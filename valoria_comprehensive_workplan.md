@@ -23,7 +23,19 @@ Each has mode-specific mechanics that do not cross over.
 2. Mechanics.docx — original design intent
 3. Editorial decisions (this workplan + session logs)
 4. Simulation-tested patches and rulings (R1–R40, A–S, D-01–D-19)
-5. Source documents (COMPLETE, v3, CP13, CP12, CP08–CP10)
+5. Source documents — draw content in this priority order:
+   1. In-session editorial decisions
+   2. Batch A–F designs
+   3. Documents newer than CP13:
+      - valoria_comprehensive_workplan.md
+      - valoria_cp14_compilation_workplan.md
+      - valoria_stress_tests_round2.md / valoria_stress_tests_round3_hybrid.md
+      - hybrid_register.md
+      - valoria_archetype_substitution_analysis.md
+      - valoria_three_dimensional_comovement.md
+      - valoria_audit_value_and_systems_analysis.md
+   4. CP13
+   5. CP12, CP08–CP10, v3, COMPLETE (supplementary content only)
 
 ---
 
