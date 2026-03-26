@@ -215,7 +215,7 @@ Vaynard maintains a collection of Einhir artefacts and Thread-locked objects. On
 | **Failure** | Artefact's Thread signature detected by a practitioner. Church Intel gains +1D vs Varfell for 1 season. TT +1. |
 | **Long-term cost** | Each use: +1 to Vaynard's hidden TS. At TS 14+ (his starting value), each use triggers Spirit check TN 7 Ob 1 for a Discovery Event. |
 
-[EDITORIAL: If a PC takes over Varfell and is not Vaynard, does the Private Collection power transfer as institutional (the collection exists physically) or transform into something appropriate to the new leader?]
+**PC takeover — Collection Discovery Event:** If a non-Vaynard PC takes over Varfell, the Private Collection transfers as an institutional asset (the artefacts exist physically). However, encountering the collection for the first time triggers a mandatory Discovery Event: the new leader finds Vaynard's research notes alongside Thread-locked objects of obvious significance. Heart check TN 7 Ob 1. Success: the player understands what they have inherited and gains TK 1 immediately. Failure: the weight of the collection lands without context — Certainty −1 and a new Belief is offered from behind a position of ignorance.
 
 **Default Leader: Duke Magnus Vaynard**
 - Conviction: Reason · Resonant Style: Consequence · TS: 14 (Dormant; unrecognised)
@@ -311,7 +311,7 @@ Niflhel deploys the Quiet (its intelligence and assassination arm) against any t
 
 **Leader:** None. The four arm heads are treated as officers, not faction leaders. A PC who infiltrates or takes over one arm controls that arm only.
 
-[EDITORIAL: Should one arm head be designated primus inter pares for PC faction-leader purposes, or should Niflhel remain permanently headless — controllable only arm-by-arm?]
+**Structure is permanent:** Niflhel has no primus inter pares and will not acquire one. A PC who wants to direct Niflhel must control each arm independently. This is intentional — Niflhel's headlessness is a structural feature, not a gap. Full network control requires four separate influence operations, one per arm.
 
 ---
 
