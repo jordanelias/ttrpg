@@ -272,9 +272,13 @@ When Health reaches 0:
 
 An incapacitated character is unconscious or otherwise unable to act. They are not dead unless the narrative demands it or a Coup de Grâce is performed.
 
-## 3.9 Recovery
+## 3.9 Stamina and Recovery
 
-**Breather:** During a lull in combat (no active threats for Endurance × 2 rounds), a character may take a Breather. Restores Health to maximum. Does not remove Wounds.
+**Stamina:** Equal to Endurance + 1. Decreases by 1 for every melee round in a row ehere a character has Moved, Manoeuvred or Attacked. Once Stamina reaches 0, the character must Catch Breath. A character may elect to take a Breather before Stamina reaches 0.
+
+**Catch Breath:** A character's Combat Pool is divided by 2 (rounded up). They can only commit their Combat Pool to Defence Dice. Stamina is restored to full afterwards.
+
+**Breather:** A character's Combat Pool can only be committed to Defence Dice. Stamina is restored to full afterwards.
 
 **Quick Rest:** Between scenes (minutes to hours of downtime). Restores Health to maximum and removes 1 Wound.
 
