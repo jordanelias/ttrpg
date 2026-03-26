@@ -1,5 +1,5 @@
 # Valoria Gap Register — Consolidated
-## Updated: 2026-03-25 (Session 3)
+## Updated: 2026-03-25 (Session 7)
 ## Total items: 108
 ## Editorial blockers: 0
 
@@ -48,9 +48,12 @@
 | Maxims | Cut; Beliefs retained | S3 |
 | Impression Track + Knots | Both retained; Impression Track for major NPCs, Knots for relationships | S3 |
 | Renown | Retained — not a resource; governs NPC recognition probability | S3 |
-| Taint → Intelligibility | Countdown 10→0. CD and Certainty integrated into TS growth framework. TS increase = roll vs Spirit + relevant Belief. | S3 |
+| Taint → Coherence (was Intelligibility) | Countdown 10→0. CD and Certainty integrated into TS growth framework. TS increase = roll vs Spirit + relevant Belief. | S3 |
 | Archetype sub test protocol | Scenarios must involve character/faction-specific actions or faction-dependent reactions; generic actions invalid | S3 |
 | Git repo | jordanelias/ttrpg | S3 |
+| Coherence (was Intelligibility) | Rename to Coherence. Track 10→0. At 0, fundamental alterations to being from thread damage; not insanity but loss of coherence to self and others. | S7 |
+| Composure formula | Composure = Presence + 6 | S7 |
+| Thread Harvest | STRUCK. Niflhel does not harvest from Southernmost. Instead: Niflhel as smugglers/black market trade items condemned as heretical by Church — this includes threadweaved items without Niflhel's knowledge. Restoration members (29>TS>10) find and trade threadweaved goods on black market since they can sense them, but can only go to edges of Southernmost (cannot resist the Forgetting). | S7 |
 
 ### Reach Rules (S3 Editorial)
 
@@ -191,7 +194,7 @@
 | G-062 | Maxims vs Beliefs | Maxims cut; Beliefs retained |
 | G-063 | Impression Track vs Knots | Both retained; distinct functions |
 | G-064 | Renown vs CP | Renown retained as recognition mechanic, not resource |
-| G-065 | Taint + CD + Certainty | Taint → Intelligibility (10→0); CD + Certainty → TS growth framework |
+| G-065 | Taint + CD + Certainty | Taint → Coherence (was Intelligibility) (10→0); CD + Certainty → TS growth framework |
 
 ---
 
@@ -275,7 +278,7 @@
 6. Phase 1 Batch F: hybrid architecture resolved — design work can proceed on session structure and handoffs
 7. Consolidation candidates (G-061–G-065): all resolved — removes Phase 4 testing for these 5 items
 8. Hybrid batches: G1 mostly resolved → G2 (10 design items) → G3 (5 design items)
-9. New compilation items: Intelligibility system, zone-based combat positioning, reach rules
+9. New compilation items: Coherence system, zone-based combat positioning, reach rules
 
 ### Revised session estimate
 **26–42 sessions** (was 28–45). Hybrid architecture pre-resolved saves ~2 sessions. Consolidation pre-resolved saves ~1 session. Added hybrid design items offset by simplified map/combat design.
