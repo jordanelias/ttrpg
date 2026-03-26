@@ -153,3 +153,41 @@ output_files:
 ```
 
 ---
+
+```yaml
+session_close: 2026-03-25T05
+phase: 1
+batch: D (supplement — 8th faction)
+completed_stages:
+  - "Löwenritter designed as full 8th faction with partial sheet (Military, Stability, Influence, Intelligence)"
+  - "Coup trigger mechanic designed (4 conditions, Domain Action roll, attribute transfer from Crown)"
+  - "Ethical framework assigned: Deontological Honor Code"
+  - "Unique Action designed: Martial Law (with post-coup variant)"
+  - "Grandmaster Sigrid Ehrenwall NPC created"
+  - "Canon compliance verified (P-01, P-05, P-07, P-14)"
+  - "System update requirements documented (faction count, board game, political axes, clock interactions)"
+editorial_resolved:
+  - "Löwenritter: full 8th faction, partial sheet in peacetime, full sheet on coup"
+  - "Löwenritter loyalty: Crown as institution, not monarch"
+  - "Church territory: begins holding territories at TC ~80"
+  - "Almud's children: daughter married to Altonian Duke (border territory); son in Royal Court with Altonian tutoring pressure (1.5x invasion clock if refused)"
+  - "Restoration Movement: non-TS leaders (scholars, guild members) as loose coalition"
+  - "Southernmost Council: not publicly active in Restoration — occupied with Thread Wounds"
+editorial_pending:
+  - "Succession mechanic (Almud's son/Altonian pressure clock) — designed but not yet formalized"
+  - "Named Restoration Movement NPCs — to be generated"
+  - "Axis 10 (Succession) — to be formalized with heir mechanic"
+  - "Niflhel primus inter pares (carried from S4)"
+  - "Varfell Private Collection transfer (carried from S4)"
+gaps_resolved_this_session:
+  - "Löwenritter faction identity (opened S4, resolved S5)"
+next_action:
+  skill: orchestrator
+  task: "Remaining pre-Batch-E work: succession mechanic, Restoration NPCs, then Batch E (board game, 14 gaps)"
+  input: lowenritter_faction_card.md + batch_d_designs.md
+output_files:
+  - "lowenritter_faction_card.md"
+```
+
+---
+
