@@ -341,3 +341,29 @@ output_files:
 
 ---
 
+
+```yaml
+session_update: 2026-03-25T05d-final
+completed_stages_addendum:
+  - "Canonical timeline committed: 45 AG game start, TC 22, all chronological conflicts resolved"
+  - "Church territorial seizure mechanic committed (TC 80, per-territory roll vs variable Ob)"
+  - "Batch F committed (hybrid timing, endgame, mode branching)"
+  - "6 document-level conflicts resolved (year, TC, children, rank, TT rationale, heir name)"
+  - "Lowenritter starting values added to faction table (Mil 5, Int 3, Stab 5, Inf 3)"
+  - "Schoenland documented as spoiler actor (not a faction)"
+  - "Edvar retired as heir name — Torben canonical"
+editorial_resolved_addendum:
+  - "Game start: 45 AG (not 102 AG)"
+  - "TC starting value: 22 (Church predates secession, consolidated post-war)"
+  - "Timeline is canonical for setting chronology, supersedes checkpoint references"
+output_files_addendum:
+  - "valoria_canonical_timeline.md"
+  - "church_territorial_seizure.md"
+  - "batch_f_designs.md"
+standing_editorial:
+  - "E-01: Perpetrator of ~18 AG assassination — TBD"
+  - "E-03: In-world name for AG calendar — TBD"
+```
+
+---
+
