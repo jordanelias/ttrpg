@@ -110,3 +110,42 @@ standing_editorial:
 
 
 ---
+
+
+---
+
+```yaml
+session_update: 2026-03-25-stage3
+phase: 2
+status: "Phase 2 — Stage 3 complete (Thread Operations compilation)"
+completed_stages:
+  - "Stage 3: Thread Operations — 605 lines, 17 sections"
+  - "Version C co-movement integrated (replaces d12 table)"
+  - "Rulings R36-R40 integrated inline"
+  - "TD renamed to Coherence Degradation (CD) per workplan"
+  - "Taint track compiled at 0-10 scale (COMPLETE version)"
+  - "All Thread-locked objects, monstrous entities, collective ops compiled"
+  - "Einhir Texts section compiled"
+  - "Co-Movement Quick Reference Card section added"
+compilation_progress: "3/28 stages complete (core engine, characters, thread ops)"
+conflict_resolutions:
+  - "TS thresholds: 30/50/70 (20-point uniform bands per audit, consistent with Stage 2)"
+  - "Leap Priority: 5 (full-round, per CP12/13)"
+  - "FR: TN7 min Ob 4 (post-audit, absorbed into Ob)"
+  - "TD -> CD rename: flavor text rewritten from temporal to configurational"
+  - "TT reduction from OW Weaving: Relational scale minimum (per MI-1 patch)"
+editorial_pending:
+  - "E-TAINT: Taint track 0-10 vs 0-7 — confirm scale"
+  - "Territory names editorial pass"
+  - "Varfell victory condition tuning (3 artifacts)"
+  - "10 remaining seasonal event cards"
+  - "Named Restoration Movement NPCs"
+  - "Niflhel primus inter pares"
+  - "Varfell Private Collection transfer"
+  - "E-01: Perpetrator of ~18 AG assassination"
+  - "E-03: In-world name for AG calendar"
+next_action:
+  stage: "Stage 4"
+  task: "Southernmost compilation (Forgetting, Extraordinary Weaving, expedition procedures)"
+  model: "Sonnet 4.6"
+```
