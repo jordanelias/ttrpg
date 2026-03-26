@@ -73,7 +73,7 @@ The GM should consult the Hard Moves table (§13.5) for structured complication 
 
 ## 1.7 Momentum
 
-Momentum tracks a character's accumulated tactical advantage. Range: 0–6.
+Momentum tracks a character's accumulated advantage. Range: 0–4.
 
 **Gain:** +1 on Overwhelming success. +1 when a Belief is achieved.
 
@@ -96,9 +96,9 @@ When multiple characters declare actions against a single unsupported opponent i
 | Attackers | Bonus Dice (each) |
 |-----------|-------------------|
 | 2 vs 1 | +1D each |
-| 3 vs 1 | +2D each |
-| 5 vs 1 | +3D each |
-| 8 vs 1 | +5D each |
+| 3+ vs 1 | +2D each |
+| 5+ vs 1 | +3D each |
+| 8+ vs 1 | +5D each |
 
 The bonus applies to each attacker's offence pool. The defender splits their defence pool across all incoming attacks (dividing defence dice among attackers before resolution).
 
@@ -132,7 +132,7 @@ Attributes range from 1 to 7. A score of 3 is the human average. 1 is severely l
 
 | Attribute | Abbreviation | Governs |
 |-----------|-------------|---------|
-| **Attunement** | Att | Empathy, perception of others, emotional reading; detecting deception; Reading Exchange base |
+| **Attunement** | Att | Empathy, perception of others, emotional reading; detecting deception; Reading pool base |
 | **Bonds** | Bon | Relational depth, trust capacity; Knot strain cap; collective operation stability |
 | **Presence** | Pres | Influence, command, charisma; social pools (Appeal, Circles); faction actions |
 
