@@ -367,3 +367,43 @@ standing_editorial:
 
 ---
 
+
+```yaml
+session_close: 2026-03-25T07
+phase: 2
+batch: infrastructure + editorial
+completed_stages:
+  - "Repo reorganization: designs/, compilation/, tests/, canon/, versions/, deprecated/ folders"
+  - "Moved 6 files to correct folders (stress tests→tests, designs→designs, timelines→canon)"
+  - "Comprehensive auditing matrix created (82 mechanics × 3 modes, 13 named NPCs, 15 generic characters, 12 PC archetypes, 8 factions, 12 scenario types, canon compliance overlay)"
+  - "Editorial: Intelligibility → Coherence (10→0, fundamental alterations to being from thread damage, not insanity)"
+  - "Editorial: Composure = Presence + 6"
+  - "Editorial: Thread Harvest STRUCK. Niflhel = smugglers/black market trading Church-condemned heretical items (includes threadweaved items unknowingly). Restoration (29>TS>10) find/trade threadweaved goods on black market, can go to edges of Southernmost only (cannot resist Forgetting)"
+  - "Pre-compilation stress test file reviewed (30 tests, 18 rulings, 3 open design questions) — filed as reference in tests/"
+  - "Gap register updated to S7 with 3 new editorial decisions"
+editorial_resolved:
+  - "Intelligibility → Coherence"
+  - "Composure = Presence + 6"
+  - "Thread Harvest struck; Niflhel smuggling redesign"
+editorial_pending:
+  - "E-01: Perpetrator of ~18 AG assassination — TBD"
+  - "E-03: In-world name for AG calendar — TBD"
+  - "Territory names editorial pass"
+  - "Varfell victory condition tuning (3 artifacts)"
+  - "10 remaining seasonal event cards"
+  - "Named Restoration Movement NPCs"
+  - "Niflhel primus inter pares"
+  - "Varfell Private Collection transfer"
+next_action:
+  skill: orchestrator
+  task: "Phase 2 — Resume compilation. Stages 1-2 done. Next: Stage 3 (Thread operations)"
+  input: "compilation/stage1_core_engine.md, compilation/stage2_characters.md, designs/*.md"
+blockers:
+  - "None — Phase 2 compilation can continue"
+output_files:
+  - "tests/auditing_matrix.md"
+  - "canon/canon_constraints.md"
+```
+
+---
+
