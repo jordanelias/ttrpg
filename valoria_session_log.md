@@ -191,3 +191,27 @@ output_files:
 
 ---
 
+
+```yaml
+session_update: 2026-03-25T05b
+completed_stages_addendum:
+  - "Succession mechanic designed (Torben Loyalty Clock, 8->0 countdown)"
+  - "Tutoring Demand trigger: IP 30"
+  - "Covert contact mechanic: Intelligence Ob 3 to freeze loyalty decay 1 season"
+  - "Retrieval options tiered by loyalty range (diplomatic/covert/military)"
+  - "Elske backup heir pathway designed (four-way endgame)"
+  - "Axis 10 formalized"
+  - "Faction interaction map for succession (all 8 factions)"
+  - "IP acceleration math verified (+10 IP delta over 10 seasons)"
+  - "Canon compliance checked (P-01, P-07, P-09, P-12)"
+editorial_resolved_addendum:
+  - "Tutoring demand begins at IP 30"
+  - "Covert contact can slow loyalty decay (Intelligence Ob 3/season)"
+gaps_resolved_addendum:
+  - "Axis 10 (Succession) — formalized with full mechanic"
+output_files_addendum:
+  - "succession_mechanic.md"
+```
+
+---
+
