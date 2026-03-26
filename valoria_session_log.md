@@ -215,3 +215,52 @@ output_files_addendum:
 
 ---
 
+
+```yaml
+session_update: 2026-03-25T05c
+phase: 1
+batch: E (board game — complete)
+completed_stages:
+  - "G-026: Turn structure (5-phase season: Planning/Negotiation/Reveal/Resolution/Accounting)"
+  - "G-025: Order Set (7 universal + restricted + faction-specific replacements; 3 orders full-sheet, 2 partial)"
+  - "G-059: Simultaneous order placement (clockwise rotation, dummy tokens)"
+  - "G-060: Resolution priority (12-tier priority table, Influence tiebreak)"
+  - "G-029: 15 territories designed (names, start control, Prosperity, Fortification, special properties, adjacencies)"
+  - "G-028: Victory conditions per faction (8 primary + secondary scoring + shared TT loss)"
+  - "G-050: Event deck (13 clock events + 10/20 seasonal events designed)"
+  - "G-051: Season wheel (Spring/Summer/Autumn/Winter modifiers)"
+  - "G-057: Thread operations (Weave/Investigate/Harvest + 15 Co-Movement Cards)"
+  - "G-049: Negotiation (informal non-binding + formal Treaty procedure + max 2 treaties)"
+  - "G-030: Component specification (full list: board, 8 faction sheets, tokens, decks, dice, reference cards)"
+  - "G-031: NPC AI expansion (3-priority decision tree per faction + escalation rules)"
+  - "Lowenritter integrated into all board game systems (partial sheet, post-coup full sheet)"
+  - "Succession mechanic integrated (Torben Loyalty track as component)"
+gaps_resolved_this_session:
+  - "G-025 (Order Set)"
+  - "G-026 (turn structure)"
+  - "G-028 (victory conditions)"
+  - "G-029 (territory differentiation)"
+  - "G-030 (components)"
+  - "G-031 (NPC AI)"
+  - "G-049 (negotiation)"
+  - "G-050 (event deck)"
+  - "G-051 (season wheel)"
+  - "G-057 (Thread operations)"
+  - "G-059 (simultaneous placement)"
+  - "G-060 (resolution ordering)"
+editorial_minor:
+  - "Territory names may need editorial pass (functional but placeholder-quality)"
+  - "Varfell victory condition (3 artifacts) may need tuning"
+  - "10 remaining seasonal event cards to write"
+next_action:
+  skill: orchestrator
+  task: "Phase 1 Batch F (hybrid + endgame, 3 gaps) — then Phase 1 complete"
+  input: batch_e_designs.md + batch_d_designs.md + succession_mechanic.md + lowenritter_faction_card.md
+output_files:
+  - "batch_e_designs.md"
+  - "lowenritter_faction_card.md"
+  - "succession_mechanic.md"
+```
+
+---
+
