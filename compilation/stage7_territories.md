@@ -1,113 +1,102 @@
-# PART NINE: TERRITORIES
+# PART SEVEN: TERRITORIES
 
-The Valn Peninsula is divided into fifteen territories on a territory-adjacency graph (not a hex grid at the strategic level). Each territory has a name, starting controller, six properties, and adjacency connections.
+Valoria comprises fifteen territories arranged in a roughly north-south layout, connected by an adjacency graph (not a hex map). Territories are the primary unit of control in board game and hybrid modes, and the geographic backdrop for TTRPG scenes. Each territory has a Prosperity score, a Fortification level, a starting controller, and at least one special property.
 
 ---
 
-## 9.1 Territory Properties
+## 7.1 Territory Properties
 
-| Property | Scale | Description |
+Each territory tracks four attributes:
+
+| Attribute | Scale | Meaning |
 |---|---|---|
-| Prosperity | 1–7 | Economic output and population wellbeing. Affects muster Ob and Wealth income. |
-| Fortification | 0–3 (max 4 at Ehrenfeld) | Defensive bonus. Attacker Ob +1 per Fortification level when assaulting. |
-| Special property | — | Unique mechanical effect for that territory |
-| Controller | Faction | Which faction holds the territory |
-| Stability | 1–7 (territory-level) | Local population cohesion |
-| Guild Favour | 1–7 | Guild presence and economic integration |
+| Prosperity | 1–7 | Economic output; affects mustering Ob, Wealth generation, and population mood |
+| Fortification | 0–3 (0–4 at Ehrenfeld) | Defense bonus; Fortification 2+ required for a siege to be declared |
+| Control | Faction or Neutral | Which faction controls this territory and receives its benefits |
+| Special Property | Fixed | Unique mechanical effect; does not change unless specifically altered |
 
-**Territory control:** A faction controls a territory if it has the only military units present or won the most recent battle there. Uncontrolled territories yield no control bonuses — the first faction to station units claims control. Contested territories (multiple factions with units present) grant no control bonuses to anyone until resolved.
-
-**Einhir Sites:** Each site has a visible state — Intact, Damaged, or Destroyed.
-- Intact: +1 Stability to the territory, −1 TT per season
-- Damaged: neither bonus
-- Destroyed: TT +3 at moment of destruction (permanent); practitioners present sense it viscerally and immediately
-
-The Church can destroy Einhir sites as a deliberate Domain Action. Niflhel inadvertently damages them through harvesting operations. Einhir sites on contested battlefields can be destroyed as a tactical action.
+**Control** transfers when one faction has the only military units present, or wins the most recent battle. Contested (multiple factions with units): no control benefits for anyone until resolved.
 
 ---
 
-## 9.2 Territory Map (15 Territories)
+## 7.2 Territory Map
 
-| # | Territory | Start Control | Prosperity | Fort | Special Property | Adjacent To |
+| # | Territory | Starting Control | Prosperity | Fort | Special Property | Adjacent |
 |---|---|---|---|---|---|---|
-| 1 | Valorsplatz *(Capital)* | Crown | 6 | 2 | **Royal Court:** Crown Decree −1 Ob here. **Parliament:** Hafenmark Influence −1 Ob here. | 2, 3, 5, 6 |
-| 2 | Kronmark *(Crown heartland)* | Crown | 5 | 1 | **Garrison:** +1 Muster die here. | 1, 3, 4 |
-| 3 | Himmelstift *(Cathedral city)* | Church | 5 | 2 | **Grand Cathedral:** TC +1/season while Church controls this. Church Excommunicate −1 Ob here. | 1, 2, 6, 7 |
-| 4 | Border Pass | Crown | 3 | 2 | **Altonian Border:** IP threshold events trigger here first. Primary invasion entry point. | 2, 5, 15 |
-| 5 | Ehrenfeld *(Military heartland)* | Crown *(Löwenritter garrison)* | 4 | 3 | **Löwenritter Fortress:** Löwenritter Martial Law −1 Ob here. Fortification max 4 (not 3). | 1, 4, 9 |
-| 6 | Hafenstadt *(Hafenmark capital)* | Hafenmark | 6 | 1 | **Ducal Court:** Sovereign Authority Doctrine can be invoked here. Major port. | 1, 3, 7, 8 |
-| 7 | Sternhaven *(Northern port)* | Hafenmark | 5 | 0 | **Trade Hub:** All Trade orders +1D here. Schoenland route terminus. | 3, 6, 8 |
-| 8 | Grauwald *(Forest region)* | Guilds | 4 | 0 | **Timber/Mining:** Guilds Trade +1D here. Difficult terrain: March costs 2 movement (not 1). | 6, 7, 10, 11 |
-| 9 | Eisengrund *(Southern highlands)* | Varfell | 4 | 1 | **Varfell Seat:** Private Collection usable here only. Einhir ruins: Revolution Community Weaving −1 Ob. | 5, 10, 12, 13 |
-| 10 | Schwarzmarkt *(Underground trade)* | Niflhel | 3 | 0 | **Black Market:** Niflhel Quiet Network −1 Ob here. All factions can Trade here at +1 Ob (illicit goods). | 8, 9, 11 |
-| 11 | Feldmark *(Farming plains)* | Guilds | 5 | 0 | **Breadbasket:** +1 Prosperity recovery per season if not contested. Muster Ob −1 (willing recruits). | 8, 10, 14 |
-| 12 | Sudwald *(Southern forest)* | Uncontrolled | 3 | 0 | **Thread Wound:** TT threshold events manifest here 10 TT earlier than elsewhere. Revolution presence (not control). | 9, 13, 14 |
-| 13 | Askeheim *(Southernmost border)* | Uncontrolled | 2 | 0 | **Southernmost Access:** Required for Southernmost Expedition (§6.3). Thread proximity: all non-Thread orders +1 Ob. TS 30+ characters: automatic Discovery Event per season present. | 9, 12 |
-| 14 | Korntal *(Southern farmland)* | Revolution *(informal)* | 4 | 0 | **Einhir Heartland:** Revolution Influence −1 Ob here. Restoration Movement stronghold. Church Influence +1 Ob here (cultural resistance). | 11, 12 |
-| 15 | Schoenland *(Altonian trade port)* | Neutral *(Altonian trade)* | 5 | 1 | **Altonian Trade:** +1 Wealth to any faction with Trade order here (while trade route open). Altonian spies: Intelligence orders here reveal results to Altonia. At IP 75+: Altonian vanguard deploys here. | 4, 7 |
-
-[EDITORIAL: Territory names (1–14) are functional placeholders. Editorial naming pass pending.]
+| 1 | Valorsplatz (Capital) | Crown | 6 | 2 | Royal Court: Crown Decree −1 Ob here. Parliament: Hafenmark Influence −1 Ob here. | 2, 3, 5, 6 |
+| 2 | Kronmark (Crown heartland) | Crown | 5 | 1 | Garrison: +1D Muster here. | 1, 3, 4 |
+| 3 | Himmelstift (Cathedral city) | Church | 5 | 2 | Grand Cathedral: TC +1 per season Church controls this. Church Excommunicate −1 Ob here. | 1, 2, 6, 7 |
+| 4 | Border Pass | Crown | 3 | 2 | Altonian Border: IP threshold events trigger here first. Invasion entry point. | 2, 5, 15 |
+| 5 | Ehrenfeld (Military heartland) | Crown / Lowenritter garrison | 4 | 3 | Lowenritter Fortress: Lowenritter Martial Law −1 Ob here. Fortification maximum 4 (not 3). | 1, 4, 9 |
+| 6 | Hafenstadt (Hafenmark capital) | Hafenmark | 6 | 1 | Ducal Court: Hafenmark Sovereign Authority may be invoked here. Major port. | 1, 3, 7, 8 |
+| 7 | Sternhaven (Northern port) | Hafenmark | 5 | 0 | Trade Hub: all Trade orders +1D here. Schoenland sea route terminus. | 3, 6, 8 |
+| 8 | Grauwald (Forest region) | Guilds | 4 | 0 | Timber and Mining: Guilds Trade +1D here. Difficult terrain: March costs 2 movement (not 1). | 6, 7, 10, 11 |
+| 9 | Eisengrund (Southern highlands) | Varfell | 4 | 1 | Varfell Seat: Private Collection usable here only. Einhir ruins: Revolution Community Weaving −1 Ob. | 5, 10, 12, 13 |
+| 10 | Schwarzmarkt (Underground trade) | Niflhel | 3 | 0 | Black Market: Niflhel Quiet Network −1 Ob here. All factions Trade here at +1 Ob (illicit goods). | 8, 9, 11 |
+| 11 | Feldmark (Farming plains) | Guilds | 5 | 0 | Breadbasket: +1 Prosperity recovery per season if uncontested. Muster Ob −1 (willing recruits). | 8, 10, 14 |
+| 12 | Sudwald (Southern forest) | Uncontrolled | 3 | 0 | Thread Wound: TT threshold events trigger here at TT −10 (earlier than elsewhere). Revolution informal presence. | 9, 13, 14 |
+| 13 | Askeheim (Southernmost border) | Uncontrolled | 2 | 0 | Southernmost Access: required for Southernmost Expedition. Thread proximity: all non-Thread orders +1 Ob. TS 30+ characters: automatic Discovery Event per season present. | 9, 12 |
+| 14 | Korntal (Southern farmland) | Revolution (informal) | 4 | 0 | Einhir Heartland: Revolution Influence −1 Ob here. Church Influence +1 Ob here (cultural resistance). | 11, 12 |
+| 15 | Schoenland (Altonian trade port) | Neutral (Altonian trade) | 5 | 1 | Altonian Trade: +1 Wealth per season to any faction with Trade order here while route is open. Altonian spies: Intelligence orders here reveal results to Altonia. At IP 75+: Altonian vanguard deploys here. | 4, 7 |
 
 ---
 
-## 9.3 Adjacency Notes
+## 7.3 Adjacency Notes
 
-- **Schoenland** (15) connects to Border Pass (4) by land and Sternhaven (7) by sea. The sea route is severed if Schoenland trade is suspended.
-- **Askeheim** (13) is a dead end — connects only to Sudwald (12) and Eisengrund (9). Expedition territory, not strategic.
-- **Valorsplatz** (1) is the most connected territory (4 adjacencies) — the political and strategic hub.
-- **Grauwald** (8) difficult terrain applies to military movement only, not to Domain Actions.
-
----
-
-## 9.4 Strategic Movement
-
-- Standard movement: 1 territory per season by road
-- Mountain pass: 2 seasons through designated passes
-- Naval: coastal territories accessible to Hafenmark or any faction with active Schoenland trade agreement
-
-**Supply lines:** Armies more than 2 territories from a friendly-controlled territory with Wealth 3+ begin attrition: −1 Endurance to all units per season. Winter campaigns in mountain terrain: −1 Endurance automatically.
+- **Valorsplatz (1)** is the most connected territory (4 adjacencies). Political hub; changes hands are maximum-consequence.
+- **Schoenland (15)** connects to Border Pass by land and Sternhaven by sea. The sea route is severed when Schoenland trade suspends (IP 75+).
+- **Askeheim (13)** is a dead end — only two connections. It is expedition territory, not strategic chokepoint.
+- **Ehrenfeld (5)** is the Lowenritter's primary position. Its anomalous Fortification cap (4 instead of 3) reflects the order's entrenched presence.
 
 ---
 
-## 9.5 TTRPG Zone-Based Play
+## 7.4 Territory Control Mechanics
 
-In TTRPG mode, territories function as scene-setting zones rather than strategic counters. The GM uses territory properties to generate scene modifiers and encounter context.
+### Control Benefits (TTRPG/Hybrid)
 
-**Zone modifiers in TTRPG mode:**
-- Fortification level → ambient difficulty for infiltration, assault, or sabotage operations
-- Prosperity → available contacts and resources (Circles Ob modifier: high Prosperity −1 Ob, low Prosperity +1 Ob)
-- Special properties → GM applies the property's mechanical effect when characters act in that territory
-- Einhir site state → practitioner perception layer (Intact sites are perceptible to TS 30+ as a distinct warmth in the configurational environment)
+A controlling faction treats the territory's Prosperity as a Domain Action resource. Controlled territories contribute to seasonal Wealth accounting and allow Muster actions.
 
-**Thread environment by territory:**
-- Askeheim (13): permanent Thread proximity bonus/hazard regardless of TT level — treat as if TT is always +10 for practitioner purposes
-- Sudwald (12): Thread Wound territory — TT threshold events fire here at (actual TT − 10)
-- Eisengrund (9): Einhir ruins — Community Weaving −1 Ob regardless of who performs it
-- Any territory with Intact Einhir site: practitioners within the territory gain +1D on Weaving and Pulling
+A territory changes control when:
+- A faction moves units in and no enemy units are present.
+- A battle resolves with the defending faction's units destroyed or routed.
+- A Govern order succeeds in an uncontrolled territory (first Govern = claim).
 
----
+### Prosperity Dynamics
 
-## 9.6 Victory Conditions (Per Faction)
+Prosperity changes through:
+- Muster: −1 per muster action (labor and resources diverted).
+- Conquest: −1 immediately (war damage).
+- Govern Overwhelming success in own territory: +1.
+- Breadbasket property (Feldmark): +1 per season if uncontested.
+- Mine Collapse event: −1 permanent until Govern restores.
+- Extended siege: −1 Endurance per season for garrisoned units; territory Stability affected.
 
-**Shared loss condition:** TT reaches 100. The Rupture occurs. No faction survives in recognisable form. This is the cooperative pressure underlying the competitive game — all players must manage TT even while competing.
+Prosperity recovery rate (no active effects): +1 per season of peace if territory is controlled and not at Prosperity cap (7).
 
-**Per-faction victory conditions:**
+### Fortification
 
-| Faction | Primary Victory | Secondary (Points if no primary by Season 10) |
-|---|---|---|
-| Crown | Control Valorsplatz + 4 other territories. Mandate ≥ 5. | 1 pt/controlled territory + 1 pt/Mandate above 3 + 2 pts if heir secure (Torben Loyalty ≥ 5) |
-| Church | TC reaches 80. Church controls Himmelstift + Valorsplatz. | 1 pt per 10 TC + 1 pt/territory where Church Mandate > Crown Mandate + 2 pts if Excommunication active |
-| Hafenmark | Parliamentary Supremacy: Mandate + Influence both ≥ 6. Crown Mandate ≤ 3. | 1 pt/Influence above 3 + 1 pt/Wealth above 3 + 2 pts if Sovereign Authority successfully invoked |
-| Varfell | Possess 3+ Thread-locked artefacts. TS of any affiliated character ≥ 50. | 1 pt/artefact + 1 pt/Intel above 3 + 2 pts if Einhir Research completed |
-| Guilds | Wealth ≥ 7 AND Economic Leverage active in 3+ territories simultaneously. | 1 pt/Wealth above 3 + 1 pt/territory with Guild Favour ≥ 5 + 2 pts if all trade routes open |
-| Niflhel | Intel ≥ 5 in 3+ territories via Quiet Network. No faction knows Niflhel's true Stability. | 1 pt/Intel above 3 + 1 pt/successful assassination + 1 pt/covert territory control |
-| Revolution | TT ≤ 20 via Community Weaving. Revolution Influence ≥ 5. Einhir cultural practices publicly restored. | 1 pt/Influence above 2 + 1 pt per 10 TT reduced below starting value + 2 pts if Restoration publicly active |
-| Löwenritter | Successful coup + control Valorsplatz + Border Pass + Ehrenfeld. IP ≤ 20, no Altonian units on map. | 1 pt/Military above 3 + 1 pt/controlled territory + 2 pts if coup triggered + 2 pts if Altonia repelled |
+Built with Fortify orders. Maximum 3 for standard territories; 4 for Ehrenfeld only. Fortification level determines siege Ob and attack bonus for defenders (+1D per level to relevant defense rolls).
 
-[EDITORIAL: Varfell victory condition — possession of 3 artefacts is the current threshold. Confirm or tune.]
-
-**Victory timing:** Primary victory checked at end of each season. If multiple factions achieve primary simultaneously: highest point total wins. Ties broken by Stability. Season 10 endpoint: highest points wins.
+Fortification 2+ is required for a siege to be declared. Territories at 0–1 are assaulted directly.
 
 ---
 
-*End of Stage 7 compilation. Stage 8 (Combat: pool split, priority, reach, manoeuvres, mass combat, siege) follows.*
+## 7.5 Thread-Significant Territories
+
+Three territories have Thread significance beyond their political properties:
+
+**Sudwald (12):** A Thread Wound in the southern forest. TT threshold events fire here 10 TT points earlier than elsewhere. The Revolution's informal presence here is not coincidental — Einhir practitioners recognized the site's significance.
+
+**Askeheim (13):** Proximity to the Southernmost creates ambient Thread pressure. All non-Thread orders suffer +1 Ob. This is the only territory from which the Southernmost Expedition can be launched (see §4.7, Southernmost).
+
+**Eisengrund (9):** Einhir ruins beneath the Varfell highlands. The Revolution's Community Weaving is easier here (−1 Ob) because the configurational substrate retains resonance. Varfell's Private Collection access is tied to this site.
+
+---
+
+## 7.6 TTRPG Zone-Based Movement
+
+In TTRPG mode, territories are not tracked with unit tokens. They function as named locations with associated properties. Movement between territories is narrative, not mechanical — the GM determines journey time based on terrain and circumstance.
+
+For overland journeys of consequence (expeditions, supply runs, military marches), use the territory adjacency graph as a rough distance guide. Standard overland travel: one territory per day under normal conditions; Grauwald costs two days (difficult terrain).
+
+Thread-significant territories require awareness: entering Askeheim or the Sudwald Thread Wound zone triggers the relevant passive effects on practitioners (automatic Discovery Events, TS growth checks) when applicable.
