@@ -1,88 +1,82 @@
-# PART TEN: COMBAT
+# PART EIGHT: COMBAT
 
-Combat in Valoria operates at two scales simultaneously: **personal combat** (individual characters) and **mass combat** (military units). Both use the same dice system and share the same priority table. The personal and mass scales can zoom into each other mid-scene.
+Combat in Valoria uses simultaneous declaration with sequential priority resolution. Skill dominates over equipment. The system operates at two scales: **personal combat** (individual characters) and **mass combat** (military units). Both use the same dice engine. Thread operations interact with combat at Priority 1 (effects manifest) and Priority 5 (operations initiated).
 
 ---
 
-## 10.1 Priority Table
+## 8.1 Personal Combat
 
-All combatants act within a round using the priority table. Lower number = earlier in round.
+### Declaration Structure
+
+Each round opens with a **Planning Phase**: each character declares one offensive action and one defensive posture simultaneously before any resolution occurs. Offensive actions resolve at their Priority; defensive postures apply reactively to all incoming attacks.
+
+- No offensive action declared → character may declare two defensive postures instead.
+- Move action as primary offensive → Dodge Backwards is the default defensive posture.
+- Ranged character engaged in melee with no melee weapon drawn → defend at Coordination only, Ob 2; draw backup weapon at Priority 4; use it at Priority 6.
+
+### Initiative
+
+Roll Coordination dice, Ob 2. Higher net wins. The winner **declares last** — they hear the opponent's plan before committing. Ties: re-roll.
+
+**Ambush**: Ob = ambusher's Tactics History + environment modifier (Ob 1–3). The defender's highest-Cognition character detects. On failure: attackers get one free Priority 2 round and initiative. On success: Coordination vs Coordination; defender's bonus successes from detection apply.
+
+### Priority Table
 
 | Priority | Action |
 |---|---|
-| 1 | Thread operation effects manifest (from previous round's Priority 5 roll) |
-| 2 | Ranged attacks |
-| 3 | Manoeuvres (Defend!, Disarm, Trip, Tie Up, Rescue, Reorient, Withdraw) — resolve before attacks within Priority 3 |
-| 4 | Standard actions (Diagnosis; draw backup weapon; non-combat single actions) |
-| 4 | Melee attacks (within Priority 4: reach advantage resolves first, then weapon speed) |
-| 5 | Move actions; Thread operation rolls (Leap, Weaving, Pulling, FR roll) |
-| 6 | Full-round actions (Forced Resolution resolution; Coup de Grâce; second actions; reload after firing) |
+| **1** | Instant events; Thread operation effects manifesting from prior rounds |
+| **2** | Ranged attacks (in order: arquebus, then crossbow, then drawn bow) |
+| **3** | All melee attacks and manoeuvres (sub-rules below) |
+| **4** | Standard actions (Diagnosis; draw backup weapon; non-combat single actions) |
+| **5** | Full-round actions (the Leap; Forced Resolution; sustained movement) |
+| **6** | Second actions; reload after firing |
 
-**Thread operation timing:** The Leap and operation roll occur at Priority 5. The effect manifests at Priority 1 of the *following* round. There is always a one-round delay between rolling and effect.
+#### Priority 3 Sub-Rules
 
----
+**A — Manoeuvres resolve before attacks.** Disarm, Trip, Tie Up, Rescue, Reorient, Defend!, and Withdraw all resolve before standard attacks within Priority 3.
 
-## 10.2 Personal Combat
+**B — Reach priority.** When a shorter weapon closes against a longer weapon, the longer weapon gets one priority attack before the shorter can reach. Hit: shorter weapon stops at 10'. Miss: shorter weapon closes regardless. Once both are at the same range, weapon speed determines order.
 
-### Attack and Defence
+**C — Rescue limitation.** Rescue redirects melee attacks and Priority 4+ attacks only. It cannot redirect Priority 2 (ranged) attacks — those resolve before Priority 3. To absorb a ranged attack for an ally, physically interpose (declare yourself the target through positioning).
 
-**Attack pool:** Combat History pool (primary attribute included — use the pre-printed pool value on the character sheet).
+### Attacks
 
-**Defence:** Defender rolls against Ob = attacker's net successes (Versus structure).
+**Attack pool** = Combat History pool (primary attribute included). Use the pre-printed pool number.
 
-| Defence Option | Pool | Notes |
+**Defense options** (all defensive pools roll against Ob = attacker's net successes):
+
+| Option | Pool | Notes |
 |---|---|---|
 | Dodge Backwards | Coordination − armour penalty | Standard evasion |
-| Duck and Weave | Coordination − armour penalty | Higher stakes; if defender wins by 2+: attacker loses next action |
-| Parry | Combat History pool | Melee only. If Parry declared and ranged attack arrives: auto Dodge Backwards instead |
-| Shield | Coordination | Shield TN applies; no armour penalty |
+| Duck and Weave | Coordination − armour penalty | Higher-stakes evasion; Partial produces a complication |
+| Parry | Combat History pool | Melee only. If Parry declared and ranged attack received: automatically switches to Dodge Backwards |
+| Shield | Coordination | Shield bonus applies |
 
 ### Damage
 
-**Formula:** Power + weapon damage bonus + excess attack successes − armour (minimum 0)
+**Power + weapon damage bonus + excess attack successes − armour (minimum 0)**
 
-*Excess attack successes = attacker's net − defender's net, minimum 0.*
+Excess attack successes = attacker's net − defender's net (minimum 0).
 
-*Example: Attacker net 5, defender net 3 = 2 excess → Power 3 + weapon +1 + 2 = 6 damage before armour.*
+*Example: Attacker net 5, defender net 3 → 2 excess. Power 3 + weapon +1 + 2 excess = 6 damage before armour.*
 
-**Exploding damage:** A damage die showing 10 → re-roll. Failure = +1 damage. Success = +2 damage and re-roll. Continue until failure.
+**Exploding damage**: A damage die showing 10 → re-roll. Failure on re-roll: +1 damage. Success: +2 damage and re-roll again. Continue until failure.
 
-### Reach Priority (Priority 3B)
+### Combat Manoeuvres (Priority 3A — all use Combat History pool)
 
-When a shorter weapon is closing against a longer weapon: the longer weapon gets one priority attack.
-- Hit: shorter weapon stops at extended range (cannot close this round)
-- Miss: shorter weapon closes regardless
-
-Once both weapons are at the same range, weapon **speed** determines attack order within Priority 4.
-
-### Ranged Characters in Melee
-
-A ranged character in melee at Priority 4 without a melee weapon drawn:
-- Defend at Coordination Ob 2
-- Draw weapon at Priority 4 (same priority as attacks — declare before rolling)
-- Use ranged weapon at Priority 6 only
-
----
-
-## 10.3 Combat Manoeuvres
-
-All manoeuvres resolve at Priority 3A (before attacks). All use Combat History pool unless noted.
-
-| Manoeuvre | Rolls Against | Effect |
+| Manoeuvre | Versus | Effect |
 |---|---|---|
-| Defend! | Coordination (defender's) | Hold target at bay; deny target's move action next round |
-| Disarm | Coordination vs Coordination | Target drops weapon; may retrieve at Priority 4 next round |
-| Trip | Coordination vs Coordination | Target prone: −2D attack; attacks vs prone +2D; costs double movement to stand |
-| Tie Up | Power | Lock weapons; no damage to either this round; both must re-engage next round |
-| Rescue | Endurance | Redirect any melee or Priority 4+ attack from ally to self. *Cannot redirect Priority 2 ranged attacks* — those resolve before Priority 3 |
-| Reorient | Cognition | Manipulate relative positioning; establish or deny reach/cover advantage |
-| Withdraw | Coordination | Sacrifice attack this round; re-establish reach or range advantage |
+| Defend! | Coordination | Hold at bay; deny target's move action next round |
+| Disarm | Coordination vs Coordination | Target drops weapon |
+| Trip | Coordination vs Coordination | Target prone: −2D attack, attacks vs prone +2D, double cost to stand |
+| Tie Up | Power | Lock weapons; no damage to either this round |
+| Rescue | Endurance | Redirect melee / Priority 4+ attack from ally to self |
+| Reorient | Cognition | Manipulate relative positioning; may establish or deny reach advantage |
+| Withdraw | Coordination | Sacrifice offensive action; re-establish reach advantage |
 
 ### Group Attacks
 
-Multiple attackers on a single target add bonus dice to the group's attack pool:
-
-| Attackers | Bonus Dice |
+| Attackers | Bonus |
 |---|---|
 | 2 | +2D |
 | 3 | +3D |
@@ -91,124 +85,210 @@ Multiple attackers on a single target add bonus dice to the group's attack pool:
 
 ### Stunts
 
-A player may declare a Stunt before rolling. The player sets their own critical success range (up to 11–20) — the critical failure range expands equally downward. A result in neither zone: Partial with GM-assigned complication. Stunts apply on both attack and defence.
+Player sets their own critical success range (up to 11–20); the critical failure range expands by the same amount. A result in neither zone: Partial, with a GM-assigned complication. Stunts are a player tool — the GM does not impose them.
 
 ---
 
-## 10.4 Wounds and Health
+## 8.2 Weapons and Armour
 
-**Health = Endurance × 2.** Tracks damage within a fight.
+Weapons and armour provide modest modifiers. History pool (skill) dominates over equipment. This is intentional — a novice with a great sword loses to a skilled soldier with a knife.
 
-**Wound:** When Health reaches 0, a Wound fires. Health resets fully to maximum. Excess damage carries over. Each Wound: +1 Ob to all rolls.
+### Weapons
 
-**Bloodied** (Health ≤ 25% of maximum): Narrative only. Does not restrict Thread operations. Does not impose mechanical penalties beyond the descriptive.
+| Weight | Damage Bonus | Reach | Speed | Notes |
+|---|---|---|---|---|
+| Light | +0 | Adjacent | Fast | Daggers, knives. Fastest in melee. |
+| Medium | +1 | Adjacent / 5' | Standard | Swords, spears, maces. Baseline. |
+| Heavy | +2 | 5'–10' | Slow | Greatswords, halberds. Reach priority advantage. |
+| Ranged | +0 to +2 | Weapon-specific | — | Reload: Standard Action after firing (Priority 6). |
 
-**Wound carry-over cap:** Maximum 2 Wounds per single hit. 3× Health cap on cumulative damage before incapacitation. (MO-6)
+Weapon speed determines who resolves first when both are at the same range: Fast before Standard before Slow.
 
-**Quick Rest:** Heals Wounds (Endurance dice, one Wound per success) AND restores Health to maximum. Requires a break in active danger.
+### Armour
 
-**Incapacitation threshold:** Varies by character. Wound count × situation. GM sets the point at which further Wounds cause incapacitation; typically 3 Wounds for most characters.
+| Type | Damage Reduction | Pool Penalty |
+|---|---|---|
+| None | 0 | — |
+| Light | 1 | None |
+| Medium | 2 | −1D Dodge / Acrobatics |
+| Heavy | 3 | −2D Dodge; −1D Acrobatics |
+
+**Special properties:**
+- **Reach advantage** (spear, halberd): Functions as the longer weapon in all reach matchups, even against medium weapons.
+- **Thread-locked item**: Fixed stats; cannot be degraded or destroyed through ordinary means.
 
 ---
 
-## 10.5 Mass Combat
+## 8.3 Mass Combat
 
-Mass combat resolves at the unit scale. Units are represented by three stats, all on the 1–7 scale.
+Mass combat operates at unit scale. Units are military formations with aggregate stats.
 
-| Stat | Represents |
-|---|---|
-| Martial | Fighting effectiveness and training |
-| Endurance | Staying power; aggregate Health = Endurance × 2 |
-| Cohesion | Morale, order, and formation integrity |
+### Unit Sheets
 
-Casualties are narrated, not tracked individually. Aggregate Health tracks the unit's capacity to continue fighting.
+| Stat | Scale | Meaning |
+|---|---|---|
+| Martial | 1–7 | Fighting effectiveness |
+| Endurance | 1–7 | Staying power and morale under attrition |
+| Cohesion | 1–7 | Willingness to take ordered actions rather than routing |
+
+**Health = Endurance + 6.** Damage reduces aggregate Health; individual casualties are narrated, not tracked.
+
+**All mass combat rolls: TN 5** (standard professional difficulty, regardless of weapon type or unit type).
+
+### Standard Unit Types (on successful muster)
+
+| Type | Martial | Endurance | Cohesion | Notes |
+|---|---|---|---|---|
+| Light Infantry | 3 | 3 | 3 | Default muster result |
+| Heavy Infantry | 4 | 4 | 4 | Requires Prosperity 5+; Wealth Ob 2 |
+| Cavalry | 4 | 3 | 5 | Requires Prosperity 6+ or relevant History; Wealth Ob 3 |
+| Ranged | 3 | 2 | 3 | Requires relevant History or officer with Ranged proficiency |
+| Artillery | 2 | 2 | 2 | Requires Wealth Ob 4 + 1 season construction |
+| Knights Templar | 5 | 5 | 6 | Church asset only; not muster-raised; immune to Brutal morale effects; +1D Cohesion vs Thread events |
 
 ### Commander Contribution
 
-A named officer commanding a unit contributes:
-- Coordination → adds dice to unit attack pool
-- Heart → adds dice to Cohesion checks
-- Memory → one conditional order per round (pre-declared contingency)
+The commanding officer's attributes directly modify unit rolls:
+- Officer **Coordination**: adds dice to unit attack rolls.
+- Officer **Heart**: adds dice to unit Cohesion checks.
+- Officer **Memory**: allows one conditional order per round beyond standard declaration.
 
-### Disposition Table
+### Declaration Structure
 
-Both commanders declare Disposition at the start of each round (simultaneously, revealed together). All unit attacks use base Ob 2. The table modifies attack pool and, for Defensive defenders, raises attacker Ob to 3.
+Same simultaneous declaration as personal combat. Both sides declare:
+1. **Disposition** (Balanced / Defensive / Offensive / Brutal)
+2. **Manoeuvre** (Advance / Hold / Withdraw / Flank / Bombard)
+
+### Disposition Interaction Table
+
+Read: attacker's row, defender's column. Apply Ob and pool modifier to the attacker's pool (Martial + Commander Coordination ± modifier).
 
 | Attacker \ Defender | Balanced | Defensive | Offensive | Brutal |
 |---|---|---|---|---|
-| **Balanced** | Ob 2, ±0D | Ob 3, ±0D | Ob 2, +2D | Ob 2, +1D |
-| **Defensive** | Ob 2, −2D | Ob 3, −2D | Ob 2, ±0D | Ob 2, −1D |
-| **Offensive** | Ob 2, +2D | Ob 3, +2D | Ob 2, +2D | Ob 2, +3D |
-| **Brutal** | Ob 2, +2D | Ob 3, +2D | Ob 2, +2D | Ob 2, +3D |
+| **Balanced** | Ob 1, ±0 | Ob 2, ±0 | Ob 1, +2D | Ob 1, +1D |
+| **Defensive** | Ob 1, −2D | Ob 2, −2D | Ob 1, ±0 | Ob 1, −1D |
+| **Offensive** | Ob 1, +2D | Ob 2, +2D | Ob 1, +2D | Ob 1, +3D |
+| **Brutal** | Ob 1, +2D +2 dmg | Ob 2, +2D +2 dmg | Ob 1, +2D +2 dmg | Ob 1, +3D +4 dmg |
 
-**Attack pool** = Martial + Commander Coordination ± table modifier.
+*Ob 2 applies only when defender is Defensive. Brutal adds +2 flat damage on any success. Ob minimum 1. Each side attacks simultaneously using their own row-column result.*
 
-**Brutal disposition:** +2 raw damage before armour on any success (in addition to table modifier).
+### Formation Constraints
 
-### Formation Break and Routing
+- **Defensive** requires Cohesion 3+ (green troops panic when ordered to hold).
+- **Offensive** requires Martial 3+ (poorly armed troops cannot charge effectively).
+- **Brutal** requires Cohesion 4+ (troops must be disciplined enough to commit atrocities on command). Brutal against a civilian population: automatic TC +1 if Church observes.
+- **Flank manoeuvre** requires 2+ friendly units in the same engagement (one pins, one flanks).
 
-**Formation Break:** Aggregate Health reaches 0. Consequences:
-1. Health resets fully
-2. All unit actions +1 Ob for remainder of battle
-3. Immediate Cohesion check: pool = Cohesion dice, Ob 2. Failure = Routes
+### Unit Attachments (Optional Layer)
 
-**Routing:** Unit withdraws from the field. Does not fight this round or any subsequent round unless Rallied.
+Attachments add one modifier per attachment without creating a sub-system. GM may omit this layer for minor engagements.
 
-**Rally:** A named officer spends their action. Pool = Heart score in d10s, Ob 2. Success: Rout cancelled; unit returns to Formation Break state (still has +1 Ob penalty).
+| Attachment | Effect | Requirement |
+|---|---|---|
+| Shield wall trained | +1D Cohesion checks when Defensive | Heavy Infantry only; 1 season training |
+| Mounted scouts | May reveal enemy disposition before declaration | Cavalry only |
+| Sappers | May attempt Fortification damage (see §8.4, Siege) | Wealth Ob 2; 1 season training |
+| Practitioner attached | +1D Cohesion near Thread events; may perform Thread ops during battle | TS 30+ officer assigned |
+| Banner bearer | +1D Rally attempts | Any unit; costs 1 officer slot |
 
-### Three-Way Combat
+On Formation Break: all attachments are lost for the remainder of the battle. A rallied unit regains base stats but not attachments.
 
-Initiative: all three commanders roll Coordination. Highest declares last (most information). Resolve each attacking pair independently using the disposition table. A unit with no target and no attacker this round does not roll.
+### Formation Breaks and Routing
 
-### Thread Operations in Mass Combat
+**Formation Break**: Unit's aggregate Health reaches 0. Health resets immediately; all subsequent actions at +1 Ob. Cohesion check required (Cohesion dice, Ob 2). Failure: unit **Routes**.
 
-Thread operations in mass combat use the standard rules with one modification: replace the scale TT multiplier with a flat ×3 multiplier. Total TT gain from any single mass combat Thread operation is **capped at +15** regardless of calculation. Excess converts to narrative consequence at GM discretion (regional site destabilisation, Locked zone expansion). (M-1)
+**Routed**: Cannot take ordered actions. Rally requires an officer with Coordination 4+ to spend their action (Heart roll, Ob 2).
 
-**Representative mass combat Thread operations:**
-- Pulling a commander's resolve (Personal scale, Ob 2–3): reduces Heart contribution to Cohesion checks by 2 for duration of contact window
-- Weaving unit Cohesion (Territorial scale, Ob 4): +2 to one Cohesion check
+Units that survive a battle gain +1 to a randomly selected stat, once per campaign season (veteran bonus).
+
+### Three-Way Mass Combat
+
+1. All three sides declare dispositions simultaneously.
+2. Determine primary conflict (who is fighting whom); resolve secondary force declarations.
+3. Apply disposition table for each attacking pair independently.
+4. Resolve all attacks simultaneously using the standard priority table.
+5. **Three-way initiative**: all three sides roll Coordination. Highest net declares last. Second highest declares second-to-last. Lowest declares first with least information.
+
+A unit declaring Defensive that is not attacked by any force takes no damage and does not roll.
 
 ### Personal Actions During Mass Combat
 
-A named character may Zoom In at Priority 5 (full-round action): one personal combat exchange. Non-incapacitated targets become Contested Figures — their ultimate fate resolves post-battle based on the exchange outcome.
+Individual characters may take **Personal Actions** (duels, espionage, Thread operations) during a mass combat round. These resolve at **Priority 8** (after the round's main resolution) and are limited to **one resolved exchange** per mass combat round.
+
+If the action requires more than one exchange, it continues as a scene after the mass combat round concludes.
+
+**Contested Figures**: A named NPC rendered non-threatening through a personal action (Disarmed, Tripped) but not yet incapacitated becomes a Contested Figure. Both sides have a claim. Fate resolves as a scene after the mass combat round concludes.
+
+**Social actions in mass combat**: Parleys, surrenders, and ultimata use the standard social rules. Default disposition for an enemy commander approached mid-battle: Cool (Ob 3). Adjust from there if prior relationship exists.
+
+### Thread Operations in Mass Combat
+
+Thread effects from prior rounds manifest at Priority 1 in the round they complete. Operations initiated at Priority 5 produce effects the following round.
+
+TT multiplier for mass combat Thread operations: ×3 flat (replaces scale-based multiplier). TT gain from any single mass combat Thread operation is **capped at +15** regardless of calculation. Excess converts to narrative consequence (regional site destabilisation, Locked zone expansion) at GM discretion.
 
 ---
 
-## 10.6 Sieges
+## 8.4 Siege
 
-Fortified territories require sustained siege operations rather than a single battle.
+Sieges are multi-season extended actions. A siege may only be declared against a territory with Fortification 2+. Fortification 0–1 territories are assaulted directly using the standard mass combat procedure.
 
-**Duration:** 1–3 seasons depending on Fortification level and defender resources.
+**Siege declaration**: An attacking force with Military ≥ defender's garrison Military may declare siege. Once declared, both sides enter the siege procedure.
 
-**Each siege season, the defending faction chooses one response:**
-- **Sortie:** Battle resolves on the defender's terms (defender chooses terrain and disposition first)
-- **Seek Relief:** A second friendly army attempts to break the siege; if it arrives, a field battle resolves normally
-- **Negotiate Surrender:** Stability preserved (no forced drop); terms set by negotiation
+### Siege Phases (One per Season)
 
-**Siege resolution:**
-- Successful siege (attacker holds for full duration without relief): Defending faction Stability drops to 1 in that territory; territory control transfers
-- Negotiated surrender: Stability preserved; terms negotiated (Circles or social scene)
-- Relief army arrives and wins: siege lifted; attacker may not re-siege for 1 season
+Both sides choose one action per season:
 
-**Fortification as Ob modifier:** Attacker Ob for assault = base Ob 2 + Fortification level of territory.
+**Attacker options:**
+
+| Action | Roll | Effect on Success |
+|---|---|---|
+| Starve | Military vs Ob = Fortification level | Defender: −1 Endurance to garrison; −1 Stability to controlling faction |
+| Assault | Military vs Ob = Fortification level + 2 | Success: breach attempt, mass combat at standard Ob. Overwhelming: walls breached, mass combat at −1 Ob for attacker |
+| Sappers | Intelligence vs Ob = Fortification level + 1 | Fortification −1 (undermining). Detected on Partial/Failure: defender gets free Sortie |
+| Negotiate | Influence vs defender's Mandate | Success: conditional surrender. Overwhelming: unconditional |
+| Thread bombardment | Practitioner Weaving, Relational+ scale | Ob = Fortification level. TT +2 regardless. Success: garrison Cohesion −2. Overwhelming: Fortification −1. Failure: practitioner TD +3 |
+
+**Defender options:**
+
+| Action | Roll | Effect on Success |
+|---|---|---|
+| Hold | Cohesion Ob 1 | Garrison holds; no losses |
+| Sortie | Military vs Ob = attacker garrison ÷ 2 | Success: attacker loses 1 unit or −2D to next siege action. Failure: sortie force destroyed |
+| Relief call | Circles / Influence Ob 3 | Summons allied force; arrives in 1–2 seasons |
+| Counter-negotiate | Influence vs attacker's Stability | Success: attacker accepts terms. Overwhelming: attacker withdraws (their Mandate −1) |
+| Sabotage | Intelligence vs Ob = attacker Military ÷ 2 | Success: attacker supply disrupted; −1D to next action |
+
+### Siege End Conditions
+
+- Defender Stability reaches 0: garrison surrenders.
+- Fortification reaches 0: walls breached; mass combat resolves immediately.
+- Attacker withdraws (voluntary or forced by Relief).
+- Negotiated settlement: both parties agree on terms.
+
+### Co-Movement During Siege
+
+Each season of siege: TT +1 (concentrated suffering and disruption).
+Einhir site within the fortification: +1 additional TT per siege season.
+
+### Personal-Scale During Siege
+
+**PCs inside** may: run espionage (Intelligence Domain Action), negotiate with besiegers (Social scene), attempt escape (Agility + relevant History, Ob = Fortification level), or perform Thread operations (siege does not prevent contact).
+
+**PCs outside** may: infiltrate (Agility/Intelligence, Ob = Fortification level + garrison commander bonus), join the assault, or perform Thread operations against the walls.
 
 ---
 
-## 10.7 Terrain Effects (Battlefield)
+## 8.5 Supply Lines
 
-When two armies meet in a territory, the tactical engagement takes place within the territory's terrain. Terrain modifies movement and attack Ob within the tactical round.
+Supply status is checked at seasonal accounting for each unit.
 
-| Terrain | Movement Cost | Attacker Ob Modifier | Special |
-|---|---|---|---|
-| Open | 1 | — | — |
-| Forest | 2 | +1 | −2D ranged within forest |
-| Hill | 2 | +1 | +1D ranged attacks from hill |
-| River crossing | 3 | +2 | No defensive formation while crossing |
-| Ruins / Einhir site | 2 | +1 | Einhir site effects apply (see §9.1) |
-| Mountain | Impassable | — | Designated passes only |
+| Status | Condition | Effect |
+|---|---|---|
+| Supplied | Within 2 territories of friendly-controlled Prosperity 3+ | No penalty |
+| Strained | 3 territories from supply, or supply territory Prosperity 1–2 | −1D to all rolls next season |
+| Cut Off | No connected friendly territory with Prosperity 1+, or route blocked | −1 Endurance per season (cumulative); Cohesion check Ob 1 or −1 Cohesion |
 
-**Einhir sites on the battlefield:** Practitioners within the area gain +1D on all Thread operations. Units occupying an Einhir ruins position make a Cohesion check (Ob 1) at the start of each round — the configurational wrongness is perceptible even to non-practitioners.
+**Supply route interdiction (Domain Action)**: Intelligence vs defender's Military ÷ 2. Success: one enemy supply route blocked 1 season. Overwhelming: blocked and undetected. Failure: detected; defender may reinforce.
 
----
-
-*End of Stage 8 compilation. Stage 9 (Social: Debate, Appeal, rhetoric styles, Composure, Reading Exchange) follows.*
+**Foraging (officer Domain Action)**: Relevant History (Survival, Campaign Veteran, etc.). Ob 2 in fertile territory; Ob 3 poor; Ob 4 winter/mountain. Success: supply improves one step for 1 season. Failure: territory Prosperity −1, potential Revolution Influence +1.
