@@ -141,19 +141,19 @@ Every test must specify which character(s) are used. Named NPCs must be substitu
 
 | ID | Name | Faction | Role | TS | Key Mechanics Engaged |
 |----|------|---------|------|----|-----------------------|
-| NPC-01 | Almud | Crown | Monarch | 0 | Domain Actions, faction leadership deviation, succession |
-| NPC-02 | Vaynard | Church | Cardinal (leader) | 0 | TC clock, Inquisitor oversight, ethical framework deviation |
+| NPC-01 | Almud | Crown | Monarch | 10 | Domain Actions, faction leadership deviation, succession |
+| NPC-02 | Confessor Himmlensendt | Church | Cardinal (leader) | 0 | TC clock, Inquisitor oversight, ethical framework deviation |
 | NPC-03 | Cardinal Olafsson | Church | Senior cardinal | 0 | Church internal politics, territorial seizure |
-| NPC-04 | Cardinal Klapp | Church | Senior cardinal | 0 | Debate, social mechanics, Reading Exchange |
-| NPC-05 | Lenneth | Revolution | Leader | 0→TS via research | TS growth (scholarly), Restoration, faction creation |
-| NPC-06 | Baralta | Hafenmark | Guild-master (leader) | 0 | Trade, negotiation, alliance/treaty, categorical imperative |
+| NPC-04 | Cardinal Klapp | Church | Senior cardinal | 10-29 | Debate, social mechanics, Reading Exchange |
+| NPC-05 | Lenneth | Crown/Restoration | Queen/Supporter | 0→TS via research | TS growth (scholarly), Restoration, faction creation |
+| NPC-06 | Inge Baralta | Hafenmark | Duchess | 0 | Divine right to rule, law, Parliament, categorical imperative |
 | NPC-07 | Sigrid Ehrenwall | Löwenritter | Grandmaster | 0 | Coup trigger, Martial Law, institutional loyalty |
-| NPC-08 | Elske Almqvist | Crown/Altonia | Princess (married to Altonian Duke) | 0 | Succession, independence paths, cross-faction |
+| NPC-08 | Elske Almqvist | Crown/Altonia | Princess (married to Altonian Duke, second in line to become monarch of Valoria) | 0 | Succession, independence paths, cross-faction |
 | NPC-09 | Torben | Crown/Altonia | Prince (Royal Court) | 0 | Loyalty clock, tutoring demand, covert contact |
 | NPC-10 | [Niflhel leader TBD] | Niflhel | Primus inter pares | 0 | Smuggling, black market, heretical goods trade |
-| NPC-11 | [Varfell leader TBD] | Varfell | Head of Society | 10–29 | Artifact research, Private Collection, Thread-adjacent |
+| NPC-11 | Magnus Vaynard | Varfell | Duke | 10–29 | Royal politics, Consequentialism, Artifact research, Private Collection, Thread-adjacent |
 | NPC-12 | [Guild leader TBD] | Guilds | Guild-master | 0 | Trade, moral relativism, economic mechanics |
-| NPC-13 | [Restoration elder TBD] | Revolution | Non-TS elder | 0 | Black market threadweaved goods, coalition building |
+| NPC-13 | [Restoration elder TBD] | Revolution | Non-TS elder | 0 | Social justice, underground recruitment, debating and ralkying, black market threadweaved goods, coalition building |
 
 ## 2B. Generic Characters (unique-mechanic archetypes for substitution)
 
@@ -166,7 +166,7 @@ Every test must specify which character(s) are used. Named NPCs must be substitu
 | GEN-05 | High-TS practitioner | 70+ | Past-Oriented Pull, advanced Thread ops, Coherence pressure, Rendering Crisis | Any |
 | GEN-06 | Restoration seeker | 10–29 | Thread perception (not practice), black market threadweaved goods, Southernmost edges, Forgetting resistance failure | Revolution |
 | GEN-07 | Niflhel operative | 0 | Smuggling, black market, unwitting heretical goods trade, decentralized ops | Niflhel |
-| GEN-08 | Political operative | 0 | Debate, Reading Exchange, Rhetoric styles, Circles, Composure, Stunts | Crown/Hafenmark |
+| GEN-08 | Political operative | 0 | Debate, Reading Exchange, Rhetoric styles, Circles, Composure, Stunts | Crown/Hafenmark/Varfell |
 | GEN-09 | Non-sensitive civilian | 0 | Epistemological barrier, witnessing Thread consequences, Forgetting, social mechanics only | None |
 
 These 9 archetypes cover every unique mechanic cluster. Named NPCs (Part 2A) provide faction-leader and narrative-specific coverage.
@@ -182,9 +182,9 @@ Every faction must appear in tests as: (a) the active faction, (b) the opposing 
 | Faction | As Active | As Opponent | As Neutral/Allied | Named NPC Substitutions (min 3) |
 |---------|-----------|-------------|--------------------|---------------------------------|
 | Crown | | | | Almud, Elske, Torben |
-| Church | | | | Vaynard, Olafsson, Klapp |
+| Church | | | | Himmlensendt, Olafsson, Klapp |
 | Hafenmark | | | | Baralta |
-| Varfell | | | | [leader TBD] |
+| Varfell | | | | Vaynard |
 | Guilds | | | | [leader TBD] |
 | Niflhel | | | | [leader TBD] |
 | Revolution | | | | Lenneth, [Restoration elder TBD] |
@@ -199,9 +199,11 @@ Every faction must appear in tests as: (a) the active faction, (b) the opposing 
 | Crown × Altonia (external) | Succession, IP clock, tutoring demand | HIGH |
 | Church × Revolution | Heresy investigation, Restoration suppression | HIGH |
 | Church × Niflhel | Black market heretical goods (Church condemns, Niflhel unknowingly trades) | HIGH |
+| Varfell × Hafenmark | Political alliance/tension, treaty mechanics, supplanting Monarch, ethical tension | HIGH |
 | Niflhel × Restoration | Black market threadweaved goods (Restoration seeks, Niflhel supplies) | MEDIUM |
 | Hafenmark × Guilds | Trade competition, economic influence | MEDIUM |
-| Varfell × Revolution | Scholarly overlap, artifact access, Southernmost edges | MEDIUM |
+| Varfell × Restoration | Scholarly overlap, artifact access, Southernmost edges | MEDIUM |
+| Crown × Varfell | Political alliance/tension, treaty mechanics | MEDIUM |
 | Crown × Hafenmark | Political alliance/tension, treaty mechanics | MEDIUM |
 | Any × Any (3-way) | Alliance formation, betrayal, casus belli | HIGH |
 
