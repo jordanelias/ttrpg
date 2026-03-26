@@ -183,9 +183,8 @@ Attributes range from 1 to 7. A score of 3 is the human average. 1 is severely l
 | Contact Rounds | Focus | 1–7 | Maximum rounds maintaining Thread contact (practitioners only) |
 | Certainty | Spirit (starting and maximum value) | 0–7 | Existential coherence; at 0, rendering crisis |
 | Coherence | 10 (starting value); countdown to 0 | 0–10 | Measures how legible reality remains to the character |
-| Resolve | Spirit | 1–7 | Maximum total Inspiration value |
 
-**Contact Rounds** uses Focus (not Heart) because sustained Thread contact is an act of concentration, not willpower.
+**Contact Rounds** uses Focus because sustained Thread contact is an act of concentration, not willpower.
 
 ---
 
@@ -356,7 +355,7 @@ A completed Belief may be converted to an Inspiration focus at 1 point (see §4.
 
 ## 4.3 Inspirations
 
-Total Inspiration value ≤ **Resolve** (Spirit score). Individual Inspirations rated 1–N; sum may not exceed Resolve.
+Total Inspiration value ≤ **Spirit score**. Individual Inspirations rated 1–N; sum may not exceed Spirit.
 
 Each Inspiration has a named **focus**: a person, place, ideal, or object that gives the character determination.
 
@@ -455,7 +454,7 @@ The Spirit check is still required — intellectual understanding alone does not
 
 ## 4.5 Intelligibility
 
-Intelligibility replaces the Taint track. It measures how legible reality remains to a character engaged in Thread operations. Range: 10 (fully coherent) to 0 (reality unreadable).
+Intelligibility replaces the Coherence track. It measures how legible reality remains to a character engaged in Thread operations. Range: 10 (fully coherent) to 0 (reality unreadable).
 
 **Starting value:** 10 (all characters).
 
@@ -480,7 +479,7 @@ Intelligibility replaces the Taint track. It measures how legible reality remain
 - A Close Knot voluntarily anchoring the practitioner through a dedicated Anchoring Scene (Bonds check TN 7, Ob 2): +1 Intelligibility (costs the Knot +1 strain)
 - Certain Einhir techniques (GM discretion, late-campaign): +1–2 Intelligibility
 
-**Knot strain from Intelligibility:** Replaces the Taint strain accumulation from prior editions.
+**Knot strain from Intelligibility:** Replaces the Coherence strain accumulation from prior editions.
 - Intelligibility 7–5: +1 strain to all Knots per 3 sessions
 - Intelligibility 4–3: +1 strain to all Knots per 2 sessions
 - Intelligibility 2–1: +1 strain to all Knots per session
@@ -520,7 +519,7 @@ Each character tracks up to **Bonds score** significant Knots. Established at cr
 
 ### Strain Sources
 
-- **Intelligibility decay:** See §4.5 (replaces Taint strain).
+- **Intelligibility decay:** See §4.5 (replaces Coherence strain).
 - **Composure buffer:** When absorbing Composure strain through a Knot (see §9), +1 strain per use.
 - **Call a Knot:** +2 strain per use (see below).
 - **External events:** Territory conquest affecting the Knot's entity, faction collapse, Thread operations targeting the entity.
@@ -630,7 +629,7 @@ Character Points (CP) are earned through Belief engagement (§4.2) and spent on 
 
 ## 4.11 Composure and Social Damage
 
-**Composure = Presence + Attunement.** Social damage (from Debates, Appeals, public humiliation, Thread-related social strain) reduces Composure.
+**Composure = Presence + 6.** Social damage (from Debates, Appeals, public humiliation, Thread-related social strain) reduces Composure.
 
 When Composure reaches 0:
 1. Character becomes **Rattled** (Composure resets to full).
@@ -681,7 +680,7 @@ The Leap is a **full-round action (Priority 5)**. No attack, no movement, no man
 
 ### The Leap Roll
 
-**Pool:** Cognition + Heart + relevant History bonus (e.g., "Einhir Scholar": points + 3)
+**Pool:** Attunement + relevant History bonus (e.g., "Einhir Scholar": points + 3)
 **TN:** 7
 **Ob:** TS 30–49 = 2 · TS 50+ = 1 · +1 Ob per Wound
 
@@ -702,18 +701,18 @@ The first time a character attempts the Leap, it is run as a full event scene ra
 
 ### Contact Duration
 
-Once the Leap succeeds, contact is maintained automatically for a number of rounds equal to the practitioner's **Heart score**. The Leap round itself counts as Round 1. At Round (Heart + 1), contact drops naturally.
+Once the Leap succeeds, contact is maintained automatically for a number of rounds equal to the practitioner's **Focus score**. The Leap round itself counts as Round 1. At Round (Focus + 1), contact drops naturally.
 
 The window is time-based — it counts down whether or not the practitioner acts within it.
 
-Standard sequence (Heart 3 or more):
+Standard sequence (Focus 3 or more):
 - Round 1: Leap (Priority 5) — contact established
 - Round 2: Diagnosis (Priority 4, free, does not shorten window)
 - Round 3: Operation (Priority 4 or 5)
 
-At Heart 2: only Rounds 1 and 2 are covered — Diagnosis is possible but the operation requires re-Leaping.
+At Focus 2: only Rounds 1 and 2 are covered — Diagnosis is possible but the operation requires re-Leaping.
 
-**Wound disruption during maintained contact:** When the practitioner takes a Wound while contact is established, make a Heart check immediately: Heart score in d10s, TN 7, Ob 1. Failure: contact drops. Damage that does not produce a Wound does not trigger this check.
+**Wound disruption during maintained contact:** When the practitioner takes a Wound while contact is established, make a Focus check immediately: Focus score in d10s, TN 7, Ob 1. Failure: contact drops. Damage that does not produce a Wound does not trigger this check.
 
 ### Thread Operation Visibility
 
@@ -747,7 +746,7 @@ The practitioner states what they are sensing. The GM describes:
 - How tight or loose the actualization is (sets Operation Ob)
 - Whether threads have been previously worked (residue of prior operations)
 - Whether a Gap is forming (critical safety information)
-- Taint trace, if the configuration has been touched by a transforming practitioner
+- Coherence trace, if the configuration has been touched by a transforming practitioner
 - For past-oriented operations: the temporal weight of the configuration
 
 **Mandatory before Forced Resolution.** Skipping Diagnosis before FR: +2 Ob and automatic Gap creation on Failure regardless of degree.
@@ -761,7 +760,7 @@ The practitioner states what they are sensing. The GM describes:
 **Foregrounded dimensions:** Actuality toward coherence; temporality toward persistence. Things cohere, connect, stabilise. Effects are potentially permanent. Healing through Weaving accelerates natural temporal progression — the wound resolves as it would, but faster. Scars are real; the world is consistent. No paradox.
 
 **Requirements:** TS 30+ · Approach Training tag
-**Pool:** Cognition + Memory + relevant History bonus
+**Pool:** Spirit + relevant History bonus
 **TN:** 7
 
 Pre-calculate the Weaving pool on the character sheet.
@@ -782,8 +781,8 @@ A practitioner below the required TS cannot attempt that scale — they cannot i
 |---|---|
 | Overwhelming | Full effect. TT −1 (Relational scale or above only). Practitioner gains 1 TS. The effect exceeds the stated goal — a wound closes without scarring; a bound agreement develops genuine trust beyond its terms. |
 | Success | Full effect. TT unchanged. |
-| Partial | Partial effect (GM sets scope). TT +1. CD +1. |
-| Failure | Weave collapses. TT +2. CD +1. At TT ≥ 60: Shifting Object forms. At TT ≥ 80: Gap opens. |
+| Partial | Partial effect (GM sets scope). TT +1. ThS −1. |
+| Failure | Weave collapses. TT +2. ThS −1. At TT ≥ 60: Shifting Object forms. At TT ≥ 80: Gap opens. |
 
 **Partial Health restoration:** Weaving at Personal scale or above can restore Health that has not yet triggered a Wound. On Success: restore up to 4 lost Health points (does not heal Wounds). On Overwhelming: restore full Health and heal 1 Wound.
 
@@ -806,7 +805,7 @@ A practitioner below the required TS cannot attempt that scale — they cannot i
 **Foregrounded dimensions:** Actuality toward potential; temporality toward loosening. Draws a thread toward potential — loosens what is fixed, opens what is closed. Effects are inherently temporary: pulled threads re-actualise to their natural configuration.
 
 **Requirements:** TS 30+
-**Pool:** Cognition + Attunement + relevant History bonus
+**Pool:** Spirit + relevant History bonus
 **TN:** 7
 
 Pre-calculate the Pulling pool on the character sheet.
@@ -834,8 +833,8 @@ Pre-calculate the Pulling pool on the character sheet.
 |---|---|
 | Overwhelming | Full effect. Extended duration. TT unchanged. |
 | Success | Full effect. Standard duration. TT unchanged. |
-| Partial | Partial effect or reduced duration. TT +1. CD +1. |
-| Failure | Snap-back. 1 Wound (no armour). TT +2. CD +1. |
+| Partial | Partial effect or reduced duration. TT +1. ThS −1. |
+| Failure | Snap-back. 1 Wound (no armour). TT +2. ThS −1. |
 
 **Perception Pulling:** Targeting a character's awareness/perception removes their defensive action for one round.
 
@@ -855,7 +854,7 @@ Pre-calculate the Pulling pool on the character sheet.
 **Foregrounded dimension:** Temporality toward the past — drawing a thread back so a prior event never fully actualised. This produces a **Temporal Disjunction**: physical facts are removed, but memories remain intact. The past event "never fully actualised" but everyone who experienced it retains the memory.
 
 **Requirements:** TS 70+ · TT ≥ 40 · Diagnosis mandatory
-**Pool:** Cognition + Heart + Memory + relevant History bonus (three attributes — this operation costs everything)
+**Pool:** Spirit + relevant History bonus
 **TN:** 7
 
 **Ob by recency:**
@@ -869,7 +868,7 @@ Pre-calculate the Pulling pool on the character sheet.
 | Prior seasons | 7+ (escalates) |
 
 **TT:** +3 minimum regardless of degree.
-**CD:** Automatic +3 additional (on top of any other CD costs).
+**ThS:** Automatic +3 additional (on top of any other ThS costs).
 
 **Co-Movement:** Past-Oriented Pulling produces secondary consequences in *both* remaining dimensions. The GM determines consequences for the actual and epistemic dimensions — not just one.
 
@@ -880,7 +879,7 @@ Pre-calculate the Pulling pool on the character sheet.
 FR collapses a thread entirely to one of its two poles. **Lock** drives it toward full actualization — permanent, unchangeable. **Dissolution** drives it toward the unintelligible pole — the thread's contribution to the rendered world dissolves. Both are irreversible without directly addressing the same thread. Both are catastrophic at scale.
 
 **Requirements:** TS 50+ · Diagnosis immediately preceding (mandatory)
-**Pool:** Cognition + Memory + relevant History bonus
+**Pool:** Spirit + relevant History bonus
 **TN:** 7
 **Minimum Ob:** 4 regardless of target
 
@@ -900,7 +899,7 @@ Pre-calculate the FR pool on the character sheet. It uses the same formula as th
 
 **FR is a full-round action (Priority 5)**. The practitioner commits entirely to the collapse.
 
-**TS 70+ Tier Reduction:** Sensitive and Resonant practitioners reduce all FR TT costs by 1 (minimum 1). This does not apply to CD costs.
+**TS 70+ Tier Reduction:** Sensitive and Resonant practitioners reduce all FR TT costs by 1 (minimum 1). This does not apply to ThS costs.
 
 ### Lock Results
 
@@ -908,8 +907,8 @@ Pre-calculate the FR pool on the character sheet. It uses the same formula as th
 |---|---|
 | Overwhelming | Target permanently locked. TT +2. Practitioner gains 1 TS. |
 | Success | Target locked. TT +2. |
-| Partial | Partial lock (GM sets scope). TT +3. CD +2. |
-| Failure | Collapse onto practitioner. Take 2 Wounds (armour does not apply). TT +4. CD +2. |
+| Partial | Partial lock (GM sets scope). TT +3. ThS −2. |
+| Failure | Collapse onto practitioner. Take 2 Wounds (armour does not apply). TT +4. ThS −2. |
 
 ### Dissolution Results
 
@@ -917,8 +916,8 @@ Pre-calculate the FR pool on the character sheet. It uses the same formula as th
 |---|---|
 | Overwhelming | Target dissolves cleanly. TT +3. Micro-Gap forms and closes within the scene. |
 | Success | Target dissolves. TT +5. Gap forms, lasts one scene, closes. |
-| Partial | Target becomes a Shifting Object. TT +6. Gap does not close without Weaving. CD +2. |
-| Failure | Full Gap tears open. TT +8. Monstrous Incursion occurs immediately. Practitioner is Incapacitated. CD +2. |
+| Partial | Target becomes a Shifting Object. TT +6. Gap does not close without Weaving. ThS −2. |
+| Failure | Full Gap tears open. TT +8. Monstrous Incursion occurs immediately. Practitioner is Incapacitated. ThS −2. |
 
 ### Representative FR Examples
 
@@ -951,11 +950,11 @@ Fires on **every** operation. The temporal dimension always moves.
 
 | Operation Type | Temporal Auto-Effect |
 |---|---|
-| Weaving (any degree) | CD +1. The target's temporal axis compresses — the present contains a healed or stabilised version earlier than natural. Observers with TS 10+ perceive the target as "clearer" or "more vivid" for 1 scene. |
-| Pulling (any degree) | CD +1. The loosened thread's temporal anchoring frays. Any social roll citing the Pulled target as historical precedent: +1 Ob until publicly reaffirmed (R40). |
-| FR Lock | CD +2. The locked configuration's temporal axis freezes. No further temporal movement is possible for that thread — it exists in a permanent present. |
-| FR Dissolution | CD +2. The dissolved configuration leaves a temporal void. All present characters feel the present as denser — temporal weight redistributed across the scene. |
-| Past-Oriented Pull | CD +3 additional. The altered past creates an epistemic paradox for witnesses: anyone who remembers the original event retains both memories. The paradox is unresolvable without Thread-level understanding. |
+| Weaving (any degree) | ThS −1. The target's temporal axis compresses — the present contains a healed or stabilised version earlier than natural. Observers with TS 10+ perceive the target as "clearer" or "more vivid" for 1 scene. |
+| Pulling (any degree) | ThS −1. The loosened thread's temporal anchoring frays. Any social roll citing the Pulled target as historical precedent: +1 Ob until publicly reaffirmed (R40). |
+| FR Lock | ThS −2. The locked configuration's temporal axis freezes. No further temporal movement is possible for that thread — it exists in a permanent present. |
+| FR Dissolution | ThS −2. The dissolved configuration leaves a temporal void. All present characters feel the present as denser — temporal weight redistributed across the scene. |
+| Past-Oriented Pull | ThS −3 additional. The altered past creates an epistemic paradox for witnesses: anyone who remembers the original event retains both memories. The paradox is unresolvable without Thread-level understanding. |
 
 ### Automatic Epistemic Co-Movement
 
@@ -989,31 +988,31 @@ The GM rolls d6 on every operation. This is the one random element in the co-mov
 
 When a Thread operation's temporal co-movement fires, the GM checks whether the practitioner has a History relevant to the operation's context. If yes: the History **resonates**.
 
-Next use of that History: the practitioner rolls 1 bonus die (d10). This represents the accumulated past briefly amplifying the present. If the bonus die shows a **1**: CD +1 (the temporal connection deepened the disjunction).
+Next use of that History: the practitioner rolls 1 bonus die (d10). This represents the accumulated past briefly amplifying the present. If the bonus die shows a **1**: ThS −1 (the temporal connection deepened the disjunction).
 
 **Constraints:**
 - Only one Resonance active per History at a time
 - Resonance persists until discharged (the bonus die is rolled)
 - History Resonance fires approximately 1–2 times per session at typical play rates
-- Expected campaign CD from Resonance: ~4–5 additional CD over 30 sessions (mathematically minor but narratively persistent)
+- Expected campaign ThS from Resonance: ~4–5 additional ThS over 30 sessions (mathematically minor but narratively persistent)
 
 ### Practitioner Flashback Temporal Anchoring (R38)
 
-When a practitioner uses a Flashback (Inspiration spend to declare a retroactive scene), their Thread sensitivity means the retroactive declaration partially actualises the past scene. If the Flashback involves Thread-relevant content — locations with Thread history, people with TS 30+, Originary Locks, dissolution residue — the GM may rule: **CD +1**.
+When a practitioner uses a Flashback (Inspiration spend to declare a retroactive scene), their Thread sensitivity means the retroactive declaration partially actualises the past scene. If the Flashback involves Thread-relevant content — locations with Thread history, people with TS 30+, Originary Locks, dissolution residue — the GM may rule: **ThS −1**.
 
 This cost applies **only to practitioners**, not to non-practitioner Flashbacks. It is GM discretion, not automatic — mundane Flashbacks are unaffected.
 
-## 5.9 Coherence Degradation (CD) — 0 to 20
+## 5.9 Thread Stability (ThS) — 20 to 0
 
-Coherence Degradation tracks the growing disjunction between the practitioner's lived configuration and the world's rendered state. As a practitioner works threads, their own configuration becomes less stable across all three dimensions — intelligibility, actuality, and temporality. This is not merely temporal; the practitioner's entire rendering frays.
+Thread Stability tracks the coherence of the practitioner's configuration relative to the world's rendered state. As a practitioner works threads, their own configuration becomes less stable across all three dimensions — intelligibility, actuality, and temporality. High Thread Stability means the practitioner's rendering is intact; low Thread Stability means it is fraying.
 
-CD is a **campaign-arc resource**, not a per-session meter. It accumulates across the campaign.
+ThS is a **campaign-arc resource**, not a per-session meter. It starts at 20 and decreases across the campaign.
 
-### CD Accumulation
+### ThS Loss
 
-CD accumulates through Thread operations (from co-movement auto-effects), History Resonance risk dice, and practitioner Flashback anchoring. The primary sources:
+ThS decreases through Thread operations (from co-movement auto-effects), History Resonance risk dice, and practitioner Flashback anchoring. The primary sources:
 
-| Source | CD Gain |
+| Source | ThS Loss |
 |---|---|
 | Object scale operation (any result) | +1 (from temporal auto-effect) |
 | Personal scale (Success/Overwhelming) | +1 (from temporal auto-effect) |
@@ -1027,17 +1026,17 @@ CD accumulates through Thread operations (from co-movement auto-effects), Histor
 
 ### Recovery
 
-−2 CD at the end of any season in which the practitioner's final session contained no Thread operations.
++2 ThS at the end of any season in which the practitioner's final session contained no Thread operations.
 
-### CD Thresholds and Fallout
+### ThS Thresholds and Fallout
 
-| CD | State | Effect |
+| ThS | State | Effect |
 |---|---|---|
-| 1–5 | Dissonant | Narrative only — flickers of wrongness, momentary déjà vu, sense of events being slightly out of sequence. |
-| 6–10 | Fragmented | Configuration unreliable. −1D to all Memory-based rolls. GM may present the character's recollection differently from what others remember. Roll Fragmented Fallout on entering this band. |
-| 11–15 | Fractured | −2D to Memory-based rolls. Once per scene in which a Thread operation is performed: Spirit TN 7 Ob 1 or lose 1 round to a dissociative episode. Roll Fractured Fallout on entering this band. +1 Ob on all Thread operations. +1 Ob on testimony about Thread events. |
-| 16–19 | Severed | −3D to Memory-based rolls. Dissociative episodes once per scene regardless of operations. |
-| 20 | Crisis | Campaign event. The character must resolve the disjunction narratively — sustained engagement with the world's rendered state — or withdraw from practice until CD falls below 16. |
+| 20–16 | Dissonant | Narrative only — flickers of wrongness, momentary déjà vu, sense of events being slightly out of sequence. |
+| 15–11 | Fragmented | Configuration unreliable. −1D to all Memory-based rolls. GM may present the character's recollection differently from what others remember. Roll Fragmented Fallout on entering this band. |
+| 10–6 | Fractured | −2D to Memory-based rolls. Once per scene in which a Thread operation is performed: Spirit TN 7 Ob 1 or lose 1 round to a dissociative episode. Roll Fractured Fallout on entering this band. +1 Ob on all Thread operations. +1 Ob on testimony about Thread events. |
+| 5–1 | Severed | −3D to Memory-based rolls. Dissociative episodes once per scene regardless of operations. |
+| 0 | Crisis | Campaign event. The character must resolve the disjunction narratively — sustained engagement with the world's rendered state — or withdraw from practice until ThS rises above 5. |
 
 **Fragmented Fallout (d6):**
 
@@ -1057,23 +1056,23 @@ CD accumulates through Thread operations (from co-movement auto-effects), Histor
 5. Your Inspiration refresh this scene feels already spent
 6. A Belief reads, briefly, as belonging to someone else
 
-## 5.10 Transformation and Epistemic Seduction — Taint Track
+## 5.10 Transformation and Epistemic Seduction — Coherence Track
 
-Dissolution residue use adds Taint. Transformation is a **perceptual shift**, not a corruption mechanic. The character's sense of what is real and normatively binding changes — this is epistemic seduction, not moral decay.
+Dissolution residue use reduces Coherence. Transformation is a **perceptual shift**, not a corruption mechanic. The character's sense of what is real and normatively binding changes — this is epistemic seduction, not moral decay.
 
-[EDITORIAL: Taint track scale — confirm 0–10 (COMPLETE version, richer content) vs 0–7 (audit version, uniform with attribute scale). Current compilation uses 0–10.]
+*Coherence track: individual, 10 (fully coherent) to 0 (monstrous configuration). Starts at 10.*
 
-**Taint accumulation:** +1 per use of dissolution residue (declared before rolling). Maximum one use per contact window. Subsequent uses from the same source: +1 Ob per prior use (residue depletion).
+**Coherence loss:** −1 per use of dissolution residue (declared before rolling). Maximum one use per contact window. Subsequent uses from the same source: +1 Ob per prior use (residue depletion).
 
-| Taint | Effect |
+| Coherence | Effect |
 |---|---|
-| 1–3 | +1D to Thread operations. Other practitioners with TS 50+ in the same scene sense the instability. Knot strain begins (+1 per 3 sessions per Knot). |
-| 4–6 | +2D to Thread operations. −1D to social rolls. Rendering contingency increasingly perceptible. Moral distinctions soften. GM recontextualises one Knot to clinical "configuration" language. Knot strain pace increases to +1 per 2 sessions. |
-| 7–8 | +3D to Thread operations. −2D to social rolls. NPCs react with unease. Character functions as minor monstrous presence — rendering strain for those in proximity. All Knots +1 strain per session. Maximum Certainty −1 per Taint level above 6. **Belief co-authorship** (see below). |
-| 9 | Character perceives the "human"/"monstrous" distinction as a rendering artifact. Corrective Weaving is possible but the character does not perceive it as desirable. Player chooses: accept correction (lose all Taint benefits, take 2 Wounds from reconfiguration) or continue. |
-| 10 | Monstrous configuration. Character becomes NPC under GM control. All Knots receive final pulse of rendering strain. |
+| 7–9 | +1D to Thread operations. Other practitioners with TS 50+ in the same scene sense the instability. Knot strain begins (+1 per 3 sessions per Knot). |
+| 4–6 | +2D to Thread operations. −1D to social rolls. Rendering contingency increasingly perceptible. Distinctions between the intelligible and unintelligible soften. GM recontextualises one Knot to clinical "configuration" language. Knot strain pace increases to +1 per 2 sessions. |
+| 2–3 | +3D to Thread operations. −2D to social rolls. NPCs react with unease. Character functions as minor monstrous presence — rendering strain for those in proximity. All Knots +1 strain per session. Maximum Certainty −1 per Coherence level below 4. **Belief co-authorship** (see below). |
+| 1 | Character perceives the "human"/"monstrous" distinction as a rendering artifact. Corrective Weaving is possible but the character does not perceive it as desirable. Player chooses: accept correction (restore Coherence to 5, take 2 Wounds from reconfiguration) or continue. |
+| 0 | Monstrous configuration. Character becomes NPC under GM control. All Knots receive final pulse of rendering strain. |
 
-### Belief Co-Authorship (Taint 7+)
+### Belief Co-Authorship (Coherence 7+)
 
 GM presents the transformed perspective as the character's internal voice. Player must rewrite each Belief to reflect this perspective. GM veto: rewrites that do not authentically reflect the transformation. Player veto: rewrites that eliminate all character intentionality.
 
@@ -1081,9 +1080,9 @@ If agreement is unreachable within the scene: Belief marked **Contested** — ca
 
 ### Community Intervention
 
-At Taint 4–6: Corrective Weaving (Ob 3, another practitioner) reduces Taint by 1 per season.
+At Coherence 4–6: Corrective Weaving (Ob 3, another practitioner) restores Coherence by 1 per season.
 
-After Taint 7: requires the transforming character's active cooperation — which epistemic seduction makes increasingly unlikely.
+Below Coherence 4: requires the transforming character's active cooperation — which epistemic seduction makes increasingly unlikely.
 
 ## 5.11 Dissolution Residue — Thread Materia
 
@@ -1101,7 +1100,7 @@ Non-practitioners: CE +1 per extended handling session. Practitioners: immediate
 
 A practitioner may draw on dissolution residue to power a Thread operation. Add bonus dice equal to the residue's Potency rating (1–5, GM-determined) to the operation pool. These bonus dice explode on **9–10** rather than 10 only — the compressed potential is volatile.
 
-Declare before rolling. +1 Taint per use. Maximum one use per contact window. Same source: +1 Ob per prior use (depletion).
+Declare before rolling. −1 Coherence per use. Maximum one use per contact window. Same source: +1 Ob per prior use (depletion).
 
 ### Storage and Detection
 
@@ -1125,7 +1124,7 @@ Objects present at or interacted with during a monstrous entity's arrival, or at
 
 **Properties:** Cannot be Pulled, Woven, or subjected to standard FR. They can be sensed, Diagnosed, and held, but not worked.
 
-**Handling an Originary Lock (TS 50+ required):** When a practitioner handles an Originary Lock for one full scene, they receive a revelation experience: +10 TS gain immediately, plus a Heart check (TN 8, Ob = current Wounds + 1) or take 2 Wounds (armour does not apply). The experience is permanent and cannot be unfelt. A practitioner who has handled an Originary Lock from Galbados's emergence has felt the shape of the third mode — the arriving that holds itself together.
+**Handling an Originary Lock (TS 50+ required):** When a practitioner handles an Originary Lock for one full scene, they receive a revelation experience: +10 TS gain immediately, plus a Spirit check (TN 8, Ob = current Wounds + 1) or take 2 Wounds (armour does not apply). The experience is permanent and cannot be unfelt. A practitioner who has handled an Originary Lock from Galbados's emergence has felt the shape of the third mode — the arriving that holds itself together.
 
 ### Category Three — Dissolution Residue
 
@@ -1139,7 +1138,7 @@ Configuration that has partially escaped normal actualization — oscillating be
 
 **Trigger:** An object in a territory where multiple Thread operations have been performed, or where TT has been above 40 for 2+ seasons.
 
-**Certainty cost:** −1 on first witnessing (Heart check TN 7 Ob 1 to resist).
+**Certainty cost:** −1 on first witnessing (Spirit check TN 7 Ob 1 to resist).
 
 **Deterioration:** Worsens to Gap within 1d3 seasons without intervention. Dissolution residue forms at edges each season it persists.
 
@@ -1149,7 +1148,7 @@ Configuration that has partially escaped normal actualization — oscillating be
 
 Wound in the rendered world's fabric.
 
-**Certainty cost:** −1 per scene near a Gap (no Heart check to resist).
+**Certainty cost:** −1 per scene near a Gap (no Spirit check to resist).
 
 **Thread operations within range:** +1 Ob (stacks with other penalties).
 
@@ -1185,7 +1184,7 @@ Immune to social influence. Physical damage halved. Never rout.
 
 **Mode 2 — Providence:** Health 10, Martial 4, Cohesion 3. Organised; apparent purpose. Certainty −1 all in scene. −1 Health per scene (slower). Resists Pulling (Ob +2). Leaves dissolution residue on dissolution.
 
-**Mode 3 — Threadcut Being:** Varies; always has Threadcut tag. No deterioration while Thread work continues. Past-Oriented Pulling auto-produces a Gap. Wounds cost additional sustained Thread work rather than conventional incapacitation. Taint track does not apply. Can communicate; may have comprehensible goals.
+**Mode 3 — Threadcut Being:** Varies; always has Threadcut tag. No deterioration while Thread work continues. Past-Oriented Pulling auto-produces a Gap. Wounds cost additional sustained Thread work rather than conventional incapacitation. Coherence track does not apply. Can communicate; may have comprehensible goals.
 
 **Defeating monstrous entities:**
 - Conventional combat: destroys current configuration. Gap persists. New configuration in 1d4 seasons.
@@ -1223,7 +1222,7 @@ When multiple practitioners work the same configuration, their threads knot into
 **Mechanical distinctions:**
 - Past-Oriented Pulling against a threadcut being: auto-produces a Gap (no temporal thread to pull against)
 - Wound effects: each Wound costs 1 additional point of sustained Thread work rather than the conventional incapacitation Ob penalty
-- Taint track does not apply to threadcut beings
+- Coherence track does not apply to threadcut beings
 
 ## 5.16 Einhir Texts
 
@@ -1249,13 +1248,13 @@ For table use. Print or display during play.
 
 | Dimension | Source | How |
 |---|---|---|
-| Temporal | Automatic | Read from §5.8 temporal table by operation type. CD always accumulates. |
+| Temporal | Automatic | Read from §5.8 temporal table by operation type. ThS always accumulates. |
 | Epistemic | Automatic | Read from §5.8 epistemic table by operation type and degree. Investigation/testimony Ob modifiers apply. |
 | Actual | Random (d6) | Roll on §5.8 actual table. One consequence per operation. |
 
 **Then check:**
-- History Resonance? (Relevant History → bonus die on next use; risk die on 1 = CD +1)
-- Practitioner Flashback this scene? (Thread-relevant content → CD +1, GM discretion)
+- History Resonance? (Relevant History → bonus die on next use; risk die on 1 = ThS −1)
+- Practitioner Flashback this scene? (Thread-relevant content → ThS −1, GM discretion)
 
 ---
 
@@ -1387,7 +1386,7 @@ If the military escort routes (Cohesion 0) or all practitioners are incapacitate
 
 Encounters fire once per zone during Exploration (Season 2). The GM selects or rolls; encounters should reflect the zone type.
 
-**Thread phenomenon** (any zone): A practitioner must identify and navigate a live Thread configuration. Weaving or Pulling check; Ob by zone (Border 2, Inner 3, Core 4). On Partial or Failure: CD +1 for lead practitioner; TT +1.
+**Thread phenomenon** (any zone): A practitioner must identify and navigate a live Thread configuration. Weaving or Pulling check; Ob by zone (Border 2, Inner 3, Core 4). On Partial or Failure: ThS −1 for lead practitioner; TT +1.
 
 **Hostile entity** (Inner zone typical): Monstrous entity emerges from active Gap. Combat. On failure to contain: Gap remains open; TT +2 this season.
 
@@ -1439,8 +1438,8 @@ After completing the Research roll (above), the practitioner may begin Repair se
 
 - **Roll**: Lead practitioner's Weaving pool, Ob 3 (Repair is less acute than the Ceiral Ritual but more technically demanding than ordinary Weaving at this scale; the -1D contact penalty for Core zone is in effect)
 - **Success or Overwhelming**: TT −2 permanent (Southernmost contribution removed). +1 Awareness for faction.
-- **Partial**: TT −1 (partial reduction). Practitioner: CD +1. May continue next season.
-- **Failure**: No progress. TT +1 (disturbing the wound without completing the work). CD +2 for practitioner.
+- **Partial**: TT −1 (partial reduction). Practitioner: ThS −1. May continue next season.
+- **Failure**: No progress. TT +1 (disturbing the wound without completing the work). ThS −2 for practitioner.
 
 After 4–5 successful Repair seasons: the Southernmost is fully stabilised. The wound is closed; configuration dynamics return to normal Thread behaviour; Gap formation ceases. The Southernmost becomes a historically significant but no longer active hazard.
 
@@ -1756,7 +1755,7 @@ Valoria's political landscape is contested by eight factions, six with full mech
 
 **Partial sheets:** Niflhel (no Mandate, no Military), Revolution (Influence, Stability, Intel only), Lowenritter (no Mandate, no Wealth — Military, Intel, Influence, Stability only).
 
-**NPC personal pools** (used in social scenes and investigations) are separate from faction stats. An NPC like Baralta has personal Poise, Heart, Presence etc. on the standard 1–10 attribute scale. Faction stats represent institutional capacity; NPC attributes represent personal capability.
+**NPC personal pools** (used in social scenes and investigations) are separate from faction stats. Named NPCs use the canonical 10-attribute set. Faction stats represent institutional capacity; NPC attributes represent personal capability.
 
 ### Starting Values
 
@@ -1952,7 +1951,7 @@ Vaynard maintains a collection of Einhir artefacts and Thread-locked objects. On
 | **Failure** | Artefact's Thread signature detected by a practitioner. Church Intel gains +1D vs Varfell for 1 season. TT +1. |
 | **Long-term cost** | Each use: +1 to Vaynard's hidden TS. At TS 14+ (his starting value), each use triggers Spirit check TN 7 Ob 1 for a Discovery Event. |
 
-**PC takeover — Collection Discovery Event:** If a non-Vaynard PC takes over Varfell, the Private Collection transfers as an institutional asset (the artefacts exist physically). However, encountering the collection for the first time triggers a mandatory Discovery Event: the new leader finds Vaynard's research notes alongside Thread-locked objects of obvious significance. Heart check TN 7 Ob 1. Success: the player understands what they have inherited and gains TK 1 immediately. Failure: the weight of the collection lands without context — Certainty −1 and a new Belief is offered from behind a position of ignorance.
+**PC takeover — Collection Discovery Event:** If a non-Vaynard PC takes over Varfell, the Private Collection transfers as an institutional asset (the artefacts exist physically). However, encountering the collection for the first time triggers a mandatory Discovery Event: the new leader finds Vaynard's research notes alongside Thread-locked objects of obvious significance. Spirit check TN 7 Ob 1. Success: the player understands what they have inherited and gains TK 1 immediately. Failure: the weight of the collection lands without context — Certainty −1 and a new Belief is offered from behind a position of ignorance.
 
 **Default Leader: Duke Magnus Vaynard**
 - Conviction: Reason · Resonant Style: Consequence · TS: 14 (Dormant; unrecognised)
@@ -2286,13 +2285,13 @@ Each round opens with a **Planning Phase**: each character declares one offensiv
 
 - No offensive action declared → character may declare two defensive postures instead.
 - Move action as primary offensive → Dodge Backwards is the default defensive posture.
-- Ranged character engaged in melee with no melee weapon drawn → defend at Coordination only, Ob 2; draw backup weapon at Priority 4; use it at Priority 6.
+- Ranged character engaged in melee with no melee weapon drawn → defend at Agility only, Ob 2; draw backup weapon at Priority 4; use it at Priority 6.
 
 ### Initiative
 
-Roll Coordination dice, Ob 2. Higher net wins. The winner **declares last** — they hear the opponent's plan before committing. Ties: re-roll.
+Roll Agility dice, Ob 2. Higher net wins. The winner **declares last** — they hear the opponent's plan before committing. Ties: re-roll.
 
-**Ambush**: Ob = ambusher's Tactics History + environment modifier (Ob 1–3). The defender's highest-Cognition character detects. On failure: attackers get one free Priority 2 round and initiative. On success: Coordination vs Coordination; defender's bonus successes from detection apply.
+**Ambush**: Ob = ambusher's Tactics History + environment modifier (Ob 1–3). The defender's highest-Cognition character detects. On failure: attackers get one free Priority 2 round and initiative. On success: Agility vs Agility; defender's bonus successes from detection apply.
 
 ### Priority Table
 
@@ -2321,10 +2320,10 @@ Roll Coordination dice, Ob 2. Higher net wins. The winner **declares last** — 
 
 | Option | Pool | Notes |
 |---|---|---|
-| Dodge Backwards | Coordination − armour penalty | Standard evasion |
-| Duck and Weave | Coordination − armour penalty | Higher-stakes evasion; Partial produces a complication |
+| Dodge Backwards | Agility − armour penalty | Standard evasion |
+| Duck and Weave | Agility − armour penalty | Higher-stakes evasion; Partial produces a complication |
 | Parry | Combat History pool | Melee only. If Parry declared and ranged attack received: automatically switches to Dodge Backwards |
-| Shield | Coordination | Shield bonus applies |
+| Shield | Agility | Shield bonus applies |
 
 ### Damage
 
@@ -2340,13 +2339,13 @@ Excess attack successes = attacker's net − defender's net (minimum 0).
 
 | Manoeuvre | Versus | Effect |
 |---|---|---|
-| Defend! | Coordination | Hold at bay; deny target's move action next round |
-| Disarm | Coordination vs Coordination | Target drops weapon |
-| Trip | Coordination vs Coordination | Target prone: −2D attack, attacks vs prone +2D, double cost to stand |
+| Defend! | Agility | Hold at bay; deny target's move action next round |
+| Disarm | Agility vs Agility | Target drops weapon |
+| Trip | Agility vs Agility | Target prone: −2D attack, attacks vs prone +2D, double cost to stand |
 | Tie Up | Power | Lock weapons; no damage to either this round |
 | Rescue | Endurance | Redirect melee / Priority 4+ attack from ally to self |
 | Reorient | Cognition | Manipulate relative positioning; may establish or deny reach advantage |
-| Withdraw | Coordination | Sacrifice offensive action; re-establish reach advantage |
+| Withdraw | Agility | Sacrifice offensive action; re-establish reach advantage |
 
 ### Group Attacks
 
@@ -2423,8 +2422,8 @@ Mass combat operates at unit scale. Units are military formations with aggregate
 ### Commander Contribution
 
 The commanding officer's attributes directly modify unit rolls:
-- Officer **Coordination**: adds dice to unit attack rolls.
-- Officer **Heart**: adds dice to unit Cohesion checks.
+- Officer **Cognition**: adds dice to unit attack rolls.
+- Officer **Presence**: adds dice to unit Cohesion checks.
 - Officer **Memory**: allows one conditional order per round beyond standard declaration.
 
 ### Declaration Structure
@@ -2435,7 +2434,7 @@ Same simultaneous declaration as personal combat. Both sides declare:
 
 ### Disposition Interaction Table
 
-Read: attacker's row, defender's column. Apply Ob and pool modifier to the attacker's pool (Martial + Commander Coordination ± modifier).
+Read: attacker's row, defender's column. Apply Ob and pool modifier to the attacker's pool (Martial + Commander Cognition ± modifier).
 
 | Attacker \ Defender | Balanced | Defensive | Offensive | Brutal |
 |---|---|---|---|---|
@@ -2471,7 +2470,7 @@ On Formation Break: all attachments are lost for the remainder of the battle. A 
 
 **Formation Break**: Unit's aggregate Health reaches 0. Health resets immediately; all subsequent actions at +1 Ob. Cohesion check required (Cohesion dice, Ob 2). Failure: unit **Routes**.
 
-**Routed**: Cannot take ordered actions. Rally requires an officer with Coordination 4+ to spend their action (Heart roll, Ob 2).
+**Routed**: Cannot take ordered actions. Rally requires an officer with Cognition 4+ to spend their action (Presence roll, Ob 2).
 
 Units that survive a battle gain +1 to a randomly selected stat, once per campaign season (veteran bonus).
 
@@ -2481,7 +2480,7 @@ Units that survive a battle gain +1 to a randomly selected stat, once per campai
 2. Determine primary conflict (who is fighting whom); resolve secondary force declarations.
 3. Apply disposition table for each attacking pair independently.
 4. Resolve all attacks simultaneously using the standard priority table.
-5. **Three-way initiative**: all three sides roll Coordination. Highest net declares last. Second highest declares second-to-last. Lowest declares first with least information.
+5. **Three-way initiative**: all three sides roll Cognition. Highest net declares last. Second highest declares second-to-last. Lowest declares first with least information.
 
 A unit declaring Defensive that is not attacked by any force takes no damage and does not roll.
 
@@ -2582,17 +2581,17 @@ Social conflict in Valoria uses two primary structures: **Appeals** (one-roll pe
 
 ## 9.1 Composure and the Rattled State
 
-**Composure = Poise + Heart.** This is the social wound threshold. Strain accumulates during social conflict; it is not reduced between exchanges within the same scene unless Unmask occurs.
+**Composure = Presence + 6.** This is the social wound threshold. Strain accumulates during social conflict; it is not reduced between exchanges within the same scene unless Unmask occurs.
 
 **Rattled** triggers the moment accumulated strain **first equals or exceeds** Composure. Stop tracking strain at that point — Rattled replaces the number.
 
-- Rattled effect: Poise halved (round down, minimum 1) for all social rolls.
+- Rattled effect: −2D on all social rolls (Presence, Cognition, and Attunement pools).
 - Combat is unaffected by Rattled.
 - Persists until: Unmask, the scene ends, or the character rests.
 
 **Unmask** is a player choice available at any point during a social scene:
 
-- All strain clears; Poise restored to full.
+- All strain clears; Composure restored to full.
 - The character reveals something true — the player declares it, the GM confirms it is not already public.
 - If mid-Debate: the current incomplete exchange is voided. Subsequent direct action in that scene: Ob = exchange deficit + 1 (minimum 1).
 - The formal register breaks. The scene changes nature — a Debate cannot resume after Unmask; it becomes a personal confrontation or collapses.
@@ -2683,7 +2682,7 @@ An Appeal is a single-roll persuasion attempt targeting an audience or individua
 
 A Debate is a formal exchange of positions. Both orators roll simultaneously; each exchange is resolved independently.
 
-**Pool**: Poise + History bonus.
+**Pool**: Cognition + History bonus.
 
 **Exchange counts by stakes:**
 
@@ -2717,9 +2716,9 @@ When a political matter requires an institutional decision, resolve it as a Parl
 |---|---|---|---|---|
 | Reading Exchange | Attunement | Single roll, pre-contact | None | Perception only |
 | Appeal | Presence | Single roll | None | Audience persuasion |
-| Debate (Casual) | Poise | 1 exchange | +1/+2 | Personal dispute |
-| Debate (Formal) | Poise | 3 exchanges | Cumulative | Institutional contest |
-| Grand Debate | Poise | 5 exchanges | Cumulative | Faction-level |
+| Debate (Casual) | Cognition | 1 exchange | +1/+2 | Personal dispute |
+| Debate (Formal) | Cognition | 3 exchanges | Cumulative | Institutional contest |
+| Grand Debate | Cognition | 5 exchanges | Cumulative | Faction-level |
 | Parliamentary Vote | Mandate / Reach | 3 exchanges (best of) | None (institutional) | Political decision |
 
 ---
@@ -2730,7 +2729,7 @@ All social rolls use the standard pool construction (attribute + History bonus),
 
 | Roll Type | Base Attribute |
 |---|---|
-| Debate | Poise |
+| Debate | Cognition |
 | Appeal, Circles, Resources | Presence |
 | Reading Exchange | Attunement |
 
@@ -2805,8 +2804,8 @@ All purchases have narrative requirements. CP alone is insufficient — every pu
 | Attribute +1 | Current score × 3 CP | Maximum 5 per attribute | Training, mentorship, or extended practice narrated |
 | History +1 (beyond test track) | 3 CP | Total cap = Memory score | Identify specific experiences that built this skill |
 | New History at 0 points | 5 CP | Must not duplicate existing History function | Origin scene with GM; establishes eligibility only (0 points = no pool bonus) |
-| New Inspiration at 1 point | 4 CP | Total Inspiration value ≤ Heart score | Name focus; narrate two scenes of genuine pursuit |
-| Inspiration +1 point | 3 CP | Individual cap = Heart score; total ≤ Heart | Scene of sustained engagement with focus this season |
+| New Inspiration at 1 point | 4 CP | Total Inspiration value ≤ Spirit score | Name focus; narrate two scenes of genuine pursuit |
+| Inspiration +1 point | 3 CP | Individual cap = Spirit score; total ≤ Spirit | Scene of sustained engagement with focus this season |
 | New Knot (establish) | 2 CP | Total significant Knots ≤ Bonds score | Relationship must have been played this season |
 | Knot +1 strain capacity | 3 CP | Max strain capacity per Knot = 5 | The relationship has been tested and endured |
 | Circles +1D (permanent) | 4 CP | Max permanent bonus = Presence score | A season of active social investment in that faction |
@@ -2814,7 +2813,7 @@ All purchases have narrative requirements. CP alone is insufficient — every pu
 | Remove 1 Wound | 6 CP | Between seasons only | Narrated treatment: healer, rest, or Thread intervention |
 | Approach Training | 8 CP | TS ≥ 30; must have witnessed ≥1 Thread operation | Replaces mentorship/breakthrough paths as CP-gated alternative |
 
-**No CP purchase for**: TS growth, Intelligibility recovery, Certainty recovery, Coherence Degradation recovery. These are play-driven; they cannot be purchased.
+**No CP purchase for**: TS growth, Intelligibility recovery, Certainty recovery, Thread Stability recovery. These are play-driven; they cannot be purchased.
 
 **Approach Training note**: The 8 CP cost is intentional. Acquiring Thread sensitivity through CP should feel like a campaign milestone. Characters who qualify will have witnessed Thread operations and lived with the knowledge of the Thread's existence for at least one season before spending.
 
@@ -2826,12 +2825,12 @@ All purchases have narrative requirements. CP alone is insufficient — every pu
 
 1. Player declares intent and names the focus.
 2. Two scenes where the character actively engages with the focus (GM confirms engagement is genuine, not incidental).
-3. After each scene: Heart check TN 7, Ob 1.
+3. After each scene: Spirit check TN 7, Ob 1.
    - Both succeed: Inspiration established at 1 point.
    - One succeeds, one fails: Inspiration established at 1 point with a **Complication Tag** (GM assigns a narrative condition — e.g., *"only while in Valorsplatz"* or *"contingent on Lenneth's survival"*).
    - Both fail: focus not yet crystallised. Retry next season with new scenes.
 
-**CP shortcut (G-053):** 4 CP + one scene of genuine engagement + one Heart check. Success: Inspiration at 1 point, no Complication Tag. Failure: 4 CP spent; retry next season.
+**CP shortcut (G-053):** 4 CP + one scene of genuine engagement + one Spirit check. Success: Inspiration at 1 point, no Complication Tag. Failure: 4 CP spent; retry next season.
 
 ### Recovery (from reduced value)
 
@@ -2844,7 +2843,7 @@ All purchases have narrative requirements. CP alone is insufficient — every pu
 When an Inspiration's focus is permanently destroyed, captured, or fundamentally changed such that engagement is no longer possible:
 
 1. Inspiration drops to 0 immediately.
-2. Player may convert to a new Inspiration through a **Grief Scene**: one scene of genuine reckoning with the loss + Heart check TN 7 Ob 2.
+2. Player may convert to a new Inspiration through a **Grief Scene**: one scene of genuine reckoning with the loss + Spirit check TN 7 Ob 2.
    - Success: new Inspiration at old value −1 (minimum 1). New focus must thematically connect to the loss.
    - Failure: Inspiration lost entirely.
 
@@ -3262,7 +3261,7 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 **TS:** 28 (high Dormant; near Stirring threshold). Does not know the name for what he experiences. Attributes felt impressions to spiritual intimation. A Discovery Event would be the most destabilising moment of his reign.
 
 **Social Profile:**
-- Composure: 9 (Poise 5 + Heart 4)
+- Composure: 11 (Presence 5 + 6)
 - Dominant Conviction: Order — legitimate authority through proper institutional channels
 - Resonant Style: Consequence — long-horizon thinking; past injustice moves him less than future structural risk
 
@@ -3273,7 +3272,7 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 
 **The Sovereign Constraint.** Almud's inaction on the Einhir question is structural, not weakness. Acting requires him to simultaneously contradict Church doctrine (TC +3), alienate northern Einhir nobility (Mandate −2), and invite Altonian diplomatic challenge. The constraint erodes only when one or more of these costs is removed by events.
 
-**TS at the table.** In scenes with Thread-significant objects or Taint 3+ practitioners, the GM may privately note that Almud experiences an impression he cannot name. TS 30+ practitioners who succeed on a passive perception check notice the King's threads register faint sensitivity. He does not know they see it.
+**TS at the table.** In scenes with Thread-significant objects or practitioners at Coherence 7 or below, the GM may privately note that Almud experiences an impression he cannot name. TS 30+ practitioners who succeed on a passive perception check notice the King's threads register faint sensitivity. He does not know they see it.
 
 ---
 
@@ -3282,7 +3281,7 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 **TS:** 0 (Inert). Not foreclosed — simply never confronted.
 
 **Social Profile:**
-- Composure: 8 (Poise 4 + Heart 4)
+- Composure: 10 (Presence 4 + 6)
 - Dominant Conviction: Liberty — the concrete political conditions under which people can act without requiring institutional permission
 - Resonant Style: Consequence
 
@@ -3329,8 +3328,8 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 **TS:** 0. Sincerely devout, institutionally effective, and completely without knowledge of what his institution is or what it was built to do. He is the most thorough product of Galbados's theological engineering in the kingdom. His certainty is not the certainty of someone who has considered doubt and rejected it — it is the certainty of someone who has never been given the perceptual tools to approach the question differently.
 
 **Social Profile:**
-- Attributes: Poise 6, Presence 6, Cognition 5
-- Composure: 10 (Poise 6 + Heart 4, estimated)
+- Attributes: Presence 6, Cognition 5
+- Composure: 12 (Presence 6 + 6)
 - Dominant Conviction: Faith
 - Resonant Style: Consequence (what this situation produces for the Church's mandate)
 
@@ -3386,8 +3385,8 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 **TS:** 0 (Inert). Essentialist theology has completely foreclosed TS development. She has no awareness this foreclosure exists.
 
 **Social Profile:**
-- Composure: 8 (Poise 5 + Heart 3)
-- Attributes: Coordination 4, Power 4, Poise 5, Presence 5
+- Attributes: Cognition 4, Endurance 4, Presence 5
+- Composure: 11 (Presence 5 + 6)
 - Dominant Conviction: Order — structured, hierarchical, institutional authority
 - Resonant Style: Evidence — legal precedent, documented history, institutional argument
 
@@ -3421,7 +3420,7 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 **TS:** 14 (Dormant). Does not know he has Thread sensitivity.
 
 **Social Profile:**
-- Composure: 6 (Poise 4 + Heart 2)
+- Composure: 10 (Presence 4 + 6)
 - Dominant Conviction: Reason — truth as instrument; genuine high weight on acknowledged uncertainty
 - Resonant Style: Consequence — forward-looking analysis of what situations will produce
 
@@ -3439,7 +3438,7 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 | 4 | Urgency. Willing to offer collection access (including originary locks) in exchange for Thread education and Southernmost partnership. TC +2. |
 | 5 | Dangerous knowledge — knows what Galbados was structurally. Seeks capability, not knowledge. TC +3. |
 
-**The Discovery Event.** If Vaynard is present during a Thread event of sufficient intensity, the GM may call a Discovery Event. Heart check TN 7 Ob 1. On success: TS advances to 30 (Stirring), and the world reorganises itself for him.
+**The Discovery Event.** If Vaynard is present during a Thread event of sufficient intensity, the GM may call a Discovery Event. Spirit check TN 7 Ob 1. On success: TS advances to 30 (Stirring), and the world reorganises itself for him.
 
 ---
 
@@ -3512,7 +3511,7 @@ Extralegal arm of the Löwenritter. Operations are not recorded in Ministry of L
 | Encounter with monstrous configuration | +2 |
 | Extraction assignment with active practitioner | +1 |
 
-At CE 3+: qualifies for TS growth check (Heart TN 7, Ob 1) on the next confrontation event.
+At CE 3+: qualifies for TS growth check (Cognition TN 7, Ob 1) on the next confrontation event.
 
 ---
 
@@ -3530,7 +3529,7 @@ The Inquisitor Confrontation Arc. An Inquisitor who builds a successful file on 
 | Handling an originary lock or dissolution residue object as evidence | +2 |
 | Extended interrogation of a Resonant-tier practitioner | +3 |
 
-At CE 3: TS growth check — Heart TN 7, Ob 2 (essentialist formation raises the Ob). Success: develops TS toward Dormant. This is a **crisis of faith event**, not a benefit.
+At CE 3: TS growth check — Cognition TN 7, Ob 2 (essentialist formation raises the Ob). Success: develops TS toward Dormant. This is a **crisis of faith event**, not a benefit.
 
 **Three trajectories at CE 3+ with TS development:**
 
@@ -3543,7 +3542,7 @@ At CE 3: TS growth check — Heart TN 7, Ob 2 (essentialist formation raises the
 | Stage | Roll | Notes |
 |---|---|---|
 | 1. File Building | Church Reach, Ob 3 | Player obstruction at Ob 2. |
-| 2. Formal Accusation | Church Reach, Ob 4 | Requires completed File. Accused may call Grand Debate (5 exchanges; pool: Poise + relevant History). |
+| 2. Formal Accusation | Church Reach, Ob 4 | Requires completed File. Accused may call Grand Debate (5 exchanges; pool: Cognition + relevant History). |
 | 3. Conviction Hearing | Grand Debate finale | Conviction: TC +2. Accused faces imprisonment or exile. |
 
 ---
@@ -3850,7 +3849,7 @@ For full mechanics: Weaving (§5.4), Pulling (§5.5), Past-Oriented Pulling (§5
 |---|---|---|---|---|---|
 | W-01 | Wound Closure | Object | 1 | 40 | Temporal acceleration — wound resolves as it would naturally, but now. Memories are consistent; no paradox. |
 | W-02 | Blade Reinforcement | Object | 1 | 40 | Weapon threads drawn toward structural coherence. Weapon gains +1 damage bonus for the scene. |
-| W-03 | Binding Word | Relational | 3 | 60 | Agreement threads woven to mutual coherence. Breaking the agreement produces a local rendering failure in both parties (+1 CD, Certainty check). |
+| W-03 | Binding Word | Relational | 3 | 60 | Agreement threads woven to mutual coherence. Breaking the agreement produces a local rendering failure in both parties (+1 ThS, Certainty check). |
 | W-04 | Territorial Calm | Territorial | 5 | 60 | Regional thread-configuration stabilised. All Thread operations in the territory at −1 Ob for one season. TT −1 on Overwhelming. |
 | W-05 | The Locked Archive | Structural | 6 | 80 | Building's integrity woven so knowledge persists even if the physical form is damaged. Documents within survive destruction as configurational memory. |
 | W-06 | Dissolving a Monstrous Configuration | Variable | 3–5 | 60 | Entity destroyed; Gap partially closed (TT −2 on Success; −4 on Overwhelming). Ob varies with entity's configuration depth. |
@@ -3926,11 +3925,11 @@ All FR operations require TS 50+. All FR operations add TD. Diagnosis mandatory 
 | **Approach Training** | One full campaign season of Thread study. Prerequisite for all active Thread operations. Grants permanent tag; not a roll. |
 | **Beliefs** | Three statements of conviction that drive character action and CP accumulation. Revised through play, not purchase. |
 | **Body of Argument (BoA)** | Social health track in Grand Debates. Equal to Presence or Cognition score. Whittled by losing exchanges. |
-| **CD** | Coherence Degradation. Per-practitioner 0–20 track measuring the growing disjunction between the practitioner's configuration and the rendered world. Not a resource — a campaign-arc cost of sustained practice. |
+| **ThS** | Coherence Degradation. Per-practitioner 0–20 track measuring the growing disjunction between the practitioner's configuration and the rendered world. Not a resource — a campaign-arc cost of sustained practice. |
 | **CE** | Confrontation Exposure. Per-NPC 0–5 track. At CE 3, triggers a TS growth check — a crisis, not a benefit. |
 | **Circles** | Social access network tied to a specific community or institution. Used for Appeal and information-gathering. History-based; degradable. |
 | **Co-Movement** | The principle that every Thread operation produces consequences in all three dimensions (intelligibility, actuality, temporality) simultaneously. The practitioner's intention foregrounds one; the others move automatically. |
-| **Composure** | Social wound track. Equal to Poise + Heart. Strain reduces it; reaching 0 means Rattled. |
+| **Composure** | Social wound track. Equal to Presence + 6 (range 7–13). Strain reduces it; reaching 0 means Rattled. |
 | **Confrontation** | A felt encounter with what exceeds the rendering's capacity. The primary developmental mechanism for Thread Sensitivity in non-practitioners. |
 | **CP** | Character Points. Earned through Beliefs, Maxims, and Ordeals. Spent on advancement (attributes, Histories, Circles, Resources, Boons). |
 | **Devout Constraint** | Essentialist theological formation that forecloses TS development. Cannot be overcome through confrontation alone — requires sustained doctrinal rupture. |
@@ -3990,7 +3989,7 @@ The following fields appear on a complete Valoria character sheet. Pre-calculate
 
 **Derived Scores**
 - Health = Endurance + 6
-- Composure = Poise + Heart *(note: compiled ruleset uses Presence + Spirit — confirm at final pass)*
+- Composure = Presence + 6
 - Certainty = current value / Spirit (maximum)
 
 **Histories (pre-calculated)**
@@ -4003,7 +4002,7 @@ The following fields appear on a complete Valoria character sheet. Pre-calculate
 - Weaving: Cognition + Memory + Scholar History bonus
 - Pulling: Cognition + Attunement + Scholar History bonus
 - FR: Cognition + Memory + Scholar History bonus
-- CD track: current / 20, with stage markers (Dissonant / Fragmented / Fractured / Severed / Crisis)
+- ThS track: current / 20, with stage markers (Dissonant / Fragmented / Fractured / Severed / Crisis)
 
 **Beliefs (2–3)**
 - Statement text
@@ -4108,4 +4107,5 @@ Net zero is Failure. Ob minimum is always 1.
 
 
 ---
+
 
