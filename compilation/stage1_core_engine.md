@@ -144,30 +144,24 @@ Attributes range from 1 to 7. A score of 3 is the human average. 1 is severely l
 
 ## 2.2 Attribute Creation
 
-**Point pool at creation:** 25 points distributed across 10 attributes.
+**Point pool at creation:** 31 points distributed across 10 attributes.
 
 **Constraints:**
 - Minimum 1 per attribute
 - Maximum 5 at creation (one attribute may be 5; all others ≤ 4)
 - Maximum 7 through advancement
 
-**Design note:** The 25-point pool with a floor of 1 per attribute yields 15 discretionary points. A balanced character averages 2.5 per attribute. A specialised character might run 1-1-1-1-1-1-1-4-5-4 (three strong, seven weak). The GM should discuss trade-offs during Session Zero.
-
-[EDITORIAL: 25-point pool is extrapolated from the original 18-point / 6-attribute system scaled to 10 attributes. The original gave 3.0 average with 12 discretionary. 25 points gives 2.5 average with 15 discretionary — slightly more spread. Confirm this is the intended balance, or adjust to 24 (same 12 discretionary as original) or 26 (16 discretionary for more specialisation).]
-
 ## 2.3 Derived Scores
 
 | Score | Formula | Range | Notes |
 |-------|---------|-------|-------|
 | Health | Endurance + 6 | 7–13 | Damage buffer before Wounds |
-| Composure | Presence + Attunement | 2–14 | Social damage buffer before Rattled |
+| Composure | Presence + 6 | 7-13 | Social damage buffer before Rattled |
 | Combat Pool | Agility + weapon proficiency History (points + 3) | Variable | Split between Offence and Defence each round |
 | Contact Rounds | Focus | 1–7 | Maximum rounds maintaining Thread contact (practitioners only) |
 | Certainty | Spirit (starting and maximum value) | 0–7 | Existential coherence; at 0, rendering crisis |
-| Intelligibility | 10 (starting value); countdown to 0 | 0–10 | Replaces Taint; measures how legible reality remains to the character |
+| Coherence | 10 (starting value); countdown to 0 | 0–10 | Measures how legible reality remains to the character |
 | Resolve | Spirit | 1–7 | Maximum total Inspiration value |
-
-**Composure** uses Presence + Attunement (not Heart + Presence as in earlier editions) because social damage targets both one's public persona (Presence) and one's empathic stability (Attunement).
 
 **Contact Rounds** uses Focus (not Heart) because sustained Thread contact is an act of concentration, not willpower.
 
@@ -193,9 +187,9 @@ Ties: re-roll. Initiative holds for the entire combat unless a specific Manoeuvr
 
 Each round has three phases:
 
-**Phase 1 — Declaration (ascending Agility order):** Each combatant announces their action type: Attack, Full Defence, Manoeuvre, Thread Operation, Move, or Withdraw. Thread operation declarations are public. Declarations are not binding on pool split — only on action type.
+**Phase 1 — Declaration (ascending Initiative order):** Each combatant announces their action type: Attack, Full Defence, Manoeuvre, Thread Operation, Move, or Withdraw. Thread operation declarations are public. Declarations are not binding on pool split — only on action type.
 
-**Phase 2 — Division (ascending Agility order; initiative winner divides last):** Each combatant secretly divides their Combat Pool between Offence and Defence dice. Minimum 1 die in each if engaging in both attack and defence. A combatant may commit all dice to Offence (reckless — no defence this round) or all to Defence (full guard — no attack).
+**Phase 2 — Division (ascending Initiative order; initiative winner divides last):** Each combatant secretly divides their Combat Pool between Offence and Defence dice. Minimum 1 die in each if engaging in both attack and defence. A combatant may commit all dice to Offence (reckless — no defence this round) or all to Defence (full guard — no attack).
 
 When a practitioner declares a Thread operation, their full Combat Pool is available for Defence. They cannot allocate Offence dice; their next offence is one full round away.
 
@@ -209,7 +203,7 @@ When a practitioner declares a Thread operation, their full Combat Pool is avail
 
 Pre-calculate and record on the character sheet.
 
-**Minimum Combat Pool:** 5 dice. Characters with a calculated pool below 5 receive 5 dice but roll at −1D effective (minimum 4 dice contribute to successes). This prevents the pool-split decision from becoming meaningless at low values.
+**Minimum Combat Pool:** 5 dice. Characters with a calculated pool below 5 receive 5 dice but roll at -1D effective (maximum 4 dice contribute to successes). This prevents the pool-split decision from becoming meaningless at low values.
 
 **Modifiers to Combat Pool:**
 - Wounds: no direct pool reduction (Wounds add +1 Ob to all rolls instead)
@@ -227,7 +221,7 @@ Pre-calculate and record on the character sheet.
 
 **Damage = Weapon Bonus + excess attack successes − Armour Rating** (minimum 0).
 
-Strength does not add directly to damage. Accuracy (Agility via pool size) determines damage through excess successes. Some heavy weapons have a Strength minimum to wield (see §8.3).
+Strength does not add directly to damage. Accuracy (Agility via pool size) determines damage through excess successes. Weapons have a Strength minimum to wield (see §8.3).
 
 ## 3.6 Reach
 
