@@ -155,42 +155,21 @@ Every test must specify which character(s) are used. Named NPCs must be substitu
 | NPC-12 | [Guild leader TBD] | Guilds | Guild-master | 0 | Trade, moral relativism, economic mechanics |
 | NPC-13 | [Restoration elder TBD] | Revolution | Non-TS elder | 0 | Black market threadweaved goods, coalition building |
 
-## 2B. Generic Faction Characters (one per faction, used in faction-specific tests)
+## 2B. Generic Characters (unique-mechanic archetypes for substitution)
 
-| ID | Archetype | Faction | TS Range | Key Test Purpose |
-|----|-----------|---------|----------|------------------|
-| GEN-01 | Crown soldier | Crown | 0 | Combat, loyalty, chain of command |
-| GEN-02 | Crown courtier | Crown | 0 | Social, Debate, political maneuvering |
-| GEN-03 | Church priest | Church | 0 (Devout) | Devout Constraint, TC interaction, parish |
-| GEN-04 | Church inquisitor | Church | 0 (Devout) | Investigation, heresy mechanics, Inquisitor abilities |
-| GEN-05 | Hafenmark merchant | Hafenmark | 0 | Trade, Resources, Circles, categorical imperative |
-| GEN-06 | Hafenmark councillor | Hafenmark | 0 | Debate, faction governance, treaty negotiation |
-| GEN-07 | Varfell scholar | Varfell | 10–29 | Thread perception (not practice), artifact study |
-| GEN-08 | Varfell field agent | Varfell | 10–29 | Expedition, artifact recovery, Southernmost edges |
-| GEN-09 | Guild artisan | Guilds | 0 | Craft, trade, moral relativism in practice |
-| GEN-10 | Niflhel operative | Niflhel | 0 | Smuggling, black market, unwitting threadweaved goods |
-| GEN-11 | Niflhel enforcer | Niflhel | 0 | Combat, intimidation, amoral consequentialism |
-| GEN-12 | Revolution activist | Revolution | 0 | Political organizing, coalition, social contract |
-| GEN-13 | Restoration seeker | Revolution | 10–29 | Black market threadweaved goods, edge-of-Southernmost |
-| GEN-14 | Löwenritter knight | Löwenritter | 0 | Military, duty, coup conditions awareness |
-| GEN-15 | Riskbreaker | Independent | varies | Thread crisis response, act consequentialism |
+| ID | Archetype | TS Range | Unique Mechanics Engaged | Faction |
+|----|-----------|----------|--------------------------|---------|
+| GEN-01 | Inquisitor | 0 (Devout) | Devout Constraint, Dissonance Marks, heresy investigation, Partial Excommunication | Church |
+| GEN-02 | Riskbreaker | 30–49 | Thread crisis intervention, FR Dissolution, mixed combat+Thread, act consequentialism | Independent |
+| GEN-03 | Knight Templar officer | 0 | Templar organization, military chain of command, duty-centred ethics | Church (Templar) |
+| GEN-04 | Attuned practitioner | 50–69 | All Thread ops, co-movement, CD, Coherence, History Resonance | Any |
+| GEN-05 | High-TS practitioner | 70+ | Past-Oriented Pull, advanced Thread ops, Coherence pressure, Rendering Crisis | Any |
+| GEN-06 | Restoration seeker | 10–29 | Thread perception (not practice), black market threadweaved goods, Southernmost edges, Forgetting resistance failure | Revolution |
+| GEN-07 | Niflhel operative | 0 | Smuggling, black market, unwitting heretical goods trade, decentralized ops | Niflhel |
+| GEN-08 | Political operative | 0 | Debate, Reading Exchange, Rhetoric styles, Circles, Composure, Stunts | Crown/Hafenmark |
+| GEN-09 | Non-sensitive civilian | 0 | Epistemological barrier, witnessing Thread consequences, Forgetting, social mechanics only | None |
 
-## 2C. PC Archetypes (from prior stress tests, expanded)
-
-| ID | Archetype | TS Range | Key Mechanics | Faction Affiliation |
-|----|-----------|----------|---------------|---------------------|
-| PC-01 | Attuned practitioner | 50–69 | All Thread ops, co-movement, CD, Coherence | Any/independent |
-| PC-02 | Political operative | 0 | Social, Debate, Circles, faction politics | Crown or Hafenmark |
-| PC-03 | Devout Inquisitor | 0 (Devout) | Devout Constraint, investigation, Dissonance | Church |
-| PC-04 | Riskbreaker | 30–49 | Thread crisis intervention, mixed combat+Thread | Independent |
-| PC-05 | Faction leader (Crown) | 0 | Domain Actions, succession, strategic | Crown |
-| PC-06 | Faction leader (Church) | 0 (Devout) | TC management, territorial seizure, heresy | Church |
-| PC-07 | Faction leader (Hafenmark) | 0 | Trade, treaty, categorical imperative | Hafenmark |
-| PC-08 | Faction leader (Niflhel) | 0 | Smuggling, decentralized ops, black market | Niflhel |
-| PC-09 | Sensitive scholar | 10–29 | Perception only, academic study, Restoration | Varfell/Revolution |
-| PC-10 | Knight Templar officer | 0 | Military, Templar organization, duty | Church (via Templar) |
-| PC-11 | Non-affiliated civilian | 0 | Social, survival, witnessing Thread consequences | None |
-| PC-12 | High-TS practitioner | 70+ | Past-Oriented Pull, advanced Thread ops, Coherence pressure | Any |
+These 9 archetypes cover every unique mechanic cluster. Named NPCs (Part 2A) provide faction-leader and narrative-specific coverage.
 
 ---
 
