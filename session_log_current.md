@@ -4,63 +4,66 @@
 
 ---
 
-session_close: 2026-03-26-full-compile
+session_close: 2026-03-26-stage17
 phase: 2
-status: Phase 2 COMPLETE — all 16 TTRPG stages compiled; full document assembled
+status: Phase 2 Stage 17 (Canon Guard Pass) COMPLETE
 completed_stages:
-  - Stage 1: Core Engine
-  - Stage 2: Characters
-  - Stage 3: Thread Operations
-  - Stage 4: Southernmost
-  - Stage 5: Clocks (TT/TC/IP)
-  - Stage 6: Factions
-  - Stage 7: Territories
-  - Stage 8: Combat
-  - Stage 9: Social Systems
-  - Stage 10: Advancement
-  - Stage 11: Scale Transitions
-  - Stage 12: Campaign Modes
-  - Stage 13: NPCs + Institutional Actors
-  - Stage 14: GM Tools
-  - Stage 15: Thread Spell Catalog
-  - Stage 16: Reference Materials
-compilation_progress: 16/16 TTRPG stages complete
-assembly_output: compilation/valoria_ttrpg_complete.md (244KB, ~4,100 lines, commit a45b6525)
+  - Stage 1–16: all previously complete
+  - Stage 17: Canon Guard Pass — all patches applied to compilation/valoria_ttrpg_complete.md
+compilation_output: compilation/valoria_ttrpg_complete.md (commit f318f7ee)
+canon_guard_report: compilation/stage17_canon_guard.md (commit 8526e934)
+
+patches_applied:
+  - P1: §5.9 Coherence Degradation → Thread Stability (ThS); track direction 0-20 → 20-0; all CD refs updated
+  - P2: §5.10 Taint Track → Coherence Track; track inverted 0-10 to 10-0 (10=fully coherent, 0=monstrous); all Taint/taint refs updated
+  - P3: Heart attribute removed — Leap pool → Attunement + History; Contact Duration → Focus; all Thread op rolls → Spirit + History; Inspiration checks → Spirit; Discovery Event checks → Spirit; CE TS growth checks → Cognition
+  - P4: Poise removed; Composure = Presence + 6 everywhere; Debate pool → Cognition; NPC Composure values recalculated
+  - P5: Coordination removed — §8.1 personal combat → Agility; §8.3 mass combat Officer pool → Cognition; mass combat initiative → Cognition; Rally → Cognition/Presence
+  - P6: Resolve derived score row removed from §2.3; Inspiration cap reads "Spirit score" directly throughout
+
+thread_op_pools_canonical:
+  Leap: Attunement + History bonus
+  Contact_Duration: Focus score (rounds)
+  Wound_disruption_check: Focus TN 7 Ob 1
+  Weaving: Spirit + History bonus
+  Pulling: Spirit + History bonus
+  Past_Oriented_Pulling: Spirit + History bonus
+  Forced_Resolution: Spirit + History bonus
+
+composure_formula_canonical: Presence + 6 (range 7-13)
+debate_pool_canonical: Cognition + History bonus
+battle_engine_officer_canonical: Cognition (attack) + Presence (cohesion/rally)
+personal_combat_manoeuvres_canonical: Agility
+inspiration_cap_canonical: Spirit score (no derived name)
+coherence_track: individual 10-0 (10=fully coherent, 0=monstrous NPC)
+thread_stability_track: campaign-arc 20-0 (20=stable, 0=crisis)
+
 notes:
-  - Stage 15 contains Thread Spell Catalog only (not equipment — weapons in stage 8, dissolution residue in stage 3)
-  - CP13 Corruption track excluded (not canon per user)
-  - Taint track references flagged for canon-guard pass — stage 3 §5.10 uses "Taint Track" header; canonical mechanic is CD (Coherence Degradation)
-  - Heart/Poise attribute references in stages 3, 9 use old 9-attribute names; stage 1 uses canonical 10-attribute set — cross-stage inconsistency requires canon-guard pass
-  - 4 EDITORIAL flags remain in assembled document (see below)
-canon_guard_issues_flagged:
-  - §5.10 header reads "Taint Track" — should read "Transformation and Epistemic Seduction — Coherence Degradation"
-  - Stage 3 Leap pool uses "Heart" — should use canonical attribute (Focus or Spirit per 10-attr set)
-  - Stage 9 Composure formula uses "Poise + Heart" — neither in 10-attr set; needs resolution
-  - Stage 2 Inspiration cap references "Heart score" — needs attribute substitution
+  - Baralta stat block substituted Cognition 4 / Endurance 4 for non-canonical Coordination 4 / Power 4 — confirm if different values intended
+  - Olafsson Composure = 7 retained (no Poise/Heart formula was present; may need explicit Presence score)
+  - §5.10 "not a corruption mechanic" retained — the word "corruption" appears only in that negating context
+  - Coherence Degradation text in §12.7 TD track uses "ThS" abbreviation — verify §12.7 reads cleanly on resume
+
 editorial_pending:
-  - Renown permission table (Renown 1-10 tiers) — only data point is Renown 6
-  - Varfell Private Collection transfer (PC takeover scenario)
-  - Niflhel primus inter pares decision
-  - Revolution named elder NPC contact (optional)
-  - Territory names (batch_e placeholder vs design doc names)
+  - Renown permission table (tiers 1-10)
+  - Varfell Private Collection transfer
+  - Niflhel primus inter pares
+  - Revolution named elder NPC
+  - Territory names (batch_e placeholders)
   - Varfell victory condition tuning
-  - 10 remaining seasonal event cards (of 20 total)
+  - 10 remaining seasonal event cards
   - Named Restoration NPCs
   - E-01 assassination perpetrator
   - E-03 AG calendar name
   - Niflhel named NPC stat blocks (Rolf Dunmark, Solvind Brak)
   - Revolution named NPC stat blocks (Edith Varn)
+  - Baralta Cognition/Endurance values — confirm correct substitution
+
 next_action:
-  stage: Stage 17 (Canon Guard Pass)
-  task: Systematic canon-guard review of assembled document — resolve attribute name inconsistencies, remove Taint references, verify all 14 canon constraints
+  stage: Stage 18 (Board Game Mode compilation) or Phase 3 (Simulation)
+  recommended: verify §12.7 ThS references read correctly, then proceed to Phase 3 simulation setup
   model: Sonnet 4.6
   input_file: compilation/valoria_ttrpg_complete.md
-  priority_issues:
-    - Heart/Poise → canonical 10-attr equivalents (Focus, Spirit, Presence, Bonds)
-    - §5.10 Taint Track header → CD
-    - Composure formula in stage 9
-    - Inspiration cap attribute in stage 2
-output_files:
-  - compilation/stage15_spell_catalog.md committed (d29b845f)
-  - compilation/stage16_reference.md committed (bb85580e)
-  - compilation/valoria_ttrpg_complete.md committed (a45b6525)
+
+open_gaps_added: []
+model_routing_notes: "Sonnet 4.6 throughout — canon guard + mechanical patch work"
