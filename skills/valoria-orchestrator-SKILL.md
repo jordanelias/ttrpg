@@ -52,6 +52,8 @@ Skills exist to be used. Every multi-step task MUST be decomposed into skill cal
 **Anti-pattern: doing skill work inline on Opus.** If the orchestrator catches itself about to do chunking, formula checking, or structural assembly inline, STOP and route to the appropriate skill + model.
 
 ## Session Start Protocol
+**Pre-condition:** Fetch `session_log_current.md` and `valoria_gap_register_consolidated.md` from GitHub (GET `https://api.github.com/repos/jordanelias/ttrpg/contents/{filename}`, decode base64 content field) before invoking any session-start steps. If either file is absent, treat as new session and flag to user.
+
 1. Read `session_log_current.md` (NOT the full log — that's the archive).
 2. Read `valoria_gap_register_consolidated.md` — P1 count only.
 3. Report status in ≤3 lines. Confirm task.
@@ -107,6 +109,17 @@ chunker → compiler → canon-guard (final pass) → export checkpoint
 
 **Board/VG Mode Development**
 chunker (Foundations §21–23) → canon-guard (constraints) → [EDITORIAL GATE: user designs] → mechanic-audit → simulator → compiler
+
+**Phase 3 Gate Verification (run before any Phase 3 compilation)**
+simulator (Mode E: load `sim_coverage_matrix.md`) → verify against gate requirements:
+- All M-001–M-056 tested in Isolation + Interaction
+- All three game modes covered for every applicable mechanic
+- All 9 factions tested with generic character in faction-relevant mechanics
+- All named NPCs tested in unique-mechanic scenarios (min counts per simulator skill)
+- All archetypes tested in archetype-defining mechanics
+- All tracks tested at: starting / mid-range / threshold crossing / terminal value
+- Zero untested P1 interactions from mechanic-audit Mode C dependency graph
+If gate fails: report which requirements are unmet. Block compilation. Do not proceed to compiler until gate passes.
 
 ## Session Close Protocol
 Write YAML block to `session_log_current.md` (replace, not append).
