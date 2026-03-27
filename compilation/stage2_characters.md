@@ -172,6 +172,10 @@ Intelligibility replaces the Taint track. It measures how legible reality remain
 
 **All characters track Certainty.** Starting value = Spirit score. Maximum = Spirit score.
 
+**Certainty maximum reduction:** When Intelligibility falls below 5, the character's Certainty maximum is reduced by 1 per level below 5 (Intelligibility 4 = −1 max; Intelligibility 3 = −2 max; etc.). Certainty cannot exceed this reduced maximum. Recovering Certainty above the reduced maximum is impossible until Intelligibility is repaired first.
+
+*Design note: Intelligibility degradation is the gate on Certainty stabilisation. A practitioner whose Intelligibility has fallen cannot recover existential coherence until the degradation itself is addressed.*
+
 **Certainty loss triggers:**
 - Successful Leap: −1
 - Non-consensual Thread work on sentient being: −1
