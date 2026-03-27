@@ -305,7 +305,7 @@
 | G-112 | B6-IT-01: Impression Track + Knot Crisis simultaneous fire has no priority rule | B6 sim | CLOSED 2026-03-27 — Crisis takes precedence; added to §4.7 |
 | G-113 | B6-FO-01/02: Fortification construction missing from TTRPG and BG | B6 sim | CLOSED 2026-03-27 — Domain Action added to §8.4; FORTIFY order added to BG B5 |
 | G-114 | B6-TS-01: Mid-phase clock game-end trigger has no resolution order rule | B6 sim | CLOSED 2026-03-27 — mid-phase check added to BG B4 |
-| G-115 | B6-VC-01 EDITORIAL: Church victory condition (TC≥80) inaccessible under shared survival rules — de facto unwinnable faction or only via THE HOLY STATE path | B6 sim | Open — requires editorial intent confirmation |
+| G-115 | B6-VC-01: Church VC lowered to TC≥60 + Himmelenger + Valorsplatz; expansion lock adjusted to TC≥40 | B6 sim | CLOSED 2026-03-27 — editorial decision B applied |
 
 **Editorial blockers: 0**
 **Design needed: 74 items**
