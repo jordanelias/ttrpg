@@ -700,10 +700,93 @@ Cross-reference: PP-043 (Stability 0) unchanged. Church starting Stability (5) n
 
 ---
 
+
+
+## PATCH PROPOSALS — EDITORIAL BATCH (2026-03-27)
+
+### STATUS UPDATES FROM EDITORIAL REVIEW
+
+| Patch | Old Status | New Status | Reason |
+|-------|-----------|-----------|--------|
+| PP-007 | EDITORIAL pending | CLOSED — NOT NEEDED | Poise = attribute; Composure = Presence+6 track. No dual-use collision once formula universally applied. |
+| PP-012 | EDITORIAL pending | REVISED | Prior decision: ONE Coherence track. Two-track proposal rejected. Merge §4.5 + §5.10 into unified Coherence track. |
+| PP-015 | EDITORIAL pending | SUPERSEDED | Full TC80 seizure procedure exists in succession_mechanic.md. Compile from source. |
+| PP-062 | EDITORIAL pending | APPROVED | Restoration Community Weaving as supplementary Coherence recovery path (+1/successful op). Coexists with Corrective Weaving. |
+| PP-071 | EDITORIAL pending | APPROVED | Conditional Weaving is canon-safe: co-movement fires at Weaving time, not trigger event. |
+| PP-077 | EDITORIAL pending | REVISED | Coherence 0 = NPC (prior decision). Player-continuation rejected. Arc: rescue window before Coherence 0 confirmed. |
+| PP-079 | OPEN (new) | SUPERSEDED | Torben Loyalty Clock fully designed in succession_mechanic.md. Starting value 8, −1/season, IP 30 trigger. |
+
+### PP-081 — NEW MECHANIC: TRAJECTORY READING
+
+**Finding:** F-B9-17
+**Severity:** Design (approved new op type)
+**Mechanic:** M-NEW: Trajectory Reading
+**Requirement:** TS 70+, active Leap contact established, Certainty ≥ 2
+
+**Summary:** Practitioner reads Thread-configuration trajectory potentials — not prophecy, but probabilistic reading of where the current Thread-state momentum is oriented. Distinct from Past-Oriented Pulling (retrieves actualized past) and standard ops (work with present configurations).
+
+**What it produces:** 1–3 probable trajectory statements per GM. Each is a direction the configuration is oriented toward, not a guarantee. Trajectories are alterable by intervention or external events.
+
+**Ob by time horizon:**
+| Horizon | Ob |
+|---------|-----|
+| Near (1–3 scenes) | 3 |
+| Medium (1 season) | 5 |
+| Extended (1–3 seasons) | 7 |
+| Far (campaign arc) | 10 |
+
+**Degrees:**
+- Overwhelming: trajectories at declared horizon +1; most probable identified
+- Success: trajectories at declared horizon
+- Partial: one trajectory; confidence level withheld
+- Failure: one plausible false trajectory (self-projection of practitioner's Beliefs/fears). Practitioner does not know it is false.
+
+**Costs:**
+- TD +4
+- Certainty −2
+- TT +2 (any result); +4 on Failure
+
+**Co-movement (Version C — mandatory):**
+- Temporal: CD +2 + History Resonance
+- Epistemic: practitioner's present-state perception filtered through trajectory for 1 scene; GM may introduce one perceptual ambiguity
+- Actual: d6 as normal
+
+**Canon compliance:** P-01 ✓, P-03 ✓, P-07 ✓, P-08 ✓, P-11 ✓
+
+**Restrictions:**
+- Cannot target own future (self-referential)
+- Cannot target deceased (no current configuration)
+- Unavailable at Coherence ≤ 4
+- Subsequent Readings same configuration same scene: Ob +3 each
+
+**Source:** F-B9-17; editorial approval 2026-03-27
+
+---
+
+### PP-008: APPROVED
+**Niflhel Intel = 6**
+Full starting stats confirmed: Mandate —, Influence 5, Wealth 4, Military —, Intel 6, Stability 4
+
+### PP-016: APPROVED (revised to 10-attribute system)
+
+**Knight Templar:**
+Str 4, End 4, Agi 3, Cog 3, Mem 2, Poise 3, Att 2, Bonds 3, Pres 3, Spirit 4
+
+**Restoration Seeker:**
+Str 2, End 2, Agi 3, Cog 3, Mem 3, Poise 3, Att 4, Bonds 3, Pres 3, Spirit 5
+
+**Niflhel Operative:**
+Str 3, End 3, Agi 4, Cog 4, Mem 3, Poise 3, Att 4, Bonds 3, Pres 3, Spirit 3
+
+FLAG: User attribute list uses "Poise" at position 6 (Str/End/Agi/Cog/Mem/Poise/Att/Bonds/Pres/Spirit). Workplan listed "Focus." Confirm at compilation: Poise = renamed Focus, or distinct attribute.
+
+---
+
 ## PATCH COUNT SUMMARY (UPDATED)
-| Severity | Count |
-|----------|-------|
-| P1 | 27 |
-| P2 | 43 |
-| P3 | 10 |
-| **Total** | **80** |
+| Severity | Count | Notes |
+|----------|-------|-------|
+| P1 (open) | 25 | −2 superseded (PP-015, PP-079); +PP-081 (design) |
+| P2 | 43 | |
+| P3 | 10 | |
+| Design (new mechanic) | 1 | PP-081 Trajectory Reading |
+| **Total** | **79** | |
