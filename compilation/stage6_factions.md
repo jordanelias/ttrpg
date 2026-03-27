@@ -150,9 +150,9 @@ Correctness is determined by institutional authority, not outcome or character. 
 - Sincerely devout. Zero awareness of Galbados's actual nature. Not cynical — wrong.
 
 
-**TC 80 — Territorial Seizure Procedure**
+**TC 60 — Territorial Seizure Procedure**
 
-At TC 80, the Church may attempt to seize territories through institutional claim rather than military force. This is triggered once per season at seasonal accounting; the Church player (or GM) may attempt seizure on any number of territories, resolving each separately.
+At TC 60, the Church may attempt to seize territories through institutional claim rather than military force. This is triggered once per season at seasonal accounting; the Church player (or GM) may attempt seizure on any number of territories, resolving each separately.
 
 **Roll:** Church Mandate (pool, TN 7) vs territory owner's Mandate ÷ 2 (round up, minimum Ob 1).
 
