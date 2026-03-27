@@ -456,6 +456,8 @@ At 3 Dissonance Marks: Devout Constraint collapses regardless of Belief status. 
 
 **Devout characters receive +2D on Certainty-resist checks against monstrous encounters.** Their theology provides a framework that reduces existential shock, even if that framework is wrong about causation. However, Devout characters cannot gain long-term TS development from such encounters (the theological framework absorbs the confrontation).
 
+**Being targeted by Thread operations.** The Devout Constraint governs perception and practice — not susceptibility to being targeted. Practitioners may perform Thread operations on Devout characters normally. The Devout character experiences the result without understanding its Thread cause. This does not generate a Dissonance Mark unless the character is confronted with direct evidence of Thread causation.
+
 ### Scholarly TS Path (Lenneth Variant)
 
 A character with access to Einhir scholarship and no essentialist theological Belief may pursue TS growth through sustained intellectual engagement with Thread-related texts and artifacts. This functions identically to the standard confrontation path, except the qualifying events are scholarly rather than experiential: deep study of Thread-operation records, analysis of temporal anomalies, decoding Originary inscriptions.
@@ -1643,7 +1645,23 @@ TC represents the Church of Galbados's slow structural conquest of Valorian civi
 | 80–99 | Theocratic Seizure | Cardinals claim co-governance authority. Knights Templar occupy key institutional positions. Confessor issues writs superseding Crown administrative decisions in specific territories. |
 | 100 | The Holy State | Campaign event. Confessor Himlensendt declares Valoria a Holy State under Church governance. This is the culmination of a two-century institutional project. |
 
-**TC 80 — Church Territorial Seizure:** At TC 80, the Church may attempt to seize territories through institutional claim rather than military force. Per-territory roll vs variable Ob. Counter-play options available. (See Faction section for full procedure.)
+**TC 80 — Church Territorial Seizure:** At TC 80, the Church may attempt to seize territories through institutional claim rather than military force. Resolved at seasonal accounting; each territory attempted separately.
+
+**Roll:** Church Mandate (pool, TN 7) vs territory owner's Mandate ÷ 2 (round up, minimum Ob 1).
+
+**TC value on seizure (flat — no per-season accrual):**
+
+| Territory Type | TC on Seizure |
+|---|---|
+| Minor territory | +1 |
+| Major territory (trade hub, fortified, ducal seat) | +3 |
+| Capital or key institutional site | +5 |
+
+**Success:** Church gains administrative control. Domain Actions targeting Church authority in this territory: +2 Ob. TC fires immediately on seizure.
+
+**Failure:** No seizure. Church Mandate −1 (overreach).
+
+**Counter-play:** Parliamentary vote (Influence vs Ob 3) reverses seizure before TC fires. Riskbreaker exposure of Church-Niflhel connection removes one seized territory per exposure. Grand Debate challenging Church civil authority: Overwhelming removes all seizures in one duchy; Success removes one.
 
 ---
 
@@ -2160,9 +2178,22 @@ The Revolution's primary operational presence. Not a leader by title — a force
 
 The Löwenritter are not an independent political faction — they are an institutional instrument of the Crown. They hold territory (the fortress at the northern border), maintain military capacity, and act as the Crown's deniable covert arm. Their loyalty is to the Crown as an institution, not to any specific monarch.
 
-**Coup Threshold:** Grandmaster Ehrenwall is keeping count of Almud's compromises. When the Löwenritter's internal assessment of the Crown's institutional integrity drops to a threshold (tracked as a private GM counter), a coup trigger is possible. See NPCs section for full Ehrenwall mechanics.
+**Coup Threshold:** Grandmaster Ehrenwall is keeping count. The GM tracks a private Coup Counter (0–3). When it reaches 3, the coup fires at the next seasonal accounting.
 
-**Martial Law Capacity:** If the coup trigger fires, the Löwenritter can impose Martial Law on Crown territories — suspending normal Domain Action resolution and replacing it with Military-based Stability enforcement. This is a campaign-level event, not a standard Domain Action.
+**Counter increments (+1 each):**
+- TC reaches 40 while the Crown has taken no action to reduce it that season
+- Torben's loyalty reaches 3–2 or lower
+- Crown loses two or more territories in one season without a military response Domain Action
+
+Counter never decrements. See §13.5 (Ehrenwall) for coup execution procedure.
+
+**Martial Law Capacity:** If the coup trigger fires, the Löwenritter impose Martial Law on all Crown-held territories simultaneously.
+
+- All non-Military Domain Actions in Martial Law territories require a secondary Military check (Löwenritter Military pool, TN 7, Ob 2). Failure: action blocked this season.
+- Löwenritter Military pool replaces faction-specific pools for all Stability actions in affected territories.
+- All factions except Löwenritter and Crown must succeed at a Covert Domain Action (Ob 3) to operate openly.
+- **Duration:** Until PC-driven Domain Action removes it (Influence vs Ob = Löwenritter Military ÷ 2, round up, minimum Ob 3) OR TC drops below 40.
+- **Scope:** Crown territories only.
 
 **Riskbreakers:** The extralegal arm of the Löwenritter. Operations are not recorded in official documents. See §9.3.
 
