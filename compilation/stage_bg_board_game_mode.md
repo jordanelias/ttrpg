@@ -910,7 +910,7 @@ Shuffle each pool separately. Threshold cards are drawn from their pile when tri
 | Faction | Victory Condition |
 |---|---|
 | Crown | Constitutional Stability (see B3) |
-| Church | TC ≥ 80 + territorial control (see B3) |
+| Church | TC ≥ 60 + controls Himmelenger + Valorsplatz at game-end (see B3) |
 | Hafenmark | Constitutional Order (see B3) |
 | Varfell | Information Supremacy (see B3) |
 | Guilds | Economic Dominance (see B3) |
@@ -958,7 +958,7 @@ All factions still in play at Stability ≥ 3: co-survival.
 - Default (neither condition): *Rupture Unresolved* — collective loss. Shared survival condition fails automatically.
 
 **THE HOLY STATE (TC = 100)**
-The Church has structurally absorbed Valorian governance. This is a Church faction victory only if Church also controls Himmelenger + Valorsplatz at the moment TC = 100. Otherwise: it is a collective loss (the Church won an institutional conquest but not the game's victory condition).
+The Church has structurally absorbed Valorian governance. Note: the Church's standard victory condition is TC ≥ 60 (see B10 Per-Faction Victory Conditions). THE HOLY STATE fires at TC = 100 as a game-end event regardless of whether the Church has already achieved its standard victory. This is a Church faction victory only if Church also controls Himmelenger + Valorsplatz at the moment TC = 100. Otherwise: it is a collective loss (the Church won an institutional conquest but not the game's victory condition).
 
 If Crown Mandate was ≥ 4 at TC = 100: *Constitutional Resistance Ongoing* — the Crown survives as a contested institution. Crown player may contest the Holy State by triggering a Grand Debate (5 exchanges, final resolution scene). Win: TC −20, Church restructured; game continues to Round 20. Lose: collective loss.
 
