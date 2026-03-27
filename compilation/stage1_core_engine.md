@@ -163,7 +163,7 @@ Attributes range from 1 to 7. A score of 3 is the human average. 1 is severely l
 | Coherence | 10 (starting value); countdown to 0 | 0–10 | Measures how legible reality remains to the character |
 | Resolve | Spirit | 1–7 | Maximum total Inspiration value |
 
-**Contact Rounds** uses Focus (not Heart) because sustained Thread contact is an act of concentration, not willpower.
+**Contact Rounds** uses Focus because sustained Thread contact is an act of concentration, not willpower.
 
 ---
 
