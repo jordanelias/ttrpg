@@ -184,6 +184,8 @@ Intelligibility replaces the Taint track. It measures how legible reality remain
 
 **Certainty 0 — Rendering Crisis:** A scene event, not a passive state. The character's rendering of reality has become unstable. They must resolve the dissonance narratively: revise a Belief, withdraw from Thread-active situations, or find a new framework for what they have experienced. Rendering Crisis is the primary mechanism for character development in practitioners.
 
+A practitioner who performs Thread operations while in Rendering Crisis (instead of resolving it) takes **+1D Coherence Degradation** on each operation, applied immediately on resolution regardless of outcome. This is the cost of pushing through rather than reckoning.
+
 **Certainty recovery:** Between scenes (downtime, travel, or deliberate grounding), roll Spirit TN 7, Ob 2. Success: +1 Certainty (cannot exceed Spirit score). One attempt per scene of downtime — not during active Thread engagement.
 
 Certainty is not straightforward damage. Depletion is existential exposure — the same pressure that drives TS growth. A practitioner who never loses Certainty has never fully confronted what the Thread is. Recovery is possible but uncertain; some practitioners carry low Certainty as a permanent condition of practice.
