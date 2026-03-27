@@ -128,6 +128,8 @@ At 3 Dissonance Marks: Devout Constraint collapses regardless of Belief status. 
 
 **Devout characters receive +2D on Certainty-resist checks against monstrous encounters.** Their theology provides a framework that reduces existential shock, even if that framework is wrong about causation. However, Devout characters cannot gain long-term TS development from such encounters (the theological framework absorbs the confrontation).
 
+**Being targeted by Thread operations.** The Devout Constraint governs what a Devout character can perceive and do — not what can be done to their threads. A practitioner may perform Thread operations on a Devout character (Pulling their conviction, Weaving a wound closed, Locking a relationship) exactly as on any other character. The Devout character experiences the result without understanding its cause — they attribute it to divine will, weakness, illness, or coincidence. This does not generate a Dissonance Mark unless the character is confronted with evidence that a Thread operation specifically caused the result.
+
 ### Scholarly TS Path (Lenneth Variant)
 
 A character with access to Einhir scholarship and no essentialist theological Belief may pursue TS growth through sustained intellectual engagement with Thread-related texts and artifacts. This functions identically to the standard confrontation path, except the qualifying events are scholarly rather than experiential: deep study of Thread-operation records, analysis of temporal anomalies, decoding Originary inscriptions.
@@ -143,7 +145,7 @@ Intelligibility replaces the Taint track. It measures how legible reality remain
 **Reduction triggers:**
 - Each Thread operation at Relational+ scale: −1 Intelligibility
 - Past-Oriented Pulling: −1 Intelligibility (additional, cumulative with operation cost)
-- Forced Resolution (any scale): −1 Intelligibility
+- Locking or Snapping (any scale): −1 Intelligibility
 - Extended proximity to a Structural-scale Gap: −1 Intelligibility per season of exposure
 
 **Effects by Intelligibility level:**
