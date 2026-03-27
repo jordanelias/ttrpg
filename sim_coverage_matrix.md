@@ -1,9 +1,9 @@
 # VALORIA SIMULATION COVERAGE MATRIX
-## Last Updated: 2026-03-27 (Schema v2 — 7-Dimension Tagging Enforced)
+## Last Updated: 2026-03-27 (After Batch 07 — 50% gate PASSED)
 
 **Interaction cell definition:** ≥3 co-mechanics in a single test.
 **Required for Phase 3 gate:** ≥28/56 mechanics (50%) with Interaction cell filled.
-**Current Interaction coverage:** 25/56 (45%) — 31 mechanics below bar.
+**Current Interaction coverage:** 53/56 (95%) — gate PASSED. Remaining: M-005, M-026 (partial), M-041.
 
 ---
 
@@ -139,3 +139,15 @@ The following 31 mechanics need a test with ≥3 co-mechanics. Suggested groupin
 | F100 | M-045 | Mass combat damage formula absent |
 | F112 | M-034 | Church Stability TC brake fires at start, suppresses TC permanently |
 | §4.5 | M-021 | Intelligibility presented as standalone track; is Coherence dimension |
+
+---
+
+## BATCH 07 UPDATE (2026-03-27)
+
+**Interaction gate: PASSED.** 15 tests run covering all 31 previously deficient mechanics.
+New P1 findings: F-B7-06, F-B7-08/16, F-B7-12, F-B7-17, F-B7-22, F-B7-23, F-B7-40 (7 new)
+Total P1 count: 18
+
+**Mechanics still below Interaction bar:** M-005, M-026 (partial — needs standalone 3-co-mech test), M-041
+
+See: tests/valoria_stress_tests_batch7.md
