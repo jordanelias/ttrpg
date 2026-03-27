@@ -295,6 +295,12 @@
 | Hybrid (G-074–G-095) | 22 | 5 | 14 | 0 | 0 | 0 |
 | P3 | 4 | 0 | 0 | 1 | 0 | 3 |
 | **Total** | **137** | **40** | **74** | **9** | **7** | **3** |
+| G-105 | B02-02: Intelligibility max reduction + low Spirit = permanent Rendering Crisis loop (Int 3 + Spirit 3: max Certainty=1, any loss = instant crisis, recovery impossible until Intelligibility repaired) | B5 Mode B | Confirm intent; document: Intelligibility must be repaired before Certainty stabilises |
+| G-106 | B03-01 P1: Inspiration spend + Fork count uncapped. Multiple Inspirations × Spirit dice = 20D+ pools, trivialise Ob 4 and below | B5 Mode B | Max 1 Inspiration per roll; max 2 Forks per roll — add to §4.1 and §4.3 |
+| G-107 | B04-01: Inspiration spend on Thread operations unruled | B5 Mode B | Add prohibition matching Momentum restriction to §4.3 |
+| G-108 | B05-01: Incapacitated character participation in social scene (hybrid) unruled | B5 Mode B | Incapacitated = no social rolls until 1+ Health; §9 or §12 |
+| G-109 | B06-01: Rendering Crisis has no mechanical enforcement for continued Thread operation | B5 Mode B | Thread op during Rendering Crisis = +1D CD on resolution |
+| G-110 | B07-01 P1: Non-combat pool floor undefined — Presence 1 + 3 Rattled = 0D or negative | B5 Mode B | Minimum 1D floor for all rolls; add to §1.1 |
 
 **Editorial blockers: 0**
 **Design needed: 74 items**
