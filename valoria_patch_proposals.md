@@ -643,8 +643,60 @@ Items marked [EDITORIAL] above require user approval:
 ## PATCH COUNT SUMMARY
 | Severity | Count |
 |----------|-------|
-| P1 | 22 |
-| P2 | 27 |
+| P1 | 23 |
+| P2 | 34 |
 | P3 | 10 |
-| **Total** | **59** |
+| **Total** | **67** |
+
+
+## PATCH PROPOSALS — BATCH 08 ADDITIONS
+
+### PP-061
+**Finding:** F-B8-01
+**Severity:** P2
+**Mechanic:** M-016 (Pulling)
+**Proposed fix:** Add: "A successful Pull on a Thread connection underlying a social relationship reduces the target's relevant Circles rating by 1. Overwhelming Pull: by 2. The character whose Thread is altered is not aware of the cause unless they have TS ≥ 5."
+
+### PP-062
+**Finding:** F-B8-02
+**Severity:** P1
+**Mechanic:** M-021 (Coherence), M-055 (Restoration Community Weaving)
+**Proposed fix:** Add Coherence recovery: "Successful Community Weaving in a Restoration context restores the participating practitioner's Coherence +1 (to a maximum of their original score). This represents relational re-anchoring — the community provides stability that Thread work alone cannot."
+[EDITORIAL: confirm this use of M-055 as the canonical Coherence recovery path]
+
+### PP-063
+**Finding:** F-B8-03
+**Severity:** P2 (downgraded)
+**Mechanic:** M-052 (Concealment)
+**Proposed fix:** Add §X.X "Concealment Procedures": "Cover identities are established via Circles (rating = depth of cover). Each covert operation accumulates Deniability Debt (+2 for standard, +3 for Destabilisation). Exposure check Ob = DD ÷ 2 (rounded up), rolled as Circles (cover) + relevant History. On failure: cover blown — Circles (cover) → 0, DD resets. On success: cover maintained this season. A blown cover cannot be re-used."
+
+### PP-064
+**Finding:** F-B8-04
+**Severity:** P2
+**Mechanic:** M-056 (Niflhel Destabilisation)
+**Proposed fix (extends PP-008):** "Niflhel may recruit one Riskbreaker per season: Wealth 2 cost + Intel Domain Action Ob 2. Success: new Riskbreaker with DD 0 and cover identity (Circles 1) in target faction. Maximum 3 active Riskbreakers simultaneously."
+
+### PP-065
+**Finding:** F-B8-06
+**Severity:** P2
+**Mechanic:** M-026 (Monstrous Entities)
+**Proposed fix:** "ME effects (CE accumulation, Certainty checks, ThS elevation) apply to all characters in the same zone as the ME. In BG mode, ME effects apply to the entire territory the ME occupies. A zone is defined as a room, area, or location where characters are co-present."
+
+### PP-066
+**Finding:** F-B8-11
+**Severity:** P2
+**Mechanic:** M-007 (Conditions)
+**Proposed fix:** "Multiple Conditions may be active simultaneously. Same-type penalties stack additively (e.g., Rattled −1D social + Exhausted −2D all = −3D on social rolls). Different Conditions' clearing conditions are tracked independently."
+
+### PP-067
+**Finding:** F-B8-13
+**Severity:** P2
+**Mechanic:** M-008 (Thread Sensitivity)
+**Proposed fix:** "A dormant practitioner (TS 1–9) may seek training from an active practitioner (TS 20+). Seasonal training action: trainer rolls End Ob 2 (teaching effort); trainee rolls Spirit Ob 3 (receptivity). If both succeed: trainee TS +3. Failure on either: no advancement this season."
+
+### PP-068
+**Finding:** F-B8-17
+**Severity:** P2
+**Mechanic:** M-046 (Thread Ops in Combat)
+**Proposed fix (extends PP-036):** "A practitioner may split their combat round between Thread operation initiation and physical defence. Split action: Thread operation pool = TS/4 (rounded down); physical defence pool = Coord/2 (rounded down). The Thread operation still initiates at Priority 5 and manifests at Priority 1 next round."
 
