@@ -71,7 +71,7 @@ A Reading Exchange is a social perception action available in the **first round 
 
 **Pool**: Attunement + relevant History bonus. Attunement replaces the History's primary attribute for this roll only.
 
-**TN**: 7 (standard).
+**TN**: 7 (standard). **Ob**: 1. Degrees: net ≥ 2 = Overwhelming; net = 1 = Success; net = 0 = Partial; net ≤ −1 = Failure.
 
 **This is not a Debate Exchange**: it does not count toward exchange tally, does not produce Composure strain, and cannot be targeted by Inspiration attacks.
 
