@@ -4,46 +4,69 @@
 
 ---
 
-session_close: 2026-03-26-bg-compilation
+session_close: 2026-03-26-checkpoint14
 phase: 2
-status: Phase 2 Stages B1-B10 (Board Game Mode Compilation) COMPLETE
-completed_stages:
-  - Stage 1-17: all previously complete
-  - Stages B1-B10: Board Game Mode compilation — 10 stages produced
-compilation_output: compilation/stage_bg_board_game_mode.md (commit 8a16ce79)
+status: Checkpoint 14 compiled and committed
 
-bg_stages_completed:
-  B1: Overview and Setup (player count, faction assignment, component list, starting state)
-  B2: Territory Map (15 territories, hex layout, properties, connections, starting control)
-  B3: Faction Cards (7 factions: Crown, Church, Hafenmark, Varfell, Guilds, Niflhel — stats, unique power, order set, Thread capability, victory condition)
-  B4: Turn Structure (6-phase round: Season Card, Planning, Intel Reveal, Order Resolution, Seasonal Accounting, Cleanup)
-  B5: Orders (Govern, Muster, March, Trade, Diplomacy, Intel + all faction-specific orders with full resolution procedures)
-  B6: Military (unit types, mustering, movement, combat via disposition table, siege phases, supply lines)
-  B7: Thread Operations + Co-Movement (faction-card BG procedures, TT management, Co-Movement card framework, TK track)
-  B8: NPC AI (Crown, Church, Hafenmark, Varfell, Guilds, Niflhel, Revolution, Schoenland, Löwenritter coup trigger)
-  B9: Event Deck (15 clock-threshold cards + 15 seasonal random events, all structured)
-  B10: Victory + Endgame (per-faction victory conditions, shared TT survival condition, scoring, 2-player tuning, endgame events)
+completed_this_session:
+  - Stage 17 canon guard pass (all P1-P14 constraints verified)
+  - 6 mechanical patches applied to valoria_ttrpg_complete.md
+  - 17 hybrid gaps resolved (G-075, G-079–G-095)
+  - §12.3 Hybrid Mode rewritten with all resolved gap content
+  - §12.9 Hybrid Consequence Rules added (new section)
+  - Checkpoint 14 exported: compilation/valoria_ruleset_checkpoint_14.md
+
+commits:
+  - stage17_canon_guard.md: 8526e934
+  - valoria_ttrpg_complete.md (stage 17 patches): f318f7ee
+  - designs/hybrid_gaps_resolved.md: 6e543b5c
+  - valoria_ttrpg_complete.md (hybrid additions): 38a0fe31
+  - compilation/valoria_ruleset_checkpoint_14.md: 2115df16
+
+canonical_decisions_locked:
+  thread_op_pools:
+    Leap: Attunement + History bonus
+    Contact_Duration: Focus score (rounds)
+    Wound_disruption: Focus check TN 7 Ob 1
+    All_ops_Weave_Pull_FR: Spirit + History bonus
+  composure: Presence + 6 (range 7-13)
+  debate_pool: Cognition + History bonus
+  battle_engine: Officer Cognition (attack) + Presence (cohesion/rally); initiative Cognition
+  personal_combat_manoeuvres: Agility
+  inspiration_cap: Spirit score (no derived name)
+  coherence_track: individual 10-0 (10=fully coherent, 0=monstrous NPC)
+  thread_stability: campaign-arc 20-0 (20=stable, 0=crisis)
+  hybrid_session_structure: Personal (90-150min) → Strategic → Cascade
+  hybrid_pacing: 1 session minimum per season
+  hybrid_fog_of_war: 4 qualitative states; exact for own faction; Intel always hidden
+  hybrid_handoffs: batch to Cascade; GM ledger
+  hybrid_zoom_in: player-involved only
+  hybrid_cascade: 5-step sequence, GM-only
+  hybrid_resources_wealth: threshold = 2x rolled; below = stressed
+  hybrid_flashback: Personal phase only
+  hybrid_pc_death: Crisis penalty; take over loyal NPC or succession; no new characters
+  hybrid_faction_collapse: continue as personal character; lose faction dice bonuses
+  hybrid_downtime: concurrent with Strategic phase
+  hybrid_advancement: board game successes generate CP
+  hybrid_knot_gating: gated by in-scene discovery
 
 editorial_pending:
-  - BG-E-01: Co-Movement cards CM-11 through CM-20 (10 cards need design)
-  - BG-E-02: Varfell TK 5 consequence / capability-seeking resolution path
-  - BG-E-03: THE RUPTURE narrative determination
-  - BG-E-04: Seasonal Event S-08 Einhir site name (territory name editorial)
-  - BG-E-05: Seasonal Event S-15 Restoration Memory (tied to Restoration NPC)
-  - BG-E-06: Revolution victory condition (if ever player-controllable)
-  (All prior editorial pending items from Stage 17 remain open)
-
-canon_compliance:
-  - P-01 (Inseparability): Co-Movement mandatory on ALL Thread operations in BG mode. Observed in B7.
-  - P-05 (Three modes distinct): BG mechanics are board-resolution procedures, not TTRPG narrative systems. Observed throughout.
-  - No canon violations detected.
+  - Renown permission table (tiers 1-10)
+  - Varfell Private Collection transfer
+  - Niflhel primus inter pares
+  - Revolution named elder NPC
+  - Territory names (batch_e placeholders)
+  - Varfell victory condition tuning
+  - 10 remaining seasonal event cards
+  - Named Restoration NPCs
+  - E-01 assassination perpetrator
+  - E-03 AG calendar name
+  - Niflhel named NPC stat blocks (Rolf Dunmark, Solvind Brak)
+  - Revolution named NPC stat blocks (Edith Varn)
 
 next_action:
-  recommended: Phase 3 (Simulation Coverage) — 56 mechanics, coverage matrix
-  alternative: Address editorial pending items (Renown permission table, Varfell victory tuning, Co-Movement CM-11-20)
-  model: Sonnet 4.6 for simulation; Opus 4.6 for editorial
-  input_file: compilation/stage_bg_board_game_mode.md + compilation/valoria_ttrpg_complete.md
+  recommended: Board game mode compilation (Phase 2 remaining deliverable) OR Phase 3 simulation
+  model: Sonnet 4.6
+  note: G-093 Resources/Wealth formula (2x vs 2x-1) flagged for Phase 3 stress testing
 
-open_gaps_added: []
-model_routing_notes: "Sonnet 4.6 throughout — structural compilation with mechanical judgment"
-
+model_routing_notes: Sonnet 4.6 throughout — canon guard, hybrid gap resolution, compilation
