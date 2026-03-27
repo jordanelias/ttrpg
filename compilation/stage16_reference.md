@@ -83,11 +83,12 @@ The following fields appear on a complete Valoria character sheet. Pre-calculate
 - Test Track: Challenged / Exceeded checkboxes
 
 **Thread Pools (practitioners only — pre-calculated)**
-- Leap: Cognition + Focus + Scholar History bonus
-- Weaving: Cognition + Memory + Scholar History bonus
-- Pulling: Cognition + Attunement + Scholar History bonus
-- FR: Cognition + Memory + Scholar History bonus
-- CD track: current / 20, with stage markers (Dissonant / Fragmented / Fractured / Severed / Crisis)
+- Leap: Attunement + relevant History bonus + TPS (TPS = TS ÷ 10, round down)
+- Weaving: Spirit + relevant History bonus + TPS
+- Pulling: Spirit + relevant History bonus + TPS
+- Past-Oriented Pulling: Spirit + relevant History bonus (no TPS)
+- FR (Locking/Snapping): Spirit + relevant History bonus (no TPS)
+- ThS track: current / 20, with stage markers (Dissonant / Fragmented / Fractured / Severed / Crisis)
 
 **Beliefs (2–3)**
 - Statement text
