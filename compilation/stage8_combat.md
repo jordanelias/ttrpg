@@ -12,13 +12,13 @@ Each round opens with a **Planning Phase**: each character declares one offensiv
 
 - No offensive action declared → character may declare two defensive postures instead.
 - Move action as primary offensive → Dodge Backwards is the default defensive posture.
-- Ranged character engaged in melee with no melee weapon drawn → defend at Coordination only, Ob 2; draw backup weapon at Priority 4; use it at Priority 6.
+- Ranged character engaged in melee with no melee weapon drawn → defend at Agility only, Ob 2; draw backup weapon at Priority 4; use it at Priority 6.
 
 ### Initiative
 
-Roll Coordination dice, Ob 2. Higher net wins. The winner **declares last** — they hear the opponent's plan before committing. Ties: re-roll.
+Roll Agility dice, Ob 2. Higher net wins. The winner **declares last** — they hear the opponent's plan before committing. Ties: re-roll. Combatants entering an ongoing combat roll initiative immediately on entry and are inserted into the existing declaration order at their result.
 
-**Ambush**: Ob = ambusher's Tactics History + environment modifier (Ob 1–3). The defender's highest-Cognition character detects. On failure: attackers get one free Priority 2 round and initiative. On success: Coordination vs Coordination; defender's bonus successes from detection apply.
+**Ambush**: Ob = ambusher's Tactics History + environment modifier (Ob 1–3). The defender's highest-Cognition character detects. On failure: attackers get one free Priority 2 round and initiative. On success: Agility vs Agility; defender's bonus successes from detection apply.
 
 ### Priority Table
 
@@ -28,7 +28,7 @@ Roll Coordination dice, Ob 2. Higher net wins. The winner **declares last** — 
 | **2** | Ranged attacks (in order: arquebus, then crossbow, then drawn bow) |
 | **3** | All melee attacks and manoeuvres (sub-rules below) |
 | **4** | Standard actions (Diagnosis; draw backup weapon; non-combat single actions) |
-| **5** | Full-round actions (the Leap; Forced Resolution; sustained movement) |
+| **5** | Full-round actions (the Leap; Locking or Snapping; sustained movement) |
 | **6** | Second actions; reload after firing |
 
 #### Priority 3 Sub-Rules
@@ -47,10 +47,10 @@ Roll Coordination dice, Ob 2. Higher net wins. The winner **declares last** — 
 
 | Option | Pool | Notes |
 |---|---|---|
-| Dodge Backwards | Coordination − armour penalty | Standard evasion |
-| Duck and Weave | Coordination − armour penalty | Higher-stakes evasion; Partial produces a complication |
+| Dodge Backwards | Agility − armour penalty | Standard evasion |
+| Duck and Weave | Agility − armour penalty | Higher-stakes evasion; Partial produces a complication |
 | Parry | Combat History pool | Melee only. If Parry declared and ranged attack received: automatically switches to Dodge Backwards |
-| Shield | Coordination | Shield bonus applies |
+| Shield | Agility | Shield bonus applies |
 
 ### Damage
 
@@ -66,22 +66,27 @@ Excess attack successes = attacker's net − defender's net (minimum 0).
 
 | Manoeuvre | Versus | Effect |
 |---|---|---|
-| Defend! | Coordination | Hold at bay; deny target's move action next round |
-| Disarm | Coordination vs Coordination | Target drops weapon |
-| Trip | Coordination vs Coordination | Target prone: −2D attack, attacks vs prone +2D, double cost to stand |
+| Defend! | Agility | Hold at bay; deny target's move action next round |
+| Disarm | Agility vs Agility | Target drops weapon |
+| Trip | Agility vs Agility | Target prone: −2D attack, attacks vs prone +2D, double cost to stand |
 | Tie Up | Power | Lock weapons; no damage to either this round |
 | Rescue | Endurance | Redirect melee / Priority 4+ attack from ally to self |
 | Reorient | Cognition | Manipulate relative positioning; may establish or deny reach advantage |
-| Withdraw | Coordination | Sacrifice offensive action; re-establish reach advantage |
+| Withdraw | Agility | Sacrifice offensive action; re-establish reach advantage |
 
 ### Group Attacks
 
-| Attackers | Bonus |
-|---|---|
-| 2 | +2D |
-| 3 | +3D |
-| 4 | +5D |
-| 5 | +8D |
+See §1.9 (Fibonacci Group Bonus) for the canonical group attack bonus table. Bonus dice apply to each attacker's Offence allocation.
+
+**Defence splitting:** When defending against multiple attackers simultaneously, the defender distributes their defence dice across attackers as they choose. This allocation must be declared simultaneously with attackers' pool divisions and cannot be changed after Offence pools are revealed.
+
+### Escaping Combat
+
+A character who wishes to exit an ongoing combat entirely (not just reposition): **Agility check, TN 7, Ob = opponent's Cognition** (their awareness of your intent to flee; minimum Ob 1). Declare intent at Phase 1.
+
+- **Success:** Character exits combat. They arrive at the scene's edge at Priority 6, Stamina set to 0.
+- **Failure:** Opponent gets one free Priority 3 attack against the fleeing character before they exit. Character still exits on failure — they are not trapped.
+- **Group flight:** Each character rolls separately. Failure on any character does not prevent others from succeeding.
 
 ### Stunts
 
@@ -149,7 +154,7 @@ Mass combat operates at unit scale. Units are military formations with aggregate
 ### Commander Contribution
 
 The commanding officer's attributes directly modify unit rolls:
-- Officer **Coordination**: adds dice to unit attack rolls.
+- Officer **Agility**: adds dice to unit attack rolls.
 - Officer **Spirit**: adds dice to unit Cohesion checks.
 - Officer **Memory**: allows one conditional order per round beyond standard declaration.
 
@@ -161,7 +166,7 @@ Same simultaneous declaration as personal combat. Both sides declare:
 
 ### Disposition Interaction Table
 
-Read: attacker's row, defender's column. Apply Ob and pool modifier to the attacker's pool (Martial + Commander Coordination ± modifier).
+Read: attacker's row, defender's column. Apply Ob and pool modifier to the attacker's pool (Martial + Commander Agility ± modifier).
 
 | Attacker \ Defender | Balanced | Defensive | Offensive | Brutal |
 |---|---|---|---|---|
@@ -197,7 +202,7 @@ On Formation Break: all attachments are lost for the remainder of the battle. A 
 
 **Formation Break**: Unit's aggregate Health reaches 0. Health resets immediately; all subsequent actions at +1 Ob. Cohesion check required (Cohesion dice, Ob 2). Failure: unit **Routes**.
 
-**Routed**: Cannot take ordered actions. Rally requires an officer with Coordination 4+ to spend their action (Spirit roll, Ob 2).
+**Routed**: Cannot take ordered actions. Rally requires an officer with Agility 4+ to spend their action (Spirit roll, Ob 2).
 
 Units that survive a battle gain +1 to a randomly selected stat, once per campaign season (veteran bonus).
 
@@ -207,7 +212,7 @@ Units that survive a battle gain +1 to a randomly selected stat, once per campai
 2. Determine primary conflict (who is fighting whom); resolve secondary force declarations.
 3. Apply disposition table for each attacking pair independently.
 4. Resolve all attacks simultaneously using the standard priority table.
-5. **Three-way initiative**: all three sides roll Coordination. Highest net declares last. Second highest declares second-to-last. Lowest declares first with least information.
+5. **Three-way initiative**: all three sides roll Agility. Highest net declares last. Second highest declares second-to-last. Lowest declares first with least information.
 
 A unit declaring Defensive that is not attacked by any force takes no damage and does not roll.
 
