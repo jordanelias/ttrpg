@@ -1,65 +1,40 @@
 session_close: 2026-03-27
-checkpoint: post-batch5-simulation
+checkpoint: 14-batch5
 model: claude-sonnet-4-6
 completed_stages:
-  - BUG-004 / G-097 closed: Heart/Poise attribute names replaced across 8 compilation stages (1,3,6,8,9,10,13,16)
-  - Stage17 confirmed exempt (historical audit record)
-  - NPC Composure recalculated: Almud=11 (Pres 5+6), Lenneth=10 (Pres 4+6), Vaynard=11 (Pres 5+6), Himlensendt=12, Baralta=11
-  - Certainty recovery rule added: Spirit TN7 Ob2, one attempt per downtime scene (stage2 §4.6 + stage3 cross-ref)
-  - Stage2 §4.6 old automatic recovery (seasonal) replaced with Spirit roll model
-  - Batch 5 Mode A simulation complete: M-001 through M-009 (M-005 eliminated — Maxims cut)
-  - Batch 5 Mode B simulation complete: interaction chains B-02 through B-07
-  - Two P1 fixes applied inline: M002-01 (Wound cap clarified in stage1), M009-01 (Certainty recovery in stage2/3)
-
-editorial_decisions_applied:
-  - Certainty recovery: Spirit TN7 Ob2 (not automatic rest-based)
-  - Certainty depletion confirmed as TS-growth pressure, not pure damage
-  - NPC Presence scores: Almud 5, Lenneth 4, Vaynard 5
-
-gap_register_delta:
-  closed:
-    G-097: BUG-002 Heart/Poise naming — CLOSED
-  added:
-    G-105: Intelligibility + low Spirit = permanent Rendering Crisis loop (P1)
-    G-106: Inspiration + Fork pool inflation, 20D+ uncapped (P1)
-    G-107: Inspiration on Thread ops unruled (P2)
-    G-108: Incapacitated character in social scene hybrid unruled (P2)
-    G-109: Rendering Crisis no mechanical enforcement (P2)
-    G-110: Non-combat pool floor undefined — negative pool possible (P1)
-  totals_after: 143 total (3 new P1s open: G-105, G-106, G-110)
+  - Batch 5 simulation: M-01 through M-09 (core combat engine)
+  - Modes: A isolation, B interaction, D edge cases
+  - 9 mechanics tested, 11 findings total
 
 commits:
-  - compilation/stage1_core_engine.md: BUG-004 (Heart ref), M002-01 Wound cap
-  - compilation/stage2_characters.md: Certainty recovery rule, NPC Presence scores
-  - compilation/stage3_thread_operations.md: BUG-004 (Heart), Certainty recovery cross-ref
-  - compilation/stage6_factions.md: BUG-004
-  - compilation/stage8_combat.md: BUG-004
-  - compilation/stage9_social.md: BUG-004
-  - compilation/stage10_advancement.md: BUG-004
-  - compilation/stage13_npcs.md: BUG-004, NPC Composure values
-  - compilation/stage16_reference.md: BUG-004
-  - tests/valoria_stress_tests_batch5.md: Mode A results
-  - tests/valoria_stress_tests_batch5_modeB.md: Mode B results
-  - valoria_gap_register_consolidated.md: G-097 closed, G-105-G-110 added
+  batch5: 542821d91a00
 
-open_p1s:
-  - G-105: Intelligibility → permanent Certainty max reduction loop
-  - G-106: Inspiration + Fork pool ceiling (max 1 Inspiration/roll, max 2 Forks/roll)
-  - G-110: Minimum 1D pool floor for all non-combat rolls
+findings_summary:
+  P1: 1
+    - B5-M07-A: §1.9 and §8.1 group bonus tables contradict at 3+ attackers — §8.1 must be removed
+  P2: 7
+    - B5-M03-A: Stamina "in a row" qualifier allows infinite reset exploit — remove qualifier
+    - B5-M04-C: Projectile range closing Ob undefined — add Agility check
+    - B5-M07-C: Single ally nullifies all group bonuses (all-or-nothing) — reduce by one tier per ally
+    - B5-M08-B: Beginner's Luck "first mark" on unestablished History undefined
+    - B5-B02-B: Defence splitting across 3+ attackers needs explicit declaration rule
+    - B5-D01: No combat escape / Flee procedure defined
+    - B5-D03: Mutual full-guard stalemate has no mechanical escape — add Stamina fatigue for consecutive full guard
+  P3: 3
+    - B5-M03-C: Catch Breath timing unspecified
+    - B5-M05-B: Thread contact across zone transitions not stated
+    - B5-M06-B: Late entrants to combat have no insertion rule
 
-editorial_still_pending:
-  - B03-02: Stunt auto-success cap — Inspiration value or full attribute? (EDITORIAL)
-  - S-08 Einhir site name
-  - E-01 assassination perpetrator
-  - Vaynard Private Collection transfer procedure
-  - Niflhel primus inter pares structure
-  - Restoration NPCs
-  - Territory names (15 territories)
+passes:
+  - Pool split dynamics (M-01): lethal exchange, initiative advantage, full-guard all correct
+  - Wound gate system (M-02): cascade math, carryover, cap all clean
+  - Zone movement (M-05): narrative design correct
+  - Momentum (M-09): Thread exclusion, spend math clean
+
+mechanics_now_tested: 9 (M-01 through M-09) + all prior batches
+remaining_untested: ~21 (down from 30)
 
 next_action:
-  options:
-    a: Apply 3 open P1 text fixes (G-105 Intelligibility note, G-106 Inspiration/Fork cap, G-110 pool floor minimum)
-    b: Resolve B03-02 editorial (Stunt auto-success cap) then apply all text fixes together
-    c: Continue simulation — Batch 6 (remaining untested mechanics)
-  priority: B — resolve editorial first, then batch all text fixes in one push; then Batch 6
-  untested_mechanics_remaining: History Resonance, Certainty blast radius, Diagnosis standalone, Co-Movement Cards (BG), Impression Track, Reading Exchange, Defection, Fortification, BG turn structure, Victory conditions, Hollow victory, plus M-010 through M-056 (all Thread + faction + combat specifics)
+  task: Apply P1 fix (§8.1 group bonus table removal) and P2 fixes to CP14 + stage8_combat.md
+  model: Sonnet 4.6 (mechanical judgment on wording)
+  then: Batch 6 — social mechanics (M-38 through M-41) or History Resonance / Certainty blast radius
