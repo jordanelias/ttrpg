@@ -60,8 +60,8 @@ All purchases have narrative requirements. CP alone is insufficient — every pu
 | Attribute +1 | Current score × 3 CP | Maximum 5 per attribute | Training, mentorship, or extended practice narrated |
 | History +1 (beyond test track) | 3 CP | Total cap = Memory score | Identify specific experiences that built this skill |
 | New History at 0 points | 5 CP | Must not duplicate existing History function | Origin scene with GM; establishes eligibility only (0 points = no pool bonus) |
-| New Inspiration at 1 point | 4 CP | Total Inspiration value ≤ Heart score | Name focus; narrate two scenes of genuine pursuit |
-| Inspiration +1 point | 3 CP | Individual cap = Heart score; total ≤ Heart | Scene of sustained engagement with focus this season |
+| New Inspiration at 1 point | 4 CP | Total Inspiration value ≤ Spirit score | Name focus; narrate two scenes of genuine pursuit |
+| Inspiration +1 point | 3 CP | Individual cap = Spirit score; total ≤ Spirit | Scene of sustained engagement with focus this season |
 | New Knot (establish) | 2 CP | Total significant Knots ≤ Bonds score | Relationship must have been played this season |
 | Knot +1 strain capacity | 3 CP | Max strain capacity per Knot = 5 | The relationship has been tested and endured |
 | Circles +1D (permanent) | 4 CP | Max permanent bonus = Presence score | A season of active social investment in that faction |
@@ -81,12 +81,12 @@ All purchases have narrative requirements. CP alone is insufficient — every pu
 
 1. Player declares intent and names the focus.
 2. Two scenes where the character actively engages with the focus (GM confirms engagement is genuine, not incidental).
-3. After each scene: Heart check TN 7, Ob 1.
+3. After each scene: Spirit check TN 7, Ob 1.
    - Both succeed: Inspiration established at 1 point.
    - One succeeds, one fails: Inspiration established at 1 point with a **Complication Tag** (GM assigns a narrative condition — e.g., *"only while in Valorsplatz"* or *"contingent on Lenneth's survival"*).
    - Both fail: focus not yet crystallised. Retry next season with new scenes.
 
-**CP shortcut (G-053):** 4 CP + one scene of genuine engagement + one Heart check. Success: Inspiration at 1 point, no Complication Tag. Failure: 4 CP spent; retry next season.
+**CP shortcut (G-053):** 4 CP + one scene of genuine engagement + one Spirit check. Success: Inspiration at 1 point, no Complication Tag. Failure: 4 CP spent; retry next season.
 
 ### Recovery (from reduced value)
 
@@ -99,7 +99,7 @@ All purchases have narrative requirements. CP alone is insufficient — every pu
 When an Inspiration's focus is permanently destroyed, captured, or fundamentally changed such that engagement is no longer possible:
 
 1. Inspiration drops to 0 immediately.
-2. Player may convert to a new Inspiration through a **Grief Scene**: one scene of genuine reckoning with the loss + Heart check TN 7 Ob 2.
+2. Player may convert to a new Inspiration through a **Grief Scene**: one scene of genuine reckoning with the loss + Spirit check TN 7 Ob 2.
    - Success: new Inspiration at old value −1 (minimum 1). New focus must thematically connect to the loss.
    - Failure: Inspiration lost entirely.
 
