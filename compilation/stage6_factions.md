@@ -149,6 +149,30 @@ Correctness is determined by institutional authority, not outcome or character. 
 - Conviction: Faith · Resonant Style: Evidence · TS: 0 (theologically foreclosed)
 - Sincerely devout. Zero awareness of Galbados's actual nature. Not cynical — wrong.
 
+
+**TC 80 — Territorial Seizure Procedure**
+
+At TC 80, the Church may attempt to seize territories through institutional claim rather than military force. This is triggered once per season at seasonal accounting; the Church player (or GM) may attempt seizure on any number of territories, resolving each separately.
+
+**Roll:** Church Mandate (pool, TN 7) vs territory owner's Mandate ÷ 2 (round up, minimum Ob 1).
+
+**Territory TC value (flat, on seizure — no per-season accrual):**
+
+| Territory Type | TC on Seizure |
+|---|---|
+| Minor territory (rural, low-prosperity) | +1 |
+| Major territory (trade hub, fortified, ducal seat) | +3 |
+| Capital or key institutional site (Valorsplatz, cathedral city) | +5 |
+
+**Outcome on success:** Church gains administrative control of the territory. The territory's Domain Actions may no longer target Church authority without +2 Ob. The flat TC value fires immediately on seizure.
+
+**Outcome on failure:** No seizure. Church Mandate −1 (overreach).
+
+**Counter-play options:**
+- Parliamentary vote to dispute seizure (Influence vs Ob 3): success reverses seizure; TC does not fire.
+- Riskbreaker operation exposing Church-Niflhel connection: each successful exposure removes one seized territory and prevents re-seizure of that territory for one season.
+- Grand Debate challenging Church civil authority: Overwhelming removes all seizures in one duchy; Success removes one.
+
 ---
 
 ## 8.4 Faction 3: Hafenmark (Duchy)
@@ -358,9 +382,22 @@ The Revolution's connection to Einhir cultural continuity allows collective Thre
 
 The Löwenritter are not an independent political faction — they are an institutional instrument of the Crown. They hold territory (the fortress at the northern border), maintain military capacity, and act as the Crown's deniable covert arm. Their loyalty is to the Crown as an institution, not to any specific monarch.
 
-**Coup Threshold:** Grandmaster Ehrenwall is keeping count of Almud's compromises. When the Löwenritter's internal assessment of the Crown's institutional integrity drops to a threshold (tracked as a private GM counter), a coup trigger is possible. See NPCs section for full Ehrenwall mechanics.
+**Coup Threshold:** Grandmaster Ehrenwall is keeping count. The GM tracks a private Coup Counter (0–3). When it reaches 3, the coup fires at the next seasonal accounting.
 
-**Martial Law Capacity:** If the coup trigger fires, the Löwenritter can impose Martial Law on Crown territories — suspending normal Domain Action resolution and replacing it with Military-based Stability enforcement. This is a campaign-level event, not a standard Domain Action.
+**Counter increments (+1 each):**
+- TC reaches 40 while the Crown has taken no action to reduce it that season (unopposed Church advance)
+- Torben's loyalty reaches 3–2 or lower (Altonian alignment)
+- Crown loses two or more territories in one season without a military response Domain Action
+
+**Counter never decrements.** Once Ehrenwall marks a failure, she does not revise the assessment. See NPCs section for full Ehrenwall mechanics and coup execution procedure.
+
+**Martial Law Capacity:** If the coup trigger fires, the Löwenritter impose Martial Law on all Crown-held territories simultaneously. Effects:
+
+- All non-Military Domain Actions in Martial Law territories require a secondary Military check (Löwenritter Military pool, TN 7, Ob 2) to proceed. Failure: the action is blocked this season.
+- Stability enforcement: Löwenritter Military pool replaces faction-specific pools for all Stability-related Domain Actions in affected territories.
+- Faction restriction: only Löwenritter and Crown may act openly. All other factions must succeed at a Covert Domain Action (Ob 3) to operate at all.
+- Duration: Martial Law persists until a PC-driven Domain Action removes it (Influence vs Ob = Löwenritter Military ÷ 2, round up, minimum Ob 3) OR TC drops below 40 (Church threat recedes; Ehrenwall withdraws).
+- Scope: Crown territories only. Hafenmark, Varfell, and Church territories are unaffected.
 
 **Riskbreakers:** The extralegal arm of the Löwenritter. Operations are not recorded in official documents. See §9.3.
 
