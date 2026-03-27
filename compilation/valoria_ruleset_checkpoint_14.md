@@ -117,7 +117,7 @@ Momentum cannot be spent on Thread operation rolls. Thread operations have their
 
 ## 1.8 Beginner's Luck
 
-When a character attempts a task with no applicable History, they may roll at **double Ob** using only their raw attribute dice (no History bonus). A success at Beginner's Luck earns the first mark toward establishing a new History (see §10.2).
+When a character attempts a task with no applicable History, they may roll at **double Ob** using only their raw attribute dice (no History bonus). A success at Beginner's Luck earns a provisional History tag at 0 points — the character has demonstrated the first trace of relevant experience. The next CP investment or qualifying scene formalises it as an established History (see §10.2).
 
 A character cannot use Beginner's Luck for: Thread operations (require Approach Training), combat proficiency rolls (require at least basic weapon familiarity), or faction Domain Actions (require institutional standing).
 
@@ -134,7 +134,7 @@ When multiple characters declare actions against a single unsupported opponent i
 
 The bonus applies to each attacker's offence pool. The defender splits their defence pool across all incoming attacks (dividing defence dice among attackers before resolution).
 
-An opponent is "unsupported" if no ally is engaging any of the attackers.
+An opponent is "unsupported" if no ally is engaging any of the attackers. If the target has one or more allies engaged with the attackers, reduce the group bonus by one tier (e.g., a 5-attacker group bonus is treated as 3-attacker). A single ally cannot fully nullify group bonuses — only distribute pressure.
 
 ---
 
@@ -194,7 +194,7 @@ Attributes range from 1 to 7. A score of 3 is the human average. 1 is severely l
 | Certainty | Spirit (starting and maximum value) | 0–7 | Existential coherence; at 0, rendering crisis |
 | Coherence | 10 (starting value); countdown to 0 | 0–10 | Measures how legible reality remains to the character |
 
-**Contact Rounds** uses Focus because sustained Thread contact is an act of concentration, not willpower.
+**Contact Rounds** uses Focus because sustained Thread contact is an act of concentration, not willpower. Moving to an adjacent zone does not break Thread contact unless the target configuration is not present in the new zone.
 
 ---
 
@@ -212,7 +212,7 @@ At combat start, each combatant rolls Agility (TN 7, Ob 1).
 
 The **winner declares their pool division last** each round after seeing opponents' announced action types (but not their die allocations). This is the information advantage: you know whether opponents are attacking, defending, manoeuvring, or operating before committing your own split.
 
-Ties: re-roll. Initiative holds for the entire combat unless a specific Manoeuvre (Reorient, §8.6) changes it.
+Ties: re-roll. Initiative holds for the entire combat unless a specific Manoeuvre (Reorient, §8.6) changes it. Combatants entering an ongoing combat roll initiative immediately on entry and are inserted into the existing declaration order at their result.
 
 ## 3.3 Round Structure
 
@@ -270,7 +270,7 @@ Weapons fall into three reach categories:
 
 **Long vs Short at long range:** Long weapon has priority. Short weapon user must manoeuvre at disadvantage without being hit to close to short range.
 
-**Projectile range:** Melee weapons cannot attack back at projectile range. Projectile weapons cannot be used at short or long melee range. A character must successfully dodge the ranged weapon user's fire to close distance. Narrative spatial conditions apply (height, obstacles, cover).
+**Projectile range:** Melee weapons cannot attack back at projectile range. Projectile weapons cannot be used at short or long melee range. To close distance against a ranged opponent, a character must survive their fire: make an Agility check (TN 7, Ob = ranged attacker's net successes that round, minimum Ob 1). On success: character closes to long melee range. On failure: character takes damage normally and remains at projectile range. Narrative spatial conditions apply (height, obstacles, cover).
 
 **Reach advantage:** While the longer-reach combatant maintains appropriate distance, the shorter-reach combatant's offence dice are wasted unless they first perform a Close manoeuvre (see §8.6).
 
@@ -305,11 +305,13 @@ An incapacitated character is unconscious or otherwise unable to act. They are n
 
 ## 3.9 Stamina and Recovery
 
-**Stamina:** Equal to Endurance + 1. Decreases by 1 for every melee round in a row ehere a character has Moved, Manoeuvred or Attacked. Once Stamina reaches 0, the character must Catch Breath. A character may elect to take a Breather before Stamina reaches 0.
+**Stamina:** Equal to Endurance + 1. Decreases by 1 for every melee round in which the character has Moved, Manoeuvred, or Attacked. Defence-only rounds and Full Guard rounds (without consecutive fatigue) do not restore Stamina. Once Stamina reaches 0, the character must Catch Breath. A character may elect to take a Breather before Stamina reaches 0.
 
-**Catch Breath:** A character's Combat Pool is divided by 2 (rounded up). They can only commit their Combat Pool to Defence Dice. Stamina is restored to full afterwards.
+**Catch Breath:** A character's Combat Pool is divided by 2 (rounded up). They can only commit their Combat Pool to Defence Dice. Stamina is restored to full afterwards. A character whose Stamina reaches 0 must Catch Breath as their next declared action — they cannot attack, manoeuvre, or move until Stamina is restored.
 
 **Breather:** A character's Combat Pool can only be committed to Defence Dice. Stamina is restored to full afterwards.
+
+**Full Guard fatigue:** A combatant who declares Full Guard (all dice to Defence, no offence declared) for 2 or more consecutive rounds: Stamina −1 per full-guard round from the second consecutive round onward. This prevents indefinite mutual stalemate without penalising tactical one-round defensive holds.
 
 **Quick Rest:** Between scenes (minutes to hours of downtime). Restores Health to maximum and removes 1 Wound.
 
@@ -2452,6 +2454,14 @@ Excess attack successes = attacker's net − defender's net (minimum 0).
 | 3 | +3D |
 | 4 | +5D |
 | 5 | +8D |
+
+### Escaping Combat
+
+A character who wishes to exit an ongoing combat entirely: **Agility check, TN 7, Ob = opponent's Cognition** (minimum Ob 1). Declare at Phase 1.
+
+- **Success:** Character exits at Priority 6, Stamina set to 0.
+- **Failure:** Opponent gets one free Priority 3 attack before exit. Character still exits.
+- **Group flight:** Each character rolls separately.
 
 ### Stunts
 
