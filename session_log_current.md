@@ -1,41 +1,37 @@
 session_close: 2026-03-27
-checkpoint: post-batch6-simulation
+checkpoint: post-reconciliation (P0-3, P1-4, P1-5)
 model: claude-sonnet-4-6
 completed_stages:
-  - Batch 6 simulation complete: History Resonance, Push/Certainty blast radius, Diagnosis standalone, Co-Movement Cards BG, Impression Track, Reading Exchange, Defection (gap status confirmed), Fortification, BG Turn Structure, Victory Conditions, Hollow Victory
-  - P1 fix applied: Reading Exchange Ob=1 + degree mapping (stage9 §9.4)
-  - Impression Track + Knot Crisis priority rule added (stage2 §4.7)
-  - Fortification construction Domain Action added (stage8 §8.4)
-  - BG FORTIFY order added (stage_bg B5)
-  - BG mid-phase clock game-end check added (stage_bg B4)
-  - G-111 through G-114 closed same session
-  - G-115 closed: Church VC = TC≥60 + Himmelenger + Valorsplatz; expansion lock TC≥40
-
-editorial_pending:
-  - G-115: Church victory condition — is Church intentionally unwinnable in standard play, or should TC≥80 be changed to TC≥60?
-  - B6-VC-03: 2-player NPC order reduction (2 instead of 3) may undermine clock tension
-  - Co-Movement cards CM-11 through CM-20 (BG-E-01)
-  - Varfell TK 5 consequence (BG-E-02)
-  - S-08 Einhir site name; E-01 perpetrator; Niflhel primus inter pares; territory names; Restoration NPCs
+  - P0-3: Coverage matrix reconciled — sim_coverage_matrix.md retired; auditing_matrix.md Part 7 updated
+  - P0-3: Coverage status corrected to 73/82 mechanics tested (89%); remaining gap = M-62–64, M-67–70, M-72, M-74–75 (BG-specific/full-scenario)
+  - P1-4: Gap register updated — G-125 through G-136 added (12 new P1s from sim_batch_02/03/04)
+  - P1-4: Summary corrected: P1 total 43→55; total items 137→149; design items 74→83
+  - P1-5: Editorial register created on GitHub with 3 new items (BG-E-01 CM-11–20, BG-E-02 Varfell TK5, BG-VC-03 2-player NPC orders)
+  - P1-5: Olafsson Niflhel connection promoted to decision item; Niflhel arm count confirmation added
+  - P0-2 and P1-6 deferred to Haiku — user confirmed Sonnet-only for this session
 
 gap_register_delta:
-  closed: G-111 (RE Ob), G-112 (IT+Knot), G-113 (Fortification build), G-114 (BG mid-phase)
-  open: G-115 (Church VC editorial)
+  added: G-125 (Pulling no social counter), G-126 (Taint/Coherence/Int naming §5.11), G-127 (Dissolution Residue drain target), G-128 (ThS scope contradiction), G-129 (TLK drain rate absent), G-130 (Concealment procedure absent), G-131 (Parliamentary Vote coalition missing), G-132 (Seasonal Accounting anti-spiral floor inverts intent), G-133 (Niflhel no Intel stat), G-134 (Community Weaving collective scaling), G-135 (Mass Combat damage formula absent), G-136 (Church Stability TC brake fires at start value)
+  p1_total: 55
+  total_items: 149
+
+editorial_register_delta:
+  added: BG-E-01 (Co-Movement Cards CM-11–20, near-blocking), BG-E-02 (Varfell TK5 consequence), BG-VC-03 (2-player NPC order reduction)
+  promoted: Olafsson Niflhel connection → decision item
+  added_note: Niflhel arm count confirmation
 
 commits:
-  - tests/valoria_stress_tests_batch6.md: Batch 6 sim results
-  - compilation/stage9_social.md: Reading Exchange Ob fix
-  - compilation/stage2_characters.md: IT+Knot Crisis priority
-  - compilation/stage8_combat.md: Fortification construction
-  - compilation/stage_bg_board_game_mode.md: FORTIFY order + mid-phase check
+  - valoria_gap_register_consolidated.md: G-125–G-136, summary update
+  - valoria_editorial_authorship_register.md: new file, 3 additions + 2 expansions
+  - tests/auditing_matrix.md: Part 7 full rewrite with all batch coverage
 
 simulation_coverage_summary:
-  batches_complete: [B5-ModeA, B5-ModeB, B6]
-  mechanics_tested: M-001 through M-009 (M-005 eliminated), History Resonance, Push, Diagnosis, Co-Movement BG, Impression Track, Reading Exchange, Fortification, BG Turn Structure, Victory Conditions
-  mechanics_pending: M-010 through M-056 (Thread ops, faction, combat specifics), Defection (design pending G-036)
-  p1s_total_found: 5 (M002-01 fixed, M009-01 fixed, B03-01 fixed, B07-01 fixed, B6-RE-01 fixed)
-  all_p1s_closed: true
+  mechanics_tested: 73/82 (89%)
+  modes: TTRPG ~90%, BG ~60%, HYB ~50%
+  npcs: 13/13 named NPCs tested
+  archetypes: 9/9
+  remaining_untested: M-62, M-63, M-64, M-67, M-68 (full scenario), M-69, M-70, M-72, M-74 (full scenario), M-75
 
 next_action:
-  task: Continue simulation — M-010+ (Thread ops, faction mechanics, combat specifics)
-  all_editorial_blockers_cleared: true
+  pending_haiku: P0-2 (ghost mechanic removal from CP14), P1-6 (test file naming convention)
+  next_sonnet: Continue Phase 3 simulation — BG-specific mechanics M-62–64, M-67–70, M-72, M-74–75 (full-scenario Mode C tests); then S-10/S-11/S-12 scenarios
