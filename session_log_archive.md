@@ -517,3 +517,48 @@ next_action:
   note: G-093 Resources/Wealth formula (2x vs 2x-1) flagged for Phase 3 stress testing
 
 model_routing_notes: Sonnet 4.6 throughout — canon guard, hybrid gap resolution, compilation
+---
+session_close: 2026-03-26
+checkpoint: 14-editorial
+model: claude-sonnet-4-6
+completed_stages:
+  - Cross-reference audit CP14 TTRPG vs BG (10 passes, 62 findings)
+  - P1 editorial resolution (7 items)
+  - P2/P3 editorial round (16 items A-P)
+  - Full correction push to both CP14 and BG
+
+commits:
+  cp14: 2325655348e0
+  bg: c49141521803
+
+corrections_applied:
+  cp14:
+    - Territory names: all 15 canonical
+    - Forced Resolution -> Locking and Snapping throughout
+    - Rattled: wound-equivalent track (-1D per accumulation)
+    - Coherence: full spec with Coherence 2 consult, Coherence 0 monstrous, saving attempt rule
+    - Monstrous entities: excess undifferentiated Thread via gaps
+    - Knots: +1 Strain for +2D -> +2 strain for +3D; presence/narration required; closer bonds = higher capacity
+    - Domain Ob: direct (1-7), pool adds faction stat if leadership position held
+    - Co-movement: d10 replacing d6, no supplements, TPS added to all Thread pools
+    - TPS = TS / 10 (round down)
+    - Renown: full 0-10 table
+    - Vaynard: Ambition Track (0-100), TK 4-5 redesigned, TS via collection
+    - Vaynard victory: Path A (all 15) or Path B (10+ territories + Stillhelm + TK5 + TS75+)
+    - Niflhel: four competing networks with supremacy mechanic
+    - Eidur Sjostrom and Hakan Reusfoldt NPCs added
+    - TC pause threshold: Stability <= 4
+    - Attribute pool: 31 points
+    - S-16 through S-20 seasonal events added
+
+editorial_still_pending:
+  - S-08 Einhir site name
+  - E-01 assassination perpetrator
+  - Vaynard Private Collection transfer procedure
+  - Niflhel Supremacy seasonal resolution procedure
+  - Coherence 0 saving attempt procedure
+
+next_action:
+  recommended: Phase 3 simulation or CP15 compilation
+  model: Sonnet 4.6
+
