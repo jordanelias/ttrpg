@@ -1,81 +1,55 @@
 session_close: 2026-03-27
-checkpoint: 14-sim-prep
+checkpoint: phase3-batch4
 model: claude-sonnet-4-6
 completed_stages:
-  - Identified all mechanics directly impacted by editorial decisions committed 2026-03-26
-  - Mapped 12 mechanic groups requiring re-simulation
-  - Discovered P1 attribute pool inconsistency (§2.2 vs §14.1/§12)
-  - Prepared full simulation routing table and handoff
+  - Stress tests Batch 3 (10 mechanics, 10 P1 findings, 18 P2, 7 P3)
+  - Stress tests Batch 4 (12 mechanics, NPC substitution, archetype gauntlet, 17 P1, 10 P2, 3 P3)
+  - BUG-001 fix: attribute points 18->31 in stage12 + stage14
+  - Auditing matrix coverage log updated
 
-p1_finding:
-  issue: Attribute pool contradiction
-  location_1: "§2.2 — 31 points distributed across 10 attributes"
-  location_2: "§14.1 (Session Zero checklist) — 18 attribute points"
-  location_3: "§3772 (GM checklist) — 18 attribute points"
-  location_4: "§12 (hybrid) — 18 attribute points"
-  action_required: Propagate 31 to all checklist references before next push
+commits:
+  batch3: 957676a57ffe
+  stage12_fix: 5e324c153225
+  stage14_fix: 2c0653a471a2
+  batch4: 3476a0a170c1
+  matrix_update: 63b36137922c
 
-mechanics_flagged_for_simulation:
-  - id: M-11/M-12/M-13/M-14/M-15
-    change: TPS (=TS÷10 round down) added to all Thread operation pools
-    test_modes: [A_isolation, B_interaction]
-  - id: M-16/M-17/M-18
-    change: Co-movement d10 replacing d6; History Resonance and Flashback removed from co-movement
-    test_modes: [A_isolation, D_edge_cases]
-  - id: M-26
-    change: Coherence renamed Intelligibility (10->0); effects table revised; separate Coherence track retained
-    test_modes: [A_isolation, B_interaction_with_Knots, D_edge_cases]
-  - id: M-32
-    change: Knot Call = +2 strain for +3D; closer bonds = higher strain capacity
-    test_modes: [B_interaction, D_edge_cases]
-  - id: M-03_Composure
-    change: Rattled = wound-equivalent track (-1D per mark, cumulative); Composure resets after each Rattled
-    test_modes: [A_isolation, D_edge_cases]
-  - id: M-42
-    change: Domain Ob = direct target stat (1-7, no division); pool adds faction stat if leadership held
-    test_modes: [A_isolation, B_interaction, C_scenario]
-  - id: M-36
-    change: Renown 0-10 full permission table; Debate bonuses at tier 5/6/7/8
-    test_modes: [A_isolation, B_interaction_with_Debate]
-  - id: M-47_Vaynard
-    change: Ambition Track (0-100, 5 thresholds); TK system redesigned; TS via originary lock collection
-    test_modes: [A_isolation_full_range, C_scenario]
-  - id: M-44_Niflhel
-    change: Four-network Supremacy Mechanic at seasonal accounting
-    test_modes: [A_isolation, C_endgame_scenario]
-  - id: M-46_TC
-    change: TC pause threshold changed from Stability <= 5 to Stability <= 4
-    test_modes: [A_boundary, C_scenario]
-  - id: M-43_seasonal
-    change: S-16 through S-20 added (five new event triggers)
-    test_modes: [C_scenario, D_interaction_with_existing_events]
+cumulative_p1_findings:
+  batch3: 10
+  batch4: 17
+  total: 27
+  critical_cluster:
+    - BUG-004: Intelligibility/Coherence/ThS naming inconsistency throughout
+    - F-25: ThS Crisis by Season 3 at standard play rate (design confirmation needed)
+    - F-26: §4.5 Intelligibility vs §5.10 Coherence bonus dice conflict
+    - F-34: Church TC80 territorial seizure procedure missing
+    - F-38: GEN-03/GEN-06/GEN-07 archetypes have no personal-scale mechanics
+    - F-32: Coup counter mechanics undefined (Ehrenwall)
+    - F-33: Martial Law procedure undefined
+    - F-27: ThS + Certainty simultaneous crisis contradictory resolution
+    - F-31: Devout bypass unreachable at TS 0-9
+    - Edge-14: Orphaned config Endurance check undefined
+    - F-23: Collective op co-movement scaling formula missing
+    - F-24: Anchor drops mid-lattice: no outcome rule
 
-commits: {}
+mechanics_tested_cumulative: ~52/82 (63%)
+phase3_gate_status: NOT MET (requires 82/82 mechanics, all modes, all factions/NPCs)
+untested_mechanics: M-01,02,03,04,05,06,07,08,09,19,22,24,25,31,33,35,39,40,53,56,62,63,64,67,68,69,70,72,74,75
 
 editorial_still_pending:
   - S-08 Einhir site name (deferred)
-  - Co-movement d10 table in BG (uses card system; d10 is TTRPG only)
   - E-01 assassination perpetrator (intentionally unresolved)
-  - Vaynard Private Collection transfer procedure (design pending)
-  - Niflhel Supremacy seasonal resolution full procedure (design pending)
-  - Coherence 0 saving attempt procedure (design pending)
+  - Vaynard Private Collection transfer scene procedure
+  - Niflhel Supremacy seasonal resolution procedure
+  - Intelligibility 0 saving attempt procedure
+  - Coherence 0 saving attempt procedure
+  - BUG-004: naming standardization throughout
+  - GEN-03/GEN-06/GEN-07 archetype personal-scale mechanics
+  - Church TC80 seizure procedure
+  - Coup counter definition (Ehrenwall)
+  - Martial Law procedure
 
 next_action:
-  task: Run full simulation suite on all 12 mechanic groups above
-  skill: valoria-simulator
-  modes: [A_isolation, B_interaction, C_scenario, D_edge_cases]
-  priority_order:
-    1: TPS across all Thread ops (Mode A)
-    2: Co-movement d10 (Mode A + D)
-    3: Intelligibility x Knot strain interaction (Mode B)
-    4: Rattled stacking (Mode A + D)
-    5: Domain Ob + leadership pool (Mode B with faction stats)
-    6: Renown x Debate (Mode B)
-    7: Vaynard Ambition Track full range (Mode A)
-    8: Niflhel Supremacy endgame (Mode A + C)
-    9: TC pause at Stability <= 4 (Mode C)
-    10: Seasonal events S-16-S-20 (Mode C)
-  output_file: tests/valoria_stress_tests_batch3.md
-  also_repair: Propagate attribute pool = 31 to §14.1 and §12 checklist references in CP14
+  recommended: Address P1 critical cluster (BUG-004 naming fix, F-34 TC80 procedure, F-38 archetype specs) then continue Batch 5 targeting untested mechanics M-01 through M-09 (core combat engine)
   model: Sonnet 4.6
-
+  note: BUG-002 (stage3 obsolete attribute names) still outstanding
