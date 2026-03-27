@@ -19,6 +19,8 @@ Roll a pool of d10s.
 
 Net successes = total successes minus total 1s rolled (including bonus dice).
 
+**Minimum pool:** No combination of penalties may reduce a pool below 1D. If penalties would reduce a pool to 0 or below, the character rolls 1D. Additional Ob penalties still apply normally.
+
 ## 1.2 Target Numbers
 
 The Target Number (TN) sets the threshold for what counts as a success on each die. The default is TN 7; situational modifiers shift it.
