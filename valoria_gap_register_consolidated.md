@@ -114,12 +114,32 @@
 | G-033 | Army levy / mustering from territories | Session review | Design |
 | G-097 | BUG-002: Stage3 compilation file uses obsolete attribute names (Heart/Poise) — not in 10-attribute list; Leap/Weaving/Pulling pools reference wrong attributes | BT3 preflight | Fix stage3 to match CP14 |
 | G-098 | BUG-003: Domain Ob formula — confirmed direct stat 1–7 (no division); faction stat adds to pool when leader held. stage6 fixed 2026-03-27 | BT3 preflight | ✅ Closed |
+| G-121 | GAP-UC-03-A: Thread op performed ON Devout character — Ruling A confirmed (theological absorption). Physical effects visible; Devout character reinterprets through theological framework. No Discovery Event unless practitioner explicitly demonstrates Thread mechanism. | Unplanned combinations + user 2026-03-27 | ✅ Closed |
+| G-122 | Alert A: FR and Past-Oriented Pulling TN = TN 7 confirmed. §1.2 parenthetical is historical artifact; section-level TN 7 governs. | Batch 3 session + user 2026-03-27 | ✅ Closed |
+| G-123 | P3-046: Overwhelming Dissolution Micro-Gap — auto-close confirmed (Option A). No second roll required. | Batch 3 session + user 2026-03-27 | ✅ Closed |
+| G-124 | E-TAINT fully resolved: Taint abolished as a concept (replaced by Intelligibility, then renamed Coherence per G-065 + S7 editorial). "Taint" must be purged from all files (tracked as G-107). | G-065 + S7 session + user 2026-03-27 | ✅ Closed |
 | G-099 | Edge-8: Mid-Debate incapacitation has no resolution rule. Character drops to 0 Composure partway through a Debate — no rule specifies what happens to remaining exchanges | BT3-04 | Fix: concede all remaining exchanges; add to §9.6 |
 | G-100 | Renown F-09: "Initial advantage" scope in Debate undefined — applies to Exchange 1 only or all exchanges? No ruling in §10.5 or §9.6 | BT3-06 | Fix: define as Exchange 1 only in §10.5 |
 | G-101 | F-12 (Niflhel): Supremacy tiebreak missing — no rule when multiple networks are equally leading or equally weakest at seasonal accounting | BT3-08 | Fix: tie-leading = all +1 Intel; tie-weakest = random selection |
 | G-102 | F-13 (Niflhel): Partial Faction endgame path mechanically undefined — "controls fewer than 4 networks" victory condition has no resolution procedure | BT3-08 | Define 3-step procedure for partial control victory |
 | G-103 | F-13 (TC): TC pause + Baralta suppressor interaction undefined — when Church Stability ≤ 4 pauses TC generation AND Baralta suppressor is active simultaneously, modifier order is unspecified | BT3-09 | Clarify: modifiers (including suppressor −1) still apply to paused baseline |
 | G-104 | F-14 (S-16): "One piece of information" in Niflhel Quiet Network seasonal event is undefined — no standard format or scope | BT3-10 | Standardise using Quiet Network information format from §faction rules |
+| G-105 | GAP-UC-06-A: §8.3 ×3 TT combat multiplier and §11.1 ×3 territorial multiplier stack ambiguously during Zoom In — personal Thread op in mass combat scene | Unplanned combinations sim | Patch §8.3 + §11.1: personal-scale ops during Zoom-in use §11.1 multiplier only, not §8.3 |
+| G-106 | BUG-004: Intelligibility/Coherence/ThS naming inconsistency across compilation stages — same track referred to by multiple names | Batch 3+4 | Audit all stage files; standardise to Coherence throughout |
+| G-107 | E-TAINT resolved: Taint track abolished. Replaced by Intelligibility then renamed Coherence. Stage3 still contains "Taint" and "Taint Track" header at §5.10 — must be purged | Search (2026-03-27) | Remove all Taint references from stage3 + CP14; §5.10 header = Coherence / Epistemic Seduction |
+| G-108 | F-25: ThS hits Crisis (≤5) by Season 3 at standard play rate (1 Thread op/session). No GM warning or pacing note | Batch 3+4 | Add pacing note to §5.9: ThS Crisis typical onset ~Season 3 at standard play |
+| G-109 | F-26: §4.5 (Intelligibility/Coherence — no Thread bonus at low track) conflicts with §5.10 (bonus dice at low Coherence). Two sections contradict directly | Batch 3+4 | Clarify: bonus dice are from Coherence (transformation), not Intelligibility decay |
+| G-110 | F-27: ThS Crisis + Certainty Rendering Crisis simultaneous — resolution conditions contradict (one requires retreat from practice, other requires Belief engagement) | Batch 3+4 | Add priority rule: Certainty Crisis resolves first; ThS Crisis is secondary |
+| G-111 | F-31: Devout bypass provision for Discovery Events is mechanically unreachable — requires TS 0–9 character to "witness" something that TS 0 renders imperceptible | Batch 3+4 | Rewrite Devout bypass: Discovery Event fires on direct theological confrontation, not TS-gated witnessing |
+| G-112 | F-32: Ehrenwall Coup Tracker — no starting value specified, no decrement triggers defined (only increment triggers) | Batch 3+4 | Define: starting value = 0; decrement = −1 per season Crown Mandate ≥ 5 with no compromises |
+| G-113 | F-33: Martial Law procedure undefined — triggered by Coup but no mechanical procedure for what Martial Law does to faction stats, orders, player actions | Batch 3+4 | Design 4-step procedure: Stability freeze, Mandate −2, restricted Orders, sunset condition |
+| G-114 | F-34: Church TC 80 territorial seizure procedure missing — C-03 threshold card says Church "may roll Mandate vs Ob 3 to claim territory" but no procedure for what claiming does | Batch 3+4 | Define claim procedure: territory control transferred, Stability of claimed territory −1, Parliament challenge option |
+| G-115 | F-38: GEN-03 (Inquisitor), GEN-06 (Riskbreaker), GEN-07 (Knight Templar) archetype generic characters have no personal-scale mechanics — only faction-scale stats | Batch 3+4 | Write personal stat blocks for each generic archetype character |
+| G-116 | F-23: Collective lattice co-movement scaling undefined — 4-practitioner lattice "produces correspondingly significant effects" with no formula | Batch 3+4 | Define: co-movement effects × participant count (capped at ×4); or flat +1 per additional practitioner |
+| G-117 | F-24: Anchor-drop outcome in collective ops undefined — if the designated anchor drops contact mid-operation, no rule specifies what happens to the lattice | Batch 3+4 | Define: anchor drop = operation immediately ends; all participants take partial-degree consequences |
+| G-118 | Past-Oriented Pulling has no degree table — most temporally significant operation in the game has cost defined but no outcome table by degree (Overwhelming/Success/Partial/Failure) | Batch 3 session | Write degree table for §5.6 Past-Oriented Pulling |
+| G-119 | §16.2 character sheet Thread pool formulas wrong — all four operations list incorrect attributes (pre-Stage17 values); players pre-calculating from sheet use wrong pools | Batch 3 session | Update §16.2 reference to match CP14 canonical pool formulas |
+| G-120 | GAP-UC-08-A: BG faction orders generating Thread-significant events in PC-occupied territories — unclear if these qualify for TS growth without an accompanying TTRPG scene | Unplanned combinations sim | Add hybrid rule to §12.3: BG-phase Thread events require TTRPG scene or explicit GM narration to count as TS growth qualifying events |
 
 ---
 
@@ -269,18 +289,18 @@
 
 | Category | Total | Resolved | Design | Open | Closed/Cut | Deferred |
 |----------|-------|----------|--------|------|------------|----------|
-| P1 | 23 | 8 | 15 | 0 | 0 | 0 |
+| P1 | 43 | 12 | 31 | 0 | 0 | 0 |
 | P2 (main) | 63 | 18 | 29 | 8 | 7 | 0 |
 | P2 (consolidation) | 5 | 5 | 0 | 0 | 0 | 0 |
 | Hybrid (G-074–G-095) | 22 | 5 | 14 | 0 | 0 | 0 |
 | P3 | 4 | 0 | 0 | 1 | 0 | 3 |
-| **Total** | **117** | **35** | **59** | **9** | **7** | **3** |
+| **Total** | **137** | **40** | **74** | **9** | **7** | **3** |
 
 **Editorial blockers: 0**
-**Design needed: 58 items**
-**Resolved awaiting compilation: 36 items**
+**Design needed: 74 items**
+**Resolved awaiting compilation: 40 items**
 **Closed/cut: 7 items**
-*Last updated: 2026-03-27 — G-098 closed (editorial confirmed + stage6 fixed)*
+*Last updated: 2026-03-27 — added G-105–G-124 from past conversation audit (16 new P1 design, 4 new P1 closed)*
 
 ---
 
