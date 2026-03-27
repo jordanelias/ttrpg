@@ -150,7 +150,7 @@ Mass combat operates at unit scale. Units are military formations with aggregate
 
 The commanding officer's attributes directly modify unit rolls:
 - Officer **Coordination**: adds dice to unit attack rolls.
-- Officer **Heart**: adds dice to unit Cohesion checks.
+- Officer **Spirit**: adds dice to unit Cohesion checks.
 - Officer **Memory**: allows one conditional order per round beyond standard declaration.
 
 ### Declaration Structure
@@ -197,7 +197,7 @@ On Formation Break: all attachments are lost for the remainder of the battle. A 
 
 **Formation Break**: Unit's aggregate Health reaches 0. Health resets immediately; all subsequent actions at +1 Ob. Cohesion check required (Cohesion dice, Ob 2). Failure: unit **Routes**.
 
-**Routed**: Cannot take ordered actions. Rally requires an officer with Coordination 4+ to spend their action (Heart roll, Ob 2).
+**Routed**: Cannot take ordered actions. Rally requires an officer with Coordination 4+ to spend their action (Spirit roll, Ob 2).
 
 Units that survive a battle gain +1 to a randomly selected stat, once per campaign season (veteran bonus).
 
