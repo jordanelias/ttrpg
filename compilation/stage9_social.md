@@ -6,7 +6,9 @@ Social conflict in Valoria uses two primary structures: **Appeals** (one-roll pe
 
 ## 9.1 Composure and the Rattled State
 
-**Composure = Presence + 6.** This is the social wound threshold. Strain accumulates during social conflict; it is not reduced between exchanges within the same scene unless Unmask occurs.
+**Composure = Presence + 6.**
+
+**Incapacitated characters:** A physically incapacitated character (Wound threshold reached) cannot initiate social actions or make social rolls. They may be present as a witness or passive party. Social actions directed *at* them (interrogation, persuasion) still proceed — the GM sets consequences. The character may resume social participation once they recover to at least 1 Health (Quick Rest or equivalent). This is the social wound threshold. Strain accumulates during social conflict; it is not reduced between exchanges within the same scene unless Unmask occurs.
 
 **Rattled** triggers the moment accumulated strain **first equals or exceeds** Composure. Stop tracking strain at that point — Rattled replaces the number.
 
