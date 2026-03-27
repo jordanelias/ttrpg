@@ -674,9 +674,13 @@ Thread operations are how practitioners interact with the constitutive ground of
 
 ## 5.1 Approach Training
 
-A character with TS 30+ may undertake Approach Training as a downtime arc: one full campaign season devoted to learning how to initiate and sustain contact. During this season the character is unavailable for Domain Actions and military service but may participate in scenes.
+A character with TS 30+ may undertake Approach Training as a downtime arc. Acquiring the tag requires:
 
-At season's end, the character gains the **Approach Training** tag permanently. This is not a roll — it is a narrative commitment confirmed at seasonal accounting.
+- **Mentor:** A character with Approach Training and TS 40+ (or authenticated Einhir text in lieu of a mentor)
+- **Dedicated season:** One full campaign season of study. The character is unavailable for Domain Actions and military service but may participate in scenes.
+- **Spirit check:** TN 7, Ob 2 at season end.
+
+On success: **Approach Training** tag acquired permanently. On failure: character is primed — next season's dedicated study automatically succeeds without a check. The tag is confirmed at seasonal accounting.
 
 ## 5.2 The Leap — Entering Contact
 
@@ -2757,10 +2761,12 @@ A Reading Exchange is a social perception action available in the **first round 
 
 | Degree | Result |
 |---|---|
-| Overwhelming | GM describes opponent's emotional state, tells, and assessment confidence in detail. +1D on the first two formal Exchanges in the same scene. |
-| Success | GM describes opponent's emotional state and one tell. +1D on the first formal Exchange in the same scene. |
+| Overwhelming | GM describes opponent's emotional state, tells, and assessment confidence in detail. +1D on the first two formal Debate Exchanges in the same scene (does not apply to Appeals or other single-roll social actions). |
+| Success | GM describes opponent's emotional state and one tell. +1D on the first formal Debate Exchange in the same scene (does not apply to Appeals or other single-roll social actions). |
 | Partial | GM describes surface affect only (calm, nervous, defensive). No Exchange bonus. |
-| Failure | No information. The opponent notices the scrutiny — they are aware of being read. |
+| Failure | No information. The opponent notices the scrutiny. GM may treat the target's disposition as one step more hostile for the remainder of the scene (GM discretion — applies when the target has cause to take offence at being probed). |
+
+If both parties attempt a Reading Exchange simultaneously, resolve both rolls before narrating either result — this prevents the first result from affecting the second declaration.
 
 **Note on pool construction**: The Reading Exchange uses Attunement as the base attribute. If using pre-printed History pools (which include a primary attribute), replace the primary attribute component with Attunement. The History bonus (points + 3) is unchanged.
 
@@ -2778,10 +2784,12 @@ An Appeal is a single-roll persuasion attempt targeting an audience or individua
 |---|---|
 | Overwhelming | Audience persuaded; disposition improves one step; GM names one additional consequence in the speaker's favour |
 | Success | Audience persuaded |
-| Partial | Partial persuasion; audience requires something additional before acting |
-| Failure | Audience unmoved; may harden against further Appeals |
+| Partial | Partial persuasion: audience names a condition for cooperation (an action, information, or concession). If satisfied this scene: treat as Success. If not satisfied before scene ends: Appeal expires without effect. |
+| Failure | Audience unmoved; may harden against further Appeals (GM discretion — hardening is not automatic; apply only when dramatically warranted). A failed Appeal does not automatically advance disposition to Contemptuous. |
 
-**Appeal vs Debate interaction**: A successful Appeal does not reverse a Debate loss from the same scene. The Debate Compromise Rule (§9.6) applies only within Debates; Appeals and Debates occupy different social registers.
+**Partial follow-up**: A Partial result that leads to the stated condition being satisfied within the same scene allows a follow-up Appeal to complete the persuasion — this is not a re-attempt (Let It Ride applies to failed Appeals, not satisfied Partials).
+
+**Appeal vs Debate interaction**: A successful Appeal does not reverse a Debate loss from the same scene. The Register Separation Rule (§9.6) applies: Appeals and Debates occupy different social registers.
 
 ---
 
@@ -2803,13 +2811,13 @@ A Debate is a formal exchange of positions. Both orators roll simultaneously; ea
 - +1 strain on a normal loss.
 - +2 strain on an Overwhelming loss (opponent's net ≥ 2× loser's net, or loser rolls 0).
 
-**Inspiration attack**: In an exchange where the attacker declares Character Style and names a specific Inspiration as target — if the defending orator achieves **net ≤ 0** (actual Failure, not merely losing), the named Inspiration loses 1 point. Losing the exchange with a positive net result does not trigger this. The targeted Inspiration must be known to the attacker; discovering Inspirations requires prior investigation or Overwhelming social success.
+**Inspiration attack**: In an exchange where the attacker declares Character Style and names a specific Inspiration as target — if the defending orator achieves **net ≤ 0** (actual Failure, not merely losing), the named Inspiration loses 1 point. Losing the exchange with a positive net result does not trigger this. The targeted Inspiration must be known to the attacker. Discovering a specific Inspiration: Attunement + relevant History, Ob 3 (Reading Exchange post-contact) or Cognition + Investigation History, Ob 4 (external research). On success: GM confirms one Inspiration name and approximate value. Alternatively, an Overwhelming success in any social scene with the target may reveal an Inspiration at GM discretion.
 
-**Debate Compromise Rule**: A lost Debate does not reverse a prior Appeal from the same scene. These resolve on separate social registers.
+**Register Separation Rule**: A lost Debate does not reverse a prior Appeal from the same scene, and a successful Appeal does not override a Debate outcome. These resolve on separate social registers.
 
 **Domain Echo**: The winning orator's position generates any Domain Echo (see §11 on Domain Actions). The loser's position does not.
 
-**Grand Debate total loss (5–0)**: The losing faction or character takes +1 Ob to social actions with the opposing faction for one season.
+**Grand Debate total loss (5–0)**: The losing faction or character takes +1 Ob to social actions with the opposing faction for one season. Record this as a **Seasonal Condition** on the character sheet: "Social −1 vs [name/faction], expires [season]." Seasonal Conditions are tracked in §16.2 (Character Sheet Fields) under the Conditions section.
 
 ### Parliamentary Vote
 
