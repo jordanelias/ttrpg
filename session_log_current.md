@@ -20,7 +20,7 @@ current_state:
   phase3_gate: READY TO CLOSE
 
 editorial_resolved_this_session:
-  - PP-007: CLOSED (not needed — Poise=attribute, Composure=Presence+6 track)
+  - PP-007: REINSTATED — CONFIRMED. Poise = derived social wound track = Presence + 6. Focus = attribute #6 (not Poise). Archetype stat arrays: "poise" column = Focus values.
   - PP-008: APPROVED (Niflhel Intel 6)
   - PP-012: REVISED (unified Coherence track — merge §4.5+§5.10)
   - PP-015: SUPERSEDED (compile from succession_mechanic.md)
@@ -32,7 +32,7 @@ editorial_resolved_this_session:
   - F-B9-17: APPROVED (Trajectory Reading — PP-081 designed)
 
 compilation_flags:
-  - Poise vs Focus: attribute name at position 6 of 10. User used "Poise" in archetype stats. Workplan says "Focus". Confirm at Stage 1/2 compilation.
+  - RESOLVED: Focus = attribute #6. Poise = Presence+6 (derived track). Archetype stat arrays corrected: column labelled "poise" = Focus attribute. PP-007 reinstated: track is named Poise.
   - PP-006: Verify against Stage 8 mass combat (TN5 disposition table). PP-006 formula (TN7) may be superseded.
   - PP-012 unified Coherence: merge §4.5 + §5.10 into single track at Stage 3 compilation.
   - PP-077 revised: rewrite Coherence 0 consequence as "rescue window before NPC transition" at Stage 3.
