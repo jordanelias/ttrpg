@@ -286,3 +286,34 @@ Files in `tests/` with test IDs mapped to this matrix.
 ---
 
 *End of Auditing Matrix v1.0*
+
+
+---
+
+# PART 7: COVERAGE LOG (Phase 3)
+
+## Batch Coverage Summary
+
+| Batch | File | Mechanics Covered | Modes |
+|---|---|---|---|
+| Pre-Phase3 | valoria_stress_tests_sonnet46.md | T1–T10, B1–B10, H1–H10 (pre-CP14, reference only) | TTRPG, BG, HYB |
+| Batch 2 | valoria_stress_tests_batch2.md | M-27,28,30,34,36,38,41,42,43,44,45,46,48,49,50,51,52,54,55,57,58,59,60,61,65,71,73,76,79,80,81,82 | TTRPG, BG, HYB |
+| Batch 3 | valoria_stress_tests_batch3.md | TPS (M-11 partial), Co-movement d10 (M-16/17/18), Knot/Int (M-32/26), Rattled (M-10), Domain Ob+pool (M-42), Renown×Debate (M-36/38), Vaynard Ambition, Niflhel Supremacy, TC pause (M-46), S-16–20 (M-66) | TTRPG, BG |
+| Batch 4 | valoria_stress_tests_batch4.md | FR/Locking (M-15), POP (M-14), Collective ops (M-23), ThS velocity (M-20), Intelligibility (M-26), ThS+Certainty crisis (M-20/21), Discovery Events (M-29), Torben Loyalty (M-77), Coup (M-76), TC80 seizure (M-78), Archetype gauntlet (all archetypes), Dissolution residue | TTRPG, BG, HYB |
+
+## Mechanic Coverage Status (Phase 3)
+
+### Tested (at least Mode A or B)
+M-10, M-11, M-12, M-13, M-14, M-15, M-16, M-17, M-18, M-20, M-21, M-23, M-26, M-27, M-28, M-29, M-30, M-32, M-34, M-36, M-37, M-38, M-41, M-42, M-43, M-44, M-45, M-46, M-47, M-48, M-49, M-50, M-51, M-52, M-54, M-55, M-57, M-58, M-59, M-60, M-61, M-65, M-66, M-71, M-73, M-76, M-77, M-78, M-79, M-80, M-81, M-82
+
+### Not Yet Tested
+M-01 (pool split combat), M-02 (Wound/Gate), M-03 (Stamina), M-04 (Reach), M-05 (Zone movement), M-06 (Initiative/Priority), M-07 (Fibonacci group), M-08 (Beginner's Luck), M-09 (Momentum), M-19 (History Resonance), M-22 (Certainty blast radius), M-24 (Diagnosis standalone), M-25 (Co-Movement Cards board), M-31 (Inspirations full), M-33 (Impression Track), M-35 (Histories), M-39 (Reading Exchange), M-40 (Social pressure), M-53 (Defection), M-56 (Fortification), M-62 (Turn structure), M-63 (Simultaneous orders), M-64 (Resolution priority), M-67 (Season wheel), M-68 (Victory conditions), M-69 (Negotiation/treaty), M-70 (Mass combat disposition), M-72 (Shared seasonal cap), M-74 (Hollow victory), M-75 (Mode branching)
+
+### Phase 3 Gate Status (as of Batch 4)
+- Tested mechanics: ~52/82 (63%)
+- Mode coverage: TTRPG ~70%, BG ~45%, HYB ~30%
+- NPC substitution: 11/13 named NPCs tested
+- Archetype coverage: 9/9 archetypes (at least Mode A/B)
+- P1 findings requiring resolution before CP15: 27 total (Batch 3: 10, Batch 4: 17)
+
+*Phase 3 gate requires all 82 mechanics tested before compilation is considered complete.*
