@@ -260,7 +260,7 @@ When Health reaches 0:
 2. All subsequent rolls: **+1 Ob per Wound** (cumulative, all roll types)
 3. Excess damage carries over into reset Health
 
-**Single-hit cap:** No single hit inflicts more than 2 Wounds. Damage exceeding 3× Health is treated as 3× Health.
+**Single-hit cap:** No single hit inflicts more than 2 Wounds. Damage beyond 2 Health resets is discarded. (Damage exceeding 2× Health triggers 2 Wounds and excess is lost — the 3× reference is the theoretical maximum input, not the output.)
 
 **Wound incapacitation thresholds:**
 
