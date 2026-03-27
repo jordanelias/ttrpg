@@ -9,7 +9,7 @@ completed_stages:
   - BG FORTIFY order added (stage_bg B5)
   - BG mid-phase clock game-end check added (stage_bg B4)
   - G-111 through G-114 closed same session
-  - G-115 open: Church victory condition editorial question
+  - G-115 closed: Church VC = TC≥60 + Himmelenger + Valorsplatz; expansion lock TC≥40
 
 editorial_pending:
   - G-115: Church victory condition — is Church intentionally unwinnable in standard play, or should TC≥80 be changed to TC≥60?
@@ -37,5 +37,5 @@ simulation_coverage_summary:
   all_p1s_closed: true
 
 next_action:
-  task: Continue simulation OR address Church victory editorial (G-115)
-  recommendation: Resolve G-115 editorial first (unblocks BG endgame validation), then continue M-010+ simulation
+  task: Continue simulation — M-010+ (Thread ops, faction mechanics, combat specifics)
+  all_editorial_blockers_cleared: true
