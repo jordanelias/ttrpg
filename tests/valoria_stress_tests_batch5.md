@@ -1,393 +1,415 @@
-# VALORIA STRESS TESTS — BATCH 5
-## Core Mechanics: M-001 through M-009
-### Date: 2026-03-27 | Model: Sonnet 4.6
+# VALORIA — STRESS TESTS BATCH 5
+## Core Combat Engine: M-01 through M-09
+### Date: 2026-03-27 · Simulator Modes: A (Isolation) + B (Interaction) + D (Edge Cases)
 
-Coverage dimensions per session instructions: Mechanic × Mode × Temporal × Tracks × Faction × NPC × Archetype
-
----
-
-## PROBABILITY REFERENCE (computed, d10 pool TN7)
-
-| Pool | E(net) | Ob1: OW/Suc/Par/Fail | Ob2: OW/Suc/Par/Fail | Ob3: OW/Suc/Par/Fail |
-|------|--------|----------------------|----------------------|----------------------|
-| 4D   | 1.33  | 45/27/0/28%          | 6/38/27/28%          | 0/20/52/28%          |
-| 5D   | 1.67  | 54/23/0/23%          | 12/42/23/23%         | 1/28/48/23%          |
-| 6D   | 2.00  | 61/20/0/20%          | 19/42/20/20%         | 3/35/43/20%          |
-| 8D   | 2.67  | 72/14/0/14%          | 33/38/14/14%         | 8/44/33/14%          |
-| 10D  | 3.33  | 79/11/0/10%          | 47/33/11/10%         | 17/47/26/10%         |
-| 12D  | 4.00  | 84/8/0/8%            | 57/27/8/8%           | 27/46/20/8%          |
-
-TN8 approximately 20–25% worse P(success) per die than TN7 across all pool sizes.
+Probability reference (d10, TN 7): expected net per die ≈ 0.33. P(≥N net) from simulator skill table.
+Mass combat uses TN 5: P(die ≥ 5) = 0.6; with 1s: expected net per die ≈ 0.5.
 
 ---
 
-## M-001 — Core Dice Engine
-
-**Mechanic:** d10 pool, TN (7/6/8), Ob 1–10, degrees (Overwhelming/Success/Partial/Failure), 10→chain, 1→−1.
-
-**Mode:** TTRPG | Temporal: PRES | Tracks: none directly | Factions: all | Archetypes: all
-
+## M-01 · POOL SPLIT (OFFENCE / DEFENCE)
 ### Mode A — Isolation
 
-**Input variables:** Pool size (1–15+), TN (6/7/8), Ob (1–10).
+**Input space:**
 
-#### Probability findings:
+| Variable | Range | Typical | Edge |
+|---|---|---|---|
+| Combat Pool | 5–15+ | 7–9 | 5 (minimum), 15+ (high-skill) |
+| Split ratio | 0:all to all:0 | ~50/50 | All offence (reckless), all defence (full guard) |
+| Wound count | 0–4 | 0–1 | 4 (near incapacitation) |
 
-**Ob 1 is auto-generous at high pools.** At 10D TN7 Ob1: P(Overwhelming) = 79%. The most common outcome at expert-level pools on simple tasks is Overwhelming. This is by design (simple tasks are easy for competent characters) but GMs must maintain Ob discipline — Ob 1 should be reserved for genuinely routine tasks, not contested ones.
+**Probability tables — attack (Weapon TN varies; using TN 7 as baseline, TN 6 for typical weapons):**
 
-**The 28% floor:** At 4D TN7, P(Failure) = 28% regardless of Ob. This is the failure floor for low-pool characters — they fail about 1 in 4 attempts even when successes don't matter (Ob doesn't change failure rate, only what failure looks like). **This is correct behaviour** — the 1s mechanic creates a failure floor independent of Ob.
+At TN 6: P(success per die) ≈ 0.5; expected net per die ≈ 0.4 (0.5 − 0.1 from 1s + chain).
 
-**Partial dominates at moderate pools vs high Ob:** 8D vs Ob 4: Partial = 53%. The system produces a lot of "almost but not quite" outcomes at mismatched difficulties. This is a design feature (fail-forward), not a bug. But GMs should expect Partial to be the *most common outcome* in difficult scenes, requiring robust complication handling.
+| Offence Dice | Defence Dice (opp) | P(hit) | Expected Excess |
+|---|---|---|---|
+| 3 vs 3 | 3 vs 3 | ~60% | ~0.4 |
+| 5 vs 3 | 3 vs 3 | ~80% | ~1.0 |
+| 7 vs 3 | 3 vs 3 | ~92% | ~1.8 |
+| 3 vs 5 | 5 vs 5 | ~35% | −0.4 (likely miss) |
+| 5 vs 5 | 5 vs 5 | ~50% | 0 |
+| 9 vs 4 | 4 vs 4 | ~88% | ~1.8 |
 
-**Ob 5 with 6D: 73% Partial or worse.** Characters with moderate skill (6D) against Ob 5 will rarely succeed outright (7.5%). The majority of results are Partial (72.8%). The system expects GMs to use Ob 5 sparingly — it produces scenes where even skilled characters struggle to achieve goals without complications.
+**Finding B5-M01-A (Degenerate — Reckless):** Full offence (all dice to attack, 0 defence): opponent hits automatically if they allocate any offence dice. For a 7-die pool all-in offence: expected damage output ~2.8 excess + weapon bonus − armour. Expected incoming: opponent's full pool unopposed. Net trade: you deal heavy damage AND take heavy damage simultaneously. Viable only if you can absorb the hit. Not a dominant strategy at equal pools.
 
-**Chain (10→reroll) impact:** Chain contributes ~4.4% bonus E(net) per die (0.1 * E(net)). At 8D: adds ~0.35 expected net successes. Meaningful but not dominant. Chains rarely change the degree of outcome — they shift borderline cases.
+**Finding B5-M01-B (Degenerate — Full Guard):** All dice to defence, 0 offence: opponent cannot score excess successes if your defence pool ≥ their offence pool. At 9D defence vs 5D offence: opponent's expected net ≈ 2.0 − 3.0 = negative → no hit. Fully safe. P(opponent hits) ≈ 5%. **This is the dominant defensive strategy but creates stalemate** — neither combatant acts if both go full guard. Resolves through Stamina drain (must eventually commit offence) or positional manoeuvre. Stalemate is dynamic, not locked. ✓
 
-#### Edge cases:
+**Finding B5-M01-C (Cliff at Pool = 5):** Minimum pool 5D. Split options: 1/4, 2/3, 3/2, 4/1. At 2 offence vs 3 defence (opponent): P(hit) ≈ 30%. Low-pool combatants are not meaningless but are significantly disadvantaged. The minimum 5D floor prevents complete helplessness. ✓
 
-**1s vs 0 successes rolled:** If all dice show 2–6 (no successes, no 1s): net = 0 = Failure. P(all dice in 2–6 range) at 4D TN7 = 0.5^4 ≈ 6%. This is the "clean miss" state — rare, feels bad narratively. No mechanical issue.
+**Finding B5-M01-D (Initiative advantage quantified):** Initiative winner declares last. Value: opponent commits to 5O/4D, then you commit 6O/3D (knowing their defence is 4). Your expected hit: ~70%. Without initiative: ~55%. Initiative advantage worth ~15pp hit probability per round. Significant but not decisive. ✓
 
-**Net negative result:** Possible when 1s exceed successes. At 4D: P(net ≤ −1) ≈ 12%. The ruleset doesn't specify what net negative means beyond "Failure." This is a gap: is there a complication gradient? **The ruleset treats all net ≤ 0 results as Failure with complication — net negative has no additional mechanical effect beyond Failure.** This is acceptable but GMs may want a signal for catastrophic failures (very negative nets). Flag as P3.
-
-**Ob 10:** Rule explicitly states Overwhelming is unavailable, Partial requires net ≥ 5, below 5 = Failure. At 12D: P(net ≥ 10) = ~4% (Overwhelming threshold, now blocked). P(net ≥ 5) at 12D ≈ 75%. So Ob 10 with a 12D pool: ~75% chance of achieving a Partial result. Success is possible (requires net 10+) but rare. The design produces: even exceptional characters rarely fully succeed at foundational-difficulty tasks. **Correct and intentional.**
-
-**Ob cap interaction:** "Maximum Ob 10 regardless of modifier stacking." If a character with 3 Wounds (+3 Ob) attempts Ob 3 combat task: effective Ob = 6, not 10. The cap only triggers at extreme stacking (4+ wound penalties + high base Ob). Verify: 3 Wounds + Ob 5 base → Ob 8, under cap. 4 Wounds + Ob 7 → Ob 11 → capped at 10. **Cap functions correctly; rarely relevant.**
-
-### Findings
-
-| ID | Severity | Finding | Fix |
-|----|----------|---------|-----|
-| M001-01 | P3 | Net negative result has no mechanical distinction from net 0. Some GMs may want a catastrophic failure tier. | No fix needed — note in GM reference that net ≤ −2 is signal for escalated Hard Move. |
-| M001-02 | P3 | At high pools (12D+) vs Ob 1, Overwhelming is near-certain (84%). "Simple tasks" become narrative noise. | GM discipline: use Ob 1 only when outcome is genuinely uncertain. No mechanical fix needed. |
-| M001-03 | P2 | Partial is the dominant outcome in many challenging scenes (Ob 3–4 with moderate pools). GM complication economy must be robust or sessions stall. | Ensure §13.5 Hard Moves table has sufficient complication options. Audit in Phase 3. |
+**P3 Finding — Wounds interaction with pool split:** Wounds add +1 Ob not −1D, so pool split decisions are unchanged by wounds. This is clean — wounded characters fight with the same pool but at penalty to effect. No complexity cascade. ✓
 
 ---
 
-## M-002 — Wound System
-
-**Mechanic:** Health = Endurance + 6; damage reduces Health; at 0 → Wound (reset), +1 Ob cumulative; incapacitation thresholds by Endurance.
-
-**Mode:** TTRPG, BG | Temporal: PRES | Tracks: Health | Factions: all | Archetypes: all
-
+## M-02 · WOUND / GATE SYSTEM
 ### Mode A — Isolation
 
-**Health range:** Endurance 1→7: Health = 7–13.
+**Input space:**
 
-| Endurance | Health | Incap threshold | Ob at threshold |
-|-----------|--------|----------------|----------------|
-| 1 | 7 | 2 Wounds | +2 Ob |
-| 2 | 8 | 2 Wounds | +2 Ob |
-| 3 | 9 | 2 Wounds | +2 Ob |
-| 4 | 10 | 3 Wounds | +3 Ob |
-| 5 | 11 | 3 Wounds | +3 Ob |
-| 6 | 12 | 4 Wounds | +4 Ob |
-| 7 | 13 | 4 Wounds | +4 Ob |
+| Variable | Range | Notes |
+|---|---|---|
+| Health | 7–13 (Endurance 1–7) | Most characters 8–10 |
+| Wound threshold | 2–4 (Endurance-dependent) | |
+| Single hit | 0–30+ theoretically | Capped at 3× Health per hit |
+| +1 Ob per Wound | Stacks to +4 | At 4 Wounds: +4 Ob on all rolls |
 
-**Damage absorption analysis:** A typical hit inflicts Weapon Bonus + Power + excess successes − armour.
+**Health by Endurance:**
+| Endurance | Health | Incapacitation | Wound Ob at incap |
+|---|---|---|---|
+| 1 | 7 | 2 Wounds | +2 Ob all rolls |
+| 3 | 9 | 2 Wounds | +2 Ob all rolls |
+| 4 | 10 | 3 Wounds | +3 Ob all rolls |
+| 5 | 11 | 3 Wounds | +3 Ob all rolls |
+| 6 | 12 | 4 Wounds | +4 Ob all rolls |
+| 7 | 13 | 4 Wounds | +4 Ob all rolls |
 
-*Example character: Endurance 4 (Health 10), Heavy armour (−3 damage reduction).*
-*Attacker 8D vs Defender 5D at TN7: E(attacker net) ≈ 2.67, E(defender net) ≈ 1.67. E(excess) ≈ 1.0. Power 3, weapon +2. E(damage) = 3 + 2 + 1 − 3 = 3 damage per hit.*
-*Hits per Wound: 10 ÷ 3 ≈ 3.3 hits per Wound. Comfortable pacing.*
+**Wound Ob cascade on a typical 7D combat pool, Ob 1 base:**
+| Wounds | Effective Ob | P(≥1 net, 7D) |
+|---|---|---|
+| 0 | 1 | ~99% |
+| 1 | 2 | ~92% |
+| 2 | 3 | ~70% |
+| 3 | 4 | ~45% |
+| 4 | 5 | ~25% |
 
-*Lightly armoured character (Endurance 3, Health 9, no armour):*
-*E(damage) = 3 + 2 + 1 − 0 = 6 per hit. Hits per Wound: 9 ÷ 6 = 1.5. Very dangerous.*
+**Finding B5-M02-A (Cascade — Wound × Thread ops):** At Wound 2+, Thread operations at Relational scale face Ob 1 (base) + Ob 2 (scale) + Ob 2 (wounds) = Ob 5. P(success, 6D pool, TN 7) ≈ 35%. A heavily wounded practitioner is nearly non-functional in Thread work. This is **intentional and well-calibrated** — taking wounds in combat before attempting Thread ops is a meaningful cost. ✓
 
-**Single-hit cap (max 2 Wounds):** A single hit cannot inflict more than 2 Wounds. "Damage exceeding 3× Health treated as 3× Health." So Health 9: cap = 27 damage → Wound + reset to 9, excess damage 18 → 2nd Wound + reset to 9, excess 9 → 3rd Wound... **Wait: the cap says max 2 Wounds from a single hit, but the formula says damage exceeding 3× Health = 3× Health = 27 damage on a 9-Health character. 27 damage = 3 full Health cycles = 3 Wounds. This contradicts the "max 2 Wounds" statement.**
+**Finding B5-M02-B (Single-hit cap):** Cap at 3× Health. Endurance 3 → Health 9 → cap 27 damage. No realistic weapon produces 27 damage (max realistic: +2 weapon + 10 excess + Brutal +4 = 16). Cap is unreachable in normal play. Serves as a theoretical edge guard only. ✓
 
-**P1 FINDING — M002-01: Single-hit Wound cap contradicts damage formula.**
+**Finding B5-M02-C (Wound reset mechanic):** Health resets to full after each Wound. Implication: a character at Health 1 who takes 8 damage (Health 9) takes exactly 1 Wound and resets to 9 Health — not 2 Wounds. The reset means large-but-sub-double-Health hits produce exactly 1 Wound, no carryover above reset. This is clean. ✓
 
-The ruleset states: "No single hit inflicts more than 2 Wounds." But also: "Damage exceeding 3× Health is treated as 3× Health." On Health 9: 3× = 27 damage. Applying damage: 9 damage = 1 Wound (reset), 9 more = 2nd Wound (reset), 9 more = 3rd Wound. This produces 3 Wounds from a single hit, contradicting the 2-Wound cap.
+**Finding B5-M02-D (P2 — excess carryover ambiguity):** Rule states "excess damage carries over into reset Health." Scenario: Health 9, character at Health 1 takes 15 damage. First 1 point → Wound #1, Health resets to 9. Remaining 14 → reduces Health to max(9−14) = 0 → Wound #2. Single-hit cap: no single hit inflicts more than 2 Wounds, so this is the ceiling. But what if Endurance 3 (incapacitation at 2 Wounds)? The character takes 2 Wounds from one attack and is incapacitated — fine. Single-hit cap is correctly stated. ✓
 
-**Fix:** Clarify which rule takes precedence. Options: (A) Hard cap at 2 Wounds regardless of damage formula — "excess damage beyond 2 Wounds is lost." (B) Keep 3× formula but clarify cap = 3 Wounds. (C) Remove the cap entirely. Recommend: (A) — simplest, prevents one-shot kills on moderate-Health characters. Add: "Damage in excess of 2× Health triggers 2 Wounds; remaining excess is discarded."
-
-**+1 Ob per Wound stacking:** At 3 Wounds (approaching incap for Endurance 4): +3 Ob. On a standard 6D roll vs Ob 2: effective Ob 5 → P(Success+OW) = 7.5% + 0.0% ≈ 7.5%. P(Partial) = 72.8%. **A heavily wounded character nearly always Partial or Fails.** This is severe but intentional — the wound system is designed to make combat increasingly dangerous. Verify this doesn't create deadlocks.
-
-*Deadlock check: Can a wounded character do anything useful?* With 3 Wounds, all rolls are at +3 Ob. Thread operations (Ob typically 1–3 → becomes Ob 4–6): P(success) drops to 0–7%. Social actions (Ob 1–3 → Ob 4–6): similar. **At 3 Wounds, a character is functionally reduced to Full Defence or narrative-only actions.** This is correct and creates withdrawal pressure. No deadlock — player can still act, just poorly.
-
-**Quick Rest / Full Rest:** Quick Rest (between scenes) restores Health to maximum and removes 1 Wound. Full Rest (full night) removes all Wounds. **Wound pacing:** With Quick Rests available between most scenes, Wound accumulation between scenes is impractical unless the scenario specifically denies rest. The wound system pressure is primarily within-scene.
-
-### Edge Cases:
-
-**Excess damage carryover with 2-Wound cap:** Rule says "excess damage carries over into reset Health." If a hit inflicts 20 damage on Health 9: 9 → Wound (reset to 9), excess 11 → carries over. Now Health = 9 − 11 = −2. That's a second Wound (Health resets again to 9) with excess −2 lost (negative excess ignored). Result: 2 Wounds, 9 Health. **This works if we apply the 2-Wound cap consistently.** The ambiguity is what "excess damage carries over" means when it generates a 3rd Wound.
-
-**Ob stacking with Endurance 1 at incap threshold:** Endurance 1, 2 Wounds = incapacitated. Before incapacitation (at Wound 1): +1 Ob to everything. On a 4D pool vs Ob 1 → effective Ob 2: P(OW+Success) = 44.6%. Still functional at 1 Wound, just degraded. Correct.
-
-**Board game mode:** Wound system presumably applies to unit Health in mass combat (confirmed: "Health = Endurance + 6" for units). The +1 Ob per Wound stacking in unit terms = +1 Ob to unit rolls per Formation Break. Rule text calls this "+1 Ob" for individual characters but uses "Formation Break" for units. **These are parallel, not identical.** Confirm mass combat Wound equivalence is explicitly documented. Flag P2.
-
-### Findings
-
-| ID | Severity | Finding | Fix |
-|----|----------|---------|-----|
-| M002-01 | **P1** | Single-hit Wound cap (max 2) contradicts "3× Health = 3× Health cap" formula which produces 3 Wounds. | Rule: "A single hit inflicts at most 2 Wounds. Damage beyond 2 Health resets is discarded." |
-| M002-02 | P2 | +1 Ob stacking at high Wound counts produces near-total incapacitation before the incap threshold. Intentional, but GMs need clear guidance on NPC behaviour (withdraw, surrender, shift tactics). | Add to §GM Tools: "Characters at 2+ Wounds should tactically change behaviour." |
-| M002-03 | P2 | Mass combat Formation Break vs personal Wound system relationship is implicit. Units don't take "Wounds" per the personal scale — but the rule structure is parallel. | Explicit bridging sentence in §8.3 cross-referencing §3.8. |
+**Finding B5-M02-E (Boundary — Health 0 vs ≤0):** Rule says "When Health reaches 0" — implies exactly 0. Damage can produce fractional results? No — all damage is integers. Excess always produces integer Health values. No boundary ambiguity. ✓
 
 ---
 
-## M-003 — Histories (Pool Formula, Fork, Advancement)
-
-**Mechanic:** Histories are skills as life-experience. Pool = base attribute + (History points + 3). Fork adds +1D from second History. Advancement: marks → increment.
-
-**Mode:** TTRPG | Temporal: PAST | Tracks: none | Factions: all | Archetypes: all
-
+## M-03 · STAMINA SYSTEM
 ### Mode A — Isolation
 
-**Pool construction:**
+**Input space:**
 
-History points range: Histories start at 0 and advance. "Points + 3" means a History with 0 points = 3 dice, with 3 points = 6 dice, with 6 points = 9 dice. This is the "+3 floor" that ensures every attempted History roll is meaningful.
+| Variable | Range | Notes |
+|---|---|---|
+| Stamina | 2–8 (Endurance + 1) | Starts full each combat |
+| Depletion trigger | Every round with Move, Manoeuvre, or Attack | Not defence-only rounds |
+| Catch Breath | Pool ÷ 2, defence-only | Forces vulnerability |
+| Breather (voluntary) | Defence-only | Voluntarily take before hitting 0 |
 
-**At creation:** Attribute typically 3, History at 0–2 points. Pool = 3 + 3 = 6D (typical), or 3 + 5 = 8D (invested History). Range 4D–10D at creation.
+**Stamina depletion rate by combat style:**
+| Style | Rounds to Depletion |
+|---|---|
+| Attack every round (End 2 → Stamina 3) | 3 rounds |
+| Attack every round (End 4 → Stamina 5) | 5 rounds |
+| Attack every round (End 7 → Stamina 8) | 8 rounds |
+| Defence-only rounds (any Endurance) | Unlimited (no depletion) |
 
-**At advancement (attribute 5, History 6 points):** Pool = 5 + 9 = 14D. E(net) ≈ 14 × 0.333 = 4.7. At Ob 3: P(OW + Success) ≈ 75%. **Expert characters are genuinely excellent at their domain.** Correct.
+**Finding B5-M03-A (P2 — Stamina depletion wording ambiguity):** "Decreases by 1 for every melee round in a row where a character has Moved, Manoeuvred or Attacked." The phrase **"in a row"** implies Stamina resets if the character takes even one defence-only round. This creates a strong tactical incentive to take a free defence-only round every N−1 rounds to avoid ever hitting 0 — effectively neutering the Stamina system for disciplined players.
 
-**Fork mechanism:** "A Fork adds +1D to the existing roll's pool without changing that pool's attribute." The contributing History's attribute is irrelevant — Fork adds exactly 1D. This is elegantly simple.
+**Mechanism:** Endurance 4 → Stamina 5. Attack rounds 1–4, then full-guard round 5 (Stamina resets to 5), then attack rounds 6–9, full guard round 10... Indefinitely. Never forced into Catch Breath.
 
-*Fork frequency concern:* A character with 5 relevant Histories can Fork up to 4 additional times? The ruleset says "Fork" (singular) but doesn't explicitly limit to one Fork per roll. **Ambiguity: can multiple Histories Fork the same roll?**
+**Severity: P2** — the "in a row" qualifier creates an easy exploit. Intended reading is probably cumulative per combat, not consecutive.
 
-Checking stage1 (§1.8 equivalent) and stage2... The rule as stated says "a Fork adds +1D." No cap specified on number of Forks per roll. If unlimited: a character with 5 relevant Histories rolls at pool + 4D (or more). At 12D: Ob 3 success rate ~74%. This would trivialize many rolls.
+**Proposed fix:** Remove "in a row." Stamina decreases by 1 for every round in which the character has Moved, Manoeuvred, or Attacked. It does not reset on a passive round; only Catch Breath or Breather restore it.
 
-**P2 FINDING — M003-01: Fork count per roll is unspecified.**
+**Finding B5-M03-B (P2 — Breather vs Catch Breath distinction unclear):** Both Breather and Catch Breath result in: defence-only, Stamina restored. Difference: Catch Breath halves combat pool (rounded up); Breather doesn't. But the rule says Breather is "voluntary before Stamina reaches 0" while Catch Breath is forced "once Stamina reaches 0." The mechanical difference (pool penalty) is buried. At the table: players will always prefer Breather over Catch Breath because pool is halved for Catch Breath. The system therefore rewards proactive Stamina management — consistent with design intent. ✓ (functionally sound; P3 wording clarity only)
 
-If multiple Forks are allowed, pool inflation becomes significant. If limited to one Fork, the rule needs to say so.
+**Finding B5-M03-C (Boundary — Stamina 0 immediately after hit):** Stamina 1, character attacks. Stamina → 0. They must Catch Breath. But Catch Breath is on their next round. Current round resolves normally (they attacked this round). **Is the Catch Breath mandatory this round or next?** The rule doesn't specify timing. At the table: most natural reading is "character must Catch Breath as their next action." This needs a note.
 
-**Beginner's Luck (§1.8):** Double Ob, raw attribute only (no History). Attribute 3, Ob 2 → effective Ob 4. 3D vs Ob 4: P(OW+Success) ≈ 0%. P(Partial) ≈ 12%. P(Failure) ≈ 88%. **Beginner's Luck is almost guaranteed to fail at anything above Ob 1.** At Ob 1: 3D → P(OW) = 13%, P(Success) = 40%, P(Partial) = 0%, P(Failure) = 47%. ~53% success rate at Ob 1. This seems intentionally harsh — beginners are bad at things. The narrative reward (first History mark on success) makes the risk worthwhile.
-
-**Advancement:** "marks → increment." Stage10 details CP cost. No issues identified in the advancement mechanic itself from stage1.
-
-### Findings
-
-| ID | Severity | Finding | Fix |
-|----|----------|---------|-----|
-| M003-01 | P2 | Fork count per roll is unspecified. Unlimited Forks would inflate pools significantly. | Add: "A character may Fork at most twice per roll, each from a distinct relevant History." |
-| M003-02 | P3 | Beginner's Luck has ~47% failure at Ob 1, ~88%+ failure at Ob 2+. This is intentional but harsh — new Histories are very hard to establish. Recommend explicit note that this is by design. | Add GM note: "Beginner's Luck should be called rarely; most attempts succeed via existing Histories." |
+**Severity: P3** — minor wording issue. Add: "A character whose Stamina reaches 0 must Catch Breath on their next declared action."
 
 ---
 
-## M-004 — Beliefs (CP Generation)
-
-**Mechanic:** 3 Beliefs per character; achieving/testing a Belief generates Conviction Points (CP); CP spent to advance Histories.
-
-**Mode:** TTRPG | Temporal: CROSS (Beliefs bridge past values → present action → future advancement) | Tracks: none directly | Archetypes: all
-
+## M-04 · REACH (SHORT / LONG / PROJECTILE)
 ### Mode A — Isolation
 
-The Belief system is primarily narrative with mechanical output (CP). The core questions are: (1) CP generation rate, (2) Belief refresh, (3) interaction with advancement economy.
+**Finding B5-M04-A: Reach priority rule creates initiative-like secondary system at Priority 3.**
+Reach advantage grants one priority attack before shorter weapon can close. This fires only on first engagement at mismatched range. Once both are at the same range, weapon speed (Fast/Standard/Slow) determines order. The two-tier priority (reach then speed) is clean. ✓
 
-Stage10 advancement (read earlier) has: CP costs. Need stage2 for Belief mechanics directly. Approximating from CP14 context: achieving a Belief = 1–3 CP, testing = 1 CP (standard BWHQ-adjacent structure).
+**Finding B5-M04-B (Ambiguity — who has "reach advantage" when both use Long weapons?):** Both using longswords (Long/Standard). Starting at long range: both have same reach. Priority attack for whom? The rule says "longer weapon gets one priority attack" — if equal reach, no priority attack. Correct. ✓
 
-**CP economy stress test:** If a character achieves 1 Belief per session and tests 1: 2–4 CP/session. History advancement cost (stage10): "3 CP + scene" for +1 point. At 2 CP/session: ~1.5 sessions per History increment. History advances require multiple marks → sessions. **Advancement pace: roughly 1 History point per 2–3 sessions.** This is moderate. Max History points not explicitly bounded in what I've read — flag for audit.
+**Finding B5-M04-C (P2 — Projectile range escape):** Rule: "A character must successfully dodge the ranged weapon user's fire to close distance." Mechanic: Dodge roll. But dodge is Defence dice in the pool split — not a standalone check. At what Ob? The rule says "must dodge" without specifying an Ob or what "successfully" means. A character with 8D all-in defence vs a crossbow at projectile range: what's the check?
 
-**Belief revision:** Beliefs must be mutable or characters stagnate. The ruleset presumably includes a Belief rewrite procedure. Not found in stage1 or stage2 (stage2 not yet read). **Flag as P2 if Belief revision not present.**
+**Severity: P2** — projectile range closing procedure is incomplete. Missing: explicit Ob for the closing dodge attempt. Proposed fix: Closing vs. projectile: Agility check (standalone, not pool-split), Ob = ranged attacker's net successes that round. On success: character closes to long range. On failure: no closure, take damage normally.
 
-### Findings
-
-| ID | Severity | Finding | Fix |
-|----|----------|---------|-----|
-| M004-01 | P2 | Belief revision procedure not confirmed in stage1. If Beliefs cannot be rewritten, character development stagnates after initial goals are achieved or rendered impossible. | Confirm in stage2 audit. Flag if absent. |
+**Finding B5-M04-D (Edge — projectile into melee):** Ranged character "cannot use ranged weapons at short or long melee range." If an archer is engaged in melee by a Short weapon user who has closed — archer cannot fire. Must draw backup weapon (Priority 4) and defend with Agility only at Ob 2 until then. This is a pronounced disadvantage — by design. ✓
 
 ---
 
-## M-005 — Maxims (CP Generation)
-
-**Coverage matrix lists M-005.** Review of session history: Maxims were **cut entirely** (S3 decision). Gap G-012 = "Virtues & Vices / Maxims — cut entirely (S3)."
-
-**Status: M-005 is a cut mechanic. Coverage matrix entry should be marked ELIMINATED.**
-
----
-
-## M-006 — Inspirations (Spend, Stunt)
-
-**Mechanic:** Inspiration = named focus area. Spend for bonus dice or Stunts. Cap = Spirit score (max Inspiration value). Inspirations advance through engagement and checks.
-
-**Mode:** TTRPG | Temporal: CROSS | Tracks: none | Archetypes: all
-
+## M-05 · ZONE-BASED MOVEMENT
 ### Mode A — Isolation
 
-**Inspiration cap:** Maximum total Inspiration value = Spirit score (1–7). Maximum individual Inspiration = Spirit score. So a character with Spirit 4 can have: one Inspiration at value 4, or four at value 1, or various combinations summing ≤ 4.
+**Finding B5-M05-A: Zone definition is entirely narrative — no mechanical constraints on zone size or transition cost.** A zone is "a narratively coherent area." Moving between zones costs one action (Manoeuvre or Move, Priority 3). No defined limit on zone count per scene, no speed attribute differentiating zone traversal.
 
-**Spend mechanic:** Spend Inspiration → bonus dice. Stage1 §1.7 (Momentum) notes Momentum adds automatic successes; Inspiration adds dice (different mechanic). Inspiration bonus dice roll at the same TN as the pool.
+**This is a deliberate design choice** — zones avoid grid complexity. The absence of mechanical constraints is a feature, not a gap. ✓
 
-*The exact spend rate isn't in stage1.* From context: likely 1 Inspiration point = 1 bonus die. At Inspiration 3 on a 6D roll: 9D total → E(net) = 3.0 vs 2.0. The bonus is meaningful (+50% pool) but not overwhelming.
+**Finding B5-M05-B (P3 — Zone transition during Thread contact):** Thread contact maximum duration = Focus score (Contact Rounds). Moving between zones: does this count as losing contact? The rule on Thread operations states contact is lost if "the practitioner is incapacitated, forcibly moved, or loses concentration." Zone transition via normal movement is not "forced" movement. A practitioner can move zones while maintaining contact without interruption — but this isn't explicitly stated. A clarifying note would prevent table disputes.
 
-**Stunt mechanic (§1.7 reference; stage10 detail):** Player sets critical success range up to 11–20, expanding failure range by same amount. This creates a risk/reward toggle. At standard (no stunt): Overwhelming = net ≥ 2×Ob. With stunt set to "critical on 8–10": effectively increases chain probability.
-
-**Inspiration interactions with Thread operations:** Stage1 §1.7: "Momentum cannot be spent on Thread operation rolls." Does the same restriction apply to Inspiration? Not specified in stage1. **If Inspirations can be spent on Thread ops, it creates a backdoor pool amplification for practitioners.** Flag P2.
-
-**Spirit cap creates interesting constraint:** Spirit-low characters (Spirit 1–2) have minimal Inspiration capacity. This means characterization (Inspirations) and existential resilience (Certainty = Spirit) are jointly constrained by Spirit. A character investing in Thread operations (needs high Spirit for Certainty) also has more Inspiration capacity. This is an elegant coupling if intentional — practitioners naturally have broader characterization options.
-
-### Findings
-
-| ID | Severity | Finding | Fix |
-|----|----------|---------|-----|
-| M006-01 | P2 | Inspiration spend on Thread operations not ruled out. If allowed, practitioners gain pool amplification at critical moments. | Add: "Inspiration dice may not be spent on Thread operation rolls (same restriction as Momentum)." |
-| M006-02 | P3 | Spirit cap links Certainty resilience and Inspiration capacity — practitioners naturally have higher Inspiration ceiling. Verify this is intentional design. | Note in design rationale. No fix unless unintended. |
+**Severity: P3** — add note at §5.2: "Moving to an adjacent zone does not break Thread contact unless the target configuration is not present in the new zone."
 
 ---
 
-## M-007 — Conditions — Gate System (Rattled, Bloodied, Unmask)
+## M-06 · INITIATIVE / PRIORITY
+### Mode A + Mode D
 
-**Mechanic:** Gate conditions: Rattled (Composure track), Bloodied (wound milestone), Unmask (ends social scene, resets Composure). Conditions layer with mechanical consequences.
+**Finding B5-M06-A: Initiative is binary (win/lose), not tiered.** One combatant declares last. There is no partial initiative — no "both tie for one round then reroll" confusion past the initial tie-break. ✓
 
-**Mode:** TTRPG | Temporal: PRES | Tracks: Composure | Archetypes: all
+**Finding B5-M06-B (P3 — Initiative persistence rule):** "Initiative holds for the entire combat unless Reorient changes it." But what if new combatants enter mid-combat? No rule for late entrants. Most natural resolution: late entrants roll initiative and are inserted into the existing order. This needs a note.
 
+**Severity: P3** — add: "Combatants entering an ongoing combat roll initiative immediately on entry; they are inserted into the existing declaration order at their result."
+
+**Finding B5-M06-C (Interaction — Priority table × Thread operations):** Thread effects manifest at Priority 1; Thread operations initiated at Priority 5. A practitioner who initiates a Leap at Priority 5 in Round 1: the contact is established by Priority 5 Round 1. Do they need to wait until Priority 1 Round 2 for an operation effect to manifest, or does the operation resolve in the same round? The rule says "Thread operation effects manifesting from prior rounds" are Priority 1. So a Weaving begun at Priority 5 Round 1 manifests at Priority 1 Round 2. **This is a 2-round delay.** For fast fights (2–3 rounds average), Thread operations rarely fire before combat ends. This is an intentional cost — practitioners are not effective in fast ambushes. Narratively appropriate. ✓
+
+**Finding B5-M06-D (P1 — Priority 3 sub-rule B × pool split):** "The longer weapon gets one priority attack before the shorter can reach." This priority attack occurs at Priority 3A (before normal Priority 3 attacks). But pool split happens at Phase 2 (before all resolution). Does the longer weapon's priority attack use their pre-declared Offence pool? Yes — all pools are pre-declared. **But if the longer weapon user didn't know at declaration time that they'd have a priority attack (they didn't know opponent would try to close), their pool split may be suboptimal.**
+
+The rule says the longer weapon user always has priority attack when shorter weapon tries to close. This means: at declaration, if you have a longer weapon, you should always assume the possibility of a closing attempt and pre-allocate offence accordingly. This creates a metagame pressure but no mechanical ambiguity. ✓
+
+---
+
+## M-07 · FIBONACCI GROUP BONUS
 ### Mode A — Isolation
 
-**Composure = Presence + 6 (confirmed from §2.3).**
-Presence range 1–7. Composure = 7–13.
+**Input space:**
 
-**Rattled trigger:** Composure reaches 0 (strain accumulation in social conflict).
-**Bloodied:** Not found in stage1 or stage8 under that name. Stage8 uses "Formation Break" for units. Personal combat doesn't use a "Bloodied" gate condition — it uses Wound incapacitation thresholds. **The coverage matrix lists "Bloodied" as part of M-007 but this term may not exist in current CP14.**
+| Attackers | Bonus | Total bonus pool contribution |
+|---|---|---|
+| 2 vs 1 | +2D total (each gets +1D) | +2D |
+| 3 vs 1 | +6D total (each gets +2D) | +6D |
+| 4 vs 1 | +8D total (each gets +2D?) | +8D |
+| 5 vs 1 | +15D total (each gets +3D) | +15D |
+| 8 vs 1 | +40D total (each gets +5D) | +40D |
 
-Checking stage8 and stage1 for "Bloodied"... Not present. The wound thresholds (2/3/4 Wounds) produce incapacitation, not a named "Bloodied" condition. **M-007 description in the coverage matrix may be stale — predates the wound system redesign.**
+**Note: CP14 §8.1 uses a different table from §1.9.** §1.9: 2=+1D each, 3+=+2D each, 5+=+3D each, 8+=+5D each. §8.1 (Group Attacks): 2=+2D, 3=+3D, 4=+5D, 5=+8D (aggregate, not per-attacker). These are different tables with different framing. **This is a contradiction.**
 
-**Gap: "Bloodied" gate condition referenced in matrix but not found in current ruleset.** This may be an artifact from an earlier version. Either: (A) Bloodied was cut and the matrix entry needs updating, or (B) a midpoint wound condition was intended but not implemented. Flag P2.
+**Finding B5-M07-A (P1 — Two incompatible Group Bonus tables):**
 
-**Rattled mechanics (stage9):** Composure = Presence + 6. Strain from social conflict. Reaching 0 = Rattled. Stage9 post-fix: "Rattled effect: −1D to all social rolls per Rattled mark." This implies Rattled is a stackable condition (marks), not a single binary. The Composure track counts down from Presence + 6, and each time it hits 0, a Rattled mark is added (Health resets to full is the analogy — Composure resets). Verify: the new Rattled-as-stackable-wound model is consistent with stage9.
+- §1.9 (Fibonacci Group Bonus): per-attacker bonuses: 2v1→+1D each, 3+v1→+2D each, 5+v1→+3D each, 8+v1→+5D each
+- §8.1 (Group Attacks): aggregate bonus totals: 2→+2D, 3→+3D, 4→+5D, 5→+8D
 
-**Unmask:** Social scene reset mechanic. Terminates ongoing Debate, clears Composure strain. Creates a strategic exit at cost. No probability concerns.
+For 2 attackers: §1.9 gives +1D each (+2D total). §8.1 gives +2D aggregate (+1D each if split evenly). Same result.
+For 3 attackers: §1.9 gives +2D each (+6D total). §8.1 gives +3D aggregate (+1D each). **Contradiction: §1.9 gives 2× more bonus.**
+For 5 attackers: §1.9 gives +3D each (+15D total). §8.1 gives +8D aggregate (+1.6D each). **§1.9 gives ~2× more bonus.**
 
-**Interaction with Wound system:** A character can be both wounded (+Ob) and Rattled (−1D social). Combined penalty at 2 Wounds + 1 Rattled mark: +2 Ob to everything, −1D on social. Significant but not deadlocking — character can still act.
+**Severity: P1** — at 3+ attackers, the two sections produce different outcomes. One must be canonical. §1.9 is the core rules section and should govern. §8.1 appears to be an incorrect simplification. **Fix: Remove §8.1 Group Attacks table; replace with cross-reference to §1.9.**
 
-### Findings
+**Finding B5-M07-B (Degenerate — 8 vs 1):** §1.9: 8+ attackers each get +5D. An 8-person mob each with 5D base pool → each attacker has 10D. Expected hits on single defender (split defence across 8 attackers, ~1D each): each attacker hits near-automatically. This is **intentionally overwhelming** — 8 vs 1 is not a balanced fight. The mechanic correctly models mob advantage without requiring complex sub-systems. ✓
 
-| ID | Severity | Finding | Fix |
-|----|----------|---------|-----|
-| M007-01 | P2 | "Bloodied" referenced in coverage matrix but not in current ruleset text. Term may be stale. | Update coverage matrix: M-007 = "Conditions: Rattled, Unmask, Incapacitation Thresholds." Remove "Bloodied" unless it should be added as a named wound milestone. |
-| M007-02 | P2 | Rattled as stackable wound model (marks approach) is in stage9 but not explicitly confirmed as "marks accumulate across a scene." Verify: does a second Composure drain to 0 add a second Rattled mark? | Confirm Rattled stacking model in §9.1. |
+**Finding B5-M07-C (Boundary — "unsupported" definition):** §1.9: bonus applies if opponent is "unsupported" (no ally engaging any attacker). With 3 attackers and 1 defender who has 1 ally: ally engages 1 of the 3 attackers. Do the remaining 2 attackers still get the group bonus? The rule says "no ally is engaging any of the attackers" — so if any ally is engaging any attacker, no bonus applies. **This means a single dedicated protector nullifies all group bonuses.** P2 — likely too strong a nullification. A single ally can cancel group bonuses for 8 attackers.
+
+**Severity: P2** — the "unsupported" definition creates all-or-nothing group bonus nullification. Fix: "If the target has an ally engaging at least one attacker, the group bonus is reduced by one step (e.g., 5v1 with support = 3v1 bonus tier)."
 
 ---
 
-## M-008 — Thread Sensitivity
-
-**Mechanic:** TS 0–100, tiers (Inert/Dormant/Stirring/Active/Heightened/Resonant), growth via exposure/CE, passive perception thresholds.
-
-**Mode:** TTRPG | Temporal: CROSS | Tracks: TS | Factions: Church, Crown | NPCs: Almud, Himlensendt, Vaynard | Archetypes: Practitioner, Inquisitor, Devout
-
+## M-08 · BEGINNER'S LUCK
 ### Mode A — Isolation
 
-**TS tiers (from context):**
-| Tier | TS Range | Capabilities |
-|------|----------|-------------|
-| Inert | 0–9 | No Thread perception |
-| Dormant | 10–29 | Passive impressions |
-| Stirring | 30–49 | Active perception possible |
-| Active | 50–69 | Full Thread operations available |
-| Heightened | 70–89 | Enhanced ops, greater risk |
-| Resonant | 90–100 | Full practitioner capacity |
+**Input space:** Double Ob, raw attribute only (no History). Typical attributes 2–4.
 
-**Growth pathways:**
-- CE exposure triggers Spirit check (TN7, Ob1): success = +TS (amount per context)
-- Discovery Events: immediate +10 TS
-- Originary Lock handling: +10 TS (Spirit check or 2 Wounds)
-- Taint 3+ characters start Taint at 1 on corruption contact (from patch log)
+| Attribute | Normal Ob | Beginner's Luck Ob | Pool | P(success BL) |
+|---|---|---|---|---|
+| 2 | 1 | 2 | 2D | ~30% |
+| 3 | 1 | 2 | 3D | ~50% |
+| 3 | 2 | 4 | 3D | ~10% |
+| 4 | 2 | 4 | 4D | ~25% |
+| 4 | 3 | 6 | 4D | ~3% |
 
-**TPS (Thread Perception Score):** From session log, TPS = TS ÷ 10 (round down). Adds to Thread op pools. At TS 50 (Active tier): TPS = 5. This adds 5D to all Thread ops — significant pool contribution at full practitioner level.
+**Finding B5-M08-A (Degenerate — high Ob BL):** Beginner's Luck at Ob 3 (normal) becomes Ob 6 (BL). A 4D pool at Ob 6: P(≥6 net at TN7) ≈ <1%. Functionally impossible. At Ob 4+, Beginner's Luck is non-viable — characters should not attempt difficult tasks without training. **This is correct design.** ✓
 
-**Passive perception:** TS 30+ practitioners can perceive Thread events passively. This is a GM tool, not a player-rolled mechanic. No probability concerns.
+**Finding B5-M08-B (Reward inconsistency):** Beginner's Luck success earns "first mark toward a new History." But establishing a new History requires: declaring it in Session Zero OR 2 CP + a scene. BL success alone doesn't establish a History — it earns a first mark on a not-yet-established History. What does that mark apply to? The text says "new History" but there's no existing History to mark.
 
-**Devout Constraint interaction:** Essentialist theology forecloses TS development. Characters with Devout Constraint cannot gain TS through normal exposure. This is a hard block, not a probability-based mechanic. Himlensendt (TS 0, sincerely devout) cannot develop TS regardless of exposure.
+**Severity: P2** — unclear what "first mark" means without an established History. Fix: "A successful Beginner's Luck roll earns the character a provisional History tag at 0 points; the next relevant scene or CP investment formalises it."
 
-**Inquisitor CE accumulation → TS growth trigger:** Inquisitors accumulate CE tracking practitioners. CE 3+ triggers TS growth check. This creates a structural tension: Inquisitors who do their job eventually develop TS themselves. The check is Spirit TN7 Ob1.
-
-*Inquisitor TS growth probability:* Spirit 4 (typical Inquisitor). Pool = 4D, TN7, Ob1. P(Success+OW) = 72%. **An Inquisitor at CE 3+ has a 72% chance to gain TS per confrontation event.** Over 3 confrontations: P(at least one growth) ≈ 98%. Most Inquisitors will eventually develop TS if they do their jobs. This is thematically rich and mechanically correct.
-
-### Findings
-
-| ID | Severity | Finding | Fix |
-|----|----------|---------|-----|
-| M008-01 | P3 | TS growth amount per CE-triggered check is not specified in stage1/stage3 ("+TS" without value). | Confirm growth amount per check in stage3 or stage2. Likely +5 TS per success degree. |
-| M008-02 | P3 | TPS = TS÷10 round down creates a cliff at every 10-point tier boundary. TS 49 → TPS 4; TS 50 → TPS 5. This cliff is intentional (tier gates) but creates pressure to push to next tier threshold. | Note as design feature. No fix. |
+**Finding B5-M08-C: BL exclusions are complete and sensible.** Thread ops, combat proficiency, faction Domain Actions all excluded. No gap. ✓
 
 ---
 
-## M-009 — Certainty Track
+## M-09 · MOMENTUM
+### Mode A + Mode D
 
-**Mechanic:** Certainty = Spirit (starting/maximum). Range 0–7. Costs: observing Thread events, failed operations. At 0: rendering crisis.
+**Input space:**
 
-**Mode:** TTRPG | Temporal: CROSS | Tracks: CERT | Factions: all | NPCs: all practitioners | Archetypes: Practitioner
+| Variable | Range | Notes |
+|---|---|---|
+| Momentum | 0–4 | Resets each session |
+| Gain | +1 per Overwhelming | Also: +1 per Belief achieved |
+| Spend | Any amount, before any non-Thread roll | 1 Momentum = 1 auto success |
 
-### Mode A — Isolation
+**Finding B5-M09-A (P2 — Momentum cap of 4 creates hoarding disincentive):** Range 0–4. If a character hits 4 Momentum via a series of Overwhelming successes, all further Overwhelmings don't generate Momentum (capped). There is no incentive to spend Momentum to make room — spending 1 Momentum on a roll where you'd succeed anyway is neutral EV. **At cap: Momentum spend is free (EV neutral) but players are psychologically reluctant to spend resources.** In practice, Momentum likely hoards at 4 and is spent only on high-stakes moments. This is fine strategically but means the session-reset rule does most of the work. The cap itself has minimal in-session effect.
 
-**Certainty range:** Spirit 1–7. Practitioners with Spirit 3 (typical) start at Certainty 3. Spirit 7 (exceptional) starts at 7.
+**Severity: P3** — not a mechanical problem. Consider raising cap to 6 for more meaningful in-session use, but current design is functional.
 
-**Certainty costs (from stage3 context):**
-- First witnessing of Gap: −1 Certainty (Spirit check TN7 Ob1 to resist)
-- Per scene near a Gap: −1 Certainty (no check to resist)
-- Other costs presumably include: failed operations, confronting Mode 3 entities, specific TS thresholds
+**Finding B5-M09-B: "Cannot be spent on Thread rolls" is clean.** Prevents Momentum from trivialising Thread difficulty. Thread operations have their own risk economy (ThS, Intelligibility, Certainty). ✓
 
-**Certainty recovery:** Not specified in stage1. Must be in stage3 or stage10. Unconfirmed recovery rate is a critical gap — if Certainty cannot recover, all practitioners drift to 0.
+**Finding B5-M09-C (Boundary — can Momentum reduce Ob below 1?):** Spending 3 Momentum on an Ob 2 roll produces 3 auto-successes. Net = 3 ≥ 2 = Success (Overwhelming if 3 ≥ 4? No — 3 < 2×2=4). Net 3 at Ob 2: ≥ Ob = Success. Overwhelming requires net ≥ 2× Ob = 4. So 3 Momentum at Ob 2 buys a guaranteed Success but not Overwhelming. Clean. ✓
 
-**Rendering crisis at Certainty 0:** Unspecified in what I've read. This is the most significant edge case.
-
-**Probability analysis:**
-
-*Practitioner Spirit 3, Certainty 3:* Three Gap exposures at −1 each = Certainty 0. P(resist first Gap) = 4D TN7 Ob1 = P(Success+OW) ≈ 72%. After 3 Gaps: Expected Certainty remaining = 3 − (3 × 0.28) ≈ 2.2. But this assumes each check is independent. If near a Gap per-scene costs −1 with no check, one scene near a Gap per encounter guarantees −1.
-
-*Session pacing:* A practitioner participating in 3 scenes near Gaps loses 3 Certainty guaranteed. Spirit 3 practitioner is at 0 by session's end. **Without recovery mechanics, Certainty is a consumable resource that depletes to crisis within a single session of active Thread engagement.**
-
-**This is either (A) intentional tension mechanic requiring careful Certainty management, or (B) a pacing problem where practitioners become non-functional too quickly.**
-
-Given the design philosophy (Thread operations are dangerous, existentially costly), this appears intentional. But **recovery must exist** — otherwise practitioners can only function for one scene per rest period.
-
-**P1 FINDING — M009-01: Certainty recovery rate not confirmed. If unspecified, practitioners hit crisis within single sessions of Thread engagement.**
-
-*Certainty at 0 (Rendering Crisis):* The crisis procedure is referenced but not in the material I've read. Stage3 presumably contains the rendering crisis rules. Without them, the 0-state behaviour is undefined in this simulation.
-
-**Certainty and Momentum coupling:** §1.7 states "Momentum resets to 0 at the start of each session." If Certainty also resets between sessions, the two economies are equivalent. But if Certainty is persistent (session to session), it's a campaign-scale resource. Given Momentum resets and Certainty is explicitly tied to "existential coherence," Certainty is likely persistent — which makes the recovery rate even more critical.
-
-### Findings
-
-| ID | Severity | Finding | Fix |
-|----|----------|---------|-----|
-| M009-01 | **P1** | Certainty recovery rate not specified in available compilation stages. Without recovery, practitioners hit Rendering Crisis within 1 session of Thread engagement (3 Gap-adjacent scenes = Spirit 3 depleted). | Confirm recovery in stage3 §5.x. If absent, add: "Quick Rest restores 1 Certainty; Full Rest restores Certainty to Spirit score." |
-| M009-02 | P2 | Rendering crisis procedure at Certainty 0 not confirmed in simulation material. | Confirm in stage3. |
-| M009-03 | P3 | Gap-adjacent per-scene cost (−1, no check) stacks fast in exploration-heavy sessions. GMs need guidance on when "in a scene near a Gap" triggers vs incidental proximity. | Add: "Certainty costs from Gap proximity trigger once per distinct scene, not once per round." |
+**Finding B5-M09-D (Optimal play — Momentum × Beginner's Luck):** Spending Momentum on a Beginner's Luck roll halves BL's doubled Ob impact (1 Momentum = 1 success regardless of Ob). At BL Ob 4 (2 raw, Ob 2 base): 4 auto-successes via Momentum guarantees success regardless of pool. **Is this intended?** Momentum on BL: the character is drawing on accumulated advantage (prior Overwhelming moments) to push through an untrained task. Narratively plausible; mechanically allows BL on normally impossible untrained tasks if Momentum is banked. **P3 edge case — not broken but notable.**
 
 ---
 
-## CROSS-MECHANIC INTERACTION FLAGS (Mode B — for separate testing)
+## MODE B — INTERACTION CHAINS (Critical combat combinations)
 
-| Chain ID | Mechanics | Interaction | Priority |
-|----------|-----------|-------------|----------|
-| B-01 | M-001 × M-002 | Wound +Ob stacking on dice pools — tested above; no additional issues |  |
-| B-02 | M-002 × M-009 | Wound incapacitation + Certainty crisis simultaneously — deadlock? | P1 |
-| B-03 | M-003 × M-006 | History pool + Inspiration dice + Fork — triple pool addition, uncapped? | P2 |
-| B-04 | M-006 × M-009 | Inspiration spend on Thread operations (currently unruled) | P2 |
-| B-05 | M-007 × M-002 | Rattled marks + Wound +Ob simultaneously — near-deadlock confirmed above | P2 |
-| B-06 | M-008 × M-009 | TS tier advancement → lower Certainty maximum? Or higher? No coupling found — verify intentional decoupling | P3 |
-| B-07 | M-001 × M-007 | Ob cap (max 10) + Wound +Ob + Rattled −1D: can combined penalties exceed meaningful action range? | P2 |
+### B-CHAIN-01: Pool Split × Wounds × Stamina (Three-way cascade)
 
-**B-02 detail:** If a character simultaneously hits Wound incapacitation AND Certainty 0, the ruleset has no resolution order. Character is both physically incapacitated (cannot take actions) AND in existential rendering crisis (Thread fabric breaking down). Priority: physical incapacitation likely takes precedence. But the rendering crisis procedure may require character participation (rolls, decisions). If incapacitated, can crisis procedure fire? Flag for stage3 audit.
+**Scenario:** Character with Endurance 3, Health 9, Stamina 4, Combat Pool 8.
+
+**Round 1:** Pool split 5O/3D. Opponent (Pool 7, split 4O/3D).
+- Attacker (5D TN6 vs 3D TN7 defence): expected attack net ≈ 5×0.4 = 2.0. Expected defence net ≈ 3×0.33 = 1.0. Expected excess ≈ 1.0. Damage = +1 weapon + 1 excess − 1 armour = 1. Health 9→8.
+- Counter-hit (4D TN6 vs 3D TN7): expected excess ≈ (4×0.4) − (3×0.33) = 1.6 − 1.0 = 0.6. Damage = +1 weapon + 0.6 − 0 armour = 1.6. Health 9→7.4 (round to 7).
+- Stamina: both attacked → Stamina −1. Character: Stamina 3. Opponent: Stamina 3 (assumed Endurance 3).
+
+**Round 2:** Same split. Character Health 8, Opponent Health ~7.
+- Both take ~1–2 damage again. Character reaches Health ~6 by round 3.
+
+**Round 3:** Character at Health 6. Takes 4 damage (excess spike). Health 6→2. No Wound yet.
+- Stamina: 3→2. Character at Stamina 2 — no Catch Breath needed.
+
+**Round 4:** Character takes 3 damage. Health 2→0 → Wound #1. Health resets to 9. +1 Ob all rolls.
+- Pool: still 8D but all rolls now at +1 Ob. Combat attack was already Ob 1 (hit) → now Ob 2.
+- P(hit at Ob 2, 5D TN6) ≈ 60% (was ~80%). Drop in hit probability.
+- Stamina: 2→1.
+
+**Round 5:** Stamina 1→0. Must Catch Breath next round. Pool halved to 4D.
+- At Wound 1 + Catch Breath: 4D pool, +1 Ob. P(hit) ≈ 35%.
+
+**Finding B5-B01-A: Wound × Stamina collapse is rapid.** A low-Endurance character (Endurance 3) enters a "crisis cascade" by round 5: Wound penalty + forced Catch Breath simultaneously. At this point they are highly vulnerable. This is **correctly calibrated** — Endurance 3 represents a fragile combatant. Players running Endurance 3 should avoid extended melee. ✓
+
+**Finding B5-B01-B (P2 — No Wound recovery mid-combat):** Quick Rest (removes 1 Wound, restores Health) requires "minutes to hours of downtime." There is no mid-combat wound recovery. A character at 2 Wounds (Endurance 3 = incapacitated) is out. No mechanism to "fight through" at penalty beyond incapacitation. This is correct — incapacitation is final unless narrative exception applies. ✓
+
+### B-CHAIN-02: Fibonacci Group Bonus × Pool Split × Defence Splitting
+
+**Scenario:** 3 attackers (each Pool 6) vs 1 defender (Pool 9, full defence declared — 9D defence).
+
+Per §1.9: 3 attackers each get +2D bonus → each attacker has 8D offence.
+
+Defender must split 9 defence dice across 3 attackers: 3D each.
+
+**Each attacker:** 8D TN6 vs 3D TN7.
+- Attack expected net: 8×0.4 = 3.2. Defence expected net: 3×0.33 = 1.0. Excess: 2.2.
+- P(hit) for each attacker ≈ 90%.
+
+Expected damage per hit: +1 weapon + 2.2 excess − armour. At 0 armour: 3.2 damage per attacker.
+With 3 attackers, all hitting: ~9.6 expected damage in one round. Health 9 (Endurance 3): 1 Wound immediately, likely 2 Wounds (incapacitated) within 2 rounds.
+
+**Finding B5-B02-A: 3v1 with group bonus is overwhelming regardless of defender pool.** A 9D full-guard defender cannot survive 3 skilled attackers (Pool 6+). The Fibonacci bonus makes 3v1 a near-guaranteed incapacitation within 2 rounds. This is **intentional** — 3v1 should be lethal. The bonus correctly models gang-up pressure. ✓
+
+**Finding B5-B02-B (P2 — Defence splitting across 3+ attackers is cognitively demanding):** The defender must decide how to split 9 dice across 3 attackers simultaneously. No guidance exists on optimal splitting. If defender knows attacker pools are equal, equal splits are rational (3/3/3). But if one attacker is stronger: concentrate defence on them. **No rule specifies whether defender must split evenly or can concentrate.**
+
+**Proposed fix:** Add explicit note: "The defender distributes defence dice however they choose; the allocation must be declared simultaneously with attackers' declarations and cannot be changed after Offence is revealed."
 
 ---
 
-## COVERAGE MATRIX UPDATES
+## MODE D — EDGE CASES (Combat engine, all mechanics)
 
-| Test ID | Mechanics | Mode | Temporal | Tracks | Factions | NPCs | Archetypes | Status | Findings |
-|---------|-----------|------|----------|--------|----------|------|------------|--------|---------|
-| B5-01 | M-001 | TTRPG | PRES | — | all | — | all | Complete | M001-01/02/03 (P3) |
-| B5-02 | M-002 | TTRPG/BG | PRES | Health | all | — | all | Complete | M002-01 **(P1)**, M002-02/03 (P2) |
-| B5-03 | M-003 | TTRPG | PAST | — | all | — | all | Complete | M003-01 (P2), M003-02 (P3) |
-| B5-04 | M-004 | TTRPG | CROSS | — | all | — | all | Partial | M004-01 (P2) — needs stage2 |
-| B5-05 | M-005 | — | — | — | — | — | — | ELIMINATED | Maxims cut in S3 |
-| B5-06 | M-006 | TTRPG | CROSS | — | all | — | all | Complete | M006-01 (P2), M006-02 (P3) |
-| B5-07 | M-007 | TTRPG | PRES | Composure | all | — | all | Complete | M007-01 (P2), M007-02 (P2) |
-| B5-08 | M-008 | TTRPG | CROSS | TS | Church/Crown | Almud, Himlensendt, Vaynard | Practitioner/Inquisitor/Devout | Complete | M008-01/02 (P3) |
-| B5-09 | M-009 | TTRPG | CROSS | CERT | all | all practitioners | Practitioner | Complete | M009-01 **(P1)**, M009-02/03 (P2) |
+### Boundary: Combat Pool at minimum (5D) × Full Guard × Fibonacci vs 1
+
+Pool 5D, all-defence vs 3 attackers with group bonus (each 6D base + 2D = 8D).
+Defender: 5D ÷ 3 ≈ 1–2D per attacker. Each attacker: 8D TN6 vs 1–2D TN7.
+P(hit per attacker): ~95%. Expected damage: 3.2 per attacker. Character with Health 9 takes ~9.6 in one round = Wound + near-second Wound. Minimum-pool combatant vs 3v1 = near-instant incapacitation. **Expected and correctly calibrated.** ✓
+
+### Cascade: Wound × Ob stacking maximum
+
+Scenario: 4 Wounds (Endurance 6, not yet incapacitated) + Ob 2 base task = effective Ob 6.
+Thread operation at Relational scale (Ob 2) + 4 Wounds = Ob 6. TPS 5D pool + 0D History = 5D.
+P(≥6 net at TN7, 5D) ≈ <2%. Functionally impossible. Character must rest before attempting Thread work.
+**Maximum Ob 10 cap**: 4 Wounds + Ob 8 (Structural) = Ob 12, capped at 10. The cap correctly prevents absurd stacking. ✓
+
+### Deadlock: Ambush × No combat-capable characters
+
+Scenario: All PCs have Endurance 1 (Health 7) and 0 Combat History. Pool = 5D minimum. Ambush fires — attackers get free Priority 2 round. PCs cannot prevent the Priority 2 attacks (they haven't declared yet). At least one PC likely takes a Wound before any action. Next round: +1 Ob on all actions including attempts to flee. **Flee Ob?** Not defined.
+
+**Finding B5-D01 (P2 — No Withdraw / Flee Ob defined):** The Withdraw manoeuvre exists (Priority 3A) but its Ob is not stated. §8.1: "Withdraw: Sacrifice offensive action; re-establish reach advantage." This is a within-combat positioning manoeuvre, not an escape from combat. **No rule covers escaping combat entirely.** A character who wants to flee a losing fight has no defined procedure.
+
+**Severity: P2.** Proposed fix: Add to §8.1: "Escaping combat: Agility roll, Ob = opponent's Cognition (their awareness of your intent). On Success: character is out of combat but at full Endurance cost (Stamina 0). On Failure: opponent gets one free Priority 3 attack before you exit."
+
+### Crunch Cascade: Peak complexity round count
+
+A maximum-complexity combat round involves:
+1. Initiative roll (Agility, 2+ combatants)
+2. Declaration phase (all combatants)
+3. Pool division (all combatants, secret)
+4. Priority 1 (Thread effect manifestation)
+5. Priority 2 (ranged — 2 ranged combatants)
+6. Priority 3A (manoeuvres — all 7 types possible)
+7. Priority 3 (all melee attacks — each pair resolves)
+8. Priority 4 (standard actions)
+9. Priority 5 (Thread initiation)
+10. Priority 6 (reloads)
+11. Damage calculation × combatant count
+12. Wound checks × combatant count
+13. Stamina decrement × combatant count
+14. Thread contact round decrement (practitioners)
+15. Co-movement roll (d10) per Thread op
+
+For 6 combatants (3v3) with 2 practitioners:
+
+Estimated resolution steps: ~20–25 per round. At 3 rounds (typical combat): 60–75 total resolution steps.
+
+**Finding B5-D02 (P2 — Crunch cascade at 4+ combatants with Thread):** 4v4 with 2 practitioners each attempting Thread operations produces ~30 resolution steps per round. This is table-heavy but manageable with pre-calculated pools. The pre-calculation requirement on the character sheet (noted multiple times in CP14) is essential to keeping this playable. Without it, each Thread pool requires 3 lookups mid-combat. ✓ with pre-calculation enforced.
+
+### Optimal Play: Full-Guard Loop exploitation
+
+**Scenario:** Two high-pool characters (Pool 12 each) both declare Full Guard every round.
+- Round 1: Both 12D defence. Neither hits. Stamina decrement? Only if Attack/Move/Manoeuvre declared. Full Guard = 0 Stamina depletion (only Defence declared). Per the "in a row" rule: no Stamina loss. **Both characters can maintain full guard indefinitely.** This is a stalemate.
+
+**The stalemate resolves only through narrative pressure** (someone arrives, environmental change, one combatant has a timed objective). There is no mechanical escape from mutual full-guard stalemate.
+
+**Finding B5-D03 (P2 — Mutual Full-Guard Stalemate):** Two combatants who both declare Full Guard can maintain it indefinitely (no Stamina loss, no damage). Stalemate is unresolvable through combat mechanics alone. This is acceptable if narrative pressure always exists, but a dedicated opponent can force a stalemate as an objective (e.g., delay a PC until reinforcements arrive). **No mechanical incentive to break stalemate exists.**
+
+**Severity: P2.** Proposed fix: "A combatant who declares Full Guard for 2 or more consecutive rounds without any offensive action: Stamina −1 per full-guard round (tension fatigue). This prevents indefinite stalemate without penalising tactical use of one or two defensive rounds."
 
 ---
 
-## SUMMARY
+## SUMMARY TABLE
 
-| Priority | Count | Items |
-|----------|-------|-------|
-| **P1** | 2 | M002-01 (Wound cap contradiction), M009-01 (Certainty recovery unspecified) |
-| P2 | 8 | M002-02/03, M003-01, M004-01, M006-01, M007-01/02, M009-02/03 |
-| P3 | 6 | M001-01/02/03, M003-02, M006-02, M008-01/02 |
-| Eliminated | 1 | M-005 (Maxims cut) |
-| Mode B flagged | 7 | B-01 through B-07 |
+| Test | Mechanic | Mode | Finding | Severity | Fix Required |
+|---|---|---|---|---|---|
+| B5-M01-A | Pool Split | A | Full offence creates lethal exchange, not dominant strategy | ✓ | None |
+| B5-M01-B | Pool Split | A | Full guard dominant defensively; resolved by Stamina | ✓ | None |
+| B5-M01-D | Pool Split | A | Initiative advantage ~15pp hit probability | ✓ | None |
+| B5-M02-A | Wounds | A | Wound × Thread cascade well-calibrated | ✓ | None |
+| B5-M02-D | Wounds | A | Excess carryover math clean | ✓ | None |
+| **B5-M03-A** | Stamina | A | "In a row" qualifier allows indefinite Stamina reset exploit | **P2** | Remove "in a row" |
+| B5-M03-B | Stamina | A | Breather vs Catch Breath distinction correct | ✓ | P3 wording only |
+| **B5-M03-C** | Stamina | A | Catch Breath timing not specified | **P3** | Add timing note |
+| **B5-M04-C** | Reach | A | Projectile range closing procedure incomplete — no Ob defined | **P2** | Add Agility check Ob |
+| B5-M05-A | Zone movement | A | Narrative zones: correct design | ✓ | None |
+| **B5-M05-B** | Zone movement | A | Thread contact across zone transitions undefined | **P3** | Add clarifying note |
+| **B5-M06-B** | Initiative | A | Late entrants to combat unspecified | **P3** | Add insertion rule |
+| B5-M06-C | Initiative | A | Thread 2-round delay in fast combat: intentional | ✓ | None |
+| **B5-M07-A** | Fibonacci | A | §1.9 and §8.1 group bonus tables contradict at 3+ attackers | **P1** | Remove §8.1 table; XRef §1.9 |
+| B5-M07-B | Fibonacci | A | 8v1 overwhelming: intentional | ✓ | None |
+| **B5-M07-C** | Fibonacci | A | Single ally nullifies all group bonuses (all-or-nothing) | **P2** | Reduce by one tier per ally |
+| **B5-M08-B** | Beginner's Luck | A | "First mark" on unestablished History undefined | **P2** | Add provisional History tag rule |
+| B5-M09-A | Momentum | A | Cap at 4 creates minor hoarding pressure; functional | P3 | Optional: raise to 6 |
+| B5-M09-B | Momentum | A | Thread exclusion clean | ✓ | None |
+| **B5-B01-A** | Pool+Wounds+Stamina | B | Low-Endurance crisis cascade by round 5: intentional | ✓ | None |
+| **B5-B02-B** | Fibonacci+Pool Split | B | Defence splitting across 3+ attackers needs explicit guidance | **P2** | Add declaration note |
+| **B5-D01** | Combat Escape | D | No Flee procedure defined | **P2** | Add Agility escape roll |
+| **B5-D02** | Crunch | D | 4v4+Thread: ~30 steps/round; manageable with pre-calc | P2 | Enforce pre-calc note |
+| **B5-D03** | Full Guard | D | Mutual full-guard stalemate: indefinite, no mechanical escape | **P2** | Stamina fatigue for consecutive full-guard |
 
-**P1 fixes required before compilation continues:**
-1. M002-01: Add explicit Wound cap language — "max 2 Wounds from single hit; excess damage discarded."
-2. M009-01: Confirm or add Certainty recovery in stage3 — "Quick Rest +1 Certainty; Full Rest restores to Spirit score."
+**P1: 1 (M-07-A — duplicate group bonus tables)**
+**P2: 7 (M-03-A, M-04-C, M-07-C, M-08-B, B-02-B, D-01, D-03)**
+**P3: 3 (M-03-C, M-05-B, M-06-B)**
 
+---
+
+## COVERAGE MATRIX UPDATE
+
+| Mechanic ID | Name | Isolation | Interaction | Scenario | Edge Cases | Status |
+|---|---|---|---|---|---|---|
+| M-01 | Pool Split | ✓ B5 | ✓ B5 | — | ✓ B5 | Issues found |
+| M-02 | Wound/Gate System | ✓ B5 | ✓ B5 | — | ✓ B5 | Pass |
+| M-03 | Stamina | ✓ B5 | ✓ B5 | — | ✓ B5 | Issues found |
+| M-04 | Reach | ✓ B5 | — | — | ✓ B5 | Issues found |
+| M-05 | Zone Movement | ✓ B5 | — | — | ✓ B5 | Pass (minor) |
+| M-06 | Initiative/Priority | ✓ B5 | ✓ B5 | — | ✓ B5 | Issues found |
+| M-07 | Fibonacci Group Bonus | ✓ B5 | ✓ B5 | — | ✓ B5 | Issues found |
+| M-08 | Beginner's Luck | ✓ B5 | — | — | ✓ B5 | Issues found |
+| M-09 | Momentum | ✓ B5 | — | — | ✓ B5 | Pass (minor) |
+
+---
+
+*Batch 5 complete — 2026-03-27*
