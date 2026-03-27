@@ -6,17 +6,17 @@ Social conflict in Valoria uses two primary structures: **Appeals** (one-roll pe
 
 ## 9.1 Composure and the Rattled State
 
-**Composure = Poise + Heart.** This is the social wound threshold. Strain accumulates during social conflict; it is not reduced between exchanges within the same scene unless Unmask occurs.
+**Composure = Presence + 6.** This is the social wound threshold. Strain accumulates during social conflict; it is not reduced between exchanges within the same scene unless Unmask occurs.
 
 **Rattled** triggers the moment accumulated strain **first equals or exceeds** Composure. Stop tracking strain at that point — Rattled replaces the number.
 
-- Rattled effect: Poise halved (round down, minimum 1) for all social rolls.
+- Rattled effect: −1D to all social rolls per Rattled mark.
 - Combat is unaffected by Rattled.
 - Persists until: Unmask, the scene ends, or the character rests.
 
 **Unmask** is a player choice available at any point during a social scene:
 
-- All strain clears; Poise restored to full.
+- All strain clears; Rattled marks cleared.
 - The character reveals something true — the player declares it, the GM confirms it is not already public.
 - If mid-Debate: the current incomplete exchange is voided. Subsequent direct action in that scene: Ob = exchange deficit + 1 (minimum 1).
 - The formal register breaks. The scene changes nature — a Debate cannot resume after Unmask; it becomes a personal confrontation or collapses.
@@ -107,7 +107,7 @@ An Appeal is a single-roll persuasion attempt targeting an audience or individua
 
 A Debate is a formal exchange of positions. Both orators roll simultaneously; each exchange is resolved independently.
 
-**Pool**: Poise + History bonus.
+**Pool**: Cognition + History bonus.
 
 **Exchange counts by stakes:**
 
@@ -141,9 +141,9 @@ When a political matter requires an institutional decision, resolve it as a Parl
 |---|---|---|---|---|
 | Reading Exchange | Attunement | Single roll, pre-contact | None | Perception only |
 | Appeal | Presence | Single roll | None | Audience persuasion |
-| Debate (Casual) | Poise | 1 exchange | +1/+2 | Personal dispute |
-| Debate (Formal) | Poise | 3 exchanges | Cumulative | Institutional contest |
-| Grand Debate | Poise | 5 exchanges | Cumulative | Faction-level |
+| Debate (Casual) | Cognition | 1 exchange | +1/+2 | Personal dispute |
+| Debate (Formal) | Cognition | 3 exchanges | Cumulative | Institutional contest |
+| Grand Debate | Cognition | 5 exchanges | Cumulative | Faction-level |
 | Parliamentary Vote | Mandate / Reach | 3 exchanges (best of) | None (institutional) | Political decision |
 
 ---
@@ -154,7 +154,7 @@ All social rolls use the standard pool construction (attribute + History bonus),
 
 | Roll Type | Base Attribute |
 |---|---|
-| Debate | Poise |
+| Debate | Cognition |
 | Appeal, Circles, Resources | Presence |
 | Reading Exchange | Attunement |
 
