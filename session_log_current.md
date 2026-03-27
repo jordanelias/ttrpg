@@ -4,66 +4,46 @@
 
 ---
 
-session_close: 2026-03-26-stage17
+session_close: 2026-03-26-bg-compilation
 phase: 2
-status: Phase 2 Stage 17 (Canon Guard Pass) COMPLETE
+status: Phase 2 Stages B1-B10 (Board Game Mode Compilation) COMPLETE
 completed_stages:
-  - Stage 1–16: all previously complete
-  - Stage 17: Canon Guard Pass — all patches applied to compilation/valoria_ttrpg_complete.md
-compilation_output: compilation/valoria_ttrpg_complete.md (commit f318f7ee)
-canon_guard_report: compilation/stage17_canon_guard.md (commit 8526e934)
+  - Stage 1-17: all previously complete
+  - Stages B1-B10: Board Game Mode compilation — 10 stages produced
+compilation_output: compilation/stage_bg_board_game_mode.md (commit 8a16ce79)
 
-patches_applied:
-  - P1: §5.9 Coherence Degradation → Thread Stability (ThS); track direction 0-20 → 20-0; all CD refs updated
-  - P2: §5.10 Taint Track → Coherence Track; track inverted 0-10 to 10-0 (10=fully coherent, 0=monstrous); all Taint/taint refs updated
-  - P3: Heart attribute removed — Leap pool → Attunement + History; Contact Duration → Focus; all Thread op rolls → Spirit + History; Inspiration checks → Spirit; Discovery Event checks → Spirit; CE TS growth checks → Cognition
-  - P4: Poise removed; Composure = Presence + 6 everywhere; Debate pool → Cognition; NPC Composure values recalculated
-  - P5: Coordination removed — §8.1 personal combat → Agility; §8.3 mass combat Officer pool → Cognition; mass combat initiative → Cognition; Rally → Cognition/Presence
-  - P6: Resolve derived score row removed from §2.3; Inspiration cap reads "Spirit score" directly throughout
-
-thread_op_pools_canonical:
-  Leap: Attunement + History bonus
-  Contact_Duration: Focus score (rounds)
-  Wound_disruption_check: Focus TN 7 Ob 1
-  Weaving: Spirit + History bonus
-  Pulling: Spirit + History bonus
-  Past_Oriented_Pulling: Spirit + History bonus
-  Forced_Resolution: Spirit + History bonus
-
-composure_formula_canonical: Presence + 6 (range 7-13)
-debate_pool_canonical: Cognition + History bonus
-battle_engine_officer_canonical: Cognition (attack) + Presence (cohesion/rally)
-personal_combat_manoeuvres_canonical: Agility
-inspiration_cap_canonical: Spirit score (no derived name)
-coherence_track: individual 10-0 (10=fully coherent, 0=monstrous NPC)
-thread_stability_track: campaign-arc 20-0 (20=stable, 0=crisis)
-
-notes:
-  - Baralta stat block substituted Cognition 4 / Endurance 4 for non-canonical Coordination 4 / Power 4 — confirm if different values intended
-  - Olafsson Composure = 7 retained (no Poise/Heart formula was present; may need explicit Presence score)
-  - §5.10 "not a corruption mechanic" retained — the word "corruption" appears only in that negating context
-  - Coherence Degradation text in §12.7 TD track uses "ThS" abbreviation — verify §12.7 reads cleanly on resume
+bg_stages_completed:
+  B1: Overview and Setup (player count, faction assignment, component list, starting state)
+  B2: Territory Map (15 territories, hex layout, properties, connections, starting control)
+  B3: Faction Cards (7 factions: Crown, Church, Hafenmark, Varfell, Guilds, Niflhel — stats, unique power, order set, Thread capability, victory condition)
+  B4: Turn Structure (6-phase round: Season Card, Planning, Intel Reveal, Order Resolution, Seasonal Accounting, Cleanup)
+  B5: Orders (Govern, Muster, March, Trade, Diplomacy, Intel + all faction-specific orders with full resolution procedures)
+  B6: Military (unit types, mustering, movement, combat via disposition table, siege phases, supply lines)
+  B7: Thread Operations + Co-Movement (faction-card BG procedures, TT management, Co-Movement card framework, TK track)
+  B8: NPC AI (Crown, Church, Hafenmark, Varfell, Guilds, Niflhel, Revolution, Schoenland, Löwenritter coup trigger)
+  B9: Event Deck (15 clock-threshold cards + 15 seasonal random events, all structured)
+  B10: Victory + Endgame (per-faction victory conditions, shared TT survival condition, scoring, 2-player tuning, endgame events)
 
 editorial_pending:
-  - Renown permission table (tiers 1-10)
-  - Varfell Private Collection transfer
-  - Niflhel primus inter pares
-  - Revolution named elder NPC
-  - Territory names (batch_e placeholders)
-  - Varfell victory condition tuning
-  - 10 remaining seasonal event cards
-  - Named Restoration NPCs
-  - E-01 assassination perpetrator
-  - E-03 AG calendar name
-  - Niflhel named NPC stat blocks (Rolf Dunmark, Solvind Brak)
-  - Revolution named NPC stat blocks (Edith Varn)
-  - Baralta Cognition/Endurance values — confirm correct substitution
+  - BG-E-01: Co-Movement cards CM-11 through CM-20 (10 cards need design)
+  - BG-E-02: Varfell TK 5 consequence / capability-seeking resolution path
+  - BG-E-03: THE RUPTURE narrative determination
+  - BG-E-04: Seasonal Event S-08 Einhir site name (territory name editorial)
+  - BG-E-05: Seasonal Event S-15 Restoration Memory (tied to Restoration NPC)
+  - BG-E-06: Revolution victory condition (if ever player-controllable)
+  (All prior editorial pending items from Stage 17 remain open)
+
+canon_compliance:
+  - P-01 (Inseparability): Co-Movement mandatory on ALL Thread operations in BG mode. Observed in B7.
+  - P-05 (Three modes distinct): BG mechanics are board-resolution procedures, not TTRPG narrative systems. Observed throughout.
+  - No canon violations detected.
 
 next_action:
-  stage: Stage 18 (Board Game Mode compilation) or Phase 3 (Simulation)
-  recommended: verify §12.7 ThS references read correctly, then proceed to Phase 3 simulation setup
-  model: Sonnet 4.6
-  input_file: compilation/valoria_ttrpg_complete.md
+  recommended: Phase 3 (Simulation Coverage) — 56 mechanics, coverage matrix
+  alternative: Address editorial pending items (Renown permission table, Varfell victory tuning, Co-Movement CM-11-20)
+  model: Sonnet 4.6 for simulation; Opus 4.6 for editorial
+  input_file: compilation/stage_bg_board_game_mode.md + compilation/valoria_ttrpg_complete.md
 
 open_gaps_added: []
-model_routing_notes: "Sonnet 4.6 throughout — canon guard + mechanical patch work"
+model_routing_notes: "Sonnet 4.6 throughout — structural compilation with mechanical judgment"
+
