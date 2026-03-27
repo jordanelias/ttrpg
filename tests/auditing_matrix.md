@@ -275,13 +275,13 @@ Files in `tests/` with test IDs mapped to this matrix.
 | File | Tests | Status |
 |------|-------|--------|
 | valoria_stress_tests_sonnet46.md | T1–T10, B1–B10, H1–H10 (pre-compilation, partial coverage) | Reference only — pre-compilation snapshot |
-| [Phase 3 Round 1] | Isolation tests per compiled ruleset | Not started |
-| [Phase 3 Round 2] | Interaction tests | Not started |
-| [Phase 3 Round 3] | Scenario tests with NPC rotation | Not started |
-| [Phase 3 Round 4] | Archetype substitution with NPC rotation | Not started |
-| [Phase 3 Round 5] | Campaign simulation | Not started |
-| [Phase 3 Board R1–R5] | Board game tests | Not started |
-| [Phase 3 Cross X1–X2] | Cross-mode tests | Not started |
+| valoria_stress_tests_batch2.md | T11–T18, B11–B14, H11–H13 (Phase 3, CP14 ruleset) | Complete — 15 tests, 20 rulings |
+| [Phase 3 Batch 3] | T19+, B15+, H14+: Impression Track, Defection, Renown tiers, NPC arcs (Klapp, Elske, Torben, Maret Uln) | Not started |
+| [Phase 3 Batch 4] | Full scenario tests with NPC rotation | Not started |
+| [Phase 3 Batch 5] | Archetype substitution (all 9 archetypes × 10 scenarios) | Not started |
+| [Phase 3 Campaign Sim] | 20-season compressed campaign simulation | Not started |
+| [Phase 3 Board R1–R5] | Board game isolation/endgame tests | Not started |
+| [Phase 3 Cross X1–X2] | Cross-mode state transfer tests | Not started |
 
 ---
 
