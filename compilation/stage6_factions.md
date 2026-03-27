@@ -40,7 +40,7 @@ Valoria's political landscape is contested by eight factions, six with full mech
 
 When a personal action has faction-level scope, the GM recognises it as a Domain Action. The personal roll resolves both the personal outcome and the faction effect simultaneously.
 
-**Domain Ob:** Target faction's relevant stat ÷ 2 (round up). On a 1–7 scale this yields Ob 1–4.
+**Domain Ob:** Target faction's relevant stat directly (1–7 scale; no division). A faction at stat 4 sets Ob 4. The rolling character may add their own faction's relevant stat as bonus dice if they hold leadership of that faction.
 
 **NPC faction rolls:** When a faction acts without a player character driving it, the GM rolls the relevant faction stat as a dice pool (d10s, TN 7) against the Domain Ob. For contested actions, both roll; higher net successes wins. Ties go to the defender.
 
@@ -383,7 +383,7 @@ Not a faction. Not player-controllable. A neutral trade port that profits from s
 When a political matter reaches Parliamentary scale (Crown choosing whether to defend Vaynard; Grand Debate ruling on Church authority; Baralta invoking Sovereign Authority institutionally), resolve as a Parliamentary Vote:
 
 1. Both sides roll relevant faction pools (typically Mandate for legitimacy claims, Influence for procedural contests)
-2. Ob = opponent's relevant stat ÷ 2 (round up)
+2. Ob = opponent's relevant stat directly (1–7)
 3. Best of **3 exchanges.** First side to win 2 exchanges wins.
 4. If neither side wins 2 of 3 (draws possible when both meet Ob): motion fails by abstention — TT +1 and TC +1 (institutional paralysis)
 5. Player characters may substitute personal pools for faction pools when personally representing the faction. Use the higher.
