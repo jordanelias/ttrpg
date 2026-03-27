@@ -16,7 +16,7 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 **TS:** 28 (high Dormant; near Stirring threshold). Does not know the name for what he experiences. Attributes felt impressions to spiritual intimation. A Discovery Event would be the most destabilising moment of his reign.
 
 **Social Profile:**
-- Composure: 9 [EDITORIAL: Presence score not yet assigned — recalculate as Presence + 6 when confirmed]
+- Composure: 11 (Presence 5 + 6)
 - Dominant Conviction: Order — legitimate authority through proper institutional channels
 - Resonant Style: Consequence — long-horizon thinking; past injustice moves him less than future structural risk
 
@@ -36,7 +36,7 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 **TS:** 0 (Inert). Not foreclosed — simply never confronted.
 
 **Social Profile:**
-- Composure: 8 [EDITORIAL: Presence score not yet assigned — recalculate as Presence + 6 when confirmed]
+- Composure: 10 (Presence 4 + 6)
 - Dominant Conviction: Liberty — the concrete political conditions under which people can act without requiring institutional permission
 - Resonant Style: Consequence
 
@@ -175,7 +175,7 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 **TS:** 14 (Dormant). Does not know he has Thread sensitivity.
 
 **Social Profile:**
-- Composure: 6 [EDITORIAL: Presence score not yet assigned — recalculate as Presence + 6 when confirmed]
+- Composure: 11 (Presence 5 + 6)
 - Dominant Conviction: Reason — truth as instrument; genuine high weight on acknowledged uncertainty
 - Resonant Style: Consequence — forward-looking analysis of what situations will produce
 
