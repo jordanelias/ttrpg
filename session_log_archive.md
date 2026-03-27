@@ -647,3 +647,21 @@ next_action:
   also_repair: Propagate attribute pool = 31 to §14.1 and §12 checklist references in CP14
   model: Sonnet 4.6
 
+---
+
+session_close: 2026-03-27
+checkpoint: 14-sim-prep
+model: claude-sonnet-4-6
+completed_stages:
+  - Identified all mechanics directly impacted by editorial decisions committed 2026-03-26
+  - Mapped 12 mechanic groups requiring re-simulation
+  - Discovered P1 attribute pool inconsistency (§2.2 vs §14.1/§12)
+  - Prepared full simulation routing table and handoff
+
+p1_finding:
+  issue: Attribute pool contradiction
+  location_1: §2.2 — 31 points distributed across 10 attributes
+  location_2: §14.1 (Session Zero checklist) — 18 attribute points
+  location_3: §3772 (GM checklist) — 18 attribute points
+  location_4: §12 (hybrid) — 18 attribute points
+  action_required: Propagate 31 to all checklist references before next push
