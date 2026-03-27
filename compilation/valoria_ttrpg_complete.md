@@ -3080,41 +3080,105 @@ Victory conditions are checked at the end of each season's accounting phase.
 
 ## 12.3 Hybrid Mode
 
-### Hybrid Session Structure
+### Session Structure
 
-One hybrid session covers one season, structured in four phases:
+One hybrid session covers one in-game season, minimum. A season may span multiple sessions if scene volume warrants; seasonal accounting fires at the end of the session in which the season closes, not mid-session.
+
+Each session runs three phases in sequence:
 
 | Phase | Duration | Content |
 |---|---|---|
-| Personal Phase | 60–90 min | TTRPG scenes. Board game paused. Maximum 2–3 scenes. |
-| Strategic Phase | 20–30 min | Board game orders placed and resolved. TTRPG paused. |
-| Cascade Phase | 10–15 min | Domain Echoes, threshold events, and cross-mode consequences applied. |
-| Accounting | 5–10 min | Attribute changes, clock advances, victory condition checks. |
+| Personal Phase | 90–150 min (scene-dependent) | TTRPG scenes. Board game paused. |
+| Strategic Phase | 20–30 min | Board game orders placed and resolved. TTRPG paused. Downtime actions declared and resolved concurrently. |
+| Cascade Phase | 10–20 min | Domain Echoes applied, Thread consequences, clock threshold checks, seasonal accounting (if end of season), board state update. |
 
-**Total per hybrid season: ~2–2.5 hrs. A full hybrid campaign of 10 seasons = 10–15 sessions.**
+**Quiet season:** GM may compress to Strategic + Cascade only (~30 min) when no TTRPG scenes are dramatically necessary.
+
+**Extended season:** GM may split one season across 2 sessions when TTRPG scene volume demands it. Strategic Phase defers to session 2.
 
 ### Pacing Controls
 
-**GM may compress:** Skip Personal Phase for a season when no TTRPG scenes are dramatically necessary. Announce "quiet season" — resolve Strategic + Cascade only (~30 min).
+**Zoom In is player-initiated.** Any board order that resolves entirely between NPCs does not generate a TTRPG scene. The GM narrates the outcome so players have the information before their next scene.
 
-**GM may expand:** Split one season across 2 sessions when TTRPG scenes demand it (siege, expedition, major social confrontation). Strategic Phase deferred to session 2.
+**Scene trigger conditions.** An order generates a mandatory TTRPG scene if:
+- A PC is the target or perpetrator of the order's primary action
+- A PC's named Knot or Inspiration focus is directly affected
+- A clock threshold is crossed as a direct result and a PC is present in the affected territory
 
-**Player-triggered scenes:** During Strategic Phase, if an order generates a scene (assassination attempt, diplomatic confrontation), pause resolution and run the TTRPG scene. Return to the resolution queue after the scene concludes.
+**NPC-order sequencing.** Within the Strategic Phase, NPC-only orders resolve first. Their outcomes are narrated before player-involved scenes begin. This ensures player scenes impacted by prior NPC action occur in the correct narrative order.
+
+### Information Asymmetry (Fog of War)
+
+All faction stats are displayed to non-owning players in four qualitative states:
+
+| Display | Underlying value |
+|---|---|
+| In ruins | 1 |
+| Poor | 2–3 |
+| Good | 4–6 |
+| Excellent | 7 |
+
+**Boundary ambiguity (value 4):** Roll 1d6 at point of observation — 1–3 = Poor, 4–6 = Good. Result is fixed for that scene; re-rolled at next observation.
+
+**Faction-leader PCs** see their own faction's exact numerical values at all times.
+
+**Intelligence stat** is always hidden for rival factions regardless of display tier. Revealed only through successful Intelligence Domain Actions or TTRPG scene discoveries.
+
+### Cross-Mode Handoffs
+
+**Default:** All TTRPG personal-scene consequences batch to the Cascade Phase. GM tracks on a ledger during Personal Phase and applies in bulk. An inline exception is permitted for single-stat changes with no threshold risk — GM discretion only, not a player option.
+
+**Thread operations in hybrid:** Personal-scale Thread operations during the Personal Phase resolve as TTRPG narrative consequences. Clock and tracker effects (TT, ThS, Coherence, co-movement) are noted by the GM and batched to Cascade. A faction-scale Thread order (Weave/Investigate/Harvest on the board) represents a collective premeditated operation — it resolves under board game rules and generates a Co-Movement Card draw, not personal co-movement effects. The two tracks are parallel.
+
+**Flashbacks** are Personal Phase only. A Flashback may not alter any board game state resolved in the Strategic Phase of the same or any prior session.
+
+**Resources/Wealth interaction.** When a PC spends Resources during a TTRPG scene, evaluate at Cascade:
+- Faction Wealth ≥ 2× Resources rolled → no faction Wealth impact.
+- Faction Wealth < 2× Resources rolled → Faction Wealth **stressed** (−1, recovers next season).
+
+Same threshold logic applies to Circles vs. Influence. Flag for stress testing: 2×−1 variant may be needed at edge values.
+
+### Siege Protocol
+
+Sieges run at board game scale across multiple seasons. TTRPG scenes fire during a siege when:
+1. **Players seek contact** — players choose to engage a named opponent (hunting a general, attempting to negotiate surrender). Generates a mandatory TTRPG scene at player initiative.
+2. **Mechanical trigger** — a named NPC's mass battle unit attacks a PC's mass battle unit. Generates a mandatory Zoom In.
+
+All other siege activity resolves at board game scale without Zoom In.
+
+### Southernmost Expeditions in Hybrid
+
+Only relevant if the expeditioning PC is a faction leader.
+
+If another PC can proxy: that PC executes faction orders during the Strategic Phase for the expedition duration. The absent PC retains faction leadership narratively.
+
+If no PC can proxy: the faction runs on NPC AI logic. The absent faction leader may send one Belief-level directive per season, which the AI prioritises unless it conflicts with faction survival logic.
+
+The expedition PC continues Personal Phase scenes normally throughout.
+
+### Cascade Phase — Full Procedure
+
+The Cascade Phase is GM-controlled. Players do not take actions. Work through in order:
+
+1. **Domain Echoes** — apply all TTRPG personal-scene consequences from the GM ledger to faction stats on the board.
+2. **Thread consequences** — apply co-movement clock/tracker effects from any Thread operations this session (TT changes, ThS loss, Coherence changes).
+3. **Clock checks** — check TT, TC, IP against thresholds. Fire threshold events in order: TT first, TC second, IP third. Queue institutional responses for next Personal Phase.
+4. **Seasonal accounting** *(end of season only)* — faction stat changes from board orders, Knot strain ticks, ThS recovery (+2 if no Thread ops this season), Coherence recovery (Corrective Weaving results), CP awards, test track advances.
+5. **Board state update** — GM updates the board to reflect all of the above. This is the final state visible at the start of the next Strategic Phase.
+
+The Cascade Phase is not skippable. If nothing fires in steps 1–3 and it is not end of season, steps 4–5 abbreviate to board update only.
 
 ### Clock Synchronisation
 
-All three clocks (TT, TC, IP) advance at Accounting regardless of mode. In hybrid:
-- TTRPG scenes may trigger Domain Echoes that modify clocks mid-season — applied at Cascade Phase, not immediately.
-- Board game orders that affect clocks resolve at Accounting.
-- No clock advances between Personal and Strategic phases — everything batches to Accounting.
+All three clocks (TT, TC, IP) advance only in the Cascade Phase. No clock advances mid-Personal Phase or mid-Strategic Phase. All clock changes batch to Cascade step 3.
 
 ### Hybrid Endgame
 
-Both systems are active. Victory requires satisfying both personal and strategic conditions simultaneously.
+Victory requires satisfying both personal and strategic conditions simultaneously.
 
-**Hybrid victory:** A faction achieves its board game primary victory condition AND the faction leader (PC) has resolved their central Belief arc in a way that supports the victory. If the board game condition is met but the PC's arc contradicts it (e.g., Crown controls 5 territories but Almud has abandoned his duty Belief), the victory is **hollow**.
+**Hybrid victory:** A faction achieves its board game primary victory condition AND the faction leader PC has resolved their central Belief arc in a way that supports the victory. If the board game condition is met but the PC's Belief arc contradicts it, the victory is **hollow**.
 
-**Hollow victory:** The player may accept a hollow victory (mechanical win, narrative loss) or reject it and continue playing until the personal arc resolves or fails — risking erosion of the mechanical victory. This is a player choice, not a rule.
+**Hollow victory:** Player may accept (mechanical win, narrative loss) or reject (continue until personal arc resolves, risking mechanical erosion). Player choice, not a rule.
 
 **Hybrid loss:** TT 100, or faction collapse with no personal resolution.
 
@@ -3241,6 +3305,41 @@ The three-way relationship between Baralta (Church-devout, anti-overreach), Vayn
 
 ---
 
+
+
+## 12.9 Hybrid Consequence Rules
+
+### PC Death and Faction Succession
+
+On PC death: the faction enters **Crisis** (−1 to all faction stats for one season; no floor during Crisis).
+
+Player chooses one of three succession options — resolved within the same Cascade Phase:
+
+1. **Take over an existing faction-loyal NPC.** That NPC becomes a full PC with their existing stat block. No newly generated characters.
+2. **Designate another PC as successor** (requires that player's agreement). The dying player then begins a new personal character unaffiliated with the faction.
+3. **Faction passes to a named NPC** (GM-controlled). Dying player begins a new personal character unaffiliated with that faction.
+
+If no option is chosen within the Cascade Phase, option 3 defaults automatically.
+
+### Faction Collapse and Personal Characters
+
+A PC whose faction collapses continues as a personal character. They lose all dice bonuses derived from that faction (Circles dice tied to the faction, any faction-stat-derived pool modifiers). Personal attributes, Histories, Knots, Inspirations, and Beliefs are unaffected. Founding or joining a successor faction is a narrative path available through play.
+
+### Downtime in Hybrid
+
+Downtime activities (training, Inspiration recovery, Knot repair, Approach Training practice) run concurrently with the Strategic Phase. PCs may declare and resolve downtime actions during the Strategic Phase without consuming Personal Phase time.
+
+### Advancement from Board Game Play
+
+Board game successes generate CP and personal advancement. The character performed those actions; zoom level does not affect whether the experience counts. CP awards use the same criteria as TTRPG play (Belief engagement, significant Domain Action, Maxim expression). GM adjudicates at Cascade Phase seasonal accounting.
+
+### Knot and Inspiration Consequences from Board Events
+
+Mechanical consequences to Knots and Inspirations from board events are **gated by information**. They do not apply until the PC learns about the event in a TTRPG scene.
+
+**Exception:** If the very next TTRPG scene after the board event is directly and immediately connected to that event (PC witnesses the death, or the scene opens in the immediate aftermath), the consequence applies at scene open. Time has not passed; the gating condition is met by the scene itself.
+
+In all other cases — subsequent sessions, time skip implied — the consequence applies at the moment of in-scene discovery.
 
 
 # PART THIRTEEN: NAMED NPCs AND INSTITUTIONAL ACTORS
