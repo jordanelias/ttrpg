@@ -24,7 +24,7 @@ The Leap is a **full-round action (Priority 5)**. No attack, no movement, no man
 
 ### The Leap Roll
 
-**Pool:** Cognition + Attunement + relevant History bonus (e.g., "Einhir Scholar": points + 3)
+**Pool:** Attunement + relevant History bonus (e.g., "Einhir Scholar": points + 3) + TPS (Thread Pool Score = TS ÷ 10, round down)
 **TN:** 7
 **Ob:** TS 30–49 = 2 · TS 50+ = 1 · +1 Ob per Wound
 
@@ -78,7 +78,7 @@ Physical effects (a wound closing, an object moving) are visible to all.
 
 ### Wound Penalties and Thread Operations
 
-The +1 Ob per Wound penalty applies to all Thread operation rolls — Leap, Weaving, Pulling, and Forced Resolution. A practitioner with 2 Wounds faces +2 Ob on every operation, applied before scale Ob. Combat-wounded practitioners are significantly compromised in Thread work.
+The +1 Ob per Wound penalty applies to all Thread operation rolls — Leap, Weaving, Pulling, and Locking/Snapping. A practitioner with 2 Wounds faces +2 Ob on every operation, applied before scale Ob. Combat-wounded practitioners are significantly compromised in Thread work.
 
 ## 5.3 Diagnosis
 
@@ -93,7 +93,7 @@ The practitioner states what they are sensing. The GM describes:
 - Taint trace, if the configuration has been touched by a transforming practitioner
 - For past-oriented operations: the temporal weight of the configuration
 
-**Mandatory before Forced Resolution.** Skipping Diagnosis before FR: +2 Ob and automatic Gap creation on Failure regardless of degree.
+**Mandatory before Locking or Snapping.** Skipping Diagnosis before FR: +2 Ob and automatic Gap creation on Failure regardless of degree.
 
 **Mandatory before Past-Oriented Pulling.** Skipping Diagnosis before Past-Oriented Pulling: +3 Ob and a temporal Gap rather than a standard Gap on Failure.
 
@@ -104,10 +104,10 @@ The practitioner states what they are sensing. The GM describes:
 **Foregrounded dimensions:** Actuality toward coherence; temporality toward persistence. Things cohere, connect, stabilise. Effects are potentially permanent. Healing through Weaving accelerates natural temporal progression — the wound resolves as it would, but faster. Scars are real; the world is consistent. No paradox.
 
 **Requirements:** TS 30+ · Approach Training tag
-**Pool:** Cognition + Memory + relevant History bonus
+**Pool:** Spirit + relevant History bonus + TPS (Thread Pool Score = TS ÷ 10, round down)
 **TN:** 7
 
-Pre-calculate the Weaving pool on the character sheet.
+Pre-calculate the Weaving pool on the character sheet as a named entry.
 
 **Ob by scale (TS minimum required):**
 
@@ -125,8 +125,8 @@ A practitioner below the required TS cannot attempt that scale — they cannot i
 |---|---|
 | Overwhelming | Full effect. TT −1 (Relational scale or above only). Practitioner gains 1 TS. The effect exceeds the stated goal — a wound closes without scarring; a bound agreement develops genuine trust beyond its terms. |
 | Success | Full effect. TT unchanged. |
-| Partial | Partial effect (GM sets scope). TT +1. CD +1. |
-| Failure | Weave collapses. TT +2. CD +1. At TT ≥ 60: Shifting Object forms. At TT ≥ 80: Gap opens. |
+| Partial | Partial effect (GM sets scope). TT +1. ThS −1. |
+| Failure | Weave collapses. TT +2. ThS −1. At TT ≥ 60: Shifting Object forms. At TT ≥ 80: Gap opens. |
 
 **Partial Health restoration:** Weaving at Personal scale or above can restore Health that has not yet triggered a Wound. On Success: restore up to 4 lost Health points (does not heal Wounds). On Overwhelming: restore full Health and heal 1 Wound.
 
@@ -149,10 +149,10 @@ A practitioner below the required TS cannot attempt that scale — they cannot i
 **Foregrounded dimensions:** Actuality toward potential; temporality toward loosening. Draws a thread toward potential — loosens what is fixed, opens what is closed. Effects are inherently temporary: pulled threads re-actualise to their natural configuration.
 
 **Requirements:** TS 30+
-**Pool:** Cognition + Attunement + relevant History bonus
+**Pool:** Spirit + relevant History bonus + TPS (Thread Pool Score = TS ÷ 10, round down)
 **TN:** 7
 
-Pre-calculate the Pulling pool on the character sheet.
+Pre-calculate the Pulling pool on the character sheet as a named entry.
 
 **Ob by actualization level (TS minimum required):**
 
@@ -177,8 +177,8 @@ Pre-calculate the Pulling pool on the character sheet.
 |---|---|
 | Overwhelming | Full effect. Extended duration. TT unchanged. |
 | Success | Full effect. Standard duration. TT unchanged. |
-| Partial | Partial effect or reduced duration. TT +1. CD +1. |
-| Failure | Snap-back. 1 Wound (no armour). TT +2. CD +1. |
+| Partial | Partial effect or reduced duration. TT +1. ThS −1. |
+| Failure | Snap-back. 1 Wound (no armour). TT +2. ThS −1. |
 
 **Perception Pulling:** Targeting a character's awareness/perception removes their defensive action for one round.
 
@@ -198,7 +198,7 @@ Pre-calculate the Pulling pool on the character sheet.
 **Foregrounded dimension:** Temporality toward the past — drawing a thread back so a prior event never fully actualised. This produces a **Temporal Disjunction**: physical facts are removed, but memories remain intact. The past event "never fully actualised" but everyone who experienced it retains the memory.
 
 **Requirements:** TS 70+ · TT ≥ 40 · Diagnosis mandatory
-**Pool:** Cognition + Attunement + Memory + relevant History bonus (three attributes — this operation costs everything)
+**Pool:** Spirit + relevant History bonus
 **TN:** 7
 
 **Ob by recency:**
@@ -211,23 +211,32 @@ Pre-calculate the Pulling pool on the character sheet.
 | Same season | 6 |
 | Prior seasons | 7+ (escalates) |
 
+**Degree of success outcomes:**
+
+| Degree | Outcome |
+|---|---|
+| Overwhelming | Temporal Disjunction complete. Physical facts removed; memories remain fully intact. TT +3. ThS −2. Practitioner gains 1 TS. |
+| Success | Temporal Disjunction achieved. Physical facts removed; memories remain. TT +3. ThS −1. |
+| Partial | Disjunction incomplete. Physical facts partially removed at GM discretion; one material trace survives. TT +3. ThS −1. |
+| Failure | Disjunction collapse. Snap-back. Practitioner takes 2 Wounds (armour does not apply). TT +5. ThS −2. A Temporal Gap forms at the operation site. |
+
 **TT:** +3 minimum regardless of degree.
-**CD:** Automatic +3 additional (on top of any other CD costs).
+**ThS:** Automatic −3 additional (on top of any other ThS costs) — except on Failure (see above).
 
 **Co-Movement:** Past-Oriented Pulling produces secondary consequences in *both* remaining dimensions. The GM determines consequences for the actual and epistemic dimensions — not just one.
 
 **The Fraying Bane:** A practitioner who performs Past-Oriented Pulling (or FR Dissolution) three or more times in one season gains the Fraying bane. Effects drawn from the Fraying table (see §5.8).
 
-## 5.7 Forced Resolution — Collapse to One Pole
+## 5.7 Locking and Snapping — Collapse to One Pole
 
-FR collapses a thread entirely to one of its two poles. **Lock** drives it toward full actualization — permanent, unchangeable. **Dissolution** drives it toward the unintelligible pole — the thread's contribution to the rendered world dissolves. Both are irreversible without directly addressing the same thread. Both are catastrophic at scale.
+Locking and Snapping (FR) collapses a thread entirely to one of its two poles. **Lock** drives it toward full actualization — permanent, unchangeable. **Dissolution** drives it toward the unintelligible pole — the thread's contribution to the rendered world dissolves. Both are irreversible without directly addressing the same thread. Both are catastrophic at scale.
 
 **Requirements:** TS 50+ · Diagnosis immediately preceding (mandatory)
-**Pool:** Cognition + Memory + relevant History bonus
+**Pool:** Spirit + relevant History bonus
 **TN:** 7
 **Minimum Ob:** 4 regardless of target
 
-Pre-calculate the FR pool on the character sheet. It uses the same formula as the Weaving pool.
+Pre-calculate the FR pool on the character sheet as a named entry.
 
 **Declare direction before rolling:** Lock or Dissolution.
 
@@ -243,7 +252,7 @@ Pre-calculate the FR pool on the character sheet. It uses the same formula as th
 
 **FR is a full-round action (Priority 5)**. The practitioner commits entirely to the collapse.
 
-**TS 70+ Tier Reduction:** Sensitive and Resonant practitioners reduce all FR TT costs by 1 (minimum 1). This does not apply to CD costs.
+**TS 70+ Tier Reduction:** Sensitive and Resonant practitioners reduce all FR TT costs by 1 (minimum 1). This does not apply to ThS costs.
 
 ### Lock Results
 
@@ -251,8 +260,8 @@ Pre-calculate the FR pool on the character sheet. It uses the same formula as th
 |---|---|
 | Overwhelming | Target permanently locked. TT +2. Practitioner gains 1 TS. |
 | Success | Target locked. TT +2. |
-| Partial | Partial lock (GM sets scope). TT +3. CD +2. |
-| Failure | Collapse onto practitioner. Take 2 Wounds (armour does not apply). TT +4. CD +2. |
+| Partial | Partial lock (GM sets scope). TT +3. ThS −2. |
+| Failure | Collapse onto practitioner. Take 2 Wounds (armour does not apply). TT +4. ThS −2. |
 
 ### Dissolution Results
 
@@ -260,8 +269,8 @@ Pre-calculate the FR pool on the character sheet. It uses the same formula as th
 |---|---|
 | Overwhelming | Target dissolves cleanly. TT +3. Micro-Gap forms and closes within the scene. |
 | Success | Target dissolves. TT +5. Gap forms, lasts one scene, closes. |
-| Partial | Target becomes a Shifting Object. TT +6. Gap does not close without Weaving. CD +2. |
-| Failure | Full Gap tears open. TT +8. Monstrous Incursion occurs immediately. Practitioner is Incapacitated. CD +2. |
+| Partial | Target becomes a Shifting Object. TT +6. Gap does not close without Weaving. ThS −2. |
+| Failure | Full Gap tears open. TT +8. Monstrous Incursion occurs immediately. Practitioner is Incapacitated. ThS −2. |
 
 ### Representative FR Examples
 
@@ -294,11 +303,11 @@ Fires on **every** operation. The temporal dimension always moves.
 
 | Operation Type | Temporal Auto-Effect |
 |---|---|
-| Weaving (any degree) | CD +1. The target's temporal axis compresses — the present contains a healed or stabilised version earlier than natural. Observers with TS 10+ perceive the target as "clearer" or "more vivid" for 1 scene. |
-| Pulling (any degree) | CD +1. The loosened thread's temporal anchoring frays. Any social roll citing the Pulled target as historical precedent: +1 Ob until publicly reaffirmed (R40). |
-| FR Lock | CD +2. The locked configuration's temporal axis freezes. No further temporal movement is possible for that thread — it exists in a permanent present. |
-| FR Dissolution | CD +2. The dissolved configuration leaves a temporal void. All present characters feel the present as denser — temporal weight redistributed across the scene. |
-| Past-Oriented Pull | CD +3 additional. The altered past creates an epistemic paradox for witnesses: anyone who remembers the original event retains both memories. The paradox is unresolvable without Thread-level understanding. |
+| Weaving (any degree) | ThS −1. The target's temporal axis compresses — the present contains a healed or stabilised version earlier than natural. Observers with TS 10+ perceive the target as "clearer" or "more vivid" for 1 scene. |
+| Pulling (any degree) | ThS −1. The loosened thread's temporal anchoring frays. Any social roll citing the Pulled target as historical precedent: +1 Ob until publicly reaffirmed (R40). |
+| FR Lock | ThS −2. The locked configuration's temporal axis freezes. No further temporal movement is possible for that thread — it exists in a permanent present. |
+| FR Dissolution | ThS −2. The dissolved configuration leaves a temporal void. All present characters feel the present as denser — temporal weight redistributed across the scene. |
+| Past-Oriented Pull | ThS −3 additional. The altered past creates an epistemic paradox for witnesses: anyone who remembers the original event retains both memories. The paradox is unresolvable without Thread-level understanding. |
 
 ### Automatic Epistemic Co-Movement
 
@@ -332,7 +341,7 @@ The GM rolls d6 on every operation. This is the one random element in the co-mov
 
 When a Thread operation's temporal co-movement fires, the GM checks whether the practitioner has a History relevant to the operation's context. If yes: the History **resonates**.
 
-Next use of that History: the practitioner rolls 1 bonus die (d10). This represents the accumulated past briefly amplifying the present. If the bonus die shows a **1**: CD +1 (the temporal connection deepened the disjunction).
+Next use of that History: the practitioner rolls 1 bonus die (d10). This represents the accumulated past briefly amplifying the present. If the bonus die shows a **1**: ThS −1 (the temporal connection deepened the disjunction).
 
 **Constraints:**
 - Only one Resonance active per History at a time
@@ -342,17 +351,17 @@ Next use of that History: the practitioner rolls 1 bonus die (d10). This represe
 
 ### Practitioner Flashback Temporal Anchoring (R38)
 
-When a practitioner uses a Flashback (Inspiration spend to declare a retroactive scene), their Thread sensitivity means the retroactive declaration partially actualises the past scene. If the Flashback involves Thread-relevant content — locations with Thread history, people with TS 30+, Originary Locks, dissolution residue — the GM may rule: **CD +1**.
+When a practitioner uses a Flashback (Inspiration spend to declare a retroactive scene), their Thread sensitivity means the retroactive declaration partially actualises the past scene. If the Flashback involves Thread-relevant content — locations with Thread history, people with TS 30+, Originary Locks, dissolution residue — the GM may rule: **ThS −1**.
 
 This cost applies **only to practitioners**, not to non-practitioner Flashbacks. It is GM discretion, not automatic — mundane Flashbacks are unaffected.
 
-## 5.9 Coherence Degradation (CD) — 0 to 20
+## 5.9 Thread Stability (ThS) — 20 to 0
 
 Coherence Degradation tracks the growing disjunction between the practitioner's lived configuration and the world's rendered state. As a practitioner works threads, their own configuration becomes less stable across all three dimensions — intelligibility, actuality, and temporality. This is not merely temporal; the practitioner's entire rendering frays.
 
-CD is a **campaign-arc resource**, not a per-session meter. It accumulates across the campaign.
+ThS is a **campaign-arc track**, not a per-session meter. It degrades across the campaign (starts at 20, moves toward 0).
 
-### CD Accumulation
+### ThS Reduction
 
 CD accumulates through Thread operations (from co-movement auto-effects), History Resonance risk dice, and practitioner Flashback anchoring. The primary sources:
 
@@ -597,8 +606,8 @@ For table use. Print or display during play.
 | Actual | Random (d6) | Roll on §5.8 actual table. One consequence per operation. |
 
 **Then check:**
-- History Resonance? (Relevant History → bonus die on next use; risk die on 1 = CD +1)
-- Practitioner Flashback this scene? (Thread-relevant content → CD +1, GM discretion)
+- History Resonance? (Relevant History → bonus die on next use; risk die on 1 = ThS −1)
+- Practitioner Flashback this scene? (Thread-relevant content → ThS −1, GM discretion)
 
 ---
 
