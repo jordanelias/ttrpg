@@ -640,128 +640,70 @@ Items marked [EDITORIAL] above require user approval:
 
 ---
 
-## PATCH COUNT SUMMARY
+
+## PATCH PROPOSALS — AUDIT BATCH (2026-03-27)
+
+### PP-078
+**Finding:** F57 / G-128
+**Severity:** P1 → P2 downgrade candidate (text clarity, not mechanical failure)
+**Mechanic:** M-020 (Thread Sensitivity) — world-track scope
+**Issue:** §5.9 Fallout table uses per-character language ("your ThS drops") but ThS is a world-side track, not a per-character stat. All ThS-related decisions may be incorrectly applied by practitioners who read ThS as personal.
+**Proposed fix:** Rewrite §5.9 Fallout table throughout:
+- Replace: "your ThS drops" → "ThS drops"
+- Replace: "your thread sensitivity has reached" → "Thread Sensitivity in this environment has reached"
+- Add header note at §5.9: "Thread Sensitivity (ThS) is a world-side track reflecting cumulative Thread-side presence density. It is not a per-character stat."
+**Model:** Haiku 4.5 (text rewrite, no new mechanic)
+**Source:** Audit batch 2026-03-27; original sim_batch_03
+
+---
+
+### PP-079
+**Finding:** F72 / G-129
+**Severity:** P1
+**Mechanic:** M-NPC-Torben — Torben Loyalty Clock
+**Issue:** TLK drain rate entirely absent from CP14. Succession timeline and IP acceleration trigger (IP 30 = Tutoring Demand) are unplayable without knowing how fast loyalty degrades.
+**Proposed fix:** Define TLK drain rate:
+TLK starts at 10 (full loyalty). At TLK 0: Torben fully Altonian-aligned; retrieval requires narrative arc, not Domain Action.
+
+Seasonal drain:
+- No Crown contact this season: TLK −1
+- Tutoring demand refused (incl. Negotiate Delay): TLK −3 cumulative
+- Failed covert contact (Partial result): TLK −1 additional
+- Successful covert contact (Crown Intel Ob3+): TLK holds (no drain this season)
+- Successful tutoring deployment (Elske dispatched): TLK +2
+
+Milestone events (one-time, GM-tracked):
+- Altonian invasion formally announced: TLK −3
+- Altonian-Crown treaty signed: TLK −2
+- Torben ordered to renounce Valoria ties: TLK −4
+- Elske makes public political statement: TLK −2
+- Crown publicly demonstrates legitimacy: TLK +1
+
+At TLK 0: Crown loses all covert contact routes. Recovery requires Public Amnesty Domain Action (Political tier, Ob5).
+**Source:** Audit batch 2026-03-27; original sim_batch_03
+
+---
+
+### PP-080
+**Finding:** F112 / G-136
+**Severity:** P1
+**Mechanic:** M-031 (Theocracy Clock) — Church Stability TC brake
+**Issue:** TC brake fires at Church Stability ≤5. Church starts at Stability 5 (standard starting stats), permanently suppressing TC generation from Season 1. Church cannot advance TC under standard conditions.
+**Proposed fix:** Change TC brake threshold from Stability ≤5 to Stability ≤3.
+- Church Stability 4–10: normal TC accumulation (no brake)
+- Church Stability 3: TC brake activates — seasonal TC gain halved (round up)
+- Church Stability 0: PP-043 applies (TC gains fully suspended — existing mechanic unchanged)
+
+Cross-reference: PP-043 (Stability 0) unchanged. Church starting Stability (5) now operates above brake threshold.
+**Model:** Haiku 4.5 (threshold number change)
+**Source:** Audit batch 2026-03-27; original sim_batch_04
+
+---
+
+## PATCH COUNT SUMMARY (UPDATED)
 | Severity | Count |
 |----------|-------|
-| P1 | 24 |
+| P1 | 27 |
 | P2 | 43 |
 | P3 | 10 |
-| **Total** | **77** |
-
-
-## PATCH PROPOSALS — BATCH 08 ADDITIONS
-
-### PP-061
-**Finding:** F-B8-01
-**Severity:** P2
-**Mechanic:** M-016 (Pulling)
-**Proposed fix:** Add: "A successful Pull on a Thread connection underlying a social relationship reduces the target's relevant Circles rating by 1. Overwhelming Pull: by 2. The character whose Thread is altered is not aware of the cause unless they have TS ≥ 5."
-
-### PP-062
-**Finding:** F-B8-02
-**Severity:** P1
-**Mechanic:** M-021 (Coherence), M-055 (Restoration Community Weaving)
-**Proposed fix:** Add Coherence recovery: "Successful Community Weaving in a Restoration context restores the participating practitioner's Coherence +1 (to a maximum of their original score). This represents relational re-anchoring — the community provides stability that Thread work alone cannot."
-[EDITORIAL: confirm this use of M-055 as the canonical Coherence recovery path]
-
-### PP-063
-**Finding:** F-B8-03
-**Severity:** P2 (downgraded)
-**Mechanic:** M-052 (Concealment)
-**Proposed fix:** Add §X.X "Concealment Procedures": "Cover identities are established via Circles (rating = depth of cover). Each covert operation accumulates Deniability Debt (+2 for standard, +3 for Destabilisation). Exposure check Ob = DD ÷ 2 (rounded up), rolled as Circles (cover) + relevant History. On failure: cover blown — Circles (cover) → 0, DD resets. On success: cover maintained this season. A blown cover cannot be re-used."
-
-### PP-064
-**Finding:** F-B8-04
-**Severity:** P2
-**Mechanic:** M-056 (Niflhel Destabilisation)
-**Proposed fix (extends PP-008):** "Niflhel may recruit one Riskbreaker per season: Wealth 2 cost + Intel Domain Action Ob 2. Success: new Riskbreaker with DD 0 and cover identity (Circles 1) in target faction. Maximum 3 active Riskbreakers simultaneously."
-
-### PP-065
-**Finding:** F-B8-06
-**Severity:** P2
-**Mechanic:** M-026 (Monstrous Entities)
-**Proposed fix:** "ME effects (CE accumulation, Certainty checks, ThS elevation) apply to all characters in the same zone as the ME. In BG mode, ME effects apply to the entire territory the ME occupies. A zone is defined as a room, area, or location where characters are co-present."
-
-### PP-066
-**Finding:** F-B8-11
-**Severity:** P2
-**Mechanic:** M-007 (Conditions)
-**Proposed fix:** "Multiple Conditions may be active simultaneously. Same-type penalties stack additively (e.g., Rattled −1D social + Exhausted −2D all = −3D on social rolls). Different Conditions' clearing conditions are tracked independently."
-
-### PP-067
-**Finding:** F-B8-13
-**Severity:** P2
-**Mechanic:** M-008 (Thread Sensitivity)
-**Proposed fix:** "A dormant practitioner (TS 1–9) may seek training from an active practitioner (TS 20+). Seasonal training action: trainer rolls End Ob 2 (teaching effort); trainee rolls Spirit Ob 3 (receptivity). If both succeed: trainee TS +3. Failure on either: no advancement this season."
-
-### PP-068
-**Finding:** F-B8-17
-**Severity:** P2
-**Mechanic:** M-046 (Thread Ops in Combat)
-**Proposed fix (extends PP-036):** "A practitioner may split their combat round between Thread operation initiation and physical defence. Split action: Thread operation pool = TS/4 (rounded down); physical defence pool = Coord/2 (rounded down). The Thread operation still initiates at Priority 5 and manifests at Priority 1 next round."
-
-
-## PATCH PROPOSALS — BATCH 09 ADDITIONS
-
-### PP-069
-**Finding:** F-B9-06 / F83 extension
-**Severity:** P2 (F83 related)
-**Mechanic:** M-038 (Seasonal Accounting), M-034 (Faction Stats)
-**Proposed fix:** "Anti-death-spiral recovery actions may use any faction stat as the pool (player choice), representing the faction drawing on their strongest resource to survive. The Ob floor remains 4."
-
-### PP-070
-**Finding:** F-B9-06
-**Severity:** P2
-**Mechanic:** M-038 (Seasonal Accounting)
-**Proposed fix:** "If 3 or more factions simultaneously reach Wealth 0, an Economic Crisis is declared: all clocks pause for 1 season, TT −2, IP +5. Each faction may attempt one Emergency Resource action at Ob 3 using any stat (one attempt per faction, no Domain Action slot cost)."
-
-### PP-071
-**Finding:** F-B9-18
-**Severity:** P2
-**Mechanic:** M-015 (Weaving)
-**Proposed fix:** "Conditional Weaving: a practitioner may Weave a structure with a defined trigger condition (Ob +2 vs standard Weave). When the trigger condition is met (GM call or stated mechanical threshold), the Weaving activates automatically. TD cost applies at time of Weaving. Contact ends at Weaving completion."
-[EDITORIAL: confirm whether deferred Weaving is consistent with Foundations P-01 co-movement principle]
-
-### PP-072
-**Finding:** F-B9-14
-**Severity:** P2
-**Mechanic:** M-056 (Niflhel Destabilisation), M-035 (Domain Actions)
-**Proposed fix:** "Truce mechanic: two factions may declare a Truce by each spending one Political Domain Action (Ob 2). During a Truce season, neither faction may take covert or military Domain Actions targeting the other. Truce expires at season end unless renewed. Either faction may break a Truce at any time; breaking a Truce costs IP +2 (diplomatic credibility loss)."
-
-### PP-073
-**Finding:** F-B9-10, F-B9-11
-**Severity:** P2
-**Mechanic:** M-050 (Riskbreakers)
-**Proposed fix (extends PP-064):**
-- Voluntary extraction: "A Riskbreaker may extract at any DD level. DD resets to 0, cover identity is retired (Circles → 0), faction loses Riskbreaker intelligence for one season, no IP penalty."
-- Natural DD decay: "At season end, if the Riskbreaker performed no operations this season: DD −1. Minimum DD: 0."
-
-### PP-074
-**Finding:** F-B9-01
-**Severity:** P2
-**Mechanic:** M-016 (Pulling)
-**Proposed fix:** "Pulling a connection shared by multiple entities: use one roll targeting the connection itself. All entities connected by the same Thread connection are affected by the outcome. TT cost applies once per Pull regardless of the number of affected entities."
-
-### PP-075
-**Finding:** F-B9-07
-**Severity:** P2
-**Mechanic:** M-038 (Seasonal Accounting), M-045 (Mass Combat)
-**Proposed fix:** "During a season of active military conflict, each belligerent faction pays additional upkeep equal to Military stat ÷ 2 (rounded up) in Wealth. This represents supply, logistics, and campaign costs."
-
-### PP-076
-**Finding:** F-B9-13
-**Severity:** P2
-**Mechanic:** M-051 (Devout Constraint)
-**Proposed fix:** "Dissonance Marks require at least one scene between accumulations. A character cannot accumulate more than one Dissonance Mark in a single scene regardless of the number of triggering events in that scene."
-
-### PP-077
-**Finding:** F-B9-04 / F-B9-08 (consolidated)
-**Severity:** P1
-**Mechanic:** M-021 (Coherence), M-026 (Monstrous Entities)
-**Proposed fix:** "At Coherence 0, the character enters the Monstrous state:
-- Retained: TS, TD, all physical stats, combat capability
-- Lost: Circles (all ratings drop to 0), Beliefs (replaced by Thread-driven compulsions defined with GM), social accessibility
-- Gained: +5D on all Thread operations; ME effects on all in zone (CE +1/scene, ThS +2/scene); cannot communicate in human language if Intelligibility ≤ 2
-- Play continuation: a player may continue playing a Monstrous character with group consent; this is an advanced arc requiring GM preparation
-- Recovery: Coherence 0 → 1 requires: sustained Restoration Community Weaving (minimum 3 successful collective ops at the Monstrous character's location) AND voluntary cessation of all Thread operations for that period"
-[EDITORIAL: confirm Monstrous character play continuation is intended as a campaign option]
+| **Total** | **80** |
