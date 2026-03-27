@@ -503,6 +503,10 @@ Wound in the rendered world's fabric.
 
 **Certainty cost:** −1 per scene near a Gap (no Spirit check to resist).
 
+**Certainty Recovery:** Between scenes (downtime, travel, or deliberate grounding), a practitioner may attempt to recover Certainty: roll Spirit, TN 7, Ob 2. Success: +1 Certainty (cannot exceed Spirit score). Failure: no change. This roll may only be attempted once per scene of downtime — not during active Thread engagement.
+
+*Design note:* Certainty loss is not simply damage. Low Certainty is existential exposure — the same pressure that drives TS growth. A practitioner who never loses Certainty never fully confronts what the Thread is. Recovery is possible but not guaranteed; some practitioners carry low Certainty as a permanent condition of their practice.
+
 **Thread operations within range:** +1 Ob (stacks with other penalties).
 
 **Seasonal escalation:** Every season a Gap remains open: TT +4.
