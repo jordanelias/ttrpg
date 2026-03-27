@@ -19,7 +19,7 @@ Valoria's political landscape is contested by eight factions, six with full mech
 
 **Partial sheets:** Niflhel (no Mandate, no Military), Revolution (Influence, Stability, Intel only), Lowenritter (no Mandate, no Wealth — Military, Intel, Influence, Stability only).
 
-**NPC personal pools** (used in social scenes and investigations) are separate from faction stats. An NPC like Baralta has personal Poise, Heart, Presence etc. on the standard 1–10 attribute scale. Faction stats represent institutional capacity; NPC attributes represent personal capability.
+**NPC personal pools** (used in social scenes and investigations) are separate from faction stats. An NPC like Baralta has personal Cognition, Attunement, Presence etc. on the standard 1–10 attribute scale. Faction stats represent institutional capacity; NPC attributes represent personal capability.
 
 ### Starting Values
 
@@ -215,7 +215,7 @@ Vaynard maintains a collection of Einhir artefacts and Thread-locked objects. On
 | **Failure** | Artefact's Thread signature detected by a practitioner. Church Intel gains +1D vs Varfell for 1 season. TT +1. |
 | **Long-term cost** | Each use: +1 to Vaynard's hidden TS. At TS 14+ (his starting value), each use triggers Spirit check TN 7 Ob 1 for a Discovery Event. |
 
-**PC takeover — Collection Discovery Event:** If a non-Vaynard PC takes over Varfell, the Private Collection transfers as an institutional asset (the artefacts exist physically). However, encountering the collection for the first time triggers a mandatory Discovery Event: the new leader finds Vaynard's research notes alongside Thread-locked objects of obvious significance. Heart check TN 7 Ob 1. Success: the player understands what they have inherited and gains TK 1 immediately. Failure: the weight of the collection lands without context — Certainty −1 and a new Belief is offered from behind a position of ignorance.
+**PC takeover — Collection Discovery Event:** If a non-Vaynard PC takes over Varfell, the Private Collection transfers as an institutional asset (the artefacts exist physically). However, encountering the collection for the first time triggers a mandatory Discovery Event: the new leader finds Vaynard's research notes alongside Thread-locked objects of obvious significance. Spirit check TN 7 Ob 1. Success: the player understands what they have inherited and gains TK 1 immediately. Failure: the weight of the collection lands without context — Certainty −1 and a new Belief is offered from behind a position of ignorance.
 
 **Default Leader: Duke Magnus Vaynard**
 - Conviction: Reason · Resonant Style: Consequence · TS: 14 (Dormant; unrecognised)
