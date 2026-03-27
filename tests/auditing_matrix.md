@@ -343,3 +343,17 @@ M-62 (BG Turn Structure — full scenario not run), M-63 (Simultaneous order pla
 
 ## Note: sim_coverage_matrix.md (tests/) — RETIRED
 The 56-mechanic schema in sim_coverage_matrix.md is superseded by this document's 82-mechanic schema. sim_coverage_matrix.md is retained as a historical artifact only. Do not update it. All coverage tracking uses this file (auditing_matrix.md).
+
+---
+
+## Note: Test File Naming Convention (P1-6, established 2026-03-27)
+
+**Canonical schema going forward:** `sim_batch_{NN}.md` (zero-padded, e.g. `sim_batch_05.md`)
+
+| Schema | Files | Status |
+|--------|-------|--------|
+| `valoria_stress_tests_batch{N}.md` | batch2–batch6, sonnet46 | Complete; not renamed; reference only |
+| `sim_batch_{NN}.md` | sim_batch_02–04, sim_batch_novel_connections | **Active schema** |
+| one-off (`valoria_f33b_simulation.md`) | 1 file | Reference only |
+
+**Rule:** All new simulation batch files use `sim_batch_{NN}.md`. Descriptive suffixes permitted for special batches (e.g. `sim_batch_05_bg_scenarios.md`). No new `valoria_stress_tests_` files.
