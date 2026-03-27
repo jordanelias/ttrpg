@@ -193,14 +193,14 @@ Roll: Mandate vs target leader's Mandate (or Ob 2 for non-leaders).
 - Himmelenger (Cathedral City): 0 TC value. Church starts controlling it. Losing Himmelenger: TC −5 immediately.
 - All other Church-controlled territories: +1 TC flat on gaining control; −1 TC on losing control.
 - Valorsplatz: +5 TC flat on gaining control; −5 TC on losing control.
-- **Expansion lock:** Church may not control more than 1 territory (Himmelenger) until TC ≥ 70. Territorial seizure unlocks at TC 70 (see C-03).
+- **Expansion lock:** Church may not control more than 1 territory (Himmelenger) until TC ≥ 40. Territorial seizure unlocks at TC 40 (adjusted: Church needs room to expand and reach Valorsplatz before hitting the TC 60 victory threshold).
 - **TC ceiling:** Cannot reach 100 without controlling Valorsplatz (the +5 flat score is required for the final push).
 
 **Order Set:** Preach · Govern · Inquisition · Military (Templar deploy) · Excommunication (Unique) · Diplomacy
 
 **Thread Capability:** None. Knights Templar units are immune to Co-Movement card effects that would reduce their Cohesion.
 
-**Victory Condition:** *The Holy State.* TC reaches 80 with Church Mandate ≥ 5 and Church controlling Himmelenger + Valorsplatz. TC reaching 100 without controlling Himmelenger + Valorsplatz is not a Church victory — it is a collective loss (see B10).
+**Victory Condition:** *The Holy State.* TC reaches 60 with Church Mandate ≥ 5 and Church controlling Himmelenger + Valorsplatz. This condition can be met under shared survival (TC 60 < 80 threshold). TC reaching 100 triggers THE HOLY STATE endgame event regardless (see B10) — that is a separate, escalated resolution path.
 
 ---
 
