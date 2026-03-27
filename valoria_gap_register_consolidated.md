@@ -113,7 +113,7 @@
 | G-032 | Asymmetric faction powers per faction | Session review | Design |
 | G-033 | Army levy / mustering from territories | Session review | Design |
 | G-097 | BUG-002: Stage3 compilation file uses obsolete attribute names (Heart/Poise) — not in 10-attribute list; Leap/Weaving/Pulling pools reference wrong attributes | BT3 preflight | Fix stage3 to match CP14 |
-| G-098 | BUG-003 [EDITORIAL]: Domain Ob formula — stage6 spec (stat ÷ 2, round up) vs CP14 (direct stat 1–7, no division). CP14 is canonical; stage6 must be confirmed intentional or corrected | BT3 preflight | Editorial confirm + fix stage6 |
+| G-098 | BUG-003: Domain Ob formula — confirmed direct stat 1–7 (no division); faction stat adds to pool when leader held. stage6 fixed 2026-03-27 | BT3 preflight | ✅ Closed |
 | G-099 | Edge-8: Mid-Debate incapacitation has no resolution rule. Character drops to 0 Composure partway through a Debate — no rule specifies what happens to remaining exchanges | BT3-04 | Fix: concede all remaining exchanges; add to §9.6 |
 | G-100 | Renown F-09: "Initial advantage" scope in Debate undefined — applies to Exchange 1 only or all exchanges? No ruling in §10.5 or §9.6 | BT3-06 | Fix: define as Exchange 1 only in §10.5 |
 | G-101 | F-12 (Niflhel): Supremacy tiebreak missing — no rule when multiple networks are equally leading or equally weakest at seasonal accounting | BT3-08 | Fix: tie-leading = all +1 Intel; tie-weakest = random selection |
@@ -269,18 +269,18 @@
 
 | Category | Total | Resolved | Design | Open | Closed/Cut | Deferred |
 |----------|-------|----------|--------|------|------------|----------|
-| P1 | 23 | 7 | 16 | 0 | 0 | 0 |
+| P1 | 23 | 8 | 15 | 0 | 0 | 0 |
 | P2 (main) | 63 | 18 | 29 | 8 | 7 | 0 |
 | P2 (consolidation) | 5 | 5 | 0 | 0 | 0 | 0 |
 | Hybrid (G-074–G-095) | 22 | 5 | 14 | 0 | 0 | 0 |
 | P3 | 4 | 0 | 0 | 1 | 0 | 3 |
 | **Total** | **117** | **35** | **59** | **9** | **7** | **3** |
 
-**Editorial blockers: 1** (G-098 — Domain Ob formula confirmation)
-**Design needed: 59 items**
-**Resolved awaiting compilation: 35 items**
+**Editorial blockers: 0**
+**Design needed: 58 items**
+**Resolved awaiting compilation: 36 items**
 **Closed/cut: 7 items**
-*Last updated: 2026-03-27 — added G-096 (closed), G-097–G-104 (BT3 simulation findings)*
+*Last updated: 2026-03-27 — G-098 closed (editorial confirmed + stage6 fixed)*
 
 ---
 
