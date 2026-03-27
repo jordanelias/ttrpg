@@ -1,40 +1,47 @@
 session_close: 2026-03-27
-checkpoint: 14-batch5
+checkpoint: 14-batch5-batch6
 model: claude-sonnet-4-6
 completed_stages:
-  - Batch 5 simulation: M-01 through M-09 (core combat engine)
-  - Modes: A isolation, B interaction, D edge cases
-  - 9 mechanics tested, 11 findings total
+  - Applied all Batch 5 fixes to stage8 + CP14 (P1 + 7x P2 + 3x P3)
+  - Ran Batch 6: social mechanics M-38 through M-41 (4 mechanics, 12 findings)
+  - Applied all non-editorial Batch 6 fixes to CP14
 
 commits:
-  batch5: 542821d91a00
+  stage8: bca244db2f8f
+  cp14_batch5: 638b494fa2f8
+  batch6_sim: 5b38ff4fb666
+  cp14_batch6: [this commit]
 
-findings_summary:
-  P1: 1
-    - B5-M07-A: §1.9 and §8.1 group bonus tables contradict at 3+ attackers — §8.1 must be removed
-  P2: 7
-    - B5-M03-A: Stamina "in a row" qualifier allows infinite reset exploit — remove qualifier
-    - B5-M04-C: Projectile range closing Ob undefined — add Agility check
-    - B5-M07-C: Single ally nullifies all group bonuses (all-or-nothing) — reduce by one tier per ally
-    - B5-M08-B: Beginner's Luck "first mark" on unestablished History undefined
-    - B5-B02-B: Defence splitting across 3+ attackers needs explicit declaration rule
-    - B5-D01: No combat escape / Flee procedure defined
-    - B5-D03: Mutual full-guard stalemate has no mechanical escape — add Stamina fatigue for consecutive full guard
-  P3: 3
-    - B5-M03-C: Catch Breath timing unspecified
-    - B5-M05-B: Thread contact across zone transitions not stated
-    - B5-M06-B: Late entrants to combat have no insertion rule
+batch5_fixes_applied:
+  - P1: §8.1 Group Attacks table removed, §1.9 XRef + defence splitting note added
+  - P2: Stamina "in a row" removed; projectile closing Ob defined; Fibonacci tier-reduction;
+         BL provisional History tag; combat escape/Flee procedure; full-guard fatigue rule
+  - P3: Catch Breath timing; Thread contact zone transitions; late entrant initiative insertion
+  - bonus: stage8 Coordination→Agility (16x), FR→Locking or Snapping at P5
 
-passes:
-  - Pool split dynamics (M-01): lethal exchange, initiative advantage, full-guard all correct
-  - Wound gate system (M-02): cascade math, carryover, cap all clean
-  - Zone movement (M-05): narrative design correct
-  - Momentum (M-09): Thread exclusion, spend math clean
+batch6_findings:
+  P1:
+    - B6-B03-C: Renamed "Debate Compromise Rule" to "Register Separation Rule"
+  P2_fixed:
+    - B6-M38-B: Inspiration discovery mechanic defined (Attunement Ob 3 / Cognition Ob 4)
+    - B6-M38-D: Grand Debate 5-0 seasonal penalty — Seasonal Condition tracking added
+    - B6-M39-B: Reading Exchange failure — one-step disposition shift (GM discretion)
+    - B6-M39-C: Simultaneous Reading — resolve both before narrating
+    - B6-M40-B: Appeal Partial — condition/satisfaction mechanism defined
+    - B6-M40-C: Appeal Partial follow-up vs Let It Ride clarified
+    - B6-M41-A: Approach Training acquisition procedure defined (mentor + Spirit Ob 2)
+    - B6-B04-A: Reading Exchange bonus scope restricted to Debate Exchanges only
+    - B6-D03: Appeal failure disposition hardening — GM discretion, not mandatory
+  P2_editorial_pending:
+    - B6-M41-B: Approach Training CP cost — requires user ruling
 
-mechanics_now_tested: 9 (M-01 through M-09) + all prior batches
-remaining_untested: ~21 (down from 30)
+mechanics_tested_total: 13 (M-01 through M-09, M-38 through M-41)
+remaining_untested: ~17
 
 next_action:
-  task: Apply P1 fix (§8.1 group bonus table removal) and P2 fixes to CP14 + stage8_combat.md
-  model: Sonnet 4.6 (mechanical judgment on wording)
-  then: Batch 6 — social mechanics (M-38 through M-41) or History Resonance / Certainty blast radius
+  options:
+    A: Apply Batch 6 fixes to stage9_social.md (propagation)
+    B: Batch 7 — Impression Track (M-33), Defection (M-53), Renown (M-36) interaction chain
+    C: Editorial ruling on B6-M41-B (Approach Training CP cost)
+  recommended: C then A then B (clear editorial gate, propagate, continue simulation)
+  model: Sonnet 4.6
