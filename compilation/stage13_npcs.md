@@ -226,6 +226,15 @@ Vaynard knows this and is calculating: Maret is the most valuable person on the 
 
 **Coup threshold.** Ehrenwall has not yet concluded the Crown has failed the nation. When she does, she will act without hesitation or remorse. She is the most dangerous NPC in the game: patient, competent, and commanding an army.
 
+**Coup Counter (0–3, GM-tracked, private).** Fires at 3. Increments:
+- TC reaches 40 while the Crown took no action to reduce it that season (+1)
+- Torben's loyalty reaches 3–2 or lower (+1)
+- Crown loses two or more territories in one season without a military response Domain Action (+1)
+
+Counter never decrements. Once marked, Ehrenwall does not revise.
+
+**Coup execution (Counter = 3):** At next seasonal accounting, Ehrenwall issues a formal demand: Almud cedes command authority or the Löwenritter act. If Almud refuses (or players do not intervene): Martial Law fires across all Crown territories. See §8.9 for Martial Law mechanics.
+
 **Relationship to the heir.** Views Torben's potential removal to Altonia as a direct sovereignty threat. If Almud surrenders the heir, coup trigger condition #2 is met.
 
 **Relationship to the Church.** Cold contempt. The Löwenritter predates the Church of Galbados in Valoria. She will not challenge it theologically, but will never cede military authority to Templars.
