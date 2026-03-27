@@ -30,7 +30,7 @@ At 2 players: recommended pairing is Crown vs. Church. All other match-ups are s
 
 **Boards and Tracks**
 - 1× Main board: territory map (15 territories in adjacency layout), 3 clock tracks (TT 0–100, TC 0–100, IP 0–100), seasonal accounting track, round structure reference
-- 3× Clock sliders or tokens: one per track (TT starts at 28, TC at 22, IP at 20)
+- 3× Clock sliders or tokens: one per track (TT starts at 28, TC at 15, IP at 20)
 - 15× Territory tiles: double-sided (controlled/uncontrolled), showing Prosperity and Fortification values
 - 1× Seasonal accounting board: faction stat grid, pending Domain Action queue, stability check record
 
@@ -68,9 +68,9 @@ Before play begins, apply starting setup from territorial and faction records:
 
 **Faction stats:** Set all faction stat dials to starting values per faction sheet.
 
-**Clocks:** Place TT at 28. TC at 22. IP at 20.
+**Clocks:** Place TT at 28. TC at 15. IP at 20.
 
-**Units:** Each player-controlled faction places 1 Light Infantry unit in their home territory at game start. Crown receives 1 additional unit in Ehrenfeld (Löwenritter garrison).
+**Units:** Each player-controlled faction places 1 Light Infantry unit in their home territory at game start. Crown receives 1 additional unit in Arnesheld (Löwenritter garrison).
 
 **Event deck:** Shuffle. Place face-down beside board.
 
@@ -83,17 +83,17 @@ Before play begins, apply starting setup from territorial and faction records:
 The 15 territories are arranged in a north-south axis. The board represents the Valorian peninsula. Connections are adjacency-based (not hex grid); movement costs are abstracted via the march order procedure.
 
 ```
-                    [15: Schoenland] ─── [4: Border Pass]
+                    [15: Schoenland] ─── [4: Spartfell]
                           |                     |
-[7: Sternhaven] ──── [6: Hafenstadt] ──── [1: Valorsplatz] ──── [2: Kronmark]
+[7: Lowenskyst] ──── [6: Hafenvalor] ──── [1: Valorsplatz] ──── [2: Gransol]
        |                  |                     |                      |
-       └──────── [3: Himmelstift] ─────── [5: Ehrenfeld] ────── (to 4)
+       └──────── [3: Himmelenger] ─────── [5: Arnesheld] ────── (to 4)
                           |
-[8: Grauwald] ──── [10: Schwarzmarkt]
+[8: Eidursjo] ──── [10: Sigurdshelm]
        |                  |
-[11: Feldmark]      [9: Eisengrund] ──── [12: Sudwald]
+[11: Halvardshelm]      [9: Varfell] ──── [12: Oastad]
        |                  |                    |
-       └──────────── [14: Korntal]      [13: Askeheim]
+       └──────────── [14: Varfell]      [13: Stillhelm]
 ```
 
 *Abbreviated layout for reference. Full adjacency from territory table below.*
@@ -103,19 +103,19 @@ The 15 territories are arranged in a north-south axis. The board represents the 
 | # | Territory | Starting Control | Prosperity | Fort | Special Property | Adjacent |
 |---|---|---|---|---|---|---|
 | 1 | Valorsplatz (Capital) | Crown | 6 | 2 | Royal Court: Crown Decree −1 Ob. Parliament: Hafenmark Influence −1 Ob. | 2, 3, 5, 6 |
-| 2 | Kronmark (Crown heartland) | Crown | 5 | 1 | Garrison: +1D Muster here. | 1, 3, 4 |
-| 3 | Himmelstift (Cathedral city) | Church | 5 | 2 | Grand Cathedral: TC +1/season Church controls. Church Excommunicate −1 Ob here. | 1, 2, 6, 7 |
-| 4 | Border Pass | Crown | 3 | 2 | Altonian Border: IP threshold events trigger here first. Invasion entry point. | 2, 5, 15 |
-| 5 | Ehrenfeld (Military heartland) | Crown / Löwenritter | 4 | 3 | Löwenritter Fortress: Martial Law −1 Ob. Fort max 4. | 1, 4, 9 |
-| 6 | Hafenstadt (Hafenmark capital) | Hafenmark | 6 | 1 | Ducal Court: Sovereign Authority may be invoked here. Major port. | 1, 3, 7, 8 |
-| 7 | Sternhaven (Northern port) | Hafenmark | 5 | 0 | Trade Hub: all Trade orders +1D. Schoenland sea route terminus. | 3, 6, 8 |
-| 8 | Grauwald (Forest region) | Guilds | 4 | 0 | Timber/Mining: Guilds Trade +1D. Difficult terrain: March costs 2 movement. | 6, 7, 10, 11 |
-| 9 | Eisengrund (Southern highlands) | Varfell | 4 | 1 | Varfell Seat: Private Collection usable here only. Einhir ruins: Revolution Weaving −1 Ob. | 5, 10, 12, 13 |
-| 10 | Schwarzmarkt (Underground) | Niflhel | 3 | 0 | Black Market: Niflhel Quiet −1 Ob. All Trade +1 Ob (illicit). | 8, 9, 11 |
-| 11 | Feldmark (Farming plains) | Guilds | 5 | 0 | Breadbasket: +1 Prosperity/season if uncontested. Muster Ob −1. | 8, 10, 14 |
-| 12 | Sudwald (Southern forest) | Uncontrolled | 3 | 0 | Thread Wound: TT threshold events trigger at TT −10 here. Revolution informal. | 9, 13, 14 |
-| 13 | Askeheim (Southernmost border) | Uncontrolled | 2 | 0 | Southernmost Access: required for Expedition. All non-Thread orders +1 Ob. | 9, 12 |
-| 14 | Korntal (Southern farmland) | Revolution (informal) | 4 | 0 | Einhir Heartland: Revolution Influence −1 Ob. Church Influence +1 Ob. | 11, 12 |
+| 2 | Gransol (Crown heartland) | Crown | 5 | 1 | Garrison: +1D Muster here. | 1, 3, 4 |
+| 3 | Himmelenger (Cathedral city) | Church | 5 | 2 | Grand Cathedral: TC +1/season Church controls. Church Excommunicate −1 Ob here. | 1, 2, 6, 7 |
+| 4 | Spartfell | Crown | 3 | 2 | Altonian Border: IP threshold events trigger here first. Invasion entry point. | 2, 5, 15 |
+| 5 | Arnesheld (Military heartland) | Crown / Löwenritter | 4 | 3 | Löwenritter Fortress: Martial Law −1 Ob. Fort max 4. | 1, 4, 9 |
+| 6 | Hafenvalor (Hafenmark capital) | Hafenmark | 6 | 1 | Ducal Court: Sovereign Authority may be invoked here. Major port. | 1, 3, 7, 8 |
+| 7 | Lowenskyst (Northern port) | Hafenmark | 5 | 0 | Trade Hub: all Trade orders +1D. Schoenland sea route terminus. | 3, 6, 8 |
+| 8 | Eidursjo (Forest region) | Guilds | 4 | 0 | Timber/Mining: Guilds Trade +1D. Difficult terrain: March costs 2 movement. | 6, 7, 10, 11 |
+| 9 | Varfell (Southern highlands) | Varfell | 4 | 1 | Varfell Seat: Private Collection usable here only. Einhir ruins: Revolution Weaving −1 Ob. | 5, 10, 12, 13 |
+| 10 | Sigurdshelm (Underground) | Niflhel | 3 | 0 | Black Market: Niflhel Quiet −1 Ob. All Trade +1 Ob (illicit). | 8, 9, 11 |
+| 11 | Halvardshelm (Farming plains) | Guilds | 5 | 0 | Breadbasket: +1 Prosperity/season if uncontested. Muster Ob −1. | 8, 10, 14 |
+| 12 | Oastad (Southern forest) | Uncontrolled | 3 | 0 | Thread Wound: TT threshold events trigger at TT −10 here. Revolution informal. | 9, 13, 14 |
+| 13 | Stillhelm (Southernmost border) | Uncontrolled | 2 | 0 | Southernmost Access: required for Expedition. All non-Thread orders +1 Ob. | 9, 12 |
+| 14 | Eisengrund (Southern farmland) | Revolution (informal) | 4 | 0 | Einhir Heartland: Revolution Influence −1 Ob. Church Influence +1 Ob. | 11, 12 |
 | 15 | Schoenland (Altonian port) | Neutral | 5 | 1 | Altonian Trade: +1 Wealth/season to faction with active Trade order here. Intel orders reveal to Altonia. At IP 75+: Altonian vanguard deploys. | 4, 7 |
 
 ### Territory Rules
@@ -124,7 +124,7 @@ The 15 territories are arranged in a north-south axis. The board represents the 
 
 **Contested territories:** No Prosperity benefit, no Muster action permitted.
 
-**Fortification cap:** Standard maximum is 3. Ehrenfeld only: maximum 4.
+**Fortification cap:** Standard maximum is 3. Arnesheld only: maximum 4.
 
 **Uncontrolled territories (12, 13):** First Govern action claims them (no battle required if no enemy units present).
 
@@ -162,9 +162,9 @@ Once per season. Roll Mandate vs Ob 2.
 
 **Thread Capability:** None (institutional). Almud has TS 28 (Dormant) — this is a narrative property, not a BG mechanic.
 
-**Löwenritter Integration:** Crown controls Ehrenfeld garrison. If coup threshold fires (see B8 NPC AI), the Löwenritter acts as a separate BG faction under NPC AI for the remainder of the game.
+**Löwenritter Integration:** Crown controls Arnesheld garrison. If coup threshold fires (see B8 NPC AI), the Löwenritter acts as a separate BG faction under NPC AI for the remainder of the game.
 
-**Victory Condition:** *Constitutional Stability.* At game end: Crown controls Valorsplatz + Kronmark + at least 2 other territories; Mandate ≥ 5; TC < 60; IP < 75; Torben's Loyalty Clock ≥ 5. All conditions must be met simultaneously.
+**Victory Condition:** *Constitutional Stability.* At game end: Crown controls Valorsplatz + Gransol + at least 2 other territories; Mandate ≥ 5; TC < 60; IP < 75; Torben's Loyalty Clock ≥ 5. All conditions must be met simultaneously.
 
 ---
 
@@ -189,11 +189,18 @@ Roll: Mandate vs target leader's Mandate (or Ob 2 for non-leaders).
 
 **TC Driver:** Church Mandate 5+ at accounting: TC +1/season. Stability ≤ 4: TC generation pauses.
 
+**Territory TC Scores (flat, non-accruing — Church-controlled territories only):**
+- Himmelenger (Cathedral City): 0 TC value. Church starts controlling it. Losing Himmelenger: TC −5 immediately.
+- All other Church-controlled territories: +1 TC flat on gaining control; −1 TC on losing control.
+- Valorsplatz: +5 TC flat on gaining control; −5 TC on losing control.
+- **Expansion lock:** Church may not control more than 1 territory (Himmelenger) until TC ≥ 70. Territorial seizure unlocks at TC 70 (see C-03).
+- **TC ceiling:** Cannot reach 100 without controlling Valorsplatz (the +5 flat score is required for the final push).
+
 **Order Set:** Preach · Govern · Inquisition · Military (Templar deploy) · Excommunication (Unique) · Diplomacy
 
 **Thread Capability:** None. Knights Templar units are immune to Co-Movement card effects that would reduce their Cohesion.
 
-**Victory Condition:** *The Holy State.* TC reaches 80 with Church Mandate ≥ 5 and Church controlling Himmelstift + Valorsplatz. Alternatively: TC reaches 100 regardless of other conditions (but this triggers the TC Holy State game-end event, which is not a faction victory — see B10).
+**Victory Condition:** *The Holy State.* TC reaches 80 with Church Mandate ≥ 5 and Church controlling Himmelenger + Valorsplatz. TC reaching 100 without controlling Himmelenger + Valorsplatz is not a Church victory — it is a collective loss (see B10).
 
 ---
 
@@ -212,7 +219,7 @@ Roll: Mandate vs target leader's Mandate (or Ob 2 for non-leaders).
 **TC Suppression:** While Baralta's Mandate ≥ 4: TC −1/season (passive suppression). Lost if Mandate drops below 4 or Baralta is excommunicated (TC +4 immediately on excommunication).
 
 **Unique Power — Sovereign Authority Doctrine**
-Once per game (not per season). Roll Mandate vs Ob 4. At Hafenstadt only.
+Once per game (not per season). Roll Mandate vs Ob 4. At Hafenvalor only.
 - Overwhelming: TC −3. Church Mandate −1. Heresy Investigation blocked this season. +1D social vs Church for the arc.
 - Success: TC −2. Church Mandate −1. Heresy Investigation opens against Baralta (Ob 4).
 - Partial: TC −1. Heresy Investigation opens immediately. Church Influence +1.
@@ -222,7 +229,7 @@ Once per game (not per season). Roll Mandate vs Ob 4. At Hafenstadt only.
 
 **Thread Capability:** None.
 
-**Victory Condition:** *Constitutional Order.* At game end: Hafenmark controls Hafenstadt + Sternhaven; Mandate ≥ 4; TC < 50; no outstanding Heresy Investigation against Baralta; at least one Parliamentary ruling in Hafenmark's favour.
+**Victory Condition:** *Constitutional Order.* At game end: Hafenmark controls Hafenvalor + Lowenskyst; Mandate ≥ 4; TC < 50; no outstanding Heresy Investigation against Baralta; at least one Parliamentary ruling in Hafenmark's favour.
 
 ---
 
@@ -239,7 +246,7 @@ Once per game (not per season). Roll Mandate vs Ob 4. At Hafenstadt only.
 - Deviation cost: Stability check Ob 2
 
 **Unique Power — The Private Collection**
-Available in Eisengrund only. Once per season. Roll Intel vs Ob 2.
+Available in Varfell only. Once per season. Roll Intel vs Ob 2.
 - Success (choose one): +2D to one Thread-related Domain Action this season; OR reveal one hidden faction stat; OR −1 Ob to one Einhir Research action.
 - Failure: Artefact Thread signature detected. Church Intel +1D vs Varfell for 1 season. TT +1.
 - Thread Knowledge Track (TK 0–5): Advances through the Collection. See B7 for TK effects.
@@ -248,7 +255,7 @@ Available in Eisengrund only. Once per season. Roll Intel vs Ob 2.
 
 **Thread Capability:** Indirect. The Collection provides Thread-adjacent effects without direct Thread operations. At TK 5, Vaynard understands Thread structure — but this is a narrative development, not a BG roll.
 
-**Victory Condition:** *Information Supremacy.* At game end: Varfell Intel ≥ 6; TK ≥ 3; control of Eisengrund; Vaynard has revealed at least 2 hidden faction stats. Alternatively: deliver Thread-knowledge intelligence to the Revolution enabling their Community Weaving success at TT < 40.
+**Victory Condition:** *Information Supremacy.* At game end: Varfell Intel ≥ 6; TK ≥ 3; control of Varfell; Vaynard has revealed at least 2 hidden faction stats. Alternatively: deliver Thread-knowledge intelligence to the Revolution enabling their Community Weaving success at TT < 40.
 
 ---
 
@@ -275,7 +282,7 @@ Roll Wealth vs target faction Wealth.
 
 **Thread Capability:** None.
 
-**Victory Condition:** *Economic Dominance.* At game end: Guilds Wealth ≥ 6; control of Feldmark + Grauwald; Guild Favour ≥ 5 in at least 3 territories; Schoenland trade route active (IP < 75).
+**Victory Condition:** *Economic Dominance.* At game end: Guilds Wealth ≥ 6; control of Halvardshelm + Eidursjo; Guild Favour ≥ 5 in at least 3 territories; Schoenland trade route active (IP < 75).
 
 ---
 
@@ -288,7 +295,7 @@ Roll Wealth vs target faction Wealth.
 - Covert actions: **−1 Ob**
 - Public or open-credit actions: **+2 Ob**
 
-**Leader:** None (four-arm decentralised structure). Each arm (Dockworkers, Reckoners, Burned, Quiet) acts as an independent officer. Redirecting any arm: Intel vs Ob 3 within Niflhel.
+**Structure:** Four competing criminal networks (Sollvik, Hafenbund, Bernweg, Stiltsift). No unified leader. Each network acts as an independent officer. Redirecting any network: Intel vs Ob 3 within Niflhel. See CP14 §8.7 for full network details.
 
 **Unique Power — The Quiet Network**
 Choose mode before rolling.
@@ -305,7 +312,7 @@ Choose mode before rolling.
 
 **Thread Capability:** Indirect and unintentional. TT rises from Niflhel operations without faction knowledge.
 
-**Victory Condition:** *Shadow Supremacy.* At game end: Niflhel Intel ≥ 5; control of Schwarzmarkt; at least 3 pieces of hidden faction information held; no arm of Niflhel publicly compromised; Stability ≥ 4.
+**Victory Condition:** *Shadow Supremacy.* At game end: Niflhel Intel ≥ 5; control of Sigurdshelm; at least 3 pieces of hidden faction information held; no arm of Niflhel publicly compromised; Stability ≥ 4.
 
 ---
 
@@ -388,7 +395,7 @@ Orders resolve in this sequence. Within same priority: simultaneous (declare bef
 **MARCH**
 *Purpose:* Move military units between territories.
 
-No roll required for standard movement. One unit moves one territory per March order. Grauwald costs 2 movement.
+No roll required for standard movement. One unit moves one territory per March order. Eidursjo costs 2 movement.
 
 *Contested entry:* Moving into a territory with enemy units triggers immediate battle resolution (see B6). Both sides declare disposition before rolling.
 
@@ -409,8 +416,8 @@ No roll required for standard movement. One unit moves one territory per March o
 | Failure | −1 Wealth. Goods lost or taxed. |
 
 *Roll:* Wealth vs Ob = territory Prosperity ÷ 3 (round up), minimum Ob 1.
-*Special:* Trade Hub (Sternhaven) and Altonian Trade (Schoenland while active): +1D to Trade rolls in those territories.
-*Schwarzmarkt:* All factions Trade at +1 Ob in Schwarzmarkt.
+*Special:* Trade Hub (Lowenskyst) and Altonian Trade (Schoenland while active): +1D to Trade rolls in those territories.
+*Sigurdshelm:* All factions Trade at +1 Ob in Sigurdshelm.
 
 ---
 
@@ -461,7 +468,7 @@ Roll: Mandate vs Ob = opponent's Influence ÷ 2 (round up).
 Roll: Mandate vs Ob = territory population resistance (proxy: GM assigns 1–3 based on Revolution Influence in territory).
 - Success: Church Favour +1 in territory (tracked like Guild Favour). TC +0.5 (institutional momentum).
 - Overwhelming: Church Favour +2. TC +1.
-- In Revolution territories (Korntal, Sudwald): +1 Ob.
+- In Revolution territories (Varfell, Oastad): +1 Ob.
 
 **SMUGGLE (Niflhel only)**
 Roll: Intel vs Ob = territory Fortification level + 1.
@@ -481,7 +488,7 @@ Roll: Intel vs Ob = territory Fortification level + 1.
 | Cavalry | 4 | 3 | 5 | 9 | 3 | Prosperity 6+ or officer with Cavalry History; Wealth Ob 3 |
 | Ranged | 3 | 2 | 3 | 8 | 2 | Officer with Ranged proficiency or relevant History |
 | Artillery | 2 | 2 | 2 | 8 | 4 | Wealth Ob 4; 1 season construction (placed face-down, deploys next season) |
-| Knights Templar | 5 | 5 | 6 | 11 | — | Church asset only; not muster-raised; placed at Himmelstift at game start |
+| Knights Templar | 5 | 5 | 6 | 11 | — | Church asset only; not muster-raised; placed at Himmelenger at game start |
 
 **Health = Endurance + 6.** Damage reduces Health. When Health reaches 0: Formation Break.
 
@@ -495,8 +502,8 @@ Muster actions occur in controlled territories (Priority 4). Roll Military vs Ob
 
 Each March order moves units as follows:
 - Standard territory: 1 movement point
-- Grauwald (T8): 2 movement points
-- Askeheim (T13): 1 movement point but all non-Thread orders receive +1 Ob after arriving
+- Eidursjo (T8): 2 movement points
+- Stillhelm (T13): 1 movement point but all non-Thread orders receive +1 Ob after arriving
 
 One March order = 2 movement points total for the ordered unit(s) in that territory.
 
@@ -517,7 +524,7 @@ Combat resolves when units from opposing factions occupy the same territory at O
 
 *Both sides attack simultaneously using own row/column result.*
 
-**Step 3 — Roll.** Pool = unit Martial + commander bonus (if applicable). TN 5. Ob from table. Net successes = damage dealt to opponent.
+**Step 3 — Roll.** Pool = unit Martial + commander bonus (if applicable). TN 7. Ob from table. Net successes = damage dealt to opponent.
 
 **Step 4 — Apply damage.** Reduce opposing unit's Health by damage dealt. When Health = 0: Formation Break (see below).
 
@@ -576,7 +583,7 @@ In Board Game Mode, Thread operations are faction-level actions triggered by Uni
 
 ### Revolution: Community Weaving Procedure
 
-Available in: Korntal (T14), Sudwald (T12), Eisengrund (T9, −1 Ob).
+Available in: Varfell (T14), Oastad (T12), Varfell (T9, −1 Ob).
 
 Requirements: Revolution Influence in territory. At least 1 practitioner affiliated (narrative; confirmed at campaign start or through play).
 
@@ -610,7 +617,7 @@ Draw one card per Thread operation regardless of result. Apply all three effects
 | CM-04 | TT +1 (operation disturbed local substrate) | Performing faction's Intel reduced −1D for 1 season | Physical residue: Fortification −1 in territory (Thread pressure on structures) |
 | CM-05 | TT −1 | Target territory Prosperity +1 (Thread stabilisation has material effect) | Nothing |
 | CM-06 | TC −1 (Thread event reveals Church framework as incomplete) | Nothing | Thread sensitivity: all Leap-eligible characters in territory gain TS +2 (TTRPG crossover marker; track for Hybrid mode) |
-| CM-07 | Nothing | Witnesses disagree: 1 random Order token this season is shuffled (that player replaces it before reveal) | Environmental shift: Grauwald movement cost reduced to 1 this season (Thread energy smooths terrain) |
+| CM-07 | Nothing | Witnesses disagree: 1 random Order token this season is shuffled (that player replaces it before reveal) | Environmental shift: Eidursjo movement cost reduced to 1 this season (Thread energy smooths terrain) |
 | CM-08 | IP −1 (Thread event reveals Altonian intervention as spiritually illegitimate to Schoenland) | Nothing | Löwenritter coup tracker advances by 1 (Thread disturbance counts as Crown compromise) |
 | CM-09 | TT +2 (operation backfired) | All players must reveal one pending Order before placing remaining tokens this planning phase | Nothing |
 | CM-10 | TT −3 (exceptional repair) | Nothing | Revolution Stability +1 (community strengthened by successful operation) |
@@ -661,7 +668,7 @@ Each NPC AI card specifies:
 
 **Priority 4 — Treaty maintenance:** Crown executes Trade order in highest-Prosperity controlled territory.
 
-**Default:** Govern in Kronmark.
+**Default:** Govern in Gransol.
 
 **Clock override:** At IP > 59, Crown executes Grand Diplomatic Scene preparation (Diplomacy + Influence both deployed toward Altonian engagement).
 
@@ -677,9 +684,9 @@ Each NPC AI card specifies:
 
 **Priority 3 — Excommunication trigger:** If Crown Mandate < 4 and TC > 30: Church executes Excommunication against Crown leader.
 
-**Priority 4 — Military deployment:** If Church Mandate ≥ 5 and TC > 50: deploy Templar unit to Valorsplatz or Hafenstadt (whichever is not Church-controlled).
+**Priority 4 — Military deployment:** If Church Mandate ≥ 5 and TC > 50: deploy Templar unit to Valorsplatz or Hafenvalor (whichever is not Church-controlled).
 
-**Default:** Govern in Himmelstift.
+**Default:** Govern in Himmelenger.
 
 **Clock override:** At TC > 70, Church executes territorial seizure attempt (Mandate vs Ob 3 for each uncontrolled territory adjacent to Church-held territory; one attempt per season).
 
@@ -691,13 +698,13 @@ Each NPC AI card specifies:
 
 **Priority 1 — TC brake:** If TC > 30 and Baralta Mandate ≥ 4: Hafenmark executes Parliamentary Manoeuvre targeting Church's most recent Domain Action.
 
-**Priority 2 — Economic consolidation:** Hafenmark executes Trade in Hafenstadt or Sternhaven (whichever has higher Prosperity).
+**Priority 2 — Economic consolidation:** Hafenmark executes Trade in Hafenvalor or Lowenskyst (whichever has higher Prosperity).
 
-**Priority 3 — Sovereign Authority trigger:** If TC > 40 and Baralta Mandate ≥ 4 and Sovereign Authority not yet used: trigger Sovereign Authority this season (in Hafenstadt).
+**Priority 3 — Sovereign Authority trigger:** If TC > 40 and Baralta Mandate ≥ 4 and Sovereign Authority not yet used: trigger Sovereign Authority this season (in Hafenvalor).
 
-**Priority 4 — Defend ports:** If Sternhaven or Hafenstadt is Contested: March units to contested port.
+**Priority 4 — Defend ports:** If Lowenskyst or Hafenvalor is Contested: March units to contested port.
 
-**Default:** Govern in Hafenstadt.
+**Default:** Govern in Hafenvalor.
 
 ---
 
@@ -707,11 +714,11 @@ Each NPC AI card specifies:
 
 **Priority 1 — Intelligence gathering:** Varfell executes Intel order against faction with highest Mandate (knowledge of the powerful).
 
-**Priority 2 — Private Collection:** If in Eisengrund and Collection available: execute Private Collection. Prioritise revealing hidden stats.
+**Priority 2 — Private Collection:** If in Varfell and Collection available: execute Private Collection. Prioritise revealing hidden stats.
 
 **Priority 3 — TK advancement:** If practitioner faction available for contact and TK < 3: Varfell executes Diplomacy toward that faction.
 
-**Priority 4 — Maintain Eisengrund:** If Eisengrund is threatened: March units to Eisengrund.
+**Priority 4 — Maintain Varfell:** If Varfell is threatened: March units to Varfell.
 
 **Default:** Trade in highest-Prosperity controlled territory.
 
@@ -721,15 +728,15 @@ Each NPC AI card specifies:
 
 *Used when Guilds are not player-controlled.*
 
-**Priority 1 — Economic leverage:** If any faction's Military is in Feldmark or Grauwald: Guilds executes Economic Leverage against that faction.
+**Priority 1 — Economic leverage:** If any faction's Military is in Halvardshelm or Eidursjo: Guilds executes Economic Leverage against that faction.
 
-**Priority 2 — Trade:** Guilds executes Trade in Feldmark (highest Guild Favour territory).
+**Priority 2 — Trade:** Guilds executes Trade in Halvardshelm (highest Guild Favour territory).
 
 **Priority 3 — Favour building:** If Guild Favour < 5 in a controlled territory: Govern to build Favour.
 
 **Priority 4 — Resist military threats:** If Guilds Military ≤ 1 and any faction has Military ≥ 4: Guilds executes Diplomacy toward non-threatening faction to seek alliance.
 
-**Default:** Trade in Grauwald.
+**Default:** Trade in Eidursjo.
 
 ---
 
@@ -743,7 +750,7 @@ Each NPC AI card specifies:
 
 **Priority 3 — Sabotage highest-stability faction:** Identify faction with highest Stability. Quiet Network (Sabotage mode) against that faction.
 
-**Priority 4 — Control Schwarzmarkt:** If Schwarzmarkt is threatened: any available response to maintain control.
+**Priority 4 — Control Sigurdshelm:** If Sigurdshelm is threatened: any available response to maintain control.
 
 **Default:** Intel order against the currently leading faction (highest combined stats).
 
@@ -751,17 +758,25 @@ Each NPC AI card specifies:
 
 ### Revolution NPC AI
 
+**Key Named Figures:**
+
+*Eidur Sjostrom* — Southernmost elder, TS 70+. Survived a Thread gap excess event. Engages with Revolution selectively when it serves Thread repair. Not politically motivated. Chest occasionally falls out of configurational coherence — detectable by TS 30+.
+
+*Hakan Reusfoldt* — Revolution organiser, TS 0. Culturally Einhir-connected. Relentless and politically sharp. Once per season: redirect Revolution Influence between territories without an order (Influence vs Ob 2).
+
+### Revolution NPC AI (Priority Trees)
+
 *Always NPC-controlled.*
 
-**Priority 1 — TT response:** If TT > 40 and practitioner available: Community Weaving in Korntal or nearest eligible territory.
+**Priority 1 — TT response:** If TT > 40 and practitioner available: Community Weaving in Varfell or nearest eligible territory.
 
-**Priority 2 — Influence expansion:** Revolution executes Govern (informal presence claim) in Sudwald if uncontrolled.
+**Priority 2 — Influence expansion:** Revolution executes Govern (informal presence claim) in Oastad if uncontrolled.
 
-**Priority 3 — Counter-Church:** If Church Favour > 4 in Korntal: Revolution executes counter-Preach (Influence vs Ob = Church Favour ÷ 2, success reduces Church Favour by 1).
+**Priority 3 — Counter-Church:** If Church Favour > 4 in Varfell: Revolution executes counter-Preach (Influence vs Ob = Church Favour ÷ 2, success reduces Church Favour by 1).
 
 **Priority 4 — Support practitioners:** If any faction publicly supports Thread operations: Revolution executes Diplomacy toward that faction (affinity-building).
 
-**Default:** Govern in Korntal.
+**Default:** Govern in Varfell.
 
 **NPC only rule:** Revolution never executes military orders. It has no Military stat. All Resolution-phase cards that would trigger military action for Revolution instead trigger Community Weaving or Influence action.
 
@@ -771,7 +786,7 @@ Each NPC AI card specifies:
 
 *Always NPC-controlled.*
 
-**Priority 1 — Profit from tension:** If two or more factions are actively at war (Contested territories with battles resolved this season): Schoenland executes Trade in Sternhaven (sea route active; +1 Wealth).
+**Priority 1 — Profit from tension:** If two or more factions are actively at war (Contested territories with battles resolved this season): Schoenland executes Trade in Lowenskyst (sea route active; +1 Wealth).
 
 **Priority 2 — Hedge toward Altonia:** If IP > 45: Schoenland closes trade route to one Valorian faction (declare publicly; that faction loses Schoenland Trade bonus for 1 season).
 
@@ -795,10 +810,10 @@ The Löwenritter are a Crown sub-faction at game start. They have no independent
 - Crown executes Brutal disposition against Valorian citizens: +2
 - Co-Movement card CM-08 drawn: +1
 
-**At tracker 5+:** Löwenritter splits from Crown. Ehrenfeld transfers to Löwenritter control. Löwenritter NPC AI activates.
+**At tracker 5+:** Löwenritter splits from Crown. Arnesheld transfers to Löwenritter control. Löwenritter NPC AI activates.
 
 **Löwenritter NPC AI (post-coup):**
-- Priority 1: Hold Ehrenfeld (defend; never initiate March unless Valorsplatz is under direct threat).
+- Priority 1: Hold Arnesheld (defend; never initiate March unless Valorsplatz is under direct threat).
 - Priority 2: Martial Law declaration (Govern in Valorsplatz if Crown Mandate < 3).
 - Priority 3: Assess Crown compliance (if Crown Mandate recovers to 4+, Löwenritter resumes Crown alliance — tracker reduced by 1 per season of restored Mandate; at 2 or below: reintegration possible via Diplomacy Ob 3).
 - Default: Hold position.
@@ -819,7 +834,7 @@ Shuffle each pool separately. Threshold cards are drawn from their pile when tri
 
 | Card | Trigger | Event |
 |---|---|---|
-| T-01 | TT crosses 40 | Monstrous Configuration in Sudwald (T12). Sudwald Prosperity −1. All March orders to Sudwald: +1 Ob this season. Church Inquisition automatically opens in Sudwald (Church AI acts; player Church may redirect if in play). |
+| T-01 | TT crosses 40 | Monstrous Configuration in Oastad (T12). Oastad Prosperity −1. All March orders to Oastad: +1 Ob this season. Church Inquisition automatically opens in Oastad (Church AI acts; player Church may redirect if in play). |
 | T-02 | TT crosses 60 | Thread operations in all territories: +1 Ob for remainder of game. Practitioner-affiliated factions gain Awareness marker (narrative: they understand what this means). Non-practitioner factions gain Alarm marker (narrative: they don't). |
 | T-03 | TT crosses 80 | Thread enters battlefields. All mass combat this season: both sides roll 1 Co-Movement card in addition to standard battle resolution. |
 | T-04 | TT reaches 100 | THE RUPTURE (game-end event). See B10. |
@@ -831,7 +846,7 @@ Shuffle each pool separately. Threshold cards are drawn from their pile when tri
 |---|---|---|
 | C-01 | TC crosses 40 | The Ultimatum. Church publicly demands Crown recognition of Church supremacy over spiritual governance. Parliament must convene next season: Parliamentary Vote (Crown Mandate vs Church Mandate, 3 exchanges). Loss: TC +3. |
 | C-02 | TC crosses 60 | Schism Politics. Church declares Crown spiritually compromised. Excommunication threat issued against all non-Church-aligned ducal leaders simultaneously. Hafenmark TC Suppression checked immediately (if Baralta Mandate ≥ 4: suppression holds; otherwise TC +2). |
-| C-03 | TC crosses 80 | Church Territorial Seizure active. Each season: Church may roll Mandate vs Ob 3 to claim one uncontrolled or low-Mandate territory without military action. |
+| C-03 | TC crosses 70 | Church Territorial Seizure active. Each season: Church may roll Mandate vs Ob 3 to claim one uncontrolled or low-Mandate territory without military action. |
 | C-04 | TC reaches 100 | HOLY STATE (game-end event). See B10. |
 | C-05 | TC drops below 40 after being above it | Church Momentum broken. TC +1 threshold pauses for 2 seasons. Church Stability check Ob 2. |
 
@@ -840,9 +855,9 @@ Shuffle each pool separately. Threshold cards are drawn from their pile when tri
 | Card | Trigger | Event |
 |---|---|---|
 | I-01 | IP crosses 30 | Tutoring Demand. Altonian diplomatic message arrives: Torben must be sent for education within 2 seasons or IP +5. Torben Loyalty Clock activates at value 8. |
-| I-02 | IP crosses 45 | Hostile. Border skirmishes: Border Pass (T4) becomes Contested (Altonian probe units placed; no combat yet). Vassalage demands issued through Schoenland. |
-| I-03 | IP crosses 60 | Warlike. Invasion preparations: Altonian military units placed on Border Pass. IP now drifts +2/season instead of +1. |
-| I-04 | IP crosses 75 | Invasion Imminent. Altonian vanguard deploys to Schoenland (T15). Schoenland trade route suspended (no Trade orders in T15). Naval route to Sternhaven (T7) threatened (March from T15 to T7 possible). |
+| I-02 | IP crosses 45 | Hostile. Border skirmishes: Spartfell (T4) becomes Contested (Altonian probe units placed; no combat yet). Vassalage demands issued through Schoenland. |
+| I-03 | IP crosses 60 | Warlike. Invasion preparations: Altonian military units placed on Spartfell. IP now drifts +2/season instead of +1. |
+| I-04 | IP crosses 75 | Invasion Imminent. Altonian vanguard deploys to Schoenland (T15). Schoenland trade route suspended (no Trade orders in T15). Naval route to Lowenskyst (T7) threatened (March from T15 to T7 possible). |
 | I-05 | IP reaches 100 | INVASION (game-end event). See B10. |
 
 ### Seasonal Random Events (S-01 through S-15)
@@ -858,12 +873,17 @@ Shuffle each pool separately. Threshold cards are drawn from their pile when tri
 | S-07 | **Schoenland Shift.** Draw Schoenland AI card and execute immediately (in addition to its normal turn). |
 | S-08 | **Einhir Ruins Discovered.** One random uncontrolled territory (reroll if T13): Revolution Influence +1 there. TT −1 (stabilising discovery). [EDITORIAL: Name the Einhir site.] |
 | S-09 | **Plague.** One territory (GM/designated player draws from territory stack): Prosperity −1 for 2 seasons. Any units there: Endurance check Ob 1 or −1 Endurance. |
-| S-10 | **Flood Season.** All March orders in territories 11–14: +1 movement cost. Feldmark Breadbasket does not trigger this season. |
+| S-10 | **Flood Season.** All March orders in territories 11–14: +1 movement cost. Halvardshelm Breadbasket does not trigger this season. |
 | S-11 | **Parliamentary Crisis.** Parliament convenes emergency session. Any pending Parliamentary Manoeuvre resolves this season regardless of timing. Crown Mandate check Ob 1 or −1 Mandate. |
 | S-12 | **Altonian Envoy.** IP −1 (gesture of diplomatic goodwill). Any faction may Diplomacy vs Altonia this season at −1 Ob. |
 | S-13 | **Löwenritter Audit.** Advance Coup Tracker by 1. Reveal to all players. (Ehrenwall is reassessing.) |
 | S-14 | **Thread Disturbance.** TT +2 (unexplained). No co-movement card drawn (substrate disturbance, not an operation). All practitioner-affiliated factions: Awareness marker. |
-| S-15 | **Restoration Memory.** [EDITORIAL: Named Restoration event — requires Restoration NPC / cultural recovery arc design. Placeholder: Revolution Stability +1 and TT −1.] |
+| S-15 | **Restoration Memory.** [EDITORIAL: S-08 Einhir site name deferred.] Revolution Stability +1. TT −1. |
+| S-16 | **Niflhel Network Exposure.** One Niflhel network (GM chooses) has an operation surface publicly. That network's Intel −1 for 2 seasons. Any faction with an active Intel order this season may immediately learn one piece of information that network holds. |
+| S-17 | **Einhir Practitioner Surfaces.** A practitioner with TS 40+ is reported operating openly in one random territory. Church automatically opens Inquisition there. Revolution Influence +1 in that territory. TT +1. |
+| S-18 | **Border Skirmish.** Two adjacent factions (GM or random draw) have a minor military incident. Neither loses units but both take −1 Stability. IP +1 if Crown is involved. |
+| S-19 | **Debt Called.** Guilds call a debt from the faction with highest Wealth. That faction: Wealth −1 this season OR Guilds gain Influence +1 in one territory of their choice. |
+| S-20 | **Thread Quiet.** Unusually stable substrate this season. All Thread operations: −1 Ob. TT −1 at seasonal accounting. Practitioners with TS 50+ sense it as uncanny — the quiet is wrong, not peaceful. |
 
 ---
 
@@ -910,12 +930,19 @@ Any of the following ends the game immediately:
 **THE RUPTURE (TT = 100)**
 The relationship between rendered world and thread-substrate changes permanently. This is not automatically a loss. Its meaning is determined by the current state of the world:
 
-- If Revolution Community Weaving was successful at least 3 times and TT was above 60 before reaching 100: *Rupture as Healing* — the Thread reconfigures toward sustainability. All factions still in play at Stability ≥ 3: co-survival. [EDITORIAL: Rupture narrative determination — requires campaign-level event design.]
+- If Revolution Community Weaving was successful at least 3 times and TT was above 60 before reaching 100: *Rupture as Healing* — the Thread substrate returns to its pre-Calamity coherence across the entire peninsula simultaneously:
+- Stillhelm and the Southernmost become habitable. The Forgetting dissolves.
+- Every Lock releases — objects, relationships, and personal threads return to their natural state. Living things that were Locked age at extraordinary speed on release and turn to dust within moments.
+- Shifting Objects stabilise. Thread Wounds and Gaps close.
+- Galbados relics become ordinary objects — no longer holding configurational charge.
+- Dissolution residue reintegrates into the substrate.
+- Memory, political structures, deaths, and human consequences remain unchanged.
+All factions still in play at Stability ≥ 3: co-survival.
 - If Niflhel Southernmost harvesting was uninterrupted for ≥ 8 seasons and no Co-Movement mitigation was applied: *Rupture as Extraction Consequence* — collective loss.
 - Default (neither condition): *Rupture Unresolved* — collective loss. Shared survival condition fails automatically.
 
 **THE HOLY STATE (TC = 100)**
-The Church has structurally absorbed Valorian governance. This is a Church faction victory only if Church also controls Himmelstift + Valorsplatz at the moment TC = 100. Otherwise: it is a collective loss (the Church won an institutional conquest but not the game's victory condition).
+The Church has structurally absorbed Valorian governance. This is a Church faction victory only if Church also controls Himmelenger + Valorsplatz at the moment TC = 100. Otherwise: it is a collective loss (the Church won an institutional conquest but not the game's victory condition).
 
 If Crown Mandate was ≥ 4 at TC = 100: *Constitutional Resistance Ongoing* — the Crown survives as a contested institution. Crown player may contest the Holy State by triggering a Grand Debate (5 exchanges, final resolution scene). Win: TC −20, Church restructured; game continues to Round 20. Lose: collective loss.
 
