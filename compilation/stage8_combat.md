@@ -271,6 +271,17 @@ Both sides choose one action per season:
 - Attacker withdraws (voluntary or forced by Relief).
 - Negotiated settlement: both parties agree on terms.
 
+### Fortification Construction
+
+**Build Fortification (Domain Action):** Roll Wealth vs Ob = current Fortification level + 1 (minimum Ob 1). One season. Cannot construct while under active siege. Maximum Fortification: 5.
+
+| Degree | Effect |
+|---|---|
+| Overwhelming | Fortification +1. Prosperity unchanged. |
+| Success | Fortification +1. Prosperity −1. |
+| Partial | Incomplete. Re-roll next season at Ob −1. |
+| Failure | Fails. Prosperity −1. Retry next season. |
+
 ### Co-Movement During Siege
 
 Each season of siege: TT +1 (concentrated suffering and disruption).
