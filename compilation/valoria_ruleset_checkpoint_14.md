@@ -61,7 +61,7 @@ The Target Number (TN) sets the threshold for what counts as a success on each d
 | Standard | 7 | Default for most rolls |
 | Desperate | 8 | Duress, hostile environment, exhaustion, existential threat |
 
-Combat uses **Weapon TN** (see §8.3). Thread operations use TN 7 (Standard) or TN 8 (Desperate-equivalent for Locking or Snapping and Past-Oriented Pulling).
+Combat uses **Weapon TN** (see §8.3). Thread operations use TN 7 (Standard) or TN 8 (Desperate-equivalent for Forced Resolution and Past-Oriented Pulling).
 
 TN and Ob are independent difficulty axes. TN governs per-die success probability; Ob governs the number of successes required.
 
@@ -117,7 +117,7 @@ Momentum cannot be spent on Thread operation rolls. Thread operations have their
 
 ## 1.8 Beginner's Luck
 
-When a character attempts a task with no applicable History, they may roll at **double Ob** using only their raw attribute dice (no History bonus). A success at Beginner's Luck earns a provisional History tag at 0 points — the character has demonstrated the first trace of relevant experience. The next CP investment or qualifying scene formalises it as an established History (see §10.2).
+When a character attempts a task with no applicable History, they may roll at **double Ob** using only their raw attribute dice (no History bonus). A success at Beginner's Luck earns the first mark toward establishing a new History (see §10.2).
 
 A character cannot use Beginner's Luck for: Thread operations (require Approach Training), combat proficiency rolls (require at least basic weapon familiarity), or faction Domain Actions (require institutional standing).
 
@@ -134,7 +134,7 @@ When multiple characters declare actions against a single unsupported opponent i
 
 The bonus applies to each attacker's offence pool. The defender splits their defence pool across all incoming attacks (dividing defence dice among attackers before resolution).
 
-An opponent is "unsupported" if no ally is engaging any of the attackers. If the target has one or more allies engaged with the attackers, reduce the group bonus by one tier (e.g., a 5-attacker group bonus is treated as 3-attacker). A single ally cannot fully nullify group bonuses — only distribute pressure.
+An opponent is "unsupported" if no ally is engaging any of the attackers.
 
 ---
 
@@ -194,7 +194,7 @@ Attributes range from 1 to 7. A score of 3 is the human average. 1 is severely l
 | Certainty | Spirit (starting and maximum value) | 0–7 | Existential coherence; at 0, rendering crisis |
 | Coherence | 10 (starting value); countdown to 0 | 0–10 | Measures how legible reality remains to the character |
 
-**Contact Rounds** uses Focus because sustained Thread contact is an act of concentration, not willpower. Moving to an adjacent zone does not break Thread contact unless the target configuration is not present in the new zone.
+**Contact Rounds** uses Focus because sustained Thread contact is an act of concentration, not willpower.
 
 ---
 
@@ -212,7 +212,7 @@ At combat start, each combatant rolls Agility (TN 7, Ob 1).
 
 The **winner declares their pool division last** each round after seeing opponents' announced action types (but not their die allocations). This is the information advantage: you know whether opponents are attacking, defending, manoeuvring, or operating before committing your own split.
 
-Ties: re-roll. Initiative holds for the entire combat unless a specific Manoeuvre (Reorient, §8.6) changes it. Combatants entering an ongoing combat roll initiative immediately on entry and are inserted into the existing declaration order at their result.
+Ties: re-roll. Initiative holds for the entire combat unless a specific Manoeuvre (Reorient, §8.6) changes it.
 
 ## 3.3 Round Structure
 
@@ -270,7 +270,7 @@ Weapons fall into three reach categories:
 
 **Long vs Short at long range:** Long weapon has priority. Short weapon user must manoeuvre at disadvantage without being hit to close to short range.
 
-**Projectile range:** Melee weapons cannot attack back at projectile range. Projectile weapons cannot be used at short or long melee range. To close distance against a ranged opponent, a character must survive their fire: make an Agility check (TN 7, Ob = ranged attacker's net successes that round, minimum Ob 1). On success: character closes to long melee range. On failure: character takes damage normally and remains at projectile range. Narrative spatial conditions apply (height, obstacles, cover).
+**Projectile range:** Melee weapons cannot attack back at projectile range. Projectile weapons cannot be used at short or long melee range. A character must successfully dodge the ranged weapon user's fire to close distance. Narrative spatial conditions apply (height, obstacles, cover).
 
 **Reach advantage:** While the longer-reach combatant maintains appropriate distance, the shorter-reach combatant's offence dice are wasted unless they first perform a Close manoeuvre (see §8.6).
 
@@ -305,13 +305,11 @@ An incapacitated character is unconscious or otherwise unable to act. They are n
 
 ## 3.9 Stamina and Recovery
 
-**Stamina:** Equal to Endurance + 1. Decreases by 1 for every melee round in which the character has Moved, Manoeuvred, or Attacked. Defence-only rounds and Full Guard rounds (without consecutive fatigue) do not restore Stamina. Once Stamina reaches 0, the character must Catch Breath. A character may elect to take a Breather before Stamina reaches 0.
+**Stamina:** Equal to Endurance + 1. Decreases by 1 for every melee round in a row ehere a character has Moved, Manoeuvred or Attacked. Once Stamina reaches 0, the character must Catch Breath. A character may elect to take a Breather before Stamina reaches 0.
 
-**Catch Breath:** A character's Combat Pool is divided by 2 (rounded up). They can only commit their Combat Pool to Defence Dice. Stamina is restored to full afterwards. A character whose Stamina reaches 0 must Catch Breath as their next declared action — they cannot attack, manoeuvre, or move until Stamina is restored.
+**Catch Breath:** A character's Combat Pool is divided by 2 (rounded up). They can only commit their Combat Pool to Defence Dice. Stamina is restored to full afterwards.
 
 **Breather:** A character's Combat Pool can only be committed to Defence Dice. Stamina is restored to full afterwards.
-
-**Full Guard fatigue:** A combatant who declares Full Guard (all dice to Defence, no offence declared) for 2 or more consecutive rounds: Stamina −1 per full-guard round from the second consecutive round onward. This prevents indefinite mutual stalemate without penalising tactical one-round defensive holds.
 
 **Quick Rest:** Between scenes (minutes to hours of downtime). Restores Health to maximum and removes 1 Wound.
 
@@ -458,8 +456,6 @@ At 3 Dissonance Marks: Devout Constraint collapses regardless of Belief status. 
 
 **Devout characters receive +2D on Certainty-resist checks against monstrous encounters.** Their theology provides a framework that reduces existential shock, even if that framework is wrong about causation. However, Devout characters cannot gain long-term TS development from such encounters (the theological framework absorbs the confrontation).
 
-**Being targeted by Thread operations.** The Devout Constraint governs perception and practice — not susceptibility to being targeted. Practitioners may perform Thread operations on Devout characters normally. The Devout character experiences the result without understanding its Thread cause. This does not generate a Dissonance Mark unless the character is confronted with direct evidence of Thread causation.
-
 ### Scholarly TS Path (Lenneth Variant)
 
 A character with access to Einhir scholarship and no essentialist theological Belief may pursue TS growth through sustained intellectual engagement with Thread-related texts and artifacts. This functions identically to the standard confrontation path, except the qualifying events are scholarly rather than experiential: deep study of Thread-operation records, analysis of temporal anomalies, decoding Originary inscriptions.
@@ -475,7 +471,7 @@ Intelligibility replaces the Coherence track. It measures how legible reality re
 **Reduction triggers:**
 - Each Thread operation at Relational+ scale: −1 Intelligibility
 - Past-Oriented Pulling: −1 Intelligibility (additional, cumulative with operation cost)
-- Locking or Snapping (any scale): −1 Intelligibility
+- Forced Resolution (any scale): −1 Intelligibility
 - Extended proximity to a Structural-scale Gap: −1 Intelligibility per season of exposure
 
 **Effects by Intelligibility level:**
@@ -674,13 +670,9 @@ Thread operations are how practitioners interact with the constitutive ground of
 
 ## 5.1 Approach Training
 
-A character with TS 30+ may undertake Approach Training as a downtime arc. Acquiring the tag requires:
+A character with TS 30+ may undertake Approach Training as a downtime arc: one full campaign season devoted to learning how to initiate and sustain contact. During this season the character is unavailable for Domain Actions and military service but may participate in scenes.
 
-- **Mentor:** A character with Approach Training and TS 40+ (or authenticated Einhir text in lieu of a mentor)
-- **Dedicated season:** One full campaign season of study. The character is unavailable for Domain Actions and military service but may participate in scenes.
-- **Spirit check:** TN 7, Ob 2 at season end.
-
-On success: **Approach Training** tag acquired permanently. On failure: character is primed — next season's dedicated study automatically succeeds without a check. The tag is confirmed at seasonal accounting.
+At season's end, the character gains the **Approach Training** tag permanently. This is not a roll — it is a narrative commitment confirmed at seasonal accounting.
 
 ## 5.2 The Leap — Entering Contact
 
@@ -698,7 +690,7 @@ The Leap is a **full-round action (Priority 5)**. No attack, no movement, no man
 
 ### The Leap Roll
 
-**Pool:** Attunement + relevant History bonus (e.g., "Einhir Scholar": points + 3) + TPS (Thread Pool Score = TS ÷ 10, round down)
+**Pool:** Attunement + relevant History bonus (e.g., "Einhir Scholar": points + 3)
 **TN:** 7
 **Ob:** TS 30–49 = 2 · TS 50+ = 1 · +1 Ob per Wound
 
@@ -752,7 +744,7 @@ Physical effects (a wound closing, an object moving) are visible to all.
 
 ### Wound Penalties and Thread Operations
 
-The +1 Ob per Wound penalty applies to all Thread operation rolls — Leap, Weaving, Pulling, and Locking or Snapping. A practitioner with 2 Wounds faces +2 Ob on every operation, applied before scale Ob. Combat-wounded practitioners are significantly compromised in Thread work.
+The +1 Ob per Wound penalty applies to all Thread operation rolls — Leap, Weaving, Pulling, and Forced Resolution. A practitioner with 2 Wounds faces +2 Ob on every operation, applied before scale Ob. Combat-wounded practitioners are significantly compromised in Thread work.
 
 ## 5.3 Diagnosis
 
@@ -767,7 +759,7 @@ The practitioner states what they are sensing. The GM describes:
 - Coherence trace, if the configuration has been touched by a transforming practitioner
 - For past-oriented operations: the temporal weight of the configuration
 
-**Mandatory before Locking or Snapping.** Skipping Diagnosis before FR: +2 Ob and automatic Gap creation on Failure regardless of degree.
+**Mandatory before Forced Resolution.** Skipping Diagnosis before FR: +2 Ob and automatic Gap creation on Failure regardless of degree.
 
 **Mandatory before Past-Oriented Pulling.** Skipping Diagnosis before Past-Oriented Pulling: +3 Ob and a temporal Gap rather than a standard Gap on Failure.
 
@@ -778,7 +770,7 @@ The practitioner states what they are sensing. The GM describes:
 **Foregrounded dimensions:** Actuality toward coherence; temporality toward persistence. Things cohere, connect, stabilise. Effects are potentially permanent. Healing through Weaving accelerates natural temporal progression — the wound resolves as it would, but faster. Scars are real; the world is consistent. No paradox.
 
 **Requirements:** TS 30+ · Approach Training tag
-**Pool:** Spirit + relevant History bonus + TPS (Thread Pool Score = TS ÷ 10, round down)
+**Pool:** Spirit + relevant History bonus
 **TN:** 7
 
 Pre-calculate the Weaving pool on the character sheet.
@@ -823,7 +815,7 @@ A practitioner below the required TS cannot attempt that scale — they cannot i
 **Foregrounded dimensions:** Actuality toward potential; temporality toward loosening. Draws a thread toward potential — loosens what is fixed, opens what is closed. Effects are inherently temporary: pulled threads re-actualise to their natural configuration.
 
 **Requirements:** TS 30+
-**Pool:** Spirit + relevant History bonus + TPS (Thread Pool Score = TS ÷ 10, round down)
+**Pool:** Spirit + relevant History bonus
 **TN:** 7
 
 Pre-calculate the Pulling pool on the character sheet.
@@ -885,23 +877,14 @@ Pre-calculate the Pulling pool on the character sheet.
 | Same season | 6 |
 | Prior seasons | 7+ (escalates) |
 
-**Degree of success outcomes:**
-
-| Degree | Outcome |
-|---|---|
-| Overwhelming | Temporal Disjunction complete. The prior event is removed from the actual world; memories remain fully intact (all witnesses retain memory of the event, but no physical evidence, wounds, or material effects remain). TT +3. ThS −2. Practitioner gains 1 TS. |
-| Success | Temporal Disjunction achieved. Physical facts removed; memories remain. TT +3. ThS −1. |
-| Partial | Disjunction incomplete. Physical facts partially removed at GM discretion; inconsistencies remain in the rendered world. TT +3. ThS −1. One material trace survives. |
-| Failure | Disjunction collapse. The thread snaps back to its prior configuration. Practitioner takes 2 Wounds (armour does not apply). TT +5. ThS −2. A Temporal Gap forms at the operation site. |
-
 **TT:** +3 minimum regardless of degree.
-**ThS:** Automatic +3 additional (on top of any other ThS costs) — except on Failure (see above for Failure ThS cost).
+**ThS:** Automatic +3 additional (on top of any other ThS costs).
 
 **Co-Movement:** Past-Oriented Pulling produces secondary consequences in *both* remaining dimensions. The GM determines consequences for the actual and epistemic dimensions — not just one.
 
-**The Fraying Bane:** A practitioner who performs Past-Oriented Pulling (or Snapping) three or more times in one season gains the Fraying bane. Effects drawn from the Fraying table (see §5.8).
+**The Fraying Bane:** A practitioner who performs Past-Oriented Pulling (or FR Dissolution) three or more times in one season gains the Fraying bane. Effects drawn from the Fraying table (see §5.8).
 
-## 5.7 Locking and Snapping — Collapse to One Pole
+## 5.7 Forced Resolution — Collapse to One Pole
 
 FR collapses a thread entirely to one of its two poles. **Lock** drives it toward full actualization — permanent, unchangeable. **Dissolution** drives it toward the unintelligible pole — the thread's contribution to the rendered world dissolves. Both are irreversible without directly addressing the same thread. Both are catastrophic at scale.
 
@@ -958,12 +941,12 @@ Pre-calculate the FR pool on the character sheet. It uses the same formula as th
 
 ### The Fraying Bane
 
-A practitioner who performs Snapping or Past-Oriented Pulling three or more times in one season gains the Fraying bane. While Fraying is active:
+A practitioner who performs FR Dissolution or Past-Oriented Pulling three or more times in one season gains the Fraying bane. While Fraying is active:
 - All Thread operations: +1 Ob
 - Contact duration reduced by 1 round (minimum 1)
 - Partial results on any Thread operation produce involuntary micro-Gaps (TT +1 each)
 
-Fraying clears at the end of a season in which the practitioner performs no Snapping and no Past-Oriented Pulling.
+Fraying clears at the end of a season in which the practitioner performs no FR Dissolution and no Past-Oriented Pulling.
 
 ## 5.8 Three-Dimensional Co-Movement (Version C)
 
@@ -979,8 +962,8 @@ Fires on **every** operation. The temporal dimension always moves.
 |---|---|
 | Weaving (any degree) | ThS −1. The target's temporal axis compresses — the present contains a healed or stabilised version earlier than natural. Observers with TS 10+ perceive the target as "clearer" or "more vivid" for 1 scene. |
 | Pulling (any degree) | ThS −1. The loosened thread's temporal anchoring frays. Any social roll citing the Pulled target as historical precedent: +1 Ob until publicly reaffirmed (R40). |
-| Locking | ThS −2. The locked configuration's temporal axis freezes. No further temporal movement is possible for that thread — it exists in a permanent present. |
-| Snapping | ThS −2. The dissolved configuration leaves a temporal void. All present characters feel the present as denser — temporal weight redistributed across the scene. |
+| FR Lock | ThS −2. The locked configuration's temporal axis freezes. No further temporal movement is possible for that thread — it exists in a permanent present. |
+| FR Dissolution | ThS −2. The dissolved configuration leaves a temporal void. All present characters feel the present as denser — temporal weight redistributed across the scene. |
 | Past-Oriented Pull | ThS −3 additional. The altered past creates an epistemic paradox for witnesses: anyone who remembers the original event retains both memories. The paradox is unresolvable without Thread-level understanding. |
 
 ### Automatic Epistemic Co-Movement
@@ -992,29 +975,42 @@ Fires on **every** operation. How things can be known changes.
 | Weaving (Success/Overwhelming) | Target becomes MORE intelligible — partially clarified. Observers with TS 10+ perceive the target as clearer for 1 scene. Non-sensitives may notice something but cannot articulate it. |
 | Weaving (Partial/Failure) | Target becomes LESS intelligible — partially occluded from rendering. Testimony about the target: +1 Ob for 1 session. |
 | Pulling (any degree) | The loosened thread becomes epistemically unstable. Witnesses disagree about details. Investigation or Circles rolls involving this target: +1 Ob until seasonal accounting (R39). |
-| Locking | The locked configuration becomes opaque to further Thread perception. Diagnosis on this target: +2 Ob. The Lock seals the thread from epistemic access. |
-| Snapping | Epistemic void. Non-practitioners present experience "something is missing that should be here." **Certainty check** for all non-practitioners present: Spirit TN 7 Ob 1. Failure: Certainty −1. Cap: once per scene regardless of number of Dissolutions (R36). |
+| FR Lock | The locked configuration becomes opaque to further Thread perception. Diagnosis on this target: +2 Ob. The Lock seals the thread from epistemic access. |
+| FR Dissolution | Epistemic void. Non-practitioners present experience "something is missing that should be here." **Certainty check** for all non-practitioners present: Spirit TN 7 Ob 1. Failure: Certainty −1. Cap: once per scene regardless of number of Dissolutions (R36). |
 | Past-Oriented Pull | Witnesses who remember the original event retain both memories (the original and the altered). Inert Knowledge of the paradox forms: they know something is wrong but cannot determine what. |
 
 **Stacking cap:** The epistemic investigation modifier (R39) and temporal precedent modifier (R40) do not stack on the same roll. Use the higher; effective cap is +1 Ob per roll from co-movement effects.
 
-### Co-Movement (d10)
+### Actual Co-Movement (d6)
 
-The GM rolls d10 on every Thread operation regardless of success or failure. No History Resonance or Flashback supplements apply — the d10 is the sole random co-movement element.
+The GM rolls d6 on every operation. This is the one random element in the co-movement system.
 
-| d10 | Consequence | Dimension |
-|---|---|---|
-| 1 | Knot strain +1 on one Knot held by practitioner or target (GM choice) | Actual |
-| 2 | One object in scene enters partial potentiality — self-corrects in 1d3 days unless area remains Thread-active | Actual |
-| 3 | Dissolution residue forms at operation site — detectable by TS 30+ | Actual |
-| 4 | Configuration overshoot — effect exceeds intended scope in a direction GM determines | Actual |
-| 5 | Environmental shift — temperature, light, or sound changes noticeably; detectable by TS 10+ as Thread disturbance | Temporal |
-| 6 | Temporal echo — brief sensory impression of target's past or future state intrudes on scene; practitioners TS 30+ perceive clearly, others experience déjà vu without content | Temporal |
-| 7 | Epistemic bleed — witnesses disagree on one factual detail of what just happened; investigation or Circles rolls about this scene +1 Ob for remainder of session | Epistemic |
-| 8 | Monstrous attention — operation disturbs Thread substrate enough to register distantly; consequence arrives within 1d3 sessions if TT ≥ 40 | Temporal |
-| 9 | TS surge in witness — one non-practitioner present with TS 10–29 experiences a Discovery Event at scene end (Spirit TN 7 Ob 1; success: TS +1d6; failure: primed, next Discovery Event fires automatically) | Epistemic |
-| 10 | Thread clarity — operation site gains configurational stability; all Thread operations here −1 Ob for one season | Actual |
+| d6 | Effect |
+|---|---|
+| 1 | Knot strain ±1 (target's or practitioner's — GM choice) |
+| 2 | Nearby object enters partial potentiality (minor Shifting Object risk; self-corrects in 1d3 days unless area remains Thread-active) |
+| 3 | Physical residue at operation site |
+| 4 | Target's physical configuration overshoots intended scope |
+| 5 | Environmental texture shifts (temperature, light, sound — detectable by TS 10+) |
+| 6 | Delayed manifestation (1d3 scenes later) |
 
+### History Resonance (R37)
+
+When a Thread operation's temporal co-movement fires, the GM checks whether the practitioner has a History relevant to the operation's context. If yes: the History **resonates**.
+
+Next use of that History: the practitioner rolls 1 bonus die (d10). This represents the accumulated past briefly amplifying the present. If the bonus die shows a **1**: ThS −1 (the temporal connection deepened the disjunction).
+
+**Constraints:**
+- Only one Resonance active per History at a time
+- Resonance persists until discharged (the bonus die is rolled)
+- History Resonance fires approximately 1–2 times per session at typical play rates
+- Expected campaign ThS from Resonance: ~4–5 additional ThS over 30 sessions (mathematically minor but narratively persistent)
+
+### Practitioner Flashback Temporal Anchoring (R38)
+
+When a practitioner uses a Flashback (Inspiration spend to declare a retroactive scene), their Thread sensitivity means the retroactive declaration partially actualises the past scene. If the Flashback involves Thread-relevant content — locations with Thread history, people with TS 30+, Originary Locks, dissolution residue — the GM may rule: **ThS −1**.
+
+This cost applies **only to practitioners**, not to non-practitioner Flashbacks. It is GM discretion, not automatic — mundane Flashbacks are unaffected.
 
 ## 5.9 Thread Stability (ThS) — 20 to 0
 
@@ -1033,7 +1029,7 @@ ThS decreases through Thread operations (from co-movement auto-effects), History
 | Personal scale (Partial/Failure) | +1 (auto-effect) + additional from degree table |
 | Relational scale (any result) | +1 (auto-effect) + additional from degree table |
 | Territorial scale (any result) | +1 (auto-effect) + additional from degree table |
-| Locking or Dissolution | +2 (auto-effect) + additional from degree table |
+| FR Lock or Dissolution | +2 (auto-effect) + additional from degree table |
 | Past-Oriented Pull | +3 additional (on top of Pulling auto-effect) |
 | History Resonance risk die (shows 1) | +1 |
 | Practitioner Flashback anchoring | +1 (GM discretion; Thread-relevant content only) |
@@ -1074,9 +1070,7 @@ ThS decreases through Thread operations (from co-movement auto-effects), History
 
 Dissolution residue use reduces Coherence. Transformation is a **perceptual shift**, not a corruption mechanic. The character's sense of what is real and normatively binding changes — this is epistemic seduction, not moral decay.
 
-*Coherence track: individual, 10 (fully coherent) to 0 (monstrous configuration). Starts at 10. At Coherence 2: GM consultation required to rewrite Beliefs — the character's self-understanding is no longer stable enough to author their own convictions. At Coherence 0: character becomes a Monstrous Entity NPC under GM control. If a Threadweaver is present and Knotted to the character at the moment Coherence hits 0, a saving attempt may be made — procedure at GM discretion.*
-
-*Phenomenology: at lower Coherence values, the character increasingly oscillates between intelligible and unintelligible, actual and potential, past and present and future. Thread damage destabilises their being across all three dimensions simultaneously.*
+*Coherence track: individual, 10 (fully coherent) to 0 (monstrous configuration). Starts at 10.*
 
 **Coherence loss:** −1 per use of dissolution residue (declared before rolling). Maximum one use per contact window. Subsequent uses from the same source: +1 Ob per prior use (residue depletion).
 
@@ -1128,7 +1122,7 @@ Detection: TS 30+ passive at arm's reach. Inquisitors with CE 2+: feel wrongness
 
 ### Category One — Intentional Locks
 
-Objects a practitioner has performed Locking upon. They persist after the practitioner's death without maintenance. The quality of the Lock reflects the practitioner's capacity.
+Objects a practitioner has performed FR Lock upon. They persist after the practitioner's death without maintenance. The quality of the Lock reflects the practitioner's capacity.
 
 **Investigating an Intentional Lock (TS 50+, one full scene):** Diagnosis reveals the approximate TS of the creating practitioner (±10), whether the Lock was placed under duress or calmly, and a rough sense of when it was made (within a decade). This is practitioner forensics.
 
@@ -1192,12 +1186,6 @@ Wound in the rendered world's fabric.
 
 ### Monstrous Entities
 
-Gaps and tears do not admit beings from Ein Sof. They allow excess undifferentiated Thread to spool through — the rendering substrate cannot hold the differential, so raw potential bleeds into the rendered world. Reality constantly pulls gaps closed, limiting the quantity of excess Thread, but the effect is unpredictable.
-
-The excess intermingles with whatever is adjacent — environment, objects, animals, people — and produces unique, unrepeatable configurational disturbances. Monstrous entities emerge from this intermingling: not invaders but local matter transformed by undifferentiated Thread contact. No two incursions produce the same result. Monstrousness is surplus, not evil — excess actuality or excess potential manifesting in configurations that rendering cannot comfortably hold.
-
-### Monstrous Entities (continued)
-
 Immune to social influence. Physical damage halved. Never rout.
 
 **Territory effects:** −1 Stability per season; Thread operations +1 Ob.
@@ -1211,7 +1199,7 @@ Immune to social influence. Physical damage halved. Never rout.
 **Defeating monstrous entities:**
 - Conventional combat: destroys current configuration. Gap persists. New configuration in 1d4 seasons.
 - Weaving (TS 60+, Ob 4): destroys entity AND partially closes Gap (TT −2).
-- Snapping (Ob 4): destroys entity but creates second Gap on failure.
+- FR Dissolution (Ob 4): destroys entity but creates second Gap on failure.
 
 **Stabilised entities** (3+ seasons active): Health doubled, resistance increased; must be destroyed before Gap can be closed.
 
@@ -1651,23 +1639,7 @@ TC represents the Church of Galbados's slow structural conquest of Valorian civi
 | 80–99 | Theocratic Seizure | Cardinals claim co-governance authority. Knights Templar occupy key institutional positions. Confessor issues writs superseding Crown administrative decisions in specific territories. |
 | 100 | The Holy State | Campaign event. Confessor Himlensendt declares Valoria a Holy State under Church governance. This is the culmination of a two-century institutional project. |
 
-**TC 80 — Church Territorial Seizure:** At TC 80, the Church may attempt to seize territories through institutional claim rather than military force. Resolved at seasonal accounting; each territory attempted separately.
-
-**Roll:** Church Mandate (pool, TN 7) vs territory owner's Mandate ÷ 2 (round up, minimum Ob 1).
-
-**TC value on seizure (flat — no per-season accrual):**
-
-| Territory Type | TC on Seizure |
-|---|---|
-| Minor territory | +1 |
-| Major territory (trade hub, fortified, ducal seat) | +3 |
-| Capital or key institutional site | +5 |
-
-**Success:** Church gains administrative control. Domain Actions targeting Church authority in this territory: +2 Ob. TC fires immediately on seizure.
-
-**Failure:** No seizure. Church Mandate −1 (overreach).
-
-**Counter-play:** Parliamentary vote (Influence vs Ob 3) reverses seizure before TC fires. Riskbreaker exposure of Church-Niflhel connection removes one seized territory per exposure. Grand Debate challenging Church civil authority: Overwhelming removes all seizures in one duchy; Success removes one.
+**TC 80 — Church Territorial Seizure:** At TC 80, the Church may attempt to seize territories through institutional claim rather than military force. Per-territory roll vs variable Ob. Counter-play options available. (See Faction section for full procedure.)
 
 ---
 
@@ -1814,9 +1786,7 @@ Valoria's political landscape is contested by eight factions, six with full mech
 
 When a personal action has faction-level scope, the GM recognises it as a Domain Action. The personal roll resolves both the personal outcome and the faction effect simultaneously.
 
-**Domain Ob:** Target faction's relevant stat (direct, 1–7 scale).
-
-**Pool construction:** Personal attribute + History bonus (d10s, TN 7). If the acting character holds a significant leadership position in their faction, add their faction's relevant stat to the pool. Faction leader always qualifies. Senior officer or trusted lieutenant at GM discretion. Outsider working for a faction does not qualify.
+**Domain Ob:** Target faction's relevant stat ÷ 2 (round up). On a 1–7 scale this yields Ob 1–4.
 
 **NPC faction rolls:** When a faction acts without a player character driving it, the GM rolls the relevant faction stat as a dice pool (d10s, TN 7) against the Domain Ob. For contested actions, both roll; higher net successes wins. Ties go to the defender.
 
@@ -2008,26 +1978,6 @@ Vaynard's TK measures his understanding of Thread metaphysics, the Calamity's me
 | 4 | Urgency. Willing to offer collection access (including originary locks) for Thread education and Southernmost partnership. TC +2. |
 | 5 | Dangerous knowledge — understands what Galbados was structurally. Seeks capability, not further knowledge. TC +3. |
 
-**Vaynard Ambition Track (0–100)**
-
-Tracks Vaynard's drive toward continental dominance. Increases automatically as time passes and when faction-level actions go against him.
-
-**Triggers:**
-- Each season that passes: +1 (relentless baseline)
-- Faction-level action directly opposing Varfell interests (blocked Domain Action, lost Parliamentary vote, territorial loss, exposed Intel operation): +5
-- Named NPC interaction where Vaynard is publicly humiliated or outmanoeuvred: +10
-
-**Thresholds:**
-| Ambition | Effect |
-|---|---|
-| 20 | Consolidates Varfell military. Intel operations increase in frequency. |
-| 40 | Openly challenges one faction per season. Begins recruiting officers. |
-| 60 | Refuses to comply with demands from Crown or Church. |
-| 80 | War declaration becomes available. Issues formal demands. |
-| 100 | Military campaign launches. Varfell attempts conquest of peninsula. |
-
-**TS Acquisition via Collection:** At seasonal accounting, Spirit check TN 7 Ob 1 for each originary lock object in the collection. Success on any: TS +1 (maximum one advance per season).
-
 TK advances through: practitioner relationship (sustained season, cap ×2); originary lock examination with practitioner context (cap ×1); Church archive access via Niflhel channels (+1/archive); players sharing Thread-level knowledge directly (+1–2 by depth); Discovery Event triggering TS 30 (+2 immediately).
 
 ---
@@ -2107,20 +2057,7 @@ Niflhel deploys the Quiet (its intelligence and assassination arm) against any t
 
 **Leader:** None. The four arm heads are treated as officers, not faction leaders. A PC who infiltrates or takes over one arm controls that arm only.
 
-**Four Competing Criminal Networks:** Niflhel is not a unified organisation. Four independent networks operate in overlapping territory, compete for resources and influence, and occasionally cooperate when mutual interest demands it. All operate through legal-facing fronts with government corruption, racketeering, smuggling, black markets, and intelligence brokering as core activities. Some guilds are fronts or compromised.
-
-| Network | Leader | Legal Front | Primary Operation |
-|---|---|---|---|
-| Sollvik | Marten Sollvik (mid-50s, former guild accountant) | Banking and lending house (Hafenvalor, Valorsplatz) | Racketeering, debt bondage, financial blackmail, corrupted parliamentary clerks |
-| Hafenbund | Inga Vraal (late 40s, labour organiser) | Dockworkers' union (Lowenskyst, Hafenvalor) | Smuggling, Thread-touched goods, harbour extortion, corrupted port inspectors |
-| Bernweg | Petr Halvach (early 60s, Altonian-origin merchant) | Long-distance trading company (Schoenland routes) | Intelligence brokering, courier interception, Altonian adjacency (opportunistic) |
-| Stiltsift | Sister Arvid Norn (30s, former novitiate) | Charitable religious foundation (Himmelenger) | Blackmail via confessional intelligence, Church archive brokering, forged documents |
-
-**Current alignment:** Sollvik and Stiltsift allied against Hafenbund and Bernweg. Transactional — Sollvik needs document forgery; Norn needs financial cover.
-
-**Supremacy Mechanic:** At seasonal accounting, networks compete passively. Leading network: +1 Intel. Weakest network: −1 Stability. Network at Stability 0: absorbed or destroyed by a rival. If one network eliminates all three rivals: becomes a Partial Faction (no territory, no Mandate, but full Intel and Wealth). From that position: may manufacture a noble claim and attempt to acquire territory via casus belli, ultimately seeking recognition as Count then Duke.
-
-A PC who wants to direct Niflhel must control each network independently through separate influence operations. No unified leadership exists or will be created.
+**Structure is permanent:** Niflhel has no primus inter pares and will not acquire one. A PC who wants to direct Niflhel must control each arm independently. This is intentional — Niflhel's headlessness is a structural feature, not a gap. Full network control requires four separate influence operations, one per arm.
 
 ---
 
@@ -2157,24 +2094,7 @@ The Revolution's connection to Einhir cultural continuity allows collective Thre
 
 **Leader:** None formal. Named figures exist (intellectuals, pamphlet writers, southern community elders) but none has institutional authority. A PC who affiliates must build personal authority through play.
 
-**Eidur Sjostrom — Southernmost Elder / Revolution Contact**
-
-Survived a Thread gap excess event — undifferentiated Thread spooled through and intermixed with her configuration. She largely reversed the effects through sustained self-Weaving over years, but the repair was imperfect. Her chest periodically falls out of configurational coherence with the rest of her body — brief moments where it exists slightly out of phase with her rendering. Detectable by TS 30+ as a configurational irregularity. She is aware of it and unbothered.
-
-- **TS:** 70+ (Resonant tier; among the highest of any living character)
-- **Conviction:** Repair — the world has tears; she closes them. Politics is noise.
-- **Resonant Style:** Evidence
-- **Relationship to Revolution:** Engages selectively when Restoration work serves Thread repair goals. Not a leader — a resource the movement occasionally accesses.
-- **Unique:** Prior gap exposure grants −1 Ob to Diagnosis of gap-adjacent configurations. Permanent immunity to the Forgetting — she has already been through it and partially back.
-
-**Hakan Reusfoldt — Revolution Organiser**
-
-The Revolution's primary operational presence. Not a leader by title — a force of sustained will. TS 0. His connection to the Einhir is entirely cultural: language fragments, oral tradition, recovered practices, community memory.
-
-- **Conviction:** Justice (Rawlsian — he wants structures dismantled, not reformed)
-- **Resonant Style:** Character
-- **Unique:** Once per season, may redirect Revolution Influence from one territory to another without an order (grassroots organising). Requires Influence vs Ob 2.
-- **Relationship to Eidur:** Mutual respect, persistent friction. Needs her Thread capability; she tolerates his urgency because his work creates conditions where repair is possible.
+[EDITORIAL: Should one named Revolution figure be established as the default NPC contact point? Suggested profile: southern Einhir elder holding fragmentary inner-tradition knowledge, partially obscured by the Forgetting.]
 
 ---
 
@@ -2184,22 +2104,9 @@ The Revolution's primary operational presence. Not a leader by title — a force
 
 The Löwenritter are not an independent political faction — they are an institutional instrument of the Crown. They hold territory (the fortress at the northern border), maintain military capacity, and act as the Crown's deniable covert arm. Their loyalty is to the Crown as an institution, not to any specific monarch.
 
-**Coup Threshold:** Grandmaster Ehrenwall is keeping count. The GM tracks a private Coup Counter (0–3). When it reaches 3, the coup fires at the next seasonal accounting.
+**Coup Threshold:** Grandmaster Ehrenwall is keeping count of Almud's compromises. When the Löwenritter's internal assessment of the Crown's institutional integrity drops to a threshold (tracked as a private GM counter), a coup trigger is possible. See NPCs section for full Ehrenwall mechanics.
 
-**Counter increments (+1 each):**
-- TC reaches 40 while the Crown has taken no action to reduce it that season
-- Torben's loyalty reaches 3–2 or lower
-- Crown loses two or more territories in one season without a military response Domain Action
-
-Counter never decrements. See §13.5 (Ehrenwall) for coup execution procedure.
-
-**Martial Law Capacity:** If the coup trigger fires, the Löwenritter impose Martial Law on all Crown-held territories simultaneously.
-
-- All non-Military Domain Actions in Martial Law territories require a secondary Military check (Löwenritter Military pool, TN 7, Ob 2). Failure: action blocked this season.
-- Löwenritter Military pool replaces faction-specific pools for all Stability actions in affected territories.
-- All factions except Löwenritter and Crown must succeed at a Covert Domain Action (Ob 3) to operate openly.
-- **Duration:** Until PC-driven Domain Action removes it (Influence vs Ob = Löwenritter Military ÷ 2, round up, minimum Ob 3) OR TC drops below 40.
-- **Scope:** Crown territories only.
+**Martial Law Capacity:** If the coup trigger fires, the Löwenritter can impose Martial Law on Crown territories — suspending normal Domain Action resolution and replacing it with Military-based Stability enforcement. This is a campaign-level event, not a standard Domain Action.
 
 **Riskbreakers:** The extralegal arm of the Löwenritter. Operations are not recorded in official documents. See §9.3.
 
@@ -2277,7 +2184,7 @@ Each territory tracks four attributes:
 | Attribute | Scale | Meaning |
 |---|---|---|
 | Prosperity | 1–7 | Economic output; affects mustering Ob, Wealth generation, and population mood |
-| Fortification | 0–3 (0–4 at Arnesheld) | Defense bonus; Fortification 2+ required for a siege to be declared |
+| Fortification | 0–3 (0–4 at Ehrenfeld) | Defense bonus; Fortification 2+ required for a siege to be declared |
 | Control | Faction or Neutral | Which faction controls this territory and receives its benefits |
 | Special Property | Fixed | Unique mechanical effect; does not change unless specifically altered |
 
@@ -2290,19 +2197,19 @@ Each territory tracks four attributes:
 | # | Territory | Starting Control | Prosperity | Fort | Special Property | Adjacent |
 |---|---|---|---|---|---|---|
 | 1 | Valorsplatz (Capital) | Crown | 6 | 2 | Royal Court: Crown Decree −1 Ob here. Parliament: Hafenmark Influence −1 Ob here. | 2, 3, 5, 6 |
-| 2 | Gransol (Crown heartland) | Crown | 5 | 1 | Garrison: +1D Muster here. | 1, 3, 4 |
-| 3 | Himmelenger (Cathedral city) | Church | 5 | 2 | Grand Cathedral: TC +1 per season Church controls this. Church Excommunicate −1 Ob here. | 1, 2, 6, 7 |
-| 4 | Spartfell | Crown | 3 | 2 | Altonian Border: IP threshold events trigger here first. Invasion entry point. | 2, 5, 15 |
-| 5 | Arnesheld (Military heartland) | Crown / Lowenritter garrison | 4 | 3 | Lowenritter Fortress: Lowenritter Martial Law −1 Ob here. Fortification maximum 4 (not 3). | 1, 4, 9 |
-| 6 | Hafenvalor (Hafenmark capital) | Hafenmark | 6 | 1 | Ducal Court: Hafenmark Sovereign Authority may be invoked here. Major port. | 1, 3, 7, 8 |
-| 7 | Lowenskyst (Northern port) | Hafenmark | 5 | 0 | Trade Hub: all Trade orders +1D here. Schoenland sea route terminus. | 3, 6, 8 |
-| 8 | Eidursjo (Forest region) | Guilds | 4 | 0 | Timber and Mining: Guilds Trade +1D here. Difficult terrain: March costs 2 movement (not 1). | 6, 7, 10, 11 |
-| 9 | Varfell (Southern highlands) | Varfell | 4 | 1 | Varfell Seat: Private Collection usable here only. Einhir ruins: Revolution Community Weaving −1 Ob. | 5, 10, 12, 13 |
-| 10 | Sigurdshelm (Underground trade) | Niflhel | 3 | 0 | Black Market: Niflhel Quiet Network −1 Ob here. All factions Trade here at +1 Ob (illicit goods). | 8, 9, 11 |
-| 11 | Halvardshelm (Farming plains) | Guilds | 5 | 0 | Breadbasket: +1 Prosperity recovery per season if uncontested. Muster Ob −1 (willing recruits). | 8, 10, 14 |
-| 12 | Oastad (Southern forest) | Uncontrolled | 3 | 0 | Thread Wound: TT threshold events trigger here at TT −10 (earlier than elsewhere). Revolution informal presence. | 9, 13, 14 |
-| 13 | Stillhelm (Southernmost border) | Uncontrolled | 2 | 0 | Southernmost Access: required for Southernmost Expedition. Thread proximity: all non-Thread orders +1 Ob. TS 30+ characters: automatic Discovery Event per season present. | 9, 12 |
-| 14 | Eisengrund (Southern farmland) | Revolution (informal) | 4 | 0 | Einhir Heartland: Revolution Influence −1 Ob here. Church Influence +1 Ob here (cultural resistance). | 11, 12 |
+| 2 | Kronmark (Crown heartland) | Crown | 5 | 1 | Garrison: +1D Muster here. | 1, 3, 4 |
+| 3 | Himmelstift (Cathedral city) | Church | 5 | 2 | Grand Cathedral: TC +1 per season Church controls this. Church Excommunicate −1 Ob here. | 1, 2, 6, 7 |
+| 4 | Border Pass | Crown | 3 | 2 | Altonian Border: IP threshold events trigger here first. Invasion entry point. | 2, 5, 15 |
+| 5 | Ehrenfeld (Military heartland) | Crown / Lowenritter garrison | 4 | 3 | Lowenritter Fortress: Lowenritter Martial Law −1 Ob here. Fortification maximum 4 (not 3). | 1, 4, 9 |
+| 6 | Hafenstadt (Hafenmark capital) | Hafenmark | 6 | 1 | Ducal Court: Hafenmark Sovereign Authority may be invoked here. Major port. | 1, 3, 7, 8 |
+| 7 | Sternhaven (Northern port) | Hafenmark | 5 | 0 | Trade Hub: all Trade orders +1D here. Schoenland sea route terminus. | 3, 6, 8 |
+| 8 | Grauwald (Forest region) | Guilds | 4 | 0 | Timber and Mining: Guilds Trade +1D here. Difficult terrain: March costs 2 movement (not 1). | 6, 7, 10, 11 |
+| 9 | Eisengrund (Southern highlands) | Varfell | 4 | 1 | Varfell Seat: Private Collection usable here only. Einhir ruins: Revolution Community Weaving −1 Ob. | 5, 10, 12, 13 |
+| 10 | Schwarzmarkt (Underground trade) | Niflhel | 3 | 0 | Black Market: Niflhel Quiet Network −1 Ob here. All factions Trade here at +1 Ob (illicit goods). | 8, 9, 11 |
+| 11 | Feldmark (Farming plains) | Guilds | 5 | 0 | Breadbasket: +1 Prosperity recovery per season if uncontested. Muster Ob −1 (willing recruits). | 8, 10, 14 |
+| 12 | Sudwald (Southern forest) | Uncontrolled | 3 | 0 | Thread Wound: TT threshold events trigger here at TT −10 (earlier than elsewhere). Revolution informal presence. | 9, 13, 14 |
+| 13 | Askeheim (Southernmost border) | Uncontrolled | 2 | 0 | Southernmost Access: required for Southernmost Expedition. Thread proximity: all non-Thread orders +1 Ob. TS 30+ characters: automatic Discovery Event per season present. | 9, 12 |
+| 14 | Korntal (Southern farmland) | Revolution (informal) | 4 | 0 | Einhir Heartland: Revolution Influence −1 Ob here. Church Influence +1 Ob here (cultural resistance). | 11, 12 |
 | 15 | Schoenland (Altonian trade port) | Neutral (Altonian trade) | 5 | 1 | Altonian Trade: +1 Wealth per season to any faction with Trade order here while route is open. Altonian spies: Intelligence orders here reveal results to Altonia. At IP 75+: Altonian vanguard deploys here. | 4, 7 |
 
 ---
@@ -2310,9 +2217,9 @@ Each territory tracks four attributes:
 ## 7.3 Adjacency Notes
 
 - **Valorsplatz (1)** is the most connected territory (4 adjacencies). Political hub; changes hands are maximum-consequence.
-- **Schoenland (15)** connects to Spartfell by land and Lowenskyst by sea. The sea route is severed when Schoenland trade suspends (IP 75+).
-- **Stillhelm (13)** is a dead end — only two connections. It is expedition territory, not strategic chokepoint.
-- **Arnesheld (5)** is the Lowenritter's primary position. Its anomalous Fortification cap (4 instead of 3) reflects the order's entrenched presence.
+- **Schoenland (15)** connects to Border Pass by land and Sternhaven by sea. The sea route is severed when Schoenland trade suspends (IP 75+).
+- **Askeheim (13)** is a dead end — only two connections. It is expedition territory, not strategic chokepoint.
+- **Ehrenfeld (5)** is the Lowenritter's primary position. Its anomalous Fortification cap (4 instead of 3) reflects the order's entrenched presence.
 
 ---
 
@@ -2333,7 +2240,7 @@ Prosperity changes through:
 - Muster: −1 per muster action (labor and resources diverted).
 - Conquest: −1 immediately (war damage).
 - Govern Overwhelming success in own territory: +1.
-- Breadbasket property (Halvardshelm): +1 per season if uncontested.
+- Breadbasket property (Feldmark): +1 per season if uncontested.
 - Mine Collapse event: −1 permanent until Govern restores.
 - Extended siege: −1 Endurance per season for garrisoned units; territory Stability affected.
 
@@ -2341,7 +2248,7 @@ Prosperity recovery rate (no active effects): +1 per season of peace if territor
 
 ### Fortification
 
-Built with Fortify orders. Maximum 3 for standard territories; 4 for Arnesheld only. Fortification level determines siege Ob and attack bonus for defenders (+1D per level to relevant defense rolls).
+Built with Fortify orders. Maximum 3 for standard territories; 4 for Ehrenfeld only. Fortification level determines siege Ob and attack bonus for defenders (+1D per level to relevant defense rolls).
 
 Fortification 2+ is required for a siege to be declared. Territories at 0–1 are assaulted directly.
 
@@ -2351,11 +2258,11 @@ Fortification 2+ is required for a siege to be declared. Territories at 0–1 ar
 
 Three territories have Thread significance beyond their political properties:
 
-**Oastad (12):** A Thread Wound in the southern forest. TT threshold events fire here 10 TT points earlier than elsewhere. The Revolution's informal presence here is not coincidental — Einhir practitioners recognized the site's significance.
+**Sudwald (12):** A Thread Wound in the southern forest. TT threshold events fire here 10 TT points earlier than elsewhere. The Revolution's informal presence here is not coincidental — Einhir practitioners recognized the site's significance.
 
-**Stillhelm (13):** Proximity to the Southernmost creates ambient Thread pressure. All non-Thread orders suffer +1 Ob. This is the only territory from which the Southernmost Expedition can be launched (see §4.7, Southernmost).
+**Askeheim (13):** Proximity to the Southernmost creates ambient Thread pressure. All non-Thread orders suffer +1 Ob. This is the only territory from which the Southernmost Expedition can be launched (see §4.7, Southernmost).
 
-**Varfell (9):** Einhir ruins beneath the Varfell highlands. The Revolution's Community Weaving is easier here (−1 Ob) because the configurational substrate retains resonance. Varfell's Private Collection access is tied to this site.
+**Eisengrund (9):** Einhir ruins beneath the Varfell highlands. The Revolution's Community Weaving is easier here (−1 Ob) because the configurational substrate retains resonance. Varfell's Private Collection access is tied to this site.
 
 ---
 
@@ -2363,9 +2270,9 @@ Three territories have Thread significance beyond their political properties:
 
 In TTRPG mode, territories are not tracked with unit tokens. They function as named locations with associated properties. Movement between territories is narrative, not mechanical — the GM determines journey time based on terrain and circumstance.
 
-For overland journeys of consequence (expeditions, supply runs, military marches), use the territory adjacency graph as a rough distance guide. Standard overland travel: one territory per day under normal conditions; Eidursjo costs two days (difficult terrain).
+For overland journeys of consequence (expeditions, supply runs, military marches), use the territory adjacency graph as a rough distance guide. Standard overland travel: one territory per day under normal conditions; Grauwald costs two days (difficult terrain).
 
-Thread-significant territories require awareness: entering Stillhelm or the Oastad Thread Wound zone triggers the relevant passive effects on practitioners (automatic Discovery Events, TS growth checks) when applicable.
+Thread-significant territories require awareness: entering Askeheim or the Sudwald Thread Wound zone triggers the relevant passive effects on practitioners (automatic Discovery Events, TS growth checks) when applicable.
 
 
 
@@ -2404,7 +2311,7 @@ Roll Agility dice, Ob 2. Higher net wins. The winner **declares last** — they 
 | **2** | Ranged attacks (in order: arquebus, then crossbow, then drawn bow) |
 | **3** | All melee attacks and manoeuvres (sub-rules below) |
 | **4** | Standard actions (Diagnosis; draw backup weapon; non-combat single actions) |
-| **5** | Full-round actions (the Leap; Locking or Snapping; sustained movement) |
+| **5** | Full-round actions (the Leap; Forced Resolution; sustained movement) |
 | **6** | Second actions; reload after firing |
 
 #### Priority 3 Sub-Rules
@@ -2458,14 +2365,6 @@ Excess attack successes = attacker's net − defender's net (minimum 0).
 | 3 | +3D |
 | 4 | +5D |
 | 5 | +8D |
-
-### Escaping Combat
-
-A character who wishes to exit an ongoing combat entirely: **Agility check, TN 7, Ob = opponent's Cognition** (minimum Ob 1). Declare at Phase 1.
-
-- **Success:** Character exits at Priority 6, Stamina set to 0.
-- **Failure:** Opponent gets one free Priority 3 attack before exit. Character still exits.
-- **Group flight:** Each character rolls separately.
 
 ### Stunts
 
@@ -2694,11 +2593,11 @@ Social conflict in Valoria uses two primary structures: **Appeals** (one-roll pe
 
 **Composure = Presence + 6.** This is the social wound threshold. Strain accumulates during social conflict; it is not reduced between exchanges within the same scene unless Unmask occurs.
 
-**Rattled** accumulates as a wound-equivalent track. Each time accumulated strain meets or exceeds Composure: +1 Rattled (−1D on all social rolls, cumulative). Composure resets to full after each Rattled is applied; strain accumulates again toward the next threshold.
+**Rattled** triggers the moment accumulated strain **first equals or exceeds** Composure. Stop tracking strain at that point — Rattled replaces the number.
 
-- Each Rattled: −1D on all social rolls (Presence, Cognition, and Attunement pools). Multiple Rattled stack.
+- Rattled effect: −2D on all social rolls (Presence, Cognition, and Attunement pools).
 - Combat is unaffected by Rattled.
-- All Rattled clear on: Unmask, scene end, or rest.
+- Persists until: Unmask, the scene ends, or the character rests.
 
 **Unmask** is a player choice available at any point during a social scene:
 
@@ -2761,12 +2660,10 @@ A Reading Exchange is a social perception action available in the **first round 
 
 | Degree | Result |
 |---|---|
-| Overwhelming | GM describes opponent's emotional state, tells, and assessment confidence in detail. +1D on the first two formal Debate Exchanges in the same scene (does not apply to Appeals or other single-roll social actions). |
-| Success | GM describes opponent's emotional state and one tell. +1D on the first formal Debate Exchange in the same scene (does not apply to Appeals or other single-roll social actions). |
+| Overwhelming | GM describes opponent's emotional state, tells, and assessment confidence in detail. +1D on the first two formal Exchanges in the same scene. |
+| Success | GM describes opponent's emotional state and one tell. +1D on the first formal Exchange in the same scene. |
 | Partial | GM describes surface affect only (calm, nervous, defensive). No Exchange bonus. |
-| Failure | No information. The opponent notices the scrutiny. GM may treat the target's disposition as one step more hostile for the remainder of the scene (GM discretion — applies when the target has cause to take offence at being probed). |
-
-If both parties attempt a Reading Exchange simultaneously, resolve both rolls before narrating either result — this prevents the first result from affecting the second declaration.
+| Failure | No information. The opponent notices the scrutiny — they are aware of being read. |
 
 **Note on pool construction**: The Reading Exchange uses Attunement as the base attribute. If using pre-printed History pools (which include a primary attribute), replace the primary attribute component with Attunement. The History bonus (points + 3) is unchanged.
 
@@ -2784,12 +2681,10 @@ An Appeal is a single-roll persuasion attempt targeting an audience or individua
 |---|---|
 | Overwhelming | Audience persuaded; disposition improves one step; GM names one additional consequence in the speaker's favour |
 | Success | Audience persuaded |
-| Partial | Partial persuasion: audience names a condition for cooperation (an action, information, or concession). If satisfied this scene: treat as Success. If not satisfied before scene ends: Appeal expires without effect. |
-| Failure | Audience unmoved; may harden against further Appeals (GM discretion — hardening is not automatic; apply only when dramatically warranted). A failed Appeal does not automatically advance disposition to Contemptuous. |
+| Partial | Partial persuasion; audience requires something additional before acting |
+| Failure | Audience unmoved; may harden against further Appeals |
 
-**Partial follow-up**: A Partial result that leads to the stated condition being satisfied within the same scene allows a follow-up Appeal to complete the persuasion — this is not a re-attempt (Let It Ride applies to failed Appeals, not satisfied Partials).
-
-**Appeal vs Debate interaction**: A successful Appeal does not reverse a Debate loss from the same scene. The Register Separation Rule (§9.6) applies: Appeals and Debates occupy different social registers.
+**Appeal vs Debate interaction**: A successful Appeal does not reverse a Debate loss from the same scene. The Debate Compromise Rule (§9.6) applies only within Debates; Appeals and Debates occupy different social registers.
 
 ---
 
@@ -2811,13 +2706,13 @@ A Debate is a formal exchange of positions. Both orators roll simultaneously; ea
 - +1 strain on a normal loss.
 - +2 strain on an Overwhelming loss (opponent's net ≥ 2× loser's net, or loser rolls 0).
 
-**Inspiration attack**: In an exchange where the attacker declares Character Style and names a specific Inspiration as target — if the defending orator achieves **net ≤ 0** (actual Failure, not merely losing), the named Inspiration loses 1 point. Losing the exchange with a positive net result does not trigger this. The targeted Inspiration must be known to the attacker. Discovering a specific Inspiration: Attunement + relevant History, Ob 3 (Reading Exchange post-contact) or Cognition + Investigation History, Ob 4 (external research). On success: GM confirms one Inspiration name and approximate value. Alternatively, an Overwhelming success in any social scene with the target may reveal an Inspiration at GM discretion.
+**Inspiration attack**: In an exchange where the attacker declares Character Style and names a specific Inspiration as target — if the defending orator achieves **net ≤ 0** (actual Failure, not merely losing), the named Inspiration loses 1 point. Losing the exchange with a positive net result does not trigger this. The targeted Inspiration must be known to the attacker; discovering Inspirations requires prior investigation or Overwhelming social success.
 
-**Register Separation Rule**: A lost Debate does not reverse a prior Appeal from the same scene, and a successful Appeal does not override a Debate outcome. These resolve on separate social registers.
+**Debate Compromise Rule**: A lost Debate does not reverse a prior Appeal from the same scene. These resolve on separate social registers.
 
 **Domain Echo**: The winning orator's position generates any Domain Echo (see §11 on Domain Actions). The loser's position does not.
 
-**Grand Debate total loss (5–0)**: The losing faction or character takes +1 Ob to social actions with the opposing faction for one season. Record this as a **Seasonal Condition** on the character sheet: "Social −1 vs [name/faction], expires [season]." Seasonal Conditions are tracked in §16.2 (Character Sheet Fields) under the Conditions section.
+**Grand Debate total loss (5–0)**: The losing faction or character takes +1 Ob to social actions with the opposing faction for one season.
 
 ### Parliamentary Vote
 
@@ -2859,7 +2754,7 @@ If the History's primary attribute differs from the social attribute, use the so
 
 # PART TEN: ADVANCEMENT
 
-Characters advance through two parallel systems: **Test Track** (automatic from play) and **Character Points (CP)** (awarded by the GM for Beliefs, Maxims, and domain-level achievements, spent on a structured menu). A third long-arc indicator, **Renown**, tracks cumulative dramatic achievement and unlocks narrative permissions without granting mechanical bonuses.
+Characters advance through two parallel systems: **Test Track** (automatic from play) and **Character Points (CP)** (awarded by the GM for Beliefs and domain-level achievements, spent on a structured menu). A third long-arc indicator, **Renown**, tracks cumulative dramatic achievement and unlocks narrative permissions without granting mechanical bonuses.
 
 ---
 
@@ -2879,7 +2774,7 @@ When both marks are filled: History advances +1 point. Both marks clear. Repeat.
 
 ## 10.2 CP Awards
 
-The GM awards CP at seasonal accounting and at significant scene conclusions. CP is awarded for Beliefs and Maxims — never for session attendance or routine success.
+The GM awards CP at seasonal accounting and at significant scene conclusions. CP is awarded for Beliefs — never for session attendance or routine success.
 
 ### Belief Awards
 
@@ -2895,14 +2790,6 @@ Belief-revised awards (4–5 CP) require genuine revision — a character who he
 
 **Contested Beliefs**: If a Belief's pursuit creates a genuine tension with another character's Belief (player or named NPC), the GM may mark the Belief **Contested**. It cannot be pursued for CP until a scene makes the tension explicit and one character chooses a position. This is not a penalty — it is narrative pressure.
 
-### Maxim Awards
-
-| Maxim Event | CP |
-|---|---|
-| Maxim honoured at genuine personal cost | +1 |
-| Broken Maxim re-established through reckoning scene | +2 |
-
-A violated Maxim is marked broken. No CP for subsequent violations of the same Maxim while broken. Re-establishing requires a full scene of genuine reckoning — the character confronts what they did and why.
 
 ### Domain Action Awards
 
@@ -2983,20 +2870,7 @@ Renown does not increase from private actions, successful but quiet operations, 
 
 ### Permissions
 
-| Renown | Tier | Mechanical Effects |
-|---|---|---|
-| 0 | Unknown | No recognition. No audience advantage. No faction targeting. |
-| 1–2 | Local | Recognised within one territory. Minor NPCs may know the name. |
-| 3 | Regional | Known across region. Minor faction officers aware of name. |
-| 4 | Provincial | Known across duchy. Minor faction officers grant audience readily. |
-| 5 | Notable | Known across Valoria. Faction officers seek meetings. Initial debate audience: +1D if opponent Renown lower. |
-| 6 | Ducal | Equivalent to a Duke. Dukes grant audience readily. Debate advantage vs Renown 5 or below. Faction scrutiny begins. |
-| 7 | Confessor | Institutional peer of a Confessor. Cardinals and faction leaders treat as equal. Debate: +2D initial advantage vs lower Renown. Assassination targeting possible. |
-| 8 | Royal | Peer of a King. Heads of state treat as equal or threat. Maximum social access. Debate: +3D initial advantage. High faction targeting risk. |
-| 9 | Legendary | Living legend. Crosses factional and national lines. Intimidation automatic vs Renown 5 or below. Debate advantage nearly insurmountable vs lower tiers. Constant scrutiny. |
-| 10 | Galbados | Myth made flesh. Beyond factional politics. No mechanical ceiling on social access. |
-
-Renown informs: likelihood of figures choosing to meet with you; initial audience favour in Debates (higher Renown than opponent = advantage before other context); ease of intimidation and persuasion; social status and rank proxy; level of scrutiny on the character; chances of being targeted by a faction.
+[EDITORIAL: Full permission table requires design — only one data point exists (Renown 6 = Audience with the Monarch bypasses Circles). The table from Renown 1 to Renown 10 needs to be established, specifying what access each tier unlocks for each faction.]
 
 **Confirmed ruling (from stress test):** Renown grants social permissions (bypasses bureaucratic access rolls) but does not replace Circles. A character with Renown 10 can request an audience with the monarch without a Circles roll but still needs Circles to locate an unknown contact. These are different social functions.
 
@@ -3007,7 +2881,7 @@ Renown informs: likelihood of figures choosing to meet with you; initial audienc
 | System | Driver | Pace | Output |
 |---|---|---|---|
 | Test Track | In-play success at difficult Obs | Session | History +1 point |
-| CP Awards | Belief pursuit, Maxims, Domain Actions | Season | CP pool |
+| CP Awards | Belief pursuit, Domain Actions | Season | CP pool |
 | CP Spending | Player choice from menu | As available | Attributes, Histories, Inspirations, Knots, Access |
 | Renown | Public dramatic achievement | Campaign arc | Narrative permissions |
 
@@ -3015,7 +2889,7 @@ Renown informs: likelihood of figures choosing to meet with you; initial audienc
 
 At end of each season, in order:
 1. Check test tracks — advance qualifying Histories.
-2. Award CP (GM): Belief events this season, Maxim events, Domain Action recognition.
+2. Award CP (GM): Belief events this season, Domain Action recognition.
 3. Process any CP purchases declared before accounting (attribute/History/Inspiration).
 4. Award Renown for qualifying public actions this season.
 5. Check Renown permission unlocks (if any new tier crossed).
@@ -3157,7 +3031,7 @@ A TTRPG session covers one dramatic arc, typically one or two scenes within a se
 
 1. Answer 10–15 Editorial Questions establishing sensory texture, NPC motivations, and faction starting postures.
 2. Set Safety Tools.
-3. Create Characters: 3 Histories at 2 points each; 31 attribute points; declare 3–5 Knots.
+3. Create Characters: 3 Histories at 2 points each; 18 attribute points; declare 3–5 Knots.
 4. Set clocks: TT 28, TC 15, IP 20.
 5. Review the Action Economy and Scope Shift procedure.
 6. Confirm the campaign's primary structural questions: which clocks are the PCs best positioned to address, and in which direction?
@@ -3355,7 +3229,7 @@ Where the three modes diverge mechanically:
 | Rule | TTRPG | Board Game | Hybrid |
 |---|---|---|---|
 | Thread operations | Personal-scale (Weaving, Pulling, Leaps) with full narrative | Faction-scale (Weave/Investigate/Harvest orders) with Co-Movement Card | Personal Phase: TTRPG Thread ops. Strategic Phase: board game Thread orders. Both count toward seasonal TT. |
-| Co-movement | Version C (automatic deterministic + actual d6) | Co-Movement Card deck (20 cards) | Personal Phase: Version C. Strategic Phase: Co-Movement Cards. |
+| Co-movement | Version C (automatic deterministic + actual d6) | Co-Movement Card deck (15 cards) | Personal Phase: Version C. Strategic Phase: Co-Movement Cards. |
 | Discovery Events | Full narrative scene | Attribute change only (no scene) | TTRPG scene triggered by board game Discovery Event |
 
 ### Advancement
@@ -3459,7 +3333,7 @@ Downtime activities (training, Inspiration recovery, Knot repair, Approach Train
 
 ### Advancement from Board Game Play
 
-Board game successes generate CP and personal advancement. The character performed those actions; zoom level does not affect whether the experience counts. CP awards use the same criteria as TTRPG play (Belief engagement, significant Domain Action, Maxim expression). GM adjudicates at Cascade Phase seasonal accounting.
+Board game successes generate CP and personal advancement. The character performed those actions; zoom level does not affect whether the experience counts. CP awards use the same criteria as TTRPG play (Belief engagement, significant Domain Action). GM adjudicates at Cascade Phase seasonal accounting.
 
 ### Knot and Inspiration Consequences from Board Events
 
@@ -3535,7 +3409,7 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 
 ### Princess Elske Almqvist
 
-**Starting state:** Married to an Altonian Duke holding territory adjacent to Spartfell. Embedded in Altonian society. Not working for any faction at campaign start.
+**Starting state:** Married to an Altonian Duke holding territory adjacent to Border Pass. Embedded in Altonian society. Not working for any faction at campaign start.
 
 **Conviction:** Family (she loves her brother and father) vs. Self-Determination (she wants to matter on her own terms, not as someone's dynastic piece).
 
@@ -3827,7 +3701,7 @@ For the co-movement procedure and the Co-Movement Prompt Table, see §5.17. For 
 
 - [ ] Answer Editorial Questions (§14.2)
 - [ ] Set Safety Tools (Lines, Veils, or equivalent)
-- [ ] Create Characters: 3 Histories at 2 pts each; 31 attribute points; 2–3 Beliefs; 0–2 Maxims; minimum 3 Knots
+- [ ] Create Characters: 3 Histories at 2 pts each; 18 attribute points; 2–3 Beliefs; minimum 3 Knots
 - [ ] Set opening clock values: TT 28, TC 15, IP 20, Parliament Integrity 7
 - [ ] Write 1–2 Impression Tracks for the first NPCs players will meet
 - [ ] Establish which clocks each PC is best positioned to address — and in which direction
@@ -3883,7 +3757,7 @@ All difficulty in Valoria is expressed through Ob. This guide gives the GM a ref
 | 1 | Routine | Prepared; unhurried; opponent willing or absent; no meaningful resistance |
 | 2 | Standard | Professional difficulty under stakes; trained opposition; some resistance |
 | 3 | Hard | Significant resistance; expert opposition; hostile environment; disadvantaged position |
-| 4 | Severe | Elite opposition; deeply embedded resistance; baseline for Locking or Snapping |
+| 4 | Severe | Elite opposition; deeply embedded resistance; baseline for Forced Resolution |
 | 5+ | Structural | Territorial, institutional, or civilisational targets; the best possible opposition |
 
 **Ob minimum is always 1.** No modifier reduces Ob below 1.
@@ -3993,7 +3867,7 @@ When a character with TS 10–39 is present during a Thread operation of suffici
 
 **Triggers:**
 - Weaving or Pulling at Relational scale or above: always triggers.
-- Locking or Snapping: always triggers.
+- Forced Resolution: always triggers.
 - Monstrous entity encounter: triggers at scene end (not mid-scene, unless the entity directly engages the observer's threads).
 - Extended proximity to an originary Lock object (handling, not passing): triggers after one full scene.
 
@@ -4014,8 +3888,8 @@ At the end of each season, resolve in order:
 - [ ] TT passive drift: +1 per four seasons (i.e., once per full year, at Winter accounting)
 - [ ] Apply TT-lowering events (Overwhelming Weavings at Relational+; preserved Einhir sites; sustained community Weaving; Ceiral Ritual)
 - [ ] Apply the faction attribute seasonal cap: no attribute may have changed by more than ±2 from this season's accounting. If cumulative changes exceed ±2, cap them. Log excess as pending for the following season.
-- [ ] CP awards: +2 per Belief pursued in a meaningful scene; +2 per Belief challenged by events; +4–5 per Belief genuinely revised; +1 per Maxim honoured at cost; +2 per Maxim violated and reckoned with; +1 per stated Goal pursued; +2 per Ordeal survived; +1 per Domain Action completed.
-- [ ] TC threshold conditions: TC pauses if Church Stability ≤ 4 this season. Cross-faction Mandate average ≥ 6: TC −1 this season.
+- [ ] CP awards: +2 per Belief pursued in a meaningful scene; +2 per Belief challenged by events; +4–5 per Belief genuinely revised; +1 per stated Goal pursued; +2 per Ordeal survived; +1 per Domain Action completed.
+- [ ] TC threshold conditions: TC pauses if Church Stability ≤ 5 this season. Cross-faction Mandate average ≥ 6: TC −1 this season.
 - [ ] Parliament Integrity update: adjust per events (Thread event in session: −1; stable Crown-Hafenmark cooperation: recovers +1 per season).
 - [ ] Orphaned configuration deterioration: each orphaned configuration makes an Endurance check (TN 7, Ob 1) at accounting. Failure: configuration fragments (TT +1; perceptible wrongness at TS 30+).
 - [ ] Season marker advances. At Winter: year-end accounting (TT annual drift, annual events).
@@ -4064,7 +3938,7 @@ The following tracks require active GM management throughout the campaign. Keep 
 
 Thread operations are generated from first principles using the Three-Step procedure (§5.2–5.7). This catalog provides representative examples across all operation types and scales. Use these to calibrate Ob expectations and illustrate what each operation type can achieve; do not treat them as an exhaustive list.
 
-For full mechanics: Weaving (§5.4), Pulling (§5.5), Past-Oriented Pulling (§5.6), Locking or Snapping (§5.7), Co-Movement (§5.8).
+For full mechanics: Weaving (§5.4), Pulling (§5.5), Past-Oriented Pulling (§5.6), Forced Resolution (§5.7), Co-Movement (§5.8).
 
 ---
 
@@ -4103,7 +3977,7 @@ For full mechanics: Weaving (§5.4), Pulling (§5.5), Past-Oriented Pulling (§5
 
 ---
 
-## 15.3 Locking and Snapping Operations
+## 15.3 Forced Resolution Operations
 
 *Collapses a thread configuration to one pole permanently. Lock = collapsed toward full actualisation. Dissolution = collapsed toward full potential (ceases to exist as a coherent thing).*
 
@@ -4158,15 +4032,15 @@ All FR operations require TS 50+. All FR operations add TD. Diagnosis mandatory 
 | **Co-Movement** | The principle that every Thread operation produces consequences in all three dimensions (intelligibility, actuality, temporality) simultaneously. The practitioner's intention foregrounds one; the others move automatically. |
 | **Composure** | Social wound track. Equal to Presence + 6 (range 7–13). Strain reduces it; reaching 0 means Rattled. |
 | **Confrontation** | A felt encounter with what exceeds the rendering's capacity. The primary developmental mechanism for Thread Sensitivity in non-practitioners. |
-| **CP** | Character Points. Earned through Beliefs, Maxims, and Ordeals. Spent on advancement (attributes, Histories, Circles, Resources, Boons). |
+| **CP** | Character Points. Earned through Beliefs and Ordeals. Spent on advancement (attributes, Histories, Circles, Resources, Boons). |
 | **Devout Constraint** | Essentialist theological formation that forecloses TS development. Cannot be overcome through confrontation alone — requires sustained doctrinal rupture. |
-| **Diagnosis** | Step 2 of Thread operation. No roll; structured GM exchange. Mandatory before Locking or Snapping. |
+| **Diagnosis** | Step 2 of Thread operation. No roll; structured GM exchange. Mandatory before Forced Resolution. |
 | **Domain Action** | A personal roll that the GM recognises as having faction-level scope. The personal Ob resolves the personal outcome; a second Ob resolves the faction-level consequence. |
 | **Domain Echo** | When a personal success automatically produces faction-level effects without a second roll. Fires on GM recognition of scope; players do not declare it. |
 | **Ein Sof** | Infinite positive being that exceeds all attributes and human categories. The source from which threads are continuously spooled. Epistemically inaccessible, not ontologically void. |
 | **Epistemic Seduction** | The process by which increasing TS dissolves the normative categories that would motivate a transforming practitioner to seek correction. The rendering shifts; what once seemed monstrous seems clarified. |
 | **Forgetting, The** | The rendering's refusal to sustain Southernmost knowledge in non-sensitives upon exit. Not amnesia — the knowledge dissolves into emotional residue without propositional content. |
-| **FR** | Locking or Snapping. Advanced Thread operation collapsing a configuration permanently to Lock (fully actualised) or Dissolution (ceases to exist). Requires TS 50+. |
+| **FR** | Forced Resolution. Advanced Thread operation collapsing a configuration permanently to Lock (fully actualised) or Dissolution (ceases to exist). Requires TS 50+. |
 | **Gap** | A wound in the rendered world's fabric through which the unintelligible ground presses. Produces monstrous configurations and configurational instability in the territory. |
 | **History** | A meaningful life chapter representing skill and experience. Provides dice pool bonus and the test-track advancement mechanism. |
 | **Impression Track** | 0–5 relationship scale with a named NPC. Advances through meaningful scenes; at 5, triggers a significant NPC action on the character's behalf. |
@@ -4176,7 +4050,6 @@ All FR operations require TS 50+. All FR operations add TD. Diagnosis mandatory 
 | **IP** | Altonian Pressure. A 0–100 track measuring the Altonian Empire's aggression toward Valoria. Hidden from players; expressed through events. |
 | **Knot** | A significant relational bond between a character's threads and another entity (person, place, community, object). Provides bonus dice when Called; accumulates Strain under relational stress. |
 | **Let It Ride** | No re-attempts on a failed roll unless circumstances significantly change. Partial = done with complication. Failure = not done AND complication. |
-| **Maxims** | 0–2 short behavioural commitments. Honoured at cost or violated and reckoned with: both earn CP. |
 | **Momentum** | 0–6 session resource. Builds on exceptional combat and social successes. Burns to add automatic successes to non-Thread rolls. |
 | **Ob** | Obstacle. The number of net successes required. Ob 1 = routine; Ob 5+ = structural/institutional. Always minimum 1. |
 | **Ontical** | Pertaining to the rendered world: particular beings, facts, everyday experience as given to consciousness. |
@@ -4184,7 +4057,6 @@ All FR operations require TS 50+. All FR operations add TD. Diagnosis mandatory 
 | **Orphaned Configuration** | A present state whose causal history has been removed by Past-Oriented Pulling. Cause removed; effect persisting. Deteriorates faster than grounded configurations. |
 | **Practitioner** | A character with Approach Training and TS 40+. Can perform active Thread operations. |
 | **Providence Event** | When the Ein Sof's fullness arrives in a form the rendering can hold — briefly and perfectly. Cannot be triggered. A consequence of perfect alignment at mortal risk at TT ≤ 20. |
-| **Push** | Re-roll all failed dice once after any non-Thread roll. Costs −1 Certainty. Once per roll. |
 | **Rendering** | The always-already process by which consciousness presents the thread-substrate as experienceable reality. Not a filter — the condition of possibility for experience. |
 | **Resources** | Material or institutional assets. History-based; degradable. Used for procurement and material-scale influence. |
 | **Scope Shift** | Changing the scale of one's action within a round. Free; verbal declaration. One action per scope per round; +1 Inspiration for additional scope within same round. |
@@ -4225,19 +4097,15 @@ The following fields appear on a complete Valoria character sheet. Pre-calculate
 - Test Track: Challenged / Exceeded checkboxes
 
 **Thread Pools (practitioners only — pre-calculated)**
-- Leap: Attunement + relevant History bonus + TPS (TPS = TS ÷ 10, round down)
-- Weaving: Spirit + relevant History bonus + TPS
-- Pulling: Spirit + relevant History bonus + TPS
-- Past-Oriented Pulling: Spirit + relevant History bonus (no TPS)
-- FR (Locking/Snapping): Spirit + relevant History bonus (no TPS)
+- Leap: Cognition + Focus + Scholar History bonus
+- Weaving: Cognition + Memory + Scholar History bonus
+- Pulling: Cognition + Attunement + Scholar History bonus
+- FR: Cognition + Memory + Scholar History bonus
 - ThS track: current / 20, with stage markers (Dissonant / Fragmented / Fractured / Severed / Crisis)
 
 **Beliefs (2–3)**
 - Statement text
 - Status checkboxes: Pursued / Challenged / Achieved / Revised
-
-**Maxims (0–2)**
-- Statement text
 
 **Inspirations**
 - Name, value (1–Spirit cap for sum), Used checkbox
@@ -4270,7 +4138,7 @@ Full-sheet factions track six attributes. Partial-sheet factions (Revolution, Ni
 | Attribute | Scale | Function |
 |---|---|---|
 | Mandate | 1–7 | Institutional legitimacy; determines Domain Action pool base |
-| Influence | 1–7 | Political reach and diplomatic weight |
+| Reach | 1–7 | Intelligence, information networks, investigative capacity |
 | Wealth | 1–7 | Economic resources; army maintenance; Domain Action support |
 | Military | 1–7 | Armed forces; unit mustering; battle resolution pool |
 | Intel | 1–7 | Covert operations; espionage; Niflhel-equivalent capacity |
@@ -4287,7 +4155,7 @@ Full-sheet factions track six attributes. Partial-sheet factions (Revolution, Ni
 | Clock | Start | Thresholds |
 |---|---|---|
 | Thread Tension (TT) | 28 | 20 Stirring · 40 Wakening · 60 Fracturing · 80 Rupturing · 100 The Rupture |
-| Theocracy Clock (TC) | 15 | 20 Ecclesiastical · 40 Ultimatum · 60 Schism · 70 Seizure · 80 Reserved · 100 Holy State |
+| Theocracy Clock (TC) | 15 | 20 Ecclesiastical · 40 Ultimatum · 60 Schism · 80 Seizure · 100 Holy State |
 | Altonian Pressure (IP) | 20 | 30 Aggressive · 45 Hostile · 60 Warlike · 75 Imminent · 100 Invasion |
 | Parliament Integrity | 7 | 7–10 Normal · 5–6 +1 Ob Votes · 3–4 Supermajority req. · 1–2 Recess · 0 Dissolved |
 
@@ -4317,8 +4185,6 @@ Net zero is Failure. Ob minimum is always 1.
 | Pursuing a Belief in a meaningful scene | +2 |
 | Belief challenged by events | +2 |
 | Belief genuinely revised in response to events | +4–5 |
-| Maxim honoured at personal cost | +1 |
-| Maxim violated and reckoned with | +2 |
 | Pursuing a stated Goal | +1 |
 | Surviving an Ordeal | +2 |
 | Completing a Domain Action | +1 |
@@ -4387,4 +4253,3 @@ Net zero is Failure. Ob minimum is always 1.
 ---
 
 *Checkpoint 14 — 2026-03-26 — Phase 2 TTRPG compilation complete with hybrid gaps resolved*
-
