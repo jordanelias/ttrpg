@@ -1,46 +1,51 @@
-session_id: 2026-03-27T03
-phase: Phase 3 (Simulation) — Testing complete, patch backfill complete
-status: Phase 3 gate BLOCKED on 20 open P1 findings
+session_id: 2026-03-27T04
+phase: Phase 3 (Simulation) — gate pending final closure
+status: Phase 3 gate UNBLOCKED — all P1 findings resolved; 1 design flag pending compilation
 
 completed_this_session:
-  - Coverage matrix schema v2: 7-dimension tagging enforced (sim_coverage_matrix.md)
-  - Interaction bar redefined as ≥3 co-mechanics; 50% gate PASSED (54/55 = 98%)
-  - Batch 07: 15 tests, 47 findings, interaction gap closed for 31 mechanics
-  - Batch 08: 11 tests, 17 findings, remaining cell gaps closed, BG combat confirmed
-  - Batch 09: 10 tests, 20 findings, all 7 remaining cell gaps closed, temporal sweep
-  - Patch proposals backfilled: 77 total (24 P1, 43 P2, 10 P3) in valoria_patch_proposals.md
-  - M-005 (Maxims) formally removed from active tracking (cut mechanic G-062)
+  - Mechanic-audit (Modes C+D) on all 20 open P1 findings
+  - Canon-guard on PP-012 — CONDITIONAL PASS; revised to unified Coherence track
+  - 3 new patches proposed: PP-078 (ThS text), PP-079 (TLK — superseded), PP-080 (TC brake threshold)
+  - Editorial search: recovered 8 prior decisions from past chats
+  - Editorial decisions collected: PP-008, PP-016 (all 3 archetypes), F-B9-17
+  - PP-081 Trajectory Reading designed (new op type, TS 70+)
+  - Patch proposals updated: 792 lines, PP-081 added, status updates applied
+  - Audit report pushed: tests/valoria_mechanic_audit_p1.md
 
 current_state:
-  cell_coverage: ~95% (210/220 active cells)
-  interaction_bar: 54/55 mechanics at ≥3 co-mechs (98%)
-  p1_findings_open: 20
-  patch_proposals: 77 (24 P1, 43 P2, 10 P3)
-  active_mechanics: 55 (M-005 cut)
-  temporal_coverage: ~90% (CROSS gaps remaining in combat/character mechanics)
-  
-p1_findings_open:
-  prior_batches: F25,F57,F72,F78(resolved→doc gap),F80,F83,F84,F89,F100,F112,§4.5
-  batch_07: F-B7-06,F-B7-08/16,F-B7-12,F-B7-17,F-B7-22,F-B7-23,F-B7-40
-  batch_08: F-B8-02(Coherence no recovery)
-  batch_09: F-B9-04/F-B9-08(ME transition procedure absent)
+  p1_findings_open: 0 (all resolved or superseded)
+  patch_proposals: 81 entries
+  editorial_decisions_outstanding: 1 (Poise vs Focus attribute name — flag for compilation)
+  trajectory_reading: designed, not yet compiled into ruleset
+  phase3_gate: READY TO CLOSE
 
-next_action: mechanic-audit on all 20 P1 findings before Phase 3 gate can close
-  - Run valoria-mechanic-audit on P1 cluster: TD/Coherence ratchets (PP-001, PP-062, PP-077)
-  - Run canon-guard on PP-012 (Intelligibility vs Coherence two-track split) against P-03, P-04
-  - [EDITORIAL] pending: PP-007(Poise rename), PP-008(Niflhel stats), PP-012(dual-track),
-    PP-015(TC80 seizure), PP-016(archetype stats), PP-032(Church tithe), PP-062(Coherence recovery),
-    PP-071(conditional Weaving), PP-077(ME play continuation), F-B9-17(future Thread observation)
+editorial_resolved_this_session:
+  - PP-007: CLOSED (not needed — Poise=attribute, Composure=Presence+6 track)
+  - PP-008: APPROVED (Niflhel Intel 6)
+  - PP-012: REVISED (unified Coherence track — merge §4.5+§5.10)
+  - PP-015: SUPERSEDED (compile from succession_mechanic.md)
+  - PP-016: APPROVED (Knight Templar, Restoration Seeker, Niflhel Operative — 10-attr arrays)
+  - PP-062: APPROVED (Community Weaving as supplementary Coherence recovery)
+  - PP-071: APPROVED (conditional Weaving — canon-safe)
+  - PP-077: REVISED (Coherence 0 = NPC; rescue arc before, not play after)
+  - PP-079: SUPERSEDED (compile TLK from succession_mechanic.md)
+  - F-B9-17: APPROVED (Trajectory Reading — PP-081 designed)
+
+compilation_flags:
+  - Poise vs Focus: attribute name at position 6 of 10. User used "Poise" in archetype stats. Workplan says "Focus". Confirm at Stage 1/2 compilation.
+  - PP-006: Verify against Stage 8 mass combat (TN5 disposition table). PP-006 formula (TN7) may be superseded.
+  - PP-012 unified Coherence: merge §4.5 + §5.10 into single track at Stage 3 compilation.
+  - PP-077 revised: rewrite Coherence 0 consequence as "rescue window before NPC transition" at Stage 3.
+  - PP-081 Trajectory Reading: new op — add to Stage 3 (Thread operations).
+  - PP-078 (ThS text fix): apply at Stage 3/4.
+  - PP-080 (TC brake threshold ≤3): apply at Stage 5.
+
+next_action:
+  task: Phase 3 gate formal closure → begin Phase 4 (Consolidate)
+  immediate: Compiler pass applying all approved patches before consolidation
+  model: Sonnet 4.6 for compilation integration; Haiku 4.5 for mechanical text fixes (PP-078, PP-080)
+  note: Do NOT re-run simulation. Do NOT re-run audit. All findings resolved.
 
 files_updated_this_session:
-  - sim_coverage_matrix.md (v2, interaction bar updated, B07-B09 summary appended)
-  - tests/valoria_stress_tests_batch7.md (new)
-  - tests/valoria_stress_tests_batch8.md (new)
-  - tests/valoria_stress_tests_batch9.md (new)
-  - valoria_patch_proposals.md (new, 77 entries)
-
-resume_instructions: |
-  Read session_log_current.md. P1 count = 20. 
-  Next task: mechanic-audit pass on P1 findings, then editorial decisions on flagged patches,
-  then Phase 3 gate closure, then compilation (Phase 2 remaining stages if any).
-  Do NOT re-run simulation — all cell gaps are closed.
+  - valoria_patch_proposals.md (PP-081 added; editorial status updates)
+  - tests/valoria_mechanic_audit_p1.md (new)
