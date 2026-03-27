@@ -112,7 +112,7 @@
 | G-031 | Board game: NPC AI expansion beyond 3-rule skeleton | Session review | Design |
 | G-032 | Asymmetric faction powers per faction | Session review | Design |
 | G-033 | Army levy / mustering from territories | Session review | Design |
-| G-097 | BUG-002: Stage3 compilation file uses obsolete attribute names (Heart/Poise) — not in 10-attribute list; Leap/Weaving/Pulling pools reference wrong attributes | BT3 preflight | Fix stage3 to match CP14 |
+| G-097 | BUG-002: Obsolete Heart/Poise attribute names across compilation stages | BT3 preflight | CLOSED 2026-03-27 — fixed stages 1,3,6,8,9,10,13,16; 3 NPC Presence scores flagged EDITORIAL (Almud/Lenneth/Vaynard) |
 | G-098 | BUG-003: Domain Ob formula — confirmed direct stat 1–7 (no division); faction stat adds to pool when leader held. stage6 fixed 2026-03-27 | BT3 preflight | ✅ Closed |
 | G-121 | GAP-UC-03-A: Thread op performed ON Devout character — Ruling A confirmed (theological absorption). Physical effects visible; Devout character reinterprets through theological framework. No Discovery Event unless practitioner explicitly demonstrates Thread mechanism. | Unplanned combinations + user 2026-03-27 | ✅ Closed |
 | G-122 | Alert A: FR and Past-Oriented Pulling TN = TN 7 confirmed. §1.2 parenthetical is historical artifact; section-level TN 7 governs. | Batch 3 session + user 2026-03-27 | ✅ Closed |
