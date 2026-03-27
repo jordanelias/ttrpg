@@ -1,0 +1,205 @@
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.router { padding: 1rem 0; }
+.task-area { width: 100%; min-height: 90px; padding: 10px 12px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); font-family: var(--font-sans); font-size: 14px; color: var(--color-text-primary); resize: vertical; line-height: 1.5; }
+.task-area:focus { outline: none; border-color: var(--color-border-primary); }
+.context-input { width: 100%; padding: 8px 12px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); background: var(--color-background-primary); font-family: var(--font-sans); font-size: 13px; color: var(--color-text-secondary); margin-top: 8px; }
+.context-input:focus { outline: none; border-color: var(--color-border-secondary); color: var(--color-text-primary); }
+.bottom-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.override-row { display: flex; gap: 6px; }
+.tier-chip { font-size: 12px; padding: 4px 12px; border: 0.5px solid var(--color-border-tertiary); border-radius: 20px; background: var(--color-background-primary); cursor: pointer; color: var(--color-text-secondary); transition: all 0.1s; }
+.tier-chip:hover { border-color: var(--color-border-secondary); color: var(--color-text-primary); }
+.tier-chip.active-haiku { background: #E1F5EE; color: #085041; border-color: #1D9E75; }
+.tier-chip.active-sonnet { background: #E6F1FB; color: #0C447C; border-color: #378ADD; }
+.tier-chip.active-opus { background: #EEEDFE; color: #3C3489; border-color: #7F77DD; }
+.tier-chip.active-auto { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-secondary); }
+.run-btn { margin-left: auto; padding: 8px 20px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); font-family: var(--font-sans); font-size: 14px; font-weight: 500; color: var(--color-text-primary); cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+.run-btn:hover { background: var(--color-background-secondary); }
+.run-btn:active { transform: scale(0.98); }
+.run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.quick-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
+.quick-chip { font-size: 12px; padding: 4px 12px; border: 0.5px solid var(--color-border-tertiary); border-radius: 20px; background: var(--color-background-primary); cursor: pointer; color: var(--color-text-secondary); transition: all 0.1s; }
+.quick-chip:hover { border-color: var(--color-border-secondary); color: var(--color-text-primary); background: var(--color-background-secondary); }
+.divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.25rem 0; }
+.result-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.model-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
+.badge-haiku { background: #E1F5EE; color: #085041; }
+.badge-sonnet { background: #E6F1FB; color: #0C447C; }
+.badge-opus { background: #EEEDFE; color: #3C3489; }
+.route-reason { font-size: 11px; color: var(--color-text-secondary); flex: 1; }
+.copy-btn { font-size: 12px; color: var(--color-text-secondary); background: none; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 3px 10px; cursor: pointer; margin-left: auto; }
+.copy-btn:hover { background: var(--color-background-secondary); }
+.response-box { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem 1.25rem; font-size: 14px; line-height: 1.7; color: var(--color-text-primary); white-space: pre-wrap; min-height: 60px; max-height: 600px; overflow-y: auto; }
+.thinking { color: var(--color-text-secondary); font-style: italic; }
+.error-box { background: #FCEBEB; border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 13px; color: #791F1F; margin-top: 8px; }
+.override-label { font-size: 12px; color: var(--color-text-secondary); white-space: nowrap; }
+</style>
+
+<div class="router">
+<div class="quick-row">
+  <span class="quick-chip" onclick="fill('Extract all section headers from the following text and return a numbered list:\n\n')">Extract headers</span>
+  <span class="quick-chip" onclick="fill('Find and list all cross-references (section numbers, G-IDs, M-IDs) in the following text:\n\n')">Find cross-refs</span>
+  <span class="quick-chip" onclick="fill('Audit the following mechanic for consistency issues, gaps, and formula errors:\n\n')">Mechanic audit</span>
+  <span class="quick-chip" onclick="fill('Run a stress test on the following mechanic. Test isolation, interaction, and edge cases:\n\n')">Stress test</span>
+  <span class="quick-chip" onclick="fill('Check the following against the 14 canon constraints (P-01 through P-14):\n\n')">Canon check</span>
+  <span class="quick-chip" onclick="fill('Resolve the following design ambiguity. Consider philosophical foundations, faction logic, and player experience:\n\n')">Resolve design</span>
+  <span class="quick-chip" onclick="fill('Write the following editorial content for Valoria. Maintain setting tone, faction voice, and philosophical coherence:\n\n')">Write content</span>
+</div>
+
+<textarea class="task-area" id="taskInput" placeholder="Describe the task — auto-routing will pick the model..."></textarea>
+<input class="context-input" id="contextInput" type="text" placeholder="Optional: paste ruleset section, mechanic text, or G-ID for context..." />
+
+<div class="bottom-row">
+  <span class="override-label">Override:</span>
+  <div class="override-row">
+    <span class="tier-chip" id="chip-auto" onclick="setOverride('auto')">auto</span>
+    <span class="tier-chip" id="chip-haiku" onclick="setOverride('haiku')">haiku</span>
+    <span class="tier-chip" id="chip-sonnet" onclick="setOverride('sonnet')">sonnet</span>
+    <span class="tier-chip" id="chip-opus" onclick="setOverride('opus')">opus</span>
+  </div>
+  <button class="run-btn" id="runBtn" onclick="runTask()">Run ↗</button>
+</div>
+
+<hr class="divider" id="resultDivider" style="display:none">
+
+<div id="resultArea" style="display:none">
+  <div class="result-header">
+    <span id="modelBadge" class="model-badge"></span>
+    <span id="routeReason" class="route-reason"></span>
+    <button class="copy-btn" onclick="copyResult()">Copy</button>
+  </div>
+  <div class="response-box" id="responseBox"></div>
+  <div id="errorBox" style="display:none" class="error-box"></div>
+</div>
+</div>
+
+<script>
+const MODELS = {
+  haiku: 'claude-haiku-4-5-20251001',
+  sonnet: 'claude-sonnet-4-20250514',
+  opus: 'claude-opus-4-6'
+};
+
+const ROUTER_SYSTEM = `You are a task router for the Valoria TTRPG project. Given a task description, output ONLY a JSON object:
+{"tier": "haiku"|"sonnet"|"opus", "reason": "<8 words"}
+
+haiku: chunking, indexing, header extraction, cross-ref listing, format fixes, formula transcription, pattern-match repairs
+sonnet: mechanical audit, canon compliance, stress testing, simulation, gap register updates, compilation assembly
+opus: editorial content, NPC/faction/setting authorship, design ambiguity resolution, philosophy-heavy mechanic design
+
+JSON only. No prose, no markdown.`;
+
+const TASK_SYSTEM = `You are a specialized assistant for the Valoria TTRPG project (TTRPG / board game / hybrid, three modes).
+
+Current state: CP14 canonical checkpoint. 14 philosophical canon constraints P-01–P-14. Gap register G-001–G-136, 55 open P1 items. Mechanic registry M-01–M-82. Named NPCs: Almud, Lenneth, Torben, Elske, Himlensendt, Olafsson, Klapp, Baralta, Vaynard, Maret Uln, Ehrenwall. Factions: Crown, Church, Hafenmark, Varfell, Guilds, Niflhel, Revolution, Löwenritter, Schoenland. Cut mechanics (do not reference): Maxims, Push, Thread Harvest, Virtues/Vices.
+
+Respond concisely. Tables for structured findings. G-XXX for new gaps. M-XX for mechanics. P1/P2/P3 severity on findings.`;
+
+let override = 'auto';
+
+function setOverride(val) {
+  override = val;
+  ['auto','haiku','sonnet','opus'].forEach(t => {
+    const chip = document.getElementById('chip-' + t);
+    chip.className = 'tier-chip';
+    if (t === val) chip.classList.add('active-' + t);
+  });
+}
+
+setOverride('auto');
+
+function fill(text) {
+  const ta = document.getElementById('taskInput');
+  ta.value = text;
+  ta.focus();
+  ta.selectionStart = ta.selectionEnd = ta.value.length;
+}
+
+async function detectTier(taskText) {
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: MODELS.haiku,
+      max_tokens: 60,
+      system: ROUTER_SYSTEM,
+      messages: [{ role: 'user', content: taskText }]
+    })
+  });
+  const data = await resp.json();
+  if (data.error) throw new Error(data.error.message);
+  return JSON.parse(data.content[0].text.trim());
+}
+
+async function runTask() {
+  const task = document.getElementById('taskInput').value.trim();
+  const context = document.getElementById('contextInput').value.trim();
+  if (!task) return;
+
+  const btn = document.getElementById('runBtn');
+  btn.disabled = true;
+  btn.textContent = 'Routing...';
+
+  document.getElementById('resultDivider').style.display = '';
+  document.getElementById('resultArea').style.display = '';
+  document.getElementById('errorBox').style.display = 'none';
+  document.getElementById('responseBox').innerHTML = '<span class="thinking">Detecting task tier...</span>';
+  document.getElementById('modelBadge').textContent = '';
+  document.getElementById('routeReason').textContent = '';
+
+  try {
+    let tier, reason;
+    if (override !== 'auto') {
+      tier = override;
+      reason = 'manual override';
+    } else {
+      const routed = await detectTier(task);
+      tier = routed.tier;
+      reason = routed.reason;
+    }
+
+    const badge = document.getElementById('modelBadge');
+    badge.textContent = tier.charAt(0).toUpperCase() + tier.slice(1);
+    badge.className = 'model-badge badge-' + tier;
+    document.getElementById('routeReason').textContent = reason;
+
+    btn.textContent = 'Running...';
+    document.getElementById('responseBox').innerHTML = '<span class="thinking">Running on ' + tier + '...</span>';
+
+    const userContent = context ? task + '\n\n---\nContext:\n' + context : task;
+
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: MODELS[tier],
+        max_tokens: 1000,
+        system: TASK_SYSTEM,
+        messages: [{ role: 'user', content: userContent }]
+      })
+    });
+
+    const data = await resp.json();
+    if (data.error) {
+      document.getElementById('responseBox').innerHTML = '';
+      const err = document.getElementById('errorBox');
+      err.style.display = '';
+      err.textContent = 'API error: ' + data.error.message;
+    } else {
+      document.getElementById('responseBox').textContent = data.content.map(b => b.text || '').join('');
+    }
+  } catch(e) {
+    document.getElementById('responseBox').innerHTML = '';
+    const err = document.getElementById('errorBox');
+    err.style.display = '';
+    err.textContent = 'Error: ' + e.message;
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Run ↗';
+}
+
+function copyResult() {
+  navigator.clipboard.writeText(document.getElementById('responseBox').textContent).catch(() => {});
+}
+</script>
