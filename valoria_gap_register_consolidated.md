@@ -1,6 +1,6 @@
 # Valoria Gap Register — Consolidated
-## Updated: 2026-03-25 (Session 7)
-## Total items: 108
+## Updated: 2026-03-27 (Session 8 — P0-3/P1-4 reconciliation)
+## Total items: 149
 ## Editorial blockers: 0
 
 ---
@@ -289,12 +289,12 @@
 
 | Category | Total | Resolved | Design | Open | Closed/Cut | Deferred |
 |----------|-------|----------|--------|------|------------|----------|
-| P1 | 43 | 12 | 31 | 0 | 0 | 0 |
+| P1 | 55 | 15 | 40 | 0 | 0 | 0 |
 | P2 (main) | 63 | 18 | 29 | 8 | 7 | 0 |
 | P2 (consolidation) | 5 | 5 | 0 | 0 | 0 | 0 |
 | Hybrid (G-074–G-095) | 22 | 5 | 14 | 0 | 0 | 0 |
 | P3 | 4 | 0 | 0 | 1 | 0 | 3 |
-| **Total** | **137** | **40** | **74** | **9** | **7** | **3** |
+| **Total** | **149** | **43** | **83** | **9** | **7** | **3** |
 | G-105 | B02-02: Intelligibility max reduction + low Spirit = permanent Rendering Crisis loop (Int 3 + Spirit 3: max Certainty=1, any loss = instant crisis, recovery impossible until Intelligibility repaired) | B5 Mode B | Confirm intent; document: Intelligibility must be repaired before Certainty stabilises |
 | G-106 | B03-01 P1: Inspiration spend + Fork count uncapped. Multiple Inspirations × Spirit dice = 20D+ pools, trivialise Ob 4 and below | B5 Mode B | Max 1 Inspiration per roll; max 2 Forks per roll — add to §4.1 and §4.3 |
 | G-107 | B04-01: Inspiration spend on Thread operations unruled | B5 Mode B | Add prohibition matching Momentum restriction to §4.3 |
@@ -307,9 +307,28 @@
 | G-114 | B6-TS-01: Mid-phase clock game-end trigger has no resolution order rule | B6 sim | CLOSED 2026-03-27 — mid-phase check added to BG B4 |
 | G-115 | B6-VC-01: Church VC lowered to TC≥60 + Himmelenger + Valorsplatz; expansion lock adjusted to TC≥40 | B6 sim | CLOSED 2026-03-27 — editorial decision B applied |
 
+---
+
+## P1 — SIM-DERIVED (sim_batch_02/03/04, not yet compiled)
+
+| ID | Description | Source | Fix | Status |
+|----|-------------|--------|-----|--------|
+| G-125 | F25: M-016 Personal-scale Pulling — no social counter-mechanic defined for non-practitioners being pulled | sim_batch_02 | Add resistance roll for non-practitioners (Composure vs Pulling Ob) to §6.3 | Design |
+| G-126 | F29: M-021 Taint/Coherence/Intelligibility — §5.11 uses all three terms for overlapping or identical concepts; players cannot determine which track is active | sim_batch_02 | Audit §5.11 and standardise to canonical Coherence (10→0) terminology; remove Taint and Intelligibility as separate track names | Design |
+| G-127 | F31: M-022 Dissolution Residue — §5.12 states residue drains "Coherence" but Coherence is the 10→0 individual countdown; intended drain target is Certainty or ThS | sim_batch_02 | Clarify §5.12: residue drains Certainty (−1 per exposure) unless context specifies ThS drain; audit all Dissolution Residue references | Design |
+| G-128 | F57: M-020 ThS — world track scope (shared, global) contradicts Fallout table language which uses per-practitioner framing ("your ThS drops") | sim_batch_03 | Rewrite §5.9 Fallout table to use world-scope language; ThS is world-side not per-character | Design |
+| G-129 | F72: Torben Loyalty Clock — drain rate entirely absent from CP14; succession timeline is undefined and unplayable without it | sim_batch_03 | Define TLK drain rate (suggest: −1 per season Torben remains in Altonian court; −3 per failed tutoring demand; milestone events); add to §NPC-Torben | Design |
+| G-130 | F78: M-052 Concealment — mechanic referenced in §5 and §7 but procedural rules absent from all scanned sections; no Ob, no resolution, no counter-detection | sim_batch_03 | Write Concealment procedure: Concealment pool vs Observer Perception Ob; success = operation hidden; partial = evidence without attribution; add to §6 | Design |
+| G-131 | F80: M-036 Parliamentary Vote — coalition formation mechanics absent; vote currently resolves as single faction rolls with no multi-faction coordination procedure | sim_batch_03 | Add coalition procedure: factions declare support before vote; supporting faction contributes Mandate dice to lead faction pool; betrayal costs Mandate −1 per supporter deceived | Design |
+| G-132 | F83: M-038 Seasonal Accounting — anti-death-spiral floor (Stability cannot drop below 1) inverts stated intent; a faction at Stability 1 is immune to collapse and cannot be eliminated via attrition | sim_batch_03 | Remove Stability floor OR change floor to 0 with elimination trigger at 0; add elimination procedure; ensure floor does not prevent endgame faction collapse | Design |
+| G-133 | F84: Niflhel faction stats — Niflhel has no Intel stat defined; covert faction identity is mechanically unresolvable (CE, Concealment, investigation all reference Intel) | sim_batch_03 | Add Intel stat to Niflhel (suggest starting value 6, max 8); document in faction stat block §Faction-Niflhel | Design |
+| G-134 | F89: M-055 Community Weaving — TT cost scaling in collective operations unspecified; single practitioner TT cost defined but group multiplier absent | sim_batch_03 | Define collective scaling: base TT cost × (number of practitioners / 2, rounded up); cap at ×3; add to §6.8 | Design |
+| G-135 | F100: M-045 Mass Combat — damage formula not specified in §8.3; unit elimination threshold present but per-round damage output undefined | sim_batch_04 | Define mass combat damage: attacker excess successes × formation Power; defender absorbs via Armour value; add to §8.3 | Design |
+| G-136 | F112: M-034 Church faction stats — Stability TC brake fires at Stability ≤5, but Church starts at Stability 5; this permanently suppresses Church TC generation from game start, making Church effectively unable to advance TC under standard conditions | sim_batch_04 | Change brake threshold to Stability ≤3 OR change Church starting Stability to 6; confirm intent — is Church supposed to face TC suppression early? | Design |
+
 **Editorial blockers: 0**
-**Design needed: 74 items**
-**Resolved awaiting compilation: 40 items**
+**Design needed: 83 items**
+**Resolved awaiting compilation: 43 items**
 **Closed/cut: 7 items**
 *Last updated: 2026-03-27 — added G-105–G-124 from past conversation audit (16 new P1 design, 4 new P1 closed)*
 
@@ -330,4 +349,5 @@
 
 ### Revised session estimate
 **26–42 sessions** (was 28–45). Hybrid architecture pre-resolved saves ~2 sessions. Consolidation pre-resolved saves ~1 session. Added hybrid design items offset by simplified map/combat design.
+
 
