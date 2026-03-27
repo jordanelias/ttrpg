@@ -24,7 +24,7 @@ The Leap is a **full-round action (Priority 5)**. No attack, no movement, no man
 
 ### The Leap Roll
 
-**Pool:** Cognition + Heart + relevant History bonus (e.g., "Einhir Scholar": points + 3)
+**Pool:** Cognition + Attunement + relevant History bonus (e.g., "Einhir Scholar": points + 3)
 **TN:** 7
 **Ob:** TS 30–49 = 2 · TS 50+ = 1 · +1 Ob per Wound
 
@@ -45,18 +45,18 @@ The first time a character attempts the Leap, it is run as a full event scene ra
 
 ### Contact Duration
 
-Once the Leap succeeds, contact is maintained automatically for a number of rounds equal to the practitioner's **Heart score**. The Leap round itself counts as Round 1. At Round (Heart + 1), contact drops naturally.
+Once the Leap succeeds, contact is maintained automatically for a number of rounds equal to the practitioner's **Focus score**. The Leap round itself counts as Round 1. At Round (Focus + 1), contact drops naturally.
 
 The window is time-based — it counts down whether or not the practitioner acts within it.
 
-Standard sequence (Heart 3 or more):
+Standard sequence (Focus 3 or more):
 - Round 1: Leap (Priority 5) — contact established
 - Round 2: Diagnosis (Priority 4, free, does not shorten window)
 - Round 3: Operation (Priority 4 or 5)
 
-At Heart 2: only Rounds 1 and 2 are covered — Diagnosis is possible but the operation requires re-Leaping.
+At Focus 2: only Rounds 1 and 2 are covered — Diagnosis is possible but the operation requires re-Leaping.
 
-**Wound disruption during maintained contact:** When the practitioner takes a Wound while contact is established, make a Heart check immediately: Heart score in d10s, TN 7, Ob 1. Failure: contact drops. Damage that does not produce a Wound does not trigger this check.
+**Wound disruption during maintained contact:** When the practitioner takes a Wound while contact is established, make an Attunement check immediately: Attunement score in d10s, TN 7, Ob 1. Failure: contact drops. Damage that does not produce a Wound does not trigger this check.
 
 ### Thread Operation Visibility
 
@@ -198,7 +198,7 @@ Pre-calculate the Pulling pool on the character sheet.
 **Foregrounded dimension:** Temporality toward the past — drawing a thread back so a prior event never fully actualised. This produces a **Temporal Disjunction**: physical facts are removed, but memories remain intact. The past event "never fully actualised" but everyone who experienced it retains the memory.
 
 **Requirements:** TS 70+ · TT ≥ 40 · Diagnosis mandatory
-**Pool:** Cognition + Heart + Memory + relevant History bonus (three attributes — this operation costs everything)
+**Pool:** Cognition + Attunement + Memory + relevant History bonus (three attributes — this operation costs everything)
 **TN:** 7
 
 **Ob by recency:**
@@ -468,7 +468,7 @@ Objects present at or interacted with during a monstrous entity's arrival, or at
 
 **Properties:** Cannot be Pulled, Woven, or subjected to standard FR. They can be sensed, Diagnosed, and held, but not worked.
 
-**Handling an Originary Lock (TS 50+ required):** When a practitioner handles an Originary Lock for one full scene, they receive a revelation experience: +10 TS gain immediately, plus a Heart check (TN 8, Ob = current Wounds + 1) or take 2 Wounds (armour does not apply). The experience is permanent and cannot be unfelt. A practitioner who has handled an Originary Lock from Galbados's emergence has felt the shape of the third mode — the arriving that holds itself together.
+**Handling an Originary Lock (TS 50+ required):** When a practitioner handles an Originary Lock for one full scene, they receive a revelation experience: +10 TS gain immediately, plus a Spirit check (TN 8, Ob = current Wounds + 1) or take 2 Wounds (armour does not apply). The experience is permanent and cannot be unfelt. A practitioner who has handled an Originary Lock from Galbados's emergence has felt the shape of the third mode — the arriving that holds itself together.
 
 ### Category Three — Dissolution Residue
 
@@ -482,7 +482,7 @@ Configuration that has partially escaped normal actualization — oscillating be
 
 **Trigger:** An object in a territory where multiple Thread operations have been performed, or where TT has been above 40 for 2+ seasons.
 
-**Certainty cost:** −1 on first witnessing (Heart check TN 7 Ob 1 to resist).
+**Certainty cost:** −1 on first witnessing (Spirit check TN 7 Ob 1 to resist).
 
 **Deterioration:** Worsens to Gap within 1d3 seasons without intervention. Dissolution residue forms at edges each season it persists.
 
@@ -492,7 +492,7 @@ Configuration that has partially escaped normal actualization — oscillating be
 
 Wound in the rendered world's fabric.
 
-**Certainty cost:** −1 per scene near a Gap (no Heart check to resist).
+**Certainty cost:** −1 per scene near a Gap (no Spirit check to resist).
 
 **Thread operations within range:** +1 Ob (stacks with other penalties).
 
