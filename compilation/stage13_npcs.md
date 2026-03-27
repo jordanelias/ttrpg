@@ -16,7 +16,7 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 **TS:** 28 (high Dormant; near Stirring threshold). Does not know the name for what he experiences. Attributes felt impressions to spiritual intimation. A Discovery Event would be the most destabilising moment of his reign.
 
 **Social Profile:**
-- Composure: 9 (Poise 5 + Heart 4)
+- Composure: 9 [EDITORIAL: Presence score not yet assigned — recalculate as Presence + 6 when confirmed]
 - Dominant Conviction: Order — legitimate authority through proper institutional channels
 - Resonant Style: Consequence — long-horizon thinking; past injustice moves him less than future structural risk
 
@@ -36,7 +36,7 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 **TS:** 0 (Inert). Not foreclosed — simply never confronted.
 
 **Social Profile:**
-- Composure: 8 (Poise 4 + Heart 4)
+- Composure: 8 [EDITORIAL: Presence score not yet assigned — recalculate as Presence + 6 when confirmed]
 - Dominant Conviction: Liberty — the concrete political conditions under which people can act without requiring institutional permission
 - Resonant Style: Consequence
 
@@ -83,8 +83,8 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 **TS:** 0. Sincerely devout, institutionally effective, and completely without knowledge of what his institution is or what it was built to do. He is the most thorough product of Galbados's theological engineering in the kingdom. His certainty is not the certainty of someone who has considered doubt and rejected it — it is the certainty of someone who has never been given the perceptual tools to approach the question differently.
 
 **Social Profile:**
-- Attributes: Poise 6, Presence 6, Cognition 5
-- Composure: 10 (Poise 6 + Heart 4, estimated)
+- Attributes: Presence 6, Cognition 5
+- Composure: 12 (Presence 6 + 6)
 - Dominant Conviction: Faith
 - Resonant Style: Consequence (what this situation produces for the Church's mandate)
 
@@ -140,8 +140,8 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 **TS:** 0 (Inert). Essentialist theology has completely foreclosed TS development. She has no awareness this foreclosure exists.
 
 **Social Profile:**
-- Composure: 8 (Poise 5 + Heart 3)
-- Attributes: Coordination 4, Power 4, Poise 5, Presence 5
+- Composure: 11 (Presence 5 + 6)
+- Attributes: Coordination 4, Power 4, Presence 5
 - Dominant Conviction: Order — structured, hierarchical, institutional authority
 - Resonant Style: Evidence — legal precedent, documented history, institutional argument
 
@@ -175,7 +175,7 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 **TS:** 14 (Dormant). Does not know he has Thread sensitivity.
 
 **Social Profile:**
-- Composure: 6 (Poise 4 + Heart 2)
+- Composure: 6 [EDITORIAL: Presence score not yet assigned — recalculate as Presence + 6 when confirmed]
 - Dominant Conviction: Reason — truth as instrument; genuine high weight on acknowledged uncertainty
 - Resonant Style: Consequence — forward-looking analysis of what situations will produce
 
@@ -193,7 +193,7 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 | 4 | Urgency. Willing to offer collection access (including originary locks) in exchange for Thread education and Southernmost partnership. TC +2. |
 | 5 | Dangerous knowledge — knows what Galbados was structurally. Seeks capability, not knowledge. TC +3. |
 
-**The Discovery Event.** If Vaynard is present during a Thread event of sufficient intensity, the GM may call a Discovery Event. Heart check TN 7 Ob 1. On success: TS advances to 30 (Stirring), and the world reorganises itself for him.
+**The Discovery Event.** If Vaynard is present during a Thread event of sufficient intensity, the GM may call a Discovery Event. Spirit check TN 7 Ob 1. On success: TS advances to 30 (Stirring), and the world reorganises itself for him.
 
 ---
 
@@ -266,7 +266,7 @@ Extralegal arm of the Löwenritter. Operations are not recorded in Ministry of L
 | Encounter with monstrous configuration | +2 |
 | Extraction assignment with active practitioner | +1 |
 
-At CE 3+: qualifies for TS growth check (Heart TN 7, Ob 1) on the next confrontation event.
+At CE 3+: qualifies for TS growth check (Spirit TN 7, Ob 1) on the next confrontation event.
 
 ---
 
@@ -284,7 +284,7 @@ The Inquisitor Confrontation Arc. An Inquisitor who builds a successful file on 
 | Handling an originary lock or dissolution residue object as evidence | +2 |
 | Extended interrogation of a Resonant-tier practitioner | +3 |
 
-At CE 3: TS growth check — Heart TN 7, Ob 2 (essentialist formation raises the Ob). Success: develops TS toward Dormant. This is a **crisis of faith event**, not a benefit.
+At CE 3: TS growth check — Spirit TN 7, Ob 2 (essentialist formation raises the Ob). Success: develops TS toward Dormant. This is a **crisis of faith event**, not a benefit.
 
 **Three trajectories at CE 3+ with TS development:**
 
@@ -297,7 +297,7 @@ At CE 3: TS growth check — Heart TN 7, Ob 2 (essentialist formation raises the
 | Stage | Roll | Notes |
 |---|---|---|
 | 1. File Building | Church Reach, Ob 3 | Player obstruction at Ob 2. |
-| 2. Formal Accusation | Church Reach, Ob 4 | Requires completed File. Accused may call Grand Debate (5 exchanges; pool: Poise + relevant History). |
+| 2. Formal Accusation | Church Reach, Ob 4 | Requires completed File. Accused may call Grand Debate (5 exchanges; pool: Cognition + relevant History). |
 | 3. Conviction Hearing | Grand Debate finale | Conviction: TC +2. Accused faces imprisonment or exile. |
 
 ---
