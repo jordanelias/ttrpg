@@ -1970,10 +1970,10 @@ Vaynard's TK measures his understanding of Thread metaphysics, the Calamity's me
 
 | TK | Campaign Effect |
 |---|---|
-| 1–2 | Informed questions. Acute awareness, not understanding. No TC effect. |
-| 3 | Structural theory (wrong in detail, correct in structure). Succession leverage formally linked to Southernmost access terms. TC +1. |
-| 4 | Urgency. Willing to offer collection access (including originary locks) for Thread education and Southernmost partnership. TC +2. |
-| 5 | Dangerous knowledge — understands what Galbados was structurally. Seeks capability, not further knowledge. TC +3. |
+| 1–2 | Informed questions. Acute awareness, not understanding. Inquisitor file building — no mechanical effect. Players can suppress via Crown or Niflhel channels. |
+| 3 | Structural theory (wrong in detail, correct in structure). Inquisitor file formally active. Church requests Crown cooperation. Succession leverage formally linked to Southernmost access terms. Crown must respond this season or TC +1 (Church escalates unopposed). |
+| 4 | Urgency. Willing to offer collection access (including originary locks) for Thread education and Southernmost partnership. Church demands Crown action — Crown faces formal Parliamentary choice: defend or yield. TC movement depends on outcome, not TK itself. |
+| 5 | Dangerous knowledge — understands what Galbados was structurally. Seeks capability, not further knowledge. Heresy declaration issued; investigation opens. If it proceeds uncontested: TC +3. Players may intervene to prevent or derail. |
 
 **Vaynard Ambition Track (0–100)**
 
@@ -3602,10 +3602,10 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 
 | TK | Campaign Effect |
 |---|---|
-| 1–2 | Informed questions. Acute awareness rather than understanding. No TC effect. |
-| 3 | Structural theory (wrong in detail, correct in structure). Succession leverage formally linked to Southernmost access terms. TC +1. |
-| 4 | Urgency. Willing to offer collection access (including originary locks) in exchange for Thread education and Southernmost partnership. TC +2. |
-| 5 | Dangerous knowledge — knows what Galbados was structurally. Seeks capability, not knowledge. TC +3. |
+| 1–2 | Informed questions. Acute awareness, not understanding. Inquisitor file building — no mechanical effect. Players can suppress via Crown or Niflhel channels. |
+| 3 | Structural theory (wrong in detail, correct in structure). Inquisitor file formally active. Church requests Crown cooperation. Succession leverage formally linked to Southernmost access terms. Crown must respond this season or TC +1 (Church escalates unopposed). |
+| 4 | Urgency. Willing to offer collection access (including originary locks) for Thread education and Southernmost partnership. Church demands Crown action — Crown faces formal Parliamentary choice: defend or yield. TC movement depends on outcome, not TK itself. |
+| 5 | Dangerous knowledge — understands what Galbados was structurally. Seeks capability, not further knowledge. Heresy declaration issued; investigation opens. If it proceeds uncontested: TC +3. Players may intervene to prevent or derail. |
 
 **The Discovery Event.** If Vaynard is present during a Thread event of sufficient intensity, the GM may call a Discovery Event. Spirit check TN 7 Ob 1. On success: TS advances to 30 (Stirring), and the world reorganises itself for him.
 
