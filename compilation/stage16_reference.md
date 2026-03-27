@@ -14,7 +14,7 @@
 | **CE** | Confrontation Exposure. Per-NPC 0–5 track. At CE 3, triggers a TS growth check — a crisis, not a benefit. |
 | **Circles** | Social access network tied to a specific community or institution. Used for Appeal and information-gathering. History-based; degradable. |
 | **Co-Movement** | The principle that every Thread operation produces consequences in all three dimensions (intelligibility, actuality, temporality) simultaneously. The practitioner's intention foregrounds one; the others move automatically. |
-| **Composure** | Social wound track. Equal to Poise + Heart. Strain reduces it; reaching 0 means Rattled. |
+| **Composure** | Social wound track. Equal to Presence + 6. Strain reduces it; reaching 0 means Rattled. |
 | **Confrontation** | A felt encounter with what exceeds the rendering's capacity. The primary developmental mechanism for Thread Sensitivity in non-practitioners. |
 | **CP** | Character Points. Earned through Beliefs, Maxims, and Ordeals. Spent on advancement (attributes, Histories, Circles, Resources, Boons). |
 | **Devout Constraint** | Essentialist theological formation that forecloses TS development. Cannot be overcome through confrontation alone — requires sustained doctrinal rupture. |
@@ -74,7 +74,7 @@ The following fields appear on a complete Valoria character sheet. Pre-calculate
 
 **Derived Scores**
 - Health = Endurance + 6
-- Composure = Poise + Heart *(note: compiled ruleset uses Presence + Spirit — confirm at final pass)*
+- Composure = Presence + 6
 - Certainty = current value / Spirit (maximum)
 
 **Histories (pre-calculated)**
