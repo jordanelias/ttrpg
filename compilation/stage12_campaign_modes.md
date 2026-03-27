@@ -27,7 +27,7 @@ A TTRPG session covers one dramatic arc, typically one or two scenes within a se
 
 1. Answer 10–15 Editorial Questions establishing sensory texture, NPC motivations, and faction starting postures.
 2. Set Safety Tools.
-3. Create Characters: 3 Histories at 2 points each; 18 attribute points; declare 3–5 Knots.
+3. Create Characters: 3 Histories at 2 points each; 31 points; declare 3–5 Knots.
 4. Set clocks: TT 28, TC 15, IP 20.
 5. Review the Action Economy and Scope Shift procedure.
 6. Confirm the campaign's primary structural questions: which clocks are the PCs best positioned to address, and in which direction?
