@@ -41,9 +41,9 @@ Total Inspiration value ≤ **Resolve** (Spirit score). Individual Inspirations 
 
 Each Inspiration has a named **focus**: a person, place, ideal, or object that gives the character determination.
 
-**Spend (value 1+, once per scene per Inspiration):** When the focus is relevant, roll Spirit score in bonus dice. Add results to pool normally.
+**Spend (value 1+, once per scene per Inspiration):** When the focus is relevant, roll Spirit score in bonus dice. Add results to pool normally. Maximum one Inspiration spend per roll (multiple Inspirations may be spent in the same scene on different rolls, but not stacked on a single roll). Inspiration may not be spent on Thread operation rolls (same restriction as Momentum, §1.7).
 
-**Stunt (value 2+):** Narrate connection to action. Add automatic successes equal to relevant attribute (no roll for those). Roll Spirit dice as bonus (chain on 10). Roll remaining pool normally. Stunt auto-successes replace rolled dice for collective operations — helpers' contributed dice do not apply to a Stunt.
+**Stunt (value 2+):** Narrate connection to action. Add automatic successes equal to the Inspiration's current value (no roll for those). Roll Spirit dice as bonus (chain on 10). Roll remaining pool normally. Stunt auto-successes replace rolled dice for collective operations — helpers' contributed dice do not apply to a Stunt.
 
 ### Acquiring New Inspirations (Mid-Campaign)
 
