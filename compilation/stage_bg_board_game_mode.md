@@ -344,6 +344,8 @@ Orders resolve in this sequence. Within same priority: simultaneous (declare bef
 | 5 | Unique Powers | Each faction's Unique Power resolves last. |
 | 6 | Decree / Parliamentary Manoeuvre | Crown Decree and Hafenmark Parliamentary Manoeuvre resolve after all others (these affect attribute changes applied to other resolutions; they take effect at next accounting if timing is ambiguous). |
 
+**Mid-phase game-end check:** If a clock reaches 100 during Phase 4, complete the current priority tier, then apply the endgame event before continuing.
+
 **Contested resolution:** If two orders interact in the same territory or target the same faction attribute, both roll simultaneously. Apply results simultaneously. No order gets to react to another order resolving unless a specific card or rule says otherwise.
 
 ### Planning Phase Rules
@@ -446,6 +448,20 @@ No roll required for standard movement. One unit moves one territory per March o
 
 *Roll:* Intel vs target Intel (or Ob 2 if target has no Intel stat).
 *Hidden stats:* Varfell and Niflhel may keep one faction stat hidden from public view at any time. Hidden stats must be revealed honestly when targeted by a successful Intel order.
+
+---
+
+**FORTIFY**
+*(Controlling faction only; cannot be used while under active siege)*
+
+Roll: Wealth vs Ob = current Fortification level + 1 (min Ob 1). Max Fortification: 5.
+
+| Degree | Effect |
+|---|---|
+| Overwhelming | Fort +1. Prosperity unchanged. |
+| Success | Fort +1. Prosperity −1. |
+| Partial | No gain. Prosperity −1. |
+| Failure | No gain. Prosperity −1. Cannot Fortify this territory next season. |
 
 ---
 
