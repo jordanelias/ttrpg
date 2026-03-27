@@ -301,6 +301,11 @@
 | G-108 | B05-01: Incapacitated character participation in social scene (hybrid) unruled | B5 Mode B | Incapacitated = no social rolls until 1+ Health; §9 or §12 |
 | G-109 | B06-01: Rendering Crisis has no mechanical enforcement for continued Thread operation | B5 Mode B | Thread op during Rendering Crisis = +1D CD on resolution |
 | G-110 | B07-01 P1: Non-combat pool floor undefined — Presence 1 + 3 Rattled = 0D or negative | B5 Mode B | Minimum 1D floor for all rolls; add to §1.1 |
+| G-111 | B6-RE-01 P1: Reading Exchange missing Ob — degree resolution impossible without it | B6 sim | CLOSED 2026-03-27 — Ob=1 + degree mapping added to §9.4 |
+| G-112 | B6-IT-01: Impression Track + Knot Crisis simultaneous fire has no priority rule | B6 sim | CLOSED 2026-03-27 — Crisis takes precedence; added to §4.7 |
+| G-113 | B6-FO-01/02: Fortification construction missing from TTRPG and BG | B6 sim | CLOSED 2026-03-27 — Domain Action added to §8.4; FORTIFY order added to BG B5 |
+| G-114 | B6-TS-01: Mid-phase clock game-end trigger has no resolution order rule | B6 sim | CLOSED 2026-03-27 — mid-phase check added to BG B4 |
+| G-115 | B6-VC-01 EDITORIAL: Church victory condition (TC≥80) inaccessible under shared survival rules — de facto unwinnable faction or only via THE HOLY STATE path | B6 sim | Open — requires editorial intent confirmation |
 
 **Editorial blockers: 0**
 **Design needed: 74 items**
@@ -325,3 +330,4 @@
 
 ### Revised session estimate
 **26–42 sessions** (was 28–45). Hybrid architecture pre-resolved saves ~2 sessions. Consolidation pre-resolved saves ~1 session. Added hybrid design items offset by simplified map/combat design.
+
