@@ -877,8 +877,17 @@ Pre-calculate the Pulling pool on the character sheet.
 | Same season | 6 |
 | Prior seasons | 7+ (escalates) |
 
+**Degree of success outcomes:**
+
+| Degree | Outcome |
+|---|---|
+| Overwhelming | Temporal Disjunction complete. The prior event is removed from the actual world; memories remain fully intact (all witnesses retain memory of the event, but no physical evidence, wounds, or material effects remain). TT +3. ThS −2. Practitioner gains 1 TS. |
+| Success | Temporal Disjunction achieved. Physical facts removed; memories remain. TT +3. ThS −1. |
+| Partial | Disjunction incomplete. Physical facts partially removed at GM discretion; inconsistencies remain in the rendered world. TT +3. ThS −1. One material trace survives. |
+| Failure | Disjunction collapse. The thread snaps back to its prior configuration. Practitioner takes 2 Wounds (armour does not apply). TT +5. ThS −2. A Temporal Gap forms at the operation site. |
+
 **TT:** +3 minimum regardless of degree.
-**ThS:** Automatic +3 additional (on top of any other ThS costs).
+**ThS:** Automatic +3 additional (on top of any other ThS costs) — except on Failure (see above for Failure ThS cost).
 
 **Co-Movement:** Past-Oriented Pulling produces secondary consequences in *both* remaining dimensions. The GM determines consequences for the actual and epistemic dimensions — not just one.
 
@@ -1970,10 +1979,10 @@ Vaynard's TK measures his understanding of Thread metaphysics, the Calamity's me
 
 | TK | Campaign Effect |
 |---|---|
-| 1–2 | Informed questions. Acute awareness, not understanding. Inquisitor file building — no mechanical effect. Players can suppress via Crown or Niflhel channels. |
-| 3 | Structural theory (wrong in detail, correct in structure). Inquisitor file formally active. Church requests Crown cooperation. Succession leverage formally linked to Southernmost access terms. Crown must respond this season or TC +1 (Church escalates unopposed). |
-| 4 | Urgency. Willing to offer collection access (including originary locks) for Thread education and Southernmost partnership. Church demands Crown action — Crown faces formal Parliamentary choice: defend or yield. TC movement depends on outcome, not TK itself. |
-| 5 | Dangerous knowledge — understands what Galbados was structurally. Seeks capability, not further knowledge. Heresy declaration issued; investigation opens. If it proceeds uncontested: TC +3. Players may intervene to prevent or derail. |
+| 1–2 | Informed questions. Acute awareness, not understanding. No TC effect. |
+| 3 | Structural theory (wrong in detail, correct in structure). Succession leverage formally linked to Southernmost access terms. TC +1. |
+| 4 | Urgency. Willing to offer collection access (including originary locks) for Thread education and Southernmost partnership. TC +2. |
+| 5 | Dangerous knowledge — understands what Galbados was structurally. Seeks capability, not further knowledge. TC +3. |
 
 **Vaynard Ambition Track (0–100)**
 
@@ -3602,10 +3611,10 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 
 | TK | Campaign Effect |
 |---|---|
-| 1–2 | Informed questions. Acute awareness, not understanding. Inquisitor file building — no mechanical effect. Players can suppress via Crown or Niflhel channels. |
-| 3 | Structural theory (wrong in detail, correct in structure). Inquisitor file formally active. Church requests Crown cooperation. Succession leverage formally linked to Southernmost access terms. Crown must respond this season or TC +1 (Church escalates unopposed). |
-| 4 | Urgency. Willing to offer collection access (including originary locks) for Thread education and Southernmost partnership. Church demands Crown action — Crown faces formal Parliamentary choice: defend or yield. TC movement depends on outcome, not TK itself. |
-| 5 | Dangerous knowledge — understands what Galbados was structurally. Seeks capability, not further knowledge. Heresy declaration issued; investigation opens. If it proceeds uncontested: TC +3. Players may intervene to prevent or derail. |
+| 1–2 | Informed questions. Acute awareness rather than understanding. No TC effect. |
+| 3 | Structural theory (wrong in detail, correct in structure). Succession leverage formally linked to Southernmost access terms. TC +1. |
+| 4 | Urgency. Willing to offer collection access (including originary locks) in exchange for Thread education and Southernmost partnership. TC +2. |
+| 5 | Dangerous knowledge — knows what Galbados was structurally. Seeks capability, not knowledge. TC +3. |
 
 **The Discovery Event.** If Vaynard is present during a Thread event of sufficient intensity, the GM may call a Discovery Event. Spirit check TN 7 Ob 1. On success: TS advances to 30 (Stirring), and the world reorganises itself for him.
 
@@ -4167,10 +4176,11 @@ The following fields appear on a complete Valoria character sheet. Pre-calculate
 - Test Track: Challenged / Exceeded checkboxes
 
 **Thread Pools (practitioners only — pre-calculated)**
-- Leap: Cognition + Focus + Scholar History bonus
-- Weaving: Cognition + Memory + Scholar History bonus
-- Pulling: Cognition + Attunement + Scholar History bonus
-- FR: Cognition + Memory + Scholar History bonus
+- Leap: Attunement + relevant History bonus + TPS (TPS = TS ÷ 10, round down)
+- Weaving: Spirit + relevant History bonus + TPS
+- Pulling: Spirit + relevant History bonus + TPS
+- Past-Oriented Pulling: Spirit + relevant History bonus (no TPS)
+- FR (Locking/Snapping): Spirit + relevant History bonus (no TPS)
 - ThS track: current / 20, with stage markers (Dissonant / Fragmented / Fractured / Severed / Crisis)
 
 **Beliefs (2–3)**
@@ -4328,3 +4338,4 @@ Net zero is Failure. Ob minimum is always 1.
 ---
 
 *Checkpoint 14 — 2026-03-26 — Phase 2 TTRPG compilation complete with hybrid gaps resolved*
+
