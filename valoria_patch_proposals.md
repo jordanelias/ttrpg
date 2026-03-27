@@ -643,10 +643,10 @@ Items marked [EDITORIAL] above require user approval:
 ## PATCH COUNT SUMMARY
 | Severity | Count |
 |----------|-------|
-| P1 | 23 |
-| P2 | 34 |
+| P1 | 24 |
+| P2 | 43 |
 | P3 | 10 |
-| **Total** | **67** |
+| **Total** | **77** |
 
 
 ## PATCH PROPOSALS — BATCH 08 ADDITIONS
@@ -700,3 +700,68 @@ Items marked [EDITORIAL] above require user approval:
 **Mechanic:** M-046 (Thread Ops in Combat)
 **Proposed fix (extends PP-036):** "A practitioner may split their combat round between Thread operation initiation and physical defence. Split action: Thread operation pool = TS/4 (rounded down); physical defence pool = Coord/2 (rounded down). The Thread operation still initiates at Priority 5 and manifests at Priority 1 next round."
 
+
+## PATCH PROPOSALS — BATCH 09 ADDITIONS
+
+### PP-069
+**Finding:** F-B9-06 / F83 extension
+**Severity:** P2 (F83 related)
+**Mechanic:** M-038 (Seasonal Accounting), M-034 (Faction Stats)
+**Proposed fix:** "Anti-death-spiral recovery actions may use any faction stat as the pool (player choice), representing the faction drawing on their strongest resource to survive. The Ob floor remains 4."
+
+### PP-070
+**Finding:** F-B9-06
+**Severity:** P2
+**Mechanic:** M-038 (Seasonal Accounting)
+**Proposed fix:** "If 3 or more factions simultaneously reach Wealth 0, an Economic Crisis is declared: all clocks pause for 1 season, TT −2, IP +5. Each faction may attempt one Emergency Resource action at Ob 3 using any stat (one attempt per faction, no Domain Action slot cost)."
+
+### PP-071
+**Finding:** F-B9-18
+**Severity:** P2
+**Mechanic:** M-015 (Weaving)
+**Proposed fix:** "Conditional Weaving: a practitioner may Weave a structure with a defined trigger condition (Ob +2 vs standard Weave). When the trigger condition is met (GM call or stated mechanical threshold), the Weaving activates automatically. TD cost applies at time of Weaving. Contact ends at Weaving completion."
+[EDITORIAL: confirm whether deferred Weaving is consistent with Foundations P-01 co-movement principle]
+
+### PP-072
+**Finding:** F-B9-14
+**Severity:** P2
+**Mechanic:** M-056 (Niflhel Destabilisation), M-035 (Domain Actions)
+**Proposed fix:** "Truce mechanic: two factions may declare a Truce by each spending one Political Domain Action (Ob 2). During a Truce season, neither faction may take covert or military Domain Actions targeting the other. Truce expires at season end unless renewed. Either faction may break a Truce at any time; breaking a Truce costs IP +2 (diplomatic credibility loss)."
+
+### PP-073
+**Finding:** F-B9-10, F-B9-11
+**Severity:** P2
+**Mechanic:** M-050 (Riskbreakers)
+**Proposed fix (extends PP-064):**
+- Voluntary extraction: "A Riskbreaker may extract at any DD level. DD resets to 0, cover identity is retired (Circles → 0), faction loses Riskbreaker intelligence for one season, no IP penalty."
+- Natural DD decay: "At season end, if the Riskbreaker performed no operations this season: DD −1. Minimum DD: 0."
+
+### PP-074
+**Finding:** F-B9-01
+**Severity:** P2
+**Mechanic:** M-016 (Pulling)
+**Proposed fix:** "Pulling a connection shared by multiple entities: use one roll targeting the connection itself. All entities connected by the same Thread connection are affected by the outcome. TT cost applies once per Pull regardless of the number of affected entities."
+
+### PP-075
+**Finding:** F-B9-07
+**Severity:** P2
+**Mechanic:** M-038 (Seasonal Accounting), M-045 (Mass Combat)
+**Proposed fix:** "During a season of active military conflict, each belligerent faction pays additional upkeep equal to Military stat ÷ 2 (rounded up) in Wealth. This represents supply, logistics, and campaign costs."
+
+### PP-076
+**Finding:** F-B9-13
+**Severity:** P2
+**Mechanic:** M-051 (Devout Constraint)
+**Proposed fix:** "Dissonance Marks require at least one scene between accumulations. A character cannot accumulate more than one Dissonance Mark in a single scene regardless of the number of triggering events in that scene."
+
+### PP-077
+**Finding:** F-B9-04 / F-B9-08 (consolidated)
+**Severity:** P1
+**Mechanic:** M-021 (Coherence), M-026 (Monstrous Entities)
+**Proposed fix:** "At Coherence 0, the character enters the Monstrous state:
+- Retained: TS, TD, all physical stats, combat capability
+- Lost: Circles (all ratings drop to 0), Beliefs (replaced by Thread-driven compulsions defined with GM), social accessibility
+- Gained: +5D on all Thread operations; ME effects on all in zone (CE +1/scene, ThS +2/scene); cannot communicate in human language if Intelligibility ≤ 2
+- Play continuation: a player may continue playing a Monstrous character with group consent; this is an advanced arc requiring GM preparation
+- Recovery: Coherence 0 → 1 requires: sustained Restoration Community Weaving (minimum 3 successful collective ops at the Monstrous character's location) AND voluntary cessation of all Thread operations for that period"
+[EDITORIAL: confirm Monstrous character play continuation is intended as a campaign option]
