@@ -1,67 +1,81 @@
-session_close: 2026-03-26
-checkpoint: 14-editorial
+session_close: 2026-03-27
+checkpoint: 14-sim-prep
 model: claude-sonnet-4-6
 completed_stages:
-  - Cross-reference audit CP14 TTRPG vs BG (10 passes, 62 findings)
-  - P1 editorial resolution (7 items)
-  - P2/P3 editorial round (16 items A-P)
-  - Full correction push to both CP14 and BG
+  - Identified all mechanics directly impacted by editorial decisions committed 2026-03-26
+  - Mapped 12 mechanic groups requiring re-simulation
+  - Discovered P1 attribute pool inconsistency (§2.2 vs §14.1/§12)
+  - Prepared full simulation routing table and handoff
 
-commits:
-  cp14: 2325655348e0
-  bg: c49141521803
+p1_finding:
+  issue: Attribute pool contradiction
+  location_1: "§2.2 — 31 points distributed across 10 attributes"
+  location_2: "§14.1 (Session Zero checklist) — 18 attribute points"
+  location_3: "§3772 (GM checklist) — 18 attribute points"
+  location_4: "§12 (hybrid) — 18 attribute points"
+  action_required: Propagate 31 to all checklist references before next push
 
-corrections_applied:
-  cp14:
-    - Territory names: all 15 canonical (from map + user corrections)
-    - Forced Resolution → Locking and Snapping throughout
-    - Rattled: wound-equivalent track (-1D per accumulation)
-    - Coherence: full spec with Coherence 2 consult, Coherence 0 monstrous, saving attempt rule
-    - Monstrous entities: excess undifferentiated Thread via gaps (not beings from Ein Sof)
-    - Knots: +1 Strain for +2D, presence/narration required, closer bonds = higher capacity
-    - Domain Ob: direct (1-7), pool adds faction stat if leadership position held
-    - Co-movement: d10 replacing d6, no supplements, TPS added to all Thread pools
-    - TPS = TS / 10 (round down) added to Leap, Weaving, Pulling, Locking/Snapping pools
-    - Renown: full 0-10 table with permission tiers
-    - Vaynard: Ambition Track (0-100, 20-point bands), TK 4-5 redesigned, TS acquisition via collection, Southernmost immunity at TK5+TS75+
-    - Vaynard victory: Path A (all 15) or Path B (10+ territories + Stillhelm + TK5 + TS75+)
-    - Niflhel: four competing networks (Sollvik, Hafenbund, Bernweg, Stiltsift) with supremacy mechanic
-    - Eidur Sjostrom: Southernmost elder NPC added
-    - Hakan Reusfoldt: Revolution organiser NPC added
-    - TC pause threshold: Stability <= 4 (was 5 in §14.7)
-    - Attribute pool: 31 points
-    - Reach → Influence in §16.3
-    - Co-movement deck: 20 cards noted in §12.5
-    - History Resonance and Flashback Anchoring supplements removed from co-movement
-    - Siege in §12.5: confirmed single roll (already correct)
-    - 245 AG (After Galbados) gloss added on first use
-    - Church territorial TC: flat scores, expansion lock at TC<70, Valorsplatz ceiling
-    - C-03 threshold: 70 (was 80)
-    - Rupture as Healing: full narrative canon
-    - S-16 through S-20 seasonal events added
-    - Grief half-CP refund confirmed
-  bg:
-    - TC start: 15 (was 22)
-    - TN 7 combat (was TN 5)
-    - C-03 threshold: 70
-    - Church victory B3: removed 'regardless' clause
-    - Church territorial TC flat scores added
-    - Varfell victory: Path A and Path B
-    - Territory names throughout
-    - S-16 through S-20 added
-    - Rupture as Healing narrative
-    - Niflhel four-network structure
-    - Eidur Sjostrom and Hakan Reusfoldt in Revolution NPC AI
+mechanics_flagged_for_simulation:
+  - id: M-11/M-12/M-13/M-14/M-15
+    change: TPS (=TS÷10 round down) added to all Thread operation pools
+    test_modes: [A_isolation, B_interaction]
+  - id: M-16/M-17/M-18
+    change: Co-movement d10 replacing d6; History Resonance and Flashback removed from co-movement
+    test_modes: [A_isolation, D_edge_cases]
+  - id: M-26
+    change: Coherence renamed Intelligibility (10->0); effects table revised; separate Coherence track retained
+    test_modes: [A_isolation, B_interaction_with_Knots, D_edge_cases]
+  - id: M-32
+    change: Knot Call = +2 strain for +3D; closer bonds = higher strain capacity
+    test_modes: [B_interaction, D_edge_cases]
+  - id: M-03_Composure
+    change: Rattled = wound-equivalent track (-1D per mark, cumulative); Composure resets after each Rattled
+    test_modes: [A_isolation, D_edge_cases]
+  - id: M-42
+    change: Domain Ob = direct target stat (1-7, no division); pool adds faction stat if leadership held
+    test_modes: [A_isolation, B_interaction, C_scenario]
+  - id: M-36
+    change: Renown 0-10 full permission table; Debate bonuses at tier 5/6/7/8
+    test_modes: [A_isolation, B_interaction_with_Debate]
+  - id: M-47_Vaynard
+    change: Ambition Track (0-100, 5 thresholds); TK system redesigned; TS via originary lock collection
+    test_modes: [A_isolation_full_range, C_scenario]
+  - id: M-44_Niflhel
+    change: Four-network Supremacy Mechanic at seasonal accounting
+    test_modes: [A_isolation, C_endgame_scenario]
+  - id: M-46_TC
+    change: TC pause threshold changed from Stability <= 5 to Stability <= 4
+    test_modes: [A_boundary, C_scenario]
+  - id: M-43_seasonal
+    change: S-16 through S-20 added (five new event triggers)
+    test_modes: [C_scenario, D_interaction_with_existing_events]
+
+commits: {}
 
 editorial_still_pending:
   - S-08 Einhir site name (deferred)
-  - Co-movement d10 table in BG (uses card system; d10 is TTRPG only - note for next session)
+  - Co-movement d10 table in BG (uses card system; d10 is TTRPG only)
   - E-01 assassination perpetrator (intentionally unresolved)
-  - Vaynard Private Collection transfer Shocking Event scene procedure (design pending)
-  - Niflhel Supremacy Mechanic seasonal resolution procedure (design pending)
+  - Vaynard Private Collection transfer procedure (design pending)
+  - Niflhel Supremacy seasonal resolution full procedure (design pending)
   - Coherence 0 saving attempt procedure (design pending)
 
 next_action:
-  recommended: Apply corrections to project-files CP14 (currently out of sync with GitHub version) then proceed to Phase 3 simulation or CP15 compilation
+  task: Run full simulation suite on all 12 mechanic groups above
+  skill: valoria-simulator
+  modes: [A_isolation, B_interaction, C_scenario, D_edge_cases]
+  priority_order:
+    1: TPS across all Thread ops (Mode A)
+    2: Co-movement d10 (Mode A + D)
+    3: Intelligibility x Knot strain interaction (Mode B)
+    4: Rattled stacking (Mode A + D)
+    5: Domain Ob + leadership pool (Mode B with faction stats)
+    6: Renown x Debate (Mode B)
+    7: Vaynard Ambition Track full range (Mode A)
+    8: Niflhel Supremacy endgame (Mode A + C)
+    9: TC pause at Stability <= 4 (Mode C)
+    10: Seasonal events S-16-S-20 (Mode C)
+  output_file: tests/valoria_stress_tests_batch3.md
+  also_repair: Propagate attribute pool = 31 to §14.1 and §12 checklist references in CP14
   model: Sonnet 4.6
-  note: Project files still show old CP14 - GitHub is now canonical
+
