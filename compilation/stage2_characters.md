@@ -208,6 +208,8 @@ Each character tracks up to **Bonds score** significant Knots. Established at cr
 
 **Crisis:** When strain reaches double the wrongness threshold (Crisis threshold), the relationship enters Crisis. A Crisis Knot cannot be Called or used as Composure buffer. The connected entity takes action — confrontation, departure, or betrayal. Resolution requires a dedicated scene.
 
+**Impression Track + Knot Crisis priority:** If an NPC's Impression Track reaches 5 while their Knot is simultaneously in Crisis, the Crisis takes precedence. The Impression Track 5 trigger is deferred until the Crisis resolves.
+
 ### Strain Sources
 
 - **Intelligibility decay:** See §4.5 (replaces Taint strain).
