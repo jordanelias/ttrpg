@@ -1,39 +1,39 @@
-session_id: 2026-03-28T01
-phase: Phase 2 — Compilation
-status: Infra session. No compilation stages advanced.
+session_id: 2026-03-27T19
+phase: Thread Operations Redesign — Simulation Batch 3 complete
+status: All three simulation batches complete. P3 clarifications resolved. 2 decisions pending.
 
 completed_this_session:
-  - Created valoria-dice-model skill (skills/valoria-dice-model/SKILL.md + valoria_dice.py)
-  - Corrected canonical dice rule: 10 = +2 successes flat (no extra die)
-  - Logged PP-092 (§1.1 dice table correction) and PP-093 (§4.3 Stunt chain-on-10 removal) — both approved
-  - Updated valoria-orchestrator-SKILL.md: dice-model added to registry
-  - Updated project_instructions.md (GitHub + .md deliverable): dice-model skill, canonical dice rule section, Haiku routing row for dice math
-  - Patch count: 91 → 93 (35 P1 / 47 P2 / 10 P3 / 1 design)
+  - Pool option analysis: Option B (Spirit+History+TPS/2) recommended
+  - Full Mode C scenario: Aldenmoor (Crown vs Revolution, Inquisitor, Löwenritter)
+  - Coverage matrix: 22 mechanics mapped across 7 dimensions
+  - Faction profiles: Crown, Church, Hafenmark, Varfell, Revolution, Niflhel, Löwenritter
+  - NPC tests: Maret Uln (complete), Almud (partial), Torben (no Thread relevance)
+  - P3 clarifications: SIM-F-11 through SIM-F-15 all resolved (text patches specified)
+  - 6 new findings (SIM3-F-01 through SIM3-F-06)
 
-gap_register_delta:
-  opened: []
-  closed: []
+decisions_pending:
+  - SIM2-F-04: Past-Oriented Pulling pool — Option B or C?
+  - SIM3-F-04: Residue use + Coherence cap — capped (recommended) or separate?
 
-commits_this_session:
-  - skills/valoria-dice-model/SKILL.md (new)
-  - skills/valoria-dice-model/valoria_dice.py (new)
-  - valoria_patch_proposals.md (PP-092, PP-093 added)
-  - skills/valoria-orchestrator-SKILL.md (dice-model in registry)
-  - project_instructions.md (v2: dice rule, skill table, routing)
+open_p1_findings:
+  - SIM2-F-03: Recency Ob table absent from v2.5 (confirmed values — patch ready)
+  - SIM2-F-09: Involuntary extension bypasses concealment (fix confirmed — patch ready)
+
+open_p2_findings:
+  - SIM2-F-01, F-02, F-05, F-08, F-10, F-11
+  - SIM3-F-01, F-02, F-03, F-04, F-06
+
+resolved_p3: SIM-F-11, F-12, F-13, F-14, F-15 (text patches specified, not yet applied)
 
 deferred_tasks:
-  - Editorial decisions on SIM2-F-03 and SIM2-F-04 (from prior session)
-  - Mechanic-audit patches: SIM2-F-03, F-04, F-09 (P1s)
-  - P2 patches: SIM2-F-01, F-02, F-05, F-08, F-10, F-11
-  - Apply PP-092 and PP-093 at Stage 3 compilation
+  - Apply all pending patches once decisions received
   - Haiku batch: Solmund rename, AG→AS, Church rename
-  - Stage 3 compilation (pending all patches)
+  - Stage 3 compilation (pending patch completion)
 
 blockers:
-  - SIM2-F-03: recency Ob table source unknown
-  - SIM2-F-04: design decision required before patching
+  - SIM2-F-04 pool decision
+  - SIM3-F-04 residue cap decision
 
 next_action:
-  task: Editorial decisions on SIM2-F-03 and SIM2-F-04, then P1 patches
-  model: Sonnet 4.6 (editorial clarification) → Haiku 4.5 (patch text)
-
+  task: Receive decisions, apply all remaining patches, then Stage 3 compilation
+  model: Sonnet (patches) / Haiku (renames + assembly)
