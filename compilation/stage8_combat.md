@@ -79,15 +79,93 @@ Excess attack successes = attacker's net − defender's net (minimum 0).
 
 **Manoeuvre and attack are mutually exclusive.** Declaring any manoeuvre is your offensive action for the round.
 
-| Manoeuvre | Versus | Effect |
-|---|---|---|
-| Defend! | Agility | Hold at bay; deny target's move action next round |
-| Disarm | Agility vs Agility | Target drops weapon |
-| Trip | Agility vs Agility | Target prone: −2D attack, attacks vs prone +2D, double cost to stand |
-| Tie Up | Power | Lock weapons; no damage to either this round |
-| Rescue | Endurance | Redirect melee / Priority 4+ attack from ally to self |
-| Reorient *(reach management)* | Agility vs Agility | Change the range band (Short↔Long). Opponent may contest with their own offensive action. Winner sets range band; loser may not attack this round. |
-| Withdraw *(reach management)* | Agility | Sacrifice offensive action; re-establish reach advantage. If unopposed, succeeds automatically. |
+#### Defensive Manoeuvres
+
+**Defend!**
+Full defensive posture. Your entire Combat Pool shifts to Defence this round — no Offence allocation. Opponent must roll their full Offence against your full pool. On Overwhelming success (your net ≥ opponent net by 3+): opponent is held at bay and loses their offensive action next round. On Success: opponent cannot close range or reposition this round. On Partial: you hold but take a complication (stumble, ground loss). Use when outnumbered or outmatched — buying time costs nothing but the offensive initiative.
+
+**Rescue**
+Redirect a melee or Priority 4+ attack targeting an ally to yourself. Roll Endurance vs Ob = incoming attack net successes. Success: you absorb the hit; ally is unaffected. Failure: both of you take the hit (split excess successes between targets). Cannot redirect Priority 2 (ranged) attacks — physically interpose instead by declaring yourself the target during Planning Phase.
+
+---
+
+#### Reach Management Manoeuvres
+
+**Reorient**
+Change the active range band (Short ↔ Long). Contested: Agility vs Agility. Winner sets the range band for this round; loser may not attack. Ties: Long range holds. Either fighter may initiate; opponent may spend their offensive action to contest or concede (and attack freely at current range). Can be used to exploit terrain features — see Exploit Terrain below.
+
+**Withdraw**
+Sacrifice offensive action to re-establish preferred reach advantage without contesting. If unopposed: automatic success. If opponent contests (spends their offensive action): resolve as Reorient. Used when you cannot risk a contested roll.
+
+---
+
+#### Offensive Manoeuvres
+
+**Disarm**
+Knock, lever, or strip the weapon from the opponent's grip. Agility vs Agility, Ob = opponent's net successes. On Success: weapon lands 1d3 feet away in a random direction; opponent must spend a Priority 5 action to retrieve it or draw a backup weapon at Priority 4. On Overwhelming: you catch or control the weapon — your choice whether to pocket it, throw it, or press it back against them. If the opponent has no backup weapon: they are unarmed and may only Grapple, Shove, or Flee.
+
+**Trip**
+Knock the opponent off their feet. Agility vs Agility. On Success: target is prone.
+- Prone attacker: −2D to Combat Pool
+- Attacks against a prone target: +2D to Combat Pool
+- Standing from prone: costs a full Priority 5 action (cannot attack that round)
+- A prone character may crawl (half speed) or attempt to roll clear (Agility Ob 2; failure = remain prone)
+
+**Tie Up**
+Lock weapons together, preventing either from attacking this round. Power vs Ob = opponent's net successes. On Success: both weapons are locked; neither deals damage this round. On Overwhelming: you control the bind — you may immediately transition to Grapple (see below) without spending another action. On Failure: your weapon is locked but opponent's is not; they attack at +1D this round.
+
+**Grapple**
+Seize the opponent bodily — closing past their weapon to control their body. Requires Close range. Power vs Power. On Success: opponent is Grappled.
+- Grappled: cannot attack with Long weapons; Short weapon attacks at −1D; cannot Reorient or Withdraw
+- Grappler: may deal unarmed damage (Power − opponent armour DR, minimum 0) each round as a free action; no weapon attack
+- Escape: Power vs Grappler's Power, costs offensive action
+- A Grapple can be initiated directly from a successful Tie Up (Overwhelming) or from Close range after winning a Reorient
+
+**Shove**
+Drive the opponent backward through raw momentum. Power vs Agility. On Success: opponent is pushed one range band away from you (Short → Long or out of melee entirely). On Overwhelming: opponent is pushed into a terrain feature — GM assigns a complication (stumble, blocked path, environmental hazard). On Failure: you overextend; opponent may attack you at +1D this round. Shove does not deal damage but disrupts positioning — useful to break a Grapple, push an opponent off a ledge, or create space for a ranged ally.
+
+**Called Shot**
+Declare a specific target location before rolling. +Ob 2 to the attack. On hit, apply the standard damage plus the location effect:
+
+| Target | Effect on hit |
+|---|---|
+| Weapon arm | Opponent's Combat Pool −2D next round; Overwhelming = Disarm (no separate roll) |
+| Legs | Opponent's movement halved; Overwhelming = Trip (no separate roll) |
+| Head | Opponent takes Composure damage equal to excess successes; Overwhelming = Stunned (lose next offensive action) |
+| Weapon hand | Opponent's grip weakened; −1D to their next attack |
+
+Called Shots cannot be declared against opponents in Heavy armour on the targeted location — the coverage negates the precision effect (damage still applies, location effect does not).
+
+---
+
+#### Psychological Manoeuvres
+
+**Feint**
+A committed false attack designed to draw and waste the opponent's defensive allocation. Declare during Planning Phase as your offensive action. Resolution: roll Combat History pool vs opponent's Cognition (Ob = their net successes). On Success: opponent's defensive dice allocation this round is treated as misdirected — their effective Defence pool is halved (rounded down) against your *next* attack (following round). On Overwhelming: their Defence pool is negated entirely for one attack next round. On Failure: opponent reads the feint; they gain +1D to their defensive pool next round.
+
+A Feint costs this round's offensive action and pays off next round — it is a setup, not an immediate attack. Opponents aware of a Feint pattern (same character feinting twice in three rounds) may call it: Cognition check Ob 2 to identify and pre-empt, negating the advantage.
+
+**Intimidate**
+Weaponise presence, reputation, or a decisive moment (killing a companion, landing a brutal hit) to shake the opponent's nerve. Presence + relevant History vs opponent's Composure (current value as Ob). Declare during Planning Phase; resolve at Priority 3A.
+
+- Success: opponent loses 2D from their Combat Pool next round (fear and hesitation)
+- Overwhelming: opponent loses 2D and must pass a Composure check (Ob 2) or spend their next offensive action on Defend! or Withdraw
+- Failure: no effect; this opponent cannot be Intimidated again this combat (they've steeled themselves)
+- Cannot Intimidate and attack in the same round
+- Devout characters with intact Certainty: +2D resistance to Intimidate
+
+---
+
+#### Environmental Manoeuvres
+
+**Exploit Terrain**
+Use the environment as a tactical resource — high ground, narrow corridor, slippery surface, furniture, fire. Cognition vs Ob set by GM (1–3 depending on terrain complexity). Declare during Planning Phase; resolve at Priority 3A.
+
+- Success: gain +1D to Combat Pool next round, or deny opponent a specific action (their choice of which) next round
+- Overwhelming: both — +1D and deny one action
+- Failure: you've committed to a position that didn't pay off; opponent may exploit your overextension (+1D to their next attack)
+
+Terrain features are declared by the GM at scene start or discovered mid-combat. Exploiting the same feature twice requires a new roll at +1 Ob (diminishing returns — the opponent adapts).
 
 ### Group Attacks
 
