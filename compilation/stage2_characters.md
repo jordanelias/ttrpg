@@ -97,7 +97,7 @@ Hidden score, 0–100, tracked by the GM. Cannot be purchased. Grows only throug
 
 ### TS Growth
 
-Through **held confrontation** only. Qualifying events: surviving a monstrous incursion, handling an Originary Lock, witnessing a Gap, entering a Locked Zone, extended proximity to a Resonant practitioner.
+Through **held confrontation** only. Qualifying events: surviving a monstrous incursion, handling an Originary Lock, witnessing a Gap, entering a Locked Zone, extended proximity to a Resonant practitioner. Witnessing a Thread operation from the outside — observing a practitioner work without direct confrontation with Thread phenomena — does not qualify. The qualifying events require direct encounter with Thread reality, not observation of its effects. Exception: witnessing a major Dissolution in the same room (Gap formation at close range) may qualify at GM discretion.
 
 On qualifying event: **Spirit check + relevant Belief bonus (if applicable), TN 7, Ob 1.**
 
@@ -183,6 +183,8 @@ Intelligibility replaces the Taint track. It measures how legible reality remain
 - Intelligibility reaching 4 or below: −1 to Certainty maximum per Intelligibility level below 5
 
 **Certainty 0 — Rendering Crisis:** A scene event, not a passive state. The character's rendering of reality has become unstable. They must resolve the dissonance narratively: revise a Belief, withdraw from Thread-active situations, or find a new framework for what they have experienced. Rendering Crisis is the primary mechanism for character development in practitioners.
+
+**Non-practitioner Rendering Crisis:** A non-practitioner at Certainty 0 suffers −2D on all rolls (rendering instability impairs action) until the crisis resolves. Resolution requires: Belief revision, OR one full season of withdrawal from Thread-active situations, OR a dedicated relational anchoring scene (Bonds check TN 7 Ob 3).
 
 A practitioner who performs Thread operations while in Rendering Crisis (instead of resolving it) takes **+1D Coherence Degradation** on each operation, applied immediately on resolution regardless of outcome. This is the cost of pushing through rather than reckoning.
 
