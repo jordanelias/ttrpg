@@ -123,7 +123,7 @@ Weapons have two independent axes: **Weight** (governs damage bonus and speed) a
 |---|---|---|
 | Light | +1 | Fast |
 | Medium | +2 | Standard |
-| Heavy | +3 | Slow |
+| Heavy | +4 | Slow |
 
 **Reach**
 
@@ -155,7 +155,7 @@ Ranged weapons use their weight's Attack TN. Ranged weapons have no Parry TN —
 
 Strength does not add to damage. It gates access to heavier weapons only.
 
-**Damage bonus by Weight:** +1 (Light) / +2 (Medium) / +3 (Heavy).  
+**Damage bonus by Weight:** +1 (Light) / +2 (Medium) / +4 (Heavy).  
 **Attack order when same range:** Fast before Standard before Slow.
 
 ### Armour
