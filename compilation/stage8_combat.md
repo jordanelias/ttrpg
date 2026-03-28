@@ -243,13 +243,13 @@ Armour provides damage reduction and has Strength requirements. It does not pena
 | Armour | Damage Reduction | Str Minimum | 1 Below Minimum | 2+ Below Minimum | Stamina Maximum |
 |---|---|---|---|---|---|
 | None | 0 | — | — | — | End + 1 |
-| Light | 1 | None | — | — | End + 1 |
+| Light | 1 | 2 | −1D Combat Pool | Cannot wear | End + 1 |
 | Medium | 2 | 3 | −1D Combat Pool | Cannot wear | End |
 | Heavy | 3 | 4 | −2D Combat Pool | Cannot wear | End − 2 |
 
 **Stamina maximum** is reduced by armour weight as above. A character wearing Heavy armour with End 3 has Stamina max 2 — they exhaust rapidly in sustained melee. Stamina minimum is 1 regardless of armour.
 
-**Strength minimum** applies to Medium and Heavy armour only. Light armour has no Strength requirement and no pool penalty — it is available to any character. Heavy armour penalty is −2D (not −1D).
+**Strength minimum** follows the same structure as weapons: 1 below minimum = −1D Combat Pool; 2+ below = cannot wear.
 
 **Special properties:**
 - **Versatile:** May attack at either Short or Long range without repositioning, at −2D to the offensive pool. The opponent's ability to contest range via Reorient or Withdraw is unaffected — Versatile means the weapon can reach, not that positioning has been won.
