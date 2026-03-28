@@ -167,7 +167,7 @@ Armour provides damage reduction and has Strength requirements. It does not pena
 | None | 0 | — | — | — | End + 1 |
 | Light | 1 | 2 | −1D Combat Pool | Cannot wear | End + 1 |
 | Medium | 2 | 3 | −1D Combat Pool | Cannot wear | End |
-| Heavy | 3 | 4 | −2D Combat Pool | Cannot wear | End − 1 |
+| Heavy | 3 | 4 | −2D Combat Pool | Cannot wear | End − 2 |
 
 **Stamina maximum** is reduced by armour weight as above. A character wearing Heavy armour with End 3 has Stamina max 2 — they exhaust rapidly in sustained melee. Stamina minimum is 1 regardless of armour.
 
