@@ -1,6 +1,6 @@
 # Valoria Gap Register — Consolidated
 ## Updated: 2026-03-27 (Session — Threadweaving v2.5 simulation)
-## Total items: 186
+## Total items: 193
 ## Editorial blockers: 0
 
 ---
@@ -416,3 +416,15 @@
 | SIM-F-13 | Collective Diagnosis: shared GM exchange clarification specified | P3 | Resolved — text patch pending |
 | SIM-F-14 | Voluntary extension after Wound disruption: not available; text clarification specified | P3 | Resolved — text patch pending |
 | SIM-F-15 | RS seasonal cap: net interpretation confirmed; text clarification specified | P3 | Resolved — text patch pending |
+
+## SIMULATION BATCH 4 FINDINGS — combination scenarios (2026-03-27)
+
+| ID | Description | Severity | Status |
+|----|-------------|----------|--------|
+| SIM4-F-01 | §9.7 interference can push Mending Ob above table ceiling; Standard Gap harder than Locked Zone | P1 | Open |
+| SIM4-F-02 | Originary contact between involuntary Leap practitioner and threadcut being: undefined | P2 | Open |
+| SIM4-F-03 | Active Knot Crisis affecting Past-Oriented Pull Ob on Crisis-causing event: no rule | P2 | Open |
+| SIM4-F-04 | Multiple Mending successes per season: RS gains stack? No explicit statement | P2 | Open |
+| SIM4-F-05 | Devout character Discovery Event Ob never escalates with repeated exposure | P3 | Open |
+| SIM4-F-06 | §9.13 both-succeed opposing outcome: no RS cost | P2 | Open |
+| SIM4-F-07 | No GM sidebar on contested-operation RS death spiral | P2 | Open |
