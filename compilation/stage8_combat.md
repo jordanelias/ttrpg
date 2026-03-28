@@ -48,7 +48,7 @@ Engagements open at the range appropriate to the distance between combatants at 
 - **Wrong range = cannot attack.** A Short weapon fighter at Long range cannot strike. A Long weapon fighter at Close range cannot swing. The offensive action must be spent on Reorient or Withdraw to change the band.
 - **Same range:** both fighters may attack. Weight/speed determines attack order (Fast before Standard before Slow).
 - **Contested range change:** the opponent may spend their own offensive action to contest a Reorient or Withdraw (Agility vs Agility). Winner sets the range band for this round. Loser may not attack.
-- **Versatile weapons** (see §8.2) may attack at either range band at −1D to the offensive pool without repositioning. The opponent's ability to contest via manoeuvre is unaffected.
+- **Versatile weapons** (see §8.2) may attack at either range band at −2D to the offensive pool without repositioning. The opponent's ability to contest via manoeuvre is unaffected.
 
 **C — Rescue limitation.** Rescue redirects melee attacks and Priority 4+ attacks only. It cannot redirect Priority 2 (ranged) attacks — those resolve before Priority 3. To absorb a ranged attack for an ally, physically interpose (declare yourself the target through positioning).
 
@@ -243,16 +243,16 @@ Armour provides damage reduction and has Strength requirements. It does not pena
 | Armour | Damage Reduction | Str Minimum | 1 Below Minimum | 2+ Below Minimum | Stamina Maximum |
 |---|---|---|---|---|---|
 | None | 0 | — | — | — | End + 1 |
-| Light | 1 | 2 | −1D Combat Pool | Cannot wear | End + 1 |
+| Light | 1 | None | — | — | End + 1 |
 | Medium | 2 | 3 | −1D Combat Pool | Cannot wear | End |
 | Heavy | 3 | 4 | −2D Combat Pool | Cannot wear | End − 2 |
 
 **Stamina maximum** is reduced by armour weight as above. A character wearing Heavy armour with End 3 has Stamina max 2 — they exhaust rapidly in sustained melee. Stamina minimum is 1 regardless of armour.
 
-**Strength minimum** follows the same structure as weapons: 1 below minimum = −1D Combat Pool; 2+ below = cannot wear.
+**Strength minimum** applies to Medium and Heavy armour only. Light armour has no Strength requirement and no pool penalty — it is available to any character. Heavy armour penalty is −2D (not −1D).
 
 **Special properties:**
-- **Versatile:** May attack at either Short or Long range without repositioning, at −1D to the offensive pool. The opponent's ability to contest range via Reorient or Withdraw is unaffected — Versatile means the weapon can reach, not that positioning has been won.
+- **Versatile:** May attack at either Short or Long range without repositioning, at −2D to the offensive pool. The opponent's ability to contest range via Reorient or Withdraw is unaffected — Versatile means the weapon can reach, not that positioning has been won.
 - **Thread-locked item:** Fixed stats; cannot be degraded or destroyed through ordinary means.
 
 ---
