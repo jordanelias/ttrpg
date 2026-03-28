@@ -135,6 +135,16 @@ Weapons have two independent axes: **Weight** (governs damage bonus and speed) a
 
 **Valid profiles (Weight × Reach):** all nine combinations are legal. Weapon archetype determines the combination — no single axis constrains the other.
 
+**Strength minimums:**
+
+| Weight | Str Minimum | 1 Below Minimum | 2+ Below Minimum |
+|---|---|---|---|
+| Light | None | — | — |
+| Medium | 3 | −1D Combat Pool | Cannot wield |
+| Heavy | 4 | −1D Combat Pool | Cannot wield |
+
+Strength does not add to damage. It gates access to heavier weapons only.
+
 **Damage bonus by Weight:** +0 (Light) / +1 (Medium) / +2 (Heavy).  
 **Attack order when same range:** Fast before Standard before Slow.
 
