@@ -121,9 +121,9 @@ Weapons have two independent axes: **Weight** (governs damage bonus and speed) a
 
 | Weight | Damage Bonus | Speed |
 |---|---|---|
-| Light | +0 | Fast |
-| Medium | +1 | Standard |
-| Heavy | +2 | Slow |
+| Light | +1 | Fast |
+| Medium | +2 | Standard |
+| Heavy | +3 | Slow |
 
 **Reach**
 
@@ -155,7 +155,7 @@ Ranged weapons use their weight's Attack TN. Ranged weapons have no Parry TN —
 
 Strength does not add to damage. It gates access to heavier weapons only.
 
-**Damage bonus by Weight:** +0 (Light) / +1 (Medium) / +2 (Heavy).  
+**Damage bonus by Weight:** +1 (Light) / +2 (Medium) / +3 (Heavy).  
 **Attack order when same range:** Fast before Standard before Slow.
 
 ### Armour
@@ -167,7 +167,7 @@ Armour provides damage reduction and has Strength requirements. It does not pena
 | None | 0 | — | — | — | End + 1 |
 | Light | 1 | 2 | −1D Combat Pool | Cannot wear | End + 1 |
 | Medium | 2 | 3 | −1D Combat Pool | Cannot wear | End |
-| Heavy | 3 | 4 | −1D Combat Pool | Cannot wear | End − 1 |
+| Heavy | 3 | 4 | −2D Combat Pool | Cannot wear | End − 1 |
 
 **Stamina maximum** is reduced by armour weight as above. A character wearing Heavy armour with End 3 has Stamina max 2 — they exhaust rapidly in sustained melee. Stamina minimum is 1 regardless of armour.
 
@@ -363,4 +363,5 @@ Supply status is checked at seasonal accounting for each unit.
 **Supply route interdiction (Domain Action)**: Intelligence vs defender's Military ÷ 2. Success: one enemy supply route blocked 1 season. Overwhelming: blocked and undetected. Failure: detected; defender may reinforce.
 
 **Foraging (officer Domain Action)**: Relevant History (Survival, Campaign Veteran, etc.). Ob 2 in fertile territory; Ob 3 poor; Ob 4 winter/mountain. Success: supply improves one step for 1 season. Failure: territory Prosperity −1, potential Revolution Influence +1.
+
 
