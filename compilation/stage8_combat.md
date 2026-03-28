@@ -48,7 +48,8 @@ Engagements open at the range appropriate to the distance between combatants at 
 - **Wrong range = cannot attack.** A Short weapon fighter at Long range cannot strike. A Long weapon fighter at Close range cannot swing. The offensive action must be spent on Reorient or Withdraw to change the band.
 - **Same range:** both fighters may attack. Weight/speed determines attack order (Fast before Standard before Slow).
 - **Contested range change:** the opponent may spend their own offensive action to contest a Reorient or Withdraw (Agility vs Agility). Winner sets the range band for this round. Loser may not attack.
-- **Versatile weapons** (see §8.2) may attack at either range band at −2D to the offensive pool without repositioning. The opponent's ability to contest via manoeuvre is unaffected.
+- **Versatile weapons** (see §8.2) may attack at either range band at −1D to the offensive pool without repositioning. However, **Versatile fighters cannot initiate Reorient or Withdraw** — they have no preferred range to establish and cannot manufacture a positional advantage. They may contest if an opponent initiates a range change against them, but they can never force a range contest themselves.
+- **Heavy armour** imposes **−1D to Agility** in all manoeuvre contests (both initiating and contesting Reorient and Withdraw rolls). The weight and restriction of the armour compromises footwork.
 
 **C — Rescue limitation.** Rescue redirects melee attacks and Priority 4+ attacks only. It cannot redirect Priority 2 (ranged) attacks — those resolve before Priority 3. To absorb a ranged attack for an ally, physically interpose (declare yourself the target through positioning).
 
@@ -92,10 +93,10 @@ Redirect a melee or Priority 4+ attack targeting an ally to yourself. Roll Endur
 #### Reach Management Manoeuvres
 
 **Reorient**
-Change the active range band (Short ↔ Long). Contested: Agility vs Agility. Winner sets the range band for this round; loser may not attack. Ties: Long range holds. Either fighter may initiate; opponent may spend their offensive action to contest or concede (and attack freely at current range). Can be used to exploit terrain features — see Exploit Terrain below.
+Change the active range band (Short ↔ Long). Contested: Agility vs Agility. Winner sets the range band for this round; loser may not attack. Ties: Long range holds. Either fighter may initiate (except Versatile weapon fighters — see §8.2); opponent may spend their offensive action to contest or concede (and attack freely at current range). **Heavy armour wearers roll −1D Agility in all Reorient contests**, both when initiating and when contesting. Can be used to exploit terrain features — see Exploit Terrain below.
 
 **Withdraw**
-Sacrifice offensive action to re-establish preferred reach advantage without contesting. If unopposed: automatic success. If opponent contests (spends their offensive action): resolve as Reorient. Used when you cannot risk a contested roll.
+Sacrifice offensive action to re-establish preferred reach advantage without contesting. If unopposed: automatic success. If opponent contests (spends their offensive action): resolve as Reorient. **Heavy armour wearers roll −1D Agility when Withdraw is contested.** Used when you cannot risk a contested roll. Not available to Versatile weapon fighters — see §8.2.
 
 ---
 
@@ -252,7 +253,7 @@ Armour provides damage reduction and has Strength requirements. It does not pena
 **Strength minimum** follows the same structure as weapons: 1 below minimum = −1D Combat Pool; 2+ below = cannot wear.
 
 **Special properties:**
-- **Versatile:** May attack at either Short or Long range without repositioning, at −2D to the offensive pool. The opponent's ability to contest range via Reorient or Withdraw is unaffected — Versatile means the weapon can reach, not that positioning has been won.
+- **Versatile:** May attack at either Short or Long range without repositioning, at −1D to the offensive pool. Cannot initiate Reorient or Withdraw — Versatile fighters have no preferred range to establish and cannot force a positional contest. May contest if an opponent initiates a range change against them. The −1D penalty is permanent; it cannot be removed by winning a contest that the Versatile fighter is not permitted to start.
 - **Thread-locked item:** Fixed stats; cannot be degraded or destroyed through ordinary means.
 
 ---
