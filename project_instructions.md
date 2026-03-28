@@ -56,6 +56,7 @@ All other files (compilation stages, canon constraints, test files, editorial re
 |-----------|-------|
 | Document chunking, indexing, header extraction, cross-reference listing | Haiku 4.5 |
 | Format fixes, formula transcription, consistency repair (pattern matching) | Haiku 4.5 |
+| Dice probability tables, EV calculations, opposing roll analysis | Haiku 4.5 |
 | Mechanical gap-fill, canon compliance, stress testing, simulation | Sonnet 4.6 |
 | Mechanical audit, interaction analysis, gap register updates | Sonnet 4.6 |
 | Compilation assembly (merging sources, resolving integration conflicts) | Sonnet 4.6 |
@@ -82,12 +83,40 @@ Render at every session start using `visualize:show_widget`. The artifact lets H
 
 ---
 
+## Skill Registry
+
+| Skill | Model | Trigger |
+|-------|-------|---------|
+| valoria-chunker | Haiku 4.5 | Any input >500 lines |
+| valoria-canon-guard | Sonnet 4.6 | New mechanic, audit finding, compilation stage |
+| valoria-mechanic-audit | Sonnet 4.6 | Consistency, gaps, formulas, interactions |
+| valoria-simulator | Sonnet 4.6 | Stress test, edge case, scenario, probability |
+| valoria-compiler | Sonnet 4.6 | Assembly, patching, checkpoint export |
+| valoria-dice-model | Haiku 4.5 | P(success/partial/fail), EV, opposing rolls, pool splits, Fibonacci value, Momentum value, any dice math |
+
+Skills are stored in `skills/` on GitHub. Always read from GitHub — `/mnt/skills/user/` copies may be stale.
+
+**Anti-pattern:** Never do skill work inline. If about to chunk, compute probabilities, or assemble files inline — STOP and route to the skill.
+
+---
+
 ## Editorial Gate
 User approves all: setting, worldbuilding, character content, narrative, tone, faction behavior, design intent resolution, ambiguous calls.
 
-Claude executes without approval: formula fixes, consistency repairs, format changes, audits, simulations, gap register updates.
+Claude executes without approval: formula fixes, consistency repairs, format changes, audits, simulations, gap register updates, dice probability analysis.
 
 Flag format: `[EDITORIAL: requires user approval — description]`
+
+---
+
+## Canonical Dice Rule
+- 1 → −1 success
+- 2 to TN−1 → 0 successes
+- TN to 9 → +1 success
+- 10 → +2 successes (flat; no extra die)
+
+TN values: 6 (Controlled), 7 (Standard), 8 (Desperate).
+Net successes = sum of all dice (can be negative).
 
 ---
 
@@ -106,3 +135,4 @@ Flag format: `[EDITORIAL: requires user approval — description]`
 - Chunk inputs >500 lines before analyzing (use valoria-chunker skill).
 - Session log: read ONLY `session_log_current.md` on resume. Never the archive.
 - Fetch files on demand. Never speculatively load GitHub content.
+
