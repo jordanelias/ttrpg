@@ -289,7 +289,7 @@ Before Weaving in a politically volatile context, the GM should ask: is this con
 
 **Requirements:** TS 70+ · RS ≤ 60 (substrate must be stressed enough for temporal depth to be accessible — in a pristine world, the temporal weight is too firmly actualised to pull against) · Diagnosis mandatory
 
-**Foundational-scale Past-Oriented Pulling:** Displacing a Foundational event (the Einhir Catastrophe, a civilisation-ending collapse, a foundational institution's origin) requires all standard prerequisites plus: the Einhir ritual framework (§9.15) — the intentionality required to reach Foundational temporal depth cannot be formed without it. Add +2 Ob surcharge to the recency Ob (Ob 7 recency + 2 = Ob 9 for a generational Foundational event). RS consequence ×3 on all outcomes (Success: RS −9 minimum; Failure: snap-back Wound + RS −6 minimum). This is a near-mythic act — maximum conceivable practitioner achieves ~5% success — but it is mechanically possible. It is a legitimate campaign endpoint: the thing the Einhir could not do and the thing a generation of practitioners might spend a campaign attempting.
+**Foundational-scale Past-Oriented Pulling:** Displacing a Foundational event (the Einhir Catastrophe, a civilisation-ending collapse, a foundational institution's origin) requires all standard prerequisites plus: the Einhir ritual framework (§5.5.3) — the intentionality required to reach Foundational temporal depth cannot be formed without it. Add +2 Ob surcharge to the recency Ob (Ob 7 recency + 2 = Ob 9 for a generational Foundational event). RS consequence ×3 on all outcomes (Success: RS −9 minimum; Failure: snap-back Wound + RS −6 minimum). This is a near-mythic act — maximum conceivable practitioner achieves ~5% success — but it is mechanically possible. It is a legitimate campaign endpoint: the thing the Einhir could not do and the thing a generation of practitioners might spend a campaign attempting.
 **Pool:** Spirit + relevant History bonus + TPS÷2 (round down)
 **TN:** 7
 
@@ -390,7 +390,7 @@ This requires a different intentionality than thread operations. The practitione
 
 **Why Attunement + Focus:** Mending requires sensitivity to the substrate's condition (Attunement) and sustained suspension of rendering while engaging something that is not a thread (Focus). The standard Spirit + History pool targets threads via intentionality. Mending targets the space between threads — the substrate itself. The faculty engaged is different.
 
-**Mending Ob ceiling:** Total Mending Ob cannot exceed 8, regardless of stacked modifiers (threadcut interference per §9.7, RS threshold penalties, sequential failure penalties, Wound penalties). The ceiling reflects the substrate's own nature: Mending engages absence, not presence, and the difficulty of engaging absence cannot exceed the difficulty of the most damaged substrate configurations. Individual modifier sources still apply and stack — the ceiling caps the total, not each source.
+**Mending Ob ceiling:** Total Mending Ob cannot exceed 8, regardless of stacked modifiers (threadcut interference per §5.5.3, RS threshold penalties, sequential failure penalties, Wound penalties). The ceiling reflects the substrate's own nature: Mending engages absence, not presence, and the difficulty of engaging absence cannot exceed the difficulty of the most damaged substrate configurations. Individual modifier sources still apply and stack — the ceiling caps the total, not each source.
 
 **Ob by Gap severity:**
 
@@ -575,7 +575,7 @@ The temporal and epistemic auto-effects are consequences the practitioner can ma
 
 ### 5.3.3 Auto-Effect Tables
 
-*Revised from current §5.8. All ThS references have been replaced with Coherence. All TT references have been replaced with RS (inverted). Temporal auto-effect Coherence costs revised per §3.2 scale principle: Object/Personal operations produce narrative temporal effects but 0 personal Coherence loss; Relational+ operations produce Coherence loss per the §3.2 table. Epistemic and actual tables unchanged except terminology.*
+*Co-movement tables use Coherence (replacing ThS) and RS (replacing TT, inverted). Temporal auto-effect Coherence costs follow the §5.2.2 scale principle: Object/Personal operations produce narrative temporal effects but 0 personal Coherence loss; Relational+ operations produce Coherence loss per the §5.2.2 table. Epistemic and actual tables are otherwise unchanged.*
 
 ### 5.3.4 History Resonance and Flashback Anchoring and Flashback Anchoring
 
@@ -738,7 +738,7 @@ Replaces the old Thread Tension track on board. Runs 100→0. Hidden by default 
 - **Coherence:** Tracked per PC practitioner during Personal Phase. Strategic Phase Thread orders: −1 Coherence only if a PC practitioner narratively leads the operation. Leadership is declared at the start of Cascade Phase — one PC per order. If no PC declares leadership, no Coherence cost is paid (the order was NPC-led). Multiple PCs cannot co-lead a single order; the leading PC pays the full Coherence cost alone.
 - **Lock chronic effects:** TTRPG Lock registered on territory card at Cascade Phase. Drift begins next Accounting.
 - **RS changes:** Both Personal and Strategic Phase changes applied at Accounting. Seasonal cap: ±10 net (the cap applies to the net RS change after all sources — positive and negative — are resolved at Accounting).
-- **Cross-phase opposing operations:** If a TTRPG Thread operation (Personal Phase) and a board game Thread order (Strategic Phase) target the same configuration with opposing intentionalities, flag at Personal Phase declaration. Both are held and resolved simultaneously at Cascade Phase using the opposing operations procedure (§9.13). The TTRPG practitioner's roll from Personal Phase stands as their input; the board game order roll is made at Cascade Phase.
+- **Cross-phase opposing operations:** If a TTRPG Thread operation (Personal Phase) and a board game Thread order (Strategic Phase) target the same configuration with opposing intentionalities, flag at Personal Phase declaration. Both are held and resolved simultaneously at Cascade Phase using the opposing operations procedure (§5.1.4). The TTRPG practitioner's roll from Personal Phase stands as their input; the board game order roll is made at Cascade Phase.
 
 ### 5.6.3 Mode Branching Table
 
