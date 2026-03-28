@@ -1,6 +1,6 @@
 # Valoria Gap Register — Consolidated
 ## Updated: 2026-03-27 (Session — Threadweaving v2.5 simulation)
-## Total items: 193
+## Total items: 202
 ## Editorial blockers: 0
 
 ---
@@ -428,3 +428,18 @@
 | SIM4-F-05 | Devout character Discovery Event Ob never escalates with repeated exposure | P3 | Open |
 | SIM4-F-06 | §9.13 both-succeed opposing outcome: no RS cost | P2 | Open |
 | SIM4-F-07 | No GM sidebar on contested-operation RS death spiral | P2 | Open |
+
+## SIMULATION BATCH 5 FINDINGS (2026-03-27)
+
+| ID | Description | Severity | Status |
+|----|-------------|----------|--------|
+| SIM5-F-01 | Dissolution of a Lock: no release consequence; Permanent Lock Dissolution undefined | P2 | Open |
+| SIM5-F-02 | Lock removal Ob = original TS÷10 creates asymmetric warfare — high-TS Locks near-irremovable | P1 | Open |
+| SIM5-F-03 | BG Mend order table missing RS threshold +1 Ob reference | P2 | Open |
+| SIM5-F-04 | Investigate Thread Ob under RS pressure not defined | P2 | Open |
+| SIM5-F-05 | Hybrid Strategic Phase Thread order Coherence leadership declaration rule absent | P2 | Open |
+| SIM5-F-06 | Fragmented +1 Ob: applies to Leap? Clarify in §3.3 table | P2 | Open |
+| SIM5-F-07 | Coherence cap makes residue use cost-free — contradicts philosophical framing | P1 | Open |
+| SIM5-F-08 | RS threshold +1 Ob at Southernmost: location-specific ruling needed | P2 | Open |
+| SIM5-F-09 | Mending Ob ceiling absorbs sequential failure penalty at high-Ob sites | P3 | Open |
+| SIM4-F-01 | §9.7 Mending Ob ceiling | P1 | Closed — patched |
