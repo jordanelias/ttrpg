@@ -772,3 +772,20 @@ next_action:
   all_reconciliation_tasks_complete: true
   p1_open_design: 40 items
 
+---
+
+```yaml
+session_id: 2026-03-27T13
+phase: Phase 3 (Simulation) — Batch 11 complete + replay
+status: PP-086–091 committed; mass combat replay validates PP-086/087/091
+
+completed_this_session:
+  - PP-086–091 drafted and pushed (6 P1 fixes)
+  - Mass combat replay (The Field at Harskeld): 5-round engagement, Crown vs. Varfell
+  - PP-086 (base damage): validated
+  - PP-087 (Formation Break stacking): validated
+  - PP-091 (Artillery Bombard): validated
+
+patch_count: 91 total (33 P1, 47 P2, 10 P3, 1 design)
+next_action: M-036 (Parliamentary Vote) and M-037 (Grand Debate isolation)
+```
