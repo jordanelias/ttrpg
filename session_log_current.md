@@ -1,37 +1,71 @@
-session_id: 2026-03-27T25
-phase: Phase 2 Compilation — Stage 3 Thread Operations COMPLETE
-status: Stage 3 compiled, canon-guard passed, report written. No open P1 findings.
+session_id: 2026-03-27T_THREADWEAVING_FINAL
+phase: Phase 2 Compilation — Stage 3 Thread Operations complete
+status: CLOSED — all work committed to GitHub
 
-completed_this_session:
-  - Applied final SIM7 patches (9 patches including Foundational Pull, threadcut external ops)
-  - Assembled Stage 3 Thread Operations from threadweaving_redesign_v25.md
-  - Reformatted to compilation structure (§5.0–§5.8, Part Five numbering)
-  - Stripped design-doc framing; cleaned migration notes; fixed cross-references
-  - Canon-guard pass: 14/14 PASS, 0 violations, 0 PARTIAL
-  - Compilation report written: stage3_compilation_report.md
-  - Stage 3 pushed: 78,201 chars, 826 lines (was 38,597 chars pre-v2.5)
+## SESSION SUMMARY
 
-stage3_stats:
-  old_size: 38597 chars
-  new_size: 78201 chars
-  patches_applied: 52
-  canon_guard: PASS 14/14
-  open_p1: 0
-  open_p2: 12 (non-blocking, logged in §5.8)
-  open_p3: 10
+### What was accomplished
+- Full philosophical and mechanical redesign of Thread Operations (v2.5) stress-tested and compiled
+- 8 simulation batches run (64 total findings)
+- 52 findings patched into designs/threadweaving_redesign_v25.md
+- Stage 3 Thread Operations recompiled from 38,597 → 78,201 chars
+- Canon guard: 14/14 PASS, 0 violations
 
-compilation_progress:
-  stages_complete: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, BG]
-  stage3_was_outdated: true (pre-v2.5)
-  stage3_now: current (v2.5, fully patched)
-  note: Infrastructure audit (valoria_infrastructure_audit.md) indicates all 17 TTRPG stages + BG already compiled. Stage 3 was the only outdated one. Phase 2 compilation may be complete.
+### Key design decisions made this session
+1. ThS/Intelligibility/CD/Taint → Coherence (10→0, unified track)
+2. Thread Tension (TT) → Rendering Stability (RS, 100→0, inverted)
+3. Diagnosis repositioned before Leap (last act of rendering)
+4. Mending added as new operation type (substrate repair, not thread operation)
+5. Coherence cap: −1 per operation maximum (all degree table costs absorbed)
+6. Past-Oriented Pulling pool: Spirit + History + TPS÷2
+7. Lock removal Ob: (original TS ÷ 10) − 2, minimum 1
+8. §9.7 threadcut interference: capped at +4 (not uncapped)
+9. Mending Ob ceiling: 8 (regardless of stacked modifiers)
+10. Residue Coherence: Option C (−1 at Object/Personal; absorbed at Relational+)
+11. FR Lock immediate RS cost: −1/−2/−3 (was −2/−3/−4)
+12. Foundational Past-Oriented Pulling: Einhir framework required, +2 Ob, RS ×3
+13. Threadcut beings: can perform external Thread operations at cost of +1 Rendering Strain each
+14. Collective Leap: all practitioners roll own Leap; Anchor failure = lattice never forms
+15. RS Critical: 2–4 season endgame; Mandate 0 = Faction Fracture
 
-deferred_tasks:
-  - Haiku batch: Solmund rename (all files), AG→AS calendar rename, Church of Galbados→Church of Solmund
-  - Stage 4 cross-reference: SIM5-F-08 (RS threshold at Southernmost)
-  - P2 items in §5.8 — assign to relevant downstream stages for polish pass
-  - Verify other stages don't reference old Stage 3 terminology (TT, ThS, CD, Intelligibility)
+### GitHub state (all committed)
+- designs/threadweaving_redesign_v25.md — fully patched (100,790 chars)
+- compilation/stage3_thread_operations.md — recompiled v2.5 (78,201 chars)
+- compilation/stage2_characters.md — SIM8-F-07/08 patches applied
+- compilation/stage3_compilation_report.md — canon guard report
+- tests/sim_threadweaving_v25.md — batch 1
+- tests/sim_threadweaving_v25_batch2.md
+- tests/sim_threadweaving_v25_batch3.md
+- tests/sim_threadweaving_v25_batch4.md
+- tests/sim_threadweaving_v25_batch5.md
+- tests/sim_threadweaving_v25_batch6.md
+- tests/sim_threadweaving_v25_batch7.md
+- tests/sim_threadweaving_v25_batch8.md
+- tests/mechanic_audit_sim_patches.md
+- valoria_gap_register_consolidated.md — updated (~226 items)
+- session_log_current.md — this close
+- session_log_archive.md — prior session appended
 
-next_action:
-  task: Haiku rename batch OR verify compilation completeness across all stages
-  model: Haiku (renames) / Sonnet (verification)
+### Open items (non-blocking)
+P2 (12): SIM2-F-01, SIM3-F-02/03, SIM4-F-02, SIM5-F-08, SIM6-F-02/04, SIM7-F-04, SIM8-F-02/03/09/10
+P3 (10): SIM2-F-06, SIM3-F-05, SIM4-F-05, SIM5-F-09, SIM6-F-01/07/08, SIM7-F-02/05, SIM8-F-01
+All logged in §5.8 of compiled Stage 3.
+
+### Editorial pending (unchanged from prior session)
+- Territory names
+- Varfell victory tuning
+- 10 seasonal event cards
+- Restoration NPCs
+- Niflhel primus inter pares
+- Varfell Private Collection transfer
+- E-01 (assassination perpetrator)
+- E-03 (AG calendar name — now blocked on AG→AS rename batch)
+
+### Deferred tasks (next session)
+1. Haiku batch: Solmund rename (all files), AG→AS calendar, Church of Galbados→Church of Solmund
+2. Cross-stage terminology check: Stages 4–17 may reference old TT/ThS/CD terms
+3. Stage 4 cross-reference: SIM5-F-08 (RS threshold +1 Ob at Southernmost)
+4. Phase 3 gate: simulation coverage matrix now runnable against compiled Stage 3
+
+### Resume instruction for next session
+Read session_log_current.md. Phase 2 compilation is complete (all 17 TTRPG stages + BG compiled; Stage 3 now current). Priority 1: Haiku batch renames (Solmund, AG→AS, Church). Priority 2: Cross-stage terminology audit for TT/ThS references in Stages 4–17.
