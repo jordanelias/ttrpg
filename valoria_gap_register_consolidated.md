@@ -356,18 +356,24 @@
 | ID | Description | Severity | Status |
 |----|-------------|----------|--------|
 | SIM-F-01 | Single-session Coherence cliff: −5 possible in one crisis scene (Dissonant→Fractured with no warning) | P1 | Open |
-| SIM-F-02 | FR Lock chronic drift: 3 unremoved Locks fatal to RS within 7–8 seasons | P1 | Open |
-| SIM-F-03 | Catastrophic Gap Mending: ~58% max success; failure at this Ob is devastating — expected design, document explicitly | P1 | Open |
-| SIM-F-04 | TS 100 threadcut being effectively immune to Dissolution/Pulling (Ob 11/10); cap §9.7 interference at +3 | P1 | Open |
-| SIM-F-05 | Priority numbering convention (lower=earlier?) not defined in this document | P1 | Open |
+| SIM-F-02 ✓ | FR Lock chronic drift: 3 unremoved Locks fatal to RS within 7–8 seasons | P1 | Open |
+| SIM-F-03 ✓ | Catastrophic Gap Mending: ~58% max success; failure at this Ob is devastating — expected design, document explicitly | P1 | Open |
+| SIM-F-04 ✓ | TS 100 threadcut being effectively immune to Dissolution/Pulling (Ob 11/10); cap §9.7 interference at +3 | P1 | Open |
+| SIM-F-05 ✓ | Priority numbering convention (lower=earlier?) not defined in this document | P1 | Open |
 | SIM-F-06 | Over-actualisation Brittleness (P-18): Weaving can produce worse outcome than not Weaving — needs explicit GM sidebar | P2 | Open |
 | SIM-F-07 | Wound during Leap round: Ob +1 to Leap roll (not disruption check); needs clarification | P2 | Open |
 | SIM-F-08 | Mid-sequence configuration change (target altered post-Diagnosis pre-Leap): no rule | P2 | Open |
 | SIM-F-09 | Confirm P-19 (Mending epistemic by degree) integrated into §2.4 main text | P2 | Open |
-| SIM-F-10 | Standard Gap Mending at minimum pool = 35% success; add pool guidance | P2 | Open |
+| SIM-F-10 ✓ | Standard Gap Mending at minimum pool = 35% success; add pool guidance | P2 | Open |
 | SIM-F-11 | Rendering Strain vs Wound De-actualisation triggers: independent triggers, clarify | P3 | Open |
 | SIM-F-12 | Diagnosis detectability by TS observers not defined | P3 | Open |
 | SIM-F-13 | Simultaneous-priority Diagnosis in collective ops: shared GM exchange, no mechanical conflict | P3 | Open |
 | SIM-F-14 | Voluntary extension after Wound disruption during involuntary Leap: undefined | P3 | Open |
 | SIM-F-15 | RS seasonal cap (hybrid): applies before or after Mending offsets? Define as net | P3 | Open |
 
+## PATCHES APPLIED 2026-03-27 (post-simulation)
+- SIM-F-02: FR Lock immediate RS cost reduced to -1 (Overwhelming/Success), -2 (Partial), -3 (Failure). Chronic drift unchanged.
+- SIM-F-03: Catastrophic Gap design intent documented. Ob unchanged. Calamity-tier note added.
+- SIM-F-04: §9.7 threadcut interference capped at +4 regardless of TS.
+- SIM-F-05: Priority convention (ascending = earlier) documented in §2.2 Diagnosis timing.
+- SIM-F-10: Mending failure no longer deals a Wound. Coherence −2 + RS −2 only.
