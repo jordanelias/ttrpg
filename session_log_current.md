@@ -1,36 +1,33 @@
-session_id: 2026-03-27T17
-phase: Thread Operations Redesign — Mechanic audit + patch complete
-status: All simulation P1 and P2 findings resolved. threadweaving_redesign_v25.md is clean.
+session_id: 2026-03-27T18
+phase: Thread Operations Redesign — Simulation Batch 2
+status: Batch 2 complete. 3 P1, 6 P2, 2 P3. Editorial decisions needed on F-03 and F-04.
 
 completed_this_session:
-  - Mechanic-audit Mode D: patch specifications for SIM-F-01/06/07/08/09
-  - Editorial decision: Coherence loss capped at -1 per operation
-  - SIM-F-01: Coherence cap added to §3.2; 6 degree table entries updated; GM Dissonant protocol added
-  - SIM-F-06: Brittleness sidebar added to §2.4
-  - SIM-F-07: Wound-during-Leap timing clarified in §2.3
-  - SIM-F-08: Mid-sequence configuration change rule added to §2.2
-  - SIM-F-09: P-19 integrated into §2.6 (was orphaned in patch log)
-  - Output: tests/mechanic_audit_sim_patches.md
+  - Stress test batch 2: Collective Operations, Past-Oriented Pulling, Involuntary Leap, Opposing Ops
+  - 11 new findings (SIM2-F-01 through SIM2-F-11)
+  - Gap register updated: +11 items
+  - Output: tests/sim_threadweaving_v25_batch2.md
 
-simulation_finding_status:
-  Closed: [SIM-F-01, SIM-F-02, SIM-F-03, SIM-F-04, SIM-F-05, SIM-F-06, SIM-F-07, SIM-F-08, SIM-F-09, SIM-F-10]
-  Open (P3 — text clarifications): [SIM-F-11, SIM-F-12, SIM-F-13, SIM-F-14, SIM-F-15]
+critical_findings:
+  - SIM2-F-03 (P1): Past-Oriented Pulling recency Ob table absent from v2.5 — blocks play
+  - SIM2-F-04 (P1): Past-Oriented Pulling pool (Spirit+History only) makes TS irrelevant to execution
+  - SIM2-F-09 (P1): Involuntary-to-voluntary-extension bypasses concealment — exploit
 
-threadweaving_redesign_v25_status: PATCHED AND CLEAN
-  - All P1 findings resolved
-  - All P2 findings resolved
-  - P3 findings deferred (non-blocking, text clarifications only)
-  - Document ready for Stage 3 compilation
+editorial_decisions_needed:
+  - SIM2-F-04: Add TPS (or TPS/2) to Past-Oriented Pulling pool? Or add rationale note?
+  - SIM2-F-03: Reproduce recency Ob table in §2.4 (from prior ruleset — needs source)
 
 deferred_tasks:
-  - P3 text clarifications (SIM-F-11 through SIM-F-15) — low priority, non-blocking
-  - Haiku batch: Solmund rename, AG→AS, Church rename (all files)
-  - Compilation: Stage 3 Thread Operations chapter
-  - Board game RS track integration
-  - Hybrid mode branching catalogue update
+  - Resolve editorial decisions on SIM2-F-03 and SIM2-F-04
+  - Mechanic-audit patches for SIM2-F-03, F-04, F-09 (P1s)
+  - P2 patches: SIM2-F-01, F-02, F-05, F-08, F-10, F-11
+  - Haiku batch: Solmund rename, AG→AS, Church rename
+  - Stage 3 compilation (pending all patches)
 
-blockers: []
+blockers:
+  - SIM2-F-03: recency Ob table source unknown — need prior ruleset or user input
+  - SIM2-F-04: design decision required before patching
 
 next_action:
-  task: Stage 3 compilation OR Haiku batch renames
-  model: Sonnet (Stage 3) / Haiku (renames)
+  task: Editorial decisions on SIM2-F-03 and SIM2-F-04
+  model: Current (user decision)
