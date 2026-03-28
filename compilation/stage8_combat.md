@@ -18,6 +18,14 @@ Each round opens with a **Planning Phase**: each character declares one offensiv
 
 Roll Agility dice, Ob 2. Higher net wins. The winner **declares last** — they hear the opponent's plan before committing. Ties: re-roll. Combatants entering an ongoing combat roll initiative immediately on entry and are inserted into the existing declaration order at their result.
 
+### Starting Range
+
+Engagements open at the range appropriate to the distance between combatants at the moment of declaration:
+
+- **Ranged weapons present:** engagement opens at projectile range. Melee combatants must close before any melee exchange is possible.
+- **No ranged weapons, combatants not already adjacent:** engagement opens at **Long** range.
+- **Combatants already adjacent (grapple, ambush from close quarters, etc.):** engagement opens at **Short** range — narratively determined.
+
 **Ambush**: Ob = ambusher's Tactics History + environment modifier (Ob 1–3). The defender's highest-Cognition character detects. On failure: attackers get one free Priority 2 round and initiative. On success: Agility vs Agility; defender's bonus successes from detection apply.
 
 ### Priority Table
@@ -35,7 +43,12 @@ Roll Agility dice, Ob 2. Higher net wins. The winner **declares last** — they 
 
 **A — Manoeuvres resolve before attacks.** Disarm, Trip, Tie Up, Rescue, Reorient, Defend!, and Withdraw all resolve before standard attacks within Priority 3.
 
-**B — Reach priority.** When a shorter weapon closes against a longer weapon, the longer weapon gets one priority attack before the shorter can reach. Hit: shorter weapon stops at 10'. Miss: shorter weapon closes regardless. Once both are at the same range, weapon speed determines order.
+**B — Range bands.** Every melee weapon has a Reach classification: **Short** or **Long** (see §8.2). The current range band of an engagement is a shared state tracked each round.
+
+- **Wrong range = cannot attack.** A Short weapon fighter at Long range cannot strike. A Long weapon fighter at Close range cannot swing. The offensive action must be spent on Reorient or Withdraw to change the band.
+- **Same range:** both fighters may attack. Weight/speed determines attack order (Fast before Standard before Slow).
+- **Contested range change:** the opponent may spend their own offensive action to contest a Reorient or Withdraw (Agility vs Agility). Winner sets the range band for this round. Loser may not attack.
+- **Versatile weapons** (see §8.2) may attack at either range band at −1D to the offensive pool without repositioning. The opponent's ability to contest via manoeuvre is unaffected.
 
 **C — Rescue limitation.** Rescue redirects melee attacks and Priority 4+ attacks only. It cannot redirect Priority 2 (ranged) attacks — those resolve before Priority 3. To absorb a ranged attack for an ally, physically interpose (declare yourself the target through positioning).
 
@@ -64,6 +77,8 @@ Excess attack successes = attacker's net − defender's net (minimum 0).
 
 ### Combat Manoeuvres (Priority 3A — all use Combat History pool)
 
+**Manoeuvre and attack are mutually exclusive.** Declaring any manoeuvre is your offensive action for the round.
+
 | Manoeuvre | Versus | Effect |
 |---|---|---|
 | Defend! | Agility | Hold at bay; deny target's move action next round |
@@ -71,8 +86,8 @@ Excess attack successes = attacker's net − defender's net (minimum 0).
 | Trip | Agility vs Agility | Target prone: −2D attack, attacks vs prone +2D, double cost to stand |
 | Tie Up | Power | Lock weapons; no damage to either this round |
 | Rescue | Endurance | Redirect melee / Priority 4+ attack from ally to self |
-| Reorient | Cognition | Manipulate relative positioning; may establish or deny reach advantage |
-| Withdraw | Agility | Sacrifice offensive action; re-establish reach advantage |
+| Reorient *(reach management)* | Agility vs Agility | Change the range band (Short↔Long). Opponent may contest with their own offensive action. Winner sets range band; loser may not attack this round. |
+| Withdraw *(reach management)* | Agility | Sacrifice offensive action; re-establish reach advantage. If unopposed, succeeds automatically. |
 
 ### Group Attacks
 
@@ -100,14 +115,28 @@ Weapons and armour provide modest modifiers. History pool (skill) dominates over
 
 ### Weapons
 
-| Weight | Damage Bonus | Reach | Speed | Notes |
-|---|---|---|---|---|
-| Light | +0 | Adjacent | Fast | Daggers, knives. Fastest in melee. |
-| Medium | +1 | Adjacent / 5' | Standard | Swords, spears, maces. Baseline. |
-| Heavy | +2 | 5'–10' | Slow | Greatswords, halberds. Reach priority advantage. |
-| Ranged | +0 to +2 | Weapon-specific | — | Reload: Standard Action after firing (Priority 6). |
+Weapons have two independent axes: **Weight** (governs damage bonus and speed) and **Reach** (governs which range band the weapon can attack from).
 
-Weapon speed determines who resolves first when both are at the same range: Fast before Standard before Slow.
+**Weight**
+
+| Weight | Damage Bonus | Speed |
+|---|---|---|
+| Light | +0 | Fast |
+| Medium | +1 | Standard |
+| Heavy | +2 | Slow |
+
+**Reach**
+
+| Reach | Attack Band | Notes |
+|---|---|---|
+| Short | Close range only | Cannot attack at Long range |
+| Long | Long range only | Cannot attack at Close range |
+| Ranged | Projectile range only | Fires at Priority 2. At Close range: locked out — must Withdraw to re-establish distance before firing. Reload at Priority 6. |
+
+**Valid profiles (Weight × Reach):** all nine combinations are legal. Weapon archetype determines the combination — no single axis constrains the other.
+
+**Damage bonus by Weight:** +0 (Light) / +1 (Medium) / +2 (Heavy).  
+**Attack order when same range:** Fast before Standard before Slow.
 
 ### Armour
 
@@ -119,8 +148,8 @@ Weapon speed determines who resolves first when both are at the same range: Fast
 | Heavy | 3 | −2D Dodge; −1D Acrobatics |
 
 **Special properties:**
-- **Reach advantage** (spear, halberd): Functions as the longer weapon in all reach matchups, even against medium weapons.
-- **Thread-locked item**: Fixed stats; cannot be degraded or destroyed through ordinary means.
+- **Versatile:** May attack at either Short or Long range without repositioning, at −1D to the offensive pool. The opponent's ability to contest range via Reorient or Withdraw is unaffected — Versatile means the weapon can reach, not that positioning has been won.
+- **Thread-locked item:** Fixed stats; cannot be degraded or destroyed through ordinary means.
 
 ---
 
@@ -308,3 +337,4 @@ Supply status is checked at seasonal accounting for each unit.
 **Supply route interdiction (Domain Action)**: Intelligence vs defender's Military ÷ 2. Success: one enemy supply route blocked 1 season. Overwhelming: blocked and undetected. Failure: detected; defender may reinforce.
 
 **Foraging (officer Domain Action)**: Relevant History (Survival, Campaign Veteran, etc.). Ob 2 in fertile territory; Ob 3 poor; Ob 4 winter/mountain. Success: supply improves one step for 1 season. Failure: territory Prosperity −1, potential Revolution Influence +1.
+
