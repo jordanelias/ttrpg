@@ -80,7 +80,9 @@ When co-movement consequences fire, the GM presents them as things that simply h
 
 Diagnosis is the practitioner's final rendering act before they suspend rendering and Leap. It is the careful, conscious perception of the target's thread configuration — reading what can be read while reading is still possible.
 
-**Timing:** Diagnosis occurs BEFORE the Leap. It is a **Priority 4 standard action in the round preceding the Leap**, or it may share a round with the Leap if the practitioner has sufficient action economy (GM judgment based on circumstances — no simultaneous action economy during the Leap round itself, but Diagnosis at the start of the round and Leap at the end is permissible in non-combat contexts).
+**Timing:** Diagnosis occurs BEFORE the Leap. It is a **Priority 4 standard action in the round preceding the Leap**
+
+*Priority convention: lower number = earlier in the round. Priority 1 acts first; Priority 5 acts last. Diagnosis (Priority 4) therefore fires before the Leap (Priority 5) if both occur in the same round.*, or it may share a round with the Leap if the practitioner has sufficient action economy (GM judgment based on circumstances — no simultaneous action economy during the Leap round itself, but Diagnosis at the start of the round and Leap at the end is permissible in non-combat contexts).
 
 **No roll.** Diagnosis is a structured GM exchange. The practitioner states what they are sensing. The GM describes:
 
@@ -304,10 +306,10 @@ On Overwhelming at Relational+: over-actualisation effects halved in duration.
 
 | Degree | Outcome |
 |---|---|
-| Overwhelming | Target permanently locked. RS −2. Practitioner gains 1 TS. |
-| Success | Target locked. RS −2. |
-| Partial | Partial lock (GM sets scope). RS −3. Coherence −2. |
-| Failure | Collapse onto practitioner. Take 2 Wounds (no armour). RS −4. Coherence −2. Adjacent configurations become partially rigid: +1 Ob to all Thread operations targeting configurations adjacent to the failure site, remainder of season. |
+| Overwhelming | Target permanently locked. RS −1. Practitioner gains 1 TS. |
+| Success | Target locked. RS −1. |
+| Partial | Partial lock (GM sets scope). RS −2. Coherence −2. |
+| Failure | Collapse onto practitioner. Take 2 Wounds (no armour). RS −3. Coherence −2. Adjacent configurations become partially rigid: +1 Ob to all Thread operations targeting configurations adjacent to the failure site, remainder of season. |
 
 **Chronic consequences:**
 
@@ -370,15 +372,17 @@ This requires a different intentionality than thread operations. The practitione
 | Micro-Gap (same scene) | 3 | 50+ |
 | Standard Gap (1 session – 1 season) | 5 | 50+ |
 | Entrenched Gap (1+ seasons) | 6 | 70+ |
-| Catastrophic Gap (3+ seasons) | 7 | 70+ |
+| Catastrophic Gap (3+ seasons) | 7 | 70+; requires Einhir ritual framework or collective operation |
 | Locked Zone border | 8+ | 70+; requires Einhir ritual framework |
+
+**Design note — Catastrophic Gaps and Locked Zones:** These are Calamity-tier damage. Solo Mending at Ob 7–8 is intentionally near-impossible (~40–58% even at maximum pool). These sites require collective operations, the Einhir ritual framework, or multi-season Mending arcs. This is the Einhir Catastrophe's legacy made mechanical: the damage they caused cannot be reversed by a single practitioner acting alone.
 
 | Degree | Outcome |
 |---|---|
 | Overwhelming | Substrate restored. Gap closes cleanly. RS +2 (strain released). Coherence −1 (base cost; inclusive of §3.2). Mended area +1 Ob to future Gap formation in this zone for 1 season. |
 | Success | Substrate restored. Gap closes. RS +1. Coherence −1 (base cost; inclusive of §3.2). |
 | Partial | Gap reduced one severity category. RS unchanged. Coherence −2 (base + additional from partial outcome). Second Mending required. |
-| Failure | Mending fails. Gap unchanged. 1 Wound (no armour). Coherence −2 (base + additional from failure). RS −2. |
+| Failure | Mending fails. Gap unchanged. Coherence −2 (base + additional from failure). RS −2. |
 
 **Mending co-movement profile:**
 
@@ -547,7 +551,7 @@ Rendering Stability (RS) is a world-scale tracker measuring the rendered world's
 |---|---|
 | Thread operation (Weaving, Pulling — partial or failure) | −1 to −2 per degree table |
 | Thread operation (Weaving — overwhelming at Relational+) | +1 (restoration) |
-| FR Lock | −2 to −4 (immediate) + chronic drift |
+| FR Lock | −1 to −3 (immediate) + chronic drift |
 | FR Dissolution | −3 to −8 |
 | Past-Oriented Pulling | −3 minimum |
 | Gap persisting (per season) | −4 |
@@ -787,9 +791,9 @@ Weaving-based monstrous entity resolution (§5.13: "Weaving (TS 60+, Ob 4): dest
 
 A threadcut being present at a Gap site draws on the same substrate the practitioner is trying to Mend. Its continuous self-rendering competes with the Mending operation's intentionality.
 
-**Mechanical effect:** +Ob = being's TS ÷ 20 (round up) to Mending operations targeting that Gap while the being is present.
+**Mechanical effect:** +Ob = being's TS ÷ 20 (round up), maximum +4, to Mending operations targeting that Gap while the being is present.
 
-This Ob modifier stacks with other modifiers (territory effects, Fraying Bane, etc.) but is subject to the Ob 10 cap. The practitioner cannot know this modifier during Diagnosis — the being's interference manifests only during contact, when the practitioner's configuration encounters unexpected resistance.
+This Ob modifier stacks with other modifiers (territory effects, Fraying Bane, etc.) but is subject to the Ob 10 cap and a maximum of +4 regardless of the being's TS. The practitioner cannot know this modifier during Diagnosis — the being's interference manifests only during contact, when the practitioner's configuration encounters unexpected resistance.
 
 ## 9.8 Over-Actualised Configuration Brittleness (P-18)
 
