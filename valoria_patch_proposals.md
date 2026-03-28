@@ -782,11 +782,58 @@ FLAG: User attribute list uses "Poise" at position 6 (Str/End/Agi/Cog/Mem/Poise/
 
 ---
 
+
+
+## PATCH PROPOSALS — BATCH 10 (2026-03-27)
+
+### PP-082
+**Finding:** F-B10-01
+**Severity:** P2
+**Mechanic:** M-046 (Thread Ops in Combat), PP-068
+**Issue:** Thread split action pool formula (TS÷4) accidentally equals full Thread pool for practitioners at TS 64+. No effective split penalty.
+**Proposed fix:** Thread split pool = (Cog + Mem) only, no History bonus, TN8 (increased difficulty). At TS 64: 9D TN8 vs ~30% success, vs full pool 16D TN7 ~65% success. Real split cost restored.
+**Source:** Batch 10 T-B10-01
+
+---
+
+### PP-083
+**Finding:** F-B10-08
+**Severity:** P2
+**Mechanic:** M-055 (Community Weaving), PP-013
+**Issue:** PP-013 specifies "auto-effects fire once per participant beyond Anchor" without clarifying whether same-type auto-effects stack. Stacking epistemic effects from large collectives would make areas uninvestigatable.
+**Proposed fix (ruling R-B10-02):** Add to PP-013: "Same-type auto-effects (temporal, epistemic) do not stack regardless of participant count. Each fires once per collective operation. Additional participants beyond the Anchor contribute additional rolls on the actual d6 consequence table only."
+**Source:** Batch 10 T-B10-07
+
+---
+
+### PP-084
+**Finding:** F-B10-09
+**Severity:** P2
+**Mechanic:** M-056 (Niflhel Destabilisation)
+**Issue:** Destabilisation Ob = raw target Stability. At Church Stability 5: Ob5, ~8% success for Intel 6D. Niflhel cannot function as a destabilisation actor against stable factions.
+**Proposed fix (ruling R-B10-03):** Destabilisation Ob = target Stability ÷ 2, rounded up. Church Stability 5 → Ob3. Intel 6D vs Ob3: ~68% success. Consistent with PP-004's Mandate+Stability÷4 formula precedent.
+**Source:** Batch 10 T-B10-08
+
+---
+
+### PP-085
+**Finding:** F-B10-13 + F-B10-14
+**Severity:** P2
+**Mechanic:** PP-081 (Trajectory Reading); M-035 (Domain Actions BG mode)
+**Issue 1:** PP-081 does not specify the Trajectory Reading dice pool.
+**Issue 2:** PP-005 domain action sequencing does not assign Thread operations to a tier for BG mode.
+**Proposed fix:**
+1. Add to PP-081: "Pool: Cog + Att + Thread History (perception attributes). TN7. This is a perception/reading op, not a shaping op — Mem is not included."
+2. Add to PP-005: "Thread operations (BG mode Weave, Lock, Dissolution orders) resolve at Tier 2, alongside Economic actions. Co-movement consequences are known before Intelligence and Military resolutions."
+**Source:** Batch 10 T-B10-11, T-B10-12
+
+---
+
 ## PATCH COUNT SUMMARY (UPDATED)
-| Severity | Count | Notes |
-|----------|-------|-------|
-| P1 (open) | 25 | −2 superseded (PP-015, PP-079); +PP-081 (design) |
-| P2 | 43 | |
-| P3 | 10 | |
-| Design (new mechanic) | 1 | PP-081 Trajectory Reading |
-| **Total** | **79** | |
+| Severity | Count |
+|----------|-------|
+| P1 | 27 |
+| P2 | 47 |
+| P3 | 10 |
+| Design (new mechanic) | 1 |
+| **Total** | **85** |
