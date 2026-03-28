@@ -60,14 +60,14 @@ Engagements open at the range appropriate to the distance between combatants at 
 
 | Option | Pool | Notes |
 |---|---|---|
-| Dodge Backwards | Agility − armour penalty | Standard evasion |
-| Duck and Weave | Agility − armour penalty | Higher-stakes evasion; Partial produces a complication |
+| Dodge Backwards | Agility | Standard evasion |
+| Duck and Weave | Agility | Higher-stakes evasion; Partial produces a complication |
 | Parry | Combat History pool | Melee only. If Parry declared and ranged attack received: automatically switches to Dodge Backwards |
 | Shield | Agility | Shield bonus applies |
 
 ### Damage
 
-**Power + weapon damage bonus + excess attack successes − armour (minimum 0)**
+**Weapon damage bonus + excess attack successes − armour damage reduction (minimum 0)**
 
 Excess attack successes = attacker's net − defender's net (minimum 0).
 
@@ -160,12 +160,18 @@ Strength does not add to damage. It gates access to heavier weapons only.
 
 ### Armour
 
-| Type | Damage Reduction | Pool Penalty |
-|---|---|---|
-| None | 0 | — |
-| Light | 1 | None |
-| Medium | 2 | −1D Dodge / Acrobatics |
-| Heavy | 3 | −2D Dodge; −1D Acrobatics |
+Armour provides damage reduction and has Strength requirements. It does not penalise dodge, agility, or acrobatics rolls.
+
+| Armour | Damage Reduction | Str Minimum | 1 Below Minimum | 2+ Below Minimum | Stamina Maximum |
+|---|---|---|---|---|---|
+| None | 0 | — | — | — | End + 1 |
+| Light | 1 | 2 | −1D Combat Pool | Cannot wear | End + 1 |
+| Medium | 2 | 3 | −1D Combat Pool | Cannot wear | End |
+| Heavy | 3 | 4 | −1D Combat Pool | Cannot wear | End − 1 |
+
+**Stamina maximum** is reduced by armour weight as above. A character wearing Heavy armour with End 3 has Stamina max 2 — they exhaust rapidly in sustained melee. Stamina minimum is 1 regardless of armour.
+
+**Strength minimum** follows the same structure as weapons: 1 below minimum = −1D Combat Pool; 2+ below = cannot wear.
 
 **Special properties:**
 - **Versatile:** May attack at either Short or Long range without repositioning, at −1D to the offensive pool. The opponent's ability to contest range via Reorient or Withdraw is unaffected — Versatile means the weapon can reach, not that positioning has been won.
