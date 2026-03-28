@@ -28,7 +28,7 @@ STR_MIN_WEAPON = {'Light': 0, 'Medium': 3, 'Heavy': 4}
 # stamina_formula: 1=End+1, 0=End, -1=End-1
 ARMOURS = {
     'None':   (0, 0, 0,  1),
-    'Light':  (1, 2, 1,  1),
+    'Light':  (1, 0, 0,  1),  # No Str min, no pool penalty, no stamina penalty
     'Medium': (2, 3, 1,  0),
     'Heavy':  (3, 4, 2, -2),  # NOTE: Heavy = -2D penalty; Stamina End-2
 }
@@ -153,7 +153,7 @@ def simulate_fight(wA, arA, wB, arB, agi, str_, end, proficiency, n_fights, max_
                 B_attacks = can_B
 
             if A_attacks:
-                pen = 1 if rA == 'Versatile' else 0
+                pen = 2 if rA == 'Versatile' else 0
                 off = max(1, effA // 2 - pen)
                 defn_B = effB - (effB // 2)
                 atk = roll(off, atnA)
@@ -163,7 +163,7 @@ def simulate_fight(wA, arA, wB, arB, agi, str_, end, proficiency, n_fights, max_
                 stamA -= 1
 
             if B_attacks:
-                pen = 1 if rB == 'Versatile' else 0
+                pen = 2 if rB == 'Versatile' else 0
                 off = max(1, effB // 2 - pen)
                 defn_A = effA - (effA // 2)
                 atk = roll(off, atnB)
