@@ -1,30 +1,37 @@
-session_id: 2026-03-27T24
-phase: Thread Operations Redesign — Simulation Batch 8 complete
-status: 8 batches, 64 total findings. Core system comprehensively stress-tested. Diminishing returns reached.
+session_id: 2026-03-27T25
+phase: Phase 2 Compilation — Stage 3 Thread Operations COMPLETE
+status: Stage 3 compiled, canon-guard passed, report written. No open P1 findings.
 
 completed_this_session:
-  - Patched SIM7-F-01/03/04/06/07/08/10/11 (8 patches)
-  - Batch 8: First Leap, Elske/Baralta/Klapp NPCs, collective Leap failure, Health 1, multiple Gaps, Certainty 0, TS growth, Niflhel harvesting
-  - 10 new findings (SIM8-F-01 through SIM8-F-10)
-  - 5 patched immediately (SIM8-F-04/05/06/07/08)
-  - Gap register: ~226 total items
-  - threadweaving_redesign_v25.md: ~99k chars, comprehensively patched
+  - Applied final SIM7 patches (9 patches including Foundational Pull, threadcut external ops)
+  - Assembled Stage 3 Thread Operations from threadweaving_redesign_v25.md
+  - Reformatted to compilation structure (§5.0–§5.8, Part Five numbering)
+  - Stripped design-doc framing; cleaned migration notes; fixed cross-references
+  - Canon-guard pass: 14/14 PASS, 0 violations, 0 PARTIAL
+  - Compilation report written: stage3_compilation_report.md
+  - Stage 3 pushed: 78,201 chars, 826 lines (was 38,597 chars pre-v2.5)
 
-coverage_complete:
-  mechanics: Weaving/Pulling/Mending/Lock/Dissolution/Diagnosis/Leap/Co-Movement/Collective/Past-Oriented/Involuntary/Opposing/Threadcut/RS/Coherence/First-Leap/External-Threadcut-ops
-  factions: All 7 (Crown/Church/Revolution/Varfell/Hafenmark/Niflhel/Löwenritter)
-  archetypes: Practitioner/Inquisitor/Knight-Templar/Devout/Riskbreaker/Faction-Leader/Severed/Non-practitioner
-  NPCs: Maret-Uln/Almud/Vaynard/Ehrenwall/Lenneth/Himlensendt/Elske/Baralta/Klapp(partial)
-  modes: TTRPG/BG/HYB
-  temporal: PAST/PRES/FUT/CROSS
-  extremes: RS-boundaries/Coherence-0/Focus-1/TS-100/Mandate-0/Health-1/Collective-degraded/Foundational-Pull
+stage3_stats:
+  old_size: 38597 chars
+  new_size: 78201 chars
+  patches_applied: 52
+  canon_guard: PASS 14/14
+  open_p1: 0
+  open_p2: 12 (non-blocking, logged in §5.8)
+  open_p3: 10
 
-open_p1: []
-open_p2: [SIM2-F-01, SIM3-F-02, SIM3-F-03, SIM4-F-02, SIM5-F-08, SIM6-F-02, SIM6-F-04, SIM7-F-04, SIM8-F-02, SIM8-F-03, SIM8-F-09, SIM8-F-10]
-open_p3: [SIM2-F-06, SIM3-F-05, SIM4-F-05, SIM5-F-09, SIM6-F-01, SIM6-F-07, SIM6-F-08, SIM7-F-02, SIM7-F-05, SIM8-F-01]
+compilation_progress:
+  stages_complete: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, BG]
+  stage3_was_outdated: true (pre-v2.5)
+  stage3_now: current (v2.5, fully patched)
+  note: Infrastructure audit (valoria_infrastructure_audit.md) indicates all 17 TTRPG stages + BG already compiled. Stage 3 was the only outdated one. Phase 2 compilation may be complete.
 
-recommendation: No remaining P1 findings. System is ready for Stage 3 compilation. Remaining P2/P3 are edge cases and cross-references that can be addressed during compilation or deferred to post-compilation polish pass.
+deferred_tasks:
+  - Haiku batch: Solmund rename (all files), AG→AS calendar rename, Church of Galbados→Church of Solmund
+  - Stage 4 cross-reference: SIM5-F-08 (RS threshold at Southernmost)
+  - P2 items in §5.8 — assign to relevant downstream stages for polish pass
+  - Verify other stages don't reference old Stage 3 terminology (TT, ThS, CD, Intelligibility)
 
 next_action:
-  task: Stage 3 compilation — Thread Operations chapter
-  model: Sonnet (integration judgment) / Haiku (assembly)
+  task: Haiku rename batch OR verify compilation completeness across all stages
+  model: Haiku (renames) / Sonnet (verification)
