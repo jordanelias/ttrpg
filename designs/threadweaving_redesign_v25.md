@@ -180,6 +180,8 @@ At Focus 1, the practitioner gains the experience of contact (relevant for TS gr
 
 **Wound during the Leap round (before contact is established):** If the practitioner takes a Wound in the same round as the Leap roll, before the roll is resolved, apply +1 Ob to the Leap roll as normal (Wound penalty). The Attunement disruption check does not apply — it only triggers once contact is established. If the Leap succeeds despite the Wound penalty, contact proceeds normally.
 
+**Incapacitation during contact:** If a Wound incapacitates the practitioner during contact (Wounds reach or exceed the incapacitation threshold: ceiling(Health ÷ 2)), contact terminates immediately regardless of the Attunement disruption check result. The operation in progress is treated as a Failure. The practitioner returns to rendering incapacitated.
+
 **Wound disruption during contact:** When the practitioner takes a Wound while contact is established, make an Attunement check immediately: Attunement score in d10s, TN 7, Ob 1. Failure: rendering reasserts violently — the body's damage overrides the suspension. Contact drops.
 
 ### Thread Operation Visibility
@@ -445,6 +447,8 @@ When multiple practitioners operate on the same configuration, they Leap togethe
 This is not coordination in any ordinary sense. The practitioners cannot communicate during contact — communication requires rendering. They share intentionality, set during collective Diagnosis before the Leap. They interact with each other's configurations below the level of consciousness.
 
 **Collective Diagnosis:** Multiple practitioners may Diagnose in the same round as part of collective preparation. This is a shared GM exchange, not sequential individual rolls — all practitioners listen to the same description of the target configuration and set their intentionality together.
+
+**Collective Leap procedure:** All practitioners roll their own Leap in the same round (Priority 5). If the Anchor fails: the collective lattice does not form. Helpers who succeeded are in individual contact (their own Focus windows) but pool their dice to no one — each may perform individual operations at their own Ob, without collective bonuses. If the Anchor succeeds but helpers fail: subtract their contributed dice; if remaining pool drops below half the Anchor's solo pool, apply +1 Ob (lattice fracture). If all fail: all take individual Leap failure consequences.
 
 **Anchor:** Highest TS practitioner. Sets the primary intentionality. Rolls their full operation pool.
 
@@ -833,6 +837,8 @@ Shifting Objects can form at any scale. The oscillation manifests differently by
 | Structural | An institution or law oscillates between presence and absence. Its authority is intermittent. Some territories recognise it; others don't. It functions sometimes and not others. |
 
 Shifting Objects at Relational+ scale deteriorate to Gaps on the same timeline as Object-scale (1d3 seasons without intervention) but the Gap is at the corresponding scale — a Structural Shifting Object produces a Structural Gap, requiring Structural-scale Mending to close.
+
+**Multiple Gaps in the same territory:** Gap effects (Monstrous Incursion risk, RS drain per season) apply per Gap and stack independently — two Gaps in one territory produce double the RS drain and double the Incursion risk at Accounting. RS threshold-band penalties (+1 Ob, spontaneous Gap checks) apply once regardless of Gap count in a territory.
 
 **Gap scale consequences:**
 
