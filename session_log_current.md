@@ -1,31 +1,40 @@
-session_id: 2026-03-27T22
-phase: Thread Operations Redesign — Simulation Batch 6 complete
-status: 6 batches complete. 2 P1 open (patch ready). 8 P2 resolved this batch. Strong coverage.
+session_id: 2026-03-27T23
+phase: Thread Operations Redesign — Simulation Batch 7 complete
+status: 7 batches, 54 total findings. 2 P1 design decisions needed. Core system is sound.
 
 completed_this_session:
-  - Patched SIM5-F-02/06/07 (Lock removal formula, Fragmented Leap, residue Option C)
-  - Batch 6: Riskbreaker, Knight Templar, Severed practitioner, Ehrenwall, Lenneth, RS Critical accounting, P2 resolution sweep
-  - 10 new findings (SIM6-F-01 through SIM6-F-10)
-  - 8 open P2 findings resolved with text patches specified
-  - Gap register: ~205 total items
+  - Applied 17 patches to threadweaving_redesign_v25.md (+6499 chars)
+  - Batch 7: extreme boundary conditions, zero-resource states, unexplored mechanics
+  - 11 new findings (SIM7-F-01 through SIM7-F-11)
+  - Gap register: ~216 total items
 
 key_findings:
-  - SIM6-F-03 (P1): Severed Coherence 1 has no Thread op Ob penalty — gap in threshold table
-  - SIM6-F-10 (P1): RS Critical is terminal 2-4 season endgame — design note needed
-  - RS Critical multi-faction Accounting confirms seasonal cap is essential safety valve
+  - SIM7-F-03 (P1): Foundational Past-Oriented Pulling — near-mythic campaign endpoint possible at 5%
+  - SIM7-F-06 (P1): Threadcut beings as practitioners — high design value, rules needed
+  - SIM7-F-04 (P2): RS 1 endgame trap correctly replicates the Einhir Catastrophe
+  - E-02: 5 Fragmented practitioners collectively achieve 97% on Structural Weaving — collective resilience confirmed
+  - E-04: RS 1 has no safe exit — design confirmed as intentional
+  - E-10: All-factions-Mandate-0 produces Revolution Community Weaving failure feedback loop
 
-resolved_p2_this_batch:
-  SIM2-F-05, SIM2-F-10, SIM2-F-11, SIM3-F-06, SIM4-F-03, SIM4-F-04, SIM4-F-06, SIM4-F-07
+design_decisions_needed:
+  - SIM7-F-03: Confirm Foundational Past-Oriented Pulling as near-mythic endpoint; RS ×3; Einhir framework required
+  - SIM7-F-06: Confirm threadcut beings can direct external ops at cost of Rendering Strain; no Leap required
 
-open_p1: [SIM6-F-03, SIM6-F-10]
-open_p2: [SIM2-F-01, SIM2-F-08, SIM3-F-02, SIM3-F-03, SIM4-F-02, SIM5-F-01, SIM5-F-03, SIM5-F-04, SIM5-F-05, SIM6-F-02, SIM6-F-04, SIM6-F-05, SIM6-F-06, SIM6-F-09]
-open_p3: [SIM2-F-06, SIM3-F-05, SIM4-F-05, SIM5-F-09, SIM6-F-01, SIM6-F-07, SIM6-F-08]
+open_p1: [SIM7-F-03, SIM7-F-06]
+open_p2_count: 14
+open_p3_count: 10
+total_findings: 54
+patched: 38
 
-deferred_tasks:
-  - Apply batch 6 resolved patches + P1 patches to threadweaving_redesign_v25.md
-  - Haiku batch: Solmund rename, AG→AS, Church rename
-  - Stage 3 compilation (pending patch completion)
+simulation_coverage:
+  mechanics_tested: Weaving/Pulling/Mending/Lock/Dissolution/Diagnosis/Leap/Co-Movement/Collective/Past-Oriented/Involuntary/Opposing/Threadcut/RS/Coherence
+  factions_tested: Crown/Church/Revolution/Varfell/Hafenmark/Niflhel/Löwenritter
+  archetypes_tested: Practitioner/Inquisitor/Knight Templar/Devout/Riskbreaker/Faction Leader/Severed
+  NPCs_tested: Maret Uln/Almud/Vaynard/Ehrenwall/Lenneth/Himlensendt
+  modes_tested: TTRPG/BG/HYB
+  temporal_tested: PAST/PRES/FUT/CROSS
+  extreme_cases: RS boundaries/Coherence 0/Focus 1/TS 100/Mandate 0/Collective degraded
 
 next_action:
-  task: Mechanic-audit patch application for all resolved findings, then Stage 3 compilation
-  model: Sonnet (patches) / Haiku (compilation + renames)
+  task: Decisions on SIM7-F-03 and SIM7-F-06, then final patch pass, then Stage 3 compilation
+  model: Current (decisions) / Sonnet (patches) / Haiku (compilation)
