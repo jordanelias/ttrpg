@@ -30,7 +30,7 @@ ARMOURS = {
     'None':   (0, 0, 0,  1),
     'Light':  (1, 2, 1,  1),
     'Medium': (2, 3, 1,  0),
-    'Heavy':  (3, 4, 2, -1),  # NOTE: Heavy = -2D penalty, not -1D
+    'Heavy':  (3, 4, 2, -2),  # NOTE: Heavy = -2D penalty; Stamina End-2
 }
 
 PROFICIENCY_POINTS = {'untrained': 0, 'beginner': 1, 'competent': 2, 'veteran': 3}
