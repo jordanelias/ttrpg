@@ -698,6 +698,8 @@ When Rendering Strain equals Health, or Wounds reach **Rendering Threshold** (He
 
 Available to any faction with an affiliated TS 50+ character, or Revolution (via Community Mending).
 
+**Revolution Community Mending prerequisite:** Revolution must have Mandate ≥ 1 to perform Community Mending. At Mandate 0, the community substrate has fractured and Community Mending is unavailable. Note: this creates a late-campaign feedback loop — RS degradation reduces Stability, Stability failures reduce Mandate, Mandate 0 blocks Community Mending, RS continues falling. The Revolution's Thread contribution fails precisely when the world needs it most. (Cross-reference: Community Weaving constraint defined in batch_d_designs.md §G-049.)
+
 | Order | Roll | Effect |
 |---|---|---|
 | **Mend** | Intelligence (or faction-specific) vs Ob by Gap category (see below) | Success: Gap closed. RS +1. Failure: RS −1. Draw Co-Movement Card. |
