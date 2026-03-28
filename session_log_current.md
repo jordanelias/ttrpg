@@ -1,39 +1,41 @@
-session_id: 2026-03-27T19
-phase: Thread Operations Redesign — Simulation Batch 3 complete
-status: All three simulation batches complete. P3 clarifications resolved. 2 decisions pending.
+session_id: 2026-03-27T20
+phase: Thread Operations Redesign — Simulation complete (4 batches)
+status: All 4 simulation batches complete. 9 patches applied. 1 P1 open. 14 P2 open.
 
 completed_this_session:
-  - Pool option analysis: Option B (Spirit+History+TPS/2) recommended
-  - Full Mode C scenario: Aldenmoor (Crown vs Revolution, Inquisitor, Löwenritter)
-  - Coverage matrix: 22 mechanics mapped across 7 dimensions
-  - Faction profiles: Crown, Church, Hafenmark, Varfell, Revolution, Niflhel, Löwenritter
-  - NPC tests: Maret Uln (complete), Almud (partial), Torben (no Thread relevance)
-  - P3 clarifications: SIM-F-11 through SIM-F-15 all resolved (text patches specified)
-  - 6 new findings (SIM3-F-01 through SIM3-F-06)
+  - Decisions applied: Past-Oriented Pull pool = Option B; residue Coherence = capped
+  - 9 patches applied to threadweaving_redesign_v25.md (SIM2-F-03/04/09, SIM3-F-01/04, SIM-F-11-15)
+  - Batch 4: 6 combination scenarios across all major mechanic intersections
+  - 7 new findings (SIM4-F-01 through SIM4-F-07)
+  - Gap register: 186 total items
 
-decisions_pending:
-  - SIM2-F-04: Past-Oriented Pulling pool — Option B or C?
-  - SIM3-F-04: Residue use + Coherence cap — capped (recommended) or separate?
+simulation_status:
+  Batches_complete: 4
+  Total_findings: 33 (SIM-F-01–15, SIM2-F-01–11, SIM3-F-01–06, SIM4-F-01–07)
+  Patched: 19
+  Open_P1: 1 (SIM4-F-01: §9.7 Mending Ob ceiling)
+  Open_P2: 13
+  Open_P3: 3
 
-open_p1_findings:
-  - SIM2-F-03: Recency Ob table absent from v2.5 (confirmed values — patch ready)
-  - SIM2-F-09: Involuntary extension bypasses concealment (fix confirmed — patch ready)
+key_open_p1:
+  SIM4-F-01: §9.7 interference (cap +4) can make Standard Gap Mending harder than Locked Zone Mending
+  Decision needed: lower the §9.7 cap further, or add Mending Ob floor/ceiling rule
 
-open_p2_findings:
-  - SIM2-F-01, F-02, F-05, F-08, F-10, F-11
-  - SIM3-F-01, F-02, F-03, F-04, F-06
-
-resolved_p3: SIM-F-11, F-12, F-13, F-14, F-15 (text patches specified, not yet applied)
+key_design_confirmations:
+  - Contested Thread operations produce RS death spiral (design confirmed)
+  - Devout Constraint robust (near-impossible to crack randomly)
+  - Past-Oriented Pull correctly prices emotional ambition
+  - Lock removal is structurally mandatory for campaign survival
 
 deferred_tasks:
-  - Apply all pending patches once decisions received
+  - Resolve SIM4-F-01 (P1 — needs decision on §9.7 cap or Mending ceiling)
+  - Mechanic-audit pass on open P2 findings
   - Haiku batch: Solmund rename, AG→AS, Church rename
-  - Stage 3 compilation (pending patch completion)
+  - Stage 3 compilation (pending SIM4-F-01 resolution)
 
 blockers:
-  - SIM2-F-04 pool decision
-  - SIM3-F-04 residue cap decision
+  - SIM4-F-01: §9.7 + Mending Ob interaction — decision needed before compilation
 
 next_action:
-  task: Receive decisions, apply all remaining patches, then Stage 3 compilation
-  model: Sonnet (patches) / Haiku (renames + assembly)
+  task: SIM4-F-01 decision, then mechanic-audit on P2 batch, then Stage 3 compilation
+  model: Current (decision) / Sonnet (mechanic-audit) / Haiku (compilation assembly)
