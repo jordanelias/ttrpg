@@ -1,6 +1,6 @@
 # Valoria Gap Register — Consolidated
 ## Updated: 2026-03-27 (Session — Threadweaving v2.5 simulation)
-## Total items: 164
+## Total items: 175
 ## Editorial blockers: 0
 
 ---
@@ -384,3 +384,19 @@
 - SIM-F-07: Wound-during-Leap-round timing clarified in §2.3
 - SIM-F-08: Mid-sequence configuration change rule added to §2.2
 - SIM-F-09: P-19 integrated into §2.6 Mending epistemic auto-effect
+
+## SIMULATION BATCH 2 FINDINGS — threadweaving v2.5 (2026-03-27)
+
+| ID | Description | Severity | Status |
+|----|-------------|----------|--------|
+| SIM2-F-01 | Coherence cost when collective achieves contact but Focus halving prevents all operations | P2 | Open |
+| SIM2-F-02 | Past-Oriented Pulling excludes TPS — TS doesn't improve execution; no rationale | P2 | Open |
+| SIM2-F-03 | Past-Oriented Pulling recency Ob table not reproduced in v2.5 | P1 | Open |
+| SIM2-F-04 | Past-Oriented Pulling near-inaccessible without Spirit 5+ History 3+ | P1 | Open |
+| SIM2-F-05 | Certainty checks for non-practitioner witnesses of temporal displacement undefined | P2 | Open |
+| SIM2-F-06 | Successful Past-Oriented Pull costs more RS than failure — needs design note | P3 | Open |
+| SIM2-F-07 | No social consequence rule for involuntary Leap in non-combat scenes | P3 | Open |
+| SIM2-F-08 | Involuntary contact as partial Diagnosis substitute — undefined | P2 | Open |
+| SIM2-F-09 | Involuntary-to-voluntary-extension bypasses concealment — exploit | P1 | Open |
+| SIM2-F-10 | Relational/Territorial/Structural Gap mechanical consequences undefined | P2 | Open |
+| SIM2-F-11 | Cross-phase opposing operations: hybrid temporal ambiguity | P2 | Open |
