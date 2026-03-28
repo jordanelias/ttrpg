@@ -105,6 +105,8 @@ Diagnosis is the practitioner's final rendering act before they suspend renderin
 
 **Configuration change after Diagnosis:** If the target configuration changes significantly between Diagnosis and the Leap — a Gap opens at the site, the target dies, another practitioner Locks or Dissolves the thread — the practitioner may revise their declared intentionality before the Leap roll at no cost. They have not yet suspended rendering; revision is possible. If the practitioner proceeds with the original intentionality against the altered configuration without revising: treat as skipping Diagnosis for that operation (+2 Ob, automatic Gap creation on Failure for FR operations).
 
+**Diagnosis detectability:** Diagnosis is not detectable by observers with TS below 50. Observers with TS 50+ may make a Cognition check (TN 7, Ob 1) to notice that a practitioner is rendering a specific configuration more carefully than passive perception requires. Physical stillness and focused attention are observable by anyone; the Thread-level rendering act is not.
+
 **Mandatory before Mending, Locking, or Dissolution.** Skipping Diagnosis before FR: +2 Ob and automatic Gap creation on Failure regardless of degree. Skipping before Mending: +2 Ob. In all cases, skipping Diagnosis means the practitioner Leaps without the rendering information that should direct their intentionality. They are not just working blind — they are Being beyond their being without having formed adequate intention. The operation is still directed by intentionality, but the intentionality is malformed.
 
 **Mandatory before Past-Oriented Pulling.** Skipping: +3 Ob and a temporal Gap on Failure. Past-Oriented Pulling reaches into the deepest parts of a thread's temporal weight. Entering that interaction without having rendered the weight's structure produces catastrophic misalignment between intentionality and configuration.
@@ -286,8 +288,18 @@ Before Weaving in a politically volatile context, the GM should ask: is this con
 **What happens:** The practitioner's intentionality is directed toward the thread's accumulated temporal depth — the history of spoolings that constitute what it has been. During contact, their configuration interacts with the thread at this deeper level, displacing temporal weight. The physical facts are removed. Memories — which are themselves spooled configurations in other beings — remain intact, producing Temporal Disjunction.
 
 **Requirements:** TS 70+ · RS ≤ 60 (substrate must be stressed enough for temporal depth to be accessible — in a pristine world, the temporal weight is too firmly actualised to pull against) · Diagnosis mandatory
-**Pool:** Spirit + relevant History bonus
+**Pool:** Spirit + relevant History bonus + TPS÷2 (round down)
 **TN:** 7
+
+**Ob by recency:**
+
+| Recency | Ob |
+|---|---|
+| Same scene/session | 3 |
+| 1–2 seasons | 4 |
+| 3–5 seasons | 5 |
+| 6–10 seasons | 6 |
+| 10+ seasons / generational | 7 |
 
 *All existing mechanics (Ob by recency, degree table, TT/RS consequences, Fraying Bane) retained with RS replacing TT throughout. RS costs inverted: where TT was +3 minimum, RS is −3 minimum.*
 
@@ -424,6 +436,8 @@ When multiple practitioners operate on the same configuration, they Leap togethe
 
 This is not coordination in any ordinary sense. The practitioners cannot communicate during contact — communication requires rendering. They share intentionality, set during collective Diagnosis before the Leap. They interact with each other's configurations below the level of consciousness.
 
+**Collective Diagnosis:** Multiple practitioners may Diagnose in the same round as part of collective preparation. This is a shared GM exchange, not sequential individual rolls — all practitioners listen to the same description of the target configuration and set their intentionality together.
+
 **Anchor:** Highest TS practitioner. Sets the primary intentionality. Rolls their full operation pool.
 
 **Helper contribution:** Each assisting practitioner contributes **floor(Cognition ÷ 2)** bonus dice to the Anchor's pool. Each helper must have their own active contact window.
@@ -497,6 +511,8 @@ Co-movement still fires on every operation regardless of scale (P-11). The tempo
 Dissolution residue is compressed potential oriented toward the unintelligible ground. A practitioner may draw on it during an operation: add bonus dice equal to Potency rating (1–5) to the operation pool. These dice explode on 9–10 (volatile).
 
 **Cost:** −1 Coherence per use (additional, on top of the operation's normal Coherence cost). Maximum one use per contact window. Same source: +1 Ob per prior use (depletion).
+
+**Coherence cap interaction:** Residue use is part of the same operation event and subject to the §3.2 cap. Total Coherence loss for a single operation including residue use cannot exceed −1. At Object or Personal scale, residue use therefore costs no additional Coherence beyond the base operation cost (which is already 0). At Relational+ scale, the total cost is still −1 regardless of residue use. The residue's value at those scales is the bonus dice, not a Coherence saving — the cap was already in effect.
 
 **Why residue accelerates Coherence loss:** The residue's proximity to the ground intensifies the practitioner's exposure during contact. They are not just suspending rendering — they are suspending it while in contact with something that pulls toward the unintelligible. Each use pushes them deeper into the beyond-rendering state, and each return leaves rendering less stable.
 
@@ -588,6 +604,9 @@ Rendering Stability (RS) is a world-scale tracker measuring the rendered world's
 
 ## 5.3 RS Thresholds
 
+**Threshold timing:** RS threshold effects activate and deactivate at Accounting (season end), not mid-scene. If RS crosses a threshold boundary during play — due to a Thread operation, Mending, or other mid-scene change — the new effects do not apply until the following Accounting. Exception: the immediate consequences listed in operation degree tables (e.g., "Shifting Object forms," "Gap opens") resolve immediately as written. Only the persistent threshold-band effects (spontaneous Gaps per season, worldwide +1 Ob, faction Stability checks) are Accounting-gated.
+
+
 | RS | State | World Effects |
 |---|---|---|
 | 100–80 | Stable | No unusual phenomena. Substrate sound. |
@@ -648,6 +667,8 @@ The more intensely the being renders itself, the sooner it ceases to be.
 
 When Rendering Strain equals Health, or Wounds reach **Rendering Threshold** (Health ÷ 2), the being can no longer sustain self-rendering.
 
+**Triggers (independent):** Both triggers independently initiate De-Actualisation — whichever is reached first activates the sequence. If both cross simultaneously, the sequence begins once.
+
 **Sequence:**
 - **Round 1:** Intelligible face dissolving. TS 30+ observers perceive loss of coherence. All operations +2 Ob. May attempt stabilisation: Weaving on itself (standard pool vs Ob = Wounds + Rendering Strain).
 - **Round 2:** Perceivable only by TS 50+. Operations +4 Ob. Second stabilisation attempt possible.
@@ -700,7 +721,7 @@ Replaces TT track on board. Runs 100→0. Hidden by default (Investigate Thread 
 - **Mending:** Personal Phase = full TTRPG rules. Strategic Phase = Mend order. Both count toward RS.
 - **Coherence:** Tracked per PC practitioner during Personal Phase. Strategic Phase Thread orders: −1 Coherence only if PC practitioner narratively leads the operation (declared at Cascade Phase).
 - **Lock chronic effects:** TTRPG Lock registered on territory card at Cascade Phase. Drift begins next Accounting.
-- **RS changes:** Both Personal and Strategic Phase changes applied at Accounting. Seasonal cap: ±10.
+- **RS changes:** Both Personal and Strategic Phase changes applied at Accounting. Seasonal cap: ±10 net (the cap applies to the net RS change after all sources — positive and negative — are resolved at Accounting).
 
 ## 7.3 Updated Mode Branching
 
@@ -937,6 +958,10 @@ At TS 90–100, significant Thread operations in the district trigger involuntar
 - The practitioner returns to rendering disoriented. They may not understand what just happened (especially at lower TS in the Resonant range).
 
 **Optional voluntary extension:** In the round after involuntary contact, the practitioner may attempt a standard Leap roll to extend into voluntary contact at +1 Ob (setting intentionality mid-contact is harder than pre-Leap). This Leap proceeds without a separate Diagnosis round — the practitioner's configuration has already begun interacting and can set intentionality from within the contact. The operation fires without full Diagnosis information (the practitioner sensed ambient Thread environment but did not render a specific target).
+
+**Concealment during voluntary extension:** No concealment can be set before a voluntary extension — the pre-Leap concealment phase did not occur. Any operation performed via voluntary extension is automatically visible to TS 50+ observers. There is no concealment roll available. The practitioner may choose not to operate if visibility is unacceptable.
+
+**Voluntary extension after Wound disruption:** If rendering reasserted due to a Wound disruption check during involuntary contact, voluntary extension is not available that round. The contact has ended. Standard Leap procedure applies if the practitioner wishes to re-enter contact.
 
 ## 9.19 The Rupture — Expanded Description (P-30)
 
