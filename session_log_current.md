@@ -1,40 +1,30 @@
-session_id: 2026-03-27T23
-phase: Thread Operations Redesign — Simulation Batch 7 complete
-status: 7 batches, 54 total findings. 2 P1 design decisions needed. Core system is sound.
+session_id: 2026-03-27T24
+phase: Thread Operations Redesign — Simulation Batch 8 complete
+status: 8 batches, 64 total findings. Core system comprehensively stress-tested. Diminishing returns reached.
 
 completed_this_session:
-  - Applied 17 patches to threadweaving_redesign_v25.md (+6499 chars)
-  - Batch 7: extreme boundary conditions, zero-resource states, unexplored mechanics
-  - 11 new findings (SIM7-F-01 through SIM7-F-11)
-  - Gap register: ~216 total items
+  - Patched SIM7-F-01/03/04/06/07/08/10/11 (8 patches)
+  - Batch 8: First Leap, Elske/Baralta/Klapp NPCs, collective Leap failure, Health 1, multiple Gaps, Certainty 0, TS growth, Niflhel harvesting
+  - 10 new findings (SIM8-F-01 through SIM8-F-10)
+  - 5 patched immediately (SIM8-F-04/05/06/07/08)
+  - Gap register: ~226 total items
+  - threadweaving_redesign_v25.md: ~99k chars, comprehensively patched
 
-key_findings:
-  - SIM7-F-03 (P1): Foundational Past-Oriented Pulling — near-mythic campaign endpoint possible at 5%
-  - SIM7-F-06 (P1): Threadcut beings as practitioners — high design value, rules needed
-  - SIM7-F-04 (P2): RS 1 endgame trap correctly replicates the Einhir Catastrophe
-  - E-02: 5 Fragmented practitioners collectively achieve 97% on Structural Weaving — collective resilience confirmed
-  - E-04: RS 1 has no safe exit — design confirmed as intentional
-  - E-10: All-factions-Mandate-0 produces Revolution Community Weaving failure feedback loop
+coverage_complete:
+  mechanics: Weaving/Pulling/Mending/Lock/Dissolution/Diagnosis/Leap/Co-Movement/Collective/Past-Oriented/Involuntary/Opposing/Threadcut/RS/Coherence/First-Leap/External-Threadcut-ops
+  factions: All 7 (Crown/Church/Revolution/Varfell/Hafenmark/Niflhel/Löwenritter)
+  archetypes: Practitioner/Inquisitor/Knight-Templar/Devout/Riskbreaker/Faction-Leader/Severed/Non-practitioner
+  NPCs: Maret-Uln/Almud/Vaynard/Ehrenwall/Lenneth/Himlensendt/Elske/Baralta/Klapp(partial)
+  modes: TTRPG/BG/HYB
+  temporal: PAST/PRES/FUT/CROSS
+  extremes: RS-boundaries/Coherence-0/Focus-1/TS-100/Mandate-0/Health-1/Collective-degraded/Foundational-Pull
 
-design_decisions_needed:
-  - SIM7-F-03: Confirm Foundational Past-Oriented Pulling as near-mythic endpoint; RS ×3; Einhir framework required
-  - SIM7-F-06: Confirm threadcut beings can direct external ops at cost of Rendering Strain; no Leap required
+open_p1: []
+open_p2: [SIM2-F-01, SIM3-F-02, SIM3-F-03, SIM4-F-02, SIM5-F-08, SIM6-F-02, SIM6-F-04, SIM7-F-04, SIM8-F-02, SIM8-F-03, SIM8-F-09, SIM8-F-10]
+open_p3: [SIM2-F-06, SIM3-F-05, SIM4-F-05, SIM5-F-09, SIM6-F-01, SIM6-F-07, SIM6-F-08, SIM7-F-02, SIM7-F-05, SIM8-F-01]
 
-open_p1: [SIM7-F-03, SIM7-F-06]
-open_p2_count: 14
-open_p3_count: 10
-total_findings: 54
-patched: 38
-
-simulation_coverage:
-  mechanics_tested: Weaving/Pulling/Mending/Lock/Dissolution/Diagnosis/Leap/Co-Movement/Collective/Past-Oriented/Involuntary/Opposing/Threadcut/RS/Coherence
-  factions_tested: Crown/Church/Revolution/Varfell/Hafenmark/Niflhel/Löwenritter
-  archetypes_tested: Practitioner/Inquisitor/Knight Templar/Devout/Riskbreaker/Faction Leader/Severed
-  NPCs_tested: Maret Uln/Almud/Vaynard/Ehrenwall/Lenneth/Himlensendt
-  modes_tested: TTRPG/BG/HYB
-  temporal_tested: PAST/PRES/FUT/CROSS
-  extreme_cases: RS boundaries/Coherence 0/Focus 1/TS 100/Mandate 0/Collective degraded
+recommendation: No remaining P1 findings. System is ready for Stage 3 compilation. Remaining P2/P3 are edge cases and cross-references that can be addressed during compilation or deferred to post-compilation polish pass.
 
 next_action:
-  task: Decisions on SIM7-F-03 and SIM7-F-06, then final patch pass, then Stage 3 compilation
-  model: Current (decisions) / Sonnet (patches) / Haiku (compilation)
+  task: Stage 3 compilation — Thread Operations chapter
+  model: Sonnet (integration judgment) / Haiku (assembly)
