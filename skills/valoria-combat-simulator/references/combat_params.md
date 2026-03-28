@@ -80,7 +80,7 @@ Speed numeric: higher = faster. Fast resolves before Standard before Slow when s
 | Armour | DR | Str min | 1 below | 2+ below | Stamina max |
 |---|---|---|---|---|---|
 | None | 0 | — | — | — | End + 1 |
-| Light | 1 | 2 | −1D Combat Pool | Cannot wear | End + 1 |
+| Light | 1 | None | — | — | End + 1 |
 | Medium | 2 | 3 | −1D Combat Pool | Cannot wear | End |
 | Heavy | 3 | 4 | −2D Combat Pool | Cannot wear | End − 2 |
 
