@@ -1,6 +1,6 @@
 # Valoria Gap Register — Consolidated
 ## Updated: 2026-03-27 (Session — Threadweaving v2.5 simulation)
-## Total items: 175
+## Total items: 186
 ## Editorial blockers: 0
 
 ---
@@ -400,3 +400,19 @@
 | SIM2-F-09 | Involuntary-to-voluntary-extension bypasses concealment — exploit | P1 | Open |
 | SIM2-F-10 | Relational/Territorial/Structural Gap mechanical consequences undefined | P2 | Open |
 | SIM2-F-11 | Cross-phase opposing operations: hybrid temporal ambiguity | P2 | Open |
+
+## SIMULATION BATCH 3 FINDINGS — threadweaving v2.5 (2026-03-27)
+
+| ID | Description | Severity | Status |
+|----|-------------|----------|--------|
+| SIM3-F-01 | RS threshold re-crossing upward mid-scene: threshold effects should resolve at Accounting only | P2 | Open |
+| SIM3-F-02 | Crown has no canon TS 70+ practitioner; Territorial Lock inaccessible | P2 | Open |
+| SIM3-F-03 | No Hafenmark-affiliated practitioners; no Thread entry point for faction | P2 | Open |
+| SIM3-F-04 | Coherence cap + dissolution residue: capped (part of operation) or separate? | P2 | Open |
+| SIM3-F-05 | Non-practitioner residue handling: no rule for incidental Coherence exposure | P3 | Open |
+| SIM3-F-06 | Political NPCs with Resonant TS: no social consequence rule for involuntary Leap in public | P2 | Open |
+| SIM-F-11 | Rendering Strain vs Wound triggers: both independent; text clarification specified | P3 | Resolved — text patch pending |
+| SIM-F-12 | Diagnosis detectability: text rule specified (TS 50+, Cognition Ob 1) | P3 | Resolved — text patch pending |
+| SIM-F-13 | Collective Diagnosis: shared GM exchange clarification specified | P3 | Resolved — text patch pending |
+| SIM-F-14 | Voluntary extension after Wound disruption: not available; text clarification specified | P3 | Resolved — text patch pending |
+| SIM-F-15 | RS seasonal cap: net interpretation confirmed; text clarification specified | P3 | Resolved — text patch pending |
