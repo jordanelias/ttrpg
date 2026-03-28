@@ -1,6 +1,6 @@
 # Valoria Gap Register — Consolidated
 ## Updated: 2026-03-27 (Session — Threadweaving v2.5 simulation)
-## Total items: 212
+## Total items: 223
 ## Editorial blockers: 0
 
 ---
@@ -466,3 +466,19 @@
 | SIM4-F-04 | Multiple Mending successes stack RS gains | P2 | Resolved — patch pending |
 | SIM4-F-06 | Both-succeed opposing ops RS −1 | P2 | Resolved — patch pending |
 | SIM4-F-07 | Contested-op RS spiral GM sidebar | P2 | Resolved — patch pending |
+
+## SIMULATION BATCH 7 FINDINGS — extreme cases (2026-03-27)
+
+| ID | Description | Severity | Status |
+|----|-------------|----------|--------|
+| SIM7-F-01 | Solo practitioner cannot self-rescue from Rendering Crisis — design rationale note needed | P2 | Open |
+| SIM7-F-02 | Fragmented helpers contribute identically to healthy helpers — Thread contribution unaffected by Coherence state | P3 | Open |
+| SIM7-F-03 | No rules for Past-Oriented Pulling at Foundational scale (Einhir Catastrophe) | P1 | Open |
+| SIM7-F-04 | RS 1 endgame trap: both operating and not operating lead to Rupture | P2 | Open |
+| SIM7-F-05 | Focus improvement pathway not cited in v2.5 | P3 | Open |
+| SIM7-F-06 | No rules for threadcut beings performing external Thread operations | P1 | Open |
+| SIM7-F-07 | Simultaneous Dissolution + Mending on same site: §9.13 does not cover | P2 | Open |
+| SIM7-F-08 | Incapacitation threshold rounding for odd Health values not specified | P2 | Open |
+| SIM7-F-09 | CE ceiling and overflow behavior absent from v2.5 | P2 | Open |
+| SIM7-F-10 | Mandate 0 Stability check consequence undefined | P2 | Open |
+| SIM7-F-11 | Revolution Community Weaving at Mandate 0: prerequisite failure feedback loop | P3 | Open |
