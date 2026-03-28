@@ -579,7 +579,7 @@ The temporal and epistemic auto-effects are consequences the practitioner can ma
 
 ### 5.3.4 History Resonance and Flashback Anchoring and Flashback Anchoring
 
-*Unchanged from current R37, R38. ThS → Coherence.*
+*History Resonance and Flashback Anchoring mechanics are unchanged. All ThS references in those rules have been replaced with Coherence.*
 
 ---
 
@@ -631,7 +631,7 @@ Rendering Stability (RS) is a world-scale tracker measuring the rendered world's
 
 ### 5.4.4 RS in Board Game
 
-RS replaces TT on the board game track. Invert all TT references: where TT went up, RS goes down. Shared loss condition: RS reaches 0.
+RS replaces the old Thread Tension track on the board game. Where TT increased, RS decreases. Shared loss condition: RS reaches 0.
 
 **RS is hidden from players by default.** The Investigate Thread order (Intelligence vs Ob 3) reveals the current RS value. Overwhelming: also reveals which territories have Gaps. Players know the world is degrading (they see the threshold effects) but do not know the exact number without investigation.
 
@@ -717,7 +717,7 @@ Available to any faction with an affiliated TS 50+ character, or Revolution (via
 
 ### Revised Co-Movement Card Deck (18 cards)
 
-Cards 1–15: retained (all TT references become RS, inverted).
+Cards 1–15: retained (all Thread Tension references updated to RS, inverted).
 Cards 16–18 added:
 
 16. **Substrate Settling** — Mended territory: all Thread operations −1 Ob next season.
