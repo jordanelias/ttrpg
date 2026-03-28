@@ -1,33 +1,39 @@
-session_id: 2026-03-27T18
-phase: Thread Operations Redesign — Simulation Batch 2
-status: Batch 2 complete. 3 P1, 6 P2, 2 P3. Editorial decisions needed on F-03 and F-04.
+session_id: 2026-03-28T01
+phase: Phase 2 — Compilation
+status: Infra session. No compilation stages advanced.
 
 completed_this_session:
-  - Stress test batch 2: Collective Operations, Past-Oriented Pulling, Involuntary Leap, Opposing Ops
-  - 11 new findings (SIM2-F-01 through SIM2-F-11)
-  - Gap register updated: +11 items
-  - Output: tests/sim_threadweaving_v25_batch2.md
+  - Created valoria-dice-model skill (skills/valoria-dice-model/SKILL.md + valoria_dice.py)
+  - Corrected canonical dice rule: 10 = +2 successes flat (no extra die)
+  - Logged PP-092 (§1.1 dice table correction) and PP-093 (§4.3 Stunt chain-on-10 removal) — both approved
+  - Updated valoria-orchestrator-SKILL.md: dice-model added to registry
+  - Updated project_instructions.md (GitHub + .md deliverable): dice-model skill, canonical dice rule section, Haiku routing row for dice math
+  - Patch count: 91 → 93 (35 P1 / 47 P2 / 10 P3 / 1 design)
 
-critical_findings:
-  - SIM2-F-03 (P1): Past-Oriented Pulling recency Ob table absent from v2.5 — blocks play
-  - SIM2-F-04 (P1): Past-Oriented Pulling pool (Spirit+History only) makes TS irrelevant to execution
-  - SIM2-F-09 (P1): Involuntary-to-voluntary-extension bypasses concealment — exploit
+gap_register_delta:
+  opened: []
+  closed: []
 
-editorial_decisions_needed:
-  - SIM2-F-04: Add TPS (or TPS/2) to Past-Oriented Pulling pool? Or add rationale note?
-  - SIM2-F-03: Reproduce recency Ob table in §2.4 (from prior ruleset — needs source)
+commits_this_session:
+  - skills/valoria-dice-model/SKILL.md (new)
+  - skills/valoria-dice-model/valoria_dice.py (new)
+  - valoria_patch_proposals.md (PP-092, PP-093 added)
+  - skills/valoria-orchestrator-SKILL.md (dice-model in registry)
+  - project_instructions.md (v2: dice rule, skill table, routing)
 
 deferred_tasks:
-  - Resolve editorial decisions on SIM2-F-03 and SIM2-F-04
-  - Mechanic-audit patches for SIM2-F-03, F-04, F-09 (P1s)
+  - Editorial decisions on SIM2-F-03 and SIM2-F-04 (from prior session)
+  - Mechanic-audit patches: SIM2-F-03, F-04, F-09 (P1s)
   - P2 patches: SIM2-F-01, F-02, F-05, F-08, F-10, F-11
+  - Apply PP-092 and PP-093 at Stage 3 compilation
   - Haiku batch: Solmund rename, AG→AS, Church rename
   - Stage 3 compilation (pending all patches)
 
 blockers:
-  - SIM2-F-03: recency Ob table source unknown — need prior ruleset or user input
+  - SIM2-F-03: recency Ob table source unknown
   - SIM2-F-04: design decision required before patching
 
 next_action:
-  task: Editorial decisions on SIM2-F-03 and SIM2-F-04
-  model: Current (user decision)
+  task: Editorial decisions on SIM2-F-03 and SIM2-F-04, then P1 patches
+  model: Sonnet 4.6 (editorial clarification) → Haiku 4.5 (patch text)
+
