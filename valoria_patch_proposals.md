@@ -829,112 +829,41 @@ FLAG: User attribute list uses "Poise" at position 6 (Str/End/Agi/Cog/Mem/Poise/
 
 ---
 
-## PATCH COUNT SUMMARY (UPDATED)
-| Severity | Count |
-|----------|-------|
-| P1 | 27 |
-| P2 | 47 |
-| P3 | 10 |
-| Design (new mechanic) | 1 |
-| **Total** | **85** |
-
-## PATCH PROPOSALS — BATCH 11 (2026-03-27)
-
-### PP-086
-**Finding:** P1-B11-01
-**Severity:** P1
-**Mechanic:** M-020 (Mass Combat), §8.3
-**Issue:** Mass combat disposition table specifies flat damage modifiers (+2, +4) but no base damage for a successful attack is defined. Net successes over Ob are calculated but never translated into Health damage.
-**Proposed fix:** Add to §8.3 immediately after the disposition table:
-> "**Mass combat damage:** A successful attack deals damage equal to net successes over Ob. Flat damage bonuses from disposition add to this total after excess successes are calculated. On a Partial result (exactly Ob met, 0 excess successes), deal 1 damage. Damage reduces the target unit's aggregate Health directly. Armour and Power do not apply at unit scale — unit Endurance and formation quality are already abstracted into Health and Martial ratings."
->
-> *Example: Offensive attacker vs. Balanced defender, pool 8D TN5, Ob 1. Net successes = 4. Excess = 3. Base damage = 3. No disposition flat bonus in this matchup. Total damage = 3.*
->
-> *Example: Brutal vs. Brutal, pool 12D TN5, Ob 1. Net successes = 6. Excess = 5. +4 flat (Brutal). Total damage = 9.*
-**Source:** C-B11-06
 
 ---
 
-### PP-087
-**Finding:** P1-B11-02
-**Severity:** P1
-**Mechanic:** M-020 (Mass Combat), §8.3 Formation Breaks
-**Issue:** §8.3 states a unit that Formation Breaks suffers "+1 Ob all subsequent actions" but does not specify whether this stacks across multiple Formation Breaks in the same battle. Two valid readings produce entirely different attrition curves (unkillable KT loop vs. rapid functional degradation).
-**Proposed fix:** Add to §8.3 Formation Breaks section:
-> "Formation Break Ob penalties stack. Each time a unit Formation Breaks (Health reaches 0), it gains a cumulative +1 Ob to all rolls for the remainder of the battle. This penalty persists through Rally — Rally removes Routed status only, not accumulated Ob penalties. A unit that has Formation Broken 3 or more times in a single battle cannot be Rallied again this engagement; it disperses permanently regardless of Cohesion check results."
-**Source:** C-B11-08
+## PATCH PROPOSALS — DICE RULE CORRECTION (2026-03-27)
+
+### PP-092
+**Finding:** Rule error — §1.1 Dice table
+**Severity:** P1 (rules-as-written are mechanically incorrect)
+**Mechanic:** M-001 (Core Dice)
+**Issue:** §1.1 states: result 10 = "One success + roll one bonus die (chains indefinitely)." This is incorrect. The canonical rule is: result 10 = flat +2 successes. No bonus die is rolled.
+**Proposed fix:** Replace §1.1 die table entry for 10:
+- Old: `10 | One success + roll one bonus die (chains indefinitely)`
+- New: `10 | Two successes`
+Also update the explanatory sentence: remove "including bonus dice" from the net successes definition.
+**Approved:** Yes — user-confirmed 2026-03-27. No editorial gate required (factual correction).
+**Source:** User correction 2026-03-27
 
 ---
 
-### PP-088
-**Finding:** P1-B11-03
-**Severity:** P1
-**Mechanic:** M-021 (Siege), §8.4
-**Issue:** §8.4 Assault action states "Success: breach attempt, mass combat at standard Ob" and "Overwhelming: walls breached, mass combat at −1 Ob for attacker" — but the relationship between the mass combat outcome and the siege result (Fortification reduction) is never stated. The Domain Action roll governs whether the mass combat occurs and at what Ob; what the mass combat outcome produces is undefined.
-**Proposed fix:** Add to §8.4 Assault entry under Attacker options:
-> "Mass combat outcome determines siege result: if the attacking unit wins the mass combat (defending garrison unit Routes or is destroyed), the walls are breached — Fortification −1. If the defending unit wins (attacking unit Routes or is destroyed), the assault fails; Fortification holds. A drawn result (both units Formation Break simultaneously) leaves Fortification unchanged; neither side gains ground this season. The attacking faction's Domain Action roll (Overwhelming / Success / Partial / Failure) governs only the Ob at which the mass combat begins — it does not independently determine the breach result."
-**Source:** C-B11-09
-
----
-
-### PP-089
-**Finding:** P1-B11-04
-**Severity:** P1
-**Mechanic:** M-050 (Mode Transitions), §11.7 Hybrid
-**Issue:** §11.7 does not specify the resolution order of Strategic Phase (board game orders) and Personal Phase (TTRPG scenes) within a single hybrid season. Supply interdiction timing, Domain Echo application, and faction stat caps all depend on phase order.
-**Proposed fix:** Add to §11.7 as a new subsection "Hybrid Season Resolution Order":
-> "Within each hybrid season, phases resolve in the following order:
-> 1. **Declaration:** All Strategic Phase orders are declared simultaneously (board game).
-> 2. **Strategic Phase:** Board game orders resolve using board game procedures (disposition table, single siege roll, faction Domain Actions).
-> 3. **Personal Phase:** TTRPG scenes resolve. Domain Echoes from personal scenes take effect at the end of this phase.
-> 4. **Seasonal Accounting:** Track updates, supply checks, veteran bonuses, faction attribute changes applied. The ±2 seasonal cap is enforced here across all changes from both phases combined.
->
-> Consequence: Personal Phase Domain Echoes from Season N take effect at Seasonal Accounting of Season N (same season, not N+1). Supply interdiction achieved in Personal Phase of Season N applies from Season N+1. Exception: if a Personal Phase scene explicitly precedes the battle (GM frames it before the Strategic Phase resolves), the GM may apply its Domain Echoes before the Strategic Phase roll, at the cost of one Inspiration from any participating PC."
-**Source:** C-B11-10
-
----
-
-### PP-090
-**Finding:** P1-B11-05
-**Severity:** P1
-**Mechanic:** M-050 (Mode Transitions), §11.7 Hybrid; §8.4 Siege
-**Issue:** When a campaign switches from TTRPG siege mode (with garrison unit stats: Endurance, Cohesion, Health) to board game siege mode (which tracks only Fortification), accumulated garrison attrition is lost — the stat system has no equivalent on the board game side.
-**Proposed fix:** Add to §11.7 under "Siege resolution" row:
-> "**Mid-siege mode transition (TTRPG → BG):** Convert accumulated garrison attrition before switching. For each point of garrison Endurance lost below starting value: Fortification −0.5 (round down, minimum 0). For each Cohesion lost below starting value: treat as −1D on the defending unit's effective Martial for the next BG siege roll (apply as −1 Ob to attacker's roll). Record these conversions on the faction sheet before the first BG siege season resolves.
->
-> **Mid-siege mode transition (BG → TTRPG):** Treat current Fortification value as the garrison's operational state. No Endurance or Cohesion conversion is required — those stats initialise at standard values for the garrison unit type."
-**Source:** C-B11-12
-
----
-
-### PP-091
-**Finding:** P1-B11-06
-**Severity:** P1
-**Mechanic:** M-020 (Mass Combat), §8.3 Artillery unit
-**Issue:** §8.3 lists Bombard as a valid manoeuvre for mass combat but provides no resolution mechanic. Artillery's only meaningful combat action is undefined.
-**Proposed fix:** Add to §8.3 after the Unit Attachments table, as a new subsection "Artillery Resolution":
-> "**Bombard manoeuvre:** An Artillery unit that declares Bombard does not participate in the standard melee exchange this round. Instead:
-> - Roll Martial dice (no Commander Agility bonus) at TN5.
-> - Ob = range tier: Adjacent (0) / Short (1) / Long (2). Default engagement is Long (Ob 2).
-> - **Overwhelming:** Target unit takes flat 4 damage, ignoring disposition modifiers.
-> - **Success:** Target unit takes flat 3 damage, ignoring disposition modifiers.
-> - **Partial:** Target unit takes flat 1 damage.
-> - **Failure:** No effect. Artillery expends ammunition (cannot Bombard next round; must Hold or Withdraw).
->
-> While Bombarding, the Artillery unit is not subject to incoming attack from the target unit (they are not in contact). However, any unit that Advances against the Artillery unit this round may make a standard attack against it using the disposition table — Artillery in the open is vulnerable.
->
-> Artillery cannot Bombard if in melee contact with any enemy unit (use standard disposition table instead, treating Artillery as Balanced).
->
-> **Fortification bombardment (Siege):** An Artillery unit assigned to Bombard a fortification rolls as above against Ob = Fortification level. Success: Fortification −0.5 (takes two successful Bombards to reduce Fortification by 1). Overwhelming: Fortification −1 immediately."
-**Source:** C-B11-14
+### PP-093
+**Finding:** Rule error — §4.3 Inspirations, Stunt rule
+**Severity:** P1 (rules-as-written inconsistent with PP-092)
+**Mechanic:** M-006 (Inspirations)
+**Issue:** §4.3 Stunt rule states: "Roll Spirit dice as bonus (chain on 10)." Inconsistent with corrected §1.1 (10 = flat +2, no extra die).
+**Proposed fix:** Remove "(chain on 10)" from Stunt rule. Spirit bonus dice follow standard die face table: 10 = +2 successes, no chain.
+**Approved:** Yes — user-confirmed 2026-03-27. No editorial gate required (consistency fix).
+**Source:** PP-092 cascade; user confirmation 2026-03-27
 
 ---
 
 ## PATCH COUNT SUMMARY (UPDATED)
 | Severity | Count |
 |----------|-------|
-| P1 | 33 |
+| P1 | 35 |
 | P2 | 47 |
 | P3 | 10 |
 | Design (new mechanic) | 1 |
-| **Total** | **91** |
+| **Total** | **93** |
