@@ -1,6 +1,6 @@
 # Valoria Gap Register — Consolidated
 ## Updated: 2026-03-27 (Session — Threadweaving v2.5 simulation)
-## Total items: 223
+## Total items: 233
 ## Editorial blockers: 0
 
 ---
@@ -482,3 +482,18 @@
 | SIM7-F-09 | CE ceiling and overflow behavior absent from v2.5 | P2 | Open |
 | SIM7-F-10 | Mandate 0 Stability check consequence undefined | P2 | Open |
 | SIM7-F-11 | Revolution Community Weaving at Mandate 0: prerequisite failure feedback loop | P3 | Open |
+
+## SIMULATION BATCH 8 FINDINGS (2026-03-27)
+
+| ID | Description | Severity | Status |
+|----|-------------|----------|--------|
+| SIM8-F-01 | Repeated First Leap failures: no accumulated consequence | P3 | Open |
+| SIM8-F-02 | Conviction mechanics external to v2.5 — compilation cross-reference | P2 | Open |
+| SIM8-F-03 | Devout character Dormant TS range: passive perception framing absent | P2 | Open |
+| SIM8-F-04 | Collective Leap procedure: Anchor failure with committed helpers | P1 | Patched |
+| SIM8-F-05 | Incapacitation during contact: no auto-termination rule | P2 | Patched |
+| SIM8-F-06 | Multiple Gaps in same territory: stacked vs consolidated | P3 | Patched |
+| SIM8-F-07 | Non-practitioner Certainty 0: no mechanical penalty | P2 | Patched |
+| SIM8-F-08 | TS growth: witnessing Thread ops doesn't qualify | P2 | Patched |
+| SIM8-F-09 | No TTRPG residue harvesting procedure | P2 | Open |
+| SIM8-F-10 | CE pooling through Church hierarchy undefined | P2 | Open |
