@@ -377,3 +377,10 @@
 - SIM-F-04: §9.7 threadcut interference capped at +4 regardless of TS.
 - SIM-F-05: Priority convention (ascending = earlier) documented in §2.2 Diagnosis timing.
 - SIM-F-10: Mending failure no longer deals a Wound. Coherence −2 + RS −2 only.
+
+## MECHANIC-AUDIT PATCHES APPLIED 2026-03-27
+- SIM-F-01: Coherence cap −1/operation added to §3.2; all degree tables updated; GM Dissonant-entry protocol added to §3.3
+- SIM-F-06: Brittleness GM sidebar added to §2.4 Weaving
+- SIM-F-07: Wound-during-Leap-round timing clarified in §2.3
+- SIM-F-08: Mid-sequence configuration change rule added to §2.2
+- SIM-F-09: P-19 integrated into §2.6 Mending epistemic auto-effect
