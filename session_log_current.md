@@ -1,51 +1,53 @@
-session_id: 2026-03-27T04
-phase: Phase 3 (Simulation) — gate pending final closure
-status: Phase 3 gate UNBLOCKED — all P1 findings resolved; 1 design flag pending compilation
+session_id: 2026-03-27T05
+phase: Phase 3 (Simulation) — Batch 10 complete
+status: Phase 3 testing ongoing; major cell gaps closed
 
 completed_this_session:
-  - Mechanic-audit (Modes C+D) on all 20 open P1 findings
-  - Canon-guard on PP-012 — CONDITIONAL PASS; revised to unified Coherence track
-  - 3 new patches proposed: PP-078 (ThS text), PP-079 (TLK — superseded), PP-080 (TC brake threshold)
-  - Editorial search: recovered 8 prior decisions from past chats
-  - Editorial decisions collected: PP-008, PP-016 (all 3 archetypes), F-B9-17
-  - PP-081 Trajectory Reading designed (new op type, TS 70+)
-  - Patch proposals updated: 792 lines, PP-081 added, status updates applied
-  - Audit report pushed: tests/valoria_mechanic_audit_p1.md
+  - Batch 10: 12 tests, 14 findings (0 P1, 11 P2, 3 design confirmations), 5 rulings
+  - PP-082: Thread split pool fix (TS÷4 accident)
+  - PP-083: Collective op auto-effect stacking ruling (R-B10-02)
+  - PP-084: Niflhel Destabilisation Ob formula fix (R-B10-03)
+  - PP-085: Trajectory Reading pool spec + BG Thread op tier (R-B10-05)
 
-current_state:
-  p1_findings_open: 0 (all resolved or superseded)
-  patch_proposals: 81 entries
-  editorial_decisions_outstanding: 1 (Poise vs Focus attribute name — flag for compilation)
-  trajectory_reading: designed, not yet compiled into ruleset
-  phase3_gate: READY TO CLOSE
+coverage_updates:
+  - M-041/042/043/044: Isolation+Interaction+Scenario now ✓
+  - M-046: Isolation+Interaction+Edge ✓ (Scenario still open)
+  - M-047: Isolation+Interaction+Scenario ✓
+  - M-048: Isolation+Interaction ✓
+  - M-049: Isolation+Interaction ✓
+  - M-051: Isolation+Interaction+Edge ✓
+  - M-054: Isolation+Interaction ✓
+  - M-055: Isolation+Interaction ✓
+  - M-056: Isolation+Interaction+Edge ✓
+  - M-033: Isolation+Interaction+Edge ✓
+  - M-035: Isolation+Interaction ✓
+  - M-038: Interaction ✓
+  - PP-081: Isolation ✓
 
-editorial_resolved_this_session:
-  - PP-007: REINSTATED — CONFIRMED. Poise = derived social wound track = Presence + 6. Focus = attribute #6 (not Poise). Archetype stat arrays: "poise" column = Focus values.
-  - PP-008: APPROVED (Niflhel Intel 6)
-  - PP-012: REVISED (unified Coherence track — merge §4.5+§5.10)
-  - PP-015: SUPERSEDED (compile from succession_mechanic.md)
-  - PP-016: APPROVED (Knight Templar, Restoration Seeker, Niflhel Operative — 10-attr arrays)
-  - PP-062: APPROVED (Community Weaving as supplementary Coherence recovery)
-  - PP-071: APPROVED (conditional Weaving — canon-safe)
-  - PP-077: REVISED (Coherence 0 = NPC; rescue arc before, not play after)
-  - PP-079: SUPERSEDED (compile TLK from succession_mechanic.md)
-  - F-B9-17: APPROVED (Trajectory Reading — PP-081 designed)
+remaining_open_cells:
+  - M-019 (Past-Oriented Pull at Einhir Sites): needs TS 70+ character — current roster max TS 66
+  - M-026 (Monstrous Entities): Isolation+Interaction still ☐
+  - M-027/028 (Southernmost/Locked Zones): Edge Cases ☐
+  - M-034 (Faction Stats): Interaction still ☐
+  - M-036 (Parliamentary Vote): Scenario ☐
+  - M-037 (Grand Debate): Isolation ☐
+  - M-046 (Thread in Combat): Scenario ☐
+  - M-048/049/052/053/054: mode gaps (BG/HYB) remain
+  - PP-081: Interaction+Scenario+Edge still ☐
 
-compilation_flags:
-  - RESOLVED: Focus = attribute #6. Poise = Presence+6 (derived track). Archetype stat arrays corrected: column labelled "poise" = Focus attribute. PP-007 reinstated: track is named Poise.
-  - PP-006: Verify against Stage 8 mass combat (TN5 disposition table). PP-006 formula (TN7) may be superseded.
-  - PP-012 unified Coherence: merge §4.5 + §5.10 into single track at Stage 3 compilation.
-  - PP-077 revised: rewrite Coherence 0 consequence as "rescue window before NPC transition" at Stage 3.
-  - PP-081 Trajectory Reading: new op — add to Stage 3 (Thread operations).
-  - PP-078 (ThS text fix): apply at Stage 3/4.
-  - PP-080 (TC brake threshold ≤3): apply at Stage 5.
+patch_proposals: 85 total (27 P1, 47 P2, 10 P3, 1 design)
+
+key_rulings:
+  R-B10-01: Low-TS Diagnosis pool = Att+Foc only (no History), Ob3
+  R-B10-02: Collective op same-type auto-effects do not stack
+  R-B10-03: Niflhel Destabilisation Ob = Stability÷2 round up
+  R-B10-04: TC80+IP75 same season = military (tier4) before political (tier5)
+  R-B10-05: BG Thread ops = Tier 2 in PP-005 sequencing
+
+design_flags:
+  - F-B10-11: Diplomatic IP Resolution locked out above TT 60 (Phase 4 review item)
+  - F-B10-07: M-019 Einhir Sites Past-Pull gap — needs TS 70+ test character
 
 next_action:
-  task: Phase 3 gate formal closure → begin Phase 4 (Consolidate)
-  immediate: Compiler pass applying all approved patches before consolidation
-  model: Sonnet 4.6 for compilation integration; Haiku 4.5 for mechanical text fixes (PP-078, PP-080)
-  note: Do NOT re-run simulation. Do NOT re-run audit. All findings resolved.
-
-files_updated_this_session:
-  - valoria_patch_proposals.md (PP-081 added; editorial status updates)
-  - tests/valoria_mechanic_audit_p1.md (new)
+  task: Continue Batch 11 — target remaining cell gaps (M-019 deferred, M-026 Monstrous Entities priority)
+  note: Do NOT re-run completed tests. Batch 11 should focus on M-026, M-036, M-037, mode gaps (BG/HYB for character-level mechanics)
