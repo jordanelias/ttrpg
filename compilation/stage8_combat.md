@@ -135,6 +135,16 @@ Weapons have two independent axes: **Weight** (governs damage bonus and speed) a
 
 **Valid profiles (Weight × Reach):** all nine combinations are legal. Weapon archetype determines the combination — no single axis constrains the other.
 
+**Weapon TN (d10 dice pool — success = die result ≥ TN):**
+
+| Weight | Attack TN | Parry TN |
+|---|---|---|
+| Light | 5 | 6 |
+| Medium | 6 | 7 |
+| Heavy | 7 | 8 |
+
+Ranged weapons use their weight's Attack TN. Ranged weapons have no Parry TN — cannot parry. Dodge always TN 7 regardless of weapon.
+
 **Strength minimums:**
 
 | Weight | Str Minimum | 1 Below Minimum | 2+ Below Minimum |
