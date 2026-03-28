@@ -1,53 +1,49 @@
-session_id: 2026-03-27T05
-phase: Phase 3 (Simulation) — Batch 10 complete
-status: Phase 3 testing ongoing; major cell gaps closed
+session_id: 2026-03-27T12
+phase: Phase 3 (Simulation) — Batch 11 complete
+status: Combat/mass combat stress tests complete; 6 P1 findings, 21 P2 findings
 
 completed_this_session:
-  - Batch 10: 12 tests, 14 findings (0 P1, 11 P2, 3 design confirmations), 5 rulings
-  - PP-082: Thread split pool fix (TS÷4 accident)
-  - PP-083: Collective op auto-effect stacking ruling (R-B10-02)
-  - PP-084: Niflhel Destabilisation Ob formula fix (R-B10-03)
-  - PP-085: Trajectory Reading pool spec + BG Thread op tier (R-B10-05)
+  - Batch 11: 15 stress tests across personal combat, mass combat, siege, supply, scale transitions, mode transitions
+  - Test C-B11-01: Fibonacci Wall (8v1 pile-on) — defence split timing P2, incapacitation in pile-on P2
+  - Test C-B11-02: Duel of Mismatched Weapons (reach hell) — "same range" ambiguity P2
+  - Test C-B11-03: Stunt Exploit — chain+crit interaction P2, max stunt eliminates partials P2
+  - Test C-B11-04: Escape Paradox (Tie Up + Rescue + Escape) — two P2 ambiguities
+  - Test C-B11-05: Wound Ob Stacking Cliff — incapacitation timing P2, Ob cap confirm P3
+  - Test C-B11-06: Triple Brutal three-way — P1 base damage undefined, P2 three-way rout resolution
+  - Test C-B11-07: Impossible Rally (commander in duel) — P2 commander action split
+  - Test C-B11-08: Rally Loop (KT) — P1 Formation Break Ob stacking unspecified, P2 rally abuse
+  - Test C-B11-09: Three-scale siege+mass+personal — P1 assault vs mass combat outcome conflation, P2 commander dice in duel, P2 NPC incapacitation+morale
+  - Test C-B11-10: Supply cut during active combat — P1 hybrid phase ordering undefined, P3 self-interdiction
+  - Test C-B11-11: Commander-less BG unit — P3 functional
+  - Test C-B11-12: Mode switch mid-siege — P1 garrison attrition destroyed on switch, P2 seasonal cap tracking, P2 narrative agreements
+  - Test C-B11-13: Ambush within Routing unit — P2 ambush formula inconsistency
+  - Test C-B11-14: Artillery unit analysis — P1 Bombard has no mechanic, P2 Artillery locked Balanced disposition
+  - Test C-B11-15: Parley at TT80/IP75 — P2 TT ambient combat modifier missing
+
+p1_findings:
+  - P1-B11-01: §8.3 mass combat base damage undefined
+  - P1-B11-02: §8.3 Formation Break Ob stacking unspecified
+  - P1-B11-03: §8.4 siege assault vs mass combat outcome conflation
+  - P1-B11-04: §11.7 hybrid season phase order undefined
+  - P1-B11-05: §11.7 mode-switch destroys garrison attrition
+  - P1-B11-06: §8.3 Artillery Bombard has no resolution mechanic
 
 coverage_updates:
-  - M-041/042/043/044: Isolation+Interaction+Scenario now ✓
-  - M-046: Isolation+Interaction+Edge ✓ (Scenario still open)
-  - M-047: Isolation+Interaction+Scenario ✓
-  - M-048: Isolation+Interaction ✓
-  - M-049: Isolation+Interaction ✓
-  - M-051: Isolation+Interaction+Edge ✓
-  - M-054: Isolation+Interaction ✓
-  - M-055: Isolation+Interaction ✓
-  - M-056: Isolation+Interaction+Edge ✓
-  - M-033: Isolation+Interaction+Edge ✓
-  - M-035: Isolation+Interaction ✓
-  - M-038: Interaction ✓
-  - PP-081: Isolation ✓
+  - M-008 (Personal Combat): Scenario+Edge ✓ B11
+  - M-020 (Mass Combat): Scenario+Edge ✓ B11
+  - M-021 (Siege): Isolation+Interaction+Scenario+Edge ✓ B11
+  - M-022 (Supply Lines): Isolation+Interaction+Edge ✓ B11
+  - M-025 (Scale Transitions): Interaction+Scenario+Edge ✓ B11
+  - M-005 (Wound System): Interaction+Edge ✓ B11
+  - M-009 (Group Attacks): Isolation+Interaction+Edge ✓ B11
+  - M-050 (Mode Transitions): Scenario+Edge ✓ B11
 
-remaining_open_cells:
-  - M-019 (Past-Oriented Pull at Einhir Sites): needs TS 70+ character — current roster max TS 66
-  - M-026 (Monstrous Entities): Isolation+Interaction still ☐
-  - M-027/028 (Southernmost/Locked Zones): Edge Cases ☐
-  - M-034 (Faction Stats): Interaction still ☐
-  - M-036 (Parliamentary Vote): Scenario ☐
-  - M-037 (Grand Debate): Isolation ☐
-  - M-046 (Thread in Combat): Scenario ☐
-  - M-048/049/052/053/054: mode gaps (BG/HYB) remain
-  - PP-081: Interaction+Scenario+Edge still ☐
-
-patch_proposals: 85 total (27 P1, 47 P2, 10 P3, 1 design)
-
-key_rulings:
-  R-B10-01: Low-TS Diagnosis pool = Att+Foc only (no History), Ob3
-  R-B10-02: Collective op same-type auto-effects do not stack
-  R-B10-03: Niflhel Destabilisation Ob = Stability÷2 round up
-  R-B10-04: TC80+IP75 same season = military (tier4) before political (tier5)
-  R-B10-05: BG Thread ops = Tier 2 in PP-005 sequencing
-
-design_flags:
-  - F-B10-11: Diplomatic IP Resolution locked out above TT 60 (Phase 4 review item)
-  - F-B10-07: M-019 Einhir Sites Past-Pull gap — needs TS 70+ test character
+editorial_pending:
+  - Confirm: Is Artillery permanently locked to Balanced disposition? Design intent?
+  - Confirm: Hybrid season phase order (Personal before Strategic or after?)
 
 next_action:
-  task: Continue Batch 11 — target remaining cell gaps (M-019 deferred, M-026 Monstrous Entities priority)
-  note: Do NOT re-run completed tests. Batch 11 should focus on M-026, M-036, M-037, mode gaps (BG/HYB for character-level mechanics)
+  task: Draft patch proposals (PP-086 through PP-091) for 6 P1 findings
+  note: Use Sonnet 4.6. P1s are mechanical — no editorial gate required for formula/clarity fixes. Then continue M-036 (Parliamentary Vote scenario) and M-037 (Grand Debate isolation) per Batch 11 plan.
+
+blockers: []
