@@ -122,7 +122,7 @@ This is not entering another state. It is leaving the only state consciousness k
 - Approach Training tag ✓
 - TS 30+ ✓
 - Not currently engaged in melee with an opponent who has declared an attack this round ✓
-- Not at or above incapacitation Wound threshold ✓
+- Not at or above incapacitation Wound threshold ✓ (threshold = ceiling(Health ÷ 2); at exactly threshold = ineligible)
 
 The Leap is a **full-round action (Priority 5)**. No attack, no movement, no manoeuvres in the same round. Only reactive defence available: Parry or Dodge Backwards (character's choice when declaring). These are pre-conscious physical responses that do not require rendering.
 
@@ -288,6 +288,8 @@ Before Weaving in a politically volatile context, the GM should ask: is this con
 **What happens:** The practitioner's intentionality is directed toward the thread's accumulated temporal depth — the history of spoolings that constitute what it has been. During contact, their configuration interacts with the thread at this deeper level, displacing temporal weight. The physical facts are removed. Memories — which are themselves spooled configurations in other beings — remain intact, producing Temporal Disjunction.
 
 **Requirements:** TS 70+ · RS ≤ 60 (substrate must be stressed enough for temporal depth to be accessible — in a pristine world, the temporal weight is too firmly actualised to pull against) · Diagnosis mandatory
+
+**Foundational-scale Past-Oriented Pulling:** Displacing a Foundational event (the Einhir Catastrophe, a civilisation-ending collapse, a foundational institution's origin) requires all standard prerequisites plus: the Einhir ritual framework (§9.15) — the intentionality required to reach Foundational temporal depth cannot be formed without it. Add +2 Ob surcharge to the recency Ob (Ob 7 recency + 2 = Ob 9 for a generational Foundational event). RS consequence ×3 on all outcomes (Success: RS −9 minimum; Failure: snap-back Wound + RS −6 minimum). This is a near-mythic act — maximum conceivable practitioner achieves ~5% success — but it is mechanically possible. It is a legitimate campaign endpoint: the thing the Einhir could not do and the thing a generation of practitioners might spend a campaign attempting.
 **Pool:** Spirit + relevant History bonus + TPS÷2 (round down)
 **TN:** 7
 
@@ -620,10 +622,10 @@ Rendering Stability (RS) is a world-scale tracker measuring the rendered world's
 | 79–60 | Strained | Occasional wrongness in territories with Thread history. Non-practitioners with TS 10+ may sense unease near old operation sites. |
 | 59–40 | Fragile | Shifting Objects form spontaneously in high-traffic Thread territories. One random Shifting Object per season at Accounting. Thread operations +1 Ob in affected territories. |
 | 39–20 | Fractured | Gaps may open spontaneously (1d10 per season at Accounting; on 1–2: Gap in territory with lowest Prosperity). Monstrous Incursion risk in all territories with existing Gaps. Non-practitioners experience rendering failures — inconsistent memories, déjà vu, objects in wrong places. |
-| 19–1 | Critical | As Fractured, plus: spontaneous Gaps on 1–4 (doubled risk). All Thread operations +1 Ob worldwide (the substrate resists manipulation). Seasonal Stability checks for all factions at Ob 1 (institutional rendering begins failing) — failure produces Mandate −1 for that faction. Discovery Events become common — TS growth checks for any non-practitioner who witnesses a rendering failure. NPCs with coup or succession trigger conditions (flagged in design files) treat RS ≤ 10 as +1 to their trigger check pool (institutional rendering failure accelerates political instability). |
+| 19–1 | Critical | As Fractured, plus: spontaneous Gaps on 1–4 (doubled risk). All Thread operations +1 Ob worldwide (the substrate resists manipulation). Seasonal Stability checks for all factions at Ob 1 (institutional rendering begins failing) — failure produces Mandate −1 for that faction (minimum 0). At Mandate 0, failure instead produces Faction Fracture: one sub-faction splinters off as a new minor faction (GM determines composition and goals). Mandate cannot go below 0. Discovery Events become common — TS growth checks for any non-practitioner who witnesses a rendering failure. NPCs with coup or succession trigger conditions (flagged in design files) treat RS ≤ 10 as +1 to their trigger check pool (institutional rendering failure accelerates political instability). |
 | 0 | The Rupture | Rendered reality fails. Campaign ends in catastrophe. No faction wins. The Ein Sof's fullness overwhelms the rendered world's capacity. What emerges is not destruction but excess — too much being for consciousness to render. The world does not end. It becomes unintelligible. |
 
-**Design note — RS Critical as endgame:** Once RS enters the Critical band (19–1), the campaign is in a 2–4 season endgame without dramatic intervention. The convergence of Lock drift, Gap persistence, spontaneous Gap formation, and seasonal operation failures produces net RS losses of 8–15 per season even with active Mending. The seasonal cap (±10) prevents single-Accounting Rupture but cannot arrest multi-season terminal decline. RS Critical is the point of no return: the table must coordinate across faction lines to stabilise the world, or accept that the campaign ends in the Rupture. This is designed. The Einhir reached the same point.
+**Design note — RS Critical as endgame:** Once RS enters the Critical band (19–1), the campaign is in a 2–4 season endgame without dramatic intervention. At RS 1, the endgame trap is complete: almost every Thread operation carries Rupture risk on Failure, but not operating also reaches Rupture within 1–3 seasons from Lock drift and winter. The only structural exit requires: remove all active Locks (eliminates drift), Mend all active Gaps (eliminates per-season RS loss), then operate exclusively at Object/Personal scale until RS recovers via successful Mending. Each Mending attempt at RS 1 risks Rupture on Failure (~17–34% success at best). This is the Einhir Catastrophe replicated mechanically — they reached this point, and there was no escape. The game does not provide a clean rescue from RS 1. It provides a narrow, difficult path that requires practitioner cooperation across faction lines and accepts that Rupture is a legitimate campaign ending. The convergence of Lock drift, Gap persistence, spontaneous Gap formation, and seasonal operation failures produces net RS losses of 8–15 per season even with active Mending. The seasonal cap (±10) prevents single-Accounting Rupture but cannot arrest multi-season terminal decline. RS Critical is the point of no return: the table must coordinate across faction lines to stabilise the world, or accept that the campaign ends in the Rupture. This is designed. The Einhir reached the same point.
 
 ## 5.4 RS in Board Game
 
@@ -670,6 +672,7 @@ The more intensely the being renders itself, the sooner it ceases to be.
 - **Past-Oriented Pulling:** Auto-produces a Gap. No temporal thread to pull — no accumulated past, no spooled depth.
 - **Wounds:** Each costs 1 additional point of sustained Thread work rather than conventional Ob penalty.
 - **Coherence track:** Does not apply. Threadcut beings do not render — they have no rendering to destabilise.
+- **External Thread operations:** A threadcut being may direct their originary intentionality toward external threads rather than self-maintenance. No Leap is required — they are already in the originary state that organic practitioners must Leap to reach. Declare operation type and target; roll standard operation pool (Spirit + History + TPS) against standard Ob. Cost: each external Thread operation adds +1 Rendering Strain (directing intentionality outward strains the continuous self-maintenance that constitutes the being's existence). A threadcut being performing external operations accelerates their own De-Actualisation. This is the Solmund dilemma: the being capable of Structural intervention faces the choice between acting (and beginning to cease) and withholding (and preserving existence at the cost of inaction).
 - **Diagnosis:** Reveals the temporal paradox. No accumulated past. No natural trajectory. Something held rather than persisting.
 
 ## 6.4 De-Actualisation
@@ -926,6 +929,8 @@ When two practitioners in contact target the same configuration with opposing in
 
 Opposing operations can occur across modes: a TTRPG practitioner in Personal Phase and a board game Thread order in Strategic Phase targeting the same configuration resolve at Cascade Phase using this procedure. The board game roll substitutes for the opposing practitioner's individual roll.
 
+**Dissolution + Mending on the same site (not covered by opposing operations):** Dissolution targets a configuration's intelligible face; Mending targets the substrate's absence. These are not opposing intentionalities — they are operations on different aspects of the same site. Resolve by pool size: the larger pool fires first. If Dissolution resolves first and succeeds: a Gap forms; the Mending now targets a Gap (not a Shifting Object) — update Ob to Gap category. If Mending resolves first and succeeds: the Shifting Object closes; the Dissolution now targets a repaired configuration — Ob unchanged. If both fail: the site deteriorates (Shifting Object persists or Gap opens per degree tables); both practitioners pay failure consequences.
+
 **GM sidebar — Contested Thread operations and RS:** When two practitioners oppose each other's Thread operations, the most likely outcome (~53% at comparable pools) is a Shifting Object — neither achieves their intent, both pay Coherence, and a substrate scar persists. Shifting Objects left unMended deteriorate to Gaps within 1d3 seasons. Faction conflicts that routinely involve opposing Thread operations will accelerate RS degradation faster than either faction's uncontested operations would. Thread-as-weapon is priced honestly: using operations as faction warfare tools damages the substrate more than using them for their intended purposes. The Einhir built a civilisation on Thread operations. They did not use them as weapons.
 
 ## 9.14 Scale-Based RS Consequences (P-25)
@@ -971,6 +976,8 @@ When a practitioner is at Coherence 0, another practitioner may perform correcti
 Success: +1 Coherence (target rises to 1/Severed — functional but severely impaired). Multiple seasons of corrective Weaving and/or non-practice required to restore meaningful function.
 
 The corrective practitioner pays normal Coherence and co-movement costs for the operation (Personal-scale Weaving on another person's configuration).
+
+**Why self-rescue is impossible:** A practitioner at Coherence 0 cannot perform corrective Weaving on themselves. This is not a rule restriction — it is an ontological one. Corrective Weaving restores rendering by engaging the degraded practitioner's configuration from outside. To Weave your own configuration back into coherence, you would need to render it — which requires functioning Coherence — which is what you are trying to restore. The circularity is irreducible. External rendering is the only path back.
 
 ## 9.18 Involuntary Leap (P-29)
 
