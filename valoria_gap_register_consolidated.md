@@ -1,6 +1,6 @@
 # Valoria Gap Register — Consolidated
 ## Updated: 2026-03-27 (Session — Threadweaving v2.5 simulation)
-## Total items: 202
+## Total items: 212
 ## Editorial blockers: 0
 
 ---
@@ -443,3 +443,26 @@
 | SIM5-F-08 | RS threshold +1 Ob at Southernmost: location-specific ruling needed | P2 | Open |
 | SIM5-F-09 | Mending Ob ceiling absorbs sequential failure penalty at high-Ob sites | P3 | Open |
 | SIM4-F-01 | §9.7 Mending Ob ceiling | P1 | Closed — patched |
+
+## SIMULATION BATCH 6 FINDINGS (2026-03-27)
+
+| ID | Description | Severity | Status |
+|----|-------------|----------|--------|
+| SIM6-F-01 | Riskbreaker DD + Thread ops: context-based clarification needed | P3 | Open |
+| SIM6-F-02 | CE accumulation for non-Inquisitor Church chars: gated on institutional reporting | P2 | Open |
+| SIM6-F-03 | Severed (Coherence 1): no Thread op Ob penalty listed — should be +2 Ob | P1 | Open |
+| SIM6-F-04 | Severed dissociative episode timing re: Leap/contact undefined | P2 | Open |
+| SIM6-F-05 | Rendering Crisis mid-contact: no rule for contact termination | P2 | Open |
+| SIM6-F-06 | RS Critical Stability failures not connected to coup trigger conditions | P2 | Open |
+| SIM6-F-07 | Martial Law enforcement under RS degradation: unaddressed | P3 | Open |
+| SIM6-F-08 | Scholarly TS + concurrent covert ops compatibility: no rule | P3 | Open |
+| SIM6-F-09 | Micro-Gap RS cost at Accounting not in §5.2 | P2 | Open |
+| SIM6-F-10 | RS Critical terminal decline 2-4 seasons — design confirmation, document explicitly | P1 | Open |
+| SIM2-F-05 | Witness Certainty checks for temporal displacement | P2 | Resolved — patch pending |
+| SIM2-F-10 | Relational/Territorial/Structural Gap mechanics | P2 | Resolved — patch pending |
+| SIM2-F-11 | Cross-phase opposing operations timing | P2 | Resolved — patch pending |
+| SIM3-F-06 | Political NPC involuntary Leap social consequence | P2 | Resolved — patch pending |
+| SIM4-F-03 | Knot Crisis + Past-Oriented Pull +1 Ob | P2 | Resolved — patch pending |
+| SIM4-F-04 | Multiple Mending successes stack RS gains | P2 | Resolved — patch pending |
+| SIM4-F-06 | Both-succeed opposing ops RS −1 | P2 | Resolved — patch pending |
+| SIM4-F-07 | Contested-op RS spiral GM sidebar | P2 | Resolved — patch pending |
