@@ -103,6 +103,8 @@ Diagnosis is the practitioner's final rendering act before they suspend renderin
 
 **Diagnosis on threadcut beings (Mode 3):** The configuration reads as having no accumulated past and no natural trajectory. A continuous present sustained by active work. The practitioner perceives something *held in place* rather than something *persisting*.
 
+**Configuration change after Diagnosis:** If the target configuration changes significantly between Diagnosis and the Leap — a Gap opens at the site, the target dies, another practitioner Locks or Dissolves the thread — the practitioner may revise their declared intentionality before the Leap roll at no cost. They have not yet suspended rendering; revision is possible. If the practitioner proceeds with the original intentionality against the altered configuration without revising: treat as skipping Diagnosis for that operation (+2 Ob, automatic Gap creation on Failure for FR operations).
+
 **Mandatory before Mending, Locking, or Dissolution.** Skipping Diagnosis before FR: +2 Ob and automatic Gap creation on Failure regardless of degree. Skipping before Mending: +2 Ob. In all cases, skipping Diagnosis means the practitioner Leaps without the rendering information that should direct their intentionality. They are not just working blind — they are Being beyond their being without having formed adequate intention. The operation is still directed by intentionality, but the intentionality is malformed.
 
 **Mandatory before Past-Oriented Pulling.** Skipping: +3 Ob and a temporal Gap on Failure. Past-Oriented Pulling reaches into the deepest parts of a thread's temporal weight. Entering that interaction without having rendered the weight's structure produces catastrophic misalignment between intentionality and configuration.
@@ -174,6 +176,8 @@ The window counts down whether or not the practitioner acts within it. Focus is 
 
 At Focus 1, the practitioner gains the experience of contact (relevant for TS growth, First Leap) but cannot perform operations. This creates a meaningful progression gate: Focus 2 is the minimum for functional practice.
 
+**Wound during the Leap round (before contact is established):** If the practitioner takes a Wound in the same round as the Leap roll, before the roll is resolved, apply +1 Ob to the Leap roll as normal (Wound penalty). The Attunement disruption check does not apply — it only triggers once contact is established. If the Leap succeeds despite the Wound penalty, contact proceeds normally.
+
 **Wound disruption during contact:** When the practitioner takes a Wound while contact is established, make an Attunement check immediately: Attunement score in d10s, TN 7, Ob 1. Failure: rendering reasserts violently — the body's damage overrides the suspension. Contact drops.
 
 ### Thread Operation Visibility
@@ -243,6 +247,10 @@ Successful Weaving at Relational scale or above drives a configuration toward mo
 
 On Overwhelming at Relational+: over-actualisation effects halved in duration.
 
+**GM sidebar — Brittleness in volatile contexts:** Weaving at Relational+ scale stabilises a configuration but makes it rigid. A Woven diplomatic agreement, stabilised faction, or reinforced institution cannot adapt to stress the way an unworked configuration can. If a non-Thread event of sufficient severity strikes a Woven configuration — a siege, betrayal, institutional collapse — the GM may rule it shatters into a Shifting Object at its scale rather than simply failing. A broken Woven treaty may become a Relational Shifting Object (deteriorating to a Relational Gap within 1d3 seasons) rather than just a broken treaty.
+
+Before Weaving in a politically volatile context, the GM should ask: is this configuration likely to face severe stress before it can be Pulled or allowed to expire naturally? If yes, Weaving may be counterproductive. The practitioner cannot know this during Diagnosis — brittleness is a consequence of over-actualisation that manifests only when external stress arrives.
+
 **Overweaving:** Each operation after the first in the same contact window: +1 Ob (cumulative). A collapsed overweave: RS −3 and local Shifting Object risk.
 
 ### Pulling — Things Open
@@ -308,8 +316,8 @@ On Overwhelming at Relational+: over-actualisation effects halved in duration.
 |---|---|
 | Overwhelming | Target permanently locked. RS −1. Practitioner gains 1 TS. |
 | Success | Target locked. RS −1. |
-| Partial | Partial lock (GM sets scope). RS −2. Coherence −2. |
-| Failure | Collapse onto practitioner. Take 2 Wounds (no armour). RS −3. Coherence −2. Adjacent configurations become partially rigid: +1 Ob to all Thread operations targeting configurations adjacent to the failure site, remainder of season. |
+| Partial | Partial lock (GM sets scope). RS −2. Coherence −1 (cap). |
+| Failure | Collapse onto practitioner. Take 2 Wounds (no armour). RS −3. Coherence −1 (cap). Adjacent configurations become partially rigid: +1 Ob to all Thread operations targeting configurations adjacent to the failure site, remainder of season. |
 
 **Chronic consequences:**
 
@@ -339,8 +347,8 @@ On Overwhelming at Relational+: over-actualisation effects halved in duration.
 |---|---|
 | Overwhelming | Target dissolves cleanly. RS −3. Micro-Gap forms and closes within the scene. |
 | Success | Target dissolves. RS −5. Gap forms, lasts one scene, closes. |
-| Partial | Target becomes a Shifting Object. RS −6. Gap does not close without Mending. Coherence −2. |
-| Failure | Full Gap tears open. RS −8. Monstrous Incursion immediately. Practitioner Incapacitated. Coherence −2. |
+| Partial | Target becomes a Shifting Object. RS −6. Gap does not close without Mending. Coherence −1 (cap). |
+| Failure | Full Gap tears open. RS −8. Monstrous Incursion immediately. Practitioner Incapacitated. Coherence −1 (cap). |
 
 **Lock vs. Dissolution summary:**
 
@@ -381,14 +389,23 @@ This requires a different intentionality than thread operations. The practitione
 |---|---|
 | Overwhelming | Substrate restored. Gap closes cleanly. RS +2 (strain released). Coherence −1 (base cost; inclusive of §3.2). Mended area +1 Ob to future Gap formation in this zone for 1 season. |
 | Success | Substrate restored. Gap closes. RS +1. Coherence −1 (base cost; inclusive of §3.2). |
-| Partial | Gap reduced one severity category. RS unchanged. Coherence −2 (base + additional from partial outcome). Second Mending required. |
-| Failure | Mending fails. Gap unchanged. Coherence −2 (base + additional from failure). RS −2. |
+| Partial | Gap reduced one severity category. RS unchanged. Coherence −1 (cap). Second Mending required. |
+| Failure | Mending fails. Gap unchanged. Coherence −1 (cap). RS −2. |
 
 **Mending co-movement profile:**
 
 *Temporal auto-effect:* Coherence −1. The practitioner engaged with damaged substrate, absorbing temporal dissonance.
 
-*Epistemic auto-effect:* Observers with TS 10+ perceive a settling. Non-sensitives may notice an easing of tension they couldn't articulate. No investigation Ob modifiers — Mending resolves epistemic instability rather than producing it.
+*Epistemic auto-effect (by degree):*
+
+| Degree | Epistemic Effect |
+|---|---|
+| Overwhelming | Strong settling. TS 10+ observers perceive the area as markedly calmer. Non-sensitives notice a distinct easing of tension. |
+| Success | Settling. TS 10+ observers perceive calming. Non-sensitives may notice subtle easing. |
+| Partial | Ambiguous. Observers perceive both settling and tension — something shifted but didn't fully resolve. |
+| Failure | Increased tension. Observers perceive things worsening. Non-sensitives feel heightened unease. The substrate was disturbed without being repaired. |
+
+No investigation Ob modifiers on Success or Overwhelming — Mending resolves epistemic instability rather than producing it. On Partial or Failure: +1 Ob to social rolls in the immediate area for the remainder of the scene.
 
 *Actual (d6):*
 
@@ -456,6 +473,8 @@ Co-movement still fires on every operation regardless of scale (P-11). The tempo
 
 **Campaign pacing:** A practitioner who restricts themselves to Object and Personal scale work can operate indefinitely without Coherence loss. The moment they scale up — and the campaign will pressure them to scale up — degradation begins. Over a 30-session campaign with ~10–15 Relational+ operations, the practitioner loses ~10–15 Coherence. This produces a late-campaign crisis arc if they don't take recovery seasons. This is the Einhir trajectory in miniature: small-scale work is sustainable; ambition and necessity push toward larger scales; the costs accumulate.
 
+**Coherence loss cap per operation:** Regardless of scale, degree table outcomes, combined auto-effects, or bonus costs (FR, residue, Past-Oriented Pulling), a single operation — from Leap through resolution — cannot reduce Coherence by more than 1. All Coherence costs from a single operation are treated as a single event and capped at −1 total. Multiple operations in a single contact window are each capped independently.
+
 **Interaction with degree tables:** Some operation degree tables list additional Coherence costs (e.g., "Coherence −1" on Partial, "Coherence −2" on Failure). These are outcome costs, separate from the scale-based auto-effect above. They represent the additional destabilisation from an operation going wrong — the snap-back, the misaligned interaction, the violent reassertion of rendering. At Object/Personal scale: ignore degree-table Coherence costs on Partial results (the interaction was too shallow to destabilise rendering even when it went partially wrong). Apply degree-table Coherence costs on Failure (the violent snap-back shakes rendering regardless of scale). At Relational+ scale: apply all degree-table Coherence costs as written.
 
 ## 3.3 Coherence Thresholds
@@ -468,6 +487,8 @@ Co-movement still fires on every operation regardless of scale (P-11). The tempo
 | 2 | Fractured | −2D to all social rolls. −2D to Memory-based rolls. All Knots at accelerated wrongness (+1 strain per session). Once per scene with Thread operation: Spirit TN 7 Ob 1 or lose 1 round to a dissociative episode. Certainty maximum reduced by 1 per Coherence level below 3. **Belief Co-Authorship begins:** GM presents the practitioner's shifting perceptual framework as the character's internal voice. Player must rewrite each Belief to reflect the framework in which the categories that structure consciousness are loosening. Roll Fractured Fallout on entering this band. |
 | 1 | Severed | −2D social, −2D Memory. Dissociative episodes once per scene regardless of operations. Involuntary perceptual events. All Knots +2 strain per session. The practitioner's rendering is barely functional. The distinction between self and world, between human and monstrous, between actual and potential, is dissolving. Not because something evil is happening to them. Because they have been outside rendering so many times that rendering no longer holds. |
 | 0 | Rendering Crisis | Campaign event. Reality as commonly rendered is no longer accessible. The practitioner's spooling is destabilised — their organic drawing-from-ground is compromised. They must resolve the crisis narratively: sustained engagement with the world's rendered state, relational anchoring, or withdrawal from practice. If unresolved by season end: NPC. |
+
+**GM protocol — Dissonant entry:** When a practitioner's Coherence drops to 7 (entering Dissonant), the GM names this to the player explicitly: "Your Coherence is now 7 — Dissonant. Each operation at Relational+ scale costs −1 Coherence. At this pace, Fragmented is [N] operations away." This is not a mechanical rule; it is a table protocol. The practitioner's rendering is still solid at Dissonant — but the player should make informed decisions about scale from this point forward.
 
 ## 3.4 Dissolution Residue
 
