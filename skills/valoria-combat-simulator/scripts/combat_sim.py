@@ -13,13 +13,13 @@ WEAPONS = {
     # name: (reach, weight, atk_tn, parry_tn, dmg_bonus)
     'Short-Light':  ('Short',     'Light',  5, 6, 1),
     'Short-Medium': ('Short',     'Medium', 6, 7, 2),
-    'Short-Heavy':  ('Short',     'Heavy',  7, 8, 3),
+    'Short-Heavy':  ('Short',     'Heavy',  7, 8, 4),
     'Long-Light':   ('Long',      'Light',  5, 6, 1),
     'Long-Medium':  ('Long',      'Medium', 6, 7, 2),
-    'Long-Heavy':   ('Long',      'Heavy',  7, 8, 3),
+    'Long-Heavy':   ('Long',      'Heavy',  7, 8, 4),
     'Vers-Light':   ('Versatile', 'Light',  5, 6, 1),
     'Vers-Medium':  ('Versatile', 'Medium', 6, 7, 2),
-    'Vers-Heavy':   ('Versatile', 'Heavy',  7, 8, 3),
+    'Vers-Heavy':   ('Versatile', 'Heavy',  7, 8, 4),
 }
 
 STR_MIN_WEAPON = {'Light': 0, 'Medium': 3, 'Heavy': 4}
