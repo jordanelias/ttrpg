@@ -29,8 +29,8 @@ At 2 players: recommended pairing is Crown vs. Church. All other match-ups are s
 ### Components
 
 **Boards and Tracks**
-- 1× Main board: territory map (15 territories in adjacency layout), 3 clock tracks (TT 0–100, TC 0–100, IP 0–100), seasonal accounting track, round structure reference
-- 3× Clock sliders or tokens: one per track (TT starts at 28, TC at 15, IP at 20)
+- 1× Main board: territory map (15 territories in adjacency layout), 3 clock tracks (RS 100→0, TC 0–100, IP 0–100), seasonal accounting track, round structure reference
+- 3× Clock sliders or tokens: one per track (RS starts at 72, TC at 15, IP at 20)
 - 15× Territory tiles: double-sided (controlled/uncontrolled), showing Prosperity and Fortification values
 - 1× Seasonal accounting board: faction stat grid, pending Domain Action queue, stability check record
 
@@ -44,7 +44,7 @@ At 2 players: recommended pairing is Crown vs. Church. All other match-ups are s
 - 1× Ethical Framework reminder card
 
 **Shared Components**
-- 1× Thread Tension marker deck (Co-Movement cards, 20 cards)
+- 1× Co-Movement card deck (18 cards)
 - 1× Event deck (30 cards: clock-triggered events + random seasonal events)
 - 1× Disposition table card (shared reference for mass combat)
 - Faction control markers (10 per faction, in faction colour)
@@ -68,7 +68,7 @@ Before play begins, apply starting setup from territorial and faction records:
 
 **Faction stats:** Set all faction stat dials to starting values per faction sheet.
 
-**Clocks:** Place TT at 28. TC at 15. IP at 20.
+**Clocks:** Place RS at 72. TC at 15. IP at 20.
 
 **Units:** Each player-controlled faction places 1 Light Infantry unit in their home territory at game start. Crown receives 1 additional unit in Arnesheld (Löwenritter garrison).
 
@@ -113,7 +113,7 @@ The 15 territories are arranged in a north-south axis. The board represents the 
 | 9 | Varfell (Southern highlands) | Varfell | 4 | 1 | Varfell Seat: Private Collection usable here only. Einhir ruins: Revolution Weaving −1 Ob. | 5, 10, 12, 13 |
 | 10 | Sigurdshelm (Underground) | Niflhel | 3 | 0 | Black Market: Niflhel Quiet −1 Ob. All Trade +1 Ob (illicit). | 8, 9, 11 |
 | 11 | Halvardshelm (Farming plains) | Guilds | 5 | 0 | Breadbasket: +1 Prosperity/season if uncontested. Muster Ob −1. | 8, 10, 14 |
-| 12 | Oastad (Southern forest) | Uncontrolled | 3 | 0 | Thread Wound: TT threshold events trigger at TT −10 here. Revolution informal. | 9, 13, 14 |
+| 12 | Oastad (Southern forest) | Uncontrolled | 3 | 0 | Thread Wound: RS threshold events trigger at RS +10 here (substrate more sensitive). Revolution informal. | 9, 13, 14 |
 | 13 | Stillhelm (Southernmost border) | Uncontrolled | 2 | 0 | Southernmost Access: required for Expedition. All non-Thread orders +1 Ob. | 9, 12 |
 | 14 | Eisengrund (Southern farmland) | Revolution (informal) | 4 | 0 | Einhir Heartland: Revolution Influence −1 Ob. Church Influence +1 Ob. | 11, 12 |
 | 15 | Schoenland (Altonian port) | Neutral | 5 | 1 | Altonian Trade: +1 Wealth/season to faction with active Trade order here. Intel orders reveal to Altonia. At IP 75+: Altonian vanguard deploys. | 4, 7 |
@@ -248,7 +248,7 @@ Once per game (not per season). Roll Mandate vs Ob 4. At Hafenvalor only.
 **Unique Power — The Private Collection**
 Available in Varfell only. Once per season. Roll Intel vs Ob 2.
 - Success (choose one): +2D to one Thread-related Domain Action this season; OR reveal one hidden faction stat; OR −1 Ob to one Einhir Research action.
-- Failure: Artefact Thread signature detected. Church Intel +1D vs Varfell for 1 season. TT +1.
+- Failure: Artefact Thread signature detected. Church Intel +1D vs Varfell for 1 season. RS −1.
 - Thread Knowledge Track (TK 0–5): Advances through the Collection. See B7 for TK effects.
 
 **Order Set:** Govern · Intel · Trade · Military · Private Collection (Unique) · Diplomacy
@@ -306,11 +306,11 @@ Choose mode before rolling.
 
 *Assassination mode:* Roll Intel vs target Intel +2. Overwhelming: named NPC eliminated; no evidence. Success: eliminated; evidence trail. Partial: target wounded; evidence. Failure: operative captured; Niflhel Stability −2.
 
-*TT cost:* Each Quiet deployment: TT +0.5 (cumulative). Niflhel's Southernmost harvesting supply chain disturbs Thread substrate. They do not know this mechanically — the TT rise is applied by the game without player attribution.
+*RS cost:* Each Quiet deployment: RS −0.5 (cumulative). Niflhel's Southernmost harvesting supply chain disturbs Thread substrate. They do not know this mechanically — the RS degradation is applied by the game without player attribution.
 
 **Order Set:** Intel · Sabotage · Assassination · Trade (covert) · Quiet Network (Unique) · Smuggle
 
-**Thread Capability:** Indirect and unintentional. TT rises from Niflhel operations without faction knowledge.
+**Thread Capability:** Indirect and unintentional. RS degrades from Niflhel operations without faction knowledge.
 
 **Victory Condition:** *Shadow Supremacy.* At game end: Niflhel Intel ≥ 5; control of Sigurdshelm; at least 3 pieces of hidden faction information held; no arm of Niflhel publicly compromised; Stability ≥ 4.
 
@@ -337,7 +337,7 @@ Orders resolve in this sequence. Within same priority: simultaneous (declare bef
 
 | Priority | Order Type | Notes |
 |---|---|---|
-| 1 | Thread Operations | TT change applies first; co-movement fires before any other resolution. |
+| 1 | Thread Operations | RS change applies first; co-movement fires before any other resolution. |
 | 2 | Military orders (March, Assault, Siege action) | Battles resolve simultaneously per territory. |
 | 3 | Intel and Sabotage orders | Outcomes apply before economic and governance. |
 | 4 | Domain Actions (Govern, Trade, Muster, Diplomacy) | All standard Domain Actions. |
@@ -568,7 +568,7 @@ Defender options: Hold (Cohesion Ob 1 → no losses); Sortie (Military vs Ob = a
 
 **Siege end:** Defender Stability 0 (surrender), Fortification 0 (walls breached → immediate mass combat), attacker withdraws, or negotiated settlement.
 
-**Siege TT cost:** TT +1 per season of active siege. Einhir site in fortification: +1 additional per season.
+**Siege RS cost:** RS −1 per season of active siege. Einhir site in fortification: RS −1 additional per season.
 
 ### Supply Lines
 
@@ -592,9 +592,9 @@ In Board Game Mode, Thread operations are faction-level actions triggered by Uni
 
 | Faction | Thread Access | How |
 |---|---|---|
-| Revolution | Community Weaving (Unique Power) | Collective operation; reduces TT |
-| Varfell | Private Collection (Unique Power, indirect) | Thread-adjacent; triggers TT on failure |
-| Niflhel | Southernmost harvesting (passive) | TT +0.5/season from operations; unattributed |
+| Revolution | Community Weaving (Unique Power) | Collective operation; reduces RS (raises RS value) |
+| Varfell | Private Collection (Unique Power, indirect) | Thread-adjacent; triggers RS degradation on failure |
+| Niflhel | Southernmost harvesting (passive) | RS −0.5/season from operations; unattributed |
 | Any with TS 30+ affiliated character | Thread order (optional rule) | Advanced play; GM adjudicates |
 
 ### Revolution: Community Weaving Procedure
@@ -603,14 +603,14 @@ Available in: Varfell (T14), Oastad (T12), Varfell (T9, −1 Ob).
 
 Requirements: Revolution Influence in territory. At least 1 practitioner affiliated (narrative; confirmed at campaign start or through play).
 
-Roll: Influence vs Ob = TT ÷ 20 (round up, minimum Ob 1).
+Roll: Influence vs Ob = (100 − RS) ÷ 20 (round up, minimum Ob 1). As RS degrades, this operation becomes easier — the community's need grows.
 
 | Result | Effect |
 |---|---|
-| Overwhelming | TT −2. Draw 1 Co-Movement card. |
-| Success | TT −1. Draw 1 Co-Movement card. |
-| Partial | TT unchanged. Revolution Stability −1. Draw 1 Co-Movement card. |
-| Failure | Revolution Stability −1. TT +1. Draw 1 Co-Movement card. |
+| Overwhelming | RS +2. Draw 1 Co-Movement card. |
+| Success | RS +1. Draw 1 Co-Movement card. |
+| Partial | RS unchanged. Revolution Stability −1. Draw 1 Co-Movement card. |
+| Failure | Revolution Stability −1. RS −1. Draw 1 Co-Movement card. |
 
 **Co-Movement is mandatory on every Thread operation.** This is P-01 (Inseparability). Even beneficial Thread work produces consequences.
 
@@ -627,22 +627,22 @@ Draw one card per Thread operation regardless of result. Apply all three effects
 
 | Card | Temporal | Epistemic | Actual |
 |---|---|---|---|
-| CM-01 | TT −1 (past coherence) | One hidden faction stat is revealed to all players | Object in target territory becomes a Shifting Object marker (+1 Ob to Govern there next season) |
+| CM-01 | RS +1 (past coherence) | One hidden faction stat is revealed to all players | Object in target territory becomes a Shifting Object marker (+1 Ob to Govern there next season) |
 | CM-02 | TC +1 (Church perceives Thread event as divine sign) | Target faction's pending Order is revealed before resolution | Thread residue: all Intel orders in target territory +1 Ob for 1 season |
 | CM-03 | IP +1 (Altonian agents observe Thread disturbance) | Nothing | Einhir ruins in territory activate: Revolution gains Influence +1 in territory |
-| CM-04 | TT +1 (operation disturbed local substrate) | Performing faction's Intel reduced −1D for 1 season | Physical residue: Fortification −1 in territory (Thread pressure on structures) |
-| CM-05 | TT −1 | Target territory Prosperity +1 (Thread stabilisation has material effect) | Nothing |
+| CM-04 | RS −1 (operation disturbed local substrate) | Performing faction's Intel reduced −1D for 1 season | Physical residue: Fortification −1 in territory (Thread pressure on structures) |
+| CM-05 | RS +1 | Target territory Prosperity +1 (Thread stabilisation has material effect) | Nothing |
 | CM-06 | TC −1 (Thread event reveals Church framework as incomplete) | Nothing | Thread sensitivity: all Leap-eligible characters in territory gain TS +2 (TTRPG crossover marker; track for Hybrid mode) |
 | CM-07 | Nothing | Witnesses disagree: 1 random Order token this season is shuffled (that player replaces it before reveal) | Environmental shift: Eidursjo movement cost reduced to 1 this season (Thread energy smooths terrain) |
 | CM-08 | IP −1 (Thread event reveals Altonian intervention as spiritually illegitimate to Schoenland) | Nothing | Löwenritter coup tracker advances by 1 (Thread disturbance counts as Crown compromise) |
-| CM-09 | TT +2 (operation backfired) | All players must reveal one pending Order before placing remaining tokens this planning phase | Nothing |
-| CM-10 | TT −3 (exceptional repair) | Nothing | Revolution Stability +1 (community strengthened by successful operation) |
+| CM-09 | RS −2 (operation backfired) | All players must reveal one pending Order before placing remaining tokens this planning phase | Nothing |
+| CM-10 | RS +3 (exceptional repair) | Nothing | Revolution Stability +1 (community strengthened by successful operation) |
 
-*Note: Full 20-card deck to be designed. Cards CM-11 through CM-20 require editorial completion — mix of TT gain/loss, clock interactions, and territory effects. [EDITORIAL: 10 remaining Co-Movement cards — expand from framework above, maintaining P-01 inseparability in each card.]*
+*Note: The confirmed 18-card deck includes CM-01 through CM-18. CM-16: Substrate Settling (Mended territory: Thread ops −1 Ob next season). CM-17: Scar Trace (Mended territory retains visible scar; Church TC +1). CM-18: Residue Condensation (dissolution residue forms at Mending site; Niflhel may harvest). [EDITORIAL: 10 remaining Co-Movement cards — expand from framework above, maintaining P-01 inseparability in each card.]*
 
-### TT Passive Rise from Niflhel
+### RS Passive Degradation from Niflhel
 
-At every seasonal accounting: TT +0.5 if Niflhel is in play and has conducted at least one order this season. This is applied automatically, without attribution, and without Niflhel's knowledge mechanically. Players controlling Niflhel are not told this is the source. The effect is described as "substrate disturbance from southern trade routes."
+At every seasonal accounting: RS −0.5 if Niflhel is in play and has conducted at least one order this season. This is applied automatically, without attribution, and without Niflhel's knowledge mechanically. Players controlling Niflhel are not told this is the source. The effect is described as "substrate disturbance from southern trade routes."
 
 ### Thread Knowledge Track — Varfell (TK 0–5)
 
@@ -696,7 +696,7 @@ Each NPC AI card specifies:
 
 **Priority 1 — TC expansion:** Church executes Preach in territory with lowest Church Favour.
 
-**Priority 2 — Heresy response:** If any faction has openly performed Thread operations or if TT > 40: Church opens Inquisition in the territory where the event occurred.
+**Priority 2 — Heresy response:** If any faction has openly performed Thread operations or if RS < 60: Church opens Inquisition in the territory where the event occurred.
 
 **Priority 3 — Excommunication trigger:** If Crown Mandate < 4 and TC > 30: Church executes Excommunication against Crown leader.
 
@@ -784,7 +784,7 @@ Each NPC AI card specifies:
 
 *Always NPC-controlled.*
 
-**Priority 1 — TT response:** If TT > 40 and practitioner available: Community Weaving in Varfell or nearest eligible territory.
+**Priority 1 — RS response:** If RS < 60 and practitioner available: Community Weaving in Varfell or nearest eligible territory.
 
 **Priority 2 — Influence expansion:** Revolution executes Govern (informal presence claim) in Oastad if uncontrolled.
 
@@ -846,15 +846,15 @@ Shuffle each pool separately. Threshold cards are drawn from their pile when tri
 
 ### Clock-Threshold Events
 
-**TT Thresholds (T-01 through T-05):**
+**RS Thresholds (T-01 through T-05):**
 
 | Card | Trigger | Event |
 |---|---|---|
-| T-01 | TT crosses 40 | Monstrous Configuration in Oastad (T12). Oastad Prosperity −1. All March orders to Oastad: +1 Ob this season. Church Inquisition automatically opens in Oastad (Church AI acts; player Church may redirect if in play). |
-| T-02 | TT crosses 60 | Thread operations in all territories: +1 Ob for remainder of game. Practitioner-affiliated factions gain Awareness marker (narrative: they understand what this means). Non-practitioner factions gain Alarm marker (narrative: they don't). |
-| T-03 | TT crosses 80 | Thread enters battlefields. All mass combat this season: both sides roll 1 Co-Movement card in addition to standard battle resolution. |
-| T-04 | TT reaches 100 | THE RUPTURE (game-end event). See B10. |
-| T-05 | TT drops below 40 after being above it | Recovery marker placed. TT −1 additional next seasonal accounting (momentum). |
+| T-01 | RS drops below 60 | Monstrous Configuration in Oastad (T12). Oastad Prosperity −1. All March orders to Oastad: +1 Ob this season. Church Inquisition automatically opens in Oastad (Church AI acts; player Church may redirect if in play). |
+| T-02 | RS drops below 40 | Thread operations in all territories: +1 Ob for remainder of game. Practitioner-affiliated factions gain Awareness marker (narrative: they understand what this means). Non-practitioner factions gain Alarm marker (narrative: they don't). |
+| T-03 | RS drops below 20 | Thread enters battlefields. All mass combat this season: both sides roll 1 Co-Movement card in addition to standard battle resolution. |
+| T-04 | RS reaches 0 | THE RUPTURE (game-end event). See B10. |
+| T-05 | RS rises above 60 after being below it | Recovery marker placed. RS +1 additional next seasonal accounting (momentum). |
 
 **TC Thresholds (C-01 through C-05):**
 
@@ -893,13 +893,13 @@ Shuffle each pool separately. Threshold cards are drawn from their pile when tri
 | S-11 | **Parliamentary Crisis.** Parliament convenes emergency session. Any pending Parliamentary Manoeuvre resolves this season regardless of timing. Crown Mandate check Ob 1 or −1 Mandate. |
 | S-12 | **Altonian Envoy.** IP −1 (gesture of diplomatic goodwill). Any faction may Diplomacy vs Altonia this season at −1 Ob. |
 | S-13 | **Löwenritter Audit.** Advance Coup Tracker by 1. Reveal to all players. (Ehrenwall is reassessing.) |
-| S-14 | **Thread Disturbance.** TT +2 (unexplained). No co-movement card drawn (substrate disturbance, not an operation). All practitioner-affiliated factions: Awareness marker. |
-| S-15 | **Restoration Memory.** [EDITORIAL: S-08 Einhir site name deferred.] Revolution Stability +1. TT −1. |
+| S-14 | **Thread Disturbance.** RS −2 (unexplained). No co-movement card drawn (substrate disturbance, not an operation). All practitioner-affiliated factions: Awareness marker. |
+| S-15 | **Restoration Memory.** [EDITORIAL: S-08 Einhir site name deferred.] Revolution Stability +1. RS +1. |
 | S-16 | **Niflhel Network Exposure.** One Niflhel network (GM chooses) has an operation surface publicly. That network's Intel −1 for 2 seasons. Any faction with an active Intel order this season may immediately learn one piece of information that network holds. |
 | S-17 | **Einhir Practitioner Surfaces.** A practitioner with TS 40+ is reported operating openly in one random territory. Church automatically opens Inquisition there. Revolution Influence +1 in that territory. TT +1. |
 | S-18 | **Border Skirmish.** Two adjacent factions (GM or random draw) have a minor military incident. Neither loses units but both take −1 Stability. IP +1 if Crown is involved. |
 | S-19 | **Debt Called.** Guilds call a debt from the faction with highest Wealth. That faction: Wealth −1 this season OR Guilds gain Influence +1 in one territory of their choice. |
-| S-20 | **Thread Quiet.** Unusually stable substrate this season. All Thread operations: −1 Ob. TT −1 at seasonal accounting. Practitioners with TS 50+ sense it as uncanny — the quiet is wrong, not peaceful. |
+| S-20 | **Thread Quiet.** Unusually stable substrate this season. All Thread operations: −1 Ob. RS +1 at seasonal accounting. Practitioners with TS 50+ sense it as uncanny — the quiet is wrong, not peaceful. |
 
 ---
 
@@ -920,7 +920,7 @@ Shuffle each pool separately. Threshold cards are drawn from their pile when tri
 
 Before checking any per-faction victory, check the shared survival condition:
 
-**TT < 80, TC < 80, IP < 80 simultaneously at the moment the game-end trigger fires.**
+**RS > 20, TC < 80, IP < 80 simultaneously at the moment the game-end trigger fires.**
 
 If this condition is met: all players whose faction victories are also met share a co-victory. The inseparability of the three dimensions is expressed in the shared stakes — no faction achieves its individual victory at the expense of the world remaining inhabitable.
 
@@ -936,17 +936,17 @@ Any of the following ends the game immediately:
 
 | Trigger | Game-End Event |
 |---|---|
-| TT = 100 | THE RUPTURE — see below |
+| RS = 0 | THE RUPTURE — see below |
 | TC = 100 | THE HOLY STATE — see below |
 | IP = 100 | THE INVASION — see below |
 | Round 20 completed | Standard game-end. Check victory conditions. |
 
 ### Endgame Events
 
-**THE RUPTURE (TT = 100)**
+**THE RUPTURE (RS = 0)**
 The relationship between rendered world and thread-substrate changes permanently. This is not automatically a loss. Its meaning is determined by the current state of the world:
 
-- If Revolution Community Weaving was successful at least 3 times and TT was above 60 before reaching 100: *Rupture as Healing* — the Thread substrate returns to its pre-Calamity coherence across the entire peninsula simultaneously:
+- If Revolution Community Weaving was successful at least 3 times and RS was below 40 before reaching 0: *Rupture as Healing* — the Thread substrate returns to its pre-Calamity coherence across the entire peninsula simultaneously:
 - Stillhelm and the Southernmost become habitable. The Forgetting dissolves.
 - Every Lock releases — objects, relationships, and personal threads return to their natural state. Living things that were Locked age at extraordinary speed on release and turn to dust within moments.
 - Shifting Objects stabilise. Thread Wounds and Gaps close.
