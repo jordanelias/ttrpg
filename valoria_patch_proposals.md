@@ -867,3 +867,663 @@ Also update the explanatory sentence: remove "including bonus dice" from the net
 | P3 | 10 |
 | Design (new mechanic) | 1 |
 | **Total** | **93** |
+---
+
+## PATCH PROPOSALS — BATCH RESOLUTIONS (2026-03-28)
+*Canon-grounded resolutions for 37 open gaps. Derived from Philosophical Foundations, compiled stages, and internal system logic. No editorial approval required unless flagged.*
+
+---
+
+### PP-094
+**Gap:** G-099 — Mid-Debate incapacitation has no resolution rule
+**Severity:** P1
+**Section:** §9.6 Debates
+**Fix:** Add to §9.6 after exchange resolution rules:
+> "If a character is physically incapacitated (Wound threshold reached) during a Debate, they immediately concede all remaining exchanges. The forfeit counts toward Grand Debate total-loss penalties. The Debate ends; the scene continues with the incapacitated character as a passive party. Social actions directed at them may still proceed — the GM sets consequences."
+**Source:** G-099 / BT3-04
+
+---
+
+### PP-095
+**Gap:** G-100 — Renown "initial advantage" scope undefined
+**Severity:** P1
+**Section:** §10.5 (Renown)
+**Fix:** Add to §10.5 Renown entry:
+> "Renown advantage: the +1D bonus applies to Exchange 1 only. It does not carry through subsequent exchanges. The advantage represents the recognition effect at first contact, not sustained rhetorical dominance."
+**Source:** G-100 / BT3-06
+
+---
+
+### PP-096
+**Gap:** G-101 — Niflhel supremacy tiebreak missing
+**Severity:** P1
+**Section:** Stage 6, §8.X Niflhel faction rules (seasonal accounting)
+**Fix:** Add tiebreak rules to Niflhel seasonal accounting:
+> "**Supremacy ties:** If multiple networks are co-leading at seasonal accounting, each co-leading network gains +1 Intel (all share the top position equally that season). If multiple networks are co-weakest, one is selected randomly (roll 1dN where N = number of tied weakest networks) to bear the weakest-network consequence."
+**Source:** G-101 / BT3-08
+
+---
+
+### PP-097
+**Gap:** G-102 — Niflhel partial endgame path undefined
+**Severity:** P1
+**Section:** Stage 6, Niflhel victory conditions
+**Fix:** Define 3-step partial control victory procedure:
+> "**Partial Network Dominance (fewer than 4 full networks):**
+> 1. *Trigger:* Niflhel Intel is highest in exactly 3 or fewer networks AND this state has held for 2 consecutive seasons.
+> 2. *Consolidation action:* Niflhel may spend a Unique Action to declare Quiet Network Consolidation. Roll Intel vs Ob 4.
+> 3. *Resolution:* Overwhelming/Success = networks consolidated into a dominant position; counts as controlling that territory for victory condition purposes, and Niflhel's endgame path activates. Partial = consolidation incomplete; may retry next season at Ob 3. Failure = overextension; one network loses Niflhel's leading Intel status."
+**Source:** G-102 / BT3-08
+
+---
+
+### PP-098
+**Gap:** G-103 — TC pause + Baralta suppressor interaction undefined
+**Severity:** P1
+**Section:** §7.2 Theocracy Clock, Church Stability brake note
+**Fix:** Add modifier-order clarification:
+> "**Modifier order:** All TC modifiers (including leader-driven suppressors such as Baralta's −1) are applied first to determine the season's net TC change. The Stability brake is then checked. If after modifiers TC change would be ≤ 0, the brake does not further affect the result. If after modifiers TC change would be > 0 and Stability is ≤ 4, the brake sets TC change to 0 for that season. The brake cannot produce a TC decrease; it can only suppress generation."
+**Source:** G-103 / BT3-09
+
+---
+
+### PP-099
+**Gap:** G-104 — Niflhel Quiet Network "one piece of information" undefined
+**Severity:** P1
+**Section:** Stage 6, Niflhel Quiet Network seasonal event
+**Fix:** Standardise information unit format:
+> "**Quiet Network information unit:** Each seasonal event yields one unit. A unit is exactly one of the following (Niflhel chooses):
+> - One faction's current Mandate, Influence, or Intel value (at accounting)
+> - One pending Domain Action declared by a named faction in the coming season
+> - The identity of one active informant or agent in another faction's current operations
+> - One territorial event outcome before it is publicly resolved at accounting
+>
+> The unit must be specific and verifiable. 'What the Church is planning' is not a unit. 'Church will deploy Templars to Hafenmark this season' is a unit."
+**Source:** G-104 / BT3-10
+
+---
+
+### PP-100
+**Gap:** G-111 — Devout bypass for Discovery Events mechanically unreachable
+**Severity:** P1
+**Section:** Stage 3, §5.X Devout characters and Discovery Events
+**Canon authority:** P-08 (barrier = inaccessibility, not suppression); P-10 (transformation = perceptual shift, not moral corruption)
+**Fix:** Rewrite Devout bypass trigger. Replace TS-gated witnessing with direct theological confrontation:
+> "**Devout character Discovery Event triggers:**
+> A Devout character (TS 0–9) cannot perceive Thread operations and cannot trigger Discovery Events through ordinary Thread exposure. However, a Discovery Event fires when the character faces DIRECT THEOLOGICAL CONFRONTATION — defined as any of:
+> - A practitioner performs a Thread operation in their presence AND explicitly demonstrates or names the mechanism (effects alone are insufficient; the claim must be made)
+> - The character encounters explicit Einhir theological materials framed as directly opposing Galbados doctrine
+> - A trusted peer, authority figure, or close Knot holder defects publicly to Restoration framing in the character's immediate presence
+>
+> Discovery Event Ob: set by the strength of the character's Conviction Beliefs (Ob = number of relevant Conviction Beliefs, minimum 1). The event is a theological confrontation, not a TS check. The Devout character's faith provides the interpretive framework; the confrontation challenges it directly."
+**Source:** G-111 / Batch 3+4; P-08; P-10
+
+---
+
+### PP-101
+**Gap:** G-112 — Ehrenwall Coup Tracker starting value and decrement missing
+**Severity:** P1
+**Section:** Stage 13, NPC Ehrenwall
+**Fix:**
+> "**Ehrenwall Coup Tracker (CoupT):**
+> Starting value: 0 (no coup risk at game start — Ehrenwall's institutional loyalty is intact).
+> *Increment triggers:* [retain existing definitions]
+> *Decrement triggers:*
+> - −1 per season where Crown Mandate ≥ 5 AND Crown Military ≥ 4 AND no Crown compromises were made that season (institutional strength confirmed)
+> - −2 if Ehrenwall executes a direct Crown command that season (loyalty reinforced by clear institutional direction)
+> - −1 if Crown publicly recognises Löwenritter contribution to territorial defence
+>
+> Ehrenwall's coup risk rises when the Crown institution appears to fail; it falls when the institution demonstrates coherent strength. Decrement is not guaranteed — if both decrement and increment triggers fire in the same season, net the results."
+**Source:** G-112 / Batch 3+4
+
+---
+
+### PP-102
+**Gap:** G-113 — Martial Law procedure undefined
+**Severity:** P1
+**Section:** Stage 6, §8.X Crown faction rules (or Stage 13 Ehrenwall)
+**Fix:** 4-step Martial Law procedure:
+> "**Martial Law (Löwenritter Coup):**
+> *Trigger:* Ehrenwall Coup Tracker reaches threshold (see §NPC-Ehrenwall) OR Crown Mandate 0 + Military 3+ + Stability ≤ 2 simultaneously.
+>
+> **Step 1 — Stabilisation:** Crown Stability is frozen for 2 seasons (cannot decrease from non-military causes). This represents the Löwenritter suppressing civil disorder.
+>
+> **Step 2 — Mandate cost:** Crown Mandate −2 immediately (legitimacy cost of military rule). This cannot be recovered until Martial Law ends.
+>
+> **Step 3 — Restricted Orders:** During Martial Law, Crown's available Domain Actions are limited to Military operations, direct Mandate stabilisation (once per season), and Royal Decree. Diplomatic, economic, and intelligence Domain Actions are unavailable.
+>
+> **Step 4 — Sunset conditions:** Martial Law ends when Crown Mandate recovers to 4+ via available actions sustained over 3+ seasons (organic legitimacy recovery). Alternatively: Parliament convenes a Grand Debate challenge (Ob 4 vs Crown Military pool). If the Grand Debate challenge fails: Löwenritter becomes effectively autonomous — treat as Faction Fracture for Crown (see §8.1 Stability rules)."
+**Source:** G-113 / Batch 3+4; PP-102
+
+---
+
+### PP-103
+**Gap:** G-114 — Church TC 80 territorial seizure procedure missing
+**Severity:** P1
+**Section:** Stage 6, Church faction; Stage 5, TC threshold 80
+**Fix:**
+> "**Church Territorial Seizure (TC ≥ 80):**
+> At TC ≥ 80, the Church may roll Mandate vs Ob = target territory's controlling faction Stability (1–7 scale) to claim territorial oversight.
+>
+> *Success:* Territorial control transfers to Church oversight. Target faction Stability −1 (transition friction). Target faction Mandate −1 (loss of territory). Church gains +1 Influence in that territory.
+>
+> *Overwhelming success:* As success, AND no Parliament challenge is possible that season (the Church has moved with overwhelming institutional speed).
+>
+> *Parliament challenge:* Within the same season (unless Overwhelming), any faction may spend a Domain Action to formally Contest the seizure. Contested resolution: contesting faction's Mandate vs Church Mandate (standard domain roll). Winner retains or reclaims control. Ties: status quo holds (seizure fails, but Church retains Influence gain).
+>
+> *Failure:* Seizure attempt publicly known; Church Mandate −1."
+**Source:** G-114 / Batch 3+4; TC threshold card
+
+---
+
+### PP-104
+**Gap:** G-115 — Archetype generic characters GEN-03, GEN-06, GEN-07 lack personal-scale mechanics
+**Severity:** P1
+**Section:** Stage 13, NPC/Archetype stat blocks
+**Fix:** Add personal stat blocks for three archetypes. Attribute scale 1–10. Composure = Presence + 6.
+
+> **GEN-03 — Generic Inquisitor (Church)**
+> Agi 3 | End 3 | Str 2 | Cog 5 | Mem 4 | Focus 5 | Att 4 | Bonds 2 | Pres 3 | Spirit 3
+> Composure: 9 | Health: 5
+> Histories: Church Doctrine 3, Investigation 3
+> Conviction: Duty / Doctrine
+> Notes: Devout (TS-blocked). CE accumulation enabled — standard Inquisitor procedure. No Thread operation authority. Personal Resonant Style: Evidence (past heresies, records, accusations).
+
+> **GEN-06 — Generic Riskbreaker**
+> Agi 5 | End 3 | Str 3 | Cog 4 | Mem 3 | Focus 4 | Att 3 | Bonds 1 | Pres 3 | Spirit 3
+> Composure: 9 | Health: 6
+> Histories: Covert Operations 3, Trade Network 2
+> Conviction: Pragmatism / Survival
+> Deniability Debt: starts at 0
+> Notes: Not Church-affiliated. CE does not accumulate unless operating inside Church-observed territory. No Thread sensitivity by default.
+
+> **GEN-07 — Generic Knight Templar**
+> Agi 4 | End 5 | Str 5 | Cog 2 | Mem 2 | Focus 3 | Att 1 | Bonds 3 | Pres 3 | Spirit 4
+> Composure: 9 | Health: 10
+> Histories: Church Military Service 4, Heresy Recognition 2
+> Conviction: Duty / Galbados
+> Notes: Devout (TS-blocked). CE passive accumulation only — no active investigation authority. Deploys under Cardinal of Fortitude direction. Personal Resonant Style: Character (virtue, duty, honour, shame).
+
+**Source:** G-115 / Batch 3+4
+
+---
+
+### PP-105
+**Gap:** G-116 — Collective lattice co-movement scaling undefined
+**Severity:** P1
+**Section:** Stage 3, §5.1.5 Collective Operations (or equivalent)
+**Canon authority:** P-01 (inseparability is mandatory — all three auto-effects fire regardless of participant count)
+**Fix:**
+> "**Collective operation co-movement scaling:**
+> Co-movement effects are not optional and do not scale with participant count — all three dimensional auto-effects fire for every collective Thread operation (P-01). However, magnitude scales:
+> - **CD accumulation:** +1 per additional participant beyond the first (maximum +3 total additional)
+> - **RS cost:** ×participant count (no cap — this is the primary risk of collective operations; large lattices produce severe RS strain)
+> - **TT change:** use Community Weaving scaling (§6.8): base TT cost × ceil(participants ÷ 2), capped at ×3
+>
+> These costs apply to each participant individually. The pool benefit (combined dice) must be weighed against the cost scaling."
+**Source:** G-116 / Batch 3+4; P-01
+
+---
+
+### PP-106
+**Gap:** G-117 — Anchor-drop outcome in collective operations undefined
+**Severity:** P1
+**Section:** Stage 3, §5.1.5 Collective Operations
+**Fix:**
+> "**Anchor drop mid-operation:**
+> If the designated anchor drops contact during a collective operation (Wound, Composure collapse, involuntary Leap, incapacitation, or any forced contact termination):
+> 1. The lattice immediately dissolves.
+> 2. All participants who were in active contact at the moment of anchor drop take consequences equal to a Partial-degree outcome for the in-progress operation.
+> 3. The operation does not complete — no effect, no benefit achieved.
+> 4. All TT and CD costs already accumulated at the point of anchor drop remain (the substrate was already strained).
+> 5. RS costs: each participant takes RS −1 (abrupt termination); the anchor takes RS −2."
+**Source:** G-117 / Batch 3+4
+
+---
+
+### PP-107
+**Gap:** G-118, SIM2-F-03, SIM2-F-04, SIM7-F-03 — Past-Oriented Pulling: no degree table, missing recency table, near-inaccessibility, no Foundational scale rules
+**Severity:** P1 (G-118, SIM2-F-03, SIM7-F-03), P1 (SIM2-F-04)
+**Section:** Stage 3, §5.6 Past-Oriented Pulling
+**Fix — Part A: Recency Ob Table**
+
+> | Timeframe | Ob modifier |
+> |-----------|-------------|
+> | Current season | +0 |
+> | 1–3 seasons past | +1 |
+> | 1–5 years past | +2 |
+> | 5–20 years past | +3 |
+> | 20–100 years past | +4 |
+> | Pre-independence (100+ years) | +5 |
+> | Pre-Altonian era (200+ years) | +6 |
+> | Einhir era | +6 + Einhir framework required |
+
+**Fix — Part B: Degree Table**
+
+> | Degree | Outcome |
+> |--------|---------|
+> | Overwhelming | The target configuration is fully accessible. Complete rendering with clarity. RS −2. TT +3 (in addition to base TT table cost). All sought information or effect obtained without distortion. |
+> | Success | Configuration accessible; rendering is partial. Core of what was sought is present; peripheral details uncertain. RS −1. TT +3. GM may withhold one significant detail. |
+> | Partial | Contact made; configuration unstable. Fragmented rendering — disconnected impressions rather than coherent information. RS −1. TT +3. GM provides one true detail and one ambiguous impression. Practitioner cannot control what surfaces. |
+> | Failure | Contact attempted; substrate resists temporal displacement. No rendering achieved. RS −2 (failed attempt still strains substrate). TT +5. An orphaned configuration may form (GM discretion) — detectable by TS 30+ Diagnosis. |
+
+**Fix — Part C: Pool Accessibility Note**
+> "Standard pool: Spirit + History + TPS ÷ 2. Minimum viable pool for reliable access: 5+ dice. Characters below this threshold should treat Past-Oriented Pulling as advanced technique requiring Einhir mentorship or significant TPS accumulation. Accessibility path: a practitioner may substitute one relevant Belief die (if the Belief directly relates to the pulled event or person) as one pool die — once per operation. This represents personal connection bridging the substrate gap."
+
+**Fix — Part D: Foundational Past-Pull (Einhir Catastrophe Protocol)**
+> "**Foundational Past-Pull (Einhir Catastrophe Protocol):**
+> Named mechanic for operations reaching pre-Calamity configurations. Requires: Einhir-framework-trained practitioner, TPS ÷ 2 minimum 3, Spirit 5+.
+>
+> - Ob: base recency Ob +4 (Foundational scale penalty, per Scale Principle)
+> - Pool: Spirit + History + TPS ÷ 2 + Einhir Resonance bonus (+2D if applicable)
+> - RS cost: ×3 base cost
+> - TT: +9 additional (base Past-Pull +3 at ×3)
+>
+> | Degree | Outcome |
+> |--------|---------|
+> | Overwhelming | Access to pre-Calamity thread configuration states. The original source of a Gap can be identified. Cannot reconstruct or reverse the Calamity — only understand it. RS −6. |
+> | Success | Partial pre-Calamity access. One major fact about the Calamity's origin. RS −4. |
+> | Partial | Fragmented impressions only. No actionable information. RS −3. |
+> | Failure | Uncontrolled temporal displacement event. RS −4. TT +12 (stacks with base cost). GM determines displacement consequences. |
+>
+> Use limit: once per campaign arc unless extraordinary circumstances (GM discretion)."
+
+**Source:** G-118, SIM2-F-03, SIM2-F-04, SIM7-F-03
+
+---
+
+### PP-108
+**Gap:** G-125 — No social counter-mechanic for non-practitioners being Pulled
+**Severity:** P1
+**Section:** Stage 3, §5.3 Pulling (or §5.6 Past-Oriented Pulling, non-practitioner subsection)
+**Canon authority:** P-09 (Pulling is messy, costly, detectable); P-08 (barrier = inaccessibility)
+**Fix:**
+> "**Non-practitioner resistance to Pulling:**
+> A non-practitioner cannot perceive Thread operations but can feel their effects at the experiential level. When a Pulling operation targets a non-practitioner, the target may attempt to resist:
+>
+> - **Resistance roll:** Spirit dice, Ob = Pulling Ob (same Ob as the operation)
+> - This represents the integrity of the target's self-coherence, not Thread perception
+>
+> | Degree | Result |
+> |--------|--------|
+> | Overwhelming | Target unreachable. Operation fails. Pulling practitioner takes RS −1 (failed contact). |
+> | Success | Target resists successfully. No information extracted. Practitioner may re-attempt next round at +1 Ob (cumulative per attempt). |
+> | Partial | Partial resistance. Memories surface chaotically — GM provides one distorted or incomplete piece of information. |
+> | Failure | Pull proceeds normally. Resolve the Pulling operation at its rolled degree. |"
+
+**Source:** G-125 / sim_batch_02
+
+---
+
+### PP-109
+**Gap:** G-127 — Dissolution Residue drain target is wrong (says Coherence; should be Certainty); SIM5-F-07 resolved as consequence
+**Severity:** P1
+**Section:** Stage 3, §5.12 Dissolution Residue
+**Fix:**
+> "**Dissolution Residue drain target (corrected):**
+> Dissolution Residue drains **Certainty (−1 per exposure)**, NOT Coherence. Coherence is the practitioner's personal countdown track (10→0); Certainty is the world-side track. The residue represents unanchored substrate configuration affecting the Certainty of the environment.
+>
+> *Exception:* Direct sustained contact with residue lasting a full scene or longer triggers an additional **Coherence −1** for any practitioners present (personal integrity cost of prolonged unanchored substrate proximity).
+>
+> *Consequence for SIM5-F-07:* The Coherence cap (−1/operation maximum) does not make residue cost-free. Residue and Thread operations drain separate tracks. They are not in competition."
+**Source:** G-127 / sim_batch_02; SIM5-F-07
+
+---
+
+### PP-110
+**Gap:** G-128 — ThS Fallout table uses per-character framing; ThS is a world-side track
+**Severity:** P1
+**Section:** Stage 3, §5.9 Thread Sensitivity thresholds / Fallout table
+**Fix:** Rewrite §5.9 Fallout table headers and trigger language:
+> "All Fallout table entries should be rewritten from 'your ThS drops to X' to 'World-side ThS drops below X.' The consequences listed still affect practitioners in the affected area, but ThS is a property of the world-thread-substrate, not of individual characters. A practitioner does not have a ThS score. They have Thread Sensitivity (TS) as a personal attribute. ThS is the world's accumulated thread-sensitivity threshold — the degree to which the substrate has been sensitised by practitioner activity across all history.
+>
+> Audit note: any §5.9 entry reading 'your ThS' or 'the practitioner's ThS' is a text error. Replace with 'world-side ThS' or 'the current world ThS level.'"
+**Source:** G-128 / sim_batch_03
+
+---
+
+### PP-111
+**Gap:** G-129 — Torben Loyalty Clock drain rate absent
+**Severity:** P1
+**Section:** Stage 13, NPC Torben
+**Fix:**
+> "**Torben Loyalty Clock (TLK) — drain rate:**
+> - Base drain: −1 per season Torben remains in the Altonian court without active Crown contact
+> - Failed tutoring demand (triggered at IP 30): −3 if Crown fails to respond within the same season
+> - Successful covert contact (Int Ob 3): −0 that season (contact stabilises loyalty)
+> - Detected or failed covert contact: −2 (detection increases institutional risk; Torben reads it as Crown exposing him)
+>
+> *Milestone events:*
+> - Elske recruited by an Altonian faction: −3 (Torben's primary personal anchor moves to opposing interest)
+> - Crown publicly acknowledges Torben's lineage in official capacity: +2 recovery (one-time; cannot be repeated)
+> - Altonian faction offers Torben a formal titled position: −2 per season that offer stands uncontested by Crown"
+**Source:** G-129 / sim_batch_03
+
+---
+
+### PP-112
+**Gap:** G-130 — Concealment mechanic: no Ob, no resolution, no counter-detection
+**Severity:** P1
+**Section:** Stage 3, §5.X Concealment (new subsection)
+**Fix:** Write Concealment procedure:
+
+> "**Concealment**
+> Concealment allows a practitioner to suppress the Thread operation signature observable by outside parties.
+>
+> *Declaration:* Simultaneous with the Thread operation declaration. Concealment is a separate roll, not part of the operation pool.
+> *Pool:* Attunement + Cognition (the practitioner's awareness of their own signature)
+> *TN:* 7 (Standard)
+>
+> **Ob by observer:**
+> | Observer | Ob |
+> |----------|-----|
+> | Non-practitioner | 1 |
+> | TS 10–29 | 2 |
+> | TS 30–59 | 3 |
+> | TS 60+ | 4 |
+>
+> **Ob modifiers:**
+> - Active combat or high distraction in scene: −1 Ob
+> - TT Fracturing (60+): +1 Ob (noisy substrate)
+> - Severed (Coherence 1): +1 Ob (signature irregularity)
+>
+> | Degree | Result |
+> |--------|--------|
+> | Overwhelming | No detectable signature. CE does not accumulate for Inquisitor observers this operation. |
+> | Success | Signature masked. CE accumulation halved for Inquisitor observers this scene. |
+> | Partial | Signature reduced. Evidence exists but not attributable to a specific practitioner. CE accumulates normally. |
+> | Failure | No concealment. Signature fully visible to any TS 10+ observer. CE accumulates normally. |
+>
+> Concealment failure does not affect the operation itself."
+**Source:** G-130 / sim_batch_03
+
+---
+
+### PP-113
+**Gap:** G-131 — Parliamentary Vote coalition formation absent
+**Severity:** P1
+**Section:** §9.6 Debates / §8.9 Parliamentary Vote (or Stage 6 faction rules)
+**Fix:** Coalition formation procedure:
+> "**Parliamentary Vote — Coalition Procedure:**
+>
+> 1. **Declaration phase:** Before vote rolls, all factions simultaneously declare their position: Support, Oppose, or Abstain.
+> 2. **Pool construction:** Supporting factions contribute their Mandate dice to the lead faction's pool. Opposing factions contribute their Mandate to the opposing pool.
+> 3. **Vote resolution:** Uses Debate exchange structure (best of 3). Lead faction rolls combined coalition pool vs opposing coalition pool. Faction leaders who are present personally may use the higher of their personal pool or their faction's Mandate.
+> 4. **Abstentions:** Abstaining factions take no pool action but gain information — they observe the full coalition structure that season at no cost.
+> 5. **Betrayal mechanics:** If a faction declares Support but betrays (votes against or Abstains): detectable on a Partial or Failure result for the coalition that season. Detected betrayal: betraying faction Mandate −1 per supporter deceived, and Intel accumulates against that faction (they are known as unreliable coalition partners).
+> 6. **Ties:** Status quo holds — no motion passes on a tied vote."
+**Source:** G-131 / sim_batch_03
+
+---
+
+### PP-114
+**Gap:** G-132 — Stability floor of 1 prevents faction collapse and endgame via attrition
+**Severity:** P1
+**Section:** §8.1 Faction Mechanics (seasonal accounting rules)
+**Fix:** Remove the Stability floor. Replace with:
+> "**Faction Stability at 0 — Crisis and Fracture:**
+> Stability can reach 0. No floor applies.
+>
+> *Stability 0:* Faction enters **Crisis**. All Domain Actions cost +2 Ob. Unique Action unavailable. Stability 0 triggers a Mandate check (see PP-127).
+>
+> *Stability 0 for 2 consecutive seasons:* **Faction Fracture.** The faction is eliminated as a player-controlled entity. Its institutional remnants continue as a GM-controlled NPC faction at half capacity (all stats halved, rounded down). Fractured factions can be rebuilt through extraordinary player action — this is a campaign-level event, not a game end.
+>
+> *Crown and Church exception:* Neither can Fracture through Stability alone (institutional depth). Additional trigger required: Crown (Martial Law already in effect + Stability 0), Church (Confessor death or Confessor excommunication from within + Stability 0)."
+**Source:** G-132 / sim_batch_03
+
+---
+
+### PP-115
+**Gap:** G-133 — Niflhel has no Intel stat defined
+**Severity:** P1
+**Section:** Stage 6, §8.X Niflhel faction; §8.1 Starting Values table
+**Fix:**
+> "Add to Niflhel faction stat block:
+> **Intel: 6** (starting value). **Maximum: 8.**
+>
+> Rationale: Niflhel is a covert intelligence operation by nature. Intel 6 reflects established, functioning networks from game start. The 8 maximum reflects the hard ceiling of an organisation operating without public institutional support. Niflhel cannot project force (no Military stat) and cannot build legitimacy (no Mandate stat); Intel is their primary operational asset.
+>
+> Update §8.1 Starting Values table: Niflhel Intel column = 6."
+**Source:** G-133 / sim_batch_03
+
+---
+
+### PP-116
+**Gap:** G-134 — Community Weaving TT cost scaling undefined
+**Severity:** P1
+**Section:** Stage 3, §6.8 Community Weaving (or equivalent)
+**Fix:**
+> "**Collective Community Weaving — TT cost scaling:**
+> Collective TT cost = individual base TT cost × ceiling(participants ÷ 2), maximum ×3.
+>
+> Examples: 2 practitioners = ×1. 3–4 practitioners = ×2. 5–6 practitioners = ×3 (cap). 7+ practitioners = ×3 (cap holds).
+>
+> The cap reflects that collective resonance partially offsets individual substrate strain at scale — but never eliminates it. Larger groups produce more total TT than smaller groups but not proportionally more."
+**Source:** G-134 / sim_batch_03; PP-105 alignment
+
+---
+
+### PP-117
+**Gap:** G-135 — Mass combat damage formula not specified
+**Severity:** P1
+**Section:** Stage 8 (or equivalent mass combat section), §8.3
+**Fix:**
+> "**Mass combat damage formula:**
+> - *Excess successes:* attacker's net successes − defender's net successes (minimum 0)
+> - *Unit damage:* excess successes × attacking formation's **Power** rating
+> - *Damage absorbed:* subtract defending unit's **Armour** rating (minimum 0 damage after absorption)
+> - *Accumulated damage:* when total accumulated damage ≥ unit **Health** threshold, the unit is eliminated
+>
+> This mirrors the personal combat formula (§8.1): weapon damage bonus + excess successes − armour damage reduction. Unit Power = equivalent of weapon damage bonus. Unit Armour = equivalent of personal armour DR. Unit Health threshold = equivalent of personal Wound threshold."
+**Source:** G-135 / sim_batch_04
+
+---
+
+### PP-118
+**Gap:** G-136 — Church Stability TC brake fires at Stability ≤5 but Church starts at Stability 5 (permanent suppression from game start); stage 5 / stage 6 text conflict
+**Severity:** P1
+**Section:** §7.2 TC Clock (stage 5); §8.3 Church faction (stage 6)
+**Fix:** Standardise brake threshold to **Stability ≤ 3** across both documents (lowered from ≤4/≤5 versions).
+
+> **Rationale:** Church starting Stability is 5. A brake at ≤4 is reachable but not permanent from game start. A brake at ≤5 fires from game start (bug). After simulation review: ≤3 is the correct threshold — this makes the brake a meaningful crisis condition rather than an ambient suppressor, consistent with the intent that Church TC generation should be suppressible only in genuine internal crisis conditions (Stability 3 = two losses from starting value).
+>
+> **Stage 5 fix:** §7.2 brake note: replace "Stability falls to 5 or below" and "Stability ≤ 4" with "Stability ≤ 3."
+> **Stage 6 fix:** §8.3 TC relationship note: replace "Stability ≤ 4" with "Stability ≤ 3."
+**Source:** G-136 / sim_batch_04
+
+---
+
+### PP-119
+**Gap:** SIM2-F-09 — Involuntary→voluntary extension bypasses concealment (exploit)
+**Severity:** P1
+**Section:** Stage 3, §5.1.3 Involuntary Leap + §5.X Concealment
+**Fix:**
+> "**Voluntary extension of involuntary Leap — concealment rule:**
+> Any voluntary extension of an involuntary Leap is treated as a **voluntary Thread operation** for all concealment and CE accumulation purposes. The involuntary initiation does not grant concealment immunity to subsequent voluntary operations in the same contact. A practitioner who chose to extend an involuntary Leap chose to operate — that choice carries the full procedural obligations of voluntary Thread work."
+**Source:** SIM2-F-09 / sim_batch_02
+
+---
+
+### PP-120
+**Gap:** SIM5-F-02 — Lock removal Ob asymmetry (high-TS Locks near-irremovable); design rationale missing
+**Severity:** P1 (documentation/design note)
+**Section:** Stage 3, §5.5 Locking
+**Fix:** Add design note + bypass path:
+> "**Lock removal asymmetry — design rationale:**
+> Lock removal Ob = (original TS ÷ 10) − 2 (minimum 1). At TS 100: Ob 8. This is intentional. Locks created by high-TS practitioners are deeply substrate-integrated; the asymmetry reflects the Scale Principle — Thread work at higher TS penetrates further below the waterline and is proportionally harder to undo.
+>
+> **Bypass path:** Rather than removing a Lock directly via Dissolution, practitioners may address the underlying Gap the Lock was placed to protect. If the Gap is fully Mended, the Lock loses its substrate rationale and may be removed at **Ob 2** (standard maintenance Dissolution, regardless of original TS). This reframes the problem: the Lock is a consequence. Address the cause."
+**Source:** SIM5-F-02 / sim_batch_05
+
+---
+
+### PP-121
+**Gap:** SIM6-F-03 — Severed (Coherence 1): no Thread operation Ob penalty listed
+**Severity:** P1
+**Section:** Stage 3, Coherence table (§5.X)
+**Canon authority:** P-03 (rendering = consciousness-performed; practitioner is the rendering engine)
+**Fix:**
+> "Add to Coherence track table:
+> **Coherence 1 (Severed): +2 Ob to all Thread operations.**
+>
+> Rationale (P-03): At Coherence 1, the practitioner's self-coherence is near-total collapse. Thread operations require a coherent self as the rendering engine. The +2 Ob reflects the practitioner struggling to maintain coherent intent while performing Thread work — not a mechanical punishment, but the natural consequence of operating at the threshold of personal dissolution."
+**Source:** SIM6-F-03 / sim_batch_06; P-03
+
+---
+
+### PP-122
+**Gap:** SIM6-F-05 — Rendering Crisis mid-contact: no contact termination rule
+**Severity:** P2
+**Section:** Stage 3, §5.X Rendering Crisis
+**Fix:**
+> "**Rendering Crisis during active contact:**
+> When a Rendering Crisis fires while a practitioner is in active Thread contact, the practitioner rolls Endurance vs Ob 2 (crisis onset resistance).
+>
+> *Success:* Contact maintained. Rendering Crisis symptoms are deferred to end of contact (not suppressed; merely postponed). RS continues degrading normally through contact.
+>
+> *Failure:* Contact terminates immediately. This is an involuntary termination — for collective operations, treat as anchor drop (PP-106: all participants take Partial consequences; anchor takes RS −2).
+>
+> *Either way:* The Rendering Crisis cannot be resolved until after contact ends. Attempting to Mend or otherwise address the Crisis while in contact is not possible."
+**Source:** SIM6-F-05 / sim_batch_06
+
+---
+
+### PP-123
+**Gap:** SIM6-F-10 — RS Critical terminal decline 2–4 seasons not documented
+**Severity:** P1
+**Section:** Stage 3, §5.4.3 RS Critical (or RS threshold table)
+**Fix:** Add GM documentation note to RS Critical entry:
+> "**RS Critical (RS 1–10) — Terminal Phase Note:**
+> RS Critical is the terminal phase. At standard play pace and without extraordinary intervention, a world at RS Critical will reach RS 0 (The Rupture) within **2–4 seasons**. This timeline is by design.
+>
+> Extraordinary intervention options: Ceiral Ritual (RS +6 on Success, +10 on Overwhelming), Foundational Mending (Ob 8; RS +4 on Overwhelming), sustained Community Weaving (RS +2/season).
+>
+> Any Foundational-scale Thread failure at RS Critical carries a high probability of triggering The Rupture immediately. The table should treat RS Critical as the endgame phase — not a recoverable normal state. Player characters who reach RS Critical without active repair operations underway have functionally entered the endgame."
+**Source:** SIM6-F-10 / sim_batch_06
+
+---
+
+### PP-124
+**Gap:** SIM7-F-07 — Simultaneous Dissolution + Mending on same site: §9.13 doesn't cover
+**Severity:** P2
+**Section:** Stage 3, §9.13 Opposing operations (add sub-case)
+**Fix:**
+> "**Opposing operations sub-case: Simultaneous Dissolution + Mending on the same site**
+> Both operations resolve at Priority 5. Apply opposing operations framework:
+>
+> - *Mending wins (higher net successes):* Mending applies at rolled degree. Dissolution partially succeeds (Partial degree regardless of rolled degree). Both practitioners pay their RS costs.
+> - *Dissolution wins:* Dissolution applies at rolled degree. Mending fails (Failure degree; no RS recovery). Both pay RS costs.
+> - *Both Overwhelming OR tied:* Neither operation completes. Both practitioners take RS −1 (substrate instability from contested operations). Both must re-initiate next round if they choose to continue.
+>
+> This sub-case is separate from standard opposing operations (two practitioners running conflicting operations on different targets)."
+**Source:** SIM7-F-07 / sim_batch_07
+
+---
+
+### PP-125
+**Gap:** SIM7-F-08 — Incapacitation threshold rounding for odd Health values
+**Severity:** P2
+**Section:** §8.1 Personal Combat (damage / incapacitation threshold)
+**Fix:**
+> "Add to §8.1: **Incapacitation threshold = floor(Health ÷ 2).** Always round down. Example: Health 7 → threshold 3; Health 9 → threshold 4."
+**Source:** SIM7-F-08 / sim_batch_07
+
+---
+
+### PP-126
+**Gap:** SIM7-F-09 — CE ceiling and overflow behaviour absent
+**Severity:** P2
+**Section:** Stage 3, §5.X CE accumulation rules; Stage 6, Church / Inquisitor rules
+**Fix:**
+> "**CE ceiling and overflow:**
+> CE maximum value: **10** (matching the 1–10 attribute scale used throughout the system).
+>
+> CE cannot exceed 10. Events that would push CE above 10: the overflow is lost (not carried forward). However, if CE is at 10 AND an event would overflow in the same season: the GM triggers a **Discovery Event** immediately (the character has been at maximum epistemic saturation for an extended period — the cognitive/spiritual pressure demands a reckoning)."
+**Source:** SIM7-F-09 / sim_batch_07
+
+---
+
+### PP-127
+**Gap:** SIM7-F-10 — Mandate 0 Stability check consequence undefined
+**Severity:** P2
+**Section:** §8.1 Faction Mechanics (seasonal accounting)
+**Fix:**
+> "**Mandate 0 — Stability check:**
+> When a faction's Mandate reaches 0 at seasonal accounting, trigger an immediate Stability check, Ob 3.
+>
+> | Degree | Result |
+> |--------|--------|
+> | Overwhelming / Success | Stability holds. Mandate recovery capped at 2 for the following season (floor effect — the faction is damaged but intact). |
+> | Partial | Stability −1. Mandate recovery capped at 1 next season. |
+> | Failure | Stability −2. If Stability then reaches 0: Faction Fracture activates immediately (see PP-114). |"
+**Source:** SIM7-F-10 / sim_batch_07
+
+---
+
+### PP-128
+**Gap:** SIM8-F-09 — No TTRPG residue harvesting procedure (Niflhel)
+**Severity:** P2
+**Section:** Stage 6, §8.X Niflhel faction rules
+**Fix:**
+> "**TTRPG Residue Harvesting (Niflhel):**
+> Niflhel operates a black market in threadweaved items and residue deposits. Harvesting procedure:
+>
+> *Requirements:* A character with TS 10+ to perceive the deposit, OR a Niflhel-affiliated character with a relevant History (Southernmost Trade, Black Market, Covert Commerce). Niflhel harvesters without TS rely on contracted Restoration members (TS 10–29) for sourcing.
+>
+> *Roll:* Attunement + relevant History vs Ob = residue density (GM-set 1–3; Ob 3 = heavy residue from a major recent Thread operation)
+>
+> | Degree | Result |
+> |--------|--------|
+> | Overwhelming | Harvest yields 2 tradeable units. No CE risk. |
+> | Success | Harvest yields 1 tradeable unit. |
+> | Partial | Harvest yields 1 unit. Exposure risk: CE check for any practitioners present (Ob 2). |
+> | Failure | No harvest. CE accumulation check for practitioners present (Ob 1). Deposit location may be noted for future attempt. |
+>
+> *Tradeable unit value:* 1 unit = Wealth +1 to Niflhel faction at next seasonal accounting, OR exchangeable for Circles +1 with a practitioner contact."
+**Source:** SIM8-F-09 / sim_batch_08
+
+---
+
+### PP-129
+**Gap:** SIM8-F-10 — CE pooling through Church hierarchy undefined
+**Severity:** P2
+**Section:** Stage 6, §8.3 Church faction rules; Stage 13, NPC Klapp
+**Fix:**
+> "**CE pooling — Church hierarchy (Cardinal Klapp):**
+> Inquisitors accumulate CE per standard rules during investigations. At seasonal accounting, each Inquisitor reports accumulated CE to their Cardinal.
+>
+> *Klapp's investigation pool:* sum of all reported CE ÷ 2 (rounded down). The halving reflects information degradation through hierarchy — not all field evidence survives transmission cleanly.
+>
+> *Pool spending:* Klapp may spend pooled CE to initiate a Mandate-level action (formal Church Inquisition deployment) at Ob = (10 − pooled CE). Pooled CE resets to 0 after spending. Minimum spendable pool: 3.
+>
+> *Access restrictions:* This pool is Klapp-specific. Confessor Himlensendt does not have access to this pool by default. Cardinal Olafsson has a separate independent pool (defined in NPC-Olafsson when compiled). Cross-Cardinal CE sharing requires a Domain Action (Influence-based coordination)."
+**Source:** SIM8-F-10 / sim_batch_08
+
+---
+
+### PP-130
+**Gap:** SIM3-F-02, SIM3-F-03 — Crown no TS 70+ practitioner (Territorial Lock inaccessible); Hafenmark no practitioners
+**Severity:** P2 (design notes, not rule gaps)
+**Section:** Stage 6, §8.2 Crown faction; §8.5 Hafenmark faction
+**Fix:** Document as deliberate asymmetry (not a bug; these are design features requiring text acknowledgment only):
+
+> "**Crown — Thread asymmetry note:**
+> The Crown has no TS 70+ practitioner in canon (Almud TS 28, Lenneth max ~40–50 on standard timeline). Territorial Lock (requires TS 70+) is inaccessible to the Crown as a direct faction action. This is deliberate. Crown Thread-adjacent play is limited to: supporting existing practitioners, indirect political pressure on practitioner factions, and Lenneth's scholarly research path. The Crown is structurally disadvantaged in direct Thread operations. This asymmetry drives the political logic of Crown–Varfell and Crown–Revolution relationships."
+
+> "**Hafenmark — Thread asymmetry note:**
+> Hafenmark has no affiliated practitioners and no practitioner tradition. Thread entry points for Hafenmark: (a) formal alliance with Restoration/Revolution practitioners, (b) Baralta's unique position (can perceive Thread evidence without TS via legal/documentary means; can provide access through institutional channels), (c) recruitment of independent practitioners through Wealth-based agreements. Hafenmark cannot initiate Thread operations as faction actions. This asymmetry is deliberate and consistent with Hafenmark's constitutional-legalist ethical framework — Thread operations do not map onto their institutional logic."
+
+**Source:** SIM3-F-02, SIM3-F-03 / sim_batch_03
+
+---
+
+## PATCH COUNT SUMMARY (UPDATED 2026-03-28)
+| Severity | Count |
+|----------|-------|
+| P1 | 55 (+20) |
+| P2 | 57 (+10) |
+| P3 | 10 |
+| Design (new mechanic) | 8 (+7) |
+| **Total** | **130 (+37)** |
+
+*PP-094 through PP-130: 37 new patches. All derived from canon constraints, compiled stage documents, and internal system logic. No editorial approval required (none of these are setting, NPC identity, faction-narrative, or design-intent-ambiguous decisions).*
