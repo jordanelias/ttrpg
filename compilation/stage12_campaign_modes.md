@@ -28,7 +28,7 @@ A TTRPG session covers one dramatic arc, typically one or two scenes within a se
 1. Answer 10–15 Editorial Questions establishing sensory texture, NPC motivations, and faction starting postures.
 2. Set Safety Tools.
 3. Create Characters: 3 Histories at 2 points each; 31 points; declare 3–5 Knots.
-4. Set clocks: TT 28, TC 15, IP 20.
+4. Set clocks: RS 72, TC 15, IP 20.
 5. Review the Action Economy and Scope Shift procedure.
 6. Confirm the campaign's primary structural questions: which clocks are the PCs best positioned to address, and in which direction?
 
@@ -38,7 +38,7 @@ There is no explicit victory condition. The TTRPG campaign ends when the GM and 
 
 **Endgame indicators (GM guidance — not triggers):**
 - All PCs have resolved or abandoned their central Beliefs.
-- TT has been reduced below 20 or has exceeded 80 (the world is saved or doomed).
+- RS has risen above 80 (world recovering) or fallen below 20 (world doomed).
 - The succession crisis has resolved (Torben, Elske, Parliament, or coup).
 - The Church's authority is broken or triumphant (TC below 20 or above 80).
 - Altonia has invaded or been permanently deterred.
@@ -66,7 +66,7 @@ The board game covers 3–5 seasons per session. A full 10-season campaign plays
 
 Victory conditions are checked at the end of each season's accounting phase.
 
-**Shared loss condition (all modes):** TT reaches 100. The Rupture. No faction wins.
+**Shared loss condition (all modes):** RS reaches 0. The Rupture. No faction wins.
 
 **Additional endgame triggers:**
 - Season 10 reached: highest point total wins.
@@ -101,7 +101,7 @@ One hybrid session covers one season, structured in four phases:
 
 ### Clock Synchronisation
 
-All three clocks (TT, TC, IP) advance at Accounting regardless of mode. In hybrid:
+All three clocks (RS, TC, IP) advance at Accounting regardless of mode. In hybrid:
 - TTRPG scenes may trigger Domain Echoes that modify clocks mid-season — applied at Cascade Phase, not immediately.
 - Board game orders that affect clocks resolve at Accounting.
 - No clock advances between Personal and Strategic phases — everything batches to Accounting.
@@ -114,7 +114,7 @@ Both systems are active. Victory requires satisfying both personal and strategic
 
 **Hollow victory:** The player may accept a hollow victory (mechanical win, narrative loss) or reject it and continue playing until the personal arc resolves or fails — risking erosion of the mechanical victory. This is a player choice, not a rule.
 
-**Hybrid loss:** TT 100, or faction collapse with no personal resolution.
+**Hybrid loss:** RS 0, or faction collapse with no personal resolution.
 
 ---
 
@@ -160,8 +160,8 @@ Where the three modes diverge mechanically:
 
 | Rule | TTRPG | Board Game | Hybrid |
 |---|---|---|---|
-| Thread operations | Personal-scale (Weaving, Pulling, Leaps) with full narrative | Faction-scale (Weave/Investigate/Harvest orders) with Co-Movement Card | Personal Phase: TTRPG Thread ops. Strategic Phase: board game Thread orders. Both count toward seasonal TT. |
-| Co-movement | Version C (automatic deterministic + actual d6) | Co-Movement Card deck (15 cards) | Personal Phase: Version C. Strategic Phase: Co-Movement Cards. |
+| Thread operations | Personal-scale (Weaving, Pulling, Mending, Leaps) with full narrative | Faction-scale (Weave/Mend/Investigate/Harvest orders) with Co-Movement Card | Personal Phase: TTRPG Thread ops. Strategic Phase: board game Thread orders. Both count toward seasonal RS. |
+| Co-movement | Version C (automatic deterministic + actual d6) | Co-Movement Card deck (18 cards) | Personal Phase: Version C. Strategic Phase: Co-Movement Cards. |
 | Discovery Events | Full narrative scene | Attribute change only (no scene) | TTRPG scene triggered by board game Discovery Event |
 
 ### Advancement
@@ -176,8 +176,10 @@ Where the three modes diverge mechanically:
 
 | Rule | TTRPG | Board Game | Hybrid |
 |---|---|---|---|
-| TT/TC/IP advance | At seasonal accounting | At Accounting | At Accounting (Cascade Phase) — identical |
+| RS/TC/IP advance | At seasonal accounting | At Accounting | At Accounting (Cascade Phase) — identical |
 | Threshold events | GM narrates and runs scenes | Event card or table lookup | Board game trigger; GM may run TTRPG scene for narratively significant thresholds |
+
+**Thread operations cross-reference:** Full Thread operation rules for all modes are in §5.6 (Part Five). The mode branching table above is a summary — §5.6 governs in cases of conflict.
 
 **Key principle:** Where a rule exists in both modes, the seasonal cap is shared. A faction attribute cannot change by more than ±2 per season regardless of how many Domain Echoes (TTRPG) and orders (board game) target it. This prevents hybrid mode from doubling attribute velocity.
 
@@ -200,25 +202,26 @@ When a thread operation resolves, the GM:
 
 This is not optional. The inseparability principle is the framework's foundational mechanical claim. Every operation has co-movement. It need not always be mechanically weighty — a small temporal flicker, a slight epistemic shift in how something is remembered — but it must always be present.
 
-### TT Threshold Events
+### RS Threshold Events
 
-When TT crosses a threshold, the GM determines a narratively appropriate consequence from the current situation. No event deck. The current political, social, and thread-level state of the world should generate the threshold consequence organically.
+When RS crosses a threshold (downward), the GM determines a narratively appropriate consequence from the current situation. No event deck. The current political, social, and thread-level state of the world should generate the threshold consequence organically. See §5.4.3 for the full RS threshold table.
 
 ---
 
-## 12.7 The TD Track as Campaign Arc
+## 12.7 The Coherence Track as Campaign Arc
 
-The Temporal Disjunction track is not a per-session tactical resource. It accumulates over the course of the campaign. Thresholds represent campaign stages:
+Coherence is not a per-session tactical resource. It degrades over the course of the campaign as practitioners operate at scale. Thresholds represent campaign stages:
 
-| TD | Stage | Character experience |
+| Coherence | State | Character experience |
 |---|---|---|
-| 1–5 | Dissonant | Early-campaign. Unsettling but manageable. |
-| 6–10 | Fragmented | Mid-campaign cost of active practice. Memory becomes unreliable. |
-| 11–15 | Fractured | Late-campaign pressure. Significant price for continued practice. |
-| 16–19 | Severed | Endgame condition. Approaching the limits of what continued work costs. |
-| 20 | Crisis | The practitioner must choose: withdraw, resolve, or accept the consequences. |
+| 10–8 | Stable | Early-campaign. No penalty. Rendering solid. |
+| 7–5 | Dissonant | Narrative flickers. Knots begin sensing wrongness. |
+| 4–3 | Fragmented | Mid-campaign cost of active practice. −1D social and memory rolls. +1 Ob Thread operations. |
+| 2 | Fractured | Late-campaign pressure. −2D social/memory. Dissociative episodes on Thread ops. |
+| 1 | Severed | Endgame condition. +2 Ob Thread operations. Barely functional rendering. |
+| 0 | Rendering Crisis | The practitioner must choose: withdraw, recover, or accept the consequences. |
 
-An active practitioner working at Relational+ scale through a full campaign will reach Fragmented by mid-campaign and approach Fractured by the end. This is the game's structural statement about the cost of sustained Thread work.
+An active practitioner working at Relational+ scale through a full campaign will enter Dissonant by mid-campaign and approach Fragmented by the end. This is the game's structural statement about the cost of sustained Thread work. See §5.2.3 for full threshold effects.
 
 ---
 
