@@ -1,48 +1,28 @@
-session_id: 2026-03-29T_COMBAT_SIMULATION
-phase: Combat System Design — complete
+session_id: 2026-03-29T_PHASE0_COMPLETE
+phase: Phase 0 complete — Phase 1 (Skill Build) ready
 status: CLOSED
 
 ## SESSION SUMMARY
 
 ### Completed
-- Full combat system redesigned and simulated from scratch
-- Binary weapon system confirmed: Light/Heavy × Cut/Blunt × Short/Long
-- TN gradient: LightCut 5/6, HeavyCut+LightBlunt 6/7, HeavyBlunt 7/8
-- Versatile weapon category removed
-- Establish Distance: TN7 vs opponent offence successes; auto-succeeds if opponent not attacking
-- Feint vs Establish Distance: direct contest (feint TN-1 vs TN7), tie goes to feint
-- Initiative: structural (correct range) > hit-and-not-hit > Agi Ob2 roll
-- Disarm: offence vs defence; retrieve on TN7 vs opponent offence successes
-- Stamina system: OOB + Full Guard both give opponent +2D
-- Critical hits: excess >= 3, weapon modifier doubled
-- Mass mismatch penalty: -1 defensive success when Light splits vs Heavy (not Full Guard, not Long-at-Close)
-- Wound system: Variant B selected — HP=End (flat), armour=DR per weapon type
-- DR table: varies by weapon type vs armour tier (LightCut/HeavyCut/LightBlunt/HeavyBlunt)
-- Long weapons at Close zone: -1D offence, half damage, type unchanged
-- Group combat: zone collapse (first closer opens zone for allies) + Fibonacci bonus
-- Historical manual analysis: Fiore, Silver, Liechtenauer, Talhoffer, Meyer
-- Simulation: 400+ matchups, 2000 fights each, randomised character parameters
-- Key finding: offence% has near-zero correlation with winning (r≈0.01)
-- Heavy weapons confirmed as situationally powerful — correct in armoured and group contexts
+- 0.22: Valoria_Philosophical_Foundations.docx converted to .md (1348 lines, 70KB) and committed to canon/
+- Orchestrator skill built and committed to skills/valoria-orchestrator/ (7 files)
+- Project instructions updated to v3 format (user action)
+- Orchestrator uploaded to Project Files (user action)
 
-### Files pushed
-- compilation/valoria_combat.docx — complete combat system write-up
+### GitHub state (committed this session)
+- canon/Valoria_Philosophical_Foundations.md: full Foundations document
+- skills/valoria-orchestrator/: SKILL.md + scripts/github_ops.py + 5 reference files
 
-### Simulation files (local /home/claude/)
-- combat_v6.py through combat_v11.py — progressive rule iterations
-- combat_v8_matrix.py — full weapon×armour matrix
-
-### Key decisions
-- No versatile weapons
-- No medium weapon category
-- Cut/Blunt as primary damage type axis (not weight alone)
-- STR stays in damage formula
-- No bind mechanic (too granular)
-- No cutting/blunt TN split beyond weight
-- Puncture not a separate axis
-- Heavy weapons situationally powerful, not generally dominant
+### Phase 0 gate status
+- Editorial ledger: zero NOT_APPLIED (all 15 items are pending decisions, no values to propagate yet) ✓
+- Patch register: PP-001–PP-093 proposed, PP-094–PP-130 approved-but-unapplied ⚠
+  NOTE: PP-094–PP-130 are approved but affects lists are empty — propagation requires manual affects discovery before compilation
+- verify_cuts: zero findings on stages (Maxims + Push removed; intentional retentions documented) ✓
+- Gap register: normalized, 128 items, 76 open ✓
+- Dead files: moved to deprecated/ ✓
+- Orchestrator: installed ✓
+- Foundations: accessible as .md ✓
 
 ### Resume instruction
-Combat system complete and compiled. Next: group combat simulation (Fibonacci + zone
-collapse together), then push combat mechanics into main compilation checkpoint.
-Pending user actions 0.19-0.22 from Phase 0 still outstanding.
+Phase 0 complete. Begin Phase 1 (Skill Build). First task: 1.1 — extract subsystem params from compiled stages into reference files for Tier 1 sims (Haiku-tier task). Read stages 3, 8, 9, and the BG mode for thread, combat, social, and mass battle params respectively. Output: 4 params files to skills/valoria-sim-{subsystem}/references/{subsystem}_params.md.
