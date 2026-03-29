@@ -1,11 +1,14 @@
 # Valoria Gap Register — Consolidated
-## Updated: 2026-03-27 (Session — Threadweaving v2.5 simulation)
-## Total items: 233
-## Editorial blockers: 0
+## Updated: 2026-03-29 (Phase 0 normalization)
+## G-IDs: 128 (G-001–G-136, G-066–G-073 absent from sequence)
+## Open: 76 | Resolved: 41 | Deferred: 3
+## Note: G-066–G-073 absent — likely consumed by consolidation; no content missing
 
 ---
 
 ## STATUS KEY
+
+> **2026-03-29 normalization note:** Header count corrected. G-066–G-073 absent from sequence (consolidated into adjacent items). SIM-F-series items tracked separately in tests/. Status field normalized across all sections.
 - **Open** — unresolved
 - **Resolved** — fix identified, awaiting compilation
 - **Closed** — compiled into checkpoint or cut
