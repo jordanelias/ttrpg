@@ -1,7 +1,934 @@
 # Valoria Patch Register
-# All mechanical fixes with application tracking.
-# Schema: id, date, description, source, finding_id, affects, status, applied_commit
-# source: mechanic-audit | simulation | conversation
+# Backfilled from valoria_patch_proposals.md on 2026-03-29
 # status: proposed | approved | applied
 
-patches: []
+patches:
+- id: PP-001
+  date: 2026-03-27
+  severity: P1
+  description: "M-013 (Leap), M-016 (Pulling) — TD accumulation"
+  finding_id: "F-B7-08 / F-B7-16 (consolidated)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-002
+  date: 2026-03-27
+  severity: P1
+  description: "M-018 (FR-Dissolution), M-030 (Thread Tension)"
+  finding_id: "F-B7-17"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-003
+  date: 2026-03-27
+  severity: P1
+  description: "M-036 (Parliamentary Vote), M-037 (Grand Debate)"
+  finding_id: "F-B7-06 / F80"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-004
+  date: 2026-03-27
+  severity: P1
+  description: "M-034 (Faction Stats)"
+  finding_id: "F-B7-12 / F-B7-22"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-005
+  date: 2026-03-27
+  severity: P1
+  description: "M-035 (Domain Actions)"
+  finding_id: "F-B7-23"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-006
+  date: 2026-03-27
+  severity: P1
+  description: "M-045 (Mass Combat)"
+  finding_id: "F-B7-29 / F100"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-007
+  date: 2026-03-27
+  severity: P1
+  description: "M-007 (Conditions) — Composure"
+  finding_id: "F-B7-40"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-008
+  date: 2026-03-27
+  severity: P1
+  description: "M-056 (Niflhel Destabilisation) — Faction Stats"
+  finding_id: "F-B7-44 / F84"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-009
+  date: 2026-03-27
+  severity: P1
+  description: "Grand Debate — Reading Exchange"
+  finding_id: "F-B6-RE-01 (Batch 6)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-010
+  date: 2026-03-27
+  severity: P1
+  description: "ThS Crisis + Certainty Rendering Crisis simultaneous"
+  finding_id: "F-27 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-011
+  date: 2026-03-27
+  severity: P1
+  description: "ThS Track"
+  finding_id: "F-25 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-012
+  date: 2026-03-27
+  severity: P1
+  description: "Intelligibility track / Coherence track (§4.5 vs §5.10)"
+  finding_id: "F-26 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-013
+  date: 2026-03-27
+  severity: P1
+  description: "Collective Thread Operations — scaling"
+  finding_id: "F-23 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-014
+  date: 2026-03-27
+  severity: P1
+  description: "Collective Thread Operations — Anchor dropout"
+  finding_id: "F-24 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-015
+  date: 2026-03-27
+  severity: P1
+  description: "TC 80 threshold — territorial seizure procedure"
+  finding_id: "F-34 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-016
+  date: 2026-03-27
+  severity: P1
+  description: "Character archetypes — Knight Templar, Restoration Seeker, Niflhel Operative"
+  finding_id: "F-38 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-017
+  date: 2026-03-27
+  severity: P1
+  description: "CE track — accumulation procedure"
+  finding_id: "F-40 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-018
+  date: 2026-03-27
+  severity: P1
+  description: "TC pause + Baralta suppressor interaction"
+  finding_id: "F-13 (Batch 3)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-019
+  date: 2026-03-27
+  severity: P1
+  description: "Niflhel network intelligence output"
+  finding_id: "F-14 (Batch 3)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-020
+  date: 2026-03-27
+  severity: P1
+  description: "Knot strain recovery vs Intelligibility decay"
+  finding_id: "F-07 (Batch 3)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-021
+  date: 2026-03-27
+  severity: P1
+  description: "Group combat bonus — dual table conflict"
+  finding_id: "F-B5-M07-A (Batch 5)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-022
+  date: 2026-03-27
+  severity: P1
+  description: "Priority 3 sub-rule B × pool split"
+  finding_id: "F-B5-M06-D (Batch 5)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-023
+  date: 2026-03-27
+  severity: P2
+  description: "M-002 (Wounds) — TN cliff"
+  finding_id: "F-B7-01"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-024
+  date: 2026-03-27
+  severity: P2
+  description: "M-006 (Inspirations) — spend timing"
+  finding_id: "F-B7-04"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-025
+  date: 2026-03-27
+  severity: P2
+  description: "M-003 (Histories) — double-dipping"
+  finding_id: "F-B7-05"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-026
+  date: 2026-03-27
+  severity: P2
+  description: "M-016 (Pulling) — Partial Pull side effects"
+  finding_id: "F-B7-09"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-027
+  date: 2026-03-27
+  severity: P2
+  description: "M-010 (Knots) — escalation loop"
+  finding_id: "F-B7-10"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-028
+  date: 2026-03-27
+  severity: P2
+  description: "M-035 (Domain Actions) — character contribution"
+  finding_id: "F-B7-13"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-029
+  date: 2026-03-27
+  severity: P2
+  description: "M-011 (Circles) — obligation resolution"
+  finding_id: "F-B7-14"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-030
+  date: 2026-03-27
+  severity: P2
+  description: "M-017 (FR-Lock) — failure penalty"
+  finding_id: "F-B7-19"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-031
+  date: 2026-03-27
+  severity: P2
+  description: "M-031 (Theocracy Clock) — Synod duration"
+  finding_id: "F-B7-24"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-032
+  date: 2026-03-27
+  severity: P2
+  description: "M-034 (Faction Stats) — Church structural poverty"
+  finding_id: "F-B7-25"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-033
+  date: 2026-03-27
+  severity: P2
+  description: "M-039 (Combat—Initiative) — tie resolution"
+  finding_id: "F-B7-26"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-034
+  date: 2026-03-27
+  severity: P2
+  description: "M-045 (Mass Combat) — unit attrition"
+  finding_id: "F-B7-30"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-035
+  date: 2026-03-27
+  severity: P2
+  description: "M-040 (Priority Table) — mass combat adaptation"
+  finding_id: "F-B7-31"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-036
+  date: 2026-03-27
+  severity: P2
+  description: "M-046 (Thread Ops in Combat) — timing"
+  finding_id: "F-B7-32"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-037
+  date: 2026-03-27
+  severity: P2
+  description: "M-046 (Thread Ops in Combat), M-048 (Scale Transitions) — TTRPG→BG handoff"
+  finding_id: "F-B7-33"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-038
+  date: 2026-03-27
+  severity: P2
+  description: "M-011 (Circles), M-037 (Grand Debate) — undocumented interaction"
+  finding_id: "F-B7-34"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-039
+  date: 2026-03-27
+  severity: P2
+  description: "M-048 (Scale Transitions) — translation ratio"
+  finding_id: "F-B7-37"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-040
+  date: 2026-03-27
+  severity: P2
+  description: "M-048 (Scale Transitions), M-035 (Domain Actions) — economy"
+  finding_id: "F-B7-38"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-041
+  date: 2026-03-27
+  severity: P2
+  description: "M-002 (Wounds) — permanent criteria"
+  finding_id: "F-B7-41"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-042
+  date: 2026-03-27
+  severity: P2
+  description: "M-054 (Einhir Sites) — detectability"
+  finding_id: "F-B7-42"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-043
+  date: 2026-03-27
+  severity: P2
+  description: "M-034 (Faction Stats) — Stability 0"
+  finding_id: "F-B7-45"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-044
+  date: 2026-03-27
+  severity: P2
+  description: "M-050 (Riskbreakers), M-056 (Destabilisation) — passive faction detection"
+  finding_id: "F-B7-46"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-045
+  date: 2026-03-27
+  severity: P2
+  description: "Stamina — 'in a row' qualifier"
+  finding_id: "F-B5-M03-A (Batch 5)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-046
+  date: 2026-03-27
+  severity: P2
+  description: "Combat — projectile range closing"
+  finding_id: "F-B5-M04-C (Batch 5)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-047
+  date: 2026-03-27
+  severity: P2
+  description: "Group combat bonus — 'unsupported' all-or-nothing nullification"
+  finding_id: "F-B5-M07-C (Batch 5)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-048
+  date: 2026-03-27
+  severity: P2
+  description: "Combat — fleeing/withdrawal"
+  finding_id: "F-B5-D01 (Batch 5)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-049
+  date: 2026-03-27
+  severity: P2
+  description: "Combat — mutual Full Guard stalemate"
+  finding_id: "F-B5-D03 (Batch 5)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-050
+  date: 2026-03-27
+  severity: P2
+  description: "Vaynard Ambition Track — no decrease mechanic"
+  finding_id: "F-10 (Batch 3)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-079
+  date: 2026-03-27
+  severity: P1
+  description: "M-NPC-Torben — Torben Loyalty Clock"
+  finding_id: "F72 / G-129"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-080
+  date: 2026-03-27
+  severity: P1
+  description: "M-031 (Theocracy Clock) — Church Stability TC brake"
+  finding_id: "F112 / G-136"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-083
+  date: 2026-03-27
+  severity: P2
+  description: "M-055 (Community Weaving), PP-013"
+  finding_id: "F-B10-08"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-084
+  date: 2026-03-27
+  severity: P2
+  description: "M-056 (Niflhel Destabilisation)"
+  finding_id: "F-B10-09"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-085
+  date: 2026-03-27
+  severity: P2
+  description: "PP-081 (Trajectory Reading); M-035 (Domain Actions BG mode)"
+  finding_id: "F-B10-13 + F-B10-14"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-093
+  date: 2026-03-27
+  severity: P1
+  description: "M-006 (Inspirations)"
+  finding_id: "Rule error — §4.3 Inspirations, Stunt rule"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-094
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-095
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-096
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-097
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-098
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-099
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-100
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-101
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-102
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-103
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-104
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-105
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-106
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-107
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-108
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-109
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-110
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-111
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-112
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-113
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-114
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-115
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-116
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-117
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-118
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-119
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-120
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-121
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-122
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-123
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-124
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-125
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-126
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-127
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-128
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-129
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-130
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~

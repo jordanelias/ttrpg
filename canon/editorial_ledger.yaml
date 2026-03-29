@@ -1,9 +1,188 @@
 # Valoria Editorial Ledger
-# All editorial decisions with propagation tracking.
-# Schema: id, date, category, decision, supersedes, replacement_type,
-#         context_hint, affects, propagation_status, affects_categories, approved_by
-# Categories: setting | faction_mechanic | clock | npc | terminology | timeline | game_mode
-# replacement_type: exact | contextual
-# propagation_status values: applied | NOT_APPLIED
+# Backfilled from valoria_editorial_authorship_register.md on 2026-03-29
+# pending = decision not yet made; all propagation_status NOT_APPLIED until resolved
 
-decisions: []
+decisions:
+
+- id: E-01
+  date: ~
+  category: npc
+  decision: "Almud assassination perpetrator (~18 AG) — PENDING"
+  status: pending
+  approved_by: ~
+  affects: []
+  propagation_status: {}
+
+- id: E-02
+  date: ~
+  category: npc
+  decision: "Elske private reality in Altonia — PENDING"
+  status: pending
+  approved_by: ~
+  affects: []
+  propagation_status: {}
+
+- id: E-03
+  date: ~
+  category: terminology
+  decision: "AG calendar in-world meaning/name — PENDING"
+  status: pending
+  approved_by: ~
+  affects:
+    - path: compilation/stage4_southernmost.md
+      description: AG dating references
+    - path: compilation/stage6_factions.md
+      description: AG dating references
+  propagation_status:
+    compilation/stage4_southernmost.md: NOT_APPLIED
+    compilation/stage6_factions.md: NOT_APPLIED
+
+- id: E-04
+  date: ~
+  category: npc
+  decision: "Almud additional heirs beyond Elske and Torben — PENDING"
+  status: pending
+  approved_by: ~
+  affects: []
+  propagation_status: {}
+
+- id: E-05
+  date: ~
+  category: setting
+  decision: "Territory names (all 15) — PENDING, placeholders in use"
+  status: pending
+  approved_by: ~
+  affects:
+    - path: compilation/stage7_territories.md
+      description: All territory name references
+    - path: compilation/stage_bg_board_game_mode.md
+      description: Territory map and faction assignments
+  propagation_status:
+    compilation/stage7_territories.md: NOT_APPLIED
+    compilation/stage_bg_board_game_mode.md: NOT_APPLIED
+
+- id: E-06
+  date: ~
+  category: faction_mechanic
+  decision: "Niflhel leadership — primus inter pares vs permanently headless — PENDING"
+  status: pending
+  approved_by: ~
+  affects:
+    - path: compilation/stage6_factions.md
+      description: Niflhel faction profile and PC contact point
+    - path: compilation/stage13_npcs.md
+      description: Niflhel NPC entries
+  propagation_status:
+    compilation/stage6_factions.md: NOT_APPLIED
+    compilation/stage13_npcs.md: NOT_APPLIED
+
+- id: E-07
+  date: ~
+  category: faction_mechanic
+  decision: "Varfell victory condition wording (Southernmost integration condition) — PENDING"
+  status: pending
+  approved_by: ~
+  affects:
+    - path: compilation/stage6_factions.md
+      description: Varfell victory condition
+    - path: compilation/stage_bg_board_game_mode.md
+      description: Victory condition tracking
+  propagation_status:
+    compilation/stage6_factions.md: NOT_APPLIED
+    compilation/stage_bg_board_game_mode.md: NOT_APPLIED
+
+- id: E-08
+  date: ~
+  category: npc
+  decision: "Olafsson Niflhel connection depth (A/B/C) — PENDING"
+  status: pending
+  approved_by: ~
+  affects:
+    - path: compilation/stage13_npcs.md
+      description: Olafsson NPC entry
+  propagation_status:
+    compilation/stage13_npcs.md: NOT_APPLIED
+
+- id: E-09
+  date: ~
+  category: setting
+  decision: "Niflhel arm count and 2 unnamed arm identities — PENDING"
+  status: pending
+  approved_by: ~
+  affects:
+    - path: compilation/stage6_factions.md
+      description: Niflhel arm descriptions
+  propagation_status:
+    compilation/stage6_factions.md: NOT_APPLIED
+
+- id: E-10
+  date: ~
+  category: npc
+  decision: "Restoration Movement named NPCs (currently zero) — PENDING"
+  status: pending
+  approved_by: ~
+  affects:
+    - path: compilation/stage13_npcs.md
+      description: Restoration Movement NPC section
+  propagation_status:
+    compilation/stage13_npcs.md: NOT_APPLIED
+
+- id: E-11
+  date: ~
+  category: game_mode
+  decision: "10 remaining Seasonal Event Cards (C-11 through C-20) — PENDING"
+  status: pending
+  approved_by: ~
+  affects:
+    - path: compilation/stage_bg_board_game_mode.md
+      description: Event card deck (10 of 20 designed)
+  propagation_status:
+    compilation/stage_bg_board_game_mode.md: NOT_APPLIED
+
+- id: E-12
+  date: ~
+  category: game_mode
+  decision: "10 remaining Co-Movement Cards (CM-11 through CM-20) — PENDING"
+  status: pending
+  approved_by: ~
+  affects:
+    - path: compilation/stage_bg_board_game_mode.md
+      description: Co-Movement card deck
+  propagation_status:
+    compilation/stage_bg_board_game_mode.md: NOT_APPLIED
+
+- id: E-13
+  date: ~
+  category: faction_mechanic
+  decision: "Varfell Private Collection transfer (institutional vs personal) — PENDING"
+  status: pending
+  approved_by: ~
+  affects:
+    - path: compilation/stage6_factions.md
+      description: Varfell Private Collection mechanic
+  propagation_status:
+    compilation/stage6_factions.md: NOT_APPLIED
+
+- id: E-14
+  date: ~
+  category: game_mode
+  decision: "Varfell TK 5 consequence — PENDING"
+  status: pending
+  approved_by: ~
+  affects:
+    - path: compilation/stage_bg_board_game_mode.md
+      description: Varfell Territory Knowledge terminal value
+  propagation_status:
+    compilation/stage_bg_board_game_mode.md: NOT_APPLIED
+
+- id: E-15
+  date: ~
+  category: game_mode
+  decision: "2-player NPC order reduction (2 vs 3) — confirm or adjust — PENDING"
+  status: pending
+  approved_by: ~
+  affects:
+    - path: compilation/stage_bg_board_game_mode.md
+      description: 2-player mode NPC AI rules
+  propagation_status:
+    compilation/stage_bg_board_game_mode.md: NOT_APPLIED
