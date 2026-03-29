@@ -588,6 +588,8 @@ Checked at seasonal accounting for each unit.
 
 In Board Game Mode, Thread operations are faction-level actions triggered by Unique Powers and specific order types. Full practitioner mechanics (TS, CD, personal Leap) are not used. Thread operations are abstracted to faction-card procedures with co-movement consequences preserved.
 
+**RS Track:** Rendering Stability runs 100→0. Starting value: RS 72. RS is hidden from players by default — use the Investigate Thread order to reveal it. Shared loss condition: RS reaches 0 (The Rupture). See §5.4.3 for full threshold effects.
+
 **Factions with Thread capability:**
 
 | Faction | Thread Access | How |
@@ -595,6 +597,7 @@ In Board Game Mode, Thread operations are faction-level actions triggered by Uni
 | Revolution | Community Weaving (Unique Power) | Collective operation; reduces RS (raises RS value) |
 | Varfell | Private Collection (Unique Power, indirect) | Thread-adjacent; triggers RS degradation on failure |
 | Niflhel | Southernmost harvesting (passive) | RS −0.5/season from operations; unattributed |
+| Any faction with TS 50+ affiliated character | Mend order | Gap closure; RS restoration |
 | Any with TS 30+ affiliated character | Thread order (optional rule) | Advanced play; GM adjudicates |
 
 ### Revolution: Community Weaving Procedure
@@ -613,6 +616,21 @@ Roll: Influence vs Ob = (100 − RS) ÷ 20 (round up, minimum Ob 1). As RS degra
 | Failure | Revolution Stability −1. RS −1. Draw 1 Co-Movement card. |
 
 **Co-Movement is mandatory on every Thread operation.** This is P-01 (Inseparability). Even beneficial Thread work produces consequences.
+
+### Mend Order Procedure
+
+Available to: any faction with an affiliated TS 50+ character, or Revolution (via Community Mending).
+
+**Full thread order table (Weave/Mend/Investigate/Harvest) and degree outcomes:** See §5.6.1 of Part Five (Thread Operations). Summary:
+
+| Order | Roll | Overwhelming | Success | Partial | Failure |
+|---|---|---|---|---|---|
+| **Weave** | Intelligence vs Ob = (100−RS)÷20 | RS +2 | RS +1 | RS unchanged; draw Co-Movement Card | RS −1; draw Co-Movement Card |
+| **Mend** | Intelligence vs Ob by Gap category (SO:1, Standard:2, Entrenched:3, Catastrophic:4) | Gap closed; RS +2 | Gap closed; RS +1 | Gap reduced one category | Gap unchanged; RS −1 |
+| **Investigate** | Intelligence vs Ob 3 (+1 Ob at RS <40 or <20) | Learn RS + Gap locations | Learn RS value | Learn approximate RS | Learn nothing |
+| **Harvest** (Niflhel only) | Intelligence vs Ob 2 | +1 Wealth; RS −0.5 | +1 Wealth; RS −0.5 | +0.5 Wealth; RS −0.5 | No Wealth; RS −1 |
+
+All Thread orders draw a Co-Movement Card at Accounting. RS threshold +1 Ob (from §5.4.3) applies to all Thread orders.
 
 ### Co-Movement Cards (Board Game Version)
 
@@ -1019,4 +1037,6 @@ Use when players want a full campaign arc rather than a decisive victory contest
 
 *Board Game Mode compilation complete. Stages B1–B10.*
 *Source documents: stage6_factions.md, stage7_territories.md, stage5_clocks.md, stage8_combat.md, stage3_thread_operations.md.*
+*Thread Operations cross-reference: Full Thread operation rules for all modes are in §5.6.1 (Part Five). This section provides board game procedure; §5.6.1 governs in cases of conflict.*
+
 *Canon compliance: P-01 (co-movement mandatory on all Thread ops) observed throughout B7. P-05 (three modes distinct) maintained — BG mechanics are board-resolution procedures, not TTRPG narrative systems.*
