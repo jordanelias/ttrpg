@@ -497,3 +497,73 @@
 | SIM8-F-08 | TS growth: witnessing Thread ops doesn't qualify | P2 | Patched |
 | SIM8-F-09 | No TTRPG residue harvesting procedure | P2 | Open |
 | SIM8-F-10 | CE pooling through Church hierarchy undefined | P2 | Open |
+
+---
+
+## BATCH RESOLUTION LOG — 2026-03-28
+*37 patch proposals (PP-094–PP-130) written and committed. All derived from canon constraints, compiled stages, and internal system logic. No editorial approval required.*
+
+### Status Changes — P1 Design → Resolved (awaiting compilation)
+
+| ID | Description | PP | New Status |
+|----|-------------|-----|------------|
+| G-099 | Mid-Debate incapacitation | PP-094 | Resolved |
+| G-100 | Renown initial advantage scope | PP-095 | Resolved |
+| G-101 | Niflhel supremacy tiebreak | PP-096 | Resolved |
+| G-102 | Niflhel partial endgame path | PP-097 | Resolved |
+| G-103 | TC pause + Baralta suppressor | PP-098 | Resolved |
+| G-104 | Niflhel quiet network information format | PP-099 | Resolved |
+| G-111 | Devout bypass Discovery Event | PP-100 | Resolved |
+| G-112 | Ehrenwall Coup Tracker decrement | PP-101 | Resolved |
+| G-113 | Martial Law procedure | PP-102 | Resolved |
+| G-114 | Church TC 80 territorial seizure | PP-103 | Resolved |
+| G-115 | Archetype stat blocks GEN-03/06/07 | PP-104 | Resolved |
+| G-116 | Collective lattice co-movement scaling | PP-105 | Resolved |
+| G-117 | Anchor drop outcome | PP-106 | Resolved |
+| G-118 | Past-Oriented Pulling degree table | PP-107 | Resolved |
+| G-125 | Non-practitioner resistance to Pulling | PP-108 | Resolved |
+| G-127 | Dissolution Residue drain target | PP-109 | Resolved |
+| G-128 | ThS world-track framing | PP-110 | Resolved |
+| G-129 | Torben Loyalty Clock drain rate | PP-111 | Resolved |
+| G-130 | Concealment procedure | PP-112 | Resolved |
+| G-131 | Parliamentary Vote coalition | PP-113 | Resolved |
+| G-132 | Stability floor removal + Fracture | PP-114 | Resolved |
+| G-133 | Niflhel Intel stat (6, max 8) | PP-115 | Resolved |
+| G-134 | Community Weaving collective TT scaling | PP-116 | Resolved |
+| G-135 | Mass combat damage formula | PP-117 | Resolved |
+| G-136 | Church Stability TC brake threshold fix | PP-118 | Resolved |
+
+### Status Changes — Sim-Derived → Resolved
+
+| ID | Description | PP | New Status |
+|----|-------------|-----|------------|
+| SIM2-F-03 | Past-Oriented Pulling recency table | PP-107 | Resolved |
+| SIM2-F-04 | Past-Oriented Pulling accessibility guidance | PP-107 | Resolved |
+| SIM2-F-09 | Involuntary→voluntary concealment exploit | PP-119 | Resolved |
+| SIM5-F-02 | Lock removal asymmetry — design note + bypass | PP-120 | Resolved |
+| SIM5-F-07 | Coherence cap + residue cost | PP-109 (by proxy) | Resolved |
+| SIM6-F-03 | Severed Coherence 1 +2 Ob | PP-121 | Resolved |
+| SIM6-F-05 | Rendering Crisis mid-contact termination | PP-122 | Resolved |
+| SIM6-F-10 | RS Critical terminal decline documentation | PP-123 | Resolved |
+| SIM7-F-03 | Foundational Past-Pull (Einhir Catastrophe) | PP-107 | Resolved |
+| SIM7-F-07 | Simultaneous Dissolution + Mending | PP-124 | Resolved |
+| SIM7-F-08 | Incapacitation threshold rounding | PP-125 | Resolved |
+| SIM7-F-09 | CE ceiling and overflow | PP-126 | Resolved |
+| SIM7-F-10 | Mandate 0 Stability check | PP-127 | Resolved |
+| SIM8-F-09 | TTRPG residue harvesting (Niflhel) | PP-128 | Resolved |
+| SIM8-F-10 | CE pooling Church hierarchy | PP-129 | Resolved |
+| SIM3-F-02 | Crown no TS 70+ practitioner | PP-130 | Closed — intentional asymmetry, documented |
+| SIM3-F-03 | Hafenmark no practitioners | PP-130 | Closed — intentional asymmetry, documented |
+
+### Updated Summary (2026-03-28)
+
+| Category | Total | Design Needed | Resolved (await compile) | Closed/Cut | Open |
+|----------|-------|--------------|------------------------|------------|------|
+| P1 | 55 | ~15 (−25) | ~40 (+25) | ~7 | 0 |
+| P2 (main+consolidation) | 68 | ~45 (−10) | ~28 (+10) | 7 | ~8 |
+| Hybrid (G-074–G-095) | 22 | 14 | 5 | 0 | 0 |
+| P3 | 4 | 0 | 0 | 3 | 1 |
+| Sim-derived (thread) | ~70+ | 0 (−17) | ~17 (+17) | 2 (+2) | ~51 |
+
+*Updated: 2026-03-28 — PP-094–PP-130 batch*
+
