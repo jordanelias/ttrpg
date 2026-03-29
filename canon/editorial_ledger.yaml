@@ -1,0 +1,9 @@
+# Valoria Editorial Ledger
+# All editorial decisions with propagation tracking.
+# Schema: id, date, category, decision, supersedes, replacement_type,
+#         context_hint, affects, propagation_status, affects_categories, approved_by
+# Categories: setting | faction_mechanic | clock | npc | terminology | timeline | game_mode
+# replacement_type: exact | contextual
+# propagation_status values: applied | NOT_APPLIED
+
+decisions: []

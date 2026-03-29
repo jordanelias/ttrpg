@@ -1,0 +1,7 @@
+# Valoria Patch Register
+# All mechanical fixes with application tracking.
+# Schema: id, date, description, source, finding_id, affects, status, applied_commit
+# source: mechanic-audit | simulation | conversation
+# status: proposed | approved | applied
+
+patches: []
