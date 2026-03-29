@@ -1,28 +1,46 @@
-session_id: 2026-03-29T_PHASE0_COMPLETE
-phase: Phase 0 complete — Phase 1 (Skill Build) ready
+session_id: 2026-03-29T_COMBAT_GROUP_SIM
+phase: Combat Group Simulation — complete
 status: CLOSED
 
 ## SESSION SUMMARY
 
 ### Completed
-- 0.22: Valoria_Philosophical_Foundations.docx converted to .md (1348 lines, 70KB) and committed to canon/
-- Orchestrator skill built and committed to skills/valoria-orchestrator/ (7 files)
-- Project instructions updated to v3 format (user action)
-- Orchestrator uploaded to Project Files (user action)
+- Group combat simulation: Fibonacci + zone collapse (sim_combat_group.py)
+- Rescue / multi-engagement simulation (sim_combat_rescue.py)
+- Tie Up / bind exhaustive proposition testing (sim_combat_tieup.py)
+- Exhaustive group combat matrix (sim_combat_exhaustive.py)
+- v11 single combat sim with mass mismatch penalty (sim_combat_v11.py)
 
-### GitHub state (committed this session)
-- canon/Valoria_Philosophical_Foundations.md: full Foundations document
-- skills/valoria-orchestrator/: SKILL.md + scripts/github_ops.py + 5 reference files
+### Key findings
+- 3v1 universally decisive (99-100%) regardless of weapon/armour
+- 2v1 is the tactically interesting zone — weapon type and armour matter
+- LightCut vs Heavy armour at 2v1: only 56% attacker win (contested)
+- HeavyBlunt is correct weapon for armoured targets at any numerical parity
+- 3v2 produces 40-87% draw rate — parallel engagements resolve simultaneously
+- Survival/rescue window: 2-3 rounds (after round 3, 75-80% of losers have fallen)
+- HeavyCut dominates 1v1 (75% vs LightCut); HeavyBlunt is armoured specialist
+- Tie Up mechanic not needed — Option A accepted (system correct without it)
+- Mass battle abstraction confirmed: Fibonacci → flanking modifier,
+  zone collapse → formation break, rescue → reserve timing,
+  weapon type → unit specialisation, DR → unit armour rating
 
-### Phase 0 gate status
-- Editorial ledger: zero NOT_APPLIED (all 15 items are pending decisions, no values to propagate yet) ✓
-- Patch register: PP-001–PP-093 proposed, PP-094–PP-130 approved-but-unapplied ⚠
-  NOTE: PP-094–PP-130 are approved but affects lists are empty — propagation requires manual affects discovery before compilation
-- verify_cuts: zero findings on stages (Maxims + Push removed; intentional retentions documented) ✓
-- Gap register: normalized, 128 items, 76 open ✓
-- Dead files: moved to deprecated/ ✓
-- Orchestrator: installed ✓
-- Foundations: accessible as .md ✓
+### Files pushed
+- tests/sim_combat_group.py
+- tests/sim_combat_rescue.py
+- tests/sim_combat_tieup.py
+- tests/sim_combat_exhaustive.py
+- tests/sim_combat_v11.py
+- compilation/valoria_combat.docx (previous session)
+
+### Design notes logged
+- Mass battle abstraction: 5 unit stats + 2 rolls per engagement
+- Heavy armoured elite unit holds 2v1 vs wrong weapon type (56%)
+- Requires 3v1 or correct weapon (HeavyBlunt) to break reliably
+- Reserve timing critical: 2 battle turns = rescue window
 
 ### Resume instruction
-Phase 0 complete. Begin Phase 1 (Skill Build). First task: 1.1 — extract subsystem params from compiled stages into reference files for Tier 1 sims (Haiku-tier task). Read stages 3, 8, 9, and the BG mode for thread, combat, social, and mass battle params respectively. Output: 4 params files to skills/valoria-sim-{subsystem}/references/{subsystem}_params.md.
+Combat system fully simulated and validated. Next:
+- Integrate group combat mechanics into valoria_combat.docx
+- Design mass battle unit stat block (weapon type, armour tier,
+  pool/cohesion, DR, Fibonacci modifier)
+- Phase 0 user actions 0.19-0.22 still pending
