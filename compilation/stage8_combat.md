@@ -1,446 +1,276 @@
 # PART EIGHT: COMBAT
 
-Combat in Valoria uses simultaneous declaration with sequential priority resolution. Skill dominates over equipment. The system operates at two scales: **personal combat** (individual characters) and **mass combat** (military units). Both use the same dice engine. Thread operations interact with combat at Priority 1 (effects manifest) and Priority 5 (operations initiated).
+Combat in Valoria uses a simultaneous pool-split system derived from historical fighting manuals — Fiore dei Liberi, George Silver, the Liechtenauer tradition, Talhoffer, Meyer. Every round, each fighter divides their Combat Pool between Offence and Defence. All pools resolve simultaneously. The core tactical decision is commitment: overcommit to offence and you are exposed; overcommit to defence and your opponent acts freely.
+
+The system operates at two scales: **personal combat** (individual characters, §8.1–8.7) and **mass combat** (military units, §8.8). Both use the same dice engine. The mass combat system is a direct abstraction of the personal combat mechanics at unit scale.
 
 ---
 
-## 8.1 Personal Combat
+## 8.1 Combat Pool
 
-### Declaration Structure
+**Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)**
 
-Each round opens with a **Planning Phase**: each character declares one offensive action and one defensive posture simultaneously before any resolution occurs. Offensive actions resolve at their Priority; defensive postures apply reactively to all incoming attacks.
+**Stamina = Endurance + Relevant History + 1** (modified by armour — see §8.5)
 
-- No offensive action declared → character may declare two defensive postures instead.
-- Move action as primary offensive → Dodge Backwards is the default defensive posture.
-- Ranged character engaged in melee with no melee weapon drawn → defend at Agility only, Ob 2; draw backup weapon at Priority 4; use it at Priority 6.
+**Health = Endurance** (per wound; resets on wound. Armour provides Damage Reduction rather than bonus Health — see §8.5)
 
-### Initiative
+Modifiers to Combat Pool:
+- Armour: no pool penalty (armour affects DR and Stamina only)
+- Wounds: no direct pool reduction (wounds are dramatic thresholds, not cumulative debuffs)
+- Fibonacci group bonus: adds to Offence allocation specifically (see §8.7)
 
-Roll Agility dice, Ob 2. Higher net wins. The winner **declares last** — they hear the opponent's plan before committing. Ties: re-roll. Combatants entering an ongoing combat roll initiative immediately on entry and are inserted into the existing declaration order at their result.
+---
 
-### Starting Range
+## 8.2 Round Structure
 
-Engagements open at the range appropriate to the distance between combatants at the moment of declaration:
+Each round proceeds in three phases:
 
-- **Ranged weapons present:** engagement opens at projectile range. Melee combatants must close before any melee exchange is possible.
-- **No ranged weapons, combatants not already adjacent:** engagement opens at **Long** range.
-- **Combatants already adjacent (grapple, ambush from close quarters, etc.):** engagement opens at **Short** range — narratively determined.
+**Declaration:** fighters announce action type in ascending Agility order. The initiative holder declares last — they hear the opponent's declared action type before committing their own pool split.
 
-**Ambush**: Ob = ambusher's Tactics History + environment modifier (Ob 1–3). The defender's highest-Cognition character detects. On failure: attackers get one free Priority 2 round and initiative. On success: Agility vs Agility; defender's bonus successes from detection apply.
+**Pool Division:** each fighter secretly allocates dice between Offence and Defence. Minimum 1 die on each side unless committing fully to one (Full Guard = all Defence; reckless attack = all Offence, rarely advisable).
 
-### Priority Table
+**Resolution:** all pools roll simultaneously. Hits, damage, and consequences apply simultaneously — fighters can incapacitate each other in the same round.
 
-| Priority | Action |
-|---|---|
-| **1** | Instant events; Thread operation effects manifesting from prior rounds |
-| **2** | Ranged attacks (in order: arquebus, then crossbow, then drawn bow) |
-| **3** | All melee attacks and manoeuvres (sub-rules below) |
-| **4** | Standard actions (Diagnosis; draw backup weapon; non-combat single actions) |
-| **5** | Full-round actions (the Leap; Locking or Snapping; sustained movement) |
-| **6** | Second actions; reload after firing |
+---
 
-#### Priority 3 Sub-Rules
+## 8.3 Initiative
 
-**A — Manoeuvres resolve before attacks.** Disarm, Trip, Tie Up, Rescue, Reorient, Defend!, and Withdraw all resolve before standard attacks within Priority 3.
+Initiative determines declaration order. The holder declares last — a genuine tactical advantage.
 
-**B — Range bands.** Every melee weapon has a Reach classification: **Short** or **Long** (see §8.2). The current range band of an engagement is a shared state tracked each round.
+**Structural:** the fighter at correct range (their weapon's preferred zone) holds initiative automatically. If only one fighter can attack, they hold it.
 
-- **Wrong range = cannot attack.** A Short weapon fighter at Long range cannot strike. A Long weapon fighter at Close range cannot swing. The offensive action must be spent on Reorient or Withdraw to change the band.
-- **Same range:** both fighters may attack. Weight/speed determines attack order (Fast before Standard before Slow).
-- **Contested range change:** the opponent may spend their own offensive action to contest a Reorient or Withdraw (Agility vs Agility). Winner sets the range band for this round. Loser may not attack.
-- **Versatile weapons** (see §8.2) may attack at either range band at −1D to the offensive pool without repositioning. However, **Versatile fighters cannot initiate Reorient or Withdraw** — they have no preferred range to establish and cannot manufacture a positional advantage. They may contest if an opponent initiates a range change against them, but they can never force a range contest themselves.
-- **Heavy armour** imposes **−1D to Agility** in all manoeuvre contests (both initiating and contesting Reorient and Withdraw rolls). The weight and restriction of the armour compromises footwork.
+**Transfer on hit:** at matched range, the fighter who hits and is not hit gains initiative.
 
-**C — Rescue limitation.** Rescue redirects melee attacks and Priority 4+ attacks only. It cannot redirect Priority 2 (ranged) attacks — those resolve before Priority 3. To absorb a ranged attack for an ally, physically interpose (declare yourself the target through positioning).
+**Transfer via Feint:** a successful Feint grants initiative next round (see §8.6).
 
-### Attacks
+**Transfer via Establish Distance:** successful range change grants initiative.
 
-**Attack pool** = Combat History pool (primary attribute included). Use the pre-printed pool number.
+**Contested** (both hit or both miss at matched range): each fighter rolls Agility Ob 2. Winner takes initiative. Ties go to higher Agility; further ties reroll.
 
-**Defense options** (all defensive pools roll against Ob = attacker's net successes):
+---
 
-| Option | Pool | Notes |
+## 8.4 Actions
+
+A fighter declares exactly one action per round.
+
+| Action | Available When | Effect |
 |---|---|---|
-| Dodge Backwards | Agility | Standard evasion |
-| Duck and Weave | Agility | Higher-stakes evasion; Partial produces a complication |
-| Parry | Combat History pool | Melee only. If Parry declared and ranged attack received: automatically switches to Dodge Backwards |
-| Shield | Agility | Shield bonus applies |
+| Strike | Correct range, Stamina > 0 | Roll Offence vs opponent Defence. Hit if your successes > theirs. Damage = excess + STR + weapon modifier. |
+| Establish Distance | Wrong range, Stamina > 0 | Roll Offence dice at TN 7. Succeed if successes ≥ opponent's Offence successes AND not hit. On success: range shifts, you gain initiative. Auto-succeeds if opponent not attacking (Ob = 0). |
+| Feint | Correct range, Stamina > 0 | Roll Offence at hit TN − 1 vs opponent Defence. Success: gain initiative next round. Fails if hit. Direct contest vs Establish Distance: feint successes vs TN 7 successes, tie goes to feint. |
+| Take a Breath | Any range, Stamina > 0 | Roll Offence dice at TN 7. Each success restores 1 Stamina (capped at maximum). Fails if hit. |
+| Full Guard | Any range, Stamina > 0 | All dice to Defence. Opponent gains +2D Offence. Represents voiding — not meeting force with force. Exempt from mass mismatch penalty. |
+| Disarm | Correct range, Stamina > 0 | Roll Offence vs opponent Defence. Success: opponent loses weapon, fights as Unarmed next round. Opponent may Retrieve or continue Unarmed. |
+| Retrieve Weapon | Disarmed only | Roll Offence at TN 7 vs opponent Offence successes. Success: weapon recovered; fighter is at wrong range with no initiative next round. |
+| Out of Breath | Stamina = 0 (forced) | Stamina restores to maximum. Half pool, Defence only. Opponent gains +2D Offence. |
 
-### Damage
-
-**Weapon damage bonus + excess attack successes − armour damage reduction (minimum 0)**
-
-Excess attack successes = attacker's net − defender's net (minimum 0).
-
-*Example: Attacker net 5, defender net 3 → 2 excess. Power 3 + weapon +1 + 2 excess = 6 damage before armour.*
-
-**Exploding damage**: A damage die showing 10 → re-roll. Failure on re-roll: +1 damage. Success: +2 damage and re-roll again. Continue until failure.
-
-### Combat Manoeuvres (Priority 3A — all use Combat History pool)
-
-**Manoeuvre and attack are mutually exclusive.** Declaring any manoeuvre is your offensive action for the round.
-
-#### Defensive Manoeuvres
-
-**Defend!**
-Full defensive posture. Your entire Combat Pool shifts to Defence this round — no Offence allocation. Opponent must roll their full Offence against your full pool. On Overwhelming success (your net ≥ opponent net by 3+): opponent is held at bay and loses their offensive action next round. On Success: opponent cannot close range or reposition this round. On Partial: you hold but take a complication (stumble, ground loss). Use when outnumbered or outmatched — buying time costs nothing but the offensive initiative.
-
-**Rescue**
-Redirect a melee or Priority 4+ attack targeting an ally to yourself. Roll Endurance vs Ob = incoming attack net successes. Success: you absorb the hit; ally is unaffected. Failure: both of you take the hit (split excess successes between targets). Cannot redirect Priority 2 (ranged) attacks — physically interpose instead by declaring yourself the target during Planning Phase.
+When opponent is disarmed, the only available actions are Strike or Take a Breath — all other actions are illogical.
 
 ---
 
-#### Reach Management Manoeuvres
+## 8.5 Weapon System
 
-**Reorient**
-Change the active range band (Short ↔ Long). Contested: Agility vs Agility. Winner sets the range band for this round; loser may not attack. Ties: Long range holds. Either fighter may initiate (except Versatile weapon fighters — see §8.2); opponent may spend their offensive action to contest or concede (and attack freely at current range). **Heavy armour wearers roll −1D Agility in all Reorient contests**, both when initiating and when contesting. Can be used to exploit terrain features — see Exploit Terrain below.
+Weapons are defined by two independent binary axes — **weight** (Light/Heavy) and **type** (Cut/Blunt) — plus **reach** (Short/Long). This is grounded directly in the historical manuals, which consistently organise around fast/slow and sharp/blunt as the primary distinctions.
 
-**Withdraw**
-Sacrifice offensive action to re-establish preferred reach advantage without contesting. If unopposed: automatic success. If opponent contests (spends their offensive action): resolve as Reorient. **Heavy armour wearers roll −1D Agility when Withdraw is contested.** Used when you cannot risk a contested roll. Not available to Versatile weapon fighters — see §8.2.
+### Weapon Statistics
 
----
-
-#### Offensive Manoeuvres
-
-**Disarm**
-Knock, lever, or strip the weapon from the opponent's grip. Agility vs Agility, Ob = opponent's net successes. On Success: weapon lands 1d3 feet away in a random direction; opponent must spend a Priority 5 action to retrieve it or draw a backup weapon at Priority 4. On Overwhelming: you catch or control the weapon — your choice whether to pocket it, throw it, or press it back against them. If the opponent has no backup weapon: they are unarmed and may only Grapple, Shove, or Flee.
-
-**Trip**
-Knock the opponent off their feet. Agility vs Agility. On Success: target is prone.
-- Prone attacker: −2D to Combat Pool
-- Attacks against a prone target: +2D to Combat Pool
-- Standing from prone: costs a full Priority 5 action (cannot attack that round)
-- A prone character may crawl (half speed) or attempt to roll clear (Agility Ob 2; failure = remain prone)
-
-**Tie Up**
-Lock weapons together, preventing either from attacking this round. Power vs Ob = opponent's net successes. On Success: both weapons are locked; neither deals damage this round. On Overwhelming: you control the bind — you may immediately transition to Grapple (see below) without spending another action. On Failure: your weapon is locked but opponent's is not; they attack at +1D this round.
-
-**Grapple**
-Seize the opponent bodily — closing past their weapon to control their body. Requires Close range. Power vs Power. On Success: opponent is Grappled.
-- Grappled: cannot attack with Long weapons; Short weapon attacks at −1D; cannot Reorient or Withdraw
-- Grappler: may deal unarmed damage (Power − opponent armour DR, minimum 0) each round as a free action; no weapon attack
-- Escape: Power vs Grappler's Power, costs offensive action
-- A Grapple can be initiated directly from a successful Tie Up (Overwhelming) or from Close range after winning a Reorient
-
-**Shove**
-Drive the opponent backward through raw momentum. Power vs Agility. On Success: opponent is pushed one range band away from you (Short → Long or out of melee entirely). On Overwhelming: opponent is pushed into a terrain feature — GM assigns a complication (stumble, blocked path, environmental hazard). On Failure: you overextend; opponent may attack you at +1D this round. Shove does not deal damage but disrupts positioning — useful to break a Grapple, push an opponent off a ledge, or create space for a ranged ally.
-
-**Called Shot**
-Declare a specific target location before rolling. +Ob 2 to the attack. On hit, apply the standard damage plus the location effect:
-
-| Target | Effect on hit |
-|---|---|
-| Weapon arm | Opponent's Combat Pool −2D next round; Overwhelming = Disarm (no separate roll) |
-| Legs | Opponent's movement halved; Overwhelming = Trip (no separate roll) |
-| Head | Opponent takes Composure damage equal to excess successes; Overwhelming = Stunned (lose next offensive action) |
-| Weapon hand | Opponent's grip weakened; −1D to their next attack |
-
-Called Shots cannot be declared against opponents in Heavy armour on the targeted location — the coverage negates the precision effect (damage still applies, location effect does not).
-
----
-
-#### Psychological Manoeuvres
-
-**Feint**
-A committed false attack designed to draw and waste the opponent's defensive allocation. Declare during Planning Phase as your offensive action. Resolution: roll Combat History pool vs opponent's Cognition (Ob = their net successes). On Success: opponent's defensive dice allocation this round is treated as misdirected — their effective Defence pool is halved (rounded down) against your *next* attack (following round). On Overwhelming: their Defence pool is negated entirely for one attack next round. On Failure: opponent reads the feint; they gain +1D to their defensive pool next round.
-
-A Feint costs this round's offensive action and pays off next round — it is a setup, not an immediate attack. Opponents aware of a Feint pattern (same character feinting twice in three rounds) may call it: Cognition check Ob 2 to identify and pre-empt, negating the advantage.
-
-**Intimidate**
-Weaponise presence, reputation, or a decisive moment (killing a companion, landing a brutal hit) to shake the opponent's nerve. Presence + relevant History vs opponent's Composure (current value as Ob). Declare during Planning Phase; resolve at Priority 3A.
-
-- Success: opponent loses 2D from their Combat Pool next round (fear and hesitation)
-- Overwhelming: opponent loses 2D and must pass a Composure check (Ob 2) or spend their next offensive action on Defend! or Withdraw
-- Failure: no effect; this opponent cannot be Intimidated again this combat (they've steeled themselves)
-- Cannot Intimidate and attack in the same round
-- Devout characters with intact Certainty: +2D resistance to Intimidate
-
----
-
-#### Environmental Manoeuvres
-
-**Exploit Terrain**
-Use the environment as a tactical resource — high ground, narrow corridor, slippery surface, furniture, fire. Cognition vs Ob set by GM (1–3 depending on terrain complexity). Declare during Planning Phase; resolve at Priority 3A.
-
-- Success: gain +1D to Combat Pool next round, or deny opponent a specific action (their choice of which) next round
-- Overwhelming: both — +1D and deny one action
-- Failure: you've committed to a position that didn't pay off; opponent may exploit your overextension (+1D to their next attack)
-
-Terrain features are declared by the GM at scene start or discovered mid-combat. Exploiting the same feature twice requires a new roll at +1 Ob (diminishing returns — the opponent adapts).
-
-### Group Attacks
-
-See §1.9 (Fibonacci Group Bonus) for the canonical group attack bonus table. Bonus dice apply to each attacker's Offence allocation.
-
-**Defence splitting:** When defending against multiple attackers simultaneously, the defender distributes their defence dice across attackers as they choose. This allocation must be declared simultaneously with attackers' pool divisions and cannot be changed after Offence pools are revealed.
-
-### Escaping Combat
-
-A character who wishes to exit an ongoing combat entirely (not just reposition): **Agility check, TN 7, Ob = opponent's Cognition** (their awareness of your intent to flee; minimum Ob 1). Declare intent at Phase 1.
-
-- **Success:** Character exits combat. They arrive at the scene's edge at Priority 6, Stamina set to 0.
-- **Failure:** Opponent gets one free Priority 3 attack against the fleeing character before they exit. Character still exits on failure — they are not trapped.
-- **Group flight:** Each character rolls separately. Failure on any character does not prevent others from succeeding.
-
-### Stunts
-
-Player sets their own critical success range (up to 11–20); the critical failure range expands by the same amount. A result in neither zone: Partial, with a GM-assigned complication. Stunts are a player tool — the GM does not impose them.
-
----
-
-## 8.2 Weapons and Armour
-
-Weapons and armour provide modest modifiers. History pool (skill) dominates over equipment. This is intentional — a novice with a great sword loses to a skilled soldier with a knife.
-
-### Weapons
-
-Weapons have two independent axes: **Weight** (governs damage bonus and speed) and **Reach** (governs which range band the weapon can attack from).
-
-**Weight**
-
-| Weight | Damage Bonus | Speed |
-|---|---|---|
-| Light | +1 | Fast |
-| Medium | +2 | Standard |
-| Heavy | +4 | Slow |
-
-**Reach**
-
-| Reach | Attack Band | Notes |
-|---|---|---|
-| Short | Close range only | Cannot attack at Long range |
-| Long | Long range only | Cannot attack at Close range |
-| Ranged | Projectile range only | Fires at Priority 2. At Close range: locked out — must Withdraw to re-establish distance before firing. Reload at Priority 6. |
-
-**Valid profiles (Weight × Reach):** all nine combinations are legal. Weapon archetype determines the combination — no single axis constrains the other.
-
-**Weapon TN (d10 dice pool — success = die result ≥ TN):**
-
-| Weight | Attack TN | Parry TN |
-|---|---|---|
-| Light | 5 | 6 |
-| Medium | 6 | 7 |
-| Heavy | 7 | 8 |
-
-Ranged weapons use their weight's Attack TN. Ranged weapons have no Parry TN — cannot parry. Dodge always TN 7 regardless of weapon.
-
-**Strength minimums:**
-
-| Weight | Str Minimum | 1 Below Minimum | 2+ Below Minimum |
-|---|---|---|---|
-| Light | None | — | — |
-| Medium | 3 | −1D Combat Pool | Cannot wield |
-| Heavy | 4 | −1D Combat Pool | Cannot wield |
-
-Strength does not add to damage. It gates access to heavier weapons only.
-
-**Damage bonus by Weight:** +1 (Light) / +2 (Medium) / +4 (Heavy).  
-**Attack order when same range:** Fast before Standard before Slow.
-
-### Armour
-
-Armour provides damage reduction and has Strength requirements. It does not penalise dodge, agility, or acrobatics rolls.
-
-| Armour | Damage Reduction | Str Minimum | 1 Below Minimum | 2+ Below Minimum | Stamina Maximum |
-|---|---|---|---|---|---|
-| None | 0 | — | — | — | End + 1 |
-| Light | 1 | 2 | −1D Combat Pool | Cannot wear | End + 1 |
-| Medium | 2 | 3 | −1D Combat Pool | Cannot wear | End |
-| Heavy | 3 | 4 | −2D Combat Pool | Cannot wear | End − 2 |
-
-**Stamina maximum** is reduced by armour weight as above. A character wearing Heavy armour with End 3 has Stamina max 2 — they exhaust rapidly in sustained melee. Stamina minimum is 1 regardless of armour.
-
-**Strength minimum** follows the same structure as weapons: 1 below minimum = −1D Combat Pool; 2+ below = cannot wear.
-
-**Special properties:**
-- **Versatile:** May attack at either Short or Long range without repositioning, at −1D to the offensive pool. Cannot initiate Reorient or Withdraw — Versatile fighters have no preferred range to establish and cannot force a positional contest. May contest if an opponent initiates a range change against them. The −1D penalty is permanent; it cannot be removed by winning a contest that the Versatile fighter is not permitted to start.
-- **Thread-locked item:** Fixed stats; cannot be degraded or destroyed through ordinary means.
-
----
-
-## 8.3 Mass Combat
-
-Mass combat operates at unit scale. Units are military formations with aggregate stats.
-
-### Unit Sheets
-
-| Stat | Scale | Meaning |
-|---|---|---|
-| Martial | 1–7 | Fighting effectiveness |
-| Endurance | 1–7 | Staying power and morale under attrition |
-| Cohesion | 1–7 | Willingness to take ordered actions rather than routing |
-
-**Health = Endurance + 6.** Damage reduces aggregate Health; individual casualties are narrated, not tracked.
-
-**All mass combat rolls: TN 5** (standard professional difficulty, regardless of weapon type or unit type).
-
-### Standard Unit Types (on successful muster)
-
-| Type | Martial | Endurance | Cohesion | Notes |
+| Type | Hit TN | Def TN | Damage Modifier | Examples |
 |---|---|---|---|---|
-| Light Infantry | 3 | 3 | 3 | Default muster result |
-| Heavy Infantry | 4 | 4 | 4 | Requires Prosperity 5+; Wealth Ob 2 |
-| Cavalry | 4 | 3 | 5 | Requires Prosperity 6+ or relevant History; Wealth Ob 3 |
-| Ranged | 3 | 2 | 3 | Requires relevant History or officer with Ranged proficiency |
-| Artillery | 2 | 2 | 2 | Requires Wealth Ob 4 + 1 season construction |
-| Knights Templar | 5 | 5 | 6 | Church asset only; not muster-raised; immune to Brutal morale effects; +1D Cohesion vs Thread events |
+| Light Cut | 5 | 6 | +1 to +2 | Dagger, knife, short sword, spear |
+| Heavy Cut | 6 | 7 | +4 to +5 | Longsword, axe, glaive |
+| Light Blunt | 6 | 7 | +1 to +2 | Hand axe, short club, sap |
+| Heavy Blunt | 7 | 8 | +4 to +5 | War hammer, mace, pollaxe, military pick |
+| Unarmed | 8 | 9 | +0 | Fists, grappling, improvised |
 
-### Commander Contribution
+Reach (Short/Long) is independent of the above. A dagger is Short Light Cut. A spear is Long Light Cut. A longsword is Long Heavy Cut. A war hammer is Short or Long Heavy Blunt.
 
-The commanding officer's attributes directly modify unit rolls:
-- Officer **Agility**: adds dice to unit attack rolls.
-- Officer **Spirit**: adds dice to unit Cohesion checks.
-- Officer **Memory**: allows one conditional order per round beyond standard declaration.
+### Strength Minimums
 
-### Declaration Structure
-
-Same simultaneous declaration as personal combat. Both sides declare:
-1. **Disposition** (Balanced / Defensive / Offensive / Brutal)
-2. **Manoeuvre** (Advance / Hold / Withdraw / Flank / Bombard)
-
-### Disposition Interaction Table
-
-Read: attacker's row, defender's column. Apply Ob and pool modifier to the attacker's pool (Martial + Commander Agility ± modifier).
-
-| Attacker \ Defender | Balanced | Defensive | Offensive | Brutal |
-|---|---|---|---|---|
-| **Balanced** | Ob 1, ±0 | Ob 2, ±0 | Ob 1, +2D | Ob 1, +1D |
-| **Defensive** | Ob 1, −2D | Ob 2, −2D | Ob 1, ±0 | Ob 1, −1D |
-| **Offensive** | Ob 1, +2D | Ob 2, +2D | Ob 1, +2D | Ob 1, +3D |
-| **Brutal** | Ob 1, +2D +2 dmg | Ob 2, +2D +2 dmg | Ob 1, +2D +2 dmg | Ob 1, +3D +4 dmg |
-
-*Ob 2 applies only when defender is Defensive. Brutal adds +2 flat damage on any success. Ob minimum 1. Each side attacks simultaneously using their own row-column result.*
-
-### Formation Constraints
-
-- **Defensive** requires Cohesion 3+ (green troops panic when ordered to hold).
-- **Offensive** requires Martial 3+ (poorly armed troops cannot charge effectively).
-- **Brutal** requires Cohesion 4+ (troops must be disciplined enough to commit atrocities on command). Brutal against a civilian population: automatic TC +1 if Church observes.
-- **Flank manoeuvre** requires 2+ friendly units in the same engagement (one pins, one flanks).
-
-### Unit Attachments (Optional Layer)
-
-Attachments add one modifier per attachment without creating a sub-system. GM may omit this layer for minor engagements.
-
-| Attachment | Effect | Requirement |
+| Weapon Weight | Minimum STR | Penalty if 1 below |
 |---|---|---|
-| Shield wall trained | +1D Cohesion checks when Defensive | Heavy Infantry only; 1 season training |
-| Mounted scouts | May reveal enemy disposition before declaration | Cavalry only |
-| Sappers | May attempt Fortification damage (see §8.4, Siege) | Wealth Ob 2; 1 season training |
-| Practitioner attached | +1D Cohesion near Thread events; may perform Thread ops during battle | TS 30+ officer assigned |
-| Banner bearer | +1D Rally attempts | Any unit; costs 1 officer slot |
+| Light Cut / Light Blunt | 1 | — |
+| Heavy Cut | 3 | −1D Combat Pool |
+| Heavy Blunt | 4 | −1D Combat Pool |
 
-On Formation Break: all attachments are lost for the remainder of the battle. A rallied unit regains base stats but not attachments.
+Cannot wield if 2 or more below minimum.
 
-### Formation Breaks and Routing
+### Range and Reach
 
-**Formation Break**: Unit's aggregate Health reaches 0. Health resets immediately; all subsequent actions at +1 Ob. Cohesion check required (Cohesion dice, Ob 2). Failure: unit **Routes**.
+Range is binary: **Close zone** (Short reach) or **Far zone** (Long reach). A fighter's weapon determines their preferred zone. Fighting outside your preferred zone:
 
-**Routed**: Cannot take ordered actions. Rally requires an officer with Agility 4+ to spend their action (Spirit roll, Ob 2).
+- Short weapons cannot attack at Far zone.
+- Long weapons cannot attack at Close zone — but may fight at Close zone at **−1D Offence and half damage** (rounded up), representing choked-up technique (half-swording, butt strikes, shaft leverage). Weapon type is unchanged.
 
-Units that survive a battle gain +1 to a randomly selected stat, once per campaign season (veteran bonus).
+Range is tracked **per fighter pair** in group combat. A fighter pair has an independent zone state.
 
-### Three-Way Mass Combat
+### Damage Resolution
 
-1. All three sides declare dispositions simultaneously.
-2. Determine primary conflict (who is fighting whom); resolve secondary force declarations.
-3. Apply disposition table for each attacking pair independently.
-4. Resolve all attacks simultaneously using the standard priority table.
-5. **Three-way initiative**: all three sides roll Agility. Highest net declares last. Second highest declares second-to-last. Lowest declares first with least information.
+**Damage = excess successes + STR + weapon modifier**
 
-A unit declaring Defensive that is not attacked by any force takes no damage and does not roll.
+On a **Critical Hit** (excess ≥ 3): weapon modifier is doubled.
 
-### Personal Actions During Mass Combat
+**Damage = excess + STR + (weapon modifier × 2)**
 
-Individual characters may take **Personal Actions** (duels, espionage, Thread operations) during a mass combat round. These resolve at **Priority 8** (after the round's main resolution) and are limited to **one resolved exchange** per mass combat round.
+Apply Damage Reduction from the defender's armour (see below). Minimum damage after DR is 0.
 
-If the action requires more than one exchange, it continues as a scene after the mass combat round concludes.
+### Mass Mismatch Penalty
 
-**Contested Figures**: A named NPC rendered non-threatening through a personal action (Disarmed, Tripped) but not yet incapacitated becomes a Contested Figure. Both sides have a claim. Fate resolves as a scene after the mass combat round concludes.
+When a **Light weapon defender splits their pool** against a **Heavy weapon attack**, their defensive successes are reduced by 1 (minimum 0).
 
-**Social actions in mass combat**: Parleys, surrenders, and ultimata use the standard social rules. Default disposition for an enemy commander approached mid-battle: Cool (Ob 3). Adjust from there if prior relationship exists.
+Exempt: Full Guard (voiding, not meeting force with force). Exempt: Long weapon at Close zone (heavy weapon already compromised by wrong range).
 
-### Thread Operations in Mass Combat
-
-Thread effects from prior rounds manifest at Priority 1 in the round they complete. Operations initiated at Priority 5 produce effects the following round.
-
-TT multiplier for mass combat Thread operations: ×3 flat (replaces scale-based multiplier). TT gain from any single mass combat Thread operation is **capped at +15** regardless of calculation. Excess converts to narrative consequence (regional site destabilisation, Locked zone expansion) at GM discretion.
+Grounded in the manuals: Silver and Fiore both note that evasion and geometry are always available answers to a heavier weapon. The penalty applies when the light weapon user chooses to stand and deflect.
 
 ---
 
-## 8.4 Siege
+## 8.6 Armour
 
-Sieges are multi-season extended actions. A siege may only be declared against a territory with Fortification 2+. Fortification 0–1 territories are assaulted directly using the standard mass combat procedure.
+Armour provides **Damage Reduction (DR)** per hit rather than bonus Health. DR varies by the attacker's weapon type — heavier and blunter weapons defeat armour more effectively.
 
-**Siege declaration**: An attacking force with Military ≥ defender's garrison Military may declare siege. Once declared, both sides enter the siege procedure.
+### Armour Statistics
 
-### Siege Phases (One per Season)
+| Armour | STR Min | Stamina Mod | vs Light Cut | vs Heavy Cut | vs Light Blunt | vs Heavy Blunt |
+|---|---|---|---|---|---|---|
+| None | — | +0 | 0 | 0 | 0 | 0 |
+| Light | 2 | +0 | 2 | 1 | 1 | 0 |
+| Medium | 3 | −1 | 4 | 3 | 2 | 1 |
+| Heavy | 4 | −2 | 6 | 5 | 3 | 1 |
 
-Both sides choose one action per season:
+Key relationships:
+- Light Cut weapons (daggers) against Heavy armour: DR 6 against base damage of 1–2. Effectively useless for damage. Find the gap through manoeuvre or abandon the attempt.
+- Heavy Blunt weapons against Heavy armour: DR 1. Near-full damage through. The war hammer and pollaxe were designed specifically to defeat plate.
+- Heavy Cut against Heavy armour: DR 5. Requires crits or high excess to deal significant damage — half-swording techniques represent this.
 
-**Attacker options:**
+---
 
-| Action | Roll | Effect on Success |
-|---|---|---|
-| Starve | Military vs Ob = Fortification level | Defender: −1 Endurance to garrison; −1 Stability to controlling faction |
-| Assault | Military vs Ob = Fortification level + 2 | Success: breach attempt, mass combat at standard Ob. Overwhelming: walls breached, mass combat at −1 Ob for attacker |
-| Sappers | Intelligence vs Ob = Fortification level + 1 | Fortification −1 (undermining). Detected on Partial/Failure: defender gets free Sortie |
-| Negotiate | Influence vs defender's Mandate | Success: conditional surrender. Overwhelming: unconditional |
-| Thread bombardment | Practitioner Weaving, Relational+ scale | Ob = Fortification level. TT +2 regardless. Success: garrison Cohesion −2. Overwhelming: Fortification −1. Failure: practitioner TD +3 |
+## 8.7 Wounds and Stamina
 
-**Defender options:**
+### Wounds
 
-| Action | Roll | Effect on Success |
-|---|---|---|
-| Hold | Cohesion Ob 1 | Garrison holds; no losses |
-| Sortie | Military vs Ob = attacker garrison ÷ 2 | Success: attacker loses 1 unit or −2D to next siege action. Failure: sortie force destroyed |
-| Relief call | Circles / Influence Ob 3 | Summons allied force; arrives in 1–2 seasons |
-| Counter-negotiate | Influence vs attacker's Stability | Success: attacker accepts terms. Overwhelming: attacker withdraws (their Mandate −1) |
-| Sabotage | Intelligence vs Ob = attacker Military ÷ 2 | Success: attacker supply disrupted; −1D to next action |
+**Health = Endurance** per wound. When Health reaches 0, the fighter takes a Wound and Health resets to full. Maximum wounds before incapacitation:
 
-### Siege End Conditions
-
-- Defender Stability reaches 0: garrison surrenders.
-- Fortification reaches 0: walls breached; mass combat resolves immediately.
-- Attacker withdraws (voluntary or forced by Relief).
-- Negotiated settlement: both parties agree on terms.
-
-### Fortification Construction
-
-**Build Fortification (Domain Action):** Roll Wealth vs Ob = current Fortification level + 1 (minimum Ob 1). One season. Cannot construct while under active siege. Maximum Fortification: 5.
-
-| Degree | Effect |
+| Endurance | Max Wounds |
 |---|---|
-| Overwhelming | Fortification +1. Prosperity unchanged. |
-| Success | Fortification +1. Prosperity −1. |
-| Partial | Incomplete. Re-roll next season at Ob −1. |
-| Failure | Fails. Prosperity −1. Retry next season. |
+| 1–3 | 2 |
+| 4–5 | 3 |
+| 6–7 | 4 |
 
-### Co-Movement During Siege
+Wounds are dramatic thresholds. A fighter who takes a wound continues at full capacity until incapacitated. There is no wound penalty to the Combat Pool.
 
-Each season of siege: TT +1 (concentrated suffering and disruption).
-Einhir site within the fortification: +1 additional TT per siege season.
+### Stamina
 
-### Personal-Scale During Siege
+**Stamina = Endurance + Relevant History + 1** (modified by armour Stamina Mod).
 
-**PCs inside** may: run espionage (Intelligence Domain Action), negotiate with besiegers (Social scene), attempt escape (Agility + relevant History, Ob = Fortification level), or perform Thread operations (siege does not prevent contact).
+Stamina depletes by 1 each round any action is taken. At 0, the fighter is **Out of Breath** (forced): Stamina restores to maximum, half pool, Defence only, opponent +2D Offence.
 
-**PCs outside** may: infiltrate (Agility/Intelligence, Ob = Fortification level + garrison commander bonus), join the assault, or perform Thread operations against the walls.
+**Take a Breath** (voluntary): restores Stamina before hitting zero, at the cost of forfeiting an attack round.
+
+**Full Guard and Out of Breath** both give the opponent +2D Offence — both represent a fighter who is not threatening their opponent and can therefore be attacked more freely.
 
 ---
 
-## 8.5 Supply Lines
+## 8.8 Group Combat
 
-Supply status is checked at seasonal accounting for each unit.
+### Zone Collapse
 
-| Status | Condition | Effect |
+Range is tracked per fighter pair. When at least one ally has already established Close zone against a target, subsequent Short-reach fighters **enter Close zone automatically** without an Establish Distance roll. The first fighter's presence has collapsed the zone — the heavy weapon can no longer be used at full extension.
+
+Long-reach fighters in the same engagement remain at Far zone and attack from there with full effectiveness.
+
+### Fibonacci Group Bonus
+
+When multiple fighters attack a single unsupported opponent in the same round, each attacker receives bonus Offence dice. The defender **splits their Defence pool across all incoming attacks** before resolution.
+
+| Attackers vs 1 | Bonus Dice (each attacker) |
+|---|---|
+| 2 vs 1 | +1D each |
+| 3 vs 1 | +2D each |
+| 5 vs 1 | +3D each |
+| 8 vs 1 | +5D each |
+
+An opponent is **unsupported** if no ally is engaging any of the attackers.
+
+**Simulation findings (N=2,000 per matchup):**
+- 3v1 is universally decisive (99–100% resolution) regardless of weapon or armour.
+- 2v1 is the tactically interesting zone — weapon type, armour, and positioning all affect outcomes.
+- Light Cut vs Heavy armoured defender at 2v1: 56% attacker win rate (genuinely contested).
+- Heavy Blunt vs Heavy armoured defender at 2v1: 94% — correct weapon type is decisive.
+- Tipping point is 3v1, not 2v1.
+
+### Rescue
+
+A fighter may declare **Rescue** as their action. Their current opponent gains +2D Offence this round (the fighter's attention shifts away — equivalent to Full Guard logic). Next round, the rescuing fighter is in their ally's engagement with Fibonacci bonus applied. No roll required.
+
+**Rescue timing:** simulation confirms the viable rescue window is **rounds 1–3**. After round 3, 75–80% of losing fighters have already fallen. Rescue declared at round 5 saves the ally only 43–45% of the time — often too late.
+
+**Rescue beats pile-on:** redirecting to a losing fight is almost always better than piling onto a winning fight. In 3v2 scenarios, rescue produces 86–96% side win rates vs 39–62% for pile-on.
+
+### Multi-Engagement (3v2, 4v3)
+
+In uneven group engagements, decompose into parallel engagements plus a free fighter.
+
+**3v2:** A1+A2 vs B1 (2v1), A3 vs B2 (1v1). A3 joins B1 fight after B2 falls — or rescues A if losing. Both engagements typically resolve at median 3–5 rounds. High draw rate (40–87%) — parallel engagements often resolve simultaneously. The free fighter's **engagement quality** (rescue vs pile-on) matters more than having the free fighter at all.
+
+**4v3:** 2v1 + 1v1 + 1v1. Numerical advantage does not compound reliably unless the free fighter rescues. Three parallel 1v1s where one side has an extra fighter produces only marginal advantage — the extra fighter must be actively committed to a losing engagement to matter.
+
+---
+
+## 8.9 Mass Combat
+
+Mass combat uses the same dice engine as personal combat, abstracted to unit scale. Unit stats map directly from individual combat mechanics.
+
+### Unit Statistics
+
+| Stat | Derived from | Notes |
 |---|---|---|
-| Supplied | Within 2 territories of friendly-controlled Prosperity 3+ | No penalty |
-| Strained | 3 territories from supply, or supply territory Prosperity 1–2 | −1D to all rolls next season |
-| Cut Off | No connected friendly territory with Prosperity 1+, or route blocked | −1 Endurance per season (cumulative); Cohesion check Ob 1 or −1 Cohesion |
+| Weapon Type | Primary weapon type of unit | Light Cut / Heavy Cut / Light Blunt / Heavy Blunt |
+| Armour Tier | Unit armour | None / Light / Medium / Heavy |
+| Combat Pool | Unit cohesion and training | Equivalent to individual pool; larger for elite units |
+| DR | Armour tier vs attacker weapon type | Same table as personal combat |
+| Stamina | Unit endurance | Depletes per engagement; OOB = unit is spent |
 
-**Supply route interdiction (Domain Action)**: Intelligence vs defender's Military ÷ 2. Success: one enemy supply route blocked 1 season. Overwhelming: blocked and undetected. Failure: detected; defender may reinforce.
+### Mass Combat Resolution
 
-**Foraging (officer Domain Action)**: Relevant History (Survival, Campaign Veteran, etc.). Ob 2 in fertile territory; Ob 3 poor; Ob 4 winter/mountain. Success: supply improves one step for 1 season. Failure: territory Prosperity −1, potential Revolution Influence +1.
+Each engagement: attacker pool vs defender pool (split by number of attacking units), Fibonacci bonus applied to outnumbering units, DR applied to damage per weapon type vs armour tier. Same critical hit threshold (excess ≥ 3). Same wound structure (units take wounds before breaking).
 
+### Mass Battle Abstractions
 
+**Fibonacci → Flanking modifier.** A flanked unit splits its Defence pool across all attacking units. 3-unit assault on 1 unit breaks that unit within approximately 3 battle turns in almost all configurations.
+
+**Zone collapse → Formation break.** When one unit breaches a formation, adjacent enemy units lose their positional coherence. Subsequent allied units engage without a formation check. Historical basis: Leuctra (371 BC), Cannae (216 BC) — one breach collapses the line.
+
+**Rescue → Reserve commitment.** A reserve unit breaking away from its engagement (costs the enemy +2D that turn) to reinforce a collapsing flank. The 2–3 round survival window maps directly: a unit that has taken one wound needs relief within 2 battle turns or it breaks.
+
+**Weapon type → Unit specialisation.**
+- Light Cut units (light infantry, skirmishers): effective in harassment, pursuit, 1v1 engagements. Weak against armoured units.
+- Heavy Cut units (line infantry, men-at-arms with swords): dominant in 1v1, effective generally. The strongest general-purpose unit type.
+- Heavy Blunt units (billmen, halberdiers, men-at-arms with hammers): specialist anti-armour. Weak against unarmoured light units; decisive against heavy armoured units. Requires numerical support (2v1 minimum) to overcome hit rate disadvantage.
+
+**Armour DR → Unit armour rating.** A Heavy armoured elite unit can hold a 2v1 engagement against Light Cut attackers 44% of the time. It requires either 3v1 or Heavy Blunt attackers to break it reliably. This is the historical basis for elite heavy cavalry and men-at-arms as anchor units.
+
+**Draw rate in 3v2 → Attritional engagement.** When flanks are roughly matched, the battle centre decides. The high draw rate in parallel engagements (40–87%) reflects historical attritional battles where local numerical advantage is neutralised by matched quality.
+
+[EDITORIAL: Mass combat unit stat values (specific pool sizes, cohesion thresholds, morale mechanics) require design confirmation before compilation. The framework above is derived from simulation data and is mechanically sound. Specific numbers need playtesting at unit scale.]
+
+---
+
+## 8.10 Design Notes
+
+This system was developed through extensive simulation testing (406 matchups, 2,000–5,000 fights per matchup) and validated against historical fighting manuals.
+
+**What the system captures from the manuals:**
+- Range control, initiative, tempo — the strategic layer of the manuals — correctly modelled.
+- Commitment decisions, the decisive blow, stamina as a real constraint — correctly abstracted.
+- Feint as tempo seizure (not damage tool), disarm as a legitimate technique — both grounded in Fiore and Silver.
+
+**What is intentionally abstracted:**
+- The bind (*Krieg* in Liechtenauer) — too granular for the game's scope.
+- Grappling integration — represented narratively through Disarm and Close zone dynamics.
+- Void vs parry as distinct defensive choices — Full Guard covers voiding; split pool covers parrying.
+
+**Historical weapon balance:**
+- Light Cut weapons dominate 1v1 in most contexts (75% vs Light Cut mirror, correctly). In most historical combat contexts (unarmoured or lightly armoured opponents), faster weapons with better hit rates were genuinely more effective.
+- Heavy Blunt weapons are situationally powerful, not generally dominant. Against unarmoured opponents in single combat: weak. Against armoured opponents in group combat: decisive. This matches the historical record — war hammers and pollaxes were specialist tools, not standard issue.
+- Heavy Cut weapons (longswords) are the strongest general-purpose choice — effective across all matchups, dominant in 1v1.
+
+**Offence allocation and winning:** simulation shows near-zero correlation (r ≈ 0.01) between offence percentage and winning across 5,000 randomised characters. No single allocation strategy dominates — outcomes are determined by matchup, range management, and dice variance.
