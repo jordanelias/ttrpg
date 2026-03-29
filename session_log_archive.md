@@ -1106,3 +1106,9 @@ status: OPEN — batch resolutions committed; combat testing ongoing
 ### Resume instruction for next session
 Read session_log_current.md. Phase 2 complete; Phase 3 simulation underway. 37 gaps resolved this session (PP-094–PP-130). Next priorities: (1) compile resolved patches into relevant stages (Stage 3, 5, 6, 8, 9, 13); (2) deferred Haiku rename batch; (3) cross-stage terminology audit. P1 board game design gaps (G-025–G-033) remain unstarted and block BG compilation stages.
 
+
+---
+
+session_id: 2026-03-29T_PHASE0_INFRASTRUCTURE
+phase: Phase 0 (Infrastructure) — steps 0.1–0.18 complete
+status: CLOSED — user actions 0.19–0.22 pending
