@@ -42,7 +42,6 @@
 | **Orphaned Configuration** | A present state whose causal history has been removed by Past-Oriented Pulling. Cause removed; effect persisting. Deteriorates faster than grounded configurations. |
 | **Practitioner** | A character with Approach Training and TS 40+. Can perform active Thread operations. |
 | **Providence Event** | When the Ein Sof's fullness arrives in a form the rendering can hold — briefly and perfectly. Cannot be triggered. A consequence of perfect alignment at mortal risk at TT ≤ 20. |
-| **Push** | Re-roll all failed dice once after any non-Thread roll. Costs −1 Certainty. Once per roll. |
 | **Rendering** | The always-already process by which consciousness presents the thread-substrate as experienceable reality. Not a filter — the condition of possibility for experience. |
 | **Resources** | Material or institutional assets. History-based; degradable. Used for procurement and material-scale influence. |
 | **Scope Shift** | Changing the scale of one's action within a round. Free; verbal declaration. One action per scope per round; +1 Inspiration for additional scope within same round. |
@@ -175,8 +174,6 @@ Net zero is Failure. Ob minimum is always 1.
 | Pursuing a Belief in a meaningful scene | +2 |
 | Belief challenged by events | +2 |
 | Belief genuinely revised in response to events | +4–5 |
-| Maxim honoured at personal cost | +1 |
-| Maxim violated and reckoned with | +2 |
 | Pursuing a stated Goal | +1 |
 | Surviving an Ordeal | +2 |
 | Completing a Domain Action | +1 |

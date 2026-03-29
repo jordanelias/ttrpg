@@ -36,15 +36,6 @@ Belief-revised awards (4–5 CP) require genuine revision — a character who he
 
 **Contested Beliefs**: If a Belief's pursuit creates a genuine tension with another character's Belief (player or named NPC), the GM may mark the Belief **Contested**. It cannot be pursued for CP until a scene makes the tension explicit and one character chooses a position. This is not a penalty — it is narrative pressure.
 
-### Maxim Awards
-
-| Maxim Event | CP |
-|---|---|
-| Maxim honoured at genuine personal cost | +1 |
-| Broken Maxim re-established through reckoning scene | +2 |
-
-A violated Maxim is marked broken. No CP for subsequent violations of the same Maxim while broken. Re-establishing requires a full scene of genuine reckoning — the character confronts what they did and why.
-
 ### Domain Action Awards
 
 At seasonal accounting, the GM reviews Domain Actions and personal goals pursued during the season. No fixed amount — GM judgment. Guideline: 1–2 CP for a season of active engagement with faction goals; 3–4 CP for a season that genuinely altered the political situation.
@@ -143,7 +134,7 @@ Renown does not increase from private actions, successful but quiet operations, 
 
 At end of each season, in order:
 1. Check test tracks — advance qualifying Histories.
-2. Award CP (GM): Belief events this season, Maxim events, Domain Action recognition.
+2. Award CP (GM): Belief events this season, Domain Action recognition.
 3. Process any CP purchases declared before accounting (attribute/History/Inspiration).
 4. Award Renown for qualifying public actions this season.
 5. Check Renown permission unlocks (if any new tier crossed).

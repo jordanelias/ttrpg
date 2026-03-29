@@ -199,7 +199,7 @@ At the end of each season, resolve in order:
 - [ ] TT passive drift: +1 per four seasons (i.e., once per full year, at Winter accounting)
 - [ ] Apply TT-lowering events (Overwhelming Weavings at Relational+; preserved Einhir sites; sustained community Weaving; Ceiral Ritual)
 - [ ] Apply the faction attribute seasonal cap: no attribute may have changed by more than ±2 from this season's accounting. If cumulative changes exceed ±2, cap them. Log excess as pending for the following season.
-- [ ] CP awards: +2 per Belief pursued in a meaningful scene; +2 per Belief challenged by events; +4–5 per Belief genuinely revised; +1 per Maxim honoured at cost; +2 per Maxim violated and reckoned with; +1 per stated Goal pursued; +2 per Ordeal survived; +1 per Domain Action completed.
+- [ ] CP awards: +2 per Belief pursued in a meaningful scene; +2 per Belief challenged by events; +4–5 per Belief genuinely revised; +1 per stated Goal pursued; +2 per Ordeal survived; +1 per Domain Action completed.
 - [ ] TC threshold conditions: TC pauses if Church Stability ≤ 5 this season. Cross-faction Mandate average ≥ 6: TC −1 this season.
 - [ ] Parliament Integrity update: adjust per events (Thread event in session: −1; stable Crown-Hafenmark cooperation: recovers +1 per season).
 - [ ] Orphaned configuration deterioration: each orphaned configuration makes an Endurance check (TN 7, Ob 1) at accounting. Failure: configuration fragments (TT +1; perceptible wrongness at TS 30+).
