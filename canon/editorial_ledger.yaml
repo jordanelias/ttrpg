@@ -427,6 +427,54 @@ resolved:
   category: game_mode
   decision: "E-15: 2-player mode keeps 3 NPC orders, same as standard."
 
+
+# --- Session (2026-03-30) Batch A-D + Hybrid + Edeyja ---
+- id: R-83
+  date: 2026-03-30
+  category: mechanics
+  decision: "G-053: Approach Training CP cost confirmed at 8 CP (2-4 sessions earn rate)"
+
+- id: R-84
+  date: 2026-03-30
+  category: mechanics
+  decision: "G-040: Permanent Inspiration loss + failed Grief Scene = half-CP refund (rounded down)"
+
+- id: R-85
+  date: 2026-03-30
+  category: mechanics
+  decision: "G-054: Circles = single unified track + bonus/penalty die per faction via Reputation. No per-faction separate tracks."
+
+- id: R-86
+  date: 2026-03-30
+  category: faction_mechanic
+  decision: "G-042: Founding a faction costs no CP. Narrative + mechanical prerequisites only."
+
+- id: R-87
+  date: 2026-03-30
+  category: faction_mechanic
+  decision: "G-038: Treaty betrayal consequences confirmed. Full asymmetric table. Grievance Marker mechanic established. No additional Stability cost on betrayer."
+
+- id: R-88
+  date: 2026-03-30
+  category: faction_mechanic
+  decision: "G-044: Altonian vassalage included as valid dark-path option. Full spec deferred to compilation."
+
+- id: R-89
+  date: 2026-03-30
+  category: faction_mechanic
+  decision: "Varfell Private Collection: institutional, survives leadership change. TK-scaled effectiveness. Discovery Event on new leader first season. Power/knowledge do not transfer."
+
+- id: R-90
+  date: 2026-03-30
+  category: npc
+  decision: "Edeyja (working name): Southernmost Warden-Chief. TS 75-80. Permanently stationed in Southernmost. PC access gated by expedition progress. See designs/edeyja_npc.md."
+
+- id: R-91
+  date: 2026-03-30
+  category: game_mode
+  decision: "Hybrid gaps G-075 through G-095: all resolved. See designs/hybrid_gaps_resolved.md."
+
+
 # ============================================================
 # SECTION 2: PENDING
 # ============================================================
@@ -524,7 +572,7 @@ propagation_pending:
 # ============================================================
 # SUMMARY
 # ============================================================
-# Resolved: 82
+# Resolved: 91
 # Pending: 4 (2 territory names, 2 narrative prerequisite designs)
 # Generation tasks: 3 (event cards, co-movement cards, monstrous entity tables)
 # Mechanical tasks: 3 (unit rosters, debate pool propagation, territorial Ob audit)
