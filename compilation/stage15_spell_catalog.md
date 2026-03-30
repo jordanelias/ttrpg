@@ -381,7 +381,7 @@ These are not separate operation types — they are any operation from §15.1–
 | Contact Round(s) | Operation | Per declaration | Operations proceed as declared before Leap. No mid-contact adaptation. |
 | Post-Contact | Return to rendering | Automatic | Co-movement consequences become apparent. |
 
-**Key constraints:** Minimum Focus 2 for any operation. Cannot be engaged in melee with an attacker who declared Attack this round. +1 Ob per Wound on all Thread rolls. Concealment from TS 30+ observers: Cognition vs Ob = observer TS ÷ 30 (round up).
+**Key constraints:** Minimum Focus 2 for any operation. Cannot be engaged in melee with an attacker who declared Attack this round. −1D per Wound on all Thread rolls. Concealment from TS 30+ observers: Cognition vs Ob = observer TS ÷ 30 (round up).
 
 ## 15.9.2 Mass Combat Thread Quick Reference
 
@@ -425,7 +425,7 @@ These are not separate operation types — they are any operation from §15.1–
 | Territorial | 4 | 7 | 50 | −1 | Per degree table |
 | Structural | 5 | 8+ | 70 | −2 | Per degree table |
 
-**Coherence cost cap:** −1 per operation regardless of stacking. Multiple operations in a single contact window are capped independently.
+**Coherence cost:** Checked once per Leap via retention roll (Spirit + History + TPS, TN7, vs sum of all operation Obs in the Leap). Failure: −1 Coherence. Residue use: automatic −1 Coherence regardless of roll.
 
 **Mass combat override:** RS multiplier = flat ×3. Cap = −15 per operation.
 
@@ -461,3 +461,4 @@ All operations in this catalog satisfy:
 
 *End of Part Fifteen: Thread Operation Catalog.*
 *This catalog is illustrative. Practitioners may attempt any effect consistent with the operation type's philosophical direction. The GM sets Ob from Diagnosis, scale, and actualization level. These entries calibrate expectations; they do not limit possibility.*
+
