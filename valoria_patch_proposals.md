@@ -1466,7 +1466,7 @@ Also update the explanatory sentence: remove "including bonus dice" from the net
 **Section:** Stage 6, §8.X Niflhel faction rules
 **Fix:**
 > "**TTRPG Residue Harvesting (Niflhel):**
-> Niflhel operates a black market in threadworked items and residue deposits. Harvesting procedure:
+> Niflhel operates a black market in threadweaved items and residue deposits. Harvesting procedure:
 >
 > *Requirements:* A character with TS 10+ to perceive the deposit, OR a Niflhel-affiliated character with a relevant History (Southernmost Trade, Black Market, Covert Commerce). Niflhel harvesters without TS rely on contracted Restoration members (TS 10–29) for sourcing.
 >
@@ -1530,51 +1530,109 @@ Also update the explanatory sentence: remove "including bonus dice" from the net
 
 ---
 
-## PP-131 through PP-155: Mass Battle System v3 + Transition Patches
-### Session: 2026-03-29 Mass Battle Design + Simulation
-### Status: All approved; compiled into stage8_combat.md, stage11_scale_transitions.md, stage5_clocks.md
+## PP-131 THROUGH PP-153 + GP-01 THROUGH GP-06: Threadweaving × Combat Simulation
+### Source: sim_thread_combat_comprehensive + sim_thread_combat_extreme + narrative_stress_tests
+### Date: 2026-03-29
+### Status: Tested, reviewed, zero conflicts. User directives (PP-131–133) are authoritative. GP patches resolve simulation-blocking gaps. PP-134+ are simulation-derived.
 
-**PP-131:** Mass battle Size/CP split (Size = health, CP = combat power, Effective Pool = min(CP, Size))
-**PP-132:** Military stat → unit quality ceiling (1:1 mapping: Military = CP ceiling = Cohesion ceiling)
-**PP-133:** Deterministic Cohesion check (degrade if Size lost > Cohesion; all checks Phase 5)
-**PP-134:** Morale cap −3/phase; Stage 2 general death outside cap; rout contagion braked 1/turn
-**PP-135:** CR = ⌈(Presence + Cognition) ÷ 2⌉; CR = max Size commanded = max sub-units
-**PP-136:** General two-stage death; 1-turn stabilisation window; Stage 2 fires next Phase 5
-**PP-137:** Leader defeat: Agility vs Ob = attacker net succs; fail by 3+: attacker may choose to kill
-**PP-138:** Battle outcome consequences: battle loss = Mil −1 + Stab Ob1; campaign = Mil −1 + Stab Ob2 + Man −1
-**PP-139:** Military floor = 1; Cohesion ceiling applies at deployment only (not retroactive)
-**PP-140:** Size rename from Strength (avoids collision with STR attribute)
-**PP-141:** Southernmost: TS < 30 units dissolve on entry; no Cohesion check; explains historical unconquerability
-**PP-142:** Thread scale mapping corrected: Battle/Campaign = Territorial (Ob4, TS50+); War = Structural (Ob5, TS70+)
-**PP-143:** "+2 Ob Coherence check" removed; replaced with automatic Coherence auto-cost per §5.2.2
-**PP-144:** Thread timing Option C: combat Thread (Dissolution/offensive Pull) fires Phase 2; support Thread fires Phase 5
-**PP-145:** Weaving general's personal attributes = Personal scale (Ob2, 0 Coherence); unit Cohesion = Territorial
-**PP-146:** Pulling enemy general's CR capacity = Personal scale [EDITORIAL: confirm intended tactical option]
-**PP-147:** Site-anchored Territorial Weave: Active site −1 Ob; Major site −2 Ob; brittleness exempt on Success
-**PP-148:** Coherence=0 definition: exits rendered existence; recovery via Close Knot Anchoring Scene (Bonds Ob2)
-**PP-149:** Contact spanning scene boundary: ops on non-existent configs auto-fail (+2 Ob, failure consequences)
-**PP-150:** Contact terminates at Personal Phase end in hybrid mode
-**PP-151:** Stage11 TT Multiplier column removed; replaced with RS/TS/Coherence reference table
-**PP-152:** Stage11 Thread→Mass handoff updated to Option C (split by operation type)
-**PP-153:** Stage11 Mass→Personal clarified: Phase 5 slot consumed per turn; not literal pause
-**PP-154:** Stage5 TT→RS comprehensive rename with inversion
-**PP-155:** Siege Clock: replaces multi-option siege; starts at Fort level; −1 per attacker Military vs defender Stability; +1 per defender Relief/Sortie; breach at 0 (Accounting)
+---
 
-### BG System Patches (PP-156–PP-170)
+### USER DIRECTIVES (authoritative — no approval needed)
 
-**PP-156:** BG unit table updated with TTRPG equivalence column
-**PP-157:** BG Brutal disposition: flat damage removed; +3D Off / −1D Def; Cohesion 4+ required
-**PP-158:** BG tactic cards: 4 shared + 2 faction-specific per faction (8 factions listed)
-**PP-159:** Varfell Shadow Intel reworked: post-placement reveal (after cards placed, before roll) + swap from hand
-**PP-160:** Overextended status defined: −2D Martial in territory for 1 season
-**PP-161:** Guilds Trade in Schoenland: Success → IP −1
-**PP-162:** Crown alternative victory path: Mandate ≥ 6, Stability ≥ 6, 4+ territories, 1 formal alliance
-**PP-163:** Niflhel compromise defined: Overwhelming Intel → Compromise token; resets via Disappear or counter-Intel
-**PP-164:** TK (Thread Knowledge) defined for Varfell: Private Collection/Intel Overwhelming/Revolution delivery = +1 TK
-**PP-165:** Stability=0 recovery: Govern Ob3 in own territory → Stability 1
-**PP-166:** Altonian invasion unit stats: Vanguard M4/E4/C4, Heavy M5/E5/C5, Siege M3/E3/C3; CR=5 general; 3 units at IP75 +1/5IP
-**PP-167:** Commander bonus: +1D per 2 CR added to BG battle pool
-**PP-168:** Triple scale shift (Mass→Personal→Social) in one turn: social scene defers to next turn Phase 1
-**PP-169:** Siege Clock domain echo: max −2 Clock/season; simultaneous application at Accounting; floor = 0
-**PP-170:** V4 editorial item: Pulling enemy general's CR capacity = Personal scale [requires editorial confirmation]
+**PP-131** · DESIGN · Wound System · HP = (End+6)×(maxW+1), continuous track, no reset. Damage carries over through thresholds. Each threshold crossed = -1D to ALL dice pools. End 3 = 27 HP (thresholds 18/9/0). End 5 = 44 HP (33/22/11/0). End 7 = 65 HP (52/39/26/13/0). Wound penalties derived from current HP vs thresholds, not tracked independently. Healing recalculates wound level from current HP. · User directive
 
+**PP-132** · DESIGN · Universal Wound Penalty · -1D per wound replaces all +Ob per wound everywhere — combat, Thread operations, social rolls, all rolls. Applies to rolled dice pools only, NOT derived scores (Composure, HP, Contact Rounds, Combat Pool base formula). · User directive
+
+**PP-133** · DESIGN · Fibonacci Debate Exclusion · Fibonacci group bonus applies ONLY to physical combat offence pools. Explicitly excluded from Debates and all social combat. · User directive
+
+---
+
+### GAP RESOLUTIONS (derived from simulation — no editorial approval needed)
+
+**GP-01 / GAP-TC-02** · P2 · Diagnosis Combat Posture · Diagnosis is a Declaration-phase mental action. Practitioner declares "Diagnosis" as action type, allocates full Combat Pool to Defence. Opponent does NOT receive +2D. · Sim A-01
+
+**GP-02 / GAP-TC-03** · P2 · Leap Defensive Posture · During Leap round, practitioner allocates entire Combat Pool to Defence. Opponent does NOT receive +2D. "Reactive defence" = pre-conscious physical response; body maintains guard while rendering suspends. · Sim A-02
+
+**GP-03 / GAP-TC-01** · P1 · Thread Operation Stat Output · Weaving on weapon: +1 damage modifier (scene). Weaving on armour: +1 DR all types (scene). Weaving on person (healing): restore (End+6) HP. Weaving on person (stabilize dying): stabilize at 1 HP. Pulling on weapon: -1 damage modifier (scene-to-seasonal by surplus). Pulling on armour: -1 DR all types (same). Pulling on person: -2D to target's Combat Pool (same). Lock on weapon: weapon frozen, cannot be used. Lock on person: per E-06 ruling. Dissolution on weapon: weapon destroyed, Gap forms. Dissolution on person: instant incapacitation, Gap forms [EDITORIAL: confirm or add resistance roll]. · Sim E-01–E-03, E-10
+
+**GP-04 / GAP-TC-08** · P2 · Gap Proximity Combat Effects · Active Gap in combat zone imposes no mechanical combat penalty. Narrative wrongness only. At RS ≤ 40 (Fragile): Gap in combat zone triggers immediate Shifting Object formation instead of waiting for Accounting. · Sim D-04, X-18
+
+**GP-05 / GAP-TC-07** · P2 · Monstrous Entity Combat Stats · 3-tier stat block: Minor (Pool 10D, HP 27, LightCut, no armour), Standard (Pool 14D, HP 44, HeavyCut, Light armour, Spirit check on encounter), Major (Pool 18D, HP 65, HeavyBlunt, Heavy armour, -1D combat to non-practitioners). [EDITORIAL: placeholder — full design needed.] · Sim D-04
+
+**GP-06 / GAP-TC-06** · P2 · Threadcut Action Economy · Threadcut beings are Defence-only during Thread operation rounds (same as organic practitioners). Advantage: skip Leap round (1 fewer round of vulnerability). Cost: +1 Rendering Strain per external operation. · Sim F-01
+
+---
+
+### SIMULATION-DERIVED PATCHES
+
+**PP-134** · P2 · Thread-Inflicted Wounds · Thread snap-back wounds (Pulling failure, Lock collapse, etc.) deal (End+6) HP damage on continuous track. Armour DR does not apply. Equals exactly one wound segment. · Sim C-03
+
+**PP-135** · P2 · Involuntary Leap Costs · Involuntary Leap (TS 90+ Focus check failure): Coherence -1. No RS change, no co-movement auto-effects (no operation occurred). · Sim E-04
+
+**PP-136** · P2 · Person as Shifting Object · A person who becomes a Personal-scale Shifting Object (from Dissolution Partial) is incapacitated. May be stabilized via Mending (Ob 2) within the scene. If not stabilized: deteriorates to a Personal Gap within 1d3 sessions (person ceases to exist as rendered being). · Sim E-07
+
+**PP-137** · P2 · Threadcut De-Actualisation Wound Trigger · Under new HP system: De-Act triggers when HP drops below 50% of max (equivalent to half wound levels exhausted). · Sim F-01
+
+**PP-138** · P2 · External Stabilisation of De-Actualising Threadcut · Another practitioner may Weave on the de-actualising being (Personal Weaving, Ob 2) to halt De-Act. Must succeed within 2 rounds (Round 3 = return to ground). Self-stabilisation Ob (= Wounds + Rendering Strain) is almost always impossible at the point De-Act triggers. · Sim F-03
+
+**PP-139** · P2 · Rendering Crisis in Combat · Rendering Crisis (Coherence 0) in combat = immediate incapacitation for combat purposes. Character physically present but cannot render reality. Allies must protect/extract. Narrative resolution occurs after combat scene ends. Not death — ontological compromise. · Sim F-05
+
+**PP-140** · P2 · Threadcut Self-Pull · Threadcut being Pulling on its own configuration: Ob 4 (equivalent to Previously Woven). Automatically triggers De-Actualisation Round 1 check. Mechanically equivalent to violent voluntary cessation — the being chose to loosen the thing that sustains its existence. · Sim F-06
+
+**PP-141** · P1 · Involuntary Leap Chain Prevention · Involuntary Leap is NOT a Thread operation. Does not trigger involuntary Leap checks in other Resonant practitioners. Only actual operations (Weaving, Pulling, Mending, Lock, Dissolution) trigger checks. Without this: cascading involuntary Leaps through all Resonant practitioners in a scene. Essential patch. · Sim X-12
+
+**PP-142** · P2 · Coherence 0 During Contact · Coherence reaching 0 during contact: no immediate effect. Rendering Crisis fires when contact drops (natural end, wound disruption, or forced). Remaining operations in the contact window proceed normally. Creates intentional "one last act" mechanic — practitioner sacrifices themselves for final Thread intervention. · Sim X-14
+
+**PP-143** · P2 · Threadcut Coherence Replacement · Threadcut beings do not track Coherence. All Coherence costs from operations are replaced by +1 Rendering Strain per operation (already defined in §6.3). Threadcut beings have no organic rendering to destabilise. · Sim X-18
+
+**PP-144** · P2 · Belief Bonus to Debate · When arguing FROM a held Belief: +1D to the exchange. When arguing AGAINST a held Belief: -1D. One-time bonus per Debate per Belief, not stackable across exchanges. · Sim S1-B2
+
+**PP-145** · P2 · Relational Weaving Effect on Debate · Relational Weaving on a Debate's subject grants +2D to the side defending the Woven configuration on their next exchange. Not mind control — stabilises the configuration, making arguments against it feel less coherent. Detectable only by TS 30+ observers. [EDITORIAL: confirm +2D or reduce to +1D.] · Sim S1-B3
+
+**PP-146** · P2 · Debate-to-Combat Carryover · When Debate erupts into combat: Composure damage carries but only affects social actions (negotiation mid-fight, surrender calls, commands). Rattled characters: -2D to social actions. Characters who lost the Debate: Momentum -1 (emotional destabilisation; must overcome before Momentum accumulates). · Sim S1-B4
+
+**PP-147** · P2 · Siege Assault Pool · Siege assault roll pool = faction Military score + commanding officer's Military History bonus. Standard d10 TN 7 resolution. · Sim S2-B1
+
+**PP-148** · P2 · Siege Partial Result · Siege Partial (not in G-047): attacker gains foothold but doesn't breach. Garrison Cohesion -1 (half of Success). Fortification undamaged. Attacker loses 1 unit strength. · Sim S2-B1
+
+**PP-149** · P2 · Break Through Action · New combat action: Break Through (charging past engaged opponents to reach rear target). Roll Offence at TN 7 vs each engaged opponent's Offence successes. Success: leave engagement, enter next zone. Failure: each opponent gets free Strike with +2D. Fibonacci applies to failure Strikes. Near-suicidal against 3+ opponents by design. · Sim S2-B3
+
+**PP-150** · P2 · Diagnosis Concealment Revision · Diagnosis concealment pool = Cognition + TPS (not Cognition only). High-TS practitioners are better at concealing their Diagnosis. TS 62 practitioner with Cognition 3: 3+6=9D instead of 3D. · Sim S3-B2
+
+**PP-151** · P2 · Witness Testimony in Grand Debates · Calling a Witness = spend one exchange to present testimony. Roll Presence + relevant History. Success: +1D to caller's next exchange. Maximum 2 witnesses per Grand Debate. · Sim S3-B3
+
+**PP-152** · P2 · Threading During Own Debate · A Debate participant may thread INSTEAD of a Debate exchange — forfeiting the exchange (opponent gets unopposed win by full success count). Practitioner Diagnoses/Leaps/operates during forfeited exchange(s). Prevents simultaneous social + Thread action while allowing tactical choice. · Sim S3-B3
+
+**PP-153** · P2 · Chase Mechanic · Chase = extended Agi contest. Each round: runner rolls Agi + relevant History vs pursuers' same. Runner needs 3 cumulative excess successes to escape. Pursuer needs 3 to catch. If caught: combat begins. · Sim S4-B4
+
+---
+
+### EDGE CASE RULINGS (from conflict review)
+
+1. Wound -1D applies to rolls, not derived scores (Composure, HP, Contact Rounds, base formulas unaffected).
+2. Healing recalculates wound level from current HP vs thresholds — no independent wound counter.
+3. Fibonacci applies to Break Through failure free Strikes (target is unsupported, multiple attackers).
+4. Social→combat transition requires 1 round minimum. Practitioner threading during social gets 1 free round.
+5. Mending cannot counterbalance multiple active Locks. Lock reversal (Pulling) is the correct response.
+6. Lock prevents Dissolution (ontological contradiction: frozen face cannot be torn).
+
+---
+
+## PATCH COUNT SUMMARY (UPDATED 2026-03-29)
+| Severity | Count |
+|----------|-------|
+| P1 | 56 (+1: PP-141) |
+| P2 | 75 (+18: GP-01–06, PP-134–140, PP-142–153) |
+| P3 | 10 |
+| Design (new mechanic / user directive) | 11 (+3: PP-131–133) |
+| **Total** | **153 (+23)** |
+
+### EDITORIAL DECISIONS PENDING (from this batch)
+1. Personal Pull balance: 0 Coherence, -2D, scene duration. Options: A) Coherence -1; B) 3-round duration; C) -1D not -2D; D) accept.
+2. Personal Dissolution lethality: instant incapacitation or add Spirit resistance roll?
+3. Heal loop: accelerated Overweave (+2 Ob per heal op) or accept infinite sustain?
+4. Pull stacking floor: cap at half base pool or allow reduction to 0D?
+5. Mass Lock RS drain: cap concurrent Lock RS at -1/round regardless of count, or allow stacking?
+6. Weaving effect on Debates: +2D or +1D?
+7. Structural Pulling vs Fortification: should Fortification provide resistance?
+8. Catastrophic TC surge: bypass Accounting gate for +5 or more from single event?
