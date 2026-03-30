@@ -17,6 +17,14 @@ Each has mode-specific mechanics that do not cross over.
 
 ---
 
+# PROJECT STATUS
+
+**Canonical status document:** `valoria_scope_map.md` (root level)
+
+Tracks: all systems inventory, simulation coverage per system, open gaps and pending patches per system, critical blockers, and prioritized audit plan. Updated at every session close and after any simulation, gap register change, or patch propagation. Consult this file first when asking "where do we stand."
+
+---
+
 # AUTHORITY HIERARCHY (unchanged)
 
 1. Valoria_Philosophical_Foundations.docx — governs everything
