@@ -1268,3 +1268,51 @@ See session_log_archive.md — last block: 2026-03-29T_COMBAT_GROUP_SIM
    morale mechanics) flagged [EDITORIAL] in stage8_combat.md §8.9
 2. Phase 0 user actions 0.19-0.22 still pending
 3. Integrate remaining gap register items per workplan
+
+
+---
+
+session_id: 2026-03-29T_THREADWEAVING_COMBAT_SIM
+phase: Threadweaving × Combat Simulation
+status: CLOSED
+
+## SESSION SUMMARY
+
+### Completed
+- Stress test matrix v2 reconstructed: 35 cells, 6 clusters (A–F)
+- Comprehensive simulation: 31 cells tested, 13 P1, 13 P2, 5 P3 findings
+- Extreme stress tests: 18 break attempts, 12 P1, dominant strategies identified
+- Narrative stress tests: 4 multi-system scenarios (debate→combat→thread→faction)
+- 23 patches drafted (PP-131–153), reviewed for conflicts (zero found), committed
+- 6 gap resolutions (GP-01–06) resolving all threadweaving×combat blocking gaps
+- 5 edge case rulings formalized
+- Wound system redesigned (PP-131): continuous HP track, -1D/wound, carryover damage
+- E-06 editorial ruling (Personal Lock in combat) fully integrated
+
+### Key design findings
+- Personal Pull is dominant combat Thread operation (0 Coherence, -2D, scene duration)
+- Personal Dissolution is 70% assassination at optimized stats (no resistance roll)
+- Practitioners dominate every system they touch; cost is world-state degradation (RS, TC, Coherence)
+- Rock-paper-scissors confirmed: practitioners beat structures, fighters beat unprotected practitioners, Church politics beat practitioners' long-term interests
+- Thread operations during Debates are powerful and nearly undetectable
+- Contact windows carry across system transitions (Debate→Combat) seamlessly
+
+### Files pushed
+- valoria_patch_proposals.md (PP-131–153 + GP-01–06 appended)
+- tests/sim_thread_combat_matrix_v2.md
+- tests/sim_thread_combat_comprehensive.md
+- tests/sim_thread_combat_extreme.md
+- tests/sim_thread_combat_narrative.md
+
+### Editorial pending (8 items)
+1. Personal Pull balance (0 Coherence, -2D, scene duration)
+2. Personal Dissolution lethality (resistance roll?)
+3. Heal loop mitigation (Overweave acceleration)
+4. Pull stacking floor (half base pool?)
+5. Mass Lock RS drain cap
+6. Weaving effect on Debates (+2D or +1D)
+7. Structural Pulling vs Fortification resistance
+8. Catastrophic TC surge Accounting bypass
+
+### Resume instruction
+Read session_log_current.md. 8 editorial decisions block further simulation. PP-131 invalidates all prior combat sim data — re-simulation needed after editorial resolution. Opus-tier work (E-05, E-06 downstream, F-06) deferred until editorial on items 1-2.
