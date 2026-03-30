@@ -1,11 +1,10 @@
 # Valoria Editorial Ledger
-# Updated: 2026-03-29
-# Sources: canon/editorial_ledger.yaml, gap_register, session_log_archive, patch_proposals
-# Status: resolved | pending | deferred
-# propagation_status: APPLIED | NOT_APPLIED | N/A
+# Updated: 2026-03-30
+# Sources: canon/editorial_ledger.yaml, gap_register, session_log_archive, patch_proposals, 2026-03-30 ballot session
+# Status: resolved | pending | deferred | generation_task | mechanical_task
 
 # ============================================================
-# SECTION 1: RESOLVED DECISIONS (confirmed, user-approved)
+# SECTION 1: RESOLVED DECISIONS
 # ============================================================
 
 resolved:
@@ -15,268 +14,224 @@ resolved:
   date: 2026-03-25
   category: mechanics
   decision: "10 attributes: Agi, End, Str, Cog, Mem, Focus, Att, Bonds, Pres, Spirit"
-  source: S3
 
 - id: R-02
   date: 2026-03-25
   category: mechanics
   decision: "Combat architecture: pool split offence/defence (SoS-inspired)"
-  source: S3
 
 - id: R-03
   date: 2026-03-25
   category: mechanics
   decision: "Action economy: pool split IS the action economy"
-  source: S3
 
 - id: R-04
   date: 2026-03-25
   category: mechanics
   decision: "Round structure: phase-based, priority list, 6-10s segments"
-  source: S3
 
 - id: R-05
   date: 2026-03-25
   category: mechanics
   decision: "Movement + attack permitted; pure movement faster"
-  source: S3
 
 - id: R-06
   date: 2026-03-25
   category: mechanics
   decision: "Movement has priority in a phase until opponent has combatant in weapon range"
-  source: S3
 
 - id: R-07
   date: 2026-03-25
   category: mechanics
-  decision: "Reach system: Short / Long / Projectile (see reach rules)"
-  source: S3
+  decision: "Reach system: Short / Long / Projectile"
 
 - id: R-08
   date: 2026-03-25
   category: game_mode
-  decision: "TTRPG map: zones only; no maps required; maps illustrative only; never grids"
-  source: S3
+  decision: "TTRPG map: zones only; no maps required; illustrative only; never grids"
 
 - id: R-09
   date: 2026-03-25
   category: game_mode
   decision: "Board game map: territory-adjacency (15 territories with routes); not hexes"
-  source: S3
 
 - id: R-10
   date: 2026-03-25
   category: game_mode
   decision: "Board game mass combat: zone-based operational map within contested territory"
-  source: S3
 
 - id: R-11
   date: 2026-03-25
   category: mechanics
   decision: "Fibonacci group bonus: multiple characters declare on single unsupported opponent"
-  source: S3
 
 - id: R-12
   date: 2026-03-25
   category: mechanics
   decision: "Weapon TN mapping: Light 5/6, Medium 6/7, Heavy 7/8 (attack/parry)"
-  source: S3
 
 - id: R-13
   date: 2026-03-24
   category: mechanics
   decision: "Co-movement system: Version C (automatic deterministic + actual d6)"
-  source: S3
 
 - id: R-14
   date: 2026-03-25
   category: mechanics
   decision: "Circles/Resources: tied to Histories + factions; improvable and degradable"
-  source: S3
 
 - id: R-15
   date: 2026-03-25
   category: game_mode
   decision: "Mode-specific rules permitted where dual-mode would be incoherent"
-  source: S3
 
 - id: R-16
   date: 2026-03-25
   category: game_mode
   decision: "Endgame — Board: explicit VCs. TTRPG: emergent. Hybrid: both."
-  source: S3
 
 - id: R-17
   date: 2026-03-25
   category: faction_mechanic
   decision: "Ethical frameworks: gravitational tendency per faction + messy deviation; not labeled"
-  source: S3
 
 - id: R-18
   date: 2026-03-25
   category: faction_mechanic
   decision: "Faction leader ≠ faction: two mechanical layers (institutional tendency + leadership friction)"
-  source: S3
 
 - id: R-19
   date: 2026-03-25
   category: game_mode
   decision: "Board game player count: 2-5 + solo mode"
-  source: S3
 
 - id: R-20
   date: 2026-03-25
   category: npc
   decision: "Lenneth TS path: can gain TS through scholarly research"
-  source: S3
 
 - id: R-21
   date: 2026-03-25
   category: mechanics
   decision: "Virtues & Vices: cut entirely"
-  source: S3
 
 - id: R-22
   date: 2026-03-25
   category: game_mode
   decision: "Hybrid temporal model: phase-separated (Personal → Strategic → Cascade)"
-  source: S3
 
 - id: R-23
   date: 2026-03-25
   category: game_mode
   decision: "Hybrid player roles: personal-only or faction+personal (faction leaders only); never faction-only"
-  source: S3
 
 - id: R-24
   date: 2026-03-25
   category: game_mode
   decision: "Hybrid NPC control: blend (GM judgment informed by NPC AI algorithm)"
-  source: S3
 
 - id: R-25
   date: 2026-03-25
   category: game_mode
   decision: "Hybrid framing: board game is primarily GM-side scenario engine"
-  source: S3
 
 - id: R-26
   date: 2026-03-25
   category: mechanics
   decision: "Push: cut; Momentum retained"
-  source: S3
 
 - id: R-27
   date: 2026-03-25
   category: mechanics
   decision: "Maxims: cut; Beliefs retained"
-  source: S3
 
 - id: R-28
   date: 2026-03-25
   category: mechanics
   decision: "Impression Track + Knots: both retained; IT for major NPCs, Knots for relationships"
-  source: S3
 
 - id: R-29
   date: 2026-03-25
   category: mechanics
   decision: "Renown: retained — not a resource; governs NPC recognition probability"
-  source: S3
 
 - id: R-30
   date: 2026-03-25
   category: mechanics
-  decision: "Archetype sub-test protocol: scenarios must involve character/faction-specific actions; generic actions invalid"
-  source: S3
+  decision: "Archetype sub-test protocol: scenarios must involve character/faction-specific actions; generic invalid"
 
 # --- Session 7 (2026-03-26/27) ---
 - id: R-31
   date: 2026-03-27
   category: terminology
-  decision: "Taint → Intelligibility → Coherence. Track 10→0. At 0: loss of coherence to self and others."
-  source: S7
+  decision: "Taint → Intelligibility → Coherence. Track 10→0."
 
 - id: R-32
   date: 2026-03-27
   category: mechanics
   decision: "Composure = Presence + 6"
-  source: S7
 
 - id: R-33
   date: 2026-03-27
   category: setting
-  decision: "Thread Harvest STRUCK. Niflhel = smugglers/black market. Restoration members (29>TS>10) find threadweaved goods on black market."
-  source: S7
+  decision: "Thread Harvest STRUCK. Niflhel = smugglers/black market."
 
 - id: R-34
   date: 2026-03-27
   category: mechanics
   decision: "ThS + Intelligibility merged into Coherence (10→0)"
-  source: S7_threadwork
 
 - id: R-35
   date: 2026-03-27
   category: mechanics
   decision: "Gap proximity: no benefit (excess being is catastrophe, not resource)"
-  source: S7_threadwork
 
 - id: R-36
   date: 2026-03-27
   category: mechanics
   decision: "FR Lock vs Dissolution: asymmetric (chronic vs acute), not equal"
-  source: S7_threadwork
 
 - id: R-37
   date: 2026-03-27
   category: mechanics
   decision: "Spooling: Level 1 (framing only)"
-  source: S7_threadwork
 
 - id: R-38
   date: 2026-03-27
   category: mechanics
-  decision: "Gap closure: new operation type Mending (not Weaving, not FR Dissolution)"
-  source: S7_threadwork
+  decision: "Gap closure: new operation type Mending"
 
 - id: R-39
   date: 2026-03-27
   category: mechanics
-  decision: "Threadcut rendering: observer-dependent at baseline; can render beyond ceiling at cost of accelerated exhaustion"
-  source: S7_threadwork
+  decision: "Threadcut rendering: observer-dependent at baseline; can render beyond ceiling at cost"
 
 - id: R-40
   date: 2026-03-27
   category: mechanics
   decision: "Taint track eliminated. Dissolution residue = accelerated Coherence loss."
-  source: S7_threadwork
 
 - id: R-41
   date: 2026-03-27
   category: terminology
   decision: "TT renamed Rendering Stability, inverted (100→0)"
-  source: S7_threadwork
 
 - id: R-42
   date: 2026-03-27
   category: terminology
   decision: "Galbados → Solmund"
-  source: S7_threadwork
   propagation_status: NOT_APPLIED (Haiku batch pending)
 
 - id: R-43
   date: 2026-03-27
   category: terminology
-  decision: "AG → AS calendar"
-  source: S7_threadwork
+  decision: "AG → AS calendar (After Solmund)"
   propagation_status: NOT_APPLIED (Haiku batch pending)
 
 - id: R-44
   date: 2026-03-27
   category: terminology
   decision: "Church of Galbados → Church of Solmund"
-  source: S7_threadwork
   propagation_status: NOT_APPLIED (Haiku batch pending)
 
 # --- Faction sim sessions (2026-03-27) ---
@@ -284,249 +239,254 @@ resolved:
   date: 2026-03-27
   category: faction_mechanic
   decision: "Coup Counter 0-3, three named triggers, never decrements"
-  source: F-32
 
 - id: R-46
   date: 2026-03-27
   category: faction_mechanic
-  decision: "Martial Law: Option A (secondary Military Ob 2 check; Covert Ob 3 for others; exit Ob = Military/2)"
-  source: F-33
+  decision: "Martial Law: Option A"
 
 - id: R-47
   date: 2026-03-27
   category: faction_mechanic
-  decision: "Church Mandate vs owner: Mandate/2; flat TC +1/+3/+5 on seizure; no per-season accrual; counter-play options"
-  source: F-34
+  decision: "Church Mandate vs owner: Mandate/2; flat TC +1/+3/+5 on seizure"
 
 - id: R-48
   date: 2026-03-27
   category: mechanics
-  decision: "Devout provides no protection from being targeted; experiences result without understanding cause"
-  source: GAP-UC-03-A
+  decision: "Devout: no protection from being targeted"
 
 - id: R-49
   date: 2026-03-27
   category: faction_mechanic
-  decision: "Church VC lowered to TC≥60 + Himmelenger + Valorsplatz; expansion lock adjusted to TC≥40"
-  source: G-115 / B6 sim
+  decision: "Church VC = TC≥60 + Himmelenger + Valorsplatz; expansion lock TC≥40"
 
-# --- User directives (2026-03-29 combat sim) ---
+# --- User directives (2026-03-29) ---
 - id: R-50
   date: 2026-03-29
   category: mechanics
-  decision: "Wound system: HP = (End+6)×(maxW+1), continuous track, no reset. Damage carries through thresholds. Each threshold = -1D to ALL pools."
-  source: PP-131 (user directive)
+  decision: "Wound system: HP=(End+6)×(maxW+1), continuous track, -1D per threshold"
 
 - id: R-51
   date: 2026-03-29
   category: mechanics
-  decision: "Universal wound penalty: -1D per wound replaces all +Ob per wound everywhere. Applies to rolled pools only, NOT derived scores."
-  source: PP-132 (user directive)
+  decision: "Universal wound penalty: -1D per wound, rolled pools only, not derived scores"
 
 - id: R-52
   date: 2026-03-29
   category: mechanics
-  decision: "Fibonacci group bonus applies ONLY to physical combat offence pools. Excluded from Debates and all social combat."
-  source: PP-133 (user directive)
+  decision: "Fibonacci excluded from Debates and all social combat"
 
 - id: R-53
   date: 2026-03-29
   category: mechanics
-  decision: "Personal Lock in combat: E-06 ruling fully integrated"
-  source: E-06 ruling / combat sim
+  decision: "Personal Lock in combat: E-06 ruling integrated"
+
+# --- Ballot session (2026-03-30) ---
+- id: R-54
+  date: 2026-03-30
+  category: mechanics
+  decision: "E-23: Personal Pull duration = 3 rounds, not end of scene. Requires re-application."
+
+- id: R-55
+  date: 2026-03-30
+  category: mechanics
+  decision: "E-24: Personal Dissolution Ob = End + Spirit + Armour (Light +1, Medium +2, Heavy +3). Standard success = Partial (Shifting Object, ~50% HP damage). Overwhelming Success required for instant kill."
+
+- id: R-56
+  date: 2026-03-30
+  category: mechanics
+  decision: "E-25: Accelerated Overweave for healing: +2 Ob per healing op. Sequence Ob 1/3/5/7."
+
+- id: R-57
+  date: 2026-03-30
+  category: mechanics
+  decision: "E-26: Pull stacking floor = 5D minimum. Below 5 requires Lock, not Pull."
+
+- id: R-58
+  date: 2026-03-30
+  category: mechanics
+  decision: "E-27: Mass Lock RS drain capped at -1/round per scene regardless of concurrent Lock count."
+
+- id: R-59
+  date: 2026-03-30
+  category: mechanics
+  decision: "E-17: The Great Unwinding kept with narrative prerequisites (TBD)."
+
+- id: R-60
+  date: 2026-03-30
+  category: mechanics
+  decision: "E-18: The Great Working kept with narrative prerequisites (TBD)."
+
+- id: R-61
+  date: 2026-03-30
+  category: mechanics
+  decision: "E-19: Crowd Coherence in Debates kept as-is. Practitioners warp everything."
+
+- id: R-62
+  date: 2026-03-30
+  category: mechanics
+  decision: "E-20: Mandate Reinforcement Ob corrected to 6. TC +1 on visible success retained."
+
+- id: R-63
+  date: 2026-03-30
+  category: mechanics
+  decision: "E-21: Locked Institution chronic RS drift is variable. Static domain: -0/season. Slow-change: -1/season. Dynamic: -2/season. GM determines at Lock time."
+
+- id: R-64
+  date: 2026-03-30
+  category: mechanics
+  decision: "E-22: Mode 3 entities immune to conventional Dissolution. Must be overwhelmed."
+
+- id: R-65
+  date: 2026-03-30
+  category: mechanics
+  decision: "E-28: Debate Weaving bonus = +TPS/3 dice (rounded down). TS 30=+1D, TS 60=+2D, TS 90=+3D."
+
+- id: R-66
+  date: 2026-03-30
+  category: mechanics
+  decision: "Debate pool formula corrected: (Presence × 2) + relevant History."
+
+- id: R-67
+  date: 2026-03-30
+  category: mechanics
+  decision: "E-29: Fortification level adds to Structural Pulling Ob."
+
+- id: R-68
+  date: 2026-03-30
+  category: mechanics
+  decision: "E-30: Accounting gate preserved for all TC changes. No bypass."
+
+- id: R-69
+  date: 2026-03-30
+  category: npc
+  decision: "E-01: Almud assassination perpetrator is random per campaign. D10: 1-2 Schoenland, 3-4 Altonia, 5-6 Church, 7-8 Restoration Movement, 9-10 Accident."
+
+- id: R-70
+  date: 2026-03-30
+  category: npc
+  decision: "E-02: Elske — resents male heir preference, ambition vs guilt (advancement requires Torben's death), loves husband but anxious about his frontier military station."
+
+- id: R-71
+  date: 2026-03-30
+  category: terminology
+  decision: "E-03: AS = After Solmund."
+
+- id: R-72
+  date: 2026-03-30
+  category: npc
+  decision: "E-04: No additional Almud heirs. Succession: Torben → Elske → Baralta (two sons) → Vaynard."
+
+- id: R-73
+  date: 2026-03-30
+  category: setting
+  decision: "E-05: 13 territory names confirmed: Sigurdshelm, Halvardshelm, Oastad, Varfell, Eidursjo, Arcansheld, Gransol, Spartfell, Lowenskyst, Hafenvalor, Valorsplatz, Himmelenger, Stillhelm. 2 remaining TBD."
+
+- id: R-74
+  date: 2026-03-30
+  category: npc
+  decision: "E-08: Olafsson is active Niflhel collaborator — regular dealings, mutual benefit."
+
+- id: R-75
+  date: 2026-03-30
+  category: npc
+  decision: "E-10: Restoration Movement NPCs: Maren Solberg (orator, Presence), Dahl Erikssen (organizer, Bonds, TS 18), Katri Voss (theorist, Cognition, TS 12)."
+
+- id: R-76
+  date: 2026-03-30
+  category: setting
+  decision: "E-16: Einhir site name = Bryttlingstad."
+
+- id: R-77
+  date: 2026-03-30
+  category: mechanics
+  decision: "E-32: Monstrous Entity 3-tier stat blocks confirmed. Entities passively perform compound Thread operations (random combination of two ops simultaneously, scale by Gap size)."
+
+- id: R-78
+  date: 2026-03-30
+  category: faction_mechanic
+  decision: "E-06: Niflhel permanently headless — cell-based, no single leader."
+
+- id: R-79
+  date: 2026-03-30
+  category: faction_mechanic
+  decision: "E-07: Varfell VC = Vaynard achieves Southernmost interior access + sufficient TS + knowledge to interact with pre-Calamity threadworking infrastructure."
+
+- id: R-80
+  date: 2026-03-30
+  category: faction_mechanic
+  decision: "E-13: Varfell Private Collection is institutional — survives leadership change."
+
+- id: R-81
+  date: 2026-03-30
+  category: faction_mechanic
+  decision: "E-14: TK 5 = deep understanding of how the Calamity occurred. Grants access to pre-Calamity threadworking knowledge. Vaynard believes he can avoid the same mistakes (epistemic limit). Feeds into E-07 VC."
+
+- id: R-82
+  date: 2026-03-30
+  category: game_mode
+  decision: "E-15: 2-player mode keeps 3 NPC orders, same as standard."
 
 # ============================================================
-# SECTION 2: PENDING DECISIONS (require user approval)
+# SECTION 2: PENDING
 # ============================================================
 
 pending:
 
-# --- Pre-existing (from editorial_ledger.yaml) ---
-- id: E-01
-  category: npc
-  decision: "Almud assassination perpetrator (~18 AG)"
-  affects: []
-
-- id: E-02
-  category: npc
-  decision: "Elske private reality in Altonia"
-  affects: []
-
-- id: E-03
-  category: terminology
-  decision: "AG calendar in-world meaning/name (partially superseded by R-43 AS rename; in-world name still pending)"
-  affects: [compilation/stage4_southernmost.md, compilation/stage6_factions.md]
-
-- id: E-04
-  category: npc
-  decision: "Almud additional heirs beyond Elske and Torben"
-  affects: []
-
-- id: E-05
+- id: E-05b
   category: setting
-  decision: "Territory names (all 15) — placeholders in use"
-  affects: [compilation/stage7_territories.md, compilation/stage_bg_board_game_mode.md]
-
-- id: E-06
-  category: faction_mechanic
-  decision: "Niflhel leadership — primus inter pares vs permanently headless"
-  affects: [compilation/stage6_factions.md, compilation/stage13_npcs.md]
-
-- id: E-07
-  category: faction_mechanic
-  decision: "Varfell victory condition wording (Southernmost integration condition)"
-  affects: [compilation/stage6_factions.md, compilation/stage_bg_board_game_mode.md]
-
-- id: E-08
-  category: npc
-  decision: "Olafsson Niflhel connection depth (A/B/C)"
-  affects: [compilation/stage13_npcs.md]
+  decision: "2 remaining territory names TBD"
 
 - id: E-09
   category: setting
-  decision: "Niflhel arm count and 2 unnamed arm identities"
-  affects: [compilation/stage6_factions.md]
+  decision: "Niflhel arm count and unnamed arm identities (includes racketeering etc)"
 
-- id: E-10
-  category: npc
-  decision: "Restoration Movement named NPCs (currently zero)"
-  affects: [compilation/stage13_npcs.md]
-
-- id: E-11
-  category: game_mode
-  decision: "10 remaining Seasonal Event Cards (C-11 through C-20)"
-  affects: [compilation/stage_bg_board_game_mode.md]
-
-- id: E-12
-  category: game_mode
-  decision: "10 remaining Co-Movement Cards (CM-11 through CM-20)"
-  affects: [compilation/stage_bg_board_game_mode.md]
-
-- id: E-13
-  category: faction_mechanic
-  decision: "Varfell Private Collection transfer (institutional vs personal)"
-  affects: [compilation/stage6_factions.md]
-
-- id: E-14
-  category: game_mode
-  decision: "Varfell TK 5 consequence"
-  affects: [compilation/stage_bg_board_game_mode.md]
-
-- id: E-15
-  category: game_mode
-  decision: "2-player NPC order reduction (2 vs 3) — confirm or adjust"
-  affects: [compilation/stage_bg_board_game_mode.md]
-
-# --- From session archive (setting/naming) ---
-- id: E-16
-  category: setting
-  decision: "S-08 Einhir site name"
-  source: session_archive
-  affects: []
-
-# --- From spell catalog / threadwork sim ---
-- id: E-17
+- id: E-17b
   category: mechanics
-  decision: "PO-06: The Great Unwinding (campaign-endpoint Past-Oriented Pulling)"
-  source: spell_catalog sim
-  affects: [compilation/stage15_spell_catalog.md]
+  decision: "Narrative prerequisites for The Great Unwinding — specific milestones TBD"
 
-- id: E-18
+- id: E-18b
   category: mechanics
-  decision: "CO-04: The Great Working (campaign-endpoint collective operation)"
-  source: spell_catalog sim
-  affects: [compilation/stage15_spell_catalog.md]
-
-- id: E-19
-  category: mechanics
-  decision: "W-42: Crowd Coherence in Debates (Thread manipulation of audience)"
-  source: spell_catalog sim
-  affects: [compilation/stage15_spell_catalog.md]
-
-- id: E-20
-  category: mechanics
-  decision: "W-51: Mandate Reinforcement via Weaving (political power balance)"
-  source: spell_catalog sim
-  affects: [compilation/stage15_spell_catalog.md]
-
-- id: E-21
-  category: mechanics
-  decision: "FR-L-05: Locked Institution chronic severity (-2/season)"
-  source: spell_catalog sim
-  affects: [compilation/stage15_spell_catalog.md]
-
-- id: E-22
-  category: mechanics
-  decision: "W-06c: Mode 3 conventional Dissolution immunity"
-  source: spell_catalog sim
-  affects: [compilation/stage15_spell_catalog.md]
-
-# --- From combat sim (2026-03-29) — 8 new items ---
-- id: E-23
-  category: mechanics
-  decision: "Personal Pull balance: currently 0 Coherence, -2D, scene duration. Options: A) Coherence -1; B) 3-round duration; C) -1D not -2D; D) accept as-is"
-  source: PP combat sim / X-01
-  blocking: [combat re-simulation, Opus E-05 cell]
-
-- id: E-24
-  category: mechanics
-  decision: "Personal Dissolution lethality: instant incapacitation or add Spirit resistance roll?"
-  source: GP-03 / sim E-01–E-03
-  blocking: [combat re-simulation, Opus E-07–E-09 cells]
-  note: "70% assassination rate at optimized stats with no resistance"
-
-- id: E-25
-  category: mechanics
-  decision: "Heal loop: accelerated Overweave (+2 Ob per heal op) or accept infinite sustain?"
-  source: combat sim X-06
-  blocking: [combat re-simulation]
-
-- id: E-26
-  category: mechanics
-  decision: "Pull stacking floor: cap at half base pool or allow reduction to 0D?"
-  source: combat sim X-07
-  blocking: [combat re-simulation]
-
-- id: E-27
-  category: mechanics
-  decision: "Mass Lock RS drain: cap concurrent Lock RS at -1/round regardless of count, or allow stacking?"
-  source: combat sim X-09
-  blocking: [combat re-simulation]
-
-- id: E-28
-  category: mechanics
-  decision: "Weaving effect on Debates: +2D or +1D?"
-  source: PP-145 / sim S1-B3
-  blocking: []
-
-- id: E-29
-  category: mechanics
-  decision: "Structural Pulling vs Fortification: should Fortification provide resistance?"
-  source: combat sim S2-B2
-  blocking: []
-
-- id: E-30
-  category: mechanics
-  decision: "Catastrophic TC surge: bypass Accounting gate for +5 or more from single event?"
-  source: combat sim X-18
-  blocking: []
-
-# --- From combat stage / mass combat ---
-- id: E-31
-  category: mechanics
-  decision: "Mass combat unit stat block: specific pool sizes, cohesion thresholds, morale mechanics"
-  source: stage8_combat.md §8.9
-  affects: [compilation/stage8_combat.md]
-
-# --- From GP-05 ---
-- id: E-32
-  category: mechanics
-  decision: "Monstrous Entity combat stats: placeholder 3-tier stat block needs full design"
-  source: GP-05 / sim D-04
-  affects: [compilation/stage8_combat.md]
+  decision: "Narrative prerequisites for The Great Working — specific milestones TBD"
 
 # ============================================================
-# SECTION 3: DEFERRED (not blocking; resolve when relevant)
+# SECTION 3: GENERATION TASKS (approved for Claude to draft)
+# ============================================================
+
+generation_tasks:
+
+- id: GT-01
+  source: E-11
+  task: "Draft Seasonal Event Cards C-11 through C-20 from faction mechanics. Present for approval."
+
+- id: GT-02
+  source: E-12
+  task: "Draft Co-Movement Cards CM-11 through CM-20. Present for approval."
+
+- id: GT-03
+  source: E-32
+  task: "Design Monstrous Entity compound Thread operation combination tables. Present for approval."
+
+# ============================================================
+# SECTION 4: MECHANICAL TASKS (no editorial needed)
+# ============================================================
+
+mechanical_tasks:
+
+- id: MT-01
+  source: E-31
+  task: "Derive faction unit rosters from Military scores."
+
+- id: MT-02
+  source: R-66
+  task: "Propagate Debate pool formula correction: (Presence × 2) + relevant History."
+
+- id: MT-03
+  source: R-62
+  task: "Audit all Territorial-scale spell catalog entries for Ob consistency."
+
+# ============================================================
+# SECTION 5: DEFERRED
 # ============================================================
 
 deferred:
@@ -534,42 +494,39 @@ deferred:
 - id: D-01
   category: mechanics
   decision: "Circles/Resources full redesign"
-  source: G-054
-  note: "Flagged S2; design needed but not blocking current compilation"
 
 - id: D-02
   category: npc
-  decision: "3 NPC Presence scores (Almud/Lenneth/Vaynard) — editorial on values"
-  source: G-097 / BUG-002
+  decision: "3 NPC Presence scores (Almud/Lenneth/Vaynard)"
 
 # ============================================================
-# SECTION 4: PROPAGATION TRACKING (resolved but not yet applied)
+# SECTION 6: PROPAGATION PENDING
 # ============================================================
 
 propagation_pending:
+
   - decision: R-42 (Galbados → Solmund)
-    files_affected: all compilation stages
     method: Haiku-tier find-replace batch
     status: NOT_APPLIED
 
-  - decision: R-43 (AG → AS calendar)
-    files_affected: [compilation/stage4_southernmost.md, compilation/stage6_factions.md]
+  - decision: R-43 (AG → AS)
     method: Haiku-tier find-replace batch
     status: NOT_APPLIED
 
   - decision: R-44 (Church of Galbados → Church of Solmund)
-    files_affected: all compilation stages
     method: Haiku-tier find-replace batch
+    status: NOT_APPLIED
+
+  - decision: R-54 through R-68 (all mechanical resolutions from 2026-03-30 ballot)
+    method: Sonnet-tier patch propagation
     status: NOT_APPLIED
 
 # ============================================================
 # SUMMARY
 # ============================================================
-# Resolved: 53
-# Pending: 32 (E-01 through E-32)
-#   Blocking simulation: 5 (E-23 through E-27)
-#   Non-blocking mechanical: 7 (E-17–E-22, E-28–E-30)
-#   Setting/NPC/naming: 11 (E-01–E-05, E-08–E-10, E-16, E-31–E-32)
-#   Faction/game mode: 9 (E-06, E-07, E-11–E-15, E-31, E-32)
+# Resolved: 82
+# Pending: 4 (2 territory names, 2 narrative prerequisite designs)
+# Generation tasks: 3 (event cards, co-movement cards, monstrous entity tables)
+# Mechanical tasks: 3 (unit rosters, debate pool propagation, territorial Ob audit)
 # Deferred: 2
-# Propagation pending: 3 rename batches
+# Propagation pending: rename batches + 15 mechanical patches from ballot
