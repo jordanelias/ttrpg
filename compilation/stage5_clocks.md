@@ -2,27 +2,27 @@
 
 Three public clocks run simultaneously throughout the campaign. All are displayed permanently on the table dashboard. Players always know all three values.
 
-**TT** (Thread Tension) measures the configurational stress of the thread-substrate. It rises from thread operations and falls from sustained repair work. It is the campaign's metaphysical pressure gauge.
+**RS** (Rendering Stability) measures the configurational integrity of the thread-substrate. It falls from thread operations and rises from sustained repair work. It is the campaign's metaphysical pressure gauge. RS starts at 100 (or 72 for board game play) and falls toward 0.
 
 **TC** (Theocracy Clock) measures the Church of Galbados's structural conquest of Valorian civil and political life. TC is not a measure of the Church's goodness — it is a measure of how much of the peninsula's governance has been absorbed into its institutional framework.
 
-**IP** (Altonian Pressure) measures the external threat of Altonian intervention. It is driven primarily by Valoria's internal instability and by TT/TC conditions that alarm the three Altonian factions for different reasons.
+**IP** (Altonian Pressure) measures the external threat of Altonian intervention. It is driven primarily by Valoria's internal instability and by RS/TC conditions that alarm the three Altonian factions for different reasons.
 
 All clock rates are **per season**. One campaign year = 4 seasons (approximately 16 sessions at standard play pace). (MI-3)
 
 ---
 
-## 7.1 Thread Tension (TT) — 0 to 100
+## 7.1 Rendering Stability (RS) — 100 to 0
 
 **Starting value:** 28 (Stirring).
 
-**TT is public.** Displayed permanently on the table dashboard.
+**RS is public.** Displayed permanently on the table dashboard.
 
-**TT rises from specific causes only.** Ordinary action — political manoeuvring, military operations without Thread involvement, social scenes — does not strain the substrate.
+**RS decreases from specific causes only.** Ordinary action — political manoeuvring, military operations without Thread involvement, social scenes — does not strain the substrate.
 
-### TT Rise Sources
+### RS Decrease Sources
 
-| Source | TT Change |
+| Source | RS Change |
 |---|---|
 | Partial Weaving | +1 |
 | Failed Weaving | +2 |
@@ -45,9 +45,9 @@ All clock rates are **per season**. One campaign year = 4 seasons (approximately
 | Niflhel Southernmost harvesting | +0.5 per season |
 | Involuntary Leap | +1 per event |
 
-### TT Decrease Sources
+### RS Increase Sources
 
-| Source | TT Change |
+| Source | RS Change |
 |---|---|
 | Overwhelming Weaving (Relational scale or above) | −1 (MI-1: Relational minimum required) |
 | Preserving Einhir site, per season | −1 |
@@ -58,9 +58,9 @@ All clock rates are **per season**. One campaign year = 4 seasons (approximately
 | Ceiral Ritual (Overwhelming) | −10 |
 | Extraordinary Repair Weaving (Success or Overwhelming, per season) | −2 |
 
-### TT Thresholds
+### RS Thresholds
 
-| TT | State | World Symptoms | Mechanical Effects |
+| RS | State | World Symptoms | Mechanical Effects |
 |---|---|---|---|
 | 0–19 | Dormant | Thread practice is folklore. | Leap fails automatically. Practitioners cannot function. |
 | 20–39 | Stirring | Practitioners surface. Shifting Objects reported. | Leap becomes available. |
@@ -69,20 +69,20 @@ All clock rates are **per season**. One campaign year = 4 seasons (approximately
 | 80–99 | Rupturing | Magic enters battlefields. Entities establish territory. Einhir becomes political. | Thread operations: +2 Ob to all rolls. |
 | 100 | The Rupture | Campaign event. The relationship between the rendered world and the thread-substrate changes permanently. | Not a loss state — a narrative threshold. What this means is determined by the current state of the world. |
 
-### TT Consequences When a Gap Opens
+### RS Consequences When a Gap Opens
 
-| TT | Consequence |
+| RS | Consequence |
 |---|---|
 | Below 40 | Shifting Object forms |
 | 40–59 | Weak monstrous configuration |
 | 60–79 | Full monstrous entity |
 | 80+ | Full entity + Shifting Object in each adjacent territory |
 
-### TT Threshold Events
+### RS Threshold Events
 
-When TT crosses a threshold, the GM determines a narratively appropriate consequence from the current situation. No event deck is used. The current political, social, and thread-level state of the world generates the threshold consequence organically.
+When RS crosses a threshold, the GM determines a narratively appropriate consequence from the current situation. No event deck is used. The current political, social, and thread-level state of the world generates the threshold consequence organically.
 
-*Example: TT crossing 40 (into Wakening) while the Church has an active Inquisitor investigation produces a different threshold event than TT 40 crossing during a period of factional cooperation. The threshold is the trigger; the event is the current world state colliding with that trigger.*
+*Example: RS dropping below 60 (Substrate Stress threshold) while the Church has an active Inquisitor investigation produces a different threshold event than RS 60 crossing during a period of factional cooperation. The threshold is the trigger; the event is the current world state colliding with that trigger.*
 
 ---
 
@@ -92,8 +92,7 @@ When TT crosses a threshold, the GM determines a narratively appropriate consequ
 
 *(Canonical value per timeline. Reflects 45 years of post-independence institutional accumulation building on centuries of Altonian colonial-era Church establishment. Earlier document values of 15 are superseded.)*
 
-**TC is public.** Displayed alongside TT and IP.
-
+**TC is public.** Displayed alongside RS and IP.
 TC represents the Church of Galbados's slow structural conquest of Valorian civil and political life. At TC 100, the Church does not invade — it has made itself the state. Whether the Crown survives and in what form is the players' decision.
 
 ### TC Rise Sources
@@ -105,8 +104,8 @@ TC represents the Church of Galbados's slow structural conquest of Valorian civi
 | Heresy conviction of a prominent public figure | +2 |
 | Inquisitor operation in Crown territory without Crown authorisation | +1 |
 | Church Mandate reaches 9–10 at seasonal accounting | +1/season |
-| TT > 45 (Thread events read as divine warning requiring Church leadership) | +1/season |
-| TT > 60 (Thread crisis provides theological justification for authority expansion) | +2/season (total, not additive to above) |
+| RS < 55 (Thread events read as divine warning requiring Church leadership) | +1/season |
+| RS < 40 (Thread crisis provides theological justification for authority expansion) | +2/season (total, not additive to above) |
 | Player characters use Thread abilities in Church-observed contexts | +1 per event |
 | Cardinal of Fortitude mobilises Knights Templar for internal enforcement | +3 |
 | Heresy investigation opened against a sitting noble | +2 |
@@ -146,7 +145,7 @@ TC represents the Church of Galbados's slow structural conquest of Valorian civi
 
 **Starting value:** 20 (Dormant).
 
-**IP is public.** Displayed alongside TT and TC.
+**IP is public.** Displayed alongside RS and TC.
 
 IP measures the threat of Altonian military and political intervention. Altonia is not a monolithic actor — three internal factions shape its policy toward Valoria and they are not in agreement. Players discover this through play.
 
@@ -180,7 +179,7 @@ IP decreases primarily through diplomatic and political actions that reduce Alto
 
 - Valoria presenting a **unified diplomatic front** (all major factions at cooperative disposition or better): IP passive drift halts for that season
 - **Schoenland trade alliance** secured: −2 IP/year, and Altonian Merchant Consortium's political cover is removed
-- **Grand Diplomatic Scene** victory (endgame; requires faction dominance + Church Mandate > 5 + TT < 50): IP frozen, peace treaty possible
+- **Grand Diplomatic Scene** victory (endgame; requires faction dominance + Church Mandate > 5 + RS > 50): IP frozen, peace treaty possible
 
 ---
 
@@ -190,22 +189,22 @@ All rates per season. Interactions are cumulative unless marked (total).
 
 | Condition | Effect |
 |---|---|
-| TT > 45 | TC +1/season; IP +1/season |
-| TT > 60 | TC +2/season (total); IP +2/season (total) |
+| RS < 55 | TC +1/season; IP +1/season |
+| RS < 40 | TC +2/season (total); IP +2/season (total) |
 | TC > 40 and IP > 45 | IP +1/season (Church offers theological mediation; Almaic Kyriakos rejects but gives Merchant Consortium political cover) |
 | TC > 60 | IP +2/season (Altonia interprets Church dominance as violating Secession Wars' religious exclusivity clauses) |
 | TC > 60 and IP > 45 simultaneously | IP +2/season; Almaic Kyriakos begins formal documentation of Church expansion for the Altonian Emperor |
-| TT > 60 and TC > 60 simultaneously | Both clocks accelerate at maximum rate |
+| RS < 40 and TC > 60 simultaneously | Both clocks accelerate at maximum rate |
 | All three clocks above their midpoints simultaneously | Campaign enters endgame phase |
-| TT > 45 and TC > 40 simultaneously | TC +1/season (compounding; both conditions must persist each season) |
+| RS < 55 and TC > 40 simultaneously | TC +1/season (compounding; both conditions must persist each season) |
 
-**Note on (total) entries:** When TT > 60, the TC and IP costs are +2/season total — not +1 (from TT > 45) + 1 (from TT > 60) = +2. The higher threshold replaces, not adds to, the lower threshold's contribution.
+**Note on (total) entries:** When RS < 40, the TC and IP costs are +2/season total — not +1 (from RS < 55) + 1 (from RS < 40) = +2. The higher threshold replaces, not adds to, the lower threshold's contribution.
 
 ### Structural Tension Summary
 
-TT and TC are in positive feedback. Rising TT produces Thread events the Church interprets as theological warrant for expanded authority. TC pressure produces internal instability that allows TT to rise faster. IP is the external constraint — it accelerates when internal conditions are worst.
+RS and TC are in feedback. Falling RS produces Thread events the Church interprets as theological warrant for expanded authority. TC pressure produces internal instability that allows RS to fall faster. IP is the external constraint — it accelerates when internal conditions are worst.
 
-Players have access to the only tools that can directly address TT (thread operations reducing configurational stress) and the only investigative capacity that can address TC's hidden structural driver (the Church-Niflhel connection). They are structurally positioned as the campaign's repair mechanism.
+Players have access to the only tools that can directly address RS (thread operations restoring configurational integrity) and the only investigative capacity that can address TC's hidden structural driver (the Church-Niflhel connection). They are structurally positioned as the campaign's repair mechanism.
 
 ---
 
@@ -215,11 +214,11 @@ At each seasonal accounting, apply passive drift before any other clock adjustme
 
 | Clock | Passive Drift | Condition |
 |---|---|---|
-| TT | +1 per 4 seasons (i.e., +1 per campaign year) | Always |
+| RS | −1 per 4 seasons (i.e., −1 per campaign year) | Always |
 | TC | +1 per season | When Church Mandate ≥ 7 at accounting |
 | IP | +1 per season | Baseline; Altonian Martial Senate monitoring |
 
-Passive drift represents background pressure that players must actively counteract. A campaign in which players do nothing deteriorates: TT +1/year, TC +1/year (Church steady pressure), IP +1/year (Martial Senate baseline). The world deteriorates at a rate the players can observe but did not choose.
+Passive drift represents background pressure that players must actively counteract. A campaign in which players do nothing deteriorates: RS −1/year, TC +1/year (Church steady pressure), IP +1/year (Martial Senate baseline). The world deteriorates at a rate the players can observe but did not choose.
 
 ---
 
@@ -227,10 +226,10 @@ Passive drift represents background pressure that players must actively countera
 
 In Board Game mode, all three clocks run as visible tracks on the board. Rules are identical to TTRPG mode with the following adjustments:
 
-- TT and TC advance triggers fire at **seasonal accounting** (Phase 5), not continuously. Clocks do not advance mid-round. (R18, R19)
+- RS and TC advance triggers fire at **seasonal accounting** (Phase 5), not continuously. Clocks do not advance mid-round. (R18, R19)
 - **TC threshold override**: When TC threshold events would override a player's planned Domain Action, only player-chosen Domain Actions are deferred. Reactive checks (Stability checks, NPC responses) still fire immediately. (R19)
 - All three clocks are player-visible at all times. No hidden tracking.
-- Board tracks: TT on shared track, TC on shared track, IP on shared track. Threshold markers placed at 20/40/60/80/100.
+- Board tracks: RS on shared track, TC on shared track, IP on shared track. Threshold markers placed at 20/40/60/80 (counting down from 100).
 
 ---
 
