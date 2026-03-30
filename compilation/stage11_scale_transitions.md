@@ -6,15 +6,15 @@ Valoria operates across five scales simultaneously. A single session may move fr
 
 ## 11.1 Scale Table
 
-| Scale | Example | Base Ob | TT Multiplier (Thread operations) |
-|---|---|---|---|
-| Object | One item; one wound; a mechanism | 1 | ×1 |
-| Personal | One person; a character | 2 | ×1 |
-| Relational | Small group; a social agreement; an officer and their unit | 3 | ×2 |
-| Territorial | A duchy; a district; a settlement | 4 | ×3 |
-| Structural | A kingdom; an institution; a lasting constitutional arrangement | 5+ | ×5 |
+| Scale | Example | Base Ob | Min TS | Coherence auto-cost |
+|---|---|---|---|---|
+| Object | One item; one wound; a mechanism | 1 | 30+ | 0 |
+| Personal | One person; a character | 2 | 30+ | 0 |
+| Relational | Small group; a social agreement; an officer and their unit | 3 | 50+ | −1 |
+| Territorial | A duchy; a district; a settlement | 4 | 50+ | −1 |
+| Structural | A kingdom; an institution; a lasting constitutional arrangement | 5+ | 70+ | −2 |
 
-Base Ob applies when a Thread operation targets configurations at that scale. TT multiplier applies to TT gain from the operation.
+Base Ob applies when a Thread operation targets configurations at that scale. RS costs and degree-table consequences are per Stage3 operation tables. The legacy TT Multiplier column has been removed — it does not map to the current RS per-degree cost structure.
 
 ---
 
@@ -45,8 +45,8 @@ These terms are used consistently throughout the rules. Each names a specific mo
 | Personal → Scene | A personal roll made before an audience may serve as the opening move of a social scene, or as the Appeal itself. |
 | Scene → Faction | An Appeal or Debate that succeeds at sufficient scope produces a faction-attribute change via Domain Echo. |
 | Thread → Faction | When a Thread operation targets a faction-level configuration, it resolves as a Domain Action using the Thread pool and appropriate Ob. No separate roll. |
-| Thread → Mass | Thread effects manifest at Priority 1 in the round they complete, regardless of when the roll was made. |
-| Mass → Personal | Any character may take a Personal Action at Priority 8. Limit: one exchange per mass combat round. Non-incapacitated named targets become Contested Figures. |
+| Thread → Mass | **Combat Thread operations** (Dissolution, offensive Pulling targeting enemy units) manifest at Phase 2 (before Engagement), simultaneous with Volley — declared Phase 1, fire before combat. **Support Thread operations** (Weave, Mend, Lock, non-offensive Pulling) manifest at Phase 5 (Cascade), after Engagement — declared Phase 1, Leap resolves Phase 5. |
+| Mass → Personal | Any character may take a Personal Action at Phase 5 (equivalent to Priority 8). Limit: one exchange per battle turn. Non-incapacitated named targets become Contested Figures. The general's Phase 5 action is consumed by personal combat each turn until resolved — mass battle continues at reduced command efficiency (CR suspended). This is not a literal pause but a structural hold on CR effects. |
 | Scene → Mass | Social scene outcomes in combat contexts affect the mass combat's opening state; applied before the next round's declaration phase. |
 
 ---
