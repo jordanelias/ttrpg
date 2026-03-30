@@ -217,40 +217,263 @@ In uneven group engagements, decompose into parallel engagements plus a free fig
 
 ## 8.9 Mass Combat
 
-Mass combat uses the same dice engine as personal combat, abstracted to unit scale. Unit stats map directly from individual combat mechanics.
+Mass combat uses the same dice engine as personal combat, with two key changes:
+**Size** (headcount health pool) and **Combat Power** (fighting effectiveness per
+soldier) are separate stats. Both are 1–7.
 
-### Unit Statistics
+**Effective Combat Pool = min(CP, current Size)**
 
-| Stat | Derived from | Notes |
+As Size drops from casualties, the pool shrinks — fewer soldiers means fewer
+dice regardless of individual quality.
+
+**Design axiom: Generalship dominates.** CR asymmetry is intentional. The
+general is the battle.
+
+---
+
+### Unit Stat Block
+
+**Size** (1–7): headcount at declared scale. Health pool. At 0: destroyed.
+
+**Combat Power (CP)** (1–7): fighting effectiveness per soldier. Equipment +
+training. Sets the combat pool ceiling.
+
+| CP | Tier |
+|---|---|
+| 1 | Levy |
+| 2 | Militia |
+| 3 | Professional |
+| 4 | Veteran |
+| 5 | Elite |
+| 6–7 | Exceptional/Peerless |
+
+**Military stat governs unit quality:** A faction's Military stat sets the
+maximum CP and Cohesion ceiling for units it fields (1:1 direct mapping).
+
+**Speed:** Slow / Standard / Fast.
+
+**Cohesion** (1–7): formation integrity. Starting value = min(general's CR,
+faction Military). Deterministic check: if total Size lost this turn exceeds
+Cohesion rating, Cohesion degrades by 1. All checks fire at Phase 5 regardless
+of damage source.
+
+| Cohesion | CP penalty |
+|---|---|
+| 5–7 | None |
+| 3–4 | −1D |
+| 1–2 | −2D |
+| 0 | Formation broken; cannot attack |
+
+Cohesion ceiling applies at deployment only, not retroactively. Military floor = 1.
+
+**Morale** (1–7): rout threshold. Starting = general's CR + unit quality
+modifier (cap 7). Degradation triggers (all fire at Phase 5, cap −3/phase):
+Size below 50%: −1. Size below 25%: −1 additional. Cohesion broken: −1.
+Allied unit routed in zone: −1. General incapacitated Stage 1: −1. General
+killed Stage 2: −2 (outside cap). Flanked and lost: −1. Idle army (no
+engagement 2+ turns): −1. Morale floor = 1 while general present. At
+Morale 0: unit routs. Rout contagion braked at 1 per turn.
+
+**Weapon Type and DR:** Inherits personal combat tables unchanged. Projectile
+DR = LightCut values.
+
+| Armour | LightCut | HeavyCut | LightBlunt | HeavyBlunt | Projectile |
+|---|---|---|---|---|---|
+| None | 0 | 0 | 0 | 0 | 0 |
+| Light | 2 | 1 | 1 | 0 | 2 |
+| Medium | 4 | 3 | 2 | 1 | 4 |
+| Heavy | 6 | 5 | 3 | 1 | 6 |
+
+---
+
+### Weapon Effectiveness Reference
+
+| Attacker | vs None | vs Light | vs Medium | vs Heavy |
+|---|---|---|---|---|
+| LightCut | ✓ | ✗ | ✗ | ✗ |
+| HeavyCut | ✓✓ | ✓✓ | ✓ | ✗ |
+| HeavyBlunt | ✓✓ | ✓✓ | ✓✓ | ✓✓ |
+| Projectile | ✓ | ✗ | ✗ | ✗ |
+
+HeavyBlunt is the only weapon effective against Heavy armour. Projectile
+units are anti-unarmoured only. Force composition determines outcome.
+
+---
+
+### Battle Scale
+
+| Scale | 1 Size = | Thread scale |
 |---|---|---|
-| Weapon Type | Primary weapon type of unit | Light Cut / Heavy Cut / Light Blunt / Heavy Blunt |
-| Armour Tier | Unit armour | None / Light / Medium / Heavy |
-| Combat Pool | Unit cohesion and training | Equivalent to individual pool; larger for elite units |
-| DR | Armour tier vs attacker weapon type | Same table as personal combat |
-| Stamina | Unit endurance | Depletes per engagement; OOB = unit is spent |
+| Skirmish | ~10 soldiers | Personal |
+| Company | ~100 soldiers | Object |
+| Battle | ~500 soldiers | Territorial |
+| Campaign | ~1,000 soldiers | Territorial |
+| War | ~5,000 soldiers | Structural |
 
-### Mass Combat Resolution
+Scale is narrative only — no mechanical change except Thread TS minimums.
 
-Each engagement: attacker pool vs defender pool (split by number of attacking units), Fibonacci bonus applied to outnumbering units, DR applied to damage per weapon type vs armour tier. Same critical hit threshold (excess ≥ 3). Same wound structure (units take wounds before breaking).
+---
 
-### Mass Battle Abstractions
+### Command Rating (CR)
 
-**Fibonacci → Flanking modifier.** A flanked unit splits its Defence pool across all attacking units. 3-unit assault on 1 unit breaks that unit within approximately 3 battle turns in almost all configurations.
+**CR = ⌈(Presence + Cognition) ÷ 2⌉.** NPC generals: CR assigned directly (1–7).
 
-**Zone collapse → Formation break.** When one unit breaches a formation, adjacent enemy units lose their positional coherence. Subsequent allied units engage without a formation check. Historical basis: Leuctra (371 BC), Cannae (216 BC) — one breach collapses the line.
+CR governs: sub-unit count cap (max = CR), Size cap per unit (max Size = CR),
+Cohesion ceiling, Morale starting value and floor (= 1 while general present),
+tactic execution (CR dice vs Ob). Combat pool bonus: +1D per 2 CR.
 
-**Rescue → Reserve commitment.** A reserve unit breaking away from its engagement (costs the enemy +2D that turn) to reinforce a collapsing flank. The 2–3 round survival window maps directly: a unit that has taken one wound needs relief within 2 battle turns or it breaks.
+**General death — two-stage:**
+- Stage 1 (incapacitated): −1 Morale all units, CR halved, Morale floor suspended.
+  Stabilise Phase 5 with Medicine Ob 2 within 1 turn or Stage 2 fires.
+- Stage 2 (killed): −2 Morale (outside cap), CR = 0, all units uncommanded.
 
-**Weapon type → Unit specialisation.**
-- Light Cut units (light infantry, skirmishers): effective in harassment, pursuit, 1v1 engagements. Weak against armoured units.
-- Heavy Cut units (line infantry, men-at-arms with swords): dominant in 1v1, effective generally. The strongest general-purpose unit type.
-- Heavy Blunt units (billmen, halberdiers, men-at-arms with hammers): specialist anti-armour. Weak against unarmoured light units; decisive against heavy armoured units. Requires numerical support (2v1 minimum) to overcome hit rate disadvantage.
+Leader defeat: if leader's unit is defeated, leader rolls Agility vs Ob =
+attacker net successes. Failure: captured. Failure by 3+: attacker may
+choose to kill.
 
-**Armour DR → Unit armour rating.** A Heavy armoured elite unit can hold a 2v1 engagement against Light Cut attackers 44% of the time. It requires either 3v1 or Heavy Blunt attackers to break it reliably. This is the historical basis for elite heavy cavalry and men-at-arms as anchor units.
+General in personal combat: Phase 5 action consumed each turn until resolved.
+Mass battle continues at reduced command efficiency. CR suspended.
 
-**Draw rate in 3v2 → Attritional engagement.** When flanks are roughly matched, the battle centre decides. The high draw rate in parallel engagements (40–87%) reflects historical attritional battles where local numerical advantage is neutralised by matched quality.
+---
 
-[EDITORIAL: Mass combat unit stat values (specific pool sizes, cohesion thresholds, morale mechanics) require design confirmation before compilation. The framework above is derived from simulation data and is mechanically sound. Specific numbers need playtesting at unit scale.]
+### Formation Types
+
+| Formation | Off dice | Def dice | Special |
+|---|---|---|---|
+| Line | Normal | Normal | Standard |
+| Shield Wall | −1D | +2D | Cannot advance. Negates flanking from one declared side/turn. Second flank applies normally. |
+| Wedge | +2D | −1D | Negated if opponent uses Shield Wall |
+| Skirmish | Normal | Normal | Cannot be flanked. −1D vs Heavy infantry |
+| Column | Cannot engage | Cannot engage | +1 Speed tier, movement only |
+| Reserve | Cannot engage | Cannot engage | Commits at Phase 3 start of NEXT turn |
+
+Wedge beats Line. Shield Wall negates Wedge. No formation universally dominant.
+Units beyond CR limit fight at Line, Cohesion floor = 1, no tactics.
+
+---
+
+### Battle Turn Structure
+
+**Phase 1 — Strategy Declaration** (simultaneous, secret)
+Assignments (max 3 engagements TTRPG), formation per unit, tactical action,
+Thread intent (public). Thread Diagnosis occurs here (public declaration =
+rendering the target configuration).
+
+**Phase 2 — Volley and Combat Thread**
+Projectile units fire. **Combat Thread operations** (Dissolution, offensive
+Pulling) also fire here — declared Phase 1, fire before Engagement.
+Volley: CP vs TN 6, net successes − DR = Size loss. Size loss recorded;
+Cohesion check deferred to Phase 5.
+
+**Phase 3 — Manoeuvre** (Fast → Standard → Slow)
+Environmental modifiers apply. Reserve commitment declared (fires next turn).
+
+**Phase 4 — Engagement** (max 3 simultaneous, TTRPG)
+Per engagement: (1) Effective Pool = min(CP, Size) − Cohesion penalty +
+Formation modifier. (2) Split Offence/Defence (both sides simultaneous).
+(3) Damage = max(0, net hits + weapon modifier − DR). Critical (net ≥ 3):
+weapon modifier doubled. Both sides take Size damage simultaneously.
+Mutual destruction valid. Mass Mismatch Penalty: Light vs Heavy weapon
+attack: −1 defensive success (min 0). Exempt: Shield Wall.
+
+**Phase 5 — Cascade** (strict order)
+1. Apply all Size damage (Volley + Combat Thread + Engagement).
+2. Cohesion checks (deterministic, all sources combined).
+3. Morale checks (triggers + cap −3/phase, Stage 2 general death outside cap).
+4. **Support Thread operations** (Weave, Mend, Lock) resolve here.
+5. General action: Rally / Reinforce Cohesion / Support Threadweave /
+   Personal combat exchange / Stabilise incapacitated general.
+
+**Phase 6 — Reform**
+Non-engaged units: restore Cohesion, recover 1 Morale, merge sub-units.
+Idle army: if no engagements Phase 4 this turn AND previous turn, both
+sides lose 1 Morale.
+
+---
+
+### Tactics
+
+| Tactic | Effect | Ob | Counter |
+|---|---|---|---|
+| Envelopment | Attempt all-flank; requires Fast | 2 | Refused Flank |
+| Feigned Retreat | Disengage; pursuer Cohesion check; re-engage next turn with flank | 3 | CR Ob 2 to recognise |
+| Ambush | First engagement: defender no Defence allocation | 4 | Scouting (GM) |
+| Concentration | All sub-units on one target; max Fibonacci | 1 | Flanks exposed |
+| Refused Flank | Wing anchors on terrain; immune that flank | 1 | Sacrifices offence |
+| Hammer & Anvil | Shield Wall holds; Fast unit envelops | 3 | Break Anvil first |
+
+---
+
+### Environmental Modifiers
+
+| Terrain | Effect |
+|---|---|
+| River crossing | −1 Speed tier; −1D Off; Cohesion check (Str lost = 1) |
+| Uphill | Defender +1D Def; attacker −1D Off |
+| Forest/broken | Cavalry → Standard; flanking impossible |
+| Walls/fortifications | Defender +3 DR all types; no flanking; Slow cannot advance |
+| Narrow pass | 1 engagement per side; Fibonacci impossible |
+
+---
+
+### Thread in Mass Combat
+
+| Battle scale | Thread scale | Min TS | Ob | Coherence cost |
+|---|---|---|---|---|
+| Skirmish | Personal | 30 | 2 | 0 |
+| Company | Object | 30 | 1 | 0 |
+| Battle | Territorial | 50 | 4 | −1/op |
+| Campaign | Territorial | 50 | 4 | −1/op |
+| War | Structural | 70 | 5 | −2/op |
+
+Coherence loss is automatic per §5.2.2, capped at −1/op (§5.2.3).
+Weaving a unit's Cohesion is Territorial scale (collective formation).
+Weaving a general's personal attributes is Personal scale (the person's
+configuration, not the unit's). Weaving the general = Personal (Ob=2, 0
+Coherence); Weaving the unit = Territorial (Ob=4, −1 Coherence).
+
+**Pulling an enemy general's command capacity** (Presence/Cognition
+configuration) is Personal scale. Effect: enemy CR −1 for battle duration.
+[EDITORIAL: confirm this is an intended tactical option]
+
+Site-anchored collective Weave: Active site −1 Ob; Major site −2 Ob.
+Brittleness exempt on Success if site-anchored. Solo Territorial Weave
+always carries brittleness risk.
+
+Co-movement at mass battle scale: Temporal result = general loses Phase 5
+action for d3 turns. Epistemic = CR −1 for d3 turns. Actual = 1 Wound.
+
+Coherence=0: practitioner exits rendered existence. Cannot initiate actions
+or Thread operations. Recovery: 1 season non-practice + Close Knot
+Anchoring Scene (Bonds Ob 2) → Coherence restored to 1.
+
+---
+
+### Southernmost
+
+Non-Thread-sensitive units (TS < 30) cannot operate in Southernmost.
+They dissolve without awareness on entry. Remove from battle map: no
+casualties, no Morale trigger, no Cohesion check. All individuals in a
+force operating in Southernmost must personally have TS ≥ 30.
+This is why Southernmost was never conquered.
+
+---
+
+### Reinforcement
+
+Natural: +1 Size per campaign season. Accelerated: 1 Faction Resource per
+additional Size point. Maximum: original Size at army creation. Destroyed
+units (Size 0) cannot be restored. Thread effects on units persist across
+battle boundaries unless cleared.
+
+Battle outcome → faction consequences:
+- Battle lost (defending force routed): Military −1, Stability check Ob 1.
+- Campaign-scale defeat: Military −1, Stability check Ob 2, Mandate −1.
+Military floor = 1. Cohesion ceiling applies at deployment only.
+
+Muster: produces 1 unit of chosen type. Size=2 at deployment (next season).
+CP determined by unit type choice, subject to Military ceiling.
+
 
 ---
 
