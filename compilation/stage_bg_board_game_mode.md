@@ -1,7 +1,7 @@
 # VALORIA: BOARD GAME MODE
 ## Compilation Stages B1–B10
 
-*Board Game Mode is a standalone competitive-cooperative game for 2–6 players. It shares the Valoria setting, faction mechanics, clocks, and territory map with TTRPG mode but replaces narrative resolution with card-driven orders, simplified unit management, and structured turn sequences. The three game-end conditions — TT Rupture, TC Holy State, IP Invasion — are shared with TTRPG mode. Victory is per-faction unless the shared TT survival condition is met.*
+*Board Game Mode is a standalone competitive-cooperative game for 2–6 players. It shares the Valoria setting, faction mechanics, clocks, and territory map with TTRPG mode but replaces narrative resolution with card-driven orders, simplified unit management, and structured turn sequences. The three game-end conditions — RS Rupture, TC Holy State, IP Invasion — are shared with TTRPG mode. Victory is per-faction unless the shared RS survival condition is met.*
 
 ---
 
@@ -164,7 +164,11 @@ Once per season. Roll Mandate vs Ob 2.
 
 **Löwenritter Integration:** Crown controls Arnesheld garrison. If coup threshold fires (see B8 NPC AI), the Löwenritter acts as a separate BG faction under NPC AI for the remainder of the game.
 
-**Victory Condition:** *Constitutional Stability.* At game end: Crown controls Valorsplatz + Gransol + at least 2 other territories; Mandate ≥ 5; TC < 60; IP < 75; Torben's Loyalty Clock ≥ 5. All conditions must be met simultaneously.
+**Victory Condition:** *Constitutional Stability.*
+
+**Standard path:** Crown controls Valorsplatz + Gransol + at least 2 other territories; Mandate ≥ 5; TC < 60; IP < 75; Torben's Loyalty Clock ≥ 5. All conditions must be met simultaneously.
+
+**Alternative path (active consolidation):** Crown controls 4+ territories including Valorsplatz; Mandate ≥ 6; Stability ≥ 6; at least 1 formal alliance with another faction (active Treaty token). Represents genuine consolidated rule independent of Church/Altonian failure.
 
 ---
 
@@ -255,7 +259,7 @@ Available in Varfell only. Once per season. Roll Intel vs Ob 2.
 
 **Thread Capability:** Indirect. The Collection provides Thread-adjacent effects without direct Thread operations. At TK 5, Vaynard understands Thread structure — but this is a narrative development, not a BG roll.
 
-**Victory Condition:** *Information Supremacy.* At game end: Varfell Intel ≥ 6; TK ≥ 3; control of Varfell; Vaynard has revealed at least 2 hidden faction stats. Alternatively: deliver Thread-knowledge intelligence to the Revolution enabling their Community Weaving success at TT < 40.
+**Victory Condition:** *Information Supremacy.* At game end: Varfell Intel ≥ 6; TK ≥ 3; control of Varfell; Vaynard has revealed at least 2 hidden faction stats. Alternatively: deliver Thread-knowledge intelligence to the Revolution enabling their Community Weaving success at RS > 60. *TK (Thread Knowledge) tokens: gained via successful Private Collection order (+1 TK), Overwhelming Intel order targeting a practitioner or Einhir site (+1 TK), or delivering Thread intel to Revolution enabling Community Weaving (+1 TK, once). Max 1 TK/season. Max 5 TK.*
 
 ---
 
@@ -282,7 +286,7 @@ Roll Wealth vs target faction Wealth.
 
 **Thread Capability:** None.
 
-**Victory Condition:** *Economic Dominance.* At game end: Guilds Wealth ≥ 6; control of Halvardshelm + Eidursjo; Guild Favour ≥ 5 in at least 3 territories; Schoenland trade route active (IP < 75).
+**Victory Condition:** *Economic Dominance.* At game end: Guilds Wealth ≥ 6; control of Halvardshelm + Eidursjo; Guild Favour ≥ 5 in at least 3 territories; Schoenland trade route active (IP < 75). *Note: Trade order in Schoenland (Success) reduces IP by 1 that season — the Guilds' primary IP suppression tool.*
 
 ---
 
@@ -312,7 +316,7 @@ Choose mode before rolling.
 
 **Thread Capability:** Indirect and unintentional. RS degrades from Niflhel operations without faction knowledge.
 
-**Victory Condition:** *Shadow Supremacy.* At game end: Niflhel Intel ≥ 5; control of Sigurdshelm; at least 3 pieces of hidden faction information held; no arm of Niflhel publicly compromised; Stability ≥ 4.
+**Victory Condition:** *Shadow Supremacy.* At game end: Niflhel Intel ≥ 5; control of Sigurdshelm; at least 3 pieces of hidden faction information held; no arm of Niflhel publicly compromised; Stability ≥ 4. *Publicly compromised: any Intel order targeting Niflhel achieves Overwhelming success → Compromise token placed. Resets via Disappear tactic card or successful counter-Intel order (Ob 2).*
 
 ---
 
@@ -497,14 +501,20 @@ Roll: Intel vs Ob = territory Fortification level + 1.
 
 ### Unit Types
 
-| Type | Martial | Endurance | Cohesion | Health | Muster Ob | Requirements |
-|---|---|---|---|---|---|---|
-| Light Infantry | 3 | 3 | 3 | 9 | 1 | None |
-| Heavy Infantry | 4 | 4 | 4 | 10 | 2 | Prosperity 5+ in muster territory; Wealth Ob 2 |
-| Cavalry | 4 | 3 | 5 | 9 | 3 | Prosperity 6+ or officer with Cavalry History; Wealth Ob 3 |
-| Ranged | 3 | 2 | 3 | 8 | 2 | Officer with Ranged proficiency or relevant History |
-| Artillery | 2 | 2 | 2 | 8 | 4 | Wealth Ob 4; 1 season construction (placed face-down, deploys next season) |
-| Knights Templar | 5 | 5 | 6 | 11 | — | Church asset only; not muster-raised; placed at Himmelenger at game start |
+| Type | Martial | Resilience | Cohesion | Health | Muster Ob | TTRPG CP equiv | TTRPG Weapon | TTRPG Armour |
+|---|---|---|---|---|---|---|---|---|
+| Light Infantry | 3 | 3 | 3 | 9 | 1 | 3 | LightCut | Light |
+| Heavy Infantry | 4 | 4 | 4 | 10 | 2 | 4 | HeavyCut | Medium |
+| Cavalry | 4 | 3 | 5 | 9 | 3 | 5 | HeavyCut | Heavy |
+| Ranged | 3 | 2 | 3 | 8 | 2 | 3 | Projectile | Light |
+| Artillery | 2 | 2 | 2 | 8 | 4 | 2 | HeavyBlunt | None |
+| Knights Templar | 5 | 5 | 6 | 11 | — | 5 | HeavyBlunt | Heavy |
+
+*BG 'Resilience' = TTRPG unit Endurance proxy (renamed to avoid confusion with character attribute Endurance). Health = Resilience + 6.*
+
+*Anti-Armour keyword (Artillery, Knights Templar): +2D when targeting Heavy Infantry, Cavalry, or Knights Templar.*
+
+*Muster Ob requirements unchanged: Light Infantry None; Heavy Infantry Prosperity 5+ + Wealth Ob 2; Cavalry Prosperity 6+ or officer History + Wealth Ob 3; Ranged officer with Ranged proficiency; Artillery Wealth Ob 4 + 1 season construction.*
 
 **Health = Endurance + 6.** Damage reduces Health. When Health reaches 0: Formation Break.
 
@@ -536,7 +546,9 @@ Combat resolves when units from opposing factions occupy the same territory at O
 | **Balanced** | Ob 1, ±0 | Ob 2, ±0 | Ob 1, +2D | Ob 1, +1D |
 | **Defensive** | Ob 1, −2D | Ob 2, −2D | Ob 1, ±0 | Ob 1, −1D |
 | **Offensive** | Ob 1, +2D | Ob 2, +2D | Ob 1, +2D | Ob 1, +3D |
-| **Brutal** | Ob 1, +2D +2 dmg | Ob 2, +2D +2 dmg | Ob 1, +2D +2 dmg | Ob 1, +3D +4 dmg |
+| **Brutal** | Ob 1, +3D −1D def | Ob 2, +3D −1D def | Ob 1, +3D −1D def | Ob 1, +3D −1D def |
+
+*Brutal: +3D Offence, −1D Defence. No flat damage bonus. Cohesion 4+ required.*
 
 *Both sides attack simultaneously using own row/column result.*
 
@@ -554,19 +566,58 @@ Combat resolves when units from opposing factions occupy the same territory at O
 - **Offensive:** Requires Martial 3+.
 - **Brutal:** Requires Cohesion 4+. If used against a civilian population (Govern order interrupted by Brutal attack): TC +1 if Church present.
 
-### Siege
 
-Siege may be declared against any territory with Fortification 2+. Fortification 0–1 territories are assaulted directly.
+### Tactic Cards
 
-**Declare siege:** Attacking faction has Military ≥ defending garrison. Siege persists across seasons until end condition met.
+Each faction receives a hand of 6 tactic cards at game start (4 shared + 2 faction-specific). Cards refresh each season. One tactic card may be played per battle, placed face-down before the Disposition declaration.
 
-**Each siege season (one action from each side):**
+**Simultaneous reveal:** Both sides place tactic cards face-down. Reveal simultaneously. The tactic card sets the Disposition row and provides additional effects. *Shadow Intel exception: see Varfell card.*
 
-Attacker options: Starve (Military vs Ob = Fort level → defender Endurance −1, Stability −1); Assault (Military vs Ob = Fort + 2 → breach attempt); Sappers (Intel vs Ob = Fort +1 → Fort −1; detected on Partial/Failure: defender gets free Sortie); Negotiate (Influence vs defender Mandate).
+**Shared tactic cards (all factions):**
 
-Defender options: Hold (Cohesion Ob 1 → no losses); Sortie (Military vs Ob = attacker Military ÷ 2 → attacker loses 1 unit or −2D); Relief Call (Influence Ob 3 → allied force arrives in 1–2 seasons); Counter-Negotiate (Influence vs attacker Stability).
+| Card | Disposition | Effect |
+|---|---|---|
+| Standard Advance | Offensive | No additional effect |
+| Disciplined Defence | Defensive | If opponent plays Offensive or Brutal: +1D Defence this engagement |
+| Feigned Retreat | Balanced | On loss: opponent's winning units are Overextended (−2D Martial in that territory next season) |
+| Concentrated Strike | Offensive | One unit of your choice rolls +2D this engagement |
 
-**Siege end:** Defender Stability 0 (surrender), Fortification 0 (walls breached → immediate mass combat), attacker withdraws, or negotiated settlement.
+**Faction-specific tactic cards (2 per faction):**
+
+| Faction | Card | Effect |
+|---|---|---|
+| Crown | Royal Guard | Elite unit of your choice: +3D this engagement |
+| Crown | Ducal Call | Summon 1 unit from adjacent territory this engagement |
+| Church | Crusade Fervour | Brutal disposition; Cohesion check exempt this engagement |
+| Church | Inquisitor's Mark | Target opposing unit: −2D this engagement |
+| Hafenmark | Mercenary Surge | Pay 1 Wealth: +2 Martial pool dice this engagement |
+| Hafenmark | Sovereign Authority | Immune to Disposition table Ob penalties this engagement |
+| Varfell | Shadow Intel | After both cards placed face-down: reveal opponent's card. You may swap your card for a different one from your hand. |
+| Varfell | Calculated Retreat | Withdraw all units; opponent cannot pursue this season |
+| Guilds | Paid Off | Target opposing unit: −1D this engagement (costs 1 Wealth) |
+| Guilds | Logistics Mastery | Strained units fight at full Martial this engagement |
+| Niflhel | Assassination | Target opposing commander: all opponent units −1D this engagement |
+| Niflhel | Disappear | Withdraw all units; no Overextended penalty; clears Compromise token if held |
+| Löwenritter | Iron Discipline | Immune to Route this engagement regardless of Cohesion check |
+| Löwenritter | Martial Law | After winning: territory gains Martial Law next season |
+| Revolution | People's Courage | All units: Cohesion +1 this engagement |
+| Revolution | Ambush | In Oastad or Stillhelm only: opponent has no Defence allocation first exchange |
+
+### Siege Clock
+
+Siege may be declared against any territory with Fortification 2+. Fortification 0–1 territories are assaulted directly (immediate combat, no siege).
+
+**Siege Clock** starts at the territory's Fortification level.
+
+**Each siege season:**
+- **Attacker:** rolls Military vs Ob = defender's current Stability. Success: Clock −1.
+- **Defender (choose one):** Relief (Influence Ob 2 → Clock +1); Sortie (Military vs Ob = attacker Military ÷ 2 → Clock +1); Negotiate (Influence vs attacker Stability → resolve diplomatically).
+
+Clock cannot drop below 0 mid-season. **At Clock = 0 (Accounting):** walls breached — immediate mass combat resolves, then territory control transfers.
+
+**Siege end:** Clock = 0 (breach), attacker withdraws, or negotiated settlement.
+
+**Hybrid:** PC Personal Phase sabotage success applies as Domain Echo (Clock −1 at Cascade Phase), stacking with the attacker's seasonal roll. Maximum Clock movement per season: −2.
 
 **Siege RS cost:** RS −1 per season of active siege. Einhir site in fortification: RS −1 additional per season.
 
@@ -905,7 +956,7 @@ Shuffle each pool separately. Threshold cards are drawn from their pile when tri
 | S-05 | **Military Desertion.** Faction with lowest Stability: −1 unit (remove weakest unit, player's choice). If two factions tied at lowest: both. |
 | S-06 | **Church Favour Surge.** Church Preach in one random territory is automatic Success this season (no roll required). TC +1. |
 | S-07 | **Schoenland Shift.** Draw Schoenland AI card and execute immediately (in addition to its normal turn). |
-| S-08 | **Einhir Ruins Discovered.** One random uncontrolled territory (reroll if T13): Revolution Influence +1 there. TT −1 (stabilising discovery). [EDITORIAL: Name the Einhir site.] |
+| S-08 | **Einhir Ruins Discovered.** One random uncontrolled territory (reroll if T13): Revolution Influence +1 there. RS +1 (stabilising discovery). [EDITORIAL: Name the Einhir site.] |
 | S-09 | **Plague.** One territory (GM/designated player draws from territory stack): Prosperity −1 for 2 seasons. Any units there: Endurance check Ob 1 or −1 Endurance. |
 | S-10 | **Flood Season.** All March orders in territories 11–14: +1 movement cost. Halvardshelm Breadbasket does not trigger this season. |
 | S-11 | **Parliamentary Crisis.** Parliament convenes emergency session. Any pending Parliamentary Manoeuvre resolves this season regardless of timing. Crown Mandate check Ob 1 or −1 Mandate. |
@@ -914,7 +965,7 @@ Shuffle each pool separately. Threshold cards are drawn from their pile when tri
 | S-14 | **Thread Disturbance.** RS −2 (unexplained). No co-movement card drawn (substrate disturbance, not an operation). All practitioner-affiliated factions: Awareness marker. |
 | S-15 | **Restoration Memory.** [EDITORIAL: S-08 Einhir site name deferred.] Revolution Stability +1. RS +1. |
 | S-16 | **Niflhel Network Exposure.** One Niflhel network (GM chooses) has an operation surface publicly. That network's Intel −1 for 2 seasons. Any faction with an active Intel order this season may immediately learn one piece of information that network holds. |
-| S-17 | **Einhir Practitioner Surfaces.** A practitioner with TS 40+ is reported operating openly in one random territory. Church automatically opens Inquisition there. Revolution Influence +1 in that territory. TT +1. |
+| S-17 | **Einhir Practitioner Surfaces.** A practitioner with TS 40+ is reported operating openly in one random territory. Church automatically opens Inquisition there. Revolution Influence +1 in that territory. RS −1. |
 | S-18 | **Border Skirmish.** Two adjacent factions (GM or random draw) have a minor military incident. Neither loses units but both take −1 Stability. IP +1 if Crown is involved. |
 | S-19 | **Debt Called.** Guilds call a debt from the faction with highest Wealth. That faction: Wealth −1 this season OR Guilds gain Influence +1 in one territory of their choice. |
 | S-20 | **Thread Quiet.** Unusually stable substrate this season. All Thread operations: −1 Ob. RS +1 at seasonal accounting. Practitioners with TS 50+ sense it as uncanny — the quiet is wrong, not peaceful. |
@@ -1003,7 +1054,7 @@ Used only when multiple players meet faction victory conditions simultaneously.
 
 ### 2-Player Victory Tuning
 
-At 2 players, each player controls one major faction. The remaining five player factions run on NPC AI. This creates significant clock-driving pressure (5 NPC factions act, many driving TT/TC/IP automatically). 
+At 2 players, each player controls one major faction. The remaining five player factions run on NPC AI. This creates significant clock-driving pressure (5 NPC factions act, many driving RS/TC/IP automatically). 
 
 **2-player adjustment:** NPC factions execute only 2 orders per season instead of 3. Clock threshold triggers for NPC factions require 1 additional season of condition persistence before firing (except game-end triggers — those fire immediately).
 
