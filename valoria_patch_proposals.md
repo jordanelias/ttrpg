@@ -1527,3 +1527,54 @@ Also update the explanatory sentence: remove "including bonus dice" from the net
 | **Total** | **130 (+37)** |
 
 *PP-094 through PP-130: 37 new patches. All derived from canon constraints, compiled stage documents, and internal system logic. No editorial approval required (none of these are setting, NPC identity, faction-narrative, or design-intent-ambiguous decisions).*
+
+---
+
+## PP-131 through PP-155: Mass Battle System v3 + Transition Patches
+### Session: 2026-03-29 Mass Battle Design + Simulation
+### Status: All approved; compiled into stage8_combat.md, stage11_scale_transitions.md, stage5_clocks.md
+
+**PP-131:** Mass battle Size/CP split (Size = health, CP = combat power, Effective Pool = min(CP, Size))
+**PP-132:** Military stat → unit quality ceiling (1:1 mapping: Military = CP ceiling = Cohesion ceiling)
+**PP-133:** Deterministic Cohesion check (degrade if Size lost > Cohesion; all checks Phase 5)
+**PP-134:** Morale cap −3/phase; Stage 2 general death outside cap; rout contagion braked 1/turn
+**PP-135:** CR = ⌈(Presence + Cognition) ÷ 2⌉; CR = max Size commanded = max sub-units
+**PP-136:** General two-stage death; 1-turn stabilisation window; Stage 2 fires next Phase 5
+**PP-137:** Leader defeat: Agility vs Ob = attacker net succs; fail by 3+: attacker may choose to kill
+**PP-138:** Battle outcome consequences: battle loss = Mil −1 + Stab Ob1; campaign = Mil −1 + Stab Ob2 + Man −1
+**PP-139:** Military floor = 1; Cohesion ceiling applies at deployment only (not retroactive)
+**PP-140:** Size rename from Strength (avoids collision with STR attribute)
+**PP-141:** Southernmost: TS < 30 units dissolve on entry; no Cohesion check; explains historical unconquerability
+**PP-142:** Thread scale mapping corrected: Battle/Campaign = Territorial (Ob4, TS50+); War = Structural (Ob5, TS70+)
+**PP-143:** "+2 Ob Coherence check" removed; replaced with automatic Coherence auto-cost per §5.2.2
+**PP-144:** Thread timing Option C: combat Thread (Dissolution/offensive Pull) fires Phase 2; support Thread fires Phase 5
+**PP-145:** Weaving general's personal attributes = Personal scale (Ob2, 0 Coherence); unit Cohesion = Territorial
+**PP-146:** Pulling enemy general's CR capacity = Personal scale [EDITORIAL: confirm intended tactical option]
+**PP-147:** Site-anchored Territorial Weave: Active site −1 Ob; Major site −2 Ob; brittleness exempt on Success
+**PP-148:** Coherence=0 definition: exits rendered existence; recovery via Close Knot Anchoring Scene (Bonds Ob2)
+**PP-149:** Contact spanning scene boundary: ops on non-existent configs auto-fail (+2 Ob, failure consequences)
+**PP-150:** Contact terminates at Personal Phase end in hybrid mode
+**PP-151:** Stage11 TT Multiplier column removed; replaced with RS/TS/Coherence reference table
+**PP-152:** Stage11 Thread→Mass handoff updated to Option C (split by operation type)
+**PP-153:** Stage11 Mass→Personal clarified: Phase 5 slot consumed per turn; not literal pause
+**PP-154:** Stage5 TT→RS comprehensive rename with inversion
+**PP-155:** Siege Clock: replaces multi-option siege; starts at Fort level; −1 per attacker Military vs defender Stability; +1 per defender Relief/Sortie; breach at 0 (Accounting)
+
+### BG System Patches (PP-156–PP-170)
+
+**PP-156:** BG unit table updated with TTRPG equivalence column
+**PP-157:** BG Brutal disposition: flat damage removed; +3D Off / −1D Def; Cohesion 4+ required
+**PP-158:** BG tactic cards: 4 shared + 2 faction-specific per faction (8 factions listed)
+**PP-159:** Varfell Shadow Intel reworked: post-placement reveal (after cards placed, before roll) + swap from hand
+**PP-160:** Overextended status defined: −2D Martial in territory for 1 season
+**PP-161:** Guilds Trade in Schoenland: Success → IP −1
+**PP-162:** Crown alternative victory path: Mandate ≥ 6, Stability ≥ 6, 4+ territories, 1 formal alliance
+**PP-163:** Niflhel compromise defined: Overwhelming Intel → Compromise token; resets via Disappear or counter-Intel
+**PP-164:** TK (Thread Knowledge) defined for Varfell: Private Collection/Intel Overwhelming/Revolution delivery = +1 TK
+**PP-165:** Stability=0 recovery: Govern Ob3 in own territory → Stability 1
+**PP-166:** Altonian invasion unit stats: Vanguard M4/E4/C4, Heavy M5/E5/C5, Siege M3/E3/C3; CR=5 general; 3 units at IP75 +1/5IP
+**PP-167:** Commander bonus: +1D per 2 CR added to BG battle pool
+**PP-168:** Triple scale shift (Mass→Personal→Social) in one turn: social scene defers to next turn Phase 1
+**PP-169:** Siege Clock domain echo: max −2 Clock/season; simultaneous application at Accounting; floor = 0
+**PP-170:** V4 editorial item: Pulling enemy general's CR capacity = Personal scale [requires editorial confirmation]
+
