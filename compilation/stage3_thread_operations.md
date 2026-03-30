@@ -176,7 +176,7 @@ The window counts down whether or not the practitioner acts within it. Focus is 
 
 At Focus 1, the practitioner gains the experience of contact (relevant for TS growth, First Leap) but cannot perform operations. This creates a meaningful progression gate: Focus 2 is the minimum for functional practice.
 
-**Wound during the Leap round (before contact is established):** If the practitioner takes a Wound in the same round as the Leap roll, before the roll is resolved, apply +1 Ob to the Leap roll as normal (Wound penalty). The Attunement disruption check does not apply — it only triggers once contact is established. If the Leap succeeds despite the Wound penalty, contact proceeds normally.
+**Wound during the Leap round (before contact is established):** If the practitioner takes a Wound in the same round as the Leap roll, before the roll is resolved, apply −1D to the Leap roll (Wound penalty, per PP-WND-01). The Attunement disruption check does not apply — it only triggers once contact is established. If the Leap succeeds despite the Wound penalty, contact proceeds normally.
 
 **Incapacitation during contact:** If a Wound incapacitates the practitioner during contact (Wounds reach or exceed the incapacitation threshold: ceiling(Health ÷ 2)), contact terminates immediately regardless of the Attunement disruption check result. The operation in progress is treated as a Failure. The practitioner returns to rendering incapacitated.
 
@@ -822,4 +822,5 @@ Replaces the old Thread Tension track on board. Runs 100→0. Hidden by default 
 ---
 
 *End of Part Five: Thread Operations. Part Six (The Southernmost) continues in Stage 4.*
+
 
