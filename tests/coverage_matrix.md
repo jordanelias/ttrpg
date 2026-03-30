@@ -17,6 +17,11 @@
 | SIM-X-11 | Maret infiltration → Thread Diagnosis → Domain Echo → Inquisitor advance | C+B | 1 scene | TK, TC, CE, Coherence, RS, Investigation stages | Church, Varfell | Maret, Klapp, Vald | Personal→Thread→Faction zoom sequence | Complete |
 | SIM-X-12 | 3-season full cascade | D+E | 3 seasons | All clocks, all faction stats, all NPC states | All | All named | Full cascade accounting | Complete |
 
+| SIM-X-13 | FR-D-01 Dissolution + Past-Oriented Pulling (hypothetical TS 70) | C+B | Single scene | RS, Coherence retention, Temporal Disjunction, Certainty | None | Maret Uln, Haelmund (Disjunction witness) | Evidence erasure, PO-Pull prerequisites | Complete |
+| SIM-X-14 | Mode 2 Monstrous Entity + W-06b + Vaynard Discovery + Domain Echo | C+D | Single scene | RS, Coherence, Certainty, TC, Locked Zone proximity | Varfell, Niflhel, Crown | Vaynard, Maret, Niflhel Envoy, Crown Diplomat | Political scene interrupted by entity | Complete |
+| SIM-X-15 | Knot crisis (Klapp/Ansel) + Certainty + Inspiration attack + Call a Knot | C+D | 3 exchanges | Coherence, Certainty, Knot strain, Composure, Inspiration | Church | Klapp, Olafsson, Ansel | Practitioner under interrogation + Knot crisis | Complete |
+| SIM-X-16 | Collective Weave (Maret anchor + Klapp helper) + Rendering Crisis | C+B | Single scene | Coherence retention (both), Certainty (Klapp→0), RS, Knots | Varfell | Maret, Klapp | First collective operation + Rendering Crisis | Complete |
+
 > Pre-v3 batch coverage archived in `deprecated/sim_coverage_matrix_legacy.md`.
 
 ## P1 Findings — Editorial Decisions Required
@@ -41,3 +46,32 @@
 ## Terminology Correction Applied
 
 All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcount stat corrected to **Size** in this index. Source files retain original text; correction is notional for tracking purposes only.
+
+## New P1 Findings (SIM-X-13 through X-16)
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| F-58 | X-14 | RS 22 is 2 points from Dormant (Leap-disabled) threshold — any failed Weaving crosses the line globally | Open — campaign awareness item |
+
+## New P2 Findings (SIM-X-13 through X-16)
+
+| ID | Source | Description |
+|----|--------|-------------|
+| F-54 | X-13 | Past-Oriented Pulling TS 70+ hard gate correctly blocks TS 50 — gate works as designed |
+| F-55 | X-13 | PO-Pulling "+1 additional" Coherence cost = +1 Ob on retention roll sum — correctly maps under new system |
+| F-62 | X-15 | Certainty (Spirit=3) depletes to 1 after 2 Leaps — one more Leap triggers Rendering Crisis for low-Spirit practitioners |
+| F-63 | X-15 | Knot strain from Dissonant Coherence reaches crisis threshold near-inevitably without recovery; Conversion makes recovery unlikely — correct self-reinforcing arc |
+| F-66 | X-16 | Rendering Crisis fires post-Leap, not during contact — no interrupt rule; crisis doesn't retroactively affect the operation |
+| F-69 | X-16 | Territorial Weave success (−1 Ob territory-wide) may be disproportionately powerful at low RS when Thread operations are most precious |
+
+## Editorial Items (Open)
+
+| ID | Source | Description |
+|----|--------|-------------|
+| F-70 | X-16 | Klapp Rendering Crisis: Belief revision content requires user input |
+| F-45 | X-10 | Church Stability brake scope: suppresses only Mandate-based TC, or all TC sources? |
+| F-52 | X-12 | Faction Stability recovery rate for externally damaged Stability — no rule defined |
+| F-30 | X-07 | Coup Counter successor on Grandmaster death — no rule defined |
+| F-27 | X-07 | Mass battle stalemate resolution — no rule defined |
+| F-11 | X-03 | W-33 broken for CP≤2 units — EDITORIAL PENDING |
+| F-43 | X-10 | Two Domain Actions can drop TC by 4+ in one season — no seasonal TC cap |
