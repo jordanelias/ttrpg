@@ -11,6 +11,25 @@ Orchestrate multi-skill workflows. Run at session start, on "resume"/"start work
 
 If either file is absent: treat as new session, flag to user.
 
+## Canonical Project Status
+
+`valoria_scope_map.md` is the single canonical project status document. It inventories all systems, tracks simulation coverage, and maps open gaps/patches per system.
+
+**Update triggers (mandatory):**
+- Session Close — update scope map before committing session log
+- After any simulation batch — update coverage columns
+- After gap register changes — update gap status columns
+- After patch propagation — update patch columns
+- After design work — update "Untested" counts and gap status
+
+**Update procedure:**
+1. Read current `valoria_scope_map.md` from GitHub
+2. Apply deltas from session work (new sims, closed gaps, applied patches, new systems)
+3. Recalculate Coverage Summary table
+4. Update "CRITICAL BLOCKERS" section
+5. Update "PRIORITIZED AUDIT PLAN" if priorities shifted
+6. Commit updated file
+
 ## Skill Registry
 
 | Skill | Model | Trigger |
@@ -51,7 +70,8 @@ All must pass before final compilation:
 
 ## Session Close
 
-Archive previous `session_log_current.md` → `session_log_archive.md`. Replace current with:
+1. Update `valoria_scope_map.md` with session deltas (coverage, gaps, patches, blockers).
+2. Archive previous `session_log_current.md` → `session_log_archive.md`. Replace current with:
 
 ```yaml
 session_close: YYYY-MM-DDTHH (use sequence if multiple same-day: T01, T02)
@@ -66,9 +86,9 @@ gap_register_delta:
   opened: []
   closed: []
 blockers: []
+scope_map_updated: true
 ```
 
 ## Editorial Gate
 
 User retains exclusive authority over: setting, worldbuilding, characters, narrative, tone, faction behavior, ambiguous design intent. Flag: `[EDITORIAL: requires user approval — description]`. Claude may execute without approval: formula corrections, consistency fixes, formatting, audits, simulations, dice probability analysis.
-
