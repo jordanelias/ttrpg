@@ -11,14 +11,14 @@
 **Battle: Lowenritter Professional infantry vs Rebel Militia. Practitioner (Solmund, TS 70) attached to Lowenritter.**
 
 **Unit A: Lowenritter Infantry (defending)**
-- CP: 4 (Veteran), Strength: 5, Cohesion: 4, Morale: 6
+- CP: 4 (Veteran), Size: 5, Cohesion: 4, Morale: 6
 - Formation: Shield Wall (−1D Off, +2D Def)
 - Weapon: Heavy Cut, Armour: Medium
 - Effective Combat Pool: min(CP=4, Strength=5) = 4D, −1D Off (Shield Wall) = 3D Off, +2D Def = 6D Def
 - General: CR 4. Cohesion ceiling = min(CR=4, Military=4) = 4.
 
 **Unit B: Rebel Militia (attacking)**
-- CP: 2 (Militia), Strength: 6, Cohesion: 3, Morale: 4
+- CP: 2 (Militia), Size: 6, Cohesion: 3, Morale: 4
 - Formation: Wedge (+2D Off, −1D Def)
 - Weapon: Light Cut, Armour: Light
 - Effective Pool: min(CP=2, Strength=6) = 2D, +2D Off (Wedge) = 4D Off, −1D Def (Wedge) = 1D Def
@@ -50,9 +50,9 @@ W-33 Relational scale: Coherence −1. RS −3 (co-movement). Plus RS cost from 
 ## State: Turn 1, Phase 1–3
 
 ### Units
-Unit A (Lowenritter) — CP4, Strength 5/5, Cohesion 4, Morale 6
+Unit A (Lowenritter) — CP4, Size 5/5, Cohesion 4, Morale 6
   Formation: Shield Wall. Effective: 3D Off, 6D Def.
-Unit B (Rebel) — CP2, Strength 6/6, Cohesion 3, Morale 4
+Unit B (Rebel) — CP2, Size 6/6, Cohesion 3, Morale 4
   Formation: Wedge. Effective: 4D Off, 1D Def.
 
 ### Tracks
@@ -86,7 +86,7 @@ Unit A Off: 3D at TN6 (HeavyCut hit TN). P(die≥6) = 0.5. Expected net = 3×(0.
 Unit B Def: 1D at TN7 (LightCut def TN). Expected = 1×0.33 = 0.33.
 
 Net hits to Unit B: 1.2 − 0.33 = 0.87. Weapon modifier +4 (HeavyCut). DR(Unit B Light armour, HeavyCut) = 1.
-Damage to Unit B: max(0, 0.87 + 4 − 1) = 3.87 Strength loss.
+Damage to Unit B: max(0, 0.87 + 4 − 1) = 3.87 Size loss.
 
 Unit B Off: 4D at TN5 (LightCut hit TN). P(die≥5) = 0.6. Expected net = 4×(0.6−0.1) = 2.0.
 Unit A Def: 6D at TN6 (LightCut def TN). Expected = 6×(0.5−0.1) = 2.4.
@@ -101,22 +101,22 @@ Mass Mismatch check: Unit B (Light weapon) attacking Unit A (Heavy weapon wielde
 Damage to Unit B (revised): 0.87 + 4 − 1 = 3.87. With mass mismatch to Unit B's def: unit B cannot defend effectively.
 
 ### State Delta: Phase 4
-Unit B: Strength 6 − 4 (rounded) = Strength 2.
-Unit A: Strength 5 − 0 = Strength 5.
+Unit B: Size 6 − 4 (rounded) = Size 2.
+Unit A: Size 5 − 0 = Size 5.
 
 ---
 
 ## Phase 5 — Cascade
 
 **Step 1: Apply Strength damage.**
-Unit B: Strength 6→2. Total lost = 4.
+Unit B: Size 6→2. Total lost = 4.
 
 **Step 2: Cohesion checks.**
 Unit B: lost 4 Strength this turn. Cohesion = 3. Lost (4) > Cohesion (3) → Cohesion degrades by 1 → Cohesion 3→2.
 CP penalty at Cohesion 3–4: −1D. At Cohesion 1–2: −2D. Unit B was at Cohesion 3 (−1D), now at Cohesion 2 (−2D). Effective pool next turn: min(CP=2, Strength=2)=2D, −2D = 0D effective combat pool.
 
 **Step 3: Morale checks.**
-Unit B triggers: Size below 50% (Strength 2 of original 6 = 33%): −1 Morale.
+Unit B triggers: Size below 50% (Size 2 of original 6 = 33%): −1 Morale.
 Size below 25%? No (33%). −1 total.
 Allied unit routed? No. General incapacitated? No.
 Unit B Morale: 4−1 = 3. At Morale 3: no rout (rout at 0).
@@ -130,8 +130,8 @@ RS: −3 (co-movement). Solmund Coherence: −1 (Territorial scale §3.2).
 **Step 5: General action.** General rallies (no action needed — Unit A stable).
 
 ### State Delta: Phase 5
-Unit A: Cohesion 4→6 (W-30). Strength 5. Morale 6.
-Unit B: Strength 2, Cohesion 2 (→−2D penalty), Morale 3.
+Unit A: Cohesion 4→6 (W-30). Size 5. Morale 6.
+Unit B: Size 2, Cohesion 2 (→−2D penalty), Morale 3.
 RS: 100→97. Solmund Coherence: 10→9.
 
 ---
@@ -139,8 +139,8 @@ RS: 100→97. Solmund Coherence: 10→9.
 ## State: Turn 2, Phase 1
 
 ### Units
-Unit A — CP4, Strength 5/5, Cohesion 6, Morale 6. Formation: Shield Wall. Effective: 3D Off, 6D Def.
-Unit B — CP2, Strength 2/6, Cohesion 2, Morale 3. Formation: Wedge (Cohesion collapse may break formation — GM call).
+Unit A — CP4, Size 5/5, Cohesion 6, Morale 6. Formation: Shield Wall. Effective: 3D Off, 6D Def.
+Unit B — CP2, Size 2/6, Cohesion 2, Morale 3. Formation: Wedge (Cohesion collapse may break formation — GM call).
   Effective: min(CP=2, Strength=2)=2D, Cohesion −2D penalty = 0D effective pool.
 
 **Unit B at 0D effective combat pool: cannot attack or defend.** Formation broken.
@@ -162,14 +162,14 @@ Effect: Unit B re-enters with Cohesion 2 (regardless of prior value).
 Coherence cost: −1 (Relational).
 RS: −3 (co-movement).
 
-Rallied Unit B stats: Strength 2 (unchanged), Cohesion 2 (restored to 2 by W-33), CP 2.
+Rallied Unit B stats: Size 2 (unchanged), Cohesion 2 (restored to 2 by W-33), CP 2.
 Effective pool: min(CP=2, Strength=2) = 2D, Cohesion−2D penalty → 0D again.
 
-**Finding F-11 [P1]:** W-33 restores Cohesion to 2, but a unit with Strength=2 and CP=2 still has 0D effective pool (Cohesion penalty −2D eliminates both base dice). W-33 cannot rescue a unit that has taken heavy Strength losses — the Cohesion restoration is mechanically irrelevant when Strength is the binding constraint on pool size. W-33's effect is only meaningful if the unit retains Strength ≥ 4 (enough that Cohesion 2 penalty doesn't eliminate the pool entirely).
+**Finding F-11 [P1]:** W-33 restores Cohesion to 2, but a unit with Strength=2 and CP=2 still has 0D effective pool (Cohesion penalty −2D eliminates both base dice). W-33 cannot rescue a unit that has taken heavy Size losses — the Cohesion restoration is mechanically irrelevant when Strength is the binding constraint on pool size. W-33's effect is only meaningful if the unit retains Strength ≥ 4 (enough that Cohesion 2 penalty doesn't eliminate the pool entirely).
 
-**Corrected W-33 scenario:** Unit B had Strength 4 when it routed (hypothetical). Rallied Cohesion 2 → effective pool: min(2,4)=2D, −2D = 0D. Still 0D.
+**Corrected W-33 scenario:** Unit B had Size 4 when it routed (hypothetical). Rallied Cohesion 2 → effective pool: min(2,4)=2D, −2D = 0D. Still 0D.
 
-Even Strength 5: min(2,5)=2D, −2D = 0D.
+Even Size 5: min(2,5)=2D, −2D = 0D.
 
 W-33 restoring Cohesion 2 only helps when CP ≥ 3 AND Strength ≥ 3+2 = 5.
 
