@@ -1466,7 +1466,7 @@ Also update the explanatory sentence: remove "including bonus dice" from the net
 **Section:** Stage 6, §8.X Niflhel faction rules
 **Fix:**
 > "**TTRPG Residue Harvesting (Niflhel):**
-> Niflhel operates a black market in threadweaved items and residue deposits. Harvesting procedure:
+> Niflhel operates a black market in threadworked items and residue deposits. Harvesting procedure:
 >
 > *Requirements:* A character with TS 10+ to perceive the deposit, OR a Niflhel-affiliated character with a relevant History (Southernmost Trade, Black Market, Covert Commerce). Niflhel harvesters without TS rely on contracted Restoration members (TS 10–29) for sourcing.
 >
