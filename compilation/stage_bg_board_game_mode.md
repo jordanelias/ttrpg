@@ -1091,3 +1091,27 @@ Use when players want a full campaign arc rather than a decisive victory contest
 *Thread Operations cross-reference: Full Thread operation rules for all modes are in §5.6.1 (Part Five). This section provides board game procedure; §5.6.1 governs in cases of conflict.*
 
 *Canon compliance: P-01 (co-movement mandatory on all Thread ops) observed throughout B7. P-05 (three modes distinct) maintained — BG mechanics are board-resolution procedures, not TTRPG narrative systems.*
+
+
+---
+
+## MT-01: Faction Unit Rosters
+
+Starting unit counts derived from Military scores (Military = max active units).
+
+| Faction | Military | Starting Units | Type |
+|---------|---------|---------------|------|
+| Crown | 4 | 4 | Mixed infantry + cavalry (standard) |
+| Church | 4 | 4 | 2 Templar (elite: Cohesion 5, Martial 4) + 2 garrison (Cohesion 3, Martial 2) |
+| Hafenmark | 3 | 3 | 1 ducal guard (elite: Cohesion 4, Martial 3) + 2 militia |
+| Varfell | 4 | 4 | Highland infantry (Cohesion 4). +1D in Eisengrund. |
+| Guilds | 2 | 2 | Hired mercenaries (Cohesion 3, Martial 2). Rapid replacement via Wealth. |
+| Niflhel | — | 0 | No standing units. Relies on Quiet Network. |
+| Revolution | — | 0 | No standing units. Community defence via Community Weaving. |
+| Löwenritter | 5 (→6 post-coup) | 5 (→6) | All elite (Cohesion 5, Martial 4). Post-coup +1 from Crown transfer. |
+
+**Unit stat defaults:** Standard = Martial 2, Cohesion 3. Elite = Martial 3–4, Cohesion 4–5.
+**Cohesion:** −1 per defeat. At 0: unit destroyed.
+**Mustering:** 1 new unit per Muster success, up to Military cap.
+**Upgrade to elite:** 2 consecutive successful Govern orders in territory + Wealth ≥ 4.
+**Church Templars:** Deploy at TC ≥ 40 as free unit in Himmelstift. Elite stat block. Separate from regular garrison cap.
