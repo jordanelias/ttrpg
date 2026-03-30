@@ -128,7 +128,7 @@ The Leap is a **full-round action (Priority 5)**. No attack, no movement, no man
 
 **Pool:** Attunement + relevant History bonus (e.g., "Einhir Scholar": points + 3) + TPS (Thread Pool Score = TS ÷ 10, round down)
 **TN:** 7
-**Ob:** TS 30–49 = 2 · TS 50+ = 1 · +1 Ob per Wound
+**Ob:** TS 30–49 = 2 · TS 50+ = 1 · −1D per Wound
 
 Pre-calculate the Leap pool on the character sheet as a named entry separate from History pools.
 
@@ -198,7 +198,7 @@ Physical effects (a wound closing, an object moving) are visible to all.
 
 **Concealing from TS 30+ observers:** Roll Cognition only (no History), TN 7, Ob = observer's TS ÷ 30 (round up). This is a pre-Leap action — concealment is set before rendering suspends. The practitioner shapes how their configuration presents during contact, but cannot adjust concealment during contact itself.
 
-**Wound penalties:** +1 Ob per Wound applies to all Thread operation rolls — Leap, Weaving, Pulling, Mending, FR. The body's damage impedes the suspension.
+**Wound penalties:** −1D per Wound applies to all Thread operation rolls — Leap, Weaving, Pulling, Mending, FR. The body's damage impedes the suspension.
 
 ### 5.1.4 Operations During Contact
 
@@ -477,29 +477,29 @@ This includes the effects previously attributed to dissolution residue use and t
 
 ### 5.2.2 Coherence Reduction
 
-Coherence loss follows the scale principle. At Object and Personal scale, the practitioner's configuration interacts shallowly — the suspension is brief, the below-the-waterline engagement is minimal, and rendering reasserts with negligible destabilisation. At Relational scale and above, the practitioner's configuration engages deeply enough that the suspension leaves a mark on their rendering.
+Coherence is checked once per Leap — not per operation. At the end of a Leap (after all operations in that contact window have resolved), the practitioner rolls their threadwork pool (Spirit + relevant History + TPS, TN 7) against the **sum of all operation Obs performed during that Leap**. If they succeed, rendering reasserts fully and Coherence is unchanged. If they fail, Coherence −1.
 
-Co-movement still fires on every operation regardless of scale (P-11). The temporal auto-effect exists at all scales — but at Object/Personal, the temporal disturbance manifests in the world (d6 consequences, narrative effects) rather than as personal Coherence loss. The practitioner's own rendering absorbs negligible impact from shallow engagements.
+**Retention roll:**
+- Pool: Spirit + relevant History + TPS, TN 7
+- Ob: sum of all operation Obs in this Leap (e.g. Ob2 + Ob3 + Ob4 = Ob9)
+- Success: no Coherence loss
+- Failure: −1 Coherence
 
-| Source | Coherence Loss |
-|---|---|
-| Object or Personal scale operation | 0 (co-movement fires but practitioner's rendering absorbs negligibly) |
-| Relational scale operation | −1 |
-| Territorial scale operation | −1 |
-| Structural scale operation | −2 |
-| FR Lock or Dissolution (any scale) | −1 additional (Lock minimum total: −2; Dissolution minimum total: −2) |
-| Past-Oriented Pulling | −1 additional on top of standard Pulling cost |
-| Mending | −1 (substrate engagement is inherently deep regardless of Gap scale) |
-| Dissolution residue use (per use) | −1 additional (on top of operation cost) |
-| History Resonance risk die (shows 1) | −1 |
-| Practitioner Flashback anchoring (GM discretion) | −1 |
-| Extended proximity to Structural-scale Gap | −1 per season |
+**Why this works mechanically:** A single modest operation is easily retained. A Leap with multiple high-scale operations rapidly becomes unretainable — the accumulated configurational engagement exhausts the practitioner's capacity to reassert their rendering cleanly on return. A TS50 practitioner (12D pool) retains Coherence ~73% of the time on a single Relational op (Ob3), but only ~27% of the time if they perform two Relational ops (Ob6) in the same Leap. A TS70 practitioner (15D) crosses the 50% loss threshold around Ob6–7. Three territorial operations in one Leap approaches near-certain Coherence loss regardless of TS.
 
-**Campaign pacing:** A practitioner who restricts themselves to Object and Personal scale work can operate indefinitely without Coherence loss. The moment they scale up — and the campaign will pressure them to scale up — degradation begins. Over a 30-session campaign with ~10–15 Relational+ operations, the practitioner loses ~10–15 Coherence. This produces a late-campaign crisis arc if they don't take recovery seasons. This is the Einhir trajectory in miniature: small-scale work is sustainable; ambition and necessity push toward larger scales; the costs accumulate.
+**Stress test reference (TN7, 50,000 trials):**
 
-**Coherence loss cap per operation:** Regardless of scale, degree table outcomes, combined auto-effects, or bonus costs (FR, residue, Past-Oriented Pulling), a single operation — from Leap through resolution — cannot reduce Coherence by more than 1. All Coherence costs from a single operation are treated as a single event and capped at −1 total. Multiple operations in a single contact window are each capped independently.
+| Pool | Single Ob3 | Single Ob4 | Ob4+Ob3 | Ob4+Ob4 | Ob5+Ob4+Ob4 |
+|------|-----------|-----------|---------|---------|-------------|
+| 8D (TS30) | 53% | 35% | 15% | 9% | ~0% |
+| 12D (TS50) | 73% | 58% | 27% | 18% | ~0% |
+| 15D (TS70) | 84% | 70% | 32% | 18% | ~0% |
 
-**Interaction with degree tables:** Some operation degree tables list additional Coherence costs (e.g., "Coherence −1" on Partial, "Coherence −2" on Failure). These are outcome costs, separate from the scale-based auto-effect above. They represent the additional destabilisation from an operation going wrong — the snap-back, the misaligned interaction, the violent reassertion of rendering. At Object/Personal scale: ignore degree-table Coherence costs on Partial results (the interaction was too shallow to destabilise rendering even when it went partially wrong). Apply degree-table Coherence costs on Failure (the violent snap-back shakes rendering regardless of scale). At Relational+ scale: apply all degree-table Coherence costs as written.
+Co-movement still fires on every operation regardless of scale (P-11). The temporal auto-effect exists at all scales — but at Object/Personal, the temporal disturbance manifests in the world (d6 consequences, narrative effects) rather than as personal Coherence loss. The retention roll fires at the end of the entire Leap, after all operations and their consequences have resolved.
+
+**Degree-table Coherence costs:** Some operation degree tables list "Coherence −1" on Partial or Failure results. These are **not** separate from the retention roll. They represent a worse starting position for the retention check — on Failure outcomes, add +1 to the total Ob for the retention roll (the violent snap-back makes reassertion harder). On Partial results at Relational+ scale: add +0 to Ob (no additional difficulty). On Failure: add +1 Ob to the retention roll total, regardless of scale.
+
+**Campaign pacing:** A practitioner running modest single-operation Leaps will retain Coherence the majority of the time and can sustain long careers without severe degradation. The campaign pressure toward larger, multi-operation Leaps — compound situations, emergencies, collective operations — is where Coherence becomes a real constraint. This is the Einhir trajectory: individual small-scale work is sustainable; necessity and ambition compound the Leap, and the retention roll catches up.
 
 ### 5.2.3 Coherence Thresholds
 
@@ -512,7 +512,7 @@ Co-movement still fires on every operation regardless of scale (P-11). The tempo
 | 1 | Severed | −2D social, −2D Memory. Dissociative episodes once per scene regardless of operations (fire at scene start, not mid-operation). Involuntary perceptual events. All Knots +2 strain per session. +2 Ob on all Thread operations including the Leap (rendering barely holds; suspension is constitutively dangerous). The practitioner's rendering is barely functional. The distinction between self and world, between human and monstrous, between actual and potential, is dissolving. Not because something evil is happening to them. Because they have been outside rendering so many times that rendering no longer holds. |
 | 0 | Rendering Crisis | Campaign event. Reality as commonly rendered is no longer accessible. The practitioner's spooling is destabilised — their organic drawing-from-ground is compromised. They must resolve the crisis narratively: sustained engagement with the world's rendered state, relational anchoring, or withdrawal from practice. If unresolved by season end: NPC. |
 
-**GM protocol — Dissonant entry:** When a practitioner's Coherence drops to 7 (entering Dissonant), the GM names this to the player explicitly: "Your Coherence is now 7 — Dissonant. Each operation at Relational+ scale costs −1 Coherence. At this pace, Fragmented is [N] operations away." This is not a mechanical rule; it is a table protocol. The practitioner's rendering is still solid at Dissonant — but the player should make informed decisions about scale from this point forward.
+**GM protocol — Dissonant entry:** When a practitioner's Coherence drops to 7 (entering Dissonant), the GM names this to the player explicitly: "Your Coherence is now 7 — Dissonant. Each Leap may cost −1 Coherence depending on your retention roll. Keep your Leaps focused." This is not a mechanical rule; it is a table protocol. The practitioner's rendering is still solid at Dissonant — but the player should make informed decisions about Leap complexity from this point forward.
 
 ### 5.2.4 Dissolution Residue
 
@@ -520,9 +520,7 @@ Co-movement still fires on every operation regardless of scale (P-11). The tempo
 
 Dissolution residue is compressed potential oriented toward the unintelligible ground. A practitioner may draw on it during an operation: add bonus dice equal to Potency rating (1–5) to the operation pool. These dice explode on 9–10 (volatile).
 
-**Cost:** −1 Coherence per use (additional, on top of the operation's normal Coherence cost). Maximum one use per contact window. Same source: +1 Ob per prior use (depletion).
-
-**Coherence cap interaction:** Residue use is a distinct Coherence event from the operation itself and is not subject to the §3.2 cap. At Object or Personal scale (base operation cost = 0): residue use costs −1 Coherence — the only cost of the operation. At Relational+ scale (base operation cost = −1, already capped): the cap absorbs the residue cost — total remains −1. In practice: residue use has a real Coherence cost when the operation would otherwise be free (Object/Personal), and no additional cost when the operation already costs −1 (Relational+). This preserves the philosophical weight — engaging with residue at shallow scale still pushes the practitioner deeper into beyond-rendering states — without stacking costs at the scales where the cap already governs.
+**Cost:** −1 Coherence at end of Leap (automatic, regardless of retention roll outcome). This cost is not part of the retention roll — residue use guarantees −1 Coherence in addition to whatever the retention roll produces. Maximum one use per contact window. Same source: +1 Ob per prior use (depletion).
 
 **Why residue accelerates Coherence loss:** The residue's proximity to the ground intensifies the practitioner's exposure during contact. They are not just suspending rendering — they are suspending it while in contact with something that pulls toward the unintelligible. Each use pushes them deeper into the beyond-rendering state, and each return leaves rendering less stable.
 
@@ -824,3 +822,4 @@ Replaces the old Thread Tension track on board. Runs 100→0. Hidden by default 
 ---
 
 *End of Part Five: Thread Operations. Part Six (The Southernmost) continues in Stage 4.*
+
