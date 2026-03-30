@@ -1639,7 +1639,9 @@ TC represents the Church of Galbados's slow structural conquest of Valorian civi
 | Successful Grand Debate ruling against Church on civil authority claim | −2 |
 | Kingdom-wide average Mandate across all factions ≥ 6 at seasonal accounting | −1 (M-6) |
 
-**Church Stability brake:** When Church Stability falls to 5 or below at seasonal accounting, TC generation ceases that season regardless of Church Mandate. Cardinals competing publicly suppresses institutional momentum. (M-6)
+**Church Stability brake:** When Church Stability falls to 3 or below at seasonal accounting, Mandate-based TC generation ceases that season. RS-driven cross-clock TC increase is not suppressed — substrate decay continues regardless of Church internal crisis. Cardinals competing publicly suppresses institutional momentum. (M-6, PP-158)
+
+**Seasonal TC movement cap (PP-157):** TC may not move more than ±5 in a single season from all faction Domain Actions, Domain Echoes, and event-driven modifiers combined. Apply actions in resolution order (PP-005 sequencing); stop when cap is reached. Cross-clock passive drift (RS-driven TC gain) is structural and applies after the cap.
 
 ### TC Thresholds
 
@@ -2118,6 +2120,8 @@ The Revolution's connection to Einhir cultural continuity allows collective Thre
 The Löwenritter are not an independent political faction — they are an institutional instrument of the Crown. They hold territory (the fortress at the northern border), maintain military capacity, and act as the Crown's deniable covert arm. Their loyalty is to the Crown as an institution, not to any specific monarch.
 
 **Coup Threshold:** Grandmaster Ehrenwall is keeping count of Almud's compromises. When the Löwenritter's internal assessment of the Crown's institutional integrity drops to a threshold (tracked as a private GM counter), a coup trigger is possible. See NPCs section for full Ehrenwall mechanics.
+
+**Coup Counter succession (PP-156):** On Ehrenwall's death, the Counter transfers to the most senior Löwenritter officer by institutional rank at its current value. The successor's personal pool is CR 3 (not Ehrenwall's CR 5). Exception: if the successor holds primary loyalty outside the Löwenritter (externally appointed, cross-faction allegiance, Altonian-affiliated), the Counter terminates — it does not transfer.
 
 **Martial Law Capacity:** If the coup trigger fires, the Löwenritter can impose Martial Law on Crown territories — suspending normal Domain Action resolution and replacing it with Military-based Stability enforcement. This is a campaign-level event, not a standard Domain Action.
 
@@ -2830,6 +2834,8 @@ All purchases have narrative requirements. CP alone is insufficient — every pu
 
 **No CP purchase for**: TS growth, Intelligibility recovery, Certainty recovery, Thread Stability recovery. These are play-driven; they cannot be purchased.
 
+**Faction Stability recovery (PP-159):** A faction may recover Stability +1 by spending one Political-tier Domain Action (Ob 2) representing internal consolidation or institutional repair. Counts against seasonal Domain Action allocation. Stability cannot exceed its starting value through recovery alone.
+
 **Approach Training note**: The 8 CP cost is intentional. Acquiring Thread sensitivity through CP should feel like a campaign milestone. Characters who qualify will have witnessed Thread operations and lived with the knowledge of the Thread's existence for at least one season before spending.
 
 ---
@@ -3474,9 +3480,11 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 ### Cardinal Magnus Klapp — Scholarship
 *Controls Church universities, monasteries, and the archive of identified Einhir texts*
 
-**TS:** 31 (approaching Stirring threshold, unknown to anyone).
+**TS:** 50 (Attuned; unknown to anyone including Klapp himself).
 
-**CE track:** 4. Archive work has brought him into sustained contact with Einhir records and two originary lock objects. Trajectory B (Fracture), moving toward C (Conversion). One more sustained encounter with a Thread-significant object will trigger a TS growth check. If it succeeds: the head of the Church's entire educational apparatus develops Thread sensitivity.
+**CE track:** 8. Trajectory B (Fracture) confirmed. Coherence: 9 (Dissonant band). **Certainty: 3** (starting value = Spirit score 3; current = 3). One successful Leap drops Certainty to 0, triggering Rendering Crisis.
+
+**Rendering Crisis — Trajectory B (Public Fracture, PP-160):** When Klapp's Certainty reaches 0, the Crisis manifests at his next public institutional scene (Cardinals' meeting, interrogation, sermon). His behaviour shifts perceptibly. Other characters may attempt Cognition Ob 2 to register the fracture. He does not declare Thread knowledge — the fracture is behavioural. This opens the Klapp Revelation arc (Collision A: Church Double Fracture). See §13 Narrative Scenario Chains.
 
 ---
 
@@ -3582,6 +3590,8 @@ Vaynard knows this and is calculating: Maret is the most valuable person on the 
 2. *"Almud is surrendering sovereignty incrementally. I am keeping count."*
 
 **Relationship to Almud:** Respect without affection. Decent man governing badly. She will follow his orders until the day she doesn't, and the transition will be instantaneous.
+
+**On death:** The Coup Counter transfers to the next senior Löwenritter officer (see §8.5 Coup Counter succession). If no successor with Löwenritter-primary loyalty exists, the Counter terminates.
 
 **Coup threshold.** Ehrenwall has not yet concluded the Crown has failed the nation. When she does, she will act without hesitation or remorse. She is the most dangerous NPC in the game: patient, competent, and commanding an army.
 
@@ -3902,7 +3912,7 @@ At the end of each season, resolve in order:
 - [ ] Apply TT-lowering events (Overwhelming Weavings at Relational+; preserved Einhir sites; sustained community Weaving; Ceiral Ritual)
 - [ ] Apply the faction attribute seasonal cap: no attribute may have changed by more than ±2 from this season's accounting. If cumulative changes exceed ±2, cap them. Log excess as pending for the following season.
 - [ ] CP awards: +2 per Belief pursued in a meaningful scene; +2 per Belief challenged by events; +4–5 per Belief genuinely revised; +1 per stated Goal pursued; +2 per Ordeal survived; +1 per Domain Action completed.
-- [ ] TC threshold conditions: TC pauses if Church Stability ≤ 5 this season. Cross-faction Mandate average ≥ 6: TC −1 this season.
+- [ ] TC threshold conditions: TC Mandate-based generation pauses if Church Stability ≤ 3 this season. RS cross-clock TC gain still applies. Cross-faction Mandate average ≥ 6: TC −1 this season.
 - [ ] Parliament Integrity update: adjust per events (Thread event in session: −1; stable Crown-Hafenmark cooperation: recovers +1 per season).
 - [ ] Orphaned configuration deterioration: each orphaned configuration makes an Endurance check (TN 7, Ob 1) at accounting. Failure: configuration fragments (TT +1; perceptible wrongness at TS 30+).
 - [ ] Season marker advances. At Winter: year-end accounting (TT annual drift, annual events).
@@ -3931,7 +3941,7 @@ The following tracks require active GM management throughout the campaign. Keep 
 | Vaynard | 14 | — | 0 | Discovery Event potential |
 | Almud | 28 | — | — | Discovery Event potential |
 | Lenneth | 0 | — | — | Not foreclosed |
-| Klapp | 31 | 4 | — | Trajectory B → C |
+| Klapp | 50 | 8 | — | Trajectory B confirmed; Certainty 3; Coherence 9 (Dissonant); Rendering Crisis imminent |
 | Himlensendt | 0 | — | — | Sincerely devout |
 | Olafsson | 0 | 1 | — | Niflhel connection active |
 
@@ -4266,3 +4276,4 @@ Net zero is Failure. Ob minimum is always 1.
 ---
 
 *Checkpoint 14 — 2026-03-26 — Phase 2 TTRPG compilation complete with hybrid gaps resolved*
+
