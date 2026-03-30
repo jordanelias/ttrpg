@@ -16,7 +16,7 @@ The system operates at two scales: **personal combat** (individual characters, �
 
 Modifiers to Combat Pool:
 - Armour: no pool penalty (armour affects DR and Stamina only)
-- Wounds: no direct pool reduction (wounds are dramatic thresholds, not cumulative debuffs)
+- Wounds: −1D per Wound to the Combat Pool (cumulative)
 - Fibonacci group bonus: adds to Offence allocation specifically (see §8.7)
 
 ---
@@ -155,7 +155,7 @@ Key relationships:
 | 4–5 | 3 |
 | 6–7 | 4 |
 
-Wounds are dramatic thresholds. A fighter who takes a wound continues at full capacity until incapacitated. There is no wound penalty to the Combat Pool.
+Each Wound reduces the Combat Pool by −1D (cumulative). A fighter with 2 Wounds fights with −2D. Incapacitation occurs at the wound threshold — the pool reduction means fighters near incapacitation are materially degraded, not just on the edge of collapse.
 
 ### Stamina
 
@@ -497,3 +497,4 @@ This system was developed through extensive simulation testing (406 matchups, 2,
 - Heavy Cut weapons (longswords) are the strongest general-purpose choice — effective across all matchups, dominant in 1v1.
 
 **Offence allocation and winning:** simulation shows near-zero correlation (r ≈ 0.01) between offence percentage and winning across 5,000 randomised characters. No single allocation strategy dominates — outcomes are determined by matchup, range management, and dice variance.
+
