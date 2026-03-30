@@ -4,46 +4,40 @@
 
 | Test ID | Mechanics | Mode | Temporal | Tracks | Factions | NPCs | Archetypes | Status | Findings |
 |---------|-----------|------|----------|--------|----------|------|------------|--------|----------|
-| SIM-X-01 | Personal Combat + W-24 (Coherent Strike) | C + B | Single scene | Health, Wounds, Stamina, Coherence, RS | None | Mira (practitioner-fighter), Kaspar (armoured veteran) | Practitioner-combatant | Complete — Issues found |
-| SIM-X-02 | Debate (v1 redesign) + W-41 (Conviction Anchor) | C + B | Single scene | Composure, Coherence, RS, Belief | Church | Vessa (practitioner-scholar), Aldric (Inquisitor) | Asymmetric Debate | Complete — Issues found |
-| SIM-X-03 | Mass Battle + W-30 + W-33 | C + B | 2 turns | Strength, Cohesion, Morale, Coherence, RS | Lowenritter, Rebel | Solmund (attached practitioner) | Thread-supported Mass Battle | Complete — Issues found |
-| SIM-X-04 | Mass Battle + Personal Combat (General Duel, Stage 1/2) | C + D | 3 turns | Strength, Cohesion, Morale, Health, Wounds, CR | Lowenritter, Rebellion | Harnak (general), Davan (general) | General Duel | Complete — No P1/P2 |
-| SIM-X-05 | Grand Debate + W-41 + W-42 + W-40 | C + B | Single scene (5 exchanges) | Composure, Coherence, RS, TC, Knot strain | Church, Hafenmark | Baralta, Himlensendt, Klapp (TS growth) | Institutional Grand Debate | Complete — Issues found |
-| SIM-X-06 | Personal Combat (Ehrenwall vs Haelmund) + Inquisitor CE | C + D | Single scene (4 rounds) | Health, Wounds (−1D system), Stamina, CE | Lowenritter, Church | Ehrenwall, Haelmund, Inquisitor Vald, Maret Uln | Named NPC duel, Inquisitor arc | Complete — Issues found |
-| SIM-X-07 | Mass Battle (Löwenritter vs Templars) + W-30 + P-31 + General duel + Stage 1/2 | C + D | 3 turns | Strength, Cohesion, Morale, Coherence, RS, CR, Coup Counter | Lowenritter, Church | Ehrenwall (killed), Jarnstal, Maret Uln | Named-NPC mass battle + Thread + deadlock | Complete — Issues found |
-| SIM-X-08 | Seasonal Accounting — full cascade from X-05/06/07 | D + E | 1 season | Mandate, Influence, Military, Stability, TC, RS, Knots | All factions | Baralta, Klapp, Ehrenwall (dead), Vald | Full cascade accounting | Complete — Issues found |
+| SIM-X-01 | Personal Combat + W-24 | C+B | Single scene | Health, Wounds, Stamina, Coherence, RS | None | Mira, Kaspar | Practitioner-combatant | Complete |
+| SIM-X-02 | Debate + W-41 | C+B | Single scene | Composure, Coherence, RS, Belief | Church | Vessa, Aldric | Asymmetric Debate | Complete |
+| SIM-X-03 | Mass Battle + W-30 + W-33 | C+B | 2 turns | Size, Cohesion, Morale, Coherence, RS | Lowenritter, Rebel | Solmund | Thread-supported Mass Battle | Complete |
+| SIM-X-04 | Mass Battle + Personal Combat (General Duel) | C+D | 3 turns | Size, Cohesion, Morale, Health, Wounds, CR | Lowenritter, Rebellion | Harnak, Davan | General Duel | Complete |
+| SIM-X-05 | Grand Debate + W-41 + W-42 + Audience | C+B | 5 exchanges | Composure, Coherence, RS, TC, Knots | Church, Hafenmark | Baralta, Himlensendt, Klapp | Institutional Grand Debate | Complete |
+| SIM-X-06 | Personal Combat + Wound −1D + CE arc | C+D | 4 rounds | Health, Wounds, Stamina, CE | Lowenritter, Church | Ehrenwall, Haelmund, Vald, Maret | Named NPC duel + Inquisitor arc | Complete |
+| SIM-X-07 | Mass Battle + W-30 + P-31 + General Duel + Stage 1/2 | C+D | 3 turns | Size, Cohesion, Morale, Coherence, RS, CR, Coup Counter | Lowenritter, Church | Ehrenwall (killed), Jarnstal, Maret | Named-NPC mass battle + Thread + deadlock | Complete |
+| SIM-X-08 | Seasonal Accounting cascade | D+E | 1 season | All faction stats, TC, RS, Knots | All | Baralta, Klapp, Ehrenwall (dead), Vald | Full cascade | Complete |
+| SIM-X-09 | Social (Vaynard/Almud) + Discovery Event + Domain Echo + Zoom | C+B | 1 scene | Composure, TS, TK, TC, IP | Crown, Varfell, Church | Vaynard, Almud, Klapp | Social → Thread → Faction zoom | Complete |
+| SIM-X-10 | Sovereign Authority Doctrine + Olafsson Evidence Chain + TC cascade | C+B | 1 season | TC, Church Stability, Mandate, Baralta penalty | Church, Hafenmark | Baralta, Himlensendt, Olafsson | Domain Action chain + clock cascade | Complete |
+| SIM-X-11 | Maret infiltration → Thread Diagnosis → Domain Echo → Inquisitor advance | C+B | 1 scene | TK, TC, CE, Coherence, RS, Investigation stages | Church, Varfell | Maret, Klapp, Vald | Personal→Thread→Faction zoom sequence | Complete |
+| SIM-X-12 | 3-season full cascade | D+E | 3 seasons | All clocks, all faction stats, all NPC states | All | All named | Full cascade accounting | Complete |
 
-> Coverage data from pre-v3 batches (Batches 01-11, threadweaving series) is archived in
-> `deprecated/sim_coverage_matrix_legacy.md`. Tests predated 7-dimension tagging and cannot
-> be retroactively mapped without re-running scenarios.
+> Pre-v3 batch coverage archived in `deprecated/sim_coverage_matrix_legacy.md`.
 
-## Complete P1/P2 Findings Register (All SIM-X Batches)
+## P1 Findings — Editorial Decisions Required
 
-| ID | Source | Severity | Description | Status |
-|----|--------|----------|-------------|--------|
-| F-04 | SIM-X-01 | P2 | W-24 near-costless if Leap protected (0 RS, 0 Coherence, +2 damage) | Open |
-| F-07 | SIM-X-01 | P2 | W-24 balance entirely depends on Leap vulnerability; no RS/Coherence gate | Open |
-| F-08 | SIM-X-02 | P2 | W-41 break-even requires 11+ exchanges — exceeds typical Debate length | Resolved — design feature (Inspiration-attack counter) |
-| F-09 | SIM-X-02 | P1 | W-41 irrelevant in policy debates; narrow activation window (Inspiration attacks only) | Resolved — design feature, not bug |
-| F-10 | SIM-X-02 | P2 | W-40 exchange cost disproportionate vs combat equivalent | Open |
-| F-11 | SIM-X-03 | P1 | W-33 broken for CP≤2 units: Cohesion=2 insufficient when Strength is binding | EDITORIAL PENDING |
-| F-12 | SIM-X-03 | P2 | W-30 Coherence cost limits sustained Thread support to ~10 mass battle ops | Open (by design — new retention roll makes this less acute) |
-| F-13 | SIM-X-03 | P2 | Weapon mismatch decisive at mass scale before Thread considered | Design correct |
-| F-19 | SIM-X-05 | P2 | 11D vs 8D pool gap makes Grand Debate structurally predetermined | Open |
-| F-20 | SIM-X-05 | P2 | W-41 correctly scoped; irrelevant in policy debates — confirmed design feature | Resolved |
-| F-21 | SIM-X-05 | P2 | High-Composure NPCs (11+) immune to Rattled in standard 5-exchange Grand Debates | Open |
-| F-24 | SIM-X-06 | P2 | Range mismatch more fight-determining than pool differential or wounds | Design correct |
-| F-26 | SIM-X-07 | P2 | Templar CP=5 exceeds Church Military=4 ceiling — CP corrected to 4 | Resolved (corrected in sim) |
-| F-27 | SIM-X-07 | P1 | Mass battle deadlock (HeavyCut vs HeavyArmour): no stalemate resolution mechanism | EDITORIAL PENDING |
-| F-30 | SIM-X-07 | P1 | No Coup Counter successor rule on Grandmaster death | EDITORIAL PENDING |
-| F-32 | SIM-X-08 | P2 | Debate loss raises Doctrine action Ob4→Ob5, ~58%→~42% — material seasonal impact | Design correct (intended consequence) |
-| F-36 | SIM-X-08 | P2 | Extended stalemate battles produce zero faction consequences | EDITORIAL PENDING |
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| F-11 | X-03 | W-33 broken for Size≤2 units: Cohesion=2 insufficient when Size is binding constraint | PENDING |
+| F-27 | X-07 | Mass battle deadlock (HeavyCut vs HeavyArmour): no stalemate resolution rule | PENDING |
+| F-30/F-33 | X-07/08 | Coup Counter: no successor rule on Grandmaster death | PENDING |
+| F-43 | X-10 | Two Domain Actions can drop TC by 4+ in one season; no seasonal cap on TC | PENDING |
+| F-45 | X-10 | Church Stability brake: does it suppress RS-driven cross-clock TC increase? | PENDING |
+| F-52 | X-12 | No Stability recovery mechanic for externally damaged faction Stability | PENDING |
 
-## Editorial Decisions Required
+## Rules Gaps (No Patch Needed — GM Ruling Acceptable)
 
-| ID | Decision needed |
-|----|----------------|
-| F-11 | W-33 fix: restore Cohesion to min(3, prior value), or add Strength component |
-| F-27 | Stalemate resolution: define turn limit, Morale decay rate, or attrition rule |
-| F-30/F-33 | Coup Counter: define successor officer or let threat evaporate on death |
-| F-36 | Stalemate consequences: passive Morale decay per turn for no-damage engagements? |
+| ID | Source | Description |
+|----|--------|-------------|
+| F-38 | X-09 | Discovery Event mid-Debate: no interrupt rule; conservative ruling taken |
+| F-41 | X-09 | No formal Impression rule for NPC TS-perception events during social scenes |
+| F-48 | X-11 | CE track has no upper-ceiling distinction beyond Trajectory at CE 3 |
+
+## Terminology Correction Applied
+
+All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcount stat corrected to **Size** in this index. Source files retain original text; correction is notional for tracking purposes only.
