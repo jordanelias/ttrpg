@@ -237,7 +237,7 @@ Pre-calculate and record on the character sheet.
 **Minimum Combat Pool:** 5 dice. Characters with a calculated pool below 5 receive 5 dice but roll at -1D effective (maximum 4 dice contribute to successes). This prevents the pool-split decision from becoming meaningless at low values.
 
 **Modifiers to Combat Pool:**
-- Wounds: no direct pool reduction (Wounds add +1 Ob to all rolls instead)
+- Wounds: −1D per Wound to the relevant action pool (cumulative)
 - Armour: no pool penalty (armour provides damage reduction only)
 - Fibonacci group bonus: adds to Offence allocation specifically
 - Terrain/zone: GM may impose +1 Ob for adverse terrain; does not reduce pool
@@ -288,7 +288,7 @@ Movement has priority within a phase until an opponent has a combatant in weapon
 
 When Health reaches 0:
 1. Take a **Wound** (Health resets to full)
-2. All subsequent rolls: **+1 Ob per Wound** (cumulative, all roll types)
+2. All subsequent rolls: **−1D per Wound** to the relevant action pool (cumulative)
 3. Excess damage carries over into reset Health
 
 **Single-hit cap:** No single hit inflicts more than 2 Wounds. Damage exceeding 3× Health is treated as 3× Health.
@@ -462,37 +462,50 @@ A character with access to Einhir scholarship and no essentialist theological Be
 
 The Spirit check is still required — intellectual understanding alone does not produce sensitivity. The scholar must risk genuine perceptual shift.
 
-## 4.5 Intelligibility
+## 4.5 Coherence
 
-Intelligibility replaces the Coherence track. It measures how legible reality remains to a character engaged in Thread operations. Range: 10 (fully coherent) to 0 (reality unreadable).
+Coherence measures how legible reality remains to a character engaged in Thread operations. Range: 10 (fully coherent) to 0 (reality unreadable).
 
-**Starting value:** 10 (all characters).
+**Starting value:** 10 (all practitioners). Non-practitioners do not track Coherence.
 
-**Reduction triggers:**
-- Each Thread operation at Relational+ scale: −1 Intelligibility
-- Past-Oriented Pulling: −1 Intelligibility (additional, cumulative with operation cost)
-- Forced Resolution (any scale): −1 Intelligibility
-- Extended proximity to a Structural-scale Gap: −1 Intelligibility per season of exposure
+**Reduction — Retention Roll:** Coherence is checked once per Leap, not per operation. At the end of a Leap, after all operations in that contact window have resolved, the practitioner rolls their threadwork pool (Spirit + relevant History + TPS, TN 7) against the **sum of all operation Obs performed during that Leap**. Success: no Coherence loss. Failure: −1 Coherence.
 
-**Effects by Intelligibility level:**
+- Pool: Spirit + relevant History + TPS, TN 7
+- Ob: sum of all operation Obs in this Leap (e.g. Ob 2 + Ob 3 + Ob 4 = Ob 9)
+- Success: Coherence unchanged
+- Failure: −1 Coherence
 
-| Intelligibility | State | Effect |
-|-----------------|-------|--------|
-| 10–8 | Coherent | No penalty. Reality legible. |
-| 7–5 | Strained | Occasional perceptual slippage. Non-practitioners in Close Knots begin sensing wrongness. |
-| 4–3 | Fragmented | −1D to all social rolls (difficulty maintaining normal presentation). Close Knots at wrongness threshold. Regular Knots begin sensing wrongness. |
-| 2–1 | Fractured | −2D to all social rolls. All Knots at wrongness threshold. Involuntary perceptual events (GM describes Thread-level reality bleeding through). |
-| 0 | Illegible | Reality as commonly rendered is no longer accessible to the character. Permanent condition unless reversed through specific Thread intervention. Character becomes an NPC unless reversed. |
+**Residue use:** −1 Coherence at end of Leap regardless of retention roll outcome (in addition to any roll result).
 
-**Recovery:** Intelligibility does not recover passively. Recovery requires:
-- Full season of non-practice (no Thread operations): +1 Intelligibility
-- A Close Knot voluntarily anchoring the practitioner through a dedicated Anchoring Scene (Bonds check TN 7, Ob 2): +1 Intelligibility (costs the Knot +1 strain)
-- Certain Einhir techniques (GM discretion, late-campaign): +1–2 Intelligibility
+**Degree-table Coherence costs:** On Failure outcomes, add +1 to the total Ob for the retention roll (the snap-back makes reassertion harder). Partial results at Relational+ scale add +0.
 
-**Knot strain from Intelligibility:** Replaces the Coherence strain accumulation from prior editions.
-- Intelligibility 7–5: +1 strain to all Knots per 3 sessions
-- Intelligibility 4–3: +1 strain to all Knots per 2 sessions
-- Intelligibility 2–1: +1 strain to all Knots per session
+**Retention probability reference (TN 7, 50,000 trials):**
+
+| Pool | Single Ob 3 | Single Ob 4 | Ob 4+Ob 3 | Ob 4+Ob 4 |
+|------|------------|------------|-----------|-----------|
+| 8D (TS 30) | 53% | 35% | 15% | 9% |
+| 12D (TS 50) | 73% | 58% | 27% | 18% |
+| 15D (TS 70) | 84% | 70% | 32% | 18% |
+
+**Effects by Coherence level:**
+
+| Coherence | State | Effect |
+|-----------|-------|--------|
+| 10–8 | Stable | No penalty. Reality legible. |
+| 7–5 | Dissonant | Narrative flickers: wrongness, déjà vu, events slightly out of sequence. Close Knots sense wrongness (+1 strain per 3 sessions). |
+| 4–3 | Fragmented | −1D to all social rolls. −1D to Memory-based rolls. All Knots at wrongness pace (+1 strain per 2 sessions). +1 Ob on all Thread operations including the Leap. Roll Fragmented Fallout on entering this band. |
+| 2–1 | Fractured | −2D to all social rolls. −2D to Memory-based rolls. All Knots at accelerated wrongness (+1 strain per session). +2 Ob on all Thread operations. Certainty maximum reduced by 1 per Coherence level below 3. |
+| 0 | Rendering Crisis | Reality as commonly rendered is no longer accessible. Character becomes NPC unless resolved narratively. |
+
+**Recovery:**
+- Full season of non-practice (no Thread operations): +1 Coherence
+- A Close Knot voluntarily anchoring through a dedicated Anchoring Scene (Bonds check TN 7, Ob 2): +1 Coherence (costs the Knot +1 strain)
+- Certain Einhir techniques (GM discretion, late-campaign): +1–2 Coherence
+
+**Knot strain from Coherence:**
+- Coherence 7–5: +1 strain to all Knots per 3 sessions
+- Coherence 4–3: +1 strain to all Knots per 2 sessions
+- Coherence 2–1: +1 strain to all Knots per session
 
 ## 4.6 Certainty
 
@@ -502,7 +515,7 @@ Intelligibility replaces the Coherence track. It measures how legible reality re
 - Successful Leap: −1
 - Non-consensual Thread work on sentient being: −1
 - Witnessing a monstrous entity: −1 (Spirit check TN 7 Ob 1 to resist; Devout characters: +2D to this check)
-- Intelligibility reaching 4 or below: −1 to Certainty maximum per Intelligibility level below 5
+- Coherence reaching 4 or below: −1 to Certainty maximum per Coherence level below 5
 
 **Certainty 0 — Rendering Crisis:** A scene event, not a passive state. The character's rendering of reality has become unstable. They must resolve the dissonance narratively: revise a Belief, withdraw from Thread-active situations, or find a new framework for what they have experienced. Rendering Crisis is the primary mechanism for character development in practitioners.
 
@@ -529,7 +542,7 @@ Each character tracks up to **Bonds score** significant Knots. Established at cr
 
 ### Strain Sources
 
-- **Intelligibility decay:** See §4.5 (replaces Coherence strain).
+- **Coherence decay:** See §4.5.
 - **Composure buffer:** When absorbing Composure strain through a Knot (see §9), +1 strain per use.
 - **Call a Knot:** +2 strain per use (see below).
 - **External events:** Territory conquest affecting the Knot's entity, faction collapse, Thread operations targeting the entity.
@@ -692,7 +705,7 @@ The Leap is a **full-round action (Priority 5)**. No attack, no movement, no man
 
 **Pool:** Attunement + relevant History bonus (e.g., "Einhir Scholar": points + 3)
 **TN:** 7
-**Ob:** TS 30–49 = 2 · TS 50+ = 1 · +1 Ob per Wound
+**Ob:** TS 30–49 = 2 · TS 50+ = 1 · −1D per Wound
 
 Pre-calculate the Leap pool on the character sheet as a named entry separate from History pools.
 
@@ -744,7 +757,7 @@ Physical effects (a wound closing, an object moving) are visible to all.
 
 ### Wound Penalties and Thread Operations
 
-The +1 Ob per Wound penalty applies to all Thread operation rolls — Leap, Weaving, Pulling, and Forced Resolution. A practitioner with 2 Wounds faces +2 Ob on every operation, applied before scale Ob. Combat-wounded practitioners are significantly compromised in Thread work.
+The −1D per Wound penalty applies to all Thread operation rolls — Leap, Weaving, Pulling, and Forced Resolution. A practitioner with 2 Wounds rolls −2D on every operation. Combat-wounded practitioners are significantly compromised in Thread work.
 
 ## 5.3 Diagnosis
 
