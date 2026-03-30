@@ -491,9 +491,9 @@ monstrosity and moral goodness are compatible, and whether the
 prophylaxis was a deliberate act or a human misreading of a teaching
 they could not hold. This refusal of narrative resolution is the point.
 
-***9.3 Threadweaving as Suspension of Grounding***
+***9.3 Threadwork as Suspension of Grounding***
 
-Threadweaving goes further beyond basic thread sensitivity. It requires
+Threadwork goes further beyond basic thread sensitivity. It requires
 the practitioner to actively sublimate their always-already rendering of
 the world as world---to be simultaneously beyond and without their
 consciousness---in order to actively touch threads. It is an entire
@@ -505,7 +505,7 @@ those bounds makes this suspension impossible for the devout. You cannot
 sublimate your rendering if you believe your rendering is the divine
 given. You cannot suspend grounding if you believe the ground is
 absolute and you are absolutely within it. The Church's theology is, in
-this precise technical sense, an anti-threadweaving formation.
+this precise technical sense, an anti-threadwork formation.
 
 **Part Five: Epistemology, Relations, and Collective Operations**
 
