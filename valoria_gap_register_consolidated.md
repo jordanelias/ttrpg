@@ -570,3 +570,23 @@
 
 *Updated: 2026-03-28 — PP-094–PP-130 batch*
 
+
+
+---
+
+## EDITORIAL RESOLUTION LOG — 2026-03-30
+
+| ID | Description | PP | New Status |
+|----|-------------|-----|------------|
+| F-11 | W-33 broken for CP≤2 units | PP-154 | Resolved (CP floor 1) |
+| F-27 | Mass battle stalemate — no resolution rule | PP-155 | **Closed — sim error**; PP-117 amended with Size term |
+| F-30 | Coup Counter successor on Grandmaster death | PP-156 | Resolved (institutional inheritance; loyalty exception) |
+| F-43 | Two Domain Actions dropped TC by 4+ in one season | PP-157 | Resolved (seasonal cap ±5) |
+| F-45 | Church Stability brake scope — all TC or Mandate only? | PP-158 | Resolved (Mandate-based only; RS cross-clock exempt) |
+| F-52 | Faction Stability recovery undefined | PP-159 | Resolved (Domain Action Political Ob 2 = +1) |
+| F-70 | Klapp Rendering Crisis content | PP-160 | Resolved (Trajectory B, public fracture, Certainty starts 3) |
+
+**Compilation flags added:**
+- Ehrenwall: she/her throughout — text correction required at compilation
+- Galbados = Solmund; AG = AS (After Solmund) — terminology normalisation at compilation
+
