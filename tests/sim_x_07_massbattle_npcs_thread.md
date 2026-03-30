@@ -41,9 +41,9 @@ Templar revised pool: min(CP4,S5)=4D, +2D Wedge = 6D Off, −1D Wedge = 3D Def.
 ## State: Turn 1, Phase 1-3
 
 ### Units
-Unit A (Löwenritter) — CP5, Strength 5, Cohesion 5, Morale 7. Shield Wall.
+Unit A (Löwenritter) — CP5, Size 5, Cohesion 5, Morale 7. Shield Wall.
   Effective: 4D Off / 7D Def.
-Unit B (Templars) — CP4, Strength 5, Cohesion 3, Morale 5. Wedge.
+Unit B (Templars) — CP4, Size 5, Cohesion 3, Morale 5. Wedge.
   Effective: 6D Off / 3D Def.
 
 ### Generals
@@ -100,8 +100,8 @@ RS: no damage. W-30 mass combat co-movement: RS −3 (flat ×3 multiplier). RS: 
 **Step 5:** Ehrenwall's Phase 5 action: Rally (not needed — Morale at 7). Instead: Ehrenwall redeploys, considers personal combat challenge to Jarnstal to change engagement terms.
 
 ### State Delta: Turn 1
-Unit A: Cohesion 7, Strength 5, Morale 7. Shield Wall.
-Unit B: Cohesion 3, Strength 5, Morale 5. Wedge.
+Unit A: Cohesion 7, Size 5, Morale 7. Shield Wall.
+Unit B: Cohesion 3, Size 5, Morale 5. Wedge.
 RS: 97. Maret Coherence: 10.
 
 ---
@@ -188,8 +188,8 @@ Jarnstal pool (mass battle): CR3−1 (mid-combat damage to command capacity?) �
 
 ## Turn 3, Phase 4: Mass engagement continues, Ehrenwall incapacitated
 
-Unit A operates at CR=2 (halved), Cohesion 7 (W-30 still active), Strength 5.
-Unit B: CP4, Strength 5, Cohesion 3, Morale 4 (−1 from Ehrenwall's Stage 1 — wait: Stage 1 affects the general's OWN side only. §8.9: "Stage 1: −1 Morale all units [own side]." Jarnstal is not incapacitated — Ehrenwall is. Ehrenwall's Stage 1 affects Löwenritter unit only.
+Unit A operates at CR=2 (halved), Cohesion 7 (W-30 still active), Size 5.
+Unit B: CP4, Size 5, Cohesion 3, Morale 4 (−1 from Ehrenwall's Stage 1 — wait: Stage 1 affects the general's OWN side only. §8.9: "Stage 1: −1 Morale all units [own side]." Jarnstal is not incapacitated — Ehrenwall is. Ehrenwall's Stage 1 affects Löwenritter unit only.
 
 Unit A Morale: 7→6 (Ehrenwall Stage 1). Unit B Morale: unchanged at 4.
 
@@ -233,14 +233,14 @@ Idle army check: no engagements this turn? Turn 3 had an engagement (Phase 4 att
 
 **W-30 bolster critical question:** Cohesion=7. Deterministic Cohesion check: Size lost this turn=0 (zero damage). 0 > 7? No → no Cohesion degradation. Unit A Cohesion stays at 7 even at CR=0.
 
-Unit A effectively fighting in Shield Wall, Cohesion 7, Morale 4, Strength 5 — no commander, but structurally intact due to W-30.
+Unit A effectively fighting in Shield Wall, Cohesion 7, Morale 4, Size 5 — no commander, but structurally intact due to W-30.
 
 **RS: P-31 mass context. Relational scale, co-movement RS−3. RS: 97→94.**
 Maret Coherence: retention roll Turn 3 Ob3 → 14D vs Ob3. P(retain)≈88%. Coherence stays 10.
 
 ### State: End Turn 3
-Unit A: Strength 5, Cohesion 7 (W-30), Morale 4. Uncommanded (CR=0).
-Unit B: Strength 5, Cohesion 3, Morale 4. Wedge.
+Unit A: Size 5, Cohesion 7 (W-30), Morale 4. Uncommanded (CR=0).
+Unit B: Size 5, Cohesion 3, Morale 4. Wedge.
 RS: 94. Maret Coherence: 10.
 Ehrenwall: **Dead.** Coup Counter: this is a Löwenritter defeat context — if the battle is lost, Coup Counter does not trigger (Ehrenwall is dead). The Coup Counter was tracking Ehrenwall's threshold. Her death ends the Coup Counter mechanic entirely.
 
