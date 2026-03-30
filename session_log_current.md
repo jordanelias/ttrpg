@@ -1,51 +1,53 @@
-session_id: 2026-03-30T_CROSS_MECHANIC_SIM_BATCH
+session_id: 2026-03-30T_EDITORIAL_BATCH_AD_HYBRID
 phase: closed
 status: CLOSED
 
 ## SESSION SUMMARY
-Cross-mechanic simulation batch. 12 new sim files produced (SIM-X-05 through X-16).
-Two mechanical patches applied and propagated.
+Processed outstanding editorial decisions from Batches A-D, all hybrid gaps (G-075–G-095), and introduced Southernmost Warden-Chief NPC (Edeyja, working name).
 
-## PATCHES COMMITTED THIS SESSION
-- PP-WND-01: Wound penalty changed from +1 Ob per Wound → −1D per Wound
-  Files: stage1_core_engine, stage3_thread_operations, stage8_combat, stage15_spell_catalog, valoria_ruleset_checkpoint_14
-- PP-COH-01: Coherence reduction changed from per-operation scale-based loss → retention roll at end of Leap (pool vs sum of Obs)
-  Files: stage3_thread_operations, stage15_spell_catalog, valoria_ruleset_checkpoint_14
-- Terminology fix: Strength → Size in mass battle sim files X-03, X-04, X-07
+## FILES COMMITTED THIS SESSION
+- designs/edeyja_npc.md — NEW: Southernmost Warden-Chief full NPC card
+- designs/batch_ad_resolutions.md — NEW: Batch A-D + treaty consequence resolutions
+- designs/hybrid_gaps_resolved.md — EXISTING: confirmed all G2/G3 decisions already written
+- canon/editorial_ledger.yaml — UPDATED: R-83 through R-91 added
 
-## SIMULATION FILES COMMITTED
-tests/sim_x_05 through sim_x_16 (12 files)
-tests/coverage_matrix.md (updated to v3)
+## EDITORIAL DECISIONS RESOLVED THIS SESSION
+- R-83: G-053 Approach Training 8 CP confirmed
+- R-84: G-040 half-CP refund on permanent Inspiration loss + failed Grief Scene
+- R-85: G-054 Circles = single track + faction bonus/penalty dice
+- R-86: G-042 faction founding = no CP cost
+- R-87: G-038 treaty betrayal full asymmetric consequence table + Grievance Marker
+- R-88: G-044 Altonian vassalage = dark-path included
+- R-89: Varfell Private Collection = institutional; TK-scaled; Discovery Event on new leader
+- R-90: Edeyja NPC created (TS 75-80; Southernmost; expedition-gated access)
+- R-91: Hybrid gaps G-075–G-095 all confirmed resolved
 
-## EDITORIAL DECISIONS PENDING (user must decide before patching)
-- F-11: W-33 broken for CP≤2 units — fix options: Cohesion min(3,prior) or add Size component
-- F-27: Mass battle stalemate resolution — no rule for zero-damage indefinite stalemates
-- F-30: Coup Counter successor on Grandmaster Ehrenwall death
-- F-43: No seasonal cap on TC clock movement — two Domain Actions dropped TC by 4 in one season
-- F-45: Church Stability brake scope — suppresses all TC or only Mandate-based TC?
-- F-52: Faction Stability recovery rate — no rule defined for externally damaged Stability
-- F-70: Klapp Rendering Crisis — Belief revision content requires user input
+## EDITORIAL DECISIONS STILL PENDING (from ledger)
+- E-05b: 2 remaining territory names
+- E-09: Niflhel arm identities/count
+- E-17b: Narrative prerequisites for The Great Unwinding
+- E-18b: Narrative prerequisites for The Great Working
 
-## CRITICAL FINDINGS (no patch needed, campaign awareness)
-- F-58: RS 22 is 2 points from Dormant threshold — any failed Weaving disables all Leaps globally
-- F-62: Certainty (Spirit=3) depletes in 2 Leaps for Klapp — Rendering Crisis imminent
-- F-51: Olafsson Evidence Chain is dominant TC suppression (6–7 TC over 3 seasons at low cost)
-- F-53: Territorial Weave success (−1 Ob territory-wide) disproportionately powerful at low RS
+## GENERATION TASKS PENDING (approved, not yet drafted)
+- GT-01: Seasonal Event Cards C-11 through C-20
+- GT-02: Co-Movement Cards CM-11 through CM-20
+- GT-03: Monstrous Entity compound Thread operation tables
+
+## MECHANICAL TASKS PENDING
+- MT-01: Faction unit rosters from Military scores
+- MT-02: Propagate Debate pool formula correction (Presence × 2) + History
+- MT-03: Audit Territorial-scale spell catalog Ob consistency
+
+## PROPAGATION STILL PENDING
+- R-42/R-43/R-44: Galbados → Solmund rename batch (Haiku find-replace)
+- R-54 through R-68: Mechanical patches from 2026-03-30 ballot (Sonnet propagation)
 
 ## NEXT ACTIONS
-1. User resolves 7 editorial decisions above
-2. Apply resulting patches
-3. Propagate PP-WND-01 + PP-COH-01 into stage2_characters if wound/coherence references exist
-4. Update valoria_gap_register_consolidated.md with new gaps from sim batch
-5. Continue simulation or move to compilation
+1. Decide: continue with generation tasks (GT-01–GT-03), mechanical tasks, or propagation batch?
+2. Most efficient next step: Haiku rename propagation (R-42/43/44) — purely mechanical, no editorial needed.
+3. Second option: generation tasks require user review of drafts before commit.
 
-## WORLD STATE AT SESSION CLOSE (canonical starting values + sim deltas)
-RS: 20 (from canonical 28, multiple Thread ops)
-TC: 20 (from canonical 22, Doctrine + Evidence chain net)
-IP: 22 (passive drift)
-Vaynard TS: 30. TK: 3.
-Klapp TS: ~50. CE: 8. Coherence: 9. Certainty: 0 (Rendering Crisis pending resolution).
-Ehrenwall: Dead. Coup Counter: Terminated.
-Olafsson: Partially reinstated (Church Stability 4).
-Maret Uln: Active. TS 50. Coherence: 10.
-Inquisitor Vald: CE 3. Investigation Stage 1 complete.
+## OPEN GAPS (Phase 2 compilation)
+All Phase 1 design gaps resolved. Phase 2 compilation is the primary remaining work.
+Outstanding mechanical patches from sim sessions not yet propagated into compilation files.
+
