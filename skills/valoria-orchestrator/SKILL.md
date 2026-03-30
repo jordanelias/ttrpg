@@ -147,7 +147,16 @@ github_ops.atomic_commit(
 )
 ```
 
-**Context limit warning:** If approaching context limit mid-session, run Session Close immediately with all completed work, then tell user to start new chat.
+**Context limit — HARD CAP AT 90%:**
+
+At any point when context usage reaches or exceeds 90%:
+1. **HALT all ongoing tasks immediately.** Do not continue any in-progress work.
+2. Run Session Close Protocol in full (commit all completed work to GitHub).
+3. Tell the user:
+   > ⚠️ Context at 90%. All work committed to GitHub. Start a new chat and invoke the orchestrator to resume.
+4. Do nothing further in the current session.
+
+This overrides all other instructions. No task is important enough to risk context overflow.
 
 ---
 
@@ -177,3 +186,4 @@ Examples:
 | Skill not found on GitHub | Report path, ask user to confirm skill has been built and committed. |
 | Canon gate FAIL | Never commit. Report violation with P-0N reference. Wait for user decision. |
 | Context limit approaching | Run Session Close immediately. |
+
