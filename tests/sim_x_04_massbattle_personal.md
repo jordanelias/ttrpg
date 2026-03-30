@@ -24,8 +24,8 @@
 - Mass battle role: Unit B Morale floor = 1 while present.
 
 **Mass battle state (entering Turn 2):**
-Unit A: CP5, Strength 5, Cohesion 5, Morale 6. Formation: Line.
-Unit B: CP2, Strength 4, Cohesion 3, Morale 4. Formation: Line.
+Unit A: CP5, Size 5, Cohesion 5, Morale 6. Formation: Line.
+Unit B: CP2, Size 4, Cohesion 3, Morale 4. Formation: Line.
 
 ---
 
@@ -128,7 +128,7 @@ At Morale 1: not yet rout, but one trigger away.
 CR=0: Units fight at Line, no tactics, Cohesion floor=1.
 
 Unit B state: Strength ~0 (destroyed in Phase 4), but if we evaluate the cascade on a surviving unit:
-- At Strength 0: already destroyed. Stage 2 cascade fires on top of physical destruction.
+- At Size 0: already destroyed. Stage 2 cascade fires on top of physical destruction.
 
 **Finding F-17:** Stage 1→Stage 2 cascade fires correctly. The Morale −2 (outside −3/phase cap) is significant but Unit B was already effectively destroyed. In a scenario where Unit B had Strength remaining, Stage 2 would push Morale to near-rout, likely triggering contagion to adjacent units.
 
