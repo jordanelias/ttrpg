@@ -208,7 +208,7 @@ Pre-calculate and record on the character sheet.
 **Minimum Combat Pool:** 5 dice. Characters with a calculated pool below 5 receive 5 dice but roll at -1D effective (maximum 4 dice contribute to successes). This prevents the pool-split decision from becoming meaningless at low values.
 
 **Modifiers to Combat Pool:**
-- Wounds: no direct pool reduction (Wounds add +1 Ob to all rolls instead)
+- Wounds: −1D per Wound to the relevant action pool (cumulative)
 - Armour: no pool penalty (armour provides damage reduction only)
 - Fibonacci group bonus: adds to Offence allocation specifically
 - Terrain/zone: GM may impose +1 Ob for adverse terrain; does not reduce pool
@@ -259,7 +259,7 @@ Movement has priority within a phase until an opponent has a combatant in weapon
 
 When Health reaches 0:
 1. Take a **Wound** (Health resets to full)
-2. All subsequent rolls: **+1 Ob per Wound** (cumulative, all roll types)
+2. All subsequent rolls: **−1D per Wound** to the relevant action pool (cumulative)
 3. Excess damage carries over into reset Health
 
 **Single-hit cap:** No single hit inflicts more than 2 Wounds. Damage beyond 2 Health resets is discarded. (Damage exceeding 2× Health triggers 2 Wounds and excess is lost — the 3× reference is the theoretical maximum input, not the output.)
@@ -289,3 +289,4 @@ An incapacitated character is unconscious or otherwise unable to act. They are n
 ---
 
 *End of Stage 1 compilation. Parts Four onward continue in subsequent stages.*
+
