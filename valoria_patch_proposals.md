@@ -1636,3 +1636,101 @@ Also update the explanatory sentence: remove "including bonus dice" from the net
 6. Weaving effect on Debates: +2D or +1D?
 7. Structural Pulling vs Fortification: should Fortification provide resistance?
 8. Catastrophic TC surge: bypass Accounting gate for +5 or more from single event?
+
+
+## EDITORIAL BATCH — 2026-03-30
+
+### PP-154
+**Finding:** F-11 (SIM-X-03)
+**Severity:** P1
+**Mechanic:** W-33 Rally the Broken
+**Decision:** C — W-33 sets effective CP floor at 1 regardless of Cohesion penalty.
+**Fix:** Add to W-33 rules: "A unit rallied by W-33 has a minimum effective combat pool of 1D regardless of Cohesion penalty. This floor persists for the duration of the rally effect only."
+**Status:** APPROVED — editorial decision 2026-03-30
+
+---
+
+### PP-155
+**Finding:** F-27 (SIM-X-07)
+**Severity:** P1 → CLOSED (sim error, not design gap)
+**Mechanic:** Mass combat damage formula (PP-117)
+**Decision:** F-27 was a simulation error. PP-117 omitted the Size term. The stalemate was an artifact of the wrong formula, not a design problem. No stalemate resolution mechanic is needed.
+**Fix:** Amend PP-117. Mass combat damage formula:
+> net hits + weapon modifier + **Size** − DR
+This mirrors the personal combat formula: net hits + weapon modifier + Strength − DR. Size is the unit-level analogue of personal Strength. Without Size, units with high armour and moderate weapon advantage could never be damaged — the formula was structurally incomplete.
+**Status:** PP-117 AMENDED — F-27 CLOSED as sim error — 2026-03-30
+
+---
+
+### PP-156
+**Finding:** F-30 (SIM-X-07/08) — Coup Counter successor on Grandmaster death
+**Severity:** P1
+**Mechanic:** §13 NPC Ehrenwall (she/her); Löwenritter Coup Counter
+**Decision:** B — Coup Counter passes to next senior Löwenritter officer. Counter inherits current value. Successor has lower personal pool than Ehrenwall (CR 3 instead of CR 5). Threat persists but diminishes. Exception: if the successor has loyalty outside the Löwenritter (e.g. appointed externally or holds cross-faction allegiances), the Counter does NOT transfer — it terminates.
+**Fix:** Add to §13 Ehrenwall / Löwenritter rules:
+> "**Coup Counter succession:** On Ehrenwall's death, the Coup Counter transfers to the most senior Löwenritter officer by institutional rank. The Counter inherits its current value. The successor's personal pool is CR 3 (not Ehrenwall's CR 5); all Counter threshold outcomes use the successor's pool. Exception: if the successor holds primary loyalty outside the Löwenritter institution (appointed externally, cross-faction allegiance, or Altonian-affiliated), the Counter terminates on transfer and does not activate. The Coup threat is institutional — it requires an officer whose primary loyalty is to Löwenritter sovereignty."
+**Correction note:** Ehrenwall is she/her throughout all documents. Any prior references to "him" or "his" for Ehrenwall are text errors requiring correction at compilation.
+**Status:** APPROVED — editorial decision 2026-03-30
+
+---
+
+### PP-157
+**Finding:** F-43 (SIM-X-10) — No seasonal TC cap
+**Severity:** P1
+**Mechanic:** §7 Theocracy Clock — seasonal movement
+**Decision:** B — seasonal TC cap ±5 per season from all player/faction-driven sources combined. Cross-clock passive drift (RS→TC) is structural and not subject to this cap.
+**Fix:** Add to §7.2 TC accounting rules:
+> "**Seasonal TC movement cap:** TC may not move more than ±5 in a single season from all faction Domain Actions, Domain Echoes, and event-driven modifiers combined. Cross-clock passive drift (RS-driven TC gain) is structural and applies after the cap. If multiple actions would exceed ±5, apply them in resolution order (per PP-005 Domain Action sequencing) and stop when the cap is reached; remaining actions are absorbed."
+**Status:** APPROVED — editorial decision 2026-03-30
+
+---
+
+### PP-158
+**Finding:** F-45 (SIM-X-10) — Church Stability brake scope
+**Severity:** P1
+**Mechanic:** §7.2 Theocracy Clock — Church Stability brake
+**Decision:** B — brake suppresses Mandate-based TC generation only. RS-driven cross-clock TC increase (structural clock mechanic) still applies even when brake is active. A Church in internal crisis cannot stop the world's substrate decay from feeding TC.
+**Fix:** Amend §7.2 Church Stability brake entry:
+> "**Church Stability brake (Stability ≤ 3):** Mandate-based TC generation ceases this season. RS-driven cross-clock TC increase is NOT suppressed by the brake — it applies normally. The brake reflects the Church's inability to actively drive institutional expansion during internal crisis; it does not affect the structural substrate pressure that feeds TC independently of Church activity."
+**Status:** APPROVED — editorial decision 2026-03-30
+
+---
+
+### PP-159
+**Finding:** F-52 (SIM-X-12) — Faction Stability recovery undefined
+**Severity:** P1
+**Mechanic:** §8.1 Faction Mechanics — Stability recovery
+**Decision:** A — Domain Action recovery. A faction may spend one Domain Action (Political tier, Ob 2) to recover Stability +1. No seasonal cap on attempts; each Domain Action spent yields +1.
+**Fix:** Add to §8.1 seasonal accounting, Stability section:
+> "**Faction Stability recovery:** A faction may recover Stability +1 by spending one Political-tier Domain Action (Ob 2) representing internal consolidation, leadership reinforcement, or institutional repair. This counts against the faction's seasonal Domain Action allocation. There is no cap on recovery attempts per season beyond the faction's available Domain Actions. Stability cannot exceed its starting value through recovery alone (extraordinary events may permit higher values at GM discretion)."
+**Status:** APPROVED — editorial decision 2026-03-30
+
+---
+
+### PP-160
+**Finding:** F-70 (SIM-X-15) — Klapp Rendering Crisis content
+**Severity:** P1
+**Mechanic:** §13 NPC Klapp — Certainty track; Rendering Crisis
+**Decision:** B — public fracture. Klapp's Rendering Crisis manifests visibly at his next institutional scene. His behaviour shifts noticeably; other characters can perceive that something has changed. Baralta's Solmund Claim context note: Galbados is always Solmund; AG is always AS (After Solmund). Klapp's starting Certainty is 3 (Spirit score = 3). Crisis fires mid-game, timed to coincide with Collision A (Church Double Fracture).
+**Fix:** Add to §13 NPC Klapp, Certainty/Rendering Crisis entry:
+> "**Klapp Rendering Crisis (Trajectory B — Public Fracture):** When Klapp's Certainty reaches 0, the Crisis does not resolve privately. It manifests at his next public institutional scene (Cardinals' meeting, interrogation, sermon, or formal Church proceeding). His behaviour shifts in ways perceptible to other characters — he cannot maintain the performance of certainty he has sustained throughout his career. Other characters observing him may attempt Cognition rolls (Ob 2) to register that something is fundamentally wrong. He does not reveal Thread knowledge explicitly; the fracture is behavioural, not declarative. This opens the Klapp Revelation arc (see Collision A: Church Double Fracture). Klapp's starting Certainty: 3."
+**Canon note:** Galbados = Solmund throughout all documents. AG = After Solmund (AS). Any references to AG are AS. Any references to Galbados as a theological abstraction are references to Solmund as a historical threadcut being. This has no mechanical effect but must be consistent at compilation.
+**Status:** APPROVED — editorial decision 2026-03-30
+
+
+---
+
+## PATCH COUNT SUMMARY (UPDATED 2026-03-30)
+| Severity | Count |
+|----------|-------|
+| P1 | 57 (+1: PP-156 Coup Counter successor; F-11 C, F-43 B, F-45 B, F-52 A, F-70 B approved) |
+| P2 | 75 |
+| P3 | 10 |
+| Design (new mechanic / user directive) | 11 |
+| Formula correction | 1 (+1: PP-155 Size term; F-27 closed as sim error) |
+| **Total** | **160 (+7)** |
+
+*PP-154–PP-160: editorial batch 2026-03-30. All 7 pending decisions resolved.*
+*F-27 closed as sim error; PP-117 amended with Size term.*
+*Ehrenwall: she/her throughout — compilation correction flagged.*
+*Galbados = Solmund; AG = AS (After Solmund) — compilation normalisation flagged.*
