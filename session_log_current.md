@@ -1,41 +1,37 @@
-session_id: 2026-03-30T_EDITORIAL_BATCH_01
+session_id: 2026-03-30T_PROPAGATION_WND_COH
 phase: closed
 status: CLOSED
 
 ## SESSION SUMMARY
-Resolved 7 pending editorial decisions from the cross-mechanic sim batch. All decisions committed to patch proposals and gap register.
+PP-WND-01 and PP-COH-01 propagation into stage2_characters audit complete.
 
-## DECISIONS RESOLVED THIS SESSION
+## PROPAGATION RESULTS
 
-| ID | Decision | PP |
-|----|----------|----|
-| F-11 | W-33: CP floor 1 on rallied units | PP-154 |
-| F-27 | CLOSED as sim error — PP-117 amended with Size term | PP-155 |
-| F-30 | Coup Counter: institutional inheritance; terminates on external loyalty | PP-156 |
-| F-43 | Seasonal TC cap ±5 (faction-driven sources) | PP-157 |
-| F-45 | Stability brake suppresses Mandate-based TC only; RS cross-clock exempt | PP-158 |
-| F-52 | Stability recovery: Political Domain Action Ob 2 = +1/season | PP-159 |
-| F-70 | Klapp Rendering Crisis: Trajectory B (public fracture); Certainty starts 3 | PP-160 |
+### PP-WND-01 (Wound penalty: +1 Ob → −1D)
+- stage1_core_engine: already correct (§3.8 states −1D per Wound)
+- stage2_characters: no wound penalty formula present — CP menu only; no change needed
+- stage3_thread_operations: **PATCHED** — Leap round wound penalty corrected from +1 Ob to −1D
+- stage8_combat: already correct (patched prior session)
+- stage15_spell_catalog: already correct (−1D per Wound stated at line 384)
+- valoria_ruleset_checkpoint_14: no stale instances found
 
-## COMPILATION FLAGS (apply at next compilation pass)
-- Ehrenwall: she/her throughout — correct any he/him references
-- Galbados = Solmund; AG = AS (After Solmund) — normalise terminology
-- PP-117 mass combat damage formula: net hits + weapon modifier + Size − DR
+### PP-COH-01 (Coherence: per-operation → retention roll per Leap)
+- stage3_thread_operations: already correct (§5.2.2 retention roll system in place)
+- stage2_characters: Coherence not tracked here (non-practitioner document); no change needed
+- Degree table −1 Coherence (cap) entries: correctly mean +1 Ob to retention roll, not direct loss — no change needed
 
-## EDITORIAL DECISIONS PENDING
-None. All 7 prior pending decisions resolved.
+## COMMITS THIS SESSION
+- stage3_thread_operations.md: 6bbfdf17fb
 
 ## NEXT ACTIONS
-1. Apply patches PP-154–160 to relevant ruleset stages
-2. Propagate PP-WND-01 + PP-COH-01 into stage2_characters (wound/coherence references)
-3. Update valoria_ruleset_checkpoint_14 with this editorial batch
-4. Continue simulation or move to compilation
+1. Update valoria_ruleset_checkpoint_14 with editorial batch PP-154–160 + propagation fix
+2. Continue simulation or move to full compilation
 
-## WORLD STATE (unchanged from prior session)
+## WORLD STATE (unchanged)
 RS: 20 | TC: 20 | IP: 22
 Vaynard TS: 30. TK: 3.
-Klapp TS: ~50. CE: 8. Coherence: 9. Certainty: 3 (confirmed this session).
-Ehrenwall: Dead. Coup Counter: Terminated — pending successor designation per PP-156.
+Klapp TS: ~50. CE: 8. Coherence: 9. Certainty: 3.
+Ehrenwall: Dead. Coup Counter: Terminated — successor rule now defined (PP-156).
 Olafsson: Partially reinstated (Church Stability 4).
 Maret Uln: Active. TS 50. Coherence: 10.
 Inquisitor Vald: CE 3. Investigation Stage 1 complete.
