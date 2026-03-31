@@ -159,4 +159,10 @@ Range is tracked per fighter pair: **Close zone** or **Far zone**.
 - On success: range shifts, gain initiative
 - Auto-succeeds if opponent not attacking (Ob = 0)
 
-**Simulation models:** opponent always contests (rational default). Tie → Long holds.
+**Establish Distance roll: Defence dice at TN 7** (not Offence).
+Succeed if your successes > opponent's successes. Tie → Long holds (Far zone).
+
+**Long weapon AI:** attempts Establish Distance whenever at Close zone, EXCEPT:
+- Opponent is one strike from incapacitation (press the attack instead), OR
+- Fighter is in Full Guard waiting for rescue (all dice on defence; no manoeuvre).
+
