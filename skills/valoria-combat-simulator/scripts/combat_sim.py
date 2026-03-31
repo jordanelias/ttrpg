@@ -3,7 +3,9 @@
 Valoria Combat Simulator
 Canonical script — parameters sourced from references/combat_params.md
 Update CONFIG block when ruleset patches land. Do not hardcode elsewhere.
-Last updated: 2026-03-31 — stage8_combat.md sync
+Last updated: 2026-03-31 — Establish Distance uses Defence dice at TN7;
+             Long weapon AI attempts Establish Distance at Close unless
+             opponent is one strike from incapacitation or fighter is in Full Guard.
 """
 
 import math, random, argparse, sys
@@ -11,32 +13,24 @@ from collections import defaultdict
 
 # ── CONFIG — update when ruleset patches land ─────────────────────────────────
 
-# Weapons: name → (reach, cut_or_blunt, atk_tn, def_tn, dmg_bonus)
-# cut_or_blunt: 'Cut' or 'Blunt' — used to look up per-type DR
 WEAPONS = {
-    # Short reach
-    'Short-LightCut':   ('Short',      'LightCut',   5, 6, 1),
-    'Short-HeavyCut':   ('Short',      'HeavyCut',   6, 7, 4),
-    'Short-LightBlunt': ('Short',      'LightBlunt', 6, 7, 1),
-    'Short-HeavyBlunt': ('Short',      'HeavyBlunt', 7, 8, 4),
-    # Long reach
-    'Long-LightCut':    ('Long',       'LightCut',   5, 6, 1),
-    'Long-HeavyCut':    ('Long',       'HeavyCut',   6, 7, 4),
-    'Long-LightBlunt':  ('Long',       'LightBlunt', 6, 7, 1),
-    'Long-HeavyBlunt':  ('Long',       'HeavyBlunt', 7, 8, 4),
-    # Unarmed
-    'Unarmed':          ('Short',      'Unarmed',    8, 9, 0),
+    'Short-LightCut':   ('Short', 'LightCut',   5, 6, 1),
+    'Short-HeavyCut':   ('Short', 'HeavyCut',   6, 7, 4),
+    'Short-LightBlunt': ('Short', 'LightBlunt', 6, 7, 1),
+    'Short-HeavyBlunt': ('Short', 'HeavyBlunt', 7, 8, 4),
+    'Long-LightCut':    ('Long',  'LightCut',   5, 6, 1),
+    'Long-HeavyCut':    ('Long',  'HeavyCut',   6, 7, 4),
+    'Long-LightBlunt':  ('Long',  'LightBlunt', 6, 7, 1),
+    'Long-HeavyBlunt':  ('Long',  'HeavyBlunt', 7, 8, 4),
+    'Unarmed':          ('Short', 'Unarmed',    8, 9, 0),
 }
 
-# Str minimums per weapon weight class
 STR_MIN_WEAPON = {
     'LightCut': 1, 'LightBlunt': 1,
     'HeavyCut': 3, 'HeavyBlunt': 4,
     'Unarmed':  0,
 }
 
-# DR per armour tier, keyed by weapon type
-# armour → {weapon_type → DR}
 ARMOUR_DR = {
     'None':   {'LightCut': 0, 'HeavyCut': 0, 'LightBlunt': 0, 'HeavyBlunt': 0, 'Unarmed': 0},
     'Light':  {'LightCut': 2, 'HeavyCut': 1, 'LightBlunt': 1, 'HeavyBlunt': 0, 'Unarmed': 0},
@@ -45,8 +39,6 @@ ARMOUR_DR = {
 }
 
 # armour → (str_min, pool_penalty_at_one_below, stamina_mod)
-# pool_penalty: dice subtracted if 1 below str_min (2+ = cannot wear)
-# stamina_mod: added to (End + History + 1)
 ARMOURS = {
     'None':   (0, 0,  0),
     'Light':  (2, 1,  0),
@@ -56,10 +48,10 @@ ARMOURS = {
 
 PROFICIENCY_POINTS = {'untrained': 0, 'beginner': 1, 'competent': 2, 'veteran': 3}
 
-MANOEUVRE_TN    = 7
+MANOEUVRE_TN     = 7
 DEFAULT_N_FIGHTS  = 20000
 DEFAULT_MAX_ROUNDS = 30
-CRIT_THRESHOLD  = 3  # excess successes ≥ this → double weapon modifier
+CRIT_THRESHOLD   = 3
 # ─────────────────────────────────────────────────────────────────────────────
 
 
@@ -69,25 +61,21 @@ def stamina_max(ar, end, history_points):
 
 
 def build_pool(w, ar, agi, str_, proficiency):
-    """Return effective combat pool, or None if build is invalid."""
     reach, wtype, _, _, _ = WEAPONS[w]
     ar_str, ar_pen, _ = ARMOURS[ar]
     points = PROFICIENCY_POINTS[proficiency]
-
     base = (agi * 2) + points + 3
     pool = base
 
-    # Weapon str check
     dw = STR_MIN_WEAPON[wtype] - str_
     if dw >= 2:   return None
     elif dw == 1: pool -= 1
 
-    # Armour str check
     da = ar_str - str_
     if da >= 2:   return None
     elif da == 1: pool -= ar_pen
 
-    return max(5, pool)  # minimum pool 5 per §8.1
+    return max(5, pool)
 
 
 def roll(n, tn):
@@ -95,11 +83,23 @@ def roll(n, tn):
     return sum(1 for _ in range(n) if random.randint(1, 10) >= tn)
 
 
-def at_correct_range(reach, band):
-    """Short = needs Close; Long = prefers Far but can fight at Close degraded."""
-    if reach == 'Short': return band == 'Close'
-    if reach == 'Long':  return True   # can always act (degraded at Close)
-    return True
+def _incap_threshold(end):
+    if end <= 3: return 2
+    if end <= 5: return 3
+    return 4
+
+
+def _one_strike_from_incap(hp, wounds, end, opponent_pool, opponent_dmg, opponent_dr):
+    """
+    True if opponent can plausibly incapacitate this fighter in one hit.
+    Conservative estimate: opponent hits with 1 excess success (minimum damage).
+    """
+    incap_wounds = _incap_threshold(end)
+    if wounds >= incap_wounds - 1:
+        # Already at last wound — any damage reaching Health 0 incapacitates
+        min_damage = max(0, 1 + opponent_dmg - opponent_dr)  # 1 excess + dmg bonus - DR
+        return min_damage >= hp
+    return False
 
 
 def simulate_fight(wA, arA, wB, arB, agi, str_, end, proficiency, n_fights, max_rounds):
@@ -112,12 +112,12 @@ def simulate_fight(wA, arA, wB, arB, agi, str_, end, proficiency, n_fights, max_
     if poolA_base is None or poolB_base is None:
         return None
 
-    health     = end + 6
-    stamA_max_ = stamina_max(arA, end, points)
-    stamB_max_ = stamina_max(arB, end, points)
-
-    drA_vs = ARMOUR_DR[arA]  # DR dict for armour A, keyed by weapon type
-    drB_vs = ARMOUR_DR[arB]
+    health      = end + 6
+    stamA_max_  = stamina_max(arA, end, points)
+    stamB_max_  = stamina_max(arB, end, points)
+    drA_vs      = ARMOUR_DR[arA]
+    drB_vs      = ARMOUR_DR[arB]
+    incap_thr   = _incap_threshold(end)
 
     wins_A = wins_B = draws = 0
 
@@ -126,13 +126,14 @@ def simulate_fight(wA, arA, wB, arB, agi, str_, end, proficiency, n_fights, max_
         woundsA = woundsB = 0
         stamA = stamA_max_
         stamB = stamB_max_
-        range_band = 'Far'  # default engagement opening
+        range_band = 'Far'
+        full_guard_A = full_guard_B = False  # set externally if rescue scenario modelled
 
         for rnd in range(max_rounds):
             if hpA <= 0 or hpB <= 0:
                 break
 
-            # Out of Breath check
+            # Out of Breath
             oobA = stamA <= 0
             oobB = stamB <= 0
             if oobA: stamA = stamA_max_
@@ -147,31 +148,75 @@ def simulate_fight(wA, arA, wB, arB, agi, str_, end, proficiency, n_fights, max_
             can_A = not oobA
             can_B = not oobB
 
-            # Range management
-            A_needs_close = (rA == 'Short' and range_band == 'Far')
-            B_needs_close = (rB == 'Short' and range_band == 'Far')
-            A_wants_far   = (rA == 'Long'  and range_band == 'Close')  # prefers Far but can still act
-            B_wants_far   = (rB == 'Long'  and range_band == 'Close')
+            # Defence dice = pool - offence allocation (pool - pool//2)
+            defA = effA - effA // 2
+            defB = effB - effB // 2
 
-            A_manoeuvres = can_A and A_needs_close
-            B_manoeuvres = can_B and B_needs_close
+            # ── Long weapon AI: attempt Establish Distance at Close zone
+            #    UNLESS: opponent one strike from incap, OR fighter in Full Guard
+            def long_wants_far(reach, band, hp_self, wounds_self,
+                               hp_opp, wounds_opp,
+                               opp_pool, opp_dmg, opp_dr, full_guard):
+                if reach != 'Long' or band != 'Close':
+                    return False
+                if full_guard:
+                    return False
+                if _one_strike_from_incap(hp_opp, wounds_opp, end, opp_pool, opp_dmg, opp_dr):
+                    return False  # opponent near-dead: press the attack
+                return True
+
+            A_needs_close  = (rA == 'Short' and range_band == 'Far')
+            B_needs_close  = (rB == 'Short' and range_band == 'Far')
+            A_wants_far    = long_wants_far(rA, range_band, hpA, woundsA,
+                                            hpB, woundsB, poolB, dmgB,
+                                            drA_vs.get(wtB, 0), full_guard_A)
+            B_wants_far    = long_wants_far(rB, range_band, hpB, woundsB,
+                                            hpA, woundsA, poolA, dmgA,
+                                            drB_vs.get(wtA, 0), full_guard_B)
+
+            A_manoeuvres = can_A and (A_needs_close or A_wants_far)
+            B_manoeuvres = can_B and (B_needs_close or B_wants_far)
 
             A_attacks = B_attacks = False
 
             if A_manoeuvres or B_manoeuvres:
-                # Establish Distance contest
+                # Establish Distance: roll Defence dice at TN 7
                 if can_A and can_B:
-                    sA = roll(effA // 2, MANOEUVRE_TN)
-                    sB = roll(effB // 2, MANOEUVRE_TN)
-                    if sA > sB:   range_band = 'Close' if A_manoeuvres else 'Far'
-                    elif sB > sA: range_band = 'Close' if B_manoeuvres else 'Far'
-                    else:         pass  # tie → Long holds (Far unchanged)
+                    sA = roll(defA, MANOEUVRE_TN)
+                    sB = roll(defB, MANOEUVRE_TN)
+
+                    # Determine who wins: each pushes toward their preferred range
+                    # If both manoeuvre, treat as contested — higher successes wins
+                    # Tie → Long holds (Far)
+                    if A_manoeuvres and B_manoeuvres:
+                        # Both contesting range — Long fighter wins ties
+                        a_wants = 'Close' if A_needs_close else 'Far'
+                        b_wants = 'Close' if B_needs_close else 'Far'
+                        if sA > sB:   range_band = a_wants
+                        elif sB > sA: range_band = b_wants
+                        else:         range_band = 'Far'  # tie → Long holds
+                    elif A_manoeuvres:
+                        # A manoeuvres; B may contest (rational: always contest)
+                        a_wants = 'Close' if A_needs_close else 'Far'
+                        if sA > sB:   range_band = a_wants
+                        elif sB > sA: pass  # B wins, range unchanged
+                        else:         range_band = 'Far'  # tie → Long holds
+                    else:
+                        # B manoeuvres; A contests
+                        b_wants = 'Close' if B_needs_close else 'Far'
+                        if sB > sA:   range_band = b_wants
+                        elif sA > sB: pass
+                        else:         range_band = 'Far'
+
                     stamA -= 1; stamB -= 1
-                elif can_A:
-                    range_band = 'Close' if A_manoeuvres else range_band
+
+                elif can_A and not can_B:
+                    if A_manoeuvres:
+                        range_band = 'Close' if A_needs_close else 'Far'
                     stamA -= 1
-                elif can_B:
-                    range_band = 'Close' if B_manoeuvres else range_band
+                elif can_B and not can_A:
+                    if B_manoeuvres:
+                        range_band = 'Close' if B_needs_close else 'Far'
                     stamB -= 1
             else:
                 A_attacks = can_A
@@ -179,10 +224,8 @@ def simulate_fight(wA, arA, wB, arB, agi, str_, end, proficiency, n_fights, max_
 
             def resolve_attack(attacker_pool, oob, reach, atk_tn, def_tn, dmg_bonus,
                                defender_pool, def_oob, dr_dict, wtype, band):
-                """Returns damage dealt to defender."""
-                if oob: return 0  # Out of Breath: defence only
+                if oob: return 0
 
-                # Long at Close zone: -1D offence, half damage
                 close_penalty = (reach == 'Long' and band == 'Close')
                 off_pool = max(1, attacker_pool // 2 - (1 if close_penalty else 0))
                 def_pool = max(1, defender_pool - defender_pool // 2)
@@ -193,11 +236,10 @@ def simulate_fight(wA, arA, wB, arB, agi, str_, end, proficiency, n_fights, max_
                 if atk <= dfn:
                     return 0
 
-                excess = atk - dfn
+                excess   = atk - dfn
                 modifier = dmg_bonus * 2 if excess >= CRIT_THRESHOLD else dmg_bonus
-                dr = dr_dict.get(wtype, 0)
-
-                raw = excess + str_ + modifier - dr
+                dr       = dr_dict.get(wtype, 0)
+                raw      = excess + str_ + modifier - dr
                 if close_penalty:
                     raw = math.ceil(raw / 2)
                 return max(0, raw)
@@ -212,35 +254,27 @@ def simulate_fight(wA, arA, wB, arB, agi, str_, end, proficiency, n_fights, max_
                                           effA, oobA, drA_vs, wtB, range_band)
                 stamB -= 1
 
-            # Apply damage simultaneously; check wounds
             hpA -= dmg_to_A
             hpB -= dmg_to_B
 
-            while hpA <= 0 and woundsA < _incap_threshold(end):
+            while hpA <= 0 and woundsA < incap_thr:
                 woundsA += 1
-                hpA += health  # reset
-            while hpB <= 0 and woundsB < _incap_threshold(end):
+                hpA += health
+            while hpB <= 0 and woundsB < incap_thr:
                 woundsB += 1
                 hpB += health
 
             stamA = max(0, stamA)
             stamB = max(0, stamB)
 
-        # Determine fight outcome
-        A_incap = hpA <= 0 or woundsA >= _incap_threshold(end)
-        B_incap = hpB <= 0 or woundsB >= _incap_threshold(end)
+        A_incap = hpA <= 0 or woundsA >= incap_thr
+        B_incap = hpB <= 0 or woundsB >= incap_thr
 
-        if not A_incap and B_incap:  wins_A += 1
+        if not A_incap and B_incap:   wins_A += 1
         elif not B_incap and A_incap: wins_B += 1
-        else:                         draws += 1
+        else:                          draws  += 1
 
     return wins_A / n_fights, wins_B / n_fights, draws / n_fights
-
-
-def _incap_threshold(end):
-    if end <= 3: return 2
-    if end <= 5: return 3
-    return 4
 
 
 def main():
@@ -299,7 +333,6 @@ def main():
         lines.append(f"{wA:<20}{arA:<9}{wB:<20}{arB:<9}"
                      f"{pW*100:>6.1f}%{pL*100:>6.1f}%{pD*100:>6.1f}%")
 
-    # Build summary
     win_rates = {}
     for wA,arA,wB,arB,pW,pL,pD in results:
         win_rates.setdefault((wA,arA),[]).append(pW)
