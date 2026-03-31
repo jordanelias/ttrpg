@@ -3,183 +3,244 @@
 Valoria Combat Simulator
 Canonical script — parameters sourced from references/combat_params.md
 Update CONFIG block when ruleset patches land. Do not hardcode elsewhere.
+Last updated: 2026-03-31 — stage8_combat.md sync
 """
 
 import math, random, argparse, sys
 from collections import defaultdict
 
 # ── CONFIG — update when ruleset patches land ─────────────────────────────────
+
+# Weapons: name → (reach, cut_or_blunt, atk_tn, def_tn, dmg_bonus)
+# cut_or_blunt: 'Cut' or 'Blunt' — used to look up per-type DR
 WEAPONS = {
-    # name: (reach, weight, atk_tn, parry_tn, dmg_bonus)
-    'Short-Light':  ('Short',     'Light',  5, 6, 1),
-    'Short-Medium': ('Short',     'Medium', 6, 7, 2),
-    'Short-Heavy':  ('Short',     'Heavy',  7, 8, 4),
-    'Long-Light':   ('Long',      'Light',  5, 6, 1),
-    'Long-Medium':  ('Long',      'Medium', 6, 7, 2),
-    'Long-Heavy':   ('Long',      'Heavy',  7, 8, 4),
-    'Vers-Light':   ('Versatile', 'Light',  5, 6, 1),
-    'Vers-Medium':  ('Versatile', 'Medium', 6, 7, 2),
-    'Vers-Heavy':   ('Versatile', 'Heavy',  7, 8, 4),
+    # Short reach
+    'Short-LightCut':   ('Short',      'LightCut',   5, 6, 1),
+    'Short-HeavyCut':   ('Short',      'HeavyCut',   6, 7, 4),
+    'Short-LightBlunt': ('Short',      'LightBlunt', 6, 7, 1),
+    'Short-HeavyBlunt': ('Short',      'HeavyBlunt', 7, 8, 4),
+    # Long reach
+    'Long-LightCut':    ('Long',       'LightCut',   5, 6, 1),
+    'Long-HeavyCut':    ('Long',       'HeavyCut',   6, 7, 4),
+    'Long-LightBlunt':  ('Long',       'LightBlunt', 6, 7, 1),
+    'Long-HeavyBlunt':  ('Long',       'HeavyBlunt', 7, 8, 4),
+    # Unarmed
+    'Unarmed':          ('Short',      'Unarmed',    8, 9, 0),
 }
 
-STR_MIN_WEAPON = {'Light': 0, 'Medium': 3, 'Heavy': 4}
+# Str minimums per weapon weight class
+STR_MIN_WEAPON = {
+    'LightCut': 1, 'LightBlunt': 1,
+    'HeavyCut': 3, 'HeavyBlunt': 4,
+    'Unarmed':  0,
+}
 
-# armour: (DR, str_min, pool_penalty_at_one_below, stamina_formula)
-# stamina_formula: 1=End+1, 0=End, -1=End-1
+# DR per armour tier, keyed by weapon type
+# armour → {weapon_type → DR}
+ARMOUR_DR = {
+    'None':   {'LightCut': 0, 'HeavyCut': 0, 'LightBlunt': 0, 'HeavyBlunt': 0, 'Unarmed': 0},
+    'Light':  {'LightCut': 2, 'HeavyCut': 1, 'LightBlunt': 1, 'HeavyBlunt': 0, 'Unarmed': 0},
+    'Medium': {'LightCut': 4, 'HeavyCut': 3, 'LightBlunt': 2, 'HeavyBlunt': 1, 'Unarmed': 0},
+    'Heavy':  {'LightCut': 6, 'HeavyCut': 5, 'LightBlunt': 3, 'HeavyBlunt': 1, 'Unarmed': 0},
+}
+
+# armour → (str_min, pool_penalty_at_one_below, stamina_mod)
+# pool_penalty: dice subtracted if 1 below str_min (2+ = cannot wear)
+# stamina_mod: added to (End + History + 1)
 ARMOURS = {
-    'None':   (0, 0, 0,  1),
-    'Light':  (1, 0, 0,  1),  # No Str min, no pool penalty, no stamina penalty
-    'Medium': (2, 3, 1,  0),
-    'Heavy':  (3, 4, 2, -2),  # NOTE: Heavy = -2D penalty; Stamina End-2
+    'None':   (0, 0,  0),
+    'Light':  (2, 1,  0),
+    'Medium': (3, 1, -1),
+    'Heavy':  (4, 2, -2),
 }
 
 PROFICIENCY_POINTS = {'untrained': 0, 'beginner': 1, 'competent': 2, 'veteran': 3}
 
-MANOEUVRE_TN = 7
-DEFAULT_N_FIGHTS = 20000
+MANOEUVRE_TN    = 7
+DEFAULT_N_FIGHTS  = 20000
 DEFAULT_MAX_ROUNDS = 30
+CRIT_THRESHOLD  = 3  # excess successes ≥ this → double weapon modifier
 # ─────────────────────────────────────────────────────────────────────────────
 
 
-def get_stamina_max(ar, end):
-    _, _, _, stam_mod = ARMOURS[ar]
-    return max(1, end + stam_mod + (1 if stam_mod == 1 else 0) if stam_mod == 1 else end + stam_mod)
+def stamina_max(ar, end, history_points):
+    _, _, stam_mod = ARMOURS[ar]
+    return max(1, end + history_points + 1 + stam_mod)
 
-def stamina_max(ar, end):
-    _, _, _, mod = ARMOURS[ar]
-    # mod: 1 = End+1, 0 = End, -1 = End-1
-    return max(1, end + mod)
 
 def build_pool(w, ar, agi, str_, proficiency):
-    _, wt, _, _, _ = WEAPONS[w]
-    _, ar_str, ar_pen, _ = ARMOURS[ar]
+    """Return effective combat pool, or None if build is invalid."""
+    reach, wtype, _, _, _ = WEAPONS[w]
+    ar_str, ar_pen, _ = ARMOURS[ar]
     points = PROFICIENCY_POINTS[proficiency]
-    base = agi + (points + 3)
 
+    base = (agi * 2) + points + 3
     pool = base
-    dw = STR_MIN_WEAPON[wt] - str_
-    if dw >= 2:   return None          # cannot wield
-    elif dw == 1: pool -= 1            # -1D
 
+    # Weapon str check
+    dw = STR_MIN_WEAPON[wtype] - str_
+    if dw >= 2:   return None
+    elif dw == 1: pool -= 1
+
+    # Armour str check
     da = ar_str - str_
-    if da >= 2:   return None          # cannot wear
-    elif da == 1: pool -= ar_pen       # -1D or -2D depending on armour
+    if da >= 2:   return None
+    elif da == 1: pool -= ar_pen
 
-    return max(1, pool)
+    return max(5, pool)  # minimum pool 5 per §8.1
+
 
 def roll(n, tn):
     if n <= 0: return 0
     return sum(1 for _ in range(n) if random.randint(1, 10) >= tn)
 
-def at_correct_range(reach, band):
-    if reach == 'Versatile': return True
-    return reach == band
 
-def preferred_range(reach):
-    if reach == 'Short': return 'Short'
-    return 'Long'  # Long and Versatile prefer Long (Versatile has no locked preference but defaults Long)
+def at_correct_range(reach, band):
+    """Short = needs Close; Long = prefers Far but can fight at Close degraded."""
+    if reach == 'Short': return band == 'Close'
+    if reach == 'Long':  return True   # can always act (degraded at Close)
+    return True
+
 
 def simulate_fight(wA, arA, wB, arB, agi, str_, end, proficiency, n_fights, max_rounds):
-    rA, _, atnA, ptnA, dmgA = WEAPONS[wA]
-    rB, _, atnB, ptnB, dmgB = WEAPONS[wB]
-    drA = ARMOURS[arA][0]
-    drB = ARMOURS[arB][0]
+    rA, wtA, atnA, dtnA, dmgA = WEAPONS[wA]
+    rB, wtB, atnB, dtnB, dmgB = WEAPONS[wB]
 
-    poolA = build_pool(wA, arA, agi, str_, proficiency)
-    poolB = build_pool(wB, arB, agi, str_, proficiency)
-    if poolA is None or poolB is None:
+    points = PROFICIENCY_POINTS[proficiency]
+    poolA_base = build_pool(wA, arA, agi, str_, proficiency)
+    poolB_base = build_pool(wB, arB, agi, str_, proficiency)
+    if poolA_base is None or poolB_base is None:
         return None
 
-    health = end + 6
-    stamA_max = stamina_max(arA, end)
-    stamB_max = stamina_max(arB, end)
+    health     = end + 6
+    stamA_max_ = stamina_max(arA, end, points)
+    stamB_max_ = stamina_max(arB, end, points)
+
+    drA_vs = ARMOUR_DR[arA]  # DR dict for armour A, keyed by weapon type
+    drB_vs = ARMOUR_DR[arB]
 
     wins_A = wins_B = draws = 0
 
     for _ in range(n_fights):
         hpA = hpB = health
-        stamA = stamA_max
-        stamB = stamB_max
-        range_band = 'Long'
+        woundsA = woundsB = 0
+        stamA = stamA_max_
+        stamB = stamB_max_
+        range_band = 'Far'  # default engagement opening
 
         for rnd in range(max_rounds):
             if hpA <= 0 or hpB <= 0:
                 break
 
-            # Catch Breath check
-            catchA = stamA <= 0
-            catchB = stamB <= 0
-            if catchA: stamA = stamA_max
-            if catchB: stamB = stamB_max
+            # Out of Breath check
+            oobA = stamA <= 0
+            oobB = stamB <= 0
+            if oobA: stamA = stamA_max_
+            if oobB: stamB = stamB_max_
 
-            effA = math.ceil(poolA / 2) if catchA else poolA
-            effB = math.ceil(poolB / 2) if catchB else poolB
-            can_A = not catchA
-            can_B = not catchB
+            # Apply wound pool penalties
+            poolA = max(1, poolA_base - woundsA)
+            poolB = max(1, poolB_base - woundsB)
 
-            # Range state
-            A_ok = at_correct_range(rA, range_band)
-            B_ok = at_correct_range(rB, range_band)
-            A_wants = can_A and not A_ok
-            B_wants = can_B and not B_ok
+            effA = math.ceil(poolA / 2) if oobA else poolA
+            effB = math.ceil(poolB / 2) if oobB else poolB
+            can_A = not oobA
+            can_B = not oobB
+
+            # Range management
+            A_needs_close = (rA == 'Short' and range_band == 'Far')
+            B_needs_close = (rB == 'Short' and range_band == 'Far')
+            A_wants_far   = (rA == 'Long'  and range_band == 'Close')  # prefers Far but can still act
+            B_wants_far   = (rB == 'Long'  and range_band == 'Close')
+
+            A_manoeuvres = can_A and A_needs_close
+            B_manoeuvres = can_B and B_needs_close
 
             A_attacks = B_attacks = False
 
-            if A_wants or B_wants:
-                initiator = 'A' if A_wants else 'B'
+            if A_manoeuvres or B_manoeuvres:
+                # Establish Distance contest
                 if can_A and can_B:
-                    sA = roll(agi, MANOEUVRE_TN)
-                    sB = roll(agi, MANOEUVRE_TN)
-                    if sA > sB:   winner = 'A'
-                    elif sB > sA: winner = 'B'
-                    else:         winner = 'Long_holds'
-
-                    init_pref = preferred_range(rA if initiator == 'A' else rB)
-                    if winner == initiator:
-                        range_band = init_pref
-                    # neither attacks — both used offensive action
+                    sA = roll(effA // 2, MANOEUVRE_TN)
+                    sB = roll(effB // 2, MANOEUVRE_TN)
+                    if sA > sB:   range_band = 'Close' if A_manoeuvres else 'Far'
+                    elif sB > sA: range_band = 'Close' if B_manoeuvres else 'Far'
+                    else:         pass  # tie → Long holds (Far unchanged)
+                    stamA -= 1; stamB -= 1
+                elif can_A:
+                    range_band = 'Close' if A_manoeuvres else range_band
                     stamA -= 1
-                    stamB -= 1
-                elif can_A and not can_B:
-                    if initiator == 'A':
-                        range_band = preferred_range(rA)
-                    stamA -= 1
-                elif can_B and not can_A:
-                    if initiator == 'B':
-                        range_band = preferred_range(rB)
+                elif can_B:
+                    range_band = 'Close' if B_manoeuvres else range_band
                     stamB -= 1
             else:
                 A_attacks = can_A
                 B_attacks = can_B
 
-            if A_attacks:
-                pen = 2 if rA == 'Versatile' else 0
-                off = max(1, effA // 2 - pen)
-                defn_B = effB - (effB // 2)
-                atk = roll(off, atnA)
-                dfn = roll(defn_B, ptnB)
-                if atk > dfn:
-                    hpB -= max(0, dmgA + (atk - dfn) - drB)
-                stamA -= 1
+            def resolve_attack(attacker_pool, oob, reach, atk_tn, def_tn, dmg_bonus,
+                               defender_pool, def_oob, dr_dict, wtype, band):
+                """Returns damage dealt to defender."""
+                if oob: return 0  # Out of Breath: defence only
 
+                # Long at Close zone: -1D offence, half damage
+                close_penalty = (reach == 'Long' and band == 'Close')
+                off_pool = max(1, attacker_pool // 2 - (1 if close_penalty else 0))
+                def_pool = max(1, defender_pool - defender_pool // 2)
+
+                atk = roll(off_pool, atk_tn)
+                dfn = roll(def_pool, def_tn)
+
+                if atk <= dfn:
+                    return 0
+
+                excess = atk - dfn
+                modifier = dmg_bonus * 2 if excess >= CRIT_THRESHOLD else dmg_bonus
+                dr = dr_dict.get(wtype, 0)
+
+                raw = excess + str_ + modifier - dr
+                if close_penalty:
+                    raw = math.ceil(raw / 2)
+                return max(0, raw)
+
+            dmg_to_B = dmg_to_A = 0
+            if A_attacks:
+                dmg_to_B = resolve_attack(effA, oobA, rA, atnA, dtnA, dmgA,
+                                          effB, oobB, drB_vs, wtA, range_band)
+                stamA -= 1
             if B_attacks:
-                pen = 2 if rB == 'Versatile' else 0
-                off = max(1, effB // 2 - pen)
-                defn_A = effA - (effA // 2)
-                atk = roll(off, atnB)
-                dfn = roll(defn_A, ptnA)
-                if atk > dfn:
-                    hpA -= max(0, dmgB + (atk - dfn) - drA)
+                dmg_to_A = resolve_attack(effB, oobB, rB, atnB, dtnB, dmgB,
+                                          effA, oobA, drA_vs, wtB, range_band)
                 stamB -= 1
+
+            # Apply damage simultaneously; check wounds
+            hpA -= dmg_to_A
+            hpB -= dmg_to_B
+
+            while hpA <= 0 and woundsA < _incap_threshold(end):
+                woundsA += 1
+                hpA += health  # reset
+            while hpB <= 0 and woundsB < _incap_threshold(end):
+                woundsB += 1
+                hpB += health
 
             stamA = max(0, stamA)
             stamB = max(0, stamB)
 
-        if hpA > 0 and hpB <= 0:    wins_A += 1
-        elif hpB > 0 and hpA <= 0:  wins_B += 1
-        else:                        draws += 1
+        # Determine fight outcome
+        A_incap = hpA <= 0 or woundsA >= _incap_threshold(end)
+        B_incap = hpB <= 0 or woundsB >= _incap_threshold(end)
+
+        if not A_incap and B_incap:  wins_A += 1
+        elif not B_incap and A_incap: wins_B += 1
+        else:                         draws += 1
 
     return wins_A / n_fights, wins_B / n_fights, draws / n_fights
+
+
+def _incap_threshold(end):
+    if end <= 3: return 2
+    if end <= 5: return 3
+    return 4
 
 
 def main():
@@ -198,14 +259,17 @@ def main():
     random.seed(42)
     str_ = args.str_; end = args.end; agi = args.agi
     prof = args.proficiency
-    pool_base = agi + (PROFICIENCY_POINTS[prof] + 3)
+    points = PROFICIENCY_POINTS[prof]
+    pool_base = (agi * 2) + points + 3
     health = end + 6
 
     print(f"Valoria Combat Simulator — {args.run_label}")
     print(f"Str {str_} / End {end} / Agi {agi} / {prof.capitalize()} / "
           f"Base Pool {pool_base} / Health {health}")
-    print(f"Stamina: None/Light={stamina_max('None',end)}, "
-          f"Medium={stamina_max('Medium',end)}, Heavy={stamina_max('Heavy',end)}")
+    print(f"Stamina: None={stamina_max('None',end,points)}, "
+          f"Light={stamina_max('Light',end,points)}, "
+          f"Medium={stamina_max('Medium',end,points)}, "
+          f"Heavy={stamina_max('Heavy',end,points)}")
     print(f"N={args.n_fights} fights, max {args.max_rounds} rounds\n")
 
     valid = [(w, ar) for w in WEAPONS for ar in ARMOURS
@@ -226,13 +290,13 @@ def main():
 
     print(f"Matchups computed: {len(results)}\n")
 
-    header = (f"{'Weapon A':<16}{'Armour A':<9}{'Weapon B':<16}"
+    header = (f"{'Weapon A':<20}{'Armour A':<9}{'Weapon B':<20}"
               f"{'Armour B':<9}{'A Win%':>7}{'B Win%':>7}{'Draw%':>7}")
     divider = "-" * len(header)
     lines = [header, divider]
     for row in sorted(results, key=lambda x: -x[4]):
         wA,arA,wB,arB,pW,pL,pD = row
-        lines.append(f"{wA:<16}{arA:<9}{wB:<16}{arB:<9}"
+        lines.append(f"{wA:<20}{arA:<9}{wB:<20}{arB:<9}"
                      f"{pW*100:>6.1f}%{pL*100:>6.1f}%{pD*100:>6.1f}%")
 
     # Build summary
@@ -246,10 +310,10 @@ def main():
     summary = ["\n── TOP / BOTTOM BUILDS ──────────────────────────────────────",
                "\nTop 10:"]
     for b, avg in avgs[:10]:
-        summary.append(f"  {b[0]:<16} {b[1]:<8}  {avg*100:.1f}%")
+        summary.append(f"  {b[0]:<20} {b[1]:<8}  {avg*100:.1f}%")
     summary.append("\nBottom 10:")
     for b, avg in avgs[-10:]:
-        summary.append(f"  {b[0]:<16} {b[1]:<8}  {avg*100:.1f}%")
+        summary.append(f"  {b[0]:<20} {b[1]:<8}  {avg*100:.1f}%")
 
     flags = ["\n── BALANCE FLAGS (>80% non-mirror) ─────────────────────────"]
     for wA,arA,wB,arB,pW,pL,pD in results:
@@ -266,6 +330,7 @@ def main():
                     f"Pool {pool_base} / Health {health}**\n\n")
             f.write(output)
         print(f"\nResults written to {args.output}")
+
 
 if __name__ == '__main__':
     main()
