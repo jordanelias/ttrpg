@@ -1,6 +1,6 @@
 # Valoria Combat — Canonical Parameters
 *Source of truth for all simulation runs. Update this file when ruleset patches land.*
-*Last updated: session 2026-03-27 — weapon damage rebase, armour penalty correction*
+*Last updated: 2026-03-31 — stage8_combat.md sync*
 
 ---
 
@@ -24,79 +24,79 @@
 
 **Derived:**
 - Health = End + 6
-- Combat Pool = Agi + weapon proficiency History (points + 3)
-- Stamina = see Armour table
+- Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)
+- Stamina = Endurance + Relevant History + 1 (modified by armour — see Armour table)
 
 **Proficiency → History points:**
 
-| Level | Points | Pool contribution (+ Agi) |
+| Level | Points | Pool contribution ((Agi×2) + points + 3) |
 |---|---|---|
-| Untrained | 0 | Agi + 3 |
-| Beginner | 1 | Agi + 4 |
-| Competent | 2 | Agi + 5 |
-| Veteran | 3 | Agi + 6 |
+| Untrained | 0 | (Agi×2) + 3 |
+| Beginner | 1 | (Agi×2) + 4 |
+| Competent | 2 | (Agi×2) + 5 |
+| Veteran | 3 | (Agi×2) + 6 |
 
 ---
 
 ## Weapons
 
-### Axes
+**Weight axis** — governs damage bonus, attack TN, parry TN:
 
-**Weight axis** — governs damage bonus, attack TN, parry TN, speed:
+| Type | Hit TN | Def TN | Damage Modifier |
+|---|---|---|---|
+| Light Cut | 5 | 6 | +1 |
+| Heavy Cut | 6 | 7 | +4 |
+| Light Blunt | 6 | 7 | +1 |
+| Heavy Blunt | 7 | 8 | +4 |
+| Unarmed | 8 | 9 | +0 |
 
-| Weight | Damage Bonus | Attack TN | Parry TN | Speed |
-|---|---|---|---|---|
-| Light | +1 | 5 | 6 | Fast (3) |
-| Medium | +2 | 6 | 7 | Standard (2) |
-| Heavy | +3 | 7 | 8 | Slow (1) |
-
-Speed numeric: higher = faster. Fast resolves before Standard before Slow when same range.
-
-**Reach axis** — governs which range band the weapon can attack from:
+**Reach axis:**
 
 | Reach | Attack band | Notes |
 |---|---|---|
-| Short | Close range only | LOCKED at Long range |
-| Long | Long range only | LOCKED at Close range |
-| Versatile | Either range | −1D to offensive pool at any range (flexibility cost) |
-| Ranged | Projectile only | Priority 2; LOCKED at Close or Long melee range |
+| Short | Close range only | Cannot attack at Far zone |
+| Long | Far range only | Can fight at Close zone at −1D Offence and half damage (rounded up) |
+| Projectile | Projectile range only | Cannot use at Short or Long melee range |
 
 **Strength minimums:**
 
-| Weight | Str min | 1 below | 2+ below |
+| Weapon Weight | Str min | 1 below | 2+ below |
 |---|---|---|---|
-| Light | None | — | — |
-| Medium | 3 | −1D Combat Pool | Cannot wield |
-| Heavy | 4 | −1D Combat Pool | Cannot wield |
+| Light Cut / Light Blunt | 1 | — | — |
+| Heavy Cut | 3 | −1D Combat Pool | Cannot wield |
+| Heavy Blunt | 4 | −1D Combat Pool | Cannot wield |
 
-**Valid weapon profiles (melee):** 9 profiles — Short/Long/Versatile × Light/Medium/Heavy
-
-**Special property — Versatile:** Can attack at either Short or Long range at −1D to offensive pool. Does not bypass opponent's right to contest range via manoeuvre.
+**Critical Hit:** excess successes ≥ 3 → weapon modifier doubled.
 
 ---
 
 ## Armour
 
-| Armour | DR | Str min | 1 below | 2+ below | Stamina max |
-|---|---|---|---|---|---|
-| None | 0 | — | — | — | End + 1 |
-| Light | 1 | None | — | — | End + 1 |
-| Medium | 2 | 3 | −1D Combat Pool | Cannot wear | End |
-| Heavy | 3 | 4 | −2D Combat Pool | Cannot wear | End − 2 |
+Per-weapon-type DR table (from §8.6):
 
-**Note:** Heavy armour penalty is −2D (not −1D). All other armours −1D at one below minimum.
+| Armour | STR Min | Stamina Mod | vs Light Cut | vs Heavy Cut | vs Light Blunt | vs Heavy Blunt |
+|---|---|---|---|---|---|---|
+| None | — | +0 | 0 | 0 | 0 | 0 |
+| Light | 2 | +0 | 2 | 1 | 1 | 0 |
+| Medium | 3 | −1 | 4 | 3 | 2 | 1 |
+| Heavy | 4 | −2 | 6 | 5 | 3 | 1 |
 
-Stamina minimum = 1 regardless of armour or End.
+**Stamina = Endurance + Relevant History + 1 + Stamina Mod (minimum 1)**
+
+**Pool penalties (armour):**
+- 1 below Str min: −1D Combat Pool
+- 2+ below Str min: Cannot wear
 
 ---
 
 ## Damage Formula
 
-**Damage = Weapon damage bonus + excess attack successes − armour DR (minimum 0)**
+**Damage = excess successes + Str + weapon modifier − armour DR (vs weapon type) (minimum 0)**
 
 Excess attack successes = attacker net successes − defender net successes (minimum 0).
 
-Strength does not add to damage. Accuracy (pool size via Agility) determines damage through excess successes.
+**Critical Hit** (excess ≥ 3): weapon modifier is doubled.
+`Damage = excess + Str + (weapon modifier × 2) − DR`
 
 ---
 
@@ -105,8 +105,8 @@ Strength does not add to damage. Accuracy (pool size via Agility) determines dam
 Each round, fighter secretly splits Combat Pool between Offence and Defence:
 - Minimum 1 die in each if engaging in both attack and defence
 - All-offence = reckless (no defence)
-- All-defence = full guard (no attack)
-- **Manoeuvre declared = offensive action consumed.** No attack and no offence allocation that round.
+- All-defence = Full Guard (no attack; opponent gains +2D Offence)
+- **Manoeuvre declared = offensive action consumed.** No attack that round.
 
 **Simulation default split:** pool // 2 offence, remainder defence (optimal baseline).
 
@@ -116,42 +116,47 @@ Each round, fighter secretly splits Combat Pool between Offence and Defence:
 
 - Health = End + 6
 - At Health 0: take a Wound, Health resets to full
-- Each Wound: +1 Ob to all rolls (cumulative)
+- Each Wound: −1D to Combat Pool (cumulative)
 - Incapacitation threshold: End 1–3 = 2 Wounds; End 4–5 = 3 Wounds; End 6–7 = 4 Wounds
-
-*Note: Wound Ob penalties not currently modelled in simulation (Run 1/2). Flag for Run 3.*
 
 ---
 
-## Stamina and Catch Breath
+## Stamina and Out of Breath
 
-- **Stamina** decrements by 1 each round a character Moves, Manoeuvres, or Attacks
-- At Stamina 0: **Catch Breath** next round — Combat Pool halved (rounded up), defence only
-- After Catch Breath: Stamina restored to max
-- **Breather** (voluntary before Stamina 0): defence only, Stamina restored
+- **Stamina** = End + Relevant History + 1 + armour Stamina Mod (minimum 1)
+- Stamina depletes by 1 each round any action is taken
+- At Stamina 0: **Out of Breath** (forced) — Stamina restores to maximum, half pool, Defence only, opponent +2D Offence
+- **Take a Breath** (voluntary): roll Offence at TN 7; each success restores 1 Stamina (capped at max). Fails if hit.
+- **Full Guard** and **Out of Breath** both give opponent +2D Offence
 
 ---
 
 ## Starting Range
 
 - Ranged weapons present → projectile range
-- No ranged, combatants not adjacent → **Long range** (default)
-- Combatants already adjacent → **Short range** (narrative determination)
+- No ranged, combatants not adjacent → **Far zone** (Long reach preferred, default)
+- Combatants already adjacent → **Close zone**
+
+---
+
+## Range and Reach
+
+Range is tracked per fighter pair: **Close zone** or **Far zone**.
+
+- Short weapons: attack at Close only; cannot attack at Far
+- Long weapons: attack at Far; can attack at Close at −1D Offence and half damage (rounded up)
+- Projectile: cannot use at Close or Far melee range
+
+**Zone collapse (group combat):** When one ally has established Close zone against a target, subsequent Short-reach fighters enter Close zone automatically.
 
 ---
 
 ## Manoeuvre Contest (Reach Management)
 
-**Trigger:** Fighter at wrong range for their weapon.
+**Establish Distance** (wrong range):
+- Roll Offence dice at TN 7
+- Succeed if successes ≥ opponent's Offence successes AND not hit
+- On success: range shifts, gain initiative
+- Auto-succeeds if opponent not attacking (Ob = 0)
 
-**Reorient / Withdraw:**
-- Initiator spends offensive action (cannot attack this round)
-- Opponent may spend their offensive action to contest
-- **Contested:** Agility vs Agility, TN 7; higher net successes wins
-- **Tie → Long reach holds** (Long fighter wins ties)
-- **Unopposed:** Initiator succeeds automatically; opponent may attack freely
-- Winner sets range band; neither attacks if both contested
-
-**Versatile fighters:** Never LOCKED; always pay −1D to attack. Still subject to opponent Reorient/Withdraw attempts.
-
-**Ranged fighters at melee range:** Must Withdraw to projectile range before firing. Opposed by melee fighter's Agility.
+**Simulation models:** opponent always contests (rational default). Tie → Long holds.
