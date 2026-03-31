@@ -141,20 +141,32 @@ Log to `valoria_patch_proposals.md`.
 
 ## Current Canonical Values (quick reference — read combat_params.md for full spec)
 
-| Weight | Dmg | Atk TN | Parry TN |
+**Combat Pool = (Agi × 2) + History + 3 (min 5)**
+**Stamina = End + History + 1 + armour mod (min 1)**
+**Health = End + 6**
+**Wounds: −1D Combat Pool each (cumulative)**
+
+| Weapon Type | Hit TN | Def TN | Dmg Bonus |
 |---|---|---|---|
-| Light | +1 | 5 | 6 |
-| Medium | +2 | 6 | 7 |
-| Heavy | +4 | 7 | 8 |
+| Light Cut | 5 | 6 | +1 |
+| Heavy Cut | 6 | 7 | +4 |
+| Light Blunt | 6 | 7 | +1 |
+| Heavy Blunt | 7 | 8 | +4 |
+| Unarmed | 8 | 9 | +0 |
 
-| Armour | DR | Str Min | Pool Pen | Stamina Max |
-|---|---|---|---|---|
-| None | 0 | — | — | End+1 |
-| Light | 1 | None | None | End+1 |
-| Medium | 2 | 3 | −1D | End |
-| Heavy | 3 | 4 | −2D | End−2 |
+**Critical Hit:** excess ≥ 3 → weapon modifier doubled.
 
-Versatile reach: −2D offensive pool at any range.
+**DR per armour vs weapon type:**
+
+| Armour | Str Min | Stamina Mod | vs LightCut | vs HeavyCut | vs LightBlunt | vs HeavyBlunt |
+|---|---|---|---|---|---|---|
+| None | — | +0 | 0 | 0 | 0 | 0 |
+| Light | 2 | +0 | 2 | 1 | 1 | 0 |
+| Medium | 3 | −1 | 4 | 3 | 2 | 1 |
+| Heavy | 4 | −2 | 6 | 5 | 3 | 1 |
+
+**Reach:** Short (Close only) / Long (Far preferred; Close at −1D off + half dmg) / Projectile (no melee range)
+**Versatile reach removed** — see stage8_combat.md reach rules.
 
 ---
 
@@ -166,3 +178,5 @@ Versatile reach: −2D offensive pool at any range.
 | `references/sim_protocol.md` | State machine, manoeuvre contest protocol |
 | `references/findings_template.md` | Output structure |
 | `scripts/combat_sim.py` | Runnable simulation script |
+
+
