@@ -128,6 +128,8 @@ The 15 territories are arranged in a north-south axis. The board represents the 
 
 **Uncontrolled territories (12, 13):** First Govern action claims them (no battle required if no enemy units present).
 
+**Thread Wound Territories (T12 Oastad, T13 Stillhelm):** These territories sit over active Thread Wounds. Any faction controlling T12 or T13 for 2 or more consecutive seasons: RS −1 per additional season of control (beginning season 3 of occupancy). This applies regardless of faction or intent — the occupation disrupts the local substrate by adding rendered-world activity to an already stressed site. This cost is disclosed to the controlling faction; it is not hidden. Factions that choose to occupy Thread Wound territories knowingly accept this tradeoff.
+
 **Schoenland:** Neutral throughout unless IP ≥ 75 (Altonian vanguard) or a diplomatic alliance is secured (see B10).
 
 ---
@@ -170,6 +172,14 @@ Once per season. Roll Mandate vs Ob 2.
 
 **Alternative path (active consolidation):** Crown controls 4+ territories including Valorsplatz; Mandate ≥ 6; Stability ≥ 6; at least 1 formal alliance with another faction (active Treaty token). Represents genuine consolidated rule independent of Church/Altonian failure.
 
+**Deed Tokens (Crown):** Place a Deed Token when each sub-condition is achieved. Victory requires all 4 tokens simultaneously at Seasonal Accounting.
+| Deed | Condition |
+|------|-----------|
+| 1 | Mandate ≥ 5 |
+| 2 | Control Valorsplatz + Gransol + ≥2 other territories |
+| 3 | TC < 60 and IP < 75 simultaneously |
+| 4 | Torben Loyalty ≥ 5 |
+
 ---
 
 ### FACTION: THE CHURCH OF GALBADOS
@@ -198,6 +208,7 @@ Roll: Mandate vs target leader's Mandate (or Ob 2 for non-leaders).
 - All other Church-controlled territories: +1 TC flat on gaining control; −1 TC on losing control.
 - Valorsplatz: +5 TC flat on gaining control; −5 TC on losing control.
 - **Expansion lock:** Church may not control more than 1 territory (Himmelenger) until TC ≥ 40. Territorial seizure unlocks at TC 40 (adjusted: Church needs room to expand and reach Valorsplatz before hitting the TC 60 victory threshold).
+- **TC 40–70 expansion window:** Between TC 40 and TC 70, Church may claim one uncontrolled territory per season via Govern order (Mandate vs Ob 2). Church may not use military force to seize territories until TC ≥ 70 (C-03 threshold card activates Territorial Seizure with military option).
 - **TC ceiling:** Cannot reach 100 without controlling Valorsplatz (the +5 flat score is required for the final push).
 
 **Order Set:** Preach · Govern · Inquisition · Military (Templar deploy) · Excommunication (Unique) · Diplomacy
@@ -205,6 +216,14 @@ Roll: Mandate vs target leader's Mandate (or Ob 2 for non-leaders).
 **Thread Capability:** None. Knights Templar units are immune to Co-Movement card effects that would reduce their Cohesion.
 
 **Victory Condition:** *The Holy State.* TC reaches 60 with Church Mandate ≥ 5 and Church controlling Himmelenger + Valorsplatz. This condition can be met under shared survival (TC 60 < 80 threshold). TC reaching 100 triggers THE HOLY STATE endgame event regardless (see B10) — that is a separate, escalated resolution path.
+
+**Deed Tokens (Church):**
+| Deed | Condition |
+|------|-----------|
+| 1 | TC ≥ 40 |
+| 2 | Church Mandate ≥ 5 |
+| 3 | Control Himmelenger (continuously since game start or recaptured) |
+| 4 | Control Valorsplatz |
 
 ---
 
@@ -235,6 +254,14 @@ Once per game (not per season). Roll Mandate vs Ob 4. At Hafenvalor only.
 
 **Victory Condition:** *Constitutional Order.* At game end: Hafenmark controls Hafenvalor + Lowenskyst; Mandate ≥ 4; TC < 50; no outstanding Heresy Investigation against Baralta; at least one Parliamentary ruling in Hafenmark's favour.
 
+**Deed Tokens (Hafenmark):**
+| Deed | Condition |
+|------|-----------|
+| 1 | Mandate ≥ 4 and no active Heresy Investigation |
+| 2 | Control Hafenvalor + Lowenskyst |
+| 3 | TC < 50 |
+| 4 | At least 1 Parliamentary ruling in Hafenmark's favour (this season or prior) |
+
 ---
 
 ### FACTION: VARFELL
@@ -260,6 +287,14 @@ Available in Varfell only. Once per season. Roll Intel vs Ob 2.
 **Thread Capability:** Indirect. The Collection provides Thread-adjacent effects without direct Thread operations. At TK 5, Vaynard understands Thread structure — but this is a narrative development, not a BG roll.
 
 **Victory Condition:** *Information Supremacy.* At game end: Varfell Intel ≥ 6; TK ≥ 3; control of Varfell; Vaynard has revealed at least 2 hidden faction stats. Alternatively: deliver Thread-knowledge intelligence to the Revolution enabling their Community Weaving success at RS > 60. *TK (Thread Knowledge) tokens: gained via successful Private Collection order (+1 TK), Overwhelming Intel order targeting a practitioner or Einhir site (+1 TK), or delivering Thread intel to Revolution enabling Community Weaving (+1 TK, once). Max 1 TK/season. Max 5 TK.*
+
+**Deed Tokens (Varfell):**
+| Deed | Condition |
+|------|-----------|
+| 1 | Intel ≥ 6 |
+| 2 | TK ≥ 3 |
+| 3 | Control Varfell (T9) |
+| 4 | 2 or more hidden faction stats revealed (accumulated total, any faction) |
 
 ---
 
@@ -287,6 +322,14 @@ Roll Wealth vs target faction Wealth.
 **Thread Capability:** None.
 
 **Victory Condition:** *Economic Dominance.* At game end: Guilds Wealth ≥ 6; control of Halvardshelm + Eidursjo; Guild Favour ≥ 5 in at least 3 territories; Schoenland trade route active (IP < 75). *Note: Trade order in Schoenland (Success) reduces IP by 1 that season — the Guilds' primary IP suppression tool.*
+
+**Deed Tokens (Guilds):**
+| Deed | Condition |
+|------|-----------|
+| 1 | Wealth ≥ 6 |
+| 2 | Control Halvardshelm + Eidursjo |
+| 3 | Guild Favour ≥ 5 in ≥ 3 territories |
+| 4 | IP < 75 (Schoenland route open) |
 
 ---
 
@@ -318,6 +361,14 @@ Choose mode before rolling.
 
 **Victory Condition:** *Shadow Supremacy.* At game end: Niflhel Intel ≥ 5; control of Sigurdshelm; at least 3 pieces of hidden faction information held; no arm of Niflhel publicly compromised; Stability ≥ 4. *Publicly compromised: any Intel order targeting Niflhel achieves Overwhelming success → Compromise token placed. Resets via Disappear tactic card or successful counter-Intel order (Ob 2).*
 
+**Deed Tokens (Niflhel):**
+| Deed | Condition |
+|------|-----------|
+| 1 | Intel ≥ 5 |
+| 2 | Control Sigurdshelm (T10) |
+| 3 | ≥ 3 pieces of hidden faction information held |
+| 4 | No Compromise token on any arm AND Stability ≥ 4 |
+
 ---
 
 ## B4: TURN STRUCTURE
@@ -334,6 +385,23 @@ One game round = one season. A campaign year is 4 rounds. Standard game length: 
 | 4 | Order Resolution | Flip all orders simultaneously. Resolve in priority sequence (see below). |
 | 5 | Seasonal Accounting | Apply clock movements. Stability checks. Faction stat changes. CP awards. Check victory and game-end conditions. |
 | 6 | Cleanup | Remove temporary effects. Advance round tracker. Draw replacement cards if any. |
+
+### Crisis Response (Optional — Phase 5 Only)
+
+Any faction may initiate a Crisis Response during Seasonal Accounting to collectively push back one clock. Crisis Response requires at least 2 participating factions.
+
+**Procedure:**
+1. Initiating faction announces target clock (RS, TC, or IP) and contributes ≥ 1 Wealth.
+2. Any other faction may join by contributing ≥ 1 Wealth.
+3. Roll:
+   - *For TC or IP:* Contributing faction with highest Influence rolls Influence vs Ob = (clock value ÷ 20, round up, minimum 1).
+   - *For RS:* Sum all participating factions' Thread Resonance (TR — see B7). Roll this pool vs same Ob. TR is expended on this roll (faction TR resets to 0 after Crisis Response regardless of result).
+4. Results:
+   - **Overwhelming:** Clock −(number of contributing factions).
+   - **Success:** Clock −(contributing factions ÷ 2, round up).
+   - **Partial:** Clock unchanged. Wealth contributed: returned.
+   - **Failure:** Wealth lost. Clock +1 (response backfired — overeager intervention destabilised the situation).
+5. Wealth contributed is consumed on any result other than Partial.
 
 ### Order Resolution Priority
 
@@ -558,7 +626,7 @@ Combat resolves when units from opposing factions occupy the same territory at O
 
 **Step 5 — Morale.** After damage application: if any unit is at Formation Break, that side rolls Cohesion vs Ob 2. Failure: unit Routes (cannot take ordered actions; remove from board for this season; returns to controlling faction next season at Martial −1, recoverable by one Govern action).
 
-**Formation Break:** Unit Health reaches 0. Reset Health to full. All actions at +1 Ob for remainder of battle. Cohesion check required.
+**Formation Break:** Unit Health reaches 0. Reset Health to Resilience + 3 (half maximum). All actions at +1 Ob for remainder of battle. Cohesion check required. A unit that reaches Formation Break a second time in the same battle without recovering: auto-Rout (no Cohesion check).
 
 ### Disposition Constraints (BG)
 
@@ -630,6 +698,20 @@ Checked at seasonal accounting for each unit.
 | Supplied | Within 2 territories of friendly-controlled Prosperity 3+ | None |
 | Strained | 3 territories from supply, or supply territory Prosperity 1–2 | −1D all rolls next season |
 | Cut Off | No connected friendly territory with Prosperity 1+, or route blocked | −1 Endurance/season; Cohesion check Ob 1 or −1 Cohesion |
+
+---
+
+### Annual Attrition (Year-End Accounting — Round 4, 8, 12, 16, 20)
+
+At the end of each game year (every 4th round), apply annual attrition to all military units:
+
+- **Units that fought in at least one battle this year:** Cohesion check Ob 1. Failure: Cohesion −1.
+- **Units that did not fight:** No Cohesion check. Veteran idleness is not attrition.
+- **Units at Cohesion 1:** Automatically retire at year-end unless the controlling faction spends 1 Wealth to maintain them through hardship.
+- **Retirement and replacement:** Retired units may be replaced via Muster at −1 Ob the following season (fresh recruits replace battle-worn veterans with institutional momentum).
+- **Elite units (Cohesion 5+):** On a failed Cohesion check, may spend 1 Wealth to ignore the result (elite units have support structures).
+
+*Design note: Annual attrition creates a strategic pulse — build-fight-rebuild — and prevents permanent stationary armies from dominating the late game.*
 
 ---
 
@@ -708,6 +790,32 @@ Draw one card per Thread operation regardless of result. Apply all three effects
 | CM-10 | RS +3 (exceptional repair) | Nothing | Revolution Stability +1 (community strengthened by successful operation) |
 
 *Note: The confirmed 18-card deck includes CM-01 through CM-18. CM-16: Substrate Settling (Mended territory: Thread ops −1 Ob next season). CM-17: Scar Trace (Mended territory retains visible scar; Church TC +1). CM-18: Residue Condensation (dissolution residue forms at Mending site; Niflhel may harvest). [EDITORIAL: 10 remaining Co-Movement cards — expand from framework above, maintaining P-01 inseparability in each card.]*
+
+### Thread Resonance (TR)
+
+**Thread Resonance (TR 0–5)** is a per-faction track that measures how much a faction's season has been touched by Thread events. TR is temporary — it resets to 0 at Seasonal Accounting (after any Crisis Response that uses it).
+
+**TR accumulates when (during Order Resolution or Accounting):**
+- A Thread operation occurs in or adjacent to the faction's controlled territory: +1 TR
+- A Co-Movement card effect directly affects this faction: +1 TR
+- RS drops below a clock threshold this season: +1 TR (all factions)
+- Faction units occupy T12 or T13 (Thread Wound territories): +1 TR per season of occupancy
+
+**TR cap: 5.** Faction-specific modifiers may raise the cap (see Thread Veil cards when implemented).
+
+**TR effects:**
+| TR | Effect |
+|----|--------|
+| 0 | No effect |
+| 1 | *Thread Awareness:* Once this season, look at the top card of the Co-Movement deck (do not reveal or reorder). |
+| 2 | *Resonance:* One of this faction's orders may be placed *after* the Season Event card is revealed (not before). The order must be placed before any orders are flipped. |
+| 3 | *Sensitive Proximity:* All Intel orders this season targeting practitioners, Einhir sites, or Thread operations: +1D. |
+| 4 | *Threshold Feeling:* Once this season, ask any yes/no question about the current RS value (e.g., "Is RS above 40?"). Answer is accurate. |
+| 5 | *Full Resonance:* Spend all TR (reset to 0): either (a) cancel one Co-Movement card effect targeting this faction this season, OR (b) contribute this faction's TR as a bonus die to Revolution's Community Weaving roll this season (+5D). |
+
+*Thread Resonance is the board game expression of P-01 (inseparability): factions that are proximate to Thread events are unavoidably affected by them. TR does not grant Thread capability — it represents environmental sensitivity, not operational access. The epistemological barrier (P-08) remains intact.*
+
+---
 
 ### RS Passive Degradation from Niflhel
 
@@ -1073,16 +1181,74 @@ Use when players want a full campaign arc rather than a decisive victory contest
 
 ---
 
+---
+
+## B11: ENTITY ENCOUNTER RULES
+
+*(Sourced from GT-03, approved 2026-03-30. Full tables in `designs/generation_tasks_gt01_gt02_gt03.md`.)*
+
+When RS drops below 60, monstrous entities may be present in Thread Wound territories (T12, T13) or in territories adjacent to active RS threshold events. Entity encounters are called by the GM (or in solo mode, triggered automatically on an RS threshold card draw).
+
+**Entity Tiers:**
+| Tier | Context | Compound Ops | Ob to Resist | Area |
+|------|---------|-------------|-------------|------|
+| 1 | Small, recent Gap | 2 | 1 | Single zone |
+| 2 | Significant Gap | 2 | 2 | Zone + adjacent |
+| 3 | Major Gap / Southernmost interior | 3 | 3 | All zones in territory |
+
+**Board Game Effect of Entity Presence:**
+- Units in entity territory: Cohesion check Ob = entity Tier each season of presence. Failure: Cohesion −1.
+- Governing faction: Govern orders in entity territory: +1 Ob per entity Tier.
+- Entity dissolved: RS +1d3 (the entity's configuration was contributing to substrate stress; its dissolution releases it).
+- **Practitioners present (hybrid/TTRPG zoom-in):** Entity encounter always triggers a Zoom-In condition (see B12).
+
+Roll compound operations from GT-03 table to determine entity effects this season. Roll at start of each season the entity is active.
+
+---
+
+## B12: HYBRID MODE — ZOOM-IN INTERFACE
+
+The following board game events **mandate** a TTRPG personal scene if any PC-affiliated faction is involved. GMs may also call a Zoom-In for any of these at their discretion.
+
+| BG Trigger | TTRPG Scene Type | Mandatory? |
+|------------|-----------------|-----------|
+| Co-Movement card with Thread Resonance ≥ 3 event in a PC's home territory | Personal Thread encounter | Recommended |
+| Heresy Investigation opened against a PC character | Personal/Social Scene | Yes |
+| Battle in a territory where a PC has stated presence | Combat Scene | Yes |
+| RS drops below 40 for the first time | Thread Awareness Scene (all practitioners) | Yes |
+| IP crosses 30 and Torben is a PC or PC-adjacent | Personal Decision Scene | Recommended |
+| Löwenritter Coup Tracker reaches 4 | Political Crisis Scene | Recommended |
+| Named NPC's Belief is directly challenged by a BG order outcome | Social Scene | GM discretion |
+| RS < 10 (approaching Rupture) | Thread Emergency Scene | Yes |
+| Entity encounter in territory with PC presence | Entity Encounter Scene | Yes |
+
+**Domain Echo (Zoom-Out):** After a TTRPG personal scene, the PC may execute one **Domain Echo** order (Priority 5, after all BG resolution) representing their personal-level action within the strategic phase. One Domain Echo per PC per season; the order must be coherent with what happened in the personal scene.
+
+**Zoom-In / Zoom-Out Timing:**
+- Zoom-In occurs between BG Phase 4 (Order Resolution) and Phase 5 (Seasonal Accounting).
+- Domain Echo resolves before Accounting (applies to Accounting calculations).
+- TTRPG scenes that produce attribute changes for an NPC: apply at Accounting.
+
+---
+
 ## EDITORIAL FLAGS
 
 | ID | Item | Status |
 |---|---|---|
-| BG-E-01 | Co-Movement cards CM-11 through CM-20 | Requires editorial design (10 cards) |
+| BG-E-01 | Co-Movement cards CM-11 through CM-20 | RESOLVED — GT-02 approved 2026-03-30 (designs/generation_tasks_gt01_gt02_gt03.md). Pending BG-E-12: deck size decision before integration. |
 | BG-E-02 | Varfell TK 5 consequence / capability-seeking resolution path | Requires editorial decision |
 | BG-E-03 | THE RUPTURE narrative determination | Requires editorial design |
 | BG-E-04 | Seasonal Event S-08 Einhir site name | Requires territory name editorial decision |
 | BG-E-05 | Seasonal Event S-15 Restoration Memory | Requires Restoration NPC design (already in TTRPG editorial pending) |
 | BG-E-06 | Victory condition for Revolution (if ever made player-controllable) | Future design item |
+| BG-E-07 | Mandate Dice adoption vs flat orders (MP-01 — structural change) | Requires editorial decision |
+| BG-E-08 | Secret Agreement card content per faction (MP-02) | Requires editorial content decisions |
+| BG-E-09 | Political Hand card text review — 18 cards across 6 factions (MP-05) | Requires editorial review |
+| BG-E-10 | Thread Veil card content — particularly Baralta Einhir lineage, 218 AG card (MP-10) | Requires lore decisions |
+| BG-E-11 | GT-01 event deck expansion: add 10 seasonal cards (30→40) or replace 10 existing | Requires editorial decision |
+| BG-E-12 | GT-02 co-movement deck: expand to 25 (CM-01–25) or replace CM-11–15 | Requires editorial decision |
+| BG-E-13 | GT-03 B11 entity encounter rules: confirm addition (already added) | Low — confirm or revert |
+| BG-E-14 | Solo mode recommended faction list | Low |
 
 ---
 
