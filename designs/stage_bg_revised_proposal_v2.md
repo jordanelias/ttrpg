@@ -20,10 +20,10 @@ The board game is one of three mandatory game modes (TTRPG, Hybrid, Board Game).
 **The feel:** Powerful institutions trying to manage a world that is quietly dying. Every strategic decision carries identity consequences that outlast the season. Victory is possible but never clean.
 
 **Information Layering Principle:** The board state must be legible at a glance. All information exists in one of four layers:
-- **Public board:** Territories, clocks, control markers, Champions, Parliament Integrity. What everyone sees.
+- **Public board:** Territories, clocks (RS/TC/IP), control markers, Champions, Parliament Integrity, Löwenritter Coup Counter, Crown Deniability Debt. What everyone sees.
 - **Faction mat:** Card hand, Research Tracks, Deed Track, Standing tokens, Cooldown Track. What you hold.
-- **Reference cards:** Environmental effects, resolution procedures, co-movement rules. What you consult.
-- **Shared ledger / companion app:** Network Depth, Attention Pool, Project progress, Coup Counter. What you track off-board.
+- **Reference cards:** Environmental effects, resolution procedures, co-movement rules, faction-specific summaries (Church: TC-as-Currency + Inquisitors + Attention Pool thresholds). What you consult.
+- **Shared ledger / companion app:** Network Depth, Attention Pool, Project progress, Thread Debt residual territory modifiers. What you track off-board.
 
 ---
 
@@ -44,7 +44,7 @@ Schoenland is always NPC-controlled. Löwenritter is always NPC-controlled (part
 ### Components
 
 **Public Board**
-- 1× Main board: territory map (15 territories), 3 clock tracks (RS 100→0, TC 0→100, IP 0→100), Parliament Integrity track (0–10), round tracker
+- 1× Main board: territory map (15 territories), 3 clock tracks (RS 100→0, TC 0→100, IP 0→100), Parliament Integrity track (0–10), Löwenritter Coup Counter track (0–4), Crown Deniability Debt track (0–5), round tracker
 - 15× Territory tiles with Prosperity/Fortification values
 - Faction control markers, Fortification tokens, Prosperity cubes — carry forward from current B1
 
@@ -71,7 +71,6 @@ Schoenland is always NPC-controlled. Löwenritter is always NPC-controlled (part
 - Community Project markers + Progress tracks (6 markers)
 - Restoration Movement Presence markers (8)
 - Niflhel Network Depth markers (15, 1 per territory)
-- Löwenritter Coup Counter track (0–4)
 
 ### Starting State
 
@@ -153,6 +152,13 @@ Roll Mandate vs Ob 2. Success: one faction attribute change (any faction, ±1) t
 
 **Policy Instruments** (Crown exclusive — see B5)
 
+**Riskbreakers** (Crown/Löwenritter covert capability — Act Consequentialism):
+The extralegal arm of the Löwenritter, operated as Crown's deniable instrument. Deploy via Tribune card (Intel). Riskbreaker operations use Act Consequentialism (not Crown's Virtue Ethics — they are Löwenritter assets operating outside Crown's institutional identity): resolve at −1 Ob but incur **Deniability Debt** (0–5, tracked on shared ledger):
+- Each Riskbreaker operation: Debt +1
+- Debt 3: Crown Domain actions against non-Crown factions +1 Ob (parliamentary trust erodes). PI −1.
+- Debt 5: Parliamentary inquiry opens. PI −2. Crown must spend 1 season on Diplomacy to resolve or accept permanent PI reduction.
+- Key capability: can expose Church-Niflhel connection (counter-play against Church territorial seizure). Each successful exposure removes one seized territory and prevents re-seizure for one season.
+
 **Starting Card Hand:** 2× Legionary, 1× Consul, 1× Senator, 1× Prefect, 1× Recess
 
 **Research Tracks:** Mandate Authority (starts 2) / Military Tradition (starts 1)
@@ -179,7 +185,17 @@ Mandate triggers: TC drops below previous season's value; a parliamentary ruling
 | 1 TC | Preach action costs no card play this season (free action) |
 | 3 TC | Declare Interdict on one territory — no faction may Trade there for 1 season; Church gains 1 TC back at accounting |
 
-**Inquisitors:** Church deploys Inquisitors via Inquisition card play (Senator card, Outward orientation). One Inquisitor may be active per territory. While deployed: +2 Attention Pool per season in that territory. Inquisitors may open Heresy Investigations without additional card play. Moving an Inquisitor to a new territory requires a Senator card. Inquisitors are not combat units — they withdraw if the territory is attacked.
+**Inquisitors:** Church deploys Inquisitors via Inquisition card play (Senator card, Outward orientation). One Inquisitor may be active per territory. While deployed: +2 Attention Pool per season in that territory. Inquisitors may open Heresy Investigations without additional card play. Moving an Inquisitor to a new territory requires a Senator card. Inquisitors are not combat units — they withdraw if the territory is attacked. Inquisitors are the instrument of the Cardinal of Justice.
+
+**The Four Cardinals** (Church officer corps — each oversees a doctrinal/operational arm):
+| Cardinal | Virtue | Portfolio | BG Relevance |
+|---|---|---|---|
+| Osten Jarnstal | Fortitude | Knights Templar | Templar deployment goes through Jarnstal. Drifting toward independence — at Church Stability ≤ 3, Jarnstal may refuse Confessor's Templar orders (Stability check Ob 2; failure: Templars unavailable this season). |
+| Arnlod Olafsson | Justice | Inquisitors, Grand Adjudicator | Active Niflhel connection (vulnerability). If exposed via Riskbreaker or Intel operation: Church loses Inquisitor capability for 1 season; Church Stability −1; TC −2. |
+| Magnus Klapp | Temperance | Scholarly institutions, monasteries, universities | TS 31 (approaching Stirring). If triggered by Thread-significant event: Church gains unexpected Thread intelligence (+1 TK) BUT Church Stability −1 (institutional crisis). Hybrid zoom-in trigger. |
+| [EDITORIAL: BG-E-46] | Prudence | Tithes, charities | Church Wealth generation (Consul/Trade card). Charities provide +1D to Church Diplomacy in territories with Church Presence. |
+
+**Internal Church tension:** At Church Stability ≤ 4, TC generation pauses (Cardinals competing — canon per stage6_factions.md). At Stability ≤ 3: one Cardinal may challenge the Confessor's authority (NPC AI selects based on highest-pressure conditions). This can produce internal schism — a Cardinal acting independently of the Confessor for one season.
 
 **Unique Power — Excommunication** (Cooldown: 3 seasons)
 Roll: Mandate vs target leader's Mandate. Outcomes as currently defined.
@@ -237,9 +253,9 @@ Mandate triggers: Crown issues Royal Taxation; Church declares Interdict in Guil
 
 **Contractor System:** Guilds have no Legionary (Military) cards. Instead:
 - Each season, Guilds may issue 1 **Contract** to any other faction: pay 1–3 Wealth for that faction to execute one specific order on Guilds' behalf in a named territory. +1D per Wealth spent. If contracted faction fails or refuses: Guilds retain Wealth; +1 Standing against that faction.
-- **Hired Blades exception:** Guilds may pay 2 Wealth at any time to place 1 Hired Blade unit. Maximum 2 simultaneously. Hired Blades: cannot garrison (removed after 1 season if not in combat), cannot defend (attack-only), cannot hold territory.
+- **Hired Blades exception:** Guilds may pay 2 Wealth at any time to place 1 Hired Blade unit. Maximum 2 simultaneously. Hired Blades: attack-only (cannot defend or garrison), removed at end of season regardless of combat status, cannot hold territory.
 
-**Guild Forum Integration:** The Guilds' economic operations are monitored by the Ministry of Guilds (setting canon). Mechanically: Guilds' Trade orders in a territory generate +1 Wealth if that territory has Prosperity ≥ 3 (guild infrastructure adds value). Guilds may spend 1 Wealth to invoke a Guild Forum resolution: target another faction's Trade order in the same territory at +1 Ob (non-competition enforcement).
+**Guild Forum Integration:** The Guilds' economic operations are monitored by the Ministry of Guilds (setting canon). Mechanically: Guilds' Trade orders in a territory generate +1 Wealth if that territory has Prosperity ≥ 3 (guild infrastructure adds value). Guilds may spend 1 Wealth to invoke a Guild Forum resolution: modifies a target faction's Trade order in the same territory at +1 Ob (non-competition enforcement). Declared during Negotiation window (Phase 2); applied when the targeted Trade order resolves (Phase 3, Domain tier).
 
 **Starting Card Hand:** 2× Consul, 1× Aedile (Trade, free at game start), 1× Tribune (limited — Intel at +1 Ob), 1× Diplomat, 1× Recess
 
@@ -301,6 +317,8 @@ Mandate triggers: a faction offers the Restoration institutional power (seat on 
 **Starting Card Hand:** 1× Pontifex, 2× Praetor (Community Projects), 1× Senator, 1× Tribune (Intel — staying hidden from Church), 1× Recess
 
 **No Legionary, no Consul.** Restoration cannot wage institutional war or trade at institutional scale. Community Wardens (defensive only, Cohesion 3) emerge at RS < 40 — 1 per Presence marker.
+
+**Wealth income:** Restoration has no Trade actions. Wealth is generated from: completed Community Projects (+1 Wealth per project completed); Presence in territories with Prosperity ≥ 3 (+1 Wealth per such territory at Accounting, representing community economic support).
 
 **Research Tracks:** Community Resilience (starts 1) / Thread Practice (starts 1)
 
@@ -440,7 +458,7 @@ Each season, a faction plays cards from hand sequentially (one per priority tier
 Each faction's Institutional Mandate is printed on the faction card. When a game event triggers a Mandate challenge, the controlling player must choose:
 
 - **Uphold:** Act consistently with the Mandate, even at cost. Gain: +1 Champion Renown, +1 Stability.
-- **Compromise:** Act against the Mandate for strategic advantage. Gain: the mechanical benefit. Cost: +1 Standing against self (visible to all), −1 Stability.
+- **Compromise:** Act against the Mandate for strategic advantage. Gain: the mechanical benefit. Cost: +1 Standing against self (visible to all — counts toward Standing thresholds for victory scoring and alliance restrictions, but does not give other factions defensive bonuses), −1 Stability.
 
 NPC factions always Uphold unless NPC AI specifies otherwise.
 
@@ -509,7 +527,7 @@ The Royal Court (Valorsplatz special property) is the physical location where De
 
 ### Cascade Depth Cap
 
-**Rule: No single action may trigger more than 3 downstream mechanical effects in a single resolution.** Additional effects are deferred to next season's Accounting. This prevents crunch cascades where a single Community Weaving operation chains through 10+ systems. Print on reference card.
+**Rule: No single action may trigger more than 3 downstream mechanical effects in a single resolution.** Additional triggered effects are deferred to next season's Accounting (Phase 6). **State-based modifiers** (RS/TC/IP environmental effects, PI threshold effects, and similar always-on conditions) apply immediately when their track value changes and do not count against the cascade cap — they are properties of the game state, not triggered chains. Print on reference card.
 
 ---
 
@@ -526,10 +544,11 @@ Faction-specific naming. One unique property per unit type per faction:
 | Church | Inquisitor | Non-combat; +2 Attention Pool/season; opens Heresy Investigations | — | — |
 | Hafenmark | Ducal Marines | +1D in coastal territories | Baralta's Household | Defensive disposition always at base Ob |
 | Varfell | Highland Scouts | +1D Intel in occupied territory | Mountain Infantry | Cohesion 5; −1 Ob defending in highlands |
-| Guilds | Hired Blades | Via Wealth (no Muster); attack-only; removed after 1 season | — | — |
+| Guilds | Hired Blades | Via Wealth (no Muster); attack-only; removed at end of season | — | — |
 | Niflhel | Street Enforcers | Network Depth +1 after winning battle | Shadow Operators | Intel: Partial counts as Success |
 | Restoration | Community Wardens | Emerge at RS < 40; Cohesion 3; defensive only | — | — |
 | Löwenritter | Iron Knights | Immune to Rout at Coup Counter < 4; Cohesion 5 | — | — |
+| Crown (covert) | Riskbreakers | Deploy via Tribune; Intel at −1 Ob; +1 Deniability Debt per operation | — | — |
 
 Combat procedures, disposition table, siege clock, supply lines, annual attrition: carry forward from current B6. Formation Break health reset: Resilience+3 (half health) to prevent cycling.
 
@@ -675,11 +694,11 @@ Starting values and track definitions per faction: carry forward from bg_improve
 | Phase | Name | What Happens |
 |---|---|---|
 | 1 | Season Card | Flip Event card. Check Mandate triggers — challenged factions must Uphold or Compromise before planning. |
-| 2 | Planning | Simultaneously select cards from hand (face-down). Crown announces Policy. Contracts announced (Guilds). |
-| 3 | Resolution | Cards flipped. Resolve by priority: Thread → Military → Intel → Domain → Unique Powers → Policy/Parliamentary. Domain expertise +1D applied. |
+| 2 | Negotiation & Planning | **Negotiation window:** Guilds may propose Contracts; any faction may discuss Deal Tokens. Then all players simultaneously select cards from hand (face-down). Crown announces Policy. |
+| 3 | Resolution | Cards flipped. Resolve by priority: Thread (Pontifex) → Military (Legionary) → Intel (Tribune) → Domain (Consul/Prefect) → Social (Senator) → Unique Powers → Policy/Parliamentary. Domain expertise +1D applied. Schoenland modifiers (arms sales, intel support) are ongoing conditions applied during this phase when relevant. |
 | 4 | Attention & Response | Update Attention Pool. Apply threshold responses. Crisis Response available. Check Coup Counter advancement. |
-| 5 | Accounting | Clock movements (including Schoenland NPC AI). Stability checks. Standing updates. Project progress. Research Track advances. PI changes. Deed Token checks. Victory/game-end checks. Senate Market refresh. |
-| 6 | Cleanup | TR resets to 0. Attention Pool resets. Cooldown Track advances. Thread Debt bleed applies. Cascade depth cap: deferred effects from Phase 3 resolve now. Advance round tracker. |
+| 5 | Accounting | Resolve in order: (1) Clock movements + Schoenland NPC AI IP manipulation, (2) PI changes, (3) Stability checks, (4) Standing changes, (5) Project progress, (6) Research Track advances, (7) Restoration Wealth income, (8) Thread Debt bleed (RS −1 per token), (9) Deed Token checks, (10) Victory/game-end check, (11) Senate Market refresh (+1 card). |
+| 6 | Cleanup | TR resets to 0. Attention Pool resets. Cooldown Track advances. Deferred cascade effects resolve. Advance round tracker. |
 
 ---
 
@@ -766,10 +785,12 @@ Schoenland acts at Accounting (Phase 5). No card hand — behavior is automatic:
 
 ### Zoom-In Triggers
 
-Carry forward from current B12 (8 trigger conditions) + 3 additional:
+Carry forward from current B12 (8 trigger conditions) + 5 additional:
 - Löwenritter coup fires
 - Inquisitor arrives in a territory with PC presence
 - Schoenland diplomatic contact (IP ≥ 30, any faction attempts negotiation)
+- Cardinal Klapp's TS triggers (Thread-significant event in territory with Church scholarly presence)
+- Riskbreaker operation exposes Cardinal Olafsson's Niflhel connection
 
 ### Cascade Phase Card Effects (MP-35)
 
@@ -785,6 +806,8 @@ In hybrid mode, after Personal Phase scenes resolve:
 | PC dies or is captured | Champion removed; no bonuses for 3 seasons |
 | PC negotiates major alliance | +1 temporary Diplomat card this season |
 | PC uncovers evidence against another faction | That faction's 1 hidden stat revealed this season |
+| PC conducts Riskbreaker operation | Crown Deniability Debt +1 on BG board |
+| PC advances Southernmost Expedition zone | Expedition Project advances +1 on BG board |
 
 ### Conviction Invocation (Hybrid Only)
 
@@ -845,8 +868,7 @@ Player controls one faction using standard Card-Hand system. All others on NPC A
 | BG-E-25 | Thread Veil card content (revised — Baralta lineage card replaced) | Low |
 | BG-E-26 | Niflhel Network Coordinator card content | Low |
 | BG-E-45 | Restoration Movement leader — name and characterize | Yes (if playable) |
-| BG-E-43 | Riskbreakers — identity, scale, BG representation | Low |
-| BG-E-44 | Four Cardinals — existence, names, portfolios, BG role | Low |
+| BG-E-46 | Cardinal of Prudence — name and characterize (tithes, charities) | Low |
 
 ---
 
@@ -855,11 +877,12 @@ Player controls one faction using standard Card-Hand system. All others on NPC A
 | Section | Status |
 |---|---|
 | B2 Territory Map (layout, adjacency, territory table) | Unchanged + clock environmental effects |
-| B6 Military (combat, disposition, siege, supply) | Unchanged except Formation Break fix, unit renaming, Inquisitor/Hired Blade limitations |
+| B6 Military (combat, disposition, siege, supply) | Unchanged except Formation Break fix, unit renaming, Inquisitor/Hired Blade/Riskbreaker additions |
 | B7 Co-Movement Cards (20-card deck) | Carry forward + expand for Thread Debt/Project coverage |
 | B9 Event Deck (30-card structure) | Carry forward; integrate GT-01 |
 | B10 Endgame Events (Rupture, Holy State, Invasion) | Unchanged |
 | B11 Entity Encounters | Unchanged |
+| canon/valoria_canonical_timeline.md | Needs Solmund naming correction (currently says Galbados) |
 
 ---
 
@@ -867,8 +890,8 @@ Player controls one faction using standard Card-Hand system. All others on NPC A
 
 | Gap | Status |
 |---|---|
-| Riskbreakers (Act Consequentialism) | Insufficient information. Need: identity, scale, BG representation. |
-| Four Cardinals (Church hierarchy) | No canon source found. Need: names, portfolios, mechanical role. |
+| Riskbreakers | RESOLVED — integrated as Crown/Löwenritter covert unit with Deniability Debt track |
+| Four Cardinals | RESOLVED — three named (Jarnstal, Olafsson, Klapp); fourth (Prudence) needs naming (BG-E-46) |
 
 ---
 
