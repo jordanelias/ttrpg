@@ -1,52 +1,43 @@
-session_id: 2026-03-31T_BG_IMPROVEMENT_V2
+session_id: 2026-03-31T_BG_IMPROVEMENT_V3
 phase: board_game_improvement
 status: CLOSED
 
 ## SESSION SUMMARY
 
 ### Completed
-V1 (committed earlier this session):
-- 14 gaps identified, 10 mechanic proposals (MP-01–10)
-- Non-editorial fixes applied to stage_bg (Formation Break, Church expansion, Thread Wound RS cost)
-- Deed Tokens, Thread Resonance, Annual Attrition, Crisis Response, B11/B12, updated flags
+V3 analysis: 9 additional reference games (Quiet Year, Nemesis, HoMM, New Cold War, Crisis, Kingdoms Forlorn, Eldfall, Under Our Sun flagged)
+8 additional mechanic proposals (MP-21-28):
+- MP-21: Community Projects (Quiet Year) — multi-season investments, Thread Resonance nodes
+- MP-22: Contempt tokens (Quiet Year) — accumulated political grievances
+- MP-23: Hidden Secondary Objectives (Nemesis) — 12 cards, 2 per faction
+- MP-24: Church Attention Pool (Nemesis) — Thread activity surveillance mechanic
+- MP-25: Champion units (HoMM) — named leaders as mobile commanders with Renown tracks
+- MP-26: Proxy Support + Grand Gesture (New Cold War)
+- MP-27: Crown Policy Instruments (Crisis) — 6 policy types affecting all factions
+- MP-28: Faction-specific unit names and properties (Kingdoms Forlorn/Eldfall)
 
-V2 (this commit):
-- 9 additional reference games analyzed: Arcs, Anachrony, Ark Nova, Nippon/Zaibatsu, Pendragon, Malifaux, Hegemony, Cloudspire, Terra Mystica
-- 10 additional mechanic proposals (MP-11–20)
-- Key proposals: Lead/Follow (Arcs), Thread Debt (Anachrony), Reaction Economy (Terra Mystica), Faction Structural Asymmetry (Hegemony), Conviction in BG (Pendragon), Development Tracks (Nippon), Winter Accounting
+Total proposals across V1-V3: 28 (MP-01 through MP-28)
 
-### GitHub state (committed)
-- designs/bg_improvement_v1.md — 7b283bb5
-- designs/bg_improvement_v2.md — (this commit)
-- compilation/stage_bg_board_game_mode.md — e6af215953
+### Files committed
+- designs/bg_improvement_v3.md — (this commit)
 
-### Editorial decisions — all BG-E items:
-BG-E-01: RESOLVED (GT-02 approved, pending deck size decision BG-E-12)
-BG-E-02: TK5 consequence — pending
-BG-E-03: Rupture narrative — pending
-BG-E-04: S-08 Einhir site name — pending
-BG-E-05: S-15 Restoration NPC — pending
-BG-E-06: Revolution player victory condition — pending
-BG-E-07: Mandate Dice vs flat orders
-BG-E-08: Secret Agreement cards
-BG-E-09: Political Hand cards (18 cards)
-BG-E-10: Thread Veil cards (lore: Baralta lineage, 218 AG)
-BG-E-11: GT-01 event deck 30→40 or replace 10
-BG-E-12: GT-02 co-movement 25 cards or replace CM-11–15
-BG-E-13: B11 entity encounters (low — already added)
-BG-E-14: Solo faction list (low)
-BG-E-15: Lead/Follow vs Mandate Dice choice
-BG-E-16: Order Fatigue default vs optional
-BG-E-17: Fate Cards optional variant
-BG-E-18: Revolution Presence markers redesign
-BG-E-19: Niflhel Network Depth redesign
-BG-E-20: Church TC-as-currency redesign
-BG-E-21: Guilds Contractor redesign
-BG-E-22: Faction Development Track starting values
-BG-E-23: Leader Age legacy element
+### V3 editorial flags added: BG-E-24 through BG-E-29
 
-### Recommended next actions (by editorial cost):
-1. Tier 1 (low cost): BG-E-11/12 (deck sizes) → integrate GT-01/02
-2. Tier 1: Implement MP-12 (Thread Debt), MP-14 (Leverage), MP-16 (Conviction BG)
-3. Tier 2: BG-E-07 or BG-E-15 (action economy structural decision)
-4. Tier 2: BG-E-18 (Revolution redesign — NPC faction, lowest risk)
+### Non-editorial integrations ready (no approval needed):
+MP-12, MP-14, MP-16, MP-22, MP-24, MP-26, MP-27
+Can all be integrated into stage_bg in one pass on user go-ahead.
+
+### 5 highest-impact proposals (cross-wave synthesis):
+1. MP-18+MP-21: Radical faction asymmetry + Community Projects (Revolution transformation)
+2. MP-24: Church Attention Pool (Thread ops feel watched)
+3. MP-25: Champions on the board (BG/TTRPG bridge)
+4. MP-27: Crown as Policy Actor
+5. MP-03+MP-12: Deed Tokens + Thread Debt
+
+### Under Our Sun: not analyzed — insufficient mechanic familiarity. User to describe.
+
+### Next recommended actions:
+1. Confirm non-editorial integrations (MP-12/14/16/22/24/26/27) → one integration pass
+2. Resolve BG-E-11/12 (deck sizes) → GT-01/02 integration
+3. Structural decision: BG-E-07 vs BG-E-15 (action economy)
+4. First structural redesign: BG-E-18 (Revolution Presence + MP-21 Community Projects)
