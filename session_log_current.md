@@ -31,3 +31,25 @@ Arc generator skill available at skills/valoria-arc-generator/SKILL.md.
 Outstanding workplan tasks unchanged from prior session: mass combat §8.9 editorial gap,
 Phase 0 items 0.19-0.22, Solmund/AS rename batch, cross-stage terminology audit,
 83 design-needed gap items.
+
+
+---
+
+## Session: 2026-03-31 — Foundations Amendment: Always-Already Self-Rendering
+
+### Canonized
+- **foundations_amendment_self_rendering.md** committed to `canon/`
+- Establishes three layers of being-persistence: Ein Sof spooling, unconscious self-rendering (always-already threadwork), deliberate threadwork
+- Redefines the Leap as suspension of layer 2 (self-rendering) to access layer 3 (deliberate threadwork)
+- Redefines Coherence as structural integrity of layer 2, orthogonal to Thread Sensitivity
+- Establishes TS-gated branching at Coherence 0: freefall (30-49), relational persistence (50-69), structural reconstitution (70-89), full reconstitution + reality strain (90-100)
+- Establishes reality-strain cost for high-TS Coherence 0 beings (Einhir parallel)
+- Recontextualizes threadcut beings as differing in which layers are operative, not categorically different in kind
+
+### Downstream Work Required
+- [ ] Revise Coherence 0 mechanical definition in ruleset (currently single outcome → branching by TS band)
+- [ ] Revise arcs 28-30 to specify NPC TS levels and acknowledge reality-strain cost
+- [ ] Add Coherence degradation observable effects to GM tools (Dissonant/Fragmented/Fractured phenomenology)
+- [ ] Evaluate whether Coherence recovery mechanics need revision given new definition
+- [ ] Consider mechanical representation of reality-strain accumulation around Coherence 0 high-TS beings
+- [ ] Evaluate implications for Solmund (threadcut being) given recontextualization of self-maintenance layers
