@@ -1,43 +1,28 @@
-session_id: 2026-03-31T_BG_IMPROVEMENT_V3
+session_id: 2026-03-31T_BG_IMPROVEMENT_V4
 phase: board_game_improvement
 status: CLOSED
 
 ## SESSION SUMMARY
+V4 analysis: Barrage, Gaia Project, Concordia, Andromeda's Edge (partial), Mythic Battles (medium), Inventors of South Tigris (medium)
+Uprising: Blessings, Flooruler, Iocus Arcanus, BORD: flagged as unverifiable — user to describe
+5 proposals (MP-29-33):
+- MP-29: Action Wheel / Cooldown for Unique Powers (Barrage)
+- MP-30: Research Tracks 3-per-faction with breakthrough bonuses + Season Objective tiles (Gaia Project)
+- MP-31: Card-Hand Action System — full Concordia replacement of Order tokens [HIGHEST PRIORITY]
+- MP-32: Champion Wound States + Belief Intervention (Mythic Battles, extends MP-25)
+- MP-33: Order Orientation for sub-type selection (Inventors)
 
-### Completed
-V3 analysis: 9 additional reference games (Quiet Year, Nemesis, HoMM, New Cold War, Crisis, Kingdoms Forlorn, Eldfall, Under Our Sun flagged)
-8 additional mechanic proposals (MP-21-28):
-- MP-21: Community Projects (Quiet Year) — multi-season investments, Thread Resonance nodes
-- MP-22: Contempt tokens (Quiet Year) — accumulated political grievances
-- MP-23: Hidden Secondary Objectives (Nemesis) — 12 cards, 2 per faction
-- MP-24: Church Attention Pool (Nemesis) — Thread activity surveillance mechanic
-- MP-25: Champion units (HoMM) — named leaders as mobile commanders with Renown tracks
-- MP-26: Proxy Support + Grand Gesture (New Cold War)
-- MP-27: Crown Policy Instruments (Crisis) — 6 policy types affecting all factions
-- MP-28: Faction-specific unit names and properties (Kingdoms Forlorn/Eldfall)
+Total proposals: 33 (MP-01 through MP-33)
+Files committed: designs/bg_improvement_v4.md
 
-Total proposals across V1-V3: 28 (MP-01 through MP-28)
+### Action economy synthesis (all 4 waves):
+Recommended stack: MP-31 (Concordia cards) + MP-33 (orientation) + MP-11 (Lead/Follow as modifier) + MP-29 (cooldown wheel)
+Set aside: MP-01 (Mandate Dice — randomness without depth), MP-13 (Order Fatigue — superseded by MP-29)
 
-### Files committed
-- designs/bg_improvement_v3.md — (this commit)
+### Key pending decisions:
+BG-E-30: MP-31 adoption (replaces entire Order system) — highest priority structural decision
+BG-E-34: 4 unknown games — awaiting user mechanic descriptions
 
-### V3 editorial flags added: BG-E-24 through BG-E-29
-
-### Non-editorial integrations ready (no approval needed):
-MP-12, MP-14, MP-16, MP-22, MP-24, MP-26, MP-27
-Can all be integrated into stage_bg in one pass on user go-ahead.
-
-### 5 highest-impact proposals (cross-wave synthesis):
-1. MP-18+MP-21: Radical faction asymmetry + Community Projects (Revolution transformation)
-2. MP-24: Church Attention Pool (Thread ops feel watched)
-3. MP-25: Champions on the board (BG/TTRPG bridge)
-4. MP-27: Crown as Policy Actor
-5. MP-03+MP-12: Deed Tokens + Thread Debt
-
-### Under Our Sun: not analyzed — insufficient mechanic familiarity. User to describe.
-
-### Next recommended actions:
-1. Confirm non-editorial integrations (MP-12/14/16/22/24/26/27) → one integration pass
-2. Resolve BG-E-11/12 (deck sizes) → GT-01/02 integration
-3. Structural decision: BG-E-07 vs BG-E-15 (action economy)
-4. First structural redesign: BG-E-18 (Revolution Presence + MP-21 Community Projects)
+### Ready to integrate into stage_bg (no editorial):
+MP-12, MP-14, MP-16, MP-22, MP-24, MP-26, MP-27, MP-29, MP-33
+(MP-30 Research Tracks ready except starting values)
