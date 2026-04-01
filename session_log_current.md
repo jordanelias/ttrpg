@@ -2,37 +2,44 @@
 
 ```yaml
 session_close: 2026-03-31
-checkpoint: bg_critical_review
+checkpoint: bg_revised_proposal_v2
 completed_stages:
-  - Canon review of bg_improvement_v1-v4 (designs/bg_improvement_review.md)
-  - Consolidated synthesis (designs/bg_consolidated_synthesis.md)
-  - Amendment 1: three-mode, political parity, scale interweaving (designs/bg_synthesis_amendment_1.md)
-  - Revised BG proposal (designs/stage_bg_revised_proposal.md)
-  - Critical review against setting elements and evaluation metrics (designs/bg_proposal_critical_review.md)
+  - Canon review of bg_improvement_v1-v4
+  - Consolidated synthesis
+  - Amendment 1: three-mode, political parity, scale interweaving
+  - Revised BG proposal v1
+  - Critical review against setting elements and evaluation metrics
+  - Revised BG proposal v2 (all critical review fixes applied)
 next_action:
-  skill: compiler or editorial review
-  task: "Revise stage_bg_revised_proposal.md to address critical review findings"
+  skill: editorial review
+  task: "Resolve blocking editorial flags starting with BG-E-30 (Card-Hand adoption)"
   parameters:
-    naming: "Apply Solmund/Restoration Movement/AS corrections throughout all BG documents"
-    missing_factions: "Add Löwenritter as full 8th faction; add Inquisitors as Church sub-unit"
-    cognitive_load: "Reduce from ~29 systems to ≤15 core + ≤5 advanced"
-    missing_institutions: "Add Parliament Integrity track; mechanize Schoenland NPC AI; add Southernmost Expedition"
-    gaps_needing_input: "Riskbreakers identity; Four Cardinals under Holy Confessor"
-open_gaps_added:
-  - "Riskbreakers — insufficient information to design BG representation"
-  - "Four Cardinals — no canon source found; need names and portfolios"
-  - "Cognitive load at 29 systems — needs reduction to ~15-20"
-  - "Crunch cascade depth needs capping rule"
-  - "Board legibility needs information layering design"
+    editorial_flags_blocking: "BG-E-30, BG-E-31, BG-E-33, BG-E-34, BG-E-35, BG-E-37, BG-E-45"
+    editorial_flags_low: "BG-E-36, BG-E-38, BG-E-39, BG-E-25, BG-E-26, BG-E-43, BG-E-44"
+open_gaps_added: []
+open_gaps_resolved:
+  - "Cognitive load at 29 systems — reduced to ~20 core (~15 first-game)"
+  - "Crunch cascade depth — capped at 3 downstream effects"
+  - "Board legibility — information layering design applied"
+  - "Naming corrections — Solmund/Restoration Movement/AS applied throughout"
+  - "Löwenritter — full 8th faction added"
+  - "Inquisitors — Church unit type added"
+  - "Schoenland NPC AI — active spoiler mechanized"
+  - "Southernmost Expedition — added with Forgetting barrier"
+  - "Parliament Integrity — shared institution track added"
+  - "Restoration Movement — optionally playable as 7th player"
+  - "Standing system — replaces Contempt + Leverage"
+  - "Hired Blades — limitations enforced (attack-only, 1 season, no garrison)"
+  - "Half-Deed scoring — fixed to whole numbers via thresholds"
+  - "Policy resolution order — defined (Policy > Opposition > Censor)"
 editorial_decisions_pending:
-  - "BG-E-30: Adopt Card-Hand system"
-  - "BG-E-40: Löwenritter as 8th playable faction in BG (confirm)"
-  - "BG-E-41: Restoration Movement playable vs NPC-only (current: NPC-only, but review notes contradiction)"
-  - "BG-E-42: Cognitive load reduction — which systems to cut/merge/defer"
-  - "BG-E-43: Riskbreakers — describe for BG integration"
-  - "BG-E-44: Four Cardinals — confirm existence and provide details"
+  - "BG-E-30: Adopt Card-Hand system (BLOCKER)"
+  - "BG-E-31: Champion Renown ability text"
+  - "BG-E-34: Institutional Mandate trigger conditions review"
+  - "BG-E-35: NPC AI tree update"
+  - "BG-E-45: Restoration Movement leader name/character"
+  - "BG-E-43: Riskbreakers identity"
+  - "BG-E-44: Four Cardinals details"
 blockers:
   - "BG-E-30 (Card-Hand adoption) blocks all Tier 1 work"
-  - "Naming corrections needed before any document is compilation-ready"
-  - "Context at limit — new chat required for revision work"
 ```
