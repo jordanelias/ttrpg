@@ -1,28 +1,40 @@
-session_id: 2026-03-31T_BG_IMPROVEMENT_V4
+session_id: 2026-03-31T_BG_SYNTHESIS
 phase: board_game_improvement
 status: CLOSED
 
 ## SESSION SUMMARY
-V4 analysis: Barrage, Gaia Project, Concordia, Andromeda's Edge (partial), Mythic Battles (medium), Inventors of South Tigris (medium)
-Uprising: Blessings, Flooruler, Iocus Arcanus, BORD: flagged as unverifiable — user to describe
-5 proposals (MP-29-33):
-- MP-29: Action Wheel / Cooldown for Unique Powers (Barrage)
-- MP-30: Research Tracks 3-per-faction with breakthrough bonuses + Season Objective tiles (Gaia Project)
-- MP-31: Card-Hand Action System — full Concordia replacement of Order tokens [HIGHEST PRIORITY]
-- MP-32: Champion Wound States + Belief Intervention (Mythic Battles, extends MP-25)
-- MP-33: Order Orientation for sub-type selection (Inventors)
+Canonical synthesis of all V1-V4 proposals against:
+- Philosophical Foundations (P-01 through P-14)
+- Stage12 hybrid architecture (BG = Strategic Phase, not standalone)
+- TTRPG throughline (Beliefs/Conviction, deterministic capability, hollow victory)
 
-Total proposals: 33 (MP-01 through MP-33)
-Files committed: designs/bg_improvement_v4.md
+### Key findings
+1. BG is the Strategic Phase, not a standalone game — mechanics that make it feel
+   complete-standalone undermine the design intent
+2. Concordia (MP-31) is most Valorian action economy because capability = what you've built,
+   matching TTRPG's deterministic capability structure
+3. The Quiet Year is the closest reference game to Valoria's feel
+4. Three cuts: MP-01 (Mandate Dice), MP-13 (Order Fatigue), MP-15 (Dev Tracks), 
+   MP-17 (Fate Cards — hard cut, metaphysically incoherent), MP-19 (Token Commitment)
+5. Three new proposals: MP-34 (Institutional Belief), MP-35 (Cascade Phase Card Effects),
+   MP-36 (Hollow Victory Scoring BG version)
+6. Crucial gap: BG has no Belief-equivalent — Institutional Belief (MP-34) fills this
 
-### Action economy synthesis (all 4 waves):
-Recommended stack: MP-31 (Concordia cards) + MP-33 (orientation) + MP-11 (Lead/Follow as modifier) + MP-29 (cooldown wheel)
-Set aside: MP-01 (Mandate Dice — randomness without depth), MP-13 (Order Fatigue — superseded by MP-29)
+### Verdicts summary
+- 24 proposals endorsed (some modified)
+- 6 cut (MP-01, 13, 15, 17, 19, and partially MP-11 modified)
+- 3 new added (MP-34, 35, 36)
 
-### Key pending decisions:
-BG-E-30: MP-31 adoption (replaces entire Order system) — highest priority structural decision
-BG-E-34: 4 unknown games — awaiting user mechanic descriptions
+### Tier 1 implementation cluster (form integrated system):
+MP-31 + MP-29 + MP-18(Church+Rev) + MP-34 + MP-12 + MP-24 + MP-21 + MP-22 + MP-27
+Precondition: BG-E-30 (confirm MP-31 adoption)
 
-### Ready to integrate into stage_bg (no editorial):
-MP-12, MP-14, MP-16, MP-22, MP-24, MP-26, MP-27, MP-29, MP-33
-(MP-30 Research Tracks ready except starting values)
+### Files committed
+- designs/bg_synthesis.md
+
+### Pending decisions to unblock Tier 1:
+1. BG-E-30: MP-31 (Concordia Card-Hand) adoption — blocks everything else
+2. BG-E-18: MP-18 Revolution Presence markers
+3. BG-E-20: MP-18 Church TC-as-currency  
+4. BG-E-35 (new): MP-34 Institutional Belief — mandate text and triggers
+5. BG-E-11/12: GT-01/02 deck sizes (low-cost, unblock card integration)
