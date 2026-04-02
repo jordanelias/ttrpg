@@ -553,6 +553,77 @@ patches:
   status: proposed
   applied_commit: ~
 
+
+- id: PP-086
+  date: 2026-04-02
+  severity: P1
+  description: "Mass combat base damage = net successes over Ob (before disposition modifiers)"
+  finding_id: "P1-B11-01"
+  source: simulation
+  affects: [compilation/v0.14/stage8_combat.md]
+  status: applied
+  applied_commit: "2026-04-02-session"
+
+- id: PP-087
+  date: 2026-04-02
+  severity: P1
+  description: "Formation Break Ob stacking — cumulative +1 Ob per break, persists through rally, cap at 3 breaks (Dispersed)"
+  finding_id: "P1-B11-02"
+  source: simulation
+  affects: [compilation/v0.14/stage8_combat.md]
+  status: applied
+  applied_commit: "2026-04-02-session"
+
+- id: PP-088
+  date: 2026-04-02
+  severity: P1
+  description: "Siege Assault vs mass combat linkage — mass combat win = Fortification −1; field win ≠ breach"
+  finding_id: "P1-B11-03"
+  source: simulation
+  affects: [compilation/v0.14/stage8_combat.md]
+  status: applied
+  applied_commit: "2026-04-02-session"
+
+- id: PP-089
+  date: 2026-04-02
+  severity: P1
+  description: "Hybrid season phase order — Strategic first, then Personal, with explicit carryover rules"
+  finding_id: "P1-B11-04"
+  source: simulation
+  affects: [compilation/v0.14/stage11_scale_transitions.md]
+  status: proposed
+  applied_commit: ~
+
+- id: PP-090
+  date: 2026-04-02
+  severity: P1
+  description: "Mode-switch mid-siege conversion — each Endurance lost = −0.5 Fortification"
+  finding_id: "P1-B11-05"
+  source: simulation
+  affects: [compilation/v0.14/stage11_scale_transitions.md]
+  status: proposed
+  applied_commit: ~
+
+- id: PP-091
+  date: 2026-04-02
+  severity: P1
+  description: "Artillery Bombard resolution — flat damage, no melee exchange, distance-based Ob (1/2/3)"
+  finding_id: "P1-B11-06"
+  source: simulation
+  affects: [compilation/v0.14/stage8_combat.md]
+  status: applied
+  applied_commit: "2026-04-02-session"
+
+- id: PP-092
+  date: 2026-04-02
+  severity: P2
+  description: "P2-B11 series — personal combat and mass combat clarifications (B11-01 through B11-19)"
+  finding_id: "P2-B11-01 through P2-B11-19"
+  source: simulation
+  affects: [compilation/v0.14/stage8_combat.md]
+  status: applied
+  applied_commit: "2026-04-02-session"
+
 - id: PP-093
   date: 2026-03-27
   severity: P1
