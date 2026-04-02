@@ -241,3 +241,18 @@ Append mechanical findings here as discovered (do not clear between sessions):
 ```
 [empty — no findings yet]
 ```
+
+### Task 8 — Full Multi-TN Probability Tables
+Produce complete outcome tables across all three TN values for a specified pool range.
+
+**Input:** pool range (e.g. 3–15), Ob range (e.g. 1–8)
+**Procedure:**
+1. Run `outcome_probs(n, tn, ob)` for TN 6, 7, 8 at every (pool, ob) combination.
+2. Output three tables (one per TN) showing P(full success) — overwhelming+success combined.
+3. Add a delta table: TN6 minus TN8 at each cell, showing where TN setting has most mechanical impact.
+4. Flag: cells where TN6→TN8 shift causes >25% swing in P(full) — these are high-leverage balance points.
+
+**Output:** Three markdown tables + one delta table. File `tn_comparison_full.md` if >60 rows total.
+
+**Standard reference output** (generate once, cache to `references/tn_full_tables.md`):
+Pool 3–12, Ob 1–6, all three TNs. This is the canonical reference — other skills link to it rather than recomputing.
