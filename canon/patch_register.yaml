@@ -1453,3 +1453,16 @@ patches:
   applied_to_version: "v1.5"
   status: applied
   applied_commit: "2026-04-02-gap-fill"
+
+- id: PP-101
+  date: 2026-04-02
+  severity: P1
+  description: "Practitioner positioning rule in mass combat: rear vs front-line Leap timing distinction. BG→TTRPG unit conversion added to §B.5 referencing §B.2 table. Resolves F-HYB-01 and GAP-K2-01."
+  finding_id: "F-HYB-01 / GAP-K2-01 / SIM-HYB-01"
+  source: simulation
+  affects:
+    - designs/mass_combat/mass_battle_v3.md
+    - skills/valoria-orchestrator/references/state_transfer_spec.md
+  applied_to_version: "v4.1"
+  status: applied
+  applied_commit: pending

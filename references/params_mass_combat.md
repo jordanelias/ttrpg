@@ -1,4 +1,4 @@
-<!-- version: v0.14+design-ST3 | sources: stage8_combat.md, mass_battle_v3.md | last_updated: 2026-04-02 -->
+<!-- version: v0.14+design-ST4 | sources: designs/mass_combat/mass_battle_v3.md (v4.1, PP-101) | last_updated: 2026-04-02 -->
 <!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D -->
 <!-- PHASE STRUCTURE: 7 phases. Thread split: offensive Phase 4, support Phase 6. All damage simultaneous Phase 6 Step 1. -->
 <!-- mass_battle_v3.md is a design proposal. Values marked [COMPILED] are from stage8; [PROPOSAL] from v3. -->
@@ -134,3 +134,11 @@ Generalship dominates. CR asymmetry is intentional. CR=7 vs CR=1 general: near-c
 
 <!-- patch_history: references/params_mass_combat_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
+
+## OPEN PARAMS GAPS (from SIM-HYB-01)
+
+| Gap ID | Description | Status |
+|--------|-------------|--------|
+| PARAMS-GAP-04 | Mass combat pool split — Offence/Defence allocation undefined for unit-scale Engagement. Provisional: ½ each. | Open |
+| PARAMS-GAP-05 | Mass combat damage formula — Strength points lost per excess success not defined at unit level. Provisional: 1 Str per excess success. | Open |
+| PARAMS-GAP-06-MC | BG Battle Partial outcome — no Partial degree defined. BG Battle is binary Win/Lose. Clarification needed. | Open |

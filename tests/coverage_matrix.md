@@ -84,6 +84,8 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 
 | SIM-D-04 | Debate gap-fill stress test — §§6.11-6.15, PP-112-118, BG Vote, Hybrid, Coalition, Beliefs, Total Victory | TTRPG+BG+HYB | CROSS | TC, Composure, Concentration, Debate Fatigue | Church, Hafenmark, Crown, Varfell | Himlensendt, Baralta, Klapp | Coalition, BG delegate, Hybrid | Complete | C-01/02/03 coalition confirmed; A.2-03 PP-117 (BG zero-zero); K2 PP-118 (Hybrid exchange count); SIM-DEBT-02 flagged |
 
+| SIM-HYB-01 | G1 Mass Combat, G2 Debate, G3 Threadwork, G4 Faction Seasonal, K2 Transition, C Full Scenario | HYB | PRES | TC, RS, IP, Stability, Coherence, Composure, Wounds, Unit Str/Morale/Cohesion | Church, Varfell, Crown, Hafenmark | Vaynard, Cardinal Klapp, Templar Sergeant | Practitioner-Scholar, Institutional Legalist, Church Militant | Session A complete; Session B pending (D+J+L+M) | F-HYB-01 (P1→PP-101), GAP-K2-01 (P1→PP-101), F-HYB-02 (params stale→params_debate fixed), F-HYB-03 (P2→ED-054); 7 params gaps logged |
+
 ## SIM-DEBT Register
 
 | ID | Source | Description | Status |

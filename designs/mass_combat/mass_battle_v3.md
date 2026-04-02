@@ -1,5 +1,5 @@
 # VALORIA — MASS BATTLE SYSTEM v4
-## Version: v4 (all ST-MB patches + PP-086-093 applied in-place; 7-phase structure per ED-050)
+## Version: v4.1 (PP-101 applied: practitioner positioning rule + BG→TTRPG unit conversion)
 ## Status: WORKING DESIGN — no appendix sections. Read straight through.
 ## Three-mode: TTRPG/Hybrid (Part A); Board Game (Part B); Hybrid Handoff (§B.5)
 ## All P1/P2/P3 patches applied. Gaps filled. Editorial notes flagged.
@@ -255,6 +255,22 @@ Practitioner rarity note: Phase 4 fires only when a practitioner is present.
 In most battles it is skipped entirely. Board game: no Phase 4 (faction Thread
 orders abstracted to Co-Movement cards at strategic scale, not battle scale).
 
+**Practitioner positioning — Rear vs Front Line (PP-101):**
+Practitioners in rear position (Reserve formation or not assigned to an engaged
+unit) resolve Phase 4 safely. Their Leap and operation fire before Phase 5
+Engagement begins. They face no personal combat during Phase 4.
+
+Practitioners embedded in a front-line unit (not in Reserve, in or adjacent to
+an engaged unit) cannot safely act in Phase 4 — they are subject to Phase 5
+Engagement as normal fighters. For these practitioners: Leap resolves at the
+start of Phase 5, concurrent with Engagement, at the practitioner's initiative
+priority. A declared attacker targeting them in Phase 5 makes them ineligible
+for Leap per standard eligibility rules.
+
+Summary:
+- Rear/Reserve practitioner → Phase 4 Leap: safe, guaranteed window.
+- Front-line practitioner → Phase 5 Leap: conditional on no declared attacker.
+
 **Phase 5 — Engagement** (max 3 simultaneous, TTRPG) *[P1-01]*
 
 Per engagement:
@@ -346,7 +362,8 @@ operations. Full-battle Threadweaving is a practitioner self-destruction event.
 *[THREAD-P2-02 — document explicitly]*
 
 **Diagnosis timing:** Phase 1 (public declaration = rendering the target
-configuration). Leap in Phase 5. *[THREAD-P2-03]*
+configuration). Leap phase: Phase 4 (rear practitioner) or Phase 5 (front-line
+practitioner) — see §A.7 PP-101 positioning rule. *[THREAD-P2-03 revised by PP-101]*
 
 **Combat-type operations** (offensive targeting): resolve Phase 4, no Defence
 allocation unless embedded Threadweaver present. Counter = contested roll
@@ -549,6 +566,13 @@ approval — each reflects the faction's military doctrine.]
 **No PC in battle:** BG resolution fires. Territory control applies. Faction
 stat consequences (Military, Stability) apply at Accounting. RS changes from
 any Thread orders apply at Accounting.
+
+**BG → TTRPG unit conversion (Zoom In):** When a named PC enters a BG-resolved
+battle (Zoom In trigger), translate BG unit tokens to TTRPG unit stats using
+§B.2. Each BG unit type has a pre-mapped TTRPG CP equivalent, weapon type, and
+armour tier. BG unit Health ÷ 1.5 (round up) = TTRPG unit Strength. Faction
+Military stat governs which unit types may be present (Military ≥ unit CP
+required) but does not translate directly to unit Strength.
 
 **PC faction leader present in contested territory:** BG resolution defers to
 TTRPG mass battle rules for that engagement. The PC's CR and tactical decisions

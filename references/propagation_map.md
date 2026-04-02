@@ -184,6 +184,13 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 
 ### GM REFERENCE / FLOWCHARTS
 
+| `tests/sim_hyb_01_templar_crossing.md` (NEW) | `tests/coverage_matrix.md` | Simulation run — log row added |
+| `tests/sim_hyb_01_templar_crossing.md` (NEW) | `canon/patch_register.yaml` | PP-101 sourced from this sim |
+| `tests/sim_hyb_01_templar_crossing.md` (NEW) | `canon/editorial_ledger.yaml` | ED-054 flagged from this sim |
+| `designs/mass_combat/mass_battle_v3.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | B.5 BG→TTRPG conversion now cross-refs B.2 |
+| `designs/mass_combat/mass_battle_v3.md` | `references/params_mass_combat.md` | PP-101 applied; params_mass_combat notes open gaps PARAMS-GAP-04/05 |
+
+
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
 | Any `designs/gm_ref_cp14/arcs/*.md` | `tests/coverage_matrix.md` | If simulated, log it |
