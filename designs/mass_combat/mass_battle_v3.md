@@ -200,54 +200,85 @@ no tactics available. *[P3-03]*
 ---
 
 ### A.7 BATTLE TURN STRUCTURE
+## Revised 2026-04-02 — ED-050 resolved (Option D): offensive Thread own phase between Manoeuvre and Engagement.
+## Volley and offensive Thread damage deferred to Cascade Phase 6 step 1 (simultaneous with Engagement damage).
 
 **Phase 1 — Strategy Declaration** (simultaneous, secret)
 General declares: sub-unit assignments (max 3 for TTRPG), formation per
-sub-unit, tactical action, and Thread intent (public). *[P1-01]*
+sub-unit, tactical action, and Thread intent (public).
 
-Threadweaving: Diagnosis occurs in Phase 1 (public declaration = rendering
-the configuration). Leap resolves in Phase 5. Configuration change between
-Phase 1 and Phase 5 is covered by §4.2.2 (practitioner may revise before
-Leap at no cost if configuration has changed significantly). *[THREAD-P2-03]*
+Thread declaration: Practitioners publicly declare intent (offensive or
+support) and target. Diagnosis occurs here (public declaration = rendering
+the configuration). *[P1-01]*
 
 **Phase 2 — Volley**
 Projectile units fire. Roll Effective CP vs TN 6. Net successes − DR
-(Projectile column) = Strength loss. Prepared Defence: declare in Phase 1;
-half Effective CP as passive DR bonus (+1 per 2 dice). Volley Str loss
-recorded for Phase 5 Cohesion check — does not fire immediately. *[P2-06]*
+(Projectile column) = Strength loss to record.
+Prepared Defence: declare in Phase 1; half Effective CP as passive DR
+bonus (+1 per 2 dice).
+**Volley Strength loss is recorded but NOT applied until Phase 6 Step 1.**
+*[P2-06, ED-037 provisional: TN 6 intentional exception]*
 
 **Phase 3 — Manoeuvre**
 Fast → Standard → Slow. Environmental modifiers applied. Reserve commitment
 declared here (takes effect next turn's Phase 3). *[P3-02]*
 
-**Phase 4 — Engagement** (max 3 simultaneous, TTRPG) *[P1-01]*
+**Phase 4 — Offensive Thread Operations**
+Practitioners with declared offensive intent execute their Leap and operation.
+Offensive operations: Dissolution, Pulling, Locking targeting enemy units or
+configurations.
+
+Resolution:
+1. Leap resolves (Coherence check if applicable — see threadwork_redesign_v25.md §2.3)
+2. Operation rolls (pool vs Ob per operation type and scale)
+3. Effects recorded but NOT applied until Phase 6 Step 1 (simultaneous
+   with Volley and Engagement damage)
+
+A unit whose Strength is reduced to 0 by Phase 4 Thread effects is removed
+at Phase 6 Step 1 and does not participate in Phase 5 Engagement.
+Configuration changes between Phase 1 declaration and Phase 4 resolution:
+practitioner may revise target at no cost if the declared configuration has
+changed significantly (unit destroyed, routed, or repositioned). *[THREAD-P2-03]*
+
+Practitioner rarity note: Phase 4 fires only when a practitioner is present.
+In most battles it is skipped entirely. Board game: no Phase 4 (faction Thread
+orders abstracted to Co-Movement cards at strategic scale, not battle scale).
+
+**Phase 5 — Engagement** (max 3 simultaneous, TTRPG) *[P1-01]*
 
 Per engagement:
-1. Effective Pool = min(CP, Str) − Cohesion penalty
+1. Effective Pool = min(CP, current Str as of Phase 3 end) − Cohesion penalty
 2. Apply Formation modifier
 3. Split into Offence / Defence (both sides simultaneously)
 4. Roll. Net hits = Offence succs − Defence succs
 5. Damage = max(0, net hits + weapon modifier − DR)
 6. Critical hit (net hits ≥ 3): weapon modifier doubled
-7. Both sides take Strength damage simultaneously
+7. Engagement damage recorded. NOT applied until Phase 6 Step 1.
 8. Mutual destruction (both to 0) is valid — Pyrrhic outcomes possible *[P2-02]*
 
 Mass Mismatch Penalty: Light weapon defender vs Heavy weapon attack − 1
 defensive success (min 0). Exempt: Shield Wall.
 
-**Phase 5 — Cascade** (strict order)
+**Phase 6 — Cascade** (strict order)
 
-1. Apply all Strength damage (Volley + Engagement)
+1. Apply ALL recorded Strength damage simultaneously:
+   Volley (Phase 2) + Offensive Thread (Phase 4) + Engagement (Phase 5).
+   Units reduced to 0 Strength are destroyed. Pyrrhic mutual destruction valid.
 2. Cohesion checks (deterministic — per §A.4)
-3. Morale checks (triggers + cap)
-4. General action (one): Rally / Reinforce Cohesion / Threadweave / Personal
-   combat / Stabilise incapacitated general
-5. Thread Leap resolves (if declared Phase 1)
+3. Morale checks (triggers + cap per §A.4; PP-082 general kill separate)
+4. General action (one): Rally / Reinforce Cohesion / **Support Threadweave**
+   (Weaving, Mending — see below) / Personal combat / Stabilise incapacitated
+   general
+5. Support Thread Leap resolves (if declared in Phase 1 as support intent)
 
-**Phase 6 — Reform**
+Support Thread operations (Phase 6 step 4–5): Weaving (Cohesion bolster,
+unit hardening), Mending (Strength restoration), Rally (W-33). These fire
+after casualties are known — practitioners respond to what the battle has done.
+
+**Phase 7 — Reform**
 Non-engaged units: restore Cohesion, recover 1 Morale, merge sub-units.
-Idle army clock: if no engagements in Phase 4 this turn AND previous turn,
-both sides lose 1 Morale in Phase 6. *[P2-02, P2-04]*
+Idle army clock: if no engagements in Phase 5 this turn AND previous turn,
+both sides lose 1 Morale in Phase 7. *[P2-02, P2-04]*
 
 ---
 

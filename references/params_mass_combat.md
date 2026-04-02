@@ -1,9 +1,25 @@
-<!-- version: v0.14+design-ST2 | sources: stage8_combat.md, mass_battle_v3.md | last_updated: 2026-04-02 -->
-<!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038 provisional; Altonian placeholder stats -->
+<!-- version: v0.14+design-ST3 | sources: stage8_combat.md, mass_battle_v3.md | last_updated: 2026-04-02 -->
+<!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D -->
+<!-- PHASE STRUCTURE: 7 phases. Thread split: offensive Phase 4, support Phase 6. All damage simultaneous Phase 6 Step 1. -->
 <!-- mass_battle_v3.md is a design proposal. Values marked [COMPILED] are from stage8; [PROPOSAL] from v3. -->
 <!-- STALE CHECK: Verify [COMPILED] values against current ruleset; verify [PROPOSAL] against compiled stage8 update. -->
 
 # params_mass_combat.md — Mass Battle (v3)
+
+
+## BATTLE TURN PHASE STRUCTURE (7 phases, revised 2026-04-02)
+
+| Phase | Name | Content |
+|-------|------|---------|
+| 1 | Strategy Declaration | Formations, tactics, Thread intent declared (simultaneous, secret) |
+| 2 | Volley | Projectile fire. Damage recorded, not applied. TN 6 [PROVISIONAL]. |
+| 3 | Manoeuvre | Movement by speed. Reserve commitments. |
+| 4 | Offensive Thread | Dissolution, Pulling, Locking. Practitioner-only. Skipped if no practitioner present. BG: always skipped. |
+| 5 | Engagement | Pool split, roll, damage recorded. Max 3 simultaneous (TTRPG). |
+| 6 | Cascade | Step 1: ALL damage applied simultaneously (Volley+Thread+Engagement). Step 2: Cohesion checks. Step 3: Morale checks. Step 4: General action (Rally/Support Thread/Personal combat). Step 5: Support Thread Leap resolves. |
+| 7 | Reform | Cohesion restore, Morale +1, sub-unit merge for non-engaged units. |
+
+Damage simultaneity: Effective CP for Phase 5 calculated from Str as of Phase 3 end. Phase 4 Thread effects do not reduce Str before Phase 5 — all applied together at Phase 6 Step 1.
 
 ## Core Formula
 Effective Combat Pool = min(CP, current Strength)

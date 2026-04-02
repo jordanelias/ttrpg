@@ -949,14 +949,14 @@ editorial_decisions:
     source_file: tests/sim_scale_transitions (prior session)
     description: "Thread timing in mass battle: Priority 1 (stage11 §11.3) conflicts with Phase 5 (mass_battle_v3 §A.7). Three options: A=offensive Thread fires Phase 1 / B=all Thread Phase 5 / C=Phase 5 with Phase 1 declaration bonus. Prior test ID: T1-P1-01."
     full_flag_text: "[EDITORIAL: ED-050 Thread→Mass timing — choose A (Phase 1 offensive), B (all Phase 5), or C (Phase 5 with declaration bonus)]"
-    status: open
+    status: resolved
     priority: P1
-    decision: null
+    decision: "Option D: offensive Thread (Dissolution/Pulling/Locking) fires Phase 4 between Manoeuvre and Engagement. Support Thread (Weaving/Mending) fires Phase 6 Cascade step 4-5. All damage simultaneous at Phase 6 Step 1. BG has no battle-phase Thread."
     propagation_targets:
       - designs/mass_combat/mass_battle_v3.md
       - compilation/v0.14/stage11_scale_transitions.md
       - skills/valoria-orchestrator/references/state_transfer_spec.md
-    propagation_status: pending
+    propagation_status: complete
     related_ids: []
     supersedes: []
     stale_reason: null

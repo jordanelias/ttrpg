@@ -88,7 +88,9 @@ This is not a punishment — it is a mechanical expression of the epistemologica
 | Mass combat resolution | Zone-based operational; Zoom In/Out for personal moments | Disposition table, single roll per battle | Board game resolution; Zoom In to TTRPG for key named-NPC moments |
 | Siege resolution | Multi-season procedure with scenes (§8.4) | Siege order vs Fortification (single roll) | Board game roll; TTRPG scenes for infiltration or breakout |
 | Domain Actions | Implicit — GM recognises scope from personal roll | Explicit — Order Set with placement and resolution | Strategic Phase uses board game orders; Personal Phase uses TTRPG Domain Echoes |
-| Thread → Faction transitions | Standard handoff rule (Thread pool, faction-scale Ob) | Faction-card Thread orders (Weave/Investigate/Harvest) | Personal Phase: TTRPG. Strategic Phase: board game. Both count toward seasonal TT. |
+| Thread → Faction transitions | Standard handoff rule (Thread pool, faction-scale Ob) | Faction-card Thread orders (Weave/Investigate/Harvest) — no battle-phase Thread in BG | Personal Phase: TTRPG. Strategic Phase: board game. Both count toward seasonal TT. |
+
+**Thread in mass battle (TTRPG/Hybrid only):** Offensive Thread operations (Dissolution, Pulling, Locking) fire in Phase 4 — between Manoeuvre and Engagement. Support Thread operations (Weaving, Mending) fire in Phase 6 Cascade step 4–5. Damage from all phases (Volley, Thread, Engagement) applies simultaneously at Phase 6 Step 1. Board Game has no battle-phase Thread — faction Thread orders are abstracted to Co-Movement cards at strategic scale only.
 
 **Key principle for hybrid**: Where a rule exists in both modes, the seasonal cap is shared. A faction attribute cannot change by more than ±2 per season regardless of how many sources target it in either phase.
 
