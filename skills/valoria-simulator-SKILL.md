@@ -210,6 +210,163 @@ Committed: [short hash]
 ```
 
 
+
+### J — Cognitive Load and Time Audit
+
+Per mechanic under test, measure and report:
+
+**Cognitive load score (1–10):**
+Count per single resolution:
+- Mandatory decisions (player must choose between options): +1 per decision
+- Mandatory lookups (player must reference a table, formula, or condition list): +1 per lookup
+- Parallel tracks (values held in working memory simultaneously): +1 per track
+- Sequential dependencies (B cannot resolve until A is known): +1 per dependency
+
+Score: total count. Flag at ≥ 5 (borderline), ≥ 7 (problem), ≥ 9 (redesign).
+
+Compare against precedent: BW Duel of Wits = 6, TI4 combat = 4, D&D 5e spell slot combat = 5.
+
+**Time estimate (human minutes at table):**
+- Novice (first 3 sessions): N minutes per resolution
+- Experienced (10+ sessions): N minutes per resolution
+- Expert (campaign-level): N minutes per resolution
+
+Estimate method: count decision points × 30 seconds (novice) / 15 seconds (experienced) / 8 seconds (expert) + lookup time (45s/15s/5s each) + arithmetic time (20s/10s/5s per calculation).
+
+Flag: any mechanic where novice time > 3 minutes per single resolution (P2), > 5 minutes (P1).
+
+Output format:
+```
+[MODE J: mechanic name]
+Decisions: N (list them)
+Lookups: N (list them)
+Parallel tracks: N (list them)
+Sequential dependencies: N (list them)
+Load score: N/10 — [OK / BORDERLINE / PROBLEM / REDESIGN]
+Time (novice/experienced/expert): Nm / Nm / Nm
+Flag: [NONE / P2: reason / P1: reason]
+```
+
+### K — Cross-Mode Delta and Transition Stress Test
+
+Two sub-modes. Run both for any mechanic that spans multiple game modes.
+
+**K1 — Cross-Mode Delta:**
+Run the mechanic in TTRPG, then Hybrid, then Board Game.
+For each mode, record:
+- Pool/formula used
+- Resolution steps
+- Outcome distribution (expected values)
+- Strategic incentives produced (dominant strategies, dead choices)
+- What information the player needs vs what is available
+
+Output a delta table:
+```
+| Property        | TTRPG | Hybrid | Board Game |
+|----------------|-------|--------|------------|
+| Pool/formula   |       |        |            |
+| Steps          |       |        |            |
+| E[outcome]     |       |        |            |
+| Dominant strat |       |        |            |
+| Dead choice?   |       |        |            |
+| Info available |       |        |            |
+```
+
+Flag: any property where BG and TTRPG produce opposite strategic incentives (P1), any mode where a choice becomes mechanically irrelevant (P2).
+
+**K2 — Transition Stress Test:**
+Test the handoff at each mode boundary using the state transfer spec (see `references/state_transfer_spec.md`).
+
+For each transition type (TTRPG→Hybrid, BG→Hybrid, Hybrid→TTRPG, Hybrid→BG, and within-TTRPG Register Shifts):
+
+1. **State inventory check:** List all variables active at point of transition. Verify each is handled: transferred, converted, suspended, or discarded. Any variable not explicitly handled = P1 gap.
+
+2. **Interruption test:** Trigger the transition at each possible phase/step of the source mode. Verify: source mode state is correctly preserved or resolved, target mode receives complete starting state, no orphaned actions or pending resolutions remain.
+
+3. **Zoom In/Out fidelity:** Run a Zoom In from BG battle to TTRPG personal combat. Track: which BG unit state variables convert to TTRPG character state. Run the TTRPG scene. Zoom Out. Verify BG state correctly reflects TTRPG outcomes.
+
+4. **Register Shift test (within TTRPG):** Trigger a Register Shift mid-scene (personal → faction, faction → mass combat). Verify: personal scale state persists correctly, faction-level consequences fire correctly, no scale-crossing variable is double-counted or lost.
+
+Flag every broken handoff as P1.
+
+### L — Precedent Comparison
+
+For the mechanic under test, identify 2–3 analogue mechanics in precedent games. For each:
+
+```
+[PRECEDENT: Game — Mechanic name]
+What it does: [one sentence]
+How Valoria's version differs: [one sentence]
+Justification for difference: [one sentence — cite Foundations, design intent, or mode requirement]
+Risk: [NONE / design drift / unjustified complexity / flavour without function]
+```
+
+Precedent game library (use these in priority order when analogues exist):
+- **Burning Wheel** — belief/instinct system, Duel of Wits, resource cycles, advancement
+- **A Song of Ice and Fire RPG** — intrigue system, house rules
+- **Twilight Imperium 4** — faction asymmetry, political phase, strategic card play
+- **Root** — asymmetric faction design, board game/narrative hybrid
+- **Here I Stand / Virgin Queen** — political/military/religious clock systems
+- **Crusader Kings (TTRPG adaptation)** — succession, dynasty, character-faction binding
+- **Pendragon** — trait/passion system, generational play
+- **Blades in the Dark** — faction clocks, position/effect, crew advancement
+
+If no analogue exists in the library: flag as `[NO PRECEDENT — this mechanic is novel; verify it carries its own weight]`.
+
+Flag: any case where Valoria's version is more complex than the precedent without justification (P2), or where the precedent's solution is strictly superior (P1 — redesign candidate).
+
+### M — Narrative Flowchart Generator
+
+Produces a branching flowchart for a defined scenario seed. This mode generates the full emergent narrative space, not a single path.
+
+**Input:** A trigger event, faction state, and list of named participants.
+
+**Output structure:**
+
+```
+## FLOWCHART: [scenario name]
+## Seed: [trigger event]
+## Mode: TTRPG / Hybrid / BG (all three must be mapped)
+## Tracks at seed: [all relevant clock/stat values]
+
+### NODE 0: [Trigger event description]
+State: [all relevant tracks]
+Branch conditions: [what determines which path fires]
+
+  ├── BRANCH A: [condition — e.g. "Church TC ≥ 40 at season start"]
+  │   State delta: [what changes]
+  │   → NODE A1: [next event]
+  │       Branch conditions: [next split]
+  │       ├── BRANCH A1a: [...]
+  │       │   → NODE A1a1: [...]
+  │       └── BRANCH A1b: [...]
+  │           → NODE A1b1: [...]
+  │
+  ├── BRANCH B: [condition]
+  │   State delta: [what changes]
+  │   → NODE B1: [next event]
+  │
+  └── BRANCH C: [condition — e.g. "PC intervenes"]
+      State delta: [what changes]
+      → NODE C1: [next event]
+```
+
+**Rules for Mode M:**
+- Minimum 3 branch conditions per node (usually: high roll / median roll / low roll, OR faction A wins / faction B wins / stalemate, OR PC intervenes / PC observes / PC is absent)
+- Minimum 3 nodes deep before reaching terminal states
+- Terminal states labeled: STABLE / UNSTABLE (escalates) / COLLAPSE / PC-DEPENDENT (requires player action to resolve)
+- Every node must track: relevant clock values, which NPCs are present/affected, which mode is active, and any pending editorial items
+- Flag any branch that produces an undefined state (no rule covers it) as `[GAP: ...]`
+- Flag any branch that produces the same terminal state regardless of player action as `[DEAD BRANCH — player agency lost]`
+
+**Cross-mode flowchart:**
+For hybrid scenarios, map the same seed across all three modes. Show where mode-specific rules produce different branch conditions or terminal states. This is the primary test for whether the mode-transition rules produce coherent narrative across scales.
+
+**Link to existing scenario documents:**
+After generating a flowchart, check `designs/ttrpg/valoria_emergent_scenarios.md` and `designs/ttrpg/valoria_narrative_scenario_chains.md` for overlap. Note whether the flowchart confirms, extends, or contradicts existing scenarios.
+
+**Output location:** Commit to `designs/gm_ref_cp14/flowcharts/` as `flowchart_[scenario_name].md`. If the directory does not exist, create it. Link the flowchart from `designs/ttrpg/valoria_emergent_scenarios.md` cross-reference section.
+
 ## SIM-DEBT Register
 Track calibration values that need re-verification due to parameter changes.
 

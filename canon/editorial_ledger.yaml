@@ -942,3 +942,22 @@ editorial_decisions:
     supersedes: []
     stale_reason: null
     tags: [board_game, church, stability, TC, clock]
+- id: ED-050
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_scale_transitions (prior session)
+    description: "Thread timing in mass battle: Priority 1 (stage11 §11.3) conflicts with Phase 5 (mass_battle_v3 §A.7). Three options: A=offensive Thread fires Phase 1 / B=all Thread Phase 5 / C=Phase 5 with Phase 1 declaration bonus. Prior test ID: T1-P1-01."
+    full_flag_text: "[EDITORIAL: ED-050 Thread→Mass timing — choose A (Phase 1 offensive), B (all Phase 5), or C (Phase 5 with declaration bonus)]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - designs/mass_combat/mass_battle_v3.md
+      - compilation/v0.14/stage11_scale_transitions.md
+      - skills/valoria-orchestrator/references/state_transfer_spec.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [mass_combat, threadwork, timing, scale_transition]

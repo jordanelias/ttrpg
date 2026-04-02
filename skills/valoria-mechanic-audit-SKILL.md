@@ -152,3 +152,22 @@ Params files and their skill usage:
 | `references/params_factions.md` | simulator Mode G4, mechanic-audit |
 | `references/params_board_game.md` | simulator Mode G5 |
 | `references/params_scale_transitions.md` | simulator Mode G (cross-mode), mechanic-audit Mode G |
+## Mode G — Cross-Mode Consistency Audit
+
+**Run this after any Mode C/D that touches a mechanic existing in multiple game modes.**
+
+For each mechanic audited:
+1. Identify which modes it appears in (TTRPG / Hybrid / BG)
+2. Load the relevant params file for each mode
+3. Check: does the mechanic produce equivalent strategic incentives across modes?
+4. Check: does the mechanic's resolution complexity scale appropriately (simpler in BG, fuller in TTRPG)?
+5. Check: is every mode-specific variant documented with its rationale?
+
+Flag: any undocumented mode-specific behaviour (P2), any mode where the mechanic is absent without explanation (P1 if the mechanic is referenced cross-mode).
+
+**Transition points (always audit these):**
+- Zoom In / Zoom Out: verify against `references/state_transfer_spec.md`
+- Register Shift: verify state persistence at each scale crossing
+- Domain Echo: verify that faction-level consequences are correctly derived from personal-level outcomes
+
+If `references/state_transfer_spec.md` does not exist or is stale: halt, flag `[STATE-TRANSFER-SPEC MISSING OR STALE]`, do not proceed with transition audit.
