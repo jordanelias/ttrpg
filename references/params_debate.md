@@ -1,4 +1,7 @@
-<!-- version: v0.14+design-ST2 | sources: debate_system_redesign_v1.md Part 6 (compiled) | last_updated: 2026-04-02 -->
+<!-- version: v0.14+design-ST3 | sources: debate_system_redesign_v1.md Part 6 v1.5 | last_updated: 2026-04-02 -->
+<!-- NEW SECTIONS: §6.11 Pre-Debate Prep, §6.12 Multi-Party, §6.13 BG Vote, §6.14 Hybrid, §6.15 Thread -->
+<!-- GAP-DS-01/02/03/04/05/06/07/08/16/17/18/19 all resolved in v1.4/v1.5 -->
+<!-- SIM-DEBT-02: Corroboration in CLASH calibration pending -->
 <!-- PATCHES APPLIED: D-01–D-10, R-01–R-07, v2-P01–v2-P04, R-65, R-66 -->
 <!-- POOL FORMULA CONFIRMED: (Presence × 2) + History bonus, TN 7 -->
 <!-- SIM-DEBT-01: PARTIALLY RESOLVED. Modes A+D complete (SIM-D-01 2026-04-02). New baselines below. Mode C still needed. -->

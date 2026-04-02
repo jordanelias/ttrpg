@@ -357,7 +357,7 @@ Not all Debates are symmetric. The institution shapes the rules.
 # PART SIX: COMPILED MECHANICAL SPECIFICATION
 ## Source: debate_stress_test_v1.md + debate_stress_test_v2.md
 ## Status: OPERATIVE — supersedes quaestio design (Parts 3–4) for play purposes
-## Version: v1.3 (PP-101 through PP-111 applied in-place 2026-04-02)
+## Version: v1.5 (PP-117, PP-118 applied 2026-04-02 — all gaps resolved, stress-test verified)
 ## Parts 1–4 retained as design reference and historical/philosophical foundation
 
 ---
@@ -482,7 +482,10 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 
 **Step 3 — Argue:** Initiative holder declares argument and rolls first. Respondent hears declaration, then chooses genre/orientation and rolls.
 - Pool: (Presence × 2) + History bonus, TN 7.
-- Memory bonus: +2D when citing a specific, named, verifiable claim (document, date, prior statement, named precedent). Binary — either it qualifies or it doesn't. Available in any genre.
+- **No fixed Ob.** Argue rolls are comparative margin-based, not Ob-based. The Read roll uses Ob 1 (Step 1). Argue rolls produce net successes feeding the margin formula — no independent Ob target. [PP-112 / GAP-DS-01]
+- Memory bonus: +2D when citing a specific, named, verifiable claim (document, date, prior statement, named precedent). Binary. Available in any genre.
+- **Momentum:** 1 Momentum may be spent before rolling to add 1 automatic success to the Argue result. Declared before dice rolled. Non-Thread rule per params_core. [PP-112 / GAP-DS-17]
+- **Genre pivot:** No restriction on genre choice between exchanges. An orator may choose any genre each exchange. Genre weight applies normally — off-primary choices receive ×0.5 or ×1.5 weight per audience. [PP-112 / GAP-DS-07]
 
 **Step 4 — Resolve by Interaction Type:**
 
@@ -517,7 +520,7 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 - Conviction Track does not move toward winner.
 - Instead: place a Doubt Marker on the opponent.
 - Doubt Marker effect: opponent's next winning exchange has its effective_margin reduced by 2 before resistance is applied.
-- Only one Doubt Marker can be active at a time. If a second Obscuring win occurs while a Doubt Marker is already active, it replaces the existing marker (no stacking).
+- Only one Doubt Marker can be active at a time. If a second Obscuring win occurs while a Doubt Marker is already active, it replaces the existing marker (no stacking). Replacement intentional — new marker supersedes old, resetting the opportunity. Stacking not permitted. [PP-113 / GAP-DS-08]
 - Doubt Marker is consumed on use.
 
 **Step 5 — Forfeit actions:**
@@ -544,7 +547,9 @@ Roll Attunement alone (no History), TN 7, Ob 1.
   - Decisive win + Evidence genre (Past): winning faction's Mandate +1 in the domain of the cited precedent.
   - Decisive win + Character genre (Present): Disposition change with all witnesses; Reputation shift (GM-set magnitude).
   - Compromise (4–6): No Domain Echo. Stakes partially resolve per final TC position proportional to win threshold distance.
-- **Post-debate recovery:** All strain clears at scene end. Rattled and Spent states clear at scene end. Debate leaves no persistent character state (no wound equivalent). [PP-108] [DESIGN NOTE: This means debate has no next-scene consequence on the character sheet — see GAP-DS-16 for whether this is intended.]
+- **Post-debate recovery:** All strain and Concentration depletion clear at scene end. Spent clears at scene end. [PP-108]
+- **Debate Fatigue [PP-114 / PP-117]:** If an orator was Rattled at any point during the debate, they carry Debate Fatigue into this session. Effect: −1D on their next social roll (Argue, Corroborate, or Circles roll); consumed after that roll regardless of outcome. One instance per session regardless of how many debates triggered it. Clears at next session start if unused. [GAP-DS-16 resolved]
+- **Total Victory [PP-114]:** If the winning side's final TC position is ≥ 9 (Side A) or ≤ 1 (Side B), the victory is Total. Additional consequences: losing faction's primary orator gains Debate Fatigue regardless of Rattled status; winning orator gains +1 Momentum (if below cap 4). In BG Parliamentary Vote, Total Victory additionally applies Mandate −1 to the losing coalition's dominant faction for one season. [GAP-DS-03 resolved]
 
 ---
 
@@ -552,9 +557,11 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 
 The faction resonance table (§3.7) integrates with genre weights as follows:
 
-The ethical mode adjustments in §6.1 Step 2 ARE the faction resonance system. The +0.5 genre adjustment is the mechanical expression of institutional receptiveness. The ±1D modifiers described in §3.7 are superseded by the genre weight system — genre weight ×1.5 for the audience's preferred genre captures the +1D effect more consistently.
+The ethical mode adjustments in §6.1 Step 2 ARE the faction resonance system. The +0.5 genre adjustment is the mechanical expression of institutional receptiveness. The ±1D modifiers described in §3.7 are superseded by the genre weight system — genre weight ×1.5 captures the +1D effect more consistently.
 
-Exception retained from §3.7: Niflhel does not participate in formal debate structures. Niflhel characters have no faction resonance modifier and cannot benefit from audience composition. Their social toolkit is Reading Exchange, private manipulation, and Thread operations only.
+Exception retained from §3.7: Niflhel does not participate in formal debate structures. Their social toolkit is Reading Exchange, private manipulation, and Thread operations only.
+
+**Beliefs integration [PP-115]:** Winning an exchange while arguing for a position directly aligned with the orator's stated Belief counts as a Belief achievement for Momentum purposes (params_core: Momentum gained on Belief achieved). GM confirms alignment at exchange end. Maximum 1 Momentum per debate from Belief alignment. [GAP-DS-19 resolved / ED-054 resolved — PROVISIONAL]
 
 ---
 
@@ -574,6 +581,10 @@ Exception retained from §3.7: Niflhel does not participate in formal debate str
 | Royal Audience | 3 | Crown objects throughout | Halved for petitioner |
 | Church Tribunal | 1–5 (Inquisitor sets) | Inquisitor proposes throughout | Halved for accused. **Design note [PP-109]:** With TC starting at 6 (biased), boosted genre (Past ×1.5), and pool gap ≥ 4D, P(one-exchange resolution) ≈ 88%. GMs seeking dramatic Tribunal play should set exchange count ≥ 3 and start TC at 5 (neutral). Exchange count 1 is appropriate only for summary proceedings where the outcome is near-certain by intent. |
 | Casual Dispute | 1 | Initiator proposes | N/A (no tracker) |
+
+**Corroboration in asymmetric proceedings [PP-116]:** The accused or petitioner may have corroborators. In asymmetric proceedings, corroboration uses Bonds Ob 2 (vs Ob 1 symmetric). On failure: corroborator takes 1 strain. Advantaged party corroborates at standard Ob 1. [GAP-DS-18 resolved / ED-055 resolved — PROVISIONAL]
+
+**Asymmetric strain [PP-116]:** The advantaged orator accumulates 0 strain from Divergence exchanges (design intent confirmed — institution's rhetorical weight means even losing arguments do not exhaust the institutional position). CLASH strain applies normally when advantaged side loses. [ED-058 resolved — PROVISIONAL]
 
 ---
 
@@ -623,6 +634,119 @@ All items from §5.1 carry forward, plus additions from stress tests:
 - [EDITORIAL: Does resistance apply symmetrically to prosecution in asymmetric proceedings?] (stress test v2 Finding v2-06 — tentative answer: yes, confirm)
 - [EDITORIAL: Is Obscuring as pure denial / Doubt Marker the intended function?] (v2-P02 — confirm design intent)
 - [EDITORIAL: Niflhel social mode — what CAN they do if excluded from formal debate?] (stress test v2 Phase 4)
+## 6.11 Pre-Debate Preparation
+
+Available when an orator has deliberate preparation time before a formal debate. Not available for impromptu debates (Street Dispute, surprise confrontation).
+
+**Pool:** Attunement + most relevant History, TN 7, Ob 1.
+
+| Degree | Effect |
+|--------|--------|
+| Failure/Partial | No effect. |
+| Success | +1D on Exchange 1 Argue roll only. |
+| Overwhelming | +1D on Exchange 1 Argue roll AND Exchange 1 Read uses TN 6 instead of TN 7. |
+
+**Time requirement:** At least 1 hour of deliberate preparation. Rushed preparation (less than 1 hour): TN 8.
+
+**Cross-mode:** TTRPG and Hybrid only. In BG Parliamentary Vote, a faction that spent a Diplomacy domain action targeting the vote's subject in the preceding season gains +1D on their vote roll. [GAP-DS-04 resolved]
+
+---
+
+## 6.12 Multi-Party Debate — Coalition Structure
+
+Use when more than two orators debate. Niflhel characters are excluded from formal coalitions (see §6.6).
+
+**Declaration:** Each orator declares Side A or Side B at setup. No side-switching after declaration. Non-declaring orators are neutral observers (no mechanical participation).
+
+**Lead orator:** Each side nominates one Lead per exchange. Lead may change between exchanges. Any coalition member may lead.
+
+**Corroboration:** Non-lead coalition members may Corroborate the lead per Step 2b (§6.4). Maximum 1 corroborator per side per exchange regardless of coalition size. Only the first declared corroborator counts per exchange.
+
+**Composure and Rattled:** Tracked individually. A Rattled orator cannot lead or Corroborate. If all orators on one side are Rattled simultaneously, that side must Regroup for the next exchange.
+
+**Concentration:** Tracked individually. Only the Lead's Concentration depletes each exchange. Non-leading coalition members' Concentration is unchanged while they are not leading. This is the coalition endurance advantage — not greater movement per exchange, but sustained fresh leads when the opposing side is fatigued.
+
+**Initiative:** Transfers to the winning side. That side nominates who holds initiative for the next exchange.
+
+**Cross-mode:** In BG Parliamentary Vote (§6.13), factions pool their Mandate dice — this is the BG equivalent of coalition corroboration. [GAP-DS-06 resolved]
+
+**Design note:** Corroboration's +1D bonus is most impactful in CLASH and COMPETITION exchanges (where margin determines movement and strain) and negligible in DIVERGENCE exchanges (where the /2 halving in the effective_margin formula absorbs the bonus die). Coalitions benefit most from corroboration when they can force CLASH exchanges by reading the opponent's genre and matching it. [PP-117]
+
+---
+
+## 6.13 Board Game Parliamentary Vote
+
+Faction-level debate resolution for BG scale. Use when the scene is narrated at BG scale. To zoom into personal scale, use §6.14 (Hybrid Debate).
+
+### BG Vote Setup
+
+**Step 1 — Declare sides:** Each participating faction declares Side A or Side B. Non-declaring factions Abstain — they do not contribute pool dice.
+
+**Step 2 — Genre and weights:** Same as §6.1 Steps 1–2. Each side declares one genre for all its factions.
+
+**Step 3 — Resistance:** Base 0. Parliament is the institution — no external audience resistance. If a faction with Stability ≥ 6 Abstains: +1 to resistance (maximum +2 from all Abstains). This represents the political weight of their neutrality.
+
+**Step 4 — Starting TC:** Position 5 (neutral) unless prior lobbying shifted it. Each successful Diplomacy domain action targeting this vote in the preceding season: +1 to starting TC toward the lobbying side (maximum ±2 from lobbying).
+
+### BG Vote Resolution
+
+**Pool:** Sum of Mandate of all factions on each side. Roll combined pool TN 7.
+
+**effective_vote for each side:** floor(net_successes × genre_weight)
+
+**Movement:** If effective_vote > resistance → Δ = effective_vote − resistance. Apply both deltas; net TC movement = Δ_A − Δ_B.
+
+**Resolution:** TC ≥ 7 = motion passes; TC ≤ 3 = motion fails; TC 4–6 = motion referred to committee (no immediate change, may be raised next season). **Zero-zero ruling [PP-117]:** If both sides produce effective_vote = 0 (both fail to exceed resistance), motion is automatically referred to committee regardless of TC position. The TTRPG TIE rule does not apply at BG scale — there is no initiative holder.
+
+**Multi-round:** If no threshold reached after 1 round, each subsequent season's Parliament may vote again (1 Domain Action slot per participating faction). Factions may spend Diplomacy domain actions between rounds for +1D to their coalition's next roll (maximum +2D from lobbying).
+
+**Thread consequences:** Do not fire from BG Parliamentary Vote. Thread co-movement requires personal-scale argument. [Commensurate with R-65 mode restriction]
+
+**Total Victory in BG:** TC ≥ 9 or ≤ 1 after a round → losing coalition's dominant faction takes Mandate −1 for one season. [GAP-DS-05 resolved / ED-053 resolved]
+
+---
+
+## 6.14 Hybrid Debate
+
+Use when a named character is present and their personal skill matters, but faction-level forces are also in play.
+
+**Step 1 — BG layer:** Run one round of BG Parliamentary Vote (§6.13) using faction pools. Apply TC offset, capped at ±2 from neutral (5) regardless of actual Δ.
+
+**Step 2 — Set TTRPG starting TC:** Neutral 5 ± capped offset. If BG vote produced Δ = 2 toward Side A, TTRPG debate starts at TC = 7 (already at win threshold — Side B must push TC back below 7 during the personal debate).
+
+**Step 3 — TTRPG personal debate:** Run standard Formal Debate (3 exchanges) or Grand Debate (5 exchanges) per §6.4–§6.9 from the adjusted starting TC. **Exchange count is determined by the GM based on context (same as pure TTRPG), not by the number of BG vote rounds. These are independent parameters.** [PP-118]
+
+**Step 4 — Resolution:** Final TTRPG TC position determines outcome. Faction stat consequences apply as in TTRPG debates. Thread consequences may fire (personal-scale argument satisfies the requirement).
+
+**RS propagation:** If the TTRPG debate's winning genre triggers an RS change (§3.8), apply to TTRPG-layer RS. BG layer has no RS equivalent. Domain Echo affecting BG faction stats propagates through normal Domain Echo procedure. [ED-056 resolved / ED-057 resolved — PROVISIONAL]
+
+**Design intent:** The BG layer sets political environment (faction strength, prior lobbying); the TTRPG layer resolves the decisive personal moment. A weaker faction's named character can overcome institutional disadvantage through personal skill.
+
+---
+
+## 6.15 Thread Operations In and Around Debate
+
+### During Argue Step
+Practitioner Weaving bonus (R-65, §6.10) applies when the practitioner declares Weaving before rolling in Step 3. Visible to all observers.
+
+### Between Exchanges
+A practitioner may initiate a Thread operation between exchanges (after Step 7, before the next Step 1). Procedure:
+1. Declare at end of exchange (after GM records).
+2. Resolve Thread operation per threadwork rules (roll, dimensional auto-effects, Coherence check).
+3. Effects apply before next exchange's Read step.
+
+| Operation | Debate Effect |
+|-----------|--------------|
+| W-42 / audience-affecting Weave | Shifts audience Disposition (GM narrates). Does NOT change genre weights — weights are institutional, fixed at setup. May shift next Read roll difficulty by ±1 TN (GM discretion). |
+| R-65 continuation | If practitioner used R-65 during prior Argue step, bonus continues automatically into next exchange — no additional between-exchange action. |
+| Personal operations (Dissolution, Pulling, etc.) | No debate effect. Affects practitioner's own RS/Coherence only. |
+
+**Genre weights are fixed at setup.** Thread operations cannot change them mid-debate.
+
+**Church Heresy Investigation:** Observed Thread operation during debate (at any point) → Church may immediately file Heresy Investigation Domain Action (Ob 2 vs practitioner's faction Mandate). [GAP-DS-02 resolved]
+
+---
+
 ## 6.10 PRACTITIONER WEAVING IN DEBATES (R-65)
 
 Confirmed pool formula: **(Presence × 2) + History bonus, TN 7.**

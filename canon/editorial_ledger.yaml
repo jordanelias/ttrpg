@@ -1224,3 +1224,8 @@ editorial_decisions:
     related_ids: []
     supersedes: []
     tags: [board_game, hafenmark, reformed_settlement, diplomacy]
+
+# Gap-fill resolutions — 2026-04-02
+# ED-053/054/055/056/057/058/059: resolved by debate_system_redesign_v1.md v1.4/v1.5
+# Full decisions recorded in tests/sim_d_04_gap_fill_stress.md
+# All provisional decisions awaiting user confirmation per standard protocol

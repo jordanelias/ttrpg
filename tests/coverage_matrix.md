@@ -82,7 +82,16 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 | AUDIT-D-01 | Debate system Modes A–G — formula validation, number systems, interaction chains, gaps, principles, burden, cross-mode | TTRPG+BG+HYB | CROSS | Composure, Concentration, TC | All | Generic | All debate archetypes | Complete | FA-01/02/03/04 (P2 patched PP-101/102/103/104), GAP-DS-09–20, C-01/C-02/G-01/G-03 (P1), ED-053–059 logged |
 | SIM-D-03 | Debate subsystem G2 (Tribunal dominant strategy) + K1 (cross-mode delta) + K2 (transition) | TTRPG+BG+HYB | CROSS | Composure, TC | Church, Hafenmark | Generic Inquisitor, Generic Accused | Institutional authority, disadvantaged accused | Complete | G2-F-01 (P1 PP-109), K1-01/K1-02 (P1 ED-056/053), K2-F-02 (P1 PP-105 ext) |
 
+| SIM-D-04 | Debate gap-fill stress test — §§6.11-6.15, PP-112-118, BG Vote, Hybrid, Coalition, Beliefs, Total Victory | TTRPG+BG+HYB | CROSS | TC, Composure, Concentration, Debate Fatigue | Church, Hafenmark, Crown, Varfell | Himlensendt, Baralta, Klapp | Coalition, BG delegate, Hybrid | Complete | C-01/02/03 coalition confirmed; A.2-03 PP-117 (BG zero-zero); K2 PP-118 (Hybrid exchange count); SIM-DEBT-02 flagged |
+
 ## SIM-DEBT Register
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| SIM-DEBT-02 | SIM-D-04 | Corroboration in CLASH — full calibration needed. Stress test confirmed +1D is negligible in DIVERGE. CLASH-specific run needed to quantify corroboration impact on margin distributions and TC movement. | Open — low priority |
+
+*(old SIM-DEBT register entries above)*
+
 
 | ID | Source | Description | Status |
 |----|--------|-------------|--------|

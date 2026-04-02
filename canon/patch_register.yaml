@@ -1376,3 +1376,80 @@ patches:
   status: provisional
   applied_commit: "2026-04-02-audit-bg-sim-01"
   supersedes: PP-118
+
+- id: PP-112
+  date: 2026-04-02
+  severity: P2
+  description: "§6.4 Step 3: (1) Clarify Argue rolls have no fixed Ob — comparative margin-based. (2) Add Momentum spending on Argue rolls (non-Thread per params_core). (3) Clarify genre pivot is unrestricted between exchanges. [GAP-DS-01/17/07 resolved]"
+  finding_id: "GAP-DS-01/07/17 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 Step 3]
+  applied_to_version: "v1.4"
+  status: applied
+  applied_commit: "2026-04-02-gap-fill"
+
+- id: PP-113
+  date: 2026-04-02
+  severity: P3
+  description: "§6.4 OBSCURING WIN: confirm Doubt Marker replacement is intentional — stacking not permitted. [GAP-DS-08 resolved]"
+  finding_id: "GAP-DS-08 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 OBSCURING WIN]
+  applied_to_version: "v1.4"
+  status: applied
+  applied_commit: "2026-04-02-gap-fill"
+
+- id: PP-114
+  date: 2026-04-02
+  severity: P2
+  description: "§6.5: (1) Add Debate Fatigue — Rattled → −1D next social roll, consumed on use. (2) Add Total Victory — TC≥9/≤1 → additional Mandate−1 (BG) + Momentum+1 (TTRPG). [GAP-DS-03/16 resolved]"
+  finding_id: "GAP-DS-03/16 / AUDIT-D-01 / SIM-D-04"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.5]
+  applied_to_version: "v1.4"
+  status: applied
+  applied_commit: "2026-04-02-gap-fill"
+
+- id: PP-115
+  date: 2026-04-02
+  severity: P2
+  description: "§6.6: Add Beliefs integration — winning exchange aligned with stated Belief = Belief achievement for Momentum. 1 Momentum per debate cap. [GAP-DS-19 / ED-054 resolved — PROVISIONAL]"
+  finding_id: "GAP-DS-19 / ED-054"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.6]
+  applied_to_version: "v1.4"
+  status: applied
+  applied_commit: "2026-04-02-gap-fill"
+
+- id: PP-116
+  date: 2026-04-02
+  severity: P2
+  description: "§6.7: (1) Corroboration in asymmetric proceedings — accused may corroborate at Bonds Ob 2 (vs Ob 1 symmetric). (2) Confirm advantaged orator 0-strain in Divergence exchanges is intentional. [GAP-DS-18 / ED-055/058 resolved — PROVISIONAL]"
+  finding_id: "GAP-DS-18 / ED-055/058"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.7]
+  applied_to_version: "v1.4"
+  status: applied
+  applied_commit: "2026-04-02-gap-fill"
+
+- id: PP-117
+  date: 2026-04-02
+  severity: P2
+  description: "§6.5/6.12/6.13: (1) Debate Fatigue consumed after first roll use. (2) BG zero-zero → automatic committee referral, TTRPG TIE rule does not apply. (3) Corroboration CLASH-specialist design note added. [SIM-D-04 findings]"
+  finding_id: "A.2-03/A.3-01/C-02 / SIM-D-04"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.5, §6.12, §6.13]
+  applied_to_version: "v1.5"
+  status: applied
+  applied_commit: "2026-04-02-gap-fill"
+
+- id: PP-118
+  date: 2026-04-02
+  severity: P2
+  description: "§6.14: Hybrid debate exchange count is independent of BG vote round count — set by GM per context. [K2 finding / SIM-D-04]"
+  finding_id: "K2 / SIM-D-04"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.14]
+  applied_to_version: "v1.5"
+  status: applied
+  applied_commit: "2026-04-02-gap-fill"

@@ -1,42 +1,42 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_BG_AUDIT
-phase: Phase 10 — Board Game Mode Audit + Gap Fill + Simulation
+session_id: 2026-04-02T_DEBATE_GAP_FILL
+phase: Phase 9 — Debate gap fill + verification stress test
 status: COMPLETE
 
 completed:
-  - SIM-D-01: Debate stress test Modes A+D+J+L.
-  - SIM-D-02: Debate Mode C scenario.
-  - SIM-DEBT-01: RESOLVED.
-  - AUDIT-BG-01: Board Game Mode full mechanic audit (Modes A-G). Commits bf2d5c1.
-  - PP-112-122: Gap fills applied. ED-053-058 added to ledger.
-  - SIM-BG-01: Stress test PP-117 (collapse exit) + PP-118 (simultaneous catastrophe).
-  - PP-118-rev1: Step numbering fix from SIM-BG-01-03 (P1 finding). Commit 5bf24da.
-  - broken_dependency_checker: Exit 1 (false positive on glob patterns in propagation_map). Pre-existing issue. No new broken links introduced.
+  - All 19 debate design gaps (GAP-DS-01 through GAP-DS-20) resolved.
+  - ED-053 through ED-059: all resolved (provisional) in v1.4/v1.5.
+  - New sections added: §6.11 Pre-Debate Preparation, §6.12 Multi-Party Coalition,
+    §6.13 BG Parliamentary Vote, §6.14 Hybrid Debate, §6.15 Thread Operations.
+  - SIM-D-04: Stress test of all new mechanics. All pass. 2 minor patches PP-117/118.
+  - debate_system_redesign_v1.md: v1.5 — complete operative system across all 3 modes.
+  - SIM-DEBT-02 flagged: Corroboration in CLASH calibration needed (low priority).
 
-key_findings:
-  - 3 P1 gaps filled with provisional rules (collapse exit PP-117, simultaneous catastrophe PP-118, stale params PP-112)
-  - 9 P2 gaps filled or flagged with provisional rules (PP-113-122)
-  - PP-118 required immediate revision after simulation found step numbering error (SIM-BG-01-03)
-  - Collapse exit rule (PP-117) structurally sound; 2 P2 edge cases depend on ED-001 resolution
-  - ED-053-058 added to editorial ledger
+key_design_decisions:
+  - BG Parliamentary Vote: Mandate pools, resistance=0, genre weights apply, 1 round/season.
+  - Hybrid: BG vote shifts TC start ±2 (capped), then TTRPG decides.
+  - Coalition: rotation + corroboration = endurance advantage, not speed advantage.
+  - Beliefs: +1 Momentum on Belief-aligned win (1/debate cap) — commensurate with core.
+  - Debate Fatigue: −1D next social roll, consumed on use — lighter than wounds.
+  - Total Victory (TC≥9/≤1): Mandate−1 (BG) + Momentum+1 (TTRPG) consequences.
 
-pending_provisionals_requiring_user_confirmation:
-  - ED-053: Collapse exit (PP-117) — confirm exit procedure
-  - ED-054: Simultaneous catastrophe (PP-118 rev.1) — confirm Restoration pre-check + Step 12 co-victory ruling
-  - ED-055: PI thresholds (PP-115) — confirm PI 0 = dissolution + coup trigger
-  - ED-056: TC ceiling (PP-116) — confirm no mechanical effect above TC 80
-  - ED-057: BG Coherence absence (PP-120) — confirm intentional
-  - ED-058: Reformed Settlement reversal — OPEN, user decision required
+open_debate_items:
+  - SIM-DEBT-02: Corroboration in CLASH (low priority).
+  - GM reference card (F-C-06 P1 from AUDIT-D-01) — still not created.
+  - ED-051: NPC full debate stat blocks (Attunement, Focus, Poise, Bonds) — still open.
 
-open_blockers_unchanged:
-  - ED-001: Card-Hand system (P1-BLOCKER)
-  - ED-033: Commander bonus formula (P1)
-  - ED-036: Altonian unit stats (P1-BLOCKER, provisional active)
-  - ED-048: Ceiral canon name
+debate_version: v1.5 (complete)
 
-next_session: >
-  Present all provisional decisions (ED-053-058) to user for batch confirmation.
-  Then proceed to ED-001 (Card-Hand) design decision — prerequisite for BG compilation sync.
+next_action:
+  task: "GM reference card for debate — resolves F-C-06 P1 cognitive load. Then move to next system."
+  note: "Debate system now fully specified across all three modes. Confirm pivot direction."
+
+commits_this_session:
+  - 22a1f24: SIM-D-01 + PP-097-099
+  - 1641078a: debate v1.1 in-place patches
+  - f03b8ddf: SIM-D-02 + PP-100 + debate v1.2
+  - c012d2d4: AUDIT-D-01 + SIM-D-03 + PP-101-111 + debate v1.3
+  - [this]: SIM-D-04 + PP-112-118 + debate v1.5 + §§6.11-6.15 + all gaps resolved
 ```
