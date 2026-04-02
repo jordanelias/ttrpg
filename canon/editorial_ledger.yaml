@@ -876,3 +876,51 @@ editorial_decisions:
     supersedes: []
     stale_reason: null
     tags: [threadwork, combat, weaving, cost]
+
+  # ── SESSION 2026-04-02 SECOND PASS ─────────────────────────────────────────
+
+  - id: ED-047
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: design-file
+    source_file: designs/ttrpg/mechanical_tasks_and_patches.md
+    description: "Debate pool formula conflict: R-66 specifies (Presence × 2) + History; stress tests v1+v2 used Cognition + History. All calibration in compiled debate spec (Part 6) used Cognition pool. Confirm operative formula before further simulation."
+    full_flag_text: "[EDITORIAL: ED-047 Debate pool formula — (Presence × 2)+History (R-66) vs Cognition+History (stress tests)]"
+    status: open
+    priority: P1-BLOCKER
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+      - references/params_debate.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [debate, pool_formula, blocker]
+
+  - id: ED-048
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: design-file
+    source_file: compilation/v0.14/stage4_southernmost.md
+    description: "Character name 'Ceiral' is not canon. Appears in stage4, stage13, stage14, arcs 20–35, narrative chains, mass_battle_v3, patch_proposals. Requires canonical name before any further NPC or arc work referencing this character."
+    full_flag_text: "[EDITORIAL: ED-048 'Ceiral' is not a canon name — provide canonical replacement]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/stage4_southernmost.md
+      - compilation/v0.14/stage13_npcs.md
+      - compilation/v0.14/stage14_gm_tools.md
+      - designs/gm_ref_cp14/arcs/arcs_20_23_branching.md
+      - designs/gm_ref_cp14/arcs/arcs_24_27_branching.md
+      - designs/gm_ref_cp14/arcs/arcs_28_30_coherence_zero.md
+      - designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md
+      - designs/ttrpg/valoria_narrative_scenario_chains.md
+      - designs/mass_combat/mass_battle_v3.md
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [npc, naming, southernmost, canon]

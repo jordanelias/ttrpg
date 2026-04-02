@@ -22,7 +22,7 @@ All rolls use **d10**. Results per die:
 
 **Net successes** = (count of 7-9) + (2 × count of 10s) − (count of 1s). Net successes can be negative; negative net = 0 for degree purposes, treated as Failure (see Correction 3).
 
-**Majority-1s override (updated language):** If dice showing 1 outnumber dice showing 7-10 in the same roll, the result is **Catastrophic Failure** regardless of net success count: apply Failure consequences plus one additional consequence at GM discretion (a Standing loss, a stat −1, or a triggered faction instability).
+**Majority-1s override (updated language):** If dice showing 1 outnumber dice showing 7-10 in the same roll, the result is **Critical Failure** regardless of net success count: apply Failure consequences plus one additional consequence at GM discretion (a Standing loss, a stat −1, or a triggered faction instability).
 
 *Rationale for preserving the override: the subtraction already degrades outcomes, but the override captures the feel of something going profoundly wrong — multiple omen dice firing when the hand is weak. On d10 this is rare (P(1) = 10%, P(7-10) = 40% per die), which is appropriate: catastrophic outcomes should be uncommon, not endemic.*
 
@@ -74,11 +74,13 @@ Every action retains at least one point of resistance. This changes the effectiv
 | = Ob               | **Success**          |
 | Ob − 1             | **Partial**          |
 | 0                  | **Failure**          |
-| Negative (after subtraction) | **Failure** (treat as 0 for degree purposes; Catastrophic Failure if majority-1s rule also fires) |
-
-**Note on "Majority 1s" and negative net:** If a roll produces negative net successes through 1s alone (no 7-10 at all), this is functionally identical to the majority-1s catastrophic condition. Apply Catastrophic Failure consequences.
+| Negative (after subtraction) | **Failure** (treat as 0 for degree purposes; Critical Failure if A majority-1s result (more 1s than 7-10 results) produces a standard Failure with no additional consequence. The degree table applies normally (net ≤ 0 = Failure). Apply Critical Failure consequences.
 
 ---
+
+
+
+> **DESIGN DECISION (2026-04-02):** Catastrophic Failure / majority-1s override has been struck from the system. All rolls resolve through the standard degree table only. Low-pool results produce Failure; they do not produce an additional consequence category. The majority-1s rule is removed.
 
 # PART TWO: INCONSISTENCIES AND CONTRADICTIONS
 
@@ -427,13 +429,13 @@ Varfell VTM 3 is in T9 (adjacent to T3). Trajectory Choice condition met.
 - Next season (11): **Klapp Discovery Event Roll.** Church: Mandate 5 vs Ob 2.
   - Roll A (5d10): 8, 8, 7, 3, 9 → 4 net. Success. Klapp suspects. Church player notes privately.
     - Church player: Klapp has developed awareness. Trajectory B continues.
-    - **Season 12:** Second Klapp Discovery Roll. Roll: 5d10: 4, 2, 1, 6, 3 → -1 net. Catastrophic: majority 1s? Count: one 1, zero 7-10s. One 1 > zero hits. **Catastrophic Failure / Majority 1s.** Heresy Protocol fires.
+    - **Season 12:** Second Klapp Discovery Roll. Roll: 5d10: 4, 2, 1, 6, 3 → -1 net. Catastrophic: majority 1s? Count: one 1, zero 7-10s. One 1 > zero hits. **Critical Failure / Majority 1s.** Heresy Protocol fires.
     - Himmensendt must Prosecute or Protect Klapp.
       - **Prosecute:** Church Stability −1. AER −1. TC −2. Klapp removed.
       - **Protect:** Himmensendt Renown −1. Klapp Active 1 more season.
     - NPC AI: Church Priority 1 is Assert (TC 37 < 50 — no mandatory Assert yet). Priority 3: Govern T3. Protecting Klapp doesn't conflict with either. NPC AI protects. Himmensendt Renown −1.
     - Season 13: Third Discovery Roll. 5d10: 9, 7, 7, 5, 10 → 1+1+2 = 4 net. Overwhelming. Klapp has independently awakened to Thread sensitivity. **Klapp's TS is now canonically Stirring.** This is a major narrative event. GM records: Klapp joins the world's covert practitioners.
-  - Roll B (alternative failure): 5d10: 2, 3, 5, 1, 4 → -1 net. Catastrophic Failure immediately at Season 11. Heresy Protocol fires early.
+  - Roll B (alternative failure): 5d10: 2, 3, 5, 1, 4 → -1 net. Critical Failure immediately at Season 11. Heresy Protocol fires early.
 
 **BRANCH C: Church chooses Trajectory C (Collaborate — only if Varfell VTM ≥ 4 OR Warden Cooperation ≥ 2)**
 *Assume Varfell VTM 4 in this branch.*
@@ -633,7 +635,7 @@ Alternatively, add an additional TC gain source: "Church wins any contested Inst
 ## PATCH P-12 — Majority 1s Rule: d10 Language
 **Affected section:** B3 Core Mechanic.
 Old: "If more dice show 1 than show 4+, result is Failure regardless of other dice."
-New: "If more dice show 1 than show 7-10 in the same roll, result is **Catastrophic Failure**: apply normal Failure consequences plus one additional immediate consequence (GM discretion: −1 Standing, −1 Stability, or one stat degradation). Net successes are still calculated for record purposes but do not mitigate the Catastrophic result."
+New: "If more dice show 1 than show 7-10 in the same roll, result is **Critical Failure**: apply normal Failure consequences plus one additional immediate consequence (GM discretion: −1 Standing, −1 Stability, or one stat degradation). Net successes are still calculated for record purposes but do not mitigate the Catastrophic result."
 
 ---
 
@@ -918,7 +920,7 @@ All rolls: pool = relevant faction stat (1–7). Dice: **d10**.
 
 **Net successes** = (7-9 count) + (2 × 10s count) − (1s count). Net cannot fall below 0 for degree purposes; treat negative net as 0.
 
-**Majority-1s override:** If dice showing 1 outnumber dice showing 7-10: **Catastrophic Failure** — apply Failure consequences plus one immediate additional consequence at GM/player discretion.
+**Majority-1s override:** If dice showing 1 outnumber dice showing 7-10: **Critical Failure** — apply Failure consequences plus one immediate additional consequence at GM/player discretion.
 
 **Ob minimum = 1.** No Ob may fall below 1 regardless of stacking modifiers. Excess reduction is discarded.
 
@@ -994,17 +996,17 @@ Confirm which threshold is canonical for BG: (a) keep "Ob + 1 surplus" as the BG
 
 ---
 
-## ST-BG-02 — Catastrophic Failure Rate at Pool 2
+## ST-BG-02 — Critical Failure Rate at Pool 2
 **[DESIGN NOTE]**
-At pool 2, majority-1s triggers approximately 11% of the time (1% from 2 ones; 10% from 1 one with 0 hits). Factions at low stats (Restoration Mandate 2, Revolution Military 2) hit Catastrophic Failure at a meaningful rate on foundational actions. This is a fragility signal for weak factions. If intentional, no rule change required; if not, see Catastrophic Failure rules.
+At pool 2, majority-1s triggers approximately 11% of the time (1% from 2 ones; 10% from 1 one with 0 hits). Factions at low stats (Restoration Mandate 2, Revolution Military 2) hit Critical Failure at a meaningful rate on foundational actions. This is a fragility signal for weak factions. If intentional, no rule change required; if not, see Critical Failure rules.
 
 ---
 
-## ST-BG-03 — Catastrophic Failure Replaces Failure Degree
+## ST-BG-03 — Critical Failure Replaces Failure Degree
 **[PATCH P-33]**
-Add the following sentence to the Degree Table section (CORRECTION 3) and to the Catastrophic Failure entry wherever it appears in B3:
+Add the following sentence to the Degree Table section (CORRECTION 3) and to the Critical Failure entry wherever it appears in B3:
 
-> "Catastrophic Failure is a fifth degree that replaces the Failure degree result. It is not applied in addition to Failure — when majority-1s fires, the Failure degree does not also apply. The Catastrophic consequence supersedes and replaces the standard Failure outcome for that roll."
+> "Critical Failure is a fifth degree that replaces the Failure degree result. It is not applied in addition to Failure — when majority-1s fires, the Failure degree does not also apply. The Catastrophic consequence supersedes and replaces the standard Failure outcome for that roll."
 
 ---
 
@@ -1055,7 +1057,7 @@ Append to PATCH P-31 (VTM: Once-Per-Season Advancement Cap):
 
 ## ST-BG-10 — Standing Tokens
 **[GAP ST-BG-10]**
-Standing Tokens are referenced in the cognitive load analysis (load 2/10) and as a possible Catastrophic Failure consequence (Standing loss) but are never defined in the B3 Core Mechanic text. What is their range (0–N)? What do they do? When are they spent vs lost? This definition is likely in B-sections not included in the provided document. Flagged as a definitional dependency.
+Standing Tokens are referenced in the cognitive load analysis (load 2/10) and as a possible Critical Failure consequence (Standing loss) but are never defined in the B3 Core Mechanic text. What is their range (0–N)? What do they do? When are they spent vs lost? This definition is likely in B-sections not included in the provided document. Flagged as a definitional dependency.
 
 ---
 

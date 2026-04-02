@@ -2,7 +2,8 @@
 
 ## Source: Prior Investigation + Continuation
 ## Model: Opus 4.6
-## Status: DESIGN PROPOSAL — requires editorial approval
+## Status: PARTS 1–4 = DESIGN REFERENCE ONLY (quaestio structure deprecated). PART 6 = OPERATIVE SYSTEM.
+## See Part 6 for all playable mechanics.
 
 ---
 
@@ -366,6 +367,37 @@ Parts 1–4 document the quaestio-based design (five-phase exchange). The stress
 
 ---
 
+## 6.0 Core Principle: Format Follows Context
+
+The debate system does not have a fixed format. Exchange count, role structure, audience weight, and available actions all vary based on the institutional context and whether an audience is present. The GM sets the format at setup; players know it before the debate begins.
+
+**What varies by context:**
+
+| Variable | Private Negotiation | Parliamentary Session | Church Tribunal | Street Dispute |
+|----------|--------------------|-----------------------|-----------------|----------------|
+| Exchange count | 1–2 | 4–6 | 1–5 (Inquisitor sets) | 1 |
+| Role structure | Symmetric, alternating | Symmetric, alternating | Asymmetric (Institution proposes throughout) | Initiator proposes |
+| Audience | None (or named third party) | Faction delegates — weighted by composition | Church judges only | Bystanders (low resistance) |
+| Audience resistance | 0 (no institutional inertia) | Average faction Stability − 1 | Halved for accused | 0 |
+| Available actions | All | All | Accused cannot Call for Division | All |
+| Thread consequences | Only on Unmask or extreme outcome | Standard | Standard | Only on Unmask |
+| Conviction Track | Optional (or GM-narrated) | Active | Active (starts biased) | Optional |
+
+**Audience presence changes the system fundamentally:**
+- With audience: Conviction Track active. Genre weights apply. Audience resistance set by institutional composition.
+- Without audience: No Conviction Track. Winner determined by exchange count. Strain still accumulates — the stakes are relational, not political.
+
+**The GM declares at setup:**
+1. Exchange count
+2. Role structure (symmetric / asymmetric / who proposes)
+3. Audience present? If yes: faction composition, resistance, starting track position
+4. Available actions (any restrictions for this institutional context)
+5. Stakes
+
+This declaration is made before the first exchange. Players may not request format changes mid-debate.
+
+---
+
 ## 6.1 GM Setup (Before Debate Begins)
 
 **Step 1 — Determine Primary Genre from the Question:**
@@ -579,3 +611,16 @@ All items from §5.1 carry forward, plus additions from stress tests:
 - [EDITORIAL: Does resistance apply symmetrically to prosecution in asymmetric proceedings?] (stress test v2 Finding v2-06 — tentative answer: yes, confirm)
 - [EDITORIAL: Is Obscuring as pure denial / Doubt Marker the intended function?] (v2-P02 — confirm design intent)
 - [EDITORIAL: Niflhel social mode — what CAN they do if excluded from formal debate?] (stress test v2 Phase 4)
+## 6.10 UNRESOLVED PATCH CONFLICT — ED-047
+
+**[EDITORIAL: requires user approval — ED-047 Debate pool formula conflict]**
+
+`mechanical_tasks_and_patches.md` R-66 (2026-03-30) specifies debate pool = **(Presence × 2) + History**.
+
+`debate_stress_test_v1.md` + `debate_stress_test_v2.md` used **Cognition + History bonus**.
+
+These produce different characters. Presence × 2 pool makes commanding speakers dominant; Cognition + History makes learned arguers dominant. The stress tests calibrated all strain, Composure, Conviction Track, and focus defence values against the Cognition pool. Rerunning with Presence × 2 would require re-calibration of all these values.
+
+Confirm which formula is operative before any further simulation.
+
+R-65 (practitioner Weaving bonus in debates = TPS ÷ 3) is compatible with either formula and can be applied once the pool is confirmed.

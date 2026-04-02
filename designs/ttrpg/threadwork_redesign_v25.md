@@ -325,7 +325,7 @@ Before Weaving in a politically volatile context, the GM should ask: is this con
 
 **Requirements:** TS 70+ · RS ≤ 60 (substrate must be stressed enough for temporal depth to be accessible — in a pristine world, the temporal weight is too firmly actualised to pull against) · Diagnosis mandatory
 
-**Foundational-scale Past-Oriented Pulling:** Displacing a Foundational event (the Einhir Catastrophe, a civilisation-ending collapse, a foundational institution's origin) requires all standard prerequisites plus: the Einhir ritual framework (§9.15) — the intentionality required to reach Foundational temporal depth cannot be formed without it. Add +2 Ob surcharge to the recency Ob (Ob 7 recency + 2 = Ob 9 for a generational Foundational event). RS consequence ×3 on all outcomes (Success: RS −9 minimum; Failure: snap-back Wound + RS −6 minimum). This is a near-mythic act — maximum conceivable practitioner achieves ~5% success — but it is mechanically possible. It is a legitimate campaign endpoint: the thing the Einhir could not do and the thing a generation of practitioners might spend a campaign attempting.
+**Foundational-scale Past-Oriented Pulling:** Displacing a Foundational event (the Einhir Catastrophe, a civilisation-ending collapse, a foundational institution's origin) requires all standard prerequisites plus: the Einhir framework (§9.15) — the intentionality required to reach Foundational temporal depth cannot be formed without it. Add +2 Ob surcharge to the recency Ob (Ob 7 recency + 2 = Ob 9 for a generational Foundational event). RS consequence ×3 on all outcomes (Success: RS −9 minimum; Failure: snap-back Wound + RS −6 minimum). This is a near-mythic act — maximum conceivable practitioner achieves ~5% success — but it is mechanically possible. It is a legitimate campaign endpoint: the thing the Einhir could not do and the thing a generation of practitioners might spend a campaign attempting.
 **Pool:** Spirit + relevant History bonus + TPS÷2 (round down)
 **TN:** 7
 
@@ -382,7 +382,7 @@ Before Weaving in a politically volatile context, the GM should ask: is this con
 
 **Reversing a Lock:** Pulling at Ob = (original practitioner's TS ÷ 10, round up) − 2, minimum Ob 1. Successful release: RS +1 per season the Lock persisted (max +5), as the substrate decompresses.
 
-**Dissolution of a Lock:** Tears the locked configuration rather than unwinding it. No RS release bonus (unlike Pulling — the configuration was torn, not cleanly unwound). Dissolution of a Permanent Lock (4+ seasons, substrate adapted) automatically fails — the configuration no longer exists as a discrete target; it has become part of the substrate's structure. Permanent Locks can only be addressed via the Einhir ritual framework. A novice Lock (TS 30) is trivially reversible (Ob 1); an expert Lock (TS 100) requires a specialist (Ob 8). Long-standing Lock release: RS +1 per season the Lock persisted (max +5). If 4+ seasons: Shifting Object risk from sudden configurational release.
+**Dissolution of a Lock:** Tears the locked configuration rather than unwinding it. No RS release bonus (unlike Pulling — the configuration was torn, not cleanly unwound). Dissolution of a Permanent Lock (4+ seasons, substrate adapted) automatically fails — the configuration no longer exists as a discrete target; it has become part of the substrate's structure. Permanent Locks can only be addressed via the Einhir framework. A novice Lock (TS 30) is trivially reversible (Ob 1); an expert Lock (TS 100) requires a specialist (Ob 8). Long-standing Lock release: RS +1 per season the Lock persisted (max +5). If 4+ seasons: Shifting Object risk from sudden configurational release.
 
 ### Dissolution — Unable to Be
 
@@ -436,10 +436,10 @@ This requires a different intentionality than thread operations. The practitione
 | Micro-Gap (same scene) | 3 | 50+ |
 | Standard Gap (1 session – 1 season) | 5 | 50+ |
 | Entrenched Gap (1+ seasons) | 6 | 70+ |
-| Catastrophic Gap (3+ seasons) | 7 | 70+; requires Einhir ritual framework or collective operation |
-| Locked Zone border | 8+ | 70+; requires Einhir ritual framework |
+| Catastrophic Gap (3+ seasons) | 7 | 70+; requires Einhir framework or collective operation |
+| Locked Zone border | 8+ | 70+; requires Einhir framework |
 
-**Design note — Catastrophic Gaps and Locked Zones:** These are Calamity-tier damage. Solo Mending at Ob 7–8 is intentionally near-impossible (~40–58% even at maximum pool). These sites require collective operations, the Einhir ritual framework, or multi-season Mending arcs. This is the Einhir Catastrophe's legacy made mechanical: the damage they caused cannot be reversed by a single practitioner acting alone.
+**Design note — Catastrophic Gaps and Locked Zones:** These are Calamity-tier damage. Solo Mending at Ob 7–8 is intentionally near-impossible (~40–58% even at maximum pool). These sites require collective operations, the Einhir framework, or multi-season Mending arcs. This is the Einhir Catastrophe's legacy made mechanical: the damage they caused cannot be reversed by a single practitioner acting alone.
 
 | Degree | Outcome |
 |---|---|
@@ -993,9 +993,9 @@ RS consequences on Partial and Failure results scale with operation scale. The b
 
 Overwhelming and Success RS effects remain as per individual degree tables (these are controlled outcomes where the unintelligible response is proportional to the operation's directed scope, not to scale of failure).
 
-## 9.15 Einhir Ritual Framework Definition (P-26)
+## 9.15 Einhir Framework Definition (P-26)
 
-"Einhir ritual framework" appears as a prerequisite for Locked Zone border Mending (Ob 8+). It requires all three of:
+"Einhir framework" appears as a prerequisite for Locked Zone border Mending (Ob 8+). It requires all three of:
 
 1. **Knowledge:** The practitioner has Diagnosed the Locked Zone's structure (requires a prior Southernmost expedition Diagnosis scene or equivalent scholarly research via Einhir Texts).
 2. **Technique:** The practitioner possesses at least one Einhir Text technique applicable to Mending (e.g., "Settling," "Restoring," or equivalent GM-created technique).
@@ -1109,3 +1109,78 @@ The Leap round creates a real tactical vulnerability: the practitioner commits a
 **[CROSS-REFERENCE]**
 mass_battle_v3.md §A.10 references "Coherence" as a practitioner-specific stat. This is the Coherence track defined in Part 3 of this document (10→0). The stat in §A.10 is the practitioner's personal Coherence track, not a separate unit stat. Add to §A.10 of mass_battle_v3.md:
 > "Coherence referenced here is the practitioner's personal Coherence track (see threadwork_redesign_v25.md Part 3). It is not a unit stat. 'Coherence auto-cost −1/op' means each Thread operation in mass battle depletes the practitioner's Coherence by 1. 'Severed (Coherence 1): +2 Ob' refers to the Coherence Threshold from §3.3 of the threadwork document."
+
+---
+
+# PART ELEVEN: MECHANICAL PATCHES — R-54 THROUGH R-68
+## Source: designs/ttrpg/mechanical_tasks_and_patches.md (2026-03-30)
+## Applied to threadwork_redesign_v25.md: 2026-04-02
+## Note: These patches target stage3_thread_operations.md (empty/stale in v0.14).
+## Since designs/ is the working layer, applied here directly.
+
+## R-54 — Personal Pull Duration Corrected
+Duration ladder shifted (Pull requires re-application at scene scale):
+- 0 surplus successes = 3 rounds (was: end of scene)
+- 1 surplus success = end of scene (was: end of session)
+- 2+ surplus = end of session (was: until next seasonal accounting)
+- 3+ surplus = until next seasonal accounting
+
+Apply to §2.4 Pulling — Past-Oriented Pulling duration table.
+
+## R-55 — Personal Dissolution Ob (Living Target)
+For Dissolution targeting a living being at Personal scale:
+> Ob = target's Endurance + target's Spirit + armour modifier (Light+1, Medium+2, Heavy+3)
+> Standard success = Partial (Shifting Object, ~50% HP damage).
+> Overwhelming required for immediate incapacitation.
+Replaces: "same as Lock" for Personal-scale living-target Dissolution.
+
+## R-56 — Healing Overweave: +2 Ob per operation (not +1)
+Healing operations (W-08 and variants) use accelerated Overweave:
+Sequence: 1st heal Ob 1, 2nd Ob 3, 3rd Ob 5, 4th Ob 7.
+Rationale: living configuration adapts and becomes less responsive to repeated intervention.
+General overweave (+1 Ob) unchanged for non-healing operations.
+
+## R-57 — Pull Pool Floor = 5D Minimum
+Minimum 5 dice before rolling any Pull. Below 5D (from wounds, degradation, low stats):
+practitioner cannot Pull. Lock is still available (does not require the same sustained openness).
+Apply to §2.4 Pulling, eligibility section.
+
+## R-58 — Mass Lock RS Drain Cap: −1/round per scene
+Regardless of concurrent active Locks: RS drain from Locks cannot exceed −1/round in combat
+or −1/scene in non-combat. Multiple Locks do not stack RS drain within a scene.
+Seasonal drift is unaffected (each active Lock contributes independently at Accounting).
+Apply to §3.2 Coherence Reduction / Lock chronic consequences.
+
+## R-63 — Locked Institution Chronic RS Drift: Variable by Domain Type
+Replaces uniform −1 RS/season for locked institutions:
+- Static domain (frozen process, unchanging institution): −0 RS/season
+- Slow-change domain (seasonal/yearly evolution): −1 RS/season
+- Dynamic domain (active contestation, living relationship): −2 RS/season
+GM determines domain type when Lock is applied.
+
+## R-64 — Mode 3 Entities: Immune to Conventional Dissolution
+Threadcut beings (Mode 3) cannot be Dissolved by standard means.
+Conventional Dissolution against Mode 3 always yields Partial (Shifting Object) regardless of roll.
+Overwhelming success required for true Dissolution effect.
+Apply to §2.4 Dissolution, and §6 Threadcut Beings.
+
+## R-67 — Fortification Adds to Structural Pulling Ob
+When Pulling a structural/territorial configuration that includes a fortified site (Fortification ≥ 1):
+add the Fortification level to the Ob. Physical reinforcement increases actualization.
+Apply to §2.4 Pulling, Foundational/Structural scale section.
+
+## R-68 — Accounting Gate Confirmed (No TC Change Bypass)
+TC changes apply at seasonal accounting. No mechanism bypasses this gate.
+Confirmation only — no text change to threadwork. Note in stage5_clocks.md accounting section.
+
+## DEBATE-RELATED (for cross-reference only — apply to debate_system_redesign_v1.md)
+R-65: Practitioner Weaving bonus in Debates = TPS ÷ 3 (TS 30=+1D, TS 60=+2D, TS 90=+3D).
+    Practitioner must declare before rolling. Visible. Church may call Heresy Investigation.
+    Coherence check Ob 1 after exchange.
+R-66: Debate pool formula → (Presence × 2) + History.
+    [CONFLICT: stress tests v1+v2 used Cognition + History. See ED-047.]
+
+## NOT APPLIED HERE (wrong document):
+R-59/R-60: Great Unwinding/Great Working — narrative prereqs TBD. Note in stage15_spell_catalog.
+R-62: W-51 Mandate Reinforcement Ob 4→6. Apply to stage15_spell_catalog.md.
+MT-01: Faction unit rosters. Apply to bg_v05_simulation_and_patches.md.

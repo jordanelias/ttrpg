@@ -3,6 +3,8 @@
 ## Purpose: Single-source map of every committed file → game system → status
 ## Maintained by: valoria-orchestrator skill (update on every commit that adds/modifies a file)
 ## Format: path | systems | type | status | depends_on | referenced_by
+## Three-mode framing: ALL systems stated as TTRPG baseline → Hybrid → Board Game.
+## TTRPG = source layer. Hybrid = bridge. Board Game = abstraction. designs/ = working layer. compilation/ = snapshot.
 
 ---
 
@@ -91,6 +93,8 @@
 
 | File | Systems | Status | Depends On | Notes |
 |------|---------|--------|------------|-------|
+| **designs/combat/combat_design_v1.md** | **ALL** | **CURRENT** | stage1, stage2, mass_battle_v3 | **NEW 2026-04-02. Working combat design with three-mode framing. Replaces stage8 as design-layer source. PP-086–092 incorporated.** |
+
 | **designs/mass_combat/mass_battle_v3.md** | **ALL** | **CURRENT** | stage8_combat, threadwork_v25 | **Operative mass battle spec. ST-MB patches added 2026-04-02. ST-MB-02 (Coherence) CRITICAL GAP.** |
 
 ---
@@ -275,3 +279,40 @@ Files in `deprecated/` are not in active use. Do not reference in new design wor
 ---
 
 *Index maintained by valoria-orchestrator. Update this file in the same commit as any file that changes its status, system classification, or dependency relationships.*
+
+---
+
+## PROPAGATION-PENDING: APPROVED DECISIONS NOT YET IN WORKING FILES
+
+These files contain confirmed design decisions that have not been propagated to the appropriate working design documents.
+
+| File | Decisions Pending Propagation | Target Files |
+|------|-------------------------------|--------------|
+| designs/ttrpg/batch_ad_resolutions.md | G-053 (Approach Training 8CP), G-040 (Inspiration half-CP refund), G-054 (Circles single track confirmed), G-042 (No CP for faction founding), G-038 (Treaty betrayal table — **no home file yet**), G-044 (Altonian vassalage spec — **not yet designed**), Varfell collection transfer | threadwork_v25 (G-053), stage2/characters (G-040), faction design files (G-038, G-044) |
+| designs/ttrpg/succession_mechanic.md | Almud succession mechanic — approved, no working design file | Needs: designs/ttrpg/political_mechanics.md or similar |
+| designs/ttrpg/church_territorial_seizure.md | TC 80 per-territory roll — approved, integrates with G-050 | bg_v05 (TC 80 section already has this; verify parity) |
+| designs/hybrid/hybrid_gaps_resolved.md | 17 hybrid gaps resolved — ready for integration | stage11_scale_transitions, bg_v05 §B.5, designs/hybrid/ |
+| designs/ttrpg/generation_tasks_gt01_gt02_gt03.md | Status: "requires user review" — not integrated | Pending user review before any propagation |
+| designs/ttrpg/mechanical_tasks_and_patches.md | R-54–R-68 applied to threadwork_v25 ✓; MT-01 applied to combat_design_v1 ✓; R-65/R-66 blocked by ED-047 | stage15_spell_catalog (R-55,56,59,60,62,63,64); stage5_clocks (R-68) |
+
+## DESIGNS/ FILES — STATUS SUMMARY
+
+| File | Status | Notes |
+|------|--------|-------|
+| designs/ttrpg/SUPERSEDED.md | INFRA | Marks superseded files |
+| designs/ttrpg/batch_a_designs.md | REFERENCE | Session 4 gap designs — review if gaps are still open |
+| designs/ttrpg/batch_bc_designs.md | REFERENCE | Session 4 military+political gap designs |
+| designs/ttrpg/batch_d_designs.md | REFERENCE | Session 4 faction identity packages |
+| designs/ttrpg/batch_e_designs.md | REFERENCE | Session 5 BG design briefs — mostly in bg_v05 |
+| designs/ttrpg/batch_f_designs.md | REFERENCE | Session 5 hybrid+endgame — check against hybrid_gaps_resolved |
+| designs/ttrpg/batch_ad_resolutions.md | PROPAGATION-PENDING | See table above |
+| designs/ttrpg/generation_tasks_gt01_gt02_gt03.md | AWAITING USER REVIEW | Do not propagate without user sign-off |
+| designs/ttrpg/edeyja_npc.md | WORKING | Canonical NPC (name working, ED-048 adjacent). In stage13. |
+| designs/ttrpg/lowenritter_faction_card.md | WORKING | Approved. Verify parity with bg_v05 faction section. |
+| designs/ttrpg/succession_mechanic.md | PROPAGATION-PENDING | Approved. No home in working design files yet. |
+| designs/ttrpg/church_territorial_seizure.md | VERIFY | Approved. Check parity with bg_v05 TC 80 section. |
+| designs/ttrpg/valoria_emergent_scenarios.md | WORKING | Emergent scenario map vs compiled ruleset. |
+| designs/ttrpg/valoria_narrative_scenario_chains.md | WORKING | NPC arcs. Note: contains "Ceiral" references (ED-048). |
+| designs/hybrid/hybrid_gaps_resolved.md | PROPAGATION-PENDING | 17 gaps resolved. Not yet integrated into stage11 or bg_v05. |
+| designs/gm_ref_cp14/* | WORKING | All arc and dashboard files. Arcs 32,34,35 not yet simulated. |
+
