@@ -49,3 +49,64 @@ Per principle: PRESENT / ALTERED (with justification) / ABSENT
 - Each mode produces standalone md. Modes run independently or as suite.
 - All findings: P1/P2/P3 severity. P1 → auto-append to gap register.
 - No editorial judgment — mechanical analysis only.
+
+
+### F — Playtest Burden Analysis
+Per mechanic or procedure: measure cost imposed on players and GM at the table.
+
+**Per mechanic, produce:**
+
+| Field | Content |
+|-------|---------|
+| Estimated resolve time | Human time in seconds for a typical instance (roll + interpret + apply) |
+| Mandatory lookups | Tables/rules player must consult to resolve (count) |
+| Parallel tracking burden | How many values must be held in working memory simultaneously |
+| Decision points | Number of choices player makes per instance |
+| Cognitive load rating | Low / Medium / High (formula: lookups + tracking + decisions; ≥5 = High) |
+
+**Flag:** Any mechanic with High cognitive load or >90s resolve time → P2 finding. Any that require >2 parallel lookups → P1 if they occur every round.
+
+**Output:** `playtest_burden.md` — `| Mechanic | Time(s) | Lookups | Tracking | Decisions | Load | Flag |`
+
+### G — Cross-Mode Consistency
+Test that each mechanic behaves correctly when the session switches mode (TTRPG → BG → HYB).
+
+**Per mechanic with mode tags:**
+1. Identify which modes it appears in.
+2. For each mode pairing (TTRPG↔BG, TTRPG↔HYB, BG↔HYB): does the mechanic change? If yes — is the change documented? Is the transition procedure defined?
+3. Check transition point mechanics specifically: what triggers a mode switch, what state is preserved, what resets.
+
+**Flag:** Mechanic present in 2+ modes with no documented transition procedure → P1. Mechanic behaves differently across modes with no explanation → P2.
+
+**Output:** `cross_mode_audit.md` — `| Mechanic | Modes | Transition Defined? | State Preserved? | Flag |`
+
+### H — Flowchart Generation
+Produce a text-based branching flowchart for a mechanic or procedure.
+
+**Format (Mermaid):**
+```
+flowchart TD
+  A[Trigger condition] --> B{Decision point}
+  B -->|Yes| C[Outcome A]
+  B -->|No| D[Outcome B]
+  C --> E{Another gate?}
+  ...
+```
+
+Include: all decision points, all dice roll branches (succeed/partial/fail), all state changes per branch, all exit conditions. Every leaf node must be a terminal state or loop-back label.
+
+**Flag inline:** Any branch with no defined resolution (dead branch → P1), any loop with no exit condition (regression → P1).
+
+**Output:** Mermaid block, inline unless >60 nodes (then `.md` file).
+
+### I — Precedent Comparison
+Compare a mechanic against named reference games. Read `designs/` for any prior game analysis already done (bg_improvement_* files contain 33-game analysis).
+
+**Per mechanic under review:**
+1. Identify closest analogue in 1–3 reference games.
+2. State: how reference game resolves the same problem, what they get right, what Valoria's version does differently.
+3. Flag: if Valoria's version is strictly worse on cognitive load OR outcome variance without a philosophical justification → P2.
+
+**Reference pool (priority):** Burning Wheel, Blades in the Dark, Root, Pax Pamir, Twilight Imperium, Mage Knight, Spirit Island, Arcs, Anachrony, Oath, Barrage, Concordia, Nemesis, The Quiet Year, HoMM3, Crisis.
+
+**Output:** inline table `| Mechanic | Closest Analogue | Game | Valoria Difference | Flag |`
