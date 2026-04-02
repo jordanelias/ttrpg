@@ -1,38 +1,41 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_TTRPG_AUDIT_CLOSED
-phase: SESSION CLOSED
-status: COMPLETE
+session_id: 2026-04-02T_ACRONYM_EXPANSION
+phase: Phase 12 — Full acronym expansion + glossary
+status: CLOSED
 
-completed_this_session:
-  - AUD-TTRPG-01: TTRPG mode mechanic audit Modes A–G. 11 P1s, 14 P2s, 4 P3s. Output: tests/aud_ttrpg_01.md.
-  - PP-164: params_core — attribute range 1–7, 10 attributes defined (Memory/Focus), derived scores table.
-  - PP-165: params_combat — Health formula fixed (End+6), Stamina minimum=1, O/D allocation procedure, wound dual-penalty quantified.
-  - PP-166: params_threadwork — Thread Depth (TD) removed (phantom stat), RS=0 lockout gate, RS ceiling=100, Coherence start=10 confirmed.
-  - PP-167: params_factions — RS TTRPG start corrected 60→72.
-  - PP-168: params_factions — all 8 faction unique actions extracted from stage6 §8.4–8.9.
-  - Terminology fix: all bare "Revolution" replaced with "Restoration Movement" across all touched files.
+completed:
+  - Expanded all bare acronyms/abbreviations to full terms across all CURRENT project files.
+  - Exceptions confirmed: TN, Ob (standalone permitted); TTRPG, BG (standalone permitted).
+  - TC collision resolved: Theocracy Counter (faction clock) vs Conviction Track (debate tracker) — both now written in full throughout.
+  - Thread Depth (TD) confirmed REMOVED (PP-166) — phantom stat, not tracked.
+  - Created references/glossary.md — canonical term and abbreviation index (12 parts, all game terms, stats, clocks, infra IDs, collision table, unresolved gaps).
+  - Added glossary reference to all 10 skill files (read protocol section or dedicated Term Reference section).
 
-open_editorials_requiring_user_input:
-  - GAP-TTRPG-04: Belief CP conflict — stage2 (+1/+1/+2/+2) vs stage10 (+2/+2/+4–5). Which is correct?
-  - ED-053: Composure formula — stage1 Presence+6 vs stage2 §4.11 Presence+Attunement. Which is correct?
+commits:
+  - e5ec275: Skills initial acronym expansion (7 files)
+  - a498ac7: Fix TC — Thread Coherence → Theocracy Counter (3 skill files)
+  - 034a000: Params files expansion (6 files)
+  - cfb27ed: Design docs expansion (24 files); TC=Conviction Track in debate docs
+  - 2466b3d: Compilation files expansion (16 files)
+  - 40acc40: References, ledger, patch register, coverage matrix (7 files)
+  - 2de011d: GM reference files — arcs and dashboards (22 files)
+  - 528d43f: Add references/glossary.md + register in file_index
+  - 550c808: Add glossary reference to all 10 skill files
 
-remaining_open_P1s:
-  - GAP-TTRPG-F1: Personal combat High burden — design-level issue, not a params fix.
-  - GAP-TTRPG-G1: BG→HYB character reactivation procedure undefined.
-  - GAP-TTRPG-G2: HYB personal↔unit combat transition missing.
+files_skipped:
+  - canon/02_canon_constraints.md: immutable canon — not modified
+  - canon/00_philosophical_foundations.md: immutable canon — not modified
+  - canon/01_foundations_amendment_self_rendering.md: immutable canon — not modified
+  - SUPERSEDED/DEPRECATED designs: not modified
+  - Test simulation outputs (tests/sim_*.md): treated as read-only records
 
-commits_this_session:
-  - 2709cfd: AUD-TTRPG-01 audit output + coverage matrix
-  - ceebd82: PP-164/165/166/167
-  - feb518e: PP-168 faction unique actions
-  - 2f37bd6: Revolution→Restoration Movement cleanup (3 files)
-  - 87e9c81: Revolution→Restoration Movement final fix
-  - [this]: session close
+open_gaps:
+  - CERT, TLK, DD, FSTAT, INT: track codes in old simulator header, full names unconfirmed — logged in glossary Part 12
+  - SIM-DEBT-01: Debate stress test recalibration (Presence×2 pool) — Mode C still needed
 
-next_session_start:
-  priority_1: "Resolve ED-053 (Composure) and GAP-TTRPG-04 (Belief CP) — both require one editorial call each."
-  priority_2: "Design docs for GAP-TTRPG-G1/G2 (HYB transition procedures) if in scope."
-  priority_3: "Stress test a TTRPG scenario (Mode C) to exercise the patched systems."
+next_action:
+  task: "stress test debate — SIM-DEBT-01 (Presence×2 pool recalibration, Mode C)"
+  note: "All acronym expansion complete. Glossary live. Ready to simulate."
 ```
