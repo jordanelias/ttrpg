@@ -196,12 +196,27 @@ For provisional decisions made by Claude, use `status: provisional` and mark tex
 **Step 5 — Update coverage matrix:**
 Append row to `tests/coverage_matrix.md`. Include all 7 dimensions and link to findings.
 
-**Step 6 — ATOMIC COMMIT (mandatory):**
-One commit containing: test file (tests/) + patched design doc(s) + params file(s) + patch_register + editorial_ledger + coverage_matrix.
+**Step 6 — UPDATE PROPAGATION MAP (mandatory, before commit):**
+For every design doc patched in Step 2:
+1. Check `references/propagation_map.md` — does a row exist for this file?
+2. If yes: verify all listed propagation targets are included in this commit (or explicitly noted as `[no-prop: reason]`).
+3. If no row exists: add one now using the auto-update rules in the map's DEPENDENCY RULES section.
+4. For each new cross-reference identified by this simulation finding: add it to the map.
+Never skip this step. A commit that adds a new design relationship without updating the map breaks the propagation chain.
+
+**Step 7 — ATOMIC COMMIT (mandatory):**
+One commit containing: test file (tests/) + patched design doc(s) + params file(s) + patch_register + editorial_ledger + coverage_matrix + **propagation_map**.
 ```
 Commit message: [simulation] sim_[system]_[N] — PP-NNN applied, ED-NNN added, SIM-DEBT flagged if applicable
 ```
 If the commit is not made, the simulation is incomplete. Do not proceed to the next task.
+
+**Step 8 — Report to user:**
+```
+Sim complete: [N] findings. P1: [N] (patched). P2: [N] (patched). Editorial: [N] (logged). Provisional: [N] (flagged).
+Prop map: [N] new entries added.
+Committed: [short hash]
+```
 
 **Step 7 — Report to user:**
 ```
