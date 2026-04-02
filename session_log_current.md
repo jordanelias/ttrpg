@@ -1,42 +1,41 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_DESIGN_CLEANUP
-phase: Phase 2 — Design cleanup, three-mode framing, infrastructure
+session_id: 2026-04-02T_BLOCKERS_SIMPREP
+phase: Phase 3 — Blocker resolution, simulation infrastructure repair
 status: CLOSED
 
 ## SESSION SUMMARY
 
 ### Completed
-- Catastrophic Failure / majority-1s override struck from BG system entirely
-- Debate: quaestio deprecated; §6.0 context-sensitivity principle added; proceeding-type table expanded (private negotiation vs parliamentary vs tribunal); Parts 1-4 = reference only
-- Debate: §6.10 added flagging R-66 vs stress-test pool conflict (ED-047, P1-BLOCKER)
-- Threadwork: "Einhir ritual framework" → "Einhir framework" (ritual not canon)
-- Threadwork: R-54–R-68 patches applied (Pull duration, Dissolution Ob, healing overweave, Pull floor, Lock drain cap, Mode 3 immunity, Fortification Pulling, institution RS drift)
-- designs/combat/combat_design_v1.md created — TTRPG-baseline working document with three-mode framing; replaces stage8 as design-layer source; PP-086–092 + MT-01 faction unit rosters incorporated
-- ED-047 (debate pool conflict blocker) + ED-048 (Ceiral non-canon — 22 files affected) added to editorial ledger
-- Orchestrator: designs-first philosophy, three-mode framing, stale sweep at session start, compilation = lowest priority
-- file_index: combat design added; propagation-pending section added (batch_ad_resolutions, succession, hybrid_gaps_resolved, generation_tasks); three-mode framing header
-- designs/ audit completed: all files catalogued; batch_ad_resolutions.md has 11 approved decisions not yet propagated; generation_tasks flagged for user review; hybrid_gaps_resolved ready for integration
+- ED-047 resolved: debate pool = (Presence × 2) + History. R-65 applied. SIM-DEBT-01 registered.
+- ED-031 provisional: BG Overwhelming = Ob+1 (intentional divergence from TTRPG 2×Ob)
+- ED-037 provisional: Volley TN 6 confirmed as intentional exception to universal TN 7
+- ED-038 resolved: Coherence in mass battle = personal track (10→0, threadwork Part 3)
+- ED-036 provisional: Altonian unit stats placeholder (Vanguard/Elite Guard/Thread Corps)
+- Coverage matrix: F-11 resolved (ST-TW-02); F-27/F-30-33/F-43/F-52 provisioned; F-45 → ED-049
+- PP-093-096 applied (provisional): stalemate, coup successor, TC cap, Stability recovery
+- Simulator skill Mode I: enforced atomic commit protocol; path fix (sim_coverage_matrix→tests/coverage_matrix); SIM-DEBT section added; provisional decision protocol added
+- Editorial register skill: provisional status added
+- params_mass_combat: Altonian stats, ED-037/038 decisions applied
+- params_board_game: ED-031 BG Overwhelming rule added
+- ED-049 added: Church Stability brake scope (F-45, P2)
+- Ledger: 49 items total — 40 open, 3 provisional, 2 resolved, 4 struck
 
-### GitHub state (committed)
-- 7a3c2ce: all above changes (single atomic commit)
+### Simulation readiness
+- Combat: READY
+- Threadwork: READY
+- Mass combat: READY (ED-037/038 resolved provisionally; Altonian stats provisional)
+- Board game faction play: READY (ED-031 provisional; ED-001 Card-Hand still open but non-blocking for most tests)
+- Debate: DEGRADED (SIM-DEBT-01 — pool change needs re-calibration; can simulate, results directional)
+- Full hybrid campaign: READY for most scenarios (Altonian engagement provisional)
 
 ### next_action:
-  task: "Resolve P1-BLOCKERs in priority order"
-  priority_queue:
-    - ED-047 (debate pool formula — P1-BLOCKER, blocks all debate simulation)
-    - ED-048 (Ceiral canonical name — P1, blocks NPC/arc work)
-    - ED-036 (Altonian unit stats — P1-BLOCKER, blocks hybrid Altonian engagement)
-    - ED-038 (Coherence stat definition — P1, blocks mass_battle §A.10)
-    - ED-001 (Card-Hand system — P1-BLOCKER, blocks BG compilation)
-  note: "Use valoria-editorial-register Workflow A. After blockers: propagate batch_ad_resolutions.md decisions (G-038 treaty betrayal needs a home file), integrate hybrid_gaps_resolved.md into stage11."
-
-### editorial_decisions_pending: 44 open (ED-001–046 minus struck; plus ED-047–048)
-### blockers: ED-047, ED-036, ED-001
+  task: "Simulate. Use Mode G suite (G1 mass combat, G2 debate, G3 threadwork, G4 faction play, G5 BG)."
+  note: "Simulator Mode I is now enforced — every sim run commits findings immediately. Provisional decisions are marked in-text. SIM-DEBT-01 requires debate re-simulation with Presence×2 pool."
+  remaining_editorials_blocking_simulation: [ED-001 (Card-Hand BG compilation only)]
 
 ### commits_this_session:
-  - d0ffda0: session close (prior)
-  - 03e462b through ac99de5: infra (prior)
-  - 7a3c2ce: design cleanup + three-mode framing
+  - 2e4bf45: ED-047 resolved, R-65 applied, SIM-DEBT-01 registered
+  - 5719802: provisional decisions + sim infrastructure repair
 ```
