@@ -1,0 +1,401 @@
+# Valoria Editorial Ledger
+# Source of truth for all editorial decisions.
+# Schema: id | date_flagged | date_resolved | source | source_file | description
+#         | full_flag_text | status | decision | propagation_targets
+#         | propagation_status | related_ids | supersedes | tags
+# Managed by: valoria-editorial-register skill
+# Last updated: 2026-04-01
+
+editorial_decisions:
+
+  # ── BOARD GAME BLOCKERS (from session_log_current.md) ──────────────────
+
+  - id: ED-001
+    legacy_id: BG-E-30
+    date_flagged: 2026-03-31
+    date_resolved: null
+    source: session
+    source_file: session_log_current.md
+    description: "Adopt Card-Hand system for board game action selection"
+    full_flag_text: "BG-E-30: Adopt Card-Hand system (BLOCKER)"
+    status: open
+    priority: P1-BLOCKER
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/stage_bg_board_game_mode.md
+      - designs/board_game/stage_bg_proposal_v02.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [board_game, action_economy, blocker]
+
+  - id: ED-002
+    legacy_id: BG-E-31
+    date_flagged: 2026-03-31
+    date_resolved: null
+    source: session
+    source_file: session_log_current.md
+    description: "Champion Renown ability text — exact wording for the ability"
+    full_flag_text: "BG-E-31: Champion Renown ability text"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/stage_bg_board_game_mode.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [board_game, npc, renown]
+
+  - id: ED-003
+    legacy_id: BG-E-34
+    date_flagged: 2026-03-31
+    date_resolved: null
+    source: session
+    source_file: session_log_current.md
+    description: "Institutional Mandate trigger conditions review — which conditions cause Mandate to fire an institutional response"
+    full_flag_text: "BG-E-34: Institutional Mandate trigger conditions review"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/stage6_factions.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [board_game, faction, mandate]
+
+  - id: ED-004
+    legacy_id: BG-E-35
+    date_flagged: 2026-03-31
+    date_resolved: null
+    source: session
+    source_file: session_log_current.md
+    description: "NPC AI tree update for board game — revised AI decision tree to reflect all BG v5 changes"
+    full_flag_text: "BG-E-35: NPC AI tree update"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/stage_bg_board_game_mode.md
+      - gm_ref/
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [board_game, npc_ai]
+
+  - id: ED-005
+    legacy_id: BG-E-45
+    date_flagged: 2026-03-31
+    date_resolved: null
+    source: session
+    source_file: session_log_current.md
+    description: "Restoration Movement leader — name and character profile for the default NPC contact point"
+    full_flag_text: "BG-E-45: Restoration Movement leader name/character"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/stage6_factions.md
+      - compilation/v0.14/stage13_npcs.md
+    propagation_status: pending
+    related_ids: [ED-018]
+    supersedes: []
+    tags: [worldbuilding, npc, faction, revolution]
+
+  - id: ED-006
+    legacy_id: BG-E-43
+    date_flagged: 2026-03-31
+    date_resolved: null
+    source: session
+    source_file: session_log_current.md
+    description: "Riskbreakers faction identity — character, culture, and operational philosophy of the Löwenritter's extralegal arm"
+    full_flag_text: "BG-E-43: Riskbreakers identity"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/stage6_factions.md
+      - compilation/v0.14/stage13_npcs.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [worldbuilding, faction, lowenritter]
+
+  - id: ED-007
+    legacy_id: BG-E-44
+    date_flagged: 2026-03-31
+    date_resolved: null
+    source: session
+    source_file: session_log_current.md
+    description: "Four Cardinals — names, characters, and individual mechanical profiles for the four Church Cardinals"
+    full_flag_text: "BG-E-44: Four Cardinals details"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/stage13_npcs.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [worldbuilding, npc, church]
+
+  # ── DEBATE SYSTEM (from designs/debate/debate_system_redesign_v1.md) ───
+
+  - id: ED-008
+    date_flagged: 2026-03-27
+    date_resolved: null
+    source: design-file
+    source_file: designs/debate/debate_system_redesign_v1.md
+    description: "Niflhel formal Debate access — exclude entirely, or permit with no faction resonance bonuses?"
+    full_flag_text: "[EDITORIAL: Niflhel formal Debate access] — Should Niflhel characters be excluded from formal Debate entirely, or permitted with no faction resonance bonuses?"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+      - compilation/v0.14/stage9_social.md
+    propagation_status: pending
+    related_ids: [ED-009]
+    supersedes: []
+    tags: [debate, faction, niflhel]
+    note: "Design file recommends exclusion (§3.7). Two flags cover same question — ED-008 is the open-items version, inline flag at §3.7 is the assertion version. Treat as one decision."
+
+  - id: ED-009
+    date_flagged: 2026-03-27
+    date_resolved: null
+    source: design-file
+    source_file: designs/debate/debate_system_redesign_v1.md
+    description: "Additional proceeding types beyond Royal Audience and Church Tribunal — Guild arbitration, Varfell review, Revolution assembly?"
+    full_flag_text: "[EDITORIAL: Proceeding type catalogue] — Which asymmetric proceedings exist beyond Royal Audience and Church Tribunal?"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+      - compilation/v0.14/stage9_social.md
+    propagation_status: pending
+    related_ids: [ED-010]
+    supersedes: []
+    tags: [debate, proceeding_types, faction]
+
+  - id: ED-010
+    date_flagged: 2026-03-27
+    date_resolved: null
+    source: design-file
+    source_file: designs/debate/debate_system_redesign_v1.md
+    description: "Inline version of ED-009 — same question with suggested designs for Guild arbitration, Varfell review, Revolution assembly"
+    full_flag_text: "[EDITORIAL: additional proceeding types] — Consider: Guild arbitration (three-party), Varfell internal review, Revolution assembly"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets: []
+    propagation_status: N/A
+    related_ids: [ED-009]
+    supersedes: []
+    tags: [debate, proceeding_types, faction]
+    note: "Consolidate with ED-009 on processing — same decision, present as one prompt."
+
+  - id: ED-011
+    date_flagged: 2026-03-27
+    date_resolved: null
+    source: design-file
+    source_file: designs/debate/debate_system_redesign_v1.md
+    description: "Concentration attribute for Debate — Focus (proposed) or Poise (alternative)?"
+    full_flag_text: "[EDITORIAL: Concentration attribute] — Focus is proposed. Poise is the alternative (composure under sustained pressure). Which?"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+      - compilation/v0.14/stage9_social.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [debate, attributes, mechanics]
+
+  - id: ED-012
+    date_flagged: 2026-03-27
+    date_resolved: null
+    source: design-file
+    source_file: designs/debate/debate_system_redesign_v1.md
+    description: "Audience Disposition as dual win-condition — apply to all Formal/Grand Debates or Grand Debates only?"
+    full_flag_text: "[EDITORIAL: Audience Disposition as win-condition] — Does dual win-condition (exchange + audience) apply to all Formal/Grand Debates, or only Grand Debates?"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+      - compilation/v0.14/stage9_social.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [debate, mechanics, victory_condition]
+
+  - id: ED-013
+    date_flagged: 2026-03-27
+    date_resolved: null
+    source: design-file
+    source_file: designs/debate/debate_system_redesign_v1.md
+    description: "Grand Debate role alternation — in 5 exchanges (3-2 split), which side gets the extra proposition: the initiator, or the faction that called for the Grand Debate?"
+    full_flag_text: "[EDITORIAL: Role alternation in 5-exchange Grand Debate] — Exchange 5 has one side proposing 3 times and the other 2. Which side gets the extra proposition?"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+      - compilation/v0.14/stage9_social.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [debate, grand_debate, mechanics]
+
+  - id: ED-014
+    date_flagged: 2026-03-27
+    date_resolved: null
+    source: design-file
+    source_file: designs/debate/debate_system_redesign_v1.md
+    description: "Corroboration Knot requirement — too restrictive? Should any ally present be able to corroborate, with Knot holders getting +1D to their corroboration roll instead?"
+    full_flag_text: "[EDITORIAL: Corroboration Knot requirement] — Is the Knot requirement too restrictive?"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+      - compilation/v0.14/stage9_social.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [debate, knots, social]
+
+  - id: ED-015
+    date_flagged: 2026-03-27
+    date_resolved: null
+    source: design-file
+    source_file: designs/debate/debate_system_redesign_v1.md
+    description: "Thread consequences for Casual Disputes — should high-strain casual disputes (Rattled trigger) produce minor co-movement?"
+    full_flag_text: "[EDITORIAL: Thread consequences for Casual Disputes] — Currently no Thread consequences for casual disputes."
+    status: open
+    priority: P3
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+      - compilation/v0.14/stage9_social.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [debate, threadwork, co_movement]
+
+  # ── MASS COMBAT (from designs/mass_combat/mass_battle_v3.md) ───────────
+
+  - id: ED-016
+    date_flagged: 2026-03-27
+    date_resolved: null
+    source: design-file
+    source_file: designs/mass_combat/mass_battle_v3.md
+    description: "Military stat → unit quality mapping — confirm the 1:1 Military-to-MaxCP table is the intended design"
+    full_flag_text: "[EDITORIAL: confirm mapping] Military stat → unit quality"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - designs/mass_combat/mass_battle_v3.md
+      - compilation/v0.14/stage8_combat.md
+    propagation_status: pending
+    related_ids: [ED-017]
+    supersedes: []
+    tags: [mass_combat, faction, military]
+
+  - id: ED-017
+    date_flagged: 2026-03-27
+    date_resolved: null
+    source: design-file
+    source_file: designs/mass_combat/mass_battle_v3.md
+    description: "Faction Military stat change on unit destruction and Stability impact — confirm behaviour when a unit is destroyed reduces faction Military, and what the Stability consequence is"
+    full_flag_text: "[EDITORIAL: confirm Military stat change on unit destruction and Stability]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/mass_combat/mass_battle_v3.md
+      - compilation/v0.14/stage8_combat.md
+    propagation_status: pending
+    related_ids: [ED-016]
+    supersedes: []
+    tags: [mass_combat, faction, military, stability]
+
+  - id: ED-018
+    date_flagged: 2026-03-27
+    date_resolved: null
+    source: design-file
+    source_file: designs/mass_combat/mass_battle_v3.md
+    description: "Commander bonus formula — confirm the formula used for general combat bonus contributions"
+    full_flag_text: "[EDITORIAL: confirm commander bonus formula]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - designs/mass_combat/mass_battle_v3.md
+      - compilation/v0.14/stage8_combat.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [mass_combat, commander, formula]
+
+  - id: ED-019
+    date_flagged: 2026-03-27
+    date_resolved: null
+    source: design-file
+    source_file: designs/mass_combat/mass_battle_v3.md
+    description: "Faction-specific tactic cards — design content for each faction's 2 unique tactic cards"
+    full_flag_text: "[EDITORIAL: design faction cards] Faction-specific cards (2 per faction)"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/mass_combat/mass_battle_v3.md
+      - compilation/v0.14/stage_bg_board_game_mode.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [mass_combat, board_game, faction, tactic_cards]
+
+  # ── COMBAT (from compilation/v0.14/stage8_combat.md) ───────────────────
+
+  - id: ED-020
+    date_flagged: 2026-03-26
+    date_resolved: null
+    source: design-file
+    source_file: compilation/v0.14/stage8_combat.md
+    description: "Pulling enemy general's command capacity — confirm this is an intended tactical option in mass combat (Personal-scale Thread op targeting Presence/Cognition)"
+    full_flag_text: "[EDITORIAL: confirm this is an intended tactical option]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/stage8_combat.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [mass_combat, threadwork, combat, tactics]
+
+  # ── FACTIONS (from compilation/v0.14/stage6_factions.md) ───────────────
+
+  - id: ED-021
+    date_flagged: 2026-03-26
+    date_resolved: null
+    source: design-file
+    source_file: compilation/v0.14/stage6_factions.md
+    description: "Revolution NPC contact point — should one named figure be established as default contact? Proposed: southern Einhir elder, fragmentary inner-tradition knowledge, partially obscured by the Forgetting"
+    full_flag_text: "[EDITORIAL: Should one named Revolution figure be established as the default NPC contact point?]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/stage6_factions.md
+      - compilation/v0.14/stage13_npcs.md
+    propagation_status: pending
+    related_ids: [ED-005]
+    supersedes: []
+    tags: [worldbuilding, npc, faction, revolution]
+    note: "Consolidate with ED-005 on processing — both concern the same Revolution NPC."
