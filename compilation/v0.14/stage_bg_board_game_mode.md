@@ -178,7 +178,7 @@ Once per season. Roll Mandate vs Ob 2.
 | 1 | Mandate ≥ 5 |
 | 2 | Control Valorsplatz + Gransol + ≥2 other territories |
 | 3 | Theocracy Counter < 60 and Institutional Pressure < 75 simultaneously |
-| 4 | Torben Loyalty ≥ 5 |
+| 4 | Torben Loyalty ≥ 5 OR Institutional Pressure < 30 at game end (PP-172) |
 
 ---
 
@@ -215,7 +215,7 @@ Roll: Mandate vs target leader's Mandate (or Ob 2 for non-leaders).
 
 **Thread Capability:** None. Knights Templar units are immune to Co-Movement card effects that would reduce their Cohesion.
 
-**Victory Condition:** *The Holy State.* Theocracy Counter reaches 60 with Church Mandate ≥ 5 and Church controlling Himmelenger + Valorsplatz. This condition can be met under shared survival (Theocracy Counter 60 < 80 threshold). Theocracy Counter reaching 100 triggers THE HOLY STATE endgame event regardless (see B10) — that is a separate, escalated resolution path.
+**Victory Condition:** *The Holy State.* Theocracy Counter reaches 60 with Church Mandate ≥ 5 and Church controlling Himmelenger, AND Crown Mandate ≤ 2 for the preceding 2 consecutive seasons. (PP-171) This condition can be met under shared survival (Theocracy Counter 60 < 80 threshold). Theocracy Counter reaching 100 triggers THE HOLY STATE endgame event regardless (see B10) — that is a separate, escalated resolution path.
 
 **Deed Tokens (Church):**
 | Deed | Condition |
@@ -223,7 +223,7 @@ Roll: Mandate vs target leader's Mandate (or Ob 2 for non-leaders).
 | 1 | Theocracy Counter ≥ 40 |
 | 2 | Church Mandate ≥ 5 |
 | 3 | Control Himmelenger (continuously since game start or recaptured) |
-| 4 | Control Valorsplatz |
+| 4 | Crown Mandate ≤ 2 for 2 consecutive seasons (PP-171) |
 
 ---
 
@@ -286,12 +286,12 @@ Available in Varfell only. Once per season. Roll Intel vs Ob 2.
 
 **Thread Capability:** Indirect. The Collection provides Thread-adjacent effects without direct Thread operations. At TK 5, Vaynard understands Thread structure — but this is a narrative development, not a BG roll.
 
-**Victory Condition:** *Information Supremacy.* At game end: Varfell Intel ≥ 6; TK ≥ 3; control of Varfell; Vaynard has revealed at least 2 hidden faction stats. Alternatively: deliver Thread-knowledge intelligence to the Revolution enabling their Community Weaving success at Rendering Stability > 60. *TK (Thread Knowledge) tokens: gained via successful Private Collection order (+1 TK), Overwhelming Intel order targeting a practitioner or Einhir site (+1 TK), or delivering Thread intel to Revolution enabling Community Weaving (+1 TK, once). Max 1 TK/season. Max 5 TK.*
+**Victory Condition:** *Information Supremacy.* At game end: Varfell Intel ≥ 5 (PP-176); TK ≥ 3; control of Varfell; Vaynard has revealed at least 2 hidden faction stats. Alternatively: deliver Thread-knowledge intelligence to the Revolution enabling their Community Weaving success at Rendering Stability > 60. *TK (Thread Knowledge) tokens: gained via successful Private Collection order (+1 TK), Overwhelming Intel order targeting a practitioner or Einhir site (+1 TK), or delivering Thread intel to Revolution enabling Community Weaving (+1 TK, once). Max 1 TK/season. Max 5 TK.*
 
 **Deed Tokens (Varfell):**
 | Deed | Condition |
 |------|-----------|
-| 1 | Intel ≥ 6 |
+| 1 | Intel ≥ 5 (PP-176) |
 | 2 | TK ≥ 3 |
 | 3 | Control Varfell (T9) |
 | 4 | 2 or more hidden faction stats revealed (accumulated total, any faction) |
