@@ -399,3 +399,165 @@ editorial_decisions:
     supersedes: []
     tags: [worldbuilding, npc, faction, revolution]
     note: "Consolidate with ED-005 on processing — both concern the same Revolution NPC."
+  # ── ARC GENERATION EDITORIALS (from arcs 31-35) ────────────────────────
+
+  - id: ED-022
+    date_flagged: 2026-04-01
+    date_resolved: null
+    source: arc-generation
+    source_file: designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md
+    description: "Forced Unmask from external disruption — is violence in the debate chamber a Register Shift or an Unmask? Defines whether the formal proceeding can resume."
+    full_flag_text: "[EDITORIAL: ED-ARC-31-01 — Forced Unmask from external disruption (violence in chamber)]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+      - compilation/v0.14/stage9_social.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [debate, social, register_shift, unmask]
+
+  - id: ED-023
+    date_flagged: 2026-04-01
+    date_resolved: null
+    source: arc-generation
+    source_file: designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md
+    description: "Vaynard at TK5 — does he attempt to acquire Thread operational capability (hiring/coercing a practitioner), or does he remain a knowledge-broker only?"
+    full_flag_text: "[EDITORIAL: ED-ARC-32-01 — Vaynard at TK5: does he attempt to acquire Thread capability himself, or only knowledge-brokerage?]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/stage6_factions.md
+      - compilation/v0.14/stage13_npcs.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [faction, npc, varfell, threadwork, worldbuilding]
+
+  - id: ED-024
+    date_flagged: 2026-04-01
+    date_resolved: null
+    source: arc-generation
+    source_file: designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md
+    description: "Southernmost Mode 3 entity stat blocks — no combat-ready profiles exist in compilation. Required for any encounter simulation inside Southernmost."
+    full_flag_text: "[EDITORIAL: ED-ARC-33-01 — Southernmost entity combat (Mode 3): stat blocks not in current compilation]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/stage13_npcs.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [southernmost, combat, mode3, npc]
+
+  - id: ED-025
+    date_flagged: 2026-04-01
+    date_resolved: null
+    source: arc-generation
+    source_file: designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md
+    description: "Almud's Torben yield — automatic mechanical fire from IP threshold or personal scene choice? Defines whether player intervention can avert it."
+    full_flag_text: "[EDITORIAL: ED-ARC-34-01 — Does Almud get a personal scene before yielding Torben, or does the yield fire automatically?]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/stage13_npcs.md
+      - compilation/v0.14/stage7_territories.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [npc, almud, torben, succession, ip_track]
+
+  - id: ED-026
+    date_flagged: 2026-04-01
+    date_resolved: null
+    source: arc-generation
+    source_file: designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md
+    description: "Klapp Trajectory determination — B (suppression/doubling-down) vs C (conversion) — and practitioner presence intervention at Discovery Event (one-window opportunity, presence not argument)"
+    full_flag_text: "[EDITORIAL: ED-ARC-35-01 — Trajectory determination for Klapp + practitioner presence intervention at Discovery Event]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/stage13_npcs.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [npc, church, klapp, threadwork, discovery_event]
+
+  # ── SIMULATION EDITORIALS (from SIM-ARC31-C01 + SIM-ARC33-C01) ─────────
+
+  - id: ED-027
+    date_flagged: 2026-04-01
+    date_resolved: null
+    source: simulation
+    source_file: tests/simulation_report_arcs_31_33.md
+    description: "Distinction Phase attribute (debate_v1 quaestio Phase 5) uses 'Poise' which is not in the 10-attribute set. Must map to an existing attribute. Focus recommended."
+    full_flag_text: "[EDITORIAL: ED-ARC31-SIM-01 — Distinction Phase attribute — Poise not in 10-attribute set]"
+    status: open
+    priority: P1-BLOCKER
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+      - compilation/v0.14/stage9_social.md
+    propagation_status: pending
+    related_ids: [ED-011]
+    supersedes: []
+    tags: [debate, attributes, mechanics, blocker]
+    note: "Consolidate with ED-011 (Concentration attribute) — both concern the debate_v1 attribute mapping. Present together."
+
+  - id: ED-028
+    date_flagged: 2026-04-01
+    date_resolved: null
+    source: simulation
+    source_file: tests/simulation_report_arcs_31_33.md
+    description: "Forgetting boundary dissolution — should non-practitioner party member dissolution be a dramatic scene or silent removal? Practitioner is aware before entry."
+    full_flag_text: "[EDITORIAL: ED-ARC33-SIM-01 — Forgetting dissolution: dramatic scene or silent removal?]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/valoria_ruleset_v0.14.md (§6.1)
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [southernmost, forgetting, scene_framing]
+
+  - id: ED-029
+    date_flagged: 2026-04-01
+    date_resolved: null
+    source: simulation
+    source_file: tests/simulation_report_arcs_31_33.md
+    description: "Purpose tracking in Southernmost — mechanical representation (Clarity countdown d3) or GM judgment only? Affects whether the Forgetting is a playable resource."
+    full_flag_text: "[EDITORIAL: ED-ARC33-SIM-02 — Purpose tracking mechanic in Southernmost]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/valoria_ruleset_v0.14.md (§6.1)
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [southernmost, forgetting, mechanics]
+
+  - id: ED-030
+    date_flagged: 2026-04-01
+    date_resolved: null
+    source: simulation
+    source_file: tests/simulation_report_arcs_31_33.md
+    description: "Thread combat vs Mode 3 entities — pool split (Off/Def) applies to Thread pool, or separate defence roll? No rule currently exists."
+    full_flag_text: "[EDITORIAL: ED-ARC33-SIM-03 — Thread combat defence vs Mode 3 entities]"
+    status: open
+    priority: P1-BLOCKER
+    decision: null
+    propagation_targets:
+      - designs/ttrpg/threadwork_redesign_v25.md
+      - compilation/v0.14/stage3_thread_operations.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [threadwork, combat, mode3, southernmost, blocker]
