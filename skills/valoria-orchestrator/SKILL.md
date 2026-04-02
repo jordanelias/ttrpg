@@ -9,6 +9,10 @@ probability, coverage, session management, Non-Player Character mechanics, facti
 territory, clocks, or any reference to the Valoria ruleset. This is the
 single entry point for all Valoria work — no other skill triggers directly.
 
+## Term Reference
+
+Read `references/glossary.md` for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
+
 ## Interface
 - Accepts: any user request involving Valoria
 - Produces: routed task output, committed to GitHub

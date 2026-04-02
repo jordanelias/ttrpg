@@ -4,6 +4,10 @@ Pre-process Valoria documents into indexed chunks for analysis skills. Must run 
 
 **Model:** Haiku 4.5. Structural extraction only.
 
+## Term Reference
+
+Read `references/glossary.md` for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
+
 ## Modes
 
 **A — Section Map:** Extract headings with hierarchy → `valoria_section_map.md`

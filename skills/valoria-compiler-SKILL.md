@@ -6,6 +6,10 @@ Assemble approved patches, editorial decisions, and structural changes into clea
 **Input:** `designs/` working documents (source of truth) + `canon/editorial_ledger.yaml` + session log.
 **Note:** Compilation is the lowest-priority task. Compile only when a system is stable and explicitly requested. `designs/` is always more current than `compilation/`.
 
+## Term Reference
+
+Read `references/glossary.md` for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
+
 ## Process
 
 ### 1. Load Current State

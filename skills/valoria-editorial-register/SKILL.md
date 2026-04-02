@@ -14,6 +14,10 @@ description: >
 
 # VALORIA EDITORIAL REGISTER SKILL
 
+## Term Reference
+
+Read `references/glossary.md` for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
+
 ## Purpose
 
 Maintain `canon/editorial_ledger.yaml` as the single source of truth for all

@@ -416,6 +416,8 @@ When a blocker requires a decision to proceed:
 
 ## Read Protocol — Mandatory Before Any Mode
 
+Read `references/glossary.md` for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
+
 **Step 0 — Canonical source check (first):**
 Read `references/canonical_sources.yaml`. For the system under test, check `canonical:` field and `compilation_current:`. Never use a source listed as `compilation_current: false` — use the design doc instead.
 

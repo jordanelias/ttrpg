@@ -181,6 +181,8 @@ Log to `valoria_patch_proposals.md`.
 
 
 ## Read Protocol — Mandatory Before Any Mode
+Read `references/glossary.md` for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
+
 Load params files, not stage files. Stage files are verbose source documents; params files are extracted mechanical values.
 
 1. Always read `references/params_core.md` first (dice engine, TN, Ob, degrees).

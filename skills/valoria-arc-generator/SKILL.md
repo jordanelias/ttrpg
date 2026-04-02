@@ -26,6 +26,8 @@ Deliver 3–5 arcs per batch unless the user specifies otherwise. End each batch
 
 ## Read Protocol
 
+Read `references/glossary.md` for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
+
 Before generating, read the following in this order. Stop reading a file once you have what you need — do not read documents in full if the relevant section is identifiable.
 
 **Required reads:**

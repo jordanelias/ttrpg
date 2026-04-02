@@ -16,6 +16,10 @@ description: >
 
 ---
 
+## Term Reference
+
+Read `references/glossary.md` for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
+
 ## Canonical Die Rule
 
 ```

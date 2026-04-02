@@ -62,6 +62,8 @@ Foundations ref: · Current implementation: · Why it violates: · Proposed repa
 
 ## Read Protocol (updated)
 
+Read `references/glossary.md` for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
+
 Before any compliance check:
 1. Read `canon/02_canon_constraints.md` from GitHub (not from cache — always fetch fresh to get latest P-NNN).
 2. Read `references/canonical_sources.yaml` to identify which document is canonical for the system under test.
