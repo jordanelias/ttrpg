@@ -591,8 +591,8 @@ patches:
   finding_id: "P1-B11-04"
   source: simulation
   affects: [compilation/v0.14/stage11_scale_transitions.md]
-  status: proposed
-  applied_commit: ~
+  status: applied
+  applied_commit: "2026-04-02-session"
 
 - id: PP-090
   date: 2026-04-02
@@ -601,8 +601,8 @@ patches:
   finding_id: "P1-B11-05"
   source: simulation
   affects: [compilation/v0.14/stage11_scale_transitions.md]
-  status: proposed
-  applied_commit: ~
+  status: applied
+  applied_commit: "2026-04-02-session"
 
 - id: PP-091
   date: 2026-04-02
