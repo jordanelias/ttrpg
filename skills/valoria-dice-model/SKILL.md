@@ -256,3 +256,23 @@ Produce complete outcome tables across all three TN values for a specified pool 
 
 **Standard reference output** (generate once, cache to `references/tn_full_tables.md`):
 Pool 3–12, Ob 1–6, all three TNs. This is the canonical reference — other skills link to it rather than recomputing.
+
+## Version Check Protocol (Mandatory)
+Before running any mode that uses mechanical values:
+1. Read the relevant `references/params_*.md` file(s) for this task.
+2. Check the `<!-- version: -->` tag at the top of each params file.
+3. Compare against the current ruleset version (stated in `compilation/README.md`).
+4. If params version ≠ current ruleset version: **halt, flag as `[STALE PARAMS: <file> is v0.XX, current ruleset is vX.XX — update params before proceeding]`**, and do not proceed until the user confirms or params are updated.
+5. If params version matches: proceed. Cost: ~200 tokens per params file read. No GitHub API call required.
+
+Params files and their skill usage:
+| Params file | Used by |
+|-------------|---------|
+| `references/params_core.md` | All skills (dice engine baseline) |
+| `references/params_combat.md` | simulator Mode G1, combat-simulator |
+| `references/params_mass_combat.md` | simulator Mode G1 |
+| `references/params_debate.md` | simulator Mode G2 |
+| `references/params_threadwork.md` | simulator Mode G3 |
+| `references/params_factions.md` | simulator Mode G4, mechanic-audit |
+| `references/params_board_game.md` | simulator Mode G5 |
+| `references/params_scale_transitions.md` | simulator Mode G (cross-mode), mechanic-audit Mode G |
