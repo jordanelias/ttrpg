@@ -607,13 +607,57 @@ Hafenmark: M 4, I 4, W 5, Mil 3, Sta 4
 
 ---
 
-## SESSION B PENDING
+## SESSION B — COMPLETE
 
-- Mode D — Edge case discovery (9 categories)
-- Mode J — Cognitive load audit (Zoom In/Out procedure + debate procedure)
-- Mode L — Precedent comparison (3 analogue systems)
-- Mode M — Narrative flowchart (The Templar Crossing, 3-mode branching)
-- Commit Session B findings
+### Mode D Findings (all 9 categories covered)
+| ID | Category | Description |
+|----|----------|-------------|
+| F-HYB-04 | Boundary | TC win-delay exploit via Zoom In suspension |
+| F-HYB-05 | Boundary | Unit ghost state during Zoom In window |
+| F-HYB-06 | Deadlock | Debate stalemate — no forced resolution |
+| F-HYB-07 | Ambiguity | COMPETITION + TIE: undefined when both score equal successes |
+| F-HYB-08 | Incoherence | Military 1 faction has no deployable unit type in B.2 |
+| GAP-D-01 | Boundary | RS=0 at Zoom In: which gap rules fire first |
+| GAP-D-02 | Cascade | Composure restoration between debate scenes unspecified |
+| (none) | Regression | No self-reference loops found |
+| (none) | Optimal play | Genre asymmetry vs hostile audience = design feature |
+| (none) | Degenerate | PP-101 resolved the only degenerate state (front-line practitioner) |
+
+### Mode J — Cognitive Load
+| Mechanic | Load | Novice time | Flag |
+|----------|------|-------------|------|
+| Zoom In/Out | 14/10 | 12m | P1 → ED-055 |
+| Debate exchange | 11/10 | 5m | P2 → ED-055 scope |
+
+### Mode L — Precedent
+| Precedent | Risk |
+|-----------|------|
+| BW Duel of Wits | Design drift — 83% higher load without proportional decision gain |
+| ASIFRPG Intrigue | NONE |
+| Here I Stand | NONE |
+
+### Mode M — Flowchart
+Filed: designs/gm_ref_cp14/flowcharts/flowchart_templar_crossing.md
+Cross-mode comparison table: TTRPG / Hybrid / BG column deltas documented.
+DEAD BRANCH: Vaynard vs Klapp win path near-impossible without ED-054 leverage mechanic.
+Confirmed: valoria_emergent_scenarios.md SCENARIO 1 is consistent. ARC 2 (Vaynard) extended.
+
+### Complete Findings Summary
+| ID | Severity | Action |
+|----|----------|--------|
+| F-HYB-01 | P1 | PP-101 APPLIED |
+| GAP-K2-01 | P1 | PP-101 APPLIED (B.5 BG→TTRPG) |
+| F-HYB-08 | P1 | PP-103 pending (Military 1 unit gap) |
+| F-HYB-09 | P1 | ED-055 (GM reference card) |
+| F-HYB-02 | withdrawn | Params stale (COMPETITION naming) — params_debate.md fixed |
+| F-HYB-03 | P2 | ED-054 |
+| F-HYB-04 | P2 | ED-056 |
+| F-HYB-05 | P2 | ED-057 |
+| F-HYB-06 | P2 | ED-058 |
+| F-HYB-07 | P2 | PP-103 scope (or separate patch) |
+| GAP-D-01 | structural | ED-059 |
+| GAP-D-02 | structural | ED-060 |
+| Mode J Debate | P2 | ED-055 scope |
 
 ---
 

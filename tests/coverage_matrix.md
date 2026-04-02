@@ -84,7 +84,7 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 
 | SIM-D-04 | Debate gap-fill stress test — §§6.11-6.15, PP-112-118, BG Vote, Hybrid, Coalition, Beliefs, Total Victory | TTRPG+BG+HYB | CROSS | TC, Composure, Concentration, Debate Fatigue | Church, Hafenmark, Crown, Varfell | Himlensendt, Baralta, Klapp | Coalition, BG delegate, Hybrid | Complete | C-01/02/03 coalition confirmed; A.2-03 PP-117 (BG zero-zero); K2 PP-118 (Hybrid exchange count); SIM-DEBT-02 flagged |
 
-| SIM-HYB-01 | G1 Mass Combat, G2 Debate, G3 Threadwork, G4 Faction Seasonal, K2 Transition, C Full Scenario | HYB | PRES | TC, RS, IP, Stability, Coherence, Composure, Wounds, Unit Str/Morale/Cohesion | Church, Varfell, Crown, Hafenmark | Vaynard, Cardinal Klapp, Templar Sergeant | Practitioner-Scholar, Institutional Legalist, Church Militant | Session A complete; Session B pending (D+J+L+M) | F-HYB-01 (P1→PP-101), GAP-K2-01 (P1→PP-101), F-HYB-02 (params stale→params_debate fixed), F-HYB-03 (P2→ED-054); 7 params gaps logged |
+| SIM-HYB-01 | G1 Mass Combat, G2 Debate, G3 Threadwork, G4 Faction Seasonal, K2 Transition, C Full Scenario | HYB | PRES | TC, RS, IP, Stability, Coherence, Composure, Wounds, Unit Str/Morale/Cohesion | Church, Varfell, Crown, Hafenmark | Vaynard, Cardinal Klapp, Templar Sergeant | Practitioner-Scholar, Institutional Legalist, Church Militant | COMPLETE (Session A + B) | F-HYB-01 (P1→PP-101), GAP-K2-01 (P1→PP-101), F-HYB-02 (params stale→params_debate fixed), F-HYB-03 (P2→ED-054); 7 params gaps logged |
 
 ## SIM-DEBT Register
 
@@ -173,3 +173,17 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 | SIM-BG-01-01 | SIM-BG-01 | Collapsed faction card access at Mandate 0 — depends ED-001 | Provisional: card access retained for recovery |
 | SIM-BG-01-02 | SIM-BG-01 | Recovery Govern Partial/Failure outcome undefined in PP-117 | Provisional: Partial = no recovery this season |
 | SIM-BG-01-04 | SIM-BG-01 | Church TC 65 at Step 3 vs Restoration Step 5 win: sequence clarification | PP-118-rev1 documents: Restoration Step 5 pre-empts Step 12 |
+
+## Session B Findings (SIM-HYB-01)
+
+| ID | Severity | Description | Action |
+|----|----------|-------------|--------|
+| F-HYB-04 | P2 | Zoom In as TC win-delay exploit | ED-056 |
+| F-HYB-05 | P2 | Unit ghost state during Zoom In window | ED-057 |
+| F-HYB-06 | P2 | Debate stalemate with no forced resolution | ED-058 |
+| F-HYB-07 | P2 | COMPETITION + TIE interaction undefined on equal successes | PP-103 pending |
+| F-HYB-08 | P1 | Military 1 faction has no deployable unit in B.2 (no CP-1 unit type) | PP-104 pending |
+| F-HYB-09 | P1 | Zoom In/Out cognitive load = 14/10; novice time 12m | ED-055 (GM reference card) |
+| GAP-D-01 | structural | RS=0 at Zoom In: which gap rules fire first | ED-059 |
+| GAP-D-02 | structural | Composure restoration between debate scenes not specified | ED-060 |
+| Mode J Debate | P2 | Debate load = 11/10; novice time 5m per exchange | Covered by ED-055 scope |

@@ -1246,3 +1246,78 @@ editorial_decisions:
     related_ids: []
     supersedes: []
     tags: [debate, leverage, evidence, social]
+
+  - id: ED-055
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_hyb_01_templar_crossing.md
+    description: "GM reference card for Zoom In/Out: one-page summary of state inventory checklist, B.2 unit conversion table, and phase suspension/resume rules. Cognitive load = 14/10 without it."
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - designs/gm_ref_cp14/
+    propagation_status: pending
+    tags: [hybrid, zoom, gm_reference, cognitive_load]
+
+  - id: ED-056
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_hyb_01_templar_crossing.md
+    description: "Zoom In as TC win-delay exploit: a player can trigger Zoom In to suspend BG Accounting and delay an imminent TC=65 Church win. Needs ruling: does TC threshold check fire at turn-end regardless of Zoom In suspension?"
+    status: open
+    priority: P2
+    decision: null
+    tags: [hybrid, zoom, tc, exploit]
+
+  - id: ED-057
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_hyb_01_templar_crossing.md
+    description: "Unit ghost state during Zoom In: a BG unit destroyed in Phase 6 Step 1 still exists in TTRPG state if Zoom In fires before Phase 6 resolves. Rule needed: Zoom In may only trigger after Phase 6 Step 1 applies all damage, OR units with 0 Strength are removed before Zoom In state transfer."
+    status: open
+    priority: P2
+    decision: null
+    tags: [hybrid, zoom, mass_combat, unit_state]
+
+  - id: ED-058
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_hyb_01_templar_crossing.md
+    description: "Debate stalemate: if resistance >= all achievable effective_margins, debate produces 0 track movement indefinitely. No forced resolution mechanism (Unmask is voluntary). Need: maximum exchange count, or mandatory Concede/Unmask trigger at N exchanges."
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+    propagation_status: pending
+    tags: [debate, stalemate, forced_resolution]
+
+  - id: ED-059
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_hyb_01_templar_crossing.md
+    description: "RS=0 at Zoom In: gap formation rules exist for both BG (Accounting) and TTRPG (immediate) layers. No rule specifies which fires first when RS hits 0 at a Zoom In transition point."
+    status: open
+    priority: P2
+    decision: null
+    tags: [hybrid, zoom, rs, gap]
+
+  - id: ED-060
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_hyb_01_templar_crossing.md
+    description: "Composure restoration between debate scenes: Rattled persists until Unmask or scene end, but post-scene Composure reset is not specified. Does full Composure restore between scenes? Between sessions? Partial recovery by rest?"
+    status: open
+    priority: P3
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+    propagation_status: pending
+    tags: [debate, composure, recovery]
