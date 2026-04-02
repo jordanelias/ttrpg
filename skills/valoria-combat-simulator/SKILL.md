@@ -179,6 +179,28 @@ Log to `valoria_patch_proposals.md`.
 | `references/findings_template.md` | Output structure |
 | `scripts/combat_sim.py` | Runnable simulation script |
 
+
+## Read Protocol — Mandatory Before Any Mode
+Load params files, not stage files. Stage files are verbose source documents; params files are extracted mechanical values.
+
+1. Always read `references/params_core.md` first (dice engine, TN, Ob, degrees).
+2. Then read only the params files relevant to the subsystem being simulated/audited:
+
+| Subsystem | Params File |
+|-----------|-------------|
+| Core dice/TN/Ob | `references/params_core.md` |
+| Personal combat | `references/params_combat.md` |
+| Mass combat | `references/params_mass_combat.md` |
+| Debate | `references/params_debate.md` |
+| Threadwork | `references/params_threadwork.md` |
+| Factions (TTRPG or BG) | `references/params_factions.md` |
+| Board game mode | `references/params_board_game.md` |
+| Scale/mode transitions | `references/params_scale_transitions.md` |
+
+3. For each params file loaded, check the `<!-- version: -->` tag. If it does not match the current ruleset version (see `compilation/README.md`), halt and flag: `[STALE PARAMS: <file> is <version>, current ruleset is <version> — update params before proceeding]`.
+4. Do NOT read stage files or design files to get mechanical values. If a value is missing from params, flag it as a gap and request a params update rather than reading the source document mid-simulation.
+5. Exception: when specifically auditing a new design document (not yet parameterised), read that document directly and note that params are incomplete for that subsystem.
+
 ## Version Check Protocol (Mandatory)
 Before running any mode that uses mechanical values:
 1. Read the relevant `references/params_*.md` file(s) for this task.
