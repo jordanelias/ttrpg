@@ -12,7 +12,7 @@ completed:
     Varfell: Private Collection (Intel vs Ob 2, full degree table including Failure and long-term cost)
     Guilds: Economic Leverage (Wealth vs Wealth, Guild Favour ≥ 5 prerequisite)
     Niflhel: Quiet Network (3 modes: Intelligence/Sabotage/Assassination, Thread Tension cost)
-    Revolution: Community Weaving (Influence vs TT÷20, practitioner prerequisite, co-movement card)
+    Restoration Movement: Community Weaving (Influence vs TT÷20, practitioner prerequisite, co-movement card)
     Löwenritter: Coup Trigger / Martial Law (counter mechanic, not a standard roll)
 
 remaining_open_editorials_requiring_user_input:

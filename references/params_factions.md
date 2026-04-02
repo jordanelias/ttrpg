@@ -18,7 +18,7 @@ Seasonal cap: ±2 per stat per season (TTRPG); ±varies (BG — see accounting).
 | Varfell | 4 | 3 | 4 | 4 | 3 | 4 | — | 4 |
 | Guilds | 3 | 3 | 4 | 6 | 6 | 2 | — | 5 |
 | Niflhel | — | — | 5 | 4 | 4 | — | — | 4 |
-| Revolution/Restoration | — | 2 | 3/4 | — | 2 | — | — | 3 |
+| Restoration Movement | — | 2 | 3/4 | — | 2 | — | — | 3 |
 | Löwenritter | — | 3 | 2/3 | — | — | 5/6 | 3 | 5/4 |
 
 Note: Varfell BG Mandate 3/Wealth 3 is intentional (political isolation at game start, not their full institutional depth).
@@ -44,7 +44,7 @@ Non-Player Character faction rolls: relevant stat as d10 pool, TN 7.
 | Church only: reveals Thread truth | +2 Ob |
 
 ## Leadership Deviation Stability Check Obs
-Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Revolution: 2 | Löwenritter: 2
+Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Restoration Movement: 2 | Löwenritter: 2
 
 ## Unique Actions (TTRPG, from stage6)
 | Faction | Action | Roll | Effect |
@@ -141,9 +141,9 @@ Choose mode before rolling. One deployment per season.
 **Assassination mode:** Intel vs target's Intel +2 → Overwhelming: Non-Player Character eliminated, no evidence; Success: eliminated, evidence trail; Partial: wounded, evidence trail; Failure: operative captured, full exposure, Niflhel Stability −2.
 Long-term cost: each Quiet deployment this season: Thread Tension +0.5 (cumulative).
 
-### Revolution/Restoration — Community Weaving
+### Restoration Movement — Community Weaving
 Roll: Influence vs Ob = Thread Tension ÷ 20 (round up).
-Requires: at least one practitioner with Thread Sensitivity (TS) 30+ affiliated with the Revolution.
+Requires: at least one practitioner with Thread Sensitivity (TS) 30+ affiliated with the Restoration Movement.
 | Degree | Result |
 |--------|--------|
 | Overwhelming | Thread Tension −2 |
