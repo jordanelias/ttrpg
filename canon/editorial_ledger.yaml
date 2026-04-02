@@ -149,7 +149,9 @@ editorial_decisions:
     source_file: designs/debate/debate_system_redesign_v1.md
     description: "Niflhel formal Debate access — exclude entirely, or permit with no faction resonance bonuses?"
     full_flag_text: "[EDITORIAL: Niflhel formal Debate access] — Should Niflhel characters be excluded from formal Debate entirely, or permitted with no faction resonance bonuses?"
-    status: open
+    status: struck
+    superseded_by: ED-041
+    stale_reason: "Superseded by ED-041 — full Niflhel social toolkit question"
     priority: P1
     decision: null
     propagation_targets:
@@ -203,7 +205,9 @@ editorial_decisions:
     source_file: designs/debate/debate_system_redesign_v1.md
     description: "Concentration attribute for Debate — Focus (proposed) or Poise (alternative)?"
     full_flag_text: "[EDITORIAL: Concentration attribute] — Focus is proposed. Poise is the alternative (composure under sustained pressure). Which?"
-    status: open
+    status: struck
+    superseded_by: ED-027
+    stale_reason: "Consolidated into ED-027. Stress tests used Focus throughout."
     priority: P1
     decision: null
     propagation_targets:
@@ -239,7 +243,9 @@ editorial_decisions:
     source_file: designs/debate/debate_system_redesign_v1.md
     description: "Grand Debate role alternation — in 5 exchanges (3-2 split), which side gets the extra proposition: the initiator, or the faction that called for the Grand Debate?"
     full_flag_text: "[EDITORIAL: Role alternation in 5-exchange Grand Debate] — Exchange 5 has one side proposing 3 times and the other 2. Which side gets the extra proposition?"
-    status: open
+    status: struck
+    superseded_by: ED-042
+    stale_reason: "Superseded by ED-042 with full compiled-spec context"
     priority: P1
     decision: null
     propagation_targets:
@@ -331,7 +337,9 @@ editorial_decisions:
     source_file: designs/mass_combat/mass_battle_v3.md
     description: "Commander bonus formula — confirm the formula used for general combat bonus contributions"
     full_flag_text: "[EDITORIAL: confirm commander bonus formula]"
-    status: open
+    status: struck
+    superseded_by: ED-033
+    stale_reason: "Superseded by ED-033 (ST-INT-02) — three-formula conflict"
     priority: P1
     decision: null
     propagation_targets:
@@ -561,3 +569,310 @@ editorial_decisions:
     related_ids: []
     supersedes: []
     tags: [threadwork, combat, mode3, southernmost, blocker]
+
+  # ── SESSION 2026-04-02 HARVEST ─────────────────────────────────────────────
+
+  - id: ED-031
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: designs/board_game/valoria_bg_v05_stress_test_report.md
+    description: "ST-BG-01: Overwhelming threshold — BG uses Ob+1 surplus; TTRPG uses 2×Ob. Confirm which applies to BG."
+    full_flag_text: "[EDITORIAL: ST-BG-01 Overwhelming threshold — Ob+1 (BG-as-written) or 2×Ob (TTRPG parent)?]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+      - compilation/v0.14/stage_bg_board_game_mode.md
+      - references/params_board_game.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [board_game, dice, degree_table]
+
+  - id: ED-032
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: designs/board_game/valoria_bg_v05_stress_test_report.md
+    description: "ST-BG-05: TC 80 seizure — declared target or all-territory sweep? Cascade Depth Cap interaction if all-territory."
+    full_flag_text: "[EDITORIAL: ST-BG-05 TC 80 seizure scope — declared target vs all-territory sweep]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [board_game, church, territory, cascade]
+
+  - id: ED-033
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: designs/board_game/valoria_bg_v05_stress_test_report.md
+    description: "ST-INT-02: Three conflicting commander bonus formulas (BG: Military÷3; TTRPG: CR=⌈(Pres+Cog)÷2⌉; Hybrid handoff: CR÷2). Confirm intentional or align."
+    full_flag_text: "[EDITORIAL: ST-INT-02 Commander bonus formula conflict — three formulas, confirm which applies where]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+      - designs/mass_combat/mass_battle_v3.md
+      - compilation/v0.14/stage8_combat.md
+      - references/params_mass_combat.md
+    propagation_status: pending
+    related_ids: [ED-018]
+    supersedes: [ED-018]
+    stale_reason: null
+    tags: [mass_combat, hybrid, commander, formula]
+
+  - id: ED-034
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: designs/board_game/valoria_bg_v05_stress_test_report.md
+    description: "ST-INT-07: Ceiral Ritual RS +6–10 vs no BG Co-Movement card exceeding RS +1. Asymmetry intentional (TTRPG > BG scale) or cap needed?"
+    full_flag_text: "[EDITORIAL: ST-INT-07 Ceiral Ritual scale asymmetry vs Co-Movement — confirm intentional]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+      - designs/ttrpg/threadwork_redesign_v25.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [threadwork, hybrid, scaling, ceiral_ritual]
+
+  - id: ED-035
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: designs/board_game/valoria_bg_v05_stress_test_report.md
+    description: "ST-INT-08: Muster Str=2 translates to BG Health 3 — below any pre-printed token (min 8). Options: (a) custom tokens, (b) scale Muster output, (c) Muster is TTRPG-only. Recommend (c)."
+    full_flag_text: "[EDITORIAL: ST-INT-08 Muster output in BG context — confirm TTRPG-only or provide scaling]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+      - designs/mass_combat/mass_battle_v3.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [board_game, hybrid, muster, unit_tokens]
+
+  - id: ED-036
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: designs/board_game/valoria_bg_v05_stress_test_report.md
+    description: "ST-INT-12 BLOCKER: Altonian invasion unit stats (Strength, CP, Cohesion, Morale, Weapon, Armour) missing. Blocks all hybrid Altonian engagement at IP ≥ 75."
+    full_flag_text: "[EDITORIAL: ST-INT-12 BLOCKER — Altonian invasion unit stats missing, hybrid battle at IP≥75 unplayable]"
+    status: open
+    priority: P1-BLOCKER
+    decision: null
+    propagation_targets:
+      - designs/mass_combat/mass_battle_v3.md
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+      - compilation/v0.14/stage8_combat.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [hybrid, mass_combat, altonia, blocker]
+
+  - id: ED-037
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: designs/mass_combat/mass_battle_v3.md
+    description: "ST-MB-01: Volley TN 6 vs universal TN 7. Volley is 25% more accurate per die than melee. Confirm intentional exception or correct to TN 7."
+    full_flag_text: "[EDITORIAL: ST-MB-01 Volley TN — intentional exception at TN 6 or correct to TN 7?]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - designs/mass_combat/mass_battle_v3.md
+      - references/params_mass_combat.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [mass_combat, volley, TN, ranged]
+
+  - id: ED-038
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: designs/mass_combat/mass_battle_v3.md
+    description: "ST-MB-02: Coherence referenced in mass_battle_v3 §A.10 is undefined as a unit/practitioner stat in that document. Confirm = personal Coherence track from threadwork Part 3 (10→0 countdown)."
+    full_flag_text: "[EDITORIAL: ST-MB-02 Coherence stat definition in mass battle context — confirm = threadwork personal track]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - designs/mass_combat/mass_battle_v3.md
+      - compilation/v0.14/stage8_combat.md
+      - references/params_mass_combat.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [mass_combat, threadwork, coherence, practitioner]
+
+  - id: ED-039
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: designs/board_game/valoria_bg_v05_stress_test_report.md
+    description: "ST-INT-04: Military seasonal cap (±2/season) — does it pool with Domain Action changes or apply separately? Pooled = battle losses immunise from Domain targeting; separate = up to −4/season possible."
+    full_flag_text: "[EDITORIAL: ST-INT-04 Military seasonal cap — pooled with Domain Actions or separate?]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+      - designs/mass_combat/mass_battle_v3.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [board_game, hybrid, military, seasonal_cap]
+
+  - id: ED-040
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: compilation/v0.14/stage8_combat.md
+    description: "P2-B11-13: Artillery locked to Balanced disposition in all contexts — intentional (fire support role) or should Artillery be permitted Offensive at point-blank when defending?"
+    full_flag_text: "[EDITORIAL: P2-B11-13 Artillery Balanced disposition lock — intentional or oversight?]"
+    status: open
+    priority: P3
+    decision: null
+    propagation_targets:
+      - compilation/v0.14/stage8_combat.md
+      - designs/mass_combat/mass_battle_v3.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [mass_combat, artillery, formation, disposition]
+
+  - id: ED-041
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: design-file
+    source_file: designs/debate/debate_system_redesign_v1.md
+    description: "Niflhel social mode — excluded from formal debate, but what IS their social toolkit? Private manipulation only? Appeal to individuals? Thread operations? Confirm scope."
+    full_flag_text: "[EDITORIAL: Niflhel social mode — what can Niflhel characters do if excluded from formal debate?]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+      - compilation/v0.14/stage9_social.md
+    propagation_status: pending
+    related_ids: [ED-008]
+    supersedes: [ED-008]
+    stale_reason: null
+    tags: [debate, niflhel, social, faction]
+
+  - id: ED-042
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: design-file
+    source_file: designs/debate/debate_system_redesign_v1.md
+    description: "Grand Debate role alternation: 5 exchanges means one side proposes 3 times, other 2. Which side gets the extra proposition — the faction that called the Grand Debate, or the initiator by Presence?"
+    full_flag_text: "[EDITORIAL: Grand Debate role alternation — who proposes 3 of 5 exchanges?]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+    propagation_status: pending
+    related_ids: [ED-013]
+    supersedes: [ED-013]
+    stale_reason: null
+    tags: [debate, grand_debate, initiative, role_alternation]
+
+  - id: ED-043
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: designs/debate/debate_stress_test_v2.md
+    description: "Debate: Can accused have corroborators in a Church Tribunal? Inquisitorial proceedings historically forbade defence counsel. If blocked, Bonds advantage is nullified for accused."
+    full_flag_text: "[EDITORIAL: Can the accused have corroborators in a Church Tribunal?]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [debate, church, tribunal, corroboration]
+
+  - id: ED-044
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: designs/debate/debate_stress_test_v2.md
+    description: "Debate: Is Obscuring as pure denial/Doubt Marker the intended design? v2-P02 makes Obscuring a blocking tool with no tracker movement. Confirm this matches intent."
+    full_flag_text: "[EDITORIAL: Obscuring orientation as pure denial (Doubt Marker, no tracker movement) — confirm design intent]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+      - references/params_debate.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [debate, obscuring, orientation, doubt_marker]
+
+  - id: ED-045
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: designs/debate/debate_stress_test_v2.md
+    description: "Debate: Genre pivot mid-debate — orator argues a genre different from the Question's primary. Permitted? Penalised? Requires a specific action? No procedure currently exists."
+    full_flag_text: "[EDITORIAL: Genre pivot mid-debate — permitted? penalised? what procedure?]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/debate/debate_system_redesign_v1.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [debate, genre, pivot, procedure]
+
+  - id: ED-046
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: designs/ttrpg/threadwork_redesign_v25.md
+    description: "ST-TW-01: W-24 (Coherent Strike) at Object scale — RS unchanged and Coherence −0 on Success. Operation is functionally free if Leap round is protected. Under-costed?"
+    full_flag_text: "[EDITORIAL: ST-TW-01 W-24 Object scale cost — confirm free RS/Coherence on Success is intended]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/ttrpg/threadwork_redesign_v25.md
+      - compilation/v0.14/stage15_spell_catalog.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [threadwork, combat, weaving, cost]
