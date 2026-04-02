@@ -1,5 +1,5 @@
 # VALORIA — MASS BATTLE SYSTEM v4
-## Version: v4.1 (PP-101 applied: practitioner positioning rule + BG→TTRPG unit conversion)
+## Version: v4.2 (PP-103 applied: Phase-Lock Protocol for Zoom In + Levy unit added to B.2)
 ## Status: WORKING DESIGN — no appendix sections. Read straight through.
 ## Three-mode: TTRPG/Hybrid (Part A); Board Game (Part B); Hybrid Handoff (§B.5)
 ## All P1/P2/P3 patches applied. Gaps filled. Editorial notes flagged.
@@ -482,14 +482,18 @@ compatibility bridge.
 Inherits from B6 (existing BG unit table). No changes to existing stats.
 TTRPG equivalence added for hybrid translation:
 
-| BG Unit | Martial | Endur | Cohesion | Health | TTRPG CP equiv | TTRPG Weapon | TTRPG Armour |
-|---|---|---|---|---|---|---|---|
-| Light Infantry | 3 | 3 | 3 | 9 | 3 | LightCut | Light |
-| Heavy Infantry | 4 | 4 | 4 | 10 | 4 | HeavyCut | Medium |
-| Cavalry | 4 | 3 | 5 | 9 | 5 | HeavyCut | Heavy |
-| Ranged | 3 | 2 | 3 | 8 | 3 | Projectile | Light |
-| Artillery | 2 | 2 | 2 | 8 | 2 | HeavyBlunt | None |
-| Knights Templar | 5 | 5 | 6 | 11 | 5 | HeavyBlunt | Heavy |
+| BG Unit | Martial | Endur | Cohesion | Health | TTRPG CP | TTRPG Str [PROVISIONAL] | TTRPG Morale [PROVISIONAL] | TTRPG Weapon | TTRPG Armour |
+|---|---|---|---|---|---|---|---|---|---|
+| Levy | 1 | 1 | 1 | 7 | 1 | 5 | 2 | LightCut | None |
+| Light Infantry | 3 | 3 | 3 | 9 | 3 | 6 | 4 | LightCut | Light |
+| Heavy Infantry | 4 | 4 | 4 | 10 | 4 | 7 | 5 | HeavyCut | Medium |
+| Cavalry | 4 | 3 | 5 | 9 | 5 | 6 | 5 | HeavyCut | Heavy |
+| Ranged | 3 | 2 | 3 | 8 | 3 | 6 | 3 | Projectile | Light |
+| Artillery | 2 | 2 | 2 | 8 | 2 | 6 | 3 | HeavyBlunt | None |
+| Knights Templar | 5 | 5 | 6 | 11 | 5 | 8 | 6 | HeavyBlunt | Heavy |
+
+Str formula: ⌈Health ÷ 1.5⌉. Morale: [PROVISIONAL] — confirm via editorial.
+Levy unit requires Military ≥ 1 (all factions qualify). Resolves F-HYB-08 (PP-103).
 
 **Anti-Armour keyword** (HeavyBlunt units): +2D when targeting Heavy Infantry,
 Cavalry, or Knights Templar. Pre-printed on Artillery and Knights Templar
@@ -567,12 +571,21 @@ approval — each reflects the faction's military doctrine.]
 stat consequences (Military, Stability) apply at Accounting. Rendering Stability changes from
 any Thread orders apply at Accounting.
 
-**BG → TTRPG unit conversion (Zoom In):** When a named Player Character enters a BG-resolved
-battle (Zoom In trigger), translate BG unit tokens to TTRPG unit stats using
-§B.2. Each BG unit type has a pre-mapped TTRPG CP equivalent, weapon type, and
-armour tier. BG unit Health ÷ 1.5 (round up) = TTRPG unit Strength. Faction
-Military stat governs which unit types may be present (Military ≥ unit CP
-required) but does not translate directly to unit Strength.
+**Zoom In — Phase-Lock Protocol (PP-103):**
+Zoom In may only fire at one of three legal phase-lock points:
+- **After Phase 1** (orders placed, nothing resolved — cleanest entry)
+- **After Phase 3** (manoeuvre complete, pre-Engagement)
+- **After Phase 6 Step 1** (all damage applied, no ghost units)
+
+If a Zoom In trigger occurs mid-phase (e.g., during Phase 5 Engagement), it
+is held and fires at the end of the current phase — not immediately. This
+eliminates mid-phase ghost-unit state (ED-057) and ensures the TTRPG scene
+always opens with a clean, fully-resolved BG state.
+
+**BG → TTRPG unit conversion:** Translate BG unit tokens using §B.2. The table
+provides TTRPG CP, Str (provisional), Morale (provisional), weapon, and armour
+for each unit type. See the Zoom In/Out Reference Card (designs/gm_ref_cp14/)
+for the one-page summary.
 
 **Player Character faction leader present in contested territory:** BG resolution defers to
 TTRPG mass battle rules for that engagement. The Player Character's Coherence Rating and tactical decisions

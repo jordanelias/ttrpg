@@ -170,7 +170,7 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | `tests/sim_d_03_subsystem_k.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | K2-F-02: debate Zoom In gap |
 | `tests/sim_d_04_gap_fill_stress.md` | `tests/coverage_matrix.md` | Gap-fill verification logged |
 | `designs/debate/debate_system_redesign_v1.md` | `references/params_debate.md` | v1.5 — params update needed for new sections |
-| `compilation/v0.14/stage13_npcs.md` | `designs/debate/debate_system_redesign_v1.md` | Non-Player Character Composure/attributes feed debate sim |
+| `compilation/v0.14/stage13_npcs.md` | `designs/debate/debate_system_redesign_v1.md` | NPC Composure/attributes feed debate sim |
 
 ### SCALE TRANSITIONS / HYBRID
 
@@ -182,7 +182,11 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | `designs/hybrid/hybrid_gaps_resolved.md` | `compilation/v0.14/stage11_scale_transitions.md` | Pending integration |
 | `designs/hybrid/hybrid_gaps_resolved.md` | `designs/board_game/valoria_bg_v05_simulation_and_patches.md` §B.5 | Pending integration |
 
-### Game Master REFERENCE / FLOWCHARTS
+### GM REFERENCE / FLOWCHARTS
+
+| `designs/gm_ref_cp14/zoom_in_out_reference_card.md` (NEW) | `skills/valoria-orchestrator/references/state_transfer_spec.md` | Summarises spec §1 for table use |
+| `designs/gm_ref_cp14/zoom_in_out_reference_card.md` (NEW) | `designs/mass_combat/mass_battle_v3.md` §B.2/B.5 | Pulls unit conversion table |
+| `designs/mass_combat/mass_battle_v3.md` | `designs/gm_ref_cp14/zoom_in_out_reference_card.md` | B.5 references this card |
 
 | `tests/sim_hyb_01_templar_crossing.md` (NEW) | `tests/coverage_matrix.md` | Simulation run — log row added |
 | `tests/sim_hyb_01_templar_crossing.md` (NEW) | `canon/patch_register.yaml` | PP-101 sourced from this sim |

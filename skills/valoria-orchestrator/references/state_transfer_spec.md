@@ -2,7 +2,7 @@
 ## Source: compilation/v0.14/stage11_scale_transitions.md §11.1–11.3, §11.8
 ## Purpose: Defines every variable that crosses mode/scale boundaries, with direction and transformation
 ## Used by: valoria-simulator Mode K2 (transition stress test)
-## Last updated: 2026-04-02
+## Last updated: 2026-04-02 | PP-103 Phase-Lock Protocol applied
 
 ---
 
@@ -60,14 +60,25 @@ After TTRPG scene resolves:
 | Thread operation RS consequence | RS track updated immediately (not queued) |
 | Fortification damaged (siege scene) | Fortification −N applied immediately |
 
-### Interruption protocol (Zoom In fires mid-BG-turn)
+### Phase-Lock Protocol (PP-103) — replaces prior interruption protocol
 
-| BG phase at interruption | Protocol |
-|--------------------------|----------|
-| Planning (order selection) | Orders already placed hold. Zoom In resolves. Orders execute on resume. |
-| Placement (unit positioning) | Partial placement holds. Zoom In resolves. Placement completes on resume. |
-| Resolution (rolls in progress) | Current roll completes. Zoom In fires after. Resume from next roll. |
-| Accounting | Accounting completes first. Zoom In fires after. |
+Zoom In fires only at one of three legal phase-lock points:
+
+| Phase-lock point | When it fires | State at Zoom In |
+|-----------------|---------------|-----------------|
+| After Phase 1 | Orders placed, nothing resolved | Clean — no damage recorded |
+| After Phase 3 | Manoeuvre complete, pre-Engagement | Units positioned; no damage |
+| After Phase 6 Step 1 | All damage applied simultaneously | Clean — no ghost units |
+
+**If trigger occurs mid-phase:** Hold Zoom In until the end of the current phase.
+The current phase completes fully before the TTRPG scene opens.
+
+**Why three points only:** Phases 2 (Volley), 4 (Offensive Thread), and 5
+(Engagement) record damage but do not apply it. Allowing Zoom In during these
+phases creates ghost units — units at 0 recorded damage that haven't yet been
+removed. Phase-Lock eliminates this class of error.
+
+**Accounting:** Always completes before Zoom In fires (unchanged).
 
 ---
 
