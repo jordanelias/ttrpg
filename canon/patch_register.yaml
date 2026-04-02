@@ -1644,3 +1644,14 @@ patches:
   applied_to_version: "PP-107 bundle"
   status: applied
   applied_commit: pending
+
+- id: PP-177
+  date: 2026-04-02
+  severity: P1
+  description: "Card-Hand action economy adopted from stage_bg_proposal_v02.md B4. Replaces Order token system. Resolves ED-001 (P1-BLOCKER) and ED-078 (novice play time). Extracted to params_board_game.md."
+  finding_id: "ED-001 / ED-078 / BAL-BG-01-F-03"
+  source: editorial
+  affects: [references/params_board_game.md, references/canonical_sources.yaml, canon/editorial_ledger.yaml]
+  applied_to_version: "v0.5.3"
+  status: applied
+  applied_commit: pending

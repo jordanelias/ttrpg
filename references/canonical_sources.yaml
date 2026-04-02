@@ -126,12 +126,13 @@ systems:
     note: "Several pending patches: R-55 (FR-D-12), R-56 (W-08), R-59/60, R-62 (W-51 Ob 6), R-63 (FR-L-30), R-64 (Mode 3). Apply when compiling."
 
   board_game:
-    canonical: designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    canonical_mechanics: designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    canonical_action_economy: designs/board_game/stage_bg_proposal_v02.md
     params: references/params_board_game.md
     design_doc: designs/board_game/valoria_bg_v05_simulation_and_patches.md
     compilation_stage: compilation/v0.14/stage_bg_board_game_mode.md
     compilation_current: false
-    note: "stage_bg is STALE. bg_v05 is canonical. ED-001 (Card-Hand) blocker for compilation sync."
+    note: "ED-001 resolved. Card-Hand system from stage_bg_proposal_v02.md is canonical for action economy (PP-177). bg_v05 remains canonical for faction stats, clocks, victory conditions (PP-112 through PP-176). stage_bg compilation STALE — reconciliation of v02 + v05 needed before compilation update. sync."
 
   hybrid:
     canonical_design: designs/hybrid/hybrid_gaps_resolved.md  # pending integration

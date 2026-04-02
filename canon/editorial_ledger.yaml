@@ -13,21 +13,23 @@ editorial_decisions:
   - id: ED-001
     legacy_id: BG-E-30
     date_flagged: 2026-03-31
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: session
     source_file: session_log_current.md
     description: "Adopt Card-Hand system for board game action selection"
     full_flag_text: "BG-E-30: Adopt Card-Hand system (BLOCKER)"
-    status: open
+    status: resolved
     priority: P1-BLOCKER
-    decision: null
+    decision: "Card-Hand system from stage_bg_proposal_v02.md adopted as canonical BG action economy. PP-177 applied. Canonical source updated to include stage_bg_proposal_v02.md for action economy. Resolves ED-078 (novice play time) simultaneously."
     propagation_targets:
       - compilation/v0.14/stage_bg_board_game_mode.md
       - designs/board_game/stage_bg_proposal_v02.md
-    propagation_status: pending
-    related_ids: []
+      - references/params_board_game.md
+      - references/canonical_sources.yaml
+    propagation_status: applied
+    related_ids: [ED-078]
     supersedes: []
-    tags: [board_game, action_economy, blocker]
+    tags: [board_game, action_economy, blocker, resolved]
 
   - id: ED-002
     legacy_id: BG-E-31
@@ -1413,37 +1415,37 @@ editorial_decisions:
     supersedes: []
     tags: [board_game, hafenmark, wealth, balance]
 
-  - id: ED-065
+  - id: ED-078
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation
     source_file: tests/sim_bg_01.md
-    description: "Novice play time P1: planning phase ~12 min/player. Confirm simplification approach: (a) faction preset menus; (b) reduce tokens to 3; (c) action cards (links ED-001)."
-    full_flag_text: "[EDITORIAL: ED-065 — Novice planning time P1: ~12 min/player. Confirm simplification approach before playtesting.]"
-    status: open
+    description: "Novice play time P1: planning phase ~12 min/player. Resolved: user selected option (c) — action cards replacing Order tokens, adopting Card-Hand system from stage_bg_proposal_v02.md. Resolves ED-001 simultaneously."
+    full_flag_text: "[EDITORIAL: ED-078 — Novice planning time P1: resolved via Card-Hand adoption (PP-177).]"
+    status: resolved
     priority: P1
-    decision: null
-    propagation_targets: [designs/board_game/valoria_bg_v05_simulation_and_patches.md]
-    propagation_status: pending
+    decision: "Option C: action cards replacing Order tokens. Card-Hand system from stage_bg_proposal_v02.md adopted as canonical. Resolves ED-001."
+    propagation_targets: [designs/board_game/valoria_bg_v05_simulation_and_patches.md, references/params_board_game.md, references/canonical_sources.yaml]
+    propagation_status: applied
     related_ids: [ED-001]
     supersedes: []
-    tags: [board_game, cognitive_load, novice, playtesting]
+    tags: [board_game, cognitive_load, novice, playtesting, resolved]
 
-  - id: ED-066
+  - id: ED-079
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation
     source_file: tests/sim_bg_01.md
-    description: "Mandate recovery mechanism undefined in BG spec. Factions losing Mandate via Crown Decree have no stated restoration path. Confirm or design recovery mechanic."
-    full_flag_text: "[EDITORIAL: ED-066 — Mandate recovery undefined in BG. Confirm or design restoration mechanic.]"
-    status: open
+    description: "Mandate recovery mechanism undefined in BG spec. Resolved: PP-174 applied — Govern Overwhelming in own capital = Mandate +1 (max once/season, max to starting value)."
+    full_flag_text: "[EDITORIAL: ED-079 — Mandate recovery: resolved via PP-174.]"
+    status: resolved
     priority: P2
-    decision: null
-    propagation_targets: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
-    propagation_status: pending
+    decision: "PP-174: Govern Overwhelming in own capital = Mandate +1. Applied to params_board_game.md."
+    propagation_targets: [references/params_board_game.md]
+    propagation_status: applied
     related_ids: []
     supersedes: []
-    tags: [board_game, mandate, faction_mechanics]
+    tags: [board_game, mandate, faction_mechanics, resolved]
   - id: ED-071
     date_flagged: 2026-04-02
     date_resolved: null
