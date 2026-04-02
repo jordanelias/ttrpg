@@ -25,8 +25,8 @@ As Strength drops, the pool shrinks — fewer soldiers means fewer dice
 regardless of individual quality. CP is the ceiling; Strength determines
 whether you reach it.
 
-**Design axiom: Generalship dominates.** CR asymmetry is intentional. A CR=7
-general versus a CR=1 general produces a near-certain outcome before a die is
+**Design axiom: Generalship dominates.** Coherence Rating asymmetry is intentional. A Coherence Rating=7
+general versus a Coherence Rating=1 general produces a near-certain outcome before a die is
 rolled. The general is the battle.
 
 ---
@@ -58,7 +58,7 @@ determines outcome more than tactics.
 | Campaign | ~1,000 soldiers | Territorial |
 | War | ~5,000 soldiers | Structural |
 
-Scale is narrative only — no mechanical change except Thread TS minimums.
+Scale is narrative only — no mechanical change except Thread Thread Sensitivity minimums.
 
 ---
 
@@ -94,7 +94,7 @@ for units it fields. A Military=3 faction cannot field CP=5 units.
 **Speed** — Slow / Standard / Fast (3 tiers).
 
 **Cohesion** (1–7) — organisational integrity. Starting value = min(general's
-CR, Military ceiling above).
+Coherence Rating, Military ceiling above).
 
 **Cohesion check — DETERMINISTIC:** *[P1-04]*
 When total Strength lost this turn (all sources, applied at Phase 5) exceeds
@@ -109,11 +109,11 @@ of damage source (Volley, melee, environmental). *[P2-06]*
 | 0 | Formation broken; cannot attack; must reform or rout |
 
 Cohesion restoration: Reform Phase only (unit not engaged), +1 Cohesion.
-Requires general's CR ≥ current Cohesion + 1.
-CR=1 general cannot restore Cohesion to any unit — all degradation is
-permanent for that battle. *[NEW-P2-05 — confirmed as intended CR asymmetry]*
+Requires general's Coherence Rating ≥ current Cohesion + 1.
+Coherence Rating=1 general cannot restore Cohesion to any unit — all degradation is
+permanent for that battle. *[NEW-P2-05 — confirmed as intended Coherence Rating asymmetry]*
 
-**Morale** (1–7) — rout threshold. Starting = general's CR + unit quality
+**Morale** (1–7) — rout threshold. Starting = general's Coherence Rating + unit quality
 modifier (cap 7).
 
 Morale degradation triggers:
@@ -153,28 +153,28 @@ column (= LightCut values). *[P2-07]*
 
 ### A.5 COMMAND RATING
 
-**CR = ⌈(Presence + Cognition) ÷ 2⌉** *[confirmed]*
+**Coherence Rating = ⌈(Presence + Cognition) ÷ 2⌉** *[confirmed]*
 
-CR governs:
-1. Sub-unit limit (max simultaneous commanded = CR; TTRPG hard cap: 3)
+Coherence Rating governs:
+1. Sub-unit limit (max simultaneous commanded = Coherence Rating; TTRPG hard cap: 3)
 2. Cohesion ceiling
 3. Morale starting value and floor (= 1 while general present)
-4. Tactic execution (CR dice vs Ob per tactic)
+4. Tactic execution (Coherence Rating dice vs Ob per tactic)
 
-**NPC generals:** CR assigned directly (1–7) as a narrative stat without
-Pres+Cog derivation. *[CR-P2-02]*
+**Non-Player Character generals:** Coherence Rating assigned directly (1–7) as a narrative stat without
+Pres+Cog derivation. *[Coherence Rating-P2-02]*
 
 **General two-stage death:** *[P1-02]*
-- Stage 1 (incapacitated): −1 Morale all units, CR halved, Morale floor
+- Stage 1 (incapacitated): −1 Morale all units, Coherence Rating halved, Morale floor
   suspended. Stabilise in Phase 5 with Medicine Ob 2 (1-turn window).
 - Stage 2 (killed): Stage 2 fires at start of following turn's Phase 5
-  if not stabilised. −2 Morale (outside cap), CR = 0, all units uncommanded.
+  if not stabilised. −2 Morale (outside cap), Coherence Rating = 0, all units uncommanded.
   *[NEW-P2-02 — Stage 1 → 2 timing confirmed]*
 
-**General in personal combat:** suspends all CR effects. Re-establish command
-with CR check Ob 2 in Phase 1 of any subsequent turn. *[P2-10]*
+**General in personal combat:** suspends all Coherence Rating effects. Re-establish command
+with Coherence Rating check Ob 2 in Phase 1 of any subsequent turn. *[P2-10]*
 
-**Wounds carry over:** Wounds from personal combat add +1 Ob to CR tactic
+**Wounds carry over:** Wounds from personal combat add +1 Ob to Coherence Rating tactic
 execution rolls. A 2-wound general has tactic success probability halved.
 *[D3-P2-01 — confirmed intended]*
 
@@ -196,16 +196,16 @@ battle turn after personal combat resolves. *[D3-P2-02]*
 | Feigned Retreat | — | — | See Tactics |
 | Reserve | Cannot engage | Cannot engage | Commits at Phase 3 start of NEXT turn *[P3-02]* |
 
-> **Clarification:** "Roll a number of d10s equal to the opposing general's CR score, against Ob 2, to recognise the Feigned Retreat as a feint rather than a genuine withdrawal. Success: the pursuing side is not deceived; the Feigned Retreat has no effect this turn. Failure (or no roll if the opposing general is killed): pursuing side pursues normally and suffers the Cohesion check."
+> **Clarification:** "Roll a number of d10s equal to the opposing general's Coherence Rating score, against Ob 2, to recognise the Feigned Retreat as a feint rather than a genuine withdrawal. Success: the pursuing side is not deceived; the Feigned Retreat has no effect this turn. Failure (or no roll if the opposing general is killed): pursuing side pursues normally and suffers the Cohesion check."
 
 > **Clarification (PP-MB-04):** "Reserve commitment at Phase 3 of Turn N+1 makes the unit immediately available for Phase 4 engagement in that same turn (Turn N+1). Commitment does not delay the unit to Turn N+2. Summary: declare Reserve in Phase 3 of Turn N → unit commits at Phase 3 of Turn N+1 → unit may engage in Phase 4 of Turn N+1."
 
-> **Clarification (PP-MB-07):** "Three-sided encirclement example: Front, Left flank, Right flank simultaneously. Shield Wall negates one declared flank (say, Left). Front attack is fully defended (+2D Def). Right flank attack applies normally (full flanking bonus to attacker). The defender faces two unmitigated engagements and one defended — this is the intended design ceiling for Shield Wall. CR = 3 maximum means a force cannot be attacked from more than three directions simultaneously."
+> **Clarification (PP-MB-07):** "Three-sided encirclement example: Front, Left flank, Right flank simultaneously. Shield Wall negates one declared flank (say, Left). Front attack is fully defended (+2D Def). Right flank attack applies normally (full flanking bonus to attacker). The defender faces two unmitigated engagements and one defended — this is the intended design ceiling for Shield Wall. Coherence Rating = 3 maximum means a force cannot be attacked from more than three directions simultaneously."
 
 **Formation counter logic:** Wedge beats Line. Shield Wall negates Wedge but
 cannot advance. No formation is universally dominant. *[P2-01]*
 
-**Units beyond CR limit** fight at Line formation, Cohesion = 1 floor,
+**Units beyond Coherence Rating limit** fight at Line formation, Cohesion = 1 floor,
 no tactics available. *[P3-03]*
 
 ---
@@ -316,8 +316,8 @@ both sides lose 1 Morale in Phase 7. *[P2-02, P2-04]*
 | Tactic | Effect | Ob | Counter |
 |---|---|---|---|
 | Envelopment | Attempt all-flank; requires Fast | 2 | Refused Flank |
-| Feigned Retreat | Disengage; pursuer Cohesion check; re-engage next turn with flank | 3 | CR Ob 2 to recognise |
-| Ambush | First engagement: defender no Defence allocation | 4 | Scouting (GM) |
+| Feigned Retreat | Disengage; pursuer Cohesion check; re-engage next turn with flank | 3 | Coherence Rating Ob 2 to recognise |
+| Ambush | First engagement: defender no Defence allocation | 4 | Scouting (Game Master) |
 | Concentration | All sub-units on one target; max Fibonacci | 1 | Flanks exposed |
 | Refused Flank | Wing anchors on terrain; immune to that flank | 1 | Sacrifices offence |
 | Hammer & Anvil | Shield Wall holds; Fast unit envelops | 3 | Break Anvil first |
@@ -345,7 +345,7 @@ splitting Str=6 into 3+3 against undivided Str=5 defender is disadvantageous
 
 **Corrected scale mapping:** *[THREAD-P1-01 fix]*
 
-| Battle scale | Thread scale | Min TS | Thread Ob | Coherence auto-cost |
+| Battle scale | Thread scale | Min Thread Sensitivity | Thread Ob | Coherence auto-cost |
 |---|---|---|---|---|
 | Skirmish | Personal | 30 | 2 | 0 |
 | Company | Object | 30 | 1 | 0 |
@@ -376,7 +376,7 @@ same turn.
 
 **Co-movement at mass battle scale:** *[COMOVE-P2-01 fix]*
 - Temporal result: general loses Phase 5 action for d3 turns
-- Epistemic result: CR −1 for d3 turns (command confusion)
+- Epistemic result: Coherence Rating −1 for d3 turns (command confusion)
 - Actual result: general takes 1 Wound
 
 **Collective Thread operations:** viable if helpers are in Reserve (not
@@ -396,22 +396,22 @@ Phase 6, not immediately. Unit unaffected. Failed First Leap (Dissociation):
 character unavailable for remainder of battle. *[EDGE-03]*
 
 **Thread Gaps from battle:** Gaps created during mass battle are registered
-on the territory card at battle resolution. Standard Gap RS drift applies.
+on the territory card at battle resolution. Standard Gap Rendering Stability drift applies.
 *[EDGE-05]*
 
 ---
 
 ### A.11 SOUTHERNMOST
 
-Non-Thread-sensitive units (TS < 30) cannot operate in Southernmost. They
+Non-Thread-sensitive units (Thread Sensitivity < 30) cannot operate in Southernmost. They
 dissolve without awareness on entry — no casualties, no Morale trigger, no
 Cohesion check. Remove from battle map. This is why Southernmost was never
 conquered. *[confirmed — replaces all prior Cohesion check variants]*
 
-> **Clarification (PP-MB-06):** "The requirement 'all individuals must have TS ≥ 30' applies at the individual level: any individual in a unit who lacks TS ≥ 30 dissolves on entry to the Southernmost, without awareness, with no Morale trigger for surviving unit members. For unit-level accounting: reduce the unit's Strength proportionally to the fraction of individuals who lack TS ≥ 30. A unit with 40% TS-capable individuals enters at 40% Strength (round down to minimum 1 if any TS-capable individuals remain, or 0 if none). Recalculate Effective CP from the reduced Strength. Practical constraint: Only Restoration communities and Varfell forces with VTM ≥ 2 can field meaningful units in the Southernmost. Crown, Church, Hafenmark, Guilds, and Niflhel cannot field viable military forces there."
+> **Clarification (PP-MB-06):** "The requirement 'all individuals must have Thread Sensitivity ≥ 30' applies at the individual level: any individual in a unit who lacks Thread Sensitivity ≥ 30 dissolves on entry to the Southernmost, without awareness, with no Morale trigger for surviving unit members. For unit-level accounting: reduce the unit's Strength proportionally to the fraction of individuals who lack Thread Sensitivity ≥ 30. A unit with 40% Thread Sensitivity-capable individuals enters at 40% Strength (round down to minimum 1 if any Thread Sensitivity-capable individuals remain, or 0 if none). Recalculate Effective CP from the reduced Strength. Practical constraint: Only Restoration communities and Varfell forces with VTM ≥ 2 can field meaningful units in the Southernmost. Crown, Church, Hafenmark, Guilds, and Niflhel cannot field viable military forces there."
 
 All individuals in a military force operating in Southernmost must personally
-have TS ≥ 30. No exceptions.
+have Thread Sensitivity ≥ 30. No exceptions.
 
 ---
 
@@ -419,7 +419,7 @@ have TS ≥ 30. No exceptions.
 
 Routing: Slow/Standard cannot fight back. Fast may rearguard at −2D Off.
 Pursuit: Fast units only. Routing unit loses Strength equal to pursuer net
-Offence successes (no Defence) each turn. Recall: CR Ob 2.
+Offence successes (no Defence) each turn. Recall: Coherence Rating Ob 2.
 Over-pursuing exposes flanks. *[confirmed]*
 
 ---
@@ -451,14 +451,14 @@ A Muster action produces 1 unit with Strength = 2, CP = faction Military ÷ 2
 
 **Woven units — brittleness:** Thread-Woven Cohesion or Morale boosts are
 subject to §4.3.4 brittleness rules. Taking Str loss > Cohesion in a single
-turn qualifies as a non-Thread event of sufficient severity — GM may rule
+turn qualifies as a non-Thread event of sufficient severity — Game Master may rule
 the Woven configuration shatters into a Shifting Object. A Woven unit can be
 simultaneously more and less resilient than an unworked unit. *[EDGE-07]*
 
-> **Clarification:** "A Woven unit configuration that shatters (Str loss in a single turn > current Cohesion) does not become a Shifting Object during the battle. For the remainder of the battle, it fights at Line formation, Cohesion 1. The Shifting Object status is registered for post-battle Thread consequences — the GM tracks this and applies it in the narrative aftermath. This prevents mid-battle stat volatility while preserving the Thread consequence."
+> **Clarification:** "A Woven unit configuration that shatters (Str loss in a single turn > current Cohesion) does not become a Shifting Object during the battle. For the remainder of the battle, it fights at Line formation, Cohesion 1. The Shifting Object status is registered for post-battle Thread consequences — the Game Master tracks this and applies it in the narrative aftermath. This prevents mid-battle stat volatility while preserving the Thread consequence."
 
-**TT references in stage5_clocks.md:** Compilation error — all TT references
-must be converted to RS with inversion (TT +N → RS −N). *[EDGE-06 — P1,
+**Thread Tension references in stage5_clocks.md:** Compilation error — all Thread Tension references
+must be converted to Rendering Stability with inversion (Thread Tension +N → Rendering Stability −N). *[EDGE-06 — P1,
 requires separate compilation pass on stage5_clocks.md]*
 
 ---
@@ -525,7 +525,7 @@ Net successes = damage dealt to opposing units.
 **Step 5 — Morale.** Formation Break → Cohesion check Ob 2 → Route on fail.
 
 **Thread in BG battles:** handled by Co-Movement cards per existing rules.
-At RS < 20: T-03 fires — both sides draw 1 Co-Movement card per battle.
+At Rendering Stability < 20: T-03 fires — both sides draw 1 Co-Movement card per battle.
 *[P3-c confirmed]*
 
 ---
@@ -563,26 +563,26 @@ approval — each reflects the faction's military doctrine.]
 
 ### B.5 HYBRID HANDOFF
 
-**No PC in battle:** BG resolution fires. Territory control applies. Faction
-stat consequences (Military, Stability) apply at Accounting. RS changes from
+**No Player Character in battle:** BG resolution fires. Territory control applies. Faction
+stat consequences (Military, Stability) apply at Accounting. Rendering Stability changes from
 any Thread orders apply at Accounting.
 
-**BG → TTRPG unit conversion (Zoom In):** When a named PC enters a BG-resolved
+**BG → TTRPG unit conversion (Zoom In):** When a named Player Character enters a BG-resolved
 battle (Zoom In trigger), translate BG unit tokens to TTRPG unit stats using
 §B.2. Each BG unit type has a pre-mapped TTRPG CP equivalent, weapon type, and
 armour tier. BG unit Health ÷ 1.5 (round up) = TTRPG unit Strength. Faction
 Military stat governs which unit types may be present (Military ≥ unit CP
 required) but does not translate directly to unit Strength.
 
-**PC faction leader present in contested territory:** BG resolution defers to
-TTRPG mass battle rules for that engagement. The PC's CR and tactical decisions
+**Player Character faction leader present in contested territory:** BG resolution defers to
+TTRPG mass battle rules for that engagement. The Player Character's Coherence Rating and tactical decisions
 play out in full. BG territory and stat consequences still apply at resolution.
 Clock changes still batch to Accounting.
 
 **Stat translation (TTRPG ↔ BG):**
 - TTRPG unit Strength → BG unit Health (Str × 1.5, round up — Health scale
   is 8–11, Str is 1–7; Str 4 ≈ Health 9)
-- TTRPG general CR → BG commander bonus (CR ÷ 2, round down)
+- TTRPG general Coherence Rating → BG commander bonus (Coherence Rating ÷ 2, round down)
 - TTRPG Cohesion → BG Cohesion (direct, same scale)
 - TTRPG Morale (rout) → BG Cohesion check (rout equivalent)
 
@@ -594,10 +594,10 @@ All items below require user approval before compilation.
 
 | ID | Item | Proposed resolution |
 |---|---|---|
-| CR-EDIT-01 | Military stat → unit CP/Cohesion ceiling (§A.4) | Table above — confirm |
-| CR-EDIT-02 | Battle outcome → faction stat consequences (§A.13) | −1 Military/unit destroyed; Stability checks as above |
-| CR-EDIT-03 | Muster → unit stats (§A.13) | Str=2, CP = Military÷2 |
+| Coherence Rating-EDIT-01 | Military stat → unit CP/Cohesion ceiling (§A.4) | Table above — confirm |
+| Coherence Rating-EDIT-02 | Battle outcome → faction stat consequences (§A.13) | −1 Military/unit destroyed; Stability checks as above |
+| Coherence Rating-EDIT-03 | Muster → unit stats (§A.13) | Str=2, CP = Military÷2 |
 | BG-EDIT-01 | Commander bonus formula (§B.3) | Military ÷ 3, round down |
 | BG-EDIT-02 | Faction-specific tactic cards (§B.4) | 8 faction cards above |
-| CLOCK-EDIT-01 | IP 75+ Altonian invasion unit stats | See simulation report |
-| CLOCK-EDIT-02 | Church military victory → TC change | No TC change from military victory alone (confirm) |
+| CLOCK-EDIT-01 | Institutional Pressure 75+ Altonian invasion unit stats | See simulation report |
+| CLOCK-EDIT-02 | Church military victory → Theocracy Counter change | No Theocracy Counter change from military victory alone (confirm) |

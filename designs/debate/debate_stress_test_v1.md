@@ -16,20 +16,20 @@ Before testing, capture every mechanical claim made during design. If a componen
 |---|---|---|
 | Initiative (exchange 1) | Yes | Higher Presence speaks first |
 | Initiative (subsequent) | Yes | Winner of previous exchange. Draw retains. |
-| Read (step 1) | Partial | Roll Attunement + History, TN 7. Success → GM gives signal about audience state. |
+| Read (step 1) | Partial | Roll Attunement + History, TN 7. Success → Game Master gives signal about audience state. |
 | Genre choice | Yes | Past / Present / Future |
 | Orientation choice | Yes | Revealing / Obscuring |
 | Argument roll | Yes | Cognition + History bonus, TN 7 |
-| Memory bonus | Partial | GM awards 1–3D "when citing specific precedent, contradiction, or documented fact" |
+| Memory bonus | Partial | Game Master awards 1–3D "when citing specific precedent, contradiction, or documented fact" |
 | Focus defence | Partial | Roll Focus vs incoming strain. Successes reduce strain. |
 | Presence modifier | Partial | Modifies strain dealt. Formula: "every 2 points above 3" → +1 strain |
 | Composure | Yes | Threshold. Strain ≥ Composure → Rattled (−1D all debate rolls) |
 | Concentration | Yes | Focus + Presence. Depletes by 1 per exchange. At 0 → Spent (−2D, opponent +1D). |
 | Conviction Track | Partial | Audience on a track between two positions. Moves by margin. |
-| Genre weight | **NO** | GM decides ×1, ×0.5, ×0 per genre. No procedure for how. |
-| Orientation weight | **NO** | GM decides. No procedure. |
-| Dynamic weight shift | **NO** | GM shifts weights between exchanges. No procedure for how or when. |
-| Attunement read output | **NO** | GM decides what to tell the player. No calibration for success degrees. |
+| Genre weight | **NO** | Game Master decides ×1, ×0.5, ×0 per genre. No procedure for how. |
+| Orientation weight | **NO** | Game Master decides. No procedure. |
+| Dynamic weight shift | **NO** | Game Master shifts weights between exchanges. No procedure for how or when. |
+| Attunement read output | **NO** | Game Master decides what to tell the player. No calibration for success degrees. |
 | Conviction Track scale | **NO** | "10 points" mentioned in example. No defined scale. |
 | Conviction Track threshold | **NO** | "+5 for outright victory" in example. No procedure for setting. |
 | Tracker movement formula | **NO** | "Margin minus audience Spirit modifier" mentioned once, never specified. |
@@ -45,14 +45,14 @@ Before testing, capture every mechanical claim made during design. If a componen
 | Call for Division | Partial | Force vote after exchange 2+. Count exchanges won. |
 | Unmask | Yes | Clear strain. Reveal truth. Debate ends. |
 | Thread co-movement | Stated | Winner's genre + orientation determines type. No magnitude specified. |
-| GM ledger | Yes | Shown after resolution. |
+| Game Master ledger | Yes | Shown after resolution. |
 | Asymmetric proceedings | Stated | Tribunal, Royal Audience described conceptually. No mechanical procedure. |
 
 ## 0.2 Unspecified Components (Pre-Test Findings)
 
-**F-00-01 (CRITICAL): Genre weight has no procedure.** The entire Conviction Track system depends on the GM assigning weights. There is no rule for how to set them, how to shift them, or what constrains the GM. This is the system's load-bearing component and it is entirely fiat.
+**F-00-01 (CRITICAL): Genre weight has no procedure.** The entire Conviction Track system depends on the Game Master assigning weights. There is no rule for how to set them, how to shift them, or what constrains the Game Master. This is the system's load-bearing component and it is entirely fiat.
 
-**F-00-02 (CRITICAL): Attunement read output has no calibration.** The read roll exists but what the GM says on success vs partial vs failure is undefined. In the example, the GM gave detailed tactical intelligence on every read. There is no rule for what information corresponds to what roll result.
+**F-00-02 (CRITICAL): Attunement read output has no calibration.** The read roll exists but what the Game Master says on success vs partial vs failure is undefined. In the example, the Game Master gave detailed tactical intelligence on every read. There is no rule for what information corresponds to what roll result.
 
 **F-00-03 (CRITICAL): Interaction types have no resolution procedure.** Three interaction types were identified (same genre/opposite orientation, same genre/same orientation, different genre) but none has a mechanical resolution distinct from "compare successes."
 
@@ -62,7 +62,7 @@ Before testing, capture every mechanical claim made during design. If a componen
 
 **F-00-06 (HIGH): Spirit as audience resistance is mentioned once and never specified.** "Each successful exchange moves the marker by margin minus audience Spirit modifier" — what is this modifier? Where does it come from? How is audience Spirit determined?
 
-**F-00-07 (MEDIUM): Memory bonus is GM-discretionary.** The GM awards 1–3D when the player cites specifics. No rule determines 1D vs 2D vs 3D. No rule defines what counts as "specific enough."
+**F-00-07 (MEDIUM): Memory bonus is Game Master-discretionary.** The Game Master awards 1–3D when the player cites specifics. No rule determines 1D vs 2D vs 3D. No rule defines what counts as "specific enough."
 
 **F-00-08 (MEDIUM): Focus defence is mechanically thin.** Roll Focus, successes reduce strain. But: what TN? What Ob? Is it a flat reduction (each success = −1 strain) or compared to something? The example implied flat reduction but didn't state it.
 
@@ -163,7 +163,7 @@ Before testing, capture every mechanical claim made during design. If a componen
 
 ## Test 1.6: Attunement Read
 
-**No calibrated output table exists.** The GM decides what to say. Testing what SHOULD happen:
+**No calibrated output table exists.** The Game Master decides what to say. Testing what SHOULD happen:
 
 | Net Successes | What Should Be Communicated |
 |---|---|
@@ -172,7 +172,7 @@ Before testing, capture every mechanical claim made during design. If a componen
 | 2 (Overwhelming) | Both signals: favoured genre AND favoured orientation. |
 | 3+ (Exceptional) | Both signals + one specific detail: "The Crown delegates are the swing votes" or "Baralta's last argument annoyed the Speaker." |
 
-**Finding S1-09 (P1):** This table doesn't exist in the system. It must. Without it, the GM has no procedure and will give inconsistent information. The read step is the most important tactical decision in the system — it's how players learn what works. If the output is uncalibrated, the entire tactical layer collapses into GM narrative preference.
+**Finding S1-09 (P1):** This table doesn't exist in the system. It must. Without it, the Game Master has no procedure and will give inconsistent information. The read step is the most important tactical decision in the system — it's how players learn what works. If the output is uncalibrated, the entire tactical layer collapses into Game Master narrative preference.
 
 ## Test 1.7: Conviction Track Movement
 
@@ -180,15 +180,15 @@ Before testing, capture every mechanical claim made during design. If a componen
 
 **Formula (reconstructed from example):** Tracker Δ = margin × genre_weight × orientation_weight.
 
-But: what ARE the weights? The GM sets them. There is no rule.
+But: what ARE the weights? The Game Master sets them. There is no rule.
 
-**Finding S1-10 (P0 — SYSTEM-BREAKING):** The Conviction Track is the win condition. Its movement depends entirely on GM-set weights with no constraining procedure. This means:
+**Finding S1-10 (P0 — SYSTEM-BREAKING):** The Conviction Track is the win condition. Its movement depends entirely on Game Master-set weights with no constraining procedure. This means:
 
-- The GM decides who wins before the debate starts (by setting weights that favour one side's likely genre)
-- The GM can change the outcome mid-debate (by shifting weights)
+- The Game Master decides who wins before the debate starts (by setting weights that favour one side's likely genre)
+- The Game Master can change the outcome mid-debate (by shifting weights)
 - The players cannot verify whether the weights were fair until the ledger is revealed, at which point the debate is over
 
-The ledger provides transparency but not fairness. Showing that Past was weighted ×1 after the fact doesn't help if the GM set it knowing Baralta would argue Past.
+The ledger provides transparency but not fairness. Showing that Past was weighted ×1 after the fact doesn't help if the Game Master set it knowing Baralta would argue Past.
 
 **This is the system's critical failure point.** The weight-setting procedure must be mechanical, not discretionary.
 
@@ -198,11 +198,11 @@ The ledger provides transparency but not fairness. Showing that Past was weighte
 
 ## Test 2.1: Read + Genre Choice Interaction
 
-**Scenario:** Orator A rolls Attunement and gets Overwhelming (3+ net). GM correctly signals that Future is the strong genre. Orator A chooses Future + Revealing. Orator B rolls Attunement and fails — gets no signal or a misleading one. Orator B chooses Past + Revealing (their default).
+**Scenario:** Orator A rolls Attunement and gets Overwhelming (3+ net). Game Master correctly signals that Future is the strong genre. Orator A chooses Future + Revealing. Orator B rolls Attunement and fails — gets no signal or a misleading one. Orator B chooses Past + Revealing (their default).
 
 **Expected outcome:** Orator A's argument is fully weighted. Orator B's argument is at ×0.5 or ×0. Even if Orator B wins the exchange on raw successes, the tracker moves toward A because A's winning argument was on-genre.
 
-**Problem:** Orator B won the exchange but the tracker moved against them. From B's perspective, they won the argument and lost the room. This is intended behaviour — but it requires the player to understand and accept that exchange victory ≠ debate victory. If the system isn't clearly communicated, this will feel like the GM cheating.
+**Problem:** Orator B won the exchange but the tracker moved against them. From B's perspective, they won the argument and lost the room. This is intended behaviour — but it requires the player to understand and accept that exchange victory ≠ debate victory. If the system isn't clearly communicated, this will feel like the Game Master cheating.
 
 **Finding S2-01 (P2):** The gap between exchange winner and tracker winner must be explicitly communicated to players before the debate begins. "Winning the argument and winning the room are different things" should be a stated system principle, not a surprise.
 
@@ -247,7 +247,7 @@ The ledger provides transparency but not fairness. Showing that Past was weighte
 
 ## Test 2.5: Memory Bonus Interaction with Genre
 
-**Scenario:** Orator argues Past + Revealing (prosecution). Cites specific documents, dates, testimony. GM awards Memory bonus.
+**Scenario:** Orator argues Past + Revealing (prosecution). Cites specific documents, dates, testimony. Game Master awards Memory bonus.
 
 **Question:** Does Memory bonus apply to Present or Future genre arguments? If the orator argues Future + Revealing ("I recall the economic projections from last season's Guild report showing that this policy will fail"), is that a Memory-eligible citation?
 
@@ -314,7 +314,7 @@ The ledger provides transparency but not fairness. Showing that Past was weighte
 
 **Current rules:** No interaction specified between Thread operations and the debate system. The Thread operation resolves through Thread mechanics (Leap, Contact, Weaving). Its effect on the debate is undefined.
 
-**Finding S3-05 (P1):** Thread operations during debates have no resolution procedure. A practitioner who Weaves the audience's emotional state mid-debate is performing a mechanical action (Thread operation) that should interact with a mechanical system (debate) but doesn't. Both systems function independently. The practitioner could Weave the audience to be sympathetic and then argue, but the sympathetic audience has no mechanical expression in the debate system because genre weights are GM fiat anyway.
+**Finding S3-05 (P1):** Thread operations during debates have no resolution procedure. A practitioner who Weaves the audience's emotional state mid-debate is performing a mechanical action (Thread operation) that should interact with a mechanical system (debate) but doesn't. Both systems function independently. The practitioner could Weave the audience to be sympathetic and then argue, but the sympathetic audience has no mechanical expression in the debate system because genre weights are Game Master fiat anyway.
 
 ## Test 3.6: 3+ Party Debate
 
@@ -328,9 +328,9 @@ The ledger provides transparency but not fairness. Showing that Past was weighte
 
 **Scenario:** Parliament audience is 40% Hafenmark (Kantian — cares about universalizable principle), 30% Crown (virtue ethics — cares about character), 30% Guilds (moral relativism — context-dependent).
 
-**Current system:** The GM sets one genre weight for the whole audience. But this audience has three different ethical modes pulling in different directions. A Past + Revealing argument moves Hafenmark (who respects precedent as universal principle), partially moves Crown (who respects it as evidence of character), and barely moves Guilds (who say "that was then, this is now").
+**Current system:** The Game Master sets one genre weight for the whole audience. But this audience has three different ethical modes pulling in different directions. A Past + Revealing argument moves Hafenmark (who respects precedent as universal principle), partially moves Crown (who respects it as evidence of character), and barely moves Guilds (who say "that was then, this is now").
 
-**Finding S3-07 (P1):** Split audiences have no procedure. The GM must somehow average across faction ethical modes to produce one weight set. This is the kind of judgment call that makes GM prep burdensome and outcomes inconsistent. The system needs either: (a) one tracker per faction group in the audience, or (b) a mechanical formula for blending ethical modes into composite weights.
+**Finding S3-07 (P1):** Split audiences have no procedure. The Game Master must somehow average across faction ethical modes to produce one weight set. This is the kind of judgment call that makes Game Master prep burdensome and outcomes inconsistent. The system needs either: (a) one tracker per faction group in the audience, or (b) a mechanical formula for blending ethical modes into composite weights.
 
 ---
 
@@ -340,7 +340,7 @@ The ledger provides transparency but not fairness. Showing that Past was weighte
 
 | ID | Finding | Impact |
 |---|---|---|
-| S1-10 | Genre weight has no constraining procedure. GM decides who wins. | Win condition is fiat |
+| S1-10 | Genre weight has no constraining procedure. Game Master decides who wins. | Win condition is fiat |
 
 ## Priority 1 (Must Fix Before Play)
 
@@ -393,9 +393,9 @@ The ledger provides transparency but not fairness. Showing that Past was weighte
 
 ## PATCH D-01: Genre Weight Procedure (fixes S1-10, F-00-01, F-00-05)
 
-**Problem:** Genre weight is pure GM fiat. The win condition depends on it.
+**Problem:** Genre weight is pure Game Master fiat. The win condition depends on it.
 
-**Patch:** Replace GM-discretionary weights with a mechanical derivation from the Question and the Audience.
+**Patch:** Replace Game Master-discretionary weights with a mechanical derivation from the Question and the Audience.
 
 **Step 1 — The Question sets the Primary Genre:**
 - "Did X happen?" → Past primary
@@ -412,16 +412,16 @@ The ledger provides transparency but not fairness. Showing that Past was weighte
 | Divine command (Church) | Past +0.5 (scripture and doctrine are historical) |
 | Categorical imperative (Hafenmark) | Past +0.5 (precedent as universal principle) |
 | Consequentialism (Varfell) | Future +0.5 (outcomes matter) |
-| Moral relativism (Guilds) | No fixed adjustment — GM chooses based on context (this IS moral relativism) |
+| Moral relativism (Guilds) | No fixed adjustment — Game Master chooses based on context (this IS moral relativism) |
 | Rawlsian social contract (Restoration) | Future +0.5 (what system should we build?) |
 
 **Resulting weight range:** 0.5, 1.0, or 1.5. Never 0 — no genre is completely irrelevant. Never above 1.5 — no genre is doubly weighted.
 
 **Step 4 — Orientation weight is fixed:** Revealing = ×1. Obscuring = ×0.75. (Institutions prefer clarity. This can be inverted for specific scenarios — a Niflhel-dominated backroom might weight Obscuring higher — but the default favours Revealing.)
 
-**Step 5 — Weights do NOT shift dynamically.** They are set during GM setup and do not change. The GM's only discretion is the Guild adjustment and any scenario-specific inversions, both of which are recorded in the ledger before the debate begins.
+**Step 5 — Weights do NOT shift dynamically.** They are set during Game Master setup and do not change. The Game Master's only discretion is the Guild adjustment and any scenario-specific inversions, both of which are recorded in the ledger before the debate begins.
 
-**Effect:** Weights are derivable, predictable (if you know the audience), and verifiable. Players who read the room correctly can deduce the weights from the read signal. The GM's ledger records the derivation, not just the result.
+**Effect:** Weights are derivable, predictable (if you know the audience), and verifiable. Players who read the room correctly can deduce the weights from the read signal. The Game Master's ledger records the derivation, not just the result.
 
 ## PATCH D-02: Attunement Read Calibration (fixes F-00-02, S1-09)
 
@@ -431,9 +431,9 @@ The ledger provides transparency but not fairness. Showing that Past was weighte
 
 | Net Successes | Output |
 |---|---|
-| Failure (0) | GM gives a misleading signal. One genre identified as strong that is actually weak. Player acts on bad intelligence. |
-| Partial (1) | GM identifies the Primary genre only. ("They care about what happened.") No orientation signal. |
-| Success (2) | GM identifies the Primary genre AND whether Revealing or Obscuring is favoured. ("They want to know what happened, and they want certainty.") |
+| Failure (0) | Game Master gives a misleading signal. One genre identified as strong that is actually weak. Player acts on bad intelligence. |
+| Partial (1) | Game Master identifies the Primary genre only. ("They care about what happened.") No orientation signal. |
+| Success (2) | Game Master identifies the Primary genre AND whether Revealing or Obscuring is favoured. ("They want to know what happened, and they want certainty.") |
 | Overwhelming (3+) | Primary genre, orientation, AND one specific detail about the audience's current emotional state or factional composition. ("The Crown delegates are the swing votes and they're getting impatient with technicalities.") |
 
 **Failure is actively misleading, not merely blank.** This creates real risk in the read step. An orator who rolls poorly and trusts their read will choose the wrong genre and pay for it on the Conviction Track.
@@ -444,9 +444,9 @@ The ledger provides transparency but not fairness. Showing that Past was weighte
 
 **Patch:**
 
-**Scale:** 0 to 10. Starting position set by GM at setup (0 = fully biased toward Side B, 5 = neutral, 10 = fully biased toward Side A). Typical start: 4–6.
+**Scale:** 0 to 10. Starting position set by Game Master at setup (0 = fully biased toward Side B, 5 = neutral, 10 = fully biased toward Side A). Typical start: 4–6.
 
-**Threshold:** Side A wins if tracker ≥ 8. Side B wins if tracker ≤ 2. Between 3 and 7: compromised outcome (GM narrates partial victory proportional to position).
+**Threshold:** Side A wins if tracker ≥ 8. Side B wins if tracker ≤ 2. Between 3 and 7: compromised outcome (Game Master narrates partial victory proportional to position).
 
 **Movement formula:** Tracker Δ = floor(margin × genre_weight × orientation_weight) − audience_resistance.
 
@@ -529,7 +529,7 @@ Clean, bounded, consistent with combat scaling.
 
 **Problem:** Memory bonus is discretionary and genre-unrestricted.
 
-**Patch:** Memory bonus applies whenever the orator cites a specific, verifiable claim — a date, a document, a prior statement, a named precedent. Available in any genre. The bonus is fixed at +2D (not variable 1–3D). Either the citation is specific enough to qualify or it isn't. Binary, not graduated. GM determines qualification, but the rule is clear: "Did the player cite a specific, named, verifiable thing? If yes, +2D."
+**Patch:** Memory bonus applies whenever the orator cites a specific, verifiable claim — a date, a document, a prior statement, a named precedent. Available in any genre. The bonus is fixed at +2D (not variable 1–3D). Either the citation is specific enough to qualify or it isn't. Binary, not graduated. Game Master determines qualification, but the rule is clear: "Did the player cite a specific, named, verifiable thing? If yes, +2D."
 
 ## PATCH D-10: Composure Formula (fixes S1-06)
 
@@ -563,9 +563,9 @@ Clean, bounded, consistent with combat scaling.
 
 **Exchange 1:**
 
-Read: Baralta rolls Attunement 3 alone (D-02): 3D → 1 success. Partial. GM: "They care about the future — this is a policy question." No orientation signal.
+Read: Baralta rolls Attunement 3 alone (D-02): 3D → 1 success. Partial. Game Master: "They care about the future — this is a policy question." No orientation signal.
 
-Vaynard rolls Attunement 4: 4D → 2 successes. Success. GM: "Future is primary, and they want clarity — Revealing is strong. Obscuring will land weakly."
+Vaynard rolls Attunement 4: 4D → 2 successes. Success. Game Master: "Future is primary, and they want clarity — Revealing is strong. Obscuring will land weakly."
 
 Initiative: Baralta (Presence 5 > 3).
 
@@ -586,9 +586,9 @@ Baralta rolls: 11D → 5 successes. Vaynard rolls: 11D → 4 successes. Baralta 
 
 **Exchange 2:**
 
-Read: Baralta 3D → 0 successes. Failure. GM gives misleading signal: "The room seems to be responding to character arguments — who you are matters more than what you propose." (This is false — Future is still primary.)
+Read: Baralta 3D → 0 successes. Failure. Game Master gives misleading signal: "The room seems to be responding to character arguments — who you are matters more than what you propose." (This is false — Future is still primary.)
 
-Vaynard 4D → 2 successes. Success. GM: "Future is still primary. Revealing still favoured."
+Vaynard 4D → 2 successes. Success. Game Master: "Future is still primary. Revealing still favoured."
 
 Baralta, misled, chooses: Present + Revealing (she'll try to establish her credibility on trade matters).
 Vaynard, correctly informed, chooses: Future + Revealing (he pivots — instead of blocking, he'll propose alternative trade terms). He's competing with Baralta on different genre.
@@ -608,9 +608,9 @@ Vaynard rolls: 11D → 5 successes. Future weight ×1.0, Revealing ×1.0. Moveme
 
 **Exchange 3:**
 
-Read: Baralta 3D → 2 successes. Success. GM: "Future is primary. Revealing is preferred." She now has correct information.
+Read: Baralta 3D → 2 successes. Success. Game Master: "Future is primary. Revealing is preferred." She now has correct information.
 
-Vaynard 4D → 1 success. Partial. GM: "They care about what should happen." Genre only, no orientation.
+Vaynard 4D → 1 success. Partial. Game Master: "They care about what should happen." Genre only, no orientation.
 
 Initiative: Vaynard won exchange 2 (via tracker advantage in Divergence — needs a ruling). Actually in Divergence there's no "winner" in the exchange sense. **Gap: who gets initiative after Divergence?**
 

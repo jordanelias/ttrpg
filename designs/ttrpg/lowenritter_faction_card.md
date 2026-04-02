@@ -20,7 +20,7 @@ Upon coup: gains Mandate (starting at 3 — military legitimacy, not popular) an
 The Löwenritter may declare institutional independence and gain the full 6-attribute sheet if ANY of these conditions are met:
 1. Crown is deposed (Almud removed, no legitimate successor installed)
 2. Foreign power controls the Crown (Altonian puppet on throne, or heir surrendered to Altonia)
-3. TC reaches threshold where Church controls Crown-held territories (~80+)
+3. Theocracy Counter reaches threshold where Church controls Crown-held territories (~80+)
 4. Crown formally subordinates to a foreign power
 
 Coup is a Domain Action: roll Military vs Ob 3.
@@ -43,11 +43,11 @@ The Löwenritter may declare martial law in one territory where they have milita
 - **Post-coup variant:** If Löwenritter has declared independence, Martial Law costs Crown Mandate -1 regardless of success (acting without Crown authority).
 - **Constraint:** Cannot be used in a territory where Church Mandate exceeds Crown Mandate (the Löwenritter won't challenge theocratic control directly — soldiers, not theologians).
 
-## Leader (default NPC): Grandmaster Sigrid Ehrenwall
+## Leader (default Non-Player Character): Grandmaster Sigrid Ehrenwall
 - **Conviction:** Duty.
 - **Resonant Style:** Consequence (show her what happens to Valoria if she doesn't act; abstract principle won't move her).
 - **Age/background:** Late 50s. Career soldier. Served under Almud's father and Almud. Remembers pre-settlement Valoria.
-- **Personal tension:** Ehrenwall swore her oath to the Crown as institution. Almud is surrendering Valorian sovereignty incrementally — the Altonian succession pressure, the Church's expanding civil authority, weakened border garrisons. She has not yet concluded the Crown has failed the nation, but she is keeping count. When she reaches that conclusion, she will act without hesitation or remorse. She is the most dangerous NPC in the game: patient, competent, and commanding an army.
+- **Personal tension:** Ehrenwall swore her oath to the Crown as institution. Almud is surrendering Valorian sovereignty incrementally — the Altonian succession pressure, the Church's expanding civil authority, weakened border garrisons. She has not yet concluded the Crown has failed the nation, but she is keeping count. When she reaches that conclusion, she will act without hesitation or remorse. She is the most dangerous Non-Player Character in the game: patient, competent, and commanding an army.
 - **Relationship to Almud:** Respect without affection. Decent man governing badly. She will follow his orders until the day she doesn't, and the transition will be instantaneous.
 - **Relationship to the heir:** Views the son's potential removal to Altonia as a direct sovereignty threat. If Almud surrenders the heir, this meets coup trigger condition #2.
 - **Relationship to the Church:** Cold contempt. The Löwenritter predates the Church of Galbados in Valoria. Ehrenwall considers it a colonial institution. She will not challenge it theologically, but will never cede military authority to Templars.
@@ -58,7 +58,7 @@ The Löwenritter may declare martial law in one territory where they have milita
 1. Faction count: 7 -> 8 in all ruleset references
 2. Board game: Löwenritter is playable (partial sheet = fewer strategic options, strong military)
 3. Political axes: Löwenritter is primary on Axis 6 (Military Authority) and Axis 8 (External Threat); secondary on Axis 10 (Succession)
-4. Coup interaction with Theocracy Clock: if TC >= 80 AND Church holds Crown territories, Löwenritter coup trigger #3 is met — this creates a three-way endgame (Crown collapse, Church theocracy, military junta)
+4. Coup interaction with Theocracy Clock: if Theocracy Counter >= 80 AND Church holds Crown territories, Löwenritter coup trigger #3 is met — this creates a three-way endgame (Crown collapse, Church theocracy, military junta)
 5. Altonian succession interaction: heir surrendered to Altonia = coup trigger #2 — Almud's diplomatic compromise has direct military consequences
 
 ---

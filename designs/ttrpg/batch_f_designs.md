@@ -30,13 +30,13 @@ Maps real-world session time to game time across all three modes.
 
 ### Pacing Controls
 
-- **GM may compress:** Skip Personal Phase for a season if no TTRPG scenes are dramatically necessary. Announce "quiet season" — resolve Strategic + Cascade only (~30 min).
-- **GM may expand:** Split one season across 2 sessions if TTRPG scenes demand it (siege, expedition, major social confrontation). Strategic Phase deferred to session 2.
+- **Game Master may compress:** Skip Personal Phase for a season if no TTRPG scenes are dramatically necessary. Announce "quiet season" — resolve Strategic + Cascade only (~30 min).
+- **Game Master may expand:** Split one season across 2 sessions if TTRPG scenes demand it (siege, expedition, major social confrontation). Strategic Phase deferred to session 2.
 - **Player-triggered scenes:** During Strategic Phase, if an order generates a scene (e.g., assassination attempt, diplomatic confrontation), pause resolution and run the TTRPG scene. Return to resolution queue after scene concludes.
 
 ### Clock Synchronization
 
-All three clocks (TT, TC, IP) advance at Accounting regardless of mode. In hybrid, this means:
+All three clocks (Thread Tension, Theocracy Counter, Institutional Pressure) advance at Accounting regardless of mode. In hybrid, this means:
 - TTRPG scenes may trigger Domain Echoes that modify clocks mid-season (applied at Cascade Phase, not immediately).
 - Board game orders that affect clocks resolve at Accounting.
 - No clock advances between Personal and Strategic phases — everything batches to Accounting.
@@ -46,27 +46,27 @@ All three clocks (TT, TC, IP) advance at Accounting regardless of mode. In hybri
 ## G-021: Endgame Conditions (All Three Modes)
 
 ### Shared Loss Condition (all modes)
-**TT reaches 100.** The Rupture. Rendered reality fails. Campaign ends in catastrophe. No faction wins.
+**Thread Tension reaches 100.** The Rupture. Rendered reality fails. Campaign ends in catastrophe. No faction wins.
 
 ### TTRPG Endgame
-**No explicit victory condition.** The TTRPG campaign ends when the GM and players agree the central dramatic questions have been resolved or exhausted. Endgame emerges from character arcs, not mechanical triggers.
+**No explicit victory condition.** The TTRPG campaign ends when the Game Master and players agree the central dramatic questions have been resolved or exhausted. Endgame emerges from character arcs, not mechanical triggers.
 
-**Endgame indicators (GM guidance, not rules):**
+**Endgame indicators (Game Master guidance, not rules):**
 - All PCs have resolved or abandoned their central Beliefs.
-- TT has been reduced below 20 or has exceeded 80 (the world is saved or doomed).
+- Thread Tension has been reduced below 20 or has exceeded 80 (the world is saved or doomed).
 - The succession crisis has resolved (Torben, Elske, Parliament, or coup).
-- The Church's authority is broken or triumphant (TC below 20 or above 80).
+- The Church's authority is broken or triumphant (Theocracy Counter below 20 or above 80).
 - Altonia has invaded or been permanently deterred.
-- At least one PC has died, retired, or fundamentally transformed.
+- At least one Player Character has died, retired, or fundamentally transformed.
 
-**The GM should signal endgame 2-3 sessions before the final session.** "We're approaching the end of this story. What does your character want to resolve?"
+**The Game Master should signal endgame 2-3 sessions before the final session.** "We're approaching the end of this story. What does your character want to resolve?"
 
 ### Board Game Endgame
 **Explicit victory conditions per faction** (see G-028 in Batch E). Checked at end of each season.
 
 **Additional endgame triggers:**
 - Season 10 reached: highest point total wins.
-- TT 100: all lose.
+- Thread Tension 100: all lose.
 - If 3+ factions collapse (Stability 0): remaining factions share a diminished victory (the world survives but is broken).
 
 **Final scoring tiebreak:** Stability (most internally coherent faction endures).
@@ -74,11 +74,11 @@ All three clocks (TT, TC, IP) advance at Accounting regardless of mode. In hybri
 ### Hybrid Endgame
 **Both systems active.** Victory requires satisfying BOTH personal and strategic conditions.
 
-**Hybrid victory:** A faction achieves its board game primary victory condition AND the faction leader (PC) has resolved their central Belief arc in a way that supports the victory. If the board game condition is met but the PC's arc contradicts it (e.g., Crown controls 5 territories but Almud has abandoned his duty Belief), the victory is hollow — the faction wins but the character doesn't.
+**Hybrid victory:** A faction achieves its board game primary victory condition AND the faction leader (Player Character) has resolved their central Belief arc in a way that supports the victory. If the board game condition is met but the Player Character's arc contradicts it (e.g., Crown controls 5 territories but Almud has abandoned his duty Belief), the victory is hollow — the faction wins but the character doesn't.
 
 **Hollow victory:** The player may accept a hollow victory (mechanical win, narrative loss) or reject it (continue playing until the personal arc resolves or fails, risking the mechanical victory eroding). This is a player choice, not a rule.
 
-**Hybrid loss:** TT 100, or faction collapse with no personal resolution. Both are catastrophic.
+**Hybrid loss:** Thread Tension 100, or faction collapse with no personal resolution. Both are catastrophic.
 
 ---
 
@@ -106,7 +106,7 @@ Comprehensive list of rules that differ by mode. This is a reference document, n
 
 | Rule | TTRPG | Board Game | Hybrid |
 |------|-------|-----------|--------|
-| Domain Actions | Implicit — GM recognizes faction-scope personal actions | Explicit — Order Set with placement and resolution | Strategic Phase uses board game orders; Personal Phase uses TTRPG Domain Echoes |
+| Domain Actions | Implicit — Game Master recognizes faction-scope personal actions | Explicit — Order Set with placement and resolution | Strategic Phase uses board game orders; Personal Phase uses TTRPG Domain Echoes |
 | Stability checks | Triggered by Domain Echo consequences | Triggered at Accounting | Batched to Cascade Phase |
 | Seasonal cap | ±2 per attribute per season | ±2 per attribute per season | Same — shared across both phases |
 
@@ -114,7 +114,7 @@ Comprehensive list of rules that differ by mode. This is a reference document, n
 
 | Rule | TTRPG | Board Game | Hybrid |
 |------|-------|-----------|--------|
-| Thread operations | Personal-scale (Weaving, Pulling, Leaps) with full narrative | Faction-scale (Weave/Investigate/Harvest orders) with Co-Movement Card | Personal Phase: TTRPG Thread ops. Strategic Phase: board game Thread orders. Both count toward seasonal TT changes. |
+| Thread operations | Personal-scale (Weaving, Pulling, Leaps) with full narrative | Faction-scale (Weave/Investigate/Harvest orders) with Co-Movement Card | Personal Phase: TTRPG Thread ops. Strategic Phase: board game Thread orders. Both count toward seasonal Thread Tension changes. |
 | Co-movement | Version C (automatic deterministic + actual d6) | Co-Movement Card deck (15 cards) | Personal Phase: Version C. Strategic Phase: Co-Movement Cards. |
 | Discovery Events | Full narrative scene | Attribute change only (no scene) | TTRPG scene triggered by board game Discovery Event |
 
@@ -130,8 +130,8 @@ Comprehensive list of rules that differ by mode. This is a reference document, n
 
 | Rule | TTRPG | Board Game | Hybrid |
 |------|-------|-----------|--------|
-| TT/TC/IP advance | At seasonal accounting | At Accounting (Phase 5) | At Accounting (Cascade Phase) — identical |
-| Threshold events | GM narrates and runs scenes | Event card or table lookup | Board game trigger; GM may run TTRPG scene for narratively significant thresholds |
+| Thread Tension/Theocracy Counter/Institutional Pressure advance | At seasonal accounting | At Accounting (Phase 5) | At Accounting (Cascade Phase) — identical |
+| Threshold events | Game Master narrates and runs scenes | Event card or table lookup | Board game trigger; Game Master may run TTRPG scene for narratively significant thresholds |
 
 ### Key Principle
 Where a rule exists in both modes, the **seasonal cap is shared**. A faction attribute cannot change by more than ±2 per season regardless of how many Domain Echoes (TTRPG) and orders (board game) target it. This prevents hybrid mode from doubling attribute velocity.
@@ -141,7 +141,7 @@ Where a rule exists in both modes, the **seasonal cap is shared**. A faction att
 ## Canon Compliance
 - **P-05 (three modes distinct):** This catalogue explicitly documents where modes diverge and why.
 - **P-14 (all modes express inseparability):** Thread consequences present in all three modes — Version C in TTRPG, Co-Movement Cards in board game, both in hybrid.
-- **P-11 (TD universal):** No mode permits free Thread operations. TTRPG has TD per Version C. Board game has Co-Movement Cards. Hybrid has both.
+- **P-11 (Thread Depth universal):** No mode permits free Thread operations. TTRPG has Thread Depth per Version C. Board game has Co-Movement Cards. Hybrid has both.
 
 ---
 

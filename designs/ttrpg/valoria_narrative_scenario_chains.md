@@ -1,5 +1,5 @@
 # VALORIA — NARRATIVE SCENARIO CHAINS
-## NPC Arcs, Political Crises, and Emergent Consequences
+## Non-Player Character Arcs, Political Crises, and Emergent Consequences
 
 *Traces named character arcs, their decision branches, and the mechanical cascade each branch produces. Reads vertically (one arc) or horizontally (cross-arc collisions). All values from compiled ruleset + designs through Session 5. [E-01] = canonical editorial gap: assassination perpetrator TBD. [EDITORIAL] = flagged design intent not yet canonised.*
 
@@ -92,7 +92,7 @@ PLAYERS INVESTIGATE THE 218 AG ASSASSINATION
 # ARC 2: ALMUD'S SYMPATHIES — THE SOVEREIGN CONSTRAINT
 
 ## The Structural Problem
-Almud privately sympathises with the Einhir Restoration. He governs through the post-war settlement that suppressed it. His Belief 2 is not cowardice — it is a structural analysis: acting requires simultaneously alienating the Church (TC +3), alienating northern Einhir nobility (Mandate −2), and provoking Altonian diplomatic challenge (IP +1). The constraint erodes only when one or more of these costs is removed by events.
+Almud privately sympathises with the Einhir Restoration. He governs through the post-war settlement that suppressed it. His Belief 2 is not cowardice — it is a structural analysis: acting requires simultaneously alienating the Church (Theocracy Counter +3), alienating northern Einhir nobility (Mandate −2), and provoking Altonian diplomatic challenge (Institutional Pressure +1). The constraint erodes only when one or more of these costs is removed by events.
 
 ```
 ALMUD'S CONSTRAINT — EROSION PATHS
@@ -673,7 +673,7 @@ VAYNARD THREAD INVESTIGATION TRACK (TK 0–5)
 
 ## COLLISION A: CHURCH DOUBLE FRACTURE
 
-**Trigger:** Klapp conversion (TS 30+, CE 4) coincides with Olafsson exposure
+**Trigger:** Klapp conversion (Thread Sensitivity 30+, Combat Endurance 4) coincides with Olafsson exposure
 
 ```
 Klapp develops Thread sensitivity (Trajectory B/C)
@@ -768,9 +768,9 @@ Niflhel exposed: Stability −2; but Niflhel responds
 
 ## COLLISION E: THE EINHIR ELDER AND BARALTA'S CLAIM
 
-**[EDITORIAL — depends on Revolution NPC elder being established]**
+**[EDITORIAL — depends on Revolution Non-Player Character elder being established]**
 
-**Trigger:** Revolution NPC elder (fragmentary inner-tradition knowledge) + Baralta's Solmund claim + Klapp's archive access
+**Trigger:** Revolution Non-Player Character elder (fragmentary inner-tradition knowledge) + Baralta's Solmund claim + Klapp's archive access
 
 ```
 Baralta claims Solmund-ordained authority (not Church-mediated)
@@ -808,15 +808,15 @@ The campaign's central dramatic question answers itself when at least three of t
 
 | Condition | Effect |
 |-----------|--------|
-| Almud develops TS 30+ | Monarchy acknowledges Thread reality |
+| Almud develops Thread Sensitivity 30+ | Monarchy acknowledges Thread reality |
 | Axis 9 resolves publicly | Church's foundational claim is contested |
 | Elske is installed independently | Succession stable without Altonian capture |
 | Torben retrieved at Loyalty 6+ | Dynasty intact |
-| RS above 40 (Wakening → Stirring) | Practitioners functional; world stabilising |
-| TC below 40 | Church institutional conquest stalled |
-| IP below 45 | Altonian invasion deterred |
+| Rendering Stability above 40 (Wakening → Stirring) | Practitioners functional; world stabilising |
+| Theocracy Counter below 40 | Church institutional conquest stalled |
+| Institutional Pressure below 45 | Altonian invasion deterred |
 | Ehrenwall's Coup Counter at 1 or less | Löwenritter maintain institutional loyalty |
-| Southernmost stabilised (Ceiral Ritual success) | RS −6 to −10; world healing |
+| Southernmost stabilised (Ceiral Ritual success) | Rendering Stability −6 to −10; world healing |
 
 **All nine simultaneously: STABLE — the peninsula survives intact, changed.**
 
@@ -828,5 +828,5 @@ The campaign's central dramatic question answers itself when at least three of t
 - *E-01: Perpetrator of 218 AG assassination — TBD; all branches above are scenarios, not canon*
 - *E-03: In-world calendar name — minor; no mechanical impact*
 - *Baralta/Solmund claim: [EDITORIAL] — not yet canonised; flagged throughout*
-- *Elske TS: not established; branch above assumes possible development only*
-- *Revolution NPC elder: [EDITORIAL] — not yet canonised as a named character*
+- *Elske Thread Sensitivity: not established; branch above assumes possible development only*
+- *Revolution Non-Player Character elder: [EDITORIAL] — not yet canonised as a named character*

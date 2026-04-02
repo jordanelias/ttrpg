@@ -10,7 +10,7 @@
 
 1. **Each faction gets one Unique Action** — a Domain Action only they can perform. This is their asymmetric power.
 2. **Ethical framework expression** = a modifier on how the faction's standard Domain Actions resolve, not a separate system. The framework constrains what the faction does well and poorly.
-3. **Leader vs institution** = two mechanical layers: the faction's **Institutional Tendency** (what the faction does on autopilot / under NPC AI) and the **Leadership Deviation** (what happens when the leader — PC or NPC — acts against the tendency). Deviation has costs.
+3. **Leader vs institution** = two mechanical layers: the faction's **Institutional Tendency** (what the faction does on autopilot / under Non-Player Character artificial intelligence) and the **Leadership Deviation** (what happens when the leader — Player Character or Non-Player Character — acts against the tendency). Deviation has costs.
 4. **All factions use the same 6-attribute sheet** (except Revolution and Niflhel which have partial sheets per existing rules).
 
 ---
@@ -26,7 +26,7 @@ The Crown's institutional logic evaluates actions by whether they demonstrate vi
 - Consequence: the Crown is strongest when it acts openly and honorably. Covert operations are mechanically harder for the Crown than for other factions.
 
 **Institutional Tendency:**
-When no PC leader directs the Crown, the institution defaults to: maintaining treaties, defending held territory, suppressing disorder, following constitutional procedure. It will not initiate aggression, will not break treaties, and will not support Thread operations.
+When no Player Character leader directs the Crown, the institution defaults to: maintaining treaties, defending held territory, suppressing disorder, following constitutional procedure. It will not initiate aggression, will not break treaties, and will not support Thread operations.
 
 **Leadership Deviation:**
 When the Crown's leader acts against the institutional tendency (e.g., breaking a treaty, supporting practitioners, ignoring Parliament): Stability check Ob 2 at next accounting. The institution resists its own leader. This represents the constitutional constraints on monarchy.
@@ -39,7 +39,7 @@ Once per season, the Crown may issue a Royal Decree — a unilateral political a
 - Constraint: cannot target Intelligence (decrees are public acts).
 - Limit: 1 per season. Using it 2+ seasons consecutively: +1 Ob per consecutive use (decree fatigue).
 
-**Leader (default NPC): King Almud Almqvist**
+**Leader (default Non-Player Character): King Almud Almqvist**
 - Conviction: Order/Reason. Resonant Style: Consequence.
 - Personal tension: Almud privately sympathizes with the Restoration but governs through the post-war settlement that suppressed it. His institutional tendency and personal beliefs are in direct conflict. This is the Crown's central dramatic engine.
 
@@ -56,13 +56,13 @@ The Church's institutional logic evaluates actions by whether they conform to Ga
 - Special: Domain Actions that would reveal Thread truth (supporting practitioners, investigating the Southernmost): +2 Ob. The Church's perceptual prophylaxis is mechanically expressed as institutional resistance to the truth about itself.
 
 **Institutional Tendency:**
-Expand Piety. Suppress heresy. Accumulate civil authority. Deploy Templars against perceived threats. The institution does not seek military conquest — it seeks theological conquest. It advances TC, not territory.
+Expand Piety. Suppress heresy. Accumulate civil authority. Deploy Templars against perceived threats. The institution does not seek military conquest — it seeks theological conquest. It advances Theocracy Counter, not territory.
 
 **Leadership Deviation:**
 The Confessor acting against doctrine (e.g., tolerating practitioners, acknowledging Thread reality, questioning Galbados's nature): Stability check Ob 3. The Church is the hardest institution to deviate from — its theological coherence is its structural strength. A reforming Confessor faces existential institutional resistance.
 
 **Unique Action — Excommunication:**
-The Church may excommunicate a named individual (PC or NPC).
+The Church may excommunicate a named individual (Player Character or Non-Player Character).
 - Roll: Church Mandate vs target's Mandate (if faction leader) or vs Ob 2 (if non-leader).
 - Success: Target loses all Circles bonus within Church-affiliated contacts. Target's faction: Mandate −1. Target cannot hold public office or command Church-loyal troops.
 - Overwhelming: as above + target's personal Reputation with all factions −1 (social pariah).
@@ -70,7 +70,7 @@ The Church may excommunicate a named individual (PC or NPC).
 - Constraint: requires Church Mandate ≥ 4. Below 4, the Church lacks the authority to make excommunication stick.
 - Reversal: excommunication can be lifted through a Grand Debate (5 exchanges) or by a new Confessor.
 
-**Leader (default NPC): Confessor Arne Himlensendt**
+**Leader (default Non-Player Character): Confessor Arne Himlensendt**
 - Conviction: Faith. Resonant Style: Evidence (paradoxically — he responds to institutional documentation, not emotional appeal).
 - Personal tension: Sincerely devout with zero awareness of what Galbados actually is. His institutional tendency and personal beliefs are perfectly aligned — which makes him the most dangerous kind of leader. He is not cynical. He is wrong.
 
@@ -95,13 +95,13 @@ Baralta acting against institutional tendency (e.g., extralegal action, breaking
 **Unique Action — Sovereign Authority Doctrine:**
 Once per campaign arc, Baralta may invoke the Sovereign Authority Doctrine — a constitutional claim of direct divine authority over Hafenmark, superseding Church jurisdiction.
 - Roll: Mandate vs Ob 4.
-- Overwhelming: TC −3. Church Mandate −1. Heresy Investigation blocked this season. +1D social vs Church for the arc.
-- Success: TC −2. Church Mandate −1. Heresy Investigation opens against Baralta (Ob 4 to pursue).
-- Partial: TC −1. Heresy Investigation opens immediately. Church Influence +1.
-- Failure: TC +1. Heresy Investigation immediate. Baralta's Mandate −1.
+- Overwhelming: Theocracy Counter −3. Church Mandate −1. Heresy Investigation blocked this season. +1D social vs Church for the arc.
+- Success: Theocracy Counter −2. Church Mandate −1. Heresy Investigation opens against Baralta (Ob 4 to pursue).
+- Partial: Theocracy Counter −1. Heresy Investigation opens immediately. Church Influence +1.
+- Failure: Theocracy Counter +1. Heresy Investigation immediate. Baralta's Mandate −1.
 - [Note: this already exists in the ruleset. Retained here for completeness as her Unique Action.]
 
-**Leader (default NPC/PC): Duchess Inge Baralta**
+**Leader (default Non-Player Character/Player Character): Duchess Inge Baralta**
 - Conviction: Order. Resonant Style: Evidence.
 - Personal tension: Her faith and her politics are structurally incompatible. She believes in God and believes the Church has no authority over her governance. She holds both positions without experiencing contradiction. This is her strength and her vulnerability.
 
@@ -130,11 +130,11 @@ Vaynard maintains a collection of Einhir artifacts and Thread-locked objects. On
   - +2D to one Thread-related Domain Action this season (artifact provides Thread-configurational advantage).
   - Reveal one hidden faction attribute (artifact-enhanced intelligence operation).
   - −1 Ob to one Einhir Research action this season.
-- Failure: the artifact's Thread signature is detected by a practitioner. Church Intelligence gains +1D vs Varfell for 1 season. TT +1 (artifact disturbance).
-- Long-term cost: each use adds +1 to Vaynard's hidden TS (he is inadvertently exposing himself to Thread reality). At TS 14+ (his current starting value), each use triggers a Spirit check TN 7 Ob 1 for a Discovery Event.
-- [EDITORIAL: The Private Collection is the most narratively specific Unique Action. It ties directly to Vaynard's character arc. If a PC takes over Varfell and is not Vaynard, should this power transfer (it's institutional — the collection exists) or transform (new leader, new approach)?]
+- Failure: the artifact's Thread signature is detected by a practitioner. Church Intelligence gains +1D vs Varfell for 1 season. Thread Tension +1 (artifact disturbance).
+- Long-term cost: each use adds +1 to Vaynard's hidden Thread Sensitivity (he is inadvertently exposing himself to Thread reality). At Thread Sensitivity 14+ (his current starting value), each use triggers a Spirit check TN 7 Ob 1 for a Discovery Event.
+- [EDITORIAL: The Private Collection is the most narratively specific Unique Action. It ties directly to Vaynard's character arc. If a Player Character takes over Varfell and is not Vaynard, should this power transfer (it's institutional — the collection exists) or transform (new leader, new approach)?]
 
-**Leader (default NPC/PC): Duke Magnus Vaynard**
+**Leader (default Non-Player Character/Player Character): Duke Magnus Vaynard**
 - Conviction: Reason. Resonant Style: Consequence.
 - Personal tension: He is pursuing Thread knowledge through acquisition rather than experience. His consequentialist framework treats Thread reality as a resource to be managed rather than a truth to be confronted. This works until it doesn't.
 
@@ -164,7 +164,7 @@ The Guilds may apply economic pressure to any faction present in a territory whe
 - Failure: Guild Favour −1 in that territory (backlash against perceived extortion).
 - Constraint: cannot target factions in territories where Guild Favour is below 5. The Guilds need buy-in to leverage.
 
-**Leader: Guildmaster Council (NPC collective)**
+**Leader: Guildmaster Council (Non-Player Character collective)**
 - No single conviction axis. Council decisions reflect the majority interest of the strongest guilds in the current season.
 - Personal tension: the Council is inherently factional. Individual guild leaders can be recruited, bribed, or threatened independently (treat as officers per G-035). The Guilds' vulnerability is that they are a coalition, not an institution.
 
@@ -190,14 +190,14 @@ Niflhel's structure is decentralized (four arms: Dockworkers, Reckoners, Burned,
 
 **Unique Action — The Quiet Network:**
 Niflhel may deploy the Quiet (its intelligence/assassination arm) against any target.
-- **Intelligence mode:** Roll Intelligence vs target's Intelligence. Success: learn one hidden attribute or one NPC's active Belief. Overwhelming: learn two.
+- **Intelligence mode:** Roll Intelligence vs target's Intelligence. Success: learn one hidden attribute or one Non-Player Character's active Belief. Overwhelming: learn two.
 - **Sabotage mode:** Roll Intelligence vs target's Stability. Success: target Stability −1. Failure: operative exposed — Niflhel Intelligence −1 for 1 season + target gains Grievance Marker.
-- **Assassination mode:** Roll Intelligence vs target's Intelligence + 2. Success: named NPC eliminated. Overwhelming: no evidence trail. Partial: target wounded, not killed; evidence trail exists. Failure: operative captured; full exposure; Niflhel Stability −2.
-- Long-term cost: each Quiet deployment in a season adds +0.5 TT (cumulative). Niflhel's operations disturb the Thread-configurational environment through their Southernmost harvesting supply chain. They do not know this.
+- **Assassination mode:** Roll Intelligence vs target's Intelligence + 2. Success: named Non-Player Character eliminated. Overwhelming: no evidence trail. Partial: target wounded, not killed; evidence trail exists. Failure: operative captured; full exposure; Niflhel Stability −2.
+- Long-term cost: each Quiet deployment in a season adds +0.5 Thread Tension (cumulative). Niflhel's operations disturb the Thread-configurational environment through their Southernmost harvesting supply chain. They do not know this.
 
 **Leader: No single leader.**
-- The four arms (Dockworkers, Reckoners, Burned, Quiet) each have a named head. These are treated as officers, not faction leaders. A PC who infiltrates or takes over one arm controls that arm's operations but not the whole network.
-- [EDITORIAL: Should one arm head be identified as the "primus inter pares" for PC-faction-leader purposes? Or should Niflhel remain permanently headless — controllable only arm-by-arm?]
+- The four arms (Dockworkers, Reckoners, Burned, Quiet) each have a named head. These are treated as officers, not faction leaders. A Player Character who infiltrates or takes over one arm controls that arm's operations but not the whole network.
+- [EDITORIAL: Should one arm head be identified as the "primus inter pares" for Player Character-faction-leader purposes? Or should Niflhel remain permanently headless — controllable only arm-by-arm?]
 
 ---
 
@@ -220,18 +220,18 @@ Spread pamphlets. Undermine elite Mandate. Protect practitioners. Recover Einhir
 The Revolution has no formal leader — it is a movement. Directing it requires Influence Ob 2 within the movement (easier than Niflhel because the Revolution is ideologically coherent, unlike Niflhel's operational fragmentation). However: directing the Revolution toward violence, authoritarianism, or elite alliance triggers Stability check Ob 3 (the movement fractures if it betrays its own principles).
 
 **Unique Action — Community Weaving:**
-The Revolution's unique connection to Einhir cultural continuity allows it to perform Community Weaving — a collective Thread operation that reduces TT.
-- Roll: faction Influence (as proxy for community mobilization) vs Ob = TT ÷ 20 (round up).
-- Success: TT −1. Overwhelming: TT −2.
-- Partial: TT unchanged, Stability −1 (the working strained the community).
-- Failure: Stability −1, TT +1 (the attempt disturbed what it tried to heal).
-- Constraint: requires at least one practitioner with TS 30+ affiliated with the Revolution. The community provides the configurational substrate; the practitioner provides the technical capacity.
+The Revolution's unique connection to Einhir cultural continuity allows it to perform Community Weaving — a collective Thread operation that reduces Thread Tension.
+- Roll: faction Influence (as proxy for community mobilization) vs Ob = Thread Tension ÷ 20 (round up).
+- Success: Thread Tension −1. Overwhelming: Thread Tension −2.
+- Partial: Thread Tension unchanged, Stability −1 (the working strained the community).
+- Failure: Stability −1, Thread Tension +1 (the attempt disturbed what it tried to heal).
+- Constraint: requires at least one practitioner with Thread Sensitivity 30+ affiliated with the Revolution. The community provides the configurational substrate; the practitioner provides the technical capacity.
 - Co-movement: draws a Co-Movement Card (see board game rules). Even beneficial Thread work has consequences.
 - [Note: This power was already tested in the new mechanic stress tests. It works but the co-movement card sometimes hurts the Revolution's own Stability. This is canonically correct per P-01.]
 
 **Leader: No formal leader.**
-- Named figures exist (intellectuals, pamphlet writers, southern community elders) but none has institutional authority. A PC who affiliates with the Revolution must build personal authority within it through play — this is itself a campaign arc.
-- [EDITORIAL: Should one named Revolution figure be established as the default NPC contact point for PCs? Suggestion: a southern Einhir elder who holds fragmentary inner-tradition knowledge but cannot fully articulate it due to the Forgetting.]
+- Named figures exist (intellectuals, pamphlet writers, southern community elders) but none has institutional authority. A Player Character who affiliates with the Revolution must build personal authority within it through play — this is itself a campaign arc.
+- [EDITORIAL: Should one named Revolution figure be established as the default Non-Player Character contact point for PCs? Suggestion: a southern Einhir elder who holds fragmentary inner-tradition knowledge but cannot fully articulate it due to the Forgetting.]
 
 ---
 
@@ -242,7 +242,7 @@ The design document references nine political axes but they've never been enumer
 
 ### Design
 
-The nine axes are tensions that generate campaign events, NPC motivations, and faction conflicts. They are NOT tracked numerically — they are qualitative states that the GM uses to generate scenes.
+The nine axes are tensions that generate campaign events, Non-Player Character motivations, and faction conflicts. They are NOT tracked numerically — they are qualitative states that the Game Master uses to generate scenes.
 
 | Axis | Pole A | Pole B | Primary Factions |
 |------|--------|--------|-----------------|
@@ -257,15 +257,15 @@ The nine axes are tensions that generate campaign events, NPC motivations, and f
 | 9. Ontological | The world is what it appears | The world is more than it appears | Church vs practitioners |
 
 **Mechanical expression:**
-Each axis generates gameplay through faction interaction, not through a tracked score. The GM uses the axes to:
+Each axis generates gameplay through faction interaction, not through a tracked score. The Game Master uses the axes to:
 
-1. **Generate NPC conviction:** Every named NPC has a position on 2–3 axes. This determines their Resonant Style vulnerability and their Belief content.
+1. **Generate Non-Player Character conviction:** Every named Non-Player Character has a position on 2–3 axes. This determines their Resonant Style vulnerability and their Belief content.
 2. **Generate scenes:** When two factions interact, identify which axes are in tension between them. The scene's conflict is about that axis. This prevents generic "faction A attacks faction B" play.
 3. **Generate casus belli:** War justification (G-039) maps to axes. "We fight because they suppress Thread knowledge" is Axis 2. "We fight because they claim authority over our duchy" is Axis 1.
-4. **Generate Domain Echo content:** When a Domain Echo fires, the GM describes it in terms of the relevant axis. "The Crown's successful Appeal in Varfell shifts the sovereignty question — the population sees the Crown as legitimate authority for the first time in a generation."
-5. **Track campaign arc:** Over a campaign, the axes shift. By endgame, some axes may be resolved (Axis 9 is resolved when Thread truth becomes public) and others may intensify (Axis 8 intensifies as Altonia approaches). The GM tracks which axes are active, dormant, or resolved.
+4. **Generate Domain Echo content:** When a Domain Echo fires, the Game Master describes it in terms of the relevant axis. "The Crown's successful Appeal in Varfell shifts the sovereignty question — the population sees the Crown as legitimate authority for the first time in a generation."
+5. **Track campaign arc:** Over a campaign, the axes shift. By endgame, some axes may be resolved (Axis 9 is resolved when Thread truth becomes public) and others may intensify (Axis 8 intensifies as Altonia approaches). The Game Master tracks which axes are active, dormant, or resolved.
 
-**No numerical tracking.** The axes are a GM tool for narrative generation, not a player-facing system. Players experience the axes through scenes, not through numbers.
+**No numerical tracking.** The axes are a Game Master tool for narrative generation, not a player-facing system. Players experience the axes through scenes, not through numbers.
 
 ### Canon compliance
 - P-05 (three modes distinct): Axes generate different content in TTRPG (personal scenes about the tension), board game (faction orders reflecting the tension), and hybrid (both).
@@ -284,12 +284,12 @@ Each axis generates gameplay through faction interaction, not through a tracked 
 
 **Editorial decisions needed: 2**
 
-1. **Varfell — Private Collection transfer:** If a PC takes over Varfell and is not Vaynard, does the Private Collection power transfer (institutional — the collection exists physically) or transform into something appropriate to the new leader?
+1. **Varfell — Private Collection transfer:** If a Player Character takes over Varfell and is not Vaynard, does the Private Collection power transfer (institutional — the collection exists physically) or transform into something appropriate to the new leader?
 
-2. **Niflhel — leadership structure:** Should one arm head be designated as "primus inter pares" for PC faction-leader purposes, or should Niflhel remain permanently headless (controllable only arm-by-arm)?
+2. **Niflhel — leadership structure:** Should one arm head be designated as "primus inter pares" for Player Character faction-leader purposes, or should Niflhel remain permanently headless (controllable only arm-by-arm)?
 
 **Optional editorial (flagged, not blocking):**
-3. Revolution — should a named NPC elder be established as the default contact point?
+3. Revolution — should a named Non-Player Character elder be established as the default contact point?
 
 ---
 

@@ -40,25 +40,25 @@ Any faction that contacts Elske (Circles Ob 3 — she's in Altonian territory) c
 Elske can break free of her Duke husband's political orbit with sufficient support. This is a multi-step process:
 
 1. **Contact** — Circles Ob 3 to reach her (she's in Altonian territory).
-2. **Recruitment** — Social scene (Appeal or Debate, 3 exchanges). Must target Family or Self-Determination conviction. Success: Elske becomes an allied NPC willing to act.
+2. **Recruitment** — Social scene (Appeal or Debate, 3 exchanges). Must target Family or Self-Determination conviction. Success: Elske becomes an allied Non-Player Character willing to act.
 3. **Independence action** — Once recruited, Elske can attempt to seize independence. Three paths:
-   - **Political break:** Elske publicly separates from the Duke and returns to Valoria. Roll her Influence (3) vs Ob 3. Success: she returns, available as heir or political actor. The Duke gains casus belli (personal insult) — IP +3.
-   - **Widowing:** Elske arranges or enables the Duke's removal. Requires Niflhel or Varfell intelligence support (Intelligence Ob 4). Success: Elske is free, no IP increase (appears natural), but she carries the moral weight. If discovered: IP +5, Elske's Mandate permanently -1.
-   - **Divorce by Parliament:** If Hafenmark controls Parliament, Baralta can push a constitutional annulment. Hafenmark Influence Ob 3. Success: marriage dissolved legally. IP +2 (diplomatic insult but not casus belli). Cleanest path but requires Hafenmark cooperation.
+   - **Political break:** Elske publicly separates from the Duke and returns to Valoria. Roll her Influence (3) vs Ob 3. Success: she returns, available as heir or political actor. The Duke gains casus belli (personal insult) — Institutional Pressure +3.
+   - **Widowing:** Elske arranges or enables the Duke's removal. Requires Niflhel or Varfell intelligence support (Intelligence Ob 4). Success: Elske is free, no Institutional Pressure increase (appears natural), but she carries the moral weight. If discovered: Institutional Pressure +5, Elske's Mandate permanently -1.
+   - **Divorce by Parliament:** If Hafenmark controls Parliament, Baralta can push a constitutional annulment. Hafenmark Influence Ob 3. Success: marriage dissolved legally. Institutional Pressure +2 (diplomatic insult but not casus belli). Cleanest path but requires Hafenmark cooperation.
 
 **Elske as Queen:**
 If Elske inherits (Torben dead or excluded) AND is independent of the Duke:
 - Crown passes to Elske. She governs as Queen.
 - Her starting Mandate: 3 (contested succession, not universally accepted).
 - Löwenritter: accepts IF she is demonstrably independent. Ehrenwall's test is behavioral, not formal — does Elske act for Valoria or for Altonia?
-- Church: accepts if she submits to Church authority (TC +2 demand). Refuses Church: TC unchanged but Church actively opposes her.
+- Church: accepts if she submits to Church authority (Theocracy Counter +2 demand). Refuses Church: Theocracy Counter unchanged but Church actively opposes her.
 - If Elske inherits while STILL married to the Duke: Crown passes into Altonian orbit. This is functionally the same as Torben at Loyalty 1. Löwenritter coup trigger #2 met.
 
 ---
 
 ## The Tutoring Demand
 
-**Trigger:** IP reaches 30 (Altonia turns Aggressive).
+**Trigger:** Institutional Pressure reaches 30 (Altonia turns Aggressive).
 
 Altonia formally demands Torben be sent for "education." Recurs every season at Strategic Phase accounting until resolved.
 
@@ -66,9 +66,9 @@ Altonia formally demands Torben be sent for "education." Recurs every season at 
 
 | Response | Consequence |
 |----------|-------------|
-| **Refuse** | IP accelerates to 1.5x pace (base +2/season becomes +3/season). Schoenland trade Ob +1 cumulative per refusal. |
-| **Negotiate delay** | Roll Crown Influence vs Ob 3 (first attempt), +1 Ob per subsequent attempt. Success: demand deferred 1 season, IP pace unchanged. Failure: treated as Refusal. |
-| **Surrender Torben** | IP pace stays at 1x. Torben Loyalty Clock begins. |
+| **Refuse** | Institutional Pressure accelerates to 1.5x pace (base +2/season becomes +3/season). Schoenland trade Ob +1 cumulative per refusal. |
+| **Negotiate delay** | Roll Crown Influence vs Ob 3 (first attempt), +1 Ob per subsequent attempt. Success: demand deferred 1 season, Institutional Pressure pace unchanged. Failure: treated as Refusal. |
+| **Surrender Torben** | Institutional Pressure pace stays at 1x. Torben Loyalty Clock begins. |
 
 ---
 
@@ -80,7 +80,7 @@ Each season Torben is in Altonia: Loyalty -1.
 
 **Loyalty floors at 1.** Altonia will never let Torben renounce — he is their claim to the Valorian throne. He remains their asset indefinitely.
 
-**Covert contact:** Any faction (typically Crown) may attempt to maintain contact with Torben. Intelligence Domain Action vs Ob 3 per season. Success: Loyalty does not decrease that season. Failure: no effect; Altonia may detect the contact (GM judgment — potential IP +1 if detected).
+**Covert contact:** Any faction (typically Crown) may attempt to maintain contact with Torben. Intelligence Domain Action vs Ob 3 per season. Success: Loyalty does not decrease that season. Failure: no effect; Altonia may detect the contact (Game Master judgment — potential Institutional Pressure +1 if detected).
 
 ### Loyalty States
 
@@ -95,9 +95,9 @@ Each season Torben is in Altonia: Loyalty -1.
 
 | Loyalty Range | Method | Procedure |
 |---------------|--------|-----------|
-| 8-6 | Diplomatic retrieval | Crown Influence vs Ob 3. Success: Torben returns, clock resets to 8. IP +2. |
-| 5-3 | Covert extraction | Intelligence vs Ob 5. Success: Torben returns at current Loyalty value (damage done). IP +5. Failure: operative captured, IP +3, Crown Mandate -1. |
-| 2-1 | Military extraction | Torben resists extraction. Requires Military action in Altonian territory. IP immediately to 75+. |
+| 8-6 | Diplomatic retrieval | Crown Influence vs Ob 3. Success: Torben returns, clock resets to 8. Institutional Pressure +2. |
+| 5-3 | Covert extraction | Intelligence vs Ob 5. Success: Torben returns at current Loyalty value (damage done). Institutional Pressure +5. Failure: operative captured, Institutional Pressure +3, Crown Mandate -1. |
+| 2-1 | Military extraction | Torben resists extraction. Requires Military action in Altonian territory. Institutional Pressure immediately to 75+. |
 
 ---
 
@@ -121,7 +121,7 @@ The late-game succession landscape depends on Torben's status and Elske's indepe
 
 **Löwenritter (Ehrenwall):** Tracks Torben's status. At Loyalty 3, begins internal coup preparations. At Loyalty 1, coup trigger #2 met. Ehrenwall's test for Elske: does she act for Valoria? If yes, Löwenritter supports her succession. If unclear, Löwenritter may coup regardless.
 
-**Church:** Indifferent to succession unless returning heir brings Altonian religious practices (TC +2). Church prefers ANY monarch who submits to Church authority. Elske submitting = Church support. Elske refusing = Church opposition.
+**Church:** Indifferent to succession unless returning heir brings Altonian religious practices (Theocracy Counter +2). Church prefers ANY monarch who submits to Church authority. Elske submitting = Church support. Elske refusing = Church opposition.
 
 **Hafenmark (Baralta):** Prefers Parliamentary succession. Will push to exclude Torben (if compromised) through constitutional process. Will support Elske IF she takes the constitutional path (annulment via Parliament). Baralta's ideal outcome: Elske as constitutional monarch with Parliamentary constraints.
 
@@ -137,15 +137,15 @@ The late-game succession landscape depends on Torben's status and Elske's indepe
 
 ---
 
-## IP Acceleration Math
+## Institutional Pressure Acceleration Math
 
-Base IP growth: +2/season.
+Base Institutional Pressure growth: +2/season.
 With refusal: +3/season (1.5x).
 
-Over a 10-season campaign starting at IP 30:
-- Compliance path: +20 IP = IP 50 at season 10 (Hostile range).
-- Refusal path: +30 IP = IP 60 at season 10 (Warlike range).
-- Delta: ~10 IP, roughly one full threat tier.
+Over a 10-season campaign starting at Institutional Pressure 30:
+- Compliance path: +20 Institutional Pressure = Institutional Pressure 50 at season 10 (Hostile range).
+- Refusal path: +30 Institutional Pressure = Institutional Pressure 60 at season 10 (Warlike range).
+- Delta: ~10 Institutional Pressure, roughly one full threat tier.
 
 The pressure is real but not instant. Players have time to maneuver.
 

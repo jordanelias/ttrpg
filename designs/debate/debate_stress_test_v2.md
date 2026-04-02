@@ -10,7 +10,7 @@
 
 All mechanics as they stand after v1 patches and revisions.
 
-## 0.1 GM Setup
+## 0.1 Game Master Setup
 
 1. **Question** determines primary genre (Past / Present / Future).
 2. **Audience** identified by faction(s) present.
@@ -22,11 +22,11 @@ All mechanics as they stand after v1 patches and revisions.
      - Divine command (Church): Past +0.5
      - Categorical imperative (Hafenmark): Past +0.5
      - Consequentialism (Varfell): Future +0.5
-     - Moral relativism (Guilds): GM picks based on context
+     - Moral relativism (Guilds): Game Master picks based on context
      - Rawlsian social contract (Restoration): Future +0.5
    - Weight range: 0.5 / 1.0 / 1.5. Never 0, never above 1.5.
 4. **Orientation weights** fixed: Revealing ×1.0, Obscuring ×0.75. (Invertible for specific scenarios.)
-5. **Conviction Track** starts at GM-set position (0–10). Typical: 4–6 for neutral.
+5. **Conviction Track** starts at Game Master-set position (0–10). Typical: 4–6 for neutral.
    - Side A wins at ≥7 (R-07 revision). Side B wins at ≤3.
    - Compromise zone: 4–6.
    - **Audience resistance** = average Stability of represented factions, round up. Typical: 1–3.
@@ -96,11 +96,11 @@ All mechanics as they stand after v1 patches and revisions.
 - Concentration (Focus + Presence) depletes by 1 per exchange + 1 additional on a loss (D-04C).
 - At Concentration 0 → **Spent:** Concentration resets to max. Next exchange: −2D, opponent gets +1D.
 
-**Step 6 — GM records exchange on hidden ledger.**
+**Step 6 — Game Master records exchange on hidden ledger.**
 
 ## 0.4 Post-Debate
 
-- GM reveals ledger.
+- Game Master reveals ledger.
 - Conviction Track position determines outcome: ≥7 Side A wins, ≤3 Side B wins, 4–6 compromise.
 - Winner's final genre + orientation determines thread co-movement type.
 - Stakes resolve.
@@ -258,7 +258,7 @@ Attunement 5+: reliably reads the room. Overwhelming (the full picture) at 25%+ 
 
 ## Scenario: Church Tribunal (Asymmetric)
 
-**Context:** Confessor Arne brings heresy charges against a PC practitioner (Maret) who was witnessed performing a Thread operation in Himmelstift. This is a Church Tribunal — asymmetric proceeding.
+**Context:** Confessor Arne brings heresy charges against a Player Character practitioner (Maret) who was witnessed performing a Thread operation in Himmelstift. This is a Church Tribunal — asymmetric proceeding.
 
 **Question:** "Is Maret guilty of heresy?" → Past primary (what did she do?).
 
@@ -297,8 +297,8 @@ For this test: no corroboration permitted. Maret stands alone.
 ### Exchange 1
 
 **Read:**
-Arne: Attunement 2, 2D → rolls 3, 8 → 1 success. Partial. GM: "The judges care about the past — what she did." (True — Past is ×1.5.)
-Maret: Attunement 5, 5D → rolls 7, 9, 4, 2, 8 → 3 successes. Overwhelming. GM: "Past is dominant — this is a tribunal about facts. Revealing is strongly preferred. The judges are devout — divine command ethics. Arguments from doctrine will land hardest. One specific detail: the youngest judge hesitated when reading the charge — he may be sympathetic but won't act unless given doctrinal cover."
+Arne: Attunement 2, 2D → rolls 3, 8 → 1 success. Partial. Game Master: "The judges care about the past — what she did." (True — Past is ×1.5.)
+Maret: Attunement 5, 5D → rolls 7, 9, 4, 2, 8 → 3 successes. Overwhelming. Game Master: "Past is dominant — this is a tribunal about facts. Revealing is strongly preferred. The judges are devout — divine command ethics. Arguments from doctrine will land hardest. One specific detail: the youngest judge hesitated when reading the charge — he may be sympathetic but won't act unless given doctrinal cover."
 
 Maret has excellent intelligence. She knows the ethical mode, the genre weight, and has identified a potential sympathizer.
 
@@ -344,8 +344,8 @@ This is correct behaviour. She chose a defensive stance. She blocked Arne's next
 ### Exchange 2
 
 **Read:**
-Arne: 2D → 1, 4 → 0 successes. Failure. GM gives misleading signal: "The judges are tiring of the factual arguments — perhaps character testimony would be more effective." (False — Past is still ×1.5.)
-Maret: 5D → 8, 3, 7, 5, 9 → 3 successes. Overwhelming. GM: "Past is still dominant. Revealing still preferred. The youngest judge's sympathy is still accessible — he's been reading his copy of the doctrinal code repeatedly. He wants a doctrinal basis to doubt the charge."
+Arne: 2D → 1, 4 → 0 successes. Failure. Game Master gives misleading signal: "The judges are tiring of the factual arguments — perhaps character testimony would be more effective." (False — Past is still ×1.5.)
+Maret: 5D → 8, 3, 7, 5, 9 → 3 successes. Overwhelming. Game Master: "Past is still dominant. Revealing still preferred. The youngest judge's sympathy is still accessible — he's been reading his copy of the doctrinal code repeatedly. He wants a doctrinal basis to doubt the charge."
 
 Maret now has critical intelligence: there's a doctrinal argument that could sway the sympathetic judge. She needs to find it.
 
@@ -398,8 +398,8 @@ Better. A brilliant argument in the perfect genre against halved resistance prod
 ### Exchange 3 (Final)
 
 **Read:**
-Arne: 2D → 7, 3 → 1 success. Partial. GM: "They care about the past." (True.)
-Maret: 5D → 8, 7, 2, 9, 4 → 3 successes. Overwhelming. GM: "Past still dominant. Revealing preferred. The youngest judge is visibly engaged — the Synod of Elkenford citation shook him. He's now looking at Arne for a response to the doctrinal precedent. The other two judges are unmoved."
+Arne: 2D → 7, 3 → 1 success. Partial. Game Master: "They care about the past." (True.)
+Maret: 5D → 8, 7, 2, 9, 4 → 3 successes. Overwhelming. Game Master: "Past still dominant. Revealing preferred. The youngest judge is visibly engaged — the Synod of Elkenford citation shook him. He's now looking at Arne for a response to the doctrinal precedent. The other two judges are unmoved."
 
 **Arne chooses:** Past + Revealing. He MUST address the Synod precedent or lose the young judge entirely. He'll argue the precedent was exceptional and does not apply.
 
@@ -422,7 +422,7 @@ Maret: 5D → 8, 7, 2, 9, 4 → 3 successes. Overwhelming. GM: "Past still domin
 
 **Conviction Track:** 6. Compromise zone (4–6).
 
-**GM Ledger:**
+**Game Master Ledger:**
 
 | Exch | Type | Winner | Margin | A Genre×Wt | M Genre×Wt | Doubt | Tracker Δ | Tracker |
 |---|---|---|---|---|---|---|---|---|
@@ -430,7 +430,7 @@ Maret: 5D → 8, 7, 2, 9, 4 → 3 successes. Overwhelming. GM: "Past still domin
 | 2 | Divergence | — | — | Present ×0.5 | Past ×1.5 | Active | +3 Maret (5−2) | 6 |
 | 3 | Competition | Arne | 3 | Past ×1.5 | Past ×1.5 | Consumed | 0 (1 ≤ res 4 after doubt) | 6 |
 
-**Outcome:** Tracker at 6. Compromise. The tribunal cannot convict outright — the doctrinal precedent introduced reasonable doubt. But the tribunal cannot acquit — the evidence of the Thread operation is clear. The GM rules: **Conditional verdict.** Maret is placed under Church supervision for one season. If no further Thread activity is observed, the charge is dismissed. If further activity occurs, the charge is reinstated without retrial.
+**Outcome:** Tracker at 6. Compromise. The tribunal cannot convict outright — the doctrinal precedent introduced reasonable doubt. But the tribunal cannot acquit — the evidence of the Thread operation is clear. The Game Master rules: **Conditional verdict.** Maret is placed under Church supervision for one season. If no further Thread activity is observed, the charge is dismissed. If further activity occurs, the charge is reinstated without retrial.
 
 This is a realistic institutional outcome — the Church saves face, the accused avoids conviction, but the Church retains leverage. The doctrinal argument created enough doubt to prevent conviction but not enough to force acquittal against the Church's institutional weight.
 
@@ -438,7 +438,7 @@ This is a realistic institutional outcome — the Church saves face, the accused
 - No Mandate changes (conditional verdict — neither side won or lost outright)
 - Maret is mechanically "under surveillance" — Church Intelligence rolls against her at −1 Ob for one season
 - The Synod of Elkenford precedent is now public — future heresy trials may cite it (long-term consequence)
-- RS: +1 (the tribunal discussed Thread operations publicly in a Church setting — the topic itself disturbs the rendering)
+- Rendering Stability: +1 (the tribunal discussed Thread operations publicly in a Church setting — the topic itself disturbs the rendering)
 
 ---
 
@@ -528,7 +528,7 @@ This is a realistic institutional outcome — the Church saves face, the accused
 | Genre pivot mid-debate (orator tries to shift the Question's genre) | No procedure | P2 |
 | Rattled → Unmask decision point | Rattled never triggered in retests | P2 |
 | Multiple Doubt Markers (Obscuring wins 2+ exchanges) | Rule says only 1 active — but what happens to the second? | P3 |
-| Ethical mode interaction when multiple factions in audience | Guilds moral relativism (GM picks) is the only flex point — how does mixed audience work? | P2 |
+| Ethical mode interaction when multiple factions in audience | Guilds moral relativism (Game Master picks) is the only flex point — how does mixed audience work? | P2 |
 
 ## Editorial Decisions Required
 
@@ -547,7 +547,7 @@ This is a realistic institutional outcome — the Church saves face, the accused
 
 ## The Debate System (Post v2 Patches)
 
-**GM Setup:** Question → primary genre. Audience → ethical mode adjustment. Weights fixed, recorded. Resistance = avg Stability − 1. Track starts at GM-set position. Stakes defined.
+**Game Master Setup:** Question → primary genre. Audience → ethical mode adjustment. Weights fixed, recorded. Resistance = avg Stability − 1. Track starts at Game Master-set position. Stakes defined.
 
 **Each Exchange:**
 1. Read (Attunement alone, calibrated output table)

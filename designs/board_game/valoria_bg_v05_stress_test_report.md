@@ -59,7 +59,7 @@ Edge case: pool of 4, roll 10, 10, 1, 1. Net = 2+2−1−1 = 2. Majority: two 1s
 
 Second edge case: pool of 5, roll 10, 1, 1, 1, 3. Net = 2−3 = −1 (negative). Majority: three 1s vs one 10 = majority. Catastrophic Failure fires. Net is also negative. The document says "treat negative net as 0 for degree purposes." So: do we apply (a) Catastrophic Failure from the override, or (b) Failure from the degree table, or (c) both? 
 
-The document says Catastrophic fires "plus one additional consequence at GM discretion." So the Catastrophic override supersedes the degree table in this case. **Confirmed working logic, but only if Catastrophic is explicitly described as a fifth degree that replaces Failure-degree outcomes in that roll.** The current text implies both can apply to the same roll. That needs one sentence of clarification: "Catastrophic Failure replaces, and is not added to, the Failure degree result."
+The document says Catastrophic fires "plus one additional consequence at Game Master discretion." So the Catastrophic override supersedes the degree table in this case. **Confirmed working logic, but only if Catastrophic is explicitly described as a fifth degree that replaces Failure-degree outcomes in that roll.** The current text implies both can apply to the same roll. That needs one sentence of clarification: "Catastrophic Failure replaces, and is not added to, the Failure degree result."
 
 ---
 
@@ -79,19 +79,19 @@ But P-16 doesn't specify what happens on a dead tie (equal net successes). Does 
 
 ---
 
-## ST-BG-05 — TC 80 Seizure: How Many Territories Simultaneously?
+## ST-BG-05 — Theocracy Counter 80 Seizure: How Many Territories Simultaneously?
 **[QUESTION]**
 
-P-30 addresses TC 80 Partial seizure. Cascade Test 4 shows Church rolling on 5 territories. But the text does not state whether TC 80 triggers rolls on ALL territories or only territories Church declares. If all non-Church territories: with 15 territories and Church in some, this could be 10+ simultaneous rolls, each potentially cascading. The Cascade Depth Cap (3 effects/step) would be overwhelmed.
+P-30 addresses Theocracy Counter 80 Partial seizure. Cascade Test 4 shows Church rolling on 5 territories. But the text does not state whether Theocracy Counter 80 triggers rolls on ALL territories or only territories Church declares. If all non-Church territories: with 15 territories and Church in some, this could be 10+ simultaneous rolls, each potentially cascading. The Cascade Depth Cap (3 effects/step) would be overwhelmed.
 
-**Decision required:** Is the TC 80 seizure a declared target or an all-territory sweep? If all-territory, the Cascade Depth Cap must explicitly state how batched TC 80 rolls are handled (treated as a single "TC 80 sweep" event counting as one effect, with individual rolls queuing under that umbrella).
+**Decision required:** Is the Theocracy Counter 80 seizure a declared target or an all-territory sweep? If all-territory, the Cascade Depth Cap must explicitly state how batched Theocracy Counter 80 rolls are handled (treated as a single "Theocracy Counter 80 sweep" event counting as one effect, with individual rolls queuing under that umbrella).
 
 ---
 
-## ST-BG-06 — Restoration RS ≥ 50 Victory + Hollow Victory Interaction
+## ST-BG-06 — Restoration Rendering Stability ≥ 50 Victory + Hollow Victory Interaction
 **[SIGNIFICANT]**
 
-P-17 clarifies "RS ≥ 50 must be met at the moment of victory declaration." But the Hollow Victory modifier reduces effective Deed count. If Restoration's RS is 52 and they have 5 Presence markers in 5 non-adjacent territories held 2 seasons, but Compromise count reduces effective Deeds to 4 — do they still win? Their RS condition is met (52 ≥ 50). Their Deed condition: 5 territories = technically not a Deed system (that's Hafenmark). Restoration's victory condition is presence-based. RS is the gate.
+P-17 clarifies "Rendering Stability ≥ 50 must be met at the moment of victory declaration." But the Hollow Victory modifier reduces effective Deed count. If Restoration's Rendering Stability is 52 and they have 5 Presence markers in 5 non-adjacent territories held 2 seasons, but Compromise count reduces effective Deeds to 4 — do they still win? Their Rendering Stability condition is met (52 ≥ 50). Their Deed condition: 5 territories = technically not a Deed system (that's Hafenmark). Restoration's victory condition is presence-based. Rendering Stability is the gate.
 
 The Hollow Victory system appears to apply to Deed-counting factions (Hafenmark). Does it apply to Restoration's presence-based victory? If yes, how? What does "−1 effective Deed" mean for a presence-based win? If no, the Hollow Victory system has asymmetric coverage.
 
@@ -119,10 +119,10 @@ If "Policy Instrument" is Crown's exclusive card (implied by the rule), it needs
 
 ---
 
-## ST-BG-09 — VTM Once-Per-Season Cap (P-31): Interaction with PC Spend
+## ST-BG-09 — VTM Once-Per-Season Cap (P-31): Interaction with Player Character Spend
 **[CONFIRMED with note]**
 
-P-31: "VTM can only advance once per season regardless of source. PC spend takes priority." Stress case: what if the PC spend fires and VTM advances to 5, but a Co-Movement card that season has an effect reading "VTM +1"? VTM is already at 5. The cap fires from P-31 (already advanced). Is the Co-Movement effect simply lost, or does it convert to another effect?
+P-31: "VTM can only advance once per season regardless of source. Player Character spend takes priority." Stress case: what if the Player Character spend fires and VTM advances to 5, but a Co-Movement card that season has an effect reading "VTM +1"? VTM is already at 5. The cap fires from P-31 (already advanced). Is the Co-Movement effect simply lost, or does it convert to another effect?
 
 **Gap:** Co-Movement cards with VTM effects do not state what happens when VTM is already at maximum (7) or when the once-per-season cap has been reached. Add: "Co-Movement VTM effects that cannot be applied due to the once-per-season cap or maximum ceiling: convert to +1D on the following season's Tribune action in any territory."
 
@@ -195,14 +195,14 @@ This seems extreme but is actually a plausible design feature — when your gene
 
 ---
 
-## ST-MB-05 — CR = 0 After General Stage 2 Death: Uncommanded Units
+## ST-MB-05 — Coherence Rating = 0 After General Stage 2 Death: Uncommanded Units
 **[SIGNIFICANT]**
 
-§A.5: "Stage 2 (killed): CR = 0, all units uncommanded." §A.4: "Units beyond CR limit fight at Line formation, Cohesion = 1 floor, no tactics available." With CR = 0, the sub-unit limit is 0. Does the "units beyond CR limit" rule apply when CR = 0 (meaning ALL units are beyond the CR limit)?
+§A.5: "Stage 2 (killed): Coherence Rating = 0, all units uncommanded." §A.4: "Units beyond Coherence Rating limit fight at Line formation, Cohesion = 1 floor, no tactics available." With Coherence Rating = 0, the sub-unit limit is 0. Does the "units beyond Coherence Rating limit" rule apply when Coherence Rating = 0 (meaning ALL units are beyond the Coherence Rating limit)?
 
-Stress case: A CR = 0 state means every unit fights at Line, Cohesion floor 1, no tactics. This is severe but survivable for strong units. A unit at Cohesion 3, CP 5, Str 6 retains significant combat effectiveness under these conditions. However, with Morale floor suspended (Stage 2 also suspends the floor), the same unit might rout on any Morale trigger.
+Stress case: A Coherence Rating = 0 state means every unit fights at Line, Cohesion floor 1, no tactics. This is severe but survivable for strong units. A unit at Cohesion 3, CP 5, Str 6 retains significant combat effectiveness under these conditions. However, with Morale floor suspended (Stage 2 also suspends the floor), the same unit might rout on any Morale trigger.
 
-**Confirmed as working — CR = 0 triggering "all units uncommanded" + Line formation + Cohesion floor 1 is coherent but brutal.** Add explicit example to the rules to prevent table disputes.
+**Confirmed as working — Coherence Rating = 0 triggering "all units uncommanded" + Line formation + Cohesion floor 1 is coherent but brutal.** Add explicit example to the rules to prevent table disputes.
 
 ---
 
@@ -224,31 +224,31 @@ Stress case: a general in Turn N declares a unit to Reserve. Turn N+1, Phase 3, 
 
 Front: Shield Wall has −1D Off, +2D Def. The defender faces front attack at full +2D Def advantage. Left flank: negated (declared). Right flank: full flanking bonus applies to attacker. 
 
-This is the intended "Shield Wall can't negate everything" design. The question is whether the "second flank applies normally" language covers a THIRD engagement (front + right + left simultaneously). With CR = 3 max, attacker could have front, left, right simultaneous. Shield Wall handles left and front but the right applies normally. Three-way CR = 3 vs Shield Wall is functionally two unmitigated engagements plus one defended — working as designed.
+This is the intended "Shield Wall can't negate everything" design. The question is whether the "second flank applies normally" language covers a THIRD engagement (front + right + left simultaneously). With Coherence Rating = 3 max, attacker could have front, left, right simultaneous. Shield Wall handles left and front but the right applies normally. Three-way Coherence Rating = 3 vs Shield Wall is functionally two unmitigated engagements plus one defended — working as designed.
 
 ---
 
-## ST-MB-08 — Feigned Retreat Counter: "CR Ob 2 to recognise"
+## ST-MB-08 — Feigned Retreat Counter: "Coherence Rating Ob 2 to recognise"
 **[SIGNIFICANT]**
 
-§A.8 Tactics: "Feigned Retreat | Disengage; pursuer Cohesion check; re-engage next turn with flank | 3 | CR Ob 2 to recognise."
+§A.8 Tactics: "Feigned Retreat | Disengage; pursuer Cohesion check; re-engage next turn with flank | 3 | Coherence Rating Ob 2 to recognise."
 
-"CR Ob 2 to recognise" means the opposing general makes a CR check against Ob 2 to identify the Feigned Retreat as a feint (not a genuine retreat). What is the pool for this check? The CR rating itself? "CR dice" would mean — rolling CR in d10s? CR is a derived stat (⌈(Presence + Cognition) ÷ 2⌉), not a stat with defined pool dice.
+"Coherence Rating Ob 2 to recognise" means the opposing general makes a Coherence Rating check against Ob 2 to identify the Feigned Retreat as a feint (not a genuine retreat). What is the pool for this check? The Coherence Rating rating itself? "Coherence Rating dice" would mean — rolling Coherence Rating in d10s? Coherence Rating is a derived stat (⌈(Presence + Cognition) ÷ 2⌉), not a stat with defined pool dice.
 
-**Gap:** The recognition check needs a pool defined. Proposed: "Roll a number of d10s equal to the general's CR score, against Ob 2." This is consistent with the Rally check pattern (CR dice vs Ob). But this is not stated.
+**Gap:** The recognition check needs a pool defined. Proposed: "Roll a number of d10s equal to the general's Coherence Rating score, against Ob 2." This is consistent with the Rally check pattern (Coherence Rating dice vs Ob). But this is not stated.
 
 ---
 
-## ST-MB-09 — Southernmost TS < 30 Rule: Faction with Mixed Forces
+## ST-MB-09 — Southernmost Thread Sensitivity < 30 Rule: Faction with Mixed Forces
 **[SIGNIFICANT]**
 
-§A.11: "Non-Thread-sensitive units (TS < 30) cannot operate in Southernmost. They dissolve without awareness on entry — no casualties, no Morale trigger, no Cohesion check. Remove from battle map."
+§A.11: "Non-Thread-sensitive units (Thread Sensitivity < 30) cannot operate in Southernmost. They dissolve without awareness on entry — no casualties, no Morale trigger, no Cohesion check. Remove from battle map."
 
-Stress case: A force enters the Southernmost with 3 units. Unit A: Thread-sensitive soldiers (TS 30+). Unit B: mixed TS. Unit C: no Thread sensitivity. Unit C dissolves. But what counts as "the unit"? In TTRPG, units are abstract formations. Does the unit dissolve if ANY soldier has TS < 30 (i.e., the majority of the formation)?
+Stress case: A force enters the Southernmost with 3 units. Unit A: Thread-sensitive soldiers (Thread Sensitivity 30+). Unit B: mixed Thread Sensitivity. Unit C: no Thread sensitivity. Unit C dissolves. But what counts as "the unit"? In TTRPG, units are abstract formations. Does the unit dissolve if ANY soldier has Thread Sensitivity < 30 (i.e., the majority of the formation)?
 
-The rule "All individuals in a military force operating in Southernmost must personally have TS ≥ 30" resolves this for strict reading: if even one individual lacks TS 30, they dissolve. But a "unit" as a block: does the whole unit dissolve when some individuals dissolve, or do the non-sensitive individuals simply vanish while sensitive ones remain?
+The rule "All individuals in a military force operating in Southernmost must personally have Thread Sensitivity ≥ 30" resolves this for strict reading: if even one individual lacks Thread Sensitivity 30, they dissolve. But a "unit" as a block: does the whole unit dissolve when some individuals dissolve, or do the non-sensitive individuals simply vanish while sensitive ones remain?
 
-**For the TTRPG:** "Dissolve without awareness" means the unit's Strength reduces proportionally to the non-sensitive fraction, and the formation's effective CP drops. But this interpretation is not in the text. The text says "remove from battle map" — which implies the whole unit vanishes if it contains ANY non-sensitive individual, since "all individuals must have TS ≥ 30."
+**For the TTRPG:** "Dissolve without awareness" means the unit's Strength reduces proportionally to the non-sensitive fraction, and the formation's effective CP drops. But this interpretation is not in the text. The text says "remove from battle map" — which implies the whole unit vanishes if it contains ANY non-sensitive individual, since "all individuals must have Thread Sensitivity ≥ 30."
 
 **Practical gap:** How does a faction form a Southernmost-capable force at game start? Only Restoration communities and Varfell VTM 2+ can plausibly field Thread-sensitive units. This means the Southernmost is militarily inaccessible to Crown, Church, Hafenmark, and Niflhel regardless of military strength.
 
@@ -257,11 +257,11 @@ The rule "All individuals in a military force operating in Southernmost must per
 ## ST-MB-10 — Woven Unit Brittleness: Shifting Object Formation
 **[QUESTION]**
 
-§A.14: "Taking Str loss > Cohesion in a single turn qualifies as a non-Thread event of sufficient severity — GM may rule the Woven configuration shatters into a Shifting Object."
+§A.14: "Taking Str loss > Cohesion in a single turn qualifies as a non-Thread event of sufficient severity — Game Master may rule the Woven configuration shatters into a Shifting Object."
 
 A Woven unit that takes a Str loss of 5 with Cohesion 4 would shatter. But the Shifting Object rule (TTRPG §14) says Shifting Objects have variable stats per scene — "a weapon's damage bonus changes; a document changes between readings." A unit-sized Shifting Object would be a monstrous formation that changes its attack stats each turn.
 
-**Design question:** Is a unit-scale Shifting Object something that should occur during battle? The implications are significant — the GM has to track and apply shifting stats turn-by-turn for what was formerly a regular unit. This is a very high cognitive load mid-battle. **Recommend:** "Unit Woven configurations that shatter into Shifting Objects do so at battle resolution, not within battle. A shattered Woven unit fights at Line formation, Cohesion 1 for the remainder of the battle, and the Shifting Object status is registered for post-battle Thread consequences."
+**Design question:** Is a unit-scale Shifting Object something that should occur during battle? The implications are significant — the Game Master has to track and apply shifting stats turn-by-turn for what was formerly a regular unit. This is a very high cognitive load mid-battle. **Recommend:** "Unit Woven configurations that shatter into Shifting Objects do so at battle resolution, not within battle. A shattered Woven unit fights at Line formation, Cohesion 1 for the remainder of the battle, and the Shifting Object status is registered for post-battle Thread consequences."
 
 ---
 
@@ -278,7 +278,7 @@ These are **fundamentally different resolution systems:**
 - BG: single pool (sum of Martial stats), single roll, net successes = damage directly
 - TTRPG: per-unit pools, split Offence/Defence, subtracted from each other, then weapon modifier and DR applied
 
-The BG hybrid handoff (§B.5) says: "PC faction leader present in contested territory: BG resolution defers to TTRPG mass battle rules." But the stat translation table maps BG Martial to TTRPG CP. These are not the same: BG pools aggregate (sum all Martial values), TTRPG pools cap at individual unit CP. A 4-unit BG force with Martial 3+3+3+3 = pool 12D. TTRPG equivalent: 4 units at CP 3 each, max 3 sub-unit engagements simultaneously, each with pool 3D.
+The BG hybrid handoff (§B.5) says: "Player Character faction leader present in contested territory: BG resolution defers to TTRPG mass battle rules." But the stat translation table maps BG Martial to TTRPG CP. These are not the same: BG pools aggregate (sum all Martial values), TTRPG pools cap at individual unit CP. A 4-unit BG force with Martial 3+3+3+3 = pool 12D. TTRPG equivalent: 4 units at CP 3 each, max 3 sub-unit engagements simultaneously, each with pool 3D.
 
 **The two systems produce dramatically different dice pool sizes for the same force.** A BG-to-TTRPG handoff mid-battle could see a force that was rolling 12D suddenly rolling at most 9D across 3 engagements. This is not trivial and could swing outcomes dramatically.
 
@@ -286,24 +286,24 @@ The BG hybrid handoff (§B.5) says: "PC faction leader present in contested terr
 
 ---
 
-## ST-INT-02 — Commander Bonus Formula: BG (Military ÷ 3) vs TTRPG (CR = ⌈(Pres+Cog)÷2⌉)
+## ST-INT-02 — Commander Bonus Formula: BG (Military ÷ 3) vs TTRPG (Coherence Rating = ⌈(Pres+Cog)÷2⌉)
 **[SIGNIFICANT]**
 
 BG §B.3 EDITORIAL: "Commander bonus = faction Military ÷ 3, round down."
-TTRPG §A.5: "CR = ⌈(Presence + Cognition) ÷ 2⌉."
+TTRPG §A.5: "Coherence Rating = ⌈(Presence + Cognition) ÷ 2⌉."
 
-In BG mode, the commander bonus is a function of the *faction's Military stat*, not the individual commander's personal attributes. In TTRPG mode, CR is an individual attribute calculation. The hybrid handoff says "TTRPG general CR → BG commander bonus (CR ÷ 2, round down)." But BG mode normally doesn't use CR at all.
+In BG mode, the commander bonus is a function of the *faction's Military stat*, not the individual commander's personal attributes. In TTRPG mode, Coherence Rating is an individual attribute calculation. The hybrid handoff says "TTRPG general Coherence Rating → BG commander bonus (Coherence Rating ÷ 2, round down)." But BG mode normally doesn't use Coherence Rating at all.
 
-These three formulas (Military ÷ 3, CR from Pres+Cog, CR ÷ 2 for handoff) produce different values for the same general:
+These three formulas (Military ÷ 3, Coherence Rating from Pres+Cog, Coherence Rating ÷ 2 for handoff) produce different values for the same general:
 
 Example: Serena (Presence 4, Coordination 4, faction Military 4).
 - BG mode: 4 ÷ 3 = +1D commander bonus
-- TTRPG mode: CR = ⌈(4+4)÷2⌉ = ⌈4⌉ = 4. CR = 4
+- TTRPG mode: Coherence Rating = ⌈(4+4)÷2⌉ = ⌈4⌉ = 4. Coherence Rating = 4
 - Hybrid handoff: 4 ÷ 2 = +2D bonus (higher than the BG formula!)
 
-The hybrid handoff gives Serena a HIGHER commander bonus than pure BG mode. This inconsistency means transitioning from BG to TTRPG mid-battle (when a PC arrives) actually improves the force's effectiveness at the command level.
+The hybrid handoff gives Serena a HIGHER commander bonus than pure BG mode. This inconsistency means transitioning from BG to TTRPG mid-battle (when a Player Character arrives) actually improves the force's effectiveness at the command level.
 
-**This should be an explicit design decision, not an accident.** State whether this is intentional (PCs are better generals than NPC faction leaders, reflecting their attribute investment) or whether the formulas need alignment.
+**This should be an explicit design decision, not an accident.** State whether this is intentional (PCs are better generals than Non-Player Character faction leaders, reflecting their attribute investment) or whether the formulas need alignment.
 
 ---
 
@@ -351,31 +351,31 @@ A faction could theoretically have Military 0, Stability 3 — all units destroy
 ## ST-INT-06 — BG Unit Tokens vs TTRPG Thread Sensitivity Requirement
 **[CRITICAL]**
 
-§A.11: "All individuals in a military force operating in Southernmost must personally have TS ≥ 30."
+§A.11: "All individuals in a military force operating in Southernmost must personally have Thread Sensitivity ≥ 30."
 
-BG unit tokens (§B.2) have no TS stat. Knights Templar, Cavalry, Heavy Infantry — none carry Thread Sensitivity tracking. There is no mechanism in BG mode for a unit to "have" TS.
+BG unit tokens (§B.2) have no Thread Sensitivity stat. Knights Templar, Cavalry, Heavy Infantry — none carry Thread Sensitivity tracking. There is no mechanism in BG mode for a unit to "have" Thread Sensitivity.
 
 Hybrid handoff (§B.5) says BG territory consequences apply even in TTRPG battle mode. If a battle occurs in the Southernmost:
-- TTRPG rules apply (PC present)
-- TTRPG Southernmost rule fires: units dissolve unless TS ≥ 30
-- But the BG units transitioning into TTRPG mode have no TS value
+- TTRPG rules apply (Player Character present)
+- TTRPG Southernmost rule fires: units dissolve unless Thread Sensitivity ≥ 30
+- But the BG units transitioning into TTRPG mode have no Thread Sensitivity value
 
-**What TS do BG units get when translated to TTRPG?** No rule exists. The BG-to-TTRPG stat translation (§B.5) maps Martial → CP, Cohesion → Cohesion, Morale → Cohesion check, but is silent on TS.
+**What Thread Sensitivity do BG units get when translated to TTRPG?** No rule exists. The BG-to-TTRPG stat translation (§B.5) maps Martial → CP, Cohesion → Cohesion, Morale → Cohesion check, but is silent on Thread Sensitivity.
 
-**Proposed bridge rule:** "BG units translating to TTRPG mode in Southernmost: TS = 0 unless the deploying faction has a designated Thread-capable asset (Restoration Weaver marker, Varfell VTM 2+) in that territory. Church Templar units have TS 0 by default (doctrinally prohibited Thread sensitivity) and dissolve in Southernmost. Restoration and Varfell units with Thread designations have TS 30 for Southernmost purposes."
+**Proposed bridge rule:** "BG units translating to TTRPG mode in Southernmost: Thread Sensitivity = 0 unless the deploying faction has a designated Thread-capable asset (Restoration Weaver marker, Varfell VTM 2+) in that territory. Church Templar units have Thread Sensitivity 0 by default (doctrinally prohibited Thread sensitivity) and dissolve in Southernmost. Restoration and Varfell units with Thread designations have Thread Sensitivity 30 for Southernmost purposes."
 
 ---
 
-## ST-INT-07 — BG Thread Operations via Co-Movement vs TTRPG Thread Operations: Same TT/RS Effect?
+## ST-INT-07 — BG Thread Operations via Co-Movement vs TTRPG Thread Operations: Same Thread Tension/Rendering Stability Effect?
 **[SIGNIFICANT]**
 
-BG Co-Movement cards produce RS effects (the BG equivalent of TT/RS). TTRPG Thread operations produce RS changes via the TTRPG formulas (BG document uses RS; TTRPG uses TT; EDGE-06 notes these must be reconciled with inversion). 
+BG Co-Movement cards produce Rendering Stability effects (the BG equivalent of Thread Tension/Rendering Stability). TTRPG Thread operations produce Rendering Stability changes via the TTRPG formulas (BG document uses Rendering Stability; TTRPG uses Thread Tension; EDGE-06 notes these must be reconciled with inversion). 
 
-If a practitioner PC performs a Weaving (Overwhelming) in TTRPG mass battle mode, the TTRPG result is TT −1. Per EDGE-06, "TT +N → RS −N." So Overwhelming Weaving = RS +1 in BG terms. But in BG mode, the equivalent Thread action via Co-Movement might produce RS +1 from the "Ground Stability" card. These should be equivalent, and for a single Weaving they appear to be.
+If a practitioner Player Character performs a Weaving (Overwhelming) in TTRPG mass battle mode, the TTRPG result is Thread Tension −1. Per EDGE-06, "Thread Tension +N → Rendering Stability −N." So Overwhelming Weaving = Rendering Stability +1 in BG terms. But in BG mode, the equivalent Thread action via Co-Movement might produce Rendering Stability +1 from the "Ground Stability" card. These should be equivalent, and for a single Weaving they appear to be.
 
-**But the scales diverge on major operations.** Ceiral Ritual (TTRPG): RS +6 to +10. No BG Co-Movement card produces RS +6 in a single draw. If the Ceiral Ritual is performed in hybrid mode (PC practitioners present), the RS gain from TTRPG rules would dwarf anything achievable in BG mode. This creates a strong mechanical incentive for players to always perform major Thread operations in TTRPG mode rather than through Co-Movement cards.
+**But the scales diverge on major operations.** Ceiral Ritual (TTRPG): Rendering Stability +6 to +10. No BG Co-Movement card produces Rendering Stability +6 in a single draw. If the Ceiral Ritual is performed in hybrid mode (Player Character practitioners present), the Rendering Stability gain from TTRPG rules would dwarf anything achievable in BG mode. This creates a strong mechanical incentive for players to always perform major Thread operations in TTRPG mode rather than through Co-Movement cards.
 
-**Decision required:** Is this asymmetry intentional (PCs and TTRPG mode produce larger Thread consequences than board game abstractions)? If yes, confirm. If no, the Ceiral Ritual's RS effect needs a BG Co-Movement cap or the Co-Movement effects need scaling.
+**Decision required:** Is this asymmetry intentional (PCs and TTRPG mode produce larger Thread consequences than board game abstractions)? If yes, confirm. If no, the Ceiral Ritual's Rendering Stability effect needs a BG Co-Movement cap or the Co-Movement effects need scaling.
 
 ---
 
@@ -414,16 +414,16 @@ If (b): the faction's Military stat doesn't change during the season, only at Ac
 
 ---
 
-## ST-INT-10 — Church Military Victory → TC Change: CLOCK-EDIT-02
+## ST-INT-10 — Church Military Victory → Theocracy Counter Change: CLOCK-EDIT-02
 **[QUESTION]**
 
-CLOCK-EDIT-02 (open editorial): "Church military victory → TC change. No TC change from military victory alone (confirm)."
+CLOCK-EDIT-02 (open editorial): "Church military victory → Theocracy Counter change. No Theocracy Counter change from military victory alone (confirm)."
 
-This has significant gameplay implications. If Church captures T3 (their capital) militarily, Mandate +1 and TC +1 (control of a holy site), but not a dedicated military-TC modifier. But in TTRPG mass battle, a Church army Weaving its soldiers (boosting Cohesion) generates RS consequences from Thread operations. Does the Thread work involved in fielding a Church military force produce RS changes independent of the military outcome?
+This has significant gameplay implications. If Church captures T3 (their capital) militarily, Mandate +1 and Theocracy Counter +1 (control of a holy site), but not a dedicated military-Theocracy Counter modifier. But in TTRPG mass battle, a Church army Weaving its soldiers (boosting Cohesion) generates Rendering Stability consequences from Thread operations. Does the Thread work involved in fielding a Church military force produce Rendering Stability changes independent of the military outcome?
 
-The question isn't just "does winning a battle change TC" but "does the means of fighting (Thread-Woven Church forces) change TC regardless of outcome." §A.10 says all Thread operations in mass battle generate RS drift via standard operation rules. So a Church army using Woven soldiers would produce RS consequences from the Weaving, not from the victory.
+The question isn't just "does winning a battle change Theocracy Counter" but "does the means of fighting (Thread-Woven Church forces) change Theocracy Counter regardless of outcome." §A.10 says all Thread operations in mass battle generate Rendering Stability drift via standard operation rules. So a Church army using Woven soldiers would produce Rendering Stability consequences from the Weaving, not from the victory.
 
-**Confirm and state:** "Military victory itself produces no TC/RS change. Thread operations performed during the battle produce standard RS changes per §A.10."
+**Confirm and state:** "Military victory itself produces no Theocracy Counter/Rendering Stability change. Thread operations performed during the battle produce standard Rendering Stability changes per §A.10."
 
 ---
 
@@ -443,22 +443,22 @@ The approximation works but is not mathematically exact. For a playtest this is 
 
 v0.4-NEW-02 and CLOCK-EDIT-01 are both marked Blocking: "Battle Tactic Card deck" and "Altonian invasion unit stats."
 
-In hybrid mode (§B.5), if the Altonian Vanguard deploys at IP 75+ and the PC faction is defending, "BG resolution defers to TTRPG mass battle rules." The TTRPG mass battle rules require unit stat blocks (Strength, CP, Cohesion, Morale, Weapon, Armour) for the Altonian units. Without CLOCK-EDIT-01 resolution, a hybrid battle against Altonia is impossible — the GM has no unit stats to work with.
+In hybrid mode (§B.5), if the Altonian Vanguard deploys at Institutional Pressure 75+ and the Player Character faction is defending, "BG resolution defers to TTRPG mass battle rules." The TTRPG mass battle rules require unit stat blocks (Strength, CP, Cohesion, Morale, Weapon, Armour) for the Altonian units. Without CLOCK-EDIT-01 resolution, a hybrid battle against Altonia is impossible — the Game Master has no unit stats to work with.
 
-**This is the highest-priority blocking item in the entire stack.** All scenario simulations involving Altonia (Scenario C in Part Six of the BG document) are provisional. The IP 68 scenario is playable to the threshold but not through invasion resolution.
+**This is the highest-priority blocking item in the entire stack.** All scenario simulations involving Altonia (Scenario C in Part Six of the BG document) are provisional. The Institutional Pressure 68 scenario is playable to the threshold but not through invasion resolution.
 
 ---
 
 ## ST-INT-13 — TTRPG Wound Penalty +1 Ob vs BG Stat Abstraction
 **[MINOR]**
 
-TTRPG mass battle §A.5: "Wounds carry over: Wounds from personal combat add +1 Ob to CR tactic execution rolls."
+TTRPG mass battle §A.5: "Wounds carry over: Wounds from personal combat add +1 Ob to Coherence Rating tactic execution rolls."
 
-BG mode has no wound tracking — faction leaders don't have Health/Wound mechanics in the board game. But in hybrid mode, a PC general who took wounds in a prior personal combat scene would have +1 Ob to their CR checks.
+BG mode has no wound tracking — faction leaders don't have Health/Wound mechanics in the board game. But in hybrid mode, a Player Character general who took wounds in a prior personal combat scene would have +1 Ob to their Coherence Rating checks.
 
-This is a minor hybrid-mode consistency issue. When a PC transitions from TTRPG personal combat (where they took wounds) to BG mode (where wounds are not tracked), do the wound Ob penalties carry into their BG-mode commander bonus?
+This is a minor hybrid-mode consistency issue. When a Player Character transitions from TTRPG personal combat (where they took wounds) to BG mode (where wounds are not tracked), do the wound Ob penalties carry into their BG-mode commander bonus?
 
-**Proposed:** "In hybrid mode, wound Ob penalties from TTRPG personal combat apply to the PC's CR checks in TTRPG mass battle. They do not reduce the commander bonus calculation in BG mass battle (which uses Military ÷ 3, not CR). This is the intended distinction between the two modes."
+**Proposed:** "In hybrid mode, wound Ob penalties from TTRPG personal combat apply to the Player Character's Coherence Rating checks in TTRPG mass battle. They do not reduce the commander bonus calculation in BG mass battle (which uses Military ÷ 3, not Coherence Rating). This is the intended distinction between the two modes."
 
 ---
 
@@ -471,7 +471,7 @@ This is a minor hybrid-mode consistency issue. When a PC transitions from TTRPG 
 | ST-MB-01 | TN 6 for Volley vs universal TN 7 | Mass Battle v3 |
 | ST-MB-02 | Coherence undefined as a stat | Mass Battle v3 |
 | ST-INT-01 | BG vs TTRPG battle pool sizes incompatible | Intersection |
-| ST-INT-06 | BG unit tokens have no TS; Southernmost rule breaks | Intersection |
+| ST-INT-06 | BG unit tokens have no Thread Sensitivity; Southernmost rule breaks | Intersection |
 | ST-INT-12 | Altonian invasion unit stats missing (blocking) | Intersection |
 | ST-BG-03 | Catastrophic Failure and Failure degree: which applies? | BG v0.5 |
 | ST-BG-01 | Overwhelming threshold: Ob+1 (BG) vs 2×Ob (TTRPG) | BG v0.5 |
@@ -482,25 +482,25 @@ This is a minor hybrid-mode consistency issue. When a PC transitions from TTRPG 
 |----|-------|--------|
 | ST-BG-02 | Catastrophic Failure rate at pool 2: ~11% | BG v0.5 |
 | ST-BG-04 | Drawn battles undefined | BG v0.5 |
-| ST-BG-05 | TC 80 seizure scope not stated | BG v0.5 |
+| ST-BG-05 | Theocracy Counter 80 seizure scope not stated | BG v0.5 |
 | ST-BG-06 | Hollow Victory + non-Deed faction interactions | BG v0.5 |
 | ST-BG-08 | Policy Instrument not defined in B3 | BG v0.5 |
 | ST-BG-09 | Co-Movement VTM effects at cap: no conversion rule | BG v0.5 |
 | ST-MB-03 | Simultaneous damage and Effective CP timing | Mass Battle v3 |
 | ST-MB-04 | Morale cap and general kill application order | Mass Battle v3 |
-| ST-MB-05 | CR = 0 uncommanded units + suspended Morale floor | Mass Battle v3 |
+| ST-MB-05 | Coherence Rating = 0 uncommanded units + suspended Morale floor | Mass Battle v3 |
 | ST-MB-06 | Reserve commitment timing within same turn | Mass Battle v3 |
 | ST-MB-08 | Feigned Retreat recognition pool undefined | Mass Battle v3 |
-| ST-MB-09 | Mixed TS forces in Southernmost | Mass Battle v3 |
+| ST-MB-09 | Mixed Thread Sensitivity forces in Southernmost | Mass Battle v3 |
 | ST-MB-10 | Woven unit Shifting Object: mid-battle vs post-battle | Mass Battle v3 |
 | ST-INT-02 | Three conflicting commander bonus formulas | Intersection |
 | ST-INT-03 | Volley TN in hybrid mode | Intersection |
 | ST-INT-04 | Military loss cap: shared or separate from Domain Actions | Intersection |
 | ST-INT-05 | Military 0: Muster and collapse implications | Intersection |
-| ST-INT-07 | Ceiral Ritual RS gain vs Co-Movement scale | Intersection |
+| ST-INT-07 | Ceiral Ritual Rendering Stability gain vs Co-Movement scale | Intersection |
 | ST-INT-08 | Muster Str=2 → BG Health 3: off token scale | Intersection |
 | ST-INT-09 | Military loss timing: immediate vs Accounting | Intersection |
-| ST-INT-11 | TC change from military victory (CLOCK-EDIT-02) | Intersection |
+| ST-INT-11 | Theocracy Counter change from military victory (CLOCK-EDIT-02) | Intersection |
 
 ## Minor / Design Notes
 
@@ -509,7 +509,7 @@ This is a minor hybrid-mode consistency issue. When a PC transitions from TTRPG 
 | ST-BG-07 | Presence marker ceiling at 2 for Weaving Ob | BG v0.5 |
 | ST-BG-10 | Standing Tokens undefined in provided B3 text | BG v0.5 |
 | ST-MB-07 | Three-way flanking vs Shield Wall | Mass Battle v3 |
-| ST-INT-10 | Church military victory TC confirmation | Intersection |
+| ST-INT-10 | Church military victory Theocracy Counter confirmation | Intersection |
 | ST-INT-13 | Wound penalties in BG vs TTRPG mode | Intersection |
 
 ---
@@ -520,11 +520,11 @@ This is a minor hybrid-mode consistency issue. When a PC transitions from TTRPG 
 
 The d10 correction and Ob minimum = 1 are applied consistently within the document. The Standard Ob table (P-21) is the most useful single addition. The Cascade Depth Cap is well-designed and functioning. The Klapp Awakening scenario is the most complete and narratively coherent emergent scenario — all three branches produce distinct, playable game states.
 
-The primary remaining fragility is the degree table definition of Overwhelming (Ob+1 vs 2×Ob divergence from TTRPG parent), the undefined Policy Instrument mechanic, and the TC 80 seizure scope. None of these block core play but all will produce table disputes on first encounter.
+The primary remaining fragility is the degree table definition of Overwhelming (Ob+1 vs 2×Ob divergence from TTRPG parent), the undefined Policy Instrument mechanic, and the Theocracy Counter 80 seizure scope. None of these block core play but all will produce table disputes on first encounter.
 
 ## Mass Battle v3
 
-The deterministic Cohesion check system is an excellent simplification from probabilistic variants. The CR asymmetry (CR=7 vs CR=1 "produces near-certain outcome before a die is rolled") is well-justified design. The TTRPG Phase structure is coherent and the patches are internally consistent.
+The deterministic Cohesion check system is an excellent simplification from probabilistic variants. The Coherence Rating asymmetry (Coherence Rating=7 vs Coherence Rating=1 "produces near-certain outcome before a die is rolled") is well-justified design. The TTRPG Phase structure is coherent and the patches are internally consistent.
 
 The critical gaps are Coherence (undefined stat blocking §A.10 entirely) and TN 6 for Volley (contradicts the universal TN 7 correction). Both are resolvable with one sentence each.
 

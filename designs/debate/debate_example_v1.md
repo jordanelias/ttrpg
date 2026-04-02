@@ -4,11 +4,11 @@
 
 Parliament has been called to session. Duchess Baralta of Hafenmark accuses Duke Vaynard of Varfell of violating the Thornfeld Accord — a treaty governing the shared mining rights in the Eisengrund highlands. Baralta claims Varfell miners crossed into Hafenmark-administered shafts and extracted ore without licence. Vaynard claims the boundary was never formally ratified and therefore cannot be violated.
 
-The PCs are Baralta (played by Sarah) and Vaynard (played by Marcus). The GM controls Parliament as audience.
+The PCs are Baralta (played by Sarah) and Vaynard (played by Marcus). The Game Master controls Parliament as audience.
 
 ---
 
-## GM Setup (hidden from players)
+## Game Master Setup (hidden from players)
 
 **Question:** Did Varfell violate the Thornfeld Accord? (Past — Forensic primary genre.)
 
@@ -59,14 +59,14 @@ Both orators read the room.
 **Baralta:** Attunement 3 + History bonus 7 = 10D, TN 7, Ob 1.
 Sarah rolls: 3, 8, 2, 9, 5, 7, 1, 4, 6, 8 → 4 successes. Net 3 (Overwhelming).
 
-**GM tells Sarah:** "Parliament is in a procedural mood. They've been dealing with Varfell's boundary ambiguities for two seasons and they're tired of it. They want this settled with evidence. The Crown delegates are watching to see if constitutional process holds. The room wants facts, not speeches."
+**Game Master tells Sarah:** "Parliament is in a procedural mood. They've been dealing with Varfell's boundary ambiguities for two seasons and they're tired of it. They want this settled with evidence. The Crown delegates are watching to see if constitutional process holds. The room wants facts, not speeches."
 
 Sarah now knows: Past is strong here. Revealing is strong. The audience wants documented evidence.
 
 **Vaynard:** Attunement 4 + History bonus 6 = 10D, TN 7, Ob 1.
 Marcus rolls: 7, 3, 9, 1, 8, 5, 2, 7, 6, 4 → 4 successes. Net 3 (Overwhelming).
 
-**GM tells Marcus:** "The room is sceptical of you specifically. Two Crown delegates exchanged a glance when you entered. Hafenmark's people are stone-faced — they came prepared. You're reading impatience with ambiguity. This audience doesn't want to hear about technicalities. They want someone to be straightforwardly right."
+**Game Master tells Marcus:** "The room is sceptical of you specifically. Two Crown delegates exchanged a glance when you entered. Hafenmark's people are stone-faced — they came prepared. You're reading impatience with ambiguity. This audience doesn't want to hear about technicalities. They want someone to be straightforwardly right."
 
 Marcus now knows: the room is hostile to Obscuring. His instinct to argue the boundary was never ratified — a Past + Obscuring move — will land poorly. He needs to pivot.
 
@@ -92,7 +92,7 @@ She stands, producing a leather folio. "Honoured members. On the fourteenth of A
 
 She's citing specific documents, dates, and testimony. Sarah declares Memory applies — she's recalling and presenting documented evidence.
 
-**Baralta's roll:** Cognition 4 + History bonus 7 + Memory bonus (GM awards 2D for specific documented citations) = 13D, TN 7.
+**Baralta's roll:** Cognition 4 + History bonus 7 + Memory bonus (Game Master awards 2D for specific documented citations) = 13D, TN 7.
 Sarah rolls: 9, 3, 7, 8, 1, 5, 7, 2, 8, 4, 6, 9, 7 → 7 successes.
 
 **Vaynard responds.**
@@ -117,14 +117,14 @@ Vaynard's Composure is 9. He's at 3/9 after one exchange.
 
 **Strain to Baralta:** Vaynard lost, so Baralta takes no strain from the exchange result. (Only the loser takes strain — this isn't combat's simultaneous damage.)
 
-### Step 5: GM Scores (hidden)
+### Step 5: Game Master Scores (hidden)
 
 Baralta's winning argument: Past + Revealing. Weight: Past ×1, Revealing ×1. Full margin counts.
 Conviction tracker: +2 toward Baralta. (Starting position was +1 toward Baralta. Now +3.)
 
-Vaynard's argument (Future + Revealing) did not win the exchange, so it doesn't move the tracker. But the GM notes internally that Vaynard's pivot to a constructive proposal may affect the audience's emotional state going forward — the weight might shift slightly toward Future for the next exchange if the room found his proposal reasonable.
+Vaynard's argument (Future + Revealing) did not win the exchange, so it doesn't move the tracker. But the Game Master notes internally that Vaynard's pivot to a constructive proposal may affect the audience's emotional state going forward — the weight might shift slightly toward Future for the next exchange if the room found his proposal reasonable.
 
-**GM adjusts hidden weights for next exchange:**
+**Game Master adjusts hidden weights for next exchange:**
 - Past: ×1 → ×0.75 (Parliament heard the evidence. They may not need more of it.)
 - Future: ×0.5 → ×0.75 (Vaynard's proposal planted a seed. Some delegates are nodding.)
 - Present: ×0.5 (unchanged)
@@ -137,7 +137,7 @@ Both orators' Concentration depletes by 1.
 
 **Initiative transfers to Baralta** (she won).
 
-### GM Ledger (Exchange 1)
+### Game Master Ledger (Exchange 1)
 
 | Exchange | Winner | Margin | Genre + Orientation | Weight Applied | Tracker Δ | Tracker Position |
 |---|---|---|---|---|---|---|
@@ -152,14 +152,14 @@ Both orators' Concentration depletes by 1.
 **Baralta:** Attunement 3 + History 7 = 10D, TN 7, Ob 1.
 Sarah rolls: 2, 7, 5, 8, 3, 1, 9, 6, 4, 7 → 4 successes. Net 3 (Overwhelming).
 
-**GM tells Sarah:** "You're winning and the room knows it. But something shifted — a few Crown delegates are looking at Vaynard with what might be sympathy. His survey proposal landed. The room still cares about the facts, but they're also starting to think about resolution. If you press the past too hard, you risk looking vindictive."
+**Game Master tells Sarah:** "You're winning and the room knows it. But something shifted — a few Crown delegates are looking at Vaynard with what might be sympathy. His survey proposal landed. The room still cares about the facts, but they're also starting to think about resolution. If you press the past too hard, you risk looking vindictive."
 
 Sarah reads this correctly: the weight has shifted. Past is still good but diminishing. She might need to pivot herself.
 
 **Vaynard:** Attunement 4 + History 6 = 10D, TN 7, Ob 1.
 Marcus rolls: 9, 7, 3, 8, 2, 5, 7, 1, 6, 8 → 5 successes. Net 4 (Overwhelming).
 
-**GM tells Marcus:** "The room is conflicted. Baralta's evidence was strong, but your proposal gave them an out — a way to resolve this without declaring a winner. The proceduralists want a winner. The pragmatists want a solution. You're reading a room that is splitting. The Crown delegates would accept a compromise. Hafenmark's people will not."
+**Game Master tells Marcus:** "The room is conflicted. Baralta's evidence was strong, but your proposal gave them an out — a way to resolve this without declaring a winner. The proceduralists want a winner. The pragmatists want a solution. You're reading a room that is splitting. The Crown delegates would accept a compromise. Hafenmark's people will not."
 
 Marcus now has excellent information. The room is splitting. A Future + Revealing argument (the survey commission) will land with the Crown delegates but bounce off Hafenmark. He needs to either commit to the pivot and win the Crown, or find something that hits both groups.
 
@@ -197,11 +197,11 @@ Marcus rolls: 8, 7, 3, 9, 2, 5, 7, 8, 1, 6, 4 → 5 successes.
 
 No strain dealt to either side on a tie.
 
-### Step 5: GM Scores (hidden)
+### Step 5: Game Master Scores (hidden)
 
-Tie — no tracker movement. But the GM notes that Vaynard's counter-characterization landed with some delegates. The room is genuinely divided now.
+Tie — no tracker movement. But the Game Master notes that Vaynard's counter-characterization landed with some delegates. The room is genuinely divided now.
 
-**GM adjusts hidden weights for exchange 3:**
+**Game Master adjusts hidden weights for exchange 3:**
 - Past: ×0.75 (unchanged — evidence phase is over)
 - Present: ×0.5 → ×0.75 (the character clash engaged the room — they're invested in who's right about whom)
 - Future: ×0.75 (unchanged)
@@ -213,7 +213,7 @@ Tie — no tracker movement. But the GM notes that Vaynard's counter-characteriz
 
 **Initiative stays with Baralta** (tie, holder retains).
 
-### GM Ledger (Exchange 2)
+### Game Master Ledger (Exchange 2)
 
 | Exchange | Winner | Margin | Genre + Orientation | Weight Applied | Tracker Δ | Tracker Position |
 |---|---|---|---|---|---|---|
@@ -229,14 +229,14 @@ Tie — no tracker movement. But the GM notes that Vaynard's counter-characteriz
 **Baralta:** Attunement 3 + History 7 = 10D, TN 7, Ob 1.
 Sarah rolls: 5, 8, 3, 7, 1, 4, 9, 6, 2, 7 → 4 successes. Net 3 (Overwhelming).
 
-**GM tells Sarah:** "The room is yours to lose. The evidence landed. The character tie didn't hurt you — it showed you can take a hit and stay composed. But the Crown delegates are still thinking about Vaynard's survey proposal. If he closes on that, he might peel them off. You need to close this. The room will respond to a definitive statement of what should happen — they're ready for a verdict, not more argument."
+**Game Master tells Sarah:** "The room is yours to lose. The evidence landed. The character tie didn't hurt you — it showed you can take a hit and stay composed. But the Crown delegates are still thinking about Vaynard's survey proposal. If he closes on that, he might peel them off. You need to close this. The room will respond to a definitive statement of what should happen — they're ready for a verdict, not more argument."
 
 Sarah reads: Future is now the strong genre. The room wants resolution. She should close with a demand, not more evidence.
 
 **Vaynard:** Attunement 4 + History 6 = 10D, TN 7, Ob 1.
 Marcus rolls: 7, 2, 8, 9, 5, 3, 7, 1, 8, 4 → 5 successes. Net 4 (Overwhelming).
 
-**GM tells Marcus:** "You're behind but not dead. The Crown delegates are your lifeline — they liked the survey proposal. Hafenmark's people are stone. The proceduralists are going to vote with Baralta unless you give them something. Here's what you're reading: the room would accept a compromise. They don't want to crush Varfell. They want this resolved. If you offer something real — concession plus proposal — you might survive this."
+**Game Master tells Marcus:** "You're behind but not dead. The Crown delegates are your lifeline — they liked the survey proposal. Hafenmark's people are stone. The proceduralists are going to vote with Baralta unless you give them something. Here's what you're reading: the room would accept a compromise. They don't want to crush Varfell. They want this resolved. If you offer something real — concession plus proposal — you might survive this."
 
 Marcus reads: he can't win outright. But he might be able to limit the damage by proposing a compromise that the room prefers to Baralta's demand for full penalty.
 
@@ -280,11 +280,11 @@ Marcus rolls: 9, 7, 8, 3, 5, 7, 2, 8, 4, 6, 1 → 5 successes.
 
 No strain dealt.
 
-### Step 5: GM Scores (hidden)
+### Step 5: Game Master Scores (hidden)
 
-Another tie — but the GM has a decision. Both argued Future + Revealing, both at 5 successes. No exchange winner, so technically no tracker movement.
+Another tie — but the Game Master has a decision. Both argued Future + Revealing, both at 5 successes. No exchange winner, so technically no tracker movement.
 
-But the GM considers: Vaynard's concession was a material shift. He accepted the finding and the restitution. His counter-proposal (resurvey) is reasonable. The room heard both proposals and is weighing them. The tracker doesn't move from the exchange, but the GM notes that the final audience state is "ready to vote, leaning Baralta but open to compromise."
+But the Game Master considers: Vaynard's concession was a material shift. He accepted the finding and the restitution. His counter-proposal (resurvey) is reasonable. The room heard both proposals and is weighing them. The tracker doesn't move from the exchange, but the Game Master notes that the final audience state is "ready to vote, leaning Baralta but open to compromise."
 
 ### Step 6: Concentration
 
@@ -301,7 +301,7 @@ Baralta won 1 exchange, 2 ties. Exchange majority: Baralta.
 ### Conviction Track
 +3 toward Baralta. The threshold for outright victory was +5 (majority of a 10-point track). She didn't get there.
 
-### GM Reveals Ledger
+### Game Master Reveals Ledger
 
 | Exchange | Winner | Margin | Genre + Orientation | Weight Applied | Tracker Δ | Tracker Position |
 |---|---|---|---|---|---|---|
@@ -311,7 +311,7 @@ Baralta won 1 exchange, 2 ties. Exchange majority: Baralta.
 
 ### Outcome
 
-Baralta won the exchange count but didn't capture the room outright. The Conviction Track at +3 of 10 is a moderate lean, not a decisive swing. The GM rules:
+Baralta won the exchange count but didn't capture the room outright. The Conviction Track at +3 of 10 is a moderate lean, not a decisive swing. The Game Master rules:
 
 **Procedural victory for Baralta.** Parliament issues the formal finding of violation and orders restitution. But the third demand — confirming original boundaries — is amended. Parliament commissions the joint resurvey that Vaynard proposed. The Speaker notes that "the evidence of violation is clear, but the practical solution serves the interests of both duchies and of this Parliament."
 
@@ -322,7 +322,7 @@ Baralta gets 2 of 3 demands. Vaynard loses the finding and pays restitution but 
 - Vaynard's Disposition with Parliament: unchanged (the concession preserved his standing)
 - Baralta's Disposition with Parliament: +1 step (she proved the case)
 - No Domain Echo (the outcome was mixed — neither side's position fully actualized)
-- RS: no change (the debate was intense but not at the scale that disturbs thread configurations)
+- Rendering Stability: no change (the debate was intense but not at the scale that disturbs thread configurations)
 
 **Strain state:**
 - Vaynard at 3 strain of 9 Composure. Not Rattled, but he felt it.
@@ -340,7 +340,7 @@ Baralta gets 2 of 3 demands. Vaynard loses the finding and pays restitution but 
 
 **Baralta's exchange 2 pivot from Past to Present reflects real prosecutorial instinct.** She'd made the evidentiary case. Repeating it would look like she had nothing else. Attacking Vaynard's character was the natural escalation. The system didn't force this — Sarah read the diminishing returns on Past and chose to move.
 
-**The GM's dynamic weighting felt organic.** The audience's priorities shifted because the arguments changed them. Exchange 1 was about facts. Exchange 2 introduced character. Exchange 3 was about resolution. This is how real proceedings evolve — the room's needs change as the debate progresses.
+**The Game Master's dynamic weighting felt organic.** The audience's priorities shifted because the arguments changed them. Exchange 1 was about facts. Exchange 2 introduced character. Exchange 3 was about resolution. This is how real proceedings evolve — the room's needs change as the debate progresses.
 
 **Presence as strain modifier rather than argument quality is correct.** Vaynard is the better arguer (Cognition 5 vs 4) but Baralta hits harder when she wins because her delivery is more commanding (Presence 5 vs 3). This matches reality — a technically weaker argument delivered with authority can be more devastating than a brilliant argument delivered meekly.
 
@@ -354,7 +354,7 @@ Baralta gets 2 of 3 demands. Vaynard loses the finding and pays restitution but 
 
 **The tie mechanic is unsatisfying.** Two of three exchanges were ties. In combat, ties are resolved by contested Agility rolls. In debate, ties just... happen, and initiative stays. This deflates the drama. Consider: tie-breaking by Presence (who delivered better), or ties producing mutual strain (the audience is frustrated by indecision, both orators feel the pressure).
 
-**Attunement's overwhelming success gave very clear information.** Both orators rolled 3+ net on every read. The GM gave detailed, actionable signals. What happens when the read is a partial success or a failure? The example doesn't test this. A failed read should produce bad or misleading information — "you think the room wants Past" when actually they're tired of it. This would create real tactical risk in the read step.
+**Attunement's overwhelming success gave very clear information.** Both orators rolled 3+ net on every read. The Game Master gave detailed, actionable signals. What happens when the read is a partial success or a failure? The example doesn't test this. A failed read should produce bad or misleading information — "you think the room wants Past" when actually they're tired of it. This would create real tactical risk in the read step.
 
 **Corroboration didn't appear.** Neither orator had an ally corroborating. The Bonds mechanic is untested in this example. A second example should feature a Grand Debate with seconds.
 
@@ -372,4 +372,4 @@ Baralta gets 2 of 3 demands. Vaynard loses the finding and pays restitution but 
 
 4. **Should Memory apply to defensive reads?** "You recall that in the Kaltfluss negotiation, the Duchess used this exact procedural argument and it was later shown to be..." — catching the opponent in a pattern. Memory as both citing precedent (offensive) and catching contradictions (defensive).
 
-5. **How should the GM handle a debater who wants to pivot genre when the institutional context restricts it?** Vaynard arguing Future in a Past-genre tribunal — should the Speaker rule it out of order? What's the mechanical cost?
+5. **How should the Game Master handle a debater who wants to pivot genre when the institutional context restricts it?** Vaynard arguing Future in a Past-genre tribunal — should the Speaker rule it out of order? What's the mechanical cost?

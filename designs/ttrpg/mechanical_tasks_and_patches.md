@@ -27,7 +27,7 @@ Formula: Military score = maximum active units the faction can field simultaneou
 
 **Mustering:** Muster order raises 1 new unit per success (up to faction Military cap). Units begin at standard stats. Upgrading to elite requires 2 consecutive successful Govern orders in the territory + Wealth ≥ 4.
 
-**Church Templars:** Separate from Church regular garrison. Templars deploy when TC ≥ 40 (free unit, Himmelstift). Templars are elite stat block.
+**Church Templars:** Separate from Church regular garrison. Templars deploy when Theocracy Counter ≥ 40 (free unit, Himmelstift). Templars are elite stat block.
 
 ---
 
@@ -57,7 +57,7 @@ Current state in stage9_social.md:
 
 # MT-03: Territorial-Scale Spell Catalog Ob Audit
 
-**Decision R-62 (E-20):** Mandate Reinforcement Ob corrected to 6 (W-51). TC +1 on visible success retained.
+**Decision R-62 (E-20):** Mandate Reinforcement Ob corrected to 6 (W-51). Theocracy Counter +1 on visible success retained.
 
 **Current state in stage15_spell_catalog.md:**
 - All Territorial operations show `Ob 4` or `Ob 7` uniformly
@@ -110,7 +110,7 @@ Ob = target's Endurance + target's Spirit + armour modifier
 Standard success = Partial degree (Shifting Object — body partially dissolved, ~50% HP damage). Overwhelming success required for immediate incapacitation.
 ```
 
-Rationale: a living body is a heavily actualised configuration with continuous spooling from both physical substrate (End) and metaphysical coherence (Spirit). Armour adds configurational rigidity. This makes Dissolution of a person genuinely hard — requiring TS investment and good roll — while preserving it as a valid combat option at high TS.
+Rationale: a living body is a heavily actualised configuration with continuous spooling from both physical substrate (End) and metaphysical coherence (Spirit). Armour adds configurational rigidity. This makes Dissolution of a person genuinely hard — requiring Thread Sensitivity investment and good roll — while preserving it as a valid combat option at high Thread Sensitivity.
 
 **Files:** stage3_thread_operations.md, stage15_spell_catalog.md (FR-D-12 Lethal Dissolution Ob update), valoria_ruleset_checkpoint_14.md
 
@@ -147,10 +147,10 @@ Rationale: the practitioner is repeatedly interacting with the same living confi
 
 ---
 
-## R-58: Mass Lock RS Drain Capped at −1/round per scene
+## R-58: Mass Lock Rendering Stability Drain Capped at −1/round per scene
 
 **Current text (Locking chronic consequences):**
-Duration table shows RS drift per season, not per round. No explicit cap on concurrent Lock RS drain.
+Duration table shows Rendering Stability drift per season, not per round. No explicit cap on concurrent Lock Rendering Stability drain.
 
 **New cap addition:**
 ```
@@ -182,9 +182,9 @@ Per MT-03 above. W-51 Ob: 4 → 6.
 
 ---
 
-## R-63: Locked Institution Chronic RS Drift — Variable by Domain Type
+## R-63: Locked Institution Chronic Rendering Stability Drift — Variable by Domain Type
 
-**Current text:** Locking a faction/institution: −1 RS/season (uniform).
+**Current text:** Locking a faction/institution: −1 Rendering Stability/season (uniform).
 
 **Corrected:**
 ```
@@ -213,7 +213,7 @@ No Mode 3 exception stated.
 
 ---
 
-## R-65: Debate Weaving Bonus = +TPS/3 dice (TS 30=+1D, TS 60=+2D, TS 90=+3D)
+## R-65: Debate Weaving Bonus = +Thread Pool Score/3 dice (Thread Sensitivity 30=+1D, Thread Sensitivity 60=+2D, Thread Sensitivity 90=+3D)
 
 **Current text:** no Debate Weaving bonus stated.
 
@@ -243,10 +243,10 @@ Per MT-02 above. Pool: (Presence × 2) + History.
 
 ---
 
-## R-68: Accounting Gate Preserved — No TC Change Bypass
+## R-68: Accounting Gate Preserved — No Theocracy Counter Change Bypass
 
 No change to existing rules (gate was already present). Confirm note added to accounting procedure:
-`**TC accounting gate (confirmed):** All TC changes apply at seasonal accounting. No mechanism in the game bypasses this gate.`
+`**Theocracy Counter accounting gate (confirmed):** All Theocracy Counter changes apply at seasonal accounting. No mechanism in the game bypasses this gate.`
 
 **Files:** compilation/stage5_clocks.md (accounting section — add confirmation note)
 

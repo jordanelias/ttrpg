@@ -12,11 +12,11 @@ Rationale: typical earn rate is 2–4 CP per session (Belief engagement events).
 
 ### G-040: Permanent Inspiration Loss — CP Refund
 **Decision: Half-CP refund when Inspiration focus is permanently destroyed and Grief Scene fails.**
-The PC invested CP to establish the Inspiration. Total loss on failure would punish investment in a way that discourages the mechanic. Half refund acknowledges the loss without zeroing the investment. Refund is rounded down. Refund applies only when: (a) focus is *permanently* destroyed/gone (not temporarily lost), AND (b) Grief Scene fails. Full Grief Scene success = no loss, no refund needed.
+The Player Character invested CP to establish the Inspiration. Total loss on failure would punish investment in a way that discourages the mechanic. Half refund acknowledges the loss without zeroing the investment. Refund is rounded down. Refund applies only when: (a) focus is *permanently* destroyed/gone (not temporarily lost), AND (b) Grief Scene fails. Full Grief Scene success = no loss, no refund needed.
 
 ### G-054: Circles Track Architecture
 **Decision: Single unified Circles track with bonus/penalty die per major faction.**
-Per-faction tracking is bookkeeping that doesn't add proportionate play value. Single track with faction modifiers preserves the faction-relationship signal without multiplying tracked values per PC.
+Per-faction tracking is bookkeeping that doesn't add proportionate play value. Single track with faction modifiers preserves the faction-relationship signal without multiplying tracked values per Player Character.
 
 Implementation:
 - Circles is one track (Presence + History bonus, as per stage2_characters.md).
@@ -32,7 +32,7 @@ No change required to compiled Circles rules. G-054 design brief's "per-faction 
 
 ### G-042: Founding a New Faction — CP Cost
 **Decision: No CP cost. Narrative + mechanical prerequisites only.**
-Founding a faction is already gated by prerequisites (existing membership, territory presence, NPC relationships, GM judgment on viability). Adding a CP cost would make it a resource transaction rather than an emergent political act. The prerequisites are the cost.
+Founding a faction is already gated by prerequisites (existing membership, territory presence, Non-Player Character relationships, Game Master judgment on viability). Adding a CP cost would make it a resource transaction rather than an emergent political act. The prerequisites are the cost.
 
 ### G-038 + Treaty Betrayal Consequences — Final Table
 **Decision: Full asymmetric consequence table confirmed.**
@@ -58,7 +58,7 @@ Founding a faction is already gated by prerequisites (existing membership, terri
 
 ### G-044: Altonian Vassalage
 **Decision: Include as valid dark-path choice.**
-A faction may submit to Altonia to redirect or delay invasion. This is a valid player or NPC choice representing a faction prioritising survival or advantage over Valorian sovereignty. It is not a standard win condition — it is a dark-path option with long-term consequences for the peninsula's political independence (IP clock interaction, Crown legitimacy damage, etc.). Full mechanical spec to be designed in compilation.
+A faction may submit to Altonia to redirect or delay invasion. This is a valid player or Non-Player Character choice representing a faction prioritising survival or advantage over Valorian sovereignty. It is not a standard win condition — it is a dark-path option with long-term consequences for the peninsula's political independence (Institutional Pressure clock interaction, Crown legitimacy damage, etc.). Full mechanical spec to be designed in compilation.
 
 ---
 
@@ -72,17 +72,17 @@ Mechanically: Private Collection Unique Action remains available to Varfell unde
 
 ### Niflhel — Leadership Structure
 **Decision: Permanently headless. Confirmed again.**
-Niflhel is cell-based with no single leader. Already confirmed as R-78 in the editorial ledger (E-06, 2026-03-30). No change. The four arms operate independently. A PC who infiltrates or takes over one arm controls that arm only. This has been recorded; closing this item.
+Niflhel is cell-based with no single leader. Already confirmed as R-78 in the editorial ledger (E-06, 2026-03-30). No change. The four arms operate independently. A Player Character who infiltrates or takes over one arm controls that arm only. This has been recorded; closing this item.
 
-### Revolution — Named NPC Elder Contact
-**Decision: Existing NPCs (Maren Solberg, Dahl Erikssen, Katri Voss — R-75) serve as primary contacts. No additional elder NPC required.**
-The three established Restoration NPCs cover the access points (Presence, Bonds/TS, Cognition/TS). An additional elder contact is redundant unless a specific narrative need arises.
+### Revolution — Named Non-Player Character Elder Contact
+**Decision: Existing NPCs (Maren Solberg, Dahl Erikssen, Katri Voss — R-75) serve as primary contacts. No additional elder Non-Player Character required.**
+The three established Restoration NPCs cover the access points (Presence, Bonds/Thread Sensitivity, Cognition/Thread Sensitivity). An additional elder contact is redundant unless a specific narrative need arises.
 
 ---
 
-## CHURCH TC 80 SEIZURE
+## CHURCH Theocracy Counter 80 SEIZURE
 **Status: Accepted as designed in church_territorial_seizure.md.**
-Per-territory roll at TC 80, not blanket takeover. Integration into event deck (G-050) confirmed. No changes to the design.
+Per-territory roll at Theocracy Counter 80, not blanket takeover. Integration into event deck (G-050) confirmed. No changes to the design.
 
 ---
 
@@ -99,5 +99,5 @@ Per-territory roll at TC 80, not blanket takeover. Integration into event deck (
 | G-044 Altonian vassalage | Include as dark-path option |
 | Varfell collection transfer | Institutional; power/knowledge don't transfer; Discovery Event |
 | Niflhel leadership | Permanently headless (confirmed R-78) |
-| Revolution elder NPC | Existing 3 NPCs sufficient |
-| Church TC 80 seizure | Accepted as designed |
+| Revolution elder Non-Player Character | Existing 3 NPCs sufficient |
+| Church Theocracy Counter 80 seizure | Accepted as designed |

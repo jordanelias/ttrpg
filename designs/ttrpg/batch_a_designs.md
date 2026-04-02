@@ -15,7 +15,7 @@ Current CP sinks: attribute advancement (score × 3 CP) and History advancement 
 |----------|------|-----------|-------|
 | Attribute +1 | Current score × 3 CP | Max 5 per attribute | Unchanged |
 | History +1 (beyond test track) | 3 CP | Cap = Memory score | Unchanged |
-| New History at 0 points | 5 CP | Must narrate origin scene; requires GM scene | Establishes eligibility; no pool bonus at 0 |
+| New History at 0 points | 5 CP | Must narrate origin scene; requires Game Master scene | Establishes eligibility; no pool bonus at 0 |
 | New Inspiration at 1 point | 4 CP | Total Inspiration value ≤ Spirit; must name focus and narrate two pursuit scenes | Faster than the freeform "two scenes + two rolls" path |
 | Inspiration +1 point | 3 CP | Individual cap = Spirit; total ≤ Spirit | Alternative to scene-based recovery |
 | New Knot (establish) | 2 CP | Total significant Knots ≤ Bonds score | Formalizes a relationship the player wants tracked |
@@ -23,16 +23,16 @@ Current CP sinks: attribute advancement (score × 3 CP) and History advancement 
 | Circles +1D (permanent) | 4 CP | Max bonus = Presence score | Represents expanding social network |
 | Resources +1D (permanent) | 4 CP | Max bonus = Presence score | Represents improving economic standing |
 | Remove 1 Wound | 6 CP | Between seasons only; requires narrative (healer, rest, Thread intervention) | Emergency long-term recovery |
-| Approach Training | 8 CP | TS ≥ 30; must have witnessed ≥1 Thread operation; replaces mentorship/breakthrough paths | CP-gated alternative to existing acquisition paths |
+| Approach Training | 8 CP | Thread Sensitivity ≥ 30; must have witnessed ≥1 Thread operation; replaces mentorship/breakthrough paths | CP-gated alternative to existing acquisition paths |
 
 ### Design rationale
 - CP costs scale: cheap (2–3) for relationship/social investment, moderate (4–5) for capability expansion, expensive (6–8) for recovery and rare unlocks.
 - All purchases have narrative requirements — CP alone is never sufficient. This prevents "spreadsheet advancement."
 - Approach Training at 8 CP is deliberately expensive — it should feel like a campaign milestone, not a shopping decision.
-- No CP purchase for TS growth, Intelligibility recovery, or Certainty recovery. These are play-driven, not purchasable.
+- No CP purchase for Thread Sensitivity growth, Intelligibility recovery, or Certainty recovery. These are play-driven, not purchasable.
 
 ### Canon compliance
-- P-01 (inseparability): CP spending doesn't bypass co-movement. Thread operations still produce TD/TT effects regardless of how Approach Training was acquired.
+- P-01 (inseparability): CP spending doesn't bypass co-movement. Thread operations still produce Thread Depth/Thread Tension effects regardless of how Approach Training was acquired.
 - P-09 (memory pull = messy): New Histories require narrated origin — no clean mechanical acquisition.
 
 ---
@@ -46,10 +46,10 @@ Current rules: new Inspiration requires "two scenes of pursuit + two Spirit roll
 
 **New Inspiration (mid-campaign):**
 1. Player declares intent and names the focus.
-2. Two scenes where the character actively engages with the focus (GM confirms engagement is genuine).
+2. Two scenes where the character actively engages with the focus (Game Master confirms engagement is genuine).
 3. After each scene: Spirit check TN 7, Ob 1.
    - Both succeed: Inspiration established at 1 point.
-   - One succeeds, one fails: Inspiration established at 1 point, but with a Complication Tag (GM assigns a narrative condition — e.g., "contingent on Lenneth's approval," "only while in Valorsplatz").
+   - One succeeds, one fails: Inspiration established at 1 point, but with a Complication Tag (Game Master assigns a narrative condition — e.g., "contingent on Lenneth's approval," "only while in Valorsplatz").
    - Both fail: Focus is not yet crystallized. Player may retry next season with new scenes.
 4. **CP shortcut:** 4 CP + one scene of genuine engagement + one Spirit check. On success: established at 1 point, no Complication Tag. On failure: 4 CP spent, retry next season.
 
@@ -65,7 +65,7 @@ Current rules: new Inspiration requires "two scenes of pursuit + two Spirit roll
 
 **Inspiration earned through play (no CP):**
 - Completing a Belief can convert it to an Inspiration at 1 point (existing rule, retained).
-- An NPC whose Impression Track reaches 5 can become an Inspiration focus (new — connects Impression Track to Inspiration economy).
+- An Non-Player Character whose Impression Track reaches 5 can become an Inspiration focus (new — connects Impression Track to Inspiration economy).
 
 ### Canon compliance
 - P-09 (memory pull = messy): Complication Tags on imperfect acquisition. Grief Scene for lost focus.
@@ -90,7 +90,7 @@ Circles and Resources are currently identical in structure (Presence + History, 
 **Resources (revised):**
 - **Pool:** Presence + highest applicable History bonus. "Merchant Guild Member" → full bonus. "Soldier" → no bonus for economic transactions.
 - **Faction linkage:** Faction leaders may roll faction Wealth instead of personal Resources for faction-appropriate expenditure (existing rule, retained). Non-leaders may access faction Resources at +1 Ob if they have positive Reputation with the faction.
-- **Tax (revised from BW model):**
+- **Tax (revised from Burning Wheel model):**
   - On Partial at any Ob: −1D to next Resources roll this season (temporary strain).
   - On Failure at Ob 3+: −1D permanent until recovered through income event, commerce Domain Action, or seasonal accounting.
   - On Failure at Ob 5: −2D permanent. Economic standing seriously damaged.
@@ -112,7 +112,7 @@ Circles and Resources are currently identical in structure (Presence + History, 
 ## G-048: Resources Degradation on Failed Rolls
 
 ### Problem
-Subsumed into G-054. The BW tax model is incorporated into the Resources redesign above.
+Subsumed into G-054. The Burning Wheel tax model is incorporated into the Resources redesign above.
 
 ### Design
 See G-054 Tax section. Summary:
@@ -158,7 +158,7 @@ No rules for establishing, improving, or benefiting from fortified positions. Si
 - Fortifications provide Circles bonus (+1D) for finding military contacts within.
 
 ### Canon compliance
-- P-07 (Calamity = rendered-side): Fortifications are rendered-side infrastructure. Their destruction is a material event with co-movement consequences (garrison morale, civilian displacement, TT effects if Einhir site present).
+- P-07 (Calamity = rendered-side): Fortifications are rendered-side infrastructure. Their destruction is a material event with co-movement consequences (garrison morale, civilian displacement, Thread Tension effects if Einhir site present).
 
 ---
 
@@ -182,7 +182,7 @@ Each season of siege, both sides choose one action:
 | Assault | Military Ob = Fortification level + 2 | If Overwhelming: walls breached, mass combat next round at −1 Ob for attacker. If Success: breach attempted, mass combat at standard Ob. |
 | Sappers | Intelligence Ob = Fortification level + 1 | Fortification −1 level (undermining). Detected on Partial/Failure: defender gets free Sortie. |
 | Negotiate | Influence vs defender's Mandate | Success: conditional surrender terms. Overwhelming: unconditional. |
-| Thread bombardment | Practitioner Weaving, scale = Relational+, Ob = Fortification level | TT +2 regardless of outcome. Success: garrison Cohesion −2. Overwhelming: walls partially dissolved (Fortification −1). Failure: practitioner takes TD +3. |
+| Thread bombardment | Practitioner Weaving, scale = Relational+, Ob = Fortification level | Thread Tension +2 regardless of outcome. Success: garrison Cohesion −2. Overwhelming: walls partially dissolved (Fortification −1). Failure: practitioner takes Thread Depth +3. |
 
 **Defender options:**
 | Action | Roll | Effect on success |
@@ -204,69 +204,69 @@ Each season of siege, both sides choose one action:
 - PCs outside may: infiltrate (Agility/Intelligence Ob = fortification level + garrison commander bonus), join assault, perform Thread operations against walls.
 
 **Co-movement during siege:**
-- Each season of siege: TT +1 (concentrated suffering and disruption).
-- Einhir site within fortification: +1 additional TT per season (proximity to active Thread site under stress).
+- Each season of siege: Thread Tension +1 (concentrated suffering and disruption).
+- Einhir site within fortification: +1 additional Thread Tension per season (proximity to active Thread site under stress).
 
 ### Canon compliance
-- P-01 (inseparability): Siege TT drift. Even purely military events affect Thread state.
+- P-01 (inseparability): Siege Thread Tension drift. Even purely military events affect Thread state.
 - P-07 (Calamity): Siege is a rendered-side catastrophe with Thread consequences.
 - P-14 (all modes): Siege operates at mass combat scale but permits personal-scale zoom-in.
 
 ---
 
-## G-052: Player/GM Transition Reference Guide
+## G-052: Player/Game Master Transition Reference Guide
 
 ### Problem
-Valoria is GM-intensive. The system has no guidance for: (a) new GMs taking over mid-campaign, (b) rotating GM duties (one player GMs faction turns, another GMs personal scenes), (c) transitioning from TTRPG to board game mode within a session.
+Valoria is Game Master-intensive. The system has no guidance for: (a) new GMs taking over mid-campaign, (b) rotating Game Master duties (one player GMs faction turns, another GMs personal scenes), (c) transitioning from TTRPG to board game mode within a session.
 
 ### Design
 
-**Part 1: GM Knowledge Requirements**
+**Part 1: Game Master Knowledge Requirements**
 
-| Category | What the GM must know | Where it lives |
+| Category | What the Game Master must know | Where it lives |
 |----------|----------------------|----------------|
-| World state | TT, TC, IP values; faction attribute scores; territory control | Faction Dashboard (single sheet) |
-| Hidden information | Intelligence scores; NPC TS values; pending Heresy investigations; Niflhel operative identities | GM Notes sheet (separate from Dashboard) |
-| Character state | PC attributes, Histories, Beliefs, Inspirations, Knots, TS, Wounds | Character sheets (player-held) |
+| World state | Thread Tension, Theocracy Counter, Institutional Pressure values; faction attribute scores; territory control | Faction Dashboard (single sheet) |
+| Hidden information | Intelligence scores; Non-Player Character Thread Sensitivity values; pending Heresy investigations; Niflhel operative identities | Game Master Notes sheet (separate from Dashboard) |
+| Character state | Player Character attributes, Histories, Beliefs, Inspirations, Knots, Thread Sensitivity, Wounds | Character sheets (player-held) |
 | Pending events | Clock threshold events queued; Domain Echo consequences pending; seasonal accounting items | Session Log (running document) |
-| Campaign arc | Current Beliefs (tells GM what scenes to create); active factional conflicts; Altonian Clock position | Campaign Summary (1-page document updated each season) |
+| Campaign arc | Current Beliefs (tells Game Master what scenes to create); active factional conflicts; Altonian Clock position | Campaign Summary (1-page document updated each season) |
 
-**Part 2: GM Handoff Procedure**
+**Part 2: Game Master Handoff Procedure**
 
-When GM duties transfer (permanently or for a session):
+When Game Master duties transfer (permanently or for a session):
 
-1. **Outgoing GM writes a Handoff Brief** (template provided):
+1. **Outgoing Game Master writes a Handoff Brief** (template provided):
    - Current season and year
    - All faction attribute scores (including hidden Intelligence)
-   - All NPC TS values and Heresy investigation stages
+   - All Non-Player Character Thread Sensitivity values and Heresy investigation stages
    - Pending clock events
-   - Active PC Beliefs (with notes on which scenes are planned)
+   - Active Player Character Beliefs (with notes on which scenes are planned)
    - Any unresolved rulings or ambiguous situations
    - Tone notes: "this campaign is currently [grim/hopeful/tense/exploratory]"
 
-2. **Incoming GM reads Handoff Brief + Faction Dashboard + Campaign Summary.** No other documents required for immediate play.
+2. **Incoming Game Master reads Handoff Brief + Faction Dashboard + Campaign Summary.** No other documents required for immediate play.
 
-3. **First session under new GM:** Run a "low-stakes" session (personal scenes, social encounters, investigation) to calibrate tone. Avoid mass combat, clock thresholds, or major factional events until the new GM has one session of calibration.
+3. **First session under new Game Master:** Run a "low-stakes" session (personal scenes, social encounters, investigation) to calibrate tone. Avoid mass combat, clock thresholds, or major factional events until the new Game Master has one session of calibration.
 
-**Part 3: Rotating GM Protocol**
+**Part 3: Rotating Game Master Protocol**
 
-For tables that rotate GM duties by scale:
+For tables that rotate Game Master duties by scale:
 
 | Scale | Who GMs | When |
 |-------|---------|------|
-| Personal scenes | Primary GM (or designated personal-GM) | TTRPG phase |
-| Faction/strategic turns | Strategy GM (may be a player whose character is not a faction leader) | Board game / strategic phase |
-| Mass combat | Either GM; whoever has more familiarity with disposition table | When mass combat fires |
-| Thread operations | Primary GM (Thread state is complex) | Whenever Thread ops occur |
+| Personal scenes | Primary Game Master (or designated personal-Game Master) | TTRPG phase |
+| Faction/strategic turns | Strategy Game Master (may be a player whose character is not a faction leader) | Board game / strategic phase |
+| Mass combat | Either Game Master; whoever has more familiarity with disposition table | When mass combat fires |
+| Thread operations | Primary Game Master (Thread state is complex) | Whenever Thread ops occur |
 
-**Rotating protocol:** At each scale transition (Zoom In, Zoom Out, Register Shift), the table pauses for 30 seconds. The outgoing scale-GM states: current faction scores, pending consequences, and any hidden information the incoming scale-GM needs. The incoming scale-GM confirms receipt and begins.
+**Rotating protocol:** At each scale transition (Zoom In, Zoom Out, Register Shift), the table pauses for 30 seconds. The outgoing scale-Game Master states: current faction scores, pending consequences, and any hidden information the incoming scale-Game Master needs. The incoming scale-Game Master confirms receipt and begins.
 
 **Part 4: TTRPG ↔ Board Game Mode Transition (within session)**
 
 | Step | Action | Time |
 |------|--------|------|
-| 1 | GM announces mode transition and names the trigger | 10 seconds |
-| 2 | Record current state: PC positions, pending actions, Belief progress | 1 minute |
+| 1 | Game Master announces mode transition and names the trigger | 10 seconds |
+| 2 | Record current state: Player Character positions, pending actions, Belief progress | 1 minute |
 | 3 | If entering board game: lay out Faction Dashboard, territory map, Order cards | 2 minutes |
 | 4 | If entering TTRPG: clear board game components, identify the personal scene's participants and location | 1 minute |
 | 5 | Confirm all players understand what their role is in the new mode | 30 seconds |
@@ -276,7 +276,7 @@ For tables that rotate GM duties by scale:
 
 ### Canon compliance
 - P-05 (three modes distinct): Transition guide respects mode boundaries — no mechanical bleed during transition.
-- P-14 (all modes express inseparability): The handoff procedure ensures TT/TD/co-movement state transfers between GMs and between modes.
+- P-14 (all modes express inseparability): The handoff procedure ensures Thread Tension/Thread Depth/co-movement state transfers between GMs and between modes.
 
 ---
 
@@ -289,12 +289,12 @@ For tables that rotate GM duties by scale:
 | G-048 | Resolved via G-054 | None |
 | G-054 | Designed | Per-faction Circles tracking (adds bookkeeping — acceptable?) |
 | G-034 | Designed | None |
-| G-047 | Designed | Thread bombardment during siege (TT +2 automatic — correct severity?) |
+| G-047 | Designed | Thread bombardment during siege (Thread Tension +2 automatic — correct severity?) |
 | G-052 | Designed | None |
 
 **Editorial decisions needed: 3**
 1. G-053: Is 8 CP correct for Approach Training, or should it be higher/lower?
 2. G-040: When an Inspiration's focus is permanently destroyed and the Grief Scene fails, should half CP be refunded or should the loss be total?
-3. G-054: Per-faction Circles advancement adds tracking per faction per PC. Is this acceptable bookkeeping, or should Circles remain a single unified track?
+3. G-054: Per-faction Circles advancement adds tracking per faction per Player Character. Is this acceptable bookkeeping, or should Circles remain a single unified track?
 
 **Gaps resolved this batch: 7 (6 designed + 1 subsumed)**

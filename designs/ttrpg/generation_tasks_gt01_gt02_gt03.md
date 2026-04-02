@@ -20,8 +20,8 @@ Design constraints applied:
 *A whisper circulates that Almud's health is failing. The succession question sharpens.*
 - Torben Loyalty track: −1 (Altonian interest intensifies around a potential heir).
 - Crown Mandate −1 (uncertainty around Crown stability).
-- Church TC +1 (theological interest in who controls the next monarch).
-- *Trigger condition:* If Torben Loyalty is already ≤ 3 when this card fires: IP +2 instead (Altonia acts on the rumour).
+- Church Theocracy Counter +1 (theological interest in who controls the next monarch).
+- *Trigger condition:* If Torben Loyalty is already ≤ 3 when this card fires: Institutional Pressure +2 instead (Altonia acts on the rumour).
 
 ---
 
@@ -34,18 +34,18 @@ Design constraints applied:
 ---
 
 **C-13 — EINHIR ARTEFACT SURFACES**
-*A construction crew in [GM-chosen territory] uncovers a pre-Calamity Einhir object. Its nature is unclear.*
+*A construction crew in [Game Master-chosen territory] uncovers a pre-Calamity Einhir object. Its nature is unclear.*
 - Varfell: if they have Intelligence ≥ 4, they learn of it automatically and may claim it via a Spy order (opposed by territory controller).
-- Church TC +1 (heretical object; suppression demanded).
+- Church Theocracy Counter +1 (heretical object; suppression demanded).
 - Revolution Influence +1 (cultural heritage moment; community organises around it).
-- TT +1 (the object is Thread-active — its exposure disturbs the local configuration).
+- Thread Tension +1 (the object is Thread-active — its exposure disturbs the local configuration).
 - *If Varfell claims it:* +1 toward Varfell Einhir Research track (if applicable). The artefact contributes to Private Collection.
 
 ---
 
 **C-14 — CONSCRIPTION CRISIS**
 *A local lord attempts to raise troops beyond his legal authority. A territorial dispute follows.*
-- One territory (GM choice — most militarised): Muster orders by all factions +1 Ob this season (population resistant).
+- One territory (Game Master choice — most militarised): Muster orders by all factions +1 Ob this season (population resistant).
 - Territory Prosperity −1 (conscription disrupts harvest/trade).
 - Löwenritter: if they have presence in this territory, they may issue Martial Law immediately without using their order for the season (enforcing order is within their mandate).
 
@@ -54,19 +54,19 @@ Design constraints applied:
 **C-15 — THREAD PRACTITIONER SURFACED**
 *A practitioner operating covertly is exposed — rumour, incident, or deliberate reveal.*
 - Church: immediately targets the practitioner with Heresy Investigation (Ob 2, using no order slot — reflex institutional action).
-- TC +2 if investigation succeeds. TC +0 if it fails (practitioner escapes or is defended).
-- Revolution: may attempt to shelter the practitioner (Influence vs Church Mandate, Ob = Church Mandate ÷ 2). Success: TC +0, practitioner joins Revolution. Failure: practitioner captured, TC +2.
+- Theocracy Counter +2 if investigation succeeds. Theocracy Counter +0 if it fails (practitioner escapes or is defended).
+- Revolution: may attempt to shelter the practitioner (Influence vs Church Mandate, Ob = Church Mandate ÷ 2). Success: Theocracy Counter +0, practitioner joins Revolution. Failure: practitioner captured, Theocracy Counter +2.
 - Varfell: may attempt to recruit the practitioner instead (Intelligence vs Ob 3). Cannot contest Church and Varfell simultaneously — if both try, Church acts first.
-- *Personal-scale trigger in hybrid:* if a PC is the practitioner or has a Knot with them, a mandatory TTRPG scene fires.
+- *Personal-scale trigger in hybrid:* if a Player Character is the practitioner or has a Knot with them, a mandatory TTRPG scene fires.
 
 ---
 
 **C-16 — ALTONIAN DIPLOMATIC MISSION**
 *An Altonian delegation arrives, nominally for trade. Actual agenda: assess Valorian political stability.*
-- IP +1 (Altonian intelligence gathering advances the clock).
+- Institutional Pressure +1 (Altonian intelligence gathering advances the clock).
 - Any faction that refuses to receive the delegation: Reputation −1 with all factions (perceived as hostile to peace).
-- Crown may attempt formal Negotiation with the mission (Influence vs Ob 3): success = IP −1 (diplomatic reassurance). Failure = IP +1 (mission reports instability).
-- Hafenmark may invoke constitutional precedent to limit the mission's access (Unique Action counts as used this season if they do so): IP −2 but Church TC +1 (Hafenmark seen as obstructing Altonian church-trade links).
+- Crown may attempt formal Negotiation with the mission (Influence vs Ob 3): success = Institutional Pressure −1 (diplomatic reassurance). Failure = Institutional Pressure +1 (mission reports instability).
+- Hafenmark may invoke constitutional precedent to limit the mission's access (Unique Action counts as used this season if they do so): Institutional Pressure −2 but Church Theocracy Counter +1 (Hafenmark seen as obstructing Altonian church-trade links).
 
 ---
 
@@ -81,28 +81,28 @@ Design constraints applied:
 
 **C-18 — JUDICIAL CONFRONTATION**
 *A landmark legal case in Valorsplatz forces a public ruling on Church vs ducal authority.*
-- Choose: the ruling goes to Church (TC +1, Crown Mandate −1, Hafenmark Influence −1) or Crown/Parliament (TC −1, Church Mandate −1 in Valorsplatz).
-- If no faction controls Valorsplatz: GM determines the ruling based on current balance of Mandate scores.
-- If a PC is involved in the case (TTRPG scene in hybrid): the PC's side of the argument shifts the outcome one tier regardless of Mandate scores.
+- Choose: the ruling goes to Church (Theocracy Counter +1, Crown Mandate −1, Hafenmark Influence −1) or Crown/Parliament (Theocracy Counter −1, Church Mandate −1 in Valorsplatz).
+- If no faction controls Valorsplatz: Game Master determines the ruling based on current balance of Mandate scores.
+- If a Player Character is involved in the case (TTRPG scene in hybrid): the Player Character's side of the argument shifts the outcome one tier regardless of Mandate scores.
 
 ---
 
 **C-19 — LÖWENRITTER PATROL**
 *A Löwenritter patrol reports something they cannot explain near the Sudwald or Askeheim border.*
-- TT +1 (Thread activity near the wound sites).
-- Löwenritter Intelligence: if ≥ 3, the patrol report reaches Grandmaster Ehrenwall (or successor). She files it without acting — but the Coup Counter may advance if this is the third such report (GM discretion).
-- Varfell: if they have Intelligence ≥ 4, they intercept the report. Discovery Event: learn TT current value.
+- Thread Tension +1 (Thread activity near the wound sites).
+- Löwenritter Intelligence: if ≥ 3, the patrol report reaches Grandmaster Ehrenwall (or successor). She files it without acting — but the Coup Counter may advance if this is the third such report (Game Master discretion).
+- Varfell: if they have Intelligence ≥ 4, they intercept the report. Discovery Event: learn Thread Tension current value.
 - *Narrative consequence:* the patrol soldiers are disturbed. One deserts. Military −1 in the territory where the patrol was stationed.
 
 ---
 
 **C-20 — RESTORATION RALLY**
 *The Restoration Movement holds a public gathering in an Einhir-heritage territory. It is larger than expected.*
-- Revolution Influence +2 in Korntal or Sudwald (GM choice, whichever is more Revolution-favourable).
-- Church TC +1 (public Einhir practice = institutional threat).
+- Revolution Influence +2 in Korntal or Sudwald (Game Master choice, whichever is more Revolution-favourable).
+- Church Theocracy Counter +1 (public Einhir practice = institutional threat).
 - Crown Mandate −1 in the rally territory (the crowd is implicitly challenging the post-war settlement).
 - Löwenritter: if they have military presence, must choose: Disperse (Revolution Influence −1, Löwenritter Stability −1 from internal dissent) or Allow (Revolution Influence +2 stands, Löwenritter gains Grievance Marker from Crown).
-- *Personal-scale trigger in hybrid:* a PC with any Restoration-affiliated Knot or Belief that engages this event receives +1 CP.
+- *Personal-scale trigger in hybrid:* a Player Character with any Restoration-affiliated Knot or Belief that engages this event receives +1 CP.
 
 ---
 
@@ -121,9 +121,9 @@ Design constraints:
 
 **CM-11 — MEMORY SURFACING**
 *Something in the Thread interaction triggered a fragment of Einhir cultural memory in a nearby person.*
-- One NPC in the territory where the operation occurred gains a partial memory of pre-Calamity Thread practice. They will seek out a practitioner within 1 season.
-- *If no practitioner is accessible:* the NPC becomes a minor Restoration sympathiser. Revolution Influence +1 in that territory.
-- *If a practitioner is accessible:* potential TS 0 recruit (GM introduces as narrative hook, not guaranteed recruitment).
+- One Non-Player Character in the territory where the operation occurred gains a partial memory of pre-Calamity Thread practice. They will seek out a practitioner within 1 season.
+- *If no practitioner is accessible:* the Non-Player Character becomes a minor Restoration sympathiser. Revolution Influence +1 in that territory.
+- *If a practitioner is accessible:* potential Thread Sensitivity 0 recruit (Game Master introduces as narrative hook, not guaranteed recruitment).
 
 ---
 
@@ -143,7 +143,7 @@ Design constraints:
 
 **CM-14 — PRACTITIONER RESONANCE**
 *The operation's Thread signature was distinctive. Another practitioner perceived it.*
-- One NPC practitioner within 3 territories of the operation knows someone performed Thread work here. They do not know who. They will investigate.
+- One Non-Player Character practitioner within 3 territories of the operation knows someone performed Thread work here. They do not know who. They will investigate.
 - *If Edeyja or a Southernmost warden is within range (Askeheim or Sudwald):* she notes it. This is factored into her assessment of whether northern practitioners are worth engaging.
 - *If the Church has an active Inquisitor:* investigation begins immediately (Heresy Investigation Ob 2 this season).
 
@@ -167,28 +167,28 @@ Design constraints:
 **CM-17 — POLITICAL OPPORTUNISM**
 *A faction immediately capitalises on the visible Thread disturbance for political advantage.*
 - The faction with the highest current Mandate (not acting faction): Mandate +1 (they publicly interpret the event as validating their authority/theology/cause).
-- If that faction is the Church: TC +1 additionally (theological claim on the event).
+- If that faction is the Church: Theocracy Counter +1 additionally (theological claim on the event).
 
 ---
 
 **CM-18 — TEMPORAL ECHO**
 *People in the territory experience brief déjà vu, dreams of events that haven't happened, or recall events that don't match recorded history.*
 - No immediate mechanical effect.
-- GM note: this territory is Thread-active and should be treated as having elevated perceptual strangeness for the remainder of the season. TS 15+ characters passing through automatically notice something is different. This is a narrative consequence, not a stat change — but it is canon that Thread work at this site has disturbed the local temporal rendering.
-- One NPC in the territory gains an anomalous memory — GM uses this as a future scene hook.
+- Game Master note: this territory is Thread-active and should be treated as having elevated perceptual strangeness for the remainder of the season. Thread Sensitivity 15+ characters passing through automatically notice something is different. This is a narrative consequence, not a stat change — but it is canon that Thread work at this site has disturbed the local temporal rendering.
+- One Non-Player Character in the territory gains an anomalous memory — Game Master uses this as a future scene hook.
 
 ---
 
 **CM-19 — FACTIONAL INTELLIGENCE LEAK**
 *The Thread operation's side effects were detectable in ways that revealed strategic information.*
-- Acting faction: one of their hidden stats is revealed to all players (GM chooses which). The revelation lasts until end of next season.
+- Acting faction: one of their hidden stats is revealed to all players (Game Master chooses which). The revelation lasts until end of next season.
 - If the acting faction is Niflhel: this effect is doubled — two stats revealed. Niflhel's operations are the most Thread-disturbing and thus the most visible to those watching the right things.
 
 ---
 
 **CM-20 — GROUND STABILITY**
 *The operation worked cleanly with the substrate. The rendered world is, briefly, more coherent here.*
-- TT −1 (net positive consequence of the operation interacting well with the existing configuration).
+- Thread Tension −1 (net positive consequence of the operation interacting well with the existing configuration).
 - Territory where operation occurred: all orders −1 Ob next season (clarity of configuration assists all action).
 - This is the rarest co-movement outcome — the one that suggests the Einhir were right that small-scale, precise work is genuinely beneficial.
 
@@ -223,8 +223,8 @@ Roll 1d10 twice (or use the table to select a combination). Each result names tw
 | 6 | Pull (intelligibility axis) | Dissolve (temporality axis) | Entity draws intelligibility out of beings (they become hard to perceive, even by themselves) while dissolving temporal depth. Targets lose 1d3 History access for the scene (cannot recall relevant experience). |
 | 7 | Lock (intelligibility axis) | Loose (actuality axis) | Intelligibility locked (nothing can be known about anything near the entity — perception blocked) + actuality loosening (things stop being fully present). Effectively: the zone around the entity becomes an un-rendered bubble. Practitioners: Coherence check Ob = entity tier or Coherence −1. |
 | 8 | Dissolve (intelligibility axis) | Pull (actuality axis) | Intelligibility dissolving + actuality drawing. Everything in the zone loses legibility while the entity draws physical mass toward itself. Structural damage to fortifications and terrain: Fortification −1 per season of sustained presence. |
-| 9 | Loose (actuality axis) | Dissolve (actuality axis) | Double actuality disruption. Severe localised rendering failure. Everything in the zone is partially un-rendered — the GM describes visual distortion, spatial incoherence. TT +2 if this zone is near a Thread Wound territory. Practitioners: Coherence −1 immediately on entering zone. |
-| 10 | Pull (temporality axis) | Lock (intelligibility axis) | Temporal pull + intelligibility lock. The entity draws the past forward while making the present unreadable. Every character in the zone experiences a forced Memory check — they re-experience a past scene from their History (GM chooses). This is not voluntary. Certainty check Ob 1 or lose 1 Certainty. |
+| 9 | Loose (actuality axis) | Dissolve (actuality axis) | Double actuality disruption. Severe localised rendering failure. Everything in the zone is partially un-rendered — the Game Master describes visual distortion, spatial incoherence. Thread Tension +2 if this zone is near a Thread Wound territory. Practitioners: Coherence −1 immediately on entering zone. |
+| 10 | Pull (temporality axis) | Lock (intelligibility axis) | Temporal pull + intelligibility lock. The entity draws the past forward while making the present unreadable. Every character in the zone experiences a forced Memory check — they re-experience a past scene from their History (Game Master chooses). This is not voluntary. Certainty check Ob 1 or lose 1 Certainty. |
 
 ---
 
@@ -240,11 +240,11 @@ For Tier 3: roll three compound operations. All three apply simultaneously. This
 
 ---
 
-## GM Usage Notes
+## Game Master Usage Notes
 
 - Entities do not "choose" their compound operations. Roll at the start of each round of contact. The operations change round to round because the entity's excess is not stable.
 - Practitioners inside the entity's effect zone add the entity tier to all Thread operation Obs (the entity's Thread noise interferes with intentional work).
-- A practitioner who successfully Dissolves a Tier 2+ entity: TT −1d3 (the entity was contributing to Thread instability). This is the primary mechanical incentive for engaging entities rather than retreating.
+- A practitioner who successfully Dissolves a Tier 2+ entity: Thread Tension −1d3 (the entity was contributing to Thread instability). This is the primary mechanical incentive for engaging entities rather than retreating.
 - The Southernmost wardens' primary activity is containing Tier 2–3 entities and preventing them from reaching territories where their zone of effect would overlap with settled populations. Edeyja has fought Tier 3 entities multiple times. This is the injury context.
 
 ---

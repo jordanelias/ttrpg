@@ -107,9 +107,9 @@ The closest TTRPG precedent. Key features:
 - **Scripted actions:** Each round, both sides secretly script three volleys from: Point, Obfuscate, Dismiss, Avoid, Incite, Rebuttal. Each volley type has different effects against each other (rock-paper-scissors-like).
 - **Compromise:** The loser gets concessions proportional to how much Body of Argument the winner lost. A 5-0 wipe is total victory. A 5-4 is a pyrrhic win — the loser barely lost and extracts major compromise.
 
-**What BW gets right:** Scripted actions create the decision density that simultaneous rolling lacks. The compromise mechanic makes close debates more interesting than blowouts.
+**What Burning Wheel gets right:** Scripted actions create the decision density that simultaneous rolling lacks. The compromise mechanic makes close debates more interesting than blowouts.
 
-**What BW gets wrong for Valoria:** BW's three-volley scripting system is abstract — the actions don't map to recognisable rhetorical moves. "Obfuscate" and "Dismiss" are mechanical categories, not things a person actually does in a formal debate. The system also doesn't distinguish between different kinds of argument or different audience contexts.
+**What Burning Wheel gets wrong for Valoria:** Burning Wheel's three-volley scripting system is abstract — the actions don't map to recognisable rhetorical moves. "Obfuscate" and "Dismiss" are mechanical categories, not things a person actually does in a formal debate. The system also doesn't distinguish between different kinds of argument or different audience contexts.
 
 ## 2.6 Twilight Imperium 4 — Political Phase
 
@@ -224,10 +224,10 @@ A debater who loses the exchange majority but captures the audience achieves a *
 
 A debater who wins both achieves a **total victory** — full consequences, exchange and audience.
 
-**Audience Disposition tracking:** The audience has an initial Disposition set by the GM. Each exchange shifts it:
+**Audience Disposition tracking:** The audience has an initial Disposition set by the Game Master. Each exchange shifts it:
 - Exchange won by Margin ≥ 3 (Overwhelming): +1 step toward winner
 - Appeal to the Room success: ±1 step (per §3.4)
-- Unmask: +2 steps toward the unmasking orator (vulnerability is persuasive) unless the revealed truth damages their position (GM call)
+- Unmask: +2 steps toward the unmasking orator (vulnerability is persuasive) unless the revealed truth damages their position (Game Master call)
 - Rhetoric Genre match (see §3.7): if the winning orator's genre matches the audience's institutional resonance, +1 step
 
 ## 3.7 Rhetoric Genre and Institutional Resonance
@@ -248,7 +248,7 @@ The three rhetoric styles (Evidence, Character, Consequence) become **genres** w
 
 **Mechanical effect:** When the orator's declared genre matches the audience faction's Primary Resonance: +1D to the Sed Contra or Respondeo phase (the audience is predisposed to hear this kind of argument). When it matches Secondary Resonance: no bonus but no resistance. When it matches the "Resistant To" genre: −1D to the Sed Contra or Respondeo (the audience actively resists this framing).
 
-**Mixed audiences:** In Parliament, multiple factions are present. The GM determines the dominant faction(s) in the room. If no faction dominates, no resonance modifier applies.
+**Mixed audiences:** In Parliament, multiple factions are present. The Game Master determines the dominant faction(s) in the room. If no faction dominates, no resonance modifier applies.
 
 **[EDITORIAL: Niflhel social mode]** — Niflhel characters should not access the formal Debate structure. Their social toolkit is Reading Exchange, private manipulation (Appeal against individuals), and Thread operations. They do not argue in public. This is a faction-asymmetric design that mirrors Niflhel's asymmetric military and Thread capabilities.
 
@@ -258,11 +258,11 @@ When a Debate concludes, the winning argument's genre determines the type of Thr
 
 | Genre Won | Thread Consequence | Mechanism |
 |---|---|---|
-| **Evidence** | Pulling — temporal co-movement | The audience re-experiences the cited past. Observers with TS 30+ perceive a thread-shimmer in the room. RS +1. The past was invoked with enough force to disturb the present's temporal configuration. |
-| **Character** | Co-movement — epistemic shift | An Overwhelming Character victory shifts how the audience renders the target's identity. Disposition change with all present witnesses. This is not Thread manipulation — it is the natural co-movement of an epistemic event at social scale. No RS change unless a practitioner amplifies it. |
-| **Consequence** | Actualization — Domain Echo | The argued future becomes a probability anchor. +1D on the first Domain Action pursuing that consequence within the season. The argument's force partially actualizes the future it described. RS +1 if the consequence involves Thread-sensitive matters. |
+| **Evidence** | Pulling — temporal co-movement | The audience re-experiences the cited past. Observers with Thread Sensitivity 30+ perceive a thread-shimmer in the room. Rendering Stability +1. The past was invoked with enough force to disturb the present's temporal configuration. |
+| **Character** | Co-movement — epistemic shift | An Overwhelming Character victory shifts how the audience renders the target's identity. Disposition change with all present witnesses. This is not Thread manipulation — it is the natural co-movement of an epistemic event at social scale. No Rendering Stability change unless a practitioner amplifies it. |
+| **Consequence** | Actualization — Domain Echo | The argued future becomes a probability anchor. +1D on the first Domain Action pursuing that consequence within the season. The argument's force partially actualizes the future it described. Rendering Stability +1 if the consequence involves Thread-sensitive matters. |
 
-**Canon grounding (P-01, Inseparability):** These are not three separate effects. They are three descriptions of the same co-movement. An Evidence argument that invokes the past also shifts how the audience renders the present (epistemic) and partially actualizes a future response (actual). The system foregrounds one dimension per genre for mechanical clarity, but the GM should narrate all three dimensions shifting. The Thread consequence fires automatically — social events at sufficient scale always produce co-movement. Debate is high-intensity social rendering; the threads move.
+**Canon grounding (P-01, Inseparability):** These are not three separate effects. They are three descriptions of the same co-movement. An Evidence argument that invokes the past also shifts how the audience renders the present (epistemic) and partially actualizes a future response (actual). The system foregrounds one dimension per genre for mechanical clarity, but the Game Master should narrate all three dimensions shifting. The Thread consequence fires automatically — social events at sufficient scale always produce co-movement. Debate is high-intensity social rendering; the threads move.
 
 ## 3.9 Stamina Analogue: Concentration
 
@@ -291,7 +291,7 @@ Not all Debates are symmetric. The institution shapes the rules.
 
 **Church Tribunal (Inquisitorial proceeding):** Asymmetric. The Inquisitor proposes (presents charges); the accused is the objector. But the Inquisitor also controls the Phase 3 Sed Contra — the accused has no Sed Contra phase. Their only actions are Objection (Phase 2) and Distinction (Phase 5). Exchange count: set by the Inquisitor (1–5). The accused may not Call for Division. The audience is the Church (Evidence resonance applies). This is deliberately oppressive — the Church tribunal is not designed for justice but for doctrinal enforcement.
 
-**Casual Dispute (street, tavern, personal):** Simplified. 1 exchange only. No audience tracking. No Thread consequences. Proposer determined by who initiated the argument. If it escalates, the GM may upgrade to a Formal Debate with additional exchanges.
+**Casual Dispute (street, tavern, personal):** Simplified. 1 exchange only. No audience tracking. No Thread consequences. Proposer determined by who initiated the argument. If it escalates, the Game Master may upgrade to a Formal Debate with additional exchanges.
 
 **[EDITORIAL: additional proceeding types]** — Consider: Guild arbitration (three-party: two disputants + Guild arbiter who holds the tie-breaking Distinction), Varfell internal review (closed-door, no audience, winner determined by Distinction phase alone — pure precision), Revolution assembly (audience IS the orator — direct democracy, Appeal to the Room replaces the entire quaestio).
 
@@ -370,7 +370,7 @@ Parts 1–4 document the quaestio-based design (five-phase exchange). The stress
 
 ## 6.0 Core Principle: Format Follows Context
 
-The debate system does not have a fixed format. Exchange count, role structure, audience weight, and available actions all vary based on the institutional context and whether an audience is present. The GM sets the format at setup; players know it before the debate begins.
+The debate system does not have a fixed format. Exchange count, role structure, audience weight, and available actions all vary based on the institutional context and whether an audience is present. The Game Master sets the format at setup; players know it before the debate begins.
 
 **What varies by context:**
 
@@ -382,13 +382,13 @@ The debate system does not have a fixed format. Exchange count, role structure, 
 | Audience resistance | 0 (no institutional inertia) | Average faction Stability − 1 | Halved for accused | 0 |
 | Available actions | All | All | Accused cannot Call for Division | All |
 | Thread consequences | Only on Unmask or extreme outcome | Standard | Standard | Only on Unmask |
-| Conviction Track | Optional (or GM-narrated) | Active | Active (starts biased) | Optional |
+| Conviction Track | Optional (or Game Master-narrated) | Active | Active (starts biased) | Optional |
 
 **Audience presence changes the system fundamentally:**
 - With audience: Conviction Track active. Genre weights apply. Audience resistance set by institutional composition.
 - Without audience: No Conviction Track. Winner determined by exchange count. Strain still accumulates — the stakes are relational, not political.
 
-**The GM declares at setup:**
+**The Game Master declares at setup:**
 1. Exchange count
 2. Role structure (symmetric / asymmetric / who proposes)
 3. Audience present? If yes: faction composition, resistance, starting track position
@@ -401,7 +401,7 @@ This declaration is made before the first exchange. Players may not request form
 
 ---
 
-## 6.1 GM Setup (Before Debate Begins)
+## 6.1 Game Master Setup (Before Debate Begins)
 
 **Step 1 — Determine Primary Genre from the Question:**
 
@@ -422,7 +422,7 @@ This declaration is made before the first exchange. Players may not request form
 | Divine command (Church) | Past +0.5 |
 | Categorical imperative (Hafenmark) | Past +0.5 |
 | Consequentialism (Varfell) | Future +0.5 |
-| Moral relativism (Guilds) | GM chooses based on context (this IS moral relativism) |
+| Moral relativism (Guilds) | Game Master chooses based on context (this IS moral relativism) |
 | Rawlsian social contract (Restoration) | Future +0.5 |
 
 Weight range: 0.5, 1.0, or 1.5. Never 0, never above 1.5. Weights are fixed at setup. Do not shift dynamically. Record in ledger.
@@ -433,12 +433,12 @@ Weight range: 0.5, 1.0, or 1.5. Never 0, never above 1.5. Weights are fixed at s
 
 **Step 4 — Set Conviction Track:**
 - Scale: 0 to 10. Side A wins at ≥7. Side B wins at ≤3. Compromise zone: 4–6.
-- Starting position: GM-set (typical neutral: 4–6). Record in ledger.
+- Starting position: Game Master-set (typical neutral: 4–6). Record in ledger.
 - Audience resistance: average Stability of represented factions, round up, then −1 (minimum 0). Typical range: 0–2.
 
 **Step 5 — Define Stakes:** What each side wins, loses, or compromises on. Record before debate begins.
 
-**Step 6 — Record all of the above in the hidden GM ledger before the first exchange.**
+**Step 6 — Record all of the above in the hidden Game Master ledger before the first exchange.**
 
 ---
 
@@ -471,7 +471,7 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 
 | Net Successes | Output |
 |---|---|
-| Failure (0) | Misleading signal: GM identifies a genre as strong that is actually weak. Orator acts on false intelligence. |
+| Failure (0) | Misleading signal: Game Master identifies a genre as strong that is actually weak. Orator acts on false intelligence. |
 | Partial (1) | Primary genre identified only. No orientation signal. |
 | Success (2) | Primary genre + whether Revealing or Obscuring is preferred. |
 | Overwhelming (3+) | Genre + orientation + one specific detail (swing faction, emotional state, key individual). |
@@ -533,23 +533,23 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 - Concentration depletes: −1 per exchange, −1 additional on any exchange loss. (Regroup counts as a loss for concentration purposes.) Concentration minimum is 0 — it cannot go below 0 from multiple depletion triggers in a single exchange; Spent fires immediately when Concentration reaches 0. [PP-102]
 - At Concentration 0: **Spent** — next exchange: −2D; opponent gets +1D. Concentration then resets to maximum.
 
-**Step 7 — GM records exchange on hidden ledger.**
+**Step 7 — Game Master records exchange on hidden ledger.**
 
 ---
 
 ## 6.5 Post-Debate Resolution
 
-- GM reveals ledger.
-- Conviction Track position determines outcome: ≥7 = Side A wins; ≤3 = Side B wins; 4–6 = compromise (GM narrates partial outcome proportional to final position).
+- Game Master reveals ledger.
+- Conviction Track position determines outcome: ≥7 = Side A wins; ≤3 = Side B wins; 4–6 = compromise (Game Master narrates partial outcome proportional to final position).
 - Winner's final genre + orientation determines Thread co-movement type (see §3.8, which carries forward unchanged).
 - Stakes resolve. **Domain Echo (canonical consequence by win type) [PP-110 — table stub; full table pending editorial]:**
-  - Decisive win (TC ≥7 or ≤3) + Future genre: Domain Echo fires — winner gains +1D on first Domain Action pursuing the argued future within the season.
+  - Decisive win (Conviction Track ≥7 or ≤3) + Future genre: Domain Echo fires — winner gains +1D on first Domain Action pursuing the argued future within the season.
   - Decisive win + Evidence genre (Past): winning faction's Mandate +1 in the domain of the cited precedent.
-  - Decisive win + Character genre (Present): Disposition change with all witnesses; Reputation shift (GM-set magnitude).
-  - Compromise (4–6): No Domain Echo. Stakes partially resolve per final TC position proportional to win threshold distance.
+  - Decisive win + Character genre (Present): Disposition change with all witnesses; Reputation shift (Game Master-set magnitude).
+  - Compromise (4–6): No Domain Echo. Stakes partially resolve per final Conviction Track position proportional to win threshold distance.
 - **Post-debate recovery:** All strain and Concentration depletion clear at scene end. Spent clears at scene end. [PP-108]
 - **Debate Fatigue [PP-114 / PP-117]:** If an orator was Rattled at any point during the debate, they carry Debate Fatigue into this session. Effect: −1D on their next social roll (Argue, Corroborate, or Circles roll); consumed after that roll regardless of outcome. One instance per session regardless of how many debates triggered it. Clears at next session start if unused. [GAP-DS-16 resolved]
-- **Total Victory [PP-114]:** If the winning side's final TC position is ≥ 9 (Side A) or ≤ 1 (Side B), the victory is Total. Additional consequences: losing faction's primary orator gains Debate Fatigue regardless of Rattled status; winning orator gains +1 Momentum (if below cap 4). In BG Parliamentary Vote, Total Victory additionally applies Mandate −1 to the losing coalition's dominant faction for one season. [GAP-DS-03 resolved]
+- **Total Victory [PP-114]:** If the winning side's final Conviction Track position is ≥ 9 (Side A) or ≤ 1 (Side B), the victory is Total. Additional consequences: losing faction's primary orator gains Debate Fatigue regardless of Rattled status; winning orator gains +1 Momentum (if below cap 4). In BG Parliamentary Vote, Total Victory additionally applies Mandate −1 to the losing coalition's dominant faction for one season. [GAP-DS-03 resolved]
 
 ---
 
@@ -561,7 +561,7 @@ The ethical mode adjustments in §6.1 Step 2 ARE the faction resonance system. T
 
 Exception retained from §3.7: Niflhel does not participate in formal debate structures. Their social toolkit is Reading Exchange, private manipulation, and Thread operations only.
 
-**Beliefs integration [PP-115]:** Winning an exchange while arguing for a position directly aligned with the orator's stated Belief counts as a Belief achievement for Momentum purposes (params_core: Momentum gained on Belief achieved). GM confirms alignment at exchange end. Maximum 1 Momentum per debate from Belief alignment. [GAP-DS-19 resolved / ED-054 resolved — PROVISIONAL]
+**Beliefs integration [PP-115]:** Winning an exchange while arguing for a position directly aligned with the orator's stated Belief counts as a Belief achievement for Momentum purposes (params_core: Momentum gained on Belief achieved). Game Master confirms alignment at exchange end. Maximum 1 Momentum per debate from Belief alignment. [GAP-DS-19 resolved / ED-054 resolved — PROVISIONAL]
 
 ---
 
@@ -579,7 +579,7 @@ Exception retained from §3.7: Niflhel does not participate in formal debate str
 | Formal Debate (Parliament) | 3 | Alternating | Standard |
 | Grand Debate (faction-defining) | 5 | Alternating | Standard |
 | Royal Audience | 3 | Crown objects throughout | Halved for petitioner |
-| Church Tribunal | 1–5 (Inquisitor sets) | Inquisitor proposes throughout | Halved for accused. **Design note [PP-109]:** With TC starting at 6 (biased), boosted genre (Past ×1.5), and pool gap ≥ 4D, P(one-exchange resolution) ≈ 88%. GMs seeking dramatic Tribunal play should set exchange count ≥ 3 and start TC at 5 (neutral). Exchange count 1 is appropriate only for summary proceedings where the outcome is near-certain by intent. |
+| Church Tribunal | 1–5 (Inquisitor sets) | Inquisitor proposes throughout | Halved for accused. **Design note [PP-109]:** With Conviction Track starting at 6 (biased), boosted genre (Past ×1.5), and pool gap ≥ 4D, P(one-exchange resolution) ≈ 88%. GMs seeking dramatic Tribunal play should set exchange count ≥ 3 and start Conviction Track at 5 (neutral). Exchange count 1 is appropriate only for summary proceedings where the outcome is near-certain by intent. |
 | Casual Dispute | 1 | Initiator proposes | N/A (no tracker) |
 
 **Corroboration in asymmetric proceedings [PP-116]:** The accused or petitioner may have corroborators. In asymmetric proceedings, corroboration uses Bonds Ob 2 (vs Ob 1 symmetric). On failure: corroborator takes 1 strain. Advantaged party corroborates at standard Ob 1. [GAP-DS-18 resolved / ED-055 resolved — PROVISIONAL]
@@ -604,7 +604,7 @@ The following items were identified in stress test v2 as requiring future testin
 | Genre pivot mid-debate (orator argues against the Question's genre): no procedure | P2 |
 | Rattled → Unmask decision point (Rattled never triggered in retests) | P2 |
 | Multiple Doubt Markers in same exchange | P3 |
-| Mixed audience with Guilds (moral relativism — GM flex): calibration needed | P2 |
+| Mixed audience with Guilds (moral relativism — Game Master flex): calibration needed | P2 |
 
 ---
 
@@ -686,7 +686,7 @@ Faction-level debate resolution for BG scale. Use when the scene is narrated at 
 
 **Step 3 — Resistance:** Base 0. Parliament is the institution — no external audience resistance. If a faction with Stability ≥ 6 Abstains: +1 to resistance (maximum +2 from all Abstains). This represents the political weight of their neutrality.
 
-**Step 4 — Starting TC:** Position 5 (neutral) unless prior lobbying shifted it. Each successful Diplomacy domain action targeting this vote in the preceding season: +1 to starting TC toward the lobbying side (maximum ±2 from lobbying).
+**Step 4 — Starting Conviction Track:** Position 5 (neutral) unless prior lobbying shifted it. Each successful Diplomacy domain action targeting this vote in the preceding season: +1 to starting Conviction Track toward the lobbying side (maximum ±2 from lobbying).
 
 ### BG Vote Resolution
 
@@ -694,15 +694,15 @@ Faction-level debate resolution for BG scale. Use when the scene is narrated at 
 
 **effective_vote for each side:** floor(net_successes × genre_weight)
 
-**Movement:** If effective_vote > resistance → Δ = effective_vote − resistance. Apply both deltas; net TC movement = Δ_A − Δ_B.
+**Movement:** If effective_vote > resistance → Δ = effective_vote − resistance. Apply both deltas; net Conviction Track movement = Δ_A − Δ_B.
 
-**Resolution:** TC ≥ 7 = motion passes; TC ≤ 3 = motion fails; TC 4–6 = motion referred to committee (no immediate change, may be raised next season). **Zero-zero ruling [PP-117]:** If both sides produce effective_vote = 0 (both fail to exceed resistance), motion is automatically referred to committee regardless of TC position. The TTRPG TIE rule does not apply at BG scale — there is no initiative holder.
+**Resolution:** Conviction Track ≥ 7 = motion passes; Conviction Track ≤ 3 = motion fails; Conviction Track 4–6 = motion referred to committee (no immediate change, may be raised next season). **Zero-zero ruling [PP-117]:** If both sides produce effective_vote = 0 (both fail to exceed resistance), motion is automatically referred to committee regardless of Conviction Track position. The TTRPG TIE rule does not apply at BG scale — there is no initiative holder.
 
 **Multi-round:** If no threshold reached after 1 round, each subsequent season's Parliament may vote again (1 Domain Action slot per participating faction). Factions may spend Diplomacy domain actions between rounds for +1D to their coalition's next roll (maximum +2D from lobbying).
 
 **Thread consequences:** Do not fire from BG Parliamentary Vote. Thread co-movement requires personal-scale argument. [Commensurate with R-65 mode restriction]
 
-**Total Victory in BG:** TC ≥ 9 or ≤ 1 after a round → losing coalition's dominant faction takes Mandate −1 for one season. [GAP-DS-05 resolved / ED-053 resolved]
+**Total Victory in BG:** Conviction Track ≥ 9 or ≤ 1 after a round → losing coalition's dominant faction takes Mandate −1 for one season. [GAP-DS-05 resolved / ED-053 resolved]
 
 ---
 
@@ -710,15 +710,15 @@ Faction-level debate resolution for BG scale. Use when the scene is narrated at 
 
 Use when a named character is present and their personal skill matters, but faction-level forces are also in play.
 
-**Step 1 — BG layer:** Run one round of BG Parliamentary Vote (§6.13) using faction pools. Apply TC offset, capped at ±2 from neutral (5) regardless of actual Δ.
+**Step 1 — BG layer:** Run one round of BG Parliamentary Vote (§6.13) using faction pools. Apply Conviction Track offset, capped at ±2 from neutral (5) regardless of actual Δ.
 
-**Step 2 — Set TTRPG starting TC:** Neutral 5 ± capped offset. If BG vote produced Δ = 2 toward Side A, TTRPG debate starts at TC = 7 (already at win threshold — Side B must push TC back below 7 during the personal debate).
+**Step 2 — Set TTRPG starting Conviction Track:** Neutral 5 ± capped offset. If BG vote produced Δ = 2 toward Side A, TTRPG debate starts at Conviction Track = 7 (already at win threshold — Side B must push Conviction Track back below 7 during the personal debate).
 
-**Step 3 — TTRPG personal debate:** Run standard Formal Debate (3 exchanges) or Grand Debate (5 exchanges) per §6.4–§6.9 from the adjusted starting TC. **Exchange count is determined by the GM based on context (same as pure TTRPG), not by the number of BG vote rounds. These are independent parameters.** [PP-118]
+**Step 3 — TTRPG personal debate:** Run standard Formal Debate (3 exchanges) or Grand Debate (5 exchanges) per §6.4–§6.9 from the adjusted starting Conviction Track. **Exchange count is determined by the Game Master based on context (same as pure TTRPG), not by the number of BG vote rounds. These are independent parameters.** [PP-118]
 
-**Step 4 — Resolution:** Final TTRPG TC position determines outcome. Faction stat consequences apply as in TTRPG debates. Thread consequences may fire (personal-scale argument satisfies the requirement).
+**Step 4 — Resolution:** Final TTRPG Conviction Track position determines outcome. Faction stat consequences apply as in TTRPG debates. Thread consequences may fire (personal-scale argument satisfies the requirement).
 
-**RS propagation:** If the TTRPG debate's winning genre triggers an RS change (§3.8), apply to TTRPG-layer RS. BG layer has no RS equivalent. Domain Echo affecting BG faction stats propagates through normal Domain Echo procedure. [ED-056 resolved / ED-057 resolved — PROVISIONAL]
+**Rendering Stability propagation:** If the TTRPG debate's winning genre triggers an Rendering Stability change (§3.8), apply to TTRPG-layer Rendering Stability. BG layer has no Rendering Stability equivalent. Domain Echo affecting BG faction stats propagates through normal Domain Echo procedure. [ED-056 resolved / ED-057 resolved — PROVISIONAL]
 
 **Design intent:** The BG layer sets political environment (faction strength, prior lobbying); the TTRPG layer resolves the decisive personal moment. A weaker faction's named character can overcome institutional disadvantage through personal skill.
 
@@ -731,15 +731,15 @@ Practitioner Weaving bonus (R-65, §6.10) applies when the practitioner declares
 
 ### Between Exchanges
 A practitioner may initiate a Thread operation between exchanges (after Step 7, before the next Step 1). Procedure:
-1. Declare at end of exchange (after GM records).
+1. Declare at end of exchange (after Game Master records).
 2. Resolve Thread operation per threadwork rules (roll, dimensional auto-effects, Coherence check).
 3. Effects apply before next exchange's Read step.
 
 | Operation | Debate Effect |
 |-----------|--------------|
-| W-42 / audience-affecting Weave | Shifts audience Disposition (GM narrates). Does NOT change genre weights — weights are institutional, fixed at setup. May shift next Read roll difficulty by ±1 TN (GM discretion). |
+| W-42 / audience-affecting Weave | Shifts audience Disposition (Game Master narrates). Does NOT change genre weights — weights are institutional, fixed at setup. May shift next Read roll difficulty by ±1 TN (Game Master discretion). |
 | R-65 continuation | If practitioner used R-65 during prior Argue step, bonus continues automatically into next exchange — no additional between-exchange action. |
-| Personal operations (Dissolution, Pulling, etc.) | No debate effect. Affects practitioner's own RS/Coherence only. |
+| Personal operations (Dissolution, Pulling, etc.) | No debate effect. Affects practitioner's own Rendering Stability/Coherence only. |
 
 **Genre weights are fixed at setup.** Thread operations cannot change them mid-debate.
 
@@ -754,10 +754,10 @@ Confirmed pool formula: **(Presence × 2) + History bonus, TN 7.**
 Note: SIM-DEBT-01 RESOLVED (2026-04-02). Stress tests SIM-D-01 and SIM-D-02 confirmed calibration under (Presence × 2) + History pool. See references/params_debate.md for updated baselines.
 
 ### R-65 — Practitioner Weaving Bonus in Debates
-A practitioner with TS ≥ 30 who is actively in Thread contact during a Debate exchange adds bonus dice to their pool equal to floor(TS ÷ 30):
-- TS 30–59: +1D
-- TS 60–89: +2D
-- TS 90+: +3D
+A practitioner with Thread Sensitivity ≥ 30 who is actively in Thread contact during a Debate exchange adds bonus dice to their pool equal to floor(Thread Sensitivity ÷ 30):
+- Thread Sensitivity 30–59: +1D
+- Thread Sensitivity 60–89: +2D
+- Thread Sensitivity 90+: +3D
 
 The practitioner must declare the Weaving before rolling. The operation is visible to all observers (practitioner is in contact while debating). Church may immediately call for Heresy Investigation on observation. After the exchange, the practitioner makes a Coherence check at Ob 1 — maintaining Debate and Thread contact simultaneously stresses the configuration.
 

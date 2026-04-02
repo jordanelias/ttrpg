@@ -18,9 +18,9 @@ Translation rules for each scale are noted inline.
 |-------|--------|------------|
 | Full personal combat (pool split, wound tracking, stamina) | Personal combat for named characters; mass combat abstraction for units | Unit-based abstraction (Martial/Cohesion/Morale); no individual tracking |
 | Zone-based (no maps or grids) | Zone-based for personal scenes; operational zones for mass combat | Territory-adjacency map; zone-based mass combat within territory |
-| All 10 attributes active | PC attributes active; NPC stats simplified | Faction stats (Military, Wealth, etc.); no personal attributes |
+| All 10 attributes active | Player Character attributes active; Non-Player Character stats simplified | Faction stats (Military, Wealth, etc.); no personal attributes |
 
-TTRPG is always the most granular layer. Hybrid uses TTRPG rules when a named PC is present. Board Game uses abstracted equivalents.
+TTRPG is always the most granular layer. Hybrid uses TTRPG rules when a named Player Character is present. Board Game uses abstracted equivalents.
 
 ---
 
@@ -38,7 +38,7 @@ Modifiers:
 
 **Board Game equivalent:** Unit Martial stat replaces Combat Pool. No split — Martial dice used for both attack and defence (abstracted).
 
-**Hybrid:** PC uses full TTRPG pool. NPC units use Martial stat.
+**Hybrid:** Player Character uses full TTRPG pool. Non-Player Character units use Martial stat.
 
 ---
 
@@ -85,7 +85,7 @@ Initiative transfers on: hit (attacker maintains), feint success, distance chang
 | Tie Up | Close range. Offence roll. Success: both parties at disadvantage next round; opponent cannot use reach advantage; escape requires Strength contest. Blocks escape for one round. |
 | Escape | Agility contest vs opponent. Requires not being Tied Up. |
 | Rescue | Declare before opponent's attack resolves. Interpose. Requires adjacent zone. Fails if no incoming attack declared — action lost. |
-| Stunt | Declared with Strike. +N dice to Offence from environmental/positional narrative (GM sets N, max 5). Chain dice (10s) chain normally, independent of Stunt effect. |
+| Stunt | Declared with Strike. +N dice to Offence from environmental/positional narrative (Game Master sets N, max 5). Chain dice (10s) chain normally, independent of Stunt effect. |
 
 **Incapacitation timing:** Complete currently-resolving action. Fall at end of that priority step. Later-declared actions do not resolve.
 
@@ -155,7 +155,7 @@ Stamina = Endurance + Relevant History + 1 − armour modifier.
 Depletes by 1 per round of active combat.
 At 0: Out of Breath. −2D to all combat rolls. Recovery: Take a Breath action.
 
-**Hybrid:** Wound Ob penalties carry into TTRPG mass battle CR checks (see stage11 PP-089 and mass_battle_v3 §A.5). Do NOT reduce BG commander bonus.
+**Hybrid:** Wound Ob penalties carry into TTRPG mass battle Coherence Rating checks (see stage11 PP-089 and mass_battle_v3 §A.5). Do NOT reduce BG commander bonus.
 
 ---
 
@@ -244,7 +244,7 @@ Default unit stats (board game / mass combat):
 | Faction | Military | Starting Units | Notes |
 |---------|---------|---------------|-------|
 | Crown | 4 | 4 | Mixed infantry + cavalry. Standard formation. |
-| Church | 4 | 4 | 2 Templar (elite: Cohesion 5, Martial 4) + 2 garrison (Cohesion 3, Martial 2). Templars deploy free at TC ≥ 40 in Himmelstift. |
+| Church | 4 | 4 | 2 Templar (elite: Cohesion 5, Martial 4) + 2 garrison (Cohesion 3, Martial 2). Templars deploy free at Theocracy Counter ≥ 40 in Himmelstift. |
 | Hafenmark | 3 | 3 | 1 ducal guard (elite: Cohesion 4, Martial 3) + 2 militia. |
 | Varfell | 4 | 4 | Highland infantry. Cohesion 4. Home territory bonus: +1D in Eisengrund. |
 | Guilds | 2 | 2 | Hired mercenaries. Cohesion 3, Martial 2. High Wealth allows rapid replacement. |
@@ -252,12 +252,12 @@ Default unit stats (board game / mass combat):
 | Revolution | 0 | 0 | No standing units. Community defence possible via Community Weaving. |
 | Löwenritter | 5 (→6 post-coup) | 5 (→6) | All units elite: Cohesion 5, Martial 4. +1 unit from Crown transfer post-coup. |
 
-> **[PROVISIONAL] Coup Counter — successor rule:** If the Löwenritter Grandmaster is killed (personal combat, mass battle, or other means) while the Coup Counter is ≥ 1: the Löwenritter council immediately selects the highest-CR surviving named officer as acting Grandmaster. The Coup Counter resets to 0. The coup attempt is treated as disrupted — the new acting Grandmaster's first action is to consolidate the Order rather than pursue the coup. If no named officers remain, the Löwenritter enter a leaderless state (all units −1D to all rolls until a new Grandmaster is appointed through narrative play).
+> **[PROVISIONAL] Coup Counter — successor rule:** If the Löwenritter Grandmaster is killed (personal combat, mass battle, or other means) while the Coup Counter is ≥ 1: the Löwenritter council immediately selects the highest-Coherence Rating surviving named officer as acting Grandmaster. The Coup Counter resets to 0. The coup attempt is treated as disrupted — the new acting Grandmaster's first action is to consolidate the Order rather than pursue the coup. If no named officers remain, the Löwenritter enter a leaderless state (all units −1D to all rolls until a new Grandmaster is appointed through narrative play).
 
 **Mustering:** Muster order raises 1 new unit per success (up to Military cap) at standard stats.
 Upgrade to elite: 2 consecutive successful Govern orders in territory + Wealth ≥ 4.
 
-> **[PROVISIONAL] TC seasonal cap:** TC cannot change by more than ±3 per season from Domain Actions alone. All TC sources combined (Domain Actions, RS-driven cascade, Thread operations, military outcomes) cannot produce more than ±5 TC change per season. Changes exceeding the cap are discarded. This prevents runaway TC spirals from multi-action stacking.
+> **[PROVISIONAL] Theocracy Counter seasonal cap:** Theocracy Counter cannot change by more than ±3 per season from Domain Actions alone. All Theocracy Counter sources combined (Domain Actions, Rendering Stability-driven cascade, Thread operations, military outcomes) cannot produce more than ±5 Theocracy Counter change per season. Changes exceeding the cap are discarded. This prevents runaway Theocracy Counter spirals from multi-action stacking.
 
 > **[PROVISIONAL] Stability recovery:** A faction with Stability ≤ 3 that receives no hostile Domain Actions targeting its Stability in a season gains +1 Stability at Accounting. This represents institutional resilience — factions recover slowly if left alone. Factions at Stability ≥ 4 do not recover this way (they are stable already). Maximum recovery from this rule: +1 per season.
 
@@ -268,7 +268,7 @@ Upgrade to elite: 2 consecutive successful Govern orders in territory + Wealth �
 ### From sim_x_06 (confirmed working)
 - Wound degradation (−1D system): smooth curve, no single-wound cliff. ✓
 - Range control: more fight-determining than pool size or wounds. Intended. ✓
-- CE accumulation (Inquisitor): slow multi-session trajectory. ✓
+- Combat Endurance accumulation (Inquisitor): slow multi-session trajectory. ✓
 
 ### From sim_combat_batch_11 P2 series (all clarifications, see §4 and §9)
 All P2-B11 clarifications incorporated above.
@@ -276,4 +276,4 @@ All P2-B11 clarifications incorporated above.
 ### Pending editorial
 - ED-033: Commander bonus formula conflict (three formulas).
 - ED-040: Artillery Balanced disposition lock — intentional?
-- [EDITORIAL: P2-B11-19 TT 80+ effect in mass battle — define or confirm no effect]
+- [EDITORIAL: P2-B11-19 Thread Tension 80+ effect in mass battle — define or confirm no effect]
