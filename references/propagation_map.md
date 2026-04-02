@@ -236,3 +236,9 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 *This map is updated in every commit that touches any file listed here. It is never updated manually in isolation — always part of an atomic commit containing the files being linked.*
 
 *`tools/broken_dependency_checker.py` scans this map and others for broken refs. Run it as part of Step C before every commit closes.*
+
+## tests/sim_bg_01.md
+- system: BG
+- type: TEST
+- depends_on: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md, references/params_factions.md]
+- referenced_by: [tests/coverage_matrix.md, canon/editorial_ledger.yaml]

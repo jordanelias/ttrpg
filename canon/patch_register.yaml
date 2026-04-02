@@ -1556,3 +1556,25 @@ patches:
   applied_to_version: "v4.4"
   status: applied
   applied_commit: pending
+
+- id: PP-169
+  date: 2026-04-02
+  severity: P2
+  description: "params_board_game.md: Add phase structure, order priority, unit Muster Ob, faction capitals, Order token rules from compilation B4/B6/B3."
+  finding_id: "SIM-BG-01-PG-01,PG-02,PG-04,PG-05"
+  source: simulation
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.5.1"
+  status: applied
+  applied_commit: pending
+
+- id: PP-170
+  date: 2026-04-02
+  severity: P2
+  description: "params_board_game.md: Parliamentary Manoeuvre Partial=no effect (explicit ruling); Failure=Mandate -1 for 1 season. Fills spec gap."
+  finding_id: "SIM-BG-01-F-07"
+  source: simulation
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.5.1"
+  status: applied
+  applied_commit: pending

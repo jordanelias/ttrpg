@@ -1,4 +1,4 @@
-<!-- version: v0.14+design-ST | source: bg_v05_simulation_and_patches.md | last_updated: 2026-04-02 -->
+<!-- version: v0.5.1+SIM-BG-01 | source: bg_v05_simulation_and_patches.md | last_updated: 2026-04-02 -->
 <!-- PATCHES APPLIED: P-12-P-32 (prior); ST-BG-01-10, ST-INT series added 2026-04-02 -->
 <!-- PATCHES APPLIED: PP-112 (remove struck Majority-1s), PP-113-PP-122 (gap fills) 2026-04-02 -->
 <!-- NOTE: stage6_factions.md is STALE for BG mode. bg_v05 is canonical for all BG faction mechanics. -->
@@ -261,3 +261,66 @@ Theocracy Counter >= 65 (not 70). Starting Theocracy Counter 28 (not 22).
 
 <!-- patch_history: references/params_board_game_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
+
+## Season and Phase Structure (PP-169, extracted from compilation B4)
+One game round = one season. Campaign year = 4 rounds. Standard: 12-16 rounds. Extended: 20 rounds.
+
+| Phase | Name | Description |
+|-------|------|-------------|
+| 1 | Season Card | Flip top Event deck card. Modifier public. |
+| 2 | Planning | All players place 5 Order tokens face-down simultaneously. Placement order: lowest Stability first. Ties: roll. |
+| 3 | Intel Reveal | Niflhel (and Intel-capable factions) reveals prior season Intel results. |
+| 4 | Order Resolution | Flip all orders. Resolve by priority sequence. |
+| 5 | Seasonal Accounting | Clocks advance. Stability checks. Stat changes. CP awards. Victory checks. |
+| 6 | Cleanup | Remove temporary effects. Advance round tracker. Draw replacement cards. |
+
+Order tokens: 5 per faction per season. Up to 3 in one territory. 1 token = 1 Domain Action. Faction Unique Power uses designated token.
+
+## Order Priority Table (PP-169, from compilation B4)
+| Priority | Order Type | Notes |
+|----------|-----------|-------|
+| 1 | Thread Operations | RS change first; Co-Movement fires before all other resolution. |
+| 2 | Military (March, Assault, Siege) | Battles resolve simultaneously per territory. |
+| 3 | Intel and Sabotage | Outcomes apply before economic/governance. |
+| 4 | Domain Actions (Govern, Trade, Muster, Diplomacy) | All standard Domain Actions. |
+| 5 | Unique Powers | Faction Unique Power resolves last. |
+| 6 | Decree / Parliamentary Manoeuvre | Take effect at next accounting if timing ambiguous. |
+
+## Unit Muster Ob Table (PP-169, from compilation B6)
+| Unit Type | Muster Ob | Prerequisite |
+|-----------|----------|--------------|
+| Light Infantry | 1 | None |
+| Heavy Infantry | 2 | Territory Prosperity >= 5 + Wealth Ob 2 |
+| Cavalry | 3 | Territory Prosperity >= 6 or officer History |
+| Ranged | 2 | Officer with Ranged proficiency |
+| Artillery | 4 | Wealth Ob 4 + 1 season construction |
+| Knights Templar | Church only | Not Muster-able by standard order |
+
+Unit starting Cohesion: Light Infantry 3, Heavy Infantry 4, Cavalry 4, Ranged 3, Artillery 3, Thread Corps 4.
+
+## Faction Capital Territories (PP-169, from compilation B3)
+| Faction | Capital Territory | Territory Number |
+|---------|------------------|-----------------|
+| Crown | Valorsplatz | T1 |
+| Church | Himmelenger | T3 |
+| Hafenmark | Hafenvalor | T6 |
+| Varfell | Varfell | T9 |
+| Guilds | Sigurdshelm | T10 |
+| Niflhel | Sigurdshelm | T10 (contested; see Niflhel victory condition) |
+| Restoration Movement | No fixed capital | — |
+| Lowenritter | Arnesheld | T5 |
+
+## Parliamentary Manoeuvre Results (PP-170 — fills spec gap PG-07)
+Roll: Mandate vs Ob = opponent Influence / 2 (round up).
+| Degree | Effect |
+|--------|--------|
+| Overwhelming | One pending Domain Action outcome delayed 1 season (cannot delay Unique Powers or Decrees) + opponent Stability -1 for 1 season. |
+| Success | One pending Domain Action outcome delayed 1 season (cannot delay Unique Powers or Decrees). |
+| Partial | No effect. [PP-170: explicit ruling.] |
+| Failure | No effect. Hafenmark Mandate -1 for 1 season (procedural blowback). |
+
+## Theocracy Counter Starting Value — Canonical
+TC starts at 28 (P-32). Compilation B1 states 15 — STALE (pre-P-32). Use 28.
+
+## Mandate Recovery (PARAMS GAP — ED-066 open)
+No Mandate recovery mechanism defined in BG spec. Do not assume recovery exists until ED-066 resolved.

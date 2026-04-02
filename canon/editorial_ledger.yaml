@@ -1396,3 +1396,51 @@ editorial_decisions:
     priority: P3
     decision: null
     tags: [personal_combat, ranged, dodge, precedent_bw]
+
+  - id: ED-064
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_bg_01.md
+    description: "Hafenmark Wealth sink: no mechanic for Wealth above 5 outside Military/Fortify. Wealth ceiling hit Season 1 on Overwhelming Trade opening. Confirm intended or design sink mechanic."
+    full_flag_text: "[EDITORIAL: ED-064 — Hafenmark Wealth sink: Trade ceiling hit S1 Overwhelming. Design Wealth sink or confirm ceiling is intended.]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+    propagation_status: pending
+    related_ids: [ED-001]
+    supersedes: []
+    tags: [board_game, hafenmark, wealth, balance]
+
+  - id: ED-065
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_bg_01.md
+    description: "Novice play time P1: planning phase ~12 min/player. Confirm simplification approach: (a) faction preset menus; (b) reduce tokens to 3; (c) action cards (links ED-001)."
+    full_flag_text: "[EDITORIAL: ED-065 — Novice planning time P1: ~12 min/player. Confirm simplification approach before playtesting.]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets: [designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+    propagation_status: pending
+    related_ids: [ED-001]
+    supersedes: []
+    tags: [board_game, cognitive_load, novice, playtesting]
+
+  - id: ED-066
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_bg_01.md
+    description: "Mandate recovery mechanism undefined in BG spec. Factions losing Mandate via Crown Decree have no stated restoration path. Confirm or design recovery mechanic."
+    full_flag_text: "[EDITORIAL: ED-066 — Mandate recovery undefined in BG. Confirm or design restoration mechanic.]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [board_game, mandate, faction_mechanics]
