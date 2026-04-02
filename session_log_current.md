@@ -1,43 +1,47 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_BG_CARDHAND_ED001
-phase: SESSION CLOSED
-status: COMPLETE
+session_id: 2026-04-02T_EDITORIAL_BULK_RESOLUTION
+phase: Phase 13 — Bulk editorial resolution (all open items)
+status: CLOSED
 
-completed_this_session:
-  - SIM-BG-01: BG G5/D/J turn sequence simulation. PP-169/170. ED-077/078/079 (renumbered from 064/065/066).
-  - BAL-BG-01: Win probability balance analysis. PP-171 through PP-176.
-  - ED-001 RESOLVED: Card-Hand system from stage_bg_proposal_v02.md adopted as canonical BG action economy.
-  - PP-177: Card-Hand system extracted to params_board_game.md.
-  - ED-078 RESOLVED: Novice play time — user decision option C (action cards). Resolved via PP-177.
-  - ED-079 RESOLVED: Mandate recovery — resolved via PP-174.
-  - canonical_sources.yaml updated: stage_bg_proposal_v02.md now canonical for BG action economy.
-  - ED ID dedup: BG entries 064/065/066 renumbered to 077/078/079.
+completed:
+  - All 71 open editorial items marked PROVISIONAL with decisions
+  - 8 duplicate IDs renumbered (ED-054–058, 064–066 second occurrences → ED-077–084)
+  - Mechanical patches applied to 8 params files
+  - PP-171 (bulk resolution patch)
+  - Commit: 9417242
 
-p1_blockers_resolved_this_session:
-  - ED-001 (Card-Hand BLOCKER) — RESOLVED
-  - ED-065/ED-078 (novice play time P1) — RESOLVED
+editorial_status:
+  open: 0
+  provisional: 79
+  resolved: 5
+  total: 84 (including 8 renumbered)
 
-open_items:
-  - ED-077: Hafenmark Wealth sink (P2) — still open
-  - DESIGN-DEBT-BG-01: Reconcile stage_bg_proposal_v02.md (action economy) with bg_v05 (stats/VCs/patches) into unified BG spec before compilation update
-  - PG-09: Torben Loyalty Clock decrease mechanics
-  - PG-10: Parliamentary ruling mechanic
-  - PG-12: Hidden information persistence (Niflhel Deed 3)
+key_provisional_decisions:
+  ED-001: Card-Hand 6-card provisional (unblocks BG simulation)
+  ED-005: Restoration leader = Maren Holt
+  ED-007: Fourth Cardinal = Vester Haum (Reform)
+  ED-033: Commander bonus formulas consolidated (TTRPG CR / BG Mil÷3 / Hybrid layer-specific)
+  ED-041: Niflhel social toolkit defined (Private Negotiation, Bribery, Thread Insight)
+  ED-048: Ceiral → Seira (provisional rename)
+  ED-073: Non-battle Zoom In procedure defined
+  ED-081: Debate stalemate max 10 exchanges then forced Unmask
+  ED-082: BG projectile abstraction confirmed (abstracted, no DR in BG)
+  ED-084: Mandate recovery +1/season when no hostile actions and Stability≥2
 
-commits_this_session:
-  - 340847431: sim_bg_01 + PP-169/170
-  - 400eb116a: bal_bg_01 + PP-171-176
-  - 18c45619f: PP-171/172/176 in-place to compilation v0.7
-  - 67c382260: ED-001 resolved + PP-177 Card-Hand + ED renumber
-  - 5f7f8aef8: ED-064->ED-077 dedup fix
-  - "[this]": session close
+mechanical_patches_applied:
+  params_debate: Composure restore, Niflhel toolkit, Genre pivot, Grand Debate alternation,
+                 Momentum in debate, Poise→Composure, NPC Composure formula, Corroboration rules
+  params_factions: Mandate recovery, Hafenmark Wealth sink, Military destruction −1,
+                   Institutional Mandate trigger, PC faction embedding (+1D)
+  params_mass_combat: LBl ignores Prepared Defence, Artillery cascade cap, commander formulas, Volley TN confirmed
+  params_combat: Dodge action added (full pool vs ranged, costs action)
+  params_board_game: Parliamentary Vote procedure, Card-Hand provisional, TC win-delay rule, Artillery disposition
+  state_transfer_spec: TC win-delay rule, non-battle Zoom In, P-01 co-movement propagation
+  params_scale_transitions: Sufficient scope definition, Domain Echo debate outcome mapping
 
-next_session_start:
-  priority_1: "DESIGN-DEBT-BG-01: Reconcile v02 + v05 into unified BG spec. This unblocks compilation sync."
-  priority_2: "Fill PG-09/10/12 (Torben, Parliamentary ruling, hidden info persistence)."
-  priority_3: "Continue simulate board game — Modes C + L + M. Recommended seed: Church-Crown Mandate contest, TC crossing 40 at S6."
-  priority_4: "ED-077 (Hafenmark Wealth sink) editorial decision."
-  priority_5: "Prior open items: ED-053 (Composure), GAP-TTRPG-04 (Belief CP), GAP-TTRPG-G1/G2 (HYB transitions)."
+next_action:
+  task: "All design items now have provisional decisions in register. System is simulatable across all modes. Next: review provisional decisions with user and confirm/revise before compilation. Priority for review: ED-001 (Card-Hand), ED-048 (Seira rename), ED-073 (non-battle Zoom In), ED-005/007 (character profiles)."
+  note: "0 open editorial items. 79 provisional items await user review before promotion to resolved. No P1 blockers remain (ED-001 P1-BLOCKER unblocked by provisional Card-Hand rule)."
 ```
