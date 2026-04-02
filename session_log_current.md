@@ -1,34 +1,25 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_DEBATE_STRESS_TEST
-phase: Phase 9 — Debate stress test (SIM-DEBT-01)
-status: COMPLETE
+session_id: 2026-04-02T_SKELETON_FINAL
+phase: Phase 11 — Skeleton-debt definitively cleared
+status: CLOSED
 
 completed:
-  - SIM-D-01: Debate stress test Modes A+D+J+L. New calibration baselines established.
-  - PP-097/098/099 PROVISIONAL: applied in-place to debate_system_redesign_v1.md.
-  - SIM-D-02: Debate Mode C scenario — Himlensendt vs Baralta, Parliament.
-  - PP-100 PROVISIONAL: §6.7 proposer/initiative decoupling clarified in-place.
-  - ED-051 (P1): stage13 NPC debate stat block missing — Attunement, Focus, Poise, Bonds.
-  - ED-052 (P2): NPC Composure formula mismatch — shorthand vs Poise+Bonds+3.
-  - SIM-DEBT-01: RESOLVED.
-  - debate_system_redesign_v1.md: v1.2
+  - bg_v05 → v0.6 FINAL: Parts Ten (P-12-P-32, 21 patches) and Eleven (summary tables removed) applied in-place. All three appendix sections eliminated.
+  - threadwork → v3.1: Part Nine (9.1-9.15, P-11-P-26) applied in-place. All appendix sections eliminated.
+  - Zero appendix sections remain in any working design document.
 
-key_findings:
-  - 3-exchange Formal Debate → Compromise ~95% at resistance 2 (structural design, not a flaw)
-  - Resistance level is the dominant variable for track movement in short debates
-  - Genre weight dominates pool-size adjustments up to ~+2D Memory bonus
-  - DIVERGE produces 0 strain — Composure drain only in CLASH/COMPETITION
-  - F-C-04 P1: NPC debate attributes missing — blocks authoritative NPC debate sims
-  - F-C-06 P1: Novice debate time 9 min/exchange — GM reference card needed
+final_document_versions:
+  combat_design: v1.1
+  mass_battle: v4
+  bg: v0.6
+  threadwork: v3.1
+  debate: v1 (debate_system_redesign_v1 Part 6 - was already clean)
+  stage8: v0.14-ST2
+  stage11: v0.14-ST
 
 next_action:
-  task: "GM reference card for debate (one-page: §6.1 setup + §6.4 exchange flowchart + genre weight table). Addresses F-C-06 P1."
-  note: "Or pivot to next simulation priority. Confirm with user."
-
-commits_this_session:
-  - 22a1f24: SIM-D-01 + PP-097/098/099 + params_debate + coverage_matrix
-  - 1641078a: debate v1.1 in-place patches + propagation_map + session_log
-  - [this]: SIM-D-02 + PP-100 + ED-051/052 + debate v1.2 + coverage_matrix + propmap + session_log
+  task: "stress test debate — SIM-DEBT-01 (Presence×2 pool recalibration)"
+  note: "All skeleton-debt cleared. All documents internally consistent. Ready to simulate."
 ```
