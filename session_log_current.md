@@ -1,41 +1,49 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_BLOCKERS_SIMPREP
-phase: Phase 3 — Blocker resolution, simulation infrastructure repair
+session_id: 2026-04-02T_SIMINFRA_COMPLETE
+phase: Phase 4 — Simulation infrastructure complete
 status: CLOSED
 
 ## SESSION SUMMARY
 
 ### Completed
-- ED-047 resolved: debate pool = (Presence × 2) + History. R-65 applied. SIM-DEBT-01 registered.
-- ED-031 provisional: BG Overwhelming = Ob+1 (intentional divergence from TTRPG 2×Ob)
-- ED-037 provisional: Volley TN 6 confirmed as intentional exception to universal TN 7
-- ED-038 resolved: Coherence in mass battle = personal track (10→0, threadwork Part 3)
-- ED-036 provisional: Altonian unit stats placeholder (Vanguard/Elite Guard/Thread Corps)
-- Coverage matrix: F-11 resolved (ST-TW-02); F-27/F-30-33/F-43/F-52 provisioned; F-45 → ED-049
-- PP-093-096 applied (provisional): stalemate, coup successor, TC cap, Stability recovery
-- Simulator skill Mode I: enforced atomic commit protocol; path fix (sim_coverage_matrix→tests/coverage_matrix); SIM-DEBT section added; provisional decision protocol added
-- Editorial register skill: provisional status added
-- params_mass_combat: Altonian stats, ED-037/038 decisions applied
-- params_board_game: ED-031 BG Overwhelming rule added
-- ED-049 added: Church Stability brake scope (F-45, P2)
-- Ledger: 49 items total — 40 open, 3 provisional, 2 resolved, 4 struck
+- Simulator Modes J/K/L/M added:
+    J: Cognitive load + time audit (decision count, lookup count, parallel tracks, novice/experienced/expert minutes)
+    K: Cross-mode delta (K1: TTRPG/Hybrid/BG property table; K2: transition stress test against state_transfer_spec)
+    L: Precedent comparison (8-game library, flag unjustified complexity)
+    M: Narrative flowchart generator (branching nodes with state tracking, min 3 branches per node, 3 nodes deep, terminal state labels, GAP/DEAD-BRANCH flags, cross-mode mapping)
+- mechanic-audit Mode G added: cross-mode consistency audit + transition point checks
+- state_transfer_spec.md created: all variables at every mode boundary (TTRPG↔Hybrid, BG↔Hybrid, within-TTRPG Register Shifts), interruption protocols, invariants
+- stage11 TT Multiplier column patched (T5-P1-01): obsolete column removed, reference to threadwork added
+- ED-050 added: Thread→Mass timing conflict (T1-P1-01) — choose A/B/C
+- Flowchart output directory: designs/gm_ref_cp14/flowcharts/
 
-### Simulation readiness
-- Combat: READY
-- Threadwork: READY
-- Mass combat: READY (ED-037/038 resolved provisionally; Altonian stats provisional)
-- Board game faction play: READY (ED-031 provisional; ED-001 Card-Hand still open but non-blocking for most tests)
-- Debate: DEGRADED (SIM-DEBT-01 — pool change needs re-calibration; can simulate, results directional)
-- Full hybrid campaign: READY for most scenarios (Altonian engagement provisional)
+### Simulation command vocabulary (confirmed)
+- "stress test [specific mechanic]" → Mode A + D + J + L (isolation, edge cases, cognitive load, precedent)
+- "stress test [subsystem]" → Mode G-submode + D + J + K + L (full subsystem, cross-mode delta, load, precedent)
+- "stress test [mode]" → all G-submodes for that mode — multi-session, orchestrator stages it
+- "simulate [scenario]" → Mode C + M (full scenario + branching flowchart)
+- "simulate [ttrpg/hybrid/boardgame]" → Mode C + G-suite + M — multi-session
+- "audit [subsystem]" → mechanic-audit Modes A-G
 
-### next_action:
-  task: "Simulate. Use Mode G suite (G1 mass combat, G2 debate, G3 threadwork, G4 faction play, G5 BG)."
-  note: "Simulator Mode I is now enforced — every sim run commits findings immediately. Provisional decisions are marked in-text. SIM-DEBT-01 requires debate re-simulation with Presence×2 pool."
-  remaining_editorials_blocking_simulation: [ED-001 (Card-Hand BG compilation only)]
+### Full audit criteria coverage
+- Crunch cascade ✓, Edge cases ✓, Regressions ✓, Failures ✓, Ambiguities ✓
+- Overlap/repetition ✓, Incoherence ✓, Philosophy compliance ✓
+- Meaningful actions ✓ (Mode C scenario output), Emergent gameplay ✓ (Mode M flowchart)
+- Cognitive load ✓ (Mode J — NEW), Time consumed ✓ (Mode J — NEW)
+- Precedent comparison ✓ (Mode L — NEW)
+- Cross-mode interdependency ✓ (Mode K1 — NEW), Transition/zoom ✓ (Mode K2 — NEW)
+- Narrative flowchart with branching ✓ (Mode M — NEW)
+
+### Remaining editorial before full simulation clearance
+- ED-050: Thread→Mass timing (P1) — blocks K2 transition test for mass battle Thread
+- ED-001: Card-Hand system (P1-BLOCKER) — blocks BG compilation only
+- 38 other open items (non-blocking for simulation)
 
 ### commits_this_session:
-  - 2e4bf45: ED-047 resolved, R-65 applied, SIM-DEBT-01 registered
-  - 5719802: provisional decisions + sim infrastructure repair
+  - 2e4bf45: ED-047 debate pool resolved
+  - 5719802: provisional decisions + sim infra
+  - 6124d9f: session close phase 3
+  - 3728b3a: Modes J/K/L/M + state_transfer_spec + Mode G + stage11 patch
 ```
