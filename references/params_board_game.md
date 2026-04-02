@@ -1,4 +1,4 @@
-<!-- version: v0.5.1+SIM-BG-01 | source: bg_v05_simulation_and_patches.md | last_updated: 2026-04-02 -->
+<!-- version: v0.5.2+BAL-BG-01 | source: bg_v05_simulation_and_patches.md | last_updated: 2026-04-02 -->
 <!-- PATCHES APPLIED: P-12-P-32 (prior); ST-BG-01-10, ST-INT series added 2026-04-02 -->
 <!-- PATCHES APPLIED: PP-112 (remove struck Majority-1s), PP-113-PP-122 (gap fills) 2026-04-02 -->
 <!-- NOTE: stage6_factions.md is STALE for BG mode. bg_v05 is canonical for all BG faction mechanics. -->
@@ -322,5 +322,97 @@ Roll: Mandate vs Ob = opponent Influence / 2 (round up).
 ## Theocracy Counter Starting Value — Canonical
 TC starts at 28 (P-32). Compilation B1 states 15 — STALE (pre-P-32). Use 28.
 
-## Mandate Recovery (PARAMS GAP — ED-066 open)
-No Mandate recovery mechanism defined in BG spec. Do not assume recovery exists until ED-066 resolved.
+## Mandate Recovery — see PP-174 section below (Victory Condition Patches).
+
+## Victory Condition Patches (PP-171 through PP-176)
+
+### Church Deed 4 — PATCHED (PP-171)
+~~Control Valorsplatz~~
+**NEW: Crown Mandate ≤ 2 for 2 consecutive seasons.**
+Rationale: Valorsplatz seizure requires TC ≥ 70 + military defeat of Crown, unreachable in standard 12–16 round game. Institutional erosion (Crown political collapse) is the canonical theocratic capture mechanism.
+
+### Crown Deed 4 — PATCHED (PP-172)
+~~Torben Loyalty Clock ≥ 5~~
+**NEW: Torben Loyalty Clock ≥ 5 OR Institutional Pressure < 30 at game end.**
+Rationale: If IP never crosses 30, the Loyalty Clock never activates (I-01 event not triggered). Without escape clause, Deed 4 is neither met nor checkable — undefined state.
+
+### Intel Stat Advancement — ADDED (PP-173)
+No prior mechanic defined. New rule:
+Each season a faction executes at least 1 successful Intel order or Quiet Network (Intelligence mode) order: that faction advances their Intel track +0.25. When the track reaches the next integer: Intel stat increases by 1.
+- Advancement cap: Intel stat max = 7.
+- Max track advance per season: +0.25 (one qualifying success per season; additional successes do not stack).
+- "Successful" = Success or Overwhelming result on the roll.
+
+### Mandate Recovery — ADDED (PP-174)
+No prior mechanic defined. New rule:
+Govern Overwhelming in a faction's own capital territory: Mandate +1 (to a maximum of the faction's printed starting Mandate value).
+- Once per season maximum.
+- Does not apply to Govern in non-capital territories.
+- Does not apply to Govern Success (only Overwhelming triggers recovery).
+- Faction starting Mandate values (recovery caps): Crown 5, Church 5, Hafenmark 4, Varfell 4, Guilds 3, Niflhel n/a (no Mandate stat).
+
+### Guild Favour Advancement — EXPLICIT (PP-175)
+Previously implied, now stated:
+Govern Success in a territory: Guild Favour +1 in that territory (Guilds only; other factions do not have a Favour track).
+Govern Overwhelming in a territory: Guild Favour +2 in that territory.
+Govern Failure: Guild Favour −1 in that territory.
+Starting Guild Favour: 3 in all Guilds-controlled territories (T8 Eidursjo, T11 Halvardshelm). 0 in all other territories.
+Ceiling: 10. No in-game effect above 7 except scoring.
+
+### Varfell Deed 1 — PATCHED (PP-176)
+~~Intel ≥ 6~~
+**NEW: Intel ≥ 5.**
+Rationale: Intel 6 from starting value 4 requires ~16 seasons of successful Intel orders at median — exceeds standard 12-round game. Intel 5 requires ~8 seasons, achievable mid-game. Varfell and Niflhel both target Intel 5, creating competitive parity on this deed dimension.
+
+## Deed Token Summary — Post-Patch (PP-171 through PP-176)
+
+### Crown
+| Deed | Condition |
+|------|-----------|
+| 1 | Mandate ≥ 5 |
+| 2 | Control Valorsplatz + Gransol + ≥ 2 other territories |
+| 3 | Theocracy Counter < 60 and Institutional Pressure < 75 simultaneously |
+| 4 | Torben Loyalty ≥ 5 OR Institutional Pressure < 30 at game end (PP-172) |
+
+### Church
+| Deed | Condition |
+|------|-----------|
+| 1 | Theocracy Counter ≥ 40 |
+| 2 | Church Mandate ≥ 5 |
+| 3 | Control Himmelenger (continuously since game start or recaptured) |
+| 4 | Crown Mandate ≤ 2 for 2 consecutive seasons (PP-171) |
+
+### Hafenmark (unchanged)
+| Deed | Condition |
+|------|-----------|
+| 1 | Mandate ≥ 4 and no active Heresy Investigation |
+| 2 | Control Hafenvalor + Lowenskyst |
+| 3 | Theocracy Counter < 50 |
+| 4 | ≥ 1 Parliamentary ruling in Hafenmark's favour |
+
+### Varfell
+| Deed | Condition |
+|------|-----------|
+| 1 | Intel ≥ 5 (PP-176; was ≥ 6) |
+| 2 | Thread Knowledge (TK) ≥ 3 |
+| 3 | Control Varfell (T9) |
+| 4 | ≥ 2 hidden faction stats revealed (accumulated) |
+
+### Guilds (unchanged)
+| Deed | Condition |
+|------|-----------|
+| 1 | Wealth ≥ 6 |
+| 2 | Control Halvardshelm (T11) + Eidursjo (T8) |
+| 3 | Guild Favour ≥ 5 in ≥ 3 territories |
+| 4 | Institutional Pressure < 75 |
+
+### Niflhel (unchanged)
+| Deed | Condition |
+|------|-----------|
+| 1 | Intel ≥ 5 |
+| 2 | Control Sigurdshelm (T10) |
+| 3 | ≥ 3 pieces of hidden faction information held simultaneously |
+| 4 | No Compromise token AND Stability ≥ 4 |
+
+## Mandate Recovery (PP-174, replaces PARAMS GAP notice)
+Govern Overwhelming in own capital territory: Mandate +1 (max once/season; max = faction starting Mandate).

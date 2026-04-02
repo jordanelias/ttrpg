@@ -242,3 +242,9 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 - type: TEST
 - depends_on: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md, references/params_factions.md]
 - referenced_by: [tests/coverage_matrix.md, canon/editorial_ledger.yaml]
+
+## tests/sim_bg_balance_01.md
+- system: BG
+- type: TEST
+- depends_on: [references/params_board_game.md, compilation/v0.14/stage_bg_board_game_mode.md]
+- referenced_by: [tests/coverage_matrix.md, canon/patch_register.yaml]
