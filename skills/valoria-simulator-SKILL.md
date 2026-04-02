@@ -163,17 +163,31 @@ After completing any simulation run, execute this protocol in order:
 - Provisional decision: Claude makes defensible choice, marks `[PROVISIONAL]`, flags for user review
 - Confirmed working: note in coverage matrix, no action
 
-**Step 2 — Apply mechanical patches immediately:**
-For each P1/P2 mechanical finding:
+**Step 2 — Apply mechanical patches in-place:**
+For each P1/P2 mechanical finding, edit the design document at the exact location of the rule being changed — NOT appended to the bottom.
+
 ```
 [PATCH PP-NNN]
 Finding: [description]
 Source: SIM-[NNN]
-Change: [exact rule text — quote the new sentence(s)]
-Applied to: designs/[path] (NOT compilation/)
+Location: designs/[path] §[section heading] — line ~N
+Change: [exact old text → exact new text]
 Canon risk: NONE | LOW | REVIEW-NEEDED
 ```
-Apply the patch text directly to the relevant design document. Update `references/params_*.md` if the patch affects extracted values.
+
+In-place edit protocol:
+1. Locate the section containing the rule (use section heading, not line number — lines shift)
+2. Replace the specific sentence(s) that are wrong
+3. Do NOT add a "Patch Notes" or "ST-series" appendix section — the document must be internally consistent when read straight through
+4. If the patch restructures a major section (e.g. phase order), rewrite the entire section — do not leave the old text with a correcting note below
+5. Update the document version in its header (v3 → v3.1 for minor fix; v3 → v4 for structural change)
+
+**Version bump rules:**
+- Formula correction, one-sentence clarification: minor bump (v3 → v3.1)
+- Section rewrite, new mechanic added, major structural change: major bump (v3 → v4)
+- Multiple major patches in one commit: single major bump
+
+**Append-only is forbidden.** A design document with appended patch sections is a skeleton + commentary, not a skeleton. Any document with "Part X: Stress Test Patches" or "Part Y: ST-series" at the bottom is in violation of the skeleton principle and needs to be cleaned up.
 
 **Step 3 — Add to patch register:**
 Append to `canon/patch_register.yaml`:
@@ -185,6 +199,7 @@ Append to `canon/patch_register.yaml`:
   finding_id: "SIM-NNN-Fx"
   source: simulation
   affects: [designs/path/to/file.md]
+  applied_to_version: "[document version after patch, e.g. v3.1]"
   status: applied
   applied_commit: "pending"
 ```
