@@ -40,7 +40,7 @@ Pool: [N]D TN[N] Ob[N] — P(Overwhelming/Success/Partial/Failure) — Expected 
 Nine categories: Boundary (0/max/threshold), Cascade (uncontrolled amplification), Regression (self-reference), Deadlock (no valid action), Crunch Cascade (too many calcs), Ambiguity (no priority rule), Incoherence (impossible results), Optimal Play (dominant strategies), Degenerate (auto-success/fail).
 
 ### E — Coverage Matrix Update
-Update `sim_coverage_matrix.md` (root, canonical copy) after every run.
+Update `tests/coverage_matrix.md` (root, canonical copy) after every run.
 ```
 | Test ID | Mechanics | Mode | Temporal | Tracks | Factions | NPCs | Archetypes | Status | Findings |
 ```
@@ -151,29 +151,81 @@ Test whether NPCs and factions can be mechanically substituted without breaking 
 
 **Per faction:** Run one seasonal cycle with canonical faction, once with a faction swapped to adjacent political position. Flag: scenarios that only work with specific faction identity → document as hard dependency.
 
-### I — Patch and Editorial Output
-After any simulation run, produce structured output for findings:
+### I — Patch, Editorial Output, and Mandatory Commit
 
-**Mechanical patches** (Claude executes, no approval needed):
+**This mode is not optional. It runs after EVERY simulation. No exceptions.**
+
+After completing any simulation run, execute this protocol in order:
+
+**Step 1 — Classify all findings:**
+- Mechanical patch (P1/P2): Claude executes, no approval needed
+- Editorial gap (requires user decision): flag and add to ledger
+- Provisional decision: Claude makes defensible choice, marks `[PROVISIONAL]`, flags for user review
+- Confirmed working: note in coverage matrix, no action
+
+**Step 2 — Apply mechanical patches immediately:**
+For each P1/P2 mechanical finding:
 ```
-[PATCH: SIM-NNN-Px]
+[PATCH PP-NNN]
 Finding: [description]
-Mechanic: [ID]
-Proposed change: [exact formula or rule text change]
-Expected effect: [probability delta or outcome change]
-Canon risk: [NONE / LOW / REVIEW-NEEDED]
+Source: SIM-[NNN]
+Change: [exact rule text — quote the new sentence(s)]
+Applied to: designs/[path] (NOT compilation/)
+Canon risk: NONE | LOW | REVIEW-NEEDED
+```
+Apply the patch text directly to the relevant design document. Update `references/params_*.md` if the patch affects extracted values.
+
+**Step 3 — Add to patch register:**
+Append to `canon/patch_register.yaml`:
+```yaml
+- id: PP-NNN
+  date: YYYY-MM-DD
+  severity: P1 | P2 | P3
+  description: "[one line]"
+  finding_id: "SIM-NNN-Fx"
+  source: simulation
+  affects: [designs/path/to/file.md]
+  status: applied
+  applied_commit: "pending"
 ```
 
-**Editorial gaps** (user approval required):
+**Step 4 — Add editorial items to ledger:**
+For each editorial finding, append to `canon/editorial_ledger.yaml` with next ED-NNN id.
+For provisional decisions made by Claude, use `status: provisional` and mark text with `[PROVISIONAL: ...]`.
+
+**Step 5 — Update coverage matrix:**
+Append row to `tests/coverage_matrix.md`. Include all 7 dimensions and link to findings.
+
+**Step 6 — ATOMIC COMMIT (mandatory):**
+One commit containing: test file (tests/) + patched design doc(s) + params file(s) + patch_register + editorial_ledger + coverage_matrix.
 ```
-[EDITORIAL: SIM-NNN-Ex — description]
-Gap type: [Missing mechanic / Ambiguous rule / Undefined edge case / Content needed]
-Blocking: [YES/NO — state what it blocks]
-Proposed direction: [1-2 sentence suggestion, illustrative only]
+Commit message: [simulation] sim_[system]_[N] — PP-NNN applied, ED-NNN added, SIM-DEBT flagged if applicable
+```
+If the commit is not made, the simulation is incomplete. Do not proceed to the next task.
+
+**Step 7 — Report to user:**
+```
+Sim complete: [N] findings. P1: [N] (patched). P2: [N] (patched). Editorial: [N] (logged). Provisional: [N] (flagged).
+Committed: [short hash]
 ```
 
-Both output types append to `valoria_gap_register_consolidated.md` automatically. Patches also append to `canon/patch_register.yaml` with status: proposed.
 
+## SIM-DEBT Register
+Track calibration values that need re-verification due to parameter changes.
+
+| ID | Description | Blocking? | What to Re-run |
+|----|-------------|-----------|----------------|
+| SIM-DEBT-01 | Debate stress tests calibrated with Cognition+History pool; now using (Presence×2)+History. Strain/Composure/tracker values need re-verification. | No — can simulate, results directionally valid but not final | Mode G2 full Grand Debate re-run |
+
+Add new SIM-DEBT items whenever a parameter change invalidates prior calibration.
+
+## Provisional Decision Protocol
+When a blocker requires a decision to proceed:
+1. Make the most mechanically defensible choice based on design context
+2. Mark in-text as `[PROVISIONAL: <brief rationale>]`
+3. Add to editorial_ledger with `status: provisional`
+4. Note in simulation output: `[PROVISIONAL ASSUMPTION: ...]`
+5. Surface at next session start for user review
 
 ## Read Protocol — Mandatory Before Any Mode
 Load params files, not stage files. Stage files are verbose source documents; params files are extracted mechanical values.
@@ -200,7 +252,7 @@ Load params files, not stage files. Stage files are verbose source documents; pa
 Before running any mode that uses mechanical values:
 1. Read the relevant `references/params_*.md` file(s) for this task.
 2. Check the `<!-- version: -->` tag at the top of each params file.
-3. Compare against the current ruleset version (stated in `compilation/README.md`).
+3. Compare against the current ruleset version (stated in `compilation/README.md`). If params version tag contains "design-ST" or higher, it is current for simulation purposes.
 4. If params version ≠ current ruleset version: **halt, flag as `[STALE PARAMS: <file> is v0.XX, current ruleset is vX.XX — update params before proceeding]`**, and do not proceed until the user confirms or params are updated.
 5. If params version matches: proceed. Cost: ~200 tokens per params file read. No GitHub API call required.
 

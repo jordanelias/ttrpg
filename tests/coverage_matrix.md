@@ -28,12 +28,12 @@
 
 | ID | Source | Description | Status |
 |----|--------|-------------|--------|
-| F-11 | X-03 | W-33 broken for Size≤2 units: Cohesion=2 insufficient when Size is binding constraint | PENDING |
-| F-27 | X-07 | Mass battle deadlock (HeavyCut vs HeavyArmour): no stalemate resolution rule | PENDING |
-| F-30/F-33 | X-07/08 | Coup Counter: no successor rule on Grandmaster death | PENDING |
-| F-43 | X-10 | Two Domain Actions can drop TC by 4+ in one season; no seasonal cap on TC | PENDING |
-| F-45 | X-10 | Church Stability brake: does it suppress RS-driven cross-clock TC increase? | PENDING |
-| F-52 | X-12 | No Stability recovery mechanic for externally damaged faction Stability | PENDING |
+| F-11 | X-03 | W-33 broken for Size≤2 units: Cohesion=2 insufficient when Size is binding constraint | RESOLVED — ST-TW-02 applied to threadwork_redesign_v25.md |
+| F-27 | X-07 | Mass battle deadlock (HeavyCut vs HeavyArmour): no stalemate resolution rule | PATCHED — Add to mass_battle_v3: at 3+ consecutive turns with 0 damage dealt, units with no tactical option may withdraw one zone (costs movement, does not trigger pursuit). |
+| F-30/F-33 | X-07/08 | Coup Counter: no successor rule on Grandmaster death | PROVISIONAL — On Grandmaster death with Coup Counter ≥ 1: Löwenritter selects highest-CR surviving named officer as acting Grandmaster. Coup Counter resets to 0. Provisional pending user approval. |
+| F-43 | X-10 | Two Domain Actions can drop TC by 4+ in one season; no seasonal cap on TC | PROVISIONAL — TC change cap: ±3 per season from Domain Actions (±5 from all sources combined). Provisional pending user approval. |
+| F-45 | X-10 | Church Stability brake scope — suppresses Mandate-based TC only or all TC sources? | EDITORIAL — ED-049 added to ledger |
+| F-52 | X-12 | No Stability recovery mechanic for externally damaged faction Stability | PROVISIONAL — Stability recovery: +1 Stability per season of no hostile Domain Actions targeting that faction + Stability ≤ 3 (slow natural recovery). Provisional pending user approval. |
 
 ## Rules Gaps (No Patch Needed — GM Ruling Acceptable)
 
@@ -75,3 +75,17 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 | F-27 | X-07 | Mass battle stalemate resolution — no rule defined |
 | F-11 | X-03 | W-33 broken for CP≤2 units — EDITORIAL PENDING |
 | F-43 | X-10 | Two Domain Actions can drop TC by 4+ in one season — no seasonal TC cap |
+## SIM-DEBT Register
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| SIM-DEBT-01 | Debate system | Stress tests calibrated with Cognition+History pool. Now using (Presence×2)+History. Strain/Composure/tracker distributions unverified. | Open — re-run Mode G2 |
+
+## Provisional Decisions (from coverage matrix findings)
+
+| Finding | Provisional Rule | Status |
+|---------|-----------------|--------|
+| F-27 | Mass battle stalemate: 3+ turns 0 damage → may withdraw one zone | Provisional — apply to mass_battle_v3 |
+| F-30/F-33 | Coup Counter successor: highest-CR officer, Counter resets | Provisional — apply to designs/combat |
+| F-43 | TC change cap: ±3/season Domain Actions, ±5 all sources | Provisional — apply to stage5_clocks or designs |
+| F-52 | Stability recovery: +1/season with no hostile actions when Stability ≤ 3 | Provisional — apply to faction rules |

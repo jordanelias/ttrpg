@@ -226,9 +226,22 @@ Military victory alone produces no TC or RS change. Thread operations during bat
 ### PP-043 — Wound Penalties in Hybrid
 Wound Ob penalties apply to PC's CR checks in TTRPG mass battle. Do NOT reduce BG commander bonus (Military÷3 calculation).
 
+## DEGREE TABLE — BG SPECIFIC
+## [PROVISIONAL: Overwhelming threshold per ED-031]
+| Net Successes | Degree |
+|---|---|
+| ≥ Ob + 1 (surplus ≥ 1) | Overwhelming |
+| = Ob exactly | Success |
+| Ob − 1 | Partial |
+| ≤ 0 | Failure |
+
+Note: TTRPG parent uses 2×Ob for Overwhelming. BG uses Ob+1 (more achievable).
+This is intentional — BG is a strategic abstraction. Review during playtesting.
+No Catastrophic Failure category (struck 2026-04-02).
+
 ## PENDING EDITORIALS BLOCKING FULL SYNC
 - ED-001: Card-Hand system (P1-BLOCKER) — prevents full stage_bg sync
-- ED-031: Overwhelming threshold Ob+1 vs 2×Ob (P1)
+- ED-031: PROVISIONAL — BG Overwhelming = Ob+1 surplus. Intentional divergence from TTRPG 2×Ob. Strategic abstraction warrants more achievable threshold.
 - ED-032: TC 80 seizure scope (P1)
 - ED-033: Commander bonus formula (P1)
 - ED-034: Ceiral Ritual scale asymmetry (P2)

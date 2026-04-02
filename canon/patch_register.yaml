@@ -1052,3 +1052,42 @@ patches:
   affects: [stage5_clocks.md §7.2, compilation/v0.14/valoria_ruleset_v0.14.md §7.2]
   status: proposed
   applied_commit: ~
+- id: PP-093
+  date: 2026-04-02
+  severity: P1
+  description: "Mass battle stalemate resolution — Tactical Withdrawal after 3 turns 0 damage [PROVISIONAL]"
+  finding_id: "F-27 / SIM-X-07"
+  source: simulation
+  affects: [designs/mass_combat/mass_battle_v3.md]
+  status: provisional
+  applied_commit: "2026-04-02-session"
+
+- id: PP-094
+  date: 2026-04-02
+  severity: P1
+  description: "Coup Counter successor rule — highest CR officer, counter resets [PROVISIONAL]"
+  finding_id: "F-30/F-33 / SIM-X-07/X-08"
+  source: simulation
+  affects: [designs/combat/combat_design_v1.md]
+  status: provisional
+  applied_commit: "2026-04-02-session"
+
+- id: PP-095
+  date: 2026-04-02
+  severity: P1
+  description: "TC seasonal change cap: ±3 Domain Actions, ±5 all sources [PROVISIONAL]"
+  finding_id: "F-43 / SIM-X-10"
+  source: simulation
+  affects: [designs/combat/combat_design_v1.md]
+  status: provisional
+  applied_commit: "2026-04-02-session"
+
+- id: PP-096
+  date: 2026-04-02
+  severity: P2
+  description: "Faction Stability natural recovery: +1/season when Stability ≤ 3 and no hostile actions [PROVISIONAL]"
+  finding_id: "F-52 / SIM-X-12"
+  source: simulation
+  affects: [designs/combat/combat_design_v1.md]
+  status: provisional
+  applied_commit: "2026-04-02-session"

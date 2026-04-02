@@ -37,7 +37,7 @@ editorial_decisions:
     source_file: "path/to/file.md"
     description: "Short description of the decision required"
     full_flag_text: "[EDITORIAL: ...]"
-    status: "open | resolved | deferred | struck"
+    status: "open | resolved | provisional | deferred | struck"
     priority: "P1-BLOCKER | P1 | P2 | P3"
     decision: null
     propagation_targets: []
@@ -46,6 +46,7 @@ editorial_decisions:
     supersedes: []        # IDs this item replaces (consolidated into this one)
     superseded_by: null   # if this item was merged into another
     stale_reason: null    # populated when status = struck
+    provisional_assumption: null  # populated when status = provisional; what Claude assumed
     tags: []
 ```
 
@@ -211,6 +212,7 @@ All editorial register commits use scope `[editorial]` per commit_convention.md:
 
 | Priority | Definition |
 |----------|-----------|
+| provisional | Claude made a defensible design decision to unblock simulation. Requires user review. Text marked [PROVISIONAL]. |
 | P1-BLOCKER | Blocks compilation or playtest of a system. Nothing downstream can proceed without this. |
 | P1 | Must resolve before next playtest. Produces broken or undefined outcomes if unresolved. |
 | P2 | Should resolve before distribution. Produces inconsistency or unclear rules if unresolved. |

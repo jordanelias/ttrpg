@@ -665,3 +665,35 @@ If separate: faction can lose up to −4 Military in one season (−2 battle + �
 | ST-INT-07 (Ceiral Ritual scale) | EDITORIAL — see BG doc |
 | ST-INT-08 (Muster BG token) | EDITORIAL — see BG doc |
 | ST-INT-12 (Altonian unit stats) | EDITORIAL BLOCKER — see BG doc |
+
+
+---
+
+# PART E: PROVISIONAL PATCHES — COVERAGE MATRIX FINDINGS
+## Source: tests/coverage_matrix.md pending findings
+## Applied: 2026-04-02
+## All items marked [PROVISIONAL] require user review
+
+## PP-093-MB — Mass Battle Stalemate Resolution (F-27)
+**[PROVISIONAL: F-27 from SIM-X-07]**
+Add to §A.12 Rout and Pursuit, or as new §A.15:
+
+> "[PROVISIONAL] **Tactical Withdrawal (stalemate condition):** If both sides in a direct engagement have dealt 0 Strength damage for 3 consecutive turns with no tactical options available (no valid formation change, no Feigned Retreat, CR = 0), either commander may declare Tactical Withdrawal. The withdrawing unit moves one zone away from the engagement. This does not trigger the Pursuit rule. The engagement ends. Both units remain on the battle map and may re-engage next turn. This prevents infinite deadlock in HeavyCut vs HeavyArmour (DR = 5) matchups."
+
+## Altonian Unit Stats (ED-036, PROVISIONAL)
+See params_mass_combat.md Altonian section. Apply to any scenario involving Altonian forces.
+
+| Unit | Str | CP | Coh | Mor | Weapon | Armour |
+|------|-----|----|-----|-----|--------|--------|
+| [PROVISIONAL] Vanguard | 5 | 4 | 4 | 5 | HeavyCut | Medium |
+| [PROVISIONAL] Elite Guard | 4 | 5 | 5 | 5 | HeavyCut | Heavy |
+| [PROVISIONAL] Thread Corps | 3 | 3 | 4 | 4 | LightCut | Light (TS 40) |
+
+## Volley TN Confirmation (ED-037, PROVISIONAL)
+§A.7 Phase 2 Volley: TN 6 retained. [PROVISIONAL: intentional exception to universal TN 7.
+Represents coordinated massed-fire advantage. Review during playtesting.]
+
+## Coherence Definition (ED-038, RESOLVED)
+§A.10 Coherence = practitioner's personal Coherence track (10→0, threadwork Part 3).
+Starting value: 10. auto-cost: −1 per Thread operation. Severed (Coherence 1): +2 Ob.
+At 0: no Thread operations (PP-027 threadwork).

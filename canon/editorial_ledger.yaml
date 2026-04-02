@@ -579,9 +579,9 @@ editorial_decisions:
     source_file: designs/board_game/valoria_bg_v05_stress_test_report.md
     description: "ST-BG-01: Overwhelming threshold — BG uses Ob+1 surplus; TTRPG uses 2×Ob. Confirm which applies to BG."
     full_flag_text: "[EDITORIAL: ST-BG-01 Overwhelming threshold — Ob+1 (BG-as-written) or 2×Ob (TTRPG parent)?]"
-    status: open
+    status: provisional
     priority: P1
-    decision: null
+    decision: "BG Overwhelming = Ob+1 surplus. Intentional divergence from TTRPG 2×Ob. Strategic abstraction layer warrants more achievable threshold."
     propagation_targets:
       - designs/board_game/valoria_bg_v05_simulation_and_patches.md
       - compilation/v0.14/stage_bg_board_game_mode.md
@@ -676,9 +676,9 @@ editorial_decisions:
     source_file: designs/board_game/valoria_bg_v05_stress_test_report.md
     description: "ST-INT-12 BLOCKER: Altonian invasion unit stats (Strength, CP, Cohesion, Morale, Weapon, Armour) missing. Blocks all hybrid Altonian engagement at IP ≥ 75."
     full_flag_text: "[EDITORIAL: ST-INT-12 BLOCKER — Altonian invasion unit stats missing, hybrid battle at IP≥75 unplayable]"
-    status: open
+    status: provisional
     priority: P1-BLOCKER
-    decision: null
+    decision: "PLACEHOLDER — requires user approval. Altonian Vanguard: Str5 CP4 Coh4 Mor5 HeavyCut Medium. Elite Guard: Str4 CP5 Coh5 Mor5 HeavyCut Heavy. Thread Corps: Str3 CP3 Coh4 Mor4 TS40."
     propagation_targets:
       - designs/mass_combat/mass_battle_v3.md
       - designs/board_game/valoria_bg_v05_simulation_and_patches.md
@@ -696,9 +696,9 @@ editorial_decisions:
     source_file: designs/mass_combat/mass_battle_v3.md
     description: "ST-MB-01: Volley TN 6 vs universal TN 7. Volley is 25% more accurate per die than melee. Confirm intentional exception or correct to TN 7."
     full_flag_text: "[EDITORIAL: ST-MB-01 Volley TN — intentional exception at TN 6 or correct to TN 7?]"
-    status: open
+    status: provisional
     priority: P1
-    decision: null
+    decision: "Volley TN 6 retained as intentional exception. Represents coordinated massed-fire structural advantage. Documented as explicit exception to universal TN 7."
     propagation_targets:
       - designs/mass_combat/mass_battle_v3.md
       - references/params_mass_combat.md
@@ -710,14 +710,14 @@ editorial_decisions:
 
   - id: ED-038
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation
     source_file: designs/mass_combat/mass_battle_v3.md
     description: "ST-MB-02: Coherence referenced in mass_battle_v3 §A.10 is undefined as a unit/practitioner stat in that document. Confirm = personal Coherence track from threadwork Part 3 (10→0 countdown)."
     full_flag_text: "[EDITORIAL: ST-MB-02 Coherence stat definition in mass battle context — confirm = threadwork personal track]"
-    status: open
+    status: resolved
     priority: P1
-    decision: null
+    decision: "Coherence in mass_battle_v3 §A.10 = personal Coherence track (10→0 countdown) from threadwork Part 3. Not a unit stat."
     propagation_targets:
       - designs/mass_combat/mass_battle_v3.md
       - compilation/v0.14/stage8_combat.md
@@ -925,3 +925,20 @@ editorial_decisions:
     supersedes: []
     stale_reason: null
     tags: [npc, naming, southernmost, canon]
+- id: ED-049
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_x_10_doctrine_evidence_tc.md
+    description: "F-45: Church Stability brake — does it suppress Mandate-based TC changes only, or all TC sources including RS-driven cascade?"
+    full_flag_text: "[EDITORIAL: ED-049 Church Stability brake scope — Mandate-only or all TC sources?]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    stale_reason: null
+    tags: [board_game, church, stability, TC, clock]
