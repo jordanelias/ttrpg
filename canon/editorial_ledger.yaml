@@ -881,12 +881,13 @@ editorial_decisions:
 
   - id: ED-047
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: design-file
     source_file: designs/ttrpg/mechanical_tasks_and_patches.md
     description: "Debate pool formula conflict: R-66 specifies (Presence × 2) + History; stress tests v1+v2 used Cognition + History. All calibration in compiled debate spec (Part 6) used Cognition pool. Confirm operative formula before further simulation."
     full_flag_text: "[EDITORIAL: ED-047 Debate pool formula — (Presence × 2)+History (R-66) vs Cognition+History (stress tests)]"
-    status: open
+    status: resolved
+    decision: "(Presence × 2) + History bonus, TN 7. SIM-DEBT-01 registered: re-simulation needed with new pool before calibration values are treated as final."
     priority: P1-BLOCKER
     decision: null
     propagation_targets:

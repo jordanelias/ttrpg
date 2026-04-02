@@ -476,7 +476,7 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 **Step 2 — Choose:** Each orator selects genre (Past / Present / Future) and orientation (Revealing / Obscuring).
 
 **Step 3 — Argue:** Initiative holder declares argument and rolls first. Respondent hears declaration, then chooses genre/orientation and rolls.
-- Pool: Cognition + History bonus, TN 7.
+- Pool: (Presence × 2) + History bonus, TN 7.
 - Memory bonus: +2D when citing a specific, named, verifiable claim (document, date, prior statement, named precedent). Binary — either it qualifies or it doesn't. Available in any genre.
 
 **Step 4 — Resolve by Interaction Type:**
@@ -611,16 +611,18 @@ All items from §5.1 carry forward, plus additions from stress tests:
 - [EDITORIAL: Does resistance apply symmetrically to prosecution in asymmetric proceedings?] (stress test v2 Finding v2-06 — tentative answer: yes, confirm)
 - [EDITORIAL: Is Obscuring as pure denial / Doubt Marker the intended function?] (v2-P02 — confirm design intent)
 - [EDITORIAL: Niflhel social mode — what CAN they do if excluded from formal debate?] (stress test v2 Phase 4)
-## 6.10 UNRESOLVED PATCH CONFLICT — ED-047
+## 6.10 PRACTITIONER WEAVING IN DEBATES (R-65)
 
-**[EDITORIAL: requires user approval — ED-047 Debate pool formula conflict]**
+Confirmed pool formula: **(Presence × 2) + History bonus, TN 7.**
 
-`mechanical_tasks_and_patches.md` R-66 (2026-03-30) specifies debate pool = **(Presence × 2) + History**.
+Note: stress tests v1+v2 used Cognition + History. All calibration in Parts 6.1–6.9 used that pool. The strain/Composure/tracker values remain valid as calibration baselines but probability distributions will shift with Presence × 2. A re-simulation pass is needed before treating those values as final. Flag as SIM-DEBT-01.
 
-`debate_stress_test_v1.md` + `debate_stress_test_v2.md` used **Cognition + History bonus**.
+### R-65 — Practitioner Weaving Bonus in Debates
+A practitioner with TS ≥ 30 who is actively in Thread contact during a Debate exchange adds bonus dice to their pool equal to floor(TS ÷ 30):
+- TS 30–59: +1D
+- TS 60–89: +2D
+- TS 90+: +3D
 
-These produce different characters. Presence × 2 pool makes commanding speakers dominant; Cognition + History makes learned arguers dominant. The stress tests calibrated all strain, Composure, Conviction Track, and focus defence values against the Cognition pool. Rerunning with Presence × 2 would require re-calibration of all these values.
+The practitioner must declare the Weaving before rolling. The operation is visible to all observers (practitioner is in contact while debating). Church may immediately call for Heresy Investigation on observation. After the exchange, the practitioner makes a Coherence check at Ob 1 — maintaining Debate and Thread contact simultaneously stresses the configuration.
 
-Confirm which formula is operative before any further simulation.
-
-R-65 (practitioner Weaving bonus in debates = TPS ÷ 3) is compatible with either formula and can be applied once the pool is confirmed.
+**Mode applicability:** TTRPG and Hybrid only. No Board Game equivalent (faction Thread orders are not tied to individual debate exchanges).

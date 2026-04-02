@@ -1,5 +1,7 @@
-<!-- version: v0.14+design-ST | sources: debate_system_redesign_v1.md Part 6 (compiled) | last_updated: 2026-04-02 -->
-<!-- PATCHES APPLIED: D-01–D-10, R-01–R-07, v2-P01–v2-P04 compiled into Part 6 of redesign_v1 -->
+<!-- version: v0.14+design-ST2 | sources: debate_system_redesign_v1.md Part 6 (compiled) | last_updated: 2026-04-02 -->
+<!-- PATCHES APPLIED: D-01–D-10, R-01–R-07, v2-P01–v2-P04, R-65, R-66 -->
+<!-- POOL FORMULA CONFIRMED: (Presence × 2) + History bonus, TN 7 -->
+<!-- SIM-DEBT-01: All stress-test calibration used Cognition+History pool. Re-simulation needed with Presence×2 before values are final. -->
 <!-- stage9_social.md is EMPTY in v0.14. All values from design proposals. -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage9 before use. -->
 
@@ -117,6 +119,19 @@ TIE: both take 1 strain, tracker +1 toward initiative holder.
 
 ### Asymmetric Proceedings
 Disadvantaged party faces halved resistance (round up) for their tracker movement.
+
+
+### R-65 — Practitioner Weaving Bonus
+TS 30–59: +1D to debate pool. TS 60–89: +2D. TS 90+: +3D.
+Declare before rolling. Visible action. Church may call Heresy Investigation.
+Coherence check Ob 1 after exchange.
+TTRPG/Hybrid only. No BG equivalent.
+
+### SIM-DEBT-01
+Stress tests v1+v2 calibrated against Cognition+History pool. With Presence×2 pool:
+- High-Presence characters now dominate (Presence 7 = 14D base vs Cognition 7 = 7D base)
+- Strain, Composure, tracker values need re-verification
+- Re-simulation required before treating calibration values as final
 
 ## PENDING EDITORIALS
 - ED-044: Obscuring as pure denial — confirm design intent (P1)
