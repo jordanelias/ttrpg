@@ -961,3 +961,37 @@ editorial_decisions:
     supersedes: []
     stale_reason: null
     tags: [mass_combat, threadwork, timing, scale_transition]
+
+- id: ED-051
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: simulation
+  source_file: tests/sim_d_02_debate_scenario_c.md
+  description: "stage13_npcs.md missing debate-relevant attributes (Attunement, Focus, Poise, Bonds) for all named NPCs. All Mode C debate simulations require provisional attribute values. Blocking for authoritative NPC debate simulation."
+  full_flag_text: "[EDITORIAL: ED-051 stage13 NPC debate stat block — add Attunement, Focus, Poise, Bonds for all named NPCs]"
+  status: open
+  priority: P1
+  decision: null
+  propagation_targets:
+    - compilation/v0.14/stage13_npcs.md
+  propagation_status: pending
+  related_ids: [ED-052]
+  supersedes: []
+  tags: [npcs, debate, attributes, simulation]
+
+- id: ED-052
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: simulation
+  source_file: tests/sim_d_02_debate_scenario_c.md
+  description: "NPC Composure shorthand in stage13 uses 'Presence + 6'; design formula is Poise+Bonds+3. These produce different values (e.g. Himlensendt: 12 vs 10). Confirm which applies to NPCs. Provisional: NPC stat block value is canonical for that NPC."
+  full_flag_text: "[EDITORIAL: ED-052 NPC Composure formula — shorthand vs Poise+Bonds+3]"
+  status: open
+  priority: P2
+  decision: null
+  propagation_targets:
+    - compilation/v0.14/stage13_npcs.md
+  propagation_status: pending
+  related_ids: [ED-051]
+  supersedes: []
+  tags: [npcs, debate, composure, formula]

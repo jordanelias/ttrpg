@@ -357,7 +357,7 @@ Not all Debates are symmetric. The institution shapes the rules.
 # PART SIX: COMPILED MECHANICAL SPECIFICATION
 ## Source: debate_stress_test_v1.md + debate_stress_test_v2.md
 ## Status: OPERATIVE — supersedes quaestio design (Parts 3–4) for play purposes
-## Version: v1.1 (PP-097, PP-098, PP-099 applied in-place 2026-04-02 — provisional)
+## Version: v1.2 (PP-100 applied in-place 2026-04-02 — provisional)
 ## Parts 1–4 retained as design reference and historical/philosophical foundation
 
 ---
@@ -551,7 +551,7 @@ Exception retained from §3.7: Niflhel does not participate in formal debate str
 
 ## 6.7 Asymmetric Proceedings
 
-**Standard proceedings (Parliament, inter-faction):** Full symmetric system. Roles transfer on win.
+**Standard proceedings (Parliament, inter-faction):** Full symmetric system. **Proposer role** alternates each exchange (1→A, 2→B, 3→A…). **Initiative** transfers per §6.4 rules independently: exchange winner takes initiative; Divergence retains with holder. These are separate mechanics — proposer role does not reset initiative. [PROVISIONAL: PP-100]
 
 **Asymmetric proceedings (Church Tribunal, Royal Audience, Inquisition):**
 - Institutional rules override initiative. The institution assigns Proposer/Respondent roles.

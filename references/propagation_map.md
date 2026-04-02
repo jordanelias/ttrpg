@@ -162,6 +162,9 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | `designs/debate/debate_system_redesign_v1.md` | `compilation/v0.14/stage9_social.md` | STALE — stage9 is empty; compile when stable |
 | `references/params_debate.md` | `skills/valoria-simulator-SKILL.md` (Mode G2) | Sim loads params |
 | `tests/sim_d_01_debate_stress_test.md` | `tests/coverage_matrix.md` | Findings logged |
+| `tests/sim_d_02_debate_scenario_c.md` | `tests/coverage_matrix.md` | Findings logged |
+| `tests/sim_d_02_debate_scenario_c.md` | `canon/editorial_ledger.yaml` | ED-051, ED-052 harvested |
+| `compilation/v0.14/stage13_npcs.md` | `designs/debate/debate_system_redesign_v1.md` | NPC Composure/attributes feed debate sim |
 
 ### SCALE TRANSITIONS / HYBRID
 

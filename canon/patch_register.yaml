@@ -1122,3 +1122,14 @@ patches:
   affects: [designs/debate/debate_system_redesign_v1.md §6.4 DIVERGE + OBSCURING WIN]
   status: provisional
   applied_commit: "2026-04-02-sim-d-01"
+
+- id: PP-100
+  date: 2026-04-02
+  severity: P2
+  description: "§6.7 Formal Debate alternating clarification: proposer role alternates; initiative transfers per §6.4 independently. These are separate mechanics. [PROVISIONAL]"
+  finding_id: "F-C-02 / SIM-D-02"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.7]
+  applied_to_version: "v1.2"
+  status: provisional
+  applied_commit: "2026-04-02-sim-d-02"

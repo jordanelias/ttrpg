@@ -77,11 +77,13 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 | F-43 | X-10 | Two Domain Actions can drop TC by 4+ in one season — no seasonal TC cap |
 | SIM-D-01 | Debate: Argue/Read/CLASH/COMP/DIVERGE/TIE/Track/Composure/Concentration/Doubt/Regroup | TTRPG | CROSS | Composure, Concentration, Conviction Track | Generic (all factions modelled) | Generic archetypes | High-Pres orator, History-specialist, Low-social, Balanced social | Complete | F-D-01 (P1), F-D-02 (P2), F-D-03 (P2), F-D-04 (P2), F-D-06 (P2); SIM-DEBT-01 recalibrated |
 
+| SIM-D-02 | Debate: Full scenario C+J — Himlensendt vs Baralta, 3-exchange Parliament, Diverge chain | TTRPG | PRESENT | TC, Composure, Concentration | Church, Hafenmark | Himlensendt, Baralta | Institutional authority, Legalist-constitutionalist | Complete | F-C-02 (P2 PP-100), F-C-04 (P1 ED-051), F-C-05 (P2 ED-052), F-C-06 (P1 cognitive load); SIM-DEBT-01 RESOLVED |
+
 ## SIM-DEBT Register
 
 | ID | Source | Description | Status |
 |----|--------|-------------|--------|
-| SIM-DEBT-01 | Debate system | Modes A+D complete (SIM-D-01). New baselines in params_debate.md. Mode C scenario run still needed before Composure thresholds are final. | Partially Resolved — Mode C pending |
+| SIM-DEBT-01 | Debate system | RESOLVED. Mode C (SIM-D-02) confirmed: resistance dominates track movement; genre weight > pool size adjustments; 3-exchange Formal Debate → Compromise ~95%. CLASH strain calibration (2-3/exchange) analytically confirmed, scenario validation pending forced-CLASH run. | RESOLVED |
 
 ## Provisional Decisions (from coverage matrix findings)
 
