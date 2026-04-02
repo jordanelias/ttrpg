@@ -295,7 +295,7 @@ Load params files, not stage files. Stage files are verbose source documents; pa
 | Board game mode | `references/params_board_game.md` |
 | Scale/mode transitions | `references/params_scale_transitions.md` |
 
-3. For each params file loaded, check the `<!-- version: -->` tag. If it does not match the current ruleset version (see `compilation/README.md`), halt and flag: `[STALE PARAMS: <file> is <version>, current ruleset is <version> — update params before proceeding]`.
+3. For each params file loaded, check the `<!-- version: -->` tag. If it does not match the current ruleset version (see `compilation/v0.14/README.md` (note: version tag in params is more reliable)), halt and flag: `[STALE PARAMS: <file> is <version>, current ruleset is <version> — update params before proceeding]`.
 4. Do NOT read stage files or design files to get mechanical values. If a value is missing from params, flag it as a gap and request a params update rather than reading the source document mid-simulation.
 5. Exception: when specifically auditing a new design document (not yet parameterised), read that document directly and note that params are incomplete for that subsystem.
 
@@ -303,7 +303,7 @@ Load params files, not stage files. Stage files are verbose source documents; pa
 Before running any mode that uses mechanical values:
 1. Read the relevant `references/params_*.md` file(s) for this task.
 2. Check the `<!-- version: -->` tag at the top of each params file.
-3. Compare params version tag. If tag contains "v0.14" (the current checkpoint) or any "design-ST" suffix, the params file is current for simulation purposes. Do not reference compilation/README.md — it does not carry a reliable version field.
+3. Compare params version tag. If tag contains "v0.14" (the current checkpoint) or any "design-ST" suffix, the params file is current for simulation purposes. Do not reference the params version tag — it does not carry a reliable version field.
 4. If params version ≠ current ruleset version: **halt, flag as `[STALE PARAMS: <file> is v0.XX, current ruleset is vX.XX — update params before proceeding]`**, and do not proceed until the user confirms or params are updated.
 5. If params version matches: proceed. Cost: ~200 tokens per params file read. No GitHub API call required.
 
