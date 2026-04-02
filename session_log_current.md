@@ -1,41 +1,38 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_ACRONYM_EXPANSION
-phase: Phase 12 — Full acronym expansion + glossary
+session_id: 2026-04-02T_SIM_PROJ_01
+phase: Phase 11c — SIM-PROJ-01 (projectile category cross-mode stress test)
 status: CLOSED
 
 completed:
-  - Expanded all bare acronyms/abbreviations to full terms across all CURRENT project files.
-  - Exceptions confirmed: TN, Ob (standalone permitted); TTRPG, BG (standalone permitted).
-  - TC collision resolved: Theocracy Counter (faction clock) vs Conviction Track (debate tracker) — both now written in full throughout.
-  - Thread Depth (TD) confirmed REMOVED (PP-166) — phantom stat, not tracked.
-  - Created references/glossary.md — canonical term and abbreviation index (12 parts, all game terms, stats, clocks, infra IDs, collision table, unresolved gaps).
-  - Added glossary reference to all 10 skill files (read protocol section or dedicated Term Reference section).
+  - SIM-PROJ-01: Modes A + K1 + D + J + L + I. Commit: d293184
+  - PP-105: TTRPG personal combat projectile weapons (LP/HP/LBl). Ranged combat
+    rules: no Defence allocation, Far zone, Close zone penalty, Cover DR, Reload
+    (HP), simultaneous ranged-vs-ranged provisional, sling knife default.
+  - PP-106: HBl Dmg Mod +5→+3 (one-shot fix). Artillery sight-line rule (LoS
+    required; Line formation screens block shots).
 
-commits:
-  - e5ec275: Skills initial acronym expansion (7 files)
-  - a498ac7: Fix TC — Thread Coherence → Theocracy Counter (3 skill files)
-  - 034a000: Params files expansion (6 files)
-  - cfb27ed: Design docs expansion (24 files); TC=Conviction Track in debate docs
-  - 2466b3d: Compilation files expansion (16 files)
-  - 40acc40: References, ledger, patch register, coverage matrix (7 files)
-  - 2de011d: GM reference files — arcs and dashboards (22 files)
-  - 528d43f: Add references/glossary.md + register in file_index
-  - 550c808: Add glossary reference to all 10 skill files
+p1_findings_resolved:
+  - F-PROJ-01: HBl one-shot → PP-106
+  - F-PROJ-04: No personal projectile stats → PP-105
+  - F-PROJ-08: No Cavalry intercept window vs Artillery → PP-106 sight-line
+  - F-PROJ-03: BG projectile abstraction → ED-064 (design decision pending)
 
-files_skipped:
-  - canon/02_canon_constraints.md: immutable canon — not modified
-  - canon/00_philosophical_foundations.md: immutable canon — not modified
-  - canon/01_foundations_amendment_self_rendering.md: immutable canon — not modified
-  - SUPERSEDED/DEPRECATED designs: not modified
-  - Test simulation outputs (tests/sim_*.md): treated as read-only records
+p2_findings_open:
+  - F-PROJ-02: LBl dominated by LP → ED-065
+  - F-PROJ-05: Artillery morale cascade cap → ED-066
+  - ED-067: Dodge action for personal ranged combat (P3)
 
-open_gaps:
-  - CERT, TLK, DD, FSTAT, INT: track codes in old simulator header, full names unconfirmed — logged in glossary Part 12
-  - SIM-DEBT-01: Debate stress test recalibration (Presence×2 pool) — Mode C still needed
+structural_gaps:
+  - GAP-PROJ-01: Ranged vs ranged initiative (PROVISIONAL: simultaneous, high Presence first)
+
+document_versions:
+  - mass_battle_v3.md: v4.4
+  - params_combat.md: v0.14-AUD2
+  - params_mass_combat.md: ST6
 
 next_action:
-  task: "stress test debate — SIM-DEBT-01 (Presence×2 pool recalibration, Mode C)"
-  note: "All acronym expansion complete. Glossary live. Ready to simulate."
+  task: "Resolve ED-064 (BG projectile abstraction — design decision). Then ED-065 (LBl differentiation). Then address remaining open EDs from prior sessions."
+  note: "All P1 projectile gaps resolved. Personal combat and mass combat now have complete provisional projectile parameter sets. BG intentionally abstracted pending ED-064 decision."
 ```
