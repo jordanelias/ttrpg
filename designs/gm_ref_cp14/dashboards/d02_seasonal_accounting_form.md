@@ -8,7 +8,7 @@
 
 ---
 
-## STEP 1 — TT PASSIVE CHANGES
+## STEP 1 — Thread Tension PASSIVE CHANGES
 
 | Source | Rate | Active? | Change |
 |--------|------|---------|--------|
@@ -18,13 +18,13 @@
 | Sustained community Weaving | −2/season | Y / N | _____ |
 | Preserving Einhir site | −1/season | Y / N | _____ |
 | Niflhel Southernmost harvesting | +0.5/season | Y / N | _____ |
-| **NET TT CHANGE THIS SEASON:** | | | **_____** |
-| **NEW TT:** | | | **_____** |
+| **NET Thread Tension CHANGE THIS SEASON:** | | | **_____** |
+| **NEW Thread Tension:** | | | **_____** |
 
 ---
 
-## STEP 2 — TT THRESHOLD CHECK
-*Did TT cross a threshold this accounting? Circle if yes.*
+## STEP 2 — Thread Tension THRESHOLD CHECK
+*Did Thread Tension cross a threshold this accounting? Circle if yes.*
 
 - Crossed 40 (Wakening): Shifting Objects begin forming spontaneously
 - Crossed 60 (Fracturing): All Thread ops +1 Ob — applies next session
@@ -36,44 +36,44 @@ _______________________________________________
 
 ---
 
-## STEP 3 — TC ADJUSTMENTS
+## STEP 3 — Theocracy Counter ADJUSTMENTS
 
 | Source | Change | Notes |
 |--------|--------|-------|
-| TT > 45 cross-clock | +1/season | _____ |
-| TT > 60 cross-clock (total, not additive) | +2/season | _____ |
-| TC > 40 + IP > 45 compound | +1/season | _____ |
+| Thread Tension > 45 cross-clock | +1/season | _____ |
+| Thread Tension > 60 cross-clock (total, not additive) | +2/season | _____ |
+| Theocracy Counter > 40 + Institutional Pressure > 45 compound | +1/season | _____ |
 | Church Mandate at 9–10 at accounting | +1/season | _____ |
 | Baralta's Mandate < 5 | +1/season | _____ |
-| IP > 45 (Church mediation cover) | +1/season | _____ |
+| Institutional Pressure > 45 (Church mediation cover) | +1/season | _____ |
 | Domain Action effects this season | _____ | _____ |
-| **NET TC CHANGE:** | **_____** | |
-| **NEW TC:** | **_____** | |
+| **NET Theocracy Counter CHANGE:** | **_____** | |
+| **NEW Theocracy Counter:** | **_____** | |
 
-*TC threshold crossed? (40/60/80/100):* _______
+*Theocracy Counter threshold crossed? (40/60/80/100):* _______
 
 ---
 
-## STEP 4 — IP ADJUSTMENTS
+## STEP 4 — Institutional Pressure ADJUSTMENTS
 
 | Source | Change | Notes |
 |--------|--------|-------|
-| TT > 45 cross-clock | +1/season | _____ |
-| TT > 60 cross-clock (total) | +2/season | _____ |
-| TC > 60 | +2/season | _____ |
-| TC > 40 + IP > 45 | +1/season | _____ |
+| Thread Tension > 45 cross-clock | +1/season | _____ |
+| Thread Tension > 60 cross-clock (total) | +2/season | _____ |
+| Theocracy Counter > 60 | +2/season | _____ |
+| Theocracy Counter > 40 + Institutional Pressure > 45 | +1/season | _____ |
 | Schoenland alliance active | −2/year | _____ |
 | Unified diplomatic front this season | drift halts | _____ |
 | Direct trigger events (list below) | _____ | _____ |
-| **NET IP CHANGE:** | **_____** | |
-| **NEW IP:** | **_____** | |
+| **NET Institutional Pressure CHANGE:** | **_____** | |
+| **NEW Institutional Pressure:** | **_____** | |
 
-*IP threshold crossed? (30/45/60/75/100):* _______
+*Institutional Pressure threshold crossed? (30/45/60/75/100):* _______
 
 ---
 
 ## STEP 5 — FACTION STABILITY CHECKS
-*Only if TT > 79. Roll for each faction: Stability check Ob 1.*
+*Only if Thread Tension > 79. Roll for each faction: Stability check Ob 1.*
 
 | Faction | Current Stability | Rolled | Pass/Fail | Mandate Change |
 |---------|------------------|--------|-----------|----------------|
@@ -112,18 +112,18 @@ _______________________________________________
 
 ---
 
-## STEP 8 — NPC CLOCK ADVANCES
+## STEP 8 — Non-Player Character CLOCK ADVANCES
 
-| NPC | Clock | Condition | Change | New Value |
+| Non-Player Character | Clock | Condition | Change | New Value |
 |-----|-------|-----------|--------|-----------|
 | Torben | Loyalty (0–8) | Covert contact failed this season? | −1 | ___ |
 | Vaynard | TK (0–5) | Private Collection used this season? | +1 | ___ |
-| Klapp | CE (0–5) | Handled Originary Locks this season? | +1 | ___ |
+| Klapp | Combat Endurance (0–5) | Handled Originary Locks this season? | +1 | ___ |
 | Ehrenwall | Coup Counter (0–3) | Trigger conditions met? (see card) | +1 | ___ |
-| Almud | TS proximity (28) | Thread-significant event in his presence? | check | ___ |
+| Almud | Thread Sensitivity proximity (28) | Thread-significant event in his presence? | check | ___ |
 
 *Ehrenwall trigger conditions (mark if met this season):*
-- [ ] TC reached 40+ with no Crown action to reduce it
+- [ ] Theocracy Counter reached 40+ with no Crown action to reduce it
 - [ ] Torben Loyalty ≤ 2
 - [ ] Crown lost 2+ territories in one season without military response
 
@@ -139,7 +139,7 @@ _______________________________________________
 
 ---
 
-## STEP 10 — UPDATE GM DASHBOARD
+## STEP 10 — UPDATE Game Master DASHBOARD
 *Transfer all new values to D-03. Sign off below.*
 
 New values committed to Dashboard: Y / N

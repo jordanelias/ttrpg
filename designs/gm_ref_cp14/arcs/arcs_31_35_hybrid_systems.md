@@ -7,18 +7,18 @@
 ---
 
 ## Arc 31: "The Quaestio of Baralta"
-**Primary mechanics:** TC threshold (§7.2), Grand Debate (§9 / debate_system_redesign_v1), Löwenritter Coup Counter (§8.9), Niflhel Quiet Network (§8.7), Personal Combat (§8), Mass Battle (mass_battle_v3), Thread → Mass handoff (§11.3)
+**Primary mechanics:** Theocracy Counter threshold (§7.2), Grand Debate (§9 / debate_system_redesign_v1), Löwenritter Coup Counter (§8.9), Niflhel Quiet Network (§8.7), Personal Combat (§8), Mass Battle (mass_battle_v3), Thread → Mass handoff (§11.3)
 **Primary NPCs:** Baralta, Himlensendt, Ehrenwall, Olafsson, Vaynard, Maret Uln
 
 ---
 
 ### Narrative
 
-Parliament convenes in the cold season with TC at 42. No one calls it a crisis. The Cardinals have spent three seasons placing men in ducal courts and minor administrative offices; Baralta has spent the same three seasons watching each appointment and saying nothing, waiting for a number she had set in her head. She invokes the Sovereign Authority Doctrine in the opening session. The galleries fill. The merchants send observers. By the end of the first week, every faction in Valoria knows a Grand Debate is coming.
+Parliament convenes in the cold season with Theocracy Counter at 42. No one calls it a crisis. The Cardinals have spent three seasons placing men in ducal courts and minor administrative offices; Baralta has spent the same three seasons watching each appointment and saying nothing, waiting for a number she had set in her head. She invokes the Sovereign Authority Doctrine in the opening session. The galleries fill. The merchants send observers. By the end of the first week, every faction in Valoria knows a Grand Debate is coming.
 
 The formal proceeding opens in the Parliament chamber. Himlensendt proposes the Church's civil authority claims are grounded in Galbados's revealed mandate; Baralta objects. What no one accounts for is Niflhel. Olafsson has been using Riskbreakers as an intelligence pipeline — a connection Baralta knows about but cannot prove. During the second exchange, a Riskbreaker operative is found dead in the servants' corridor. The discovery breaks the formal register. For a session, it looks as though violence will substitute for argument. It does not. But the interruption costs Baralta two phases of Concentration and transforms what was a procedural debate into a character trial.
 
-If Baralta wins: TC drops 2, the Church overreach narrative gains traction, and Ehrenwall's count sticks at 2. If she loses: TC rises, Mandate erosion triggers coup counter increment 3, and the Löwenritter mobilise. Either outcome triggers a territorial response. The Church's Templars are already positioned at two duchy borders. Whether to interpret that as defensive posture or military threat becomes the next season's opening question — and the answer is not rhetorical.
+If Baralta wins: Theocracy Counter drops 2, the Church overreach narrative gains traction, and Ehrenwall's count sticks at 2. If she loses: Theocracy Counter rises, Mandate erosion triggers coup counter increment 3, and the Löwenritter mobilise. Either outcome triggers a territorial response. The Church's Templars are already positioned at two duchy borders. Whether to interpret that as defensive posture or military threat becomes the next season's opening question — and the answer is not rhetorical.
 
 ---
 
@@ -63,9 +63,9 @@ flowchart TD
     I1 --> M
 ```
 
-**Why this arc is emergent:** TC rising from Church Mandate (not player action) activates Baralta's unique mechanic; Baralta's move activates Niflhel's opportunism (not directed by any player); the Löwenritter counter increments from TC level (passive threshold, not player decision). Three independent systems produced the crisis before any player acted on it.
+**Why this arc is emergent:** Theocracy Counter rising from Church Mandate (not player action) activates Baralta's unique mechanic; Baralta's move activates Niflhel's opportunism (not directed by any player); the Löwenritter counter increments from Theocracy Counter level (passive threshold, not player decision). Three independent systems produced the crisis before any player acted on it.
 
-**Arc shape:** 3–4 seasons. Season 1: TC threshold + Baralta declaration. Season 2: Grand Debate proceeding + assassination. Season 3: Debate resolution + Templar repositioning. Season 4 (conditional on H2): Martial Law + Mass Battle.
+**Arc shape:** 3–4 seasons. Season 1: Theocracy Counter threshold + Baralta declaration. Season 2: Grand Debate proceeding + assassination. Season 3: Debate resolution + Templar repositioning. Season 4 (conditional on H2): Martial Law + Mass Battle.
 
 ---
 
@@ -91,18 +91,18 @@ flowchart TD
 ---
 
 ## Arc 32: "Vaynard's Confession"
-**Primary mechanics:** Vaynard TK track (§8.5), Discovery Event (§8.5), Thread operations (threadwork_v25), Inquisitor CE track (§13.6), Parliamentary Vote (§8.11), Faction play (§8.1)
+**Primary mechanics:** Vaynard TK track (§8.5), Discovery Event (§8.5), Thread operations (threadwork_v25), Inquisitor Combat Endurance track (§13.6), Parliamentary Vote (§8.11), Faction play (§8.1)
 **Primary NPCs:** Vaynard, Maret Uln, Olafsson, Klapp, Baralta, Himlensendt
 
 ---
 
 ### Narrative
 
-Vaynard has been acquiring pieces of a puzzle he cannot name. At TK 3, he can articulate the structure of what the Church is hiding even if his specific theory is wrong in three of its four components. At TK 4, he wants more than knowledge — he wants a partner with capability. The person he chooses is Maret Uln, and that choice is the moment when two independent systems collide: Varfell's institutional consequentialism (which evaluates Maret as an asset) and the Inquisitor track (which has been building a CE dossier on Maret for two seasons).
+Vaynard has been acquiring pieces of a puzzle he cannot name. At TK 3, he can articulate the structure of what the Church is hiding even if his specific theory is wrong in three of its four components. At TK 4, he wants more than knowledge — he wants a partner with capability. The person he chooses is Maret Uln, and that choice is the moment when two independent systems collide: Varfell's institutional consequentialism (which evaluates Maret as an asset) and the Inquisitor track (which has been building a Combat Endurance dossier on Maret for two seasons).
 
-When Maret performs a Thread operation in Vaynard's private collection — in contact with an originary lock object — Vaynard experiences a Discovery Event. The GM rolls Spirit vs Ob 1. If he makes it, his TS advances to 30 and the world reorganises itself for him in a way he cannot communicate to anyone. If he fails, Certainty −1 and a new Belief forms from behind a position of ignorance. Either outcome destabilises the faction's political coherence — Varfell's Resonant Style is Evidence, and their leader has just had an experience that is constitutively non-evidential.
+When Maret performs a Thread operation in Vaynard's private collection — in contact with an originary lock object — Vaynard experiences a Discovery Event. The Game Master rolls Spirit vs Ob 1. If he makes it, his Thread Sensitivity advances to 30 and the world reorganises itself for him in a way he cannot communicate to anyone. If he fails, Certainty −1 and a new Belief forms from behind a position of ignorance. Either outcome destabilises the faction's political coherence — Varfell's Resonant Style is Evidence, and their leader has just had an experience that is constitutively non-evidential.
 
-The Inquisitors close in two seasons after the originary lock event generates a Thread Tension spike (+2 TT from Maret's operation). Olafsson has an evidence file. A Heresy Investigation opens. Parliament must decide whether to defend Varfell or allow the Church's procedure to proceed. The Parliamentary Vote mechanics engage: three exchanges, Crown and Hafenmark pool Mandate against the Church's Influence. If the Church wins, Vaynard stands trial and the Grand Debate is a Church Tribunal — an asymmetric proceeding where the Inquisitor proposes all exchanges.
+The Inquisitors close in two seasons after the originary lock event generates a Thread Tension spike (+2 Thread Tension from Maret's operation). Olafsson has an evidence file. A Heresy Investigation opens. Parliament must decide whether to defend Varfell or allow the Church's procedure to proceed. The Parliamentary Vote mechanics engage: three exchanges, Crown and Hafenmark pool Mandate against the Church's Influence. If the Church wins, Vaynard stands trial and the Grand Debate is a Church Tribunal — an asymmetric proceeding where the Inquisitor proposes all exchanges.
 
 ---
 
@@ -141,7 +141,7 @@ flowchart TD
     I --> J
 ```
 
-**Why this arc is emergent:** Vaynard's TK advancement is driven by his Beliefs and faction Unique Action (Private Collection) — not player-directed. The originary lock operation produces TT that activates the Inquisitor track — two independent tracks whose outputs collide. Klapp's CE advancement is a background process running across all prior Church scenes. No single player designed the collision.
+**Why this arc is emergent:** Vaynard's TK advancement is driven by his Beliefs and faction Unique Action (Private Collection) — not player-directed. The originary lock operation produces Thread Tension that activates the Inquisitor track — two independent tracks whose outputs collide. Klapp's Combat Endurance advancement is a background process running across all prior Church scenes. No single player designed the collision.
 
 **Arc shape:** 4–5 seasons. Season 1: TK 3→4 via practitioner relationship. Season 2: Originary lock event + Discovery Event. Season 3: Inquisitor response + Parliamentary Vote. Season 4–5: Tribunal or post-discovery Vaynard pursuing capability.
 
@@ -151,10 +151,10 @@ flowchart TD
 
 | Personal action | Domain Echo | Mechanic |
 |---|---|---|
-| Maret Uln successful Territorial Weave | TT +2 | threadwork_v25: TT drift at Territorial scale |
+| Maret Uln successful Territorial Weave | Thread Tension +2 | threadwork_v25: Thread Tension drift at Territorial scale |
 | Vaynard Discovery Event (success) | Varfell Stability check Ob 2 (leader ideological disruption) | §8.1 Leadership Deviation |
-| Klapp TS development | Church Stability −1 (factional disruption) | §13.2 CE track → Stability |
-| Tribunal conviction | Maret removed from play; TK5 effect fires (TC +3) | §8.5 TK track |
+| Klapp Thread Sensitivity development | Church Stability −1 (factional disruption) | §13.2 Combat Endurance track → Stability |
+| Tribunal conviction | Maret removed from play; TK5 effect fires (Theocracy Counter +3) | §8.5 TK track |
 
 ---
 
@@ -167,7 +167,7 @@ flowchart TD
 ---
 
 ## Arc 33: "The Forgetting Road"
-**Primary mechanics:** Southernmost expedition (§6.3), Forgetting (§6.1), Coherence track (§4.5), Personal combat (§8), Thread operations in Southernmost, Faction consequence on return (§11.3 Domain Echo), TC spike
+**Primary mechanics:** Southernmost expedition (§6.3), Forgetting (§6.1), Coherence track (§4.5), Personal combat (§8), Thread operations in Southernmost, Faction consequence on return (§11.3 Domain Echo), Theocracy Counter spike
 **Primary NPCs:** Maret Uln, Almud (indirect), Inquisitors, Baralta
 
 ---
@@ -176,7 +176,7 @@ flowchart TD
 
 Someone goes into the Southernmost and comes back. This is the arc. Everything else — the politics, the mass battle, the inquisition that follows — is the consequence of that single structural fact.
 
-The expedition uses Approach Training-tagged practitioners (TS ≥ 30 to cross the Forgetting barrier). Inside, the Forgetting strips the name of what you are looking for — you can hold the intention, the direction, but not the content of the goal. Every time you reach for the memory of why you are here, it has moved. What you can do is Thread operations. The oscillation inside Southernmost registers at personal scale even when the entity you are addressing is vast. This is the trap the Einhir walked into at territorial scale. The practitioners go in knowing this. They work small.
+The expedition uses Approach Training-tagged practitioners (Thread Sensitivity ≥ 30 to cross the Forgetting barrier). Inside, the Forgetting strips the name of what you are looking for — you can hold the intention, the direction, but not the content of the goal. Every time you reach for the memory of why you are here, it has moved. What you can do is Thread operations. The oscillation inside Southernmost registers at personal scale even when the entity you are addressing is vast. This is the trap the Einhir walked into at territorial scale. The practitioners go in knowing this. They work small.
 
 What they bring back is the Ceiral Ritual — a partial reconstruction, sufficient to perform the first complete cycle in 45 years. That is what crosses the Forgetting boundary when they emerge. Not the text. Not the object. The practitioners themselves, whose configurations now hold the procedure. They are, in the most literal sense of Foundations §1, changed. The Inquisitors notice within two seasons. The Church's response is not theological argument. It is the deployment of Templars. The mass battle that follows is not over territory. It is over whether any practitioner who has been to the Southernmost can exist in civil Valoria.
 
@@ -216,9 +216,9 @@ flowchart TD
     I1 --> L
 ```
 
-**Why this arc is emergent:** TC spike on return is automatic (§7.2 event table — no player action can prevent it). Inquisitor CE track has been running independently from any Southernmost-related play. Baralta's response is determined by her Beliefs and Mandate level at the time — not scripted. Three systems collide at the return moment without any single player engineering the crisis.
+**Why this arc is emergent:** Theocracy Counter spike on return is automatic (§7.2 event table — no player action can prevent it). Inquisitor Combat Endurance track has been running independently from any Southernmost-related play. Baralta's response is determined by her Beliefs and Mandate level at the time — not scripted. Three systems collide at the return moment without any single player engineering the crisis.
 
-**Arc shape:** 3-season arc once expedition begins. Pre-arc: 1–2 seasons of expedition preparation (Approach Training, faction positioning). In-Southernmost: runs as personal-scene TTRPG arc (1–2 sessions). Return: TC spike + faction cascade plays out over 2 seasons.
+**Arc shape:** 3-season arc once expedition begins. Pre-arc: 1–2 seasons of expedition preparation (Approach Training, faction positioning). In-Southernmost: runs as personal-scene TTRPG arc (1–2 sessions). Return: Theocracy Counter spike + faction cascade plays out over 2 seasons.
 
 ---
 
@@ -226,10 +226,10 @@ flowchart TD
 
 | Personal action | Domain Echo | Mechanic |
 |---|---|---|
-| Ceiral Ritual performed (Success) | TT −3 | §6.5 Ceiral Ritual outcome |
-| Return with Ceiral knowledge | TC +3 | §7.2 one-time event |
+| Ceiral Ritual performed (Success) | Thread Tension −3 | §6.5 Ceiral Ritual outcome |
+| Return with Ceiral knowledge | Theocracy Counter +3 | §7.2 one-time event |
 | Baralta shelters practitioners (Success) | Baralta Mandate +1; Church Mandate −1 | §8.3 Unique Action / §11.5 Domain Echo |
-| Mass Battle (practitioner Thread support, Success) | TT −1 (controlled Dissolution during battle) | §11.3 Thread→Mass handoff |
+| Mass Battle (practitioner Thread support, Success) | Thread Tension −1 (controlled Dissolution during battle) | §11.3 Thread→Mass handoff |
 
 ---
 
@@ -237,19 +237,19 @@ flowchart TD
 
 [GAP-ARC-33-01] Ceiral Ritual reconstruction — §6.5 mechanics exist but the "practitioners carry the procedure in their configuration" outcome has no defined mechanical representation. The practitioners have changed but the change is not tracked on the character sheet. Proposed: tag characters with `Ceiral-trained` status granting +1D to collective Thread operations until next Coherence crisis; this is a P2 design gap.
 
-[EDITORIAL: ED-ARC-33-01 — Southernmost entity combat (Mode 3): are the combat rules for monstrous configurations settled, or do they require a separate encounter design?] Stage13/§5.13 establishes they exist but specific stat blocks are not in the current compilation. Per simulation scope, treating as standard combat with Ob +1 for alien geometry (spatial disorientation). Flagged for NPC design pass.
+[EDITORIAL: ED-ARC-33-01 — Southernmost entity combat (Mode 3): are the combat rules for monstrous configurations settled, or do they require a separate encounter design?] Stage13/§5.13 establishes they exist but specific stat blocks are not in the current compilation. Per simulation scope, treating as standard combat with Ob +1 for alien geometry (spatial disorientation). Flagged for Non-Player Character design pass.
 
 ---
 
 ## Arc 34: "Ehrenwall's Count"
-**Primary mechanics:** Löwenritter Coup Counter (§8.9), Martial Law (§8.9), IP track (§7.3), Mass Battle (mass_battle_v3), Seasonal Accounting (§8.12), Grand Debate to remove Martial Law (§9)
-**Primary NPCs:** Ehrenwall, Almud, Torben, Baralta, Varfell NPC
+**Primary mechanics:** Löwenritter Coup Counter (§8.9), Martial Law (§8.9), Institutional Pressure track (§7.3), Mass Battle (mass_battle_v3), Seasonal Accounting (§8.12), Grand Debate to remove Martial Law (§9)
+**Primary NPCs:** Ehrenwall, Almud, Torben, Baralta, Varfell Non-Player Character
 
 ---
 
 ### Narrative
 
-Three conditions, three different seasons, three different systems. IP passes 30 (Schoenland hedges toward Altonia), and in response Almud permits — reluctantly — the demand to allow Torben to be educated at an Altonian court. The heir leaves. Six months later, the first loyalty check fires and Torben is Adapting. Ehrenwall marks it. The second condition: the Church has been quietly absorbing administrative roles across two Crown territories. Crown Mandate was 5 at the start of the year; it is 4 now, and the passive TC suppressor is gone. Ehrenwall marks that too. Three seasons later, an Altonian force crosses the northern border with a casus belli that has been in legal preparation for eight years. The Crown loses two territories in one season and does not respond with a Military Domain Action — Almud is trying to resolve it diplomatically. Ehrenwall marks it for the third time.
+Three conditions, three different seasons, three different systems. Institutional Pressure passes 30 (Schoenland hedges toward Altonia), and in response Almud permits — reluctantly — the demand to allow Torben to be educated at an Altonian court. The heir leaves. Six months later, the first loyalty check fires and Torben is Adapting. Ehrenwall marks it. The second condition: the Church has been quietly absorbing administrative roles across two Crown territories. Crown Mandate was 5 at the start of the year; it is 4 now, and the passive Theocracy Counter suppressor is gone. Ehrenwall marks that too. Three seasons later, an Altonian force crosses the northern border with a casus belli that has been in legal preparation for eight years. The Crown loses two territories in one season and does not respond with a Military Domain Action — Almud is trying to resolve it diplomatically. Ehrenwall marks it for the third time.
 
 The coup is not a violent seizure. It is a formal demand delivered to Parliament: cede executive military authority to the Löwenritter pending a settlement of the succession crisis, or face Martial Law. Almud refuses. Martial Law fires across all Crown territories simultaneously. What follows is not a battle against the Löwenritter — it is a negotiation conducted under the barrel of a gun, in Parliament, using the debate mechanics, with Baralta and Vaynard on opposite sides of whether to legitimise Ehrenwall or resist her.
 
@@ -288,7 +288,7 @@ flowchart TD
     K --> L
 ```
 
-**Why this arc is emergent:** Counter increment conditions are independent (Torben departure = IP-driven; TC advance = Church-driven; military loss = Altonian-driven). None requires the other. All three fire from passive threshold mechanics in the same campaign window without player orchestration.
+**Why this arc is emergent:** Counter increment conditions are independent (Torben departure = Institutional Pressure-driven; Theocracy Counter advance = Church-driven; military loss = Altonian-driven). None requires the other. All three fire from passive threshold mechanics in the same campaign window without player orchestration.
 
 **Arc shape:** 5–6 seasons to fully develop. Counter conditions accumulate across seasons 1–4; coup fires season 5; Martial Law and debate season 5–6; mass battle conditional on season 6+.
 
@@ -299,8 +299,8 @@ flowchart TD
 | Personal action | Domain Echo | Mechanic |
 |---|---|---|
 | Almud yields Torben (personal scene) | Crown Mandate −1 | §11.5 Domain Echo — personal decision → faction stat |
-| Baralta wins Debate to remove Martial Law | TC −1, Löwenritter Stability −1 | §8.4 Unique Action consequence chain |
-| Löwenritter wins Mass Battle | IP −3, Crown Mandate restored +1 | §11.3 Mass→Faction outcome |
+| Baralta wins Debate to remove Martial Law | Theocracy Counter −1, Löwenritter Stability −1 | §8.4 Unique Action consequence chain |
+| Löwenritter wins Mass Battle | Institutional Pressure −3, Crown Mandate restored +1 | §11.3 Mass→Faction outcome |
 
 ---
 
@@ -308,23 +308,23 @@ flowchart TD
 
 [GAP-ARC-34-01] Coup Counter decrement — per §8.9, the counter never decrements. This means once condition 1 fires, the arc is on a one-way trajectory regardless of player action to reverse conditions 2 and 3. Proposed: the counter is irreversible by design (it represents Ehrenwall's assessment, not an objective threshold). No patch needed. Confirmed intentional. [DOCUMENTED]
 
-[EDITORIAL: ED-ARC-34-01 — Does Almud get a personal scene before yielding Torben, or does the yield fire automatically from IP mechanics?] Proposed: the demand fires mechanically but Almud's compliance is a personal scene choice. If PCs can intervene in that scene (Ob 3 Appeal or Debate targeting Almud's Belief 1), they may avert the yield — which keeps IP rising without the Torben cost. This creates a meaningful intervention window.
+[EDITORIAL: ED-ARC-34-01 — Does Almud get a personal scene before yielding Torben, or does the yield fire automatically from Institutional Pressure mechanics?] Proposed: the demand fires mechanically but Almud's compliance is a personal scene choice. If PCs can intervene in that scene (Ob 3 Appeal or Debate targeting Almud's Belief 1), they may avert the yield — which keeps Institutional Pressure rising without the Torben cost. This creates a meaningful intervention window.
 
 ---
 
 ## Arc 35: "The Klapp Threshold"
-**Primary mechanics:** Klapp CE track (§13.2), Thread Sensitivity development (threadwork_v25 §2.3 Discovery), Church Stability (§8.3), TC generation pause (§7.2), Debate (Church Tribunal), Faction play cascade
+**Primary mechanics:** Klapp Combat Endurance track (§13.2), Thread Sensitivity development (threadwork_v25 §2.3 Discovery), Church Stability (§8.3), Theocracy Counter generation pause (§7.2), Debate (Church Tribunal), Faction play cascade
 **Primary NPCs:** Klapp, Himlensendt, Olafsson, Baralta, Maret Uln (indirect)
 
 ---
 
 ### Narrative
 
-The Cardinal of Scholarship has been reading Einhir texts for six years. His CE track is at 4 when the arc begins. The originary lock objects in his archive have names in the catalogue but no descriptions — the scholars who processed them in the original inventory made a note about the peculiar difficulty of writing down what you saw when you looked at them, and then the note ends. Klapp knows this because he wrote the current catalogue. He has handled the objects. He has experienced the difficulty of writing.
+The Cardinal of Scholarship has been reading Einhir texts for six years. His Combat Endurance track is at 4 when the arc begins. The originary lock objects in his archive have names in the catalogue but no descriptions — the scholars who processed them in the original inventory made a note about the peculiar difficulty of writing down what you saw when you looked at them, and then the note ends. Klapp knows this because he wrote the current catalogue. He has handled the objects. He has experienced the difficulty of writing.
 
-His TS growth check fires during a routine archive session. Spirit TN 7 Ob 1. If he succeeds, the head of the Church's entire educational apparatus spends forty minutes in a state his theology calls apostasy and his body calls homecoming. When he returns, the Church has an internal crisis that is entirely invisible to Parliament and entirely destabilising to the institution's momentum.
+His Thread Sensitivity growth check fires during a routine archive session. Spirit TN 7 Ob 1. If he succeeds, the head of the Church's entire educational apparatus spends forty minutes in a state his theology calls apostasy and his body calls homecoming. When he returns, the Church has an internal crisis that is entirely invisible to Parliament and entirely destabilising to the institution's momentum.
 
-The mechanical cascade is specific: Church Stability drops below 3 at the next accounting. Per §7.2, the TC generation pause activates — Cardinals competing internally suppresses institutional momentum. TC does not rise from Mandate that season. This is the single most effective TC brake in the game other than a successful Grand Debate, and it fires from an NPC's spiritual experience, not from player action. Olafsson wants Klapp investigated. Himlensendt is caught between doctrine and the reality that his most capable administrator has become something his theology cannot categorise. Two Trajectories: Klapp doubles down (suppression) or fractures (Conversion). If fracture, he becomes the Church's first practitioner in 45 years. If suppression, he drives the Inquisitors with new fervour and TC resumes at +2/season.
+The mechanical cascade is specific: Church Stability drops below 3 at the next accounting. Per §7.2, the Theocracy Counter generation pause activates — Cardinals competing internally suppresses institutional momentum. Theocracy Counter does not rise from Mandate that season. This is the single most effective Theocracy Counter brake in the game other than a successful Grand Debate, and it fires from an Non-Player Character's spiritual experience, not from player action. Olafsson wants Klapp investigated. Himlensendt is caught between doctrine and the reality that his most capable administrator has become something his theology cannot categorise. Two Trajectories: Klapp doubles down (suppression) or fractures (Conversion). If fracture, he becomes the Church's first practitioner in 45 years. If suppression, he drives the Inquisitors with new fervour and Theocracy Counter resumes at +2/season.
 
 ---
 
@@ -358,9 +358,9 @@ flowchart TD
     H --> I
 ```
 
-**Why this arc is emergent:** Klapp's CE advancement is a background tracker across all prior Church-adjacent scenes. No player or GM directs him toward the originary lock objects — he is processing the archive (his faction function) and the locks are in the archive. The CE threshold check fires from cumulative exposure, not from any single decision. Himlensendt's response is determined by his Belief, not by the GM scripting a particular outcome.
+**Why this arc is emergent:** Klapp's Combat Endurance advancement is a background tracker across all prior Church-adjacent scenes. No player or Game Master directs him toward the originary lock objects — he is processing the archive (his faction function) and the locks are in the archive. The Combat Endurance threshold check fires from cumulative exposure, not from any single decision. Himlensendt's response is determined by his Belief, not by the Game Master scripting a particular outcome.
 
-**Arc shape:** 2–3 seasons once CE 4 is reached. Setup: 3–5 background seasons of Klapp processing the archive. Crisis: 1–2 seasons from TS check to Tribunal. Resolution: 1 season, with long-tail institutional consequences.
+**Arc shape:** 2–3 seasons once Combat Endurance 4 is reached. Setup: 3–5 background seasons of Klapp processing the archive. Crisis: 1–2 seasons from Thread Sensitivity check to Tribunal. Resolution: 1 season, with long-tail institutional consequences.
 
 ---
 
@@ -368,8 +368,8 @@ flowchart TD
 
 | Personal action | Domain Echo | Mechanic |
 |---|---|---|
-| Klapp TS development | Church Stability −1 | §13.2 Leadership Deviation Ob 3 |
-| Church Stability ≤3 | TC generation pause | §7.2 Church Stability brake |
+| Klapp Thread Sensitivity development | Church Stability −1 | §13.2 Leadership Deviation Ob 3 |
+| Church Stability ≤3 | Theocracy Counter generation pause | §7.2 Church Stability brake |
 | Tribunal conviction | Church Stability +1 (crisis resolved), TK gap | §8.12 Seasonal accounting |
 | Klapp covert sharing | Vaynard TK +1, Maret Uln Ceiral reconstruction aided | §8.5 TK advancement via archive |
 
@@ -377,9 +377,9 @@ flowchart TD
 
 ### Gap Log
 
-[GAP-ARC-35-01] Klapp CE track needs a specific trigger for "next Thread-significant encounter" — the archive is full of objects but not all qualify. Proposed criteria: objects described in catalogue with the original "difficulty writing" notation (3 confirmed items). The third encounter with such an object triggers the check. This requires a GM tracking mechanism not currently formalised.
+[GAP-ARC-35-01] Klapp Combat Endurance track needs a specific trigger for "next Thread-significant encounter" — the archive is full of objects but not all qualify. Proposed criteria: objects described in catalogue with the original "difficulty writing" notation (3 confirmed items). The third encounter with such an object triggers the check. This requires a Game Master tracking mechanism not currently formalised.
 
-[EDITORIAL: ED-ARC-35-01 — Trajectory determination for Klapp: who decides Trajectory B vs C?] Proposed: Trajectory B (Fracture toward suppression) is default if Klapp's CE accumulation was driven by fear-based contact (prolonged exposure, uncertain, defensive). Trajectory C (Conversion) is possible if a practitioner PC intervenes during or immediately after the Discovery Event scene with genuine presence, not argument. This is a one-window opportunity — the first 30 minutes after the Event, Klapp's rendering is reorganising. Argument is useless; presence is everything. [EDITORIAL: requires user approval — intervention mechanism for practitioner presence at Discovery Event]
+[EDITORIAL: ED-ARC-35-01 — Trajectory determination for Klapp: who decides Trajectory B vs C?] Proposed: Trajectory B (Fracture toward suppression) is default if Klapp's Combat Endurance accumulation was driven by fear-based contact (prolonged exposure, uncertain, defensive). Trajectory C (Conversion) is possible if a practitioner Player Character intervenes during or immediately after the Discovery Event scene with genuine presence, not argument. This is a one-window opportunity — the first 30 minutes after the Event, Klapp's rendering is reorganising. Argument is useless; presence is everything. [EDITORIAL: requires user approval — intervention mechanism for practitioner presence at Discovery Event]
 
 ---
 
@@ -387,13 +387,13 @@ flowchart TD
 
 | Arc | Outputs to | Via | Effect |
 |---|---|---|---|
-| Arc 31 (Quaestio of Baralta) | Arc 34 (Ehrenwall's Count) | TC level + Crown Mandate erosion | If Baralta loses Grand Debate → TC spike activates Coup Counter condition 2 faster |
+| Arc 31 (Quaestio of Baralta) | Arc 34 (Ehrenwall's Count) | Theocracy Counter level + Crown Mandate erosion | If Baralta loses Grand Debate → Theocracy Counter spike activates Coup Counter condition 2 faster |
 | Arc 31 | Arc 32 (Vaynard's Confession) | Vaynard TK track | Parliament defending Varfell (F1) gives Vaynard protected space to advance TK; Parliament yielding (F2) accelerates Inquisitor pressure |
 | Arc 32 (Vaynard's Confession) | Arc 33 (Forgetting Road) | Maret Uln availability | If Maret is convicted in Arc 32 Tribunal, Southernmost expedition loses its most capable practitioner — Ob +1 on all Ceiral Ritual rolls |
-| Arc 33 (Forgetting Road) | Arc 35 (Klapp Threshold) | Ceiral reconstruction + TT | Successful Ceiral Ritual provides Einhir knowledge that cross-confirms Klapp's archive findings → Klapp CE +1 on next archive encounter |
-| Arc 34 (Ehrenwall's Count) | Arc 31 | Martial Law + faction ops | Martial Law removes Baralta's ability to invoke Sovereign Authority Doctrine until removed → TC advance unchecked during Martial Law period |
-| Arc 35 (Klapp Threshold) | Arc 32 | Church Stability brake + archive access | TC pause from Klapp crisis gives Vaynard's TK advancement window; Klapp covert sharing directly advances TK +1 |
-| All arcs | RS track | Thread ops accumulation | Every successful Territorial+ Thread operation across all arcs: TT +1–2. Across 5 arcs at 3 operations each: expected TT rise ~15–20. RS structural pressure. |
+| Arc 33 (Forgetting Road) | Arc 35 (Klapp Threshold) | Ceiral reconstruction + Thread Tension | Successful Ceiral Ritual provides Einhir knowledge that cross-confirms Klapp's archive findings → Klapp Combat Endurance +1 on next archive encounter |
+| Arc 34 (Ehrenwall's Count) | Arc 31 | Martial Law + faction ops | Martial Law removes Baralta's ability to invoke Sovereign Authority Doctrine until removed → Theocracy Counter advance unchecked during Martial Law period |
+| Arc 35 (Klapp Threshold) | Arc 32 | Church Stability brake + archive access | Theocracy Counter pause from Klapp crisis gives Vaynard's TK advancement window; Klapp covert sharing directly advances TK +1 |
+| All arcs | Rendering Stability track | Thread ops accumulation | Every successful Territorial+ Thread operation across all arcs: Thread Tension +1–2. Across 5 arcs at 3 operations each: expected Thread Tension rise ~15–20. Rendering Stability structural pressure. |
 
 ---
 

@@ -13,11 +13,11 @@ Valoria has no scripted plot. Arcs emerge from five mechanical engines running i
 
 | Engine | Key Output |
 |---|---|
-| Three clocks (RS / TC / IP) | Threshold events; loss conditions |
+| Three clocks (Rendering Stability / Theocracy Counter / Institutional Pressure) | Threshold events; loss conditions |
 | Seasonal accounting (Stability checks, Domain Echoes) | Faction collapse; power shifts |
-| NPC trigger conditions (Ehrenwall counter, Vaynard TK, Baralta TC suppression) | Named-NPC decision points |
+| Non-Player Character trigger conditions (Ehrenwall counter, Vaynard TK, Baralta Theocracy Counter suppression) | Named-Non-Player Character decision points |
 | Political axes (9 qualitative axes) | Scene conflict framing; casus belli |
-| Thread operations + Co-Movement | Ontological consequences; RS drain |
+| Thread operations + Co-Movement | Ontological consequences; Rendering Stability drain |
 
 Each arc below names the **mechanical seed**, traces the **causal chain** through these engines, and shows the resulting **campaign shape**. The same seed produces different arcs depending on player choices at each branch.
 
@@ -25,9 +25,9 @@ Each arc below names the **mechanical seed**, traces the **causal chain** throug
 
 ## Arc 1: The Coup That Wasn't Supposed to Happen
 
-**Seed:** Players focus on Church opposition and TC reduction. Crown is left to manage itself.
+**Seed:** Players focus on Church opposition and Theocracy Counter reduction. Crown is left to manage itself.
 
-**Light narrative:** The players believe they're winning — they've stalled the Church, reduced TC, protected practitioners. Then, quietly, the soldiers arrive. Not the Church's templars. The Crown's own.
+**Light narrative:** The players believe they're winning — they've stalled the Church, reduced Theocracy Counter, protected practitioners. Then, quietly, the soldiers arrive. Not the Church's templars. The Crown's own.
 
 ### Mechanical Causal Chain
 
@@ -55,7 +55,7 @@ flowchart TD
 
 ## Arc 2: The Vaynard Revelation Cascade
 
-**Seed:** A practitioner PC forms a sustained relationship with Vaynard. His Private Collection is deployed.
+**Seed:** A practitioner Player Character forms a sustained relationship with Vaynard. His Private Collection is deployed.
 
 **Light narrative:** A duke who collects things he does not understand. One day, someone explains what he has. Everything that follows is the consequence of that explanation.
 
@@ -81,7 +81,7 @@ flowchart TD
     O -->|"Failure"| Q["Certainty −1\nNew Belief from ignorance\nVaynard becomes unpredictable"]
 ```
 
-**Why this arc is emergent:** TC accumulates from Vaynard's TK advances as a side effect of helping him. The PC who builds the relationship is simultaneously raising a clock they probably need to suppress. No player intends this.
+**Why this arc is emergent:** Theocracy Counter accumulates from Vaynard's TK advances as a side effect of helping him. The Player Character who builds the relationship is simultaneously raising a clock they probably need to suppress. No player intends this.
 
 **Campaign shape:** Slow-burn 4–6 season arc. Each TK level is a scene. The Parliamentary vote is the crisis point. Multiple branching endgames depending on the Crown's choice.
 
@@ -114,9 +114,9 @@ flowchart TD
     O --> P["TC rise from Church consolidation response\nFaction crisis: knowledge axis and ontological axis both active"]
 ```
 
-**Why this arc is emergent:** Niflhel's TT accumulation is a mechanical side effect of its core operation, not a villain plan. The arc exists because Niflhel is good at its job. The players may not connect RS decline to Niflhel operations for several seasons.
+**Why this arc is emergent:** Niflhel's Thread Tension accumulation is a mechanical side effect of its core operation, not a villain plan. The arc exists because Niflhel is good at its job. The players may not connect Rendering Stability decline to Niflhel operations for several seasons.
 
-**Campaign shape:** Background decay for 3–5 seasons. Investigation arc of 2–3 seasons. Recovery arc of 2–4 seasons. TC rise in the recovery arc creates a second front.
+**Campaign shape:** Background decay for 3–5 seasons. Investigation arc of 2–3 seasons. Recovery arc of 2–4 seasons. Theocracy Counter rise in the recovery arc creates a second front.
 
 ---
 
@@ -163,11 +163,11 @@ These arcs do not run in isolation. Common collision points:
 | Collision | Arcs | Mechanic |
 |---|---|---|
 | Martial Law fires while Vaynard Revelation is at Parliamentary Vote | 1 + 2 | Vote blocked by Martial Law Military check |
-| Niflhel TT drain accelerates RS fall during Axis 9 Resolution | 3 + 4 | RS threshold events fire during Grand Debate season |
+| Niflhel Thread Tension drain accelerates Rendering Stability fall during Axis 9 Resolution | 3 + 4 | Rendering Stability threshold events fire during Grand Debate season |
 | Vaynard TK 5 + Löwenritter coup at same Accounting | 2 + 1 | Two crisis events same season; Stability checks stack |
-| Revolution Weaving reduces TT while Church responds to Axis 9 | 3 + 4 | TT drops but TC rises from Church consolidation; clocks trade off |
-| Church territorial seizure (TC 60) during Coup Martial Law | 1 (late) | Church seizes Crown-law-locked territories; Löwenritter cannot respond legally |
+| Revolution Weaving reduces Thread Tension while Church responds to Axis 9 | 3 + 4 | Thread Tension drops but Theocracy Counter rises from Church consolidation; clocks trade off |
+| Church territorial seizure (Theocracy Counter 60) during Coup Martial Law | 1 (late) | Church seizes Crown-law-locked territories; Löwenritter cannot respond legally |
 
 ---
 
-*All arcs require GM application of the Let It Ride rule — outcomes stand. No re-attempts unless circumstances significantly changed. This is what makes the arcs feel earned rather than scripted.*
+*All arcs require Game Master application of the Let It Ride rule — outcomes stand. No re-attempts unless circumstances significantly changed. This is what makes the arcs feel earned rather than scripted.*

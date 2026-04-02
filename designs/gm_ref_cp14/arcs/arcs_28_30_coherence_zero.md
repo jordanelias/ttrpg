@@ -25,7 +25,7 @@ They are simultaneously Other and human. Not one replacing the other. Both, at o
 
 ## Arc 28: Vaynard — *The Reckoner Who Saw the Sum*
 
-**Prerequisite:** Discovery Event success → TS 30 → practice at scale driven by TK urgency
+**Prerequisite:** Discovery Event success → Thread Sensitivity 30 → practice at scale driven by TK urgency
 **Pivot:** Final operation crossing Coherence to 0 — the threshold at which his rendering exceeds human limits
 **Primary NPCs:** Duke Magnus Vaynard · Maret Uln · Player practitioners
 
@@ -51,7 +51,7 @@ What this produces: the most capable intelligence actor in the kingdom, now oper
 
 His TK 5 understanding — what Galbados structurally was, what the Church has been suppressing, what the Southernmost requires — is now not a structural theory but a direct perception. He has seen it. The players who carry his recommendations into political action are acting on the word of someone who is telling the truth at a register they cannot independently confirm.
 
-The political problem: he cannot testify effectively to anyone without TS sufficient to receive what he is saying. In Parliament, in a Grand Debate, before Ehrenwall — his understanding exceeds the context. He knows this. He is precise about it. He can identify exactly what each person can and cannot receive, and he shapes his communication accordingly. This makes him more useful than ever and less understood than ever simultaneously.
+The political problem: he cannot testify effectively to anyone without Thread Sensitivity sufficient to receive what he is saying. In Parliament, in a Grand Debate, before Ehrenwall — his understanding exceeds the context. He knows this. He is precise about it. He can identify exactly what each person can and cannot receive, and he shapes his communication accordingly. This makes him more useful than ever and less understood than ever simultaneously.
 
 ### Branch B — Vaynard Chooses to Work Himself Beyond (Physical Transformation)
 
@@ -85,7 +85,7 @@ flowchart TD
 
 ## Arc 29: Almud — *The King at the Limit of Order*
 
-**Prerequisite:** Discovery Event (TS 28 → 30) → First Leap → practice under crisis pressure
+**Prerequisite:** Discovery Event (Thread Sensitivity 28 → 30) → First Leap → practice under crisis pressure
 **Pivot:** Coherence 0 during active reign — a king who now renders past the limit of what kingship means
 
 ---
@@ -98,7 +98,7 @@ At Coherence 0 he can see past them. All of them. The contradictions that made h
 
 He still wants what he always wanted. Order. Torben safe. The Einhir question resolved. He holds these with exactly the care he always held them. But the version of Order he can now see is not parliamentary procedure and constitutional settlement. It is something at the Thread-configurational level of what makes human society possible at all — the below-the-waterline structure of the agreements, the loyalties, the shared renderings that constitute governance before governance has a name. He can see all of it. He cannot govern. Not because he is incapable, but because governance is a human-scale instrument and what he can now perceive is not at human scale.
 
-The conversation where a player PC first speaks with him after this threshold is the most important conversation in the campaign. He is completely Almud. He remembers everything. He loves his son. He cares about Valoria. He is also operating from a perception of what Valoria is and what his son represents in the configurational structure of the peninsula's Thread reality that the player cannot follow. He will try to explain. He will succeed partially. What they receive will be true and will be enough.
+The conversation where a player Player Character first speaks with him after this threshold is the most important conversation in the campaign. He is completely Almud. He remembers everything. He loves his son. He cares about Valoria. He is also operating from a perception of what Valoria is and what his son represents in the configurational structure of the peninsula's Thread reality that the player cannot follow. He will try to explain. He will succeed partially. What they receive will be true and will be enough.
 
 ---
 
@@ -110,7 +110,7 @@ He can still govern in the formal sense. He can sign decrees. He can sit Parliam
 
 Torben's ratification — if it has not yet happened — he now understands in full. Not as a political necessity but as a Thread-configurational event with implications for the succession as a structural feature of Valoria's institutional reality. He ratifies Torben, or arranges the succession, with complete understanding of what it produces at the substrate level. He cannot explain this to Torben. He can be his father while holding knowledge Torben will never have access to.
 
-The grief of this — the love that has nowhere to land because the person you love cannot receive what you now know — is the arc's emotional content. Nothing in the mechanics contains it. The GM presents it. The players sit with it. Almud is still there. He is just also somewhere else that nobody else can be.
+The grief of this — the love that has nowhere to land because the person you love cannot receive what you now know — is the arc's emotional content. Nothing in the mechanics contains it. The Game Master presents it. The players sit with it. Almud is still there. He is just also somewhere else that nobody else can be.
 
 ### Branch B — Almud Works Himself Beyond; the Throne is Vacated
 
@@ -144,7 +144,7 @@ flowchart TD
 
 ## Arc 30: Lenneth — *What She Finally Understood*
 
-**Prerequisite:** CE accumulation → TS growth → self-directed practice in concealment
+**Prerequisite:** Combat Endurance accumulation → Thread Sensitivity growth → self-directed practice in concealment
 **Pivot:** Coherence 0 while hidden networks still active — the most informed entity in the kingdom, finally able to understand completely what she was building toward
 
 ---

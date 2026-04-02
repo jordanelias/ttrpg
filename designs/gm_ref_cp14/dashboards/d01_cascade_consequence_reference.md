@@ -3,13 +3,13 @@
 <!-- STATUS: Pre-release reference tool. Not valid against any post-CP14 ruleset. -->
 
 # D-01 — CASCADE CONSEQUENCE REFERENCE
-*Keep on GM screen every session. All rates per season unless marked.*
+*Keep on Game Master screen every session. All rates per season unless marked.*
 
 ---
 
-## THREAD TENSION (TT) — Starting: 28
+## THREAD TENSION (Thread Tension) — Starting: 28
 
-| TT Band | State | Active Effects |
+| Thread Tension Band | State | Active Effects |
 |---------|-------|----------------|
 | 0–19 | Dormant | Leap fails automatically; no Thread operations possible |
 | 20–39 | **Stirring** ← START | Leap available. No mechanical penalties. |
@@ -18,23 +18,23 @@
 | 80–99 | Rupturing | **All Thread ops: +2 Ob.** Entities establish territory. |
 | 100 | The Rupture | Campaign event. |
 
-**TT Cross-Clock Fires (check each accounting):**
-- TT > 45 → TC +1/season AND IP +1/season
-- TT > 60 → TC +2/season (total, replaces above) AND IP +2/season (total)
-- TT > 60 + TC > 60 simultaneously → both at maximum acceleration
+**Thread Tension Cross-Clock Fires (check each accounting):**
+- Thread Tension > 45 → Theocracy Counter +1/season AND Institutional Pressure +1/season
+- Thread Tension > 60 → Theocracy Counter +2/season (total, replaces above) AND Institutional Pressure +2/season (total)
+- Thread Tension > 60 + Theocracy Counter > 60 simultaneously → both at maximum acceleration
 
-**Spontaneous Gaps by TT:**
-- TT 40–59: 1d10/season; result 1–2 → Gap in lowest-Stability territory
-- TT 60–79: 1d10/season; result 1–4 → Gap in lowest-Stability territory
-- TT > 79: 1d10/season; result 1–6 → Gap in lowest-Stability territory
+**Spontaneous Gaps by Thread Tension:**
+- Thread Tension 40–59: 1d10/season; result 1–2 → Gap in lowest-Stability territory
+- Thread Tension 60–79: 1d10/season; result 1–4 → Gap in lowest-Stability territory
+- Thread Tension > 79: 1d10/season; result 1–6 → Gap in lowest-Stability territory
 
-**TT Passive Drift:** +1 per full campaign year (4 seasons)
+**Thread Tension Passive Drift:** +1 per full campaign year (4 seasons)
 
 ---
 
-## THEOCRACY CLOCK (TC) — Starting: 22
+## THEOCRACY CLOCK (Theocracy Counter) — Starting: 22
 
-| TC Band | State | Active Effects |
+| Theocracy Counter Band | State | Active Effects |
 |---------|-------|----------------|
 | 0–19 | Institutional Pressure | Lobbying only. No mechanical penalties. |
 | 20–39 | **Consolidation** ← START | Church assumes civil domain authority. |
@@ -43,20 +43,20 @@
 | 80–99 | Theocratic Seizure | Church may attempt territorial seizure (roll vs Ob). |
 | 100 | The Holy State | Campaign event. |
 
-**TC Cross-Clock Fires:**
-- TC > 40 + IP > 45 → IP +1/season additional (Church mediation cover)
-- TC > 60 → IP +2/season (total; Secession Wars clause violation)
-- TC > 60 + IP > 45 → Almaic Kyriakos begins formal documentation
+**Theocracy Counter Cross-Clock Fires:**
+- Theocracy Counter > 40 + Institutional Pressure > 45 → Institutional Pressure +1/season additional (Church mediation cover)
+- Theocracy Counter > 60 → Institutional Pressure +2/season (total; Secession Wars clause violation)
+- Theocracy Counter > 60 + Institutional Pressure > 45 → Almaic Kyriakos begins formal documentation
 
-**TC Passive Drift:** None. TC only changes from explicit triggers.
+**Theocracy Counter Passive Drift:** None. Theocracy Counter only changes from explicit triggers.
 
-**Church Stability Brake:** When Church Stability ≤ 3, TC generation from Mandate pauses (Cardinals competing). RS cross-clock unaffected.
+**Church Stability Brake:** When Church Stability ≤ 3, Theocracy Counter generation from Mandate pauses (Cardinals competing). Rendering Stability cross-clock unaffected.
 
 ---
 
-## ALTONIAN PRESSURE (IP) — Starting: 20
+## ALTONIAN PRESSURE (Institutional Pressure) — Starting: 20
 
-| IP Band | State | Active Effects |
+| Institutional Pressure Band | State | Active Effects |
 |---------|-------|----------------|
 | 0–29 | **Dormant** ← START | Trade continues. Spies monitor. |
 | 30–44 | Aggressive | Sanctions. Tutoring Demand triggers (Prince Torben). |
@@ -65,36 +65,36 @@
 | 75–99 | Invasion Imminent | Merchant Consortium collapses. |
 | 100 | Invasion | Campaign event. |
 
-**IP Direct Triggers:**
+**Institutional Pressure Direct Triggers:**
 - Public Thread use (observed by Altonian agents) → +2/event
 - Succession delayed past 2 arcs → +2
 - Schoenland trade alliance → −2/year; removes MC political cover
-- Grand Diplomatic Scene victory → IP frozen; peace treaty available
-- Unified Valorian diplomatic front → IP passive drift halts 1 season
+- Grand Diplomatic Scene victory → Institutional Pressure frozen; peace treaty available
+- Unified Valorian diplomatic front → Institutional Pressure passive drift halts 1 season
 
 ---
 
-## FACTION STABILITY CHECKS (TT-driven)
-*Only when TT > 79 (Critical band)*
+## FACTION STABILITY CHECKS (Thread Tension-driven)
+*Only when Thread Tension > 79 (Critical band)*
 
 Each faction: Stability check Ob 1 per season
 - Fail → Mandate −1 (minimum 0)
-- Mandate 0 fail → Faction Fracture (sub-faction splinters; GM event)
+- Mandate 0 fail → Faction Fracture (sub-faction splinters; Game Master event)
 
 ---
 
 ## ENDGAME TRIGGER
-All three clocks above their midpoints simultaneously (TT > 50, TC > 50, IP > 50) → Campaign enters endgame phase.
+All three clocks above their midpoints simultaneously (Thread Tension > 50, Theocracy Counter > 50, Institutional Pressure > 50) → Campaign enters endgame phase.
 
 ---
 
 ## ACTIVE EFFECTS QUICK-CHECK (tick applicable boxes each session)
-- [ ] TT > 45: TC/IP +1/season
-- [ ] TT > 60: TC/IP +2/season (total); +1 Ob all Thread ops
-- [ ] TT > 79: +2 Ob all ops; Stability checks Ob 1/season
-- [ ] TC > 40: IP +1/season (if IP > 45)
-- [ ] TC > 60: IP +2/season; Almaic Kyriakos active
-- [ ] TC > 79: Territorial seizure available to Church
-- [ ] IP > 30: Tutoring Demand active
-- [ ] IP > 44: Hostile posture; vassalage demands
-- [ ] IP > 74: MC collapses; invasion imminent
+- [ ] Thread Tension > 45: Theocracy Counter/Institutional Pressure +1/season
+- [ ] Thread Tension > 60: Theocracy Counter/Institutional Pressure +2/season (total); +1 Ob all Thread ops
+- [ ] Thread Tension > 79: +2 Ob all ops; Stability checks Ob 1/season
+- [ ] Theocracy Counter > 40: Institutional Pressure +1/season (if Institutional Pressure > 45)
+- [ ] Theocracy Counter > 60: Institutional Pressure +2/season; Almaic Kyriakos active
+- [ ] Theocracy Counter > 79: Territorial seizure available to Church
+- [ ] Institutional Pressure > 30: Tutoring Demand active
+- [ ] Institutional Pressure > 44: Hostile posture; vassalage demands
+- [ ] Institutional Pressure > 74: MC collapses; invasion imminent

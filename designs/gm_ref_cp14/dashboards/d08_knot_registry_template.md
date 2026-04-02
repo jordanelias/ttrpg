@@ -3,7 +3,7 @@
 <!-- STATUS: Pre-release reference tool. Not valid against any post-CP14 ruleset. -->
 
 # D-08 — KNOT REGISTRY
-*One copy per practitioner-PC. Player-maintained; GM keeps duplicate.*
+*One copy per practitioner-Player Character. Player-maintained; Game Master keeps duplicate.*
 
 **Practitioner:** _________________ | **Current Coherence:** ___ | **Current Band:** _____________
 
@@ -102,6 +102,6 @@
 
 - **Strong Knot:** connected entity experiences roughly 1/3 of co-movement magnitude
 - **Moderate Knot:** connected entity experiences faint version (narrative only in most cases)
-- **Wrapping:** connected entity experiences trace only; requires TS 30+ to perceive
+- **Wrapping:** connected entity experiences trace only; requires Thread Sensitivity 30+ to perceive
 
-*The GM applies this as narrative texture, not a separate mechanical roll, unless the operation was at Relational+ scale targeting the Knot directly.*
+*The Game Master applies this as narrative texture, not a separate mechanical roll, unless the operation was at Relational+ scale targeting the Knot directly.*

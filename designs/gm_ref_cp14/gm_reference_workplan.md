@@ -2,9 +2,9 @@
 <!-- SESSION: 2026-03-30 / 2026-03-31 — see session_log_archive.md -->
 <!-- STATUS: Pre-release reference tool. Not valid against any post-CP14 ruleset. -->
 
-# VALORIA — GM REFERENCE SUITE WORKPLAN
+# VALORIA — Game Master REFERENCE SUITE WORKPLAN
 
-*Goal: Produce a complete GM reference suite that offsets ~80–90% of tracking/accounting burden and ~70–75% of co-movement narration burden. Based on analysis in `valoria_emergent_narrative_analysis.md` and preceding design conversation.*
+*Goal: Produce a complete Game Master reference suite that offsets ~80–90% of tracking/accounting burden and ~70–75% of co-movement narration burden. Based on analysis in `valoria_emergent_narrative_analysis.md` and preceding design conversation.*
 
 *Model assignments: Claude = mechanical/structural work. Opus = narrative/philosophical content requiring philosophical judgment.*
 
@@ -16,11 +16,11 @@
 |---|-------------|-------|-------|-------|
 | D-01 | Cascade Consequence Reference | 1 | Claude | 1 |
 | D-02 | Seasonal Accounting Form | 1 | Claude | 1 |
-| D-03 | GM Dashboard | 1 | Claude | 1 |
+| D-03 | Game Master Dashboard | 1 | Claude | 1 |
 | D-04 | Gap Escalation Table | 0.5 | Claude | 1 |
 | D-05 | Coherence Band Track Reference | 0.5 | Claude | 1 |
 | D-06 | Thread Operation Resolution Card | 1 | Claude | 1 |
-| D-07 | NPC State Card Templates | 1 | Claude | 1 |
+| D-07 | Non-Player Character State Card Templates | 1 | Claude | 1 |
 | D-08 | Knot Registry Template | 0.5 | Claude | 1 |
 | D-09 | Co-movement Matrix Skeleton | 2 | Claude | 1 |
 | D-10 | Framing Process — Structural Frame | 0.5 | Claude | 1 |
@@ -28,7 +28,7 @@
 | D-12 | Framing Process — Philosophical Content | 0.5 | Opus | 2 |
 | D-13 | Annotated Examples (8–12, split-register) | 4–6 | Opus | 2 |
 | D-14 | Counter-examples (4–6) | 2–3 | Opus | 2 |
-| D-15 | Assembled GM Reference Suite | ~16 | Claude | 3 |
+| D-15 | Assembled Game Master Reference Suite | ~16 | Claude | 3 |
 
 **Total estimated pages: ~16 formatted reference pages across all deliverables.**
 
@@ -41,21 +41,21 @@ All tasks in this phase are purely mechanical: table construction, procedure cod
 Source documents required (all in canon/ or compilation/ or designs/):
 - `compilation/valoria_ruleset_checkpoint_14.md` — canonical values
 - `designs/valoria_emergent_scenarios.md` — scenario chains and clock values
-- `designs/valoria_narrative_scenario_chains.md` — NPC stat blocks
+- `designs/valoria_narrative_scenario_chains.md` — Non-Player Character stat blocks
 
 ---
 
 ### TASK 1.1 — Cascade Consequence Reference (D-01)
 
-**What:** Single-page table. All active clock cross-effects by threshold. GM keeps on screen every session.
+**What:** Single-page table. All active clock cross-effects by threshold. Game Master keeps on screen every session.
 
 **Content:**
-- RS thresholds (55, 40, 20, 1) → active cross-clock effects
-- TC thresholds (40, 60, 80) → active cross-clock effects  
-- IP thresholds (30, 45, 60, 75, 100) → triggers
-- All spontaneous Gap probabilities by RS band
-- Faction Stability check triggers by RS band
-- Session cap reminders (RS ±10/season net)
+- Rendering Stability thresholds (55, 40, 20, 1) → active cross-clock effects
+- Theocracy Counter thresholds (40, 60, 80) → active cross-clock effects  
+- Institutional Pressure thresholds (30, 45, 60, 75, 100) → triggers
+- All spontaneous Gap probabilities by Rendering Stability band
+- Faction Stability check triggers by Rendering Stability band
+- Session cap reminders (Rendering Stability ±10/season net)
 
 **Source:** Scenario 8 (clock interactions), Scenario 9 (terminal decline), compiled Stage 6 (factions).
 
@@ -65,37 +65,37 @@ Source documents required (all in canon/ or compilation/ or designs/):
 
 ### TASK 1.2 — Seasonal Accounting Form (D-02)
 
-**What:** Step-by-step offline processing worksheet. GM fills out between sessions. Arrives at table with resolved state.
+**What:** Step-by-step offline processing worksheet. Game Master fills out between sessions. Arrives at table with resolved state.
 
 **Content:** Fixed-order checklist:
-1. RS passive drift (−1 Winter; active Gap drain −4/Gap; Lock chronic drift −1 to −2/Lock)
-2. RS threshold cross-effects (check if any threshold crossed this accounting)
-3. TC adjustments (RS cross-clock; Church Domain Action effects; seasonal TC generation)
-4. IP adjustments (RS/TC cross-clocks; event-driven changes)
-5. Faction Stability checks (if RS ≤ 19: Ob 1; resolve Mandate drops and Fracture triggers)
+1. Rendering Stability passive drift (−1 Winter; active Gap drain −4/Gap; Lock chronic drift −1 to −2/Lock)
+2. Rendering Stability threshold cross-effects (check if any threshold crossed this accounting)
+3. Theocracy Counter adjustments (Rendering Stability cross-clock; Church Domain Action effects; seasonal Theocracy Counter generation)
+4. Institutional Pressure adjustments (Rendering Stability/Theocracy Counter cross-clocks; event-driven changes)
+5. Faction Stability checks (if Rendering Stability ≤ 19: Ob 1; resolve Mandate drops and Fracture triggers)
 6. Knot strain increments (by Coherence band of each practitioner)
 7. Coherence recovery (full season non-practice = +1; Anchoring Scenes this season)
-8. NPC clock advances (Torben Loyalty if covert contact failed; Vaynard TK if Private Collection used; Klapp CE if handling Locks; Ehrenwall Counter if trigger conditions met)
+8. Non-Player Character clock advances (Torben Loyalty if covert contact failed; Vaynard TK if Private Collection used; Klapp Combat Endurance if handling Locks; Ehrenwall Counter if trigger conditions met)
 9. Domain Action resolutions (any pending seasonal effects)
-10. State record (write new values to GM Dashboard)
+10. State record (write new values to Game Master Dashboard)
 
 **Output:** `gm_ref/d02_seasonal_accounting_form.md`
 
 ---
 
-### TASK 1.3 — GM Dashboard (D-03)
+### TASK 1.3 — Game Master Dashboard (D-03)
 
-**What:** Single-page live-state reference. All variables the GM needs during play. Updated after each Seasonal Accounting.
+**What:** Single-page live-state reference. All variables the Game Master needs during play. Updated after each Seasonal Accounting.
 
 **Content:**
-- World clocks: RS / TC / IP (current value + active threshold band)
+- World clocks: Rendering Stability / Theocracy Counter / Institutional Pressure (current value + active threshold band)
 - Faction attribute grid: all 7 factions × Mandate/Stability/Military/Wealth/Influence/Intel (or faction-specific equivalents)
-- NPC clock positions: Torben Loyalty (0–8) / Vaynard TK (0–5) / Klapp CE (0–5) / Ehrenwall Counter (0–3) / Almud TS proximity
+- Non-Player Character clock positions: Torben Loyalty (0–8) / Vaynard TK (0–5) / Klapp Combat Endurance (0–5) / Ehrenwall Counter (0–3) / Almud Thread Sensitivity proximity
 - Active threshold effects: checkboxes for each currently-active cross-clock effect
 - Active Gaps: territory + severity + seasons open
-- Active Locks: territory + TS of locked config + chronic drift registered
-- PC Coherence positions: per-practitioner band (Stable/Dissonant/Fragmented/Fractured/Severed)
-- PC Knot strain: per-practitioner active Knot count + strain level
+- Active Locks: territory + Thread Sensitivity of locked config + chronic drift registered
+- Player Character Coherence positions: per-practitioner band (Stable/Dissonant/Fragmented/Fractured/Severed)
+- Player Character Knot strain: per-practitioner active Knot count + strain level
 
 **Output:** `gm_ref/d03_gm_dashboard.md`
 
@@ -103,14 +103,14 @@ Source documents required (all in canon/ or compilation/ or designs/):
 
 ### TASK 1.4 — Gap Escalation Table (D-04)
 
-**What:** Half-page reference. RS value at Gap formation → entity severity. Seasons unaddressed → Mend Ob increase.
+**What:** Half-page reference. Rendering Stability value at Gap formation → entity severity. Seasons unaddressed → Mend Ob increase.
 
 **Content:**
-- RS value at Gap formation → severity (Shifting Object / Weak entity / Full entity / Full + Shifting Objects in adjacent territories)
+- Rendering Stability value at Gap formation → severity (Shifting Object / Weak entity / Full entity / Full + Shifting Objects in adjacent territories)
 - Gap age → Mend Ob (Shifting Ob 2 → Fresh Gap Ob 3 → Entrenched Ob 6 → Catastrophic Ob 7)
-- RS seasonal drain per Gap (−4/season active)
-- Mending degree outcomes (Overwhelming/Success/Partial/Failure → RS change + Coherence cost)
-- Special cases: Collective Mending ceiling (Ob 8); Catastrophic prerequisites (TS 70+ lead + 2× TS 20+)
+- Rendering Stability seasonal drain per Gap (−4/season active)
+- Mending degree outcomes (Overwhelming/Success/Partial/Failure → Rendering Stability change + Coherence cost)
+- Special cases: Collective Mending ceiling (Ob 8); Catastrophic prerequisites (Thread Sensitivity 70+ lead + 2× Thread Sensitivity 20+)
 
 **Source:** Scenario 6 (Gap formation and incursion), Stage 3 (thread operations).
 
@@ -120,7 +120,7 @@ Source documents required (all in canon/ or compilation/ or designs/):
 
 ### TASK 1.5 — Coherence Band Track Reference (D-05)
 
-**What:** Half-page formatted track. Coherence value → active penalties + recovery options. Replaces GM having to recall band effects mid-scene.
+**What:** Half-page formatted track. Coherence value → active penalties + recovery options. Replaces Game Master having to recall band effects mid-scene.
 
 **Content:**
 - Track: 10 → 8 (Stable) → 7–5 (Dissonant) → 4–3 (Fragmented) → 2 (Fractured) → 1 (Severed) → 0 (Rendering Crisis)
@@ -139,37 +139,37 @@ Source documents required (all in canon/ or compilation/ or designs/):
 
 ### TASK 1.6 — Thread Operation Resolution Card (D-06)
 
-**What:** Single-page procedure checklist. Step-by-step for every thread operation. GM runs through it in sequence.
+**What:** Single-page procedure checklist. Step-by-step for every thread operation. Game Master runs through it in sequence.
 
 **Content:**
-- Pre-operation checks: TS threshold met? Contact mode (Leap or originary)? Combat eligibility check?
+- Pre-operation checks: Thread Sensitivity threshold met? Contact mode (Leap or originary)? Combat eligibility check?
 - Leap procedure: Priority → Diagnosis → Roll (pool + TN) → degree outcome
 - Operation roll: pool by operation type + TN + current Ob modifiers
 - Co-movement fires: [PLACEHOLDER — narrative cells filled by D-11]
-- Post-operation: Coherence retention check trigger conditions / RS cost applied / TS growth check
+- Post-operation: Coherence retention check trigger conditions / Rendering Stability cost applied / Thread Sensitivity growth check
 - Quick-reference pools by operation type:
-  - Leap: Attunement + History + TPS, TN 7
-  - Weaving: Spirit + History + TPS, TN 7
-  - Pulling: Spirit + History + TPS, TN 7
+  - Leap: Attunement + History + Thread Pool Score, TN 7
+  - Weaving: Spirit + History + Thread Pool Score, TN 7
+  - Pulling: Spirit + History + Thread Pool Score, TN 7
   - Lock: Spirit + History, TN 7, min Ob 4
   - Dissolution: Spirit + History, TN 7, min Ob 4
-  - Mending: Attunement + Focus + TPS, TN 7
-- Footnotes: scale RS cost modifiers (Object ×1 / Personal ×1 / Relational ×2 / Territorial ×3)
+  - Mending: Attunement + Focus + Thread Pool Score, TN 7
+- Footnotes: scale Rendering Stability cost modifiers (Object ×1 / Personal ×1 / Relational ×2 / Territorial ×3)
 
-**Note:** Co-movement narration section (middle of card) will have placeholder boxes filled by D-11 (Opus task). Card is functional for procedure without those boxes — GM can run mechanics; co-movement narration is the enhancement.
+**Note:** Co-movement narration section (middle of card) will have placeholder boxes filled by D-11 (Opus task). Card is functional for procedure without those boxes — Game Master can run mechanics; co-movement narration is the enhancement.
 
 **Output:** `gm_ref/d06_thread_operation_resolution_card.md`
 
 ---
 
-### TASK 1.7 — NPC State Card Templates (D-07)
+### TASK 1.7 — Non-Player Character State Card Templates (D-07)
 
-**What:** Standardised card format for each significant NPC. Flipped face-up when NPC enters scene. Populated from Stage 13 content.
+**What:** Standardised card format for each significant Non-Player Character. Flipped face-up when Non-Player Character enters scene. Populated from Stage 13 content.
 
 **Structure per card:**
 - Name / Faction / Role
-- Faction stat block (Mandate/Stability/Influence etc. — NPC-specific subset)
-- Personal: TS / Conviction / Resonant Style / Active Beliefs (3)
+- Faction stat block (Mandate/Stability/Influence etc. — Non-Player Character-specific subset)
+- Personal: Thread Sensitivity / Conviction / Resonant Style / Active Beliefs (3)
 - Clock position (if applicable): current value + trigger conditions
 - Impression Track: current value (if applicable)
 - Destabilisation trigger (if defined)
@@ -181,7 +181,7 @@ Source documents required (all in canon/ or compilation/ or designs/):
 - Vaynard (Varfell)
 - Lenneth (Revolution)
 - Himlensendt (Church)
-- Klapp (Church — CE track)
+- Klapp (Church — Combat Endurance track)
 - Olafsson (Church — Intel)
 - Ehrenwall (Löwenritter — Coup Counter)
 - Torben (Crown — Loyalty Clock)
@@ -194,7 +194,7 @@ Source documents required (all in canon/ or compilation/ or designs/):
 
 ### TASK 1.8 — Knot Registry Template (D-08)
 
-**What:** Half-page per-PC form. Player-maintained with GM copy. Tracks significant Knots and their current state.
+**What:** Half-page per-Player Character form. Player-maintained with Game Master copy. Tracks significant Knots and their current state.
 
 **Content per Knot entry:**
 - Connected entity (name/place/community/object)
@@ -217,7 +217,7 @@ Source documents required (all in canon/ or compilation/ or designs/):
 **Mechanical content per cell (Claude fills now):**
 - Temporal auto-effect classification: narrative-only vs Coherence retention trigger
 - Epistemic auto-effect: specific social Ob modifier (from compiled degree tables)
-- RS cost: exact value by operation type and degree
+- Rendering Stability cost: exact value by operation type and degree
 - Coherence retention Ob: accumulated Obs this Leap
 - Any special flags (e.g., "Relational+ scale: retention roll required regardless of degree")
 
@@ -256,7 +256,7 @@ Social consequence: ___
 
 ### TASK 1.10 — Framing Process — Structural Frame (D-10)
 
-**What:** Half-page generative procedure. The 4-step process the GM runs when improvising co-movement consequences outside the matrix. Structural content only — philosophical framing and examples are Opus tasks (D-12, D-13).
+**What:** Half-page generative procedure. The 4-step process the Game Master runs when improvising co-movement consequences outside the matrix. Structural content only — philosophical framing and examples are Opus tasks (D-12, D-13).
 
 **Content:**
 ```
@@ -322,16 +322,16 @@ All tasks in this phase require philosophical judgment: producing narration that
 ### TASK 2.1 — Co-movement Matrix Narrative Cells (D-11)
 
 **Opus task summary:** Fill all narrative sections of the D-09 skeleton. For each of the 18 cells (6 rows × 3 degree columns), produce:
-- Temporal beat: 2–3 sentences, TS-split into three tiers (TS 0–29 / TS 30–49 / TS 50+), [TARGET] placeholder retained
-- Epistemic beat: 1–2 sentences, [CONTEXT] placeholder retained for GM-specific detail
+- Temporal beat: 2–3 sentences, Thread Sensitivity-split into three tiers (Thread Sensitivity 0–29 / Thread Sensitivity 30–49 / Thread Sensitivity 50+), [TARGET] placeholder retained
+- Epistemic beat: 1–2 sentences, [CONTEXT] placeholder retained for Game Master-specific detail
 - d6 prompt table: 6 seeds, thematically consistent with operation type, each deliverable in one sentence
 
-**Also:** Relational+ supplement — same structure for both Relational+ rows, plus one additional field per cell: "what does a knotted entity feel?" (one sentence, TS-split)
+**Also:** Relational+ supplement — same structure for both Relational+ rows, plus one additional field per cell: "what does a knotted entity feel?" (one sentence, Thread Sensitivity-split)
 
 **Philosophical constraints for Opus:**
 - Temporal beats must reflect Temporal Disjunction (§1.3, §19.2), not simply time-passage
 - Epistemic beats must reflect epistemic inaccessibility (§1.2, §10.1), not simply confusion or forgetting
-- TS tier differences must reflect genuine ontological/ontical distinction (§17), not just information quantity
+- Thread Sensitivity tier differences must reflect genuine ontological/ontical distinction (§17), not just information quantity
 - d6 seeds must be surprising but traceable to the operation type's logic — not arbitrary
 - Failure degree is excluded from the matrix by design; Opus should not add it
 
@@ -401,7 +401,7 @@ WHY THIS WORKS: [1–2 sentences — which principle from the Foundations this n
 - At minimum 1 counter-example showing a temporal beat narrated as simple time-passage (error: conflating temporal displacement with aging/duration)
 - At minimum 1 counter-example showing an epistemic beat narrated as simple forgetting (error: conflating epistemic inaccessibility with memory loss)
 - At minimum 1 counter-example showing a Weaving narrated as only affecting the actualized dimension (error: violating Inseparability)
-- At minimum 1 counter-example showing TS tiers as simple information quantity (error: missing the ontical/ontological distinction)
+- At minimum 1 counter-example showing Thread Sensitivity tiers as simple information quantity (error: missing the ontical/ontological distinction)
 
 **Per counter-example structure:**
 ```
@@ -414,8 +414,8 @@ CORRECTED VERSION: [correct narration in same situation]
 
 **Philosophical constraints:**
 - "What the player now believes" is the most important field — it identifies downstream consequence of the error
-- Corrections must follow the same TS-split format as D-13
-- Errors should be plausible mistakes, not obvious ones — the kind a thoughtful GM would make
+- Corrections must follow the same Thread Sensitivity-split format as D-13
+- Errors should be plausible mistakes, not obvious ones — the kind a thoughtful Game Master would make
 
 **Input files:** D-13 complete + Foundations full
 
@@ -425,7 +425,7 @@ CORRECTED VERSION: [correct narration in same situation]
 
 ## PHASE 3 — INTEGRATION (Claude)
 
-### TASK 3.1 — Assemble GM Reference Suite (D-15)
+### TASK 3.1 — Assemble Game Master Reference Suite (D-15)
 
 **What:** Combine all Phase 1 and Phase 2 outputs into a single structured reference document organized for table use.
 

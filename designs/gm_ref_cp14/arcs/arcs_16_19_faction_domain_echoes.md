@@ -10,16 +10,16 @@
 
 ## Arc 16: The World Without Direction
 
-**Primary mechanics:** Institutional tendency (NPC faction AI) · NPC faction rolls (faction stat as dice pool, TN 7) · Contested Domain Actions (higher net successes wins; ties to defender) · Seasonal accounting strict order
+**Primary mechanics:** Institutional tendency (Non-Player Character faction artificial intelligence) · Non-Player Character faction rolls (faction stat as dice pool, TN 7) · Contested Domain Actions (higher net successes wins; ties to defender) · Seasonal accounting strict order
 **Primary NPCs:** Confessor Himlensendt · Duke Vaynard · Guildmaster Council
 
 ---
 
 ### Narrative
 
-There are seasons where the players are occupied elsewhere — a Thread crisis in the south, a personal arc consuming attention, a succession problem requiring travel. The factions do not pause. Each has an institutional tendency that describes what it does without active direction, and the GM rolls those tendencies forward at every seasonal accounting. The result is not chaos. It is something more unsettling: the world advancing on its own logic toward outcomes nobody chose.
+There are seasons where the players are occupied elsewhere — a Thread crisis in the south, a personal arc consuming attention, a succession problem requiring travel. The factions do not pause. Each has an institutional tendency that describes what it does without active direction, and the Game Master rolls those tendencies forward at every seasonal accounting. The result is not chaos. It is something more unsettling: the world advancing on its own logic toward outcomes nobody chose.
 
-The Church's tendency is to expand Piety, suppress heresy, and accumulate civil authority. Without players disrupting it, Himlensendt's apparatus works efficiently. Church Mandate creeps toward 6. TC ticks upward because the seasonal mechanic generates it automatically at Mandate 5+. Varfell's tendency is to maximize information advantage and avoid public commitments — Vaynard runs intelligence operations quietly, building TK through asset deployment, not through the relationship with practitioners that would also build it faster. The Guilds protect commerce and resist taxation independently in each territory, fracturing any emerging coalition against Church encroachment because no single guild leader has authority to commit the whole.
+The Church's tendency is to expand Piety, suppress heresy, and accumulate civil authority. Without players disrupting it, Himlensendt's apparatus works efficiently. Church Mandate creeps toward 6. Theocracy Counter ticks upward because the seasonal mechanic generates it automatically at Mandate 5+. Varfell's tendency is to maximize information advantage and avoid public commitments — Vaynard runs intelligence operations quietly, building TK through asset deployment, not through the relationship with practitioners that would also build it faster. The Guilds protect commerce and resist taxation independently in each territory, fracturing any emerging coalition against Church encroachment because no single guild leader has authority to commit the whole.
 
 When the players return, the board has moved two seasons without them. None of the individual moves was a crisis. The accumulation is. The Church is at Mandate 6, one step from dominance. Vaynard is at TK 3, succession leverage now formally linked to Southernmost terms. The Guilds have quietly increased Prosperity in three territories, raising the Ob for anyone trying to mobilise economic pressure against them. Each faction did exactly what its tendency describes. The players look at the accounting sheet and have to identify which tendency created which consequence — because the remedies are different for each.
 
@@ -49,7 +49,7 @@ flowchart TD
     K --> K4["Baralta suppression may be gone:\nTC at +1/season net without her contribution\nImmediate assessment: Baralta Mandate vs 5 threshold"]
 ```
 
-**Why this arc is emergent:** No faction was directed by a player. Each followed its stated institutional tendency with GM dice rolls. The crisis is the product of four independent tendencies advancing simultaneously in directions that individually were not crises.
+**Why this arc is emergent:** No faction was directed by a player. Each followed its stated institutional tendency with Game Master dice rolls. The crisis is the product of four independent tendencies advancing simultaneously in directions that individually were not crises.
 
 **Arc shape:** 2-season drift (off-screen). 1 session of triage and reorientation. 2–3 seasons of targeted remediation responding to the specific tendencies that created the largest shifts.
 
@@ -101,19 +101,19 @@ flowchart TD
 
 ## Arc 18: The Tied Vote
 
-**Primary mechanics:** Parliamentary Vote (best of 3 exchanges; tie = motion fails by abstention → TC +1 AND RS −1 simultaneously) · Political Axis 1 (Sovereignty) · Axis 3 (Legitimacy) · Pre-vote Domain Actions (Influence whipping mechanic) · Seasonal accounting order (votes resolve before clock drift)
+**Primary mechanics:** Parliamentary Vote (best of 3 exchanges; tie = motion fails by abstention → Theocracy Counter +1 AND Rendering Stability −1 simultaneously) · Political Axis 1 (Sovereignty) · Axis 3 (Legitimacy) · Pre-vote Domain Actions (Influence whipping mechanic) · Seasonal accounting order (votes resolve before clock drift)
 
 ---
 
 ### Narrative
 
-Parliament is not a solution. It is a venue where solutions can happen if the conditions are right, and where failures cost more than silence if the conditions are not. Players who understand the TC mechanics understand that a Parliamentary Vote is one of the few formal procedures that can reverse territorial seizures or constrain Church authority within a season. They push for a vote. They get one. It ties.
+Parliament is not a solution. It is a venue where solutions can happen if the conditions are right, and where failures cost more than silence if the conditions are not. Players who understand the Theocracy Counter mechanics understand that a Parliamentary Vote is one of the few formal procedures that can reverse territorial seizures or constrain Church authority within a season. They push for a vote. They get one. It ties.
 
-The mechanical consequence of a tied Parliamentary Vote is both clocks ticking simultaneously: TC +1 from institutional paralysis, RS −1 as the substrate reflects the contested rendering of political reality. Neither side won. The motion failed by abstention. The world is slightly worse in two independent dimensions because two factions were unable to resolve their disagreement through the mechanism designed to resolve it. The players spent a season building toward this vote. They leave having made things incrementally worse.
+The mechanical consequence of a tied Parliamentary Vote is both clocks ticking simultaneously: Theocracy Counter +1 from institutional paralysis, Rendering Stability −1 as the substrate reflects the contested rendering of political reality. Neither side won. The motion failed by abstention. The world is slightly worse in two independent dimensions because two factions were unable to resolve their disagreement through the mechanism designed to resolve it. The players spent a season building toward this vote. They leave having made things incrementally worse.
 
 This is not a punishment for trying. The tie is the probabilistic output of two roughly matched faction pools rolling against each other when neither side has established a majority. The whipping problem — assembling enough Influence with the right factions before the vote is called — is the mechanic that determines whether the vote resolves or stalls. But whipping requires Domain Actions in the season before the vote, which means the players had to know the vote was coming. They may not have known. The faction that called the vote did.
 
-The arc after the tied vote is about what comes next, which is always worse than what came before. The Church, which benefited from the paralysis, consolidates. The Crown, which called the vote to resolve the tension, has demonstrated that it cannot marshal a Parliamentary majority. Ehrenwall is watching. TC +1 means the Church is one season closer to the seizure threshold. RS −1 is quiet, but it compounds.
+The arc after the tied vote is about what comes next, which is always worse than what came before. The Church, which benefited from the paralysis, consolidates. The Crown, which called the vote to resolve the tension, has demonstrated that it cannot marshal a Parliamentary majority. Ehrenwall is watching. Theocracy Counter +1 means the Church is one season closer to the seizure threshold. Rendering Stability −1 is quiet, but it compounds.
 
 ---
 
@@ -135,7 +135,7 @@ flowchart TD
     B --> M["Whipping failure modes:\nPlayers whip one faction → Church whips another → net zero\nOr: players lack sufficient Influence investment in key faction\nInfluence Domain Action: pool = player Presence + Influence History\nvs Ob 3 for strongly opposed faction\nFail: faction votes against; actively undermines on the floor"]
 ```
 
-**Why this arc is emergent:** The tie emerges from roughly matched faction pools that no player controls. The whipping problem requires advance knowledge of the vote that players may not have had. TC +1 and RS −1 both tick from a single parliamentary failure that neither side intended — the parliamentary procedure itself is the source of the damage.
+**Why this arc is emergent:** The tie emerges from roughly matched faction pools that no player controls. The whipping problem requires advance knowledge of the vote that players may not have had. Theocracy Counter +1 and Rendering Stability −1 both tick from a single parliamentary failure that neither side intended — the parliamentary procedure itself is the source of the damage.
 
 **Arc shape:** 1 season pre-vote Domain Actions (whipping). 1 session vote scene. Immediate clock consequences at Accounting. 2–4 seasons of post-tie response depending on which path players take.
 
@@ -189,6 +189,6 @@ flowchart TD
 |---|---|---|
 | Institutional drift (Arc 16) advances Church to Mandate 6 in the same season as a Parliamentary Vote (Arc 18) | 16 + 18 | Church Mandate 6 pool overwhelms any player-assembled majority; tie becomes near-certain unless whipping succeeded two seasons prior |
 | Guild Favour gate (Arc 17) reached in a territory just as that territory becomes contested in the accounting sequence (Arc 19) | 17 + 19 | Economic Leverage fires in step 1 of accounting (Domain Echo from last season's Favour-building); territory's Prosperity check in step 3 may undo the Leverage gain immediately |
-| Parliamentary tie (Arc 18) advances TC by 1 in the same accounting where Baralta's suppression is under Stability pressure (Arc 19) | 18 + 19 | TC +1 from tie; if Baralta hits Stability 2 this same Accounting, suppression may disappear; TC is then +2/season net from the combined event |
+| Parliamentary tie (Arc 18) advances Theocracy Counter by 1 in the same accounting where Baralta's suppression is under Stability pressure (Arc 19) | 18 + 19 | Theocracy Counter +1 from tie; if Baralta hits Stability 2 this same Accounting, suppression may disappear; Theocracy Counter is then +2/season net from the combined event |
 | Institutional drift (Arc 16) builds Guild Favour passively while players are away, crossing Favour 5 in the wrong territory | 16 + 17 | Guilds now have Economic Leverage against the Crown (not the Church) — the Guilds' institutional tendency aimed Favour-building at commercial self-interest, not player strategy |
-| Domain Echo from Vaynard scene (Arc 19) fires in same accounting as Varfell drift builds TK (Arc 16) | 16 + 19 | Domain Echo may generate TC +1 (Vaynard TK advance) in step 1 before Church Stability check in step 2 — Church consolidates in the same accounting where players thought they were helping Vaynard |
+| Domain Echo from Vaynard scene (Arc 19) fires in same accounting as Varfell drift builds TK (Arc 16) | 16 + 19 | Domain Echo may generate Theocracy Counter +1 (Vaynard TK advance) in step 1 before Church Stability check in step 2 — Church consolidates in the same accounting where players thought they were helping Vaynard |

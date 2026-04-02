@@ -43,15 +43,15 @@ flowchart TD
 
 **Why this arc is emergent:** The practitioner who Weaved the treaty intended to protect it. The brittleness is not failure — it is success. Weaving at Relational scale worked. The problem is that the rigidity it created, which was invisible during Diagnosis, manifests only when external political pressure arrives. The player had no mechanical way to anticipate this during the operation.
 
-**Arc shape:** 1 season to Weave and lock in. 1–3 seasons of political pressure accumulating. 1 season of shattering. 2–3 season resolution arc (Mending or re-Debate). If d6=1 fires on Mending: Niflhel harvesting sub-arc restarts RS drain.
+**Arc shape:** 1 season to Weave and lock in. 1–3 seasons of political pressure accumulating. 1 season of shattering. 2–3 season resolution arc (Mending or re-Debate). If d6=1 fires on Mending: Niflhel harvesting sub-arc restarts Rendering Stability drain.
 
 ---
 
 ## Arc 6: The Tribunal and the Temporal Shimmer
 
-**Primary mechanics:** Debate redesign v1 asymmetric proceedings (Church Tribunal) · Evidence genre Thread consequence (Pulling / temporal co-movement) · Axis 9 (Ontological) · TC threshold
+**Primary mechanics:** Debate redesign v1 asymmetric proceedings (Church Tribunal) · Evidence genre Thread consequence (Pulling / temporal co-movement) · Axis 9 (Ontological) · Theocracy Counter threshold
 
-**Seed:** The Church opens an Inquisitorial proceeding against a practitioner PC or Varfell for Thread-related heresy.
+**Seed:** The Church opens an Inquisitorial proceeding against a practitioner Player Character or Varfell for Thread-related heresy.
 
 **Light narrative:** The Inquisitor knows what questions to ask. The accused knows what happened. The room starts to remember things that haven't happened yet.
 
@@ -84,7 +84,7 @@ flowchart TD
 
 **Why this arc is emergent:** The asymmetric Tribunal structure means the accused cannot Reframe (no Sed Contra). They can only raise objections and make a final distinction. An Evidence genre Overwhelming against the accused fires Pulling co-movement — the Church's own evidentiary argument temporally disturbs the room. The very tool of institutional suppression produces the Thread visibility the Church is trying to prevent.
 
-**Arc shape:** 1 session for the Tribunal scene. Immediate TC/Mandate consequences at Accounting. If Evidence Overwhelming fires: Axis 9 crisis in the same session. Resolution arc depends on which outcome branch fires.
+**Arc shape:** 1 session for the Tribunal scene. Immediate Theocracy Counter/Mandate consequences at Accounting. If Evidence Overwhelming fires: Axis 9 crisis in the same session. Resolution arc depends on which outcome branch fires.
 
 ---
 
@@ -92,7 +92,7 @@ flowchart TD
 
 **Primary mechanics:** Mass Battle v3 Threadweaving-per-turn (§A.10) · Coherence drain curve · Rendering Crisis (Coherence 0) · Corrective Weaving (§3.4 Threadweaving v2.5) · Collective operations Belief conflict
 
-**Seed:** A war begins. A practitioner PC acts as the faction's battlefield Thread asset. They operate every turn.
+**Seed:** A war begins. A practitioner Player Character acts as the faction's battlefield Thread asset. They operate every turn.
 
 **Light narrative:** They won the battle. No one is sure they're still the same person.
 
@@ -135,9 +135,9 @@ flowchart TD
 
 ## Arc 8: The Temporal Window
 
-**Primary mechanics:** Threadweaving v2.5 Past-Oriented Pulling prerequisite (RS ≤ 60) · RS degradation sources · Einhir Ritual Framework (§9.15) · Temporal Disjunction · Certainty checks · Multiple faction awareness
+**Primary mechanics:** Threadweaving v2.5 Past-Oriented Pulling prerequisite (Rendering Stability ≤ 60) · Rendering Stability degradation sources · Einhir Ritual Framework (§9.15) · Temporal Disjunction · Certainty checks · Multiple faction awareness
 
-**Seed:** RS deteriorates below 60. Multiple factions learn that Past-Oriented Pulling is now mechanically accessible.
+**Seed:** Rendering Stability deteriorates below 60. Multiple factions learn that Past-Oriented Pulling is now mechanically accessible.
 
 **Light narrative:** For the first time since the Catastrophe, someone could reach back. Everyone who knows this is deciding whether to let them.
 
@@ -174,9 +174,9 @@ flowchart TD
     P --> T["Institutions built on the partially-displaced event oscillate\nMandates for affected factions: unreliable — Structural Shifting Object means authority intermittent\nDomain Actions by those institutions: −1D\nMandate-conferring capacity suspended until Mended\nThis is functionally a political crisis without any political act by any faction"]
 ```
 
-**Why this arc is emergent:** The Past-Oriented Pulling prerequisite (RS ≤ 60) means the world must first degrade before temporal manipulation is possible. Factions that want to use it need the world to be worse. No faction deliberately tanks RS to open the window — RS degrades from the accumulated effects of prior play. The window opens as a side effect of everything else. When it opens, every faction with knowledge of Thread mechanics has a different agenda for what to do with it.
+**Why this arc is emergent:** The Past-Oriented Pulling prerequisite (Rendering Stability ≤ 60) means the world must first degrade before temporal manipulation is possible. Factions that want to use it need the world to be worse. No faction deliberately tanks Rendering Stability to open the window — Rendering Stability degrades from the accumulated effects of prior play. The window opens as a side effect of everything else. When it opens, every faction with knowledge of Thread mechanics has a different agenda for what to do with it.
 
-**Arc shape:** Background RS deterioration for 3–6 seasons (invisible prerequisite accumulating). Window opens as a threshold event. 2–3 season Southernmost expedition to satisfy Einhir Ritual Framework. 1 session Pulling attempt. 2–4 season consequence arc from whichever branch fires.
+**Arc shape:** Background Rendering Stability deterioration for 3–6 seasons (invisible prerequisite accumulating). Window opens as a threshold event. 2–3 season Southernmost expedition to satisfy Einhir Ritual Framework. 1 session Pulling attempt. 2–4 season consequence arc from whichever branch fires.
 
 ---
 
@@ -187,8 +187,8 @@ flowchart TD
 | Over-actualised treaty shatters during Tribunal season | 5 + 6 | Relational Gap opens; Debate re-establishment needed; Evidence genre Pull fires in tribunal room while Relational Gap exists in the same zone |
 | Practitioner at Rendering Crisis during Southernmost expedition | 7 + 8 | Cannot Leap, cannot Diagnose; Einhir Ritual Framework acquisition impossible; expedition must wait for Corrective Weaving to restore Coherence to 1+ before proceeding |
 | Mass battle turns general's Coherence Fragmented before Temporal Pull attempt | 7 + 8 | At Fragmented: +1 Ob all Thread operations including Leap; Foundational Pull already at Ob 9 + 2 surcharge; now Ob 12 — exceeds Ob 10 cap; Pull becomes mechanically impossible until Coherence recovers |
-| Evidence genre win in Tribunal fires temporal co-movement while RS ≤ 40 | 6 + 8 | At RS Fragile: Shifting Objects form spontaneously in Thread-traffic territories; temporal co-movement from Tribunal triggers spontaneous Shifting Object in the courtroom itself; witnesses perceive rendering failure mid-proceeding |
-| Niflhel Quiet deployed during Southernmost expedition adds TT while RS already critical | 8 (late) | Each Quiet deployment: RS −0.5 (existing harvesting chain); RS at expedition season already stressed; Niflhel accelerates the RS drain that makes the Foundational Pull more dangerous to the substrate |
+| Evidence genre win in Tribunal fires temporal co-movement while Rendering Stability ≤ 40 | 6 + 8 | At Rendering Stability Fragile: Shifting Objects form spontaneously in Thread-traffic territories; temporal co-movement from Tribunal triggers spontaneous Shifting Object in the courtroom itself; witnesses perceive rendering failure mid-proceeding |
+| Niflhel Quiet deployed during Southernmost expedition adds Thread Tension while Rendering Stability already critical | 8 (late) | Each Quiet deployment: Rendering Stability −0.5 (existing harvesting chain); Rendering Stability at expedition season already stressed; Niflhel accelerates the Rendering Stability drain that makes the Foundational Pull more dangerous to the substrate |
 | Collective Mending of Relational Gap has Belief conflict | 5 (recovery) | Directly opposing Beliefs require pre-Leap check; practitioners who disagree about whether the treaty should be restored cannot align; Shifting Object persists |
 
 ---
@@ -205,11 +205,11 @@ flowchart TD
 | Coherence drain per mass battle turn | 7 | Winning the war costs practitioner rendering stability; deterministic, not a punishment |
 | Corrective Weaving Ob 5 at Rendering Crisis | 7 | Recovery requires external rendering; self-rescue is ontologically impossible |
 | Belief conflict in Collective operations | 7 | Opposing intentionalities block collective Mending/Corrective Weaving |
-| RS ≤ 60 prerequisite for Past-Oriented Pulling | 8 | World deterioration opens temporal mechanics; perverse incentive structure |
+| Rendering Stability ≤ 60 prerequisite for Past-Oriented Pulling | 8 | World deterioration opens temporal mechanics; perverse incentive structure |
 | Einhir Ritual Framework (§9.15) | 8 | Three-condition gate for Foundational operations; each condition is a campaign arc in itself |
 | Temporal Disjunction + Certainty checks | 8 | Success of the Pull destabilises rendering for all witnesses; victory has ontological cost |
 | Foundational-scale Shifting Object (Partial) | 8 | Half-successful temporal manipulation oscillates institutional authority at Structural scale; political crisis from Thread event |
 
 ---
 
-*All arcs require RS to be tracked accurately across sessions. Arcs 7 and 8 converge if the same practitioner runs both — full-battle Threadweaving followed by Foundational Pull in the same campaign is a near-certain Rendering Crisis path.*
+*All arcs require Rendering Stability to be tracked accurately across sessions. Arcs 7 and 8 converge if the same practitioner runs both — full-battle Threadweaving followed by Foundational Pull in the same campaign is a near-certain Rendering Crisis path.*

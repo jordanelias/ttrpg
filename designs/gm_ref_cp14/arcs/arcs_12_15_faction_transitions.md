@@ -18,7 +18,7 @@
 
 The two factions best positioned to resist Church overreach are also the two factions structurally penalised for doing so in the ways the situation requires.
 
-The Crown's Virtue Ethics framework grades actions by whether they demonstrate virtuous character — public, visible, honourable acts earn −1 Ob. Covert, expedient, or morally ambiguous acts earn +1 Ob. The Crown is, in the rules' own language, "structurally weakest at covert operations." This is fine when the threats are open. The Church's current campaign is not open. TC has been climbing through intelligence operations, quiet territorial pressure, and Niflhel channels that don't appear in any public record. The Crown cannot oppose covert pressure through virtue. It is mechanically unable to be effective at the game being played against it.
+The Crown's Virtue Ethics framework grades actions by whether they demonstrate virtuous character — public, visible, honourable acts earn −1 Ob. Covert, expedient, or morally ambiguous acts earn +1 Ob. The Crown is, in the rules' own language, "structurally weakest at covert operations." This is fine when the threats are open. The Church's current campaign is not open. Theocracy Counter has been climbing through intelligence operations, quiet territorial pressure, and Niflhel channels that don't appear in any public record. The Crown cannot oppose covert pressure through virtue. It is mechanically unable to be effective at the game being played against it.
 
 Hafenmark's Categorical Imperative framework rewards actions based on legal precedent (−1 Ob) and penalises ad hoc, situational, or precedent-breaking actions (+1 Ob). Baralta is the strongest procedural actor in the kingdom: Mandate 7, Reach 5, deep History in Court Law, a parliamentary record that is effectively the institutional memory of the constitutional settlement. What she cannot do is make an exception. When the Church's territorial seizure proceeds through technically legitimate doctrinal channels — and it does, because Olafsson is thorough — Hafenmark faces a Church move that is constitutionally irregular but not obviously illegal. Opposing it ad hoc costs +1 Ob. Opposing it by building new legal precedent takes time it doesn't have. Opposing it through the parliamentary procedure that would be −1 Ob requires Parliament to be in session, which requires the Crown to call it, which requires the Crown to act.
 
@@ -50,25 +50,25 @@ flowchart TD
 
 **Why this arc is emergent:** No player designed the trap. The Crown's Virtue Ethics and Hafenmark's Categorical Imperative are baked into the faction cards. The Church's covert campaign is the Church's institutional tendency. The trap assembles itself from three independent systems running simultaneously.
 
-**Arc shape:** 2–3 seasons of TC accumulation inside the framework gap. 1 season where the gap becomes visible to players. 1–2 seasons of precedent-building or parliamentary manoeuvre. Resolution at the vote.
+**Arc shape:** 2–3 seasons of Theocracy Counter accumulation inside the framework gap. 1 season where the gap becomes visible to players. 1–2 seasons of precedent-building or parliamentary manoeuvre. Resolution at the vote.
 
 ---
 
 ## Arc 13: The Dominance Event
 
-**Primary mechanics:** Church TC threshold escalation · Mandate/Stability 7 dominance event · TC 60 territorial seizure procedure · Counter-play timing windows · Axes 1, 2, 9
+**Primary mechanics:** Church Theocracy Counter threshold escalation · Mandate/Stability 7 dominance event · Theocracy Counter 60 territorial seizure procedure · Counter-play timing windows · Axes 1, 2, 9
 
 ---
 
 ### Narrative
 
-TC does not move in straight lines. It moves in thresholds. Below 40, it is a background condition — something the factions monitor, something the players track, something that produces moderate seasonal effects. At 40, the Church gains the capacity for territorial seizure. At 60, the seizure procedure becomes active. These thresholds are not abstract. They correspond to observable changes in how Confessor Himlensendt holds himself in a room, in whether Olafsson's Inquisitors have search authorisation, in whether the Templars can deploy without asking.
+Theocracy Counter does not move in straight lines. It moves in thresholds. Below 40, it is a background condition — something the factions monitor, something the players track, something that produces moderate seasonal effects. At 40, the Church gains the capacity for territorial seizure. At 60, the seizure procedure becomes active. These thresholds are not abstract. They correspond to observable changes in how Confessor Himlensendt holds himself in a room, in whether Olafsson's Inquisitors have search authorisation, in whether the Templars can deploy without asking.
 
-The dominance event is what happens if no one arrests the trajectory. Church Mandate 7, Church Stability 7 — either triggers it. The seasonal accounting machinery reads this as a ceiling event, the mirror of the Stability 0 collapse. The world reorganises around the faction that has achieved dominance. What that reorganisation looks like in practice: every other faction's Domain Actions that target Church authority face an additional layer of institutional resistance. The TC suppression mechanisms that have been quietly working — Baralta's −1/season, players' Domain Actions, Revolution community operations — are insufficient against a faction that has, in mechanical terms, become structurally dominant.
+The dominance event is what happens if no one arrests the trajectory. Church Mandate 7, Church Stability 7 — either triggers it. The seasonal accounting machinery reads this as a ceiling event, the mirror of the Stability 0 collapse. The world reorganises around the faction that has achieved dominance. What that reorganisation looks like in practice: every other faction's Domain Actions that target Church authority face an additional layer of institutional resistance. The Theocracy Counter suppression mechanisms that have been quietly working — Baralta's −1/season, players' Domain Actions, Revolution community operations — are insufficient against a faction that has, in mechanical terms, become structurally dominant.
 
-The arc is not about what happens after dominance. It is about the last two or three seasons before dominance when it is still preventable and the window is closing. Seasonal accounting is the mechanism: Church Mandate advances most reliably when TC ≥ 40 (TC +1/season from Church's own threshold mechanic), when Baralta's suppression has been removed, and when no Domain Action targets Church Stability or Mandate. The players who can do the arithmetic know when dominance is one or two quiet seasons away.
+The arc is not about what happens after dominance. It is about the last two or three seasons before dominance when it is still preventable and the window is closing. Seasonal accounting is the mechanism: Church Mandate advances most reliably when Theocracy Counter ≥ 40 (Theocracy Counter +1/season from Church's own threshold mechanic), when Baralta's suppression has been removed, and when no Domain Action targets Church Stability or Mandate. The players who can do the arithmetic know when dominance is one or two quiet seasons away.
 
-The three counter-play options for TC 60 seizure — Parliamentary challenge (Influence vs Ob 3), Riskbreaker operation exposing Church-Niflhel connection, Grand Debate challenging Church civil authority — each have different timing requirements and different costs. The Parliamentary challenge is fastest but requires Parliament to be in session. The Riskbreaker exposure adds Deniability Debt to the Crown (at Debt 3, all Crown Domain Actions against non-Crown factions +1 Ob). The Grand Debate is the nuclear option: Overwhelming removes all seizures in one duchy; Success removes one. But Grand Debate requires 5 exchanges, which is a full season's investment of Baralta's time and political capital.
+The three counter-play options for Theocracy Counter 60 seizure — Parliamentary challenge (Influence vs Ob 3), Riskbreaker operation exposing Church-Niflhel connection, Grand Debate challenging Church civil authority — each have different timing requirements and different costs. The Parliamentary challenge is fastest but requires Parliament to be in session. The Riskbreaker exposure adds Deniability Debt to the Crown (at Debt 3, all Crown Domain Actions against non-Crown factions +1 Ob). The Grand Debate is the nuclear option: Overwhelming removes all seizures in one duchy; Success removes one. But Grand Debate requires 5 exchanges, which is a full season's investment of Baralta's time and political capital.
 
 ---
 
@@ -97,9 +97,9 @@ flowchart TD
     L -->|"Too late: dominance event fires"| O["Church Mandate 7: ceiling event\nEvery Domain Action targeting Church authority:\nadditional layer of institutional resistance\nAll TC-reducing options face higher Ob\nEndgame arc: world under Church dominance\nRS unaddressed without Revolution's Community Weaving"]
 ```
 
-**Why this arc is emergent:** TC moves through multiple independent sources — Church Mandate threshold, seizure flat values, Baralta suppression status. No single intervention permanently reverses it. The counter-play options each have costs that create new problems. The dominance event is not a scripted villain arc — it is the output of a system running at full load without coordinated opposition.
+**Why this arc is emergent:** Theocracy Counter moves through multiple independent sources — Church Mandate threshold, seizure flat values, Baralta suppression status. No single intervention permanently reverses it. The counter-play options each have costs that create new problems. The dominance event is not a scripted villain arc — it is the output of a system running at full load without coordinated opposition.
 
-**Arc shape:** Background TC accumulation across full campaign. Seizure window opens at TC 40 (crisis begins). TC 60 reached in 2–4 seasons without intervention. Last-window play for 1–2 seasons. Dominance event or reversal.
+**Arc shape:** Background Theocracy Counter accumulation across full campaign. Seizure window opens at Theocracy Counter 40 (crisis begins). Theocracy Counter 60 reached in 2–4 seasons without intervention. Last-window play for 1–2 seasons. Dominance event or reversal.
 
 ---
 
@@ -113,9 +113,9 @@ flowchart TD
 
 The Revolution has no Mandate, no Military, no Wealth. It runs on Influence, Stability, and Intel — and on the Rawlsian Social Contract that makes it mechanically strongest when it acts for the common population and weakest when it concentrates power. This is not an inconsistency in the design. It is a structural statement about what the Revolution is: a movement, not an institution. The moment it becomes an institution, its own ethical framework turns against it.
 
-The path to Community Weaving — the Revolution's unique Thread contribution, the only faction mechanism that can lower RS — requires Mandate ≥ 1. The Revolution rejects the legitimacy of the system that confers Mandate, but it needs that system's recognition to access its most powerful action. This is the arc's mechanical seed: the Revolution must become legible to the political structure it opposes, and becoming legible costs it the thing that makes it effective.
+The path to Community Weaving — the Revolution's unique Thread contribution, the only faction mechanism that can lower Rendering Stability — requires Mandate ≥ 1. The Revolution rejects the legitimacy of the system that confers Mandate, but it needs that system's recognition to access its most powerful action. This is the arc's mechanical seed: the Revolution must become legible to the political structure it opposes, and becoming legible costs it the thing that makes it effective.
 
-In practice: players who affiliate with the Revolution and build its Influence toward political recognition gain Mandate — which unlocks Community Weaving and makes RS recovery possible. But the moment Revolution holds Mandate, it is an establishment faction. Actions that concentrate power, benefit elites, or suppress popular expression now carry +1 Ob. The institution-building that unlocked Weaving is itself subject to the framework penalty. The movement that was strongest as an outsider is now penalised for acting like an insider. Its own members recognise this before the players do.
+In practice: players who affiliate with the Revolution and build its Influence toward political recognition gain Mandate — which unlocks Community Weaving and makes Rendering Stability recovery possible. But the moment Revolution holds Mandate, it is an establishment faction. Actions that concentrate power, benefit elites, or suppress popular expression now carry +1 Ob. The institution-building that unlocked Weaving is itself subject to the framework penalty. The movement that was strongest as an outsider is now penalised for acting like an insider. Its own members recognise this before the players do.
 
 Leadership Deviation within the Revolution fires at Ob 3 when directed toward violence, authoritarianism, or elite alliance — the hardest deviation cost of any faction except the Church. The institution fractures if it betrays its own principles. This is not a game balance decision. It is a design claim: the thing that makes the Revolution worth affiliating with is also the thing that makes it impossible to sustain as a political institution. Every successful Revolution faces this. This one has it written into the dice.
 
@@ -147,7 +147,7 @@ flowchart TD
 
 ## Arc 15: The Headless Network
 
-**Primary mechanics:** Niflhel four-arm structure · Decentralised control mechanic · Intel vs Ob 3 per arm · Uncontrolled arm independence · Quiet deployment RS/TT accumulation (cause pending editorial clarification — GAP-ARC-01)
+**Primary mechanics:** Niflhel four-arm structure · Decentralised control mechanic · Intel vs Ob 3 per arm · Uncontrolled arm independence · Quiet deployment Rendering Stability/Thread Tension accumulation (cause pending editorial clarification — GAP-ARC-01)
 
 ---
 
@@ -200,8 +200,8 @@ flowchart TD
 
 | Collision | Arcs | Mechanic |
 |---|---|---|
-| Framework Trap + Dominance Event in same season | 12 + 13 | Crown cannot act covertly; Hafenmark needs precedent time; Church seizes territory in the gap; TC jumps to 60 in one accounting without framework-unencumbered response |
-| Revolution Mandate reaches 1 during Dominance Event | 14 + 13 | Community Weaving unlocks precisely when Church dominance is making all Thread-revealing Domain Actions +2 Ob; the Weaving that could reverse RS is blocked by the same threshold event that made it necessary |
+| Framework Trap + Dominance Event in same season | 12 + 13 | Crown cannot act covertly; Hafenmark needs precedent time; Church seizes territory in the gap; Theocracy Counter jumps to 60 in one accounting without framework-unencumbered response |
+| Revolution Mandate reaches 1 during Dominance Event | 14 + 13 | Community Weaving unlocks precisely when Church dominance is making all Thread-revealing Domain Actions +2 Ob; the Weaving that could reverse Rendering Stability is blocked by the same threshold event that made it necessary |
 | Player controlling Niflhel Quiet is also running the Revolution | 15 + 14 | Elite alliance (+1 Ob under Rawlsian framework); Revolution Stability check Ob 3 fires if the player's Niflhel operations become known to the movement; the movement fractures if it discovers its player-affiliate is running the kingdom's assassination network |
 | Reckoners (uncontrolled) contracted to Church during Tribunal arc | 15 + 6 | Niflhel financial resources backstop the Church's Inquisition file-building; players fighting the Tribunal while also trying to control the Reckoners face the arm actively working against them during the most politically exposed moment |
 | Framework Trap forces player covert action during Niflhel acquisition | 12 + 15 | Players acting covertly on Crown's behalf are simultaneously in Niflhel's intelligence visibility if Quiet is uncontrolled; Quiet sells what it finds; Crown covert action becomes public through Niflhel's default commercial behaviour |

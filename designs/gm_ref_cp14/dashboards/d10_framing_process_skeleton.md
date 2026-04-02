@@ -12,7 +12,7 @@
 ### STEP 1 — IDENTIFY PRIMARY DIMENSION
 What was the practitioner's intended target?
 
-- **Primarily temporal:** the operation moves something in time (Past-Pull; temporal Weaving at TS 50+; operations targeting duration, timing, or historical state)
+- **Primarily temporal:** the operation moves something in time (Past-Pull; temporal Weaving at Thread Sensitivity 50+; operations targeting duration, timing, or historical state)
 - **Primarily epistemic:** the operation changes how something is known or perceived (Pulling attention/perception; operations targeting awareness, belief, memory accessibility)
 - **Primarily actualized:** the operation changes something's physical or factual state (standard Weaving for healing or reinforcement; Lock; Dissolution)
 
@@ -57,15 +57,15 @@ The other two dimensions move in the same direction as the primary effect, propo
 
 ---
 
-### STEP 4 — NARRATE AT APPROPRIATE TS TIER
+### STEP 4 — NARRATE AT APPROPRIATE Thread Sensitivity TIER
 
-**TS 0–29 (ontical surface only):**
+**Thread Sensitivity 0–29 (ontical surface only):**
 What changes in the observable, sensory world. No reference to threads, rendering, or mechanism. The observer notices something changed, feels something, or experiences something — but has no framework for why.
 
-**TS 30–49 (ontical + partial ontological):**
+**Thread Sensitivity 30–49 (ontical + partial ontological):**
 What changes + a faint sense of the mechanism. The practitioner knows an operation occurred and perceives the primary effect clearly. The co-movement consequences register as a secondary awareness — something moved that they didn't intend to move — but without full comprehension of which dimension.
 
-**TS 50+ (full ontological):**
+**Thread Sensitivity 50+ (full ontological):**
 What changes + explicit awareness of all three dimensions moving. The practitioner perceives the co-movement in real time: the temporal displacement, the epistemic shift, and the actualized change as three distinct but unified movements of the same configuration. This is not three separate observations — it is one unified perception of the thread's inseparability.
 
 ---

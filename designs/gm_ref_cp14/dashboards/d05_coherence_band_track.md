@@ -24,12 +24,12 @@
 ### DISSONANT (7–5)
 - **Narrative:** flickers of wrongness; déjà vu; events feel slightly out of sequence
 - **Knot strain:** +1 per 3 sessions per Knot
-- **Perception by others:** TS 50+ practitioners in same scene sense instability
+- **Perception by others:** Thread Sensitivity 50+ practitioners in same scene sense instability
 - **Thread ops:** +1D (benefit — instability permits easier Thread access)
 
 ### FRAGMENTED (4–3)
 - **Dice penalties:** −1D all Memory-based rolls
-- **Narrative:** GM may present character's recollection differently from what others remember
+- **Narrative:** Game Master may present character's recollection differently from what others remember
 - **Knot strain:** +1 per 2 sessions per Knot
 - **Thread ops:** +2D (benefit); +1 Ob on all Thread ops including Leap
 - **On entering band:** Roll Fragmented Fallout (d6 — see below)
@@ -40,8 +40,8 @@
 - **Certainty max:** −1 per Coherence level below 3 (so −1 at Coherence 2)
 - **Dissociation:** Once per scene with Thread op — Spirit TN 7 Ob 1 or lose 1 round
 - **Thread ops:** +3D (benefit); +1 Ob on all Thread ops
-- **NPC reaction:** unease; character functions as minor monstrous presence
-- **Belief co-authorship begins** (GM + player rewrite Beliefs together)
+- **Non-Player Character reaction:** unease; character functions as minor monstrous presence
+- **Belief co-authorship begins** (Game Master + player rewrite Beliefs together)
 - **On entering band:** Roll Fractured Fallout (d6 — see below)
 
 ### SEVERED (1)
@@ -54,7 +54,7 @@
 ### RENDERING CRISIS (0)
 - Campaign event
 - Practitioner must resolve narratively (relational anchoring, withdrawal)
-- Unresolved by season end → character becomes NPC
+- Unresolved by season end → character becomes Non-Player Character
 - All Knots receive final pulse of rendering strain
 
 ---
@@ -68,7 +68,7 @@
 | Operation Failure degree tables (some) | +1 Ob to retention roll this Leap |
 | No passive recovery | — |
 
-**Retention Roll:** Spirit + relevant History + TPS, TN 7, Ob = sum of all operation Obs this Leap
+**Retention Roll:** Spirit + relevant History + Thread Pool Score, TN 7, Ob = sum of all operation Obs this Leap
 
 ---
 
@@ -97,7 +97,7 @@
 1. Vivid memory of an event the world no longer contains — character doesn't know it's orphaned
 2. Most recent History advancement feels uncertain — borrowed, not learned
 3. A named Knot briefly doesn't recognise the character, or vice versa (one scene)
-4. Character performs an action they don't remember — GM describes the gap
+4. Character performs an action they don't remember — Game Master describes the gap
 5. Inspiration refresh this scene feels already spent
 6. A Belief reads, briefly, as belonging to someone else
 

@@ -11,8 +11,8 @@
 
 **Leap eligibility (all must be true):**
 - [ ] Approach Training tag
-- [ ] TS ≥ 30
-- [ ] TT ≥ 20
+- [ ] Thread Sensitivity ≥ 30
+- [ ] Thread Tension ≥ 20
 - [ ] Not currently in melee with opponent who declared attack this round
 - [ ] Not at/above incapacitation Wound threshold
 
@@ -21,11 +21,11 @@
 ## STEP 1 — DECLARE AND LEAP (Priority 5, full-round)
 
 **Leap Pool:** Attunement + relevant History bonus (pre-calculated on sheet)
-**TN:** 7 | **Ob:** TS 30–49 = 2 · TS 50+ = 1 · −1D per Wound
+**TN:** 7 | **Ob:** Thread Sensitivity 30–49 = 2 · Thread Sensitivity 50+ = 1 · −1D per Wound
 
 | Degree | Outcome |
 |--------|---------|
-| Overwhelming | Clean contact. Next op Ob −1 (min 1). +1 TS. |
+| Overwhelming | Clean contact. Next op Ob −1 (min 1). +1 Thread Sensitivity. |
 | Success | Contact achieved. Proceed. |
 | Partial | Unstable. Op Ob +1. −2 Composure. |
 | Failure | No Thread op this scene. −4 Composure. Rattled. |
@@ -36,7 +36,7 @@
 
 ## STEP 2 — DIAGNOSIS (Priority 4, free action, Round N+1)
 
-No roll. GM exchange: GM describes actualization tightness (sets Ob), prior workings, Gap risk, Coherence trace.
+No roll. Game Master exchange: Game Master describes actualization tightness (sets Ob), prior workings, Gap risk, Coherence trace.
 
 **Mandatory before FR:** Skip = +2 Ob + auto-Gap on Failure
 **Mandatory before Past-Pull:** Skip = +3 Ob + temporal Gap on Failure
@@ -51,13 +51,13 @@ No roll. GM exchange: GM describes actualization tightness (sets Ob), prior work
 | Pulling | Spirit + History | 7 | Ob 1–5 |
 | FR Lock | Spirit + History | 7 | Ob 4–8+ (min 4) |
 | FR Dissolution | Spirit + History | 7 | Ob 4–8+ (min 4) |
-| Mending | Attunement + Focus + TPS | 7 | Ob 2–8 |
+| Mending | Attunement + Focus + Thread Pool Score | 7 | Ob 2–8 |
 
 **Current Op Ob Modifiers (stack additively, cap at 10):**
 - Partial Leap: +1
 - Wounds: −1D (not Ob)
-- TT > 60: +1 Ob all ops
-- TT > 79: +2 Ob all ops
+- Thread Tension > 60: +1 Ob all ops
+- Thread Tension > 79: +2 Ob all ops
 - Coherence Fragmented/Fractured/Severed: +1/+1/+2 Ob
 - Overweaving (2nd+ in same scene): +1 Ob cumulative
 
@@ -73,9 +73,9 @@ No roll. GM exchange: GM describes actualization tightness (sets Ob), prior work
 
 ### Temporal Auto-Effect (automatic)
 
-| Op Type | Effect | TT Change |
+| Op Type | Effect | Thread Tension Change |
 |---------|--------|-----------|
-| Weaving (any degree) | Target's temporal axis compresses; observers TS 10+ perceive target as "clearer" 1 scene | −1 |
+| Weaving (any degree) | Target's temporal axis compresses; observers Thread Sensitivity 10+ perceive target as "clearer" 1 scene | −1 |
 | Pulling (any degree) | Loosened thread's temporal anchoring frays; social roll citing it as precedent +1 Ob until reaffirmed | −1 |
 | FR Lock | Locked config's temporal axis freezes permanently | −2 |
 | FR Dissolution | Temporal void; present feels denser | −2 |
@@ -87,7 +87,7 @@ No roll. GM exchange: GM describes actualization tightness (sets Ob), prior work
 
 | Op Type | Effect |
 |---------|--------|
-| Weaving (S/O) | Target MORE intelligible; TS 10+ perceive clarity 1 scene |
+| Weaving (S/O) | Target MORE intelligible; Thread Sensitivity 10+ perceive clarity 1 scene |
 | Weaving (P/F) | Target LESS intelligible; testimony about target +1 Ob 1 session |
 | Pulling (any) | Epistemic instability; witnesses disagree on details; investigation/Circles +1 Ob until accounting |
 | FR Lock | Locked config opaque; Diagnosis on target +2 Ob |
@@ -102,11 +102,11 @@ No roll. GM exchange: GM describes actualization tightness (sets Ob), prior work
 
 | d6 | Effect |
 |----|--------|
-| 1 | Knot strain ±1 (target's or practitioner's — GM choice) |
+| 1 | Knot strain ±1 (target's or practitioner's — Game Master choice) |
 | 2 | Nearby object enters partial potentiality (minor Shifting Object risk; self-corrects 1d3 days) |
 | 3 | Physical residue at operation site |
 | 4 | Target's physical config overshoots intended scope |
-| 5 | Environmental texture shifts (temperature/light/sound; detectable TS 10+) |
+| 5 | Environmental texture shifts (temperature/light/sound; detectable Thread Sensitivity 10+) |
 | 6 | Delayed manifestation (1d3 scenes later) |
 
 **→ Narrative: [SEE D-11 CO-MOVEMENT MATRIX — d6 table column]**
@@ -116,23 +116,23 @@ No roll. GM exchange: GM describes actualization tightness (sets Ob), prior work
 ## STEP 6 — POST-OPERATION CHECKS
 
 **Coherence Retention Roll** (at end of full Leap contact window, not per operation):
-- Pool: Spirit + relevant History + TPS, TN 7
+- Pool: Spirit + relevant History + Thread Pool Score, TN 7
 - Ob: sum of all operation Obs performed during this Leap
 - Fail → −1 Coherence
 
-**TT change:** Apply all auto-effects + degree table changes to TT tracker
+**Thread Tension change:** Apply all auto-effects + degree table changes to Thread Tension tracker
 
-**TS growth check** (if Leap was Overwhelming): +1 TS
+**Thread Sensitivity growth check** (if Leap was Overwhelming): +1 Thread Sensitivity
 
 **Fraying Bane check:** 3rd+ FR Dissolution or Past-Pull this season → Fraying active
 
-**History Resonance:** If temporal co-movement fired + practitioner has relevant History → Resonance active; next use of that History +1D (on result 1: −1 TT)
+**History Resonance:** If temporal co-movement fired + practitioner has relevant History → Resonance active; next use of that History +1D (on result 1: −1 Thread Tension)
 
 ---
 
 ## SCALE QUICK-REFERENCE
 
-| Scale | Ob | Min TS | TT Cost Modifier |
+| Scale | Ob | Min Thread Sensitivity | Thread Tension Cost Modifier |
 |-------|-----|--------|-----------------|
 | Object | 1–2 | 30+ | ×1 |
 | Personal | 2–3 | 30+ | ×1 |
@@ -140,13 +140,13 @@ No roll. GM exchange: GM describes actualization tightness (sets Ob), prior work
 | Territorial | 4–5 | 50+ | ×3 (floor) |
 | Structural | 5–8+ | 70+ | ×3 (floor) |
 
-*Mass combat Thread ops: all TT costs ×3 floor, capped at +15/op*
+*Mass combat Thread ops: all Thread Tension costs ×3 floor, capped at +15/op*
 
 ---
 
 ## COLLECTIVE OPERATION QUICK-REFERENCE
 
-- Anchor: highest TS; sets intentionality; cannot Fork
+- Anchor: highest Thread Sensitivity; sets intentionality; cannot Fork
 - Each helper contributes: floor(Cog ÷ 2) bonus dice
 - Helpers cannot Fork
 - Anchor fails Leap → lattice does not form (helpers proceed individually)
