@@ -259,15 +259,12 @@ The following params files are behind their source documents after this session'
 
 | Params File | Source That Changed | What Changed |
 |-------------|--------------------|--------------| 
-| references/params_combat.md | stage8_combat.md | PP-086–092 applied 2026-04-02 |
-| references/params_mass_combat.md | mass_battle_v3.md | ST-MB patches applied 2026-04-02 |
-| references/params_board_game.md | bg_v05_simulation_and_patches.md | ST-BG/INT patches 2026-04-02 |
-| references/params_debate.md | debate_system_redesign_v1.md | Part 6 compiled mechanics 2026-04-02 |
-| references/params_threadwork.md | threadwork_redesign_v25.md | ST-TW patches 2026-04-02 |
-| compilation/v0.14/stage8_combat.md | PP-089, PP-090 | PENDING — belong in stage11 |
-| compilation/v0.14/stage3_thread_operations.md | threadwork_redesign_v25.md | Entire stage3 needs rewrite from v25 |
-| compilation/v0.14/stage9_social.md | debate_system_redesign_v1.md | Entire stage9 needs rewrite from redesign |
-| compilation/v0.14/stage_bg_board_game_mode.md | bg_v05_simulation_and_patches.md | ED-001 BLOCKER prevents full sync |
+| compilation/v0.14/stage8_combat.md | PP-089, PP-090 | PENDING — belong in stage11_scale_transitions.md |
+| compilation/v0.14/stage3_thread_operations.md | threadwork_redesign_v25.md | Entire stage3 needs rewrite from v25 design |
+| compilation/v0.14/stage9_social.md | debate_system_redesign_v1.md | Entire stage9 needs rewrite from Part 6 compiled spec |
+| compilation/v0.14/stage_bg_board_game_mode.md | bg_v05_simulation_and_patches.md | ED-001 (Card-Hand) BLOCKER prevents full sync |
+
+*Resolved 2026-04-02: params_combat, params_mass_combat, params_board_game, params_debate, params_threadwork — all synced with ST patch summaries.*
 
 ---
 

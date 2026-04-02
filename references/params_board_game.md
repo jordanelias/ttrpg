@@ -1,4 +1,5 @@
-<!-- version: v0.14+design | source: designs/board_game/valoria_bg_v05_simulation_and_patches.md | last_updated: 2026-04-02 -->
+<!-- version: v0.14+design-ST | source: bg_v05_simulation_and_patches.md | last_updated: 2026-04-02 -->
+<!-- PATCHES APPLIED: P-12–P-32 (prior); ST-BG-01–10, ST-INT-01,05,06,07,08,09,10,12,13 added 2026-04-02 -->
 <!-- NOTE: stage6_factions.md is STALE for BG mode. bg_v05 is canonical for all BG faction mechanics. -->
 <!-- STALE CHECK: BG editorial blockers pending (BG-E-30 card-hand adoption). See canon/editorial_ledger.yaml. -->
 
@@ -188,3 +189,49 @@ TC ≥ 65 (not 70). Starting TC 28 (not 22).
 | Phase 5 Accounting (13+ steps) | 8/10 |
 | Overall (with reference cards) | 6.5/10 |
 | Overall hybrid (with cards) | 8.0/10 |
+
+## PATCH SUMMARY (ST-BG series, applied 2026-04-02)
+
+### PP-033 — Catastrophic Failure Replaces Failure Degree
+Catastrophic Failure is a fifth degree that REPLACES Failure. Not additive.
+
+### PP-034 — Drawn Battles
+Equal net successes: both sides Cohesion −1, hold position, no territory change.
+
+### PP-035 — Hollow Victory Scope
+Hollow Victory applies to Deed-counting factions only (Hafenmark, Guilds).
+Restoration (RS-based) and Crown/Löwenritter (mandate-based) are excluded.
+
+### PP-036 — Policy Instrument Definition (Crown)
+Crown bonus action at Mandate ≥ 4. Any standard action. Once/season. Not interruptible by Parliamentary Manoeuvre.
+
+### PP-037 — Co-Movement VTM at Cap
+VTM effects blocked by once/season cap or VTM max (7): convert to +1D on following season's Tribune action (max +2D total).
+
+### PP-038 — BG vs TTRPG Pool Size
+BG aggregates (sum of all Martial). TTRPG uses per-unit pools. Not statistically equivalent by design.
+
+### PP-039 — Military 0 + Muster
+At Military 0: Muster actions produce no units and may not be taken.
+
+### PP-040 — BG Unit TS (Southernmost)
+Default TS=0. Restoration+Weaver: TS=30. Varfell VTM≥2: TS=30. Church Templar: TS=0 (doctrine).
+
+### PP-041 — Military Loss Timing
+TTRPG: immediate. BG: queues to Accounting. Hybrid: TTRPG timing during battle.
+
+### PP-042 — Military Victory and TC/RS
+Military victory alone produces no TC or RS change. Thread operations during battle produce standard RS changes.
+
+### PP-043 — Wound Penalties in Hybrid
+Wound Ob penalties apply to PC's CR checks in TTRPG mass battle. Do NOT reduce BG commander bonus (Military÷3 calculation).
+
+## PENDING EDITORIALS BLOCKING FULL SYNC
+- ED-001: Card-Hand system (P1-BLOCKER) — prevents full stage_bg sync
+- ED-031: Overwhelming threshold Ob+1 vs 2×Ob (P1)
+- ED-032: TC 80 seizure scope (P1)
+- ED-033: Commander bonus formula (P1)
+- ED-034: Ceiral Ritual scale asymmetry (P2)
+- ED-035: Muster output in BG context (P2)
+- ED-036: Altonian unit stats BLOCKER
+- ED-039: Military seasonal cap pooling (P2)
