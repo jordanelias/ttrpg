@@ -1,0 +1,280 @@
+# VALORIA REPOSITORY FILE INDEX
+## Last updated: 2026-04-02
+## Purpose: Single-source map of every committed file → game system → status
+## Maintained by: valoria-orchestrator skill (update on every commit that adds/modifies a file)
+## Format: path | systems | type | status | depends_on | referenced_by
+
+---
+
+## HOW TO USE
+
+- **systems**: which game mode(s) the file primarily covers (ALL / TTRPG / BG / HYBRID / INFRA)
+- **type**: CANON (immutable) | COMPILED (checkpoint) | DESIGN (proposal) | TEST (simulation) | SKILL | TOOL | REF (parameter/reference) | LOG
+- **status**: CURRENT | STALE | SUPERSEDED | DEPRECATED
+- **depends_on**: files this file's content relies on being correct
+- **referenced_by**: files that cite or build on this file
+
+---
+
+## CANON (immutable — do not modify without explicit canon amendment)
+
+| File | Systems | Status | Notes |
+|------|---------|--------|-------|
+| canon/00_philosophical_foundations.md | ALL | CURRENT | Highest authority. Governs all design. |
+| canon/01_foundations_amendment_self_rendering.md | ALL | CURRENT | Amendment to foundations |
+| canon/02_canon_constraints.md | ALL | CURRENT | Mechanical constraints derived from foundations |
+| canon/03_canonical_timeline.md | ALL | CURRENT | World timeline |
+| canon/README.md | INFRA | CURRENT | — |
+| canon/audit_threadwork_v24.md | TTRPG | CURRENT | Audit of v24 threadwork vs foundations |
+| canon/audit_threadwork_v25.md | TTRPG | CURRENT | Audit of v25 threadwork vs foundations |
+| canon/editorial_ledger.yaml | ALL | CURRENT | Source of truth for editorial decisions. 30 items open. |
+| canon/patch_register.yaml | ALL | CURRENT | All patches PP-001–PP-100+. PP-086–092 filled 2026-04-02. |
+
+---
+
+## COMPILATION v0.14 (current checkpoint)
+
+| File | Systems | Status | Depends On | Referenced By |
+|------|---------|--------|------------|---------------|
+| compilation/v0.14/stage1_core_engine.md | ALL | CURRENT | 00_philosophical_foundations | references/params_core.md |
+| compilation/v0.14/stage2_characters.md | TTRPG/HYBRID | CURRENT | stage1 | — |
+| compilation/v0.14/stage3_thread_operations.md | TTRPG/HYBRID | STALE | designs/ttrpg/threadwork_redesign_v25.md | — |
+| compilation/v0.14/stage4_southernmost.md | TTRPG/HYBRID | CURRENT | stage3 | — |
+| compilation/v0.14/stage5_clocks.md | ALL | CURRENT | stage1 | mass_battle_v3 (Coherence ref) |
+| compilation/v0.14/stage6_factions.md | TTRPG | STALE | — | references/params_factions.md (TTRPG col); NOTE: BG faction mechanics superseded by bg_v05 |
+| compilation/v0.14/stage7_territories.md | ALL | CURRENT | stage6 | — |
+| compilation/v0.14/stage8_combat.md | ALL | CURRENT | stage1, stage2 | references/params_combat.md, references/params_mass_combat.md; PP-086–092 applied 2026-04-02 |
+| compilation/v0.14/stage9_social.md | TTRPG | STALE | — | NOTE: debate_system_redesign_v1.md is the operative design. stage9 is empty. |
+| compilation/v0.14/stage10_advancement.md | TTRPG | CURRENT | stage2 | — |
+| compilation/v0.14/stage11_scale_transitions.md | HYBRID | CURRENT | stage1–8 | references/params_scale_transitions.md; PP-089/PP-090 PENDING application |
+| compilation/v0.14/stage12_campaign_modes.md | ALL | CURRENT | stage1–11 | — |
+| compilation/v0.14/stage13_npcs.md | ALL | CURRENT | stage2, stage6 | GAP: Focus+Attunement values missing from NPC profiles (GAP-ARC31-SIM-01) |
+| compilation/v0.14/stage14_gm_tools.md | ALL | CURRENT | all stages | — |
+| compilation/v0.14/stage15_spell_catalog.md | TTRPG | CURRENT | stage3 | threadwork_redesign_v25 (W-series ops) |
+| compilation/v0.14/stage16_reference.md | ALL | CURRENT | all stages | — |
+| compilation/v0.14/stage17_canon_guard.md | ALL | CURRENT | 00_philosophical_foundations | — |
+| compilation/v0.14/stage3_compilation_report.md | INFRA | CURRENT | — | — |
+| compilation/v0.14/stage_bg_board_game_mode.md | BG | STALE | designs/board_game/valoria_bg_v05_simulation_and_patches.md | NOTE: BG v05 is canonical for BG mode. This stage file is behind. ED-001 (Card-Hand) BLOCKER. |
+| compilation/v0.14/valoria_ruleset_v0.14.md | ALL | CURRENT | all stages | — |
+
+---
+
+## DESIGNS — BOARD GAME
+
+| File | Systems | Status | Depends On | Notes |
+|------|---------|--------|------------|-------|
+| designs/board_game/bg_consolidated_synthesis.md | BG | SUPERSEDED | — | Superseded by bg_v05 |
+| designs/board_game/bg_improvement_v1.md | BG | SUPERSEDED | — | — |
+| designs/board_game/bg_improvement_v2.md | BG | SUPERSEDED | — | — |
+| designs/board_game/bg_improvement_v3.md | BG | SUPERSEDED | — | — |
+| designs/board_game/bg_improvement_v3_amendment2.md | BG | SUPERSEDED | — | — |
+| designs/board_game/bg_improvement_v4.md | BG | SUPERSEDED | — | — |
+| designs/board_game/bg_improvement_review.md | BG | SUPERSEDED | — | — |
+| designs/board_game/bg_proposal_critical_review.md | BG | SUPERSEDED | — | — |
+| designs/board_game/bg_synthesis.md | BG | SUPERSEDED | — | — |
+| designs/board_game/bg_synthesis_amendment_1.md | BG | SUPERSEDED | — | — |
+| designs/board_game/stage_bg_proposal.md | BG | SUPERSEDED | — | — |
+| designs/board_game/stage_bg_proposal_v02.md | BG | SUPERSEDED | — | — |
+| designs/board_game/valoria_bg_v01.md | BG | SUPERSEDED | — | — |
+| designs/board_game/valoria_bg_v02.md | BG | SUPERSEDED | — | — |
+| designs/board_game/valoria_bg_v02_sim_report.md | BG | SUPERSEDED | — | — |
+| designs/board_game/valoria_bg_v03_part1.md | BG | SUPERSEDED | — | — |
+| designs/board_game/valoria_bg_v03_part2.md | BG | SUPERSEDED | — | — |
+| designs/board_game/valoria_bg_v03_part3.md | BG | SUPERSEDED | — | — |
+| designs/board_game/valoria_bg_v04.md | BG | SUPERSEDED | — | — |
+| **designs/board_game/valoria_bg_v05_simulation_and_patches.md** | **BG/HYBRID** | **CURRENT** | stage8, stage6, threadwork_v25 | **Canonical BG faction mechanics. P-12–P-32 applied. ST-BG/INT patches added 2026-04-02.** |
+| designs/board_game/valoria_bg_v05_stress_test_report.md | BG/HYBRID | CURRENT | bg_v05 | Source for ST-BG-01–13, ST-MB-01–10, ST-INT-01–13 patches |
+
+---
+
+## DESIGNS — MASS COMBAT
+
+| File | Systems | Status | Depends On | Notes |
+|------|---------|--------|------------|-------|
+| **designs/mass_combat/mass_battle_v3.md** | **ALL** | **CURRENT** | stage8_combat, threadwork_v25 | **Operative mass battle spec. ST-MB patches added 2026-04-02. ST-MB-02 (Coherence) CRITICAL GAP.** |
+
+---
+
+## DESIGNS — DEBATE
+
+| File | Systems | Status | Depends On | Notes |
+|------|---------|--------|------------|-------|
+| designs/debate/debate_example_v1.md | TTRPG/HYBRID | CURRENT | debate_system_redesign_v1 | Example scenario |
+| **designs/debate/debate_system_redesign_v1.md** | **TTRPG/HYBRID** | **CURRENT** | stage1, stage9 | **Operative debate spec. Part 6 (compiled mechanics) added 2026-04-02 from v1+v2 stress tests.** |
+| designs/debate/debate_stress_test_v1.md | TTRPG | CURRENT | debate_system_redesign_v1 | Source for D-01–D-10, R-01–R-07 patches |
+| designs/debate/debate_stress_test_v2.md | TTRPG | CURRENT | debate_system_redesign_v1 | Source for v2-P01–v2-P04 patches |
+
+---
+
+## DESIGNS — TTRPG (Threadwork)
+
+| File | Systems | Status | Depends On | Notes |
+|------|---------|--------|------------|-------|
+| **designs/ttrpg/threadwork_redesign_v25.md** | **TTRPG/HYBRID/BG** | **CURRENT** | 00_philosophical_foundations, stage3 | **Operative threadwork spec. Mode index added 2026-04-02. ST-TW patches added.** |
+| designs/ttrpg/SUPERSEDED.md | INFRA | CURRENT | — | Marks older design files |
+| designs/ttrpg/batch_a_designs.md | TTRPG | CURRENT | — | Design batch |
+| designs/ttrpg/batch_ad_resolutions.md | TTRPG | CURRENT | — | — |
+| designs/ttrpg/batch_bc_designs.md | TTRPG | CURRENT | — | — |
+| designs/ttrpg/batch_d_designs.md | TTRPG | CURRENT | — | — |
+| designs/ttrpg/batch_e_designs.md | TTRPG | CURRENT | — | — |
+| designs/ttrpg/batch_f_designs.md | TTRPG | CURRENT | — | — |
+| designs/ttrpg/church_territorial_seizure.md | TTRPG/BG | CURRENT | stage6, stage7 | — |
+| designs/ttrpg/edeyja_npc.md | TTRPG | CURRENT | stage13 | — |
+| designs/ttrpg/generation_tasks_gt01_gt02_gt03.md | TTRPG | CURRENT | — | — |
+| designs/ttrpg/lowenritter_faction_card.md | BG | CURRENT | bg_v05 | — |
+| designs/ttrpg/mechanical_tasks_and_patches.md | TTRPG | CURRENT | — | — |
+| designs/ttrpg/succession_mechanic.md | ALL | CURRENT | stage6 | — |
+| designs/ttrpg/valoria_emergent_scenarios.md | TTRPG | CURRENT | stage12 | — |
+| designs/ttrpg/valoria_narrative_scenario_chains.md | TTRPG | CURRENT | stage12 | — |
+
+---
+
+## DESIGNS — HYBRID
+
+| File | Systems | Status | Notes |
+|------|---------|--------|-------|
+| designs/hybrid/hybrid_gaps_resolved.md | HYBRID | CURRENT | Resolved hybrid design gaps |
+
+---
+
+## DESIGNS — GM REFERENCE (CP14)
+
+| File | Systems | Status | Notes |
+|------|---------|--------|-------|
+| designs/gm_ref_cp14/gm_reference_workplan.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/arcs/arcs_01_04_rebuilt.md | ALL | CURRENT | Campaign arcs 1–4 |
+| designs/gm_ref_cp14/arcs/arcs_05_08_rebuilt.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/arcs/arcs_09_11_elske_baralta.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/arcs/arcs_12_15_faction_transitions.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/arcs/arcs_16_19_faction_domain_echoes.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/arcs/arcs_20_23_branching.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/arcs/arcs_24_27_branching.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/arcs/arcs_28_30_coherence_zero.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md | HYBRID | CURRENT | Arcs 31–35 (generated 2026-04-01). Arcs 32, 34, 35 NOT YET SIMULATED. |
+| designs/gm_ref_cp14/arcs/valoria_emergent_arcs_experimental.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/arcs/valoria_emergent_campaign_arcs.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/dashboards/d01_cascade_consequence_reference.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/dashboards/d02_seasonal_accounting_form.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/dashboards/d03_gm_dashboard.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/dashboards/d04_gap_escalation_table.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/dashboards/d05_coherence_band_track.md | TTRPG | CURRENT | — |
+| designs/gm_ref_cp14/dashboards/d06_thread_operation_resolution_card.md | TTRPG | CURRENT | — |
+| designs/gm_ref_cp14/dashboards/d07_npc_state_cards.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/dashboards/d08_knot_registry_template.md | TTRPG | CURRENT | — |
+| designs/gm_ref_cp14/dashboards/d09_comovement_matrix_skeleton.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/dashboards/d10_framing_process_skeleton.md | ALL | CURRENT | — |
+
+---
+
+## REFERENCES (parameter files — extracted mechanical values for sim/audit use)
+
+| File | Systems | Status | Source Document | Stale Flags |
+|------|---------|--------|-----------------|-------------|
+| references/params_core.md | ALL | CURRENT | stage1_core_engine.md | — |
+| references/params_combat.md | ALL | CURRENT | stage8_combat.md | PP-086–092 applied to stage8; params_combat not yet synced |
+| references/params_mass_combat.md | ALL | CURRENT | stage8 + mass_battle_v3 | ST-MB patches applied to mass_battle_v3; params not yet synced |
+| references/params_factions.md | ALL | CURRENT | stage6 (TTRPG) + bg_v05 (BG) | — |
+| references/params_board_game.md | BG | CURRENT | bg_v05_simulation_and_patches.md | ST-BG patches applied; params not yet synced |
+| references/params_debate.md | TTRPG/HYBRID | CURRENT | debate_system_redesign_v1.md | Part 6 (compiled mechanics) added; params not yet synced |
+| references/params_threadwork.md | TTRPG/HYBRID | CURRENT | threadwork_redesign_v25.md | ST-TW patches applied; params not yet synced |
+| references/params_scale_transitions.md | HYBRID | CURRENT | stage11_scale_transitions.md | PP-089/PP-090 PENDING |
+| references/D10_INTEGRATION_GUIDE.md | ALL | CURRENT | — | — |
+| references/d10_success_probabilities.json | ALL | CURRENT | — | — |
+
+---
+
+## SKILLS
+
+| File | Systems | Status | Uses Params? | Notes |
+|------|---------|--------|--------------|-------|
+| skills/valoria-orchestrator/SKILL.md | INFRA | CURRENT | No | Session management. Dir-based (canonical). |
+| skills/valoria-orchestrator-SKILL.md | INFRA | STALE | No | Flat file — older stub. Use dir-based version. |
+| skills/valoria-orchestrator/references/commit_convention.md | INFRA | CURRENT | — | — |
+| skills/valoria-orchestrator/references/github_pat.md | INFRA | CURRENT | — | — |
+| skills/valoria-orchestrator/references/model_routing_table.md | INFRA | CURRENT | — | — |
+| skills/valoria-orchestrator/references/session_protocol.md | INFRA | CURRENT | — | — |
+| skills/valoria-orchestrator/references/skill_registry.md | INFRA | CURRENT | — | — |
+| skills/valoria-orchestrator/scripts/github_ops.py | INFRA | CURRENT | — | GraphQL batch reader added 2026-04-02 |
+| skills/valoria-canon-guard-SKILL.md | INFRA | STALE | No | Flat file — use dir-based when available |
+| skills/valoria-chunker-SKILL.md | INFRA | STALE | No | Flat file |
+| skills/valoria-mechanic-audit-SKILL.md | INFRA | CURRENT | Yes (all params) | Correctly references params |
+| skills/valoria-simulator-SKILL.md | INFRA | CURRENT | Yes (all params) | Correctly references params |
+| skills/valoria-compiler-SKILL.md | INFRA | CURRENT | No | — |
+| skills/valoria-editorial-register/SKILL.md | INFRA | CURRENT | No | Updated 2026-04-01 |
+| skills/valoria-arc-generator/SKILL.md | INFRA | CURRENT | No | — |
+| skills/valoria-combat-simulator/SKILL.md | INFRA | CURRENT | Own params | Uses references/combat_params.md (separate from main params) |
+| skills/valoria-combat-simulator/references/combat_params.md | INFRA | CURRENT | — | Separate from references/params_combat.md |
+| skills/valoria-dice-model/SKILL.md | INFRA | CURRENT | No | — |
+
+---
+
+## TESTS (simulation outputs)
+
+| File | Systems | Patches Produced | Status |
+|------|---------|-----------------|--------|
+| tests/coverage_matrix.md | ALL | — | CURRENT |
+| tests/sim_cascade_01.md | BG | — | CURRENT |
+| tests/sim_combat_batch_11.md | ALL | PP-086–092 | CURRENT |
+| tests/sim_mass_battle_batch_11.md | ALL | PP-086–092 (validated) | CURRENT |
+| tests/sim_thread_batch_01–08.md | TTRPG | Various | CURRENT |
+| tests/sim_ttrpg_batch_02–10.md | TTRPG | Various | CURRENT |
+| tests/sim_ttrpg_batch_r01–r07.md | TTRPG | Various | CURRENT |
+| tests/sim_ttrpg_batch_sonnet46.md | TTRPG | — | CURRENT |
+| tests/sim_x_01_combat_thread.md | TTRPG | ST-TW-01,04 | CURRENT |
+| tests/sim_x_02_debate_thread.md | TTRPG | — | CURRENT |
+| tests/sim_x_03_massbattle_thread.md | ALL | ST-TW-02,03 | CURRENT |
+| tests/sim_x_04_massbattle_personal.md | ALL | — | CURRENT |
+| tests/sim_x_05_debate_thread_npcs.md | TTRPG | — | CURRENT |
+| tests/sim_x_06_combat_wounds_npcs.md | TTRPG | F-23–25 (confirmed) | CURRENT |
+| tests/sim_x_07_massbattle_npcs_thread.md | ALL | — | CURRENT |
+| tests/sim_x_08_seasonal_cascade.md | ALL | — | CURRENT |
+| tests/sim_x_09_vaynard_almud_zoom.md | TTRPG | — | CURRENT |
+| tests/sim_x_10_doctrine_evidence_tc.md | ALL | — | CURRENT |
+| tests/sim_x_11_maret_infiltration_zoom.md | TTRPG | — | CURRENT |
+| tests/sim_x_12_three_season_cascade.md | ALL | — | CURRENT |
+| tests/sim_x_13_pulling_dissolution.md | TTRPG | — | CURRENT |
+| tests/sim_x_14_mode2_entity_political.md | ALL | — | CURRENT |
+| tests/sim_x_15_knot_crisis_klapp.md | ALL | — | CURRENT |
+| tests/sim_x_16_collective_weave.md | TTRPG | — | CURRENT |
+| tests/simulation_report_arcs_31_33.md | HYBRID | PP-159–163 | CURRENT |
+
+---
+
+## TOOLS
+
+| File | Purpose | Status |
+|------|---------|--------|
+| tools/coverage_matrix.py | Track simulation coverage | CURRENT |
+| tools/find_references.py | Find cross-references between files | CURRENT |
+| tools/github_ops.py | GitHub REST/GraphQL operations | CURRENT |
+| tools/model_router.html | Model routing reference | CURRENT |
+| tools/propagator.py | Propagate patches to dependent files | CURRENT |
+| tools/verify_cuts.py | Verify patch cuts are applied | CURRENT |
+
+---
+
+## KNOWN STALE / SYNC GAPS
+
+The following params files are behind their source documents after this session's patches:
+
+| Params File | Source That Changed | What Changed |
+|-------------|--------------------|--------------| 
+| references/params_combat.md | stage8_combat.md | PP-086–092 applied 2026-04-02 |
+| references/params_mass_combat.md | mass_battle_v3.md | ST-MB patches applied 2026-04-02 |
+| references/params_board_game.md | bg_v05_simulation_and_patches.md | ST-BG/INT patches 2026-04-02 |
+| references/params_debate.md | debate_system_redesign_v1.md | Part 6 compiled mechanics 2026-04-02 |
+| references/params_threadwork.md | threadwork_redesign_v25.md | ST-TW patches 2026-04-02 |
+| compilation/v0.14/stage8_combat.md | PP-089, PP-090 | PENDING — belong in stage11 |
+| compilation/v0.14/stage3_thread_operations.md | threadwork_redesign_v25.md | Entire stage3 needs rewrite from v25 |
+| compilation/v0.14/stage9_social.md | debate_system_redesign_v1.md | Entire stage9 needs rewrite from redesign |
+| compilation/v0.14/stage_bg_board_game_mode.md | bg_v05_simulation_and_patches.md | ED-001 BLOCKER prevents full sync |
+
+---
+
+## DEPRECATED
+
+Files in `deprecated/` are not in active use. Do not reference in new design work.
+
+---
+
+*Index maintained by valoria-orchestrator. Update this file in the same commit as any file that changes its status, system classification, or dependency relationships.*
