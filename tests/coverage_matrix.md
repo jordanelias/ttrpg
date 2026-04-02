@@ -142,3 +142,23 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 | G-BG-03 | AUDIT-BG-01 | BG Thread Ops: no Coherence — confirm intentional | PP-120 PROVISIONAL (ED-057) |
 | G-BG-05 | AUDIT-BG-01 | CP awards in Hybrid: no worked example | PP-122 PROVISIONAL |
 | A-BG-03 | AUDIT-BG-01 | Overwhelming threshold TTRPG vs BG conflict | ED-031 PROVISIONAL ongoing |
+
+## SIM-BG-01 — Collapse Exit + Simultaneous Catastrophe (2026-04-02)
+
+| Test ID | Mechanics | Mode | Temporal | Tracks | Factions | NPCs | Archetypes | Status | Findings |
+|---------|-----------|------|----------|--------|----------|------|------------|--------|----------|
+| SIM-BG-01 | PP-117 (collapse exit) + PP-118 (simultaneous catastrophe) | BG | 2-4 seasons | Stability Mandate RS IP PI | Restoration Church Crown | N/A | Collapsed faction, end-game multi-clock race | Complete | SIM-BG-01-03 (P1 PP-118 step error — PP-118-rev1 applied); SIM-BG-01-01/02/04 (P2) |
+
+### P1 Findings — SIM-BG-01
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| SIM-BG-01-03 | SIM-BG-01 | PP-118 Step 5 reference wrong — Restoration victory is Step 12 not Step 5; pre-check added at Step 5 explicitly | PP-118-rev1 APPLIED |
+
+### P2 Findings — SIM-BG-01
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| SIM-BG-01-01 | SIM-BG-01 | Collapsed faction card access at Mandate 0 — depends ED-001 | Provisional: card access retained for recovery |
+| SIM-BG-01-02 | SIM-BG-01 | Recovery Govern Partial/Failure outcome undefined in PP-117 | Provisional: Partial = no recovery this season |
+| SIM-BG-01-04 | SIM-BG-01 | Church TC 65 at Step 3 vs Restoration Step 5 win: sequence clarification | PP-118-rev1 documents: Restoration Step 5 pre-empts Step 12 |

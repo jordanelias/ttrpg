@@ -148,10 +148,14 @@ Exit when ALL met:
 3. Allied faction (Pledge active) or own player takes Govern Ob 2 in any formerly controlled territory. Success: Stability -> 1, exit collapse.
 4. Auto-exit at Season 2 end if not earlier: Stability 1, Mandate 0. Faction functional but politically hollow.
 
-## Simultaneous Catastrophe (PP-118) [PROVISIONAL: ED-054]
-If RS = 0 and IP >= 80 both trigger in the same Accounting phase:
-1. RS = 0 (Rupture) checked at Step 6 takes precedence. Campaign ends as shared loss.
-2. Exception: Restoration victory declared at Step 5 pre-empts Step 6 Rupture. Victory check fires before RS loss application.
+## Simultaneous Catastrophe (PP-118 rev.1) [PROVISIONAL: ED-054]
+Accounting sequence context: IP Advancement at Step 4. RS adjustment at Step 6. Victory checks at Step 12.
+1. IP = 80 threshold fires at Step 4: Vanguard deploys as a board event. Campaign does not end at Step 4.
+2. RS = 0 (Rupture) fires at Step 6. Campaign ends as shared loss. Rupture takes precedence over all other unresolved win conditions.
+3. Restoration pre-check at Step 5: Before RS losses applied at Step 6, check if Restoration has 5 Presence markers in 5 non-adjacent territories held 2 consecutive seasons AND RS >= 1 at Step 5. If both: Restoration wins immediately. Step 6 does not fire.
+4. If RS = 0 entering Step 5 (prior loss same phase): Restoration cannot win. Rupture fires Step 6.
+5. Church Holy State (TC >= 65): declared at Step 12. If Restoration wins at Step 5 in same Accounting phase: Restoration wins; Step 12 not reached.
+6. Simultaneous multi-faction Step 12 wins: [EDITORIAL: ED-054 — confirm co-victory or GM ruling for simultaneous Step 12 conditions.] Victory check fires before RS loss application.
 
 ## Battle Resolution (P-16)
 Both sides roll simultaneously. Compare net successes.

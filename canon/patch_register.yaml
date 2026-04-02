@@ -1364,3 +1364,15 @@ patches:
   applied_to_version: "v0.14+design-ST"
   status: provisional
   applied_commit: "2026-04-02-audit-bg-01"
+
+- id: PP-118-rev1
+  date: 2026-04-02
+  severity: P1
+  description: "PP-118 Step numbering correction. Restoration pre-check moved to Step 5 (before RS Step 6). Added step-by-step accounting sequence context. Added simultaneous Step 12 editorial flag. Fixes SIM-BG-01-03."
+  finding_id: "SIM-BG-01-03 / SIM-BG-01-04"
+  source: simulation
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-sim-01"
+  supersedes: PP-118
