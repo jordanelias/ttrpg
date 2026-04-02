@@ -107,10 +107,10 @@ Flag: mass combat actions that resolve faster than personal combat (pacing misma
 State block:
 ```
 ## Debate Round N
-[Participant] — Composure=[N], Rhetoric pool=[N], Stance=[Offense/Defense/Redirect]
-Appeal type: [Logos/Pathos/Ethos] | Target: [Belief/Position]
+[Participant] — Composure=[N], Conviction Track=[N], Pool=((Presence×2)+History)=[N]D, Stance=[Revealing/Obscuring], Genre=[Past/Present/Future]
+Orientation: [Revealing/Obscuring] | Genre: [Past/Present/Future] | Audience resistance=[N]
 Pool: [N]D TN[N] Ob[N] → outcome
-### Composure damage → Concession threshold? → State Delta
+### Strain → Rattled threshold? | Concentration depleted? → Spent? | Tracker delta → State Delta
 ```
 Track: composure degradation curve, dominant strategy detection (is one appeal type always optimal?), stalemate conditions.
 Flag: debate that terminates in <3 rounds at median pools (too fast → P2), debates with no path to resolution (stalemate → P1).
@@ -218,127 +218,6 @@ Prop map: [N] new entries added.
 Committed: [short hash]
 ```
 
-**Step 7 — Report to user:**
-```
-Sim complete: [N] findings. P1: [N] (patched). P2: [N] (patched). Editorial: [N] (logged). Provisional: [N] (flagged).
-Committed: [short hash]
-```
-
-
-
-### J — Cognitive Load and Time Audit
-
-Per mechanic under test, measure and report:
-
-**Cognitive load score (1–10):**
-Count per single resolution:
-- Mandatory decisions (player must choose between options): +1 per decision
-- Mandatory lookups (player must reference a table, formula, or condition list): +1 per lookup
-- Parallel tracks (values held in working memory simultaneously): +1 per track
-- Sequential dependencies (B cannot resolve until A is known): +1 per dependency
-
-Score: total count. Flag at ≥ 5 (borderline), ≥ 7 (problem), ≥ 9 (redesign).
-
-Compare against precedent: BW Duel of Wits = 6, TI4 combat = 4, D&D 5e spell slot combat = 5.
-
-**Time estimate (human minutes at table):**
-- Novice (first 3 sessions): N minutes per resolution
-- Experienced (10+ sessions): N minutes per resolution
-- Expert (campaign-level): N minutes per resolution
-
-Estimate method: count decision points × 30 seconds (novice) / 15 seconds (experienced) / 8 seconds (expert) + lookup time (45s/15s/5s each) + arithmetic time (20s/10s/5s per calculation).
-
-Flag: any mechanic where novice time > 3 minutes per single resolution (P2), > 5 minutes (P1).
-
-Output format:
-```
-[MODE J: mechanic name]
-Decisions: N (list them)
-Lookups: N (list them)
-Parallel tracks: N (list them)
-Sequential dependencies: N (list them)
-Load score: N/10 — [OK / BORDERLINE / PROBLEM / REDESIGN]
-Time (novice/experienced/expert): Nm / Nm / Nm
-Flag: [NONE / P2: reason / P1: reason]
-```
-
-### K — Cross-Mode Delta and Transition Stress Test
-
-Two sub-modes. Run both for any mechanic that spans multiple game modes.
-
-**K1 — Cross-Mode Delta:**
-Run the mechanic in TTRPG, then Hybrid, then Board Game.
-For each mode, record:
-- Pool/formula used
-- Resolution steps
-- Outcome distribution (expected values)
-- Strategic incentives produced (dominant strategies, dead choices)
-- What information the player needs vs what is available
-
-Output a delta table:
-```
-| Property        | TTRPG | Hybrid | Board Game |
-|----------------|-------|--------|------------|
-| Pool/formula   |       |        |            |
-| Steps          |       |        |            |
-| E[outcome]     |       |        |            |
-| Dominant strat |       |        |            |
-| Dead choice?   |       |        |            |
-| Info available |       |        |            |
-```
-
-Flag: any property where BG and TTRPG produce opposite strategic incentives (P1), any mode where a choice becomes mechanically irrelevant (P2).
-
-**K2 — Transition Stress Test:**
-Test the handoff at each mode boundary using the state transfer spec (see `references/state_transfer_spec.md`).
-
-For each transition type (TTRPG→Hybrid, BG→Hybrid, Hybrid→TTRPG, Hybrid→BG, and within-TTRPG Register Shifts):
-
-1. **State inventory check:** List all variables active at point of transition. Verify each is handled: transferred, converted, suspended, or discarded. Any variable not explicitly handled = P1 gap.
-
-2. **Interruption test:** Trigger the transition at each possible phase/step of the source mode. Verify: source mode state is correctly preserved or resolved, target mode receives complete starting state, no orphaned actions or pending resolutions remain.
-
-3. **Zoom In/Out fidelity:** Run a Zoom In from BG battle to TTRPG personal combat. Track: which BG unit state variables convert to TTRPG character state. Run the TTRPG scene. Zoom Out. Verify BG state correctly reflects TTRPG outcomes.
-
-4. **Register Shift test (within TTRPG):** Trigger a Register Shift mid-scene (personal → faction, faction → mass combat). Verify: personal scale state persists correctly, faction-level consequences fire correctly, no scale-crossing variable is double-counted or lost.
-
-Flag every broken handoff as P1.
-
-### L — Precedent Comparison
-
-For the mechanic under test, identify 2–3 analogue mechanics in precedent games. For each:
-
-```
-[PRECEDENT: Game — Mechanic name]
-What it does: [one sentence]
-How Valoria's version differs: [one sentence]
-Justification for difference: [one sentence — cite Foundations, design intent, or mode requirement]
-Risk: [NONE / design drift / unjustified complexity / flavour without function]
-```
-
-Precedent game library (use these in priority order when analogues exist):
-- **Burning Wheel** — belief/instinct system, Duel of Wits, resource cycles, advancement
-- **A Song of Ice and Fire RPG** — intrigue system, house rules
-- **Twilight Imperium 4** — faction asymmetry, political phase, strategic card play
-- **Root** — asymmetric faction design, board game/narrative hybrid
-- **Here I Stand / Virgin Queen** — political/military/religious clock systems
-- **Crusader Kings (TTRPG adaptation)** — succession, dynasty, character-faction binding
-- **Pendragon** — trait/passion system, generational play
-- **Blades in the Dark** — faction clocks, position/effect, crew advancement
-
-If no analogue exists in the library: flag as `[NO PRECEDENT — this mechanic is novel; verify it carries its own weight]`.
-
-Flag: any case where Valoria's version is more complex than the precedent without justification (P2), or where the precedent's solution is strictly superior (P1 — redesign candidate).
-
-### M — Narrative Flowchart Generator
-
-Produces a branching flowchart for a defined scenario seed. This mode generates the full emergent narrative space, not a single path.
-
-**Input:** A trigger event, faction state, and list of named participants.
-
-**Output structure:**
-
-```
 ## FLOWCHART: [scenario name]
 ## Seed: [trigger event]
 ## Mode: TTRPG / Hybrid / BG (all three must be mapped)
@@ -424,7 +303,7 @@ Load params files, not stage files. Stage files are verbose source documents; pa
 Before running any mode that uses mechanical values:
 1. Read the relevant `references/params_*.md` file(s) for this task.
 2. Check the `<!-- version: -->` tag at the top of each params file.
-3. Compare against the current ruleset version (stated in `compilation/README.md`). If params version tag contains "design-ST" or higher, it is current for simulation purposes.
+3. Compare params version tag. If tag contains "v0.14" (the current checkpoint) or any "design-ST" suffix, the params file is current for simulation purposes. Do not reference compilation/README.md — it does not carry a reliable version field.
 4. If params version ≠ current ruleset version: **halt, flag as `[STALE PARAMS: <file> is v0.XX, current ruleset is vX.XX — update params before proceeding]`**, and do not proceed until the user confirms or params are updated.
 5. If params version matches: proceed. Cost: ~200 tokens per params file read. No GitHub API call required.
 

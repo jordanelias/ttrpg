@@ -166,8 +166,8 @@ For each mechanic audited:
 Flag: any undocumented mode-specific behaviour (P2), any mode where the mechanic is absent without explanation (P1 if the mechanic is referenced cross-mode).
 
 **Transition points (always audit these):**
-- Zoom In / Zoom Out: verify against `references/state_transfer_spec.md`
+- Zoom In / Zoom Out: verify against `skills/valoria-orchestrator/references/state_transfer_spec.md`
 - Register Shift: verify state persistence at each scale crossing
 - Domain Echo: verify that faction-level consequences are correctly derived from personal-level outcomes
 
-If `references/state_transfer_spec.md` does not exist or is stale: halt, flag `[STATE-TRANSFER-SPEC MISSING OR STALE]`, do not proceed with transition audit.
+If `skills/valoria-orchestrator/references/state_transfer_spec.md` does not exist or is stale: halt, flag `[STATE-TRANSFER-SPEC MISSING OR STALE]`, do not proceed with transition audit.

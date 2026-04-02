@@ -141,11 +141,11 @@ Trigger: Church TC reaches 80.
 
 ---
 
-## 5. UNRESOLVED TRANSITION P1 ITEMS (require fixing before K2 tests are valid)
+## 5. TRANSITION P1 ITEMS STATUS
 
 | ID | Issue | Location | Status |
 |----|-------|----------|--------|
-| T1-P1-01 | Thread→Mass timing: Priority 1 (stage11) vs Phase 5 (mass_battle_v3) | stage11 §11.3 vs mass_battle_v3 §A.7 | UNRESOLVED — [EDITORIAL: requires decision; see options A/B/C below] |
+| T1-P1-01 | Thread→Mass timing: Priority 1 (stage11) vs Phase 5 (mass_battle_v3) | stage11 §11.3 vs mass_battle_v3 §A.7 | RESOLVED (2026-04-02 — see below) — [EDITORIAL: requires decision; see options A/B/C below] |
 | T5-P1-01 | TT Multiplier column in stage11 table is obsolete | stage11 §11.1 | NEEDS PATCH |
 
 **T1-P1-01 RESOLVED (2026-04-02):** Option D applied per user decision. Offensive Thread (Dissolution, Pulling, Locking) fires Phase 4 between Manoeuvre and Engagement. Support Thread (Weaving, Mending) fires Phase 6 Cascade step 4–5. All damage from Volley, Thread, and Engagement applies simultaneously at Phase 6 Step 1.

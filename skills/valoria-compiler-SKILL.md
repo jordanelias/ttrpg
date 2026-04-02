@@ -3,13 +3,15 @@
 Assemble approved patches, editorial decisions, and structural changes into clean ruleset exports.
 
 **Model:** Sonnet 4.6.
-**Input:** Compilation stages + gap register + session log (for applied patches).
+**Input:** `designs/` working documents (source of truth) + `canon/editorial_ledger.yaml` + session log.
+**Note:** Compilation is the lowest-priority task. Compile only when a system is stable and explicitly requested. `designs/` is always more current than `compilation/`.
 
 ## Process
 
 ### 1. Load Current State
-- Read `valoria_gap_register_consolidated.md` — check P1 count.
-  - **P1 > 0: BLOCK export.** List P1 items. Override: `[COMPILER GATE OVERRIDE: user accepted — date]`
+- Read `canon/editorial_ledger.yaml` — check P1-BLOCKER and P1 count.
+  - **P1-BLOCKER > 0: BLOCK export.** List blockers. Override: `[COMPILER GATE OVERRIDE: user accepted — date]`
+  - **P1 > 0: WARN.** List P1 items. Compilation may proceed with explicit user acknowledgment.
 - Identify pending vs. approved patches from session logs and gap register.
 
 ### 2. Apply Changes
@@ -33,7 +35,7 @@ Every compiled ruleset begins with:
 > *All mechanics derive from the Philosophical Foundations. Where this document conflicts with the Foundations, the Foundations govern.*
 
 ### 6. Export
-- Output: `compilation/valoria_ruleset_checkpoint_[N].md`
+- Output: `compilation/v[N]/valoria_ruleset_v[N].md` — match existing checkpoint naming convention (e.g. compilation/v0.15/)
 - Appendix: changes since previous checkpoint
 - Appendix: open P1/P2 items from gap register
 

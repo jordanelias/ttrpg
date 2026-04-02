@@ -4,7 +4,7 @@ Validate mechanics, rules, or content against the Philosophical Foundations. Thi
 
 **Model:** Sonnet 4.6.
 **Input:** Specific mechanic or section — chunked, never full document.
-**Requires:** `canon/canon_constraints.md`
+**Requires:** `canon/02_canon_constraints.md` (the canonical constraint file on GitHub)
 
 ## Canon Constraints (P-01 through P-14)
 
