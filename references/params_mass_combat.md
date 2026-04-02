@@ -1,4 +1,4 @@
-<!-- version: v0.14+design-ST4 | sources: designs/mass_combat/mass_battle_v3.md (v4.1, PP-101) | last_updated: 2026-04-02 -->
+<!-- version: v0.14+design-ST3 | sources: stage8_combat.md, mass_battle_v3.md | last_updated: 2026-04-02 -->
 <!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D -->
 <!-- PHASE STRUCTURE: 7 phases. Thread split: offensive Phase 4, support Phase 6. All damage simultaneous Phase 6 Step 1. -->
 <!-- mass_battle_v3.md is a design proposal. Values marked [COMPILED] are from stage8; [PROPOSAL] from v3. -->
@@ -57,10 +57,10 @@ As Strength drops: fewer dice regardless of quality. CP is ceiling; Strength det
 | 6 | 6 | 7 |
 | 7 | 7 | 7 |
 
-## Command Rating (CR) [PROPOSAL]
-CR = ⌈(Presence + Cognition) ÷ 2⌉
-Governs: sub-unit limit (max = CR; TTRPG hard cap 3); Cohesion ceiling; Morale floor (= 1 while general present); tactic execution (CR dice vs Ob).
-CR = 1: cannot restore Cohesion to any unit — all degradation permanent for that battle.
+## Command Rating (Coherence Rating) [PROPOSAL]
+Coherence Rating = ⌈(Presence + Cognition) ÷ 2⌉
+Governs: sub-unit limit (max = Coherence Rating; TTRPG hard cap 3); Cohesion ceiling; Morale floor (= 1 while general present); tactic execution (Coherence Rating dice vs Ob).
+Coherence Rating = 1: cannot restore Cohesion to any unit — all degradation permanent for that battle.
 
 ## Battle Phases (TTRPG)
 1. Declaration
@@ -79,7 +79,7 @@ Fires at Phase 5 when total Strength lost this turn > Cohesion rating → Cohesi
 | 1–2 | −2D |
 | 0 | Formation broken; cannot attack; Reform or rout |
 
-Restoration: Reform Phase only (not engaged), +1 Cohesion, CR ≥ current Cohesion + 1.
+Restoration: Reform Phase only (not engaged), +1 Cohesion, Coherence Rating ≥ current Cohesion + 1.
 
 ## Morale Degradation Triggers [PROPOSAL]
 | Trigger | Change |
@@ -117,7 +117,7 @@ Weapon Effectiveness:
 HeavyBlunt is the only weapon class effective vs Heavy armour.
 
 ## Battle Scale [PROPOSAL]
-| Scale | 1 Strength ≈ | Thread TS minimum |
+| Scale | 1 Strength ≈ | Thread Thread Sensitivity minimum |
 |-------|-------------|-------------------|
 | Skirmish | ~10 soldiers | 30+ |
 | Company | ~100 soldiers | 30+ |
@@ -127,18 +127,10 @@ HeavyBlunt is the only weapon class effective vs Heavy armour.
 
 ## Thread Integration [COMPILED — stage11]
 Combat Thread ops (Dissolution, offensive Pulling): Phase 2. Support ops (Weave, Mend, Lock, non-offensive Pulling): Phase 5. Both declared Phase 1.
-Mass → Personal: Personal Action available at Phase 5 (Priority 8). Limit: 1 exchange/battle turn. General's Phase 5 consumed by personal combat (CR suspended).
+Mass → Personal: Personal Action available at Phase 5 (Priority 8). Limit: 1 exchange/battle turn. General's Phase 5 consumed by personal combat (Coherence Rating suspended).
 
 ## Key Design Axiom
-Generalship dominates. CR asymmetry is intentional. CR=7 vs CR=1 general: near-certain outcome before dice rolled.
+Generalship dominates. Coherence Rating asymmetry is intentional. Coherence Rating=7 vs Coherence Rating=1 general: near-certain outcome before dice rolled.
 
 <!-- patch_history: references/params_mass_combat_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
-
-## OPEN PARAMS GAPS (from SIM-HYB-01)
-
-| Gap ID | Description | Status |
-|--------|-------------|--------|
-| PARAMS-GAP-04 | Mass combat pool split — Offence/Defence allocation undefined for unit-scale Engagement. Provisional: ½ each. | Open |
-| PARAMS-GAP-05 | Mass combat damage formula — Strength points lost per excess success not defined at unit level. Provisional: 1 Str per excess success. | Open |
-| PARAMS-GAP-06-MC | BG Battle Partial outcome — no Partial degree defined. BG Battle is binary Win/Lose. Clarification needed. | Open |

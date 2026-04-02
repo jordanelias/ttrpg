@@ -13,23 +13,23 @@
 | Rendering Stability (RS) | 100→0 | World coherence (shared track) |
 | Coherence | 10→0 | Personal rendering stability |
 | Focus | 1–5+ | Contact duration in rounds |
-| TPS | TS ÷ 10 (round down) | Thread Pool Score — added to operation pools |
+| Thread Pool Score | Thread Sensitivity ÷ 10 (round down) | Thread Pool Score — added to operation pools |
 
 ## Leap Roll
-Pool: Attunement + relevant History bonus + TPS | TN: 7
-| TS | Ob | Wound modifier |
+Pool: Attunement + relevant History bonus + Thread Pool Score | TN: 7
+| Thread Sensitivity | Ob | Wound modifier |
 |----|----|-|
 | 30–49 | 2 | +1 Ob per Wound |
 | 50+ | 1 | +1 Ob per Wound |
 
 | Degree | Outcome |
 |--------|---------|
-| Overwhelming | Clean suspension. Next op Ob −1 (min 1). +1 TS. |
+| Overwhelming | Clean suspension. Next op Ob −1 (min 1). +1 Thread Sensitivity. |
 | Success | Contact established. Proceed. |
 | Partial | Unstable. Op Ob +1. −2 Composure. |
 | Failure | Snaps back. −4 Composure. Rattled. No op this scene. |
 
-Eligibility: Approach Training tag; TS 30+; not in melee with declared attacker; not at incapacitation threshold (⌈Health÷2⌉).
+Eligibility: Approach Training tag; Thread Sensitivity 30+; not in melee with declared attacker; not at incapacitation threshold (⌈Health÷2⌉).
 Full-round action (Priority 5). Only reactive defence available during Leap round.
 
 ## Contact Duration
@@ -48,11 +48,11 @@ Priority 4 action. No roll. Mandatory before: Mending, Locking, Dissolution, Pas
 Skip before FR: +2 Ob + auto Gap on Failure. Skip before Mending: +2 Ob. Skip before POP: +3 Ob + temporal Gap on Failure.
 
 ## Operations — Pools and TNs
-All operations: Pool uses Spirit + relevant History bonus + TPS unless stated. TN 7 standard.
+All operations: Pool uses Spirit + relevant History bonus + Thread Pool Score unless stated. TN 7 standard.
 TN 8: Forced Resolution (Lock/Dissolution) and Past-Oriented Pulling.
 
 ### Weaving (Things Cohere)
-| Scale | Ob | Min TS |
+| Scale | Ob | Min Thread Sensitivity |
 |-------|----|--------|
 | Object | 1 | 30+ |
 | Personal | 2 | 30+ |
@@ -60,19 +60,19 @@ TN 8: Forced Resolution (Lock/Dissolution) and Past-Oriented Pulling.
 | Territorial | 4 | 50+ |
 | Structural | 5 | 70+ |
 
-| Degree | RS | Coherence | Other |
+| Degree | Rendering Stability | Coherence | Other |
 |--------|-----|-----------|-------|
-| Overwhelming | +1 (Relational+ only) | 0 | +1 TS |
+| Overwhelming | +1 (Relational+ only) | 0 | +1 Thread Sensitivity |
 | Success | 0 | 0 | — |
-| Partial | 0 | −1 | RS 0; Stability −1 |
-| Failure | −2 (Shifting Object at RS≤40; Gap at RS≤20) | −1 | Stability −2 |
+| Partial | 0 | −1 | Rendering Stability 0; Stability −1 |
+| Failure | −2 (Shifting Object at Rendering Stability≤40; Gap at Rendering Stability≤20) | −1 | Stability −2 |
 
 Over-actualisation (Relational+ success): subsequent ops on same config +1 Ob (clears 1 season or after Pull).
-Overweaving: each op after first in contact window +1 Ob. Collapsed overweave: RS −3.
+Overweaving: each op after first in contact window +1 Ob. Collapsed overweave: Rendering Stability −3.
 
 ### Pulling (Things Open)
-Pool: Spirit + History + TPS | TN 7
-| Actualisation | Ob | Min TS |
+Pool: Spirit + History + Thread Pool Score | TN 7
+| Actualisation | Ob | Min Thread Sensitivity |
 |---------------|----|--------|
 | Loosely actualised | 1 | 30+ |
 | Normal | 2 | 30+ |
@@ -82,7 +82,7 @@ Pool: Spirit + History + TPS | TN 7
 
 Duration by surplus: 0 = end of scene. 1 = end of session. 2+ = next seasonal accounting.
 
-| Degree | RS | Coherence |
+| Degree | Rendering Stability | Coherence |
 |--------|----|-----------|
 | Overwhelming | 0 | 0 |
 | Success | 0 | 0 |
@@ -90,8 +90,8 @@ Duration by surplus: 0 = end of scene. 1 = end of session. 2+ = next seasonal ac
 | Failure | −2 | −1 (snap-back: 1 Wound, no armour) |
 
 ### Past-Oriented Pulling
-Pool: Spirit + History + TPS÷2 (round down) | TN 7
-Requirements: TS 70+; RS ≤ 60; Diagnosis mandatory.
+Pool: Spirit + History + Thread Pool Score÷2 (round down) | TN 7
+Requirements: Thread Sensitivity 70+; Rendering Stability ≤ 60; Diagnosis mandatory.
 | Recency | Ob |
 |---------|----|
 | Same scene/session | 3 |
@@ -99,14 +99,14 @@ Requirements: TS 70+; RS ≤ 60; Diagnosis mandatory.
 | 3–5 seasons | 5 |
 | 6–10 seasons | 6 |
 | 10+/generational | 7 |
-| Foundational | Ob 7 + 2 surcharge = 9; RS consequence ×3 |
+| Foundational | Ob 7 + 2 surcharge = 9; Rendering Stability consequence ×3 |
 
 Active Knot Crisis on target: +1 Ob.
-RS minimum cost: −3 on Success. Failure: snap-back Wound + RS −6 minimum.
+Rendering Stability minimum cost: −3 on Success. Failure: snap-back Wound + Rendering Stability −6 minimum.
 
 ### Locking (Forced Resolution)
-Pool: Spirit + History (no TPS) | TN 7 (TN 8 for FR)
-Requirements: TS 50+; Diagnosis mandatory. Min Ob: 4.
+Pool: Spirit + History (no Thread Pool Score) | TN 7 (TN 8 for FR)
+Requirements: Thread Sensitivity 50+; Diagnosis mandatory. Min Ob: 4.
 | Scale | Ob |
 |-------|----|
 | Object | 4 |
@@ -115,23 +115,23 @@ Requirements: TS 50+; Diagnosis mandatory. Min Ob: 4.
 | Territorial | 7 |
 | Structural/Foundational | 8+ |
 
-TS 70+: −1 to all FR RS costs (min 1).
+Thread Sensitivity 70+: −1 to all FR Rendering Stability costs (min 1).
 
-| Degree | RS | Coherence |
+| Degree | Rendering Stability | Coherence |
 |--------|----|-----------|
-| Overwhelming | −1 | 0; +1 TS |
+| Overwhelming | −1 | 0; +1 Thread Sensitivity |
 | Success | −1 | 0 |
 | Partial | −2 | −1 (cap) |
 | Failure | −3 | −1 (cap); 2 Wounds; adjacent ops +1 Ob rest of season |
 
-Chronic drift: 2–3 seasons: RS −1/season + ops +1 Ob. 4+ seasons: RS −2/season. Permanent: RS drift ceases; permanent +1 Ob adjacent.
-Reversal Ob: original practitioner's TS ÷ 10 (round up) − 2, min 1.
+Chronic drift: 2–3 seasons: Rendering Stability −1/season + ops +1 Ob. 4+ seasons: Rendering Stability −2/season. Permanent: Rendering Stability drift ceases; permanent +1 Ob adjacent.
+Reversal Ob: original practitioner's Thread Sensitivity ÷ 10 (round up) − 2, min 1.
 
 ### Dissolution (Forced Resolution)
-Pool: Spirit + History (no TPS) | TN 7 (TN 8 for FR)
-Requirements: TS 50+; Diagnosis mandatory. Min Ob: 4. Same Ob table as Lock.
+Pool: Spirit + History (no Thread Pool Score) | TN 7 (TN 8 for FR)
+Requirements: Thread Sensitivity 50+; Diagnosis mandatory. Min Ob: 4. Same Ob table as Lock.
 
-| Degree | RS | Coherence |
+| Degree | Rendering Stability | Coherence |
 |--------|----|-----------|
 | Overwhelming | −3 | 0; micro-Gap forms/closes in scene |
 | Success | −5 | 0; Gap forms, closes end of scene |
@@ -139,10 +139,10 @@ Requirements: TS 50+; Diagnosis mandatory. Min Ob: 4. Same Ob table as Lock.
 | Failure | −8 | −1 (cap); full Gap; Monstrous Incursion; Practitioner incapacitated |
 
 ### Mending (Substrate Repair)
-Pool: Attunement + Focus + TPS | TN 7
-Requirements: TS 50+; Diagnosis mandatory. Target must be a Gap, Shifting Object, or Locked Zone border.
+Pool: Attunement + Focus + Thread Pool Score | TN 7
+Requirements: Thread Sensitivity 50+; Diagnosis mandatory. Target must be a Gap, Shifting Object, or Locked Zone border.
 Ob ceiling: 8 (regardless of stacked modifiers).
-| Gap Type | Ob | Min TS |
+| Gap Type | Ob | Min Thread Sensitivity |
 |----------|----|--------|
 | Shifting Object | 2 | 50+ |
 | Micro-Gap (same scene) | 3 | 50+ |
@@ -151,14 +151,14 @@ Ob ceiling: 8 (regardless of stacked modifiers).
 | Catastrophic Gap (3+ seasons) | 7 | 70+ |
 | Locked Zone border | 8+ | 70+ |
 
-| Degree | RS | Coherence |
+| Degree | Rendering Stability | Coherence |
 |--------|----|-----------|
 | Overwhelming | +2 | −1 (base) |
 | Success | +1 | −1 (base) |
 | Partial | 0 | −1 (cap); Gap reduced one severity |
 | Failure | −2 | −1 (cap) |
 
-Threadcut being interference: +Ob = being's TS ÷ 20 (round up), max +4.
+Threadcut being interference: +Ob = being's Thread Sensitivity ÷ 20 (round up), max +4.
 
 ## Coherence (10→0)
 Starting: 10 (all practitioners). Non-practitioners: not tracked.
@@ -184,7 +184,7 @@ Loss per operation cap: −1 max per single operation regardless of combined sou
 | 4–3 | Fragmented | −1D social/Memory; +1 Ob all ops |
 | 2 | Fractured | −2D social/Memory; Belief Co-Authorship begins |
 | 1 | Severed | −2D; dissociative episodes; +2 Ob all ops |
-| 0 | Rendering Crisis | Campaign event. NPC if unresolved by season end. |
+| 0 | Rendering Crisis | Campaign event. Non-Player Character if unresolved by season end. |
 
 Recovery: Full season non-practice: +1. Anchoring Scene (Bonds TN7 Ob2): +1. Cannot exceed 10.
 
@@ -194,8 +194,8 @@ Cost: −1 Coherence per use (additional; not subject to §3.2 op cap at Relatio
 Same source: +1 Ob per prior use.
 
 ## Rendering Stability (RS) Track
-Range: 100→0. Starting: RS 60 (default campaign).
-| RS | State | World Effects |
+Range: 100→0. Starting: Rendering Stability 60 (default campaign).
+| Rendering Stability | State | World Effects |
 |----|-------|---------------|
 | 100–80 | Stable | None |
 | 79–60 | Strained | Occasional wrongness near Thread sites |
@@ -204,11 +204,11 @@ Range: 100→0. Starting: RS 60 (default campaign).
 | 19–1 | Critical | As Fractured + doubled Gap risk; +1 Ob worldwide; faction Stability checks Ob1; Mandate 0 → Faction Fracture |
 | 0 | The Rupture | Campaign ends |
 
-RS threshold effects: activate/deactivate at Accounting, not mid-scene.
-RS threshold effects are cumulative (each lower band includes all higher band effects).
-Seasonal cap: ±10 net RS change per season (applies at Accounting).
+Rendering Stability threshold effects: activate/deactivate at Accounting, not mid-scene.
+Rendering Stability threshold effects are cumulative (each lower band includes all higher band effects).
+Seasonal cap: ±10 net Rendering Stability change per season (applies at Accounting).
 
-Key RS degradation values:
+Key Rendering Stability degradation values:
 - FR Dissolution Failure: −8. Dissolution Success: −5. POP Success: −3 minimum.
 - Gap persisting per season: −4. Lock chronic drift: −1 to −2/season.
 - Winter annual drift: −1. Siege per season: −1.
@@ -216,7 +216,7 @@ Key RS degradation values:
 - Weaving Overwhelming (Relational+): +1.
 
 ## Collective Operations
-Anchor: highest TS practitioner. Rolls full pool.
+Anchor: highest Thread Sensitivity practitioner. Rolls full pool.
 Helper contribution: ⌊Cognition ÷ 2⌋ bonus dice each.
 If pool drops below half Anchor's solo pool: +1 Ob.
 Directly opposing Beliefs: pre-Leap Belief check (Spirit TN7 Ob1) or helper drops out.
@@ -227,12 +227,12 @@ Tangential conflicting Beliefs: helper dice don't chain on 10.
 |------|-------|-----------|--------|
 | Operations | Weaving/Pulling/Mending/Lock/Dissolution | Weave/Mend/Investigate/Harvest orders | Personal: TTRPG; Strategic: BG |
 | Co-movement | Version C (temporal + epistemic + d6) | Co-Movement Cards (18) | Personal: Version C; Strategic: Cards |
-| Coherence | Tracked per PC | Not tracked | Tracked during Personal Phase only |
-| RS | 100→0 at Accounting | 100→0 at Accounting | Cascade Phase Accounting; cap ±10 |
-| Lock drift | GM tracks | Territory card: RS −1/season | TTRPG Lock → territory card at Cascade |
+| Coherence | Tracked per Player Character | Not tracked | Tracked during Personal Phase only |
+| Rendering Stability | 100→0 at Accounting | 100→0 at Accounting | Cascade Phase Accounting; cap ±10 |
+| Lock drift | Game Master tracks | Territory card: Rendering Stability −1/season | TTRPG Lock → territory card at Cascade |
 
 ## Observation / Detection
-| Observer TS | Perception |
+| Observer Thread Sensitivity | Perception |
 |-------------|-----------|
 | 0–9 | Nothing |
 | 10–29 | Vague unease |
@@ -240,7 +240,7 @@ Tangential conflicting Beliefs: helper dice don't chain on 10.
 | 50–69 | Identifies type and target |
 | 70+ | Full configuration |
 
-Concealment from TS 30+ observers: Cognition only (no History), TN7, Ob = observer TS ÷ 30 (round up). Pre-Leap action.
+Concealment from Thread Sensitivity 30+ observers: Cognition only (no History), TN7, Ob = observer Thread Sensitivity ÷ 30 (round up). Pre-Leap action.
 
 <!-- patch_history: references/params_threadwork_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->

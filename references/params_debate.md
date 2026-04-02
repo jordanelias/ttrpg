@@ -1,7 +1,10 @@
-<!-- version: v0.14+design-ST3 | sources: debate_system_redesign_v1.md Part 6 (compiled) | last_updated: 2026-04-02 | updated: COMPETITION/DIVERGENCE naming fix from SIM-HYB-01 -->
+<!-- version: v0.14+design-ST3 | sources: debate_system_redesign_v1.md Part 6 v1.5 | last_updated: 2026-04-02 -->
+<!-- NEW SECTIONS: §6.11 Pre-Debate Prep, §6.12 Multi-Party, §6.13 BG Vote, §6.14 Hybrid, §6.15 Thread -->
+<!-- GAP-DS-01/02/03/04/05/06/07/08/16/17/18/19 all resolved in v1.4/v1.5 -->
+<!-- SIM-DEBT-02: Corroboration in CLASH calibration pending -->
 <!-- PATCHES APPLIED: D-01–D-10, R-01–R-07, v2-P01–v2-P04, R-65, R-66 -->
 <!-- POOL FORMULA CONFIRMED: (Presence × 2) + History bonus, TN 7 -->
-<!-- SIM-DEBT-01: FULLY RESOLVED. Mode C confirmed by SIM-D-02 (2026-04-02). Baselines below are final. -->
+<!-- SIM-DEBT-01: PARTIALLY RESOLVED. Modes A+D complete (SIM-D-01 2026-04-02). New baselines below. Mode C still needed. -->
 <!-- PP-097 PROVISIONAL: DIVERGE+TIE → Tie rule fires. -->
 <!-- PP-098 PROVISIONAL: Regroup at Concentration=0 → consumes Spent without penalty. -->
 <!-- PP-099 PROVISIONAL: Obscuring in Divergence → Doubt Marker; orientation_weight=1.0 for calc. -->
@@ -56,13 +59,13 @@ Post-Diverge state: stays with holder. No re-Read.
 | Interaction | Condition | Resolution |
 |-------------|-----------|-----------|
 | CLASH | Same genre, opposite orientation | Compare successes. Margin = difference. Apply movement formula. |
-| COMPETITION | Same genre, same orientation | Same resolution as CLASH (compare successes, apply movement formula). Lower strain to loser (margin−1 min 1). No loser tracker contribution. [params_debate updated from COMPETITION rule in design doc §6.4 — prior AMPLIFY/combined-pools entry was stale] |
-| DIVERGENCE | Different genres | Each evaluated independently. Each side: effective_margin = floor((successes/2) × genre_weight × 1.0). Net movement = difference of deltas. No strain dealt. [renamed from CROSS — stale name in prior params entry] |
-| DIVERGE STATE | Post-Divergence state | No Read/Choose. Direct pool vs pool, orientation_weight=1.0. See PP-097 TIE override and PP-099 Obscuring rule. |
+| AMPLIFY | Same genre, same orientation | Combined pools vs Conviction Track resistance. |
+| CROSS | Different genres | Each evaluated independently. |
+| DIVERGE | Post-Diverge state | No Read/Choose. Direct pool vs pool, flat orientation weights. |
 
 ## Conviction Track
 Range: 0–10. Side A wins ≥ 7. Side B wins ≤ 3. Compromise zone: 4–6.
-Starting position: GM-set, typically 4–6 neutral.
+Starting position: Game Master-set, typically 4–6 neutral.
 Audience resistance = average Stability of represented factions (round up; typical 1–3).
 
 Movement formula:
@@ -78,7 +81,7 @@ One genre boosted +0.5 by audience ethical mode:
 | Church (Divine Command) | Past |
 | Hafenmark (Categorical Imperative) | Past |
 | Varfell (Consequentialism) | Future |
-| Guilds (Moral Relativism) | GM picks |
+| Guilds (Moral Relativism) | Game Master picks |
 | Restoration (Rawlsian Social Contract) | Future |
 
 Weight range: 0.5–1.5. Never 0, never above 1.5. Fixed at setup.
@@ -95,7 +98,7 @@ Recovery: Reframe action (costs initiative; Ob 2 Cognition check).
 Concession: voluntary, or forced at Composure 0.
 
 ## Diverge State
-Triggered when: margin threshold met but Conviction Track still in compromise zone after N exchanges (GM discretion).
+Triggered when: margin threshold met but Conviction Track still in compromise zone after N exchanges (Game Master discretion).
 Effect: No Read, no genre choice. Orientation weights flatten. Initiative stays with holder.
 Ends: when Conviction exits compromise zone or Composure concession fires.
 

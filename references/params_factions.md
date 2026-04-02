@@ -25,15 +25,15 @@ Note: Varfell BG Mandate 3/Wealth 3 is intentional (political isolation at game 
 ## Clock Starting Values
 | Clock | TTRPG | BG (bg_v05 P-32) | Shared Loss |
 |-------|-------|-----------------|-------------|
-| TC | 0 | 28 | — |
-| RS | 60 | 72 | RS = 0 |
-| IP | 20 | 20 | — |
-| PI | — | 5 | — |
+| Theocracy Counter | 0 | 28 | — |
+| Rendering Stability | 60 | 72 | Rendering Stability = 0 |
+| Institutional Pressure | 20 | 20 | — |
+| Public Instability | — | 5 | — |
 
 ## Domain Action Rules (TTRPG)
 Ob = target faction's relevant stat (1–7 directly, no division).
 Attacker bonus dice: own faction's relevant stat if holding faction leadership.
-NPC faction rolls: relevant stat as d10 pool, TN 7.
+Non-Player Character faction rolls: relevant stat as d10 pool, TN 7.
 
 ## Ethical Framework Ob Modifiers
 | Condition | Modifier |
@@ -50,7 +50,7 @@ Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Revolution: 2 | L
 |---------|--------|------|--------|
 | Crown | Royal Decree | Mandate vs Ob 2 | One faction stat ±1 immediate. Consecutive: +1 Ob/season. Cannot target Intel. |
 | Church | Excommunication | Mandate vs target Mandate (leader) / Ob 2 (non-leader) | Strips Circles bonus; target faction Mandate −1. Reversal: Grand Debate (5 exchanges) or new Confessor. |
-| Church | TC 60 Territorial Seizure | Mandate vs owner's Mandate ÷ 2 (round up, min 1) | Per-territory roll. Success: administrative control. Failure: Mandate −1. |
+| Church | Theocracy Counter 60 Territorial Seizure | Mandate vs owner's Mandate ÷ 2 (round up, min 1) | Per-territory roll. Success: administrative control. Failure: Mandate −1. |
 | Revolution | Community Weaving | Presence markers −1 Ob (base Ob 2) | Mending Mandate prerequisite: Mandate ≥ 1 |
 | [Others] | See stage6_factions.md §8.4–8.9 | — | Hafenmark, Varfell, Guilds, Niflhel, Löwenritter unique actions not extracted |
 
@@ -67,12 +67,12 @@ Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Revolution: 2 | L
 8. External threat: Accommodation vs Resistance to Altonia
 9. Ontological: World as it appears vs World is more
 
-## Faction NPC Trigger Conditions (key)
-| NPC | Trigger | Effect |
+## Faction Non-Player Character Trigger Conditions (key)
+| Non-Player Character | Trigger | Effect |
 |-----|---------|--------|
 | Ehrenwall | Coup trigger | Martial Law; Crown Loyalty check |
 | Vaynard | TK threshold | Research acceleration |
-| Baralta | TC suppression | Church Mandate −1/season while Mandate ≥ 4 |
+| Baralta | Theocracy Counter suppression | Church Mandate −1/season while Mandate ≥ 4 |
 | Schoenland | Active spoiler | Various faction disruptions |
 
-RS ≤ 10 adds +1 to coup/succession trigger check pools.
+Rendering Stability ≤ 10 adds +1 to coup/succession trigger check pools.
