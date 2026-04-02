@@ -15,7 +15,7 @@ Tracks: [all touched] | Factions: [all involved] | NPCs: [named or "Generic [Fac
 Archetypes: [all represented]
 ```
 
-Track codes: Thread Tension, Thread Coherence, Institutional Pressure, Thread Sensitivity, Thread Depth, Composure, Public Instability, Rendering Stability — plus system-specific tracks defined in the relevant params file. [GAP: CERT, TLK, DD, Combat Endurance, FSTAT, INT — full names not confirmed in any design doc; remove from tracking list until defined]
+Track codes: Thread Tension, Theocracy Counter, Institutional Pressure, Thread Sensitivity, Thread Depth, Composure, Public Instability, Rendering Stability — plus system-specific tracks defined in the relevant params file. [GAP: CERT, TLK, DD, Combat Endurance, FSTAT, INT — full names not confirmed in any design doc; remove from tracking list until defined]
 
 ## Modes
 
@@ -30,7 +30,7 @@ Complete game situation with mandatory state tracking every step:
 ```
 ## State: [Round/Phase/Season N]
 [Name] — [10 attrs], Health/Wounds/Composure, Pools, Conditions
-Tracks: Thread Tension/Thread Coherence/Institutional Pressure + practitioner tracks if applicable + faction stats if applicable
+Tracks: Thread Tension/Theocracy Counter/Institutional Pressure + practitioner tracks if applicable + faction stats if applicable
 ## Action: [description]
 Pool: [N]D TN[N] Ob[N] — P(Overwhelming/Success/Partial/Failure) — Expected net: [N]
 ### Most likely outcome → resolve → State Delta → Findings
@@ -56,7 +56,7 @@ Per Non-Player Character: load profile → run defining scenario → run cross-f
 | Lenneth | Covert networks, scholarly Thread Sensitivity, Revolution endowment | 2 |
 | Torben | Loyalty Clock, tutoring demand, covert contact, retrieval | 2 |
 | Elske | Conviction split, multi-faction recruitment, independence | 2 |
-| Himlensendt | Devout Constraint (sincere), Thread Coherence driver, expansion | 2 |
+| Himlensendt | Devout Constraint (sincere), Theocracy Counter driver, expansion | 2 |
 | Olafsson | Cardinal mechanics, Church politics | 1 |
 | Klapp | Cardinal mechanics, intelligence ops | 1 |
 | Baralta | Devout + legalist, jurisdiction vs Confessor | 2 |
@@ -95,7 +95,7 @@ State block per unit group:
 ```
 ## State: Season N / Battle Round N
 [Unit] — Type, Size, Morale, Wounds, Commander Thread Sensitivity/Thread Depth
-Clocks: Thread Coherence=[N] | Seasonal Stability=[N]
+Clocks: Theocracy Counter=[N] | Seasonal Stability=[N]
 ## Action: [manoeuvre]
 Pool: [N]D TN[N] Ob[N] → outcome
 ### Casualties → Morale check → Routing condition? → State Delta
@@ -363,7 +363,7 @@ Produces a branching flowchart for a defined scenario seed. This mode generates 
 State: [all relevant tracks]
 Branch conditions: [what determines which path fires]
 
-  ├── BRANCH A: [condition — e.g. "Church Thread Coherence ≥ 40 at season start"]
+  ├── BRANCH A: [condition — e.g. "Church Theocracy Counter ≥ 40 at season start"]
   │   State delta: [what changes]
   │   → NODE A1: [next event]
   │       Branch conditions: [next split]

@@ -63,7 +63,7 @@ Before generating, read the following in this order. Stop reading a file once yo
 
 **Canon constraints (non-negotiable):**
 - Niflhel does not harvest threads. Never attribute Rendering Stability drain to Niflhel operations.
-- All three clock dimensions (Rendering Stability, Thread Coherence, Institutional Pressure) are independent. Do not treat them as the same system.
+- All three clock dimensions (Rendering Stability, Theocracy Counter, Institutional Pressure) are independent. Do not treat them as the same system.
 - Ethical framework penalties apply to factions, not players directly — players have no framework penalty unless they are operating as a faction leader.
 - Seasonal cap: ±2 per faction stat per season regardless of Domain Action count.
 
