@@ -1,7 +1,7 @@
-# THREADWORK MECHANICS — REDESIGN PROPOSAL (v2)
-## Date: 2026-03-27
+# THREADWORK MECHANICS — v2.6
+## Date: 2026-03-27 (revised 2026-04-02)
 ## Authority: Philosophical Foundations (immutable) → this document (design proposal, requires editorial approval)
-## Status: v2.5 FINAL DRAFT — 30 patches, 18 stress tests, 2 canon audits (14/14 + 3/3). Ready for Sonnet-tier simulation and compilation.
+## Version: v2.6 — ST-TW-01–05 + R-54–R-68 applied in-place. Parts 10+11 appendix eliminated. Read straight through.
 ## Revision: Incorporates Leap-as-rendering-suspension. Supersedes v1.
 
 ---
@@ -20,10 +20,24 @@
 - Part 8: Interdependency Map — implementation sequence for all modes
 - Part 9: Stress Test Patches (S-01/P-11 through S-??/P-30) — all mode patches compiled here
 
+> **Mass battle RS cost note (ST-TW-03):** **Finding from sim_x_03_massbattle_thread.md**
+**[DESIGN NOTE]**
+The ×3 RS multiplier for mass battle Thread operations means a practitioner performing 5+ Thread operations in a single large battle risks significant Coherence drain (−1/op = Coherence 5 after 5 ops → Dissonant threshold). This is pro
+
 ### TTRPG ONLY
 - Part 2: Operations — Approach Training, Diagnosis, Leap, all named operations (Weaving, Pulling, Locking, Dissolution, Mending, Collective)
 - Part 3: Coherence (10→0) — personal practitioner track; no BG equivalent
 - Part 6: Threadcut Beings — TTRPG encounter mechanics
+
+> **Pool floor correction (R-57):** Minimum 5 dice before rolling any Pull. Below 5D (from wounds, degradation, low stats):
+practitioner cannot Pull. Lock is still available (does not require the same sustained openness).
+Apply to §2.4 Pulling, eligibility section.
+
+> **Ob correction (R-55):** For Dissolution targeting a living being at Personal scale:
+> Ob = target's Endurance + target's Spirit + armour modifier (Light+1, Medium+2, Heavy+3)
+> Standard success = Partial (Shifting Object, ~50% HP damage).
+> Overwhelming required for immediate incapacitation.
+Replaces: "same as Lock" for Pe
 
 ### BOARD GAME ONLY
 - §5.4: RS in Board Game
@@ -37,6 +51,8 @@
 ### CROSS-MODE (applies in both TTRPG and Hybrid)
 - §2.3–2.4: All named operations — applicable whenever a practitioner PC is present (TTRPG and Hybrid personal scenes)
 - §A.10 of mass_battle_v3.md: Thread operations in mass battle (Hybrid / TTRPG mass combat)
+
+> **Cross-reference (ST-TW-05):** Coherence referenced in mass_battle_v3 §A.10 = this document's personal Coherence track (10→0). Not a unit stat. auto-cost −1/op depletes personal track by 1 per mass battle operation.
 
 ---
 
@@ -136,6 +152,11 @@ Diagnosis is the practitioner's final rendering act before they suspend renderin
 | Structural | Nothing. The trajectory is entirely below the waterline. |
 
 **Diagnosis on threadcut beings (Mode 3):** The configuration reads as having no accumulated past and no natural trajectory. A continuous present sustained by active work. The practitioner perceives something *held in place* rather than something *persisting*.
+
+> **Mode 3 Dissolution exception (R-64):** Threadcut beings (Mode 3) cannot be Dissolved by standard means.
+Conventional Dissolution against Mode 3 always yields Partial (Shifting Object) regardless of roll.
+Overwhelming success required for true Dissolution effect.
+Apply to §2.4 Dissolution, and §6 Threadcut Beings.
 
 **Configuration change after Diagnosis:** If the target configuration changes significantly between Diagnosis and the Leap — a Gap opens at the site, the target dies, another practitioner Locks or Dissolves the thread — the practitioner may revise their declared intentionality before the Leap roll at no cost. They have not yet suspended rendering; revision is possible. If the practitioner proceeds with the original intentionality against the altered configuration without revising: treat as skipping Diagnosis for that operation (+2 Ob, automatic Gap creation on Failure for FR operations).
 
@@ -248,6 +269,8 @@ During contact, the practitioner is not consciously present. Their configuration
 
 ### Weaving — Things Cohere
 
+> **Design note (ST-TW-01):** W-24 (Coherent Strike) at Object scale: RS unchanged, Coherence −0 on Success. If Leap round is protected (opponent at wrong range), operation is free in Thread terms. Design question: is this intended? See ED-046.
+
 **What happens:** The practitioner's configuration interacts with a thread, and the thread is drawn toward greater coherence — toward stable actualization. The practitioner directed this through intentionality: they intended coherence, healing, stabilisation, and their configuration's interaction with the thread produced it.
 
 **Why Weaving works with the ground:** Ein Sof spools continuously. Weaving aligns with that process — the practitioner's intentionality toward coherence assists what the ground is already providing. This is why Weaving effects are stable and permanent: the operation did not impose something foreign. It assisted the process that already sustains the thread. Scars are real. The world is consistent. No paradox.
@@ -293,6 +316,10 @@ Before Weaving in a politically volatile context, the GM should ask: is this con
 
 ### Pulling — Things Open
 
+> **Fortification Ob addition (R-67):** When Pulling a structural/territorial configuration that includes a fortified site (Fortification ≥ 1):
+add the Fortification level to the Ob. Physical reinforcement increases actualization.
+Apply to §2.4 Pulling, Foundational/Structural scale section.
+
 **What happens:** The practitioner's configuration interacts with a thread, and the thread is drawn toward potential — toward looseness, openness, the constitutive ground. The practitioner intended loosening, and their configuration's interaction produced it.
 
 **Why Pulling effects expire:** The thread returns to its natural configuration because Ein Sof continues to spool. The ground does not stop providing. The Pull temporarily interrupted the spooling; when the interruption ends, the process resumes. Duration represents how long the practitioner's originary intentionality holds against the ground's continuous provision.
@@ -311,6 +338,13 @@ Before Weaving in a politically volatile context, the GM should ask: is this con
 | Foundational | Deep structural thread | 5 | 70+ |
 
 **Duration by surplus successes:** 0 = end of scene. 1 = end of session. 2+ = until next seasonal accounting.
+
+> **Correction (R-54):** Duration ladder shifted (Pull requires re-application at scene scale):
+- 0 surplus successes = 3 rounds (was: end of scene)
+- 1 surplus success = end of scene (was: end of session)
+- 2+ surplus = end of session (was: until next seasonal accounting)
+- 3+ surplus = until next seasonal accounting
+Apply to §2.4 Pulling — Past-Oriented Pulling duration table.
 
 | Degree | Outcome |
 |---|---|
@@ -344,6 +378,11 @@ Before Weaving in a politically volatile context, the GM should ask: is this con
 **Additional Ob modifier — active Knot Crisis:** If the target event has caused an active Knot Crisis in any character (the death is still being grieved, the loss is still raw), add +1 Ob. The ongoing relational weight of the grief makes the temporal thread more firmly actualised — living sorrow has woven itself into the thread's current configuration and resists displacement.
 
 ### Locking — Unable to Become
+
+> **RS drain cap (R-58):** Regardless of concurrent active Locks: RS drain from Locks cannot exceed −1/round in combat
+or −1/scene in non-combat. Multiple Locks do not stack RS drain within a scene.
+Seasonal drift is unaffected (each active Lock contributes independently at Accounting).
+Apply to §3.2 Coherence Reduction / Loc
 
 **What happens:** The practitioner's intentionality is directed toward total actualization — freezing the thread permanently in its current rendered state. During contact, their configuration drives the thread to full actualization. The thread can no longer move between actual and potential. Ein Sof continues to spool, but the thread cannot integrate what the ground provides. It is frozen. Unable to become.
 
@@ -380,6 +419,12 @@ Before Weaving in a politically volatile context, the GM should ask: is this con
 | 4+ seasons | RS −2/season. Operations targeting any configuration in the same zone: +1 Ob (the frozen thread occludes Diagnosis, degrading intentionality for subsequent operations). |
 | Permanent (never reversed) | Substrate adapts. RS drift ceases. Permanent +1 Ob to adjacent operations. This is how Locked Zones form. |
 
+> **Variable RS drift (R-63):** Replaces uniform −1 RS/season for locked institutions:
+- Static domain (frozen process, unchanging institution): −0 RS/season
+- Slow-change domain (seasonal/yearly evolution): −1 RS/season
+- Dynamic domain (active contestation, living relationship): −2 RS/season
+GM determines domain type when Lock is applied.
+
 **Reversing a Lock:** Pulling at Ob = (original practitioner's TS ÷ 10, round up) − 2, minimum Ob 1. Successful release: RS +1 per season the Lock persisted (max +5), as the substrate decompresses.
 
 **Dissolution of a Lock:** Tears the locked configuration rather than unwinding it. No RS release bonus (unlike Pulling — the configuration was torn, not cleanly unwound). Dissolution of a Permanent Lock (4+ seasons, substrate adapted) automatically fails — the configuration no longer exists as a discrete target; it has become part of the substrate's structure. Permanent Locks can only be addressed via the Einhir framework. A novice Lock (TS 30) is trivially reversible (Ob 1); an expert Lock (TS 100) requires a specialist (Ob 8). Long-standing Lock release: RS +1 per season the Lock persisted (max +5). If 4+ seasons: Shifting Object risk from sudden configurational release.
@@ -415,6 +460,10 @@ Before Weaving in a politically volatile context, the GM should ask: is this con
 | Core violation | Unable to become | Unable to be |
 
 ### Mending — Repairing the Substrate
+
+> **Correction (R-56):** Healing operations (W-08 and variants) use accelerated Overweave: each healing operation in the same contact window adds +2 Ob (not +1). Sequence: 1st heal Ob 1, 2nd Ob 3, 3rd Ob 5, 4th Ob 7.
+
+> **W-33 note (P-31):** W-33 is effective only for units with CP ≥ 3. A rallied unit with CP ≤ 2 will have an effective combat pool of 0 despite Cohesion restoration — the Cohesion penalty from Cohesion 2 eliminates the entire pool at low CP values. W-33's primary use case is Professional or Elite infantry (CP 3+) that has broken under morale pressure while retaining Strength.
 
 **What happens:** Mending does not work on threads. The practitioner's intentionality is directed toward the substrate itself — the rendered world's capacity to integrate what Ein Sof provides. A Gap is where that capacity has failed. The practitioner Leaps, and during contact their configuration interacts not with a thread but with the absence of one — the place where the substrate should be supporting a thread and is not.
 
@@ -1057,130 +1106,3 @@ When RS reaches 0, the Rupture occurs. The rendered world's capacity to integrat
 **In the board game:** shared loss condition. Game over.
 **In the TTRPG:** the GM narrates the Rupture as the final session. PCs experience the dissolution of intelligible reality. The Rupture is the campaign's tragedy ending.
 **In hybrid:** both. The board game state reaches 0; the GM runs the Rupture scene in TTRPG mode.
-
----
-
-# PART TEN: POST-v2.5 STRESS TEST FINDINGS
-## Sources: tests/sim_x_01_combat_thread.md, tests/sim_x_03_massbattle_thread.md
-## Applied: 2026-04-02
-
----
-
-## ST-TW-01 — W-24 (Coherent Strike): Under-Costed at Object Scale
-**Finding F-06 from sim_x_01_combat_thread.md**
-**[DESIGN NOTE / EDITORIAL: requires user approval — W-24 cost]**
-W-24 (Coherent Strike) at Object scale: on a Success degree, RS is unchanged and Coherence −0. The operation provides +2 damage with no RS or Coherence cost. This is functionally free in Thread terms — the only cost is the Leap round vulnerability.
-
-The Leap round vulnerability is a real tactical cost (practitioner exposed ~60% hit probability against an opponent who can attack). However, if the practitioner has range protection (opponent cannot attack during Leap), the operation costs nothing at the Thread level.
-
-**Design question:** Is W-24 at Object scale intended to be free of RS/Coherence cost? If yes: no patch needed. If no: consider adding RS +1 even on Success at Object scale, or requiring minimum Coherence expenditure.
-
-**Confirmed from sim:** W-24 is only viable when the Leap round is protected (opponent at wrong range or ally providing cover). Against an opponent who can attack during the Leap round, the practitioner is likely incapacitated before the operation fires.
-
----
-
-## ST-TW-02 — W-33 (Rally the Broken): Ineffective for CP ≤ 2 Units
-**Finding F-11 from sim_x_03_massbattle_thread.md**
-**[PATCH P-31]**
-W-33 restores Cohesion to 2 but does not restore Strength. For units with CP ≤ 2, the Cohesion 2 restoration produces 0 effective dice (min(CP,Str) base − Cohesion penalty exhausts the pool). W-33 can only meaningfully rally units with CP ≥ 3 (Professional+ tier).
-
-Add to W-33 description:
-> "W-33 is effective only for units with CP ≥ 3. A rallied unit with CP ≤ 2 will have an effective combat pool of 0 despite Cohesion restoration — the Cohesion penalty from Cohesion 2 eliminates the entire pool at low CP values. W-33's primary use case is Professional or Elite infantry (CP 3+) that has broken under morale pressure while retaining Strength."
-
----
-
-## ST-TW-03 — RS Cost Curve Calibration for Mass Battle
-**Finding from sim_x_03_massbattle_thread.md**
-**[DESIGN NOTE]**
-The ×3 RS multiplier for mass battle Thread operations means a practitioner performing 5+ Thread operations in a single large battle risks significant Coherence drain (−1/op = Coherence 5 after 5 ops → Dissonant threshold). This is probably intended — Thread operations in mass combat are high-cost interventions. No patch required. Add to §A.10 of mass_battle_v3.md:
-> "Practitioners should expect mass battle Thread operations to consume 1 Coherence per operation. A practitioner entering a multi-turn engagement with Coherence ≤ 5 is at significant risk of reaching Dissonant threshold before battle resolution."
-
----
-
-## ST-TW-04 — W-24 Vulnerability Window vs Stage8 Combat Interaction
-**Finding F-01 from sim_x_01_combat_thread.md**
-**[CONFIRMED — no patch needed]**
-The Leap round creates a real tactical vulnerability: the practitioner commits all 13D to defence, giving the opponent full offence dice. Hit probability ~60% against a typical armoured opponent. This cost is working as designed — Thread operations in melee have a genuine cost structure through the Leap window. No mechanical change needed; add a GM note.
-
----
-
-## ST-TW-05 — Coherence Undefined in mass_battle_v3.md (Cross-reference)
-**From ST-MB-02 in stress test report**
-**[CROSS-REFERENCE]**
-mass_battle_v3.md §A.10 references "Coherence" as a practitioner-specific stat. This is the Coherence track defined in Part 3 of this document (10→0). The stat in §A.10 is the practitioner's personal Coherence track, not a separate unit stat. Add to §A.10 of mass_battle_v3.md:
-> "Coherence referenced here is the practitioner's personal Coherence track (see threadwork_redesign_v25.md Part 3). It is not a unit stat. 'Coherence auto-cost −1/op' means each Thread operation in mass battle depletes the practitioner's Coherence by 1. 'Severed (Coherence 1): +2 Ob' refers to the Coherence Threshold from §3.3 of the threadwork document."
-
----
-
-# PART ELEVEN: MECHANICAL PATCHES — R-54 THROUGH R-68
-## Source: designs/ttrpg/mechanical_tasks_and_patches.md (2026-03-30)
-## Applied to threadwork_redesign_v25.md: 2026-04-02
-## Note: These patches target stage3_thread_operations.md (empty/stale in v0.14).
-## Since designs/ is the working layer, applied here directly.
-
-## R-54 — Personal Pull Duration Corrected
-Duration ladder shifted (Pull requires re-application at scene scale):
-- 0 surplus successes = 3 rounds (was: end of scene)
-- 1 surplus success = end of scene (was: end of session)
-- 2+ surplus = end of session (was: until next seasonal accounting)
-- 3+ surplus = until next seasonal accounting
-
-Apply to §2.4 Pulling — Past-Oriented Pulling duration table.
-
-## R-55 — Personal Dissolution Ob (Living Target)
-For Dissolution targeting a living being at Personal scale:
-> Ob = target's Endurance + target's Spirit + armour modifier (Light+1, Medium+2, Heavy+3)
-> Standard success = Partial (Shifting Object, ~50% HP damage).
-> Overwhelming required for immediate incapacitation.
-Replaces: "same as Lock" for Personal-scale living-target Dissolution.
-
-## R-56 — Healing Overweave: +2 Ob per operation (not +1)
-Healing operations (W-08 and variants) use accelerated Overweave:
-Sequence: 1st heal Ob 1, 2nd Ob 3, 3rd Ob 5, 4th Ob 7.
-Rationale: living configuration adapts and becomes less responsive to repeated intervention.
-General overweave (+1 Ob) unchanged for non-healing operations.
-
-## R-57 — Pull Pool Floor = 5D Minimum
-Minimum 5 dice before rolling any Pull. Below 5D (from wounds, degradation, low stats):
-practitioner cannot Pull. Lock is still available (does not require the same sustained openness).
-Apply to §2.4 Pulling, eligibility section.
-
-## R-58 — Mass Lock RS Drain Cap: −1/round per scene
-Regardless of concurrent active Locks: RS drain from Locks cannot exceed −1/round in combat
-or −1/scene in non-combat. Multiple Locks do not stack RS drain within a scene.
-Seasonal drift is unaffected (each active Lock contributes independently at Accounting).
-Apply to §3.2 Coherence Reduction / Lock chronic consequences.
-
-## R-63 — Locked Institution Chronic RS Drift: Variable by Domain Type
-Replaces uniform −1 RS/season for locked institutions:
-- Static domain (frozen process, unchanging institution): −0 RS/season
-- Slow-change domain (seasonal/yearly evolution): −1 RS/season
-- Dynamic domain (active contestation, living relationship): −2 RS/season
-GM determines domain type when Lock is applied.
-
-## R-64 — Mode 3 Entities: Immune to Conventional Dissolution
-Threadcut beings (Mode 3) cannot be Dissolved by standard means.
-Conventional Dissolution against Mode 3 always yields Partial (Shifting Object) regardless of roll.
-Overwhelming success required for true Dissolution effect.
-Apply to §2.4 Dissolution, and §6 Threadcut Beings.
-
-## R-67 — Fortification Adds to Structural Pulling Ob
-When Pulling a structural/territorial configuration that includes a fortified site (Fortification ≥ 1):
-add the Fortification level to the Ob. Physical reinforcement increases actualization.
-Apply to §2.4 Pulling, Foundational/Structural scale section.
-
-## R-68 — Accounting Gate Confirmed (No TC Change Bypass)
-TC changes apply at seasonal accounting. No mechanism bypasses this gate.
-Confirmation only — no text change to threadwork. Note in stage5_clocks.md accounting section.
-
-## DEBATE-RELATED (for cross-reference only — apply to debate_system_redesign_v1.md)
-R-65: Practitioner Weaving bonus in Debates = TPS ÷ 3 (TS 30=+1D, TS 60=+2D, TS 90=+3D).
-    Practitioner must declare before rolling. Visible. Church may call Heresy Investigation.
-    Coherence check Ob 1 after exchange.
-R-66: Debate pool formula → (Presence × 2) + History.
-    [CONFLICT: stress tests v1+v2 used Cognition + History. See ED-047.]
-
-## NOT APPLIED HERE (wrong document):
-R-59/R-60: Great Unwinding/Great Working — narrative prereqs TBD. Note in stage15_spell_catalog.
-R-62: W-51 Mandate Reinforcement Ob 4→6. Apply to stage15_spell_catalog.md.
-MT-01: Faction unit rosters. Apply to bg_v05_simulation_and_patches.md.

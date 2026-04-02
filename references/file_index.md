@@ -322,6 +322,6 @@ These files contain confirmed design decisions that have not been propagated to 
 | File | Issue | Priority |
 |------|-------|----------|
 | `designs/board_game/valoria_bg_v05_simulation_and_patches.md` | Part Thirteen appended (ST-BG/INT patches, ~180 lines). Apply in-place → v0.6 | High |
-| `designs/ttrpg/threadwork_redesign_v25.md` | Parts 10+11 appended (ST-TW, R-54–R-68, ~80 lines). Apply in-place → v2.6. Part 1 philosophical framing should move to reference doc → v3.0 | High |
+| ~~`designs/ttrpg/threadwork_redesign_v25.md`~~ | DONE — v2.6 committed 2026-04-02. Part 1 philosophical framing → v3.0 still pending | Partial |
 | `compilation/v0.14/stage8_combat.md` | Part Eleven appended (PP-086–092). Apply in-place. Lower priority — compilation layer. | Low |
 | `compilation/v0.14/stage11_scale_transitions.md` | §11.8 appended (PP-089/090). Apply in-place. | Low |
