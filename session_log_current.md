@@ -1,31 +1,22 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_DEBATE_STRESS_TEST
-phase: Phase 9 — Debate stress test (SIM-DEBT-01)
-status: IN PROGRESS
+session_id: 2026-04-02T_SKELETON_CLEAN_2
+phase: Phase 10 — bg_v05 → v0.6, threadwork → v2.6, skeleton-debt cleared
+status: CLOSED
 
 completed:
-  - SIM-D-01: Debate stress test Modes A+D+J+L. Calibration baselines recalibrated.
-  - PP-097 PROVISIONAL: DIVERGE+TIE → Tie rule fires (any interaction type). Applied in-place to debate_system_redesign_v1.md §6.4 DIVERGE block.
-  - PP-098 PROVISIONAL: Regroup at Concentration=0 → consumes Spent without penalty. Applied in-place §6.4 Step 5.
-  - PP-099 PROVISIONAL: Obscuring in Divergence → Doubt Marker; orientation_weight=1.0. Applied in-place §6.4 DIVERGE block.
-  - debate_system_redesign_v1.md bumped to v1.1.
-  - propagation_map.md updated with DEBATE section.
-  - SIM-DEBT-01 PARTIALLY RESOLVED: Mode C scenario run still needed.
+  - bg_v05 → v0.6: ST-BG-03/04/06/07/08/09 and ST-INT-01/05/06/09/10 applied in-place. PART THIRTEEN appendix eliminated. 981 → 1000 lines (net minimal growth because patches are now context notes, not appendix sections).
+  - threadwork_v25 → v2.6: ST-TW-01–05 and R-54–R-68 applied in-place. Parts 10+11 appendix eliminated. 1059 → 1108 lines.
+  - skeleton-debt register updated in file_index.md.
+  - In-place patching rule now enforced in simulator Mode I and orchestrator.
 
-key_findings:
-  - P(Overwhelming) doubled: ~25% old → ~60% new (symmetric 8D pools)
-  - Exchanges to Rattled halved: 7-9 old → 3-5 new (Composure 9)
-  - Track movement now consistent 1 step/exchange vs 0 often under old pool
-  - F-D-01 P1 (PP-097): DIVERGE+TIE ambiguity — Tie rule takes priority
-  - F-D-06 P2: Grand Debate + Corroboration ~90 resolution steps, no GM reference card
+skeleton_debt_remaining:
+  - threadwork v2.6 → v3.0: Part 1 philosophical framing should move to a reference doc (separate from the mechanical spec). Low priority — Part 1 is useful reference for canon-guard.
+  - compilation/v0.14/stage8_combat.md: Part Eleven appendix. Low priority — compilation layer.
+  - compilation/v0.14/stage11_scale_transitions.md: PP-089/090 appended. Low priority.
 
 next_action:
-  task: "Mode C debate scenario — Baralta vs Himlensendt, 3-exchange Formal Debate. Completes SIM-DEBT-01."
-  note: "Read stage13_npcs.md for Baralta and Himlensendt stats before running. New pool: (Presence×2)+History."
-
-commits_this_session:
-  - 22a1f24: SIM-D-01 test file + patch_register PP-097/098/099 + params_debate recalibration + coverage_matrix
-  - [this commit]: debate_system_redesign_v1.md v1.1 in-place patches + propagation_map + session_log
+  task: "Begin simulation. stress test debate — SIM-DEBT-01 (Presence×2 pool recalibration)."
+  note: "All high-priority skeleton-debt cleared. Design documents now internally consistent. Pipeline verified."
 ```
