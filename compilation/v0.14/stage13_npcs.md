@@ -1,6 +1,6 @@
 # PART THIRTEEN: NAMED NPCs AND INSTITUTIONAL ACTORS
 
-Every named NPC in Valoria has a **Resonant Style** tag (Evidence, Character, or Consequence). Using that style earns +1D on social rolls targeting them. Tags are not listed on player-facing materials — discover them through investigation, observation, or prior scenes.
+Every named Non-Player Character in Valoria has a **Resonant Style** tag (Evidence, Character, or Consequence). Using that style earns +1D on social rolls targeting them. Tags are not listed on player-facing materials — discover them through investigation, observation, or prior scenes.
 
 Named NPCs follow their Beliefs regardless of wound state. They do not withdraw when outmatched unless their Beliefs permit it.
 
@@ -13,7 +13,7 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 ### King Almud Almqvist
 *"The Golden Lion" · "The Golden King"*
 
-**TS:** 28 (high Dormant; near Stirring threshold). Does not know the name for what he experiences. Attributes felt impressions to spiritual intimation. A Discovery Event would be the most destabilising moment of his reign.
+**Thread Sensitivity:** 28 (high Dormant; near Stirring threshold). Does not know the name for what he experiences. Attributes felt impressions to spiritual intimation. A Discovery Event would be the most destabilising moment of his reign.
 
 **Social Profile:**
 - Composure: 11 (Presence 5 + 6)
@@ -25,30 +25,30 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 2. *"The informal caste against southern Einhir is wrong. I cannot act on that conviction without destroying the coalition that holds the kingdom together. I will not act until I find a path that doesn't require choosing between justice and the monarchy."*
 3. *"My son must be ratified before the succession becomes a weapon."*
 
-**The Sovereign Constraint.** Almud's inaction on the Einhir question is structural, not weakness. Acting requires him to simultaneously contradict Church doctrine (TC +3), alienate northern Einhir nobility (Mandate −2), and invite Altonian diplomatic challenge. The constraint erodes only when one or more of these costs is removed by events.
+**The Sovereign Constraint.** Almud's inaction on the Einhir question is structural, not weakness. Acting requires him to simultaneously contradict Church doctrine (Theocracy Counter +3), alienate northern Einhir nobility (Mandate −2), and invite Altonian diplomatic challenge. The constraint erodes only when one or more of these costs is removed by events.
 
-**TS at the table.** In scenes with Thread-significant objects or Taint 3+ practitioners, the GM may privately note that Almud experiences an impression he cannot name. TS 30+ practitioners who succeed on a passive perception check notice the King's threads register faint sensitivity. He does not know they see it.
+**Thread Sensitivity at the table.** In scenes with Thread-significant objects or Taint 3+ practitioners, the Game Master may privately note that Almud experiences an impression he cannot name. Thread Sensitivity 30+ practitioners who succeed on a passive perception check notice the King's threads register faint sensitivity. He does not know they see it.
 
 ---
 
 ### Queen Lenneth Almqvist
 
-**TS:** 0 (Inert). Not foreclosed — simply never confronted.
+**Thread Sensitivity:** 0 (Inert). Not foreclosed — simply never confronted.
 
 **Social Profile:**
 - Composure: 10 (Presence 4 + 6)
 - Dominant Conviction: Liberty — the concrete political conditions under which people can act without requiring institutional permission
 - Resonant Style: Consequence
 
-**Hidden networks.** Maintains a third-party cultural foundation funding People's Revolution academic work (including Edith Varn's project) through a retired magistrate. The paper trail does not reach the Crown. She has sea-republic archive access to a pre-Altonian coastal survey — a document a TS 50+ practitioner would recognise as a first-person thread-perception account from approximately 180 years ago.
+**Hidden networks.** Maintains a third-party cultural foundation funding People's Revolution academic work (including Edith Varn's project) through a retired magistrate. The paper trail does not reach the Crown. She has sea-republic archive access to a pre-Altonian coastal survey — a document a Thread Sensitivity 50+ practitioner would recognise as a first-person thread-perception account from approximately 180 years ago.
 
 ---
 
 ### Prince Torben Almqvist — Heir, Early Teens
 
-**TS:** 8 (near-Inert). Has had three unexplained experiences in five years but has no framework for them.
+**Thread Sensitivity:** 8 (near-Inert). Has had three unexplained experiences in five years but has no framework for them.
 
-**Starting state:** In Valoria. Becomes available for Altonian education demand at IP 30.
+**Starting state:** In Valoria. Becomes available for Altonian education demand at Institutional Pressure 30.
 
 **Torben Loyalty Clock.** Starting value: 8 (loyal to Valoria). See §7.x (Succession Mechanic) for full procedure.
 
@@ -80,7 +80,7 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 ### Confessor Arne Himlensendt
 *Head of the Holy Church of Galbados*
 
-**TS:** 0. Sincerely devout, institutionally effective, and completely without knowledge of what his institution is or what it was built to do. He is the most thorough product of Galbados's theological engineering in the kingdom. His certainty is not the certainty of someone who has considered doubt and rejected it — it is the certainty of someone who has never been given the perceptual tools to approach the question differently.
+**Thread Sensitivity:** 0. Sincerely devout, institutionally effective, and completely without knowledge of what his institution is or what it was built to do. He is the most thorough product of Galbados's theological engineering in the kingdom. His certainty is not the certainty of someone who has considered doubt and rejected it — it is the certainty of someone who has never been given the perceptual tools to approach the question differently.
 
 **Social Profile:**
 - Attributes: Presence 6, Cognition 5
@@ -108,16 +108,16 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 
 **Domain action pool (Heresy Investigation):** Church Reach 7 + Ecclesiastical Law History bonus.
 
-**Olafsson's vulnerability.** Baralta holds circumstantial evidence of the Olafsson-Niflhel connection. If players supply corroborating evidence (Solvind Brak's testimony or documentary records), Baralta launches a Domain action against Church Stability: Ob 3, pool Mandate 7 + Reach 5 + player evidence bonus. Success: Church Stability −2, TC −3, Olafsson's Inquisitor operations suspended.
+**Olafsson's vulnerability.** Baralta holds circumstantial evidence of the Olafsson-Niflhel connection. If players supply corroborating evidence (Solvind Brak's testimony or documentary records), Baralta launches a Domain action against Church Stability: Ob 3, pool Mandate 7 + Reach 5 + player evidence bonus. Success: Church Stability −2, Theocracy Counter −3, Olafsson's Inquisitor operations suspended.
 
 ---
 
 ### Cardinal Magnus Klapp — Scholarship
 *Controls Church universities, monasteries, and the archive of identified Einhir texts*
 
-**TS:** 31 (approaching Stirring threshold, unknown to anyone).
+**Thread Sensitivity:** 31 (approaching Stirring threshold, unknown to anyone).
 
-**CE track:** 4. Archive work has brought him into sustained contact with Einhir records and two originary lock objects. Trajectory B (Fracture), moving toward C (Conversion). One more sustained encounter with a Thread-significant object will trigger a TS growth check. If it succeeds: the head of the Church's entire educational apparatus develops Thread sensitivity.
+**Combat Endurance track:** 4. Archive work has brought him into sustained contact with Einhir records and two originary lock objects. Trajectory B (Fracture), moving toward C (Conversion). One more sustained encounter with a Thread-significant object will trigger a Thread Sensitivity growth check. If it succeeds: the head of the Church's entire educational apparatus develops Thread sensitivity.
 
 ---
 
@@ -137,7 +137,7 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 ### Duchess Inge Baralta
 *"The Hammer" · "The Black Ram"*
 
-**TS:** 0 (Inert). Essentialist theology has completely foreclosed TS development. She has no awareness this foreclosure exists.
+**Thread Sensitivity:** 0 (Inert). Essentialist theology has completely foreclosed Thread Sensitivity development. She has no awareness this foreclosure exists.
 
 **Social Profile:**
 - Composure: 11 (Presence 5 + 6)
@@ -152,16 +152,16 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 2. *"The Church is holy, but it is not the state. I will hold that line in Parliament, in court, and in blood if necessary."*
 3. *"The succession must be settled before Vaynard turns it into his instrument."*
 
-**TC Contribution.** While Baralta's Mandate remains above 5, she suppresses TC at −1/season. If Mandate falls below 5 this suppression disappears. If she is excommunicated: TC +4 immediately.
+**Theocracy Counter Contribution.** While Baralta's Mandate remains above 5, she suppresses Theocracy Counter at −1/season. If Mandate falls below 5 this suppression disappears. If she is excommunicated: Theocracy Counter +4 immediately.
 
 **The Sovereign Authority Doctrine.** *Usable once per campaign arc as a Domain action against Church Reach (Ob 4; pool: Mandate 7 + Reach 5):*
 
 | Degree | Result |
 |---|---|
-| Overwhelming | TC −3. Church Mandate −1. Heresy Investigation cannot advance this season. Baralta +1D on social actions vs Church reps for the arc. |
-| Success | TC −2. Church Mandate −1. Heresy Investigation opens (Ob 4 to pursue). |
-| Partial | TC −1. Heresy Investigation opens immediately. Church Reach +1. |
-| Failure | TC +1. Heresy Investigation opens immediately. Baralta's Mandate −1. |
+| Overwhelming | Theocracy Counter −3. Church Mandate −1. Heresy Investigation cannot advance this season. Baralta +1D on social actions vs Church reps for the arc. |
+| Success | Theocracy Counter −2. Church Mandate −1. Heresy Investigation opens (Ob 4 to pursue). |
+| Partial | Theocracy Counter −1. Heresy Investigation opens immediately. Church Reach +1. |
+| Failure | Theocracy Counter +1. Heresy Investigation opens immediately. Baralta's Mandate −1. |
 
 ---
 
@@ -172,7 +172,7 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 ### Duke Magnus Vaynard
 *"The White Wolf"*
 
-**TS:** 14 (Dormant). Does not know he has Thread sensitivity.
+**Thread Sensitivity:** 14 (Dormant). Does not know he has Thread sensitivity.
 
 **Social Profile:**
 - Composure: 11 (Presence 5 + 6)
@@ -188,18 +188,18 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 
 | TK | Campaign Effect |
 |---|---|
-| 1–2 | Informed questions. Acute awareness rather than understanding. No TC effect. |
-| 3 | Structural theory (wrong in detail, correct in structure). Succession leverage formally linked to Southernmost access terms. TC +1. |
-| 4 | Urgency. Willing to offer collection access (including originary locks) in exchange for Thread education and Southernmost partnership. TC +2. |
-| 5 | Dangerous knowledge — knows what Galbados was structurally. Seeks capability, not knowledge. TC +3. |
+| 1–2 | Informed questions. Acute awareness rather than understanding. No Theocracy Counter effect. |
+| 3 | Structural theory (wrong in detail, correct in structure). Succession leverage formally linked to Southernmost access terms. Theocracy Counter +1. |
+| 4 | Urgency. Willing to offer collection access (including originary locks) in exchange for Thread education and Southernmost partnership. Theocracy Counter +2. |
+| 5 | Dangerous knowledge — knows what Galbados was structurally. Seeks capability, not knowledge. Theocracy Counter +3. |
 
-**The Discovery Event.** If Vaynard is present during a Thread event of sufficient intensity, the GM may call a Discovery Event. Spirit check TN 7 Ob 1. On success: TS advances to 30 (Stirring), and the world reorganises itself for him.
+**The Discovery Event.** If Vaynard is present during a Thread event of sufficient intensity, the Game Master may call a Discovery Event. Spirit check TN 7 Ob 1. On success: Thread Sensitivity advances to 30 (Stirring), and the world reorganises itself for him.
 
 ---
 
 ### Scholar Maret Uln — Varfell's Wild Card
 
-**TS:** Unknown; practitioner-level (confirmed). Not a loyal Varfell character. Pursuing his own Belief: *"I will reconstruct the Ceiral Ritual before the Inquisitors find the text."* People's Revolution-adjacent.
+**Thread Sensitivity:** Unknown; practitioner-level (confirmed). Not a loyal Varfell character. Pursuing his own Belief: *"I will reconstruct the Ceiral Ritual before the Inquisitors find the text."* People's Revolution-adjacent.
 
 **Starting Loyalty to Varfell:** 4.
 
@@ -224,10 +224,10 @@ Vaynard knows this and is calculating: Maret is the most valuable person on the 
 
 **Relationship to Almud:** Respect without affection. Decent man governing badly. She will follow his orders until the day she doesn't, and the transition will be instantaneous.
 
-**Coup threshold.** Ehrenwall has not yet concluded the Crown has failed the nation. When she does, she will act without hesitation or remorse. She is the most dangerous NPC in the game: patient, competent, and commanding an army.
+**Coup threshold.** Ehrenwall has not yet concluded the Crown has failed the nation. When she does, she will act without hesitation or remorse. She is the most dangerous Non-Player Character in the game: patient, competent, and commanding an army.
 
-**Coup Counter (0–3, GM-tracked, private).** Fires at 3. Increments:
-- TC reaches 40 while the Crown took no action to reduce it that season (+1)
+**Coup Counter (0–3, Game Master-tracked, private).** Fires at 3. Increments:
+- Theocracy Counter reaches 40 while the Crown took no action to reduce it that season (+1)
 - Torben's loyalty reaches 3–2 or lower (+1)
 - Crown loses two or more territories in one season without a military response Domain Action (+1)
 
@@ -249,9 +249,9 @@ Counter never decrements. Once marked, Ehrenwall does not revise.
 
 Legitimate investigative apparatus. Operations produce public evidentiary records.
 
-**NPC pool.** Crown Reach dice at TN 7. Ob = target faction's Reach ÷ 2 (round up).
+**Non-Player Character pool.** Crown Reach dice at TN 7. Ob = target faction's Reach ÷ 2 (round up).
 
-**Thread exposure risk.** Royal Investigators assigned to Niflhel, Southernmost, or active practitioner cases will encounter Thread-level phenomena they cannot process. The GM imposes −1D on affected investigators for the remainder of that investigation.
+**Thread exposure risk.** Royal Investigators assigned to Niflhel, Southernmost, or active practitioner cases will encounter Thread-level phenomena they cannot process. The Game Master imposes −1D on affected investigators for the remainder of that investigation.
 
 ---
 
@@ -266,16 +266,16 @@ Extralegal arm of the Löwenritter. Operations are not recorded in Ministry of L
 | 3 | Parliament's institutional trust erodes. All Crown Domain actions against non-Crown factions +1 Ob. |
 | 5 | Parliamentary inquiry opens. Grand Debate (5 exchanges) — Crown's Reach and Mandate at stake. |
 
-**Riskbreaker Cumulative Exposure (CE) — per operative:**
+**Riskbreaker Cumulative Exposure (Combat Endurance) — per operative:**
 
-| Event | CE |
+| Event | Combat Endurance |
 |---|---|
 | Handling dissolution residue evidence | +1 |
 | Direct witness to thread operation | +2 |
 | Encounter with monstrous configuration | +2 |
 | Extraction assignment with active practitioner | +1 |
 
-At CE 3+: qualifies for TS growth check (Spirit TN 7, Ob 1) on the next confrontation event.
+At Combat Endurance 3+: qualifies for Thread Sensitivity growth check (Spirit TN 7, Ob 1) on the next confrontation event.
 
 ---
 
@@ -283,9 +283,9 @@ At CE 3+: qualifies for TS growth check (Spirit TN 7, Ob 1) on the next confront
 
 The Inquisitor Confrontation Arc. An Inquisitor who builds a successful file on a practitioner must, at some point, get close enough to observe what the practitioner is. The theology says it is the sin that caused the Calamity. Thread-level reality says otherwise.
 
-**Inquisitor CE track:**
+**Inquisitor Combat Endurance track:**
 
-| Event | CE |
+| Event | Combat Endurance |
 |---|---|
 | Reviewing physical evidence from a Thread operation site | +1 |
 | Interrogating a practitioner who performs passive perception in their presence | +1 |
@@ -293,13 +293,13 @@ The Inquisitor Confrontation Arc. An Inquisitor who builds a successful file on 
 | Handling an originary lock or dissolution residue object as evidence | +2 |
 | Extended interrogation of a Resonant-tier practitioner | +3 |
 
-At CE 3: TS growth check — Spirit TN 7, Ob 2 (essentialist formation raises the Ob). Success: develops TS toward Dormant. This is a **crisis of faith event**, not a benefit.
+At Combat Endurance 3: Thread Sensitivity growth check — Spirit TN 7, Ob 2 (essentialist formation raises the Ob). Success: develops Thread Sensitivity toward Dormant. This is a **crisis of faith event**, not a benefit.
 
-**Three trajectories at CE 3+ with TS development:**
+**Three trajectories at Combat Endurance 3+ with Thread Sensitivity development:**
 
-- *Doubling Down:* Interprets the felt sense as evidence of the Arrogance's continuing temptation. Pursues practitioners with increased conviction. Becomes functionally a low-sensitivity Thread-detector without knowing it. TC +1.
+- *Doubling Down:* Interprets the felt sense as evidence of the Arrogance's continuing temptation. Pursues practitioners with increased conviction. Becomes functionally a low-sensitivity Thread-detector without knowing it. Theocracy Counter +1.
 - *Fracture:* Cannot reconcile the felt sense with doctrine. Stops functioning. Requests reassignment. Church loses investigative capacity; this Inquisitor may become an ally who knows operational procedure from the inside.
-- *Conversion (rare):* TS development exceeds institutional formation's capacity to contain. Seeks out a practitioner to understand. The Church has a suppression protocol for this that Inquisitors themselves are not told about.
+- *Conversion (rare):* Thread Sensitivity development exceeds institutional formation's capacity to contain. Seeks out a practitioner to understand. The Church has a suppression protocol for this that Inquisitors themselves are not told about.
 
 **Investigation procedure (3 stages):**
 
@@ -307,7 +307,7 @@ At CE 3: TS growth check — Spirit TN 7, Ob 2 (essentialist formation raises th
 |---|---|---|
 | 1. File Building | Church Reach, Ob 3 | Player obstruction at Ob 2. |
 | 2. Formal Accusation | Church Reach, Ob 4 | Requires completed File. Accused may call Grand Debate (5 exchanges; pool: Cognition + relevant History). |
-| 3. Conviction Hearing | Grand Debate finale | Conviction: TC +2. Accused faces imprisonment or exile. |
+| 3. Conviction Hearing | Grand Debate finale | Conviction: Theocracy Counter +2. Accused faces imprisonment or exile. |
 
 ---
 
@@ -315,25 +315,25 @@ At CE 3: TS growth check — Spirit TN 7, Ob 2 (essentialist formation raises th
 
 Church military arm, commanded by Cardinal Jarnstal. Deployable without royal authorisation when Piety is high. Cannot be used in a territory where Crown Mandate exceeds Church Mandate without provoking a Sovereignty Dispute.
 
-**Thread exposure.** Templars assigned to Monstrous Incursion suppression missions accumulate CE on the same table as Inquisitors. Unlike Inquisitors, they have no institutional trajectory framework for managing it — Templar CE crises are personal, sudden, and unmanaged.
+**Thread exposure.** Templars assigned to Monstrous Incursion suppression missions accumulate Combat Endurance on the same table as Inquisitors. Unlike Inquisitors, they have no institutional trajectory framework for managing it — Templar Combat Endurance crises are personal, sudden, and unmanaged.
 
 **Constraint:** Cannot accept orders that subordinate the Löwenritter militarily. If Cardinal Jarnstal orders Templar deployment into Löwenritter-held territory, this generates a Faction Tension event between Church and Löwenritter (Stability check for both factions, Ob 2).
 
 ---
 
-## 13.7 NPC Faction Pools (Generic)
+## 13.7 Non-Player Character Faction Pools (Generic)
 
-When a faction acts through institutional NPC capacity rather than a named leader:
+When a faction acts through institutional Non-Player Character capacity rather than a named leader:
 
 **Pool construction:** Faction's relevant attribute score as dice pool. TN 7. Ob = opposing faction's relevant attribute ÷ 2, rounded up.
 
-**Named NPC override.** When a named leader is personally involved in a Domain action, use their personal pool (attribute + History bonus) rather than the generic institutional pool. Named NPC personal pools are typically larger but narrower in scope.
+**Named Non-Player Character override.** When a named leader is personally involved in a Domain action, use their personal pool (attribute + History bonus) rather than the generic institutional pool. Named Non-Player Character personal pools are typically larger but narrower in scope.
 
 ---
 
-## 13.8 NPC Style Discovery
+## 13.8 Non-Player Character Style Discovery
 
-Each named NPC has one Resonant Style tag: **Evidence**, **Character**, or **Consequence**.
+Each named Non-Player Character has one Resonant Style tag: **Evidence**, **Character**, or **Consequence**.
 
 | Style | Approach that earns +1D |
 |---|---|
@@ -341,4 +341,4 @@ Each named NPC has one Resonant Style tag: **Evidence**, **Character**, or **Con
 | Character | Who the person is; what they value; direct truth about oneself |
 | Consequence | Forward-looking analysis; what happens if this path is taken |
 
-Tags are not listed on player-facing materials. Discover them through investigation, observation, or prior scenes in which the NPC responded visibly to one approach over another.
+Tags are not listed on player-facing materials. Discover them through investigation, observation, or prior scenes in which the Non-Player Character responded visibly to one approach over another.

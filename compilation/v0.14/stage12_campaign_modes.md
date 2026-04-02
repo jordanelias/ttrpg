@@ -25,26 +25,26 @@ A TTRPG session covers one dramatic arc, typically one or two scenes within a se
 
 ### Session Zero Protocol
 
-1. Answer 10–15 Editorial Questions establishing sensory texture, NPC motivations, and faction starting postures.
+1. Answer 10–15 Editorial Questions establishing sensory texture, Non-Player Character motivations, and faction starting postures.
 2. Set Safety Tools.
 3. Create Characters: 3 Histories at 2 points each; 31 points; declare 3–5 Knots.
-4. Set clocks: RS 72, TC 15, IP 20.
+4. Set clocks: Rendering Stability 72, Theocracy Counter 15, Institutional Pressure 20.
 5. Review the Action Economy and Scope Shift procedure.
 6. Confirm the campaign's primary structural questions: which clocks are the PCs best positioned to address, and in which direction?
 
 ### TTRPG Endgame
 
-There is no explicit victory condition. The TTRPG campaign ends when the GM and players agree the central dramatic questions have been resolved or exhausted. Endgame is emergent, not mechanical.
+There is no explicit victory condition. The TTRPG campaign ends when the Game Master and players agree the central dramatic questions have been resolved or exhausted. Endgame is emergent, not mechanical.
 
-**Endgame indicators (GM guidance — not triggers):**
+**Endgame indicators (Game Master guidance — not triggers):**
 - All PCs have resolved or abandoned their central Beliefs.
-- RS has risen above 80 (world recovering) or fallen below 20 (world doomed).
+- Rendering Stability has risen above 80 (world recovering) or fallen below 20 (world doomed).
 - The succession crisis has resolved (Torben, Elske, Parliament, or coup).
-- The Church's authority is broken or triumphant (TC below 20 or above 80).
+- The Church's authority is broken or triumphant (Theocracy Counter below 20 or above 80).
 - Altonia has invaded or been permanently deterred.
-- At least one PC has died, retired, or fundamentally transformed.
+- At least one Player Character has died, retired, or fundamentally transformed.
 
-The GM should signal endgame 2–3 sessions before the final session: *"We're approaching the end of this story. What does your character want to resolve?"*
+The Game Master should signal endgame 2–3 sessions before the final session: *"We're approaching the end of this story. What does your character want to resolve?"*
 
 ---
 
@@ -66,7 +66,7 @@ The board game covers 3–5 seasons per session. A full 10-season campaign plays
 
 Victory conditions are checked at the end of each season's accounting phase.
 
-**Shared loss condition (all modes):** RS reaches 0. The Rupture. No faction wins.
+**Shared loss condition (all modes):** Rendering Stability reaches 0. The Rupture. No faction wins.
 
 **Additional endgame triggers:**
 - Season 10 reached: highest point total wins.
@@ -93,15 +93,15 @@ One hybrid session covers one season, structured in four phases:
 
 ### Pacing Controls
 
-**GM may compress:** Skip Personal Phase for a season when no TTRPG scenes are dramatically necessary. Announce "quiet season" — resolve Strategic + Cascade only (~30 min).
+**Game Master may compress:** Skip Personal Phase for a season when no TTRPG scenes are dramatically necessary. Announce "quiet season" — resolve Strategic + Cascade only (~30 min).
 
-**GM may expand:** Split one season across 2 sessions when TTRPG scenes demand it (siege, expedition, major social confrontation). Strategic Phase deferred to session 2.
+**Game Master may expand:** Split one season across 2 sessions when TTRPG scenes demand it (siege, expedition, major social confrontation). Strategic Phase deferred to session 2.
 
 **Player-triggered scenes:** During Strategic Phase, if an order generates a scene (assassination attempt, diplomatic confrontation), pause resolution and run the TTRPG scene. Return to the resolution queue after the scene concludes.
 
 ### Clock Synchronisation
 
-All three clocks (RS, TC, IP) advance at Accounting regardless of mode. In hybrid:
+All three clocks (Rendering Stability, Theocracy Counter, Institutional Pressure) advance at Accounting regardless of mode. In hybrid:
 - TTRPG scenes may trigger Domain Echoes that modify clocks mid-season — applied at Cascade Phase, not immediately.
 - Board game orders that affect clocks resolve at Accounting.
 - No clock advances between Personal and Strategic phases — everything batches to Accounting.
@@ -110,11 +110,11 @@ All three clocks (RS, TC, IP) advance at Accounting regardless of mode. In hybri
 
 Both systems are active. Victory requires satisfying both personal and strategic conditions simultaneously.
 
-**Hybrid victory:** A faction achieves its board game primary victory condition AND the faction leader (PC) has resolved their central Belief arc in a way that supports the victory. If the board game condition is met but the PC's arc contradicts it (e.g., Crown controls 5 territories but Almud has abandoned his duty Belief), the victory is **hollow**.
+**Hybrid victory:** A faction achieves its board game primary victory condition AND the faction leader (Player Character) has resolved their central Belief arc in a way that supports the victory. If the board game condition is met but the Player Character's arc contradicts it (e.g., Crown controls 5 territories but Almud has abandoned his duty Belief), the victory is **hollow**.
 
 **Hollow victory:** The player may accept a hollow victory (mechanical win, narrative loss) or reject it and continue playing until the personal arc resolves or fails — risking erosion of the mechanical victory. This is a player choice, not a rule.
 
-**Hybrid loss:** RS 0, or faction collapse with no personal resolution.
+**Hybrid loss:** Rendering Stability 0, or faction collapse with no personal resolution.
 
 ---
 
@@ -137,7 +137,7 @@ Where the three modes diverge mechanically:
 | Rule | TTRPG | Board Game | Hybrid |
 |---|---|---|---|
 | Personal combat | Pool split, priority table, reach, maneuvers | Not applicable | TTRPG rules during Personal Phase |
-| Mass combat | Zone-based operational; Zoom In/Out for personal moments | Disposition table, single roll per battle | Board game resolution; Zoom In to TTRPG for named-NPC moments |
+| Mass combat | Zone-based operational; Zoom In/Out for personal moments | Disposition table, single roll per battle | Board game resolution; Zoom In to TTRPG for named-Non-Player Character moments |
 | Siege | Multi-season procedure with scenes (§8.4) | Siege order vs Fortification (single roll) | Board game roll; TTRPG scenes for infiltration or breakout |
 
 ### Social
@@ -152,7 +152,7 @@ Where the three modes diverge mechanically:
 
 | Rule | TTRPG | Board Game | Hybrid |
 |---|---|---|---|
-| Domain Actions | Implicit — GM recognises faction-scope from personal roll | Explicit — Order Set with placement and resolution | Strategic Phase uses board game orders; Personal Phase uses TTRPG Domain Echoes |
+| Domain Actions | Implicit — Game Master recognises faction-scope from personal roll | Explicit — Order Set with placement and resolution | Strategic Phase uses board game orders; Personal Phase uses TTRPG Domain Echoes |
 | Stability checks | Triggered by Domain Echo consequences | Triggered at Accounting | Batched to Cascade Phase |
 | Seasonal cap | ±2 per attribute per season | ±2 per attribute per season | Shared — applies across both phases |
 
@@ -160,7 +160,7 @@ Where the three modes diverge mechanically:
 
 | Rule | TTRPG | Board Game | Hybrid |
 |---|---|---|---|
-| Thread operations | Personal-scale (Weaving, Pulling, Mending, Leaps) with full narrative | Faction-scale (Weave/Mend/Investigate/Harvest orders) with Co-Movement Card | Personal Phase: TTRPG Thread ops. Strategic Phase: board game Thread orders. Both count toward seasonal RS. |
+| Thread operations | Personal-scale (Weaving, Pulling, Mending, Leaps) with full narrative | Faction-scale (Weave/Mend/Investigate/Harvest orders) with Co-Movement Card | Personal Phase: TTRPG Thread ops. Strategic Phase: board game Thread orders. Both count toward seasonal Rendering Stability. |
 | Co-movement | Version C (automatic deterministic + actual d6) | Co-Movement Card deck (18 cards) | Personal Phase: Version C. Strategic Phase: Co-Movement Cards. |
 | Discovery Events | Full narrative scene | Attribute change only (no scene) | TTRPG scene triggered by board game Discovery Event |
 
@@ -176,8 +176,8 @@ Where the three modes diverge mechanically:
 
 | Rule | TTRPG | Board Game | Hybrid |
 |---|---|---|---|
-| RS/TC/IP advance | At seasonal accounting | At Accounting | At Accounting (Cascade Phase) — identical |
-| Threshold events | GM narrates and runs scenes | Event card or table lookup | Board game trigger; GM may run TTRPG scene for narratively significant thresholds |
+| Rendering Stability/Theocracy Counter/Institutional Pressure advance | At seasonal accounting | At Accounting | At Accounting (Cascade Phase) — identical |
+| Threshold events | Game Master narrates and runs scenes | Event card or table lookup | Board game trigger; Game Master may run TTRPG scene for narratively significant thresholds |
 
 **Thread operations cross-reference:** Full Thread operation rules for all modes are in §5.6 (Part Five). The mode branching table above is a summary — §5.6 governs in cases of conflict.
 
@@ -185,9 +185,9 @@ Where the three modes diverge mechanically:
 
 ---
 
-## 12.6 The GM as Rendering Engine
+## 12.6 The Game Master as Rendering Engine
 
-For non-sensitive characters, the GM presents the ontical world — things as they appear. For sensitive characters, the GM layers ontological information beneath the ontical presentation: faint thread-structures visible beneath surfaces, distortions around monstrous presences, warmth or tension at knot-points.
+For non-sensitive characters, the Game Master presents the ontical world — things as they appear. For sensitive characters, the Game Master layers ontological information beneath the ontical presentation: faint thread-structures visible beneath surfaces, distortions around monstrous presences, warmth or tension at knot-points.
 
 The information asymmetry is the mechanic. It mirrors the epistemological barrier the Foundations establish as metaphysically principled, not institutional.
 
@@ -195,16 +195,16 @@ The information asymmetry is the mechanic. It mirrors the epistemological barrie
 
 ### Co-Movement at the Table
 
-When a thread operation resolves, the GM:
+When a thread operation resolves, the Game Master:
 1. Describes the primary intended effect.
 2. Determines one secondary consequence in an untargeted dimension (two consequences for Past-Oriented Pulls).
 3. Narrates the secondary consequence as part of the scene.
 
 This is not optional. The inseparability principle is the framework's foundational mechanical claim. Every operation has co-movement. It need not always be mechanically weighty — a small temporal flicker, a slight epistemic shift in how something is remembered — but it must always be present.
 
-### RS Threshold Events
+### Rendering Stability Threshold Events
 
-When RS crosses a threshold (downward), the GM determines a narratively appropriate consequence from the current situation. No event deck. The current political, social, and thread-level state of the world should generate the threshold consequence organically. See §5.4.3 for the full RS threshold table.
+When Rendering Stability crosses a threshold (downward), the Game Master determines a narratively appropriate consequence from the current situation. No event deck. The current political, social, and thread-level state of the world should generate the threshold consequence organically. See §5.4.3 for the full Rendering Stability threshold table.
 
 ---
 
@@ -229,10 +229,10 @@ An active practitioner working at Relational+ scale through a full campaign will
 
 The three-way relationship between Baralta (Church-devout, anti-overreach), Vaynard (anti-Church, knowledge-seeking), and Confessor Himlensendt (theocratic consolidation) generates political action without requiring predetermined outcomes. Track seasonal accounting. Apply triggers consistently. Outcomes emerge from the configuration.
 
-**The excommunication scenario.** If Olafsson opens a Heresy Investigation against Baralta: Grand Debate, 5 exchanges. Church represented by Olafsson (Composure 7, pool: Church Reach 7 + Ecclesiastical Law). If it succeeds: Mandate −2, TC +3, TC suppression removed. If players defend her or supply documentary evidence: the investigation can be derailed or reversed.
+**The excommunication scenario.** If Olafsson opens a Heresy Investigation against Baralta: Grand Debate, 5 exchanges. Church represented by Olafsson (Composure 7, pool: Church Reach 7 + Ecclesiastical Law). If it succeeds: Mandate −2, Theocracy Counter +3, Theocracy Counter suppression removed. If players defend her or supply documentary evidence: the investigation can be derailed or reversed.
 
-**The Vaynard revelation.** When a practitioner tells Vaynard what his TS 14 means: structured social scene. Vaynard makes a Reading Exchange (pool: Cognition 4D, TN 7). If the practitioner wins or presents corroborating evidence: Vaynard accepts and enters his TK-level response. If Vaynard wins: he files the claim as unverified but highly interesting and begins watching the practitioner.
+**The Vaynard revelation.** When a practitioner tells Vaynard what his Thread Sensitivity 14 means: structured social scene. Vaynard makes a Reading Exchange (pool: Cognition 4D, TN 7). If the practitioner wins or presents corroborating evidence: Vaynard accepts and enters his TK-level response. If Vaynard wins: he files the claim as unverified but highly interesting and begins watching the practitioner.
 
 **The Crown's choice when Vaynard is exposed.** Resolved as a Parliamentary Vote (§7.4):
-- Defend Vaynard: TC +2; Crown-Church relations fracture; Baralta must choose sides.
-- Yield to Church justice: TC −1; Crown loses intelligence asset; Southernmost access collapses; Vaynard's succession leverage dissolves unpredictably; Baralta's Church-boundary cooperation secured for the following arc.
+- Defend Vaynard: Theocracy Counter +2; Crown-Church relations fracture; Baralta must choose sides.
+- Yield to Church justice: Theocracy Counter −1; Crown loses intelligence asset; Southernmost access collapses; Vaynard's succession leverage dissolves unpredictably; Baralta's Church-boundary cooperation secured for the following arc.

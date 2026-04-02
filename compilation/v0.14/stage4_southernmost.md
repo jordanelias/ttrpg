@@ -25,20 +25,20 @@ This is not a psychological defence or a failure of courage. It is a structural 
 | Deep interior (4+ hours) | 3 |
 | Einhir core sites | 4 |
 
-**TS modifier**: TS ÷ 20, rounded down, as bonus dice.
+**Thread Sensitivity modifier**: Thread Sensitivity ÷ 20, rounded down, as bonus dice.
 
 | Degree | Knowledge retained |
 |---|---|
-| Overwhelming | Full retention. TS 40+ retain ontological understanding (what the Southernmost *is*); others retain facts only (that it is dangerous, what was seen). |
+| Overwhelming | Full retention. Thread Sensitivity 40+ retain ontological understanding (what the Southernmost *is*); others retain facts only (that it is dangerous, what was seen). |
 | Success | Facts retained; threat context partially dissolved. The character knows what they observed; the weight of what it means fades. |
 | Partial | Emotional impressions only. Dread, unease, urgency — without content. |
 | Failure | Nothing operational. The character knows they were in a strange place and feels affected; cannot report anything actionable. |
 
-Full understanding of the ontological nature of the threat — that it is a rendering failure, that the wound is in the constitutive ground, that it cannot be addressed through political or military means — requires TS 40+, even on an Overwhelming result.
+Full understanding of the ontological nature of the threat — that it is a rendering failure, that the wound is in the constitutive ground, that it cannot be addressed through political or military means — requires Thread Sensitivity 40+, even on an Overwhelming result.
 
 **Momentum**: Momentum may be burned on Forgetting checks. (R17)
 
-**Testimony Ob penalty**: Non-practitioners (TS below 40) using Southernmost knowledge in Appeals or Debates: +1 Ob for Boundary exposure, +2 Ob for Interior, +3 Ob for Deep Interior or Core. This penalty decreases as exposure depth increases — paradoxically, those who have spent more time in the Southernmost are more credible, because the Forgetting mechanism leaves emotional weight even when it strips content, and that weight reads as conviction.
+**Testimony Ob penalty**: Non-practitioners (Thread Sensitivity below 40) using Southernmost knowledge in Appeals or Debates: +1 Ob for Boundary exposure, +2 Ob for Interior, +3 Ob for Deep Interior or Core. This penalty decreases as exposure depth increases — paradoxically, those who have spent more time in the Southernmost are more credible, because the Forgetting mechanism leaves emotional weight even when it strips content, and that weight reads as conviction.
 
 ---
 
@@ -50,7 +50,7 @@ Awareness represents the faction's institutional understanding of the Southernmo
 
 - Practitioner reports from successful expedition (Diagnosis results converted to Awareness points)
 - Study of Einhir primary texts (each text: +1 Awareness, one-time)
-- Diagnosis at Einhir core sites (requires expedition access; automatic for TS 50+, Ob 3 below)
+- Diagnosis at Einhir core sites (requires expedition access; automatic for Thread Sensitivity 50+, Ob 3 below)
 - Dedicated research arcs by practitioner officers
 
 **Starting Awareness by faction** (game start, 45 AG):
@@ -61,7 +61,7 @@ Awareness represents the faction's institutional understanding of the Southernmo
 | Church | 0 | Institutionally suppresses Einhir knowledge |
 | Hafenmark | 1 | Maritime presence; traders have noted anomalies |
 | Varfell | 2 | Road into the Southernmost; Maret Uln's presence |
-| People's Revolution (NPC) | 3 | Highest Awareness of any NPC faction; ideological interest in the pre-Church world |
+| People's Revolution (Non-Player Character) | 3 | Highest Awareness of any Non-Player Character faction; ideological interest in the pre-Church world |
 
 **Awareness floor**: Each faction has a permanent Awareness floor equal to the number of primary Einhir texts it holds. A faction holding the Ceiral Text cannot have Awareness drop below 1 while retaining that text, because the text itself preserves some comprehension independent of active research.
 
@@ -75,8 +75,8 @@ Expeditions to the Southernmost are extended actions — the officer leading the
 
 ### Prerequisites
 
-- **TT ≥ 40**: The Southernmost is dormant below this threshold. Thread configurations are insufficiently active to diagnose or engage. Expedition at lower TT is possible but yields nothing actionable.
-- **Practitioner officer, TS 30+**: Required to perceive Thread structures at all.
+- **Thread Tension ≥ 40**: The Southernmost is dormant below this threshold. Thread configurations are insufficiently active to diagnose or engage. Expedition at lower Thread Tension is possible but yields nothing actionable.
+- **Practitioner officer, Thread Sensitivity 30+**: Required to perceive Thread structures at all.
 - **Relevant History**: Einhir Scholar, Natural Philosophy, or Expedition Leader. Expedition planning roll: Ob 3. On failure: expedition departs unprepared (+1 Ob to all zone checks Season 2 onward).
 - **Resources**: Ob 3 for expedition supplies (hostile terrain, multi-season commitment).
 - **Military escort**: Recommended. At least 1 unit. The Southernmost contains hostile configurations; escort provides combat options if encounter resolution requires mass combat scale.
@@ -85,10 +85,10 @@ Expeditions to the Southernmost are extended actions — the officer leading the
 
 | Season | Phase | Procedure |
 |---|---|---|
-| 1 | Approach | Travel to Southernmost border territory. Military escort (if present): Cohesion check Ob 1 (Thread proximity unsettles troops; failure = escort −1 Cohesion for the expedition). Practitioner with TS 30+: automatic Discovery Event — the lead practitioner perceives Thread anomalies at the boundary; first Forgetting Check fires here. |
+| 1 | Approach | Travel to Southernmost border territory. Military escort (if present): Cohesion check Ob 1 (Thread proximity unsettles troops; failure = escort −1 Cohesion for the expedition). Practitioner with Thread Sensitivity 30+: automatic Discovery Event — the lead practitioner perceives Thread anomalies at the boundary; first Forgetting Check fires here. |
 | 2 | Exploration | Enter the Southernmost proper. Zone-based traversal: three zones to cross to reach the primary site. Each zone: one encounter (Thread phenomenon, hostile entity, or environmental hazard — see §6.4). Resolution per combat rules or Thread operation rules as appropriate. |
-| 3 | Discovery | Reach the primary site (the locus of the original Einhir catastrophe). Practitioner TS 50+: Diagnosis fires automatically — the nature of the damage is fully apparent. Below TS 50: Diagnosis Ob 3. On success: partial understanding. On Partial: the practitioner understands something is deeply wrong; specific nature requires TS 50+. On Failure: Forgetting mechanism prevents retention entirely. |
-| 4+ | Repair (optional) | Extraordinary Repair Weaving per §6.6. Each season of successful Repair: TT −2 permanent (Southernmost contribution removed). |
+| 3 | Discovery | Reach the primary site (the locus of the original Einhir catastrophe). Practitioner Thread Sensitivity 50+: Diagnosis fires automatically — the nature of the damage is fully apparent. Below Thread Sensitivity 50: Diagnosis Ob 3. On success: partial understanding. On Partial: the practitioner understands something is deeply wrong; specific nature requires Thread Sensitivity 50+. On Failure: Forgetting mechanism prevents retention entirely. |
+| 4+ | Repair (optional) | Extraordinary Repair Weaving per §6.6. Each season of successful Repair: Thread Tension −2 permanent (Southernmost contribution removed). |
 
 ### Zone Hazard Table
 
@@ -102,28 +102,28 @@ Expeditions to the Southernmost are extended actions — the officer leading the
 
 If the military escort routes (Cohesion 0) or all practitioners are incapacitated: expedition retreats. Consequences:
 - All participants: Certainty −1
-- TT +1 (disturbing the Southernmost without completing stabilisation work leaves configurations more agitated)
+- Thread Tension +1 (disturbing the Southernmost without completing stabilisation work leaves configurations more agitated)
 - Retreat from Core zone: Agility Ob 2 or an additional encounter fires before the party exits
 
 ### Expedition Success Indicators
 
 - **Diagnosis complete**: The Southernmost's Thread signature is understood by at least one practitioner. This is the prerequisite for any Extraordinary Repair Weaving or Ceiral Ritual attempt — the practitioners must understand what they are working on.
 - **Awareness gain**: Successful expedition Diagnosis: +1 Southernmost Awareness for the faction (applied at seasonal accounting).
-- **Research access**: After successful expedition reaching the primary site, a practitioner officer with TS 50+ may take Research actions in the Locked Zones in subsequent seasons (see §6.6).
+- **Research access**: After successful expedition reaching the primary site, a practitioner officer with Thread Sensitivity 50+ may take Research actions in the Locked Zones in subsequent seasons (see §6.6).
 
 ---
 
 ## 6.4 Encounter Reference
 
-Encounters fire once per zone during Exploration (Season 2). The GM selects or rolls; encounters should reflect the zone type.
+Encounters fire once per zone during Exploration (Season 2). The Game Master selects or rolls; encounters should reflect the zone type.
 
-**Thread phenomenon** (any zone): A practitioner must identify and navigate a live Thread configuration. Weaving or Pulling check; Ob by zone (Border 2, Inner 3, Core 4). On Partial or Failure: CD +1 for lead practitioner; TT +1.
+**Thread phenomenon** (any zone): A practitioner must identify and navigate a live Thread configuration. Weaving or Pulling check; Ob by zone (Border 2, Inner 3, Core 4). On Partial or Failure: CD +1 for lead practitioner; Thread Tension +1.
 
-**Hostile entity** (Inner zone typical): Monstrous entity emerges from active Gap. Combat. On failure to contain: Gap remains open; TT +2 this season.
+**Hostile entity** (Inner zone typical): Monstrous entity emerges from active Gap. Combat. On failure to contain: Gap remains open; Thread Tension +2 this season.
 
 **Environmental hazard** (Border or Core): Physical consequence of Thread instability. Endurance or Agility check; Ob 2–3. On Partial or Failure: 1 Wound per character in the zone.
 
-**Discovery Event** (Approach, automatic): Lead practitioner perceives the boundary configurations. No roll. GM delivers a brief description of what Thread sight reveals at the Southernmost's edge. This scene counts as the character's first exposure for Forgetting Check purposes.
+**Discovery Event** (Approach, automatic): Lead practitioner perceives the boundary configurations. No roll. Game Master delivers a brief description of what Thread sight reveals at the Southernmost's edge. This scene counts as the character's first exposure for Forgetting Check purposes.
 
 ---
 
@@ -135,20 +135,20 @@ The Ceiral Ritual is the canonical method for stabilising the Southernmost's wou
 
 - Ceiral Text (in faction possession)
 - Southernmost Awareness 5+ (faction stat); without this: +2 Ob
-- Lead practitioner: TS 60+
-- Two additional participants: TS 20+ each
+- Lead practitioner: Thread Sensitivity 60+
+- Two additional participants: Thread Sensitivity 20+ each
 - One full season preparation: the lead practitioner and participants are unavailable for other actions during the preparation season. The faction leader's two actions remain free.
 
 ### The Ritual Roll
 
-Lead practitioner's Weaving pool. Ob 5. Each participant with TS 20+ adds +1D (maximum +4D total bonus from participants).
+Lead practitioner's Weaving pool. Ob 5. Each participant with Thread Sensitivity 20+ adds +1D (maximum +4D total bonus from participants).
 
 | Degree | Result |
 |---|---|
-| Overwhelming | The wound stabilises permanently. TT −10. The Southernmost becomes settleable — territory may be developed and inhabited. |
-| Success | Temporary stabilisation. TT −6. The Southernmost is accessible without expedition prerequisites for 5 seasons. The Ritual may be re-attempted after this window. |
-| Partial | Partial stabilisation. TT −3. Forgetting Ob −1 permanently (the wound is slightly less incomprehensible). The lead practitioner cannot attempt the Ritual again; a new lead is required. |
-| Failure | The outer winding tears. TT +8. A monstrous entity of Mode 3 emerges at the primary site. The lead practitioner is Incapacitated. |
+| Overwhelming | The wound stabilises permanently. Thread Tension −10. The Southernmost becomes settleable — territory may be developed and inhabited. |
+| Success | Temporary stabilisation. Thread Tension −6. The Southernmost is accessible without expedition prerequisites for 5 seasons. The Ritual may be re-attempted after this window. |
+| Partial | Partial stabilisation. Thread Tension −3. Forgetting Ob −1 permanently (the wound is slightly less incomprehensible). The lead practitioner cannot attempt the Ritual again; a new lead is required. |
+| Failure | The outer winding tears. Thread Tension +8. A monstrous entity of Mode 3 emerges at the primary site. The lead practitioner is Incapacitated. |
 
 ---
 
@@ -160,7 +160,7 @@ Extraordinary Repair Weaving is the technical procedure discovered through deep 
 
 - Southernmost Awareness 8+ (faction stat)
 - Successful expedition reaching the primary site (§6.3 completed)
-- Practitioner officer with TS 50+ assigned to Research in the Locked Zones
+- Practitioner officer with Thread Sensitivity 50+ assigned to Research in the Locked Zones
 - Research roll: Memory + Einhir Scholar History, Ob 4. On success: the full collapse technical record is read; the practitioner learns the specific structural repair procedure required.
 
 ### Repair Procedure
@@ -168,35 +168,35 @@ Extraordinary Repair Weaving is the technical procedure discovered through deep 
 After completing the Research roll (above), the practitioner may begin Repair seasons. Each season of Repair Weaving:
 
 - **Roll**: Lead practitioner's Weaving pool, Ob 3 (Repair is less acute than the Ceiral Ritual but more technically demanding than ordinary Weaving at this scale; the -1D contact penalty for Core zone is in effect)
-- **Success or Overwhelming**: TT −2 permanent (Southernmost contribution removed). +1 Awareness for faction.
-- **Partial**: TT −1 (partial reduction). Practitioner: CD +1. May continue next season.
-- **Failure**: No progress. TT +1 (disturbing the wound without completing the work). CD +2 for practitioner.
+- **Success or Overwhelming**: Thread Tension −2 permanent (Southernmost contribution removed). +1 Awareness for faction.
+- **Partial**: Thread Tension −1 (partial reduction). Practitioner: CD +1. May continue next season.
+- **Failure**: No progress. Thread Tension +1 (disturbing the wound without completing the work). CD +2 for practitioner.
 
 After 4–5 successful Repair seasons: the Southernmost is fully stabilised. The wound is closed; configuration dynamics return to normal Thread behaviour; Gap formation ceases. The Southernmost becomes a historically significant but no longer active hazard.
 
-**Note**: Extraordinary Repair Weaving and the Ceiral Ritual are not mutually exclusive. A faction may pursue both paths simultaneously with different officers. The TT reductions stack.
+**Note**: Extraordinary Repair Weaving and the Ceiral Ritual are not mutually exclusive. A faction may pursue both paths simultaneously with different officers. The Thread Tension reductions stack.
 
 ---
 
 ## 6.7 Southernmost Crisis Timeline
 
-The outer Einhir winding — the large-scale configurational structure that has been containing the catastrophe since 0 AG — is not stable indefinitely. As TT rises, the pressure on the winding increases.
+The outer Einhir winding — the large-scale configurational structure that has been containing the catastrophe since 0 AG — is not stable indefinitely. As Thread Tension rises, the pressure on the winding increases.
 
 ### Crisis Trigger (Patched — replaces season-based counter)
 
-The crisis fires based on TT level and absence of stabilisation work, not a fixed campaign season:
+The crisis fires based on Thread Tension level and absence of stabilisation work, not a fixed campaign season:
 
-1. **TT reaches 50**: The outer winding begins showing signs of strain. A visible faction-facing event fires: practitioners in adjacent territories report pressure; the boundary configurations are degrading. This event is the player's warning.
+1. **Thread Tension reaches 50**: The outer winding begins showing signs of strain. A visible faction-facing event fires: practitioners in adjacent territories report pressure; the boundary configurations are degrading. This event is the player's warning.
 
-2. **TT 50 sustained for 3 consecutive seasons without stabilising Weaving**: The outer winding begins to crack. A second event fires: visible map effect; +1 TT per season from Southernmost (in addition to other sources) begins accumulating.
+2. **Thread Tension 50 sustained for 3 consecutive seasons without stabilising Weaving**: The outer winding begins to crack. A second event fires: visible map effect; +1 Thread Tension per season from Southernmost (in addition to other sources) begins accumulating.
 
-3. **Cracking continues for 3 more seasons without a Ceiral Ritual attempt**: The outer winding fails. TT +2 per season from the Southernmost, automatic and unremovable until the Ritual succeeds or Extraordinary Repair Weaving completes.
+3. **Cracking continues for 3 more seasons without a Ceiral Ritual attempt**: The outer winding fails. Thread Tension +2 per season from the Southernmost, automatic and unremovable until the Ritual succeeds or Extraordinary Repair Weaving completes.
 
-**Stabilising Weaving** (to pause the cracking clock): Any practitioner performing a Ritual action targeting the Southernmost's outer winding (Ob 3, TS 40+) pauses the cracking counter for that season. This is a delaying action only — it does not reverse cracking already underway.
+**Stabilising Weaving** (to pause the cracking clock): Any practitioner performing a Ritual action targeting the Southernmost's outer winding (Ob 3, Thread Sensitivity 40+) pauses the cracking counter for that season. This is a delaying action only — it does not reverse cracking already underway.
 
 ### Design Rationale
 
-This replaces the original Season 17 fixed trigger. Players who aggressively manage TT can delay the crisis indefinitely. Players who neglect TT management trigger the crisis earlier. The crisis is tied to player decisions, not to a campaign timer that may not match the campaign's pace.
+This replaces the original Season 17 fixed trigger. Players who aggressively manage Thread Tension can delay the crisis indefinitely. Players who neglect Thread Tension management trigger the crisis earlier. The crisis is tied to player decisions, not to a campaign timer that may not match the campaign's pace.
 
 ---
 
@@ -204,11 +204,11 @@ This replaces the original Season 17 fixed trigger. Players who aggressively man
 
 In Board Game mode, Southernmost mechanics are abstracted to the faction-level:
 
-- **Expedition Action**: Available as an extended Council Phase action (officer unavailable for Season). Prerequisite: TT ≥ 40. Outcome: Southernmost Awareness +1 for acting faction.
+- **Expedition Action**: Available as an extended Council Phase action (officer unavailable for Season). Prerequisite: Thread Tension ≥ 40. Outcome: Southernmost Awareness +1 for acting faction.
 - **Research Action** (as standard Domain Action table): Awareness +1, Complexity Ob 1–4, risk: Church attention.
-- **Ceiral Ritual**: Available as a multi-season action. Uses faction's Mandate pool as proxy for practitioner TS. Requirements as TTRPG mode; Ob set against faction's accumulated Awareness level.
+- **Ceiral Ritual**: Available as a multi-season action. Uses faction's Mandate pool as proxy for practitioner Thread Sensitivity. Requirements as TTRPG mode; Ob set against faction's accumulated Awareness level.
 - **Crisis Timeline**: Fires per §6.7. Represented as a track on the board — visible to all players.
 
 ---
 
-*End of Stage 4 compilation. Stage 5 (Clocks: TT/TC/IP, threshold events, interaction rules) follows.*
+*End of Stage 4 compilation. Stage 5 (Clocks: Thread Tension/Theocracy Counter/Institutional Pressure, threshold events, interaction rules) follows.*

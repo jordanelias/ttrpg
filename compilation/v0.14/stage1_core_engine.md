@@ -65,13 +65,13 @@ The Obstacle (Ob) is the number of net successes required to achieve the intende
 
 ## 1.5 Let It Ride
 
-Once a roll resolves a situation, the result stands. No re-attempts unless circumstances have significantly changed. Neither player nor GM may call for a re-test of the same situation.
+Once a roll resolves a situation, the result stands. No re-attempts unless circumstances have significantly changed. Neither player nor Game Master may call for a re-test of the same situation.
 
 ## 1.6 Fail Forward
 
 Failure does not halt the narrative. Partial success: the goal is achieved but an unwanted complication accompanies it. Failure: the goal is not achieved and a complication occurs. In both cases, the story moves forward.
 
-The GM should consult the Hard Moves table (§13.5) for structured complication options rather than improvising consequences.
+The Game Master should consult the Hard Moves table (§13.5) for structured complication options rather than improvising consequences.
 
 ## 1.7 Momentum
 
@@ -211,7 +211,7 @@ Pre-calculate and record on the character sheet.
 - Wounds: −1D per Wound to the relevant action pool (cumulative)
 - Armour: no pool penalty (armour provides damage reduction only)
 - Fibonacci group bonus: adds to Offence allocation specifically
-- Terrain/zone: GM may impose +1 Ob for adverse terrain; does not reduce pool
+- Terrain/zone: Game Master may impose +1 Ob for adverse terrain; does not reduce pool
 
 ## 3.5 Attack Resolution
 

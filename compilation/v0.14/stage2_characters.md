@@ -31,7 +31,7 @@ Each character holds 2–3 Beliefs. A Belief is an active intention with a speci
 | Belief achieved | +2 (rewrite the Belief) |
 | Belief genuinely revised in response to events | +2 |
 
-Beliefs drive the campaign. The GM builds situations that challenge, intersect with, and pressure Beliefs. A session where no Belief is tested is a session where the GM missed the mark.
+Beliefs drive the campaign. The Game Master builds situations that challenge, intersect with, and pressure Beliefs. A session where no Belief is tested is a session where the Game Master missed the mark.
 
 A completed Belief may be converted to an Inspiration focus at 1 point (see §4.4).
 
@@ -48,14 +48,14 @@ Each Inspiration has a named **focus**: a person, place, ideal, or object that g
 ### Acquiring New Inspirations (Mid-Campaign)
 
 1. Player declares intent and names the focus.
-2. Two scenes where the character actively engages with the focus (GM confirms engagement is genuine).
+2. Two scenes where the character actively engages with the focus (Game Master confirms engagement is genuine).
 3. After each scene: Spirit check TN 7, Ob 1.
    - Both succeed: Inspiration established at 1 point.
-   - One succeeds, one fails: Inspiration established at 1 point, with a **Complication Tag** (GM assigns a narrative condition — e.g., "contingent on Lenneth's approval," "only while in Valorsplatz").
+   - One succeeds, one fails: Inspiration established at 1 point, with a **Complication Tag** (Game Master assigns a narrative condition — e.g., "contingent on Lenneth's approval," "only while in Valorsplatz").
    - Both fail: Focus not yet crystallized. Player may retry next season with new scenes.
 4. **CP shortcut:** 4 CP + one scene of genuine engagement + one Spirit check. On success: established at 1 point, no Complication Tag. On failure: 4 CP spent, retry next season.
 
-An NPC whose Impression Track reaches 5 can become an Inspiration focus (connects the relationship system to the Inspiration economy).
+An Non-Player Character whose Impression Track reaches 5 can become an Inspiration focus (connects the relationship system to the Inspiration economy).
 
 ### Recovery (from Reduced Value)
 
@@ -74,9 +74,9 @@ Inspiration drops to 0 immediately. The player may convert to a new Inspiration 
 
 ## 4.4 Thread Sensitivity (TS)
 
-Hidden score, 0–100, tracked by the GM. Cannot be purchased. Grows only through held confrontation.
+Hidden score, 0–100, tracked by the Game Master. Cannot be purchased. Grows only through held confrontation.
 
-| TS Range | State | Capacity |
+| Thread Sensitivity Range | State | Capacity |
 |----------|-------|----------|
 | 0–9 | Inert | No Thread perception. Cannot Leap. |
 | 10–29 | Dormant | Passive awareness; no Thread operations |
@@ -87,7 +87,7 @@ Hidden score, 0–100, tracked by the GM. Cannot be purchased. Grows only throug
 
 ### Passive Perception (Automatic)
 
-| TS Range | Automatically Perceives |
+| Thread Sensitivity Range | Automatically Perceives |
 |----------|------------------------|
 | 10–29 | Wrongness near Gaps, Shifting Objects, Intelligibility 3- practitioners; source unidentifiable |
 | 30–49 | Active Thread operations in the scene; dissolution residue at touch; Originary Locks when touched |
@@ -95,14 +95,14 @@ Hidden score, 0–100, tracked by the GM. Cannot be purchased. Grows only throug
 | 70–89 | Thread operations within a city block; thread-configuration of individuals; Originary Locks in the room |
 | 90–100 | Thread operations across the district; significant operations → involuntary Leap risk (Focus check TN 7 Ob 1) |
 
-### TS Growth
+### Thread Sensitivity Growth
 
-Through **held confrontation** only. Qualifying events: surviving a monstrous incursion, handling an Originary Lock, witnessing a Gap, entering a Locked Zone, extended proximity to a Resonant practitioner. Witnessing a Thread operation from the outside — observing a practitioner work without direct confrontation with Thread phenomena — does not qualify. The qualifying events require direct encounter with Thread reality, not observation of its effects. Exception: witnessing a major Dissolution in the same room (Gap formation at close range) may qualify at GM discretion.
+Through **held confrontation** only. Qualifying events: surviving a monstrous incursion, handling an Originary Lock, witnessing a Gap, entering a Locked Zone, extended proximity to a Resonant practitioner. Witnessing a Thread operation from the outside — observing a practitioner work without direct confrontation with Thread phenomena — does not qualify. The qualifying events require direct encounter with Thread reality, not observation of its effects. Exception: witnessing a major Dissolution in the same room (Gap formation at close range) may qualify at Game Master discretion.
 
 On qualifying event: **Spirit check + relevant Belief bonus (if applicable), TN 7, Ob 1.**
 
-- Success: character holds the confrontation. **+5 TS.**
-- Failure: character represses. No growth. GM notes the event; the next encounter of equal or lesser intensity fires automatically (the repression breaks).
+- Success: character holds the confrontation. **+5 Thread Sensitivity.**
+- Failure: character represses. No growth. Game Master notes the event; the next encounter of equal or lesser intensity fires automatically (the repression breaks).
 - Fleeing before completion: no check, no growth.
 
 ### Approach Training
@@ -111,14 +111,14 @@ Required to perform the Leap. Cannot be purchased directly.
 
 **Acquisition paths:**
 
-1. **Mentorship:** TS 50+ practitioner spends a full season with a TS 30+ character who has held at least one confrontation and witnessed at least one operation.
-2. **Spontaneous Breakthrough:** During a Discovery Event where TS reaches 30+, make additional Spirit check TN 7 Ob 2. Success: Approach Training acquired simultaneously.
-3. **Einhir Texts:** A character with TS 30+ studies a relevant primary text for a full season. Cognition + Memory (Ob 3). Success: Approach Training. Overwhelming: Approach Training + +1 thread-knowledge.
-4. **CP purchase:** 8 CP. Requires TS ≥ 30, having witnessed ≥1 Thread operation, and narrating the training. Does not bypass the TS threshold — the character must already perceive Threads.
+1. **Mentorship:** Thread Sensitivity 50+ practitioner spends a full season with a Thread Sensitivity 30+ character who has held at least one confrontation and witnessed at least one operation.
+2. **Spontaneous Breakthrough:** During a Discovery Event where Thread Sensitivity reaches 30+, make additional Spirit check TN 7 Ob 2. Success: Approach Training acquired simultaneously.
+3. **Einhir Texts:** A character with Thread Sensitivity 30+ studies a relevant primary text for a full season. Cognition + Memory (Ob 3). Success: Approach Training. Overwhelming: Approach Training + +1 thread-knowledge.
+4. **CP purchase:** 8 CP. Requires Thread Sensitivity ≥ 30, having witnessed ≥1 Thread operation, and narrating the training. Does not bypass the Thread Sensitivity threshold — the character must already perceive Threads.
 
 ### The Devout Constraint
 
-A character with an active essentialist theological Belief (Church doctrine, fixed divine determinism) cannot attempt TS growth checks — the Belief forecloses the perceptual stance required. Discovery Events bypass this for the initial check (the experience is involuntary).
+A character with an active essentialist theological Belief (Church doctrine, fixed divine determinism) cannot attempt Thread Sensitivity growth checks — the Belief forecloses the perceptual stance required. Discovery Events bypass this for the initial check (the experience is involuntary).
 
 After a Devout character's successful Discovery Event: immediate **Theological Dissonance Event** (Spirit check TN 7 Ob 1):
 - Success: framework holds. Constraint re-engages. Certainty −1.
@@ -126,13 +126,13 @@ After a Devout character's successful Discovery Event: immediate **Theological D
 
 At 3 Dissonance Marks: Devout Constraint collapses regardless of Belief status. Belief must be revised or lost.
 
-**Devout characters receive +2D on Certainty-resist checks against monstrous encounters.** Their theology provides a framework that reduces existential shock, even if that framework is wrong about causation. However, Devout characters cannot gain long-term TS development from such encounters (the theological framework absorbs the confrontation).
+**Devout characters receive +2D on Certainty-resist checks against monstrous encounters.** Their theology provides a framework that reduces existential shock, even if that framework is wrong about causation. However, Devout characters cannot gain long-term Thread Sensitivity development from such encounters (the theological framework absorbs the confrontation).
 
 **Being targeted by Thread operations.** The Devout Constraint governs what a Devout character can perceive and do — not what can be done to their threads. A practitioner may perform Thread operations on a Devout character (Pulling their conviction, Weaving a wound closed, Locking a relationship) exactly as on any other character. The Devout character experiences the result without understanding its cause — they attribute it to divine will, weakness, illness, or coincidence. This does not generate a Dissonance Mark unless the character is confronted with evidence that a Thread operation specifically caused the result.
 
-### Scholarly TS Path (Lenneth Variant)
+### Scholarly Thread Sensitivity Path (Lenneth Variant)
 
-A character with access to Einhir scholarship and no essentialist theological Belief may pursue TS growth through sustained intellectual engagement with Thread-related texts and artifacts. This functions identically to the standard confrontation path, except the qualifying events are scholarly rather than experiential: deep study of Thread-operation records, analysis of temporal anomalies, decoding Originary inscriptions.
+A character with access to Einhir scholarship and no essentialist theological Belief may pursue Thread Sensitivity growth through sustained intellectual engagement with Thread-related texts and artifacts. This functions identically to the standard confrontation path, except the qualifying events are scholarly rather than experiential: deep study of Thread-operation records, analysis of temporal anomalies, decoding Originary inscriptions.
 
 The Spirit check is still required — intellectual understanding alone does not produce sensitivity. The scholar must risk genuine perceptual shift.
 
@@ -155,13 +155,13 @@ Intelligibility replaces the Taint track. It measures how legible reality remain
 | 10–8 | Coherent | No penalty. Reality legible. |
 | 7–5 | Strained | Occasional perceptual slippage. Non-practitioners in Close Knots begin sensing wrongness. |
 | 4–3 | Fragmented | −1D to all social rolls (difficulty maintaining normal presentation). Close Knots at wrongness threshold. Regular Knots begin sensing wrongness. |
-| 2–1 | Fractured | −2D to all social rolls. All Knots at wrongness threshold. Involuntary perceptual events (GM describes Thread-level reality bleeding through). |
-| 0 | Illegible | Reality as commonly rendered is no longer accessible to the character. Permanent condition unless reversed through specific Thread intervention. Character becomes an NPC unless reversed. |
+| 2–1 | Fractured | −2D to all social rolls. All Knots at wrongness threshold. Involuntary perceptual events (Game Master describes Thread-level reality bleeding through). |
+| 0 | Illegible | Reality as commonly rendered is no longer accessible to the character. Permanent condition unless reversed through specific Thread intervention. Character becomes an Non-Player Character unless reversed. |
 
 **Recovery:** Intelligibility does not recover passively. Recovery requires:
 - Full season of non-practice (no Thread operations): +1 Intelligibility
 - A Close Knot voluntarily anchoring the practitioner through a dedicated Anchoring Scene (Bonds check TN 7, Ob 2): +1 Intelligibility (costs the Knot +1 strain)
-- Certain Einhir techniques (GM discretion, late-campaign): +1–2 Intelligibility
+- Certain Einhir techniques (Game Master discretion, late-campaign): +1–2 Intelligibility
 
 **Knot strain from Intelligibility:** Replaces the Taint strain accumulation from prior editions.
 - Intelligibility 7–5: +1 strain to all Knots per 3 sessions
@@ -190,7 +190,7 @@ A practitioner who performs Thread operations while in Rendering Crisis (instead
 
 **Certainty recovery:** Between scenes (downtime, travel, or deliberate grounding), roll Spirit TN 7, Ob 2. Success: +1 Certainty (cannot exceed Spirit score). One attempt per scene of downtime — not during active Thread engagement.
 
-Certainty is not straightforward damage. Depletion is existential exposure — the same pressure that drives TS growth. A practitioner who never loses Certainty has never fully confronted what the Thread is. Recovery is possible but uncertain; some practitioners carry low Certainty as a permanent condition of practice.
+Certainty is not straightforward damage. Depletion is existential exposure — the same pressure that drives Thread Sensitivity growth. A practitioner who never loses Certainty has never fully confronted what the Thread is. Recovery is possible but uncertain; some practitioners carry low Certainty as a permanent condition of practice.
 
 - Certainty cannot be purchased with CP
 
@@ -210,7 +210,7 @@ Each character tracks up to **Bonds score** significant Knots. Established at cr
 
 **Crisis:** When strain reaches double the wrongness threshold (Crisis threshold), the relationship enters Crisis. A Crisis Knot cannot be Called or used as Composure buffer. The connected entity takes action — confrontation, departure, or betrayal. Resolution requires a dedicated scene.
 
-**Impression Track + Knot Crisis priority:** If an NPC's Impression Track reaches 5 while their Knot is simultaneously in Crisis, the Crisis takes precedence. The Impression Track 5 trigger is deferred until the Crisis resolves.
+**Impression Track + Knot Crisis priority:** If an Non-Player Character's Impression Track reaches 5 while their Knot is simultaneously in Crisis, the Crisis takes precedence. The Impression Track 5 trigger is deferred until the Crisis resolves.
 
 ### Strain Sources
 
@@ -235,7 +235,7 @@ Recovery requires the relationship to be actively maintained. A Knot ignored dur
 
 ### New Knots
 
-New Knots may be declared mid-campaign when a relationship reaches sufficient significance (GM judgment). If the character already has Bonds-score Knots, one existing Knot must be demoted to narrative-only status (no longer tracked mechanically).
+New Knots may be declared mid-campaign when a relationship reaches sufficient significance (Game Master judgment). If the character already has Bonds-score Knots, one existing Knot must be demoted to narrative-only status (no longer tracked mechanically).
 
 Establishing a new Knot via CP: 2 CP. Formalizes a relationship the player wants tracked.
 
@@ -307,7 +307,7 @@ Character Points (CP) are earned through Belief engagement (§4.2) and spent on 
 |----------|------|-----------|
 | Attribute +1 | Current score × 3 CP | Max 7 per attribute |
 | History +1 (beyond test track) | 3 CP | Cap = Memory score |
-| New History at 0 points | 5 CP | Must narrate origin scene; requires GM scene |
+| New History at 0 points | 5 CP | Must narrate origin scene; requires Game Master scene |
 | New Inspiration at 1 point | 4 CP | Total Inspiration ≤ Spirit; must name focus + one engagement scene + Spirit check |
 | Inspiration +1 point | 3 CP | Individual cap = Spirit; total ≤ Spirit |
 | New Knot (establish) | 2 CP | Total significant Knots ≤ Bonds score |
@@ -315,11 +315,11 @@ Character Points (CP) are earned through Belief engagement (§4.2) and spent on 
 | Circles +1D (permanent) | 4 CP | Max bonus = Presence score |
 | Resources +1D (permanent) | 4 CP | Max bonus = Presence score |
 | Remove 1 Wound | 6 CP | Between seasons only; requires narrative (healer, rest, Thread intervention) |
-| Approach Training | 8 CP | TS ≥ 30; must have witnessed ≥1 Thread operation; replaces mentorship/breakthrough paths |
+| Approach Training | 8 CP | Thread Sensitivity ≥ 30; must have witnessed ≥1 Thread operation; replaces mentorship/breakthrough paths |
 
 **Design constraints:**
 - All purchases have narrative requirements — CP alone is never sufficient.
-- No CP purchase for TS growth, Intelligibility recovery, or Certainty recovery. These are play-driven.
+- No CP purchase for Thread Sensitivity growth, Intelligibility recovery, or Certainty recovery. These are play-driven.
 - CP costs scale: cheap (2–3) for relationship/social investment, moderate (4–5) for capability expansion, expensive (6–8) for recovery and rare unlocks.
 
 ## 4.11 Composure and Social Damage

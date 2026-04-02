@@ -18,7 +18,7 @@
 | Intelligibility (§4.5, 10→0) | Coherence (10→0) | Applied |
 | ThS / CD (§5.9, 20→0) | Coherence (merged) | Applied |
 | Taint (§5.10, 0→10) | Coherence degradation (no separate track) | Applied |
-| Thread Tension (TT, 0→100) | Rendering Stability (RS, 100→0) | Applied |
+| Thread Tension (Thread Tension, 0→100) | Rendering Stability (Rendering Stability, 100→0) | Applied |
 | Gap closure via FR Dissolution | Mending (new operation type) | Applied |
 | Diagnosis after Leap | Diagnosis before Leap (last act of rendering) | Applied |
 | "Epistemic seduction" | Coherence degradation (terminology only) | Applied |
@@ -28,7 +28,7 @@
 - Philosophical Framing section added as §5.0 (governs all operational rules)
 - Mending added as new operation type (§5.1.4)
 - Coherence track replaces three separate tracks (§5.2)
-- RS track replaces TT (§5.4)
+- Rendering Stability track replaces Thread Tension (§5.4)
 - Threadcut beings chapter added (§5.5)
 - Cross-mode implications chapter added (§5.6)
 - Interdependency map added (§5.7)
@@ -36,14 +36,14 @@
 
 ## Applied Patches (summary by source)
 
-**Simulation Batch 1 (isolation):** F-01 through F-15 — Coherence cap, Lock RS costs, Mending Ob ceiling, priority convention, P3 clarifications  
+**Simulation Batch 1 (isolation):** F-01 through F-15 — Coherence cap, Lock Rendering Stability costs, Mending Ob ceiling, priority convention, P3 clarifications  
 **Simulation Batch 2 (new mechanics):** F-03/04/09 — recency table, pool formula, concealment rule  
-**Simulation Batch 3 (coverage matrix):** P3 clarifications, RS threshold timing, residue cap  
+**Simulation Batch 3 (coverage matrix):** P3 clarifications, Rendering Stability threshold timing, residue cap  
 **Simulation Batch 4 (combinations):** Brittleness sidebar, contested-op spiral, Gap scale mechanics  
 **Simulation Batch 5 (extreme cases):** Lock removal formula, Fragmented Leap clarification, residue Option C  
 **Simulation Batch 6 (open P2 sweep):** Severed Ob, mid-contact crisis, witness Certainty, cross-phase ops, Knot Crisis Pull  
-**Simulation Batch 7 (boundary conditions):** Foundational Pull, threadcut external ops, RS 1 endgame, Mandate fracture  
-**Simulation Batch 8 (unexplored):** Collective Leap procedure, incapacitation contact, multiple Gaps, TS growth qualifying  
+**Simulation Batch 7 (boundary conditions):** Foundational Pull, threadcut external ops, Rendering Stability 1 endgame, Mandate fracture  
+**Simulation Batch 8 (unexplored):** Collective Leap procedure, incapacitation contact, multiple Gaps, Thread Sensitivity growth qualifying  
 
 ## Pending Editorial Decisions
 
@@ -67,4 +67,4 @@ None. All editorial items resolved.
 
 ## Next Stage
 
-Stage 4 (Southernmost) — already compiled. Cross-reference §5.8 SIM5-F-08 (RS threshold +1 Ob at Southernmost) during Stage 4 review.
+Stage 4 (Southernmost) — already compiled. Cross-reference §5.8 SIM5-F-08 (Rendering Stability threshold +1 Ob at Southernmost) during Stage 4 review.

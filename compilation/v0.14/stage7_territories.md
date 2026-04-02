@@ -25,8 +25,8 @@ Each territory tracks four attributes:
 |---|---|---|---|---|---|---|
 | 1 | Valorsplatz (Capital) | Crown | 6 | 2 | Royal Court: Crown Decree −1 Ob here. Parliament: Hafenmark Influence −1 Ob here. | 2, 3, 5, 6 |
 | 2 | Kronmark (Crown heartland) | Crown | 5 | 1 | Garrison: +1D Muster here. | 1, 3, 4 |
-| 3 | Himmelstift (Cathedral city) | Church | 5 | 2 | Grand Cathedral: TC +1 per season Church controls this. Church Excommunicate −1 Ob here. | 1, 2, 6, 7 |
-| 4 | Border Pass | Crown | 3 | 2 | Altonian Border: IP threshold events trigger here first. Invasion entry point. | 2, 5, 15 |
+| 3 | Himmelstift (Cathedral city) | Church | 5 | 2 | Grand Cathedral: Theocracy Counter +1 per season Church controls this. Church Excommunicate −1 Ob here. | 1, 2, 6, 7 |
+| 4 | Border Pass | Crown | 3 | 2 | Altonian Border: Institutional Pressure threshold events trigger here first. Invasion entry point. | 2, 5, 15 |
 | 5 | Ehrenfeld (Military heartland) | Crown / Lowenritter garrison | 4 | 3 | Lowenritter Fortress: Lowenritter Martial Law −1 Ob here. Fortification maximum 4 (not 3). | 1, 4, 9 |
 | 6 | Hafenstadt (Hafenmark capital) | Hafenmark | 6 | 1 | Ducal Court: Hafenmark Sovereign Authority may be invoked here. Major port. | 1, 3, 7, 8 |
 | 7 | Sternhaven (Northern port) | Hafenmark | 5 | 0 | Trade Hub: all Trade orders +1D here. Schoenland sea route terminus. | 3, 6, 8 |
@@ -34,17 +34,17 @@ Each territory tracks four attributes:
 | 9 | Eisengrund (Southern highlands) | Varfell | 4 | 1 | Varfell Seat: Private Collection usable here only. Einhir ruins: Revolution Community Weaving −1 Ob. | 5, 10, 12, 13 |
 | 10 | Schwarzmarkt (Underground trade) | Niflhel | 3 | 0 | Black Market: Niflhel Quiet Network −1 Ob here. All factions Trade here at +1 Ob (illicit goods). | 8, 9, 11 |
 | 11 | Feldmark (Farming plains) | Guilds | 5 | 0 | Breadbasket: +1 Prosperity recovery per season if uncontested. Muster Ob −1 (willing recruits). | 8, 10, 14 |
-| 12 | Sudwald (Southern forest) | Uncontrolled | 3 | 0 | Thread Wound: TT threshold events trigger here at TT −10 (earlier than elsewhere). Revolution informal presence. | 9, 13, 14 |
-| 13 | Askeheim (Southernmost border) | Uncontrolled | 2 | 0 | Southernmost Access: required for Southernmost Expedition. Thread proximity: all non-Thread orders +1 Ob. TS 30+ characters: automatic Discovery Event per season present. | 9, 12 |
+| 12 | Sudwald (Southern forest) | Uncontrolled | 3 | 0 | Thread Wound: Thread Tension threshold events trigger here at Thread Tension −10 (earlier than elsewhere). Revolution informal presence. | 9, 13, 14 |
+| 13 | Askeheim (Southernmost border) | Uncontrolled | 2 | 0 | Southernmost Access: required for Southernmost Expedition. Thread proximity: all non-Thread orders +1 Ob. Thread Sensitivity 30+ characters: automatic Discovery Event per season present. | 9, 12 |
 | 14 | Korntal (Southern farmland) | Revolution (informal) | 4 | 0 | Einhir Heartland: Revolution Influence −1 Ob here. Church Influence +1 Ob here (cultural resistance). | 11, 12 |
-| 15 | Schoenland (Altonian trade port) | Neutral (Altonian trade) | 5 | 1 | Altonian Trade: +1 Wealth per season to any faction with Trade order here while route is open. Altonian spies: Intelligence orders here reveal results to Altonia. At IP 75+: Altonian vanguard deploys here. | 4, 7 |
+| 15 | Schoenland (Altonian trade port) | Neutral (Altonian trade) | 5 | 1 | Altonian Trade: +1 Wealth per season to any faction with Trade order here while route is open. Altonian spies: Intelligence orders here reveal results to Altonia. At Institutional Pressure 75+: Altonian vanguard deploys here. | 4, 7 |
 
 ---
 
 ## 7.3 Adjacency Notes
 
 - **Valorsplatz (1)** is the most connected territory (4 adjacencies). Political hub; changes hands are maximum-consequence.
-- **Schoenland (15)** connects to Border Pass by land and Sternhaven by sea. The sea route is severed when Schoenland trade suspends (IP 75+).
+- **Schoenland (15)** connects to Border Pass by land and Sternhaven by sea. The sea route is severed when Schoenland trade suspends (Institutional Pressure 75+).
 - **Askeheim (13)** is a dead end — only two connections. It is expedition territory, not strategic chokepoint.
 - **Ehrenfeld (5)** is the Lowenritter's primary position. Its anomalous Fortification cap (4 instead of 3) reflects the order's entrenched presence.
 
@@ -85,7 +85,7 @@ Fortification 2+ is required for a siege to be declared. Territories at 0–1 ar
 
 Three territories have Thread significance beyond their political properties:
 
-**Sudwald (12):** A Thread Wound in the southern forest. TT threshold events fire here 10 TT points earlier than elsewhere. The Revolution's informal presence here is not coincidental — Einhir practitioners recognized the site's significance.
+**Sudwald (12):** A Thread Wound in the southern forest. Thread Tension threshold events fire here 10 Thread Tension points earlier than elsewhere. The Revolution's informal presence here is not coincidental — Einhir practitioners recognized the site's significance.
 
 **Askeheim (13):** Proximity to the Southernmost creates ambient Thread pressure. All non-Thread orders suffer +1 Ob. This is the only territory from which the Southernmost Expedition can be launched (see §4.7, Southernmost).
 
@@ -95,8 +95,8 @@ Three territories have Thread significance beyond their political properties:
 
 ## 7.6 TTRPG Zone-Based Movement
 
-In TTRPG mode, territories are not tracked with unit tokens. They function as named locations with associated properties. Movement between territories is narrative, not mechanical — the GM determines journey time based on terrain and circumstance.
+In TTRPG mode, territories are not tracked with unit tokens. They function as named locations with associated properties. Movement between territories is narrative, not mechanical — the Game Master determines journey time based on terrain and circumstance.
 
 For overland journeys of consequence (expeditions, supply runs, military marches), use the territory adjacency graph as a rough distance guide. Standard overland travel: one territory per day under normal conditions; Grauwald costs two days (difficult terrain).
 
-Thread-significant territories require awareness: entering Askeheim or the Sudwald Thread Wound zone triggers the relevant passive effects on practitioners (automatic Discovery Events, TS growth checks) when applicable.
+Thread-significant territories require awareness: entering Askeheim or the Sudwald Thread Wound zone triggers the relevant passive effects on practitioners (automatic Discovery Events, Thread Sensitivity growth checks) when applicable.

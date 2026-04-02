@@ -235,7 +235,7 @@ soldier) are separate stats. Both are 1–7.
 As Size drops from casualties, the pool shrinks — fewer soldiers means fewer
 dice regardless of individual quality.
 
-**Design axiom: Generalship dominates.** CR asymmetry is intentional. The
+**Design axiom: Generalship dominates.** Coherence Rating asymmetry is intentional. The
 general is the battle.
 
 ---
@@ -261,7 +261,7 @@ maximum CP and Cohesion ceiling for units it fields (1:1 direct mapping).
 
 **Speed:** Slow / Standard / Fast.
 
-**Cohesion** (1–7): formation integrity. Starting value = min(general's CR,
+**Cohesion** (1–7): formation integrity. Starting value = min(general's Coherence Rating,
 faction Military). Deterministic check: if total Size lost this turn exceeds
 Cohesion rating, Cohesion degrades by 1. All checks fire at Phase 5 regardless
 of damage source.
@@ -277,7 +277,7 @@ of damage source.
 
 Cohesion ceiling applies at deployment only, not retroactively. Military floor = 1.
 
-**Morale** (1–7): rout threshold. Starting = general's CR + unit quality
+**Morale** (1–7): rout threshold. Starting = general's Coherence Rating + unit quality
 modifier (cap 7). Degradation triggers (all fire at Phase 5, cap −3/phase):
 Size below 50%: −1. Size below 25%: −1 additional. Cohesion broken: −1.
 Allied unit routed in zone: −1. General incapacitated Stage 1: −1. General
@@ -321,29 +321,29 @@ units are anti-unarmoured only. Force composition determines outcome.
 | Campaign | ~1,000 soldiers | Territorial |
 | War | ~5,000 soldiers | Structural |
 
-Scale is narrative only — no mechanical change except Thread TS minimums.
+Scale is narrative only — no mechanical change except Thread Thread Sensitivity minimums.
 
 ---
 
-### Command Rating (CR)
+### Command Rating (Coherence Rating)
 
-**CR = ⌈(Presence + Cognition) ÷ 2⌉.** NPC generals: CR assigned directly (1–7).
+**Coherence Rating = ⌈(Presence + Cognition) ÷ 2⌉.** Non-Player Character generals: Coherence Rating assigned directly (1–7).
 
-CR governs: sub-unit count cap (max = CR), Size cap per unit (max Size = CR),
+Coherence Rating governs: sub-unit count cap (max = Coherence Rating), Size cap per unit (max Size = Coherence Rating),
 Cohesion ceiling, Morale starting value and floor (= 1 while general present),
-tactic execution (CR dice vs Ob). Combat pool bonus: +1D per 2 CR.
+tactic execution (Coherence Rating dice vs Ob). Combat pool bonus: +1D per 2 Coherence Rating.
 
 **General death — two-stage:**
-- Stage 1 (incapacitated): −1 Morale all units, CR halved, Morale floor suspended.
+- Stage 1 (incapacitated): −1 Morale all units, Coherence Rating halved, Morale floor suspended.
   Stabilise Phase 5 with Medicine Ob 2 within 1 turn or Stage 2 fires.
-- Stage 2 (killed): −2 Morale (outside cap), CR = 0, all units uncommanded.
+- Stage 2 (killed): −2 Morale (outside cap), Coherence Rating = 0, all units uncommanded.
 
 Leader defeat: if leader's unit is defeated, leader rolls Agility vs Ob =
 attacker net successes. Failure: captured. Failure by 3+: attacker may
 choose to kill.
 
 General in personal combat: Phase 5 action consumed each turn until resolved.
-Mass battle continues at reduced command efficiency. CR suspended.
+Mass battle continues at reduced command efficiency. Coherence Rating suspended.
 
 ---
 
@@ -359,7 +359,7 @@ Mass battle continues at reduced command efficiency. CR suspended.
 | Reserve | Cannot engage | Cannot engage | Commits at Phase 3 start of NEXT turn |
 
 Wedge beats Line. Shield Wall negates Wedge. No formation universally dominant.
-Units beyond CR limit fight at Line, Cohesion floor = 1, no tactics.
+Units beyond Coherence Rating limit fight at Line, Cohesion floor = 1, no tactics.
 
 ---
 
@@ -409,8 +409,8 @@ sides lose 1 Morale.
 | Tactic | Effect | Ob | Counter |
 |---|---|---|---|
 | Envelopment | Attempt all-flank; requires Fast | 2 | Refused Flank |
-| Feigned Retreat | Disengage; pursuer Cohesion check; re-engage next turn with flank | 3 | CR Ob 2 to recognise |
-| Ambush | First engagement: defender no Defence allocation | 4 | Scouting (GM) |
+| Feigned Retreat | Disengage; pursuer Cohesion check; re-engage next turn with flank | 3 | Coherence Rating Ob 2 to recognise |
+| Ambush | First engagement: defender no Defence allocation | 4 | Scouting (Game Master) |
 | Concentration | All sub-units on one target; max Fibonacci | 1 | Flanks exposed |
 | Refused Flank | Wing anchors on terrain; immune that flank | 1 | Sacrifices offence |
 | Hammer & Anvil | Shield Wall holds; Fast unit envelops | 3 | Break Anvil first |
@@ -431,7 +431,7 @@ sides lose 1 Morale.
 
 ### Thread in Mass Combat
 
-| Battle scale | Thread scale | Min TS | Ob | Coherence cost |
+| Battle scale | Thread scale | Min Thread Sensitivity | Ob | Coherence cost |
 |---|---|---|---|---|
 | Skirmish | Personal | 30 | 2 | 0 |
 | Company | Object | 30 | 1 | 0 |
@@ -446,7 +446,7 @@ configuration, not the unit's). Weaving the general = Personal (Ob=2, 0
 Coherence); Weaving the unit = Territorial (Ob=4, −1 Coherence).
 
 **Pulling an enemy general's command capacity** (Presence/Cognition
-configuration) is Personal scale. Effect: enemy CR −1 for battle duration.
+configuration) is Personal scale. Effect: enemy Coherence Rating −1 for battle duration.
 [EDITORIAL: confirm this is an intended tactical option]
 
 Site-anchored collective Weave: Active site −1 Ob; Major site −2 Ob.
@@ -454,7 +454,7 @@ Brittleness exempt on Success if site-anchored. Solo Territorial Weave
 always carries brittleness risk.
 
 Co-movement at mass battle scale: Temporal result = general loses Phase 5
-action for d3 turns. Epistemic = CR −1 for d3 turns. Actual = 1 Wound.
+action for d3 turns. Epistemic = Coherence Rating −1 for d3 turns. Actual = 1 Wound.
 
 Coherence=0: practitioner exits rendered existence. Cannot initiate actions
 or Thread operations. Recovery: 1 season non-practice + Close Knot
@@ -464,10 +464,10 @@ Anchoring Scene (Bonds Ob 2) → Coherence restored to 1.
 
 ### Southernmost
 
-Non-Thread-sensitive units (TS < 30) cannot operate in Southernmost.
+Non-Thread-sensitive units (Thread Sensitivity < 30) cannot operate in Southernmost.
 They dissolve without awareness on entry. Remove from battle map: no
 casualties, no Morale trigger, no Cohesion check. All individuals in a
-force operating in Southernmost must personally have TS ≥ 30.
+force operating in Southernmost must personally have Thread Sensitivity ≥ 30.
 This is why Southernmost was never conquered.
 
 ---

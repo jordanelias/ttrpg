@@ -19,7 +19,7 @@ Valoria's political landscape is contested by eight factions, six with full mech
 
 **Partial sheets:** Niflhel (no Mandate, no Military), Revolution (Influence, Stability, Intel only), Lowenritter (no Mandate, no Wealth — Military, Intel, Influence, Stability only).
 
-**NPC personal pools** (used in social scenes and investigations) are separate from faction stats. An NPC like Baralta has personal Cognition, Attunement, Presence etc. on the standard 1–10 attribute scale. Faction stats represent institutional capacity; NPC attributes represent personal capability.
+**Non-Player Character personal pools** (used in social scenes and investigations) are separate from faction stats. An Non-Player Character like Baralta has personal Cognition, Attunement, Presence etc. on the standard 1–10 attribute scale. Faction stats represent institutional capacity; Non-Player Character attributes represent personal capability.
 
 ### Starting Values
 
@@ -38,11 +38,11 @@ Valoria's political landscape is contested by eight factions, six with full mech
 
 ### Domain Actions
 
-When a personal action has faction-level scope, the GM recognises it as a Domain Action. The personal roll resolves both the personal outcome and the faction effect simultaneously.
+When a personal action has faction-level scope, the Game Master recognises it as a Domain Action. The personal roll resolves both the personal outcome and the faction effect simultaneously.
 
 **Domain Ob:** Target faction's relevant stat directly (1–7 scale; no division). A faction at stat 4 sets Ob 4. The rolling character may add their own faction's relevant stat as bonus dice if they hold leadership of that faction.
 
-**NPC faction rolls:** When a faction acts without a player character driving it, the GM rolls the relevant faction stat as a dice pool (d10s, TN 7) against the Domain Ob. For contested actions, both roll; higher net successes wins. Ties go to the defender.
+**Non-Player Character faction rolls:** When a faction acts without a player character driving it, the Game Master rolls the relevant faction stat as a dice pool (d10s, TN 7) against the Domain Ob. For contested actions, both roll; higher net successes wins. Ties go to the defender.
 
 **Seasonal cap:** ±2 per stat per season.
 
@@ -56,13 +56,13 @@ Each faction's ethical framework modifies Domain Action rolls. Frameworks are mo
 
 ### Leader vs Institution
 
-**Institutional Tendency:** What the faction does without active PC direction. Represents the faction's default priorities and the direction NPC AI applies.
+**Institutional Tendency:** What the faction does without active Player Character direction. Represents the faction's default priorities and the direction Non-Player Character artificial intelligence applies.
 
 **Leadership Deviation:** When a faction leader acts against the institutional tendency, a Stability check fires at next seasonal accounting. Ob varies by faction. Deviation is not forbidden — it is costly.
 
 ### Nine Political Axes
 
-The nine political axes generate campaign events, NPC motivations, and faction conflicts. They are **not tracked numerically** — they are qualitative GM tools for scene generation.
+The nine political axes generate campaign events, Non-Player Character motivations, and faction conflicts. They are **not tracked numerically** — they are qualitative Game Master tools for scene generation.
 
 | Axis | Pole A | Pole B | Primary Factions |
 |---|---|---|---|
@@ -77,7 +77,7 @@ The nine political axes generate campaign events, NPC motivations, and faction c
 | 9. Ontological | The world is what it appears | The world is more | Church vs practitioners |
 
 **Using the axes:**
-1. Every named NPC has a position on 2–3 axes — determines Resonant Style vulnerability and Belief content
+1. Every named Non-Player Character has a position on 2–3 axes — determines Resonant Style vulnerability and Belief content
 2. When two factions interact, identify which axes are in tension — the scene's conflict is about that axis
 3. War justification (casus belli) maps to axes
 4. Domain Echo content is described in terms of the relevant axis
@@ -113,7 +113,7 @@ Once per season, the Crown issues a unilateral political act that bypasses norma
 | **Limit** | 1/season; consecutive seasons: +1 Ob per consecutive use (decree fatigue) |
 
 **Default Leader: King Almud Almqvist**
-- Conviction: Order/Reason · Resonant Style: Consequence · TS: 28 (near Stirring; unrecognised)
+- Conviction: Order/Reason · Resonant Style: Consequence · Thread Sensitivity: 28 (near Stirring; unrecognised)
 - Privately sympathises with the Restoration. Governs through the post-war settlement that suppressed it. Institutional tendency and personal beliefs in direct conflict.
 
 ---
@@ -132,7 +132,7 @@ Correctness is determined by institutional authority, not outcome or character. 
 
 **Leadership Deviation:** Confessor acts against doctrine: Stability check **Ob 3**. Hardest deviation cost of any faction — theological coherence is the Church's structural strength.
 
-**TC Relationship:** Church Mandate 5+ at accounting: TC +1/season. Stability ≤ 4: TC generation pauses (Cardinals competing). *(On 1–7 scale, Mandate 5 = strong institutional position; Stability 4 = mid-range.)*
+**Theocracy Counter Relationship:** Church Mandate 5+ at accounting: Theocracy Counter +1/season. Stability ≤ 4: Theocracy Counter generation pauses (Cardinals competing). *(On 1–7 scale, Mandate 5 = strong institutional position; Stability 4 = mid-range.)*
 
 **Unique Action — Excommunication**
 
@@ -146,30 +146,30 @@ Correctness is determined by institutional authority, not outcome or character. 
 | **Reversal** | Grand Debate (5 exchanges) or appointment of a new Confessor |
 
 **Default Leader: Confessor Arne Himlensendt**
-- Conviction: Faith · Resonant Style: Evidence · TS: 0 (theologically foreclosed)
+- Conviction: Faith · Resonant Style: Evidence · Thread Sensitivity: 0 (theologically foreclosed)
 - Sincerely devout. Zero awareness of Galbados's actual nature. Not cynical — wrong.
 
 
-**TC 60 — Territorial Seizure Procedure**
+**Theocracy Counter 60 — Territorial Seizure Procedure**
 
-At TC 60, the Church may attempt to seize territories through institutional claim rather than military force. This is triggered once per season at seasonal accounting; the Church player (or GM) may attempt seizure on any number of territories, resolving each separately.
+At Theocracy Counter 60, the Church may attempt to seize territories through institutional claim rather than military force. This is triggered once per season at seasonal accounting; the Church player (or Game Master) may attempt seizure on any number of territories, resolving each separately.
 
 **Roll:** Church Mandate (pool, TN 7) vs territory owner's Mandate ÷ 2 (round up, minimum Ob 1).
 
-**Territory TC value (flat, on seizure — no per-season accrual):**
+**Territory Theocracy Counter value (flat, on seizure — no per-season accrual):**
 
-| Territory Type | TC on Seizure |
+| Territory Type | Theocracy Counter on Seizure |
 |---|---|
 | Minor territory (rural, low-prosperity) | +1 |
 | Major territory (trade hub, fortified, ducal seat) | +3 |
 | Capital or key institutional site (Valorsplatz, cathedral city) | +5 |
 
-**Outcome on success:** Church gains administrative control of the territory. The territory's Domain Actions may no longer target Church authority without +2 Ob. The flat TC value fires immediately on seizure.
+**Outcome on success:** Church gains administrative control of the territory. The territory's Domain Actions may no longer target Church authority without +2 Ob. The flat Theocracy Counter value fires immediately on seizure.
 
 **Outcome on failure:** No seizure. Church Mandate −1 (overreach).
 
 **Counter-play options:**
-- Parliamentary vote to dispute seizure (Influence vs Ob 3): success reverses seizure; TC does not fire.
+- Parliamentary vote to dispute seizure (Influence vs Ob 3): success reverses seizure; Theocracy Counter does not fire.
 - Riskbreaker operation exposing Church-Niflhel connection: each successful exposure removes one seized territory and prevents re-seizure of that territory for one season.
 - Grand Debate challenging Church civil authority: Overwhelming removes all seizures in one duchy; Success removes one.
 
@@ -196,19 +196,19 @@ Once per campaign arc, Baralta invokes the constitutional claim that her authori
 
 | Degree | Result |
 |---|---|
-| **Overwhelming** | TC −3. Church Mandate −1. Heresy Investigation blocked this season. +1D social vs Church for the arc. |
-| **Success** | TC −2. Church Mandate −1. Heresy Investigation opens against Baralta (Ob 4 to pursue). |
-| **Partial** | TC −1. Heresy Investigation opens immediately. Church Influence +1. |
-| **Failure** | TC +1. Heresy Investigation immediate. Baralta's Mandate −1. |
+| **Overwhelming** | Theocracy Counter −3. Church Mandate −1. Heresy Investigation blocked this season. +1D social vs Church for the arc. |
+| **Success** | Theocracy Counter −2. Church Mandate −1. Heresy Investigation opens against Baralta (Ob 4 to pursue). |
+| **Partial** | Theocracy Counter −1. Heresy Investigation opens immediately. Church Influence +1. |
+| **Failure** | Theocracy Counter +1. Heresy Investigation immediate. Baralta's Mandate −1. |
 
 *Roll: Mandate vs Ob 4. Once per campaign arc.*
 
-*Heresy Investigation consequence:* Grand Debate (5 exchanges). If it succeeds without player intervention: Mandate −2, TC +3, TC suppression removed.
+*Heresy Investigation consequence:* Grand Debate (5 exchanges). If it succeeds without player intervention: Mandate −2, Theocracy Counter +3, Theocracy Counter suppression removed.
 
-**TC Suppression:** While Baralta's Mandate remains 4+ (on 1–7 scale), she suppresses TC at −1/season. If Mandate drops below 4, suppression disappears. If excommunicated: TC +4 immediately.
+**Theocracy Counter Suppression:** While Baralta's Mandate remains 4+ (on 1–7 scale), she suppresses Theocracy Counter at −1/season. If Mandate drops below 4, suppression disappears. If excommunicated: Theocracy Counter +4 immediately.
 
 **Default Leader: Duchess Inge Baralta**
-- Conviction: Order · Resonant Style: Evidence · TS: 0 (essentialist theology forecloses development)
+- Conviction: Order · Resonant Style: Evidence · Thread Sensitivity: 0 (essentialist theology forecloses development)
 - Her faith and her politics are structurally incompatible. She holds both without experiencing contradiction. This is her strength and her vulnerability.
 
 ---
@@ -236,13 +236,13 @@ Vaynard maintains a collection of Einhir artefacts and Thread-locked objects. On
 |---|---|
 | **Roll** | Intel vs Ob 2 |
 | **Success (choose one)** | +2D to one Thread-related Domain Action this season; *or* reveal one hidden faction attribute; *or* −1 Ob to one Einhir Research action this season |
-| **Failure** | Artefact's Thread signature detected by a practitioner. Church Intel gains +1D vs Varfell for 1 season. TT +1. |
-| **Long-term cost** | Each use: +1 to Vaynard's hidden TS. At TS 14+ (his starting value), each use triggers Spirit check TN 7 Ob 1 for a Discovery Event. |
+| **Failure** | Artefact's Thread signature detected by a practitioner. Church Intel gains +1D vs Varfell for 1 season. Thread Tension +1. |
+| **Long-term cost** | Each use: +1 to Vaynard's hidden Thread Sensitivity. At Thread Sensitivity 14+ (his starting value), each use triggers Spirit check TN 7 Ob 1 for a Discovery Event. |
 
-**PC takeover — Collection Discovery Event:** If a non-Vaynard PC takes over Varfell, the Private Collection transfers as an institutional asset (the artefacts exist physically). However, encountering the collection for the first time triggers a mandatory Discovery Event: the new leader finds Vaynard's research notes alongside Thread-locked objects of obvious significance. Spirit check TN 7 Ob 1. Success: the player understands what they have inherited and gains TK 1 immediately. Failure: the weight of the collection lands without context — Certainty −1 and a new Belief is offered from behind a position of ignorance.
+**Player Character takeover — Collection Discovery Event:** If a non-Vaynard Player Character takes over Varfell, the Private Collection transfers as an institutional asset (the artefacts exist physically). However, encountering the collection for the first time triggers a mandatory Discovery Event: the new leader finds Vaynard's research notes alongside Thread-locked objects of obvious significance. Spirit check TN 7 Ob 1. Success: the player understands what they have inherited and gains TK 1 immediately. Failure: the weight of the collection lands without context — Certainty −1 and a new Belief is offered from behind a position of ignorance.
 
 **Default Leader: Duke Magnus Vaynard**
-- Conviction: Reason · Resonant Style: Consequence · TS: 14 (Dormant; unrecognised)
+- Conviction: Reason · Resonant Style: Consequence · Thread Sensitivity: 14 (Dormant; unrecognised)
 - Pursuing Thread knowledge through acquisition rather than experience. His consequentialist framework treats Thread reality as a resource to be managed rather than a truth to be confronted.
 
 **Thread Investigation Track (TK) — 0 to 5**
@@ -251,12 +251,12 @@ Vaynard's TK measures his understanding of Thread metaphysics, the Calamity's me
 
 | TK | Campaign Effect |
 |---|---|
-| 1–2 | Informed questions. Acute awareness, not understanding. No TC effect. |
-| 3 | Structural theory (wrong in detail, correct in structure). Succession leverage formally linked to Southernmost access terms. TC +1. |
-| 4 | Urgency. Willing to offer collection access (including originary locks) for Thread education and Southernmost partnership. TC +2. |
-| 5 | Dangerous knowledge — understands what Galbados was structurally. Seeks capability, not further knowledge. TC +3. |
+| 1–2 | Informed questions. Acute awareness, not understanding. No Theocracy Counter effect. |
+| 3 | Structural theory (wrong in detail, correct in structure). Succession leverage formally linked to Southernmost access terms. Theocracy Counter +1. |
+| 4 | Urgency. Willing to offer collection access (including originary locks) for Thread education and Southernmost partnership. Theocracy Counter +2. |
+| 5 | Dangerous knowledge — understands what Galbados was structurally. Seeks capability, not further knowledge. Theocracy Counter +3. |
 
-TK advances through: practitioner relationship (sustained season, cap ×2); originary lock examination with practitioner context (cap ×1); Church archive access via Niflhel channels (+1/archive); players sharing Thread-level knowledge directly (+1–2 by depth); Discovery Event triggering TS 30 (+2 immediately).
+TK advances through: practitioner relationship (sustained season, cap ×2); originary lock examination with practitioner context (cap ×1); Church archive access via Niflhel channels (+1/archive); players sharing Thread-level knowledge directly (+1–2 by depth); Discovery Event triggering Thread Sensitivity 30 (+2 immediately).
 
 ---
 
@@ -287,7 +287,7 @@ The Guilds apply economic pressure to any faction present in a territory where G
 | **Failure** | Guild Favour −1 in that territory (backlash against perceived extortion) |
 | **Constraint** | Cannot target factions in territories where Guild Favour < 5 |
 
-**Leader: Guildmaster Council (NPC collective)**
+**Leader: Guildmaster Council (Non-Player Character collective)**
 - No single conviction axis. Council decisions reflect the majority interest of the strongest guilds in the current season.
 - Individual guild leaders can be recruited, bribed, or threatened independently (treat as officers). The Guilds' vulnerability is that they are a coalition, not an institution.
 
@@ -316,7 +316,7 @@ Niflhel deploys the Quiet (its intelligence and assassination arm) against any t
 
 **Intelligence mode:**
 - Roll: Intel vs target's Intel
-- Success: learn one hidden faction attribute or one NPC's active Belief
+- Success: learn one hidden faction attribute or one Non-Player Character's active Belief
 - Overwhelming: learn two
 
 **Sabotage mode:**
@@ -326,16 +326,16 @@ Niflhel deploys the Quiet (its intelligence and assassination arm) against any t
 
 **Assassination mode:**
 - Roll: Intel vs target's Intel +2
-- Overwhelming: named NPC eliminated; no evidence trail
-- Success: named NPC eliminated; evidence trail exists
+- Overwhelming: named Non-Player Character eliminated; no evidence trail
+- Success: named Non-Player Character eliminated; evidence trail exists
 - Partial: target wounded, not killed; evidence trail
 - Failure: operative captured; full exposure; Niflhel Stability −2
 
-**Long-term cost:** Each Quiet deployment in a season: TT +0.5 (cumulative). Niflhel's Southernmost harvesting supply chain disturbs the Thread-configurational environment. They do not know this.
+**Long-term cost:** Each Quiet deployment in a season: Thread Tension +0.5 (cumulative). Niflhel's Southernmost harvesting supply chain disturbs the Thread-configurational environment. They do not know this.
 
-**Leader:** None. The four arm heads are treated as officers, not faction leaders. A PC who infiltrates or takes over one arm controls that arm only.
+**Leader:** None. The four arm heads are treated as officers, not faction leaders. A Player Character who infiltrates or takes over one arm controls that arm only.
 
-**Structure is permanent:** Niflhel has no primus inter pares and will not acquire one. A PC who wants to direct Niflhel must control each arm independently. This is intentional — Niflhel's headlessness is a structural feature, not a gap. Full network control requires four separate influence operations, one per arm.
+**Structure is permanent:** Niflhel has no primus inter pares and will not acquire one. A Player Character who wants to direct Niflhel must control each arm independently. This is intentional — Niflhel's headlessness is a structural feature, not a gap. Full network control requires four separate influence operations, one per arm.
 
 ---
 
@@ -358,21 +358,21 @@ The Revolution is strongest when it acts for the people and weakest when it trie
 
 **Unique Action — Community Weaving**
 
-The Revolution's connection to Einhir cultural continuity allows collective Thread operations that reduce TT.
+The Revolution's connection to Einhir cultural continuity allows collective Thread operations that reduce Thread Tension.
 
 | | |
 |---|---|
-| **Roll** | Influence vs Ob = TT ÷ 20 (round up) |
-| **Overwhelming** | TT −2 |
-| **Success** | TT −1 |
-| **Partial** | TT unchanged; Stability −1 (working strained the community) |
-| **Failure** | Stability −1; TT +1 (attempt disturbed what it tried to heal) |
-| **Constraint** | Requires at least one practitioner with TS 30+ affiliated with the Revolution |
+| **Roll** | Influence vs Ob = Thread Tension ÷ 20 (round up) |
+| **Overwhelming** | Thread Tension −2 |
+| **Success** | Thread Tension −1 |
+| **Partial** | Thread Tension unchanged; Stability −1 (working strained the community) |
+| **Failure** | Stability −1; Thread Tension +1 (attempt disturbed what it tried to heal) |
+| **Constraint** | Requires at least one practitioner with Thread Sensitivity 30+ affiliated with the Revolution |
 | **Co-movement** | Draw a Co-Movement Card. Even beneficial Thread work has consequences. (P-01) |
 
-**Leader:** None formal. Named figures exist (intellectuals, pamphlet writers, southern community elders) but none has institutional authority. A PC who affiliates must build personal authority through play.
+**Leader:** None formal. Named figures exist (intellectuals, pamphlet writers, southern community elders) but none has institutional authority. A Player Character who affiliates must build personal authority through play.
 
-[EDITORIAL: Should one named Revolution figure be established as the default NPC contact point? Suggested profile: southern Einhir elder holding fragmentary inner-tradition knowledge, partially obscured by the Forgetting.]
+[EDITORIAL: Should one named Revolution figure be established as the default Non-Player Character contact point? Suggested profile: southern Einhir elder holding fragmentary inner-tradition knowledge, partially obscured by the Forgetting.]
 
 ---
 
@@ -382,10 +382,10 @@ The Revolution's connection to Einhir cultural continuity allows collective Thre
 
 The Löwenritter are not an independent political faction — they are an institutional instrument of the Crown. They hold territory (the fortress at the northern border), maintain military capacity, and act as the Crown's deniable covert arm. Their loyalty is to the Crown as an institution, not to any specific monarch.
 
-**Coup Threshold:** Grandmaster Ehrenwall is keeping count. The GM tracks a private Coup Counter (0–3). When it reaches 3, the coup fires at the next seasonal accounting.
+**Coup Threshold:** Grandmaster Ehrenwall is keeping count. The Game Master tracks a private Coup Counter (0–3). When it reaches 3, the coup fires at the next seasonal accounting.
 
 **Counter increments (+1 each):**
-- TC reaches 40 while the Crown has taken no action to reduce it that season (unopposed Church advance)
+- Theocracy Counter reaches 40 while the Crown has taken no action to reduce it that season (unopposed Church advance)
 - Torben's loyalty reaches 3–2 or lower (Altonian alignment)
 - Crown loses two or more territories in one season without a military response Domain Action
 
@@ -396,7 +396,7 @@ The Löwenritter are not an independent political faction — they are an instit
 - All non-Military Domain Actions in Martial Law territories require a secondary Military check (Löwenritter Military pool, TN 7, Ob 2) to proceed. Failure: the action is blocked this season.
 - Stability enforcement: Löwenritter Military pool replaces faction-specific pools for all Stability-related Domain Actions in affected territories.
 - Faction restriction: only Löwenritter and Crown may act openly. All other factions must succeed at a Covert Domain Action (Ob 3) to operate at all.
-- Duration: Martial Law persists until a PC-driven Domain Action removes it (Influence vs Ob = Löwenritter Military ÷ 2, round up, minimum Ob 3) OR TC drops below 40 (Church threat recedes; Ehrenwall withdraws).
+- Duration: Martial Law persists until a Player Character-driven Domain Action removes it (Influence vs Ob = Löwenritter Military ÷ 2, round up, minimum Ob 3) OR Theocracy Counter drops below 40 (Church threat recedes; Ehrenwall withdraws).
 - Scope: Crown territories only. Hafenmark, Varfell, and Church territories are unaffected.
 
 **Riskbreakers:** The extralegal arm of the Löwenritter. Operations are not recorded in official documents. See §9.3.
@@ -409,9 +409,9 @@ Not a faction. Not player-controllable. A neutral trade port that profits from s
 
 **Orientation:** Pro-war (arms sales), anti-conquest (benefits from feuding, not resolution). Actively stokes tensions without triggering settlement.
 
-**Board game representation:** Territory 15. Modifies Trade orders. GM-driven.
+**Board game representation:** Territory 15. Modifies Trade orders. Game Master-driven.
 
-**Diplomatic path:** If Valoria presents as a stable trading partner early, Schoenland becomes an ally providing naval support against Altonian aggression: IP −2/year through trade agreements. If Valoria is fragmented, Schoenland hedges toward Altonia.
+**Diplomatic path:** If Valoria presents as a stable trading partner early, Schoenland becomes an ally providing naval support against Altonian aggression: Institutional Pressure −2/year through trade agreements. If Valoria is fragmented, Schoenland hedges toward Altonia.
 
 ---
 
@@ -422,7 +422,7 @@ When a political matter reaches Parliamentary scale (Crown choosing whether to d
 1. Both sides roll relevant faction pools (typically Mandate for legitimacy claims, Influence for procedural contests)
 2. Ob = opponent's relevant stat directly (1–7)
 3. Best of **3 exchanges.** First side to win 2 exchanges wins.
-4. If neither side wins 2 of 3 (draws possible when both meet Ob): motion fails by abstention — TT +1 and TC +1 (institutional paralysis)
+4. If neither side wins 2 of 3 (draws possible when both meet Ob): motion fails by abstention — Thread Tension +1 and Theocracy Counter +1 (institutional paralysis)
 5. Player characters may substitute personal pools for faction pools when personally representing the faction. Use the higher.
 
 ---
@@ -446,10 +446,10 @@ At the end of each campaign season (~4 sessions):
 - Overwhelming (net ≥ 2× Ob): Stability +1 (max 7)
 - **Anti-death-spiral floor:** Faction at Stability 2 or lower is treated as Ob 4 regardless of actual pressure. Prevents immediate cascade; gives players a window to intervene.
 
-3. Apply TT drift and all TT-lowering events
+3. Apply Thread Tension drift and all Thread Tension-lowering events
 4. Check floors (Stability 0 = collapse event) and ceilings (Mandate or Stability 7 = dominance event)
 5. Award CP for Domain Actions and personal goals
-6. Apply TC changes from threshold conditions
+6. Apply Theocracy Counter changes from threshold conditions
 
 ---
 

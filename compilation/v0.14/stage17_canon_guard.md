@@ -74,7 +74,7 @@ Three different formulas appear:
 | §4.11 Composure (line 633) | `Presence + Attunement` | Two canonical attributes |
 | §9.1 Composure (line 2585) | `Poise + Heart` | Two non-canonical attributes |
 | Glossary §16.1 (line 3933) | `Poise + Heart` with note `*(compiled ruleset uses Presence + Spirit — confirm)*` | Conflicted; three candidate formulas |
-| NPC stat blocks §13.x | All use `Poise + Heart` (e.g., Almud: Poise 5 + Heart 4 = 9) | Non-canonical |
+| Non-Player Character stat blocks §13.x | All use `Poise + Heart` (e.g., Almud: Poise 5 + Heart 4 = 9) | Non-canonical |
 
 **Verdict:** FAIL — attribute names Poise and Heart do not exist in the canonical 10-attribute set. All instances using either must be repaired.
 
@@ -87,7 +87,7 @@ Three different formulas appear:
 (A) Presence + 6 (matches Health derivation pattern; range 7–13)
 (B) Presence + Attunement (§4.11; socially intuitive; range 2–14)
 (C) Presence + Spirit (Glossary note candidate; range 2–14)
-NPC stat blocks all currently use non-canonical Poise + Heart values and will need recalculation once formula confirmed.]`
+Non-Player Character stat blocks all currently use non-canonical Poise + Heart values and will need recalculation once formula confirmed.]`
 
 **Until resolved:** All Poise and Heart instances in Composure formulas are flagged as broken references.
 
@@ -122,26 +122,26 @@ No editorial gate — the design intent is unambiguous from §2.1 + §2.3 + §4.
 |-----------|--------|------------------|-------|
 | P-01 Inseparability co-movement | ✓ | §5.8, §12.6, Part 5 intro | §5.8 Three-Dimensional Co-Movement correctly implements mandatory secondary consequences across actual/temporal/epistemic |
 | P-02 Ein Sof = fullness | ✓ | §5.9 CD thresholds, §5.13 Shifting Objects | Unintelligible ground framed as source of density/fullness, not void. No violations detected. |
-| P-03 Rendering = consciousness | ✓ | §12.6 GM as Rendering Engine | Correctly positions GM as rendering engine. Information asymmetry mechanical via TS tiers (§5.2 visibility table). |
+| P-03 Rendering = consciousness | ✓ | §12.6 Game Master as Rendering Engine | Correctly positions Game Master as rendering engine. Information asymmetry mechanical via Thread Sensitivity tiers (§5.2 visibility table). |
 | P-04 Monstrosity = ontological, not moral | ⚠ | §5.13, §5.10 | §5.13 Shifting Objects correctly framed as rendering failures. §5.10 header "Taint Track" implies moral valence (see Issue 1 above). Body text correct; header violates. |
 | P-05 Three modes mechanically distinct | ✓ | §5.13, §15 Spell Catalog | Modes 1/2/3 have distinct behaviours. §15.4 Operation Scale Reference distinguishes mode outcomes. |
 | P-06 Threadcut = is without becoming | ✓ | §5.12 Thread-Locked Objects | Threadcut objects correctly mechanised as maintenance-requiring. No Taint contamination in this section. |
-| P-07 Calamity = rendered-side | ✓ | §5.1–5.5, TT system | TT framed as over-drawing by practitioners, not ground responsiveness. §14.5 Three-Clock Feedback Loop correct. |
-| P-08 Epistemic barrier = inaccessibility | ✓ | §4.4 Devout Constraint, §13.2 Himlensendt | Church framed as reinforcing inaccessibility, not causing it. Devout Constraint correctly mechanised as TS-blocking without implying suppression. |
+| P-07 Calamity = rendered-side | ✓ | §5.1–5.5, Thread Tension system | Thread Tension framed as over-drawing by practitioners, not ground responsiveness. §14.5 Three-Clock Feedback Loop correct. |
+| P-08 Epistemic barrier = inaccessibility | ✓ | §4.4 Devout Constraint, §13.2 Himlensendt | Church framed as reinforcing inaccessibility, not causing it. Devout Constraint correctly mechanised as Thread Sensitivity-blocking without implying suppression. |
 | P-09 Memory pull = messy/costly | ✓ | §5.6 Past-Oriented Pulling | High Ob, produces orphaned configurations, detectable. Correctly implemented. |
 | P-10 Epistemic seduction = perceptual shift | ⚠ | §5.10 | Body text correct. Header "Taint Track" violates (see Issue 1). |
-| P-11 TD universal | ✓ | §5.8 Co-Movement, §12.7 TD Campaign Arc | All Thread operations produce TD per §5.8. Not restricted to Past-Pulls. |
-| P-12 Relational contagion | ✓ | §4.7 Knots, §5.10 Taint 4–6 | Taint 4–6: GM recontextualises one Knot. Transforming practitioner's shift propagates through Knot system. |
-| P-13 Forgetting = rendering failure | ✓ | §4.4 TS gating, §4.5 Intelligibility | Southernmost knowledge mechanically untransmittable below TS threshold. Intelligibility countdown correctly mechanised. |
+| P-11 Thread Depth universal | ✓ | §5.8 Co-Movement, §12.7 Thread Depth Campaign Arc | All Thread operations produce Thread Depth per §5.8. Not restricted to Past-Pulls. |
+| P-12 Relational contagion | ✓ | §4.7 Knots, §5.10 Taint 4–6 | Taint 4–6: Game Master recontextualises one Knot. Transforming practitioner's shift propagates through Knot system. |
+| P-13 Forgetting = rendering failure | ✓ | §4.4 Thread Sensitivity gating, §4.5 Intelligibility | Southernmost knowledge mechanically untransmittable below Thread Sensitivity threshold. Intelligibility countdown correctly mechanised. |
 | P-14 Board/VG modes express inseparability | ✓ | §12.2 BG Mode, §12.3 Hybrid Mode, §12.5 Mode-Specific Branching | Co-movement present in all modes. §12.5 Thread section confirms Thread ops produce co-movement in BG/Hybrid. |
 
 ---
 
 ## PART C: SECONDARY ISSUES FOUND (not in session log flags)
 
-### C-1 — NPC Stat Blocks use non-canonical attributes (§13)
+### C-1 — Non-Player Character Stat Blocks use non-canonical attributes (§13)
 
-All NPC Composure values calculated as `Poise + Heart`. Both attributes non-canonical. Values will require recalculation once Composure formula confirmed (Issue 3 editorial gate).
+All Non-Player Character Composure values calculated as `Poise + Heart`. Both attributes non-canonical. Values will require recalculation once Composure formula confirmed (Issue 3 editorial gate).
 
 Affected NPCs: Almud (9), Lenneth (8), Baralta (10 estimated), Vaynard (6), and all others in §13.
 
@@ -160,7 +160,7 @@ Candidates: Presence (social command, already governs Appeal) or a new social/Pe
 (B) Attunement — empathy/reading framing
 (C) A blended pool: Presence for formal/institutional; Attunement for personal/emotional]`
 
-### C-3 — Military NPC "Officer Heart" (§8 Battle Engine, line 2427)
+### C-3 — Military Non-Player Character "Officer Heart" (§8 Battle Engine, line 2427)
 
 Line 2427: `Officer Heart: adds dice to unit Cohesion checks.`
 Line 2474: `Rally requires an officer with Coordination 4+ to spend their action (Heart roll, Ob 2).`
@@ -176,23 +176,23 @@ Line 3993: `Composure = Poise + Heart *(note: compiled ruleset uses Presence + S
 
 The self-referential note in the Glossary confirms the compiler was aware of the conflict but did not resolve it. This entry must be updated once Issue 3 editorial decision is received.
 
-### C-5 — CE accumulation uses "Heart" for TS growth checks (§13.6 Inquisitors)
+### C-5 — Combat Endurance accumulation uses "Heart" for Thread Sensitivity growth checks (§13.6 Inquisitors)
 
 Line 3515: `Heart TN 7, Ob 1`
 Line 3533: `Heart TN 7, Ob 2`
 
-TS growth triggered by CE accumulation. The canonical TS growth mechanic in §4.4 does not use Heart — it uses a free roll structure. The CE-triggered TS growth check attribute needs confirmation.
+Thread Sensitivity growth triggered by Combat Endurance accumulation. The canonical Thread Sensitivity growth mechanic in §4.4 does not use Heart — it uses a free roll structure. The Combat Endurance-triggered Thread Sensitivity growth check attribute needs confirmation.
 
-`[EDITORIAL: CE-triggered TS growth check — confirm canonical attribute. Candidate: Cognition (perception/reasoning) or Spirit (existential coherence). Current §4.4 TS growth uses no attribute check; CE path may intentionally differ.]`
+`[EDITORIAL: Combat Endurance-triggered Thread Sensitivity growth check — confirm canonical attribute. Candidate: Cognition (perception/reasoning) or Spirit (existential coherence). Current §4.4 Thread Sensitivity growth uses no attribute check; Combat Endurance path may intentionally differ.]`
 
-### C-6 — §13.1 NPC Stat Blocks reference "Coordination" and "Power" attributes
+### C-6 — §13.1 Non-Player Character Stat Blocks reference "Coordination" and "Power" attributes
 
 Line 3390 (Baralta): `Attributes: Coordination 4, Power 4, Poise 5, Presence 5`
 None of Coordination, Power, or Poise are in the canonical 10-attribute set.
 
-**Verdict:** NPC stat blocks were compiled against an earlier attribute schema. All named NPC stat blocks require audit and rebuild against the canonical 10-attribute set.
+**Verdict:** Non-Player Character stat blocks were compiled against an earlier attribute schema. All named Non-Player Character stat blocks require audit and rebuild against the canonical 10-attribute set.
 
-`[EDITORIAL: NPC stat block rebuild is mechanical (not creative) — Claude may execute once canonical Composure/Debate/Officer attribute decisions are received. No content decisions required beyond the editorial flags above.]`
+`[EDITORIAL: Non-Player Character stat block rebuild is mechanical (not creative) — Claude may execute once canonical Composure/Debate/Officer attribute decisions are received. No content decisions required beyond the editorial flags above.]`
 
 ---
 
@@ -204,8 +204,8 @@ The following were verified and found compliant:
 - §5.9 CD track: correctly named, correctly scaled (0–20), no Taint contamination
 - §5.8 Three-Dimensional Co-Movement: correctly implements inseparability
 - §4.5 Intelligibility / §4.6 Certainty: correctly differentiated and mechanised
-- §12.6 GM as Rendering Engine: philosophically correct
-- §14.5 Three-Clock Feedback Loop: correctly frames TT over-draw (P-07)
+- §12.6 Game Master as Rendering Engine: philosophically correct
+- §14.5 Three-Clock Feedback Loop: correctly frames Thread Tension over-draw (P-07)
 - §4.4 Devout Constraint: correctly mechanises P-08 without suppression framing
 - §5.6 Past-Oriented Pulling: correctly mechanises P-09 (messy, costly, detectable)
 
@@ -223,10 +223,10 @@ The following were verified and found compliant:
 - §10.3 + §10.4 + §4.3: Heart → Spirit (Inspiration cap and acquisition checks)
 
 **Blocked pending editorial decisions:**
-- Composure formula (Issue 3): affects §4.11, §9.1, §10.3 Composure row, §13.x NPC stat blocks, §16.1 Glossary
+- Composure formula (Issue 3): affects §4.11, §9.1, §10.3 Composure row, §13.x Non-Player Character stat blocks, §16.1 Glossary
 - Debate pool attribute (Issue C-2): affects §9.1 Rattled effect, §9.6–9.8 social pools
 - Battle Engine: Officer Heart + Coordination (Issue C-3)
-- CE-triggered TS growth attribute (Issue C-5)
-- NPC stat block rebuild (Issue C-6): blocked by all above
+- Combat Endurance-triggered Thread Sensitivity growth attribute (Issue C-5)
+- Non-Player Character stat block rebuild (Issue C-6): blocked by all above
 
 **Editorial gate count:** 5 decisions required (Issues 3, C-2, C-3, C-5, §5.10 name confirmation)
