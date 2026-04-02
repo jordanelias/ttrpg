@@ -1399,13 +1399,13 @@ editorial_decisions:
     decision: null
     tags: [personal_combat, ranged, dodge, precedent_bw]
 
-  - id: ED-064
+  - id: ED-077
     date_flagged: 2026-04-02
     date_resolved: null
     source: simulation
     source_file: tests/sim_bg_01.md
     description: "Hafenmark Wealth sink: no mechanic for Wealth above 5 outside Military/Fortify. Wealth ceiling hit Season 1 on Overwhelming Trade opening. Confirm intended or design sink mechanic."
-    full_flag_text: "[EDITORIAL: ED-064 — Hafenmark Wealth sink: Trade ceiling hit S1 Overwhelming. Design Wealth sink or confirm ceiling is intended.]"
+    full_flag_text: "[EDITORIAL: ED-077 — Hafenmark Wealth sink: Trade ceiling hit S1 Overwhelming. Design Wealth sink or confirm ceiling is intended.]"
     status: open
     priority: P2
     decision: null
