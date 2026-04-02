@@ -174,21 +174,21 @@ After any session where design work was done:
 | Description | Source File | Priority | Tags |
 |-------------|-------------|----------|------|
 | ST-BG-01: Overwhelming threshold (Ob+1 vs 2×Ob) | bg_v05_simulation_and_patches.md | P1 | board_game, dice |
-| ST-BG-05: TC 80 seizure scope (declared target vs all-territory) | bg_v05_simulation_and_patches.md | P1 | board_game, church |
+| ST-BG-05: Thread Coherence 80 seizure scope (declared target vs all-territory) | bg_v05_simulation_and_patches.md | P1 | board_game, church |
 | ST-INT-02: Commander bonus formula (three conflicting formulas) | bg_v05, mass_battle_v3 | P1 | mass_combat, hybrid, commander |
-| ST-INT-07: Ceiral Ritual RS gain vs Co-Movement scale | bg_v05, mass_battle_v3 | P2 | threadwork, hybrid, scaling |
+| ST-INT-07: Ceiral Ritual Rendering Stability gain vs Co-Movement scale | bg_v05, mass_battle_v3 | P2 | threadwork, hybrid, scaling |
 | ST-INT-08: Muster output in BG context (Str=2 off token scale) | bg_v05, mass_battle_v3 | P2 | board_game, hybrid, muster |
 | ST-INT-12: Altonian invasion unit stats BLOCKER | bg_v05, mass_battle_v3 | P1-BLOCKER | hybrid, mass_combat, altonia |
 | ST-MB-01: Volley TN 6 vs universal TN 7 | mass_battle_v3.md | P1 | mass_combat, volley |
 | ST-MB-02: Coherence undefined as mass battle stat | mass_battle_v3.md | P1 | mass_combat, threadwork, coherence |
 | ST-INT-04: Military seasonal cap pooled vs separate | bg_v05, mass_battle_v3 | P2 | board_game, hybrid, military |
 | P2-B11-13: Artillery Balanced disposition lock (intentional?) | stage8_combat.md | P3 | mass_combat, artillery |
-| P2-B11-19: TT 80+ effect in mass battle | stage8_combat.md | P2 | mass_combat, threadwork |
+| P2-B11-19: Thread Tension 80+ effect in mass battle | stage8_combat.md | P2 | mass_combat, threadwork |
 | Debate: Can accused have corroborators in Church Tribunal? | debate_system_redesign_v1.md | P2 | debate, church |
 | Debate: Obscuring as pure denial/Doubt Marker — confirm design intent | debate_system_redesign_v1.md | P1 | debate, orientation |
 | Debate: Niflhel social mode (what can they do if excluded?) | debate_system_redesign_v1.md | P2 | debate, niflhel |
 | Debate: Genre pivot mid-debate — permitted? penalised? | debate_system_redesign_v1.md | P2 | debate, genre |
-| ST-TW-01: W-24 Object scale under-costed (free RS/Coherence?) | threadwork_redesign_v25.md | P2 | threadwork, combat |
+| ST-TW-01: W-24 Object scale under-costed (free Rendering Stability/Coherence?) | threadwork_redesign_v25.md | P2 | threadwork, combat |
 
 Consolidate new Niflhel debate item with ED-008.
 Consolidate ST-INT-02 commander bonus with ED-018.

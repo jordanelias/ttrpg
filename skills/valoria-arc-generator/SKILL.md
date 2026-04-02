@@ -4,7 +4,7 @@ description: >
   Generate emergent campaign arcs for Valoria — causal chains that emerge
   from mechanical systems running in parallel, not scripted plot. Use whenever
   the user asks for: emergent arcs, campaign arcs, narrative arcs, scenario
-  chains, "what arcs come out of X mechanic", "arcs involving NPC Y", or
+  chains, "what arcs come out of X mechanic", "arcs involving Non-Player Character Y", or
   "what happens when Z system runs". Also trigger when the user asks how
   mechanics combine, what factions generate naturally, or how the world evolves
   without player intervention. Always use this skill rather than generating
@@ -34,14 +34,14 @@ Before generating, read the following in this order. Stop reading a file once yo
 3. `compilation/stage12_campaign_modes.md` — session structure, endgame indicators, clock synchronisation
 
 **Read if arcs involve Thread mechanics:**
-- `designs/threadwork_redesign_v25.md` — Coherence, RS, Leap, operations, co-movement
+- `designs/threadwork_redesign_v25.md` — Coherence, Rendering Stability, Leap, operations, co-movement
 - `canon/Valoria_Philosophical_Foundations.md` §1–2 only (inseparability, scale principle)
 
 **Read if arcs involve social/debate:**
 - `designs/debate_system_redesign_v1.md` — quaestio structure, asymmetric proceedings, genre resonance
 
 **Read if arcs involve mass battle:**
-- `designs/mass_battle_v3.md` — CR, Cohesion, Thread in battle, co-movement at scale
+- `designs/mass_battle_v3.md` — Coherence Rating, Cohesion, Thread in battle, co-movement at scale
 
 **Read if arcs involve specific NPCs:**
 - `compilation/stage13_npcs.md` — Beliefs, Resonant Styles, trigger conditions, mechanical profiles
@@ -62,14 +62,14 @@ Before generating, read the following in this order. Stop reading a file once yo
 **Emergence standard:** Each arc must satisfy: *no single player decision caused this; it required multiple independent systems running simultaneously.* If a single player choice is sufficient to explain the arc, it is a plot hook, not an emergent arc.
 
 **Canon constraints (non-negotiable):**
-- Niflhel does not harvest threads. Never attribute RS drain to Niflhel operations.
-- All three clock dimensions (RS, TC, IP) are independent. Do not treat them as the same system.
+- Niflhel does not harvest threads. Never attribute Rendering Stability drain to Niflhel operations.
+- All three clock dimensions (Rendering Stability, Thread Coherence, Institutional Pressure) are independent. Do not treat them as the same system.
 - Ethical framework penalties apply to factions, not players directly — players have no framework penalty unless they are operating as a faction leader.
 - Seasonal cap: ±2 per faction stat per season regardless of Domain Action count.
 
 **Scope:** Keep arcs to systems already compiled or in experimental designs. Do not invent mechanics. If a mechanic needed for an arc has a known gap (GAP-ARC-01 or similar), note the gap inline rather than assuming a value.
 
-**NPC fidelity:** When named NPCs appear, use their documented Beliefs, Resonant Styles, and trigger conditions exactly. Do not invent NPC motivations. If NPC data is needed and not in stage13, flag it with [EDITORIAL].
+**Non-Player Character fidelity:** When named NPCs appear, use their documented Beliefs, Resonant Styles, and trigger conditions exactly. Do not invent Non-Player Character motivations. If Non-Player Character data is needed and not in stage13, flag it with [EDITORIAL].
 
 **Editorial gate:** Any arc that requires a worldbuilding or narrative decision not resolvable from existing documents must be flagged: `[EDITORIAL: requires user approval — description]`.
 

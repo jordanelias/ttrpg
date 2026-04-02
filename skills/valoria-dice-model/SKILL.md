@@ -3,7 +3,7 @@ name: valoria-dice-model
 description: >
   Statistical modeling of Valoria dice mechanics: single-pool success probabilities,
   outcome distributions, opposing rolls (combat offence vs defence), pool split
-  optimization, Fibonacci bonus marginal value, TN shift impact, and Momentum EV.
+  optimization, Fibonacci bonus marginal value, TN shift impact, and Momentum Expected Value.
   ALWAYS use this skill when any Valoria task requires probability tables, expected
   values, P(success/partial/failure), combat odds, or balance analysis of pool sizes.
   Trigger on: "probability", "expected value", "odds", "how often does X succeed",
@@ -121,7 +121,7 @@ def optimal_split(total: int, atk_tn: int, opp: int, opp_tn: int = 7,
 
 def fibonacci_marginal(base_pool: int, tn: int, ob: int,
                        max_attackers: int = 8, trials: int = 100_000) -> List[Dict]:
-    """EV gain from Fibonacci group bonus dice. Bonus: 2→+1, 3→+2, 5→+3, 8→+5."""
+    """Expected Value gain from Fibonacci group bonus dice. Bonus: 2→+1, 3→+2, 5→+3, 8→+5."""
     bonus_map = {1: 0, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 3, 8: 5}
     rows = []
     base = outcome_probs(base_pool, tn, ob, trials)
@@ -157,7 +157,7 @@ def quick_check(n: int, tn: int, ob: int) -> str:
     p = outcome_probs(n, tn, ob, 100_000)
     return (f"Pool {n} TN{tn} Ob{ob}: "
             f"Overwhelm {p['overwhelming']:.1%} | Success {p['success']:.1%} | "
-            f"Partial {p['partial']:.1%} | Fail {p['failure']:.1%} | EV {pool_ev(n,tn):.2f}")
+            f"Partial {p['partial']:.1%} | Fail {p['failure']:.1%} | Expected Value {pool_ev(n,tn):.2f}")
 ```
 
 ---
@@ -183,7 +183,7 @@ def quick_check(n: int, tn: int, ob: int) -> str:
 **Procedure:**
 1. Run `opposing_roll(ap, atn, dp, dtn)`.
 2. Sweep: vary one pool from 3–12 while holding the other fixed.
-3. Output: P(attacker wins), P(defender wins), P(tie), EV margin per configuration.
+3. Output: P(attacker wins), P(defender wins), P(tie), Expected Value margin per configuration.
 4. Identify crossover point where attacker win probability drops below 50%.
 
 ### Task 4 — Pool Split Optimizer

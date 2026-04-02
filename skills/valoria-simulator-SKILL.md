@@ -10,12 +10,12 @@ Stress testing: probability analysis, state tracking, edge case discovery, cover
 
 ```
 Test ID: SIM-[NNN]
-Mechanics: M-xxx, M-yyy | Mode: TTRPG/BG/HYB | Temporal: PAST/PRES/FUT/CROSS
+Mechanics: M-xxx, M-yyy | Mode: TTRPG/BG/Hybrid | Temporal: PAST/PRES/FUT/CROSS
 Tracks: [all touched] | Factions: [all involved] | NPCs: [named or "Generic [Faction]"]
 Archetypes: [all represented]
 ```
 
-Track codes: TT, TC, IP, TS, TD, INT, CERT, COMP, TLK, PI, DD, CE, FSTAT
+Track codes: Thread Tension, Thread Coherence, Institutional Pressure, Thread Sensitivity, Thread Depth, Composure, Public Instability, Rendering Stability — plus system-specific tracks defined in the relevant params file. [GAP: CERT, TLK, DD, Combat Endurance, FSTAT, INT — full names not confirmed in any design doc; remove from tracking list until defined]
 
 ## Modes
 
@@ -30,7 +30,7 @@ Complete game situation with mandatory state tracking every step:
 ```
 ## State: [Round/Phase/Season N]
 [Name] — [10 attrs], Health/Wounds/Composure, Pools, Conditions
-Tracks: TT/TC/IP + practitioner tracks if applicable + faction stats if applicable
+Tracks: Thread Tension/Thread Coherence/Institutional Pressure + practitioner tracks if applicable + faction stats if applicable
 ## Action: [description]
 Pool: [N]D TN[N] Ob[N] — P(Overwhelming/Success/Partial/Failure) — Expected net: [N]
 ### Most likely outcome → resolve → State Delta → Findings
@@ -45,18 +45,18 @@ Update `tests/coverage_matrix.md` (root, canonical copy) after every run.
 | Test ID | Mechanics | Mode | Temporal | Tracks | Factions | NPCs | Archetypes | Status | Findings |
 ```
 
-### F — NPC Stress Test
-Per NPC: load profile → run defining scenario → run cross-faction interaction → track what breaks/degenerates/creates compelling play.
+### F — Non-Player Character Stress Test
+Per Non-Player Character: load profile → run defining scenario → run cross-faction interaction → track what breaks/degenerates/creates compelling play.
 
-**NPC minimum scenarios:**
+**Non-Player Character minimum scenarios:**
 
-| NPC | Unique Mechanics | Min |
+| Non-Player Character | Unique Mechanics | Min |
 |-----|------------------|-----|
-| Almud | Elevated TS, political paralysis, succession trigger | 2 |
-| Lenneth | Covert networks, scholarly TS, Revolution endowment | 2 |
+| Almud | Elevated Thread Sensitivity, political paralysis, succession trigger | 2 |
+| Lenneth | Covert networks, scholarly Thread Sensitivity, Revolution endowment | 2 |
 | Torben | Loyalty Clock, tutoring demand, covert contact, retrieval | 2 |
 | Elske | Conviction split, multi-faction recruitment, independence | 2 |
-| Himlensendt | Devout Constraint (sincere), TC driver, expansion | 2 |
+| Himlensendt | Devout Constraint (sincere), Thread Coherence driver, expansion | 2 |
 | Olafsson | Cardinal mechanics, Church politics | 1 |
 | Klapp | Cardinal mechanics, intelligence ops | 1 |
 | Baralta | Devout + legalist, jurisdiction vs Confessor | 2 |
@@ -94,8 +94,8 @@ Call the appropriate submode; do not use generic Mode C for these.
 State block per unit group:
 ```
 ## State: Season N / Battle Round N
-[Unit] — Type, Size, Morale, Wounds, Commander TS/TD
-Clocks: TC=[N] | Seasonal Stability=[N]
+[Unit] — Type, Size, Morale, Wounds, Commander Thread Sensitivity/Thread Depth
+Clocks: Thread Coherence=[N] | Seasonal Stability=[N]
 ## Action: [manoeuvre]
 Pool: [N]D TN[N] Ob[N] → outcome
 ### Casualties → Morale check → Routing condition? → State Delta
@@ -119,7 +119,7 @@ Flag: debate that terminates in <3 rounds at median pools (too fast → P2), deb
 State block:
 ```
 ## Thread Operation
-Practitioner — TS=[N], TD=[N], Coherence=[N], Active Knots=[list]
+Practitioner — Thread Sensitivity=[N], Thread Depth=[N], Coherence=[N], Active Knots=[list]
 Operation: [type] | Target: [thread descriptor]
 Co-movement: Temporal auto-effect=[N] | Epistemic=[N] | Actual=[N]
 Pool: [N]D TN[N] Ob[N] → outcome
@@ -136,7 +136,7 @@ State block:
 Resolution: [roll or auto] → effect
 ### Faction stat change → Clock impact → Inter-faction consequence → State Delta
 ```
-Run full seasonal cycle: all 8 factions + Schoenland AI. Track: clock accumulation rates, faction collapse conditions, first-mover advantages, dominant strategies.
+Run full seasonal cycle: all 8 factions + Schoenland Non-Player Character artificial intelligence. Track: clock accumulation rates, faction collapse conditions, first-mover advantages, dominant strategies.
 Flag: any faction with no viable domain action at median stats (→ P1), any clock that reaches threshold in <3 seasons without player action (→ P2).
 
 **G5 — Board Game Mode**
@@ -147,7 +147,7 @@ Flag: any turn sequence exceeding 8 minutes at median play speed → P2. Any pla
 ### H — Substitution Analysis
 Test whether NPCs and factions can be mechanically substituted without breaking scenarios.
 
-**Per named NPC:** Run their defining scenario once with the canonical NPC, once with a Generic [Faction] substitute. Compare: outcome distribution, mechanical pressure points, narrative branch availability. Flag if substitution produces meaningfully different mechanical outcomes (→ NPC's mechanics are load-bearing, note it) or identical outcomes (→ NPC mechanics are cosmetic, flag as P3 simplification candidate).
+**Per named Non-Player Character:** Run their defining scenario once with the canonical Non-Player Character, once with a Generic [Faction] substitute. Compare: outcome distribution, mechanical pressure points, narrative branch availability. Flag if substitution produces meaningfully different mechanical outcomes (→ Non-Player Character's mechanics are load-bearing, note it) or identical outcomes (→ Non-Player Character mechanics are cosmetic, flag as P3 simplification candidate).
 
 **Per faction:** Run one seasonal cycle with canonical faction, once with a faction swapped to adjacent political position. Flag: scenarios that only work with specific faction identity → document as hard dependency.
 
@@ -254,7 +254,7 @@ Count per single resolution:
 
 Score: total count. Flag at ≥ 5 (borderline), ≥ 7 (problem), ≥ 9 (redesign).
 
-Compare against precedent: BW Duel of Wits = 6, TI4 combat = 4, D&D 5e spell slot combat = 5.
+Compare against precedent: Burning Wheel Duel of Wits = 6, TI4 combat = 4, D&D 5e spell slot combat = 5.
 
 **Time estimate (human minutes at table):**
 - Novice (first 3 sessions): N minutes per resolution
@@ -363,7 +363,7 @@ Produces a branching flowchart for a defined scenario seed. This mode generates 
 State: [all relevant tracks]
 Branch conditions: [what determines which path fires]
 
-  ├── BRANCH A: [condition — e.g. "Church TC ≥ 40 at season start"]
+  ├── BRANCH A: [condition — e.g. "Church Thread Coherence ≥ 40 at season start"]
   │   State delta: [what changes]
   │   → NODE A1: [next event]
   │       Branch conditions: [next split]
@@ -376,15 +376,15 @@ Branch conditions: [what determines which path fires]
   │   State delta: [what changes]
   │   → NODE B1: [next event]
   │
-  └── BRANCH C: [condition — e.g. "PC intervenes"]
+  └── BRANCH C: [condition — e.g. "Player Character intervenes"]
       State delta: [what changes]
       → NODE C1: [next event]
 ```
 
 **Rules for Mode M:**
-- Minimum 3 branch conditions per node (usually: high roll / median roll / low roll, OR faction A wins / faction B wins / stalemate, OR PC intervenes / PC observes / PC is absent)
+- Minimum 3 branch conditions per node (usually: high roll / median roll / low roll, OR faction A wins / faction B wins / stalemate, OR Player Character intervenes / Player Character observes / Player Character is absent)
 - Minimum 3 nodes deep before reaching terminal states
-- Terminal states labeled: STABLE / UNSTABLE (escalates) / COLLAPSE / PC-DEPENDENT (requires player action to resolve)
+- Terminal states labeled: STABLE / UNSTABLE (escalates) / COLLAPSE / Player Character-DEPENDENT (requires player action to resolve)
 - Every node must track: relevant clock values, which NPCs are present/affected, which mode is active, and any pending editorial items
 - Flag any branch that produces an undefined state (no rule covers it) as `[GAP: ...]`
 - Flag any branch that produces the same terminal state regardless of player action as `[DEAD BRANCH — player agency lost]`

@@ -52,7 +52,7 @@ Per principle: PRESENT / ALTERED (with justification) / ABSENT
 
 
 ### F — Playtest Burden Analysis
-Per mechanic or procedure: measure cost imposed on players and GM at the table.
+Per mechanic or procedure: measure cost imposed on players and Game Master at the table.
 
 **Per mechanic, produce:**
 
@@ -69,11 +69,11 @@ Per mechanic or procedure: measure cost imposed on players and GM at the table.
 **Output:** `playtest_burden.md` — `| Mechanic | Time(s) | Lookups | Tracking | Decisions | Load | Flag |`
 
 ### G — Cross-Mode Consistency
-Test that each mechanic behaves correctly when the session switches mode (TTRPG → BG → HYB).
+Test that each mechanic behaves correctly when the session switches mode (TTRPG → BG → Hybrid).
 
 **Per mechanic with mode tags:**
 1. Identify which modes it appears in.
-2. For each mode pairing (TTRPG↔BG, TTRPG↔HYB, BG↔HYB): does the mechanic change? If yes — is the change documented? Is the transition procedure defined?
+2. For each mode pairing (TTRPG↔BG, TTRPG↔Hybrid, BG↔Hybrid): does the mechanic change? If yes — is the change documented? Is the transition procedure defined?
 3. Check transition point mechanics specifically: what triggers a mode switch, what state is preserved, what resets.
 
 **Flag:** Mechanic present in 2+ modes with no documented transition procedure → P1. Mechanic behaves differently across modes with no explanation → P2.

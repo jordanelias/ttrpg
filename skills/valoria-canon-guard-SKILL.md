@@ -12,15 +12,15 @@ Validate mechanics, rules, or content against the Philosophical Foundations. Thi
 |----|-----------|----------|
 | P-01 | Inseparability: all three dimensions co-move | Every thread op → mandatory secondary consequences? |
 | P-02 | Ein Sof = infinite positive being | Ground framed as fullness, not void/chaos? |
-| P-03 | Rendering = consciousness-performed | GM as rendering engine? Information asymmetry mechanical? |
+| P-03 | Rendering = consciousness-performed | Game Master as rendering engine? Information asymmetry mechanical? |
 | P-04 | Monstrosity = ontological, not moral | Rendering failures, not evil? |
 | P-05 | Three emergence modes mechanically distinct | Modes 1/2/3 have distinct stat blocks? |
 | P-06 | Threadcut = is without becoming | Maintained via Thread work? Past-Pull → auto-Gap? No Taint? |
-| P-07 | Calamity = rendered-side | TT implies over-drawing, not ground responsiveness? |
+| P-07 | Calamity = rendered-side | Thread Tension implies over-drawing, not ground responsiveness? |
 | P-08 | Barrier = inaccessibility, not suppression | Knowledge = "religious poetry"? Church reinforces, doesn't cause? |
 | P-09 | Memory pulling = messy, costly, detectable | Not clean eraser? Orphaned configurations? |
 | P-10 | Epistemic seduction = perceptual shift | Dissolving categories, not corruption? |
-| P-11 | TD universal | ALL thread ops produce TD? |
+| P-11 | Thread Depth universal | ALL thread ops produce Thread Depth? |
 | P-12 | Relational contagion via knotting | Transformation propagates through Knots? |
 | P-13 | Forgetting = rendering failure | Southernmost knowledge untransmittable to non-sensitives? |
 | P-14 | All modes express inseparability | Co-movement in all play modes? |

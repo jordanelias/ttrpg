@@ -5,7 +5,7 @@ Route ALL Valoria project tasks. ALWAYS invoke for ANY request involving:
 simulation, combat, threadweaving, social mechanics, mass battle, board game,
 hybrid mode, compilation, assembly, checkpoint, audit, consistency, canon,
 philosophy, editorial decisions, gap register, patches, stress testing, dice,
-probability, coverage, session management, NPC mechanics, faction mechanics,
+probability, coverage, session management, Non-Player Character mechanics, faction mechanics,
 territory, clocks, or any reference to the Valoria ruleset. This is the
 single entry point for all Valoria work — no other skill triggers directly.
 
