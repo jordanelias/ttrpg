@@ -1,39 +1,61 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_PIPELINE_VERIFIED
-phase: Phase 6 — Pipeline review, clarity fixes, viability confirmed
+session_id: 2026-04-02T_FINAL_REVIEW
+phase: Phase 7 — Canon, clarity, canonical sources, project instructions
 status: CLOSED
 
 ## SESSION SUMMARY
 
-### Pipeline review findings (4 blocking, 5 warnings, 1 note)
+### Canon-guard analysis
+- Amendment 01 (self-rendering) introduces three-layer being-persistence; Leap redefined; Coherence 0 TS-gated branching
+- These were NOT in P-01-P-14. P-15 added to canon/02_canon_constraints.md
+- Canon-guard updated with amendment integration workflow (auto-runs when any canon file changes)
+- Canon-guard now reads canonical_sources.yaml to determine which document to validate
 
-Blocking — all fixed:
-- [1] Simulator Mode I: duplicate Step 7 → renumbered to Step 8
-- [2] Skill registry: described non-existent Tier1/2/2.5 simulation skills — rewritten to reflect actual GitHub skills with simulation command routing table
-- [3] State transfer spec: section 5 heading still said UNRESOLVED after ED-050 resolution — fixed
-- [4] Simulator Mode G2: used old Rhetoric pool terminology — updated to (Presence×2)+History, Conviction Track, genre/orientation framing
+### Version authority
+- references/canonical_sources.yaml created — maps every system to canonical source
+- Rule: compilation_current:false = use design doc; compilation_current:true = compilation is correct
+- Key reversals: combat and mass_combat now point to designs/ not compilation stage8
+- simulator Read Protocol updated to check canonical_sources.yaml first (Step 0)
 
-Warnings — all fixed:
-- [W1] Simulator version check referenced compilation/README.md — replaced with params version tag check
-- [W2] Canon-guard path: canon/canon_constraints.md → canon/02_canon_constraints.md
-- [W3] Compiler: old gap register reference → canon/editorial_ledger.yaml; output path fixed; designs-first note added
-- [W4] Mechanic-audit Mode G: incomplete path to state_transfer_spec → full path added
-- [W5] Session protocol: stale filename valoria_session_log.md → session_log_current.md
+### Params fixes
+- params_combat: source corrected to designs/combat/combat_design_v1.md
+- params_mass_combat: source corrected (combat_design_v1 + mass_battle_v3)
+- params_scale_transitions: version tag updated (stage11 updated April 2)
 
-Note — communicated:
-- Propagation map broken-dependency detection is described but not executable code; honest limitation
+### Token efficiency
+- The params abstraction IS working correctly. Skills read params (compact) not design docs (verbose).
+- Simulator trimmed from 441 to 432 lines (duplicate version check removed).
+- Efficiency note added to project instructions.
 
-### Pipeline viability: CONFIRMED
-12/12 checks passing after fixes.
+### Project instructions
+- project_instructions.md rewritten. Key changes:
+  - Removed "check Project Files first" (Project Files deprecated)
+  - Added canonical_sources.yaml reference
+  - Added simulation command vocabulary table
+  - Added audit criteria coverage statement
+  - Updated model routing table
+  - Added compilation rules (lowest priority, when to compile)
+  - Added open blockers summary
 
-### Commits this session:
-- e4a276e: all pipeline fixes (skill_registry, simulator, audit, canon-guard, compiler, editorial-register, session_protocol, state_transfer_spec, propagation_map)
-- 74836d8: first pass compilation/README fix
-- 1a6ea6a: complete compilation/README removal
+### Pipeline status
+- 5/5 questions: YES (with honest note on broken-dependency detection)
+- 12/12 checks passing
+- All critical issues from review resolved
+
+### Remaining honest limitations
+- Propagation map broken-dependency detection: described but not executable code
+- SIM-DEBT-01: debate calibration needs re-simulation with Presence×2 pool
+- ED-048: Ceiral non-canon name in 22 files — awaiting canonical name from user
 
 ### next_action:
-  task: "Run first simulation. Recommend: stress test debate (SIM-DEBT-01 — re-calibrate Presence×2 pool). Use simulator Mode G2 + Mode J (cognitive load) + Mode L (precedent)."
-  note: "Pipeline is verified and ready. Every criteria dimension covered. All blocking issues resolved. Propagation is automatic."
+  task: "Run simulations. Priority: (1) stress test debate (SIM-DEBT-01), (2) stress test combat, (3) simulate hybrid scenario."
+  note: "Pipeline verified and documented. Project instructions ready. Begin simulation work next session."
+
+### commits_this_session:
+  - a96161: simulation infra modes J/K/L/M (prior)
+  - e4a276e: pipeline clarity fixes (prior)
+  - 74836d8, 1a6ea6a: version check fixes (prior)
+  - bf2917b: canonical_sources + P-15 + project_instructions (this close)
 ```
