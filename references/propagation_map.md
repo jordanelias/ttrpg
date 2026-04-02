@@ -32,11 +32,24 @@ For each new cross-reference:
 2. If the relationship is bidirectional, add it in both directions.
 3. Update `references/file_index.md` `referenced_by` column for both files.
 
-### Step C — Stale detection
-After adding new entries, scan all existing entries:
-- If a file listed in `depends_on` no longer exists: mark `[BROKEN DEPENDENCY]`
-- If a file in `propagation_targets` no longer exists: mark `[BROKEN TARGET]`
-- Report broken entries in commit message as `[PROP-BROKEN: entry]`
+### Step C — Stale detection (executable)
+Run `tools/broken_dependency_checker.py` before closing any commit.
+
+```bash
+export GITHUB_PAT=<pat>
+python3 tools/broken_dependency_checker.py
+```
+
+The script:
+1. Fetches the full repository file tree from GitHub
+2. Scans propagation_map.md, canonical_sources.yaml, skill_registry.md, and editorial_ledger.yaml
+3. Reports every file reference that does not exist in the repo
+4. Exits 1 if any broken dependency found; 0 if clean
+
+If broken dependencies are found:
+- Do NOT close the commit until resolved
+- Either fix the reference (update the path) or add `[BROKEN-DEP: path — reason]` to the commit message with an explanation
+- Update the BROKEN DEPENDENCIES section of this file
 
 ### Step D — Commit
 Include the updated propagation_map.md in the same atomic commit as all other changed files.
@@ -181,3 +194,5 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 ---
 
 *This map is updated in every commit that touches any file listed here. It is never updated manually in isolation — always part of an atomic commit containing the files being linked.*
+
+*`tools/broken_dependency_checker.py` scans this map and others for broken refs. Run it as part of Step C before every commit closes.*

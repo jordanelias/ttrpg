@@ -4,6 +4,37 @@
 
 ---
 
+## BOOTSTRAP (Run First — Every Session)
+
+```python
+# Step 1: Set PAT (from Claude Project Instructions — never commit this)
+import os
+os.environ['GITHUB_PAT'] = '<PAT from Claude Project Instructions>'
+
+# Step 2: Bootstrap github_ops.py via REST (one-time per session)
+import urllib.request, json, base64
+PAT = os.environ['GITHUB_PAT']
+req = urllib.request.Request(
+    'https://api.github.com/repos/jordanelias/ttrpg/contents/skills/valoria-orchestrator/scripts/github_ops.py?ref=main',
+    headers={'Authorization': f'token {PAT}', 'Accept': 'application/vnd.github.v3+json'}
+)
+with urllib.request.urlopen(req) as r:
+    d = json.loads(r.read())
+    open('/home/claude/github_ops.py', 'w').write(base64.b64decode(d['content']).decode())
+
+# Step 3: All subsequent reads via GraphQL (token-efficient batch reads)
+import sys; sys.path.insert(0, '/home/claude')
+import github_ops as g  # now available
+# g.read_files_graphql([list of paths]) — one API call for N files
+# g.atomic_commit(additions, deletions, message) — one API call for N file writes
+```
+
+**PAT location:** Claude Project Instructions (not in any committed file). Copy from there.
+**GraphQL:** Use `g.read_files_graphql()` for ALL file reads after bootstrap. Never use individual REST calls for batch reads.
+**Writes:** Use `g.atomic_commit()` exclusively — never individual file PUTs.
+
+---
+
 ## What This Project Is
 
 Valoria is a tabletop roleplaying game / board game / hybrid playable in all three modes. All three modes are mechanically grounded in the TTRPG baseline — Hybrid bridges them, Board Game abstracts to strategic scale.
@@ -169,3 +200,62 @@ Compilation reads FROM `canonical:` docs in `canonical_sources.yaml` and writes 
 
 All other editorial items are non-blocking for simulation.
 **SIM-DEBT-01:** Debate stress tests calibrated with Cognition+History pool; now (Presence×2)+History. Re-simulation needed before calibration values are treated as final.
+---
+
+## Skeleton Ruleset Principle
+
+**Design documents (`designs/`) must be mechanical specifications only.** No explanatory prose, no historical context, no "why we designed it this way." Those belong in compilation or separate reference documents.
+
+A skeleton ruleset contains:
+- Tables (weapon stats, armour DR, degree table, phase structure)
+- Formulas (pool = X, damage = Y)
+- Procedures (numbered steps)
+- Edge case rulings (one sentence each)
+- Cross-references to other files
+
+A skeleton ruleset does NOT contain:
+- Historical precedent (Scholastic disputatio, etc.) → reference doc or compilation
+- Philosophical motivation → compilation or canon
+- Design rationale prose → compilation
+- Patch history → `references/params_[system]_history.md`
+
+**Flag for splitting:** Any design doc over 400 lines likely has non-skeleton content. Flag it as `[SKELETON-DEBT: file — contains explanatory content at lines N-M]` when encountered.
+
+---
+
+## Container Pattern
+
+Every file in the pipeline is a **container** — it contains values and points to related containers:
+
+```
+Skill
+  └─ references params file (mechanical values only)
+       ├─ patch_history: references/params_[system]_history.md
+       ├─ canonical_sources: references/canonical_sources.yaml
+       └─ (if value missing) → canonical source document
+```
+
+**params files** contain: headers, formula tables, key value tables, stale flags. Nothing else.
+**params_history files** contain: all patches applied, pending editorials, SIM-DEBT items.
+**canonical_sources.yaml** contains: which document is canonical per system.
+**propagation_map.md** contains: cross-reference relationships between files.
+
+This means simulations stay fast (params are compact), history is preserved (history files), and canonical authority is unambiguous (canonical_sources.yaml).
+
+**Commit protocol for params:** When a patch changes mechanical values:
+1. Update `references/params_[system].md` (values only)
+2. Append the patch summary to `references/params_[system]_history.md`
+3. Include both in the same atomic commit
+
+---
+
+## Broken Dependency Check
+
+Before closing any commit, run:
+```bash
+export GITHUB_PAT=<pat>
+python3 tools/broken_dependency_checker.py
+```
+
+Exit 0 = clean. Exit 1 = broken references. Fix before committing.
+
