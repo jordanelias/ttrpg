@@ -1,38 +1,34 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_SIM_PROJ_01
-phase: Phase 11c — SIM-PROJ-01 (projectile category cross-mode stress test)
-status: CLOSED
+session_id: 2026-04-02T_BG_SIM_01
+phase: SESSION CLOSED
+status: COMPLETE
 
-completed:
-  - SIM-PROJ-01: Modes A + K1 + D + J + L + I. Commit: d293184
-  - PP-105: TTRPG personal combat projectile weapons (LP/HP/LBl). Ranged combat
-    rules: no Defence allocation, Far zone, Close zone penalty, Cover DR, Reload
-    (HP), simultaneous ranged-vs-ranged provisional, sling knife default.
-  - PP-106: HBl Dmg Mod +5→+3 (one-shot fix). Artillery sight-line rule (LoS
-    required; Line formation screens block shots).
+completed_this_session:
+  - SIM-BG-01: BG mode simulation Modes G5 + D + J (3-player full turn sequence, edge cases, cognitive load). 8 findings. Output: tests/sim_bg_01.md.
+  - PP-169: params_board_game — phase structure, order priority, unit Muster Ob table, faction capitals, Order token rules extracted from compilation B4/B6/B3.
+  - PP-170: params_board_game — Parliamentary Manoeuvre Partial=no effect (explicit ruling); Failure=Mandate -1.
+  - ED-064: Hafenmark Wealth sink undefined (P2).
+  - ED-065: Novice planning time P1 (~12 min/player). Requires design decision before playtesting.
+  - ED-066: Mandate recovery mechanism undefined in BG spec (P2).
 
-p1_findings_resolved:
-  - F-PROJ-01: HBl one-shot → PP-106
-  - F-PROJ-04: No personal projectile stats → PP-105
-  - F-PROJ-08: No Cavalry intercept window vs Artillery → PP-106 sight-line
-  - F-PROJ-03: BG projectile abstraction → ED-064 (design decision pending)
+open_editorials_requiring_user_input:
+  - ED-064: Hafenmark Wealth sink — design sink mechanic or confirm ceiling is intended.
+  - ED-065 (P1): Novice play time — confirm simplification approach: (a) preset menus; (b) fewer tokens; (c) action cards (links ED-001).
+  - ED-066: Mandate recovery — confirm or design restoration mechanic.
+  - ED-001 (existing P1 blocker): Card-Hand system — still unresolved; blocking compilation sync.
 
-p2_findings_open:
-  - F-PROJ-02: LBl dominated by LP → ED-065
-  - F-PROJ-05: Artillery morale cascade cap → ED-066
-  - ED-067: Dodge action for personal ranged combat (P3)
+remaining_open_P1s_from_sim:
+  - F-03/ED-065: Novice planning time. Design-level issue.
+  - F-06: TC starting value conflict in compilation (stale). Compilation sync blocked by ED-001.
 
-structural_gaps:
-  - GAP-PROJ-01: Ranged vs ranged initiative (PROVISIONAL: simultaneous, high Presence first)
+commits_this_session:
+  - 340847431280b0b81de8f4b56c5e5a60fc08b80b: sim_bg_01 + PP-169/170 + ED-064/065/066
 
-document_versions:
-  - mass_battle_v3.md: v4.4
-  - params_combat.md: v0.14-AUD2
-  - params_mass_combat.md: ST6
-
-next_action:
-  task: "Resolve ED-064 (BG projectile abstraction — design decision). Then ED-065 (LBl differentiation). Then address remaining open EDs from prior sessions."
-  note: "All P1 projectile gaps resolved. Personal combat and mass combat now have complete provisional projectile parameter sets. BG intentionally abstracted pending ED-064 decision."
+next_session_start:
+  priority_1: "Resolve ED-065 (novice play time P1) — user decision on simplification approach."
+  priority_2: "Resolve ED-064 (Hafenmark Wealth sink) and ED-066 (Mandate recovery)."
+  priority_3: "Continue simulate board game — Modes C (full scenario) + L (precedent) + M (narrative flowchart). Recommended seed: Church-Hafenmark tension, TC approaching 40, S6-8."
+  priority_4: "Resolve prior-session items: ED-053 (Composure), GAP-TTRPG-04 (Belief CP)."
 ```
