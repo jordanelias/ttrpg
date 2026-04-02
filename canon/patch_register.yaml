@@ -932,3 +932,52 @@ patches:
   affects: []
   status: approved
   applied_commit: ~
+- id: PP-159
+  date: 2026-04-01
+  severity: P2
+  description: "Sovereign Authority Doctrine Partial result — add defensive social bonus to prevent net-negative expected value"
+  finding_id: "F-ARC31-01 (SIM-ARC31-C01)"
+  source: simulation
+  affects: [stage6_factions.md Hafenmark section]
+  status: proposed
+  applied_commit: ~
+
+- id: PP-160
+  date: 2026-04-01
+  severity: P1
+  description: "Coup Counter evaluation timing — mid-season TC reduction should avert counter increment if TC drops below 41 before seasonal accounting"
+  finding_id: "F-ARC31-04 (SIM-ARC31-C01)"
+  source: simulation
+  affects: [stage8_combat.md §8.9 Coup Counter, stage6_factions.md Löwenritter]
+  status: proposed
+  applied_commit: ~
+
+- id: PP-161
+  date: 2026-04-01
+  severity: P1
+  description: "Mass combat stalemate resolution — add rule: 2 turns no damage → CR check, winner gains Feigned Retreat, double fail → strategic withdrawal"
+  finding_id: "F-ARC31-05 (SIM-ARC31-C01)"
+  source: simulation
+  affects: [designs/mass_combat/mass_battle_v3.md, stage8_combat.md §8.9]
+  status: proposed
+  applied_commit: ~
+
+- id: PP-162
+  date: 2026-04-01
+  severity: P2
+  description: "Thread support scope note — Thread Weaving improves formation metrics but cannot address weapon/armour matchup deadlock; add design note"
+  finding_id: "F-ARC31-07 (SIM-ARC31-C01)"
+  source: simulation
+  affects: [stage8_combat.md §8.9 Thread in Mass Combat]
+  status: proposed
+  applied_commit: ~
+
+- id: PP-163
+  date: 2026-04-01
+  severity: P1
+  description: "TC spike from Southernmost expedition — add player-facing note to §7.2 one-time events table that spike fires before seasonal accounting"
+  finding_id: "F-ARC33-04 (SIM-ARC33-C01)"
+  source: simulation
+  affects: [stage5_clocks.md §7.2, compilation/v0.14/valoria_ruleset_v0.14.md §7.2]
+  status: proposed
+  applied_commit: ~
