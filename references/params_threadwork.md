@@ -1,5 +1,5 @@
-<!-- version: v0.14+design-ST | source: threadwork_redesign_v25.md | last_updated: 2026-04-02 -->
-<!-- PATCHES APPLIED: P-11–P-30 (prior); ST-TW-01–05 added 2026-04-02; Mode index added to source doc -->
+<!-- version: v0.14-AUD1 | source: threadwork_redesign_v25.md | last_updated: 2026-04-02 -->
+<!-- PATCHES APPLIED: P-11–P-30 (prior); ST-TW-01–05 added 2026-04-02; Mode index added to source doc; PP-166 (TD removed, RS=0 lockout, Coherence start confirmed, RS ceiling) -->
 <!-- stage3_thread_operations.md is EMPTY in v0.14. All values from threadwork_redesign_v25.md. -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage3 before use. -->
 
@@ -9,11 +9,23 @@
 | Stat | Range | Description |
 |------|-------|-------------|
 | Thread Sensitivity (TS) | 0–100+ | Perception depth |
-| Thread Depth (TD) | 0–10 | Active engagement depth |
 | Rendering Stability (RS) | 100→0 | World coherence (shared track) |
 | Coherence | 10→0 | Personal rendering stability |
 | Focus | 1–5+ | Contact duration in rounds |
 | Thread Pool Score | Thread Sensitivity ÷ 10 (round down) | Thread Pool Score — added to operation pools |
+
+
+## RS=0 Lockout (PP-166)
+Thread operations **cannot be attempted** when RS = 0. The substrate has no remaining integrity to engage. All Leap eligibility checks fail automatically at RS = 0. RS = 0 triggers the Rupture (shared loss condition — see stage12_campaign_modes §12.2).
+
+## RS Ceiling
+RS maximum: **100**. RS cannot exceed 100 through any restoration effect. If a restoration result would push RS above 100, RS = 100.
+
+## Coherence Starting Value
+Coherence starts at **10** for all characters (confirmed: stage1_core_engine §2.3). Counts down toward 0. Recovery per stage1 derived stats table.
+
+## Thread Depth (TD) — REMOVED (PP-166)
+Thread Depth (TD) was defined in prior params versions as a stat with range 0–10. It does not appear in threadwork_redesign_v25.md or any current operation formula. **TD is a phantom definition from a prior design iteration — it has no mechanical function and is not tracked.** Removed from all params files.
 
 ## Leap Roll
 Pool: Attunement + relevant History bonus + Thread Pool Score | TN: 7

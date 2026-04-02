@@ -1466,3 +1466,35 @@ patches:
   applied_to_version: "v4.1"
   status: applied
   applied_commit: pending
+
+  - id: PP-164
+    date: 2026-04-02
+    status: applied
+    source: AUD-TTRPG-01 Mode B
+    description: "params_core: add attribute range 1–7, 10 attributes listed with Memory/Focus definitions, derived scores table (Health=End+6, Composure=Pres+6, Contact Rounds=Focus, Coherence start=10)"
+    files_changed:
+      - references/params_core.md
+
+  - id: PP-165
+    date: 2026-04-02
+    status: applied
+    source: AUD-TTRPG-01 Modes A+F
+    description: "params_combat: fix Health formula (End+6 not End), Stamina minimum=1 rule, Offence/Defence allocation procedure, wound dual-penalty quantification"
+    files_changed:
+      - references/params_combat.md
+
+  - id: PP-166
+    date: 2026-04-02
+    status: applied
+    source: AUD-TTRPG-01 Modes B+C
+    description: "params_threadwork: remove phantom Thread Depth (TD) stat (not present in threadwork_redesign_v25 or any formula), add RS=0 lockout gate, confirm Coherence start=10, add RS ceiling=100"
+    files_changed:
+      - references/params_threadwork.md
+
+  - id: PP-167
+    date: 2026-04-02
+    status: applied
+    source: AUD-TTRPG-01 Mode B
+    description: "params_factions: fix RS TTRPG starting value 60→72 (canonical source: stage12_campaign_modes §12.1 Session Zero step 4 'Set clocks: RS 72')"
+    files_changed:
+      - references/params_factions.md

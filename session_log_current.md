@@ -1,42 +1,35 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_DEBATE_GAP_FILL
-phase: Phase 9 — Debate gap fill + verification stress test
+session_id: 2026-04-02T_TTRPG_AUDIT_PATCHES
+phase: Phase 11 — Patch batch PP-164 to PP-167 (AUD-TTRPG-01 findings)
 status: COMPLETE
 
 completed:
-  - All 19 debate design gaps (GAP-DS-01 through GAP-DS-20) resolved.
-  - ED-053 through ED-059: all resolved (provisional) in v1.4/v1.5.
-  - New sections added: §6.11 Pre-Debate Preparation, §6.12 Multi-Party Coalition,
-    §6.13 BG Parliamentary Vote, §6.14 Hybrid Debate, §6.15 Thread Operations.
-  - SIM-D-04: Stress test of all new mechanics. All pass. 2 minor patches PP-117/118.
-  - debate_system_redesign_v1.md: v1.5 — complete operative system across all 3 modes.
-  - SIM-DEBT-02 flagged: Corroboration in CLASH calibration needed (low priority).
+  - AUD-TTRPG-01: TTRPG mode audit complete (prior commit).
+  - PP-164: params_core — attribute range 1–7, 10 attributes defined (Memory/Focus), derived scores table added.
+  - PP-165: params_combat — Health formula fixed (End+6), Stamina minimum=1, O/D allocation procedure, wound dual penalty quantified.
+  - PP-166: params_threadwork — Thread Depth (TD) removed (phantom stat, not in v25 design), RS=0 lockout gate, RS ceiling=100, Coherence start=10 confirmed.
+  - PP-167: params_factions — RS TTRPG start corrected 60→72 (source: stage12 §12.1).
 
-key_design_decisions:
-  - BG Parliamentary Vote: Mandate pools, resistance=0, genre weights apply, 1 round/season.
-  - Hybrid: BG vote shifts TC start ±2 (capped), then TTRPG decides.
-  - Coalition: rotation + corroboration = endurance advantage, not speed advantage.
-  - Beliefs: +1 Momentum on Belief-aligned win (1/debate cap) — commensurate with core.
-  - Debate Fatigue: −1D next social roll, consumed on use — lighter than wounds.
-  - Total Victory (TC≥9/≤1): Mandate−1 (BG) + Momentum+1 (TTRPG) consequences.
+additional_findings_this_patch:
+  - Composure formula: stage1 says Presence+6; stage2 §4.11 says Presence+Attunement. CONFLICT still open.
+    stage1 (canonical derived stats table) takes precedence. stage2 §4.11 text is wrong.
+    [EDITORIAL: ED-053 — stage2 §4.11 Composure formula error: says Presence+Attunement, should be Presence+6 per stage1 §2.3]
+  - Thread Depth (TD) confirmed phantom: 0 occurrences in threadwork_redesign_v25.md. Removed.
+  - Attribute max confirmed 7 (not 5 — 5 is creation cap; 7 is advancement max).
 
-open_debate_items:
-  - SIM-DEBT-02: Corroboration in CLASH (low priority).
-  - GM reference card (F-C-06 P1 from AUDIT-D-01) — still not created.
-  - ED-051: NPC full debate stat blocks (Attunement, Focus, Poise, Bonds) — still open.
-
-debate_version: v1.5 (complete)
+remaining_P1s_still_open:
+  - GAP-TTRPG-04: Belief CP conflict stage2 vs stage10 — EDITORIAL required
+  - GAP-TTRPG-17: 4 faction unique actions missing — extract task pending
+  - GAP-TTRPG-F1: Personal combat High burden — design-level issue, not a params fix
+  - GAP-TTRPG-G1/G2: HYB transition procedures — design docs needed
 
 next_action:
-  task: "GM reference card for debate — resolves F-C-06 P1 cognitive load. Then move to next system."
-  note: "Debate system now fully specified across all three modes. Confirm pivot direction."
+  task: "User to confirm: (1) ED-053 Composure formula — is stage2 §4.11 wrong (should be Presence+6)? (2) Belief CP conflict — which table is authoritative? Then: extract 4 missing faction unique actions from stage6."
+  note: "GAP-TTRPG-17 (faction unique actions) can proceed without editorial if stage6 content is unambiguous."
 
 commits_this_session:
-  - 22a1f24: SIM-D-01 + PP-097-099
-  - 1641078a: debate v1.1 in-place patches
-  - f03b8ddf: SIM-D-02 + PP-100 + debate v1.2
-  - c012d2d4: AUDIT-D-01 + SIM-D-03 + PP-101-111 + debate v1.3
-  - [this]: SIM-D-04 + PP-112-118 + debate v1.5 + §§6.11-6.15 + all gaps resolved
+  - [prior]: AUD-TTRPG-01 audit output
+  - [this]: PP-164/165/166/167 params patches + patch register + session log
 ```

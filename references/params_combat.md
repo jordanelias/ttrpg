@@ -1,6 +1,6 @@
-<!-- version: v0.14-ST2 | sources: designs/combat/combat_design_v1.md | last_updated: 2026-04-02 -->
+<!-- version: v0.14-AUD1 | sources: designs/combat/combat_design_v1.md | last_updated: 2026-04-02 -->
 <!-- CANONICAL SOURCE: combat_design_v1.md supersedes stage8_combat.md (has PP-086-092, MT-01, three-mode framing) -->
-<!-- PATCHES APPLIED: PP-086 (base damage), PP-087 (Formation Break stacking), PP-088 (assault linkage), PP-091 (Bombard), PP-092 (P2-B11 personal combat clarifications) -->
+<!-- PATCHES APPLIED: PP-086 (base damage), PP-087 (Formation Break stacking), PP-088 (assault linkage), PP-091 (Bombard), PP-092 (P2-B11 personal combat clarifications), PP-165 (Health formula fix, Stamina minimum, O/D procedure) -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
 
 # params_combat.md — Personal Combat
@@ -8,7 +8,7 @@
 ## Pool Formula
 Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)
 Stamina = Endurance + Relevant History + 1 (modified by armour)
-Health = Endurance (per wound; resets on wound)
+Health = Endurance + 6 (total damage buffer; reduces to 0 → take Wound, Health resets to full)
 
 Pool modifiers:
 - Wounds: −1D per wound (cumulative)
@@ -76,5 +76,23 @@ Wound Ob penalty: +1 Ob per wound (all rolls). Incapacitated: Stage 1 (down) or 
 ## Actions Summary
 Strike / Establish Distance / Feint / Take a Breath / Full Guard / Disarm / Retrieve Weapon / Out of Breath (forced at Stamina 0)
 
+## Stamina Minimum (PP-165)
+Stamina minimum: **1**. If Endurance + History + 1 − armour modifier ≤ 0, Stamina = 1.
+Heavy armour (−2 mod) on Endurance 1, no History: raw Stamina = 0 → floored to 1.
+
+## Offence / Defence Allocation Procedure (PP-165)
+At the start of each combat round, each combatant secretly allocates their Combat Pool between Offence and Defence.
+1. Each player writes (or holds) their split privately.
+2. Both reveal simultaneously.
+3. Offence dice roll against opponent's Defence dice (compare successes). Defender wins ties.
+4. Fibonacci Group Bonus applies to Offence allocation only.
+Minimum 0D to either allocation (full pool to one side permitted).
+
+## Wound Dual Penalty — Quantified (PP-165)
+Each Wound applies: −1D to Combat Pool AND +1 Ob to all rolls.
+At 3 Wounds (Endurance 4–5 character): −3D pool, +3 Ob. Effective combat pool ≈ half starting; Ob on most rolls ≈ doubled.
+At max Wounds before incapacitation: character is mechanically non-functional in combat (correct by design — incapacitation is imminent).
+
 <!-- patch_history: references/params_combat_history.md -->
+
 <!-- canonical_sources: references/canonical_sources.yaml -->

@@ -1,5 +1,6 @@
-<!-- version: v0.14 | sources: stage1_core_engine.md | last_updated: 2026-03-26 -->
+<!-- version: v0.14-AUD1 | sources: stage1_core_engine.md | last_updated: 2026-04-02 -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
+<!-- PATCHES APPLIED: PP-164 (attribute range, derived stats table, Memory/Focus definitions) -->
 
 # params_core.md — Core Dice Engine
 
@@ -70,3 +71,32 @@ No penalty may reduce a pool below 1D. Ob penalties still apply at 1D.
 | 12D | 4.0 | ~99% | ~95% | ~83% |
 
 Full multi-TN tables: references/tn_full_tables.md (generate via dice-model Task 8 if absent).
+
+## Attributes
+
+Range: **1–7** (all attributes). Average human: 3. Creation max: 5 (one attribute only; all others ≤ 4). Advancement max: 7.
+Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
+
+| Group | Attributes |
+|-------|-----------|
+| Physical | Agility (Agi), Endurance (End), Strength (Str) |
+| Mental | Cognition (Cog), Memory (Mem), Focus (Foc) |
+| Social | Attunement (Att), Bonds (Bon), Presence (Pres) |
+| Metaphysical | Spirit (Spi) |
+
+**Memory (Mem):** Knowledge, experience, retention. Sets the per-History point cap — a History can never hold more points than the character's Memory score.
+**Focus (Foc):** Concentration, discipline, precision under pressure. Governs Thread contact duration: Contact Rounds = Focus score (range 1–7).
+
+## Derived Scores
+
+| Score | Formula | Range | Notes |
+|-------|---------|-------|-------|
+| Health | Endurance + 6 | 7–13 | Damage buffer before Wounds |
+| Composure | Presence + 6 | 7–13 | Social damage buffer before Rattled |
+| Combat Pool | Agility + weapon proficiency History (points + 3) | Variable | Split Offence/Defence each round |
+| Contact Rounds | Focus | 1–7 | Max rounds maintaining Thread contact (practitioners only) |
+| Certainty | Spirit (starting and maximum) | 1–7 | Existential coherence; at 0 → Rendering Crisis |
+| Coherence | 10 (starting); countdown to 0 | 0–10 | Personal rendering legibility |
+| Resolve | Spirit | 1–7 | Maximum total Inspiration value |
+
+<!-- patch_history: references/params_core_history.md -->

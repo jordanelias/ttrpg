@@ -1,5 +1,6 @@
-<!-- version: v0.14+design | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-02 -->
+<!-- version: v0.14-AUD1 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-02 -->
 <!-- NOTE: stage6_factions.md is STALE for BG faction mechanics. Use BG column for board game/hybrid. -->
+<!-- PATCHES APPLIED: PP-167 (RS TTRPG start corrected 60→72 per stage12_campaign_modes §12.1 Session Zero) -->
 <!-- STALE CHECK: TTRPG column from v0.14 compiled. BG column from bg_v05 design. -->
 
 # params_factions.md — Factions
