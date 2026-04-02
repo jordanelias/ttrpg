@@ -154,6 +154,15 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | `references/params_factions.md` | `skills/valoria-simulator-SKILL.md` (Mode G4) | Sim loads params |
 | `references/params_factions.md` | `skills/valoria-mechanic-audit-SKILL.md` | Audit loads params |
 
+### DEBATE
+
+| Changed File | Propagates To | Reason |
+|-------------|--------------|--------|
+| `designs/debate/debate_system_redesign_v1.md` | `references/params_debate.md` | Values extracted; patches must sync |
+| `designs/debate/debate_system_redesign_v1.md` | `compilation/v0.14/stage9_social.md` | STALE — stage9 is empty; compile when stable |
+| `references/params_debate.md` | `skills/valoria-simulator-SKILL.md` (Mode G2) | Sim loads params |
+| `tests/sim_d_01_debate_stress_test.md` | `tests/coverage_matrix.md` | Findings logged |
+
 ### SCALE TRANSITIONS / HYBRID
 
 | Changed File | Propagates To | Reason |

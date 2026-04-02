@@ -357,6 +357,7 @@ Not all Debates are symmetric. The institution shapes the rules.
 # PART SIX: COMPILED MECHANICAL SPECIFICATION
 ## Source: debate_stress_test_v1.md + debate_stress_test_v2.md
 ## Status: OPERATIVE — supersedes quaestio design (Parts 3–4) for play purposes
+## Version: v1.1 (PP-097, PP-098, PP-099 applied in-place 2026-04-02 — provisional)
 ## Parts 1–4 retained as design reference and historical/philosophical foundation
 
 ---
@@ -495,11 +496,13 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 
 **DIVERGENCE** (different genre):
 - No direct comparison. Each argument evaluated independently.
-- effective_margin for each = floor((successes / 2) × genre_weight × orientation_weight). [Using half successes to bring Divergence into comparable scale with Clash margin.]
+- effective_margin for each = floor((successes / 2) × genre_weight × 1.0). [orientation_weight fixed at 1.0 in Divergence — Obscuring is handled separately below. Half successes brings Divergence into comparable scale with Clash margin.]
 - For each side: if effective_margin > resistance → Δ = effective_margin − resistance toward that side's position.
 - Net tracker movement = difference between the two deltas; direction: toward the side with the larger delta.
+- **Obscuring in Divergence [PROVISIONAL: PP-099]:** If the side with the larger delta used Obscuring orientation, place a Doubt Marker on the opponent instead of applying tracker movement. Conviction Track does not move.
 - No strain dealt. Neither argument attacked the other.
 - Initiative stays with holder.
+- **TIE override [PROVISIONAL: PP-097]:** If both orators score equal successes (including both scoring 0), the TIE rule fires instead: both take 1 strain, Conviction Track moves +1 toward initiative holder. The "any interaction type" specification in the TIE rule takes priority over Divergence independent evaluation.
 
 **TIE** (equal successes, any interaction type):
 - Both orators take 1 strain.
@@ -514,7 +517,7 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 - Doubt Marker is consumed on use.
 
 **Step 5 — Forfeit actions:**
-- **Regroup:** Forfeit exchange. No argument, no strain. Conviction Track moves +1 toward non-forfeiting side (fixed, no genre weight). Concentration restores by Focus score.
+- **Regroup:** Forfeit exchange. No argument, no strain. Conviction Track moves +1 toward non-forfeiting side (fixed, no genre weight). Concentration restores by Focus score. **Spent interaction [PROVISIONAL: PP-098]:** If Concentration was 0 when Regroup is declared, Regroup consumes the Spent state without applying the −2D/+1D penalty — no argue roll occurs during Regroup so the penalty has no target. Concentration then resets to maximum normally.
 - **Concede a Point:** Forfeit exchange. Take 1 strain. Conviction Track moves +1 toward non-forfeiting side. Gain +1D on next exchange's argument roll.
 
 **Step 6 — Strain and Concentration:**
