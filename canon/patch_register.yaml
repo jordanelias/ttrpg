@@ -1520,3 +1520,17 @@ patches:
     description: "params_factions: extract and add all 8 faction unique actions from stage6_factions.md §8.4–8.9 (Hafenmark/Sovereign Authority Doctrine, Varfell/Private Collection full table, Guilds/Economic Leverage, Niflhel/Quiet Network all modes, Restoration Movement/Community Weaving, Löwenritter/Martial Law Coup Trigger)"
     files_changed:
       - references/params_factions.md
+
+- id: PP-104
+  date: 2026-04-02
+  severity: P2
+  description: "4 projectile weapon categories (LP/HP/LBl/HBl) replacing single Projectile. Str corrections in B.2 (−2 all, −3 Ranged/Artillery). Pool split declared Phase 1. Damage formula: Str loss = net hits + Dmg Mod − DR. BG Battle Partial outcome defined. All marked PROVISIONAL."
+  finding_id: "SIM-HYB-01 PARAMS-GAP-04/05/06-MC + user audit"
+  source: simulation+editorial
+  affects:
+    - designs/mass_combat/mass_battle_v3.md
+    - references/params_mass_combat.md
+    - designs/gm_ref_cp14/zoom_in_out_reference_card.md
+  applied_to_version: "v4.3"
+  status: applied
+  applied_commit: pending

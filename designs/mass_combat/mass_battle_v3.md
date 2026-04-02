@@ -1,5 +1,5 @@
 # VALORIA — MASS BATTLE SYSTEM v4
-## Version: v4.2 (PP-103 applied: Phase-Lock Protocol for Zoom In + Levy unit added to B.2)
+## Version: v4.3 (PP-104 applied: 4 projectile weapon categories, Str corrections, pool-split declaration, BG Battle Partial)
 ## Status: WORKING DESIGN — no appendix sections. Read straight through.
 ## Three-mode: TTRPG/Hybrid (Part A); Board Game (Part B); Hybrid Handoff (§B.5)
 ## All P1/P2/P3 patches applied. Gaps filled. Editorial notes flagged.
@@ -39,12 +39,16 @@ rolled. The general is the battle.
 | HeavyCut | ✓✓ | ✓✓ | ✓ | ✗ |
 | LightBlunt | ✓ | ✗ | ✗ | ✗ |
 | HeavyBlunt | ✓✓ | ✓✓ | ✓✓ | ✓✓ |
-| Projectile | ✓ | ✗ | ✗ | ✗ |
+| LP — Light Pierce (arrows) | ✓ | ✓ | ✗ | ✗ |
+| HP — Heavy Pierce (bolts) | ✓✓ | ✓✓ | ✓ | ✗ |
+| LBl — Light Blunt (sling) | ✓ | ✗ | ✗ | ✗ |
+| HBl — Heavy Blunt Siege | ✓✓ | ✓✓ | ✓✓ | ✓✓ |
 
-HeavyBlunt is the only weapon effective against Heavy armour. Projectile units
-are anti-unarmoured only. Deploying the wrong weapon against wrong armour deals
-zero expected damage. This is not recoverable mid-battle. Force composition
-determines outcome more than tactics.
+HeavyBlunt and HBl (siege) are the only weapon classes effective against Heavy
+armour. LP (arrows) penetrate light armour; HP (crossbow bolts) penetrate
+medium; LBl (sling) are anti-unarmoured only. Force composition determines
+outcome more than tactics. [EDITORIAL: ED-061 — confirm 4-category split and
+sub-unit types for Ranged (archer/crossbow/slinger)]
 
 ---
 
@@ -217,6 +221,11 @@ no tactics available. *[P3-03]*
 **Phase 1 — Strategy Declaration** (simultaneous, secret)
 General declares: sub-unit assignments (max 3 for TTRPG), formation per
 sub-unit, tactical action, and Thread intent (public).
+
+**Offence/Defence pool split** declared here for each sub-unit. Any allocation
+is valid (minimum 1D each side). If not declared: default = equal split
+(round down to Offence). Split is secret; revealed simultaneously at Phase 5.
+[PROV: PP-104 — resolves PARAMS-GAP-04]
 
 Thread declaration: Practitioners publicly declare intent (offensive or
 support) and target. Diagnosis occurs here (public declaration = rendering
@@ -482,18 +491,21 @@ compatibility bridge.
 Inherits from B6 (existing BG unit table). No changes to existing stats.
 TTRPG equivalence added for hybrid translation:
 
-| BG Unit | Martial | Endur | Cohesion | Health | TTRPG CP | TTRPG Str [PROVISIONAL] | TTRPG Morale [PROVISIONAL] | TTRPG Weapon | TTRPG Armour |
-|---|---|---|---|---|---|---|---|---|---|
-| Levy | 1 | 1 | 1 | 7 | 1 | 5 | 2 | LightCut | None |
-| Light Infantry | 3 | 3 | 3 | 9 | 3 | 6 | 4 | LightCut | Light |
-| Heavy Infantry | 4 | 4 | 4 | 10 | 4 | 7 | 5 | HeavyCut | Medium |
-| Cavalry | 4 | 3 | 5 | 9 | 5 | 6 | 5 | HeavyCut | Heavy |
-| Ranged | 3 | 2 | 3 | 8 | 3 | 6 | 3 | Projectile | Light |
-| Artillery | 2 | 2 | 2 | 8 | 2 | 6 | 3 | HeavyBlunt | None |
-| Knights Templar | 5 | 5 | 6 | 11 | 5 | 8 | 6 | HeavyBlunt | Heavy |
+| BG Unit | Martial | Endur | Cohesion | Health | TTRPG CP | TTRPG Str [PROV] | TTRPG Morale [PROV] | TTRPG Weapon | TTRPG Armour | Dmg Mod [PROV] |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Levy | 1 | 1 | 1 | 7 | 1 | 3 | 2 | LightCut | None | +1 |
+| Light Infantry | 3 | 3 | 3 | 9 | 3 | 4 | 4 | LightCut | Light | +2 |
+| Heavy Infantry | 4 | 4 | 4 | 10 | 4 | 5 | 5 | HeavyCut | Medium | +4 |
+| Cavalry | 4 | 3 | 5 | 9 | 5 | 4 | 5 | HeavyCut | Heavy | +5 |
+| Ranged | 3 | 2 | 3 | 8 | 3 | 3 | 3 | LP (arrows) | Light | +2 |
+| Artillery | 2 | 2 | 2 | 8 | 2 | 3 | 3 | HBl (siege) | None | +5 |
+| Knights Templar | 5 | 5 | 6 | 11 | 5 | 6 | 6 | HeavyBlunt | Heavy | +5 |
 
-Str formula: ⌈Health ÷ 1.5⌉. Morale: [PROVISIONAL] — confirm via editorial.
-Levy unit requires Military ≥ 1 (all factions qualify). Resolves F-HYB-08 (PP-103).
+Str corrected: user audit −2 all units, −3 Ranged and Artillery (PP-104).
+Dmg Mod: used in Phase 5 damage formula (max(0, net hits + Dmg Mod − DR) = Str loss). [EDITORIAL: ED-062]
+Ranged weapon: LP (arrows) default — see ED-061 for sub-type split (archer/crossbow/slinger).
+Artillery weapon: HBl (siege) — Volley keyword, no melee.
+Morale values: [PROVISIONAL] — ED-062 scope.
 
 **Anti-Armour keyword** (HeavyBlunt units): +2D when targeting Heavy Infantry,
 Cavalry, or Knights Templar. Pre-printed on Artillery and Knights Templar
@@ -524,9 +536,21 @@ Commander bonus = faction Military ÷ 3, round down (min 0, max +2D).
 [EDITORIAL: confirm commander bonus formula] TN 7. Ob from table.
 Net successes = damage dealt to opposing units.
 
-**Step 4 — Apply damage.** Reduce opposing unit Health. Formation Break at 0.
+**Step 4 — Determine outcome by margin (PP-104):**
 
-**Step 5 — Morale.** Formation Break → Cohesion check Ob 2 → Route on fail.
+| Margin | Outcome | Effect |
+|--------|---------|--------|
+| Attacker net ≥ Defender net + 2 | Attacker wins | Territory captured; Defender Military −1 |
+| Margin ≤ 1 either direction | Partial | No territory change; Attacker Stability −1 (commitment cost) |
+| Defender net ≥ Attacker net + 2 | Defender wins | No territory change; Attacker Military −1 |
+
+Partial reflects a costly inconclusive engagement — forces committed, ground unchanged.
+[PROVISIONAL — ED-063: confirm Partial threshold and Stability cost]
+
+**Step 5 — Apply damage.** Reduce Health per Step 3 net successes × unit damage modifier − DR.
+Formation Break at Health 0.
+
+**Step 6 — Morale.** Formation Break → Cohesion check Ob 2 → Route on fail.
 
 **Thread in BG battles:** handled by Co-Movement cards per existing rules.
 At Rendering Stability < 20: T-03 fires — both sides draw 1 Co-Movement card per battle.

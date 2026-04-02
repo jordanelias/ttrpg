@@ -1321,3 +1321,35 @@ editorial_decisions:
       - designs/debate/debate_system_redesign_v1.md
     propagation_status: pending
     tags: [debate, composure, recovery]
+  - id: ED-061
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation+editorial
+    description: "Confirm 4 projectile weapon categories (LP/HP/LBl/HBl) and DR values. Ranged unit default = LP (arrows). Consider Ranged sub-type split: archer (LP) / crossbowman (HP) / slinger (LBl)."
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+    tags: [mass_combat, weapons, projectile]
+
+  - id: ED-062
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation+editorial
+    description: "Confirm unit damage modifiers (Dmg Mod column in B.2) and unit Morale starting values. Dmg Mod drives the mass combat damage formula. Currently PROVISIONAL."
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md, designs/gm_ref_cp14/zoom_in_out_reference_card.md]
+    tags: [mass_combat, damage, units]
+
+  - id: ED-063
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation+editorial
+    description: "Confirm BG Battle Partial outcome: margin ≤1 = Partial, Attacker Stability −1. Confirm Partial threshold (currently 1) and whether Stability is the right cost (vs Mandate or Military)."
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+    tags: [board_game, battle, partial_outcome]

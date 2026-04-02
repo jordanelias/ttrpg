@@ -196,3 +196,12 @@ PP-103 (Phase-Lock Protocol + Levy unit) resolves:
 - ED-057 (P2): Ghost-unit state eliminated by Phase-Lock ✓
 
 Remaining open from SIM-HYB-01: ED-056, ED-058, ED-059, ED-060, PARAMS-GAP-04/05/06-MC.
+
+## PP-104 Resolution Note (2026-04-02)
+
+PP-104 applied: 4 projectile categories, Str corrections, pool split, damage formula, BG Battle Partial.
+- PARAMS-GAP-04: resolved (pool split declared Phase 1) ✓
+- PARAMS-GAP-05: resolved (Str loss = net hits + Dmg Mod − DR) ✓
+- PARAMS-GAP-06-MC: resolved (BG Battle Partial, margin ≤1) ✓
+- User Str audit: all units −2, Ranged/Artillery −3 ✓
+Open for editorial: ED-061, ED-062, ED-063.

@@ -1,5 +1,5 @@
 # ZOOM IN / ZOOM OUT — GM REFERENCE CARD
-## Version: 1.0 | Source: PP-103, state_transfer_spec.md, mass_battle_v3.md §B.2/B.5
+## Version: 1.1 | Source: PP-103/PP-104, state_transfer_spec.md, mass_battle_v3.md §B.2/B.5
 ## Purpose: Single-page reference. Eliminates mid-session multi-document lookup.
 ## Replaces: state_transfer_spec.md §1 (for table use) — spec remains authoritative for edge cases.
 
@@ -64,17 +64,17 @@ Resume BG from held phase. All suspended factions resume. Co-Movement draws reso
 
 ## SIDE B — UNIT CONVERSION TABLE (BG token → TTRPG stats)
 
-| BG Unit | TTRPG CP | TTRPG Str* | TTRPG Morale* | Weapon | Armour |
-|---------|----------|------------|---------------|--------|--------|
-| Levy | 1 | 5 | 2 | LightCut | None |
-| Light Infantry | 3 | 6 | 4 | LightCut | Light |
-| Heavy Infantry | 4 | 7 | 5 | HeavyCut | Medium |
-| Cavalry | 5 | 6 | 5 | HeavyCut | Heavy |
-| Ranged | 3 | 6 | 3 | Projectile | Light |
-| Artillery | 2 | 6 | 3 | HeavyBlunt | None |
-| Knights Templar | 5 | 8 | 6 | HeavyBlunt | Heavy |
+| BG Unit | TTRPG CP | TTRPG Str* | TTRPG Morale* | Weapon | Armour | Dmg Mod* |
+|---------|----------|------------|---------------|--------|--------|---------|
+| Levy | 1 | 3 | 2 | LightCut | None | +1 |
+| Light Infantry | 3 | 4 | 4 | LightCut | Light | +2 |
+| Heavy Infantry | 4 | 5 | 5 | HeavyCut | Medium | +4 |
+| Cavalry | 5 | 4 | 5 | HeavyCut | Heavy | +5 |
+| Ranged | 3 | 3 | 3 | LP (arrows) | Light | +2 |
+| Artillery | 2 | 3 | 3 | HBl (siege) | None | +5 |
+| Knights Templar | 5 | 6 | 6 | HeavyBlunt | Heavy | +5 |
 
-*Provisional — ED-057 resolved by Phase-Lock; Morale values pending editorial confirmation.
+*Provisional — Str corrected PP-104 (−2 all, −3 Ranged/Artillery). Morale/Dmg Mod: ED-062.
 
 **Starting Cohesion:** = BG unit Cohesion column in §B.2 (1:1 transfer).
 

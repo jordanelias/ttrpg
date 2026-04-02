@@ -1,4 +1,4 @@
-<!-- version: v0.14+design-ST3 | sources: stage8_combat.md, mass_battle_v3.md | last_updated: 2026-04-02 -->
+<!-- version: v0.14+design-ST5 | sources: designs/mass_combat/mass_battle_v3.md (v4.3, PP-104) | last_updated: 2026-04-02 -->
 <!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D -->
 <!-- PHASE STRUCTURE: 7 phases. Thread split: offensive Phase 4, support Phase 6. All damage simultaneous Phase 6 Step 1. -->
 <!-- mass_battle_v3.md is a design proposal. Values marked [COMPILED] are from stage8; [PROPOSAL] from v3. -->
@@ -97,9 +97,11 @@ Cap: −3 per Cascade Phase (Stage 2 death separate and uncapped).
 Floor: 1 while general present. At 0: rout.
 Rout contagion: −1 Morale to adjacent units; secondary loss cannot cascade to rout until next turn.
 
-## DR Table — Mass Combat (adds Projectile column) [PROPOSAL]
-| Armour | LC | HC | LB | HB | Projectile |
-|--------|----|----|----|----|-----------|
+## DR Table — Mass Combat (PP-104: Projectile split into 4 categories)
+
+### Melee weapons
+| Armour | LC | HC | LB | HB |
+|--------|----|----|----|----|
 | None | 0 | 0 | 0 | 0 | 0 |
 | Light | 2 | 1 | 1 | 0 | 2 |
 | Medium | 4 | 3 | 2 | 1 | 4 |
@@ -112,9 +114,31 @@ Weapon Effectiveness:
 | HeavyCut | ✓✓ | ✓✓ | ✓ | ✗ |
 | LightBlunt | ✓ | ✗ | ✗ | ✗ |
 | HeavyBlunt | ✓✓ | ✓✓ | ✓✓ | ✓✓ |
-| Projectile | ✓ | ✗ | ✗ | ✗ |
 
-HeavyBlunt is the only weapon class effective vs Heavy armour.
+### Projectile weapons (mass combat only — PP-104)
+| Armour | LP (arrows) | HP (bolts) | LBl (sling) | HBl (siege) |
+|--------|------------|------------|-------------|------------|
+| None | 0 | 0 | 0 | 0 |
+| Light | 1 | 1 | 2 | 0 |
+| Medium | 4 | 3 | 4 | 1 |
+| Heavy | 7 | 5 | 6 | 2 |
+
+LP = Light Pierce (arrows). HP = Heavy Pierce (bolts). LBl = Light Blunt (sling). HBl = Heavy Blunt Siege.
+[PROVISIONAL — ED-061: confirm DR values and sub-category definitions]
+
+### Weapon Effectiveness (combined)
+| Attacker | vs None | vs Light | vs Medium | vs Heavy |
+|----------|---------|----------|-----------|---------|
+| LightCut | ✓ | ✗ | ✗ | ✗ |
+| HeavyCut | ✓✓ | ✓✓ | ✓ | ✗ |
+| LightBlunt | ✓ | ✗ | ✗ | ✗ |
+| HeavyBlunt | ✓✓ | ✓✓ | ✓✓ | ✓✓ |
+| LP (arrows) | ✓ | ✓ | ✗ | ✗ |
+| HP (bolts) | ✓✓ | ✓✓ | ✓ | ✗ |
+| LBl (sling) | ✓ | ✗ | ✗ | ✗ |
+| HBl (siege) | ✓✓ | ✓✓ | ✓✓ | ✓✓ |
+
+HeavyBlunt and HBl are the only classes effective vs Heavy armour.
 
 ## Battle Scale [PROPOSAL]
 | Scale | 1 Strength ≈ | Thread Thread Sensitivity minimum |
@@ -131,6 +155,35 @@ Mass → Personal: Personal Action available at Phase 5 (Priority 8). Limit: 1 e
 
 ## Key Design Axiom
 Generalship dominates. Coherence Rating asymmetry is intentional. Coherence Rating=7 vs Coherence Rating=1 general: near-certain outcome before dice rolled.
+
+
+## RESOLVED PARAMS GAPS (PP-104, 2026-04-02)
+
+### Pool Split — Phase 5 Engagement (PARAMS-GAP-04 resolved)
+Declared in Phase 1. Any allocation valid, min 1D each side.
+Default: ½ pool to Offence (round down), remainder Defence. [PROVISIONAL]
+
+### Damage Formula — unit Strength loss (PARAMS-GAP-05 resolved)
+Strength loss = max(0, net hits + Dmg Mod − DR)
+Dmg Mod from unit table below. [PROVISIONAL — ED-062: confirm values]
+
+| Unit | Weapon | Dmg Mod |
+|------|--------|---------|
+| Levy | LightCut | +1 |
+| Light Infantry | LightCut | +2 |
+| Heavy Infantry | HeavyCut | +4 |
+| Cavalry | HeavyCut | +5 |
+| Ranged | LP | +2 |
+| Artillery | HBl | +5 |
+| Knights Templar | HeavyBlunt | +5 |
+
+### BG Battle Partial outcome (PARAMS-GAP-06-MC resolved)
+Margin = |attacker net − defender net|.
+- Margin ≥ 2, attacker higher → Win: territory captured, Defender Military −1
+- Margin ≤ 1 (either direction) → Partial: no territory change, Attacker Stability −1
+- Margin ≥ 2, defender higher → Lose: no territory change, Attacker Military −1
+[PROVISIONAL — ED-063: confirm Partial threshold and Stability cost]
+
 
 <!-- patch_history: references/params_mass_combat_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
