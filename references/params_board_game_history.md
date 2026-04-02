@@ -63,3 +63,40 @@ No Catastrophic Failure category (struck 2026-04-02).
 - ED-035: Muster output in BG context (P2)
 - ED-036: Altonian unit stats BLOCKER
 - ED-039: Military seasonal cap pooling (P2)
+
+---
+
+## AUDIT 2026-04-02 — GAP-FILL PATCHES (PP-112 through PP-122)
+
+### PP-112 — Remove Struck Majority-1s Override
+Majority-1s override (P-12) struck from params. All rolls: standard degree table only.
+
+### PP-113 — Stat Ceilings and Floors
+Faction stats floor 0, ceiling 7. Standing 0-10.
+
+### PP-114 — IP Post-80 Escalation [PROVISIONAL]
+IP 81-89: Vanguard +1 territory/season. IP 90-99: Altonian Mil +2. IP 100: shared defeat.
+
+### PP-115 — PI Threshold Table [PROVISIONAL: ED-055]
+PI 0 = dissolution + coup. 6-tier table added.
+
+### PP-116 — TC Seasonal Cap + Ceiling [PROVISIONAL: ED-056]
+Domain Actions +-3. All sources +-5. Seizure exempt. TC ceiling 100 cosmetic.
+
+### PP-117 — Faction Collapse Exit [PROVISIONAL: ED-053]
+1 season + no hostile actions + Govern Ob 2 Success. Auto-exit Season 2: Stability 1, Mandate 0.
+
+### PP-118 — Simultaneous Catastrophe [PROVISIONAL: ED-054]
+RS Rupture Step 6 takes precedence. Restoration Step 5 victory pre-empts.
+
+### PP-119 — BG Unit Cohesion [PROVISIONAL]
+Levy 3, Infantry 4, Elite 5, Cavalry 4, Artillery 3, Thread Corps 4. Track 0-6.
+
+### PP-120 — No BG Coherence Cost [PROVISIONAL: ED-057]
+BG Thread ops: no Coherence. Hybrid: PC Coherence via Cascade Step 3.
+
+### PP-121 — Reformed Settlement Penalty Permanent [PROVISIONAL: ED-058]
++1 Ob Diplomacy vs Hafenmark permanent. No reversal mechanic.
+
+### PP-122 — CP Awards in Hybrid [PROVISIONAL]
+CP +1 on BG Domain Action if Belief declared. BG-only: no CP.

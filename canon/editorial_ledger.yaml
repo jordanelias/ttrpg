@@ -1115,3 +1115,112 @@ editorial_decisions:
   related_ids: []
   supersedes: []
   tags: [debate, momentum, core]
+
+  # ── BOARD GAME MODE AUDIT 2026-04-02 ─────────────────────────────────────
+
+  - id: ED-053
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: audit
+    source_file: audit_board_game_mode.md
+    description: "Faction collapse exit condition — how does a faction exit the 2-season collapse state? Provisional rule applied (PP-117)."
+    full_flag_text: "[EDITORIAL: ED-053 — Faction collapse exit: PP-117 provisional applied. Confirm exit procedure.]"
+    status: provisional
+    priority: P1
+    decision: "PP-117 PROVISIONAL: Exit requires 1 full season elapsed + no hostile Domain Actions current season + allied or own Govern Ob 2 Success in former territory. Auto-exit Season 2 with Stability 1, Mandate 0."
+    propagation_targets:
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+      - references/params_board_game.md
+    propagation_status: applied
+    related_ids: []
+    supersedes: []
+    tags: [board_game, faction, collapse, stability]
+
+  - id: ED-054
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: audit
+    source_file: audit_board_game_mode.md
+    description: "Simultaneous catastrophe — RS=0 and IP≥80 both in same Accounting phase. Resolution order. Provisional rule applied (PP-118)."
+    full_flag_text: "[EDITORIAL: ED-054 — Simultaneous RS=0 + IP>=80: PP-118 provisional applied. Confirm resolution order.]"
+    status: provisional
+    priority: P1
+    decision: "PP-118 PROVISIONAL: RS Rupture (Step 6) takes precedence. Exception: Restoration victory declared at Step 5 pre-empts Step 6 Rupture."
+    propagation_targets:
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+      - references/params_board_game.md
+    propagation_status: applied
+    related_ids: []
+    supersedes: []
+    tags: [board_game, clock, catastrophe, RS, IP]
+
+  - id: ED-055
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: audit
+    source_file: audit_board_game_mode.md
+    description: "PI floor and ceiling undefined. PI 0 = Parliament dissolved? Provisional table applied (PP-115)."
+    full_flag_text: "[EDITORIAL: ED-055 — PI floor/ceiling: PP-115 provisional applied. Confirm PI 0 = dissolution + coup trigger and full threshold table.]"
+    status: provisional
+    priority: P2
+    decision: "PP-115 PROVISIONAL: PI 0 = Parliament dissolved + Löwenritter coup trigger. PI 1-2 near-collapse. PI 3-4 degraded. PI 5-6 standard. PI 7-9 full function. PI 10 maximum."
+    propagation_targets:
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+      - references/params_board_game.md
+    propagation_status: applied
+    related_ids: []
+    supersedes: []
+    tags: [board_game, clock, PI, parliament, lowenritter]
+
+  - id: ED-056
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: audit
+    source_file: audit_board_game_mode.md
+    description: "TC ceiling undefined. TC can exceed 80 post-seizure. Provisional ceiling 100 cosmetic."
+    full_flag_text: "[EDITORIAL: ED-056 — TC ceiling: provisional cap 100 applied. Confirm no mechanical effect above 80 beyond seizure rolls.]"
+    status: provisional
+    priority: P2
+    decision: "PP-116 PROVISIONAL: TC ceiling 100 cosmetic. No effect above 80 except seizure. TC 80 seizure gains exempt from seasonal cap."
+    propagation_targets:
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+      - references/params_board_game.md
+    propagation_status: applied
+    related_ids: [ED-032]
+    supersedes: []
+    tags: [board_game, clock, TC, ceiling]
+
+  - id: ED-057
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: audit
+    source_file: audit_board_game_mode.md
+    description: "BG Thread Operations: no Coherence cost. Confirm intentional (TTRPG personal-scale only)."
+    full_flag_text: "[EDITORIAL: ED-057 — BG Thread Ops: no Coherence cost. Confirm intentional.]"
+    status: provisional
+    priority: P2
+    decision: "PP-120 PROVISIONAL: Coherence is TTRPG personal-scale only. BG Thread ops cost only Ob, Thread Debt, RS, Co-Movement."
+    propagation_targets:
+      - references/params_board_game.md
+    propagation_status: applied
+    related_ids: []
+    supersedes: []
+    tags: [board_game, threadwork, coherence, cross_mode]
+
+  - id: ED-058
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: audit
+    source_file: audit_board_game_mode.md
+    description: "Reformed Settlement permanent +1 Ob Diplomacy targeting Hafenmark — confirm no reversal mechanic."
+    full_flag_text: "[EDITORIAL: ED-058 — Reformed Settlement +1 Ob permanent (PP-121). Confirm no reversal. If reversal desired, provide design.]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets:
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+      - references/params_board_game.md
+    propagation_status: pending
+    related_ids: []
+    supersedes: []
+    tags: [board_game, hafenmark, reformed_settlement, diplomacy]

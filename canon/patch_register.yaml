@@ -1243,3 +1243,124 @@ patches:
   applied_to_version: "v1.3"
   status: applied
   applied_commit: "2026-04-02-audit-d-01"
+
+- id: PP-112
+  date: 2026-04-02
+  severity: P1
+  description: "Remove struck Majority-1s override from params_board_game.md. GAP-BG-14."
+  finding_id: "GAP-BG-14 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: applied
+  applied_commit: "2026-04-02-audit-bg-01"
+
+- id: PP-113
+  date: 2026-04-02
+  severity: P2
+  description: "Stat ceilings and floors table: faction stats floor 0, ceiling 7. Standing 0-10."
+  finding_id: "A-BG-07 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: applied
+  applied_commit: "2026-04-02-audit-bg-01"
+
+- id: PP-114
+  date: 2026-04-02
+  severity: P2
+  description: "IP post-80 escalation: IP 81-89 Vanguard +1 territory/season; IP 90-99 Altonian Mil +2; IP 100 shared defeat. Fills GAP-BG-06. PROVISIONAL."
+  finding_id: "GAP-BG-06 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+
+- id: PP-115
+  date: 2026-04-02
+  severity: P2
+  description: "PI threshold table. PI 0 = Parliament dissolved + Löwenritter coup. Fills GAP-BG-03. PROVISIONAL ED-055."
+  finding_id: "GAP-BG-03 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+
+- id: PP-116
+  date: 2026-04-02
+  severity: P2
+  description: "TC seasonal cap: Domain Actions +-3, all sources +-5. Seizure gains exempt. TC ceiling 100 cosmetic. PROVISIONAL ED-056."
+  finding_id: "A-BG-05 / GAP-BG-04 / GAP-BG-09 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+
+- id: PP-117
+  date: 2026-04-02
+  severity: P1
+  description: "Faction collapse exit: 1 season elapsed + no hostile Domain Actions + Govern Ob 2 Success. Auto-exit Season 2 Stability 1 Mandate 0. PROVISIONAL ED-053."
+  finding_id: "GAP-BG-01 / C-BG-02 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+
+- id: PP-118
+  date: 2026-04-02
+  severity: P1
+  description: "Simultaneous RS=0 + IP>=80: Rupture (Step 6) takes precedence. Exception: Restoration Step 5 victory pre-empts. PROVISIONAL ED-054."
+  finding_id: "GAP-BG-02 / C-BG-01 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+
+- id: PP-119
+  date: 2026-04-02
+  severity: P2
+  description: "BG unit Cohesion starting values by type. Track 0-6. At 0: destroyed. +1/season recovery if no battle. PROVISIONAL GAP-BG-07."
+  finding_id: "GAP-BG-07 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+
+- id: PP-120
+  date: 2026-04-02
+  severity: P2
+  description: "BG Thread ops: no Coherence cost. TTRPG personal-scale only. Hybrid: PC Coherence via Cascade Step 3. PROVISIONAL ED-057."
+  finding_id: "G-BG-03 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+
+- id: PP-121
+  date: 2026-04-02
+  severity: P2
+  description: "Reformed Settlement +1 Ob Diplomacy targeting Hafenmark: permanent, no reversal. PROVISIONAL ED-058 open."
+  finding_id: "GAP-BG-11 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+
+- id: PP-122
+  date: 2026-04-02
+  severity: P2
+  description: "CP awards in Hybrid: CP +1 on Domain Action Success if PC declares Belief. CP +1 on Mandate decision if Conviction articulated. BG-only: no CP. Fills G-BG-05."
+  finding_id: "G-BG-05 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"

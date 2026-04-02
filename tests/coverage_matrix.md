@@ -113,3 +113,32 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 | F-D-03 | SIM-D-01 | Obscuring in Divergence: orientation_weight undefined. PP-099: Doubt Marker rule applies. |
 | F-D-04 | SIM-D-01 | Presence 1 cannot participate meaningfully in formal debate. Institutional gatekeeping implied. |
 | F-D-06 | SIM-D-01 | Grand Debate + Corroboration: ~90 resolution steps. No GM reference card. Tooling gap. |
+
+
+## Board Game Mode Audit (2026-04-02)
+
+| Test ID | Mechanics | Mode | Temporal | Tracks | Factions | NPCs | Archetypes | Status | Findings |
+|---------|-----------|------|----------|--------|----------|------|------------|--------|----------|
+| AUDIT-BG-01 | BG Mode: Modes A+B+C+D+E+F+G | BG+Hybrid | Structural audit | TC RS IP PI Faction-stats Cohesion | All BG | N/A | N/A | Complete | GAP-BG-01 (P1) GAP-BG-02 (P1) GAP-BG-14 (P1); 9xP2; PP-112-122 applied |
+
+### P1 Findings — AUDIT-BG-01
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| GAP-BG-01 | AUDIT-BG-01 | Faction collapse exit condition undefined | PP-117 PROVISIONAL |
+| GAP-BG-02 | AUDIT-BG-01 | Simultaneous RS=0 + IP>=80 resolution undefined | PP-118 PROVISIONAL |
+| GAP-BG-14 | AUDIT-BG-01 | params_board_game.md: Majority-1s override stale (struck from design) | PP-112 APPLIED |
+
+### P2 Findings — AUDIT-BG-01
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| GAP-BG-03 | AUDIT-BG-01 | PI floor/ceiling undefined | PP-115 PROVISIONAL (ED-055) |
+| GAP-BG-04 | AUDIT-BG-01 | TC ceiling post-TC-80 undefined | PP-116 PROVISIONAL (ED-056) |
+| GAP-BG-06 | AUDIT-BG-01 | IP above 80 undefined | PP-114 PROVISIONAL |
+| GAP-BG-07 | AUDIT-BG-01 | BG unit Cohesion undefined in params | PP-119 PROVISIONAL |
+| GAP-BG-09 | AUDIT-BG-01 | TC cap vs seizure interaction | PP-116 PROVISIONAL |
+| GAP-BG-11 | AUDIT-BG-01 | Reformed Settlement +1 Ob — confirm no reversal | PP-121 PROVISIONAL (ED-058 open) |
+| G-BG-03 | AUDIT-BG-01 | BG Thread Ops: no Coherence — confirm intentional | PP-120 PROVISIONAL (ED-057) |
+| G-BG-05 | AUDIT-BG-01 | CP awards in Hybrid: no worked example | PP-122 PROVISIONAL |
+| A-BG-03 | AUDIT-BG-01 | Overwhelming threshold TTRPG vs BG conflict | ED-031 PROVISIONAL ongoing |

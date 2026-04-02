@@ -199,6 +199,17 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 
 ---
 
+
+
+### BOARD GAME AUDIT 2026-04-02
+
+| Changed File | Propagates To | Reason |
+|-------------|--------------|--------|
+| `references/params_board_game.md` | `designs/board_game/valoria_bg_v05_simulation_and_patches.md` | PP-115-122 gap fills |
+| `references/params_board_game.md` | `canon/editorial_ledger.yaml` | ED-053-058 added |
+| `references/params_board_game.md` | `canon/patch_register.yaml` | PP-112-122 added |
+| `canon/editorial_ledger.yaml` | `session_log_current.md` | New editorial decisions pending |
+
 ## BROKEN DEPENDENCIES (auto-detected, log here)
 
 | File | Broken Reference | Detected | Status |
