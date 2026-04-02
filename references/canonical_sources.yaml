@@ -1,0 +1,176 @@
+# VALORIA CANONICAL SOURCES REGISTRY
+# Single source of truth for which file governs each system.
+# Used by: simulator Read Protocol, mechanic-audit, canon-guard, compiler.
+# Updated whenever a new design file supersedes a compilation stage.
+# Rule: most recent PATCHED document wins. If design doc has patches applied
+#       that compilation doesn't, design doc is canonical. If compilation has
+#       been compiled from an approved design doc and no newer patches exist,
+#       compilation may be used.
+
+---
+
+systems:
+
+  core_engine:
+    canonical: compilation/v0.14/stage1_core_engine.md
+    params: references/params_core.md
+    design_doc: null
+    compilation_current: true
+    note: "No design-layer core doc exists. Stage1 is canonical."
+
+  characters:
+    canonical: compilation/v0.14/stage2_characters.md
+    params: references/params_core.md  # character values in core params
+    design_doc: null
+    compilation_current: true
+    note: "No design-layer character doc exists. Stage2 is canonical."
+
+  threadwork:
+    canonical: designs/ttrpg/threadwork_redesign_v25.md
+    params: references/params_threadwork.md
+    design_doc: designs/ttrpg/threadwork_redesign_v25.md
+    compilation_stage: compilation/v0.14/stage3_thread_operations.md
+    compilation_current: false
+    note: "stage3 is EMPTY/STALE. threadwork_redesign_v25 is canonical. Parts 9+10+11 have all current patches."
+
+  southernmost:
+    canonical: compilation/v0.14/stage4_southernmost.md
+    params: null
+    design_doc: null
+    compilation_current: true
+    note: "No design-layer Southernmost doc. Stage4 is canonical. Contains 'Ceiral' placeholder (ED-048 open)."
+
+  clocks:
+    canonical: compilation/v0.14/stage5_clocks.md
+    params: null
+    design_doc: null
+    compilation_current: true
+    note: "R-68 TC accounting gate confirmation needed. No design-layer clock doc."
+
+  factions:
+    canonical_ttrpg: compilation/v0.14/stage6_factions.md
+    canonical_bg: designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    canonical_hybrid: designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    params: references/params_factions.md
+    compilation_current_ttrpg: true
+    compilation_current_bg: false
+    note: "Stage6 is canonical for TTRPG faction mechanics. bg_v05 is canonical for BG/Hybrid. Stage6 is STALE for BG."
+
+  territories:
+    canonical: compilation/v0.14/stage7_territories.md
+    params: null
+    design_doc: null
+    compilation_current: true
+
+  combat:
+    canonical: designs/combat/combat_design_v1.md
+    params: references/params_combat.md
+    design_doc: designs/combat/combat_design_v1.md
+    compilation_stage: compilation/v0.14/stage8_combat.md
+    compilation_current: false
+    note: "combat_design_v1.md has PP-086-092, MT-01 faction rosters, three-mode framing. stage8 has subset. Use design doc."
+
+  mass_combat:
+    canonical: designs/mass_combat/mass_battle_v3.md
+    params: references/params_mass_combat.md
+    design_doc: designs/mass_combat/mass_battle_v3.md
+    compilation_stage: compilation/v0.14/stage8_combat.md  # §8.9
+    compilation_current: false
+    note: "mass_battle_v3 has 7-phase structure (ED-050), ST-MB patches, Altonian provisional stats. stage8 §8.9 is behind."
+
+  social_debate:
+    canonical: designs/debate/debate_system_redesign_v1.md
+    params: references/params_debate.md
+    design_doc: designs/debate/debate_system_redesign_v1.md
+    compilation_stage: compilation/v0.14/stage9_social.md
+    compilation_current: false
+    note: "stage9 is EMPTY/STALE. debate_system_redesign_v1 Part 6 is canonical. SIM-DEBT-01 open (re-calibration needed)."
+
+  advancement:
+    canonical: compilation/v0.14/stage10_advancement.md
+    params: null
+    design_doc: null
+    compilation_current: true
+
+  scale_transitions:
+    canonical: compilation/v0.14/stage11_scale_transitions.md
+    params: references/params_scale_transitions.md
+    design_doc: null
+    compilation_current: true
+    note: "stage11 updated this session with PP-089/090 and Thread timing fix. No separate design doc. Canonical."
+
+  campaign_modes:
+    canonical: compilation/v0.14/stage12_campaign_modes.md
+    params: null
+    design_doc: null
+    compilation_current: true
+
+  npcs:
+    canonical: compilation/v0.14/stage13_npcs.md
+    params: null
+    design_doc: designs/ttrpg/edeyja_npc.md  # supplementary
+    compilation_current: true
+    note: "Stage13 canonical. GAP: Focus+Attunement values missing from NPC profiles (GAP-ARC31-SIM-01). Ceiral placeholder (ED-048)."
+
+  gm_tools:
+    canonical: compilation/v0.14/stage14_gm_tools.md
+    params: null
+    design_doc: null
+    compilation_current: true
+
+  spell_catalog:
+    canonical: compilation/v0.14/stage15_spell_catalog.md
+    params: null
+    design_doc: null
+    compilation_current: true
+    note: "Several pending patches: R-55 (FR-D-12), R-56 (W-08), R-59/60, R-62 (W-51 Ob 6), R-63 (FR-L-30), R-64 (Mode 3). Apply when compiling."
+
+  board_game:
+    canonical: designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    params: references/params_board_game.md
+    design_doc: designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    compilation_stage: compilation/v0.14/stage_bg_board_game_mode.md
+    compilation_current: false
+    note: "stage_bg is STALE. bg_v05 is canonical. ED-001 (Card-Hand) blocker for compilation sync."
+
+  hybrid:
+    canonical_design: designs/hybrid/hybrid_gaps_resolved.md  # pending integration
+    canonical_rules: compilation/v0.14/stage11_scale_transitions.md
+    params: references/params_scale_transitions.md
+    design_doc: designs/hybrid/hybrid_gaps_resolved.md
+    compilation_current: true  # for rules; design doc pending integration
+    note: "hybrid_gaps_resolved.md has 17 resolved gaps not yet in stage11. Integration pending."
+
+---
+
+## HOW SKILLS USE THIS FILE
+
+**Simulator / Mechanic-Audit Read Protocol:**
+1. Read canonical_sources.yaml (this file)
+2. For the system under test, find `canonical:` field
+3. Load `params:` file first (most efficient — extracted values)
+4. If a value is missing from params: check `canonical:` document directly
+5. NEVER use a document listed as `compilation_current: false` — use the design doc
+
+**Canon-guard Read Protocol:**
+1. Load `canon/02_canon_constraints.md` (P-01 to P-15)
+2. For the mechanic under test, find its system in canonical_sources.yaml
+3. Load params file for mechanical values
+4. Check against each applicable constraint
+
+**Compiler Read Protocol:**
+1. For each system to compile, check canonical_sources.yaml
+2. If `compilation_current: true` — the compilation stage is already the canonical source; verify no patches have been applied to design docs since last compile
+3. If `compilation_current: false` — the design doc is more current; compile FROM the design doc INTO the compilation stage
+
+---
+
+## UPDATE PROTOCOL (auto-maintained)
+
+When any design doc or compilation stage changes:
+1. Update `compilation_current:` field for that system
+2. Update `canonical:` if the source changes
+3. Update `note:` with what changed and when
+4. Include this file in the same atomic commit as the changed document
+
+This file is included in the propagation_map.md as a dependency of EVERY system.

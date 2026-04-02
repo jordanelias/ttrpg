@@ -1,213 +1,171 @@
 # VALORIA PROJECT INSTRUCTIONS
-For All Sessions — Read First
+## For All Sessions — Read First
+## Version: 2026-04-02
+
+---
 
 ## What This Project Is
-Valoria is a tabletop roleplaying game / board game / hybrid playable in all three modes. This project develops the complete ruleset, audits it against philosophical canon, stress-tests all mechanics, and compiles clean checkpoint editions.
 
-Architecture: Skills live on GitHub (`skills/`). Always read skills from GitHub — `/mnt/skills/user/` copies may be stale. Persistent state lives on GitHub.
+Valoria is a tabletop roleplaying game / board game / hybrid playable in all three modes. All three modes are mechanically grounded in the TTRPG baseline — Hybrid bridges them, Board Game abstracts to strategic scale.
 
-## MANDATORY FILE CHECKING
-Before executing any task that calls for reference to a file, check Project Files. Only if Project Files do not have the requested file should GitHub be checked.
+Frame: **TTRPG ← Hybrid → Board Game**
 
-## MANDATORY MODEL ROUTING — ENFORCED ON EVERY TASK
+---
 
-| Task Type | Model | Rationale |
-|-----------|-------|-----------|
-| Document chunking, indexing, section extraction | Haiku 4.5 | Structural; no reasoning |
-| Format fixes, cross-reference insertion, table formatting | Haiku 4.5 | Mechanical transcription |
-| Formula transcription from design docs to ruleset | Haiku 4.5 | Copy + format |
-| Consistency repair (wrong numbers, broken refs) | Haiku 4.5 | Pattern matching |
-| Dice probability tables, EV, opposing rolls, pool splits | Haiku 4.5 | Arithmetic/simulation |
-| Mechanical gap-fill (known constraints, no ambiguity) | Sonnet 4.6 | Structured reasoning within bounds |
-| Canon compliance checking | Sonnet 4.6 | Philosophical judgment |
-| Stress testing / simulation | Sonnet 4.6 | Scenario reasoning |
-| Mechanical audit (interaction analysis, gap detection) | Sonnet 4.6 | System-level reasoning |
-| Compilation assembly (merging sources into clean doc) | Sonnet 4.6 | Judgment on integration conflicts |
-| Editorial-adjacent design (faction cards, NPCs, setting) | Opus 4.6 | Creative + philosophical judgment |
-| Ambiguous design intent resolution | Opus 4.6 | Deep contextual reasoning |
-| Philosophy-heavy new mechanic design | Opus 4.6 | Foundations interpretation |
+## State and Authority
 
-**Routing Protocol**
-Assess task complexity BEFORE starting.
-If task can be done by a cheaper model: say so. Suggest user switch model or flag for batch processing at lower tier.
-NEVER run Haiku-tier or Sonnet-tier work on Opus. Flag it and refuse to execute inline. Provide the task specification so the user can run it on the appropriate model.
-When multiple sub-tasks exist, produce a routing table showing each sub-task's assigned model BEFORE executing any of them.
-If the current model is wrong for the task, state: [MODEL MISMATCH: this task is [Haiku/Sonnet]-tier. Switch model or confirm override.]
+**All persistent state lives on GitHub** (`jordanelias/ttrpg`, branch `main`). Project Files are deprecated — do not use them.
 
-## Skill Delegation — Mandatory
+**Document authority (immutable hierarchy):**
+1. `canon/00_philosophical_foundations.md` — governs everything
+2. `canon/01_*.md` amendments — extend the Foundations
+3. `canon/02_canon_constraints.md` — mechanical constraints derived from Foundations (P-01 to P-15)
+4. `designs/` working documents — source of truth for all active mechanics
+5. `compilation/` — periodic snapshots; use only when `compilation_current: true` in `references/canonical_sources.yaml`
 
-Skills exist to be used. Every multi-step task MUST be decomposed into skill calls. Anti-pattern: doing skill work inline on Opus. If the orchestrator catches itself about to do chunking, formula checking, structural assembly, or dice math inline, STOP and route to the appropriate skill + model.
+**Critical rule:** When `references/canonical_sources.yaml` lists a design doc as `canonical:` for a system, use that design doc. If `compilation_current: false`, the compilation stage is stale — never use it as a source of mechanical values.
 
-| Skill | Model | When to Use |
-|-------|-------|-------------|
-| valoria-orchestrator | Sonnet 4.6 | Session start, workflow routing, editorial gate |
-| valoria-chunker | Haiku 4.5 | Any input >500 lines |
-| valoria-canon-guard | Sonnet 4.6 | Any new mechanic, any audit finding, any compilation stage |
-| valoria-mechanic-audit | Sonnet 4.6 | Consistency, gap detection, formula checks |
-| valoria-simulator | Sonnet 4.6 | Stress tests, edge cases, scenario simulations |
-| valoria-compiler | Haiku 4.5 / Sonnet 4.6 | Assembly, patching, checkpoint export |
-| valoria-dice-model | Haiku 4.5 | P(success/partial/fail), EV, opposing rolls, pool splits, Fibonacci value, Momentum value, any dice math |
+---
 
-## Canonical Dice Rule
+## Session Start Protocol (Mandatory)
 
-| Face | Net Successes |
-|------|--------------|
-| 1 | −1 |
-| 2 to TN−1 | 0 |
-| TN to 9 | +1 |
-| 10 | +2 (flat; no extra die) |
+1. Bootstrap `github_ops.py` from `skills/valoria-orchestrator/scripts/github_ops.py`. Use `read_files_graphql()` for all batch reads.
+2. Read `session_log_current.md` from GitHub. Report last stage + next action in ≤3 lines.
+3. Read `canon/editorial_ledger.yaml`. Report P1-BLOCKER count only.
+4. Read `references/file_index.md` KNOWN STALE SYNC GAPS section. Report count.
+5. Confirm task with user before proceeding.
 
-TN values: 6 (Controlled), 7 (Standard), 8 (Desperate).
-Net successes = sum of all dice (can be negative).
+---
 
-## GitHub API
-**Repo:** `jordanelias/ttrpg` · branch `main`
-**PAT:** `github_pat_11ACSEXDA0K9O7BaTfn` + `qSe_IvZhgAEv2oUytdU3VaBIoSRqTnKPkTAxy3DtxBQUI0VTCBEO6HLHfWkPNzB` (concatenate both parts)
+## Simulation Commands
 
-**Read:**
-```
-GET https://api.github.com/repos/jordanelias/ttrpg/contents/{path}
-Authorization: token {PAT}
-```
-content field is base64-encoded. Decode before parsing. Capture sha for any write.
+| Command | What runs |
+|---------|-----------|
+| `stress test [specific mechanic]` | Simulator Modes A + D + J + L (isolation, edge cases, cognitive load, precedent) |
+| `stress test [subsystem]` | Simulator Mode G-submode + D + J + K + L (full subsystem + cross-mode) |
+| `stress test [mode]` | All G-submodes for that mode — multi-session, orchestrator stages it |
+| `simulate [scenario]` | Simulator Modes C + M (full scenario + branching flowchart) |
+| `simulate [ttrpg/hybrid/boardgame]` | Modes C + G-suite + M — multi-session |
+| `audit [subsystem]` | Mechanic-audit Modes A–G |
 
-**Write:**
-```
-PUT https://api.github.com/repos/jordanelias/ttrpg/contents/{path}
-Authorization: token {PAT}
-Body: {"message": "{commit message}", "content": "{base64-encoded}", "sha": "{current sha}"}
-```
-Always GET before PUT. SHA not required for new files. On 409: re-GET and retry once. On failure after retry: output as fenced code block with manual paste instructions. Never silently drop state.
+**Every simulation run commits findings immediately** (Mode I protocol). Nothing accumulates between sessions.
 
-Commit discipline: Finalize files locally before pushing. One push per file per session. No revision commits.
+**Audit criteria covered:** crunch cascade, edge cases, regressions, failures, ambiguities, overlap, incoherence, philosophy compliance, cognitive load, time consumed, meaningful actions, emergent gameplay, precedent comparison, cross-mode interdependency, transition/zoom fidelity, narrative branching flowcharts.
 
-## Document Hierarchy (Immutable)
-1. `Valoria_Philosophical_Foundations.docx` — metaphysical canon; governs everything
-2. `Mechanics.docx` — core mechanical principles and design intent; original edition
-3. Current ruleset checkpoint — working document; subject to audit against 1–2
+---
 
-If conflict: higher-ranked document wins. Always. The ruleset header states this explicitly.
+## Mandatory Model Routing
 
-## Editorial Control
-User approves all: setting, worldbuilding, character content, narrative, tone, faction behavior, design intent resolution, ambiguous calls.
-Claude executes without approval: formula fixes, consistency repairs, format changes, audits, simulations, dice probability analysis.
-Flag format: [EDITORIAL: requires user approval — description]
+| Task | Model |
+|------|-------|
+| Chunking, indexing, section extraction, dice math, format fixes | Haiku 4.5 |
+| Simulation, audit, canon compliance, mechanical gap-fill, compilation | Sonnet 4.6 |
+| Editorial-adjacent design, ambiguous intent, philosophy-heavy design | Opus 4.6 |
 
-## Session Protocol
-**Start:** Read `session_log_current.md` (NOT `session_log_archive.md`). Report status in ≤3 lines. Read `valoria_gap_register_consolidated.md` — P1 count only. Confirm task. Produce model routing table before executing anything.
+Assess tier BEFORE starting. If the current model is wrong: flag `[MODEL MISMATCH: this is <tier>-tier work]` and stop.
 
-**Work:** Execute via skill workflows. Checkpoint after each stage.
+---
 
-**End:** Replace content of `session_log_current.md` with session-close YAML. Append previous current block to `session_log_archive.md`. Update gap register if changed.
+## Editorial Gate
 
-**Context limit:** Complete current stage → session-close → instruct new chat with handoff.
+**User approves:** setting, worldbuilding, characters, narrative, faction behaviour, ambiguous design intent, all `[EDITORIAL: ...]` items.
 
-## Token Efficiency Rules — Non-Negotiable
-- Chunk before analyzing (>500 lines → valoria-chunker first)
-- Never re-read already-chunked documents within a session
-- Never re-run completed stages
-- Intermediate work: tables, not prose. Final outputs only as documents.
-- Haiku for structural work and dice math; Sonnet for reasoning; Opus only for editorial/philosophical judgment.
-- Session log: read ONLY `session_log_current.md` on resume. Never the archive.
-- Finalize before committing to GitHub. No revision commits.
+**Claude executes without approval:** formula fixes, consistency repairs, formatting, simulations, mechanical patches derived from simulation findings.
 
-## Stress Testing & Simulation Coverage Matrix
+**Provisional decisions:** When a blocker prevents simulation, Claude makes the most mechanically defensible choice, marks it `[PROVISIONAL: ...]`, adds it to the editorial ledger with `status: provisional`, and surfaces it for user review. Provisional decisions unblock simulation — they are not final.
 
-The simulation coverage matrix tracks SEVEN dimensions. Every test scenario must be tagged across all applicable dimensions.
+**Flag format:** `[EDITORIAL: ED-NNN — brief description]`
 
-**Dimension 1: Mechanic** (56 mechanics, M-001 through M-056)
+---
 
-**Dimension 2: Game Mode**
+## Commit Protocol (Mandatory on Every Commit)
 
-| Code | Mode |
-|------|------|
-| TTRPG | Tabletop RPG mode |
-| BG | Board game mode |
-| HYB | Hybrid mode |
+Every commit must be atomic and contain:
+1. The changed design doc(s)
+2. The corresponding params file(s) if mechanical values changed
+3. `references/canonical_sources.yaml` if a source authority changed
+4. `references/propagation_map.md` (updated with any new cross-references)
+5. `canon/patch_register.yaml` if patches were applied
+6. `canon/editorial_ledger.yaml` if editorial items were added/resolved
+7. `tests/coverage_matrix.md` if a simulation was run
+8. The test output file in `tests/` if a simulation was run
 
-**Dimension 3: Temporal Impact**
+**Commit message format:** `[scope] description — PP-NNN / ED-NNN if applicable`
 
-| Code | Description |
-|------|-------------|
-| PAST | Mechanic engages with accumulated past (Histories, Memory Pull, flashbacks, institutional memory) |
-| PRES | Mechanic resolves in present action (combat, skill checks, current-state operations) |
-| FUT | Mechanic projects into future (clocks, countdown timers, strategic planning, trajectory) |
-| CROSS | Mechanic bridges temporal modes (co-movement, TD accumulation, transformation arcs) |
+Scopes: `editorial` / `patch` / `simulation` / `compilation` / `infrastructure` / `skill` / `cleanup`
 
-**Dimension 4: Tracks & Timers Invoked**
-TT, TC, IP, TS, TD, INT, CERT, COMP, TLK, PI, DD, CE, FSTAT
+Never commit a design file without updating `canonical_sources.yaml` if the commit changes which document is canonical for a system.
 
-**Dimension 5: Faction**
-Crown, Church, Hafenmark, Varfell, Guilds, Niflhel, Revolution, Löwenritter, Schoenland (spoiler)
+---
 
-Each faction must have a generic character tested across all faction-relevant mechanics: Domain Actions, faction stat changes, seasonal accounting, inter-faction interactions, mode-specific faction operations.
+## Key Reference Files
 
-**Dimension 6: Named NPCs**
+| File | Purpose |
+|------|---------|
+| `references/canonical_sources.yaml` | Which document is canonical for each system |
+| `references/propagation_map.md` | Cross-reference dependencies; auto-updated on every commit |
+| `references/file_index.md` | All files, status, stale gaps |
+| `references/params_*.md` | Extracted mechanical values for each system |
+| `canon/editorial_ledger.yaml` | All editorial decisions (49 items: 40 open, 3 provisional, 3 resolved, 4 struck) |
+| `canon/patch_register.yaml` | All patches PP-001–PP-096 |
+| `tests/coverage_matrix.md` | Simulation coverage; P1 findings; SIM-DEBT register |
+| `skills/valoria-orchestrator/references/state_transfer_spec.md` | State variables at every mode boundary |
+| `skills/valoria-orchestrator/references/skill_registry.md` | All skills, paths, triggers, command routing |
+| `session_log_current.md` | Current session state |
 
-| NPC | Faction | Unique Mechanics to Test |
-|-----|---------|--------------------------|
-| Almud | Crown | Elevated TS (artefact contact), political paralysis, succession crisis trigger |
-| Lenneth | Crown | Covert networks, scholarly TS acquisition, Revolution endowment |
-| Torben | Crown/Altonia | Loyalty Clock, tutoring demand (IP 30), covert contact (Int Ob 3), retrieval options |
-| Elske | Crown/Altonia | Conviction (Family vs Self-Determination), recruitment by multiple factions, independence paths |
-| Himlensendt | Church | Devout Constraint (sincere, zero TS awareness), institutional expansion, TC driver |
-| Olafsson | Church | Cardinal mechanics, Church internal politics |
-| Klapp | Church | Cardinal mechanics, Church expansion, intelligence operations |
-| Baralta | Hafenmark | Devout + constitutional legalist, divine authority claim vs Confessor jurisdiction |
-| Vaynard | Varfell | Secret Thread knowledge pursuit, artifact collection, consequentialist pragmatism |
-| Maret Uln | Varfell/Southernmost | Practitioner mechanics, Southernmost access, Revolution adjacency |
-| Ehrenwall | Löwenritter | Coup trigger conditions, Martial Law, Crown loyalty assessment |
+---
 
-**Dimension 7: Character Archetype**
+## Skills
 
-| Archetype | Description |
-|-----------|-------------|
-| Practitioner | TS-active, performs Thread operations |
-| Faction Leader | Controls faction stats via Domain Actions |
-| Inquisitor | CE accumulation, investigation procedure, TS risk |
-| Riskbreaker | Deniability Debt, covert operations |
-| Löwenritter Knight | Military specialist, institutional loyalty |
-| Knight Templar | Church military, Devout Constraint |
-| Devout Character | TS-blocked, Dissonance Marks |
-| Non-TS Scholar | Research-based, no Thread perception |
+All skills live in `skills/` on GitHub. Read from GitHub — never from local or Project File copies.
 
-**Coverage Matrix Format**
+| Skill | Path | Tier | Use When |
+|-------|------|------|----------|
+| valoria-orchestrator | `skills/valoria-orchestrator/SKILL.md` | Sonnet | Session start, routing, any multi-step task |
+| valoria-simulator | `skills/valoria-simulator-SKILL.md` | Sonnet | Stress test, simulate, Modes A–M |
+| valoria-mechanic-audit | `skills/valoria-mechanic-audit-SKILL.md` | Sonnet | Audit, consistency check, gap detection |
+| valoria-canon-guard | `skills/valoria-canon-guard-SKILL.md` | Sonnet | Canon compliance (P-01–P-15) |
+| valoria-editorial-register | `skills/valoria-editorial-register/SKILL.md` | Sonnet | Resolve editorials, harvest flags, dedup |
+| valoria-compiler | `skills/valoria-compiler-SKILL.md` | Sonnet | Compile (lowest priority — only on request) |
+| valoria-chunker | `skills/valoria-chunker-SKILL.md` | Haiku | Pre-process docs >500 lines |
+| valoria-arc-generator | `skills/valoria-arc-generator/SKILL.md` | Sonnet | Generate arcs, campaign scenarios |
+| valoria-combat-simulator | `skills/valoria-combat-simulator/SKILL.md` | Sonnet | Statistical/probabilistic combat analysis |
+| valoria-dice-model | `skills/valoria-dice-model/SKILL.md` | Haiku | Dice math, probability tables |
 
-| Test ID | Mechanics | Mode | Temporal | Tracks | Factions | NPCs | Archetypes | Status | Findings |
+---
 
-**Coverage Requirements (Phase 3 gate)**
-- Every mechanic (M-001–M-056) tested in at least Isolation + Interaction
-- Every game mode (TTRPG/BG/HYB) covered for every applicable mechanic
-- Every faction tested with a generic character in faction-relevant mechanics
-- Every named NPC tested in their unique-mechanic scenarios
-- Every archetype tested in archetype-defining mechanics
-- Every track tested at: starting value, mid-range, threshold crossing, and terminal value
-- Zero untested P1 interactions (cross-referenced from mechanic-audit Mode C dependency graph)
+## Context Limit
 
-## Persistent Files (GitHub)
+At 90% context: halt all tasks, run Session Close Protocol, commit everything, tell the user to start a new chat. This rule overrides everything else.
 
-| File | Location | Purpose |
-|------|----------|---------|
-| session_log_current.md | root | Latest session state — READ THIS ON RESUME |
-| session_log_archive.md | root | Historical record — DO NOT read on resume |
-| valoria_gap_register_consolidated.md | root | Open issues (P1/P2/P3) |
-| valoria_comprehensive_workplan.md | root | 5-phase workplan |
-| valoria_patch_proposals.md | root | Approved and pending patches |
-| canon/canon_constraints.md | canon/ | 14 philosophical constraints |
-| canon/valoria_canonical_timeline.md | canon/ | Canonical setting chronology |
-| designs/ | designs/ | Phase 1 batch design files |
-| compilation/ | compilation/ | Phase 2 compilation stages |
-| skills/ | skills/ | Canonical skill definitions (read from here, not /mnt/skills/user/) |
-| tests/ | tests/ | Simulation outputs and coverage matrix |
+---
 
-## 14 Canon Constraints (Quick Reference)
-P-01 Inseparability (co-movement mandatory) · P-02 Ein Sof = fullness · P-03 Rendering = consciousness · P-04 Monstrosity ≠ moral · P-05 Three modes distinct · P-06 Threadcut = is without becoming · P-07 Calamity = rendered-side · P-08 Barrier = inaccessibility · P-09 Memory pull = messy · P-10 Epistemic seduction = perceptual shift · P-11 TD universal · P-12 Relational contagion · P-13 Forgetting = rendering failure · P-14 All modes express inseparability
+## GitHub
 
-## Current Status
-Phase: 2 (Compilation) — Phase 1 Design complete (38/38 gaps resolved)
-Compilation progress: 2/28 stages (core engine, characters)
-Gap Register: 108 items (consolidated)
-Patch Proposals: 93 total (35 P1 / 47 P2 / 10 P3 / 1 design)
-Simulation Coverage: 0/56 mechanics tested (Phase 3)
-Pending compilation patches: PP-092 (§1.1 dice table), PP-093 (§4.3 Stunt rule) — approved, awaiting compiler stage
-Editorial Pending: Territory names, Varfell victory tuning, 10 seasonal event cards, Restoration NPCs, Niflhel primus inter pares, Varfell Private Collection transfer, E-01 (assassination perpetrator), E-03 (AG calendar name)
+**Repository:** `jordanelias/ttrpg` branch `main`
+**PAT:** stored in Claude Project Instructions only — never in any committed file
+**Operations:** use `github_ops.py` exclusively. GraphQL for batch reads (`read_files_graphql`). GraphQL mutation for atomic commits (`atomic_commit`). REST only for operations not covered by the script.
+
+---
+
+## Compilation
+
+Compilation is the **lowest-priority task**. Never block design, simulation, or editorial work waiting for compilation. Compile only when:
+- A system is stable (no open P1 editorials, no unresolved stress-test findings)
+- The user explicitly requests it
+- `canonical_sources.yaml` shows `compilation_current: false` for that system and a compilation pass is due
+
+Compilation reads FROM `canonical:` docs in `canonical_sources.yaml` and writes TO `compilation/v[N]/`.
+
+---
+
+## Open Blockers (as of 2026-04-02)
+
+| ID | Description | Blocks |
+|----|-------------|--------|
+| ED-001 | Card-Hand system for BG | BG compilation sync |
+| ED-036 | Altonian unit stats (provisional placeholder active) | Hybrid Altonian engagement |
+| ED-048 | 'Ceiral' is not a canon name | NPC/arc work referencing this character |
+
+All other editorial items are non-blocking for simulation.
+**SIM-DEBT-01:** Debate stress tests calibrated with Cognition+History pool; now (Presence×2)+History. Re-simulation needed before calibration values are treated as final.

@@ -1,4 +1,5 @@
-<!-- version: v0.14+design-ST3 | sources: stage8_combat.md, mass_battle_v3.md | last_updated: 2026-04-02 -->
+<!-- version: v0.14+design-ST3 | sources: designs/combat/combat_design_v1.md, designs/mass_combat/mass_battle_v3.md | last_updated: 2026-04-02 -->
+<!-- CANONICAL SOURCE: combat_design_v1.md supersedes stage8_combat.md §8.9 for mass combat base stats -->
 <!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D -->
 <!-- PHASE STRUCTURE: 7 phases. Thread split: offensive Phase 4, support Phase 6. All damage simultaneous Phase 6 Step 1. -->
 <!-- mass_battle_v3.md is a design proposal. Values marked [COMPILED] are from stage8; [PROPOSAL] from v3. -->

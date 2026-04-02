@@ -1,4 +1,5 @@
-<!-- version: v0.14-ST | sources: stage8_combat.md | last_updated: 2026-04-02 -->
+<!-- version: v0.14-ST2 | sources: designs/combat/combat_design_v1.md | last_updated: 2026-04-02 -->
+<!-- CANONICAL SOURCE: combat_design_v1.md supersedes stage8_combat.md (has PP-086-092, MT-01, three-mode framing) -->
 <!-- PATCHES APPLIED: PP-086 (base damage), PP-087 (Formation Break stacking), PP-088 (assault linkage), PP-091 (Bombard), PP-092 (P2-B11 personal combat clarifications) -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
 

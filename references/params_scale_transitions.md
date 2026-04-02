@@ -1,4 +1,5 @@
-<!-- version: v0.14 | sources: stage11_scale_transitions.md | last_updated: 2026-03-26 -->
+<!-- version: v0.14-ST | sources: compilation/v0.14/stage11_scale_transitions.md | last_updated: 2026-04-02 -->
+<!-- CANONICAL SOURCE: stage11 is canonical (no design doc for scale transitions). Updated with PP-089/090 and ED-050 Thread timing fix. -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
 
 # params_scale_transitions.md — Scale and Mode Transitions

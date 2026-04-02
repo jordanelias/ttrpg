@@ -45,3 +45,25 @@ Foundations ref: · Current implementation: · Why it violates: · Proposed repa
 - Philosophy governs mechanics. Never the reverse.
 - Mechanically sound but philosophically incoherent = FAIL.
 - When uncertain: PARTIAL, not PASS.
+
+
+## Amendment Integration Workflow
+
+**Trigger:** Any commit touching `canon/00_philosophical_foundations.md` or any `canon/01_*.md` amendment file.
+
+**Protocol:**
+1. Read the amendment. Identify new mechanical implications not covered by P-01–P-14.
+2. For each new implication: draft a new P-NNN entry in the constraint table format.
+3. Update `canon/02_canon_constraints.md` with the new constraint(s).
+4. Update version line with date and description of change.
+5. Commit: `[editorial] Update P-NNN in canon_constraints — [amendment name]`
+
+**This workflow runs automatically** — the orchestrator invokes it whenever a canon file changes. Canon-guard is always current with the Foundations.
+
+## Read Protocol (updated)
+
+Before any compliance check:
+1. Read `canon/02_canon_constraints.md` from GitHub (not from cache — always fetch fresh to get latest P-NNN).
+2. Read `references/canonical_sources.yaml` to identify which document is canonical for the system under test.
+3. Load the canonical document's params file.
+4. Run P-01 through P-15 (or current max) against the mechanic.

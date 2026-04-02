@@ -1,6 +1,6 @@
 # Valoria Canon Constraints — Updated
 ## Extracted from: Valoria_Philosophical_Foundations.docx
-## Version: 2026-03-25 (revised P-01, P-11, P-14 violation tests for Version C co-movement)
+## Version: 2026-04-02 (P-15 added from Amendment 01: three-layer being-persistence, Leap mechanics, Coherence 0)
 
 Every mechanic, rule, and content element must satisfy all applicable constraints.
 Violation = mechanical revision required. No exceptions.
@@ -21,3 +21,5 @@ Violation = mechanical revision required. No exceptions.
 | P-12 | **Relational contagion via knotting**: transformation propagates through Knots. | §16.3 | A transforming practitioner's thread-shift exerts force on everyone knotted to them. Knot strain mechanics reflect this (Patch O: +1 strain/season on Close Knots at Taint 4–6). Extended exposure = low-grade confrontation for connected individuals. | Does the Taint system affect only the practitioner? If Knot strain propagation is absent → FAIL. |
 | P-13 | **Forgetting = rendering failure**: Southernmost knowledge is mechanically untransmittable to non-sensitives. | §10.2, §5.3 (implied) | The Forgetting mechanic must make Southernmost knowledge unstable in non-sensitive minds. Evidence is available; epistemic capacity to render it as knowledge is not. | Can non-sensitive characters retain full Southernmost knowledge indefinitely? If yes → FAIL. |
 | P-14 | **Board/VG modes must express inseparability**: co-movement cannot be omitted in any play mode. | §21.1, §22.2 | Board game: Version C auto-effects printed on faction cards as deterministic consequences. Hybrid: auto-effects fire through same rules as TTRPG. All modes produce three-dimensional co-movement per Thread operation. | Does any play mode allow thread operations without three-dimensional co-movement? If yes → FAIL. |
+| P-15 | **Three-layer being-persistence**: organic beings maintain themselves through (1) Ein Sof spooling, (2) unconscious self-rendering, (3) deliberate threadwork. The Leap = temporary suspension of layer 2. Coherence 0 = layer 2 failing. | Amendment 01 | Coherence track models layer 2 integrity. At Coherence 0: TS-gated branching (low-TS → dissolution of self-configuration; high-TS → reality-strain cost, forced self-maintenance via layer 3). The Leap cannot occur without briefly suspending layer 2 — this is why Leaps have a vulnerability window. | Does any mechanic allow Coherence 0 with no consequence, or allow a Leap without a vulnerability window? If yes → FAIL. Does any rule treat high-TS Coherence 0 as identical to low-TS Coherence 0? If yes → FAIL (TS determines which layer 3 self-maintenance is possible). |
+

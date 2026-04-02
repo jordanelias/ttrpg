@@ -107,10 +107,10 @@ Flag: mass combat actions that resolve faster than personal combat (pacing misma
 State block:
 ```
 ## Debate Round N
-[Participant] — Composure=[N], Conviction Track=[N], Pool=((Presence×2)+History)=[N]D, Stance=[Revealing/Obscuring], Genre=[Past/Present/Future]
-Orientation: [Revealing/Obscuring] | Genre: [Past/Present/Future] | Audience resistance=[N]
+[Participant] — Composure=[N], Rhetoric pool=[N], Stance=[Offense/Defense/Redirect]
+Appeal type: [Logos/Pathos/Ethos] | Target: [Belief/Position]
 Pool: [N]D TN[N] Ob[N] → outcome
-### Strain → Rattled threshold? | Concentration depleted? → Spent? | Tracker delta → State Delta
+### Composure damage → Concession threshold? → State Delta
 ```
 Track: composure degradation curve, dominant strategy detection (is one appeal type always optimal?), stalemate conditions.
 Flag: debate that terminates in <3 rounds at median pools (too fast → P2), debates with no path to resolution (stalemate → P1).
@@ -218,6 +218,127 @@ Prop map: [N] new entries added.
 Committed: [short hash]
 ```
 
+**Step 7 — Report to user:**
+```
+Sim complete: [N] findings. P1: [N] (patched). P2: [N] (patched). Editorial: [N] (logged). Provisional: [N] (flagged).
+Committed: [short hash]
+```
+
+
+
+### J — Cognitive Load and Time Audit
+
+Per mechanic under test, measure and report:
+
+**Cognitive load score (1–10):**
+Count per single resolution:
+- Mandatory decisions (player must choose between options): +1 per decision
+- Mandatory lookups (player must reference a table, formula, or condition list): +1 per lookup
+- Parallel tracks (values held in working memory simultaneously): +1 per track
+- Sequential dependencies (B cannot resolve until A is known): +1 per dependency
+
+Score: total count. Flag at ≥ 5 (borderline), ≥ 7 (problem), ≥ 9 (redesign).
+
+Compare against precedent: BW Duel of Wits = 6, TI4 combat = 4, D&D 5e spell slot combat = 5.
+
+**Time estimate (human minutes at table):**
+- Novice (first 3 sessions): N minutes per resolution
+- Experienced (10+ sessions): N minutes per resolution
+- Expert (campaign-level): N minutes per resolution
+
+Estimate method: count decision points × 30 seconds (novice) / 15 seconds (experienced) / 8 seconds (expert) + lookup time (45s/15s/5s each) + arithmetic time (20s/10s/5s per calculation).
+
+Flag: any mechanic where novice time > 3 minutes per single resolution (P2), > 5 minutes (P1).
+
+Output format:
+```
+[MODE J: mechanic name]
+Decisions: N (list them)
+Lookups: N (list them)
+Parallel tracks: N (list them)
+Sequential dependencies: N (list them)
+Load score: N/10 — [OK / BORDERLINE / PROBLEM / REDESIGN]
+Time (novice/experienced/expert): Nm / Nm / Nm
+Flag: [NONE / P2: reason / P1: reason]
+```
+
+### K — Cross-Mode Delta and Transition Stress Test
+
+Two sub-modes. Run both for any mechanic that spans multiple game modes.
+
+**K1 — Cross-Mode Delta:**
+Run the mechanic in TTRPG, then Hybrid, then Board Game.
+For each mode, record:
+- Pool/formula used
+- Resolution steps
+- Outcome distribution (expected values)
+- Strategic incentives produced (dominant strategies, dead choices)
+- What information the player needs vs what is available
+
+Output a delta table:
+```
+| Property        | TTRPG | Hybrid | Board Game |
+|----------------|-------|--------|------------|
+| Pool/formula   |       |        |            |
+| Steps          |       |        |            |
+| E[outcome]     |       |        |            |
+| Dominant strat |       |        |            |
+| Dead choice?   |       |        |            |
+| Info available |       |        |            |
+```
+
+Flag: any property where BG and TTRPG produce opposite strategic incentives (P1), any mode where a choice becomes mechanically irrelevant (P2).
+
+**K2 — Transition Stress Test:**
+Test the handoff at each mode boundary using the state transfer spec (see `references/state_transfer_spec.md`).
+
+For each transition type (TTRPG→Hybrid, BG→Hybrid, Hybrid→TTRPG, Hybrid→BG, and within-TTRPG Register Shifts):
+
+1. **State inventory check:** List all variables active at point of transition. Verify each is handled: transferred, converted, suspended, or discarded. Any variable not explicitly handled = P1 gap.
+
+2. **Interruption test:** Trigger the transition at each possible phase/step of the source mode. Verify: source mode state is correctly preserved or resolved, target mode receives complete starting state, no orphaned actions or pending resolutions remain.
+
+3. **Zoom In/Out fidelity:** Run a Zoom In from BG battle to TTRPG personal combat. Track: which BG unit state variables convert to TTRPG character state. Run the TTRPG scene. Zoom Out. Verify BG state correctly reflects TTRPG outcomes.
+
+4. **Register Shift test (within TTRPG):** Trigger a Register Shift mid-scene (personal → faction, faction → mass combat). Verify: personal scale state persists correctly, faction-level consequences fire correctly, no scale-crossing variable is double-counted or lost.
+
+Flag every broken handoff as P1.
+
+### L — Precedent Comparison
+
+For the mechanic under test, identify 2–3 analogue mechanics in precedent games. For each:
+
+```
+[PRECEDENT: Game — Mechanic name]
+What it does: [one sentence]
+How Valoria's version differs: [one sentence]
+Justification for difference: [one sentence — cite Foundations, design intent, or mode requirement]
+Risk: [NONE / design drift / unjustified complexity / flavour without function]
+```
+
+Precedent game library (use these in priority order when analogues exist):
+- **Burning Wheel** — belief/instinct system, Duel of Wits, resource cycles, advancement
+- **A Song of Ice and Fire RPG** — intrigue system, house rules
+- **Twilight Imperium 4** — faction asymmetry, political phase, strategic card play
+- **Root** — asymmetric faction design, board game/narrative hybrid
+- **Here I Stand / Virgin Queen** — political/military/religious clock systems
+- **Crusader Kings (TTRPG adaptation)** — succession, dynasty, character-faction binding
+- **Pendragon** — trait/passion system, generational play
+- **Blades in the Dark** — faction clocks, position/effect, crew advancement
+
+If no analogue exists in the library: flag as `[NO PRECEDENT — this mechanic is novel; verify it carries its own weight]`.
+
+Flag: any case where Valoria's version is more complex than the precedent without justification (P2), or where the precedent's solution is strictly superior (P1 — redesign candidate).
+
+### M — Narrative Flowchart Generator
+
+Produces a branching flowchart for a defined scenario seed. This mode generates the full emergent narrative space, not a single path.
+
+**Input:** A trigger event, faction state, and list of named participants.
+
+**Output structure:**
+
+```
 ## FLOWCHART: [scenario name]
 ## Seed: [trigger event]
 ## Mode: TTRPG / Hybrid / BG (all three must be mapped)
@@ -279,42 +400,33 @@ When a blocker requires a decision to proceed:
 5. Surface at next session start for user review
 
 ## Read Protocol — Mandatory Before Any Mode
-Load params files, not stage files. Stage files are verbose source documents; params files are extracted mechanical values.
 
-1. Always read `references/params_core.md` first (dice engine, TN, Ob, degrees).
-2. Then read only the params files relevant to the subsystem being simulated/audited:
+**Step 0 — Canonical source check (first):**
+Read `references/canonical_sources.yaml`. For the system under test, check `canonical:` field and `compilation_current:`. Never use a source listed as `compilation_current: false` — use the design doc instead.
 
-| Subsystem | Params File |
-|-----------|-------------|
-| Core dice/TN/Ob | `references/params_core.md` |
-| Personal combat | `references/params_combat.md` |
-| Mass combat | `references/params_mass_combat.md` |
-| Debate | `references/params_debate.md` |
-| Threadwork | `references/params_threadwork.md` |
-| Factions (TTRPG or BG) | `references/params_factions.md` |
-| Board game mode | `references/params_board_game.md` |
-| Scale/mode transitions | `references/params_scale_transitions.md` |
+**Step 1 — Load params (not source docs):**
+Always load `references/params_core.md` first (dice engine, TN, Ob, degrees).
+Then load only the params file for the system under test:
 
-3. For each params file loaded, check the `<!-- version: -->` tag. If it does not match the current ruleset version (see `compilation/v0.14/README.md` (note: version tag in params is more reliable)), halt and flag: `[STALE PARAMS: <file> is <version>, current ruleset is <version> — update params before proceeding]`.
-4. Do NOT read stage files or design files to get mechanical values. If a value is missing from params, flag it as a gap and request a params update rather than reading the source document mid-simulation.
-5. Exception: when specifically auditing a new design document (not yet parameterised), read that document directly and note that params are incomplete for that subsystem.
+| Subsystem | Params File | Canonical Source (from canonical_sources.yaml) |
+|-----------|-------------|------------------------------------------------|
+| Core dice/TN/Ob | `references/params_core.md` | stage1_core_engine.md |
+| Personal combat | `references/params_combat.md` | designs/combat/combat_design_v1.md |
+| Mass combat | `references/params_mass_combat.md` | designs/mass_combat/mass_battle_v3.md |
+| Debate | `references/params_debate.md` | designs/debate/debate_system_redesign_v1.md Part 6 |
+| Threadwork | `references/params_threadwork.md` | designs/ttrpg/threadwork_redesign_v25.md |
+| Factions | `references/params_factions.md` | stage6 (TTRPG) / bg_v05 (BG/Hybrid) |
+| Board game | `references/params_board_game.md` | designs/board_game/valoria_bg_v05_simulation_and_patches.md |
+| Scale/mode transitions | `references/params_scale_transitions.md` | compilation/v0.14/stage11_scale_transitions.md |
 
-## Version Check Protocol (Mandatory)
-Before running any mode that uses mechanical values:
-1. Read the relevant `references/params_*.md` file(s) for this task.
-2. Check the `<!-- version: -->` tag at the top of each params file.
-3. Compare params version tag. If tag contains "v0.14" (the current checkpoint) or any "design-ST" suffix, the params file is current for simulation purposes. Do not reference the params version tag — it does not carry a reliable version field.
-4. If params version ≠ current ruleset version: **halt, flag as `[STALE PARAMS: <file> is v0.XX, current ruleset is vX.XX — update params before proceeding]`**, and do not proceed until the user confirms or params are updated.
-5. If params version matches: proceed. Cost: ~200 tokens per params file read. No GitHub API call required.
+**Step 2 — Version check:**
+Each params file has a `<!-- version: -->` tag. Any tag containing "v0.14" or "design-ST" is current. If stale or missing: flag `[STALE PARAMS: <file>]` and halt until updated.
 
-Params files and their skill usage:
-| Params file | Used by |
-|-------------|---------|
-| `references/params_core.md` | All skills (dice engine baseline) |
-| `references/params_combat.md` | simulator Mode G1, combat-simulator |
-| `references/params_mass_combat.md` | simulator Mode G1 |
-| `references/params_debate.md` | simulator Mode G2 |
-| `references/params_threadwork.md` | simulator Mode G3 |
-| `references/params_factions.md` | simulator Mode G4, mechanic-audit |
-| `references/params_board_game.md` | simulator Mode G5 |
-| `references/params_scale_transitions.md` | simulator Mode G (cross-mode), mechanic-audit Mode G |
+**Step 3 — Missing value protocol:**
+If a value is missing from params: flag `[PARAMS GAP: <system> missing <value>]` and request a params update. Do NOT read source documents mid-simulation to fill gaps — it breaks efficiency. Exception: new design documents not yet parameterised may be read directly; note params are incomplete.
+
+
+## Version Check
+Integrated into Read Protocol Step 2 above.
+
+
