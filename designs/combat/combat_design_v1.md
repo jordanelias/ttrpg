@@ -1,5 +1,6 @@
 # VALORIA — COMBAT DESIGN (v1)
 ## Date: 2026-04-02
+## Version: v1.1 (PP-086–096 applied in-place; provisional decisions integrated)
 ## Status: WORKING DESIGN — not compiled. This is the design-layer source for personal combat.
 ## Authority: Philosophical Foundations → this document → compilation (when ready)
 ## Mode applicability: ALL (TTRPG baseline; scales to Hybrid and Board Game via params)
@@ -251,8 +252,14 @@ Default unit stats (board game / mass combat):
 | Revolution | 0 | 0 | No standing units. Community defence possible via Community Weaving. |
 | Löwenritter | 5 (→6 post-coup) | 5 (→6) | All units elite: Cohesion 5, Martial 4. +1 unit from Crown transfer post-coup. |
 
+> **[PROVISIONAL] Coup Counter — successor rule:** If the Löwenritter Grandmaster is killed (personal combat, mass battle, or other means) while the Coup Counter is ≥ 1: the Löwenritter council immediately selects the highest-CR surviving named officer as acting Grandmaster. The Coup Counter resets to 0. The coup attempt is treated as disrupted — the new acting Grandmaster's first action is to consolidate the Order rather than pursue the coup. If no named officers remain, the Löwenritter enter a leaderless state (all units −1D to all rolls until a new Grandmaster is appointed through narrative play).
+
 **Mustering:** Muster order raises 1 new unit per success (up to Military cap) at standard stats.
 Upgrade to elite: 2 consecutive successful Govern orders in territory + Wealth ≥ 4.
+
+> **[PROVISIONAL] TC seasonal cap:** TC cannot change by more than ±3 per season from Domain Actions alone. All TC sources combined (Domain Actions, RS-driven cascade, Thread operations, military outcomes) cannot produce more than ±5 TC change per season. Changes exceeding the cap are discarded. This prevents runaway TC spirals from multi-action stacking.
+
+> **[PROVISIONAL] Stability recovery:** A faction with Stability ≤ 3 that receives no hostile Domain Actions targeting its Stability in a season gains +1 Stability at Accounting. This represents institutional resilience — factions recover slowly if left alone. Factions at Stability ≥ 4 do not recover this way (they are stable already). Maximum recovery from this rule: +1 per season.
 
 ---
 
@@ -270,28 +277,3 @@ All P2-B11 clarifications incorporated above.
 - ED-033: Commander bonus formula conflict (three formulas).
 - ED-040: Artillery Balanced disposition lock — intentional?
 - [EDITORIAL: P2-B11-19 TT 80+ effect in mass battle — define or confirm no effect]
-
-
----
-
-## PROVISIONAL PATCHES — COVERAGE MATRIX FINDINGS
-## Source: tests/coverage_matrix.md
-## Applied: 2026-04-02
-
-## PP-094-COMBAT — Coup Counter Successor Rule (F-30/F-33)
-**[PROVISIONAL: from SIM-X-07/X-08]**
-Add to §11 Faction Unit Rosters, Löwenritter section, or to relevant faction design:
-
-> "[PROVISIONAL] **Coup Counter: successor on Grandmaster death.** If the Löwenritter Grandmaster is killed (personal combat, mass battle, or other means) while the Coup Counter is ≥ 1: the Löwenritter council immediately selects the highest-CR surviving named officer as acting Grandmaster. The Coup Counter resets to 0. The coup attempt is treated as disrupted — the new acting Grandmaster's first action is to consolidate the Order rather than pursue the coup. If no named officers remain, the Löwenritter enter a leaderless state (all units −1D to all rolls until a new Grandmaster is appointed through narrative play)."
-
-## PP-095-COMBAT — TC Seasonal Cap (F-43)
-**[PROVISIONAL: from SIM-X-10]**
-Add to clock rules (stage5_clocks.md or designs equivalent):
-
-> "[PROVISIONAL] **TC seasonal change cap:** TC cannot change by more than ±3 per season from Domain Actions alone. All TC sources combined (Domain Actions, RS-driven cascade, Thread operations, military outcomes) cannot produce more than ±5 TC change per season. Changes exceeding the cap are discarded. This prevents runaway TC spirals from multi-action stacking."
-
-## PP-096-COMBAT — Faction Stability Recovery (F-52)
-**[PROVISIONAL: from SIM-X-12]**
-Add to faction rules or seasonal accounting:
-
-> "[PROVISIONAL] **Stability natural recovery:** A faction with Stability ≤ 3 that receives no hostile Domain Actions targeting its Stability in a season gains +1 Stability at Accounting. This represents institutional resilience — factions recover slowly if left alone. Factions at Stability ≥ 4 do not recover this way (they are stable already). Maximum recovery from this rule: +1 per season."

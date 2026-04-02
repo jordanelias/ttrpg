@@ -1,4 +1,7 @@
-# VALORIA — MASS BATTLE SYSTEM v3
+# VALORIA — MASS BATTLE SYSTEM v4
+## Version: v4 (all ST-MB patches + PP-086-093 applied in-place; 7-phase structure per ED-050)
+## Status: WORKING DESIGN — no appendix sections. Read straight through.
+## Three-mode: TTRPG/Hybrid (Part A); Board Game (Part B); Hybrid Handoff (§B.5)
 ## All P1/P2/P3 patches applied. Gaps filled. Editorial notes flagged.
 ## Status: PROPOSAL — awaiting approval before GitHub push
 
@@ -126,6 +129,8 @@ Morale degradation triggers:
 **Morale cap: −3 per Cascade Phase.** General killed (Stage 2) deals −2
 separately, not subject to the cap. *[P1-03]*
 
+> **Clarification:** "Application order: Apply all non-general Morale changes first, capping the total at −3 from these sources. Then apply Stage 2 general death −2 additionally (this −2 is separate and not subject to the cap). Maximum total Morale loss in one Cascade Phase: −5 (−3 capped + −2 general kill)."
+
 While general is present: Morale floor = 1. At Morale 0: unit routs.
 
 **Rout contagion brake:** Rout causes −1 Morale to adjacent units, but this
@@ -191,6 +196,12 @@ battle turn after personal combat resolves. *[D3-P2-02]*
 | Feigned Retreat | — | — | See Tactics |
 | Reserve | Cannot engage | Cannot engage | Commits at Phase 3 start of NEXT turn *[P3-02]* |
 
+> **Clarification:** "Roll a number of d10s equal to the opposing general's CR score, against Ob 2, to recognise the Feigned Retreat as a feint rather than a genuine withdrawal. Success: the pursuing side is not deceived; the Feigned Retreat has no effect this turn. Failure (or no roll if the opposing general is killed): pursuing side pursues normally and suffers the Cohesion check."
+
+> **Clarification (PP-MB-04):** "Reserve commitment at Phase 3 of Turn N+1 makes the unit immediately available for Phase 4 engagement in that same turn (Turn N+1). Commitment does not delay the unit to Turn N+2. Summary: declare Reserve in Phase 3 of Turn N → unit commits at Phase 3 of Turn N+1 → unit may engage in Phase 4 of Turn N+1."
+
+> **Clarification (PP-MB-07):** "Three-sided encirclement example: Front, Left flank, Right flank simultaneously. Shield Wall negates one declared flank (say, Left). Front attack is fully defended (+2D Def). Right flank attack applies normally (full flanking bonus to attacker). The defender faces two unmitigated engagements and one defended — this is the intended design ceiling for Shield Wall. CR = 3 maximum means a force cannot be attacked from more than three directions simultaneously."
+
 **Formation counter logic:** Wedge beats Line. Shield Wall negates Wedge but
 cannot advance. No formation is universally dominant. *[P2-01]*
 
@@ -255,6 +266,8 @@ Per engagement:
 6. Critical hit (net hits ≥ 3): weapon modifier doubled
 7. Engagement damage recorded. NOT applied until Phase 6 Step 1.
 8. Mutual destruction (both to 0) is valid — Pyrrhic outcomes possible *[P2-02]*
+
+> **Clarification (PP-MB-01):** "Effective CP is calculated at the start of Phase 4 using Strength as of Phase 3 end. All damage within Phase 4 is applied simultaneously at Phase 5 Step 1. CP does not change within a single Phase 4 — a unit that takes damage mid-Phase 4 does not recalculate its Effective CP until Phase 5."
 
 Mass Mismatch Penalty: Light weapon defender vs Heavy weapon attack − 1
 defensive success (min 0). Exempt: Shield Wall.
@@ -378,6 +391,8 @@ dissolve without awareness on entry — no casualties, no Morale trigger, no
 Cohesion check. Remove from battle map. This is why Southernmost was never
 conquered. *[confirmed — replaces all prior Cohesion check variants]*
 
+> **Clarification (PP-MB-06):** "The requirement 'all individuals must have TS ≥ 30' applies at the individual level: any individual in a unit who lacks TS ≥ 30 dissolves on entry to the Southernmost, without awareness, with no Morale trigger for surviving unit members. For unit-level accounting: reduce the unit's Strength proportionally to the fraction of individuals who lack TS ≥ 30. A unit with 40% TS-capable individuals enters at 40% Strength (round down to minimum 1 if any TS-capable individuals remain, or 0 if none). Recalculate Effective CP from the reduced Strength. Practical constraint: Only Restoration communities and Varfell forces with VTM ≥ 2 can field meaningful units in the Southernmost. Crown, Church, Hafenmark, Guilds, and Niflhel cannot field viable military forces there."
+
 All individuals in a military force operating in Southernmost must personally
 have TS ≥ 30. No exceptions.
 
@@ -422,6 +437,8 @@ subject to §4.3.4 brittleness rules. Taking Str loss > Cohesion in a single
 turn qualifies as a non-Thread event of sufficient severity — GM may rule
 the Woven configuration shatters into a Shifting Object. A Woven unit can be
 simultaneously more and less resilient than an unworked unit. *[EDGE-07]*
+
+> **Clarification:** "A Woven unit configuration that shatters (Str loss in a single turn > current Cohesion) does not become a Shifting Object during the battle. For the remainder of the battle, it fights at Line formation, Cohesion 1. The Shifting Object status is registered for post-battle Thread consequences — the GM tracks this and applies it in the narrative aftermath. This prevents mid-battle stat volatility while preserving the Thread consequence."
 
 **TT references in stage5_clocks.md:** Compilation error — all TT references
 must be converted to RS with inversion (TT +N → RS −N). *[EDGE-06 — P1,
@@ -560,171 +577,3 @@ All items below require user approval before compilation.
 | BG-EDIT-02 | Faction-specific tactic cards (§B.4) | 8 faction cards above |
 | CLOCK-EDIT-01 | IP 75+ Altonian invasion unit stats | See simulation report |
 | CLOCK-EDIT-02 | Church military victory → TC change | No TC change from military victory alone (confirm) |
-
----
-
-# PART D: STRESS TEST PATCHES — v3-ST
-## Source: designs/board_game/valoria_bg_v05_stress_test_report.md
-## Applied: 2026-04-02
-
----
-
-## ST-MB-01 — Volley TN 6 vs Universal TN 7
-**[EDITORIAL: requires user approval — ST-MB-01 Volley TN]**
-§A.7 Phase 2 states "Roll Effective CP vs TN 6." All other rolls use TN 7. Volley is therefore 25% more accurate per die than melee.
-Confirm: (a) TN 6 for Volley is intentional (representing structural advantage of massed ranged fire vs melee chaos — if yes, add a sentence documenting this as an explicit exception), or (b) update Volley to TN 7 for consistency.
-
----
-
-## ST-MB-02 — Coherence Undefined
-**[CRITICAL GAP — ST-MB-02]**
-§A.10 references "Coherence" extensively as a practitioner-specific stat (auto-cost −1/op, Severed at Coherence 1, depletion warning). This stat is not defined in mass_battle_v3, does not appear in the unit stat block (§A.4), and does not match any other stat in the compiled v0.14 checkpoint.
-§A.10 is unplayable until Coherence is defined. Required:
-1. Starting value formula
-2. Where it appears on character/unit sheets
-3. What happens when it reaches 0 (beyond the noted "Severed (Coherence 1): +2 Ob")
-**[EDITORIAL: requires user approval — Coherence stat definition]**
-Note: Coherence may be the practitioner's personal Coherence track (the renamed Intelligibility/Taint from the TTRPG, currently 10→0 countdown). If so, "Coherence auto-cost −1/op" means each Thread operation in mass battle costs 1 from the practitioner's personal Coherence track. Confirm and align with stage5_clocks.md.
-
----
-
-## ST-MB-03 — Effective CP Timing with Simultaneous Damage
-**[PATCH MB-01]**
-Add to §A.7 Phase 4 before the damage application step:
-
-> "Effective CP is calculated at the start of Phase 4 using Strength as of Phase 3 end. All damage within Phase 4 is applied simultaneously at Phase 5 Step 1. CP does not change within a single Phase 4 — a unit that takes damage mid-Phase 4 does not recalculate its Effective CP until Phase 5."
-
----
-
-## ST-MB-04 — Morale Cap and General Kill Application Order
-**[PATCH MB-02]**
-Add to §A.4 (Morale) or wherever the −3 Morale cap is stated:
-
-> "Application order: Apply all non-general Morale changes first, capping the total at −3 from these sources. Then apply Stage 2 general death −2 additionally (this −2 is separate and not subject to the cap). Maximum total Morale loss in one Cascade Phase: −5 (−3 capped + −2 general kill)."
-
----
-
-## ST-MB-05 — CR=0 Uncommanded Units
-**[PATCH MB-03]**
-Add the following example to §A.5 (Command Rating) after the CR=0 definition:
-
-> "Example: A general is killed (Stage 2). CR drops to 0. All units in the force are now uncommanded — each fights at Line formation, Cohesion floor 1, with no tactics available (no cards may be played). This is severe but survivable for units with strong base stats. Note: Stage 2 death also suspends the Morale floor, so uncommanded units may rout on any subsequent Morale trigger without a floor to catch them."
-
----
-
-## ST-MB-06 — Reserve Commitment Timing
-**[PATCH MB-04]**
-Add to §A.6 Reserve definition and to §A.7 Phase 3:
-
-> "Reserve commitment at Phase 3 of Turn N+1 makes the unit immediately available for Phase 4 engagement in that same turn (Turn N+1). Commitment does not delay the unit to Turn N+2. Summary: declare Reserve in Phase 3 of Turn N → unit commits at Phase 3 of Turn N+1 → unit may engage in Phase 4 of Turn N+1."
-
----
-
-## ST-MB-07 — Shield Wall vs Three-Sided Encirclement
-**[CONFIRMED — add example only]**
-Add to §A.6 Shield Wall:
-
-> "Three-sided encirclement example: Front, Left flank, Right flank simultaneously. Shield Wall negates one declared flank (say, Left). Front attack is fully defended (+2D Def). Right flank attack applies normally (full flanking bonus to attacker). The defender faces two unmitigated engagements and one defended — this is the intended design ceiling for Shield Wall. CR = 3 maximum means a force cannot be attacked from more than three directions simultaneously."
-
----
-
-## ST-MB-08 — Feigned Retreat Recognition Pool
-**[PATCH MB-05]**
-Revise §A.8 Tactics entry for Feigned Retreat. Replace "CR Ob 2 to recognise" with:
-
-> "Roll a number of d10s equal to the opposing general's CR score, against Ob 2, to recognise the Feigned Retreat as a feint rather than a genuine withdrawal. Success: the pursuing side is not deceived; the Feigned Retreat has no effect this turn. Failure (or no roll if the opposing general is killed): pursuing side pursues normally and suffers the Cohesion check."
-
----
-
-## ST-MB-09 — Mixed TS Forces in Southernmost
-**[PATCH MB-06]**
-Replace or supplement the current §A.11 Southernmost entry with:
-
-> "The requirement 'all individuals must have TS ≥ 30' applies at the individual level: any individual in a unit who lacks TS ≥ 30 dissolves on entry to the Southernmost, without awareness, with no Morale trigger for surviving unit members.
-> For unit-level accounting: reduce the unit's Strength proportionally to the fraction of individuals who lack TS ≥ 30. A unit with 40% TS-capable individuals enters at 40% Strength (round down to minimum 1 if any TS-capable individuals remain, or 0 if none). Recalculate Effective CP from the reduced Strength.
-> Practical constraint: Only Restoration communities and Varfell forces with VTM ≥ 2 can field meaningful units in the Southernmost. Crown, Church, Hafenmark, Guilds, and Niflhel cannot field viable military forces there."
-
----
-
-## ST-MB-10 — Woven Unit Shifting Object Timing
-**[PATCH MB-07]**
-Replace the current §A.14 Woven unit shattering rule with:
-
-> "A Woven unit configuration that shatters (Str loss in a single turn > current Cohesion) does not become a Shifting Object during the battle. For the remainder of the battle, it fights at Line formation, Cohesion 1. The Shifting Object status is registered for post-battle Thread consequences — the GM tracks this and applies it in the narrative aftermath. This prevents mid-battle stat volatility while preserving the Thread consequence."
-
----
-
-## ST-INT-01 — BG vs TTRPG Pool Incompatibility (see also BG doc Part 13)
-Patch text is in BG doc PART THIRTEEN, ST-INT-01 (PATCH P-38). Add cross-reference to §B.5:
-> "See BG document P-38 for the explicit statement that BG and TTRPG battle pool systems are intentionally non-equivalent and produce different expected outcomes."
-
----
-
-## ST-INT-03 — Volley TN in Hybrid Mode
-**[EDITORIAL: contingent on ST-MB-01 resolution]**
-Once ST-MB-01 is resolved (Volley TN confirmed as 6 or corrected to 7), add to §B.5:
-> "In hybrid mode, Volley attacks by BG Ranged units transitioning to TTRPG use [TN confirmed by ST-MB-01 resolution]. TTRPG mass battle rules govern all rolls in hybrid mode."
-
----
-
-## ST-INT-04 — Military Stat Loss Cap: Battle vs Domain Actions
-**[EDITORIAL: requires user approval — ST-INT-04 seasonal cap pooling]**
-Confirm: does the ±2/season Military cap from §A.13 (FACTION-P2-02) apply separately from, or pooled with, Domain Action Military changes?
-If pooled: a faction losing 2 units in battle (−2 Military, cap reached) cannot be further weakened by Domain Actions targeting Military that season.
-If separate: faction can lose up to −4 Military in one season (−2 battle + −2 Domain).
-
----
-
-## ST-INT-06 — BG Unit TS (see also BG doc Part 13, PATCH P-40)
-> Cross-reference added. Bridge rule for BG unit TS in Southernmost is in BG doc PATCH P-40.
-
----
-
-## ST-INT-09 — Military Loss Timing (see also BG doc Part 13, PATCH P-41)
-> Military timing rule (immediate in TTRPG, Accounting in BG, TTRPG timing in hybrid) is in BG doc PATCH P-41.
-
----
-
-## PART D SUMMARY — Outstanding Items
-
-| ID | Status |
-|----|--------|
-| ST-MB-01 (Volley TN) | EDITORIAL — confirm before distribution |
-| ST-MB-02 (Coherence) | CRITICAL GAP + EDITORIAL — blocks §A.10 |
-| ST-INT-02 (Commander bonus) | EDITORIAL — see BG doc |
-| ST-INT-04 (Military cap pooling) | EDITORIAL |
-| ST-INT-07 (Ceiral Ritual scale) | EDITORIAL — see BG doc |
-| ST-INT-08 (Muster BG token) | EDITORIAL — see BG doc |
-| ST-INT-12 (Altonian unit stats) | EDITORIAL BLOCKER — see BG doc |
-
-
----
-
-# PART E: PROVISIONAL PATCHES — COVERAGE MATRIX FINDINGS
-## Source: tests/coverage_matrix.md pending findings
-## Applied: 2026-04-02
-## All items marked [PROVISIONAL] require user review
-
-## PP-093-MB — Mass Battle Stalemate Resolution (F-27)
-**[PROVISIONAL: F-27 from SIM-X-07]**
-Add to §A.12 Rout and Pursuit, or as new §A.15:
-
-> "[PROVISIONAL] **Tactical Withdrawal (stalemate condition):** If both sides in a direct engagement have dealt 0 Strength damage for 3 consecutive turns with no tactical options available (no valid formation change, no Feigned Retreat, CR = 0), either commander may declare Tactical Withdrawal. The withdrawing unit moves one zone away from the engagement. This does not trigger the Pursuit rule. The engagement ends. Both units remain on the battle map and may re-engage next turn. This prevents infinite deadlock in HeavyCut vs HeavyArmour (DR = 5) matchups."
-
-## Altonian Unit Stats (ED-036, PROVISIONAL)
-See params_mass_combat.md Altonian section. Apply to any scenario involving Altonian forces.
-
-| Unit | Str | CP | Coh | Mor | Weapon | Armour |
-|------|-----|----|-----|-----|--------|--------|
-| [PROVISIONAL] Vanguard | 5 | 4 | 4 | 5 | HeavyCut | Medium |
-| [PROVISIONAL] Elite Guard | 4 | 5 | 5 | 5 | HeavyCut | Heavy |
-| [PROVISIONAL] Thread Corps | 3 | 3 | 4 | 4 | LightCut | Light (TS 40) |
-
-## Volley TN Confirmation (ED-037, PROVISIONAL)
-§A.7 Phase 2 Volley: TN 6 retained. [PROVISIONAL: intentional exception to universal TN 7.
-Represents coordinated massed-fire advantage. Review during playtesting.]
-
-## Coherence Definition (ED-038, RESOLVED)
-§A.10 Coherence = practitioner's personal Coherence track (10→0, threadwork Part 3).
-Starting value: 10. auto-cost: −1 per Thread operation. Severed (Coherence 1): +2 Ob.
-At 0: no Thread operations (PP-027 threadwork).

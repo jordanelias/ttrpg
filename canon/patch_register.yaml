@@ -582,6 +582,7 @@ patches:
   source: simulation
   affects: [compilation/v0.14/stage8_combat.md]
   status: applied
+  applied_to_version: "mass_battle_v4"
   applied_commit: "2026-04-02-session"
 
 - id: PP-089

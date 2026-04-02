@@ -316,3 +316,12 @@ These files contain confirmed design decisions that have not been propagated to 
 | designs/hybrid/hybrid_gaps_resolved.md | PROPAGATION-PENDING | 17 gaps resolved. Not yet integrated into stage11 or bg_v05. |
 | designs/gm_ref_cp14/* | WORKING | All arc and dashboard files. Arcs 32,34,35 not yet simulated. |
 
+
+## SKELETON-DEBT REGISTER (documents with non-skeleton content to clean up)
+
+| File | Issue | Priority |
+|------|-------|----------|
+| `designs/board_game/valoria_bg_v05_simulation_and_patches.md` | Part Thirteen appended (ST-BG/INT patches, ~180 lines). Apply in-place → v0.6 | High |
+| `designs/ttrpg/threadwork_redesign_v25.md` | Parts 10+11 appended (ST-TW, R-54–R-68, ~80 lines). Apply in-place → v2.6. Part 1 philosophical framing should move to reference doc → v3.0 | High |
+| `compilation/v0.14/stage8_combat.md` | Part Eleven appended (PP-086–092). Apply in-place. Lower priority — compilation layer. | Low |
+| `compilation/v0.14/stage11_scale_transitions.md` | §11.8 appended (PP-089/090). Apply in-place. | Low |
