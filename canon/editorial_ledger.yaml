@@ -1444,3 +1444,68 @@ editorial_decisions:
     related_ids: []
     supersedes: []
     tags: [board_game, mandate, faction_mechanics]
+  - id: ED-071
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: audit
+    source_file: tests/audit_hybrid_01.md
+    description: "Confirm Domain Echo amount formula (PP-108 provisional): +1 Success, +2 Overwhelming, relevant stat, cap ±2/scene. Confirm multiple Echo firing order rule."
+    status: open
+    priority: P2
+    decision: null
+    tags: [hybrid, domain_echo, accounting]
+
+  - id: ED-072
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: audit
+    source_file: tests/audit_hybrid_01.md
+    description: "Confirm concurrent Zoom In ordering (PP-112 provisional): faction-turn Accounting sequence order. Consider whether two PCs can split and handle concurrent scenes simultaneously with a co-GM or async resolution."
+    status: open
+    priority: P2
+    decision: null
+    tags: [hybrid, zoom, concurrent]
+
+  - id: ED-073
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: audit
+    source_file: tests/audit_hybrid_01.md
+    description: "Full procedure for non-battle Zoom In: PC enters BG territory for political scene, Thread investigation, or social encounter. Phase-Lock only covers battle phases. Need: trigger condition, state transfer table, Zoom Out update rules for non-combat contexts."
+    status: open
+    priority: P1
+    decision: null
+    tags: [hybrid, zoom, non_battle]
+
+  - id: ED-074
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: audit
+    source_file: tests/audit_hybrid_01.md
+    description: "Define 'sufficient scope' for TTRPG Register Shift (Scene→Faction). Currently GM discretion only. Propose: a scene qualifies as faction-scope if it involves a named faction leader, a Domain Action equivalent, or a direct challenge to a faction institution. Otherwise personal scope only."
+    status: open
+    priority: P2
+    decision: null
+    tags: [hybrid, register_shift, scope]
+
+  - id: ED-075
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: audit
+    source_file: tests/audit_hybrid_01.md
+    description: "PC faction embedding in BG layer: P-11 requires characters to be embedded in factions, but between Zoom Ins PCs have no mechanical presence in BG (they exist only in TTRPG mode). Design decision: do PCs have passive BG effects between Zoom Ins (e.g., presence in a territory grants faction bonus), or are they mechanically absent?"
+    status: open
+    priority: P2
+    decision: null
+    tags: [hybrid, faction, pc_embedding]
+
+  - id: ED-076
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: audit
+    source_file: tests/audit_hybrid_01.md
+    description: "P-01 co-movement propagation: TTRPG scene Thread ops produce all three auto-effects (P-01 compliant). But these auto-effects don't propagate to the BG layer on Zoom Out (no mechanism). When a Zoom In TTRPG scene includes a Thread operation, should its epistemic/temporal/actual auto-effects have BG-layer consequences? If yes: define the translation. If no: document as intentional abstraction."
+    status: open
+    priority: P2
+    decision: null
+    tags: [hybrid, thread, co_movement, p01]

@@ -2,7 +2,7 @@
 ## Source: compilation/v0.14/stage11_scale_transitions.md §11.1–11.3, §11.8
 ## Purpose: Defines every variable that crosses mode/scale boundaries, with direction and transformation
 ## Used by: valoria-simulator Mode K2 (transition stress test)
-## Last updated: 2026-04-02 | PP-103 Phase-Lock Protocol applied
+## Last updated: 2026-04-02 | PP-103 Phase-Lock + PP-107 variable corrections applied
 
 ---
 
@@ -23,10 +23,10 @@ Triggered when a named PC enters a BG-resolved battle or territory.
 
 | BG Variable | TTRPG Equivalent | Transformation |
 |-------------|-----------------|----------------|
-| Unit Strength (0–10) | Unit Str in TTRPG mass combat | 1:1 (same scale) |
-| Unit Cohesion (1–7) | Unit Cohesion | 1:1 |
-| Unit Morale (1–7) | Unit Morale | 1:1 |
-| Unit Martial | Unit CP | 1:1 |
+| Unit Strength (0–10) | Unit Str in TTRPG mass combat | Use B.2 conversion: TTRPG Str = ⌈BG Health ÷ 1.5⌉ (PP-103). state_transfer_spec "1:1" was wrong — corrected PP-107. |
+| Unit Cohesion (BG: 0–6) | Unit Cohesion (TTRPG: 1–7) | BG Cohesion 0 → TTRPG Cohesion 1 (floor). BG 1–6 → TTRPG 1–6 direct. BG max 6 ≠ TTRPG max 7. [PP-107] |
+| Unit Morale | Unit Morale (TTRPG: 1–7) | BG does not track Morale separately (PP-119: Cohesion subsumes both). On Zoom In: set TTRPG Morale = BG Cohesion + 1, max 7. [PROVISIONAL PP-107] |
+| Unit Martial (BG: 1–5) | Unit CP (TTRPG: 1–7) | Use B.2 TTRPG CP column — not 1:1. BG Martial is a BG-specific stat; B.2 maps each unit type to TTRPG CP. [PP-107] |
 | Faction Military stat | Informs available units; not a TTRPG stat | Read-only reference |
 | Territory control | Context (zone descriptions, defender positions) | Narrative only |
 | Current BG turn phase | Sets constraint: Zoom In suspends BG turn at current phase | Phase held, not resolved |
@@ -59,6 +59,8 @@ After TTRPG scene resolves:
 | Wounds taken by PC general | BG commander bonus unaffected (wounds are personal) |
 | Thread operation RS consequence | RS track updated immediately (not queued) |
 | Fortification damaged (siege scene) | Fortification −N applied immediately |
+| Debate outcome (Conviction Track ≥7 or ≤3) | Queue as Domain Echo: faction Mandate ±1 (winner's faction +1, loser −1 if applicable). Fires at next Accounting. [PP-108] |
+| Gap aversion (Thread Weaving stabilised) | No BG stat change. RS unchanged (Object-scale). Narrative note: territory has a known instability for future Investigation actions. |
 
 ### Phase-Lock Protocol (PP-103) — replaces prior interruption protocol
 
@@ -79,6 +81,19 @@ phases creates ghost units — units at 0 recorded damage that haven't yet been
 removed. Phase-Lock eliminates this class of error.
 
 **Accounting:** Always completes before Zoom In fires (unchanged).
+
+**Phase 6 Step 1 Zoom In — continuation protocol (PP-110):**
+After Step 1 (all damage applied), Zoom In fires. TTRPG scene runs. Zoom Out updates Str and NPC kills using updated state. Then Phase 6 Steps 2–6 resume:
+- Step 2 (Cohesion checks): use Strength values from Zoom Out update.
+- Step 3 (Morale checks): use Morale values from Zoom Out update.
+- Step 4 (General action): available unless the PC general is the Zoom In character (their Step 4 is consumed by the Zoom In scene).
+- Steps 5–6 (Support Thread, Reform): resolve normally.
+
+**Concurrent Zoom Ins — provisional procedure (PP-112):**
+If two PCs simultaneously trigger Zoom In in different battles, resolve in faction-turn order (Accounting sequence). First battle's full scene (Zoom In → TTRPG → Zoom Out) completes before the second begins. All other faction turns hold throughout both.
+
+**Non-battle Zoom In (PP-112 scope — ED-073 open):**
+Zoom In can also trigger in BG territory contexts outside active battle (political scenes, Thread investigations). Phase-Lock only covers battle phases. For non-battle Zoom In: trigger at the end of the current BG Domain Action being resolved. No unit conversion needed (no units present). Faction stats still suspend; RS still transfers immediately. Full procedure pending ED-073.
 
 ---
 

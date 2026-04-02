@@ -1579,68 +1579,68 @@ patches:
   status: applied
   applied_commit: pending
 
-- id: PP-171
+- id: PP-107
   date: 2026-04-02
   severity: P1
-  description: "Church Deed 4: Replace 'Control Valorsplatz' with 'Crown Mandate <= 2 for 2 consecutive seasons'. Valorsplatz seizure unreachable in standard game; institutional erosion is the canonical Church win mechanism."
-  finding_id: "BAL-BG-01-IMBALANCE-1"
-  source: simulation
-  affects: [references/params_board_game.md, compilation/v0.14/stage_bg_board_game_mode.md]
-  applied_to_version: "v0.5.2"
+  description: "state_transfer_spec wholesale correction: Unit Str 1:1→B.5 conversion; Unit Cohesion BG 0–6 floor rule; Unit Morale BG absent→derive from Cohesion+1; Unit Martial→use B.2 CP column. Zoom Out table: debate outcome and Gap aversion rows added. Phase 6 continuation protocol added. Concurrent Zoom In provisional procedure added. Non-battle Zoom In note added."
+  finding_id: "GAP-HYB-02/03/04/09, ST-K2-01, ST-K2-02, ST-K2-05, AUDIT-HYBRID-01"
+  source: audit
+  affects: [skills/valoria-orchestrator/references/state_transfer_spec.md]
+  applied_to_version: "post-PP-103"
   status: applied
   applied_commit: pending
 
-- id: PP-172
+- id: PP-108
   date: 2026-04-02
   severity: P1
-  description: "Crown Deed 4: Add 'OR Institutional Pressure < 30 at game end' escape clause. Torben Loyalty Clock never activates if IP never crosses 30, leaving Deed 4 in undefined state."
-  finding_id: "BAL-BG-01-IMBALANCE-3"
-  source: simulation
-  affects: [references/params_board_game.md, compilation/v0.14/stage_bg_board_game_mode.md]
-  applied_to_version: "v0.5.2"
+  description: "Domain Echo amount defined provisionally: +1 on Success, +2 on Overwhelming, to most relevant faction stat, cap ±2 per scene. Debate outcome mapping added. Multiple Echo ordering rule added."
+  finding_id: "GAP-HYB-01, AUDIT-HYBRID-01"
+  source: audit
+  affects: [references/params_scale_transitions.md]
+  applied_to_version: "ST2"
   status: applied
   applied_commit: pending
 
-- id: PP-173
+- id: PP-109
   date: 2026-04-02
-  severity: P2
-  description: "Intel advancement mechanic added: successful Intel/Quiet Network order = +0.25 Intel track; advances stat by 1 at each integer. Max +0.25/season. Previously no advancement mechanic existed; Varfell and Niflhel Deed 1 were unreachable."
-  finding_id: "BAL-BG-01-IMBALANCE-5"
-  source: simulation
-  affects: [references/params_board_game.md]
-  applied_to_version: "v0.5.2"
+  severity: P1
+  description: "Domain Echo timing discrepancy documented as intentional design: full TTRPG fires immediately; Hybrid queues to Accounting. Rationale: prevents real-time BG stat manipulation from personal scenes."
+  finding_id: "GAP-HYB-07, AUDIT-C-01, AUDIT-HYBRID-01"
+  source: audit
+  affects: [references/params_scale_transitions.md]
+  applied_to_version: "ST2"
   status: applied
   applied_commit: pending
 
-- id: PP-174
+- id: PP-110
   date: 2026-04-02
-  severity: P2
-  description: "Mandate recovery mechanic added: Govern Overwhelming in own capital = Mandate +1 (max once/season, max to starting value). Previously no recovery path existed; Crown Decree could permanently suppress faction Mandates."
-  finding_id: "BAL-BG-01-IMBALANCE-6 / ED-066"
-  source: simulation
-  affects: [references/params_board_game.md]
-  applied_to_version: "v0.5.2"
+  severity: P1
+  description: "Phase 6 Step 1 Zoom In continuation protocol: Steps 2–6 resume after Zoom Out using updated state. General's Step 4 consumed if PC general is Zoom In character."
+  finding_id: "GAP-HYB-05, ST-K2-01, AUDIT-HYBRID-01"
+  source: audit
+  affects: [skills/valoria-orchestrator/references/state_transfer_spec.md]
+  applied_to_version: "PP-107 bundle"
   status: applied
   applied_commit: pending
 
-- id: PP-175
+- id: PP-111
   date: 2026-04-02
-  severity: P2
-  description: "Guild Favour advancement explicitly defined: Govern Success = +1 Favour, Overwhelming = +2, Failure = -1. Starting Favour = 3 in Guilds-controlled territories. Previously implied but unstated."
-  finding_id: "BAL-BG-01-IMBALANCE-2"
-  source: simulation
-  affects: [references/params_board_game.md]
-  applied_to_version: "v0.5.2"
+  severity: P1
+  description: "Mass→Personal time scale: 1 mass combat turn = 1 personal combat exchange. Max 5 exchanges before forced disengage/incapacitation. General loses CR bonus (effective CR 0) per turn in personal combat."
+  finding_id: "ST-K2-04, GAP-HYB-10, AUDIT-HYBRID-01"
+  source: audit
+  affects: [references/params_scale_transitions.md]
+  applied_to_version: "ST2"
   status: applied
   applied_commit: pending
 
-- id: PP-176
+- id: PP-112
   date: 2026-04-02
   severity: P2
-  description: "Varfell Deed 1: Intel requirement reduced from 6 to 5. Intel 6 required ~16 seasons at median; exceeds standard game. Intel 5 requires ~8 seasons; achievable mid-game. Aligns with Niflhel Deed 1 (also Intel 5)."
-  finding_id: "BAL-BG-01-IMBALANCE-5"
-  source: simulation
-  affects: [references/params_board_game.md, compilation/v0.14/stage_bg_board_game_mode.md]
-  applied_to_version: "v0.5.2"
+  description: "Concurrent Zoom In provisional: resolve in faction-turn order (Accounting sequence). First battle completes fully before second begins. [PROVISIONAL — ED-072]"
+  finding_id: "GAP-HYB-08, AUDIT-C-02, AUDIT-HYBRID-01"
+  source: audit
+  affects: [skills/valoria-orchestrator/references/state_transfer_spec.md]
+  applied_to_version: "PP-107 bundle"
   status: applied
   applied_commit: pending
