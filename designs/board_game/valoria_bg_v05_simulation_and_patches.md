@@ -1,5 +1,5 @@
 # VALORIA: THE BOARD GAME
-## Version: v0.6 (ST-BG/INT patches applied in-place; CF removed; PART THIRTEEN appendix eliminated)
+## Version: v0.6 (ST-BG/INT + P-12–P-32 applied in-place; PART THIRTEEN and PART TEN/ELEVEN eliminated; pure mechanical spec)
 ## Status: WORKING DESIGN — read straight through. No appendix sections.
 ## v0.4 → v0.5 → v0.6 Transition Document
 **Date:** 2026-04-01
@@ -25,6 +25,8 @@ All rolls use **d10**. Results per die:
 
 **Majority-1s override (updated language):** If dice showing 1 outnumber dice showing 7-10 in the same roll, the result is **Critical Failure** regardless of net success count: apply Failure consequences plus one additional consequence at GM discretion (a Standing loss, a stat −1, or a triggered faction instability).
 
+> **P-15: standing cap:** Standing: Cannot exceed 5. Cannot fall below 0. Changes of +2 or −2 cap at the boundary — surplus is lost.
+
 *Rationale for preserving the override: the subtraction already degrades outcomes, but the override captures the feel of something going profoundly wrong — multiple omen dice firing when the hand is weak. On d10 this is rare (P(1) = 10%, P(7-10) = 40% per die), which is appropriate: catastrophic outcomes should be uncommon, not endemic.*
 
 **Probability summary (d10):**
@@ -45,6 +47,10 @@ All rolls use **d10**. Results per die:
 - Ob 1 checks for pools of 3+ are effectively reliable (74-97%), preserving the feel that basic competence succeeds. Ob 3 checks are genuinely threatening (15-42% for pools 3-5), preserving the weight of difficult rolls.
 - The bonus success on 10 (10%) adds upside tension on small pools: a pool of 2 can still get Overwhelming if both dice show 10.
 
+> **P-24:** **Faction elimination:** Stability 0 at Accounting end = faction eliminated. Units remain on board until Muster order removes them (holding ground, now Masterless). Other factions may Claim (Domain Action) Masterless units.
+
+> **P-14: rep cap:** Reputation: Cannot exceed 5. Cannot fall below 0. Cap applies before any modifier is applied — excess is discarded.
+
 ---
 
 ## CORRECTION 2 — Ob Minimum = 1 (Ob0 is impossible)
@@ -58,7 +64,13 @@ All rolls use **d10**. Results per die:
 **Impact on gameplay:**
 Every action retains at least one point of resistance. This changes the effective ceiling of modifier stacking. Factions with multiple simultaneous bonuses (e.g., Church in T3 at TC 30–49: doctrine-aligned −1 Ob, Church-held territory −1 Ob, Ethical Framework −1 Ob) previously could theoretically reach Ob 0 on certain actions. With the Ob1 floor, those three stacked modifiers on an Ob 3 action = Ob 1 (not Ob 0), which still has a 74% success rate for a pool of 3. The floor prevents guaranteed success while preserving strong advantages.
 
+> **P-29: RS gain:** Revolution RS gain from Thread operations: +1 RS per successful Weave against Church-held territory (max +2/season from this source). Requires TS ≥ 20 practitioner.
+
+> **P-23:** **TC Seizure threshold:** Church TC 80+ triggers seizure at next Accounting. Territory roll: Church Military vs Defender Military, Ob 2. Each success: one contested territory flips. Hard cap: maximum 2 territory transfers per seizure event per faction (prevents single-season consolidation).
+
 > **Clarification (PP-042):** "Military victory alone produces no TC or RS change. Thread operations performed during a battle produce standard RS changes per §A.10 regardless of battle outcome. A Church army using Thread-enhanced soldiers (e.g., Weaving unit Cohesion) generates RS drift from those specific Thread operations — not from the act of winning."
+
+> **P-18:** **Unit cap at Military:** Number of units deployed cannot exceed current Military stat. Excess units over Military are immediately removed — they cannot be held as reinforcements beyond the cap.
 
 **Specific affected rules:**
 - Hafenmark Diplomat in T6: Influence 4, Diplomat −1 Ob, base Ob 1 = floor 1. Cannot be reduced further. ✓
@@ -66,6 +78,14 @@ Every action retains at least one point of resistance. This changes the effectiv
 - Restoration Community Weaving with multiple Presence markers: Ob 2 base −1 per marker. At 3+ markers in territory, Ob would drop below 1 → Ob 1 floor. This significantly changes Restoration's Weaving ceiling. See P-19 below.
 
 > **Policy Instrument definition (PP-036):** **Policy Instrument (Crown only):** When Crown's Mandate ≥ 4, Crown may take one additional Standard Action per season designated as the Policy Instrument. This action may be any action Crown could normally take; it is not limited by card-hand constraints. It activates once per season and cannot be interrupted by Parliamentary Manoeuvre (see P-19). Activation condition: Mandate ≥ 4 at the start of the season.
+
+> **P-19: PM scope:** The Hafenmark free Parliamentary Manoeuvre interrupt is triggered only by Crown's Policy Instrument (once-per-season bonus action, available when Mandate ≥ 4). It does NOT apply to Crown Senator card plays, Decrees, Diplomacy, or any other Crown action.
+
+> **P-21:** | Action | Default Ob | Typical Modifiers |
+|--------|-----------|------------------|
+| Muster (Legionary Inward) | 2 | −1 in T2 (Garrison), −1 in T11 (Breadbasket) |
+| March (Legionary Outward) | 2 | +1 in T8 (Difficult terrain) |
+| Govern (Consul Inward / Prefect) | 2 | −1 in own capital; −1 with 
 
 ---
 
@@ -81,6 +101,12 @@ Every action retains at least one point of resistance. This changes the effectiv
 | 0                  | **Failure**          |
 | Negative (after subtraction) | **Failure** (treat as 0 for degree purposes; Critical Failure if A majority-1s result (more 1s than 7-10 results) produces a standard Failure with no additional consequence. The degree table applies normally (net ≤ 0 = Failure). Apply Critical Failure consequences.
 
+> **P-16:** **Victory determination:** Both sides roll simultaneously. Compare net successes.
+- If attacker's net > defender's net: **Attacker wins.** Apply outcome from attacker's degree (Overwhelming/Success/Partial/Failure) using the DIFFERENCE as the effective surplus: (attacker net − defender net) vs Ob.
+-
+
+> **P-32:** **Victory condition clarification:** BG victory = reach declared VP total OR opponent faction eliminated. Hybrid victory = BG victory PLUS personal arc resolution. A BG-only win with unresolved personal arc = Hollow Victory (valid but narratively incomplete).
+
 ---
 
 
@@ -95,12 +121,14 @@ Every action retains at least one point of resistance. This changes the effectiv
 **Error:** "Majority 1s override: If more dice show 1 than show 4+, result is Failure." References "4+" (d6 threshold).
 **Correction (PATCH P-12):** Update to "If more dice show 1 than show 7-10."
 
+> **P-12: CF rule:** If more dice show 1 than show 7–10 in the same roll, result is **Critical Failure**: apply normal Failure consequences plus one additional immediate consequence (GM discretion: −1 Standing, −1 Stability, or one stat degradation).
+
 ---
 
 ## I-02 — Patience Protocol body vs P-07 Patch (Cap contradiction)
 
 **Location:** B5 Varfell (Patience Protocol), and Part E PATCH P-07.
-**Error:** B5 body reads: "The above two counters can both trigger in the same season. Maximum +2 PC per season from inaction." PATCH P-07 corrects this to "+1 PC maximum per season from inaction." The body text was never updated to reflect P-07.
+**Error:** B5 body reads: "Only **one** of the two inaction conditions (Tribune held back, OR Senate Market purchase passed) generates +1 PC per season. Both conditions may be met simultaneously, but PC gain from inaction is capped at +1 per season. The maximum of +2/season previously stated was an error, corrected in P-07 and now reflected here." PATCH P-07 corrects this to "+1 PC maximum per season from inaction." The body text was never updated to reflect P-07.
 **Correction (PATCH P-13):** B5 body text must be updated. See Section Two, P-13.
 
 ---
@@ -118,6 +146,8 @@ Every action retains at least one point of resistance. This changes the effectiv
 **Location:** B4 Accounting, Stability Check at 0.
 **Error:** "All that faction's attributes **freeze at current values.**" followed immediately by "That faction's **Mandate immediately drops to 0.**" Mandate is an attribute. An attribute cannot simultaneously freeze and change.
 **Correction (PATCH P-15):** "On Faction Collapse, Mandate drops to 0 immediately (the institution has lost all political legitimacy). All OTHER attributes freeze at their pre-collapse values. The Mandate-0 drop occurs before the freeze snapshot is taken."
+
+> **P-20:** **Accounting — Mandate cap:** Faction Mandate cannot exceed 7 (hard ceiling). All modifiers that would push above 7 are discarded. Mandate floor is 0.
 
 > **Military loss timing by mode (PP-041):** Military loss from unit destruction applies differently by mode: — TTRPG mode: Military −1 is an immediate world-state consequence. It affects faction capabilities from the moment the unit is destroyed (within the same battle if relevant). — BG mode: Military −1 from unit destruction queues to the season's Accounting phase (Domain Echo timing). The faction's Military stat does not change during the season; it updates at Accounting. — Hybrid mode: TTRPG timing applies during the battle (immediate). BG timing applies to any units that are destroyed outside of a PC-triggered TTRPG engagement.
 
@@ -155,6 +185,8 @@ Every action retains at least one point of resistance. This changes the effectiv
 **Ambiguity:** "Crown Policy declared → Hafenmark may immediately respond with Senator Inward (interrupt, no card play cost)." Does this interrupt apply to: (a) Crown's Policy Instrument only (the extra free action from Crown's exclusive tool), or (b) any Crown Senator Inward card play?
 **Correction (PATCH P-19):** The interrupt applies to **Crown's Policy Instrument only** — the once-per-season bonus action if Mandate ≥ 4. A Crown Senator Inward played as a normal card play (Decree or Diplomacy) is NOT subject to the free interrupt. This preserves the constitutional balance mechanic (Parliament checks the executive's bonus authority) without making every Crown Senator play costlessly contested.
 
+> **P-17:** **Hafenmark Decree scope:** Decrees affect only Varfell Territory factions. Cross-territory Decrees are invalid — they are not issued.
+
 ---
 
 ## I-09 — Information Asymmetry Boundary Roll uses d6 while Main System is d10
@@ -180,6 +212,9 @@ Every action retains at least one point of resistance. This changes the effectiv
 ---
 
 ## G-02 — Prosperity: Undefined Track
+
+> **P-22:** **Prosperity** is a territory-level track, not a faction stat. Each territory has a Prosperity value (0–5); starting values shown in B2. Govern success (Consul Inward / Prefect) increases Prosperity by 1 in that territory. Govern failure decreases it by 1.
+**Prosperity effects at Accounting (Year-En
 
 **Location:** B3 (Govern outcomes), B2 Territory Map (T11: "+1 Prosperity/season uncontested"), B9 (Community Projects table).
 **Gap:** Govern outcome says "Prosperity +1" on Success. T11 grants "+1 Prosperity/season." Community Projects mention "Prosperity +1." But Prosperity is never defined as a stat or track — it is referenced as if self-evident. Is Prosperity a territory-level track that feeds into faction Wealth at accounting? Is it Wealth itself under a different name?
@@ -214,7 +249,12 @@ Every action retains at least one point of resistance. This changes the effectiv
 ## G-06 — Forgetting Check "Spirit Proxy" in Board Game Mode
 
 **Location:** B7 Warden Cooperation Track, Forgetting Check.
-**Gap:** "roll Spirit proxy + Thread Sensitivity (Ob 1)." Spirit is a TTRPG attribute with no defined board game equivalent. What does a faction roll for this check?
+**Gap:** "**In board game mode, the Forgetting Check pool is:**
+- Restoration faction: Influence + 1D per Presence marker in T13.
+- Varfell: VTM level (roll VTM dice, e.g., VTM 3 = 3d10).
+- Any other faction: Wealth ÷ 2 (rounded up) — resources sustain cognitive continuity through unfamiliar substrate strain.
+- Ob 1 (floor). Thread-qualified presence (Restoration Weaver active in T13 this season, or VTM 2+) does not reduce Ob below the floor; instead, the qualified party may reroll one die once.
+In hybrid mode: use the PC's Spirit + Thread Sensitivity (TS ÷ 10, rounded down) as the pool, as specified in TTRPG compiled stages." Spirit is a TTRPG attribute with no defined board game equivalent. What does a faction roll for this check?
 **Correction (PATCH P-26):** "In board game mode, the Forgetting Check pool is: Influence + 1D per Presence marker in T13 (Restoration) OR VTM level (Varfell) OR Wealth ÷ 2 rounded up (other factions, representing the resources they brought to sustain cognitive continuity). Ob 1 (floor applies). Thread-qualified presence (Restoration Weaver this season, VTM 2+) grants −1 Ob, already at floor. A practitioner PC present reduces the applicable Ob by 1 in hybrid mode using their actual TS."
 
 ---
@@ -222,7 +262,10 @@ Every action retains at least one point of resistance. This changes the effectiv
 ## G-07 — VTM Bootstrapping Success Rate on d10
 
 **Location:** B5 Varfell, VTM Bootstrapping.
-**Gap:** Bootstrapping: "Roll Influence vs. Ob 2. Success/Overwhelming: VTM +1." On d10 with Influence 4 at Ob 2: P(≥2 net successes) ≈ 56%. A once-per-campaign action fails 44% of the time. This is too harsh for a foundational faction mechanic.
+**Gap:** Bootstrapping: "Roll Influence vs. **Ob 1**. 
+- Success or Overwhelming: VTM +1 immediately.
+- Partial: Varfell gains a **'Latent VTM' token.** On any subsequent successful Tribune Inward in T9 within the next 2 seasons, the Latent VTM converts to VTM +1. If not converted within 2 seasons, the token is lost.
+- Failure: Bootstrapping fails. No retry this campaign. Varfell must gain VTM through standard methods only." On d10 with Influence 4 at Ob 2: P(≥2 net successes) ≈ 56%. A once-per-campaign action fails 44% of the time. This is too harsh for a foundational faction mechanic.
 **Correction (PATCH P-27):** Reduce Bootstrapping to Ob 1. P(≥1 net success from pool of 4) ≈ 85% — a confident but not guaranteed start. **Add:** "Partial on Bootstrapping: the attempt partially takes hold. Varfell gains a 'Latent VTM' marker. On any subsequent successful Tribune Inward in T9 within 2 seasons, this converts to VTM +1. Failure: attempt fails; Bootstrapping cannot be retried." This preserves Season 1 stakes without making the faction's entire arc hinge on a coin-flip.
 
 ---
@@ -250,6 +293,13 @@ Every action retains at least one point of resistance. This changes the effectiv
 ---
 
 ## G-11 — Incomplete IP Pressure Advancement Table
+
+> **P-28:** **Invasion Pressure (IP) Advancement Formula (applied at Accounting Step 4):**
+| Condition | IP Change |
+|-----------|-----------|
+| Base: each season | 0 (IP does not advance automatically) |
+| Altonian Trade Mission refused (IP 30 event) | +1 |
+| Torben complied (sent to Altonia) | −3/season while
 
 **Location:** B4 Accounting Step 4, B2 Clock Environmental Effects.
 **Gap:** The IP section in B2 shows threshold EFFECTS but not the ongoing IP ADVANCEMENT formula. "IP per Altonian pressure table" is referenced in B4 but no table appears in the document. From scattered references: TC > 60 → IP +1/season. No base IP advancement is stated.
@@ -280,6 +330,8 @@ See I-05 above. PATCH P-16 resolves this.
 - Elske/Torben tracking: two off-board cards with ~6 conditions each. Manageable on dedicated reference cards. Load ≈ 4/10.
 - Faction-specific private tracks (VTM, PC, RDT, TD, AER): five concurrent private tracks across factions. Per-player this is one or two tracks. Load ≈ 4/10 per player.
 - Phase 4 priority order (7 tiers): the priority ladder is long but the within-tier resolution is clear. Physical tracker card recommended. Load ≈ 5/10.
+
+> **P-31:** **Co-Movement deck refresh:** Deck reshuffles when empty (no permanent depletion). Each card drawn: practitioner resolves the stated effect plus the three-dimensional auto-effect. Cards cannot be held between seasons — draw, resolve, discard.
 
 **Systems at elevated load (require careful design attention):**
 - Klapp Trajectory: three-branching decision tree with conditional activation, cooldown states, multi-season consequences. This is the single most complex new system in v0.4. Load ≈ 7/10.
@@ -393,6 +445,8 @@ But at RDT 6:
 
 ## Cascade Test 4: Church TC 80 Territorial Seizure
 
+> **P-30:** **TC 80 Territorial Seizure Partial result:** Territory is not seized. Church places 1 Templar Staging Token in the territory (the Templars have moved to the border). The controlling faction may contest this deployment: any Military card play in that territory next season removes the Staging Token a
+
 **Setup:** TC 80 crosses this season. Per batch_ad_resolutions.md: per-territory roll at TC 80, not blanket takeover.
 
 Per-territory roll for Church at TC 80: Church Mandate vs Ob 3 (contested territory) or Ob 2 (allied/neutral).
@@ -414,6 +468,8 @@ Territories Church can seize: any non-Church controlled territory.
 - PI −1 (Church Territorial Seizure).
 - TC +2 (Seizure successful per TC formula).
 - AER: if AER ≥ 3, AER adjusts TC formula.
+
+> **P-25: wound conversion:** Wound conversion on Zoom In: 1 personal Wound = CR −1 for that character (minimum CR 1). Wounds do not convert to unit Strength loss.
 
 **Total effects from one TC 80 seizure roll on T1:** 5+ cascading effects. Only 3 can be immediate per the Cascade Depth Cap — the rest queue. **The TC 80 event is the largest cascade event in the game. This warrants a dedicated resolution checklist card.**
 
@@ -646,355 +702,3 @@ Alternatively, add an additional TC gain source: "Church wins any contested Inst
 - **Thread Debt in hybrid:** A PC performing a personal Thread operation generates Thread Debt that batches to Cascade. But the board game Thread Debt triggers (RS < 30, prior token in territory) may not apply identically at personal scale. Hybrid mode should specify: "Personal Thread operations incur Thread Debt on the board only if the TTRPG scale operation would qualify as 'against temporal flow' by TTRPG criteria. The GM determines this at the Cascade phase ledger, not the player mid-scene."
 - **Co-Movement Cards for personal Thread operations:** TTRPG operations that batch to Cascade (Thread consequences step) generate Co-Movement card draws in Cascade, not during the personal scene. The card effects (particularly Temporal effects — NPC relationship changes) must be retroactively applied to the scene that just finished, which can feel narratively discontinuous. Recommendation: GM draws the Co-Movement card for a batched personal Thread operation at the END of the personal scene in which it occurred, records its effects, then applies them at Cascade. The narrative flavoring is immediate; the mechanical application is deferred.
 - **CP awards from board game successes (G-089 in hybrid_gaps_resolved.md):** "Board game successes generate CP." The criteria for CP awards are stated as "Belief engagement, significant Domain Action, Maxim expression." In the board game, Beliefs and Maxims are TTRPG constructs. In board-game-only mode, CP doesn't apply. In hybrid, the board action must be tied back to the PC's belief system by the GM to earn CP. **This is correct but needs a worked example in the ruleset.** The Institutional Mandate Uphold/Compromise decision is the natural bridge: a faction Upholding their Mandate in a way that reflects the PC's personal Conviction (their TTRPG Belief arc) earns CP even when resolved at board scale.
-
----
-
-# PART TEN: PATCHES P-12 THROUGH P-32
-
-## PATCH P-12 — Majority 1s Rule: d10 Language
-**Affected section:** B3 Core Mechanic.
-Old: "If more dice show 1 than show 4+, result is Failure regardless of other dice."
-New: "If more dice show 1 than show 7-10 in the same roll, result is **Critical Failure**: apply normal Failure consequences plus one additional immediate consequence (GM discretion: −1 Standing, −1 Stability, or one stat degradation). Net successes are still calculated for record purposes but do not mitigate the Catastrophic result."
-
----
-
-## PATCH P-13 — Patience Protocol Body Text: Cap at +1 (reconcile with P-07)
-**Affected section:** B5 Varfell, Patience Protocol.
-Old body text: "The above two counters can both trigger in the same season. Maximum +2 PC per season from inaction."
-New: "Only **one** of the two inaction conditions (Tribune held back, OR Senate Market purchase passed) generates +1 PC per season. Both conditions may be met simultaneously, but PC gain from inaction is capped at +1 per season. The maximum of +2/season previously stated was an error, corrected in P-07 and now reflected here."
-
----
-
-## PATCH P-14 — Casus Belli Expiration (canonical distinction)
-**Affected section:** B7 Casus Belli rules and B7 Treaty Betrayal table.
-Add: "**Casus Belli expiration rules by source:**
-- Treaty betrayal (pledge broken against you): **Permanent until used.** Does not expire. The grievance is institutional.
-- Brutal disposition against civilians you controlled: **3 seasons** from acquisition if unused.
-- Fabricated Heresy Investigation (evidence of falsification): **3 seasons** from acquisition if unused.
-- Varfell Patience Protocol accumulation: **Expires when exposed by Riskbreakers** (immediate, no seasonal expiry otherwise).
-Only one Casus Belli may be held per faction at a time. A new acquisition from a different source replaces the old one only if the old one has already expired or been used."
-
----
-
-## PATCH P-15 — Faction Collapse: Mandate Priority
-**Affected section:** B4 Accounting, Stability Check at 0.
-Old: "All that faction's attributes freeze at current values. That faction's Mandate immediately drops to 0."
-New: "When Stability reaches 0, Faction Collapse fires: (1) Mandate drops to 0 immediately — this is the first effect. (2) All remaining attributes (Influence, Wealth, Military, Intelligence) **freeze at their current values** (the snapshot is taken AFTER the Mandate drop). (3) The faction is in Collapse state for up to 2 seasons pending reconstitution."
-
----
-
-## PATCH P-16 — Battle Resolution: Compare Net Successes
-**Affected section:** B8 Battle Resolution.
-Add after "Each side rolls their Military stat...":
-
-> **Victory determination:** Both sides roll simultaneously. Compare net successes.
-> - If attacker's net > defender's net: **Attacker wins.** Apply outcome from attacker's degree (Overwhelming/Success/Partial/Failure) using the DIFFERENCE as the effective surplus: (attacker net − defender net) vs Ob.
-> - If defender's net > attacker's net: **Defender wins.** Attacker's advance fails; apply Partial or Failure to attacker based on the deficit.
-> - If net successes are equal: **Stalemate.** Both sides: Cohesion −1. No territorial change. Battle may continue next season if both players choose.
->
-> **Example:** Attacker rolls 4 net (Ob 2: Overwhelming). Defender rolls 3 net. Net difference = 1. Attacker wins by Success margin (not Overwhelming, because the defender's resistance absorbed the surplus). Defender Cohesion −2.
-
----
-
-## PATCH P-17 — Restoration Victory Framing
-**Affected section:** B5 Restoration Movement, Victory.
-Add after "RS ≥ 50": "(This condition must be met at the moment of victory declaration, not just at game start. Restoration's win is inherently a preservation mandate — they cannot claim victory in a world that has already degraded past saving.)"
-
----
-
-## PATCH P-18 — Phase 4 Tiebreaking: Three-Way Ties
-**Affected section:** B4 Phase 4 Resolution.
-Old: "Within tier: descending Stability first. Ties: resolve simultaneously. Three or more factions same card type same territory: descending Stability each applying fully before the next."
-New: "Within tier: descending Stability first. **Exactly two factions tied on Stability:** resolve simultaneously. **Three or more factions tied on Stability:** resolve in player turn order (the order established at game start and recorded on the shared reference card). Player turn order is consistent and arbitrary — it grants no inherent faction advantage. Military-vs-military ties between two factions always resolve simultaneously regardless of player count."
-
----
-
-## PATCH P-19 — Parliamentary Manoeuvre Free Interrupt: Scope Clarified
-**Affected section:** B4 Phase 4, Resolution order.
-Add: "The Hafenmark free PM interrupt is triggered **only by Crown's Policy Instrument** (the once-per-season bonus action from the Crown-Exclusive Policy Instruments table, available when Mandate ≥ 4). It does NOT apply to Crown Senator Inward card plays (Decrees), Crown Senator Outward (Diplomacy), or any other Crown action. Policy Instruments are issued separately from card plays and are the specific subject of Parliamentary oversight."
-
----
-
-## PATCH P-20 — Information Asymmetry Boundary Roll: d6 Exception
-**Affected section:** B14 Hybrid Interface, Fog of War.
-Add to boundary ambiguity rule: "(Use a d6 for this roll only — it is a 50/50 coin-flip mechanism, not a success-count roll. The main game uses d10.)"
-
----
-
-## PATCH P-21 — Standard Action Obstacle Reference Table
-**New table, add to B3 after Stat-to-Action Mapping:**
-
-| Action | Default Ob | Typical Modifiers |
-|--------|-----------|------------------|
-| Muster (Legionary Inward) | 2 | −1 in T2 (Garrison), −1 in T11 (Breadbasket) |
-| March (Legionary Outward) | 2 | +1 in T8 (Difficult terrain) |
-| Govern (Consul Inward / Prefect) | 2 | −1 in own capital; −1 with Architectus upgrade |
-| Trade (Consul Outward / Aedile) | 2 | +1 at IP ≥ 30 (Schoenland routes); +1 in T10 (Black Market) |
-| Diplomacy (Senator Outward / Diplomat) | 2 | −1 with Diplomat card; −1 in own territory; +1 if Standing ≥ 3 vs target |
-| Decree (Senator Inward) | 2 | +1 in non-home territory; −1 in capital |
-| Parliamentary Manoeuvre (Hafenmark) | 2 | +1 at PI ≤ 2; −1 at PI ≥ 7 |
-| Investigate (Tribune Inward) | 2 | −1 in own territory; +1 in Niflhel-active territory |
-| Spy (Tribune Outward) | 2 | +1 in heavily fortified territory |
-| Thread Operation (standard) | 2 | −1 per Presence marker (Restoration); see Thread Operation Procedure |
-| Community Organizing (Organizer) | 2 | — |
-| Community Project start (Praetor) | 1 | — |
-| Community Project advance (Praetor) | 2 | — |
-| Fortify (Architectus) | 2 | — |
-| Forgetting Check | 1 | −1 with Restoration Weaver present; −1 with VTM 2+ |
-
-*All Obs subject to Ob minimum = 1 (Correction 2). Modifiers are cumulative; total cannot fall below 1.*
-
----
-
-## PATCH P-22 — Prosperity Defined
-**New rule, add to B3 after Govern outcomes AND add Prosperity track reference to B2 Territory Table:**
-
-> **Prosperity** is a territory-level track, not a faction stat. Each territory has a Prosperity value (0–5); starting values shown in B2. Govern success (Consul Inward / Prefect) increases Prosperity by 1 in that territory. Govern failure decreases it by 1.
->
-> **Prosperity effects at Accounting (Year-End):**
-> - Prosperity ≥ 3: +1 Wealth to controlling faction per territory.
-> - Prosperity ≥ 5: +2 Wealth to controlling faction (maximum benefit).
-> - Prosperity 0 or 1: Stability check Ob 1 for controlling faction.
->
-> Prosperity is separate from the Prosperity column in the B2 territory table (which shows starting Prosperity values). Record changes on the board or reference sheet.
-
-**Starting Prosperity values by territory (added to B2 Territory Table as new column):**
-T1:4, T2:3, T3:4, T4:2, T5:3, T6:5, T7:4, T8:3, T9:3, T10:2, T11:4, T12:1, T13:1, T14:3, T15:4.
-
----
-
-## PATCH P-23 — "Thread-active territory" Definition
-**Affected section:** B5 Varfell, Gaining VTM.
-Old: "Tribune in Thread-active territory while in Thread Resonance: +1 VTM."
-New: "Tribune played (either orientation) in a territory **where a Thread operation occurred this season** (by any faction), while Varfell is in Thread Resonance: +1 VTM. 'Thread-active' means an operation occurred there, not merely in an adjacent territory. Exception: T9 (Varfell) is treated as permanently Thread-active for VTM purposes once VTM ≥ 2."
-
----
-
-## PATCH P-24 — Thread Debt Ob Effect: Corrected Direction
-**Affected section:** B6 Thread Operation Procedure, Step 3.
-Old: "incur Thread Debt token (placed in territory, −1 Ob to THIS operation as substrate resistance)."
-New: "incur Thread Debt token (placed in territory). **The Thread Debt token adds +1 Ob to the NEXT Thread operation in this territory** (applied at that future operation's Step 4 Ob modifiers). This current operation is not penalised — the substrate is already stressed; the cost manifests in future operations here, not this one."
-
----
-
-## PATCH P-25 — Heresy Investigation: Required Valid Target
-**Affected section:** B6 Church Attention Pool; B5 Church (Pontifex).
-Add: "A Heresy Investigation requires a **named target** at declaration: a faction currently active in the territory this season (has played a card or has units/Presence there), a named NPC, or (in hybrid mode) a practitioner PC with TS > 0. **If no valid target exists** in the territory: the Investigation cannot open. Church must select an alternate territory or forfeit the action (card is still consumed for played card; if it was a free action from Overwhelming Decree, it is simply lost)."
-
----
-
-## PATCH P-26 — Forgetting Check: Board Game Stat Proxy
-**Affected section:** B7 Warden Cooperation Track, Forgetting Check.
-Old: "roll Spirit proxy + Thread Sensitivity (Ob 1)."
-New: "**In board game mode, the Forgetting Check pool is:**
-- Restoration faction: Influence + 1D per Presence marker in T13.
-- Varfell: VTM level (roll VTM dice, e.g., VTM 3 = 3d10).
-- Any other faction: Wealth ÷ 2 (rounded up) — resources sustain cognitive continuity through unfamiliar substrate strain.
-- Ob 1 (floor). Thread-qualified presence (Restoration Weaver active in T13 this season, or VTM 2+) does not reduce Ob below the floor; instead, the qualified party may reroll one die once.
-In hybrid mode: use the PC's Spirit + Thread Sensitivity (TS ÷ 10, rounded down) as the pool, as specified in TTRPG compiled stages."
-
----
-
-## PATCH P-27 — Bootstrapping: Ob Reduction + Partial Result
-**Affected section:** B5 Varfell, VTM Bootstrapping.
-Old: "Roll Influence vs. Ob 2. Success/Overwhelming: VTM +1."
-New: "Roll Influence vs. **Ob 1**. 
-- Success or Overwhelming: VTM +1 immediately.
-- Partial: Varfell gains a **'Latent VTM' token.** On any subsequent successful Tribune Inward in T9 within the next 2 seasons, the Latent VTM converts to VTM +1. If not converted within 2 seasons, the token is lost.
-- Failure: Bootstrapping fails. No retry this campaign. Varfell must gain VTM through standard methods only."
-
----
-
-## PATCH P-28 — IP Advancement Table
-**New section, add to B4 Accounting Step 4 and B2 near Clock Tracks:**
-
-> **Invasion Pressure (IP) Advancement Formula (applied at Accounting Step 4):**
-
-| Condition | IP Change |
-|-----------|-----------|
-| Base: each season | 0 (IP does not advance automatically) |
-| Altonian Trade Mission refused (IP 30 event) | +1 |
-| Torben complied (sent to Altonia) | −3/season while so disposed, but IP +5 immediately on compliance |
-| Torben refuses tutoring (Crown refuses at IP 40) | +3 immediately |
-| Elske returns to Valoria (rescue) | +5 immediately |
-| TC > 60 | +1/season |
-| Schoenland Proxy Arms Deal active (IP 45 event) | +2 this season |
-| Crown Free Trade Decree | −1 |
-| AER ≥ 4 | IP cannot advance above 60 while active |
-| AER = 5 | IP fixed at 50 while active |
-| Grand Diplomatic Scene milestone fired | −5 immediately |
-| Löwenritter or Crown Military success vs Altonian interest | −2 |
-| Altonian Vanguard repelled (see B2) | −5 |
-
-*IP has no automatic per-season advance unless specific conditions are active. This is by design: IP is event-driven, not time-driven. The political choices of all factions together determine whether Altonian pressure grows.*
-
----
-
-## PATCH P-29 — Cascade Depth Cap: Clock Changes Clarified
-**Affected section:** B4 Phase 4, Cascade Depth Cap.
-Add: "Clock changes (RS, TC, IP, PI modifications) **count against** the 3-immediate-effect cap. A card play that would trigger: (1) TC +3, (2) RDT +1, and (3) Standing +1 has exhausted its 3-effect allowance. Additional effects from the same card play (Deed Token qualification, environmental effect threshold crossings) **queue to Accounting Phase 5 Step 8** rather than applying immediately. This prevents mid-Phase victory declarations or mid-Phase threshold events."
-
----
-
-## PATCH P-30 — TC 80 Territorial Seizure: Partial Resolution
-**Affected section:** Implied by batch_ad_resolutions.md Church TC 80 Seizure integration.
-Add to B5 Church (TC Advancement Formula section) or B10 (World Event Deck):
-
-> **TC 80 Territorial Seizure Partial result:** Territory is not seized. Church places 1 Templar Staging Token in the territory (the Templars have moved to the border). The controlling faction may contest this deployment: any Military card play in that territory next season removes the Staging Token at no additional cost. If uncontested, the Staging Token converts to a deployed Templar (elite stat block) at the start of the following Phase 1. TC +1 from the partial seizure (the momentum is maintained even without immediate success). PI −1 (the seizure attempt undermines parliamentary confidence).
-
----
-
-## PATCH P-31 — VTM: Once-Per-Season Advancement Cap
-**Affected section:** B5 Varfell, Gaining VTM.
-Add: "**VTM may only advance once per season regardless of how many advancement conditions are simultaneously met.** Priority order if multiple conditions fire in the same season: (1) 6 PC spend (declared at Phase 1). (2) Southernmost Expedition Season 1 completion. (3) Tribune in Thread-active territory. (4) Thread Debt incurred by any faction."
-
----
-
-## PATCH P-32 — Church Holy State Victory: TC Target Adjustment
-**Affected section:** B5 Church of Solmund, Victory.
-**Decision:** Starting TC raised from 22 to 28 (reflecting deeper historical institutional entrenchment per canonical_timeline.md) AND TC target for Holy State reduced from 70 to 65.
-
-Old: Starting TC 22. Holy State requires TC ≥ 70.
-New: **Starting TC 28.** Holy State requires **TC ≥ 65.** Gap: 37 points. At 2–3/season with moderate opposition: achievable in 13–18 seasons. ✓
-
-Update B2 Clock Tracks: "**Theocratic Clock (TC):** Starts **28** → 100. TC 80 = Church Territorial Seizure."
-
-Update all starting state references (canonical_timeline.md states TC 22 — this is a board game balance override of the canonical value; note it explicitly): "Board game starting TC is 28, representing the Church's deeper institutional entrenchment as playable momentum. The canonical setting value of TC 22 reflects the raw historical measurement; the board game starts closer to the politically active threshold."
-
-Update C2, Pre-Playtest Checklist note: "Starting TC confirmed at 28 for board game balance (v0.5 correction)."
-
----
-
-# PART ELEVEN: SUMMARY TABLES
-
-## All Patches (P-01 through P-32)
-
-| ID | Gap | Location | Status |
-|----|-----|----------|--------|
-| P-01 | Stat cap at 7 | B3 | v0.4 |
-| P-02 | Misplayed Pontifex | B5 Church | v0.4 |
-| P-03 | Territory Influence vs Faction stat | B3 | v0.4 |
-| P-04 | Staging Token conversion timing | B8 | v0.4 |
-| P-05 | VTM Bootstrapping vs Investigate | B5 Varfell | v0.4 |
-| P-06 | T14 control clarification | B2 | v0.4 |
-| P-07 | Patience Counter accumulation | B5 Varfell | v0.4 |
-| P-08 | Soft-coup Crown hand | B5 Löwenritter | v0.4 |
-| P-09 | Territory adjacency list | B2 | v0.4 |
-| P-10 | Church NPC Overwhelming Decree | B13 | v0.4 |
-| P-11 | Hafenmark Deed 2 starting state | B5 Hafenmark | v0.4 |
-| **P-12** | **Majority 1s rule: d10 language** | **B3** | **v0.5** |
-| **P-13** | **Patience Protocol body text cap +1** | **B5 Varfell** | **v0.5** |
-| **P-14** | **Casus Belli: canonical expiration distinction** | **B7** | **v0.5** |
-| **P-15** | **Faction Collapse: Mandate priority before freeze** | **B4** | **v0.5** |
-| **P-16** | **Battle resolution: compare net successes** | **B8** | **v0.5** |
-| **P-17** | **Restoration victory RS framing** | **B5 Restoration** | **v0.5** |
-| **P-18** | **Three-way tiebreaking in Phase 4** | **B4** | **v0.5** |
-| **P-19** | **PM free interrupt: Policy Instrument only** | **B4** | **v0.5** |
-| **P-20** | **Info Asymmetry boundary: d6 exception noted** | **B14** | **v0.5** |
-| **P-21** | **Standard Action Ob Reference table** | **B3** | **v0.5** |
-| **P-22** | **Prosperity: defined as territory track** | **B3, B2** | **v0.5** |
-| **P-23** | **"Thread-active territory" defined** | **B5 Varfell** | **v0.5** |
-| **P-24** | **Thread Debt Ob: +1 NEXT operation (not −1 this)** | **B6** | **v0.5** |
-| **P-25** | **Heresy Investigation: valid target required** | **B6, B5 Church** | **v0.5** |
-| **P-26** | **Forgetting Check: board game stat proxy** | **B7** | **v0.5** |
-| **P-27** | **Bootstrapping: Ob1, Partial = Latent VTM** | **B5 Varfell** | **v0.5** |
-| **P-28** | **IP Advancement Table** | **B4, B2** | **v0.5** |
-| **P-29** | **Cascade Depth Cap: clock changes count** | **B4** | **v0.5** |
-| **P-30** | **TC 80 Seizure: Partial resolution** | **B5 Church** | **v0.5** |
-| **P-31** | **VTM: once-per-season cap** | **B5 Varfell** | **v0.5** |
-| **P-32** | **Church Holy State: TC 28 start, target 65** | **B2, B5 Church** | **v0.5** |
-
-## Outstanding Pre-Playtest Items (Carry Forward from v0.4)
-
-| ID | Item | Priority |
-|----|------|---------|
-| v0.4-NEW-01 | Veldensohn stat block / IP ≥ 75 disposition | **Blocking** |
-| v0.4-NEW-02 | Battle Tactic Card deck (4 shared + faction-specific) | **Blocking** |
-| v0.4-NEW-03 | Mass Battle v3 Part B.4 inline resolution | **Blocking** |
-| v0.5-NEW-01 | Hybrid: Co-Movement card draw timing for batched personal Thread ops | Recommended pre-playtest |
-| v0.5-NEW-02 | CP awards from board game actions: worked example in B14 | Recommended pre-playtest |
-| v0.5-NEW-03 | Accounting steps 8, 8b, 9, 9b, 10, 10b: consolidate into one "Events and Emergence" step | Recommended |
-| BG-E-27/33 | Champion Renown ability text | Post-playtest |
-| BG-E-50 | Cardinal schism mechanics | Post-playtest |
-
----
-
-# PART TWELVE: UPDATED CORE MECHANIC SECTION (B3 replacement text)
-
-*The following replaces the B3 Core Mechanic section in its entirety:*
-
----
-
-## B3 — ACTION ECONOMY (v0.5)
-
-### Core Mechanic
-
-All rolls: pool = relevant faction stat (1–7). Dice: **d10**.
-
-**Per die:**
-- **7, 8, 9:** 1 success.
-- **10:** 2 successes (bonus success).
-- **1:** −1 success (subtracts one from net total).
-- **2–6:** 0.
-
-**Net successes** = (7-9 count) + (2 × 10s count) − (1s count). Net cannot fall below 0 for degree purposes; treat negative net as 0.
-
-**Majority-1s override:** If dice showing 1 outnumber dice showing 7-10: **Critical Failure** — apply Failure consequences plus one immediate additional consequence at GM/player discretion.
-
-**Ob minimum = 1.** No Ob may fall below 1 regardless of stacking modifiers. Excess reduction is discarded.
-
-**Degree table:**
-
-| Net Successes | Degree |
-|---------------|--------|
-| Ob + 1 or more surplus | Overwhelming |
-| = Ob | Success |
-| Ob − 1 | Partial |
-| 0 (or negative) | Failure |
-
-**Faction stat cap:** All stats maximum 7, minimum 0. Surplus above 7 or losses below 0 are discarded.
-
-### Standard Action Obstacle Table
-
-| Action | Default Ob | Common Modifiers |
-|--------|-----------|-----------------|
-| Muster (Legionary Inward) | 2 | −1 at T2, T11; +1 RS < 29 |
-| March (Legionary Outward) | 2 | +1 at T8; −1 Löwenritter Martial Law territory |
-| Govern (Consul Inward / Prefect) | 2 | −1 in own capital; −1 with Architectus upgrade |
-| Trade (Consul Outward / Aedile) | 2 | See IP/Schoenland modifiers |
-| Diplomacy (Senator Outward / Diplomat) | 2 | −1 with Diplomat card |
-| Decree (Senator Inward) | 2 | +1 non-home territory |
-| Parliamentary Manoeuvre | 2 | +1 at PI ≤ 2; −1 at PI ≥ 7 |
-| Investigate (Tribune Inward) | 2 | −1 in own territory |
-| Spy (Tribune Outward) | 2 | +1 in fortified territory |
-| Thread operation (base) | 2 | −1 per Presence marker (Restoration); see B6 |
-| Community Organizing | 2 | — |
-| Project start (Praetor) | 1 | — |
-| Project advance (Praetor) | 2 | — |
-| Fortify (Architectus) | 2 | — |
-| Forgetting Check | 1 | See PATCH P-26 |
-
-*All Obs subject to Ob minimum = 1.*
-
-### Prosperity (Territory Track)
-
-Prosperity is a **territory-level track (0–5)**, not a faction stat. Govern success: Prosperity +1. Govern failure: Prosperity −1.
-
-**At Year-End Accounting:**
-- Prosperity ≥ 3: controlling faction +1 Wealth from this territory.
-- Prosperity 5: +2 Wealth (maximum).
-- Prosperity 0–1: controlling faction Stability check Ob 1.
-
-Starting Prosperity: T1:4, T2:3, T3:4, T4:2, T5:3, T6:5, T7:4, T8:3, T9:3, T10:2, T11:4, T12:1, T13:1, T14:3, T15:4.
-
-*(T11 Breadbasket: Prosperity +1/season automatically while uncontested, in addition to Govern effects.)*
-
-### Stat-to-Action Mapping (unchanged from v0.4)
-
-[All card/action/stat mappings as previously stated — no changes.]
-
----
-
-*Valoria v0.5 Simulation and Patch Report complete.*
-*21 core systems stable. 32 patches applied (11 inherited from v0.4; 21 new in v0.5). 3 blocking editorial items outstanding (v0.4-NEW-01, -02, -03). 3 new recommended pre-playtest items. Dice system corrected to d10 throughout.*
-*Next step: Apply all patches to v0.4 ruleset document. Then designer authorship on 3 blocking items. Then first playtest.*
