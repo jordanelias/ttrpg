@@ -1,6 +1,9 @@
 # PART EIGHT: COMBAT
+## Version: v0.14-ST2 — PP-086–092 applied in-place; Part Eleven appendix eliminated
 
 Combat in Valoria uses a simultaneous pool-split system derived from historical fighting manuals — Fiore dei Liberi, George Silver, the Liechtenauer tradition, Talhoffer, Meyer. Every round, each fighter divides their Combat Pool between Offence and Defence. All pools resolve simultaneously. The core tactical decision is commitment: overcommit to offence and you are exposed; overcommit to defence and your opponent acts freely.
+
+> **Multi-attacker timing:** In multi-attacker scenarios (3+), defender allocates pool blind before any attacker declares their offence split.
 
 The system operates at two scales: **personal combat** (individual characters, §8.1–8.7) and **mass combat** (military units, §8.8). Both use the same dice engine. The mass combat system is a direct abstraction of the personal combat mechanics at unit scale.
 
@@ -83,6 +86,8 @@ Weapons are defined by two independent binary axes — **weight** (Light/Heavy) 
 | Unarmed | 8 | 9 | +0 | Fists, grappling, improvised |
 
 Reach (Short/Long) is independent of the above. A dagger is Short Light Cut. A spear is Long Light Cut. A longsword is Long Heavy Cut. A war hammer is Short or Long Heavy Blunt.
+
+> **Same range definition:** 'Same range' occurs when shorter weapon closes to its optimal zone. Shorter weapon has priority; longer weapon user must re-establish distance at disadvantage.
 
 ### Strength Minimums
 
@@ -199,6 +204,8 @@ An opponent is **unsupported** if no ally is engaging any of the attackers.
 
 ### Rescue
 
+> **Tie Up clarification (P2-B11-05):** Tie Up blocks escape for one round only. The affected character may attempt Escape the following round.
+
 A fighter may declare **Rescue** as their action. Their current opponent gains +2D Offence this round (the fighter's attention shifts away — equivalent to Full Guard logic). Next round, the rescuing fighter is in their ally's engagement with Fibonacci bonus applied. No roll required.
 
 **Rescue timing:** simulation confirms the viable rescue window is **rounds 1–3**. After round 3, 75–80% of losing fighters have already fallen. Rescue declared at round 5 saves the ally only 43–45% of the time — often too late.
@@ -222,6 +229,8 @@ Mass combat uses the same dice engine as personal combat, with two key changes:
 soldier) are separate stats. Both are 1–7.
 
 **Effective Combat Pool = min(CP, current Size)**
+
+> **Base damage formula (PP-086):** Base damage for a mass combat engagement = net successes on the attack roll (successes over Ob). Disposition modifiers (Offensive +2 flat; Defensive +4 flat) add to this base. Minimum 0.
 
 As Size drops from casualties, the pool shrinks — fewer soldiers means fewer
 dice regardless of individual quality.
@@ -263,6 +272,8 @@ of damage source.
 | 3–4 | −1D |
 | 1–2 | −2D |
 | 0 | Formation broken; cannot attack |
+
+> **Break stacking (PP-087):** Formation Break Ob stacking: each break adds +1 Ob to all subsequent Cohesion checks (cumulative, persists through rally). Cap: 3 breaks = Dispersed (permanent rout). All attachments lost on any Formation Break.
 
 Cohesion ceiling applies at deployment only, not retroactively. Military floor = 1.
 
@@ -376,6 +387,8 @@ weapon modifier doubled. Both sides take Size damage simultaneously.
 Mutual destruction valid. Mass Mismatch Penalty: Light vs Heavy weapon
 attack: −1 defensive success (min 0). Exempt: Shield Wall.
 
+> **Artillery Bombard (PP-091):** Bombard (Artillery only): Roll Artillery CP vs Ob by distance (Short=1, Med=2, Long=3). No melee exchange. Success = flat 1 Size damage. Overwhelming = flat 2. Cannot Bombard at melee range. Artillery locked to Balanced disposition by default. [EDITORIAL ED-040: intentional?]
+
 **Phase 5 — Cascade** (strict order)
 1. Apply all Size damage (Volley + Combat Thread + Engagement).
 2. Cohesion checks (deterministic, all sources combined).
@@ -474,6 +487,8 @@ Military floor = 1. Cohesion ceiling applies at deployment only.
 Muster: produces 1 unit of chosen type. Size=2 at deployment (next season).
 CP determined by unit type choice, subject to Military ceiling.
 
+> **Siege linkage (PP-088):** Siege assault linkage: mass combat win during declared Assault = Fortification −1. Overwhelming = −2. Field victory (not declared Assault) does not breach — Assault must be declared next season.
+
 
 ---
 
@@ -497,119 +512,3 @@ This system was developed through extensive simulation testing (406 matchups, 2,
 - Heavy Cut weapons (longswords) are the strongest general-purpose choice — effective across all matchups, dominant in 1v1.
 
 **Offence allocation and winning:** simulation shows near-zero correlation (r ≈ 0.01) between offence percentage and winning across 5,000 randomised characters. No single allocation strategy dominates — outcomes are determined by matchup, range management, and dice variance.
-
-
----
-
-# PART ELEVEN: STRESS TEST PATCHES — BATCH 11 + SIM-X SERIES
-## Sources: tests/sim_combat_batch_11.md, tests/sim_x_01_combat_thread.md, tests/sim_x_06_combat_wounds_npcs.md
-## Applied: 2026-04-02
-## PP-086 through PP-091 (P1), P2-B11 series
-
----
-
-## PP-086 — Mass Combat Base Damage Definition
-**Fixes P1-B11-01: §8.9 disposition table adds to undefined base**
-
-Add to §8.9 Mass Combat, Battle Turn Structure, Phase 4 damage resolution:
-
-> "**Base damage** for a mass combat engagement = net successes on the attack roll (successes over Ob). This is the baseline before disposition modifiers. Disposition modifiers (offensive: +2 flat; defensive: +4 flat per prior compiled text) are added to this base. Minimum base damage = 0 (cannot deal negative damage). Formula: Damage = max(0, net_successes + disposition_modifier)."
-
----
-
-## PP-087 — Formation Break Ob Stacking
-**Fixes P1-B11-02: §8.9 Formation Break — two valid interpretations produce radically different attrition**
-
-Add to §8.9 Formation Types, Formation Break section:
-
-> "**Ob stacking on repeat breaks:** Each time a unit suffers a Formation Break, it accumulates +1 Ob to all subsequent Cohesion checks (cumulative, persists until battle end — rally actions do not clear the accumulated Ob penalty). A unit that has broken twice faces +2 Ob on all Cohesion checks. **Cap:** At 3 Formation Breaks, the unit is Dispersed — it routes permanently regardless of Morale. All attachments are lost on any Formation Break. The 3-break cap prevents indefinite rally-loop exploitation."
-
----
-
-## PP-088 — Siege Assault vs Mass Combat Linkage
-**Fixes P1-B11-03 and P2-B11-15: §8.4 assault outcome vs §8.9 mass combat outcome conflated**
-
-Add to §8.9, end of Battle Outcome section, and cross-reference in §8.4 (Domain Actions):
-
-> "**Siege assault linkage:** When a season's Domain Action is an Assault (siege offensive action), the Assault's outcome is determined by the mass combat resolution if a battle is fought:
-> - Attacker wins mass combat: Fortification −1 (breach made).
-> - Attacker loses mass combat: no Fortification change. Attacker may attempt again next season.
-> - Attacker wins with Overwhelming (net ≥ 2×Ob): Fortification −2.
-> Mass combat won in a field engagement (not an Assault declaration) does not change Fortification — only declared Assaults can breach fortifications. A field victory allows the attacker to declare an Assault next season."
-
----
-
-## PP-091 — Artillery Bombard Resolution
-**Fixes P1-B11-06: §8.9 Artillery Bombard manoeuvre has no resolution mechanic**
-
-Add to §8.9 Tactics (Artillery section) or Weapon Effectiveness Reference:
-
-> "**Bombard (Artillery tactic):** Artillery units may declare Bombard instead of a standard melee engagement. Bombard is a ranged action — the Artillery unit does not enter melee and is not subject to melee retaliation that round.
-> Resolution: Roll Artillery CP vs distance-based Ob (Short = Ob 1, Medium = Ob 2, Long = Ob 3). Success = flat 1 Strength damage to target. Overwhelming = flat 2 Strength damage. Failure = no effect. Bombard may not be used at melee range (enemy unit in same zone).
-> Artillery units in Bombard have Balanced disposition by default (no melee exchange). If an enemy unit closes to melee range without being intercepted, Artillery loses the Bombard action for that turn and must defend."
-
----
-
-## P2-B11 SERIES — Personal Combat Clarifications
-
-### P2-B11-01 — Defence Split Timing (8+ Attackers)
-Add to §8.1 Combat Pool, Pool Split section:
-> "In multi-attacker scenarios (3+ opponents), the defender allocates their pool before any attacker declares their offence split. The defender's allocation is blind — they cannot see how attackers split. Attackers declare simultaneously after the defender's split is set."
-
-### P2-B11-02 — 'Same Range' Definition for Reach Priority
-Add to §8.5 Range and Reach:
-> "'Same range' occurs when a combatant using a shorter weapon has successfully closed to their optimal range (Close zone for Short weapons). At this point the shorter weapon has priority; the longer weapon user loses range priority and must manoeuvre at disadvantage to re-establish Far zone. Closing to melee range (touching distance from narrative standpoint) counts as Short range regardless of zone descriptor."
-
-### P2-B11-03 — Stunt and Chain Die Interaction on Crit Success
-Add to §8.4 Actions, Stunt:
-> "Chain dice triggered by 10s on a Stunt roll still chain (produce additional dice on 10s) as normal. A Stunt's critical success range (the stunt range value) determines narrative outcome severity, not dice chain behaviour. Both effects are independent and apply simultaneously."
-
-### P2-B11-05 — Escape During Tie Up
-Add to §8.4 Actions, Tie Up:
-> "A character subjected to Tie Up cannot declare Escape that round. They may attempt Escape the following round as their declared action. Tie Up prevents escape for one round only — the defender is not permanently restrained."
-
-### P2-B11-06 — Rescue Against Non-Attack Action
-Add to §8.8 Group Combat, Rescue:
-> "Rescue is valid only when an incoming attack is declared against the target. If no attack is declared against the rescue target this round, the Rescue action fails and the action is lost. The rescuer may not redirect their Rescue to a different target mid-declaration."
-
-### P2-B11-07 — Incapacitation Timing
-Add to §8.7 Wounds:
-> "A character reduced to 0 Health during action resolution completes their currently-resolving action (if declared and in the same priority step). They fall incapacitated at the end of that priority step. Actions declared for later priority steps do not resolve."
-
-### P2-B11-08 — Three-Way Combat Simultaneous Rout
-Add to §8.8 Multi-Engagement:
-> "If two parties in a three-way engagement rout simultaneously (both reach 0 Health or Morale 0 in the same resolution step), the surviving party wins the engagement and receives the standard veteran bonus. No tiebreaker required — the last party standing wins."
-
-### P2-B11-09 / P2-B11-10 — Commander in Personal Combat During Mass Battle
-Add to §8.9 Command Rating:
-> "A commander in personal combat (Priority 8 duel or contested personal action) may not simultaneously take a mass combat Rally, Tactics, or Memory conditional order action in that same round. Their unit dice contribution remains active (orders already issued before personal engagement), but the commander cannot issue new orders while personally combating."
-
-### P2-B11-11 — Routed Unit Drift During Scene Resolution
-Add to §8.9 Rout and Pursuit:
-> "Routed units hold position during any inter-round scene resolution (contested figures, Thread operations, personal combats between rounds). Routed units resume drift at the start of the next round's Declaration Phase."
-
-### P2-B11-12 — Named NPC Incapacitation and Unit Morale
-Add to §8.9 Unit Stat Block, Morale section:
-> "When a named NPC who is the commanding officer of a unit is incapacitated (personal combat, Thread consequence, or other means), that unit loses its Commander Contribution for the remainder of the battle. The unit continues with the general's CR but at 0 commander bonus dice."
-
-### P2-B11-13 — Artillery Balanced Disposition
-Add to §8.9 Formation Types:
-> "[EDITORIAL: requires user approval — ST-B11-13 Artillery disposition lock] Artillery is currently locked to Balanced disposition in all contexts. Confirm whether this is intentional (Artillery is never purely offensive or purely defensive — it provides fire support from a fixed position) or whether Artillery should be permitted to declare Offensive disposition at point-blank range when defending against a closing enemy."
-
-### P2-B11-17 — Cross-Mode Seasonal Cap Tracking
-Add to §8.9 Reinforcement (or cross-reference to stage11):
-> "The ±2 seasonal cap for faction Military stat applies across all mode interactions within a single season. GM tracks the cap explicitly on a faction summary sheet updated after both Strategic Phase and Personal Phase each season. If a result would breach the cap, the excess is discarded."
-
-### P2-B11-19 — TT 80+ Effect in Mass Battle
-Add to §8.9 Thread in Mass Combat:
-> "[EDITORIAL: requires user approval — P2-B11-19 TT 80+ mass battle effect] The current text does not define what happens in mass battle when the world TT/RS reaches the 80+ threshold. Define: (a) does high TT produce adverse Thread effects on non-practitioner units (suggested: Coherence checks for any practitioner attached to a unit, Morale −1 for all non-Thread-sensitive units in Southernmost-adjacent territories), or (b) TT threshold has no mass battle mechanical effect beyond what is already defined in the RS track?"
-
----
-
-## SIM-X-06 FINDINGS — Personal Combat Validation Notes
-
-These findings confirm the system is working as designed (no patches needed):
-
-- **F-23 (Wounds, −1D system):** Wound degradation is smooth with no single-wound cliff effect. Confirmed working.
-- **F-24 (Range control decisive):** Range mismatch is more fight-determining than pool size or wounds. Intended design — range management is the primary tactical layer.
-- **F-25 (CE accumulation pacing):** Inquisitor CE track accumulates correctly at ~1-2 events per multi-session trajectory. No patch needed.
