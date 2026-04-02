@@ -1353,3 +1353,46 @@ editorial_decisions:
     decision: null
     propagation_targets: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
     tags: [board_game, battle, partial_outcome]
+  - id: ED-064
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_proj_01_projectile_categories.md
+    description: "BG projectile type matchup: 4 categories have zero mechanical effect in BG Battle Resolution (no DR table applied). Design decision: does BG apply a simplified projectile vs armour modifier, or remain fully abstracted? Options: (a) abstracted (no change), (b) Ranged LP/LBl units get −1 Martial vs Heavy Infantry+, (c) tactic card modifiers."
+    status: open
+    priority: P2
+    decision: null
+    tags: [board_game, projectile, battle_resolution]
+
+  - id: ED-065
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_proj_01_projectile_categories.md
+    description: "LBl (sling) dominated by LP (arrows) in all mass combat scenarios. LP beats LBl vs every armour type. Differentiation needed. Options: (a) LBl ignores Prepared Defence bonus (stones concussive, deflection less effective), (b) LBl costs less in army building, (c) LBl has higher availability at low Military ratings (levy default weapon)."
+    status: open
+    priority: P2
+    decision: null
+    tags: [mass_combat, projectile, sling, balance]
+
+  - id: ED-066
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_proj_01_projectile_categories.md
+    description: "Artillery morale cascade: if 3+ HBl units each destroy a unit simultaneously, do morale triggers sum toward or apply against the −3/Cascade Phase cap? Clarify that the −3 cap is a total per phase across all non-general triggers, not per trigger source."
+    status: open
+    priority: P2
+    decision: null
+    tags: [mass_combat, artillery, morale, cascade]
+
+  - id: ED-067
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_proj_01_projectile_categories.md
+    description: "Personal combat ranged: consider adding a Dodge action (full pool Defence vs ranged attack) alongside Cover. BW precedent has Avoid (full pool to dodge). Currently Valoria only offers Establish Distance (move out of range, costs action) or Cover (passive DR). A mid-cost option — spend Defence pool to partially mitigate — may improve tactical richness."
+    status: open
+    priority: P3
+    decision: null
+    tags: [personal_combat, ranged, dodge, precedent_bw]

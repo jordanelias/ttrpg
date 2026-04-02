@@ -1,5 +1,5 @@
 # VALORIA — MASS BATTLE SYSTEM v4
-## Version: v4.3 (PP-104 applied: 4 projectile weapon categories, Str corrections, pool-split declaration, BG Battle Partial)
+## Version: v4.4 (PP-106 applied: HBl Dmg Mod +5→+3, Artillery sight-line rule, personal combat projectile reference)
 ## Status: WORKING DESIGN — no appendix sections. Read straight through.
 ## Three-mode: TTRPG/Hybrid (Part A); Board Game (Part B); Hybrid Handoff (§B.5)
 ## All P1/P2/P3 patches applied. Gaps filled. Editorial notes flagged.
@@ -49,6 +49,12 @@ armour. LP (arrows) penetrate light armour; HP (crossbow bolts) penetrate
 medium; LBl (sling) are anti-unarmoured only. Force composition determines
 outcome more than tactics. [EDITORIAL: ED-061 — confirm 4-category split and
 sub-unit types for Ranged (archer/crossbow/slinger)]
+
+**Personal combat projectile weapons:** LP, HP, and LBl are also defined for
+individual fighters in personal combat. See references/params_combat.md §Ranged
+Combat Rules (PP-105). HBl has no personal combat equivalent (siege crew fight as
+melee/unarmed). The DR values above apply to both mass combat (unit scale) and personal
+combat (individual scale, same formula).
 
 ---
 
@@ -235,6 +241,13 @@ the configuration). *[P1-01]*
 Projectile units fire. Roll Effective CP vs TN 6. Net successes − DR
 (Projectile column) = Strength loss to record.
 Prepared Defence: declare in Phase 1; half Effective CP as passive DR
+against Volley attacks this turn (rounded down, min 0).
+
+**Artillery sight-line rule (PP-106):** HBl (Artillery) units require unobstructed
+line of sight. A unit in Line formation positioned between the Artillery and its
+target blocks the shot. Artillery must target units in an unobstructed zone.
+Primary counter to Artillery: maintain a screening formation in front of your
+vulnerable units, then flank to threaten Artillery directly.
 bonus (+1 per 2 dice).
 **Volley Strength loss is recorded but NOT applied until Phase 6 Step 1.**
 *[P2-06, ED-037 provisional: TN 6 intentional exception]*
@@ -498,7 +511,7 @@ TTRPG equivalence added for hybrid translation:
 | Heavy Infantry | 4 | 4 | 4 | 10 | 4 | 5 | 5 | HeavyCut | Medium | +4 |
 | Cavalry | 4 | 3 | 5 | 9 | 5 | 4 | 5 | HeavyCut | Heavy | +5 |
 | Ranged | 3 | 2 | 3 | 8 | 3 | 3 | 3 | LP (arrows) | Light | +2 |
-| Artillery | 2 | 2 | 2 | 8 | 2 | 3 | 3 | HBl (siege) | None | +5 |
+| Artillery | 2 | 2 | 2 | 8 | 2 | 3 | 3 | HBl (siege) | None | +3 |
 | Knights Templar | 5 | 5 | 6 | 11 | 5 | 6 | 6 | HeavyBlunt | Heavy | +5 |
 
 Str corrected: user audit −2 all units, −3 Ranged and Artillery (PP-104).

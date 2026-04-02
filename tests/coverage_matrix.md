@@ -205,3 +205,5 @@ PP-104 applied: 4 projectile categories, Str corrections, pool split, damage for
 - PARAMS-GAP-06-MC: resolved (BG Battle Partial, margin ≤1) ✓
 - User Str audit: all units −2, Ranged/Artillery −3 ✓
 Open for editorial: ED-061, ED-062, ED-063.
+
+| SIM-PROJ-01 | LP/HP/LBl/HBl projectile categories | TTRPG+BG | PRES | Unit Str, Wounds, DR, Morale | Generic | Generic unit archetypes | Ranged skirmisher, siege crew, armoured infantry | COMPLETE | F-PROJ-01 (P1→PP-106), F-PROJ-03 (P1→ED-064), F-PROJ-04 (P1→PP-105), F-PROJ-08 (P1→PP-106 sight-line), F-PROJ-02/05/06/07 (P2→EDs) |

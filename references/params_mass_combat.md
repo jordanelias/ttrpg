@@ -1,4 +1,4 @@
-<!-- version: v0.14+design-ST5 | sources: designs/mass_combat/mass_battle_v3.md (v4.3, PP-104) | last_updated: 2026-04-02 -->
+<!-- version: v0.14+design-ST6 | sources: designs/mass_combat/mass_battle_v3.md (v4.4, PP-106) | last_updated: 2026-04-02 -->
 <!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D -->
 <!-- PHASE STRUCTURE: 7 phases. Thread split: offensive Phase 4, support Phase 6. All damage simultaneous Phase 6 Step 1. -->
 <!-- mass_battle_v3.md is a design proposal. Values marked [COMPILED] are from stage8; [PROPOSAL] from v3. -->
@@ -140,6 +140,12 @@ LP = Light Pierce (arrows). HP = Heavy Pierce (bolts). LBl = Light Blunt (sling)
 
 HeavyBlunt and HBl are the only classes effective vs Heavy armour.
 
+**Artillery sight-line rule (PP-106):** HBl units require clear line of sight to target.
+A unit in Line formation between Artillery and target blocks the shot (target is in the
+firing unit's dead zone). Artillery must target units with unobstructed paths — typically
+units in the same zone or flanking positions. This creates the primary counter to Artillery:
+block sight-lines with front-line formations; flank to reach Artillery directly.
+
 ## Battle Scale [PROPOSAL]
 | Scale | 1 Strength ≈ | Thread Thread Sensitivity minimum |
 |-------|-------------|-------------------|
@@ -174,7 +180,7 @@ Dmg Mod from unit table below. [PROVISIONAL — ED-062: confirm values]
 | Heavy Infantry | HeavyCut | +4 |
 | Cavalry | HeavyCut | +5 |
 | Ranged | LP | +2 |
-| Artillery | HBl | +5 |
+| Artillery | HBl | +3 |
 | Knights Templar | HeavyBlunt | +5 |
 
 ### BG Battle Partial outcome (PARAMS-GAP-06-MC resolved)

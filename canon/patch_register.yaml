@@ -1534,3 +1534,25 @@ patches:
   applied_to_version: "v4.3"
   status: applied
   applied_commit: pending
+
+- id: PP-105
+  date: 2026-04-02
+  severity: P1
+  description: "TTRPG personal combat projectile weapon types: LP (bow +2), HP (crossbow +4), LBl (sling +1). Ranged combat rules: no Defence allocation, Far zone only, Close zone −3D, Cover +2DR, Reload action for HP, simultaneous ranged-vs-ranged provisional. Sling knife default at Close zone."
+  finding_id: "F-PROJ-04 / F-PROJ-06 / F-PROJ-07 / SIM-PROJ-01"
+  source: simulation
+  affects: [references/params_combat.md]
+  applied_to_version: "v0.14-AUD2"
+  status: applied
+  applied_commit: pending
+
+- id: PP-106
+  date: 2026-04-02
+  severity: P1
+  description: "HBl Artillery Dmg Mod +5→+3 (one-shot problem). Artillery sight-line rule: HBl requires unobstructed LoS; Line formation screens block shots; flank to engage Artillery. Applied to mass_battle_v3 §B.2 and §Phase 2 Volley."
+  finding_id: "F-PROJ-01 / F-PROJ-08 / SIM-PROJ-01"
+  source: simulation
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  applied_to_version: "v4.4"
+  status: applied
+  applied_commit: pending
