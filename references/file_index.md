@@ -182,6 +182,7 @@
 | references/params_debate.md | TTRPG/HYBRID | CURRENT | debate_system_redesign_v1.md | Part 6 (compiled mechanics) added; params not yet synced |
 | references/params_threadwork.md | TTRPG/HYBRID | CURRENT | threadwork_redesign_v25.md | ST-TW patches applied; params not yet synced |
 | references/params_scale_transitions.md | HYBRID | CURRENT | stage11_scale_transitions.md | PP-089/PP-090 PENDING |
+| references/glossary.md | ALL | CURRENT | — | Canonical term expansion reference. Update on every commit introducing a new term. |
 | references/D10_INTEGRATION_GUIDE.md | ALL | CURRENT | — | — |
 | references/d10_success_probabilities.json | ALL | CURRENT | — | — |
 
