@@ -1,35 +1,35 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_TTRPG_AUDIT
-phase: Phase 10 — TTRPG mode mechanic audit (AUD-TTRPG-01)
+session_id: 2026-04-02T_DEBATE_AUDIT_STRESS
+phase: Phase 9 — Debate audit + subsystem stress test
 status: COMPLETE
 
 completed:
-  - AUD-TTRPG-01: TTRPG mode audit Modes A–G. 11 P1s, 14 P2s, 4 P3s.
-  - Output: tests/aud_ttrpg_01.md committed.
-  - Coverage matrix updated with AUD-TTRPG-01 row.
+  - AUDIT-D-01: Debate mechanic audit Modes A-G. 11 P1/P2 findings, 7 editorials.
+  - SIM-D-03: Debate subsystem G2 + K. Tribunal dominant strategy found (88% 1-exchange). Hybrid/BG gaps confirmed.
+  - PP-101–111: Applied in-place to debate_system_redesign_v1.md → v1.3.
+  - ED-053–059: Logged to editorial ledger.
+  - state_transfer_spec.md: Debate Zoom In gap documented.
 
 key_findings:
-  - GAP-TTRPG-04 P1: Belief CP award conflict — stage2 §4.2 vs stage10 §10.2 (different values)
-  - GAP-TTRPG-16 P1: RS starting value conflict — params_factions says 60, stage12 says 72
-  - GAP-TTRPG-01 P1: PC Composure formula absent from player-facing rules
-  - GAP-TTRPG-02 P1: Memory score range/start/derivation undefined
-  - GAP-TTRPG-03 P1: Focus score derivation undefined
-  - GAP-TTRPG-05 P1: No RS=0 lockout gate for Thread operations
-  - GAP-TTRPG-17 P1: Hafenmark/Guilds/Niflhel/Löwenritter unique faction actions missing
-  - GAP-TTRPG-21 P1: Stamina underflow before combat (Endurance 1 + Heavy armour = Stamina ≤0)
-  - GAP-TTRPG-F1 P1: Personal combat round >90s + 5 parallel tracks — High playtest burden every round
-  - GAP-TTRPG-G1 P1: BG→HYB character reactivation procedure undefined
-  - GAP-TTRPG-G2 P1: HYB personal↔unit combat transition missing
-  - Thread Depth (TD) defined but unreferenced by any formula (P2 orphaned stat)
-  - Stage10 references Maxims (cut) — stale reference (P2)
-  - Negotiation absent as distinct mechanic (P2)
+  - TRIBUNAL P1: 88% one-exchange resolution at default TC=6. PP-109 adds GM guidance.
+  - FORMULA P2s: Presence modifier floor, Concentration floor, Strain minimum — all patched.
+  - CROSS-MODE P1s: Hybrid debate undefined (ED-056), BG Parliamentary Vote undefined (ED-053), BG Zoom In undefined (K2-F-02).
+  - CORROBORATION: Still a dead reference in §6.4 (PP-104 stub only). Full port needs ED-051 NPC stats.
+  - BELIEFS: Not integrated in Debate (ED-054 — design decision needed).
+  - COGNITIVE LOAD: 7/10 (PROBLEM). F-01/F-02 P1 flags — GM reference card still needed.
+
+open_editorial_count: 57 (7 new this session)
+debate_version: v1.3
 
 next_action:
-  task: "Confirm which P1 gaps to patch vs editorial decision. GAP-TTRPG-04 and GAP-TTRPG-16 are pure mechanical conflicts requiring one editorial call each."
-  note: "GAP-TTRPG-01/02/03 (Composure/Memory/Focus) may be resolvable from stage2 full read."
+  task: "GM reference card for debate (addresses F-01/F-02 P1 cognitive load flags). One-page: §6.0 setup checklist + §6.4 exchange flowchart + genre weight table + proceeding type quick-ref."
+  note: "Or pivot to next system. Confirm with user."
 
 commits_this_session:
-  - [this]: AUD-TTRPG-01 + coverage_matrix + session_log
+  - 22a1f24: SIM-D-01 + PP-097/098/099 + params_debate + coverage_matrix
+  - 1641078a: debate v1.1 in-place patches + propagation_map + session_log
+  - f03b8ddf: SIM-D-02 + PP-100 + ED-051/052 + debate v1.2 + coverage_matrix + propmap
+  - [this]: AUDIT-D-01 + SIM-D-03 + PP-101-111 + ED-053-059 + debate v1.3 + all registers
 ```

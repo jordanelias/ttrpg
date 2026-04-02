@@ -995,3 +995,123 @@ editorial_decisions:
   related_ids: [ED-051]
   supersedes: []
   tags: [npcs, debate, composure, formula]
+
+- id: ED-053
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: simulation
+  source_file: tests/audit_debate_a_g.md
+  description: "BG Parliamentary Vote procedure undefined. Faction-level debate resolution for Board Game mode has no mechanics. Blocking for BG political play."
+  full_flag_text: "[EDITORIAL: ED-053 BG Parliamentary Vote — define procedure for faction-level vote resolution]"
+  status: open
+  priority: P1
+  decision: null
+  propagation_targets:
+    - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+  propagation_status: pending
+  related_ids: [GAP-DS-05]
+  supersedes: []
+  tags: [board_game, debate, vote, procedure]
+
+- id: ED-054
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: audit
+  source_file: tests/audit_debate_a_g.md
+  description: "Beliefs not mechanically integrated in Debate. Orators arguing in alignment with their stated Belief have no mechanical benefit. Design decision: add Belief bonus (e.g. +1D when arguing for a Belief-aligned position) or leave as narrative only."
+  full_flag_text: "[EDITORIAL: ED-054 Beliefs in Debate — mechanical integration or narrative only?]"
+  status: open
+  priority: P2
+  decision: null
+  propagation_targets:
+    - designs/debate/debate_system_redesign_v1.md §6.4
+  propagation_status: pending
+  related_ids: []
+  supersedes: []
+  tags: [debate, beliefs, mechanics]
+
+- id: ED-055
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: audit
+  source_file: tests/audit_debate_a_g.md
+  description: "Corroboration in asymmetric proceedings: can the accused have corroborators in a Church Tribunal? Design decision needed — PP-104 stub does not address asymmetric context."
+  full_flag_text: "[EDITORIAL: ED-055 Corroboration in Tribunal — permitted or blocked for the accused?]"
+  status: open
+  priority: P2
+  decision: null
+  propagation_targets:
+    - designs/debate/debate_system_redesign_v1.md §6.7
+  propagation_status: pending
+  related_ids: [ED-051]
+  supersedes: []
+  tags: [debate, tribunal, corroboration]
+
+- id: ED-056
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: simulation
+  source_file: tests/sim_d_03_subsystem_k.md
+  description: "Hybrid debate variant entirely undefined. No formula, steps, or win condition for Hybrid mode debate. Design decision: use full TTRPG system at personal scale in Hybrid, or define simplified variant."
+  full_flag_text: "[EDITORIAL: ED-056 Hybrid debate variant — define or confirm TTRPG system used unchanged]"
+  status: open
+  priority: P1
+  decision: null
+  propagation_targets:
+    - designs/debate/debate_system_redesign_v1.md §6.7
+  propagation_status: pending
+  related_ids: []
+  supersedes: []
+  tags: [debate, hybrid, mode]
+
+- id: ED-057
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: simulation
+  source_file: tests/sim_d_03_subsystem_k.md
+  description: "Debate RS changes in Hybrid mode: how do debate-generated RS changes propagate to BG Thread Order queue? No procedure defined."
+  full_flag_text: "[EDITORIAL: ED-057 Debate RS changes in Hybrid — BG propagation procedure undefined]"
+  status: open
+  priority: P2
+  decision: null
+  propagation_targets:
+    - skills/valoria-orchestrator/references/state_transfer_spec.md
+  propagation_status: pending
+  related_ids: [ED-056]
+  supersedes: []
+  tags: [debate, hybrid, thread, RS]
+
+- id: ED-058
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: simulation
+  source_file: tests/sim_d_03_subsystem_k.md
+  description: "Asymmetric proceedings: advantaged orator accumulates 0 strain while disadvantaged is Rattled by exchange 3. Confirm this is intended (Tribunals are oppressive) or add minimum strain to advantaged orator to create dramatic tension."
+  full_flag_text: "[EDITORIAL: ED-058 Asymmetric proceedings strain — confirm advantaged orator 0-strain is intended]"
+  status: open
+  priority: P2
+  decision: null
+  propagation_targets:
+    - designs/debate/debate_system_redesign_v1.md §6.7
+  propagation_status: pending
+  related_ids: []
+  supersedes: []
+  tags: [debate, tribunal, strain, asymmetric]
+
+- id: ED-059
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: audit
+  source_file: tests/audit_debate_a_g.md
+  description: "Momentum spending in Debate: params_core allows Momentum spend on non-Thread rolls. Debate rolls are non-Thread. Confirm whether Momentum can be spent on Argue rolls — not currently stated in §6.4."
+  full_flag_text: "[EDITORIAL: ED-059 Momentum in Debate — permitted or prohibited? Add to §6.4 or params_core exception]"
+  status: open
+  priority: P2
+  decision: null
+  propagation_targets:
+    - designs/debate/debate_system_redesign_v1.md §6.4
+    - references/params_core.md
+  propagation_status: pending
+  related_ids: []
+  supersedes: []
+  tags: [debate, momentum, core]

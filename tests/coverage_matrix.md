@@ -79,6 +79,9 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 
 | SIM-D-02 | Debate: Full scenario C+J — Himlensendt vs Baralta, 3-exchange Parliament, Diverge chain | TTRPG | PRESENT | TC, Composure, Concentration | Church, Hafenmark | Himlensendt, Baralta | Institutional authority, Legalist-constitutionalist | Complete | F-C-02 (P2 PP-100), F-C-04 (P1 ED-051), F-C-05 (P2 ED-052), F-C-06 (P1 cognitive load); SIM-DEBT-01 RESOLVED |
 
+| AUDIT-D-01 | Debate system Modes A–G — formula validation, number systems, interaction chains, gaps, principles, burden, cross-mode | TTRPG+BG+HYB | CROSS | Composure, Concentration, TC | All | Generic | All debate archetypes | Complete | FA-01/02/03/04 (P2 patched PP-101/102/103/104), GAP-DS-09–20, C-01/C-02/G-01/G-03 (P1), ED-053–059 logged |
+| SIM-D-03 | Debate subsystem G2 (Tribunal dominant strategy) + K1 (cross-mode delta) + K2 (transition) | TTRPG+BG+HYB | CROSS | Composure, TC | Church, Hafenmark | Generic Inquisitor, Generic Accused | Institutional authority, disadvantaged accused | Complete | G2-F-01 (P1 PP-109), K1-01/K1-02 (P1 ED-056/053), K2-F-02 (P1 PP-105 ext) |
+
 ## SIM-DEBT Register
 
 | ID | Source | Description | Status |

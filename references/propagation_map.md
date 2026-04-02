@@ -164,6 +164,10 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | `tests/sim_d_01_debate_stress_test.md` | `tests/coverage_matrix.md` | Findings logged |
 | `tests/sim_d_02_debate_scenario_c.md` | `tests/coverage_matrix.md` | Findings logged |
 | `tests/sim_d_02_debate_scenario_c.md` | `canon/editorial_ledger.yaml` | ED-051, ED-052 harvested |
+| `tests/audit_debate_a_g.md` | `tests/coverage_matrix.md` | Audit findings logged |
+| `tests/audit_debate_a_g.md` | `canon/editorial_ledger.yaml` | ED-053–059 harvested |
+| `tests/sim_d_03_subsystem_k.md` | `tests/coverage_matrix.md` | G2+K findings logged |
+| `tests/sim_d_03_subsystem_k.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | K2-F-02: debate Zoom In gap |
 | `compilation/v0.14/stage13_npcs.md` | `designs/debate/debate_system_redesign_v1.md` | NPC Composure/attributes feed debate sim |
 
 ### SCALE TRANSITIONS / HYBRID

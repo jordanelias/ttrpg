@@ -357,7 +357,7 @@ Not all Debates are symmetric. The institution shapes the rules.
 # PART SIX: COMPILED MECHANICAL SPECIFICATION
 ## Source: debate_stress_test_v1.md + debate_stress_test_v2.md
 ## Status: OPERATIVE — supersedes quaestio design (Parts 3–4) for play purposes
-## Version: v1.2 (PP-100 applied in-place 2026-04-02 — provisional)
+## Version: v1.3 (PP-101 through PP-111 applied in-place 2026-04-02)
 ## Parts 1–4 retained as design reference and historical/philosophical foundation
 
 ---
@@ -396,6 +396,8 @@ The debate system does not have a fixed format. Exchange count, role structure, 
 5. Stakes
 
 This declaration is made before the first exchange. Players may not request format changes mid-debate.
+
+**Debate initiation (Principle 1 — roll only when meaningful):** A Debate is initiated when: (a) two orators with opposed positions are present in an institutional context that recognises formal argument, AND (b) the outcome is uncertain and consequential. GMs should not call for a Debate when one side has no plausible case (institutional gatekeeping prevents the debate from being called), or when the outcome is predetermined by prior Domain Actions. [PP-107]
 
 ---
 
@@ -444,7 +446,7 @@ Weight range: 0.5, 1.0, or 1.5. Never 0, never above 1.5. Weights are fixed at s
 
 | Value | Formula |
 |---|---|
-| Presence modifier | floor((Presence − 3) / 2) → Pres 1–3: +0; Pres 4–5: +1; Pres 6–7: +2 |
+| Presence modifier | max(0, floor((Presence − 3) / 2)) → Pres 1–3: +0; Pres 4–5: +1; Pres 6–7: +2. Minimum 0 — never negative. [PP-101] |
 | Focus defence | floor(Focus / 2) → passive, no roll |
 | Composure | Poise + Bonds + 3. Range 5–17. |
 | Concentration | Focus + Presence. Depletes per exchange. |
@@ -476,6 +478,8 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 
 **Step 2 — Choose:** Each orator selects genre (Past / Present / Future) and orientation (Revealing / Obscuring).
 
+**Step 2b — Corroborate (optional):** Before rolling, a corroborator present at the debate may declare support (see §3.5 for full procedure — [GAP-DS-12: corroboration not yet fully ported to Part 6; use §3.5 as provisional reference]). On success: primary orator gains +1D for this exchange's Argue roll. Corroborator must share a Knot with the primary orator. [PP-104 — stub; full procedure pending editorial resolution of Knot requirement]
+
 **Step 3 — Argue:** Initiative holder declares argument and rolls first. Respondent hears declaration, then chooses genre/orientation and rolls.
 - Pool: (Presence × 2) + History bonus, TN 7.
 - Memory bonus: +2D when citing a specific, named, verifiable claim (document, date, prior statement, named precedent). Binary — either it qualifies or it doesn't. Available in any genre.
@@ -487,16 +491,16 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 - effective_margin = floor(margin × genre_weight × orientation_weight_of_winner).
 - If effective_margin > resistance → Δ = effective_margin − resistance toward winner's position on Conviction Track.
 - If effective_margin ≤ resistance → 0 movement.
-- Strain to loser: margin + 1 + winner's Presence modifier. Reduced by loser's Focus defence: floor(Focus/2).
+- Strain to loser: margin + 1 + winner's Presence modifier. Reduced by loser's Focus defence: floor(Focus/2). Minimum 1 strain regardless of Focus defence. [PP-103]
 
 **COMPETITION** (same genre, same orientation):
 - Same resolution as Clash.
-- Strain to loser: (margin − 1, minimum 1) + 1 + winner's Presence modifier. Reduced by Focus defence.
+- Strain to loser: (margin − 1, minimum 1) + 1 + winner's Presence modifier. Reduced by Focus defence. Minimum 1 strain regardless of Focus defence. [PP-103]
 - No loser tracker contribution.
 
 **DIVERGENCE** (different genre):
 - No direct comparison. Each argument evaluated independently.
-- effective_margin for each = floor((successes / 2) × genre_weight × 1.0). [orientation_weight fixed at 1.0 in Divergence — Obscuring is handled separately below. Half successes brings Divergence into comparable scale with Clash margin.]
+- effective_margin for each = floor((successes / 2) × genre_weight × 1.0). [orientation_weight fixed at 1.0 in Divergence — Obscuring is handled separately below. Half successes brings Divergence into comparable scale with Clash margin.] If net successes are negative (fumbles exceeded hits), effective_margin is negative and is treated as 0 by the gate (not > resistance → no movement). [PP-111]
 - For each side: if effective_margin > resistance → Δ = effective_margin − resistance toward that side's position.
 - Net tracker movement = difference between the two deltas; direction: toward the side with the larger delta.
 - **Obscuring in Divergence [PROVISIONAL: PP-099]:** If the side with the larger delta used Obscuring orientation, place a Doubt Marker on the opponent instead of applying tracker movement. Conviction Track does not move.
@@ -522,8 +526,8 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 
 **Step 6 — Strain and Concentration:**
 - Strain accumulates toward Composure.
-- At strain ≥ Composure: **Rattled** — −2D to all debate rolls; Focus defence is lost (strain not reduced). Persists until Unmask or scene end.
-- Concentration depletes: −1 per exchange, −1 additional on any exchange loss. (Regroup counts as a loss for concentration purposes.)
+- At strain ≥ Composure: **Rattled** — −2D to all debate rolls; Focus defence is lost (strain not reduced). Persists until Unmask or scene end. **Stacking with Spent:** If both Rattled and Spent are active simultaneously, penalties apply cumulatively (−4D total; opponent also gains +1D from Spent). Pool minimum of 1D (params_core) applies as the floor. [PP-106]
+- Concentration depletes: −1 per exchange, −1 additional on any exchange loss. (Regroup counts as a loss for concentration purposes.) Concentration minimum is 0 — it cannot go below 0 from multiple depletion triggers in a single exchange; Spent fires immediately when Concentration reaches 0. [PP-102]
 - At Concentration 0: **Spent** — next exchange: −2D; opponent gets +1D. Concentration then resets to maximum.
 
 **Step 7 — GM records exchange on hidden ledger.**
@@ -535,7 +539,12 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 - GM reveals ledger.
 - Conviction Track position determines outcome: ≥7 = Side A wins; ≤3 = Side B wins; 4–6 = compromise (GM narrates partial outcome proportional to final position).
 - Winner's final genre + orientation determines Thread co-movement type (see §3.8, which carries forward unchanged).
-- Stakes resolve.
+- Stakes resolve. **Domain Echo (canonical consequence by win type) [PP-110 — table stub; full table pending editorial]:**
+  - Decisive win (TC ≥7 or ≤3) + Future genre: Domain Echo fires — winner gains +1D on first Domain Action pursuing the argued future within the season.
+  - Decisive win + Evidence genre (Past): winning faction's Mandate +1 in the domain of the cited precedent.
+  - Decisive win + Character genre (Present): Disposition change with all witnesses; Reputation shift (GM-set magnitude).
+  - Compromise (4–6): No Domain Echo. Stakes partially resolve per final TC position proportional to win threshold distance.
+- **Post-debate recovery:** All strain clears at scene end. Rattled and Spent states clear at scene end. Debate leaves no persistent character state (no wound equivalent). [PP-108] [DESIGN NOTE: This means debate has no next-scene consequence on the character sheet — see GAP-DS-16 for whether this is intended.]
 
 ---
 
@@ -563,7 +572,7 @@ Exception retained from §3.7: Niflhel does not participate in formal debate str
 | Formal Debate (Parliament) | 3 | Alternating | Standard |
 | Grand Debate (faction-defining) | 5 | Alternating | Standard |
 | Royal Audience | 3 | Crown objects throughout | Halved for petitioner |
-| Church Tribunal | 1–5 (Inquisitor sets) | Inquisitor proposes throughout | Halved for accused |
+| Church Tribunal | 1–5 (Inquisitor sets) | Inquisitor proposes throughout | Halved for accused. **Design note [PP-109]:** With TC starting at 6 (biased), boosted genre (Past ×1.5), and pool gap ≥ 4D, P(one-exchange resolution) ≈ 88%. GMs seeking dramatic Tribunal play should set exchange count ≥ 3 and start TC at 5 (neutral). Exchange count 1 is appropriate only for summary proceedings where the outcome is near-certain by intent. |
 | Casual Dispute | 1 | Initiator proposes | N/A (no tracker) |
 
 ---
@@ -618,7 +627,7 @@ All items from §5.1 carry forward, plus additions from stress tests:
 
 Confirmed pool formula: **(Presence × 2) + History bonus, TN 7.**
 
-Note: stress tests v1+v2 used Cognition + History. All calibration in Parts 6.1–6.9 used that pool. The strain/Composure/tracker values remain valid as calibration baselines but probability distributions will shift with Presence × 2. A re-simulation pass is needed before treating those values as final. Flag as SIM-DEBT-01.
+Note: SIM-DEBT-01 RESOLVED (2026-04-02). Stress tests SIM-D-01 and SIM-D-02 confirmed calibration under (Presence × 2) + History pool. See references/params_debate.md for updated baselines.
 
 ### R-65 — Practitioner Weaving Bonus in Debates
 A practitioner with TS ≥ 30 who is actively in Thread contact during a Debate exchange adds bonus dice to their pool equal to floor(TS ÷ 30):

@@ -164,3 +164,16 @@ These are always mode-specific and do not transfer:
 | TTRPG Belief text | TTRPG only | Narrative, not strategic |
 | TTRPG Knot registry | TTRPG only | No BG equivalent |
 | BG Co-Movement deck state | BG/Hybrid strategic only | Not used in personal scenes |
+
+
+## DEBATE (Zoom In/Out — PARTIAL)
+
+**Status:** Partially defined. State handoff at debate conclusion is documented in §6.5. BG→TTRPG Zoom In is undefined.
+
+| Transition | State Variables | Conversion Rule | Status |
+|-----------|----------------|-----------------|--------|
+| TTRPG debate end → BG faction stats | TC position, winner's genre, Thread consequences | §6.5 stakes resolve; Domain Echo table stub PP-110 | Partially defined |
+| BG Parliamentary Vote → TTRPG Formal Debate (Zoom In) | Vote count → TC start position | **UNDEFINED** [K2-F-02] | GAP — P1 |
+| BG Parliamentary Vote → TTRPG Formal Debate (Zoom In) | Remaining vote rounds → Exchange count | **UNDEFINED** [K2-F-02] | GAP — P1 |
+
+**K2-F-02 resolution needed before BG↔TTRPG debate Zoom In is playable.**

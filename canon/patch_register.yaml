@@ -1133,3 +1133,113 @@ patches:
   applied_to_version: "v1.2"
   status: provisional
   applied_commit: "2026-04-02-sim-d-02"
+
+- id: PP-101
+  date: 2026-04-02
+  severity: P2
+  description: "Presence modifier formula: add max(0,...) — formula gave −1 at Presence 1-2, table says +0. Fixed."
+  finding_id: "FA-01 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.2]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+
+- id: PP-102
+  date: 2026-04-02
+  severity: P2
+  description: "Concentration depletion floor: add explicit minimum 0. Double-depletion in one exchange cannot go below 0; Spent fires immediately."
+  finding_id: "FA-02 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 Step 6]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+
+- id: PP-103
+  date: 2026-04-02
+  severity: P2
+  description: "Strain minimum 1: CLASH and COMPETITION can produce 0 strain at high Focus defence. Add minimum 1 strain to both."
+  finding_id: "FA-03/FA-04 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 CLASH, COMPETITION]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+
+- id: PP-104
+  date: 2026-04-02
+  severity: P1
+  description: "Corroboration stub: §3.5 corroboration mechanic not integrated in §6.4. Added Step 2b stub with provisional reference to §3.5. Full porting pending ED-051 NPC stat block."
+  finding_id: "GAP-DS-12 / C-01 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+
+- id: PP-106
+  date: 2026-04-02
+  severity: P2
+  description: "Rattled + Spent stacking: document cumulative −4D total and pool minimum of 1D applies as floor."
+  finding_id: "C-02/GAP-DS-14 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 Step 6]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+
+- id: PP-107
+  date: 2026-04-02
+  severity: P2
+  description: "Debate initiation gate: add Principle 1 (roll only when meaningful) gate to §6.0."
+  finding_id: "GAP-DS-13 / E-01 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.0]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+
+- id: PP-108
+  date: 2026-04-02
+  severity: P2
+  description: "Post-debate recovery: all strain, Rattled, Spent clear at scene end. No persistent character state. Add design note flagging GAP-DS-16 as open question."
+  finding_id: "GAP-DS-16 / K2-F-01 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.5]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+
+- id: PP-109
+  date: 2026-04-02
+  severity: P1
+  description: "Tribunal exchange count guidance: P(one-exchange resolution) ~88% at default TC=6 + boosted genre. Add design note with dramatic play guidance."
+  finding_id: "G2-F-01 / SIM-D-03"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.7]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+
+- id: PP-110
+  date: 2026-04-02
+  severity: P2
+  description: "Domain Echo table stub: add canonical consequence table to §6.5 for debate win by genre. Full table pending editorial."
+  finding_id: "K1-04/K2-F-03 / SIM-D-03"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.5]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+
+- id: PP-111
+  date: 2026-04-02
+  severity: P3
+  description: "DIVERGE negative net successes: add explicit note that negative effective_margin is treated as 0 by the resistance gate."
+  finding_id: "FA-07/GAP-DS-20 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 DIVERGENCE]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
