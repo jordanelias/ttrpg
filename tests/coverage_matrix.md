@@ -75,11 +75,13 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 | F-27 | X-07 | Mass battle stalemate resolution — no rule defined |
 | F-11 | X-03 | W-33 broken for CP≤2 units — EDITORIAL PENDING |
 | F-43 | X-10 | Two Domain Actions can drop TC by 4+ in one season — no seasonal TC cap |
+| SIM-D-01 | Debate: Argue/Read/CLASH/COMP/DIVERGE/TIE/Track/Composure/Concentration/Doubt/Regroup | TTRPG | CROSS | Composure, Concentration, Conviction Track | Generic (all factions modelled) | Generic archetypes | High-Pres orator, History-specialist, Low-social, Balanced social | Complete | F-D-01 (P1), F-D-02 (P2), F-D-03 (P2), F-D-04 (P2), F-D-06 (P2); SIM-DEBT-01 recalibrated |
+
 ## SIM-DEBT Register
 
 | ID | Source | Description | Status |
 |----|--------|-------------|--------|
-| SIM-DEBT-01 | Debate system | Stress tests calibrated with Cognition+History pool. Now using (Presence×2)+History. Strain/Composure/tracker distributions unverified. | Open — re-run Mode G2 |
+| SIM-DEBT-01 | Debate system | Modes A+D complete (SIM-D-01). New baselines in params_debate.md. Mode C scenario run still needed before Composure thresholds are final. | Partially Resolved — Mode C pending |
 
 ## Provisional Decisions (from coverage matrix findings)
 
@@ -89,3 +91,19 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 | F-30/F-33 | Coup Counter successor: highest-CR officer, Counter resets | Provisional — apply to designs/combat |
 | F-43 | TC change cap: ±3/season Domain Actions, ±5 all sources | Provisional — apply to stage5_clocks or designs |
 | F-52 | Stability recovery: +1/season with no hostile actions when Stability ≤ 3 | Provisional — apply to faction rules |
+
+
+## New P1 Findings (SIM-D-01)
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| F-D-01 | SIM-D-01 | DIVERGE+TIE: both score 0, different genres — Tie rule fires (any interaction type). | PP-097 PROVISIONAL |
+
+## New P2 Findings (SIM-D-01)
+
+| ID | Source | Description |
+|----|--------|-------------|
+| F-D-02 | SIM-D-01 | Regroup at Concentration=0: Spent ambiguous. PP-098: Regroup consumes Spent without penalty. |
+| F-D-03 | SIM-D-01 | Obscuring in Divergence: orientation_weight undefined. PP-099: Doubt Marker rule applies. |
+| F-D-04 | SIM-D-01 | Presence 1 cannot participate meaningfully in formal debate. Institutional gatekeeping implied. |
+| F-D-06 | SIM-D-01 | Grand Debate + Corroboration: ~90 resolution steps. No GM reference card. Tooling gap. |

@@ -1091,3 +1091,33 @@ patches:
   affects: [designs/combat/combat_design_v1.md]
   status: provisional
   applied_commit: "2026-04-02-session"
+
+- id: PP-097
+  date: 2026-04-02
+  severity: P1
+  description: "DIVERGE+TIE: Tie rule fires on equal successes regardless of interaction type, including Divergence. Both take 1 strain; track +1 toward initiative holder. [PROVISIONAL]"
+  finding_id: "F-D-01 / SIM-D-01"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4]
+  status: provisional
+  applied_commit: "2026-04-02-sim-d-01"
+
+- id: PP-098
+  date: 2026-04-02
+  severity: P2
+  description: "Regroup at Concentration=0: consumes Spent state without -2D/+1D penalty. Concentration restores by Focus score. [PROVISIONAL]"
+  finding_id: "F-D-02 / SIM-D-01"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 Step 5-6]
+  status: provisional
+  applied_commit: "2026-04-02-sim-d-01"
+
+- id: PP-099
+  date: 2026-04-02
+  severity: P2
+  description: "Obscuring in Divergence: effective_margin calculated at orientation_weight=1.0. If winner used Obscuring, place Doubt Marker instead of track movement. [PROVISIONAL]"
+  finding_id: "F-D-03 / SIM-D-01"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 DIVERGE + OBSCURING WIN]
+  status: provisional
+  applied_commit: "2026-04-02-sim-d-01"

@@ -1,11 +1,29 @@
 <!-- version: v0.14+design-ST2 | sources: debate_system_redesign_v1.md Part 6 (compiled) | last_updated: 2026-04-02 -->
 <!-- PATCHES APPLIED: D-01–D-10, R-01–R-07, v2-P01–v2-P04, R-65, R-66 -->
 <!-- POOL FORMULA CONFIRMED: (Presence × 2) + History bonus, TN 7 -->
-<!-- SIM-DEBT-01: All stress-test calibration used Cognition+History pool. Re-simulation needed with Presence×2 before values are final. -->
+<!-- SIM-DEBT-01: PARTIALLY RESOLVED. Modes A+D complete (SIM-D-01 2026-04-02). New baselines below. Mode C still needed. -->
+<!-- PP-097 PROVISIONAL: DIVERGE+TIE → Tie rule fires. -->
+<!-- PP-098 PROVISIONAL: Regroup at Concentration=0 → consumes Spent without penalty. -->
+<!-- PP-099 PROVISIONAL: Obscuring in Divergence → Doubt Marker; orientation_weight=1.0 for calc. -->
 <!-- stage9_social.md is EMPTY in v0.14. All values from design proposals. -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage9 before use. -->
 
 # params_debate.md — Debate System (v1, patched)
+
+
+## SIM-DEBT-01 Recalibrated Baselines (SIM-D-01)
+**All prior v1+v2 strain/Composure values are INVALID.** Use values below.
+
+| Value | Old (INVALID) | New baseline |
+|-------|--------------|-------------- |
+| Typical pool (Pres 3, Hist 2) | 5D | 8D |
+| E[winning margin, symmetric] | ~1.6 | ~2.0 |
+| P(Overwhelming) symmetric | ~25% | ~60% |
+| Typical strain/exchange (CLASH, Pres 3 winner, Focus 2 loser) | 1-2 | 2-3 |
+| Exchanges to Rattled (Composure 9) | 7-9 | 3-5 |
+| Exchanges to Rattled (Composure 7) | 5-7 | 2-4 |
+| Track movement/exchange (primary genre, res=1) | 0 (often) | 1 (consistent) |
+| Concentration durability (Conc=6, 50% loss rate) | — | ~4 exchanges |
 
 ## Pools
 | Roll | Pool | TN | Notes |
