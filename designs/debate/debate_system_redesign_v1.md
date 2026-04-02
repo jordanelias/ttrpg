@@ -350,3 +350,232 @@ Not all Debates are symmetric. The institution shapes the rules.
 ---
 
 *End of design proposal. All mechanical content is provisional pending editorial approval and stress testing.*
+
+---
+
+# PART SIX: COMPILED MECHANICAL SPECIFICATION
+## Source: debate_stress_test_v1.md + debate_stress_test_v2.md
+## Status: OPERATIVE — supersedes quaestio design (Parts 3–4) for play purposes
+## Parts 1–4 retained as design reference and historical/philosophical foundation
+
+---
+
+## NOTE ON STRUCTURE
+
+Parts 1–4 document the quaestio-based design (five-phase exchange). The stress tests (v1 and v2) were conducted on a simpler exchange-based system with genre/orientation/Conviction Track mechanics. That simpler system produced better play outcomes and is the compiled operative specification below. The quaestio structure is preserved as a design reference and may be revisited as a variant for Grand Debate or formal academic settings. The faction resonance table (§3.7), thread consequences (§3.8), and corroboration mechanic (§3.5) carry forward unchanged.
+
+---
+
+## 6.1 GM Setup (Before Debate Begins)
+
+**Step 1 — Determine Primary Genre from the Question:**
+
+| Question Type | Primary Genre |
+|---|---|
+| "Did X happen? / Was X done?" | Past |
+| "Is X true? / Is this person fit?" | Present |
+| "Should we do X? / What should be done?" | Future |
+
+**Step 2 — Set Genre Weights from Audience Ethical Mode:**
+- Primary genre: ×1.0
+- Other two genres: ×0.5 base
+- Audience ethical mode adjusts ONE genre by +0.5:
+
+| Faction / Mode | Adjustment |
+|---|---|
+| Virtue ethics (Crown) | Present +0.5 |
+| Divine command (Church) | Past +0.5 |
+| Categorical imperative (Hafenmark) | Past +0.5 |
+| Consequentialism (Varfell) | Future +0.5 |
+| Moral relativism (Guilds) | GM chooses based on context (this IS moral relativism) |
+| Rawlsian social contract (Restoration) | Future +0.5 |
+
+Weight range: 0.5, 1.0, or 1.5. Never 0, never above 1.5. Weights are fixed at setup. Do not shift dynamically. Record in ledger.
+
+**Step 3 — Set Orientation Weights:**
+- Revealing: ×1.0 (default)
+- Obscuring: Obscuring does NOT move the Conviction Track toward the user's position. A winning Obscuring exchange places a **Doubt Marker** on the opponent instead (see §6.4).
+
+**Step 4 — Set Conviction Track:**
+- Scale: 0 to 10. Side A wins at ≥7. Side B wins at ≤3. Compromise zone: 4–6.
+- Starting position: GM-set (typical neutral: 4–6). Record in ledger.
+- Audience resistance: average Stability of represented factions, round up, then −1 (minimum 0). Typical range: 0–2.
+
+**Step 5 — Define Stakes:** What each side wins, loses, or compromises on. Record before debate begins.
+
+**Step 6 — Record all of the above in the hidden GM ledger before the first exchange.**
+
+---
+
+## 6.2 Derived Values
+
+| Value | Formula |
+|---|---|
+| Presence modifier | floor((Presence − 3) / 2) → Pres 1–3: +0; Pres 4–5: +1; Pres 6–7: +2 |
+| Focus defence | floor(Focus / 2) → passive, no roll |
+| Composure | Poise + Bonds + 3. Range 5–17. |
+| Concentration | Focus + Presence. Depletes per exchange. |
+| Attunement read pool | Attunement score only (no History bonus) |
+
+---
+
+## 6.3 Initiative
+
+- Exchange 1: higher Presence speaks first (proposes).
+- Subsequent exchanges: transfers to exchange winner.
+- On tie: stays with current holder.
+- After Divergence: stays with holder.
+- Institutional override: in asymmetric proceedings, the institution determines who proposes regardless of Presence (see §6.9).
+
+---
+
+## 6.4 Exchange Structure
+
+**Step 1 — Read (both orators):**
+Roll Attunement alone (no History), TN 7, Ob 1.
+
+| Net Successes | Output |
+|---|---|
+| Failure (0) | Misleading signal: GM identifies a genre as strong that is actually weak. Orator acts on false intelligence. |
+| Partial (1) | Primary genre identified only. No orientation signal. |
+| Success (2) | Primary genre + whether Revealing or Obscuring is preferred. |
+| Overwhelming (3+) | Genre + orientation + one specific detail (swing faction, emotional state, key individual). |
+
+**Step 2 — Choose:** Each orator selects genre (Past / Present / Future) and orientation (Revealing / Obscuring).
+
+**Step 3 — Argue:** Initiative holder declares argument and rolls first. Respondent hears declaration, then chooses genre/orientation and rolls.
+- Pool: Cognition + History bonus, TN 7.
+- Memory bonus: +2D when citing a specific, named, verifiable claim (document, date, prior statement, named precedent). Binary — either it qualifies or it doesn't. Available in any genre.
+
+**Step 4 — Resolve by Interaction Type:**
+
+**CLASH** (same genre, opposite orientation):
+- Compare successes. Higher wins. Margin = difference.
+- effective_margin = floor(margin × genre_weight × orientation_weight_of_winner).
+- If effective_margin > resistance → Δ = effective_margin − resistance toward winner's position on Conviction Track.
+- If effective_margin ≤ resistance → 0 movement.
+- Strain to loser: margin + 1 + winner's Presence modifier. Reduced by loser's Focus defence: floor(Focus/2).
+
+**COMPETITION** (same genre, same orientation):
+- Same resolution as Clash.
+- Strain to loser: (margin − 1, minimum 1) + 1 + winner's Presence modifier. Reduced by Focus defence.
+- No loser tracker contribution.
+
+**DIVERGENCE** (different genre):
+- No direct comparison. Each argument evaluated independently.
+- effective_margin for each = floor((successes / 2) × genre_weight × orientation_weight). [Using half successes to bring Divergence into comparable scale with Clash margin.]
+- For each side: if effective_margin > resistance → Δ = effective_margin − resistance toward that side's position.
+- Net tracker movement = difference between the two deltas; direction: toward the side with the larger delta.
+- No strain dealt. Neither argument attacked the other.
+- Initiative stays with holder.
+
+**TIE** (equal successes, any interaction type):
+- Both orators take 1 strain.
+- Conviction Track moves +1 toward initiative holder's position.
+- Initiative stays with holder.
+
+**OBSCURING WIN** (winning exchange with Obscuring orientation):
+- Conviction Track does not move toward winner.
+- Instead: place a Doubt Marker on the opponent.
+- Doubt Marker effect: opponent's next winning exchange has its effective_margin reduced by 2 before resistance is applied.
+- Only one Doubt Marker can be active at a time. If a second Obscuring win occurs while a Doubt Marker is already active, it replaces the existing marker (no stacking).
+- Doubt Marker is consumed on use.
+
+**Step 5 — Forfeit actions:**
+- **Regroup:** Forfeit exchange. No argument, no strain. Conviction Track moves +1 toward non-forfeiting side (fixed, no genre weight). Concentration restores by Focus score.
+- **Concede a Point:** Forfeit exchange. Take 1 strain. Conviction Track moves +1 toward non-forfeiting side. Gain +1D on next exchange's argument roll.
+
+**Step 6 — Strain and Concentration:**
+- Strain accumulates toward Composure.
+- At strain ≥ Composure: **Rattled** — −2D to all debate rolls; Focus defence is lost (strain not reduced). Persists until Unmask or scene end.
+- Concentration depletes: −1 per exchange, −1 additional on any exchange loss. (Regroup counts as a loss for concentration purposes.)
+- At Concentration 0: **Spent** — next exchange: −2D; opponent gets +1D. Concentration then resets to maximum.
+
+**Step 7 — GM records exchange on hidden ledger.**
+
+---
+
+## 6.5 Post-Debate Resolution
+
+- GM reveals ledger.
+- Conviction Track position determines outcome: ≥7 = Side A wins; ≤3 = Side B wins; 4–6 = compromise (GM narrates partial outcome proportional to final position).
+- Winner's final genre + orientation determines Thread co-movement type (see §3.8, which carries forward unchanged).
+- Stakes resolve.
+
+---
+
+## 6.6 Faction Resonance Integration
+
+The faction resonance table (§3.7) integrates with genre weights as follows:
+
+The ethical mode adjustments in §6.1 Step 2 ARE the faction resonance system. The +0.5 genre adjustment is the mechanical expression of institutional receptiveness. The ±1D modifiers described in §3.7 are superseded by the genre weight system — genre weight ×1.5 for the audience's preferred genre captures the +1D effect more consistently.
+
+Exception retained from §3.7: Niflhel does not participate in formal debate structures. Niflhel characters have no faction resonance modifier and cannot benefit from audience composition. Their social toolkit is Reading Exchange, private manipulation, and Thread operations only.
+
+---
+
+## 6.7 Asymmetric Proceedings
+
+**Standard proceedings (Parliament, inter-faction):** Full symmetric system. Roles transfer on win.
+
+**Asymmetric proceedings (Church Tribunal, Royal Audience, Inquisition):**
+- Institutional rules override initiative. The institution assigns Proposer/Respondent roles.
+- Roles do NOT alternate — the institution retains the advantaged position throughout.
+- Asymmetric resistance rule: in asymmetric proceedings, the disadvantaged party (accused, petitioner) faces **halved resistance** (round up) when moving the Conviction Track in their favour. The advantaged party (inquisitor, Crown) faces full institutional resistance for their tracker movement. This represents the institution being hard to sway toward the accused's position — but not impossibly so.
+
+| Proceeding Type | Exchange Count | Role Structure | Audience Resistance Modifier |
+|---|---|---|---|
+| Formal Debate (Parliament) | 3 | Alternating | Standard |
+| Grand Debate (faction-defining) | 5 | Alternating | Standard |
+| Royal Audience | 3 | Crown objects throughout | Halved for petitioner |
+| Church Tribunal | 1–5 (Inquisitor sets) | Inquisitor proposes throughout | Halved for accused |
+| Casual Dispute | 1 | Initiator proposes | N/A (no tracker) |
+
+---
+
+## 6.8 Untested Items (Require Separate Testing)
+
+The following items were identified in stress test v2 as requiring future testing:
+
+| Item | Priority |
+|---|---|
+| Multi-party debates (3+ orators): no procedure exists | P1 |
+| Thread operations during debate: no interaction procedure | P1 |
+| Corroboration from §3.5 in practice (not tested in v1/v2 retests) | P2 |
+| Parliamentary proceeding with new formulas | P2 |
+| Royal Audience proceeding (stress test v2 tested Tribunal only) | P2 |
+| Casual Dispute edge cases (single exchange + tracker) | P3 |
+| Regroup exploit in Grand Debate (partially addressed by Concentration depletion change) | P2 |
+| Genre pivot mid-debate (orator argues against the Question's genre): no procedure | P2 |
+| Rattled → Unmask decision point (Rattled never triggered in retests) | P2 |
+| Multiple Doubt Markers in same exchange | P3 |
+| Mixed audience with Guilds (moral relativism — GM flex): calibration needed | P2 |
+
+---
+
+## 6.9 Updated Open Items (Part 5 superseded by this list)
+
+All items from §5.1 carry forward, plus additions from stress tests:
+
+**Mechanical — requires design decision:**
+- [GAP-DS-01] Phase Ob tables carry forward (Ob 1 throughout assumed — verify)
+- [GAP-DS-02] Thread operations mid-debate — no procedure
+- [GAP-DS-03] Total loss (5-0) consequences under dual-track system
+- [GAP-DS-04] Reading Exchange +1D placement in new system (Phase 1 only, or full Exchange 1?)
+- [GAP-DS-05] Parliamentary Vote under compiled system
+- [GAP-DS-06] Multi-party debate structure (P1 — blocking for Parliament scenarios)
+- [GAP-DS-07] Genre pivot: declared mid-debate change to Question's genre — permitted? Cost?
+- [GAP-DS-08] Single Doubt Marker replacement rule — confirm intended behaviour when second Obscuring win fires before first Doubt Marker is consumed
+
+**Editorial — requires user approval:**
+- [EDITORIAL: Niflhel formal Debate access] (carried from §5.1)
+- [EDITORIAL: Proceeding type catalogue] (carried)
+- [EDITORIAL: Concentration attribute — Focus vs Poise] (carried; stress test used Focus — confirm)
+- [EDITORIAL: Audience Disposition win-condition scope — all Formal vs Grand only] (carried; stress test used Conviction Track for all types — confirm)
+- [EDITORIAL: Grand Debate role alternation — 5 exchanges, which side proposes 3 times?] (carried)
+- [EDITORIAL: Corroboration Knot requirement] (carried)
+- [EDITORIAL: Thread consequences for Casual Disputes] (carried)
+- [EDITORIAL: Can the accused have corroborators in a Church Tribunal?] (from stress test v2, scenario 2)
+- [EDITORIAL: Does resistance apply symmetrically to prosecution in asymmetric proceedings?] (stress test v2 Finding v2-06 — tentative answer: yes, confirm)
+- [EDITORIAL: Is Obscuring as pure denial / Doubt Marker the intended function?] (v2-P02 — confirm design intent)
+- [EDITORIAL: Niflhel social mode — what CAN they do if excluded from formal debate?] (stress test v2 Phase 4)

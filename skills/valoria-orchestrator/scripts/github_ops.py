@@ -153,3 +153,28 @@ if __name__ == "__main__":
     print("Head OID:", get_head_oid())
     print("session_log_current.md size:", file_size("session_log_current.md"))
     print("tools/ contents:", list_directory("tools"))
+
+
+def read_files_graphql(paths: list) -> dict:
+    """Batch-read multiple files in a single GraphQL request."""
+    if not paths:
+        return {}
+    # Build aliased fields: alias must be valid GraphQL identifier
+    aliases = {f"f{i}": p for i, p in enumerate(paths)}
+    fields = "\n".join(
+        f'  {alias}: object(expression: "main:{path}") {{ ... on Blob {{ text }} }}'
+        for alias, path in aliases.items()
+    )
+    query = f"""
+    query($owner: String!, $name: String!) {{
+      repository(owner: $owner, name: $name) {{
+{fields}
+      }}
+    }}
+    """
+    result = _graphql(query, {"owner": REPO_OWNER, "name": REPO_NAME})
+    repo = result["data"]["repository"]
+    return {
+        aliases[alias]: (repo[alias]["text"] if repo[alias] else None)
+        for alias in aliases
+    }

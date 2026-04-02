@@ -977,3 +977,183 @@ Starting Prosperity: T1:4, T2:3, T3:4, T4:2, T5:3, T6:5, T7:4, T8:3, T9:3, T10:2
 *Valoria v0.5 Simulation and Patch Report complete.*
 *21 core systems stable. 32 patches applied (11 inherited from v0.4; 21 new in v0.5). 3 blocking editorial items outstanding (v0.4-NEW-01, -02, -03). 3 new recommended pre-playtest items. Dice system corrected to d10 throughout.*
 *Next step: Apply all patches to v0.4 ruleset document. Then designer authorship on 3 blocking items. Then first playtest.*
+
+---
+
+# PART THIRTEEN: STRESS TEST PATCHES — v0.5-ST
+## Source: designs/board_game/valoria_bg_v05_stress_test_report.md
+## Applied: 2026-04-02
+## Status markers: [PATCH] = applied directly. [EDITORIAL] = requires user approval. [DESIGN NOTE] = no rule change; author note only. [GAP] = definitional gap flagged.
+
+---
+
+## ST-BG-01 — Overwhelming Threshold
+**[EDITORIAL: requires user approval — ST-BG-01 Overwhelming threshold]**
+BG v0.5 defines Overwhelming as "Ob + 1 or more surplus" (net ≥ Ob + 1). The TTRPG parent defines it as "net ≥ 2× Ob." These diverge at Ob ≥ 2 — BG Overwhelming triggers at lower net successes. At Ob 3: BG requires net ≥ 4 (~27%); TTRPG requires net ≥ 6 (~11%).
+Confirm which threshold is canonical for BG: (a) keep "Ob + 1 surplus" as the BG-specific threshold (more achievable, appropriate for a lighter game mode), or (b) align to TTRPG "2× Ob" (mechanically consistent across modes).
+
+---
+
+## ST-BG-02 — Catastrophic Failure Rate at Pool 2
+**[DESIGN NOTE]**
+At pool 2, majority-1s triggers approximately 11% of the time (1% from 2 ones; 10% from 1 one with 0 hits). Factions at low stats (Restoration Mandate 2, Revolution Military 2) hit Catastrophic Failure at a meaningful rate on foundational actions. This is a fragility signal for weak factions. If intentional, no rule change required; if not, see Catastrophic Failure rules.
+
+---
+
+## ST-BG-03 — Catastrophic Failure Replaces Failure Degree
+**[PATCH P-33]**
+Add the following sentence to the Degree Table section (CORRECTION 3) and to the Catastrophic Failure entry wherever it appears in B3:
+
+> "Catastrophic Failure is a fifth degree that replaces the Failure degree result. It is not applied in addition to Failure — when majority-1s fires, the Failure degree does not also apply. The Catastrophic consequence supersedes and replaces the standard Failure outcome for that roll."
+
+---
+
+## ST-BG-04 — Drawn Battles
+**[PATCH P-34]**
+Append the following to PATCH P-16 (Battle Resolution: Compare Net Successes):
+
+> "On exactly tied net successes: the battle is drawn. Both sides take Cohesion −1 and hold position. Neither side claims or loses territory from this engagement. On the subsequent turn, the initiating attacker may re-engage or withdraw; the territory is contested."
+
+---
+
+## ST-BG-05 — TC 80 Seizure Scope
+**[EDITORIAL: requires user approval — ST-BG-05 TC 80 seizure scope]**
+PATCH P-30 (TC 80 Territorial Seizure) does not specify whether TC 80 triggers rolls on ALL territories or only on territories the Church declares. If all non-Church territories, batched rolls may overwhelm the Cascade Depth Cap.
+Confirm: (a) TC 80 seizure is a declared target (Church selects specific territories each season), or (b) TC 80 is an all-territory sweep (batched, treated as a single "TC 80 sweep" event counting as one Cascade effect with individual rolls queuing under that umbrella).
+
+---
+
+## ST-BG-06 — Hollow Victory and Non-Deed Factions
+**[PATCH P-35]**
+Add to the Hollow Victory section (wherever Compromise count and effective Deed reduction appear):
+
+> "Hollow Victory applies only to Deed-counting factions (Hafenmark, Guilds, and any faction whose victory condition uses a Deed or similar countable token). Restoration's presence-based victory condition (RS ≥ 50) and Löwenritter/Crown's mandate-based conditions are not Deed systems. Hollow Victory does not apply to these factions."
+
+---
+
+## ST-BG-07 — Presence Marker Ceiling for Weaving Ob
+**[DESIGN NOTE]**
+At 2+ Presence markers in a territory, Community Weaving hits Ob 1 (the floor). Additional markers beyond 2 provide no further Ob reduction. Players will notice this ceiling quickly. Consider adding a one-line note: "Each Presence marker after the second provides no Ob benefit to Weaving in that territory. Markers beyond 2 per territory serve presence-stability purposes only."
+
+---
+
+## ST-BG-08 — Policy Instrument Undefined
+**[PATCH P-36]**
+PATCH P-19 references "Crown's Policy Instrument" (the once-per-season bonus action if Mandate ≥ 4) but this mechanic has no B3 entry. Add to the Crown faction entry in B3 / Standard Action reference:
+
+> "**Policy Instrument (Crown only):** When Crown's Mandate ≥ 4, Crown may take one additional Standard Action per season designated as the Policy Instrument. This action may be any action Crown could normally take; it is not limited by card-hand constraints. It activates once per season and cannot be interrupted by Parliamentary Manoeuvre (see P-19). Activation condition: Mandate ≥ 4 at the start of the season."
+
+---
+
+## ST-BG-09 — Co-Movement VTM Effects at Cap
+**[PATCH P-37]**
+Append to PATCH P-31 (VTM: Once-Per-Season Advancement Cap):
+
+> "Co-Movement cards with VTM effects that cannot be applied due to the once-per-season cap or the VTM maximum (7): convert to +1D on the following season's Tribune action in any territory. The converted bonus cannot exceed +2D regardless of how many VTM effects were blocked."
+
+---
+
+## ST-BG-10 — Standing Tokens
+**[GAP ST-BG-10]**
+Standing Tokens are referenced in the cognitive load analysis (load 2/10) and as a possible Catastrophic Failure consequence (Standing loss) but are never defined in the B3 Core Mechanic text. What is their range (0–N)? What do they do? When are they spent vs lost? This definition is likely in B-sections not included in the provided document. Flagged as a definitional dependency.
+
+---
+
+## ST-INT-01 — BG vs TTRPG Battle Pool Size Incompatibility
+**[PATCH P-38]**
+Add to PART NINE (Hybrid Mode Intersection) and to mass_battle_v3.md §B.5:
+
+> "BG battle resolution uses an aggregated pool (sum of all engaged unit Martial values). TTRPG mass battle uses per-unit pools (Effective CP = min(CP, current Strength)) applied individually to each engagement. These systems are not statistically equivalent and will produce different expected outcomes for the same force.
+> This is the intended distinction: BG mode is a strategic abstraction (one faction roll represents the whole force). TTRPG mode is a tactical simulation (each unit engages separately, each with its own roll and damage calculation). Neither system is 'more correct' — they model different scopes of play.
+> When a PC faction leader arrives mid-battle and triggers the BG→TTRPG handoff, the outcome distribution will change. This is expected: PCs introduce tactical granularity that the board game abstraction cannot represent."
+
+---
+
+## ST-INT-02 — Commander Bonus Formula Conflict
+**[EDITORIAL: requires user approval — ST-INT-02 Commander bonus formula]**
+Three formulas exist: BG mode (Military ÷ 3, round down); TTRPG mode (CR = ⌈(Presence + Cognition) ÷ 2⌉); hybrid handoff (CR ÷ 2, round down). The hybrid formula gives a HIGHER bonus than pure BG mode for high-CR generals. Example: Serena (Presence 4, Cognition 4, Military 4): BG = +1D; TTRPG CR = 4; hybrid = +2D.
+Confirm whether this discrepancy is intentional (PCs are better generals than NPC faction leaders, reflecting attribute investment) or requires formula alignment.
+
+---
+
+## ST-INT-05 — Military 0 and Muster
+**[PATCH P-39]**
+Add to faction collapse / Military stat section:
+
+> "At Military 0, Muster actions produce no units and may not be taken. A Muster action at Military 0 is invalid and does not count as the faction's action for that season. Factions at Military 0 remain politically active but cannot field new military units until Military is raised above 0."
+
+---
+
+## ST-INT-06 — BG Unit Tokens Have No Thread Sensitivity
+**[PATCH P-40]**
+Add to PART NINE (Hybrid Mode Intersection) and §B.5:
+
+> "BG units transitioning to TTRPG mode for battles in the Southernmost: Thread Sensitivity = 0 by default, unless the deploying faction has a designated Thread-capable asset in that territory (Restoration Weaver marker or Varfell VTM ≥ 2 in that territory).
+> — Church Templar units: TS = 0 by doctrine (doctrinally prohibited Thread sensitivity). Dissolve in Southernmost.
+> — Restoration units with Weaver marker in territory: TS = 30 for Southernmost purposes.
+> — Varfell units with VTM ≥ 2 in territory: TS = 30 for Southernmost purposes.
+> — All other factions (Crown, Hafenmark, Guilds, Niflhel, Löwenritter): TS = 0. Cannot operate in Southernmost in hybrid battle mode."
+
+---
+
+## ST-INT-07 — Ceiral Ritual RS Gain vs Co-Movement Scale
+**[EDITORIAL: requires user approval — ST-INT-07 Ceiral Ritual scale asymmetry]**
+Ceiral Ritual in TTRPG mode produces RS +6 to +10. No BG Co-Movement card produces RS +6 in a single draw. If hybrid mode (PC practitioners present), TTRPG Thread rules apply and RS gain from major operations dwarfs anything achievable through Co-Movement. This creates a strong mechanical incentive to always perform major Thread operations in TTRPG mode.
+Confirm whether this asymmetry is intentional (PCs and TTRPG mode produce larger Thread consequences than board game abstractions, as expected) or whether a cap or scaling adjustment is needed.
+
+---
+
+## ST-INT-08 — Muster Str=2 and BG Token Scale
+**[EDITORIAL: requires user approval — ST-INT-08 Muster output in BG context]**
+Mustered units (Str = 2) translate to BG Health = 3 via the Str × 1.5 formula. Minimum BG pre-printed token Health is 8 (Artillery). Mustered units cannot use pre-printed tokens without confusion.
+Recommend option (c): Muster is a TTRPG-only mechanic that does not produce BG unit tokens. If confirmed, add: "Muster produces a TTRPG unit that does not translate to a BG unit token. In hybrid mode, Mustered units exist only in TTRPG battle resolution and are removed at battle end — they cannot be carried forward as standing BG units."
+
+---
+
+## ST-INT-09 — Military Loss Timing: Immediate vs Accounting
+**[PATCH P-41]**
+Add to §A.13 of mass_battle_v3.md and to the BG Domain Echo section:
+
+> "Military loss from unit destruction applies differently by mode:
+> — TTRPG mode: Military −1 is an immediate world-state consequence. It affects faction capabilities from the moment the unit is destroyed (within the same battle if relevant).
+> — BG mode: Military −1 from unit destruction queues to the season's Accounting phase (Domain Echo timing). The faction's Military stat does not change during the season; it updates at Accounting.
+> — Hybrid mode: TTRPG timing applies during the battle (immediate). BG timing applies to any units that are destroyed outside of a PC-triggered TTRPG engagement."
+
+---
+
+## ST-INT-10 — Church Military Victory and TC Change
+**[PATCH P-42]**
+Add to the Church faction rules and to mass_battle_v3.md §A.10:
+
+> "Military victory alone produces no TC or RS change. Thread operations performed during a battle produce standard RS changes per §A.10 regardless of battle outcome. A Church army using Thread-enhanced soldiers (e.g., Weaving unit Cohesion) generates RS drift from those specific Thread operations — not from the act of winning."
+
+---
+
+## ST-INT-12 — Altonian Invasion Unit Stats
+**[EDITORIAL: requires user approval — ST-INT-12 BLOCKER: Altonian invasion unit stats]**
+CLOCK-EDIT-01 is unresolved: Altonian Vanguard unit stat blocks (Strength, CP, Cohesion, Morale, Weapon, Armour) are missing. In hybrid mode, any Altonian engagement at IP ≥ 75 is unplayable without these stats. This is the highest-priority blocking item for hybrid play.
+Scenario C (IP 68) is playable to threshold but not through invasion resolution.
+
+---
+
+## ST-INT-13 — Wound Penalties in BG vs TTRPG Commander
+**[PATCH P-43]**
+Add to §B.5 Hybrid Handoff:
+
+> "In hybrid mode, wound Ob penalties from TTRPG personal combat carry into the PC's CR checks in TTRPG mass battle (as per §A.5). They do not reduce the commander bonus calculation in BG mass battle (which uses Military ÷ 3, not CR). Wound penalties are personal and apply only to personally-rolled checks, not to faction-level stat calculations."
+
+---
+
+## PART THIRTEEN SUMMARY — Priority Outstanding Items
+
+| ID | Issue | Document | Priority |
+|----|-------|----------|----------|
+| ST-BG-01 | Overwhelming threshold (Ob+1 vs 2×Ob) | BG | EDITORIAL |
+| ST-BG-05 | TC 80 seizure scope | BG | EDITORIAL |
+| ST-INT-02 | Commander bonus formula conflict | Both | EDITORIAL |
+| ST-INT-07 | Ceiral Ritual scale asymmetry | Both | EDITORIAL |
+| ST-INT-08 | Muster Str=2 / BG token scale | Both | EDITORIAL |
+| ST-INT-12 | Altonian invasion unit stats | Both | EDITORIAL BLOCKER |
+| ST-BG-10 | Standing Tokens undefined | BG | GAP |
+| ST-MB-01 | Volley TN 6 (see mass_battle_v3 patches) | Mass Battle | EDITORIAL |
+| ST-MB-02 | Coherence undefined (see mass_battle_v3 patches) | Mass Battle | CRITICAL |

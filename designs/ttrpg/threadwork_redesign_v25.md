@@ -6,6 +6,40 @@
 
 ---
 
+---
+
+## MODE APPLICABILITY INDEX
+*Added 2026-04-02 — applied per user session instruction*
+
+### ALL MODES (TTRPG, Board Game, Hybrid)
+- Part 1: Philosophical Framing — foundational for all modes
+- Part 4: Co-Movement (Version C) — core mechanic; BG uses card abstraction, TTRPG uses dice
+- Part 5: Rendering Stability (World Track) — world-level track applies in all modes
+  - §5.4: RS in Board Game (BG only)
+  - §5.5: RS in Hybrid (Hybrid only)
+- Part 8: Interdependency Map — implementation sequence for all modes
+- Part 9: Stress Test Patches (S-01/P-11 through S-??/P-30) — all mode patches compiled here
+
+### TTRPG ONLY
+- Part 2: Operations — Approach Training, Diagnosis, Leap, all named operations (Weaving, Pulling, Locking, Dissolution, Mending, Collective)
+- Part 3: Coherence (10→0) — personal practitioner track; no BG equivalent
+- Part 6: Threadcut Beings — TTRPG encounter mechanics
+
+### BOARD GAME ONLY
+- §5.4: RS in Board Game
+- §7.1: Board Game — New Order: Mend, Co-Movement Card Deck (18 cards), Lock Chronic Drift, RS Track
+
+### HYBRID ONLY
+- §5.5: RS in Hybrid
+- §7.2: Hybrid Mode
+- §7.3: Updated Mode Branching
+
+### CROSS-MODE (applies in both TTRPG and Hybrid)
+- §2.3–2.4: All named operations — applicable whenever a practitioner PC is present (TTRPG and Hybrid personal scenes)
+- §A.10 of mass_battle_v3.md: Thread operations in mass battle (Hybrid / TTRPG mass combat)
+
+---
+
 # PART ONE: PHILOSOPHICAL FRAMING
 
 *This section precedes all operational rules. It governs how GMs describe Thread perception, how players understand what their characters are doing, and why Thread operations work the way they do. It is not flavour text. Every mechanical decision in this document derives from these principles.*
@@ -1023,3 +1057,55 @@ When RS reaches 0, the Rupture occurs. The rendered world's capacity to integrat
 **In the board game:** shared loss condition. Game over.
 **In the TTRPG:** the GM narrates the Rupture as the final session. PCs experience the dissolution of intelligible reality. The Rupture is the campaign's tragedy ending.
 **In hybrid:** both. The board game state reaches 0; the GM runs the Rupture scene in TTRPG mode.
+
+---
+
+# PART TEN: POST-v2.5 STRESS TEST FINDINGS
+## Sources: tests/sim_x_01_combat_thread.md, tests/sim_x_03_massbattle_thread.md
+## Applied: 2026-04-02
+
+---
+
+## ST-TW-01 — W-24 (Coherent Strike): Under-Costed at Object Scale
+**Finding F-06 from sim_x_01_combat_thread.md**
+**[DESIGN NOTE / EDITORIAL: requires user approval — W-24 cost]**
+W-24 (Coherent Strike) at Object scale: on a Success degree, RS is unchanged and Coherence −0. The operation provides +2 damage with no RS or Coherence cost. This is functionally free in Thread terms — the only cost is the Leap round vulnerability.
+
+The Leap round vulnerability is a real tactical cost (practitioner exposed ~60% hit probability against an opponent who can attack). However, if the practitioner has range protection (opponent cannot attack during Leap), the operation costs nothing at the Thread level.
+
+**Design question:** Is W-24 at Object scale intended to be free of RS/Coherence cost? If yes: no patch needed. If no: consider adding RS +1 even on Success at Object scale, or requiring minimum Coherence expenditure.
+
+**Confirmed from sim:** W-24 is only viable when the Leap round is protected (opponent at wrong range or ally providing cover). Against an opponent who can attack during the Leap round, the practitioner is likely incapacitated before the operation fires.
+
+---
+
+## ST-TW-02 — W-33 (Rally the Broken): Ineffective for CP ≤ 2 Units
+**Finding F-11 from sim_x_03_massbattle_thread.md**
+**[PATCH P-31]**
+W-33 restores Cohesion to 2 but does not restore Strength. For units with CP ≤ 2, the Cohesion 2 restoration produces 0 effective dice (min(CP,Str) base − Cohesion penalty exhausts the pool). W-33 can only meaningfully rally units with CP ≥ 3 (Professional+ tier).
+
+Add to W-33 description:
+> "W-33 is effective only for units with CP ≥ 3. A rallied unit with CP ≤ 2 will have an effective combat pool of 0 despite Cohesion restoration — the Cohesion penalty from Cohesion 2 eliminates the entire pool at low CP values. W-33's primary use case is Professional or Elite infantry (CP 3+) that has broken under morale pressure while retaining Strength."
+
+---
+
+## ST-TW-03 — RS Cost Curve Calibration for Mass Battle
+**Finding from sim_x_03_massbattle_thread.md**
+**[DESIGN NOTE]**
+The ×3 RS multiplier for mass battle Thread operations means a practitioner performing 5+ Thread operations in a single large battle risks significant Coherence drain (−1/op = Coherence 5 after 5 ops → Dissonant threshold). This is probably intended — Thread operations in mass combat are high-cost interventions. No patch required. Add to §A.10 of mass_battle_v3.md:
+> "Practitioners should expect mass battle Thread operations to consume 1 Coherence per operation. A practitioner entering a multi-turn engagement with Coherence ≤ 5 is at significant risk of reaching Dissonant threshold before battle resolution."
+
+---
+
+## ST-TW-04 — W-24 Vulnerability Window vs Stage8 Combat Interaction
+**Finding F-01 from sim_x_01_combat_thread.md**
+**[CONFIRMED — no patch needed]**
+The Leap round creates a real tactical vulnerability: the practitioner commits all 13D to defence, giving the opponent full offence dice. Hit probability ~60% against a typical armoured opponent. This cost is working as designed — Thread operations in melee have a genuine cost structure through the Leap window. No mechanical change needed; add a GM note.
+
+---
+
+## ST-TW-05 — Coherence Undefined in mass_battle_v3.md (Cross-reference)
+**From ST-MB-02 in stress test report**
+**[CROSS-REFERENCE]**
+mass_battle_v3.md §A.10 references "Coherence" as a practitioner-specific stat. This is the Coherence track defined in Part 3 of this document (10→0). The stat in §A.10 is the practitioner's personal Coherence track, not a separate unit stat. Add to §A.10 of mass_battle_v3.md:
+> "Coherence referenced here is the practitioner's personal Coherence track (see threadwork_redesign_v25.md Part 3). It is not a unit stat. 'Coherence auto-cost −1/op' means each Thread operation in mass battle depletes the practitioner's Coherence by 1. 'Severed (Coherence 1): +2 Ob' refers to the Coherence Threshold from §3.3 of the threadwork document."
