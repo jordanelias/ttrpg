@@ -1512,3 +1512,11 @@ patches:
   applied_to_version: "v4.2"
   status: applied
   applied_commit: pending
+
+  - id: PP-168
+    date: 2026-04-02
+    status: applied
+    source: AUD-TTRPG-01 Mode D GAP-TTRPG-17
+    description: "params_factions: extract and add all 8 faction unique actions from stage6_factions.md §8.4–8.9 (Hafenmark/Sovereign Authority Doctrine, Varfell/Private Collection full table, Guilds/Economic Leverage, Niflhel/Quiet Network all modes, Revolution/Community Weaving, Löwenritter/Martial Law Coup Trigger)"
+    files_changed:
+      - references/params_factions.md

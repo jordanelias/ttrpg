@@ -1,47 +1,32 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_HYB_SIM_01_PLUS_PP103
-phase: Phase 11 — SIM-HYB-01 + PP-103 (Zoom In/Out transition usability work)
-status: CLOSED
+session_id: 2026-04-02T_TTRPG_AUDIT_PATCHES_2
+phase: Phase 12 — PP-168 faction unique actions extraction
+status: COMPLETE
 
 completed:
-  - SIM-HYB-01: Complete hybrid session simulation (all modes). See prior entry.
-  - PP-103: Phase-Lock Protocol for Zoom In + Levy unit + GM reference card.
-    Commit: 665f195
+  - PP-164/165/166/167: prior commit — attr range, Health fix, Stamina min, TD removed, RS start, RS lockout.
+  - PP-168: params_factions — all 8 faction unique actions extracted from stage6 §8.4–8.9.
+    Hafenmark: Sovereign Authority Doctrine (Mandate vs Ob 4, once/arc, TC suppression mechanic)
+    Varfell: Private Collection (Intel vs Ob 2, full degree table including Failure and long-term cost)
+    Guilds: Economic Leverage (Wealth vs Wealth, Guild Favour ≥ 5 prerequisite)
+    Niflhel: Quiet Network (3 modes: Intelligence/Sabotage/Assassination, Thread Tension cost)
+    Revolution: Community Weaving (Influence vs TT÷20, practitioner prerequisite, co-movement card)
+    Löwenritter: Coup Trigger / Martial Law (counter mechanic, not a standard roll)
 
-pp103_details:
-  solution_1_reference_card:
-    file: designs/gm_ref_cp14/zoom_in_out_reference_card.md
-    content: Side A (Zoom In procedure, 7 steps) + Side B (unit conversion table)
-    effect: Eliminates 4-document parallel lookup. Novice time 12m → ~4m.
-  solution_2_phase_lock:
-    legal_entry_points: [After Phase 1, After Phase 3, After Phase 6 Step 1]
-    mid_phase_rule: Hold Zoom In until end of current phase.
-    eliminates: Ghost-unit class (Phase 2/4/5 damage-recorded-not-applied state).
-  levy_unit:
-    added_to: designs/mass_combat/mass_battle_v3.md §B.2
-    cp: 1
-    str: 5
-    morale: 2
-    armour: None
-    fixes: F-HYB-08 (Military 1 faction had no deployable unit in B.2)
+remaining_open_editorials_requiring_user_input:
+  - GAP-TTRPG-04 / ED pending: Belief CP conflict stage2 (+1/+1/+2/+2) vs stage10 (+2/+2/+4-5)
+  - ED-053: Composure formula — stage1 says Presence+6; stage2 §4.11 says Presence+Attunement
 
-editorials_resolved:
-  - ED-055: GM reference card created (PP-103)
-  - ED-057: Ghost-unit state eliminated by Phase-Lock (PP-103)
-
-open_from_sim_hyb_01:
-  - ED-056: Zoom In as TC win-delay exploit (P2)
-  - ED-058: Debate stalemate forced resolution (P2)
-  - ED-059: RS=0 at Zoom In gap-rule priority (structural)
-  - ED-060: Composure restoration between scenes (P3)
-  - PARAMS-GAP-04: Mass combat pool split (Offence/Defence unit-scale)
-  - PARAMS-GAP-05: Mass combat Strength loss per excess success
-  - PARAMS-GAP-06-MC: BG Battle Partial outcome undefined
-  - F-HYB-07 (P2): COMPETITION + TIE on equal successes — no patch yet
+remaining_P1s_audit:
+  - GAP-TTRPG-F1: Personal combat High burden — design-level, not patchable at params layer
+  - GAP-TTRPG-G1/G2: HYB character reactivation / personal-unit combat transition — design docs needed
 
 next_action:
-  task: "Address remaining open editorial items from SIM-HYB-01 per priority, or begin next simulation target. Highest-value next sim: stress test mass combat (G1 full run) to resolve PARAMS-GAP-04/05 and anchor unit-scale damage formula."
-  note: "Transition mechanics now usable (PP-101 + PP-103 + reference card). No remaining P1 blockers from hybrid sim."
+  task: "Await user direction on ED-053 and Belief CP conflict. All mechanically patchable P1s from AUD-TTRPG-01 are now resolved."
+
+commits_this_session:
+  - prior: AUD-TTRPG-01, PP-164/165/166/167
+  - [this]: PP-168 + patch register + session log
 ```

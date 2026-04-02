@@ -1,6 +1,6 @@
-<!-- version: v0.14-AUD1 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-02 -->
+<!-- version: v0.14-AUD2 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-02 -->
 <!-- NOTE: stage6_factions.md is STALE for BG faction mechanics. Use BG column for board game/hybrid. -->
-<!-- PATCHES APPLIED: PP-167 (RS TTRPG start corrected 60→72 per stage12_campaign_modes §12.1 Session Zero) -->
+<!-- PATCHES APPLIED: PP-167 (RS TTRPG start corrected 60→72), PP-168 (all 8 faction unique actions extracted from stage6) -->
 <!-- STALE CHECK: TTRPG column from v0.14 compiled. BG column from bg_v05 design. -->
 
 # params_factions.md — Factions
@@ -55,7 +55,6 @@ Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Revolution: 2 | L
 | Revolution | Community Weaving | Presence markers −1 Ob (base Ob 2) | Mending Mandate prerequisite: Mandate ≥ 1 |
 | [Others] | See stage6_factions.md §8.4–8.9 | — | Hafenmark, Varfell, Guilds, Niflhel, Löwenritter unique actions not extracted |
 
-[GAP: Hafenmark/Guilds/Niflhel/Löwenritter unique actions — read stage6_factions.md §8.4–8.8]
 
 ## Nine Political Axes (qualitative — not tracked numerically)
 1. Sovereignty: Crown authority vs Church authority
@@ -77,3 +76,89 @@ Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Revolution: 2 | L
 | Schoenland | Active spoiler | Various faction disruptions |
 
 Rendering Stability ≤ 10 adds +1 to coup/succession trigger check pools.
+
+## Unique Actions — All Factions (PP-168)
+
+### Crown — Royal Decree
+Roll: Mandate vs Ob 2. Once per season.
+| Degree | Result |
+|--------|--------|
+| Overwhelming | One faction stat ±1 immediate; consecutive seasons: +1 Ob/season |
+| Success | One faction stat ±1 immediate; consecutive seasons: +1 Ob/season |
+| Failure | — |
+Cannot target Intel. Effect is immediate and unilateral.
+
+### Church — Excommunication
+Roll: Mandate vs target Mandate (faction leader) or Ob 2 (non-leader).
+| Degree | Result |
+|--------|--------|
+| Success | Strips target's Circles bonus; target faction Mandate −1 |
+| Failure | — |
+Reversal: Grand Debate (5 exchanges) or new Confessor appointed.
+
+### Church — TC 60 Territorial Seizure
+Trigger: Theocracy Counter (TC) reaches 60. Fires once per territory.
+Roll: Mandate vs owner's Mandate ÷ 2 (round up, min 1).
+| Degree | Result |
+|--------|--------|
+| Success | Administrative control of territory. Domain Actions vs Church authority require +2 Ob. Flat Theocracy Counter value fires immediately. |
+| Failure | Mandate −1 |
+Riskbreaker exposure removes seized territory and prevents re-seizure for one season.
+
+### Hafenmark — Sovereign Authority Doctrine
+Roll: Mandate vs Ob 4. Once per campaign arc.
+| Degree | Result |
+|--------|--------|
+| Overwhelming | Theocracy Counter −3; Church Mandate −1; Heresy Investigation blocked this season; +1D social vs Church for the arc |
+| Success | Theocracy Counter −2; Church Mandate −1; Heresy Investigation opens (Ob 4 to pursue) |
+| Partial | Theocracy Counter −1; Heresy Investigation opens immediately; Church Influence +1 |
+| Failure | Theocracy Counter +1; Heresy Investigation immediate; Baralta's Mandate −1 |
+TC Suppression: while Baralta's Mandate ≥ 4, Theocracy Counter −1/season. Suppression ends if Mandate < 4 or excommunication (TC +4 immediately).
+
+### Varfell — The Private Collection
+Roll: Intel vs Ob 2. Once per season.
+| Degree | Result |
+|--------|--------|
+| Success (choose one) | +2D to one Thread-related Domain Action this season; OR reveal one hidden faction attribute; OR −1 Ob to one Einhir Research action this season |
+| Failure | Artefact's Thread signature detected by a practitioner; Church Intel +1D vs Varfell for 1 season; Thread Tension +1 |
+Long-term cost: each use: +1 to Vaynard's hidden Thread Sensitivity (TS). At Thread Sensitivity 14+, each use triggers Spirit check TN 7 Ob 1 for a Discovery Event.
+Player Character takeover: collection transfers as institutional asset; triggers mandatory Discovery Event for new leader (Spirit TN 7 Ob 1; Success: Thread Knowledge (TK) +1; Failure: Certainty −1, new Belief offered).
+
+### Guilds — Economic Leverage
+Trigger: Guild Favour ≥ 5 in target territory (1–7 territory track).
+Roll: Wealth vs target faction's Wealth.
+| Degree | Result |
+|--------|--------|
+| Overwhelming | Target loses 1 Wealth + 1 Prosperity in that territory |
+| Success | Target faction loses 1 Wealth for 1 season |
+| Failure | Guild Favour −1 in that territory |
+Cannot target factions in territories where Guild Favour < 5.
+
+### Niflhel — The Quiet Network
+Choose mode before rolling. One deployment per season.
+**Intelligence mode:** Intel vs target's Intel → Success: learn one hidden faction attribute or one Non-Player Character's active Belief; Overwhelming: learn two.
+**Sabotage mode:** Intel vs target's Stability → Success: Stability −1; Failure: operative exposed (Niflhel Intel −1 for 1 season; target gains Grievance Marker).
+**Assassination mode:** Intel vs target's Intel +2 → Overwhelming: Non-Player Character eliminated, no evidence; Success: eliminated, evidence trail; Partial: wounded, evidence trail; Failure: operative captured, full exposure, Niflhel Stability −2.
+Long-term cost: each Quiet deployment this season: Thread Tension +0.5 (cumulative).
+
+### Revolution/Restoration — Community Weaving
+Roll: Influence vs Ob = Thread Tension ÷ 20 (round up).
+Requires: at least one practitioner with Thread Sensitivity (TS) 30+ affiliated with the Revolution.
+| Degree | Result |
+|--------|--------|
+| Overwhelming | Thread Tension −2 |
+| Success | Thread Tension −1 |
+| Partial | Thread Tension unchanged; Stability −1 |
+| Failure | Stability −1; Thread Tension +1 |
+Co-Movement Card drawn on every result (P-01 compliance).
+Prerequisite: Mandate ≥ 1 for Mending prerequisite (see stage6 §8.8).
+
+### Löwenritter — Martial Law / Coup Trigger
+No standard Unique Action roll — Löwenritter action is triggered by Coup Counter reaching 3.
+**Coup Counter increments (+1 each):**
+- Theocracy Counter reaches 40 while Crown took no action to reduce it that season
+- Torben's loyalty reaches 3–2 or lower
+- Crown loses 2+ territories in one season without a military response Domain Action
+Counter never decrements. Fires at next seasonal accounting once at 3.
+**Martial Law effects:** All non-Military Domain Actions in Crown territories require secondary Military check (Löwenritter Military pool, TN 7, Ob 2); failure blocks the action. Persists until players remove it (Influence vs Ob = Löwenritter Military ÷ 2, round up, min Ob 3) or Theocracy Counter drops below 40.
+
