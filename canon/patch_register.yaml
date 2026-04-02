@@ -6,7 +6,7 @@ patches:
 - id: PP-001
   date: 2026-03-27
   severity: P1
-  description: "M-013 (Leap), M-016 (Pulling) — TD accumulation"
+  description: "M-013 (Leap), M-016 (Pulling) — Thread Depth accumulation"
   finding_id: "F-B7-08 / F-B7-16 (consolidated)"
   source: simulation
   affects: []
@@ -146,7 +146,7 @@ patches:
 - id: PP-015
   date: 2026-03-27
   severity: P1
-  description: "TC 80 threshold — territorial seizure procedure"
+  description: "Theocracy Counter 80 threshold — territorial seizure procedure"
   finding_id: "F-34 (Batch 4)"
   source: simulation
   affects: []
@@ -166,7 +166,7 @@ patches:
 - id: PP-017
   date: 2026-03-27
   severity: P1
-  description: "CE track — accumulation procedure"
+  description: "Combat Endurance track — accumulation procedure"
   finding_id: "F-40 (Batch 4)"
   source: simulation
   affects: []
@@ -176,7 +176,7 @@ patches:
 - id: PP-018
   date: 2026-03-27
   severity: P1
-  description: "TC pause + Baralta suppressor interaction"
+  description: "Theocracy Counter pause + Baralta suppressor interaction"
   finding_id: "F-13 (Batch 3)"
   source: simulation
   affects: []
@@ -506,7 +506,7 @@ patches:
 - id: PP-079
   date: 2026-03-27
   severity: P1
-  description: "M-NPC-Torben — Torben Loyalty Clock"
+  description: "M-Non-Player Character-Torben — Torben Loyalty Clock"
   finding_id: "F72 / G-129"
   source: simulation
   affects: []
@@ -516,7 +516,7 @@ patches:
 - id: PP-080
   date: 2026-03-27
   severity: P1
-  description: "M-031 (Theocracy Clock) — Church Stability TC brake"
+  description: "M-031 (Theocracy Clock) — Church Stability Theocracy Counter brake"
   finding_id: "F112 / G-136"
   source: simulation
   affects: []
@@ -1017,7 +1017,7 @@ patches:
 - id: PP-160
   date: 2026-04-01
   severity: P1
-  description: "Coup Counter evaluation timing — mid-season TC reduction should avert counter increment if TC drops below 41 before seasonal accounting"
+  description: "Coup Counter evaluation timing — mid-season Theocracy Counter reduction should avert counter increment if Theocracy Counter drops below 41 before seasonal accounting"
   finding_id: "F-ARC31-04 (SIM-ARC31-C01)"
   source: simulation
   affects: [stage8_combat.md §8.9 Coup Counter, stage6_factions.md Löwenritter]
@@ -1027,7 +1027,7 @@ patches:
 - id: PP-161
   date: 2026-04-01
   severity: P1
-  description: "Mass combat stalemate resolution — add rule: 2 turns no damage → CR check, winner gains Feigned Retreat, double fail → strategic withdrawal"
+  description: "Mass combat stalemate resolution — add rule: 2 turns no damage → Coherence Rating check, winner gains Feigned Retreat, double fail → strategic withdrawal"
   finding_id: "F-ARC31-05 (SIM-ARC31-C01)"
   source: simulation
   affects: [designs/mass_combat/mass_battle_v3.md, stage8_combat.md §8.9]
@@ -1047,7 +1047,7 @@ patches:
 - id: PP-163
   date: 2026-04-01
   severity: P1
-  description: "TC spike from Southernmost expedition — add player-facing note to §7.2 one-time events table that spike fires before seasonal accounting"
+  description: "Theocracy Counter spike from Southernmost expedition — add player-facing note to §7.2 one-time events table that spike fires before seasonal accounting"
   finding_id: "F-ARC33-04 (SIM-ARC33-C01)"
   source: simulation
   affects: [stage5_clocks.md §7.2, compilation/v0.14/valoria_ruleset_v0.14.md §7.2]
@@ -1066,7 +1066,7 @@ patches:
 - id: PP-094
   date: 2026-04-02
   severity: P1
-  description: "Coup Counter successor rule — highest CR officer, counter resets [PROVISIONAL]"
+  description: "Coup Counter successor rule — highest Coherence Rating officer, counter resets [PROVISIONAL]"
   finding_id: "F-30/F-33 / SIM-X-07/X-08"
   source: simulation
   affects: [designs/combat/combat_design_v1.md]
@@ -1076,7 +1076,7 @@ patches:
 - id: PP-095
   date: 2026-04-02
   severity: P1
-  description: "TC seasonal change cap: ±3 Domain Actions, ±5 all sources [PROVISIONAL]"
+  description: "Theocracy Counter seasonal change cap: ±3 Domain Actions, ±5 all sources [PROVISIONAL]"
   finding_id: "F-43 / SIM-X-10"
   source: simulation
   affects: [designs/combat/combat_design_v1.md]
@@ -1170,7 +1170,7 @@ patches:
 - id: PP-104
   date: 2026-04-02
   severity: P1
-  description: "Corroboration stub: §3.5 corroboration mechanic not integrated in §6.4. Added Step 2b stub with provisional reference to §3.5. Full porting pending ED-051 NPC stat block."
+  description: "Corroboration stub: §3.5 corroboration mechanic not integrated in §6.4. Added Step 2b stub with provisional reference to §3.5. Full porting pending ED-051 Non-Player Character stat block."
   finding_id: "GAP-DS-12 / C-01 / AUDIT-D-01"
   source: audit
   affects: [designs/debate/debate_system_redesign_v1.md §6.4]
@@ -1214,7 +1214,7 @@ patches:
 - id: PP-109
   date: 2026-04-02
   severity: P1
-  description: "Tribunal exchange count guidance: P(one-exchange resolution) ~88% at default TC=6 + boosted genre. Add design note with dramatic play guidance."
+  description: "Tribunal exchange count guidance: P(one-exchange resolution) ~88% at default Theocracy Counter=6 + boosted genre. Add design note with dramatic play guidance."
   finding_id: "G2-F-01 / SIM-D-03"
   source: simulation
   affects: [designs/debate/debate_system_redesign_v1.md §6.7]
@@ -1269,7 +1269,7 @@ patches:
 - id: PP-114
   date: 2026-04-02
   severity: P2
-  description: "IP post-80 escalation: IP 81-89 Vanguard +1 territory/season; IP 90-99 Altonian Mil +2; IP 100 shared defeat. Fills GAP-BG-06. PROVISIONAL."
+  description: "Institutional Pressure post-80 escalation: Institutional Pressure 81-89 Vanguard +1 territory/season; Institutional Pressure 90-99 Altonian Mil +2; Institutional Pressure 100 shared defeat. Fills GAP-BG-06. PROVISIONAL."
   finding_id: "GAP-BG-06 / AUDIT-BG-01"
   source: audit
   affects: [references/params_board_game.md]
@@ -1280,7 +1280,7 @@ patches:
 - id: PP-115
   date: 2026-04-02
   severity: P2
-  description: "PI threshold table. PI 0 = Parliament dissolved + Löwenritter coup. Fills GAP-BG-03. PROVISIONAL ED-055."
+  description: "Public Instability threshold table. Public Instability 0 = Parliament dissolved + Löwenritter coup. Fills GAP-BG-03. PROVISIONAL ED-055."
   finding_id: "GAP-BG-03 / AUDIT-BG-01"
   source: audit
   affects: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
@@ -1291,7 +1291,7 @@ patches:
 - id: PP-116
   date: 2026-04-02
   severity: P2
-  description: "TC seasonal cap: Domain Actions +-3, all sources +-5. Seizure gains exempt. TC ceiling 100 cosmetic. PROVISIONAL ED-056."
+  description: "Theocracy Counter seasonal cap: Domain Actions +-3, all sources +-5. Seizure gains exempt. Theocracy Counter ceiling 100 cosmetic. PROVISIONAL ED-056."
   finding_id: "A-BG-05 / GAP-BG-04 / GAP-BG-09 / AUDIT-BG-01"
   source: audit
   affects: [references/params_board_game.md]
@@ -1313,7 +1313,7 @@ patches:
 - id: PP-118
   date: 2026-04-02
   severity: P1
-  description: "Simultaneous RS=0 + IP>=80: Rupture (Step 6) takes precedence. Exception: Restoration Step 5 victory pre-empts. PROVISIONAL ED-054."
+  description: "Simultaneous Rendering Stability=0 + Institutional Pressure>=80: Rupture (Step 6) takes precedence. Exception: Restoration Step 5 victory pre-empts. PROVISIONAL ED-054."
   finding_id: "GAP-BG-02 / C-BG-01 / AUDIT-BG-01"
   source: audit
   affects: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
@@ -1335,7 +1335,7 @@ patches:
 - id: PP-120
   date: 2026-04-02
   severity: P2
-  description: "BG Thread ops: no Coherence cost. TTRPG personal-scale only. Hybrid: PC Coherence via Cascade Step 3. PROVISIONAL ED-057."
+  description: "BG Thread ops: no Coherence cost. TTRPG personal-scale only. Hybrid: Player Character Coherence via Cascade Step 3. PROVISIONAL ED-057."
   finding_id: "G-BG-03 / AUDIT-BG-01"
   source: audit
   affects: [references/params_board_game.md]
@@ -1357,7 +1357,7 @@ patches:
 - id: PP-122
   date: 2026-04-02
   severity: P2
-  description: "CP awards in Hybrid: CP +1 on Domain Action Success if PC declares Belief. CP +1 on Mandate decision if Conviction articulated. BG-only: no CP. Fills G-BG-05."
+  description: "CP awards in Hybrid: CP +1 on Domain Action Success if Player Character declares Belief. CP +1 on Mandate decision if Conviction articulated. BG-only: no CP. Fills G-BG-05."
   finding_id: "G-BG-05 / AUDIT-BG-01"
   source: audit
   affects: [references/params_board_game.md]
@@ -1368,7 +1368,7 @@ patches:
 - id: PP-118-rev1
   date: 2026-04-02
   severity: P1
-  description: "PP-118 Step numbering correction. Restoration pre-check moved to Step 5 (before RS Step 6). Added step-by-step accounting sequence context. Added simultaneous Step 12 editorial flag. Fixes SIM-BG-01-03."
+  description: "PP-118 Step numbering correction. Restoration pre-check moved to Step 5 (before Rendering Stability Step 6). Added step-by-step accounting sequence context. Added simultaneous Step 12 editorial flag. Fixes SIM-BG-01-03."
   finding_id: "SIM-BG-01-03 / SIM-BG-01-04"
   source: simulation
   affects: [references/params_board_game.md]
@@ -1402,7 +1402,7 @@ patches:
 - id: PP-114
   date: 2026-04-02
   severity: P2
-  description: "§6.5: (1) Add Debate Fatigue — Rattled → −1D next social roll, consumed on use. (2) Add Total Victory — TC≥9/≤1 → additional Mandate−1 (BG) + Momentum+1 (TTRPG). [GAP-DS-03/16 resolved]"
+  description: "§6.5: (1) Add Debate Fatigue — Rattled → −1D next social roll, consumed on use. (2) Add Total Victory — Theocracy Counter≥9/≤1 → additional Mandate−1 (BG) + Momentum+1 (TTRPG). [GAP-DS-03/16 resolved]"
   finding_id: "GAP-DS-03/16 / AUDIT-D-01 / SIM-D-04"
   source: audit
   affects: [designs/debate/debate_system_redesign_v1.md §6.5]
@@ -1446,7 +1446,7 @@ patches:
 - id: PP-118
   date: 2026-04-02
   severity: P2
-  description: "§6.14: Hybrid debate exchange count is independent of BG vote round count — set by GM per context. [K2 finding / SIM-D-04]"
+  description: "§6.14: Hybrid debate exchange count is independent of BG vote round count — set by Game Master per context. [K2 finding / SIM-D-04]"
   finding_id: "K2 / SIM-D-04"
   source: simulation
   affects: [designs/debate/debate_system_redesign_v1.md §6.14]
@@ -1457,8 +1457,8 @@ patches:
 - id: PP-101
   date: 2026-04-02
   severity: P1
-  description: "Practitioner positioning rule in mass combat: rear vs front-line Leap timing distinction. BG→TTRPG unit conversion added to §B.5 referencing §B.2 table. Resolves F-HYB-01 and GAP-K2-01."
-  finding_id: "F-HYB-01 / GAP-K2-01 / SIM-HYB-01"
+  description: "Practitioner positioning rule in mass combat: rear vs front-line Leap timing distinction. BG→TTRPG unit conversion added to §B.5 referencing §B.2 table. Resolves F-Hybrid-01 and GAP-K2-01."
+  finding_id: "F-Hybrid-01 / GAP-K2-01 / SIM-Hybrid-01"
   source: simulation
   affects:
     - designs/mass_combat/mass_battle_v3.md
@@ -1487,7 +1487,7 @@ patches:
     date: 2026-04-02
     status: applied
     source: AUD-TTRPG-01 Modes B+C
-    description: "params_threadwork: remove phantom Thread Depth (TD) stat (not present in threadwork_redesign_v25 or any formula), add RS=0 lockout gate, confirm Coherence start=10, add RS ceiling=100"
+    description: "params_threadwork: remove phantom Thread Depth (TD) stat (not present in threadwork_redesign_v25 or any formula), add Rendering Stability=0 lockout gate, confirm Coherence start=10, add Rendering Stability ceiling=100"
     files_changed:
       - references/params_threadwork.md
 
@@ -1495,6 +1495,6 @@ patches:
     date: 2026-04-02
     status: applied
     source: AUD-TTRPG-01 Mode B
-    description: "params_factions: fix RS TTRPG starting value 60→72 (canonical source: stage12_campaign_modes §12.1 Session Zero step 4 'Set clocks: RS 72')"
+    description: "params_factions: fix Rendering Stability TTRPG starting value 60→72 (canonical source: stage12_campaign_modes §12.1 Session Zero step 4 'Set clocks: Rendering Stability 72')"
     files_changed:
       - references/params_factions.md

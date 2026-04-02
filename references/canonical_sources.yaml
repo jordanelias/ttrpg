@@ -45,7 +45,7 @@ systems:
     params: null
     design_doc: null
     compilation_current: true
-    note: "R-68 TC accounting gate confirmation needed. No design-layer clock doc."
+    note: "R-68 Theocracy Counter accounting gate confirmation needed. No design-layer clock doc."
 
   factions:
     canonical_ttrpg: compilation/v0.14/stage6_factions.md
@@ -110,7 +110,7 @@ systems:
     params: null
     design_doc: designs/ttrpg/edeyja_npc.md  # supplementary
     compilation_current: true
-    note: "Stage13 canonical. GAP: Focus+Attunement values missing from NPC profiles (GAP-ARC31-SIM-01). Ceiral placeholder (ED-048)."
+    note: "Stage13 canonical. GAP: Focus+Attunement values missing from Non-Player Character profiles (GAP-ARC31-SIM-01). Ceiral placeholder (ED-048)."
 
   gm_tools:
     canonical: compilation/v0.14/stage14_gm_tools.md

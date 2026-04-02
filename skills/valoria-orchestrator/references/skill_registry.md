@@ -19,7 +19,7 @@
 - Path: `skills/valoria-simulator-SKILL.md`
 - Model: Sonnet 4.6
 - Triggers: stress test, simulate, audit mechanics, edge cases, run scenario, test [mechanic], probability, crunch cascade, cognitive load, flowchart, precedent comparison, cross-mode
-- Modes: A (isolation) B (interaction) C (scenario) D (edge case) E (coverage) F (NPC) G1-G5 (subsystem) H (substitution) I (patch output + commit) J (cognitive load) K (cross-mode delta + transitions) L (precedent) M (flowchart)
+- Modes: A (isolation) B (interaction) C (scenario) D (edge case) E (coverage) F (Non-Player Character) G1-G5 (subsystem) H (substitution) I (patch output + commit) J (cognitive load) K (cross-mode delta + transitions) L (precedent) M (flowchart)
 
 ### valoria-mechanic-audit
 - Path: `skills/valoria-mechanic-audit-SKILL.md`
@@ -54,7 +54,7 @@
 ### valoria-arc-generator
 - Path: `skills/valoria-arc-generator/SKILL.md` (directory-based)
 - Model: Sonnet 4.6
-- Triggers: generate arc, campaign arc, NPC arc, emergent scenario, arc sequence
+- Triggers: generate arc, campaign arc, Non-Player Character arc, emergent scenario, arc sequence
 
 ### valoria-combat-simulator
 - Path: `skills/valoria-combat-simulator/SKILL.md` (directory-based)

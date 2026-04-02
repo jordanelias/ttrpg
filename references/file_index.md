@@ -50,7 +50,7 @@
 | compilation/v0.14/stage10_advancement.md | TTRPG | CURRENT | stage2 | — |
 | compilation/v0.14/stage11_scale_transitions.md | HYBRID | CURRENT | stage1–8 | references/params_scale_transitions.md; PP-089/PP-090 PENDING application |
 | compilation/v0.14/stage12_campaign_modes.md | ALL | CURRENT | stage1–11 | — |
-| compilation/v0.14/stage13_npcs.md | ALL | CURRENT | stage2, stage6 | GAP: Focus+Attunement values missing from NPC profiles (GAP-ARC31-SIM-01) |
+| compilation/v0.14/stage13_npcs.md | ALL | CURRENT | stage2, stage6 | GAP: Focus+Attunement values missing from Non-Player Character profiles (GAP-ARC31-SIM-01) |
 | compilation/v0.14/stage14_gm_tools.md | ALL | CURRENT | all stages | — |
 | compilation/v0.14/stage15_spell_catalog.md | TTRPG | CURRENT | stage3 | threadwork_redesign_v25 (W-series ops) |
 | compilation/v0.14/stage16_reference.md | ALL | CURRENT | all stages | — |
@@ -141,7 +141,7 @@
 
 ---
 
-## DESIGNS — GM REFERENCE (CP14)
+## DESIGNS — Game Master REFERENCE (CP14)
 
 | File | Systems | Status | Notes |
 |------|---------|--------|-------|
@@ -290,7 +290,7 @@ These files contain confirmed design decisions that have not been propagated to 
 |------|-------------------------------|--------------|
 | designs/ttrpg/batch_ad_resolutions.md | G-053 (Approach Training 8CP), G-040 (Inspiration half-CP refund), G-054 (Circles single track confirmed), G-042 (No CP for faction founding), G-038 (Treaty betrayal table — **no home file yet**), G-044 (Altonian vassalage spec — **not yet designed**), Varfell collection transfer | threadwork_v25 (G-053), stage2/characters (G-040), faction design files (G-038, G-044) |
 | designs/ttrpg/succession_mechanic.md | Almud succession mechanic — approved, no working design file | Needs: designs/ttrpg/political_mechanics.md or similar |
-| designs/ttrpg/church_territorial_seizure.md | TC 80 per-territory roll — approved, integrates with G-050 | bg_v05 (TC 80 section already has this; verify parity) |
+| designs/ttrpg/church_territorial_seizure.md | Theocracy Counter 80 per-territory roll — approved, integrates with G-050 | bg_v05 (Theocracy Counter 80 section already has this; verify parity) |
 | designs/hybrid/hybrid_gaps_resolved.md | 17 hybrid gaps resolved — ready for integration | stage11_scale_transitions, bg_v05 §B.5, designs/hybrid/ |
 | designs/ttrpg/generation_tasks_gt01_gt02_gt03.md | Status: "requires user review" — not integrated | Pending user review before any propagation |
 | designs/ttrpg/mechanical_tasks_and_patches.md | R-54–R-68 applied to threadwork_v25 ✓; MT-01 applied to combat_design_v1 ✓; R-65/R-66 blocked by ED-047 | stage15_spell_catalog (R-55,56,59,60,62,63,64); stage5_clocks (R-68) |
@@ -307,12 +307,12 @@ These files contain confirmed design decisions that have not been propagated to 
 | designs/ttrpg/batch_f_designs.md | REFERENCE | Session 5 hybrid+endgame — check against hybrid_gaps_resolved |
 | designs/ttrpg/batch_ad_resolutions.md | PROPAGATION-PENDING | See table above |
 | designs/ttrpg/generation_tasks_gt01_gt02_gt03.md | AWAITING USER REVIEW | Do not propagate without user sign-off |
-| designs/ttrpg/edeyja_npc.md | WORKING | Canonical NPC (name working, ED-048 adjacent). In stage13. |
+| designs/ttrpg/edeyja_npc.md | WORKING | Canonical Non-Player Character (name working, ED-048 adjacent). In stage13. |
 | designs/ttrpg/lowenritter_faction_card.md | WORKING | Approved. Verify parity with bg_v05 faction section. |
 | designs/ttrpg/succession_mechanic.md | PROPAGATION-PENDING | Approved. No home in working design files yet. |
-| designs/ttrpg/church_territorial_seizure.md | VERIFY | Approved. Check parity with bg_v05 TC 80 section. |
+| designs/ttrpg/church_territorial_seizure.md | VERIFY | Approved. Check parity with bg_v05 Theocracy Counter 80 section. |
 | designs/ttrpg/valoria_emergent_scenarios.md | WORKING | Emergent scenario map vs compiled ruleset. |
-| designs/ttrpg/valoria_narrative_scenario_chains.md | WORKING | NPC arcs. Note: contains "Ceiral" references (ED-048). |
+| designs/ttrpg/valoria_narrative_scenario_chains.md | WORKING | Non-Player Character arcs. Note: contains "Ceiral" references (ED-048). |
 | designs/hybrid/hybrid_gaps_resolved.md | PROPAGATION-PENDING | 17 gaps resolved. Not yet integrated into stage11 or bg_v05. |
 | designs/gm_ref_cp14/* | WORKING | All arc and dashboard files. Arcs 32,34,35 not yet simulated. |
 
