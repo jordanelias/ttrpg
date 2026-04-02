@@ -203,3 +203,21 @@ These are always mode-specific and do not transfer:
 | BG Parliamentary Vote → TTRPG Formal Debate (Zoom In) | Remaining vote rounds → Exchange count | **UNDEFINED** [K2-F-02] | GAP — P1 |
 
 **K2-F-02 resolution needed before BG↔TTRPG debate Zoom In is playable.**
+## TC Win-Delay Rule (ED-056b resolved — provisional)
+TC threshold check (TC ≥ 65 = Church win) fires at Seasonal Accounting regardless of active Zoom In suspension. A Zoom In cannot delay or prevent a TC win condition. If TC reaches 65 during an Accounting that is otherwise suspended by Zoom In: Accounting completes the TC check, win fires if applicable, then Zoom In resumes. [PROVISIONAL]
+
+## P-01 Co-Movement Propagation — BG Layer (ED-076 resolved — provisional)
+TTRPG scene Thread operations fire all three auto-effects per P-01. On Zoom Out, these propagate to BG as:
+- Temporal auto-effect: RS ±1 at next Accounting (if operation was Relational+ scale)
+- Epistemic auto-effect: Investigation Action available to relevant faction next season (no roll)
+- Actual auto-effect: narrative note only (no BG mechanical effect)
+Object/Personal scale operations: no BG propagation. [PROVISIONAL — ED-076]
+
+## Non-Battle Zoom In Procedure (ED-073 resolved — provisional)
+Trigger: named PC enters BG territory for a non-combat purpose (political scene, Thread investigation, social encounter).
+Phase-Lock: fires at end of current Domain Action being resolved (not a battle-phase lock).
+State transfer: faction stats suspended; RS transfers immediately; no unit conversion needed.
+Running the scene: TTRPG rules apply. Debate, Thread ops, social mechanics as normal.
+Zoom Out: Domain Echoes queue to Accounting; RS consequences immediate; no unit Strength updates.
+Duration: one scene (one seasonal phase's equivalent). If multiple scenes needed, each is a separate Zoom In.
+[PROVISIONAL — ED-073]

@@ -416,88 +416,26 @@ Rationale: Intel 6 from starting value 4 requires ~16 seasons of successful Inte
 
 ## Mandate Recovery (PP-174, replaces PARAMS GAP notice)
 Govern Overwhelming in own capital territory: Mandate +1 (max once/season; max = faction starting Mandate).
+## Parliamentary Vote (ED-053b resolved — provisional)
+Faction calls a Parliamentary Vote via Parliamentary Manoeuvre Domain Action.
+Resolution:
+- Each participating faction rolls their Influence pool (1D per Influence point), TN 7
+- Ob = highest opposing faction's Influence ÷ 2 (round up)
+- Net successes: faction with highest net wins the vote; ties go to faction with higher Mandate
+- Effects: winner faction gains +1 PI (Parliamentary Integrity); loser −1 PI
+[PROVISIONAL — ED-053]
 
-## Card-Hand Action Economy (PP-177 — from stage_bg_proposal_v02.md B4)
-Adopted 2026-04-02. Replaces Order token system. Resolves ED-001.
+## Card-Hand System — Provisional (ED-001 resolved — provisional)
+Pending full design. Provisional rule to unblock simulation:
+- Each faction receives 6 tactic cards at season start (4 shared + 2 faction-specific)
+- Draw 1 additional card at start of each Battle phase
+- Play 1 card per Battle or Domain Action as appropriate
+- Cards discard after use; hand refreshes to 6 at Seasonal Accounting
+- Card effects are the disposition modifiers in §B.4
+- [PROVISIONAL — requires full card-hand design review. ED-001 blocker unblocked for simulation only]
 
-### Card Types
-| Card | Inward Action | Outward Action |
-|------|--------------|----------------|
-| Legionary | Muster (raise unit at home) | March (move unit to adjacent) |
-| Consul | Govern (consolidate control) | Trade (generate Wealth) |
-| Senator | Decree / Parliamentary Manoeuvre | Diplomacy (inter-faction) |
-| Tribune | Investigate (learn own territory) | Spy (learn enemy territory/stat) |
-| Prefect | Govern ALL controlled territories (+1 Ob) | Trade ALL controlled territories (+1 Ob) |
-| Recess | Retrieve all played cards. No other action. Cost: 1 Wealth. |
+## Artillery Disposition (ED-040 resolved — provisional)
+Artillery units are locked to Balanced disposition in all BG contexts. Rationale: siege weapons cannot execute offensive or defensive tactical manoeuvres — they fire from fixed positions. [PROVISIONAL — confirmed as intentional]
 
-**Orientation:** Rotate card inward or outward to select sub-type.
-
-### Faction Starting Hands
-| Faction | Hand |
-|---------|------|
-| Crown | 2× Legionary, 1× Consul, 1× Senator, 1× Prefect, 1× Recess |
-| Church | 2× Senator, 1× Pontifex (free), 1× Consul, 1× Legionary, 1× Recess |
-| Hafenmark | 2× Consul, 1× Senator, 1× Legionary, 1× Diplomat (free), 1× Recess |
-| Varfell | 2× Tribune, 1× Legionary, 1× Consul, 1× Colonist (free), 1× Recess |
-| Guilds | 2× Consul, 1× Aedile (free), 1× Tribune (+1 Ob), 1× Diplomat, 1× Recess |
-| Niflhel | 3× Tribune, 1× Legionary (Sabotage/Assassination only), 1× Consul, 1× Recess |
-| Restoration Movement | 1× Pontifex, 2× Praetor (free), 1× Senator, 1× Tribune, 1× Recess |
-| Löwenritter (NPC peacetime) | 1× Legionary, 1× Tribune, 1× Martial Law (Unique), 1× Recess |
-
-### Faction-Specific Cards
-| Card | Available to | Action |
-|------|-------------|--------|
-| Pontifex | Church, Restoration Movement | Thread operation (Community Weaving / Mend) |
-| Diplomat | Hafenmark (free start), purchasable | Diplomacy at −1 Ob |
-| Aedile | Guilds (free start) | Trade at −1 Ob |
-| Colonist | Varfell (free start) | March + Govern in destination (combined) |
-| Praetor | Restoration (free start), purchasable | Place/advance Community Project marker |
-| Tribune Militum | Purchasable | Military at −1 Ob |
-| Architectus | Purchasable | Fortify + Govern in same territory |
-| Censor | Purchasable | Crown: issue Policy. Non-Crown: block one order |
-
-### Senate Market
-6 cards face-up from Senate Deck. At each season Accounting: +1 new card from deck.
-Purchase: 1–3 Wealth (printed on card). Purchased cards join hand permanently. Purchases visible to all.
-
-### Domain Expertise Bonus
-When playing your faction's expertise card type: +1D to resolution roll.
-| Faction | Expertise |
-|---------|-----------|
-| Crown | Legionary (Military) |
-| Church | Senator (Social) |
-| Hafenmark | Consul/Prefect (Domain) |
-| Varfell | Tribune (Covert) |
-| Guilds | Consul Outward (Trade) |
-| Restoration Movement | Pontifex (Thread) |
-| Niflhel | Tribune (Covert — Niflhel actions unattributable) |
-
-### Season Flow
-Each season: play cards sequentially (one per priority tier). Unplayed cards carry to next season.
-**Maximum 5 cards played per season.**
-
-### Cooldown Track
-3-slot track for Unique Powers. After use: slot 3. Each Accounting: advance 1 slot. Exits slot 0: available.
-| Ability | Cooldown (seasons) |
-|---------|--------------------|
-| Royal Decree (Crown) | 2 |
-| Excommunication (Church) | 3 |
-| Sovereign Authority (Hafenmark) | Once per game |
-| Private Collection (Varfell) | 1 |
-| Economic Leverage (Guilds) | 1 |
-| Quiet Network: Assassination (Niflhel) | 3 |
-| Quiet Network: other modes (Niflhel) | 1 |
-| Martial Law (Löwenritter) | 2 |
-
-### Cognitive Load (Card-Hand vs Order Tokens)
-| System | Load |
-|--------|------|
-| Card hand management | 2/10 |
-| Planning phase (select cards to play) | 3/10 novice, 2/10 experienced |
-| Novice planning time estimate | ~3 min/player (vs ~12 min with tokens) |
-| Experienced planning time estimate | ~1 min/player |
-
-### Reconciliation Note
-PP-177 adopts Card-Hand action economy from stage_bg_proposal_v02.md.
-Faction stats, clock values, victory conditions, and all PP-112 through PP-176 patches remain from bg_v05_simulation_and_patches.md.
-Full reconciliation of the two design docs into a unified BG spec is required before compilation update. Tracked as DESIGN-DEBT-BG-01.
+## TC Threshold Check During Zoom In (ED-056b)
+TC threshold check fires at Seasonal Accounting regardless of Zoom In suspension. See state_transfer_spec.md.

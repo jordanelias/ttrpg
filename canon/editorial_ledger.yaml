@@ -13,23 +13,21 @@ editorial_decisions:
   - id: ED-001
     legacy_id: BG-E-30
     date_flagged: 2026-03-31
-    date_resolved: 2026-04-02
+    date_resolved: null
     source: session
     source_file: session_log_current.md
     description: "Adopt Card-Hand system for board game action selection"
     full_flag_text: "BG-E-30: Adopt Card-Hand system (BLOCKER)"
-    status: resolved
+    status: provisional
     priority: P1-BLOCKER
-    decision: "Card-Hand system from stage_bg_proposal_v02.md adopted as canonical BG action economy. PP-177 applied. Canonical source updated to include stage_bg_proposal_v02.md for action economy. Resolves ED-078 (novice play time) simultaneously."
+    decision: "Card-Hand provisional adopted (6-card hand, 4 shared+2 faction, draw 1/Battle, discard after use, refresh at Accounting). Unblocks simulation only. Full design review required before compilation. [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage_bg_board_game_mode.md
       - designs/board_game/stage_bg_proposal_v02.md
-      - references/params_board_game.md
-      - references/canonical_sources.yaml
-    propagation_status: applied
-    related_ids: [ED-078]
+    propagation_status: pending
+    related_ids: []
     supersedes: []
-    tags: [board_game, action_economy, blocker, resolved]
+    tags: [board_game, action_economy, blocker]
 
   - id: ED-002
     legacy_id: BG-E-31
@@ -39,9 +37,9 @@ editorial_decisions:
     source_file: session_log_current.md
     description: "Champion Renown ability text — exact wording for the ability"
     full_flag_text: "BG-E-31: Champion Renown ability text"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Champion Renown ability: "Once per season, Champion may spend 1 Mandate to grant +1D to one allied faction Domain Action roll in a territory where the Champion is present." [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage_bg_board_game_mode.md
     propagation_status: pending
@@ -57,9 +55,9 @@ editorial_decisions:
     source_file: session_log_current.md
     description: "Institutional Mandate trigger conditions review — which conditions cause Mandate to fire an institutional response"
     full_flag_text: "BG-E-34: Institutional Mandate trigger conditions review"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Institutional Mandate fires when Mandate≥4 AND Domain Action directly challenges faction core institutional authority. See params_factions.md. [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage6_factions.md
     propagation_status: pending
@@ -75,9 +73,9 @@ editorial_decisions:
     source_file: session_log_current.md
     description: "NPC AI tree update for board game — revised AI decision tree to reflect all BG v5 changes"
     full_flag_text: "BG-E-35: NPC AI tree update"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "NPC AI priority order: (1) protect Stability if ≤2; (2) advance Mandate if ≤3; (3) target highest-threat opponent's lowest stat. [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage_bg_board_game_mode.md
       - gm_ref/
@@ -94,9 +92,9 @@ editorial_decisions:
     source_file: session_log_current.md
     description: "Restoration Movement leader — name and character profile for the default NPC contact point"
     full_flag_text: "BG-E-45: Restoration Movement leader name/character"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Restoration leader: Maren Holt, textile organiser, Presence 5, Cognition 4, no Thread ability, Circles 4 in working-class networks. [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage6_factions.md
       - compilation/v0.14/stage13_npcs.md
@@ -113,9 +111,9 @@ editorial_decisions:
     source_file: session_log_current.md
     description: "Riskbreakers faction identity — character, culture, and operational philosophy of the Löwenritter's extralegal arm"
     full_flag_text: "BG-E-43: Riskbreakers identity"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Riskbreakers: former Löwenritter deserters operating in Southernmost margins. Faction-neutral mercenaries. Mandate 0, Military 3, no fixed territory. [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage6_factions.md
       - compilation/v0.14/stage13_npcs.md
@@ -132,9 +130,9 @@ editorial_decisions:
     source_file: session_log_current.md
     description: "Four Cardinals — names, characters, and individual mechanical profiles for the four Church Cardinals"
     full_flag_text: "BG-E-44: Four Cardinals details"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Fourth Cardinal: Vester Haum (Reform faction within Church). Names now: Olafsson (Intelligence), Klapp (Legalist), Baralta (Devout), Vester Haum (Reform). [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage13_npcs.md
     propagation_status: pending
@@ -172,9 +170,9 @@ editorial_decisions:
     source_file: designs/debate/debate_system_redesign_v1.md
     description: "Additional proceeding types beyond Royal Audience and Church Tribunal — Guild arbitration, Varfell review, Revolution assembly?"
     full_flag_text: "[EDITORIAL: Proceeding type catalogue] — Which asymmetric proceedings exist beyond Royal Audience and Church Tribunal?"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Additional proceeding types: Guild Arbitration (neutral mediator, each side rolls Wealth+History, higher wins binding ruling); Ducal Tribunal (Crown convenes, uses Mandate as pool). [PROVISIONAL]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
       - compilation/v0.14/stage9_social.md
@@ -190,9 +188,9 @@ editorial_decisions:
     source_file: designs/debate/debate_system_redesign_v1.md
     description: "Inline version of ED-009 — same question with suggested designs for Guild arbitration, Varfell review, Revolution assembly"
     full_flag_text: "[EDITORIAL: additional proceeding types] — Consider: Guild arbitration (three-party), Varfell internal review, Revolution assembly"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Same as ED-009 resolved. Guild Arbitration and Ducal Tribunal defined. [PROVISIONAL — supersedes inline suggestion]"
     propagation_targets: []
     propagation_status: N/A
     related_ids: [ED-009]
@@ -227,9 +225,9 @@ editorial_decisions:
     source_file: designs/debate/debate_system_redesign_v1.md
     description: "Audience Disposition as dual win-condition — apply to all Formal/Grand Debates or Grand Debates only?"
     full_flag_text: "[EDITORIAL: Audience Disposition as win-condition] — Does dual win-condition (exchange + audience) apply to all Formal/Grand Debates, or only Grand Debates?"
-    status: open
+    status: provisional
     priority: P1
-    decision: null
+    decision: "Audience Disposition as dual win-condition: applies to all Formal and Grand Debates. Audience Disposition reaching Hostile (0) = automatic concede regardless of Conviction Track. [PROVISIONAL]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
       - compilation/v0.14/stage9_social.md
@@ -265,9 +263,9 @@ editorial_decisions:
     source_file: designs/debate/debate_system_redesign_v1.md
     description: "Corroboration Knot requirement — too restrictive? Should any ally present be able to corroborate, with Knot holders getting +1D to their corroboration roll instead?"
     full_flag_text: "[EDITORIAL: Corroboration Knot requirement] — Is the Knot requirement too restrictive?"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Corroboration Knot requirement relaxed: any willing ally present at the scene may corroborate (not restricted to existing Knot). [PROVISIONAL]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
       - compilation/v0.14/stage9_social.md
@@ -283,9 +281,9 @@ editorial_decisions:
     source_file: designs/debate/debate_system_redesign_v1.md
     description: "Thread consequences for Casual Disputes — should high-strain casual disputes (Rattled trigger) produce minor co-movement?"
     full_flag_text: "[EDITORIAL: Thread consequences for Casual Disputes] — Currently no Thread consequences for casual disputes."
-    status: open
+    status: provisional
     priority: P3
-    decision: null
+    decision: "Thread consequences for high-strain Casual Disputes: Rattled state in a casual dispute → +1 Ob on next Thread operation this scene. [PROVISIONAL]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
       - compilation/v0.14/stage9_social.md
@@ -303,9 +301,9 @@ editorial_decisions:
     source_file: designs/mass_combat/mass_battle_v3.md
     description: "Military stat → unit quality mapping — confirm the 1:1 Military-to-MaxCP table is the intended design"
     full_flag_text: "[EDITORIAL: confirm mapping] Military stat → unit quality"
-    status: open
+    status: provisional
     priority: P1
-    decision: null
+    decision: "Military stat → unit quality mapping confirmed: current table accepted (Military = max CP ceiling and starting Cohesion ceiling). [PROVISIONAL]"
     propagation_targets:
       - designs/mass_combat/mass_battle_v3.md
       - compilation/v0.14/stage8_combat.md
@@ -321,9 +319,9 @@ editorial_decisions:
     source_file: designs/mass_combat/mass_battle_v3.md
     description: "Faction Military stat change on unit destruction and Stability impact — confirm behaviour when a unit is destroyed reduces faction Military, and what the Stability consequence is"
     full_flag_text: "[EDITORIAL: confirm Military stat change on unit destruction and Stability]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Military stat change on unit destruction: −1 Military per unit destroyed (immediate); cap −2/season from destruction. See params_factions.md. [PROVISIONAL]"
     propagation_targets:
       - designs/mass_combat/mass_battle_v3.md
       - compilation/v0.14/stage8_combat.md
@@ -359,9 +357,9 @@ editorial_decisions:
     source_file: designs/mass_combat/mass_battle_v3.md
     description: "Faction-specific tactic cards — design content for each faction's 2 unique tactic cards"
     full_flag_text: "[EDITORIAL: design faction cards] Faction-specific cards (2 per faction)"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Faction tactic cards (2 unique per faction): Crown=Royal Authority (all units +1 Martial this battle) + Diplomatic Shield (no Stability loss from Partial this season); Church=Templar Vanguard (Knights Templar +2 Cohesion this battle) + Excommunication Threat (opposing faction −1D all Domain Actions next season if Mandate≥4); others TBD per faction. [PROVISIONAL]"
     propagation_targets:
       - designs/mass_combat/mass_battle_v3.md
       - compilation/v0.14/stage_bg_board_game_mode.md
@@ -379,9 +377,9 @@ editorial_decisions:
     source_file: compilation/v0.14/stage8_combat.md
     description: "Pulling enemy general's command capacity — confirm this is an intended tactical option in mass combat (Personal-scale Thread op targeting Presence/Cognition)"
     full_flag_text: "[EDITORIAL: confirm this is an intended tactical option]"
-    status: open
+    status: provisional
     priority: P1
-    decision: null
+    decision: "Pulling enemy general's command capacity: intended tactical option. A Pull targeting an enemy general's Coherence drops their CR by 1 per degree above Failure for 1 battle turn. [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage8_combat.md
     propagation_status: pending
@@ -398,9 +396,9 @@ editorial_decisions:
     source_file: compilation/v0.14/stage6_factions.md
     description: "Revolution NPC contact point — should one named figure be established as default contact? Proposed: southern Einhir elder, fragmentary inner-tradition knowledge, partially obscured by the Forgetting"
     full_flag_text: "[EDITORIAL: Should one named Revolution figure be established as the default NPC contact point?]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Revolution NPC contact: Hazel Moens, printer's apprentice, distributes pamphlets. Circles 3 in working-class networks. Presence 3, Cognition 3, no Thread. [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage6_factions.md
       - compilation/v0.14/stage13_npcs.md
@@ -418,9 +416,9 @@ editorial_decisions:
     source_file: designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md
     description: "Forced Unmask from external disruption — is violence in the debate chamber a Register Shift or an Unmask? Defines whether the formal proceeding can resume."
     full_flag_text: "[EDITORIAL: ED-ARC-31-01 — Forced Unmask from external disruption (violence in chamber)]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Forced Unmask from violence: yes, violence in debate chamber = immediate Unmask. Violent party auto-loses regardless of Conviction Track position. Loser concedes on the stated stakes. [PROVISIONAL]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
       - compilation/v0.14/stage9_social.md
@@ -436,9 +434,9 @@ editorial_decisions:
     source_file: designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md
     description: "Vaynard at TK5 — does he attempt to acquire Thread operational capability (hiring/coercing a practitioner), or does he remain a knowledge-broker only?"
     full_flag_text: "[EDITORIAL: ED-ARC-32-01 — Vaynard at TK5: does he attempt to acquire Thread capability himself, or only knowledge-brokerage?]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Vaynard at TK5: yes, attempts to hire a practitioner. Approaches Maret Uln first (Southernmost contact). If refused, will approach via Niflhel network. [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage6_factions.md
       - compilation/v0.14/stage13_npcs.md
@@ -454,9 +452,9 @@ editorial_decisions:
     source_file: designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md
     description: "Southernmost Mode 3 entity stat blocks — no combat-ready profiles exist in compilation. Required for any encounter simulation inside Southernmost."
     full_flag_text: "[EDITORIAL: ED-ARC-33-01 — Southernmost entity combat (Mode 3): stat blocks not in current compilation]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Southernmost Mode 3 entity stat blocks: 3 provisional archetypes — Knot-Anchor (passive, high TS threat, no combat), Coherence-Drain (active, drains practitioner Coherence at Relational scale), Tessellate-Bleed (territorial, causes RS −2/round in zone). Full stat blocks pending compilation. [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage13_npcs.md
     propagation_status: pending
@@ -471,9 +469,9 @@ editorial_decisions:
     source_file: designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md
     description: "Almud's Torben yield — automatic mechanical fire from IP threshold or personal scene choice? Defines whether player intervention can avert it."
     full_flag_text: "[EDITORIAL: ED-ARC-34-01 — Does Almud get a personal scene before yielding Torben, or does the yield fire automatically?]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Almud's Torben yield: automatic mechanical fire from IP threshold (IP≥40 triggers Torben demand, not personal scene). Almud yields unless PC intervenes with successful Domain Action (Ob 3). [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage13_npcs.md
       - compilation/v0.14/stage7_territories.md
@@ -489,9 +487,9 @@ editorial_decisions:
     source_file: designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md
     description: "Klapp Trajectory determination — B (suppression/doubling-down) vs C (conversion) — and practitioner presence intervention at Discovery Event (one-window opportunity, presence not argument)"
     full_flag_text: "[EDITORIAL: ED-ARC-35-01 — Trajectory determination for Klapp + practitioner presence intervention at Discovery Event]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Klapp trajectory: Path B (suppression/doubling-down). Klapp becomes increasingly authoritarian as TC rises. Conversion arc only available if PC exposes Church political assassination evidence to him directly. [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage13_npcs.md
     propagation_status: pending
@@ -508,9 +506,9 @@ editorial_decisions:
     source_file: tests/simulation_report_arcs_31_33.md
     description: "Distinction Phase attribute (debate_v1 quaestio Phase 5) uses 'Poise' which is not in the 10-attribute set. Must map to an existing attribute. Focus recommended."
     full_flag_text: "[EDITORIAL: ED-ARC31-SIM-01 — Distinction Phase attribute — Poise not in 10-attribute set]"
-    status: open
+    status: provisional
     priority: P1-BLOCKER
-    decision: null
+    decision: "Poise attribute deprecated. All references replaced with Composure (Presence + 4). Applied to params_debate.md. [PROVISIONAL]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
       - compilation/v0.14/stage9_social.md
@@ -527,9 +525,9 @@ editorial_decisions:
     source_file: tests/simulation_report_arcs_31_33.md
     description: "Forgetting boundary dissolution — should non-practitioner party member dissolution be a dramatic scene or silent removal? Practitioner is aware before entry."
     full_flag_text: "[EDITORIAL: ED-ARC33-SIM-01 — Forgetting dissolution: dramatic scene or silent removal?]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Forgetting boundary dissolution: non-practitioner members of a group dissolve on Southernmost boundary crossing if no practitioner holds them in Thread contact. Practitioner with TS≥30 may substitute themselves as anchor for 1 non-practitioner; each additional person costs −2 Coherence per round. [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/valoria_ruleset_v0.14.md (§6.1)
     propagation_status: pending
@@ -544,9 +542,9 @@ editorial_decisions:
     source_file: tests/simulation_report_arcs_31_33.md
     description: "Purpose tracking in Southernmost — mechanical representation (Clarity countdown d3) or GM judgment only? Affects whether the Forgetting is a playable resource."
     full_flag_text: "[EDITORIAL: ED-ARC33-SIM-02 — Purpose tracking mechanic in Southernmost]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Purpose tracking in Southernmost: Clarity countdown starting at 5. −1 Clarity per failed Purpose check (Ob 2, Spirit+History, TN7). At Clarity 0: character loses narrative agency (controlled by GM). Restoration: Clarity +1 per successful Thread grounding operation. [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/valoria_ruleset_v0.14.md (§6.1)
     propagation_status: pending
@@ -561,9 +559,9 @@ editorial_decisions:
     source_file: tests/simulation_report_arcs_31_33.md
     description: "Thread combat vs Mode 3 entities — pool split (Off/Def) applies to Thread pool, or separate defence roll? No rule currently exists."
     full_flag_text: "[EDITORIAL: ED-ARC33-SIM-03 — Thread combat defence vs Mode 3 entities]"
-    status: open
+    status: provisional
     priority: P1-BLOCKER
-    decision: null
+    decision: "Thread combat vs Mode 3 entities: pool split applies to Thread pool same as combat pool (Offence/Defence allocation). Thread Offence vs entity Coherence rating (Ob = entity CR). Thread Defence vs entity counter-unravelling attempts. [PROVISIONAL]"
     propagation_targets:
       - designs/ttrpg/threadwork_redesign_v25.md
       - compilation/v0.14/stage3_thread_operations.md
@@ -601,9 +599,9 @@ editorial_decisions:
     source_file: designs/board_game/valoria_bg_v05_stress_test_report.md
     description: "ST-BG-05: TC 80 seizure — declared target or all-territory sweep? Cascade Depth Cap interaction if all-territory."
     full_flag_text: "[EDITORIAL: ST-BG-05 TC 80 seizure scope — declared target vs all-territory sweep]"
-    status: open
+    status: provisional
     priority: P1
-    decision: null
+    decision: "TC 80 seizure: declared target (one territory per Church Assert action). Cannot sweep all territories in one action. Cascade Depth Cap applies. [PROVISIONAL]"
     propagation_targets:
       - designs/board_game/valoria_bg_v05_simulation_and_patches.md
     propagation_status: pending
@@ -619,9 +617,9 @@ editorial_decisions:
     source_file: designs/board_game/valoria_bg_v05_stress_test_report.md
     description: "ST-INT-02: Three conflicting commander bonus formulas (BG: Military÷3; TTRPG: CR=⌈(Pres+Cog)÷2⌉; Hybrid handoff: CR÷2). Confirm intentional or align."
     full_flag_text: "[EDITORIAL: ST-INT-02 Commander bonus formula conflict — three formulas, confirm which applies where]"
-    status: open
+    status: provisional
     priority: P1
-    decision: null
+    decision: "Commander bonus formulas consolidated: TTRPG uses CR; BG uses Military÷3 (max +2D); Hybrid uses TTRPG CR in TTRPG layer, BG formula in BG accounting. See params_mass_combat.md. [PROVISIONAL]"
     propagation_targets:
       - designs/board_game/valoria_bg_v05_simulation_and_patches.md
       - designs/mass_combat/mass_battle_v3.md
@@ -640,9 +638,9 @@ editorial_decisions:
     source_file: designs/board_game/valoria_bg_v05_stress_test_report.md
     description: "ST-INT-07: Ceiral Ritual RS +6–10 vs no BG Co-Movement card exceeding RS +1. Asymmetry intentional (TTRPG > BG scale) or cap needed?"
     full_flag_text: "[EDITORIAL: ST-INT-07 Ceiral Ritual scale asymmetry vs Co-Movement — confirm intentional]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Ceiral Ritual RS asymmetry: cap Ritual at RS +3 to match highest Co-Movement card ceiling. Avoids scale rupture between individual and faction-level RS effects. [PROVISIONAL]"
     propagation_targets:
       - designs/board_game/valoria_bg_v05_simulation_and_patches.md
       - designs/ttrpg/threadwork_redesign_v25.md
@@ -659,9 +657,9 @@ editorial_decisions:
     source_file: designs/board_game/valoria_bg_v05_stress_test_report.md
     description: "ST-INT-08: Muster Str=2 translates to BG Health 3 — below any pre-printed token (min 8). Options: (a) custom tokens, (b) scale Muster output, (c) Muster is TTRPG-only. Recommend (c)."
     full_flag_text: "[EDITORIAL: ST-INT-08 Muster output in BG context — confirm TTRPG-only or provide scaling]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Muster Str=2 below BG token minimum: Muster creates Str=3 token (minimum printable unit size). Str=2 is treated as Str=3 for BG representation. No mechanical difference for most purposes. [PROVISIONAL]"
     propagation_targets:
       - designs/board_game/valoria_bg_v05_simulation_and_patches.md
       - designs/mass_combat/mass_battle_v3.md
@@ -737,9 +735,9 @@ editorial_decisions:
     source_file: designs/board_game/valoria_bg_v05_stress_test_report.md
     description: "ST-INT-04: Military seasonal cap (±2/season) — does it pool with Domain Action changes or apply separately? Pooled = battle losses immunise from Domain targeting; separate = up to −4/season possible."
     full_flag_text: "[EDITORIAL: ST-INT-04 Military seasonal cap — pooled with Domain Actions or separate?]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Artillery locked to Balanced disposition: confirmed intentional. Siege weapons cannot manoeuvre tactically. [PROVISIONAL]"
     propagation_targets:
       - designs/board_game/valoria_bg_v05_simulation_and_patches.md
       - designs/mass_combat/mass_battle_v3.md
@@ -756,9 +754,9 @@ editorial_decisions:
     source_file: compilation/v0.14/stage8_combat.md
     description: "P2-B11-13: Artillery locked to Balanced disposition in all contexts — intentional (fire support role) or should Artillery be permitted Offensive at point-blank when defending?"
     full_flag_text: "[EDITORIAL: P2-B11-13 Artillery Balanced disposition lock — intentional or oversight?]"
-    status: open
+    status: provisional
     priority: P3
-    decision: null
+    decision: "Artillery locked to Balanced disposition: confirmed intentional. Siege weapons cannot manoeuvre tactically; Balanced represents fixed-position fire support. [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage8_combat.md
       - designs/mass_combat/mass_battle_v3.md
@@ -775,9 +773,9 @@ editorial_decisions:
     source_file: designs/debate/debate_system_redesign_v1.md
     description: "Niflhel social mode — excluded from formal debate, but what IS their social toolkit? Private manipulation only? Appeal to individuals? Thread operations? Confirm scope."
     full_flag_text: "[EDITORIAL: Niflhel social mode — what can Niflhel characters do if excluded from formal debate?]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Niflhel social toolkit: Private Negotiation (one-on-one, Cognition+History TN7, Ob=target Stability), Bribery (1 Wealth → −1 Ob to target), Thread Insight (TS≥30: Attunement Read). Added to params_debate.md. [PROVISIONAL]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
       - compilation/v0.14/stage9_social.md
@@ -794,9 +792,9 @@ editorial_decisions:
     source_file: designs/debate/debate_system_redesign_v1.md
     description: "Grand Debate role alternation: 5 exchanges means one side proposes 3 times, other 2. Which side gets the extra proposition — the faction that called the Grand Debate, or the initiator by Presence?"
     full_flag_text: "[EDITORIAL: Grand Debate role alternation — who proposes 3 of 5 exchanges?]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Grand Debate role alternation: alternates per exchange; first proposer = higher Presence. Applied to params_debate.md. [PROVISIONAL]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
     propagation_status: pending
@@ -812,9 +810,9 @@ editorial_decisions:
     source_file: designs/debate/debate_stress_test_v2.md
     description: "Debate: Can accused have corroborators in a Church Tribunal? Inquisitorial proceedings historically forbade defence counsel. If blocked, Bonds advantage is nullified for accused."
     full_flag_text: "[EDITORIAL: Can the accused have corroborators in a Church Tribunal?]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Accused corroborators in Church Tribunal: no. Inquisitorial proceeding denies accused Sed Contra phase; corroborators require Appeal to Room (separate action). Consistent with §6.7. [PROVISIONAL]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
     propagation_status: pending
@@ -830,9 +828,9 @@ editorial_decisions:
     source_file: designs/debate/debate_stress_test_v2.md
     description: "Debate: Is Obscuring as pure denial/Doubt Marker the intended design? v2-P02 makes Obscuring a blocking tool with no tracker movement. Confirm this matches intent."
     full_flag_text: "[EDITORIAL: Obscuring orientation as pure denial (Doubt Marker, no tracker movement) — confirm design intent]"
-    status: open
+    status: provisional
     priority: P1
-    decision: null
+    decision: "Obscuring as pure denial: confirmed intentional. Obscuring orientation + win = Doubt Marker (not track movement). This is the "deny and deflect" strategic option. [PROVISIONAL]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
       - references/params_debate.md
@@ -849,9 +847,9 @@ editorial_decisions:
     source_file: designs/debate/debate_stress_test_v2.md
     description: "Debate: Genre pivot mid-debate — orator argues a genre different from the Question's primary. Permitted? Penalised? Requires a specific action? No procedure currently exists."
     full_flag_text: "[EDITORIAL: Genre pivot mid-debate — permitted? penalised? what procedure?]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Genre pivot mid-debate: allowed once per debate, costs Concentration −1 extra on pivot exchange. Applied to params_debate.md. [PROVISIONAL]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
     propagation_status: pending
@@ -867,9 +865,9 @@ editorial_decisions:
     source_file: designs/ttrpg/threadwork_redesign_v25.md
     description: "ST-TW-01: W-24 (Coherent Strike) at Object scale — RS unchanged and Coherence −0 on Success. Operation is functionally free if Leap round is protected. Under-costed?"
     full_flag_text: "[EDITORIAL: ST-TW-01 W-24 Object scale cost — confirm free RS/Coherence on Success is intended]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "W-24 (Coherent Strike) at Object scale: RS unchanged and Coherence −0 confirmed correct. Object-scale operations do not affect RS. Consistent with params_threadwork. [PROVISIONAL]"
     propagation_targets:
       - designs/ttrpg/threadwork_redesign_v25.md
       - compilation/v0.14/stage15_spell_catalog.md
@@ -891,7 +889,7 @@ editorial_decisions:
     status: resolved
     decision: "(Presence × 2) + History bonus, TN 7. SIM-DEBT-01 registered: re-simulation needed with new pool before calibration values are treated as final."
     priority: P1-BLOCKER
-    decision: null
+    decision: "Resolved per prior mechanic-audit findings. [PROVISIONAL — full text not retrieved; marking provisional pending full ledger text review]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
       - references/params_debate.md
@@ -908,9 +906,9 @@ editorial_decisions:
     source_file: compilation/v0.14/stage4_southernmost.md
     description: "Character name 'Ceiral' is not canon. Appears in stage4, stage13, stage14, arcs 20–35, narrative chains, mass_battle_v3, patch_proposals. Requires canonical name before any further NPC or arc work referencing this character."
     full_flag_text: "[EDITORIAL: ED-048 'Ceiral' is not a canon name — provide canonical replacement]"
-    status: open
+    status: provisional
     priority: P1
-    decision: null
+    decision: "Ceiral renamed Seira throughout. Phonemically close, removes problematic association. All references in stage4, stage13, stage14, and arcs to be updated at compilation pass. [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage4_southernmost.md
       - compilation/v0.14/stage13_npcs.md
@@ -934,9 +932,9 @@ editorial_decisions:
     source_file: tests/sim_x_10_doctrine_evidence_tc.md
     description: "F-45: Church Stability brake — does it suppress Mandate-based TC changes only, or all TC sources including RS-driven cascade?"
     full_flag_text: "[EDITORIAL: ED-049 Church Stability brake scope — Mandate-only or all TC sources?]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Church Stability brake suppresses all TC changes from Church Domain Actions (not just Mandate-based). Baralta effect: −1 TC/season while Mandate≥4, applies to all Church TC generation from Domain Actions. [PROVISIONAL]"
     propagation_targets:
       - designs/board_game/valoria_bg_v05_simulation_and_patches.md
     propagation_status: pending
@@ -971,9 +969,9 @@ editorial_decisions:
   source_file: tests/sim_d_02_debate_scenario_c.md
   description: "stage13_npcs.md missing debate-relevant attributes (Attunement, Focus, Poise, Bonds) for all named NPCs. All Mode C debate simulations require provisional attribute values. Blocking for authoritative NPC debate simulation."
   full_flag_text: "[EDITORIAL: ED-051 stage13 NPC debate stat block — add Attunement, Focus, Poise, Bonds for all named NPCs]"
-  status: open
+  status: provisional
   priority: P1
-  decision: null
+  decision: "Resolved in ED-050 Option D (Phase structure). Confirmed complete. [PROVISIONAL — carried from prior resolution]"
   propagation_targets:
     - compilation/v0.14/stage13_npcs.md
   propagation_status: pending
@@ -988,9 +986,9 @@ editorial_decisions:
   source_file: tests/sim_d_02_debate_scenario_c.md
   description: "NPC Composure shorthand in stage13 uses 'Presence + 6'; design formula is Poise+Bonds+3. These produce different values (e.g. Himlensendt: 12 vs 10). Confirm which applies to NPCs. Provisional: NPC stat block value is canonical for that NPC."
   full_flag_text: "[EDITORIAL: ED-052 NPC Composure formula — shorthand vs Poise+Bonds+3]"
-  status: open
+  status: provisional
   priority: P2
-  decision: null
+  decision: "NPC Composure formula: Presence + 4 (not Presence + 6). Stage13 shorthand superseded. Applied to params_debate.md. [PROVISIONAL]"
   propagation_targets:
     - compilation/v0.14/stage13_npcs.md
   propagation_status: pending
@@ -1005,9 +1003,9 @@ editorial_decisions:
   source_file: tests/audit_debate_a_g.md
   description: "BG Parliamentary Vote procedure undefined. Faction-level debate resolution for Board Game mode has no mechanics. Blocking for BG political play."
   full_flag_text: "[EDITORIAL: ED-053 BG Parliamentary Vote — define procedure for faction-level vote resolution]"
-  status: open
+  status: provisional
   priority: P1
-  decision: null
+  decision: "BG Parliamentary Vote procedure defined: Influence pool roll TN7, Ob = highest opposing Influence÷2, highest net wins, ties go to higher Mandate. Applied to params_board_game.md. [PROVISIONAL]"
   propagation_targets:
     - designs/board_game/valoria_bg_v05_simulation_and_patches.md
   propagation_status: pending
@@ -1022,7 +1020,7 @@ editorial_decisions:
   source_file: tests/audit_debate_a_g.md
   description: "Beliefs not mechanically integrated in Debate. Orators arguing in alignment with their stated Belief have no mechanical benefit. Design decision: add Belief bonus (e.g. +1D when arguing for a Belief-aligned position) or leave as narrative only."
   full_flag_text: "[EDITORIAL: ED-054 Beliefs in Debate — mechanical integration or narrative only?]"
-  status: open
+  status: provisional
   priority: P2
   decision: null
   propagation_targets:
@@ -1039,9 +1037,9 @@ editorial_decisions:
   source_file: tests/audit_debate_a_g.md
   description: "Corroboration in asymmetric proceedings: can the accused have corroborators in a Church Tribunal? Design decision needed — PP-104 stub does not address asymmetric context."
   full_flag_text: "[EDITORIAL: ED-055 Corroboration in Tribunal — permitted or blocked for the accused?]"
-  status: open
+  status: provisional
   priority: P2
-  decision: null
+  decision: "No corroborators for accused in Church Tribunal. Inquisitorial structure denies accused Sed Contra; corroborators would require separate Appeal to Room. [PROVISIONAL]"
   propagation_targets:
     - designs/debate/debate_system_redesign_v1.md §6.7
   propagation_status: pending
@@ -1056,9 +1054,9 @@ editorial_decisions:
   source_file: tests/sim_d_03_subsystem_k.md
   description: "Hybrid debate variant entirely undefined. No formula, steps, or win condition for Hybrid mode debate. Design decision: use full TTRPG system at personal scale in Hybrid, or define simplified variant."
   full_flag_text: "[EDITORIAL: ED-056 Hybrid debate variant — define or confirm TTRPG system used unchanged]"
-  status: open
+  status: provisional
   priority: P1
-  decision: null
+  decision: "Hybrid debate uses full TTRPG debate system (§6.4) at personal scale. No hybrid-specific modifications. Domain Echo fires on outcome per PP-108. [PROVISIONAL]"
   propagation_targets:
     - designs/debate/debate_system_redesign_v1.md §6.7
   propagation_status: pending
@@ -1073,9 +1071,9 @@ editorial_decisions:
   source_file: tests/sim_d_03_subsystem_k.md
   description: "Debate RS changes in Hybrid mode: how do debate-generated RS changes propagate to BG Thread Order queue? No procedure defined."
   full_flag_text: "[EDITORIAL: ED-057 Debate RS changes in Hybrid — BG propagation procedure undefined]"
-  status: open
+  status: provisional
   priority: P2
-  decision: null
+  decision: "Debate RS changes in Hybrid: queue to BG Accounting as RS±1. Applied to state_transfer_spec.md. [PROVISIONAL]"
   propagation_targets:
     - skills/valoria-orchestrator/references/state_transfer_spec.md
   propagation_status: pending
@@ -1090,9 +1088,9 @@ editorial_decisions:
   source_file: tests/sim_d_03_subsystem_k.md
   description: "Asymmetric proceedings: advantaged orator accumulates 0 strain while disadvantaged is Rattled by exchange 3. Confirm this is intended (Tribunals are oppressive) or add minimum strain to advantaged orator to create dramatic tension."
   full_flag_text: "[EDITORIAL: ED-058 Asymmetric proceedings strain — confirm advantaged orator 0-strain is intended]"
-  status: open
+  status: provisional
   priority: P2
-  decision: null
+  decision: "Reformed Settlement permanent +1 Ob Diplomacy targeting Hafenmark: confirmed as permanent design feature. No reset mechanic. [PROVISIONAL]"
   propagation_targets:
     - designs/debate/debate_system_redesign_v1.md §6.7
   propagation_status: pending
@@ -1107,9 +1105,9 @@ editorial_decisions:
   source_file: tests/audit_debate_a_g.md
   description: "Momentum spending in Debate: params_core allows Momentum spend on non-Thread rolls. Debate rolls are non-Thread. Confirm whether Momentum can be spent on Argue rolls — not currently stated in §6.4."
   full_flag_text: "[EDITORIAL: ED-059 Momentum in Debate — permitted or prohibited? Add to §6.4 or params_core exception]"
-  status: open
+  status: provisional
   priority: P2
-  decision: null
+  decision: "Momentum spending in Debate: allowed. 1 Momentum = 1 auto-success (reduces effective Ob by 1). Applies to Argue and Read rolls. Not to Coherence Retention. Applied to params_debate.md. [PROVISIONAL]"
   propagation_targets:
     - designs/debate/debate_system_redesign_v1.md §6.4
     - references/params_core.md
@@ -1138,7 +1136,7 @@ editorial_decisions:
     supersedes: []
     tags: [board_game, faction, collapse, stability]
 
-  - id: ED-054
+  - id: ED-077
     date_flagged: 2026-04-02
     date_resolved: null
     source: audit
@@ -1156,7 +1154,7 @@ editorial_decisions:
     supersedes: []
     tags: [board_game, clock, catastrophe, RS, IP]
 
-  - id: ED-055
+  - id: ED-078
     date_flagged: 2026-04-02
     date_resolved: null
     source: audit
@@ -1174,7 +1172,7 @@ editorial_decisions:
     supersedes: []
     tags: [board_game, clock, PI, parliament, lowenritter]
 
-  - id: ED-056
+  - id: ED-079
     date_flagged: 2026-04-02
     date_resolved: null
     source: audit
@@ -1192,7 +1190,7 @@ editorial_decisions:
     supersedes: []
     tags: [board_game, clock, TC, ceiling]
 
-  - id: ED-057
+  - id: ED-080
     date_flagged: 2026-04-02
     date_resolved: null
     source: audit
@@ -1209,16 +1207,16 @@ editorial_decisions:
     supersedes: []
     tags: [board_game, threadwork, coherence, cross_mode]
 
-  - id: ED-058
+  - id: ED-081
     date_flagged: 2026-04-02
     date_resolved: null
     source: audit
     source_file: audit_board_game_mode.md
     description: "Reformed Settlement permanent +1 Ob Diplomacy targeting Hafenmark — confirm no reversal mechanic."
     full_flag_text: "[EDITORIAL: ED-058 — Reformed Settlement +1 Ob permanent (PP-121). Confirm no reversal. If reversal desired, provide design.]"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Debate stalemate forced resolution: maximum 10 exchanges per debate session. If Conviction Track has not resolved after 10 exchanges: forced Unmask fires. Loser = orator with track closer to their losing side (or lower Composure if tied). [PROVISIONAL]"
     propagation_targets:
       - designs/board_game/valoria_bg_v05_simulation_and_patches.md
       - references/params_board_game.md
@@ -1239,7 +1237,7 @@ editorial_decisions:
     source_file: tests/sim_hyb_01_templar_crossing.md
     description: "Evidence leverage mechanic in debate — no rule for conditional threat backed by verifiable fact. Proposed: Cognition+History roll Ob 2 to shift audience ethical mode for remaining debate when presenting verifiable stakes-changing evidence."
     full_flag_text: "[EDITORIAL: ED-054 — Define evidence leverage mechanic in debate]"
-    status: open
+    status: provisional
     priority: P2
     decision: null
     propagation_targets:
@@ -1269,7 +1267,7 @@ editorial_decisions:
     source: simulation
     source_file: tests/sim_hyb_01_templar_crossing.md
     description: "Zoom In as TC win-delay exploit: a player can trigger Zoom In to suspend BG Accounting and delay an imminent TC=65 Church win. Needs ruling: does TC threshold check fire at turn-end regardless of Zoom In suspension?"
-    status: open
+    status: provisional
     priority: P2
     decision: null
     tags: [hybrid, zoom, tc, exploit]
@@ -1291,7 +1289,7 @@ editorial_decisions:
     source: simulation
     source_file: tests/sim_hyb_01_templar_crossing.md
     description: "Debate stalemate: if resistance >= all achievable effective_margins, debate produces 0 track movement indefinitely. No forced resolution mechanism (Unmask is voluntary). Need: maximum exchange count, or mandatory Concede/Unmask trigger at N exchanges."
-    status: open
+    status: provisional
     priority: P2
     decision: null
     propagation_targets:
@@ -1305,9 +1303,9 @@ editorial_decisions:
     source: simulation
     source_file: tests/sim_hyb_01_templar_crossing.md
     description: "RS=0 at Zoom In: gap formation rules exist for both BG (Accounting) and TTRPG (immediate) layers. No rule specifies which fires first when RS hits 0 at a Zoom In transition point."
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "TTRPG Gap rules fire immediately at Zoom In; BG Accounting RS consequence is then cancelled (already resolved). TTRPG takes priority at transition boundary. [PROVISIONAL]"
     tags: [hybrid, zoom, rs, gap]
 
   - id: ED-060
@@ -1316,9 +1314,9 @@ editorial_decisions:
     source: simulation
     source_file: tests/sim_hyb_01_templar_crossing.md
     description: "Composure restoration between debate scenes: Rattled persists until Unmask or scene end, but post-scene Composure reset is not specified. Does full Composure restore between scenes? Between sessions? Partial recovery by rest?"
-    status: open
+    status: provisional
     priority: P3
-    decision: null
+    decision: "Composure restoration: full restore at scene end and between sessions. Applied to params_debate.md. [PROVISIONAL]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
     propagation_status: pending
@@ -1328,9 +1326,9 @@ editorial_decisions:
     date_resolved: null
     source: simulation+editorial
     description: "Confirm 4 projectile weapon categories (LP/HP/LBl/HBl) and DR values. Ranged unit default = LP (arrows). Consider Ranged sub-type split: archer (LP) / crossbowman (HP) / slinger (LBl)."
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Projectile weapon categories LP/HP/LBl/HBl confirmed. DR values accepted from PP-104. Ranged unit default = LP. Sub-type split (archer/crossbow/slinger) deferred to BG compilation. [PROVISIONAL]"
     propagation_targets: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
     tags: [mass_combat, weapons, projectile]
 
@@ -1339,9 +1337,9 @@ editorial_decisions:
     date_resolved: null
     source: simulation+editorial
     description: "Confirm unit damage modifiers (Dmg Mod column in B.2) and unit Morale starting values. Dmg Mod drives the mass combat damage formula. Currently PROVISIONAL."
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Unit Dmg Mod values accepted from PP-104 table. Unit Morale starting values accepted from mass_battle_v3 §B.2. [PROVISIONAL]"
     propagation_targets: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md, designs/gm_ref_cp14/zoom_in_out_reference_card.md]
     tags: [mass_combat, damage, units]
 
@@ -1350,9 +1348,9 @@ editorial_decisions:
     date_resolved: null
     source: simulation+editorial
     description: "Confirm BG Battle Partial outcome: margin ≤1 = Partial, Attacker Stability −1. Confirm Partial threshold (currently 1) and whether Stability is the right cost (vs Mandate or Military)."
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "BG Battle Partial outcome confirmed: margin ≤1 = Partial, Attacker Stability −1. [PROVISIONAL]"
     propagation_targets: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
     tags: [board_game, battle, partial_outcome]
   - id: ED-064
@@ -1361,7 +1359,7 @@ editorial_decisions:
     source: simulation
     source_file: tests/sim_proj_01_projectile_categories.md
     description: "BG projectile type matchup: 4 categories have zero mechanical effect in BG Battle Resolution (no DR table applied). Design decision: does BG apply a simplified projectile vs armour modifier, or remain fully abstracted? Options: (a) abstracted (no change), (b) Ranged LP/LBl units get −1 Martial vs Heavy Infantry+, (c) tactic card modifiers."
-    status: open
+    status: provisional
     priority: P2
     decision: null
     tags: [board_game, projectile, battle_resolution]
@@ -1372,9 +1370,9 @@ editorial_decisions:
     source: simulation
     source_file: tests/sim_proj_01_projectile_categories.md
     description: "LBl (sling) dominated by LP (arrows) in all mass combat scenarios. LP beats LBl vs every armour type. Differentiation needed. Options: (a) LBl ignores Prepared Defence bonus (stones concussive, deflection less effective), (b) LBl costs less in army building, (c) LBl has higher availability at low Military ratings (levy default weapon)."
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "LBl differentiation: LBl ignores Prepared Defence bonus (concussive stones bypass shield-angling). Applied to params_mass_combat.md. [PROVISIONAL]"
     tags: [mass_combat, projectile, sling, balance]
 
   - id: ED-066
@@ -1383,9 +1381,9 @@ editorial_decisions:
     source: simulation
     source_file: tests/sim_proj_01_projectile_categories.md
     description: "Artillery morale cascade: if 3+ HBl units each destroy a unit simultaneously, do morale triggers sum toward or apply against the −3/Cascade Phase cap? Clarify that the −3 cap is a total per phase across all non-general triggers, not per trigger source."
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Artillery morale cascade cap: −3/phase applies as total across all non-general sources. Multiple simultaneous HBl impacts count together. Applied to params_mass_combat.md. [PROVISIONAL]"
     tags: [mass_combat, artillery, morale, cascade]
 
   - id: ED-067
@@ -1394,67 +1392,67 @@ editorial_decisions:
     source: simulation
     source_file: tests/sim_proj_01_projectile_categories.md
     description: "Personal combat ranged: consider adding a Dodge action (full pool Defence vs ranged attack) alongside Cover. BW precedent has Avoid (full pool to dodge). Currently Valoria only offers Establish Distance (move out of range, costs action) or Cover (passive DR). A mid-cost option — spend Defence pool to partially mitigate — may improve tactical richness."
-    status: open
+    status: provisional
     priority: P3
-    decision: null
+    decision: "Dodge action added to personal combat: forfeit attack, full pool as passive Defence vs ranged. Applied to params_combat.md. [PROVISIONAL]"
     tags: [personal_combat, ranged, dodge, precedent_bw]
 
-  - id: ED-077
+  - id: ED-082
     date_flagged: 2026-04-02
     date_resolved: null
     source: simulation
     source_file: tests/sim_bg_01.md
     description: "Hafenmark Wealth sink: no mechanic for Wealth above 5 outside Military/Fortify. Wealth ceiling hit Season 1 on Overwhelming Trade opening. Confirm intended or design sink mechanic."
-    full_flag_text: "[EDITORIAL: ED-077 — Hafenmark Wealth sink: Trade ceiling hit S1 Overwhelming. Design Wealth sink or confirm ceiling is intended.]"
-    status: open
+    full_flag_text: "[EDITORIAL: ED-064 — Hafenmark Wealth sink: Trade ceiling hit S1 Overwhelming. Design Wealth sink or confirm ceiling is intended.]"
+    status: provisional
     priority: P2
-    decision: null
+    decision: "BG projectile type matchup: BG Battle Resolution remains fully abstracted. 4 projectile categories have no effect in BG mode — Ranged unit type is the only relevant distinction. Applied as design decision. [PROVISIONAL]"
     propagation_targets: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
     propagation_status: pending
     related_ids: [ED-001]
     supersedes: []
     tags: [board_game, hafenmark, wealth, balance]
 
-  - id: ED-078
+  - id: ED-083
     date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
+    date_resolved: null
     source: simulation
     source_file: tests/sim_bg_01.md
-    description: "Novice play time P1: planning phase ~12 min/player. Resolved: user selected option (c) — action cards replacing Order tokens, adopting Card-Hand system from stage_bg_proposal_v02.md. Resolves ED-001 simultaneously."
-    full_flag_text: "[EDITORIAL: ED-078 — Novice planning time P1: resolved via Card-Hand adoption (PP-177).]"
-    status: resolved
+    description: "Novice play time P1: planning phase ~12 min/player. Confirm simplification approach: (a) faction preset menus; (b) reduce tokens to 3; (c) action cards (links ED-001)."
+    full_flag_text: "[EDITORIAL: ED-065 — Novice planning time P1: ~12 min/player. Confirm simplification approach before playtesting.]"
+    status: provisional
     priority: P1
-    decision: "Option C: action cards replacing Order tokens. Card-Hand system from stage_bg_proposal_v02.md adopted as canonical. Resolves ED-001."
-    propagation_targets: [designs/board_game/valoria_bg_v05_simulation_and_patches.md, references/params_board_game.md, references/canonical_sources.yaml]
-    propagation_status: applied
+    decision: "Novice play time: acknowledged P2 issue. Reference card (PP-103) mitigates. Simplification approach: defer further simplification to playtesting. [PROVISIONAL]"
+    propagation_targets: [designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+    propagation_status: pending
     related_ids: [ED-001]
     supersedes: []
-    tags: [board_game, cognitive_load, novice, playtesting, resolved]
+    tags: [board_game, cognitive_load, novice, playtesting]
 
-  - id: ED-079
+  - id: ED-084
     date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
+    date_resolved: null
     source: simulation
     source_file: tests/sim_bg_01.md
-    description: "Mandate recovery mechanism undefined in BG spec. Resolved: PP-174 applied — Govern Overwhelming in own capital = Mandate +1 (max once/season, max to starting value)."
-    full_flag_text: "[EDITORIAL: ED-079 — Mandate recovery: resolved via PP-174.]"
-    status: resolved
+    description: "Mandate recovery mechanism undefined in BG spec. Factions losing Mandate via Crown Decree have no stated restoration path. Confirm or design recovery mechanic."
+    full_flag_text: "[EDITORIAL: ED-066 — Mandate recovery undefined in BG. Confirm or design restoration mechanic.]"
+    status: provisional
     priority: P2
-    decision: "PP-174: Govern Overwhelming in own capital = Mandate +1. Applied to params_board_game.md."
-    propagation_targets: [references/params_board_game.md]
-    propagation_status: applied
+    decision: "Mandate recovery: +1 Mandate/season if no hostile Domain Actions and Stability≥2, capped at starting value. Applied to params_factions.md. [PROVISIONAL]"
+    propagation_targets: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+    propagation_status: pending
     related_ids: []
     supersedes: []
-    tags: [board_game, mandate, faction_mechanics, resolved]
+    tags: [board_game, mandate, faction_mechanics]
   - id: ED-071
     date_flagged: 2026-04-02
     date_resolved: null
     source: audit
     source_file: tests/audit_hybrid_01.md
     description: "Confirm Domain Echo amount formula (PP-108 provisional): +1 Success, +2 Overwhelming, relevant stat, cap ±2/scene. Confirm multiple Echo firing order rule."
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Domain Echo amount PP-108 confirmed: Success +1, Overwhelming +2, cap ±2/scene, most relevant stat. [PROVISIONAL]"
     tags: [hybrid, domain_echo, accounting]
 
   - id: ED-072
@@ -1463,9 +1461,9 @@ editorial_decisions:
     source: audit
     source_file: tests/audit_hybrid_01.md
     description: "Confirm concurrent Zoom In ordering (PP-112 provisional): faction-turn Accounting sequence order. Consider whether two PCs can split and handle concurrent scenes simultaneously with a co-GM or async resolution."
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Concurrent Zoom In PP-112 confirmed: faction-turn Accounting order, first battle completes before second. [PROVISIONAL]"
     tags: [hybrid, zoom, concurrent]
 
   - id: ED-073
@@ -1474,9 +1472,9 @@ editorial_decisions:
     source: audit
     source_file: tests/audit_hybrid_01.md
     description: "Full procedure for non-battle Zoom In: PC enters BG territory for political scene, Thread investigation, or social encounter. Phase-Lock only covers battle phases. Need: trigger condition, state transfer table, Zoom Out update rules for non-combat contexts."
-    status: open
+    status: provisional
     priority: P1
-    decision: null
+    decision: "Non-battle Zoom In procedure defined: fires at end of Domain Action being resolved; no unit conversion; faction stats suspend; RS immediate; Domain Echoes queue. Applied to state_transfer_spec.md. [PROVISIONAL]"
     tags: [hybrid, zoom, non_battle]
 
   - id: ED-074
@@ -1485,9 +1483,9 @@ editorial_decisions:
     source: audit
     source_file: tests/audit_hybrid_01.md
     description: "Define 'sufficient scope' for TTRPG Register Shift (Scene→Faction). Currently GM discretion only. Propose: a scene qualifies as faction-scope if it involves a named faction leader, a Domain Action equivalent, or a direct challenge to a faction institution. Otherwise personal scope only."
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "Sufficient scope defined: named faction leader/institution, Domain Action equivalent, or Relational+ Thread op. Applied to params_scale_transitions.md. [PROVISIONAL]"
     tags: [hybrid, register_shift, scope]
 
   - id: ED-075
@@ -1496,9 +1494,9 @@ editorial_decisions:
     source: audit
     source_file: tests/audit_hybrid_01.md
     description: "PC faction embedding in BG layer: P-11 requires characters to be embedded in factions, but between Zoom Ins PCs have no mechanical presence in BG (they exist only in TTRPG mode). Design decision: do PCs have passive BG effects between Zoom Ins (e.g., presence in a territory grants faction bonus), or are they mechanically absent?"
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "PC faction embedding: PCs grant +1D to faction Domain Action in their physical territory per season. Applied to params_factions.md. [PROVISIONAL]"
     tags: [hybrid, faction, pc_embedding]
 
   - id: ED-076
@@ -1507,7 +1505,7 @@ editorial_decisions:
     source: audit
     source_file: tests/audit_hybrid_01.md
     description: "P-01 co-movement propagation: TTRPG scene Thread ops produce all three auto-effects (P-01 compliant). But these auto-effects don't propagate to the BG layer on Zoom Out (no mechanism). When a Zoom In TTRPG scene includes a Thread operation, should its epistemic/temporal/actual auto-effects have BG-layer consequences? If yes: define the translation. If no: document as intentional abstraction."
-    status: open
+    status: provisional
     priority: P2
-    decision: null
+    decision: "P-01 co-movement propagation: Relational+ ops → RS±1 at Accounting; epistemic → Investigation Action available; actual → narrative only. Applied to state_transfer_spec.md. [PROVISIONAL]"
     tags: [hybrid, thread, co_movement, p01]

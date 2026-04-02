@@ -1,4 +1,4 @@
-<!-- version: v0.14+design-ST3 | sources: debate_system_redesign_v1.md Part 6 v1.5 | last_updated: 2026-04-02 -->
+<!-- version: v0.14+design-ST4 | sources: debate_system_redesign_v1.md Part 6 v1.5 | last_updated: 2026-04-02 -->
 <!-- NEW SECTIONS: §6.11 Pre-Debate Prep, §6.12 Multi-Party, §6.13 BG Vote, §6.14 Hybrid, §6.15 Thread -->
 <!-- GAP-DS-01/02/03/04/05/06/07/08/16/17/18/19 all resolved in v1.4/v1.5 -->
 <!-- SIM-DEBT-02: Corroboration in CLASH calibration pending -->
@@ -104,6 +104,34 @@ Ends: when Conviction exits compromise zone or Composure concession fires.
 
 ## Multi-Party Debates
 [GAP: multi-party procedure not yet defined — design_v1.md F-5 identifies this as a structural gap.]
+
+## Composure Restoration (ED-060 resolved — provisional)
+Full Composure restores at scene end. Between-session: full restore. No partial recovery mechanic. [PROVISIONAL]
+
+## Momentum in Debate (ED-059 resolved — provisional)
+Momentum may be spent in Debate rolls (1 Momentum = 1 automatic success, reduces effective Ob by 1). Applies to Argue and Read rolls. Does not apply to Coherence Retention rolls. [PROVISIONAL]
+
+## Genre Pivot Mid-Debate (ED-045 resolved — provisional)
+An orator may pivot their primary genre once per debate (not per exchange). Costs Concentration −1 extra on the exchange of the pivot. Must be declared during Choose step. [PROVISIONAL]
+
+## Grand Debate Role Alternation (ED-042 resolved — provisional)
+Proposer role alternates per exchange. First proposer: higher Presence (ties: initiative holder). Alternation is independent of initiative transfer. [PROVISIONAL — PP-100 applies to §6.7 separately]
+
+## Niflhel Social Toolkit (ED-041 resolved — provisional)
+Niflhel cannot participate in Formal or Grand Debates. Their social toolkit:
+- Private Negotiation: one-on-one only; uses Cognition + History, TN 7, Ob = target's Stability.
+- Bribery: spend 1 Wealth token; target takes −1 Ob on next roll toward Niflhel interests.
+- Thread Insight (TS≥30 only): Attunement Read before negotiation; reveals one unstated position.
+[PROVISIONAL — ED-041]
+
+## Poise Attribute (ED-027 resolved — provisional)
+'Poise' is deprecated. All references to Poise in debate mechanics use Composure (derived: Presence + 4, range 5–11). [PROVISIONAL]
+
+## NPC Composure Formula (ED-052 resolved — provisional)
+NPC Composure = Presence + 4. Prior shorthand "Presence + 6" is superseded. [PROVISIONAL]
+
+## Debate Corroboration — Asymmetric Proceedings (ED-055b resolved — provisional)
+Accused in Church Tribunal (Inquisitorial proceeding) may not have corroborators. The Inquisitor controls the proceeding structure. Accused may only: Object (Phase 2) and Distinction (Phase 5). [PROVISIONAL — consistent with §6.7]
 
 <!-- patch_history: references/params_debate_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->

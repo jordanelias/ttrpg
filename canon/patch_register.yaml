@@ -1645,13 +1645,21 @@ patches:
   status: applied
   applied_commit: pending
 
-- id: PP-177
+- id: PP-171
   date: 2026-04-02
-  severity: P1
-  description: "Card-Hand action economy adopted from stage_bg_proposal_v02.md B4. Replaces Order token system. Resolves ED-001 (P1-BLOCKER) and ED-078 (novice play time). Extracted to params_board_game.md."
-  finding_id: "ED-001 / ED-078 / BAL-BG-01-F-03"
+  severity: P2
+  description: "Bulk editorial resolution: 70+ open editorial items marked provisional with decisions. Mechanical patches applied to params_debate (Composure restore, Niflhel toolkit, Genre pivot, Grand Debate alternation, Momentum, Poise→Composure, NPC formula), params_factions (Mandate recovery, Hafenmark Wealth sink, Military destruction cap, Institutional Mandate trigger, PC embedding), params_mass_combat (LBl Prepared Defence exception, Artillery cascade cap, commander formula, Volley TN), params_combat (Dodge action), params_board_game (Parliamentary Vote, Card-Hand provisional, TC win-delay rule), state_transfer_spec (TC win-delay, non-battle Zoom In, P-01 propagation), params_scale_transitions (sufficient scope). Duplicate IDs ED-054/055/056/057/058/064/065/066 renumbered to ED-077/078/079/080/081/082/083/084."
+  finding_id: "AUDIT-HYBRID-01 + all prior sessions"
   source: editorial
-  affects: [references/params_board_game.md, references/canonical_sources.yaml, canon/editorial_ledger.yaml]
-  applied_to_version: "v0.5.3"
+  affects:
+    - references/params_debate.md
+    - references/params_factions.md
+    - references/params_mass_combat.md
+    - references/params_combat.md
+    - references/params_board_game.md
+    - skills/valoria-orchestrator/references/state_transfer_spec.md
+    - references/params_scale_transitions.md
+    - canon/editorial_ledger.yaml
+  applied_to_version: "v0.14 + all ST patches"
   status: applied
   applied_commit: pending

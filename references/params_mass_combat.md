@@ -193,3 +193,19 @@ Margin = |attacker net − defender net|.
 
 <!-- patch_history: references/params_mass_combat_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
+## LBl (Sling) — Prepared Defence Exception (ED-065 resolved — provisional)
+LBl (sling) attacks ignore the Prepared Defence bonus (+0 DR from Prepared Defence when targeted by LBl). Sling stones are concussive/indirect and bypass shield-angling. LP, HP, HBl: Prepared Defence applies normally. [PROVISIONAL]
+
+## Artillery Morale Cascade Cap (ED-066 resolved — provisional)
+The −3 Morale cap per Cascade Phase applies as a total across all non-general sources. Multiple simultaneous HBl artillery impacts count together toward the −3 cap, not separately. Example: 3 Artillery units each destroy a unit → triggers 3× −1 Morale → capped at −3 total, not −3 each. [PROVISIONAL]
+
+## Commander Bonus Formulas — Consolidated (ED-033 resolved — provisional)
+| Context | Formula | Notes |
+|---------|---------|-------|
+| TTRPG mass combat | CR = ⌈(Presence + Cognition) ÷ 2⌉ | Per params_mass_combat |
+| BG battle resolution | Commander bonus = faction Military ÷ 3, round down (max +2D) | Per §B.3 |
+| Hybrid Zoom In | Use TTRPG CR for TTRPG-layer actions; BG commander bonus for BG-layer accounting | No conversion between them |
+[PROVISIONAL]
+
+## Volley TN (ED-037 resolved — provisional)
+Volley phase uses TN 6 (not TN 7). Rationale: ranged advantage before armour engagement; represents favourable conditions (distance, preparation). [PROVISIONAL — confirmed from prior provisional]

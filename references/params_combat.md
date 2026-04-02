@@ -105,7 +105,9 @@ Wound Ob penalty: +1 Ob per wound (all rolls). Incapacitated: Stage 1 (down) or 
 | 8+ | +5 |
 
 ## Actions Summary
-Strike / Establish Distance / Feint / Take a Breath / Full Guard / Disarm / Retrieve Weapon / Reload (HP crossbow only — forfeit attack this round) / Out of Breath (forced at Stamina 0)
+Strike / Establish Distance / Feint / Take a Breath / Full Guard / Disarm / Retrieve Weapon / Reload (HP crossbow only) / **Dodge** (ranged only — forfeit attack; allocate full pool as passive Defence vs incoming ranged attack this round; armour DR still applies) / Out of Breath (forced at Stamina 0)
+
+**Dodge (ED-067 resolved — provisional):** Defender may Dodge a ranged attack instead of being unable to respond. Full pool = passive Defence dice vs attacker's Offence. Cover DR still applies additionally. Costs the defender's full combat action this round. [PROVISIONAL]
 
 ## Stamina Minimum (PP-165)
 Stamina minimum: **1**. If Endurance + History + 1 − armour modifier ≤ 0, Stamina = 1.

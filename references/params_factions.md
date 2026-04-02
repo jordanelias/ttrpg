@@ -161,4 +161,33 @@ No standard Unique Action roll — Löwenritter action is triggered by Coup Coun
 - Crown loses 2+ territories in one season without a military response Domain Action
 Counter never decrements. Fires at next seasonal accounting once at 3.
 **Martial Law effects:** All non-Military Domain Actions in Crown territories require secondary Military check (Löwenritter Military pool, TN 7, Ob 2); failure blocks the action. Persists until players remove it (Influence vs Ob = Löwenritter Military ÷ 2, round up, min Ob 3) or Theocracy Counter drops below 40.
+## Mandate Recovery (ED-066b resolved — provisional)
+Factions with Mandate < starting value recover +1 Mandate/season when:
+- No hostile Domain Action targeting that faction this season
+- Stability ≥ 2
+Cap: cannot recover above starting Mandate value via this mechanic. [PROVISIONAL]
 
+## Hafenmark Wealth Sink (ED-064b resolved — provisional)
+Wealth above 5 may be spent as bonus dice on trade-adjacent Domain Actions:
+- 1 Wealth token → +1D on Trade or Diplomacy Domain Action (max +2D per action)
+- Token is consumed on spend
+[PROVISIONAL]
+
+## Military Stat Change on Unit Destruction (ED-017 resolved — provisional)
+When a unit is destroyed in TTRPG mass combat: Faction Military −1 (immediate). Cap: −2 per season from destruction. [PROVISIONAL]
+
+## Military Seasonal Cap (ED-039 resolved — provisional)
+Military stat cap: ±2/season from all Domain Actions combined. Hard cap = faction Military rating (cannot exceed starting value +1 via Domain Actions alone). [PROVISIONAL]
+
+## Institutional Mandate Trigger (ED-003 resolved — provisional)
+Institutional Mandate fires when:
+- Faction Mandate ≥ 4, AND
+- A Domain Action directly challenges the faction's core institutional authority:
+  Crown: sovereignty or legal authority; Church: spiritual authority or excommunication power;
+  Guilds: trade monopoly or taxation; Hafenmark: guild autonomy; Varfell: territorial governance;
+  Restoration: community organizing; Löwenritter: military authority.
+[PROVISIONAL]
+
+## PC Faction Embedding — BG Layer (ED-075 resolved — provisional)
+PCs are always mechanically present in their primary faction between Zoom Ins.
+Effect: the PC's faction gains +1D on one Domain Action per season in territories the PC is physically located in (narrative confirmation required). [PROVISIONAL]
