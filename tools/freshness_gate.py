@@ -152,8 +152,11 @@ def run_check(system_filter=None):
         if sys_idx < 0:
             print(f"[ERROR] System '{system_filter}' not found in canonical_sources.yaml")
             sys.exit(1)
-        next_sys_idx = content.find("\n  ", sys_idx + len(system_filter) + 3)
-        block = content[sys_idx: next_sys_idx if next_sys_idx > 0 else len(content)]
+        # Find where the next top-level system key begins (two-space indent + word + colon)
+        remaining = content[sys_idx + len(system_filter) + 3:]
+        next_sys = re.search(r'\n  \w[^:\n]+:', remaining)
+        end_idx = sys_idx + len(system_filter) + 3 + next_sys.start() if next_sys else len(content)
+        block = content[sys_idx:end_idx]
         pairs = parse_canonical_pairs(block)
     else:
         pairs = parse_canonical_pairs(content)
