@@ -126,7 +126,7 @@ Weapon Effectiveness:
 | Heavy | 7 | 5 | 6 | 2 |
 
 LP = Light Pierce (arrows). HP = Heavy Pierce (bolts). LBl = Light Blunt (sling). HBl = Heavy Blunt Siege.
-[PROVISIONAL — ED-061: confirm DR values and sub-category definitions]
+*[PP-196 — confirmed: LP/HP vs None=0 is correct (net hits only, no DR reduction needed); LBl vs Light=2 reflects blunt trauma advantage vs light armour]*
 
 ### Weapon Effectiveness (combined)
 | Attacker | vs None | vs Light | vs Medium | vs Heavy |
@@ -194,7 +194,7 @@ Default: ½ pool to Offence (round down), remainder Defence. [PROVISIONAL]
 
 ### Damage Formula — unit Strength loss (PARAMS-GAP-05 resolved)
 Strength loss = max(0, net hits + Dmg Mod − DR)
-Dmg Mod from unit table below. [PROVISIONAL — ED-062: confirm values]
+Dmg Mod from unit table below. *[PP-194 — confirmed]*
 
 | Unit | Weapon | Dmg Mod |
 |------|--------|---------|
@@ -256,3 +256,24 @@ The −3 Morale cap per Cascade Phase applies as a total across all non-general 
 
 ## Volley TN (ED-037 resolved — provisional)
 Volley phase uses TN 6 (not TN 7). Rationale: ranged advantage before armour engagement; represents favourable conditions (distance, preparation). [PROVISIONAL — confirmed from prior provisional]
+## Commander Bonus (PP-190)
+Formula: faction Military ÷ 3, round down. Min 0, max +2D. Applies to all modes (TTRPG mass combat, Hybrid, BG).
+## Altonian Invasion Units (PP-193 — provisional, ED-036)
+Generated from Altonian Military ~5 (foreign professional standing army; above Crown/Church 4).
+[PROVISIONAL: pending ED-036 editorial confirmation]
+
+| Unit Type | Strength | CP | Cohesion | Morale | Armour | Weapon | Dmg Mod |
+|-----------|----------|----|----------|--------|--------|--------|---------|
+| Altonian Heavy Infantry | 4 | 3 | 5 | 5 | Heavy | HeavyCut | +4 |
+| Altonian Cavalry | 3 | 4 | 4 | 6 | Medium | HeavyCut | +5 |
+| Altonian Crossbow | 3 | 2 | 4 | 4 | Light | HP | +0/+2 vs med+heavy |
+| Altonian Artillery | 2 | 2 | 3 | 4 | None | HBl | +3 |
+
+Commander bonus: Military 5 → +1D (5÷3=1, round down).
+Deployment trigger: Institutional Pressure ≥ 75 (CLOCK-EDIT-01).
+## LBl vs LP Dominance (PP-197 — ED-065 resolved)
+LBl (sling) outperforms LP (arrows) only vs Light armour (+2 vs +1). LP equals or exceeds LBl at Medium and Heavy. Distinction is intentional: slings = anti-light-infantry; bows = anti-armoured. No change needed.
+## BG Thread Operations (PP-200 — ED-080)
+BG mode: Thread operations (Phase 4 Offensive, Phase 6 Support) are always skipped. No Coherence cost applies in BG — Thread ops do not occur at board scale. This is intentional (P-01: Thread operates below BG abstraction layer). Resolves ED-080.
+## Planning Phase Time (PP-202 — ED-083)
+Finding from bg_v05 simulation: Phase 1 planning ~8 min/player with reference cards; ~12-15 min without. Recommendation: pre-assign Seasonal Priority order on faction reference cards to reduce deliberation. No mechanical change required.

@@ -527,7 +527,7 @@ Varfell VTM 3 is in T9 (adjacent to T3). Trajectory Choice condition met.
 - Church gains limited Thread access: one Senate Market Pontifex/season.
 - **This is an institutional tipping point.** Church just enabled the very thing it has been suppressing.
 - Downstream: Riskbreaker Priority 3 fires next season (Theocracy Counter 36 > 50? No — Theocracy Counter 36 < 50, so Riskbreaker Priority 3 condition not met). Riskbreakers do not respond.
-- Varfell: Tribune Outward in T3 (Spy): Influence 4 + VTM 4 (Casus Belli Ob −1 not applicable here) vs Ob 2. Roll 4d10: 10, 8, 2, 5 → 2+1 = 3 net. Overwhelming. Varfell learns of Trajectory C. Klapp's Awakening Milestone fires: **Restoration + Varfell may now collaborate on Ceiral Ritual research at Warden Cooperation 2 instead of 3.**
+- Varfell: Tribune Outward in T3 (Spy): Influence 4 + VTM 4 (Casus Belli Ob −1 not applicable here) vs Ob 2. Roll 4d10: 10, 8, 2, 5 → 2+1 = 3 net. Overwhelming. Varfell learns of Trajectory C. Klapp's Awakening Milestone fires: **Restoration + Varfell may now collaborate on [NAME-PENDING: ED-048] Ritual research at Warden Cooperation 2 instead of 3.**
 
 **EMERGENT CONCLUSION:** Trajectory C creates a two-faction alliance (Varfell-Restoration + covertly-aligned Church) that the ruleset rewards. The Klapp event card is excellently designed — all three trajectories are narratively coherent and mechanically distinctive. The branching paths produce genuinely different game states.
 

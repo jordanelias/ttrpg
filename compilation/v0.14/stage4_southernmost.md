@@ -63,9 +63,9 @@ Awareness represents the faction's institutional understanding of the Southernmo
 | Varfell | 2 | Road into the Southernmost; Maret Uln's presence |
 | People's Revolution (Non-Player Character) | 3 | Highest Awareness of any Non-Player Character faction; ideological interest in the pre-Church world |
 
-**Awareness floor**: Each faction has a permanent Awareness floor equal to the number of primary Einhir texts it holds. A faction holding the Ceiral Text cannot have Awareness drop below 1 while retaining that text, because the text itself preserves some comprehension independent of active research.
+**Awareness floor**: Each faction has a permanent Awareness floor equal to the number of primary Einhir texts it holds. A faction holding the [NAME-PENDING: ED-048] Text cannot have Awareness drop below 1 while retaining that text, because the text itself preserves some comprehension independent of active research.
 
-**Ceiral Ritual penalty**: Ceiral Ritual attempted without Awareness 5+: +2 Ob.
+**[NAME-PENDING: ED-048] Ritual penalty**: [NAME-PENDING: ED-048] Ritual attempted without Awareness 5+: +2 Ob.
 
 ---
 
@@ -107,7 +107,7 @@ If the military escort routes (Cohesion 0) or all practitioners are incapacitate
 
 ### Expedition Success Indicators
 
-- **Diagnosis complete**: The Southernmost's Thread signature is understood by at least one practitioner. This is the prerequisite for any Extraordinary Repair Weaving or Ceiral Ritual attempt — the practitioners must understand what they are working on.
+- **Diagnosis complete**: The Southernmost's Thread signature is understood by at least one practitioner. This is the prerequisite for any Extraordinary Repair Weaving or [NAME-PENDING: ED-048] Ritual attempt — the practitioners must understand what they are working on.
 - **Awareness gain**: Successful expedition Diagnosis: +1 Southernmost Awareness for the faction (applied at seasonal accounting).
 - **Research access**: After successful expedition reaching the primary site, a practitioner officer with Thread Sensitivity 50+ may take Research actions in the Locked Zones in subsequent seasons (see §6.6).
 
@@ -127,13 +127,13 @@ Encounters fire once per zone during Exploration (Season 2). The Game Master sel
 
 ---
 
-## 6.5 The Ceiral Ritual
+## 6.5 The [NAME-PENDING: ED-048] Ritual
 
-The Ceiral Ritual is the canonical method for stabilising the Southernmost's wound. It requires specific knowledge (the Ceiral Text), high practitioner competence, and Awareness sufficient to identify what is actually being addressed.
+The [NAME-PENDING: ED-048] Ritual is the canonical method for stabilising the Southernmost's wound. It requires specific knowledge (the [NAME-PENDING: ED-048] Text), high practitioner competence, and Awareness sufficient to identify what is actually being addressed.
 
 ### Requirements
 
-- Ceiral Text (in faction possession)
+- [NAME-PENDING: ED-048] Text (in faction possession)
 - Southernmost Awareness 5+ (faction stat); without this: +2 Ob
 - Lead practitioner: Thread Sensitivity 60+
 - Two additional participants: Thread Sensitivity 20+ each
@@ -167,14 +167,14 @@ Extraordinary Repair Weaving is the technical procedure discovered through deep 
 
 After completing the Research roll (above), the practitioner may begin Repair seasons. Each season of Repair Weaving:
 
-- **Roll**: Lead practitioner's Weaving pool, Ob 3 (Repair is less acute than the Ceiral Ritual but more technically demanding than ordinary Weaving at this scale; the -1D contact penalty for Core zone is in effect)
+- **Roll**: Lead practitioner's Weaving pool, Ob 3 (Repair is less acute than the [NAME-PENDING: ED-048] Ritual but more technically demanding than ordinary Weaving at this scale; the -1D contact penalty for Core zone is in effect)
 - **Success or Overwhelming**: Thread Tension −2 permanent (Southernmost contribution removed). +1 Awareness for faction.
 - **Partial**: Thread Tension −1 (partial reduction). Practitioner: CD +1. May continue next season.
 - **Failure**: No progress. Thread Tension +1 (disturbing the wound without completing the work). CD +2 for practitioner.
 
 After 4–5 successful Repair seasons: the Southernmost is fully stabilised. The wound is closed; configuration dynamics return to normal Thread behaviour; Gap formation ceases. The Southernmost becomes a historically significant but no longer active hazard.
 
-**Note**: Extraordinary Repair Weaving and the Ceiral Ritual are not mutually exclusive. A faction may pursue both paths simultaneously with different officers. The Thread Tension reductions stack.
+**Note**: Extraordinary Repair Weaving and the [NAME-PENDING: ED-048] Ritual are not mutually exclusive. A faction may pursue both paths simultaneously with different officers. The Thread Tension reductions stack.
 
 ---
 
@@ -190,7 +190,7 @@ The crisis fires based on Thread Tension level and absence of stabilisation work
 
 2. **Thread Tension 50 sustained for 3 consecutive seasons without stabilising Weaving**: The outer winding begins to crack. A second event fires: visible map effect; +1 Thread Tension per season from Southernmost (in addition to other sources) begins accumulating.
 
-3. **Cracking continues for 3 more seasons without a Ceiral Ritual attempt**: The outer winding fails. Thread Tension +2 per season from the Southernmost, automatic and unremovable until the Ritual succeeds or Extraordinary Repair Weaving completes.
+3. **Cracking continues for 3 more seasons without a [NAME-PENDING: ED-048] Ritual attempt**: The outer winding fails. Thread Tension +2 per season from the Southernmost, automatic and unremovable until the Ritual succeeds or Extraordinary Repair Weaving completes.
 
 **Stabilising Weaving** (to pause the cracking clock): Any practitioner performing a Ritual action targeting the Southernmost's outer winding (Ob 3, Thread Sensitivity 40+) pauses the cracking counter for that season. This is a delaying action only — it does not reverse cracking already underway.
 
@@ -206,7 +206,7 @@ In Board Game mode, Southernmost mechanics are abstracted to the faction-level:
 
 - **Expedition Action**: Available as an extended Council Phase action (officer unavailable for Season). Prerequisite: Thread Tension ≥ 40. Outcome: Southernmost Awareness +1 for acting faction.
 - **Research Action** (as standard Domain Action table): Awareness +1, Complexity Ob 1–4, risk: Church attention.
-- **Ceiral Ritual**: Available as a multi-season action. Uses faction's Mandate pool as proxy for practitioner Thread Sensitivity. Requirements as TTRPG mode; Ob set against faction's accumulated Awareness level.
+- **[NAME-PENDING: ED-048] Ritual**: Available as a multi-season action. Uses faction's Mandate pool as proxy for practitioner Thread Sensitivity. Requirements as TTRPG mode; Ob set against faction's accumulated Awareness level.
 - **Crisis Timeline**: Fires per §6.7. Represented as a track on the board — visible to all players.
 
 ---

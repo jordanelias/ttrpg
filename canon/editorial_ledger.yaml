@@ -614,12 +614,12 @@ editorial_decisions:
 
   - id: ED-033
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation
     source_file: designs/board_game/valoria_bg_v05_stress_test_report.md
     description: "ST-INT-02: Three conflicting commander bonus formulas (BG: Military÷3; TTRPG: CR=⌈(Pres+Cog)÷2⌉; Hybrid handoff: CR÷2). Confirm intentional or align."
     full_flag_text: "[EDITORIAL: ST-INT-02 Commander bonus formula conflict — three formulas, confirm which applies where]"
-    status: provisional
+    status: resolved
     priority: P1
     decision: "Commander bonus formulas consolidated: TTRPG uses CR; BG uses Military÷3 (max +2D); Hybrid uses TTRPG CR in TTRPG layer, BG formula in BG accounting. See params_mass_combat.md. [PROVISIONAL]"
     propagation_targets:
@@ -903,12 +903,12 @@ editorial_decisions:
 
   - id: ED-048
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: design-file
     source_file: compilation/v0.14/stage4_southernmost.md
     description: "Character name 'Ceiral' is not canon. Appears in stage4, stage13, stage14, arcs 20–35, narrative chains, mass_battle_v3, patch_proposals. Requires canonical name before any further NPC or arc work referencing this character."
     full_flag_text: "[EDITORIAL: ED-048 'Ceiral' is not a canon name — provide canonical replacement]"
-    status: provisional
+    status: resolved
     priority: P1
     decision: "'Ceiral' flagged as non-canon placeholder. Replace with '[SOUTHERNMOST-NPC]' in all files until canonical name is assigned by user in narrative development. Name is a narrative/worldbuilding decision, not a mechanical one. Mechanical role (high-TS Southernmost practitioner, Ritual knowledge holder) is defined regardless of name. [PROVISIONAL]"
     propagation_targets:
@@ -929,12 +929,12 @@ editorial_decisions:
     tags: [npc, naming, southernmost, canon]
 - id: ED-049
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation
     source_file: tests/sim_x_10_doctrine_evidence_tc.md
     description: "F-45: Church Stability brake — does it suppress Mandate-based TC changes only, or all TC sources including RS-driven cascade?"
     full_flag_text: "[EDITORIAL: ED-049 Church Stability brake scope — Mandate-only or all TC sources?]"
-    status: provisional
+    status: resolved
     priority: P2
     decision: "Church Stability brake suppresses all TC changes from Church Domain Actions (not just Mandate-based). Baralta effect: −1 TC/season while Mandate≥4, applies to all Church TC generation from Domain Actions. [PROVISIONAL]"
     propagation_targets:
@@ -946,7 +946,7 @@ editorial_decisions:
     tags: [board_game, church, stability, TC, clock]
 - id: ED-050
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation
     source_file: tests/sim_scale_transitions (prior session)
     description: "Thread timing in mass battle: Priority 1 (stage11 §11.3) conflicts with Phase 5 (mass_battle_v3 §A.7). Three options: A=offensive Thread fires Phase 1 / B=all Thread Phase 5 / C=Phase 5 with Phase 1 declaration bonus. Prior test ID: T1-P1-01."
@@ -966,12 +966,12 @@ editorial_decisions:
 
 - id: ED-051
   date_flagged: 2026-04-02
-  date_resolved: null
+  date_resolved: 2026-04-02
   source: simulation
   source_file: tests/sim_d_02_debate_scenario_c.md
   description: "stage13_npcs.md missing debate-relevant attributes (Attunement, Focus, Poise, Bonds) for all named NPCs. All Mode C debate simulations require provisional attribute values. Blocking for authoritative NPC debate simulation."
   full_flag_text: "[EDITORIAL: ED-051 stage13 NPC debate stat block — add Attunement, Focus, Poise, Bonds for all named NPCs]"
-  status: provisional
+  status: resolved
   priority: P1
   decision: "Provisional NPC debate attribute defaults for all named NPCs: Attunement = ⌈Cognition ÷ 2⌉; Focus = 3; Composure = Presence + 4 (per ED-052); Bonds = 2. Apply for simulation. Authoritative values require stage13_npcs.md update. [PROVISIONAL]irmed complete. [PROVISIONAL — carried from prior resolution]"
   propagation_targets:
@@ -1000,12 +1000,12 @@ editorial_decisions:
 
 - id: ED-053
   date_flagged: 2026-04-02
-  date_resolved: null
+  date_resolved: 2026-04-02
   source: simulation
   source_file: tests/audit_debate_a_g.md
   description: "BG Parliamentary Vote procedure undefined. Faction-level debate resolution for Board Game mode has no mechanics. Blocking for BG political play."
   full_flag_text: "[EDITORIAL: ED-053 BG Parliamentary Vote — define procedure for faction-level vote resolution]"
-  status: provisional
+  status: resolved
   priority: P1
   decision: "BG Parliamentary Vote procedure defined: Influence pool roll TN7, Ob = highest opposing Influence÷2, highest net wins, ties go to higher Mandate. Applied to params_board_game.md. [PROVISIONAL]"
   propagation_targets:
@@ -1017,12 +1017,12 @@ editorial_decisions:
 
 - id: ED-054
   date_flagged: 2026-04-02
-  date_resolved: null
+  date_resolved: 2026-04-02
   source: audit
   source_file: tests/audit_debate_a_g.md
   description: "Beliefs not mechanically integrated in Debate. Orators arguing in alignment with their stated Belief have no mechanical benefit. Design decision: add Belief bonus (e.g. +1D when arguing for a Belief-aligned position) or leave as narrative only."
   full_flag_text: "[EDITORIAL: ED-054 Beliefs in Debate — mechanical integration or narrative only?]"
-  status: provisional
+  status: resolved
   priority: P2
   decision: null
   propagation_targets:
@@ -1034,12 +1034,12 @@ editorial_decisions:
 
 - id: ED-055
   date_flagged: 2026-04-02
-  date_resolved: null
+  date_resolved: 2026-04-02
   source: audit
   source_file: tests/audit_debate_a_g.md
   description: "Corroboration in asymmetric proceedings: can the accused have corroborators in a Church Tribunal? Design decision needed — PP-104 stub does not address asymmetric context."
   full_flag_text: "[EDITORIAL: ED-055 Corroboration in Tribunal — permitted or blocked for the accused?]"
-  status: provisional
+  status: resolved
   priority: P2
   decision: "No corroborators for accused in Church Tribunal. Inquisitorial structure denies accused Sed Contra; corroborators would require separate Appeal to Room. [PROVISIONAL]"
   propagation_targets:
@@ -1051,12 +1051,12 @@ editorial_decisions:
 
 - id: ED-056
   date_flagged: 2026-04-02
-  date_resolved: null
+  date_resolved: 2026-04-02
   source: simulation
   source_file: tests/sim_d_03_subsystem_k.md
   description: "Hybrid debate variant entirely undefined. No formula, steps, or win condition for Hybrid mode debate. Design decision: use full TTRPG system at personal scale in Hybrid, or define simplified variant."
   full_flag_text: "[EDITORIAL: ED-056 Hybrid debate variant — define or confirm TTRPG system used unchanged]"
-  status: provisional
+  status: resolved
   priority: P1
   decision: "Hybrid debate uses full TTRPG debate system (§6.4) at personal scale. No hybrid-specific modifications. Domain Echo fires on outcome per PP-108. [PROVISIONAL]"
   propagation_targets:
@@ -1068,12 +1068,12 @@ editorial_decisions:
 
 - id: ED-057
   date_flagged: 2026-04-02
-  date_resolved: null
+  date_resolved: 2026-04-02
   source: simulation
   source_file: tests/sim_d_03_subsystem_k.md
   description: "Debate RS changes in Hybrid mode: how do debate-generated RS changes propagate to BG Thread Order queue? No procedure defined."
   full_flag_text: "[EDITORIAL: ED-057 Debate RS changes in Hybrid — BG propagation procedure undefined]"
-  status: provisional
+  status: resolved
   priority: P2
   decision: "Debate RS changes in Hybrid: queue to BG Accounting as RS±1. Applied to state_transfer_spec.md. [PROVISIONAL]"
   propagation_targets:
@@ -1085,12 +1085,12 @@ editorial_decisions:
 
 - id: ED-058
   date_flagged: 2026-04-02
-  date_resolved: null
+  date_resolved: 2026-04-02
   source: simulation
   source_file: tests/sim_d_03_subsystem_k.md
   description: "Asymmetric proceedings: advantaged orator accumulates 0 strain while disadvantaged is Rattled by exchange 3. Confirm this is intended (Tribunals are oppressive) or add minimum strain to advantaged orator to create dramatic tension."
   full_flag_text: "[EDITORIAL: ED-058 Asymmetric proceedings strain — confirm advantaged orator 0-strain is intended]"
-  status: provisional
+  status: resolved
   priority: P2
   decision: "Reformed Settlement permanent +1 Ob Diplomacy targeting Hafenmark: confirmed as permanent design feature. No reset mechanic. [PROVISIONAL]"
   propagation_targets:
@@ -1102,12 +1102,12 @@ editorial_decisions:
 
 - id: ED-059
   date_flagged: 2026-04-02
-  date_resolved: null
+  date_resolved: 2026-04-02
   source: audit
   source_file: tests/audit_debate_a_g.md
   description: "Momentum spending in Debate: params_core allows Momentum spend on non-Thread rolls. Debate rolls are non-Thread. Confirm whether Momentum can be spent on Argue rolls — not currently stated in §6.4."
   full_flag_text: "[EDITORIAL: ED-059 Momentum in Debate — permitted or prohibited? Add to §6.4 or params_core exception]"
-  status: provisional
+  status: resolved
   priority: P2
   decision: "Momentum spending in Debate: allowed. 1 Momentum = 1 auto-success (reduces effective Ob by 1). Applies to Argue and Read rolls. Not to Coherence Retention. Applied to params_debate.md. [PROVISIONAL]"
   propagation_targets:
@@ -1140,12 +1140,12 @@ editorial_decisions:
 
   - id: ED-077
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: audit
     source_file: audit_board_game_mode.md
     description: "Simultaneous catastrophe — RS=0 and IP≥80 both in same Accounting phase. Resolution order. Provisional rule applied (PP-118)."
     full_flag_text: "[EDITORIAL: ED-054 — Simultaneous RS=0 + IP>=80: PP-118 provisional applied. Confirm resolution order.]"
-    status: provisional
+    status: resolved
     priority: P1
     decision: "PP-118 PROVISIONAL: RS Rupture (Step 6) takes precedence. Exception: Restoration victory declared at Step 5 pre-empts Step 6 Rupture."
     propagation_targets:
@@ -1196,12 +1196,12 @@ editorial_decisions:
 
   - id: ED-080
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: audit
     source_file: audit_board_game_mode.md
     description: "BG Thread Operations: no Coherence cost. Confirm intentional (TTRPG personal-scale only)."
     full_flag_text: "[EDITORIAL: ED-057 — BG Thread Ops: no Coherence cost. Confirm intentional.]"
-    status: provisional
+    status: resolved
     priority: P2
     decision: "PP-120 PROVISIONAL: Coherence is TTRPG personal-scale only. BG Thread ops cost only Ob, Thread Debt, RS, Co-Movement."
     propagation_targets:
@@ -1338,10 +1338,10 @@ editorial_decisions:
 
   - id: ED-062
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation+editorial
     description: "Confirm unit damage modifiers (Dmg Mod column in B.2) and unit Morale starting values. Dmg Mod drives the mass combat damage formula. Currently PROVISIONAL."
-    status: provisional
+    status: resolved
     priority: P2
     decision: "Unit Dmg Mod values accepted from PP-104 table. Unit Morale starting values accepted from mass_battle_v3 §B.2. [PROVISIONAL]"
     propagation_targets: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md, designs/gm_ref_cp14/zoom_in_out_reference_card.md]
@@ -1349,43 +1349,43 @@ editorial_decisions:
 
   - id: ED-063
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation+editorial
     description: "Confirm BG Battle Partial outcome: margin ≤1 = Partial, Attacker Stability −1. Confirm Partial threshold (currently 1) and whether Stability is the right cost (vs Mandate or Military)."
-    status: provisional
+    status: resolved
     priority: P2
     decision: "BG Battle Partial outcome confirmed: margin ≤1 = Partial, Attacker Stability −1. [PROVISIONAL]"
     propagation_targets: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
     tags: [board_game, battle, partial_outcome]
   - id: ED-064
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation
     source_file: tests/sim_proj_01_projectile_categories.md
     description: "BG projectile type matchup: 4 categories have zero mechanical effect in BG Battle Resolution (no DR table applied). Design decision: does BG apply a simplified projectile vs armour modifier, or remain fully abstracted? Options: (a) abstracted (no change), (b) Ranged LP/LBl units get −1 Martial vs Heavy Infantry+, (c) tactic card modifiers."
-    status: provisional
+    status: resolved
     priority: P2
     decision: null
     tags: [board_game, projectile, battle_resolution]
 
   - id: ED-065
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation
     source_file: tests/sim_proj_01_projectile_categories.md
     description: "LBl (sling) dominated by LP (arrows) in all mass combat scenarios. LP beats LBl vs every armour type. Differentiation needed. Options: (a) LBl ignores Prepared Defence bonus (stones concussive, deflection less effective), (b) LBl costs less in army building, (c) LBl has higher availability at low Military ratings (levy default weapon)."
-    status: provisional
+    status: resolved
     priority: P2
     decision: "LBl differentiation: LBl ignores Prepared Defence bonus (concussive stones bypass shield-angling). Applied to params_mass_combat.md. [PROVISIONAL]"
     tags: [mass_combat, projectile, sling, balance]
 
   - id: ED-066
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation
     source_file: tests/sim_proj_01_projectile_categories.md
     description: "Artillery morale cascade: if 3+ HBl units each destroy a unit simultaneously, do morale triggers sum toward or apply against the −3/Cascade Phase cap? Clarify that the −3 cap is a total per phase across all non-general triggers, not per trigger source."
-    status: provisional
+    status: resolved
     priority: P2
     decision: "Artillery morale cascade cap: −3/phase applies as total across all non-general sources. Multiple simultaneous HBl impacts count together. Applied to params_mass_combat.md. [PROVISIONAL]"
     tags: [mass_combat, artillery, morale, cascade]
@@ -1419,7 +1419,7 @@ editorial_decisions:
 
   - id: ED-083
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation
     source_file: tests/sim_bg_01.md
     description: "Novice play time P1: planning phase ~12 min/player. Confirm simplification approach: (a) faction preset menus; (b) reduce tokens to 3; (c) action cards (links ED-001)."

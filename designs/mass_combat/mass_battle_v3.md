@@ -140,6 +140,8 @@ separately, not subject to the cap. *[P1-03]*
 
 > **Clarification:** "Application order: Apply all non-general Morale changes first, capping the total at −3 from these sources. Then apply Stage 2 general death −2 additionally (this −2 is separate and not subject to the cap). Maximum total Morale loss in one Cascade Phase: −5 (−3 capped + −2 general kill)."
 
+> **Artillery cascade ruling (PP-198):** Multiple simultaneous HBl unit destructions in one Cascade Phase each trigger Morale −1 (allied unit routed). Total non-general Morale loss still capped at −3. No runaway cascade possible from Artillery alone.
+
 While general is present: Morale floor = 1. At Morale 0: unit routs.
 
 **Rout contagion brake:** Rout causes −1 Morale to adjacent units, but this
@@ -563,8 +565,7 @@ Apply Ob and dice modifier.
 
 **Step 3 — Roll.**
 Pool = sum of all engaged unit Martial values + commander bonus.
-Commander bonus = faction Military ÷ 3, round down (min 0, max +2D).
-[EDITORIAL: confirm commander bonus formula] TN 7. Ob from table.
+Commander bonus = faction Military ÷ 3, round down (min 0, max +2D). *[PP-190 — confirmed]* TN 7. Ob from table.
 Net successes = damage dealt to opposing units.
 
 **Step 4 — Determine outcome by margin (PP-104):**
@@ -576,7 +577,7 @@ Net successes = damage dealt to opposing units.
 | Defender net ≥ Attacker net + 2 | Defender wins | No territory change; Attacker Military −1 |
 
 Partial reflects a costly inconclusive engagement — forces committed, ground unchanged.
-[PROVISIONAL — ED-063: confirm Partial threshold and Stability cost]
+*[PP-195 — confirmed: margin ≤1 = Partial; Attacker Stability −1]*
 
 **Step 5 — Apply damage.** Reduce Health per Step 3 net successes × unit damage modifier − DR.
 Formation Break at Health 0.

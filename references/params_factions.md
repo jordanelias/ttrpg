@@ -210,3 +210,13 @@ Revolution Domain Action. Pool: Mandate (as dice) + History, TN 7, Ob 3. Prerequ
 | Partial | RS +0 | Wasted action |
 | Failure | RS +0 | Mandate −1 |
 Frequency: once per season. Consumes 1 Domain Action.
+## Simultaneous Catastrophe Rule (PP-199 — ED-077)
+If RS=0 AND IP≥80 both trigger in the same Accounting phase:
+1. RS=0 resolves first (Shared Loss: game-ending Thread collapse condition).
+2. IP≥80 Altonian invasion pressure resolves second.
+Both are independent effects. Priority: RS=0 > IP threshold. If RS=0 triggers Shared Loss end condition, IP escalation is moot.
+## Reformed Settlement Standing Effect (PP-201 — ED-081)
+When Reformed Settlement is in force (Theocracy Counter ≥ 40 and Church has Resisted):
+- All Diplomacy Domain Actions targeting Hafenmark: permanent +1 Ob (Church institutional antagonism).
+- Effect persists until Theocracy Counter drops below 40 OR Reformed Settlement is withdrawn.
+[Source: bg_v05 Cascade Test 2 simulation]

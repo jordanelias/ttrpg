@@ -2214,3 +2214,104 @@ patches:
     status: provisional
     files: [designs/ttrpg/threadwork_redesign_v25.md]
     tags: [hybrid, coherence, pacing, gm_guidance]
+
+  - id: PP-190
+    date: 2026-04-02
+    scope: mass_combat_commander_bonus
+    description: >
+      Confirm commander bonus formula: Military÷3 round down, min 0, max +2D. Resolves ED-033.
+    files_changed:
+      - designs/mass_combat/mass_battle_v3.md
+      - references/params_mass_combat.md
+    status: applied
+
+  - id: PP-193
+    date: 2026-04-02
+    scope: altonian_invasion_units
+    description: >
+      Provisional Altonian unit stats derived from Military ~5. Heavy Infantry, Cavalry, Crossbow, Artillery. Deployment at IP≥75. ED-036 provisional.
+    files_changed:
+      - references/params_mass_combat.md
+    status: applied
+
+  - id: PP-194
+    date: 2026-04-02
+    scope: mass_combat_dmg_mod
+    description: >
+      Confirm unit Dmg Mod table. Values consistent with personal combat weapon types. Resolves ED-062.
+    files_changed:
+      - references/params_mass_combat.md
+      - designs/mass_combat/mass_battle_v3.md
+    status: applied
+
+  - id: PP-195
+    date: 2026-04-02
+    scope: bg_battle_partial_outcome
+    description: >
+      Confirm Partial battle outcome: margin ≤1 either direction = Partial; Attacker Stability −1. Resolves ED-063.
+    files_changed:
+      - designs/mass_combat/mass_battle_v3.md
+    status: applied
+
+  - id: PP-196
+    date: 2026-04-02
+    scope: mass_combat_projectile_dr
+    description: >
+      Confirm projectile DR table. LP/HP vs None=0 correct (net hits sufficient). LBl vs Light=2 intentional. Resolves ED-061 and ED-064.
+    files_changed:
+      - references/params_mass_combat.md
+    status: applied
+
+  - id: PP-197
+    date: 2026-04-02
+    scope: mass_combat_projectile_balance
+    description: >
+      LBl vs LP dominance analysis. LBl better vs Light only. LP equal/better at Medium/Heavy. Intentional weapon role distinction. Resolves ED-065.
+    files_changed:
+      - references/params_mass_combat.md
+    status: applied
+
+  - id: PP-198
+    date: 2026-04-02
+    scope: mass_combat_artillery_morale
+    description: >
+      Artillery morale cascade capped by existing −3/phase rule. Multiple simultaneous HBl destructions still capped. Resolves ED-066.
+    files_changed:
+      - designs/mass_combat/mass_battle_v3.md
+    status: applied
+
+  - id: PP-199
+    date: 2026-04-02
+    scope: simultaneous_catastrophe
+    description: >
+      Simultaneous catastrophe resolution order: RS=0 first (Shared Loss), then IP≥80. Independent effects. RS=0 is terminal — IP moot if Shared Loss fires. Resolves ED-077.
+    files_changed:
+      - references/params_factions.md
+    status: applied
+
+  - id: PP-200
+    date: 2026-04-02
+    scope: bg_thread_coherence
+    description: >
+      BG Thread ops always skipped (Phase 4/6). No Coherence cost in BG is correct by design — Thread operates below BG abstraction. Resolves ED-080.
+    files_changed:
+      - references/params_mass_combat.md
+    status: applied
+
+  - id: PP-201
+    date: 2026-04-02
+    scope: reformed_settlement_ob
+    description: >
+      Reformed Settlement standing effect: +1 Ob on Diplomacy targeting Hafenmark while TC≥40 and Church Resisted. Derived from bg_v05 simulation. Resolves ED-081.
+    files_changed:
+      - references/params_factions.md
+    status: applied
+
+  - id: PP-202
+    date: 2026-04-02
+    scope: bg_planning_phase_time
+    description: >
+      Planning phase time: ~8 min/player with reference cards, ~12-15 without. Pre-assign Seasonal Priority on faction cards. No mechanical change. Resolves ED-083.
+    files_changed:
+      - references/params_mass_combat.md
+    status: applied
