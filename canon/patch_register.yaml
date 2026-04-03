@@ -2375,3 +2375,14 @@ patches:
   applied_to_version: "v0.8.2"
   status: applied
   applied_commit: pending
+
+- id: PP-202
+  date: 2026-04-02
+  severity: P1
+  description: "BAL-BG-02 balance analysis. Stale territory references fixed: Crown Deed 2 (T1/T6→T12/T9); Hafenmark Path C (T6→T5 Gransol); Varfell Path B (T12→T4); Starting Control block updated to PP-199 assignments. P1 design findings flagged as ED-109 through ED-112. P2 finding ED-113. All require user decision before mechanics patch."
+  finding_id: "BAL-BG-02"
+  source: simulation
+  affects: [references/params_board_game.md, canon/editorial_ledger.yaml]
+  applied_to_version: "v0.8.3"
+  status: applied
+  applied_commit: pending

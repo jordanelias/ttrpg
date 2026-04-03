@@ -1945,3 +1945,53 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     propagation_status: complete
     related_ids: [PP-205]
     tags: [hybrid, coherence, tie_break]
+
+  - id: ED-109
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: balance_analysis
+    description: "Crown victory front-loaded: 3 of 5 deeds pre-met at game start. See BAL-04."
+    status: open
+    priority: P1
+    decision: null
+    tags: [board_game, crown, balance, victory]
+
+  - id: ED-110
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: balance_analysis
+    description: "Church primary victory inaccessible in standard campaign: TC net 0 with Hafenmark active; Deed 4 (seize T12) requires Military at +2 Ob penalty. See BAL-05/06."
+    status: open
+    priority: P1
+    decision: null
+    tags: [board_game, church, balance, tc, victory]
+
+  - id: ED-111
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: balance_analysis
+    description: "Varfell Path B under-gated: T13 seizable S1 from starting position T4, VTM≥3 by S9 = 9-10 season victory. See BAL-08."
+    status: open
+    priority: P1
+    decision: null
+    tags: [board_game, varfell, balance, victory]
+
+  - id: ED-112
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: balance_analysis
+    description: "TC lock: Hafenmark suppression (-1/season) exactly cancels Church TC gain from T14 (+1/season). TC permanently frozen at 28 if Hafenmark functional. Church cannot build toward victory. See BAL-09."
+    status: open
+    priority: P1
+    decision: null
+    tags: [board_game, church, hafenmark, tc, balance]
+
+  - id: ED-113
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: balance_analysis
+    description: "Varfell T13 dominant opening: T13 Fort 0, adjacent to T4 (Varfell start), Crown cannot hold it. Seizable S1 at no cost. May reduce strategic variety. See BAL-10."
+    status: open
+    priority: P2
+    decision: null
+    tags: [board_game, varfell, crown, territory, balance]

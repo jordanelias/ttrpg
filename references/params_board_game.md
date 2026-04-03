@@ -193,7 +193,7 @@ Unit starting Cohesion: Light Infantry 3, Heavy Infantry 4, Cavalry 4, Ranged 3,
 | Deed | Condition |
 |------|-----------|
 | 1 | Mandate ≥ 5 |
-| 2 | Control T1 (Valorsplatz) + T6 (Hafenvalor) + ≥ 2 other territories (total ≥ 4) (PP-196) |
+| 2 | Control T12 (Valorsplatz) + T9 (Arcansheld) + ≥ 2 other territories (total ≥ 4) (PP-202) |
 | 3 | TC < 60 and IP < 75 simultaneously |
 | 4 | PI ≥ 5 |
 | 5 | Torben Loyalty ≥ 5 |
@@ -221,11 +221,11 @@ TC ≥ 60 + AER = 5 + IP ≤ 30.
 ### HAFENMARK — Three Paths (v04 B5)
 Path A — Reformed Valoria (3 Deeds): RDT ≥ 4, PI ≥ 3, Reformed Settlement completed.
 Path B — Theological Supremacy (2 Deeds): RDT = 6, TD = 5.
-Path C — Parliamentary Consolidation (4 Deeds): PI ≥ 4, Mandate ≥ 4, control T6, no active Heresy Investigation ≥ 2 seasons.
+Path C — Parliamentary Consolidation (4 Deeds): PI ≥ 4, Mandate ≥ 4, control T5 (Gransol, duchy capital), no active Heresy Investigation targeting Hafenmark ≥ 2 seasons. (PP-202 — T6 was stale ref; T5 Gransol is the meaningful territorial condition.)
 
 ### VARFELL — Three Paths (v04 B5)
 Path A — Intelligence Hegemony (3 Deeds): VTM ≥ 3, control ≥ 3 territories, all other faction stats revealed at least once.
-Path B — Southernmost Dominion (2 Deeds): control T12 + T13 simultaneously, VTM ≥ 3.
+Path B — Southernmost Dominion (2 Deeds): control T4 (Vargstad) + T13 (Stillhelm) simultaneously, VTM ≥ 3. (PP-202 — T12 was stale ref from prior numbering.)
 Path C — Thread Supremacy (3 Deeds): VTM = 5, control T12 + T13 + ≥ 1 other, RS ≥ 50 at Accounting.
 
 CORRECTIONS (PP-188): Removed Intel-stat-based deeds (PP-173, PP-176 — no basis in v04). Reverted to v04 path structure.
@@ -736,15 +736,16 @@ T13 (Stillhelm) ↔ T3, T12, T14
 T14 (Eisengrund) ↔ T3, T12, T13
 T15 (Schoenland) ↔ T4 (mountain pass), T7 (sea)
 
-## Starting Control Summary — Final (PP-197)
+## Starting Control — Definitive (PP-199, confirmed PP-202)
 | Faction | Territories | Count |
 |---------|------------|-------|
-| Crown | T1, T3, T5 (shared), T6, T7, T13 (nominal) | 6 |
-| Hafenmark | T2 (capital), T4, T8, T11 | 4 |
-| Varfell | T9, T10, T12 | 3 |
-| Church | None (cathedral presence in T3, city Favour elsewhere) | 0 |
-| Restoration | T14 (informal) | 1 |
-| Löwenritter | T5 (shared with Crown pre-coup) | shared |
+| Crown | T9 Arcansheld (shared), T10 Nordhelm, T11 Mittelmark, T12 Valorsplatz★, T13 Stillhelm | 5 |
+| Hafenmark | T5 Gransol★, T6 Eidursjo, T7 Spartfell, T8 Lowenskyst | 4 |
+| Varfell | T1 Varfell, T2 Sigurdshelm, T3 Halvardshelm, T4 Vargstad★ | 4 |
+| Church | T14 Himmelenger★ | 1 |
+| Löwenritter | T9 (shared with Crown pre-coup) | shared |
+| Uncontrolled | T15 Askeheim | — |
+| NPC | T16 Schoenland (merchant island, unconquerable) | — |
 
 ## Altonian Mountain Routes (PP-197)
 Two passes through mountains (purple lines on map):
@@ -989,3 +990,29 @@ T3 (Halvardshelm), T5 (Gransol), T8 (Lowenskyst), T12 (Valorsplatz), T14 (Himmel
 
 ## Niflhel Network Starting Depth (PP-199)
 T2 (Sigurdshelm) depth 2. T12 (Valorsplatz) depth 1. T14 (Himmelenger) depth 1.
+
+## Balance Findings and Proposals — BAL-BG-02 (PP-202)
+
+### BAL-04 (P1): Crown Victory Front-Loaded
+3 of 5 deeds pre-met at game start (Deed 1: Mandate≥5, Deed 3: TC<60∧IP<75, Deed 4: PI≥5).
+Crown victory reduces to: hold T12+T9+2 others (Deed 2) and maintain Torben ≥ 5 (Deed 5).
+[EDITORIAL: ED-109 — Crown balance. Options: (A) Raise Deed 1 to Mandate ≥ 6 (requires active maintenance). (B) Deed 3 becomes TC < 50 (tighter threshold — must actively suppress Church). (C) Add a 6th deed. (D) Accept as intended — Crown's difficulty is that maintaining passive deeds under pressure is the challenge, not achieving them.]
+
+### BAL-05/06 (P1): Church Primary Victory Inaccessible
+TC at net 0 per season (T14 control +1, Hafenmark suppression −1). TC ≥ 65 requires 37 seasons.
+Church Deed 4 (seize T12) requires Military action at +2 Ob (doctrine penalty) against Fort 2.
+[EDITORIAL: ED-110 — Church balance. Options: (A) Add TC generation source independent of Hafenmark suppression: "AER ≥ 3: TC +1/season additional" (Altonian ecclesiastical momentum bypasses domestic suppression). (B) Replace Deed 4 (seize T12) with "Crown formally acknowledges Church authority over religious appointments" — achievable via Diplomacy/Compromise, not Military. (C) Reduce TC victory threshold from 65 to 55. (D) Combination: (A) + (B).]
+
+### BAL-08 (P1): Varfell Path B Under-Gated
+T4 Vargstad (Varfell start) + T13 Stillhelm (Fort 0, adjacent, Crown cannot effectively hold) = fastest win path on board. VTM ≥ 3 reachable S7–9. Victory by S9–10 in favourable conditions.
+[EDITORIAL: ED-111 — Varfell Path B balance. Options: (A) Add a third deed: "VTM ≥ 3, control T4+T13, AND RS ≥ 55" (RS preservation requirement slows Thread-heavy play). (B) Raise VTM requirement to 4 (adds 3–4 seasons). (C) Replace T13 with T12 Valorsplatz — far harder to seize and hold. (D) Add duration requirement: T4+T13 held simultaneously for 2 consecutive seasons (not just at Accounting).]
+
+### BAL-09 (P1): TC Lock (Church/Hafenmark)
+With Hafenmark Mandate ≥ 4: TC net = 0. Church cannot build TC toward victory.
+Forcing Church to first neutralise Hafenmark before TC can build creates mandatory aggression sequence.
+[EDITORIAL: ED-112 — TC lock resolution. This is likely partially intentional (Church must confront Protestant Reform). But if TC is permanently locked at 28, the Church faction is non-functional as a winner. Options: (A) AER ≥ 3 generates TC +1/season regardless of Hafenmark suppression (Altonian ecclesiastical leverage bypasses domestic politics). (B) Hafenmark suppression capped at −1/season maximum, but Church Assert (TC > 50) generates +2 not +1. (C) Church gets one TC gain per successful Heresy Investigation that Hafenmark cannot suppress. Recommended: (A) — the AER track is underused as a TC accelerant.]
+
+### BAL-10 (P2): Varfell T13 Dominant Opening
+T13 Stillhelm directly adjacent to T4 Vargstad. Fort 0. Crown nominal hold only (+1 Ob all actions).
+Varfell can March T4→T13 in S1 at almost no cost.
+[EDITORIAL: ED-113 — T13 opening. Options: (A) Give T13 Fort 1 (small warden garrison — the Wardens maintain some presence before Emergence). (B) Varfell march into T13 triggers immediate Warden Cooperation check (expedition trigger fires early, forcing Varfell to commit to the Southernmost path). (C) Accept — Crown holding T13 "nominally" is flavour; losing it S1 is correct fiction. Crown should simply not count T13 as a real starting territory for deed purposes.]
