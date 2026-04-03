@@ -1,10 +1,10 @@
 # VALORIA — COMBAT DESIGN (v1)
 ## Date: 2026-04-02
-## Version: v1.1 (PP-086–096 applied in-place; provisional decisions integrated)
+## Version: v1.2 (PP-172 applied: ranged weapon subtypes LP/HP/LBl/HBl, TN8 defence, environmental factors)
 ## Status: WORKING DESIGN — not compiled. This is the design-layer source for personal combat.
 ## Authority: Philosophical Foundations → this document → compilation (when ready)
 ## Mode applicability: ALL (TTRPG baseline; scales to Hybrid and Board Game via params)
-## Patches incorporated: PP-086–092, P2-B11 series (from sim_combat_batch_11.md)
+## Patches incorporated: PP-086–092, P2-B11 series (from sim_combat_batch_11.md), PP-172 (SIM-001 ranged subtypes)
 ## Source checkpoint: compilation/v0.14/stage8_combat.md (for reference values)
 
 ---
@@ -101,10 +101,15 @@ Initiative transfers on: hit (attacker maintains), feint success, distance chang
 | Heavy Cut | 6 | 7 | +4 | Long |
 | Light Blunt | 6 | 7 | +1 | Short |
 | Heavy Blunt | 7 | 8 | +4 | Short or Long |
-| Projectile | 7 | — | +2 | Projectile only |
+| LP — Light Piercing (arrow) | 6 | 8† | +2 | Projectile only |
+| HP — Heavy Piercing (bolt) | 5 | 8† | +4 | Projectile only |
+| LBl — Light Blunt ranged (clay/stone sling) | 7 | 8† | +1 | Projectile only |
+| HBl — Heavy Blunt ranged (lead/metal sling) | 8 | 8† | +3 | Projectile only |
 | Versatile (Light) | 5 | 6 | +1 | Short or Long (choose per round) |
 | Versatile (Medium) | 6 | 7 | +2 | Short or Long |
 | Versatile (Heavy) | 7 | 8 | +4 | Short or Long |
+
+†Def TN 8 applies only when inside attacker's melee range (Close zone). Cannot split pool for Offence when using ranged weapon defensively at melee range.
 
 ### Damage Resolution
 Net hits = Offence successes − Defence successes (minimum 0).
@@ -123,8 +128,31 @@ No catastrophic outcome category. Majority-1s produces standard Failure.
 ### Reach Rules
 - Short vs Long at Short range: Short weapon has priority. Long weapon user must manoeuvre at disadvantage to re-establish Long range.
 - Long vs Short at Long range: Long weapon has priority. Short weapon user must close at disadvantage.
-- Projectile: cannot be used at Short or Long melee range. Melee weapons cannot retaliate against Projectile.
-- Ranged vs closing: closing character must successfully dodge to reach Projectile user. Narrative spatial conditions apply.
+- Ranged weapons (LP/HP/LBl/HBl): require Far zone to attack. At Close zone, ranged weapons cannot make an Offence roll. Melee weapons cannot retaliate against a ranged attack from Far zone.
+- Ranged defence at Close zone: a character carrying a ranged weapon may defend at Def TN 8 if forced into Close zone by a melee attacker. The full pool is allocated to Defence; no Offence allocation is permitted. This represents using the weapon as a physical barrier or emergency grapple resist.
+- Sling at Close zone: LBl and HBl slingers who are forced to Close zone are assumed to carry a melee weapon (typically a knife, Light Cut). May draw it as a Retrieve Weapon action.
+- HP crossbow reload: after firing, HP user must take a full-round Reload action before firing again. No other action may be taken during Reload.
+- Ranged vs closing melee: closing character must take a Move action each round. While closing, they are exposed to ranged fire and cannot allocate dice to Defence against it.
+
+### Environmental Factors (Ranged Combat)
+Melee users must close to reach a ranged attacker. Terrain affects the number of rounds of exposure and imposes penalties.
+
+| Terrain | Rounds to close | Penalty to closer |
+|---------|----------------|-------------------|
+| Open ground | 1 round | None |
+| Difficult (marsh, rubble, slope) | 2 rounds | +1 Ob to all movement-linked actions |
+| Shallow river / ford | 2 rounds | +1 Ob, −2D to all combat rolls while crossing |
+| Deep river | 3 rounds + Swim check (Ob 2) | Ob 2 to cross; failure = swept back |
+| Wall or rampart | Climb action (TN 8 Ob 1) per obstacle | Action lost if climb fails |
+
+Cover (a physical obstacle between attacker and defender) adds DR to the defender:
+
+| Cover | vs LP | vs HP | vs LBl | vs HBl |
+|-------|-------|-------|--------|--------|
+| Soft (trees, wagon, bale) | +2 DR | +1 DR | +2 DR | +2 DR |
+| Hard (stone wall, fortification) | Blocks shot | Blocks shot | Blocks shot | Blocks shot |
+
+Cover must be declared in Phase 1 (Movement) to take effect. Cover does not move with the defender.
 
 **Board Game:** Weapon types map to BG Anti-Armour keyword and unit type. No TN variation — unit uses Martial stat pool vs standard TN 7.
 
@@ -132,12 +160,23 @@ No catastrophic outcome category. Majority-1s produces standard Failure.
 
 ## 6. ARMOUR
 
+### Melee DR
 | Tier | DR vs Light Cut | DR vs Heavy Cut | DR vs Light Blunt | DR vs Heavy Blunt | Stamina modifier |
 |------|----------------|----------------|------------------|------------------|-----------------|
 | None | 0 | 0 | 0 | 0 | +0 |
 | Light | 2 | 1 | 1 | 0 | −0 |
 | Medium | 4 | 3 | 2 | 1 | −1 |
 | Heavy | 6 | 5 | 3 | 1 | −2 |
+
+### Ranged DR
+| Tier | DR vs LP (arrow) | DR vs HP (bolt) | DR vs LBl (stone) | DR vs HBl (lead) |
+|------|-----------------|----------------|------------------|-----------------|
+| None | 0 | 0 | 0 | 0 |
+| Light | 2 | 1 | 1 | 0 |
+| Medium | 3 | 2 | 2 | 1 |
+| Heavy | 5 | 3 | 3 | 2 |
+
+**Ranged DR design note:** LP (arrows) are deflected by plate at high angles — Heavy armour DR 5 reflects this. HP (bolts) penetrate all armour tiers best — Heavy armour DR only 3. LBl (stone) follows same curve as LP (blunt impact degrades similarly). HBl (lead) is anti-armour: uniquely flat DR curve (0/0/1/2) — non-deflecting dense mass transfers energy through armour. Heavy armour + cover stacks: DR totals apply cumulatively.
 
 DR is subtracted from damage after net hits + weapon modifier.
 

@@ -261,3 +261,11 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 - type: TEST
 - depends_on: [designs/board_game/*.md, designs/gm_ref_cp14/arcs/*.md, references/params_board_game.md]
 - referenced_by: [tests/coverage_matrix.md, canon/editorial_ledger.yaml, canon/patch_register.yaml]
+
+### PP-172 — Ranged Subtypes (2026-04-02)
+Source: designs/combat/combat_design_v1.md §5, §6
+Propagation targets:
+- references/params_combat.md → DONE (this commit)
+- designs/mass_combat/mass_battle_v3.md → PENDING (HBl unit type, ranged DR rows)
+- references/params_mass_combat.md → PENDING (HBl DR row)
+- designs/board_game/valoria_bg_v05_simulation_and_patches.md → PENDING (Anti-Armour keyword for HBl units)

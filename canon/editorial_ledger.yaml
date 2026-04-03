@@ -1642,3 +1642,34 @@ editorial_decisions:
     propagation_status: pending
     related_ids: [ED-083]
     tags: [board_game, thread, co_movement, p14_compliance]
+
+  - id: ED-085
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: SIM-001
+    source_file: tests/sim_ranged_001.md
+    description: "Pool split at melee range for ranged weapons — confirmed: Offence allocation forbidden, Defence only at TN8. Needs explicit user confirmation."
+    full_flag_text: "[EDITORIAL: ED-085 — Can ranged weapons split pool for Offence at melee range? Provisional ruling: No. Only Def TN8 permitted.]"
+    status: provisional
+    decision: "Ranged weapons at Close zone: full pool to Defence at TN8. No Offence split. Rationale: physically cannot draw and release at Close zone."
+    propagation_targets:
+      - designs/combat/combat_design_v1.md
+      - references/params_combat.md
+    propagation_status: propagated
+    related_ids: []
+    tags: [ranged, combat, provisional]
+
+  - id: ED-086
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: SIM-001
+    source_file: tests/sim_ranged_001.md
+    description: "HBl (lead shot sling) availability by faction — is it available to all factions or faction-specific? Affects weapon choice and unit type."
+    full_flag_text: "[EDITORIAL: ED-086 — Are lead shot slings (HBl) available to all factions or specific ones? Provisional: available to all as purchased equipment.]"
+    status: provisional
+    decision: "Provisional: HBl available to all factions as purchased equipment. No faction lock."
+    propagation_targets:
+      - designs/combat/combat_design_v1.md
+    propagation_status: pending
+    related_ids: []
+    tags: [ranged, faction, worldbuilding, provisional]

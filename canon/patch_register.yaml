@@ -1685,3 +1685,16 @@ patches:
   applied_to_version: "v0.5.4"
   status: applied
   applied_commit: pending
+
+- id: PP-172
+  date: 2026-04-02
+  severity: P2
+  description: "Ranged weapon subtypes: LP/HP/LBl/HBl with distinct TN/modifier/DR profiles; TN8 melee-range defence; environmental terrain table; HBl STR minimum 2; cover DR by type"
+  finding_id: "SIM-001-F1"
+  source: simulation
+  affects:
+    - designs/combat/combat_design_v1.md
+    - references/params_combat.md
+  applied_to_version: "v1.2"
+  status: applied
+  applied_commit: "pending"

@@ -1,6 +1,6 @@
-<!-- version: v0.14-AUD2 | sources: designs/combat/combat_design_v1.md (PP-105) | last_updated: 2026-04-02 -->
+<!-- version: v0.14-AUD3 | sources: designs/combat/combat_design_v1.md (PP-172) | last_updated: 2026-04-02 -->
 <!-- CANONICAL SOURCE: combat_design_v1.md supersedes stage8_combat.md (has PP-086-092, MT-01, three-mode framing) -->
-<!-- PATCHES APPLIED: PP-086 (base damage), PP-087 (Formation Break stacking), PP-088 (assault linkage), PP-091 (Bombard), PP-092 (P2-B11 personal combat clarifications), PP-165 (Health formula fix, Stamina minimum, O/D procedure) -->
+<!-- PATCHES APPLIED: PP-086 (base damage), PP-087 (Formation Break stacking), PP-088 (assault linkage), PP-091 (Bombard), PP-092 (P2-B11 personal combat clarifications), PP-165 (Health formula fix, Stamina minimum, O/D procedure), PP-172 (ranged subtypes: LP/HP/LBl/HBl, TN8 defence, environmental factors, HBl STR min) -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
 
 # params_combat.md — Personal Combat
@@ -22,24 +22,43 @@ Pool modifiers:
 | Light Blunt | 6 | 7 | +1 to +2 | Hand axe, short club, sap |
 | Heavy Blunt | 7 | 8 | +4 to +5 | War hammer, mace, pollaxe |
 | Unarmed | 8 | 9 | +0 | Fists, grappling, improvised |
-| LP — bow | 6 | — | +2 | Shortbow, longbow |
-| HP — crossbow | 5 | — | +4 | Light crossbow, heavy crossbow |
-| LBl — sling | 7 | — | +1 | Sling, staff sling |
+| LP — Light Piercing (arrow) | 6 | 8† | +2 | Shortbow, longbow |
+| HP — Heavy Piercing (bolt) | 5 | 8† | +4 | Light crossbow, heavy crossbow |
+| LBl — Light Blunt ranged (stone) | 7 | 8† | +1 | Stone sling, staff sling |
+| HBl — Heavy Blunt ranged (lead) | 8 | 8† | +3 | Lead shot sling |
+
+†Def TN 8: ranged weapon used as barrier at Close zone. Full pool to Defence only. No Offence split permitted.
 
 Ranged weapons have no Def TN — targets cannot allocate Defence dice against them.
 Damage (ranged) = net successes + weapon modifier (STR not added — arm strength already in modifier/TN).
 
-## Ranged Combat Rules (PP-105)
+## Ranged Combat Rules (PP-172)
 
-**Zone:** Ranged weapons require Far zone. At Close zone: −3D to attacker pool. Sling cannot be used at Close zone (use as Unarmed or draw melee weapon — Reload action).
+**Zone:** Ranged weapons (LP/HP/LBl/HBl) require Far zone to make an Offence roll. At Close zone: cannot attack. See Ranged Defence below.
 
-**No parry:** Target cannot allocate Defence dice against ranged attacks. Armour DR applies normally.
+**No parry (Far zone):** When attacker is at Far zone, target cannot allocate Defence dice against ranged attacks. Armour Damage Reduction (DR) applies normally.
 
-**Cover:** If defender declared Cover in Phase 1: +2 DR vs LP/LBl; +1 DR vs HP. Cover requires a physical obstacle (wall, tree, wagon). 
+**Ranged Defence at Close zone (new — PP-172):** If a ranged-weapon user is forced into Close zone by a melee attacker, they may defend at Def TN 8 using their full pool. No Offence allocation permitted. This is an emergency defence only.
+
+**Cover:** If defender declared Cover in Phase 1 of Movement: cover DR applies. Cover requires a physical obstacle. Cover does not move with the defender.
+
+| Cover type | vs LP | vs HP | vs LBl | vs HBl |
+|------------|-------|-------|--------|--------|
+| Soft (trees, wagon, bale) | +2 DR | +1 DR | +2 DR | +2 DR |
+| Hard (stone wall, fortification) | Blocks shot | Blocks shot | Blocks shot | Blocks shot |
+
+**Environmental approach (melee closing):**
+| Terrain | Rounds to close | Penalty to closer |
+|---------|----------------|-------------------|
+| Open ground | 1 round | None |
+| Difficult (marsh, rubble, slope) | 2 rounds | +1 Ob to movement actions |
+| Shallow river / ford | 2 rounds | +1 Ob, −2D combat while crossing |
+| Deep river | 3 rounds + Swim (Ob 2) | Fail = swept back |
+| Wall or rampart | Climb (TN 8 Ob 1) | Action lost if climb fails |
 
 **Establish Distance (defender option):** Costs combat action. Attacker loses shot this round. Target moves beyond range.
 
-**Reload (HP crossbow only):** After each shot, HP user must take Reload action before firing again. Reload = full round, no other action. LP and LBl fire every round.
+**Reload (HP crossbow only):** After each shot, HP user must take Reload action (full round, no other action). LP, LBl, HBl fire every round (sling wind-up included in action economy).
 
 **Ranged vs ranged (mirror):** Initiative rules apply (higher Presence declares first). Both attacks resolve simultaneously at round end. [PROVISIONAL — GAP-PROJ-01]
 
@@ -48,9 +67,10 @@ Damage (ranged) = net successes + weapon modifier (STR not added — arm strengt
 |--------|---------|-------------------|
 | LP (bow) | 2 | −1D |
 | HP (crossbow) | 1 | — |
-| LBl (sling) | 1 | — |
+| LBl (stone sling) | 1 | — |
+| HBl (lead sling) | 2 | −1D |
 
-**Sling at Close zone default:** Slinger is assumed to carry a knife (LightCut). May draw knife as Retrieve Weapon action if forced to Close zone.
+**Sling at Close zone:** LBl and HBl slingers are assumed to carry a knife (Light Cut). May draw it as Retrieve Weapon action if forced to Close zone.
 
 **No personal HBl:** Artillery (HBl) is a mass combat unit — no personal combat equivalent. Individual siege crew members fight as unarmed or with melee weapons.
 
@@ -83,6 +103,16 @@ Exempt: Full Guard; Long weapon at Close zone.
 | Light | 2 | +0 | 2 | 1 | 1 | 0 |
 | Medium | 3 | −1 | 4 | 3 | 2 | 1 |
 | Heavy | 4 | −2 | 6 | 5 | 3 | 1 |
+
+## Ranged Damage Reduction (DR) by Armour Tier
+| Armour | vs LP (arrow) | vs HP (bolt) | vs LBl (stone) | vs HBl (lead) |
+|--------|--------------|-------------|----------------|--------------|
+| None | 0 | 0 | 0 | 0 |
+| Light | 2 | 1 | 1 | 0 |
+| Medium | 3 | 2 | 2 | 1 |
+| Heavy | 5 | 3 | 3 | 2 |
+
+Cover DR stacks additively with armour DR.
 
 ## Wounds / Incapacitation
 Health = Endurance per wound. At 0 Health → take Wound, Health resets.

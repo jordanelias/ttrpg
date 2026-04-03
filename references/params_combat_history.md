@@ -40,3 +40,16 @@ Cannot Bombard at melee range.
 - ED-037: Volley TN 6 vs TN 7 (mass combat)
 - ED-038: Coherence stat definition in mass battle
 - ED-040: Artillery Balanced disposition lock (intentional?)
+
+## PP-172 (2026-04-02) — Ranged Weapon Subtypes
+Source: SIM-001
+Changes:
+- Weapon table: replaced single 'Projectile' row with LP/HP/LBl/HBl rows (distinct TN/mod/Def TN)
+- Def TN: ranged weapons now defend at TN8 at Close zone (full pool to Defence, no Offence split)
+- Armour table: added Ranged DR table (4 types × 4 armour tiers)
+- Environmental factors: terrain table added (rounds to close + penalties)
+- Cover table: added type-specific DR by ranged weapon type
+- STR minimum: HBl requires STR 2 (new)
+- Reload: LP/LBl/HBl fire every round; HP requires Reload action (unchanged from PP-105)
+Editorials raised: ED-085 (pool split ruling), ED-086 (HBl availability)
+Propagation pending: mass_battle_v3.md, params_mass_combat.md, bg_v05
