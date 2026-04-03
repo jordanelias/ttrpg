@@ -1,5 +1,5 @@
 <!-- version: v0.14-AUD1 | source: threadwork_redesign_v25.md | last_updated: 2026-04-02 -->
-<!-- PATCHES APPLIED: P-11–P-30 (prior); ST-TW-01–05 added 2026-04-02; PP-166; PP-190 (Diagnosis+Leap combat timing); PP-191 (Lock phase mass combat); PP-192 (×3 RS multiplier mass battle); PP-193 (paradox window resolution); PP-194 (Rendering Crisis resolution); PP-195 (Community Weaving procedure) -->
+<!-- PATCHES APPLIED: P-11–P-30 (prior); ST-TW-01–05; PP-166; PP-190–200 (audit resolutions + canon-derived patches) -->
 <!-- stage3_thread_operations.md is EMPTY in v0.14. All values from threadwork_redesign_v25.md. -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage3 before use. -->
 
@@ -284,6 +284,39 @@ Offensive Lock = Phase 4 (declared at Phase 1). Support Lock = Phase 6 Step 5 (d
 ### PP-195: Community Weaving Procedure [PROVISIONAL]
 Revolution Domain Action. Pool: Mandate (as dice) + History, TN7, Ob3.
 Success=RS+1, Overwhelming=RS+2, Partial=RS+0, Failure=RS+0 and Mandate−1. Once/season. Mandate≥1 required.
+
+
+## Canon-Derived Resolutions — ED-099–106 (PP-196–200)
+
+### ED-099 — RESOLVED (intended): Temporal weight inert for non-POP ops
+Canon §1.3 + §19.1: Ob captures actualization. Temporal weight manifests through co-movement auto-effects, not Ob difficulty. Old vs. new configurations are equally hard to Weave — but produce different co-movement consequences. No change to Ob tables. Temporal weight is a co-movement input, not an Ob modifier.
+
+### ED-100 — RESOLVED (no change): Lock axis attribution
+Canon §1.1 Inseparability: actuality is Lock's PRIMARY target (drives to full actualization). Intelligibility (frozen face) and temporality (unable to become) are constitutive co-movement consequences, per P-01. Three-way description is correct — it is the inseparability principle working. Clarification note only: Lock primarily targets actuality axis; other effects are inseparability consequences.
+
+### ED-101 — RESOLVED (independence canon-mandated, with exception): Coherence/RS independence
+Canon Amendment 01 §3: Coherence and RS are orthogonal. Independence is correct for TS 0–89. Exception: TS 90+ at Coherence 0 causes reality strain RS cost (PP-197). For TS 70–89 at Coherence 0: −1 RS/session. For TS 90+ at Coherence 0: −1 RS/scene.
+
+### ED-102 — RESOLVED (intended, canon-consistent): POP RS ≤ 60 gate
+Canon §6.1: Strained substrate = thinner membrane between intelligible and unintelligible. POP requires stressed substrate because temporal depth is closer to the surface when the fabric is taut. The perverse incentive is intentional design — using world degradation as a tool is a real choice with real consequences (per §23.3). No change.
+
+### ED-103 — RESOLVED (patch PP-196): FR surcharge cap exemption
+Canon §1.1 + P-01: FR operations are deeper ontological violations. FR surcharge now exempt from §3.2 cap (consistent with Dissolution residue exemption). See PP-196 for revised cost table.
+| Scale | FR Lock/Dissolution | Non-FR at same scale |
+|-------|---------------------|----------------------|
+| Object/Personal | −1 (FR surcharge only) | 0 |
+| Relational | −2 (−1 scale + −1 FR) | −1 |
+| Territorial | −2 (−1 scale + −1 FR) | −1 |
+| Structural | −3 (−2 scale + −1 FR) | −2 |
+
+### ED-104 — RESOLVED (ruling PP-199): POP displacement of debate subject
+If POP displaces debated event: disputed party loses Memory bonus for displaced claims. Debate continues (no restart). Opposing party may invoke displacement as Present-genre argument. Temporal Disjunction: −1D Argue for characters arguing from displaced past (one exchange). See PP-199 in threadwork doc.
+
+### ED-105 — RESOLVED (patch PP-198): Hybrid Coherence declaration rule
+Canon Amendment 01 §2–3: Coherence = layer 2 suspension cost. Only the Leap-performer pays. Replaced "narratively leads" with binary: PC who declares leadership at Phase 1 of Cascade Phase pays Coherence cost. No declaration = no cost. See PP-198.
+
+### ED-106 — RESOLVED (ruling PP-200): Coherence initialization BG→Hybrid
+Canon Amendment 01 §3: Layer 2 intact before any Leap. First Personal Phase in Hybrid: Coherence = 10. Subsequent: carry forward last recorded value. GMs track per PC on Hybrid tracking sheet. See PP-200.
 
 <!-- patch_history: references/params_threadwork_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->

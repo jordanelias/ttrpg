@@ -1830,14 +1830,14 @@ editorial_decisions:
 
   - id: ED-099
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: AUD-TW-001
     source_file: tests/aud_tw_001_threadwork_audit.md
     description: "Confirm temporal weight mechanically inert for non-POP ops is intended (AUD-TW-01)"
     full_flag_text: "AUD-TW-01: Temporal weight revealed by Diagnosis but has no Ob modifier for Weaving/Lock/Dissolution. Old vs new configs identical Ob at same actualization."
-    status: open
+    status: resolved
     priority: P2
-    decision: null
+    decision: "Intended. Canon §1.3+§19.1: Ob captures actualization; temporal weight manifests through co-movement auto-effects, not Ob. Old vs new configs equally hard to operate on. No change."
     propagation_targets: [designs/ttrpg/threadwork_redesign_v25.md]
     propagation_status: pending
     related_ids: []
@@ -1845,14 +1845,14 @@ editorial_decisions:
 
   - id: ED-100
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: AUD-TW-001
     source_file: tests/aud_tw_001_threadwork_audit.md
     description: "Confirm Lock axis attribution — primarily actuality, intelligibility, or temporality? (AUD-TW-03)"
     full_flag_text: "AUD-TW-03: Design text attributes Lock to actuality (full actualization), intelligibility (freezes intelligible face), AND temporality (unable to become). Three-way tension."
-    status: open
+    status: resolved
     priority: P2
-    decision: null
+    decision: "No change needed. Canon §1.1 Inseparability: actuality is primary target; intelligibility/temporality effects are constitutive co-movement consequences per P-01. Description is correct."
     propagation_targets: [designs/ttrpg/threadwork_redesign_v25.md, designs/ttrpg/threadwork_philosophical_reference.md]
     propagation_status: pending
     related_ids: []
@@ -1860,14 +1860,14 @@ editorial_decisions:
 
   - id: ED-101
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: AUD-TW-001
     source_file: tests/aud_tw_001_threadwork_audit.md
     description: "Confirm Coherence/RS mechanical independence is intended (AUD-TW-04)"
     full_flag_text: "AUD-TW-04: Coherence and RS are mechanically independent. Practitioner at Coherence 1 causes no additional RS damage. RS 20 does not accelerate personal Coherence loss beyond Extended Proximity clause. Philosophically the two degradations are the same process at different scales."
-    status: open
+    status: resolved
     priority: P2
-    decision: null
+    decision: "Independence canon-mandated (Amendment 01 §3). Exception added: TS 90+ at Coherence 0 causes RS drain per scene (PP-197); TS 70-89 at Coherence 0 causes RS drain per session. Applied in PP-197."
     propagation_targets: [designs/ttrpg/threadwork_redesign_v25.md]
     propagation_status: pending
     related_ids: []
@@ -1875,14 +1875,14 @@ editorial_decisions:
 
   - id: ED-102
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: AUD-TW-001
     source_file: tests/aud_tw_001_threadwork_audit.md
     description: "Confirm POP RS<=60 gate perverse incentive is intended (AUD-TW-18)"
     full_flag_text: "AUD-TW-18: Past-Oriented Pulling requires RS<=60 (stressed substrate). This means POP becomes easier as the world degrades. Late-game (RS 20-40) this is the default state. Creates perverse incentive to allow RS degradation to enable POP."
-    status: open
+    status: resolved
     priority: P2
-    decision: null
+    decision: "Intended and canon-consistent. Canon §6.1: stressed substrate = thinner membrane; temporal depth more accessible. Perverse incentive is intentional design per §23.3 (no clean solutions, only triage). No change."
     propagation_targets: [designs/ttrpg/threadwork_redesign_v25.md]
     propagation_status: pending
     related_ids: []
@@ -1890,14 +1890,14 @@ editorial_decisions:
 
   - id: ED-103
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: AUD-TW-001
     source_file: tests/aud_tw_001_threadwork_audit.md
     description: "FR surcharge nullified by §3.2 cap at Territorial scale — confirm intended or exempt FR from cap (AUD-TW-09)"
     full_flag_text: "AUD-TW-09: §3.2 cap (-1 max per op) means Territorial Lock and Territorial Pull cost identical Coherence (-1). FR surcharge has no effect at Territorial+. Options: (a) exempt FR from cap; (b) raise cap to -2 for FR; (c) intended — FR danger expressed in RS cost."
-    status: open
+    status: resolved
     priority: P2
-    decision: null
+    decision: "FR surcharge now exempt from §3.2 cap (PP-196). Canon §1.1+P-01: FR is deeper ontological violation; must register differently. Consistent with Dissolution residue exemption. New FR costs: Object/Personal=-1, Relational/Territorial=-2, Structural=-3."
     propagation_targets: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
     propagation_status: pending
     related_ids: []
@@ -1905,14 +1905,14 @@ editorial_decisions:
 
   - id: ED-104
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: AUD-TW-001
     source_file: tests/aud_tw_001_threadwork_audit.md
     description: "POP displacement of debate subject — confirm no mechanical interaction or add ruling (AUD-TW-10)"
     full_flag_text: "AUD-TW-10: If a POP displaces an event being debated, Past-genre argument loses factual basis. No ruling exists. Recommend: displaced event -> Memory bonus lost for that argument, debate not restarted."
-    status: open
+    status: resolved
     priority: P2
-    decision: null
+    decision: "Ruling added (PP-199): POP displaces factual basis → Memory bonus lost for displaced claims; debate continues; opposing party may use displacement as Present-genre argument; Temporal Disjunction −1D Argue for one exchange."
     propagation_targets: [designs/debate/debate_system_redesign_v1.md, designs/ttrpg/threadwork_redesign_v25.md]
     propagation_status: pending
     related_ids: []
@@ -1920,14 +1920,14 @@ editorial_decisions:
 
   - id: ED-105
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: AUD-TW-001
     source_file: tests/aud_tw_001_threadwork_audit.md
     description: "Hybrid Coherence cost qualifier — replace 'narratively leads' with declared/not-declared binary (AUD-TW-15)"
     full_flag_text: "AUD-TW-15: 'Narratively leads' the Strategic Phase Thread order is the qualifier for Hybrid Coherence cost. Ambiguous — creates wiggle room. Recommend: replace with hard binary: PC who declared leadership at start of Cascade Phase pays cost."
-    status: open
+    status: resolved
     priority: P2
-    decision: null
+    decision: "Replaced 'narratively leads' with binary declaration rule (PP-198). Canon Amendment 01 §2-3: only the Leap-performer pays Coherence. PC who declares leadership at Phase 1 of Cascade pays; no declaration = no cost."
     propagation_targets: [designs/ttrpg/threadwork_redesign_v25.md]
     propagation_status: pending
     related_ids: []
@@ -1935,14 +1935,14 @@ editorial_decisions:
 
   - id: ED-106
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: AUD-TW-001
     source_file: tests/aud_tw_001_threadwork_audit.md
     description: "Coherence initialization BG->Hybrid — rule needed (AUD-TW-17)"
     full_flag_text: "AUD-TW-17: When a BG campaign activates Hybrid mode for the first time, practitioner Coherence must be initialized. No ruling. Recommend: Coherence=10 on first activation; GM carries narrative history for subsequent activations."
-    status: open
+    status: resolved
     priority: P2
-    decision: null
+    decision: "Ruling added (PP-200). Canon Amendment 01 §3: layer 2 intact before any Leap. First Hybrid Personal Phase: Coherence=10. Subsequent: carry forward last recorded value."
     propagation_targets: [designs/ttrpg/threadwork_redesign_v25.md]
     propagation_status: pending
     related_ids: []

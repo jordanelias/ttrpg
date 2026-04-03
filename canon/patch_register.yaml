@@ -1997,3 +1997,43 @@ patches:
     status: provisional
     files: [references/params_factions.md, references/params_threadwork.md]
     tags: [threadwork, factions, community_weaving, revolution]
+
+  - id: PP-196
+    date: 2026-04-02
+    source: ED-103 / Canon §1.1 P-01
+    description: "FR surcharge (Lock/Dissolution) exempt from §3.2 per-op Coherence cap. FR costs: Object/Personal=-1, Relational/Territorial=-2, Structural=-3."
+    status: provisional
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+    tags: [threadwork, forced_resolution, coherence, canon_derived]
+
+  - id: PP-197
+    date: 2026-04-02
+    source: ED-101 / Canon Amendment 01 §Resonant
+    description: "TS 90+ Coherence 0 practitioners cause RS drain: -1 RS/scene (TS 90+) or -1 RS/session (TS 70-89). Reality strain from continuous self-maintenance threadwork."
+    status: provisional
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+    tags: [threadwork, coherence, rendering_stability, coherence_zero, canon_derived]
+
+  - id: PP-198
+    date: 2026-04-02
+    source: ED-105 / Canon Amendment 01 §2-3
+    description: "Hybrid Coherence declaration rule: replace 'narratively leads' with binary declaration at Phase 1 of Cascade Phase. Declaring PC pays Coherence; no declaration = no cost."
+    status: provisional
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+    tags: [threadwork, hybrid, coherence, canon_derived]
+
+  - id: PP-199
+    date: 2026-04-02
+    source: ED-104 / Canon §1.3, §13.1
+    description: "POP displacement of debate subject: Memory bonus lost for displaced claims; debate continues; opposing party may use displacement as Present-genre argument; Temporal Disjunction -1D Argue one exchange."
+    status: provisional
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+    tags: [threadwork, debate, past_oriented_pulling, canon_derived]
+
+  - id: PP-200
+    date: 2026-04-02
+    source: ED-106 / Canon Amendment 01 §3
+    description: "Coherence initialization BG→Hybrid: first Personal Phase = Coherence 10; subsequent = carry last recorded value. GMs track per PC on Hybrid sheet."
+    status: provisional
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+    tags: [threadwork, hybrid, coherence, canon_derived]
