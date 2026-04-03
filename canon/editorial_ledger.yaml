@@ -1970,3 +1970,18 @@ editorial_decisions:
     priority: P2
     decision: null
     tags: [board_game, territory, naming, crown]
+
+  - id: ED-107
+    date_flagged: 2026-04-02
+    date_resolved: 2026-04-02
+    source: SIM-20-01
+    source_file: tests/sim_x_20_hybrid_coherence_campaign.md
+    description: "Hybrid co-declaration tie-break — simultaneous leadership declarations unspecified"
+    full_flag_text: "SIM-20-01: Two PCs simultaneously declare leadership for same Strategic Phase order — no tie-break specified."
+    status: resolved
+    priority: P2
+    decision: "Highest Thread Sensitivity declares. Tie = first at table. Non-declaring PC pays no Coherence. PP-205."
+    propagation_targets: [designs/ttrpg/threadwork_redesign_v25.md]
+    propagation_status: complete
+    related_ids: [PP-205]
+    tags: [hybrid, coherence, tie_break]

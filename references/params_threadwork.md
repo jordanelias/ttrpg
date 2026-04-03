@@ -1,5 +1,5 @@
 <!-- version: v0.14-AUD1 | source: threadwork_redesign_v25.md | last_updated: 2026-04-02 -->
-<!-- PATCHES APPLIED: P-11–P-30 (prior); ST-TW-01–05; PP-166; PP-190–200 (audit resolutions + canon-derived patches) -->
+<!-- PATCHES APPLIED: P-11–P-30 (prior); ST-TW-01–05; PP-166; PP-190–207 (all audit + sim-debt resolutions) -->
 <!-- stage3_thread_operations.md is EMPTY in v0.14. All values from threadwork_redesign_v25.md. -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage3 before use. -->
 
@@ -317,6 +317,30 @@ Canon Amendment 01 §2–3: Coherence = layer 2 suspension cost. Only the Leap-p
 
 ### ED-106 — RESOLVED (ruling PP-200): Coherence initialization BG→Hybrid
 Canon Amendment 01 §3: Layer 2 intact before any Leap. First Personal Phase in Hybrid: Coherence = 10. Subsequent: carry forward last recorded value. GMs track per PC on Hybrid tracking sheet. See PP-200.
+
+
+## Sim-Debt Resolutions — SIM-X-17 through SIM-X-20 (PP-201–207)
+
+### PP-201 (P1): Mass battle Dissolution warning
+E[RS per Dissolution attempt at TS70] = −18.4. Three attempts = E[RS] 6 (Critical) from RS 60. Single Failure at RS<24 = Rupture. Dissolution is campaign-altering. See params_mass_combat.
+
+### PP-202 (P2): Rendering Crisis arc stability disruption
+Arc pauses (not resets) if physical stability fails mid-arc. Disrupted seasons extend non-practice requirement. Thread ops during disrupted season resets non-practice counter entirely.
+
+### PP-203 (P3): Sequential POPs on paradoxed thread
+Second POP targeting a thread in paradox window auto-fails (no roll, no RS cost). Coherence and Focus consumed. Window unaffected.
+
+### PP-204 (P3): RS<24 mass battle Rupture threshold
+GM mandatory disclosure before any mass battle Dissolution declaration when RS<24. Dissolution Failure = −24 RS = Rupture if RS<24.
+
+### PP-205 (P2 / ED-107): Hybrid co-declaration tie-break
+Highest Thread Sensitivity declares. Tie = first declared at table. Non-declaring PC pays no Coherence.
+
+### PP-206 (P3): TS 30-31 Rendering Crisis GM guidance
+GM must disclose before arc: Success/Overwhelming at TS 30-31 reduces TS to 29 or below Leap minimum (30). Practitioner may lose Thread ops permanently.
+
+### PP-207 (P3): Hybrid Coherence pacing guidance
+Sustainable: 1 Personal Relational op + 1 Strategic declaration/session → Rendering Crisis ~session 10. Two of each → Crisis by session 3-5 (not intended).
 
 <!-- patch_history: references/params_threadwork_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->

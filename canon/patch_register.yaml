@@ -2158,3 +2158,59 @@ patches:
   applied_to_version: "v0.8.0"
   status: applied
   applied_commit: pending
+
+  - id: PP-201
+    date: 2026-04-02
+    source: SIM-19-01 (P1)
+    description: "Mass battle Dissolution campaign-impact warning — E[RS/attempt]=-18.4; 3 attempts = Critical RS; Failure at RS<24 = Rupture. Mandatory GM communication."
+    status: provisional
+    files: [references/params_mass_combat.md, references/params_threadwork.md]
+    tags: [mass_combat, dissolution, rendering_stability, gm_guidance]
+
+  - id: PP-202
+    date: 2026-04-02
+    source: SIM-18-01 (P2)
+    description: "Rendering Crisis arc stability disruption — arc pauses not resets; disrupted seasons extend non-practice; Thread op during disruption resets non-practice counter."
+    status: provisional
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+    tags: [threadwork, coherence, rendering_crisis, arc]
+
+  - id: PP-203
+    date: 2026-04-02
+    source: SIM-17-01 (P3)
+    description: "Sequential POPs on paradoxed thread auto-fail (no roll, no RS cost). Coherence and Focus consumed. Window unaffected."
+    status: provisional
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+    tags: [threadwork, past_oriented_pulling, paradox_window]
+
+  - id: PP-204
+    date: 2026-04-02
+    source: SIM-19-02 (P3)
+    description: "RS<24 mass battle Rupture threshold — GM mandatory disclosure before Dissolution declaration; Failure = -24 RS = Rupture if RS<24."
+    status: provisional
+    files: [references/params_mass_combat.md]
+    tags: [mass_combat, dissolution, rendering_stability, rupture]
+
+  - id: PP-205
+    date: 2026-04-02
+    source: SIM-20-01 (P2) / ED-107
+    description: "Hybrid co-declaration tie-break — highest TS declares; tie = first at table. Non-declaring PC pays no Coherence."
+    status: provisional
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+    tags: [hybrid, coherence, declaration, tie_break]
+
+  - id: PP-206
+    date: 2026-04-02
+    source: SIM-18-02 (P3)
+    description: "GM guidance: TS 30-31 Rendering Crisis arc may reduce TS below Leap minimum — surface before arc begins."
+    status: provisional
+    files: [designs/ttrpg/threadwork_redesign_v25.md]
+    tags: [threadwork, coherence, thread_sensitivity, gm_guidance]
+
+  - id: PP-207
+    date: 2026-04-02
+    source: SIM-20-02 (P3)
+    description: "Hybrid Coherence pacing guidance — 1 Personal + 1 Strategic/session is sustainable (Crisis ~S10); 2+2 causes Crisis by S3-5."
+    status: provisional
+    files: [designs/ttrpg/threadwork_redesign_v25.md]
+    tags: [hybrid, coherence, pacing, gm_guidance]

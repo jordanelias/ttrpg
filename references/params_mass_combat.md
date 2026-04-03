@@ -173,6 +173,12 @@ All RS costs from Thread operations in mass battle ×3. Applied after degree tab
 Source: ST-TW-03 design note.
 
 ## Thread Integration [COMPILED — stage11]
+
+> **Mass battle Dissolution — campaign impact warning (PP-201):** [PROVISIONAL] Dissolution at mass battle scale is a **campaign-altering decision**, not a tactical one. E[RS per Dissolution attempt] = −18.4 at TS 70 (9D Spirit+History, Ob5). Three Dissolution attempts in a single battle produce E[RS after] ≈ 6 (Critical band) from a campaign-starting RS 60. A single Dissolution Failure when RS < 24 triggers the Rupture immediately. **Before a practitioner declares offensive Dissolution in mass battle:** the GM should confirm the table understands this is a world-stakes action. Dissolution in mass battle is the Einhir scale of operation. It may win a battle while ending a campaign. Weaving and Mending are the only RS-neutral or RS-positive mass battle Thread operations on average. Lock and Pull are risky (E −3 to −6 RS per attempt). Dissolution is in a category of its own.
+
+
+> **RS<24 mass battle Rupture threshold (PP-204):** [PROVISIONAL] If RS is below 24 when a mass battle Thread operation is declared, the GM must inform the declaring practitioner before the roll: a Dissolution Failure at this RS level triggers the Rupture immediately (Dissolution Failure = −24 RS via ×3 multiplier; RS floor = 0 = Rupture). This is not a mechanic restriction — the practitioner may still attempt the operation. It is mandatory table information. At RS 0–23: any mass battle Dissolution Failure ends the campaign in the Rupture. Partial and worse results on Dissolution (−18 RS and −24 RS respectively) also carry Rupture risk at RS < 18 and RS < 25 respectively. Print this threshold on the mass battle Thread tracking sheet.
+
 Combat Thread ops (Dissolution, offensive Pulling): Phase 2. Support ops (Weave, Mend, Lock, non-offensive Pulling): Phase 5. Both declared Phase 1.
 Mass → Personal: Personal Action available at Phase 5 (Priority 8). Limit: 1 exchange/battle turn. General's Phase 5 consumed by personal combat (Coherence Rating suspended).
 
