@@ -32,12 +32,12 @@ editorial_decisions:
   - id: ED-002
     legacy_id: BG-E-31
     date_flagged: 2026-03-31
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: session
     source_file: session_log_current.md
     description: "Champion Renown ability text — exact wording for the ability"
     full_flag_text: "BG-E-31: Champion Renown ability text"
-    status: provisional
+    status: resolved
     priority: P2
     decision: "Champion Renown ability: "Once per season, Champion may spend 1 Mandate to grant +1D to one allied faction Domain Action roll in a territory where the Champion is present." [PROVISIONAL]"
     propagation_targets:
