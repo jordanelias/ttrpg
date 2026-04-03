@@ -1894,3 +1894,17 @@ patches:
   applied_to_version: "v1.4 / v4.6"
   status: applied
   applied_commit: "pending"
+
+  - id: PP-188
+    date: 2026-04-02
+    scope: personal_combat_ranged
+    description: >
+      Correct ranged weapon TN and damage values.
+      Bow (LP): Hit TN 6→7, damage modifier +2→+0 (no damage bonus).
+      Crossbow (HP): Hit TN 5→6, damage modifier +4→+0 base / +2 vs medium and heavy armour.
+      Sling: collapse LBl/HBl into single Sling type at TN8; ammo sub-table:
+      clay +0 / rock +1 / metal +2 / lead +3 vs medium and heavy armour (all +0 vs unarmoured and light armour).
+    files_changed:
+      - designs/combat/combat_design_v1.md
+      - references/params_combat.md
+    status: applied

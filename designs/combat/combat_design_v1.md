@@ -1,10 +1,10 @@
 # VALORIA — COMBAT DESIGN (v1)
 ## Date: 2026-04-02
-## Version: v1.4 (PP-188: ranged redesign — Piercing/Blunt categories, fire rates, crossbow armour bonus, sling ammo, no Fibonacci for ranged)
+## Version: v1.3 (ED-098: cover declaration timing clarification)
 ## Status: WORKING DESIGN — not compiled. This is the design-layer source for personal combat.
 ## Authority: Philosophical Foundations → this document → compilation (when ready)
 ## Mode applicability: ALL (TTRPG baseline; scales to Hybrid and Board Game via params)
-## Patches incorporated: PP-086–092, P2-B11 series, PP-172, PP-188 (ranged redesign ED-061)
+## Patches incorporated: PP-086–092, P2-B11 series (from sim_combat_batch_11.md), PP-172 (SIM-001 ranged subtypes)
 ## Source checkpoint: compilation/v0.14/stage8_combat.md (for reference values)
 
 ---
@@ -101,17 +101,25 @@ Initiative transfers on: hit (attacker maintains), feint success, distance chang
 | Heavy Cut | 6 | 7 | +4 | Long |
 | Light Blunt | 6 | 7 | +1 | Short |
 | Heavy Blunt | 7 | 8 | +4 | Short or Long |
-| Piercing — Bow | 6 | 8† | +2 | Projectile only |
-| Piercing — Crossbow | 5 | 8† | +2‡ | Projectile only |
-| Blunt — Throwing weapon | 7 | 8† | +1 | Projectile only |
-| Blunt — Sling | 8 | 8† | §ammo | Projectile only |
+| LP — Light Piercing (bow/arrow) | 7 | 8† | +0 | Projectile only |
+| HP — Heavy Piercing (crossbow/bolt) | 6 | 8† | +0 / +2 vs med+heavy‡ | Projectile only |
+| Sling (all ammo types) | 8 | 8† | see ammo table‡‡ | Projectile only |
 | Versatile (Light) | 5 | 6 | +1 | Short or Long (choose per round) |
 | Versatile (Medium) | 6 | 7 | +2 | Short or Long |
 | Versatile (Heavy) | 7 | 8 | +4 | Short or Long |
 
-†Def TN 8 applies only when inside attacker's melee range (Close zone). Full pool to Defence only — no Offence split.
-‡Crossbow base mod +2. If the attack hits (net hits > 0 after DR): add +2 flat vs Medium armour, +3 flat vs Heavy armour.
-§Sling pool is −2D from base Combat Pool. Damage modifier by ammunition: Clay +1 / Stone +2 / Metal +3 / Lead +4.
+†Def TN 8 applies only when inside attacker's melee range (Close zone). Cannot split pool for Offence when using ranged weapon defensively at melee range.
+
+‡HP crossbow: +0 damage modifier vs unarmoured and light armour. +2 damage modifier vs medium armour and heavy armour.
+
+‡‡Sling ammo damage modifier vs medium and heavy armour only (vs unarmoured/light: +0 regardless of ammo):
+
+| Ammo | Dmg mod vs med/heavy |
+|------|----------------------|
+| Clay | +0 |
+| Rock | +1 |
+| Metal | +2 |
+| Lead | +3 |
 
 ### Damage Resolution
 Net hits = Offence successes − Defence successes (minimum 0).
@@ -133,11 +141,8 @@ No catastrophic outcome category. Majority-1s produces standard Failure.
 - Ranged weapons (LP/HP/LBl/HBl): require Far zone to attack. At Close zone, ranged weapons cannot make an Offence roll. Melee weapons cannot retaliate against a ranged attack from Far zone.
 - Ranged defence at Close zone: a character carrying a ranged weapon may defend at Def TN 8 if forced into Close zone by a melee attacker. The full pool is allocated to Defence; no Offence allocation is permitted. This represents using the weapon as a physical barrier or emergency grapple resist.
 - Sling at Close zone: LBl and HBl slingers who are forced to Close zone are assumed to carry a melee weapon (typically a knife, Light Cut). May draw it as a Retrieve Weapon action.
-- Crossbow reload: after firing, crossbow user must take a full-round Reload action before firing again. No other action may be taken during Reload. Fires on alternate rounds only.
-- Sling wind-up: sling requires a full-round wind-up action after each shot. Fires on alternate rounds only.
-- Bow and throwing weapons: no reload or wind-up required. Fire every round.
+- HP crossbow reload: after firing, HP user must take a full-round Reload action before firing again. No other action may be taken during Reload.
 - Ranged vs closing melee: closing character must take a Move action each round. While closing, they are exposed to ranged fire and cannot allocate dice to Defence against it.
-- Fibonacci group bonus does not apply to ranged attacks. Ranged attackers receive no bonus dice for additional allies targeting the same enemy.
 
 ### Environmental Factors (Ranged Combat)
 Melee users must close to reach a ranged attacker. Terrain affects the number of rounds of exposure and imposes penalties.
@@ -152,10 +157,10 @@ Melee users must close to reach a ranged attacker. Terrain affects the number of
 
 Cover (a physical obstacle between attacker and defender) adds DR to the defender:
 
-| Cover | vs Piercing | vs Blunt |
-|-------|------------|---------|
-| Soft (trees, wagon, bale) | +2 DR | +2 DR |
-| Hard (stone wall, fortification) | Blocks shot | Blocks shot |
+| Cover | vs LP | vs HP | vs LBl | vs HBl |
+|-------|-------|-------|--------|--------|
+| Soft (trees, wagon, bale) | +2 DR | +1 DR | +2 DR | +2 DR |
+| Hard (stone wall, fortification) | Blocks shot | Blocks shot | Blocks shot | Blocks shot |
 
 Cover must be declared in Phase 1 (Movement) to take effect. Cover does not move with the defender. The Game Master determines whether a physical obstacle is present in the zone. A character who does not declare Cover in Phase 1 receives no DR benefit that round, even if physically behind an obstacle. [PROVISIONAL — ED-098]
 
@@ -174,16 +179,14 @@ Cover must be declared in Phase 1 (Movement) to take effect. Cover does not move
 | Heavy | 6 | 5 | 3 | 1 | −2 |
 
 ### Ranged DR
-| Tier | DR vs Piercing | DR vs Blunt |
-|------|---------------|------------|
-| None | 0 | 0 |
-| Light | 2 | 1 |
-| Medium | 3 | 2 |
-| Heavy | 5 | 3 |
+| Tier | DR vs LP (arrow) | DR vs HP (bolt) | DR vs LBl (stone) | DR vs HBl (lead) |
+|------|-----------------|----------------|------------------|-----------------|
+| None | 0 | 0 | 0 | 0 |
+| Light | 2 | 1 | 1 | 0 |
+| Medium | 3 | 2 | 2 | 1 |
+| Heavy | 5 | 3 | 3 | 2 |
 
-Crossbow post-DR flat bonus (applies only if net hits > 0 after DR): +2 vs Medium, +3 vs Heavy. This is added after the DR table is applied.
-Sling pool penalty (−2D) and ammunition modifier (Clay +1 / Stone +2 / Metal +3 / Lead +4) apply before the roll. DR then applies to the result normally.
-Cover DR and armour DR stack additively. Fibonacci group bonus: not applicable to ranged.
+**Ranged DR design note:** LP (arrows) are deflected by plate at high angles — Heavy armour DR 5 reflects this. HP (bolts) penetrate all armour tiers best — Heavy armour DR only 3. LBl (stone) follows same curve as LP (blunt impact degrades similarly). HBl (lead) is anti-armour: uniquely flat DR curve (0/0/1/2) — non-deflecting dense mass transfers energy through armour. Heavy armour + cover stacks: DR totals apply cumulatively.
 
 DR is subtracted from damage after net hits + weapon modifier.
 

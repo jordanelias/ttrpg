@@ -1,4 +1,4 @@
-<!-- version: v0.14-AUD5 | sources: designs/combat/combat_design_v1.md (PP-188) | last_updated: 2026-04-02 -->
+<!-- version: v0.14-AUD4 | sources: designs/combat/combat_design_v1.md (PP-174) | last_updated: 2026-04-02 -->
 <!-- CANONICAL SOURCE: combat_design_v1.md supersedes stage8_combat.md (has PP-086-092, MT-01, three-mode framing) -->
 <!-- PATCHES APPLIED: PP-086, PP-087, PP-088, PP-091, PP-092, PP-165, PP-172, PP-174 (remove stale HBl no-personal note; fix Damage Formula; ED-092 provisional on STR) -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
@@ -22,21 +22,18 @@ Pool modifiers:
 | Light Blunt | 6 | 7 | +1 to +2 | Hand axe, short club, sap |
 | Heavy Blunt | 7 | 8 | +4 to +5 | War hammer, mace, pollaxe |
 | Unarmed | 8 | 9 | +0 | Fists, grappling, improvised |
-| Piercing — Bow | 6 | 8† | +2 | Shortbow, longbow, recurve |
-| Piercing — Crossbow | 5 | 8† | +2‡ | Light crossbow, heavy crossbow |
-| Blunt — Throwing weapon | 7 | 8† | +1 | Javelin, thrown rock, dart |
-| Blunt — Sling | 8 | 8† | §ammo | Sling, staff sling |
+| LP — Light Piercing (bow/arrow) | 7 | 8† | +0 | Shortbow, longbow |
+| HP — Heavy Piercing (crossbow/bolt) | 6 | 8† | +0 / +2 vs med+heavy | Light crossbow, heavy crossbow |
+| Sling | 8 | 8† | clay+0 / rock+1 / metal+2 / lead+3 vs med+heavy | Sling (all ammo) |
 
-†Def TN 8: at Close zone, full pool to Defence only. No Offence split.
-‡Crossbow base +2. If hit (net hits > 0 after DR): +2 flat vs Medium, +3 flat vs Heavy.
-§Sling: −2D from Combat Pool. Ammo: Clay +1 / Stone +2 / Metal +3 / Lead +4.
+†Def TN 8: ranged weapon used as barrier at Close zone. Full pool to Defence only. No Offence split permitted.
 
 Ranged weapons have no Def TN — targets cannot allocate Defence dice against them.
 Damage (ranged) = net successes + weapon modifier (STR not added — arm strength already in modifier/TN).
 
-## Ranged Combat Rules (PP-188)
+## Ranged Combat Rules (PP-172)
 
-**Zone:** Ranged weapons (Piercing and Blunt) require Far zone to make an Offence roll. At Close zone: cannot attack. See Ranged Defence below.
+**Zone:** Ranged weapons (LP/HP/LBl/HBl) require Far zone to make an Offence roll. At Close zone: cannot attack. See Ranged Defence below.
 
 **No parry (Far zone):** When attacker is at Far zone, target cannot allocate Defence dice against ranged attacks. Armour Damage Reduction (DR) applies normally.
 
@@ -44,10 +41,10 @@ Damage (ranged) = net successes + weapon modifier (STR not added — arm strengt
 
 **Cover:** If defender declared Cover in Phase 1 of Movement: cover DR applies. Cover requires a physical obstacle. Cover does not move with the defender.
 
-| Cover type | vs Piercing | vs Blunt |
-|------------|------------|---------|
-| Soft (trees, wagon, bale) | +2 DR | +2 DR |
-| Hard (stone wall, fortification) | Blocks shot | Blocks shot |
+| Cover type | vs LP | vs HP | vs LBl | vs HBl |
+|------------|-------|-------|--------|--------|
+| Soft (trees, wagon, bale) | +2 DR | +1 DR | +2 DR | +2 DR |
+| Hard (stone wall, fortification) | Blocks shot | Blocks shot | Blocks shot | Blocks shot |
 
 **Environmental approach (melee closing):**
 | Terrain | Rounds to close | Penalty to closer |
@@ -60,22 +57,19 @@ Damage (ranged) = net successes + weapon modifier (STR not added — arm strengt
 
 **Establish Distance (defender option):** Costs combat action. Attacker loses shot this round. Target moves beyond range.
 
-**Fire rate:**
-- Bow and throwing weapons: fire every round. No reload.
-- Crossbow: fire every other round. Reload action (full round, no other action) required after each shot.
-- Sling: fire every other round. Wind-up action (full round) required after each shot.
+**Reload (HP crossbow only):** After each shot, HP user must take Reload action (full round, no other action). LP, LBl, HBl fire every round (sling wind-up included in action economy).
 
 **Ranged vs ranged (mirror):** Initiative rules apply (higher Presence declares first). Both attacks resolve simultaneously at round end. [PROVISIONAL — GAP-PROJ-01]
 
 **STR minimums:**
 | Weapon | Min STR | Penalty if 1 below |
 |--------|---------|-------------------|
-| Bow | 2 | −1D |
-| Crossbow | 1 | — |
-| Throwing weapon | 1 | — |
-| Sling | 1 | — |
+| LP (bow) | 2 | −1D |
+| HP (crossbow) | 1 | — |
+| LBl (stone sling) | 1 | — |
+| HBl (lead sling) | 2 | −1D |
 
-**Sling at Close zone:** Slingers are assumed to carry a knife (Light Cut) or other melee weapon. May draw it as a Retrieve Weapon action if forced to Close zone.
+**Sling at Close zone:** LBl and HBl slingers are assumed to carry a knife (Light Cut). May draw it as Retrieve Weapon action if forced to Close zone.
 
 **HBl personal vs siege distinction:** HBl at personal scale = lead shot sling (PP-172). HBl at siege/mass scale = Artillery unit (PP-091/PP-106, sight-line rule). These are distinct: personal HBl uses Ranged DR 0/0/1/2; Artillery Bombard uses flat Strength damage formula.
 
@@ -111,16 +105,13 @@ Exempt: Full Guard; Long weapon at Close zone.
 | Heavy | 4 | −2 | 6 | 5 | 3 | 1 |
 
 ## Ranged Damage Reduction (DR) by Armour Tier
-| Armour | vs Piercing | vs Blunt |
-|--------|------------|---------|
-| None | 0 | 0 |
-| Light | 2 | 1 |
-| Medium | 3 | 2 |
-| Heavy | 5 | 3 |
+| Armour | vs LP (arrow) | vs HP (bolt) | vs LBl (stone) | vs HBl (lead) |
+|--------|--------------|-------------|----------------|--------------|
+| None | 0 | 0 | 0 | 0 |
+| Light | 2 | 1 | 1 | 0 |
+| Medium | 3 | 2 | 2 | 1 |
+| Heavy | 5 | 3 | 3 | 2 |
 
-**Crossbow armour penetration (post-DR):** If crossbow attack hits, add flat bonus after DR: +2 vs Medium, +3 vs Heavy.
-**Sling:** −2D pool. Ammo mod (Clay +1 / Stone +2 / Metal +3 / Lead +4) applied before roll. DR applied normally.
-**Fibonacci group bonus:** Does not apply to ranged attacks.
 Cover DR stacks additively with armour DR.
 
 ## Wounds / Incapacitation
