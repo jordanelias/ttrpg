@@ -1,5 +1,5 @@
 # VALORIA — MASS BATTLE SYSTEM v4
-## Version: v4.4 (PP-106 applied: HBl Dmg Mod +5→+3, Artillery sight-line rule, personal combat projectile reference)
+## Version: v4.5 (PP-173 applied: ranged DR table split LP/HP/LBl/HBl, HBl personal combat reference updated)
 ## Status: WORKING DESIGN — no appendix sections. Read straight through.
 ## Three-mode: TTRPG/Hybrid (Part A); Board Game (Part B); Hybrid Handoff (§B.5)
 ## All P1/P2/P3 patches applied. Gaps filled. Editorial notes flagged.
@@ -50,11 +50,7 @@ medium; LBl (sling) are anti-unarmoured only. Force composition determines
 outcome more than tactics. [EDITORIAL: ED-061 — confirm 4-category split and
 sub-unit types for Ranged (archer/crossbow/slinger)]
 
-**Personal combat projectile weapons:** LP, HP, and LBl are also defined for
-individual fighters in personal combat. See references/params_combat.md §Ranged
-Combat Rules (PP-105). HBl has no personal combat equivalent (siege crew fight as
-melee/unarmed). The DR values above apply to both mass combat (unit scale) and personal
-combat (individual scale, same formula).
+**Personal combat projectile weapons:** LP, HP, LBl, and HBl are all defined for individual fighters in personal combat (PP-172). See references/params_combat.md §Ranged Combat Rules. **HBl distinction:** HBl at personal scale = lead shot sling (individual weapon, PP-172 DR 0/0/1/2). HBl at mass/siege scale = Artillery unit (PP-091/PP-106, sight-line rule, Bombard action). Siege crew fight as melee/unarmed, but individual slingers may carry lead shot. The ranged DR values above apply at both unit scale (Volley Phase) and personal scale (individual ranged attacks).
 
 ---
 
@@ -149,15 +145,25 @@ secondary loss cannot itself cause further routs until the next turn. *[P1-02]*
 **Weapon Type** — (hit TN, def TN, damage modifier). Inherits personal combat
 table unchanged.
 
-**Armour Tier / DR table** — inherits personal combat table plus Projectile
-column (= LightCut values). *[P2-07]*
+**Armour Tier / DR table** — inherits personal combat tables. Melee and ranged DR are distinct. *[PP-173]*
 
-| Armour | LightCut | HeavyCut | LightBlunt | HeavyBlunt | Projectile |
-|---|---|---|---|---|---|
-| None | 0 | 0 | 0 | 0 | 0 |
-| Light | 2 | 1 | 1 | 0 | 2 |
-| Medium | 4 | 3 | 2 | 1 | 4 |
-| Heavy | 6 | 5 | 3 | 1 | 6 |
+**Melee DR:**
+| Armour | LightCut | HeavyCut | LightBlunt | HeavyBlunt |
+|---|---|---|---|---|
+| None | 0 | 0 | 0 | 0 |
+| Light | 2 | 1 | 1 | 0 |
+| Medium | 4 | 3 | 2 | 1 |
+| Heavy | 6 | 5 | 3 | 1 |
+
+**Ranged DR (Volley Phase):**
+| Armour | LP (arrow) | HP (bolt) | LBl (stone) | HBl (lead sling) |
+|---|---|---|---|---|
+| None | 0 | 0 | 0 | 0 |
+| Light | 2 | 1 | 1 | 0 |
+| Medium | 3 | 2 | 2 | 1 |
+| Heavy | 5 | 3 | 3 | 2 |
+
+**Ranged unit role note:** LP (archer) units are effective only vs None/Light armour. HP (crossbow) units penetrate through Medium armour. LBl (sling) units are anti-levy only — ineffective vs Light armour or higher. HBl (lead sling) units are the only personal-scale anti-armour ranged option; effective vs Light and Medium. HBl (Artillery/siege units) follow PP-091/PP-106 and are a distinct unit type.
 
 ---
 

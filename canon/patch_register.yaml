@@ -1797,3 +1797,16 @@ patches:
   applied_to_version: "v1.6"
   status: provisional
   applied_commit: "2026-04-02-session-close"
+
+- id: PP-173
+  date: 2026-04-02
+  severity: P1
+  description: "Mass combat DR table: replace single Projectile column with LP/HP/LBl/HBl ranged columns; update HBl personal combat cross-reference; add LBl anti-levy note"
+  finding_id: "SIM-002-F"
+  source: simulation
+  affects:
+    - designs/mass_combat/mass_battle_v3.md
+    - references/params_mass_combat.md
+  applied_to_version: "v4.5"
+  status: applied
+  applied_commit: "pending"

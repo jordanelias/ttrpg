@@ -179,9 +179,25 @@ Dmg Mod from unit table below. [PROVISIONAL — ED-062: confirm values]
 | Light Infantry | LightCut | +2 |
 | Heavy Infantry | HeavyCut | +4 |
 | Cavalry | HeavyCut | +5 |
-| Ranged | LP | +2 |
+| LP (archer) | LP | +2 |
+| HP (crossbow) | HP | +4 |
+| LBl (stone sling) | LBl | +1 |
+| HBl (lead sling) | HBl | +3 |
 | Artillery | HBl | +3 |
 | Knights Templar | HeavyBlunt | +5 |
+
+
+## Ranged DR Table (Volley Phase) — PP-173
+| Armour | vs LP | vs HP | vs LBl | vs HBl (lead) | vs HBl (Artillery) |
+|--------|-------|-------|--------|---------------|-------------------|
+| None | 0 | 0 | 0 | 0 | 0 |
+| Light | 2 | 1 | 1 | 0 | 0 |
+| Medium | 3 | 2 | 2 | 1 | 1 |
+| Heavy | 5 | 3 | 3 | 2 | 2 |
+
+HBl (Artillery) uses same DR as HBl (lead sling personal) — both are blunt mass-transfer projectiles. Artillery applies PP-091 Bombard rules (flat damage), not Volley DR formula. The DR here is for reference: if Artillery is treated as a Volley unit in a simplified scenario, use HBl column.
+
+LBl (stone sling) units: anti-levy only. Zero damage vs Light armour or higher at CP3 (E[net] 1.2, DR 1 → 0.2; effectively rounds to 0 in practice). Use LBl units only when enemy is unarmoured or lightly equipped.
 
 ### BG Battle Partial outcome (PARAMS-GAP-06-MC resolved)
 Margin = |attacker net − defender net|.
@@ -191,6 +207,7 @@ Margin = |attacker net − defender net|.
 [PROVISIONAL — ED-063: confirm Partial threshold and Stability cost]
 
 
+<!-- patches: PP-173 (ranged DR split, HBl personal reference) -->
 <!-- patch_history: references/params_mass_combat_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
 ## LBl (Sling) — Prepared Defence Exception (ED-065 resolved — provisional)

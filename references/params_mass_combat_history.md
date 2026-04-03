@@ -72,3 +72,13 @@ auto-cost −1/op: each Thread operation in mass battle depletes personal track 
 - ED-038: Coherence — RESOLVED: personal track from threadwork Part 3
 - ED-039: Military seasonal cap pooling (P2)
 - ED-036: Altonian unit stats BLOCKER
+
+## PP-173 (2026-04-02) — Ranged DR Table Split
+Source: SIM-002
+Changes:
+- Unit table: single 'Ranged | LP | +2' row expanded to 4 rows (LP/HP/LBl/HBl)
+- DR table: Projectile column (LightCut) replaced with 4-column Ranged DR table
+  LP: 0/2/3/5 | HP: 0/1/2/3 | LBl: 0/1/2/3 | HBl (lead sling): 0/0/1/2
+- HBl personal combat cross-reference updated
+- LBl anti-levy clarification added
+Editorials: ED-087 (BG ranged modifier)

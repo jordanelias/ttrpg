@@ -1725,3 +1725,17 @@ editorial_decisions:
   related_ids: []
   supersedes: []
   tags: [debate, board_game, orientation, doubt_marker]
+
+  - id: ED-087
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: SIM-003
+    source_file: tests/sim_ranged_002_003.md
+    description: "BG mode: should ranged-specialist factions receive a Military modifier for archer/crossbow force composition? Currently all units abstracted to Military stat."
+    full_flag_text: "[EDITORIAL: ED-087 — Should ranged-specialist factions get BG Military modifier for archer/crossbow units?]"
+    status: provisional
+    decision: "Provisional: no BG modifier. BG correctly abstracts above weapon-type level. Revisit if faction asymmetry design requires it."
+    propagation_targets: []
+    propagation_status: n/a
+    related_ids: [ED-061]
+    tags: [ranged, board_game, faction, provisional]

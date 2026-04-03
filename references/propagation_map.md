@@ -269,6 +269,13 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 Source: designs/combat/combat_design_v1.md §5, §6
 Propagation targets:
 - references/params_combat.md → DONE (this commit)
-- designs/mass_combat/mass_battle_v3.md → PENDING (HBl unit type, ranged DR rows)
-- references/params_mass_combat.md → PENDING (HBl DR row)
-- designs/board_game/valoria_bg_v05_simulation_and_patches.md → PENDING (Anti-Armour keyword for HBl units)
+- designs/mass_combat/mass_battle_v3.md → DONE (PP-173, this commit)
+- references/params_mass_combat.md → DONE (PP-173, this commit)
+- designs/board_game/ → NOT REQUIRED (BG abstracts above weapon-type level — confirmed SIM-003)
+
+### PP-173 — Mass Combat Ranged DR (2026-04-02)
+Source: designs/mass_combat/mass_battle_v3.md §A.4 (DR table)
+Propagation targets:
+- references/params_mass_combat.md → DONE (this commit)
+- designs/board_game/ → NOT REQUIRED (BG abstracts above weapon type)
+- references/propagation_map.md: PP-172 entry updated: mass_battle → DONE
