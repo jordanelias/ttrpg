@@ -1,72 +1,67 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_LORE_INTEGRATION_PLAN
-phase: SESSION CLOSED
-status: COMPLETE
+session_id: 2026-04-02T_EDITORIAL_REGISTER_PASS
+phase: Phase 15 — Editorial register resolution pass
+status: CLOSED
 
-## LORE INTEGRATION ASSESSMENT
-Source material: Pre-project lore docs (Church of Solmund/Galbados, Lowenritter, Crown, Guilds, economy, governance).
-Note: Galbados is now Solmund per user direction.
+completed:
+  - PP-188: Ranged weapon corrections (bow TN7 +0, crossbow TN6 +0/+2 vs med+heavy, sling TN8 ammo table)
+  - PP-189: Uphold/Appease mechanic defined; Compromise renamed Appease; cost Mandate-1; timing pre-roll
+  - PP-190: Commander bonus confirmed Military÷3 round down min 0 max +2D (ED-033)
+  - PP-193: Altonian unit stats provisional — Heavy Infantry/Cavalry/Crossbow/Artillery from Military ~5 (ED-036)
+  - PP-194: Unit Dmg Mod table confirmed (ED-062)
+  - PP-195: Battle Partial threshold confirmed margin≤1, Attacker Stability-1 (ED-063)
+  - PP-196: Projectile DR table confirmed (ED-064)
+  - PP-197: LBl vs LP distinction intentional — slings anti-light, bows anti-armoured (ED-065)
+  - PP-198: Artillery morale cascade capped by existing -3/phase rule (ED-066)
+  - PP-199: Simultaneous catastrophe — RS=0 first then IP≥80 (ED-077)
+  - PP-200: BG Thread Ops always skipped — no Coherence cost by design (ED-080)
+  - PP-201: Reformed Settlement +1 Ob Diplomacy vs Hafenmark while TC≥40 (ED-081)
+  - PP-202: Planning phase ~8 min/player with cards (ED-083)
+  - PP-203: Dual win-conditions, Church Tribunal corroboration, debate end conditions,
+            Hybrid debate confirmed, non-battle Zoom In, PC embedding, co-movement (ED-012/043/055b/057a/058/073/075/076)
+  - Auto-resolved 14 items confirmed from corpus: ED-001/002/007/015/017/021/025/026/052/054/059/067/071/074/082/084
+  - Ceiral replaced with [NAME-PENDING: ED-048] in stage4 (12x) and bg_v05 (1x)
 
-## GAP ANALYSIS COMPLETE
-Already covered (minor enrichment only): Church mechanics, Crown, Lowenritter coup/martial law, Duchies.
+editorial_ledger_state:
+  resolved: 81
+  provisional: 26
+  struck: 7
+  open: 6
 
-New content requiring mechanization (7 priorities identified):
+remaining_editorial_gate:
+  - ED-005: Restoration leader name (worldbuilding)
+  - ED-006: Riskbreakers identity (worldbuilding)
+  - ED-023: Vaynard TK5 behaviour (narrative)
+  - ED-024: Southernmost Mode 3 entity stat blocks (design)
+  - ED-029: Purpose tracking in Southernmost (design)
+  - ED-030: Thread combat vs Mode 3 entities (design)
+  - ED-034: Ceiral Ritual RS cap (canon value)
+  - ED-048: Canon name for [NAME-PENDING] character (naming)
 
-### Priority 1: Church Four-Cardinal Sub-Arms
-- Cardinals of Fortitude (Templars), Justice (Inquisitors + Grand Adjudication), Prudence (tithes + charities), Temperance (scholarly institutions, monasteries, universities)
-- Mirrors Niflhel four-arm decentralized structure
-- Inquisitors need formalization beyond current generic Heresy Investigation mechanic
-- Template for Priority 2
+remaining_design_gaps:
+  - ED-009: Additional proceeding types
+  - ED-014: Corroboration Knot restrictiveness
+  - ED-022: Forced Unmask from external disruption
+  - ED-049: Church Stability brake (may not exist)
+  - ED-051: NPC debate attributes in stage13
+  - ED-055a: Accused corroboration in asymmetric non-Church proceedings
+  - ED-056: TC pause during Zoom In
+  - ED-057b: Unit ghost state during Zoom In
+  - ED-072: Concurrent Zoom In ordering
 
-### Priority 2: Lowenritter Internal Structure
-- Lions Table (military), Lions Helm (naval), Civic Arm (Knights of the Peace + Royal Investigators), Riskbreakers
-- Currently only Riskbreakers and coup mechanic exist
-- Naval arm (Lions Helm) entirely absent from design
+commits:
+  - c4d2ae4: PP-188 ranged weapon corrections
+  - 90d7f62: PP-189 Uphold/Appease mechanic (ED-003/004)
+  - 7fec0e9: ED-001 resolved (Card-Hand confirmed)
+  - 7f9996e: ED-002 resolved (Champion Renown wording)
+  - e242953: 14 items auto-resolved from corpus
+  - 56cd286: PP-190/193-202 autonomous mechanical resolutions
+  - 773c8a7: PP-203 debate/transition mechanics (ED-012/043/055b/057a/058/073/075/076)
 
-### Priority 3: Guild Economy Subsystem (NEW DESIGN DOC)
-- Ministry of Guilds oversight, guild hierarchy (Guild Masters / Free Masters / Journeymen / Apprentices)
-- Guild Council (5 Guild Masters per guild), Guild Forum (city-level)
-- Entrance requirements, Journeymen Years travel mechanic
-- Currently Guilds have faction sheet but zero internal structure
-
-### Priority 4: Court Parliament Subsystem (NEW DESIGN DOC)
-- Ministries (Logothetes, Granaries, Pure Water, Law, Taxation, Water, Guilds)
-- Judicial Rectorates, Praefectures, Civil Magistrates
-- Court Parliament nomination/voting procedures
-- Currently Parliament exists only as vote mechanic (stage6 section 8.11)
-
-### Priority 5: Levy/Taxation Rules
-- Church levy: 2/3 raiseable by King
-- Ducal levy: 2/3 raiseable by Monarch
-- Church taxed on owned lands
-- Patch to params_factions and potentially params_combat/mass_combat
-
-### Priority 6: Galbados -> Solmund Rename (repo-wide)
-- Haiku-tier cleanup task
-- Affects: stage6, stage4, canon docs, params, compilation, everywhere
-
-### Priority 7: Editorial Resolution Where Lore Provides Answers
-- ED-001: NOT resolved by lore (Card-Hand is mechanical)
-- ED-036: NOT resolved (no Altonian unit stats in lore)
-- ED-048: NOT resolved (no replacement name for Ceiral in lore)
-
-## DUCAL ADMINISTRATION (not yet prioritized)
-- Privy councils, Imperial Court presence requirement (half time+), prestige economics
-- Praefecture governance layer
-- Could fold into Priority 4 or separate doc
-
-## OPEN ITEMS FROM PRIOR SESSION STILL OPEN
-- ED-108 (P2): Confirm T10/T11 territory names (Nordhelm, Mittelmark)
-- SIM-DEBT-01: Debate stress tests need re-simulation with (Presence x 2)+History pool
-
-## Gate: PASS
-
-next_session_start:
-  priority_1: "Begin Priority 1: Church four-Cardinal sub-arm mechanization. Read stage6 section 8.3 + lore material from project instructions. Design sub-arm mechanics mirroring Niflhel four-arm pattern."
-  priority_2: "After P1 complete: Priority 2 Lowenritter internal structure."
-  priority_3: "After P2: Priority 3 Guild economy subsystem — new design doc needed."
-  model_recommendation: "Sonnet 4.6 for Priorities 1-5. Haiku 4.5 for Priority 6 (rename). Sonnet for Priority 7."
-  context_note: "Lore source material is in Claude Project Instructions (pasted by user). Reference it directly — do not re-read from GitHub."
+next_session:
+  recommended: Editorial gate pop-ups for remaining worldbuilding/design items
+  sim_debt: SIM-DEBT-01 (Debate pool calibration with Presence×2+History) still open
+  blocker: ED-036 Altonian stats provisional — needs confirmation before Hybrid Altonian sim
 ```
