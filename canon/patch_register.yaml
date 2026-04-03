@@ -2462,3 +2462,86 @@ patches:
   applied_to_version: "v0.8.5"
   status: applied
   applied_commit: pending
+
+  # ── SIM-X-22: Combat + Mass Battle + Thread + Temporal Axes (2026-04-03) ───
+
+  - id: PP-221
+    status: provisional
+    source: SIM-X-22 / F-10
+    date: 2026-04-03
+    description: "Coherence 2 (Fractured) = +1 Ob all Thread ops. Consistent with 4–3 band."
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+
+  - id: PP-222
+    status: provisional
+    source: SIM-X-22 / F-11
+    date: 2026-04-03
+    description: "Offensive Lock on formation thread blocks Cohesion degradation checks for lock duration."
+    files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+    editorial: ED-122
+
+  - id: PP-223
+    status: provisional
+    source: SIM-X-22 / F-06/F-16
+    date: 2026-04-03
+    description: "Mass battle turn = 1 scene for RS threshold effects, Coherence-0 leakage, paradox window tick."
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+    editorial: ED-123
+
+  - id: PP-224
+    status: provisional
+    source: SIM-X-22 / F-03
+    date: 2026-04-03
+    description: "Diagnosis+Leap collapse to single Phase 4 in mass battle. PP-190 2-round rule = personal combat only."
+    files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+    editorial: ED-124
+
+  - id: PP-225
+    status: provisional
+    source: SIM-X-22 / F-12
+    date: 2026-04-03
+    description: "RS x3 multiplier (PP-192) applies to RS gains as well as costs. Weaving Overwhelming = RS+3 in mass battle."
+    files: [references/params_mass_combat.md, references/params_threadwork.md]
+
+  - id: PP-226
+    status: provisional
+    source: SIM-X-22 / F-13
+    date: 2026-04-03
+    description: "Temporal auto-effect RS (PP-181) NOT subject to x3. It is a separate auto-effect system, not an op RS cost."
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+
+  - id: PP-227
+    status: provisional
+    source: SIM-X-22 / F-15
+    date: 2026-04-03
+    description: "Paradox window (P-22) has no mechanical effect on unit stats during battle. Pre-displacement values used; displaced values apply on window auto-resolution (end of battle turn)."
+    files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+    editorial: ED-121
+
+  - id: PP-228
+    status: provisional
+    source: SIM-X-22 / F-01
+    date: 2026-04-03
+    description: "Practitioner Leap in personal combat vs pool-8+ opponent: E[Stamina lost before first op] ~3.74/5. Design-intent vulnerability — add GM guidance note, no formula change."
+    files: [designs/combat/combat_design_v1.md]
+
+  - id: PP-229
+    status: provisional
+    source: SIM-X-22 / F-04
+    date: 2026-04-03
+    description: "Active Thread contact window suspended (not consumed) during General Zoom In personal exchange. Resumes on return to mass scale. No op rounds consumed."
+    files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+
+  - id: PP-230
+    status: provisional
+    source: SIM-X-22 / F-05
+    date: 2026-04-03
+    description: "Active paradox window does not tick during Zoom In personal exchange (sub-scene of battle turn scene)."
+    files: [designs/mass_combat/mass_battle_v3.md]
+
+  - id: PP-231
+    status: provisional
+    source: SIM-X-22 / F-09
+    date: 2026-04-03
+    description: "Cohesion degradation is an asymmetry mechanic, not attrition. Triggers only with CP asymmetry, Thread-assisted Str loss, or artillery. Add GM note."
+    files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]

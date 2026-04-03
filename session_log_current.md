@@ -39,3 +39,33 @@ next_session_start:
   priority_4: "BAL-BG-02: BG balance analysis with final territory positions."
   priority_5: "SIM-DEBT-01: Debate re-simulation (now Presence×2+History pool)."
 ```
+
+---
+
+```yaml
+session_id: 2026-04-03T_SIM_X22
+phase: SIMULATION COMPLETE
+status: AWAITING EDITORIAL REVIEW
+
+## SIM-X-22: Combat + Mass Battle + Threadworking + Temporal Axes
+Source: params_combat, params_mass_combat, params_threadwork (all v0.14)
+Output: tests/sim_x_22_combat_massbattle_threadwork_temporal.md
+
+## WORK COMPLETED
+1. Modes A, D, G (2 full battle turns + temporal axis turn), J, K1, K2, L
+2. 7 P1, 5 P2, 3 P3 findings
+3. PP-221–231 provisional patches applied (patch_register.yaml)
+4. ED-120–126 logged (editorial_ledger.yaml)
+5. Coverage matrix updated (SIM-X-22 row added)
+
+## OPEN BLOCKERS FROM THIS SESSION
+- ED-126: FR ops in mass battle — tactically inert at TS70 (98.3% failure). Decision needed.
+- ED-125: Hybrid Strategic Thread temporal auto-effect undefined.
+- ED-122: Lock-as-Cohesion-freeze confirmation needed.
+
+## NEXT ACTION
+1. User reviews ED-120–126 editorial items
+2. If ED-126 resolved: update mass_battle_v3 and params_mass_combat with FR threshold ruling
+3. If ED-121/123/124 confirmed: promote PP-223/224/227 from provisional to patched in design docs
+4. Run Hybrid Thread stress test (separate session) once ED-125 resolved
+```

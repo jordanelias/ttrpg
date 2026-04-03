@@ -2117,3 +2117,54 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     priority: P2
     decision: null
     tags: [board_game, crown, lenneth, champion, southernmost]
+
+  # ── SIM-X-22 Editorials (2026-04-03) ──────────────────────────────────────
+
+  - id: ED-120
+    date_flagged: 2026-04-03
+    source: SIM-X-22 / D1
+    status: open
+    description: "GM mandatory disclosure at RS<24 for Dissolution: 90.3% Rupture probability. Is disclosure alone sufficient given §23.3 perverse incentive intent? No mechanical gate proposed — editorial confirmation needed."
+    tags: [thread, mass_battle, RS, dissolution]
+
+  - id: ED-121
+    date_flagged: 2026-04-03
+    source: SIM-X-22 / D2
+    status: provisional
+    description: "Define 'scene' for mass combat paradox window. PP-223 provisional: battle-turn = scene. Confirm."
+    tags: [thread, mass_battle, temporal, paradox]
+
+  - id: ED-122
+    date_flagged: 2026-04-03
+    source: SIM-X-22 / D4
+    status: provisional
+    description: "Offensive Lock on formation thread: PP-222 provisional blocks Cohesion degradation. Confirm this is intended — it is a strong tactical option."
+    tags: [thread, mass_battle, lock, cohesion]
+
+  - id: ED-123
+    date_flagged: 2026-04-03
+    source: SIM-X-22 / D5
+    status: provisional
+    description: "Battle-turn = scene definition for RS threshold effects and Coherence-0 RS leakage. PP-223 provisional. Confirm."
+    tags: [thread, mass_battle, scene_definition, RS]
+
+  - id: ED-124
+    date_flagged: 2026-04-03
+    source: SIM-X-22 / Phase4
+    status: provisional
+    description: "Diagnosis+Leap collapse to single Phase 4 in mass battle (PP-224 provisional). PP-190 2-round rule = personal only. Confirm."
+    tags: [thread, mass_battle, diagnosis, leap, action_economy]
+
+  - id: ED-125
+    date_flagged: 2026-04-03
+    source: SIM-X-22 / K1
+    status: open
+    description: "Hybrid Strategic Phase: temporal auto-effect and paradox windows currently undefined at strategic scale. Ruling needed before Hybrid Thread stress test."
+    tags: [thread, hybrid, temporal, paradox]
+
+  - id: ED-126
+    date_flagged: 2026-04-03
+    source: SIM-X-22 / L
+    status: open
+    description: "FR operations (Lock/Dissolution) in mass battle: 98.3% failure rate at TS70 Relational. Tactically inert but RS-costly. Options: (a) accept as deterrent-only design; (b) reduce mass battle FR Ob -2; (c) restrict FR to TS90+ in mass battle. Simulation confirms no TS70 practitioner should attempt FR ops in mass battle."
+    tags: [thread, mass_battle, lock, dissolution, FR, balance]
