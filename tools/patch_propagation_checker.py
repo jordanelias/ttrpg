@@ -125,12 +125,24 @@ def parse_patches(content, from_id=None):
     return params_patches
 
 def check_params_header(params_content, patch_id):
-    """Check if a params file's header comments mention a patch ID."""
+    """Check if a params file mentions a patch ID — in header, range notation, or body sections."""
     if not params_content:
         return False
-    # Check first 20 lines (header area)
+
+    # Direct mention anywhere in file (e.g. "### PP-203:" section)
+    if patch_id in params_content:
+        return True
+
+    # Parse range notation in header (e.g. "PP-190–209" covers PP-190 through PP-209)
+    patch_num = int(re.search(r'\d+', patch_id).group())
     header = "\n".join(params_content.split("\n")[:20])
-    return patch_id in header
+    # Match ranges like PP-190–209, PP-190-209, PP-190–PP-209
+    for m in re.finditer(r'PP-(\d+)[–\-]+(?:PP-)?(\d+)', header):
+        lo, hi = int(m.group(1)), int(m.group(2))
+        if lo <= patch_num <= hi:
+            return True
+
+    return False
 
 # ── Main ───────────────────────────────────────────────────────────────────────
 
