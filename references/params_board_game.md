@@ -1,8 +1,8 @@
-<!-- version: v0.5.2+BAL-BG-01 | source: bg_v05_simulation_and_patches.md | last_updated: 2026-04-02 -->
+<!-- version: v0.6.0+PP181-182 | source: bg_v05+stage_bg_proposal_v02+amendment2 | last_updated: 2026-04-02 -->
 <!-- PATCHES APPLIED: P-12-P-32 (prior); ST-BG-01-10, ST-INT series added 2026-04-02 -->
 <!-- PATCHES APPLIED: PP-112 (remove struck Majority-1s), PP-113-PP-122 (gap fills) 2026-04-02 -->
 <!-- NOTE: stage6_factions.md is STALE for BG mode. bg_v05 is canonical for all BG faction mechanics. -->
-<!-- STALE CHECK: BG editorial blockers pending (BG-E-30 card-hand adoption). See canon/editorial_ledger.yaml. -->
+<!-- STALE CHECK: All known BG editorial blockers resolved as of PP-182. See canon/editorial_ledger.yaml. -->
 
 # params_board_game.md — Board Game Mode (v0.5)
 
