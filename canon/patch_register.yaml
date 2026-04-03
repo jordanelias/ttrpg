@@ -2326,3 +2326,19 @@ patches:
   applied_to_version: "v0.8.1"
   status: applied
   applied_commit: pending
+
+  - id: PP-208
+    date: 2026-04-02
+    source: SIM-21-01 (P3)
+    description: "OA modifier does not carry through brittleness collapse to Shifting Object. Shifting Object is new configuration. Exception: OA applies if Mending targets still-Woven thread."
+    status: provisional
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+    tags: [threadwork, over_actualisation, shifting_object, brittleness]
+
+  - id: PP-209
+    date: 2026-04-02
+    source: SIM-21-02 (P3)
+    description: "Double OA stacking — two independent successful Weavings of same thread in separate contact windows = two OA stacks (+2 Ob). Compounded brittleness. Overweaving rule is intra-window only."
+    status: provisional
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+    tags: [threadwork, over_actualisation, collective, stacking]

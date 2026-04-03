@@ -34,7 +34,7 @@ systems:
     design_doc: designs/ttrpg/threadwork_redesign_v25.md
     compilation_stage: compilation/v0.14/stage3_thread_operations.md
     compilation_current: false
-    note: "stage3 is EMPTY/STALE. threadwork_redesign_v25 is canonical. Parts 9+10+11 have all current patches."
+    note: "stage3 is EMPTY/STALE. threadwork_redesign_v25 is canonical. PP-190–209 applied 2026-04-02 (full audit cycle)."
 
   southernmost:
     canonical: compilation/v0.14/stage4_southernmost.md

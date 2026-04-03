@@ -1,5 +1,5 @@
 <!-- version: v0.14-AUD1 | source: threadwork_redesign_v25.md | last_updated: 2026-04-02 -->
-<!-- PATCHES APPLIED: P-11–P-30 (prior); ST-TW-01–05; PP-166; PP-190–207 (all audit + sim-debt resolutions) -->
+<!-- PATCHES APPLIED: P-11–P-30 (prior); ST-TW-01–05; PP-166; PP-190–209 (full audit cycle complete) -->
 <!-- stage3_thread_operations.md is EMPTY in v0.14. All values from threadwork_redesign_v25.md. -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage3 before use. -->
 
@@ -341,6 +341,15 @@ GM must disclose before arc: Success/Overwhelming at TS 30-31 reduces TS to 29 o
 
 ### PP-207 (P3): Hybrid Coherence pacing guidance
 Sustainable: 1 Personal Relational op + 1 Strategic declaration/session → Rendering Crisis ~session 10. Two of each → Crisis by session 3-5 (not intended).
+
+
+## SIM-X-21 Gap Resolutions (PP-208–209)
+
+### PP-208: OA modifier does not carry through to Shifting Object
+When a Woven thread shatters into Shifting Object via brittleness, OA +1 Ob modifier does not apply to the new configuration. Mending proceeds at base Ob. Exception: OA applies if Mending targets still-Woven thread before it shatters.
+
+### PP-209: Double OA stacking — two independent Weavings same scene
+Two separate successful Weavings of same thread in separate contact windows = two OA stacks (+2 Ob total). Both clear after 1 season or Pull. Doubly OA = more severe brittleness shattering (Shifting Object forms 1 tier more advanced). Overweaving rule (intra-window +1 Ob cumulative) does not apply across separate windows.
 
 <!-- patch_history: references/params_threadwork_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
