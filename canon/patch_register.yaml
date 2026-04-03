@@ -1808,3 +1808,43 @@ patches:
   applied_to_version: "v0.6.0"
   status: applied
   applied_commit: pending
+
+- id: PP-181
+  date: 2026-04-02
+  severity: P2
+  description: "Pool Minimum = 1D added to BG params. No penalty may reduce any BG pool below 1D. Aligns with TTRPG core."
+  source: simulation
+  finding_id: SIM-TW-01
+  affects: [references/params_board_game.md]
+  status: applied
+  applied_commit: pending
+
+- id: PP-182
+  date: 2026-04-02
+  severity: P3
+  description: "Ob Minimum = 1 stated explicitly for all modes (TTRPG/BG already had it; Hybrid now explicit)."
+  source: simulation
+  finding_id: SIM-TW-01
+  affects: [references/params_board_game.md]
+  status: applied
+  applied_commit: pending
+
+- id: PP-183
+  date: 2026-04-02
+  severity: P2
+  description: "Domain Action Overwhelming Bonus Table added to BG params. Resolves ED-086. Overwhelming = Success effect + action-type bonus. Full table in params."
+  source: editorial
+  finding_id: ED-086
+  affects: [references/params_board_game.md]
+  status: applied
+  applied_commit: pending
+
+- id: PP-184
+  date: 2026-04-02
+  severity: P2
+  description: "Govern full four-degree table. Resolves ED-085. Overwhelming +2 Prosperity, Success +1, Partial +1+Minor complication, Failure −1+Moderate complication."
+  source: editorial
+  finding_id: ED-085
+  affects: [references/params_board_game.md]
+  status: applied
+  applied_commit: pending

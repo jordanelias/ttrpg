@@ -115,3 +115,15 @@ See patch_register.yaml PP-179. Not a FF patch.
 
 ### PP-180 — Hybrid Zoom-Boundary FF Rule [PROVISIONAL: ED-087c]
 When a PC Failure in TTRPG/Hybrid mode produces a zoom transition to faction scale, the complication carries forward as: −1 Ob modifier on the faction's next relevant Domain Action OR Standing −1 consequence (GM choice based on fiction). Complication is not discarded at the scale boundary.
+
+### PP-181 — Pool Minimum = 1D (BG mode explicit)
+No penalty may reduce any BG pool below 1D. Relevant for low-pool practitioners in combat contexts. Aligns BG with TTRPG core.
+
+### PP-182 — Ob Minimum = 1 (all modes explicit)
+Cross-mode statement. TTRPG and BG already had Ob minimum. Hybrid now explicitly stated. Relevant for Restoration Thread Ops with 4+ Presence markers.
+
+### PP-183 — Domain Action Overwhelming Bonus Table [ED-086 resolved]
+Overwhelming = Success effect + action-type bonus. Govern: +1 Prosperity additional. Trade: +1 Wealth or IP −1. Muster: +1 Cohesion. Diplomacy: target Standing −1 or own Standing +1. Decree: immediate effect. Parliamentary Manoeuvre: confirmed PP-170. Investigate: +1 datum. Spy: no exposure + +1 datum. Thread: per Thread table. Community: +1 Ob removed next. Fortify: +1 Cohesion. Parliamentary Vote: +1 Mandate (winner).
+
+### PP-184 — Govern Full Degree Table [ED-085 resolved]
+Overwhelming: Prosperity +2. Success: Prosperity +1. Partial: Prosperity +1 + Minor complication (FF). Failure: Prosperity −1 + Moderate complication (FF).

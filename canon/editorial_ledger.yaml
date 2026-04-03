@@ -1618,7 +1618,7 @@ editorial_decisions:
 
   - id: ED-085
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: document_review
     source_file: designs/board_game/bg_improvement_v3_amendment2.md
     description: "Reformed Settlement options — confirm Church's three responses (Resist/Accommodate/Ignore) cover all canon outcomes for Baralta's formal theological declaration."
@@ -1633,7 +1633,7 @@ editorial_decisions:
 
   - id: ED-086
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: document_review
     source_file: designs/board_game/bg_consolidated_synthesis.md
     description: "BG Co-Movement Resolution Protocol required for P-14 compliance. All BG Thread operations must produce three-dimensional auto-effects (Actualized, Temporal, Epistemic). Current co-movement card deck is an event system, not a consequence system. Design work required."
@@ -1741,3 +1741,43 @@ editorial_decisions:
     propagation_targets: [references/params_board_game.md]
     propagation_status: applied
     tags: [board_game, hafenmark, church, rdt, resolved]
+
+  - id: ED-090
+    date_flagged: 2026-04-02
+    date_resolved: 2026-04-02
+    source: simulation
+    source_file: tests/sim_tw_01.md
+    description: "Pool minimum = 1D verified in simulation. Low-pool practitioners (pool 4–6D) can trigger the floor at 3–5 Wounds. BG Thread ops: pool floor already satisfied by stat floor (min Influence 1). PP-181 makes this explicit. No design change required — confirmation only."
+    status: resolved
+    priority: P3
+    decision: "Pool minimum = 1D confirmed correct for all modes. PP-181 applied. [RESOLVED]"
+    propagation_targets: [references/params_board_game.md]
+    propagation_status: complete
+    tags: [dice_engine, pool_minimum, all_modes]
+
+  - id: ED-091
+    date_flagged: 2026-04-02
+    date_resolved: 2026-04-02
+    source: simulation
+    source_file: tests/sim_tw_01.md
+    description: "Ob minimum = 1 verified. Fires at 4+ Restoration Presence markers with Thread Debt active in same territory. Correct behaviour — no modifier can reduce to Ob 0. PP-182 cross-mode statement applied."
+    status: resolved
+    priority: P3
+    decision: "Ob minimum = 1 confirmed all modes. PP-182 applied. [RESOLVED]"
+    propagation_targets: [references/params_board_game.md]
+    propagation_status: complete
+    tags: [dice_engine, ob_minimum, all_modes]
+
+  - id: ED-092
+    date_flagged: 2026-04-02
+    date_resolved: 2026-04-02
+    source: simulation
+    source_file: tests/sim_tw_01.md
+    description: "Overwhelming = net >= 2xOb verified across all three temporal axes. Lock Relational Ob 6 requires net 12 for Overwhelming (~<1% at pool 12D) — correct difficulty scaling. Weaving Relational Ob 3 requires net 6 (~30% at pool 17D) — achievable for experienced practitioner. Correct differentiation."
+    status: resolved
+    priority: P2
+    decision: "2xOb Overwhelming threshold confirmed correct across all Thread operation types and BG Domain Actions. PP-179 and PP-183 both confirmed. [RESOLVED]"
+    propagation_targets: []
+    propagation_status: complete
+    tags: [dice_engine, overwhelming, thread_operations, all_modes]
+

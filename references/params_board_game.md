@@ -1,8 +1,8 @@
-<!-- version: v0.6.0+PP181-182 | source: bg_v05+stage_bg_proposal_v02+amendment2 | last_updated: 2026-04-02 -->
+<!-- version: v0.5.2+BAL-BG-01 | source: bg_v05_simulation_and_patches.md | last_updated: 2026-04-02 -->
 <!-- PATCHES APPLIED: P-12-P-32 (prior); ST-BG-01-10, ST-INT series added 2026-04-02 -->
 <!-- PATCHES APPLIED: PP-112 (remove struck Majority-1s), PP-113-PP-122 (gap fills) 2026-04-02 -->
 <!-- NOTE: stage6_factions.md is STALE for BG mode. bg_v05 is canonical for all BG faction mechanics. -->
-<!-- STALE CHECK: All known BG editorial blockers resolved as of PP-182. See canon/editorial_ledger.yaml. -->
+<!-- STALE CHECK: BG editorial blockers pending (BG-E-30 card-hand adoption). See canon/editorial_ledger.yaml. -->
 
 # params_board_game.md — Board Game Mode (v0.5)
 
@@ -17,6 +17,12 @@ d10 pool. Same engine as TTRPG.
 
 **Majority-1s override: STRUCK (PP-112).** All rolls resolve through standard degree table only. Removed 2026-04-02.
 Ob minimum = 1. No modifier may push Ob below 1.
+## Pool Minimum — All Modes (PP-181)
+No penalty — Wounds, terrain, disposition, stat degradation, or modifier stacking — may reduce any dice pool below 1D. Ob penalties still apply at 1D pool. Applies to Domain Actions, Battle Resolution, Thread Operations, Parliamentary Manoeuvre, Forgetting Checks, and all other rolls.
+
+## Ob Minimum — All Modes (PP-182)
+Ob cannot be reduced below 1 in any game mode (TTRPG, BG, Hybrid). Modifiers that would push Ob below 1 are wasted. Applies to all rolls without exception. Relevant for Restoration Thread Operations with multiple Presence markers in territory.
+
 
 ## Degree Table
 | Net | Degree |
@@ -313,6 +319,33 @@ Unit starting Cohesion: Light Infantry 3, Heavy Infantry 4, Cavalry 4, Ranged 3,
 | Niflhel | Sigurdshelm | T10 (contested; see Niflhel victory condition) |
 | Restoration Movement | No fixed capital | — |
 | Lowenritter | Arnesheld | T5 |
+
+
+## Overwhelming Bonuses — Domain Actions (PP-183) [ED-086 resolved]
+Overwhelming (net ≥ 2×Ob) produces the Success effect PLUS the following bonus:
+
+| Domain Action | Overwhelming Bonus |
+|---|---|
+| Govern | Prosperity +1 additional (total +2 in territory) |
+| Trade | Wealth +1 additional OR Institutional Pressure −1 (acting faction chooses) |
+| Muster | Mustered unit starts at Cohesion +1 above standard |
+| Diplomacy | Target faction Standing −1 OR acting faction Standing +1 (acting faction chooses) |
+| Decree | Effect applies immediately (not delayed to next Accounting) |
+| Parliamentary Manoeuvre | Delay effect + opponent Stability −1 (PP-170 already stated; confirmed) |
+| Investigate | One additional hidden datum revealed |
+| Spy | Identity NOT exposed AND one additional intel datum |
+| Thread Operation | Per Thread degree table (Weave Overwhelming: RS +2; Mend Overwhelming: Gap closed + RS +2) |
+| Community Organising | +1 Ob removed from territory's next Community action |
+| Fortify | Fortification begins with Cohesion +1 |
+| Parliamentary Vote | Winner gains +1 Mandate (not PI) in addition to PI change |
+
+## Govern — Full Degree Table (PP-184) [ED-085 resolved]
+| Degree | Effect |
+|--------|--------|
+| Overwhelming | Prosperity +2 in territory |
+| Success | Prosperity +1 in territory |
+| Partial | Prosperity +1 in territory + Minor complication (player chooses: Standing −1 or Public Instability +1) |
+| Failure | Prosperity −1 in territory + Moderate complication (mandatory per Fail Forward table) |
 
 ## Parliamentary Manoeuvre Results (PP-170 — fills spec gap PG-07)
 Roll: Mandate vs Ob = opponent Influence / 2 (round up).
