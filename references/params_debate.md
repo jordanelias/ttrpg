@@ -133,5 +133,9 @@ NPC Composure = Presence + 4. Prior shorthand "Presence + 6" is superseded. [PRO
 ## Debate Corroboration — Asymmetric Proceedings (ED-055b resolved — provisional)
 Accused in Church Tribunal (Inquisitorial proceeding) may not have corroborators. The Inquisitor controls the proceeding structure. Accused may only: Object (Phase 2) and Distinction (Phase 5). [PROVISIONAL — consistent with §6.7]
 
+## Evidence Leverage Audience Mode Shift — Cap (PP-183)
+
+Audience ethical mode weight shifts from evidence leverage (ED-077: Cognition+History Ob2 to shift audience genre preference) are capped at weight 2.0. Subsequent successful leverage rolls in the same debate do not push the weight above 2.0. Multiple leverage attempts do not stack. [PP-183]
+
 <!-- patch_history: references/params_debate_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->

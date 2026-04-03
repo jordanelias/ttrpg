@@ -1,4 +1,4 @@
-<!-- version: v0.5.5+AUD-BG-01 | source: bg_v05_simulation_and_patches.md | last_updated: 2026-04-02 -->
+<!-- version: v0.5.2+BAL-BG-01 | source: bg_v05_simulation_and_patches.md | last_updated: 2026-04-02 -->
 <!-- PATCHES APPLIED: P-12-P-32 (prior); ST-BG-01-10, ST-INT series added 2026-04-02 -->
 <!-- PATCHES APPLIED: PP-112 (remove struck Majority-1s), PP-113-PP-122 (gap fills) 2026-04-02 -->
 <!-- NOTE: stage6_factions.md is STALE for BG mode. bg_v05 is canonical for all BG faction mechanics. -->
@@ -18,15 +18,13 @@ d10 pool. Same engine as TTRPG.
 **Majority-1s override: STRUCK (PP-112).** All rolls resolve through standard degree table only. Removed 2026-04-02.
 Ob minimum = 1. No modifier may push Ob below 1.
 
-## Degree Table (PP-179 — now matches TTRPG)
-| Net Successes | Degree |
-|--------------|--------|
-| ≥ 2× Ob | Overwhelming |
+## Degree Table
+| Net | Degree |
+|-----|--------|
+| >= Ob + 1 | Overwhelming [PROVISIONAL: ED-031 — BG uses Ob+1 surplus; TTRPG uses 2xOb. Intentional divergence; awaiting user confirmation.] |
 | = Ob | Success |
-| 0 < net < Ob | Partial |
-| ≤ 0 | Failure |
-
-Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
+| Ob - 1 | Partial |
+| <= 0 | Failure |
 
 ## Stat Ceilings and Floors (PP-113)
 | Stat | Floor | Ceiling | Notes |
@@ -261,40 +259,6 @@ Theocracy Counter >= 65 (not 70). Starting Theocracy Counter 28 (not 22).
 | Overall (with reference cards) | 6.5/10 |
 | Overall hybrid (with cards) | 8.0/10 |
 
-
-## Fail Forward — Board Game Mode (PP-177) [PROVISIONAL: ED-085, ED-086, ED-087]
-Applies to all Domain Action rolls. Fires on Partial and Failure results.
-
-### Complication Tiers
-| Tier | Severity | Used for |
-|------|----------|----------|
-| Minor | Standing −1 OR Public Instability +1 (acting faction chooses) | Partial outcomes |
-| Moderate | Mandatory consequence from action-type table | Failure outcomes |
-| Severe | Moderate + Stability −1 | Failure on Ob ≥ 4 only |
-
-### Action-Type Complication Table
-| Domain Action | Partial (Minor — player chooses 1) | Failure (Moderate — mandatory) |
-|---------------|-------------------------------------|--------------------------------|
-| Govern (Inward) | Standing −1 OR Public Instability +1 | Prosperity −1 in target territory |
-| Trade (Outward) | Standing −1 OR Wealth −1 this season | Wealth −1 (permanent until Accounting) |
-| Muster (Inward) | Unit mustered at Cohesion −1 OR Standing −1 | No unit mustered; Wealth −1 |
-| Diplomacy (Outward) | Standing −1 OR target faction Standing +1 | Target faction gains Casus Belli vs acting faction (Ob 3 to dismiss) |
-| Decree (Inward) | Mandate −1 for 1 season OR Public Instability +1 | Mandate −1 (permanent until Accounting) |
-| Parliamentary Manoeuvre | Standing −1 OR no effect (player's choice) | Mandate −1 + opponent Standing +1 |
-| Investigate (Inward) | One datum unreliable (GM marks) OR Standing −1 | No intel gained; Stability −1 |
-| Spy (Outward) | Intel gained but identity exposed OR Standing −1 | No intel; target may take free Intel action vs actor next season |
-| Thread Operation | Thread Debt token OR Rendering Stability −1 | Thread Debt token; Rendering Stability −2 |
-| Community Organising | +1 Ob to next Community action in territory OR Standing −1 | No progress; Institutional Pressure +1 |
-| Fortify | Fortification at unit Cohesion −1 OR Standing −1 | No fortification; Wealth −1 |
-| Parliamentary Vote | Losing margin halved OR Public Instability −1 | Calling faction Mandate −1 + Public Instability −1 |
-
-**Battle Resolution excluded.** FF applies to Domain Actions only. Battle has its own outcome table.
-**Casus Belli from Diplomacy Failure:** Standard Casus Belli rules apply; expires 3 seasons unused; one Casus Belli per faction at a time.
-**Thread Operation FF stacks with co-movement:** FF complication is in addition to mandatory co-movement effects (P-01). Not a replacement.
-**Parliamentary Manoeuvre Partial update (PP-177 supersedes PP-170 Partial clause):** Partial = Minor complication fires. Player may choose "no effect" as their Minor choice — PP-170's "no effect" ruling is preserved as a menu option.
-
-[PROVISIONAL: Confirmed as design intent by SIM-FF-01. ED-085/086/087 flagged for user review.]
-
 <!-- patch_history: references/params_board_game_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
 
@@ -475,128 +439,18 @@ Artillery units are locked to Balanced disposition in all BG contexts. Rationale
 
 ## TC Threshold Check During Zoom In (ED-056b)
 TC threshold check fires at Seasonal Accounting regardless of Zoom In suspension. See state_transfer_spec.md.
+## Thread Debt Tokens — BG Layer (PP-184)
 
-## Overwhelming Degree Table — BG Now Matches TTRPG (PP-179)
-Resolves ST-BG-01.
+Thread operations in TTRPG scenes that produce over-actualisation or Partial Lock carry over to BG layer via Thread Debt tokens.
 
-**Old BG rule:** Overwhelming = net successes ≥ Ob + 1 (surplus 1 over Ob).
-**New BG rule:** Overwhelming = net successes ≥ 2 × Ob. **Same as TTRPG.**
-At Ob 1: Overwhelming at net ≥ 2 (unchanged — Ob+1 = 2×Ob when Ob=1).
-At Ob 2: Overwhelming at net ≥ 4 (was net ≥ 3). P(Overwhelming) drops from ~42% to ~22% at pool 5D.
-At Ob 3: Overwhelming at net ≥ 6 (was net ≥ 4). P drops from ~22% to ~5% at pool 5D.
+**Thread Debt token rules:**
+- Assigned to: the BG territory card or faction card corresponding to the Thread operation's target
+- Effect: −1D to BG-layer Domain Actions targeting that card (for 1 season)
+- Maximum: 2 Thread Debt tokens per card
+- Recovery: 1 token removed per season with no Thread activity on that card
 
-Updated Degree Table (BG):
-| Net Successes | Degree |
-|--------------|--------|
-| ≥ 2× Ob | Overwhelming |
-| = Ob | Success |
-| 0 < net < Ob | Partial |
-| ≤ 0 | Failure |
-
-**Ob 10 exception (inherited from TTRPG params_core):** Overwhelming unavailable at Ob 10. Partial requires net ≥ 5.
-
-## Trade Network Investment — Hafenmark Wealth Sink (PP-178)
-Hafenmark-exclusive action. Consul card, Inward orientation, in any Hafenmark-controlled territory.
-Resolves ED-077.
-
-**Cost:** 2 Wealth before rolling.
-**Roll:** Wealth vs Ob 2.
-| Degree | Effect |
-|--------|--------|
-| Overwhelming | Trade Route token placed between this territory and one adjacent territory. All Trade orders in either territory this season and next: +1D. Hafenmark gains +1 Guild Favour in the non-capital territory. Token persists until territory changes control. |
-| Success | Trade Route token placed. +1D Trade in this territory only, this season. Token persists. |
-| Partial | Trade Route token placed. No immediate bonus. Token persists. |
-| Failure | Wealth cost paid. No token. Hafenmark Stability −1 this season. |
-
-**Trade Route tokens:** Permanent while Hafenmark controls the territory. Lost when territory changes control. Maximum 1 token per territory pair. Tokens are public (visible to all factions).
-**Thematic note:** Hafenmark invests trade surplus into durable economic infrastructure. Military seizure of Hafenmark territories destroys this infrastructure — a natural deterrent to aggression against the Duchy.
-
-## Resolved Params Gaps
-
-### PG-09: Torben Loyalty Clock (from arcs_09_11 / arcs_20_23)
-Torben Loyalty Clock activates at value 8 when Institutional Pressure crosses 30 (I-01 event).
-Degrades: −1/season while Torben is in Altonian territory.
-Floor: 1 (never reaches 0 — Torben retains residual Valorian identity).
-Recovery: Elske's presence slows decay by −1/season (net: 0 decay per season if Elske recruited). Covert contact (Intel vs Ob 3): success = no decay this season; failure = contact exposed, Institutional Pressure +1.
-Crown Deed 4 condition: Torben Loyalty ≥ 5 (meaning: Clock has not degraded below 5 — at 8 at activation, requires max 3 seasons of unmitigated decay before failing).
-
-### PG-10: Parliamentary Ruling Mechanic (from stress test / critical review)
-A Parliamentary ruling is produced by a successful Parliamentary Manoeuvre (Success or Overwhelming result).
-The ruling delays one pending Domain Action outcome by 1 season.
-Hafenmark Deed 4 condition: "at least 1 Parliamentary ruling in Hafenmark's favour" = at least 1 successful Parliamentary Manoeuvre result (Success or Overwhelming) recorded this game. Track with a Deed token placed immediately on first success.
-
-### PG-12: Hidden Information Persistence (Niflhel Deed 3)
-Niflhel holds revealed faction stats as intelligence. Information expires if the underlying stat changes by more than ±1 from the revealed value (the intelligence is now materially wrong). At expiry: information no longer counts toward Deed 3.
-Niflhel Deed 3: "≥ 3 pieces of hidden faction information held simultaneously" = 3 pieces of valid (non-expired) intelligence held at Accounting.
-
-## Audit Patches (PP-180 bundle)
-
-### Accounting Phase Reference Steps (PP-180, resolves F-01 partial)
-Phase 5 — Seasonal Accounting sequence (13 steps):
-1. Apply all Domain Action stat changes queued this season.
-2. Apply Military losses from unit destruction (BG timing — queued from Phase 4).
-3. Thread Debt tokens: apply +1 Ob to next Thread operation in affected territories.
-4. Institutional Pressure: check all advancement conditions; advance if triggered.
-5. Restoration pre-check: can Restoration win this season? (5 Presence in 5 non-adjacent territories, held 2 consecutive seasons, RS ≥ 1)
-6. Rendering Stability: apply all RS changes queued this season (Thread ops, Niflhel Harvest, substrate events).
-7. Theocracy Counter: apply TC changes; check thresholds (C-01 through C-05).
-8. Queued cascade overflow effects (beyond Cascade Depth Cap from Phase 4).
-9. Stability checks: any faction at Stability 0 enters Collapse.
-10. Prosperity: Halvardshelm Breadbasket (+1 if uncontested). Territory event effects.
-11. CP awards (hybrid only): Belief engagement, Mandate Uphold/Compromise.
-12. Victory checks: per-faction Deed tokens; shared survival condition; game-end triggers.
-13. Cleanup: remove temporary effects, advance round tracker, draw replacement cards.
-
-### Parliament Integrity (PI) Scale Clarification (PP-180, resolves B-01)
-PI uses scale 0–10 (not 0–100). PI 5 = functional parliament; PI 0 = dissolved.
-All other clocks (TC, RS, IP) use scale 0–100.
-Reference materials must display PI with its 0–10 range explicitly to avoid confusion with 0–100 tracks.
-
-### Intel Advancement Simplification (PP-180, resolves B-02)
-Replaces fractional +0.25 rule (PP-173).
-**New rule:** Each faction maintains an Intel Advancement Counter (0–3) on their faction mat.
-Each season with at least 1 successful Intel or Quiet Network order: Counter +1.
-When Counter reaches 4: Intel stat +1, Counter resets to 0.
-Rate unchanged (~8 successful seasons to advance 1 point). No fractional tracking required.
-
-### Church Excommunication Ob Cap (PP-180, resolves C-02)
-Excommunication Ob = min(target Mandate, 4). Maximum Ob 4 regardless of target Mandate.
-Previously: Ob = target Mandate (could reach 5 vs Crown at full strength).
-At Ob 4, Church 5D: P(Success) ≈ 9%. Uncommon but possible. Represents: even a fully mandated Crown leader can be publicly challenged by the Church — the institutional weight of the papacy is real even against a strong king.
-Church Excommunication Overwhelming at Ob 4 (needs net ≥ 8 from 5D): P ≈ 0.3%. Effectively removed under PP-179 — acceptable, Overwhelming effects are bonus.
-
-### Drawn Battle Rule (PP-180, resolves GAP-BG-02)
-When both sides achieve equal net successes in battle:
-Stalemate. Both sides: Cohesion −1. No territorial change. Neither side may re-engage in the same territory this season (units hold ground; orders are spent).
-If both sides are at Cohesion 0 after the stalemate: both units destroyed simultaneously. Territory becomes uncontrolled.
-
-### Crown Policy Instrument — Defined (PP-180, resolves GAP-BG-03)
-The Crown Policy Instrument is the Crown's once-per-season bonus political action (no card required, separate from card hand).
-Activation: Crown Mandate ≥ 4. Cannot use the same Policy two consecutive seasons.
-Available Policies: see Crown Policy Instruments table (in stage_bg_proposal_v02.md B5).
-Resolution order: Policy → Hafenmark Opposition (if Parliamentary Manoeuvre) → Censor card (if in play).
-This is printed on the Crown faction reference card.
-
-### Co-Movement VTM Effects at Cap (PP-180, resolves GAP-BG-04)
-When a Co-Movement card would advance VTM but VTM is already at maximum (5) or the once-per-season cap has been reached:
-Convert: +1D to Varfell's next Tribune order in any territory (the Thread signature that would have advanced VTM instead sharpens Vaynard's tactical awareness).
-
-### Restoration: Community Organizing vs Community Weaving Split (PP-180, resolves GAP-BG-06)
-Two distinct action types within Restoration Presence system:
-**Community Organizing (Praetor card, rendered-world):**
-- Move Presence markers, build non-Thread Projects (Fortification, Diplomatic Mission), recruit.
-- No Thread operation. No co-movement card drawn. Does NOT trigger Church Attention Pool.
-- Roll: Influence vs Ob 2.
-
-**Community Weaving (Pontifex card, Thread operation):**
-- RS restoration, Einhir Memory Recovery.
-- Requires practitioner Presence marker in territory.
-- Produces full co-movement (card drawn). DOES trigger Attention Pool +2.
-- Roll: Influence vs Ob = (100 − RS) ÷ 20 (round up, min Ob 1).
-
-### Thread Debt Cross-Mode Hybrid Rule (PP-180, resolves G-01)
-In hybrid mode, when a Player Character performs a Thread operation:
-1. Apply TTRPG Thread Debt rules (personal: +1 Ob to next personal Thread operation in that territory).
-2. Also place 1 BG Thread Debt token in that territory for board-scale effect (+1 Ob to next faction Thread order there).
-These are additive and independent. The personal cost (TTRPG) and institutional cost (BG token) both apply.
-Game Master applies at Cascade phase: "This practitioner's operation has left a substrate mark that other factions' Thread activity will feel."
+**Sources:**
+- Over-actualisation (Relational+ Weaving in TTRPG scene): 1 Thread Debt token on corresponding BG card at Zoom Out
+- Partial Lock (TTRPG Locking): 1 Thread Debt token on corresponding BG card, via Domain Echo at Accounting
+- Successful Lock (TTRPG Locking): 1 Thread Debt token on corresponding BG card (+ chronic RS drift −1/season from season 2)
+[PP-184]

@@ -1743,70 +1743,46 @@ patches:
   status: provisional
   applied_commit: pending
 
-- id: PP-119
+- id: PP-181
+  date: 2026-04-02
+  severity: P1
+  description: "Threadwork missing tables: Actual d6 auto-effect table for personal-scale ops; temporal auto-effect RS cost table for POP by recency; Territorial Locking near-impossible documented as design feature (P-06 consistent); Partial Lock duration = 1 season."
+  finding_id: "F-TH-B-03 / F-TH-C-04 / F-TH-D-01 / F-TH-D-02 / SIM-THREAD-01"
+  source: simulation
+  affects: [references/params_threadwork.md]
+  applied_to_version: "v0.14+design-ST-PP181"
+  status: applied
+  applied_commit: pending
+
+- id: PP-182
+  date: 2026-04-02
+  severity: P1
+  description: "TC trigger from epistemic auto-effect: observation alone insufficient; Church Investigation Domain Action required before TC+1 at Accounting. Prevents automatic TC cascade from all observed Thread ops."
+  finding_id: "F-TH-D-03 / SIM-THREAD-01"
+  source: simulation
+  affects: [references/params_threadwork.md]
+  applied_to_version: "v0.14+design-ST-PP182"
+  status: applied
+  applied_commit: pending
+
+- id: PP-183
   date: 2026-04-02
   severity: P2
-  description: "(1) §6.8/6.9: mark resolved items, clean stale list. (2) §6.13 BG: add design note — orientation absent by design; genre pivot between rounds permitted."
-  finding_id: "GAP-DS-21/22/26 / AUDIT-D-02"
-  source: audit
-  affects: [designs/debate/debate_system_redesign_v1.md §6.8, §6.9, §6.13]
-  applied_to_version: "v1.6"
-  status: applied
-  applied_commit: "2026-04-02-session-close"
-
-- id: PP-120
-  date: 2026-04-02
-  severity: P1
-  description: "§6.14 Hybrid: TC starting position clamped to compromise zone 4-6. BG offset determines position within zone, never pre-decides outcome. Prevents hollow Hybrid debate scenes. [PROVISIONAL]"
-  finding_id: "HD-F-01 / SIM-D-05"
+  description: "Evidence leverage audience mode shift capped at weight 2.0. Subsequent leverage rolls in same debate do not stack."
+  finding_id: "F-TH-A-01 / SIM-THREAD-01"
   source: simulation
-  affects: [designs/debate/debate_system_redesign_v1.md §6.14]
-  applied_to_version: "v1.6"
-  status: provisional
-  applied_commit: "2026-04-02-session-close"
+  affects: [references/params_debate.md]
+  applied_to_version: "v0.14+design-ST4-PP183"
+  status: applied
+  applied_commit: pending
 
-- id: PP-121
+- id: PP-184
   date: 2026-04-02
   severity: P2
-  description: "§6.15: Church self-investigation exception — Church does not file Heresy Investigation against own ordained members supporting Church interests. Opposing factions may still file. [PROVISIONAL]"
-  finding_id: "TT-F-02 / SIM-D-05"
+  description: "BG Thread Debt token system: over-actualisation and Lock operations produce Thread Debt tokens on BG territory/faction cards at Zoom Out. Each token = −1D on BG Domain Actions targeting that card for 1 season, max 2 tokens, 1 removed/season with no Thread activity."
+  finding_id: "F-TH-B-02 / F-TH-D-04 / SIM-THREAD-01"
   source: simulation
-  affects: [designs/debate/debate_system_redesign_v1.md §6.15]
-  applied_to_version: "v1.6"
-  status: provisional
-  applied_commit: "2026-04-02-session-close"
-
-- id: PP-122
-  date: 2026-04-02
-  severity: P1
-  description: "§6.5: Debate-generated RS changes subject to RS ceiling (100) and RS=0 lockout (Rupture). At RS=0 or RS=100, no RS changes from §3.8 fire."
-  finding_id: "TT-F-03/TT-F-05 / SIM-D-05"
-  source: simulation
-  affects: [designs/debate/debate_system_redesign_v1.md §6.5]
-  applied_to_version: "v1.6"
+  affects: [references/params_board_game.md]
+  applied_to_version: "PP-184"
   status: applied
-  applied_commit: "2026-04-02-session-close"
-
-- id: PP-123
-  date: 2026-04-02
-  severity: P1
-  description: "§6.15: Temporal axis conflict rule — Past-axis Thread op during Future-primary debate (or reverse) imposes TN 8 on both orators' next Read roll. Same-axis ops and non-temporal ops unaffected. [PROVISIONAL]"
-  finding_id: "TT-F-04 / SIM-D-05"
-  source: simulation
-  affects: [designs/debate/debate_system_redesign_v1.md §6.15]
-  applied_to_version: "v1.6"
-  status: provisional
-  applied_commit: "2026-04-02-session-close"
-
-- id: PP-173
-  date: 2026-04-02
-  severity: P1
-  description: "Mass combat DR table: replace single Projectile column with LP/HP/LBl/HBl ranged columns; update HBl personal combat cross-reference; add LBl anti-levy note"
-  finding_id: "SIM-002-F"
-  source: simulation
-  affects:
-    - designs/mass_combat/mass_battle_v3.md
-    - references/params_mass_combat.md
-  applied_to_version: "v4.5"
-  status: applied
-  applied_commit: "pending"
+  applied_commit: pending

@@ -256,3 +256,50 @@ Concealment from Thread Sensitivity 30+ observers: Cognition only (no History), 
 
 <!-- patch_history: references/params_threadwork_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
+## Actual Auto-Effect Table — Personal-Scale Operations (PP-181)
+
+When a Thread operation fires at personal scale (not mass combat), the Actual d6 consequence follows this table. Roll d6 (or use expected value = 3-4 for simulation):
+
+| d6 | Actual consequence |
+|----|-------------------|
+| 1 | Nothing observable. The operation is unwitnessed. |
+| 2 | A minor physical object nearby shifts — falls, opens, tips. Narrative only. |
+| 3 | A nearby person (TS 0) feels brief disorientation or dread. Recovers in moments. |
+| 4 | A sensory anomaly in the area — cold breath, scent out of place, sound. Narrative only. |
+| 5 | A document, object, or memory relevant to the operation's target becomes momentarily prominent. +1D on the next investigation roll in this scene. |
+| 6 | A minor structural consequence — a door opens, a fire gutters, a clock stops. GM discretion; narrative significant but not mechanically dangerous. |
+
+**For simulation:** Use expected value d6=3-4 (minor observational consequence). [PP-181]
+
+## Temporal Auto-Effect RS Cost — Past-Oriented Pulling (PP-181)
+
+POP operations produce an additional RS cost from temporal auto-effect, independent of the operation's own RS cost:
+
+| Recency band | Temporal auto-effect RS |
+|-------------|------------------------|
+| Same scene/session | 0 (no temporal stress) |
+| 1–2 seasons | 0 |
+| 3–5 seasons | −1 |
+| 6–10 seasons | −1 |
+| 10+/generational | −1 |
+| Foundational | −2 |
+
+Applied after operation RS cost. The temporal auto-effect fires regardless of success/failure. [PP-181]
+
+## Territorial+ Locking — Design Note (PP-181)
+
+Territorial Locking (Ob 7, TN8, no Thread Pool Score) and above is near-impossible by design. P(success) < 2% even for TS 80+ practitioners. This is philosophically consistent with P-06 (threadcut = "radically IS without becoming") — practitioners cannot lock strategic-scale configurations. To achieve strategic-scale future constraint, use sustained Relational-scale Weaving over multiple seasons instead. [PP-181]
+
+## Partial Lock Duration (PP-181)
+
+A Partial Lock result produces a volatile lock. Effect: +1 Ob on Domain Actions/operations attempting to override the locked configuration. Duration: 1 season only (degrades naturally). Chronic drift (RS −1/season from season 2) applies only to successful Locks, not Partial Locks. [PP-181]
+
+## Epistemic Auto-Effect — TC Trigger (PP-182)
+
+A TS 30+ Church observer witnessing a Thread operation does NOT automatically trigger TC increase. Observation alone is insufficient. TC increase from epistemic auto-effect requires:
+1. A Church actor with TS 30+ witnesses the operation AND
+2. The Church initiates a formal Investigation (one Church Domain Action, Ob 2).
+If the investigation proceeds: TC +1 at next Accounting.
+If the Church does not investigate (or cannot): no TC effect from observation.
+
+This prevents automatic TC escalation from all Thread ops in Church-adjacent locations. [PP-182]
