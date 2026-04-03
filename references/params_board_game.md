@@ -54,7 +54,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard |
 | Parliament Integrity (PI) | **7** | 0–10 | CORRECTED from 5. |
 | AER | 2 | 0–5 | Near IP clock. |
-| Torben Loyalty | **3** | 0–7 | CORRECTED from 8. Active from game start. No IP trigger needed. |
+| Torben Loyalty | **10** | 0–10 | Active from game start. No IP trigger. Range extended to 10. |
 | Elske Loyalty | 4 | 0–7 | Off-board card near T4. |
 | Löwenritter Coup Counter | 0 | 0–4 | Public. Threshold 4 = coup eligible. |
 | Warden Cooperation | 0 | 0–3 | Near T13. Inactive until Warden Emergence. |
@@ -65,13 +65,13 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Crown | 5 | 5 | 4 | 4 | 4 |
 | Church | 5 | 6 | 5 | 4 | 5 |
 | Hafenmark | 4 | 4 | 5 | 3 | 4 |
-| Varfell | **3** | 4 | **3** | 4 | 4 |
+| Varfell | **4** | 4 | **4** | 4 | 4 |
 | Restoration | 2 | 4 | 2 | 0 | 3 |
 | Löwenritter (post-coup) | 3 | 2 | 3 | 6 | 5 |
 | Guilds (NPC) | 3 | 4 | 6 | 2 | 5 |
 | Niflhel (NPC) | — | 5 | 4 | — | 4 |
 
-CORRECTIONS (PP-189 final): Varfell Mandate 3, Wealth 3 (G-10 confirms intentional BG starting position). TC = 28 (P-32). TC victory = 65 (P-32). PP-188 had TC=22 which was wrong — P-32 in v05 explicitly sets TC start to 28.
+CORRECTIONS (PP-191): Varfell Mandate 4, Wealth 4 (user decision — G-10 was wrong to confirm 3/3). Varfell's mechanical handicap is territorial positioning: all territories adjacent to Varfell's starting position are fortified, making early expansion costly. TC = 28 (P-32). TC victory = 65 (P-32).
 
 ## Stat Ceilings and Floors
 | Stat | Floor | Ceiling |
@@ -294,8 +294,8 @@ Range 0–7. Starts at **3**. Visible to all. Active from game start (no trigger
 - TC crosses 60: −1.
 - Torben sent to Altonia (comply with tutoring demand): −2 immediately.
 
-Crown Deed 5 condition: Torben Loyalty ≥ 5.
-Altonian Tutoring Demand triggers at IP ≥ **40** (not 30 — v04 B2: "Torben Tutoring Demand (IP ≥ 40 Event)").
+Crown Deed 5 condition: Torben Loyalty ≥ 5 (i.e. must not have degraded more than 5 points from start).
+Altonian Tutoring Demand triggers at IP ≥ **40** (v04 B2: "Torben Tutoring Demand (IP ≥ 40 Event)") (not 30 — v04 B2: "Torben Tutoring Demand (IP ≥ 40 Event)").
 
 ## Elske Off-Board Card (v04 B2)
 Princess Elske Almqvist is in Altonia (not on the board). Married to Duke Hardar Veldensohn, duchy borders T4.
@@ -321,17 +321,38 @@ Return: Elske Loyalty ≥ 6 + IP < 60 + Crown/Löwenritter unit in T4: Military 
 **TC Decreases:**
 Reformed Settlement Accommodate: −5. Sovereign Authority Doctrine (Hafenmark): −2 to −3. Baralta passive (Mandate ≥ 4): −1/season. Löwenritter Requisition Order success: −1. Royal Decree targeting TC: −1.
 
-## TC 80 Territorial Seizure (P-23, P-30 — v05 authoritative)
-At TC ≥ 80: Church Territorial Seizure active each season TC remains ≥ 80.
-Roll: **Church Military** vs **Defender Military** (opposed roll), Ob 2.
-Each success on the opposed roll: one contested territory flips. Hard cap: **2 territory transfers per seizure event** (P-23).
+## TC 80 Territorial Seizure (PP-192 — user design decision)
+At TC = 80: Church declares seizure attempt on **all Crown and Hafenmark territories** simultaneously.
+This is not a Military action — it is an ecclesiastical consolidation of temporal power backed by Templar force.
+
+### Seizure Roll (per territory)
+Church Mandate vs Ob = territory Fort level + 1 (min Ob 1).
+Roll for each Crown/Hafenmark territory separately. All rolls resolved simultaneously.
+
+### TC Gain per Successful Seizure
+| Territory | TC Gain on Success |
+|-----------|-------------------|
+| Standard Crown/Hafenmark territory | +1 |
+| Hafenvalor (T6, duchy capital) | +3 |
+| Lowenskyst (T7) | +1 |
+| Valorsplatz (T1, royal capital) | +5 |
+| Himmelenger (T3, Grand Cathedral) | Already Church-held — does not trigger seizure roll and generates no additional TC |
+
+### Seizure Results
 | Degree | Effect |
 |--------|--------|
-| Overwhelming | Immediate seizure, no Standing cost. TC +2/territory. |
-| Success | Seizure. TC +2/territory. |
-| Partial | Not seized; Church places 1 Templar Staging Token in territory (P-30). Controlling faction may remove it with any Military card play next season. |
-| Failure | No seizure. No token. |
-Note: Roll is Church Military pool vs Defender Military pool (opposed), not fixed Ob. PP-183 (cap 4) and earlier Mandate vs Ob3/Ob2 formulation were both wrong — corrected here.
+| Overwhelming | Territory seized immediately. No Standing cost. TC +territory value. PI −1. |
+| Success | Territory contested (Church and prior faction both present). Battle required next season. TC +territory value queues to Accounting after battle resolves. |
+| Partial | Templar Staging Token placed (P-30). Territory not seized. Prior faction may remove token with Military card play next season. |
+| Failure | No effect. Church Mandate −1 (failed seizure weakens the Confessor's authority). |
+
+### Seizure Constraints
+- Seizure fires once when TC first crosses 80. Does not repeat unless TC drops and re-crosses 80.
+- Church must have Mandate ≥ 4 to initiate (faction must be institutionally coherent to press the claim).
+- Restoration Territory (T14, Eisengrund): not targeted — Church does not press claims against communities, only against political authorities.
+- Varfell Territory (T9): not targeted — Varfell is not a Crown or Hafenmark territory.
+- AER ≥ 3: +1D on all seizure rolls (Altonian ecclesiastical backing).
+- PI at seizure: −1 per territory successfully seized (constitutional rupture cascades).
 
 ## Theocracy Counter Starting Value — Canonical
 TC starts at **22** (v04 B2: "TC starts at 22, not 15, per canonical timeline: 45 years of post-independence accumulation").
@@ -498,3 +519,88 @@ Corrections applied over PP-188:
 - Majority-1s override: STRUCK in v05 (DESIGN DECISION 2026-04-02)
 - Institutional Mandate: Uphold/Appease (PP-189); prior params used "Compromise"
 - canonical source: v05 is authoritative (v04 is the structural base; v05 is most recent)
+
+## Varfell Territorial Expansion Constraint (PP-191)
+Varfell's starting handicap is **positional**, not statistical.
+Varfell (T9) is adjacent to: T5 (Arnesheld, Fort 3), T10 (Sigurdshalm, NPC/Niflhel), T12 (Oastad, uncontrolled/Thread Wound), T13 (Stillhelm, uncontrolled/Thread Wound).
+
+Every viable expansion path from T9 runs into a fortified or hostile position:
+- T5 (Arnesheld): Fort 3 — the strongest fortress on the board. Löwenritter garrison.
+- T10 (Sigurdshalm): Niflhel NPC territory. Trade +1 Ob. No military presence but diplomatically hostile.
+- T12/T13: Uncontrolled Thread Wound sites. RS −1/season if occupied. Accessible only with VTM ≥ 2.
+
+**Fortification Combat Rule (clarification for Varfell):** When attacking a fortified territory, defending faction adds Fort level as bonus dice to defensive Military roll. Fort 3 (Arnesheld) = defender rolls Military + 3D. This is the primary mechanical reason Varfell's expansion is delayed — they must either neutralise fortifications first (Fortify-equivalent action in reverse: Tribune Sabotage to reduce Fort by 1, Ob = Fort level) or accept heavily unfavourable odds.
+
+**Varfell Intelligence Path:** Varfell's dominant early game is information, not territory. The Intelligence Hegemony victory path (3 territories + VTM ≥ 3 + all stats revealed) doesn't require Crown or Hafenmark territory — it requires T9 + 2 others. T12 and T13 are reachable at VTM ≥ 2 (Thread-qualified presence bypasses normal March constraints into Thread Wound sites). Path B (Southernmost Dominion) and Path C (Thread Supremacy) both run through T12/T13.
+
+Starting stat total revised: Varfell 4+4+4+4+4 = 20 points (vs Crown 22, Church 25, Hafenmark 20). Equal to Hafenmark on raw points; differentiated by asymmetric mechanics (Patience Protocol, VTM, positional constraint).
+
+
+## Ministry — NPC Faction (PP-193)
+### Ethical Framework: Procedural Consequentialism
+The Ministry evaluates actions by whether they preserve the procedural conditions for governance. It is not loyal to Crown, Church, or Hafenmark — it is loyal to the functioning of the state itself. It is the civil service: clerks, administrators, record-keepers, tax collectors, enforcement officers.
+
+**Ministry is always NPC-controlled.** It has no player victory condition and cannot be captured by any faction's card play.
+
+### Ministry Stats
+| Stat | Value | Notes |
+|------|-------|-------|
+| Mandate | 3 | Institutional legitimacy of the administrative apparatus |
+| Influence | 4 | Reach into all territories via clerks and administrators |
+| Wealth | 2 | State treasury access (limited — Crown controls the purse) |
+| Military | 0 | Ministry has no military capacity |
+| Stability | 5 | The civil service is hard to destroy |
+
+### Ministry Tokens
+Ministry maintains **Administrative Presence** tokens (AP-tokens, not to be confused with Attention Pool).
+One AP-token per territory in which Ministry has clerks active. Starts with AP-tokens in T1 (Valorsplatz), T2 (Gransol), T6 (Hafenvalor), T7 (Lowenskyst). These represent the administrative apparatus of Parliamentary governance.
+
+### Parliament Connection — Direct Mechanics
+Ministry is the mechanical engine behind Parliament Integrity (PI).
+
+**Ministry Stabilisation (fires at Accounting Step 11, before Hollow Victory totals):**
+Each season Ministry has an AP-token in T1 (Valorsplatz, Parliament seat): PI degradation from Crown Emergency Powers is reduced by 1 (to a minimum of −0 — i.e. Ministry can prevent one Emergency Powers PI loss per season). This represents clerks managing the parliamentary record and maintaining continuity despite political disruption.
+
+**Ministry Legislative Record:**
+At each Year-End Accounting: Ministry produces a Legislative Record for the prior year. Any Parliamentary Manoeuvre that succeeded (Hafenmark) this year is recorded as a Parliamentary Ruling. Effect: the first time each year a Parliamentary Ruling is recorded, PI +1 (the institution acknowledges the precedent). This is in addition to the standard Hafenmark Parliamentary Manoeuvre PI recovery.
+
+**Ministry and Crown Policy:**
+Crown Policy Instruments require Ministry countersignature. If Ministry Mandate < 2 (collapsed or compromised): Crown Policy actions cost +1 Ob (the administrative apparatus is too compromised to implement the decree cleanly). If Ministry Mandate = 0: Crown Policy actions unavailable until Ministry Mandate recovers.
+
+**Ministry and Church Seizure (TC 80):**
+Church Territorial Seizure of T1 (Valorsplatz) requires removing the Ministry AP-token first. If AP-token present: seizure Ob +1 (the administrative apparatus resists institutional capture). If seizure succeeds despite the token: Ministry AP-token in T1 is removed. All Crown Policy actions are now +1 Ob until Ministry reestablishes presence in T1 (requires 1 season of Ministry NPC action in T1).
+
+**Ministry and Hafenmark:**
+Hafenmark's Parliamentary Manoeuvre benefits from Ministry presence. If Ministry has AP-token in T1: Hafenmark Parliamentary Manoeuvre Ob −1 (the clerks facilitate process). If Ministry AP-token absent from T1: Parliamentary Manoeuvre Ob +1 (no procedural infrastructure to execute the manoeuvre).
+
+**Ministry and Löwenritter Coup:**
+If Löwenritter Coup fires: Ministry AP-tokens in T1 and T2 are removed immediately. Ministry Mandate −2. PI −3 (standard coup effect) but Ministry Stabilisation does not fire next season (Ministry is recalibrating). Ministry attempts to re-establish AP-tokens in recouped territories at rate of 1/season.
+
+### Ministry NPC AI Priority Tree (runs at Phase 4, Priority 4 — Domain Actions tier)
+| Priority | Condition | Action |
+|----------|-----------|--------|
+| 1 | PI ≤ 3 | Ministry plays Consul Inward (Govern) in T1: roll Ministry Mandate (3D) vs Ob 1. Success: PI +1 (clerks shore up parliamentary function). |
+| 2 | T1 has no Ministry AP-token | Ministry plays Consul Inward in T1: roll Mandate 3D vs Ob 1. Success: AP-token placed in T1. |
+| 3 | Any territory with AP-token has PI loss pending from Church Seizure | Ministry plays Senator Outward (Diplomacy) vs Church: Mandate 3D vs Church Mandate. Success: Church seizure of that territory delayed 1 season (Ministry files formal procedural objection). |
+| 4 | Crown Mandate ≥ 4 AND PI < 5 | Ministry plays Senator Inward (Decree support): PI +1 (Ministry facilitates Crown constitutional governance). Requires Crown Mandate ≥ 4 — Ministry does not support a weakened Crown. |
+| 5 (default) | None of above | Ministry plays Consul Inward in highest-Prosperity uncontested territory with AP-token: Prosperity maintained. |
+
+### Ministry Compromise and Corruption
+Factions may attempt to corrupt Ministry via Diplomacy.
+
+**Corrupt Ministry (Consul Outward, any faction, Ob = Ministry Mandate ÷ 2 round up, min 2):**
+Success: Ministry NPC Priority 4 fires in favour of the corrupting faction this season (Ministry supports that faction's Crown Policy or Parliamentary action regardless of current priorities).
+Overwhelming: As above + Ministry AP-token in one territory of choice acts as if that territory is the corrupting faction's capital for one season (−1 Ob on all their actions there).
+Failure: Ministry notes the attempt. Corrupting faction Stability −1. Ministry sends record to Riskbreakers (Riskbreaker Priority 6 now includes the corrupting faction's territory).
+
+**Ministry Collapse (Mandate 0):** Ministry ceases NPC actions for 2 seasons. All Ministry AP-tokens removed. During collapse: Crown Policy +1 Ob, Parliamentary Manoeuvre +1 Ob, all Hafenmark Deed 3 (Parliamentary Consolidation) checks suspended. Collapse exit: Hafenmark or Crown plays Govern Inward in T1 (Ob 2). Success: Ministry Mandate returns to 1, AP-token placed in T1, collapse ends.
+
+### Ministry and PI Track — Summary
+| Ministry State | PI Effect |
+|---------------|-----------|
+| AP-token in T1, Mandate ≥ 2 | Emergency Powers PI loss −1 (Ministry prevents one loss/season) |
+| AP-token in T1, Mandate ≥ 2, Hafenmark Manoeuvre success this year | Additional PI +1 at Year-End (Legislative Record) |
+| AP-token absent from T1 | Hafenmark Parliamentary Manoeuvre Ob +1 |
+| Ministry Mandate = 0 | Crown Policy unavailable |
+| Church seizes T1 with AP-token present | Seizure Ob +1; if seized: AP-token removed, Crown Policy +1 Ob |
+| Löwenritter Coup | T1+T2 AP-tokens removed; Ministry Mandate −2; Ministry Stabilisation suspended 1 season |

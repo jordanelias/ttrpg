@@ -240,3 +240,4 @@ Open for editorial: ED-061, ED-062, ED-063.
 | SIM-DEBT-TW-03 | RESOLVED (SIM-X-19) | ×3 RS multiplier validated. P1 finding: mass Dissolution is campaign-altering (SIM-19-01). |
 | SIM-DEBT-TW-04 | RESOLVED (SIM-X-20) | Hybrid Coherence calibrated — Moderate scenario is correct design intent. 2 minor findings. |
 | PP-189 | v05 final corrections over PP-188: TC=28, Church victory TC≥65, TC80 seizure formula, majority-1s struck, Uphold/Appease | BG | CROSS | TC RS IP PI | All | All | All | COMPLETE | PP-189 applied |
+| PP-190-193 | Torben 10, Varfell 4/4+fortification constraint, TC80 redesign, Ministry NPC design | BG | CROSS | PI TC RS | All + Ministry | All | All | COMPLETE | ED-088 resolved |

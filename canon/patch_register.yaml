@@ -2048,3 +2048,47 @@ patches:
   applied_to_version: "v0.7.1"
   status: applied
   applied_commit: pending
+
+- id: PP-190
+  date: 2026-04-02
+  severity: P1
+  description: "Torben Loyalty start: 3→10. Range extended 0-10. Torben begins with full loyalty; degradation is the story. Deed 5 condition unchanged (≥ 5 = still half the track lost = meaningful pressure)."
+  finding_id: "User decision"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.2"
+  status: applied
+  applied_commit: pending
+
+- id: PP-191
+  date: 2026-04-02
+  severity: P1
+  description: "Varfell starting stats: Mandate 4, Wealth 4 (user decision). G-10 in v05 was wrong to confirm 3/3. Varfell's handicap is positional: fortified adjacencies (T5 Fort 3, T10 NPC hostile, T12/T13 Thread Wounds). Fortification combat rule documented."
+  finding_id: "User decision"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.2"
+  status: applied
+  applied_commit: pending
+
+- id: PP-192
+  date: 2026-04-02
+  severity: P1
+  description: "TC 80 Territorial Seizure redesigned: targets all Crown/Hafenmark territories simultaneously. Per-territory TC gain: standard +1, Hafenvalor +3, Valorsplatz +5, Himmelenger already held (excluded). Roll: Church Mandate vs Ob = Fort+1. Church Military formula (P-23) was wrong — Mandate is the ecclesiastical power instrument, not Military."
+  finding_id: "User decision"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.2"
+  status: applied
+  applied_commit: pending
+
+- id: PP-193
+  date: 2026-04-02
+  severity: P1
+  description: "Ministry NPC faction designed: Valorian civil service/administrative apparatus. Stats M3 I4 W2 Mil0 Sta5. AP-tokens track administrative presence per territory. Direct Parliament connections: stabilises PI via Emergency Powers mitigation, Legislative Record at Year-End, Crown Policy dependency, Hafenmark Parliamentary Manoeuvre facilitation. Ministry NPC AI priority tree. Corruption mechanic. Collapse mechanic. Resolves ED-088."
+  finding_id: "ED-088 / User design decision"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.2"
+  status: applied
+  applied_commit: pending
