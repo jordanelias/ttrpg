@@ -1,50 +1,42 @@
-# Valoria Session Log — Updated
+# Valoria Session Log — CLOSED
 
 ```yaml
-session_id: 2026-04-02T_FULL_EDITORIAL_AND_THREAD_SIM
-phase: Phase 14 — Full editorial dedup + threadwork simulation (all temporal axes)
+session_id: 2026-04-02T_MECHANICS_AND_THREAD_SIM
+phase: Phase 15 — COMPLETE AND CLOSED
 status: CLOSED
 
-completed:
-  - Stage 1: Editorial Workflow D (dedup/consolidate/strike)
-      Promoted to resolved: 19 items (mechanical patches applied or design confirmed)
-      Struck: 2 new (ED-078 dupe of ED-043; ED-083 mitigated by ref card)
-      5 BG amendment items resolved (ED-081–085 in BG numbering)
-      Final state: resolved=28, provisional=62, struck=7, open=0
-      Commit: 312a5f0
+commits_this_session:
+  - 6d8e3da: BG Fail Forward design + comparative sim (PP-177/178/180 / ED-085–089)
+  - 245837c: Pool/Ob/Overwhelming alignment + three-temporal-axis thread sim (PP-181–184 / ED-085–086 resolved / SIM-TW-01)
 
-  - Stage 2: Editorial propagation complete (all applied decisions marked)
+completed_this_session:
+  - Glossary confirmed current (built prior session — no rebuild).
+  - LIR/FF cross-mode analysis: 5 editorial items resolved (ED-085 through ED-089).
+  - BG Fail Forward (PP-177): Partial = Minor complication (player choice). Failure = Moderate (mandatory, action-type specific). Severe tier for Ob>=4 Failures.
+  - Hybrid zoom-boundary FF rule (PP-180): personal complication carries to faction scale.
+  - LIR/FF cross-mode note (PP-178): Debate exempt from LIR; Thread irreversibility governs; BG action-economy = LIR-equivalent.
+  - SIM-FF-01: 4-season BG comparative (no FF vs FF). Verdict: FF superior — 5 zero-consequence Failures vs 5 state-changing complications; 2 new inter-faction tensions generated.
+  - PP-181: Pool Minimum = 1D (all modes, explicit in BG params).
+  - PP-182: Ob Minimum = 1 (all modes, Hybrid now explicit).
+  - PP-183: Domain Action Overwhelming Bonus Table (ED-086 resolved).
+  - PP-184: Govern full four-degree table (ED-085 resolved).
+  - SIM-TW-01: Three-temporal-axis cross-mode simulation (present/future/past, with+without threadworking).
+    Present-axis (Weaving Relational Ob3): Overwhelming — RS+1, over-actualisation, 3 GM event seeds.
+    Future-axis (Pulling Firmly Actualised Ob3): Success — Treaty loosened 2 seasons, IP−1 next Accounting, Crown internal debate.
+    Past-axis (POP 2-season Ob4, TS75): Success — Church T9 claim removed, Orphaned Configuration, paradox window 2 scenes, RS−3.
+    TS70 gate for POP confirmed. P-01 co-movement verified all three axes. 2xOb Overwhelming confirmed correct gradient.
+  - ED-085, ED-086, ED-090, ED-091, ED-092 resolved. No open editorial items from this session.
 
-  - Stage 3: SIM-THREAD-01 — four temporal axis sessions
-      A (no threading): Debate — Baralta defeats Crown envoy 5 exchanges. Evidence leverage confirmed. Symmetric-pool deadlock at resistance≥2 confirmed design feature.
-      B (Present/Weaving): Relational Weaving TS-52. Overwhelming 75%. RS+1. P-01 ✓. Over-actualisation BG gap found.
-      C (Past/POP): Generational POP Ob8. P(success)≈8%. RS−7 expected per attempt. Historical truth mechanically sealed. P-03 consistent.
-      D (Future/Locking, Hybrid): Personal Locking Ob4 TN8. P(success)≈8%. Territorial+ near-impossible by design (P-06). TC trigger clarified.
-      Commit: 8edcc3a
+mechanical_state_at_close:
+  patches_applied: PP-177 through PP-184 (8 patches this session)
+  editorial_ledger: ED-085/086 resolved; ED-087/088/089 provisional; ED-090/091/092 resolved
+  params_board_game: v0.5.5 (FF + Overwhelming + Govern table + Pool/Ob floors)
+  coverage_matrix: SIM-FF-01 and SIM-TW-01 complete
+  all_files_committed: true
 
-patches_applied:
-  PP-181: Threadwork tables — d6 Actual auto-effect, temporal RS cost for POP, Territorial Locking design note, Partial Lock duration 1 season
-  PP-182: TC trigger — observation alone insufficient; Church Investigation Domain Action required
-  PP-183: Evidence leverage audience mode shift capped at weight 2.0
-  PP-184: Thread Debt token system for BG layer (over-actualisation + Lock Domain Echo)
-
-editorial_items_added:
-  ED-087: Register Shift needs GM narrative signal (provisional rule added to params_scale_transitions scope)
-
-key_design_confirmations:
-  - High-resistance political debates deadlock symmetric pools (design feature ✓)
-  - Historical POP near-impossible: mundane investigation is primary (P-03 ✓)
-  - Territorial Locking near-impossible: future cannot be locked at strategic scale (P-06 ✓)
-  - P-01 co-movement confirmed in all Thread sessions ✓
-
-final_ledger_state:
-  open: 0
-  provisional: 63 (62 + ED-087)
-  resolved: 28
-  struck: 7
-  total: 98
-
-next_action:
-  task: "User review of priority provisional items: ED-001 (Card-Hand full design), ED-036 (Altonian units), ED-048 ([SOUTHERNMOST-NPC] name), ED-081 (10-exchange stalemate cap). Then: compilation pass for any stable system. Hybrid and threadwork mechanics are now fully simulatable with no open blockers."
-  note: "All temporal axes simulated. PP-181–184 applied. System ready for next arc generation, NPC stress testing, or compilation."
+resume_next_session:
+  priority_1: Compile BG Domain Action reference card (FF complication column + Overwhelming bonus column)
+  priority_2: 12-season long-run simulation with Thread ops active (SIM-TW-02)
+  priority_3: Stage 3 compilation update (threadwork_redesign_v25 → stage3_thread_operations — currently empty)
+  open_provisional: ED-087 (Parliamentary Manoeuvre Partial), ED-088 (Debate LIR exemption), ED-089 (Thread LIR precedence) — all low-priority, no blockers
 ```
