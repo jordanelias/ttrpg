@@ -550,7 +550,7 @@ The Ministry evaluates actions by whether they preserve the procedural condition
 
 ### Ministry Tokens
 Ministry maintains **Administrative Presence** tokens (AP-tokens, not to be confused with Attention Pool).
-One AP-token per territory in which Ministry has clerks active. Starts with AP-tokens in T1 (Valorsplatz), T2 (Gransol), T6 (Hafenvalor), T7 (Lowenskyst). These represent the administrative apparatus of Parliamentary governance.
+One AP-token per territory in which Ministry has clerks active. Starts with AP-tokens in T9 (Arcansheld), T10 (Nordhelm), T11 (Mittelmark), T12 (Valorsplatz). These represent the administrative apparatus of Parliamentary governance. (PP-204 corrected.)
 
 ### Parliament Connection — Direct Mechanics
 Ministry is the mechanical engine behind Parliament Integrity (PI).
