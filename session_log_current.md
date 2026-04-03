@@ -1,70 +1,72 @@
-# Valoria Session Log — Current
+# Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_SESSION_CLOSE
-session_date: 2026-04-02
-phase: Phase 15 — Threadwork audit cycle COMPLETE
-status: CLOSED
+session_id: 2026-04-02T_LORE_INTEGRATION_PLAN
+phase: SESSION CLOSED
+status: COMPLETE
 
-## COMPLETED THIS SESSION
+## LORE INTEGRATION ASSESSMENT
+Source material: Pre-project lore docs (Church of Solmund/Galbados, Lowenritter, Crown, Guilds, economy, governance).
+Note: Galbados is now Solmund per user direction.
 
-audit_work:
-  - AUD-TW-001: Full threadworking audit — 18 findings (6 P1, 9 P2, 3 P3)
-  - Canon-guard pass: all 8 P2 items resolved against Foundations + Amendment 01
-  - SIM-X-17: P-22 paradox window (PASS, 1 minor gap)
-  - SIM-X-18: Rendering Crisis arc (PASS, 2 findings)
-  - SIM-X-19: Mass battle ×3 RS multiplier (P1 finding — Dissolution warning)
-  - SIM-X-20: Hybrid Coherence 10-session campaign (calibrated)
-  - SIM-X-21: Collective Threadwork → OA → Brittleness (6 findings, new Lock vs Weave)
+## GAP ANALYSIS COMPLETE
+Already covered (minor enrichment only): Church mechanics, Crown, Lowenritter coup/martial law, Duchies.
 
-patches_applied: [PP-190, PP-191, PP-192, PP-193, PP-194, PP-195, PP-196, PP-197,
-                  PP-198, PP-199, PP-200, PP-201, PP-202, PP-203, PP-204, PP-205,
-                  PP-206, PP-207, PP-208, PP-209]
+New content requiring mechanization (7 priorities identified):
 
-editorial_items_resolved: [ED-099, ED-100, ED-101, ED-102, ED-103, ED-104,
-                            ED-105, ED-106, ED-107]
+### Priority 1: Church Four-Cardinal Sub-Arms
+- Cardinals of Fortitude (Templars), Justice (Inquisitors + Grand Adjudication), Prudence (tithes + charities), Temperance (scholarly institutions, monasteries, universities)
+- Mirrors Niflhel four-arm decentralized structure
+- Inquisitors need formalization beyond current generic Heresy Investigation mechanic
+- Template for Priority 2
 
-commits_this_session:
-  - f96277f: AUD-TW-001 audit findings
-  - b8c9a9e: PP-190–195 (P1 resolutions)
-  - fedfcae: PP-196–200 (canon-derived P2 resolutions)
-  - fc1b5ca: SIM-X-17–20 outputs + coverage matrix
-  - 24018d8: PP-201–207 (sim-debt finding resolutions)
-  - 0268046: SIM-X-21 output
-  - [this commit]: PP-208–209 + session close
+### Priority 2: Lowenritter Internal Structure
+- Lions Table (military), Lions Helm (naval), Civic Arm (Knights of the Peace + Royal Investigators), Riskbreakers
+- Currently only Riskbreakers and coup mechanic exist
+- Naval arm (Lions Helm) entirely absent from design
 
-## OPEN ITEMS AT CLOSE
+### Priority 3: Guild Economy Subsystem (NEW DESIGN DOC)
+- Ministry of Guilds oversight, guild hierarchy (Guild Masters / Free Masters / Journeymen / Apprentices)
+- Guild Council (5 Guild Masters per guild), Guild Forum (city-level)
+- Entrance requirements, Journeymen Years travel mechanic
+- Currently Guilds have faction sheet but zero internal structure
 
-active_p1_items: 0
-active_p2_items: 0
-active_p3_items:
-  - SIM-19-01 note added (Dissolution warning in params) — no further action needed
-  
-sim_debt_status: ALL CLEAR
-  SIM-DEBT-TW-01: resolved (SIM-X-17)
-  SIM-DEBT-TW-02: resolved (SIM-X-18)
-  SIM-DEBT-TW-03: resolved (SIM-X-19)
-  SIM-DEBT-TW-04: resolved (SIM-X-20)
+### Priority 4: Court Parliament Subsystem (NEW DESIGN DOC)
+- Ministries (Logothetes, Granaries, Pure Water, Law, Taxation, Water, Guilds)
+- Judicial Rectorates, Praefectures, Civil Magistrates
+- Court Parliament nomination/voting procedures
+- Currently Parliament exists only as vote mechanic (stage6 section 8.11)
 
-## NEXT SESSION
+### Priority 5: Levy/Taxation Rules
+- Church levy: 2/3 raiseable by King
+- Ducal levy: 2/3 raiseable by Monarch
+- Church taxed on owned lands
+- Patch to params_factions and potentially params_combat/mass_combat
 
-next_action:
-  primary: continue editorial review from ED-065
-  note: >
-    The threadwork system is now fully audited and all findings resolved.
-    PP-190–209 constitute a complete audit cycle. All patches are PROVISIONAL
-    and require user sign-off before compilation.
-    
-    Priority editorial items remaining (ED-065 onward):
-    - ED-065: continue prior session's editorial review queue
-    - F3 from SIM-X-21 (Lock vs Weave at Relational scale) may warrant
-      an editorial decision on whether this trade-off should be more
-      explicitly surfaced in compilation/player-facing materials.
+### Priority 6: Galbados -> Solmund Rename (repo-wide)
+- Haiku-tier cleanup task
+- Affects: stage6, stage4, canon docs, params, compilation, everywhere
 
-canonical_doc_status:
-  threadwork: designs/ttrpg/threadwork_redesign_v25.md (92,776 chars, PP-190–209)
-  params_threadwork: references/params_threadwork.md (21,717 chars)
-  params_mass_combat: references/params_mass_combat.md (PP-191, 192, 201, 204)
-  params_factions: references/params_factions.md (PP-195)
-  compilation_threadwork: STALE (stage3 empty — do not use)
+### Priority 7: Editorial Resolution Where Lore Provides Answers
+- ED-001: NOT resolved by lore (Card-Hand is mechanical)
+- ED-036: NOT resolved (no Altonian unit stats in lore)
+- ED-048: NOT resolved (no replacement name for Ceiral in lore)
+
+## DUCAL ADMINISTRATION (not yet prioritized)
+- Privy councils, Imperial Court presence requirement (half time+), prestige economics
+- Praefecture governance layer
+- Could fold into Priority 4 or separate doc
+
+## OPEN ITEMS FROM PRIOR SESSION STILL OPEN
+- ED-108 (P2): Confirm T10/T11 territory names (Nordhelm, Mittelmark)
+- SIM-DEBT-01: Debate stress tests need re-simulation with (Presence x 2)+History pool
+
+## Gate: PASS
+
+next_session_start:
+  priority_1: "Begin Priority 1: Church four-Cardinal sub-arm mechanization. Read stage6 section 8.3 + lore material from project instructions. Design sub-arm mechanics mirroring Niflhel four-arm pattern."
+  priority_2: "After P1 complete: Priority 2 Lowenritter internal structure."
+  priority_3: "After P2: Priority 3 Guild economy subsystem — new design doc needed."
+  model_recommendation: "Sonnet 4.6 for Priorities 1-5. Haiku 4.5 for Priority 6 (rename). Sonnet for Priority 7."
+  context_note: "Lore source material is in Claude Project Instructions (pasted by user). Reference it directly — do not re-read from GitHub."
 ```
