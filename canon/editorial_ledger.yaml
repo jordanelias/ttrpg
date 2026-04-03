@@ -50,12 +50,12 @@ editorial_decisions:
   - id: ED-003
     legacy_id: BG-E-34
     date_flagged: 2026-03-31
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: session
     source_file: session_log_current.md
     description: "Institutional Mandate trigger conditions review — which conditions cause Mandate to fire an institutional response"
     full_flag_text: "BG-E-34: Institutional Mandate trigger conditions review"
-    status: provisional
+    status: resolved
     priority: P2
     decision: "Institutional Mandate fires when Mandate≥4 AND Domain Action directly challenges faction core institutional authority. See params_factions.md. [PROVISIONAL]"
     propagation_targets:
@@ -68,12 +68,12 @@ editorial_decisions:
   - id: ED-004
     legacy_id: BG-E-35
     date_flagged: 2026-03-31
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: session
     source_file: session_log_current.md
     description: "NPC AI tree update for board game — revised AI decision tree to reflect all BG v5 changes"
     full_flag_text: "BG-E-35: NPC AI tree update"
-    status: provisional
+    status: resolved
     priority: P2
     decision: "NPC AI priority order: (1) protect Stability if ≤2; (2) advance Mandate if ≤3; (3) target highest-threat opponent's lowest stat. [PROVISIONAL]"
     propagation_targets:

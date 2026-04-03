@@ -1,4 +1,17 @@
 # VALORIA: THE BOARD GAME
+## Institutional Mandate — Uphold / Appease (PP-189)
+
+**Trigger:** Domain Action directly challenges a faction's core institutional authority AND targeted faction Mandate ≥ 4.
+
+| Choice | Timing | Effect | Cost |
+|--------|--------|--------|------|
+| **Uphold** | Before roll | Roll proceeds normally | None |
+| **Appease** | Before roll | Triggering action cancelled entirely — no roll made | Mandate −1 |
+
+**NPC rule:** Non-Player Character factions Appease if Mandate ≥ 4 AND Stability ≤ 3.
+
+*PP-189, 2026-04-02*
+
 ## Version: v0.6 (ST-BG/INT + P-12–P-32 applied in-place; PART THIRTEEN and PART TEN/ELEVEN eliminated; pure mechanical spec)
 ## Status: WORKING DESIGN — read straight through. No appendix sections.
 ## v0.4 → v0.5 → v0.6 Transition Document
@@ -320,7 +333,7 @@ See I-05 above. PATCH P-16 resolves this.
 **Systems at acceptable load (clear, low overhead):**
 - Card hand management: intuitive. Five cards, one Recess. New players understand this within two seasons.
 - Degree table: clean four-outcome system. Overwhelming/Success/Partial/Failure maps directly to player intuition.
-- Institutional Mandate Uphold/Compromise: binary choice, mechanically immediate. Load ≈ 2/10.
+- Institutional Mandate Uphold/Appease: binary choice, mechanically immediate. Load ≈ 2/10.
 - Standing Tokens: simple accumulation/spending. Load ≈ 2/10.
 - Casus Belli: well-defined acquisition and effect. Load ≈ 3/10.
 
@@ -368,8 +381,8 @@ See I-05 above. PATCH P-16 resolves this.
 
 **But**: The HI itself, when resolved at Accounting Step 5, could trigger:
 - If successful (Attention Pool ≥ 3): Theocracy Counter +0.5; AER +1; Restoration potentially loses Presence marker.
-- If target is Restoration faction, Restoration may Compromise their Mandate (Investigation closes, Mandate −1).
-- If Restoration Compromises: their Stability −1 (Compromise cost: 1 Standing + 1 Stability).
+- If target is Restoration faction, Restoration may Appease their Mandate (Investigation closes, Mandate −1).
+- If Restoration Compromises: their Stability −1 (Appease cost: 1 Standing + 1 Stability).
 
 **Season end cascade from T3 Decree + HI:**
 - Theocracy Counter +1 (T3 control) at Accounting.
@@ -406,7 +419,7 @@ But at RDT 6:
 7. Hafenmark holds 4+ Deed Tokens (if Deed 3 = Reformed Settlement, they now hold it). Hafenmark also holds Deed 2 (Public Instability ≥ 3 — current Public Instability 5). Check all three Path A deeds: RDT ≥ 4 (RDT 6 ✓), Public Instability ≥ 3 (Public Instability 5 ✓), Reformed Settlement (✓). **Hafenmark has all three Path A Deeds simultaneously.**
 
 8. **VICTORY CHECK:** Hafenmark declares victory at Accounting Step 12.
-9. **Hollow Victory check:** Hafenmark Compromise count: assume 2 (−1 Deed effective). Effective Deeds: 3 − 1 = 2. Path A requires 3. Hafenmark CANNOT declare victory — Hollow Victory modifier reduces effective Deed count below threshold.
+9. **Hollow Victory check:** Hafenmark Appease count: assume 2 (−1 Deed effective). Effective Deeds: 3 − 1 = 2. Path A requires 3. Hafenmark CANNOT declare victory — Hollow Victory modifier reduces effective Deed count below threshold.
 
 > **Clarification (PP-035):** "Hollow Victory applies only to Deed-counting factions (Hafenmark, Guilds, and any faction whose victory condition uses a Deed or similar countable token). Restoration's presence-based victory condition (Rendering Stability ≥ 50) and Löwenritter/Crown's mandate-based conditions are not Deed systems. Hollow Victory does not apply to these factions."
 
@@ -608,7 +621,7 @@ Vanguard (defender, Balanced vs Offensive): Cohesion 5 +fort? T4 has Fort 2: +2D
 ## Terra Mystica / Gaia Project
 **Comparison:** Faction asymmetry and resource conversion chains. Valoria exceeds both in narrative depth and faction distinctiveness but carries similar risks: analysis paralysis from asymmetric options, and faction A/B comparisons feeling unfair before experience reveals the balance. **Recommendation:** Like Terra Mystica, Valoria needs a "first session faction guide" — simplified recommended opening plays per faction to prevent new players from building into corners.
 
-**Valoria advantage:** The Institutional Mandate Uphold/Compromise system creates emotional investment in faction identity that Terra Mystica never achieves. Players care about their faction's soul, not just their engine.
+**Valoria advantage:** The Institutional Mandate Uphold/Appease system creates emotional investment in faction identity that Terra Mystica never achieves. Players care about their faction's soul, not just their engine.
 
 ## Root
 **Comparison:** Highly asymmetric faction design with an interconnected political board. Root's faction design principle — each faction has a different win condition that requires different interaction patterns — is fully present in Valoria. Root achieves lower cognitive load through simpler individual mechanics; Valoria trades that simplicity for thematic richness.
@@ -701,4 +714,4 @@ Alternatively, add an additional Theocracy Counter gain source: "Church wins any
 - **Forgetting Check "Spirit proxy":** Already addressed in G-06/PATCH P-26. This is the most significant hybrid gap remaining.
 - **Thread Debt in hybrid:** A Player Character performing a personal Thread operation generates Thread Debt that batches to Cascade. But the board game Thread Debt triggers (Rendering Stability < 30, prior token in territory) may not apply identically at personal scale. Hybrid mode should specify: "Personal Thread operations incur Thread Debt on the board only if the TTRPG scale operation would qualify as 'against temporal flow' by TTRPG criteria. The Game Master determines this at the Cascade phase ledger, not the player mid-scene."
 - **Co-Movement Cards for personal Thread operations:** TTRPG operations that batch to Cascade (Thread consequences step) generate Co-Movement card draws in Cascade, not during the personal scene. The card effects (particularly Temporal effects — Non-Player Character relationship changes) must be retroactively applied to the scene that just finished, which can feel narratively discontinuous. Recommendation: Game Master draws the Co-Movement card for a batched personal Thread operation at the END of the personal scene in which it occurred, records its effects, then applies them at Cascade. The narrative flavoring is immediate; the mechanical application is deferred.
-- **CP awards from board game successes (G-089 in hybrid_gaps_resolved.md):** "Board game successes generate CP." The criteria for CP awards are stated as "Belief engagement, significant Domain Action, Maxim expression." In the board game, Beliefs and Maxims are TTRPG constructs. In board-game-only mode, CP doesn't apply. In hybrid, the board action must be tied back to the Player Character's belief system by the Game Master to earn CP. **This is correct but needs a worked example in the ruleset.** The Institutional Mandate Uphold/Compromise decision is the natural bridge: a faction Upholding their Mandate in a way that reflects the Player Character's personal Conviction (their TTRPG Belief arc) earns CP even when resolved at board scale.
+- **CP awards from board game successes (G-089 in hybrid_gaps_resolved.md):** "Board game successes generate CP." The criteria for CP awards are stated as "Belief engagement, significant Domain Action, Maxim expression." In the board game, Beliefs and Maxims are TTRPG constructs. In board-game-only mode, CP doesn't apply. In hybrid, the board action must be tied back to the Player Character's belief system by the Game Master to earn CP. **This is correct but needs a worked example in the ruleset.** The Institutional Mandate Uphold/Appease decision is the natural bridge: a faction Upholding their Mandate in a way that reflects the Player Character's personal Conviction (their TTRPG Belief arc) earns CP even when resolved at board scale.

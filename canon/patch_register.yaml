@@ -1934,3 +1934,18 @@ patches:
   applied_to_version: "v0.7.0"
   status: applied
   applied_commit: pending
+
+  - id: PP-189
+    date: 2026-04-02
+    scope: bg_faction_institutional_mandate
+    description: >
+      Rename Compromise to Appease. Define Uphold/Appease mechanic.
+      Trigger: Mandate>=4 AND Domain Action directly challenges faction core institutional authority.
+      Uphold: roll proceeds, no cost. Appease: declare before roll, action cancelled, Mandate-1.
+      Removes erroneous Standing and Stability costs from provisional.
+      NPC AI: may Appease if Mandate>=4 AND Stability<=3.
+    files_changed:
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+      - references/params_factions.md
+    status: applied
+    resolves: ED-003, ED-004

@@ -191,3 +191,11 @@ Institutional Mandate fires when:
 ## PC Faction Embedding — BG Layer (ED-075 resolved — provisional)
 PCs are always mechanically present in their primary faction between Zoom Ins.
 Effect: the PC's faction gains +1D on one Domain Action per season in territories the PC is physically located in (narrative confirmation required). [PROVISIONAL]
+
+## Institutional Mandate — Uphold / Appease (PP-189)
+Trigger: Mandate ≥ 4 AND Domain Action directly challenges faction core institutional authority.
+| Choice | Timing | Effect | Cost |
+|--------|--------|--------|------|
+| Uphold | Before roll | Roll proceeds | None |
+| Appease | Before roll | Action cancelled | Mandate −1 |
+NPC: Appease if Mandate ≥ 4 AND Stability ≤ 3.
