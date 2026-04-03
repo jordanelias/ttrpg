@@ -1,91 +1,50 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_BG_AUDIT_FULL
-phase: SESSION CLOSED
-status: COMPLETE
+session_id: 2026-04-02T_RANGED_WEAPONS_PROPAGATION
+phase: Phase 14 — Ranged weapon type propagation and simulation complete
+status: CLOSED
 
-## WORK RECORD — FULL SESSION
+completed:
+  - PP-172: personal combat ranged subtypes (LP/HP/LBl/HBl), TN8 defence, environmental factors, HBl STR min
+  - PP-173: mass combat ranged DR table split (Projectile → 4 columns), HBl personal distinction, LBl anti-levy note
+  - PP-174: params_combat stale HBl note removed; Damage Formula STR inconsistency provisional (ED-092)
+  - PP-175: mass combat ranged DR scaled ÷2 from personal DR (provisional ED-096) — P1 fix
+  - SIM-001: personal combat ranged test battles (6 scenarios)
+  - SIM-002/003: mass combat and BG ranged scenarios
+  - SIM-004: full personal combat test suite (Mode A/C/D/J)
+  - SIM-005/006: full mass combat and BG battle scenarios
+  - Commits: d30e47b (PP-172), 8ea42f3 (PP-173), c397de0 (PP-174), a496722 (PP-175)
 
-### Stage 1: Editorial Resolutions
-ED-032/087: TC 80 = all-territory sweep (then capped by PP-183 — see Stage 4).
-ED-080: Baralta conviction approved (contingent).
-ED-081: Vaynard conviction approved (contingent).
-ED-082: Almud conviction approved (contingent).
-ED-083: VTM 5 co-movement direction approved (contingent, P-14 bending not breaking).
-ED-084: AER starting value 2 approved.
-ED-085: Reformed Settlement 3 responses approved.
+patches_applied:
+  - PP-172 through PP-175 (4 patches)
 
-### Stage 2: BG Co-Movement Resolution Protocol (PP-182, resolves ED-086)
-Three-dimensional auto-effects defined for all BG Thread operation types:
-- Temporal: History Resonance markers (stack to 3 = Thread Wound)
-- Epistemic: Church Attention Pool advances (territory-level)
-- Actualized: primary operation result
-Thread Tension (TT) public track added (count of all History Resonance markers across board).
-Triangular tension display: RS (actualized) + TT (temporal) + AP (epistemic).
-P-01 PASS. P-11 PASS. P-14 PASS.
+editorial_status:
+  open_provisional: 84+ (prior) + ED-085/086/087/092/093/094/095/096 = 92+
+  new_this_session: ED-085, ED-086, ED-087, ED-092, ED-093, ED-094, ED-095, ED-096
 
-### Stage 3: Amendment2 Systems Extracted to Params (PP-181)
-- AER track (Altonian Ecclesiastical Relationship, 0-5, start=2)
-- RDT track (Reformed Doctrine Track, 0-6, Hafenmark)
-- TD track (Theological Dissatisfaction, 0-5, private)
-- VTM full spec (0-5, VTM 3+ public, VTM 5 co-movement direction)
-- Riskbreaker Pool and Priority Tree (NPC, 3 tokens/year)
-- Crown Dominion alternate victory
-- Church Dual Theocracy alternate victory
-- Hafenmark Path A (Reformed Valoria) + Path B (Theological Supremacy)
-- Faction conviction texts (all 6 factions)
-- TC 80 all-territory sweep (initially; then capped PP-183)
+key_provisional_decisions:
+  ED-085: Ranged pool split at melee range — Offence forbidden, Defence only at TN8
+  ED-086: HBl availability by faction — provisional: all factions
+  ED-092: STR in damage formula — provisional: STR is wield-requirement only, not damage addition
+  ED-093: Fibonacci group bonus for ranged — provisional: does not apply
+  ED-094: HP reload at mass combat scale — provisional: no reload (unit staggers)
+  ED-095: Ranged units in Engagement weapon — provisional: Light Cut sidearm
+  ED-096: Mass combat ranged DR scaling — provisional: ÷2 rounded up
 
-### Stage 4: Audits and Stress Tests
+outstanding_propagation:
+  - ED-092: if confirmed STR is not in damage, update combat_design_v1.md formula text
+  - ED-093: if confirmed no Fibonacci for ranged, add explicit rule to combat_design_v1.md §8
+  - ED-094/095: add HP reload note and Engagement weapon note to mass_battle_v3.md §Phase 2/5
+  - ED-096: confirm ÷2 scaling before treating PP-175 as final
 
-AUD-BG-02 (No Thread): 
-- Crown Deed 2 too easy — adjusted to >=5 territories (PP-186)
-- Guilds Wealth sink still missing (open note)
+sim_debt:
+  - SIM-DEBT-01: Debate pool re-calibration (unchanged — not ranged related)
+  - No new SIM-DEBT items
 
-AUD-BG-03 (Thread, all temporal axes):
-- P-01/P-11/P-14 PASS on all tested operations
-- Partial Mend creates Thread Wound at 2-marker territory — documented PP-184 (P1)
-- AP per-territory ceiling undefined — fixed PP-185 (P1), ceiling=10, multi-Inquisitor rules
-- Co-Movement card effects not parameterised — fixed PP-187
-
-SIM-BG-02 (Church TC Race):
-- TC 40 reached exactly at S12 with Hafenmark suppression — knife-edge timing correct
-- Without suppression: TC 40 by S6 — confirms Hafenmark/Church tension is load-bearing
-
-SIM-BG-03 (TC 80 Sweep):
-- Unlimited sweep seizes 6.5 territories median — P1 game-ending — capped at 4/season PP-183
-
-SIM-BG-04 (Varfell Thread Supremacy):
-- VTM 5 + RS>=50 + territories achievable S11-12 — correct design tension confirmed
-
-### Patches Applied This Session
-PP-181: Editorial resolutions bundle + amendment2 systems extraction
-PP-182: BG Co-Movement Resolution Protocol (P-14 compliant)
-PP-183: TC 80 sweep capped (4 territories/season, TC gain capped +4/season)
-PP-184: Partial Mend Thread Wound risk documented
-PP-185: Church Attention Pool ceiling (10/territory) + multi-Inquisitor rules
-PP-186: Crown Deed 2 raised to >=5 territories
-PP-187: Co-Movement card effects table (20 cards parameterised)
-
-### Commits
-f099a377: PP-181/182 editorial + co-movement protocol
-518e9a4a: version tag fix
-ba1eb3bc: AUD-BG-02-03 + SIM-BG-02-04 + PP-183-187
-fdf5773d: version tag update
-
-### Open Items
-GAP-BG-A2-01: Guilds Wealth sink — design note, not patched
-DESIGN-DEBT-BG-01: Reconcile v02/v05/amendment2 into single canonical spec (still pending)
-
-### Known Outstanding Non-BG Items
-ED-053: Composure formula (TTRPG)
-GAP-TTRPG-04: Belief CP conflict
-GAP-TTRPG-G1/G2: Hybrid transition procedures
-
-next_session_start:
-  priority_1: "Guilds Wealth sink design (A2-01 open note — last BG balance gap)."
-  priority_2: "DESIGN-DEBT-BG-01: Reconcile BG design docs into single canonical spec."
-  priority_3: "Run Mode C full scenario simulation (Church-Crown-Hafenmark triangle, S6-12)."
-  priority_4: "TTRPG items: ED-053 Composure, GAP-TTRPG-04 Belief CP."
+next_actions:
+  1. User reviews ED-085/086/092/093/094/095/096 provisional decisions
+  2. If confirmed: propagate as non-provisional patches to design docs
+  3. Mass combat ranged unit roster update (faction unit blocks need ranged subtypes)
+  4. Consider: ranged unit availability and cost differentiation by faction
 ```
