@@ -1,8 +1,8 @@
-<!-- version: v0.7.1+PP189-V05FINAL | source: valoria_bg_v04.md (canonical) + v05 corrections | last_updated: 2026-04-02 -->
-<!-- PATCHES APPLIED: PP-169-PP-187 | CORRECTIONS: PP-188 (revert PP-171/172/173/176/186 errors; fix starting values; correct faction list) -->
-<!-- AUTHORITATIVE SOURCE: designs/board_game/valoria_bg_v04.md for all faction cards, victory conditions, turn structure, starting values -->
-<!-- NOTE: v05 is a correction document only (dice system, Ob minimum, inconsistency patches). v04 B-sections are the ruleset. -->
-<!-- STALE CHECK: All known BG editorial blockers resolved as of PP-188. -->
+<!-- version: v0.8.5+PP220 | source: valoria_bg_v05_simulation_and_patches.md (canonical per canonical_sources.yaml); action economy from stage_bg_proposal_v02.md | last_updated: 2026-04-03 -->
+<!-- PATCHES APPLIED: PP-169-PP-187 | CORRECTIONS: PP-188 | PP-189 (v05 final) | PP-219 (Southernmost access redesign) | PP-220 (Champion TS table) -->
+<!-- AUTHORITATIVE SOURCE: designs/board_game/valoria_bg_v05_simulation_and_patches.md (faction stats, clocks, victory conditions); designs/board_game/stage_bg_proposal_v02.md (action economy, card-hand system PP-177) -->
+<!-- NOTE: v05 is canonical for BG mechanics. v04 B-sections remain structural base. -->
+<!-- STALE CHECK: PP-219/220 propagated. Next: ED-109–113 balance editorials open. -->
 
 # params_board_game.md — Board Game Mode (v0.7.0)
 

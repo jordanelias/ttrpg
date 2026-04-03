@@ -1,5 +1,5 @@
-<!-- version: v0.14+design-ST6 | sources: designs/mass_combat/mass_battle_v3.md (v4.4, PP-106) | last_updated: 2026-04-02 -->
-<!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D; PP-191 (Lock phase); PP-192 (×3 RS multiplier) -->
+<!-- version: v0.14+design-ST7 | sources: designs/mass_combat/mass_battle_v3.md (v4.4, PP-106) | last_updated: 2026-04-03 -->
+<!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D; PP-191 (Lock phase); PP-192 (×3 RS multiplier); PP-222, PP-224, PP-225, PP-227, PP-229, PP-231 (SIM-X-22 provisional) -->
 <!-- PHASE STRUCTURE: 7 phases. Thread split: offensive Phase 4, support Phase 6. All damage simultaneous Phase 6 Step 1. -->
 <!-- mass_battle_v3.md is a design proposal. Values marked [COMPILED] are from stage8; [PROPOSAL] from v3. -->
 <!-- STALE CHECK: Verify [COMPILED] values against current ruleset; verify [PROPOSAL] against compiled stage8 update. -->
@@ -64,13 +64,8 @@ Coherence Rating = ⌈(Presence + Cognition) ÷ 2⌉
 Governs: sub-unit limit (max = Coherence Rating; TTRPG hard cap 3); Cohesion ceiling; Morale floor (= 1 while general present); tactic execution (Coherence Rating dice vs Ob).
 Coherence Rating = 1: cannot restore Cohesion to any unit — all degradation permanent for that battle.
 
-## Battle Phases (TTRPG)
-1. Declaration
-2. Volley (projectiles + Combat Thread ops)
-3. Charge/Manoeuvre
-4. Engagement (melee pool-split resolution)
-5. Cascade (support Thread ops, Morale checks, Cohesion checks)
-Reform Phase: between turns; unit not engaged.
+## Battle Phases (TTRPG) — SUPERSEDED
+See §BATTLE TURN PHASE STRUCTURE above (7 phases, ED-050 Option D). The prior 5-phase structure is obsolete.
 
 ## Cohesion Degradation (Deterministic) [PROPOSAL]
 Fires at Phase 5 when total Strength lost this turn > Cohesion rating → Cohesion −1.
@@ -161,8 +156,8 @@ block sight-lines with front-line formations; flank to reach Artillery directly.
 | War | ~5,000 soldiers | 70+ |
 
 
-## Mass Battle RS Multiplier (PP-192) [PROVISIONAL]
-All RS costs from Thread operations in mass battle ×3. Applied after degree table resolution. Coherence costs NOT multiplied. RS ceiling (100) and seasonal cap (±10) still apply.
+## Mass Battle RS Multiplier (PP-192, PP-225) [PROVISIONAL]
+All RS costs AND gains from Thread operations in mass battle ×3 (PP-225). Applied after degree table resolution. Coherence costs NOT multiplied. RS ceiling (100) and seasonal cap (±10) still apply.
 | Op | Normal RS (Success) | Mass Battle RS (×3) |
 |----|--------------------|-----------------------|
 | Pulling (failure) | −2 | −6 |
@@ -170,7 +165,9 @@ All RS costs from Thread operations in mass battle ×3. Applied after degree tab
 | Dissolution (success) | −5 | −15 |
 | Dissolution (failure) | −8 | −24 |
 | Mending (success) | +1 | +3 |
-Source: ST-TW-03 design note.
+| Mending (overwhelming) | +2 | +6 |
+| Weaving Overwhelming (Relational+) | +1 | +3 |
+Source: ST-TW-03 design note + PP-225 (gains also ×3).
 
 ## Thread Integration [COMPILED — stage11]
 
@@ -238,6 +235,25 @@ Margin = |attacker net − defender net|.
 
 
 <!-- patches: PP-173 (ranged DR split, HBl personal reference), PP-175 (mass combat DR scaled ÷2 provisional) -->
+
+
+## SIM-X-22 Provisional Patches (PP-222, PP-224, PP-227, PP-229, PP-231)
+
+### PP-222: Offensive Lock Blocks Cohesion Degradation [PROVISIONAL]
+Offensive Lock (Phase 4) on a formation thread blocks Cohesion degradation checks on the locked unit for the lock duration. The formation is frozen — it cannot degrade organisationally while the thread configuration holds it in place. ED-122 pending confirmation.
+
+### PP-224: Diagnosis+Leap Collapse in Mass Battle [PROVISIONAL]
+In mass battle, Diagnosis and Leap collapse to a single Phase 4 action (not 2 separate rounds). The PP-190 2-round rule (Diagnosis Round N, Leap Round N+1) applies to personal combat only. Mass battle tempo requires single-phase resolution. ED-124 pending confirmation.
+
+### PP-227: Paradox Window — No Unit Stat Effect During Battle [PROVISIONAL]
+A paradox window (P-22) has no mechanical effect on unit stats during the active battle turn. Pre-displacement values are used for all Phase 5 calculations. Displaced values apply on window auto-resolution at end of battle turn (Phase 7 Reform or later). ED-121 pending confirmation.
+
+### PP-229: Contact Window Suspended During Zoom In [PROVISIONAL]
+When a General triggers Zoom In (personal exchange during Phase 6 Step 4), any active Thread contact window is suspended — not consumed. Contact rounds do not tick during the personal exchange sub-scene. On return to mass scale, remaining contact rounds resume.
+
+### PP-231: Cohesion Degradation = Asymmetry Mechanic [PROVISIONAL]
+Cohesion degradation is an asymmetry mechanic, not an attrition mechanic. It triggers only when: (a) CP asymmetry exists (stronger unit overwhelms weaker), (b) Thread-assisted Strength loss creates sudden imbalance, or (c) Artillery bombardment. Symmetric engagements between equal-CP units do not trigger Cohesion degradation — they produce attrition (Strength loss) only. GM guidance note.
+
 <!-- patch_history: references/params_mass_combat_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
 ## LBl (Sling) — Prepared Defence Exception (ED-065 resolved — provisional)

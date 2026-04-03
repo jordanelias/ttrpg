@@ -1,5 +1,5 @@
-<!-- version: v0.14-AUD1 | source: threadwork_redesign_v25.md | last_updated: 2026-04-02 -->
-<!-- PATCHES APPLIED: P-11–P-30 (prior); ST-TW-01–05; PP-166; PP-190–209 (full audit cycle complete) -->
+<!-- version: v0.14-AUD2 | source: threadwork_redesign_v25.md | last_updated: 2026-04-03 -->
+<!-- PATCHES APPLIED: P-11–P-30 (prior); ST-TW-01–05; PP-166; PP-190–209 (full audit cycle); PP-221, PP-223, PP-225, PP-226 (SIM-X-22 provisional) -->
 <!-- stage3_thread_operations.md is EMPTY in v0.14. All values from threadwork_redesign_v25.md. -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage3 before use. -->
 
@@ -194,7 +194,7 @@ Loss per operation cap: −1 max per single operation regardless of combined sou
 | 10–8 | Stable | No penalty |
 | 7–5 | Dissonant | Narrative flickers |
 | 4–3 | Fragmented | −1D social/Memory; +1 Ob all ops |
-| 2 | Fractured | −2D social/Memory; Belief Co-Authorship begins |
+| 2 | Fractured | −2D social/Memory; +1 Ob all Thread ops (PP-221); Belief Co-Authorship begins |
 | 1 | Severed | −2D; dissociative episodes; +2 Ob all ops |
 | 0 | Rendering Crisis | Campaign event. Non-Player Character if unresolved by season end. |
 
@@ -350,6 +350,22 @@ When a Woven thread shatters into Shifting Object via brittleness, OA +1 Ob modi
 
 ### PP-209: Double OA stacking — two independent Weavings same scene
 Two separate successful Weavings of same thread in separate contact windows = two OA stacks (+2 Ob total). Both clear after 1 season or Pull. Doubly OA = more severe brittleness shattering (Shifting Object forms 1 tier more advanced). Overweaving rule (intra-window +1 Ob cumulative) does not apply across separate windows.
+
+
+
+## SIM-X-22 Provisional Patches (PP-221, PP-223, PP-225, PP-226)
+
+### PP-221: Coherence 2 (Fractured) Thread Ob Penalty [PROVISIONAL]
+Coherence 2 (Fractured) = +1 Ob all Thread operations. Consistent with the 4–3 band penalty progression (4–3 = +1 Ob ops; 2 = +1 Ob ops + social/Memory penalties; 1 = +2 Ob ops).
+
+### PP-223: Mass Battle Turn = 1 Scene [PROVISIONAL]
+One mass battle turn = 1 scene for all RS threshold effects, Coherence-0 leakage, and paradox window ticking. This means: RS threshold effects activate/deactivate once per battle turn (at Phase 6 Cascade); Coherence-0 leakage fires once per battle turn; paradox window duration counts 1 tick per battle turn. ED-123 pending confirmation.
+
+### PP-225: RS ×3 Multiplier Applies to Gains [PROVISIONAL]
+The mass battle RS ×3 multiplier (PP-192) applies to RS gains as well as costs. Weaving Overwhelming at Relational+ scale in mass battle = RS +3 (not +1). Mending Success = RS +3 (not +1). Mending Overwhelming = RS +6 (not +2). This makes Mending viable as a strategic mass-battle action.
+
+### PP-226: Temporal Auto-Effect RS NOT Subject to ×3 [PROVISIONAL]
+Temporal auto-effect RS costs from Past-Oriented Pulling (PP-181) are NOT subject to the mass battle ×3 multiplier. The temporal auto-effect is a separate system triggered by recency band, not an operation RS cost. It fires independently of mass battle context. The ×3 multiplier applies only to operation-table RS costs (degree outcomes).
 
 <!-- patch_history: references/params_threadwork_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
