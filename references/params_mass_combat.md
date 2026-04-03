@@ -1,5 +1,5 @@
 <!-- version: v0.14+design-ST6 | sources: designs/mass_combat/mass_battle_v3.md (v4.4, PP-106) | last_updated: 2026-04-02 -->
-<!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D -->
+<!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D; PP-191 (Lock phase); PP-192 (×3 RS multiplier) -->
 <!-- PHASE STRUCTURE: 7 phases. Thread split: offensive Phase 4, support Phase 6. All damage simultaneous Phase 6 Step 1. -->
 <!-- mass_battle_v3.md is a design proposal. Values marked [COMPILED] are from stage8; [PROPOSAL] from v3. -->
 <!-- STALE CHECK: Verify [COMPILED] values against current ruleset; verify [PROPOSAL] against compiled stage8 update. -->
@@ -20,6 +20,8 @@
 | 7 | Reform | Cohesion restore, Morale +1, sub-unit merge for non-engaged units. |
 
 Damage simultaneity: Effective CP for Phase 5 calculated from Str as of Phase 3 end. Phase 4 Thread effects do not reduce Str before Phase 5 — all applied together at Phase 6 Step 1.
+> **Lock phase assignment in mass combat (PP-191):** [PROVISIONAL] Offensive Lock (targeting enemy configuration) = Phase 4; declared at Phase 1 as "offensive." Support Lock (stabilizing own configuration) = Phase 6 Step 5; declared at Phase 1 as "support." If undeclared: defaults to Phase 6. A practitioner may not perform both Offensive and Support Lock in the same battle turn.
+
 
 ## Core Formula
 Effective Combat Pool = min(CP, current Strength)
@@ -157,6 +159,18 @@ block sight-lines with front-line formations; flank to reach Artillery directly.
 | Battle | ~500 soldiers | 50+ |
 | Campaign | ~1,000 soldiers | 50+ |
 | War | ~5,000 soldiers | 70+ |
+
+
+## Mass Battle RS Multiplier (PP-192) [PROVISIONAL]
+All RS costs from Thread operations in mass battle ×3. Applied after degree table resolution. Coherence costs NOT multiplied. RS ceiling (100) and seasonal cap (±10) still apply.
+| Op | Normal RS (Success) | Mass Battle RS (×3) |
+|----|--------------------|-----------------------|
+| Pulling (failure) | −2 | −6 |
+| Locking (success) | −1 | −3 |
+| Dissolution (success) | −5 | −15 |
+| Dissolution (failure) | −8 | −24 |
+| Mending (success) | +1 | +3 |
+Source: ST-TW-03 design note.
 
 ## Thread Integration [COMPILED — stage11]
 Combat Thread ops (Dissolution, offensive Pulling): Phase 2. Support ops (Weave, Mend, Lock, non-offensive Pulling): Phase 5. Both declared Phase 1.

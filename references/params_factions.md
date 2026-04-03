@@ -1,6 +1,6 @@
 <!-- version: v0.14-AUD2 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-02 -->
 <!-- NOTE: stage6_factions.md is STALE for BG faction mechanics. Use BG column for board game/hybrid. -->
-<!-- PATCHES APPLIED: PP-167 (RS TTRPG start corrected 60→72), PP-168 (all 8 faction unique actions extracted from stage6) -->
+<!-- PATCHES APPLIED: PP-167, PP-168; PP-195 (Community Weaving procedure) -->
 <!-- STALE CHECK: TTRPG column from v0.14 compiled. BG column from bg_v05 design. -->
 
 # params_factions.md — Factions
@@ -199,3 +199,14 @@ Trigger: Mandate ≥ 4 AND Domain Action directly challenges faction core instit
 | Uphold | Before roll | Roll proceeds | None |
 | Appease | Before roll | Action cancelled | Mandate −1 |
 NPC: Appease if Mandate ≥ 4 AND Stability ≤ 3.
+
+
+## Community Weaving — Procedure (PP-195) [PROVISIONAL]
+Revolution Domain Action. Pool: Mandate (as dice) + History, TN 7, Ob 3. Prerequisite: Mandate ≥ 1.
+| Degree | RS Effect | Other |
+|--------|-----------|-------|
+| Overwhelming | RS +2 | Mandate unchanged |
+| Success | RS +1 | Mandate unchanged |
+| Partial | RS +0 | Wasted action |
+| Failure | RS +0 | Mandate −1 |
+Frequency: once per season. Consumes 1 Domain Action.

@@ -1,5 +1,5 @@
 <!-- version: v0.14-AUD1 | source: threadwork_redesign_v25.md | last_updated: 2026-04-02 -->
-<!-- PATCHES APPLIED: P-11–P-30 (prior); ST-TW-01–05 added 2026-04-02; Mode index added to source doc; PP-166 (TD removed, RS=0 lockout, Coherence start confirmed, RS ceiling) -->
+<!-- PATCHES APPLIED: P-11–P-30 (prior); ST-TW-01–05 added 2026-04-02; PP-166; PP-190 (Diagnosis+Leap combat timing); PP-191 (Lock phase mass combat); PP-192 (×3 RS multiplier mass battle); PP-193 (paradox window resolution); PP-194 (Rendering Crisis resolution); PP-195 (Community Weaving procedure) -->
 <!-- stage3_thread_operations.md is EMPTY in v0.14. All values from threadwork_redesign_v25.md. -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage3 before use. -->
 
@@ -253,6 +253,37 @@ Tangential conflicting Beliefs: helper dice don't chain on 10.
 | 70+ | Full configuration |
 
 Concealment from Thread Sensitivity 30+ observers: Cognition only (no History), TN7, Ob = observer Thread Sensitivity ÷ 30 (round up). Pre-Leap action.
+
+
+## P1 Audit Resolutions — AUD-TW-001 (PP-190–PP-195)
+
+### PP-190: Diagnosis+Leap Combat Action Economy [PROVISIONAL]
+In combat: Diagnosis = Round N (Priority 4 standard action). Leap = Round N+1 (Priority 5 full-round action). Minimum 2 rounds in combat.
+In non-combat: same-round Diagnosis+Leap permitted (GM judgment).
+
+### PP-193: P-22 Paradox Window Resolution [PROVISIONAL]
+Auto-resolves at window end (1d3 scenes). Early closure: Mending (Ob 3 = Micro-Gap). Exploitation: +2 Ob to operations targeting paradoxed thread; Failure collapses window.
+
+### PP-194: Rendering Crisis Resolution [PROVISIONAL]
+Requires: (1) full season no Thread practice; (2) 3 Anchoring Scenes (Bonds TN7 Ob2 each); (3) physical stability.
+Resolution roll: Close Knot Bonds + successful Anchoring Scenes, TN7 Ob3.
+| Degree | Coherence restored |
+|--------|-------------------|
+| Overwhelming | 4 (−1 TS permanent) |
+| Success | 3 (−1 TS permanent) |
+| Partial | 1 (another arc needed) |
+| Failure | 0 → Non-Player Character at season end |
+
+### PP-192: Mass Battle RS Multiplier [PROVISIONAL]
+All RS costs from Thread ops in mass battle ×3. Coherence costs unaffected.
+See params_mass_combat §Mass Battle RS Multiplier.
+
+### PP-191: Lock Phase in Mass Combat [PROVISIONAL]
+Offensive Lock = Phase 4 (declared at Phase 1). Support Lock = Phase 6 Step 5 (declared at Phase 1). Default if undeclared: Phase 6.
+
+### PP-195: Community Weaving Procedure [PROVISIONAL]
+Revolution Domain Action. Pool: Mandate (as dice) + History, TN7, Ob3.
+Success=RS+1, Overwhelming=RS+2, Partial=RS+0, Failure=RS+0 and Mandate−1. Once/season. Mandate≥1 required.
 
 <!-- patch_history: references/params_threadwork_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->

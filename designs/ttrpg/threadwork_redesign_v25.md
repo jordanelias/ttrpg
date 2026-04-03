@@ -35,6 +35,9 @@ The ×3 Rendering Stability multiplier for mass battle Thread operations means a
 
 > **Delayed manifestation (P-22):** When the actual co-movement d6 produces "delayed manifestation" (result 6) on a Past-Oriented Pull, the temporal displacement has occurred at the Thread level but the physical facts have not yet updated. For 1d3 scenes, the world contains a paradox window: - Practitioners with Thread Sensitivity 30+: perceive the target's thread as both present and absent — the displacement is visible at the Thread level even tho
 
+> **Paradox window resolution (PP-193):** [PROVISIONAL] The P-22 paradox window resolves as follows. **Auto-resolution:** At window end (1d3 scenes), physical facts update; thread snaps to displaced state. Observers Thread Sensitivity 30+ perceive sudden realignment. **Early closure:** A practitioner may Mend the paradox window site (treat as Micro-Gap, Ob 3). Success: window closes immediately. Partial: duration halved. Failure: window persists full duration; RS −2. **Exploitation during window:** Another practitioner may target the paradoxed thread at +2 Ob (two simultaneous configurations resist). On Failure: window collapses immediately and operation's Failure consequences also apply. **After window:** Temporal Disjunction persists (memories intact; physical facts now match displaced state). No further mechanics unless new operation targets displaced thread.
+
+
 > **Threadcut/Mending (P-17):** A threadcut being present at a Gap site draws on the same substrate the practitioner is trying to Mend. Its continuous self-rendering competes with the Mending operation's intentionality. **Mechanical effect:** +Ob = being's Thread Sensitivity ÷ 20 (round up), maximum +4, to Mending operations targeting that Gap while the being is present. This Ob modifier stacks with other modifiers (territory effects, Fraying B
 
 > **Opposing beliefs (P-12):** *Already patched into §2.5.* Directly opposing Beliefs require a pre-Leap Belief check. Tangential conflicts: non-chaining dice.
@@ -88,6 +91,9 @@ Diagnosis is the practitioner's final rendering act before they suspend renderin
 **Timing:** Diagnosis occurs BEFORE the Leap. It is a **Priority 4 standard action in the round preceding the Leap**
 
 *Priority convention: lower number = earlier in the round. Priority 1 acts first; Priority 5 acts last. Diagnosis (Priority 4) therefore fires before the Leap (Priority 5) if both occur in the same round.*, or it may share a round with the Leap if the practitioner has sufficient action economy (Game Master judgment based on circumstances — no simultaneous action economy during the Leap round itself, but Diagnosis at the start of the round and Leap at the end is permissible in non-combat contexts).
+
+> **Diagnosis+Leap action economy in combat (PP-190):** [PROVISIONAL] In combat, Diagnosis and the Leap occupy separate rounds. **Diagnosis round:** Diagnosis fires at Priority 4 as a standard action; no other standard action this round; only reactive defence available after Priority 4. No Leap this round. **Leap round:** Leap fires at Priority 5 as a full-round action the following round. Minimum time cost in combat: 2 rounds. In non-combat (no declared attackers, no active melee): Diagnosis may fire at Priority 4 and the Leap at Priority 5 in the same round, per GM judgment.
+
 
 **No roll.** Diagnosis is a structured Game Master exchange. The practitioner states what they are sensing. The Game Master describes:
 
@@ -610,6 +616,30 @@ Coherence does not recover passively. Recovery requires the practitioner's spool
 4. You perform an action you do not remember. Game Master describes the gap.
 5. Your Inspiration refresh this scene feels already spent
 6. A Belief reads, briefly, as belonging to someone else
+
+---
+
+## 3.7 Rendering Crisis Resolution (PP-194) [PROVISIONAL]
+
+Rendering Crisis (Coherence 0) cannot be resolved by standard recovery (§3.5). Resolution requires a structured campaign arc.
+
+**Minimum conditions:**
+1. Full season withdrawal from Thread practice (no Leap, no Thread operations).
+2. Three Anchoring Scenes with Close Knots (each: Bonds check TN 7, Ob 2; failed scene costs the scene without progress).
+3. Physical stability — no active siege, no ongoing catastrophe in the practitioner's territory.
+
+**Resolution attempt** (at Accounting after conditions met):
+Pool: highest Close Knot's Bonds score + number of successful Anchoring Scenes, TN 7, Ob 3.
+
+| Degree | Outcome |
+|--------|----------|
+| Overwhelming | Coherence → 4. Functional. Permanent −1 Thread Sensitivity. |
+| Success | Coherence → 3 (Fragmented). Minimally functional. −1 Thread Sensitivity. |
+| Partial | Coherence → 1 (Severed). Another full-season arc required for further recovery. |
+| Failure | No recovery. Practitioner becomes Non-Player Character at season end. |
+
+Rendering Crisis resolution is not guaranteed. A practitioner who reaches Coherence 0 may not return.
+
 
 ---
 

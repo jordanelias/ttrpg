@@ -1949,3 +1949,51 @@ patches:
       - references/params_factions.md
     status: applied
     resolves: ED-003, ED-004
+
+  - id: PP-190
+    date: 2026-04-02
+    source: AUD-TW-001
+    description: "Diagnosis+Leap action economy in combat — 2-round minimum in combat; same-round permitted in non-combat"
+    status: provisional
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+    tags: [threadwork, combat, timing]
+
+  - id: PP-191
+    date: 2026-04-02
+    source: AUD-TW-001
+    description: "Lock phase in mass combat — Offensive Lock=Phase 4, Support Lock=Phase 6; declared at Phase 1"
+    status: provisional
+    files: [references/params_mass_combat.md, references/params_threadwork.md]
+    tags: [threadwork, mass_combat, lock]
+
+  - id: PP-192
+    date: 2026-04-02
+    source: AUD-TW-001
+    description: "Mass battle RS multiplier ×3 — all RS costs from Thread ops in mass battle multiplied by 3; Coherence unaffected"
+    status: provisional
+    files: [references/params_mass_combat.md, references/params_threadwork.md]
+    tags: [threadwork, mass_combat, rendering_stability]
+
+  - id: PP-193
+    date: 2026-04-02
+    source: AUD-TW-001
+    description: "P-22 paradox window resolution — auto-resolves at window end; early closure via Mending Ob3; exploitation at +2 Ob"
+    status: provisional
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+    tags: [threadwork, past_oriented_pulling, temporal]
+
+  - id: PP-194
+    date: 2026-04-02
+    source: AUD-TW-001
+    description: "Rendering Crisis resolution — campaign arc: season withdrawal + 3 Anchoring Scenes + Bonds TN7 Ob3; permanent TS loss on success"
+    status: provisional
+    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+    tags: [threadwork, coherence, campaign_arc]
+
+  - id: PP-195
+    date: 2026-04-02
+    source: AUD-TW-001
+    description: "Community Weaving procedure — Revolution Domain Action: Mandate+History TN7 Ob3; RS+1/+2 on success/overwhelming; Mandate-1 on failure"
+    status: provisional
+    files: [references/params_factions.md, references/params_threadwork.md]
+    tags: [threadwork, factions, community_weaving, revolution]
