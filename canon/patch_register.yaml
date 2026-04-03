@@ -2364,3 +2364,14 @@ patches:
     status: applied
     resolves: ED-012, ED-043, ED-055b, ED-057a, ED-058, ED-073, ED-075, ED-076
     gaps_documented: ED-009, ED-014, ED-022, ED-049, ED-051, ED-055a, ED-056, ED-057b, ED-072
+
+- id: PP-201
+  date: 2026-04-02
+  severity: P2
+  description: "Map v2 provisionally approved. Territory positions finalised: Himmelenger (T14) equidistant from Nordhelm/Lowenskyst/Valorsplatz/Gransol. Mittelmark (T11) between Valorsplatz and Stillhelm. Schoenland = merchant NPC only, no military adjacency, sea-trade connections only (T8/T12). Rivers added: R. Valoris (lake→Valorsplatz), NW tributary, NE stream, R. Vargard (SW peninsula). Connections added: T9↔T12 (Arcansheld-Valorsplatz), T11↔T12/T13 (Mittelmark corridor). Roads deferred to next session. Names provisional (ED-108 open for T10/T11)."
+  finding_id: "User provisional approval"
+  source: editorial
+  affects: [references/params_board_game.md, designs/board_game/valoria_map_v2.svg]
+  applied_to_version: "v0.8.2"
+  status: applied
+  applied_commit: pending

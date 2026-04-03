@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="900" viewBox="0 0 700 900" style="font-family:Georgia,serif">
+
+<!-- Ocean -->
+<rect width="700" height="900" fill="#1a3a5c"/>
+
+<!-- Peninsula land -->
+<ellipse cx="340" cy="490" rx="300" ry="420" fill="#4a7c3f" opacity="0.95"/>
+<ellipse cx="270" cy="820" rx="175" ry="130" fill="#3d6b35" opacity="0.95"/>
+<ellipse cx="235" cy="910" rx="100" ry="70" fill="#2d5a27" opacity="0.9"/>
+
+<!-- NE shoulder (Spartfell area) -->
+<ellipse cx="540" cy="280" rx="140" ry="110" fill="#4a7c3f" opacity="0.85"/>
+
+<!-- Mountain ranges -->
+<g fill="#7a6548" opacity="0.72">
+  <!-- Northern spine -->
+  <polygon points="30,18 70,72 -10,72"/>
+  <polygon points="110,8 158,68 62,68"/>
+  <polygon points="195,14 248,70 142,70"/>
+  <polygon points="278,8 338,68 218,68"/>
+  <polygon points="368,4 435,66 301,66"/>
+  <polygon points="468,8 538,66 398,66"/>
+  <polygon points="558,14 628,68 488,68"/>
+  <polygon points="640,20 698,72 582,72"/>
+  <!-- NW cluster -->
+  <polygon points="14,290 52,345 -24,345"/>
+  <polygon points="52,278 96,338 8,338"/>
+  <polygon points="90,268 136,326 44,326"/>
+  <!-- NE cluster (near Spartfell) -->
+  <polygon points="510,118 555,178 465,178"/>
+  <polygon points="566,106 618,172 514,172"/>
+  <polygon points="630,122 680,180 580,180"/>
+  <!-- South ridge (peninsula spine) -->
+  <polygon points="195,640 234,696 156,696"/>
+  <polygon points="248,628 290,690 206,690"/>
+  <polygon points="298,648 338,706 258,706"/>
+</g>
+
+<!-- Lake Eidursjo -->
+<ellipse cx="275" cy="298" rx="52" ry="82" fill="#2563eb" opacity="0.78"/>
+<text x="275" y="220" text-anchor="middle" fill="#93c5fd" font-size="9" font-style="italic" opacity="0.9">Lake Eidursjo</text>
+
+<!-- Southernmost rings -->
+<circle cx="189" cy="792" r="80" fill="none" stroke="#ef4444" stroke-width="1.5" opacity="0.30"/>
+<circle cx="189" cy="792" r="55" fill="none" stroke="#ef4444" stroke-width="1.5" opacity="0.45"/>
+<circle cx="189" cy="792" r="32" fill="none" stroke="#ef4444" stroke-width="2" opacity="0.65"/>
+<circle cx="189" cy="792" r="12" fill="#dc2626" opacity="0.55"/>
+
+<!-- Altonian mountain passes (magenta) -->
+<!-- NW pass from Sigurdshelm -->
+<path d="M 70,423 C 40,380 20,330 10,270 C 5,220 8,160 15,100" fill="none" stroke="#d946ef" stroke-width="2" stroke-dasharray="8,4" opacity="0.75"/>
+<!-- NE pass from Spartfell -->
+<path d="M 518,234 C 560,192 608,158 660,128 C 700,104 720,80 700,50" fill="none" stroke="#d946ef" stroke-width="2" stroke-dasharray="8,4" opacity="0.75"/>
+<text x="28" y="200" fill="#d946ef" font-size="8" font-style="italic" opacity="0.85" transform="rotate(-70,28,200)">Altonian Pass</text>
+<text x="662" y="105" fill="#d946ef" font-size="8" font-style="italic" opacity="0.85" transform="rotate(-55,662,105)">Altonian Pass</text>
+
+<!-- Schoenland island -->
+<ellipse cx="658" cy="504" rx="32" ry="24" fill="#3d6b35" opacity="0.88"/>
+<ellipse cx="658" cy="504" rx="42" ry="34" fill="none" stroke="#1a3a5c" stroke-width="10" opacity="0.9"/>
+
+<!-- Rivers -->
+<path d="M 140 81 C 175 126, 196 162, 217 198 C 238 225, 252 243, 266 270" fill="none" stroke="#3b82f6" stroke-width="2.5" opacity="0.65"/>
+<path d="M 280 459 C 308 504, 350 540, 385 567 C 427 558, 476 549, 532 540 L 574 549" fill="none" stroke="#3b82f6" stroke-width="3.5" opacity="0.75"/>
+<path d="M 455 90 C 476 135, 504 180, 518 216 C 539 252, 560 306, 581 360" fill="none" stroke="#3b82f6" stroke-width="2.0" opacity="0.6"/>
+<path d="M 196 540 C 168 585, 140 630, 119 675 L 84 702" fill="none" stroke="#3b82f6" stroke-width="2.0" opacity="0.55"/>
+<!-- Roads -->
+<polyline points="567.0,558.0 448.0,423.0 413.0,747.0" fill="none" stroke="#f59e0b" stroke-width="3.0" stroke-dasharray="0" stroke-linejoin="round" opacity="0.88"/>
+<polyline points="567.0,558.0 588.0,405.0 518.0,234.0" fill="none" stroke="#f59e0b" stroke-width="3.0" stroke-dasharray="0" stroke-linejoin="round" opacity="0.88"/>
+<polyline points="567.0,558.0 357.0,558.0 266.0,486.0" fill="none" stroke="#92400e" stroke-width="2.5" stroke-dasharray="7,3" stroke-linejoin="round" opacity="0.88"/>
+<polyline points="357.0,558.0 266.0,486.0 385.0,270.0" fill="none" stroke="#92400e" stroke-width="2.5" stroke-dasharray="7,3" stroke-linejoin="round" opacity="0.88"/>
+<polyline points="385.0,270.0 301.0,351.0 210.0,261.0" fill="none" stroke="#15803d" stroke-width="2.5" stroke-dasharray="6,3" stroke-linejoin="round" opacity="0.88"/>
+<polyline points="210.0,261.0 140.0,477.0 70.0,423.0" fill="none" stroke="#166534" stroke-width="1.8" stroke-dasharray="4,5" stroke-linejoin="round" opacity="0.88"/>
+<polyline points="210.0,261.0 140.0,477.0 105.0,657.0" fill="none" stroke="#166534" stroke-width="1.8" stroke-dasharray="4,5" stroke-linejoin="round" opacity="0.88"/>
+<polyline points="567.0,558.0 504.0,657.0 413.0,747.0" fill="none" stroke="#a16207" stroke-width="1.8" stroke-dasharray="5,4" stroke-linejoin="round" opacity="0.88"/>
+<polyline points="357.0,558.0 413.0,747.0" fill="none" stroke="#78350f" stroke-width="1.5" stroke-dasharray="3,6" stroke-linejoin="round" opacity="0.88"/>
+<polyline points="448.0,423.0 567.0,558.0" fill="none" stroke="#78350f" stroke-width="1.5" stroke-dasharray="3,6" stroke-linejoin="round" opacity="0.88"/>
+<polyline points="413.0,747.0 189.0,792.0" fill="none" stroke="#991b1b" stroke-width="1.5" stroke-dasharray="2,7" stroke-linejoin="round" opacity="0.88"/>
+<!-- Sea trade -->
+<line x1="588.0" y1="405.0" x2="658.0" y2="504.0" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="5,5" opacity="0.6"/>
+<line x1="567.0" y1="558.0" x2="658.0" y2="504.0" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="5,5" opacity="0.6"/>
+<!-- Territory adjacency lines -->
+<line x1="210.0" y1="261.0" x2="70.0" y2="423.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="210.0" y1="261.0" x2="140.0" y2="477.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="210.0" y1="261.0" x2="301.0" y2="351.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="70.0" y1="423.0" x2="140.0" y2="477.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="140.0" y1="477.0" x2="105.0" y2="657.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="140.0" y1="477.0" x2="301.0" y2="351.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="140.0" y1="477.0" x2="266.0" y2="486.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="105.0" y1="657.0" x2="413.0" y2="747.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="105.0" y1="657.0" x2="189.0" y2="792.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="385.0" y1="270.0" x2="301.0" y2="351.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="385.0" y1="270.0" x2="518.0" y2="234.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="385.0" y1="270.0" x2="266.0" y2="486.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="385.0" y1="270.0" x2="448.0" y2="423.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="301.0" y1="351.0" x2="357.0" y2="558.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="301.0" y1="351.0" x2="266.0" y2="486.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="518.0" y1="234.0" x2="588.0" y2="405.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="588.0" y1="405.0" x2="567.0" y2="558.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="588.0" y1="405.0" x2="448.0" y2="423.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="357.0" y1="558.0" x2="266.0" y2="486.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="357.0" y1="558.0" x2="567.0" y2="558.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="357.0" y1="558.0" x2="413.0" y2="747.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="266.0" y1="486.0" x2="448.0" y2="423.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="504.0" y1="657.0" x2="567.0" y2="558.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="504.0" y1="657.0" x2="413.0" y2="747.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="567.0" y1="558.0" x2="448.0" y2="423.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<line x1="413.0" y1="747.0" x2="189.0" y2="792.0" stroke="#ffffff" stroke-width="0.7" opacity="0.15"/>
+<!-- Territory nodes -->
+<circle cx="210.0" cy="261.0" r="15" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" opacity="0.96"/>
+<text x="210.0" y="262.0" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="8" font-weight="bold">T1</text>
+<text x="210.0" y="289.0" text-anchor="middle" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Varfell</text>
+<circle cx="70.0" cy="423.0" r="15" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" opacity="0.96"/>
+<text x="70.0" y="424.0" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="8" font-weight="bold">T2</text>
+<text x="91.0" y="427.0" text-anchor="start" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Sigurdshelm</text>
+<circle cx="140.0" cy="477.0" r="15" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" opacity="0.96"/>
+<text x="140.0" y="478.0" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="8" font-weight="bold">T3</text>
+<text x="161.0" y="481.0" text-anchor="start" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Halvardshelm</text>
+<circle cx="105.0" cy="657.0" r="20" fill="#22c55e" stroke="#ffffff" stroke-width="2.5" opacity="0.96"/>
+<circle cx="105.0" cy="657.0" r="25" fill="none" stroke="#22c55e" stroke-width="1.5" opacity="0.55"/>
+<text x="105.0" y="658.0" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="8" font-weight="bold">T4 ★</text>
+<text x="131.0" y="661.0" text-anchor="start" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Vargstad</text>
+<circle cx="385.0" cy="270.0" r="20" fill="#cbd5e1" stroke="#ffffff" stroke-width="2.5" opacity="0.96"/>
+<circle cx="385.0" cy="270.0" r="25" fill="none" stroke="#cbd5e1" stroke-width="1.5" opacity="0.55"/>
+<text x="385.0" y="271.0" text-anchor="middle" dominant-baseline="middle" fill="#1e293b" font-size="8" font-weight="bold">T5 ★</text>
+<text x="385.0" y="303.0" text-anchor="middle" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Gransol</text>
+<circle cx="301.0" cy="351.0" r="15" fill="#cbd5e1" stroke="#ffffff" stroke-width="1.5" opacity="0.96"/>
+<text x="301.0" y="352.0" text-anchor="middle" dominant-baseline="middle" fill="#1e293b" font-size="8" font-weight="bold">T6</text>
+<text x="301.0" y="379.0" text-anchor="middle" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Eidursjo</text>
+<circle cx="518.0" cy="234.0" r="15" fill="#cbd5e1" stroke="#ffffff" stroke-width="1.5" opacity="0.96"/>
+<text x="518.0" y="235.0" text-anchor="middle" dominant-baseline="middle" fill="#1e293b" font-size="8" font-weight="bold">T7</text>
+<text x="518.0" y="262.0" text-anchor="middle" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Spartfell</text>
+<circle cx="588.0" cy="405.0" r="15" fill="#cbd5e1" stroke="#ffffff" stroke-width="1.5" opacity="0.96"/>
+<text x="588.0" y="406.0" text-anchor="middle" dominant-baseline="middle" fill="#1e293b" font-size="8" font-weight="bold">T8</text>
+<text x="567.0" y="409.0" text-anchor="end" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Lowenskyst</text>
+<circle cx="357.0" cy="558.0" r="15" fill="#ca8a04" stroke="#ffffff" stroke-width="1.5" opacity="0.96"/>
+<text x="357.0" y="559.0" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="8" font-weight="bold">T9</text>
+<text x="357.0" y="586.0" text-anchor="middle" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Arcansheld</text>
+<circle cx="266.0" cy="486.0" r="15" fill="#ca8a04" stroke="#ffffff" stroke-width="1.5" opacity="0.96"/>
+<text x="266.0" y="487.0" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="8" font-weight="bold">T10</text>
+<text x="266.0" y="514.0" text-anchor="middle" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Nordhelm</text>
+<circle cx="504.0" cy="657.0" r="15" fill="#ca8a04" stroke="#ffffff" stroke-width="1.5" opacity="0.96"/>
+<text x="504.0" y="658.0" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="8" font-weight="bold">T11</text>
+<text x="504.0" y="685.0" text-anchor="middle" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Mittelmark</text>
+<circle cx="567.0" cy="558.0" r="20" fill="#ca8a04" stroke="#ffffff" stroke-width="2.5" opacity="0.96"/>
+<circle cx="567.0" cy="558.0" r="25" fill="none" stroke="#ca8a04" stroke-width="1.5" opacity="0.55"/>
+<text x="567.0" y="559.0" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="8" font-weight="bold">T12 ★</text>
+<text x="567.0" y="591.0" text-anchor="middle" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Valorsplatz</text>
+<circle cx="413.0" cy="747.0" r="15" fill="#ca8a04" stroke="#ffffff" stroke-width="1.5" opacity="0.96"/>
+<text x="413.0" y="748.0" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="8" font-weight="bold">T13</text>
+<text x="413.0" y="775.0" text-anchor="middle" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Stillhelm</text>
+<circle cx="448.0" cy="423.0" r="20" fill="#1e293b" stroke="#fbbf24" stroke-width="2.5" opacity="0.96"/>
+<circle cx="448.0" cy="423.0" r="25" fill="none" stroke="#1e293b" stroke-width="1.5" opacity="0.55"/>
+<text x="448.0" y="424.0" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="8" font-weight="bold">T14 ★</text>
+<text x="448.0" y="456.0" text-anchor="middle" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Himmelenger</text>
+<circle cx="189.0" cy="792.0" r="15" fill="#dc2626" stroke="#fbbf24" stroke-width="1.5" opacity="0.96"/>
+<text x="189.0" y="793.0" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="8" font-weight="bold">T15</text>
+<text x="189.0" y="820.0" text-anchor="middle" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Askeheim</text>
+<circle cx="658.0" cy="504.0" r="15" fill="#64748b" stroke="#fbbf24" stroke-width="1.5" opacity="0.96"/>
+<text x="658.0" y="505.0" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="8" font-weight="bold">T16</text>
+<text x="637.0" y="508.0" text-anchor="end" fill="#f1f5f9" font-size="10" font-weight="600" stroke="#1a2e1a" stroke-width="3.5" paint-order="stroke">Schoenland</text>
+<!-- Legend -->
+<rect x="8" y="720" width="148" height="175" fill="#0f172a" rx="6" opacity="0.85"/>
+<text x="18" y="736" fill="#f1f5f9" font-size="10" font-weight="bold">FACTIONS</text>
+<circle cx="22" cy="750" r="6" fill="#22c55e"/><text x="33" y="754" fill="#f1f5f9" font-size="9">Varfell (T1–T4)</text>
+<circle cx="22" cy="766" r="6" fill="#cbd5e1"/><text x="33" y="770" fill="#f1f5f9" font-size="9">Hafenmark (T5–T8)</text>
+<circle cx="22" cy="782" r="6" fill="#ca8a04"/><text x="33" y="786" fill="#f1f5f9" font-size="9">Crown (T9–T13)</text>
+<circle cx="22" cy="798" r="6" fill="#1e293b" stroke="#fbbf24" stroke-width="1.5"/><text x="33" y="802" fill="#f1f5f9" font-size="9">Church (T14)</text>
+<circle cx="22" cy="814" r="6" fill="#dc2626"/><text x="33" y="818" fill="#f1f5f9" font-size="9">Southernmost (T15)</text>
+<circle cx="22" cy="830" r="6" fill="#64748b"/><text x="33" y="834" fill="#f1f5f9" font-size="9">Schoenland (NPC)</text>
+<text x="18" y="850" fill="#f1f5f9" font-size="9" font-weight="bold">ROADS</text>
+<line x1="18" y1="863" x2="52" y2="863" stroke="#f59e0b" stroke-width="3"/><text x="58" y="867" fill="#f1f5f9" font-size="8">Primary</text>
+<line x1="18" y1="877" x2="52" y2="877" stroke="#92400e" stroke-width="2.5" stroke-dasharray="7,3"/><text x="58" y="881" fill="#f1f5f9" font-size="8">Secondary</text>
+<line x1="18" y1="891" x2="52" y2="891" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="5,5"/><text x="58" y="895" fill="#f1f5f9" font-size="8">Sea trade</text>
+
+<text x="348" y="545" fill="#93c5fd" font-size="8" font-style="italic" opacity="0.8" transform="rotate(-12,348,545)">R. Valoris</text>
+<text x="105" y="755" fill="#93c5fd" font-size="8" font-style="italic" opacity="0.7" transform="rotate(-55,105,755)">R. Vargard</text>
+<text x="350" y="22" text-anchor="middle" fill="#f1f5f9" font-size="15" font-weight="bold" stroke="#0f172a" stroke-width="3" paint-order="stroke">VALORIA</text>
+<text x="350" y="37" text-anchor="middle" fill="#94a3b8" font-size="8">Territory map — PP-199/200 — names provisional</text>
+</svg>

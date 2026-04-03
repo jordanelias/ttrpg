@@ -902,20 +902,20 @@ Mountains impassable except at purple passes. Eidursjo lake: T6 march = 2 cards 
 
 T1 (Varfell) ↔ T2, T3, T6
 T2 (Sigurdshelm) ↔ T1, T3
-T3 (Halvardshelm) ↔ T1, T2, T4, T6
-T4 (Vargstad) ↔ T3, T13, T15 [T9 removed — no direct route across mountain terrain; must go via T3]
-T5 (Gransol) ↔ T6, T7, T10
+T3 (Halvardshelm) ↔ T1, T2, T4, T6, T10
+T4 (Vargstad) ↔ T3, T13, T15
+T5 (Gransol) ↔ T6, T7, T10, T14
 T6 (Eidursjo) ↔ T1, T3, T5, T9, T10
-T7 (Spartfell) ↔ T5, T8, T16 (NE pass — IP invasion route only, not trade)
-T8 (Lowenskyst) ↔ T7, T12, T16 (sea trade)
-T9 (Arcansheld) ↔ T6, T10, T11, T13
-T10 (Nordhelm) ↔ T5, T6, T9, T11
-T11 (Mittelmark) ↔ T9, T10, T12, T14
-T12 (Valorsplatz) ↔ T8, T11, T13, T14, T16 (sea trade)
-T13 (Stillhelm) ↔ T4, T9, T12, T15
-T14 (Himmelenger) ↔ T11, T12, T13
+T7 (Spartfell) ↔ T5, T8
+T8 (Lowenskyst) ↔ T7, T12, T14, T16 (sea trade only)
+T9 (Arcansheld) ↔ T6, T10, T12, T13
+T10 (Nordhelm) ↔ T3, T5, T6, T9, T14
+T11 (Mittelmark) ↔ T9, T12, T13
+T12 (Valorsplatz) ↔ T8, T9, T11, T13, T14, T16 (sea trade only)
+T13 (Stillhelm) ↔ T4, T9, T11, T12, T15
+T14 (Himmelenger) ↔ T5, T8, T10, T12
 T15 (Askeheim) ↔ T4, T13 (expedition access only)
-T16 (Schoenland) ↔ T7 (IP invasion staging only — not a trade route), T8 (sea), T12 (sea)
+T16 (Schoenland) ↔ T8 (sea trade), T12 (sea trade) [merchant NPC only — no military access, cannot be conquered]
 
 ## Road Network — Definitive (PP-199)
 
