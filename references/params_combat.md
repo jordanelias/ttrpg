@@ -1,6 +1,6 @@
-<!-- version: v0.14-AUD3 | sources: designs/combat/combat_design_v1.md (PP-172) | last_updated: 2026-04-02 -->
+<!-- version: v0.14-AUD4 | sources: designs/combat/combat_design_v1.md (PP-174) | last_updated: 2026-04-02 -->
 <!-- CANONICAL SOURCE: combat_design_v1.md supersedes stage8_combat.md (has PP-086-092, MT-01, three-mode framing) -->
-<!-- PATCHES APPLIED: PP-086 (base damage), PP-087 (Formation Break stacking), PP-088 (assault linkage), PP-091 (Bombard), PP-092 (P2-B11 personal combat clarifications), PP-165 (Health formula fix, Stamina minimum, O/D procedure), PP-172 (ranged subtypes: LP/HP/LBl/HBl, TN8 defence, environmental factors, HBl STR min) -->
+<!-- PATCHES APPLIED: PP-086, PP-087, PP-088, PP-091, PP-092, PP-165, PP-172, PP-174 (remove stale HBl no-personal note; fix Damage Formula; ED-092 provisional on STR) -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
 
 # params_combat.md — Personal Combat
@@ -72,7 +72,7 @@ Damage (ranged) = net successes + weapon modifier (STR not added — arm strengt
 
 **Sling at Close zone:** LBl and HBl slingers are assumed to carry a knife (Light Cut). May draw it as Retrieve Weapon action if forced to Close zone.
 
-**No personal HBl:** Artillery (HBl) is a mass combat unit — no personal combat equivalent. Individual siege crew members fight as unarmed or with melee weapons.
+**HBl personal vs siege distinction:** HBl at personal scale = lead shot sling (PP-172). HBl at siege/mass scale = Artillery unit (PP-091/PP-106, sight-line rule). These are distinct: personal HBl uses Ranged DR 0/0/1/2; Artillery Bombard uses flat Strength damage formula.
 
 ## Strength Minimums
 | Weight | Min STR | Penalty if 1 below |
@@ -89,8 +89,9 @@ Cannot wield if 2+ below minimum.
 - Long weapons at Close zone: −1D Offence + half damage (rounded up)
 
 ## Damage Formula
-Damage = excess successes + STR + weapon modifier
-Critical Hit (excess ≥ 3): weapon modifier doubled
+Damage = max(0, net hits + weapon modifier − DR)
+Critical Hit (net hits ≥ 3): weapon modifier doubled
+[PROVISIONAL ED-092: STR appeared in a prior formula version; design doc (canonical) does not include STR in damage. Confirm whether STR is intended as a damage addition or only as a minimum-wield requirement.]
 
 ## Mass Mismatch Penalty
 Light weapon defender splits pool vs Heavy weapon attack: defensive successes −1 (min 0).

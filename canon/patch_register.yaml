@@ -1848,3 +1848,15 @@ patches:
   affects: [references/params_board_game.md]
   status: applied
   applied_commit: pending
+
+- id: PP-174
+  date: 2026-04-02
+  severity: P1
+  description: "params_combat: remove stale 'No personal HBl' line (contradicts PP-172); fix Damage Formula (remove STR, add ED-092 provisional note)"
+  finding_id: "SIM-004-F1,SIM-004-F2"
+  source: simulation
+  affects:
+    - references/params_combat.md
+  applied_to_version: "v0.14-AUD4"
+  status: applied
+  applied_commit: "pending"

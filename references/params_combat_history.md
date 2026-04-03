@@ -53,3 +53,11 @@ Changes:
 - Reload: LP/LBl/HBl fire every round; HP requires Reload action (unchanged from PP-105)
 Editorials raised: ED-085 (pool split ruling), ED-086 (HBl availability)
 Propagation pending: mass_battle_v3.md, params_mass_combat.md, bg_v05
+
+## PP-174 (2026-04-02) — Stale HBl Note + Damage Formula Fix
+Source: SIM-004
+Changes:
+- Removed stale "No personal HBl" line (contradicted PP-172)
+- Replaced with HBl personal vs siege distinction paragraph
+- Damage Formula updated: removed STR, added ED-092 provisional note
+- Version: v0.14-AUD3 → v0.14-AUD4

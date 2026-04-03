@@ -1781,3 +1781,35 @@ editorial_decisions:
     propagation_status: complete
     tags: [dice_engine, overwhelming, thread_operations, all_modes]
 
+
+  - id: ED-092
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: SIM-004
+    source_file: tests/sim_combat_004.md
+    description: "STR in damage formula: params_combat had 'Damage = excess successes + STR + weapon modifier' but combat_design_v1 says 'Damage = net hits + weapon modifier − DR'. No STR in design doc. Confirm whether STR is a damage addition or wield-requirement only."
+    full_flag_text: "[EDITORIAL: ED-092 — Does STR add to melee damage? params_combat had STR in formula; design doc does not. Provisional: STR is wield-requirement only, not damage addition.]"
+    status: provisional
+    decision: "Provisional: STR does not add to damage. It is a minimum-wield requirement only. Formula = max(0, net_hits + weapon_mod − DR)."
+    propagation_targets:
+      - references/params_combat.md
+      - designs/combat/combat_design_v1.md
+    propagation_status: propagated (params provisional note added PP-174)
+    related_ids: []
+    tags: [combat, damage-formula, provisional]
+
+  - id: ED-093
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: SIM-004
+    source_file: tests/sim_combat_004.md
+    description: "Fibonacci group bonus applicability to ranged attacks: design doc says bonus adds to Offence allocation, but ranged has no pool split. Does Fibonacci apply when 3 archers target the same unarmoured fighter?"
+    full_flag_text: "[EDITORIAL: ED-093 — Does Fibonacci group bonus apply to ranged group attacks? Provisional: No — Fibonacci requires pool split context.]"
+    status: provisional
+    decision: "Provisional: Fibonacci does not apply to ranged attacks. Ranged attackers each fire independently; no group bonus. Rationale: Fibonacci models coordination advantage in melee press; ranged fire is already undefended."
+    propagation_targets:
+      - designs/combat/combat_design_v1.md
+      - references/params_combat.md
+    propagation_status: pending
+    related_ids: []
+    tags: [combat, ranged, group-combat, provisional]
