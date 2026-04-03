@@ -1,6 +1,6 @@
 # VALORIA — COMBAT DESIGN (v1)
 ## Date: 2026-04-02
-## Version: v1.2 (PP-172 applied: ranged weapon subtypes LP/HP/LBl/HBl, TN8 defence, environmental factors)
+## Version: v1.3 (ED-098: cover declaration timing clarification)
 ## Status: WORKING DESIGN — not compiled. This is the design-layer source for personal combat.
 ## Authority: Philosophical Foundations → this document → compilation (when ready)
 ## Mode applicability: ALL (TTRPG baseline; scales to Hybrid and Board Game via params)
@@ -152,7 +152,7 @@ Cover (a physical obstacle between attacker and defender) adds DR to the defende
 | Soft (trees, wagon, bale) | +2 DR | +1 DR | +2 DR | +2 DR |
 | Hard (stone wall, fortification) | Blocks shot | Blocks shot | Blocks shot | Blocks shot |
 
-Cover must be declared in Phase 1 (Movement) to take effect. Cover does not move with the defender.
+Cover must be declared in Phase 1 (Movement) to take effect. Cover does not move with the defender. The Game Master determines whether a physical obstacle is present in the zone. A character who does not declare Cover in Phase 1 receives no DR benefit that round, even if physically behind an obstacle. [PROVISIONAL — ED-098]
 
 **Board Game:** Weapon types map to BG Anti-Armour keyword and unit type. No TN variation — unit uses Martial stat pool vs standard TN 7.
 

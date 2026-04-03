@@ -1662,13 +1662,13 @@ editorial_decisions:
   supersedes: []
   tags: [debate, hybrid, conviction_track]
 
-- id: ED-088
+- id: ED-097
   date_flagged: 2026-04-02
   date_resolved: null
   source: simulation
   source_file: tests/audit_d02_sim_d05.md
   description: "§6.15 Church self-investigation exception (PP-121): confirm scope — ordained members only, or anyone acting under Church authority? And does exception apply if the Thread operation is against Church interests?"
-  full_flag_text: "[EDITORIAL: ED-088 Church self-investigation exception scope]"
+  full_flag_text: "[EDITORIAL: ED-097 Church self-investigation exception scope]"
   status: open
   priority: P2
   decision: null
@@ -1678,13 +1678,13 @@ editorial_decisions:
   supersedes: []
   tags: [debate, church, thread, heresy]
 
-- id: ED-089
+- id: ED-098
   date_flagged: 2026-04-02
   date_resolved: null
   source: simulation
   source_file: tests/audit_d02_sim_d05.md
   description: "§6.15 Temporal axis conflict rule (PP-123): confirm TN8 Read penalty calibration. Alternate: -1D to both Argue rolls that exchange instead. Or no mechanical effect (purely narrative)."
-  full_flag_text: "[EDITORIAL: ED-089 Temporal axis conflict penalty — TN8 Read vs -1D Argue vs narrative only]"
+  full_flag_text: "[EDITORIAL: ED-098 Temporal axis conflict penalty — TN8 Read vs -1D Argue vs narrative only]"
   status: open
   priority: P2
   decision: null
@@ -1783,3 +1783,32 @@ editorial_decisions:
     propagation_status: propagated (PP-175)
     related_ids: [ED-061]
     tags: [ranged, mass_combat, DR, scaling, P1, provisional]
+
+  - id: ED-097
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: SIM-005
+    source_file: tests/sim_ranged_004_005_006.md
+    description: "HP mass combat unit — should it have reduced effective CP to reflect reload cycle (1 shot per 2 rounds)? Currently abstracted to same CP as LP."
+    full_flag_text: "[EDITORIAL: ED-097 — HP mass combat unit CP: apply reload penalty or leave abstracted?]"
+    status: provisional
+    decision: "Provisional: no CP penalty. Mass combat abstracts over entire Volley Phase; reload cycle is subsumed in the abstraction. CP represents sustained fire volume."
+    propagation_targets: []
+    propagation_status: n/a
+    related_ids: [ED-061]
+    tags: [mass_combat, ranged, HP, provisional]
+
+  - id: ED-098
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: SIM-004
+    source_file: tests/sim_ranged_004_005_006.md
+    description: "Cover declaration timing: must be declared in Phase 1 to apply. GM arbitration of cover availability in zone-based combat. Add explicit ruling to design doc."
+    full_flag_text: "[EDITORIAL: ED-098 — GM arbitration of cover availability and Phase 1 declaration requirement. Add to combat_design_v1.md cover rules.]"
+    status: provisional
+    decision: "Provisional: cover must be declared in Phase 1. GM determines physical availability based on zone description. No declaration = no DR benefit that round."
+    propagation_targets:
+      - designs/combat/combat_design_v1.md
+    propagation_status: pending
+    related_ids: [PP-172]
+    tags: [combat, cover, provisional]

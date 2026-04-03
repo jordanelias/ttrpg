@@ -286,3 +286,7 @@ Finding: SIM-005-F1
 Propagation targets:
 - references/params_mass_combat.md → DONE (this commit)
 - Pending ED-096 user confirmation — values marked PROVISIONAL
+
+### ED-098 — Cover declaration ruling (2026-04-02)
+Pending propagation:
+- designs/combat/combat_design_v1.md §5 Environmental Factors → add: "Cover must be declared in Phase 1. Game Master determines physical availability. No declaration = no DR benefit that round."
