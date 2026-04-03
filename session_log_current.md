@@ -1,41 +1,52 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_BAL_BG_02
-phase: SESSION CLOSED
-status: COMPLETE
+session_id: 2026-04-02T_WORLDBUILDING_INTEGRATION
+phase: DESIGN DOCUMENT PRODUCED
+status: AWAITING EDITORIAL REVIEW
 
-## BAL-BG-02 COMPLETE
-Full balance analysis run on 4-player game (Crown/Church/Hafenmark/Varfell).
+## WORLDBUILDING INTEGRATION v1
+Source: pre-project lore documents (Church, Lowenritter, Crown, Guilds, Economy, Governance)
+Output: designs/worldbuilding/worldbuilding_integration_v1.md
 
-## STALE REFERENCES FIXED (PP-202)
-Crown Deed 2: T12 (Valorsplatz) + T9 (Arcansheld) + ≥2 others.
-Hafenmark Path C Deed 3: T5 Gransol (duchy capital).
-Varfell Path B: T4 (Vargstad) + T13 (Stillhelm).
-Starting Control block: updated to PP-199 final assignments.
+## WORK COMPLETED
+1. Church four-Cardinal sub-arm structure mechanized (Fortitude/Justice/Prudence/Temperance)
+2. Lowenritter five-arm structure mechanized (Lions Table/Lions Helm/Knights of Peace/Royal Investigators/Riskbreakers)
+3. Guild internal structure and economy designed (hierarchy, Guild Council, Guild Forum, Ministry of Guilds, Burgher status)
+4. Court Parliament governance system designed (Ministries, Rectorates, Praefectures, Parliamentary Actions, Deposal Procedure)
+5. Levy and taxation mechanics integrated
+6. Restoration Movement leader proposed (Elder Solvei Kaldring)
+7. Tithe economy, charity network, university influence mechanics created
+8. Almaic Kyriakos (Altonian religious institution) interaction at IP thresholds
+9. Journeymen Years as PC travel mechanic
+10. Territory name discrepancies identified and mapped
+11. Galbados -> Solmund rename scoped
+12. Name discrepancies flagged (Vaynard first name, Baralta spelling, Holy See title)
 
-## P1 FINDINGS — AWAITING USER DECISIONS
-ED-109: Crown 3/5 deeds pre-met at start. Passive victory viable.
-ED-110: Church primary victory inaccessible (TC net 0, Deed 4 military near-impossible).
-ED-111: Varfell Path B 9-10 season win (T13 adjacent to T4, Fort 0, seizable S1).
-ED-112: TC lock (Hafenmark suppression = Church TC generation exactly cancel).
+## EDITORIAL ITEMS GENERATED
+9 new editorial items (ED-NEW-01 through ED-NEW-09)
+3 existing editorials addressed (ED-005, ED-006, ED-009)
 
-## P2 FINDINGS
-ED-113: Varfell T13 dominant opening (P2).
-BAL-01: Crown economic advantage (offset by 5-deed VC complexity).
-BAL-03: Hafenmark Military 3 (correct by design).
+## EXISTING EDITORIALS ADDRESSED
+- ED-005 (Restoration leader): Proposal — Elder Solvei Kaldring
+- ED-006 (Riskbreakers identity): Resolved — loyal to Valoria concept, not institutions
+- ED-009 (Guild Arbitration): Resolved — 3-exchange proceeding type designed
 
-## RECOMMENDED FIXES (pending user input)
-ED-110+ED-112 (linked): AER ≥ 3 generates TC +1/season additional (bypasses Hafenmark suppression).
-  This uses the AER track purposefully and gives Church a path.
-ED-111: T4+T13 held 2 consecutive seasons before Deed counted (duration gate).
-ED-113: Varfell march to T13 triggers Warden Cooperation check (early expedition forced).
+## PENDING USER DECISIONS
+- ED-NEW-01: Confirm Solmund as canonical name
+- ED-NEW-02: Vaynard first name (Dienton vs Magnus)
+- ED-NEW-03: Baralta spelling (Inga vs Inge)
+- ED-NEW-04: Church leader title (Holy See vs Confessor — both canonical?)
+- ED-NEW-05: T4 name (Oastad vs Vargstad)
+- ED-NEW-06: Cardinal of Prudence name/profile
+- ED-NEW-07: Almaic Kyriakos IP threshold interactions
+- ED-NEW-09: Territory name reconciliation
 
-## Gate: PASS
+## Gate: PASS (design document committed; no canonical files modified)
 
 next_session_start:
-  priority_1: "Run freshness_gate.py check first."
-  priority_2: "Resolve ED-109 through ED-113 (balance decisions)."
-  priority_3: "If ED-110+112 resolved: patch TC generation mechanic."
-  priority_4: "Road network design (deferred from map session)."
+  priority_1: "User reviews worldbuilding_integration_v1.md editorial items."
+  priority_2: "On approval: propagate approved mechanics to stage6, stage13, params files."
+  priority_3: "Run freshness_gate.py after propagation."
+  priority_4: "Simulation: stress test Church four-Cardinal structure for Stability cascade."
 ```
