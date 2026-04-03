@@ -29,7 +29,7 @@ systems:
 
   threadwork:
     canonical: designs/ttrpg/threadwork_redesign_v25.md
-    canonical_sha__designs__ttrpg__threadwork_redesign_v25_md: "350d9690a32f028b58f6f3e2b63f8bf4aa3844d5"
+    canonical_sha__designs__ttrpg__threadwork_redesign_v25_md: "21663abcb06c96b356df59888defdc03e473e921"
     params: references/params_threadwork.md
     design_doc: designs/ttrpg/threadwork_redesign_v25.md
     compilation_stage: compilation/v0.14/stage3_thread_operations.md
@@ -56,9 +56,9 @@ systems:
     canonical_ttrpg: compilation/v0.14/stage6_factions.md
     canonical_sha__compilation__v0_14__stage6_factions_md: "d09b32d1970b5144c73189d4f815d93f102ddfb0"
     canonical_bg: designs/board_game/valoria_bg_v05_simulation_and_patches.md
-    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "27a73b96e38fea237504380523f4294b102d47f2"
+    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "cd2ee5fba3b4ccff911703f839fb839a1ff17508"
     canonical_hybrid: designs/board_game/valoria_bg_v05_simulation_and_patches.md
-    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "27a73b96e38fea237504380523f4294b102d47f2"
+    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "cd2ee5fba3b4ccff911703f839fb839a1ff17508"
     params: references/params_factions.md
     compilation_current_ttrpg: true
     compilation_current_bg: false
@@ -145,7 +145,7 @@ systems:
 
   board_game:
     canonical_mechanics: designs/board_game/valoria_bg_v05_simulation_and_patches.md
-    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "27a73b96e38fea237504380523f4294b102d47f2"
+    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "cd2ee5fba3b4ccff911703f839fb839a1ff17508"
     canonical_action_economy: designs/board_game/stage_bg_proposal_v02.md
     canonical_sha__designs__board_game__stage_bg_proposal_v02_md: "de6e2f88ec9220bf7d5808bc26b500d5da58991d"
     params: references/params_board_game.md
