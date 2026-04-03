@@ -1663,3 +1663,25 @@ patches:
   applied_to_version: "v0.14 + all ST patches"
   status: applied
   applied_commit: pending
+
+- id: PP-178
+  date: 2026-04-02
+  severity: P2
+  description: "Trade Network Investment: Hafenmark Wealth sink. Consul Inward, 2 Wealth cost, places Trade Route tokens for +1D Trade bonuses. Resolves ED-077."
+  finding_id: "ED-077 / BAL-BG-01-F-01"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.5.4"
+  status: applied
+  applied_commit: pending
+
+- id: PP-179
+  date: 2026-04-02
+  severity: P1
+  description: "BG Overwhelming degree table aligned with TTRPG: net >= 2xOb (was net >= Ob+1). Resolves ST-BG-01. User decision."
+  finding_id: "ST-BG-01"
+  source: simulation
+  affects: [references/params_board_game.md, compilation/v0.14/stage_bg_board_game_mode.md]
+  applied_to_version: "v0.5.4"
+  status: applied
+  applied_commit: pending

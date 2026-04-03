@@ -1511,3 +1511,134 @@ editorial_decisions:
     priority: P2
     decision: "P-01 co-movement propagation: Relational+ ops → RS±1 at Accounting; epistemic → Investigation Action available; actual → narrative only. Applied to state_transfer_spec.md. [PROVISIONAL]"
     tags: [hybrid, thread, co_movement, p01]
+
+  - id: ED-048
+    date_flagged: 2026-03-31
+    date_resolved: 2026-04-02
+    source: session
+    source_file: designs/gm_ref_cp14/arcs/arcs_20_23_branching.md
+    description: "Ceiral is not a canon name — flagged as potential naming error."
+    status: resolved
+    priority: P2
+    decision: "Ceiral is confirmed canonical. It is the name of a Thread text/ritual (The Ceiral Ritual, The Ceiral Text), not a person's name. Appears in arcs_20_23_branching.md Arc 22. ED-048 was a false flag — the concern was that it might be a character name, but it is a ritual/document name. No renaming required."
+    propagation_targets: []
+    propagation_status: applied
+    tags: [naming, canonical_text, resolved]
+
+  - id: ED-077
+    date_flagged: 2026-04-02
+    date_resolved: 2026-04-02
+    source: simulation
+    source_file: tests/sim_bg_01.md
+    description: "Hafenmark Wealth sink: no mechanic for Wealth above 5 outside Military/Fortify."
+    status: resolved
+    priority: P2
+    decision: "Trade Network Investment added (PP-178): Hafenmark Consul Inward action, 2 Wealth cost, places Trade Route tokens for +1D Trade bonuses. Converts surplus Wealth into durable territorial economic infrastructure."
+    propagation_targets: [references/params_board_game.md]
+    propagation_status: applied
+    tags: [board_game, hafenmark, wealth, balance, resolved]
+
+  - id: ED-080
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: document_review
+    source_file: designs/board_game/bg_improvement_v3_amendment2.md
+    description: "BG-E-51: Baralta Conviction text. Amendment2 proposes: 'Faith is not mediated — it is lived. Anyone who is truly faithful can hear Solmund. Anyone who cannot should not rule.' Confirm or replace."
+    full_flag_text: "[EDITORIAL: ED-080 — Baralta BG Conviction text. Proposed text in bg_improvement_v3_amendment2.md. Confirm?]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets: [compilation/v0.14/stage_bg_board_game_mode.md, designs/board_game/stage_bg_proposal_v02.md]
+    propagation_status: pending
+    related_ids: []
+    tags: [board_game, hafenmark, baralta, conviction]
+
+  - id: ED-081
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: document_review
+    source_file: designs/board_game/bg_improvement_v3_amendment2.md
+    description: "BG-E-53: Vaynard Conviction text. Amendment2 proposes: 'The strongest thread is the one others cannot see — and I have spent my life learning to pull it.' Confirm or replace."
+    full_flag_text: "[EDITORIAL: ED-081 — Vaynard BG Conviction text. Proposed in amendment2. Confirm?]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets: [compilation/v0.14/stage_bg_board_game_mode.md, designs/board_game/stage_bg_proposal_v02.md]
+    propagation_status: pending
+    related_ids: []
+    tags: [board_game, varfell, vaynard, conviction]
+
+  - id: ED-082
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: document_review
+    source_file: designs/board_game/bg_improvement_v3_amendment2.md
+    description: "BG-E-59: Almud Conviction text. Amendment2 proposes: 'The state is the only legitimate vessel of order; everything must flow through it or be consumed by it.' Confirm or replace."
+    full_flag_text: "[EDITORIAL: ED-082 — Almud BG Conviction text. Proposed in amendment2. Confirm?]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets: [compilation/v0.14/stage_bg_board_game_mode.md, designs/board_game/stage_bg_proposal_v02.md]
+    propagation_status: pending
+    related_ids: []
+    tags: [board_game, crown, almud, conviction]
+
+  - id: ED-083
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: document_review
+    source_file: designs/board_game/bg_improvement_v3_amendment2.md
+    description: "VTM 5 co-movement direction ability: P-14 compliance check required. Amendment2 allows Vaynard at VTM 5 to choose the outcome of one Co-Movement card draw. P-14 states co-movement is universal and uncontrollable. Amendment2 argues this bends (not breaks) P-14 since Thread Debt is still incurred. Canon-guard review required."
+    full_flag_text: "[EDITORIAL: ED-083 — VTM 5 co-movement direction: P-14 compliance. Canon-guard review required before adoption.]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets: [designs/board_game/stage_bg_proposal_v02.md]
+    propagation_status: pending
+    related_ids: []
+    tags: [board_game, varfell, vaynard, vtm, p14_compliance]
+
+  - id: ED-084
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: document_review
+    source_file: designs/board_game/bg_improvement_v3_amendment2.md
+    description: "AER (Altonian Ecclesiastical Relationship) starting value = 2. Confirm this is appropriate given canon Church/Altonia relationship at game start. Amendment2 proposes: AER starts at 2 (neutral)."
+    full_flag_text: "[EDITORIAL: ED-084 — AER starting value. Amendment2 sets AER=2 at game start. Confirm?]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets: [references/params_board_game.md]
+    propagation_status: pending
+    related_ids: []
+    tags: [board_game, church, altonia, aer]
+
+  - id: ED-085
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: document_review
+    source_file: designs/board_game/bg_improvement_v3_amendment2.md
+    description: "Reformed Settlement options — confirm Church's three responses (Resist/Accommodate/Ignore) cover all canon outcomes for Baralta's formal theological declaration."
+    full_flag_text: "[EDITORIAL: ED-085 — Reformed Settlement Church responses. Confirm three options cover canon outcomes?]"
+    status: open
+    priority: P2
+    decision: null
+    propagation_targets: [references/params_board_game.md, designs/board_game/stage_bg_proposal_v02.md]
+    propagation_status: pending
+    related_ids: [ED-080]
+    tags: [board_game, hafenmark, church, rdt]
+
+  - id: ED-086
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: document_review
+    source_file: designs/board_game/bg_consolidated_synthesis.md
+    description: "BG Co-Movement Resolution Protocol required for P-14 compliance. All BG Thread operations must produce three-dimensional auto-effects (Actualized, Temporal, Epistemic). Current co-movement card deck is an event system, not a consequence system. Design work required."
+    full_flag_text: "[EDITORIAL: ED-086 — BG Co-Movement Resolution Protocol. P-14 compliance gap. Design required before Thread operations are playtestable.]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets: [designs/board_game/stage_bg_proposal_v02.md, references/params_board_game.md]
+    propagation_status: pending
+    related_ids: [ED-083]
+    tags: [board_game, thread, co_movement, p14_compliance]

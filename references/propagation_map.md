@@ -255,3 +255,9 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 - depends_on: [canon/00_philosophical_foundations.md, canon/02_canon_constraints.md]
 - referenced_by: [references/params_board_game.md, references/canonical_sources.yaml]
 - note: Canonical for BG action economy (PP-177). Mechanics/stats/VCs still from bg_v05.
+
+## DOCREVIEW-BG-01 synthesis
+- system: BG
+- type: TEST
+- depends_on: [designs/board_game/*.md, designs/gm_ref_cp14/arcs/*.md, references/params_board_game.md]
+- referenced_by: [tests/coverage_matrix.md, canon/editorial_ledger.yaml, canon/patch_register.yaml]

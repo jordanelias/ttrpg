@@ -1,4 +1,4 @@
-<!-- version: v0.5.2+BAL-BG-01 | source: bg_v05_simulation_and_patches.md | last_updated: 2026-04-02 -->
+<!-- version: v0.5.4+DOCREVIEW | source: bg_v05_simulation_and_patches.md | last_updated: 2026-04-02 -->
 <!-- PATCHES APPLIED: P-12-P-32 (prior); ST-BG-01-10, ST-INT series added 2026-04-02 -->
 <!-- PATCHES APPLIED: PP-112 (remove struck Majority-1s), PP-113-PP-122 (gap fills) 2026-04-02 -->
 <!-- NOTE: stage6_factions.md is STALE for BG mode. bg_v05 is canonical for all BG faction mechanics. -->
@@ -18,13 +18,15 @@ d10 pool. Same engine as TTRPG.
 **Majority-1s override: STRUCK (PP-112).** All rolls resolve through standard degree table only. Removed 2026-04-02.
 Ob minimum = 1. No modifier may push Ob below 1.
 
-## Degree Table
-| Net | Degree |
-|-----|--------|
-| >= Ob + 1 | Overwhelming [PROVISIONAL: ED-031 — BG uses Ob+1 surplus; TTRPG uses 2xOb. Intentional divergence; awaiting user confirmation.] |
+## Degree Table (PP-179 — now matches TTRPG)
+| Net Successes | Degree |
+|--------------|--------|
+| ≥ 2× Ob | Overwhelming |
 | = Ob | Success |
-| Ob - 1 | Partial |
-| <= 0 | Failure |
+| 0 < net < Ob | Partial |
+| ≤ 0 | Failure |
+
+Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 
 ## Stat Ceilings and Floors (PP-113)
 | Stat | Floor | Ceiling | Notes |
@@ -439,3 +441,56 @@ Artillery units are locked to Balanced disposition in all BG contexts. Rationale
 
 ## TC Threshold Check During Zoom In (ED-056b)
 TC threshold check fires at Seasonal Accounting regardless of Zoom In suspension. See state_transfer_spec.md.
+
+## Overwhelming Degree Table — BG Now Matches TTRPG (PP-179)
+Resolves ST-BG-01.
+
+**Old BG rule:** Overwhelming = net successes ≥ Ob + 1 (surplus 1 over Ob).
+**New BG rule:** Overwhelming = net successes ≥ 2 × Ob. **Same as TTRPG.**
+At Ob 1: Overwhelming at net ≥ 2 (unchanged — Ob+1 = 2×Ob when Ob=1).
+At Ob 2: Overwhelming at net ≥ 4 (was net ≥ 3). P(Overwhelming) drops from ~42% to ~22% at pool 5D.
+At Ob 3: Overwhelming at net ≥ 6 (was net ≥ 4). P drops from ~22% to ~5% at pool 5D.
+
+Updated Degree Table (BG):
+| Net Successes | Degree |
+|--------------|--------|
+| ≥ 2× Ob | Overwhelming |
+| = Ob | Success |
+| 0 < net < Ob | Partial |
+| ≤ 0 | Failure |
+
+**Ob 10 exception (inherited from TTRPG params_core):** Overwhelming unavailable at Ob 10. Partial requires net ≥ 5.
+
+## Trade Network Investment — Hafenmark Wealth Sink (PP-178)
+Hafenmark-exclusive action. Consul card, Inward orientation, in any Hafenmark-controlled territory.
+Resolves ED-077.
+
+**Cost:** 2 Wealth before rolling.
+**Roll:** Wealth vs Ob 2.
+| Degree | Effect |
+|--------|--------|
+| Overwhelming | Trade Route token placed between this territory and one adjacent territory. All Trade orders in either territory this season and next: +1D. Hafenmark gains +1 Guild Favour in the non-capital territory. Token persists until territory changes control. |
+| Success | Trade Route token placed. +1D Trade in this territory only, this season. Token persists. |
+| Partial | Trade Route token placed. No immediate bonus. Token persists. |
+| Failure | Wealth cost paid. No token. Hafenmark Stability −1 this season. |
+
+**Trade Route tokens:** Permanent while Hafenmark controls the territory. Lost when territory changes control. Maximum 1 token per territory pair. Tokens are public (visible to all factions).
+**Thematic note:** Hafenmark invests trade surplus into durable economic infrastructure. Military seizure of Hafenmark territories destroys this infrastructure — a natural deterrent to aggression against the Duchy.
+
+## Resolved Params Gaps
+
+### PG-09: Torben Loyalty Clock (from arcs_09_11 / arcs_20_23)
+Torben Loyalty Clock activates at value 8 when Institutional Pressure crosses 30 (I-01 event).
+Degrades: −1/season while Torben is in Altonian territory.
+Floor: 1 (never reaches 0 — Torben retains residual Valorian identity).
+Recovery: Elske's presence slows decay by −1/season (net: 0 decay per season if Elske recruited). Covert contact (Intel vs Ob 3): success = no decay this season; failure = contact exposed, Institutional Pressure +1.
+Crown Deed 4 condition: Torben Loyalty ≥ 5 (meaning: Clock has not degraded below 5 — at 8 at activation, requires max 3 seasons of unmitigated decay before failing).
+
+### PG-10: Parliamentary Ruling Mechanic (from stress test / critical review)
+A Parliamentary ruling is produced by a successful Parliamentary Manoeuvre (Success or Overwhelming result).
+The ruling delays one pending Domain Action outcome by 1 season.
+Hafenmark Deed 4 condition: "at least 1 Parliamentary ruling in Hafenmark's favour" = at least 1 successful Parliamentary Manoeuvre result (Success or Overwhelming) recorded this game. Track with a Deed token placed immediately on first success.
+
+### PG-12: Hidden Information Persistence (Niflhel Deed 3)
+Niflhel holds revealed faction stats as intelligence. Information expires if the underlying stat changes by more than ±1 from the revealed value (the intelligence is now materially wrong). At expiry: information no longer counts toward Deed 3.
+Niflhel Deed 3: "≥ 3 pieces of hidden faction information held simultaneously" = 3 pieces of valid (non-expired) intelligence held at Accounting.
