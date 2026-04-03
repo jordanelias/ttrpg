@@ -290,3 +290,12 @@ Propagation targets:
 ### ED-098 — Cover declaration ruling (2026-04-02)
 Pending propagation:
 - designs/combat/combat_design_v1.md §5 Environmental Factors → add: "Cover must be declared in Phase 1. Game Master determines physical availability. No declaration = no DR benefit that round."
+
+### PP-188 — Ranged Redesign (2026-04-02)
+Source: designs/combat/combat_design_v1.md §5 (weapon table, reach rules, armour DR)
+Resolved: ED-061
+Propagation targets:
+- references/params_combat.md → DONE (this commit)
+- designs/mass_combat/mass_battle_v3.md → DONE (this commit)
+- references/params_mass_combat.md → DONE (this commit)
+- session_log_current.md → DONE (this commit)

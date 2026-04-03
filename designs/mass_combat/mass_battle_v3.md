@@ -39,18 +39,19 @@ rolled. The general is the battle.
 | HeavyCut | ✓✓ | ✓✓ | ✓ | ✗ |
 | LightBlunt | ✓ | ✗ | ✗ | ✗ |
 | HeavyBlunt | ✓✓ | ✓✓ | ✓✓ | ✓✓ |
-| LP — Light Pierce (arrows) | ✓ | ✓ | ✗ | ✗ |
-| HP — Heavy Pierce (bolts) | ✓✓ | ✓✓ | ✓ | ✗ |
-| LBl — Light Blunt (sling) | ✓ | ✗ | ✗ | ✗ |
+| Piercing — Bow (arrows) | ✓ | ✓ | ✗ | ✗ |
+| Piercing — Crossbow (bolts) | ✓✓ | ✓✓ | ✓✓* | ✓* |
+| Blunt — Throwing | ✓ | ✗ | ✗ | ✗ |
+| Blunt — Sling (clay/stone) | ✓ | ✗ | ✗ | ✗ |
+| Blunt — Sling (metal/lead) | ✓✓ | ✓✓ | ✓ | ✗ |
 | HBl — Heavy Blunt Siege | ✓✓ | ✓✓ | ✓✓ | ✓✓ |
 
-HeavyBlunt and HBl (siege) are the only weapon classes effective against Heavy
-armour. LP (arrows) penetrate light armour; HP (crossbow bolts) penetrate
-medium; LBl (sling) are anti-unarmoured only. Force composition determines
-outcome more than tactics. [EDITORIAL: ED-061 — confirm 4-category split and
+*Crossbow vs Medium/Heavy: post-DR flat bonus applies if hit (+2 Med / +3 Heavy).
+
+HeavyBlunt and HBl (siege) are the only weapon classes fully effective against Heavy armour. Piercing/Bow penetrates Light; Piercing/Crossbow reaches Medium and Heavy via post-DR bonus. Blunt/Sling metal/lead penetrates Medium. Clay/stone sling is anti-levy only. Force composition determines outcome more than tactics. [EDITORIAL: ED-061 — confirm 4-category split and
 sub-unit types for Ranged (archer/crossbow/slinger)]
 
-**Personal combat projectile weapons:** LP, HP, LBl, and HBl are all defined for individual fighters in personal combat (PP-172). See references/params_combat.md §Ranged Combat Rules. **HBl distinction:** HBl at personal scale = lead shot sling (individual weapon, PP-172 DR 0/0/1/2). HBl at mass/siege scale = Artillery unit (PP-091/PP-106, sight-line rule, Bombard action). Siege crew fight as melee/unarmed, but individual slingers may carry lead shot. The ranged DR values above apply at both unit scale (Volley Phase) and personal scale (individual ranged attacks).
+**Personal combat projectile weapons:** Piercing (Bow/Crossbow) and Blunt (Throwing/Sling) are defined for individual fighters in personal combat (PP-188). See references/params_combat.md §Ranged Combat Rules. **HBl distinction:** HBl at personal scale = lead shot sling (individual weapon, PP-172 DR 0/0/1/2). HBl at mass/siege scale = Artillery unit (PP-091/PP-106, sight-line rule, Bombard action). Siege crew fight as melee/unarmed, but individual slingers may carry lead shot. The ranged DR values above apply at both unit scale (Volley Phase) and personal scale (individual ranged attacks).
 
 ---
 
@@ -155,19 +156,22 @@ table unchanged.
 | Medium | 4 | 3 | 2 | 1 |
 | Heavy | 6 | 5 | 3 | 1 |
 
-**Ranged DR (Volley Phase) — MASS COMBAT SCALE [PROVISIONAL PP-175/ED-096]:**
-Mass combat DR is scaled from personal combat DR (÷2, rounded up). Personal combat DR pools are 8–15D; mass combat CP is 1–7. Using personal DR directly renders ranged units ineffective vs Light armour at all standard CP tiers.
+**Ranged DR (Volley Phase) — MASS COMBAT SCALE [PP-188]:**
+Scaled (÷2 rounded up) from personal combat DR. Crossbow post-DR bonus applied after table.
 
-| Armour | LP (arrow) | HP (bolt) | LBl (stone) | HBl (lead sling) |
-|---|---|---|---|---|
-| None | 0 | 0 | 0 | 0 |
-| Light | 1 | 1 | 1 | 0 |
-| Medium | 2 | 1 | 1 | 1 |
-| Heavy | 3 | 2 | 2 | 1 |
+| Armour | vs Piercing | vs Blunt |
+|---|---|---|
+| None | 0 | 0 |
+| Light | 1 | 1 |
+| Medium | 2 | 1 |
+| Heavy | 3 | 2 |
+
+Crossbow post-DR bonus (if net hits > 0): +2 vs Medium, +3 vs Heavy.
+Sling: effective CP −2D; ammo modifier per unit table above.
 
 Personal combat ranged DR (for reference): LP 0/2/3/5 — HP 0/1/2/3 — LBl 0/1/2/3 — HBl 0/0/1/2. See references/params_combat.md.
 
-**Ranged unit role note:** LP (archer) units are effective only vs None/Light armour. HP (crossbow) units penetrate through Medium armour. LBl (sling) units are anti-levy only — ineffective vs Light armour or higher. HBl (lead sling) units are the only personal-scale anti-armour ranged option; effective vs Light and Medium. HBl (Artillery/siege units) follow PP-091/PP-106 and are a distinct unit type.
+**Ranged unit roles:** Archer units effective vs None/Light armour. Crossbow units: modest base, post-DR bonus makes them the anti-armour ranged choice. Sling clay/stone: anti-levy. Sling metal/lead: exceed crossbow base damage but carry pool penalty. HBl (Artillery/siege) follow PP-091/PP-106 — distinct unit type.
 
 ---
 
@@ -520,7 +524,9 @@ TTRPG equivalence added for hybrid translation:
 | Light Infantry | 3 | 3 | 3 | 9 | 3 | 4 | 4 | LightCut | Light | +2 |
 | Heavy Infantry | 4 | 4 | 4 | 10 | 4 | 5 | 5 | HeavyCut | Medium | +4 |
 | Cavalry | 4 | 3 | 5 | 9 | 5 | 4 | 5 | HeavyCut | Heavy | +5 |
-| Ranged | 3 | 2 | 3 | 8 | 3 | 3 | 3 | LP (arrows) | Light | +2 |
+| Archer | 3 | 2 | 3 | 8 | 3 | 3 | 3 | Piercing/Bow | Light | +2 |
+| Crossbow | 3 | 2 | 3 | 8 | 3 | 3 | 3 | Piercing/Crossbow | Light | +2 base |
+| Sling | 2 | 2 | 2 | 8 | 2 | 3 | 3 | Blunt/Sling | Light | by ammo (−2D) |
 | Artillery | 2 | 2 | 2 | 8 | 2 | 3 | 3 | HBl (siege) | None | +3 |
 | Knights Templar | 5 | 5 | 6 | 11 | 5 | 6 | 6 | HeavyBlunt | Heavy | +5 |
 

@@ -1327,12 +1327,12 @@ editorial_decisions:
     tags: [debate, composure, recovery]
   - id: ED-061
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation+editorial
     description: "Confirm 4 projectile weapon categories (LP/HP/LBl/HBl) and DR values. Ranged unit default = LP (arrows). Consider Ranged sub-type split: archer (LP) / crossbowman (HP) / slinger (LBl)."
-    status: provisional
+    status: resolved
     priority: P2
-    decision: "Projectile weapon categories LP/HP/LBl/HBl confirmed. DR values accepted from PP-104. Ranged unit default = LP. Sub-type split (archer/crossbow/slinger) deferred to BG compilation. [PROVISIONAL]"
+    decision: "REDESIGNED via PP-188: 2 categories (Piercing/Blunt). Bow TN6+2/round; Crossbow TN5+2base/alt-round, post-DR +2 Med/+3 Heavy if hit; Throw TN7+1/round; Sling TN8/alt-round/-2D/ammo Clay+1/Stone+2/Metal+3/Lead+4. No Fibonacci for ranged."
     propagation_targets: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
     tags: [mass_combat, weapons, projectile]
 

@@ -61,3 +61,15 @@ Changes:
 - Replaced with HBl personal vs siege distinction paragraph
 - Damage Formula updated: removed STR, added ED-092 provisional note
 - Version: v0.14-AUD3 → v0.14-AUD4
+
+## PP-188 (2026-04-02) — Ranged Category Redesign (ED-061 resolved)
+Source: user editorial decision
+Changes:
+- Weapon table: LP/HP/LBl/HBl → Piercing (Bow/Crossbow) and Blunt (Throw/Sling)
+- Bow: TN6, +2 mod, every round
+- Crossbow: TN5, +2 base mod, every other round; post-DR +2 vs Med / +3 vs Heavy (if hit)
+- Throwing weapon: TN7, +1 mod, every round
+- Sling: TN8, −2D pool, every other round; Clay+1/Stone+2/Metal+3/Lead+4
+- DR table: collapsed to 2 columns (Piercing: 0/2/3/5; Blunt: 0/1/2/3)
+- Cover table: collapsed to 2 columns
+- Fibonacci group bonus: removed for all ranged weapons

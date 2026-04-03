@@ -93,3 +93,12 @@ Changes:
   HBl (lead): personal 0/0/1/2 → mass 0/0/1/1
 - Rationale: unscaled DRs made LP/LBl zero damage vs Light armour at all CP1-7
 - Status: PROVISIONAL pending ED-096 user confirmation
+
+## PP-188 (2026-04-02) — Ranged Category Redesign (ED-061 resolved)
+Source: user editorial decision
+Changes:
+- Unit table: LP(archer)/HP(crossbow)/LBl(stone)/HBl(lead) → Archer/Crossbow/Throw/Sling rows
+- Sling split into 4 ammo variants (clay/stone/metal/lead) in unit table
+- Ranged DR: collapsed LP/HP/LBl/HBl columns → Piercing/Blunt (scaled ÷2)
+- Crossbow post-DR bonus added: +2 vs Med / +3 vs Heavy if net hits > 0
+- Effectiveness table: updated to reflect Piercing/Blunt categories

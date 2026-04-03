@@ -1879,3 +1879,18 @@ patches:
   status: provisional
   applied_commit: "pending"
   note: "Provisional pending ED-096 user confirmation. Values are mechanically defensible."
+
+- id: PP-188
+  date: 2026-04-02
+  severity: P2
+  description: "Ranged redesign: collapse LP/HP/LBl/HBl to Piercing/Blunt categories. Fire rates (bow/throw every round; crossbow/sling every other round). Crossbow post-DR armour bonus (+2 Med / +3 Heavy if hit). Sling -2D pool, ammo modifier (Clay+1/Stone+2/Metal+3/Lead+4). No Fibonacci group bonus for ranged."
+  finding_id: "ED-061"
+  source: editorial
+  affects:
+    - designs/combat/combat_design_v1.md
+    - references/params_combat.md
+    - designs/mass_combat/mass_battle_v3.md
+    - references/params_mass_combat.md
+  applied_to_version: "v1.4 / v4.6"
+  status: applied
+  applied_commit: "pending"

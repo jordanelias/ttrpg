@@ -179,24 +179,25 @@ Dmg Mod from unit table below. [PROVISIONAL — ED-062: confirm values]
 | Light Infantry | LightCut | +2 |
 | Heavy Infantry | HeavyCut | +4 |
 | Cavalry | HeavyCut | +5 |
-| LP (archer) | LP | +2 |
-| HP (crossbow) | HP | +4 |
-| LBl (stone sling) | LBl | +1 |
-| HBl (lead sling) | HBl | +3 |
+| Piercing — Archer | Piercing/Bow | +2 |
+| Piercing — Crossbow | Piercing/Crossbow | +2 base (+2 vs Med / +3 vs Heavy post-DR) |
+| Blunt — Throwing | Blunt/Throw | +1 |
+| Blunt — Sling | Blunt/Sling | Clay+1 / Stone+2 / Metal+3 / Lead+4 (−2D pool) |
 | Artillery | HBl | +3 |
 | Knights Templar | HeavyBlunt | +5 |
 
 
-## Ranged DR Table (Volley Phase) — PP-175 [PROVISIONAL ED-096]
-Mass combat ranged DR is scaled from personal combat values (÷2, rounded up).
-Rationale: personal combat pools (8–15D) handle personal DR (0–5) cleanly; mass combat CP (1–7) does not — unscaled DR renders LP/LBl zero vs Light armour at all standard CP tiers.
+## Ranged DR Table (Volley Phase) — PP-188
+Scaled (÷2 rounded up) from personal combat DR. Crossbow post-DR bonus applied after.
+| Armour | vs Piercing | vs Blunt |
+|--------|------------|---------|
+| None | 0 | 0 |
+| Light | 1 | 1 |
+| Medium | 2 | 1 |
+| Heavy | 3 | 2 |
 
-| Armour | vs LP | vs HP | vs LBl | vs HBl (lead sling) |
-|--------|-------|-------|--------|---------------------|
-| None | 0 | 0 | 0 | 0 |
-| Light | 1 | 1 | 1 | 0 |
-| Medium | 2 | 1 | 1 | 1 |
-| Heavy | 3 | 2 | 2 | 1 |
+Crossbow post-DR bonus (if net hits > 0): +2 vs Medium, +3 vs Heavy.
+Sling: effective CP −2D; ammo modifier per unit table above.
 
 HBl (Artillery/siege): uses PP-091 Bombard (flat Strength damage). Not subject to Volley DR formula. Artillery is a separate unit type from HBl lead-sling infantry units.
 
