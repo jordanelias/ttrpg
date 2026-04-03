@@ -29,7 +29,7 @@ systems:
 
   threadwork:
     canonical: designs/ttrpg/threadwork_redesign_v25.md
-    canonical_sha__designs__ttrpg__threadwork_redesign_v25_md: "263bd9d77804dd0b4ce6bcaed18e7a7770bb2255"
+    canonical_sha__designs__ttrpg__threadwork_redesign_v25_md: "bdf9021e6e1a720ccfdb88fca8b00edfe248c5b6"
     params: references/params_threadwork.md
     design_doc: designs/ttrpg/threadwork_redesign_v25.md
     compilation_stage: compilation/v0.14/stage3_thread_operations.md
@@ -107,7 +107,7 @@ systems:
 
   scale_transitions:
     canonical: compilation/v0.14/stage11_scale_transitions.md
-    canonical_sha__compilation__v0_14__stage11_scale_transitions_md: "5fd052236b4d6949b47e8d9c261b04aa6448a07b"
+    canonical_sha__compilation__v0_14__stage11_scale_transitions_md: "6e8e383659e8d2aefa37049770ee703b5a132f68"
     params: references/params_scale_transitions.md
     design_doc: null
     compilation_current: true
@@ -158,7 +158,7 @@ systems:
     canonical_design: designs/hybrid/hybrid_gaps_resolved.md  # pending integration
     canonical_sha__designs__hybrid__hybrid_gaps_resolved_md: "7a302b63317504626ecbcf27f5c014d8aaf25868"
     canonical_rules: compilation/v0.14/stage11_scale_transitions.md
-    canonical_sha__compilation__v0_14__stage11_scale_transitions_md: "5fd052236b4d6949b47e8d9c261b04aa6448a07b"
+    canonical_sha__compilation__v0_14__stage11_scale_transitions_md: "6e8e383659e8d2aefa37049770ee703b5a132f68"
     params: references/params_scale_transitions.md
     design_doc: designs/hybrid/hybrid_gaps_resolved.md
     compilation_current: true  # for rules; design doc pending integration
