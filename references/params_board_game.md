@@ -324,7 +324,9 @@ Roll for each Crown/Hafenmark territory separately. All rolls resolved simultane
 | Territory | TC Gain on Success |
 |-----------|-------------------|
 | Standard Crown/Hafenmark territory | +1 |
-| Gransol (T2, Hafenmark duchy capital) | +3 | (PP-196: Gransol is Hafenmark capital, not Hafenvalor) |
+| Gransol (T2, Hafenmark duchy capital) | +3 |
+| Halvardshelm (T11, Hafenmark) | +1 |
+| Eidursjo (T8, Hafenmark) | +1 |
 | Hafenvalor (T6, Crown port) | +1 |
 | Lowenskyst (T7, Crown port) | +1 |
 | Valorsplatz (T1, royal capital) | +5 |
@@ -692,26 +694,82 @@ Current v04 map assignments differ significantly. Applying canonical geography w
 
 This changes faction starting positions fundamentally and may destabilise balance. User decision required.
 
-## Territory Table — Reconciled (PP-195)
-Source: Physical map + canonical source duchy boundaries. Guilds and Niflhel do not hold territory.
 
-| # | Territory | Duchy | Starting Control | Pros | Fort | Special |
-|---|-----------|-------|-----------------|------|------|---------|
-| 1 | Valorsplatz | Valorsmark (Crown) | Crown | 6 | 2 | Kingdom capital. Royal Court: Crown Policy −1 Ob. Parliament: Hafenmark Mandate orders −1 Ob. Ministry AP-token at start. |
-| 2 | Gransol | Hafenmark | Hafenmark | 5 | 1 | Hafenmark duchy capital. Garrison: Muster +1D. |
-| 3 | Himmelenger | Valorsmark (Crown) | Crown | 5 | 2 | Church Grand Cathedral here (institutional presence, not control). TC +1/season if Church has Favour ≥ 3 here. Church Unique Power −1 Ob here. |
-| 4 | Spartfell | Hafenmark | Hafenmark | 3 | 2 | Altonian Border. IP threshold events fire here first. Invasion entry point. Elske's duchy borders here. |
-| 5 | Arcansheld | Valorsmark (Crown) | Crown/Löwenritter | 4 | 3 | Löwenritter Fortress. Martial Law −1 Ob. Fort max 4. |
-| 6 | Hafenvalor | Valorsmark (Crown) | Crown | 5 | 1 | Crown port city. Major harbour. All Trade +1D (port). Duchy gave its name to the region — Hafenmark is named after this city's hinterland. |
-| 7 | Lowenskyst | Valorsmark (Crown) | Crown | 4 | 0 | Northern port. Schoenland sea route terminus. |
-| 8 | Eidursjo | Hafenmark | Hafenmark | 4 | 0 | Difficult terrain: March costs 2 cards. Forest/lake region. |
-| 9 | Varfell | Varfell | Varfell | 4 | 1 | Varfell duchy capital. VTM research here only. Einhir ruins: Restoration Weaving −1 Ob. |
-| 10 | Sigurdshelm | Varfell | Varfell | 3 | 0 | Varfell western city. Niflhel operates here as network (Black Market: all Trade +1 Ob; Niflhel Covert −1 Ob — Niflhel presence is institutional, not territorial). |
-| 11 | Halvardshelm | Varfell | Varfell | 5 | 0 | Breadbasket. +1 Prosperity/season uncontested. Muster Ob −1. Guilds operate here commercially (no territorial control). |
-| 12 | Oastad | Varfell | Varfell | 3 | 0 | Thread Wound. RS thresholds trigger +10 early. RS −1/season after 2 consecutive seasons any occupation. Southernmost rule applies. |
-| 13 | Stillhelm | Valorsmark (Crown) | Crown (nominal) | 2 | 0 | Southernmost Access. Non-Thread orders +1 Ob. RS −1/season any occupation. Warden Cooperation track here. Remote — Crown claims it but exercises no real governance. |
-| 14 | Eisengrund | — | Restoration (informal) | 4 | 0 | Einhir Heartland. Restoration Influence −1 Ob. Church Influence +1 Ob. South of mapped territory. |
-| 15 | Schoenland | — | Neutral (NPC) | 5 | 1 | Altonian Trade. At IP ≥ 75: Altonian Vanguard deploys. Intel orders visible to Altonia. Off-peninsula. |
+## Territory Table — Final (PP-197, from annotated map)
+Map annotations override all prior assignments. White dots = Hafenmark, Yellow = Crown, Green = Varfell.
+Stars = faction capitals. Purple = Altonian mountain routes. Red = Southernmost epicentre + radiation zones.
+
+| # | Territory | Faction | Fort | Pros | Special |
+|---|-----------|---------|------|------|---------|
+| 1 | Valorsplatz | Crown | 2 | 6 | Kingdom capital. Royal Court: Crown Policy −1 Ob. Parliament seat: Hafenmark Mandate orders −1 Ob. Ministry AP-token at start. Hafenvalor is the port district of this city (sub-location, not separate territory). |
+| 2 | Gransol | Hafenmark ★ | 1 | 5 | Hafenmark duchy capital (white star). Garrison: Muster +1D. |
+| 3 | Himmelenger | Crown | 2 | 5 | Crown territory. Church Grand Cathedral here — ecclesiastical presence, not political control. TC +1/season if Church Favour ≥ 3. Church Unique Power −1 Ob here. Yellow star cluster = Crown major settlement. |
+| 4 | Spartfell | Hafenmark | 2 | 3 | White blob, northeast. Altonian mountain pass (purple route) nearby. IP threshold events fire here first. Elske's duchy borders here. |
+| 5 | Arcansheld | Crown/Löwenritter | 3 | 4 | Yellow dot, central. Löwenritter Fortress. Martial Law −1 Ob. Fort max 4. |
+| 6 | Hafenvalor | Crown | 1 | 5 | Crown port city, adjacent to Valorsplatz. Major harbour. Trade +1D (port). Hafenmark is named after this city's hinterland — the name predates the duchy's political independence. |
+| 7 | Lowenskyst | Crown | 0 | 4 | Yellow blob, east coast. Northern port. Schoenland sea route terminus. |
+| 8 | Eidursjo | Hafenmark | 0 | 4 | White blob near lake. Difficult terrain: March costs 2 cards. Lake/forest region. |
+| 9 | Varfell | Varfell | 1 | 4 | Green blob (city labeled, northwest). VTM research here only. Einhir ruins: Restoration Weaving −1 Ob. Note: Varfell duchy capital star (green star) is shown SW on map — see Oastad note. |
+| 10 | Sigurdshelm | Varfell | 0 | 3 | Western city. Niflhel Black Market presence: Trade +1 Ob (Niflhel network depresses legitimate commerce), Niflhel Covert −1 Ob. Northwest Altonian mountain pass (purple route) passes near here. |
+| 11 | Halvardshelm | Hafenmark | 0 | 5 | White blob (MAP OVERRIDES canonical source — Halvardshelm = Hafenmark, not Varfell). Breadbasket: +1 Prosperity/season uncontested. Muster Ob −1. Guilds operate commercially here (CP-token at start). |
+| 12 | Oastad | Varfell | 0 | 3 | Green star on map = Varfell capital marker in this region — Varfell duchy capital may be understood as Oastad as the administrative seat of southern Varfell, OR the green star marks the Varfell duchy's southern stronghold. Thread Wound: RS −1/season after 2 seasons any occupation. Southernmost access zone begins here. |
+| 13 | Stillhelm | Crown | 0 | 2 | Yellow dot, south coast. Crown nominal control. Southernmost Access: Non-Thread orders +1 Ob. RS −1/season any occupation. Warden Cooperation track here. |
+| 14 | Eisengrund | Restoration (informal) | 0 | 4 | Unlabeled south territory. Einhir Heartland. Restoration Influence −1 Ob. Church Influence +1 Ob. |
+| 15 | Schoenland | Neutral NPC | 1 | 5 | Off-map. User: "east of Valorsplatz" — Altonian port, sea-accessible. Altonian Trade. At IP ≥ 75: Altonian Vanguard deploys. Intel orders visible to Altonia. |
+
+★ = duchy/faction capital
+
+## Adjacency — Final (PP-197, from annotated map yellow dotted lines + geography)
+T1 (Valorsplatz) ↔ T3 (Himmelenger), T5 (Arcansheld), T6 (Hafenvalor), T7 (Lowenskyst)
+T2 (Gransol) ↔ T4 (Spartfell), T8 (Eidursjo), T11 (Halvardshelm)
+T3 (Himmelenger) ↔ T1, T6, T13 (south coast), T14 (Eisengrund)
+T4 (Spartfell) ↔ T2, T15 (Schoenland — Altonian mountain pass, northeast purple route)
+T5 (Arcansheld) ↔ T1, T8 (Eidursjo valley), T9 (Varfell — mountain pass), T12 (Oastad — southern route)
+T6 (Hafenvalor) ↔ T1, T3, T7
+T7 (Lowenskyst) ↔ T1, T6, T15 (sea route)
+T8 (Eidursjo) ↔ T2, T5, T9, T11
+T9 (Varfell) ↔ T5, T8, T10, T12
+T10 (Sigurdshelm) ↔ T9, T11 [western Altonian mountain pass nearby — purple route; Altonia cannot enter here without IP ≥ 75 event]
+T11 (Halvardshelm) ↔ T2, T8, T10, T12
+T12 (Oastad) ↔ T5, T9, T11, T13, T14
+T13 (Stillhelm) ↔ T3, T12, T14
+T14 (Eisengrund) ↔ T3, T12, T13
+T15 (Schoenland) ↔ T4 (mountain pass), T7 (sea)
+
+## Starting Control Summary — Final (PP-197)
+| Faction | Territories | Count |
+|---------|------------|-------|
+| Crown | T1, T3, T5 (shared), T6, T7, T13 (nominal) | 6 |
+| Hafenmark | T2 (capital), T4, T8, T11 | 4 |
+| Varfell | T9, T10, T12 | 3 |
+| Church | None (cathedral presence in T3, city Favour elsewhere) | 0 |
+| Restoration | T14 (informal) | 1 |
+| Löwenritter | T5 (shared with Crown pre-coup) | shared |
+
+## Altonian Mountain Routes (PP-197)
+Two passes through mountains (purple lines on map):
+- **Northeast pass** (near Spartfell): T4 (Spartfell) ↔ T15 (Schoenland/Altonia). Primary invasion route. IP threshold events fire at T4 first.
+- **Northwest pass** (near Sigurdshelm): T10 (Sigurdshelm) ↔ off-map Altonian territory. Secondary. Only relevant at AER 5 or IP ≥ 90 (extreme escalation). Riskbreakers monitor this pass.
+
+## Southernmost — Radiating Zone (PP-197)
+Red concentric arcs on map, epicentre at far south tip of peninsula.
+- **Epicentre** (beyond T13/T14): Site of the Calamity. The Thread substrate is most damaged here. Edeyja and the Wardens work at the epicentre. Not a territory — it is a location within T13/T14 territory. Warden Emergence fires when expedition reaches this area.
+- **Zone 1** (T13, T14 — inner ring): Active Thread Wound sites. RS −1/season any occupation. Warden Cooperation track active after Emergence.
+- **Zone 2** (T12, Oastad — middle ring): Thread Wound active. RS thresholds trigger +10 early.
+- **Zone 3** (T9, T5 — outer ring): Substrate sensitivity. Thread Resonance +1 in these territories for all factions when RS < 40.
+The rings are not hard mechanical zones but inform which territories are affected by RS threshold events first.
+
+## Faction Starting Positions — Revised Balance Note (PP-197)
+Hafenmark starts with 4 territories (T2 Gransol capital, T4 Spartfell, T8 Eidursjo, T11 Halvardshelm).
+This improves Hafenmark's opening position significantly vs prior PP-195 (3 territories).
+Hafenmark now has the Breadbasket (T11 +1 Prosperity/season) and Eidursjo forest access.
+Hafenmark military handicap (Military 3) is offset by strong economic starting position (T11 Breadbasket, T8 trade access, T2 Garrison).
+
+Varfell starts with 3 territories (T9, T10, T12).
+T12 is a Thread Wound — net cost to hold. Effective starting position: T9 + T10 = 2 productive territories.
+This confirms Varfell's position as strategically constrained but intelligence-rich.
+VTM path through T12 → T13 (Southernmost) is the correct Varfell expansion path — through Thread-active territory that other factions avoid.
+
 
 ## Adjacency (from physical map)
 T1 (Valorsplatz) ↔ T3 (Himmelenger), T5 (Arcansheld), T6 (Hafenvalor), T7 (Lowenskyst)

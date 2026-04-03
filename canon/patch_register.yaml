@@ -2125,3 +2125,14 @@ patches:
   applied_to_version: "v0.7.4"
   status: applied
   applied_commit: pending
+
+- id: PP-197
+  date: 2026-04-02
+  severity: P1
+  description: "Final territory table from annotated physical map. Key correction over PP-195: Halvardshelm T11 = Hafenmark (white dot on map), not Varfell. Hafenmark now has 4 territories (T2/T4/T8/T11). Varfell has 3 (T9/T10/T12). Southernmost radiating zones documented (red arcs = Zone 1/2/3). Two Altonian mountain passes documented (purple routes: northeast near Spartfell T4, northwest near Sigurdshelm T10). Adjacency table finalized from map. Hafenvalor confirmed as Crown port sub-location of T1 area."
+  finding_id: "Annotated physical map (Screenshot_20260402-224317_2)"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.5"
+  status: applied
+  applied_commit: pending
