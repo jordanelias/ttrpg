@@ -1786,3 +1786,25 @@ patches:
   applied_to_version: "PP-184"
   status: applied
   applied_commit: pending
+
+- id: PP-181
+  date: 2026-04-02
+  severity: P1
+  description: "Editorial resolutions bundle: TC 80 all-territory sweep (ED-032/087); conviction texts Almud/Baralta/Vaynard/Himlensendt/Council/Reusfoldt (ED-080/081/082); AER track (ED-084, start=2); RDT Reformed Doctrine Track (ED-085); TD Theological Dissatisfaction; VTM full spec (ED-083, contingent); Riskbreaker Pool+Priority Tree; Crown Dominion alt victory; Church Dual Theocracy alt victory; Hafenmark Path A/B victories. All extracted to params."
+  finding_id: "ED-032/080/081/082/083/084/085/087; GAP-BG-09 through GAP-BG-15"
+  source: editorial
+  affects: [references/params_board_game.md, canon/editorial_ledger.yaml]
+  applied_to_version: "v0.6.0"
+  status: applied
+  applied_commit: pending
+
+- id: PP-182
+  date: 2026-04-02
+  severity: P1
+  description: "BG Co-Movement Resolution Protocol: three-dimensional auto-effects (Temporal=History Resonance markers, Epistemic=Attention Pool/leakage, Actualized=primary op result). Thread Tension track (TT) and triangular display added. Resolves ED-086, P-01, P-11, P-14 compliance."
+  finding_id: "ED-086 / P-14 / P-01 / P-11"
+  source: design
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.6.0"
+  status: applied
+  applied_commit: pending

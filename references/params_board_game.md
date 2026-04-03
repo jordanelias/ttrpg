@@ -232,12 +232,16 @@ VTM cap: once per season (P-31).
 | Varfell Patience Protocol | Expires on Riskbreaker exposure |
 One CB per faction at a time.
 
-## Theocracy Counter 80 Territorial Seizure
-Per-territory roll: Church Mandate vs Ob 3 (contested) or Ob 2 (neutral).
-Partial (P-30): Not seized; 1 Templar Staging Token placed.
-Overwhelming: Immediate seizure, no Standing cost.
-Success: Seizure; Theocracy Counter +2; Public Instability -1.
-[EDITORIAL: ED-032 — Theocracy Counter 80 scope: declared target territories only, or all-territory sweep? Confirm.]
+## Theocracy Counter 80 Territorial Seizure — ALL-TERRITORY SWEEP (PP-181)
+At TC = 80: Church rolls Mandate vs Ob 3 (contested) or Ob 2 (neutral) for EVERY territory
+not already Church-controlled. All rolls resolved simultaneously (one roll per territory).
+| Degree | Effect |
+|--------|--------|
+| Overwhelming | Immediate seizure, no Standing cost. |
+| Success | Seizure; TC +2; PI −1. |
+| Partial | Not seized; 1 Templar Staging Token placed. |
+| Failure | No seizure; Church Mandate −1 for this territory's resistance. |
+Fires once when TC first crosses 80. Does not re-fire on subsequent TC changes.
 
 ## Phase 4 Tiebreaking (P-18)
 2-way Stability tie: simultaneous. 3+ way: player turn order. Military-vs-military ties: always simultaneous.
@@ -454,3 +458,195 @@ Thread operations in TTRPG scenes that produce over-actualisation or Partial Loc
 - Partial Lock (TTRPG Locking): 1 Thread Debt token on corresponding BG card, via Domain Echo at Accounting
 - Successful Lock (TTRPG Locking): 1 Thread Debt token on corresponding BG card (+ chronic RS drift −1/season from season 2)
 [PP-184]
+
+## BG Co-Movement Resolution Protocol (PP-182 — resolves ED-086, P-14 compliance)
+### Authority: P-01, P-11, P-14, §21.1, §22.2
+
+Every Thread operation in BG mode produces automatic effects across all three dimensions.
+These effects are DETERMINISTIC — printed on the Thread operation reference card.
+No GM judgment permitted to skip or modify auto-effects. No exceptions.
+
+### Dimensional Auto-Effect Table
+
+For each Thread operation, resolve ALL THREE auto-effects in sequence after the roll:
+
+**Step 1 — ACTUALIZED auto-effect** (the intended result — resolves per the roll degree):
+This is the primary operation effect (RS change, Presence advance, info reveal, etc.).
+Resolves per the Thread operation's own result table.
+
+**Step 2 — TEMPORAL auto-effect** (always fires, regardless of roll degree):
+| Thread Operation Type | Temporal Auto-Effect |
+|-----------------------|----------------------|
+| Community Weaving (Restoration) | History Resonance marker placed in territory. All Thread operations in this territory next season: +1 Ob (substrate remembers the contact). |
+| Mend (Restoration) | History Resonance marker placed in territory. Gap category reduced by 1 (temporal repair leaves a scar). |
+| Investigate (any) | No marker placed. Instead: the acting faction's Thread Knowledge (TK or equivalent) advances +0.25 track (the investigation deepens temporal sensitivity). |
+| Harvest (Niflhel) | History Resonance marker placed. Substrate at this site is now marked; future Harvest here: Ob +1 cumulative (each Harvest degrades the site). |
+| VTM operation (Varfell) | History Resonance marker placed. VTM advancement check fires this season (counts as the season's qualifying event for Intel Advancement Counter). |
+| Any Thread operation on a territory with existing History Resonance marker | Additional marker placed (stack). At 3 stacked markers: territory becomes Thread Wound (permanent Ob +2 to all Thread operations, RS −1/season while any faction occupies it). |
+
+**Step 3 — EPISTEMIC auto-effect** (always fires, regardless of roll degree):
+| Thread Operation Type | Epistemic Auto-Effect |
+|-----------------------|-----------------------|
+| Community Weaving | Church Attention Pool +2 in this territory (visible community gathering). If Pool crosses threshold 3: Inquisition opens automatically. |
+| Mend | Church Attention Pool +1. Rendered-world anomaly observed (the Gap closing is perceivable as wrongness lifting). |
+| Investigate | Church Attention Pool +1. A faction with Intel in this territory (Varfell, Niflhel, or any Intel order this season): learns that a Thread investigation occurred here (not who, not outcome — only that it happened). |
+| Harvest (Niflhel) | NO Attention Pool trigger (covert operation). Instead: Niflhel's Intel Advancement Counter +1 (the Harvest teaches them what the substrate holds). |
+| VTM operation | If VTM ≥ 3: operation is visible — any faction with Intel in this territory learns Varfell performed a Thread-adjacent action. If VTM ≤ 2: no epistemic leakage. |
+
+### History Resonance Markers
+Physical tokens placed in territory during Temporal auto-effect.
+- 1 marker: +1 Ob to all Thread operations in this territory next season.
+- 2 markers: +1 Ob permanent (until Mend clears one marker).
+- 3 markers: Thread Wound (see above).
+Markers are PUBLIC — visible to all factions. They indicate substrate stress.
+A successful Mend (Success or Overwhelming) removes 1 marker from the target territory.
+
+### BG Triangular Track (§22.2 compliance)
+The three dimensions are tracked on the public board as a triangular tension display:
+- **Rendering Stability (RS):** Actualized dimension. 0–100 shared track.
+- **Thread Tension (TT):** Temporal dimension. Count of History Resonance markers across all territories (0–N). At TT ≥ 10: all Thread operation Obs +1 globally. At TT ≥ 15: Thread Wound formation triggers automatically in any territory with 2+ markers.
+- **Attentional Pressure (AP):** Epistemic dimension. Sum of all Church Attention Pool values across all territories (0–N). At AP ≥ 20: Church may deploy Inquisitor unit without a card play (autonomous escalation).
+
+The three tracks are mutually reinforcing: RS degradation increases TT formation speed; TT accumulation increases Ob costs; AP accumulation increases Church pressure. This is the BG's triangular tension system per §22.2.
+
+### Cascade Depth interaction
+Thread operation auto-effects (Steps 2 and 3) do NOT count against the Cascade Depth Cap (3 immediate effects per resolution). They are substrate-level consequences — properties of the operation's physics, not triggered effects. They always fire regardless of cascade depth.
+
+
+## TC 80 Territorial Seizure — ALL-TERRITORY SWEEP (PP-181, resolves ED-032/087)
+At TC = 80: Church rolls Mandate vs Ob 3 (contested) or Ob 2 (neutral) for EVERY territory
+not already Church-controlled. All rolls resolved simultaneously.
+Per-territory results apply: Success = seizure + TC +2 + PI −1; Partial = Templar Staging Token;
+Overwhelming = immediate seizure, no Standing cost.
+This fires once when TC first reaches 80. If Church loses control of a territory post-seizure,
+the sweep does not re-fire — only the initial TC 80 crossing triggers it.
+
+## Faction Conviction Texts — BG (PP-181, resolves ED-080/081/082)
+| Faction | Leader | Conviction |
+|---------|--------|-----------|
+| Crown | King Almud Almqvist | "The state is the only legitimate vessel of order; everything must flow through it or be consumed by it." |
+| Church | Confessor Arne Himlensendt | "The faithful carry Solmund's presence — and the Church carries the faithful." |
+| Hafenmark | Duchess Inge Baralta | "Faith is not mediated — it is lived. Anyone who is truly faithful can hear Solmund. Anyone who cannot should not rule." |
+| Varfell | Duke Magnus Vaynard | "The strongest thread is the one others cannot see — and I have spent my life learning to pull it." |
+| Guilds | Guildmaster Council | "Trade makes all things equal — the only justice that has never required a crusade." |
+| Restoration Movement | Hakan Reusfoldt | "What was torn can be woven again — but only by those who remember what wholeness felt like." |
+
+## Altonian Ecclesiastical Relationship (AER) — PP-181 (resolves ED-084)
+Shared ledger track, 0–5. Starting value: **2** (neutral).
+Represents Church's standing with Altonian power.
+
+| AER | TC Effect | IP Effect |
+|-----|-----------|-----------|
+| 0–1 | TC gains not modified by Altonia | IP escalates normally |
+| 2 (start) | Neutral | Neutral |
+| 3 | TC environmental effects +1 level (Church Altonian prestige reinforces domestic authority) | IP vanguard threshold rises: 76→80 |
+| 4 | Any TC gain > 3/season treated as TC +4 | Altonia will not invade while AER ≥ 4 |
+| 5 | Once/game: any faction's order targeting Church interests auto-fails (Altonian ultimatum) | IP immediately set to 50 and held there |
+
+**Gaining AER:** TC crosses threshold 30/50/70: +1 each. Heresy Investigation with Restoration Presence removed: +1. Church issues Interdict: +1.
+**Losing AER:** TC drops below a threshold: −1. Church Stability < 3: −1. Reformed Settlement (Baralta RDT 5): −2.
+
+## Reformed Doctrine Track (RDT) — PP-181 (resolves ED-085)
+Hafenmark private track, 0–6. Tracks spread of Baralta's theological argument (direct divine access).
+
+**Gaining RDT:**
+- Senator card (Outward) in non-Church territory: Ob 2. Success: RDT +1.
+- TC rises above 50 AND Baralta has a unit in that territory: RDT +1.
+- Crown issues Emergency Powers without Parliamentary check: RDT +1.
+- Any faction Compromises their Institutional Mandate publicly: RDT +1.
+
+**Losing RDT:**
+- Church Excommunicates Baralta: RDT −2.
+- Baralta Compromises her own Mandate: RDT −2.
+- RS drops below 30: RDT −1/season.
+
+| RDT | Effect |
+|-----|--------|
+| 0–1 | No mechanical effect |
+| 2 | TC gains this season halved (rounded down) |
+| 3 | Church Inquisition Autonomy threshold rises: AP must reach 8 (not 7) to trigger autonomous escalation |
+| 4 | TC capped at current level + 5 for remainder of game |
+| 5 | Reformed Settlement available (once/game) |
+| 6 | All Diplomacy targeting Hafenmark: +1 Ob (Reformed movement momentum) |
+
+**Reformed Settlement (RDT 5, once per game):**
+Baralta declares theological right of direct faithful access. Church must respond:
+- **Church Resists:** TC +3; RDT +1 (martyrdom); Hafenmark gains +1 Standing from Church + 1 Deed Token.
+- **Church Accommodates:** TC −5; Church Mandate triggers; Himlensendt Renown −1; Church Stability −1 (internal schism).
+- **Church Ignores:** TC unchanged; RDT +1 next season (silence validates).
+
+## Theological Dissatisfaction Track (TD) — PP-181
+Hafenmark private track, 0–5. Baralta's assessment of Almud's theological fitness to rule.
+
+**Gaining TD:** Crown issues Emergency Powers: +1. Crown submits to Altonian pressure without resistance: +1. Crown does not respond to Church incursion in Crown territory: +1.
+**Losing TD:** Crown issues Parliamentary Session policy: −1. Crown collaborates with Hafenmark on policy: −1.
+
+| TD | Effect |
+|----|--------|
+| 0–2 | No effect |
+| 3 | Hafenmark +1D to Diplomatic orders targeting Crown |
+| 4 | Baralta may declare Almud unworthy: Crown loses 1 Deed Token; Hafenmark gains 1 Standing against Crown |
+| 5 | Hafenmark permanent +1D in Crown-adjacent territories; Civil War: Hafenmark no Standing penalties for seizing Crown territories |
+
+TD is private to the Hafenmark player (faction mat tracking only).
+
+## VTM (Vaynard Thread Mastery) — Full Spec PP-181
+Private track 0–5 (VTM 3+ becomes public).
+
+**Gaining VTM:** Tribune card on Thread-active territory (TR ≥ 2): +1. Southernmost Expedition season completed with Varfell unit in T13: +1. Thread Debt incurred by any faction: +1. Successful Patience + CB in territory with RS environmental effects: +1.
+**Losing VTM:** Riskbreakers expose a Vaynard CB: −1.
+
+| VTM | Southernmost Access | Additional Capability |
+|-----|--------------------|-----------------------|
+| 0–1 | None | — |
+| 2 | First Layer | Varfell TR never capped below 3 |
+| 3 | Deep Layer | Once/game: preview top 2 Co-Movement cards; keep either, return other. VTM 3+ is PUBLIC. |
+| 4 | Deep Layer without Restoration guide | Patience Protocol max increases to 6; CB Ob −1 |
+| 5 | Core zone without Restoration Presence | Once/game: choose outcome of 1 Co-Movement card draw. Thread Debt token incurred immediately. RS −1 immediate. (Contingently approved ED-083.) |
+
+## Riskbreaker Pool and Priority Tree — PP-181
+Always NPC-controlled. Never hire-able. 3 tokens per year (refresh each Year at Accounting).
+
+**Priority Tree (evaluated at Accounting, strict order):**
+| Priority | Condition | Intervention |
+|----------|-----------|-------------|
+| 1 | Vaynard has active fabricated Casus Belli | CB fails next season automatically; Varfell +1 Standing from all factions; VTM −1 |
+| 2 | Civil War active AND triggered by fabricated CB | One faction's Military order in most contested territory: +2 Ob next season; PI +1 |
+| 3 | Church seized Crown territory AND TC > 60 | Territory Prosperity −1 next season; Church Govern there: +1 Ob |
+| 4 | Löwenritter Coup Counter = 3 AND diplomatic trigger approaching | Diplomatic action that would trigger Condition 4 fails (no faction takes the consequence) |
+| 5 | Any faction's Military targets community with Restoration Presence | Military order: +1 Ob; if fails: Restoration gains Presence in adjacent territory |
+| 6 (default) | None of above | Crown player receives 1 revealed hidden stat of faction acting most against Valoria's interests |
+
+**Riskbreaker + Almud Dominion:** If Crown Mandate ≥ 6 AND Emergency Powers issued 2+ times: Priority 2 may fire against Crown's own Military orders.
+**Riskbreaker + Vaynard escalation:** Each prior failed Vaynard CB exposed: Riskbreaker Priority 1 Ob to suppress −1 (they've built the file). At VTM 4: CB Ob to expose +1. At VTM 5: Vaynard may spend co-movement direction to suppress Riskbreaker Priority 1 once/game.
+
+## Crown Dominion Alternate Victory — PP-181
+**Path B — Dominion:** Crown controls ≥ 8 territories AND one Submission Condition met = immediate win.
+
+| Submission Condition | How Achieved | Standing Cost |
+|----------------------|-------------|---------------|
+| Church recognizes Crown supremacy over religious appointments in Crown territories | Church player accepts via Deal Token (Open Pledge), or TC drops to 0 | +2 Standing from Church; RDT trigger |
+| Varfell formally subordinates Intel to Crown oversight | Varfell Intel ≤ 1 OR Crown captures Vaynard + Governs all Varfell territories | +1 Standing from Varfell |
+| Hafenmark surrenders Parliamentary independence | PI drops to 0 OR Baralta Mandate Compromise count ≥ 4 | +2 Standing from Hafenmark; Riskbreaker Priority 2 fires vs Crown |
+
+Dominion generates maximum Standing against Crown and fires Riskbreaker evaluation.
+
+## Church Dual Theocracy Alternate Victory — PP-181
+**Path B — Dual Theocracy:** TC ≥ 60 + AER = 5 + IP ≤ 30.
+Church achieves theological governance over both Valoria and Altonia without military dominance.
+Requires diplomatic mastery rather than TC racing.
+
+## Hafenmark Victory Paths — PP-181
+**Path A — Reformed Valoria:** Reformed Settlement completed + PI ≥ 3 at game end + 3 Deed Tokens.
+**Path B — Theological Supremacy:** RDT = 6 + TD = 5 + 2 Deed Tokens.
+**Path C — Parliamentary Consolidation:** 4 Deed Tokens + PI ≥ 4 (unchanged).
+
+## VTM 5 Co-Movement Direction — Canonical Note (ED-083)
+At VTM 5, Vaynard may once per game choose the outcome of one Co-Movement card draw.
+This bends P-14 (co-movement is universal) but does not break it:
+- The operation still fires in all three dimensions (auto-effects still apply per PP-182).
+- Thread Debt token incurred immediately.
+- RS −1 immediate.
+- History Resonance marker placed (temporal auto-effect fires normally).
+- Church Attention Pool +2 (epistemic auto-effect fires normally).
+Only the actualized card outcome is shaped. The substrate cost is real and immediate.
