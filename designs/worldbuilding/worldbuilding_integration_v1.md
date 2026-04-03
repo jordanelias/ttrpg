@@ -422,9 +422,11 @@ From lore: The Valn Peninsula was home to three indigenous nations (worshipping 
 
 From lore: Altonia "enforced its cultural imperialism by systematically destroying Valnese historical records, monuments and temples."
 
-**Mechanical relevance:** This is the source of The Forgetting (P-09 / P-10 canon constraints). The institutional destruction of Einhir records is the mundane layer of the epistemological barrier. The metaphysical barrier (Thread knowledge is experiential, not transmissible) is reinforced by the historical destruction of the records that would have contextualised Thread experience.
+**Mechanical relevance:** This is a political and cultural fact, NOT the source of the Forgetting. The Forgetting is epistemological (P-08): Thread knowledge is experiential and cannot be transmitted through text, study, or institutional memory. The barrier is metaphysical — it would exist even if every Einhir record survived intact. Publishing all documents would not end it.
 
-**Restoration Movement connection:** The Revolution's core mission — recovering Einhir cultural knowledge — is not nostalgia. It is an attempt to reconstruct the context that would make Thread experience interpretable. This is why Community Weaving works: the cultural practices are the interface.
+The Altonian destruction matters politically (it is a grievance the Restoration Movement organises around, and it eliminated cultural context that had coexisted with Thread practice), but it has zero mechanical bearing on the epistemological barrier. The Church reinforces the barrier institutionally, but did not create it. Nothing created it — it is a structural feature of how Thread knowledge works (P-08: "religious poetry" — non-sensitives can recite but not act with Thread-level precision).
+
+**Restoration Movement connection:** The Revolution's mission to recover Einhir cultural knowledge is politically significant (identity, dignity, resistance to colonial erasure) but does not and cannot restore Thread capability. Community Weaving works because it is performed by Thread-sensitive practitioners using cultural forms as a practice interface — not because the cultural knowledge itself contains Thread information. A non-sensitive elder who knows every recovered Einhir text still cannot perform Thread operations (P-08 Inert Knowledge mechanic).
 
 ---
 
