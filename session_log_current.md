@@ -1,50 +1,60 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-03T_WORLDBUILDING_V2_AUDIT
-phase: AUDIT COMPLETE
-status: AWAITING EDITORIAL REVIEW
+session_id: 2026-04-02T_BAL_AUDIT_COMPLETE
+phase: SESSION CLOSED
+status: COMPLETE
 
-## WORLDBUILDING INTEGRATION v2 (audit-trimmed)
-v1 audited against P-01–P-15, cognitive load, three-mode necessity.
-v2 produced with cuts and trims applied.
+## BALANCE ANALYSIS + FIX + AUDIT CYCLE COMPLETE
 
-## AUDIT RESULTS
-- 1 canon violation found and fixed (§8.2 P-08 — Forgetting attribution, fixed in prior commit)
-- 10 proposals CUT (flavour-only, redundant with existing mechanics, or cognitive bloat)
-- 7 proposals TRIMMED to essential rule statements
-- 1 BALANCE FLAG raised (Church cumulative passive bonuses — BALANCE-FLAG-01)
-- 1 proposal routed to debate system (ED-009 Guild Arbitration)
+### Balance Fixes Applied (PP-203)
+ED-109 RESOLVED: Crown Deed 3 tightened TC<60→TC<50. Crown must actively suppress Church.
+ED-110 RESOLVED: Church Deed 4 redesigned — Diplomatic recognition (Crown Open Pledge or
+  Royal Deposition), not Military seizure of T12. Achievable via politics, not war.
+ED-110+112 RESOLVED: AER ≥ 3 generates TC +1/season additional, bypassing Hafenmark
+  domestic suppression. TC lock broken. Church has viable build path.
+ED-111 RESOLVED: Varfell Path B requires T4+T13 held 2 consecutive seasons (not just 1).
+  T13 still seizable S1 but must be defended under Crown pressure.
+ED-113 RESOLVED: T13 Stillhelm Fort raised 0→1 (warden outpost). Any march into T13
+  triggers immediate Warden Emergence check, forcing commitment to Southernmost path.
 
-## KEY CUTS
-- Ministry mechanics (4 parallel tracking systems → cut)
-- Lions Helm naval (no naval system exists → ED-NEW-10 future design question)  
-- Knights of Peace territory modifier (redundant with Lowenritter Intel)
-- 4 named Parliamentary sub-actions (redundant with existing Domain Actions)
-- Charity Network (flavour rename of existing mechanic)
-- Guild PC advancement table (character creation appendix, not faction design)
+### Stale Reference Fixes (PP-203/204)
+All T-number references updated to PP-199 final numbering throughout params:
+- Church Deed 3: T3→T14 (Himmelenger)
+- Church Deed 4: T1→redesigned (no longer territory reference)
+- TC Advancement table: T3→T14
+- TC 80 table: T1/T2/T3→T12/T5/T14
+- Ministry AP-tokens: T1/T2/T6/T7→T9/T10/T11/T12 throughout
+- Varfell Path C: T12+T13→T4+T13
+- Cardinal Temperance: T3→T14
 
-## KEPT MECHANICS (genuinely new)
-- Church four-Cardinal structure (reference + BG modifiers pending balance test)
-- Jarnstal Drift counter (0-3, mirrors Ehrenwall Coup Counter)
-- Riskbreaker loyalty divergence (ED-006 resolution)
-- Motion of No Confidence / Deposal procedure
-- Excommunication reversal paths (Penance/Banishment)
-- Church land taxation (+1 Wealth to Crown from Church territories)
-- Levy requisition rule (2/3 vassal Military, deviation on refusal)
-- Elder Solvei Kaldring (ED-005 NPC proposal)
-- Almaic Kyriakos (single IP 50 decision point, pending IP ladder check)
+### Cleanup (PP-204)
+Removed stale PP-197 territory table (13,149 chars). Single authoritative
+PP-199 definitive table remains. Removed stale PP-195 opening position notes.
 
-## BALANCE FLAG
-BALANCE-FLAG-01: Church gets 4 passive Cardinal modifiers + tithe Wealth + university Influence.
-Church already strongest faction by starting stats.
-MUST stress test before any BG integration.
+### Post-fix Verification
+All 9 balance checks: OK
+All 5 stale ref checks: CLEAN
+Single territory table: CONFIRMED
+T13 Fort 1: CONFIRMED in authoritative table
+T14 Himmelenger = Church: CONFIRMED
 
-## Gate: PASS
+## BALANCE STATE POST-FIX
+Crown: 5 deeds, Deed 3 (TC<50) now requires active Church suppression.
+Church: TC builds via AER≥3 bypass + T14 control. Deed 4 via diplomacy.
+  Primary path: AER to 3 (feasible via TC milestones), then TC races with Hafenmark no longer able to fully lock it.
+Hafenmark: unchanged — suppression still valuable (TC net +1/season with AER<3).
+Varfell Path B: valid fast path but requires 2 seasons of defended T13 hold.
 
-next_session_start:
-  priority_1: "User reviews v2 editorial items and approves/rejects."
-  priority_2: "On approval: propagate to stage6, stage13, params."
-  priority_3: "BALANCE-FLAG-01: stress test Church Cardinal BG modifiers."
-  priority_4: "ED-NEW-10: naval design decision."
+## OPEN ITEMS
+ED-108 (P2): T10 Nordhelm / T11 Mittelmark names provisional.
+Road network: deferred.
+BAL-BG-03: follow-up balance check post-fixes (next session).
+
+## Commits
+df05985f: PP-203 balance fixes + stale refs
+e92fb40a: PP-204 stale table removal
+0bda17ed: Ministry AP-token fix
+
+Gate: PASS
 ```
