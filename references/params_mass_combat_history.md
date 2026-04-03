@@ -82,3 +82,14 @@ Changes:
 - HBl personal combat cross-reference updated
 - LBl anti-levy clarification added
 Editorials: ED-087 (BG ranged modifier)
+
+## PP-175 (2026-04-02) — Mass Combat Ranged DR Scaling [PROVISIONAL ED-096]
+Source: SIM-005
+Changes:
+- Ranged DR table: scaled from personal combat (÷2, rounded up)
+  LP: personal 0/2/3/5 → mass 0/1/2/3
+  HP: personal 0/1/2/3 → mass 0/1/1/2
+  LBl: personal 0/1/2/3 → mass 0/1/1/2
+  HBl (lead): personal 0/0/1/2 → mass 0/0/1/1
+- Rationale: unscaled DRs made LP/LBl zero damage vs Light armour at all CP1-7
+- Status: PROVISIONAL pending ED-096 user confirmation

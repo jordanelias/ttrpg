@@ -1,5 +1,5 @@
 # VALORIA — MASS BATTLE SYSTEM v4
-## Version: v4.5 (PP-173 applied: ranged DR table split LP/HP/LBl/HBl, HBl personal combat reference updated)
+## Version: v4.6 (PP-175 applied: mass combat ranged DR scaled ÷2 from personal combat — provisional ED-096)
 ## Status: WORKING DESIGN — no appendix sections. Read straight through.
 ## Three-mode: TTRPG/Hybrid (Part A); Board Game (Part B); Hybrid Handoff (§B.5)
 ## All P1/P2/P3 patches applied. Gaps filled. Editorial notes flagged.
@@ -155,13 +155,17 @@ table unchanged.
 | Medium | 4 | 3 | 2 | 1 |
 | Heavy | 6 | 5 | 3 | 1 |
 
-**Ranged DR (Volley Phase):**
+**Ranged DR (Volley Phase) — MASS COMBAT SCALE [PROVISIONAL PP-175/ED-096]:**
+Mass combat DR is scaled from personal combat DR (÷2, rounded up). Personal combat DR pools are 8–15D; mass combat CP is 1–7. Using personal DR directly renders ranged units ineffective vs Light armour at all standard CP tiers.
+
 | Armour | LP (arrow) | HP (bolt) | LBl (stone) | HBl (lead sling) |
 |---|---|---|---|---|
 | None | 0 | 0 | 0 | 0 |
-| Light | 2 | 1 | 1 | 0 |
-| Medium | 3 | 2 | 2 | 1 |
-| Heavy | 5 | 3 | 3 | 2 |
+| Light | 1 | 1 | 1 | 0 |
+| Medium | 2 | 1 | 1 | 1 |
+| Heavy | 3 | 2 | 2 | 1 |
+
+Personal combat ranged DR (for reference): LP 0/2/3/5 — HP 0/1/2/3 — LBl 0/1/2/3 — HBl 0/0/1/2. See references/params_combat.md.
 
 **Ranged unit role note:** LP (archer) units are effective only vs None/Light armour. HP (crossbow) units penetrate through Medium armour. LBl (sling) units are anti-levy only — ineffective vs Light armour or higher. HBl (lead sling) units are the only personal-scale anti-armour ranged option; effective vs Light and Medium. HBl (Artillery/siege units) follow PP-091/PP-106 and are a distinct unit type.
 

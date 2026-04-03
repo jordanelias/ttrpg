@@ -1865,3 +1865,17 @@ patches:
   applied_to_version: "v0.6.1"
   status: applied
   applied_commit: pending
+
+- id: PP-175
+  date: 2026-04-02
+  severity: P1
+  description: "Mass combat ranged DR scaled from personal combat (÷2 rounded up): LP 0/1/2/3, HP 0/1/1/2, LBl 0/1/1/2, HBl 0/0/1/1. Unscaled DRs made all ranged units anti-levy-only at mass combat scale."
+  finding_id: "SIM-005-F1"
+  source: simulation
+  affects:
+    - designs/mass_combat/mass_battle_v3.md
+    - references/params_mass_combat.md
+  applied_to_version: "v4.6"
+  status: provisional
+  applied_commit: "pending"
+  note: "Provisional pending ED-096 user confirmation. Values are mechanically defensible."

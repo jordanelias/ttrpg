@@ -1739,3 +1739,47 @@ editorial_decisions:
     propagation_status: n/a
     related_ids: [ED-061]
     tags: [ranged, board_game, faction, provisional]
+
+  - id: ED-094
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: SIM-005
+    source_file: tests/sim_mass_combat_005.md
+    description: "HP crossbow units at mass combat scale: does reload apply per unit or is it abstracted away? Unit of crossbowmen staggers reloads historically."
+    full_flag_text: "[EDITORIAL: ED-094 — HP reload at mass combat scale? Provisional: No — unit staggers reloads, fires every Volley Phase.]"
+    status: provisional
+    decision: "Provisional: HP unit fires every Volley Phase. Individual reload applies only in personal combat."
+    propagation_targets: [designs/mass_combat/mass_battle_v3.md]
+    propagation_status: pending
+    related_ids: []
+    tags: [ranged, mass_combat, HP, provisional]
+
+  - id: ED-095
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: SIM-005
+    source_file: tests/sim_mass_combat_005.md
+    description: "What weapon do ranged units use in Phase 5 Engagement? Archers/slingers in melee contact cannot use ranged weapons."
+    full_flag_text: "[EDITORIAL: ED-095 — Ranged units in Engagement: what weapon type? Provisional: drawn sidearm (Light Cut).]"
+    status: provisional
+    decision: "Provisional: Ranged units in Engagement use Light Cut (drawn sidearm). This makes ranged units poor in melee — correct design intent."
+    propagation_targets: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+    propagation_status: pending
+    related_ids: []
+    tags: [ranged, mass_combat, engagement, provisional]
+
+  - id: ED-096
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: SIM-005
+    source_file: tests/sim_mass_combat_005.md
+    description: "Mass combat ranged DR scaling: unscaled personal DR (0/2/3/5 for LP) renders LP/LBl useless vs Light armour at all standard CP tiers. Provisional fix: ÷2 rounded up."
+    full_flag_text: "[EDITORIAL: ED-096 — Mass combat ranged DR: use personal DR ÷2 (rounded up) as provisional. Confirm this scaling is intended.]"
+    status: provisional
+    decision: "Provisional: mass combat ranged DR = ceil(personal_DR / 2). Produces: LP 0/1/2/3, HP 0/1/1/2, LBl 0/1/1/2, HBl 0/0/1/1."
+    propagation_targets:
+      - designs/mass_combat/mass_battle_v3.md
+      - references/params_mass_combat.md
+    propagation_status: propagated (PP-175)
+    related_ids: [ED-061]
+    tags: [ranged, mass_combat, DR, scaling, P1, provisional]

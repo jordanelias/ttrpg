@@ -187,17 +187,23 @@ Dmg Mod from unit table below. [PROVISIONAL — ED-062: confirm values]
 | Knights Templar | HeavyBlunt | +5 |
 
 
-## Ranged DR Table (Volley Phase) — PP-173
-| Armour | vs LP | vs HP | vs LBl | vs HBl (lead) | vs HBl (Artillery) |
-|--------|-------|-------|--------|---------------|-------------------|
-| None | 0 | 0 | 0 | 0 | 0 |
-| Light | 2 | 1 | 1 | 0 | 0 |
-| Medium | 3 | 2 | 2 | 1 | 1 |
-| Heavy | 5 | 3 | 3 | 2 | 2 |
+## Ranged DR Table (Volley Phase) — PP-175 [PROVISIONAL ED-096]
+Mass combat ranged DR is scaled from personal combat values (÷2, rounded up).
+Rationale: personal combat pools (8–15D) handle personal DR (0–5) cleanly; mass combat CP (1–7) does not — unscaled DR renders LP/LBl zero vs Light armour at all standard CP tiers.
 
-HBl (Artillery) uses same DR as HBl (lead sling personal) — both are blunt mass-transfer projectiles. Artillery applies PP-091 Bombard rules (flat damage), not Volley DR formula. The DR here is for reference: if Artillery is treated as a Volley unit in a simplified scenario, use HBl column.
+| Armour | vs LP | vs HP | vs LBl | vs HBl (lead sling) |
+|--------|-------|-------|--------|---------------------|
+| None | 0 | 0 | 0 | 0 |
+| Light | 1 | 1 | 1 | 0 |
+| Medium | 2 | 1 | 1 | 1 |
+| Heavy | 3 | 2 | 2 | 1 |
 
-LBl (stone sling) units: anti-levy only. Zero damage vs Light armour or higher at CP3 (E[net] 1.2, DR 1 → 0.2; effectively rounds to 0 in practice). Use LBl units only when enemy is unarmoured or lightly equipped.
+HBl (Artillery/siege): uses PP-091 Bombard (flat Strength damage). Not subject to Volley DR formula. Artillery is a separate unit type from HBl lead-sling infantry units.
+
+LP (archer) unit effectiveness at CP4 (Veteran): vs None=1.6, vs Light=0.6, vs Med=0, vs Heavy=0.
+HP (crossbow) unit effectiveness at CP4: vs None=1.6, vs Light=0.6, vs Med=0.6, vs Heavy=0.
+HBl (lead sling) unit effectiveness at CP4: vs None=1.6, vs Light=1.6, vs Med=0.6, vs Heavy=0.6.
+LBl remains anti-levy at mass scale (same DR as LP after scaling).
 
 ### BG Battle Partial outcome (PARAMS-GAP-06-MC resolved)
 Margin = |attacker net − defender net|.
@@ -207,7 +213,7 @@ Margin = |attacker net − defender net|.
 [PROVISIONAL — ED-063: confirm Partial threshold and Stability cost]
 
 
-<!-- patches: PP-173 (ranged DR split, HBl personal reference) -->
+<!-- patches: PP-173 (ranged DR split, HBl personal reference), PP-175 (mass combat DR scaled ÷2 provisional) -->
 <!-- patch_history: references/params_mass_combat_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
 ## LBl (Sling) — Prepared Defence Exception (ED-065 resolved — provisional)

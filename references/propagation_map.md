@@ -279,3 +279,10 @@ Propagation targets:
 - references/params_mass_combat.md → DONE (this commit)
 - designs/board_game/ → NOT REQUIRED (BG abstracts above weapon type)
 - references/propagation_map.md: PP-172 entry updated: mass_battle → DONE
+
+### PP-175 — Mass Combat Ranged DR Scaling (2026-04-02)
+Source: designs/mass_combat/mass_battle_v3.md §A.4 (Ranged DR table)
+Finding: SIM-005-F1
+Propagation targets:
+- references/params_mass_combat.md → DONE (this commit)
+- Pending ED-096 user confirmation — values marked PROVISIONAL
