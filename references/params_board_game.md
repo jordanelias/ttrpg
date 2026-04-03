@@ -220,9 +220,9 @@ Controls ≥ 8 territories AND one Submission Condition simultaneously (see AER/
 | 2 | Mandate ≥ 5 |
 | 3 | Control T3 continuously ≥ 2 seasons |
 | 4 | Control T1 |
-Gate: AER ≥ 3 required to declare victory. Primary victory threshold: TC ≥ 70.
+Gate: AER ≥ 3 required to declare victory. Primary victory threshold: **TC ≥ 65** (P-32).
 
-CORRECTIONS (PP-188): Reverted PP-171. Deed 4 is Control T1 (not "Crown Mandate ≤ 2"). Primary victory threshold is TC ≥ 70 per v04 — meeting all 4 Deeds plus AER ≥ 3 declares victory, but TC must be ≥ 70. Deed 1 (TC ≥ 40) is a milestone deed, not the victory threshold.
+CORRECTIONS (PP-188): Reverted PP-171. Deed 4 is Control T1 (not "Crown Mandate ≤ 2"). Primary victory threshold is TC ≥ 65 (P-32 in v05 reduced from 70). Meeting all 4 Deeds plus AER ≥ 3 plus TC ≥ 65 declares victory. Deed 1 (TC ≥ 40) is a milestone deed, not the victory threshold.
 
 ### CHURCH — Dual Theocracy (Alternate)
 TC ≥ 60 + AER = 5 + IP ≤ 30.
