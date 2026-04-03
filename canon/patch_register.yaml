@@ -2397,3 +2397,14 @@ patches:
   applied_to_version: "v0.8.4"
   status: applied
   applied_commit: pending
+
+- id: PP-211
+  date: 2026-04-02
+  severity: P2
+  description: "Cleanup: removed stale territory tables PP-197 and earlier versions from params. Only PP-199 Definitive table remains. Removed stale PP-195 opening position notes. Single authoritative territory table now in params."
+  finding_id: "AUD-POST-PP203 cleanup"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.8.4"
+  status: applied
+  applied_commit: pending
