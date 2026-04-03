@@ -1,753 +1,488 @@
-<!-- version: v0.5.2+BAL-BG-01 | source: bg_v05_simulation_and_patches.md | last_updated: 2026-04-02 -->
-<!-- PATCHES APPLIED: P-12-P-32 (prior); ST-BG-01-10, ST-INT series added 2026-04-02 -->
-<!-- PATCHES APPLIED: PP-112 (remove struck Majority-1s), PP-113-PP-122 (gap fills) 2026-04-02 -->
-<!-- NOTE: stage6_factions.md is STALE for BG mode. bg_v05 is canonical for all BG faction mechanics. -->
-<!-- STALE CHECK: BG editorial blockers pending (BG-E-30 card-hand adoption). See canon/editorial_ledger.yaml. -->
+<!-- version: v0.7.0+CORRECTED | source: valoria_bg_v04.md (canonical) + v05 corrections | last_updated: 2026-04-02 -->
+<!-- PATCHES APPLIED: PP-169-PP-187 | CORRECTIONS: PP-188 (revert PP-171/172/173/176/186 errors; fix starting values; correct faction list) -->
+<!-- AUTHORITATIVE SOURCE: designs/board_game/valoria_bg_v04.md for all faction cards, victory conditions, turn structure, starting values -->
+<!-- NOTE: v05 is a correction document only (dice system, Ob minimum, inconsistency patches). v04 B-sections are the ruleset. -->
+<!-- STALE CHECK: All known BG editorial blockers resolved as of PP-188. -->
 
-# params_board_game.md — Board Game Mode (v0.5)
+# params_board_game.md — Board Game Mode (v0.7.0)
 
-## Dice System
-d10 pool. Same engine as TTRPG.
+## FACTION ASSIGNMENT (canonical, v04 B1)
+
+### Playable Factions
+| Faction | Player Count |
+|---------|-------------|
+| Crown | 2–5 players |
+| Church of Solmund | 2–5 players |
+| Hafenmark | 2–5 players |
+| Varfell | 2–5 players |
+| Restoration Movement | 5 players only (optional) |
+| Löwenritter | Conditional: post-coup only |
+
+### NPC-Only Factions (never playable)
+Löwenritter (pre-coup), Riskbreakers, Inquisitors, Guilds, Schoenland, Niflhel, Altonia, Edeyja/Wardens.
+Ministry: NPC faction (source document not yet identified — [GAP: Ministry NPC design doc not found in any read document. User confirmed it exists. Design blocked until source located.])
+
+Note: Guilds and Niflhel do NOT have player victory conditions. All Guilds/Niflhel victory condition text from prior params versions is struck.
+
+## Dice System (v05 correction)
+d10 pool. TN 7 (standard).
 | Face | Effect |
 |------|--------|
-| 1 | -1 success |
-| 2-6 | 0 |
-| 7-9 | +1 success |
+| 1 | −1 success |
+| 2–6 | 0 |
+| 7–9 | +1 success |
 | 10 | +2 successes |
 
-**Majority-1s override: STRUCK (PP-112).** All rolls resolve through standard degree table only. Removed 2026-04-02.
-Ob minimum = 1. No modifier may push Ob below 1.
-## Pool Minimum — All Modes (PP-181)
-No penalty — Wounds, terrain, disposition, stat degradation, or modifier stacking — may reduce any dice pool below 1D. Ob penalties still apply at 1D pool. Applies to Domain Actions, Battle Resolution, Thread Operations, Parliamentary Manoeuvre, Forgetting Checks, and all other rolls.
+Net successes = sum of contributions. May be negative (treated as 0 for degree purposes = Failure).
+Ob minimum: 1. No modifier may push Ob below 1.
 
-## Ob Minimum — All Modes (PP-182)
-Ob cannot be reduced below 1 in any game mode (TTRPG, BG, Hybrid). Modifiers that would push Ob below 1 are wasted. Applies to all rolls without exception. Relevant for Restoration Thread Operations with multiple Presence markers in territory.
-
-
-## Degree Table
-| Net | Degree |
-|-----|--------|
-| >= Ob + 1 | Overwhelming [PROVISIONAL: ED-031 — BG uses Ob+1 surplus; TTRPG uses 2xOb. Intentional divergence; awaiting user confirmation.] |
+## Degree Table (PP-179 — matches TTRPG)
+| Net Successes | Degree |
+|--------------|--------|
+| ≥ 2× Ob | Overwhelming |
 | = Ob | Success |
-| Ob - 1 | Partial |
-| <= 0 | Failure |
+| 0 < net < Ob | Partial |
+| ≤ 0 | Failure |
+Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 
-## Stat Ceilings and Floors (PP-113)
-| Stat | Floor | Ceiling | Notes |
-|------|-------|---------|-------|
-| Mandate | 0 | 7 | 0 = Collapse state |
-| Influence | 1 | 7 | Cannot drop below 1 (faction remains extant) |
-| Wealth | 0 | 7 | 0 = cannot Trade or fund Wealth-requiring actions |
-| Military | 0 | 7 | 0 = cannot Muster (PP-039) |
-| Stability | 0 | 7 | 0 = Collapse trigger (P-15) |
-| Standing | 0 | 10 | No in-game benefit above 7; 10 is cosmetic maximum |
+## Starting Values (v04 B2, PP-188 correction)
+| Track | Start | Range | Notes |
+|-------|-------|-------|-------|
+| Rendering Stability (RS) | 72 | 0–100 | Rupture = shared loss |
+| Theocracy Clock (TC) | **22** | 0–100 | TC 80 = Territorial Seizure. CORRECTED from 28 (P-32 was wrong). |
+| Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard |
+| Parliament Integrity (PI) | **7** | 0–10 | CORRECTED from 5. |
+| AER | 2 | 0–5 | Near IP clock. |
+| Torben Loyalty | **3** | 0–7 | CORRECTED from 8. Active from game start. No IP trigger needed. |
+| Elske Loyalty | 4 | 0–7 | Off-board card near T4. |
+| Löwenritter Coup Counter | 0 | 0–4 | Public. Threshold 4 = coup eligible. |
+| Warden Cooperation | 0 | 0–3 | Near T13. Inactive until Warden Emergence. |
 
-## Standard Action Ob Reference (P-21)
+## Faction Starting Stats (v04 B5)
+| Faction | Mandate | Influence | Wealth | Military | Stability |
+|---------|---------|-----------|--------|----------|-----------|
+| Crown | 5 | 5 | 4 | 4 | 4 |
+| Church | 5 | 6 | 5 | 4 | 5 |
+| Hafenmark | 4 | 4 | 5 | 3 | 4 |
+| Varfell | **3** | 4 | **3** | 4 | 4 |
+| Restoration | 2 | 4 | 2 | 0 | 3 |
+| Löwenritter (post-coup) | 3 | 2 | 3 | 6 | 5 |
+| Guilds (NPC) | 3 | 4 | 6 | 2 | 5 |
+| Niflhel (NPC) | — | 5 | 4 | — | 4 |
+
+CORRECTIONS (PP-188): Varfell Mandate 4→3, Varfell Wealth 4→3. These match v04 B5.
+
+## Stat Ceilings and Floors
+| Stat | Floor | Ceiling |
+|------|-------|---------|
+| Mandate | 0 | 7 |
+| Influence | 1 | 7 |
+| Wealth | 0 | 7 |
+| Military | 0 | 7 |
+| Stability | 0 | 7 |
+
+## Standard Action Ob Reference (P-21, v04 B3)
 | Action | Default Ob | Key Modifiers |
 |--------|-----------|---------------|
-| Muster (Legionary Inward) | 2 | -1 T2, -1 T11 |
-| March (Legionary Outward) | 2 | +1 T8 (terrain) |
-| Govern (Consul Inward) | 2 | -1 own capital; -1 with Architectus |
-| Trade (Consul Outward) | 2 | +1 Institutional Pressure>=30; +1 T10 |
-| Diplomacy (Senator Outward) | 2 | -1 Diplomat card; -1 own territory; +1 Standing>=3 vs target |
-| Decree (Senator Inward) | 2 | +1 non-home territory; -1 capital |
-| Parliamentary Manoeuvre | 2 | +1 Public Instability<=2; -1 Public Instability>=7 |
-| Investigate (Tribune Inward) | 2 | -1 own territory; +1 Niflhel-active |
-| Spy (Tribune Outward) | 2 | +1 heavily fortified |
-| Thread Operation | 2 | -1 per Restoration Presence marker; see Thread procedure |
-| Community Organising | 2 | — |
-| Community Project start | 1 | — |
-| Community Project advance | 2 | — |
-| Fortify | 2 | — |
-| Forgetting Check | 1 | -1 Restoration Weaver present; -1 VTM 2+ |
+| Muster (Legionary Inward) | 2 | −1 T2 garrison |
+| March (Legionary Outward) | No roll | Contested entry = Battle |
+| Govern (Consul Inward) | Prosperity ÷ 2 (round up, min 1) | −1 own capital |
+| Trade (Consul Outward) | Prosperity ÷ 3 (round up, min 1) | +1 IP≥30; +1 T10 |
+| Diplomacy vs NPC (Senator Outward) | NPC Stability ÷ 2 (round up) | — |
+| Diplomacy between players | Negotiated | Not a roll |
+| Thread Operation (Pontifex/Weaver) | Ob 2 base | See PP-182 co-movement protocol |
+| Investigate/Intel (Tribune) | 2 | +2 Ob in Church territory with Inquisitor |
+| Spy (Tribune Outward) | Target Intel ÷ 2 round up | — |
+| Parliamentary Manoeuvre (Hafenmark) | Opponent Influence ÷ 2 round up | — |
+| Community Organising (Restoration) | 2 | — |
+| Community Weaving (Restoration) | (100−RS)÷20 round up min 1 | −1 per Presence marker in territory |
+| Fortify | Fort level + 1 | — |
 
 All Obs: floor 1.
 
-## Faction Starting Stats
-| Faction | Mandate | Influence | Wealth | Military | Intel | Stability | Notes |
-|---------|---------|-----------|--------|----------|-------|-----------|-------|
-| Crown | 5 | 5 | 4 | 4 | — | 4 | |
-| Church | 5 | 6 | 5 | 4 | — | 5 | Starting Theocracy Counter: 28 (P-32) |
-| Hafenmark | 4 | 4 | 5 | 3 | — | 4 | |
-| Varfell | 3 | 4 | 3 | 4 | — | 4 | BG-specific (Mandate/Wealth 3, not TTRPG 4) |
-| Restoration | 2 | 4 | 2 | 0 | — | 3 | 5-player only |
-| Lowenritter | 3 | 2 | — | 6 | — | 4 | No Wealth; enters at coup trigger |
-| Niflhel | — | 5 | 4 | — | — | 4 | |
-| Schoenland | — | — | — | — | — | — | Spoiler only; not playable |
-
-## Clock Starting Values and Targets
-| Clock | Start | Floor | Ceiling | Win/Loss Threshold |
-|-------|-------|-------|---------|--------------------|
-| Theocracy Counter (Theocracy Clock) | 28 (P-32) | 0 | 100 [PROVISIONAL: ED-056 — no mechanical effect above 80 except seizure; 100 is cosmetic] | 65 = Church Holy State (P-32) |
-| Rendering Stability (RS) | 72 | 0 | 100 | Rendering Stability = 0 = Rupture (all factions lose) |
-| Institutional Pressure (Invasion Pressure) | 20 | 0 | 100 [PROVISIONAL: PP-114 — post-80 escalation table applies] | 75 = Vanguard (AER <=2); 80 = Vanguard (AER 3); AER 4: Institutional Pressure cap 60; AER 5: Institutional Pressure fixed 50 |
-| Public Instability (Parliamentary Integrity) | 5 | 0 | 10 [PROVISIONAL: ED-055] | Public Instability 0 = Parliament dissolved + Lowenritter coup trigger [PROVISIONAL: ED-055] |
-
-## Public Instability Thresholds (PP-115) [PROVISIONAL: ED-055 — user confirmation required]
-| Public Instability | Effect |
-|----|--------|
-| 10 | Full Parliamentary authority. Crown Policy Instrument requires Public Instability vote to override. |
-| 7-9 | Standard operation. Parliamentary Manoeuvre: -1 Ob. |
-| 5-6 | Starting range. No modifier. |
-| 3-4 | Degraded Parliament. Church Assert/Suppress resolution Ob -1. |
-| 1-2 | Near-collapse. Lowenritter coup condition met if Military conditions also satisfied. |
-| 0 | Parliament dissolved. Lowenritter coup fires immediately if coup trigger conditions otherwise met. All Diplomacy between factions +1 Ob (no institutional mediation). |
-
-## Institutional Pressure Post-80 Escalation (PP-114) [PROVISIONAL]
-| Institutional Pressure | Effect |
-|----|--------|
-| 80 | Altonian Vanguard deployed. Standard threshold. |
-| 81-89 | Vanguard advances one territory/season automatically. |
-| 90-99 | Vanguard reinforced: Altonian Military treated as +2 all engagements. |
-| 100 | Altonian Conquest: campaign ends, shared defeat. |
-
-## Institutional Pressure Advancement Formula (P-28)
-Institutional Pressure has NO automatic per-season advance. Event-driven only.
-| Condition | Institutional Pressure Change |
-|-----------|-----------|
-| Base per season | 0 |
-| Theocracy Counter > 60 | +1/season |
-| Altonian Trade Mission refused (Institutional Pressure 30 event) | +1 |
-| Torben sent to Altonia | -3/season; +5 immediately on compliance |
-| Torben refuses (Crown refuses at Institutional Pressure 40) | +3 immediately |
-| Elske returns to Valoria | +5 immediately |
-| Schoenland Proxy Arms Deal active (Institutional Pressure 45) | +2 this season |
-| Crown Free Trade Decree | -1 |
-| AER >= 4 | Institutional Pressure cannot advance above 60 |
-| AER = 5 | Institutional Pressure fixed at 50 |
-| Grand Diplomatic Scene milestone | -5 immediately |
-| Military success vs Altonian interest | -2 |
-| Altonian Vanguard repelled | -5 |
-
-## Theocracy Counter Advancement (key sources)
-| Source | Theocracy Counter Change |
-|--------|-----------|
-| T3 control (base) | +1/season |
-| Church Assert (mandatory at Theocracy Counter > 50) | +1/season |
-| Heresy Investigation confirmed | +0.5 |
-| Templar deployment | varies |
-| Theocracy Counter 80 Seizure success (per territory) | +2 |
-| Hafenmark Baralta suppression (Mandate >= 4) | -1/season |
-| Grand Debate challenging Church authority | -2 (Overwhelming) |
-| Reformed Settlement (Church Resists) | +3 |
-| Starting value (P-32) | 28 |
-
-## Theocracy Counter Seasonal Cap (PP-116) [PROVISIONAL: F-43 / ED-056]
-| Source category | Max change/season |
-|----------------|------------------|
-| Domain Actions only | +-3 |
-| All sources combined | +-5 |
-| Theocracy Counter 80 Seizure gains | NOT counted against cap. Seizure is an event resolution. |
-
-## Cascade Depth Cap
-Maximum 3 immediate mechanical effects per card play resolution step.
-Clock changes (Rendering Stability, Theocracy Counter, Institutional Pressure, Public Instability) count against the cap (P-29).
-Excess effects queue to Accounting Phase 5 Step 8.
-
-## Faction Collapse (P-15) and Recovery (PP-117) [PROVISIONAL: ED-053]
-On Stability = 0: (1) Mandate -> 0 immediately. (2) All other stats freeze. (3) Collapse state up to 2 seasons.
-
-**Collapse exit (PP-117) [PROVISIONAL: ED-053 — user confirmation required]:**
-Exit when ALL met:
-1. At least 1 full season elapsed in collapse state.
-2. No hostile Domain Action targeting that faction this season.
-3. Allied faction (Pledge active) or own player takes Govern Ob 2 in any formerly controlled territory. Success: Stability -> 1, exit collapse.
-4. Auto-exit at Season 2 end if not earlier: Stability 1, Mandate 0. Faction functional but politically hollow.
-
-## Simultaneous Catastrophe (PP-118 rev.1) [PROVISIONAL: ED-054]
-Accounting sequence context: Institutional Pressure Advancement at Step 4. Rendering Stability adjustment at Step 6. Victory checks at Step 12.
-1. Institutional Pressure = 80 threshold fires at Step 4: Vanguard deploys as a board event. Campaign does not end at Step 4.
-2. Rendering Stability = 0 (Rupture) fires at Step 6. Campaign ends as shared loss. Rupture takes precedence over all other unresolved win conditions.
-3. Restoration pre-check at Step 5: Before Rendering Stability losses applied at Step 6, check if Restoration has 5 Presence markers in 5 non-adjacent territories held 2 consecutive seasons AND Rendering Stability >= 1 at Step 5. If both: Restoration wins immediately. Step 6 does not fire.
-4. If Rendering Stability = 0 entering Step 5 (prior loss same phase): Restoration cannot win. Rupture fires Step 6.
-5. Church Holy State (Theocracy Counter >= 65): declared at Step 12. If Restoration wins at Step 5 in same Accounting phase: Restoration wins; Step 12 not reached.
-6. Simultaneous multi-faction Step 12 wins: [EDITORIAL: ED-054 — confirm co-victory or Game Master ruling for simultaneous Step 12 conditions.] Victory check fires before Rendering Stability loss application.
-
-## Battle Resolution (P-16)
-Both sides roll simultaneously. Compare net successes.
-- Attacker net > Defender net: Attacker wins.
-- Defender net > Attacker net: Defender wins.
-- Equal nets: Stalemate. Both Cohesion -1. No territorial change.
-
-## BG Unit Cohesion (PP-119) [PROVISIONAL: GAP-BG-07]
-Per-unit integer track (0-6).
-| Unit Type | Starting Cohesion |
-|-----------|------------------|
-| Levy | 3 |
-| Infantry | 4 |
-| Elite | 5 |
-| Cavalry | 4 |
-| Artillery | 3 |
-| Thread Corps | 4 |
-At Cohesion 0: unit destroyed. Recovery: +1/season at Accounting if no battle engagement this season.
-
-## BG Thread Operations — Coherence Absence (PP-120) [PROVISIONAL: ED-057]
-BG Thread Operations produce NO Coherence cost. Coherence is TTRPG personal-scale only.
-BG Thread op costs: Ob penalties, Thread Debt tokens, Rendering Stability changes, Co-Movement card draws only.
-Hybrid: Player Character practitioners incur personal Coherence per TTRPG rules. Cascade Step 3 applies consequences.
-
-## Reformed Settlement — Diplomatic Penalty Permanent (PP-121) [PROVISIONAL: ED-058]
-+1 Ob to all Diplomacy targeting Hafenmark after Reformed Settlement (RDT >= 5) is PERMANENT. No reversal mechanic.
-[EDITORIAL: ED-058 — confirm no reversal mechanic. If Treaty of Accommodation or Grand Debate win should reset, design that reversal.]
-
-## CP Awards in Hybrid Mode (PP-122) [PROVISIONAL]
-Procedure for Player Character faction leaders earning Character Points (CP) from BG Domain Actions:
-1. Player Character declares which Belief the action expresses before rolling.
-2. Success or Overwhelming: CP +1 (Belief Engagement).
-3. Institutional Mandate Uphold/Compromise: CP +1 if Player Character articulates Conviction link regardless of outcome.
-4. Worked example: Crown Player Character holds Belief "Parliament must be preserved." Crown Decree degrading Public Instability = Belief conflict. Crown Player Character Compromising Mandate to block the Decree earns CP +1.
-5. BG-only (no PCs): CP does not apply.
-
-## Prosperity (P-22)
-Territory-level track (0-5). Not a faction stat.
-Govern Success: Prosperity +1. Govern Failure: -1. Year-End: Prosperity >= 3 -> +1 Wealth. Prosperity >= 5 -> +2 Wealth.
-Starting Prosperity: T1:4 T2:3 T3:4 T4:2 T5:3 T6:5 T7:4 T8:3 T9:3 T10:2 T11:4 T12:1 T13:1 T14:3 T15:4.
-
-## Fog of War (Hybrid, P-20)
-Stats 1-3: Poor. Stats 5-7: Good. Stat = 4: roll 1d6 (NOT d10) — 1-3 Poor, 4-6 Good.
-
-## Forgetting Check (P-26)
-| Faction | Pool |
-|---------|------|
-| Restoration | Influence + 1D per Presence marker in T13 |
-| Varfell | VTM level in dice |
-| Other factions | Wealth / 2 (round up) |
-Ob 1 (floor). Thread-qualified presence: may reroll one die once. Hybrid: Player Character Spirit + Thread Sensitivity/10 (round down).
-
-## VTM (Varfell Thread Monitoring)
-Bootstrapping (P-27): Roll Influence vs Ob 1. Success/Overwhelming: VTM +1. Partial: Latent VTM token. Failure: no retry.
-VTM cap: once per season (P-31).
-
-| VTM | Ability |
-|-----|---------|
-| 1 | Tribune range: any non-adjacent territory |
-| 2 | Thread Resonance: while Tribune in thread-active territory |
-| 3 | Patience Counter tracks publicly |
-| 4 | 4 Player Character spend: Tribune Outward any territory |
-| 5 | Once/game: choose Actualized dimension of one Co-Movement draw |
-
-## Thread Debt (P-24)
-+1 Ob to NEXT Thread operation in that territory (not current).
-
-## Casus Belli Expiration (P-14)
-| Source | Expiry |
-|--------|--------|
-| Treaty betrayal | Permanent until used |
-| Brutal disposition vs civilians | 3 seasons unused |
-| Fabricated Heresy Investigation | 3 seasons unused |
-| Varfell Patience Protocol | Expires on Riskbreaker exposure |
-One CB per faction at a time.
-
-## Theocracy Counter 80 Territorial Seizure — CAPPED SWEEP (PP-181, PP-183)
-At TC = 80: Church targets up to 4 territories/season (Church player chooses).
-Remaining territories may be targeted in subsequent seasons.
-Roll Church Mandate vs Ob 3 (contested) or Ob 2 (neutral) per targeted territory.
-| Degree | Effect |
-|--------|--------|
-| Overwhelming | Immediate seizure, no Standing cost. |
-| Success | Seizure; TC +2 (capped: max TC +4 total from Seizure per season); PI −1. |
-| Partial | Not seized; 1 Templar Staging Token placed. |
-| Failure | No seizure; Church Mandate −1 for this territory's resistance. |
-Fires each season while TC ≥ 80. Church may continue targeting un-seized territories
-in subsequent seasons at same Ob.
-
-## Phase 4 Tiebreaking (P-18)
-2-way Stability tie: simultaneous. 3+ way: player turn order. Military-vs-military ties: always simultaneous.
-
-## Church Holy State Victory (P-32)
-Theocracy Counter >= 65 (not 70). Starting Theocracy Counter 28 (not 22).
-
-## Cognitive Load Estimates
-| System | Load |
-|--------|------|
-| Card hand management | 2/10 |
-| Degree table | 2/10 |
-| Thread Operation (8 steps with card) | 3/10 |
-| Co-Movement Cards | 5/10 per draw |
-| Faction private tracks | 4/10 per player |
-| Phase 4 priority order | 5/10 |
-| Klapp Trajectory | 7/10 |
-| Phase 5 Accounting (13+ steps) | 8/10 |
-| Overall (with reference cards) | 6.5/10 |
-| Overall hybrid (with cards) | 8.0/10 |
-
-<!-- patch_history: references/params_board_game_history.md -->
-<!-- canonical_sources: references/canonical_sources.yaml -->
-
-## Season and Phase Structure (PP-169, extracted from compilation B4)
-One game round = one season. Campaign year = 4 rounds. Standard: 12-16 rounds. Extended: 20 rounds.
-
-| Phase | Name | Description |
-|-------|------|-------------|
-| 1 | Season Card | Flip top Event deck card. Modifier public. |
-| 2 | Planning | All players place 5 Order tokens face-down simultaneously. Placement order: lowest Stability first. Ties: roll. |
-| 3 | Intel Reveal | Niflhel (and Intel-capable factions) reveals prior season Intel results. |
-| 4 | Order Resolution | Flip all orders. Resolve by priority sequence. |
-| 5 | Seasonal Accounting | Clocks advance. Stability checks. Stat changes. CP awards. Victory checks. |
-| 6 | Cleanup | Remove temporary effects. Advance round tracker. Draw replacement cards. |
-
-Order tokens: 5 per faction per season. Up to 3 in one territory. 1 token = 1 Domain Action. Faction Unique Power uses designated token.
-
-## Order Priority Table (PP-169, from compilation B4)
+## Phase 4 Resolution Priority Order (v04 B4 — CORRECTED from stage_bg_proposal_v02 order)
 | Priority | Order Type | Notes |
 |----------|-----------|-------|
-| 1 | Thread Operations | RS change first; Co-Movement fires before all other resolution. |
-| 2 | Military (March, Assault, Siege) | Battles resolve simultaneously per territory. |
-| 3 | Intel and Sabotage | Outcomes apply before economic/governance. |
-| 4 | Domain Actions (Govern, Trade, Muster, Diplomacy) | All standard Domain Actions. |
-| 5 | Unique Powers | Faction Unique Power resolves last. |
-| 6 | Decree / Parliamentary Manoeuvre | Take effect at next accounting if timing ambiguous. |
+| 1 | Intel/Covert (Tribune) | Executes first; shapes information before other actions |
+| 2 | Military (Legionary) — Battle | Battles resolve simultaneously per territory |
+| 3 | Domain (Consul, Prefect, Architectus, Colonist) | Govern, Trade, Muster, March |
+| 4 | Social (Senator) | Decree, Parliamentary Manoeuvre, Diplomacy |
+| 5 | Thread operations (Pontifex, Weaver) | See PP-182 for three-dimensional auto-effects |
+| 6 | Special/Unique Powers | Royal Decree, Excommunication, VTM ops, Sovereign Authority |
+| 7 | Project advancement (Praetor) | Community Projects advance |
 
-## Unit Muster Ob Table (PP-169, from compilation B6)
-| Unit Type | Muster Ob | Prerequisite |
-|-----------|----------|--------------|
+Within tier: descending Stability order. Ties: simultaneous.
+NOTE: This corrects the stage_bg_proposal_v02 order (which put Thread Ops first). v04 is authoritative.
+
+## Phase 5 Seasonal Accounting (v04 B4 — CORRECTED)
+Execute in strict order:
+1. Apply all pending attribute changes from resolved orders.
+2. Faction Stability checks: any faction with ≥2 attribute loss this season: Stability pool vs Ob = loss magnitude.
+3. Advance Cooldown Track (all items −1 slot; at 0: return to hand).
+4. Clock advances: RS baseline drift (−1 at Year-End/Winter only). TC per formula. IP per Altonian pressure table. PI changes.
+5. Church Attention Pool: resolve threshold responses. Pool resets to 0.
+6. Thread Debt: tokens >1 season old: RS −1/token. Serviced tokens: no drain; permanent residual RS −0.5 recorded.
+7. Clear Thread Resonance markers (all factions reset).
+8. Check threshold events: draw one Event Card per threshold crossed.
+8b. Milestone Bonus check.
+9. Warden Emergence check.
+9b. Vaynard-Edeyja same-season rule: if Warden Emergence at Step 9 AND VTM ≥ 4 AND Varfell played Tribune Inward in T13: Warden Cooperation +1 immediately.
+10. Warden Cooperation check.
+10b. Torben/Elske Loyalty events: apply Loyalty changes.
+11. Hollow Victory totals: announced publicly, recorded.
+12. Victory condition check. All Deed Tokens simultaneously = declare victory.
+13. Season marker advances. If Winter (every 4th season): Year-End Accounting (B11).
+
+## Year-End Accounting (every 4th season = Winter, v04 B11)
+1. Apply Year-End TC and RS fractions.
+2. RS baseline drift −1 (annual world degradation).
+3. Löwenritter (if active): raise one free unit; Prosperity −1.
+4. Torben Loyalty Year-End modifiers: Crown PI ≥ 5 →+1; Crown upheld Mandate 2+ consecutive seasons →+1; Löwenritter PI ≥ 3 without Emergency Powers →+1.
+5. Elske Loyalty Year-End modifiers.
+6. Hollow Victory totals announced publicly.
+7. Once-Per-Year effects trigger.
+8. Age track (optional Long Campaign only).
+9. Check TC Year-End fractions for threshold crossings.
+10. Season resets to Spring. Campaign year advances.
+
+## Unit Muster Ob Table (from v04 B8 + compilation B6)
+| Unit Type | Muster Ob | Prerequisites |
+|-----------|----------|---------------|
 | Light Infantry | 1 | None |
-| Heavy Infantry | 2 | Territory Prosperity >= 5 + Wealth Ob 2 |
-| Cavalry | 3 | Territory Prosperity >= 6 or officer History |
+| Heavy Infantry | 2 | Prosperity ≥ 5 + Wealth Ob 2 |
+| Cavalry | 3 | Prosperity ≥ 6 or officer History |
 | Ranged | 2 | Officer with Ranged proficiency |
 | Artillery | 4 | Wealth Ob 4 + 1 season construction |
-| Knights Templar | Church only | Not Muster-able by standard order |
+| Knights Templar | Church only | Not standard Muster |
 
-Unit starting Cohesion: Light Infantry 3, Heavy Infantry 4, Cavalry 4, Ranged 3, Artillery 3, Thread Corps 4.
+Unit starting Cohesion: Light Infantry 3, Heavy Infantry 4, Cavalry 4, Ranged 3, Artillery 3.
 
-## Faction Capital Territories (PP-169, from compilation B3)
-| Faction | Capital Territory | Territory Number |
-|---------|------------------|-----------------|
+## Faction Capital Territories (v04 B2)
+| Faction | Capital | Territory |
+|---------|---------|-----------|
 | Crown | Valorsplatz | T1 |
 | Church | Himmelenger | T3 |
 | Hafenmark | Hafenvalor | T6 |
 | Varfell | Varfell | T9 |
-| Guilds | Sigurdshelm | T10 |
-| Niflhel | Sigurdshelm | T10 (contested; see Niflhel victory condition) |
-| Restoration Movement | No fixed capital | — |
-| Lowenritter | Arnesheld | T5 |
+| Guilds (NPC) | Halvardshelm | T11 |
+| Niflhel (NPC) | Sigurdshalm | T10 |
+| Restoration | No capital | — |
+| Löwenritter | Arnesheld | T5 |
 
+## Clock Environmental Effects (v04 B2)
 
-## Overwhelming Bonuses — Domain Actions (PP-183) [ED-086 resolved]
-Overwhelming (net ≥ 2×Ob) produces the Success effect PLUS the following bonus:
+### Rendering Stability (RS) Effects
+| RS Range | Effect |
+|----------|--------|
+| 72–50 | No modifier |
+| 49–30 | Thread operations: −1 Ob. Non-Thread orders in T12/T13: +1 Ob |
+| 29–20 | As above. Entity encounters possible in T12/T13. All Muster: +1 Ob |
+| Below 20 | All orders all territories: +1 Ob. Community Projects +1/season. Entity encounters all uncontrolled territories |
 
-| Domain Action | Overwhelming Bonus |
-|---|---|
-| Govern | Prosperity +1 additional (total +2 in territory) |
-| Trade | Wealth +1 additional OR Institutional Pressure −1 (acting faction chooses) |
-| Muster | Mustered unit starts at Cohesion +1 above standard |
-| Diplomacy | Target faction Standing −1 OR acting faction Standing +1 (acting faction chooses) |
-| Decree | Effect applies immediately (not delayed to next Accounting) |
-| Parliamentary Manoeuvre | Delay effect + opponent Stability −1 (PP-170 already stated; confirmed) |
-| Investigate | One additional hidden datum revealed |
-| Spy | Identity NOT exposed AND one additional intel datum |
-| Thread Operation | Per Thread degree table (Weave Overwhelming: RS +2; Mend Overwhelming: Gap closed + RS +2) |
-| Community Organising | +1 Ob removed from territory's next Community action |
-| Fortify | Fortification begins with Cohesion +1 |
-| Parliamentary Vote | Winner gains +1 Mandate (not PI) in addition to PI change |
+### Theocracy Clock (TC) Effects
+| TC Range | Effect |
+|----------|--------|
+| Below 30 | No modifier |
+| 30–49 | Church orders: −1 Ob in Church-held territory |
+| 50–69 | Church orders: −1 Ob everywhere. Non-Church Diplomacy targeting Church: +1 Ob. Mandatory Assert/Suppress each season |
+| 70+ | As above. Territorial Seizure protocol active. AER begins modifying TC gains |
 
-## Govern — Full Degree Table (PP-184) [ED-085 resolved]
-| Degree | Effect |
-|--------|--------|
-| Overwhelming | Prosperity +2 in territory |
-| Success | Prosperity +1 in territory |
-| Partial | Prosperity +1 in territory + Minor complication (player chooses: Standing −1 or Public Instability +1) |
-| Failure | Prosperity −1 in territory + Moderate complication (mandatory per Fail Forward table) |
+### Invasion Pressure (IP) Effects
+| IP Range | Effect |
+|----------|--------|
+| Below 30 | Trade with Schoenland: +1D |
+| 30–59 | Trade with Schoenland: +1 Ob. All factions: +1D to Intel orders |
+| 60–74 | Trade disrupted: +2 Ob. Proxy at T4: +1D military |
+| 75+ | Altonian Vanguard deployed. AER ≥ 4: threshold rises to 80. AER 5: IP held at 50 |
 
-## Parliamentary Manoeuvre Results (PP-170 — fills spec gap PG-07)
-Roll: Mandate vs Ob = opponent Influence / 2 (round up).
-| Degree | Effect |
-|--------|--------|
-| Overwhelming | One pending Domain Action outcome delayed 1 season (cannot delay Unique Powers or Decrees) + opponent Stability -1 for 1 season. |
-| Success | One pending Domain Action outcome delayed 1 season (cannot delay Unique Powers or Decrees). |
-| Partial | No effect. [PP-170: explicit ruling.] |
-| Failure | No effect. Hafenmark Mandate -1 for 1 season (procedural blowback). |
+## Victory Conditions (v04 B5 — PP-188 corrections)
 
-## Theocracy Counter Starting Value — Canonical
-TC starts at 28 (P-32). Compilation B1 states 15 — STALE (pre-P-32). Use 28.
-
-## Mandate Recovery — see PP-174 section below (Victory Condition Patches).
-
-## Victory Condition Patches (PP-171 through PP-176)
-
-### Church Deed 4 — PATCHED (PP-171)
-~~Control Valorsplatz~~
-**NEW: Crown Mandate ≤ 2 for 2 consecutive seasons.**
-Rationale: Valorsplatz seizure requires TC ≥ 70 + military defeat of Crown, unreachable in standard 12–16 round game. Institutional erosion (Crown political collapse) is the canonical theocratic capture mechanism.
-
-### Crown Deed 4 — PATCHED (PP-172)
-~~Torben Loyalty Clock ≥ 5~~
-**NEW: Torben Loyalty Clock ≥ 5 OR Institutional Pressure < 30 at game end.**
-Rationale: If IP never crosses 30, the Loyalty Clock never activates (I-01 event not triggered). Without escape clause, Deed 4 is neither met nor checkable — undefined state.
-
-### Intel Stat Advancement — ADDED (PP-173)
-No prior mechanic defined. New rule:
-Each season a faction executes at least 1 successful Intel order or Quiet Network (Intelligence mode) order: that faction advances their Intel track +0.25. When the track reaches the next integer: Intel stat increases by 1.
-- Advancement cap: Intel stat max = 7.
-- Max track advance per season: +0.25 (one qualifying success per season; additional successes do not stack).
-- "Successful" = Success or Overwhelming result on the roll.
-
-### Mandate Recovery — ADDED (PP-174)
-No prior mechanic defined. New rule:
-Govern Overwhelming in a faction's own capital territory: Mandate +1 (to a maximum of the faction's printed starting Mandate value).
-- Once per season maximum.
-- Does not apply to Govern in non-capital territories.
-- Does not apply to Govern Success (only Overwhelming triggers recovery).
-- Faction starting Mandate values (recovery caps): Crown 5, Church 5, Hafenmark 4, Varfell 4, Guilds 3, Niflhel n/a (no Mandate stat).
-
-### Guild Favour Advancement — EXPLICIT (PP-175)
-Previously implied, now stated:
-Govern Success in a territory: Guild Favour +1 in that territory (Guilds only; other factions do not have a Favour track).
-Govern Overwhelming in a territory: Guild Favour +2 in that territory.
-Govern Failure: Guild Favour −1 in that territory.
-Starting Guild Favour: 3 in all Guilds-controlled territories (T8 Eidursjo, T11 Halvardshelm). 0 in all other territories.
-Ceiling: 10. No in-game effect above 7 except scoring.
-
-### Varfell Deed 1 — PATCHED (PP-176)
-~~Intel ≥ 6~~
-**NEW: Intel ≥ 5.**
-Rationale: Intel 6 from starting value 4 requires ~16 seasons of successful Intel orders at median — exceeds standard 12-round game. Intel 5 requires ~8 seasons, achievable mid-game. Varfell and Niflhel both target Intel 5, creating competitive parity on this deed dimension.
-
-## Deed Token Summary — Post-Patch (PP-171 through PP-176)
-
-### Crown
+### CROWN — Constitutional Stability (Primary, 5 Deeds + PI ≥ 3 gate)
 | Deed | Condition |
 |------|-----------|
 | 1 | Mandate ≥ 5 |
-| 2 | Control Valorsplatz + Gransol + ≥ 3 other territories (total ≥ 5) (PP-186) |
-| 3 | Theocracy Counter < 60 and Institutional Pressure < 75 simultaneously |
-| 4 | Torben Loyalty ≥ 5 OR Institutional Pressure < 30 at game end (PP-172) |
+| 2 | Control T1 + T2 + ≥ 2 other territories (total ≥ 4) |
+| 3 | TC < 60 and IP < 75 simultaneously |
+| 4 | PI ≥ 5 |
+| 5 | Torben Loyalty ≥ 5 |
+Gate: PI ≥ 3 to declare victory (not a Deed).
 
-### Church
+CORRECTIONS (PP-188): Added Deed 4 (PI ≥ 5) and Deed 5 (Torben Loyalty ≥ 5) which were missing. Removed IP escape clause from PP-172 (not in v04). Deed 2 territory count reverted to ≥4 (PP-186 was wrong — v04 says T1+T2+≥2 others = 4 total, not 5).
+
+### CROWN — Dominion (Alternate)
+Controls ≥ 8 territories AND one Submission Condition simultaneously (see AER/faction section).
+
+### CHURCH — Holy State (Primary, 4 Deeds + AER ≥ 3 gate)
 | Deed | Condition |
 |------|-----------|
-| 1 | Theocracy Counter ≥ 40 |
-| 2 | Church Mandate ≥ 5 |
-| 3 | Control Himmelenger (continuously since game start or recaptured) |
-| 4 | Crown Mandate ≤ 2 for 2 consecutive seasons (PP-171) |
+| 1 | TC ≥ 40 |
+| 2 | Mandate ≥ 5 |
+| 3 | Control T3 continuously ≥ 2 seasons |
+| 4 | Control T1 |
+Gate: AER ≥ 3 required to declare victory. Primary victory threshold: TC ≥ 70.
 
-### Hafenmark (unchanged)
+CORRECTIONS (PP-188): Reverted PP-171. Deed 4 is Control T1 (not "Crown Mandate ≤ 2"). Primary victory threshold is TC ≥ 70 per v04 — meeting all 4 Deeds plus AER ≥ 3 declares victory, but TC must be ≥ 70. Deed 1 (TC ≥ 40) is a milestone deed, not the victory threshold.
+
+### CHURCH — Dual Theocracy (Alternate)
+TC ≥ 60 + AER = 5 + IP ≤ 30.
+
+### HAFENMARK — Three Paths (v04 B5)
+Path A — Reformed Valoria (3 Deeds): RDT ≥ 4, PI ≥ 3, Reformed Settlement completed.
+Path B — Theological Supremacy (2 Deeds): RDT = 6, TD = 5.
+Path C — Parliamentary Consolidation (4 Deeds): PI ≥ 4, Mandate ≥ 4, control T6, no active Heresy Investigation ≥ 2 seasons.
+
+### VARFELL — Three Paths (v04 B5)
+Path A — Intelligence Hegemony (3 Deeds): VTM ≥ 3, control ≥ 3 territories, all other faction stats revealed at least once.
+Path B — Southernmost Dominion (2 Deeds): control T12 + T13 simultaneously, VTM ≥ 3.
+Path C — Thread Supremacy (3 Deeds): VTM = 5, control T12 + T13 + ≥ 1 other, RS ≥ 50 at Accounting.
+
+CORRECTIONS (PP-188): Removed Intel-stat-based deeds (PP-173, PP-176 — no basis in v04). Reverted to v04 path structure.
+
+### RESTORATION MOVEMENT — Network Victory
+5 Presence markers in 5 non-adjacent territories, held 2 consecutive seasons + RS ≥ 50.
+Or co-victory with compatible faction (see Co-Victory section).
+
+### LÖWENRITTER — Regency Resolution (Primary, 5 Deeds)
 | Deed | Condition |
 |------|-----------|
-| 1 | Mandate ≥ 4 and no active Heresy Investigation |
-| 2 | Control Hafenvalor + Lowenskyst |
-| 3 | Theocracy Counter < 50 |
-| 4 | ≥ 1 Parliamentary ruling in Hafenmark's favour |
+| 1 | TC < 50 |
+| 2 | IP < 60 |
+| 3 | RS > 40 |
+| 4 | PI ≥ 4 |
+| 5 | Succession candidate: Elske confirmed OR Torben Loyalty ≥ 6 |
+All 5 Deeds + legitimate successor installed = shared victory.
 
-### Varfell
-| Deed | Condition |
-|------|-----------|
-| 1 | Intel ≥ 5 (PP-176; was ≥ 6) |
-| 2 | Thread Knowledge (TK) ≥ 3 |
-| 3 | Control Varfell (T9) |
-| 4 | ≥ 2 hidden faction stats revealed (accumulated) |
+Alternate: Military Consolidation (≥8 territories + Military≥5 + RS>35 + TC<60) — only if Regency Resolution not fired after 8 Löwenritter seasons.
 
-### Guilds (unchanged)
-| Deed | Condition |
-|------|-----------|
-| 1 | Wealth ≥ 6 |
-| 2 | Control Halvardshelm (T11) + Eidursjo (T8) |
-| 3 | Guild Favour ≥ 5 in ≥ 3 territories |
-| 4 | Institutional Pressure < 75 |
+## Hollow Victory (v04 B12)
+Running modifier per faction. Tracked publicly at each Year-End.
+| Event | Modifier |
+|-------|---------|
+| Compromised Institutional Mandate | −0.5 Deeds per Compromise |
+| Löwenritter Coup while player faction supported coup | −1 Deed |
+| RS < 30 at victory declaration | −1 Deed |
+| IP > 60 at victory declaration | −1 Deed |
+| Allied faction holds Standing ≥ 3 vs your faction at victory | −0.5 Deed per faction |
+| Faction holds ≥ 4 Casus Belli Standing | −1 Deed |
+| PC Belief arc contradicted Uphold/Compromise pattern (hybrid) | −1 Deed per season |
+| Torben Loyalty ≤ 1 at victory | −1 Deed |
+If effective Deeds below required threshold: victory cannot be declared.
 
-### Niflhel (unchanged)
-| Deed | Condition |
-|------|-----------|
-| 1 | Intel ≥ 5 |
-| 2 | Control Sigurdshelm (T10) |
-| 3 | ≥ 3 pieces of hidden faction information held simultaneously |
-| 4 | No Compromise token AND Stability ≥ 4 |
+## Co-Victory Pairings (v04 B15)
+| Pair | Path |
+|------|------|
+| Crown + Hafenmark | Crown holds Constitutional Stability AND Hafenmark holds Reformed Valoria (Path A) |
+| Crown + Varfell | Crown holds Constitutional Stability AND Varfell holds Intelligence Hegemony |
+| Varfell + Restoration | Varfell holds Thread Supremacy AND Restoration holds Network Victory (both require RS ≥ 50) |
+| Hafenmark + Restoration | Hafenmark holds Reformed Valoria AND Restoration holds Network Victory |
+| Löwenritter + Hafenmark | Löwenritter holds Regency Resolution AND Hafenmark holds Parliamentary Consolidation |
+Incompatible: Church + Hafenmark, Crown + Church, Crown + Löwenritter.
 
-## Mandate Recovery (PP-174, replaces PARAMS GAP notice)
-Govern Overwhelming in own capital territory: Mandate +1 (max once/season; max = faction starting Mandate).
-## Parliamentary Vote (ED-053b resolved — provisional)
-Faction calls a Parliamentary Vote via Parliamentary Manoeuvre Domain Action.
-Resolution:
-- Each participating faction rolls their Influence pool (1D per Influence point), TN 7
-- Ob = highest opposing faction's Influence ÷ 2 (round up)
-- Net successes: faction with highest net wins the vote; ties go to faction with higher Mandate
-- Effects: winner faction gains +1 PI (Parliamentary Integrity); loser −1 PI
-[PROVISIONAL — ED-053]
+## Torben Loyalty Track (v04 B2 + B5 — PP-188 correction)
+Range 0–7. Starts at **3**. Visible to all. Active from game start (no trigger needed).
 
-## Card-Hand System — Provisional (ED-001 resolved — provisional)
-Pending full design. Provisional rule to unblock simulation:
-- Each faction receives 6 tactic cards at season start (4 shared + 2 faction-specific)
-- Draw 1 additional card at start of each Battle phase
-- Play 1 card per Battle or Domain Action as appropriate
-- Cards discard after use; hand refreshes to 6 at Seasonal Accounting
-- Card effects are the disposition modifiers in §B.4
-- [PROVISIONAL — requires full card-hand design review. ED-001 blocker unblocked for simulation only]
+**Gaining:**
+- Senator Outward targeting Torben: Overwhelming +2; Success +1.
+- Crown holds PI ≥ 5 at Year-End: +1.
+- Crown upholds Institutional Mandate 2+ consecutive seasons: +1/Year-End.
 
-## Artillery Disposition (ED-040 resolved — provisional)
-Artillery units are locked to Balanced disposition in all BG contexts. Rationale: siege weapons cannot execute offensive or defensive tactical manoeuvres — they fire from fixed positions. [PROVISIONAL — confirmed as intentional]
+**Losing:**
+- Crown Compromises Institutional Mandate: −1.
+- Crown issues Emergency Powers: −1.
+- Löwenritter Coup fires: reset to 1.
+- TC crosses 60: −1.
+- Torben sent to Altonia (comply with tutoring demand): −2 immediately.
 
-## TC Threshold Check During Zoom In (ED-056b)
-TC threshold check fires at Seasonal Accounting regardless of Zoom In suspension. See state_transfer_spec.md.
-## Thread Debt Tokens — BG Layer (PP-184)
+Crown Deed 5 condition: Torben Loyalty ≥ 5.
+Altonian Tutoring Demand triggers at IP ≥ **40** (not 30 — v04 B2: "Torben Tutoring Demand (IP ≥ 40 Event)").
 
-Thread operations in TTRPG scenes that produce over-actualisation or Partial Lock carry over to BG layer via Thread Debt tokens.
+## Elske Off-Board Card (v04 B2)
+Princess Elske Almqvist is in Altonia (not on the board). Married to Duke Hardar Veldensohn, duchy borders T4.
+Elske Loyalty: 0–7, starts 4. Tracked on off-board card near T4.
 
-**Thread Debt token rules:**
-- Assigned to: the BG territory card or faction card corresponding to the Thread operation's target
-- Effect: −1D to BG-layer Domain Actions targeting that card (for 1 season)
-- Maximum: 2 Thread Debt tokens per card
-- Recovery: 1 token removed per season with no Thread activity on that card
+Contact: Crown or Löwenritter Senator Outward in T4 (Ob 2 at IP < 60; Ob 3 at IP ≥ 60).
+Return: Elske Loyalty ≥ 6 + IP < 60 + Crown/Löwenritter unit in T4: Military vs Ob 2. IP +5 on success.
 
-**Sources:**
-- Over-actualisation (Relational+ Weaving in TTRPG scene): 1 Thread Debt token on corresponding BG card at Zoom Out
-- Partial Lock (TTRPG Locking): 1 Thread Debt token on corresponding BG card, via Domain Echo at Accounting
-- Successful Lock (TTRPG Locking): 1 Thread Debt token on corresponding BG card (+ chronic RS drift −1/season from season 2)
-[PP-184]
+## TC Advancement (v04 B5 Church)
+| Source | TC Gain |
+|--------|---------| 
+| Church controls T3 (Himmelenger) | +1/season |
+| Assert choice (TC > 50, mandatory) | +1 |
+| Attention Pool reaches threshold 5 | +1 |
+| Emergency Powers (Crown or Löwenritter) | +1 |
+| Free Trade Decree (Crown) | +1 |
+| Church unit in non-Church territory at season end | +0.5/unit (max +1/season) |
+| Church Territorial Seizure success | +2/territory seized |
+| Reformed Settlement — Church Resists | +3 |
+| Heresy Investigation confirmed success | +0.5 |
+| Doctrinal Reach Milestone | +0.5/season |
 
-## BG Co-Movement Resolution Protocol (PP-182 — resolves ED-086, P-14 compliance)
-### Authority: P-01, P-11, P-14, §21.1, §22.2
+**TC Decreases:**
+Reformed Settlement Accommodate: −5. Sovereign Authority Doctrine (Hafenmark): −2 to −3. Baralta passive (Mandate ≥ 4): −1/season. Löwenritter Requisition Order success: −1. Royal Decree targeting TC: −1.
 
-Every Thread operation in BG mode produces automatic effects across all three dimensions.
-These effects are DETERMINISTIC — printed on the Thread operation reference card.
-No GM judgment permitted to skip or modify auto-effects. No exceptions.
+## TC 80 Territorial Seizure (PP-181 revised by PP-188 — reconciled with v05 P-23)
+At TC ≥ 80: Church Territorial Seizure active. Per season:
+Church may target territories. v04/v05 P-23: "Hard cap: maximum 2 territory transfers per seizure event per faction."
+Roll: Church Military vs Defender Military, Ob 2.
+| Degree | Effect |
+|--------|--------|
+| Overwhelming | Immediate seizure, no Standing cost. |
+| Success | Seizure; TC +2. |
+| Partial | Not seized; Templar Staging Token placed. |
+| Failure | No seizure. |
+Cap: 2 territory transfers per seizure event (v04/v05). PP-183's cap of 4 was too generous — corrected to 2.
 
-### Dimensional Auto-Effect Table
+## Theocracy Counter Starting Value — Canonical
+TC starts at **22** (v04 B2: "TC starts at 22, not 15, per canonical timeline: 45 years of post-independence accumulation").
+Prior params value of 28 (P-32) and 15 (early compilation) are both wrong.
 
-For each Thread operation, resolve ALL THREE auto-effects in sequence after the roll:
+## Parliament Integrity (PI) Scale
+0–10. Starts at **7**. (Corrected from 5.)
+| PI | State |
+|----|-------|
+| 8–10 | Full Parliament. Crown Policy requires Mandate ≥ 4. |
+| 5–7 | Standard. Parliamentary Manoeuvre available. |
+| 3–4 | Degraded. Parliamentary Manoeuvre +1 Ob. Crown Decree Ob reduced to 1. |
+| ≤ 2 | Non-functional. Hafenmark loses Parliamentary Manoeuvre. Crown governs by decree. TC +2. |
 
-**Step 1 — ACTUALIZED auto-effect** (the intended result — resolves per the roll degree):
-This is the primary operation effect (RS change, Presence advance, info reveal, etc.).
-Resolves per the Thread operation's own result table.
+PI degrades: Crown Emergency Powers (−1), Church territorial seizure (−1), Löwenritter coup (−3).
+PI recovers: Hafenmark Parliamentary Manoeuvre success (+1), Crown Parliamentary Session policy (+1).
 
-**Step 2 — TEMPORAL auto-effect** (always fires, regardless of roll degree):
-| Thread Operation Type | Temporal Auto-Effect |
-|-----------------------|----------------------|
-| Community Weaving (Restoration) | History Resonance marker placed in territory. All Thread operations in this territory next season: +1 Ob (substrate remembers the contact). |
-| Mend (Restoration) | History Resonance marker placed in territory. Gap category reduced by 1 (temporal repair leaves a scar). |
-| Investigate (any) | No marker placed. Instead: the acting faction's Thread Knowledge (TK or equivalent) advances +0.25 track (the investigation deepens temporal sensitivity). |
-| Harvest (Niflhel) | History Resonance marker placed. Substrate at this site is now marked; future Harvest here: Ob +1 cumulative (each Harvest degrades the site). |
-| VTM operation (Varfell) | History Resonance marker placed. VTM advancement check fires this season (counts as the season's qualifying event for Intel Advancement Counter). |
-| Any Thread operation on a territory with existing History Resonance marker | Additional marker placed (stack). At 3 stacked markers: territory becomes Thread Wound (permanent Ob +2 to all Thread operations, RS −1/season while any faction occupies it). |
+## Ethical Framework Modifiers (v04 B4)
+| Faction | Bonus | Penalty |
+|---------|-------|---------| 
+| Crown (Virtue Ethics) | Public, visible actions −1 Ob | Covert/morally ambiguous +1 Ob |
+| Church (Divine Command) | Doctrine-aligned −1 Ob | Thread-supporting +2 Ob |
+| Hafenmark (Categorical Imperative) | Procedurally grounded −1 Ob | Ad hoc/precedent-breaking +1 Ob |
+| Varfell (Epistemic Reason) | Evidence-based Intel −1 Ob | Emotional/reactive +1 Ob |
+| Restoration (Rawlsian) | Community-benefiting −1 Ob | Hierarchical/exclusionary +1 Ob |
+| Löwenritter (Military Honor) | Orders protecting Valorian sovereignty −1 Ob | Advancing personal/factional gain at Valoria's expense +2 Ob |
 
-**Step 3 — EPISTEMIC auto-effect** (always fires, regardless of roll degree):
-| Thread Operation Type | Epistemic Auto-Effect |
-|-----------------------|-----------------------|
-| Community Weaving | Church Attention Pool +2 in this territory (visible community gathering). If Pool crosses threshold 3: Inquisition opens automatically. |
-| Mend | Church Attention Pool +1. Rendered-world anomaly observed (the Gap closing is perceivable as wrongness lifting). |
-| Investigate | Church Attention Pool +1. A faction with Intel in this territory (Varfell, Niflhel, or any Intel order this season): learns that a Thread investigation occurred here (not who, not outcome — only that it happened). |
-| Harvest (Niflhel) | NO Attention Pool trigger (covert operation). Instead: Niflhel's Intel Advancement Counter +1 (the Harvest teaches them what the substrate holds). |
-| VTM operation | If VTM ≥ 3: operation is visible — any faction with Intel in this territory learns Varfell performed a Thread-adjacent action. If VTM ≤ 2: no epistemic leakage. |
+## Faction Conviction Texts (PP-181, v04 confirmed)
+| Faction | Conviction |
+|---------|-----------|
+| Crown (Almud) | "The state is the only legitimate vessel of order." |
+| Church (Himlensendt) | Faith |
+| Hafenmark (Baralta) | "Faith is not mediated — it is lived. Anyone who is truly faithful can hear Solmund. Anyone who cannot should not rule." |
+| Varfell (Vaynard) | "The strongest thread is the one others cannot see — and I have spent my life learning to pull it." |
+| Restoration (Erikssen collective) | "The community is the only legitimate political unit." |
+| Löwenritter (Ehrenwall) | "Valoria endures, whatever the cost." |
 
-### History Resonance Markers
-Physical tokens placed in territory during Temporal auto-effect.
-- 1 marker: +1 Ob to all Thread operations in this territory next season.
-- 2 markers: +1 Ob permanent (until Mend clears one marker).
-- 3 markers: Thread Wound (see above).
-Markers are PUBLIC — visible to all factions. They indicate substrate stress.
-A successful Mend (Success or Overwhelming) removes 1 marker from the target territory.
+## Cascade Depth Cap (v04 B4)
+Maximum 3 immediate mechanical effects per card play resolution step. Additional effects queue to next Accounting.
+State-based modifiers (RS/TC/IP/PI environmental effects) do NOT count against this cap.
 
-### BG Triangular Track (§22.2 compliance)
-The three dimensions are tracked on the public board as a triangular tension display:
-- **Rendering Stability (RS):** Actualized dimension. 0–100 shared track.
-- **Thread Tension (TT):** Temporal dimension. Count of History Resonance markers across all territories (0–N). At TT ≥ 10: all Thread operation Obs +1 globally. At TT ≥ 15: Thread Wound formation triggers automatically in any territory with 2+ markers.
-- **Attentional Pressure (AP):** Epistemic dimension. Sum of all Church Attention Pool values across all territories (0–N). At AP ≥ 20: Church may deploy Inquisitor unit without a card play (autonomous escalation).
+## Batch Card Hand (v04 B3 confirmed — Card-Hand system PP-177)
+| Faction | Starting Hand |
+|---------|--------------|
+| Crown | 2× Legionary, 1× Consul, 1× Senator, 1× Prefect, 1× Recess |
+| Church | 2× Senator, 1× Pontifex, 1× Consul, 1× Legionary, 1× Recess |
+| Hafenmark | 2× Consul, 1× Senator, 1× Legionary, 1× Diplomat, 1× Recess |
+| Varfell | 2× Tribune, 1× Legionary, 1× Consul, 1× Colonist, 1× Recess |
+| Restoration | 1× Pontifex, 2× Praetor, 1× Senator, 1× Tribune, 1× Recess |
 
-The three tracks are mutually reinforcing: RS degradation increases TT formation speed; TT accumulation increases Ob costs; AP accumulation increases Church pressure. This is the BG's triangular tension system per §22.2.
+Domain Expertise (+1D when playing this card type):
+Crown = Legionary | Church = Senator | Hafenmark = Consul/Prefect | Varfell = Tribune | Restoration = Pontifex
 
-### Cascade Depth interaction
-Thread operation auto-effects (Steps 2 and 3) do NOT count against the Cascade Depth Cap (3 immediate effects per resolution). They are substrate-level consequences — properties of the operation's physics, not triggered effects. They always fire regardless of cascade depth.
+## Mandate Recovery (PP-174 — provisional, no v04 basis but not contradicted)
+Govern Overwhelming in own capital: Mandate +1 (max once/season, max to faction starting Mandate).
 
+## Trade Network Investment — Hafenmark Wealth Sink (PP-178)
+Consul Inward, 2 Wealth cost. Ob 2. Places Trade Route tokens for +1D Trade bonuses.
+Success: Trade Route token placed (+1D Trade this territory this season). Token persists until control transfer.
+Overwhelming: As above + token links adjacent territory + Guild Favour +1 in non-capital territory.
+Partial: Token placed, no bonus. Persists.
+Failure: No token, Stability −1.
 
-## TC 80 Territorial Seizure — ALL-TERRITORY SWEEP (PP-181, resolves ED-032/087)
-At TC = 80: Church rolls Mandate vs Ob 3 (contested) or Ob 2 (neutral) for EVERY territory
-not already Church-controlled. All rolls resolved simultaneously.
-Per-territory results apply: Success = seizure + TC +2 + PI −1; Partial = Templar Staging Token;
-Overwhelming = immediate seizure, no Standing cost.
-This fires once when TC first reaches 80. If Church loses control of a territory post-seizure,
-the sweep does not re-fire — only the initial TC 80 crossing triggers it.
-
-## Faction Conviction Texts — BG (PP-181, resolves ED-080/081/082)
-| Faction | Leader | Conviction |
-|---------|--------|-----------|
-| Crown | King Almud Almqvist | "The state is the only legitimate vessel of order; everything must flow through it or be consumed by it." |
-| Church | Confessor Arne Himlensendt | "The faithful carry Solmund's presence — and the Church carries the faithful." |
-| Hafenmark | Duchess Inge Baralta | "Faith is not mediated — it is lived. Anyone who is truly faithful can hear Solmund. Anyone who cannot should not rule." |
-| Varfell | Duke Magnus Vaynard | "The strongest thread is the one others cannot see — and I have spent my life learning to pull it." |
-| Guilds | Guildmaster Council | "Trade makes all things equal — the only justice that has never required a crusade." |
-| Restoration Movement | Hakan Reusfoldt | "What was torn can be woven again — but only by those who remember what wholeness felt like." |
-
-## Altonian Ecclesiastical Relationship (AER) — PP-181 (resolves ED-084)
-Shared ledger track, 0–5. Starting value: **2** (neutral).
-Represents Church's standing with Altonian power.
-
-| AER | TC Effect | IP Effect |
-|-----|-----------|-----------|
-| 0–1 | TC gains not modified by Altonia | IP escalates normally |
-| 2 (start) | Neutral | Neutral |
-| 3 | TC environmental effects +1 level (Church Altonian prestige reinforces domestic authority) | IP vanguard threshold rises: 76→80 |
-| 4 | Any TC gain > 3/season treated as TC +4 | Altonia will not invade while AER ≥ 4 |
-| 5 | Once/game: any faction's order targeting Church interests auto-fails (Altonian ultimatum) | IP immediately set to 50 and held there |
-
-**Gaining AER:** TC crosses threshold 30/50/70: +1 each. Heresy Investigation with Restoration Presence removed: +1. Church issues Interdict: +1.
-**Losing AER:** TC drops below a threshold: −1. Church Stability < 3: −1. Reformed Settlement (Baralta RDT 5): −2.
-
-## Reformed Doctrine Track (RDT) — PP-181 (resolves ED-085)
-Hafenmark private track, 0–6. Tracks spread of Baralta's theological argument (direct divine access).
-
-**Gaining RDT:**
-- Senator card (Outward) in non-Church territory: Ob 2. Success: RDT +1.
-- TC rises above 50 AND Baralta has a unit in that territory: RDT +1.
-- Crown issues Emergency Powers without Parliamentary check: RDT +1.
-- Any faction Compromises their Institutional Mandate publicly: RDT +1.
-
-**Losing RDT:**
-- Church Excommunicates Baralta: RDT −2.
-- Baralta Compromises her own Mandate: RDT −2.
-- RS drops below 30: RDT −1/season.
-
-| RDT | Effect |
-|-----|--------|
-| 0–1 | No mechanical effect |
-| 2 | TC gains this season halved (rounded down) |
-| 3 | Church Inquisition Autonomy threshold rises: AP must reach 8 (not 7) to trigger autonomous escalation |
-| 4 | TC capped at current level + 5 for remainder of game |
-| 5 | Reformed Settlement available (once/game) |
-| 6 | All Diplomacy targeting Hafenmark: +1 Ob (Reformed movement momentum) |
-
-**Reformed Settlement (RDT 5, once per game):**
-Baralta declares theological right of direct faithful access. Church must respond:
-- **Church Resists:** TC +3; RDT +1 (martyrdom); Hafenmark gains +1 Standing from Church + 1 Deed Token.
-- **Church Accommodates:** TC −5; Church Mandate triggers; Himlensendt Renown −1; Church Stability −1 (internal schism).
-- **Church Ignores:** TC unchanged; RDT +1 next season (silence validates).
-
-## Theological Dissatisfaction Track (TD) — PP-181
-Hafenmark private track, 0–5. Baralta's assessment of Almud's theological fitness to rule.
-
-**Gaining TD:** Crown issues Emergency Powers: +1. Crown submits to Altonian pressure without resistance: +1. Crown does not respond to Church incursion in Crown territory: +1.
-**Losing TD:** Crown issues Parliamentary Session policy: −1. Crown collaborates with Hafenmark on policy: −1.
-
-| TD | Effect |
+## BG Co-Movement Resolution Protocol (PP-182 — P-14 compliance)
+[Full protocol in PP-182 section — three-dimensional auto-effects for all Thread operations]
+History Resonance markers (temporal), Attention Pool (epistemic), Primary result (actualized).
+Thread Tension (TT) = sum of all History Resonance markers across board.
+| TT | Effect |
 |----|--------|
-| 0–2 | No effect |
-| 3 | Hafenmark +1D to Diplomatic orders targeting Crown |
-| 4 | Baralta may declare Almud unworthy: Crown loses 1 Deed Token; Hafenmark gains 1 Standing against Crown |
-| 5 | Hafenmark permanent +1D in Crown-adjacent territories; Civil War: Hafenmark no Standing penalties for seizing Crown territories |
+| 0–9 | Normal |
+| ≥ 10 | All Thread operation Obs +1 globally |
+| ≥ 15 | Thread Wound formation triggers automatically in any territory with ≥ 2 markers |
 
-TD is private to the Hafenmark player (faction mat tracking only).
+## TC 80 Seizure — Territorial Seizure (PP-188 corrects PP-183)
+Cap: 2 territory transfers per seizure event (v04/v05 P-23). Previously set to 4 by PP-183 — reverted.
 
-## VTM (Vaynard Thread Mastery) — Full Spec PP-181
-Private track 0–5 (VTM 3+ becomes public).
+## Church Excommunication Ob Cap (PP-180)
+Ob = min(target Mandate, 4). Maximum Ob 4 regardless of target Mandate.
 
-**Gaining VTM:** Tribune card on Thread-active territory (TR ≥ 2): +1. Southernmost Expedition season completed with Varfell unit in T13: +1. Thread Debt incurred by any faction: +1. Successful Patience + CB in territory with RS environmental effects: +1.
-**Losing VTM:** Riskbreakers expose a Vaynard CB: −1.
+## Drawn Battle Rule (PP-180)
+Equal net successes: Stalemate. Both Cohesion −1. No territorial change.
+Both at Cohesion 0: both units destroyed simultaneously. Territory uncontrolled.
 
-| VTM | Southernmost Access | Additional Capability |
-|-----|--------------------|-----------------------|
-| 0–1 | None | — |
-| 2 | First Layer | Varfell TR never capped below 3 |
-| 3 | Deep Layer | Once/game: preview top 2 Co-Movement cards; keep either, return other. VTM 3+ is PUBLIC. |
-| 4 | Deep Layer without Restoration guide | Patience Protocol max increases to 6; CB Ob −1 |
-| 5 | Core zone without Restoration Presence | Once/game: choose outcome of 1 Co-Movement card draw. Thread Debt token incurred immediately. RS −1 immediate. (Contingently approved ED-083.) |
+## Crown Policy Instrument (PP-180, v04 confirmed)
+Once per season, Crown may issue one Policy if Mandate ≥ 4. Same Policy cannot repeat 2 seasons.
+Resolution order: Policy → Hafenmark Opposition → Censor.
+[Full Policy table in faction card section]
 
-## Riskbreaker Pool and Priority Tree — PP-181
-Always NPC-controlled. Never hire-able. 3 tokens per year (refresh each Year at Accounting).
+## Partial Mend — Thread Wound Risk (PP-184)
+Partial or Failed Mend still places History Resonance marker (temporal auto-effect fires regardless of degree).
+2 existing markers + Partial Mend = Thread Wound. Warning token required at 2 markers.
 
-**Priority Tree (evaluated at Accounting, strict order):**
-| Priority | Condition | Intervention |
-|----------|-----------|-------------|
-| 1 | Vaynard has active fabricated Casus Belli | CB fails next season automatically; Varfell +1 Standing from all factions; VTM −1 |
-| 2 | Civil War active AND triggered by fabricated CB | One faction's Military order in most contested territory: +2 Ob next season; PI +1 |
-| 3 | Church seized Crown territory AND TC > 60 | Territory Prosperity −1 next season; Church Govern there: +1 Ob |
-| 4 | Löwenritter Coup Counter = 3 AND diplomatic trigger approaching | Diplomatic action that would trigger Condition 4 fails (no faction takes the consequence) |
-| 5 | Any faction's Military targets community with Restoration Presence | Military order: +1 Ob; if fails: Restoration gains Presence in adjacent territory |
-| 6 (default) | None of above | Crown player receives 1 revealed hidden stat of faction acting most against Valoria's interests |
+## Church Attention Pool — Per-Territory Rules (PP-185)
+Per-territory ceiling: 10. Second Inquisitor at AP ≥ 6. Max 2 Inquisitors/territory.
+Community Organizing success: AP −2 + expels one Inquisitor if AP drops below deployment threshold.
 
-**Riskbreaker + Almud Dominion:** If Crown Mandate ≥ 6 AND Emergency Powers issued 2+ times: Priority 2 may fire against Crown's own Military orders.
-**Riskbreaker + Vaynard escalation:** Each prior failed Vaynard CB exposed: Riskbreaker Priority 1 Ob to suppress −1 (they've built the file). At VTM 4: CB Ob to expose +1. At VTM 5: Vaynard may spend co-movement direction to suppress Riskbreaker Priority 1 once/game.
-
-## Crown Dominion Alternate Victory — PP-181
-**Path B — Dominion:** Crown controls ≥ 8 territories AND one Submission Condition met = immediate win.
-
-| Submission Condition | How Achieved | Standing Cost |
-|----------------------|-------------|---------------|
-| Church recognizes Crown supremacy over religious appointments in Crown territories | Church player accepts via Deal Token (Open Pledge), or TC drops to 0 | +2 Standing from Church; RDT trigger |
-| Varfell formally subordinates Intel to Crown oversight | Varfell Intel ≤ 1 OR Crown captures Vaynard + Governs all Varfell territories | +1 Standing from Varfell |
-| Hafenmark surrenders Parliamentary independence | PI drops to 0 OR Baralta Mandate Compromise count ≥ 4 | +2 Standing from Hafenmark; Riskbreaker Priority 2 fires vs Crown |
-
-Dominion generates maximum Standing against Crown and fires Riskbreaker evaluation.
-
-## Church Dual Theocracy Alternate Victory — PP-181
-**Path B — Dual Theocracy:** TC ≥ 60 + AER = 5 + IP ≤ 30.
-Church achieves theological governance over both Valoria and Altonia without military dominance.
-Requires diplomatic mastery rather than TC racing.
-
-## Hafenmark Victory Paths — PP-181
-**Path A — Reformed Valoria:** Reformed Settlement completed + PI ≥ 3 at game end + 3 Deed Tokens.
-**Path B — Theological Supremacy:** RDT = 6 + TD = 5 + 2 Deed Tokens.
-**Path C — Parliamentary Consolidation:** 4 Deed Tokens + PI ≥ 4 (unchanged).
-
-## VTM 5 Co-Movement Direction — Canonical Note (ED-083)
-At VTM 5, Vaynard may once per game choose the outcome of one Co-Movement card draw.
-This bends P-14 (co-movement is universal) but does not break it:
-- The operation still fires in all three dimensions (auto-effects still apply per PP-182).
-- Thread Debt token incurred immediately.
-- RS −1 immediate.
-- History Resonance marker placed (temporal auto-effect fires normally).
-- Church Attention Pool +2 (epistemic auto-effect fires normally).
-Only the actualized card outcome is shaped. The substrate cost is real and immediate.
-
-## TC 80 Territorial Seizure — Capped at 4 Territories/Season (PP-183, SIM-BG-03)
-Amends PP-181.
-
-At TC = 80: Church may target up to **4 territories** per season (Church player chooses which).
-Roll Church Mandate vs Ob 3 (contested) or Ob 2 (neutral) for each selected territory.
-Remaining non-Church territories not targeted this season: Church may target them in subsequent seasons.
-TC gain from successful seizures: capped at **+4 total per season** (regardless of number of territories seized).
-PI loss from seizures: −1 per territory seized, no cap.
-
-**Rationale:** Unlimited all-territory sweep instantly ends the game (~6.5 territories at median).
-4-territory cap gives other factions 2–3 seasons of counterplay before Church achieves full dominion.
-TC gain cap prevents runaway TC acceleration from the sweep itself.
-
-## Partial Mend — Thread Wound Risk (PP-184, AUD-BG-03 E-01)
-EXPLICIT WARNING: A Partial or Failed Mend result still places a History Resonance marker
-in the target territory (temporal auto-effect fires regardless of roll degree).
-
-At 3 History Resonance markers in a territory: Thread Wound forms (permanent Ob +2, RS −1/season while occupied).
-
-**Consequence:** Attempting to Mend a territory with 2 existing History Resonance markers
-on a Partial result CREATES a Thread Wound. Players must be warned before attempting Mend
-in high-marker territories.
-
-**Display:** Territories with History Resonance markers must visibly show the marker count on the board.
-At 2 markers: display a warning token (Thread Wound Imminent).
-Reference card note: "Mend on 2-marker territory: partial result = Thread Wound."
-
-## Church Attention Pool — Per-Territory Ceiling and Multi-Inquisitor Rule (PP-185, GAP-BG-17)
-
-**Per-territory AP ceiling:** 10. AP(territory) cannot exceed 10.
-At AP = 10: Inquisitor in that territory becomes an Inquisition Commander (gains +1D to all Inquisition-related rolls; Church may open one additional Heresy Investigation in an adjacent territory for free at Accounting).
-
-**Multi-Inquisitor rule:** A second Inquisitor may deploy to a territory when AP(territory) ≥ 6.
-Maximum 2 Inquisitors per territory. Second Inquisitor generates +1 additional AP/season (total +3/season with 2 Inquisitors present).
-
-**Inquisitor removal:** A successful Restoration Community Organizing order (Success or better) in the territory reduces AP by 2 and expels one Inquisitor if AP drops below the deployment threshold.
-
-## Crown Deed 2 — Territorial Control Requirement Adjusted (PP-186, AUD-BG-02 A2-03)
-Amends PP-171.
-
-Crown starts with T1, T2, T4 as unambiguously Crown-controlled.
-T5 (Arnesheld) = shared Crown/Löwenritter control at game start; does NOT count toward Crown territorial deeds until Löwenritter is formally reintegrated (Coup Counter ≤ 2) or Crown holds it uncontested.
-
-**Deed 2 (revised):** Control Valorsplatz + Gransol + at least **3** other territories (total ≥ 5).
-Previously: ≥ 4 total including Valorsplatz and Gransol.
-
-Crown starts with 3 unambiguous territories (T1, T2, T4). Needs 2 more to meet Deed 2.
-This requires active territorial expansion (governing T3, T6, T7, or other uncontrolled territories).
-
-## Co-Movement Card Effects — BG Reference (PP-187, GAP-BG-16)
-Co-Movement cards drawn during BG Thread operations resolve as follows.
-Full card deck (20 cards) — effects summarised by category:
-
-| Category | Count | Effect when drawn |
-|----------|-------|------------------|
-| TC effect (Church theological surge) | 4 | TC +1 immediately |
+## Co-Movement Card Effects — BG Reference (PP-187)
+20-card deck. Draw on: Partial Community Weaving, Niflhel Harvest, VTM preview.
+| Category | Count | Effect |
+|----------|-------|--------|
+| TC effect | 4 | TC +1 immediately |
 | RS stabilisation | 3 | RS +1 at next Accounting |
-| Faction intel leak | 3 | One random non-practitioner faction learns this Thread operation occurred |
-| Thread Debt in adjacent territory | 3 | Thread Debt token placed in a territory adjacent to the operation site |
-| History Resonance in adjacent territory | 3 | History Resonance marker placed in adjacent territory (not this one) |
-| Benign (no effect) | 4 | No mechanical effect; narrative flavour only |
+| Faction intel leak | 3 | One random faction learns Thread operation occurred here |
+| Thread Debt adjacent | 3 | Thread Debt token in adjacent territory |
+| History Resonance adjacent | 3 | History Resonance marker in adjacent territory |
+| Benign | 4 | No mechanical effect |
 
-**Draw procedure:** Draw from shuffled Co-Movement deck. Apply effect immediately (before Accounting).
-Applies to: Partial Community Weaving, any Harvest (Niflhel), VTM preview (VTM 3 draws 2, returns 1).
-Does NOT apply to: Investigate, Community Organizing (not a Thread op).
+## AER (Altonian Ecclesiastical Relationship) (PP-181, v04 confirmed)
+Track 0–5. Starts 2.
+[Full table in PP-181 section — confirmed by v04 B2]
+
+## RDT (Reformed Doctrine Track) (PP-181, v04 B5 confirmed)
+Hafenmark private track 0–6.
+[Full mechanics in PP-181 section — confirmed by v04 B5]
+
+## TD (Theological Dissatisfaction) (PP-181, v04 B5 confirmed)
+Hafenmark private track 0–5.
+
+## VTM (Vaynard Thread Mastery) (PP-181, v04 B5 confirmed)
+Private 0–2; public 3+.
+[Full table in PP-181 section — confirmed by v04 B5]
+
+## Patience Protocol (Varfell, v04 B5)
+Patience Counters (PC): 0–4 at VTM 0–3; 0–6 at VTM 4+. Private to Varfell player.
+Gaining: +1 PC per season Tribune available but played differently; +1 PC per season pass on Senate purchase when Wealth ≥ 3. Max +2/season.
+[Full spend table in v04 B5 — key: 4 PC = Spy anywhere on board; 6 PC at VTM 4+ = VTM +1]
+
+## Riskbreakers (NPC, v04 B13 — reconciled with amendment2)
+3 tokens per year. Priority tree evaluated at Phase 4 start.
+[v04 B13 priority tree is authoritative — differs from amendment2 which was a proposal. v04 applies.]
+
+## Warden Emergence (v04 B2/B13)
+Condition: any faction's Southernmost Expedition passes Forgetting Check (Phase 5 Step 9).
+On Emergence: Warden Token placed at position 0. Warden Cooperation Track activates.
+Edeyja/Wardens NPC AI activates (B13: contain entity; investigate Niflhel; work alongside; emergency Mend).
+
+## Institutional Mandate Uphold/Compromise (PP-180, v04 B7)
+Each faction has a printed Institutional Mandate. When event challenges it:
+- Uphold: act consistently. +1 Renown + 1 Stability.
+- Compromise: strategic benefit. Hollow Victory −0.5 Deeds. Stability −1.
+
+## Hollow Victory Mechanics (v04 B12)
+[See full table above in Hollow Victory section]
+
+## Intel Advancement Counter (PP-180 revised)
+Intel Advancement Counter (0–3) on faction mat.
+Each season with ≥1 successful Intel or Quiet Network order: Counter +1.
+At Counter 4: Intel stat +1 (max 7); Counter resets to 0.
+Note: Intel stat advancement is valid for NPC factions (Niflhel). Varfell victory paths do NOT require Intel stat advancement — they use VTM and territorial control.
+
+## Accounting Phase Reference (PP-180 + v04 B4)
+13-step sequence. See Phase 5 section above.
+
+<!-- patch_history: references/params_board_game_history.md -->
+<!-- canonical_sources: references/canonical_sources.yaml -->
