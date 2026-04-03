@@ -125,12 +125,12 @@ editorial_decisions:
   - id: ED-007
     legacy_id: BG-E-44
     date_flagged: 2026-03-31
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: session
     source_file: session_log_current.md
     description: "Four Cardinals — names, characters, and individual mechanical profiles for the four Church Cardinals"
     full_flag_text: "BG-E-44: Four Cardinals details"
-    status: provisional
+    status: resolved
     priority: P2
     decision: "[Fourth Cardinal archetype — Reform faction within Church. Canon cardinals are Olafsson, Klapp, and Baralta. Fourth cardinal identity is a narrative decision deferred to campaign development.] [PROVISIONAL]"
     propagation_targets:
@@ -278,12 +278,12 @@ editorial_decisions:
 
   - id: ED-015
     date_flagged: 2026-03-27
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: design-file
     source_file: designs/debate/debate_system_redesign_v1.md
     description: "Thread consequences for Casual Disputes — should high-strain casual disputes (Rattled trigger) produce minor co-movement?"
     full_flag_text: "[EDITORIAL: Thread consequences for Casual Disputes] — Currently no Thread consequences for casual disputes."
-    status: provisional
+    status: resolved
     priority: P3
     decision: "Thread consequences for high-strain Casual Disputes: Rattled state in a casual dispute → +1 Ob on next Thread operation this scene. [PROVISIONAL]"
     propagation_targets:
@@ -316,12 +316,12 @@ editorial_decisions:
 
   - id: ED-017
     date_flagged: 2026-03-27
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: design-file
     source_file: designs/mass_combat/mass_battle_v3.md
     description: "Faction Military stat change on unit destruction and Stability impact — confirm behaviour when a unit is destroyed reduces faction Military, and what the Stability consequence is"
     full_flag_text: "[EDITORIAL: confirm Military stat change on unit destruction and Stability]"
-    status: provisional
+    status: resolved
     priority: P2
     decision: "Military stat change on unit destruction: −1 Military per unit destroyed (immediate); cap −2/season from destruction. See params_factions.md. [PROVISIONAL]"
     propagation_targets:
@@ -393,12 +393,12 @@ editorial_decisions:
 
   - id: ED-021
     date_flagged: 2026-03-26
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: design-file
     source_file: compilation/v0.14/stage6_factions.md
     description: "Revolution NPC contact point — should one named figure be established as default contact? Proposed: southern Einhir elder, fragmentary inner-tradition knowledge, partially obscured by the Forgetting"
     full_flag_text: "[EDITORIAL: Should one named Revolution figure be established as the default NPC contact point?]"
-    status: provisional
+    status: resolved
     priority: P2
     decision: "[Revolution contact archetype — TS 0, Circles 3+ in working-class networks, non-practitioner organiser role. Specific name and profile deferred to campaign development.] [PROVISIONAL]"
     propagation_targets:
@@ -466,12 +466,12 @@ editorial_decisions:
 
   - id: ED-025
     date_flagged: 2026-04-01
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: arc-generation
     source_file: designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md
     description: "Almud's Torben yield — automatic mechanical fire from IP threshold or personal scene choice? Defines whether player intervention can avert it."
     full_flag_text: "[EDITORIAL: ED-ARC-34-01 — Does Almud get a personal scene before yielding Torben, or does the yield fire automatically?]"
-    status: provisional
+    status: resolved
     priority: P2
     decision: "Almud's Torben yield: automatic mechanical fire from IP threshold (IP≥40 triggers Torben demand, not personal scene). Almud yields unless PC intervenes with successful Domain Action (Ob 3). [PROVISIONAL]"
     propagation_targets:
@@ -484,12 +484,12 @@ editorial_decisions:
 
   - id: ED-026
     date_flagged: 2026-04-01
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: arc-generation
     source_file: designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md
     description: "Klapp Trajectory determination — B (suppression/doubling-down) vs C (conversion) — and practitioner presence intervention at Discovery Event (one-window opportunity, presence not argument)"
     full_flag_text: "[EDITORIAL: ED-ARC-35-01 — Trajectory determination for Klapp + practitioner presence intervention at Discovery Event]"
-    status: provisional
+    status: resolved
     priority: P2
     decision: "Klapp trajectory: Path B (suppression/doubling-down). Klapp becomes increasingly authoritarian as TC rises. Conversion arc only available if PC exposes Church political assassination evidence to him directly. [PROVISIONAL]"
     propagation_targets:
@@ -983,12 +983,12 @@ editorial_decisions:
 
 - id: ED-052
   date_flagged: 2026-04-02
-  date_resolved: null
+  date_resolved: 2026-04-02
   source: simulation
   source_file: tests/sim_d_02_debate_scenario_c.md
   description: "NPC Composure shorthand in stage13 uses 'Presence + 6'; design formula is Poise+Bonds+3. These produce different values (e.g. Himlensendt: 12 vs 10). Confirm which applies to NPCs. Provisional: NPC stat block value is canonical for that NPC."
   full_flag_text: "[EDITORIAL: ED-052 NPC Composure formula — shorthand vs Poise+Bonds+3]"
-  status: provisional
+  status: resolved
   priority: P2
   decision: "NPC Composure formula: Presence + 4 (not Presence + 6). Stage13 shorthand superseded. Applied to params_debate.md. [PROVISIONAL]"
   propagation_targets:
@@ -1236,12 +1236,12 @@ editorial_decisions:
 
   - id: ED-054
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation
     source_file: tests/sim_hyb_01_templar_crossing.md
     description: "Evidence leverage mechanic in debate — no rule for conditional threat backed by verifiable fact. Proposed: Cognition+History roll Ob 2 to shift audience ethical mode for remaining debate when presenting verifiable stakes-changing evidence."
     full_flag_text: "[EDITORIAL: ED-054 — Define evidence leverage mechanic in debate]"
-    status: provisional
+    status: resolved
     priority: P2
     decision: null
     propagation_targets:
@@ -1392,11 +1392,11 @@ editorial_decisions:
 
   - id: ED-067
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation
     source_file: tests/sim_proj_01_projectile_categories.md
     description: "Personal combat ranged: consider adding a Dodge action (full pool Defence vs ranged attack) alongside Cover. BW precedent has Avoid (full pool to dodge). Currently Valoria only offers Establish Distance (move out of range, costs action) or Cover (passive DR). A mid-cost option — spend Defence pool to partially mitigate — may improve tactical richness."
-    status: provisional
+    status: resolved
     priority: P3
     decision: "Dodge action added to personal combat: forfeit attack, full pool as passive Defence vs ranged. Applied to params_combat.md. [PROVISIONAL]"
     tags: [personal_combat, ranged, dodge, precedent_bw]
@@ -1451,11 +1451,11 @@ editorial_decisions:
     tags: [board_game, mandate, faction_mechanics]
   - id: ED-071
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: audit
     source_file: tests/audit_hybrid_01.md
     description: "Confirm Domain Echo amount formula (PP-108 provisional): +1 Success, +2 Overwhelming, relevant stat, cap ±2/scene. Confirm multiple Echo firing order rule."
-    status: provisional
+    status: resolved
     priority: P2
     decision: "Domain Echo amount PP-108 confirmed: Success +1, Overwhelming +2, cap ±2/scene, most relevant stat. [PROVISIONAL]"
     tags: [hybrid, domain_echo, accounting]
@@ -1484,11 +1484,11 @@ editorial_decisions:
 
   - id: ED-074
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: audit
     source_file: tests/audit_hybrid_01.md
     description: "Define 'sufficient scope' for TTRPG Register Shift (Scene→Faction). Currently GM discretion only. Propose: a scene qualifies as faction-scope if it involves a named faction leader, a Domain Action equivalent, or a direct challenge to a faction institution. Otherwise personal scope only."
-    status: provisional
+    status: resolved
     priority: P2
     decision: "Sufficient scope defined: named faction leader/institution, Domain Action equivalent, or Relational+ Thread op. Applied to params_scale_transitions.md. [PROVISIONAL]"
     tags: [hybrid, register_shift, scope]
@@ -1573,12 +1573,12 @@ editorial_decisions:
 
   - id: ED-082
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: document_review
     source_file: designs/board_game/bg_improvement_v3_amendment2.md
     description: "BG-E-59: Almud Conviction text. Amendment2 proposes: 'The state is the only legitimate vessel of order; everything must flow through it or be consumed by it.' Confirm or replace."
     full_flag_text: "[EDITORIAL: ED-082 — Almud BG Conviction text. Proposed in amendment2. Confirm?]"
-    status: provisional
+    status: resolved
     priority: P2
     decision: "[BG Conviction archetype text placeholder — specific wording for Almud's conviction is a narrative decision deferred to campaign development. Mechanical function unchanged.] [PROVISIONAL]"
     propagation_targets: [compilation/v0.14/stage_bg_board_game_mode.md, designs/board_game/stage_bg_proposal_v02.md]
@@ -1603,12 +1603,12 @@ editorial_decisions:
 
   - id: ED-084
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: document_review
     source_file: designs/board_game/bg_improvement_v3_amendment2.md
     description: "AER (Altonian Ecclesiastical Relationship) starting value = 2. Confirm this is appropriate given canon Church/Altonia relationship at game start. Amendment2 proposes: AER starts at 2 (neutral)."
     full_flag_text: "[EDITORIAL: ED-084 — AER starting value. Amendment2 sets AER=2 at game start. Confirm?]"
-    status: provisional
+    status: resolved
     priority: P2
     decision: "AER (Altonian Expansion Rating) starting value: AER=2 (neutral) at game start per Amendment2. Represents neither active threat nor stable peace — motivates IP clock without immediate crisis. [PROVISIONAL]"
     propagation_targets: [references/params_board_game.md]
