@@ -88,6 +88,11 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 
 | AUDIT-D-02 | Debate system v1.5 re-audit + all modes + Thread temporal axes | TTRPG+BG+HYB | PAST/PRES/FUT/CROSS | TC, Composure, Concentration, RS, Coherence | All | Himlensendt, Baralta, Klapp, Maret, Vaynard | All debate archetypes | Complete | PP-119-123 applied; HD-F-01 P1 (PP-120 Hybrid clamp); TT-F-04 P1 (PP-123 temporal conflict); ED-087-091 logged |
 | SIM-D-05 | Thread in all temporal axes during debate — Past/Present/Future axis tests | TTRPG | PAST+PRES+FUT | RS, Coherence, TC, Conviction Track | Church, Varfell | Maret, Klapp, Vaynard | Practitioner-orator, institutional | Complete | TT-F-01-05; 3 P1 findings patched PP-120/122/123; 2 P2 ED-097/089 |
+| SIM-X-17 | POP + paradox window (PP-193) | TTRPG | PAST | Coherence, RS, TD | None | Generic TS70, TS30+ opponent | Veteran practitioner, adversary | Complete | 1 gap (sequential POP on paradoxed thread) |
+| SIM-X-18 | Rendering Crisis arc (PP-194) | TTRPG | CROSS | Coherence, Thread Sensitivity, Bonds | None | Generic practitioner, Close Knot | Late-campaign veteran | Complete | 2 findings: stability disruption gap; TS30-31 TS loss risk |
+| SIM-X-19 | Mass battle ×3 RS multiplier (PP-192) | TTRPG+Hybrid | PRES | RS, Coherence | Generic | Generic TS70 practitioner | Combat practitioner | Complete | P1: 3 Dissolution attempts = campaign-ending RS drain; RS<24 Rupture threshold |
+| SIM-X-20 | Hybrid Coherence 10-session (PP-198) | Hybrid | CROSS | Coherence, Thread Sensitivity | All | 2 PC practitioners | Hybrid practitioner-strategist | Complete | Co-declaration tie-break gap; GM guidance needed on sustainable op rate |
+
 
 ## SIM-DEBT Register
 
@@ -227,3 +232,10 @@ Open for editorial: ED-061, ED-062, ED-063.
 | SIM-005 | PP-173 mass combat scenarios: HP vs Heavy armour, LP vs levy, HBl unit test | TTRPG | PRES | Str/Cohesion/Morale | Crown, Varfell | Generic commanders | HP crossbow unit, LP archer unit, HBl unit, Heavy infantry | COMPLETE | 005A-F1: HP units zero damage vs Heavy armour at standard CP (correct — mass combat abstraction). 005B-F1: LP devastates levy. 005C: HBl effective vs Light/Medium. |
 | SIM-006 | Hybrid siege: PP-091 Artillery, PP-172 HBl personal, Zoom-In intersection | Hybrid | PRES | Unit Str/Fortification | Löwenritter, Crown | Maret Uln | HBl skirmisher, Artillery crew | COMPLETE | 006-F1: Personal HBl viable anti-artillery sniper archetype in Hybrid mode. |
 | PP-188 | Comprehensive params correction from authoritative v04 scan | BG | CROSS | All | Crown/Church/Hafenmark/Varfell/Restoration/Löwenritter | All | All | COMPLETE | Faction list corrected; TC=22, PI=7, Torben=3; Phase4 order corrected; Church/Crown/Varfell victory conditions corrected; Guilds/Niflhel removed as players; ED-088 Ministry gap |
+## SIM-DEBT Updates (2026-04-02)
+| ID | Status | Notes |
+|----|--------|-------|
+| SIM-DEBT-TW-01 | RESOLVED (SIM-X-17) | Paradox window mechanic validated. 1 minor gap (D3). |
+| SIM-DEBT-TW-02 | RESOLVED (SIM-X-18) | Rendering Crisis arc validated. 2 findings (SIM-18-01, SIM-18-02). |
+| SIM-DEBT-TW-03 | RESOLVED (SIM-X-19) | ×3 RS multiplier validated. P1 finding: mass Dissolution is campaign-altering (SIM-19-01). |
+| SIM-DEBT-TW-04 | RESOLVED (SIM-X-20) | Hybrid Coherence calibrated — Moderate scenario is correct design intent. 2 minor findings. |
