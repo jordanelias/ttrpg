@@ -1,5 +1,5 @@
 <!-- version: v0.8.5+PP220 | source: valoria_bg_v05_simulation_and_patches.md (canonical per canonical_sources.yaml); action economy from stage_bg_proposal_v02.md | last_updated: 2026-04-03 -->
-<!-- PATCHES APPLIED: PP-169-PP-187 | CORRECTIONS: PP-188 | PP-189 (v05 final) | PP-199–201 (territory table, road network, map v2) | PP-219 (Southernmost access redesign) | PP-220 (Champion TS table) -->
+<!-- PATCHES APPLIED: PP-169-PP-187 | CORRECTIONS: PP-188 | PP-189 (v05 final) | PP-190–201 (BG balance, territory table, road network, map v2) | PP-219 (Southernmost access redesign) | PP-220 (Champion TS table) -->
 <!-- AUTHORITATIVE SOURCE: designs/board_game/valoria_bg_v05_simulation_and_patches.md (faction stats, clocks, victory conditions); designs/board_game/stage_bg_proposal_v02.md (action economy, card-hand system PP-177) -->
 <!-- NOTE: v05 is canonical for BG mechanics. v04 B-sections remain structural base. -->
 <!-- STALE CHECK: PP-219/220 propagated. Next: ED-109–113 balance editorials open. -->
