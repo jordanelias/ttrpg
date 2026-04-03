@@ -193,7 +193,7 @@ Unit starting Cohesion: Light Infantry 3, Heavy Infantry 4, Cavalry 4, Ranged 3,
 | Deed | Condition |
 |------|-----------|
 | 1 | Mandate ≥ 5 |
-| 2 | Control T1 + T2 + ≥ 2 other territories (total ≥ 4) |
+| 2 | Control T1 (Valorsplatz) + T6 (Hafenvalor) + ≥ 2 other territories (total ≥ 4) (PP-196) |
 | 3 | TC < 60 and IP < 75 simultaneously |
 | 4 | PI ≥ 5 |
 | 5 | Torben Loyalty ≥ 5 |
@@ -324,8 +324,9 @@ Roll for each Crown/Hafenmark territory separately. All rolls resolved simultane
 | Territory | TC Gain on Success |
 |-----------|-------------------|
 | Standard Crown/Hafenmark territory | +1 |
-| Hafenvalor (T6, duchy capital) | +3 |
-| Lowenskyst (T7) | +1 |
+| Gransol (T2, Hafenmark duchy capital) | +3 | (PP-196: Gransol is Hafenmark capital, not Hafenvalor) |
+| Hafenvalor (T6, Crown port) | +1 |
+| Lowenskyst (T7, Crown port) | +1 |
 | Valorsplatz (T1, royal capital) | +5 |
 | Himmelenger (T3, Grand Cathedral) | Already Church-held — does not trigger seizure roll and generates no additional TC |
 
@@ -517,8 +518,9 @@ Varfell (T9) is adjacent to: T5 (Arnesheld, Fort 3), T10 (Sigurdshalm, NPC/Niflh
 
 Every viable expansion path from T9 runs into a fortified or hostile position:
 - T5 (Arnesheld): Fort 3 — the strongest fortress on the board. Löwenritter garrison.
-- T10 (Sigurdshalm): Niflhel NPC territory. Trade +1 Ob. No military presence but diplomatically hostile.
-- T12/T13: Uncontrolled Thread Wound sites. RS −1/season if occupied. Accessible only with VTM ≥ 2.
+- T10 (Sigurdshelm): Varfell starting territory (Niflhel has network presence here, Trade +1 Ob from Black Market, but Varfell controls it). Expansion from T10 goes to T9 (already Varfell) or T11 (already Varfell) — no outward expansion available from this direction.
+- T12 (Oastad): Varfell starting territory but Thread Wound — occupation costs RS. Not a liability but a constraint on holding it long-term.
+- T13 (Stillhelm): Crown nominal territory, Thread Wound, Southernmost Access. Varfell must pass through T12 to reach T13.
 
 **Fortification Combat Rule (clarification for Varfell):** When attacking a fortified territory, defending faction adds Fort level as bonus dice to defensive Military roll. Fort 3 (Arnesheld) = defender rolls Military + 3D. This is the primary mechanical reason Varfell's expansion is delayed — they must either neutralise fortifications first (Fortify-equivalent action in reverse: Tribune Sabotage to reduce Fort by 1, Ob = Fort level) or accept heavily unfavourable odds.
 
@@ -787,3 +789,15 @@ Most territories, but dispersed along the coast and south.
 T3 (Himmelenger) is Crown territory but Church has deep institutional presence — Crown cannot use T3 for standard military purposes without Church backlash (Institutional Mandate trigger).
 T13 (Stillhelm) is nominal — Crown claims it but exercises no governance (non-Thread orders +1 Ob).
 Effective starting territories: T1, T5, T6, T7 = 4 territories with real governance. T3 = contested presence. T13 = unclaimed frontier.
+
+## Territory Cascade Corrections (PP-196)
+Following PP-195 territory reassignment, corrections applied:
+- Crown Deed 2: T1+T2 → T1+T6 (T2 is now Hafenmark)
+- Hafenmark Deed (Path C, Deed 3): T6 → T2 (Gransol is Hafenmark capital)
+- TC 80 seizure TC values: Gransol T2 = +3 (duchy capital), Hafenvalor T6 = +1 (Crown port)
+- Ministry AP-tokens: removed T2 from starting positions (Crown Ministry only)
+- Varfell expansion constraint: T10 corrected (Varfell starting territory, not NPC hostile)
+- T12 (Oastad): Varfell starting territory — Thread Wound cost applies but it's already theirs
+- Elske contact via T4 (Spartfell): T4 is now Hafenmark. Crown or Löwenritter must operate
+  in Hafenmark territory to contact Elske. Ob +1 if Hafenmark has active Standing against Crown.
+  Hafenmark player may facilitate or obstruct contact (Senator Outward, Ob 2 to grant access).

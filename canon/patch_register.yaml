@@ -2114,3 +2114,14 @@ patches:
   applied_to_version: "v0.7.4"
   status: applied
   applied_commit: pending
+
+- id: PP-196
+  date: 2026-04-02
+  severity: P1
+  description: "Territory cascade corrections from PP-195 reassignment: Crown Deed 2 T1+T2→T1+T6; Hafenmark Path C Deed 3 T6→T2; TC80 duchy capital TC bonus corrected (Gransol T2 +3, Hafenvalor T6 +1); Ministry AP-tokens T2 removed (Crown-only); Varfell expansion constraint text corrected (T10 is Varfell starting territory); Elske contact via T4 (now Hafenmark) — facilitation/obstruction mechanic added."
+  finding_id: "PP-195 cascade"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.4"
+  status: applied
+  applied_commit: pending
