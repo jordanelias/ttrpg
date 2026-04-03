@@ -859,3 +859,119 @@ Following PP-195 territory reassignment, corrections applied:
 - Elske contact via T4 (Spartfell): T4 is now Hafenmark. Crown or Löwenritter must operate
   in Hafenmark territory to contact Elske. Ob +1 if Hafenmark has active Standing against Crown.
   Hafenmark player may facilitate or obstruct contact (Senator Outward, Ob 2 to grant access).
+
+## Territory Table — Final Corrected (PP-198)
+Vargstad = Varfell duchy capital (green star, SW peninsula). Halvardshelm = Varfell (green circle, reverting PP-197).
+
+| # | Territory | Faction | Fort | Pros | Key Special |
+|---|-----------|---------|------|------|-------------|
+| 1 | Valorsplatz | Crown ★ | 2 | 6 | Kingdom capital. Parliament seat. Royal Court. Ministry AP-token. |
+| 2 | Gransol | Hafenmark ★ | 1 | 5 | Hafenmark duchy capital. Garrison +1D Muster. |
+| 3 | Himmelenger | Crown | 2 | 5 | Church Grand Cathedral (presence, not control). TC +1/season if Church Favour ≥ 3. |
+| 4 | Spartfell | Hafenmark | 2 | 3 | NE Altonian mountain pass. IP events fire here first. |
+| 5 | Arcansheld | Crown/Löwenritter | 3 | 4 | Löwenritter Fortress. Fort max 4. |
+| 6 | Hafenvalor | Crown | 1 | 5 | Crown port city. Trade +1D. Named the Hafenmark region. |
+| 7 | Lowenskyst | Crown | 0 | 4 | Northern port. Schoenland sea route. |
+| 8 | Eidursjo | Hafenmark | 0 | 4 | Lake/forest. March costs 2 cards. |
+| 9 | Varfell | Varfell | 1 | 4 | VTM research here only. Einhir ruins: Restoration Weaving −1 Ob. |
+| 10 | Sigurdshelm | Varfell | 0 | 3 | NW Altonian pass nearby. Niflhel Black Market: Trade +1 Ob, Niflhel Covert −1 Ob. |
+| 11 | Halvardshelm | Varfell | 0 | 5 | Breadbasket +1 Pros/season. Guilds CP-token. (PP-198: Varfell, not Hafenmark — map corrected.) |
+| 12 | Vargstad | Varfell ★ | 1 | 3 | Varfell duchy capital (green star). RENAMED from Oastad. Thread Wound. RS −1/season after 2 seasons occupation. Southernmost access zone. |
+| 13 | Stillhelm | Crown (nominal) | 0 | 2 | Southernmost Access. Non-Thread orders +1 Ob. Warden Cooperation track. |
+| 14 | Eisengrund | Restoration (informal) | 0 | 4 | Einhir Heartland. Restoration −1 Ob. Church +1 Ob. |
+| 15 | Schoenland | Neutral NPC | 1 | 5 | Off-map, east of Valorsplatz. Altonian Trade. IP ≥ 75: Vanguard deploys. |
+
+★ = duchy/faction capital  
+
+### Starting Control
+| Faction | Territories | Count |
+|---------|------------|-------|
+| Crown | T1, T3, T5 (shared), T6, T7, T13 (nominal) | 6 |
+| Hafenmark | T2★, T4, T8 | 3 |
+| Varfell | T9, T10, T11, T12★ | 4 |
+| Church | 0 (Favour in major cities) | — |
+| Restoration | T14 (informal) | 1 |
+
+## Adjacency — Final (PP-198)
+Derived from map circles, yellow dotted territory lines, terrain, and road network logic.
+
+T1 ↔ T3, T5, T6, T7
+T2 ↔ T4, T8
+T3 ↔ T1, T6, T13, T14
+T4 ↔ T2, T15 (mountain pass — NE purple route)
+T5 ↔ T1, T8, T9, T12
+T6 ↔ T1, T3, T7
+T7 ↔ T1, T6, T15 (sea)
+T8 ↔ T2, T5, T9, T11
+T9 ↔ T5, T8, T10, T12
+T10 ↔ T9, T11 [NW pass to off-map Altonia — not a playable adjacency, IP event only]
+T11 ↔ T8, T10, T12
+T12 ↔ T5, T9, T11, T13, T14
+T13 ↔ T3, T12, T14
+T14 ↔ T3, T12, T13
+T15 ↔ T4 (mountain pass), T7 (sea)
+
+## Road Network (PP-198)
+Generated from circle positions, terrain (mountains north + NW peninsula, lake at Eidursjo), and pre-industrial geography.
+
+### Primary Roads (maintained, all-season trade routes)
+| Road | Route | Notes |
+|------|-------|-------|
+| King's Road | T1 (Valorsplatz) → T3 (Himmelenger) → T13 (Stillhelm) | South coast. Primary civilian and military arterial. Crown maintained. |
+| Northern Coast Road | T1 → T6 (Hafenvalor) → T7 (Lowenskyst) → T4 (Spartfell) | East coast. Trade route to north. Hafenmark uses for Schoenland access. |
+| Central Corridor | T1 → T5 (Arcansheld) → T8 (Eidursjo) → T2 (Gransol) | Inland route. Löwenritter patrol. Connects capitals T1 and T2. |
+| Hafenmark Duchy Road | T2 (Gransol) → T4 (Spartfell) | Internal duchy. Garrison road. |
+| Western Valley Road | T8 (Eidursjo) → T11 (Halvardshelm) → T10 (Sigurdshelm) → T9 (Varfell) | Follows valley west of lake. Primary trade route through Varfell. |
+
+### Secondary Roads (unpaved, passable all seasons but slower)
+| Road | Route | Notes |
+|------|-------|-------|
+| Mountain Pass Road | T5 (Arcansheld) → T9 (Varfell) | Through mountain saddle. Löwenritter checkpoint. Slow (March costs 2 cards through this route unless Löwenritter permit). |
+| Varfell Duchy South Road | T9 → T11 → T12 (Vargstad) | Internal Varfell duchy road connecting capital chain. |
+| Southernmost Track | T12 (Vargstad) → T13 (Stillhelm) | Narrow coastal track. Thread active territory. Non-Thread orders +1 Ob throughout. |
+| Einhir Track | T12 → T14 (Eisengrund) → T3 (Himmelenger) | Ancient Einhir road, partially reclaimed. Restoration uses for movement. Church patrols southern end. |
+| Border Track | T2 (Gransol) → T8 → T11 → T12 | Hafenmark-Varfell border route. Contested in war scenarios. |
+
+### Altonian Mountain Routes (passes — not roads, impassable without guide)
+| Pass | Route | Notes |
+|------|-------|-------|
+| NE Spartfell Pass | T4 (Spartfell) → Altonian territory → T15 (Schoenland) | Primary Altonian invasion route. IP events fire at T4 first. Duke Veldensohn's duchy borders here. |
+| NW Sigurdshelm Pass | T10 (Sigurdshelm) → off-map Altonia | Secondary. Riskbreakers monitor. Not a playable faction route — only relevant at IP ≥ 90 or specific events. |
+
+### Road Effects on March
+| Situation | March Cost |
+|-----------|-----------|
+| Primary road, adjacent territory | 1 Legionary card |
+| Secondary road or no road, adjacent territory | 1 Legionary card (same — roads affect narrative speed, not game cost unless specified) |
+| Eidursjo (T8): any March through | 2 cards (terrain, per existing rule) |
+| Mountain Pass Road T5↔T9 | 2 cards (without Löwenritter permit) or 1 card (with permit) |
+| Southernmost Track T12↔T13 | 1 card but triggers Thread Wound rules on arrival |
+
+## Southernmost Zones (PP-197, confirmed PP-198)
+| Zone | Territories | Effect |
+|------|------------|--------|
+| Zone 3 (outer) | T9 (Varfell), T5 (Arcansheld) | Substrate sensitivity. Thread Resonance +1 for all factions when RS < 40. |
+| Zone 2 (middle) | T12 (Vargstad), T11 (Halvardshelm) | Thread Wound. RS thresholds trigger +10 early. |
+| Zone 1 (inner) | T13 (Stillhelm), T14 (Eisengrund) | Active Thread Wound. RS −1/season any occupation. Warden Cooperation track. |
+| Epicentre | Beyond T13/T14 (not a territory) | Site of the Calamity. Warden base. Emergence fires when expedition reaches here. |
+
+## Altonian Mountain Passes (PP-197, confirmed PP-198)
+- **NE Pass** (near T4 Spartfell): primary Altonian invasion route; playable connection to T15 Schoenland
+- **NW Pass** (near T10 Sigurdshelm): Riskbreaker-monitored; event-only route for Altonian incursion at extreme IP
+
+## TC 80 Seizure — Final Territory Values (PP-198 corrects PP-196)
+| Territory | Faction | TC on Success |
+|-----------|---------|---------------|
+| T1 Valorsplatz | Crown capital | +5 |
+| T3 Himmelenger | Crown | +1 |
+| T5 Arcansheld | Crown/Löwenritter | +1 |
+| T6 Hafenvalor | Crown | +1 |
+| T7 Lowenskyst | Crown | +1 |
+| T13 Stillhelm | Crown (nominal) | +1 |
+| T2 Gransol | Hafenmark capital | +3 |
+| T4 Spartfell | Hafenmark | +1 |
+| T8 Eidursjo | Hafenmark | +1 |
+| T11 Halvardshelm | Varfell — NOT targeted (TC80 targets Crown/Hafenmark only) | — |
+| T12 Vargstad | Varfell — NOT targeted | — |
+Himmelenger (T3) is Crown territory with Church cathedral presence — Church seizing its own cathedral city via TC80 does not generate TC (already ecclesiastically consolidated). TC +0 for T3.
+Revised: T3 Himmelenger = TC +0 on seizure (Church already has Favour here; political seizure adds nothing theologically).

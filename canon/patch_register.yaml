@@ -2136,3 +2136,14 @@ patches:
   applied_to_version: "v0.7.5"
   status: applied
   applied_commit: pending
+
+- id: PP-198
+  date: 2026-04-02
+  severity: P1
+  description: "Final territory corrections from starred map: Vargstad = Varfell duchy capital (green star, SW, T12 renamed from Oastad). Halvardshelm T11 = Varfell (green circle — PP-197 was wrong to assign to Hafenmark). Hafenmark = T2/T4/T8 (3 territories). Varfell = T9/T10/T11/T12 (4 territories). Road network generated from circle positions, terrain, pre-industrial geography. Adjacency table finalized. TC80 seizure values corrected for final territory assignments."
+  finding_id: "Annotated map with stars"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.5"
+  status: applied
+  applied_commit: pending
