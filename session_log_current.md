@@ -1,43 +1,38 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_VARGSTAD_ROADS_FINAL
+session_id: 2026-04-02T_DEFINITIVE_MAP_PP199
 phase: SESSION CLOSED
 status: COMPLETE
 
-## CORRECTIONS FROM STARRED MAP
-- Green star = Vargstad (Varfell duchy capital, SW peninsula) — new name for T12 (was Oastad)
-- White star = Gransol (Hafenmark capital T2) — confirmed
-- Yellow star = Valorsplatz (Crown capital T1) — confirmed
-- Halvardshelm T11 = VARFELL (green circle) — PP-197 was wrong to assign to Hafenmark
+## DEFINITIVE TERRITORY MAP (PP-199)
+15 land territories + T16 Schoenland (maritime island NPC).
 
-## FINAL TERRITORY ASSIGNMENTS (PP-198)
-Crown (6): T1 Valorsplatz★, T3 Himmelenger, T5 Arcansheld(shared), T6 Hafenvalor, T7 Lowenskyst, T13 Stillhelm
-Hafenmark (3): T2 Gransol★, T4 Spartfell, T8 Eidursjo
-Varfell (4): T9 Varfell city, T10 Sigurdshelm, T11 Halvardshelm, T12 Vargstad★
+Varfell (4): T1 Varfell city, T2 Sigurdshelm, T3 Halvardshelm, T4 Vargstad★
+Hafenmark (4): T5 Gransol★, T6 Eidursjo, T7 Spartfell, T8 Lowenskyst
+Crown (5): T9 Arcansheld (shared), T10 Nordhelm, T11 Mittelmark, T12 Valorsplatz★, T13 Stillhelm
+Church (1): T14 Himmelenger★ (Church STARTS here — black blob = territorial control)
+Southernmost: T15 Askeheim (uncontrolled, Warden domain)
+NPC: T16 Schoenland (maritime island, east of Valorsplatz)
 
-## ROAD NETWORK GENERATED (PP-198)
-Primary roads (5): King's Road, Northern Coast Road, Central Corridor, Hafenmark Duchy Road, Western Valley Road
-Secondary roads (5): Mountain Pass Road (T5↔T9, 2 cards), Varfell South Road, Southernmost Track, Einhir Track, Border Track
-Altonian passes: NE (T4↔T15), NW (T10↔off-map, event-only)
+## KEY DECISIONS
+- Himmelenger = Church starting territory (not Crown). Black blob confirms control.
+- Church has 1 starting territory and Cathedral TC generation.
+- Lowenskyst = Hafenmark (white curl on map). Overrides canonical source.
+- Nordhelm (T10) and Mittelmark (T11) = Crown buffer territories. Names provisional (ED-108).
+- Schoenland = maritime island, connected by sea (T8, T12) and NE mountain pass (T7).
 
-## TC80 SEIZURE VALUES FINALIZED
-T1 Valorsplatz +5, T2 Gransol(duchy capital) +3, all others +1.
-T3 Himmelenger = +0 (Church already consolidated ecclesiastically).
-Varfell territories (T11 Halvardshelm, T12 Vargstad) not targeted by TC80.
+## ROAD NETWORK COMPLETE
+5 primary roads + 6 secondary roads + 2 Altonian passes.
 
-## ADJACENCY TABLE FINALIZED
-See params. Key: T5 (Arcansheld) is now adjacent to T12 (Vargstad) via southern mountain route,
-giving Crown/Löwenritter direct access to Varfell's southern territories.
+## OPEN ITEMS
+ED-108 (P2): Confirm T10/T11 names (Nordhelm, Mittelmark).
 
 ## Gate: PASS
 
-## Commits
-d38f79bd: PP-198 Vargstad + roads + final adjacency
-
 next_session_start:
   priority_1: "Run freshness_gate.py check first."
-  priority_2: "BAL-BG-02: balance analysis with final correct territory assignments."
-  priority_3: "Church opening viability — 0 starting territories, TC via Favour in T3."
-  priority_4: "Verify Varfell expansion paths: T12 (Vargstad, Thread Wound) is capital but costs RS; VTM path through T12→T13 is canonical."
+  priority_2: "Confirm T10/T11 territory names (ED-108)."
+  priority_3: "Church opening viability: starts T14 Himmelenger with TC generation. Verify viable."
+  priority_4: "BAL-BG-02: balance analysis with definitive territory assignments."
 ```
