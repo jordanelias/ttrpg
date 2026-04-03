@@ -1,36 +1,50 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_MECHANICS_AND_THREAD_SIM
-phase: Phase 15 — Pool/Ob/Overwhelming alignment + three-temporal-axis thread simulation
-status: COMPLETE
+session_id: 2026-04-02T_FULL_EDITORIAL_AND_THREAD_SIM
+phase: Phase 14 — Full editorial dedup + threadwork simulation (all temporal axes)
+status: CLOSED
 
 completed:
-  - PP-181: Pool Minimum = 1D confirmed and stated in BG params (aligns with TTRPG).
-  - PP-182: Ob Minimum = 1 stated explicitly for all modes (Hybrid now covered).
-  - PP-183: Overwhelming Bonus Table for Domain Actions — ED-086 resolved. Overwhelming = Success + action-type bonus.
-  - PP-184: Govern full degree table — ED-085 resolved. Overwhelming +2, Success +1, Partial +1+Minor, Failure −1+Moderate.
-  - SIM-TW-01: Three-temporal-axis cross-mode simulation.
-    - Present-axis (Weaving Relational): Overwhelming — RS +1, over-actualisation, brittle stability, 3 co-movement fires.
-    - Future-axis (Pulling Firmly Actualised): Success — Treaty loosened 2 seasons, IP −1 next Accounting, Crown internal debate opened.
-    - Past-axis (POP 2-season): Success at TS 75 — Church T9 claim removed, Orphaned Configuration, paradox window 2 scenes, RS −3.
-    - TS gate confirmed: TS 55 cannot perform POP. TS 70+ required.
-    - All axes: P-01 co-movement fires (temporal+epistemic+actuality auto-effects confirmed).
-  - ED-085, ED-086 resolved (Govern degree table; Overwhelming bonus table).
-  - ED-090, ED-091, ED-092 added and resolved (pool min, Ob min, Overwhelming confirmation).
-  - Verdict: Threadworking produces qualitatively superior emergent gameplay (5+ new vectors vs 1 without thread).
+  - Stage 1: Editorial Workflow D (dedup/consolidate/strike)
+      Promoted to resolved: 19 items (mechanical patches applied or design confirmed)
+      Struck: 2 new (ED-078 dupe of ED-043; ED-083 mitigated by ref card)
+      5 BG amendment items resolved (ED-081–085 in BG numbering)
+      Final state: resolved=28, provisional=62, struck=7, open=0
+      Commit: 312a5f0
 
-key_design_decisions:
-  PP-181: Pool minimum = 1D all modes.
-  PP-182: Ob minimum = 1 all modes (Hybrid explicit).
-  PP-183: Domain Action Overwhelming bonus table — each action type has specific bonus.
-  PP-184: Govern Overwhelming = Prosperity +2, Success = +1, Partial = +1 + Minor FF, Failure = −1 + Moderate FF.
-  SIM-TW-01: Three temporal axes verified distinct, complementary, appropriately gated.
+  - Stage 2: Editorial propagation complete (all applied decisions marked)
 
-flags_for_review: none (all editorials resolved this session)
+  - Stage 3: SIM-THREAD-01 — four temporal axis sessions
+      A (no threading): Debate — Baralta defeats Crown envoy 5 exchanges. Evidence leverage confirmed. Symmetric-pool deadlock at resistance≥2 confirmed design feature.
+      B (Present/Weaving): Relational Weaving TS-52. Overwhelming 75%. RS+1. P-01 ✓. Over-actualisation BG gap found.
+      C (Past/POP): Generational POP Ob8. P(success)≈8%. RS−7 expected per attempt. Historical truth mechanically sealed. P-03 consistent.
+      D (Future/Locking, Hybrid): Personal Locking Ob4 TN8. P(success)≈8%. Territorial+ near-impossible by design (P-06). TC trigger clarified.
+      Commit: 8edcc3a
 
-next_recommended:
-  - Compile BG Domain Action reference card with FF complication column + Overwhelming bonus column
-  - 12-season long-run simulation with Thread ops active
-  - Investigate Stage 3 compilation update (threadwork_redesign_v25 vs empty stage3)
+patches_applied:
+  PP-181: Threadwork tables — d6 Actual auto-effect, temporal RS cost for POP, Territorial Locking design note, Partial Lock duration 1 season
+  PP-182: TC trigger — observation alone insufficient; Church Investigation Domain Action required
+  PP-183: Evidence leverage audience mode shift capped at weight 2.0
+  PP-184: Thread Debt token system for BG layer (over-actualisation + Lock Domain Echo)
+
+editorial_items_added:
+  ED-087: Register Shift needs GM narrative signal (provisional rule added to params_scale_transitions scope)
+
+key_design_confirmations:
+  - High-resistance political debates deadlock symmetric pools (design feature ✓)
+  - Historical POP near-impossible: mundane investigation is primary (P-03 ✓)
+  - Territorial Locking near-impossible: future cannot be locked at strategic scale (P-06 ✓)
+  - P-01 co-movement confirmed in all Thread sessions ✓
+
+final_ledger_state:
+  open: 0
+  provisional: 63 (62 + ED-087)
+  resolved: 28
+  struck: 7
+  total: 98
+
+next_action:
+  task: "User review of priority provisional items: ED-001 (Card-Hand full design), ED-036 (Altonian units), ED-048 ([SOUTHERNMOST-NPC] name), ED-081 (10-exchange stalemate cap). Then: compilation pass for any stable system. Hybrid and threadwork mechanics are now fully simulatable with no open blockers."
+  note: "All temporal axes simulated. PP-181–184 applied. System ready for next arc generation, NPC stress testing, or compilation."
 ```
