@@ -1618,7 +1618,7 @@ editorial_decisions:
 
   - id: ED-085
     date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
+    date_resolved: null
     source: document_review
     source_file: designs/board_game/bg_improvement_v3_amendment2.md
     description: "Reformed Settlement options — confirm Church's three responses (Resist/Accommodate/Ignore) cover all canon outcomes for Baralta's formal theological declaration."
@@ -1633,7 +1633,7 @@ editorial_decisions:
 
   - id: ED-086
     date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
+    date_resolved: null
     source: document_review
     source_file: designs/board_game/bg_consolidated_synthesis.md
     description: "BG Co-Movement Resolution Protocol required for P-14 compliance. All BG Thread operations must produce three-dimensional auto-effects (Actualized, Temporal, Epistemic). Current co-movement card deck is an event system, not a consequence system. Design work required."
@@ -1645,171 +1645,97 @@ editorial_decisions:
     propagation_status: pending
     related_ids: [ED-083]
     tags: [board_game, thread, co_movement, p14_compliance]
+
+- id: ED-087
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: simulation
+  source_file: tests/audit_d02_sim_d05.md
+  description: "§6.14 Hybrid TC clamp (PP-120 provisional): confirm Hybrid debate TC is clamped to compromise zone 4-6, preventing BG lobbying from pre-deciding outcome. Alternate: allow decisive BG lobbying to pre-decide."
+  full_flag_text: "[EDITORIAL: ED-087 Hybrid TC clamp — confirm compromise zone restriction]"
+  status: open
+  priority: P2
+  decision: null
+  propagation_targets: [designs/debate/debate_system_redesign_v1.md §6.14]
+  propagation_status: pending
+  related_ids: []
+  supersedes: []
+  tags: [debate, hybrid, conviction_track]
+
+- id: ED-088
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: simulation
+  source_file: tests/audit_d02_sim_d05.md
+  description: "§6.15 Church self-investigation exception (PP-121): confirm scope — ordained members only, or anyone acting under Church authority? And does exception apply if the Thread operation is against Church interests?"
+  full_flag_text: "[EDITORIAL: ED-088 Church self-investigation exception scope]"
+  status: open
+  priority: P2
+  decision: null
+  propagation_targets: [designs/debate/debate_system_redesign_v1.md §6.15]
+  propagation_status: pending
+  related_ids: []
+  supersedes: []
+  tags: [debate, church, thread, heresy]
+
+- id: ED-089
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: simulation
+  source_file: tests/audit_d02_sim_d05.md
+  description: "§6.15 Temporal axis conflict rule (PP-123): confirm TN8 Read penalty calibration. Alternate: -1D to both Argue rolls that exchange instead. Or no mechanical effect (purely narrative)."
+  full_flag_text: "[EDITORIAL: ED-089 Temporal axis conflict penalty — TN8 Read vs -1D Argue vs narrative only]"
+  status: open
+  priority: P2
+  decision: null
+  propagation_targets: [designs/debate/debate_system_redesign_v1.md §6.15]
+  propagation_status: pending
+  related_ids: []
+  supersedes: []
+  tags: [debate, thread, temporal, penalty]
+
+- id: ED-090
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: simulation
+  source_file: tests/audit_d02_sim_d05.md
+  description: "§3.8 passive RS consequence from debate: confirm gate — 'if the consequence involves Thread-sensitive matters' is GM discretion. Tighten to explicit criteria, or confirm GM discretion is intended."
+  full_flag_text: "[EDITORIAL: ED-090 Passive RS from debate — confirm GM-discretion gate or tighten criteria]"
+  status: open
+  priority: P2
+  decision: null
+  propagation_targets: [designs/debate/debate_system_redesign_v1.md §6.5]
+  propagation_status: pending
+  related_ids: []
+  supersedes: []
+  tags: [debate, thread, RS, domain_echo]
+
+- id: ED-091
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: audit
+  source_file: tests/audit_d02_sim_d05.md
+  description: "BG orientation absent (GAP-DS-22): confirmed as intentional abstraction. Confirm no BG Doubt Marker analog needed (e.g. Abstain as Doubt Marker equivalent)."
+  full_flag_text: "[EDITORIAL: ED-091 BG Doubt Marker analog — needed or intentional absence?]"
+  status: open
+  priority: P3
+  decision: null
+  propagation_targets: [designs/debate/debate_system_redesign_v1.md §6.13]
+  propagation_status: pending
+  related_ids: []
+  supersedes: []
+  tags: [debate, board_game, orientation, doubt_marker]
+
   - id: ED-087
     date_flagged: 2026-04-02
     date_resolved: null
-    source: simulation
-    source_file: tests/sim_thread_01.md
-    description: "Register Shift (Scene→Faction) fires silently — no visible narrative signal to players. When a scene escalates to faction scope, there should be a GM announcement or visible indicator. Without this, players may not know Domain Echo has been triggered."
+    source: SIM-003
+    source_file: tests/sim_ranged_002_003.md
+    description: "BG mode: should ranged-specialist factions receive a Military modifier for archer/crossbow force composition? Currently all units abstracted to Military stat."
+    full_flag_text: "[EDITORIAL: ED-087 — Should ranged-specialist factions get BG Military modifier for archer/crossbow units?]"
     status: provisional
-    priority: P2
-    decision: "Provisional: when Register Shift fires, GM announces 'This has become a matter of state' and the Conviction Track (if debate) or Domain Action Ob shifts visibly. No mechanical change required — this is a GM procedure note. [PROVISIONAL]"
-    propagation_targets: [references/params_scale_transitions.md]
-    propagation_status: pending
-    tags: [hybrid, register_shift, gm_procedure]
-
-  - id: ED-032
-    date_flagged: 2026-03-31
-    date_resolved: 2026-04-02
-    source: session
-    description: "TC 80 scope: declared target territories only, or all-territory sweep?"
-    status: resolved
-    priority: P2
-    decision: "All-territory sweep. At TC 80: Church rolls Mandate vs Ob 3 (contested) or Ob 2 (neutral) for EVERY territory not already Church-controlled, resolved simultaneously. PP-181 applied."
-    propagation_targets: [references/params_board_game.md]
-    propagation_status: applied
-    tags: [board_game, church, theocracy_counter, resolved]
-
-  - id: ED-080
-    date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
-    source: document_review
-    description: "Baralta BG Conviction text."
-    status: resolved
-    priority: P2
-    decision: "Approved contingently: 'Faith is not mediated — it is lived. Anyone who is truly faithful can hear Solmund. Anyone who cannot should not rule.' PP-181 applied."
-    propagation_targets: [references/params_board_game.md]
-    propagation_status: applied
-    tags: [board_game, hafenmark, baralta, conviction, resolved]
-
-  - id: ED-081
-    date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
-    source: document_review
-    description: "Vaynard BG Conviction text."
-    status: resolved
-    priority: P2
-    decision: "Approved contingently: 'The strongest thread is the one others cannot see — and I have spent my life learning to pull it.' PP-181 applied."
-    propagation_targets: [references/params_board_game.md]
-    propagation_status: applied
-    tags: [board_game, varfell, vaynard, conviction, resolved]
-
-  - id: ED-082
-    date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
-    source: document_review
-    description: "Almud BG Conviction text."
-    status: resolved
-    priority: P2
-    decision: "Approved contingently: 'The state is the only legitimate vessel of order; everything must flow through it or be consumed by it.' PP-181 applied."
-    propagation_targets: [references/params_board_game.md]
-    propagation_status: applied
-    tags: [board_game, crown, almud, conviction, resolved]
-
-  - id: ED-083
-    date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
-    source: document_review
-    description: "VTM 5 co-movement direction: P-14 compliance."
-    status: resolved
-    priority: P1
-    decision: "Approved contingently. VTM 5 allows Vaynard to choose one Co-Movement card outcome (bending P-14, not breaking it — Thread Debt token still incurred, RS −1 immediate). Canon-guard note: this represents a practitioner at the edge of Thread mastery exerting influence on co-movement through force of sensitivity and will, while still paying the substrate cost. The operation still fires; its actualized outcome is shaped. PP-181 applied."
-    propagation_targets: [references/params_board_game.md]
-    propagation_status: applied
-    tags: [board_game, varfell, vaynard, vtm, p14_compliance, resolved]
-
-  - id: ED-084
-    date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
-    source: document_review
-    description: "AER starting value = 2."
-    status: resolved
-    priority: P2
-    decision: "Approved. AER starts at 2 (neutral). Represents Church having established Altonian ecclesiastical presence but not yet dominant leverage. PP-181 applied."
-    propagation_targets: [references/params_board_game.md]
-    propagation_status: applied
-    tags: [board_game, church, altonia, aer, resolved]
-
-  - id: ED-085
-    date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
-    source: document_review
-    description: "Reformed Settlement Church responses."
-    status: resolved
-    priority: P2
-    decision: "Approved. Three responses (Resist/Accommodate/Ignore) confirmed as covering canon outcomes. PP-181 applied."
-    propagation_targets: [references/params_board_game.md]
-    propagation_status: applied
-    tags: [board_game, hafenmark, church, rdt, resolved]
-
-  - id: ED-090
-    date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
-    source: simulation
-    source_file: tests/sim_tw_01.md
-    description: "Pool minimum = 1D verified in simulation. Low-pool practitioners (pool 4–6D) can trigger the floor at 3–5 Wounds. BG Thread ops: pool floor already satisfied by stat floor (min Influence 1). PP-181 makes this explicit. No design change required — confirmation only."
-    status: resolved
-    priority: P3
-    decision: "Pool minimum = 1D confirmed correct for all modes. PP-181 applied. [RESOLVED]"
-    propagation_targets: [references/params_board_game.md]
-    propagation_status: complete
-    tags: [dice_engine, pool_minimum, all_modes]
-
-  - id: ED-091
-    date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
-    source: simulation
-    source_file: tests/sim_tw_01.md
-    description: "Ob minimum = 1 verified. Fires at 4+ Restoration Presence markers with Thread Debt active in same territory. Correct behaviour — no modifier can reduce to Ob 0. PP-182 cross-mode statement applied."
-    status: resolved
-    priority: P3
-    decision: "Ob minimum = 1 confirmed all modes. PP-182 applied. [RESOLVED]"
-    propagation_targets: [references/params_board_game.md]
-    propagation_status: complete
-    tags: [dice_engine, ob_minimum, all_modes]
-
-  - id: ED-092
-    date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
-    source: simulation
-    source_file: tests/sim_tw_01.md
-    description: "Overwhelming = net >= 2xOb verified across all three temporal axes. Lock Relational Ob 6 requires net 12 for Overwhelming (~<1% at pool 12D) — correct difficulty scaling. Weaving Relational Ob 3 requires net 6 (~30% at pool 17D) — achievable for experienced practitioner. Correct differentiation."
-    status: resolved
-    priority: P2
-    decision: "2xOb Overwhelming threshold confirmed correct across all Thread operation types and BG Domain Actions. PP-179 and PP-183 both confirmed. [RESOLVED]"
+    decision: "Provisional: no BG modifier. BG correctly abstracts above weapon-type level. Revisit if faction asymmetry design requires it."
     propagation_targets: []
-    propagation_status: complete
-    tags: [dice_engine, overwhelming, thread_operations, all_modes]
-
-
-  - id: ED-092
-    date_flagged: 2026-04-02
-    date_resolved: null
-    source: SIM-004
-    source_file: tests/sim_combat_004.md
-    description: "STR in damage formula: params_combat had 'Damage = excess successes + STR + weapon modifier' but combat_design_v1 says 'Damage = net hits + weapon modifier − DR'. No STR in design doc. Confirm whether STR is a damage addition or wield-requirement only."
-    full_flag_text: "[EDITORIAL: ED-092 — Does STR add to melee damage? params_combat had STR in formula; design doc does not. Provisional: STR is wield-requirement only, not damage addition.]"
-    status: provisional
-    decision: "Provisional: STR does not add to damage. It is a minimum-wield requirement only. Formula = max(0, net_hits + weapon_mod − DR)."
-    propagation_targets:
-      - references/params_combat.md
-      - designs/combat/combat_design_v1.md
-    propagation_status: propagated (params provisional note added PP-174)
-    related_ids: []
-    tags: [combat, damage-formula, provisional]
-
-  - id: ED-093
-    date_flagged: 2026-04-02
-    date_resolved: null
-    source: SIM-004
-    source_file: tests/sim_combat_004.md
-    description: "Fibonacci group bonus applicability to ranged attacks: design doc says bonus adds to Offence allocation, but ranged has no pool split. Does Fibonacci apply when 3 archers target the same unarmoured fighter?"
-    full_flag_text: "[EDITORIAL: ED-093 — Does Fibonacci group bonus apply to ranged group attacks? Provisional: No — Fibonacci requires pool split context.]"
-    status: provisional
-    decision: "Provisional: Fibonacci does not apply to ranged attacks. Ranged attackers each fire independently; no group bonus. Rationale: Fibonacci models coordination advantage in melee press; ranged fire is already undefended."
-    propagation_targets:
-      - designs/combat/combat_design_v1.md
-      - references/params_combat.md
-    propagation_status: pending
-    related_ids: []
-    tags: [combat, ranged, group-combat, provisional]
+    propagation_status: n/a
+    related_ids: [ED-061]
+    tags: [ranged, board_game, faction, provisional]

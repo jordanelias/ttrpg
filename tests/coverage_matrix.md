@@ -86,6 +86,9 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 
 | SIM-HYB-01 | G1 Mass Combat, G2 Debate, G3 Threadwork, G4 Faction Seasonal, K2 Transition, C Full Scenario | HYB | PRES | TC, RS, IP, Stability, Coherence, Composure, Wounds, Unit Str/Morale/Cohesion | Church, Varfell, Crown, Hafenmark | Vaynard, Cardinal Klapp, Templar Sergeant | Practitioner-Scholar, Institutional Legalist, Church Militant | COMPLETE (Session A + B) | F-HYB-01 (P1→PP-101), GAP-K2-01 (P1→PP-101), F-HYB-02 (params stale→params_debate fixed), F-HYB-03 (P2→ED-054); 7 params gaps logged |
 
+| AUDIT-D-02 | Debate system v1.5 re-audit + all modes + Thread temporal axes | TTRPG+BG+HYB | PAST/PRES/FUT/CROSS | TC, Composure, Concentration, RS, Coherence | All | Himlensendt, Baralta, Klapp, Maret, Vaynard | All debate archetypes | Complete | PP-119-123 applied; HD-F-01 P1 (PP-120 Hybrid clamp); TT-F-04 P1 (PP-123 temporal conflict); ED-087-091 logged |
+| SIM-D-05 | Thread in all temporal axes during debate — Past/Present/Future axis tests | TTRPG | PAST+PRES+FUT | RS, Coherence, TC, Conviction Track | Church, Varfell | Maret, Klapp, Vaynard | Practitioner-orator, institutional | Complete | TT-F-01-05; 3 P1 findings patched PP-120/122/123; 2 P2 ED-088/089 |
+
 ## SIM-DEBT Register
 
 | ID | Source | Description | Status |
@@ -215,8 +218,5 @@ Open for editorial: ED-061, ED-062, ED-063.
 | AUD-BG-01 | Full BG system audit — formulas, number systems, interaction chains, gaps, principles, playtest burden, cross-mode | BG+HYBRID | CROSS | All BG tracks | All factions | — | All | COMPLETE | PP-180 bundle applied (8 fixes); ED-087 (P1 TC 80 scope); GAP-BG-05 (P1 co-movement protocol) remains open |
 | SIM-FF-01 | BG Fail Forward comparative (4-season, 6 factions, fixed rolls) | PP-177 confirmed; ED-085/086/087 flagged | 2026-04-02 | COMPLETE |
 
-| SIM-THREAD-01 | Weaving (Relational), POP (Past), Locking (Personal), Debate (no Thread), Co-movement P-01 | TTRPG+HYB | PAST+PRES+FUT | RS, Coherence, TC, Domain Echo, Wound, Composure | Crown, Church, Hafenmark, Varfell | Generic archetypes per axis | Practitioner, Monarch, Legalist | COMPLETE | F-TH-A-01 (P2→PP-183), F-TH-B-03 (P1→PP-181), F-TH-C-04 (P1→PP-181), F-TH-D-03 (P1→PP-182), F-TH-B-02 (P2→PP-184), F-TH-D-04 (P2→PP-184); ED-087 added; P-01 compliance confirmed all sessions |
-| PP-181-182 | Editorial resolutions + amendment2 extraction + BG Co-Movement Protocol design | BG+ALL | CROSS | RS, TC, IP, PI, TT, AER, RDT, TD, VTM | All factions | All named NPCs | All | COMPLETE | PP-181: all amendment2 systems extracted; PP-182: P-14 compliant co-movement protocol; ED-086 resolved |
-| SIM-TW-01 | Thread temporal axes cross-mode (present/future/past axis, with+without thread, all 3 modes) | PP-181/182/183/184 applied; ED-085/086/090/091/092 resolved | 2026-04-02 | COMPLETE |
-
-| SIM-004 | PP-174: params_combat stale HBl note, STR formula; ranged full combat test | TTRPG | PRES | Combat Pool/Health/Wounds | All | Generic | Archer, Crossbowman, Slinger, Melee, Knight | COMPLETE | F1: HBl stale line (P1 patched). F2: STR formula inconsistency (P1→ED-092 provisional). F3: Fibonacci ranged (ED-093). F5: HP/LP reload trade-off confirmed. F6: HBl role confirmed. |
+| SIM-002 | PP-173: mass combat ranged DR split (LP/HP/LBl/HBl), Volley Phase, Prepared Defence | TTRPG | PRES | — | All | Generic | Archer unit, Crossbow unit, Sling unit, Heavy Infantry | COMPLETE | F1: Old Projectile DR (LightCut) was P1 wrong — HP/HBl massively undervalued vs armour. F2: LBl anti-levy only at mass scale. F3: HBl personal vs Artillery distinction required. |
+| SIM-003 | BG ranged weapons: K1 cross-mode delta; BG abstraction confirmed correct | BG/Hybrid | PRES | — | All | Generic | All unit types | COMPLETE | F1: BG correctly abstracts weapon types — no changes needed. F2: ED-087 raised (faction ranged modifier). |

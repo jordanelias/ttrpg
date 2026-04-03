@@ -279,9 +279,3 @@ Propagation targets:
 - references/params_mass_combat.md → DONE (this commit)
 - designs/board_game/ → NOT REQUIRED (BG abstracts above weapon type)
 - references/propagation_map.md: PP-172 entry updated: mass_battle → DONE
-
-### PP-174 — params_combat stale note + formula fix (2026-04-02)
-Source: references/params_combat.md (SIM-004)
-Changes: Remove stale HBl no-personal line; fix Damage Formula (STR→ED-092 provisional)
-Propagation targets:
-- designs/combat/combat_design_v1.md → pending if ED-092 confirms STR removal (or confirms no STR)
