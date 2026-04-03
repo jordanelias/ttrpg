@@ -94,7 +94,7 @@ editorial_decisions:
     full_flag_text: "BG-E-45: Restoration Movement leader name/character"
     status: provisional
     priority: P2
-    decision: "Restoration leader: Maren Holt, textile organiser, Presence 5, Cognition 4, no Thread ability, Circles 4 in working-class networks. [PROVISIONAL]"
+    decision: "[Restoration leader archetype — TS 0, Presence 5+, grassroots organiser background, Circles 3+ in working-class networks. Specific name and profile are narrative decisions deferred to campaign development.] [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage6_factions.md
       - compilation/v0.14/stage13_npcs.md
@@ -113,7 +113,7 @@ editorial_decisions:
     full_flag_text: "BG-E-43: Riskbreakers identity"
     status: provisional
     priority: P2
-    decision: "Riskbreakers: former Löwenritter deserters operating in Southernmost margins. Faction-neutral mercenaries. Mandate 0, Military 3, no fixed territory. [PROVISIONAL]"
+    decision: "[Riskbreakers archetype — faction-neutral operators with Southernmost proximity. Specific cultural identity, background, and stat profile are narrative/worldbuilding decisions deferred to campaign development.] [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage6_factions.md
       - compilation/v0.14/stage13_npcs.md
@@ -132,7 +132,7 @@ editorial_decisions:
     full_flag_text: "BG-E-44: Four Cardinals details"
     status: provisional
     priority: P2
-    decision: "Fourth Cardinal: Vester Haum (Reform faction within Church). Names now: Olafsson (Intelligence), Klapp (Legalist), Baralta (Devout), Vester Haum (Reform). [PROVISIONAL]"
+    decision: "[Fourth Cardinal archetype — Reform faction within Church. Canon cardinals are Olafsson, Klapp, and Baralta. Fourth cardinal identity is a narrative decision deferred to campaign development.] [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage13_npcs.md
     propagation_status: pending
@@ -188,9 +188,11 @@ editorial_decisions:
     source_file: designs/debate/debate_system_redesign_v1.md
     description: "Inline version of ED-009 — same question with suggested designs for Guild arbitration, Varfell review, Revolution assembly"
     full_flag_text: "[EDITORIAL: additional proceeding types] — Consider: Guild arbitration (three-party), Varfell internal review, Revolution assembly"
-    status: provisional
+    status: struck
+    stale_reason: "Duplicate of ED-009. Same question, same resolution."
+    superseded_by: ED-009
     priority: P2
-    decision: "Same as ED-009 resolved. Guild Arbitration and Ducal Tribunal defined. [PROVISIONAL — supersedes inline suggestion]"
+    decision: null
     propagation_targets: []
     propagation_status: N/A
     related_ids: [ED-009]
@@ -398,7 +400,7 @@ editorial_decisions:
     full_flag_text: "[EDITORIAL: Should one named Revolution figure be established as the default NPC contact point?]"
     status: provisional
     priority: P2
-    decision: "Revolution NPC contact: Hazel Moens, printer's apprentice, distributes pamphlets. Circles 3 in working-class networks. Presence 3, Cognition 3, no Thread. [PROVISIONAL]"
+    decision: "[Revolution contact archetype — TS 0, Circles 3+ in working-class networks, non-practitioner organiser role. Specific name and profile deferred to campaign development.] [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage6_factions.md
       - compilation/v0.14/stage13_npcs.md
@@ -640,7 +642,7 @@ editorial_decisions:
     full_flag_text: "[EDITORIAL: ST-INT-07 Ceiral Ritual scale asymmetry vs Co-Movement — confirm intentional]"
     status: provisional
     priority: P2
-    decision: "Ceiral Ritual RS asymmetry: cap Ritual at RS +3 to match highest Co-Movement card ceiling. Avoids scale rupture between individual and faction-level RS effects. [PROVISIONAL]"
+    decision: "Ceiral Ritual RS changes propagate at full TTRPG value to BG RS track (immediate, per state_transfer_spec PP-107). The BG Co-Movement card ceiling (RS +1) applies ONLY to BG-initiated Thread abstraction, not to TTRPG Zoom In scenes. Ritual Success RS −6, Overwhelming RS −10, Partial RS −3, Failure RS +8 apply directly. [PROVISIONAL]"
     propagation_targets:
       - designs/board_game/valoria_bg_v05_simulation_and_patches.md
       - designs/ttrpg/threadwork_redesign_v25.md
@@ -737,7 +739,7 @@ editorial_decisions:
     full_flag_text: "[EDITORIAL: ST-INT-04 Military seasonal cap — pooled with Domain Actions or separate?]"
     status: provisional
     priority: P2
-    decision: "Artillery locked to Balanced disposition: confirmed intentional. Siege weapons cannot manoeuvre tactically. [PROVISIONAL]"
+    decision: "Military seasonal cap POOLS with Domain Action changes. Total ±2/season from all sources (battle losses + Domain Actions combined). One-season hard cap prevents single-season military collapse. [PROVISIONAL]"
     propagation_targets:
       - designs/board_game/valoria_bg_v05_simulation_and_patches.md
       - designs/mass_combat/mass_battle_v3.md
@@ -908,7 +910,7 @@ editorial_decisions:
     full_flag_text: "[EDITORIAL: ED-048 'Ceiral' is not a canon name — provide canonical replacement]"
     status: provisional
     priority: P1
-    decision: "Ceiral renamed Seira throughout. Phonemically close, removes problematic association. All references in stage4, stage13, stage14, and arcs to be updated at compilation pass. [PROVISIONAL]"
+    decision: "'Ceiral' flagged as non-canon placeholder. Replace with '[SOUTHERNMOST-NPC]' in all files until canonical name is assigned by user in narrative development. Name is a narrative/worldbuilding decision, not a mechanical one. Mechanical role (high-TS Southernmost practitioner, Ritual knowledge holder) is defined regardless of name. [PROVISIONAL]"
     propagation_targets:
       - compilation/v0.14/stage4_southernmost.md
       - compilation/v0.14/stage13_npcs.md
@@ -971,7 +973,7 @@ editorial_decisions:
   full_flag_text: "[EDITORIAL: ED-051 stage13 NPC debate stat block — add Attunement, Focus, Poise, Bonds for all named NPCs]"
   status: provisional
   priority: P1
-  decision: "Resolved in ED-050 Option D (Phase structure). Confirmed complete. [PROVISIONAL — carried from prior resolution]"
+  decision: "Provisional NPC debate attribute defaults for all named NPCs: Attunement = ⌈Cognition ÷ 2⌉; Focus = 3; Composure = Presence + 4 (per ED-052); Bonds = 2. Apply for simulation. Authoritative values require stage13_npcs.md update. [PROVISIONAL]irmed complete. [PROVISIONAL — carried from prior resolution]"
   propagation_targets:
     - compilation/v0.14/stage13_npcs.md
   propagation_status: pending
