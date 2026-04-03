@@ -1,47 +1,21 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_GEO_REALISM_PP200
-phase: SESSION CLOSED
+session_id: 2026-04-02T_SIM_X_21
+phase: Phase 15 — SIM-X-21 full simulation + sim-debt resolutions
 status: COMPLETE
 
-## GEOGRAPHIC REALISM REVIEW (PP-200)
+completed_this_session:
+  - PP-201–207: all sim-debt findings resolved (committed 24018d8)
+  - SIM-X-21: Collective Threadwork → Over-Actualisation → Brittleness (Modes C+B+D)
+    - 6 findings: 4 confirmations, 1 new (Lock vs Weave strategic choice), 1 gap
+    - 2 minor gaps (P3): OA carry-through to Shifting Object; double OA stacking
 
-### Findings
-1. T9 (Arcansheld) ↔ T4 (Vargstad): REMOVED. Mountain terrain intervenes.
-   Correct route: Arcansheld→Halvardshelm(T3)→Vargstad. This significantly
-   changes the threat profile — Crown/Löwenritter cannot directly reach Vargstad
-   without passing through Varfell territory first.
+key_new_findings:
+  - F3: Lock vs Weave at Relational scale is a genuine strategic choice (not previously documented)
+  - F4 (gap): OA modifier does not carry to Shifting Object — needs explicit ruling
 
-2. King's Road renamed to coastal route T12→T14→T13. Correct geography.
-   Old inland route T12→T11→T9 = Military Road (Löwenritter patrol).
-
-3. Schoenland T7 connection = IP invasion staging only, not trade.
-   Trade: T8 (Lowenskyst) and T12 (Valorsplatz) by sea.
-
-4. Varfell trade isolation documented as intentional design feature.
-   All Varfell exports must cross Hafenmark territory to reach east coast market.
-
-### Items Confirmed Correct
-- Sigurdshelm isolation (T2 ↔ T1, T3 only) — west coast city, one road in/out
-- Eidursjo lake-road geography (T6 adjacencies sound)
-- Himmelenger coastal position (T14 ↔ T11, T12, T13)
-- East coast trade spine (T7→T8→T12→T14) — flat, settled, realistic
-- Lake Road (T5→T6→T1) — east shore circumnavigation
-
-### Remaining Question
-T9 (Arcansheld) ↔ T13 (Stillhelm): interior road through peninsula uplands.
-Retained as 'Fortress Extension' secondary road. Defensible — interior
-highland track, Löwenritter patrol route. Not primary.
-
-## Gate: PASS
-
-## Commits
-9b746657: PP-200 geographic corrections
-
-next_session_start:
-  priority_1: "Run freshness_gate.py check first."
-  priority_2: "BAL-BG-02: balance analysis with final map. Crown cannot directly threaten Vargstad now (must go through T3). Reassess Varfell defensibility."
-  priority_3: "ED-108: confirm T10/T11 territory names."
-  priority_4: "Church opening — starts T14 Himmelenger. TC generation viable from turn 1."
+next_action:
+  task: resolve SIM-21-01/02 (P3 gaps) then continue editorial from ED-065
+  or: user to direct
 ```
