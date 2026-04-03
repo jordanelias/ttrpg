@@ -73,7 +73,7 @@ systems:
 
   combat:
     canonical: designs/combat/combat_design_v1.md
-    canonical_sha__designs__combat__combat_design_v1_md: "8df0267be1b118efb3d46ba2bc50c62fb1fb8c98"
+    canonical_sha__designs__combat__combat_design_v1_md: "60897933db1252ee36f706c38131a375f79ecf24"
     params: references/params_combat.md
     design_doc: designs/combat/combat_design_v1.md
     compilation_stage: compilation/v0.14/stage8_combat.md
