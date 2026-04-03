@@ -1,61 +1,53 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_CANONICAL_SOURCE_INTEGRATION
-phase: SESSION CLOSED
+session_id: 2026-04-02T_TERRITORY_RECONCILIATION
+phase: SESSION CLOSED  
 status: COMPLETE
 
-## CANONICAL SOURCE PROVIDED
-User provided original pre-project institutional documents. Key extractions:
+## CANONICAL MAP PROVIDED
+User uploaded physical map of Valoria peninsula.
+Map shows: Spartfell, Gransol, Lowenskyst, Hafenvalor (small dot near Valorsplatz),
+Valorsplatz, Himmelenger, Stillhelm, Arcansheld, Eidursjo, Varfell,
+Sigurdshelm, Halvardshelm, Oastad.
 
-### Church of Solmund structure (PP-194)
-Holy See + Four Cardinals: Fortitude (Templars), Justice (Inquisitors), Prudence (Tithes/Charities), Temperance (Universities/Observatories).
-Each Cardinal has BG mechanical role. Cardinal schism trigger at Church Stability = 2.
-Church levy rule: Crown may raise 2/3 Church levies once/Year-End (Church Military −1, Crown Military +1 for 1 season).
-Excommunication penance mechanic: Wealth −1/season (3 seasons) + one Senator Outward/season toward Church.
+## TERRITORY RECONCILIATION (PP-195)
+Canonical duchy assignments applied:
+- Hafenmark: T2 (Gransol, duchy capital), T4 (Spartfell), T8 (Eidursjo)
+- Varfell: T9/T10/T11/T12 (4 starting territories)
+- Crown/Valorsmark: T1/T3/T5/T6/T7/T13
+- Church: no starting territorial control (cathedral presence in T3 only)
+- Guilds/Niflhel: no territorial control confirmed (commercial/network presence only)
+- Hafenvalor = Crown port city T6 (not Hafenmark capital — Gransol is)
+- ED-107 resolved
 
-### Löwenritter structure (PP-194)
-Lions' Table (military), Lions' Helm (naval), Riskbreakers (covert sub-unit), Civic Arm (Knights of Peace + Royal Investigators).
-CORRECTION: Riskbreakers are a Löwenritter sub-unit, NOT an independent NPC faction.
-Pre-coup: Riskbreakers fire under Löwenritter NPC AI Priority Tree.
-Post-coup: Riskbreakers become Löwenritter player resource (1 free Priority action/season).
+## CASCADE CORRECTIONS (PP-196)
+- Crown Deed 2: T1+T2 → T1+T6 (T2 is now Hafenmark)
+- Hafenmark Path C Deed 3: T6 → T2 (Gransol)
+- TC80 duchy capital TC: Gransol T2 = +3, Hafenvalor T6 = +1
+- Ministry AP-tokens: T2 removed (Crown territories only)
+- Varfell expansion: T10 is Varfell starting territory (corrected from "NPC hostile")
+- Elske contact via T4 (Spartfell, now Hafenmark): Hafenmark facilitation/obstruction mechanic
 
-### Ministry canonical identity (PP-194)
-Multiple ministries: Law, Guilds, Logothetes, Granaries, Pure Water.
-Ministers nominated by Parliament, confirmed by Monarch.
-Ministry of Guilds directly protects Guilds NPC from Economic Leverage when Ministry Mandate ≥ 2.
-Parliament Nomination mechanic added (once/Year-End, three agenda options).
+## VARFELL NOTE
+Varfell starts with 4 territories — most of any player faction.
+Handicap is defensive: mountain range + Thread Wounds + fortified exits.
+Not territorially poor — geographically constrained.
 
-### Parliament Deposition mechanic (PP-194)
-Canonical source: Parliament can depose Monarch if Holy See AND Imperial Court deem unfit.
-BG mechanic: PI ≥ 5 + Church Mandate ≥ 5 + Crown Mandate ≤ 1 + 2+ Standing against Crown = deposition trigger.
+## GUILDS/NIFLHEL CONFIRMED
+Never territorial. Guilds = commercial network (CP-tokens in trade cities).
+Niflhel = criminal network (Network Depth tokens). Both operate in all cities.
 
-### Guilds confirmed as Ministry of Guilds client
-Guilds = economic NPC monitored by Ministry of Guilds. Trade protections linked to Ministry Mandate.
-
-## CRITICAL OPEN ITEM — ED-107 (P1 BLOCKER)
-Canonical source establishes duchy boundaries that DIFFER from v04 BG map:
-- Hafenmark: Gransol (T2, duchy capital), Eidursjo (T8), Spartfell (T4)
-- Varfell: Varfell (T9), Sigurdshalm (T10), Halvardshelm (T11), Oastad (T12)
-- Crown/Valorsmark: Valorsplatz (T1), Lowenskyst (T7), Himmelenger (T3), Arnesheld (T5), Stillhelm (T13)
-- Himmelenger is Crown territory with Church cathedral presence — NOT Church-controlled
-
-If canonical: Guilds NPC and Niflhel NPC lose starting territorial positions.
-Major balance implication. USER DECISION REQUIRED before map reassignment.
-
-## WHAT WAS NOT APPLIED (awaiting ED-107 decision)
-- Territory starting control corrections
-- Faction capital corrections (Hafenmark capital = Gransol T2, not Hafenvalor T6)
-- Himmelenger as Crown territory
-
-## Gate: PASS 22/22
+## Gate: PASS
 
 ## Commits
-31d6a80: PP-194 + ED-107
+56e4ce57: PP-195 territory table
+d4e7b2bc: PP-196 cascade corrections
+freshness_gate --update (tool)
 
 next_session_start:
   priority_1: "Run freshness_gate.py check first."
-  priority_2: "ED-107 decision: does BG map use canonical duchy geography or gameplay abstraction? Answer determines whether T2/T4/T7/T8/T10/T11/T12 reassignments apply."
-  priority_3: "If canonical map: full territory reassignment pass required (affects starting positions, faction VCs, opening strategies, all adjacency-based mechanics)."
-  priority_4: "BAL-BG-02: balance analysis with corrected values."
+  priority_2: "BAL-BG-02: re-run balance analysis with corrected territory assignments and starting positions."
+  priority_3: "Church has no starting territory — verify Church opening position is viable (TC generation from T3 Favour, not control)."
+  priority_4: "Hafenmark now starts with T4 (Spartfell, Altonian border) — verify IP exposure doesn't cripple early game."
 ```
