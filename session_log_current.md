@@ -1,52 +1,50 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_WORLDBUILDING_INTEGRATION
-phase: DESIGN DOCUMENT PRODUCED
+session_id: 2026-04-03T_WORLDBUILDING_V2_AUDIT
+phase: AUDIT COMPLETE
 status: AWAITING EDITORIAL REVIEW
 
-## WORLDBUILDING INTEGRATION v1
-Source: pre-project lore documents (Church, Lowenritter, Crown, Guilds, Economy, Governance)
-Output: designs/worldbuilding/worldbuilding_integration_v1.md
+## WORLDBUILDING INTEGRATION v2 (audit-trimmed)
+v1 audited against P-01–P-15, cognitive load, three-mode necessity.
+v2 produced with cuts and trims applied.
 
-## WORK COMPLETED
-1. Church four-Cardinal sub-arm structure mechanized (Fortitude/Justice/Prudence/Temperance)
-2. Lowenritter five-arm structure mechanized (Lions Table/Lions Helm/Knights of Peace/Royal Investigators/Riskbreakers)
-3. Guild internal structure and economy designed (hierarchy, Guild Council, Guild Forum, Ministry of Guilds, Burgher status)
-4. Court Parliament governance system designed (Ministries, Rectorates, Praefectures, Parliamentary Actions, Deposal Procedure)
-5. Levy and taxation mechanics integrated
-6. Restoration Movement leader proposed (Elder Solvei Kaldring)
-7. Tithe economy, charity network, university influence mechanics created
-8. Almaic Kyriakos (Altonian religious institution) interaction at IP thresholds
-9. Journeymen Years as PC travel mechanic
-10. Territory name discrepancies identified and mapped
-11. Galbados -> Solmund rename scoped
-12. Name discrepancies flagged (Vaynard first name, Baralta spelling, Holy See title)
+## AUDIT RESULTS
+- 1 canon violation found and fixed (§8.2 P-08 — Forgetting attribution, fixed in prior commit)
+- 10 proposals CUT (flavour-only, redundant with existing mechanics, or cognitive bloat)
+- 7 proposals TRIMMED to essential rule statements
+- 1 BALANCE FLAG raised (Church cumulative passive bonuses — BALANCE-FLAG-01)
+- 1 proposal routed to debate system (ED-009 Guild Arbitration)
 
-## EDITORIAL ITEMS GENERATED
-9 new editorial items (ED-NEW-01 through ED-NEW-09)
-3 existing editorials addressed (ED-005, ED-006, ED-009)
+## KEY CUTS
+- Ministry mechanics (4 parallel tracking systems → cut)
+- Lions Helm naval (no naval system exists → ED-NEW-10 future design question)  
+- Knights of Peace territory modifier (redundant with Lowenritter Intel)
+- 4 named Parliamentary sub-actions (redundant with existing Domain Actions)
+- Charity Network (flavour rename of existing mechanic)
+- Guild PC advancement table (character creation appendix, not faction design)
 
-## EXISTING EDITORIALS ADDRESSED
-- ED-005 (Restoration leader): Proposal — Elder Solvei Kaldring
-- ED-006 (Riskbreakers identity): Resolved — loyal to Valoria concept, not institutions
-- ED-009 (Guild Arbitration): Resolved — 3-exchange proceeding type designed
+## KEPT MECHANICS (genuinely new)
+- Church four-Cardinal structure (reference + BG modifiers pending balance test)
+- Jarnstal Drift counter (0-3, mirrors Ehrenwall Coup Counter)
+- Riskbreaker loyalty divergence (ED-006 resolution)
+- Motion of No Confidence / Deposal procedure
+- Excommunication reversal paths (Penance/Banishment)
+- Church land taxation (+1 Wealth to Crown from Church territories)
+- Levy requisition rule (2/3 vassal Military, deviation on refusal)
+- Elder Solvei Kaldring (ED-005 NPC proposal)
+- Almaic Kyriakos (single IP 50 decision point, pending IP ladder check)
 
-## PENDING USER DECISIONS
-- ED-NEW-01: Confirm Solmund as canonical name
-- ED-NEW-02: Vaynard first name (Dienton vs Magnus)
-- ED-NEW-03: Baralta spelling (Inga vs Inge)
-- ED-NEW-04: Church leader title (Holy See vs Confessor — both canonical?)
-- ED-NEW-05: T4 name (Oastad vs Vargstad)
-- ED-NEW-06: Cardinal of Prudence name/profile
-- ED-NEW-07: Almaic Kyriakos IP threshold interactions
-- ED-NEW-09: Territory name reconciliation
+## BALANCE FLAG
+BALANCE-FLAG-01: Church gets 4 passive Cardinal modifiers + tithe Wealth + university Influence.
+Church already strongest faction by starting stats.
+MUST stress test before any BG integration.
 
-## Gate: PASS (design document committed; no canonical files modified)
+## Gate: PASS
 
 next_session_start:
-  priority_1: "User reviews worldbuilding_integration_v1.md editorial items."
-  priority_2: "On approval: propagate approved mechanics to stage6, stage13, params files."
-  priority_3: "Run freshness_gate.py after propagation."
-  priority_4: "Simulation: stress test Church four-Cardinal structure for Stability cascade."
+  priority_1: "User reviews v2 editorial items and approves/rejects."
+  priority_2: "On approval: propagate to stage6, stage13, params."
+  priority_3: "BALANCE-FLAG-01: stress test Church Cardinal BG modifiers."
+  priority_4: "ED-NEW-10: naval design decision."
 ```
