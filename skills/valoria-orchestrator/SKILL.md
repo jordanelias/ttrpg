@@ -93,12 +93,24 @@ project_knowledge_search for any GitHub read.**
    ```
    Report status in ≤3 lines: current phase, last action, what's next.
 
-2. **Load skill registry**
+2. **Freshness Gate** — mandatory before any simulation, audit, or patch work
+   ```bash
+   export GITHUB_PAT="{PAT_FROM_PROJECT_INSTRUCTIONS}"
+   python3 tools/freshness_gate.py
+   ```
+   - Exit 0 → proceed.
+   - Exit 1 → report stale systems. **Do not begin simulation, audit, or patch
+     on any stale system.** Read the updated canonical doc, re-sync params if
+     values changed, then run `python3 tools/freshness_gate.py --update` and
+     re-check before proceeding.
+   - Exit 2 → run `python3 tools/freshness_gate.py --update` first, then re-check.
+
+3. **Load skill registry**
    Read from `/mnt/skills/user/valoria-orchestrator/SKILL.md` local mount if available,
    otherwise fetch from GitHub at `skills/valoria-orchestrator/SKILL.md`.
    Do NOT use project_knowledge_search.
 
-3. **Confirm task** with user before proceeding.
+4. **Confirm task** with user before proceeding.
 
 ---
 
@@ -123,6 +135,15 @@ project_knowledge_search for any GitHub read.**
 ## Atomic Commit Discipline
 
 **Every file created must be committed to GitHub before the response is sent.**
+
+**After every commit that modifies a canonical doc, run:**
+```bash
+python3 tools/freshness_gate.py --update
+```
+This re-syncs canonical_sha fields in canonical_sources.yaml so the next
+session's freshness gate passes. Include the canonical_sources.yaml update
+in the same atomic commit as the canonical doc change whenever possible.
+If committed separately, message: `[infrastructure] freshness_gate --update`
 
 ```
 create_file(/home/claude/output.md)

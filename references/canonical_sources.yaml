@@ -13,6 +13,7 @@ systems:
 
   core_engine:
     canonical: compilation/v0.14/stage1_core_engine.md
+    canonical_sha__compilation__v0_14__stage1_core_engine_md: "150e34d13ce3f39ebdbf2b431c13804ec5454507"
     params: references/params_core.md
     design_doc: null
     compilation_current: true
@@ -20,6 +21,7 @@ systems:
 
   characters:
     canonical: compilation/v0.14/stage2_characters.md
+    canonical_sha__compilation__v0_14__stage2_characters_md: "dc43e9ca99f68ff9cee9c3e3771772758c250dbf"
     params: references/params_core.md  # character values in core params
     design_doc: null
     compilation_current: true
@@ -27,6 +29,7 @@ systems:
 
   threadwork:
     canonical: designs/ttrpg/threadwork_redesign_v25.md
+    canonical_sha__designs__ttrpg__threadwork_redesign_v25_md: "350d9690a32f028b58f6f3e2b63f8bf4aa3844d5"
     params: references/params_threadwork.md
     design_doc: designs/ttrpg/threadwork_redesign_v25.md
     compilation_stage: compilation/v0.14/stage3_thread_operations.md
@@ -35,6 +38,7 @@ systems:
 
   southernmost:
     canonical: compilation/v0.14/stage4_southernmost.md
+    canonical_sha__compilation__v0_14__stage4_southernmost_md: "58ce0757881b2ae1bc607d39174fba9002220a03"
     params: null
     design_doc: null
     compilation_current: true
@@ -42,6 +46,7 @@ systems:
 
   clocks:
     canonical: compilation/v0.14/stage5_clocks.md
+    canonical_sha__compilation__v0_14__stage5_clocks_md: "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
     params: null
     design_doc: null
     compilation_current: true
@@ -49,8 +54,11 @@ systems:
 
   factions:
     canonical_ttrpg: compilation/v0.14/stage6_factions.md
+    canonical_sha__compilation__v0_14__stage6_factions_md: "d09b32d1970b5144c73189d4f815d93f102ddfb0"
     canonical_bg: designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "27a73b96e38fea237504380523f4294b102d47f2"
     canonical_hybrid: designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "27a73b96e38fea237504380523f4294b102d47f2"
     params: references/params_factions.md
     compilation_current_ttrpg: true
     compilation_current_bg: false
@@ -58,12 +66,14 @@ systems:
 
   territories:
     canonical: compilation/v0.14/stage7_territories.md
+    canonical_sha__compilation__v0_14__stage7_territories_md: "c4c03420588b4f341ba40779a61bda17e8c6a7be"
     params: null
     design_doc: null
     compilation_current: true
 
   combat:
     canonical: designs/combat/combat_design_v1.md
+    canonical_sha__designs__combat__combat_design_v1_md: "50f7dad698f97bdc1850ca45174b1b3fef4470d7"
     params: references/params_combat.md
     design_doc: designs/combat/combat_design_v1.md
     compilation_stage: compilation/v0.14/stage8_combat.md
@@ -72,6 +82,7 @@ systems:
 
   mass_combat:
     canonical: designs/mass_combat/mass_battle_v3.md
+    canonical_sha__designs__mass_combat__mass_battle_v3_md: "cfea6a344d04991cbde7be9b667c4ccc13b4073f"
     params: references/params_mass_combat.md
     design_doc: designs/mass_combat/mass_battle_v3.md
     compilation_stage: compilation/v0.14/stage8_combat.md  # §8.9
@@ -80,6 +91,7 @@ systems:
 
   social_debate:
     canonical: designs/debate/debate_system_redesign_v1.md
+    canonical_sha__designs__debate__debate_system_redesign_v1_md: "800a910d664de38aa7c7541e5f9959f512dda568"
     params: references/params_debate.md
     design_doc: designs/debate/debate_system_redesign_v1.md
     compilation_stage: compilation/v0.14/stage9_social.md
@@ -88,12 +100,14 @@ systems:
 
   advancement:
     canonical: compilation/v0.14/stage10_advancement.md
+    canonical_sha__compilation__v0_14__stage10_advancement_md: "58f6c3adb43aef9ab12d3806eaca0641a2d14ef5"
     params: null
     design_doc: null
     compilation_current: true
 
   scale_transitions:
     canonical: compilation/v0.14/stage11_scale_transitions.md
+    canonical_sha__compilation__v0_14__stage11_scale_transitions_md: "5fd052236b4d6949b47e8d9c261b04aa6448a07b"
     params: references/params_scale_transitions.md
     design_doc: null
     compilation_current: true
@@ -101,12 +115,14 @@ systems:
 
   campaign_modes:
     canonical: compilation/v0.14/stage12_campaign_modes.md
+    canonical_sha__compilation__v0_14__stage12_campaign_modes_md: "18fd4d7af91818d8581b35742fa1016977fa22f5"
     params: null
     design_doc: null
     compilation_current: true
 
   npcs:
     canonical: compilation/v0.14/stage13_npcs.md
+    canonical_sha__compilation__v0_14__stage13_npcs_md: "3253e3077e843ea8a3debe86a36dffbf22f20c77"
     params: null
     design_doc: designs/ttrpg/edeyja_npc.md  # supplementary
     compilation_current: true
@@ -114,29 +130,35 @@ systems:
 
   gm_tools:
     canonical: compilation/v0.14/stage14_gm_tools.md
+    canonical_sha__compilation__v0_14__stage14_gm_tools_md: "9be0ef38885b6d26d84037da14910cdf107d907d"
     params: null
     design_doc: null
     compilation_current: true
 
   spell_catalog:
     canonical: compilation/v0.14/stage15_spell_catalog.md
+    canonical_sha__compilation__v0_14__stage15_spell_catalog_md: "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
     params: null
     design_doc: null
     compilation_current: true
     note: "Several pending patches: R-55 (FR-D-12), R-56 (W-08), R-59/60, R-62 (W-51 Ob 6), R-63 (FR-L-30), R-64 (Mode 3). Apply when compiling."
 
   board_game:
-    canonical: designs/board_game/valoria_bg_v04.md
-    canonical_corrections: designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    canonical_mechanics: designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "27a73b96e38fea237504380523f4294b102d47f2"
+    canonical_action_economy: designs/board_game/stage_bg_proposal_v02.md
+    canonical_sha__designs__board_game__stage_bg_proposal_v02_md: "de6e2f88ec9220bf7d5808bc26b500d5da58991d"
     params: references/params_board_game.md
-    design_doc: designs/board_game/valoria_bg_v04.md
+    design_doc: designs/board_game/valoria_bg_v05_simulation_and_patches.md
     compilation_stage: compilation/v0.14/stage_bg_board_game_mode.md
     compilation_current: false
-    note: "PP-188: v04 is the canonical BG ruleset. v05 is a correction document (dice system, Ob minimum, inconsistency patches) only. All B-sections (faction cards, victory conditions, turn structure) from v04 are authoritative. stage_bg compilation is STALE. stage_bg_proposal_v02.md Card-Hand system is adopted (PP-177) and confirmed by v04 B3. sync."
+    note: "ED-001 resolved. Card-Hand system from stage_bg_proposal_v02.md is canonical for action economy (PP-177). bg_v05 remains canonical for faction stats, clocks, victory conditions (PP-112 through PP-176). stage_bg compilation STALE — reconciliation of v02 + v05 needed before compilation update. sync."
 
   hybrid:
     canonical_design: designs/hybrid/hybrid_gaps_resolved.md  # pending integration
+    canonical_sha__designs__hybrid__hybrid_gaps_resolved_md: "7a302b63317504626ecbcf27f5c014d8aaf25868"
     canonical_rules: compilation/v0.14/stage11_scale_transitions.md
+    canonical_sha__compilation__v0_14__stage11_scale_transitions_md: "5fd052236b4d6949b47e8d9c261b04aa6448a07b"
     params: references/params_scale_transitions.md
     design_doc: designs/hybrid/hybrid_gaps_resolved.md
     compilation_current: true  # for rules; design doc pending integration
