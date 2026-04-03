@@ -357,7 +357,7 @@ Not all Debates are symmetric. The institution shapes the rules.
 # PART SIX: COMPILED MECHANICAL SPECIFICATION
 ## Source: debate_stress_test_v1.md + debate_stress_test_v2.md
 ## Status: OPERATIVE — supersedes quaestio design (Parts 3–4) for play purposes
-## Version: v1.5 (PP-117, PP-118 applied 2026-04-02 — all gaps resolved, stress-test verified)
+## Version: v1.6 (PP-119 through PP-123 applied 2026-04-02 — audit D-02 + full three-mode + Thread/temporal verified)
 ## Parts 1–4 retained as design reference and historical/philosophical foundation
 
 ---
@@ -550,6 +550,7 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 - **Post-debate recovery:** All strain and Concentration depletion clear at scene end. Spent clears at scene end. [PP-108]
 - **Debate Fatigue [PP-114 / PP-117]:** If an orator was Rattled at any point during the debate, they carry Debate Fatigue into this session. Effect: −1D on their next social roll (Argue, Corroborate, or Circles roll); consumed after that roll regardless of outcome. One instance per session regardless of how many debates triggered it. Clears at next session start if unused. [GAP-DS-16 resolved]
 - **Total Victory [PP-114]:** If the winning side's final Conviction Track position is ≥ 9 (Side A) or ≤ 1 (Side B), the victory is Total. Additional consequences: losing faction's primary orator gains Debate Fatigue regardless of Rattled status; winning orator gains +1 Momentum (if below cap 4). In BG Parliamentary Vote, Total Victory additionally applies Mandate −1 to the losing coalition's dominant faction for one season. [GAP-DS-03 resolved]
+- **Rendering Stability changes from debate [PP-122]:** Thread co-movement consequences from §3.8 (RS changes from genre-win) are subject to the RS ceiling (100) and RS=0 lockout. If RS = 100, no RS gain from debate fires. If RS = 0, the substrate is Ruptured — no RS changes from debate fire in either direction. Debate-generated RS changes follow the same ceiling/floor rules as direct Thread operations.
 
 ---
 
@@ -588,23 +589,27 @@ Exception retained from §3.7: Niflhel does not participate in formal debate str
 
 ---
 
-## 6.8 Untested Items (Require Separate Testing)
+## 6.8 Untested / Open Items
 
-The following items were identified in stress test v2 as requiring future testing:
+Items resolved in v1.4/v1.5 are marked ✓. Remaining open items retained for tracking.
 
-| Item | Priority |
+| Item | Status |
 |---|---|
-| Multi-party debates (3+ orators): no procedure exists | P1 |
-| Thread operations during debate: no interaction procedure | P1 |
-| Corroboration from §3.5 in practice (not tested in v1/v2 retests) | P2 |
-| Parliamentary proceeding with new formulas | P2 |
-| Royal Audience proceeding (stress test v2 tested Tribunal only) | P2 |
-| Casual Dispute edge cases (single exchange + tracker) | P3 |
-| Regroup exploit in Grand Debate (partially addressed by Concentration depletion change) | P2 |
-| Genre pivot mid-debate (orator argues against the Question's genre): no procedure | P2 |
-| Rattled → Unmask decision point (Rattled never triggered in retests) | P2 |
-| Multiple Doubt Markers in same exchange | P3 |
-| Mixed audience with Guilds (moral relativism — Game Master flex): calibration needed | P2 |
+| Multi-party debates (3+ orators) | ✓ Resolved — §6.12 Coalition Structure |
+| Thread operations during debate | ✓ Resolved — §6.15; temporal axis conflict PP-123 |
+| Corroboration §3.5 in practice | Partial — PP-104 stub; full port pending ED-051 |
+| Parliamentary proceeding with new formulas | ✓ Tested — SIM-D-02, SIM-D-04 |
+| Royal Audience proceeding | Open — P2, not yet stress-tested |
+| Casual Dispute edge cases | Open — P3 |
+| Regroup exploit in Grand Debate | ✓ Addressed — Concentration depletion PP-102 |
+| Genre pivot mid-debate | ✓ Resolved — PP-112 (unrestricted between exchanges) |
+| Rattled → Unmask decision point | Open — P2, not yet triggered in simulation |
+| Multiple Doubt Markers in same exchange | ✓ Resolved — PP-113 (replacement rule) |
+| Mixed Guilds audience calibration | Open — P2 |
+| BG Parliamentary Vote | ✓ Resolved — §6.13 |
+| Hybrid Debate | ✓ Resolved — §6.14 |
+| Pre-Debate Preparation | ✓ Resolved — §6.11 |
+| Thread temporal axis conflict | ✓ PP-123 provisional |
 
 ---
 
@@ -612,15 +617,15 @@ The following items were identified in stress test v2 as requiring future testin
 
 All items from §5.1 carry forward, plus additions from stress tests:
 
-**Mechanical — requires design decision:**
-- [GAP-DS-01] Phase Ob tables carry forward (Ob 1 throughout assumed — verify)
-- [GAP-DS-02] Thread operations mid-debate — no procedure
-- [GAP-DS-03] Total loss (5-0) consequences under dual-track system
-- [GAP-DS-04] Reading Exchange +1D placement in new system (Phase 1 only, or full Exchange 1?)
-- [GAP-DS-05] Parliamentary Vote under compiled system
-- [GAP-DS-06] Multi-party debate structure (P1 — blocking for Parliament scenarios)
-- [GAP-DS-07] Genre pivot: declared mid-debate change to Question's genre — permitted? Cost?
-- [GAP-DS-08] Single Doubt Marker replacement rule — confirm intended behaviour when second Obscuring win fires before first Doubt Marker is consumed
+**Mechanical — resolved in v1.4/v1.5 (all below):**
+- [GAP-DS-01] ✓ PP-112 — no fixed Ob; comparative margin-based.
+- [GAP-DS-02] ✓ §6.15 — between-exchange Thread procedure.
+- [GAP-DS-03] ✓ PP-114 — Total Victory consequences.
+- [GAP-DS-04] ✓ §6.11 — prep roll for TTRPG; Diplomacy action for BG.
+- [GAP-DS-05] ✓ §6.13 — BG Parliamentary Vote.
+- [GAP-DS-06] ✓ §6.12 — Coalition Structure.
+- [GAP-DS-07] ✓ PP-112 — genre pivot unrestricted between exchanges.
+- [GAP-DS-08] ✓ PP-113 — replacement intentional, no stacking.
 
 **Editorial — requires user approval:**
 - [EDITORIAL: Niflhel formal Debate access] (carried from §5.1)
@@ -702,6 +707,10 @@ Faction-level debate resolution for BG scale. Use when the scene is narrated at 
 
 **Thread consequences:** Do not fire from BG Parliamentary Vote. Thread co-movement requires personal-scale argument. [Commensurate with R-65 mode restriction]
 
+**Orientation absent by design [PP-119]:** BG Parliamentary Vote has no Obscuring/Doubt Marker equivalent. Factions vote publicly — personal-scale rhetorical deflection does not apply at faction-pool level. This is an intentional abstraction: BG scale removes orientation tactics, retaining only genre choice and pool size.
+
+**Genre pivot between rounds [PP-119]:** Sides may change their genre declaration between vote rounds. Pivoting to a secondary-weight genre (e.g., switching to Past ×0.5 for a Crown audience) is permitted but rarely advantageous — genre weight is determined by audience ethical mode, which does not change between rounds.
+
 **Total Victory in BG:** Conviction Track ≥ 9 or ≤ 1 after a round → losing coalition's dominant faction takes Mandate −1 for one season. [GAP-DS-05 resolved / ED-053 resolved]
 
 ---
@@ -712,7 +721,17 @@ Use when a named character is present and their personal skill matters, but fact
 
 **Step 1 — BG layer:** Run one round of BG Parliamentary Vote (§6.13) using faction pools. Apply Conviction Track offset, capped at ±2 from neutral (5) regardless of actual Δ.
 
-**Step 2 — Set TTRPG starting Conviction Track:** Neutral 5 ± capped offset. If BG vote produced Δ = 2 toward Side A, TTRPG debate starts at Conviction Track = 7 (already at win threshold — Side B must push Conviction Track back below 7 during the personal debate).
+**Step 2 — Set TTRPG starting Conviction Track:** Neutral 5 ± capped BG offset, then clamped to the compromise zone (4–6). The personal debate always begins in compromise — faction lobbying determines where within that zone, not whether the outcome is pre-decided. [PP-120 PROVISIONAL]
+
+| BG offset | Starting TC |
+|-----------|------------|
+| +2 toward Side A | 6 (Side A dominant compromise) |
+| +1 toward Side A | 6 |
+| 0 | 5 (neutral) |
+| +1 toward Side B | 4 |
+| +2 toward Side B | 4 (Side B dominant compromise) |
+
+Rationale: A TC starting at 7 or above pre-decides the outcome before named characters speak, making the Hybrid debate scene dramatically hollow. The clamp to 4–6 ensures personal skill always matters.
 
 **Step 3 — TTRPG personal debate:** Run standard Formal Debate (3 exchanges) or Grand Debate (5 exchanges) per §6.4–§6.9 from the adjusted starting Conviction Track. **Exchange count is determined by the Game Master based on context (same as pure TTRPG), not by the number of BG vote rounds. These are independent parameters.** [PP-118]
 
@@ -743,7 +762,11 @@ A practitioner may initiate a Thread operation between exchanges (after Step 7, 
 
 **Genre weights are fixed at setup.** Thread operations cannot change them mid-debate.
 
+**Temporal axis conflict [PP-123 PROVISIONAL]:** When a practitioner conducts a between-exchange Thread operation whose temporal axis contradicts the current debate's primary genre — specifically, a Past-axis operation (Past-Oriented Pulling, or any operation whose temporal auto-effect invokes historical configurations) during a Future-primary debate, or a Future-axis operation during a Past-primary debate — both orators' Read rolls in the immediately following exchange use TN 8 (Desperate) instead of TN 7. The temporal cross-contamination from the Thread operation makes audience state harder to read. This applies only to operations with explicit temporal auto-effects. Neutral operations (Mending, Locking) and same-axis operations (Weaving Present during Present-genre debate) do not trigger this penalty.
+
 **Church Heresy Investigation:** Observed Thread operation during debate (at any point) → Church may immediately file Heresy Investigation Domain Action (Ob 2 vs practitioner's faction Mandate). [GAP-DS-02 resolved]
+
+**Exception [PP-121 PROVISIONAL]:** The Church does not initiate Heresy Investigation against its own ordained members (Cardinals, Confessors, ordained priests) who use Thread operations in demonstrable support of Church institutional interests during a debate. Opposing factions who observe the operation may still file a Heresy Investigation as their own Domain Action. The distinction: Church self-policing vs. faction-level accusation.
 
 ---
 

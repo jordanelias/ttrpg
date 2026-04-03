@@ -1,46 +1,49 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_LIR_FF_BG_DESIGN
-phase: Phase 14 — LIR/FF design + BG Fail Forward + comparative simulation
-status: COMPLETE
+session_id: 2026-04-02T_SESSION_CLOSE
+phase: Phase 9 — Debate system complete
+status: CLOSED
 
-completed:
-  - Confirmed existing glossary.md (built prior session) — no rebuild needed.
-  - Resolved all 5 LIR/FF editorial items (ED-085 through ED-089, PROVISIONAL).
-  - Designed BG Fail Forward system: PP-177 (Partial = Minor complication, player choice; Failure = Moderate, mandatory; Severe tier for Ob>=4).
-  - Designed cross-mode LIR/FF applicability note: PP-178.
-  - Designed Hybrid zoom-boundary FF rule: PP-180.
-  - SIM-FF-01: 4-season comparative simulation (Run A no FF vs Run B with FF).
-  - Verdict: FF produces significantly richer emergent gameplay. Run B generated 2 new inter-faction tensions, PI change, Stability change vs zero state changes from 5 Failures in Run A.
-  - PP-177, PP-178, PP-180 applied to params_board_game.md.
-  - PP-177 added to params_board_game_history.md.
-  - Patches PP-177/178/180 added to patch_register.yaml.
-  - ED-085 through ED-089 added to editorial_ledger.yaml.
-  - Simulation SIM-FF-01 committed to tests/sim_bg_ff_01.md.
-  - tests/coverage_matrix.md updated.
+## SESSION SUMMARY
 
-key_design_decisions:
-  PP-177: Fail Forward BG operationalisation — Partial = Minor complication (player choice: Standing -1 or PI +1). Failure = Moderate (action-type specific, mandatory). All Domain Actions covered. Battle excluded.
-  PP-178: LIR/FF cross-mode note — Debate exempt from LIR; Thread irreversibility governs over LIR; BG action-economy = LIR-equivalent.
-  PP-180: Hybrid zoom-boundary FF — personal complication carries to faction scale.
-  ED-085: Govern Success/Partial/Overwhelming distinction confirmed (Provisional).
-  ED-086: Domain Action Overwhelming = Success effect only unless stated otherwise (Provisional).
-  ED-087: Parliamentary Manoeuvre Partial — PP-170 "no effect" preserved as Minor choice option.
-  ED-088: Debate exempt from LIR — confirmed.
-  ED-089: Thread irreversibility governs over LIR — confirmed.
+### Completed
+- Debate stress test SIM-D-01 (Modes A+D+J+L): recalibrated all baselines. SIM-DEBT-01 partially resolved.
+- Debate stress test SIM-D-02 (Mode C): Himlensendt vs Baralta. SIM-DEBT-01 fully resolved.
+- Audit AUDIT-D-01 (Modes A-G): 11 P1/P2 findings, PP-101–111 applied in-place.
+- Audit AUDIT-D-01 + SIM-D-03 (subsystem G2+K): PP-112–118 applied; all 19 design gaps resolved.
+- SIM-D-04: Gap-fill stress test — all new mechanics (§§6.11–6.15) verified across 3 modes.
+- GM reference card: debate_ref_card_v1.md — covers all §§6.0–6.15.
+- AUDIT-D-02 + SIM-D-05: Post-v1.5 re-audit + all three modes + Thread all temporal axes.
+  - HD-F-01 P1: Hybrid TC clamp → PP-120
+  - TT-F-04 P1: Temporal axis conflict → PP-123
+  - TT-F-05 P1: RS=0 lockout for debate → PP-122
+  - ED-087–091 logged.
+- debate_system_redesign_v1.md: v1.6 (complete, all gaps filled, all modes verified).
+- PP-097 through PP-123: 27 patches applied to debate system this session.
+- ED-051 through ED-091 new items this session.
 
-flags_for_user_review:
-  - ED-085: Confirm Govern Partial = Prosperity +1 (with Minor complication)
-  - ED-086: Confirm Domain Action Overwhelming = Success effect only (no bonus)
-  - ED-087: Confirm Parliamentary Manoeuvre Partial = Minor complication (with "no effect" as choice)
+### GitHub state (committed)
+- designs/debate/debate_system_redesign_v1.md (v1.6)
+- gm_ref/debate_ref_card_v1.md
+- tests/audit_d02_sim_d05.md
+- tests/audit_debate_a_g.md (AUDIT-D-01)
+- tests/sim_d_01 through sim_d_05 (all stress tests)
+- canon/patch_register.yaml (PP-097–PP-123)
+- canon/editorial_ledger.yaml (ED-051–ED-091)
+- tests/coverage_matrix.md
+- references/propagation_map.md
+- references/params_debate.md (recalibrated)
+- skills/valoria-orchestrator/references/state_transfer_spec.md (debate Zoom In gap)
+- session_log_current.md + session_log_archive.md
 
-open_design_gaps_from_sim:
-  - GAP BG-FF-01: Govern Partial base effect — resolved via ED-085 (Provisional)
-  - GAP BG-FF-02: Domain Action Overwhelming bonus — resolved via ED-086 (Provisional)
-
-next_recommended:
-  - Compile updated BG Domain Action reference card incorporating FF complication column
-  - Simulate 12-season game with FF to assess long-run compounding
-  - User review of ED-085, ED-086, ED-087 to confirm or adjust
+### Resume instruction
+Next session: params_debate.md needs §§6.11–6.15 values extracted (new sections in v1.4+).
+Open P1 items from debate:
+  - ED-051: NPC full debate stat blocks (Attunement, Focus, Poise, Bonds) — blocks named-NPC debate sims.
+  - GAP-DS-12: Corroboration full port to §6.4 (PP-104 stub only).
+Provisional decisions pending user review: PP-097/098/099/100/115/116/120/121/123.
+Editorial decisions pending: ED-087–091 (5 items from this session).
+SIM-DEBT-02: Corroboration in CLASH calibration (low priority).
+Next subsystem: confirm with user.
 ```

@@ -86,6 +86,9 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 
 | SIM-HYB-01 | G1 Mass Combat, G2 Debate, G3 Threadwork, G4 Faction Seasonal, K2 Transition, C Full Scenario | HYB | PRES | TC, RS, IP, Stability, Coherence, Composure, Wounds, Unit Str/Morale/Cohesion | Church, Varfell, Crown, Hafenmark | Vaynard, Cardinal Klapp, Templar Sergeant | Practitioner-Scholar, Institutional Legalist, Church Militant | COMPLETE (Session A + B) | F-HYB-01 (P1→PP-101), GAP-K2-01 (P1→PP-101), F-HYB-02 (params stale→params_debate fixed), F-HYB-03 (P2→ED-054); 7 params gaps logged |
 
+| AUDIT-D-02 | Debate system v1.5 re-audit + all modes + Thread temporal axes | TTRPG+BG+HYB | PAST/PRES/FUT/CROSS | TC, Composure, Concentration, RS, Coherence | All | Himlensendt, Baralta, Klapp, Maret, Vaynard | All debate archetypes | Complete | PP-119-123 applied; HD-F-01 P1 (PP-120 Hybrid clamp); TT-F-04 P1 (PP-123 temporal conflict); ED-087-091 logged |
+| SIM-D-05 | Thread in all temporal axes during debate — Past/Present/Future axis tests | TTRPG | PAST+PRES+FUT | RS, Coherence, TC, Conviction Track | Church, Varfell | Maret, Klapp, Vaynard | Practitioner-orator, institutional | Complete | TT-F-01-05; 3 P1 findings patched PP-120/122/123; 2 P2 ED-088/089 |
+
 ## SIM-DEBT Register
 
 | ID | Source | Description | Status |

@@ -1645,3 +1645,83 @@ editorial_decisions:
     propagation_status: pending
     related_ids: [ED-083]
     tags: [board_game, thread, co_movement, p14_compliance]
+
+- id: ED-087
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: simulation
+  source_file: tests/audit_d02_sim_d05.md
+  description: "§6.14 Hybrid TC clamp (PP-120 provisional): confirm Hybrid debate TC is clamped to compromise zone 4-6, preventing BG lobbying from pre-deciding outcome. Alternate: allow decisive BG lobbying to pre-decide."
+  full_flag_text: "[EDITORIAL: ED-087 Hybrid TC clamp — confirm compromise zone restriction]"
+  status: open
+  priority: P2
+  decision: null
+  propagation_targets: [designs/debate/debate_system_redesign_v1.md §6.14]
+  propagation_status: pending
+  related_ids: []
+  supersedes: []
+  tags: [debate, hybrid, conviction_track]
+
+- id: ED-088
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: simulation
+  source_file: tests/audit_d02_sim_d05.md
+  description: "§6.15 Church self-investigation exception (PP-121): confirm scope — ordained members only, or anyone acting under Church authority? And does exception apply if the Thread operation is against Church interests?"
+  full_flag_text: "[EDITORIAL: ED-088 Church self-investigation exception scope]"
+  status: open
+  priority: P2
+  decision: null
+  propagation_targets: [designs/debate/debate_system_redesign_v1.md §6.15]
+  propagation_status: pending
+  related_ids: []
+  supersedes: []
+  tags: [debate, church, thread, heresy]
+
+- id: ED-089
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: simulation
+  source_file: tests/audit_d02_sim_d05.md
+  description: "§6.15 Temporal axis conflict rule (PP-123): confirm TN8 Read penalty calibration. Alternate: -1D to both Argue rolls that exchange instead. Or no mechanical effect (purely narrative)."
+  full_flag_text: "[EDITORIAL: ED-089 Temporal axis conflict penalty — TN8 Read vs -1D Argue vs narrative only]"
+  status: open
+  priority: P2
+  decision: null
+  propagation_targets: [designs/debate/debate_system_redesign_v1.md §6.15]
+  propagation_status: pending
+  related_ids: []
+  supersedes: []
+  tags: [debate, thread, temporal, penalty]
+
+- id: ED-090
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: simulation
+  source_file: tests/audit_d02_sim_d05.md
+  description: "§3.8 passive RS consequence from debate: confirm gate — 'if the consequence involves Thread-sensitive matters' is GM discretion. Tighten to explicit criteria, or confirm GM discretion is intended."
+  full_flag_text: "[EDITORIAL: ED-090 Passive RS from debate — confirm GM-discretion gate or tighten criteria]"
+  status: open
+  priority: P2
+  decision: null
+  propagation_targets: [designs/debate/debate_system_redesign_v1.md §6.5]
+  propagation_status: pending
+  related_ids: []
+  supersedes: []
+  tags: [debate, thread, RS, domain_echo]
+
+- id: ED-091
+  date_flagged: 2026-04-02
+  date_resolved: null
+  source: audit
+  source_file: tests/audit_d02_sim_d05.md
+  description: "BG orientation absent (GAP-DS-22): confirmed as intentional abstraction. Confirm no BG Doubt Marker analog needed (e.g. Abstain as Doubt Marker equivalent)."
+  full_flag_text: "[EDITORIAL: ED-091 BG Doubt Marker analog — needed or intentional absence?]"
+  status: open
+  priority: P3
+  decision: null
+  propagation_targets: [designs/debate/debate_system_redesign_v1.md §6.13]
+  propagation_status: pending
+  related_ids: []
+  supersedes: []
+  tags: [debate, board_game, orientation, doubt_marker]

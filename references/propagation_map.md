@@ -169,7 +169,10 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | `tests/sim_d_03_subsystem_k.md` | `tests/coverage_matrix.md` | G2+K findings logged |
 | `tests/sim_d_03_subsystem_k.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | K2-F-02: debate Zoom In gap |
 | `tests/sim_d_04_gap_fill_stress.md` | `tests/coverage_matrix.md` | Gap-fill verification logged |
-| `designs/debate/debate_system_redesign_v1.md` | `references/params_debate.md` | v1.5 — params update needed for new sections |
+| `designs/debate/debate_system_redesign_v1.md` | `references/params_debate.md` | v1.6 — params_debate needs §§6.11-6.15 values extracted |
+| `tests/audit_d02_sim_d05.md` | `tests/coverage_matrix.md` | Audit + stress test findings logged |
+| `tests/audit_d02_sim_d05.md` | `canon/editorial_ledger.yaml` | ED-087-091 harvested |
+| `gm_ref/debate_ref_card_v1.md` | `designs/debate/debate_system_redesign_v1.md` | Reference card must track v1.x |
 | `compilation/v0.14/stage13_npcs.md` | `designs/debate/debate_system_redesign_v1.md` | NPC Composure/attributes feed debate sim |
 
 ### SCALE TRANSITIONS / HYBRID

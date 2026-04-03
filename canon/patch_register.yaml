@@ -1742,3 +1742,58 @@ patches:
   applied_to_version: "v0.5.5"
   status: provisional
   applied_commit: pending
+
+- id: PP-119
+  date: 2026-04-02
+  severity: P2
+  description: "(1) §6.8/6.9: mark resolved items, clean stale list. (2) §6.13 BG: add design note — orientation absent by design; genre pivot between rounds permitted."
+  finding_id: "GAP-DS-21/22/26 / AUDIT-D-02"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.8, §6.9, §6.13]
+  applied_to_version: "v1.6"
+  status: applied
+  applied_commit: "2026-04-02-session-close"
+
+- id: PP-120
+  date: 2026-04-02
+  severity: P1
+  description: "§6.14 Hybrid: TC starting position clamped to compromise zone 4-6. BG offset determines position within zone, never pre-decides outcome. Prevents hollow Hybrid debate scenes. [PROVISIONAL]"
+  finding_id: "HD-F-01 / SIM-D-05"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.14]
+  applied_to_version: "v1.6"
+  status: provisional
+  applied_commit: "2026-04-02-session-close"
+
+- id: PP-121
+  date: 2026-04-02
+  severity: P2
+  description: "§6.15: Church self-investigation exception — Church does not file Heresy Investigation against own ordained members supporting Church interests. Opposing factions may still file. [PROVISIONAL]"
+  finding_id: "TT-F-02 / SIM-D-05"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.15]
+  applied_to_version: "v1.6"
+  status: provisional
+  applied_commit: "2026-04-02-session-close"
+
+- id: PP-122
+  date: 2026-04-02
+  severity: P1
+  description: "§6.5: Debate-generated RS changes subject to RS ceiling (100) and RS=0 lockout (Rupture). At RS=0 or RS=100, no RS changes from §3.8 fire."
+  finding_id: "TT-F-03/TT-F-05 / SIM-D-05"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.5]
+  applied_to_version: "v1.6"
+  status: applied
+  applied_commit: "2026-04-02-session-close"
+
+- id: PP-123
+  date: 2026-04-02
+  severity: P1
+  description: "§6.15: Temporal axis conflict rule — Past-axis Thread op during Future-primary debate (or reverse) imposes TN 8 on both orators' next Read roll. Same-axis ops and non-temporal ops unaffected. [PROVISIONAL]"
+  finding_id: "TT-F-04 / SIM-D-05"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.15]
+  applied_to_version: "v1.6"
+  status: provisional
+  applied_commit: "2026-04-02-session-close"
