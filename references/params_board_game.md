@@ -238,16 +238,18 @@ VTM cap: once per season (P-31).
 | Varfell Patience Protocol | Expires on Riskbreaker exposure |
 One CB per faction at a time.
 
-## Theocracy Counter 80 Territorial Seizure — ALL-TERRITORY SWEEP (PP-181)
-At TC = 80: Church rolls Mandate vs Ob 3 (contested) or Ob 2 (neutral) for EVERY territory
-not already Church-controlled. All rolls resolved simultaneously (one roll per territory).
+## Theocracy Counter 80 Territorial Seizure — CAPPED SWEEP (PP-181, PP-183)
+At TC = 80: Church targets up to 4 territories/season (Church player chooses).
+Remaining territories may be targeted in subsequent seasons.
+Roll Church Mandate vs Ob 3 (contested) or Ob 2 (neutral) per targeted territory.
 | Degree | Effect |
 |--------|--------|
 | Overwhelming | Immediate seizure, no Standing cost. |
-| Success | Seizure; TC +2; PI −1. |
+| Success | Seizure; TC +2 (capped: max TC +4 total from Seizure per season); PI −1. |
 | Partial | Not seized; 1 Templar Staging Token placed. |
 | Failure | No seizure; Church Mandate −1 for this territory's resistance. |
-Fires once when TC first crosses 80. Does not re-fire on subsequent TC changes.
+Fires each season while TC ≥ 80. Church may continue targeting un-seized territories
+in subsequent seasons at same Ob.
 
 ## Phase 4 Tiebreaking (P-18)
 2-way Stability tie: simultaneous. 3+ way: player turn order. Military-vs-military ties: always simultaneous.
@@ -407,7 +409,7 @@ Rationale: Intel 6 from starting value 4 requires ~16 seasons of successful Inte
 | Deed | Condition |
 |------|-----------|
 | 1 | Mandate ≥ 5 |
-| 2 | Control Valorsplatz + Gransol + ≥ 2 other territories |
+| 2 | Control Valorsplatz + Gransol + ≥ 3 other territories (total ≥ 5) (PP-186) |
 | 3 | Theocracy Counter < 60 and Institutional Pressure < 75 simultaneously |
 | 4 | Torben Loyalty ≥ 5 OR Institutional Pressure < 30 at game end (PP-172) |
 
@@ -683,3 +685,69 @@ This bends P-14 (co-movement is universal) but does not break it:
 - History Resonance marker placed (temporal auto-effect fires normally).
 - Church Attention Pool +2 (epistemic auto-effect fires normally).
 Only the actualized card outcome is shaped. The substrate cost is real and immediate.
+
+## TC 80 Territorial Seizure — Capped at 4 Territories/Season (PP-183, SIM-BG-03)
+Amends PP-181.
+
+At TC = 80: Church may target up to **4 territories** per season (Church player chooses which).
+Roll Church Mandate vs Ob 3 (contested) or Ob 2 (neutral) for each selected territory.
+Remaining non-Church territories not targeted this season: Church may target them in subsequent seasons.
+TC gain from successful seizures: capped at **+4 total per season** (regardless of number of territories seized).
+PI loss from seizures: −1 per territory seized, no cap.
+
+**Rationale:** Unlimited all-territory sweep instantly ends the game (~6.5 territories at median).
+4-territory cap gives other factions 2–3 seasons of counterplay before Church achieves full dominion.
+TC gain cap prevents runaway TC acceleration from the sweep itself.
+
+## Partial Mend — Thread Wound Risk (PP-184, AUD-BG-03 E-01)
+EXPLICIT WARNING: A Partial or Failed Mend result still places a History Resonance marker
+in the target territory (temporal auto-effect fires regardless of roll degree).
+
+At 3 History Resonance markers in a territory: Thread Wound forms (permanent Ob +2, RS −1/season while occupied).
+
+**Consequence:** Attempting to Mend a territory with 2 existing History Resonance markers
+on a Partial result CREATES a Thread Wound. Players must be warned before attempting Mend
+in high-marker territories.
+
+**Display:** Territories with History Resonance markers must visibly show the marker count on the board.
+At 2 markers: display a warning token (Thread Wound Imminent).
+Reference card note: "Mend on 2-marker territory: partial result = Thread Wound."
+
+## Church Attention Pool — Per-Territory Ceiling and Multi-Inquisitor Rule (PP-185, GAP-BG-17)
+
+**Per-territory AP ceiling:** 10. AP(territory) cannot exceed 10.
+At AP = 10: Inquisitor in that territory becomes an Inquisition Commander (gains +1D to all Inquisition-related rolls; Church may open one additional Heresy Investigation in an adjacent territory for free at Accounting).
+
+**Multi-Inquisitor rule:** A second Inquisitor may deploy to a territory when AP(territory) ≥ 6.
+Maximum 2 Inquisitors per territory. Second Inquisitor generates +1 additional AP/season (total +3/season with 2 Inquisitors present).
+
+**Inquisitor removal:** A successful Restoration Community Organizing order (Success or better) in the territory reduces AP by 2 and expels one Inquisitor if AP drops below the deployment threshold.
+
+## Crown Deed 2 — Territorial Control Requirement Adjusted (PP-186, AUD-BG-02 A2-03)
+Amends PP-171.
+
+Crown starts with T1, T2, T4 as unambiguously Crown-controlled.
+T5 (Arnesheld) = shared Crown/Löwenritter control at game start; does NOT count toward Crown territorial deeds until Löwenritter is formally reintegrated (Coup Counter ≤ 2) or Crown holds it uncontested.
+
+**Deed 2 (revised):** Control Valorsplatz + Gransol + at least **3** other territories (total ≥ 5).
+Previously: ≥ 4 total including Valorsplatz and Gransol.
+
+Crown starts with 3 unambiguous territories (T1, T2, T4). Needs 2 more to meet Deed 2.
+This requires active territorial expansion (governing T3, T6, T7, or other uncontrolled territories).
+
+## Co-Movement Card Effects — BG Reference (PP-187, GAP-BG-16)
+Co-Movement cards drawn during BG Thread operations resolve as follows.
+Full card deck (20 cards) — effects summarised by category:
+
+| Category | Count | Effect when drawn |
+|----------|-------|------------------|
+| TC effect (Church theological surge) | 4 | TC +1 immediately |
+| RS stabilisation | 3 | RS +1 at next Accounting |
+| Faction intel leak | 3 | One random non-practitioner faction learns this Thread operation occurred |
+| Thread Debt in adjacent territory | 3 | Thread Debt token placed in a territory adjacent to the operation site |
+| History Resonance in adjacent territory | 3 | History Resonance marker placed in adjacent territory (not this one) |
+| Benign (no effect) | 4 | No mechanical effect; narrative flavour only |
+
+**Draw procedure:** Draw from shuffled Co-Movement deck. Apply effect immediately (before Accounting).
+Applies to: Partial Community Weaving, any Harvest (Niflhel), VTM preview (VTM 3 draws 2, returns 1).
+Does NOT apply to: Investigate, Community Organizing (not a Thread op).

@@ -1810,3 +1810,58 @@ patches:
   applied_to_version: "v4.5"
   status: applied
   applied_commit: "pending"
+
+- id: PP-183
+  date: 2026-04-02
+  severity: P1
+  description: "TC 80 sweep capped: 4 territories/season (Church player chooses). TC gain from Seizure capped at +4/season. Unlimited sweep was game-ending in one season (expected 6.5 territories seized)."
+  finding_id: "SIM-BG-03-F1"
+  source: simulation
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.6.1"
+  status: applied
+  applied_commit: pending
+
+- id: PP-184
+  date: 2026-04-02
+  severity: P1
+  description: "Partial Mend temporal auto-effect documented: Partial/Failed Mend still places History Resonance marker; 2-marker + Partial Mend = Thread Wound. Warning token added for 2-marker territories."
+  finding_id: "AUD-BG-03-E-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.6.1"
+  status: applied
+  applied_commit: pending
+
+- id: PP-185
+  date: 2026-04-02
+  severity: P1
+  description: "Church Attention Pool per-territory ceiling = 10. Second Inquisitor at AP >= 6. Multi-Inquisitor generates +3 AP/season. Inquisitor removal via Community Organizing. Resolves GAP-BG-17."
+  finding_id: "AUD-BG-03-D-01 / GAP-BG-17"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.6.1"
+  status: applied
+  applied_commit: pending
+
+- id: PP-186
+  date: 2026-04-02
+  severity: P2
+  description: "Crown Deed 2: requirement raised from >=4 to >=5 territories. T5 Arnesheld (Lowenritter shared) does not count until reintegrated. Crown starts with 3 unambiguous territories, needs active expansion."
+  finding_id: "AUD-BG-02-A2-03"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.6.1"
+  status: applied
+  applied_commit: pending
+
+- id: PP-187
+  date: 2026-04-02
+  severity: P2
+  description: "Co-Movement card effects parameterised for BG: 20-card deck categorised (TC effect x4, RS stabilisation x3, intel leak x3, Thread Debt adjacent x3, History Resonance adjacent x3, benign x4). Resolves GAP-BG-16."
+  finding_id: "AUD-BG-03-B-02 / GAP-BG-16"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.6.1"
+  status: applied
+  applied_commit: pending
