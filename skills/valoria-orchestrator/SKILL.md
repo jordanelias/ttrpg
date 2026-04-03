@@ -105,6 +105,14 @@ project_knowledge_search for any GitHub read.**
      re-check before proceeding.
    - Exit 2 → run `python3 tools/freshness_gate.py --update` first, then re-check.
 
+2b. **Patch Propagation Check** — run if session log mentions recent patches
+   ```bash
+   export GITHUB_PAT="{PAT_FROM_PROJECT_INSTRUCTIONS}"
+   python3 tools/patch_propagation_checker.py --from PP-200
+   ```
+   Exit 0 → proceed. Exit 1 → report missing propagations. Fix before any work that
+   reads params files.
+
 3. **Load skill registry**
    Read from `/mnt/skills/user/valoria-orchestrator/SKILL.md` local mount if available,
    otherwise fetch from GitHub at `skills/valoria-orchestrator/SKILL.md`.
@@ -144,6 +152,15 @@ This re-syncs canonical_sha fields in canonical_sources.yaml so the next
 session's freshness gate passes. Include the canonical_sources.yaml update
 in the same atomic commit as the canonical doc change whenever possible.
 If committed separately, message: `[infrastructure] freshness_gate --update`
+
+**After every commit that applies a patch listing params files, run:**
+```bash
+python3 tools/patch_propagation_checker.py --from PP-NNN
+```
+where PP-NNN is the lowest patch ID in the commit. Exit 0 = all propagated.
+Exit 1 = patches registered but not reflected in params headers — fix before
+closing the session. This prevents the pattern where patch_register is updated
+but params files are not.
 
 ```
 create_file(/home/claude/output.md)

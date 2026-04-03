@@ -1,5 +1,5 @@
 # VALORIA REPOSITORY FILE INDEX
-## Last updated: 2026-04-02
+## Last updated: 2026-04-03
 ## Purpose: Single-source map of every committed file → game system → status
 ## Maintained by: valoria-orchestrator skill (update on every commit that adds/modifies a file)
 ## Format: path | systems | type | status | depends_on | referenced_by
@@ -246,6 +246,8 @@
 ---
 
 ## TOOLS
+
+| tools/patch_propagation_checker.py | ALL | TOOL | CURRENT | canon/patch_register.yaml | references/params_*.md | Validates patches propagated to params headers |
 
 | File | Purpose | Status |
 |------|---------|--------|
