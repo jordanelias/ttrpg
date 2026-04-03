@@ -1,47 +1,34 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_RANGED_PROPAGATION
-phase: Phase 14 — Ranged weapon type propagation and simulation
-status: CLOSED
+session_id: 2026-04-02T_EDITORIAL_REVIEW
+phase: Phase 15 — Editorial review (provisional decisions)
+status: CLOSED — partial
 
 completed:
-  - PP-172: ranged subtypes (LP/HP/LBl/HBl) in personal combat, TN8 defence, environmental factors
-  - PP-173: mass combat ranged DR split (Projectile column → 4 columns), HBl personal reference updated
-  - SIM-001: personal combat ranged test battles (committed d30e47b)
-  - SIM-002/003: mass combat + BG ranged scenarios (committed 40f54e0)
-  - SIM-004/005/006: TTRPG personal, mass combat, hybrid siege scenarios (committed 3856ab8)
-  - ED-097: HP mass combat reload abstraction (provisional: no CP penalty)
-  - ED-098: cover declaration timing (provisional: Phase 1 required, GM arbitrates)
-  - Propagation complete for personal combat and mass combat
-  - BG confirmed: no changes needed (correctly abstracted)
+  - All 58 provisional decisions presented as ordered list
+  - ED-061 partially resolved: user instructed redesign of ranged system
+  - Design decisions captured (not yet committed — awaiting final values):
+    - Two categories: Piercing and Blunt (replacing LP/HP/LBl/HBl four-type system)
+    - Piercing/Bow: every round
+    - Piercing/Crossbow: every other round; base mod = bow mod; flat bonus post-DR IF hit (>0 net): +2 vs Medium, +3 vs Heavy
+    - Blunt/Throwing: every round
+    - Blunt/Sling: every other round; -2D pool; ammo-dependent mod: Clay +1, Stone +2, Metal +3, Lead +4
+    - No Fibonacci group bonus for ranged weapons
+    - Crossbow base mod = bow base mod (currently +2); pending user confirmation
+    - Sling ammo ladder pending user confirmation (wider gaps?)
+  - Session closed before ED-062 through ED-098 reviewed
 
-commits:
-  - d30e47b: PP-172 personal combat ranged subtypes
-  - 40f54e0: PP-173 mass combat ranged DR split
-  - 3856ab8: SIM-004/005/006 scenarios + ED-097/098
-
-design_decisions:
-  - HP crossbow penetrates all armour tiers at personal scale (historically accurate)
-  - Balance mechanism is zone control and terrain, NOT damage numbers
-  - HBl (lead sling) = anti-armour ranged; HBl (Artillery) = siege unit — distinct
-  - LBl (stone sling) = anti-levy only at mass combat scale
-  - Mass combat HP units zero damage vs Heavy armour at standard CP (correct abstraction)
-  - Personal HBl (16D Agility 5) = viable anti-artillery sniper in Hybrid mode
-
-open_editorials:
-  - ED-085: pool split at melee range for ranged (provisional: Offence forbidden)
-  - ED-086: HBl lead sling availability by faction (provisional: all factions)
-  - ED-087: BG ranged-specialist faction modifier (provisional: none)
-  - ED-097: HP mass combat reload CP penalty (provisional: none)
-  - ED-098: cover declaration timing (provisional: Phase 1, GM arbitrates) → propagated to combat_design_v1 v1.3
-
-pending_propagation:
-  - None. All propagation complete.
-  - BG: no changes needed (confirmed SIM-003)
+pending:
+  - User to confirm: bow base mod (+2?), sling ammo ladder gaps
+  - Then: implement redesign across combat_design_v1.md, params_combat.md, mass_battle_v3.md, params_mass_combat.md
+  - Then: continue ED-062 through ED-098 editorial review
+  - Then: re-run ranged simulations with new two-category system
 
 next_session:
-  - Ranged system is fully propagated and tested
-  - Propagation map updated, no broken dependencies introduced
-  - Available for any subsequent work
+  - Resume at: confirm bow base mod and sling ammo ladder
+  - Then: commit redesign as PP-174 (supersedes PP-172 ranged weapon table)
+  - Then: continue ED-062 onwards
+
+open_editorials_count: 58 (none resolved this session)
 ```
