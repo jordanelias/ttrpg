@@ -1,51 +1,42 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_SOUTHERNMOST_FIX
+session_id: 2026-04-02T_LENNETH_CHAMPION
 phase: SESSION CLOSED
 status: COMPLETE
 
-## SOUTHERNMOST ACCESS CLARIFICATION (PP-205)
+## LENNETH ALMQVIST — QUEEN OF VALORIA (PP-206)
+User confirmed: Lenneth Almqvist is Crown Queen (Almud's wife).
+She can access the Southernmost.
 
-User confirmed: Stillhelm (T13) is a normal territory. The Southernmost access
-gate applies only to T15 Askeheim.
+### What we know from design docs
+- Holds pre-Altonian sea-republic archive (coastal surveys, first-person
+  Thread-perception accounts ~180 AG)
+- Her covert network touches Restoration Movement
+- Conditional TS: narrative_scenario_chains suggests TS may be 0 at start
+  (theologically foreclosed) with development through archive exposure
+- "A Queen with Thread sensitivity" is a destabilising scenario: TC +2 immediately
 
-### Changes Applied
-T13 Stillhelm: Reverted PP-203 Fort 1 and "march triggers Warden Emergence" rule.
-Both were wrong. T13 is a normal Crown territory with:
-  - Non-Thread orders +1 Ob (difficult frontier terrain)
-  - RS -1/season occupation (substrate proximity)
-  - No special access restrictions
-  - Warden Cooperation track inactive here (activates only in T15)
+### What is unknown (ED-120 opened, P2)
+- Starting TS
+- Development arc to TS 30
+- Full stat block
 
-T15 Askeheim: Full Southernmost access system defined.
-  - Not a normal territory. No faction control possible. Ever.
-  - Access gate: Champion TS >= 30 staged in T13 for >= 1 season
-  - Expedition declaration: pool = TS/10 (min 1D, max 3D) vs Ob 3
-  - Forgetting Check on entry: same pool vs Ob 2
-  - Failure = present but retains nothing; Success = Warden contact possible
-  - Edeyja contact: Overwhelming on Forgetting Check or Success + 1 prior season
-  - Edeyja TS 75-80: she will not engage TS < 30; TS 40+ = substantive contact
+### Champion Table Now Shows Three Paths
+Varfell (Vaynard): VTM 3+ = TS 30, fastest (~S7-9)
+Crown (Almud): TS 28 at start, Discovery Event → TS 30. Politically costly.
+Crown (Lenneth): Arc-dependent, starting TS unknown. Archive exposure is the key.
+Restoration: Support role only (Ob -1 when accompanying qualifying Champion).
 
-### Varfell Paths Correctly Stated
-Path B (T4+T13): T13 is a normal territory. The deed measures political
-presence at the Southernmost threshold, not T15 occupation.
-Path C (T4+T13+1 other): same.
-T15 never appears as a territorial deed condition.
-
-### Vaynard is the Only Qualifying Champion at Game Start
-VTM 3+ = TS 30. Marginal but valid. VTM 4+ = TS 40, Edeyja will engage.
-No other faction Champion qualifies without extraordinary development.
+### Almud TS 28 confirmed in params
+Discovery Event: Spirit Ob 1, any Thread-significant event with Almud present.
+On success: TS 30, Certainty -1 permanent. TC +1; Church learning: TC +2 + Heresy.
 
 ## Gate: PASS
 
-## Commits
-61f3239d: PP-205 Southernmost access system
-
 next_session_start:
   priority_1: "Run freshness_gate.py check first."
-  priority_2: "BAL-BG-03: verify Varfell Path B is still adequately gated now that
-    T13 is normal (2-season hold under Crown pressure still applies from PP-203)."
-  priority_3: "Road network design (still deferred)."
-  priority_4: "ED-108: confirm T10/T11 territory names."
+  priority_2: "ED-120: design Lenneth's TS starting value and development arc."
+  priority_3: "BAL-BG-03: verify Crown Southernmost access doesn't unbalance Varfell Path B."
+  priority_4: "Road network design (still deferred)."
 ```
