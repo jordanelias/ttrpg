@@ -38,7 +38,7 @@ systems:
 
   southernmost:
     canonical: compilation/v0.14/stage4_southernmost.md
-    canonical_sha__compilation__v0_14__stage4_southernmost_md: "58ce0757881b2ae1bc607d39174fba9002220a03"
+    canonical_sha__compilation__v0_14__stage4_southernmost_md: "9d6d1e75027985371b22970ce58b4d14f5da8519"
     params: null
     design_doc: null
     compilation_current: true
@@ -56,9 +56,9 @@ systems:
     canonical_ttrpg: compilation/v0.14/stage6_factions.md
     canonical_sha__compilation__v0_14__stage6_factions_md: "d09b32d1970b5144c73189d4f815d93f102ddfb0"
     canonical_bg: designs/board_game/valoria_bg_v05_simulation_and_patches.md
-    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "cd2ee5fba3b4ccff911703f839fb839a1ff17508"
+    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "763941ecca04ec58029099dee24ec44d1aeca43c"
     canonical_hybrid: designs/board_game/valoria_bg_v05_simulation_and_patches.md
-    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "cd2ee5fba3b4ccff911703f839fb839a1ff17508"
+    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "763941ecca04ec58029099dee24ec44d1aeca43c"
     params: references/params_factions.md
     compilation_current_ttrpg: true
     compilation_current_bg: false
@@ -82,7 +82,7 @@ systems:
 
   mass_combat:
     canonical: designs/mass_combat/mass_battle_v3.md
-    canonical_sha__designs__mass_combat__mass_battle_v3_md: "c1faf91156f2c99d5a34aefd7d9b1dcd01ce0665"
+    canonical_sha__designs__mass_combat__mass_battle_v3_md: "9ec3240449ebf607d9ba4ba1625f03431af501b1"
     params: references/params_mass_combat.md
     design_doc: designs/mass_combat/mass_battle_v3.md
     compilation_stage: compilation/v0.14/stage8_combat.md  # §8.9
@@ -145,7 +145,7 @@ systems:
 
   board_game:
     canonical_mechanics: designs/board_game/valoria_bg_v05_simulation_and_patches.md
-    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "cd2ee5fba3b4ccff911703f839fb839a1ff17508"
+    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "763941ecca04ec58029099dee24ec44d1aeca43c"
     canonical_action_economy: designs/board_game/stage_bg_proposal_v02.md
     canonical_sha__designs__board_game__stage_bg_proposal_v02_md: "de6e2f88ec9220bf7d5808bc26b500d5da58991d"
     params: references/params_board_game.md
