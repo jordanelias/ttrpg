@@ -1959,3 +1959,14 @@ editorial_decisions:
     propagation_targets: [references/params_board_game.md]
     propagation_status: applied
     tags: [board_game, territory, geography, resolved]
+
+  - id: ED-108
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: territory_remap
+    description: "Two Crown territories need confirmed names. T10 working name: Nordhelm (NW of Arcansheld, buffer territory). T11 working name: Mittelmark (central, between Arcansheld and Valorsplatz). Both are administrative counties of Valorsmark duchy with no major named city."
+    full_flag_text: "[EDITORIAL: ED-108 — Crown territory names T10/T11 provisional: Nordhelm, Mittelmark]"
+    status: open
+    priority: P2
+    decision: null
+    tags: [board_game, territory, naming, crown]

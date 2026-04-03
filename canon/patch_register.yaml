@@ -2147,3 +2147,14 @@ patches:
   applied_to_version: "v0.7.5"
   status: applied
   applied_commit: pending
+
+- id: PP-199
+  date: 2026-04-02
+  severity: P1
+  description: "Definitive 15-territory map. Varfell 4 (T1-T4), Hafenmark 4 (T5-T8), Crown 5 (T9-T13), Church 1 (T14 Himmelenger), Southernmost 1 (T15 Askeheim). T16 Schoenland maritime island NPC. Road network, adjacency, Southernmost zones, TC80 table, VC territory references, Ministry/Guilds/Niflhel starting positions all updated. ED-108: T10 Nordhelm/T11 Mittelmark names provisional."
+  finding_id: "Map 3 annotations + user faction count"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.8.0"
+  status: applied
+  applied_commit: pending
