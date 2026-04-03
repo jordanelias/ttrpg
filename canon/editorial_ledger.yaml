@@ -13,12 +13,12 @@ editorial_decisions:
   - id: ED-001
     legacy_id: BG-E-30
     date_flagged: 2026-03-31
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: session
     source_file: session_log_current.md
     description: "Adopt Card-Hand system for board game action selection"
     full_flag_text: "BG-E-30: Adopt Card-Hand system (BLOCKER)"
-    status: provisional
+    status: resolved
     priority: P1-BLOCKER
     decision: "Card-Hand provisional adopted (6-card hand, 4 shared+2 faction, draw 1/Battle, discard after use, refresh at Accounting). Unblocks simulation only. Full design review required before compilation. [PROVISIONAL]"
     propagation_targets:
