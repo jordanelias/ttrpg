@@ -73,7 +73,7 @@ systems:
 
   combat:
     canonical: designs/combat/combat_design_v1.md
-    canonical_sha__designs__combat__combat_design_v1_md: "50f7dad698f97bdc1850ca45174b1b3fef4470d7"
+    canonical_sha__designs__combat__combat_design_v1_md: "8df0267be1b118efb3d46ba2bc50c62fb1fb8c98"
     params: references/params_combat.md
     design_doc: designs/combat/combat_design_v1.md
     compilation_stage: compilation/v0.14/stage8_combat.md
@@ -82,7 +82,7 @@ systems:
 
   mass_combat:
     canonical: designs/mass_combat/mass_battle_v3.md
-    canonical_sha__designs__mass_combat__mass_battle_v3_md: "cfea6a344d04991cbde7be9b667c4ccc13b4073f"
+    canonical_sha__designs__mass_combat__mass_battle_v3_md: "c1faf91156f2c99d5a34aefd7d9b1dcd01ce0665"
     params: references/params_mass_combat.md
     design_doc: designs/mass_combat/mass_battle_v3.md
     compilation_stage: compilation/v0.14/stage8_combat.md  # §8.9
