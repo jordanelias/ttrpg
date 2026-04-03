@@ -1688,3 +1688,69 @@ editorial_decisions:
     propagation_status: pending
     related_ids: []
     tags: [board_game, church, theocracy_counter, blocker]
+
+  - id: ED-085
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_bg_ff_01.md
+    description: "BG Govern Partial base effect: Success = Prosperity +1; Partial = Prosperity +1 with Minor complication. Confirm Govern Success = Prosperity +1 is the full-success value (currently implied but not stated)."
+    status: provisional
+    priority: P2
+    decision: "Govern Partial = Prosperity +1 + Minor complication. Success = Prosperity +1. Overwhelming = Prosperity +2. [PROVISIONAL — flagged for user review]"
+    propagation_targets: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+    propagation_status: pending
+    tags: [board_game, govern, partial, fail_forward]
+
+  - id: ED-086
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_bg_ff_01.md
+    description: "Domain Action Overwhelming bonus undefined in BG. Provisional ruling: Success effect only; no additional mechanical bonus. Overwhelming = better margin, narrative weight only, unless explicitly stated per action."
+    status: provisional
+    priority: P3
+    decision: "Overwhelming = Success effect only in BG Domain Actions. No bonus mechanical effect unless action-type table specifies one. [PROVISIONAL — flagged for user review]"
+    propagation_targets: [references/params_board_game.md]
+    propagation_status: pending
+    tags: [board_game, overwhelming, domain_actions]
+
+  - id: ED-087
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_bg_ff_01.md
+    description: "Parliamentary Manoeuvre Partial conflict: PP-170 stated 'no effect.' PP-177 adds Minor complication. Resolution: player may choose 'no effect' as their Minor option, preserving PP-170 as a menu item. No contradiction."
+    status: provisional
+    priority: P3
+    decision: "Partial = Minor complication fires; player may choose Standing -1 OR no effect. PP-170 preserved as choice option. [PROVISIONAL]"
+    propagation_targets: [references/params_board_game.md]
+    propagation_status: pending
+    tags: [board_game, parliamentary_manoeuvre, partial, fail_forward]
+
+  - id: ED-088
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: design
+    source_file: designs/lir_ff_impact.md
+    description: "Explicitly exempt Debate exchanges from LIR in stage1 §1.5. Each Debate round presents a new fictional state; no LIR applies within a Debate sequence."
+    status: provisional
+    priority: P3
+    decision: "Debate exemption from LIR: confirmed. Each exchange = new fictional state. No re-test restriction applies. Added to PP-178 cross-mode note. [PROVISIONAL]"
+    propagation_targets: [compilation/v0.14/stage1_core_engine.md, designs/debate/debate_system_redesign_v1.md]
+    propagation_status: pending
+    tags: [debate, let_it_ride, cross_mode]
+
+  - id: ED-089
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: design
+    source_file: designs/lir_ff_impact.md
+    description: "Clarify LIR precedence vs Thread operation irreversibility: Thread rules govern. LIR does not add further restriction. FR is permanently irreversible under Thread rules; LIR is redundant here."
+    status: provisional
+    priority: P3
+    decision: "Thread operation irreversibility governed by Thread rules alone. LIR does not add further restriction at Thread scope. PP-178 cross-mode note states this. [PROVISIONAL]"
+    propagation_targets: [compilation/v0.14/stage1_core_engine.md]
+    propagation_status: pending
+    tags: [thread_operations, let_it_ride, cross_mode]
+

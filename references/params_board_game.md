@@ -261,6 +261,40 @@ Theocracy Counter >= 65 (not 70). Starting Theocracy Counter 28 (not 22).
 | Overall (with reference cards) | 6.5/10 |
 | Overall hybrid (with cards) | 8.0/10 |
 
+
+## Fail Forward — Board Game Mode (PP-177) [PROVISIONAL: ED-085, ED-086, ED-087]
+Applies to all Domain Action rolls. Fires on Partial and Failure results.
+
+### Complication Tiers
+| Tier | Severity | Used for |
+|------|----------|----------|
+| Minor | Standing −1 OR Public Instability +1 (acting faction chooses) | Partial outcomes |
+| Moderate | Mandatory consequence from action-type table | Failure outcomes |
+| Severe | Moderate + Stability −1 | Failure on Ob ≥ 4 only |
+
+### Action-Type Complication Table
+| Domain Action | Partial (Minor — player chooses 1) | Failure (Moderate — mandatory) |
+|---------------|-------------------------------------|--------------------------------|
+| Govern (Inward) | Standing −1 OR Public Instability +1 | Prosperity −1 in target territory |
+| Trade (Outward) | Standing −1 OR Wealth −1 this season | Wealth −1 (permanent until Accounting) |
+| Muster (Inward) | Unit mustered at Cohesion −1 OR Standing −1 | No unit mustered; Wealth −1 |
+| Diplomacy (Outward) | Standing −1 OR target faction Standing +1 | Target faction gains Casus Belli vs acting faction (Ob 3 to dismiss) |
+| Decree (Inward) | Mandate −1 for 1 season OR Public Instability +1 | Mandate −1 (permanent until Accounting) |
+| Parliamentary Manoeuvre | Standing −1 OR no effect (player's choice) | Mandate −1 + opponent Standing +1 |
+| Investigate (Inward) | One datum unreliable (GM marks) OR Standing −1 | No intel gained; Stability −1 |
+| Spy (Outward) | Intel gained but identity exposed OR Standing −1 | No intel; target may take free Intel action vs actor next season |
+| Thread Operation | Thread Debt token OR Rendering Stability −1 | Thread Debt token; Rendering Stability −2 |
+| Community Organising | +1 Ob to next Community action in territory OR Standing −1 | No progress; Institutional Pressure +1 |
+| Fortify | Fortification at unit Cohesion −1 OR Standing −1 | No fortification; Wealth −1 |
+| Parliamentary Vote | Losing margin halved OR Public Instability −1 | Calling faction Mandate −1 + Public Instability −1 |
+
+**Battle Resolution excluded.** FF applies to Domain Actions only. Battle has its own outcome table.
+**Casus Belli from Diplomacy Failure:** Standard Casus Belli rules apply; expires 3 seasons unused; one Casus Belli per faction at a time.
+**Thread Operation FF stacks with co-movement:** FF complication is in addition to mandatory co-movement effects (P-01). Not a replacement.
+**Parliamentary Manoeuvre Partial update (PP-177 supersedes PP-170 Partial clause):** Partial = Minor complication fires. Player may choose "no effect" as their Minor choice — PP-170's "no effect" ruling is preserved as a menu option.
+
+[PROVISIONAL: Confirmed as design intent by SIM-FF-01. ED-085/086/087 flagged for user review.]
+
 <!-- patch_history: references/params_board_game_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
 

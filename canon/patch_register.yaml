@@ -1709,3 +1709,36 @@ patches:
   applied_to_version: "v0.5.5"
   status: applied
   applied_commit: pending
+
+- id: PP-177
+  date: 2026-04-02
+  severity: P2
+  description: "Fail Forward operationalised for BG Domain Actions. Partial = Minor complication (player choice). Failure = Moderate complication (action-type specific, mandatory). Severe tier for Ob>=4 Failures. Parliamentary Manoeuvre Partial supersedes PP-170."
+  finding_id: "SIM-FF-01"
+  source: simulation
+  affects: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+  applied_to_version: "v0.5.5"
+  status: provisional
+  applied_commit: pending
+
+- id: PP-178
+  date: 2026-04-02
+  severity: P3
+  description: "LIR/FF cross-mode applicability note added to stage1. Debate exemption, Thread precedence, BG action-economy equivalence all stated. Hybrid zoom-boundary FF rule added."
+  finding_id: "SIM-FF-01"
+  source: simulation
+  affects: [compilation/v0.14/stage1_core_engine.md, references/params_board_game.md]
+  applied_to_version: "v0.5.5"
+  status: provisional
+  applied_commit: pending
+
+- id: PP-180
+  date: 2026-04-02
+  severity: P3
+  description: "Hybrid zoom-boundary FF rule: PC Failure complication carries to faction scale as -1 Ob on next Domain Action or Standing -1. Not discarded at zoom boundary."
+  finding_id: "SIM-FF-01"
+  source: simulation
+  affects: [references/params_board_game.md, skills/valoria-orchestrator/references/state_transfer_spec.md]
+  applied_to_version: "v0.5.5"
+  status: provisional
+  applied_commit: pending

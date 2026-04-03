@@ -100,3 +100,18 @@ BG Thread ops: no Coherence. Hybrid: PC Coherence via Cascade Step 3.
 
 ### PP-122 — CP Awards in Hybrid [PROVISIONAL]
 CP +1 on BG Domain Action if Belief declared. BG-only: no CP.
+
+### PP-177 — Fail Forward (BG Domain Actions) [PROVISIONAL: ED-085, ED-086, ED-087]
+Fail Forward operationalised for BG mode. Partial = goal achieved + Minor complication (player choice of Standing −1 or Public Instability +1). Failure = goal not achieved + Moderate complication (action-type specific, mandatory). Severe tier added for Ob ≥ 4 Failures (Moderate + Stability −1). Parliamentary Manoeuvre Partial supersedes PP-170 "no effect" ruling — player may choose "no effect" as their Minor option.
+
+### PP-178 — LIR/FF Cross-Mode Applicability Note [PROVISIONAL: ED-087b]
+Let It Ride (LIR): TTRPG = full; Hybrid = full for PCs / action-economy for units; BG = action-economy-enforced (one slot per season).
+Fail Forward (FF): TTRPG = Hard Moves §13.5; Hybrid = Hard Moves for PCs / PP-177 for units; BG = PP-177 complication table.
+Debate exchanges: explicitly exempt from LIR (each exchange = new fictional state).
+Thread operation irreversibility: Thread rules govern; LIR does not add further restriction.
+
+### PP-179 — BG Overwhelming Degree Table (applied prior session)
+See patch_register.yaml PP-179. Not a FF patch.
+
+### PP-180 — Hybrid Zoom-Boundary FF Rule [PROVISIONAL: ED-087c]
+When a PC Failure in TTRPG/Hybrid mode produces a zoom transition to faction scale, the complication carries forward as: −1 Ob modifier on the faction's next relevant Domain Action OR Standing −1 consequence (GM choice based on fiction). Complication is not discarded at the scale boundary.
