@@ -2440,3 +2440,14 @@ patches:
     source: audit_combat_2026-04-02.md (GAP-CMB-05)
     system: combat / mass_combat
     description: "PP-086 mass damage formula clarified. Formula is now: max(0, net successes − Ob) + disposition_modifier. Floor applies to bracketed term only; disposition modifier always adds after. Partial success → 0+modifier. Replaces ambiguous 'net_successes_over_Ob' notation."
+
+- id: PP-219
+  date: 2026-04-02
+  severity: P1
+  description: "Southernmost access redesign. T13 Stillhelm = normal territory (reverts PP-203 Fort 1 and march-trigger; both were wrong). T15 Askeheim = Southernmost proper — no faction control possible; Champion TS >= 30 required; Expedition Procedure defined (stage in T13, declare Expedition, Forgetting Check on entry); Meeting Edeyja defined. Varfell Path B/C correctly reference T13 (normal territory control) not T15. TC 80 seizure cannot target T15. Warden Cooperation advances via successful Expedition seasons, not territorial control."
+  finding_id: "User clarification — Stillhelm is normal; Southernmost access gate is T15 only"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.8.5"
+  status: applied
+  applied_commit: pending

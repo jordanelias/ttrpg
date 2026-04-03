@@ -715,9 +715,9 @@ T16 Schoenland = maritime island NPC (off-peninsula extension).
 | 10 | Nordhelm | Crown | 1 | 4 | NW of Arcansheld. Buffer between Crown heartland and Hafenmark/Varfell. [EDITORIAL: ED-108 name provisional] |
 | 11 | Mittelmark | Crown | 0 | 4 | Central, between Arcansheld and Valorsplatz. [EDITORIAL: ED-108 name provisional] |
 | 12 | Valorsplatz | Crown ★ | 2 | 6 | East coast. Kingdom capital. Parliament seat. Ministry AP-token. Hafenvalor = port sub-district. |
-| 13 | Stillhelm | Crown | 1 | 2 | South coast. Southernmost Access. Fort 1 (warden outpost — the Wardens maintain minimal presence before Emergence). Non-Thread orders +1 Ob. RS −1/season occupation. Warden Cooperation track. Any faction marching into T13 triggers Warden Emergence check immediately (regardless of Accounting phase). (PP-203) |
+| 13 | Stillhelm | Crown | 0 | 2 | South coast. Southernmost Access point — last normal territory before the Southernmost. Non-Thread orders +1 Ob (difficult frontier terrain). RS −1/season any occupation. Normal military march and territorial control apply. Warden Cooperation track inactive here until Emergence. Expedition into T15 (Askeheim) requires Champion with TS ≥ 30 staging from T13 with at least 1 season of presence. |
 | 14 | Himmelenger | Church ★ | 2 | 5 | Cathedral city. Church starts here. TC +1/season Church controls. Church Unique Power −1 Ob. |
-| 15 | Askeheim | Uncontrolled | 0 | 1 | The Southernmost. Epicentre. Warden domain. No faction control possible. Expedition required. RS −2/season non-Warden occupation. Forgetting Check mandatory on entry. |
+| 15 | Askeheim | Uncontrolled | 0 | 1 | The Southernmost. Epicentre. Warden domain. **Not a normal territory — cannot be controlled by any faction under any standard military or domain action.** Access requires: (1) Champion with TS ≥ 30 present in T13 for ≥ 1 season. (2) Expedition declared (card play, Praetor or Tribune Inward, Ob 3). (3) Forgetting Check on entry (pool = Champion TS ÷ 10 round down, Ob 2; Restoration Weaver present: Ob −1; VTM 2+: Ob −1). Failure: Champion present but retains nothing — no Warden contact, no Cooperation advance, no VTM progress. Must wait 1 season and retry. Success: Warden Emergence fires if not already active. No faction control token placed. RS −2/season any non-Warden presence. Cannot be seized by TC 80 Church Territorial Seizure. |
 | 16 | Schoenland | Neutral NPC | 1 | 5 | Maritime island, east of Valorsplatz. Altonian Trade. IP ≥ 75: Vanguard deploys. Intel orders visible to Altonia. |
 
 ★ = duchy/faction capital. T15 Askeheim = Southernmost territory (uncontrolled). T16 Schoenland = off-peninsula island.
@@ -790,8 +790,72 @@ T16 (Schoenland) ↔ T8 (sea trade), T12 (sea trade) [merchant NPC only — no m
 |------|-----------|--------|
 | 3 (Outer) | T1 (Varfell), T9 (Arcansheld) | Thread Resonance +1 all factions when RS < 40. |
 | 2 (Middle) | T4 (Vargstad), T3 (Halvardshelm) | Thread Wound. RS thresholds +10 early. |
-| 1 (Inner) | T13 (Stillhelm) | RS −1/season any occupation. Warden Cooperation track. |
+| 1 (Inner) | T13 (Stillhelm) | Normal territory. RS −1/season any occupation (substrate proximity). Southernmost Access point — Expedition into T15 staged from here. |
 | Epicentre | T15 (Askeheim) | RS −2/season non-Warden. Expedition required. |
+
+
+## Southernmost Access System (PP-219)
+### Authority: designs/ttrpg/edeyja_npc.md; Philosophical Foundations P-13
+
+**T13 Stillhelm = normal territory.** Standard military march, territorial control,
+Domain Actions all apply. Difficult frontier terrain (+1 Ob non-Thread) and RS drain
+from substrate proximity, but no special access gate.
+
+**T15 Askeheim = the Southernmost proper.** Not a normal territory. Cannot be
+controlled by any faction through standard mechanics. The Warden presence and the
+substrate damage itself make conventional occupation impossible — any military force
+that enters encounters Thread operations at TS 75–80 scale. This has never needed
+advertising. It has simply never been necessary.
+
+### Expedition Procedure (T13 → T15)
+Required sequence to access Askeheim:
+
+1. **Stage in T13 (Stillhelm):** Faction must control T13 AND have a Champion with
+   TS ≥ 30 present there for at least 1 full season. Champion must not have been
+   used for military orders that season (Expedition requires full attention).
+
+2. **Declare Expedition:** Phase 4, Praetor or Tribune Inward in T13.
+   Roll: Champion pool (TS ÷ 10, rounded down, min 1D, max 3D) vs Ob 3.
+   Modifiers: Restoration Weaver with Presence in T13: −1 Ob. VTM ≥ 2: −1 Ob.
+   Failure: expedition does not depart this season. Try again next season.
+   Success/Overwhelming: expedition departs. Move to step 3.
+
+3. **Forgetting Check (on entry into T15):**
+   Same pool vs Ob 2. Modifiers same as above.
+   | Result | Effect |
+   |--------|--------|
+   | Failure | Champion enters T15 but retains nothing. No Warden contact. No Cooperation advance. No VTM progress. Champion returns to T13 next season. |
+   | Partial | Emotional impressions retained. Warden Emergence fires (if not active). Cooperation +0 (Wardens observe but do not approach). |
+   | Success | Facts retained. Warden Emergence fires. Cooperation +1. VTM +1 (Varfell only, if VTM ≥ 2). |
+   | Overwhelming | Full retention. Warden Emergence fires. Cooperation +1. VTM +1 (Varfell). Edeyja makes contact. |
+
+4. **Meeting Edeyja:**
+   Requires Overwhelming on Forgetting Check, OR Success + 1 prior successful season
+   in T15. She assesses the Champion. TS < 30: she will not engage. TS 30–39: brief,
+   wary contact. TS 40+: substantive contact. She never leaves T15.
+
+### Champion TS Values (BG)
+| Champion | TS | Qualifies |
+|----------|----|-----------|
+| Vaynard (VTM 3+) | 30 | Minimum — marginal. Forgetting pool = 3D. |
+| Vaynard (VTM 4+) | 40 | Effective. Edeyja will engage. |
+| Restoration Weaver (TS 18 base) | 18 | Does NOT qualify alone. Restoration Weaver present provides Ob −1 as support but is not the expedition leader. |
+| Any other faction Champion | < 30 | Cannot lead expedition. |
+
+Varfell is the only faction whose starting Champion can access the Southernmost
+without additional development. This is by design.
+
+### What "No Faction Control" Means in BG
+- No control token can be placed in T15.
+- No Govern, Trade, Muster, Fortify, or Decree orders execute in T15.
+- TC 80 Church Territorial Seizure does not target T15.
+- Varfell Path B (T4+T13) refers to control of T13 — a normal territory.
+  The deed measures political and strategic presence at the Southernmost threshold,
+  not occupation of the epicentre itself.
+- Varfell Path C Deed 2 (T4+T13+1 other): same — T13 is the territorial condition.
+  T15 is never the territorial condition.
+- Warden Cooperation track advances through successful Expedition seasons in T15,
+  not through territorial control.
 
 ## TC 80 Seizure — Territory Values (PP-199)
 Targets all Crown and Hafenmark territories. Roll: Church Mandate vs Ob = Fort + 1.
