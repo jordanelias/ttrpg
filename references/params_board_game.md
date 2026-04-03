@@ -835,15 +835,25 @@ Required sequence to access Askeheim:
    wary contact. TS 40+: substantive contact. She never leaves T15.
 
 ### Champion TS Values (BG)
-| Champion | TS | Qualifies |
-|----------|----|-----------|
-| Vaynard (VTM 3+) | 30 | Minimum — marginal. Forgetting pool = 3D. |
-| Vaynard (VTM 4+) | 40 | Effective. Edeyja will engage. |
-| Restoration Weaver (TS 18 base) | 18 | Does NOT qualify alone. Restoration Weaver present provides Ob −1 as support but is not the expedition leader. |
-| Any other faction Champion | < 30 | Cannot lead expedition. |
+| Champion | Faction | Starting TS | Qualifies at Start | Path to TS 30 |
+|----------|---------|-------------|-------------------|---------------|
+| Vaynard (VTM 3+) | Varfell | 30 (at VTM 3) | Yes — conditional on VTM development | VTM 3 achieved ~S7–9. Marginal: Forgetting pool = 3D. |
+| Vaynard (VTM 4+) | Varfell | 40 | Yes | VTM 4 ~S10–12. Edeyja will engage substantively. |
+| Almud Almqvist | Crown | 28 | **No** | Discovery Event: any Thread-significant event with Almud present, Spirit Ob 1. On success: TS 30, Certainty −1 (permanent). Politically costly: TC +1; Church learning triggers TC +2 + Heresy Investigation. |
+| Lenneth Almqvist (Queen) | Crown | Unknown (not yet documented) | **Unknown** | Arc-dependent. Holds pre-Altonian sea-republic archive with first-person Thread-perception accounts (~180 AG). Potential TS development through intellectual confrontation with archive content + Thread exposure. [EDITORIAL: ED-119 — Lenneth full design required: starting TS, development path, stat block.] |
+| Restoration Weaver (TS 18) | Restoration | 18 | No | Does not qualify as expedition leader. Provides Ob −1 support when accompanying a qualifying Champion. |
+| Any other faction Champion | Any | < 30 | No | No standard development path. |
 
-Varfell is the only faction whose starting Champion can access the Southernmost
-without additional development. This is by design.
+**Crown's Southernmost access is conditional on in-game development.**
+Neither Almud nor Lenneth qualifies at game start. Crown must trigger
+specific arc events (Almud Discovery Event; Lenneth archive arc) to
+develop an eligible Champion. This is slower than Varfell's VTM path
+but represents Crown's unique royal household angle on the Southernmost.
+
+**Three factions have Southernmost access paths:**
+- Varfell: fastest (VTM development, S7–12)
+- Crown: conditional (Discovery Event / archive arc, unpredictable timing)
+- Restoration: support role only (Weaver provides Ob −1, cannot lead)
 
 ### What "No Faction Control" Means in BG
 - No control token can be placed in T15.

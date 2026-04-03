@@ -2451,3 +2451,14 @@ patches:
   applied_to_version: "v0.8.5"
   status: applied
   applied_commit: pending
+
+- id: PP-220
+  date: 2026-04-02
+  severity: P2
+  description: "Champion TS table updated: Almud Almqvist TS 28 (near-Stirring, qualifies via Discovery Event only — politically costly); Lenneth Almqvist (Queen, Crown) can access Southernmost via arc development — starting TS unknown, ED-119 opened for full design. Crown now has two conditional Champion pathways. Three factions have Southernmost access paths: Varfell (fastest, VTM), Crown (conditional, arc-dependent), Restoration (support role only)."
+  finding_id: "User clarification — Lenneth is Crown Queen"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.8.5"
+  status: applied
+  applied_commit: pending

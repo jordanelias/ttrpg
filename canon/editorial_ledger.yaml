@@ -2106,3 +2106,14 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     decision: "Formula clarified. Floor applies to (net−Ob) only; disposition modifier always adds after. PP-218 applied."
     propagation_targets: [designs/combat/combat_design_v1.md]
     propagation_status: complete
+
+  - id: ED-119
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: canonical_clarification
+    description: "Lenneth Almqvist (Queen of Valoria, Almud's wife) can access the Southernmost. Starting TS and development arc not documented in any read design file. narrative_scenario_chains.md references her sea-republic archive (pre-Altonian coastal surveys, first-person Thread-perception accounts ~180 AG) as a knowledge source. Conditional text suggests TS may be 0 at game start (theologically foreclosed) with development path through archive exposure. Full stat block and TS development arc required."
+    full_flag_text: "[EDITORIAL: ED-119 — Lenneth Almqvist: design her TS starting value, development arc, and stat block for BG Champion use.]"
+    status: open
+    priority: P2
+    decision: null
+    tags: [board_game, crown, lenneth, champion, southernmost]
