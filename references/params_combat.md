@@ -1,6 +1,6 @@
-<!-- version: v0.14-AUD4 | sources: designs/combat/combat_design_v1.md (PP-174) | last_updated: 2026-04-02 -->
+<!-- version: v0.14-AUD5 | sources: designs/combat/combat_design_v1.md (PP-218) | last_updated: 2026-04-03 -->
 <!-- CANONICAL SOURCE: combat_design_v1.md supersedes stage8_combat.md (has PP-086-092, MT-01, three-mode framing) -->
-<!-- PATCHES APPLIED: PP-086, PP-087, PP-088, PP-091, PP-092, PP-165, PP-172, PP-174 (remove stale HBl no-personal note; fix Damage Formula; ED-092 provisional on STR) -->
+<!-- PATCHES APPLIED: PP-086, PP-087, PP-088, PP-091, PP-092, PP-165, PP-172, PP-174, PP-210–218 (audit gap fixes: Health formula, Feint, Tie Up, Rescue, Dodge, Fibonacci, Anti-Armour, PP-086 clarification) -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
 
 # params_combat.md — Personal Combat
@@ -8,7 +8,7 @@
 ## Pool Formula
 Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)
 Stamina = Endurance + Relevant History + 1 (modified by armour)
-Health = Endurance + 6 (total damage buffer; reduces to 0 → take Wound, Health resets to full)
+Health = Endurance + 6 (range 7–13; accumulates damage each round; at 0 → take Wound, resets to full) (PP-210)
 
 Pool modifiers:
 - Wounds: −1D per wound (cumulative)
@@ -115,7 +115,7 @@ Exempt: Full Guard; Long weapon at Close zone.
 Cover DR stacks additively with armour DR.
 
 ## Wounds / Incapacitation
-Health = Endurance per wound. At 0 Health → take Wound, Health resets.
+Health = Endurance + 6 (range 7–13). Damage accumulates each round. At 0 Health → take Wound, Health resets to full. (PP-210)
 | Endurance | Max Wounds before incapacitation |
 |-----------|----------------------------------|
 | 1–3 | 2 |
@@ -135,7 +135,7 @@ Wound Ob penalty: +1 Ob per wound (all rolls). Incapacitated: Stage 1 (down) or 
 | 8+ | +5 |
 
 ## Actions Summary
-Strike / Establish Distance / Feint / Take a Breath / Full Guard / Disarm / Retrieve Weapon / Reload (HP crossbow only) / **Dodge** (ranged only — forfeit attack; allocate full pool as passive Defence vs incoming ranged attack this round; armour DR still applies) / Out of Breath (forced at Stamina 0)
+Strike / Establish Distance / Feint / Take a Breath / Full Guard / Disarm / Retrieve Weapon / Reload (HP crossbow only) / Dodge (ranged attacks only — forfeit all offensive action; full pool as passive Defence vs one incoming ranged attack; armour DR applies) (PP-215) / Out of Breath (forced at Stamina 0)
 
 **Dodge (ED-067 resolved — provisional):** Defender may Dodge a ranged attack instead of being unable to respond. Full pool = passive Defence dice vs attacker's Offence. Cover DR still applies additionally. Costs the defender's full combat action this round. [PROVISIONAL]
 

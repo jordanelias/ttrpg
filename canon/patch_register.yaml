@@ -2387,24 +2387,56 @@ patches:
   status: applied
   applied_commit: pending
 
-- id: PP-210
-  date: 2026-04-02
-  severity: P1
-  description: "Balance fixes (ED-109 through ED-113) + comprehensive stale reference correction. Balance: Crown Deed 3 TC<60→TC<50 (ED-109); AER≥3 generates TC+1/season additional bypassing Hafenmark suppression (ED-110+112); Church Deed 4 redesigned to Diplomatic recognition (not Military seizure of T12) (ED-110); Varfell Path B 2-season hold requirement added (ED-111); T13 Stillhelm Fort 0→1 + immediate Warden Emergence check on march (ED-113). Stale refs: Church Deed 3 T3→T14; TC table T3→T14 Himmelenger; Ministry AP-tokens T1/T2/T6/T7→T9/T10/T11/T12; Varfell Path C T12+T13→T4+T13; Cardinal Temperance T3→T14; TC80 table T-numbers corrected throughout."
-  finding_id: "BAL-BG-02 / ED-109-113"
-  source: audit
-  affects: [references/params_board_game.md]
-  applied_to_version: "v0.8.4"
-  status: applied
-  applied_commit: pending
+  - id: PP-210
+    date: 2026-04-03
+    source: audit_combat_2026-04-02.md (GAP-CMB-03)
+    system: combat
+    description: "Health formula corrected to accumulation model: Health = Endurance + 6. Damage accumulates per round; at 0 take Wound, Health resets. Replaces erroneous 'Health = Endurance score' single-hit-threshold language in design doc §7 and params_combat Wounds section."
 
-- id: PP-211
-  date: 2026-04-02
-  severity: P2
-  description: "Cleanup: removed stale territory tables PP-197 and earlier versions from params. Only PP-199 Definitive table remains. Removed stale PP-195 opening position notes. Single authoritative territory table now in params."
-  finding_id: "AUD-POST-PP203 cleanup"
-  source: audit
-  affects: [references/params_board_game.md]
-  applied_to_version: "v0.8.4"
-  status: applied
-  applied_commit: pending
+  - id: PP-211
+    date: 2026-04-03
+    source: audit_combat_2026-04-02.md (GAP-CMB-04)
+    system: combat
+    description: "Critical Hit rule added to design doc §5 Damage Resolution. Net hits ≥ 3 → weapon damage modifier doubled before DR subtraction. Rule was in params_combat only; now in canonical design doc."
+
+  - id: PP-212
+    date: 2026-04-03
+    source: audit_combat_2026-04-02.md (GAP-CMB-02)
+    system: combat
+    description: "Feint timing defined: 'next exchange' = next round only. −2D Defence penalty expires at end of that round."
+
+  - id: PP-213
+    date: 2026-04-03
+    source: audit_combat_2026-04-02.md (GAP-CMB-01)
+    system: combat
+    description: "Tie Up 'disadvantage' defined: −2D to Combat Pool for both parties for one round. Replaces undefined 'at disadvantage' language."
+
+  - id: PP-214
+    date: 2026-04-03
+    source: audit_combat_2026-04-02.md (GAP-CMB-17)
+    system: combat
+    description: "Rescue mechanical resolution defined: attack resolves against rescuer instead of original target; rescuer's armour DR applies. Replaces bare 'Interpose.' language."
+
+  - id: PP-215
+    date: 2026-04-03
+    source: audit_combat_2026-04-02.md (GAP-CMB-08)
+    system: combat
+    description: "Dodge action added to design doc §4 Actions table. Ranged attacks only; forfeit all offensive action; full pool as passive Defence vs one incoming ranged attack; armour DR applies. Was in params Actions Summary (ED-067 provisional) but absent from design doc."
+
+  - id: PP-216
+    date: 2026-04-03
+    source: audit_combat_2026-04-02.md (GAP-CMB-07)
+    system: combat
+    description: "Fibonacci Group Bonus table expanded from 4-row simplified to 6-row canonical version matching params_combat. Design doc §8 now shows: 1=+0, 2=+1, 3=+2, 4–5=+3, 6–7=+4, 8+=+5."
+
+  - id: PP-217
+    date: 2026-04-03
+    source: audit_combat_2026-04-02.md (G-P1-01)
+    system: combat / board_game
+    description: "Anti-Armour keyword defined for BG layer. Units with HP (crossbow) or HBl (lead sling) weapon type carry Anti-Armour: reduces target armour tier by 1 for the engagement. Does not stack. Keyword was referenced in design doc §5 BG note but undefined everywhere."
+
+  - id: PP-218
+    date: 2026-04-03
+    source: audit_combat_2026-04-02.md (GAP-CMB-05)
+    system: combat / mass_combat
+    description: "PP-086 mass damage formula clarified. Formula is now: max(0, net successes − Ob) + disposition_modifier. Floor applies to bracketed term only; disposition modifier always adds after. Partial success → 0+modifier. Replaces ambiguous 'net_successes_over_Ob' notation."

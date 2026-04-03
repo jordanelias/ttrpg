@@ -1948,50 +1948,161 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
 
   - id: ED-109
     date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
+    date_resolved: null
     source: balance_analysis
     description: "Crown victory front-loaded: 3 of 5 deeds pre-met at game start. See BAL-04."
-    status: resolved
+    status: open
     priority: P1
-    decision: "Option B applied: Crown Deed 3 tightened to TC < 50 (was 60). Crown must actively suppress Church TC growth to maintain this deed."
+    decision: null
     tags: [board_game, crown, balance, victory]
 
   - id: ED-110
     date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
+    date_resolved: null
     source: balance_analysis
     description: "Church primary victory inaccessible in standard campaign: TC net 0 with Hafenmark active; Deed 4 (seize T12) requires Military at +2 Ob penalty. See BAL-05/06."
-    status: resolved
+    status: open
     priority: P1
-    decision: "Option A + B applied: AER ≥ 3 generates TC +1/season additional (bypasses Hafenmark suppression). Church Deed 4 redesigned to Diplomatic recognition (Crown acknowledges Church authority over religious appointments) — achievable via Open Pledge or Royal Deposition mechanic, not Military seizure."
+    decision: null
     tags: [board_game, church, balance, tc, victory]
 
   - id: ED-111
     date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
+    date_resolved: null
     source: balance_analysis
     description: "Varfell Path B under-gated: T13 seizable S1 from starting position T4, VTM≥3 by S9 = 9-10 season victory. See BAL-08."
-    status: resolved
+    status: open
     priority: P1
-    decision: "Option D applied: T4+T13 must be held simultaneously for 2 consecutive seasons before deed is counted."
+    decision: null
     tags: [board_game, varfell, balance, victory]
 
   - id: ED-112
     date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
+    date_resolved: null
     source: balance_analysis
     description: "TC lock: Hafenmark suppression (-1/season) exactly cancels Church TC gain from T14 (+1/season). TC permanently frozen at 28 if Hafenmark functional. Church cannot build toward victory. See BAL-09."
-    status: resolved
+    status: open
     priority: P1
-    decision: "Resolved by ED-110 fix: AER ≥ 3 TC source bypasses Hafenmark domestic suppression. TC lock broken."
+    decision: null
     tags: [board_game, church, hafenmark, tc, balance]
 
   - id: ED-113
     date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
+    date_resolved: null
     source: balance_analysis
     description: "Varfell T13 dominant opening: T13 Fort 0, adjacent to T4 (Varfell start), Crown cannot hold it. Seizable S1 at no cost. May reduce strategic variety. See BAL-10."
+    status: open
+    priority: P2
+    decision: null
+    tags: [board_game, varfell, crown, territory, balance]
+
+  # ── AUDIT GAP RESOLUTIONS (2026-04-03, PP-210–218) ──────────────────
+
+  - id: ED-110
+    date_flagged: 2026-04-03
+    date_resolved: 2026-04-03
+    source: audit
+    source_file: tests/audit_combat_2026-04-02.md
+    description: "GAP-CMB-03: Health formula conflict resolved. Design doc §7 used 'Health = Endurance score' (single-hit threshold model). Canonical formula is Health = Endurance + 6 (accumulation model). Design doc corrected."
+    status: resolved
+    priority: P1
+    decision: "Health = Endurance + 6. Accumulation model. PP-210 applied."
+    propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
+    propagation_status: complete
+
+  - id: ED-111
+    date_flagged: 2026-04-03
+    date_resolved: 2026-04-03
+    source: audit
+    source_file: tests/audit_combat_2026-04-02.md
+    description: "GAP-CMB-04: Critical Hit rule (net hits ≥ 3 → weapon modifier doubled) existed only in params_combat. Added to design doc §5."
+    status: resolved
+    priority: P1
+    decision: "Rule added to design doc §5. PP-211 applied."
+    propagation_targets: [designs/combat/combat_design_v1.md]
+    propagation_status: complete
+
+  - id: ED-112
+    date_flagged: 2026-04-03
+    date_resolved: 2026-04-03
+    source: audit
+    source_file: tests/audit_combat_2026-04-02.md
+    description: "GAP-CMB-02: Feint 'next exchange' timing undefined. Resolved as next round only."
+    status: resolved
+    priority: P1
+    decision: "Feint −2D Defence penalty applies to next round only. PP-212 applied."
+    propagation_targets: [designs/combat/combat_design_v1.md]
+    propagation_status: complete
+
+  - id: ED-113
+    date_flagged: 2026-04-03
+    date_resolved: 2026-04-03
+    source: audit
+    source_file: tests/audit_combat_2026-04-02.md
+    description: "GAP-CMB-01: Tie Up 'disadvantage' undefined. Resolved as −2D to Combat Pool for both parties."
+    status: resolved
+    priority: P1
+    decision: "Disadvantage = −2D to Combat Pool for both parties for one round. PP-213 applied."
+    propagation_targets: [designs/combat/combat_design_v1.md]
+    propagation_status: complete
+
+  - id: ED-114
+    date_flagged: 2026-04-03
+    date_resolved: 2026-04-03
+    source: audit
+    source_file: tests/audit_combat_2026-04-02.md
+    description: "GAP-CMB-17: Rescue action had no mechanical resolution — 'interpose' was undefined. Resolved: attack resolves against rescuer; rescuer's armour DR applies."
+    status: resolved
+    priority: P1
+    decision: "Attack redirects fully to rescuer. Rescuer's DR applies. PP-214 applied."
+    propagation_targets: [designs/combat/combat_design_v1.md]
+    propagation_status: complete
+
+  - id: ED-115
+    date_flagged: 2026-04-03
+    date_resolved: 2026-04-03
+    source: audit
+    source_file: tests/audit_combat_2026-04-02.md
+    description: "GAP-CMB-08: Dodge action existed in params_combat only (ED-067 provisional). Added to design doc §4 Actions table."
     status: resolved
     priority: P2
-    decision: "Option B applied: T13 Fort raised to 1 (warden outpost). Any faction marching into T13 triggers immediate Warden Emergence check, forcing Varfell to commit to the Southernmost path from S1 if they seize it."
-    tags: [board_game, varfell, crown, territory, balance]
+    decision: "Dodge added to design doc §4. PP-215 applied. Supersedes ED-067 provisional."
+    propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
+    propagation_status: complete
+
+  - id: ED-116
+    date_flagged: 2026-04-03
+    date_resolved: 2026-04-03
+    source: audit
+    source_file: tests/audit_combat_2026-04-02.md
+    description: "GAP-CMB-07: Fibonacci cap discrepancy — design doc had 4-row simplified table (5th+), params had 6-row table (8+). Design doc aligned to canonical 6-row params version."
+    status: resolved
+    priority: P2
+    decision: "Design doc §8 updated to 6-row table: 1=+0, 2=+1, 3=+2, 4–5=+3, 6–7=+4, 8+=+5. PP-216 applied."
+    propagation_targets: [designs/combat/combat_design_v1.md]
+    propagation_status: complete
+
+  - id: ED-117
+    date_flagged: 2026-04-03
+    date_resolved: 2026-04-03
+    source: audit
+    source_file: tests/audit_combat_2026-04-02.md
+    description: "G-P1-01: Anti-Armour keyword referenced in design doc §5 BG note but defined nowhere. Defined as: HP/HBl units reduce target armour tier by 1 for the engagement."
+    status: resolved
+    priority: P1
+    decision: "Anti-Armour keyword defined. HP (crossbow) and HBl (lead sling) carry it. PP-217 applied."
+    propagation_targets: [designs/combat/combat_design_v1.md, references/params_board_game.md]
+    propagation_status: partial
+    propagation_note: "params_board_game.md update deferred — keyword definition is now in design doc and can be referenced from there."
+
+  - id: ED-118
+    date_flagged: 2026-04-03
+    date_resolved: 2026-04-03
+    source: audit
+    source_file: tests/audit_combat_2026-04-02.md
+    description: "GAP-CMB-05: PP-086 mass damage formula ambiguous ('net_successes_over_Ob'). Clarified as max(0, net−Ob) + disposition_modifier."
+    status: resolved
+    priority: P1
+    decision: "Formula clarified. Floor applies to (net−Ob) only; disposition modifier always adds after. PP-218 applied."
+    propagation_targets: [designs/combat/combat_design_v1.md]
+    propagation_status: complete

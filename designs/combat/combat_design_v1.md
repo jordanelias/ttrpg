@@ -1,10 +1,10 @@
 # VALORIA — COMBAT DESIGN (v1)
 ## Date: 2026-04-02
-## Version: v1.3 (ED-098: cover declaration timing clarification)
+## Version: v1.4 (PP-210–218: audit gap fixes — Health formula, Critical Hit, Feint timing, Tie Up, Rescue, Dodge, Fibonacci, Anti-Armour, PP-086)
 ## Status: WORKING DESIGN — not compiled. This is the design-layer source for personal combat.
 ## Authority: Philosophical Foundations → this document → compilation (when ready)
 ## Mode applicability: ALL (TTRPG baseline; scales to Hybrid and Board Game via params)
-## Patches incorporated: PP-086–092, P2-B11 series (from sim_combat_batch_11.md), PP-172 (SIM-001 ranged subtypes)
+## Patches incorporated: PP-086–092, P2-B11 series (from sim_combat_batch_11.md), PP-172 (SIM-001 ranged subtypes), PP-210–218 (audit gap fixes 2026-04-03)
 ## Source checkpoint: compilation/v0.14/stage8_combat.md (for reference values)
 
 ---
@@ -76,15 +76,16 @@ Initiative transfers on: hit (attacker maintains), feint success, distance chang
 | Action | Description |
 |--------|-------------|
 | Strike | Allocate pool split, roll, apply damage |
-| Feint | Offence-only roll vs opponent Ob 2. Success: opponent loses −2D Defence next exchange. |
+| Feint | Offence-only roll vs opponent Ob 2. Success: opponent loses −2D Defence in the next round only. (PP-212) |
 | Establish Distance | Move to preferred range. Contested Agility if opponent opposes. |
 | Take a Breath | No combat action. Recover Stamina by Endurance score. Cannot if in immediate melee contact. |
 | Full Guard | All dice to Defence. Cannot Attack. |
 | Disarm | Offence roll vs opponent's Strength+Agility Ob. Success: weapon dropped. Requires Close range. |
 | Retrieve | Pick up dropped weapon/item. Opposed Agility if in melee contact. |
-| Tie Up | Close range. Offence roll. Success: both parties at disadvantage next round; opponent cannot use reach advantage; escape requires Strength contest. Blocks escape for one round. |
+| Tie Up | Close range. Offence roll. Success: both parties suffer −2D to Combat Pool for one round; opponent cannot use reach advantage; escape requires Strength contest. Blocks escape for one round. (PP-213) |
 | Escape | Agility contest vs opponent. Requires not being Tied Up. |
-| Rescue | Declare before opponent's attack resolves. Interpose. Requires adjacent zone. Fails if no incoming attack declared — action lost. |
+| Rescue | Declare before opponent's attack resolves. Rescuer interposes: attack resolves against rescuer instead of original target; rescuer's armour DR applies. Requires adjacent zone. Fails silently if no incoming attack was declared — action lost. (PP-214) |
+| Dodge | Ranged attacks only. Forfeit all offensive action this round. Allocate full Combat Pool as passive Defence against one incoming ranged attack. Armour DR applies normally. (PP-215) |
 | Stunt | Declared with Strike. +N dice to Offence from environmental/positional narrative (Game Master sets N, max 5). Chain dice (10s) chain normally, independent of Stunt effect. |
 
 **Incapacitation timing:** Complete currently-resolving action. Fall at end of that priority step. Later-declared actions do not resolve.
@@ -124,6 +125,7 @@ Initiative transfers on: hit (attacker maintains), feint success, distance chang
 ### Damage Resolution
 Net hits = Offence successes − Defence successes (minimum 0).
 Damage = max(0, net hits + weapon damage modifier − DR).
+Critical Hit: net hits ≥ 3 → weapon damage modifier doubled before DR subtraction. (PP-211)
 
 ### Degree Table (for combat outcomes requiring degree, e.g. Feint, Disarm)
 | Net Successes | Degree |
@@ -164,7 +166,7 @@ Cover (a physical obstacle between attacker and defender) adds DR to the defende
 
 Cover must be declared in Phase 1 (Movement) to take effect. Cover does not move with the defender. The Game Master determines whether a physical obstacle is present in the zone. A character who does not declare Cover in Phase 1 receives no DR benefit that round, even if physically behind an obstacle. [PROVISIONAL — ED-098]
 
-**Board Game:** Weapon types map to BG Anti-Armour keyword and unit type. No TN variation — unit uses Martial stat pool vs standard TN 7.
+**Board Game:** Weapon types map to BG unit type. No TN variation — units use Martial stat pool vs standard TN 7. Anti-Armour keyword (PP-217): units with HP (crossbow) or HBl (lead sling) weapon type carry the Anti-Armour keyword. When an Anti-Armour unit attacks, reduce target unit's effective armour tier by 1 for that engagement (e.g. Heavy → Medium DR applies). Does not stack from multiple attacking units.
 
 ---
 
@@ -195,9 +197,16 @@ DR is subtracted from damage after net hits + weapon modifier.
 ## 7. WOUNDS AND STAMINA
 
 ### Wounds
-Health = Endurance score. One Wound per contact that deals damage ≥ Health threshold (typically 3+).
-Max Wounds = 3. At max Wounds: incapacitated.
-Each Wound: −1D to all combat rolls (cumulative).
+Health = Endurance + 6 (range 7–13). Damage accumulates each round against Health. At 0 Health: take one Wound, Health resets to full. (PP-210)
+
+| Endurance | Max Wounds before incapacitation |
+|-----------|----------------------------------|
+| 1–3 | 2 |
+| 4–5 | 3 |
+| 6–7 | 4 |
+
+At max Wounds: incapacitated (Stage 1: down; Stage 2: dying, −2 Morale to any witnessing unit/ally).
+Each Wound: −1D to all combat rolls AND +1 Ob to all rolls (cumulative). (PP-165)
 
 ### Stamina
 Stamina = Endurance + Relevant History + 1 − armour modifier.
@@ -214,12 +223,16 @@ At 0: Out of Breath. −2D to all combat rolls. Recovery: Take a Breath action.
 When 3+ combatants in a zone: combat becomes group combat. Fibonacci bonus applies.
 
 ### Fibonacci Group Bonus
-Each additional attacker beyond the first against a single unsupported target adds dice to Offence allocation:
-- 1st attacker: normal
-- 2nd: +1D Offence
-- 3rd: +2D Offence
-- 4th: +3D Offence
-- 5th+: +5D Offence (cap)
+Each additional attacker beyond the first against a single unsupported target adds dice to Offence allocation. (PP-216)
+
+| Attackers | Bonus Offence Dice |
+|-----------|-------------------|
+| 1 | +0 |
+| 2 | +1 |
+| 3 | +2 |
+| 4–5 | +3 |
+| 6–7 | +4 |
+| 8+ | +5 (cap) |
 
 Bonus only applies when target has no allies in the zone (unsupported). Supported target uses standard pool split against each attacker.
 
@@ -251,7 +264,8 @@ Each combatant is engaged in one primary pairing per round. Extras choose which 
 **Effective CP = min(CP, current Strength).** As Strength drops, fewer dice regardless of quality.
 
 ### PP-086 — Base Damage Formula (mass combat)
-Damage = max(0, net_successes_over_Ob + disposition_modifier).
+Damage = max(0, net successes − Ob) + disposition_modifier. (PP-218 clarification)
+"Net successes − Ob" = total net successes minus the Obstacle value. Floor of 0 applies to the bracketed term before adding disposition modifier. Partial success (0 < net < Ob) → bracket is negative → floored to 0; disposition modifier still adds. Example: net 1, Ob 2, Offensive (+2) → max(0, 1−2)+2 = 0+2 = 2 damage.
 Disposition modifiers: Offensive +2 flat; Defensive +4 flat.
 
 ### PP-087 — Formation Break Ob Stacking
