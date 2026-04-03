@@ -2315,3 +2315,14 @@ patches:
     files_changed:
       - references/params_mass_combat.md
     status: applied
+
+- id: PP-200
+  date: 2026-04-02
+  severity: P2
+  description: "Geographic realism review of road/trade network against terrain. Corrections: (1) Removed T9 (Arcansheld) ↔ T4 (Vargstad) adjacency — no realistic route across mountain terrain; path must go via T3 Halvardshelm. (2) Renamed 'King's Road' to coastal route T12→T14→T13 (correct — follows settled east coast). Old inland route T12→T11→T9 renamed 'Military Road' (Löwenritter patrol route). (3) Clarified Schoenland T7 connection = IP invasion staging only, not trade. (4) Added geographic trade notes documenting east coast trade axis and Varfell trade isolation (mechanically intentional). (5) Renamed 'Fortress Road' to 'Fortress Extension' (T9→T13 interior route, not T9→T4 which is removed)."
+  finding_id: "Geographic realism review"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.8.1"
+  status: applied
+  applied_commit: pending

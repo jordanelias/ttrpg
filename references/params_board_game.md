@@ -903,40 +903,45 @@ Mountains impassable except at purple passes. Eidursjo lake: T6 march = 2 cards 
 T1 (Varfell) ↔ T2, T3, T6
 T2 (Sigurdshelm) ↔ T1, T3
 T3 (Halvardshelm) ↔ T1, T2, T4, T6
-T4 (Vargstad) ↔ T3, T9, T13, T15
+T4 (Vargstad) ↔ T3, T13, T15 [T9 removed — no direct route across mountain terrain; must go via T3]
 T5 (Gransol) ↔ T6, T7, T10
 T6 (Eidursjo) ↔ T1, T3, T5, T9, T10
-T7 (Spartfell) ↔ T5, T8, T16 (NE mountain pass)
-T8 (Lowenskyst) ↔ T7, T12, T16 (sea)
-T9 (Arcansheld) ↔ T4, T6, T10, T11, T13
+T7 (Spartfell) ↔ T5, T8, T16 (NE pass — IP invasion route only, not trade)
+T8 (Lowenskyst) ↔ T7, T12, T16 (sea trade)
+T9 (Arcansheld) ↔ T6, T10, T11, T13
 T10 (Nordhelm) ↔ T5, T6, T9, T11
 T11 (Mittelmark) ↔ T9, T10, T12, T14
-T12 (Valorsplatz) ↔ T8, T11, T13, T14, T16 (sea)
+T12 (Valorsplatz) ↔ T8, T11, T13, T14, T16 (sea trade)
 T13 (Stillhelm) ↔ T4, T9, T12, T15
 T14 (Himmelenger) ↔ T11, T12, T13
 T15 (Askeheim) ↔ T4, T13 (expedition access only)
-T16 (Schoenland) ↔ T7 (NE pass), T8 (sea), T12 (sea)
+T16 (Schoenland) ↔ T7 (IP invasion staging only — not a trade route), T8 (sea), T12 (sea)
 
 ## Road Network — Definitive (PP-199)
 
 ### Primary Roads
 | Road | Route | Notes |
 |------|-------|-------|
-| King's Road | T12 → T11 → T9 → T13 | Crown central arterial. Löwenritter patrol. |
-| Coastal Road North | T12 → T8 → T7 | East coast. Northern trade route. |
-| Coastal Road South | T12 → T14 → T13 | South coast. Church Inquisitor route. |
-| Midland Road | T9 → T10 → T5 | Crown into Hafenmark. Most contested road. |
-| Lake Road | T5 → T6 → T1 | Circles lake. Hafenmark-Varfell trade. |
+| King's Road | T12 (Valorsplatz) → T14 (Himmelenger) → T13 (Stillhelm) | Coastal arterial south. Natural route following the settled east coast. Church Inquisitor movement. Pilgrims. |
+| Northern Coast Road | T12 → T8 (Lowenskyst) → T7 (Spartfell) | Coastal north. Main trade spine. Flat settled land all the way. Hafenmark primary export route. |
+| Military Road | T12 → T11 (Mittelmark) → T9 (Arcansheld) | Inland strategic road. Löwenritter patrol route. Connects capital to the fortress. |
+| Midland Road | T9 (Arcansheld) → T10 (Nordhelm) → T5 (Gransol) | Crown into Hafenmark. Most contested road. Crosses duchy boundary. |
+| Lake Road | T5 (Gransol) → T6 (Eidursjo) → T1 (Varfell) | East shore of lake north-to-south. Hafenmark-Varfell trade route. Slow in winter (lakeside flooding). |
 
 ### Secondary Roads
 | Road | Route | Notes |
 |------|-------|-------|
-| Western Valley | T1 → T3 → T2 | Varfell internal. Remote. |
-| Southern Duchy | T1 → T3 → T4 | Varfell capital connection. Thread zone. |
-| Fortress Road | T9 → T4 | Löwenritter direct south. Crown can threaten Vargstad. |
-| Hill Track | T10 → T11 | Crown administrative. |
-| Pilgrims' Road | T11 → T14 | Crown to Cathedral. Church Inquisitor route. Ministry records movement. |
-| Warden Track | T13 → T15 | Expedition only. Non-Thread +1 Ob throughout. |
+| Western Valley Road | T1 (Varfell) → T3 (Halvardshelm) → T2 (Sigurdshelm) | Follows valley descending from lake to west coast. Remote. Niflhel network uses. |
+| Southern Duchy Road | T1 (Varfell) → T3 (Halvardshelm) → T4 (Vargstad) | Varfell internal. Through Thread-active terrain in south. Only route to the capital from the north. |
+| Fortress Extension | T9 (Arcansheld) → T13 (Stillhelm) | Interior route south through peninsula uplands. Löwenritter patrol. Slower than coastal King's Road but avoids Church territory. |
+| Hill Track | T10 (Nordhelm) → T11 (Mittelmark) | Crown administrative road between buffer territories. |
+| Pilgrims' Road | T11 (Mittelmark) → T14 (Himmelenger) | Inland connection to cathedral. Secondary — most pilgrims use King's Road coastal approach. |
+| Warden Track | T13 (Stillhelm) → T15 (Askeheim) | Barely a track. Expedition access only. Non-Thread +1 Ob throughout. |
+
+### Geographic Trade Notes
+**East coast trade axis** (T7→T8→T12→T14): The commercial spine of Valoria. Flat coastal terrain, settled, maintained roads. Hafenmark controls the northern half (T7-T8), Crown the southern half (T12-T14 area). Guilds operate throughout.
+**Varfell trade isolation**: All Varfell exports must cross Hafenmark territory (via Lake Road through T6, into T5 Gransol) to reach the east coast market. Varfell has no direct sea access — Sigurdshelm (T2) is on the west coast facing Altonian waters, not the trade sea. This is geographically correct and mechanically intentional (Wealth 4 despite isolation = internal resource wealth from the Halvardshelm breadbasket and Varfell mineral deposits).
+**Schoenland** (T16): Maritime island. Trade connections = T8 (Lowenskyst) and T12 (Valorsplatz) by sea. T7 (Spartfell) connection = Altonian invasion staging route ONLY — IP event mechanic, not a normal trade connection. Schoenland merchants use Lowenskyst as their primary mainland port.
 
 ### Altonian Mountain Passes
 | Pass | Connection | Notes |
