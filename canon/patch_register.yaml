@@ -2037,3 +2037,14 @@ patches:
     status: provisional
     files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
     tags: [threadwork, hybrid, coherence, canon_derived]
+
+- id: PP-189
+  date: 2026-04-02
+  severity: P1
+  description: "Final v05 corrections over PP-188: TC start 22→28 (P-32 explicit); Church victory TC≥65 not 70 (P-32); TC80 seizure uses Church Military vs Defender Military Ob 2 not Mandate (P-23); majority-1s override struck (v05 DESIGN DECISION); Uphold/Appease terminology adopted (PP-189 in v05); canonical source confirmed as v05."
+  finding_id: "v05 authoritative read"
+  source: audit
+  affects: [references/params_board_game.md, references/canonical_sources.yaml]
+  applied_to_version: "v0.7.1"
+  status: applied
+  applied_commit: pending

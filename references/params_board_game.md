@@ -1,4 +1,4 @@
-<!-- version: v0.7.0+CORRECTED | source: valoria_bg_v04.md (canonical) + v05 corrections | last_updated: 2026-04-02 -->
+<!-- version: v0.7.1+PP189-V05FINAL | source: valoria_bg_v04.md (canonical) + v05 corrections | last_updated: 2026-04-02 -->
 <!-- PATCHES APPLIED: PP-169-PP-187 | CORRECTIONS: PP-188 (revert PP-171/172/173/176/186 errors; fix starting values; correct faction list) -->
 <!-- AUTHORITATIVE SOURCE: designs/board_game/valoria_bg_v04.md for all faction cards, victory conditions, turn structure, starting values -->
 <!-- NOTE: v05 is a correction document only (dice system, Ob minimum, inconsistency patches). v04 B-sections are the ruleset. -->
@@ -35,6 +35,7 @@ d10 pool. TN 7 (standard).
 
 Net successes = sum of contributions. May be negative (treated as 0 for degree purposes = Failure).
 Ob minimum: 1. No modifier may push Ob below 1.
+**Majority-1s (Catastrophic Failure) override: STRUCK** (v05 DESIGN DECISION 2026-04-02). All rolls resolve through standard degree table only. Low-pool results produce Failure; no additional consequence category exists.
 
 ## Degree Table (PP-179 — matches TTRPG)
 | Net Successes | Degree |
@@ -49,7 +50,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Track | Start | Range | Notes |
 |-------|-------|-------|-------|
 | Rendering Stability (RS) | 72 | 0–100 | Rupture = shared loss |
-| Theocracy Clock (TC) | **22** | 0–100 | TC 80 = Territorial Seizure. CORRECTED from 28 (P-32 was wrong). |
+| Theocracy Clock (TC) | **28** | 0–100 | TC 80 = Territorial Seizure. P-32 sets starting value at 28. |
 | Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard |
 | Parliament Integrity (PI) | **7** | 0–10 | CORRECTED from 5. |
 | AER | 2 | 0–5 | Near IP clock. |
@@ -70,7 +71,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Guilds (NPC) | 3 | 4 | 6 | 2 | 5 |
 | Niflhel (NPC) | — | 5 | 4 | — | 4 |
 
-CORRECTIONS (PP-188): Varfell Mandate 4→3, Varfell Wealth 4→3. These match v04 B5.
+CORRECTIONS (PP-189 final): Varfell Mandate 3, Wealth 3 (G-10 confirms intentional BG starting position). TC = 28 (P-32). TC victory = 65 (P-32). PP-188 had TC=22 which was wrong — P-32 in v05 explicitly sets TC start to 28.
 
 ## Stat Ceilings and Floors
 | Stat | Floor | Ceiling |
@@ -320,17 +321,17 @@ Return: Elske Loyalty ≥ 6 + IP < 60 + Crown/Löwenritter unit in T4: Military 
 **TC Decreases:**
 Reformed Settlement Accommodate: −5. Sovereign Authority Doctrine (Hafenmark): −2 to −3. Baralta passive (Mandate ≥ 4): −1/season. Löwenritter Requisition Order success: −1. Royal Decree targeting TC: −1.
 
-## TC 80 Territorial Seizure (PP-181 revised by PP-188 — reconciled with v05 P-23)
-At TC ≥ 80: Church Territorial Seizure active. Per season:
-Church may target territories. v04/v05 P-23: "Hard cap: maximum 2 territory transfers per seizure event per faction."
-Roll: Church Military vs Defender Military, Ob 2.
+## TC 80 Territorial Seizure (P-23, P-30 — v05 authoritative)
+At TC ≥ 80: Church Territorial Seizure active each season TC remains ≥ 80.
+Roll: **Church Military** vs **Defender Military** (opposed roll), Ob 2.
+Each success on the opposed roll: one contested territory flips. Hard cap: **2 territory transfers per seizure event** (P-23).
 | Degree | Effect |
 |--------|--------|
-| Overwhelming | Immediate seizure, no Standing cost. |
-| Success | Seizure; TC +2. |
-| Partial | Not seized; Templar Staging Token placed. |
-| Failure | No seizure. |
-Cap: 2 territory transfers per seizure event (v04/v05). PP-183's cap of 4 was too generous — corrected to 2.
+| Overwhelming | Immediate seizure, no Standing cost. TC +2/territory. |
+| Success | Seizure. TC +2/territory. |
+| Partial | Not seized; Church places 1 Templar Staging Token in territory (P-30). Controlling faction may remove it with any Military card play next season. |
+| Failure | No seizure. No token. |
+Note: Roll is Church Military pool vs Defender Military pool (opposed), not fixed Ob. PP-183 (cap 4) and earlier Mandate vs Ob3/Ob2 formulation were both wrong — corrected here.
 
 ## Theocracy Counter Starting Value — Canonical
 TC starts at **22** (v04 B2: "TC starts at 22, not 15, per canonical timeline: 45 years of post-independence accumulation").
@@ -467,10 +468,12 @@ Condition: any faction's Southernmost Expedition passes Forgetting Check (Phase 
 On Emergence: Warden Token placed at position 0. Warden Cooperation Track activates.
 Edeyja/Wardens NPC AI activates (B13: contain entity; investigate Niflhel; work alongside; emergency Mend).
 
-## Institutional Mandate Uphold/Compromise (PP-180, v04 B7)
+## Institutional Mandate Uphold/Appease (PP-189 — v05 names this "Appease" not "Compromise")
 Each faction has a printed Institutional Mandate. When event challenges it:
-- Uphold: act consistently. +1 Renown + 1 Stability.
-- Compromise: strategic benefit. Hollow Victory −0.5 Deeds. Stability −1.
+- **Uphold** (before roll): Roll proceeds normally. No cost.
+- **Appease** (before roll): Triggering action cancelled entirely — no roll made. Mandate −1.
+NPC rule: NPC factions Appease if Mandate ≥ 4 AND Stability ≤ 3.
+Note: Prior params used "Compromise" — v05 PP-189 establishes "Appease" as the canonical term.
 
 ## Hollow Victory Mechanics (v04 B12)
 [See full table above in Hollow Victory section]
@@ -486,3 +489,12 @@ Note: Intel stat advancement is valid for NPC factions (Niflhel). Varfell victor
 
 <!-- patch_history: references/params_board_game_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
+
+## PP-189 Final Corrections (v05 authoritative)
+Corrections applied over PP-188:
+- TC starting value: 28 (PP-188 had set it to 22 — wrong; P-32 in v05 explicitly raises it from 22 to 28)
+- Church primary victory threshold: TC ≥ 65 (P-32 reduced from 70)
+- TC 80 seizure: Church Military vs Defender Military Ob 2 (P-23); PP-183 had wrong formula
+- Majority-1s override: STRUCK in v05 (DESIGN DECISION 2026-04-02)
+- Institutional Mandate: Uphold/Appease (PP-189); prior params used "Compromise"
+- canonical source: v05 is authoritative (v04 is the structural base; v05 is most recent)
