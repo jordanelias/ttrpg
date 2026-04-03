@@ -2386,3 +2386,14 @@ patches:
   applied_to_version: "v0.8.3"
   status: applied
   applied_commit: pending
+
+- id: PP-210
+  date: 2026-04-02
+  severity: P1
+  description: "Balance fixes (ED-109 through ED-113) + comprehensive stale reference correction. Balance: Crown Deed 3 TC<60→TC<50 (ED-109); AER≥3 generates TC+1/season additional bypassing Hafenmark suppression (ED-110+112); Church Deed 4 redesigned to Diplomatic recognition (not Military seizure of T12) (ED-110); Varfell Path B 2-season hold requirement added (ED-111); T13 Stillhelm Fort 0→1 + immediate Warden Emergence check on march (ED-113). Stale refs: Church Deed 3 T3→T14; TC table T3→T14 Himmelenger; Ministry AP-tokens T1/T2/T6/T7→T9/T10/T11/T12; Varfell Path C T12+T13→T4+T13; Cardinal Temperance T3→T14; TC80 table T-numbers corrected throughout."
+  finding_id: "BAL-BG-02 / ED-109-113"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.8.4"
+  status: applied
+  applied_commit: pending

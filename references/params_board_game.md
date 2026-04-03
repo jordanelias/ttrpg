@@ -194,7 +194,7 @@ Unit starting Cohesion: Light Infantry 3, Heavy Infantry 4, Cavalry 4, Ranged 3,
 |------|-----------|
 | 1 | Mandate ≥ 5 |
 | 2 | Control T12 (Valorsplatz) + T9 (Arcansheld) + ≥ 2 other territories (total ≥ 4) (PP-202) |
-| 3 | TC < 60 and IP < 75 simultaneously |
+| 3 | TC < 50 and IP < 75 simultaneously (PP-203 — tightened from 60; Crown must actively suppress Church) |
 | 4 | PI ≥ 5 |
 | 5 | Torben Loyalty ≥ 5 |
 Gate: PI ≥ 3 to declare victory (not a Deed).
@@ -209,8 +209,8 @@ Controls ≥ 8 territories AND one Submission Condition simultaneously (see AER/
 |------|-----------|
 | 1 | TC ≥ 40 |
 | 2 | Mandate ≥ 5 |
-| 3 | Control T3 continuously ≥ 2 seasons |
-| 4 | Control T1 |
+| 3 | Control T14 (Himmelenger) continuously ≥ 2 seasons (PP-203 — T3 was stale ref; T14 is Himmelenger in current numbering) |
+| 4 | Crown formally acknowledges Church authority over religious appointments in Crown territories (PP-203 — replaces Military seizure of T12; achievable via Diplomacy: Crown Open Pledge to Church, OR Crown Mandate ≤ 1 for 2 seasons triggering Royal Deposition mechanic) |
 Gate: AER ≥ 3 required to declare victory. Primary victory threshold: **TC ≥ 65** (P-32).
 
 CORRECTIONS (PP-188): Reverted PP-171. Deed 4 is Control T1 (not "Crown Mandate ≤ 2"). Primary victory threshold is TC ≥ 65 (P-32 in v05 reduced from 70). Meeting all 4 Deeds plus AER ≥ 3 plus TC ≥ 65 declares victory. Deed 1 (TC ≥ 40) is a milestone deed, not the victory threshold.
@@ -225,8 +225,8 @@ Path C — Parliamentary Consolidation (4 Deeds): PI ≥ 4, Mandate ≥ 4, contr
 
 ### VARFELL — Three Paths (v04 B5)
 Path A — Intelligence Hegemony (3 Deeds): VTM ≥ 3, control ≥ 3 territories, all other faction stats revealed at least once.
-Path B — Southernmost Dominion (2 Deeds): control T4 (Vargstad) + T13 (Stillhelm) simultaneously, VTM ≥ 3. (PP-202 — T12 was stale ref from prior numbering.)
-Path C — Thread Supremacy (3 Deeds): VTM = 5, control T12 + T13 + ≥ 1 other, RS ≥ 50 at Accounting.
+Path B — Southernmost Dominion (2 Deeds): control T4 (Vargstad) + T13 (Stillhelm) simultaneously for 2 consecutive seasons, VTM ≥ 3. (PP-203 — 2-season hold requirement added; T13 seizable S1 but must be held under pressure.)
+Path C — Thread Supremacy (3 Deeds): VTM = 5, control T4 (Vargstad) + T13 (Stillhelm) + ≥ 1 other, RS ≥ 50 at Accounting. (PP-203 — T12+T13 was stale from prior numbering.)
 
 CORRECTIONS (PP-188): Removed Intel-stat-based deeds (PP-173, PP-176 — no basis in v04). Reverted to v04 path structure.
 
@@ -298,8 +298,9 @@ Return: Elske Loyalty ≥ 6 + IP < 60 + Crown/Löwenritter unit in T4: Military 
 ## TC Advancement (v04 B5 Church)
 | Source | TC Gain |
 |--------|---------| 
-| Church controls T3 (Himmelenger) | +1/season |
+| Church controls T14 (Himmelenger) | +1/season |
 | Assert choice (TC > 50, mandatory) | +1 |
+| AER ≥ 3 (Altonian ecclesiastical momentum) | +1/season (PP-203 — bypasses Hafenmark domestic suppression) |
 | Attention Pool reaches threshold 5 | +1 |
 | Emergency Powers (Crown or Löwenritter) | +1 |
 | Free Trade Decree (Crown) | +1 |
@@ -324,13 +325,14 @@ Roll for each Crown/Hafenmark territory separately. All rolls resolved simultane
 | Territory | TC Gain on Success |
 |-----------|-------------------|
 | Standard Crown/Hafenmark territory | +1 |
-| Gransol (T2, Hafenmark duchy capital) | +3 |
-| Halvardshelm (T11, Hafenmark) | +1 |
-| Eidursjo (T8, Hafenmark) | +1 |
+| Gransol (T5, Hafenmark duchy capital) | +3 |
+| Lowenskyst (T8, Hafenmark) | +1 |
+| Eidursjo (T6, Hafenmark) | +1 |
+| Spartfell (T7, Hafenmark) | +1 |
 | Hafenvalor (T6, Crown port) | +1 |
 | Lowenskyst (T7, Crown port) | +1 |
-| Valorsplatz (T1, royal capital) | +5 |
-| Himmelenger (T3, Grand Cathedral) | Already Church-held — does not trigger seizure roll and generates no additional TC |
+| Valorsplatz (T12, royal capital) | +5 |
+| Himmelenger (T14, Grand Cathedral) | Already Church-held — excluded from seizure |
 
 ### Seizure Results
 | Degree | Effect |
@@ -554,7 +556,7 @@ One AP-token per territory in which Ministry has clerks active. Starts with AP-t
 Ministry is the mechanical engine behind Parliament Integrity (PI).
 
 **Ministry Stabilisation (fires at Accounting Step 11, before Hollow Victory totals):**
-Each season Ministry has an AP-token in T1 (Valorsplatz, Parliament seat): PI degradation from Crown Emergency Powers is reduced by 1 (to a minimum of −0 — i.e. Ministry can prevent one Emergency Powers PI loss per season). This represents clerks managing the parliamentary record and maintaining continuity despite political disruption.
+Each season Ministry has an AP-token in T12 (Valorsplatz, Parliament seat): PI degradation from Crown Emergency Powers is reduced by 1 (to a minimum of −0 — i.e. Ministry can prevent one Emergency Powers PI loss per season). This represents clerks managing the parliamentary record and maintaining continuity despite political disruption.
 
 **Ministry Legislative Record:**
 At each Year-End Accounting: Ministry produces a Legislative Record for the prior year. Any Parliamentary Manoeuvre that succeeded (Hafenmark) this year is recorded as a Parliamentary Ruling. Effect: the first time each year a Parliamentary Ruling is recorded, PI +1 (the institution acknowledges the precedent). This is in addition to the standard Hafenmark Parliamentary Manoeuvre PI recovery.
@@ -563,7 +565,7 @@ At each Year-End Accounting: Ministry produces a Legislative Record for the prio
 Crown Policy Instruments require Ministry countersignature. If Ministry Mandate < 2 (collapsed or compromised): Crown Policy actions cost +1 Ob (the administrative apparatus is too compromised to implement the decree cleanly). If Ministry Mandate = 0: Crown Policy actions unavailable until Ministry Mandate recovers.
 
 **Ministry and Church Seizure (TC 80):**
-Church Territorial Seizure of T1 (Valorsplatz) requires removing the Ministry AP-token first. If AP-token present: seizure Ob +1 (the administrative apparatus resists institutional capture). If seizure succeeds despite the token: Ministry AP-token in T1 is removed. All Crown Policy actions are now +1 Ob until Ministry reestablishes presence in T1 (requires 1 season of Ministry NPC action in T1).
+Church Territorial Seizure of T12 (Valorsplatz) requires removing the Ministry AP-token first. If AP-token present: seizure Ob +1 (the administrative apparatus resists institutional capture). If seizure succeeds despite the token: Ministry AP-token in T1 is removed. All Crown Policy actions are now +1 Ob until Ministry reestablishes presence in T1 (requires 1 season of Ministry NPC action in T1).
 
 **Ministry and Hafenmark:**
 Hafenmark's Parliamentary Manoeuvre benefits from Ministry presence. If Ministry has AP-token in T1: Hafenmark Parliamentary Manoeuvre Ob −1 (the clerks facilitate process). If Ministry AP-token absent from T1: Parliamentary Manoeuvre Ob +1 (no procedural infrastructure to execute the manoeuvre).
@@ -618,7 +620,7 @@ Holy See = elected from among the Bishopry. Second only to the Monarch.
 - **Fortitude (Templar):** Templar deployment requires Cardinal of Fortitude to be active (Church Stability ≥ 2). At Stability ≤ 1: Templars do not deploy regardless of card play.
 - **Justice (Inquisitors):** Heresy Investigations are issued under Cardinal of Justice. If Cardinal of Justice is compromised (via Niflhel or Varfell Intel action on Church): one Heresy Investigation this season is false (all factions notified that one Investigation this season was procedurally invalid).
 - **Prudence (Tithes):** Church Wealth generation: +0.5 Wealth/season from tithed territories (rounds down at Year-End). Territories where Church has Favour ≥ 3 contribute to tithe income.
-- **Temperance (Scholars):** AER maintenance. While Church controls at least one university city (T3 Himmelenger has a university): AER loss events are reduced by 1/Year-End (Temperance scholars maintain Altonian ecclesiastical relationships through scholarship).
+- **Temperance (Scholars):** AER maintenance. While Church controls at least one university city (T14 Himmelenger has a university): AER loss events are reduced by 1/Year-End (Temperance scholars maintain Altonian ecclesiastical relationships through scholarship).
 
 **Cardinal schism trigger:** If Church Stability = 2 AND any faction played a Senator action targeting Church this season: one Cardinal (random or GM discretion) challenges the Confessor. That Cardinal's faction sub-action fires as an NPC Priority regardless of the Church player's card plays.
 
@@ -880,7 +882,7 @@ T16 Schoenland = maritime island NPC (off-peninsula extension).
 | 10 | Nordhelm | Crown | 1 | 4 | NW of Arcansheld. Buffer between Crown heartland and Hafenmark/Varfell. [EDITORIAL: ED-108 name provisional] |
 | 11 | Mittelmark | Crown | 0 | 4 | Central, between Arcansheld and Valorsplatz. [EDITORIAL: ED-108 name provisional] |
 | 12 | Valorsplatz | Crown ★ | 2 | 6 | East coast. Kingdom capital. Parliament seat. Ministry AP-token. Hafenvalor = port sub-district. |
-| 13 | Stillhelm | Crown | 0 | 2 | South coast. Southernmost Access. Non-Thread orders +1 Ob. RS −1/season occupation. Warden Cooperation track. |
+| 13 | Stillhelm | Crown | 1 | 2 | South coast. Southernmost Access. Fort 1 (warden outpost — the Wardens maintain minimal presence before Emergence). Non-Thread orders +1 Ob. RS −1/season occupation. Warden Cooperation track. Any faction marching into T13 triggers Warden Emergence check immediately (regardless of Accounting phase). (PP-203) |
 | 14 | Himmelenger | Church ★ | 2 | 5 | Cathedral city. Church starts here. TC +1/season Church controls. Church Unique Power −1 Ob. |
 | 15 | Askeheim | Uncontrolled | 0 | 1 | The Southernmost. Epicentre. Warden domain. No faction control possible. Expedition required. RS −2/season non-Warden occupation. Forgetting Check mandatory on entry. |
 | 16 | Schoenland | Neutral NPC | 1 | 5 | Maritime island, east of Valorsplatz. Altonian Trade. IP ≥ 75: Vanguard deploys. Intel orders visible to Altonia. |
@@ -978,18 +980,18 @@ AER ≥ 3: +1D all rolls. Ministry AP-token in T12: seizure Ob +1.
 ## Victory Condition Territory References (PP-199)
 Crown Deed 2: control T12 (Valorsplatz) + T9 (Arcansheld) + ≥ 2 others (total ≥ 4).
 Hafenmark Path C Deed 3: control T5 (Gransol, duchy capital).
-Varfell Path B Deed 1: control T4 (Vargstad) + T13 (Stillhelm) simultaneously.
-Varfell Path C Deed 2: control T4 + T13 + ≥ 1 other.
-Elske contact: via T7 (Spartfell, Hafenmark). Hafenmark may facilitate or obstruct.
+Varfell Path B Deed 1: control T4 (Vargstad) + T13 (Stillhelm) simultaneously for 2 consecutive seasons. (PP-203 duration gate)
+Varfell Path C Deed 2: control T4 (Vargstad) + T13 (Stillhelm) + ≥ 1 other. (PP-203 — corrected T-numbers)
+Elske contact: via T7 (Spartfell, Hafenmark). Hafenmark may facilitate (+1D) or obstruct (+1 Ob). (T7 confirmed current numbering.)
 
-## Ministry AP-Token Starting Positions (PP-199)
+## Ministry AP-Token Starting Positions (PP-203)
 T9 (Arcansheld), T10 (Nordhelm), T11 (Mittelmark), T12 (Valorsplatz — primary Parliament seat).
 
-## Guilds CP-Token Starting Positions (PP-199)
-T3 (Halvardshelm), T5 (Gransol), T8 (Lowenskyst), T12 (Valorsplatz), T14 (Himmelenger).
+## Guilds CP-Token Starting Positions (PP-203)
+T3 (Halvardshelm), T5 (Gransol), T8 (Lowenskyst), T12 (Valorsplatz), T14 (Himmelenger). [PP-199 numbering confirmed — all correct.]
 
-## Niflhel Network Starting Depth (PP-199)
-T2 (Sigurdshelm) depth 2. T12 (Valorsplatz) depth 1. T14 (Himmelenger) depth 1.
+## Niflhel Network Starting Depth (PP-203)
+T2 (Sigurdshelm) depth 2. T12 (Valorsplatz) depth 1. T14 (Himmelenger) depth 1. [Confirmed correct numbering.]
 
 ## Balance Findings and Proposals — BAL-BG-02 (PP-202)
 
