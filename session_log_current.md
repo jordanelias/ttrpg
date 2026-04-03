@@ -1,47 +1,46 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_EDITORIAL_BULK_RESOLUTION
-phase: Phase 13 — Bulk editorial resolution (all open items)
+session_id: 2026-04-02T_EDITORIAL_FULL_RESOLUTION
+phase: Phase 13b — Full editorial resolution with cross-session context
 status: CLOSED
 
 completed:
-  - All 71 open editorial items marked PROVISIONAL with decisions
-  - 8 duplicate IDs renumbered (ED-054–058, 064–066 second occurrences → ED-077–084)
-  - Mechanical patches applied to 8 params files
-  - PP-171 (bulk resolution patch)
-  - Commit: 9417242
+  - Searched past conversations before resolving (found NPC canon names, Vaynard=Varfell, Ceiral=Ritual mechanic vs character)
+  - Ran dedup/consolidate/strike workflow per editorial-register skill Workflow D
+  - Corrected bulk resolution errors from Phase 13:
+      ED-039: was ED-040's decision → fixed to Military seasonal cap pools with Domain Actions
+      ED-051: had ED-050's wrong text → fixed to NPC debate attribute defaults (Attunement=Cognition÷2, Focus=3, Composure=Presence+4, Bonds=2)
+      ED-034: was wrong (capped at RS+3) → fixed to full-value TTRPG propagation, BG cap applies to BG layer only
+      ED-005/006/007/021: removed hardcoded character names → archetype placeholders
+      ED-048: removed 'Seira' name assignment → [SOUTHERNMOST-NPC] placeholder pending user naming
+      ED-010: struck as duplicate of ED-009
+  - User clarification applied: character names are contingent; non-canon NPCs are archetypes for testing only
+  - Canon NPC names confirmed from past sessions: Almud, Lenneth, Torben, Elske, Himlensendt, Olafsson, Klapp, Baralta, Vaynard (Varfell Duke), Maret Uln, Ehrenwall
+  - Commit: 5a23835
 
-editorial_status:
+editorial_status_final:
   open: 0
-  provisional: 79
+  provisional: 78
   resolved: 5
-  total: 84 (including 8 renumbered)
+  struck: 5
+  total: 88
 
-key_provisional_decisions:
-  ED-001: Card-Hand 6-card provisional (unblocks BG simulation)
-  ED-005: Restoration leader = Maren Holt
-  ED-007: Fourth Cardinal = Vester Haum (Reform)
-  ED-033: Commander bonus formulas consolidated (TTRPG CR / BG Mil÷3 / Hybrid layer-specific)
-  ED-041: Niflhel social toolkit defined (Private Negotiation, Bribery, Thread Insight)
-  ED-048: Ceiral → Seira (provisional rename)
-  ED-073: Non-battle Zoom In procedure defined
-  ED-081: Debate stalemate max 10 exchanges then forced Unmask
-  ED-082: BG projectile abstraction confirmed (abstracted, no DR in BG)
-  ED-084: Mandate recovery +1/season when no hostile actions and Stability≥2
+dedup_consolidate_strike_report:
+  deduped: 1 (ED-010 struck as duplicate of ED-009)
+  consolidated: 0 (prior sessions already consolidated known candidates)
+  struck_stale: 0 new (ED-008/011/013/018 already struck from prior sessions)
+  remaining_p1_blockers: 0 (ED-001 unblocked by provisional Card-Hand; ED-030/036 provisional)
 
-mechanical_patches_applied:
-  params_debate: Composure restore, Niflhel toolkit, Genre pivot, Grand Debate alternation,
-                 Momentum in debate, Poise→Composure, NPC Composure formula, Corroboration rules
-  params_factions: Mandate recovery, Hafenmark Wealth sink, Military destruction −1,
-                   Institutional Mandate trigger, PC faction embedding (+1D)
-  params_mass_combat: LBl ignores Prepared Defence, Artillery cascade cap, commander formulas, Volley TN confirmed
-  params_combat: Dodge action added (full pool vs ranged, costs action)
-  params_board_game: Parliamentary Vote procedure, Card-Hand provisional, TC win-delay rule, Artillery disposition
-  state_transfer_spec: TC win-delay rule, non-battle Zoom In, P-01 co-movement propagation
-  params_scale_transitions: Sufficient scope definition, Domain Echo debate outcome mapping
+key_remaining_provisional_needing_user_review:
+  ED-001: Card-Hand system — provisional unblocks simulation only; full design needed
+  ED-036: Altonian unit stats — provisional placeholder; user confirmation required
+  ED-048: [SOUTHERNMOST-NPC] — needs canonical name assignment
+  ED-005/006/007/021: NPC archetypes — narrative profiles deferred to campaign development
+  ED-073: Non-battle Zoom In — procedure defined, design confirmation helpful
+  ED-081: Debate stalemate max 10 exchanges — confirm threshold
 
 next_action:
-  task: "All design items now have provisional decisions in register. System is simulatable across all modes. Next: review provisional decisions with user and confirm/revise before compilation. Priority for review: ED-001 (Card-Hand), ED-048 (Seira rename), ED-073 (non-battle Zoom In), ED-005/007 (character profiles)."
-  note: "0 open editorial items. 79 provisional items await user review before promotion to resolved. No P1 blockers remain (ED-001 P1-BLOCKER unblocked by provisional Card-Hand rule)."
+  task: "System is fully unblocked. 0 open items, 78 provisional (all documented). Ready for: (1) user review of flagged provisional items, (2) compilation pass for any stable system, (3) next simulation target."
+  note: "All simulations can proceed without editorial blockers. Provisional decisions are defensible and documented. Nothing is final until user reviews and promotes to resolved."
 ```
