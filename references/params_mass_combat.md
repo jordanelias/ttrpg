@@ -133,9 +133,12 @@ LP = Light Pierce (arrows). HP = Heavy Pierce (bolts). LBl = Light Blunt (sling)
 | HeavyCut | ✓✓ | ✓✓ | ✓ | ✗ |
 | LightBlunt | ✓ | ✗ | ✗ | ✗ |
 | HeavyBlunt | ✓✓ | ✓✓ | ✓✓ | ✓✓ |
-| LP (arrows) | ✓ | ✓ | ✗ | ✗ |
+| Bow (LP) | ✓ | ✗ | ✗ | ✗ |
 | HP (bolts) | ✓✓ | ✓✓ | ✓ | ✗ |
-| LBl (sling) | ✓ | ✗ | ✗ | ✗ |
+| Sling clay | ✓ | ✗ | ✗ | ✗ |
+| Sling rock | ✓ | ✓ | ✗ | ✗ |
+| Sling metal | ✓✓ | ✓✓ | ✓ | ✗ |
+| Sling lead | ✓✓ | ✓✓ | ✓✓ | ✗ |
 | HBl (siege) | ✓✓ | ✓✓ | ✓✓ | ✓✓ |
 
 HeavyBlunt and HBl are the only classes effective vs Heavy armour.
@@ -179,10 +182,10 @@ Dmg Mod from unit table below. [PROVISIONAL — ED-062: confirm values]
 | Light Infantry | LightCut | +2 |
 | Heavy Infantry | HeavyCut | +4 |
 | Cavalry | HeavyCut | +5 |
-| Piercing — Archer | Piercing/Bow | +2 |
-| Piercing — Crossbow | Piercing/Crossbow | +2 base (+2 vs Med / +3 vs Heavy post-DR) |
+| Piercing — Archer | Piercing/Bow | +0 |
+| Piercing — Crossbow | Piercing/Crossbow | +0 base (+1 vs med+heavy post-DR) |
 | Blunt — Throwing | Blunt/Throw | +1 |
-| Blunt — Sling | Blunt/Sling | Clay+1 / Stone+2 / Metal+3 / Lead+4 (−2D pool) |
+| Blunt — Sling | Blunt/Sling | clay+0 / rock+1 / metal+2 / lead+3 vs med+heavy (−2D pool) |
 | Artillery | HBl | +3 |
 | Knights Templar | HeavyBlunt | +5 |
 
@@ -196,13 +199,13 @@ Scaled (÷2 rounded up) from personal combat DR. Crossbow post-DR bonus applied 
 | Medium | 2 | 1 |
 | Heavy | 3 | 2 |
 
-Crossbow post-DR bonus (if net hits > 0): +2 vs Medium, +3 vs Heavy.
+Crossbow post-DR bonus (if net hits > 0): +1 vs Medium and Heavy. Scaled ÷2 from personal +2 (PP-189).
 Sling: effective CP −2D; ammo modifier per unit table above.
 
 HBl (Artillery/siege): uses PP-091 Bombard (flat Strength damage). Not subject to Volley DR formula. Artillery is a separate unit type from HBl lead-sling infantry units.
 
-LP (archer) unit effectiveness at CP4 (Veteran): vs None=1.6, vs Light=0.6, vs Med=0, vs Heavy=0.
-HP (crossbow) unit effectiveness at CP4: vs None=1.6, vs Light=0.6, vs Med=0.6, vs Heavy=0.
+Bow/LP (archer) unit effectiveness at CP4 (Veteran): vs None=1.6, vs Light=0, vs Med=0, vs Heavy=0. [PP-189: Dmg Mod +0; net successes only vs unarmoured. Re-sim pending.]
+Crossbow/HP unit effectiveness at CP4: vs None=1.6, vs Light=0.6, vs Med=0.6, vs Heavy=0. [PP-189: post-DR +1 vs med+heavy; re-sim pending.]
 HBl (lead sling) unit effectiveness at CP4: vs None=1.6, vs Light=1.6, vs Med=0.6, vs Heavy=0.6.
 LBl remains anti-levy at mass scale (same DR as LP after scaling).
 

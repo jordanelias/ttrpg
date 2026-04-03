@@ -1908,3 +1908,18 @@ patches:
       - designs/combat/combat_design_v1.md
       - references/params_combat.md
     status: applied
+
+  - id: PP-189
+    date: 2026-04-02
+    scope: mass_combat_ranged_parallel
+    description: >
+      Parallel mass battle patch for PP-188 personal combat ranged corrections.
+      Bow (LP): Dmg Mod +2→+0; effectiveness vs Light armour reduced (✓→✗).
+      Crossbow (HP): Dmg Mod +2 base→+0 base; post-DR bonus +2 Med/+3 Heavy → +1 Med+Heavy (scaled ÷2 from personal +2).
+      Sling: expand 2-ammo (clay/stone + metal/lead) → 4-ammo (clay/rock/metal/lead), modifiers vs med+heavy: +0/+1/+2/+3.
+      All-ammo modifier applies vs medium and heavy only; vs unarmoured and light: +0 regardless of ammo.
+    files_changed:
+      - designs/mass_combat/mass_battle_v3.md
+      - references/params_mass_combat.md
+    status: applied
+    note: Re-simulation required for crossbow and archer effectiveness numbers (SIM-DEBT flag).
