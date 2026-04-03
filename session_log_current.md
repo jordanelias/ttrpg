@@ -1,33 +1,63 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-02T_SIM_DEBT_RUNS
-phase: Phase 15 — SIM-DEBT simulation runs
+session_id: 2026-04-02T_BG_V05_CORRECTION
+phase: SESSION CLOSED
 status: COMPLETE
 
-completed_this_session:
-  - SIM-X-17: P-22 paradox window — PASS with 1 minor gap (sequential POP on paradoxed thread)
-  - SIM-X-18: Rendering Crisis arc — PASS with 2 findings (stability disruption gap; TS30-31 risk)
-  - SIM-X-19: Mass battle x3 RS — P1 finding: 3 Dissolution attempts = campaign-ending RS drain
-  - SIM-X-20: Hybrid Coherence 10-session — calibrated; moderate scenario is correct; 2 minor findings
+## ROOT CAUSE
+Did not read valoria_bg_v05_simulation_and_patches.md before patching.
+Did not run freshness_gate.py before starting work.
+Both are now protocol.
 
-p1_findings_from_sims:
-  - SIM-19-01: 3 mass battle Dissolution attempts = E[RS] 6 (Critical). Needs explicit GM warning
-    in mass battle Thread Integration section. [EDITORIAL ED-108]
+## WHAT HAPPENED
+1. Freshness gate tool found in tools/freshness_gate.py
+2. Gate run — all 22 canonical sources FRESH at session start
+3. v05 read in full — it IS the most recent document, not just a corrections doc
+4. v05 contains PP-189 (Uphold/Appease), P-32 (TC start 28, victory 65), P-23 (TC80 seizure formula)
+5. PP-188 (prior session) had TC=22 — wrong; P-32 explicitly sets it to 28
+6. PP-189 applied: all v05-specific values now in params
 
-new_gaps_logged:
-  - SIM-17-01 (P3): Sequential POPs on same paradoxed thread — recommend auto-fail second POP
-  - SIM-18-01 (P2): Physical stability disruption mid-arc — recommend arc pauses not resets
-  - SIM-18-02 (P3): GM guidance: TS 30-31 risk of permanent Thread op loss on resolution
-  - SIM-19-02 (P3): RS<24 before mass battle + Dissolution Failure = Rupture — add explicit note
-  - SIM-20-01 (P2): Co-declaration tie-break unspecified [EDITORIAL ED-107]
-  - SIM-20-02 (P3): GM guidance for sustainable Hybrid op rate
+## STALE MATERIAL RESOLVED
+All items from stale_scan_bg_01.md addressed across PP-188 + PP-189:
+- Faction list: Crown/Church/Hafenmark/Varfell playable; Guilds/Niflhel NPC-only
+- TC start: 28 (P-32 correct)
+- TC victory: 65 (P-32)
+- PI start: 7
+- Torben Loyalty start: 3 (active from game start)
+- Varfell: Mandate 3, Wealth 3
+- Church victory: 4 Deeds + TC≥65 + AER≥3
+- Crown: 5 Deeds per v04
+- Varfell victories: 3 paths (VTM+territories, not Intel stat)
+- TC80 seizure: Church Military vs Defender Military Ob 2, cap 2 (P-23)
+- Majority-1s: STRUCK (v05 DESIGN DECISION)
+- Uphold/Appease terminology (PP-189)
+- Phase 4 order: Intel→Military→Domain→Social→Thread→Unique→Project (v04 authoritative)
 
-next_action:
-  task: resolve new findings and continue editorial from ED-065
-  priority_order:
-    - SIM-19-01 (P1): Add mass battle Dissolution warning
-    - SIM-18-01 (P2): Arc stability disruption ruling
-    - SIM-20-01 (P2 / ED-107): Co-declaration tie-break
-    - Then continue ED-065 editorial review
+## OPEN GAPS
+ED-088 (P1): Ministry faction — no source document found in any design file.
+Cannot design until user identifies source or provides brief.
+
+## FRESHNESS GATE
+Ran --update after all changes. All 22 canonical sources FRESH.
+
+## PROTOCOL ADDITIONS (mandatory from now on)
+1. Run freshness_gate.py CHECK before any simulation/audit/patch
+2. Read canonical source doc before patching any system
+3. Check canonical_sources.yaml for which doc is authoritative
+
+## COMMITS
+bd4232b: stale_scan_bg_01 report
+0af61e52: PP-188 comprehensive params correction
+2db16124: PP-188 register + ED-088
+ee494cfc: PP-189 corrections (TC80, majority-1s, Uphold/Appease)
+6749136a: PP-189 follow-up (TC 70 → 65 incomplete)
+0921e8fa: Church TC≥65 final fix
+freshness_gate --update commit (via tool)
+
+next_session_start:
+  priority_1: "Run freshness_gate.py check before anything else."
+  priority_2: "User to identify Ministry faction source document (ED-088, P1 blocker)."
+  priority_3: "Re-run balance analysis BAL-BG-02 on correct faction set with correct values (TC=28, PI=7, Torben=3, Varfell M3/W3)."
+  priority_4: "Verify Restoration Movement has player-grade mechanics for optional 5th player role."
 ```
