@@ -1,4 +1,4 @@
-<!-- version: v0.5.4+DOCREVIEW | source: bg_v05_simulation_and_patches.md | last_updated: 2026-04-02 -->
+<!-- version: v0.5.5+AUD-BG-01 | source: bg_v05_simulation_and_patches.md | last_updated: 2026-04-02 -->
 <!-- PATCHES APPLIED: P-12-P-32 (prior); ST-BG-01-10, ST-INT series added 2026-04-02 -->
 <!-- PATCHES APPLIED: PP-112 (remove struck Majority-1s), PP-113-PP-122 (gap fills) 2026-04-02 -->
 <!-- NOTE: stage6_factions.md is STALE for BG mode. bg_v05 is canonical for all BG faction mechanics. -->
@@ -494,3 +494,75 @@ Hafenmark Deed 4 condition: "at least 1 Parliamentary ruling in Hafenmark's favo
 ### PG-12: Hidden Information Persistence (Niflhel Deed 3)
 Niflhel holds revealed faction stats as intelligence. Information expires if the underlying stat changes by more than ±1 from the revealed value (the intelligence is now materially wrong). At expiry: information no longer counts toward Deed 3.
 Niflhel Deed 3: "≥ 3 pieces of hidden faction information held simultaneously" = 3 pieces of valid (non-expired) intelligence held at Accounting.
+
+## Audit Patches (PP-180 bundle)
+
+### Accounting Phase Reference Steps (PP-180, resolves F-01 partial)
+Phase 5 — Seasonal Accounting sequence (13 steps):
+1. Apply all Domain Action stat changes queued this season.
+2. Apply Military losses from unit destruction (BG timing — queued from Phase 4).
+3. Thread Debt tokens: apply +1 Ob to next Thread operation in affected territories.
+4. Institutional Pressure: check all advancement conditions; advance if triggered.
+5. Restoration pre-check: can Restoration win this season? (5 Presence in 5 non-adjacent territories, held 2 consecutive seasons, RS ≥ 1)
+6. Rendering Stability: apply all RS changes queued this season (Thread ops, Niflhel Harvest, substrate events).
+7. Theocracy Counter: apply TC changes; check thresholds (C-01 through C-05).
+8. Queued cascade overflow effects (beyond Cascade Depth Cap from Phase 4).
+9. Stability checks: any faction at Stability 0 enters Collapse.
+10. Prosperity: Halvardshelm Breadbasket (+1 if uncontested). Territory event effects.
+11. CP awards (hybrid only): Belief engagement, Mandate Uphold/Compromise.
+12. Victory checks: per-faction Deed tokens; shared survival condition; game-end triggers.
+13. Cleanup: remove temporary effects, advance round tracker, draw replacement cards.
+
+### Parliament Integrity (PI) Scale Clarification (PP-180, resolves B-01)
+PI uses scale 0–10 (not 0–100). PI 5 = functional parliament; PI 0 = dissolved.
+All other clocks (TC, RS, IP) use scale 0–100.
+Reference materials must display PI with its 0–10 range explicitly to avoid confusion with 0–100 tracks.
+
+### Intel Advancement Simplification (PP-180, resolves B-02)
+Replaces fractional +0.25 rule (PP-173).
+**New rule:** Each faction maintains an Intel Advancement Counter (0–3) on their faction mat.
+Each season with at least 1 successful Intel or Quiet Network order: Counter +1.
+When Counter reaches 4: Intel stat +1, Counter resets to 0.
+Rate unchanged (~8 successful seasons to advance 1 point). No fractional tracking required.
+
+### Church Excommunication Ob Cap (PP-180, resolves C-02)
+Excommunication Ob = min(target Mandate, 4). Maximum Ob 4 regardless of target Mandate.
+Previously: Ob = target Mandate (could reach 5 vs Crown at full strength).
+At Ob 4, Church 5D: P(Success) ≈ 9%. Uncommon but possible. Represents: even a fully mandated Crown leader can be publicly challenged by the Church — the institutional weight of the papacy is real even against a strong king.
+Church Excommunication Overwhelming at Ob 4 (needs net ≥ 8 from 5D): P ≈ 0.3%. Effectively removed under PP-179 — acceptable, Overwhelming effects are bonus.
+
+### Drawn Battle Rule (PP-180, resolves GAP-BG-02)
+When both sides achieve equal net successes in battle:
+Stalemate. Both sides: Cohesion −1. No territorial change. Neither side may re-engage in the same territory this season (units hold ground; orders are spent).
+If both sides are at Cohesion 0 after the stalemate: both units destroyed simultaneously. Territory becomes uncontrolled.
+
+### Crown Policy Instrument — Defined (PP-180, resolves GAP-BG-03)
+The Crown Policy Instrument is the Crown's once-per-season bonus political action (no card required, separate from card hand).
+Activation: Crown Mandate ≥ 4. Cannot use the same Policy two consecutive seasons.
+Available Policies: see Crown Policy Instruments table (in stage_bg_proposal_v02.md B5).
+Resolution order: Policy → Hafenmark Opposition (if Parliamentary Manoeuvre) → Censor card (if in play).
+This is printed on the Crown faction reference card.
+
+### Co-Movement VTM Effects at Cap (PP-180, resolves GAP-BG-04)
+When a Co-Movement card would advance VTM but VTM is already at maximum (5) or the once-per-season cap has been reached:
+Convert: +1D to Varfell's next Tribune order in any territory (the Thread signature that would have advanced VTM instead sharpens Vaynard's tactical awareness).
+
+### Restoration: Community Organizing vs Community Weaving Split (PP-180, resolves GAP-BG-06)
+Two distinct action types within Restoration Presence system:
+**Community Organizing (Praetor card, rendered-world):**
+- Move Presence markers, build non-Thread Projects (Fortification, Diplomatic Mission), recruit.
+- No Thread operation. No co-movement card drawn. Does NOT trigger Church Attention Pool.
+- Roll: Influence vs Ob 2.
+
+**Community Weaving (Pontifex card, Thread operation):**
+- RS restoration, Einhir Memory Recovery.
+- Requires practitioner Presence marker in territory.
+- Produces full co-movement (card drawn). DOES trigger Attention Pool +2.
+- Roll: Influence vs Ob = (100 − RS) ÷ 20 (round up, min Ob 1).
+
+### Thread Debt Cross-Mode Hybrid Rule (PP-180, resolves G-01)
+In hybrid mode, when a Player Character performs a Thread operation:
+1. Apply TTRPG Thread Debt rules (personal: +1 Ob to next personal Thread operation in that territory).
+2. Also place 1 BG Thread Debt token in that territory for board-scale effect (+1 Ob to next faction Thread order there).
+These are additive and independent. The personal cost (TTRPG) and institutional cost (BG token) both apply.
+Game Master applies at Cascade phase: "This practitioner's operation has left a substrate mark that other factions' Thread activity will feel."

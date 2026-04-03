@@ -1698,3 +1698,14 @@ patches:
   applied_to_version: "v1.2"
   status: applied
   applied_commit: "pending"
+
+- id: PP-180
+  date: 2026-04-02
+  severity: P2
+  description: "Audit bundle: Accounting Phase 13-step sequence; PI scale clarification; Intel advancement simplified to counter (no fractional); Excommunication Ob capped at 4; Drawn battle rule; Policy Instrument defined; Co-movement VTM cap conversion; Restoration Organizing/Weaving split; Thread Debt hybrid bridge rule."
+  finding_id: "AUD-BG-01: F-01, B-01, B-02, C-02, GAP-BG-02/03/04/06, G-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.5.5"
+  status: applied
+  applied_commit: pending

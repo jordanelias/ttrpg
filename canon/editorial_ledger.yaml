@@ -1673,3 +1673,18 @@ editorial_decisions:
     propagation_status: pending
     related_ids: []
     tags: [ranged, faction, worldbuilding, provisional]
+
+  - id: ED-087
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: audit
+    source_file: tests/aud_bg_01.md
+    description: "GAP-BG-01: TC 80 territorial seizure scope undefined. How many territories may Church seize simultaneously at TC 80? One per season (sequential) or all-territory sweep? Blocks TC 80 scenario simulation."
+    full_flag_text: "[EDITORIAL: ED-087 — TC 80 seizure scope. One per season or sweep? Required for TC 80 simulation.]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets: [references/params_board_game.md, compilation/v0.14/stage_bg_board_game_mode.md]
+    propagation_status: pending
+    related_ids: []
+    tags: [board_game, church, theocracy_counter, blocker]
