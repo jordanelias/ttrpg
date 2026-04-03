@@ -172,7 +172,7 @@ editorial_decisions:
     full_flag_text: "[EDITORIAL: Proceeding type catalogue] — Which asymmetric proceedings exist beyond Royal Audience and Church Tribunal?"
     status: provisional
     priority: P2
-    decision: "Additional proceeding types: Guild Arbitration (neutral mediator, each side rolls Wealth+History, higher wins binding ruling); Ducal Tribunal (Crown convenes, uses Mandate as pool). [PROVISIONAL]"
+    decision: "Additional proceeding types: Guild Arbitration (neutral mediator, each side rolls Wealth+History, higher wins binding ruling); Ducal Tribunal (Crown convenes, uses Mandate as pool). [PROVISIONAL] [GAP: Additional proceeding types not yet designed. Candidate types flagged in debate doc: Guild arbitration (3-party), Varfell internal review (no audience), Restoration assembly (audience = orator). Requires editorial design decision.]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
       - compilation/v0.14/stage9_social.md
@@ -180,13 +180,7 @@ editorial_decisions:
     related_ids: [ED-010]
     supersedes: []
     tags: [debate, proceeding_types, faction]
-
-  - id: ED-010
-    date_flagged: 2026-03-27
-    date_resolved: null
-    source: design-file
-    source_file: designs/debate/debate_system_redesign_v1.md
-    description: "Inline version of ED-009 — same question with suggested designs for Guild arbitration, Varfell review, Revolution assembly"
+r Guild arbitration, Varfell review, Revolution assembly"
     full_flag_text: "[EDITORIAL: additional proceeding types] — Consider: Guild arbitration (three-party), Varfell internal review, Revolution assembly"
     status: struck
     stale_reason: "Duplicate of ED-009. Same question, same resolution."
@@ -222,12 +216,12 @@ editorial_decisions:
 
   - id: ED-012
     date_flagged: 2026-03-27
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: design-file
     source_file: designs/debate/debate_system_redesign_v1.md
     description: "Audience Disposition as dual win-condition — apply to all Formal/Grand Debates or Grand Debates only?"
     full_flag_text: "[EDITORIAL: Audience Disposition as win-condition] — Does dual win-condition (exchange + audience) apply to all Formal/Grand Debates, or only Grand Debates?"
-    status: provisional
+    status: resolved
     priority: P1
     decision: "Audience Disposition as dual win-condition: applies to all Formal and Grand Debates. Audience Disposition reaching Hostile (0) = automatic concede regardless of Conviction Track. [PROVISIONAL]"
     propagation_targets:
@@ -267,7 +261,7 @@ editorial_decisions:
     full_flag_text: "[EDITORIAL: Corroboration Knot requirement] — Is the Knot requirement too restrictive?"
     status: provisional
     priority: P2
-    decision: "Corroboration Knot requirement relaxed: any willing ally present at the scene may corroborate (not restricted to existing Knot). [PROVISIONAL]"
+    decision: "Corroboration Knot requirement relaxed: any willing ally present at the scene may corroborate (not restricted to existing Knot). [PROVISIONAL] [GAP: Corroboration Knot restrictiveness unresolved. Question: should any ally present corroborate (with Knot holders getting +1D), or Knot required? Requires design decision.]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
       - compilation/v0.14/stage9_social.md
@@ -275,13 +269,7 @@ editorial_decisions:
     related_ids: []
     supersedes: []
     tags: [debate, knots, social]
-
-  - id: ED-015
-    date_flagged: 2026-03-27
-    date_resolved: 2026-04-02
-    source: design-file
-    source_file: designs/debate/debate_system_redesign_v1.md
-    description: "Thread consequences for Casual Disputes — should high-strain casual disputes (Rattled trigger) produce minor co-movement?"
+"Thread consequences for Casual Disputes — should high-strain casual disputes (Rattled trigger) produce minor co-movement?"
     full_flag_text: "[EDITORIAL: Thread consequences for Casual Disputes] — Currently no Thread consequences for casual disputes."
     status: resolved
     priority: P3
@@ -420,7 +408,7 @@ editorial_decisions:
     full_flag_text: "[EDITORIAL: ED-ARC-31-01 — Forced Unmask from external disruption (violence in chamber)]"
     status: provisional
     priority: P2
-    decision: "Forced Unmask from violence: yes, violence in debate chamber = immediate Unmask. Violent party auto-loses regardless of Conviction Track position. Loser concedes on the stated stakes. [PROVISIONAL]"
+    decision: "Forced Unmask from violence: yes, violence in debate chamber = immediate Unmask. Violent party auto-loses regardless of Conviction Track position. Loser concedes on the stated stakes. [PROVISIONAL] [GAP: Forced Unmask from external disruption not defined in debate doc. No rule for violence or external event interrupting debate. Requires design.]"
     propagation_targets:
       - designs/debate/debate_system_redesign_v1.md
       - compilation/v0.14/stage9_social.md
@@ -428,12 +416,7 @@ editorial_decisions:
     related_ids: []
     supersedes: []
     tags: [debate, social, register_shift, unmask]
-
-  - id: ED-023
-    date_flagged: 2026-04-01
-    date_resolved: null
-    source: arc-generation
-    source_file: designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md
+ybrid_systems.md
     description: "Vaynard at TK5 — does he attempt to acquire Thread operational capability (hiring/coercing a practitioner), or does he remain a knowledge-broker only?"
     full_flag_text: "[EDITORIAL: ED-ARC-32-01 — Vaynard at TK5: does he attempt to acquire Thread capability himself, or only knowledge-brokerage?]"
     status: provisional
@@ -807,12 +790,12 @@ editorial_decisions:
 
   - id: ED-043
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation
     source_file: designs/debate/debate_stress_test_v2.md
     description: "Debate: Can accused have corroborators in a Church Tribunal? Inquisitorial proceedings historically forbade defence counsel. If blocked, Bonds advantage is nullified for accused."
     full_flag_text: "[EDITORIAL: Can the accused have corroborators in a Church Tribunal?]"
-    status: provisional
+    status: resolved
     priority: P2
     decision: "Accused corroborators in Church Tribunal: no. Inquisitorial proceeding denies accused Sed Contra phase; corroborators require Appeal to Room (separate action). Consistent with §6.7. [PROVISIONAL]"
     propagation_targets:
@@ -936,7 +919,7 @@ editorial_decisions:
     full_flag_text: "[EDITORIAL: ED-049 Church Stability brake scope — Mandate-only or all TC sources?]"
     status: resolved
     priority: P2
-    decision: "Church Stability brake suppresses all TC changes from Church Domain Actions (not just Mandate-based). Baralta effect: −1 TC/season while Mandate≥4, applies to all Church TC generation from Domain Actions. [PROVISIONAL]"
+    decision: "Church Stability brake suppresses all TC changes from Church Domain Actions (not just Mandate-based). Baralta effect: −1 TC/season while Mandate≥4, applies to all Church TC generation from Domain Actions. [PROVISIONAL] [GAP: Church Stability brake mechanic not found in bg_v05 or stage6. No defined rule for Stability suppressing TC generation. Requires design or confirmation this mechanism does not exist.]"
     propagation_targets:
       - designs/board_game/valoria_bg_v05_simulation_and_patches.md
     propagation_status: pending
@@ -1119,17 +1102,11 @@ editorial_decisions:
   tags: [debate, momentum, core]
 
   # ── BOARD GAME MODE AUDIT 2026-04-02 ─────────────────────────────────────
-
-  - id: ED-053
-    date_flagged: 2026-04-02
-    date_resolved: null
-    source: audit
-    source_file: audit_board_game_mode.md
-    description: "Faction collapse exit condition — how does a faction exit the 2-season collapse state? Provisional rule applied (PP-117)."
+a faction exit the 2-season collapse state? Provisional rule applied (PP-117)."
     full_flag_text: "[EDITORIAL: ED-053 — Faction collapse exit: PP-117 provisional applied. Confirm exit procedure.]"
     status: provisional
     priority: P1
-    decision: "PP-117 PROVISIONAL: Exit requires 1 full season elapsed + no hostile Domain Actions current season + allied or own Govern Ob 2 Success in former territory. Auto-exit Season 2 with Stability 1, Mandate 0."
+    decision: "PP-117 PROVISIONAL: Exit requires 1 full season elapsed + no hostile Domain Actions current season + allied or own Govern Ob 2 Success in former territory. Auto-exit Season 2 with Stability 1, Mandate 0. [GAP: NPC debate attributes (Attunement, Focus) missing from stage13. NPCs have social profiles but lack formal debate stat blocks. Requires either (a) adding attributes to stage13 profiles or (b) ruling NPCs use Presence + History for all debate rolls.]"
     propagation_targets:
       - designs/board_game/valoria_bg_v05_simulation_and_patches.md
       - references/params_board_game.md
@@ -1137,13 +1114,7 @@ editorial_decisions:
     related_ids: []
     supersedes: []
     tags: [board_game, faction, collapse, stability]
-
-  - id: ED-077
-    date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
-    source: audit
-    source_file: audit_board_game_mode.md
-    description: "Simultaneous catastrophe — RS=0 and IP≥80 both in same Accounting phase. Resolution order. Provisional rule applied (PP-118)."
+ rule applied (PP-118)."
     full_flag_text: "[EDITORIAL: ED-054 — Simultaneous RS=0 + IP>=80: PP-118 provisional applied. Confirm resolution order.]"
     status: resolved
     priority: P1
@@ -1271,17 +1242,12 @@ editorial_decisions:
     source: simulation
     source_file: tests/sim_hyb_01_templar_crossing.md
     description: "Zoom In as TC win-delay exploit: a player can trigger Zoom In to suspend BG Accounting and delay an imminent TC=65 Church win. Needs ruling: does TC threshold check fire at turn-end regardless of Zoom In suspension?"
+    decision: "[GAP: Zoom In during active BG season — no rule for whether TC and clock advancement pause during Zoom In personal phase. Requires ruling: clocks continue (recommended — prevents exploit) or pause (player choice).]"
     status: provisional
     priority: P2
     decision: null
     tags: [hybrid, zoom, tc, exploit]
-
-  - id: ED-057
-    date_flagged: 2026-04-02
-    date_resolved: 2026-04-02
-    source: simulation
-    source_file: tests/sim_hyb_01_templar_crossing.md
-    description: "Unit ghost state during Zoom In: a BG unit destroyed in Phase 6 Step 1 still exists in TTRPG state if Zoom In fires before Phase 6 resolves. Rule needed: Zoom In may only trigger after Phase 6 Step 1 applies all damage, OR units with 0 Strength are removed before Zoom In state transfer."
+ 6 Step 1 still exists in TTRPG state if Zoom In fires before Phase 6 resolves. Rule needed: Zoom In may only trigger after Phase 6 Step 1 applies all damage, OR units with 0 Strength are removed before Zoom In state transfer."
     status: resolved
     priority: P2
     decision: "Phase-Lock Protocol (PP-103): Zoom In fires only at Phase 1, Phase 3, or after Phase 6 Step 1. Ghost-unit class eliminated by design."
@@ -1289,11 +1255,11 @@ editorial_decisions:
 
   - id: ED-058
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: simulation
     source_file: tests/sim_hyb_01_templar_crossing.md
     description: "Debate stalemate: if resistance >= all achievable effective_margins, debate produces 0 track movement indefinitely. No forced resolution mechanism (Unmask is voluntary). Need: maximum exchange count, or mandatory Concede/Unmask trigger at N exchanges."
-    status: provisional
+    status: resolved
     priority: P2
     decision: null
     propagation_targets:
@@ -1468,16 +1434,10 @@ editorial_decisions:
     description: "Confirm concurrent Zoom In ordering (PP-112 provisional): faction-turn Accounting sequence order. Consider whether two PCs can split and handle concurrent scenes simultaneously with a co-GM or async resolution."
     status: provisional
     priority: P2
-    decision: "Concurrent Zoom In PP-112 confirmed: faction-turn Accounting order, first battle completes before second. [PROVISIONAL]"
+    decision: "Concurrent Zoom In PP-112 confirmed: faction-turn Accounting order, first battle completes before second. [PROVISIONAL] [GAP: Concurrent Zoom In ordering undefined. If multiple factions trigger Zoom In simultaneously, resolution order not specified. PP-112 provisional referenced but no rule found. Requires ruling: faction-turn order, or declared order, or GM discretion.]"
     tags: [hybrid, zoom, concurrent]
-
-  - id: ED-073
-    date_flagged: 2026-04-02
-    date_resolved: null
-    source: audit
-    source_file: tests/audit_hybrid_01.md
-    description: "Full procedure for non-battle Zoom In: PC enters BG territory for political scene, Thread investigation, or social encounter. Phase-Lock only covers battle phases. Need: trigger condition, state transfer table, Zoom Out update rules for non-combat contexts."
-    status: provisional
+on, or social encounter. Phase-Lock only covers battle phases. Need: trigger condition, state transfer table, Zoom Out update rules for non-combat contexts."
+    status: resolved
     priority: P1
     decision: "Non-battle Zoom In procedure defined: fires at end of Domain Action being resolved; no unit conversion; faction stats suspend; RS immediate; Domain Echoes queue. Applied to state_transfer_spec.md. [PROVISIONAL]"
     tags: [hybrid, zoom, non_battle]
@@ -1495,22 +1455,22 @@ editorial_decisions:
 
   - id: ED-075
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: audit
     source_file: tests/audit_hybrid_01.md
     description: "PC faction embedding in BG layer: P-11 requires characters to be embedded in factions, but between Zoom Ins PCs have no mechanical presence in BG (they exist only in TTRPG mode). Design decision: do PCs have passive BG effects between Zoom Ins (e.g., presence in a territory grants faction bonus), or are they mechanically absent?"
-    status: provisional
+    status: resolved
     priority: P2
     decision: "PC faction embedding: PCs grant +1D to faction Domain Action in their physical territory per season. Applied to params_factions.md. [PROVISIONAL]"
     tags: [hybrid, faction, pc_embedding]
 
   - id: ED-076
     date_flagged: 2026-04-02
-    date_resolved: null
+    date_resolved: 2026-04-02
     source: audit
     source_file: tests/audit_hybrid_01.md
     description: "P-01 co-movement propagation: TTRPG scene Thread ops produce all three auto-effects (P-01 compliant). But these auto-effects don't propagate to the BG layer on Zoom Out (no mechanism). When a Zoom In TTRPG scene includes a Thread operation, should its epistemic/temporal/actual auto-effects have BG-layer consequences? If yes: define the translation. If no: document as intentional abstraction."
-    status: provisional
+    status: resolved
     priority: P2
     decision: "P-01 co-movement propagation: Relational+ ops → RS±1 at Accounting; epistemic → Investigation Action available; actual → narrative only. Applied to state_transfer_spec.md. [PROVISIONAL]"
     tags: [hybrid, thread, co_movement, p01]

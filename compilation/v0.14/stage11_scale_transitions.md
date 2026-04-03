@@ -99,3 +99,21 @@ This is not a punishment — it is a mechanical expression of the epistemologica
 **Thread in mass battle (TTRPG/Hybrid only):** Offensive Thread operations (Dissolution, Pulling, Locking) fire in Phase 4 — between Manoeuvre and Engagement. Support Thread operations (Weaving, Mending) fire in Phase 6 Cascade step 4–5. Damage from all phases (Volley, Thread, Engagement) applies simultaneously at Phase 6 Step 1. Board Game has no battle-phase Thread — faction Thread orders are abstracted to Co-Movement cards at strategic scale only.
 
 **Key principle for hybrid**: Where a rule exists in both modes, the seasonal cap is shared. A faction attribute cannot change by more than ±2 per season regardless of how many sources target it in either phase.
+---
+
+## 11.8 GM Reference Card — Zoom In / Zoom Out (ED-055b)
+
+*Laminate and keep at table. Content drawn from §11.2–11.3.*
+
+| Term | Definition |
+|------|-----------|
+| Zoom In | GM narrows scale. Player gets one exchange at personal/scene scale. |
+| Zoom Out | GM widens scale. Mass battle continues at reduced command efficiency. |
+| Register Shift | Social scene changes nature. Unmask or external event triggers. |
+| Domain Echo | Personal success produces faction consequence. No extra roll. |
+
+**Eight Handoff Rules (summary):**
+Personal→Thread: Leap action. Personal→Faction: GM recognises scope, Domain Action resolves. Personal→Scene: Roll serves as opening move or Appeal. Scene→Faction: Domain Echo on sufficient scope. Thread→Faction: Thread pool, faction-scale Ob. Thread→Mass: Offensive=Phase 2; Support=Phase 5. Mass→Personal: Phase 5, one exchange, named targets become Contested Figures. Scene→Mass: Social outcome affects mass combat opening state.
+
+**Zoom In state to track:** PC location, current scale, actions remaining, mass battle turn state.
+**Zoom Out trigger:** Exchange complete, or PC incapacitated.

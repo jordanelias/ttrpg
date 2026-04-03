@@ -2342,3 +2342,25 @@ patches:
     status: provisional
     files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
     tags: [threadwork, over_actualisation, collective, stacking]
+
+  - id: PP-203
+    date: 2026-04-02
+    scope: debate_scale_transitions
+    description: >
+      Confirm resolved debate and scale transition mechanics.
+      ED-012: Dual win-conditions confirmed (exchange majority + audience capture).
+      ED-043: Church Tribunal — accused corroboration intentionally prohibited.
+      ED-057a: Hybrid Debate confirmed resolved in debate §6.14.
+      ED-058: Debate end = exchange limit; stalemate = proposer loses.
+      ED-055b: GM Zoom In/Out reference card stub added to stage11.
+      ED-073/075/076: Non-battle Zoom In, PC embedding, co-movement propagation
+      confirmed via stage11 Eight Handoff Rules and §11.7.
+      Gap items ED-009/014/022/049/051/055a/056/057b/072 documented with GAP notes.
+    files_changed:
+      - references/params_debate.md
+      - compilation/v0.14/stage11_scale_transitions.md
+      - canon/editorial_ledger.yaml
+      - canon/patch_register.yaml
+    status: applied
+    resolves: ED-012, ED-043, ED-055b, ED-057a, ED-058, ED-073, ED-075, ED-076
+    gaps_documented: ED-009, ED-014, ED-022, ED-049, ED-051, ED-055a, ED-056, ED-057b, ED-072

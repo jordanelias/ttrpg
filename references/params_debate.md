@@ -139,3 +139,24 @@ Audience ethical mode weight shifts from evidence leverage (ED-077: Cognition+Hi
 
 <!-- patch_history: references/params_debate_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
+
+## Confirmed Debate Mechanics (PP-203)
+
+### Dual Win-Conditions (ED-012 resolved)
+Applies to: Formal Debate, Grand Debate.
+1. Exchange majority: win more exchanges than opponent.
+2. Audience capture: end Debate with audience Friendly AND opponent Hostile or worse.
+Outcomes: Procedural victory (exchange majority only) / Popular victory (audience only) / Total victory (both).
+Domain Echo fires from audience response when Popular or Total victory.
+
+### Church Tribunal Corroboration (ED-043 resolved)
+Accused has no Sed Contra phase, no Corroboration, cannot Call for Division.
+Corroboration for the accused is intentionally prohibited. Tribunal = doctrinal enforcement, not justice.
+
+### Debate End Conditions (ED-058 resolved)
+End triggers: exchange limit reached (Inquisitor sets 1–5; Formal/Grand minimum 3).
+Stalemate (tied exchanges at limit): Proposer loses — burden of proof not met.
+No infinite loop possible: Inquisitor controls exchange count in Church Tribunal.
+
+### Hybrid Debate (ED-057a resolved)
+Resolved in debate_system_redesign_v1 §6.14. No further mechanical content needed.
