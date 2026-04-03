@@ -126,13 +126,13 @@ systems:
     note: "Several pending patches: R-55 (FR-D-12), R-56 (W-08), R-59/60, R-62 (W-51 Ob 6), R-63 (FR-L-30), R-64 (Mode 3). Apply when compiling."
 
   board_game:
-    canonical_mechanics: designs/board_game/valoria_bg_v05_simulation_and_patches.md
-    canonical_action_economy: designs/board_game/stage_bg_proposal_v02.md
+    canonical: designs/board_game/valoria_bg_v04.md
+    canonical_corrections: designs/board_game/valoria_bg_v05_simulation_and_patches.md
     params: references/params_board_game.md
-    design_doc: designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    design_doc: designs/board_game/valoria_bg_v04.md
     compilation_stage: compilation/v0.14/stage_bg_board_game_mode.md
     compilation_current: false
-    note: "ED-001 resolved. Card-Hand system from stage_bg_proposal_v02.md is canonical for action economy (PP-177). bg_v05 remains canonical for faction stats, clocks, victory conditions (PP-112 through PP-176). stage_bg compilation STALE — reconciliation of v02 + v05 needed before compilation update. sync."
+    note: "PP-188: v04 is the canonical BG ruleset. v05 is a correction document (dice system, Ob minimum, inconsistency patches) only. All B-sections (faction cards, victory conditions, turn structure) from v04 are authoritative. stage_bg compilation is STALE. stage_bg_proposal_v02.md Card-Hand system is adopted (PP-177) and confirmed by v04 B3. sync."
 
   hybrid:
     canonical_design: designs/hybrid/hybrid_gaps_resolved.md  # pending integration

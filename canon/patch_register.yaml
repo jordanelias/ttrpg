@@ -1923,3 +1923,14 @@ patches:
       - references/params_mass_combat.md
     status: applied
     note: Re-simulation required for crossbow and archer effectiveness numbers (SIM-DEBT flag).
+
+- id: PP-188
+  date: 2026-04-02
+  severity: P1
+  description: "Comprehensive params correction from authoritative v04 scan. Reverts PP-171 (Church Deed 4), PP-172 (Crown IP escape), PP-173 (Intel advancement), PP-176 (Varfell Intel deed), PP-183 partial (TC80 cap 4→2 per v04/v05 P-23), PP-186 (Crown Deed 2 territories). Corrects: TC start 28→22, PI start 5→7, Torben Loyalty start 8→3 (active from game start), Varfell Mandate 4→3/Wealth 4→3. Corrects Phase 4 priority order (v04: Intel→Military→Domain→Social→Thread→Unique→Project). Removes Guilds/Niflhel as playable factions with player victory conditions. Adds Crown 5-deed structure, Varfell 3-path victory, Löwenritter full victory conditions, Restoration Movement full playable faction. Flags Ministry faction as undocumented gap."
+  finding_id: "STALE-SCAN-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.0"
+  status: applied
+  applied_commit: pending

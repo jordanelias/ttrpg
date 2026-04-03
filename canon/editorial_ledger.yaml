@@ -1812,3 +1812,18 @@ editorial_decisions:
     propagation_status: pending
     related_ids: [PP-172]
     tags: [combat, cover, provisional]
+
+  - id: ED-088
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: stale_scan
+    source_file: tests/stale_scan_bg_01.md
+    description: "Ministry faction: user confirmed as NPC faction. Not found in any design document (v04, v05, batch_d, batch_e, stage_bg_proposal_v01/v02, amendment2, synthesis docs). Design blocked until source document located or user provides spec."
+    full_flag_text: "[GAP: ED-088 — Ministry NPC faction has no source document. Cannot design until source located.]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets: [references/params_board_game.md]
+    propagation_status: pending
+    related_ids: []
+    tags: [board_game, ministry, npc, blocker]
