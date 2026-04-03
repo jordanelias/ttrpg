@@ -1,38 +1,41 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-03T_WORLDBUILDING_V3
-phase: DESIGN DOCUMENT v3
-status: AWAITING EDITORIAL REVIEW
+session_id: 2026-04-03T_COMBAT_FIXES_AND_SIM
+phase: SESSION CLOSED
+status: COMPLETE
 
-## WORLDBUILDING INTEGRATION v3
-Key changes from v2:
-- Levy system cut entirely (already in starting stats)
-- Cardinal BG modifiers replaced with Named Character Event cards (no passive stat inflation)
-- BALANCE-FLAG-01 resolved (Church no longer gets free bonuses)
-- Cut proposals (Ministry mechanics, Guild advancement, Parliamentary sub-actions) converted to event card triggers where the interesting part survives
-- 8 new Named Character Event cards proposed
-- 3 existing events confirmed for deck
+## WORK COMPLETED
+1. Combat audit gap fixes: PP-210–218 applied to designs/combat/combat_design_v1.md and
+   references/params_combat.md. ED-110–118 added to editorial ledger (all resolved).
+2. Combat simulation Run-22: 5 stat brackets, 500 fights/matchup.
+   No P1 findings. 2 P2 monitoring flags (Heavy armour gap at Str 4+; Light weapon floor).
 
-## NEW NAMED CHARACTER EVENT CARDS (8)
-Church: Jarnstal Independence, Olafsson Exposure, Prudence Crisis
-Lowenritter: Lions Table Mutiny
-Guilds: Guild Schism, Guild Forum Revolt
-Crown: Constitutional Crisis, Ministry Collapse
+## PATCHES APPLIED
+PP-210: Health = End+6 accumulation model (design doc §7 corrected)
+PP-211: Critical Hit rule added to design doc §5
+PP-212: Feint 'next round only' timing defined
+PP-213: Tie Up disadvantage defined as −2D Combat Pool
+PP-214: Rescue: attack redirects to rescuer, rescuer's DR applies
+PP-215: Dodge added to design doc §4 Actions table
+PP-216: Fibonacci table expanded to 6-row canonical version
+PP-217: Anti-Armour keyword defined for BG layer
+PP-218: PP-086 mass damage formula clarified
 
-## EXISTING EVENTS CONFIRMED FOR DECK (3)
-Klapp Awakening, Ehrenwall Coup, Riskbreaker Exposure
+## SIM RESULTS
+Run-22: No P1. P2-SIM-22-01 (Heavy armour gap, Str4+), P2-SIM-22-02 (Light weapon floor).
+No patches required.
 
-## DESIGN PRINCIPLE
-Cards fire from game state, not player initiative.
-Players interact with institutions by attacking conditions that keep them stable.
-No passive bonuses. Rewards strategic targeting.
+## OPEN P2 MONITORING
+SIM-22-01: Heavy/Medium armour gap at high Str — watch at 1000+ fights.
+SIM-22-02: Light weapon competitive floor — design-consistent but note for player docs.
 
 ## Gate: PASS
 
 next_session_start:
-  priority_1: "User reviews v3 editorial items and event cards."
-  priority_2: "On approval: propagate TTRPG mechanics to stage6, stage13."
-  priority_3: "Event cards: integrate into Named Character Events deck design."
-  priority_4: "Stress test event card triggers for cascade analysis."
+  priority_1: "Resolve remaining open P2 audit findings if desired."
+  priority_2: "Road network design (deferred from PP-201 session)."
+  priority_3: "ED-108: confirm T10/T11 territory names."
+  priority_4: "BAL-BG-02: BG balance analysis with final territory positions."
+  priority_5: "SIM-DEBT-01: Debate re-simulation (now Presence×2+History pool)."
 ```
