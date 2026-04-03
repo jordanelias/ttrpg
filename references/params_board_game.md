@@ -71,7 +71,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Guilds (NPC) | 3 | 4 | 6 | 2 | 5 |
 | Niflhel (NPC) | — | 5 | 4 | — | 4 |
 
-CORRECTIONS (PP-191): Varfell Mandate 4, Wealth 4 (user decision — G-10 was wrong to confirm 3/3). Varfell's mechanical handicap is territorial positioning: all territories adjacent to Varfell's starting position are fortified, making early expansion costly. TC = 28 (P-32). TC victory = 65 (P-32).
+CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 territories (T9/T10/T11/T12) — the most of any faction. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. TC = 28 (P-32). TC victory = 65 (P-32).
 
 ## Stat Ceilings and Floors
 | Stat | Floor | Ceiling |
@@ -158,17 +158,8 @@ Execute in strict order:
 
 Unit starting Cohesion: Light Infantry 3, Heavy Infantry 4, Cavalry 4, Ranged 3, Artillery 3.
 
-## Faction Capital Territories (v04 B2)
-| Faction | Capital | Territory |
-|---------|---------|-----------|
-| Crown | Valorsplatz | T1 |
-| Church | Himmelenger | T3 |
-| Hafenmark | Hafenvalor | T6 |
-| Varfell | Varfell | T9 |
-| Guilds (NPC) | Halvardshelm | T11 |
-| Niflhel (NPC) | Sigurdshalm | T10 |
-| Restoration | No capital | — |
-| Löwenritter | Arnesheld | T5 |
+## Faction Capital Territories — see Territory Table Reconciled (PP-195)
+[Replaced by PP-195 territory table above — Hafenmark capital = Gransol T2, not Hafenvalor T6.]
 
 ## Clock Environmental Effects (v04 B2)
 
@@ -698,3 +689,101 @@ Current v04 map assignments differ significantly. Applying canonical geography w
 - Remove Guilds NPC and Niflhel NPC from territorial starting positions
 
 This changes faction starting positions fundamentally and may destabilise balance. User decision required.
+
+## Territory Table — Reconciled (PP-195)
+Source: Physical map + canonical source duchy boundaries. Guilds and Niflhel do not hold territory.
+
+| # | Territory | Duchy | Starting Control | Pros | Fort | Special |
+|---|-----------|-------|-----------------|------|------|---------|
+| 1 | Valorsplatz | Valorsmark (Crown) | Crown | 6 | 2 | Kingdom capital. Royal Court: Crown Policy −1 Ob. Parliament: Hafenmark Mandate orders −1 Ob. Ministry AP-token at start. |
+| 2 | Gransol | Hafenmark | Hafenmark | 5 | 1 | Hafenmark duchy capital. Garrison: Muster +1D. |
+| 3 | Himmelenger | Valorsmark (Crown) | Crown | 5 | 2 | Church Grand Cathedral here (institutional presence, not control). TC +1/season if Church has Favour ≥ 3 here. Church Unique Power −1 Ob here. |
+| 4 | Spartfell | Hafenmark | Hafenmark | 3 | 2 | Altonian Border. IP threshold events fire here first. Invasion entry point. Elske's duchy borders here. |
+| 5 | Arcansheld | Valorsmark (Crown) | Crown/Löwenritter | 4 | 3 | Löwenritter Fortress. Martial Law −1 Ob. Fort max 4. |
+| 6 | Hafenvalor | Valorsmark (Crown) | Crown | 5 | 1 | Crown port city. Major harbour. All Trade +1D (port). Duchy gave its name to the region — Hafenmark is named after this city's hinterland. |
+| 7 | Lowenskyst | Valorsmark (Crown) | Crown | 4 | 0 | Northern port. Schoenland sea route terminus. |
+| 8 | Eidursjo | Hafenmark | Hafenmark | 4 | 0 | Difficult terrain: March costs 2 cards. Forest/lake region. |
+| 9 | Varfell | Varfell | Varfell | 4 | 1 | Varfell duchy capital. VTM research here only. Einhir ruins: Restoration Weaving −1 Ob. |
+| 10 | Sigurdshelm | Varfell | Varfell | 3 | 0 | Varfell western city. Niflhel operates here as network (Black Market: all Trade +1 Ob; Niflhel Covert −1 Ob — Niflhel presence is institutional, not territorial). |
+| 11 | Halvardshelm | Varfell | Varfell | 5 | 0 | Breadbasket. +1 Prosperity/season uncontested. Muster Ob −1. Guilds operate here commercially (no territorial control). |
+| 12 | Oastad | Varfell | Varfell | 3 | 0 | Thread Wound. RS thresholds trigger +10 early. RS −1/season after 2 consecutive seasons any occupation. Southernmost rule applies. |
+| 13 | Stillhelm | Valorsmark (Crown) | Crown (nominal) | 2 | 0 | Southernmost Access. Non-Thread orders +1 Ob. RS −1/season any occupation. Warden Cooperation track here. Remote — Crown claims it but exercises no real governance. |
+| 14 | Eisengrund | — | Restoration (informal) | 4 | 0 | Einhir Heartland. Restoration Influence −1 Ob. Church Influence +1 Ob. South of mapped territory. |
+| 15 | Schoenland | — | Neutral (NPC) | 5 | 1 | Altonian Trade. At IP ≥ 75: Altonian Vanguard deploys. Intel orders visible to Altonia. Off-peninsula. |
+
+## Adjacency (from physical map)
+T1 (Valorsplatz) ↔ T3 (Himmelenger), T5 (Arcansheld), T6 (Hafenvalor), T7 (Lowenskyst)
+T2 (Gransol) ↔ T4 (Spartfell), T8 (Eidursjo), T9 (Varfell — via Eidursjo valley)
+T3 (Himmelenger) ↔ T1, T6, T14 (Eisengrund — southern border)
+T4 (Spartfell) ↔ T2, T15 (Schoenland — Altonian border)
+T5 (Arcansheld) ↔ T1, T9 (Varfell — mountain pass)
+T6 (Hafenvalor) ↔ T1, T3, T7
+T7 (Lowenskyst) ↔ T1, T6, T15 (sea route)
+T8 (Eidursjo) ↔ T2, T9, T11 (Halvardshelm — lake crossing)
+T9 (Varfell) ↔ T2, T5, T8, T10, T12
+T10 (Sigurdshelm) ↔ T9, T11
+T11 (Halvardshelm) ↔ T8, T10, T12
+T12 (Oastad) ↔ T9, T11, T13, T14
+T13 (Stillhelm) ↔ T12, T14
+T14 (Eisengrund) ↔ T3, T12, T13
+T15 (Schoenland) ↔ T4, T7 (sea)
+
+## Faction Starting Control — Reconciled (PP-195)
+| Faction | Starting Territories |
+|---------|---------------------|
+| Crown | T1 (Valorsplatz), T3 (Himmelenger), T5 (Arcansheld, shared Löwenritter), T6 (Hafenvalor), T7 (Lowenskyst), T13 (Stillhelm, nominal) |
+| Hafenmark | T2 (Gransol, capital), T4 (Spartfell), T8 (Eidursjo) |
+| Varfell | T9 (Varfell, capital), T10 (Sigurdshelm), T11 (Halvardshelm), T12 (Oastad) |
+| Restoration | T14 (Eisengrund, informal) |
+| Church | No starting territorial control. Church has cathedral presence in T3 (Himmelenger) and Favour in all major cities. |
+| Guilds (NPC) | No territorial control. Commercial presence in T11 (Halvardshelm), T8 (Eidursjo), T6 (Hafenvalor port). |
+| Niflhel (NPC) | No territorial control. Network presence in T10 (Sigurdshelm), T1 (Valorsplatz), T6 (Hafenvalor). |
+| Löwenritter | T5 (Arcansheld, shared with Crown pre-coup). |
+
+## Faction Capital Territories — Corrected (PP-195)
+| Faction | Capital | Territory | Notes |
+|---------|---------|-----------|-------|
+| Crown | Valorsplatz | T1 | Kingdom capital |
+| Church | Himmelenger | T3 | Grand Cathedral — institutional HQ, Crown territory |
+| Hafenmark | Gransol | T2 | CORRECTED from T6 (Hafenvalor). Hafenvalor is Crown territory. |
+| Varfell | Varfell | T9 | Duchy capital |
+| Löwenritter | Arcansheld | T5 | Fortress |
+| Restoration | None | — | Network faction |
+
+## Guilds — Canonical Identity (PP-195)
+Guilds = commercial network, NOT a territorial faction. They operate in all cities per canonical source.
+Ministry of Guilds monitors their membership lists, arranges contracts, sets taxation.
+**In BG:** Guilds maintain Commercial Presence (CP-tokens, distinct from Ministry AP-tokens) in trade cities.
+Starting CP-tokens: T1 (Valorsplatz), T2 (Gransol), T6 (Hafenvalor), T9 (Varfell), T11 (Halvardshelm).
+CP-tokens generate economic effects without territorial control:
+- Territory with CP-token: Trade orders by any faction: +0.5 Wealth at Year-End (round down; Guilds take the remainder as trade tax — Guilds Wealth +0.5/Year-End per CP-token territory).
+- CP-token persists until Church Interdict or Ministry of Guilds collapse (Ministry Mandate = 0).
+
+## Niflhel — Canonical Identity (PP-195)
+Niflhel = criminal/shadow network. Never territorial. Operates in all cities.
+**In BG:** Network Depth tokens (existing mechanic confirmed). No CP-tokens, no territorial control.
+Starting Network Depth: T1 (depth 1), T10 (depth 2), T6 (depth 1).
+Niflhel's Black Market presence in T10 (Sigurdshelm) generates the Trade +1 Ob special property for that territory — Niflhel's influence depresses legitimate trade even without control.
+
+## Varfell Opening Position — Revised (PP-195)
+Varfell starts with 4 territories (T9, T10, T11, T12). Strong starting position territorially.
+Mechanical handicap is NOT positional scarcity — Varfell has the most starting territories.
+Handicap is defensive: Varfell's territories are surrounded by mountains and Thread Wounds.
+- T9 → T5 (Arcansheld): Fort 3 mountain pass. Löwenritter garrison.
+- T9 → T2 (Gransol): Hafenmark territory; direct border conflict risk.
+- T12/T13/T14: Thread Wound sites; RS cost for occupation.
+The fortification constraint (PP-191) is accurate but the framing changes: Varfell has territory but is hemmed in by the mountain range and cannot easily expand outward. Intelligence, not conquest, is the correct path — confirmed by canonical geography.
+
+## Hafenmark Opening Position — Revised (PP-195)
+Hafenmark starts with 3 territories (T2, T4, T8). Duchy capital = T2 Gransol.
+T4 (Spartfell) = Altonian border — exposed to IP events.
+T8 (Eidursjo) = forest/lake terrain, adjacent to Varfell (T9) — eastern exposure.
+Hafenmark is flanked: Altonia to the east (T4), Varfell to the west (T8→T9), Crown to the south (T2→T1 corridor).
+Parliamentary strategy is correct — Hafenmark cannot win through military expansion; it wins through institutional influence.
+
+## Crown Opening Position — Revised (PP-195)
+Crown starts with 6 territories (T1, T3, T5, T6, T7, T13 nominal).
+Most territories, but dispersed along the coast and south.
+T3 (Himmelenger) is Crown territory but Church has deep institutional presence — Crown cannot use T3 for standard military purposes without Church backlash (Institutional Mandate trigger).
+T13 (Stillhelm) is nominal — Crown claims it but exercises no governance (non-Thread orders +1 Ob).
+Effective starting territories: T1, T5, T6, T7 = 4 territories with real governance. T3 = contested presence. T13 = unclaimed frontier.

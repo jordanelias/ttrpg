@@ -2103,3 +2103,14 @@ patches:
   applied_to_version: "v0.7.3"
   status: applied
   applied_commit: pending
+
+- id: PP-195
+  date: 2026-04-02
+  severity: P1
+  description: "Territory table reconciled from physical map + canonical source. Hafenmark = T2 (Gransol capital)/T4 (Spartfell)/T8 (Eidursjo). Varfell = T9/T10/T11/T12 (4 territories at start). Crown = T1/T3/T5/T6/T7/T13. Hafenvalor = Crown port T6 (not Hafenmark capital). Church has no starting territorial control (cathedral presence in T3 only). Guilds/Niflhel: commercial/network presence only, no territorial control. Adjacency table derived from physical map. Resolves ED-107."
+  finding_id: "ED-107 / Physical map + canonical source"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.4"
+  status: applied
+  applied_commit: pending
