@@ -1947,3 +1947,17 @@ editorial_decisions:
     propagation_status: pending
     related_ids: []
     tags: [threadwork, hybrid, board_game, coherence, design_decision]
+
+  - id: ED-107
+    date_flagged: 2026-04-02
+    date_resolved: null
+    source: canonical_source_review
+    description: "Territory assignment conflict: canonical source document establishes duchy boundaries that differ from v04 BG map. Hafenmark should control T2 (Gransol, duchy capital), T4 (Spartfell), T8 (Eidursjo). Varfell should control T10 (Sigurdshalm), T11 (Halvardshelm), T12 (Oastad). Crown should control T7 (Lowenskyst). Church has cathedral presence in T3 (Himmelenger, Crown territory) but not political control. This would eliminate Guilds NPC and Niflhel NPC from starting territorial positions. User decision required before map reassignment."
+    full_flag_text: "[EDITORIAL: ED-107 — Ducal geography conflict. Does BG map use canonical political geography or deliberate gameplay abstraction?]"
+    status: open
+    priority: P1
+    decision: null
+    propagation_targets: [references/params_board_game.md, compilation/v0.14/stage_bg_board_game_mode.md]
+    propagation_status: pending
+    related_ids: []
+    tags: [board_game, territory, geography, canon_conflict, blocker]

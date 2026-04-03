@@ -2092,3 +2092,14 @@ patches:
   applied_to_version: "v0.7.2"
   status: applied
   applied_commit: pending
+
+- id: PP-194
+  date: 2026-04-02
+  severity: P1
+  description: "Canonical source integration: Church Four Cardinals (Fortitude/Justice/Prudence/Temperance) with BG mechanics; Church levy rule (Crown may raise 2/3 Church levies); Excommunication penance mechanic; Lowenritter canonical structure (Lions Table/Helm/Civic Arm); Riskbreakers corrected as Lowenritter sub-unit; Ministry canonical identity (ministries of Law/Guilds/Logothetes/Granaries/Water); Parliament nomination mechanic; Royal Deposition mechanic; Ducal geography conflict flagged as ED-107."
+  finding_id: "Original canonical source documents"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.3"
+  status: applied
+  applied_commit: pending
