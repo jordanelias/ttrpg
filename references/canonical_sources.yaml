@@ -34,7 +34,7 @@ systems:
     design_doc: designs/ttrpg/threadwork_redesign_v25.md
     compilation_stage: compilation/v0.14/stage3_thread_operations.md
     compilation_current: false
-    note: "stage3 is EMPTY/STALE. threadwork_redesign_v25 is canonical. PP-190–209 applied 2026-04-02. WARNING (AUD-P0-01): PP-232 changes (Leap pool+Spirit, Leap Failure outcome, POP TN 8, eligibility threshold removed) applied to params_threadwork.md but NOT to threadwork_v25.md. Params is de facto authority for PP-232 content. Propagation required."
+    note: "stage3 is EMPTY/STALE. threadwork_redesign_v25 is canonical. PP-190–209 applied 2026-04-02. PP-232 changes propagated to threadwork_v25.md 2026-04-04 (Leap pool+Spirit, Leap Failure revised, POP TN 8, eligibility simplified, Memory→Recall)."
 
   southernmost:
     canonical: compilation/v0.14/stage4_southernmost.md
@@ -78,7 +78,7 @@ systems:
     design_doc: designs/combat/combat_design_v1.md
     compilation_stage: compilation/v0.14/stage8_combat.md
     compilation_current: false
-    note: "combat_design_v1.md has PP-086-092, MT-01 faction rosters, three-mode framing. stage8 has subset. Use design doc. WARNING (AUD-P0-01): PP-232 applied to params_combat.md but NOT to combat_design_v1.md. Params is de facto authority for PP-232 content (weapon system, wound penalties, initiative, Health formula, Stamina floor). Propagation required."
+    note: "combat_design_v1.md has PP-086-092, MT-01 faction rosters, three-mode framing. stage8 has subset. Use design doc. PP-232 propagated 2026-04-04 (weapon system rebuild, wound penalty, initiative, Health formula, Stamina floor, armour wield constraint, ED-130)."
 
   mass_combat:
     canonical: designs/mass_combat/mass_battle_v3.md
@@ -87,7 +87,7 @@ systems:
     design_doc: designs/mass_combat/mass_battle_v3.md
     compilation_stage: compilation/v0.14/stage8_combat.md  # §8.9
     compilation_current: false
-    note: "mass_battle_v3 has 7-phase structure (ED-050), ST-MB patches, Altonian provisional stats. stage8 §8.9 is behind. WARNING (AUD-P0-01): PP-232 (renames) and PP-233 (core formula) applied to params_mass_combat.md but NOT to mass_battle_v3.md. 84 stale terminology instances. Params is de facto authority. Propagation required."
+    note: "mass_battle_v3 has 7-phase structure (ED-050), ST-MB patches, Altonian provisional stats. stage8 §8.9 is behind. PP-232 (renames) and PP-233 (core formula) propagated to mass_battle_v3.md 2026-04-04. 84 terminology fixes + formula rebuild."
 
   social_contest:
     canonical: designs/contest/social_contest_system_v2.md

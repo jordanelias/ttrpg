@@ -12,7 +12,7 @@
 
 *PP-189, 2026-04-02*
 
-## Version: v0.6 (ST-BG/INT + P-12–P-32 applied in-place; PART THIRTEEN and PART TEN/ELEVEN eliminated; pure mechanical spec)
+## Version: v0.6 (ST-BG/INT + P-12–P-32 applied in-place; PART THIRTEEN and PART TEN/ELEVEN eliminated; pure mechanical spec) PP-232 terminology (Cohesion→Discipline) applied 2026-04-04.
 ## Status: WORKING DESIGN — read straight through. No appendix sections.
 ## v0.4 → v0.5 → v0.6 Transition Document
 **Date:** 2026-04-01
@@ -81,7 +81,7 @@ Every action retains at least one point of resistance. This changes the effectiv
 
 > **P-23:** **Theocracy Counter Seizure threshold:** Church Theocracy Counter 80+ triggers seizure at next Accounting. Territory roll: Church Military vs Defender Military, Ob 2. Each success: one contested territory flips. Hard cap: maximum 2 territory transfers per seizure event per faction (prevents single-season consolidation).
 
-> **Clarification (PP-042):** "Military victory alone produces no Theocracy Counter or Rendering Stability change. Thread operations performed during a battle produce standard Rendering Stability changes per §A.10 regardless of battle outcome. A Church army using Thread-enhanced soldiers (e.g., Weaving unit Cohesion) generates Rendering Stability drift from those specific Thread operations — not from the act of winning."
+> **Clarification (PP-042):** "Military victory alone produces no Theocracy Counter or Rendering Stability change. Thread operations performed during a battle produce standard Rendering Stability changes per §A.10 regardless of battle outcome. A Church army using Thread-enhanced soldiers (e.g., Weaving unit Discipline) generates Rendering Stability drift from those specific Thread operations — not from the act of winning."
 
 > **P-18:** **Unit cap at Military:** Number of units deployed cannot exceed current Military stat. Excess units over Military are immediately removed — they cannot be held as reinforcements beyond the cap.
 
@@ -169,10 +169,10 @@ Every action retains at least one point of resistance. This changes the effectiv
 ## I-05 — Battle Resolution: Both Sides Roll, No Clear Victory Determination
 
 **Location:** B8, Battle Resolution.
-**Error:** "Each side rolls their Military stat + Commander Coordination modifier + Disposition modifier." Outcomes are then listed only from the attacker's perspective: "Overwhelming win: losing side's unit destroyed... Success win: losing side Cohesion −2... Partial (attacker)... Failure (attacker)." But both sides roll. The outcome table only resolves the attacker's roll. What happens if the attacker rolls Success and the defender also rolls Success? Is victory assigned by net margin? By who rolled higher net successes?
+**Error:** "Each side rolls their Military stat + Commander Coordination modifier + Disposition modifier." Outcomes are then listed only from the attacker's perspective: "Overwhelming win: losing side's unit destroyed... Success win: losing side Discipline −2... Partial (attacker)... Failure (attacker)." But both sides roll. The outcome table only resolves the attacker's roll. What happens if the attacker rolls Success and the defender also rolls Success? Is victory assigned by net margin? By who rolled higher net successes?
 **Correction (PATCH P-16):** See below. The resolution needs a "compare net successes" rule.
 
-> **Clarification (PP-034):** Drawn battle: "On exactly tied net successes: the battle is drawn. Both sides take Cohesion −1 and hold position. Neither side claims or loses territory from this engagement. On the subsequent turn, the initiating attacker may re-engage or withdraw; the territory is contested."
+> **Clarification (PP-034):** Drawn battle: "On exactly tied net successes: the battle is drawn. Both sides take Discipline −1 and hold position. Neither side claims or loses territory from this engagement. On the subsequent turn, the initiating attacker may re-engage or withdraw; the territory is contested."
 
 ---
 
@@ -600,15 +600,15 @@ Crown player correctly identifies: AER 3 is the firewall. If Church Stability dr
 **Threat tree:**
 - Hafenmark pursues Reformed Settlement (RDT 5, possible at Season 13): AER −2.
 - If AER → 1: Institutional Pressure threshold → 75. Current Institutional Pressure 70 → Vanguard deploys in 3 seasons.
-- If Löwenritter successfully holds T4 (Overwhelming March established control): Vanguard must fight through T4 to advance. Löwenritter Military 6 vs Altonian Vanguard Military 5 Cohesion 5: contested battle.
+- If Löwenritter successfully holds T4 (Overwhelming March established control): Vanguard must fight through T4 to advance. Löwenritter Military 6 vs Altonian Vanguard Military 5 Discipline 5: contested battle.
 
 **BRANCH A: Hafenmark proceeds with Reformed Settlement. Church resists. AER −2.**
 Institutional Pressure 70, AER 1, threshold reverts to 75. Next season: Institutional Pressure +2 → 72. Season following: Institutional Pressure 74. Season after: Institutional Pressure 76 → Vanguard deploys.
 
-**Löwenritter in T4 with Military 6 vs Vanguard Military 5, Cohesion 5:**
+**Löwenritter in T4 with Military 6 vs Vanguard Military 5, Discipline 5:**
 Battle: Löwenritter Offensive (+2D, Ob 2) vs Vanguard Balanced (Ob 2).
 Löwenritter: Military 6 +2D (Offensive) = 8 dice vs Ob 2. Roll 8d10: 9, 7, 8, 3, 10, 2, 7, 5 → 1+1+1+2+1 = 6 net. Ob 2, surplus 4 = Overwhelming. Vanguard unit destroyed. Löwenritter territory controlled.
-Vanguard (defender, Balanced vs Offensive): Cohesion 5 +fort? T4 has Fort 2: +2D. Military 5 +2D = 7 dice vs Ob 2. Roll 7d10: 8, 4, 9, 1, 3, 7, 6 → 1+1+1-1 = 2 net. Ob 2 = Success. Löwenritter unit Cohesion −2 (from defender's Success — see PATCH P-16 resolution rules).
+Vanguard (defender, Balanced vs Offensive): Discipline 5 +fort? T4 has Fort 2: +2D. Military 5 +2D = 7 dice vs Ob 2. Roll 7d10: 8, 4, 9, 1, 3, 7, 6 → 1+1+1-1 = 2 net. Ob 2 = Success. Löwenritter unit Discipline −2 (from defender's Success — see PATCH P-16 resolution rules).
 
 **Resolution (per PATCH P-16, compare net successes):** Löwenritter 6 net vs Vanguard 2 net. Löwenritter wins by 4 (overwhelming margin). Vanguard unit destroyed; Institutional Pressure does not advance to Season 2 invasion. Institutional Pressure −5 (military rebuff). Institutional Pressure: 76 → 71. Below threshold again. AER consequence: Vanguard repelled → AER −1 (optional, reflect Altonian embarrassment).
 
