@@ -1,7 +1,11 @@
-<!-- version: v0.14+design-ST7-R1 | sources: designs/mass_combat/mass_battle_v3.md (v4.4, PP-106) | last_updated: 2026-04-03 -->
+<!-- version: v0.14+design-ST7-R2 | sources: designs/mass_combat/mass_battle_v3.md (v4.4, PP-106) | last_updated: 2026-04-03 -->
 <!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D; PP-191 (Lock phase); PP-192 (×3 RS multiplier); PP-222, PP-224, PP-225, PP-227, PP-229, PP-231 (SIM-X-22 provisional) -->
 <!-- PP-232: Unit stats renamed (Strength→Size, Combat Power→Power, Cohesion→Discipline, Coherence Rating/Command Rating→Command); -->
 <!--         Power derived from Size; damage formula references updated. -->
+<!-- PP-233: Unit combat formula established. Pool = min(Size,Command)+Command. -->
+<!--         Health per Size = min(Discipline,Command)+DR. Total Health = Size×H. -->
+<!--         Damage per success = 1+Power. Size after = ⌊remaining Health÷H⌋. -->
+<!--         Damage simultaneous. Size loss only reduces pool when Size>Command. -->
 <!-- PHASE STRUCTURE: 7 phases. Thread split: offensive Phase 4, support Phase 6. All damage simultaneous Phase 6 Step 1. -->
 <!-- mass_battle_v3.md is a design proposal. Values marked [COMPILED] are from stage8; [PROPOSAL] from v3. -->
 <!-- STALE CHECK: Verify [COMPILED] values against current ruleset; verify [PROPOSAL] against compiled stage8 update. -->
@@ -25,9 +29,49 @@ Damage simultaneity: Effective Power for Phase 5 calculated from Size as of Phas
 > **Lock phase assignment in mass combat (PP-191):** [PROVISIONAL] Offensive Lock (targeting enemy formation) = Phase 4; declared at Phase 1 as "offensive." Support Lock (stabilising own formation) = Phase 6 Step 5; declared at Phase 1 as "support." If undeclared: defaults to Phase 6. A practitioner may not perform both Offensive and Support Lock in the same battle turn.
 
 
-## Core Formula
-Effective Power = min(Power, current Size)
-As Size drops: fewer dice regardless of quality. Power is the ceiling; Size determines reach. (PP-232)
+## Core Formula (PP-233)
+
+### Definitions
+| Term | Value |
+|------|-------|
+| Effective Size contribution to pool | min(Size, Command) |
+| Effective Discipline contribution to Health | min(Discipline, Command) |
+| Health per Size (H) | min(Discipline, Command) + DR |
+| Total Health | Size × H |
+| Pool | min(Size, Command) + Command |
+| Damage per success | 1 + Power |
+| Damage dealt | successes × (1 + Power) |
+| Size after round | ⌊ remaining Health ÷ H ⌋ |
+| Destroyed | Size = 0 |
+
+### Key rules
+- **Command caps both Size and Discipline contributions** — to pool and to Health respectively. Full Size still counts for total Health.
+- **Pool = min(Size, Command) + Command.** A Size 2 Command 5 unit rolls 7D. Size loss only reduces the pool when Size > Command.
+- **Damage is simultaneous.** Both sides deal and receive damage before Size is recalculated. A unit destroyed this round still delivers its outgoing damage.
+- **H is fixed for the unit** (Discipline and DR don't change mid-battle). Current Size = ⌊ remaining Health ÷ H ⌋.
+
+### Worked example
+**Group 1:** Size 5, Command 5, Discipline 5, Power 3 (Heavy Infantry), DR 2
+- Pool = min(5,5)+5 = 10D
+- H = min(5,5)+2 = 7
+- Total Health = 5×7 = 35
+- Damage/success = 1+3 = 4
+
+**Group 2:** Size 6, Command 3, Discipline 3, Power 1 (Light Infantry), DR 0
+- Pool = min(6,3)+3 = 6D  ← Size capped at Command
+- H = min(3,3)+0 = 3
+- Total Health = 6×3 = 18  ← full Size used
+- Damage/success = 1+1 = 2
+
+**Round (4 successes G1, 5 successes G2 — simultaneous):**
+| | Group 1 | Group 2 |
+|---|---|---|
+| Damage dealt | 4×4 = 16 | 5×2 = 10 |
+| Incoming | 10 | 16 |
+| Health after | 25 | 2 |
+| Size after | ⌊25÷7⌋ = **3** | ⌊2÷3⌋ = **0 — destroyed** |
+
+Group 2 is destroyed but their 10 damage resolves first (simultaneous). Group 1 drops Size 5→3.
 
 ## Unit Stats (1–7 unless noted)
 | Stat | Description |

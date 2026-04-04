@@ -2560,3 +2560,13 @@ patches:
   status: applied
   applied_commit: "2026-04-03-pp232-docx-review-batch"
   editorial_flags_raised: [ED-127, ED-128, ED-129, ED-130, ED-131, ED-132, ED-133, ED-134, ED-135]
+
+- id: PP-233
+  date: "2026-04-03"
+  severity: P1
+  description: "Mass battle unit combat formula established. Pool = min(Size,Command)+Command. Command caps both Size contribution to pool and Discipline contribution to Health (min(Discipline,Command)+DR = Health per Size H). Total Health = Size×H using full Size. Damage per success = 1+Power. Size after = floor(remaining Health / H). Damage simultaneous — destroyed unit still delivers outgoing damage. Size loss only reduces pool when Size>Command."
+  source: design
+  affects:
+    - references/params_mass_combat.md
+  status: applied
+  applied_commit: "2026-04-03-pp233-mass-combat-unit-formula"
