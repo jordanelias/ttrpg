@@ -1,5 +1,5 @@
 # VALORIA — MASS BATTLE SYSTEM v4
-## Version: PP-232 (renames), PP-233 (formula) applied 2026-04-04. Prior: v4.6 (PP-175 applied: mass combat ranged DR scaled ÷2 from personal combat — provisional ED-096)
+## Version: v4.5 — PP-232 (renames: Strength→Size, CP→Power, Cohesion→Discipline, CR→Command) + PP-233 (core formula) propagated.
 ## Status: WORKING DESIGN — no appendix sections. Read straight through.
 ## Three-mode: TTRPG/Hybrid (Part A); Board Game (Part B); Hybrid Handoff (§B.5)
 ## All P1/P2/P3 patches applied. Gaps filled. Editorial notes flagged.
@@ -16,13 +16,13 @@ Offence/Defence, simultaneous resolution, TN-based successes, DR applied to
 damage. Two stats unified in personal combat split here:
 
 - **Size** — headcount. Health pool. Casualties reduce it directly.
-- **Power (Power)** — fighting effectiveness per soldier. Equipment and
+- **Power** — fighting effectiveness per soldier. Equipment and
   training. Determines dice rolled.
 
-**Effective Combat Pool = min(Size, Command) + Command**
+**Effective Combat Pool = min(Size, Command) + Command** (PP-233)
 
 As Size drops, the pool shrinks — fewer soldiers means fewer dice
-regardless of individual quality. Power is the ceiling; Size determines
+regardless of individual quality. Command caps both Size and Power contributions. (PP-233) Size determines
 whether you reach it.
 
 **Design axiom: Generalship dominates.** Command asymmetry is intentional. A Command=7
@@ -75,7 +75,7 @@ Scale is narrative only — no mechanical change except Thread Thread Sensitivit
 
 **Size** — health pool (headcount). At 0: destroyed.
 
-**Power (Power)** — dice pool ceiling.
+**Power** — dice pool ceiling.
 
 | Power | Tier |
 |---|---|
@@ -126,19 +126,19 @@ permanent for that battle. *[NEW-P2-05 — confirmed as intended Command asymmet
 modifier (cap 7).
 
 Morale degradation triggers:
-- Str dropped below 50% of max: −1
-- Str dropped below 25%: −1 additional
+- Size dropped below 50% of max: −1
+- Size dropped below 25%: −1 additional
 - Discipline broken this turn: −1
 - Allied unit routed in same zone: −1
-- General incapacitated: −1
-- General killed: −2
+- General incapacitated (Stage 1): −1
+- General killed (Stage 2): −2
 - Flanked and lost exchange: −1
 - No engagement for 2+ consecutive turns (idle army): −1 *[P2-02/P2-04]*
 
-**Morale cap: −3 per Cascade Phase.** General killed deals −2
+**Morale cap: −3 per Cascade Phase.** General killed (Stage 2) deals −2
 separately, not subject to the cap. *[P1-03]*
 
-> **Clarification:** "Application order: Apply all non-general Morale changes first, capping the total at −3 from these sources. Then apply general death −2 additionally (this −2 is separate and not subject to the cap). Maximum total Morale loss in one Cascade Phase: −5 (−3 capped + −2 general kill)."
+> **Clarification:** "Application order: Apply all non-general Morale changes first, capping the total at −3 from these sources. Then apply Stage 2 general death −2 additionally (this −2 is separate and not subject to the cap). Maximum total Morale loss in one Cascade Phase: −5 (−3 capped + −2 general kill)."
 
 > **Artillery cascade ruling (PP-198):** Multiple simultaneous HBl unit destructions in one Cascade Phase each trigger Morale −1 (allied unit routed). Total non-general Morale loss still capped at −3. No runaway cascade possible from Artillery alone.
 
@@ -193,11 +193,11 @@ Command governs:
 Cha+Cog derivation. *[Command-P2-02]*
 
 **General two-stage death:** *[P1-02]*
-- **General Incapacitated:** −1 Morale all units, Command halved, Morale floor
+- Stage 1 (incapacitated): −1 Morale all units, Command halved, Morale floor
   suspended. Stabilise in Phase 5 with Medicine Ob 2 (1-turn window).
-- **General Killed:** General Killed fires at start of following turn's Phase 5
+- Stage 2 (killed): Stage 2 fires at start of following turn's Phase 5
   if not stabilised. −2 Morale (outside cap), Command = 0, all units uncommanded.
-  *[NEW-P2-02 — Incapacitated → Killed timing confirmed]*
+  *[NEW-P2-02 — Stage 1 → 2 timing confirmed]*
 
 **General in personal combat:** suspends all Command effects. Re-establish command
 with Command check Ob 2 in Phase 1 of any subsequent turn. *[P2-10]*
@@ -314,7 +314,7 @@ Summary:
 **Phase 5 — Engagement** (max 3 simultaneous, TTRPG) *[P1-01]*
 
 Per engagement:
-1. Effective Pool = min(Size, Command) + Command (Size as of Phase 3 end) − Discipline penalty
+1. Effective Pool = min(Size, Command) + Command − Discipline penalty (PP-233; Size as of Phase 3 end)
 2. Apply Formation modifier
 3. Split into Offence / Defence (both sides simultaneously)
 4. Roll. Net hits = Offence succs − Defence succs
@@ -363,7 +363,7 @@ both sides lose 1 Morale in Phase 7. *[P2-02, P2-04]*
 | Hammer & Anvil | Shield Wall holds; Fast unit envelops | 3 | Break Anvil first |
 
 Split strategy note: Splitting only helps if defender must split too. Attacker
-splitting Str=6 into 3+3 against undivided Str=5 defender is disadvantageous
+splitting Size=6 into 3+3 against undivided Size=5 defender is disadvantageous
 — defender's full pool exceeds each sub-engagement. *[P2-14]*
 
 ---
@@ -372,7 +372,7 @@ splitting Str=6 into 3+3 against undivided Str=5 defender is disadvantageous
 
 | Terrain | Effect |
 |---|---|
-| River crossing | −1 Speed tier; −1D Off; Discipline check (treat Str lost = 1) |
+| River crossing | −1 Speed tier; −1D Off; Discipline check (treat Size lost = 1) |
 | Uphill | Defender +1D Def; attacker −1D Off |
 | Forest / broken | Cavalry → Standard; flanking impossible |
 | Walls / fortifications | Defender +3 DR; no flanking; Slow cannot advance |
@@ -469,7 +469,7 @@ Over-pursuing exposes flanks. *[confirmed]*
 Natural: +1 Size per campaign season.
 Accelerated: 1 Faction Resource per additional Size point.
 Maximum: cannot exceed original Size at army creation.
-Destroyed units (Str 0) cannot be restored — must raise new unit at full
+Destroyed units (Size 0) cannot be restored — must raise new unit at full
 Resource cost. Thread effects on units (over-actualisation, Locks) persist
 across battle boundaries unless cleared. *[EDGE-08]*
 
@@ -483,19 +483,19 @@ check thresholds]
 **Muster output (per Muster action):** *[FACTION-P2-03 — proposed, EDITORIAL]*
 A Muster action produces 1 unit with Size = 2, Power = faction Military ÷ 2
 (round up). Deploys following season. Multiple Muster actions stack.
-[EDITORIAL: confirm Str=2 and Power derivation from Military stat]
+[EDITORIAL: confirm Size=2 and Power derivation from Military stat]
 
 ---
 
 ### A.14 CROSS-SYSTEM NOTES
 
 **Woven units — brittleness:** Thread-Woven Discipline or Morale boosts are
-subject to §4.3.4 brittleness rules. Taking Str loss > Discipline in a single
+subject to §4.3.4 brittleness rules. Taking Size loss > Discipline in a single
 turn qualifies as a non-Thread event of sufficient severity — Game Master may rule
 the Woven configuration shatters into a Shifting Object. A Woven unit can be
 simultaneously more and less resilient than an unworked unit. *[EDGE-07]*
 
-> **Clarification:** "A Woven unit configuration that shatters (Str loss in a single turn > current Discipline) does not become a Shifting Object during the battle. For the remainder of the battle, it fights at Line formation, Discipline 1. The Shifting Object status is registered for post-battle Thread consequences — the Game Master tracks this and applies it in the narrative aftermath. This prevents mid-battle stat volatility while preserving the Thread consequence."
+> **Clarification:** "A Woven unit configuration that shatters (Size loss in a single turn > current Discipline) does not become a Shifting Object during the battle. For the remainder of the battle, it fights at Line formation, Discipline 1. The Shifting Object status is registered for post-battle Thread consequences — the Game Master tracks this and applies it in the narrative aftermath. This prevents mid-battle stat volatility while preserving the Thread consequence."
 
 **Thread Tension references in stage5_clocks.md:** Compilation error — all Thread Tension references
 must be converted to Rendering Stability with inversion (Thread Tension +N → Rendering Stability −N). *[EDGE-06 — P1,
@@ -522,7 +522,7 @@ compatibility bridge.
 Inherits from B6 (existing BG unit table). No changes to existing stats.
 TTRPG equivalence added for hybrid translation:
 
-| BG Unit | Martial | Endur | Discipline | Health | TTRPG Power | TTRPG Str [PROV] | TTRPG Morale [PROV] | TTRPG Weapon | TTRPG Armour | Dmg Mod [PROV] |
+| BG Unit | Martial | Endur | Discipline | Health | TTRPG Power | TTRPG Size [PROV] | TTRPG Morale [PROV] | TTRPG Weapon | TTRPG Armour | Dmg Mod [PROV] |
 |---|---|---|---|---|---|---|---|---|---|---|
 | Levy | 1 | 1 | 1 | 7 | 1 | 3 | 2 | LightCut | None | +1 |
 | Light Infantry | 3 | 3 | 3 | 9 | 3 | 4 | 4 | LightCut | Light | +2 |
@@ -534,8 +534,8 @@ TTRPG equivalence added for hybrid translation:
 | Artillery | 2 | 2 | 2 | 8 | 2 | 3 | 3 | HBl (siege) | None | +3 |
 | Knights Templar | 5 | 5 | 6 | 11 | 5 | 6 | 6 | HeavyBlunt | Heavy | +5 |
 
-Str corrected: user audit −2 all units, −3 Ranged and Artillery (PP-104).
-Dmg Mod: used in Phase 5 damage formula (max(0, net hits + Dmg Mod − DR) = Str loss). [EDITORIAL: ED-062]
+Size corrected: user audit −2 all units, −3 Ranged and Artillery (PP-104).
+Dmg Mod: used in Phase 5 damage formula (max(0, net hits + Dmg Mod − DR) = Size loss). [EDITORIAL: ED-062]
 Ranged weapon: LP (arrows) default — see ED-061 for sub-type split (archer/crossbow/slinger).
 Artillery weapon: HBl (siege) — Volley keyword, no melee.
 Morale values: [PROVISIONAL] — ED-062 scope.
@@ -639,7 +639,7 @@ eliminates mid-phase ghost-unit state (ED-057) and ensures the TTRPG scene
 always opens with a clean, fully-resolved BG state.
 
 **BG → TTRPG unit conversion:** Translate BG unit tokens using §B.2. The table
-provides TTRPG Power, Str (provisional), Morale (provisional), weapon, and armour
+provides TTRPG Power, Size (provisional), Morale (provisional), weapon, and armour
 for each unit type. See the Zoom In/Out Reference Card (designs/gm_ref_cp14/)
 for the one-page summary.
 
@@ -649,8 +649,8 @@ play out in full. BG territory and stat consequences still apply at resolution.
 Clock changes still batch to Accounting.
 
 **Stat translation (TTRPG ↔ BG):**
-- TTRPG unit Size → BG unit Health (Str × 1.5, round up — Health scale
-  is 8–11, Str is 1–7; Str 4 ≈ Health 9)
+- TTRPG unit Size → BG unit Health (Size × 1.5, round up — Health scale
+  is 8–11, Size is 1–7; Size 4 ≈ Health 9)
 - TTRPG general Command → BG commander bonus (Command ÷ 2, round down)
 - TTRPG Discipline → BG Discipline (direct, same scale)
 - TTRPG Morale (rout) → BG Discipline check (rout equivalent)
@@ -665,7 +665,7 @@ All items below require user approval before compilation.
 |---|---|---|
 | Command-EDIT-01 | Military stat → unit Power/Discipline ceiling (§A.4) | Table above — confirm |
 | Command-EDIT-02 | Battle outcome → faction stat consequences (§A.13) | −1 Military/unit destroyed; Stability checks as above |
-| Command-EDIT-03 | Muster → unit stats (§A.13) | Str=2, Power = Military÷2 |
+| Command-EDIT-03 | Muster → unit stats (§A.13) | Size=2, Power = Military÷2 |
 | BG-EDIT-01 | Commander bonus formula (§B.3) | Military ÷ 3, round down |
 | BG-EDIT-02 | Faction-specific tactic cards (§B.4) | 8 faction cards above |
 | CLOCK-EDIT-01 | Institutional Pressure 75+ Altonian invasion unit stats | See simulation report |

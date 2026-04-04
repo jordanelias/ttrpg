@@ -12,7 +12,7 @@
 
 *PP-189, 2026-04-02*
 
-## Version: v0.6 (ST-BG/INT + P-12–P-32 applied in-place; PART THIRTEEN and PART TEN/ELEVEN eliminated; pure mechanical spec) PP-232 terminology (Cohesion→Discipline) applied 2026-04-04.
+## Version: v0.6 (ST-BG/INT + P-12–P-32 applied in-place; PART THIRTEEN and PART TEN/ELEVEN eliminated; pure mechanical spec)
 ## Status: WORKING DESIGN — read straight through. No appendix sections.
 ## v0.4 → v0.5 → v0.6 Transition Document
 **Date:** 2026-04-01

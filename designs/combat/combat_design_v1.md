@@ -1,10 +1,10 @@
 # VALORIA — COMBAT DESIGN (v1)
 ## Date: 2026-04-02
-## Version: v1.5 (PP-232 applied 2026-04-04: weapon system rebuild, wound penalty, initiative, Health formula, Stamina floor, armour wield constraint, ED-130 Stage 1/2 struck). Prior: v1.4 (PP-210–218: Rescue, Dodge, Fibonacci, Anti-Armour, PP-086)
+## Version: v1.5 (PP-232: weapon system rebuild, wound penalty, initiative, Health/Stamina, Stage 1/2 struck; PP-210–218: audit gap fixes — Health formula, Critical Hit, Feint timing, Tie Up, Rescue, Dodge, Fibonacci, Anti-Armour, PP-086)
 ## Status: WORKING DESIGN — not compiled. This is the design-layer source for personal combat.
 ## Authority: Philosophical Foundations → this document → compilation (when ready)
 ## Mode applicability: ALL (TTRPG baseline; scales to Hybrid and Board Game via params)
-## Patches incorporated: PP-086–092, P2-B11 series, PP-165, PP-172, PP-174, PP-210–218, PP-232, PP-172 (SIM-001 ranged subtypes), PP-210–218 (audit gap fixes 2026-04-03)
+## Patches incorporated: PP-086–092, P2-B11 series (from sim_combat_batch_11.md), PP-172 (SIM-001 ranged subtypes), PP-210–218 (audit gap fixes 2026-04-03)
 ## Source checkpoint: compilation/v0.14/stage8_combat.md (for reference values)
 
 ---
@@ -62,16 +62,15 @@ Round duration: 6–10 seconds narrative.
 
 Initiative determines declaration order, not action speed. Higher initiative = more information.
 
+**Exchange 1:** Higher Attunement acts last (highest information advantage).
+**Subsequent rounds:** Initiative transfers to the exchange winner.
+**Tie result:** No damage to either side; initiative stays with current holder.
+
 **Declaration order each round:**
 1. Lower initiative holder declares Offence/Defence split first.
 2. Higher initiative holder sees that split, then declares their own.
 
-**Exchange 1 initiative:** Higher Attunement acts last (information advantage).
-**Subsequent rounds:** Transfers to exchange winner.
-**Tie result:** No damage to either side; initiative stays with current holder.
-
-**Board Game:** No personal initiative — BG battle is unit-level abstraction.
-**Hybrid:** Personal combat within Zoom In uses TTRPG initiative rules.
+Initiative replaces the prior range-priority system. Positional advantage from weapon reach is handled by the weapon TN matrix (§5). Longer weapon user must manoeuvre at disadvantage to re-establish distance.
 
 ---
 
@@ -84,7 +83,7 @@ Initiative determines declaration order, not action speed. Higher initiative = m
 | Establish Distance | Move to preferred range. Contested Agility if opponent opposes. |
 | Take a Breath | No combat action. Recover Stamina by Endurance score. Cannot if in immediate melee contact. |
 | Full Guard | All dice to Defence. Cannot Attack. |
-| Disarm | Offence roll vs opponent's Strength+Agility Ob. Success: weapon dropped. Requires Close range. |
+| Disarm | Offence roll vs opponent's STR+Agility Ob. Success: weapon dropped. Requires Close range. |
 | Retrieve | Pick up dropped weapon/item. Opposed Agility if in melee contact. |
 | Tie Up | Close range. Offence roll. Success: both parties suffer −2D to Combat Pool for one round; opponent cannot use reach advantage; escape requires Strength contest. Blocks escape for one round. (PP-213) |
 | Escape | Agility contest vs opponent. Requires not being Tied Up. |
@@ -98,7 +97,7 @@ Initiative determines declaration order, not action speed. Higher initiative = m
 
 ## 5. WEAPON SYSTEM
 
-### Weapon System (PP-232)
+### Weapon TN Matrix (PP-232)
 
 Weapons are defined by three binary axes. Base TN = 7. TN modifiers:
 
@@ -110,7 +109,17 @@ Weapons are defined by three binary axes. Base TN = 7. TN modifiers:
 
 Final Hit TN = 7 + reach modifier + weight modifier + type modifier.
 
-**Example weapons by combination:**
+**STR minimums:** Each "Heavy" or "Long" axis adds +1 to minimum STR.
+| Combination | Min STR |
+|-------------|---------|
+| Short Light (either type) | 1 |
+| Short Heavy or Long Light | 2 |
+| Long Heavy (either type) | 3 |
+| Long Heavy Blunt | 4 |
+
+Penalty if 1 below minimum: −1D Combat Pool. Cannot wield if 2+ below minimum.
+
+**"Blade"** encompasses cutting, piercing, and stabbing weapons. **"Blunt"** encompasses bludgeoning weapons.
 
 | Combination | TN | Examples |
 |-------------|-----|---------|
@@ -124,25 +133,40 @@ Final Hit TN = 7 + reach modifier + weight modifier + type modifier.
 | Long Heavy Blunt | 8 | War hammer, pollaxe |
 | Unarmed | 8 | Fists, grappling, improvised |
 
-**Strength minimums:** Each "Heavy" or "Long" axis adds +1 to minimum Strength.
+[EDITORIAL: ED-129 — Ranged weapon TN integration into this matrix pending.]
 
-| Combination | Min STR |
-|-------------|---------|
-| Short Light (either type) | 1 |
-| Short Heavy or Long Light | 2 |
-| Long Heavy (either type) | 3 |
-| Long Heavy Blunt | 4 |
+### Ranged Weapons (retained from prior system, pending ED-129)
 
-Penalty if 1 below minimum: −1D Combat Pool. Cannot wield if 2+ below minimum.
+| Weapon | TN | Notes |
+|--------|-----|-------|
+| LP — Light Piercing (bow) | 7 | Min STR 2 |
+| HP — Heavy Piercing (crossbow) | 6 | Min STR 1; full-round Reload after each shot |
+| Sling (all ammo) | 8 | Min STR varies by ammo |
 
-**Blade vs Blunt:** "Blade" encompasses cutting, piercing, and stabbing weapons. "Blunt" encompasses bludgeoning weapons.
-
-[EDITORIAL: ED-129 — Ranged weapon TN integration into Short/Long/Light/Heavy/Blade/Blunt matrix pending. Current ranged entries (LP, HP, sling) not yet mapped to new system.]
+Sling ammo modifier (vs medium and heavy armour only):
+| Ammo | Dmg mod vs med/heavy |
+|------|----------------------|
+| Clay | +0 |
+| Rock | +1 |
+| Metal | +2 |
+| Lead | +3 |
 
 ### Damage Resolution (PP-232)
 Net hits = Offence successes − Defence successes (minimum 0).
-Damage = net hits + STR + weapon modifier vs armour tier (see §6 Armour table).
+Damage = net hits + STR + weapon modifier vs armour tier (see table below).
 Critical Hit: net hits ≥ 3 → weapon modifier doubled before applying armour reduction. (PP-211)
+
+STR is confirmed as a damage addition (PP-232).
+
+**Weapon modifier vs armour tier:**
+| Weapon Class | vs None | vs Light | vs Medium | vs Heavy |
+|--------------|---------|----------|-----------|----------|
+| Light Blade | +3 | +2 | +1 | +0 |
+| Heavy Blade | +6 | +4 | +2 | +0 |
+| Light Blunt | +3 | +3 | +3 | +3 |
+| Heavy Blunt | +5 | +5 | +5 | +5 |
+
+[EDITORIAL: ED-131 — Exact modifier values require playtesting confirmation.]
 
 ### Degree Table (for combat outcomes requiring degree, e.g. Feint, Disarm)
 | Net Successes | Degree |
@@ -189,13 +213,17 @@ Cover must be declared in Phase 1 (Movement) to take effect. Cover does not move
 
 ## 6. ARMOUR
 
-### Melee DR
-| Tier | DR vs Light Cut | DR vs Heavy Cut | DR vs Light Blunt | DR vs Heavy Blunt | Stamina modifier |
-|------|----------------|----------------|------------------|------------------|-----------------|
-| None | 0 | 0 | 0 | 0 | +0 |
-| Light | 2 | 1 | 1 | 0 | −0 |
-| Medium | 4 | 3 | 2 | 1 | −1 |
-| Heavy | 6 | 5 | 3 | 1 | −2 |
+### Armour (PP-232)
+
+| Armour | STR Min | Stamina Mod |
+|--------|---------|-------------|
+| None | — | +0 |
+| Light | 2 | +0 |
+| Medium | 3 | −1 |
+| Heavy | 4 | −2 |
+
+Cannot wear armour if it would reduce Stamina to 1 or below (PP-232).
+Damage Reduction (DR) is subsumed into the weapon modifier vs armour tier table (see Damage Resolution above).
 
 ### Ranged DR
 | Tier | DR vs LP (arrow) | DR vs HP (bolt) | DR vs LBl (stone) | DR vs HBl (lead) |
@@ -211,29 +239,27 @@ DR is subtracted from damage after net hits + weapon modifier.
 
 ---
 
-## 7. WOUNDS AND STAMINA (PP-232)
+## 7. WOUNDS AND STAMINA
 
 ### Wounds
-Health = (Endurance + 6) × (wound count + 1). Wound threshold every (Endurance + 6) points of accumulated damage. At 0 Health: incapacitated. (PP-232)
+Health = Endurance + 6 (range 7–13). Damage accumulates each round against Health. At 0 Health: take one Wound, Health resets to full. (PP-210)
 
-| Endurance | Health per wound interval | Max Wounds before incapacitation |
-|-----------|-------------------------|----------------------------------|
-| 1–3 | 7–9 | 2 |
-| 4–5 | 10–11 | 3 |
-| 6–7 | 12–13 | 4 |
+| Endurance | Max Wounds before incapacitation |
+|-----------|----------------------------------|
+| 1–3 | 2 |
+| 4–5 | 3 |
+| 6–7 | 4 |
 
-At max Wounds: incapacitated (Health = 0). No staged incapacitation states. (ED-130 resolved)
-Each Wound: **−1D Combat Pool only** (no Ob penalty). (PP-232)
-
-Critical hits (net ≥ 3) can deal multiple wounds simultaneously if damage crosses multiple thresholds.
+At max Wounds: incapacitated. Health track runs to 0 = incapacitated. No staged incapacitation states. (PP-232, ED-130 resolved)
+Each Wound: −1D Combat Pool only (cumulative). No Ob penalty from wounds. (PP-232, replaces PP-165)
 
 ### Stamina
 Stamina = Endurance + Relevant History + 1 − armour modifier. **Minimum 2.** (PP-232)
+Cannot wear armour whose Stamina modifier would reduce Stamina to 1 or below. (PP-232)
 Depletes by 1 per round of active combat.
 At 0: Out of Breath. −2D to all combat rolls. Recovery: Take a Breath action.
-Cannot wear armour that would reduce Stamina to 1 or below. (PP-232)
 
-**Hybrid:** Wound penalties (−1D) carry into mass battle Command checks (see stage11 PP-089). Do NOT reduce BG commander bonus.
+**Hybrid:** Wound Ob penalties carry into TTRPG mass battle Command checks (PP-232) (see stage11 PP-089 and mass_battle_v3 §A.5). Do NOT reduce BG commander bonus.
 
 ---
 

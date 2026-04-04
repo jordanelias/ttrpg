@@ -1,7 +1,7 @@
 # THREADWORK MECHANICS — v2.6
 ## Date: 2026-03-27 (revised 2026-04-02)
 ## Authority: Philosophical Foundations (immutable) → this document (design proposal, requires editorial approval)
-## Version: v3.2 — PP-232 applied 2026-04-04 (Leap pool+Spirit, Leap Failure revised, POP TN 8, eligibility simplified, Memory→Recall). Prior: v3.1 — Part Nine (S-01–S-06 / P-11–P-26) applied in-place.
+## Version: v3.1 — Part Nine (S-01–S-06 / P-11–P-26) applied in-place. All appendix sections eliminated.
 ## Revision: Incorporates Leap-as-rendering-suspension. Supersedes v1.
 
 ---
@@ -99,7 +99,7 @@ This is not entering another state. It is leaving the only state consciousness k
 - Approach Training tag ✓
 - Thread Sensitivity 30+ ✓
 - Not currently engaged in melee with an opponent who has declared an attack this round ✓
-- Not incapacitated (Health > 0) ✓ (PP-232 — incapacitation threshold simplified)
+- Not incapacitated (Health > 0) (PP-232 — prior ceiling(Health÷2) threshold removed; incapacitation is binary under current wound system)
 
 The Leap is a **full-round action (Priority 5)**. No attack, no movement, no manoeuvres in the same round. Only reactive defence available: Parry or Dodge Backwards (character's choice when declaring). These are pre-conscious physical responses that do not require rendering.
 
@@ -122,7 +122,7 @@ Pre-calculate the Leap pool on the character sheet as a named entry separate fro
 
 **Partial result framing:** The rendering keeps bleeding through. The practitioner is partly present to themselves, which means they are partly interfering with the contact. Their consciousness is fighting the suspension. The operation is still possible but compromised — the practitioner's rendering is contaminating the interaction with their own categories.
 
-**Failure framing:** The practitioner could not surrender rendering. Their consciousness held on. This is not weakness — it is the fundamental difficulty of doing something that your being resists constitutively. The diminished Thread Pool Score (−1D) reflects the failed attempt's residual interference — the practitioner's configuration is slightly misaligned for the remainder of the scene. (PP-232)
+**Failure framing:** The practitioner could not surrender rendering. Their consciousness held on. This is not weakness — it is the fundamental difficulty of doing something that your being resists constitutively. The aftereffect (−1D Thread Pool Score) represents the psychic friction of the failed attempt — the practitioner's engagement with Thread is degraded for the remainder of the scene, not from injury but from the failed surrender itself. (PP-232)
 
 ### The First Leap (Event Scene)
 
@@ -295,7 +295,7 @@ Apply to §2.4 Pulling — Past-Oriented Pulling duration table.
 
 **Foundational-scale Past-Oriented Pulling:** Displacing a Foundational event (the Einhir Catastrophe, a civilisation-ending collapse, a foundational institution's origin) requires all standard prerequisites plus: the Einhir framework (§9.15) — the intentionality required to reach Foundational temporal depth cannot be formed without it. Add +2 Ob surcharge to the recency Ob (Ob 7 recency + 2 = Ob 9 for a generational Foundational event). Rendering Stability consequence ×3 on all outcomes (Success: Rendering Stability −9 minimum; Failure: snap-back Wound + Rendering Stability −6 minimum). This is a near-mythic act — maximum conceivable practitioner achieves ~5% success — but it is mechanically possible. It is a legitimate campaign endpoint: the thing the Einhir could not do and the thing a generation of practitioners might spend a campaign attempting.
 **Pool:** Spirit + relevant History bonus + Thread Pool Score÷2 (round down)
-**TN:** 8 (PP-232 — corrected from 7)
+**TN:** 8 (PP-232 — corrected from 7; POP targets deeper temporal weight requiring greater precision)
 
 **Ob by recency:**
 
@@ -537,9 +537,9 @@ The §3.2 per-operation cap still governs non-FR operations.
 |---|---|---|
 | 10–8 | Stable | No penalty. Rendering solid. The world is legible. |
 | 7–5 | Dissonant | Narrative flickers: wrongness, déjà vu, events slightly out of sequence. Close Knots sense wrongness (+1 strain per 3 sessions). |
-| 4–3 | Fragmented | −1D to all social rolls. −1D to Recall-based rolls. Game Master may present the character's recollection differently from what others remember. All Knots at wrongness pace (+1 strain per 2 sessions). +1 Ob on all Thread operations including the Leap roll (rendering reasserts more aggressively, making suspension harder). Roll Fragmented Fallout on entering this band. |
-| 2 | Fractured | −2D to all social rolls. −2D to Recall-based rolls. All Knots at accelerated wrongness (+1 strain per session). Once per scene with Thread operation: Spirit TN 7 Ob 1 or lose 1 round to a dissociative episode. Certainty maximum reduced by 1 per Coherence level below 3. **Belief Co-Authorship begins:** Game Master presents the practitioner's shifting perceptual framework as the character's internal voice. Player must rewrite each Belief to reflect the framework in which the categories that structure consciousness are loosening. Roll Fractured Fallout on entering this band. |
-| 1 | Severed | −2D social, −2D Recall. Dissociative episodes once per scene regardless of operations (fire at scene start, not mid-operation). Involuntary perceptual events. All Knots +2 strain per session. +2 Ob on all Thread operations including the Leap (rendering barely holds; suspension is constitutively dangerous). The practitioner's rendering is barely functional. The distinction between self and world, between human and monstrous, between actual and potential, is dissolving. Not because something evil is happening to them. Because they have been outside rendering so many times that rendering no longer holds. |
+| 4–3 | Fragmented | −1D to all social rolls. −1D to Recall-based rolls. (PP-234) Game Master may present the character's recollection differently from what others remember. All Knots at wrongness pace (+1 strain per 2 sessions). +1 Ob on all Thread operations including the Leap roll (rendering reasserts more aggressively, making suspension harder). Roll Fragmented Fallout on entering this band. |
+| 2 | Fractured | −2D to all social rolls. −2D to Recall-based rolls. (PP-234) All Knots at accelerated wrongness (+1 strain per session). Once per scene with Thread operation: Spirit TN 7 Ob 1 or lose 1 round to a dissociative episode. Certainty maximum reduced by 1 per Coherence level below 3. **Belief Co-Authorship begins:** Game Master presents the practitioner's shifting perceptual framework as the character's internal voice. Player must rewrite each Belief to reflect the framework in which the categories that structure consciousness are loosening. Roll Fractured Fallout on entering this band. |
+| 1 | Severed | −2D social, −2D Recall. (PP-234) Dissociative episodes once per scene regardless of operations (fire at scene start, not mid-operation). Involuntary perceptual events. All Knots +2 strain per session. +2 Ob on all Thread operations including the Leap (rendering barely holds; suspension is constitutively dangerous). The practitioner's rendering is barely functional. The distinction between self and world, between human and monstrous, between actual and potential, is dissolving. Not because something evil is happening to them. Because they have been outside rendering so many times that rendering no longer holds. |
 | 0 | Rendering Crisis | Campaign event. Reality as commonly rendered is no longer accessible. The practitioner's spooling is destabilised — their organic drawing-from-ground is compromised. They must resolve the crisis narratively: sustained engagement with the world's rendered state, relational anchoring, or withdrawal from practice. If unresolved by season end: Non-Player Character. |
 
 **Game Master protocol — Dissonant entry:** When a practitioner's Coherence drops to 7 (entering Dissonant), the Game Master names this to the player explicitly: "Your Coherence is now 7 — Dissonant. Each operation at Relational+ scale costs −1 Coherence. At this pace, Fragmented is [N] operations away." This is not a mechanical rule; it is a table protocol. The practitioner's rendering is still solid at Dissonant — but the player should make informed decisions about scale from this point forward.
