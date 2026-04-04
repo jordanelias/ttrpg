@@ -6,7 +6,7 @@ Uses GraphQL createCommitOnBranch for atomic multi-file commits.
 PAT must be set as environment variable: GITHUB_PAT
 """
 
-import os, sys, json, base64, urllib.request, urllib.error
+import os, sys, json, base64, re, urllib.request, urllib.error
 
 REPO_OWNER = "jordanelias"
 REPO_NAME = "ttrpg"
@@ -148,6 +148,81 @@ def atomic_commit(
     except Exception as e:
         raise RuntimeError(f"Atomic commit error: {e}")
 
+
+
+def _extract_session_id(content: str) -> str:
+    """Extract session_id from a session log's YAML block."""
+    m = re.search(r'session_id:\s*(.+)', content)
+    return m.group(1).strip() if m else ""
+
+
+def safe_session_close(
+    new_session_log: str,
+    bootstrap_session_log: str,
+    extra_additions: list = None,
+    message: str = "[infrastructure] Session close",
+) -> str:
+    """
+    Close a session safely, preventing overwrite of concurrent session closes.
+
+    Args:
+        new_session_log: the session log content to write
+        bootstrap_session_log: the session log content read at session START
+        extra_additions: additional (path, content) pairs to include in the commit
+        message: commit message
+
+    Returns:
+        commit OID on success
+
+    Raises:
+        RuntimeError if duplicate close detected (same session_id already current)
+
+    Protocol:
+        1. Re-read session_log_current.md fresh from GitHub
+        2. If current matches bootstrap → no intervening close → normal archive + write
+        3. If current differs from bootstrap → another session closed since we started →
+           archive THAT session's close (not our stale bootstrap copy), then write ours
+        4. If current session_id matches our new session_id → duplicate close → abort
+    """
+    import re as _re
+
+    # Fresh read
+    fresh = read_files_graphql(["session_log_current.md", "session_log_archive.md"])
+    live_current = fresh.get("session_log_current.md", "") or ""
+    live_archive = fresh.get("session_log_archive.md", "") or ""
+
+    live_id = _extract_session_id(live_current)
+    new_id = _extract_session_id(new_session_log)
+    bootstrap_id = _extract_session_id(bootstrap_session_log)
+
+    # Guard: duplicate close
+    if live_id and new_id and live_id == new_id:
+        raise RuntimeError(
+            f"DUPLICATE CLOSE BLOCKED: session_log_current.md already contains "
+            f"session_id '{live_id}'. This session has already been closed. "
+            f"Do not overwrite."
+        )
+
+    # Detect intervening close
+    if live_current.strip() != bootstrap_session_log.strip():
+        # Another session closed between our start and now.
+        # Archive the LIVE current (not our stale bootstrap copy).
+        print(f"[safe_session_close] Intervening session detected: "
+              f"bootstrap='{bootstrap_id}', live='{live_id}'. "
+              f"Archiving live session before writing ours.")
+        updated_archive = live_archive + "\n---\n\n" + live_current
+    else:
+        # No intervening close — normal archive
+        updated_archive = live_archive + "\n---\n\n" + live_current
+
+    additions = [
+        ("session_log_current.md", new_session_log),
+        ("session_log_archive.md", updated_archive),
+    ]
+    if extra_additions:
+        additions.extend(extra_additions)
+
+    return atomic_commit(additions=additions, deletions=[], message=message)
 
 if __name__ == "__main__":
     print("Head OID:", get_head_oid())

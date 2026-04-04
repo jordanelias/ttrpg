@@ -239,8 +239,14 @@ Before any compilation run, verify:
 
 At session end or context limit warning:
 
+**Use `g.safe_session_close()` — never write session_log_current.md manually.**
+
 ```python
-new_current = f"""session_id: {date}T_{SESSION_LABEL}
+import github_ops as g
+
+new_current = f"""# Valoria Session Log — Updated
+
+session_id: {date}T_{SESSION_LABEL}
 phase: {CURRENT_PHASE}
 status: CLOSED
 
@@ -255,14 +261,25 @@ status: CLOSED
 {NEXT_ACTION_FOR_NEXT_SESSION}
 """
 
-# Read current + archive, append, commit both atomically
-old_current = github_read("session_log_current.md")
-old_archive = github_read("session_log_archive.md")
+# bootstrap_log = the session_log_current.md content read at session START
+# safe_session_close handles:
+#   - Duplicate close detection (same session_id already in current → abort)
+#   - Concurrent close protection (another session closed since we started →
+#     archives THAT session's log, not our stale copy)
+g.safe_session_close(
+    new_session_log=new_current,
+    bootstrap_session_log=bootstrap_log,  # saved at session start
+    message="[infrastructure] Session close — {SESSION_LABEL}",
+)
+```
 
-github_atomic_commit([
-    ("session_log_current.md", new_current),
-    ("session_log_archive.md", old_archive + "\n---\n\n" + old_current),
-])
+**Session Start — save bootstrap snapshot:**
+At Step 1 of Session Start Protocol, after reading session_log_current.md,
+save the raw content as `bootstrap_log` (a Python variable). This is used by
+`safe_session_close()` to detect intervening closes.
+
+```python
+bootstrap_log = g.read_files_graphql(["session_log_current.md"])["session_log_current.md"]
 ```
 
 **Context limit — HARD CAP AT 90%:**
