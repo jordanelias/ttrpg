@@ -6,45 +6,41 @@ phase: SESSION CLOSED
 status: COMPLETE
 
 ## WORK COMPLETED
-1. Presence/Attunement attribute identity analysis across social, debate, and mass battle systems.
-2. Genre restructure: three genres (Past/Present/Future) → two genres (Memory/Projection).
-   - Present is not a temporal position but the Husserlian operation site (presence = immediacy).
-   - Character/Present arguments decompose into retention (Memory) or protention (Projection).
-3. Attribute renames: Presence → Charisma, Memory → Recall.
-   - "Presence" reserved for Husserlian technical use.
-   - "Memory" freed for genre name.
-4. Faction boost system: single-axis selection from 4 options (Memory/Projection/Revealing/Obscuring).
-   - Church = Obscuring (divine authority forecloses opponent epistemic standing).
-   - Crown = Revealing (merit requires transparency).
-   - Varfell = Projection (consequentialism; outcomes matter).
-   - Hafenmark = Memory (categorical imperative; law is established).
-   - Restoration = Revealing (justice requires transparent reasoning).
-   - Löwenritter = Projection (duty is forward-facing, if they emerge).
-   - Guilds/Niflhel = GM picks.
-5. Adjudicator-type pool rotation: Cognition (expert judge), Charisma (crowd), Attunement (no adjudicator).
-6. Composure = Charisma + 6 (resolves ED-127; parallels Health = Endurance + 6).
-7. Multipliers removed; integer bonus dice (+1D primary genre, +1D audience boost, max +2D).
-8. Five-lens review: philosophical foundations, game precedents, cognitive load, academic literature, internal consistency.
-9. Internal review against core dice mechanics, Let It Ride, Fail Forward, consistency.
-10. Corrected and committed as PP-234.
+1. Presence/Attunement attribute identity analysis (leadership, morale, social combat types, adjudicator contexts).
+2. Four-lens review: philosophical foundations, game precedents (BW, DramaSystem, DitV, Pendragon), cognitive load, academic literature (Aristotle, Fisher/Ury, speech act theory, Cialdini, leadership studies).
+3. Genre restructure: 3 genres (Past/Present/Future) → 2 genres (Memory/Projection).
+   - Present dissolved as genre — it is the Husserlian operation site (presence = immediacy of givenness).
+   - Memory = retention × actuality × epistemic access. Projection = protention × potentiality × epistemic inaccessibility.
+4. Attribute renames: Presence → Charisma, Memory → Recall. "Presence" reserved for Husserlian technical use.
+5. Faction boost: single-axis from 4 options (Memory/Projection/Revealing/Obscuring).
+   Church=Obscuring, Crown=Revealing, Varfell=Projection, Hafenmark=Memory, Restoration=Revealing, Löwenritter=Projection.
+6. Adjudicator-type pool rotation: Cognition (expert judge), Charisma (crowd), Attunement (no adjudicator).
+7. Composure = Charisma + 6 (resolves ED-127; parallels Health = Endurance + 6).
+8. Multipliers removed; integer bonus dice (+1D primary genre, +1D audience boost, max +2D).
+9. Internal review against core dice mechanics, Let It Ride, Fail Forward, cognitive load, consistency.
+10. PP-234 committed. Propagation completed across stage1, stage2, mass_battle_v3, params_core, params_mass_combat, params_factions, propagation_map, file_index.
 
 ## COMMITS THIS SESSION
-- [editorial] PP-234 — Social Contest System v2 — ED-127 resolved / ED-136,137,138 created / SIM-DEBT-03,04 created
+- 810c4d8 [editorial] PP-234 — Social Contest System v2 design + params + canonical_sources + ledger + patch register + coverage matrix
+- 739adf6 [infrastructure] PP-234 propagation — attribute renames across 8 files
+- 5ad451a [infrastructure] PP-234 propagation fix — 3 remaining stage2 references
 
 ## OPEN ITEMS ADDED
-- ED-136: System rename (Debate → Contest)
-- ED-137: Panel adjudicator type (provisional: Expert Judge)
-- ED-138: Social initiative deterministic vs rolled
+- ED-136: System rename (Debate → Contest) — P1
+- ED-137: Panel adjudicator type (provisional: Expert Judge) — P2
+- ED-138: Social initiative deterministic vs rolled — P2
+
+## RESOLVED
+- ED-127: Composure redesign → Charisma + 6
 
 ## SIMULATION DEBT ADDED
-- SIM-DEBT-03: Full re-sim under two-genre system
-- SIM-DEBT-04: Adjudicator-type pool calibration
+- SIM-DEBT-03: Full re-sim under two-genre system (all prior baselines invalidated)
+- SIM-DEBT-04: Adjudicator-type pool calibration (Cha×2, Att×2 untested)
 
 ## Gate: PASS
 
 next_session_start:
-  priority: SIM-DEBT-03 (re-simulation under new system) or attribute rename propagation
+  priority: SIM-DEBT-03 (re-simulation under two-genre system) or PP-233 (Part 6 body text fix — now moot, superseded by v2)
   read_first: [designs/contest/social_contest_system_v2.md, references/params_contest.md]
-  context: PP-234 committed. Attribute renames NOT yet propagated to non-contest files.
-    Propagation list in §12 of design doc. Do NOT propagate until user confirms rename approval.
+  context: Full social contest system redesigned and propagated. params_debate.md is now stale (superseded by params_contest.md). Old debate design doc retained as historical reference. Test outputs SIM-D-01 through SIM-D-05 invalidated by genre restructure.
 ```
