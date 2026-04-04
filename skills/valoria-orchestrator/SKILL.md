@@ -91,12 +91,14 @@ workarounds or fallbacks.
 Execute in order on every session start. **Do not skip steps. Do not substitute
 project_knowledge_search for any GitHub read.**
 
-1. **Read session log from GitHub**
-   ```bash
-   PAT="{PAT_FROM_PROJECT_INSTRUCTIONS}"
-   curl -s -H "Authorization: token $PAT" \
-     "https://api.github.com/repos/jordanelias/ttrpg/contents/session_log_current.md" \
-     | python3 -c "import sys,json,base64; d=json.load(sys.stdin); print(base64.b64decode(d['content']).decode())"
+1. **Read session log from GitHub** — use read_files_graphql, not curl
+   After bootstrap, immediately run:
+   ```python
+   files = g.read_files_graphql([
+       'session_log_current.md',
+       'canon/editorial_ledger.yaml',
+       'references/file_index.md',
+   ])
    ```
    Report status in ≤3 lines: current phase, last action, what's next.
 
