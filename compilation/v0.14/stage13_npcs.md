@@ -141,7 +141,7 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 
 **Social Profile:**
 - Composure: 11 (Charisma 5 + 6)
-- Attributes: Coordination [STALE — should be Agility?] 4, Power 4, Presence 5
+- Attributes: Coordination [STALE — should be Agility?] 4, Power 4, Charisma 5
 - Dominant Conviction: Order — structured, hierarchical, institutional authority
 - Resonant Style: Evidence — legal precedent, documented history, institutional argument
 
