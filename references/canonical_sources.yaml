@@ -89,14 +89,14 @@ systems:
     compilation_current: false
     note: "mass_battle_v3 has 7-phase structure (ED-050), ST-MB patches, Altonian provisional stats. stage8 §8.9 is behind."
 
-  social_debate:
-    canonical: designs/debate/debate_system_redesign_v1.md
-    canonical_sha__designs__debate__debate_system_redesign_v1_md: "800a910d664de38aa7c7541e5f9959f512dda568"
-    params: references/params_debate.md
-    design_doc: designs/debate/debate_system_redesign_v1.md
+  social_contest:
+    canonical: designs/contest/social_contest_system_v2.md
+    params: references/params_contest.md
+    design_doc: designs/contest/social_contest_system_v2.md
+    prior_canonical: designs/debate/debate_system_redesign_v1.md
     compilation_stage: compilation/v0.14/stage9_social.md
     compilation_current: false
-    note: "stage9 is EMPTY/STALE. debate_system_redesign_v1 Part 6 is canonical. SIM-DEBT-01 open (re-calibration needed)."
+    note: "PP-234. social_contest_system_v2 supersedes debate_system_redesign_v1 Part 6. Genre restructure (3→2), attribute renames (Presence→Charisma, Memory→Recall), Composure=Cha+6, faction boost revision. SIM-DEBT-03/04 open. All prior SIM-D baselines invalidated."
 
   advancement:
     canonical: compilation/v0.14/stage10_advancement.md

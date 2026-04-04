@@ -250,6 +250,8 @@ Open for editorial: ED-061, ED-062, ED-063.
 | PP-233-PROP | PP-233 mass combat unit formula established + propagated | ALL | CROSS | Size, Power, Discipline, Command, H | All | — | — | Complete | Pool/Health/Damage formula committed; SIM-DEBT-03 logged |
 
 ## SIM-DEBT-02
+| SIM-DEBT-03 | Full re-simulation under two-genre system with integer bonus dice | PP-234 | All prior SIM-D baselines invalidated | P1 |
+| SIM-DEBT-04 | Adjudicator-type pool variation (Cha×2, Att×2) calibration | PP-234 | New pools untested | P1 |
 - **Item:** ED-120 — Dissolution at RS<24 Rupture probability
 - **Finding:** 90.3% Rupture rate at Relational scale in mass battle is likely miscalibrated
 - **Suspected cause:** FR surcharge exemption (PP-196) stacking with mass battle Ob + RS stress modifier

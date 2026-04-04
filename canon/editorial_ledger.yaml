@@ -2290,3 +2290,41 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     propagation_status: flagged
     related_ids: []
     tags: [threadwork, terminology]
+  - id: ED-136
+    date_flagged: "2026-04-04"
+    source: opus_session
+    source_file: "designs/contest/social_contest_system_v2.md"
+    description: "System rename: 'Debate' → 'Contest' (or alternative: Contention, Proceeding). The system now covers formal debate, negotiation, personal appeal, and command — 'Debate' is too narrow."
+    full_flag_text: "[EDITORIAL: ED-136 — System name: 'Contest' proposed]"
+    status: open
+    decision: ~
+    propagation_targets: [designs/contest/social_contest_system_v2.md, references/params_contest.md]
+    propagation_status: flagged
+    related_ids: []
+    tags: [contest, terminology]
+
+  - id: ED-137
+    date_flagged: "2026-04-04"
+    source: opus_session
+    source_file: "designs/contest/social_contest_system_v2.md"
+    description: "Panel adjudicator type not yet designed. Using Expert Judge (Cognition-primary) as provisional. Panel should potentially use a per-juror disposition track with Attunement-based reads revealing individual positions."
+    full_flag_text: "[EDITORIAL: ED-137 — panel mechanics not yet designed]"
+    status: provisional
+    decision: "Using Expert Judge as provisional"
+    propagation_targets: [designs/contest/social_contest_system_v2.md, references/params_contest.md]
+    propagation_status: flagged
+    related_ids: []
+    tags: [contest, adjudicator]
+
+  - id: ED-138
+    date_flagged: "2026-04-04"
+    source: opus_session
+    source_file: "designs/contest/social_contest_system_v2.md"
+    description: "Social initiative is deterministic (higher Attunement always wins Exchange 1). Combat initiative is rolled (Agility vs Agility). Consistency question: should social initiative be rolled for variance, or is deterministic correct because social positioning is about reading ability, not luck?"
+    full_flag_text: "[EDITORIAL: ED-138 — Social initiative deterministic vs rolled]"
+    status: open
+    decision: ~
+    propagation_targets: [designs/contest/social_contest_system_v2.md]
+    propagation_status: flagged
+    related_ids: []
+    tags: [contest, initiative, consistency]

@@ -2570,3 +2570,12 @@ patches:
     - references/params_mass_combat.md
   status: applied
   applied_commit: "2026-04-03-pp233-mass-combat-unit-formula"
+
+PP-234
+  date: "2026-04-04"
+  severity: P1
+  description: "Social Contest System v2. Full redesign of debate system. (1) Genre restructure: 3 genres (Past/Present/Future) → 2 genres (Memory/Projection). 'Present' retired as genre — it is the Husserlian operation site, not a temporal position. (2) Attribute renames: Presence→Charisma, Memory→Recall. 'Presence' reserved for Husserlian technical use. (3) Composure = Charisma + 6 (resolves ED-127, parallels Health = Endurance + 6). (4) Faction boost: single-axis selection from 4 options (Memory/Projection/Revealing/Obscuring). Church=Obscuring, Crown=Revealing, Varfell=Projection, Hafenmark=Memory, Restoration=Revealing. (5) Fractional multipliers removed; replaced with integer bonus dice (+1D primary genre, +1D audience boost). (6) Adjudicator-type pool rotation: Cognition (expert judge), Charisma (crowd), Attunement (no adjudicator). (7) Strain minimum 0 (matches combat). (8) Let It Ride explicit for contests. (9) Fail Forward for private ties. (10) Interaction types: CLASH/REINFORCE/CROSS + TIE. All prior SIM-D baselines invalidated."
+  source: designs/contest/social_contest_system_v2.md
+  resolves: [ED-127]
+  creates: [ED-136, ED-137, ED-138, SIM-DEBT-03, SIM-DEBT-04]
+  invalidates: [SIM-D-01, SIM-D-02, SIM-D-03, SIM-D-04, SIM-D-05]
