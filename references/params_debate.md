@@ -6,15 +6,16 @@
 <!-- PP-232: Argue pool corrected to (Cognition × 2) + History; Initiative to Attunement; -->
 <!--         Step 1 action name flagged ED-132; Diverge trigger flagged ED-133; -->
 <!--         SIM-DEBT-01 baselines invalidated pending re-sim with corrected pool formula. -->
-<!-- SIM-DEBT-01: INVALIDATED by PP-232 pool correction. All baselines below are STALE. Re-sim required. -->
+<!-- SIM-DEBT-01: RESOLVED 2026-04-03 by SIM-D-05. New baselines in tests/sim_d05_debate_resim.md. -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage9 before use. -->
 
 # params_debate.md — Debate System (v1, patched)
 
 
-## SIM-DEBT-01 Baselines — INVALIDATED (PP-232)
-**All prior baselines (Pres 3 + Hist 2 = 8D etc.) are INVALID.** Pool formula was wrong.
-Correct pool = (Cognition × 2) + History. Re-simulation required before these values are usable.
+## SIM-DEBT-01 Baselines — RESOLVED (SIM-D-05, 2026-04-03)
+See tests/sim_d05_debate_resim.md for full baseline tables.
+Pool: (Cognition × 2) + History | Initiative: Attunement | TN 7
+Key baselines: Scholar(11D) v Diplomat(8D) Formal: 67/6/27% | Scholar v Scholar Formal: 33/28/39%
 
 ## Pools
 | Roll | Pool | TN | Notes |

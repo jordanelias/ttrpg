@@ -1,44 +1,48 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-03T_PARAMS_PROPAGATION_FIX
+session_id: 2026-04-03T_DEBATE_RESIM_AND_DESIGN
 phase: SESSION CLOSED
 status: COMPLETE
 
 ## WORK COMPLETED
-1. Diagnosed params propagation failure: PP-190–231 registered in patch_register.yaml
-   but not fully reflected in params_threadwork.md, params_mass_combat.md, params_board_game.md.
-2. Root cause: SIM-X-22 and earlier sessions committed findings without the params write-back step.
-3. Fixed params_board_game.md canonical source header (was citing v04, now correctly cites v05).
-4. Fixed params_mass_combat.md internal inconsistency (stale 5-phase section replaced
-   with superseded cross-reference to 7-phase structure).
-5. Propagated all missing patches to their target params files with [PROVISIONAL] tags.
-6. Built tools/patch_propagation_checker.py — validates patch-to-params propagation.
-   Handles range notation (e.g. PP-190–209) and full-file search.
-7. Added propagation checker to orchestrator SKILL.md: commit discipline and session start protocol.
-8. Added safe_session_close() to github_ops.py — prevents concurrent/duplicate session close overwrites.
-9. Updated orchestrator Session Close Protocol to use safe_session_close().
+1. SIM-DEBT-01 resolved: debate re-simulation under (Cognition × 2) + History pool (PP-232).
+   Modes A + D + J + L. n=10,000 per scenario. Results in tests/sim_d05_debate_resim.md.
+2. PP-232 validated — Cognition correctly dominant over Presence in formal debate.
+3. Findings: F-SIM-D05-01 (P1 doc fix → PP-233), F-02/03/04 (P2 GM guidance), F-05 (P3 → ED-134).
+4. Part 6 body text conflict identified: still says Presence×2 (stale). PP-233 needed next session.
+5. Design discussion: derived values explained (Presence modifier, Focus defence, Composure,
+   Concentration). Poise confirmed deprecated (ED-027). ED-127 (Composure redesign) still open.
+6. User proposed debate redesign elements:
+   - Timing (initiative) via Attunement vs Ob 1, most successes goes first
+   - Judging the Audience as gated roll (Attunement×2)+History+3
+   - Argument Pool = (Cognition×2)+History+3 (adds +3 vs current)
+   - Concentration = Focus+History+1 (drops Presence, adds History)
+   - Stress/Composure parallel to Wounds/Health (addresses ED-127)
+   - Strain formula revision
+   - Forced-counter orientation — ABANDONED (breaks multi-party case)
+7. Three open design questions identified for Opus session:
+   - Presence vs Attunement attribute identity (leadership/command vs reading/intuition)
+   - Conflation of debate/negotiation/appeal as separate social combat types
+   - Different mechanical conditions per social context (judge, audience, jury, no audience)
+8. Routed to Opus: all three questions are editorial-adjacent/philosophy-heavy design tier.
 
-## VERIFICATION (all pass)
-- freshness_gate.py: 22 FRESH, 0 STALE, 0 NO-SHA — GATE PASSED
-- patch_propagation_checker.py --from PP-190: 57 propagated, 0 missing — PASSED
-- safe_session_close: duplicate close blocked (test 1), intervening close detected (test 2)
+## COMMITS THIS SESSION
+- [simulation] SIM-DEBT-01 resolve — debate re-sim under PP-232 pool — SIM-D-05 / ED-134
 
-## COMMITS
-- 8a67532: params propagation (threadwork, mass_combat, board_game) + new tool
-- 45aa2b2: orchestrator skill update + file_index + session log + archive
-- b44fc48: checker range-parsing fix + PP-199–201 header
-- b9627d6: PP-190–201 range header fix
-- b681fa2: session log interim close
-- a171d18: safe_session_close + orchestrator protocol update
+## OPEN ITEMS ADDED
+- ED-134: Orator archetype viability in Formal Debate (P3)
+- PP-233: Part 6 body text pool formula fix (pending next session)
 
 ## Gate: PASS
 
 next_session_start:
-  priority_1: "User reviews ED-120–126 editorial items from SIM-X-22."
-  priority_2: "Worldbuilding v3 canon audit editorial review (from prior session)."
-  priority_3: "Road network design (deferred from PP-201 session)."
-  priority_4: "ED-108: confirm T10/T11 territory names."
-  priority_5: "SIM-DEBT-01: Debate re-simulation (Presence×2+History pool)."
-  note: "broken_dependency_checker glob-pattern false positives (6) are pre-existing."
+  priority_1: "[OPUS] Presence vs Attunement identity + social combat type differentiation
+               (3 questions from session close). Read philosophical_foundations first."
+  priority_2: "PP-233: Update Part 6 body text pool formula (Presence→Cognition). Doc fix only."
+  priority_3: "ED-127: Composure redesign to mirror Health/Wound structure. User proposed
+               Stress=(Focus/2), Composure=(Focus+6)×(MaxStress+1). Needs sim before locking."
+  priority_4: "ED-134: Orator archetype decision."
+  priority_5: "SIM-DEBT-02: Corroboration in CLASH calibration."
+  note: "ED-132 (Step 1 action name), ED-133 (Diverge trigger) still open."
 ```
