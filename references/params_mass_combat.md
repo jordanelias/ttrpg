@@ -1,4 +1,4 @@
-<!-- version: v0.14+design-ST7-R3-AUD | sources: designs/mass_combat/mass_battle_v3.md (v4.4, PP-106) | last_updated: 2026-04-03 -->
+<!-- version: v0.14+design-ST7-R4-PP235 | sources: designs/mass_combat/mass_battle_v3.md (v4.4, PP-106) | last_updated: 2026-04-03 -->
 <!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D; PP-191 (Lock phase); PP-192 (×3 RS multiplier); PP-222, PP-224, PP-225, PP-227, PP-229, PP-231 (SIM-X-22 provisional) -->
 <!-- PP-232: Unit stats renamed (Strength→Size, Combat Power→Power, Cohesion→Discipline, Coherence Rating/Command Rating→Command); -->
 <!--         Power derived from Size; damage formula references updated. -->
@@ -13,17 +13,43 @@
 # params_mass_combat.md — Mass Battle (v3)
 
 
+
+## Battle Plan Templates (PP-235)
+Phase 1: select one battle plan covering all units. Individual unit orders derived from plan. General may override one unit per turn with a Command check (TN 7, Ob 1; failure = unit follows plan).
+
+| Plan | All Units Do |
+|------|-------------|
+| Advance | Engage nearest enemy; Aggressive formation |
+| Hold | Defend position; Defensive formation |
+| Pincer | 2 units engage front, 1 flanks |
+| Withdraw | Orderly retreat; rear unit covers |
+| Screen | Ranged units fire; melee holds line |
+
 ## BATTLE TURN PHASE STRUCTURE (7 phases, revised 2026-04-02)
 
 | Phase | Name | Content |
 |-------|------|---------|
-| 1 | Strategy Declaration | Formations, tactics, Thread intent declared (simultaneous, secret) |
+| 1 | Strategy Declaration | Formations, tactics declared (simultaneous, secret). Thread intent declared at Phase 4 start, not Phase 1. (PP-235) |
 | 2 | Volley | Projectile fire. Damage recorded, not applied. TN 6 [PROVISIONAL]. |
 | 3 | Manoeuvre | Movement by speed. Reserve commitments. |
 | 4 | Offensive Thread | Dissolution, Pulling, Locking. Practitioner-only. Skipped if no practitioner present. BG: always skipped. |
 | 5 | Engagement | Pool split, roll, damage recorded. Max 3 simultaneous (TTRPG). |
 | 6 | Cascade | Step 1: ALL damage applied simultaneously (Volley+Thread+Engagement). Step 2: Discipline checks. Step 3: Morale checks. Step 4: General action (Rally/Support Thread/Personal combat). Step 5: Support Thread Leap resolves. |
 | 7 | Reform | Discipline restore, Morale +1, sub-unit merge for non-engaged units. |
+
+
+## Phase Consolidation — 5-Phase Structure (PP-235)
+For reduced cognitive load, the 7-phase structure may be run as 5 phases:
+
+| Phase | Combines | Content |
+|-------|----------|---------|
+| 1 | Strategy Declaration | Battle plan selection + overrides |
+| 2 | Ranged + Movement | Volley fires, then movement resolves (old Phases 2+3) |
+| 3 | Thread | Offensive Thread operations (old Phase 4). Declared here, not Phase 1. |
+| 4 | Engagement + Cascade | Pool split, roll, ALL damage applied (Volley+Thread+Engagement). Discipline/Morale checks. Rally/Support. (old Phases 5+6) |
+| 5 | Reform | Discipline restore, Morale +1, sub-unit merge (old Phase 7) |
+
+Damage simultaneity preserved: all sources resolve together at Phase 4 end. The 7-phase structure remains available as the full-detail reference.
 
 Damage simultaneity: Effective Power for Phase 5 calculated from Size as of Phase 3 end. Phase 4 Thread effects do not reduce Size before Phase 5 — all applied together at Phase 6 Step 1.
 > **Lock phase assignment in mass combat (PP-191):** [PROVISIONAL] Offensive Lock (targeting enemy formation) = Phase 4; declared at Phase 1 as "offensive." Support Lock (stabilising own formation) = Phase 6 Step 5; declared at Phase 1 as "support." If undeclared: defaults to Phase 6. A practitioner may not perform both Offensive and Support Lock in the same battle turn.
@@ -224,6 +250,22 @@ Source: ST-TW-03 design note + PP-225 (gains also ×3).
 
 Combat Thread ops (Dissolution, offensive Pulling): Phase 2. Support ops (Weave, Mend, Lock, non-offensive Pulling): Phase 5. Both declared Phase 1.
 Mass → Personal: Personal Action available at Phase 5 (Priority 8). Limit: 1 exchange/battle turn. General's Phase 5 consumed by personal combat (Command suspended).
+
+
+## Single Operation Per Battle Turn — Mass Scale (PP-235)
+In mass combat, a practitioner gets exactly 1 Thread operation per battle turn. No multi-round contact window at mass battle scale. Focus determines Leap success probability but does not extend the contact window at mass scale.
+
+Rationale: mass battle turns represent longer timeframes. A single operation at mass scale represents sustained effort across the engagement phase. Full contact-window mechanics apply at personal scale only.
+
+
+## Command Suspension During Thread Contact (PP-235)
+While a practitioner-general is in Thread contact (Phase 4), their Command bonus is suspended. Sub-units follow automation:
+1. Engage nearest enemy unit in same zone
+2. If no enemy in zone: hold position
+3. Default pool split: 50/50 (round Offence down)
+4. Defensive formation if Size < 50%
+
+Extends PP-111 (Command suspension during personal combat). Thematic: suspended rendering = cannot command.
 
 ## Key Design Axiom
 Generalship dominates. Command asymmetry is intentional. Command=7 vs Command=1 general: near-certain outcome before dice rolled.

@@ -1,4 +1,4 @@
-<!-- version: v2.0 | sources: designs/contest/social_contest_system_v2.md | last_updated: 2026-04-04 -->
+<!-- version: v2.1-PP235 | sources: designs/contest/social_contest_system_v2.md | last_updated: 2026-04-04 -->
 <!-- PP-234: Full system redesign. Genre restructure (3→2), attribute renames (Presence→Charisma, Memory→Recall), -->
 <!--         Composure = Charisma + 6, faction boost revision (4 single-axis options), integer bonus dice, -->
 <!--         adjudicator-type pool rotation, Let It Ride explicit, Fail Forward for ties. -->
@@ -19,7 +19,7 @@
 | Argue (Crowd) | (Charisma × 2) + History bonus | 7 | Crowd responds to delivery/authority |
 | Argue (No Adjudicator) | (Attunement × 2) + History bonus | 7 | Must read and calibrate to counterpart |
 | Argue (Panel) | (Cognition × 2) + History bonus | 7 | [PROVISIONAL — ED-137] |
-| Read | Attunement only (no History) | 7 Ob 1 | Per exchange. Action name [ED-132]. |
+| Read | Attunement only (no History) | 7 Ob 1 | Once per contest (PP-235). Result persists; degrades one tier per exchange after first. Action name [ED-132]. |
 | Recall bonus | +2D | — | Citing specific named verifiable claim. Binary. Either genre. |
 | Pre-contest prep | Attunement + History | 7 Ob 1 | Requires 1+ hour. Rushed: TN 8. |
 
@@ -29,6 +29,18 @@
 | Memory | Retention (has been) | Accessible | Actual (settled) |
 | Projection | Protention (yet to be) | Inaccessible | Potential (unsettled) |
 
+
+## Argument Styles (PP-235)
+Genre + orientation presented as a single choice per exchange:
+
+| Style | = Genre + Orientation | Flavour |
+|-------|----------------------|---------|
+| Precedent | Memory + Revealing | Citing what happened openly |
+| Suppression | Memory + Obscuring | Burying inconvenient history |
+| Vision | Projection + Revealing | Proposing a transparent future |
+| Insinuation | Projection + Obscuring | Implying unstated consequences |
+
+Interaction type derived: same style = REINFORCE, same genre opposite orientation = CLASH, different genre = CROSS.
 ## Genre and Orientation Bonus Dice
 | Source | Bonus | Condition |
 |--------|-------|-----------|
@@ -63,7 +75,7 @@ Step 1 — Read (Attunement, TN 7, Ob 1):
 | Overwhelming (3+) | Boost + one specific detail (Belief, threshold, emotional state) |
 
 Step 2 — Choose genre (Memory/Projection) + orientation (Revealing/Obscuring).
-Step 2b — Corroborate (optional, +1D on success; Bonds Ob 1 symmetric, Ob 2 asymmetric disadvantaged).
+Step 2b — Corroborate (automatic when Bonds ≥ 3 symmetric or ≥ 4 asymmetric disadvantaged; +1D on success. PP-235).
 Step 3 — Argue (pool per §Pools + genre/orientation bonus).
 Step 4 — Resolve (see Interaction Types).
 Step 5 — Forfeit (Regroup or Concede a Point).
@@ -83,7 +95,7 @@ Obscuring win: no track movement; place Doubt Marker on opponent (−2 to oppone
 ## Conviction Track
 Range: 0–10. Side A wins ≥ 7. Side B wins ≤ 3. Compromise zone: 4–6.
 Starting position: GM-set (typical: 5).
-Audience resistance: average Stability of factions (round up) − 1, minimum 0.
+Audience resistance: average Stability of factions (round up) − 1, minimum 0. Announced once at contest start; place resistance token on Conviction Track. (PP-235)
 
 ## Derived Values
 | Value | Formula | Range |

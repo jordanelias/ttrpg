@@ -2579,3 +2579,14 @@ PP-234
   resolves: [ED-127]
   creates: [ED-136, ED-137, ED-138, SIM-DEBT-03, SIM-DEBT-04]
   invalidates: [SIM-D-01, SIM-D-02, SIM-D-03, SIM-D-04, SIM-D-05]
+
+  - id: PP-235
+    date: 2026-04-04
+    source: designs/cogload_moderate_target.md
+    scope: ALL
+    description: "Cognitive load optimization package. SC-2 (Read once per contest), SC-3 (argument styles), SC-4 (auto-corroborate), SC-5 (resistance token), TM-1 (late Thread declaration), TM-2 (single op per mass battle turn), TM-3 (Command suspension during Thread), MC-1 (battle plan templates), MC-3 (5-phase consolidation option). Plus reference architecture: weapon cards (PC-1), unit cards (MC-4/MC-5), faction mats (BG-1/BG-2), strain card (SC-1), ×3 RS card (TM-4). Threadwork restorations: TW-2/TW-3/TW-5 kept at full complexity (experienced player system). TW-1/TW-4/TW-6 pre-computation aids retained."
+    files_changed:
+      - references/params_contest.md
+      - references/params_mass_combat.md
+    status: applied
+    tags: [cognitive_load, all_modes, optimization]
