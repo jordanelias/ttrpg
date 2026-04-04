@@ -156,7 +156,7 @@ Execute in strict order:
 | Artillery | 4 | Wealth Ob 4 + 1 season construction |
 | Knights Templar | Church only | Not standard Muster |
 
-Unit starting Cohesion: Light Infantry 3, Heavy Infantry 4, Cavalry 4, Ranged 3, Artillery 3.
+Unit starting Discipline: Light Infantry 3, Heavy Infantry 4, Cavalry 4, Ranged 3, Artillery 3.
 
 ## Faction Capital Territories — see Territory Table Reconciled (PP-195)
 [Replaced by PP-195 territory table above — Hafenmark capital = Gransol T2, not Hafenvalor T6.]
@@ -429,8 +429,8 @@ Cap: 2 territory transfers per seizure event (v04/v05 P-23). Previously set to 4
 Ob = min(target Mandate, 4). Maximum Ob 4 regardless of target Mandate.
 
 ## Drawn Battle Rule (PP-180)
-Equal net successes: Stalemate. Both Cohesion −1. No territorial change.
-Both at Cohesion 0: both units destroyed simultaneously. Territory uncontrolled.
+Equal net successes: Stalemate. Both Discipline −1. No territorial change.
+Both at Discipline 0: both units destroyed simultaneously. Territory uncontrolled.
 
 ## Crown Policy Instrument (PP-180, v04 confirmed)
 Once per season, Crown may issue one Policy if Mandate ≥ 4. Same Policy cannot repeat 2 seasons.

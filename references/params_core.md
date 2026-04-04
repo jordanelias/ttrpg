@@ -96,7 +96,7 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 | Health | (Endurance + 6) × (wound count + 1) | 7–13 per wound interval | Wound threshold every (Endurance + 6) points. Resets per interval on Wound. (PP-232) |
 | Stamina | Endurance + Relevant History + 1 (modified by armour) | min 2 | Combat resource. Floor 2. Cannot wear armour that would reduce Stamina to 1 or below. (PP-232) |
 | Composure | Charisma + 6 | 7–13 | Social damage buffer before Rattled. Parallels Health = Endurance + 6. (PP-234, ED-127 resolved) |
-| Combat Pool | (Agility × 2) + weapon proficiency History + 3 | Variable | Split Offence/Defence each round |
+| Combat Pool | (Agility × 2) + weapon proficiency History + 3 | Variable (min 5) | Split Offence/Defence each round |
 | Contact Rounds | Focus | 1–7 | Max rounds maintaining Thread contact (practitioners only) |
 | Certainty | [EDITORIAL: ED-128] | — | Decoupled from Spirit pending design decision. |
 | Coherence | 10 (starting); countdown to 0 | 0–10 | Personal rendering legibility |

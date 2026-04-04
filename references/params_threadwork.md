@@ -1,4 +1,4 @@
-<!-- version: v0.14-AUD2-R1 | source: threadwork_redesign_v25.md | last_updated: 2026-04-03 -->
+<!-- version: v0.14-AUD3-R1 | source: threadwork_redesign_v25.md | last_updated: 2026-04-03 -->
 <!-- PATCHES APPLIED: P-11–P-30 (prior); ST-TW-01–05; PP-166; PP-190–209 (full audit cycle); PP-221, PP-223, PP-225, PP-226 (SIM-X-22 provisional) -->
 <!-- PP-232: Leap pool adds Spirit; Leap Failure outcome corrected; POP TN corrected to 8; sequential failure rule corrected; -->
 <!--         Weaving Structural Ob corrected to 8; Diagnosis struck ED-134; FR term flagged ED-135 (open); ED-030/034/121/124/134 resolved 2026-04-03. -->
@@ -13,7 +13,7 @@
 | Thread Sensitivity (TS) | 0–100+ | Perception depth |
 | Rendering Stability (RS) | 100→0 | World coherence (shared track) |
 | Coherence | 10→0 | Personal rendering stability |
-| Focus | 1–5+ | Contact duration in rounds |
+| Focus | 1–7 | Contact duration in rounds |
 | Thread Pool Score | Thread Sensitivity ÷ 10 (round down) | Thread Pool Score — added to operation pools |
 
 
@@ -196,8 +196,8 @@ Loss per operation cap: −1 max per single operation regardless of combined sou
 |-----------|-------|-------------|
 | 10–8 | Stable | No penalty |
 | 7–5 | Dissonant | Narrative flickers |
-| 4–3 | Fragmented | −1D social/Memory; +1 Ob all ops |
-| 2 | Fractured | −2D social/Memory; +1 Ob all Thread ops (PP-221); Belief Co-Authorship begins |
+| 4–3 | Fragmented | −1D social/Recall; +1 Ob all ops |
+| 2 | Fractured | −2D social/Recall; +1 Ob all Thread ops (PP-221); Belief Co-Authorship begins |
 | 1 | Severed | −2D; dissociative episodes; +2 Ob all ops |
 | 0 | Rendering Crisis | Campaign event. Non-Player Character if unresolved by season end. |
 

@@ -1,4 +1,4 @@
-<!-- version: v0.14+design-ST7-R2 | sources: designs/mass_combat/mass_battle_v3.md (v4.4, PP-106) | last_updated: 2026-04-03 -->
+<!-- version: v0.14+design-ST7-R3-AUD | sources: designs/mass_combat/mass_battle_v3.md (v4.4, PP-106) | last_updated: 2026-04-03 -->
 <!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D; PP-191 (Lock phase); PP-192 (×3 RS multiplier); PP-222, PP-224, PP-225, PP-227, PP-229, PP-231 (SIM-X-22 provisional) -->
 <!-- PP-232: Unit stats renamed (Strength→Size, Combat Power→Power, Cohesion→Discipline, Coherence Rating/Command Rating→Command); -->
 <!--         Power derived from Size; damage formula references updated. -->
@@ -22,8 +22,8 @@
 | 3 | Manoeuvre | Movement by speed. Reserve commitments. |
 | 4 | Offensive Thread | Dissolution, Pulling, Locking. Practitioner-only. Skipped if no practitioner present. BG: always skipped. |
 | 5 | Engagement | Pool split, roll, damage recorded. Max 3 simultaneous (TTRPG). |
-| 6 | Cascade | Step 1: ALL damage applied simultaneously (Volley+Thread+Engagement). Step 2: Cohesion checks. Step 3: Morale checks. Step 4: General action (Rally/Support Thread/Personal combat). Step 5: Support Thread Leap resolves. |
-| 7 | Reform | Cohesion restore, Morale +1, sub-unit merge for non-engaged units. |
+| 6 | Cascade | Step 1: ALL damage applied simultaneously (Volley+Thread+Engagement). Step 2: Discipline checks. Step 3: Morale checks. Step 4: General action (Rally/Support Thread/Personal combat). Step 5: Support Thread Leap resolves. |
+| 7 | Reform | Discipline restore, Morale +1, sub-unit merge for non-engaged units. |
 
 Damage simultaneity: Effective Power for Phase 5 calculated from Size as of Phase 3 end. Phase 4 Thread effects do not reduce Size before Phase 5 — all applied together at Phase 6 Step 1.
 > **Lock phase assignment in mass combat (PP-191):** [PROVISIONAL] Offensive Lock (targeting enemy formation) = Phase 4; declared at Phase 1 as "offensive." Support Lock (stabilising own formation) = Phase 6 Step 5; declared at Phase 1 as "support." If undeclared: defaults to Phase 6. A practitioner may not perform both Offensive and Support Lock in the same battle turn.
@@ -95,7 +95,7 @@ Group 2 is destroyed but their 10 damage resolves first (simultaneous). Group 1 
 | 6–7 | Exceptional/Peerless |
 
 ## Faction Military → Unit Quality [PROPOSAL]
-| Military | Max CP | Starting Cohesion ceiling |
+| Military | Max Power | Starting Discipline ceiling |
 |----------|--------|--------------------------|
 | 1 | 1 | 2 |
 | 2 | 2 | 3 |
@@ -131,12 +131,12 @@ Restoration: Reform Phase only (not engaged), +1 Discipline, Command ≥ current
 | Size < 25% max | −1 additional |
 | Discipline broken this turn | −1 |
 | Allied unit routed in same zone | −1 |
-| General incapacitated (Stage 1) | −1 |
-| General killed (Stage 2) | −2 (not subject to phase cap) |
+| General incapacitated | −1 |
+| General killed | −2 (not subject to phase cap) |
 | Flanked and lost exchange | −1 |
 | Idle 2+ consecutive turns | −1 |
 
-Cap: −3 per Cascade Phase (Stage 2 death separate and uncapped).
+Cap: −3 per Cascade Phase (general death separate and uncapped).
 Floor: 1 while general present. At 0: rout.
 Rout contagion: −1 Morale to adjacent units; secondary loss cannot cascade to rout until next turn.
 
@@ -193,7 +193,7 @@ units in the same zone or flanking positions. This creates the primary counter t
 block sight-lines with front-line formations; flank to reach Artillery directly.
 
 ## Battle Scale [PROPOSAL]
-| Scale | 1 Strength ≈ | Thread Thread Sensitivity minimum |
+| Scale | 1 Size ≈ | Thread Thread Sensitivity minimum |
 |-------|-------------|-------------------|
 | Skirmish | ~10 soldiers | 30+ |
 | Company | ~100 soldiers | 30+ |
@@ -236,7 +236,7 @@ Declared in Phase 1. Any allocation valid, min 1D each side.
 Default: ½ pool to Offence (round down), remainder Defence. [PROVISIONAL]
 
 ### Damage Formula — unit Strength loss (PARAMS-GAP-05 resolved)
-Strength loss = max(0, net hits + Dmg Mod − DR)
+Size loss = max(0, net hits + Dmg Mod − DR)
 Dmg Mod from unit table below. *[PP-194 — confirmed]*
 
 | Unit | Weapon | Dmg Mod |
@@ -265,7 +265,7 @@ Scaled (÷2 rounded up) from personal combat DR. Crossbow post-DR bonus applied 
 Crossbow post-DR bonus (if net hits > 0): +1 vs Medium and Heavy. Scaled ÷2 from personal +2 (PP-189).
 Sling: effective CP −2D; ammo modifier per unit table above.
 
-HBl (Artillery/siege): uses PP-091 Bombard (flat Strength damage). Not subject to Volley DR formula. Artillery is a separate unit type from HBl lead-sling infantry units.
+HBl (Artillery/siege): uses PP-091 Bombard (flat Size damage). Not subject to Volley DR formula. Artillery is a separate unit type from HBl lead-sling infantry units.
 
 Bow/LP (archer) unit effectiveness at CP4 (Veteran): vs None=1.6, vs Light=0, vs Med=0, vs Heavy=0. [PP-189: Dmg Mod +0; net successes only vs unarmoured. Re-sim pending.]
 Crossbow/HP unit effectiveness at CP4: vs None=1.6, vs Light=0.6, vs Med=0.6, vs Heavy=0. [PP-189: post-DR +1 vs med+heavy; re-sim pending.]
@@ -319,12 +319,12 @@ The −3 Morale cap per Cascade Phase applies as a total across all non-general 
 ## Volley TN (ED-037 resolved — provisional)
 Volley phase uses TN 6 (not TN 7). Rationale: ranged advantage before armour engagement; represents favourable conditions (distance, preparation). [PROVISIONAL — confirmed from prior provisional]
 ## Commander Bonus (PP-190)
-Formula: faction Military ÷ 3, round down. Min 0, max +2D. Applies to all modes (TTRPG mass combat, Hybrid, BG).
+Formula: faction Military ÷ 3, round down. Min 0, max +2D. Applies to BG mode. TTRPG uses Command = ⌈(Cha+Cog)÷2⌉ (PP-232). See consolidated table above.
 ## Altonian Invasion Units (PP-193, ED-036 resolved 2026-04-03)
 Generated from Altonian Military ~5 (foreign professional standing army; above Crown/Church 4).
 [ED-036 resolved 2026-04-03] Stats confirmed: Vanguard Str5 CP4 Coh4 Mor5 HeavyCut Medium. Elite Guard Str4 CP5 Coh5 Mor5 HeavyCut Heavy. Thread Corps Str3 CP3 Coh4 Mor4 TS40.
 
-| Unit Type | Strength | CP | Cohesion | Morale | Armour | Weapon | Dmg Mod |
+| Unit Type | Size | Power | Discipline | Morale | Armour | Weapon | Dmg Mod |
 |-----------|----------|----|----------|--------|--------|--------|---------|
 | Altonian Heavy Infantry | 4 | 3 | 5 | 5 | Heavy | HeavyCut | +4 |
 | Altonian Cavalry | 3 | 4 | 4 | 6 | Medium | HeavyCut | +5 |
@@ -353,7 +353,7 @@ Individual reload applies only in personal combat.
 - Diplomatic Shield: no Stability loss from Partial outcome this season.
 
 **Church:**
-- Templar Vanguard: Knights Templar units +2 Cohesion this battle.
+- Templar Vanguard: Knights Templar units +2 Discipline this battle.
 - Excommunication Threat: opposing faction −1D all Domain Actions next season if Church Mandate ≥ 4.
 
 **Remaining factions (Varfell, Hafenmark, Löwenritter, Revolution):** TBD — pending editorial design.

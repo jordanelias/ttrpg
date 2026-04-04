@@ -1,4 +1,4 @@
-<!-- version: v0.14-AUD2 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-02 -->
+<!-- version: v0.14-AUD3 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-02 -->
 <!-- NOTE: stage6_factions.md is STALE for BG faction mechanics. Use BG column for board game/hybrid. -->
 <!-- PATCHES APPLIED: PP-167, PP-168; PP-195 (Community Weaving procedure) -->
 <!-- STALE CHECK: TTRPG column from v0.14 compiled. BG column from bg_v05 design. -->
@@ -15,7 +15,7 @@ Seasonal cap: ±2 per stat per season (TTRPG); ±varies (BG — see accounting).
 | Crown | 5 | 5 | 5 | 4 | 4 | 4 | — | 4 |
 | Church | 5 | 5 | 6 | 5 | 5 | 4 | — | 5 |
 | Hafenmark | 4 | 4 | 4 | 5 | 5 | 3 | — | 4 |
-| Varfell | 4 | 3 | 4 | 4 | 3 | 4 | — | 4 |
+| Varfell | 4 | 4 | 4 | 4 | 4 | 4 | — | 4 |
 | Guilds | 3 | 3 | 4 | 6 | 6 | 2 | — | 5 |
 | Niflhel | — | — | 5 | 4 | 4 | — | — | 4 |
 | Restoration Movement | — | 2 | 3/4 | — | 2 | — | — | 3 |
@@ -222,8 +222,8 @@ When Reformed Settlement is in force (Theocracy Counter ≥ 40 and Church has Re
 [Source: bg_v05 Cascade Test 2 simulation]
 
 ## Restoration Movement — Named NPCs (ED-005 resolved 2026-04-03)
-1. **MARET VOSSEN** — Primary contact. Grassroots organiser. TS 0, Presence 5+, Circles 3+ in working-class networks. Non-practitioner. Full stat block deferred to campaign development.
-2. **ALDRIC HANN** — Operational doer. Lower Presence than Vossen, higher Circles in logistics and street-level networks. Full stat block deferred.
+1. **MARET VOSSEN** — Primary contact. Grassroots organiser. TS 0, Charisma 5+, Circles 3+ in working-class networks. Non-practitioner. Full stat block deferred to campaign development.
+2. **ALDRIC HANN** — Operational doer. Lower Charisma than Vossen, higher Circles in logistics and street-level networks. Full stat block deferred.
 
 ## Riskbreakers — Identity Confirmed (ED-006 resolved 2026-04-03)
 Extralegal arm of the Löwenritter. Small-cadre elite consequentialists loyal to Valoria as concept — not to Crown, institution, or faith.

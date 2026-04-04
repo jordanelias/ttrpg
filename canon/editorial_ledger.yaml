@@ -2328,3 +2328,63 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     propagation_status: flagged
     related_ids: []
     tags: [contest, initiative, consistency]
+
+  - id: ED-139
+    date_flagged: 2026-04-04
+    date_resolved: ~
+    source: audit
+    source_file: tests/audit_phase1_params_crosssystem.md
+    description: "Community Weaving triple specification conflict — three different pools, Obs, and target tracks in params_factions.md"
+    full_flag_text: "[EDITORIAL: ED-139 — Community Weaving: Influence/TT÷20/Thread Tension (PP-168) vs Mandate+History/Ob3/RS (PP-195) vs unspecified/Ob2 (TTRPG entry). Reconcile: one action or two? Which spec is canonical?]"
+    status: open
+    priority: P1
+    decision: ~
+    propagation_targets: [references/params_factions.md, compilation/v0.14/stage6_factions.md]
+    propagation_status: flagged
+    related_ids: [PP-168, PP-195]
+    tags: [faction, restoration, consistency, audit]
+
+  - id: ED-140
+    date_flagged: 2026-04-04
+    date_resolved: ~
+    source: audit
+    source_file: tests/audit_phase1_params_crosssystem.md
+    description: "Discipline degradation trigger formula contradicts PP-231 asymmetry rule — formula fires on any Size loss > Discipline including symmetric engagements"
+    full_flag_text: "[EDITORIAL: ED-140 — Discipline degradation: trigger formula (Size lost > Discipline) has no asymmetry precondition, contradicting PP-231 (symmetric engagements should not trigger). Add asymmetry condition to formula, or revise PP-231.]"
+    status: open
+    priority: P1
+    decision: ~
+    propagation_targets: [references/params_mass_combat.md, designs/mass_combat/mass_battle_v3.md]
+    propagation_status: flagged
+    related_ids: [PP-231, PP-232]
+    tags: [mass_combat, discipline, consistency, audit]
+
+  - id: ED-141
+    date_flagged: 2026-04-04
+    date_resolved: ~
+    source: audit
+    source_file: tests/audit_phase1_params_crosssystem.md
+    description: "Social contest v2 GM reference card needed — ~40 bookkeeping operations per Grand Contest with no tracking aid"
+    full_flag_text: "[EDITORIAL: ED-141 — Social contest v2 reference card: pre-computed strain tables (margin × Charisma modifier × Focus defence), track movement summary, concentration/Rattled tracking grid. Prior ED-055 card covered v1 only.]"
+    status: open
+    priority: P2
+    decision: ~
+    propagation_targets: [designs/contest/social_contest_system_v2.md]
+    propagation_status: flagged
+    related_ids: [ED-055, PP-234]
+    tags: [contest, cognitive_load, tooling, audit]
+
+  - id: ED-142
+    date_flagged: 2026-04-04
+    date_resolved: ~
+    source: audit
+    source_file: tests/audit_phase1_params_crosssystem.md
+    description: "BG Overwhelming threshold — ED-031 resolved as Ob+1 surplus but PP-179 in params_board_game says 'matches TTRPG' (2×Ob). Plus Overwhelming floor of 3 (PP-232) not stated in BG."
+    full_flag_text: "[EDITORIAL: ED-142 — BG Overwhelming: ED-031 says Ob+1, PP-179 says 2×Ob. Which is correct? Also: TTRPG Overwhelming floor (net ≥ 3) not stated in BG degree table.]"
+    status: open
+    priority: P1
+    decision: ~
+    propagation_targets: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+    propagation_status: flagged
+    related_ids: [ED-031, PP-179, PP-232]
+    tags: [board_game, degree_table, consistency, audit]
