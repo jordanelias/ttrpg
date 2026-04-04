@@ -116,8 +116,12 @@ Niflhel cannot participate in Formal or Grand Debates. Their social toolkit:
 ## NPC Composure Formula (ED-052 resolved — provisional)
 [PROVISIONAL — pending ED-127 Composure redesign.]
 
-## Debate Corroboration — Asymmetric Proceedings (ED-055b resolved — provisional)
-Accused in Church Tribunal (Inquisitorial proceeding) may not have corroborators. Accused may only: Object (Phase 2) and Distinction (Phase 5). [PROVISIONAL]
+## Debate Corroboration (ED-014 resolved 2026-04-03)
+General rule: any willing ally present at the scene may corroborate (+1D to Argue roll).
+Knot allies give full Knot bonus (not capped at +1D). Knot no longer required to corroborate.
+
+### Church Tribunal / Inquisition exception (ED-043, ED-055 resolved)
+Accused has no Sed Contra phase, no Corroboration, cannot Call for Division. Inquisitorial structure denies defence. Corroborators require separate Appeal to Room action.
 
 ## Evidence Leverage Audience Mode Shift — Cap (PP-183)
 Audience ethical mode weight shifts capped at weight 2.0. Multiple leverage attempts do not stack. [PP-183]
@@ -142,3 +146,23 @@ Stalemate (tied exchanges at limit): Proposer loses — burden of proof not met.
 
 ### Hybrid Debate (ED-057a resolved)
 Resolved in debate_system_redesign_v1 §6.14.
+
+## Proceeding Types — Confirmed Catalogue (ED-009 resolved 2026-04-03)
+Seven asymmetric proceeding types:
+1. **Royal Audience** — Monarch, Duke, or Duchess questions and adjudicates within their territory.
+2. **Church Tribunal** — Excommunication proceedings; Holy See questions and adjudicates; Cardinals always present.
+3. **Inquisition** — Heresy; no defence phase, evidence-gathering only. Accused may Object and Distinction only.
+4. **Guild Arbitration** — Neutral mediator; each side rolls Wealth+History TN7; higher net wins binding ruling.
+5. **Ducal Tribunal** — Crown convenes; Mandate used as pool.
+6. **Varfell Internal Review** — No audience, private proceeding.
+7. **Restoration Assembly** — Audience = orator (public legitimacy replaces institutional authority).
+
+## Forced Unmask — External Disruption (ED-022 resolved 2026-04-03)
+Violence in debate chamber = immediate Unmask. Violent party auto-loses regardless of Conviction Track position. Loser concedes on stated stakes.
+Exception: monster incursion or external catastrophe = postponement (not loss). Proceeding resumes next scene if both parties survive.
+
+## Southernmost — Purpose Rolls (ED-029 resolved 2026-04-03)
+STRUCK: Clarity countdown mechanic removed.
+Entry roll: Spirit+History TN7 Ob 2. Success = character maintains purpose inside Southernmost. Failure = GM controls narrative behaviour inside.
+Exit roll: Spirit+History TN7 Ob 2. Success = character can articulate/remember why they entered. Failure = purpose lost to the Forgetting.
+No countdown track. GM judgment governs behaviour between entry and exit rolls.

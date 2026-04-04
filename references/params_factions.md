@@ -220,3 +220,16 @@ When Reformed Settlement is in force (Theocracy Counter ≥ 40 and Church has Re
 - All Diplomacy Domain Actions targeting Hafenmark: permanent +1 Ob (Church institutional antagonism).
 - Effect persists until Theocracy Counter drops below 40 OR Reformed Settlement is withdrawn.
 [Source: bg_v05 Cascade Test 2 simulation]
+
+## Restoration Movement — Named NPCs (ED-005 resolved 2026-04-03)
+1. **MARET VOSSEN** — Primary contact. Grassroots organiser. TS 0, Presence 5+, Circles 3+ in working-class networks. Non-practitioner. Full stat block deferred to campaign development.
+2. **ALDRIC HANN** — Operational doer. Lower Presence than Vossen, higher Circles in logistics and street-level networks. Full stat block deferred.
+
+## Riskbreakers — Identity Confirmed (ED-006 resolved 2026-04-03)
+Extralegal arm of the Löwenritter. Small-cadre elite consequentialists loyal to Valoria as concept — not to Crown, institution, or faith.
+Will go extralegal (blackmail, hostage, theft, murder) when judged necessary for Valoria's survival.
+Existence known only to Crown and Lions' Table. Active concealment is core doctrine.
+Some members are Thread Practitioners. Operate alone or in small teams; present as ordinary people.
+Will not permit Valoria to fall under weak-willed, foreign, or religious rule.
+Parallel archetype: Shadow Warriors (Sousou no Frieren).
+Individual profiles and stat blocks deferred to campaign development.

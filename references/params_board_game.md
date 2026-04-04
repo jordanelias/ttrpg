@@ -311,7 +311,7 @@ Return: Elske Loyalty ≥ 6 + IP < 60 + Crown/Löwenritter unit in T4: Military 
 | Doctrinal Reach Milestone | +0.5/season |
 
 **TC Decreases:**
-Reformed Settlement Accommodate: −5. Sovereign Authority Doctrine (Hafenmark): −2 to −3. Baralta passive (Mandate ≥ 4): −1/season. Löwenritter Requisition Order success: −1. Royal Decree targeting TC: −1.
+Reformed Settlement Accommodate: −5. Reformed Settlement Ignore: Church Stability −1, Influence −1 (penalised for non-response — ED-085 resolved 2026-04-03). Sovereign Authority Doctrine (Hafenmark): −2 to −3. Baralta passive (Mandate ≥ 4): −1/season. Löwenritter Requisition Order success: −1. Royal Decree targeting TC: −1.
 
 ## TC 80 Territorial Seizure (PP-192 — user design decision)
 At TC = 80: Church declares seizure attempt on **all Crown and Hafenmark territories** simultaneously.
@@ -376,7 +376,7 @@ PI recovers: Hafenmark Parliamentary Manoeuvre success (+1), Crown Parliamentary
 | Restoration (Rawlsian) | Community-benefiting −1 Ob | Hierarchical/exclusionary +1 Ob |
 | Löwenritter (Military Honor) | Orders protecting Valorian sovereignty −1 Ob | Advancing personal/factional gain at Valoria's expense +2 Ob |
 
-## Faction Conviction Texts (PP-181, v04 confirmed)
+## Faction Conviction Texts (PP-181, ED-080/081 resolved 2026-04-03)
 | Faction | Conviction |
 |---------|-----------|
 | Crown (Almud) | "The state is the only legitimate vessel of order." |
@@ -412,7 +412,7 @@ Overwhelming: As above + token links adjacent territory + Guild Favour +1 in non
 Partial: Token placed, no bonus. Persists.
 Failure: No token, Stability −1.
 
-## BG Co-Movement Resolution Protocol (PP-182 — P-14 compliance)
+## BG Co-Movement Resolution Protocol (PP-182, ED-086 resolved 2026-04-03 — P-14 compliant)
 [Full protocol in PP-182 section — three-dimensional auto-effects for all Thread operations]
 History Resonance markers (temporal), Attention Pool (epistemic), Primary result (actualized).
 Thread Tension (TT) = sum of all History Resonance markers across board.
@@ -444,6 +444,9 @@ Partial or Failed Mend still places History Resonance marker (temporal auto-effe
 ## Church Attention Pool — Per-Territory Rules (PP-185)
 Per-territory ceiling: 10. Second Inquisitor at AP ≥ 6. Max 2 Inquisitors/territory.
 Community Organizing success: AP −2 + expels one Inquisitor if AP drops below deployment threshold.
+
+## Ranged Faction Military Modifier (ED-087 resolved 2026-04-03)
+No BG Military modifier for ranged-specialist factions. BG correctly abstracts above weapon-type level. Intentional design decision — revisit only if faction asymmetry design requires it.
 
 ## Co-Movement Card Effects — BG Reference (PP-187)
 20-card deck. Draw on: Partial Community Weaving, Niflhel Harvest, VTM preview.
@@ -925,3 +928,21 @@ Forcing Church to first neutralise Hafenmark before TC can build creates mandato
 T13 Stillhelm directly adjacent to T4 Vargstad. Fort 0. Crown nominal hold only (+1 Ob all actions).
 Varfell can March T4→T13 in S1 at almost no cost.
 [EDITORIAL: ED-113 — T13 opening. Options: (A) Give T13 Fort 1 (small warden garrison — the Wardens maintain some presence before Emergence). (B) Varfell march into T13 triggers immediate Warden Cooperation check (expedition trigger fires early, forcing Varfell to commit to the Southernmost path). (C) Accept — Crown holding T13 "nominally" is flavour; losing it S1 is correct fiction. Crown should simply not count T13 as a real starting territory for deed purposes.]
+
+## TC Threshold Check — Zoom In Interaction (ED-056 resolved 2026-04-03)
+TC threshold check fires at turn-end regardless of Zoom In suspension.
+Zoom In cannot delay TC threshold check. Clocks continue during Zoom In personal phase.
+
+## Concurrent Zoom In — Ordering (ED-072 resolved 2026-04-03)
+If multiple factions trigger Zoom In simultaneously: faction-turn Accounting sequence order applies.
+First battle completes before second begins.
+
+## Crown Victory Condition — Redesign (ED-109 resolved 2026-04-03)
+Crown must make Varfell AND Hafenmark submit OR own their territories outright.
+3 pre-met deeds stand unchanged. 2 remaining deeds require active play against other major factions.
+[Propagation: update Deed table when design doc revised.]
+
+## Church TC Gain — Redesign Required (ED-110 resolved 2026-04-03)
+Church must have more TC gain routes than Baralta has suppression capacity.
+Baralta is one person, not a nation. Church spans multiple territories and actors.
+Expand TC gain table before next BG simulation. Options under consideration: AER-linked gain, territory-hold bonuses, non-Hafenmark suppression routes.

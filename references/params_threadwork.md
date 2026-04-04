@@ -1,7 +1,7 @@
 <!-- version: v0.14-AUD2-R1 | source: threadwork_redesign_v25.md | last_updated: 2026-04-03 -->
 <!-- PATCHES APPLIED: P-11–P-30 (prior); ST-TW-01–05; PP-166; PP-190–209 (full audit cycle); PP-221, PP-223, PP-225, PP-226 (SIM-X-22 provisional) -->
 <!-- PP-232: Leap pool adds Spirit; Leap Failure outcome corrected; POP TN corrected to 8; sequential failure rule corrected; -->
-<!--         Weaving Structural Ob corrected to 8; Diagnosis rationale flagged ED-134; "Forced Resolution" term flagged ED-135. -->
+<!--         Weaving Structural Ob corrected to 8; Diagnosis struck ED-134; FR term flagged ED-135 (open); ED-030/034/121/124/134 resolved 2026-04-03. -->
 <!-- stage3_thread_operations.md is EMPTY in v0.14. All values from threadwork_redesign_v25.md. -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage3 before use. -->
 
@@ -57,8 +57,8 @@ Contact rounds = Focus score. Round 1 = Leap (no op). Ops begin Round 2.
 
 Sequential failure: a failed operation ejects the practitioner from the contact window and applies −1D to Thread Pool Score for the remainder of the scene. (PP-232)
 
-## Diagnosis
-[EDITORIAL: ED-134 — Design rationale for Diagnosis as a mandatory pre-op action is disputed. Pending decision on whether Diagnosis represents intentional orientation of being vs a purely procedural gate.]
+## Diagnosis — STRUCK (ED-134 resolved 2026-04-03)
+Diagnosis as a mandatory pre-operation procedural gate is removed. Practitioner either suspends sense of self or does not — no separate timed action required. Operations proceed directly.
 Priority 4 action. No roll. Mandatory before: Mending, Locking, Dissolution, Past-Oriented Pulling.
 Skip before FR: +2 Ob + auto Gap on Failure. Skip before Mending: +2 Ob. Skip before POP: +3 Ob + temporal Gap on Failure.
 
@@ -106,7 +106,7 @@ Duration by surplus: 0 = end of scene. 1 = end of session. 2+ = next seasonal ac
 
 ### Past-Oriented Pulling
 Pool: Spirit + History + Thread Pool Score÷2 (round down) | TN 8 (PP-232 — corrected from TN 7)
-Requirements: Thread Sensitivity 70+; Rendering Stability ≤ 60; Diagnosis mandatory.
+Requirements: Thread Sensitivity 70+; Rendering Stability ≤ 60.
 | Recency | Ob |
 |---------|----|
 | Same scene/session | 3 |
@@ -144,7 +144,7 @@ Reversal Ob: original practitioner's Thread Sensitivity ÷ 10 (round up) − 2, 
 
 ### Dissolution (Forced Resolution)
 Pool: Spirit + History (no Thread Pool Score) | TN 7 (TN 8 for FR)
-Requirements: Thread Sensitivity 50+; Diagnosis mandatory. Min Ob: 4. Same Ob table as Lock.
+Requirements: Thread Sensitivity 50+. Min Ob: 4. Same Ob table as Lock.
 
 | Degree | Rendering Stability | Coherence |
 |--------|----|-----------|
@@ -155,7 +155,7 @@ Requirements: Thread Sensitivity 50+; Diagnosis mandatory. Min Ob: 4. Same Ob ta
 
 ### Mending (Substrate Repair)
 Pool: Attunement + Focus + Thread Pool Score | TN 7
-Requirements: Thread Sensitivity 50+; Diagnosis mandatory. Target must be a Gap, Shifting Object, or Locked Zone border.
+Requirements: Thread Sensitivity 50+. Target must be a Gap, Shifting Object, or Locked Zone border.
 Ob ceiling: 8 (regardless of stacked modifiers).
 | Gap Type | Ob | Min Thread Sensitivity |
 |----------|----|--------|
@@ -260,9 +260,8 @@ Concealment from Thread Sensitivity 30+ observers: Cognition only (no History), 
 
 ## P1 Audit Resolutions — AUD-TW-001 (PP-190–PP-195)
 
-### PP-190: Diagnosis+Leap Combat Action Economy [PROVISIONAL]
-In combat: Diagnosis = Round N (Priority 4 standard action). Leap = Round N+1 (Priority 5 full-round action). Minimum 2 rounds in combat.
-In non-combat: same-round Diagnosis+Leap permitted (GM judgment).
+### PP-190: Leap Combat Action Economy (ED-124/ED-134 resolved 2026-04-03)
+Diagnosis struck as mandatory action. In mass battle: Leap proceeds directly in Phase 4. In personal combat: Leap = Priority 5 full-round action (no Diagnosis prerequisite). PP-190 2-round rule removed — personal combat only constraint lifted.
 
 ### PP-193: P-22 Paradox Window Resolution [PROVISIONAL]
 Auto-resolves at window end (1d3 scenes). Early closure: Mending (Ob 3 = Micro-Gap). Exploitation: +2 Ob to operations targeting paradoxed thread; Failure collapses window.
@@ -419,3 +418,21 @@ If the investigation proceeds: TC +1 at next Accounting.
 If the Church does not investigate (or cannot): no TC effect from observation.
 
 This prevents automatic TC escalation from all Thread ops in Church-adjacent locations. [PP-182]
+
+## Thread Combat vs Mode 3 Entities (ED-030 resolved 2026-04-03)
+Pool split (Offence/Defence) applies to Thread pool same as combat pool.
+Thread Offence vs entity Coherence Rating (Ob = entity CR).
+Thread Defence vs entity counter-unravelling attempts.
+
+## Ceiral Ritual — BG RS Propagation (ED-034 resolved 2026-04-03)
+Ceiral Ritual RS changes propagate at full TTRPG value to BG RS track (immediate, per state_transfer_spec PP-107).
+BG Co-Movement card ceiling (RS +1) applies ONLY to BG-initiated Thread abstraction — not to TTRPG Zoom In scenes.
+Ritual outcomes: Success RS −6, Overwhelming RS −10, Partial RS −3, Failure RS +8. Apply directly.
+
+## Mass Combat Paradox Window — Scene Definition (ED-121 resolved 2026-04-03)
+Scene for mass combat paradox window = number of battle turns before the paradox window closes for the season.
+Not a single battle turn. GM tracks window closure per season.
+
+## Co-Movement Axes — Operation (ED-086 resolved 2026-04-03)
+Three axes confirmed: Temporal, Epistemic, Actuality. D10 roll.
+All three axes fire simultaneously — not sequential staging.

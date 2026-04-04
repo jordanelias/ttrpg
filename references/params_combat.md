@@ -5,7 +5,7 @@
 <!--         initiative order corrected (initiative holder declares last); tie result corrected; -->
 <!--         weapon system rebuilt (Short/Long × Light/Heavy × Blade/Blunt matrix); STR in damage confirmed; -->
 <!--         damage formula revised (armour-dependent modifier); Mass Mismatch exemptions corrected; -->
-<!--         Close/Far zone terminology flagged ED-129; Stage 1/2 flagged ED-130; Reach zone flagged ED-129. -->
+<!--         Close/Far zone terminology flagged ED-129 (open). Stage 1/2 struck ED-130. Reach zone flagged ED-129 (open). -->
 
 # params_combat.md — Personal Combat
 
@@ -144,7 +144,7 @@ Per Wound: **−1D Combat Pool only** (no Ob penalty). (PP-232)
 | 4–5 | 3 |
 | 6–7 | 4 |
 
-[EDITORIAL: ED-130 — Stage 1 (down) and Stage 2 (dying) incapacitation states need design definition. Prior text was unclear.]
+[ED-130 resolved 2026-04-03] Stage 1 (down) and Stage 2 (dying) incapacitation states STRUCK. No staged incapacitation states in current design. Health track runs to 0 = incapacitated.
 
 ## Mass Mismatch Penalty
 Light weapon defender vs Heavy weapon attacker: defensive successes −1 (min 0).
@@ -179,3 +179,6 @@ Stamina minimum: **2**. Cannot wear armour that would reduce Stamina to 1 or bel
 
 <!-- patch_history: references/params_combat_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
+
+## Cover Declaration — Phase 1 Requirement (ED-098 resolved 2026-04-03)
+Cover must be declared in Phase 1 to apply that round. GM determines physical availability from zone description. No declaration = no DR benefit that round.

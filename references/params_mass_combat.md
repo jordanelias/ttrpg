@@ -320,9 +320,9 @@ The −3 Morale cap per Cascade Phase applies as a total across all non-general 
 Volley phase uses TN 6 (not TN 7). Rationale: ranged advantage before armour engagement; represents favourable conditions (distance, preparation). [PROVISIONAL — confirmed from prior provisional]
 ## Commander Bonus (PP-190)
 Formula: faction Military ÷ 3, round down. Min 0, max +2D. Applies to all modes (TTRPG mass combat, Hybrid, BG).
-## Altonian Invasion Units (PP-193 — provisional, ED-036)
+## Altonian Invasion Units (PP-193, ED-036 resolved 2026-04-03)
 Generated from Altonian Military ~5 (foreign professional standing army; above Crown/Church 4).
-[PROVISIONAL: pending ED-036 editorial confirmation]
+[ED-036 resolved 2026-04-03] Stats confirmed: Vanguard Str5 CP4 Coh4 Mor5 HeavyCut Medium. Elite Guard Str4 CP5 Coh5 Mor5 HeavyCut Heavy. Thread Corps Str3 CP3 Coh4 Mor4 TS40.
 
 | Unit Type | Strength | CP | Cohesion | Morale | Armour | Weapon | Dmg Mod |
 |-----------|----------|----|----------|--------|--------|--------|---------|
@@ -339,3 +339,21 @@ LBl (sling) outperforms LP (arrows) only vs Light armour (+2 vs +1). LP equals o
 BG mode: Thread operations (Phase 4 Offensive, Phase 6 Support) are always skipped. No Coherence cost applies in BG — Thread ops do not occur at board scale. This is intentional (P-01: Thread operates below BG abstraction layer). Resolves ED-080.
 ## Planning Phase Time (PP-202 — ED-083)
 Finding from bg_v05 simulation: Phase 1 planning ~8 min/player with reference cards; ~12-15 min without. Recommendation: pre-assign Seasonal Priority order on faction reference cards to reduce deliberation. No mechanical change required.
+
+## HP (Crossbow) Reload — Mass Combat Scale (ED-094 resolved 2026-04-03)
+HP crossbow units fire every Volley Phase at mass combat scale.
+Individual reload cycle is abstracted — units stagger reloads historically.
+Individual reload applies only in personal combat.
+
+## Faction Tactic Cards — Confirmed (ED-019 resolved 2026-04-03)
+2 unique tactic cards per faction. Confirmed:
+
+**Crown:**
+- Royal Authority: all Crown units +1 Martial this battle.
+- Diplomatic Shield: no Stability loss from Partial outcome this season.
+
+**Church:**
+- Templar Vanguard: Knights Templar units +2 Cohesion this battle.
+- Excommunication Threat: opposing faction −1D all Domain Actions next season if Church Mandate ≥ 4.
+
+**Remaining factions (Varfell, Hafenmark, Löwenritter, Revolution):** TBD — pending editorial design.
