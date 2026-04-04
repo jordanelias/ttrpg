@@ -113,7 +113,7 @@ Required to perform the Leap. Cannot be purchased directly.
 
 1. **Mentorship:** Thread Sensitivity 50+ practitioner spends a full season with a Thread Sensitivity 30+ character who has held at least one confrontation and witnessed at least one operation.
 2. **Spontaneous Breakthrough:** During a Discovery Event where Thread Sensitivity reaches 30+, make additional Spirit check TN 7 Ob 2. Success: Approach Training acquired simultaneously.
-3. **Einhir Texts:** A character with Thread Sensitivity 30+ studies a relevant primary text for a full season. Cognition + Memory (Ob 3). Success: Approach Training. Overwhelming: Approach Training + +1 thread-knowledge.
+3. **Einhir Texts:** A character with Thread Sensitivity 30+ studies a relevant primary text for a full season. Cognition + Recall (Ob 3). Success: Approach Training. Overwhelming: Approach Training + +1 thread-knowledge.
 4. **CP purchase:** 8 CP. Requires Thread Sensitivity ≥ 30, having witnessed ≥1 Thread operation, and narrating the training. Does not bypass the Thread Sensitivity threshold — the character must already perceive Threads.
 
 ### The Devout Constraint

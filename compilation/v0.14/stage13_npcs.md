@@ -16,7 +16,7 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 **Thread Sensitivity:** 28 (high Dormant; near Stirring threshold). Does not know the name for what he experiences. Attributes felt impressions to spiritual intimation. A Discovery Event would be the most destabilising moment of his reign.
 
 **Social Profile:**
-- Composure: 11 (Presence 5 + 6)
+- Composure: 11 (Charisma 5 + 6)
 - Dominant Conviction: Order — legitimate authority through proper institutional channels
 - Resonant Style: Consequence — long-horizon thinking; past injustice moves him less than future structural risk
 
@@ -36,7 +36,7 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 **Thread Sensitivity:** 0 (Inert). Not foreclosed — simply never confronted.
 
 **Social Profile:**
-- Composure: 10 (Presence 4 + 6)
+- Composure: 10 (Charisma 4 + 6)
 - Dominant Conviction: Liberty — the concrete political conditions under which people can act without requiring institutional permission
 - Resonant Style: Consequence
 
@@ -83,8 +83,8 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 **Thread Sensitivity:** 0. Sincerely devout, institutionally effective, and completely without knowledge of what his institution is or what it was built to do. He is the most thorough product of Galbados's theological engineering in the kingdom. His certainty is not the certainty of someone who has considered doubt and rejected it — it is the certainty of someone who has never been given the perceptual tools to approach the question differently.
 
 **Social Profile:**
-- Attributes: Presence 6, Cognition 5
-- Composure: 12 (Presence 6 + 6)
+- Attributes: Charisma 6, Cognition 5
+- Composure: 12 (Charisma 6 + 6)
 - Dominant Conviction: Faith
 - Resonant Style: Consequence (what this situation produces for the Church's mandate)
 
@@ -140,8 +140,8 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 **Thread Sensitivity:** 0 (Inert). Essentialist theology has completely foreclosed Thread Sensitivity development. She has no awareness this foreclosure exists.
 
 **Social Profile:**
-- Composure: 11 (Presence 5 + 6)
-- Attributes: Coordination 4, Power 4, Presence 5
+- Composure: 11 (Charisma 5 + 6)
+- Attributes: Coordination [STALE — should be Agility?] 4, Power 4, Presence 5
 - Dominant Conviction: Order — structured, hierarchical, institutional authority
 - Resonant Style: Evidence — legal precedent, documented history, institutional argument
 
@@ -175,7 +175,7 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 **Thread Sensitivity:** 14 (Dormant). Does not know he has Thread sensitivity.
 
 **Social Profile:**
-- Composure: 11 (Presence 5 + 6)
+- Composure: 11 (Charisma 5 + 6)
 - Dominant Conviction: Reason — truth as instrument; genuine high weight on acknowledged uncertainty
 - Resonant Style: Consequence — forward-looking analysis of what situations will produce
 

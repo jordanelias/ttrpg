@@ -16,7 +16,7 @@ The Southernmost's danger cannot be rendered by those without Thread sensitivity
 
 This is not a psychological defence or a failure of courage. It is a structural limitation of how consciousness renders experience. A non-practitioner who spends a day in the Southernmost will leave knowing they were somewhere hostile and strange. The specific knowledge — *what* it is, *why* it matters, *what* the stakes are — does not survive the return to ordinary rendering.
 
-**Forgetting Check**: roll Cognition + Memory, TN 8.
+**Forgetting Check**: roll Cognition + Recall, TN 8 (PP-234).
 
 | Exposure | Ob |
 |---|---|
@@ -85,7 +85,7 @@ Expeditions to the Southernmost are extended actions — the officer leading the
 
 | Season | Phase | Procedure |
 |---|---|---|
-| 1 | Approach | Travel to Southernmost border territory. Military escort (if present): Cohesion check Ob 1 (Thread proximity unsettles troops; failure = escort −1 Cohesion for the expedition). Practitioner with Thread Sensitivity 30+: automatic Discovery Event — the lead practitioner perceives Thread anomalies at the boundary; first Forgetting Check fires here. |
+| 1 | Approach | Travel to Southernmost border territory. Military escort (if present): Discipline check Ob 1 (PP-232) (Thread proximity unsettles troops; failure = escort −1 Discipline for the expedition). Practitioner with Thread Sensitivity 30+: automatic Discovery Event — the lead practitioner perceives Thread anomalies at the boundary; first Forgetting Check fires here. |
 | 2 | Exploration | Enter the Southernmost proper. Zone-based traversal: three zones to cross to reach the primary site. Each zone: one encounter (Thread phenomenon, hostile entity, or environmental hazard — see §6.4). Resolution per combat rules or Thread operation rules as appropriate. |
 | 3 | Discovery | Reach the primary site (the locus of the original Einhir catastrophe). Practitioner Thread Sensitivity 50+: Diagnosis fires automatically — the nature of the damage is fully apparent. Below Thread Sensitivity 50: Diagnosis Ob 3. On success: partial understanding. On Partial: the practitioner understands something is deeply wrong; specific nature requires Thread Sensitivity 50+. On Failure: Forgetting mechanism prevents retention entirely. |
 | 4+ | Repair (optional) | Extraordinary Repair Weaving per §6.6. Each season of successful Repair: Thread Tension −2 permanent (Southernmost contribution removed). |
@@ -161,7 +161,7 @@ Extraordinary Repair Weaving is the technical procedure discovered through deep 
 - Southernmost Awareness 8+ (faction stat)
 - Successful expedition reaching the primary site (§6.3 completed)
 - Practitioner officer with Thread Sensitivity 50+ assigned to Research in the Locked Zones
-- Research roll: Memory + Einhir Scholar History, Ob 4. On success: the full collapse technical record is read; the practitioner learns the specific structural repair procedure required.
+- Research roll: Recall + Einhir Scholar History (PP-234), Ob 4. On success: the full collapse technical record is read; the practitioner learns the specific structural repair procedure required.
 
 ### Repair Procedure
 

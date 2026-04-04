@@ -49,14 +49,14 @@ All purchases have narrative requirements. CP alone is insufficient — every pu
 | Purchase | Cost | Constraint | Narrative Requirement |
 |---|---|---|---|
 | Attribute +1 | Current score × 3 CP | Maximum 5 per attribute | Training, mentorship, or extended practice narrated |
-| History +1 (beyond test track) | 3 CP | Total cap = Memory score | Identify specific experiences that built this skill |
+| History +1 (beyond test track) | 3 CP | Total cap = Recall score (PP-234) | Identify specific experiences that built this skill |
 | New History at 0 points | 5 CP | Must not duplicate existing History function | Origin scene with Game Master; establishes eligibility only (0 points = no pool bonus) |
 | New Inspiration at 1 point | 4 CP | Total Inspiration value ≤ Spirit score | Name focus; narrate two scenes of genuine pursuit |
 | Inspiration +1 point | 3 CP | Individual cap = Spirit score; total ≤ Spirit | Scene of sustained engagement with focus this season |
 | New Knot (establish) | 2 CP | Total significant Knots ≤ Bonds score | Relationship must have been played this season |
 | Knot +1 strain capacity | 3 CP | Max strain capacity per Knot = 5 | The relationship has been tested and endured |
-| Circles +1D (permanent) | 4 CP | Max permanent bonus = Presence score | A season of active social investment in that faction |
-| Resources +1D (permanent) | 4 CP | Max permanent bonus = Presence score | A season of commerce or estate management |
+| Circles +1D (permanent) | 4 CP | Max permanent bonus = Charisma score (PP-234) | A season of active social investment in that faction |
+| Resources +1D (permanent) | 4 CP | Max permanent bonus = Charisma score (PP-234) | A season of commerce or estate management |
 | Remove 1 Wound | 6 CP | Between seasons only | Narrated treatment: healer, rest, or Thread intervention |
 | Approach Training | 8 CP | Thread Sensitivity ≥ 30; must have witnessed ≥1 Thread operation | Replaces mentorship/breakthrough paths as CP-gated alternative |
 
