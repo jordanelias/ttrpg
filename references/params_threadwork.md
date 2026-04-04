@@ -1,5 +1,7 @@
-<!-- version: v0.14-AUD2 | source: threadwork_redesign_v25.md | last_updated: 2026-04-03 -->
+<!-- version: v0.14-AUD2-R1 | source: threadwork_redesign_v25.md | last_updated: 2026-04-03 -->
 <!-- PATCHES APPLIED: P-11–P-30 (prior); ST-TW-01–05; PP-166; PP-190–209 (full audit cycle); PP-221, PP-223, PP-225, PP-226 (SIM-X-22 provisional) -->
+<!-- PP-232: Leap pool adds Spirit; Leap Failure outcome corrected; POP TN corrected to 8; sequential failure rule corrected; -->
+<!--         Weaving Structural Ob corrected to 8; Diagnosis rationale flagged ED-134; "Forced Resolution" term flagged ED-135. -->
 <!-- stage3_thread_operations.md is EMPTY in v0.14. All values from threadwork_redesign_v25.md. -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage3 before use. -->
 
@@ -28,7 +30,7 @@ Coherence starts at **10** for all characters (confirmed: stage1_core_engine §2
 Thread Depth (TD) was defined in prior params versions as a stat with range 0–10. It does not appear in threadwork_redesign_v25.md or any current operation formula. **TD is a phantom definition from a prior design iteration — it has no mechanical function and is not tracked.** Removed from all params files.
 
 ## Leap Roll
-Pool: Attunement + relevant History bonus + Thread Pool Score | TN: 7
+Pool: Spirit + Attunement + relevant History bonus + Thread Pool Score | TN: 7 (PP-232)
 | Thread Sensitivity | Ob | Wound modifier |
 |----|----|-|
 | 30–49 | 2 | +1 Ob per Wound |
@@ -39,9 +41,9 @@ Pool: Attunement + relevant History bonus + Thread Pool Score | TN: 7
 | Overwhelming | Clean suspension. Next op Ob −1 (min 1). +1 Thread Sensitivity. |
 | Success | Contact established. Proceed. |
 | Partial | Unstable. Op Ob +1. −2 Composure. |
-| Failure | Snaps back. −4 Composure. Rattled. No op this scene. |
+| Failure | Thread contact fails. −1D to Thread Pool Score for remainder of scene. (PP-232) |
 
-Eligibility: Approach Training tag; Thread Sensitivity 30+; not in melee with declared attacker; not at incapacitation threshold (⌈Health÷2⌉).
+Eligibility: Approach Training tag; Thread Sensitivity 30+; not in melee with declared attacker. (PP-232 — incapacitation threshold condition removed; not a defined mechanic in this context.)
 Full-round action (Priority 5). Only reactive defence available during Leap round.
 
 ## Contact Duration
@@ -53,15 +55,16 @@ Contact rounds = Focus score. Round 1 = Leap (no op). Ops begin Round 2.
 | 3 | 2 | Two ops |
 | 4+ | 3+ | Three or more |
 
-Sequential failure penalty: +1 Ob per prior failure in same contact window (cumulative).
+Sequential failure: a failed operation ejects the practitioner from the contact window and applies −1D to Thread Pool Score for the remainder of the scene. (PP-232)
 
 ## Diagnosis
+[EDITORIAL: ED-134 — Design rationale for Diagnosis as a mandatory pre-op action is disputed. Pending decision on whether Diagnosis represents intentional orientation of being vs a purely procedural gate.]
 Priority 4 action. No roll. Mandatory before: Mending, Locking, Dissolution, Past-Oriented Pulling.
 Skip before FR: +2 Ob + auto Gap on Failure. Skip before Mending: +2 Ob. Skip before POP: +3 Ob + temporal Gap on Failure.
 
 ## Operations — Pools and TNs
 All operations: Pool uses Spirit + relevant History bonus + Thread Pool Score unless stated. TN 7 standard.
-TN 8: Forced Resolution (Lock/Dissolution) and Past-Oriented Pulling.
+TN 8: Locking, Dissolution, and Past-Oriented Pulling. [EDITORIAL: ED-135 — "Forced Resolution (FR)" as a collective term is disputed. Pending replacement terminology.]
 
 ### Weaving (Things Cohere)
 | Scale | Ob | Min Thread Sensitivity |
@@ -70,7 +73,7 @@ TN 8: Forced Resolution (Lock/Dissolution) and Past-Oriented Pulling.
 | Personal | 2 | 30+ |
 | Relational | 3 | 50+ |
 | Territorial | 4 | 50+ |
-| Structural | 5 | 70+ |
+| Structural | 8 | 70+ | (PP-232 — corrected from 5)
 
 | Degree | Rendering Stability | Coherence | Other |
 |--------|-----|-----------|-------|
@@ -102,7 +105,7 @@ Duration by surplus: 0 = end of scene. 1 = end of session. 2+ = next seasonal ac
 | Failure | −2 | −1 (snap-back: 1 Wound, no armour) |
 
 ### Past-Oriented Pulling
-Pool: Spirit + History + Thread Pool Score÷2 (round down) | TN 7
+Pool: Spirit + History + Thread Pool Score÷2 (round down) | TN 8 (PP-232 — corrected from TN 7)
 Requirements: Thread Sensitivity 70+; Rendering Stability ≤ 60; Diagnosis mandatory.
 | Recency | Ob |
 |---------|----|

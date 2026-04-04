@@ -2545,3 +2545,18 @@ patches:
     date: 2026-04-03
     description: "Cohesion degradation is an asymmetry mechanic, not attrition. Triggers only with CP asymmetry, Thread-assisted Str loss, or artillery. Add GM note."
     files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+
+- id: PP-232
+  date: "2026-04-03"
+  severity: P1
+  description: "Batch correction from docx review. Core: Ob cap raised to 20, Overwhelming floor 3, Health formula revised to (End+6)×(wounds+1), Stamina floor 2, armour wield constraint added, Certainty flagged ED-128, Composure flagged ED-127. Combat: weapon system rebuilt (Short/Long × Light/Heavy × Blade/Blunt matrix, base TN 7 with modifiers), STR confirmed in damage formula, damage formula revised to armour-dependent modifier table, initiative order corrected (lower initiative declares first; higher declares last), tie result corrected (no damage; initiative stays), wound penalty corrected to −1D only (no Ob penalty), Mass Mismatch Long weapon exemption removed. Debate: Argue pool corrected to (Cognition × 2) + History, initiative stat corrected to Attunement, Step 1 name flagged ED-132, Diverge flagged ED-133. Threadwork: Leap pool adds Spirit, Leap Failure corrected to −1D Thread Pool Score for scene, POP TN corrected to 8, sequential failure rule corrected to ejection+−1D, Weaving Structural Ob corrected to 8, Diagnosis flagged ED-134, FR term flagged ED-135. Mass combat: Strength→Size, Combat Power→Power, Cohesion→Discipline, Command Rating/Coherence Rating→Command throughout."
+  source: docx_review
+  affects:
+    - references/params_core.md
+    - references/params_combat.md
+    - references/params_debate.md
+    - references/params_threadwork.md
+    - references/params_mass_combat.md
+  status: applied
+  applied_commit: "2026-04-03-pp232-docx-review-batch"
+  editorial_flags_raised: [ED-127, ED-128, ED-129, ED-130, ED-131, ED-132, ED-133, ED-134, ED-135]

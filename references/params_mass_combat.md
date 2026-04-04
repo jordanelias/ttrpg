@@ -1,5 +1,7 @@
-<!-- version: v0.14+design-ST7 | sources: designs/mass_combat/mass_battle_v3.md (v4.4, PP-106) | last_updated: 2026-04-03 -->
+<!-- version: v0.14+design-ST7-R1 | sources: designs/mass_combat/mass_battle_v3.md (v4.4, PP-106) | last_updated: 2026-04-03 -->
 <!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D; PP-191 (Lock phase); PP-192 (×3 RS multiplier); PP-222, PP-224, PP-225, PP-227, PP-229, PP-231 (SIM-X-22 provisional) -->
+<!-- PP-232: Unit stats renamed (Strength→Size, Combat Power→Power, Cohesion→Discipline, Coherence Rating/Command Rating→Command); -->
+<!--         Power derived from Size; damage formula references updated. -->
 <!-- PHASE STRUCTURE: 7 phases. Thread split: offensive Phase 4, support Phase 6. All damage simultaneous Phase 6 Step 1. -->
 <!-- mass_battle_v3.md is a design proposal. Values marked [COMPILED] are from stage8; [PROPOSAL] from v3. -->
 <!-- STALE CHECK: Verify [COMPILED] values against current ruleset; verify [PROPOSAL] against compiled stage8 update. -->
@@ -19,27 +21,27 @@
 | 6 | Cascade | Step 1: ALL damage applied simultaneously (Volley+Thread+Engagement). Step 2: Cohesion checks. Step 3: Morale checks. Step 4: General action (Rally/Support Thread/Personal combat). Step 5: Support Thread Leap resolves. |
 | 7 | Reform | Cohesion restore, Morale +1, sub-unit merge for non-engaged units. |
 
-Damage simultaneity: Effective CP for Phase 5 calculated from Str as of Phase 3 end. Phase 4 Thread effects do not reduce Str before Phase 5 — all applied together at Phase 6 Step 1.
-> **Lock phase assignment in mass combat (PP-191):** [PROVISIONAL] Offensive Lock (targeting enemy configuration) = Phase 4; declared at Phase 1 as "offensive." Support Lock (stabilizing own configuration) = Phase 6 Step 5; declared at Phase 1 as "support." If undeclared: defaults to Phase 6. A practitioner may not perform both Offensive and Support Lock in the same battle turn.
+Damage simultaneity: Effective Power for Phase 5 calculated from Size as of Phase 3 end. Phase 4 Thread effects do not reduce Size before Phase 5 — all applied together at Phase 6 Step 1.
+> **Lock phase assignment in mass combat (PP-191):** [PROVISIONAL] Offensive Lock (targeting enemy formation) = Phase 4; declared at Phase 1 as "offensive." Support Lock (stabilising own formation) = Phase 6 Step 5; declared at Phase 1 as "support." If undeclared: defaults to Phase 6. A practitioner may not perform both Offensive and Support Lock in the same battle turn.
 
 
 ## Core Formula
-Effective Combat Pool = min(CP, current Strength)
-As Strength drops: fewer dice regardless of quality. CP is ceiling; Strength determines reach.
+Effective Power = min(Power, current Size)
+As Size drops: fewer dice regardless of quality. Power is the ceiling; Size determines reach. (PP-232)
 
 ## Unit Stats (1–7 unless noted)
 | Stat | Description |
 |------|-------------|
-| Strength | Headcount/health pool. At 0: destroyed. |
-| Combat Power (CP) | Dice pool ceiling. |
-| Cohesion | Organisational integrity (1–7). |
+| Size | Headcount/health pool. At 0: destroyed. |
+| Power | Dice pool ceiling. Derived from Size. |
+| Discipline | Organisational integrity (1–7). |
 | Morale | Rout threshold (1–7). |
 | Speed | Slow / Standard / Fast |
 | Weapon Type | Inherits personal combat table [COMPILED] |
 | Armour Tier | Inherits personal combat DR table [COMPILED] |
 
-## CP Tier Reference [PROPOSAL]
-| CP | Tier |
+## Power Tier Reference [PROPOSAL]
+| Power | Tier |
 |----|------|
 | 1 | Levy |
 | 2 | Militia |
@@ -59,31 +61,31 @@ As Strength drops: fewer dice regardless of quality. CP is ceiling; Strength det
 | 6 | 6 | 7 |
 | 7 | 7 | 7 |
 
-## Command Rating (Coherence Rating) [PROPOSAL]
-Coherence Rating = ⌈(Presence + Cognition) ÷ 2⌉
-Governs: sub-unit limit (max = Coherence Rating; TTRPG hard cap 3); Cohesion ceiling; Morale floor (= 1 while general present); tactic execution (Coherence Rating dice vs Ob).
-Coherence Rating = 1: cannot restore Cohesion to any unit — all degradation permanent for that battle.
+## Command [PROPOSAL] (PP-232)
+Command = ⌈(Presence + Cognition) ÷ 2⌉
+Governs: sub-unit limit (max = Command; TTRPG hard cap 3); Discipline ceiling; Morale floor (= 1 while general present); tactic execution (Command dice vs Ob).
+Command = 1: cannot restore Discipline to any unit — all degradation permanent for that battle.
 
 ## Battle Phases (TTRPG) — SUPERSEDED
 See §BATTLE TURN PHASE STRUCTURE above (7 phases, ED-050 Option D). The prior 5-phase structure is obsolete.
 
-## Cohesion Degradation (Deterministic) [PROPOSAL]
-Fires at Phase 5 when total Strength lost this turn > Cohesion rating → Cohesion −1.
-| Cohesion | CP penalty |
+## Discipline Degradation (Deterministic) [PROPOSAL] (PP-232)
+Fires at Phase 5 when total Size lost this turn > Discipline → Discipline −1.
+| Discipline | Power penalty |
 |----------|-----------|
 | 5–7 | None |
 | 3–4 | −1D |
 | 1–2 | −2D |
 | 0 | Formation broken; cannot attack; Reform or rout |
 
-Restoration: Reform Phase only (not engaged), +1 Cohesion, Coherence Rating ≥ current Cohesion + 1.
+Restoration: Reform Phase only (not engaged), +1 Discipline, Command ≥ current Discipline + 1.
 
 ## Morale Degradation Triggers [PROPOSAL]
 | Trigger | Change |
 |---------|--------|
-| Str < 50% max | −1 |
-| Str < 25% max | −1 additional |
-| Cohesion broken this turn | −1 |
+| Size < 50% max | −1 |
+| Size < 25% max | −1 additional |
+| Discipline broken this turn | −1 |
 | Allied unit routed in same zone | −1 |
 | General incapacitated (Stage 1) | −1 |
 | General killed (Stage 2) | −2 (not subject to phase cap) |
@@ -177,10 +179,10 @@ Source: ST-TW-03 design note + PP-225 (gains also ×3).
 > **RS<24 mass battle Rupture threshold (PP-204):** [PROVISIONAL] If RS is below 24 when a mass battle Thread operation is declared, the GM must inform the declaring practitioner before the roll: a Dissolution Failure at this RS level triggers the Rupture immediately (Dissolution Failure = −24 RS via ×3 multiplier; RS floor = 0 = Rupture). This is not a mechanic restriction — the practitioner may still attempt the operation. It is mandatory table information. At RS 0–23: any mass battle Dissolution Failure ends the campaign in the Rupture. Partial and worse results on Dissolution (−18 RS and −24 RS respectively) also carry Rupture risk at RS < 18 and RS < 25 respectively. Print this threshold on the mass battle Thread tracking sheet.
 
 Combat Thread ops (Dissolution, offensive Pulling): Phase 2. Support ops (Weave, Mend, Lock, non-offensive Pulling): Phase 5. Both declared Phase 1.
-Mass → Personal: Personal Action available at Phase 5 (Priority 8). Limit: 1 exchange/battle turn. General's Phase 5 consumed by personal combat (Coherence Rating suspended).
+Mass → Personal: Personal Action available at Phase 5 (Priority 8). Limit: 1 exchange/battle turn. General's Phase 5 consumed by personal combat (Command suspended).
 
 ## Key Design Axiom
-Generalship dominates. Coherence Rating asymmetry is intentional. Coherence Rating=7 vs Coherence Rating=1 general: near-certain outcome before dice rolled.
+Generalship dominates. Command asymmetry is intentional. Command=7 vs Command=1 general: near-certain outcome before dice rolled.
 
 
 ## RESOLVED PARAMS GAPS (PP-104, 2026-04-02)
@@ -240,7 +242,7 @@ Margin = |attacker net − defender net|.
 ## SIM-X-22 Provisional Patches (PP-222, PP-224, PP-227, PP-229, PP-231)
 
 ### PP-222: Offensive Lock Blocks Cohesion Degradation [PROVISIONAL]
-Offensive Lock (Phase 4) on a formation thread blocks Cohesion degradation checks on the locked unit for the lock duration. The formation is frozen — it cannot degrade organisationally while the thread configuration holds it in place. ED-122 pending confirmation.
+Offensive Lock (Phase 4) on a formation thread blocks Discipline degradation checks on the locked unit for the lock duration. The formation is frozen — it cannot degrade organisationally while the thread configuration holds it in place. ED-122 pending confirmation.
 
 ### PP-224: Diagnosis+Leap Collapse in Mass Battle [PROVISIONAL]
 In mass battle, Diagnosis and Leap collapse to a single Phase 4 action (not 2 separate rounds). The PP-190 2-round rule (Diagnosis Round N, Leap Round N+1) applies to personal combat only. Mass battle tempo requires single-phase resolution. ED-124 pending confirmation.
@@ -252,7 +254,7 @@ A paradox window (P-22) has no mechanical effect on unit stats during the active
 When a General triggers Zoom In (personal exchange during Phase 6 Step 4), any active Thread contact window is suspended — not consumed. Contact rounds do not tick during the personal exchange sub-scene. On return to mass scale, remaining contact rounds resume.
 
 ### PP-231: Cohesion Degradation = Asymmetry Mechanic [PROVISIONAL]
-Cohesion degradation is an asymmetry mechanic, not an attrition mechanic. It triggers only when: (a) CP asymmetry exists (stronger unit overwhelms weaker), (b) Thread-assisted Strength loss creates sudden imbalance, or (c) Artillery bombardment. Symmetric engagements between equal-CP units do not trigger Cohesion degradation — they produce attrition (Strength loss) only. GM guidance note.
+Discipline degradation is an asymmetry mechanic, not an attrition mechanic. It triggers only when: (a) Power asymmetry exists (stronger unit overwhelms weaker), (b) Thread-assisted Size loss creates sudden imbalance, or (c) Artillery bombardment. Symmetric engagements between equal-Power units do not trigger Discipline degradation — they produce attrition (Size loss) only. GM guidance note.
 
 <!-- patch_history: references/params_mass_combat_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
@@ -265,7 +267,7 @@ The −3 Morale cap per Cascade Phase applies as a total across all non-general 
 ## Commander Bonus Formulas — Consolidated (ED-033 resolved — provisional)
 | Context | Formula | Notes |
 |---------|---------|-------|
-| TTRPG mass combat | CR = ⌈(Presence + Cognition) ÷ 2⌉ | Per params_mass_combat |
+| TTRPG mass combat | Command = ⌈(Presence + Cognition) ÷ 2⌉ | Per params_mass_combat (PP-232) |
 | BG battle resolution | Commander bonus = faction Military ÷ 3, round down (max +2D) | Per §B.3 |
 | Hybrid Zoom In | Use TTRPG CR for TTRPG-layer actions; BG commander bonus for BG-layer accounting | No conversion between them |
 [PROVISIONAL]

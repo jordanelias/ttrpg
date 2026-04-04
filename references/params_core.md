@@ -1,6 +1,7 @@
-<!-- version: v0.14-AUD1 | sources: stage1_core_engine.md | last_updated: 2026-04-02 -->
+<!-- version: v0.14-AUD1-R1 | sources: stage1_core_engine.md | last_updated: 2026-04-03 -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
 <!-- PATCHES APPLIED: PP-164 (attribute range, derived stats table, Memory/Focus definitions) -->
+<!-- PP-232 (Ob cap raised to 20; Overwhelming floor 3; Health formula revised; Stamina floor 2; armour wield constraint) -->
 
 # params_core.md — Core Dice Engine
 
@@ -21,7 +22,7 @@ Net successes = sum of all contributions (may be negative).
 | Standard | 7 | Default |
 | Desperate | 8 | Duress, exhaustion, existential threat |
 
-Thread operations: TN 7 standard; TN 8 for Forced Resolution and Past-Oriented Pulling.
+Thread operations: TN 7 standard; TN 8 for Locking, Dissolution, and Past-Oriented Pulling.
 
 ## Obstacle Scale
 | Ob | Difficulty |
@@ -31,19 +32,20 @@ Thread operations: TN 7 standard; TN 8 for Forced Resolution and Past-Oriented P
 | 3 | Difficult |
 | 5 | Entrenched |
 | 8 | Structural |
-| 10 | Foundational (cap; no stacking above 10) |
+| 20 | Foundational (cap; no stacking above 20) |
 
-Ob minimum: 1. No modifier may reduce Ob below 1.
+Ob minimum: 1. No modifier may reduce Ob below 1. (PP-232)
 
 ## Degrees of Success
 | Degree | Condition |
 |--------|-----------|
-| Overwhelming | Net ≥ 2× Ob (+1 Momentum) |
+| Overwhelming | Net ≥ 2× Ob AND net ≥ 3 (+1 Momentum) |
 | Success | Net ≥ Ob |
 | Partial | Net > 0 but < Ob |
 | Failure | Net ≤ 0 |
 
-Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
+Overwhelming requires a minimum of 3 net successes regardless of Ob. (PP-232)
+Ob 20 exception: Overwhelming unavailable. Partial requires net ≥ 10.
 
 ## Momentum
 - Range: 0–4
@@ -91,11 +93,12 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 
 | Score | Formula | Range | Notes |
 |-------|---------|-------|-------|
-| Health | Endurance + 6 | 7–13 | Damage buffer before Wounds |
-| Composure | Presence + 6 | 7–13 | Social damage buffer before Rattled |
-| Combat Pool | Agility + weapon proficiency History (points + 3) | Variable | Split Offence/Defence each round |
+| Health | (Endurance + 6) × (wound count + 1) | 7–13 per wound interval | Wound threshold every (Endurance + 6) points. Resets per interval on Wound. (PP-232) |
+| Stamina | Endurance + Relevant History + 1 (modified by armour) | min 2 | Combat resource. Floor 2. Cannot wear armour that would reduce Stamina to 1 or below. (PP-232) |
+| Composure | Tracks like Health/Wounds but for social durability. Rattled = wound-equivalent threshold. | [EDITORIAL: ED-127] | Design pending — mirror of Health/Wound structure. |
+| Combat Pool | (Agility × 2) + weapon proficiency History + 3 | Variable | Split Offence/Defence each round |
 | Contact Rounds | Focus | 1–7 | Max rounds maintaining Thread contact (practitioners only) |
-| Certainty | Spirit (starting and maximum) | 1–7 | Existential coherence; at 0 → Rendering Crisis |
+| Certainty | [EDITORIAL: ED-128] | — | Decoupled from Spirit pending design decision. |
 | Coherence | 10 (starting); countdown to 0 | 0–10 | Personal rendering legibility |
 | Resolve | Spirit | 1–7 | Maximum total Inspiration value |
 

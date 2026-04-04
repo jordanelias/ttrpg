@@ -2168,3 +2168,120 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     status: open
     description: "FR operations (Lock/Dissolution) in mass battle: 98.3% failure rate at TS70 Relational. Tactically inert but RS-costly. Options: (a) accept as deterrent-only design; (b) reduce mass battle FR Ob -2; (c) restrict FR to TS90+ in mass battle. Simulation confirms no TS70 practitioner should attempt FR ops in mass battle."
     tags: [thread, mass_battle, lock, dissolution, FR, balance]
+
+  - id: ED-127
+    date_flagged: "2026-04-03"
+    source: docx_review
+    source_file: "__Valoria___System_Overview_Review.docx"
+    description: "Composure track needs redesign to mirror Health/Wound structure. Rattled = wound-equivalent threshold. Formula and track design pending."
+    full_flag_text: "Should be like health and wounds, but composure and rattled"
+    status: open
+    decision: ~
+    propagation_targets: [references/params_core.md, references/params_combat.md, references/params_debate.md]
+    propagation_status: flagged
+    related_ids: [ED-060]
+    tags: [combat, debate, core, composure]
+
+  - id: ED-128
+    date_flagged: "2026-04-03"
+    source: docx_review
+    source_file: "__Valoria___System_Overview_Review.docx"
+    description: "Certainty stat decoupled from Spirit. Design question: is Certainty a sanity-parallel track (how robustly reality is given to consciousness), a Thread-development prerequisite, or something else? Spirit should not be the sole determinant. 0-10 or 0-7 range TBD."
+    full_flag_text: "maybe this doesn't make sense if rendering is an act of consciousness... maybe certainty is like health for sanity or something..."
+    status: open
+    decision: ~
+    propagation_targets: [references/params_core.md, references/params_threadwork.md]
+    propagation_status: flagged
+    related_ids: []
+    tags: [core, threadwork, certainty, philosophy]
+
+  - id: ED-129
+    date_flagged: "2026-04-03"
+    source: docx_review
+    source_file: "__Valoria___System_Overview_Review.docx"
+    description: "Close zone / Far zone terminology disputed. Replace with plain-language distance descriptors consistent with the new Short/Long weapon reach matrix. Ranged is ranged until GM rules otherwise."
+    full_flag_text: "far zone? close zone? if so, that makes no sense. ranged is just ranged until dm says otherwise"
+    status: open
+    decision: ~
+    propagation_targets: [references/params_combat.md]
+    propagation_status: flagged
+    related_ids: []
+    tags: [combat, ranged, terminology]
+
+  - id: ED-130
+    date_flagged: "2026-04-03"
+    source: docx_review
+    source_file: "__Valoria___System_Overview_Review.docx"
+    description: "Stage 1 (down) and Stage 2 (dying) incapacitation states undefined or unclear. Need design definition: what triggers each stage, what effects they have, and how they interact with the new Health/Wound formula."
+    full_flag_text: "huh? [re: Stage 1 (down). Stage 2 (dying; −2 Morale to witnessing units)]"
+    status: open
+    decision: ~
+    propagation_targets: [references/params_combat.md]
+    propagation_status: flagged
+    related_ids: []
+    tags: [combat, incapacitation]
+
+  - id: ED-131
+    date_flagged: "2026-04-03"
+    source: docx_review
+    source_file: "__Valoria___System_Overview_Review.docx"
+    description: "Weapon modifier vs armour tier table requires playtesting to confirm values. Design intent: Light Blade +3/+2/+1/0, Heavy Blade +6/+4/+2/0, Light Blunt +3/+3/+3/+3, Heavy Blunt +5/+5/+5/+5. Whether adding STR makes these values excessive is an open playtesting question."
+    full_flag_text: "basically if you add strength, every hit you do with the right weapon is a wound...it's just increasingly hard to hit?"
+    status: open
+    decision: ~
+    propagation_targets: [references/params_combat.md]
+    propagation_status: flagged
+    related_ids: []
+    tags: [combat, damage, weapons, balance]
+
+  - id: ED-132
+    date_flagged: "2026-04-03"
+    source: docx_review
+    source_file: "__Valoria___System_Overview_Review.docx"
+    description: "Debate exchange Step 1 action name disputed. 'Read' is wrong. Candidates: Judge, Appraise. User to confirm preferred term."
+    full_flag_text: "Read??? / judge? appraise? read seems wrong"
+    status: open
+    decision: ~
+    propagation_targets: [references/params_debate.md]
+    propagation_status: flagged
+    related_ids: []
+    tags: [debate, terminology]
+
+  - id: ED-133
+    date_flagged: "2026-04-03"
+    source: docx_review
+    source_file: "__Valoria___System_Overview_Review.docx"
+    description: "Diverge state trigger and design rationale disputed. Current trigger (GM discretion at margin threshold) is unclear. Full design justification required before Diverge state is treated as final."
+    full_flag_text: "???? [re: Diverge state trigger] / Present justification for this system"
+    status: open
+    decision: ~
+    propagation_targets: [references/params_debate.md]
+    propagation_status: flagged
+    related_ids: []
+    tags: [debate, diverge]
+
+  - id: ED-134
+    date_flagged: "2026-04-03"
+    source: docx_review
+    source_file: "__Valoria___System_Overview_Review.docx"
+    description: "Diagnosis as a mandatory pre-operation action lacks clear design rationale. Disputed: whether it represents intentional orientation of being or is purely a procedural gate. If it is just 'focusing intentionality', may not need to be a separate timed action."
+    full_flag_text: "Diagnosing what? What's the point of this? You're either suspending your sense of self or you're not unless this is justified as focusing your Intentionality..."
+    status: open
+    decision: ~
+    propagation_targets: [references/params_threadwork.md]
+    propagation_status: flagged
+    related_ids: []
+    tags: [threadwork, diagnosis]
+
+  - id: ED-135
+    date_flagged: "2026-04-03"
+    source: docx_review
+    source_file: "__Valoria___System_Overview_Review.docx"
+    description: "The term 'Forced Resolution (FR)' as a collective label for Locking and Dissolution is disputed. User believes it refers specifically to snapping or locking threads and does not like the term. Replacement terminology required."
+    full_flag_text: "I don't like this term, and I think it refers to snapping threads or locking threads specifically?"
+    status: open
+    decision: ~
+    propagation_targets: [references/params_threadwork.md, references/params_core.md]
+    propagation_status: flagged
+    related_ids: []
+    tags: [threadwork, terminology]

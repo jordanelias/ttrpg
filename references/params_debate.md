@@ -1,48 +1,36 @@
-<!-- version: v0.14+design-ST4 | sources: debate_system_redesign_v1.md Part 6 v1.5 | last_updated: 2026-04-02 -->
+<!-- version: v0.14+design-ST4-R1 | sources: debate_system_redesign_v1.md Part 6 v1.5 | last_updated: 2026-04-03 -->
 <!-- NEW SECTIONS: §6.11 Pre-Debate Prep, §6.12 Multi-Party, §6.13 BG Vote, §6.14 Hybrid, §6.15 Thread -->
 <!-- GAP-DS-01/02/03/04/05/06/07/08/16/17/18/19 all resolved in v1.4/v1.5 -->
 <!-- SIM-DEBT-02: Corroboration in CLASH calibration pending -->
 <!-- PATCHES APPLIED: D-01–D-10, R-01–R-07, v2-P01–v2-P04, R-65, R-66 -->
-<!-- POOL FORMULA CONFIRMED: (Presence × 2) + History bonus, TN 7 -->
-<!-- SIM-DEBT-01: PARTIALLY RESOLVED. Modes A+D complete (SIM-D-01 2026-04-02). New baselines below. Mode C still needed. -->
-<!-- PP-097 PROVISIONAL: DIVERGE+TIE → Tie rule fires. -->
-<!-- PP-098 PROVISIONAL: Regroup at Concentration=0 → consumes Spent without penalty. -->
-<!-- PP-099 PROVISIONAL: Obscuring in Divergence → Doubt Marker; orientation_weight=1.0 for calc. -->
-<!-- stage9_social.md is EMPTY in v0.14. All values from design proposals. -->
+<!-- PP-232: Argue pool corrected to (Cognition × 2) + History; Initiative to Attunement; -->
+<!--         Step 1 action name flagged ED-132; Diverge trigger flagged ED-133; -->
+<!--         SIM-DEBT-01 baselines invalidated pending re-sim with corrected pool formula. -->
+<!-- SIM-DEBT-01: INVALIDATED by PP-232 pool correction. All baselines below are STALE. Re-sim required. -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage9 before use. -->
 
 # params_debate.md — Debate System (v1, patched)
 
 
-## SIM-DEBT-01 Recalibrated Baselines (SIM-D-01)
-**All prior v1+v2 strain/Composure values are INVALID.** Use values below.
-
-| Value | Old (INVALID) | New baseline |
-|-------|--------------|-------------- |
-| Typical pool (Pres 3, Hist 2) | 5D | 8D |
-| E[winning margin, symmetric] | ~1.6 | ~2.0 |
-| P(Overwhelming) symmetric | ~25% | ~60% |
-| Typical strain/exchange (CLASH, Pres 3 winner, Focus 2 loser) | 1-2 | 2-3 |
-| Exchanges to Rattled (Composure 9) | 7-9 | 3-5 |
-| Exchanges to Rattled (Composure 7) | 5-7 | 2-4 |
-| Track movement/exchange (primary genre, res=1) | 0 (often) | 1 (consistent) |
-| Concentration durability (Conc=6, 50% loss rate) | — | ~4 exchanges |
+## SIM-DEBT-01 Baselines — INVALIDATED (PP-232)
+**All prior baselines (Pres 3 + Hist 2 = 8D etc.) are INVALID.** Pool formula was wrong.
+Correct pool = (Cognition × 2) + History. Re-simulation required before these values are usable.
 
 ## Pools
 | Roll | Pool | TN | Notes |
 |------|------|----|-------|
-| Argue | Cognition + History bonus | 7 | Main contest roll |
-| Read | Attunement only (no History) | 7 Ob 1 | Per exchange, before Choose |
+| Argue | (Cognition × 2) + History bonus | 7 | Main contest roll. (PP-232) |
+| Step 1 Appraise | Attunement only (no History) | 7 Ob 1 | Per exchange, before Choose. Action name [EDITORIAL: ED-132]. |
 | Memory bonus | +2D | — | When citing specific named verifiable claim. Binary. Any genre. |
-| Composure damage | — | — | From losing exchanges |
 
 ## Initiative
-Exchange 1: higher Presence acts first.
-Subsequent: transfers to exchange winner. Tie: stays with holder.
-Post-Diverge state: stays with holder. No re-Read.
+Exchange 1: higher **Attunement** acts last (has most information; declares second). (PP-232)
+Subsequent: transfers to exchange winner. Tie: stays with holder; no damage to either side. (PP-232)
+Post-Diverge state: stays with holder.
 
 ## Exchange Structure
-**Step 1 — Read** (both orators, Attunement, TN7 Ob1):
+**Step 1 — [EDITORIAL: ED-132 — action name: "Read" disputed; candidates include Appraise, Judge]**
+(both orators, Attunement, TN7 Ob1):
 | Net | Information |
 |-----|-------------|
 | Failure | Misleading signal: one weak genre identified as strong |
@@ -52,7 +40,7 @@ Post-Diverge state: stays with holder. No re-Read.
 
 **Step 2 — Choose:** Each orator selects Genre (Past/Present/Future) + Orientation (Revealing/Obscuring).
 
-**Step 3 — Argue:** Initiative holder declares and rolls first. Respondent hears, then declares and rolls.
+**Step 3 — Argue:** Lower Attunement (lower initiative) declares first. Higher Attunement hears, then declares and rolls. (PP-232)
 
 **Step 4 — Resolve** (by interaction type):
 
@@ -61,7 +49,7 @@ Post-Diverge state: stays with holder. No re-Read.
 | CLASH | Same genre, opposite orientation | Compare successes. Margin = difference. Apply movement formula. |
 | AMPLIFY | Same genre, same orientation | Combined pools vs Conviction Track resistance. |
 | CROSS | Different genres | Each evaluated independently. |
-| DIVERGE | Post-Diverge state | No Read/Choose. Direct pool vs pool, flat orientation weights. |
+| DIVERGE | Post-Diverge state | No Step 1/Choose. Direct pool vs pool, flat orientation weights. [EDITORIAL: ED-133] |
 
 ## Conviction Track
 Range: 0–10. Side A wins ≥ 7. Side B wins ≤ 3. Compromise zone: 4–6.
@@ -91,16 +79,14 @@ Revealing: ×1.0 | Obscuring: ×0.75 (invertible for specific scenarios).
 Fixed at setup; recorded in ledger.
 
 ## Composure
-[GAP: exact Composure formula not finalised — attribute mapping pending. From design intent:]
-Pool likely: Endurance + Poise or Presence.
-Rattled threshold: Composure ≤ 2 → −2D all Argue rolls.
-Recovery: Reframe action (costs initiative; Ob 2 Cognition check).
+[EDITORIAL: ED-127 — Composure to mirror Health/Wound structure with Rattled as wound-equivalent threshold. Formula and track pending design decision.]
+Recovery: Reframe action (costs initiative; Cognition Ob 2 — [EDITORIAL: ED-127]).
 Concession: voluntary, or forced at Composure 0.
 
 ## Diverge State
-Triggered when: margin threshold met but Conviction Track still in compromise zone after N exchanges (Game Master discretion).
-Effect: No Read, no genre choice. Orientation weights flatten. Initiative stays with holder.
-Ends: when Conviction exits compromise zone or Composure concession fires.
+[EDITORIAL: ED-133 — Diverge trigger and justification need design rationale. Current trigger (GM discretion at margin threshold) is disputed. Full design required before this state is treated as final.]
+Effect pending ED-133 resolution: No Step 1, no genre choice. Orientation weights flatten. Initiative stays with holder.
+Ends: when Conviction Track exits compromise zone or Composure concession fires.
 
 ## Multi-Party Debates
 [GAP: multi-party procedure not yet defined — design_v1.md F-5 identifies this as a structural gap.]
@@ -109,33 +95,32 @@ Ends: when Conviction exits compromise zone or Composure concession fires.
 Full Composure restores at scene end. Between-session: full restore. No partial recovery mechanic. [PROVISIONAL]
 
 ## Momentum in Debate (ED-059 resolved — provisional)
-Momentum may be spent in Debate rolls (1 Momentum = 1 automatic success, reduces effective Ob by 1). Applies to Argue and Read rolls. Does not apply to Coherence Retention rolls. [PROVISIONAL]
+Momentum may be spent in Debate rolls (1 Momentum = 1 automatic success, reduces effective Ob by 1). Applies to Argue and Step 1 rolls. Does not apply to Coherence Retention rolls. [PROVISIONAL]
 
 ## Genre Pivot Mid-Debate (ED-045 resolved — provisional)
 An orator may pivot their primary genre once per debate (not per exchange). Costs Concentration −1 extra on the exchange of the pivot. Must be declared during Choose step. [PROVISIONAL]
 
 ## Grand Debate Role Alternation (ED-042 resolved — provisional)
-Proposer role alternates per exchange. First proposer: higher Presence (ties: initiative holder). Alternation is independent of initiative transfer. [PROVISIONAL — PP-100 applies to §6.7 separately]
+Proposer role alternates per exchange. First proposer: higher Attunement (ties: initiative holder). Alternation is independent of initiative transfer. [PROVISIONAL — PP-100 applies to §6.7 separately; PP-232 corrects Attunement as initiative stat]
 
 ## Niflhel Social Toolkit (ED-041 resolved — provisional)
 Niflhel cannot participate in Formal or Grand Debates. Their social toolkit:
 - Private Negotiation: one-on-one only; uses Cognition + History, TN 7, Ob = target's Stability.
 - Bribery: spend 1 Wealth token; target takes −1 Ob on next roll toward Niflhel interests.
-- Thread Insight (TS≥30 only): Attunement Read before negotiation; reveals one unstated position.
+- Thread Insight (TS≥30 only): Attunement Step 1 before negotiation; reveals one unstated position.
 [PROVISIONAL — ED-041]
 
 ## Poise Attribute (ED-027 resolved — provisional)
-'Poise' is deprecated. All references to Poise in debate mechanics use Composure (derived: Presence + 4, range 5–11). [PROVISIONAL]
+'Poise' is deprecated. All references to Poise in debate mechanics use Composure. [PROVISIONAL — ED-127 governs Composure formula]
 
 ## NPC Composure Formula (ED-052 resolved — provisional)
-NPC Composure = Presence + 4. Prior shorthand "Presence + 6" is superseded. [PROVISIONAL]
+[PROVISIONAL — pending ED-127 Composure redesign.]
 
 ## Debate Corroboration — Asymmetric Proceedings (ED-055b resolved — provisional)
-Accused in Church Tribunal (Inquisitorial proceeding) may not have corroborators. The Inquisitor controls the proceeding structure. Accused may only: Object (Phase 2) and Distinction (Phase 5). [PROVISIONAL — consistent with §6.7]
+Accused in Church Tribunal (Inquisitorial proceeding) may not have corroborators. Accused may only: Object (Phase 2) and Distinction (Phase 5). [PROVISIONAL]
 
 ## Evidence Leverage Audience Mode Shift — Cap (PP-183)
-
-Audience ethical mode weight shifts from evidence leverage (ED-077: Cognition+History Ob2 to shift audience genre preference) are capped at weight 2.0. Subsequent successful leverage rolls in the same debate do not push the weight above 2.0. Multiple leverage attempts do not stack. [PP-183]
+Audience ethical mode weight shifts capped at weight 2.0. Multiple leverage attempts do not stack. [PP-183]
 
 <!-- patch_history: references/params_debate_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
@@ -143,20 +128,17 @@ Audience ethical mode weight shifts from evidence leverage (ED-077: Cognition+Hi
 ## Confirmed Debate Mechanics (PP-203)
 
 ### Dual Win-Conditions (ED-012 resolved)
-Applies to: Formal Debate, Grand Debate.
 1. Exchange majority: win more exchanges than opponent.
 2. Audience capture: end Debate with audience Friendly AND opponent Hostile or worse.
-Outcomes: Procedural victory (exchange majority only) / Popular victory (audience only) / Total victory (both).
+Outcomes: Procedural victory / Popular victory / Total victory.
 Domain Echo fires from audience response when Popular or Total victory.
 
 ### Church Tribunal Corroboration (ED-043 resolved)
-Accused has no Sed Contra phase, no Corroboration, cannot Call for Division.
-Corroboration for the accused is intentionally prohibited. Tribunal = doctrinal enforcement, not justice.
+Accused has no Sed Contra phase, no Corroboration, cannot Call for Division. Tribunal = doctrinal enforcement, not justice.
 
 ### Debate End Conditions (ED-058 resolved)
 End triggers: exchange limit reached (Inquisitor sets 1–5; Formal/Grand minimum 3).
 Stalemate (tied exchanges at limit): Proposer loses — burden of proof not met.
-No infinite loop possible: Inquisitor controls exchange count in Church Tribunal.
 
 ### Hybrid Debate (ED-057a resolved)
-Resolved in debate_system_redesign_v1 §6.14. No further mechanical content needed.
+Resolved in debate_system_redesign_v1 §6.14.
