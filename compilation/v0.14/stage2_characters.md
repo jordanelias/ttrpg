@@ -306,14 +306,14 @@ Character Points (CP) are earned through Belief engagement (§4.2) and spent on 
 | Purchase | Cost | Constraint |
 |----------|------|-----------|
 | Attribute +1 | Current score × 3 CP | Max 7 per attribute |
-| History +1 (beyond test track) | 3 CP | Cap = Memory score |
+| History +1 (beyond test track) | 3 CP | Cap = Recall score |
 | New History at 0 points | 5 CP | Must narrate origin scene; requires Game Master scene |
 | New Inspiration at 1 point | 4 CP | Total Inspiration ≤ Spirit; must name focus + one engagement scene + Spirit check |
 | Inspiration +1 point | 3 CP | Individual cap = Spirit; total ≤ Spirit |
 | New Knot (establish) | 2 CP | Total significant Knots ≤ Bonds score |
 | Knot +1 strain capacity | 3 CP | Max strain capacity per Knot = 5 above base threshold |
-| Circles +1D (permanent) | 4 CP | Max bonus = Presence score |
-| Resources +1D (permanent) | 4 CP | Max bonus = Presence score |
+| Circles +1D (permanent) | 4 CP | Max bonus = Charisma score |
+| Resources +1D (permanent) | 4 CP | Max bonus = Charisma score |
 | Remove 1 Wound | 6 CP | Between seasons only; requires narrative (healer, rest, Thread intervention) |
 | Approach Training | 8 CP | Thread Sensitivity ≥ 30; must have witnessed ≥1 Thread operation; replaces mentorship/breakthrough paths |
 
