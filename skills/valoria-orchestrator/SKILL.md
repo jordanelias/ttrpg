@@ -59,6 +59,13 @@ NEVER attempt to fetch a file without first verifying its name exists.
 If unsure of exact filename: list the directory first (1 call), then fetch.
 This prevents the pattern of 3-5 failed 404 calls to wrong filenames.
 
+### 7. Bootstrap without python3 heredoc wrapper
+NEVER paste the bootstrap block as bare Python into bash_tool without the heredoc wrapper.
+The correct form is always `python3 - <<'EOF'` ... `EOF`. Running bare Python code
+(without the heredoc) causes a syntax error on the first attempt. Retry attempts
+waste 500-1000 tokens per session. Copy the bootstrap block from Project Instructions
+exactly as written — do not reformat.
+
 ---
 
 ## PAT Reference
@@ -126,11 +133,9 @@ project_knowledge_search for any GitHub read.**
 
 1. Match user request against trigger keywords in skill registry.
 2. Declare: skill name · model tier · rationale (one line).
-3. Fetch skill SKILL.md from GitHub:
-   ```bash
-   curl -s -H "Authorization: token $PAT" \
-     "https://api.github.com/repos/jordanelias/ttrpg/contents/skills/{skill-name}/SKILL.md" \
-     | python3 -c "import sys,json,base64; d=json.load(sys.stdin); print(base64.b64decode(d['content']).decode())"
+3. Fetch skill SKILL.md from GitHub via read_files_graphql:
+   ```python
+   files = g.read_files_graphql(['skills/{skill-name}/SKILL.md'])
    ```
 4. Execute per skill instructions.
 5. **Commit output to GitHub BEFORE sending response to user** (see Atomic Commit Discipline).
