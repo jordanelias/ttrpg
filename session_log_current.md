@@ -2,59 +2,37 @@
 
 ```yaml
 session_id: 2026-04-04T_COMPREHENSIVE_AUDIT
-phase: SESSION CLOSED
+phase: SESSION COMPLETE
 status: COMPLETE
 
 ## WORK COMPLETED
-### Phase 1 — Params Cross-System Audit
-1. All 8 params files cross-checked. Automated terminology scan.
-2. Formula cross-reference validation. Crunch cascade analysis.
-3. Cognitive load assessment. Cross-mode value alignment.
-4. 8 P1, 5 P2, 3 P3 findings. Mechanical fixes applied to 5 params files.
-5. 4 new editorial items flagged: ED-139–142.
-6. Commit: d72fb57
-
-### Phase 2 — Canonical Design Document Review
-7. Deep audit of 5 canonical design docs (232k chars).
-8. CRITICAL P0 finding: PP-232/PP-233 applied to zero canonical docs.
-9. 6 P1 formula/outcome mismatches documented.
-10. Commit: 251ea34
-
-### PP-232/PP-233 Propagation
-11. combat_design_v1.md: weapon system rebuilt, wound penalty, initiative, Health, Stamina, ED-130.
-12. mass_battle_v3.md: 84 terminology fixes + core formula to min(Size,Command)+Command.
-13. threadwork_redesign_v25.md: Leap pool+Spirit, Failure revised, POP TN 8, eligibility, Memory→Recall.
-14. valoria_bg_v05.md: 5 Cohesion→Discipline.
-15. Commit: 1ac8151
-
-### Phase 3 — Remaining Systems + Cross-Mode + Cognitive Load
-16. 9 compilation stages scanned. 4 fixed (PP-234 attribute renames).
-17. Cross-mode transitions: all 8 handoff rules confirmed. Phase-Lock clean.
-18. Cognitive load scoring: 3 systems at Extreme (9/9), 2 at Heavy (7/9).
-19. Optimization recommendations: 4 reference aids for peak load reduction.
-20. Structural gap: stage5_clocks.md and stage15_spell_catalog.md are empty canonicals.
-21. Commit: [this commit]
+1. Phase 1: Params cross-system audit (8 params files). 8 P1 + 5 P2 + 3 P3 findings. Mechanical fixes applied.
+2. Phase 2: Canonical doc review (5 design docs, 232k chars). P0 critical finding: PP-232/PP-233 unpropagated.
+3. PP-232/PP-233 propagation: combat_design_v1 → v1.5, mass_battle_v3 → v4.5, threadwork_v25 → v3.2, bg_v05 Cohesion→Discipline.
+4. PP-232/PP-234 propagation: stage2, stage4, stage10, stage11, stage13 (14 individual corrections).
+5. Phase 3: Cross-mode transition fidelity (8 handoff rules, 2 gaps), cognitive load scoring (6 systems), crunch cascade final (all bounded).
+6. ~110 terminology corrections across 14 files.
+7. 4 new editorial items (ED-139–142).
 
 ## COMMITS THIS SESSION
 - d72fb57 [patch] Phase 1 audit — terminology fixes + ED-139-142
-- 251ea34 [infrastructure] Phase 2 audit report + stale warnings
-- 1ac8151 [patch] PP-232/PP-233 propagation to 4 canonical design docs
-- [this] [patch] Phase 3 — compilation PP-234 propagation + audit report
+- 251ea34 [infrastructure] Phase 2 audit report + canonical_sources stale warnings
+- 671325f [patch] PP-232/PP-233 propagation — 4 canonical design docs
+- dfa0e6b [patch] PP-232/PP-234 propagation — 5 compilation stages
+- [pending] [infrastructure] Phase 3 audit report + session close
 
-## OPEN EDITORIAL ITEMS (require user decision)
-- ED-139: Community Weaving triple specification conflict — P1
-- ED-140: Discipline degradation trigger vs PP-231 asymmetry — P1
-- ED-141: Social contest v2 GM reference card — P2
-- ED-142: BG Overwhelming threshold ED-031 vs PP-179 — P1
+## OPEN ITEMS ADDED
+- ED-139: Community Weaving triple spec — P1 (user decision)
+- ED-140: Discipline degradation asymmetry — P1 (user decision)
+- ED-141: Social contest v2 reference card — P2 (tooling)
+- ED-142: BG Overwhelming threshold — P1 (user decision)
+- AUD-P1-15: Scene→Mass transition underspecified
+- AUD-P1-16: 17 Hybrid gap resolutions pending integration
 
-## SIMULATION DEBT (excluded per user direction)
-- SIM-DEBT-03: Full re-sim under two-genre system
-- SIM-DEBT-04: Adjudicator-type pool calibration
-
-## Gate: PASS — AUDIT COMPLETE
+## Gate: PASS
 
 next_session_start:
-  priority: Resolve ED-139 (Community Weaving reconciliation), ED-140 (Discipline degradation asymmetry), ED-142 (BG Overwhelming threshold). Then SIM-DEBT-03/04 when ready.
-  read_first: [tests/audit_phase3_remaining_systems.md, canon/editorial_ledger.yaml]
-  context: Full 3-phase audit complete. All PP-232/PP-233/PP-234 propagation done. Canonical source integrity restored. 4 editorial items and 2 sim debts remain. Stage5 and stage15 are empty canonicals (structural gap, low priority).
+  priority: User decisions on ED-139/140/142, then Hybrid gap integration (AUD-P1-16)
+  read_first: [tests/audit_phase3_crossmode_cogload.md, session_log_current.md]
+  context: Full 3-phase audit complete. All canonical docs aligned with params. 3 editorial items require user decisions. Hybrid gaps (17) are the largest remaining integration task. SIM-DEBT-03/04 deferred.
 ```
