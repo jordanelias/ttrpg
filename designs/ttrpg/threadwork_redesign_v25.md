@@ -29,7 +29,7 @@
 The ×3 Rendering Stability multiplier for mass battle Thread operations means a practitioner performing 5+ Thread operations in a single large battle risks significant Coherence drain (−1/op = Coherence 5 after 5 ops → Dissonant threshold). This is pro
 
 ### TTRPG ONLY
-- Part 2: Operations — Approach Training, Diagnosis, Leap, all named operations (Weaving, Pulling, Locking, Dissolution, Mending, Collective)
+- Part 2: Operations — Approach Training, Leap, all named operations (Weaving, Pulling, Locking, Dissolution, Mending, Collective)
 - Part 3: Coherence (10→0) — personal practitioner track; no BG equivalent
 - Part 6: Threadcut Beings — TTRPG encounter mechanics
 
@@ -83,56 +83,10 @@ See `designs/ttrpg/threadwork_philosophical_reference.md` for the complete philo
 
 *No changes from current §5.1. Full season commitment, narrative confirmation, Approach Training tag granted.*
 
-## 2.2 Diagnosis — The Last Act of Rendering
+## 2.2 Diagnosis — STRUCK (ED-134/ED-124, 2026-04-03)
 
-*Revised from current §5.3. Repositioned before the Leap in the operational sequence.*
+> Diagnosis as a standalone action is removed from the system. Practitioner either suspends their sense of self and Leaps, or does not. No preparatory gate action exists. In mass combat, Leap proceeds directly in Phase 4 without Diagnosis. In personal combat, Leap is a Priority 5 full-round action with no Diagnosis prerequisite. See params_threadwork.md §Diagnosis — STRUCK.
 
-Diagnosis is the practitioner's final rendering act before they suspend rendering and Leap. It is the careful, conscious perception of the target's thread configuration — reading what can be read while reading is still possible.
-
-> **Over-actualised brittleness (P-18):** Game Master guidance note (not a mechanical check): Over-actualised configurations — those driven beyond the substrate's natural coherence by Weaving at Relational+ scale — are rigid. They cannot adapt to changing circumstances the way natural configurations do. When a non-Thread event of sufficient severity threatens an over-actualised configuration (e.g., territorial seizure threatening a diplomatic agre
-
-**Timing:** Diagnosis occurs BEFORE the Leap. It is a **Priority 4 standard action in the round preceding the Leap**
-
-*Priority convention: lower number = earlier in the round. Priority 1 acts first; Priority 5 acts last. Diagnosis (Priority 4) therefore fires before the Leap (Priority 5) if both occur in the same round.*, or it may share a round with the Leap if the practitioner has sufficient action economy (Game Master judgment based on circumstances — no simultaneous action economy during the Leap round itself, but Diagnosis at the start of the round and Leap at the end is permissible in non-combat contexts).
-
-> **Diagnosis+Leap action economy in combat (PP-190):** [PROVISIONAL] In combat, Diagnosis and the Leap occupy separate rounds. **Diagnosis round:** Diagnosis fires at Priority 4 as a standard action; no other standard action this round; only reactive defence available after Priority 4. No Leap this round. **Leap round:** Leap fires at Priority 5 as a full-round action the following round. Minimum time cost in combat: 2 rounds. In non-combat (no declared attackers, no active melee): Diagnosis may fire at Priority 4 and the Leap at Priority 5 in the same round, per GM judgment.
-
-
-**No roll.** Diagnosis is a structured Game Master exchange. The practitioner states what they are sensing. The Game Master describes:
-
-- **Actualization:** How tight or loose the configuration is (sets Operation Ob).
-- **Prior work:** Whether threads have been previously worked (residue of prior operations).
-- **Gap proximity:** Whether a Gap is forming (critical safety information).
-- **Coherence trace:** If the configuration has been touched by a degraded practitioner.
-- **Temporal weight:** The depth of the configuration's accumulated past.
-- **Trajectory:** The thread's orientation toward becoming. Intelligibility follows the scale principle:
-
-| Scale | Trajectory Perception |
-|---|---|
-| Object | Clear. "This wound is closing. This lock mechanism is wearing. This blade is dulling." |
-| Personal | Directional. "This person is trending toward despair. This relationship is straining." General direction, not specific outcome. |
-| Relational | Partial. Momentum — acceleration, stiffening, fraying — but not destination. |
-| Territorial | Near-opaque. A vague sense that something large is shifting, but too complex to render. |
-| Structural | Nothing. The trajectory is entirely below the waterline. |
-
-**Diagnosis on threadcut beings (Mode 3):** The configuration reads as having no accumulated past and no natural trajectory. A continuous present sustained by active work. The practitioner perceives something *held in place* rather than something *persisting*.
-
-> **Mode 3 exclusion (P-16):** Weaving-based monstrous entity resolution (§5.13: "Weaving (Thread Sensitivity 60+, Ob 4): destroys entity AND partially closes Gap") **does not work on Mode 3 (threadcut) beings.** Weaving draws threads toward coherence. A threadcut being is already self-coherent through continuous Thread work. Weaving a threadcut being reinforces its self-rendering rather than resolving its configuration. **Mode 3 resolution op
-
-> **Mode 3 Dissolution exception (R-64):** Threadcut beings (Mode 3) cannot be Dissolved by standard means.
-Conventional Dissolution against Mode 3 always yields Partial (Shifting Object) regardless of roll.
-Overwhelming success required for true Dissolution effect.
-Apply to §2.4 Dissolution, and §6 Threadcut Beings.
-
-**Configuration change after Diagnosis:** If the target configuration changes significantly between Diagnosis and the Leap — a Gap opens at the site, the target dies, another practitioner Locks or Dissolves the thread — the practitioner may revise their declared intentionality before the Leap roll at no cost. They have not yet suspended rendering; revision is possible. If the practitioner proceeds with the original intentionality against the altered configuration without revising: treat as skipping Diagnosis for that operation (+2 Ob, automatic Gap creation on Failure for FR operations).
-
-**Diagnosis detectability:** Diagnosis is not detectable by observers with Thread Sensitivity below 50. Observers with Thread Sensitivity 50+ may make a Cognition check (TN 7, Ob 1) to notice that a practitioner is rendering a specific configuration more carefully than passive perception requires. Physical stillness and focused attention are observable by anyone; the Thread-level rendering act is not.
-
-**Mandatory before Mending, Locking, or Dissolution.** Skipping Diagnosis before FR: +2 Ob and automatic Gap creation on Failure regardless of degree. Skipping before Mending: +2 Ob. In all cases, skipping Diagnosis means the practitioner Leaps without the rendering information that should direct their intentionality. They are not just working blind — they are Being beyond their being without having formed adequate intention. The operation is still directed by intentionality, but the intentionality is malformed.
-
-**Mandatory before Past-Oriented Pulling.** Skipping: +3 Ob and a temporal Gap on Failure.
-> **POP displacement of debate subject (PP-199):** [PROVISIONAL — canon: §1.3, §13.1] If a Past-Oriented Pull displaces an event that is the factual basis of an active debate's Past-genre argument, the following applies at the moment of displacement: (1) The displaced party's Past-genre argument loses its Memory bonus for any claim whose factual basis was removed. The bonus does not return during this debate — the cited facts no longer exist in the world's current state. (2) The debate does not restart. The participants continue from the current exchange. The altered world is now the factual ground. (3) The opposing party may, on their next exchange, invoke the displacement itself as a Present-genre argument (the sudden alteration of historical fact is itself a present-tense occurrence). This counts as a new claim and may earn a Memory bonus if the POP itself is documented. (4) If both parties had Past-genre arguments relying on the displaced event, both lose their Memory bonuses for those claims. (5) Temporal Disjunction from the POP applies to all participants: the GM may impose a one-exchange −1D on Argue rolls for any character whose retained memories now conflict with the world's current facts (they are arguing from a past that no longer exists).
- Past-Oriented Pulling reaches into the deepest parts of a thread's temporal weight. Entering that interaction without having rendered the weight's structure produces catastrophic misalignment between intentionality and configuration.
 
 ## 2.3 The Leap — Suspending Rendering
 
@@ -337,7 +291,7 @@ Apply to §2.4 Pulling — Past-Oriented Pulling duration table.
 
 **What happens:** The practitioner's intentionality is directed toward the thread's accumulated temporal depth — the history of spoolings that constitute what it has been. During contact, their configuration interacts with the thread at this deeper level, displacing temporal weight. The physical facts are removed. Memories — which are themselves spooled configurations in other beings — remain intact, producing Temporal Disjunction.
 
-**Requirements:** Thread Sensitivity 70+ · Rendering Stability ≤ 60 (substrate must be stressed enough for temporal depth to be accessible — in a pristine world, the temporal weight is too firmly actualised to pull against) · Diagnosis mandatory
+**Requirements:** Thread Sensitivity 70+ · Rendering Stability ≤ 60 (substrate must be stressed enough for temporal depth to be accessible — in a pristine world, the temporal weight is too firmly actualised to pull against)
 
 **Foundational-scale Past-Oriented Pulling:** Displacing a Foundational event (the Einhir Catastrophe, a civilisation-ending collapse, a foundational institution's origin) requires all standard prerequisites plus: the Einhir framework (§9.15) — the intentionality required to reach Foundational temporal depth cannot be formed without it. Add +2 Ob surcharge to the recency Ob (Ob 7 recency + 2 = Ob 9 for a generational Foundational event). Rendering Stability consequence ×3 on all outcomes (Success: Rendering Stability −9 minimum; Failure: snap-back Wound + Rendering Stability −6 minimum). This is a near-mythic act — maximum conceivable practitioner achieves ~5% success — but it is mechanically possible. It is a legitimate campaign endpoint: the thing the Einhir could not do and the thing a generation of practitioners might spend a campaign attempting.
 **Pool:** Spirit + relevant History bonus + Thread Pool Score÷2 (round down)
@@ -366,7 +320,7 @@ Apply to §3.2 Coherence Reduction / Loc
 
 **What happens:** The practitioner's intentionality is directed toward total actualization — freezing the thread permanently in its current rendered state. During contact, their configuration drives the thread to full actualization. The thread can no longer move between actual and potential. Ein Sof continues to spool, but the thread cannot integrate what the ground provides. It is frozen. Unable to become.
 
-**Requirements:** Thread Sensitivity 50+ · Diagnosis mandatory
+**Requirements:** Thread Sensitivity 50+
 **Pool:** Spirit + relevant History bonus
 **TN:** 7
 **Minimum Ob:** 4
@@ -415,7 +369,7 @@ Game Master determines domain type when Lock is applied.
 
 **Why Dissolution is acute:** Tearing is immediate and violent. The substrate ruptures. Ein Sof — infinite positive being — erupts through the tear as excess, not void. Monstrous configurations are forced through the rupture into the rendered world, partially intelligible and exceeding integration capacity.
 
-**Requirements:** Thread Sensitivity 50+ · Diagnosis mandatory
+**Requirements:** Thread Sensitivity 50+
 **Pool:** Spirit + relevant History bonus
 **TN:** 7
 **Minimum Ob:** 4
@@ -453,7 +407,7 @@ Game Master determines domain type when Lock is applied.
 
 This requires a different intentionality than thread operations. The practitioner is not directing their configuration toward a thread's coherence or potential. They are directing it toward a structural absence, intending restoration of the conditions under which threads can exist. They are repairing the loom, not working a thread.
 
-**Requirements:** Thread Sensitivity 50+ · Diagnosis mandatory · Target must be a Gap, Shifting Object, or Locked Zone border
+**Requirements:** Thread Sensitivity 50+ · Target must be a Gap, Shifting Object, or Locked Zone border
 **Pool:** Attunement + Focus + Thread Pool Score
 **TN:** 7
 

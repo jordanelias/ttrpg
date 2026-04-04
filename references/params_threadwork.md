@@ -121,7 +121,7 @@ Rendering Stability minimum cost: −3 on Success. Failure: snap-back Wound + Re
 
 ### Locking (Forced Resolution)
 Pool: Spirit + History (no Thread Pool Score) | TN 7 (TN 8 for FR)
-Requirements: Thread Sensitivity 50+; Diagnosis mandatory. Min Ob: 4.
+Requirements: Thread Sensitivity 50+. Min Ob: 4.
 | Scale | Ob |
 |-------|----|
 | Object | 4 |
