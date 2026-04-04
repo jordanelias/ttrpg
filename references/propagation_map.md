@@ -1,5 +1,5 @@
 # VALORIA PROPAGATION MAP
-## Last updated: 2026-04-02
+## Last updated: 2026-04-03
 ## Version: 2.0 — self-maintaining
 ## Format: machine-readable YAML blocks + human-readable tables
 
@@ -299,3 +299,29 @@ Propagation targets:
 - designs/mass_combat/mass_battle_v3.md → DONE (this commit)
 - references/params_mass_combat.md → DONE (this commit)
 - session_log_current.md → DONE (this commit)
+
+### PP-232 — Docx Review Batch (2026-04-03)
+Propagation complete. All affected params updated in same commit (22ee783).
+- references/params_core.md → DONE
+- references/params_combat.md → DONE
+- references/params_debate.md → DONE
+- references/params_threadwork.md → DONE
+- references/params_mass_combat.md → DONE
+- references/params_scale_transitions.md → DONE (this commit)
+- references/glossary.md → DONE (this commit)
+- canon/editorial_ledger.yaml → DONE (ED-127–135 added)
+- canon/patch_register.yaml → DONE
+- tests/coverage_matrix.md → DONE (this commit)
+- session_log_current.md → DONE (this commit)
+- references/params_board_game.md → NOT REQUIRED (BG battle abstracts above unit-stat level; BG uses faction Military stat for battle resolution, not Size/Power/Discipline)
+- references/params_factions.md → NOT REQUIRED (no mass combat stat references in factions params)
+
+### PP-233 — Mass Combat Unit Formula (2026-04-03)
+Source: design conversation 2026-04-03. Commit: 6db033d.
+Propagation targets:
+- references/params_mass_combat.md → DONE (6db033d)
+- references/glossary.md → DONE (this commit — new terms: Size, Power, Discipline, Command, H, Total Health)
+- tests/coverage_matrix.md → DONE (SIM-DEBT-03 added)
+- session_log_current.md → DONE (this commit)
+- designs/mass_combat/mass_battle_v3.md → STALE — unit formula in design doc predates PP-233. Needs rewrite on next design pass. [PROP-STALE: mass_battle_v3.md §B.1 unit stats]
+- compilation/v0.14/stage8_combat.md → STALE — mass combat compilation predates PP-232/233. [PROP-STALE: stage8_combat.md]

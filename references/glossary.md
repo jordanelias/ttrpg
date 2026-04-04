@@ -106,8 +106,13 @@ All factions tracked on 1–7 scale (0 = collapse / inoperability for most stats
 | Full Term | Abbr | Description |
 |-----------|------|-------------|
 | Combat Endurance | CE | Stamina resource tracking in extended combat. |
-| Coherence Rating | CR | Unit-level cohesion stat in mass battle. Range varies by unit type. Replaced Thread Coherence as label in mass combat context (unrelated to personal Coherence stat). |
-| Damage Resistance | DR | Armour mitigation value. Reduces damage received. |
+| Command | — | Unit commander stat in mass battle. ⌈(Presence + Cognition) ÷ 2⌉. Caps both Size contribution to pool and Discipline contribution to Health. (PP-232) |
+| Damage Resistance | DR | Armour mitigation value. In mass combat: component of Health per Size formula. |
+| Size | — | Unit headcount stat (replaces Strength). At 0: unit destroyed. Pool contribution capped at Command. (PP-232) |
+| Power | — | Unit offensive quality (replaces Combat Power). Damage per success = 1 + Power. Derived from unit type. (PP-232/PP-233) |
+| Discipline | — | Unit organisational integrity (replaces Cohesion). Contribution to Health per Size capped at Command. (PP-232) |
+| Health per Size | H | min(Discipline, Command) + DR. Used to derive Total Health and current Size. (PP-233) |
+| Total Health | — | Size × H. Full Size always used regardless of Command cap. (PP-233) |
 | Target Number | TN | **Exception — abbreviation permitted standalone.** The die face threshold for a success (6, 7, or 8 depending on context). |
 | Obstacle | Ob | **Exception — abbreviation permitted standalone.** The number of net successes required for a Success result. |
 
@@ -121,7 +126,7 @@ All factions tracked on 1–7 scale (0 = collapse / inoperability for most stats
 | Obstacle | Ob | Permitted standalone. Required net successes for a Success result. |
 | Expected Value | EV | Probability-weighted average outcome per die or pool. Used in simulation analysis. |
 | Degree of Success | — | Outcome tier: Overwhelming / Success / Partial / Failure. |
-| Overwhelming | — | Net successes ≥ 2× Ob (TTRPG); ≥ Ob + 1 (BG, provisional). |
+| Overwhelming | — | Net successes ≥ 2× Ob AND ≥ 3 minimum (TTRPG, PP-232); ≥ Ob + 1 (BG, provisional). |
 | Partial | — | Net successes > 0 but < Ob. |
 
 ---
@@ -202,6 +207,7 @@ Terms whose abbreviations conflict with another term. Never use these abbreviati
 | Abbreviation | Meaning A | Meaning B | Resolution |
 |-------------|-----------|-----------|------------|
 | TC | Theocracy Counter (Church faction clock, 0–100) | Conviction Track (Debate position tracker, 0–10) | Write full term always. |
+| CP | Character Points (advancement currency) | Combat Power (now renamed Power — PP-232) | CP now refers to Character Points only. Use "Power" for the unit offensive stat. [EDITORIAL: ED-136] |
 | TD | Thread Depth | Top-Down (Mermaid flowchart directive) | Thread Depth is a phantom stat (REMOVED PP-166). `flowchart TD` is valid Mermaid syntax — not a game term. |
 | COMP | Composure (Debate context) | Computation / Composition (general English) | Write "Composure" in game documents. |
 
@@ -221,5 +227,8 @@ The following abbreviations appeared in skill files but could not be confirmed a
 | INT (track code) | Listed as track code in old simulator header; possibly "Intel" faction stat | [GAP: confirm or replace] |
 
 ---
+
+## SIM-DEBT NOTE (PP-233)
+DR contribution to Health per Size means heavily armoured units accumulate Health fast. H = min(Discipline,Command) + DR — heavy armour (DR 2) adds 40% more Health than unarmoured at equal Discipline. Interaction with armour-dependent Power modifiers needs simulation before values are treated as calibrated. Logged as SIM-DEBT-03.
 
 *Glossary maintained by valoria-orchestrator. Update in the same commit as any file that introduces or retires a term.*

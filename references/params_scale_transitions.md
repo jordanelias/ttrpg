@@ -1,4 +1,4 @@
-<!-- version: v0.14-ST2 | sources: stage11_scale_transitions.md + PP-107–112 hybrid audit patches | last_updated: 2026-04-02 -->
+<!-- version: v0.14-ST2-R1 | sources: stage11_scale_transitions.md + PP-107–112 hybrid audit patches | last_updated: 2026-04-03 -->
 <!-- CANONICAL SOURCE: stage11 is canonical (no design doc for scale transitions). Updated with PP-089/090 and ED-050 Thread timing fix. -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
 
@@ -22,7 +22,7 @@
 | Scene → Faction | Successful Appeal/Debate at sufficient scope → Domain Echo (faction attribute change). No extra roll. |
 | Thread → Faction | Thread op targeting faction-level config resolves as Domain Action. Thread pool, appropriate Ob. No extra roll. |
 | Thread → Mass | Combat ops: Phase 2 (before Engagement). Support ops: Phase 5 (Cascade). Both declared Phase 1. |
-| Mass → Personal | Personal Action available at Phase 5 (Priority 8). Limit: 1 exchange/battle turn. General's Phase 5 consumed until personal combat resolved (Coherence Rating suspended). |
+| Mass → Personal | Personal Action available at Phase 5 (Priority 8). Limit: 1 exchange/battle turn. General's Phase 5 consumed until personal combat resolved (Command (PP-232) suspended). |
 | Scene → Mass | Social scene outcomes apply to mass combat opening state before next round declaration. |
 
 ## Domain Echo Rules (PP-108/PP-109)
