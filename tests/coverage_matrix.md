@@ -258,3 +258,4 @@ Open for editorial: ED-061, ED-062, ED-063.
 - **Required:** Recalibration simulation isolating FR surcharge contribution at mass battle scale
 - **Blocks:** Disclosure/gate ruling for Dissolution at RS<24
 - **Registered:** 2026-04-03
+| SIM-H-01 | Leap, Diagnosis, Forgetting, Appeal, Debate/CLASH, Circles, Domain Actions, Hybrid Season | Hybrid | PRES | Crown, Church, Guilds, Hafenmark, Revolution, Varfell | Torben, Halvard | Scholar-Practitioner, Soldier-Agent, Church-Renegade, Guilds-Fixer | COMPLETE | F-H01–F-H09 — 9 findings; 5 gaps flagged |
