@@ -336,3 +336,10 @@ Propagation targets:
 - references/params_factions.md — ED-005 (Maret Vossen, Aldric Hann), ED-006 (Riskbreakers identity)
 - references/params_board_game.md — ED-056 (TC/Zoom In), ED-072 (concurrent Zoom In), ED-080/081 (Conviction texts), ED-083 (VTM5 P-14), ED-085 (Ignore penalised), ED-086 (co-movement), ED-087 (ranged modifier), ED-109 (Crown victory), ED-110 (Church TC)
 **Status:** Complete for params layer. Design docs (designs/) not updated — skeleton debt flagged separately.
+
+## PP-234 Propagation (2026-04-04)
+- Attribute renames: Presence→Charisma, Memory→Recall propagated to: stage1, stage2, mass_battle_v3, params_core, params_mass_combat, params_factions.
+- params_debate.md superseded by params_contest.md.
+- debate_system_redesign_v1.md Part 6 superseded by social_contest_system_v2.md.
+- Genre rename: Past→Memory, Present→(turfed), Future→Projection.
+- Files NOT yet propagated: params_debate_history.md (historical, keep as-is), test outputs (flagged stale).

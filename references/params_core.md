@@ -82,11 +82,11 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 | Group | Attributes |
 |-------|-----------|
 | Physical | Agility (Agi), Endurance (End), Strength (Str) |
-| Mental | Cognition (Cog), Memory (Mem), Focus (Foc) |
-| Social | Attunement (Att), Bonds (Bon), Presence (Pres) |
+| Mental | Cognition (Cog), Recall (Rec), Focus (Foc) |
+| Social | Attunement (Att), Bonds (Bon), Charisma (Cha) |
 | Metaphysical | Spirit (Spi) |
 
-**Memory (Mem):** Knowledge, experience, retention. Sets the per-History point cap — a History can never hold more points than the character's Memory score.
+**Recall (Rec):** Knowledge, experience, retention. Sets the per-History point cap — a History can never hold more points than the character's Recall score.
 **Focus (Foc):** Concentration, discipline, precision under pressure. Governs Thread contact duration: Contact Rounds = Focus score (range 1–7).
 
 ## Derived Scores
@@ -95,7 +95,7 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 |-------|---------|-------|-------|
 | Health | (Endurance + 6) × (wound count + 1) | 7–13 per wound interval | Wound threshold every (Endurance + 6) points. Resets per interval on Wound. (PP-232) |
 | Stamina | Endurance + Relevant History + 1 (modified by armour) | min 2 | Combat resource. Floor 2. Cannot wear armour that would reduce Stamina to 1 or below. (PP-232) |
-| Composure | Tracks like Health/Wounds but for social durability. Rattled = wound-equivalent threshold. | [EDITORIAL: ED-127] | Design pending — mirror of Health/Wound structure. |
+| Composure | Charisma + 6 | 7–13 | Social damage buffer before Rattled. Parallels Health = Endurance + 6. (PP-234, ED-127 resolved) |
 | Combat Pool | (Agility × 2) + weapon proficiency History + 3 | Variable | Split Offence/Defence each round |
 | Contact Rounds | Focus | 1–7 | Max rounds maintaining Thread contact (practitioners only) |
 | Certainty | [EDITORIAL: ED-128] | — | Decoupled from Spirit pending design decision. |

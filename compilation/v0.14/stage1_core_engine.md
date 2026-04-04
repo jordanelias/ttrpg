@@ -127,7 +127,7 @@ Attributes range from 1 to 7. A score of 3 is the human average. 1 is severely l
 | Attribute | Abbreviation | Governs |
 |-----------|-------------|---------|
 | **Cognition** | Cog | Perception, reasoning, analysis; Thread Leap and Weaving base; investigation |
-| **Memory** | Mem | Knowledge, experience, retention; per-History point cap; Weaving pool contribution |
+| **Recall** | Rec | Knowledge, experience, retention; per-History point cap; Weaving pool contribution |
 | **Focus** | Foc | Concentration, discipline, precision under pressure; Thread operation sustained attention; resisting distraction mid-task |
 
 ### Social
@@ -136,7 +136,7 @@ Attributes range from 1 to 7. A score of 3 is the human average. 1 is severely l
 |-----------|-------------|---------|
 | **Attunement** | Att | Empathy, perception of others, emotional reading; detecting deception; Reading pool base |
 | **Bonds** | Bon | Relational depth, trust capacity; Knot strain cap; collective operation stability |
-| **Presence** | Pres | Influence, command, charisma; social pools (Appeal, Circles); faction actions |
+| **Charisma** | Cha | Influence, command, force of personality; social pools (Appeal, Circles); faction actions |
 
 ### Metaphysical
 
@@ -158,7 +158,7 @@ Attributes range from 1 to 7. A score of 3 is the human average. 1 is severely l
 | Score | Formula | Range | Notes |
 |-------|---------|-------|-------|
 | Health | Endurance + 6 | 7–13 | Damage buffer before Wounds |
-| Composure | Presence + 6 | 7-13 | Social damage buffer before Rattled |
+| Composure | Charisma + 6 | 7–13 | Social damage buffer before Rattled |
 | Combat Pool | Agility + weapon proficiency History (points + 3) | Variable | Split between Offence and Defence each round |
 | Contact Rounds | Focus | 1–7 | Maximum rounds maintaining Thread contact (practitioners only) |
 | Certainty | Spirit (starting and maximum value) | 0–7 | Existential coherence; at 0, rendering crisis |

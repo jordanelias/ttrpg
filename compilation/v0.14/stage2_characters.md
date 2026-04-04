@@ -10,9 +10,9 @@ Each History specifies a **primary attribute** (the attribute most relevant to t
 
 **Starting Histories:** 3 Histories, each at 2 points. Players name and describe each during Session Zero.
 
-**Per-History cap:** A History can never hold more points than the character's **Memory score**. This is the binding constraint — Memory limits how deeply experience consolidates into reliable capability.
+**Per-History cap:** A History can never hold more points than the character's **Recall score**. This is the binding constraint — Memory limits how deeply experience consolidates into reliable capability.
 
-**Social rolls:** Presence (for Appeal, Circles) or Cognition (for Debate, investigation) replaces the History's primary attribute as the base dice. History bonus dice (points + 3) are always added. If the social attribute equals the History's primary attribute, the total is unchanged.
+**Social rolls:** Charisma (for Appeal, Circles) or Cognition (for Contest, investigation) replaces the History's primary attribute as the base dice. History bonus dice (points + 3) are always added. If the social attribute equals the History's primary attribute, the total is unchanged.
 
 **Fork Rule:** When a second History is relevant and the player narrates the connection, add **+1D per 3 full points** in the secondary History (minimum +1D if any points exist). Maximum one Fork per roll. Fork cannot be used when acting as Anchor in a collective operation.
 
@@ -243,7 +243,7 @@ Establishing a new Knot via CP: 2 CP. Formalizes a relationship the player wants
 
 Circles represents the character's social network — the people they can find when they need help, information, or services.
 
-**Pool:** Presence + highest applicable History bonus. The History must connect to the social sphere being accessed. "Court Connections" gives full bonus for Crown/Church circles; "Street Network" gives full bonus for Guilds/Revolution/Niflhel circles. A History that doesn't connect to the target faction provides no bonus — raw Presence only.
+**Pool:** Charisma + highest applicable History bonus. The History must connect to the social sphere being accessed. "Court Connections" gives full bonus for Crown/Church circles; "Street Network" gives full bonus for Guilds/Revolution/Niflhel circles. A History that doesn't connect to the target faction provides no bonus — raw Presence only.
 
 **TN:** 7. **Ob:**
 
@@ -268,13 +268,13 @@ Circles represents the character's social network — the people they can find w
 
 **Advancement:** Test-track system, tracked per-faction. Each faction's Circles advances independently through use.
 
-**CP purchase:** 4 CP for +1D permanent (max bonus = Presence score). Represents deliberately expanding your social network.
+**CP purchase:** 4 CP for +1D permanent (max bonus = Charisma score). Represents deliberately expanding your social network.
 
 ## 4.9 Resources
 
 Resources represents the character's economic capacity — wealth, access to goods, ability to procure through whatever channels available.
 
-**Pool:** Presence + highest applicable History bonus. "Merchant Guild Member" → full bonus. "Soldier" → no bonus for economic transactions.
+**Pool:** Charisma + highest applicable History bonus. "Merchant Guild Member" → full bonus. "Soldier" → no bonus for economic transactions.
 
 **TN:** 7. **Ob:**
 
@@ -297,7 +297,7 @@ Resources represents the character's economic capacity — wealth, access to goo
 
 **External degradation:** Territory conquered → all characters with Resources tied to that territory lose 1D permanent. Faction collapse → all characters with Resources tied to that faction lose 2D permanent.
 
-**CP purchase:** 4 CP for +1D permanent (max bonus = Presence score). Represents improving economic standing.
+**CP purchase:** 4 CP for +1D permanent (max bonus = Charisma score). Represents improving economic standing.
 
 ## 4.10 Advancement — CP Spending Menu
 
@@ -324,7 +324,7 @@ Character Points (CP) are earned through Belief engagement (§4.2) and spent on 
 
 ## 4.11 Composure and Social Damage
 
-**Composure = Presence + Attunement.** Social damage (from Debates, Appeals, public humiliation, Thread-related social strain) reduces Composure.
+**Composure = Charisma + 6.** Social damage (from Debates, Appeals, public humiliation, Thread-related social strain) reduces Composure.
 
 When Composure reaches 0:
 1. Character becomes **Rattled** (Composure resets to full).

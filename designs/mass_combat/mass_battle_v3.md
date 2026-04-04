@@ -181,7 +181,7 @@ Personal combat ranged DR (for reference): LP 0/2/3/5 — HP 0/1/2/3 — LBl 0/1
 
 ### A.5 COMMAND RATING
 
-**Coherence Rating = ⌈(Presence + Cognition) ÷ 2⌉** *[confirmed]*
+**Coherence Rating = ⌈(Charisma + Cognition) ÷ 2⌉** *[confirmed]*
 
 Coherence Rating governs:
 1. Sub-unit limit (max simultaneous commanded = Coherence Rating; TTRPG hard cap: 3)
@@ -190,7 +190,7 @@ Coherence Rating governs:
 4. Tactic execution (Coherence Rating dice vs Ob per tactic)
 
 **Non-Player Character generals:** Coherence Rating assigned directly (1–7) as a narrative stat without
-Pres+Cog derivation. *[Coherence Rating-P2-02]*
+Cha+Cog derivation. *[Coherence Rating-P2-02]*
 
 **General two-stage death:** *[P1-02]*
 - Stage 1 (incapacitated): −1 Morale all units, Coherence Rating halved, Morale floor

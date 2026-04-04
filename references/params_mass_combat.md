@@ -106,7 +106,7 @@ Group 2 is destroyed but their 10 damage resolves first (simultaneous). Group 1 
 | 7 | 7 | 7 |
 
 ## Command [PROPOSAL] (PP-232)
-Command = ⌈(Presence + Cognition) ÷ 2⌉
+Command = ⌈(Charisma + Cognition) ÷ 2⌉
 Governs: sub-unit limit (max = Command; TTRPG hard cap 3); Discipline ceiling; Morale floor (= 1 while general present); tactic execution (Command dice vs Ob).
 Command = 1: cannot restore Discipline to any unit — all degradation permanent for that battle.
 
@@ -311,7 +311,7 @@ The −3 Morale cap per Cascade Phase applies as a total across all non-general 
 ## Commander Bonus Formulas — Consolidated (ED-033 resolved — provisional)
 | Context | Formula | Notes |
 |---------|---------|-------|
-| TTRPG mass combat | Command = ⌈(Presence + Cognition) ÷ 2⌉ | Per params_mass_combat (PP-232) |
+| TTRPG mass combat | Command = ⌈(Charisma + Cognition) ÷ 2⌉ | Per params_mass_combat (PP-232) |
 | BG battle resolution | Commander bonus = faction Military ÷ 3, round down (max +2D) | Per §B.3 |
 | Hybrid Zoom In | Use TTRPG CR for TTRPG-layer actions; BG commander bonus for BG-layer accounting | No conversion between them |
 [PROVISIONAL]
