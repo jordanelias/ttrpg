@@ -2122,9 +2122,14 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
 
   - id: ED-120
     date_flagged: 2026-04-03
+    date_resolved: 2026-04-03
     source: SIM-X-22 / D1
-    status: open
+    status: resolved
+    priority: P2
     description: "GM mandatory disclosure at RS<24 for Dissolution: 90.3% Rupture probability. Is disclosure alone sufficient given §23.3 perverse incentive intent? No mechanical gate proposed — editorial confirmation needed."
+    decision: "90.3% Rupture probability at RS<24 flagged as miscalibrated. Likely cause: FR surcharge exemption (PP-196) stacking with mass battle scale Ob + RS stress modifier + Relational scale. Recalibration simulation required before disclosure or gate ruling. Registered as SIM-DEBT-02. No mechanical gate or disclosure rule applied until recalibration complete."
+    propagation_targets: [tests/coverage_matrix.md]
+    propagation_status: pending
     tags: [thread, mass_battle, RS, dissolution]
 
   - id: ED-121

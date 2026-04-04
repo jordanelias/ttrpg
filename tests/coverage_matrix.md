@@ -248,3 +248,11 @@ Open for editorial: ED-061, ED-062, ED-063.
 | PP-203 | Balance fixes + stale refs | BG | CROSS | All | All | All | All | COMPLETE | ED-109-113 resolved || SIM-22 | personal combat post-audit (Run-22) — 5 brackets, 500 fights each — PP-210–218 | TTRPG | CROSS | Health, Wounds, Damage, Armour DR, Fibonacci, Feint, Tie Up, Rescue, Dodge | All | All | All | COMPLETE | 0 P1, 2 P2, 2 P3. See tests/sim_run22_report.md |
 | PP-232-PROP | PP-232 propagation — all params + glossary + scale transitions updated | ALL | CROSS | All | All | — | — | Complete | Terminology renames + formula corrections applied |
 | PP-233-PROP | PP-233 mass combat unit formula established + propagated | ALL | CROSS | Size, Power, Discipline, Command, H | All | — | — | Complete | Pool/Health/Damage formula committed; SIM-DEBT-03 logged |
+
+## SIM-DEBT-02
+- **Item:** ED-120 — Dissolution at RS<24 Rupture probability
+- **Finding:** 90.3% Rupture rate at Relational scale in mass battle is likely miscalibrated
+- **Suspected cause:** FR surcharge exemption (PP-196) stacking with mass battle Ob + RS stress modifier
+- **Required:** Recalibration simulation isolating FR surcharge contribution at mass battle scale
+- **Blocks:** Disclosure/gate ruling for Dissolution at RS<24
+- **Registered:** 2026-04-03
