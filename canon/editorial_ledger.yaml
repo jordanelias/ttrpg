@@ -4148,9 +4148,10 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [combat, rescue, sacrifice, fibonacci, momentum]
   - id: ED-198
     date_flagged: 2026-04-04
+    date_resolved: 2026-04-04
     source: error-audit
-    description: "Face 10 discrepancy: stage1 states +1 success + chain bonus die (indefinite); params_core states +2 successes (no chain). Different mechanics. Confirm which is authoritative."
-    status: open
-    priority: P2
+    description: "Face 10 = +2 successes fixed (no chain). stage1 chain-die description is superseded. params_core is correct."
+    status: struck
+    decision: "Face 10 = +2 successes, no chain. Ruled by user 2026-04-04. ED struck."
     tags: [core_engine, dice, params_core]
 

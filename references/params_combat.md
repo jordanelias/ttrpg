@@ -138,9 +138,12 @@ Allows critical hits to deal multiple wounds simultaneously.
 
 Per Wound: **−1D Combat Pool only** (no Ob penalty). (PP-232)
 
+**Max wounds formula: floor(Endurance ÷ 2) + 1** (PP-263)
+
 | Endurance | Max Wounds before incapacitation |
 |-----------|----------------------------------|
-| 1–3 | 2 |
+| 1 | 1 |
+| 2–3 | 2 |
 | 4–5 | 3 |
 | 6–7 | 4 |
 

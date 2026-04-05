@@ -265,9 +265,12 @@ DR is subtracted from damage after net hits + weapon modifier.
 ### Wounds
 Health = Endurance + 6 (range 7–13). Damage accumulates each round against Health. At 0 Health: take one Wound, Health resets to full. (PP-210)
 
+**Max wounds formula: floor(Endurance ÷ 2) + 1** (PP-263)
+
 | Endurance | Max Wounds before incapacitation |
 |-----------|----------------------------------|
-| 1–3 | 2 |
+| 1 | 1 |
+| 2–3 | 2 |
 | 4–5 | 3 |
 | 6–7 | 4 |
 

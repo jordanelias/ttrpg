@@ -3101,4 +3101,15 @@ PP-234
   propagation_targets:
     - references/params_core.md
   propagation_status: flagged
+- id: PP-263
+  date: 2026-04-04
+  source: user-ruling
+  priority: P1
+  system: combat
+  description: "Wound max formula corrected: floor(Endurance/2)+1. End=1 → 1 wound max (was 2 in prior table). End 2-7 unchanged. Net successes floor clarified as 0 (pool total, not per die)."
+  status: applied
+  propagation_targets:
+    - references/params_combat.md
+    - designs/combat/combat_design_v1.md
+  propagation_status: applied
 
