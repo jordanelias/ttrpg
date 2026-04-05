@@ -1,65 +1,53 @@
 # Valoria Session Log — Current
 
 ```yaml
-session_id: 2026-04-04T_AUDIT_AND_DESIGN
+session_id: 2026-04-04T_FINAL_CLOSE
 phase: SESSION CLOSED
 status: COMPLETE
-last_commit: 43208261eecea11700e4d5e1aa3c8872db813f8a
+last_commit: ~
 
 ## WORK COMPLETED THIS SESSION
+Full non-optimal actor simulation batch (SIM-X-26 to SIM-X-36):
+  55 findings | 12 gaps resolved | 4 patches (PP-254/255/303/304)
 
-### Simulations (non-optimal actor batch)
-- SIM-X-26 to SIM-X-36: 11 simulations across TTRPG/Hybrid/BG
-  - 55 findings total
-  - 17 gaps registered; 12 resolved; 5 carried (all P2)
-  - 4 patches applied: PP-254, PP-255, PP-303, PP-304
+Audit: 3 systemic signals identified and acted on.
 
-### Audit
-- Full audit of all 11 simulations compiled
-- 3 systemic signals identified:
-  1. Caution under-incentivised (no blowback for inaction/delay)
-  2. Local optima dominate coalition play (salience + incentive failure)
-  3. Non-optimal decisions combine multiplicatively (healthy emergent)
+Design decisions approved and committed:
+  PP-402: TC passive advance +1/season; Suppress action
+  PP-403: Failed Domain Action -1 Stability cost
+  PP-404: Missed coalition +1 Ob penalty (fog-of-war exemption)
+  PP-405: Resentment token (ED-298) + coalition enumeration (ED-299)
 
-### Design decisions and patches
-- 1A: PP-402 — TC passive advance +1/season; Suppress action defined
-- 1B: PP-403 — Failed Domain Action costs -1 Stability
-- 2C: ED-298 opened — Resentment token (No-vote earns Standing + Resentment vs proposer)
-- 2D: PP-404 — Missed coalition Ob penalty (+1 Ob next season; fog-of-war exemption)
-- ED-299 opened — Coalition trigger enumeration required for PP-404
+## ALL SESSION EDs RESOLVED
+  ED-298: Resentment token — RESOLVED PP-405
+  ED-299: Coalition enumeration — RESOLVED PP-405
+
+## CARRIED OPEN ITEMS (pre-existing, unchanged)
+  ED-295: CLASH formula fix (user selects A/B/C/D)
+  ED-297: AMPLIFY dominance confirmation
+  ED-290/292: Rescue calibration
+  SIM-DEBT-03: AMPLIFY multi-party + DIVERGE
+  ED-109–113: BG balance decisions
+
+## CARRIED GAPS (P2)
+  GAP-SIM-X34-02: Composure 0 threshold
+  GAP-SIM-X35-01: All-abstain motion outcome
+  GAP-SIM-X36-01: Social pool formula
+  GAP-SIM-X36-02: Domain Echo Overwhelming magnitude
 
 ## PATCH STATE
-- Highest PP committed this session: PP-404
-- Next PP: 405
-
-## OPEN EDITORIALS FROM THIS SESSION
-- ED-298: Resentment token form factor + scope + resolution conditions (P2)
-- ED-299: Coalition trigger enumeration for PP-404 (P2)
-
-## CARRIED GAPS (P2, from simulation batch)
-- GAP-SIM-X34-02: Composure 0 threshold effect
-- GAP-SIM-X35-01: All-abstain / zero-support motion outcome
-- GAP-SIM-X36-01: Social pool formula (Cognition×2+History proxied)
-- GAP-SIM-X36-02: Domain Echo Overwhelming magnitude
-
-## PRE-EXISTING OPEN ITEMS (unchanged)
-- ED-295: CLASH formula fix (user selects option A/B/C/D)
-- ED-297: AMPLIFY dominance — user confirms intent
-- ED-290/292: Rescue calibration decisions
-- SIM-DEBT-03: AMPLIFY multi-party + DIVERGE completion
-- ED-109–113: BG balance decisions
+  Highest PP this session: PP-405. Next: PP-406.
 
 ## SESSION START PROTOCOL FOR NEXT CHAT
 1. Bootstrap github_ops.py from skills/valoria-orchestrator/scripts/github_ops.py
-2. Read session_log_current.md (this file)
+2. Read session_log_current.md
 3. Read canon/editorial_ledger.yaml — report P1-BLOCKER count
-4. Read references/file_index.md STALE GAPS section — report count
+4. Read references/file_index.md STALE GAPS — report count
 5. Confirm task before proceeding
 
 ## RECOMMENDED NEXT PRIORITIES
-1. ED-298 Resentment token — user approval of form factor
-2. ED-299 Coalition trigger enumeration — enumerate canonical coalition pairs
-3. ED-295 CLASH formula — user decision required
-4. GAP-SIM-X34-02 Composure 0 — resolve from design doc
-5. SIM-DEBT-03 completion
+1. ED-295 CLASH formula — user decision required (A/B/C/D)
+2. GAP-SIM-X34-02 Composure 0 — resolve from design doc
+3. SIM-DEBT-03 completion
+4. ED-109–113 BG balance
 ```

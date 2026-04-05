@@ -3611,3 +3611,13 @@ patches:
   affects: [designs/board_game/valoria_bg_v05_simulation_and_patches.md]
   status: applied
   applied_commit: ~
+
+- id: PP-405
+  date: 2026-04-04
+  severity: P2
+  description: "Resentment token: No-vote on blocked motion earns +1 Standing + Resentment cube vs proposer (-1 Ob attacking them, +1 Ob their attacks on you); parliamentary-only; Year-End expiry; Diplomacy early resolution. Coalition trigger enumeration: 4 canonical pairs with stat thresholds."
+  finding_id: "ED-298, ED-299"
+  source: editorial
+  affects: [references/params_factions.md]
+  status: applied
+  applied_commit: ~

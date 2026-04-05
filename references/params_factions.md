@@ -1,6 +1,6 @@
 <!-- version: v0.14-AUD3-R2 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-04 -->
 <!-- NOTE: stage6_factions.md is STALE for BG faction mechanics. Use BG column for board game/hybrid. -->
-<!-- PATCHES APPLIED: PP-167, PP-168; PP-195; PP-402 (TC passive advance + Suppress); PP-403 (Failed DA Stability cost) -->
+<!-- PATCHES APPLIED: PP-167, PP-168; PP-195; PP-402; PP-403; PP-405 (Resentment token ED-298; coalition enumeration ED-299) -->
 <!-- STALE CHECK: TTRPG column from v0.14 compiled. BG column from bg_v05 design. -->
 
 # params_factions.md — Factions
@@ -452,3 +452,29 @@ When a public accusatory Contest against a Church leader fails (net < Ob, public
 Church gains Stability +1.
 Conditions: (a) public venue with witnesses, (b) accusatory mode used vs Consequence-mode NPC, (c) Failure or Partial result.
 Applies to: Himlensendt, Olafsson, Klapp as institutional representatives.
+
+## Resentment Tokens (PP-405 — ED-298 resolved)
+Generated when a faction votes **No** on a parliamentary motion that is successfully blocked.
+- Acting faction gains **+1 Standing** (blocking reward).
+- A **Resentment token** (cube) is placed between the blocking faction and the proposing faction.
+- Effect: blocking faction gets **−1 Ob** on Domain Actions targeting the proposer; proposer gets **+1 Ob** on Domain Actions targeting the blocking faction.
+- Scope: parliamentary votes only. Domain Actions do not generate Resentment.
+- Expiry: cleared at Year-End if neither faction took a hostile Domain Action against the other during the year.
+- Early resolution: Diplomacy action (Ob 2), both factions must consent.
+- Abstaining generates no Resentment and no Standing gain.
+
+
+## Canonical Coalition Pairs (PP-405 — ED-299 resolved)
+Used by PP-404 (Missed Coalition Ob Penalty). A coalition trigger requires both factions'
+relevant stats to meet or exceed the listed threshold simultaneously.
+
+| Coalition | Factions | Trigger condition | Effect on activation |
+|-----------|---------|-------------------|----------------------|
+| Trade-Mandate Pact | Church + Hafenmark | Both Influence ≥ 6 | Combined Standard Action once per season; +1D to each other's Diplomacy rolls |
+| Military Alliance | Varfell + Löwenritter | Both Military ≥ 5 | Shared unit deployment in adjacent territories; Casus Belli against shared enemy |
+| Economic Bloc | Guilds + Hafenmark | Both Wealth ≥ 6 | +1 Prosperity in shared trade territories per season |
+| Restoration Compact | Restoration + Niflhel | Restoration Influence ≥ 4 AND Niflhel Influence ≥ 4 | Thread Weaving in each other's territories at −1 Ob |
+
+Fog-of-war exemption applies to all coalitions per PP-404.
+Coalition triggers are public knowledge (the threshold conditions are known); only the current stat values are subject to fog of war.
+
