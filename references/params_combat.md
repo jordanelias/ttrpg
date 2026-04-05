@@ -231,7 +231,7 @@ Both succeed at different priorities → initiative stays with current holder.
 | On win | Attack redirects to rescuer; resolves vs armour DR only (contest dice expended) |
 | On loss | Attack hits original target; rescuer N dice wasted; own engagement Defence unaffected |
 | Weapon speed | TN 5–6 attackers harder to intercept (higher expected net); TN 7–8 easier |
-| Rescuer payoff | +1 Momentum on successful intercept only |
+| Rescuer payoff | +1 Momentum if struck (≥1 wound) this Rescue round, any source; capped 1/round; fires on intercept success OR failure |
 | Rescued actor payoff | Fibonacci exempt + untargetable this round (successful intercept only) |
 | Exemption duration | Current round only |
 | Zone | Adjacent zone |
@@ -239,11 +239,13 @@ Both succeed at different priorities → initiative stays with current holder.
 | Chain block | Rescuers cannot be rescued the same round |
 | Incapacitation at P1 | Rescue fails; attack reverts; no Momentum |
 
-## Feint — PP-291
+## Feint — PP-294
 | Property | Value |
 |----------|-------|
 | Commit | Player chooses N dice (minimum 3) to Offence for feint; remainder to Defence |
-| Roll | N dice TN 7 vs Ob 2 |
-| Payoff | Opponent Defence ceiling −2D next round (fixed regardless of N) |
-| Exposure | Only the N committed dice are withdrawn from Defence — not full pool |
-| Dominant strategy note | Higher N = higher P(success); all-in maximises P but is no longer required |
+| Roll | N dice TN 7 vs opponent's Defence pool TN 7 (sequential per initiative) |
+| Payoff | B loses [margin] dice from total pool next round; scales with margin |
+| Pool reduction floor | Minimum 1D (B cannot be reduced below 1D by Feint) |
+| Non-stacking | Successive Feints reset reduction to current margin; do not accumulate |
+| Expires | Pool reduction cancelled if Feinting actor incapacitated before reduction round |
+| Initiative note | Higher initiative B sees A's commit and can over-allocate Defence; costs B offensive output |

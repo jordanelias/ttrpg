@@ -432,6 +432,20 @@ Cap: 2 territory transfers per seizure event (v04/v05 P-23). Previously set to 4
 ## Church Excommunication Ob Cap (PP-180)
 Ob = min(target Mandate, 4). Maximum Ob 4 regardless of target Mandate.
 
+## Mandate Suppression — General Cap and Coalition Bonus (PP-296)
+All Domain Actions targeting another faction's Mandate stat use Ob = min(target Mandate, 4). Maximum Ob 4 regardless of target Mandate. Consistent with Excommunication precedent (PP-180).
+
+**Coalition suppression bonus (PP-296):** When 2+ factions play Domain Actions targeting the same faction's Mandate in the same Phase 4 resolution, each additional faction beyond the first adds +2D to the suppression pool (automatic — no formal pact declaration required).
+
+| Factions suppressing | Pool bonus |
+|---|---|
+| 1 | +0D |
+| 2 | +2D |
+| 3 | +4D |
+| 4+ | +6D (cap) |
+
+Coalition bonus applies to the primary suppressing faction's pool. Secondary factions must each have a valid suppression action played this phase. Pool floor: 1D.
+
 ## Drawn Battle Rule (PP-180)
 Equal net successes: Stalemate. Both Discipline −1. No territorial change.
 Both at Discipline 0: both units destroyed simultaneously. Territory uncontrolled.

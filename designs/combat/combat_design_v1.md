@@ -93,7 +93,7 @@ A practitioner declaring Leap (Priority 5) may be struck at Priority 1 before co
 | Action | Description |
 |--------|-------------|
 | Strike | Allocate pool split, roll, apply damage |
-| Feint | Player chooses commit: allocate N dice (minimum 3) to Offence for the feint; remaining dice available for Defence this round. Roll N dice vs opponent Ob 2. Success: opponent's Defence *ceiling* is reduced by 2D next round — they may allocate at most (pool − 2) dice to Defence. Payoff is fixed regardless of N — more commit increases P(success), not effect magnitude. **Ceiling non-stacking (PP-293):** successive Feints do not stack — the ceiling is always (pool − 2), not cumulative. **Ceiling expires (PP-293):** if the Feinting actor is incapacitated before the ceiling round, the ceiling effect is cancelled. (PP-277 clarification: −2D is a ceiling reduction on Defence allocation, not a total pool reduction.) (PP-212, PP-238, PP-277, PP-291, PP-293) |
+| Feint | Player chooses commit: allocate N dice (minimum 3) to Offence for the feint; remaining dice available for Defence this round. **Versus roll (PP-294):** roll N dice (TN 7) vs opponent's Defence pool (TN 7) — sequential per initiative, not fixed Ob. If A's net > B's net: B loses [margin] dice from total pool next round (affects both Offence and Defence allocation). Pool reduction floor: minimum 1D (PP-294). Payoff scales with margin — more commit increases both P(success) and expected reduction magnitude. **Non-stacking (PP-293):** successive Feints always reset pool reduction to current margin; effects do not accumulate. **Expires on incapacitation (PP-293):** pool reduction expires if Feinting actor cannot act in the reduction round. (PP-212, PP-238, PP-277, PP-291, PP-293, PP-294) |
 | Establish Distance | Move to preferred range. Contested Agility if opponent opposes. |
 | Take a Breath | No combat action. Recover Stamina by Endurance score. Cannot if in immediate melee contact. |
 | Full Guard | All dice to Defence. Cannot Attack. |
@@ -319,12 +319,11 @@ Rescuer rolls N dice (TN 7) vs the target attacker's Offence roll (contested):
 
 **Weapon speed note:** Attacker TN affects contest difficulty. Light/fast weapons (TN 5–6) roll more net successes on average — harder to intercept. Heavy weapons (TN 7–8) are slower and easier to redirect. Rescuers should commit more dice against fast attackers.
 
-**On successful intercept only (PP-292):**
-- Rescuer gains 1 Momentum.
-- Rescued actor is exempt from the Fibonacci group penalty this round.
-- Rescued actor cannot be targeted by any other attacker this round.
+**Rescue payoffs (PP-292, PP-295):**
+- **Rescuer Momentum:** Gains 1 Momentum if struck (≥1 wound) during a Rescue attempt this round, from any source (own engagement or redirected attack). Capped at 1 Momentum per Rescue round regardless of number of wounds taken. Fires regardless of intercept outcome — failed intercept still yields Momentum if the rescuer is wounded.
+- **Rescued actor (successful intercept only):** Exempt from Fibonacci group penalty this round; cannot be targeted by any other attacker this round.
 
-Exemptions expire at round end. No payoff fires on a failed intercept.
+Rescued actor exemptions expire at round end. Rescuer Momentum fires on wound, not on intercept success.
 
 **Rescue chain block (PP-290):** A character who has declared Rescue this round cannot themselves be the target of another Rescue declaration.
 

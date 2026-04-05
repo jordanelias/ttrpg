@@ -1314,3 +1314,16 @@ editorial_decisions:
     propagation_status: pending
     related_ids: [ED-172]
     tags: [board-game, mandate, faction-balance, p1]
+- id: ED-294
+    date_flagged: 2026-04-04
+    date_resolved: 2026-04-04
+    source: simulation
+    source_file: tests/sim_feint_rescue_mandate_batch.md
+    description: "ED-292 resolved via PP-295 (Rescue Momentum on wound). ED-293 resolved via PP-296 (Mandate Ob cap 4 + coalition +2D). Both applied."
+    status: resolved
+    priority: P1
+    decision: "PP-295: Rescue Momentum fires on wound, capped 1/round. PP-296: Mandate suppression Ob cap 4; coalition +2D/faction auto (max +6D)."
+    propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md, references/params_board_game.md]
+    propagation_status: applied
+    related_ids: [ED-292, ED-293, PP-295, PP-296]
+    tags: [combat, rescue, momentum, board-game, mandate, resolved]

@@ -3319,3 +3319,37 @@ PP-234
   applied_to_version: "v1.6+"
   status: applied
   applied_commit: "pending"
+- id: PP-294
+  date: 2026-04-04
+  severity: P1
+  description: "Feint: versus roll (N dice TN7 vs opponent Defence pool TN7); B loses margin dice from total pool next round; pool reduction floor 1D."
+  finding_id: "SIM-FM-03-F03"
+  source: simulation
+  affects: [designs/combat/combat_design_v1.md, references/params_combat.md]
+  applied_to_version: "v1.6+"
+  status: applied
+  applied_commit: "pending"
+
+- id: PP-295
+  date: 2026-04-04
+  severity: P2
+  description: "Rescue Momentum: fires when rescuer is struck (≥1 wound) during Rescue attempt, any source; capped 1 Momentum per Rescue round regardless of wound count."
+  finding_id: "SIM-RES-08-F01"
+  source: editorial
+  editorial_id: ED-292
+  affects: [designs/combat/combat_design_v1.md, references/params_combat.md]
+  applied_to_version: "v1.6+"
+  status: applied
+  applied_commit: "pending"
+
+- id: PP-296
+  date: 2026-04-04
+  severity: P1
+  description: "BG Mandate suppression: Ob capped at 4 (matching PP-180 Excommunication precedent); coalition bonus +2D per additional suppressing faction (automatic, max +6D at 4+ factions). Resolves ED-172/ED-293."
+  finding_id: "SIM-BG-MANDATE-F01, SIM-BG-02-F01"
+  source: editorial
+  editorial_id: ED-293
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.8.5+"
+  status: applied
+  applied_commit: "pending"
