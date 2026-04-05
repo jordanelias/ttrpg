@@ -218,5 +218,15 @@ Both succeed at different priorities → initiative stays with current holder.
 - Wound recovery: stabilised characters return after 1-scene rest; wounds clear at session end
 - Stage 2 trigger: any attack with ≥1 net hit on downed Stage 1 character; downed = Defence 0
 
-## PP-285 — Rescue no Defence
-Rescuer receives no Defence allocation. Armour DR only. Rescue is reactive interposition, not parry.
+## Rescue Payoff — PP-286
+| Property | Value |
+|----------|-------|
+| Trigger | Declare in Phase 1 before opponent's attack resolves |
+| Cost | Exclusive action — rescuer receives no Defence allocation; armour DR only |
+| Effect | Attack redirects to rescuer |
+| Rescuer payoff | +1 Momentum on declaration (fires regardless of hit/miss) |
+| Rescued actor payoff | Exempt from Fibonacci group penalty this round; cannot be targeted by any other attacker this round |
+| Payoff trigger | Declaration — not contingent on hit landing |
+| Zone requirement | Adjacent zone |
+| Fails silently | Yes — if no incoming attack was declared, action and payoffs lost |
+| Exemption duration | Current round only |

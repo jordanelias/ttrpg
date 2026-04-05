@@ -3078,3 +3078,14 @@ PP-234
   files_changed:
     - designs/combat/combat_design_v1.md
     - references/params_combat.md
+- id: PP-286
+  date: 2026-04-04
+  severity: P2
+  description: "Rescue payoff — Momentum on declaration (not hit-taken); rescued actor exempt from Fibonacci penalty and targeting this round. ED-198."
+  finding_id: "SIM-X-26R-F05"
+  source: editorial
+  editorial_id: ED-198
+  affects: [designs/combat/combat_design_v1.md, references/params_combat.md]
+  applied_to_version: "v1.6+"
+  status: applied
+  applied_commit: "pending"

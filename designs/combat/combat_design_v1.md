@@ -101,7 +101,7 @@ A practitioner declaring Leap (Priority 5) may be struck at Priority 1 before co
 | Retrieve | Pick up dropped weapon/item. Opposed Agility if in melee contact. |
 | Tie Up | Close range. Offence roll. Success: both parties suffer −2D to Combat Pool for one round; opponent cannot use reach advantage; escape requires Strength contest. Blocks escape for one round. (PP-213) |
 | Escape | Agility contest vs opponent. Requires not being Tied Up. |
-| Rescue | Declare before opponent's attack resolves. Rescuer interposes: attack resolves against rescuer instead of original target; rescuer receives **no Defence allocation** — armour DR applies only. Requires adjacent zone. Fails silently if no incoming attack was declared — action lost. (PP-214, PP-285) |
+| Rescue | **Exclusive action** — declare in Phase 1 before opponent's attack resolves. Attack redirects to rescuer; rescuer receives **no Defence allocation** — armour DR applies only. Requires adjacent zone. Fails silently if no incoming attack was declared — action lost. **On declaration:** rescuer gains 1 Momentum. Rescued actor is exempt from Fibonacci group penalty and cannot be targeted by any other attacker this round. Both effects apply regardless of whether the redirected attack hits. (PP-214, PP-285, PP-286) |
 | Dodge | Ranged attacks only. Forfeit all offensive action this round. Allocate full Combat Pool as passive Defence against one incoming ranged attack. Armour DR applies normally. (PP-215) |
 | Stunt | Declared with Strike. +N dice to Offence from environmental/positional narrative (Game Master sets N, max 5). Chain dice (10s) chain normally, independent of Stunt effect. |
 
@@ -303,8 +303,15 @@ Each additional attacker beyond the first against a single unsupported target ad
 Bonus only applies when target has no allies in the zone (unsupported). Supported target uses standard pool split against each attacker.
 
 ### Rescue
-One ally may interpose against an incoming attack. Declare before resolution. Requires adjacent zone.
+One ally may interpose against an incoming attack. Declare in Phase 1 before resolution. Requires adjacent zone.
 Fails silently if no incoming attack was declared — action is lost.
+
+**On declaration (PP-286):**
+- Rescuer gains 1 Momentum immediately — fires on declaration, not on hit.
+- Rescued actor is exempt from the Fibonacci group penalty this round.
+- Rescued actor cannot be targeted by any other attacker this round.
+
+All three effects apply regardless of whether the redirected attack hits or misses. The targeting exemption and Fibonacci exemption expire at round end.
 
 ### Multi-Engagement (3v2, 4v3)
 Each combatant is engaged in one primary pairing per round. Extras choose which pairing to support (Fibonacci bonus) or maintain their own engagement.

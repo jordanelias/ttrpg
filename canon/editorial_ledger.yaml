@@ -4132,4 +4132,17 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     status: open
     priority: P2
     tags: [threadwork, focus, operations]
-
+- id: ED-198
+    date_flagged: 2026-04-04
+    date_resolved: 2026-04-04
+    source: simulation
+    source_file: tests/sim_x26r_personal_combat_protocol.md
+    description: "Rescue action had no mechanical payoff — sacrifice mechanically identical to suboptimal play. Resolved: PP-286 adds Momentum on declaration + Fibonacci/targeting exemption for rescued actor."
+    full_flag_text: "[EDITORIAL: ED-198 — Rescue payoff: Momentum on declaration, rescued actor exempt from Fibonacci penalty and targeting this round]"
+    status: resolved
+    priority: P2
+    decision: "PP-286 applied. Rescuer: +1 Momentum on declaration. Rescued actor: exempt from Fibonacci group penalty and cannot be targeted by other attackers this round. Both effects fire on declaration regardless of hit outcome."
+    propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
+    propagation_status: applied
+    related_ids: [ED-114, SIM-X-26R-G01]
+    tags: [combat, rescue, sacrifice, fibonacci, momentum]
