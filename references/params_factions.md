@@ -1,5 +1,6 @@
 <!-- version: v0.14-AUD3 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-02 -->
 <!-- NOTE: stage6_factions.md is STALE for BG faction mechanics. Use BG column for board game/hybrid. -->
+<!-- PP-287 (DA sequential timing), PP-288 (stat cap cost clarification), PP-289 (high-Wealth recovery) -->
 <!-- PATCHES APPLIED: PP-167, PP-168; PP-195 (Community Weaving procedure) -->
 <!-- STALE CHECK: TTRPG column from v0.14 compiled. BG column from bg_v05 design. -->
 
@@ -414,3 +415,21 @@ When Revolution passes a revolt-check (Agitation Partial or better and PI > 5):
 Stability +1 (internal movement cohesion). This prevents PI from spinning Revolution into
 a Stability death spiral. Applies once per season max.
 [FLAGGED: confirm +1 Stability cascade brake before IP/PI interaction compilation.]
+
+
+## Domain Action Intra-Season Stat Update Timing (PP-287)
+Stats update IMMEDIATELY after each Domain Action resolves within a season (sequential model).
+A stat depleted by DA-1 provides a lower pool for DA-3 in the same season.
+GMs track running stat totals on the faction sheet during Domain Action resolution.
+Rationale: batch resolution would allow impossible actions (spending Wealth already spent).
+
+## Seasonal Stat Change Cap — Cost Clarification (PP-288)
+The ±2 seasonal cap applies to net **gains** from Domain Action outcomes only.
+Domain Action **costs** (Wealth expenditure, Stability backlash) are NOT subject to the cap.
+A faction may lose more than 2 Wealth in a season if multiple DAs each cost 1 Wealth.
+A faction may not gain more than 2 in any single stat from DA outcomes in one season.
+
+## High-Wealth Passive Recovery (PP-289)
+A faction with Wealth >= 5 at Accounting that suffered no active economic Domain Action against it
+this season recovers +1 Wealth automatically (economic resilience).
+Applies to: Guilds (starting W=6), Hafenmark (starting W=5). Does not apply under Trade Embargo or Siege.

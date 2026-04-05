@@ -4155,3 +4155,32 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     decision: "Face 10 = +2 successes, no chain. Ruled by user 2026-04-04. ED struck."
     tags: [core_engine, dice, params_core]
 
+  - id: ED-287
+    date_flagged: 2026-04-04
+    date_resolved: 2026-04-04
+    source: SIM-ECON-01
+    description: "DA intra-season stat update timing undefined. Resolved PP-287: sequential model."
+    status: resolved
+    decision: "Sequential update model. PP-287 applied."
+    priority: P1
+    tags: [factions, domain_actions, accounting]
+
+  - id: ED-288
+    date_flagged: 2026-04-04
+    date_resolved: 2026-04-04
+    source: SIM-ECON-01
+    description: "Seasonal stat cap asymmetry: cap on gains, costs uncapped."
+    status: resolved
+    decision: "Cap on net gains only. Costs uncapped. PP-288 applied."
+    priority: P2
+    tags: [factions, stat_cap, accounting]
+
+  - id: ED-289
+    date_flagged: 2026-04-04
+    date_resolved: 2026-04-04
+    source: SIM-ECON-01
+    description: "High-Wealth passive recovery undefined. PP-289 formalises."
+    status: resolved
+    decision: "Wealth>=5 factions recover +1 at Accounting if not under attack. PP-289 applied."
+    priority: P3
+    tags: [factions, wealth, accounting]

@@ -3113,3 +3113,26 @@ PP-234
     - designs/combat/combat_design_v1.md
   propagation_status: applied
 
+  - id: PP-287
+    date: 2026-04-04
+    source: SIM-ECON-01 F02 F09
+    system: factions
+    description: "DA intra-season timing: sequential model. Stats update immediately after each DA. Eliminates batch-vs-sequential ambiguity (18-point probability gap)."
+    status: applied
+    files_changed: [references/params_factions.md]
+
+  - id: PP-288
+    date: 2026-04-04
+    source: SIM-ECON-01 F08
+    system: factions
+    description: "Seasonal stat cap: ±2 cap applies to net outcome gains only. DA costs (Wealth expenditure, backlash) are uncapped. Multiple costs in one season all apply."
+    status: applied
+    files_changed: [references/params_factions.md]
+
+  - id: PP-289
+    date: 2026-04-04
+    source: SIM-ECON-01 F10
+    system: factions
+    description: "High-Wealth passive recovery: Wealth>=5 faction not under economic attack recovers +1 Wealth at Accounting. Applies to Guilds, Hafenmark."
+    status: applied
+    files_changed: [references/params_factions.md]
