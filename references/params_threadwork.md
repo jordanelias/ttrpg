@@ -522,3 +522,17 @@ When a Shifting Object is present in a territory (formed from Fragile band RS co
 - Dissolution: Ob 3 (standard small-scale Dissolution).
 Shifting Objects persist until addressed. Each season unaddressed: +1 Ob to Thread operations in that territory.
 [FLAGGED: confirm Coherence check parameters and seasonal Ob accumulation.]
+
+## Document RS Resonance (PP-258)
+A Thread Sensitivity 50+ practitioner reading a pre-Galbados first-person Thread-perception document gains:
+- RS +2 (one-time per document per character)
+- Requires: TS ≥ 50, full scene of contact, primary first-person account (not secondary analysis)
+- Does not stack with active Thread operations in the same scene (larger RS change applies)
+- Subsequent readings of the same document: no RS effect
+
+## Collective Forgetting — Companion Carrying (PP-279)
+A practitioner who succeeds on their Forgetting boundary Leap may carry companions:
+- Each companion: −2 Coherence/round (cumulative)
+- Maximum companions = practitioner's Focus − 1
+- Focus 1: 0 companions. Focus 3: max 2. Focus 5: max 4.
+- Companion must remain within Thread contact throughout crossing.

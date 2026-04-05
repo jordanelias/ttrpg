@@ -1,52 +1,39 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-04T_SIM_STRESS_04
+session_id: 2026-04-04T_FULL_EDITORIAL_PASS_SIM_ARC_03
 phase: SESSION CLOSED
 status: COMPLETE
 
 ## WORK COMPLETED
-1. Batch resolved 69 open/provisional editorial items (ED-005 to ED-170)
-   - 50 mechanically resolved with patches PP-257–272
-   - 18 flagged as EDITORIAL (require worldbuilding/authorial decision)
-   - 1 remaining open (ED-174, PI cascade brake)
-2. SIM-STRESS-04: 6 randomized scenarios
-   - 22 findings; 5 immediate P1/P2 resolutions → PP-273–277
-   - 1 new provisional (ED-174)
-3. Total patches this session: PP-257–277 (21 patches)
+1. Full editorial resolution pass — 29 items resolved, 12 confirmed-provisional, 10 user blockers surfaced
+2. PP-257–PP-279 applied (23 patches)
+3. SIM-ARC-01/02 gaps resolved: PP-257 (martyrdom), PP-258 (RS document), ED-171 (Niflhel lineage provisional)
+4. SIM-ARC-03: 5 new arcs (ARC 11–15) with NG-G through NG-L archetypes
+   - 18 findings (F-ARC3-01–F-ARC3-18)
+   - 3 systemic findings: window failures, disclosure paradox, narrow precedent failures
 
-## EDITORIAL FLAGS AWAITING USER DECISION (18 items)
-ED-005: Restoration Movement leader name/profile
-ED-006: Riskbreakers identity
-ED-019: Faction-specific tactic card content
-ED-024: Southernmost entity stat blocks
-ED-029: Purpose tracking in Southernmost
-ED-034: Ceiral Ritual RS scale asymmetry
-ED-036: Altonian unit stats (P1 BLOCKER)
-ED-080: Baralta Conviction text
-ED-081: Vaynard Conviction text
-ED-085: Reformed Settlement options
-ED-108: T10/T11 territory names
-ED-119: Lenneth Almqvist TS/arc
-ED-127: Composure redesign scope
-ED-128: Certainty/Spirit decoupling
-ED-131: Weapon modifier playtesting
-ED-132: Read step action name
-ED-134: Diagnosis as separate action
-ED-135: FR terminology
+## USER BLOCKERS REQUIRING DECISION (10 items)
+- ED-108: Crown territory names T10/T11 (Nordhelm/Mittelmark provisional) — approve or rename
+- ED-109: Crown victory front-loaded (3/5 deeds pre-met) — accept or redesign
+- ED-110/112: Church victory inaccessible + TC lock — address together (same root cause)
+- ED-111: Varfell Path B 9-10 season win — gate T13 seizure or fortify
+- ED-113: Varfell T13 seizable Season 1 — garrison, contested claim, or accept
+- ED-119: Lenneth stat block and TS development arc — define or leave campaign-defined
+- ED-143–146: PC simulation constructs (Mira, Arend, Dagmara, Theron) — approve all/some/none
+- ED-080/081: Baralta/Vaynard BG Conviction text — approve Amendment2 or provide wording
+- ED-083: VTM 5 co-movement direction ability — canon-guard review or accept provisional
 
-## PROVISIONAL AWAITING USER CONFIRMATION
-ED-174: PI cascade brake (revolt-pass → Stability +1; PI rate cap +2/season)
+## NEW EDITORIAL ITEMS
+- ED-171: Niflhel archive lineage data — provisional (no lineage content); user to confirm
 
-## OPEN SIM-DEBT
-SIM-DEBT-01, 03, 04: Social contest calibration (attribute renames)
-SIM-DEBT-06: War-scale Coherence/Dissonant effects (needs threadwork_redesign_v25.md §3)
-SIM-DEBT-07: High-resistance contest calibration
+## SIM-DEBT OPEN (unchanged)
+- SIM-DEBT-01: Debate/Contest calibration (new pool formula)
+- SIM-DEBT-03, 04: Contest system stress tests
+- SIM-DEBT-06: War-scale Thread coherence (Dissonant effects)
+- SIM-DEBT-07: High-resistance Contest calibration
 
-## NEXT RECOMMENDED ACTIONS
-- User resolves 18 editorial flags (all are worldbuilding/authorial)
-- User confirms ED-174 (PI cascade brake)
-- SIM-STRESS-05: recommend targets — Dissonant effects, contest pre-prep mechanics,
-  BG tactic card face-off, Thread vs Mode 3 Southernmost (once ED-024 resolved),
-  Varfell T13 opening with PP-266 Fortification applied
+next_session_start:
+  priority: User decisions on 10 blockers (listed above), then SIM-DEBT closure
+  read_first: [tests/editorial_resolution_pass.md, session_log_current.md]
 ```

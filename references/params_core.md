@@ -135,3 +135,10 @@ Example: Spend 1 Momentum (1 auto-success) + roll 1D TN 7.
 - Die shows 1: net = 1 (auto) − 1 (roll) = 0 → Failure at Ob 1.
 
 Spending 2 Momentum on Ob 1 (2 auto-successes): auto-successes alone reach Ob 1 but cannot satisfy Overwhelming floor (need ≥ 3 net). Must also roll to reach Overwhelming.
+
+## Composure Track Redesign (PP-266)
+- Composure = Charisma + 6 (confirmed)
+- Rattled: full Composure track expended from one hit. −2D social; cannot Amplify; cannot Unmask voluntarily.
+- Broken: two Rattled instances. Concedes automatically next exchange.
+- Recovery from Rattled: full scene rest or voluntary Unmask.
+- Rattled is NOT a threshold — it is a full-track event parallel to Wounds.
