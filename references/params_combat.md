@@ -221,19 +221,29 @@ Both succeed at different priorities → initiative stays with current holder.
 - Wound recovery: stabilised characters return after 1-scene rest; wounds clear at session end
 - Stage 2 trigger: any attack with ≥1 net hit on downed Stage 1 character; downed = Defence 0
 
-## Rescue — PP-286, PP-290
+## Rescue — PP-290, PP-292
 | Property | Value |
 |----------|-------|
-| Eligibility | Rescued actor must be outnumbered at Phase 1 declaration (2+ attackers, no ally — Fibonacci condition met) |
-| Eligibility timing | Assessed at declaration only; mid-round incapacitations do not retroactively qualify |
-| Trigger | Declare in Phase 1; specify which attacker is redirected |
-| Cost | Exclusive action — rescuer receives no Defence allocation vs redirected attack OR own engagement's attacker |
-| Double exposure | Rescuer hit from own engagement + redirected attack; both resolve at Ob 1 floor |
-| Rescuer payoff | +1 Momentum on declaration (fires regardless of hit/miss) |
-| Rescued actor payoff | Exempt from Fibonacci group penalty this round; cannot be targeted by any other attacker this round |
-| Payoff trigger | Declaration — not contingent on hit landing |
-| Zone requirement | Adjacent zone |
-| Fails silently | Ineligible Rescue / no declared incoming attack — action lost, declaration Momentum retained |
+| Eligibility | Rescued actor outnumbered at Phase 1 declaration (Fibonacci condition); assessed at declaration only |
+| Commit | Rescuer allocates N Offence dice (minimum 1) to contest; remainder defend own engagement |
+| Contest | N dice TN 7 vs attacker's Offence roll (contested) |
+| Win condition | Rescuer net ≥ attacker net |
+| On win | Attack redirects to rescuer; resolves vs armour DR only (contest dice expended) |
+| On loss | Attack hits original target; rescuer N dice wasted; own engagement Defence unaffected |
+| Weapon speed | TN 5–6 attackers harder to intercept (higher expected net); TN 7–8 easier |
+| Rescuer payoff | +1 Momentum on successful intercept only |
+| Rescued actor payoff | Fibonacci exempt + untargetable this round (successful intercept only) |
 | Exemption duration | Current round only |
-| Chain block | Character who declared Rescue this round cannot be target of another Rescue |
-| Incapacitation before resolution | Rescue fails; attack reverts to original target; declaration Momentum not reclaimed |
+| Zone | Adjacent zone |
+| Fails silently | Ineligible / no declared attack — action lost |
+| Chain block | Rescuers cannot be rescued the same round |
+| Incapacitation at P1 | Rescue fails; attack reverts; no Momentum |
+
+## Feint — PP-291
+| Property | Value |
+|----------|-------|
+| Commit | Player chooses N dice (minimum 3) to Offence for feint; remainder to Defence |
+| Roll | N dice TN 7 vs Ob 2 |
+| Payoff | Opponent Defence ceiling −2D next round (fixed regardless of N) |
+| Exposure | Only the N committed dice are withdrawn from Defence — not full pool |
+| Dominant strategy note | Higher N = higher P(success); all-in maximises P but is no longer required |

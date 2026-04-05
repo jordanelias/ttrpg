@@ -3277,3 +3277,24 @@ PP-234
   applied_to_version: "v1.6+"
   status: applied
   applied_commit: "pending"
+- id: PP-291
+  date: 2026-04-04
+  severity: P2
+  description: "Feint: partial commit (player chooses N dice, minimum 3); payoff fixed at opponent -2D ceiling regardless of N. Removes forced all-in."
+  finding_id: "SIM-FM-01-F02"
+  source: simulation
+  affects: [designs/combat/combat_design_v1.md, references/params_combat.md]
+  applied_to_version: "v1.6+"
+  status: applied
+  applied_commit: "pending"
+
+- id: PP-292
+  date: 2026-04-04
+  severity: P1
+  description: "Rescue: contested roll (rescuer N dice TN7 vs attacker Offence); partial commit; Defence vs own engagement only; payoff on successful intercept only (not declaration). Corrects no-Defence error from PP-286/PP-290."
+  finding_id: "SIM-RES-05-F01, SIM-RES-06-F01, SIM-RES-07-F01"
+  source: simulation
+  affects: [designs/combat/combat_design_v1.md, references/params_combat.md]
+  applied_to_version: "v1.6+"
+  status: applied
+  applied_commit: "pending"

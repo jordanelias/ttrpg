@@ -1213,3 +1213,16 @@ editorial_decisions:
     propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
     propagation_status: pending
     tags: [combat, rescue, momentum, calibration]
+- id: ED-291
+    date_flagged: 2026-04-04
+    date_resolved: 2026-04-04
+    source: simulation
+    source_file: tests/sim_rescue_feint_partial_commit.md
+    description: "Rescue Momentum on declaration perverse if intercept fails — resolved by moving payoff trigger to successful intercept (PP-292)."
+    status: resolved
+    priority: P2
+    decision: "PP-292 applied. Momentum and ally exemptions fire on successful intercept only. Failed intercept yields no payoff — correct tension."
+    propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
+    propagation_status: applied
+    related_ids: [ED-290, SIM-RES-07-F01]
+    tags: [combat, rescue, momentum, resolved]

@@ -93,7 +93,7 @@ A practitioner declaring Leap (Priority 5) may be struck at Priority 1 before co
 | Action | Description |
 |--------|-------------|
 | Strike | Allocate pool split, roll, apply damage |
-| Feint | **Full Combat Pool to Offence; Defence = 0 this round (PP-238).** Roll vs opponent Ob 2. Success: opponent's Defence *ceiling* is reduced by 2D next round — they may allocate at most (pool − 2) dice to Defence. (PP-277 clarification: −2D is a ceiling reduction on Defence allocation, not a total pool reduction.) Feinting character fully exposed — any incoming attack resolves against Defence 0. High-risk/high-reward. (PP-212, PP-238, PP-277) |
+| Feint | Player chooses commit: allocate N dice (minimum 3) to Offence for the feint; remaining dice available for Defence this round. Roll N dice vs opponent Ob 2. Success: opponent's Defence *ceiling* is reduced by 2D next round — they may allocate at most (pool − 2) dice to Defence. Payoff is fixed regardless of N — more commit increases P(success), not effect magnitude. (PP-277 clarification: −2D is a ceiling reduction on Defence allocation, not a total pool reduction.) (PP-212, PP-238, PP-277, PP-291) |
 | Establish Distance | Move to preferred range. Contested Agility if opponent opposes. |
 | Take a Breath | No combat action. Recover Stamina by Endurance score. Cannot if in immediate melee contact. |
 | Full Guard | All dice to Defence. Cannot Attack. |
@@ -101,7 +101,7 @@ A practitioner declaring Leap (Priority 5) may be struck at Priority 1 before co
 | Retrieve | Pick up dropped weapon/item. Opposed Agility if in melee contact. |
 | Tie Up | Close range. Offence roll. Success: both parties suffer −2D to Combat Pool for one round; opponent cannot use reach advantage; escape requires Strength contest. Blocks escape for one round. (PP-213) |
 | Escape | Agility contest vs opponent. Requires not being Tied Up. |
-| Rescue | **Exclusive action** — declare in Phase 1 before opponent's attack resolves. **Eligibility (PP-290):** rescued actor must be outnumbered at declaration (2+ attackers, no supporting ally — i.e. subject to Fibonacci bonus this round). Ineligible Rescue fails silently — action lost. Attack redirects to rescuer; rescuer receives **no Defence allocation** against the redirected attack or any attack from their own original engagement — armour DR applies to both. **Double exposure:** rescuer may be hit by both their original engagement's attacker and the redirected attack in the same round; both resolve at Ob 1 floor (PP-232). Requires adjacent zone. **On declaration:** rescuer gains 1 Momentum. Rescued actor is exempt from Fibonacci group penalty and cannot be targeted by any other attacker this round. Both declaration effects apply regardless of whether attacks hit. **Rescue chain block (PP-290):** a character who has declared Rescue this round cannot themselves be the target of another Rescue declaration. **Incapacitation before resolution (PP-290):** if the rescuer is incapacitated at Priority 1 before the Rescue trigger fires, the Rescue fails and the redirected attack reverts to the original target. Declaration Momentum already granted is not reclaimed. (PP-214, PP-285, PP-286, PP-290) |
+| Rescue | **Exclusive action** — declare in Phase 1 before opponent's attack resolves. **Eligibility (PP-290):** rescued actor must be outnumbered at declaration (2+ attackers, no supporting ally). Ineligible Rescue fails silently — action lost. Requires adjacent zone. **Commit:** rescuer allocates N Offence dice to contest the redirect (minimum 1); remaining dice available for Defence against own engagement's attacker only. **Contest (PP-292):** rescuer rolls N dice (TN 7) vs attacker's Offence roll. If rescuer wins: attack redirects to rescuer — resolves against rescuer's armour DR only (contest dice are expended; no Defence dice available against the redirected attack). If rescuer loses: attack resolves against original target; rescuer's N dice wasted; remaining dice still defend own engagement. **On successful intercept (PP-292):** rescuer gains 1 Momentum; rescued actor is exempt from Fibonacci group penalty and cannot be targeted by any other attacker this round. Exemptions expire at round end. **Rescue chain block (PP-290):** a character who declared Rescue this round cannot be the target of another Rescue. **Incapacitation before resolution (PP-290):** rescuer incapacitated at Priority 1 — Rescue fails, attack reverts to original target, Momentum not granted. (PP-214, PP-285, PP-286, PP-290, PP-292) |
 | Dodge | Ranged attacks only. Forfeit all offensive action this round. Allocate full Combat Pool as passive Defence against one incoming ranged attack. Armour DR applies normally. (PP-215) |
 | Stunt | Declared with Strike. +N dice to Offence from environmental/positional narrative (Game Master sets N, max 5). Chain dice (10s) chain normally, independent of Stunt effect. |
 
@@ -307,22 +307,28 @@ Bonus only applies when target has no allies in the zone (unsupported). Supporte
 
 ### Rescue
 
-**Eligibility (PP-290):** Rescue may only be declared if the rescued actor is outnumbered at Phase 1 declaration — facing 2+ attackers with no supporting ally (i.e. would be subject to the Fibonacci group bonus this round). Eligibility is assessed at declaration; subsequent incapacitations within the round do not retroactively alter eligibility. Ineligible Rescue fails silently — action lost.
+**Eligibility (PP-290):** Rescue may only be declared if the rescued actor is outnumbered at Phase 1 declaration — facing 2+ attackers with no supporting ally (subject to Fibonacci bonus this round). Assessed at declaration only; mid-round incapacitations do not retroactively qualify. Ineligible Rescue fails silently — action lost.
 
-One ally may interpose against one incoming attack (rescuer must specify which attacker is redirected). Declare in Phase 1 before resolution. Requires adjacent zone. Fails silently if no incoming attack was declared — action lost.
+One ally may interpose against one incoming attack. Rescuer must specify which attacker is being contested. Declare in Phase 1 before resolution. Requires adjacent zone. Fails silently if no incoming attack was declared — action lost.
 
-**Double exposure (PP-290):** The rescuer remains engaged with their original pairing. They receive no Defence allocation against either the redirected attack or any attack from their own original engagement this round — armour DR applies to both. Both incoming attacks resolve at Ob 1 (system floor, PP-232). The rescuer should expect to take wounds from both sources.
+**Commit and contest (PP-292):** Rescuer allocates N Offence dice (minimum 1) to contest the redirect. Remaining dice (pool − N) are available for Defence against the rescuer's own engagement's attacker only.
 
-**On declaration (PP-286):**
-- Rescuer gains 1 Momentum immediately — fires on declaration, not contingent on hits landing.
+Rescuer rolls N dice (TN 7) vs the target attacker's Offence roll (contested):
+- **Rescuer wins (net ≥ attacker net):** Attack redirects to rescuer. Redirected attack resolves against rescuer's armour DR only — contest dice are expended and unavailable for Defence against this attack. Rescuer may be wounded by both the redirected attack (DR only) and their own engagement's attacker (pool−N Defence applies).
+- **Rescuer loses (net < attacker net):** Attack resolves against original target. Rescuer's N dice are wasted. Remaining (pool−N) dice still defend the rescuer's own engagement normally. No wounds from the contested attack.
+
+**Weapon speed note:** Attacker TN affects contest difficulty. Light/fast weapons (TN 5–6) roll more net successes on average — harder to intercept. Heavy weapons (TN 7–8) are slower and easier to redirect. Rescuers should commit more dice against fast attackers.
+
+**On successful intercept only (PP-292):**
+- Rescuer gains 1 Momentum.
 - Rescued actor is exempt from the Fibonacci group penalty this round.
 - Rescued actor cannot be targeted by any other attacker this round.
 
-All three declaration effects apply regardless of hit outcomes. The targeting exemption and Fibonacci exemption expire at round end.
+Exemptions expire at round end. No payoff fires on a failed intercept.
 
-**Rescue chain block (PP-290):** A character who has declared Rescue this round cannot themselves be the target of another Rescue declaration. Voluntary double exposure does not qualify as numerical disadvantage.
+**Rescue chain block (PP-290):** A character who has declared Rescue this round cannot themselves be the target of another Rescue declaration.
 
-**Rescuer incapacitated before resolution (PP-290):** If the rescuer is incapacitated (Health = 0) at Priority 1 before the Rescue trigger fires, the Rescue fails. The redirected attack reverts to the original target. Momentum already granted on declaration is not reclaimed.
+**Rescuer incapacitated before resolution (PP-290):** If the rescuer is incapacitated at Priority 1 before the contest resolves, the Rescue fails. The attack reverts to the original target. No Momentum is granted.
 
 ### Multi-Engagement (3v2, 4v3)
 Each combatant is engaged in one primary pairing per round. Extras choose which pairing to support (Fibonacci bonus) or maintain their own engagement.
