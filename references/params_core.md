@@ -52,6 +52,9 @@ Ob minimum: 1. No modifier may reduce Ob below 1. (PP-232)
 Overwhelming requires a minimum of 3 net successes regardless of Ob. (PP-232)
 Ob 20 exception: Overwhelming unavailable. Partial requires net ≥ 10.
 
+
+## Coherence 0 — NPC Transition (PP-261)
+At Coherence 0: character becomes NPC (100% functional, player agency ends). See params_threadwork.md for full rule.
 ## Momentum
 - Range: 0–4
 - Gain: Overwhelming success OR Belief achieved

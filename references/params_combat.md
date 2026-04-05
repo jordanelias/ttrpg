@@ -1,7 +1,7 @@
 <!-- version: v0.14-AUD5-R1 | sources: designs/combat/combat_design_v1.md | last_updated: 2026-04-03 -->
 <!-- CANONICAL SOURCE: combat_design_v1.md supersedes stage8_combat.md -->
 <!-- PATCHES APPLIED: PP-086, PP-087, PP-088, PP-091, PP-092, PP-165, PP-172, PP-174, PP-210–218 -->
-<!-- PP-232: Health formula revised; Stamina floor 2; armour wield constraint; wound penalty −1D only; -->
+<!-- PP-260 (combat resolution — pure opposed); PP-261 (Coherence 0 NPC transition); PP-232: Health formula revised; Stamina floor 2; armour wield constraint; wound penalty −1D only; -->
 <!--         initiative order corrected (initiative holder declares last); tie result corrected; -->
 <!--         weapon system rebuilt (Short/Long × Light/Heavy × Blade/Blunt matrix); STR in damage confirmed; -->
 <!--         damage formula revised (armour-dependent modifier); Mass Mismatch exemptions corrected; -->
@@ -15,6 +15,18 @@ Stamina = Endurance + Relevant History + 1 (modified by armour) — minimum 2 (P
 Health = (Endurance + 6) × (wound count + 1) — wound threshold every (Endurance + 6) points (PP-232)
 
 **Armour wield constraint (PP-232):** A character cannot wear armour whose Stamina modifier would reduce their Stamina to 1 or below.
+
+## Combat Resolution (PP-260)
+
+**Opposed roll.** No fixed Obstacle on combat rolls.
+
+Net Offence successes − Net Defence successes = **hits**.
+- Positive result: attacker lands hits equal to the difference.
+- Zero or negative: defender wins the exchange cleanly (no damage).
+
+Damage = hits + STR + weapon modifier vs armour tier (existing formula unchanged).
+Critical Hit (hits ≥ 3): weapon modifier doubled before armour reduction.
+
 
 Pool modifiers:
 - Wounds: −1D per wound (cumulative). No Ob penalty from wounds. (PP-232)

@@ -3111,3 +3111,26 @@ PP-234
   files_changed:
     - designs/combat/combat_design_v1.md
     - references/params_combat.md
+- id: PP-260
+  date: 2026-04-04
+  source: ED-150
+  priority: P1
+  system: combat
+  description: "Combat resolution: pure opposed. Net Offence minus Net Defence = hits. No fixed Ob on combat rolls."
+  status: applied
+  propagation_targets:
+    - references/params_combat.md
+  propagation_status: applied
+
+- id: PP-261
+  date: 2026-04-04
+  source: ED-147
+  priority: P1
+  system: core_engine
+  description: "Coherence 0: character becomes NPC. 100% functional, all stats intact, player agency ends. GM takes control."
+  status: applied
+  propagation_targets:
+    - references/params_core.md
+    - designs/ttrpg/threadwork_redesign_v25.md
+  propagation_status: applied
+
