@@ -356,3 +356,8 @@ Propagation targets:
 | Source | Dependency key | Targets | Notes |
 |--------|---------------|---------|-------|
 | canon/editorial_ledger.yaml (ED-300) | domain-echo-scene-availability | designs/board_game/valoria_bg_v05_simulation_and_patches.md, references/params_board_game.md | Domain Echo reframe: availability declaration + escalation clock + primary/secondary yield. All-modes applicability. Propagate to BG design doc when ED-300 resolved. |
+
+## ED-301 Propagation (2026-04-05)
+| Source | Dependency key | Targets | Notes |
+|--------|---------------|---------|-------|
+| canon/editorial_ledger.yaml (ED-301) | ts-coherence-orthogonal | designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md, references/params_core.md | TS and Coherence are orthogonal axes. Coherence loss = expansion beyond human rendering frame, not degradation. Knots = relational bindings. Coherence 0 = rendering frame incompatibility, not incapacitation. Propagate to threadwork design doc and params when resolved. |
