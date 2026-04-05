@@ -36,6 +36,14 @@ Valoria's political landscape is contested by eight factions, six with full mech
 
 *Schoenland is not a faction — it is a spoiler actor. See §8.10.*
 
+**Public Instability Track — BG mechanics (PP-255):**
+Range: 0–10. Starting value: 5 (BG). Not a separate track in TTRPG mode (effects folded into Institutional Pressure).
+- **Accrual:** +1 per season in which any faction's Mandate drops below 3 at accounting.
+- **Recovery:** −1 per season in which zero hostile Domain Actions targeted any faction's Stability that season.
+- **PI ≥ 8:** Revolt risk — at accounting, each faction with Stability ≤ 3 makes a Stability check Ob 2. Failure: Mandate −1.
+- **PI = 10:** General uprising — GM narrative event fires. Magnitude and faction determined by campaign state. No automatic mechanical resolution.
+- PI does not reset between seasons automatically.
+
 ### Domain Actions
 
 When a personal action has faction-level scope, the Game Master recognises it as a Domain Action. The personal roll resolves both the personal outcome and the faction effect simultaneously.
@@ -44,7 +52,9 @@ When a personal action has faction-level scope, the Game Master recognises it as
 
 **Non-Player Character faction rolls:** When a faction acts without a player character driving it, the Game Master rolls the relevant faction stat as a dice pool (d10s, TN 7) against the Domain Ob. For contested actions, both roll; higher net successes wins. Ties go to the defender.
 
-**Seasonal cap:** ±2 per stat per season.
+**Domain Action → Social Contest escalation (PP-246):** A Domain Action always produces a mechanical outcome on its own. Escalation to a full Social Contest occurs only when all three hold: (a) both parties are personally present, (b) stakes are explicitly contested by both, AND (c) the DA roll produces a Partial. On Partial: GM may call a Contest at Conviction Track 5 (neutral); DA outcome held pending Contest resolution. On Success or Failure: outcome is final, no Contest.
+
+**Seasonal cap:** ±2 per stat per season, applied at seasonal accounting (PP-242). Multiple actions may accumulate more than ±2 change within a season; the net is clipped to ±2 at accounting. Institutional momentum does not reverse between actions.
 
 ### Ethical Framework Modifiers
 
@@ -109,7 +119,7 @@ Once per season, the Crown issues a unilateral political act that bypasses norma
 | **Roll** | Mandate vs Ob 2 |
 | **Success** | One faction attribute change (any faction, ±1) takes effect immediately rather than at seasonal accounting |
 | **Failure** | Mandate −1 (overreach) |
-| **Constraint** | Cannot target Intel — decrees are public acts |
+| **Constraint** | Cannot target Intel — decrees are public acts. Cannot target a stat absent from the target faction's sheet (e.g. Niflhel has no Mandate; Löwenritter has no Wealth). (PP-243) |
 | **Limit** | 1/season; consecutive seasons: +1 Ob per consecutive use (decree fatigue) |
 
 **Default Leader: King Almud Almqvist**
@@ -144,6 +154,8 @@ Correctness is determined by institutional authority, not outcome or character. 
 | **Failure** | Church Mandate −1; target gains Mandate +1 (sympathy martyr) |
 | **Constraint** | Requires Church Mandate ≥ 3 (on 1–7 scale: institutional authority threshold) |
 | **Reversal** | Grand Debate (5 exchanges) or appointment of a new Confessor |
+
+**Player Character excommunication — faction succession (PP-244):** If the excommunicated target is a PC faction leader, the faction reverts to institutional tendency (Game Master-run) until: (a) the PC is reinstated via Reversal above, or (b) a replacement leader is designated through narrative play (Influence Domain Action Ob 2 by any PC, or Game Master succession).
 
 **Default Leader: Confessor Arne Himlensendt**
 - Conviction: Faith · Resonant Style: Evidence · Thread Sensitivity: 0 (theologically foreclosed)

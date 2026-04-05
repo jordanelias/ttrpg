@@ -1,6 +1,6 @@
 # VALORIA — COMBAT DESIGN (v1)
 ## Date: 2026-04-02
-## Version: v1.5 (PP-232: weapon system rebuild, wound penalty, initiative, Health/Stamina, Stage 1/2 struck; PP-210–218: audit gap fixes — Health formula, Critical Hit, Feint timing, Tie Up, Rescue, Dodge, Fibonacci, Anti-Armour, PP-086)
+## Version: v1.6 (PP-238, PP-239, PP-247 applied; PP-232: weapon system rebuild, wound penalty, initiative, Health/Stamina, Stage 1/2 struck; PP-210–218: audit gap fixes — Health formula, Critical Hit, Feint timing, Tie Up, Rescue, Dodge, Fibonacci, Anti-Armour, PP-086)
 ## Status: WORKING DESIGN — not compiled. This is the design-layer source for personal combat.
 ## Authority: Philosophical Foundations → this document → compilation (when ready)
 ## Mode applicability: ALL (TTRPG baseline; scales to Hybrid and Board Game via params)
@@ -62,7 +62,7 @@ Round duration: 6–10 seconds narrative.
 
 Initiative determines declaration order, not action speed. Higher initiative = more information.
 
-**Exchange 1:** Higher Attunement acts last (highest information advantage).
+**Exchange 1:** Higher Attunement acts last (highest information advantage). **Tiebreaker — equal Attunement (PP-239):** higher Agility acts last. If Agility is also equal: GM determines or coin flip.
 **Subsequent rounds:** Initiative transfers to the exchange winner.
 **Tie result:** No damage to either side; initiative stays with current holder.
 
@@ -76,10 +76,23 @@ Initiative replaces the prior range-priority system. Positional advantage from w
 
 ## 4. ACTIONS
 
+**Combat action priority order (PP-247):** Lower number = resolves first within a round.
+
+| Priority | Action |
+|----------|--------|
+| 1 | Strike |
+| 2 | Feint |
+| 3 | Disarm, Tie Up, Retrieve |
+| 4 | Establish Distance, Escape |
+| 5 | Leap (Thread — full-round) |
+| — | Full Guard, Take a Breath, Dodge, Rescue (reactive; trigger-timed) |
+
+A practitioner declaring Leap (Priority 5) may be struck at Priority 1 before contact. Consistent with mass battle ruling: a declared attacker targeting a practitioner in their Leap round makes the Leap ineligible.
+
 | Action | Description |
 |--------|-------------|
 | Strike | Allocate pool split, roll, apply damage |
-| Feint | Offence-only roll vs opponent Ob 2. Success: opponent loses −2D Defence in the next round only. (PP-212) |
+| Feint | **Full Combat Pool to Offence; Defence = 0 this round (PP-238).** Roll vs opponent Ob 2. Success: opponent loses −2D Defence next round only. Feinting character fully exposed — any incoming attack resolves against Defence 0. High-risk/high-reward. (PP-212, PP-238) |
 | Establish Distance | Move to preferred range. Contested Agility if opponent opposes. |
 | Take a Breath | No combat action. Recover Stamina by Endurance score. Cannot if in immediate melee contact. |
 | Full Guard | All dice to Defence. Cannot Attack. |

@@ -1,5 +1,6 @@
 # VALORIA — SOCIAL CONTEST SYSTEM v2
 ## [EDITORIAL: ED-136 — System name: "Contest" proposed. Candidates: Contest, Contention, Proceeding.]
+## Patches applied: PP-234, PP-235, PP-236, PP-237
 ## Status: DESIGN PROPOSAL — supersedes debate_system_redesign_v1.md Part 6 upon approval
 ## Source: Opus 4.6 session 2026-04-04
 ## Patch: PP-234 (genre restructure, attribute renames, Composure resolution, faction boost revision, dice consistency)
@@ -172,7 +173,7 @@ One orator invokes what has been (Memory); the other projects what could become 
 - Initiative stays with holder.
 
 **TIE** (equal successes, any interaction type):
-- Both orators take 1 strain.
+- Both orators take 1 strain. **Exception (PP-236): if the interaction type is CROSS, no strain is dealt — CROSS no-strain rule takes precedence. Neither argument attacked the other; a tie does not change that structural fact.**
 - Conviction Track moves +1 toward initiative holder's position.
 - Initiative stays with holder.
 
@@ -286,7 +287,7 @@ Pool: Attunement + most relevant History, TN 7, Ob 1.
 Time requirement: at least 1 hour. Rushed (< 1 hour): TN 8.
 
 ### §9.2 Multi-Party Contest — Coalition Structure
-Each orator declares Side A or Side B at setup. No side-switching. Each side nominates one Lead per exchange (may change between exchanges). Non-lead coalition members may Corroborate (max 1 per side per exchange). Composure and Rattled tracked individually. Only Lead's Concentration depletes. Initiative transfers to winning side; that side nominates holder.
+Each orator declares Side A or Side B at setup. No side-switching. Each side nominates one Lead per exchange (may change between exchanges). Non-lead coalition members may Corroborate (max 1 per side per exchange). Composure and Rattled tracked individually. **Coalition Concentration — shared pool (PP-237):** Concentration tracks on a shared pool equal to the sum of all coalition members' (Focus + Recall) at contest setup. Each exchange depletes the shared pool by 1 (plus 1 on exchange loss) regardless of which member holds Lead. Rotating Lead does not reset depletion. Spent triggers at 0; pool resets to its setup total. Initiative transfers to winning side; that side nominates holder.
 
 ### §9.3 Practitioner Weaving in Contests (R-65)
 A practitioner with TS ≥ 30 in active Thread contact adds bonus dice: floor(TS ÷ 30) (+1D at 30, +2D at 60, +3D at 90). Must declare before rolling. Visible to all observers. Church may file Heresy Investigation on observation. After exchange: Coherence check Ob 1.

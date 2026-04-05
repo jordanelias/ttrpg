@@ -16,6 +16,8 @@ Valoria operates across five scales simultaneously. A single session may move fr
 | Territorial | A duchy; a district; a settlement | 4 | 50+ | −1 |
 | Structural | A kingdom; an institution; a lasting constitutional arrangement | 5+ | 70+ | −2 |
 
+**Coherence auto-cost ruling (PP-248):** §11.1 is authoritative. Object and Personal scale Thread operations cost 0 Coherence automatically. The −1/op auto-cost applies only at Relational scale and above. Mass battle Thread operations run at Territorial/Campaign scale and correctly incur −1/op. No contradiction.
+
 Base Ob applies when a Thread operation targets configurations at that scale. Rendering Stability costs and degree-table consequences are per Stage3 operation tables. The legacy Thread Tension Multiplier column has been removed — it does not map to the current Rendering Stability per-degree cost structure.
 
 ---
@@ -96,9 +98,13 @@ This is not a punishment — it is a mechanical expression of the epistemologica
 
 > **Phase order (PP-089):** Hybrid season phase order: Strategic Phase first, Personal Phase second (fixed). Domain Echo consequences from Personal Phase apply at start of next season Strategic Phase. Seasonal ±2 attribute cap shared across both phases.
 
+> **Rendering Stability timing (PP-253):** PP-089 "next season" deferral applies to faction stat Domain Echoes only. RS changes from Thread operations apply immediately in both phases. RS is a live world track with no seasonal buffer; the ±2 faction stat cap does not govern it.
+
 **Thread in mass battle (TTRPG/Hybrid only):** Offensive Thread operations (Dissolution, Pulling, Locking) fire in Phase 4 — between Manoeuvre and Engagement. Support Thread operations (Weaving, Mending) fire in Phase 6 Cascade step 4–5. Damage from all phases (Volley, Thread, Engagement) applies simultaneously at Phase 6 Step 1. Board Game has no battle-phase Thread — faction Thread orders are abstracted to Co-Movement cards at strategic scale only.
 
 **Key principle for hybrid**: Where a rule exists in both modes, the seasonal cap is shared. A faction attribute cannot change by more than ±2 per season regardless of how many sources target it in either phase.
+
+**Theocracy Counter cap — seizure classification (PP-254):** Territory seizure TC gains are a distinct category, not Domain Actions. All TC sources combined (Domain Actions, Mandate accrual, seizure, Thread operations, military outcomes) are subject to the existing ±5/season combined cap. The ±3 DA sub-cap does not apply to seizure.
 ---
 
 ## 11.8 GM Reference Card — Zoom In / Zoom Out (ED-055b)
@@ -115,5 +121,11 @@ This is not a punishment — it is a mechanical expression of the epistemologica
 **Eight Handoff Rules (summary):**
 Personal→Thread: Leap action. Personal→Faction: GM recognises scope, Domain Action resolves. Personal→Scene: Roll serves as opening move or Appeal. Scene→Faction: Domain Echo on sufficient scope. Thread→Faction: Thread pool, faction-scale Ob. Thread→Mass: Offensive=Phase 2; Support=Phase 5. Mass→Personal: Phase 5, one exchange, named targets become Contested Figures. Scene→Mass: Social outcome affects mass combat opening state.
 
+**Multiple simultaneous Zoom Ins (PP-252):** Two or more PCs triggering Zoom In at the same phase-lock point resolve their exchanges in Attunement order (higher first). Ties: higher Agility. Further ties: GM. Consequences of each exchange are visible to subsequent PCs before their exchange resolves.
+
+**Contested Figure wound on Zoom Out (ED-167 provisional):** If a Contested Figure is wounded but not killed during a Zoom In exchange, the wound carries back to BG as +1 Ob to that commander's tactic rolls for the remainder of the current battle. Death = Stage 2 general consequences (existing rules). If the CF is killed during one PC's exchange and another PC's Zoom In has not yet resolved (ED-168 provisional): the second PC may redirect to any other named Non-Player Character in the zone, or Zoom Out immediately with no action consumed.
+
 **Zoom In state to track:** PC location, current scale, actions remaining, mass battle turn state.
 **Zoom Out trigger:** Exchange complete, or PC incapacitated.
+
+**PC incapacitation during Zoom In — Stage 1 timing (PP-251):** Stage 1 general consequences (−1 Morale all units, Command halved, Morale floor suspended) fire immediately on Zoom Out, before mass battle resumes at its next phase. Incapacitation is a fact; consequences do not wait for Phase 6.

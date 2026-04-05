@@ -1,5 +1,6 @@
 # VALORIA — MASS BATTLE SYSTEM v4
-## Version: v4.5 — PP-232 (renames: Strength→Size, CP→Power, Cohesion→Discipline, CR→Command) + PP-233 (core formula) propagated.
+## Version: v4.8 — PP-240,241,245,249,250,256 applied;
+##  PP-232 (renames: Strength→Size, CP→Power, Cohesion→Discipline, CR→Command) + PP-233 (core formula) propagated.
 ## Status: WORKING DESIGN — no appendix sections. Read straight through.
 ## Three-mode: TTRPG/Hybrid (Part A); Board Game (Part B); Hybrid Handoff (§B.5)
 ## All P1/P2/P3 patches applied. Gaps filled. Editorial notes flagged.
@@ -118,7 +119,7 @@ of damage source (Volley, melee, environmental). *[P2-06]*
 | 0 | Formation broken; cannot attack; must reform or rout |
 
 Discipline restoration: Reform Phase only (unit not engaged), +1 Discipline.
-Requires general's Command ≥ current Discipline + 1.
+Requires general's Command ≥ current Discipline + 1 **AND Command ≥ 2 (PP-241)**. The explicit Command=1 prohibition takes precedence over the formula.
 Command=1 general cannot restore Discipline to any unit — all degradation is
 permanent for that battle. *[NEW-P2-05 — confirmed as intended Command asymmetry]*
 
@@ -206,6 +207,8 @@ with Command check Ob 2 in Phase 1 of any subsequent turn. *[P2-10]*
 execution rolls. A 2-wound general has tactic success probability halved.
 *[D3-P2-01 — confirmed intended]*
 
+**Coherence does not affect Command (PP-249):** Coherence is a Thread perceptual track; Command is tactical effectiveness. Dissonance impairs Thread operations only. No Coherence penalty applies to Command tactic rolls.
+
 **Mass battle pauses during personal combat.** If general enters personal
 combat, mass battle holds at current state. Resume at Phase 1 of next mass
 battle turn after personal combat resolves. *[D3-P2-02]*
@@ -225,6 +228,8 @@ battle turn after personal combat resolves. *[D3-P2-02]*
 | Reserve | Cannot engage | Cannot engage | Commits at Phase 3 start of NEXT turn *[P3-02]* |
 
 > **Clarification:** "Roll a number of d10s equal to the opposing general's Command score, against Ob 2, to recognise the Feigned Retreat as a feint rather than a genuine withdrawal. Success: the pursuing side is not deceived; the Feigned Retreat has no effect this turn. Failure (or no roll if the opposing general is killed): pursuing side pursues normally and suffers the Discipline check."
+
+> **Feigned Retreat Discipline check Ob (PP-256):** The pursuing-side Discipline check is **Ob 1**. Pursuing a fleeing enemy is a natural impulse; Ob 1 reflects the difficulty of halting momentum. Discipline-4 unit: ~87% success. Discipline-1 unit: ~40% success.
 
 > **Clarification (PP-MB-04):** "Reserve commitment at Phase 3 of Turn N+1 makes the unit immediately available for Phase 4 engagement in that same turn (Turn N+1). Commitment does not delay the unit to Turn N+2. Summary: declare Reserve in Phase 3 of Turn N → unit commits at Phase 3 of Turn N+1 → unit may engage in Phase 4 of Turn N+1."
 
@@ -321,7 +326,7 @@ Per engagement:
 5. Damage = max(0, net hits + weapon modifier − DR)
 6. Critical hit (net hits ≥ 3): weapon modifier doubled
 7. Engagement damage recorded. NOT applied until Phase 6 Step 1.
-8. Mutual destruction (both to 0) is valid — Pyrrhic outcomes possible *[P2-02]*
+8. Mutual destruction (both to 0) is valid — Pyrrhic outcomes possible *[P2-02]*. **Mutual total destruction — all units both sides to 0 simultaneously (PP-240):** draw; no territory change; both factions Stability check Ob 1 at Accounting.
 
 > **Clarification (PP-MB-01):** "Effective Power is calculated at the start of Phase 4 using Size as of Phase 3 end. All damage within Phase 4 is applied simultaneously at Phase 5 Step 1. Power does not change within a single Phase 4 — a unit that takes damage mid-Phase 4 does not recalculate its Effective Power until Phase 5."
 
@@ -535,9 +540,23 @@ TTRPG equivalence added for hybrid translation:
 | Knights Templar | 5 | 5 | 6 | 11 | 5 | 6 | 6 | HeavyBlunt | Heavy | +5 |
 
 Size corrected: user audit −2 all units, −3 Ranged and Artillery (PP-104).
-Dmg Mod: used in Phase 5 damage formula (max(0, net hits + Dmg Mod − DR) = Size loss). [EDITORIAL: ED-062]
-Ranged weapon: LP (arrows) default — see ED-061 for sub-type split (archer/crossbow/slinger).
-Artillery weapon: HBl (siege) — Volley keyword, no melee.
+Dmg Mod (BG): used in BG battle formula. [EDITORIAL: ED-062 — BG values provisional]
+
+**TTRPG Dmg Mod (PP-245):** TTRPG mass battle uses ⌈BG Dmg Mod ÷ 2⌉. BG unscaled values collapse TTRPG battles to one exchange (SIM-DEBT-05). Scaled values produce multi-exchange battles consistent with the 7-phase structure.
+
+| Unit | BG Dmg Mod | TTRPG Dmg Mod |
+|------|-----------|---------------|
+| Levy | +1 | +1 |
+| Light Infantry | +2 | +1 |
+| Heavy Infantry | +4 | +2 |
+| Cavalry | +5 | +3 |
+| Archer | +0 | +0 |
+| Crossbow | +0 (+1 vs med/heavy post-DR) | +0 (+1 vs med/heavy post-DR) |
+| Sling | by ammo (−2D) | by ammo (−2D) |
+| Artillery | +3 | +2 |
+| Knights Templar | +5 | +3 |
+
+Ranged: LP (arrows) default. Artillery: HBl (siege), Volley keyword, no melee.
 Morale values: [PROVISIONAL] — ED-062 scope.
 
 **Anti-Armour keyword** (HeavyBlunt units): +2D when targeting Heavy Infantry,
@@ -633,10 +652,7 @@ Zoom In may only fire at one of three legal phase-lock points:
 - **After Phase 3** (manoeuvre complete, pre-Engagement)
 - **After Phase 6 Step 1** (all damage applied, no ghost units)
 
-If a Zoom In trigger occurs mid-phase (e.g., during Phase 5 Engagement), it
-is held and fires at the end of the current phase — not immediately. This
-eliminates mid-phase ghost-unit state (ED-057) and ensures the TTRPG scene
-always opens with a clean, fully-resolved BG state.
+If a Zoom In trigger occurs mid-phase, it is held and fires at the **next legal phase-lock point** — not the end of the current phase (PP-250). A trigger during Phase 5 Engagement defers to After Phase 6 Step 1 (not end-of-Phase-5, which preserves ghost-unit state). A trigger during Phase 2 defers to After Phase 3. A trigger within Phase 6 pre-Step-1 defers to After Phase 6 Step 1. This eliminates ghost-unit state (ED-057).
 
 **BG → TTRPG unit conversion:** Translate BG unit tokens using §B.2. The table
 provides TTRPG Power, Size (provisional), Morale (provisional), weapon, and armour

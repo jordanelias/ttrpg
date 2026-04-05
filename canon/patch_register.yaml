@@ -2694,93 +2694,100 @@ PP-234
   affects: [references/params_factions.md]
   status: applied
   provisional: false
-
 - id: PP-247
-  date: 2026-04-04
-  severity: P1
-  description: "ED-139 resolved: Community Weaving has two mode-specific forms (TTRPG vs BG/Hybrid). Not a contradiction. Flagged for review."
-  source: editorial_resolution
-  affects: [references/params_factions.md]
-  status: applied
-  provisional: true
-  editorial: ED-139-R
+    date: 2026-04-04
+    source: SIM-C-01 AUD-F01
+    system: core_engine
+    description: "Combat Pool formula corrected in params_core.md: (Agility x2)+History+3 -> Agility+(History points+3). Matches stage1 ss2.3 and ss3.4."
+    status: applied
+    files_changed: [references/params_core.md]
 
-- id: PP-248
-  date: 2026-04-04
-  severity: P1
-  description: "ED-140 resolved: Discipline degradation trigger adds asymmetry precondition (Power asymmetry OR Thread/artillery). Symmetric engagements: attrition only. Flagged for review."
-  source: editorial_resolution
-  affects: [references/params_mass_combat.md]
-  status: applied
-  provisional: true
-  editorial: ED-140-R
+  - id: PP-248
+    date: 2026-04-04
+    source: SIM-C-01 AUD-F02 AUD-F03
+    system: core_engine
+    description: "Stamina formula corrected in params_core.md: End+History+1 -> End+1 per stage1 ss3.9. Health row clarified: base score End+6, wound-interval mechanics to Notes."
+    status: applied
+    files_changed: [references/params_core.md]
 
-- id: PP-249
-  date: 2026-04-04
-  severity: P1
-  description: "ED-142 resolved: BG Overwhelming uses 2xOb (PP-179 canonical). Floor of 3 added (matches PP-232). ED-031 superseded. Flagged for review."
-  source: editorial_resolution
-  affects: [references/params_board_game.md]
-  status: applied
-  provisional: true
-  editorial: ED-142-R
+  - id: PP-249
+    date: 2026-04-04
+    source: SIM-C-01 AUD-F06 PP-232-propagation
+    system: core_engine
+    description: "Ob cap propagated to stage1 ss1.3: updated from 10 to 20 per PP-232. Ob stacking cap and Ob-20 exception updated throughout ss1.3-1.4."
+    status: applied
+    files_changed: [compilation/v0.14/stage1_core_engine.md]
 
 - id: PP-250
   date: 2026-04-04
   severity: P1
-  description: "ED-150 resolved: AMPLIFY combined pool cap confirmed at highest individual x2. PP-242 provisional confirmed. Flagged for review."
-  source: editorial_resolution
-  affects: [references/params_debate.md]
+  description: "Zoom In mid-phase deferral fix: triggers during Phase 5 defer to After Phase 6 Step 1, not end-of-Phase-5. Eliminates ghost-unit state (ED-057)."
+  finding_id: "F-HYB-01 / ED-158"
+  source: simulation/SIM-STRESS-02
   status: applied
-  provisional: true
-  editorial: ED-150-R
+  files_changed:
+    - designs/mass_combat/mass_battle_v3.md
+    - references/params_mass_combat.md
 
 - id: PP-251
   date: 2026-04-04
-  severity: P1
-  description: "ED-151 resolved: Scene-to-Mass transition modifiers confirmed (PP-244). AUD-P1-15 provisionally closed. Flagged for review."
-  source: editorial_resolution
-  affects: [references/params_factions.md]
+  severity: P2
+  description: "PC incapacitation during Zoom In: Stage 1 general consequences fire immediately on Zoom Out, before mass battle resumes."
+  finding_id: "F-HYB-02 / ED-159"
+  source: simulation/SIM-STRESS-02
   status: applied
-  provisional: true
-  editorial: ED-151-R
+  files_changed:
+    - compilation/v0.14/stage11_scale_transitions.md
 
 - id: PP-252
   date: 2026-04-04
-  severity: P1
-  description: "ED-152 resolved: Domain Echo formal rule defined (Cascade Phase conversion of personal outcomes to faction stat changes). Flagged for review."
-  source: editorial_resolution
-  affects: [references/params_factions.md]
+  severity: P2
+  description: "Multiple simultaneous Zoom Ins at same phase-lock point: resolve in Attunement order. Ties: Agility, then GM."
+  finding_id: "F-HYB-03 / ED-160"
+  source: simulation/SIM-STRESS-02
   status: applied
-  provisional: true
-  editorial: ED-152-R
+  files_changed:
+    - compilation/v0.14/stage11_scale_transitions.md
 
 - id: PP-253
   date: 2026-04-04
   severity: P2
-  description: "ED-153 resolved: Collective Forgetting rule — Recall Anchor mechanic (one passer anchors one failer to Success-equivalent retention). Flagged for review."
-  source: editorial_resolution
-  affects: [references/params_threadwork.md]
+  description: "Rendering Stability timing: RS changes from Thread operations apply immediately in both phases. PP-089 next-season deferral governs faction stat Domain Echoes only."
+  finding_id: "F-HYB-04 / ED-161"
+  source: simulation/SIM-STRESS-02
   status: applied
-  provisional: true
-  editorial: ED-153-R
+  files_changed:
+    - compilation/v0.14/stage11_scale_transitions.md
 
 - id: PP-254
   date: 2026-04-04
   severity: P2
-  description: "Stamina exhaustion propagation to params_combat; Health formula conflict resolution (design doc §7 wins over PP-232); ED-152 flagged"
-  finding_id: "GAP-SIM-X26-01"
-  source: simulation
-  affects: [references/params_combat.md, references/params_combat_history.md]
+  description: "Theocracy Counter seizure classification: territory seizure TC gains are a distinct category (not Domain Actions). All TC sources subject to ±5/season combined cap."
+  finding_id: "F-CLK-02 / ED-162"
+  source: simulation/SIM-STRESS-02
   status: applied
-  applied_commit: ~
+  files_changed:
+    - compilation/v0.14/stage11_scale_transitions.md
+    - references/params_factions.md
 
 - id: PP-255
   date: 2026-04-04
   severity: P2
-  description: "Momentum between-scene carry within session; RS baseline decay -1/year baseline confirmed"
-  finding_id: "GAP-SIM-X26-02, GAP-SIM-X27-01"
-  source: simulation
-  affects: [references/params_core.md, references/params_factions.md, references/params_combat_history.md]
+  description: "Public Instability track — full BG design. Accrual +1/season Mandate<3. Recovery −1/season zero hostile Stability DAs. PI≥8: revolt check (Stability≤3 factions Ob 2; fail→Mandate−1). PI=10: GM uprising event."
+  finding_id: "F-CLK-06 / ED-163"
+  source: simulation/SIM-STRESS-02
   status: applied
-  applied_commit: ~
+  files_changed:
+    - compilation/v0.14/stage6_factions.md
+    - references/params_factions.md
+
+- id: PP-256
+  date: 2026-04-04
+  severity: P2
+  description: "Feigned Retreat Discipline check Ob: pursuing-side Discipline check is Ob 1. Pursuing is natural impulse; Ob 1 reflects difficulty of halting momentum."
+  finding_id: "F-S3-16 / ED-169"
+  source: simulation/SIM-STRESS-03
+  status: applied
+  files_changed:
+    - designs/mass_combat/mass_battle_v3.md
+    - references/params_mass_combat.md

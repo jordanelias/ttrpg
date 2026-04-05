@@ -1,6 +1,5 @@
 <!-- version: v0.14+design-ST7-R4-PP235 | sources: designs/mass_combat/mass_battle_v3.md (v4.4, PP-106) | last_updated: 2026-04-03 -->
 <!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D; PP-191 (Lock phase); PP-192 (×3 RS multiplier); PP-222, PP-224, PP-225, PP-227, PP-229, PP-231 (SIM-X-22 provisional) -->
-<!-- PP-248 2026-04-04: ED-140 resolved — Discipline degradation asymmetry precondition added -->
 <!-- PP-232: Unit stats renamed (Strength→Size, Combat Power→Power, Cohesion→Discipline, Coherence Rating/Command Rating→Command); -->
 <!--         Power derived from Size; damage formula references updated. -->
 <!-- PP-233: Unit combat formula established. Pool = min(Size,Command)+Command. -->
@@ -141,11 +140,7 @@ Command = 1: cannot restore Discipline to any unit — all degradation permanent
 See §BATTLE TURN PHASE STRUCTURE above (7 phases, ED-050 Option D). The prior 5-phase structure is obsolete.
 
 ## Discipline Degradation (Deterministic) [PROPOSAL] (PP-232)
-Fires at Phase 5 when ALL of the following are true (PP-248):
-1. Total Size lost this turn > Discipline, AND
-2. Power asymmetry exists (attacking unit Power > defending unit Power), OR Thread/artillery caused the Size loss.
-Symmetric engagements (equal or near-equal Power) produce attrition only — Discipline degradation does not fire.
-[FLAGGED FOR REVIEW: ED-140-R — confirm asymmetry threshold: strict Power > Power, or Power difference ≥ 2?]
+Fires at Phase 5 when total Size lost this turn > Discipline → Discipline −1.
 | Discipline | Power penalty |
 |----------|-----------|
 | 5–7 | None |
@@ -404,3 +399,37 @@ Individual reload applies only in personal combat.
 - Excommunication Threat: opposing faction −1D all Domain Actions next season if Church Mandate ≥ 4.
 
 **Remaining factions (Varfell, Hafenmark, Löwenritter, Revolution):** TBD — pending editorial design.
+
+## PP-240 — Mutual total destruction
+All units both sides to 0 simultaneously: draw. No territory change. Both factions Stability check Ob 1 at Accounting.
+
+## PP-241 — Reform condition
+Reform requires: Command ≥ current Discipline + 1 AND Command ≥ 2. Command=1 generals cannot reform any unit regardless of Discipline value.
+
+## PP-245 — TTRPG Dmg Mod (resolves SIM-DEBT-05)
+TTRPG Dmg Mod = ⌈BG Dmg Mod ÷ 2⌉.
+| Unit | TTRPG Dmg Mod |
+|------|--------------|
+| Levy | +1 |
+| Light Infantry | +1 |
+| Heavy Infantry | +2 |
+| Cavalry | +3 |
+| Archer/Crossbow | +0 (+1 vs med/heavy post-DR for crossbow) |
+| Sling | by ammo (−2D) |
+| Artillery | +2 |
+| Knights Templar | +3 |
+
+## PP-249 — Coherence → Command: no penalty
+Dissonance impairs Thread operations only. No Coherence penalty on Command tactic rolls.
+
+## PP-250 — Zoom In mid-Phase-5 deferral fix
+Mid-phase Zoom In fires at next legal phase-lock point. Phase-5 trigger → After Phase 6 Step 1 (not end-of-Phase-5).
+
+## PP-256 — Feigned Retreat Discipline check Ob
+Pursuing-side Discipline check = Ob 1. P(hold | Discipline 4) ≈ 87%. P(hold | Discipline 1) ≈ 40%.
+
+## ED-167 provisional — CF wound on Zoom Out
+CF wound during Zoom In → +1 Ob to that commander's BG tactic rolls for remainder of current battle.
+
+## ED-170 provisional — Coherence recovery in multi-day battle
+1 Coherence/night of rest (no Thread ops). Single-day battle: no in-battle Coherence recovery.

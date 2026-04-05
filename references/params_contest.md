@@ -163,3 +163,12 @@ Resolved questions cannot be re-contested without significantly changed circumst
 
 <!-- patch_history: references/params_contest_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
+
+## PP-236 — CROSS Tie no-strain
+CROSS interaction + equal successes: no strain to either orator. CROSS no-strain rule overrides Tie +1-strain. Conviction Track +1 toward initiative holder as normal.
+
+## PP-237 — Coalition Concentration shared pool
+Shared pool = sum of all coalition members' (Focus+Recall) at setup. Depletes 1/exchange (+1 on loss) regardless of Lead rotation. Spent at 0; resets to setup total.
+
+## History bonus note (PP-234 era)
+History bonus = history points + 3 (per Stage 2 §4.1). Pool (PrimaryAttr×2)+H is equivalent to combat pool (Agi×2)+H+3. The +3 is embedded in H.

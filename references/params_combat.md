@@ -1,6 +1,6 @@
-<!-- version: v0.14-AUD5-R2 | sources: designs/combat/combat_design_v1.md | last_updated: 2026-04-04 -->
+<!-- version: v0.14-AUD5-R1 | sources: designs/combat/combat_design_v1.md | last_updated: 2026-04-03 -->
 <!-- CANONICAL SOURCE: combat_design_v1.md supersedes stage8_combat.md -->
-<!-- PATCHES APPLIED: PP-086, PP-087, PP-088, PP-091, PP-092, PP-165, PP-172, PP-174, PP-210–218, PP-254 -->
+<!-- PATCHES APPLIED: PP-086, PP-087, PP-088, PP-091, PP-092, PP-165, PP-172, PP-174, PP-210–218 -->
 <!-- PP-232: Health formula revised; Stamina floor 2; armour wield constraint; wound penalty −1D only; -->
 <!--         initiative order corrected (initiative holder declares last); tie result corrected; -->
 <!--         weapon system rebuilt (Short/Long × Light/Heavy × Blade/Blunt matrix); STR in damage confirmed; -->
@@ -177,19 +177,24 @@ Strike / Establish Distance / Feint / Take a Breath / Full Guard / Disarm / Retr
 ## Stamina Minimum (PP-165, revised PP-232)
 Stamina minimum: **2**. Cannot wear armour that would reduce Stamina to 1 or below.
 
-## Stamina Exhaustion (PP-254 — from combat_design_v1.md §7)
-Stamina depletes by 1 per round of active combat (each round a Strike or other active action is declared).
-At Stamina 0: character is **Out of Breath**. −2D to all combat rolls until recovery.
-Recovery: declare **Take a Breath** action (forfeit all offensive and defensive combat actions that round). Recover Stamina equal to Endurance score.
-Cannot Take a Breath while in immediate melee contact with a declared attacker.
-
-**Health formula clarification (PP-254):** canonical source is combat_design_v1.md §7:
-Health = Endurance + 6 (range 7–13). At 0 Health: take one Wound, Health resets to full.
-[CONFLICT: params_combat previously stated Health = (Endurance+6)×(wound count+1) per PP-232. This contradicts the design doc. PP-232 health formula is struck. Design doc §7 is authoritative. Flagged ED-152.]
-
-
 <!-- patch_history: references/params_combat_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
 
 ## Cover Declaration — Phase 1 Requirement (ED-098 resolved 2026-04-03)
 Cover must be declared in Phase 1 to apply that round. GM determines physical availability from zone description. No declaration = no DR benefit that round.
+
+## PP-238 — Feint full-pool
+Feint commits full Combat Pool to Offence; Defence = 0 this round. Feinting character exposed — incoming attacks resolve against Defence 0. On success: opponent −2D Defence next round only.
+
+## PP-239 — Initiative tiebreaker
+Equal Attunement in Exchange 1: higher Agility acts last. If Agility also equal: GM or coin flip.
+
+## PP-247 — Action priority order
+| Priority | Action |
+|----------|--------|
+| 1 | Strike |
+| 2 | Feint |
+| 3 | Disarm, Tie Up, Retrieve |
+| 4 | Establish Distance, Escape |
+| 5 | Leap (Thread — full-round) |
+| — | Full Guard, Take a Breath, Dodge, Rescue (reactive) |

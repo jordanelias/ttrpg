@@ -1,38 +1,39 @@
-# Valoria Session Log - Updated
+# Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-04T_CROSS_MODE_SIM_B
+session_id: 2026-04-04T_SIM_STRESS_03
 phase: SESSION CLOSED
 status: COMPLETE
 
 ## WORK COMPLETED
-1. Resolved 5 of 6 prior gaps (PP-254, PP-255). ED-152 opened (Health formula conflict resolved in favour of design doc). ED-153 opened (BG Wealth diminishing returns — no rule exists).
-2. SIM-X-29: TTRPG Debate. Citation-fishing + genre misread. 2 CROSS + 2 CLASH-ties. CT +2, no Composure damage. 5 findings, 1 gap.
-3. SIM-X-30: TTRPG Thread operations. Over-extension into Structural scale. Serial Partials. Composure drain. 5 findings, 3 gaps.
-4. SIM-X-31: Hybrid Mass Battle + Duel. General duel causes Command Pool blackout. Crown Right routs. Pyrrhic duel win. 4 findings.
-5. SIM-X-32: BG Accounting at crisis thresholds. Church never crosses TC 60. Restoration counter-pressure effective. RS decay confirmed. 5 findings.
+1. Applied all pending patches to design docs (PP-236–PP-256, 21 patches total)
+2. Added ED-154–170 to editorial ledger (all resolved or provisionally resolved)
+3. SIM-STRESS-03: 6 randomized scenarios across Contest, Mass Battle, Hybrid Zoom, Thread
+   - 21 findings logged
+   - 7 new editorial items (ED-164–170)
+   - 5 resolved immediately (ED-165, ED-167, ED-168, ED-169, ED-170 provisional)
+   - SIM-DEBT-05 CLOSED (PP-245 verified)
+   - SIM-DEBT-06 opened (War-scale Dissonant effects)
 
-## GAPS FLAGGED (new)
-- GAP-SIM-X29-01: Memory re-citation of same source (P2)
-- GAP-SIM-X30-01: Leap Partial contact sufficiency (P2)
-- GAP-SIM-X30-02: Partial Ob stacking cap (P2)
-- GAP-SIM-X30-03: RS change on Partial Weaving (P2)
+## OPEN EDITORIAL ITEMS REQUIRING USER DECISION
+- ED-143: Forfeit track movement — keep +1 or change? (flagged; user input needed)
+- ED-164: Resistance scaling at institutional sessions (P1) — accept Option A (Grand Contest is tool)?
+- ED-166: "Division" in §7 Church Tribunal — define or strike?
 
-## RESOLVED (this session)
-- GAP-SIM-X26-01: PP-254
-- GAP-SIM-X26-02: PP-255
-- GAP-SIM-X27-01: PP-255
-- GAP-SIM-X27-02: closed (Charisma confirmed)
-- GAP-SIM-X28-02: closed (no canonical mechanic)
+## PROVISIONAL RULINGS APPLIED (awaiting user confirmation)
+- ED-164: Resistance 4+ → note Grand Contest in GM tools
+- ED-167: CF wound on Zoom Out → +1 Ob BG tactic rolls
+- ED-168: CF killed mid-Zoom In sequence → redirect or free Zoom Out
+- ED-170: Coherence recovery 1/night rest in multi-day battles
 
-## CARRIED FORWARD
-- ED-139, ED-140, ED-142: P1-BLOCKERs unchanged
-- ED-143 to ED-146: PC simulation constructs, user approval required
-- ED-153: BG Wealth diminishing returns (P2, open)
-- AUD-P1-15, AUD-P1-16: unchanged
-- SIM-DEBT-03/04: deferred
+## SIM-DEBT OPEN
+- SIM-DEBT-01, 03, 04: Contest calibration (attribute renames)
+- SIM-DEBT-06: War-scale Thread coherence (Dissonant effects)
+- SIM-DEBT-07: High-resistance contest calibration
 
-next_session_start:
-  priority: ED-143-146 PC approval; GAP-SIM-X30-01/02/03 resolution; ED-153 design decision
-  read_first: [tests/sim_x29_x30_x31_x32_cross_mode_b.md, session_log_current.md]
+## NEXT ACTIONS
+- Commit this session (below)
+- User confirms ED-143, ED-164, ED-166
+- Next sim batch: SIM-STRESS-04 — recommend targets: Dissonant effects, 
+  coalition Spent recovery, PI revolt cascade, combo tactic chains
 ```
