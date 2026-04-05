@@ -119,7 +119,7 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 | Composure | Charisma + 6 | 7–13 | Social damage buffer before Rattled. Parallels Health = Endurance + 6. (PP-234, ED-127 resolved) |
 | Combat Pool | Agility + weapon proficiency History (points + 3) | Variable (min 5) | Split Offence/Defence each round. (PP-247) |
 | Contact Rounds | Focus | 1–7 | Max rounds maintaining Thread contact (practitioners only) |
-| Certainty | [EDITORIAL: ED-128] | — | Decoupled from Spirit pending design decision. |
+| Certainty | 10 (starting); countdown to 0 | 0–10 | Epistemological confidence in consensus reality. See PP-289 section below. |
 | Coherence | 10 (starting); countdown to 0 | 0–10 | Personal rendering legibility |
 | Resolve | Spirit | 1–7 | Maximum total Inspiration value |
 
@@ -138,12 +138,6 @@ Example: Spend 1 Momentum (1 auto-success) + roll 1D TN 7.
 
 Spending 2 Momentum on Ob 1 (2 auto-successes): auto-successes alone reach Ob 1 but cannot satisfy Overwhelming floor (need ≥ 3 net). Must also roll to reach Overwhelming.
 
-## Composure Track Redesign (PP-266)
-- Composure = Charisma + 6 (confirmed)
-- Rattled: full Composure track expended from one hit. −2D social; cannot Amplify; cannot Unmask voluntarily.
-- Broken: two Rattled instances. Concedes automatically next exchange.
-- Recovery from Rattled: full scene rest or voluntary Unmask.
-- Rattled is NOT a threshold — it is a full-track event parallel to Wounds.
 
 ## Certainty Track (PP-289)
 Range 0–10. Starting value: 10. Counts down toward 0.
@@ -162,11 +156,3 @@ Spirit is unrelated to Certainty. Certainty ≠ Coherence (Coherence = personal 
 Net successes CAN be negative (per stage1 §1.1). Prior "Floor: 0" was an error.
 Negative net successes contribute to Failure degree only; they do not compound penalties further.
 
-## Composure Track (PP-247)
-Composure = Charisma + 6. Range: 7–13.
-Rattled condition: single exchange delivers social damage ≥ full Composure score.
-- Rattled: −2D all social rolls; cannot Amplify; cannot Unmask voluntarily.
-- Broken: second Rattled instance in same scene. Auto-concedes next exchange.
-- Recovery: full scene rest OR voluntary Unmask.
-Rattled is a full-track event (one overwhelming hit), not a threshold accumulation.
-High-Composure NPCs (Himlensendt 12, Baralta 11) require extreme pool stacking to Rattle in a single exchange.

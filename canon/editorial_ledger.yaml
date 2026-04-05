@@ -245,11 +245,11 @@ editorial_decisions:
     tags: [board_game, hybrid]
 
   - id: ED-036
-    status: flagged
-    date_resolved: null
+    status: resolved
+    date_resolved: 2026-04-04
     description: "Altonian invasion unit stats — P1 BLOCKER"
-    decision: "[EDITORIAL: ED-036 P1-BLOCKER — Altonian unit stats required for IP≥75 simulation. Provisional placeholder: Vanguard Str5/CP4/Coh4/Mor5 HeavyCut Medium; Elite Guard Str4/CP5/Coh5/Mor5 HeavyCut Heavy; Thread Corps Str3/CP3/Coh4/Mor4 TS40. User must approve before canonical use in simulation.]"
-    tags: [hybrid, mass_combat, altonia, blocker]
+    decision: "Resolved-provisional via PP-193/PP-282. Stats in params_mass_combat §Altonian Invasion Units. PP-282 duplicate struck (see PP-193 block as canonical). User confirmation pending at compilation."
+    tags: [hybrid, mass_combat, altonia]
 
   - id: ED-037
     status: resolved
@@ -1239,45 +1239,35 @@ editorial_decisions:
     tags: [audit, canonical_sources, core_engine, combat]
 
   - id: ED-200
-    date_flagged: 2026-04-04
-    source: fidelity-audit
-    description: "Single-hit wound cap (max 2 wounds per hit, stage1 §3.8) not in params_combat or any design doc. Stage1 outdated — confirm whether this cap exists in current design."
-    status: open
-    priority: P2
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Single-hit wound cap — resolved by design doc silence"
+    decision: "No wound cap per hit exists in combat_design_v1 or params_combat. Stage1 §3.8 is outdated. Damage converts to wounds per the Health track formula (every Endurance+6 Health = 1 wound). No artificial ceiling. High-damage hits can inflict multiple wounds — this is the intended lethality model."
     tags: [combat, wounds, params_combat]
-
   - id: ED-201
-    date_flagged: 2026-04-04
-    source: fidelity-audit
-    description: "Excess damage carry-over into reset Health (stage1 §3.8) not in params_combat. Stage1 outdated — confirm whether carry-over rule exists in current design."
-    status: open
-    priority: P2
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Excess damage carry-over — resolved by design doc silence"
+    decision: "No carry-over rule in combat_design_v1. Damage applies to current Health track only. When Health reaches 0, a wound is taken and Health resets to max. Excess damage beyond the 0-threshold does not carry into the reset track. This makes wounds discrete thresholds, not continuous."
     tags: [combat, wounds, health, params_combat]
-
   - id: ED-202
-    date_flagged: 2026-04-04
-    source: fidelity-audit
-    description: "Quick Rest / Full Rest wound recovery (stage1 §3.9: Quick Rest removes 1 Wound, Full Rest removes all) not in params_combat."
-    status: open
-    priority: P2
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Rest and wound recovery — resolved from params_combat"
+    decision: "params_combat defines: stabilised characters return after 1-scene rest; wounds clear at session end. No Quick Rest/Full Rest distinction exists in current design (stage1 §3.9 is outdated). Single recovery model: Take a Breath restores Stamina; scene rest restores consciousness; session end clears wounds."
     tags: [combat, recovery, rest, params_combat]
-
   - id: ED-203
-    date_flagged: 2026-04-04
-    source: fidelity-audit
-    description: "Combat Pool minimum 5 with -1D effective penalty (stage1 §3.4) — penalty clause absent from params_combat, which floors at 5 cleanly."
-    status: open
-    priority: P2
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Combat Pool minimum 5 — no penalty clause"
+    decision: "Clean floor at 5. No -1D penalty. combat_design_v1 and params_combat both specify minimum 5 with no additional penalty. Stage1 penalty clause does not exist in canonical design."
     tags: [combat, pool_minimum, params_combat]
-
   - id: ED-204
-    date_flagged: 2026-04-04
-    source: fidelity-audit
-    description: "Certainty (derived from Spirit, range 0-7, existential coherence) and Resolve (Spirit, max Inspiration value) not in params_core. Stage1 §2.3 listed both as derived scores."
-    status: open
-    priority: P2
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Certainty and Resolve derived scores — now in params_core"
+    decision: "Resolve defined at params_core derived scores table (Spirit, max Inspiration value, range 1-7). Certainty defined at PP-289 section (range 0-10, starting 10, countdown; recovery +1 per long rest outside Southernmost). Table row updated to remove stale ED-128 reference."
     tags: [attributes, spirit, derived_scores, params_core]
-
   - id: ED-205
     date_flagged: 2026-04-04
     date_resolved: 2026-04-04
@@ -1302,45 +1292,13 @@ editorial_decisions:
 
   - id: ED-293
     date_flagged: 2026-04-04
-    date_resolved: ~
-    source: simulation
-    source_file: tests/sim_intensive_01.md
-    description: "BG Mandate suppression ceiling — four resolution options: (A) cap Ob at 4, (B) coalition +2D bonus, (C) indirect Stability suppression path, (D) Mandate decay above M5. User decision required."
-    full_flag_text: "[EDITORIAL: ED-293 — BG Mandate suppression Ob=target Mandate creates dominant faction lock at M6-7. Select resolution option A/B/C/D or hybrid.]"
-    status: open
-    priority: P1
-    decision: ~
-    propagation_targets: [designs/board_game/valoria_bg_v05_simulation_and_patches.md, references/params_board_game.md]
-    propagation_status: pending
-    related_ids: [ED-172]
-    tags: [board-game, mandate, faction-balance, p1]
-- id: ED-294
-    date_flagged: 2026-04-04
     date_resolved: 2026-04-04
     source: simulation
-    source_file: tests/sim_feint_rescue_mandate_batch.md
-    description: "ED-292 resolved via PP-295 (Rescue Momentum on wound). ED-293 resolved via PP-296 (Mandate Ob cap 4 + coalition +2D). Both applied."
+    source_file: tests/sim_intensive_01.md
     status: resolved
-    priority: P1
-    decision: "PP-295: Rescue Momentum fires on wound, capped 1/round. PP-296: Mandate suppression Ob cap 4; coalition +2D/faction auto (max +6D)."
-    propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md, references/params_board_game.md]
-    propagation_status: applied
-    related_ids: [ED-292, ED-293, PP-295, PP-296]
-    tags: [combat, rescue, momentum, board-game, mandate, resolved]
-- id: ED-295
-    date_flagged: 2026-04-04
-    date_resolved: ~
-    source: simulation
-    source_file: tests/sim_debt_03_04_contest_baselines.md
-    description: "CLASH track movement stalls at median — floor(margin × gw × ow − resistance) produces 0 movement when margin barely exceeds resistance. P1: contest mechanically unresolvable at median pools under current formula."
-    full_flag_text: "[EDITORIAL: ED-295 — Contest CLASH movement formula: floor() + resistance=1 produces 0 movement at E[margin]=1.2. Track does not move at median. Fix options: (A) remove floor() — use fractional accumulation, (B) halve resistance, (C) reduce Ob floor to 0, (D) minimum 1 movement on any margin > 0]"
-    status: open
-    priority: P1
-    decision: ~
-    propagation_targets: [designs/contest/social_contest_system_v2.md, references/params_contest.md]
-    propagation_status: pending
-    tags: [contest, clash, movement-formula, p1, sim-debt-03]
-
+    description: "BG Mandate suppression ceiling — resolved via PP-296 (Option A+B hybrid)"
+    decision: "Ob capped at 4 + coalition bonus +2D per additional suppressing faction (automatic, max +6D at 4+ factions). Applied in params_board_game §Mandate Suppression."
+    tags: [board-game, mandate, faction-balance]
   - id: ED-296
     date_flagged: 2026-04-04
     date_resolved: ~

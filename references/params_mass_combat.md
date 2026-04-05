@@ -437,11 +437,9 @@ CF wound during Zoom In → +1 Ob to that commander's BG tactic rolls for remain
 ## PP-273 — Mass battle minimum pool
 1 die minimum after all penalties. Discipline 0 = Formation Break (no attack). Command=0 general death: units at 1 die minimum.
 
-## PP-282 — Altonian provisional unit stats (ED-036 unblocked)
-At IP ≥ 75:
-- Altonian Vanguard: Size 4, Power 4, Discipline 4, Morale 5, Weapon LightCut+HP, Armour Medium
-- Altonian Heavy Infantry: Size 5, Power 5, Discipline 5, Morale 5, Weapon HeavyCut, Armour Heavy
-Wave: 3 Vanguard + 2 Heavy. NPC general Command 5. NOTED: provisional pending worldbuilding confirmation.
+## PP-282 — STRUCK (duplicate of PP-193 Altonian block above)
+> Superseded. PP-193 §Altonian Invasion Units is the canonical stat block.
+> PP-282 was a duplicate created in a concurrent session. Struck 2026-04-04.
 
 ## PP-283 — Tactic cards confirmed canonical
 All faction tactic cards in mass_battle_v3 §B.4 confirmed as canonical defaults.

@@ -98,7 +98,7 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 
 | ID | Source | Description | Status |
 |----|--------|-------------|--------|
-| SIM-DEBT-02 | SIM-D-04 | Corroboration in CLASH — full calibration needed. Stress test confirmed +1D is negligible in DIVERGE. CLASH-specific run needed to quantify corroboration impact on margin distributions and TC movement. | Open — low priority |
+| SIM-DEBT-02 | SIM-D-04 | **STRUCK** — superseded by PP-234 (Social Contest System v2 redesign). Corroboration mechanics rebuilt. Subsumed by SIM-DEBT-03. |
 
 *(old SIM-DEBT register entries above)*
 
@@ -304,3 +304,4 @@ Open for editorial: ED-061, ED-062, ED-063.
 | SIM-BG-02 | BG Mandate suppression Options A+B combined | BG | PRES | Mandate, Stability | Crown, Church, Hafenmark, Varfell | None | FACTION-LOYAL, RITUAL, FACTION-OPPORTUNIST | COMPLETE | F01 OK (gradient valid); F02 OK; F03 P2 (coalition auto-trigger); F04 OK — PP-296 applied |
 | SIM-DEBT-03 | Contest re-sim: CLASH/REINFORCE/CROSS/AMPLIFY baselines, two-genre system | TTRPG | PRES | Composure, Concentration, Conviction Track | Crown, Hafenmark | Scholar, Diplomat, Demagogue | GREEDY, SATISFY | COMPLETE | SC-03-A F01/F02 P1→ED-295; SC-03-B F01 P1→ED-296; SC-03-C OK; SC-03-D F01 OK; F02 P2→ED-297 |
 | SIM-DEBT-04 | Adjudicator pool variation baselines | TTRPG | PRES | Composure, Conviction Track | Crown, Hafenmark | Scholar, Diplomat | GREEDY | COMPLETE | SD-04-F01 OK; SD-04-F02 P2→ED-297 (Crowd/NoAdj indistinct at low Cha/Att divergence) |
+| SIM-DEBT-07 | — | Status unverifiable. Referenced in mid-campaign hybrid session (ED-180) as "RS×3 PP-225 trained practitioner in mass combat." No test file committed. If PP-225 RS×3 mechanic is current, re-test under SIM-DEBT-03 scope. |
