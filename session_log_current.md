@@ -1,39 +1,33 @@
-# Valoria Session Log — Updated
+# Valoria Session Log - Updated
 
 ```yaml
-session_id: 2026-04-04T_SIM_STRESS_03
-phase: SESSION CLOSED
-status: COMPLETE
+session_id: 2026-04-04T_IXC_STRESS_TEST
+phase: IXC-01/02/03 COMPLETE
+status: PARTIAL — IXC-04 through IXC-17 deferred to subsequent sessions
 
 ## WORK COMPLETED
-1. Applied all pending patches to design docs (PP-236–PP-256, 21 patches total)
-2. Added ED-154–170 to editorial ledger (all resolved or provisionally resolved)
-3. SIM-STRESS-03: 6 randomized scenarios across Contest, Mass Battle, Hybrid Zoom, Thread
-   - 21 findings logged
-   - 7 new editorial items (ED-164–170)
-   - 5 resolved immediately (ED-165, ED-167, ED-168, ED-169, ED-170 provisional)
-   - SIM-DEBT-05 CLOSED (PP-245 verified)
-   - SIM-DEBT-06 opened (War-scale Dissonant effects)
+1. SIM-IXC-01: Canon Constraints to Core Engine. Modes A+D. 3 GAPs, 3 findings.
+2. SIM-IXC-02: Core Engine to Threadwork. Modes A+B+D. 2 GAPs, 5 findings. P1 die face table.
+3. SIM-IXC-03: Core Engine to Personal Combat. Modes B+D. 2 GAPs (1 P1), 6 findings (1 P1).
 
-## OPEN EDITORIAL ITEMS REQUIRING USER DECISION
-- ED-143: Forfeit track movement — keep +1 or change? (flagged; user input needed)
-- ED-164: Resistance scaling at institutional sessions (P1) — accept Option A (Grand Contest is tool)?
-- ED-166: "Division" in §7 Church Tribunal — define or strike?
+## P1 ITEMS
+- PP-257: Die face table wrong (TN7 success = faces 8-9, not 7-9). APPLIED to params_core.
+- PP-258: Combat Pool minimum conflict. PROVISIONAL.
+- ED-150: Combat Ob undefined — all combat probabilities remain provisional.
+- ED-147: Coherence 0 action availability.
 
-## PROVISIONAL RULINGS APPLIED (awaiting user confirmation)
-- ED-164: Resistance 4+ → note Grand Contest in GM tools
-- ED-167: CF wound on Zoom Out → +1 Ob BG tactic rolls
-- ED-168: CF killed mid-Zoom In sequence → redirect or free Zoom Out
-- ED-170: Coherence recovery 1/night rest in multi-day battles
+## NEW EDITORIAL ITEMS
+- ED-147 (P1): Coherence 0 action availability
+- ED-148 (P2): P-01 Ob stacking at cap
+- ED-149 (P2): Focus=1 Leap Composure penalty
+- ED-150 (P1): Combat resolution model
+- ED-151 (P2): Defence TN source
 
-## SIM-DEBT OPEN
-- SIM-DEBT-01, 03, 04: Contest calibration (attribute renames)
-- SIM-DEBT-06: War-scale Thread coherence (Dissonant effects)
-- SIM-DEBT-07: High-resistance contest calibration
+## PATCHES
+- PP-257 applied | PP-258 provisional | PP-259 provisional
 
-## NEXT ACTIONS
-- Commit this session (below)
-- User confirms ED-143, ED-164, ED-166
-- Next sim batch: SIM-STRESS-04 — recommend targets: Dissonant effects, 
-  coalition Spent recovery, PI revolt cascade, combo tactic chains
+next_session_start:
+  priority: IXC-05/06/07 (attribute to subsystem chains)
+  confirm_first: [ED-150 combat Ob, ED-147 Coherence 0, PP-258 pool minimum]
+  read_first: [tests/sim_ixc_01_02_03.md, session_log_current.md]
 ```

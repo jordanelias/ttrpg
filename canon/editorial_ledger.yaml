@@ -2764,3 +2764,43 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     propagation_status: pending
     related_ids: []
     tags: [thread, coherence, mass_battle, provisional]
+  - id: ED-147
+    date_flagged: 2026-04-04
+    source: SIM-IXC-01
+    description: "Coherence 0 action availability — incapacitated or degraded-but-functional?"
+    status: open
+    priority: P1
+    tags: [coherence, threadwork, core_engine]
+
+  - id: ED-148
+    date_flagged: 2026-04-04
+    source: SIM-IXC-01
+    description: "P-01 Ob stacking sequence at cap (20) undefined when multi-effects fire simultaneously"
+    status: open
+    priority: P2
+    tags: [canon, core_engine, threadwork]
+
+  - id: ED-149
+    date_flagged: 2026-04-04
+    source: SIM-IXC-02
+    description: "Focus=1 Leap: Composure penalty fires with zero ops available. Block Leap or make penalty conditional?"
+    status: open
+    priority: P2
+    tags: [threadwork, leap, focus]
+
+  - id: ED-150
+    date_flagged: 2026-04-04
+    source: SIM-IXC-03
+    description: "Combat Ob not stated. Opposed roll (Offence net vs Defence net) or fixed Ob?"
+    status: open
+    priority: P1
+    tags: [combat, core_engine]
+
+  - id: ED-151
+    date_flagged: 2026-04-04
+    source: SIM-IXC-03
+    description: "Defence TN: defender uses own weapon TN or attacker's TN in asymmetric matchups?"
+    status: open
+    priority: P2
+    tags: [combat, weapon_matrix]
+

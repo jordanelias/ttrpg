@@ -12,10 +12,13 @@
 |------|--------|
 | 1 | −1 success |
 | 2–6 | 0 |
-| 7–9 | +1 success |
+| (TN+1)–9 | +1 success (faces strictly greater than TN) |
 | 10 | +2 successes (no extra die) |
 
 Net successes = sum of all contributions (may be negative).
+
+**TN determines success threshold (PP-257):** Faces strictly greater than TN count as +1 success.
+- TN6: faces 7–9 = +1 | TN7: faces 8–9 = +1 | TN8: face 9 = +1
 
 ## TN Values
 | Mode | TN | When |

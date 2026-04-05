@@ -2876,3 +2876,36 @@ PP-234
     description: "Altonian invasion unit stats [PROVISIONAL]. Vanguard/Infantry/Siege. IP>=75 trigger. No Rout."
     status: applied
     files_changed: [references/params_mass_combat.md]
+- id: PP-257
+  date: 2026-04-04
+  source: SIM-IXC-02
+  priority: P1
+  system: core_engine
+  description: "Correct die face table in params_core.md. Faces strictly greater than TN count as +1 success. TN7: faces 8-9. TN6: faces 7-9. TN8: face 9 only."
+  status: applied
+  propagation_targets:
+    - references/params_core.md
+  propagation_status: applied
+
+- id: PP-258
+  date: 2026-04-04
+  source: SIM-IXC-03
+  priority: P1
+  system: combat
+  description: "Combat Pool minimum = 5 as lex specialis over core 1D minimum. [PROVISIONAL]"
+  status: provisional
+  propagation_targets:
+    - references/params_combat.md
+  propagation_status: pending
+
+- id: PP-259
+  date: 2026-04-04
+  source: SIM-IXC-01
+  priority: P3
+  system: core_engine
+  description: "Momentum overflow at cap (4): excess gain is lost. [PROVISIONAL]"
+  status: provisional
+  propagation_targets:
+    - references/params_core.md
+  propagation_status: pending
+
