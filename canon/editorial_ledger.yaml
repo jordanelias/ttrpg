@@ -4223,5 +4223,32 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     propagation_targets:
       - references/params_combat.md
     propagation_status: applied
-    tags: [combat, core_engine, pool_minimum]
+    tags: [combat, core_engine, pool_minimum]- id: ED-280
+    date_flagged: 2026-04-04
+    date_resolved: 2026-04-04
+    source: SIM-ECON-01
+    description: "Domain Action intra-season timing undefined. Resolved PP-280: sequential model."
+    status: resolved
+    decision: "Sequential update model. Stats change immediately after each DA. PP-280 applied."
+    priority: P1
+    tags: [factions, domain_actions, accounting]
 
+  - id: ED-281
+    date_flagged: 2026-04-04
+    date_resolved: 2026-04-04
+    source: SIM-ECON-01
+    description: "Seasonal stat cap asymmetry: cap applies to gains but costs may exceed cap."
+    status: resolved
+    decision: "Cap on net outcome gains only. Costs uncapped. PP-281 applied."
+    priority: P2
+    tags: [factions, stat_cap, accounting]
+
+  - id: ED-282
+    date_flagged: 2026-04-04
+    date_resolved: 2026-04-04
+    source: SIM-ECON-01
+    description: "High-Wealth passive recovery undefined. PP-282 formalises rule."
+    status: resolved
+    decision: "Wealth>=5 factions recover +1 at Accounting if not under attack. PP-282 applied."
+    priority: P3
+    tags: [factions, wealth, accounting]

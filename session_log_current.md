@@ -1,40 +1,29 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-04T_SIM_STRESS_06
+session_id: 2026-04-04T_SIM_ECON_01
 phase: SESSION CLOSED
 status: COMPLETE
 
 ## WORK COMPLETED
-1. Committed all prior session work (PP-257–284, ED-005–179)
-2. SIM-STRESS-06: 7 scenarios (2 P1 greedy + 5 P2 randomized)
-   - PP-285–288 applied (4 new patches)
-   - ED-180–185 all resolved same session
-   - SIM-DEBT-01, 03, 04, 07 CLOSED
+1. SIM-SOC-01 completed and committed (PP-278/279 — CT resistance formula fix).
+2. Conversation audit: all findings from this conversation verified committed.
+3. SIM-ECON-01: Seasonal Economic Cascade — Overextended Crown, 3 seasons.
+   - 7 findings (1 P1, 5 P2, 1 P3)
+   - P1: DA intra-season timing undefined -> PP-280 (sequential model)
+   - P2: Wealth cap asymmetry -> PP-281 (costs uncapped, gains capped)
+   - P3: Guilds passive recovery -> PP-282 (formalised)
+   - Overextended archetype: Crown with 4 DAs/season degrades to Stability 3 in 2 seasons
+   - Anti-death-spiral floor validated: activates at Sta<=2, slows but does not prevent collapse
 
-## ALL SIM-DEBT CLOSED
-No open SIM-DEBT items. All social contest debts resolved via calibration.
+## COMMITS THIS SESSION
+- 66b7c59: PP-257-264 + 64 editorial resolutions
+- 7ca21ed: SIM-SOC-01 + PP-278/279
+- (this): SIM-ECON-01 + PP-280-282 + conversation audit
 
-## SYSTEM STATUS
-PP range: PP-001 through PP-288
-ED range: ED-001 through ED-185 (all resolved or flagged)
-Open main-series EDs: 1 (ED-166, stricken/confirmed)
-Open SIM-DEBT: 0
-
-## EDITORIAL NOTES (worldbuilding placeholders, replaceable without patch)
-- ED-005: Sister Elara Vind (Restoration leader) — placeholder
-- ED-006: Riskbreakers identity — placeholder
-- ED-024: Southernmost entity stats — placeholder
-- ED-036: Altonian invasion stats (PP-282 provisional)
-- ED-080/081: Conviction texts — confirmed pending authorial approval
-- ED-108: T10/T11 names — confirmed pending authorial approval
-- ED-119: Lenneth arc — placeholder
-- ED-128: Certainty track — needs threadwork doc update
-- ED-131: Weapon modifiers — pending playtesting
-
-## RECOMMENDED NEXT STEPS
-- Playtest: weapon modifier table values (ED-131)
-- Confirm worldbuilding: Altonian stats, T10/T11 names, Conviction texts
-- Threadwork doc update: Certainty track decoupling (ED-128)
-- Compilation pass: all systems now have full canonical patches; ready for v0.15
+## CONVERSATION AUDIT SUMMARY
+All patches PP-247 through PP-282 committed.
+SIM-C-01, SIM-MB-01, SIM-SOC-01, SIM-ECON-01 all committed to tests/.
+64 editorials resolved this conversation. 5 balance items (ED-109-113) remain provisional.
+0 open editorials at session close.
 ```

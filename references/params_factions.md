@@ -1,5 +1,6 @@
 <!-- version: v0.14-AUD3 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-02 -->
 <!-- NOTE: stage6_factions.md is STALE for BG faction mechanics. Use BG column for board game/hybrid. -->
+<!-- PP-280 (DA sequential timing), PP-281 (stat cap cost clarification), PP-282 (high-Wealth recovery) -->
 <!-- PATCHES APPLIED: PP-167, PP-168; PP-195 (Community Weaving procedure) -->
 <!-- STALE CHECK: TTRPG column from v0.14 compiled. BG column from bg_v05 design. -->
 
@@ -303,3 +304,23 @@ Ethical framework −1 Ob modifier cannot reduce any Domain Action Ob below 1. P
 
 ## ED-180 provisional — Piety DA + Stability ≤ 4
 Piety DA is an active action, not passive generation. Not subject to Stability ≤ 4 TC generation pause. Available regardless of Stability level. Provisional confirmed.
+
+## Domain Action Intra-Season Stat Update Timing (PP-280)
+Stats update IMMEDIATELY after each Domain Action resolves within a season.
+A stat depleted by DA-1 provides a lower pool for DA-3 in the same season.
+This is the **Sequential** resolution model.
+Rationale: batch resolution would allow impossible actions (spending Wealth you have already spent).
+GMs track running stat totals on the faction sheet during Domain Action resolution.
+
+## Seasonal Stat Change Cap — Cost Clarification (PP-281)
+The ±2 seasonal cap applies to **net gain** from Domain Action *outcomes*.
+Domain Action **costs** (Wealth expenditure, Stability backlash) are NOT subject to the cap.
+A faction may lose more than 2 Wealth in a season if multiple DAs each cost 1 Wealth.
+A faction may not *gain* more than 2 in any single stat from DA outcomes.
+Example: Crown spends 3 Wealth across 3 DAs (3×−1) = legal. Gains Military+3 from 3 DAs = illegal (capped to +2).
+
+## High-Wealth Passive Recovery (PP-282)
+A faction with Wealth ≥ 5 at Accounting that did not suffer an active economic Domain Action
+against it this season recovers +1 Wealth automatically (economic resilience).
+Applies to: Guilds (Wealth 6 starting), Hafenmark (Wealth 5).
+Does not apply to: factions under active Trade Embargo or Siege.
