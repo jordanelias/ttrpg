@@ -3298,3 +3298,15 @@ PP-234
   applied_to_version: "v1.6+"
   status: applied
   applied_commit: "pending"
+- id: PP-264
+  date: 2026-04-04
+  source: user-ruling
+  priority: P1
+  system: ALL
+  description: "All compilation/v0.14 stage documents declared outdated and superseded 2026-04-04. canonical_sources.yaml updated: design docs are canonical for all systems that have them. Stage files retained only where no design doc exists, marked unverified. params files are working canonical for core_engine and characters."
+  status: applied
+  propagation_targets:
+    - references/canonical_sources.yaml
+    - references/file_index.md
+  propagation_status: applied
+

@@ -1226,3 +1226,65 @@ editorial_decisions:
     propagation_status: applied
     related_ids: [ED-290, SIM-RES-07-F01]
     tags: [combat, rescue, momentum, resolved]
+  # ── AUDIT RESOLUTION (2026-04-04) ────────────────────────────────────────
+
+  - id: ED-199
+    date_flagged: 2026-04-04
+    date_resolved: 2026-04-04
+    source: fidelity-audit
+    description: "Stage1 vs design doc conflicts (Combat Pool Agi formula, STR in damage, damage formula, simultaneous resolution, initiative Attunement vs Agility roll, Stamina formula, Leap pool Cognition vs Spirit+Attunement). All resolved: stage docs are outdated, design docs govern."
+    status: resolved
+    priority: P1
+    decision: "All compilation stage documents superseded as of 2026-04-04. Design docs and params files are canonical. Stage1 conflicts are not conflicts — stage1 is simply stale."
+    tags: [audit, canonical_sources, core_engine, combat]
+
+  - id: ED-200
+    date_flagged: 2026-04-04
+    source: fidelity-audit
+    description: "Single-hit wound cap (max 2 wounds per hit, stage1 §3.8) not in params_combat or any design doc. Stage1 outdated — confirm whether this cap exists in current design."
+    status: open
+    priority: P2
+    tags: [combat, wounds, params_combat]
+
+  - id: ED-201
+    date_flagged: 2026-04-04
+    source: fidelity-audit
+    description: "Excess damage carry-over into reset Health (stage1 §3.8) not in params_combat. Stage1 outdated — confirm whether carry-over rule exists in current design."
+    status: open
+    priority: P2
+    tags: [combat, wounds, health, params_combat]
+
+  - id: ED-202
+    date_flagged: 2026-04-04
+    source: fidelity-audit
+    description: "Quick Rest / Full Rest wound recovery (stage1 §3.9: Quick Rest removes 1 Wound, Full Rest removes all) not in params_combat."
+    status: open
+    priority: P2
+    tags: [combat, recovery, rest, params_combat]
+
+  - id: ED-203
+    date_flagged: 2026-04-04
+    source: fidelity-audit
+    description: "Combat Pool minimum 5 with -1D effective penalty (stage1 §3.4) — penalty clause absent from params_combat, which floors at 5 cleanly."
+    status: open
+    priority: P2
+    tags: [combat, pool_minimum, params_combat]
+
+  - id: ED-204
+    date_flagged: 2026-04-04
+    source: fidelity-audit
+    description: "Certainty (derived from Spirit, range 0-7, existential coherence) and Resolve (Spirit, max Inspiration value) not in params_core. Stage1 §2.3 listed both as derived scores."
+    status: open
+    priority: P2
+    tags: [attributes, spirit, derived_scores, params_core]
+
+  - id: ED-205
+    date_flagged: 2026-04-04
+    date_resolved: 2026-04-04
+    source: fidelity-audit
+    description: "Defence TN: IXC-03-G2 gap flagged as unknown. Stage1 §3.5 answers it: Dodge = TN7, Parry = own weapon TN. Gap was valid but answer in stage1."
+    status: resolved
+    priority: P2
+    decision: "Defence: Dodge = TN7, Parry = own weapon Parry TN. Resolved from stage1 §3.5 — apply to params_combat. Stage1 outdated but this ruling is consistent with design intent."
+    tags: [combat, defence, TN]
+

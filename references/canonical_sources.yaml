@@ -1,199 +1,123 @@
 # VALORIA CANONICAL SOURCES REGISTRY
 # Single source of truth for which file governs each system.
 # Used by: simulator Read Protocol, mechanic-audit, canon-guard, compiler.
-# Updated whenever a new design file supersedes a compilation stage.
-# Rule: most recent PATCHED document wins. If design doc has patches applied
-#       that compilation doesn't, design doc is canonical. If compilation has
-#       been compiled from an approved design doc and no newer patches exist,
-#       compilation may be used.
+# Rule: most recent PATCHED design doc or params file wins.
+# ALL compilation/v0.14 stage documents are OUTDATED as of 2026-04-04.
+# Do not use any stage document as a mechanical reference.
+# Canonical authority: design docs (designs/) and params files (references/params_*.md).
 
 ---
 
 systems:
 
   core_engine:
-    canonical: compilation/v0.14/stage1_core_engine.md
-    canonical_sha__compilation__v0_14__stage1_core_engine_md: "150e34d13ce3f39ebdbf2b431c13804ec5454507"
+    canonical: references/params_core.md
     params: references/params_core.md
     design_doc: null
-    compilation_current: true
-    note: "No design-layer core doc exists. Stage1 is canonical. PP-247/248/249 applied 2026-04-04 (Combat Pool, Stamina, Ob cap propagation)."
+    compilation_stage: compilation/v0.14/stage1_core_engine.md
+    compilation_current: false
+    note: "Stage1 OUTDATED — all compilation stages superseded 2026-04-04. params_core.md is working canonical for core engine (dice, TN, Ob, Momentum, attributes, derived scores). No design-layer core doc exists; params is the authoritative record."
 
   characters:
-    canonical: compilation/v0.14/stage2_characters.md
-    canonical_sha__compilation__v0_14__stage2_characters_md: "dc43e9ca99f68ff9cee9c3e3771772758c250dbf"
-    params: references/params_core.md  # character values in core params
+    canonical: references/params_core.md
+    params: references/params_core.md
     design_doc: null
-    compilation_current: true
-    note: "No design-layer character doc exists. Stage2 is canonical."
-
-  threadwork:
-    canonical: designs/ttrpg/threadwork_redesign_v25.md
-    canonical_sha__designs__ttrpg__threadwork_redesign_v25_md: "bdf9021e6e1a720ccfdb88fca8b00edfe248c5b6"
-    params: references/params_threadwork.md
-    design_doc: designs/ttrpg/threadwork_redesign_v25.md
-    compilation_stage: compilation/v0.14/stage3_thread_operations.md
+    compilation_stage: compilation/v0.14/stage2_characters.md
     compilation_current: false
-    note: "stage3 is EMPTY/STALE. threadwork_redesign_v25 is canonical. PP-190–209 applied 2026-04-02. PP-232 changes propagated to threadwork_v25.md 2026-04-04 (Leap pool+Spirit, Leap Failure revised, POP TN 8, eligibility simplified, Memory→Recall)."
-
-  southernmost:
-    canonical: compilation/v0.14/stage4_southernmost.md
-    canonical_sha__compilation__v0_14__stage4_southernmost_md: "9d6d1e75027985371b22970ce58b4d14f5da8519"
-    params: null
-    design_doc: null
-    compilation_current: true
-    note: "No design-layer Southernmost doc. Stage4 is canonical. Contains 'Ceiral' placeholder (ED-048 open)."
-
-  clocks:
-    canonical: compilation/v0.14/stage5_clocks.md
-    canonical_sha__compilation__v0_14__stage5_clocks_md: "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
-    params: null
-    design_doc: null
-    compilation_current: true
-    note: "R-68 Theocracy Counter accounting gate confirmation needed. No design-layer clock doc."
-
-  factions:
-    canonical_ttrpg: compilation/v0.14/stage6_factions.md
-    canonical_sha__compilation__v0_14__stage6_factions_md: "d09b32d1970b5144c73189d4f815d93f102ddfb0"
-    canonical_bg: designs/board_game/valoria_bg_v05_simulation_and_patches.md
-    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "763941ecca04ec58029099dee24ec44d1aeca43c"
-    canonical_hybrid: designs/board_game/valoria_bg_v05_simulation_and_patches.md
-    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "763941ecca04ec58029099dee24ec44d1aeca43c"
-    params: references/params_factions.md
-    compilation_current_ttrpg: true
-    compilation_current_bg: false
-    note: "Stage6 is canonical for TTRPG faction mechanics. bg_v05 is canonical for BG/Hybrid. Stage6 is STALE for BG."
-
-  territories:
-    canonical: compilation/v0.14/stage7_territories.md
-    canonical_sha__compilation__v0_14__stage7_territories_md: "c4c03420588b4f341ba40779a61bda17e8c6a7be"
-    params: null
-    design_doc: null
-    compilation_current: true
+    note: "Stage2 OUTDATED. params_core.md covers character creation, attributes, Histories, Beliefs, Inspirations as extracted from design sessions. No separate character design doc."
 
   combat:
     canonical: designs/combat/combat_design_v1.md
-    canonical_sha__designs__combat__combat_design_v1_md: "60897933db1252ee36f706c38131a375f79ecf24"
     params: references/params_combat.md
     design_doc: designs/combat/combat_design_v1.md
     compilation_stage: compilation/v0.14/stage8_combat.md
     compilation_current: false
-    note: "combat_design_v1.md has PP-086-092, MT-01 faction rosters, three-mode framing. stage8 has subset. Use design doc. PP-232 propagated 2026-04-04 (weapon system rebuild, wound penalty, initiative, Health formula, Stamina floor, armour wield constraint, ED-130)."
+    note: "Stage8 OUTDATED. combat_design_v1.md is canonical. PP-232 and subsequent patches applied. params_combat.md is extracted summary."
+
+  threadwork:
+    canonical: designs/ttrpg/threadwork_redesign_v25.md
+    params: references/params_threadwork.md
+    design_doc: designs/ttrpg/threadwork_redesign_v25.md
+    compilation_stage: compilation/v0.14/stage3_thread_operations.md
+    compilation_current: false
+    note: "Stage3 EMPTY/STALE. threadwork_redesign_v25.md is canonical. PP-190-209, PP-232 applied."
+
+  southernmost:
+    canonical: compilation/v0.14/stage4_southernmost.md
+    params: null
+    design_doc: null
+    compilation_stage: compilation/v0.14/stage4_southernmost.md
+    compilation_current: false
+    note: "Stage4 OUTDATED (all stages outdated 2026-04-04). No design-layer doc exists. Stage4 retained as only source but treat as unverified. ED-048 open (Ceiral placeholder)."
+
+  clocks:
+    canonical: compilation/v0.14/stage5_clocks.md
+    params: null
+    design_doc: null
+    compilation_stage: compilation/v0.14/stage5_clocks.md
+    compilation_current: false
+    note: "Stage5 OUTDATED. No design-layer clock doc exists. Stage5 retained as only source but treat as unverified."
+
+  factions:
+    canonical_ttrpg: compilation/v0.14/stage6_factions.md
+    canonical_bg: designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    canonical_hybrid: designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    params: references/params_factions.md
+    compilation_stage: compilation/v0.14/stage6_factions.md
+    compilation_current: false
+    note: "Stage6 OUTDATED. BG/Hybrid: bg_v05 is canonical. TTRPG factions: stage6 is only source but unverified — treat with caution."
+
+  territories:
+    canonical: compilation/v0.14/stage7_territories.md
+    params: null
+    design_doc: null
+    compilation_stage: compilation/v0.14/stage7_territories.md
+    compilation_current: false
+    note: "Stage7 OUTDATED. No design-layer territory doc. Retained as only source, unverified."
 
   mass_combat:
     canonical: designs/mass_combat/mass_battle_v3.md
-    canonical_sha__designs__mass_combat__mass_battle_v3_md: "9ec3240449ebf607d9ba4ba1625f03431af501b1"
     params: references/params_mass_combat.md
     design_doc: designs/mass_combat/mass_battle_v3.md
-    compilation_stage: compilation/v0.14/stage8_combat.md  # §8.9
+    compilation_stage: null
     compilation_current: false
-    note: "mass_battle_v3 has 7-phase structure (ED-050), ST-MB patches, Altonian provisional stats. stage8 §8.9 is behind. PP-232 (renames) and PP-233 (core formula) propagated to mass_battle_v3.md 2026-04-04. 84 terminology fixes + formula rebuild."
+    note: "mass_battle_v3.md is canonical. No compilation stage for mass combat."
 
-  social_contest:
-    canonical: designs/contest/social_contest_system_v2.md
-    params: references/params_contest.md
-    design_doc: designs/contest/social_contest_system_v2.md
-    prior_canonical: designs/debate/debate_system_redesign_v1.md
+  social_debate:
+    canonical: designs/debate/debate_system_redesign_v1.md
+    params: references/params_debate.md
+    design_doc: designs/debate/debate_system_redesign_v1.md
     compilation_stage: compilation/v0.14/stage9_social.md
     compilation_current: false
-    note: "PP-234. social_contest_system_v2 supersedes debate_system_redesign_v1 Part 6. Genre restructure (3→2), attribute renames (Presence→Charisma, Memory→Recall), Composure=Cha+6, faction boost revision. SIM-DEBT-03/04 open. All prior SIM-D baselines invalidated."
-
-  advancement:
-    canonical: compilation/v0.14/stage10_advancement.md
-    canonical_sha__compilation__v0_14__stage10_advancement_md: "58f6c3adb43aef9ab12d3806eaca0641a2d14ef5"
-    params: null
-    design_doc: null
-    compilation_current: true
-
-  scale_transitions:
-    canonical: compilation/v0.14/stage11_scale_transitions.md
-    canonical_sha__compilation__v0_14__stage11_scale_transitions_md: "6e8e383659e8d2aefa37049770ee703b5a132f68"
-    params: references/params_scale_transitions.md
-    design_doc: null
-    compilation_current: true
-    note: "stage11 updated this session with PP-089/090 and Thread timing fix. No separate design doc. Canonical."
-
-  campaign_modes:
-    canonical: compilation/v0.14/stage12_campaign_modes.md
-    canonical_sha__compilation__v0_14__stage12_campaign_modes_md: "18fd4d7af91818d8581b35742fa1016977fa22f5"
-    params: null
-    design_doc: null
-    compilation_current: true
-
-  npcs:
-    canonical: compilation/v0.14/stage13_npcs.md
-    canonical_sha__compilation__v0_14__stage13_npcs_md: "3253e3077e843ea8a3debe86a36dffbf22f20c77"
-    params: null
-    design_doc: designs/ttrpg/edeyja_npc.md  # supplementary
-    compilation_current: true
-    note: "Stage13 canonical. GAP: Focus+Attunement values missing from Non-Player Character profiles (GAP-ARC31-SIM-01). Ceiral placeholder (ED-048)."
-
-  gm_tools:
-    canonical: compilation/v0.14/stage14_gm_tools.md
-    canonical_sha__compilation__v0_14__stage14_gm_tools_md: "9be0ef38885b6d26d84037da14910cdf107d907d"
-    params: null
-    design_doc: null
-    compilation_current: true
-
-  spell_catalog:
-    canonical: compilation/v0.14/stage15_spell_catalog.md
-    canonical_sha__compilation__v0_14__stage15_spell_catalog_md: "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
-    params: null
-    design_doc: null
-    compilation_current: true
-    note: "Several pending patches: R-55 (FR-D-12), R-56 (W-08), R-59/60, R-62 (W-51 Ob 6), R-63 (FR-L-30), R-64 (Mode 3). Apply when compiling."
+    note: "Stage9 STALE/EMPTY. debate_system_redesign_v1.md is canonical. SIM-DEBT-01 open."
 
   board_game:
-    canonical_mechanics: designs/board_game/valoria_bg_v05_simulation_and_patches.md
-    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "763941ecca04ec58029099dee24ec44d1aeca43c"
-    canonical_action_economy: designs/board_game/stage_bg_proposal_v02.md
-    canonical_sha__designs__board_game__stage_bg_proposal_v02_md: "de6e2f88ec9220bf7d5808bc26b500d5da58991d"
+    canonical: designs/board_game/valoria_bg_v05_simulation_and_patches.md
     params: references/params_board_game.md
     design_doc: designs/board_game/valoria_bg_v05_simulation_and_patches.md
     compilation_stage: compilation/v0.14/stage_bg_board_game_mode.md
     compilation_current: false
-    note: "ED-001 resolved. Card-Hand system from stage_bg_proposal_v02.md is canonical for action economy (PP-177). bg_v05 remains canonical for faction stats, clocks, victory conditions (PP-112 through PP-176). stage_bg compilation STALE — reconciliation of v02 + v05 needed before compilation update. sync."
+    note: "Stage_bg STALE. bg_v05 is canonical. ED-001 Card-Hand provisional resolved."
 
-  hybrid:
-    canonical_design: designs/hybrid/hybrid_gaps_resolved.md  # pending integration
-    canonical_sha__designs__hybrid__hybrid_gaps_resolved_md: "7a302b63317504626ecbcf27f5c014d8aaf25868"
-    canonical_rules: compilation/v0.14/stage11_scale_transitions.md
-    canonical_sha__compilation__v0_14__stage11_scale_transitions_md: "6e8e383659e8d2aefa37049770ee703b5a132f68"
-    params: references/params_scale_transitions.md
-    design_doc: designs/hybrid/hybrid_gaps_resolved.md
-    compilation_current: true  # for rules; design doc pending integration
-    note: "hybrid_gaps_resolved.md has 17 resolved gaps not yet in stage11. Integration pending."
+  scale_transitions:
+    canonical: compilation/v0.14/stage11_scale_transitions.md
+    params: null
+    design_doc: null
+    compilation_stage: compilation/v0.14/stage11_scale_transitions.md
+    compilation_current: false
+    note: "Stage11 OUTDATED. No design-layer doc. Retained as only source, unverified. K2-F-02 Zoom In gap open."
 
----
+  campaign_modes:
+    canonical: compilation/v0.14/stage12_campaign_modes.md
+    params: null
+    design_doc: null
+    compilation_stage: compilation/v0.14/stage12_campaign_modes.md
+    compilation_current: false
+    note: "Stage12 OUTDATED. No design-layer doc. Retained as only source, unverified."
 
-## HOW SKILLS USE THIS FILE
-
-**Simulator / Mechanic-Audit Read Protocol:**
-1. Read canonical_sources.yaml (this file)
-2. For the system under test, find `canonical:` field
-3. Load `params:` file first (most efficient — extracted values)
-4. If a value is missing from params: check `canonical:` document directly
-5. NEVER use a document listed as `compilation_current: false` — use the design doc
-
-**Canon-guard Read Protocol:**
-1. Load `canon/02_canon_constraints.md` (P-01 to P-15)
-2. For the mechanic under test, find its system in canonical_sources.yaml
-3. Load params file for mechanical values
-4. Check against each applicable constraint
-
-**Compiler Read Protocol:**
-1. For each system to compile, check canonical_sources.yaml
-2. If `compilation_current: true` — the compilation stage is already the canonical source; verify no patches have been applied to design docs since last compile
-3. If `compilation_current: false` — the design doc is more current; compile FROM the design doc INTO the compilation stage
-
----
-
-## UPDATE PROTOCOL (auto-maintained)
-
-When any design doc or compilation stage changes:
-1. Update `compilation_current:` field for that system
-2. Update `canonical:` if the source changes
-3. Update `note:` with what changed and when
-4. Include this file in the same atomic commit as the changed document
-
-This file is included in the propagation_map.md as a dependency of EVERY system.
+# GLOBAL NOTE (2026-04-04):
+# All compilation/v0.14 stage documents are outdated and superseded.
+# For any system that has a design doc (designs/), use the design doc.
+# For systems with only a compilation stage and no design doc, the stage file
+# is the only available source — treat as unverified and flag findings accordingly.
+# Never use stage docs to adjudicate conflicts with design docs.
