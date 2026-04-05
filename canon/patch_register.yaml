@@ -3067,14 +3067,3 @@ PP-234
   files_changed:
     - designs/combat/combat_design_v1.md
     - references/params_combat.md
-- id: PP-285
-  date: 2026-04-04
-  severity: P2
-  description: "Rescue action payoff — Momentum gain (rescuer) + ally +2D bonus (rescued) when hit taken; no payoff on miss"
-  finding_id: "SIM-X-26R-F05"
-  source: editorial
-  editorial_id: ED-171
-  affects: [designs/combat/combat_design_v1.md, references/params_combat.md]
-  applied_to_version: "see combat_design_v1.md version header"
-  status: applied
-  applied_commit: "pending"

@@ -101,7 +101,7 @@ A practitioner declaring Leap (Priority 5) may be struck at Priority 1 before co
 | Retrieve | Pick up dropped weapon/item. Opposed Agility if in melee contact. |
 | Tie Up | Close range. Offence roll. Success: both parties suffer −2D to Combat Pool for one round; opponent cannot use reach advantage; escape requires Strength contest. Blocks escape for one round. (PP-213) |
 | Escape | Agility contest vs opponent. Requires not being Tied Up. |
-| Rescue | Declare before opponent's attack resolves. Rescuer interposes: attack resolves against rescuer instead of original target; rescuer's armour DR applies. Requires adjacent zone. Fails silently if no incoming attack was declared — action lost. If the incoming attack lands and deals at least 1 Wound to the rescuer: rescuer gains 1 Momentum, and the rescued actor gains +2D on their next action this scene. These effects do not fire if the attack misses or if no attack was declared. (PP-214, PP-285) |
+| Rescue | Declare before opponent's attack resolves. Rescuer interposes: attack resolves against rescuer instead of original target; rescuer's armour DR applies. Requires adjacent zone. Fails silently if no incoming attack was declared — action lost. (PP-214) |
 | Dodge | Ranged attacks only. Forfeit all offensive action this round. Allocate full Combat Pool as passive Defence against one incoming ranged attack. Armour DR applies normally. (PP-215) |
 | Stunt | Declared with Strike. +N dice to Offence from environmental/positional narrative (Game Master sets N, max 5). Chain dice (10s) chain normally, independent of Stunt effect. |
 

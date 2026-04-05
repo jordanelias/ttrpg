@@ -217,14 +217,3 @@ Both succeed at different priorities → initiative stays with current holder.
 ## PP-284 — Stage 1/2 clarifications
 - Wound recovery: stabilised characters return after 1-scene rest; wounds clear at session end
 - Stage 2 trigger: any attack with ≥1 net hit on downed Stage 1 character; downed = Defence 0
-## Rescue (Interpose) — PP-285
-| Property | Value |
-|----------|-------|
-| Trigger | Declare before opponent's attack resolves |
-| Cost | Full action (replaces pool split — no offence this round) |
-| Effect | Attack redirects to rescuer; rescuer's armour Damage Reduction applies |
-| Payoff (if hit lands, ≥1 Wound) | Rescuer gains 1 Momentum; rescued actor gains +2D next action this scene |
-| Payoff (if attack misses) | No payoff; action spent |
-| Zone requirement | Adjacent zone |
-| Fails silently | Yes — if no incoming attack was declared, action lost |
-| PROVISIONAL | Momentum fires on hit-taken (not declaration). Ally bonus: +2D (matches Memory citation precedent). |
