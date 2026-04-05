@@ -1,5 +1,6 @@
 <!-- version: v0.14+design-ST7-R4-PP235 | sources: designs/mass_combat/mass_battle_v3.md (v4.4, PP-106) | last_updated: 2026-04-03 -->
 <!-- PATCHES APPLIED: PP-086-088, PP-091-092; ST-MB-01–10; ED-037/038; Altonian provisional; ED-050 Option D; PP-191 (Lock phase); PP-192 (×3 RS multiplier); PP-222, PP-224, PP-225, PP-227, PP-229, PP-231 (SIM-X-22 provisional) -->
+<!-- PP-248 2026-04-04: ED-140 resolved — Discipline degradation asymmetry precondition added -->
 <!-- PP-232: Unit stats renamed (Strength→Size, Combat Power→Power, Cohesion→Discipline, Coherence Rating/Command Rating→Command); -->
 <!--         Power derived from Size; damage formula references updated. -->
 <!-- PP-233: Unit combat formula established. Pool = min(Size,Command)+Command. -->
@@ -140,7 +141,11 @@ Command = 1: cannot restore Discipline to any unit — all degradation permanent
 See §BATTLE TURN PHASE STRUCTURE above (7 phases, ED-050 Option D). The prior 5-phase structure is obsolete.
 
 ## Discipline Degradation (Deterministic) [PROPOSAL] (PP-232)
-Fires at Phase 5 when total Size lost this turn > Discipline → Discipline −1.
+Fires at Phase 5 when ALL of the following are true (PP-248):
+1. Total Size lost this turn > Discipline, AND
+2. Power asymmetry exists (attacking unit Power > defending unit Power), OR Thread/artillery caused the Size loss.
+Symmetric engagements (equal or near-equal Power) produce attrition only — Discipline degradation does not fire.
+[FLAGGED FOR REVIEW: ED-140-R — confirm asymmetry threshold: strict Power > Power, or Power difference ≥ 2?]
 | Discipline | Power penalty |
 |----------|-----------|
 | 5–7 | None |

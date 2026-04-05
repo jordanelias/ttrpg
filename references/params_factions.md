@@ -273,3 +273,49 @@ Mid-combat zoom: pause combat. Resolve Strategic Phase. Apply mass outcome as co
 |---------|-----------|----------------|-------------------|
 | Niflhel | Transactional Survival | Covert actions (always −1 Ob; covert is their native mode) | Open/public actions |
 | Löwenritter | Martial Honour | Military actions + Crown-loyal actions | Political manipulation; acting against Crown interest |
+---
+<!-- PP-247 2026-04-04: ED-139 resolved — Community Weaving mode disambiguation -->
+
+## Community Weaving — Mode Disambiguation (PP-247) [FLAGGED FOR REVIEW: ED-139-R]
+Community Weaving has two distinct mode-specific forms. They are not contradictions — they are the same action at different scales.
+
+| Mode | Pool | TN | Ob | Effect | Source |
+|------|------|----|----|--------|--------|
+| TTRPG (personal scene) | Mandate (dice) + History | 7 | 3 | RS change per degree table (PP-195) | PP-195 |
+| BG / Hybrid Strategic Phase | Influence (dice) | 7 | Thread Tension ÷ 20 (round up) | Thread Tension change per degree table (PP-168) | PP-168 |
+
+In TTRPG mode, Community Weaving is a practitioner-led social operation targeting RS directly.
+In BG/Hybrid Strategic Phase, it is a faction-level action targeting Thread Tension (the faction-scale proxy for RS health).
+The two forms use different tracks because they operate at different scales. No reconciliation needed.
+
+Prerequisite (both modes): Mandate ≥ 1; at least one affiliated practitioner with Thread Sensitivity 30+.
+[FLAGGED FOR REVIEW: ED-139-R — confirm this two-form interpretation before compilation.]
+
+---
+<!-- PP-251 2026-04-04: ED-151 resolved — Scene-to-Mass transition confirmed -->
+
+## Scene→Mass Transition — Confirmed (PP-251) [FLAGGED FOR REVIEW: ED-151-R]
+PP-244 provisional confirmed. Personal combat outcome sets Domain Action Ob modifier:
+- PC Overwhelming: mass action −1 Ob
+- PC Success: no modifier
+- PC Partial: mass action +1 Ob
+- PC Failure: mass action +2 Ob
+Mid-combat zoom: pause at round boundary. Resolve Strategic Phase. Resume personal combat next session.
+AUD-P1-15 closed provisionally by this patch.
+[FLAGGED FOR REVIEW: ED-151-R — confirm modifier values before Hybrid compilation.]
+
+---
+<!-- PP-252 2026-04-04: ED-152 resolved — Domain Echo formal rule -->
+
+## Domain Echo — Formal Rule (PP-252) [FLAGGED FOR REVIEW: ED-152-R]
+A Domain Echo converts a personal scene outcome into a faction-level effect in the Cascade Phase.
+Trigger: a personal scene directly achieves or blocks a faction-level objective.
+Magnitude by degree:
+- Overwhelming: target faction stat ±2 (or clock ±3)
+- Success: target faction stat ±1 (or clock ±2)
+- Partial: no stat change; narrative consequence only
+- Failure: own faction stat −1 (or clock −1 in unfavourable direction)
+
+Domain Echo applies only to the most directly relevant stat. Game Master determines stat and direction.
+Maximum one Domain Echo per scene per faction.
+[FLAGGED FOR REVIEW: ED-152-R — confirm clock magnitudes (±2/±3 may be too large); confirm one Echo per scene limit.]

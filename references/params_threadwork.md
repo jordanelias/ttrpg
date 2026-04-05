@@ -454,3 +454,14 @@ Multiple Forgetting Checks in the same session:
 - Within a single scene: only the deepest applicable Ob applies (checks do not stack within one scene).
 - Across multiple scenes in the same session: each check is independent. A Failure on an earlier check does not increase Ob for subsequent checks — the Forgetting strips content, not the mechanism itself.
 - Collective Forgetting (multiple practitioners present): [GAP-H-01 — undefined. Do not apply any rule until defined.]
+---
+<!-- PP-253 2026-04-04: ED-153 resolved — Collective Forgetting rule -->
+
+## Collective Forgetting (PP-253) [FLAGGED FOR REVIEW: ED-153-R]
+When multiple practitioners are present during Southernmost exposure:
+- Each makes their own Forgetting Check independently.
+- A practitioner who passes (Success or Overwhelming) may act as a Recall Anchor for one other practitioner who failed or partially failed.
+- Recall Anchor effect: the failing practitioner retains facts only (as if they had achieved Success), regardless of their actual roll result. Emotional conviction is still lost.
+- One Anchor per failed practitioner. An Anchor cannot anchor more than one other.
+- Non-practitioners cannot anchor anyone.
+[FLAGGED FOR REVIEW: ED-153-R — confirm Anchor mechanic; confirm non-practitioner exclusion.]

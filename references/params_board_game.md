@@ -1,4 +1,5 @@
 <!-- version: v0.8.5+PP220 | source: valoria_bg_v05_simulation_and_patches.md (canonical per canonical_sources.yaml); action economy from stage_bg_proposal_v02.md | last_updated: 2026-04-03 -->
+<!-- PP-249 2026-04-04: ED-142 resolved — BG Overwhelming: 2×Ob + floor 3, supersedes ED-031 -->
 <!-- PATCHES APPLIED: PP-169-PP-187 | CORRECTIONS: PP-188 | PP-189 (v05 final) | PP-190–201 (BG balance, territory table, road network, map v2) | PP-219 (Southernmost access redesign) | PP-220 (Champion TS table) -->
 <!-- AUTHORITATIVE SOURCE: designs/board_game/valoria_bg_v05_simulation_and_patches.md (faction stats, clocks, victory conditions); designs/board_game/stage_bg_proposal_v02.md (action economy, card-hand system PP-177) -->
 <!-- NOTE: v05 is canonical for BG mechanics. v04 B-sections remain structural base. -->
@@ -37,14 +38,17 @@ Net successes = sum of contributions. May be negative (treated as 0 for degree p
 Ob minimum: 1. No modifier may push Ob below 1.
 **Majority-1s (Catastrophic Failure) override: STRUCK** (v05 DESIGN DECISION 2026-04-02). All rolls resolve through standard degree table only. Low-pool results produce Failure; no additional consequence category exists.
 
-## Degree Table (PP-179 — matches TTRPG)
+## Degree Table (PP-179 + PP-249 — matches TTRPG)
 | Net Successes | Degree |
 |--------------|--------|
-| ≥ 2× Ob | Overwhelming |
-| = Ob | Success |
+| ≥ 2× Ob AND ≥ 3 | Overwhelming |
+| ≥ Ob | Success |
 | 0 < net < Ob | Partial |
 | ≤ 0 | Failure |
+Overwhelming floor: net must be ≥ 3 regardless of Ob (matches PP-232 TTRPG rule). (PP-249)
+ED-031 (Ob+1 surplus) is SUPERSEDED by PP-179 (2×Ob). PP-179 is canonical.
 Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
+[FLAGGED FOR REVIEW: ED-142-R — confirm 2×Ob canonical; confirm floor of 3 applies to BG; confirm Ob 10 exception carries.]
 
 ## Starting Values (v04 B2, PP-188 correction)
 | Track | Start | Range | Notes |

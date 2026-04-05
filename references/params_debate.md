@@ -185,3 +185,11 @@ CROSS interactions (different genres): both genre evaluations resolve **simultan
 - Net track position after CROSS = current position + movement A − movement B (or ± as directed by each genre's audience weight).
 - Neither orator's movement is revealed before the other rolls.
 Note: CROSS→DIVERGE transition pending ED-133 resolution.
+---
+<!-- PP-250 2026-04-04: ED-150 resolved — AMPLIFY pool cap confirmed -->
+
+## AMPLIFY Pool Cap — Confirmed (PP-250) [FLAGGED FOR REVIEW: ED-150-R]
+AMPLIFY combined pool maximum = highest individual orator pool × 2. PP-242 provisional confirmed.
+Additional orators beyond the cap contribute +1D narrative bonus at Game Master discretion (not mechanical stacking).
+This cap prevents degenerate 4-orator blowouts while preserving meaningful collaboration.
+[FLAGGED FOR REVIEW: ED-150-R — designer to confirm ceiling or propose alternative.]
