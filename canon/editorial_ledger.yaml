@@ -1419,3 +1419,21 @@ editorial_decisions:
       - references/params_core.md
     propagation_status: pending
     tags: [thread-sensitivity, coherence, investigation, scene-structure, knots, coherence-0, solmund, all-modes, perception, rendering-frame]
+    addendum_2026-04-05: >
+      Released Coherence 0 player characters become world-state contributors in the same category as
+      Vaynard or Klapp — active in the world, generating Domain Echoes, available as scene nodes —
+      except their behaviour is GM-rendered and their reasoning is unrecoverable to any other character
+      regardless of that character's TS. They appear in the thread landscape as a kind of weather:
+      their thread activity (knots created/dissolved, operations performed) is detectable but intent
+      and future action are not attributable.
+
+      GM handling mechanism: at Coherence 3, player and GM co-write beliefs and inspirations together.
+      This is double-duty — it is both a narrative tool for the player to participate in their own
+      release, and a design document the GM uses to render the character as a world-state contributor
+      afterward. The player co-authors the behaviour parameters of their future NPC. The released
+      character's actions are not random — they are the terminus of an arc already visible in the
+      belief/inspiration material, extrapolated into a mode of being that no longer operates on human
+      motivational logic but remains recognisably continuous with what the character was becoming.
+      Ref: Solmund helping living things is not arbitrary — it is the endpoint of what Solmund was
+      already oriented toward.
+
