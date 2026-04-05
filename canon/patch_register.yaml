@@ -2694,3 +2694,26 @@ PP-234
   affects: [references/params_factions.md]
   status: applied
   provisional: false
+- id: PP-247
+    date: 2026-04-04
+    source: SIM-C-01 AUD-F01
+    system: core_engine
+    description: "Combat Pool formula corrected in params_core.md: (Agility x2)+History+3 -> Agility+(History points+3). Matches stage1 ss2.3 and ss3.4."
+    status: applied
+    files_changed: [references/params_core.md]
+
+  - id: PP-248
+    date: 2026-04-04
+    source: SIM-C-01 AUD-F02 AUD-F03
+    system: core_engine
+    description: "Stamina formula corrected in params_core.md: End+History+1 -> End+1 per stage1 ss3.9. Health row clarified: base score End+6, wound-interval mechanics to Notes."
+    status: applied
+    files_changed: [references/params_core.md]
+
+  - id: PP-249
+    date: 2026-04-04
+    source: SIM-C-01 AUD-F06 PP-232-propagation
+    system: core_engine
+    description: "Ob cap propagated to stage1 ss1.3: updated from 10 to 20 per PP-232. Ob stacking cap and Ob-20 exception updated throughout ss1.3-1.4."
+    status: applied
+    files_changed: [compilation/v0.14/stage1_core_engine.md]

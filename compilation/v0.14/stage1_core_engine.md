@@ -48,9 +48,9 @@ The Obstacle (Ob) is the number of net successes required to achieve the intende
 | 8 | Structural | Usurping a political institution; performing Dissolution at Territorial scale |
 | 10 | Foundational | Restructuring history; challenging a faction's core identity |
 
-**Maximum Ob: 10.** No roll may have effective Ob above 10 regardless of modifier stacking. Success at Ob 10 is a genuine miracle warranting exceptional narrative treatment.
+**Maximum Ob: 20.** No roll may have effective Ob above 20 regardless of modifier stacking. (PP-232, PP-249)
 
-**Ob stacking:** When multiple modifiers increase Ob (Wounds, terrain, scale, zone conditions), they stack additively but cap at Ob 10.
+**Ob stacking:** When multiple modifiers increase Ob (Wounds, terrain, scale, zone conditions), they stack additively but cap at Ob 20. (PP-249)
 
 ## 1.4 Degrees of Success
 
@@ -61,7 +61,7 @@ The Obstacle (Ob) is the number of net successes required to achieve the intende
 | Partial | Net > 0 but < Ob | Goal achieved with a complication |
 | Failure | Net ≤ 0 | Goal not achieved; complication occurs |
 
-**Ob 10 exception:** Overwhelming is unavailable at Ob 10. Partial requires net ≥ 5. Below 5 = Failure.
+**Ob 20 exception:** Overwhelming is unavailable at Ob 20. Partial requires net ≥ 10. Below 10 = Failure. (PP-249)
 
 ## 1.5 Let It Ride
 

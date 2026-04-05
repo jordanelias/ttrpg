@@ -17,7 +17,7 @@ systems:
     params: references/params_core.md
     design_doc: null
     compilation_current: true
-    note: "No design-layer core doc exists. Stage1 is canonical."
+    note: "No design-layer core doc exists. Stage1 is canonical. PP-247/248/249 applied 2026-04-04 (Combat Pool, Stamina, Ob cap propagation)."
 
   characters:
     canonical: compilation/v0.14/stage2_characters.md
