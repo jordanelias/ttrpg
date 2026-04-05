@@ -4139,3 +4139,89 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     decision: 'Rescue is exclusive: replaces all other actions in the round. Cannot Strike and Rescue simultaneously. PP-288 applied.'
     propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
     tags: [combat, rescue, resolved]
+
+  # ── FROM SIM-IXC-01/02/03 (2026-04-04) ─────────────────────────────────────
+
+  - id: ED-186
+    date_flagged: 2026-04-04
+    date_resolved: 2026-04-04
+    source: SIM-IXC-01
+    description: "Coherence 0 action availability — incapacitated or degraded-but-functional?"
+    status: resolved
+    priority: P1
+    decision: "Coherence 0 = character becomes NPC. 100% mechanically functional, all stats intact. Lost to human thread boundaries. Player agency ends; GM takes control. Permanent unless restoration mechanic defined (none currently in params). PP-261 applied."
+    propagation_targets:
+      - references/params_core.md
+      - designs/ttrpg/threadwork_redesign_v25.md
+    propagation_status: applied
+    tags: [coherence, threadwork, core_engine]
+
+  - id: ED-187
+    date_flagged: 2026-04-04
+    source: SIM-IXC-01
+    description: "Multi-effect Ob stacking sequence when P-01 auto-effects simultaneously add Ob approaching cap (20) — priority order undefined"
+    status: open
+    priority: P2
+    tags: [canon, core_engine, threadwork]
+
+  - id: ED-188
+    date_flagged: 2026-04-04
+    source: SIM-IXC-01
+    description: "Momentum gain at cap (4) — no overflow rule. Lost, deferred, or converted?"
+    status: provisional
+    priority: P3
+    decision: "Provisional: excess gain is lost. [PROVISIONAL — PP-259]"
+    propagation_targets:
+      - references/params_core.md
+    propagation_status: applied
+    tags: [momentum, core_engine]
+
+  - id: ED-189
+    date_flagged: 2026-04-04
+    source: SIM-IXC-02
+    description: "Focus=1 Leap: Composure penalty fires with zero ops available. Block Leap at Focus=1, or make Composure penalty conditional on op availability?"
+    status: open
+    priority: P2
+    tags: [threadwork, leap, focus]
+
+  - id: ED-190
+    date_flagged: 2026-04-04
+    date_resolved: 2026-04-04
+    source: SIM-IXC-03
+    description: "Combat resolution model — opposed roll vs fixed Ob?"
+    status: resolved
+    priority: P1
+    decision: "Pure opposed resolution. Net Offence successes minus Net Defence successes = hits. Negative = defender wins exchange cleanly. No fixed Ob on combat rolls. PP-260 applied."
+    propagation_targets:
+      - references/params_combat.md
+    propagation_status: applied
+    tags: [combat, core_engine]
+
+  - id: ED-191
+    date_flagged: 2026-04-04
+    source: SIM-IXC-03
+    description: "Defence TN in asymmetric weapon matchup — defender uses own weapon TN or attacker's TN?"
+    status: open
+    priority: P2
+    tags: [combat, weapon_matrix]
+
+  - id: ED-192
+    date_flagged: 2026-04-04
+    source: SIM-IXC-02
+    description: "Leap gate status: does any Thread operation bypass Leap eligibility (TS<30 / TPS=0 case)?"
+    status: open
+    priority: P2
+    tags: [threadwork, leap, eligibility]
+
+  - id: ED-193
+    date_flagged: 2026-04-04
+    source: SIM-IXC-03
+    description: "Combat Pool minimum conflict: params_combat states minimum 5; params_core states minimum 1D. Lex specialis ruling needed."
+    status: provisional
+    priority: P1
+    decision: "Provisional: Combat Pool minimum = 5 overrides core 1D minimum (lex specialis). [PROVISIONAL — PP-258]"
+    propagation_targets:
+      - references/params_combat.md
+    propagation_status: applied
+    tags: [combat, core_engine, pool_minimum]
+
