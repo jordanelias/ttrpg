@@ -1,84 +1,65 @@
 # Valoria Session Log — Current
 
 ```yaml
-session_id: 2026-04-04T_DAY_REVIEW_AND_CLEANUP
+session_id: 2026-04-04T_AUDIT_AND_DESIGN
 phase: SESSION CLOSED
 status: COMPLETE
+last_commit: 43208261eecea11700e4d5e1aa3c8872db813f8a
 
-## WORK PERFORMED — THIS SESSION (day review + comprehensive fix pass)
-1. Reviewed all 21 sessions (84 commits) from 2026-04-04 for coherency and correctness
-2. PP register de-collision: 332 entries had 104 duplicates across 68 IDs; all renumbered PP-297–PP-400. Zero duplicates remain.
-3. Resolved 8 stale editorial items:
-   - ED-036 (Altonian stats) flagged→resolved; duplicate PP-282 stat block struck, PP-193 retained
-   - ED-200 (wound cap) → resolved: no cap in design doc
-   - ED-201 (damage carry-over) → resolved: no carry-over in design doc
-   - ED-202 (rest/recovery) → resolved: single recovery model
-   - ED-203 (pool minimum) → resolved: clean floor, no penalty
-   - ED-204 (Certainty/Resolve) → resolved: both defined in params_core PP-289
-   - ED-293 (Mandate suppression) → resolved: PP-296 applied (Ob cap 4 + coalition +2D)
-   - ED-296 (REINFORCE negative) → resolved: PP-401 max(0,...) floor applied
-4. params_core: removed orphaned ED-128 reference; removed 2 redundant Composure blocks
-5. params_combat: added 4 explicit resolved rulings (ED-200/201/202/203)
-6. params_contest: PP-401 REINFORCE floor applied; P1 warnings for ED-295/297
-7. file_index: synced all compilation stage statuses to OUTDATED
-8. coverage_matrix: backfilled 18 simulation entries from 2026-04-04; struck SIM-DEBT-02; added SIM-DEBT-07
-9. propagation_map: added combat rulings + REINFORCE floor cross-references
+## WORK COMPLETED THIS SESSION
 
-## FILES MODIFIED THIS SESSION
-- canon/patch_register.yaml (de-collision: 104 entries renumbered + PP-401 added)
-- canon/editorial_ledger.yaml (8 items resolved)
-- references/params_core.md (ED-128 fix, Composure dedup)
-- references/params_combat.md (4 resolved rulings)
-- references/params_contest.md (PP-401 + P1 warnings)
-- references/params_mass_combat.md (PP-282 duplicate struck)
-- references/file_index.md (stage doc status sync)
-- references/propagation_map.md (new cross-refs)
-- tests/coverage_matrix.md (18 sim backfill + SIM-DEBT-02 struck + SIM-DEBT-07 added)
+### Simulations (non-optimal actor batch)
+- SIM-X-26 to SIM-X-36: 11 simulations across TTRPG/Hybrid/BG
+  - 55 findings total
+  - 17 gaps registered; 12 resolved; 5 carried (all P2)
+  - 4 patches applied: PP-254, PP-255, PP-303, PP-304
 
-## DAY SUMMARY — 2026-04-04 (all 21 sessions)
+### Audit
+- Full audit of all 11 simulations compiled
+- 3 systemic signals identified:
+  1. Caution under-incentivised (no blowback for inaction/delay)
+  2. Local optima dominate coalition play (salience + incentive failure)
+  3. Non-optimal decisions combine multiplicatively (healthy emergent)
 
-### Key deliverables produced today:
-- Social Contest System v2 (PP-234): full attribute renames (Presence→Charisma, Memory→Recall), genre restructure, adjudicator types
-- Decision protocol library: 16 non-optimal player decision protocols for simulation
-- Editorial review artifact: mobile-first approval UI (tools/editorial_review/valoria-editorial-review.jsx)
-- BG simulator artifact: playable board game sim (valoria-bg.jsx/html) with territory system, card effects, threshold events
-- safe_session_close() added to github_ops.py — prevents session log overwrites
-- Rescue mechanic full rebuild: eligibility, contested roll, double exposure, Momentum on wound (PP-290/292/295)
-- Feint mechanic rebuild: partial commit, ceiling non-stacking, versus roll (PP-291/293/294)
-- BG Mandate suppression ceiling: Ob cap 4 + coalition +2D (PP-296)
-- All compilation stage docs marked OUTDATED in canonical_sources.yaml
-- PP register de-collided: 332 entries, 332 unique IDs (from 228 unique)
-- 8 stale editorial items resolved; ED-296 REINFORCE formula fixed (PP-401)
+### Design decisions and patches
+- 1A: PP-402 — TC passive advance +1/season; Suppress action defined
+- 1B: PP-403 — Failed Domain Action costs -1 Stability
+- 2C: ED-298 opened — Resentment token (No-vote earns Standing + Resentment vs proposer)
+- 2D: PP-404 — Missed coalition Ob penalty (+1 Ob next season; fog-of-war exemption)
+- ED-299 opened — Coalition trigger enumeration required for PP-404
 
-### Patch activity: PP-234 through PP-401 (168 entries; 104 are renumbered duplicates)
-### Editorial: 8 resolved this session; 20 remain (17 flagged/user-decision, 3 open/mechanical)
+## PATCH STATE
+- Highest PP committed this session: PP-404
+- Next PP: 405
 
-## REMAINING OPEN ITEMS (20 total)
+## OPEN EDITORIALS FROM THIS SESSION
+- ED-298: Resentment token form factor + scope + resolution conditions (P2)
+- ED-299: Coalition trigger enumeration for PP-404 (P2)
 
-### Flagged — user decisions required (17):
-ED-005 Riskbreakers identity | ED-006 Restoration leader | ED-024 Southernmost stats
-ED-080/081 Conviction texts | ED-108 T10/T11 names | ED-109-113 BG balance (5)
-ED-119 Lenneth arc | ED-143-146 PC constructs (4) | ED-171 Niflhel lineage
+## CARRIED GAPS (P2, from simulation batch)
+- GAP-SIM-X34-02: Composure 0 threshold effect
+- GAP-SIM-X35-01: All-abstain / zero-support motion outcome
+- GAP-SIM-X36-01: Social pool formula (Cognition×2+History proxied)
+- GAP-SIM-X36-02: Domain Echo Overwhelming magnitude
 
-### Open — mechanical (3):
-ED-290: Rescue Momentum calibration (+1 vs +2) — balance question
-ED-292: MARTYR failed-Rescue feedback loop — design question
-ED-297: AMPLIFY dominance over CLASH — confirm intent
+## PRE-EXISTING OPEN ITEMS (unchanged)
+- ED-295: CLASH formula fix (user selects option A/B/C/D)
+- ED-297: AMPLIFY dominance — user confirms intent
+- ED-290/292: Rescue calibration decisions
+- SIM-DEBT-03: AMPLIFY multi-party + DIVERGE completion
+- ED-109–113: BG balance decisions
 
-### P1 open:
-ED-295: CLASH movement stalls at median — 4 fix options (A/B/C/D), user decision required
+## SESSION START PROTOCOL FOR NEXT CHAT
+1. Bootstrap github_ops.py from skills/valoria-orchestrator/scripts/github_ops.py
+2. Read session_log_current.md (this file)
+3. Read canon/editorial_ledger.yaml — report P1-BLOCKER count
+4. Read references/file_index.md STALE GAPS section — report count
+5. Confirm task before proceeding
 
-### SIM-DEBT:
-- SIM-DEBT-03: PARTIAL (AMPLIFY multi-party + DIVERGE pending)
-- SIM-DEBT-04: PARTIAL (Crowd/NoAdj distinction gap)
-- SIM-DEBT-06: BLOCKED (Dissonant war-scale params missing)
-- SIM-DEBT-07: UNVERIFIABLE (no test file)
-- SIM-DEBT-08: BLOCKED (PI threshold values missing)
-
-## NEXT SESSION PRIORITIES
-1. ED-295 CLASH formula fix (user selects option A/B/C/D)
-2. ED-297 AMPLIFY dominance — user confirms intent
-3. ED-290/292 Rescue calibration decisions
-4. SIM-DEBT-03 completion (AMPLIFY multi-party + DIVERGE)
-5. ED-109-113 BG balance decisions
+## RECOMMENDED NEXT PRIORITIES
+1. ED-298 Resentment token — user approval of form factor
+2. ED-299 Coalition trigger enumeration — enumerate canonical coalition pairs
+3. ED-295 CLASH formula — user decision required
+4. GAP-SIM-X34-02 Composure 0 — resolve from design doc
+5. SIM-DEBT-03 completion
 ```
