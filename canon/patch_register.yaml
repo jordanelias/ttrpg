@@ -2791,3 +2791,24 @@ PP-234
   files_changed:
     - designs/mass_combat/mass_battle_v3.md
     - references/params_mass_combat.md
+- id: PP-257
+  date: 2026-04-04
+  severity: P1
+  description: "RITUAL and FACTION-LOYAL protocols: add feasibility gate (skip action if P(success) < 10%)"
+  finding_id: "SIM-X-27R-F04, SIM-X-28R-F03"
+  source: simulation
+  affects: [references/sim_decision_protocols.md]
+  applied_to_version: "v1.1"
+  status: applied
+  applied_commit: "pending"
+
+- id: PP-258
+  date: 2026-04-04
+  severity: P2
+  description: "FACTION-OPPORTUNIST protocol: add viability check (skip opportunity if P(success) < 20%)"
+  finding_id: "SIM-X-27R-F05, SIM-X-28R-F04"
+  source: simulation
+  affects: [references/sim_decision_protocols.md]
+  applied_to_version: "v1.1"
+  status: applied
+  applied_commit: "pending"

@@ -343,3 +343,4 @@ Propagation targets:
 - debate_system_redesign_v1.md Part 6 superseded by social_contest_system_v2.md.
 - Genre rename: Past→Memory, Present→(turfed), Future→Projection.
 - Files NOT yet propagated: params_debate_history.md (historical, keep as-is), test outputs (flagged stale).
+| references/sim_decision_protocols.md | sim_decision_protocols | skills/valoria-simulator-SKILL.md, tests/coverage_matrix.md | Protocol changes propagate to simulator skill and any test using actor protocol assignments |

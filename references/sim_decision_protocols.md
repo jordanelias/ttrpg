@@ -125,6 +125,8 @@ At every decision point, select the action that most directly advances the assig
 
 **Resource rule:** Spend faction resources freely in service of the goal. Do not hoard.
 
+**Viability gate (PP-257):** Before taking any goal-directed action with a contested roll, check P(success). If P(success) < 10%, skip and take the lowest-cost available action instead. Record the skipped goal as blocked.
+
 **Applies across modes:**  
 - TTRPG: Domain Actions and individual NPC actions aligned to seasonal goal
 - Hybrid: Faction assets deployed toward goal; personal character actions secondary
@@ -144,7 +146,7 @@ Maintain a passive baseline (take lowest-cost action that does not lose ground).
 - A clock threshold is reached by another actor's action
 - A PC creates a narrative gap (absent for a scene, makes a public commitment)
 
-On trigger: pivot immediately to the highest-yield action that exploits the opening. Do not commit resources to the opening if the cost exceeds the expected gain by more than 1 net success.
+On trigger: check P(success) for the exploiting action first. If P(success) < 20%, the opportunity is mechanically unviable — do not fire (PP-258). Return to passive baseline. If P(success) ≥ 20%, pivot immediately to the highest-yield action. Do not commit resources if cost exceeds expected gain by more than 1 net success.
 
 **Resource rule:** Hoard resources until an opportunity trigger fires; then spend aggressively.
 
@@ -296,7 +298,7 @@ When active:
 **Decision rule:**  
 Define a fixed action sequence at simulation start (e.g. "Phase 1: expand Mandate → Phase 2: suppress rival Intel → Phase 3: trigger Theocracy Counter"). Execute the sequence in order, one action per available action slot, regardless of current mechanical state.
 
-**Override condition:** Sequence may pause (not deviate) if the current step is mechanically impossible (e.g. stat already at max). Skip to next step; return to paused step when viable.
+**Override condition:** Sequence may pause (not deviate) if the current step is mechanically impossible (e.g. stat already at max) **or if P(success) for the required roll is < 10%** (feasibility gate — PP-257). Skip to next step; return to paused step when the probability threshold is met or the step becomes mandatory (no remaining steps in sequence).
 
 **Resource rule:** Allocate resources according to sequence phase. No reactive spending.
 
@@ -425,4 +427,4 @@ Canonical status: Design-layer reference document. Not a params file.
 
 ---
 
-*v1.0 — 2026-04-04*
+*v1.1 — 2026-04-04 | PP-257 (RITUAL+FACTION-LOYAL feasibility gate), PP-258 (FACTION-OPPORTUNIST viability check)*
