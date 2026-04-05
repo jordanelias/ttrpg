@@ -2764,3 +2764,23 @@ PP-234
   status: applied
   provisional: true
   editorial: ED-153-R
+
+- id: PP-254
+  date: 2026-04-04
+  severity: P2
+  description: "Stamina exhaustion propagation to params_combat; Health formula conflict resolution (design doc §7 wins over PP-232); ED-152 flagged"
+  finding_id: "GAP-SIM-X26-01"
+  source: simulation
+  affects: [references/params_combat.md, references/params_combat_history.md]
+  status: applied
+  applied_commit: ~
+
+- id: PP-255
+  date: 2026-04-04
+  severity: P2
+  description: "Momentum between-scene carry within session; RS baseline decay -1/year baseline confirmed"
+  finding_id: "GAP-SIM-X26-02, GAP-SIM-X27-01"
+  source: simulation
+  affects: [references/params_core.md, references/params_factions.md, references/params_combat_history.md]
+  status: applied
+  applied_commit: ~

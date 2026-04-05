@@ -73,3 +73,20 @@ Changes:
 - DR table: collapsed to 2 columns (Piercing: 0/2/3/5; Blunt: 0/1/2/3)
 - Cover table: collapsed to 2 columns
 - Fibonacci group bonus: removed for all ranged weapons
+
+## PP-254 (2026-04-04) — Stamina Exhaustion Propagation + Health Formula Conflict (GAP-SIM-X26-01)
+Source: combat_design_v1.md §7 (canonical)
+Changes:
+- Added Stamina Exhaustion rule: Stamina 0 = Out of Breath (−2D all combat), recovery via Take a Breath action
+- Struck PP-232 Health formula (Endurance+6)×(wound count+1) — conflicts with design doc
+- Confirmed Health = Endurance+6 per §7; at 0 Health take 1 Wound, Health resets to full
+- Flagged ED-152: Health formula contradiction PP-232 vs design doc §7 — design doc wins
+- Version: v0.14-AUD5-R1 → v0.14-AUD5-R2
+
+## PP-255 (2026-04-04) — Momentum Between-Scene Carry + RS Baseline Decay (GAP-SIM-X26-02, GAP-SIM-X27-01)
+Source: bg_v05 Part Seven precedent analysis (RS decay); design intent (Momentum)
+Changes:
+- Momentum: confirmed reset at session start (not scene start); between-scene carry within session now explicit
+- RS baseline decay: −1/year (per 4-season year) confirmed from bg_v05 Part Seven HIS comparison
+- Propagated to params_core.md and params_factions.md
+- Version: v0.14-AUD1-R1 → v0.14-AUD1-R2

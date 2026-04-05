@@ -1,4 +1,4 @@
-<!-- version: v0.14-AUD3 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-02 -->
+<!-- version: v0.14-AUD3-R1 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-04 -->
 <!-- NOTE: stage6_factions.md is STALE for BG faction mechanics. Use BG column for board game/hybrid. -->
 <!-- PATCHES APPLIED: PP-167, PP-168; PP-195 (Community Weaving procedure) -->
 <!-- STALE CHECK: TTRPG column from v0.14 compiled. BG column from bg_v05 design. -->
@@ -27,7 +27,7 @@ Note: Varfell BG Mandate 3/Wealth 3 is intentional (political isolation at game 
 | Clock | TTRPG | BG (bg_v05 P-32) | Shared Loss |
 |-------|-------|-----------------|-------------|
 | Theocracy Counter | 0 | 28 | — |
-| Rendering Stability | 60 | 72 | Rendering Stability = 0 |
+| Rendering Stability | 60 | 72 | Rendering Stability = 0 | −1/year baseline (PP-255) |
 | Institutional Pressure | 20 | 20 | — |
 | Public Instability | — | 5 | — |
 

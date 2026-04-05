@@ -1,6 +1,6 @@
-<!-- version: v0.14-AUD1-R1 | sources: stage1_core_engine.md | last_updated: 2026-04-03 -->
+<!-- version: v0.14-AUD1-R2 | sources: stage1_core_engine.md | last_updated: 2026-04-04 -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
-<!-- PATCHES APPLIED: PP-164 (attribute range, derived stats table, Memory/Focus definitions) -->
+<!-- PATCHES APPLIED: PP-164, PP-255 (Momentum between-scene carry; RS baseline decay −1/year) -->
 <!-- PP-247 (Combat Pool formula corrected to match stage1 §2.3/§3.4: Agi + hist_pts + 3) -->
 <!-- PP-248 (Stamina formula corrected to End+1 per stage1 §3.9; Health row clarified) -->
 <!-- PP-232 (Ob cap raised to 20; Overwhelming floor 3; Health formula revised; Stamina floor 2; armour wield constraint) -->
@@ -54,6 +54,20 @@ Ob 20 exception: Overwhelming unavailable. Partial requires net ≥ 10.
 - Gain: Overwhelming success OR Belief achieved
 - Spend: 1 Momentum = 1 automatic success (non-Thread rolls only)
 - Reset: start of each session
+
+## Momentum Carry Rule (PP-255)
+Momentum range: 0–4. Resets to 0 at the **start of each session** (not scene).
+**Between-scene carry within a session:** Momentum carries between scenes within the same session. A character who ends Scene 1 with Momentum 2 begins Scene 2 with Momentum 2.
+**Hoarding cost:** Momentum cannot be banked across sessions. Any unspent Momentum at session end is lost.
+
+## RS Baseline Decay (PP-255)
+Rendering Stability (RS) loses **−1 per in-game year** from baseline drift alone (confirmed bg_v05 Part Seven precedent analysis). This applies across all modes:
+- TTRPG: −1 RS per 4-season year, applied at Year-End Accounting.
+- Board Game: −1 RS per Year-End step.
+- Hybrid: same as TTRPG.
+Thread operations accelerate this. Restoration sources can offset but not reverse baseline decay.
+RS floor: 0 (Rupture). RS ceiling: 100.
+
 
 ## Pool Minimum
 No penalty may reduce a pool below 1D. Ob penalties still apply at 1D.
