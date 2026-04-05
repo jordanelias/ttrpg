@@ -344,3 +344,8 @@ Propagation targets:
 - Genre rename: Past→Memory, Present→(turfed), Future→Projection.
 - Files NOT yet propagated: params_debate_history.md (historical, keep as-is), test outputs (flagged stale).
 | references/sim_decision_protocols.md | sim_decision_protocols | skills/valoria-simulator-SKILL.md, tests/coverage_matrix.md | Protocol changes propagate to simulator skill and any test using actor protocol assignments |
+| references/sim_decision_protocols.md | sim_decision_protocols | skills/valoria-simulator-SKILL.md, tests/coverage_matrix.md | Protocol library; changes propagate to all simulation test files using actor assignments |
+| designs/combat/combat_design_v1.md (Feint §PP-291/293/294) | feint-partial-commit | references/params_combat.md | Feint versus roll + pool reduction; params must reflect current formula |
+| designs/combat/combat_design_v1.md (Rescue §PP-290/292/295) | rescue-contested | references/params_combat.md, references/sim_decision_protocols.md | Rescue eligibility, contest, Momentum wound trigger |
+| references/params_board_game.md (PP-296) | mandate-suppression | designs/board_game/valoria_bg_v05_simulation_and_patches.md | Mandate Ob cap 4 + coalition bonus; must propagate to BG design doc on next compile |
+| designs/contest/social_contest_system_v2.md | contest-movement | references/params_contest.md | ED-295/296 open — CLASH/REINFORCE formula fixes pending; do not compile until resolved |
