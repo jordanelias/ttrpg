@@ -1,45 +1,38 @@
-# Valoria Session Log — Updated
+# Valoria Session Log - Updated
 
 ```yaml
-session_id: 2026-04-04T_SIM_STRESS_06
-phase: SESSION CLOSED
-status: COMPLETE
+session_id: 2026-04-04T_IXC_STRESS_TEST
+phase: IXC-01 through IXC-07 complete (IXC-07 partial — blocked)
+status: IN PROGRESS
 
-## WORK COMPLETED
-1. Committed all prior session work (PP-278-284)
-2. SIM-STRESS-06: 7 scenarios (3 P1 SIM-DEBT + 4 P2 randomized)
-   - SIM-DEBT-01, 03, 04 ALL CLOSED
-   - PP-285 applied (Rescue no Defence)
-   - ED-180/181 resolved same session
+## CHAINS COMPLETE
+- IXC-01: Canon → Core. DONE.
+- IXC-02: Core → Threadwork. DONE.
+- IXC-03: Core → Combat. DONE.
+- IXC-05: Attributes → Combat. DONE.
+- IXC-06: Attributes → Threadwork. DONE.
+- IXC-07: Attributes → Debate. PARTIAL — blocked ED-194 (Presence identity).
 
-## SIM-DEBT STATUS — ALL CLOSED
-- SIM-DEBT-01: Social contest Cha×2 calibration ✓ CLOSED
-- SIM-DEBT-03: Two-genre system re-sim ✓ CLOSED
-- SIM-DEBT-04: Adjudicator-type calibration ✓ CLOSED
-- SIM-DEBT-05: TTRPG mass battle Dmg Mod ✓ CLOSED (PP-245)
-- SIM-DEBT-06: War-scale Coherence/Dissonant ✓ CLOSED (SIM-STRESS-05)
-- SIM-DEBT-07: High-resistance contest calibration ✓ CLOSED (ED-164 confirmed Option A)
+## EDITORIAL DECISIONS THIS SESSION
+- ED-186 resolved: Coherence 0 = NPC transition (PP-261)
+- ED-190 resolved: Combat = pure opposed (PP-260)
 
-## ALL SIM-DEBTS CLEARED
+## P1 ITEMS OUTSTANDING
+- ED-194: Presence attribute identity (blocks IXC-07, IXC-04)
+- ED-193: Combat pool minimum (provisional PP-258)
+- IXC-07 resume: after ED-194 ruling
 
-## PATCHES THIS SESSION: PP-285
-## NEW EDITORIAL ITEMS: ED-180, ED-181 (both resolved)
+## NEW EDITORIAL ITEMS
+- ED-194 (P1): Presence identity
+- ED-195 (P2): Rattled mechanics
+- ED-196 (P2): Bonds attribute function
+- ED-197 (P2): Max ops per contact window
 
-## EDITORIAL NOTES REMAINING (worldbuilding, replaceable without patch)
-ED-005: Sister Elara Vind (Restoration leader placeholder)
-ED-006: Riskbreakers identity placeholder
-ED-024: Southernmost entity stat placeholders
-ED-029: Forgetting mechanics
-ED-036: Altonian stats (PP-282 provisional)
-ED-080/081: Conviction texts (confirmed)
-ED-108: T10/T11 names
-ED-119: Lenneth arc
-ED-128: Certainty track (needs threadwork update)
-ED-131: Weapon modifiers (playtesting subject)
+## DEFERRED
+- IXC-04 (Core → Debate): blocked by ED-194
+- IXC-08 through IXC-17: subsequent sessions
 
-## RECOMMENDED NEXT TARGETS
-- Altonian full invasion simulation (IP ramp to 75+, multi-season)
-- Thread combat vs Southernmost entities (ED-024 placeholder stats available)
-- Varfell T13 opening with Fortification 1 verified
-- Full campaign arc simulation (Board Game Seasons 1-12)
+next_session_start:
+  priority: Ruling on ED-194 (Presence), then IXC-07 resume + IXC-08/09
+  read_first: [tests/sim_ixc_05_06_07.md, session_log_current.md]
 ```

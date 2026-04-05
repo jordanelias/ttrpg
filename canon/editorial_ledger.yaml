@@ -4099,3 +4099,37 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     decision: 'Co-movement accumulation is sufficient brake. 10 co-movements in one session is narratively disruptive enough to self-limit. Overweaving blocks single-window exploit. PP-248 confirmed. No additional mechanic needed.'
     propagation_targets: []
     tags: [thread, coherence, loop, resolved]
+  # ── FROM SIM-IXC-05/06/07 (2026-04-04) ─────────────────────────────────────
+
+  - id: ED-194
+    date_flagged: 2026-04-04
+    source: SIM-IXC-07
+    description: "'Presence' attribute in Debate pool formula (Presence×2)+History not in params_core 10-attribute list. Presence=Charisma, renamed attribute, or 11th attribute?"
+    status: open
+    priority: P1
+    tags: [debate, attributes, core_engine]
+
+  - id: ED-195
+    date_flagged: 2026-04-04
+    source: SIM-IXC-07
+    description: "Rattled condition (Composure=0) mechanics undefined. Incapacitation, penalty state, or NPC transition per Coherence 0 precedent?"
+    status: open
+    priority: P2
+    tags: [debate, social, composure]
+
+  - id: ED-196
+    date_flagged: 2026-04-04
+    source: SIM-IXC-07
+    description: "Bonds attribute has no confirmed pool formula, derived stat, or roll context in params_core. Mechanically inert?"
+    status: open
+    priority: P2
+    tags: [attributes, bonds, core_engine]
+
+  - id: ED-197
+    date_flagged: 2026-04-04
+    source: SIM-IXC-06
+    description: "Maximum operations per contact window not stated. At Focus=7 (6 op rounds): can practitioner perform multiple ops per round?"
+    status: open
+    priority: P2
+    tags: [threadwork, focus, operations]
+
