@@ -7,6 +7,7 @@
 <!--         Step 1 action name flagged ED-132; Diverge trigger flagged ED-133; -->
 <!--         SIM-DEBT-01 baselines invalidated pending re-sim with corrected pool formula. -->
 <!-- SIM-DEBT-01: RESOLVED 2026-04-03 by SIM-D-05. New baselines in tests/sim_d05_debate_resim.md. -->
+<!-- PP-278 (resistance formula: raw Stability -> ceil(Stability/4), 2026-04-04) -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage9 before use. -->
 
 # params_debate.md — Debate System (v1, patched)
@@ -55,7 +56,7 @@ Post-Diverge state: stays with holder.
 ## Conviction Track
 Range: 0–10. Side A wins ≥ 7. Side B wins ≤ 3. Compromise zone: 4–6.
 Starting position: Game Master-set, typically 4–6 neutral.
-Audience resistance = average Stability of represented factions (round up; typical 1–3).
+Audience resistance = ceil(average Stability of represented factions / 4). Range: 1–2 for typical factions (Stability 2–7). Example: Hafenmark Stability 4 -> resistance = ceil(4/4) = 1. Guilds Stability 5 -> resistance = ceil(5/4) = 2. (PP-278)
 
 Movement formula:
 - If (margin × genre_weight × orientation_weight) ≤ resistance → 0 movement.
@@ -253,3 +254,21 @@ This ensures even high-Stability audiences remain contestable with sufficient ma
 ## ED-166 Resolution (PP-296)
 "Call for Division" in Church Tribunal context: **formal procedural vote** — orator calls for the audience to divide physically (ayes to one side, nays to other). Mechanically: triggers a Conviction Track check at current position. If track position ≥ 7 (Side A leads): Side A wins the Division. If ≤ 3: Side B wins. If 4–6: Division is inconclusive; Debate continues.
 "Division" = a Parliamentary/Tribunal procedural tool to force a snap Conviction reading. Cannot be called more than once per Contest.
+
+
+## CT Movement Worked Example (PP-279)
+Given: Stability 4 audience, resistance = ceil(4/4) = 1.
+
+**Setup:** AMPLIFY exchange. Side A (26D combined) vs Side B (14D), genre Past (gw=1.0), orientation Revealing (ow=1.0).
+
+1. E[net A] = 26 × 0.30 = 7.8 successes
+2. E[net B] = 14 × 0.30 = 4.2 successes
+3. Margin = 7.8 − 4.2 = 3.6
+4. Raw = 3.6 × 1.0 (gw) × 1.0 (ow) = 3.6
+5. CT move = floor(3.6 − 1) = floor(2.6) = **+2 toward Side A**
+
+**Contrast (CROSS exchange):** Side A argues Present (gw=0.5), Side B argues Past (gw=1.0). Independent.
+- A: E[11D] = 3.3 × 0.5 = 1.65 raw. CT move = floor(1.65 − 1) = **+0** (just below threshold)
+- B: E[14D] = 4.2 × 1.0 = 4.2 raw. CT move = floor(4.2 − 1) = **+3 toward Side B**
+
+CROSS exchanges strongly favour whichever side has the boosted genre. CLASH in the boosted genre with AMPLIFY is the high-value play.

@@ -3002,3 +3002,18 @@ PP-234
   files_changed:
     - designs/combat/combat_design_v1.md
     - references/params_combat.md
+- id: PP-278
+    date: 2026-04-04
+    source: SIM-SOC-01 SIM-SOC-F09
+    system: contest
+    description: "CT resistance formula corrected: raw Stability -> ceil(Stability/4). Raw Stability made system mechanically inert (res=4 > any realistic CT output). After fix: AMPLIFY 26D vs 14D at Stability 4 gives CT+2."
+    status: applied
+    files_changed: [references/params_debate.md]
+
+  - id: PP-279
+    date: 2026-04-04
+    source: SIM-SOC-01 SIM-SOC-F09
+    system: contest
+    description: "CT movement worked example added to params_debate.md showing gw x ow x margin vs resistance calculation with concrete numbers."
+    status: applied
+    files_changed: [references/params_debate.md]
