@@ -209,6 +209,8 @@ execution rolls. A 2-wound general has tactic success probability halved.
 
 **Coherence does not affect Command (PP-249):** Coherence is a Thread perceptual track; Command is tactical effectiveness. Dissonance impairs Thread operations only. No Coherence penalty applies to Command tactic rolls.
 
+**Coherence does not affect Command (PP-249):** Coherence is a Thread perceptual track; Command is tactical effectiveness. Dissonance impairs Thread operations only. No Coherence penalty applies to Command tactic rolls.
+
 **Mass battle pauses during personal combat.** If general enters personal
 combat, mass battle holds at current state. Resume at Phase 1 of next mass
 battle turn after personal combat resolves. *[D3-P2-02]*
@@ -229,6 +231,8 @@ battle turn after personal combat resolves. *[D3-P2-02]*
 
 > **Clarification:** "Roll a number of d10s equal to the opposing general's Command score, against Ob 2, to recognise the Feigned Retreat as a feint rather than a genuine withdrawal. Success: the pursuing side is not deceived; the Feigned Retreat has no effect this turn. Failure (or no roll if the opposing general is killed): pursuing side pursues normally and suffers the Discipline check."
 
+> **Feigned Retreat Discipline check Ob (PP-256):** The pursuing-side Discipline check is **Ob 1**. Discipline-4 unit: ~87% success. Discipline-1 unit: ~40% success.
+
 > **Feigned Retreat Discipline check Ob (PP-256):** The pursuing-side Discipline check is **Ob 1**. Pursuing a fleeing enemy is a natural impulse; Ob 1 reflects the difficulty of halting momentum. Discipline-4 unit: ~87% success. Discipline-1 unit: ~40% success.
 
 > **Clarification (PP-MB-04):** "Reserve commitment at Phase 3 of Turn N+1 makes the unit immediately available for Phase 4 engagement in that same turn (Turn N+1). Commitment does not delay the unit to Turn N+2. Summary: declare Reserve in Phase 3 of Turn N → unit commits at Phase 3 of Turn N+1 → unit may engage in Phase 4 of Turn N+1."
@@ -240,6 +244,8 @@ cannot advance. No formation is universally dominant. *[P2-01]*
 
 **Units beyond Command limit** fight at Line formation, Discipline = 1 floor,
 no tactics available. *[P3-03]*
+
+**Minimum unit combat pool (PP-273):** After all penalties (Discipline modifier, Command limit effects), the effective combat pool has a minimum of **1 die**. A unit at Discipline 1 with −2D penalty and pool 2 fights at 1 die, not 0. The only condition that removes all attacking capability is Discipline 0 (Formation Broken — unit cannot attack). When the general dies and Command = 0, all units are beyond the Command limit and fight at 1 die minimum until Formation Broken or routed.
 
 ---
 
@@ -326,7 +332,7 @@ Per engagement:
 5. Damage = max(0, net hits + weapon modifier − DR)
 6. Critical hit (net hits ≥ 3): weapon modifier doubled
 7. Engagement damage recorded. NOT applied until Phase 6 Step 1.
-8. Mutual destruction (both to 0) is valid — Pyrrhic outcomes possible *[P2-02]*. **Mutual total destruction — all units both sides to 0 simultaneously (PP-240):** draw; no territory change; both factions Stability check Ob 1 at Accounting.
+8. Mutual destruction (both to 0) is valid — Pyrrhic outcomes possible *[P2-02]*. **Mutual total destruction — all units both sides to 0 simultaneously (PP-240):** draw; no territory change; both factions Stability check Ob 1 at Accounting.. **Mutual total destruction — all units both sides to 0 simultaneously (PP-240):** draw; no territory change; both factions Stability check Ob 1 at Accounting.
 
 > **Clarification (PP-MB-01):** "Effective Power is calculated at the start of Phase 4 using Size as of Phase 3 end. All damage within Phase 4 is applied simultaneously at Phase 5 Step 1. Power does not change within a single Phase 4 — a unit that takes damage mid-Phase 4 does not recalculate its Effective Power until Phase 5."
 

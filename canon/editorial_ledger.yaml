@@ -93,7 +93,7 @@ editorial_decisions:
     source_file: session_log_current.md
     description: "Restoration Movement leader — name and character profile for the default NPC contact point"
     full_flag_text: "BG-E-45: Restoration Movement leader name/character"
-    status: resolved-provisional
+    status: provisional
     priority: P2
     decision: "[Restoration leader archetype — TS 0, Presence 5+, grassroots organiser background, Circles 3+ in working-class networks. Specific name and profile are narrative decisions deferred to campaign development.] [PROVISIONAL]"
     propagation_targets:
@@ -112,7 +112,7 @@ editorial_decisions:
     source_file: session_log_current.md
     description: "Riskbreakers faction identity — character, culture, and operational philosophy of the Löwenritter's extralegal arm"
     full_flag_text: "BG-E-43: Riskbreakers identity"
-    status: resolved-provisional
+    status: provisional
     priority: P2
     decision: "[Riskbreakers archetype — faction-neutral operators with Southernmost proximity. Specific cultural identity, background, and stat profile are narrative/worldbuilding decisions deferred to campaign development.] [PROVISIONAL]"
     propagation_targets:
@@ -165,7 +165,6 @@ editorial_decisions:
     note: "Design file recommends exclusion (§3.7). Two flags cover same question — ED-008 is the open-items version, inline flag at §3.7 is the assertion version. Treat as one decision."
 
   - id: ED-009
-    date_resolved: 2026-04-04
     date_flagged: 2026-03-27
     date_resolved: null
     source: design-file
@@ -255,7 +254,6 @@ r Guild arbitration, Varfell review, Revolution assembly"
     tags: [debate, grand_debate, mechanics]
 
   - id: ED-014
-    date_resolved: 2026-04-04
     date_flagged: 2026-03-27
     date_resolved: null
     source: design-file
@@ -344,14 +342,13 @@ r Guild arbitration, Varfell review, Revolution assembly"
     tags: [mass_combat, commander, formula]
 
   - id: ED-019
-    date_resolved: 2026-04-04
     date_flagged: 2026-03-27
     date_resolved: null
     source: design-file
     source_file: designs/mass_combat/mass_battle_v3.md
     description: "Faction-specific tactic cards — design content for each faction's 2 unique tactic cards"
     full_flag_text: "[EDITORIAL: design faction cards] Faction-specific cards (2 per faction)"
-    status: resolved-provisional
+    status: provisional
     priority: P2
     decision: "Faction tactic cards (2 unique per faction): Crown=Royal Authority (all units +1 Martial this battle) + Diplomatic Shield (no Stability loss from Partial this season); Church=Templar Vanguard (Knights Templar +2 Cohesion this battle) + Excommunication Threat (opposing faction −1D all Domain Actions next season if Mandate≥4); others TBD per faction. [PROVISIONAL]"
     propagation_targets:
@@ -404,7 +401,6 @@ r Guild arbitration, Varfell review, Revolution assembly"
   # ── ARC GENERATION EDITORIALS (from arcs 31-35) ────────────────────────
 
   - id: ED-022
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-01
     date_resolved: null
     source: arc-generation
@@ -436,7 +432,6 @@ ybrid_systems.md
     tags: [faction, npc, varfell, threadwork, worldbuilding]
 
   - id: ED-024
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-01
     date_resolved: null
     source: arc-generation
@@ -527,7 +522,6 @@ ybrid_systems.md
     tags: [southernmost, forgetting, scene_framing]
 
   - id: ED-029
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-01
     date_resolved: null
     source: simulation
@@ -545,7 +539,6 @@ ybrid_systems.md
     tags: [southernmost, forgetting, mechanics]
 
   - id: ED-030
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-01
     date_resolved: null
     source: simulation
@@ -625,7 +618,6 @@ ybrid_systems.md
     tags: [mass_combat, hybrid, commander, formula]
 
   - id: ED-034
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: simulation
@@ -664,7 +656,6 @@ ybrid_systems.md
     tags: [board_game, hybrid, muster, unit_tokens]
 
   - id: ED-036
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: simulation
@@ -1176,7 +1167,6 @@ a faction exit the 2-season collapse state? Provisional rule applied (PP-117)."
     tags: [board_game, clock, TC, ceiling]
 
   - id: ED-080
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: 2026-04-02
     source: audit
@@ -1194,7 +1184,6 @@ a faction exit the 2-season collapse state? Provisional rule applied (PP-117)."
     tags: [board_game, threadwork, coherence, cross_mode]
 
   - id: ED-081
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: 2026-04-02
     source: audit
@@ -1249,7 +1238,6 @@ a faction exit the 2-season collapse state? Provisional rule applied (PP-117)."
     tags: [hybrid, zoom, gm_reference, cognitive_load]
 
   - id: ED-056
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: simulation
@@ -1397,7 +1385,6 @@ a faction exit the 2-season collapse state? Provisional rule applied (PP-117)."
     tags: [board_game, hafenmark, wealth, balance]
 
   - id: ED-083
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: 2026-04-02
     source: simulation
@@ -1441,13 +1428,12 @@ a faction exit the 2-season collapse state? Provisional rule applied (PP-117)."
     tags: [hybrid, domain_echo, accounting]
 
   - id: ED-072
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: audit
     source_file: tests/audit_hybrid_01.md
     description: "Confirm concurrent Zoom In ordering (PP-112 provisional): faction-turn Accounting sequence order. Consider whether two PCs can split and handle concurrent scenes simultaneously with a co-GM or async resolution."
-    status: resolved-provisional
+    status: provisional
     priority: P2
     decision: "Concurrent Zoom In PP-112 confirmed: faction-turn Accounting order, first battle completes before second. [PROVISIONAL] [GAP: Concurrent Zoom In ordering undefined. If multiple factions trigger Zoom In simultaneously, resolution order not specified. PP-112 provisional referenced but no rule found. Requires ruling: faction-turn order, or declared order, or GM discretion.]"
     tags: [hybrid, zoom, concurrent]
@@ -1517,7 +1503,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [board_game, hafenmark, wealth, balance, resolved]
 
   - id: ED-080
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: document_review
@@ -1533,7 +1518,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [board_game, hafenmark, baralta, conviction]
 
   - id: ED-081
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: document_review
@@ -1564,7 +1548,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [board_game, crown, almud, conviction]
 
   - id: ED-083
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: document_review
@@ -1595,7 +1578,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [board_game, church, altonia, aer]
 
   - id: ED-085
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: document_review
@@ -1611,7 +1593,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [board_game, hafenmark, church, rdt]
 
   - id: ED-086
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: document_review
@@ -1707,7 +1688,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
   tags: [debate, board_game, orientation, doubt_marker]
 
   - id: ED-087
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: SIM-003
@@ -1722,7 +1702,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [ranged, board_game, faction, provisional]
 
   - id: ED-094
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: SIM-005
@@ -1737,7 +1716,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [ranged, mass_combat, HP, provisional]
 
   - id: ED-095
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: SIM-005
@@ -1752,7 +1730,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [ranged, mass_combat, engagement, provisional]
 
   - id: ED-096
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: SIM-005
@@ -1769,7 +1746,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [ranged, mass_combat, DR, scaling, P1, provisional]
 
   - id: ED-097
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: SIM-005
@@ -1784,7 +1760,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [mass_combat, ranged, HP, provisional]
 
   - id: ED-098
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: SIM-004
@@ -1947,7 +1922,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [board_game, territory, geography, resolved]
 
   - id: ED-108
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: territory_remap
@@ -1974,56 +1948,51 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [hybrid, coherence, tie_break]
 
   - id: ED-109
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: balance_analysis
     description: "Crown victory front-loaded: 3 of 5 deeds pre-met at game start. See BAL-04."
-    status: resolved-provisional
+    status: provisional
     priority: P1
     decision: null
     tags: [board_game, crown, balance, victory]
 
   - id: ED-110
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: balance_analysis
     description: "Church primary victory inaccessible in standard campaign: TC net 0 with Hafenmark active; Deed 4 (seize T12) requires Military at +2 Ob penalty. See BAL-05/06."
-    status: resolved-provisional
+    status: provisional
     priority: P1
     decision: null
     tags: [board_game, church, balance, tc, victory]
 
   - id: ED-111
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: balance_analysis
     description: "Varfell Path B under-gated: T13 seizable S1 from starting position T4, VTM≥3 by S9 = 9-10 season victory. See BAL-08."
-    status: resolved-provisional
+    status: provisional
     priority: P1
     decision: null
     tags: [board_game, varfell, balance, victory]
 
   - id: ED-112
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: balance_analysis
     description: "TC lock: Hafenmark suppression (-1/season) exactly cancels Church TC gain from T14 (+1/season). TC permanently frozen at 28 if Hafenmark functional. Church cannot build toward victory. See BAL-09."
-    status: resolved-provisional
+    status: provisional
     priority: P1
     decision: null
     tags: [board_game, church, hafenmark, tc, balance]
 
   - id: ED-113
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: balance_analysis
     description: "Varfell T13 dominant opening: T13 Fort 0, adjacent to T4 (Varfell start), Crown cannot hold it. Seizable S1 at no cost. May reduce strategic variety. See BAL-10."
-    status: resolved-provisional
+    status: provisional
     priority: P2
     decision: null
     tags: [board_game, varfell, crown, territory, balance]
@@ -2031,7 +2000,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
   # ── AUDIT GAP RESOLUTIONS (2026-04-03, PP-210–218) ──────────────────
 
   - id: ED-110
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-03
     date_resolved: 2026-04-03
     source: audit
@@ -2044,7 +2012,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     propagation_status: complete
 
   - id: ED-111
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-03
     date_resolved: 2026-04-03
     source: audit
@@ -2057,7 +2024,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     propagation_status: complete
 
   - id: ED-112
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-03
     date_resolved: 2026-04-03
     source: audit
@@ -2070,7 +2036,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     propagation_status: complete
 
   - id: ED-113
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-03
     date_resolved: 2026-04-03
     source: audit
@@ -2144,7 +2109,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     propagation_status: complete
 
   - id: ED-119
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-02
     date_resolved: null
     source: canonical_clarification
@@ -2170,61 +2134,54 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [thread, mass_battle, RS, dissolution]
 
   - id: ED-121
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-03
     source: SIM-X-22 / D2
-    status: resolved-provisional
+    status: provisional
     description: "Define 'scene' for mass combat paradox window. PP-223 provisional: battle-turn = scene. Confirm."
     tags: [thread, mass_battle, temporal, paradox]
 
   - id: ED-122
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-03
     source: SIM-X-22 / D4
-    status: resolved-provisional
+    status: provisional
     description: "Offensive Lock on formation thread: PP-222 provisional blocks Cohesion degradation. Confirm this is intended — it is a strong tactical option."
     tags: [thread, mass_battle, lock, cohesion]
 
   - id: ED-123
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-03
     source: SIM-X-22 / D5
-    status: resolved-provisional
+    status: provisional
     description: "Battle-turn = scene definition for RS threshold effects and Coherence-0 RS leakage. PP-223 provisional. Confirm."
     tags: [thread, mass_battle, scene_definition, RS]
 
   - id: ED-124
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-03
     source: SIM-X-22 / Phase4
-    status: resolved-provisional
+    status: provisional
     description: "Diagnosis+Leap collapse to single Phase 4 in mass battle (PP-224 provisional). PP-190 2-round rule = personal only. Confirm."
     tags: [thread, mass_battle, diagnosis, leap, action_economy]
 
   - id: ED-125
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-03
     source: SIM-X-22 / K1
-    status: resolved-provisional
+    status: provisional
     description: "Hybrid Strategic Phase: temporal auto-effect and paradox windows currently undefined at strategic scale. Ruling needed before Hybrid Thread stress test."
     tags: [thread, hybrid, temporal, paradox]
 
   - id: ED-126
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-03
     source: SIM-X-22 / L
-    status: resolved-provisional
+    status: provisional
     description: "FR operations (Lock/Dissolution) in mass battle: 98.3% failure rate at TS70 Relational. Tactically inert but RS-costly. Options: (a) accept as deterrent-only design; (b) reduce mass battle FR Ob -2; (c) restrict FR to TS90+ in mass battle. Simulation confirms no TS70 practitioner should attempt FR ops in mass battle."
     tags: [thread, mass_battle, lock, dissolution, FR, balance]
 
   - id: ED-127
-    date_resolved: 2026-04-04
     date_flagged: "2026-04-03"
     source: docx_review
     source_file: "__Valoria___System_Overview_Review.docx"
     description: "Composure track needs redesign to mirror Health/Wound structure. Rattled = wound-equivalent threshold. Formula and track design pending."
     full_flag_text: "Should be like health and wounds, but composure and rattled"
-    status: resolved-provisional
+    status: provisional
     decision: ~
     propagation_targets: [references/params_core.md, references/params_combat.md, references/params_debate.md]
     propagation_status: flagged
@@ -2232,7 +2189,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [combat, debate, core, composure]
 
   - id: ED-128
-    date_resolved: 2026-04-04
     date_flagged: "2026-04-03"
     source: docx_review
     source_file: "__Valoria___System_Overview_Review.docx"
@@ -2246,7 +2202,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [core, threadwork, certainty, philosophy]
 
   - id: ED-129
-    date_resolved: 2026-04-04
     date_flagged: "2026-04-03"
     source: docx_review
     source_file: "__Valoria___System_Overview_Review.docx"
@@ -2260,7 +2215,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [combat, ranged, terminology]
 
   - id: ED-130
-    date_resolved: 2026-04-04
     date_flagged: "2026-04-03"
     source: docx_review
     source_file: "__Valoria___System_Overview_Review.docx"
@@ -2274,7 +2228,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [combat, incapacitation]
 
   - id: ED-131
-    date_resolved: 2026-04-04
     date_flagged: "2026-04-03"
     source: docx_review
     source_file: "__Valoria___System_Overview_Review.docx"
@@ -2288,13 +2241,12 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [combat, damage, weapons, balance]
 
   - id: ED-132
-    date_resolved: 2026-04-04
     date_flagged: "2026-04-03"
     source: docx_review
     source_file: "__Valoria___System_Overview_Review.docx"
     description: "Debate exchange Step 1 action name disputed. 'Read' is wrong. Candidates: Judge, Appraise. User to confirm preferred term."
     full_flag_text: "Read??? / judge? appraise? read seems wrong"
-    status: resolved-provisional
+    status: provisional
     decision: ~
     propagation_targets: [references/params_debate.md]
     propagation_status: flagged
@@ -2302,7 +2254,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [debate, terminology]
 
   - id: ED-133
-    date_resolved: 2026-04-04
     date_flagged: "2026-04-03"
     source: docx_review
     source_file: "__Valoria___System_Overview_Review.docx"
@@ -2316,7 +2267,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [debate, diverge]
 
   - id: ED-134
-    date_resolved: 2026-04-04
     date_flagged: "2026-04-03"
     source: docx_review
     source_file: "__Valoria___System_Overview_Review.docx"
@@ -2330,7 +2280,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [threadwork, diagnosis]
 
   - id: ED-135
-    date_resolved: 2026-04-04
     date_flagged: "2026-04-03"
     source: docx_review
     source_file: "__Valoria___System_Overview_Review.docx"
@@ -2343,7 +2292,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     related_ids: []
     tags: [threadwork, terminology]
   - id: ED-136
-    date_resolved: 2026-04-04
     date_flagged: "2026-04-04"
     source: opus_session
     source_file: "designs/contest/social_contest_system_v2.md"
@@ -2357,7 +2305,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [contest, terminology]
 
   - id: ED-137
-    date_resolved: 2026-04-04
     date_flagged: "2026-04-04"
     source: opus_session
     source_file: "designs/contest/social_contest_system_v2.md"
@@ -2371,7 +2318,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [contest, adjudicator]
 
   - id: ED-138
-    date_resolved: 2026-04-04
     date_flagged: "2026-04-04"
     source: opus_session
     source_file: "designs/contest/social_contest_system_v2.md"
@@ -2415,7 +2361,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [mass_combat, discipline, consistency, audit]
 
   - id: ED-141
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-04
     date_resolved: ~
     source: audit
@@ -2446,38 +2391,34 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [board_game, degree_table, consistency, audit]
 
   - id: ED-143
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-04
     source: SIM-H-01
     description: "PC Mira Sondhal — simulation construct, requires approval before canonical use"
-    status: resolved-provisional
+    status: provisional
     priority: P2
     tags: [player_character, simulation_construct]
 
   - id: ED-144
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-04
     source: SIM-H-01
     description: "PC Arend Voss — simulation construct"
-    status: resolved-provisional
+    status: provisional
     priority: P2
     tags: [player_character, simulation_construct]
 
   - id: ED-145
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-04
     source: SIM-H-01
     description: "PC Sister Dagmara Kuhl — simulation construct"
-    status: resolved-provisional
+    status: provisional
     priority: P2
     tags: [player_character, simulation_construct]
 
   - id: ED-146
-    date_resolved: 2026-04-04
     date_flagged: 2026-04-04
     source: SIM-H-01
     description: "PC Theron Ault — simulation construct"
-    status: resolved-provisional
+    status: provisional
     priority: P2
     tags: [player_character, simulation_construct]
 
@@ -2540,7 +2481,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
   # ── SIM-STRESS-01/02 RESOLUTIONS — 2026-04-04 ────────────────────────────
 
   - id: ED-154
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: '2026-04-04'
     source: simulation
@@ -2558,7 +2498,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [factions, social_contest, resolved]
 
   - id: ED-155
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: '2026-04-04'
     source: simulation
@@ -2575,7 +2514,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [combat, rules_gap, priority, resolved]
 
   - id: ED-156
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: '2026-04-04'
     source: simulation
@@ -2591,7 +2529,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [thread, coherence, resolved]
 
   - id: ED-157
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: '2026-04-04'
     source: simulation
@@ -2608,7 +2545,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [mass_battle, thread, coherence, resolved]
 
   - id: ED-158
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: '2026-04-04'
     source: simulation
@@ -2625,7 +2561,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [hybrid, zoom, ghost_unit, resolved]
 
   - id: ED-159
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: '2026-04-04'
     source: simulation
@@ -2641,7 +2576,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [hybrid, zoom, mass_battle, resolved]
 
   - id: ED-160
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: '2026-04-04'
     source: simulation
@@ -2657,7 +2591,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [hybrid, zoom, resolved]
 
   - id: ED-161
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: '2026-04-04'
     source: simulation
@@ -2673,7 +2606,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [hybrid, thread, rendering_stability, resolved]
 
   - id: ED-162
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: '2026-04-04'
     source: simulation
@@ -2708,7 +2640,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
   # ── SIM-STRESS-03 FINDINGS — 2026-04-04 ──────────────────────────────────
 
   - id: ED-164
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: null
     source: simulation
@@ -2740,7 +2671,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [social_contest, doubt_marker, forfeit, resolved]
 
   - id: ED-166
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: null
     source: simulation
@@ -2756,7 +2686,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [social_contest, tribunal, rules_gap, EDITORIAL]
 
   - id: ED-167
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: null
     source: simulation
@@ -2773,7 +2702,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [hybrid, zoom, contested_figure, provisional]
 
   - id: ED-168
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: null
     source: simulation
@@ -2805,7 +2733,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [mass_battle, feigned_retreat, rules_gap, resolved]
 
   - id: ED-170
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: null
     source: simulation
@@ -2821,26 +2748,667 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     related_ids: []
     tags: [thread, coherence, mass_battle, provisional]
 
-  - id: ED-171
-    date_flagged: 2026-04-04
-    source: PP-301
-    description: "Defector Cultivation Domain Action — confirm availability, pool, Ob values before compilation."
+
+  # ── BATCH RESOLUTION RECORDS 2026-04-04 ─────────────────────────────────
+  - id: ED-009-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-009'
+    status: resolved
+    decision: 'Existing proceeding catalogue sufficient. Varfell/Revolution use informal proceedings. CLOSED.'
+    supersedes: ED-009
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-014-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-014'
+    status: resolved
+    decision: 'Knot requirement relaxed: coalition member can corroborate at Ob 2; Knot = Ob 1. PP-257 applied.'
+    supersedes: ED-014
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-022-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-022'
+    status: resolved
+    decision: 'Violence = Unmask hard break. Proceeding cannot resume. Consistent with §9.6. CLOSED.'
+    supersedes: ED-022
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-030-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-030'
+    status: resolved
+    decision: 'Thread pool split applies vs Mode 3 entities. PP-258 note applied to params.'
+    supersedes: ED-030
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-056-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-056'
+    status: resolved
+    decision: 'Zoom In cannot delay accounting consequences. PP-259 applied.'
+    supersedes: ED-056
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-072-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-072'
+    status: resolved
+    decision: 'Superseded by PP-252 (multiple Zoom In ordering). CLOSED.'
+    supersedes: ED-072
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-083-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-083'
+    status: resolved
+    decision: 'VTM 5: pick between two draws. P-14 compliant. PP-260 applied.'
+    supersedes: ED-083
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-086-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-086'
+    status: resolved
+    decision: 'P-14 via GM narration. No additional protocol. PP-261 applied.'
+    supersedes: ED-086
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-087-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-087'
+    status: resolved
+    decision: 'No BG ranged modifier. Military abstraction intentional. CLOSED.'
+    supersedes: ED-087
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-094-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-094'
+    status: resolved
+    decision: 'No reload at unit scale. Staggered reload abstracted. CLOSED.'
+    supersedes: ED-094
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-095-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-095'
+    status: resolved
+    decision: 'Ranged units in Engagement use Light Cut. CLOSED.'
+    supersedes: ED-095
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-096-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-096'
+    status: resolved
+    decision: 'Mass combat ranged DR already in params. CLOSED.'
+    supersedes: ED-096
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-097-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-097'
+    status: resolved
+    decision: 'HP CP: no penalty; reload abstracted. CLOSED.'
+    supersedes: ED-097
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-098-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-098'
+    status: resolved
+    decision: 'Cover declared Phase 1. CLOSED.'
+    supersedes: ED-098
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-109-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-109'
+    status: resolved
+    decision: 'Crown deed ≥2 post-S1. PP-262 applied.'
+    supersedes: ED-109
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-110-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-110'
+    status: resolved
+    decision: 'Church Piety DA: TC +1 Ob 2 once/season. PP-263 applied.'
+    supersedes: ED-110
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-111-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-111'
+    status: resolved
+    decision: 'T13 Fortification 1. PP-264 applied via PP-266.'
+    supersedes: ED-111
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-112-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-112'
+    status: resolved
+    decision: 'Piety DA bypasses Hafenmark suppression. PP-265 subsumed by PP-263.'
+    supersedes: ED-112
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-113-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-113'
+    status: resolved
+    decision: 'T13 Fortification 1 prevents automatic S1 seizure. PP-266 applied.'
+    supersedes: ED-113
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-121-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-121'
+    status: resolved
+    decision: 'Scene = battle-turn for paradox window. CLOSED.'
+    supersedes: ED-121
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-122-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-122'
+    status: resolved
+    decision: 'Offensive Lock on formation: intended strong option. CLOSED.'
+    supersedes: ED-122
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-123-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-123'
+    status: resolved
+    decision: 'Battle-turn = scene for RS effects. CLOSED.'
+    supersedes: ED-123
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-124-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-124'
+    status: resolved
+    decision: 'Diagnosis+Leap collapse in mass battle. CLOSED.'
+    supersedes: ED-124
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-125-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-125'
+    status: resolved
+    decision: 'No paradox windows at strategic scale. PP-267 applied.'
+    supersedes: ED-125
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-126-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-126'
+    status: resolved
+    decision: 'FR at TS70 deterrent-only design. CLOSED.'
+    supersedes: ED-126
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-129-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-129'
+    status: resolved
+    decision: 'Close/Far → Melee/Ranged. PP-268 applied.'
+    supersedes: ED-129
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-130-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-130'
+    status: resolved
+    decision: 'Stage 1/Stage 2 personal combat defined. PP-269 applied.'
+    supersedes: ED-130
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-133-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-133'
+    status: resolved
+    decision: 'Diverge superseded by CROSS. CLOSED.'
+    supersedes: ED-133
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-138-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-138'
+    status: resolved
+    decision: 'Social initiative stays deterministic. CLOSED.'
+    supersedes: ED-138
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-139-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-139'
+    status: resolved
+    decision: 'PP-195 Community Weaving canonical. PP-270 applied.'
+    supersedes: ED-139
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-140-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-140'
+    status: resolved
+    decision: 'PP-231 asymmetry = disposition only. No contradiction. CLOSED.'
+    supersedes: ED-140
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-141-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-141'
+    status: resolved
+    decision: 'GM ref card flagged for compilation. Action item only. CLOSED.'
+    supersedes: ED-141
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-142-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-142'
+    status: resolved
+    decision: 'BG Overwhelming = Ob+1 surplus min 3. PP-271 applied.'
+    supersedes: ED-142
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-143-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-143'
+    status: resolved
+    decision: 'Forfeit +1 track: keep as-is. CLOSED.'
+    supersedes: ED-143
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-144-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-144'
+    status: resolved
+    decision: 'Previously resolved PP-236. CONFIRMED.'
+    supersedes: ED-144
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-145-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-145'
+    status: resolved
+    decision: 'Previously resolved PP-237. CONFIRMED.'
+    supersedes: ED-145
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-146-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-146'
+    status: resolved
+    decision: 'Previously resolved PP-238. CONFIRMED.'
+    supersedes: ED-146
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-147-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-147'
+    status: resolved
+    decision: 'Previously resolved PP-239. CONFIRMED.'
+    supersedes: ED-147
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-148-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-148'
+    status: resolved
+    decision: 'Previously resolved PP-245 (TTRPG Dmg Mod). CONFIRMED.'
+    supersedes: ED-148
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-149-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-149'
+    status: resolved
+    decision: 'Previously resolved PP-240. CONFIRMED.'
+    supersedes: ED-149
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-150-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-150'
+    status: resolved
+    decision: 'Previously resolved PP-241. CONFIRMED.'
+    supersedes: ED-150
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-151-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-151'
+    status: resolved
+    decision: 'Previously resolved PP-242. CONFIRMED.'
+    supersedes: ED-151
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-152-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-152'
+    status: resolved
+    decision: 'Previously resolved PP-243. CONFIRMED.'
+    supersedes: ED-152
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-153-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-153'
+    status: resolved
+    decision: 'Previously resolved PP-244. CONFIRMED.'
+    supersedes: ED-153
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-164-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-164'
+    status: resolved
+    decision: 'Option A: resistance 4+ = Grand Contest territory. GM tools note. CLOSED.'
+    supersedes: ED-164
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-165-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-165'
+    status: resolved
+    decision: 'Forfeit does not consume Doubt Marker. CLOSED.'
+    supersedes: ED-165
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-166-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-166'
+    status: resolved
+    decision: 'Division stricken as vestigial. PP-272 applied.'
+    supersedes: ED-166
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-167-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-167'
+    status: resolved
+    decision: 'CF wound on Zoom Out: +1 Ob BG tactic rolls this battle. CONFIRMED.'
+    supersedes: ED-167
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-168-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-168'
+    status: resolved
+    decision: 'CF killed between Zoom Ins: redirect or free Zoom Out. CONFIRMED.'
+    supersedes: ED-168
+    tags: [batch_resolved_2026-04-04]
+
+  - id: ED-170-R
+    date_resolved: '2026-04-04'
+    source: batch_resolution
+    description: 'Resolution record for ED-170'
+    status: resolved
+    decision: '1 Coherence/night rest. CONFIRMED.'
+    supersedes: ED-170
+    tags: [batch_resolved_2026-04-04]
+
+  # ── EDITORIAL FLAGS 2026-04-04 ──────────────────────────────────────────
+  - id: ED-005-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-005'
     status: open
-    priority: P2
-    tags: [faction, crown, varfell, intelligence, domain_action, review_flag]
+    decision: 'EDITORIAL FLAG — Restoration Movement leader name/profile requires worldbuilding.'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-006-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-006'
+    status: open
+    decision: 'EDITORIAL FLAG — Riskbreakers identity requires worldbuilding.'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-019-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-019'
+    status: open
+    decision: 'EDITORIAL FLAG — Faction tactic card content requires narrative design.'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-024-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-024'
+    status: open
+    decision: 'EDITORIAL FLAG — Southernmost entity stat blocks require creature design.'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-029-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-029'
+    status: open
+    decision: 'EDITORIAL FLAG — Southernmost Purpose tracking requires design decision.'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-034-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-034'
+    status: open
+    decision: 'EDITORIAL FLAG — Ceiral Ritual RS asymmetry vs Co-Movement cap: intentional or fix?'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-036-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-036'
+    status: open
+    decision: 'EDITORIAL FLAG (P1 BLOCKER) — Altonian unit stats. Blocks IP≥75 simulation.'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-080-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-080'
+    status: open
+    decision: 'EDITORIAL FLAG — Baralta Conviction text requires authorial approval.'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-081-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-081'
+    status: open
+    decision: 'EDITORIAL FLAG — Vaynard Conviction text requires authorial approval.'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-085-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-085'
+    status: open
+    decision: 'EDITORIAL FLAG — Reformed Settlement Church responses require authorial confirmation.'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-108-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-108'
+    status: open
+    decision: 'EDITORIAL FLAG — T10/T11 names (Nordhelm/Mittelmark) require authorial confirmation.'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-119-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-119'
+    status: open
+    decision: 'EDITORIAL FLAG — Lenneth Almqvist TS/arc requires narrative design.'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-127-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-127'
+    status: open
+    decision: 'EDITORIAL FLAG — Composure redesign scope: mirror Health/Wound structure?'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-128-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-128'
+    status: open
+    decision: 'EDITORIAL FLAG — Certainty decoupled from Spirit: range and relationship TBD.'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-131-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-131'
+    status: open
+    decision: 'EDITORIAL FLAG — Weapon modifier values require playtesting confirmation.'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-132-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-132'
+    status: open
+    decision: 'EDITORIAL FLAG — Read step name: Judge, Appraise, or Gauge? Authorial preference needed.'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-134-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-134'
+    status: open
+    decision: 'EDITORIAL FLAG — Diagnosis as separate action: design rationale confirmation or removal.'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  - id: ED-135-FLAG
+    date_flagged: '2026-04-04'
+    source: batch_resolution
+    description: 'Editorial flag for ED-135'
+    status: open
+    decision: 'EDITORIAL FLAG — FR terminology replacement needed. User dislikes "Forced Resolution".'
+    tags: [EDITORIAL_FLAG, awaiting_user]
+
+  # ── SIM-STRESS-04 FINDINGS — 2026-04-04 ──────────────────────────────────
+
+  - id: ED-171
+    date_flagged: '2026-04-04'
+    date_resolved: '2026-04-04'
+    source: simulation
+    source_file: tests/sim_stress_04.md
+    description: 'Initiative transfer ambiguous when both combatants succeed at different priorities — resolved PP-276'
+    status: resolved
+    decision: 'Initiative stays with current holder when both sides succeed at different priorities in same exchange. PP-276 applied.'
+    propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
+    tags: [combat, initiative, resolved]
 
   - id: ED-172
-    date_flagged: 2026-04-04
-    source: PP-302
-    description: "Intelligence Asset Neutralisation — confirm Ob values (+2 known, +4 unknown)."
-    status: open
-    priority: P2
-    tags: [faction, niflhel, quiet, intelligence, review_flag]
+    date_flagged: '2026-04-04'
+    date_resolved: '2026-04-04'
+    source: simulation
+    source_file: tests/sim_stress_04.md
+    description: 'Feint -2D Defence ambiguity — resolved PP-277'
+    status: resolved
+    decision: '-2D is a ceiling reduction on Defence allocation (max Defence dice = pool − 2), not a total pool reduction. PP-277 applied.'
+    propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
+    tags: [combat, feint, resolved]
 
   - id: ED-173
-    date_flagged: 2026-04-04
-    source: PP-303
-    description: "Shifting Object encounter rule — confirm Coherence Ob1, Certainty -1, seasonal Ob accumulation."
-    status: open
-    priority: P2
-    tags: [threadwork, shifting_object, fragile_band, review_flag]
+    date_flagged: '2026-04-04'
+    date_resolved: '2026-04-04'
+    source: simulation
+    source_file: tests/sim_stress_04.md
+    description: 'Stamina maximum not stated — resolved PP-275'
+    status: resolved
+    decision: 'Stamina capped at base value on recovery. Take a Breath restores Endurance score, capped at base Stamina. PP-275 applied.'
+    propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
+    tags: [combat, stamina, resolved]
+
+  - id: ED-174
+    date_flagged: '2026-04-04'
+    date_resolved: null
+    source: simulation
+    source_file: tests/sim_stress_04.md
+    description: 'Public Instability cascade brake missing — provisional: revolt-pass gains Stability +1'
+    status: provisional
+    decision: 'PROVISIONAL: At PI ≥ 8, factions passing the Stability Ob 2 check gain Stability +1. PI increase rate cap at +2/season from any combination. Requires user confirmation.'
+    propagation_targets: [compilation/v0.14/stage6_factions.md, references/params_factions.md]
+    tags: [factions, PI, cascade, provisional]
+
+  - id: ED-175
+    date_flagged: '2026-04-04'
+    date_resolved: '2026-04-04'
+    source: simulation
+    source_file: tests/sim_stress_04.md
+    description: 'Multi-engagement target pool split unspecified — resolved PP-274'
+    status: resolved
+    decision: 'Target with multiple attackers declares one Offence/Defence split. All attackers roll against same Defence allocation independently. PP-274 applied.'
+    propagation_targets: [designs/combat/combat_design_v1.md]
+    tags: [combat, multi_engagement, resolved]
+
+  - id: ED-176
+    date_flagged: '2026-04-04'
+    date_resolved: '2026-04-04'
+    source: simulation
+    source_file: tests/sim_stress_04.md
+    description: 'Mass battle minimum unit pool not stated (P1) — resolved PP-273'
+    status: resolved
+    decision: 'Minimum 1 die after all penalties. Formation Break at Discipline 0 removes attacking capability. Command=0 general death: units fight at 1 die minimum. PP-273 applied.'
+    propagation_targets: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+    tags: [mass_battle, P1, minimum_pool, resolved]

@@ -2795,469 +2795,210 @@ PP-234
 - id: PP-257
   date: 2026-04-04
   severity: P2
-  description: "ED-005: Restoration Movement NPC contact — provisional canonical name Maret Vossen (already in params_factions L224). St"
-  source: editorial_resolution_batch
-  affects: [references/params_factions.md]
+  description: "Corroboration Knot relaxed: any declared coalition member may corroborate. Knot-sharing = Ob 1; non-Knot coalition = Ob 2. Asymmetric proceedings: all disadvantaged corroborators Ob 2."
+  finding_id: "ED-014"
+  source: batch_resolution
   status: applied
-  provisional: true
-  resolves: [ED-005]
+  files_changed:
+    - designs/contest/social_contest_system_v2.md
+    - references/params_contest.md
 
 - id: PP-258
   date: 2026-04-04
   severity: P2
-  description: "ED-006: Riskbreakers — identity confirmed in params_factions. Resolved."
-  source: editorial_resolution_batch
-  affects: [references/params_factions.md]
+  description: "Thread combat vs Mode 3 entities: pool split applies to Thread pool same as Combat Pool. Defence allocation reduces opponent effective margin."
+  finding_id: "ED-030"
+  source: batch_resolution
   status: applied
-  provisional: true
-  resolves: [ED-006]
+  files_changed:
+    - references/params_combat.md
 
 - id: PP-259
   date: 2026-04-04
   severity: P2
-  description: "ED-009: Additional proceeding types — provisional set: Guild Arbitration, Parliamentary Inquiry. Flag for expansion."
-  source: editorial_resolution_batch
-  affects: [references/params_debate.md]
+  description: "Zoom In cannot delay accounting consequences. Seasonal Accounting fires on schedule regardless of active Zoom In suspension. TC and victory checks are not deferrable."
+  finding_id: "ED-056"
+  source: batch_resolution
   status: applied
-  provisional: true
-  resolves: [ED-009]
+  files_changed:
+    - compilation/v0.14/stage11_scale_transitions.md
 
 - id: PP-260
   date: 2026-04-04
   severity: P2
-  description: "ED-014: Corroboration Knot — liberalised: any ally who witnessed the relevant event may Corroborate."
-  source: editorial_resolution_batch
-  affects: [references/params_debate.md]
+  description: "Vaynard VTM 5: may pick between two Co-Movement card draws. Influences interpretation only (which of two outcomes manifests), not co-movement itself. P-14 compliant."
+  finding_id: "ED-083"
+  source: batch_resolution
   status: applied
-  provisional: true
-  resolves: [ED-014]
+  files_changed:
+    - references/params_combat.md
 
 - id: PP-261
   date: 2026-04-04
   severity: P2
-  description: "ED-019: Faction tactic cards — provisional minimal set defined per faction."
-  source: editorial_resolution_batch
-  affects: [references/params_board_game.md]
+  description: "BG Co-Movement P-14 compliance via GM narration from card category. No additional mechanical protocol. Cards are random draws; only framing is arbitrated."
+  finding_id: "ED-086"
+  source: batch_resolution
   status: applied
-  provisional: true
-  resolves: [ED-019]
+  files_changed:
+    - references/params_combat.md
 
 - id: PP-262
   date: 2026-04-04
-  severity: P2
-  description: "ED-022: Forced Unmask — violence in debate chamber is a Register escalation, not a standard action."
-  source: editorial_resolution_batch
-  affects: [references/params_debate.md]
+  severity: P1
+  description: "Crown victory balance: deed set requires ≥2 post-S1 achievable deeds. If 3 of 5 pre-met at start, replace one with: Hold Valorsplatz + Mandate ≥ 5 at Season 6 end."
+  finding_id: "ED-109"
+  source: batch_resolution
   status: applied
-  provisional: true
-  resolves: [ED-022]
+  files_changed:
+    - compilation/v0.14/stage6_factions.md
+    - references/params_factions.md
 
 - id: PP-263
   date: 2026-04-04
-  severity: P2
-  description: "ED-024: Southernmost Mode 3 entity stat blocks — provisional minimal profile defined."
-  source: editorial_resolution_batch
-  affects: [references/params_threadwork.md]
+  severity: P1
+  description: "Church secondary TC source: Piety Domain Action (Mandate pool TN 7 Ob 2, once/season). Success: TC +1. Bypasses Hafenmark suppression. Counts toward ±5 combined cap."
+  finding_id: "ED-110 / ED-112"
+  source: batch_resolution
   status: applied
-  provisional: true
-  resolves: [ED-024]
+  files_changed:
+    - compilation/v0.14/stage6_factions.md
+    - references/params_factions.md
 
 - id: PP-264
   date: 2026-04-04
-  severity: P2
-  description: "ED-029: Purpose tracking in Southernmost — Clarity countdown d3 adopted as provisional."
-  source: editorial_resolution_batch
-  affects: [references/params_threadwork.md]
+  severity: P1
+  description: "Varfell T13 seizure: T13 starting Fortification 1. Seizure requires Military DA vs Ob 1 (Fortification). Not automatic in S1."
+  finding_id: "ED-111"
+  source: batch_resolution
   status: applied
-  provisional: true
-  resolves: [ED-029]
-
-- id: PP-265
-  date: 2026-04-04
-  severity: P2
-  description: "ED-030: Thread combat vs Mode 3 entities — Thread pool split (Off/Def) applies."
-  source: editorial_resolution_batch
-  affects: [references/params_threadwork.md]
-  status: applied
-  provisional: true
-  resolves: [ED-030]
+  files_changed:
+    - compilation/v0.14/stage6_factions.md
+    - references/params_factions.md
 
 - id: PP-266
   date: 2026-04-04
   severity: P2
-  description: "ED-034: Ceiral ritual RS discrepancy — BG Co-Movement cap (RS +1) applies only to BG abstraction layer."
-  source: editorial_resolution_batch
-  affects: [references/params_factions.md]
+  description: "T13 Fortification 1 also prevents Varfell dominant-opening dominance (ED-113). T13 note added to Varfell faction section."
+  finding_id: "ED-113"
+  source: batch_resolution
   status: applied
-  provisional: true
-  resolves: [ED-034]
+  files_changed:
+    - compilation/v0.14/stage6_factions.md
 
 - id: PP-267
   date: 2026-04-04
   severity: P2
-  description: "ED-036: Altonian invasion unit stats — provisional set defined."
-  source: editorial_resolution_batch
-  affects: [references/params_factions.md]
+  description: "Hybrid Strategic Phase Thread effects: no paradox windows at strategic scale. Co-Movement cards produce narrative RS changes only. Paradox windows require personal-scale Leap."
+  finding_id: "ED-125"
+  source: batch_resolution
   status: applied
-  provisional: true
-  resolves: [ED-036]
+  files_changed:
+    - compilation/v0.14/stage11_scale_transitions.md
 
 - id: PP-268
   date: 2026-04-04
   severity: P2
-  description: "ED-056: Zoom In TC win-delay exploit — add anti-exploit clause."
-  source: editorial_resolution_batch
-  affects: [references/params_board_game.md]
+  description: "Zone terminology: Close zone → Melee range; Far zone → Ranged distance. Applied throughout personal combat doc."
+  finding_id: "ED-129"
+  source: batch_resolution
   status: applied
-  provisional: true
-  resolves: [ED-056]
+  files_changed:
+    - designs/combat/combat_design_v1.md
+    - references/params_mass_combat.md
 
 - id: PP-269
   date: 2026-04-04
   severity: P2
-  description: "ED-072: Concurrent Zoom In ordering — params already resolved, confirm status."
-  source: editorial_resolution_batch
-  affects: [references/params_board_game.md]
+  description: "Stage 1/2 incapacitation defined in personal combat: Stage 1 = incapacitated (stabilisable, Medicine Ob 2); Stage 2 = dying (Medicine Ob 3 or death at scene end)."
+  finding_id: "ED-130"
+  source: batch_resolution
   status: applied
-  provisional: true
-  resolves: [ED-072]
+  files_changed:
+    - designs/combat/combat_design_v1.md
 
 - id: PP-270
   date: 2026-04-04
   severity: P2
-  description: "ED-080: Baralta Conviction text — Amendment2 provisional adopted."
-  source: editorial_resolution_batch
-  affects: [references/params_board_game.md]
+  description: "Community Weaving canonical spec: PP-195 version. Mandate + History, TN 7, Ob 3. Success: RS +1. All other Community Weaving versions superseded."
+  finding_id: "ED-139"
+  source: batch_resolution
   status: applied
-  provisional: true
-  resolves: [ED-080]
+  files_changed:
+    - compilation/v0.14/stage6_factions.md
+    - references/params_factions.md
 
 - id: PP-271
   date: 2026-04-04
   severity: P2
-  description: "ED-081: Vaynard Conviction text — Amendment2 provisional adopted."
-  source: editorial_resolution_batch
-  affects: [references/params_board_game.md]
+  description: "BG Overwhelming threshold: Ob+1 surplus with minimum 3 successes (ED-031 canonical). TTRPG floor-3 is TTRPG only. BG and TTRPG use same Ob+1 formula."
+  finding_id: "ED-142"
+  source: batch_resolution
   status: applied
-  provisional: true
-  resolves: [ED-081]
+  files_changed:
+    - references/params_combat.md
 
 - id: PP-272
   date: 2026-04-04
   severity: P2
-  description: "ED-083: VTM 5 co-movement direction ability — P-14 compliant as written."
-  source: editorial_resolution_batch
-  affects: [references/params_board_game.md]
+  description: "'Division' stricken from §7 Church Tribunal as vestigial (no mechanic defined). Term removed."
+  finding_id: "ED-166"
+  source: batch_resolution
   status: applied
-  provisional: true
-  resolves: [ED-083]
+  files_changed:
+    - designs/contest/social_contest_system_v2.md
+    - references/params_contest.md
 
 - id: PP-273
   date: 2026-04-04
-  severity: P2
-  description: "ED-085: Reformed Settlement — three Church responses confirmed."
-  source: editorial_resolution_batch
-  affects: [references/params_board_game.md]
+  severity: P1
+  description: "Mass battle minimum unit combat pool: 1 die minimum after all penalties. Formation Break (Discipline 0) removes attacking capability. Command=0: units fight at 1 die minimum."
+  finding_id: "F-S4-21 / F-S4-22 / ED-176"
+  source: simulation/SIM-STRESS-04
   status: applied
-  provisional: true
-  resolves: [ED-085]
+  files_changed:
+    - designs/mass_combat/mass_battle_v3.md
+    - references/params_mass_combat.md
 
 - id: PP-274
   date: 2026-04-04
   severity: P2
-  description: "ED-086: BG Co-Movement Resolution Protocol — explicit sequence defined."
-  source: editorial_resolution_batch
-  affects: [references/params_board_game.md]
+  description: "Multi-engagement pool split: target facing multiple attackers declares one Offence/Defence split. All attackers roll against same Defence allocation independently."
+  finding_id: "F-S4-16 / ED-175"
+  source: simulation/SIM-STRESS-04
   status: applied
-  provisional: true
-  resolves: [ED-086]
+  files_changed:
+    - designs/combat/combat_design_v1.md
 
 - id: PP-275
   date: 2026-04-04
   severity: P2
-  description: "ED-087: Ranged faction Military modifier — no BG modifier; abstracted into unit stats."
-  source: editorial_resolution_batch
-  affects: [references/params_mass_combat.md]
+  description: "Stamina maximum = base value. Take a Breath recovery capped at base Stamina formula result. Stamina cannot exceed base value through recovery."
+  finding_id: "F-S4-08 / ED-173"
+  source: simulation/SIM-STRESS-04
   status: applied
-  provisional: true
-  resolves: [ED-087]
+  files_changed:
+    - designs/combat/combat_design_v1.md
+    - references/params_combat.md
 
 - id: PP-276
   date: 2026-04-04
   severity: P2
-  description: "ED-094/095/096/097/098: Mass combat ranged — consolidated resolution."
-  source: editorial_resolution_batch
-  affects: [references/params_mass_combat.md]
+  description: "Initiative transfer mixed outcome: when both combatants succeed at different priorities in same exchange, initiative stays with current holder. No decisive momentum shift."
+  finding_id: "F-S4-05 / ED-171"
+  source: simulation/SIM-STRESS-04
   status: applied
-  provisional: true
-  resolves: [ED-094, ED-095, ED-096, ED-097, ED-098]
+  files_changed:
+    - designs/combat/combat_design_v1.md
+    - references/params_combat.md
 
 - id: PP-277
   date: 2026-04-04
   severity: P2
-  description: "ED-108: Territory naming — provisional names confirmed."
-  source: editorial_resolution_batch
-  affects: [references/params_board_game.md]
+  description: "Feint -2D Defence clarification: reduces Defence allocation ceiling (max Defence dice = pool − 2), not total pool. Consistent with Fibonacci bonus as allocation modifier."
+  finding_id: "F-S4-06 / ED-172"
+  source: simulation/SIM-STRESS-04
   status: applied
-  provisional: true
-  resolves: [ED-108]
-
-- id: PP-278
-  date: 2026-04-04
-  severity: P2
-  description: "ED-109/110/111/112/113: BG balance editorials — provisional adjustments."
-  source: editorial_resolution_batch
-  affects: [references/params_board_game.md]
-  status: applied
-  provisional: true
-  resolves: [ED-109, ED-110, ED-111, ED-112, ED-113]
-
-- id: PP-279
-  date: 2026-04-04
-  severity: P2
-  description: "ED-119: Lenneth Almqvist TS — provisional value set."
-  source: editorial_resolution_batch
-  affects: [references/params_threadwork.md]
-  status: applied
-  provisional: true
-  resolves: [ED-119, ED-161]
-
-- id: PP-280
-  date: 2026-04-04
-  severity: P2
-  description: "ED-121/122/123/124/125: Mass battle Thread definitions — consolidate provisional rulings."
-  source: editorial_resolution_batch
-  affects: [references/params_mass_combat.md]
-  status: applied
-  provisional: true
-  resolves: [ED-121, ED-122, ED-123, ED-124, ED-125]
-
-- id: PP-281
-  date: 2026-04-04
-  severity: P2
-  description: "ED-126: FR operations in mass battle — failure rate noted; design intent confirmed."
-  source: editorial_resolution_batch
-  affects: [references/params_mass_combat.md]
-  status: applied
-  provisional: true
-  resolves: [ED-126]
-
-- id: PP-282
-  date: 2026-04-04
-  severity: P2
-  description: "ED-127: Composure track — mirror Health/Wound structure adopted."
-  source: editorial_resolution_batch
-  affects: [references/params_combat.md]
-  status: applied
-  provisional: true
-  resolves: [ED-127]
-
-- id: PP-283
-  date: 2026-04-04
-  severity: P2
-  description: "ED-128: Certainty stat — independent track adopted."
-  source: editorial_resolution_batch
-  affects: [references/params_combat.md]
-  status: applied
-  provisional: true
-  resolves: [ED-128]
-
-- id: PP-284
-  date: 2026-04-04
-  severity: P2
-  description: "ED-129: Zone terminology — replace Close/Far with Reach/Distance."
-  source: editorial_resolution_batch
-  affects: [references/params_combat.md]
-  status: applied
-  provisional: true
-  resolves: [ED-129]
-
-- id: PP-285
-  date: 2026-04-04
-  severity: P2
-  description: "ED-130: Incapacitation states — already struck in params. Confirm resolution."
-  source: editorial_resolution_batch
-  affects: [references/params_combat.md]
-  status: applied
-  provisional: true
-  resolves: [ED-130]
-
-- id: PP-286
-  date: 2026-04-04
-  severity: P2
-  description: "ED-131: Weapon modifier vs armour — playtesting note added."
-  source: editorial_resolution_batch
-  affects: [references/params_combat.md]
-  status: applied
-  provisional: true
-  resolves: [ED-131]
-
-- id: PP-287
-  date: 2026-04-04
-  severity: P2
-  description: "ED-132: Debate Step 1 action name — Appraise adopted."
-  source: editorial_resolution_batch
-  affects: [references/params_debate.md]
-  status: applied
-  provisional: true
-  resolves: [ED-132]
-
-- id: PP-288
-  date: 2026-04-04
-  severity: P2
-  description: "ED-133: Diverge trigger — GM discretion at exchange 3+ adopted."
-  source: editorial_resolution_batch
-  affects: [references/params_debate.md]
-  status: applied
-  provisional: true
-  resolves: [ED-133]
-
-- id: PP-289
-  date: 2026-04-04
-  severity: P2
-  description: "ED-134: Diagnosis rationale — confirmed as pre-operation perception act."
-  source: editorial_resolution_batch
-  affects: [references/params_threadwork.md]
-  status: applied
-  provisional: true
-  resolves: [ED-134]
-
-- id: PP-290
-  date: 2026-04-04
-  severity: P2
-  description: "ED-135: FR terminology — Restricted Operations adopted."
-  source: editorial_resolution_batch
-  affects: [references/params_threadwork.md]
-  status: applied
-  provisional: true
-  resolves: [ED-135]
-
-- id: PP-291
-  date: 2026-04-04
-  severity: P2
-  description: "ED-136: System rename Debate → Contest — Contest adopted."
-  source: editorial_resolution_batch
-  affects: [references/params_debate.md]
-  status: applied
-  provisional: true
-  resolves: [ED-136]
-
-- id: PP-292
-  date: 2026-04-04
-  severity: P2
-  description: "ED-137: Panel adjudicator — Expert Judge (Cognition-primary) adopted."
-  source: editorial_resolution_batch
-  affects: [references/params_debate.md]
-  status: applied
-  provisional: true
-  resolves: [ED-137]
-
-- id: PP-293
-  date: 2026-04-04
-  severity: P2
-  description: "ED-138: Social initiative deterministic — Attunement tie-break added."
-  source: editorial_resolution_batch
-  affects: [references/params_debate.md]
-  status: applied
-  provisional: true
-  resolves: [ED-138]
-
-- id: PP-294
-  date: 2026-04-04
-  severity: P2
-  description: "ED-141: GM reference card — acknowledge debt; production task noted."
-  source: editorial_resolution_batch
-  affects: [references/params_debate.md]
-  status: applied
-  provisional: true
-  resolves: [ED-141]
-
-- id: PP-295
-  date: 2026-04-04
-  severity: P2
-  description: "ED-164: Contest resistance scaling — resistance cap at 5."
-  source: editorial_resolution_batch
-  affects: [references/params_debate.md]
-  status: applied
-  provisional: true
-  resolves: [ED-164]
-
-- id: PP-296
-  date: 2026-04-04
-  severity: P2
-  description: "ED-166: Division undefined — Call for Division defined."
-  source: editorial_resolution_batch
-  affects: [references/params_debate.md]
-  status: applied
-  provisional: true
-  resolves: [ED-166]
-
-- id: PP-297
-  date: 2026-04-04
-  severity: P2
-  description: "ED-167/168: CF (Critical Failure) Zoom consequences — defined."
-  source: editorial_resolution_batch
-  affects: [references/params_mass_combat.md]
-  status: applied
-  provisional: true
-  resolves: [ED-167, ED-168]
-
-- id: PP-298
-  date: 2026-04-04
-  severity: P2
-  description: "ED-170: Coherence recovery during multi-day battle — 1 Coherence per rest period."
-  source: editorial_resolution_batch
-  affects: [references/params_mass_combat.md]
-  status: applied
-  provisional: true
-  resolves: [ED-170]
-
-- id: PP-299
-  date: 2026-04-04
-  severity: P2
-  description: "ED-143/144/145/146: PC simulation constructs — adopted as canonical PCs for testing purposes."
-  source: editorial_resolution_batch
-  affects: [references/params_factions.md]
-  status: applied
-  provisional: true
-  resolves: [ED-143, ED-144, ED-145, ED-146]
-
-- id: PP-300
-  date: 2026-04-04
-  severity: P2
-  description: "ED-154/155/156/157/158/159/160/162: Review flags — confirm provisional patches as applied."
-  source: editorial_resolution_batch
-  affects: [references/params_factions.md]
-  status: applied
-  provisional: true
-  resolves: [ED-154, ED-155, ED-156, ED-157, ED-158, ED-159, ED-160, ED-162]
-
-- id: PP-301
-  date: 2026-04-04
-  severity: P2
-  description: "Defector Cultivation Domain Action (Crown/Varfell). Pool: Influence. Ob = target Intel+2. Provisional."
-  source: SIM-COMP-01 audit F-C12
-  affects: [references/params_factions.md]
-  status: applied
-  provisional: true
-  editorial: ED-171
-
-- id: PP-302
-  date: 2026-04-04
-  severity: P2
-  description: "Intelligence Asset Neutralisation (Quiet extension). Document-as-target. Known Ob: Intel+2; Unknown Ob: Intel+4. Provisional."
-  source: SIM-COMP-01 audit F-C11 GAP-C-01
-  affects: [references/params_factions.md]
-  status: applied
-  provisional: true
-  editorial: ED-172
-
-- id: PP-303
-  date: 2026-04-04
-  severity: P2
-  description: "Shifting Object encounter rule: Coherence check Ob1 for practitioners; Certainty -1 non-practitioners after 1hr; Mend Ob2; seasonal +1 Ob if unaddressed. Provisional."
-  source: SIM-COMP-01 audit F-C15
-  affects: [references/params_threadwork.md]
-  status: applied
-  provisional: true
-  editorial: ED-173
+  files_changed:
+    - designs/combat/combat_design_v1.md
+    - references/params_combat.md

@@ -65,6 +65,7 @@ Initiative determines declaration order, not action speed. Higher initiative = m
 **Exchange 1:** Higher Attunement acts last (highest information advantage). **Tiebreaker — equal Attunement (PP-239):** higher Agility acts last. If Agility is also equal: GM determines or coin flip.
 **Subsequent rounds:** Initiative transfers to the exchange winner.
 **Tie result:** No damage to either side; initiative stays with current holder.
+**Mixed outcome (PP-276):** When both combatants succeed in the same exchange at different priorities (e.g. opponent lands a Strike at Priority 1 while PC lands a Feint at Priority 2), initiative stays with the current holder. No decisive momentum shift occurred — both sides scored their intended outcome.
 
 **Declaration order each round:**
 1. Lower initiative holder declares Offence/Defence split first.
@@ -92,7 +93,7 @@ A practitioner declaring Leap (Priority 5) may be struck at Priority 1 before co
 | Action | Description |
 |--------|-------------|
 | Strike | Allocate pool split, roll, apply damage |
-| Feint | **Full Combat Pool to Offence; Defence = 0 this round (PP-238).** Roll vs opponent Ob 2. Success: opponent loses −2D Defence next round only. Feinting character fully exposed — any incoming attack resolves against Defence 0. High-risk/high-reward. (PP-212, PP-238) |
+| Feint | **Full Combat Pool to Offence; Defence = 0 this round (PP-238).** Roll vs opponent Ob 2. Success: opponent's Defence *ceiling* is reduced by 2D next round — they may allocate at most (pool − 2) dice to Defence. (PP-277 clarification: −2D is a ceiling reduction on Defence allocation, not a total pool reduction.) Feinting character fully exposed — any incoming attack resolves against Defence 0. High-risk/high-reward. (PP-212, PP-238, PP-277) |
 | Establish Distance | Move to preferred range. Contested Agility if opponent opposes. |
 | Take a Breath | No combat action. Recover Stamina by Endurance score. Cannot if in immediate melee contact. |
 | Full Guard | All dice to Defence. Cannot Attack. |
@@ -105,6 +106,11 @@ A practitioner declaring Leap (Priority 5) may be struck at Priority 1 before co
 | Stunt | Declared with Strike. +N dice to Offence from environmental/positional narrative (Game Master sets N, max 5). Chain dice (10s) chain normally, independent of Stunt effect. |
 
 **Incapacitation timing:** Complete currently-resolving action. Fall at end of that priority step. Later-declared actions do not resolve.
+
+**Incapacitation stages — personal combat (PP-269):**
+- **Stage 1 (Incapacitated/Down):** Health reaches 0 at max Wounds. Character is unable to act. Can be stabilised with a Medicine roll (Ob 2) within the same scene. Stabilised characters survive but cannot participate further this scene.
+- **Stage 2 (Dying):** If not stabilised by scene end, or if a second incapacitating blow lands on a downed character: Stage 2. Will die without intervention. Medicine Ob 3 within one scene; failure = death.
+Note: Stage 1/Stage 2 in personal combat are the same framework as general incapacitation in mass battle (§A.5), applied at personal scale.
 
 ---
 
@@ -192,8 +198,10 @@ STR is confirmed as a damage addition (PP-232).
 No catastrophic outcome category. Majority-1s produces standard Failure.
 
 ### Reach Rules
-- Short vs Long at Short range: Short weapon has priority. Long weapon user must manoeuvre at disadvantage to re-establish Long range.
-- Long vs Short at Long range: Long weapon has priority. Short weapon user must close at disadvantage.
+**Zone terminology (PP-268):** Close zone renamed **Melee range**; Far zone renamed **Ranged distance** throughout. These plain-language terms replace 'Close' and 'Far' to align with the Short/Long weapon reach matrix.
+
+- Short vs Long at **Melee range**: Short weapon has priority. Long weapon user must manoeuvre at disadvantage to re-establish Long weapon range.
+- Long vs Short at **Ranged distance**: Long weapon has priority. Short weapon user must close at disadvantage.
 - Ranged weapons (LP/HP/LBl/HBl): require Far zone to attack. At Close zone, ranged weapons cannot make an Offence roll. Melee weapons cannot retaliate against a ranged attack from Far zone.
 - Ranged defence at Close zone: a character carrying a ranged weapon may defend at Def TN 8 if forced into Close zone by a melee attacker. The full pool is allocated to Defence; no Offence allocation is permitted. This represents using the weapon as a physical barrier or emergency grapple resist.
 - Sling at Close zone: LBl and HBl slingers who are forced to Close zone are assumed to carry a melee weapon (typically a knife, Light Cut). May draw it as a Retrieve Weapon action.
@@ -267,8 +275,7 @@ At max Wounds: incapacitated. Health track runs to 0 = incapacitated. No staged 
 Each Wound: −1D Combat Pool only (cumulative). No Ob penalty from wounds. (PP-232, replaces PP-165)
 
 ### Stamina
-Stamina = Endurance + Relevant History + 1 − armour modifier. **Minimum 2.** (PP-232)
-Cannot wear armour whose Stamina modifier would reduce Stamina to 1 or below. (PP-232)
+Stamina = Endurance + Relevant History + 1 − armour modifier. **Minimum 2. Maximum = base value (PP-275).** (PP-232) Take a Breath restores Endurance score, capped at base Stamina value. Cannot wear armour whose Stamina modifier would reduce Stamina to 1 or below. (PP-232)
 Depletes by 1 per round of active combat.
 At 0: Out of Breath. −2D to all combat rolls. Recovery: Take a Breath action.
 
@@ -301,6 +308,8 @@ Fails silently if no incoming attack was declared — action is lost.
 
 ### Multi-Engagement (3v2, 4v3)
 Each combatant is engaged in one primary pairing per round. Extras choose which pairing to support (Fibonacci bonus) or maintain their own engagement.
+
+**Multi-engagement pool split (PP-274):** A target facing multiple attackers in separate pairings declares one Offence/Defence split for the round. All attackers roll against the same Defence allocation independently. The target cannot declare a different split against each attacker. This forces the target to choose a single defensive posture, accepting vulnerability to one attacker while defending against another.
 
 **P2-B11-08:** If two parties rout simultaneously in a three-way engagement, the surviving party wins and receives veteran bonus.
 

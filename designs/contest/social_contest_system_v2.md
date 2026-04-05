@@ -136,7 +136,7 @@ Each exchange's Read senses the CURRENT state of the audience (which may have sh
 
 **Step 2 — Choose:** Each orator selects genre (Memory or Projection) and orientation (Revealing or Obscuring).
 
-**Step 2b — Corroborate (optional):** A corroborator present at the contest may declare support before the Argue roll. On success: primary orator gains +1D for this exchange. Corroborator must share a Knot with the primary orator or be a declared coalition member. In asymmetric proceedings: disadvantaged party's corroborator uses Bonds Ob 2 (vs Ob 1 symmetric). On failure: corroborator takes 1 strain.
+**Step 2b — Corroborate (optional):** A corroborator present at the contest may declare support before the Argue roll. On success: primary orator gains +1D for this exchange. Corroborator must be a declared coalition member (Knot not required). Knot-sharing corroborators roll at Ob 1; non-Knot coalition members roll at Ob 2. In asymmetric proceedings: all corroborators for the disadvantaged party use Ob 2 regardless of Knot. (PP-257) On failure: corroborator takes 1 strain.
 
 **Step 3 — Argue:**
 Initiative holder declares argument and rolls first. Respondent hears, then declares and rolls.
@@ -254,7 +254,7 @@ One orator invokes what has been (Memory); the other projects what could become 
 - Advantaged orator accumulates 0 strain from CROSS exchanges.
 - CLASH strain applies normally when advantaged side loses.
 
-**Church Tribunal specifics:** Accused has no corroboration. Cannot call for Division. Exchange count set by Inquisitor (1–5). Conviction Track starts biased at 6. Church boosts Obscuring — the Inquisitor's arguments that foreclose the accused's epistemic standing carry institutional weight.
+**Church Tribunal specifics:** Accused has no corroboration. Exchange count set by Inquisitor (1–5). (PP-272: 'Division' stricken — term was vestigial from an earlier parliamentary design pass; it has no mechanical definition in the current system.) Conviction Track starts biased at 6. Church boosts Obscuring — the Inquisitor's arguments that foreclose the accused's epistemic standing carry institutional weight.
 
 ---
 

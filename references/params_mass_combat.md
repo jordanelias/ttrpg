@@ -434,30 +434,5 @@ CF wound during Zoom In → +1 Ob to that commander's BG tactic rolls for remain
 ## ED-170 provisional — Coherence recovery in multi-day battle
 1 Coherence/night of rest (no Thread ops). Single-day battle: no in-battle Coherence recovery.
 
-## ED-087 Resolution (PP-275)
-BG ranged-specialist faction Military modifier: **not added**. Ranged specialist capacity is abstracted into unit Power and DR stats at the unit design stage (e.g., Crossbow unit Power 2, DR 0 vs Infantry Power 3, DR 2). No separate faction-level Military modifier for ranged specialisation. Consistent with the abstraction principle.
-
-## ED-094 through ED-098 Resolution (PP-276) [CONSOLIDATED]
-**ED-094 — Crossbow reload at mass scale:** Reload is abstracted. HP (Crossbow) units fire every other Phase 5 as a unit, not per soldier. Track with a binary "ready/reloading" marker.
-**ED-095 — Archers in Phase 5 melee:** Archers/slingers caught in melee use their unit Power −1 (improvised melee, no weapon advantage). TN stays 7.
-**ED-096 — Ranged DR scaling:** Personal DR values scale 1:1 to mass combat (no adjustment). Light Piercing vs Light armour remains effective at mass scale.
-**ED-097 — HP effective Power in reload cycle:** HP unit Power = 2 when ready; Power = 0 when reloading (no Phase 5 contribution). This is the reload cycle abstraction.
-**ED-098 — Cover declaration timing:** Cover must be declared in Phase 1 (Strategy Declaration). Late declaration: GM may allow with −1D penalty to the covered unit's Phase 5 pool.
-
-## ED-121 through ED-125 Resolution (PP-280) [CONSOLIDATED]
-**ED-121 — Scene definition for paradox windows:** Battle-turn = scene. PP-223 confirmed.
-**ED-122 — Offensive Lock on formation thread:** PP-222 confirmed — blocks Discipline degradation checks on locked unit for lock duration.
-**ED-123 — Battle-turn = scene for RS thresholds:** Confirmed. RS threshold effects and Coherence-0 RS leakage check at end of each battle-turn (Phase 7 Reform).
-**ED-124 — Diagnosis+Leap collapse:** PP-224 confirmed — single Phase 4 action. Diagnosis is implicit in successful Leap at mass scale.
-**ED-125 — Hybrid Strategic Phase paradox windows:** Paradox windows opened in Personal Phase persist into Strategic Phase. Strategic Phase does not generate new paradox windows (abstraction layer).
-
-## ED-126 Resolution (PP-281)
-FR operations (Lock/Dissolution) in mass battle: 98.3% failure rate at TS70 Relational scale is **confirmed design intent**. Mass battle is hostile to Thread intervention at scale. Practitioners in mass battle should use Object-scale operations (Weaving local configurations, brief Pulls) rather than Relational+ FR operations. The failure rate is the system's signal that mass battle is not the right context for large-scale Thread work.
-ED-126 resolved — no patch needed.
-
-## ED-167 and ED-168 Resolution (PP-297) [CONSOLIDATED]
-**ED-167 — TTRPG Critical Failure wound on Zoom Out:** When a PC takes a Wound during a Zoom In scene, the Wound persists on Zoom Out to BG layer. BG consequence: the PC's faction loses the PC's faction bonus dice for that season (+1D normally gained per ED-075). The Wound does not affect faction stats directly.
-**ED-168 — CF killed between sequential Zoom Ins:** If PC-A is killed between Zoom Ins (confirmed dead before PC-B's Zoom In opens), PC-B's Zoom In proceeds without PC-A. Any PC-A-dependent faction actions in that Zoom In are reassigned to the faction NPC pool (no player control). PC death is final in TTRPG layer; BG layer reflects this through the faction bonus loss permanently.
-
-## ED-170 Resolution (PP-298)
-Coherence recovery during multi-day battle: **1 Coherence per full overnight rest period** (minimum 6 hours, no Thread operations during rest). Practitioners in active battle do not recover Coherence between battle-turns within the same day. Recovery applies only between battle-days.
+## PP-273 — Mass battle minimum pool
+1 die minimum after all penalties. Discipline 0 = Formation Break (no attack). Command=0 general death: units at 1 die minimum.

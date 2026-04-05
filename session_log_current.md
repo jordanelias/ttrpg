@@ -1,44 +1,52 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-04T_FULL_RESOLUTION_COMPREHENSIVE_SIM
+session_id: 2026-04-04T_SIM_STRESS_04
 phase: SESSION CLOSED
 status: COMPLETE
 
 ## WORK COMPLETED
-1. Resolved 68 of 69 open/provisional editorials (PP-257–300):
-   - All faction design-content items: provisional canonical decisions applied
-   - All mechanical gaps: resolved from canonical sources
-   - All ambiguities: dominant reading applied and flagged
-   - Remaining open: ED-166 (Division — resolved by PP-296), all others marked resolved-provisional
-   
-2. SIM-COMP-01: Comprehensive Season 8 full-hybrid simulation with 4 new non-optimal actors:
-   - Halvard Jens (Crown bureaucrat, information-hoarder)
-   - Signe Mauer (Varfell intel officer, over-preparer)
-   - Brother Elan Vard (Church doubting inquisitor)
-   - Lotte Brann (Guilds enforcer, escalator)
-   - 3 scenes + 7 domain actions + cascade + accounting
-   - 15 findings (F-C01–F-C15)
-   
-3. Audit: 6 systems reviewed; 3 new patches (PP-301–303); 3 new editorials (ED-171–173)
+1. Batch resolved 69 open/provisional editorial items (ED-005 to ED-170)
+   - 50 mechanically resolved with patches PP-257–272
+   - 18 flagged as EDITORIAL (require worldbuilding/authorial decision)
+   - 1 remaining open (ED-174, PI cascade brake)
+2. SIM-STRESS-04: 6 randomized scenarios
+   - 22 findings; 5 immediate P1/P2 resolutions → PP-273–277
+   - 1 new provisional (ED-174)
+3. Total patches this session: PP-257–277 (21 patches)
 
-## PATCHES THIS SESSION
-PP-257 through PP-303 (47 patches total)
+## EDITORIAL FLAGS AWAITING USER DECISION (18 items)
+ED-005: Restoration Movement leader name/profile
+ED-006: Riskbreakers identity
+ED-019: Faction-specific tactic card content
+ED-024: Southernmost entity stat blocks
+ED-029: Purpose tracking in Southernmost
+ED-034: Ceiral Ritual RS scale asymmetry
+ED-036: Altonian unit stats (P1 BLOCKER)
+ED-080: Baralta Conviction text
+ED-081: Vaynard Conviction text
+ED-085: Reformed Settlement options
+ED-108: T10/T11 territory names
+ED-119: Lenneth Almqvist TS/arc
+ED-127: Composure redesign scope
+ED-128: Certainty/Spirit decoupling
+ED-131: Weapon modifier playtesting
+ED-132: Read step action name
+ED-134: Diagnosis as separate action
+ED-135: FR terminology
 
-## OPEN ITEMS REMAINING
-- ED-171, ED-172, ED-173: new simulation findings (designer review needed)
-- ED-154 to ED-160, ED-162: review flags from prior session (confirmed this session)
-- All other editorials: resolved-provisional (designer confirmation at compilation phase)
+## PROVISIONAL AWAITING USER CONFIRMATION
+ED-174: PI cascade brake (revolt-pass → Stability +1; PI rate cap +2/season)
 
-## KEY FINDINGS
-- CROSS interaction: genre/orientation weight dominates over pool size
-- Crown intelligence is structurally blind without Lowenritter delegation or PC-level Circles
-- Non-optimal play earns CP at same or better rate than optimal play
-- Shifting Object encounter rules were incomplete — PP-303 addresses
-- Document-as-assassination-target rules were undefined — PP-302 addresses
+## OPEN SIM-DEBT
+SIM-DEBT-01, 03, 04: Social contest calibration (attribute renames)
+SIM-DEBT-06: War-scale Coherence/Dissonant effects (needs threadwork_redesign_v25.md §3)
+SIM-DEBT-07: High-resistance contest calibration
 
-next_session_start:
-  priority: ED-171/172/173 designer review; then playtesting calibration
-  read_first: [tests/sim_comp01_season8.md, session_log_current.md]
-  context: 68 editorials resolved. 3 new from simulation. System approaching compilation readiness.
+## NEXT RECOMMENDED ACTIONS
+- User resolves 18 editorial flags (all are worldbuilding/authorial)
+- User confirms ED-174 (PI cascade brake)
+- SIM-STRESS-05: recommend targets — Dissonant effects, contest pre-prep mechanics,
+  BG tactic card face-off, Thread vs Mode 3 Southernmost (once ED-024 resolved),
+  Varfell T13 opening with PP-266 Fortification applied
 ```

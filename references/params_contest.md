@@ -172,3 +172,9 @@ Shared pool = sum of all coalition members' (Focus+Recall) at setup. Depletes 1/
 
 ## History bonus note (PP-234 era)
 History bonus = history points + 3 (per Stage 2 §4.1). Pool (PrimaryAttr×2)+H is equivalent to combat pool (Agi×2)+H+3. The +3 is embedded in H.
+
+## PP-257 — Corroboration Knot relaxed
+Any declared coalition member can corroborate (Knot not required). Knot-sharing = Ob 1; non-Knot coalition member = Ob 2. Asymmetric proceedings: all disadvantaged-party corroborators use Ob 2.
+
+## PP-272 — "Division" stricken
+Term removed from §7 Church Tribunal as vestigial. No mechanic defined.

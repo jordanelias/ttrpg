@@ -54,6 +54,8 @@ When a personal action has faction-level scope, the Game Master recognises it as
 
 **Domain Action → Social Contest escalation (PP-246):** A Domain Action always produces a mechanical outcome on its own. Escalation to a full Social Contest occurs only when all three hold: (a) both parties are personally present, (b) stakes are explicitly contested by both, AND (c) the DA roll produces a Partial. On Partial: GM may call a Contest at Conviction Track 5 (neutral); DA outcome held pending Contest resolution. On Success or Failure: outcome is final, no Contest.
 
+**Community Weaving canonical spec (PP-270):** The PP-195 version is canonical. Pool: Mandate + relevant History. TN 7, Ob 3. On success: target RS track +1 (shared world track). All other Community Weaving specifications (PP-168 pool and PP-195 partial variants) are superseded.
+
 **Seasonal cap:** ±2 per stat per season, applied at seasonal accounting (PP-242). Multiple actions may accumulate more than ±2 change within a season; the net is clipped to ±2 at accounting. Institutional momentum does not reverse between actions.
 
 ### Ethical Framework Modifiers
@@ -122,6 +124,8 @@ Once per season, the Crown issues a unilateral political act that bypasses norma
 | **Constraint** | Cannot target Intel — decrees are public acts. Cannot target a stat absent from the target faction's sheet (e.g. Niflhel has no Mandate; Löwenritter has no Wealth). (PP-243) |
 | **Limit** | 1/season; consecutive seasons: +1 Ob per consecutive use (decree fatigue) |
 
+**Victory balance (PP-262):** Crown's victory condition requires at least one deed that demands active mid-game play (not pre-met at session start). The GM should confirm that Crown's deed set includes at least two deeds achievable only through Domain Actions or military success after Season 1. If Crown's starting position pre-meets 3 of 5 deeds, replace one pre-met deed with: 'Hold Valorsplatz and maintain Mandate ≥ 5 at end of Season 6.'
+
 **Default Leader: King Almud Almqvist**
 - Conviction: Order/Reason · Resonant Style: Consequence · Thread Sensitivity: 28 (near Stirring; unrecognised)
 - Privately sympathises with the Restoration. Governs through the post-war settlement that suppressed it. Institutional tendency and personal beliefs in direct conflict.
@@ -142,7 +146,7 @@ Correctness is determined by institutional authority, not outcome or character. 
 
 **Leadership Deviation:** Confessor acts against doctrine: Stability check **Ob 3**. Hardest deviation cost of any faction — theological coherence is the Church's structural strength.
 
-**Theocracy Counter Relationship:** Church Mandate 5+ at accounting: Theocracy Counter +1/season. Stability ≤ 4: Theocracy Counter generation pauses (Cardinals competing). *(On 1–7 scale, Mandate 5 = strong institutional position; Stability 4 = mid-range.)*
+**Theocracy Counter Relationship:** Church Mandate 5+ at accounting: Theocracy Counter +1/season. **Secondary TC source (PP-263):** Church may perform a Piety Domain Action (Mandate pool, TN 7, Ob 2) once per season. Success: TC +1, independent of Mandate level and Hafenmark suppression. This represents active missionary and institutional expansion beyond passive Mandate accrual. Failure: no TC gain. This action counts toward the seasonal ±5 TC combined cap. Stability ≤ 4: Theocracy Counter generation pauses (Cardinals competing). *(On 1–7 scale, Mandate 5 = strong institutional position; Stability 4 = mid-range.)*
 
 **Unique Action — Excommunication**
 
@@ -235,6 +239,8 @@ Actions are evaluated purely by outcomes. Means are irrelevant if ends are achie
 - Actions with uncertain or long-term payoff (ideological campaigns, relationship-building, cultural investment): **+1 Ob**
 
 Varfell is strongest at short-term tactical play and weakest at institution-building. They win battles and lose peace.
+
+**T13 territory note (PP-266):** T13 (Varfell-adjacent borderland) has starting Fortification 1. This prevents automatic S1 seizure by Varfell with no opposing action. Varfell can still seize T13 in S1 with a successful Military Domain Action; the Fortification adds Ob 1 to the seizure roll.
 
 **Institutional Tendency:** Maximise information advantage. Acquire resources including Thread-related materials. Avoid public commitments. Keep options open. Defaults to intelligence operations and economic positioning over military or social action.
 

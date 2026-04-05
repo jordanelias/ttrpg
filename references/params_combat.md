@@ -199,35 +199,17 @@ Equal Attunement in Exchange 1: higher Agility acts last. If Agility also equal:
 | 5 | Leap (Thread — full-round) |
 | — | Full Guard, Take a Breath, Dodge, Rescue (reactive) |
 
-## ED-127 Resolution (PP-282) [FLAGGED]
-Composure track redesign: mirror Health/Wound structure.
-- **Composure:** starts at (Bonds + Focus + 3). Maximum 10.
-- **Rattled:** condition at Composure ≤ half starting value. Effect: −1D all social rolls.
-- **Broken:** condition at Composure = 0. Cannot act voluntarily in social/Thread context. Requires recovery scene.
-- **Recovery:** 1 Composure per scene of rest or support (another PC makes successful Bonds roll Ob 1).
-[FLAGGED: confirm starting formula and recovery rate.]
+## PP-273 (mass battle) — Minimum pool 1 die
+Minimum 1 die after all penalties. Formation Break at Discipline 0 removes attacking. Command=0: 1 die minimum.
 
-## ED-128 Resolution (PP-283) [FLAGGED]
-Certainty stat: **independent track**, not derived from Spirit.
-- Range: 0–10. Starting value: 10 − (Thread Sensitivity ÷ 20, round down).
-- Non-practitioners: start at 10.
-- Certainty 0: Rendering Crisis — character cannot perform Thread operations; perceives too many configurations simultaneously to form intentionality.
-- Recovery: 1 Certainty per quiet season (no Thread operations). Practitioner support: Mending roll Ob 2, Success = +1 Certainty.
-[FLAGGED: confirm starting formula and interaction with Coherence.]
+## PP-274 — Multi-engagement pool split
+Target declares one Offence/Defence split; both attackers roll against same Defence allocation.
 
-## ED-129 Resolution (PP-284)
-Zone terminology: **Close zone → Reach. Far zone → Distance.**
-All params_combat references updated to use Reach/Distance.
-Ranged weapons: effective at Distance, disadvantaged at Reach (−1D Offence or +1 TN at Reach, GM choice).
-Melee weapons: effective at Reach, cannot make Offence roll at Distance.
-[FLAGGED: confirm Reach/Distance as final terminology before compilation.]
+## PP-275 — Stamina maximum
+Stamina capped at base value (End + H + 1 − armour mod). Take a Breath restores Endurance score, capped at base.
 
-## ED-130 Resolution (PP-285)
-Stage 1/Stage 2 incapacitation: already STRUCK per params_combat L147 (ED-130 resolved 2026-04-03).
-Single incapacitation state: Health reaches 0 → Incapacitated. No staged dying. PP-232 governs.
-ED-130 confirmed resolved.
+## PP-276 — Initiative mixed outcome
+Both succeed at different priorities → initiative stays with current holder.
 
-## ED-131 Resolution (PP-286) [FLAGGED]
-Weapon modifier vs armour tier table: current values stand pending playtesting.
-Provisional guideline: Blade vs Light armour DR 1 → full damage. Blade vs Heavy armour DR 3 → damage −2 (net: 1+STR−3; minimum 1).
-[FLAGGED: confirm via playtesting before compilation.]
+## PP-277 — Feint -2D ceiling
+-2D is ceiling on Defence dice allocation (max Defence = pool − 2), not total pool reduction.
