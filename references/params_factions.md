@@ -297,3 +297,9 @@ At PI ≥ 8: factions passing Stability Ob 2 gain Stability +1. PI increase cap 
 
 ## PP-281 — PI cascade brake
 At PI ≥ 8: revolt-pass → Stability +1. PI increase rate cap: +2/season max from all combined sources.
+
+## PP-285 — Ethical framework Ob minimum = 1
+Ethical framework −1 Ob modifier cannot reduce any Domain Action Ob below 1. Prevents trivially automatic actions against low-Ob barriers.
+
+## ED-180 provisional — Piety DA + Stability ≤ 4
+Piety DA is an active action, not passive generation. Not subject to Stability ≤ 4 TC generation pause. Available regardless of Stability level. Provisional confirmed.

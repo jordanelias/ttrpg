@@ -217,3 +217,12 @@ Both succeed at different priorities → initiative stays with current holder.
 ## PP-284 — Stage 1/2 clarifications
 - Wound recovery: stabilised characters return after 1-scene rest; wounds clear at session end
 - Stage 2 trigger: any attack with ≥1 net hit on downed Stage 1 character; downed = Defence 0
+
+## PP-286 — Retrieve opposed Agility
+Direct pool contest: both roll Agility (TN 7); higher net successes wins. Retriever wins ties.
+
+## PP-287 — Pool split for non-Strike actions
+Disarm/Retrieve/Tie Up etc.: character still makes full Offence/Defence split. Offence dice go to the contested action. Defence allocation available against faster incoming attacks.
+
+## PP-288 — Rescue exclusivity
+Rescue replaces all other actions in the round. Character cannot Strike and Rescue simultaneously.

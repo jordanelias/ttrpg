@@ -67,6 +67,8 @@ Each faction's ethical framework modifies Domain Action rolls. Frameworks are mo
 - **+1 Ob:** Actions that contradict or strain the framework
 - **+2 Ob:** Church only — actions that would reveal Thread truth (institutional perceptual prophylaxis)
 
+**Minimum Ob = 1 (PP-285):** Ethical framework modifiers cannot reduce any Domain Action Ob below 1. An aligned action against a Fortification 1 target remains Ob 1, not Ob 0. This prevents Fortification, territorial defence, and other low-Ob barriers from becoming trivially automatic.
+
 ### Leader vs Institution
 
 **Institutional Tendency:** What the faction does without active Player Character direction. Represents the faction's default priorities and the direction Non-Player Character artificial intelligence applies.

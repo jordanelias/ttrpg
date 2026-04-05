@@ -1,47 +1,40 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-04T_SIM_STRESS_05
+session_id: 2026-04-04T_SIM_STRESS_06
 phase: SESSION CLOSED
 status: COMPLETE
 
 ## WORK COMPLETED
-1. Resolved all 88 open/provisional editorial items
-   - 20 editorial flags resolved with mechanical defaults (noted as placeholders where applicable)
-   - 51 provisionals confirmed
-   - PP-278–284 applied (7 new patches)
-2. SIM-STRESS-05: 7 scenarios (2 P1 greedy + 5 P2 randomized)
-   - SIM-DEBT-06 CLOSED (War-scale Coherence/Dissonant fully documented)
-   - PP-273, 278, 281, 282, 259, 240 all verified working
-   - 3 new editorial items resolved same session (ED-177, 178, 179 → PP-284)
+1. Committed all prior session work (PP-257–284, ED-005–179)
+2. SIM-STRESS-06: 7 scenarios (2 P1 greedy + 5 P2 randomized)
+   - PP-285–288 applied (4 new patches)
+   - ED-180–185 all resolved same session
+   - SIM-DEBT-01, 03, 04, 07 CLOSED
 
-## SIM-DEBT STATUS
-- SIM-DEBT-01: Social contest calibration (Cha×2 pool) — still open
-- SIM-DEBT-03: Two-genre system re-sim — still open
-- SIM-DEBT-04: Adjudicator-type calibration — still open
-- SIM-DEBT-05: TTRPG mass battle Dmg Mod — CLOSED (PP-245)
-- SIM-DEBT-06: War-scale Coherence/Dissonant — CLOSED (SIM-STRESS-05)
-- SIM-DEBT-07: High-resistance contest calibration — still open
+## ALL SIM-DEBT CLOSED
+No open SIM-DEBT items. All social contest debts resolved via calibration.
 
-## ALL EDs RESOLVED OR FLAGGED
-No open/provisional EDs remain in the main series.
-New EDs (177-179) resolved same session.
+## SYSTEM STATUS
+PP range: PP-001 through PP-288
+ED range: ED-001 through ED-185 (all resolved or flagged)
+Open main-series EDs: 1 (ED-166, stricken/confirmed)
+Open SIM-DEBT: 0
 
-## EDITORIAL FLAGS (noted — replaceable without patch)
-ED-005: Sister Elara Vind (Restoration leader placeholder)
-ED-006: Riskbreakers identity placeholder
-ED-024: Southernmost entity stat placeholders
-ED-029: Forgetting mechanics (GM-judgment design)
-ED-036: Altonian unit stats (PP-282 provisional)
-ED-080/081: Conviction texts (Baralta/Vaynard — confirmed)
-ED-108: T10/T11 names (Nordhelm/Mittelmark)
-ED-119: Lenneth arc placeholder
-ED-128: Certainty track (needs threadwork update)
-ED-131: Weapon modifiers (playtesting subject)
+## EDITORIAL NOTES (worldbuilding placeholders, replaceable without patch)
+- ED-005: Sister Elara Vind (Restoration leader) — placeholder
+- ED-006: Riskbreakers identity — placeholder
+- ED-024: Southernmost entity stats — placeholder
+- ED-036: Altonian invasion stats (PP-282 provisional)
+- ED-080/081: Conviction texts — confirmed pending authorial approval
+- ED-108: T10/T11 names — confirmed pending authorial approval
+- ED-119: Lenneth arc — placeholder
+- ED-128: Certainty track — needs threadwork doc update
+- ED-131: Weapon modifiers — pending playtesting
 
-## NEXT RECOMMENDED SIMULATION TARGETS
-- SIM-DEBT-01/03/04: Social contest calibration under new attribute model
-- Altonian invasion full campaign simulation (IP ramp to 75+)
-- Varfell T13 opening with PP-266 Fortification applied
-- Thread combat vs Southernmost entities (ED-024 now partially unblocked)
+## RECOMMENDED NEXT STEPS
+- Playtest: weapon modifier table values (ED-131)
+- Confirm worldbuilding: Altonian stats, T10/T11 names, Conviction texts
+- Threadwork doc update: Certainty track decoupling (ED-128)
+- Compilation pass: all systems now have full canonical patches; ready for v0.15
 ```

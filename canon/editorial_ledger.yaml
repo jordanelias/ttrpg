@@ -4077,3 +4077,65 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     decision: 'Partial Appraise identifies axis type mechanically. Publicly known faction boost assignments supplement but do not replace the roll. Players may infer from context. PP-278 applies; no additional patch.'
     propagation_targets: []
     tags: [social_contest, appraise, resolved]
+
+  # ── SIM-STRESS-06 FINDINGS — 2026-04-04 ──────────────────────────────────
+
+  - id: ED-180
+    date_flagged: '2026-04-04'
+    date_resolved: '2026-04-04'
+    source: simulation/SIM-STRESS-06
+    description: 'Piety DA not subject to Stability ≤ 4 TC generation pause — confirmed'
+    status: resolved
+    decision: 'Piety DA is an active action; Stability ≤ 4 pause applies only to passive TC generation. Piety DA available at any Stability level. Provisional confirmed.'
+    propagation_targets: [compilation/v0.14/stage6_factions.md, references/params_factions.md]
+    tags: [factions, piety_da, TC, resolved]
+
+  - id: ED-181
+    date_flagged: '2026-04-04'
+    date_resolved: '2026-04-04'
+    source: simulation/SIM-STRESS-06
+    description: 'Woven Discipline brittleness: max Discipline unreachable threshold — Option A accepted'
+    status: resolved
+    decision: 'Expert Weaving (Discipline 5) is stable by design. Brittleness unreachable at max Woven Discipline. Option A accepted. Note in GM tools. No mechanical change.'
+    propagation_targets: []
+    tags: [thread, mass_battle, woven, resolved]
+
+  - id: ED-182
+    date_flagged: '2026-04-04'
+    date_resolved: '2026-04-04'
+    source: simulation/SIM-STRESS-06
+    description: 'Ethical framework Ob minimum = 1 — resolved PP-285'
+    status: resolved
+    decision: 'Ethical framework modifiers cannot reduce Ob below 1. PP-285 applied to factions doc.'
+    propagation_targets: [compilation/v0.14/stage6_factions.md, references/params_factions.md]
+    tags: [factions, ethical_framework, Ob, resolved]
+
+  - id: ED-183
+    date_flagged: '2026-04-04'
+    date_resolved: '2026-04-04'
+    source: simulation/SIM-STRESS-06
+    description: 'Retrieve opposed Agility — direct pool contest — resolved PP-286'
+    status: resolved
+    decision: 'Both roll Agility (TN 7); higher net successes wins; Retriever wins ties. PP-286 applied.'
+    propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
+    tags: [combat, retrieve, resolved]
+
+  - id: ED-184
+    date_flagged: '2026-04-04'
+    date_resolved: '2026-04-04'
+    source: simulation/SIM-STRESS-06
+    description: 'Pool split for non-Strike actions — resolved PP-287'
+    status: resolved
+    decision: 'Non-Strike actions still require full Offence/Defence split. Offence commits to the action; Defence remains available against faster incoming attacks. PP-287 applied.'
+    propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
+    tags: [combat, pool_split, priority, resolved]
+
+  - id: ED-185
+    date_flagged: '2026-04-04'
+    date_resolved: '2026-04-04'
+    source: simulation/SIM-STRESS-06
+    description: 'Rescue exclusivity — resolved PP-288'
+    status: resolved
+    decision: 'Rescue is exclusive: replaces all other actions in the round. Cannot Strike and Rescue simultaneously. PP-288 applied.'
+    propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
+    tags: [combat, rescue, resolved]

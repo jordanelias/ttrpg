@@ -3067,3 +3067,47 @@ PP-234
   files_changed:
     - designs/combat/combat_design_v1.md
     - references/params_combat.md
+
+- id: PP-285
+  date: 2026-04-04
+  severity: P2
+  description: "Ethical framework minimum Ob = 1. Modifiers cannot reduce any Domain Action Ob below 1. Prevents trivially automatic actions against low-Ob barriers."
+  finding_id: "F-S6-18 / ED-182"
+  source: simulation/SIM-STRESS-06
+  status: applied
+  files_changed:
+    - compilation/v0.14/stage6_factions.md
+    - references/params_factions.md
+
+- id: PP-286
+  date: 2026-04-04
+  severity: P2
+  description: "Retrieve opposed Agility: direct pool contest. Both roll Agility (TN 7); higher net successes wins; Retriever wins ties."
+  finding_id: "F-S6-21 / ED-183"
+  source: simulation/SIM-STRESS-06
+  status: applied
+  files_changed:
+    - designs/combat/combat_design_v1.md
+    - references/params_combat.md
+
+- id: PP-287
+  date: 2026-04-04
+  severity: P2
+  description: "Pool split for non-Strike actions: Disarm/Retrieve/Tie Up etc. characters still split Offence/Defence at Phase 1. Offence commits to action; Defence remains available against faster attacks."
+  finding_id: "F-S6-22 / ED-184"
+  source: simulation/SIM-STRESS-06
+  status: applied
+  files_changed:
+    - designs/combat/combat_design_v1.md
+    - references/params_combat.md
+
+- id: PP-288
+  date: 2026-04-04
+  severity: P2
+  description: "Rescue exclusivity: Rescue replaces all other actions in the round. Cannot Strike and Rescue simultaneously. Rescuer still makes Offence/Defence split for their own defence."
+  finding_id: "F-S6-26 / ED-185"
+  source: simulation/SIM-STRESS-06
+  status: applied
+  files_changed:
+    - designs/combat/combat_design_v1.md
+    - references/params_combat.md
