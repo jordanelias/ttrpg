@@ -36,11 +36,12 @@ Valoria's political landscape is contested by eight factions, six with full mech
 
 *Schoenland is not a faction — it is a spoiler actor. See §8.10.*
 
-**Public Instability Track — BG mechanics (PP-255):**
+**Public Instability Track — BG mechanics (PP-255, PP-281):**
 Range: 0–10. Starting value: 5 (BG). Not a separate track in TTRPG mode (effects folded into Institutional Pressure).
-- **Accrual:** +1 per season in which any faction's Mandate drops below 3 at accounting.
+- **Accrual:** +1 per season in which any faction's Mandate drops below 3 at accounting. **Rate cap (PP-281):** PI cannot increase by more than +2 per season from any combination of sources.
 - **Recovery:** −1 per season in which zero hostile Domain Actions targeted any faction's Stability that season.
-- **PI ≥ 8:** Revolt risk — at accounting, each faction with Stability ≤ 3 makes a Stability check Ob 2. Failure: Mandate −1.
+- **Cap:** 0–10.
+- **PI ≥ 8:** Revolt risk — at accounting, each faction with Stability ≤ 3 makes a Stability check Ob 2. Failure: Mandate −1. **Cascade brake (PP-281):** Any faction that passes this check gains Stability +1.
 - **PI = 10:** General uprising — GM narrative event fires. Magnitude and faction determined by campaign state. No automatic mechanical resolution.
 - PI does not reset between seasons automatically.
 
@@ -123,6 +124,16 @@ Once per season, the Crown issues a unilateral political act that bypasses norma
 | **Failure** | Mandate −1 (overreach) |
 | **Constraint** | Cannot target Intel — decrees are public acts. Cannot target a stat absent from the target faction's sheet (e.g. Niflhel has no Mandate; Löwenritter has no Wealth). (PP-243) |
 | **Limit** | 1/season; consecutive seasons: +1 Ob per consecutive use (decree fatigue) |
+
+**Altonian invasion units — provisional (PP-282, ED-036 resolved):**
+At IP ≥ 75, the following provisional unit stats apply for simulation. **NOTED: subject to worldbuilding confirmation.**
+
+| Unit | Size | Power | Discipline | Morale | Weapon | Armour |
+|------|------|-------|-----------|--------|--------|--------|
+| Altonian Vanguard | 4 | 4 | 4 | 5 | LightCut + HP | Medium |
+| Altonian Heavy Infantry | 5 | 5 | 5 | 5 | HeavyCut | Heavy |
+
+Invasion wave: 3 Vanguard + 2 Heavy Infantry. NPC general Command 5.
 
 **Victory balance (PP-262):** Crown's victory condition requires at least one deed that demands active mid-game play (not pre-met at session start). The GM should confirm that Crown's deed set includes at least two deeds achievable only through Domain Actions or military success after Season 1. If Crown's starting position pre-meets 3 of 5 deeds, replace one pre-met deed with: 'Hold Valorsplatz and maintain Mandate ≥ 5 at end of Season 6.'
 

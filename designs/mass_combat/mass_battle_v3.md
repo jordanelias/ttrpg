@@ -644,6 +644,8 @@ approval — each reflects the faction's military doctrine.]
 | Löwenritter | Iron Discipline (immune to Route this engagement) | Martial Law (after winning: territory gains Martial Law next season) |
 | Revolution | People's Courage (Discipline +1 all units this engagement) | Ambush (first engagement in Oastad or Stillhelm: opponent no Defence roll) |
 
+**Tactic cards confirmed canonical (PP-283):** All faction-specific cards above are confirmed as canonical defaults. Content may be revised narratively without patch; mechanical effects require patch.
+
 ---
 
 ### B.5 HYBRID HANDOFF

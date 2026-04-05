@@ -295,13 +295,5 @@ Range 0–10. Start 5. Accrual: +1/season any faction Mandate < 3 at accounting.
 ## ED-174 provisional — PI cascade brake
 At PI ≥ 8: factions passing Stability Ob 2 gain Stability +1. PI increase cap +2/season from all sources combined. Awaiting user confirmation.
 
-## Church Martyrdom Effect (PP-257 / PP-302)
-When a public accusatory Contest against a Church leader fails (Contest net < Ob in public venue with witnesses):
-Church gains Stability +1 from institutional martyrdom effect.
-Conditions: (a) public venue (witnesses beyond the two parties), (b) accusatory mode used against Consequence-mode NPC (wrong Resonant Style), (c) Debate result is Failure or Partial.
-Applies to: Himlensendt, Olafsson, Klapp (as institutional representatives).
-Does NOT apply to: failed Consequence-mode debates, private scenes, non-accusatory approaches.
-
-## Community Weaving — Canonical Formula (cross-reference PP-296)
-See params_threadwork.md PP-296. Faction params entries for Community Weaving under PP-168 and PP-195 are superseded.
-Formula: Attunement + History + TPS, Ob 3, RS +1/+2. Not a Domain Action.
+## PP-281 — PI cascade brake
+At PI ≥ 8: revolt-pass → Stability +1. PI increase rate cap: +2/season max from all combined sources.

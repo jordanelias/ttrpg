@@ -108,8 +108,8 @@ A practitioner declaring Leap (Priority 5) may be struck at Priority 1 before co
 **Incapacitation timing:** Complete currently-resolving action. Fall at end of that priority step. Later-declared actions do not resolve.
 
 **Incapacitation stages — personal combat (PP-269):**
-- **Stage 1 (Incapacitated/Down):** Health reaches 0 at max Wounds. Character is unable to act. Can be stabilised with a Medicine roll (Ob 2) within the same scene. Stabilised characters survive but cannot participate further this scene.
-- **Stage 2 (Dying):** If not stabilised by scene end, or if a second incapacitating blow lands on a downed character: Stage 2. Will die without intervention. Medicine Ob 3 within one scene; failure = death.
+- **Stage 1 (Incapacitated/Down):** Health reaches 0 at max Wounds. Character is unable to act. Can be stabilised with a Medicine roll (Ob 2) within the same scene. Stabilised characters survive but cannot participate further this scene. **Recovery (PP-284/ED-177):** Stabilised characters may return to action after one full scene of rest. Wounds clear at end of session (or after extended rest per GM). Stabilised characters retain all Wounds until rest.
+- **Stage 2 (Dying):** If not stabilised by scene end, or if **any attack dealing at least 1 net hit lands on a downed Stage 1 character** (PP-284/ED-178): Stage 2. Downed characters cannot defend (Defence = 0); any landed strike is potentially finishing. Will die without intervention. Medicine Ob 3 within one scene; failure = death.
 Note: Stage 1/Stage 2 in personal combat are the same framework as general incapacitation in mass battle (§A.5), applied at personal scale.
 
 ---

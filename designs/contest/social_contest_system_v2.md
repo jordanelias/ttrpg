@@ -114,7 +114,7 @@ TN: 7 (Standard). Situational modifiers per core engine (TN 6 Controlled, TN 8 D
 
 This follows the same pool construction pattern as combat: Combat Pool = (Agility × 2) + weapon proficiency History + 3. The doubled attribute makes the primary attribute the dominant factor, with History providing depth of experience. The +3 constant from combat and general skill rolls is included in the History bonus formula (History bonus = points + 3, per §4.1 of Stage 2).
 
-The Read step (§4, Step 1) always uses Attunement regardless of adjudicator type. Reading the audience or opponent is always an act of empathetic perception.
+The Appraise step (§4, Step 1) always uses Attunement regardless of adjudicator type. Appraising the audience or opponent is always an act of empathetic perception. (PP-278)
 
 **Design note:** the three social attributes (Cognition, Charisma, Attunement) each have a domain where they are primary. High-Cognition characters excel before judges and tribunals. High-Charisma characters excel before crowds and parliaments. High-Attunement characters excel in private dealings. This produces meaningful character differentiation across social contexts without adding mechanical complexity — the formula is the same; only the base attribute changes.
 
@@ -122,12 +122,12 @@ The Read step (§4, Step 1) always uses Attunement regardless of adjudicator typ
 
 ## §4 EXCHANGE STRUCTURE
 
-**Step 1 — Read (both orators):**
+**Step 1 — Appraise (both orators) (PP-278):**
 Roll Attunement alone (no History), TN 7, Ob 1.
 
-Each exchange's Read senses the CURRENT state of the audience (which may have shifted from Doubt Markers, track movement, or strain). This is not a re-attempt of the same question — it is a fresh perception of changed circumstances.
+Each exchange's Appraise senses the CURRENT state of the audience (which may have shifted from Doubt Markers, track movement, or strain). This is not a re-attempt of the same question — it is a fresh perception of changed circumstances.
 
-| Net Successes | Information |
+| Appraise Net Successes | Information |
 |---|---|
 | Failure (0) | Misleading signal: GM identifies a wrong boost as the audience's actual boost |
 | Partial (1) | Boosted axis type identified (genre or orientation) but not which specific one |
@@ -266,7 +266,7 @@ One orator invokes what has been (Memory); the other projects what could become 
 | Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) | 0–2 | — |
 | Focus defence | floor(Foc ÷ 2) | 0–3 | Armour Rating (damage reduction) |
 | Concentration | Focus + Recall | 2–14 | Stamina = Endurance + History + 1 |
-| Read pool | Attunement only | 1–7 | — |
+| Appraise pool | Attunement only | 1–7 | — |
 | Argue pool | (Primary Attribute × 2) + History bonus | Variable | Combat Pool = (Agility × 2) + History + 3 |
 
 ---
@@ -282,7 +282,7 @@ Pool: Attunement + most relevant History, TN 7, Ob 1.
 |---|---|
 | Failure / Partial | No effect |
 | Success | +1D on Exchange 1 Argue roll |
-| Overwhelming | +1D on Exchange 1 Argue roll AND Exchange 1 Read uses TN 6 |
+| Overwhelming | +1D on Exchange 1 Argue roll AND Exchange 1 Appraise uses TN 6 |
 
 Time requirement: at least 1 hour. Rushed (< 1 hour): TN 8.
 
@@ -370,7 +370,7 @@ Total Victory: Conviction Track ≥ 9 or ≤ 1 → losing coalition's dominant f
 ### Carried forward
 | ID | Description | Priority |
 |---|---|---|
-| ED-132 | Read step action name (Appraise/Read/Gauge) | P3 |
+| ED-132 | Appraise step action name resolved: Appraise (PP-278) | P3 |
 | ED-133 | Diverge state — superseded by CROSS. Confirm Diverge no longer needed. | P2 |
 | ED-041 | Niflhel social toolkit — provisional stub in §9.7 | P2 |
 | ED-051 | Corroboration full port (Knot requirement removed per ED-014) | P3 |
@@ -381,7 +381,7 @@ Total Victory: Conviction Track ≥ 9 or ≤ 1 → losing coalition's dominant f
 | Escalation between social modes (negotiation → debate → appeal) | Conceptually identified, not designed |
 | Negotiation compromise resolution (ZOPA-style) | Identified as structurally different from Conviction Track, not designed |
 | Mass battle rally action (Attunement-based) | Gap identified, belongs in mass_battle_v3 |
-| Read step expansion (reveal Beliefs, Knot vulnerabilities) | Conceptually identified, not specified |
+| Appraise step expansion (reveal Beliefs, Knot vulnerabilities) | Conceptually identified, not specified |
 
 ### Simulation debt
 | ID | Description |

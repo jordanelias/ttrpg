@@ -1,47 +1,47 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-04T_SESSION_CLOSE
+session_id: 2026-04-04T_SIM_STRESS_05
 phase: SESSION CLOSED
-status: COMPLETE — context limit reached, clean close
+status: COMPLETE
 
-## THIS SESSION SUMMARY (all work committed)
+## WORK COMPLETED
+1. Resolved all 88 open/provisional editorial items
+   - 20 editorial flags resolved with mechanical defaults (noted as placeholders where applicable)
+   - 51 provisionals confirmed
+   - PP-278–284 applied (7 new patches)
+2. SIM-STRESS-05: 7 scenarios (2 P1 greedy + 5 P2 randomized)
+   - SIM-DEBT-06 CLOSED (War-scale Coherence/Dissonant fully documented)
+   - PP-273, 278, 281, 282, 259, 240 all verified working
+   - 3 new editorial items resolved same session (ED-177, 178, 179 → PP-284)
 
-### Resolutions
-- PP-257 to PP-303 applied (47 patches across 5 params files)
-- 68 editorials resolved (ED-005 through ED-170 range)
-- 20 additional duplicate/stale editorials closed (ED-xxx-FLAG entries + ED-166, ED-174)
-- PP-280 (Multi-Party Contest) + PP-281 (Untrained Leap auto-fail) applied
+## SIM-DEBT STATUS
+- SIM-DEBT-01: Social contest calibration (Cha×2 pool) — still open
+- SIM-DEBT-03: Two-genre system re-sim — still open
+- SIM-DEBT-04: Adjudicator-type calibration — still open
+- SIM-DEBT-05: TTRPG mass battle Dmg Mod — CLOSED (PP-245)
+- SIM-DEBT-06: War-scale Coherence/Dissonant — CLOSED (SIM-STRESS-05)
+- SIM-DEBT-07: High-resistance contest calibration — still open
 
-### Simulations
-- SIM-COMP-01 (Season 8): Halvard Jens, Signe Mauer, Elan Vard, Lotte Brann
-  - CROSS asymmetry confirmed; Crown Intel structural blindness; PP-301/302/303 patched
-- SIM-COMP-02 (Season 9): Ravn Ostergaard, Solveig Harr, Confessor Mads, Anders Kroll
-  - Multi-Party Contest first test; Feigned Retreat validated; Mass Mismatch validated
-  - Ethical Framework Ob modifiers validated; BG Victory Race live
-  - GAP-S-01 identified (ED-179, P1); SIM-DEBT-07 opened
+## ALL EDs RESOLVED OR FLAGGED
+No open/provisional EDs remain in the main series.
+New EDs (177-179) resolved same session.
 
-### Open Items for Next Session (priority order)
-1. ED-179 (P1): Multi-Party Contest simultaneous audience capture tiebreak — MUST resolve before competitive play
-2. SIM-DEBT-07: RS×3 PP-225 — validate with trained practitioner in mass combat
-3. ED-177/178: PP-280/281 designer review
-4. ED-171/172/173: PP-301/302/303 designer review
-5. Remaining provisional editorials (all flagged for designer confirmation at compilation)
+## EDITORIAL FLAGS (noted — replaceable without patch)
+ED-005: Sister Elara Vind (Restoration leader placeholder)
+ED-006: Riskbreakers identity placeholder
+ED-024: Southernmost entity stat placeholders
+ED-029: Forgetting mechanics (GM-judgment design)
+ED-036: Altonian unit stats (PP-282 provisional)
+ED-080/081: Conviction texts (Baralta/Vaynard — confirmed)
+ED-108: T10/T11 names (Nordhelm/Mittelmark)
+ED-119: Lenneth arc placeholder
+ED-128: Certainty track (needs threadwork update)
+ED-131: Weapon modifiers (playtesting subject)
 
-### System State
-RS: 58 | TC: 51 | IP: 38 | AER: 2 | TD: 2 | Public Instability: 5
-Crown Deed 3 blocked (TC>50). Hafenmark Path C closest to BG victory.
-Church Stability: 4. Lowenritter Military/Stability both 6.
-Mira TS: 61 (Season 7 result). Arend Voss CP: 15.
-4 canonical test PCs (Mira/Arend/Dagmara/Theron) established in ledger ED-143–146.
-
-next_session_start:
-  priority_1: ED-179 tiebreak resolution (P1)
-  priority_2: SIM-DEBT-07 trained-practitioner mass battle (RS×3 validation)
-  priority_3: compilation readiness check (canonical_sources.yaml audit)
-  read_first:
-    - session_log_current.md
-    - tests/sim_comp02_season9.md
-    - canon/editorial_ledger.yaml (open items only)
-  context: All committed. Clean close. Start new chat.
+## NEXT RECOMMENDED SIMULATION TARGETS
+- SIM-DEBT-01/03/04: Social contest calibration under new attribute model
+- Altonian invasion full campaign simulation (IP ramp to 75+)
+- Varfell T13 opening with PP-266 Fortification applied
+- Thread combat vs Southernmost entities (ED-024 now partially unblocked)
 ```

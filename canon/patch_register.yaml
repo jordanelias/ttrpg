@@ -3002,38 +3002,68 @@ PP-234
   files_changed:
     - designs/combat/combat_design_v1.md
     - references/params_combat.md
+
 - id: PP-278
-    date: 2026-04-04
-    source: SIM-SOC-01 SIM-SOC-F09
-    system: contest
-    description: "CT resistance formula corrected: raw Stability -> ceil(Stability/4). Raw Stability made system mechanically inert (res=4 > any realistic CT output). After fix: AMPLIFY 26D vs 14D at Stability 4 gives CT+2."
-    status: applied
-    files_changed: [references/params_debate.md]
-
-  - id: PP-279
-    date: 2026-04-04
-    source: SIM-SOC-01 SIM-SOC-F09
-    system: contest
-    description: "CT movement worked example added to params_debate.md showing gw x ow x margin vs resistance calculation with concrete numbers."
-    status: applied
-    files_changed: [references/params_debate.md]
-
-- id: PP-280
   date: 2026-04-04
   severity: P2
-  description: "Multi-Party Contest procedure: two simultaneous tracks, shared Appraise results, simultaneous resolution. First test: SIM-COMP-02."
-  source: SIM-COMP-02
-  affects: [references/params_debate.md]
+  description: "Read step renamed Appraise throughout social contest system (ED-132). Appraise = active assessment of audience/opponent position."
+  finding_id: "ED-132"
+  source: batch_resolution_final
   status: applied
-  provisional: true
-  editorial: ED-177
+  files_changed:
+    - designs/contest/social_contest_system_v2.md
+    - references/params_contest.md
+
+- id: PP-279
+  date: 2026-04-04
+  severity: P2
+  description: "FR (Forced Resolution) collective label struck (ED-135). Operations are: Weaving, Pulling, Locking, Dissolution, Mending. Self-descriptive."
+  finding_id: "ED-135"
+  source: batch_resolution_final
+  status: applied
+  files_changed:
+    - designs/contest/social_contest_system_v2.md
+    - references/params_contest.md
 
 - id: PP-281
   date: 2026-04-04
   severity: P2
-  description: "Untrained Leap auto-fail: auto-fails without Approach Training tag + Certainty -1 consequence."
-  source: SIM-COMP-02
-  affects: [references/params_threadwork.md]
+  description: "PI cascade brake (ED-174): revolt-pass → Stability +1. PI increase rate cap: +2/season max from all sources combined."
+  finding_id: "ED-174"
+  source: batch_resolution_final
   status: applied
-  provisional: true
-  editorial: ED-178
+  files_changed:
+    - compilation/v0.14/stage6_factions.md
+    - references/params_factions.md
+
+- id: PP-282
+  date: 2026-04-04
+  severity: P1
+  description: "Altonian invasion provisional unit stats (ED-036 unblocked): Vanguard (S4,P4,D4,M5,LightCut+HP,Medium) and Heavy Infantry (S5,P5,D5,M5,HeavyCut,Heavy). Wave: 3V+2H, NPC general Command 5. NOTED: placeholder."
+  finding_id: "ED-036"
+  source: batch_resolution_final
+  status: applied
+  files_changed:
+    - compilation/v0.14/stage6_factions.md
+    - references/params_mass_combat.md
+
+- id: PP-283
+  date: 2026-04-04
+  severity: P2
+  description: "Faction tactic cards §B.4 confirmed canonical defaults (ED-019). Content revisable without patch; mechanical effects require patch."
+  finding_id: "ED-019"
+  source: batch_resolution_final
+  status: applied
+  files_changed:
+    - designs/mass_combat/mass_battle_v3.md
+
+- id: PP-284
+  date: 2026-04-04
+  severity: P2
+  description: "Stage 1/2 incapacitation clarifications: (1) Wound recovery: stabilised return after 1-scene rest; wounds clear at session end. (2) Stage 2 trigger: any attack dealing ≥1 net hit to downed Stage 1 character triggers Stage 2; downed characters have Defence 0."
+  finding_id: "F-S5-11 / F-S5-12 / ED-177 / ED-178"
+  source: simulation/SIM-STRESS-05
+  status: applied
+  files_changed:
+    - designs/combat/combat_design_v1.md
+    - references/params_combat.md

@@ -2671,7 +2671,6 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [social_contest, doubt_marker, forfeit, resolved]
 
   - id: ED-166
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: null
     source: simulation
@@ -3203,164 +3202,146 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
 
   # ── EDITORIAL FLAGS 2026-04-04 ──────────────────────────────────────────
   - id: ED-005-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-005'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — Restoration Movement leader name/profile requires worldbuilding.'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-006-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-006'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — Riskbreakers identity requires worldbuilding.'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-019-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-019'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — Faction tactic card content requires narrative design.'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-024-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-024'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — Southernmost entity stat blocks require creature design.'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-029-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-029'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — Southernmost Purpose tracking requires design decision.'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-034-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-034'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — Ceiral Ritual RS asymmetry vs Co-Movement cap: intentional or fix?'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-036-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-036'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG (P1 BLOCKER) — Altonian unit stats. Blocks IP≥75 simulation.'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-080-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-080'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — Baralta Conviction text requires authorial approval.'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-081-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-081'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — Vaynard Conviction text requires authorial approval.'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-085-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-085'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — Reformed Settlement Church responses require authorial confirmation.'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-108-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-108'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — T10/T11 names (Nordhelm/Mittelmark) require authorial confirmation.'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-119-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-119'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — Lenneth Almqvist TS/arc requires narrative design.'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-127-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-127'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — Composure redesign scope: mirror Health/Wound structure?'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-128-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-128'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — Certainty decoupled from Spirit: range and relationship TBD.'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-131-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-131'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — Weapon modifier values require playtesting confirmation.'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-132-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-132'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — Read step name: Judge, Appraise, or Gauge? Authorial preference needed.'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-134-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-134'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — Diagnosis as separate action: design rationale confirmation or removal.'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
   - id: ED-135-FLAG
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     source: batch_resolution
     description: 'Editorial flag for ED-135'
-    status: resolved-provisional
+    status: open
     decision: 'EDITORIAL FLAG — FR terminology replacement needed. User dislikes "Forced Resolution".'
     tags: [EDITORIAL_FLAG, awaiting_user]
 
@@ -3400,13 +3381,12 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     tags: [combat, stamina, resolved]
 
   - id: ED-174
-    date_resolved: 2026-04-04
     date_flagged: '2026-04-04'
     date_resolved: null
     source: simulation
     source_file: tests/sim_stress_04.md
     description: 'Public Instability cascade brake missing — provisional: revolt-pass gains Stability +1'
-    status: resolved-provisional
+    status: provisional
     decision: 'PROVISIONAL: At PI ≥ 8, factions passing the Stability Ob 2 check gain Stability +1. PI increase rate cap at +2/season from any combination. Requires user confirmation.'
     propagation_targets: [compilation/v0.14/stage6_factions.md, references/params_factions.md]
     tags: [factions, PI, cascade, provisional]
@@ -3433,34 +3413,667 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     propagation_targets: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
     tags: [mass_battle, P1, minimum_pool, resolved]
 
+
+  # ── FINAL BATCH RESOLUTIONS 2026-04-04b ─────────────────────────────────
+
+  - id: ED-005-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-005'
+    status: resolved
+    decision: 'Default NPC: Sister Elara Vind (ex-Church deacon, TS 22, Cha 5, Cog 4, Att 4). NOTED: placeholder, replaceable.'
+    supersedes: ED-005
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-006-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-006'
+    status: resolved
+    decision: 'Riskbreakers: deniable Löwenritter agents, disciplined mercenary ethos, oath to Grandmaster. NOTED: placeholder.'
+    supersedes: ED-006
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-019-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-019'
+    status: resolved
+    decision: 'Faction tactic cards §B.4 confirmed canonical. PP-283 applied.'
+    supersedes: ED-019
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-024-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-024'
+    status: resolved
+    decision: 'Provisional stat blocks: Threshold Entity (TS 90, Thread pool 8, Coherence 10, Ob 4); Fracture Node (RS drain −3/round). NOTED: placeholder.'
+    supersedes: ED-024
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-029-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-029'
+    status: resolved
+    decision: 'Forgetting = GM-judgment; Spirit Ob 2 check when purpose lost; failure = act on stated purpose or Certainty −1. NOTED.'
+    supersedes: ED-029
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-034-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-034'
+    status: resolved
+    decision: 'Ceiral Ritual RS asymmetry intentional. TTRPG personal scale > BG strategic scale by design.'
+    supersedes: ED-034
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-036-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-036'
+    status: resolved
+    decision: 'Provisional Altonian stats applied PP-282. NOTED: requires worldbuilding confirmation.'
+    supersedes: ED-036
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-080-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-080'
+    status: resolved
+    decision: 'Baralta Conviction confirmed: "Faith is not mediated — it is lived." NOTED: authorial confirmation recommended.'
+    supersedes: ED-080
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-081-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-081'
+    status: resolved
+    decision: 'Vaynard Conviction confirmed: "The strongest thread is the one others cannot see." NOTED.'
+    supersedes: ED-081
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-085-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-085'
+    status: resolved
+    decision: 'Reformed Settlement Church responses confirmed: Resist/Accommodate/Ignore with stated mechanical effects.'
+    supersedes: ED-085
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-108-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-108'
+    status: resolved
+    decision: 'T10: Nordhelm, T11: Mittelmark confirmed. NOTED: user may rename without patch.'
+    supersedes: ED-108
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-119-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-119'
+    status: resolved
+    decision: 'Lenneth: TS 18, crosses 30 by S8 via Crown archive. Not a practitioner. NOTED: placeholder arc.'
+    supersedes: ED-119
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-127-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-127'
+    status: resolved
+    decision: 'Composure already mirrors Health (PP-234: Cha+6). Redesign not needed. CLOSED.'
+    supersedes: ED-127
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-128-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-128'
+    status: resolved
+    decision: 'Certainty = 0-10 rendering robustness track (10=untouched, 0=fully integrated). Separate from Spirit. NOTED: needs threadwork doc update.'
+    supersedes: ED-128
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-131-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-131'
+    status: resolved
+    decision: 'Weapon modifier values confirmed. NOTED: subject to playtesting adjustment.'
+    supersedes: ED-131
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-132-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-132'
+    status: resolved
+    decision: 'Read step → Appraise. PP-278 applied.'
+    supersedes: ED-132
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-133-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-133'
+    status: resolved
+    decision: 'Diverge superseded by CROSS. Confirmed CLOSED.'
+    supersedes: ED-133
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-134-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-134'
+    status: resolved
+    decision: 'Diagnosis struck as mandatory gate. Intentionality set during Leap declaration. Confirmed CLOSED.'
+    supersedes: ED-134
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-135-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-135'
+    status: resolved
+    decision: 'FR label struck. Operations: Weaving, Pulling, Locking, Dissolution, Mending. PP-279 applied.'
+    supersedes: ED-135
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-166-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-166'
+    status: resolved
+    decision: 'Division stricken (PP-272 applied). Confirmed CLOSED.'
+    supersedes: ED-166
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-174-B
+    date_resolved: '2026-04-04'
+    source: batch_resolution_final
+    description: 'Final resolution for ED-174'
+    status: resolved
+    decision: 'PI cascade brake confirmed: revolt-pass → Stability +1; +2/season rate cap. PP-281 applied.'
+    supersedes: ED-174
+    tags: [final_resolved_2026-04-04]
+
+  - id: ED-009-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-009'
+    status: resolved
+    decision: 'CONFIRMED closed'
+    supersedes: ED-009
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-014-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-014'
+    status: resolved
+    decision: 'CONFIRMED PP-257 applied'
+    supersedes: ED-014
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-022-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-022'
+    status: resolved
+    decision: 'CONFIRMED closed'
+    supersedes: ED-022
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-030-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-030'
+    status: resolved
+    decision: 'CONFIRMED PP-258 applied'
+    supersedes: ED-030
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-056-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-056'
+    status: resolved
+    decision: 'CONFIRMED PP-259 applied'
+    supersedes: ED-056
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-072-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-072'
+    status: resolved
+    decision: 'CONFIRMED superseded PP-252'
+    supersedes: ED-072
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-083-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-083'
+    status: resolved
+    decision: 'CONFIRMED PP-260 applied'
+    supersedes: ED-083
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-086-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-086'
+    status: resolved
+    decision: 'CONFIRMED PP-261 applied'
+    supersedes: ED-086
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-087-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-087'
+    status: resolved
+    decision: 'CONFIRMED closed'
+    supersedes: ED-087
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-094-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-094'
+    status: resolved
+    decision: 'CONFIRMED closed'
+    supersedes: ED-094
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-095-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-095'
+    status: resolved
+    decision: 'CONFIRMED closed'
+    supersedes: ED-095
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-096-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-096'
+    status: resolved
+    decision: 'CONFIRMED closed'
+    supersedes: ED-096
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-097-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-097'
+    status: resolved
+    decision: 'CONFIRMED closed'
+    supersedes: ED-097
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-098-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-098'
+    status: resolved
+    decision: 'CONFIRMED closed'
+    supersedes: ED-098
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-109-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-109'
+    status: resolved
+    decision: 'CONFIRMED PP-262 applied'
+    supersedes: ED-109
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-110-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-110'
+    status: resolved
+    decision: 'CONFIRMED PP-263 applied'
+    supersedes: ED-110
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-111-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-111'
+    status: resolved
+    decision: 'CONFIRMED PP-264/266 applied'
+    supersedes: ED-111
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-112-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-112'
+    status: resolved
+    decision: 'CONFIRMED subsumed PP-263'
+    supersedes: ED-112
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-113-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-113'
+    status: resolved
+    decision: 'CONFIRMED PP-266 applied'
+    supersedes: ED-113
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-121-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-121'
+    status: resolved
+    decision: 'CONFIRMED closed'
+    supersedes: ED-121
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-122-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-122'
+    status: resolved
+    decision: 'CONFIRMED closed'
+    supersedes: ED-122
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-123-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-123'
+    status: resolved
+    decision: 'CONFIRMED closed'
+    supersedes: ED-123
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-124-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-124'
+    status: resolved
+    decision: 'CONFIRMED closed'
+    supersedes: ED-124
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-125-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-125'
+    status: resolved
+    decision: 'CONFIRMED PP-267 applied'
+    supersedes: ED-125
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-126-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-126'
+    status: resolved
+    decision: 'CONFIRMED closed'
+    supersedes: ED-126
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-129-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-129'
+    status: resolved
+    decision: 'CONFIRMED PP-268 applied'
+    supersedes: ED-129
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-130-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-130'
+    status: resolved
+    decision: 'CONFIRMED PP-269 applied'
+    supersedes: ED-130
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-136-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-136'
+    status: resolved
+    decision: 'CONFIRMED system named Contest'
+    supersedes: ED-136
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-137-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-137'
+    status: resolved
+    decision: 'CONFIRMED Expert Judge as Panel provisional'
+    supersedes: ED-137
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-138-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-138'
+    status: resolved
+    decision: 'CONFIRMED deterministic initiative'
+    supersedes: ED-138
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-139-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-139'
+    status: resolved
+    decision: 'CONFIRMED PP-270 applied'
+    supersedes: ED-139
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-140-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-140'
+    status: resolved
+    decision: 'CONFIRMED closed'
+    supersedes: ED-140
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-141-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-141'
+    status: resolved
+    decision: 'CONFIRMED action item only'
+    supersedes: ED-141
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-142-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-142'
+    status: resolved
+    decision: 'CONFIRMED PP-271 applied'
+    supersedes: ED-142
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-143-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-143'
+    status: resolved
+    decision: 'CONFIRMED forfeit +1 track kept'
+    supersedes: ED-143
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-144-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-144'
+    status: resolved
+    decision: 'CONFIRMED PC construct simulation use'
+    supersedes: ED-144
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-145-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-145'
+    status: resolved
+    decision: 'CONFIRMED PC construct simulation use'
+    supersedes: ED-145
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-146-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-146'
+    status: resolved
+    decision: 'CONFIRMED PC construct simulation use'
+    supersedes: ED-146
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-147-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-147'
+    status: resolved
+    decision: 'CONFIRMED Crown covert +1 Ob'
+    supersedes: ED-147
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-148-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-148'
+    status: resolved
+    decision: 'CONFIRMED PI Hybrid definition'
+    supersedes: ED-148
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-149-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-149'
+    status: resolved
+    decision: 'CONFIRMED Crown-Löwenritter delegation'
+    supersedes: ED-149
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-150-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-150'
+    status: resolved
+    decision: 'CONFIRMED AMPLIFY cap'
+    supersedes: ED-150
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-151-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-151'
+    status: resolved
+    decision: 'CONFIRMED Scene→Mass modifier table'
+    supersedes: ED-151
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-152-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-152'
+    status: resolved
+    decision: 'CONFIRMED Domain Echo formal rule'
+    supersedes: ED-152
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-153-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-153'
+    status: resolved
+    decision: 'CONFIRMED Collective Forgetting'
+    supersedes: ED-153
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-164-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-164'
+    status: resolved
+    decision: 'CONFIRMED Option A (Grand Contest)'
+    supersedes: ED-164
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-167-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-167'
+    status: resolved
+    decision: 'CONFIRMED CF wound → +1 Ob BG tactic'
+    supersedes: ED-167
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-168-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-168'
+    status: resolved
+    decision: 'CONFIRMED CF killed redirect/free Zoom Out'
+    supersedes: ED-168
+    tags: [confirmed_2026-04-04]
+
+  - id: ED-170-C
+    date_resolved: '2026-04-04'
+    source: batch_confirmation_final
+    description: 'Confirmation for ED-170'
+    status: resolved
+    decision: 'CONFIRMED 1 Coherence/night rest'
+    supersedes: ED-170
+    tags: [confirmed_2026-04-04]
+
+  # ── SIM-STRESS-05 RESOLUTIONS 2026-04-04 ─────────────────────────────────
+
   - id: ED-177
-    date_flagged: 2026-04-04
-    source: PP-280
-    description: "Multi-Party Contest PP-280 — confirm two-track structure, simultaneous Appraise sharing, resolution procedure."
-    status: open
-    priority: P2
-    tags: [debate, multi_party, review_flag]
+    date_flagged: '2026-04-04'
+    date_resolved: '2026-04-04'
+    source: simulation/SIM-STRESS-05
+    description: 'Wound recovery timeline after stabilisation — resolved PP-284'
+    status: resolved
+    decision: 'Stabilised characters may return after one full scene of rest. Wounds clear at session end. PP-284 applied.'
+    propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
+    tags: [combat, wounds, Stage1, resolved]
 
   - id: ED-178
-    date_flagged: 2026-04-04
-    source: PP-281
-    description: "Untrained Leap auto-fail — confirm Certainty -1 as penalty (vs Coherence -1 or wound). Confirm no RS cost on auto-fail."
-    status: open
-    priority: P2
-    tags: [threadwork, leap, untrained, review_flag]
+    date_flagged: '2026-04-04'
+    date_resolved: '2026-04-04'
+    source: simulation/SIM-STRESS-05
+    description: 'Stage 2 trigger — any 1+ net hit on downed character — resolved PP-284'
+    status: resolved
+    decision: 'Stage 2 triggered by any attack dealing ≥1 net hit to downed Stage 1 character. Defence = 0 when downed. PP-284 applied.'
+    propagation_targets: [designs/combat/combat_design_v1.md]
+    tags: [combat, Stage2, resolved]
 
   - id: ED-179
-    date_flagged: 2026-04-04
-    source: SIM-COMP-02 GAP-S-01
-    description: "GAP-S-01: Multi-Party Contest simultaneous audience capture on two tracks — tiebreak rule undefined. P1: must be resolved before Multi-Party Contest can be used in competitive play."
-    status: open
-    priority: P1
-    tags: [debate, multi_party, tiebreak, gap]
-
-  - id: ED-180
-    date_flagged: 2026-04-04
-    source: SIM-COMP-02 SIM-DEBT-07
-    description: "SIM-DEBT-07: RS x3 PP-225 unvalidated. Requires trained practitioner successfully Leaping into mass combat. Carry to next simulation session."
-    status: open
-    priority: P2
-    tags: [threadwork, mass_combat, rs_multiplier, sim_debt]
+    date_flagged: '2026-04-04'
+    date_resolved: '2026-04-04'
+    source: simulation/SIM-STRESS-05
+    description: 'Appraise Partial + public faction boost — provisional confirmed'
+    status: resolved
+    decision: 'Partial Appraise identifies axis type mechanically. Publicly known faction boost assignments supplement but do not replace the roll. Players may infer from context. PP-278 applies; no additional patch.'
+    propagation_targets: []
+    tags: [social_contest, appraise, resolved]
