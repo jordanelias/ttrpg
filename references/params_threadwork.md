@@ -436,3 +436,21 @@ Not a single battle turn. GM tracks window closure per season.
 ## Co-Movement Axes — Operation (ED-086 resolved 2026-04-03)
 Three axes confirmed: Temporal, Epistemic, Actuality. D10 roll.
 All three axes fire simultaneously — not sequential staging.
+
+---
+<!-- PP-239 applied 2026-04-04: RS no natural decay clarification -->
+<!-- PP-240 applied 2026-04-04: Forgetting Check stacking rule (PROVISIONAL) -->
+
+## RS Change Rule (PP-239)
+**RS does not decay naturally. All RS changes are event-driven:**
+- Thread operation degree outcomes (see operation tables)
+- Lock chronic drift: −1 RS/season per territory with active Lock (seasons 1–3); −2 RS/season (seasons 4+)
+- Gap persistence: −4 RS/season per active Gap at Accounting
+- Mending success: +1 to +2 RS per operation
+- No baseline seasonal RS reduction exists.
+
+## Forgetting Check Stacking Rule (PP-240) [PROVISIONAL — ED-153 adjacent]
+Multiple Forgetting Checks in the same session:
+- Within a single scene: only the deepest applicable Ob applies (checks do not stack within one scene).
+- Across multiple scenes in the same session: each check is independent. A Failure on an earlier check does not increase Ob for subsequent checks — the Forgetting strips content, not the mechanism itself.
+- Collective Forgetting (multiple practitioners present): [GAP-H-01 — undefined. Do not apply any rule until defined.]

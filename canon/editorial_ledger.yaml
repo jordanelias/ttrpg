@@ -2388,3 +2388,91 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     propagation_status: flagged
     related_ids: [ED-031, PP-179, PP-232]
     tags: [board_game, degree_table, consistency, audit]
+
+  - id: ED-143
+    date_flagged: 2026-04-04
+    source: SIM-H-01
+    description: "PC Mira Sondhal — simulation construct, requires approval before canonical use"
+    status: open
+    priority: P2
+    tags: [player_character, simulation_construct]
+
+  - id: ED-144
+    date_flagged: 2026-04-04
+    source: SIM-H-01
+    description: "PC Arend Voss — simulation construct"
+    status: open
+    priority: P2
+    tags: [player_character, simulation_construct]
+
+  - id: ED-145
+    date_flagged: 2026-04-04
+    source: SIM-H-01
+    description: "PC Sister Dagmara Kuhl — simulation construct"
+    status: open
+    priority: P2
+    tags: [player_character, simulation_construct]
+
+  - id: ED-146
+    date_flagged: 2026-04-04
+    source: SIM-H-01
+    description: "PC Theron Ault — simulation construct"
+    status: open
+    priority: P2
+    tags: [player_character, simulation_construct]
+
+  - id: ED-147
+    date_flagged: 2026-04-04
+    source: PP-236
+    description: "Crown covert penalty: +1 Ob on Influence-based covert rolls is PROVISIONAL. Confirm or set exact modifier."
+    status: provisional
+    priority: P2
+    tags: [faction, crown, covert, patch]
+
+  - id: ED-148
+    date_flagged: 2026-04-04
+    source: PP-237
+    description: "Public Instability Hybrid definition (range, thresholds, IP interaction) is PROVISIONAL. Requires user confirmation."
+    status: provisional
+    priority: P2
+    tags: [hybrid, clock, public_instability]
+
+  - id: ED-149
+    date_flagged: 2026-04-04
+    source: PP-241
+    description: "Crown-Lowenritter covert delegation: confirm whether Crown +1 Ob penalty applies when Lowenritter executes on Crown behalf."
+    status: provisional
+    priority: P2
+    tags: [faction, crown, lowenritter, covert]
+
+  - id: ED-150
+    date_flagged: 2026-04-04
+    source: PP-242
+    description: "AMPLIFY combined pool cap (highest individual x2). Degenerate case without cap confirmed. Confirm ceiling."
+    status: provisional
+    priority: P1
+    tags: [debate, amplify, pool_cap, blocker]
+
+  - id: ED-151
+    date_flagged: 2026-04-04
+    source: PP-244
+    description: "Scene to Mass transition modifier table is PROVISIONAL. Resolves AUD-P1-15 provisionally. Confirm modifier values and mid-combat zoom handling."
+    status: provisional
+    priority: P1-BLOCKER
+    tags: [hybrid, combat, mass_combat, transition]
+
+  - id: ED-152
+    date_flagged: 2026-04-04
+    source: Audit-01
+    description: "Domain Echo formal rule: how personal scene outcomes convert to faction stat changes in Cascade Phase is undefined. Provisional working rule provided."
+    status: provisional
+    priority: P1-BLOCKER
+    tags: [hybrid, cascade, domain_echo, blocker]
+
+  - id: ED-153
+    date_flagged: 2026-04-04
+    source: SIM-H-02
+    description: "Collective Forgetting rule undefined. Does one practitioner success allow carrying others intelligence? No rule found."
+    status: open
+    priority: P2
+    tags: [southernmost, forgetting, collective]

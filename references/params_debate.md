@@ -167,3 +167,21 @@ STRUCK: Clarity countdown mechanic removed.
 Entry roll: Spirit+History TN7 Ob 2. Success = character maintains purpose inside Southernmost. Failure = GM controls narrative behaviour inside.
 Exit roll: Spirit+History TN7 Ob 2. Success = character can articulate/remember why they entered. Failure = purpose lost to the Forgetting.
 No countdown track. GM judgment governs behaviour between entry and exit rolls.
+
+---
+<!-- PP-242 applied 2026-04-04: AMPLIFY combined pool cap (PROVISIONAL — ED-150) -->
+<!-- PP-245 applied 2026-04-04: CROSS exchange simultaneous resolution (PROVISIONAL) -->
+
+## AMPLIFY Combined Pool Cap (PP-242) [PROVISIONAL — ED-150]
+AMPLIFY (same genre, same orientation) combined pool maximum = **highest individual orator pool × 2**.
+This prevents degenerate stacking with 3+ orators while preserving meaningful collaboration.
+- Example: Lead orator 15D, helper orator 12D → combined cap = 30D (15 × 2).
+- Additional helpers beyond the cap do not increase dice. They may contribute a +1D narrative bonus at Game Master discretion (not mechanical).
+
+## CROSS Exchange Resolution (PP-245) [PROVISIONAL]
+CROSS interactions (different genres): both genre evaluations resolve **simultaneously**.
+- Each orator rolls independently.
+- Both movements are calculated.
+- Net track position after CROSS = current position + movement A − movement B (or ± as directed by each genre's audience weight).
+- Neither orator's movement is revealed before the other rolls.
+Note: CROSS→DIVERGE transition pending ED-133 resolution.

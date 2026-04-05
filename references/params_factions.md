@@ -233,3 +233,43 @@ Some members are Thread Practitioners. Operate alone or in small teams; present 
 Will not permit Valoria to fall under weak-willed, foreign, or religious rule.
 Parallel archetype: Shadow Warriors (Sousou no Frieren).
 Individual profiles and stat blocks deferred to campaign development.
+
+---
+<!-- PP-236 applied 2026-04-04: Crown covert actions rule -->
+<!-- PP-237 applied 2026-04-04: Public Instability Hybrid definition -->
+<!-- PP-238 applied 2026-04-04: Lowenritter reactive Military NPC guidance -->
+<!-- PP-241 applied 2026-04-04: Crown-Lowenritter covert delegation rule (PROVISIONAL) -->
+<!-- PP-244 applied 2026-04-04: Scene→Mass transition modifier table (PROVISIONAL) -->
+<!-- PP-246 applied 2026-04-04: Niflhel + Lowenritter ethical framework modifiers extracted -->
+
+## Crown Covert Actions (PP-236) [PROVISIONAL — ED-147]
+Crown has NO Intel stat. Crown covert actions (investigation, sabotage, intelligence gathering) use the **Influence** pool at **+1 Ob**. This is a faction design constraint: Crown is institutionally weakest at covert operations. The +1 Ob penalty applies to all Crown-initiated covert Domain Actions regardless of the action's formal label.
+
+## Crown-Lowenritter Covert Delegation (PP-241) [PROVISIONAL — ED-149]
+When Crown delegates a covert Domain Action to Lowenritter, the roll uses **Lowenritter Intel** pool. The Crown covert +1 Ob penalty does NOT apply — the constraint is institutional, not operational. Lowenritter acts as Crown's deniable agent. Political consequences of Lowenritter action discovery fall on Crown, not Lowenritter.
+
+## Public Instability — Hybrid Mode (PP-237) [PROVISIONAL — ED-148]
+Public Instability is a Hybrid-mode secondary clock.
+- Range: 0–10. Starting value: 5.
+- In TTRPG mode: not a separate clock. Effects folded into Institutional Pressure.
+- Hybrid increases: +1 per season Revolution Agitation resolves (any degree); +1 per season IP increases while TC > 40.
+- Hybrid decreases: −1 per season Crown or Guilds completes successful social Domain Action in contested territory.
+- Threshold 8: Revolution gains one free Agitation action at no Domain Action cost.
+- Threshold 10: Shared loss condition check (Institutional collapse — distinct from RS=0 Rupture).
+
+## Lowenritter Reactive Military NPC Guidance (PP-238)
+Lowenritter NPC AI priority: if any bordering faction's Military exceeds Lowenritter Military, Lowenritter NPC AI prioritises Military Consolidation (internal) the following season. This is a guidance rule, not a threshold mechanic — no automatic trigger fires.
+
+## Scene→Mass Transition Modifiers — Hybrid (PP-244) [PROVISIONAL — ED-151]
+When a personal combat scene precedes or overlaps a Strategic Phase mass action:
+- PC Overwhelming success: mass action at −1 Ob (officer neutralised, morale advantage)
+- PC Success: no modifier
+- PC Partial: mass action at +1 Ob (position degraded)
+- PC Failure: mass action at +2 Ob (PC captured/incapacitated; morale cost)
+Mid-combat zoom: pause combat. Resolve Strategic Phase. Apply mass outcome as context. Resume personal combat next session.
+
+## Ethical Framework Modifiers — Niflhel and Lowenritter (PP-246)
+| Faction | Framework | Aligned (−1 Ob) | Contradict (+1 Ob) |
+|---------|-----------|----------------|-------------------|
+| Niflhel | Transactional Survival | Covert actions (always −1 Ob; covert is their native mode) | Open/public actions |
+| Löwenritter | Martial Honour | Military actions + Crown-loyal actions | Political manipulation; acting against Crown interest |

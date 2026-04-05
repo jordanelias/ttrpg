@@ -2590,3 +2590,107 @@ PP-234
       - references/params_mass_combat.md
     status: applied
     tags: [cognitive_load, all_modes, optimization]
+
+- id: PP-236
+  date: 2026-04-04
+  severity: P2
+  description: "Crown covert actions: Influence pool +1 Ob (no Intel stat). Provisional."
+  source: SIM-H-01 gap resolution
+  affects: [references/params_factions.md]
+  status: applied
+  provisional: true
+  editorial: ED-147
+
+- id: PP-237
+  date: 2026-04-04
+  severity: P2
+  description: "Public Instability Hybrid mode definition: range 0-10, start 5, thresholds at 8 and 10. Provisional."
+  source: SIM-H-01 gap resolution
+  affects: [references/params_factions.md]
+  status: applied
+  provisional: true
+  editorial: ED-148
+
+- id: PP-238
+  date: 2026-04-04
+  severity: P2
+  description: "Lowenritter reactive Military NPC guidance: prioritise Consolidation if border faction Military exceeds own."
+  source: SIM-H-01 gap resolution
+  affects: [references/params_factions.md]
+  status: applied
+  provisional: false
+
+- id: PP-239
+  date: 2026-04-04
+  severity: P1
+  description: "RS has no natural decay. All RS changes are event-driven. Corrects SIM-H-01 accounting error (RS 54, not 53)."
+  source: SIM-H-01 audit
+  affects: [references/params_threadwork.md, tests/sim_h01_hybrid_season6.md]
+  status: applied
+  provisional: false
+
+- id: PP-240
+  date: 2026-04-04
+  severity: P2
+  description: "Forgetting Check stacking: deepest Ob per scene; independent across scenes. Collective Forgetting undefined (GAP-H-01)."
+  source: SIM-H-02
+  affects: [references/params_threadwork.md]
+  status: applied
+  provisional: true
+
+- id: PP-241
+  date: 2026-04-04
+  severity: P2
+  description: "Crown-Lowenritter covert delegation: Lowenritter Intel pool; Crown +1 Ob penalty does not apply to delegated actions. Provisional."
+  source: SIM-H-03
+  affects: [references/params_factions.md]
+  status: applied
+  provisional: true
+  editorial: ED-149
+
+- id: PP-242
+  date: 2026-04-04
+  severity: P1
+  description: "AMPLIFY combined pool cap: highest individual pool x2. Prevents degenerate multi-orator stacking. Provisional."
+  source: SIM-H-04
+  affects: [references/params_debate.md]
+  status: applied
+  provisional: true
+  editorial: ED-150
+
+- id: PP-243
+  date: 2026-04-04
+  severity: P2
+  description: "Momentum auto-successes add to roll, not replace. 1-result on die can cancel Momentum auto-success."
+  source: SIM-H-06
+  affects: [references/params_core.md]
+  status: applied
+  provisional: false
+
+- id: PP-244
+  date: 2026-04-04
+  severity: P1
+  description: "Scene to Mass transition modifier table (Hybrid). PC combat outcome sets Domain Action Ob modifier. Provisional (addresses AUD-P1-15)."
+  source: SIM-H-07
+  affects: [references/params_factions.md]
+  status: applied
+  provisional: true
+  editorial: ED-151
+
+- id: PP-245
+  date: 2026-04-04
+  severity: P2
+  description: "CROSS exchange: both genre evaluations resolve simultaneously. Provisional."
+  source: Audit-02
+  affects: [references/params_debate.md]
+  status: applied
+  provisional: true
+
+- id: PP-246
+  date: 2026-04-04
+  severity: P2
+  description: "Extract Niflhel (covert -1 Ob) and Lowenritter (Martial Honour) ethical framework modifiers to params_factions."
+  source: Audit-03
+  affects: [references/params_factions.md]
+  status: applied
+  provisional: false

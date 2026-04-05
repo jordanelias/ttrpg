@@ -259,3 +259,9 @@ Open for editorial: ED-061, ED-062, ED-063.
 - **Blocks:** Disclosure/gate ruling for Dissolution at RS<24
 - **Registered:** 2026-04-03
 | SIM-H-01 | Leap, Diagnosis, Forgetting, Appeal, Debate/CLASH, Circles, Domain Actions, Hybrid Season | Hybrid | PRES | Crown, Church, Guilds, Hafenmark, Revolution, Varfell | Torben, Halvard | Scholar-Practitioner, Soldier-Agent, Church-Renegade, Guilds-Fixer | COMPLETE | F-H01–F-H09 — 9 findings; 5 gaps flagged |
+| SIM-H-02 | Forgetting Check stacking, TS cliff at multiples of 20 | TTRPG | PRES | Coherence, TS | None | Practitioner-Scholar | COMPLETE | SIM-H-02-F1/F2; GAP-H-01 |
+| SIM-H-03 | Crown covert PP-236 corrected pool, Crown-Lowenritter delegation | Hybrid | PRES | Faction Intel, Crown Influence | Crown, Lowenritter | None | COMPLETE | SIM-H-03-F1/F2; PP-241 |
+| SIM-H-04 | Debate AMPLIFY, combined pool, degenerate cap | TTRPG | PRES | Conviction Track | Crown, Church, Guilds | Halvard, Solt | Church-Renegade, Guilds-Fixer | COMPLETE | SIM-H-04-F1; GAP-H-02; PP-242 |
+| SIM-H-05 | Locking Structural scale, RS chronic drift 5-season | TTRPG | PRES/FUT | RS, Lock duration | None | None | Practitioner | COMPLETE | SIM-H-05-F1/F2/F3 |
+| SIM-H-06 | Momentum auto-success + 1-result cancel, minimum pool edge | TTRPG | PRES | Momentum | None | None | Any | COMPLETE | SIM-H-06-F1/F2; PP-243 |
+| SIM-H-07 | Scene-to-Mass transition, Hybrid zoom, AUD-P1-15 | Hybrid | PRES | Health, Stamina, Military | Crown, Lowenritter | Arend | Soldier-Agent | COMPLETE | SIM-H-07-F1/F2; PP-244; ED-151 |

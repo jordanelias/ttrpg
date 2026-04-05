@@ -103,3 +103,16 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 | Resolve | Spirit | 1–7 | Maximum total Inspiration value |
 
 <!-- patch_history: references/params_core_history.md -->
+
+---
+<!-- PP-243 applied 2026-04-04: Momentum auto-success interaction with roll -->
+
+## Momentum Auto-Success Interaction (PP-243)
+Momentum auto-successes **add to** (not replace) the dice roll. A 1-result on a die can cancel a Momentum auto-success.
+
+Example: Spend 1 Momentum (1 auto-success) + roll 1D TN 7.
+- Die shows 10: net = 1 (auto) + 2 (roll) = 3 → may reach Overwhelming if ≥ 2×Ob AND ≥ 3 net.
+- Die shows 7–9: net = 1 (auto) + 1 (roll) = 2 → Success at Ob 1, not Overwhelming (net < 3).
+- Die shows 1: net = 1 (auto) − 1 (roll) = 0 → Failure at Ob 1.
+
+Spending 2 Momentum on Ob 1 (2 auto-successes): auto-successes alone reach Ob 1 but cannot satisfy Overwhelming floor (need ≥ 3 net). Must also roll to reach Overwhelming.
