@@ -3089,3 +3089,16 @@ PP-234
   applied_to_version: "v1.6+"
   status: applied
   applied_commit: "pending"
+
+# PP-257 REVERTED — see error audit 2026-04-04
+- id: PP-262
+  date: 2026-04-04
+  source: error-audit
+  priority: P2
+  system: core_engine
+  description: "Flag discrepancy: stage1_core_engine.md states face 10 = +1 success + bonus chain die (indefinite). params_core.md states '+2 successes (no extra die)'. Different mechanics. Note added to params_core pending resolution."
+  status: flagged
+  propagation_targets:
+    - references/params_core.md
+  propagation_status: flagged
+

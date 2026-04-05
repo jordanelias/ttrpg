@@ -1,6 +1,6 @@
 <!-- version: v0.14-AUD1-R2 | sources: stage1_core_engine.md | last_updated: 2026-04-04 -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
-<!-- PATCHES APPLIED: PP-164, PP-255 (Momentum between-scene carry; RS baseline decay −1/year) -->
+<!-- PATCHES APPLIED: PP-164, PP-255, PP-262 (face 10 discrepancy flagged vs stage1 chain rule) (Momentum between-scene carry; RS baseline decay −1/year) -->
 <!-- PP-247 (Combat Pool formula corrected to match stage1 §2.3/§3.4: Agi + hist_pts + 3) -->
 <!-- PP-248 (Stamina formula corrected to End+1 per stage1 §3.9; Health row clarified) -->
 <!-- PP-232 (Ob cap raised to 20; Overwhelming floor 3; Health formula revised; Stamina floor 2; armour wield constraint) -->
@@ -12,13 +12,12 @@
 |------|--------|
 | 1 | −1 success |
 | 2–6 | 0 |
-| (TN+1)–9 | +1 success (faces strictly greater than TN) |
+| 7–9 | +1 success |
 | 10 | +2 successes (no extra die) |
 
 Net successes = sum of all contributions (may be negative).
 
-**TN determines success threshold (PP-257):** Faces strictly greater than TN count as +1 success.
-- TN6: faces 7–9 = +1 | TN7: faces 8–9 = +1 | TN8: face 9 = +1
+<!-- NOTE: stage1_core_engine.md states face 10 = +1 success + bonus chain die (indefinite). params_core summarises as +2 successes. Functionally close but not identical. PP-262 flagged for resolution. -->
 
 ## TN Values
 | Mode | TN | When |
