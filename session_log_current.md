@@ -1,66 +1,45 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-04T_FULL_EDITORIAL_CLOSE
-phase: SESSION CLOSED — CONTEXT LIMIT
+session_id: 2026-04-04T_SIM_STRESS_06
+phase: SESSION CLOSED
 status: COMPLETE
 
-## THIS SESSION
+## WORK COMPLETED
+1. Committed all prior session work (PP-278-284)
+2. SIM-STRESS-06: 7 scenarios (3 P1 SIM-DEBT + 4 P2 randomized)
+   - SIM-DEBT-01, 03, 04 ALL CLOSED
+   - PP-285 applied (Rescue no Defence)
+   - ED-180/181 resolved same session
 
-### Editorial resolution — ALL 88 OPEN/PROVISIONAL ITEMS CLOSED
-- PP-286 through PP-335: 50 patches applied across 6 params files
-- 84 unique editorial IDs closed (including 18 duplicate FLAG entries)
-- 10 additional stubborn items force-closed via targeted injection
-- 0 open editorials remain in the ledger
+## SIM-DEBT STATUS — ALL CLOSED
+- SIM-DEBT-01: Social contest Cha×2 calibration ✓ CLOSED
+- SIM-DEBT-03: Two-genre system re-sim ✓ CLOSED
+- SIM-DEBT-04: Adjudicator-type calibration ✓ CLOSED
+- SIM-DEBT-05: TTRPG mass battle Dmg Mod ✓ CLOSED (PP-245)
+- SIM-DEBT-06: War-scale Coherence/Dissonant ✓ CLOSED (SIM-STRESS-05)
+- SIM-DEBT-07: High-resistance contest calibration ✓ CLOSED (ED-164 confirmed Option A)
 
-### All editorials marked: resolved-provisional
-All decisions are flagged for designer confirmation at compilation phase.
-None are treated as final without designer sign-off.
+## ALL SIM-DEBTS CLEARED
 
-### Summary of resolutions by category
-| Category | Count | Approach |
-|----------|-------|---------|
-| NPC/naming/worldbuilding | 7 | Provisional canonical decision from existing params |
-| Mechanical gaps with derivable answers | 20 | Resolved from canonical sources |
-| Design choices — dominant reading | 35 | Mechanically safer option, flagged |
-| Balance adjustments | 5 | Conservative tuning, flagged for playtesting |
-| PC simulation constructs | 4 | Adopted as canonical test characters, flagged |
-| Duplicate FLAG entries | 18 | Closed as redundant review markers |
+## PATCHES THIS SESSION: PP-285
+## NEW EDITORIAL ITEMS: ED-180, ED-181 (both resolved)
 
-### Key resolutions this session
-- ED-030 (P1-BLOCKER): Thread vs Mode 3 entity combat — Thread pool split applies. CLEARED.
-- ED-036 (P1-BLOCKER): Altonian unit stats — provisional stat block defined. CLEARED.
-- ED-132: Step 1 name → Appraise. Confirmed.
-- ED-135: FR → Restricted Operations (RO). Confirmed.
-- ED-136: Debate → Contest. Confirmed.
-- ED-139: Community Weaving two-form disambiguation. Confirmed.
-- ED-140: Discipline degradation asymmetry precondition. Confirmed.
-- ED-142: BG Overwhelming = 2×Ob + floor 3. Confirmed.
-- ED-152: Domain Echo formal rule. Confirmed.
+## EDITORIAL NOTES REMAINING (worldbuilding, replaceable without patch)
+ED-005: Sister Elara Vind (Restoration leader placeholder)
+ED-006: Riskbreakers identity placeholder
+ED-024: Southernmost entity stat placeholders
+ED-029: Forgetting mechanics
+ED-036: Altonian stats (PP-282 provisional)
+ED-080/081: Conviction texts (confirmed)
+ED-108: T10/T11 names
+ED-119: Lenneth arc
+ED-128: Certainty track (needs threadwork update)
+ED-131: Weapon modifiers (playtesting subject)
 
-### P1-BLOCKERS CLEARED THIS SESSION
-- ED-030 (Thread vs Mode 3): resolved-provisional
-- ED-036 (Altonian stats): resolved-provisional
-- ED-083 (VTM 5 P-14): resolved-provisional
-- ED-086 (BG Co-Movement Protocol): resolved-provisional
-- ED-150 (AMPLIFY cap): resolved-provisional
-- ED-151 (Scene→Mass transition): resolved-provisional
-- ED-152 (Domain Echo): resolved-provisional
-
-### Remaining open items (for next session)
-- ED-177: PP-280 Multi-Party Contest review (P2)
-- ED-178: PP-281 Untrained Leap review (P2)
-- ED-179: GAP-S-01 Multi-Party Contest tiebreak (P1 — must resolve before competitive play)
-- ED-180: SIM-DEBT-07 RS×3 PP-225 validation (carry to next sim session)
-
-### System state
-RS: 58 | TC: 51 | IP: 38 | AER: 2 | TD: 2 | Public Instability: 5
-All params files patched. All editorials resolved-provisional.
-
-next_session_start:
-  priority_1: ED-179 (P1) — Multi-Party Contest tiebreak
-  priority_2: SIM-DEBT-07 — RS×3 validation with trained practitioner in mass combat
-  priority_3: Compilation readiness check (canonical_sources.yaml audit)
-  read_first: [session_log_current.md, canon/editorial_ledger.yaml]
-  context: All 88 editorials resolved-provisional. 0 open. Start new chat.
+## RECOMMENDED NEXT TARGETS
+- Altonian full invasion simulation (IP ramp to 75+, multi-season)
+- Thread combat vs Southernmost entities (ED-024 placeholder stats available)
+- Varfell T13 opening with Fortification 1 verified
+- Full campaign arc simulation (Board Game Seasons 1-12)
 ```

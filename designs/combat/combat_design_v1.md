@@ -29,7 +29,7 @@ TTRPG is always the most granular layer. Hybrid uses TTRPG rules when a named Pl
 **TTRPG:**
 Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)
 
-Pool split: allocate between Offence and Defence before any dice are revealed. This split IS the action economy — no separate action declaration needed. **Pool split for non-Strike actions (PP-287):** Characters declaring Disarm, Retrieve, Tie Up, or other Priority 3 actions still make a full Offence/Defence split at Phase 1. Their Offence dice are committed to that action's contested roll; their Defence allocation remains available against incoming attacks at Priority 1 or 2 that resolve before their action.
+Pool split: allocate between Offence and Defence before any dice are revealed. This split IS the action economy — no separate action declaration needed.
 
 Modifiers:
 - Wounds: −1D per wound (cumulative)
@@ -98,10 +98,10 @@ A practitioner declaring Leap (Priority 5) may be struck at Priority 1 before co
 | Take a Breath | No combat action. Recover Stamina by Endurance score. Cannot if in immediate melee contact. |
 | Full Guard | All dice to Defence. Cannot Attack. |
 | Disarm | Offence roll vs opponent's STR+Agility Ob. Success: weapon dropped. Requires Close range. |
-| Retrieve | Pick up dropped weapon/item. **Opposed Agility if in melee contact (PP-286):** both parties roll their Agility as a dice pool (TN 7); higher net successes wins. Retriever wins ties (they are already reaching for the weapon). |
+| Retrieve | Pick up dropped weapon/item. Opposed Agility if in melee contact. |
 | Tie Up | Close range. Offence roll. Success: both parties suffer −2D to Combat Pool for one round; opponent cannot use reach advantage; escape requires Strength contest. Blocks escape for one round. (PP-213) |
 | Escape | Agility contest vs opponent. Requires not being Tied Up. |
-| Rescue | **Exclusive action (PP-288)** — replaces all other actions this round. Declare in Phase 1 before opponent's attack resolves. Rescuer interposes: attack resolves against rescuer instead of original target; rescuer's armour DR applies. Rescuer makes their normal Offence/Defence split but cannot Strike or take any other action this round. Requires adjacent zone. Fails silently if no incoming attack was declared — action lost. (PP-214, PP-288) |
+| Rescue | Declare before opponent's attack resolves. Rescuer interposes: attack resolves against rescuer instead of original target; rescuer receives **no Defence allocation** — armour DR applies only. Requires adjacent zone. Fails silently if no incoming attack was declared — action lost. (PP-214, PP-285) |
 | Dodge | Ranged attacks only. Forfeit all offensive action this round. Allocate full Combat Pool as passive Defence against one incoming ranged attack. Armour DR applies normally. (PP-215) |
 | Stunt | Declared with Strike. +N dice to Offence from environmental/positional narrative (Game Master sets N, max 5). Chain dice (10s) chain normally, independent of Stunt effect. |
 
