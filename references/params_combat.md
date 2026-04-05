@@ -221,15 +221,19 @@ Both succeed at different priorities → initiative stays with current holder.
 - Wound recovery: stabilised characters return after 1-scene rest; wounds clear at session end
 - Stage 2 trigger: any attack with ≥1 net hit on downed Stage 1 character; downed = Defence 0
 
-## Rescue Payoff — PP-286
+## Rescue — PP-286, PP-290
 | Property | Value |
 |----------|-------|
-| Trigger | Declare in Phase 1 before opponent's attack resolves |
-| Cost | Exclusive action — rescuer receives no Defence allocation; armour DR only |
-| Effect | Attack redirects to rescuer |
+| Eligibility | Rescued actor must be outnumbered at Phase 1 declaration (2+ attackers, no ally — Fibonacci condition met) |
+| Eligibility timing | Assessed at declaration only; mid-round incapacitations do not retroactively qualify |
+| Trigger | Declare in Phase 1; specify which attacker is redirected |
+| Cost | Exclusive action — rescuer receives no Defence allocation vs redirected attack OR own engagement's attacker |
+| Double exposure | Rescuer hit from own engagement + redirected attack; both resolve at Ob 1 floor |
 | Rescuer payoff | +1 Momentum on declaration (fires regardless of hit/miss) |
 | Rescued actor payoff | Exempt from Fibonacci group penalty this round; cannot be targeted by any other attacker this round |
 | Payoff trigger | Declaration — not contingent on hit landing |
 | Zone requirement | Adjacent zone |
-| Fails silently | Yes — if no incoming attack was declared, action and payoffs lost |
+| Fails silently | Ineligible Rescue / no declared incoming attack — action lost, declaration Momentum retained |
 | Exemption duration | Current round only |
+| Chain block | Character who declared Rescue this round cannot be target of another Rescue |
+| Incapacitation before resolution | Rescue fails; attack reverts to original target; declaration Momentum not reclaimed |

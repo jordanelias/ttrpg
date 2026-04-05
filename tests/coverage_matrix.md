@@ -291,3 +291,4 @@ Open for editorial: ED-061, ED-062, ED-063.
 | SIM-IXC-05 | Attributes, Combat Pool, Opposed Resolution, Damage | TTRPG | PRES | Health, Wounds, Stamina | None | Generic combatants | Min/avg/max builds | COMPLETE | IXC-05-F2(P2) |
 | SIM-IXC-06 | Spirit/Attunement/Focus → Threadwork, Leap | TTRPG | CROSS | RS, Coherence, TPS, Composure | None | Generic Practitioner | Thread builds | COMPLETE | IXC-06-F2(P2); IXC-06-G1(GAP) |
 | SIM-IXC-07 | Charisma/Bonds → Debate/Social | TTRPG | PRES | Composure | None | None | Social builds | PARTIAL-BLOCKED | IXC-07-F1(P1); G1,G2,G3(GAP) |
+| SIM-RES-01/02/03/04 | Rescue eligibility, double exposure, payoff calibration, edge cases | TTRPG | PRES | Health, Wounds, Stamina, Momentum, Fibonacci | None | Generic 3v2 actors | SATISFY, MARTYR, RISK-AVERSE | COMPLETE | PP-290 (P1×4); ED-290 (P2, open); RES-02-F02/F03 design-valid |

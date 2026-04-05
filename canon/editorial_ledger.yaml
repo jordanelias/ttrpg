@@ -1200,3 +1200,16 @@ editorial_decisions:
   # ED-119: Lenneth Almqvist stat block
   # ED-143–146: PC simulation construct approvals (4 items)
   # ED-171: Niflhel archive lineage data
+- id: ED-290
+    date_flagged: 2026-04-04
+    date_resolved: ~
+    source: simulation
+    source_file: tests/sim_rescue_interconnected.md
+    description: "Rescue Momentum calibration — rescuer absorbs 2 near-certain wounds (96% P both land); 1 Momentum may undervalue the sacrifice. Consider +2 Momentum."
+    full_flag_text: "[EDITORIAL: ED-290 — Rescue rescuer Momentum: currently +1 on declaration. Double exposure means ~2 wounds expected. Upgrade to +2 Momentum?]"
+    status: open
+    priority: P2
+    decision: ~
+    propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
+    propagation_status: pending
+    tags: [combat, rescue, momentum, calibration]

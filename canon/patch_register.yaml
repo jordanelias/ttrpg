@@ -3267,3 +3267,13 @@ PP-234
   description: "BG Overwhelming: Ob+1 surplus confirmed; floor net≥2 (not 3); PP-179 documentation error corrected."
   status: applied
   files_changed: [references/params_board_game.md]
+- id: PP-290
+  date: 2026-04-04
+  severity: P1
+  description: "Rescue: eligibility constraint (outnumbered at declaration), double exposure (Ob 1 floor both engagements), chain block, incapacitation-before-resolution rule"
+  finding_id: "SIM-RES-01-F01, SIM-RES-02-F01, SIM-RES-04-F01, SIM-RES-04-F04"
+  source: simulation
+  affects: [designs/combat/combat_design_v1.md, references/params_combat.md]
+  applied_to_version: "v1.6+"
+  status: applied
+  applied_commit: "pending"
