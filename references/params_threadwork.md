@@ -465,3 +465,60 @@ When multiple practitioners are present during Southernmost exposure:
 - One Anchor per failed practitioner. An Anchor cannot anchor more than one other.
 - Non-practitioners cannot anchor anyone.
 [FLAGGED FOR REVIEW: ED-153-R — confirm Anchor mechanic; confirm non-practitioner exclusion.]
+
+## ED-024 Resolution (PP-263) [FLAGGED FOR DESIGNER REVIEW]
+Southernmost Mode 3 entity provisional stat block (minimal):
+| Stat | Value | Notes |
+|------|-------|-------|
+| Thread Pool Score | 8 | Acts as a practitioner at TS 80+ |
+| Coherence | N/A | Cannot degrade — no rendering substrate |
+| Wound threshold | 12 | Physical damage valid only while in material-adjacent state |
+| Initiative | Always last | Entities do not declare; they respond |
+| Thread Operation | Weaving (automatic, no Leap) | Once per round, object scale |
+Full stat blocks require designer decision. This is a floor for simulation purposes only.
+[FLAGGED: full Mode 3 entity design deferred.]
+
+## ED-029 Resolution (PP-264) [FLAGGED]
+Purpose tracking in Southernmost: **Clarity countdown** mechanic adopted (provisional).
+- Start: Clarity = d3+1 (rolled at entry to each Southernmost zone).
+- Each hour of exposure: Clarity −1.
+- Clarity 0: character must succeed at a Spirit check TN 7 Ob 2 or leave the zone immediately (Purpose dissolves).
+- Thread Sensitivity ≥ 40: +1 Clarity at zone entry.
+[FLAGGED: confirm d3+1 range and Spirit check parameters.]
+
+## ED-030 Resolution (PP-265)
+Thread combat vs Mode 3 entities: **Thread pool split (Off/Def) applies** identically to personal combat pool split.
+- Offence dice roll vs entity Thread resistance (TPS 8 = Ob 8 to overcome).
+- Defence dice absorb entity's Weaving attempts (entity Weaving = Ob equal to PC Defence allocation net).
+- No separate Thread combat system needed.
+[FLAGGED: confirm Ob derivation for entity Thread resistance.]
+
+## ED-119 Resolution (PP-279) [FLAGGED FOR DESIGNER REVIEW]
+Lenneth Almqvist (Queen of Valoria, Almud's wife): Thread Sensitivity **72** (provisional).
+Rationale: trained Mira (TS now 61); must exceed student; consistent with high-level practitioner profile.
+Southernmost access: confirmed. Can attempt operations up to Territorial scale.
+[FLAGGED: confirm TS value and operational history before NPC roster compilation.]
+Also resolves ED-161 (Lenneth TS undefined — same NPC, same resolution).
+
+## ED-134 Resolution (PP-289)
+Diagnosis as mandatory pre-operation: confirmed as **perception act**, not a separate operation.
+Diagnosis reveals: Thread configuration type, approximate scale, RS signature. Takes no action economy slot in TTRPG (perception is continuous for Leap-eligible practitioners). In mass battle: collapsed into Leap per PP-224.
+ED-134 resolved — Diagnosis is not a separate action; it is the practitioner's default mode of Thread perception during contact.
+
+## ED-135 Resolution (PP-290)
+"Forced Resolution (FR)" as collective label for Locking and Dissolution: **renamed to Restricted Operations (RO)**.
+Rationale: "Forced Resolution" implies inevitability; these operations are costly choices. "Restricted" captures: available only to practitioners; restricted by Coherence cost; restricted by Ob; restricted by RS.
+All params_threadwork references to FR updated to RO.
+[FLAGGED: confirm rename before compilation.]
+
+---
+<!-- PP-303 2026-04-04: Shifting Object encounter rule (PROVISIONAL ED-173) -->
+
+## Shifting Object Encounter Rule (PP-303) [PROVISIONAL — ED-173]
+When a Shifting Object is present in a territory (formed from Fragile band RS consequence or operation failure):
+- Practitioners within 50m: Coherence check TN 7 Ob 1 per scene. Failure: Coherence −1.
+- Non-practitioners: Certainty −1 (PP-283) after 1+ hour of proximity.
+- Mending the Shifting Object: treated as Micro-Gap, Ob 2.
+- Dissolution: Ob 3 (standard small-scale Dissolution).
+Shifting Objects persist until addressed. Each season unaddressed: +1 Ob to Thread operations in that territory.
+[FLAGGED: confirm Coherence check parameters and seasonal Ob accumulation.]

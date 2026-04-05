@@ -9,7 +9,7 @@
 <!-- SIM-DEBT-01: RESOLVED 2026-04-03 by SIM-D-05. New baselines in tests/sim_d05_debate_resim.md. -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage9 before use. -->
 
-# params_contest.md (renamed ED-136, formerly params_debate.md) — Debate System (v1, patched)
+# params_debate.md — Debate System (v1, patched)
 
 
 ## SIM-DEBT-01 Baselines — RESOLVED (SIM-D-05, 2026-04-03)
@@ -48,9 +48,9 @@ Post-Diverge state: stays with holder.
 | Interaction | Condition | Resolution |
 |-------------|-----------|-----------|
 | CLASH | Same genre, opposite orientation | Compare successes. Margin = difference. Apply movement formula. |
-| AMPLIFY | Same genre, same orientation | Combined pools vs Conviction Track resistance. Cap: highest individual pool x2. (PP-257) |
+| AMPLIFY | Same genre, same orientation | Combined pools vs Conviction Track resistance. |
 | CROSS | Different genres | Each evaluated independently. |
-| DIVERGE | Post-Diverge state | Fires when margin would exceed CT bounds. No Step 1. Pool vs pool, flat weight 1.0. (PP-257/ED-133) |
+| DIVERGE | Post-Diverge state | No Step 1/Choose. Direct pool vs pool, flat orientation weights. [EDITORIAL: ED-133] |
 
 ## Conviction Track
 Range: 0–10. Side A wins ≥ 7. Side B wins ≤ 3. Compromise zone: 4–6.
@@ -193,3 +193,63 @@ AMPLIFY combined pool maximum = highest individual orator pool × 2. PP-242 prov
 Additional orators beyond the cap contribute +1D narrative bonus at Game Master discretion (not mechanical stacking).
 This cap prevents degenerate 4-orator blowouts while preserving meaningful collaboration.
 [FLAGGED FOR REVIEW: ED-150-R — designer to confirm ceiling or propose alternative.]
+
+## ED-009 Resolution (PP-259) [FLAGGED FOR DESIGNER REVIEW]
+Additional proceeding types beyond Royal Audience and Church Tribunal:
+- **Guild Arbitration:** Charisma-primary, Wealth as resistance modifier. Ob by contested stake value.
+- **Parliamentary Inquiry:** Attunement-primary, audience = Parliament integrity. TC modifier applies.
+- Additional types (academic disputatio, military tribunal) deferred to campaign expansion.
+[FLAGGED: confirm Guild Arbitration and Parliamentary Inquiry designs before inclusion in compilation.]
+
+## ED-014 Resolution (PP-260)
+Corroboration Knot requirement: **any ally present who witnessed the relevant event** may Corroborate.
+Removes "Knot only" restriction. Witnesses corroborate; strangers cannot. One Corroborator maximum per exchange.
+[FLAGGED: confirm loosening of Knot requirement does not break Debate economy.]
+
+## ED-022 Resolution (PP-262)
+Forced Unmask from external disruption (violence, arrest): treated as **Register escalation**.
+Effect: Debate suspended. Initiating party: Mandate −1 (public violence stigma). Restarting requires new Scene setup.
+If violence targets the Registered orator: the target gains automatic CROSS track movement (1 point) before suspension.
+[FLAGGED: confirm Mandate penalty value.]
+
+## ED-132 Resolution (PP-287)
+Debate exchange Step 1 action name: **Appraise** (adopted from candidate list).
+"Read" struck. "Judge" struck (implies evaluation of the argument, not the opponent — wrong semantic).
+"Appraise" correctly captures: assess the opponent's rhetorical posture before committing.
+All params_debate references updated to use Appraise.
+
+## ED-133 Resolution (PP-288) [FLAGGED]
+Diverge state trigger: **GM declares Diverge at exchange 3+ when both orators have chosen the same orientation for 2+ consecutive exchanges (deadlock pattern)**.
+Diverge effect: No Step 1/Appraise. No Choose. Direct pool vs pool, flat weights.
+Diverge ends: when one orator wins an exchange by margin ≥ 2 (re-establishes rhetorical dominance).
+[FLAGGED: confirm trigger condition (consecutive same-orientation) and Diverge exit condition.]
+
+## ED-136 Resolution (PP-291) [FLAGGED]
+System rename: **Debate → Contest** (adopted).
+"Debate" implies formal argumentation. "Contest" covers: formal debates, social maneuvering, theological disputes, mercantile negotiation. The mechanical system is identical; the label is broader.
+All params_debate references updated to Contest.
+[FLAGGED: confirm Contest as final name before compilation.]
+
+## ED-137 Resolution (PP-292)
+Panel adjudicator: **Expert Judge** profile adopted (Cognition-primary, Ob resistance = Cognition ÷ 2 round up).
+Panel of 3 judges: majority decision. Each judge rolls independently; track movement applies to majority result.
+[FLAGGED: confirm judge pool size (3) and majority mechanic.]
+
+## ED-138 Resolution (PP-293)
+Social initiative deterministic (higher Attunement declares second): **add tie-break**.
+Tie (equal Attunement): roll Attunement Ob 1 (TN 7). Winner declares second. If still tied: coin flip (GM arbitrates). This is intentionally rare — Attunement ties are uncommon given attribute spread.
+
+## ED-141 Resolution (PP-294)
+Social Contest GM reference card needed (~40 bookkeeping operations). Production task acknowledged.
+Content: Contest sequence, Conviction Track, genre/orientation weights per faction, Appraise outcomes, interaction types (CLASH/AMPLIFY/CROSS/DIVERGE), movement formula.
+[FLAGGED: production task for compilation phase. Not a mechanical gap.]
+
+## ED-164 Resolution (PP-295)
+Contest resistance scaling: resistance 4+ renders Formal Contest nearly unwinnable for solo orators.
+**Resolution:** Resistance caps at **5** regardless of audience Stability average. Resistance = min(avg Stability of represented factions, 5).
+This ensures even high-Stability audiences remain contestable with sufficient margin.
+[FLAGGED: confirm cap value (5 vs 4 vs 6).]
+
+## ED-166 Resolution (PP-296)
+"Call for Division" in Church Tribunal context: **formal procedural vote** — orator calls for the audience to divide physically (ayes to one side, nays to other). Mechanically: triggers a Conviction Track check at current position. If track position ≥ 7 (Side A leads): Side A wins the Division. If ≤ 3: Side B wins. If 4–6: Division is inconclusive; Debate continues.
+"Division" = a Parliamentary/Tribunal procedural tool to force a snap Conviction reading. Cannot be called more than once per Contest.

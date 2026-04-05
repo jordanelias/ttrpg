@@ -950,3 +950,64 @@ Crown must make Varfell AND Hafenmark submit OR own their territories outright.
 Church must have more TC gain routes than Baralta has suppression capacity.
 Baralta is one person, not a nation. Church spans multiple territories and actors.
 Expand TC gain table before next BG simulation. Options under consideration: AER-linked gain, territory-hold bonuses, non-Hafenmark suppression routes.
+
+## ED-019 Resolution (PP-261) [FLAGGED FOR DESIGNER REVIEW]
+Faction unique tactic cards (2 per faction, provisional):
+| Faction | Tactic A | Tactic B |
+|---------|----------|----------|
+| Crown | Royal Prerogative: +2D one Mandate roll | Iron Decree: cancel one opposing Domain Action (1/campaign) |
+| Church | Sanctuary: protect one NPC from targeting for 1 season | Inquisition: force one faction to reveal one hidden stat |
+| Hafenmark | Trade Leverage: +1D all Wealth rolls for 1 season | Constitutional Check: reduce one Crown action Ob by 2 |
+| Varfell | Intelligence Supremacy: learn one faction's full stat block | Patience Protocol: pass; bank +2D for any future roll |
+[FLAGGED: these are placeholder designs. Full design required before BG compilation.]
+
+## ED-056 Resolution (PP-268)
+Zoom In TC win-delay exploit: if a player triggers Zoom In specifically to suspend Accounting when TC ≥ 80 (Church win threshold), the Accounting still checks victory conditions at suspension point before Zoom In resolves.
+Rule: **Victory condition check fires at the moment the threshold is crossed, not at Accounting completion.**
+Zoom In cannot retroactively prevent a threshold that was crossed before the interrupt was declared.
+
+## ED-072 Resolution (PP-269)
+Confirmed from params_board_game: concurrent Zoom In ordering resolved by PP-112 (faction-turn Accounting sequence). Faction that triggered the Zoom In resolves first; others queue in Mandate order (descending). ED-072 resolved — already in params.
+
+## ED-080 Resolution (PP-270)
+Baralta Conviction text (Amendment2): "Faith is not mediated — it is immediate, or it is nothing."
+Mechanical effect: Baralta gains +1D on any roll made in defence of direct Church authority (unmediated from doctrine). Loses −1D on rolls requiring institutional compromise.
+[FLAGGED: confirm wording and mechanical expression.]
+
+## ED-081 Resolution (PP-271)
+Vaynard Conviction text (Amendment2): "The strongest thread is the one that does not know it is being pulled."
+Mechanical effect: Vaynard gains +1D on any Intel-based action where his involvement is not publicly known. −1D if his faction affiliation is openly declared before rolling.
+[FLAGGED: confirm wording.]
+
+## ED-083 Resolution (PP-272)
+VTM 5 ability (choose Actualized dimension of one Co-Movement card): P-14 compliance confirmed. Amendment2 "allows pre-draw selection" = choosing which of the two card dimensions becomes the outcome. This is not card manipulation — it is outcome selection from the existing draw. P-14 (Co-Movement must be genuine) is satisfied because the card was drawn legitimately; VTM 5 only selects the dimension, not the card. ED-083 resolved.
+
+## ED-085 Resolution (PP-273)
+Reformed Settlement Church responses confirmed (three options):
+1. **Resist:** Church contests the settlement. Mandate −1 but TC gain continues; Hafenmark gains Deed.
+2. **Accommodate:** Church accepts. TC gain suspended for 1 season. Parliament Integrity +1.
+3. **Ignore:** Church neither contests nor accepts. No mechanical effect; sets up future escalation. TC gain halved for 1 season.
+[FLAGGED: confirm Mandate −1 for Resist and PI +1 for Accommodate.]
+
+## ED-086 Resolution (PP-274)
+BG Co-Movement Resolution Protocol (P-14 compliance):
+1. Declare Thread order type.
+2. Roll faction stat pool (TN 7, Ob per order type).
+3. Apply degree result (Overwhelm/Success/Partial/Failure from BG degree table PP-249).
+4. Draw Co-Movement card.
+5. Apply Actualized dimension first, then Temporal dimension.
+6. Apply any VTM/ability modifications to outcome selection (not card draw).
+7. Record RS change and attention pool change.
+All BG Thread operations follow this sequence. No shortcuts.
+
+## ED-108 Resolution (PP-277) [FLAGGED FOR DESIGNER REVIEW]
+Crown territory names (provisional): T10 = **Nordhelm** (NW of Arcansheim), T11 = **Sudmarken** (SE border).
+[FLAGGED: confirm names before map publication.]
+
+## ED-109 through ED-113 Resolution (PP-278) [FLAGGED FOR DESIGNER REVIEW]
+**ED-109 — Crown victory front-loaded:** Remove 1 pre-met deed from Crown starting conditions. Crown starts with 2 of 5 deeds met (not 3). Rebalances opening tempo.
+**ED-110 — Church primary victory inaccessible:** Add fallback: if TC reaches 70 and Church holds 2+ territories, Church may declare Ecclesiastical Mandate victory (partial win, shared with one ally). Unblocks solo Church win path.
+**ED-111 — Varfell Path B under-gated:** Require VTM ≥ 4 (not 3) to seize T13 via Path B. +1 VTM threshold gate.
+**ED-112 — TC lock:** Hafenmark suppression capped at −1/season total (cannot be stacked via multiple actions). Church TC gain from T14 remains +1/season. Net: Church can advance TC by investing elsewhere.
+**ED-113 — Varfell T13 opening dominance:** Add Fort 1 to T13 at game start (not Fort 0). Increases seizure Ob from 0-fort to Fort 1 resistance (+1D to defender).
+[FLAGGED: all balance adjustments require playtesting confirmation.]

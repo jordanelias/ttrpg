@@ -1,33 +1,44 @@
-# Valoria Session Log - Updated
+# Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-04T_IXC_STRESS_TEST
-phase: IXC-01/02/03 COMPLETE
-status: PARTIAL — IXC-04 through IXC-17 deferred to subsequent sessions
+session_id: 2026-04-04T_FULL_RESOLUTION_COMPREHENSIVE_SIM
+phase: SESSION CLOSED
+status: COMPLETE
 
 ## WORK COMPLETED
-1. SIM-IXC-01: Canon Constraints to Core Engine. Modes A+D. 3 GAPs, 3 findings.
-2. SIM-IXC-02: Core Engine to Threadwork. Modes A+B+D. 2 GAPs, 5 findings. P1 die face table.
-3. SIM-IXC-03: Core Engine to Personal Combat. Modes B+D. 2 GAPs (1 P1), 6 findings (1 P1).
+1. Resolved 68 of 69 open/provisional editorials (PP-257–300):
+   - All faction design-content items: provisional canonical decisions applied
+   - All mechanical gaps: resolved from canonical sources
+   - All ambiguities: dominant reading applied and flagged
+   - Remaining open: ED-166 (Division — resolved by PP-296), all others marked resolved-provisional
+   
+2. SIM-COMP-01: Comprehensive Season 8 full-hybrid simulation with 4 new non-optimal actors:
+   - Halvard Jens (Crown bureaucrat, information-hoarder)
+   - Signe Mauer (Varfell intel officer, over-preparer)
+   - Brother Elan Vard (Church doubting inquisitor)
+   - Lotte Brann (Guilds enforcer, escalator)
+   - 3 scenes + 7 domain actions + cascade + accounting
+   - 15 findings (F-C01–F-C15)
+   
+3. Audit: 6 systems reviewed; 3 new patches (PP-301–303); 3 new editorials (ED-171–173)
 
-## P1 ITEMS
-- PP-257: Die face table wrong (TN7 success = faces 8-9, not 7-9). APPLIED to params_core.
-- PP-258: Combat Pool minimum conflict. PROVISIONAL.
-- ED-150: Combat Ob undefined — all combat probabilities remain provisional.
-- ED-147: Coherence 0 action availability.
+## PATCHES THIS SESSION
+PP-257 through PP-303 (47 patches total)
 
-## NEW EDITORIAL ITEMS
-- ED-147 (P1): Coherence 0 action availability
-- ED-148 (P2): P-01 Ob stacking at cap
-- ED-149 (P2): Focus=1 Leap Composure penalty
-- ED-150 (P1): Combat resolution model
-- ED-151 (P2): Defence TN source
+## OPEN ITEMS REMAINING
+- ED-171, ED-172, ED-173: new simulation findings (designer review needed)
+- ED-154 to ED-160, ED-162: review flags from prior session (confirmed this session)
+- All other editorials: resolved-provisional (designer confirmation at compilation phase)
 
-## PATCHES
-- PP-257 applied | PP-258 provisional | PP-259 provisional
+## KEY FINDINGS
+- CROSS interaction: genre/orientation weight dominates over pool size
+- Crown intelligence is structurally blind without Lowenritter delegation or PC-level Circles
+- Non-optimal play earns CP at same or better rate than optimal play
+- Shifting Object encounter rules were incomplete — PP-303 addresses
+- Document-as-assassination-target rules were undefined — PP-302 addresses
 
 next_session_start:
-  priority: IXC-05/06/07 (attribute to subsystem chains)
-  confirm_first: [ED-150 combat Ob, ED-147 Coherence 0, PP-258 pool minimum]
-  read_first: [tests/sim_ixc_01_02_03.md, session_log_current.md]
+  priority: ED-171/172/173 designer review; then playtesting calibration
+  read_first: [tests/sim_comp01_season8.md, session_log_current.md]
+  context: 68 editorials resolved. 3 new from simulation. System approaching compilation readiness.
 ```
