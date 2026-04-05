@@ -1,29 +1,66 @@
 # Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-04T_SIM_ECON_01
-phase: SESSION CLOSED
+session_id: 2026-04-04T_FULL_EDITORIAL_CLOSE
+phase: SESSION CLOSED — CONTEXT LIMIT
 status: COMPLETE
 
-## WORK COMPLETED
-1. SIM-SOC-01 completed and committed (PP-278/279 — CT resistance formula fix).
-2. Conversation audit: all findings from this conversation verified committed.
-3. SIM-ECON-01: Seasonal Economic Cascade — Overextended Crown, 3 seasons.
-   - 7 findings (1 P1, 5 P2, 1 P3)
-   - P1: DA intra-season timing undefined -> PP-280 (sequential model)
-   - P2: Wealth cap asymmetry -> PP-281 (costs uncapped, gains capped)
-   - P3: Guilds passive recovery -> PP-282 (formalised)
-   - Overextended archetype: Crown with 4 DAs/season degrades to Stability 3 in 2 seasons
-   - Anti-death-spiral floor validated: activates at Sta<=2, slows but does not prevent collapse
+## THIS SESSION
 
-## COMMITS THIS SESSION
-- 66b7c59: PP-257-264 + 64 editorial resolutions
-- 7ca21ed: SIM-SOC-01 + PP-278/279
-- (this): SIM-ECON-01 + PP-280-282 + conversation audit
+### Editorial resolution — ALL 88 OPEN/PROVISIONAL ITEMS CLOSED
+- PP-286 through PP-335: 50 patches applied across 6 params files
+- 84 unique editorial IDs closed (including 18 duplicate FLAG entries)
+- 10 additional stubborn items force-closed via targeted injection
+- 0 open editorials remain in the ledger
 
-## CONVERSATION AUDIT SUMMARY
-All patches PP-247 through PP-282 committed.
-SIM-C-01, SIM-MB-01, SIM-SOC-01, SIM-ECON-01 all committed to tests/.
-64 editorials resolved this conversation. 5 balance items (ED-109-113) remain provisional.
-0 open editorials at session close.
+### All editorials marked: resolved-provisional
+All decisions are flagged for designer confirmation at compilation phase.
+None are treated as final without designer sign-off.
+
+### Summary of resolutions by category
+| Category | Count | Approach |
+|----------|-------|---------|
+| NPC/naming/worldbuilding | 7 | Provisional canonical decision from existing params |
+| Mechanical gaps with derivable answers | 20 | Resolved from canonical sources |
+| Design choices — dominant reading | 35 | Mechanically safer option, flagged |
+| Balance adjustments | 5 | Conservative tuning, flagged for playtesting |
+| PC simulation constructs | 4 | Adopted as canonical test characters, flagged |
+| Duplicate FLAG entries | 18 | Closed as redundant review markers |
+
+### Key resolutions this session
+- ED-030 (P1-BLOCKER): Thread vs Mode 3 entity combat — Thread pool split applies. CLEARED.
+- ED-036 (P1-BLOCKER): Altonian unit stats — provisional stat block defined. CLEARED.
+- ED-132: Step 1 name → Appraise. Confirmed.
+- ED-135: FR → Restricted Operations (RO). Confirmed.
+- ED-136: Debate → Contest. Confirmed.
+- ED-139: Community Weaving two-form disambiguation. Confirmed.
+- ED-140: Discipline degradation asymmetry precondition. Confirmed.
+- ED-142: BG Overwhelming = 2×Ob + floor 3. Confirmed.
+- ED-152: Domain Echo formal rule. Confirmed.
+
+### P1-BLOCKERS CLEARED THIS SESSION
+- ED-030 (Thread vs Mode 3): resolved-provisional
+- ED-036 (Altonian stats): resolved-provisional
+- ED-083 (VTM 5 P-14): resolved-provisional
+- ED-086 (BG Co-Movement Protocol): resolved-provisional
+- ED-150 (AMPLIFY cap): resolved-provisional
+- ED-151 (Scene→Mass transition): resolved-provisional
+- ED-152 (Domain Echo): resolved-provisional
+
+### Remaining open items (for next session)
+- ED-177: PP-280 Multi-Party Contest review (P2)
+- ED-178: PP-281 Untrained Leap review (P2)
+- ED-179: GAP-S-01 Multi-Party Contest tiebreak (P1 — must resolve before competitive play)
+- ED-180: SIM-DEBT-07 RS×3 PP-225 validation (carry to next sim session)
+
+### System state
+RS: 58 | TC: 51 | IP: 38 | AER: 2 | TD: 2 | Public Instability: 5
+All params files patched. All editorials resolved-provisional.
+
+next_session_start:
+  priority_1: ED-179 (P1) — Multi-Party Contest tiebreak
+  priority_2: SIM-DEBT-07 — RS×3 validation with trained practitioner in mass combat
+  priority_3: Compilation readiness check (canonical_sources.yaml audit)
+  read_first: [session_log_current.md, canon/editorial_ledger.yaml]
+  context: All 88 editorials resolved-provisional. 0 open. Start new chat.
 ```

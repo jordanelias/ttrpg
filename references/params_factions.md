@@ -1,6 +1,5 @@
 <!-- version: v0.14-AUD3 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-02 -->
 <!-- NOTE: stage6_factions.md is STALE for BG faction mechanics. Use BG column for board game/hybrid. -->
-<!-- PP-280 (DA sequential timing), PP-281 (stat cap cost clarification), PP-282 (high-Wealth recovery) -->
 <!-- PATCHES APPLIED: PP-167, PP-168; PP-195 (Community Weaving procedure) -->
 <!-- STALE CHECK: TTRPG column from v0.14 compiled. BG column from bg_v05 design. -->
 
@@ -299,28 +298,119 @@ At PI ≥ 8: factions passing Stability Ob 2 gain Stability +1. PI increase cap 
 ## PP-281 — PI cascade brake
 At PI ≥ 8: revolt-pass → Stability +1. PI increase rate cap: +2/season max from all combined sources.
 
-## PP-285 — Ethical framework Ob minimum = 1
-Ethical framework −1 Ob modifier cannot reduce any Domain Action Ob below 1. Prevents trivially automatic actions against low-Ob barriers.
+## ED-005 Resolution (PP-286) — Restoration Movement Leader [FLAGGED]
+Primary NPC contact: **Maret Vossen** (confirmed existing). Secondary: **Aldric Hann**.
+Full stat blocks deferred to campaign development. Names canonical from existing params.
+[FLAGGED: stat blocks required before NPC roster compilation.]
 
-## ED-180 provisional — Piety DA + Stability ≤ 4
-Piety DA is an active action, not passive generation. Not subject to Stability ≤ 4 TC generation pause. Available regardless of Stability level. Provisional confirmed.
 
-## Domain Action Intra-Season Stat Update Timing (PP-280)
-Stats update IMMEDIATELY after each Domain Action resolves within a season.
-A stat depleted by DA-1 provides a lower pool for DA-3 in the same season.
-This is the **Sequential** resolution model.
-Rationale: batch resolution would allow impossible actions (spending Wealth you have already spent).
-GMs track running stat totals on the faction sheet during Domain Action resolution.
+## ED-006 Resolution (PP-287) — Riskbreakers Identity [FLAGGED]
+Riskbreakers: extralegal arm of Löwenritter. Small-cadre elite consequentialists,
+loyal to Valoria-as-concept not to Crown or institution. Will go extralegal when
+judged necessary. Already documented in params_factions §Riskbreakers. Confirmed.
+[FLAGGED: full operational profile deferred to NPC roster development.]
 
-## Seasonal Stat Change Cap — Cost Clarification (PP-281)
-The ±2 seasonal cap applies to **net gain** from Domain Action *outcomes*.
-Domain Action **costs** (Wealth expenditure, Stability backlash) are NOT subject to the cap.
-A faction may lose more than 2 Wealth in a season if multiple DAs each cost 1 Wealth.
-A faction may not *gain* more than 2 in any single stat from DA outcomes.
-Example: Crown spends 3 Wealth across 3 DAs (3×−1) = legal. Gains Military+3 from 3 DAs = illegal (capped to +2).
 
-## High-Wealth Passive Recovery (PP-282)
-A faction with Wealth ≥ 5 at Accounting that did not suffer an active economic Domain Action
-against it this season recovers +1 Wealth automatically (economic resilience).
-Applies to: Guilds (Wealth 6 starting), Hafenmark (Wealth 5).
-Does not apply to: factions under active Trade Embargo or Siege.
+## ED-019 Resolution (PP-288) — Faction Tactic Cards [FLAGGED]
+Provisional minimal tactic card set (2 per faction):
+| Faction | Tactic A | Tactic B |
+|---------|----------|----------|
+| Crown | Royal Prerogative (+2D one Mandate roll, 1/season) | Iron Decree (cancel 1 opposing DA, 1/campaign) |
+| Church | Sanctuary (protect 1 NPC from targeting 1 season) | Inquisition (force reveal 1 hidden faction stat) |
+| Hafenmark | Trade Leverage (+1D all Wealth rolls 1 season) | Constitutional Check (−2 Ob one Crown action) |
+| Varfell | Intelligence Supremacy (learn full stat block of 1 faction) | Patience Protocol (pass; bank +2D for any future roll) |
+| Restoration | Community Shield (reduce RS cost of 1 Weaving by 2) | Solidarity (+1D all Presence marker actions 1 season) |
+| Löwenritter | Martial Discipline (immune to Feigned Retreat 1 battle) | Riskbreaker Activation (deploy Quiet-equivalent 1/campaign) |
+[FLAGGED: placeholder designs. Full design required before BG compilation.]
+
+
+## ED-024 Resolution (PP-289) — Mode 3 Entity Stats [FLAGGED]
+Minimal provisional stat block for simulation:
+| Stat | Value | Notes |
+|------|-------|-------|
+| Thread Pool Score | 8 | Acts as TS 80+ practitioner |
+| Wound threshold | 12 | Physical damage valid only in material-adjacent state |
+| Initiative | Always last | Responds, does not initiate |
+| Thread operation | Weaving (automatic, no Leap) 1/round, Object scale |
+| Coherence | N/A | No rendering substrate to degrade |
+Full stat blocks require designer decision. Floor for simulation only.
+[FLAGGED: full Mode 3 design deferred to Southernmost supplement.]
+
+
+## ED-029 Resolution (PP-290) — Purpose Tracking / Clarity [FLAGGED]
+Clarity countdown adopted: Clarity = d3+1 at zone entry. −1 per hour of exposure.
+Clarity 0: Spirit TN7 Ob2 or forced exit. TS ≥ 40: +1 Clarity at entry.
+[FLAGGED: confirm d3+1 range and Spirit check parameters.]
+
+
+## ED-034 Resolution (PP-291) — Ceiral Ritual RS Asymmetry
+BG Co-Movement cap (RS +1) applies only to BG-layer Thread abstraction.
+Ceiral Ritual is a TTRPG Zoom In — operates at full TTRPG RS values, bypassing BG cap.
+Not a contradiction. ED-034 resolved — no mechanical change needed.
+
+
+## ED-036 Resolution (PP-292) — Altonian Invasion Unit Stats [FLAGGED]
+Provisional stats for simulation unblocking (ED-036 P1-BLOCKER):
+| Unit | Size | Command | Discipline | Power | DR |
+|------|------|---------|-----------|-------|----|
+| Vanguard Infantry | 6 | 4 | 5 | 3 | 2 |
+| Vanguard Cavalry | 4 | 5 | 4 | 4 | 1 |
+| Vanguard Siege | 3 | 3 | 3 | 5 | 3 |
+Altonian faction: Mandate 6, Military 7, Stability 5. No Influence/Wealth/Intel in Valoria context.
+[FLAGGED: confirm unit stats before Altonian engagement is canonically simulated. P1-BLOCKER cleared provisionally.]
+
+
+## ED-143–146 Resolution (PP-323) — PC Simulation Constructs [FLAGGED]
+Canonical test characters adopted for mechanical testing:
+- **Mira Sondhal** (ED-143): Practitioner-Scholar. TS 61. Confirmed.
+- **Arend Voss** (ED-144): Crown Agent-Soldier. Confirmed.
+- **Sister Dagmara Kuhl** (ED-145): Church Renegade. Confirmed.
+- **Theron Ault** (ED-146): Guilds Fixer. Confirmed.
+Designer retains right to revise names and backstory before player-facing publication.
+[FLAGGED: confirm canonical adoption or request redesign.]
+
+
+## ED-147 Resolution (PP-324) — Crown Covert Penalty [FLAGGED]
+Crown covert actions use Influence pool at +1 Ob (no Intel stat). PP-236 confirmed.
++1 Ob is the provisional modifier — represents Crown's institutional weakness at covert operations.
+[FLAGGED: confirm +1 Ob or set alternative modifier before Crown Domain Action compilation.]
+
+
+## ED-148 Resolution (PP-325) — Public Instability Hybrid [FLAGGED]
+Public Instability: Hybrid secondary clock. Range 0–10, start 5.
+Increases: +1/season Revolution Agitation resolves (any degree); +1/season IP rises while TC > 40.
+Decreases: −1/season Crown or Guilds completes successful social DA in contested territory.
+Threshold 8: Revolution free Agitation action. Threshold 10: Institutional collapse check.
+[FLAGGED: confirm thresholds before Hybrid cascade compilation.]
+
+
+## ED-149 Resolution (PP-326) — Crown-Löwenritter Delegation [FLAGGED]
+When Crown delegates covert DA to Löwenritter: roll uses Löwenritter Intel pool.
+Crown +1 Ob penalty does NOT apply — constraint is institutional, not operational.
+Political consequences of discovery fall on Crown. PP-241 confirmed.
+[FLAGGED: confirm penalty non-application to delegated actions.]
+
+
+## ED-151 Resolution (PP-328) — Scene→Mass Transition [FLAGGED]
+Modifiers confirmed (PP-244/251):
+- PC Overwhelming: mass action −1 Ob
+- PC Success: no modifier
+- PC Partial: +1 Ob
+- PC Failure: +2 Ob
+Mid-combat zoom: pause at round boundary, resolve Strategic Phase, resume next session.
+AUD-P1-15 provisionally closed.
+[FLAGGED: confirm modifier values before Hybrid compilation.]
+
+
+## ED-152 Resolution (PP-329) — Domain Echo Formal Rule [FLAGGED]
+Domain Echo: Cascade Phase conversion of personal scene outcome to faction stat change.
+Magnitude: Overwhelming = stat ±2 or clock ±3; Success = stat ±1 or clock ±2; Partial = narrative only; Failure = own faction stat −1.
+One Domain Echo max per scene per faction. GM determines relevant stat and direction.
+[FLAGGED: confirm clock magnitudes before Hybrid compilation.]
+
+
+## ED-174 Resolution (PP-335) — Public Instability Cascade Brake [FLAGGED]
+When Revolution passes a revolt-check (Agitation Partial or better and PI > 5):
+Stability +1 (internal movement cohesion). This prevents PI from spinning Revolution into
+a Stability death spiral. Applies once per season max.
+[FLAGGED: confirm +1 Stability cascade brake before IP/PI interaction compilation.]

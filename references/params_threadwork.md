@@ -549,3 +549,30 @@ A practitioner who attempts Leap without the Approach Training tag:
 - Coherence is NOT reduced by auto-fail (only by successful contact that then degrades).
 
 [FLAGGED: confirm Certainty −1 as the correct penalty vs alternatives (Coherence −1, wound, Composure).]
+
+## ED-119 Resolution (PP-304) — Lenneth Almqvist TS [FLAGGED]
+Lenneth Almqvist (Queen of Valoria, Almud's wife): Thread Sensitivity **72** (provisional).
+Rationale: trained Mira (TS now 61); must exceed student. Southernmost access confirmed.
+Can attempt operations up to Territorial scale.
+[FLAGGED: confirm TS value before NPC roster compilation. Also resolves ED-161.]
+
+
+## ED-134 Resolution (PP-314) — Diagnosis Rationale
+Diagnosis: confirmed as perception act, not a separate operation.
+Diagnosis reveals Thread configuration type, scale, RS signature during active Leap contact.
+Takes no action economy slot in TTRPG (perception is continuous for Leap-eligible practitioners).
+In mass battle: collapsed into Leap per PP-224. ED-134 resolved.
+
+
+## ED-135 Resolution (PP-315) — FR Terminology [FLAGGED]
+"Forced Resolution (FR)" renamed to **Restricted Operations (RO)**.
+"Restricted" captures: available only to practitioners; restricted by Coherence, Ob, and RS.
+All params_threadwork FR references updated to RO.
+[FLAGGED: confirm rename before compilation.]
+
+
+## ED-153 Resolution (PP-330) — Collective Forgetting Anchor [FLAGGED]
+Recall Anchor mechanic: practitioner who passes Forgetting Check may anchor one other who failed/partially failed.
+Anchor elevates failing practitioner to fact-retention (as if Success) — emotional conviction still lost.
+One anchor per failed practitioner; Anchor cannot anchor more than one other. Non-practitioners excluded.
+[FLAGGED: confirm Anchor mechanic before Southernmost compilation.]

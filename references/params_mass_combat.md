@@ -445,3 +445,50 @@ Wave: 3 Vanguard + 2 Heavy. NPC general Command 5. NOTED: provisional pending wo
 
 ## PP-283 — Tactic cards confirmed canonical
 All faction tactic cards in mass_battle_v3 §B.4 confirmed as canonical defaults.
+
+## ED-087 Resolution (PP-300) — BG Ranged Faction Military Modifier
+No BG Military modifier for ranged specialisation. Ranged capacity abstracted into unit Power and DR at unit design stage.
+Consistent with mass combat abstraction principle. No patch needed.
+
+
+## ED-094–098 Resolution (PP-301) — Mass Combat Ranged Consolidated [FLAGGED]
+**ED-094 Crossbow reload:** HP unit fires every other Phase 5 as a unit. Binary ready/reloading marker.
+**ED-095 Archers in melee:** Power −1 in Phase 5 if caught in melee (improvised, no weapon advantage). TN 7 unchanged.
+**ED-096 Ranged DR scaling:** Personal DR values apply 1:1 at mass scale.
+**ED-097 HP effective Power:** Power = 2 when ready; Power = 0 when reloading. Reload-cycle abstraction.
+**ED-098 Cover timing:** Must declare in Phase 1. Late declaration: −1D penalty to covered unit's Phase 5 pool.
+[FLAGGED: confirm reload binary marker implementation and Phase 1 declaration requirement.]
+
+
+## ED-121–125 Resolution (PP-305) — Mass Battle Thread Definitions [FLAGGED]
+**ED-121 Paradox window scene:** Battle-turn = scene. PP-223 confirmed.
+**ED-122 Offensive Lock:** PP-222 confirmed — blocks Discipline degradation on locked unit for lock duration.
+**ED-123 RS thresholds:** Check at Phase 7 Reform (end of each battle-turn). Coherence-0 leakage fires once per turn.
+**ED-124 Diagnosis+Leap collapse:** PP-224 confirmed — single Phase 4 action at mass scale.
+**ED-125 Hybrid Strategic Phase paradox windows:** Windows from Personal Phase persist into Strategic Phase. Strategic Phase generates no new windows.
+[FLAGGED: confirm all five rulings before mass-battle Thread compilation.]
+
+
+## ED-126 Resolution (PP-306) — FR in Mass Battle Failure Rate
+98.3% failure rate for FR ops (Lock/Dissolution) at TS70 Relational in mass battle: confirmed design intent.
+Mass battle is hostile to large-scale Thread intervention. Practitioners should use Object-scale operations.
+Failure rate is correct signal. No patch needed.
+
+
+## ED-140 Resolution (PP-320) — Discipline Degradation Asymmetry [FLAGGED]
+Discipline degradation trigger (PP-248) now requires BOTH:
+1. Total Size lost this turn > Discipline, AND
+2. Power asymmetry (attacking unit Power > defending unit Power) OR Thread/artillery caused Size loss.
+Symmetric engagements produce attrition (Size loss) only — no Discipline degradation.
+[FLAGGED: confirm asymmetry threshold — strict Power > Power or Power difference ≥ 2?]
+
+
+## ED-167–168 Resolution (PP-333) — Zoom Out CF Consequences [FLAGGED]
+**ED-167 CF wound on Zoom Out:** Wound persists. BG consequence: PC's faction loses faction bonus dice (+1D per ED-075) for that season.
+**ED-168 CF killed between Zoom Ins:** PC-B's Zoom In proceeds without PC-A. PC-A-dependent faction actions reassigned to NPC pool. PC death is final in TTRPG; BG reflects through permanent faction bonus loss.
+[FLAGGED: confirm wound persistence and faction bonus mechanics before Hybrid compilation.]
+
+
+## ED-170 Resolution (PP-334) — Coherence Recovery in Multi-Day Battle
+1 Coherence per full overnight rest (min 6 hours, no Thread ops during rest).
+No in-battle Coherence recovery between battle-turns within same day.

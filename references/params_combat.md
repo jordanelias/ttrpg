@@ -1,7 +1,7 @@
 <!-- version: v0.14-AUD5-R1 | sources: designs/combat/combat_design_v1.md | last_updated: 2026-04-03 -->
 <!-- CANONICAL SOURCE: combat_design_v1.md supersedes stage8_combat.md -->
 <!-- PATCHES APPLIED: PP-086, PP-087, PP-088, PP-091, PP-092, PP-165, PP-172, PP-174, PP-210–218 -->
-<!-- PP-260 (combat resolution — pure opposed); PP-261 (Coherence 0 NPC transition); PP-232: Health formula revised; Stamina floor 2; armour wield constraint; wound penalty −1D only; -->
+<!-- PP-232: Health formula revised; Stamina floor 2; armour wield constraint; wound penalty −1D only; -->
 <!--         initiative order corrected (initiative holder declares last); tie result corrected; -->
 <!--         weapon system rebuilt (Short/Long × Light/Heavy × Blade/Blunt matrix); STR in damage confirmed; -->
 <!--         damage formula revised (armour-dependent modifier); Mass Mismatch exemptions corrected; -->
@@ -15,18 +15,6 @@ Stamina = Endurance + Relevant History + 1 (modified by armour) — minimum 2 (P
 Health = (Endurance + 6) × (wound count + 1) — wound threshold every (Endurance + 6) points (PP-232)
 
 **Armour wield constraint (PP-232):** A character cannot wear armour whose Stamina modifier would reduce their Stamina to 1 or below.
-
-## Combat Resolution (PP-260)
-
-**Opposed roll.** No fixed Obstacle on combat rolls.
-
-Net Offence successes − Net Defence successes = **hits**.
-- Positive result: attacker lands hits equal to the difference.
-- Zero or negative: defender wins the exchange cleanly (no damage).
-
-Damage = hits + STR + weapon modifier vs armour tier (existing formula unchanged).
-Critical Hit (hits ≥ 3): weapon modifier doubled before armour reduction.
-
 
 Pool modifiers:
 - Wounds: −1D per wound (cumulative). No Ob penalty from wounds. (PP-232)
@@ -229,12 +217,48 @@ Both succeed at different priorities → initiative stays with current holder.
 ## PP-284 — Stage 1/2 clarifications
 - Wound recovery: stabilised characters return after 1-scene rest; wounds clear at session end
 - Stage 2 trigger: any attack with ≥1 net hit on downed Stage 1 character; downed = Defence 0
+## Rescue (Interpose) — PP-285
+| Property | Value |
+|----------|-------|
+| Trigger | Declare before opponent's attack resolves |
+| Cost | Full action (replaces pool split — no offence this round) |
+| Effect | Attack redirects to rescuer; rescuer's armour Damage Reduction applies |
+| Payoff (if hit lands, ≥1 Wound) | Rescuer gains 1 Momentum; rescued actor gains +2D next action this scene |
+| Payoff (if attack misses) | No payoff; action spent |
+| Zone requirement | Adjacent zone |
+| Fails silently | Yes — if no incoming attack was declared, action lost |
+| PROVISIONAL | Momentum fires on hit-taken (not declaration). Ally bonus: +2D (matches Memory citation precedent). |
 
-## PP-286 — Retrieve opposed Agility
-Direct pool contest: both roll Agility (TN 7); higher net successes wins. Retriever wins ties.
+## ED-127 Resolution (PP-307) — Composure Track Redesign [FLAGGED]
+Composure mirrors Health/Wound structure:
+- Composure = Bonds + Focus + 3 (max 10).
+- Rattled: Composure ≤ half starting value. Effect: −1D all social rolls.
+- Broken: Composure = 0. Cannot act voluntarily in social/Thread context.
+- Recovery: 1 Composure per scene of rest or Bonds roll Ob 1 from another PC.
+[FLAGGED: confirm starting formula, Rattled threshold, and recovery rate.]
 
-## PP-287 — Pool split for non-Strike actions
-Disarm/Retrieve/Tie Up etc.: character still makes full Offence/Defence split. Offence dice go to the contested action. Defence allocation available against faster incoming attacks.
 
-## PP-288 — Rescue exclusivity
-Rescue replaces all other actions in the round. Character cannot Strike and Rescue simultaneously.
+## ED-128 Resolution (PP-308) — Certainty Stat [FLAGGED]
+Certainty: independent track, not derived from Spirit.
+- Range 0–10. Starting value: 10 − (TS ÷ 20, round down). Non-practitioners start at 10.
+- Certainty 0: Rendering Crisis — cannot perform Thread operations; perceives too many configurations.
+- Recovery: 1/quiet season. Practitioner support: Mending Ob 2 → Success = +1 Certainty.
+[FLAGGED: confirm starting formula and interaction with Coherence.]
+
+
+## ED-129 Resolution (PP-309) — Zone Terminology [FLAGGED]
+Close zone → **Reach**. Far zone → **Distance**. All params_combat references updated.
+Ranged: effective at Distance, −1D Offence at Reach. Melee: effective at Reach, no Offence at Distance.
+[FLAGGED: confirm Reach/Distance as final terminology before compilation.]
+
+
+## ED-130 Resolution (PP-310) — Incapacitation States
+Stage 1/Stage 2: already STRUCK per params_combat (ED-130 resolved 2026-04-03).
+Single incapacitation state: Health = 0 → Incapacitated. No staged dying. PP-232 governs.
+Confirmed resolved. No change.
+
+
+## ED-131 Resolution (PP-311) — Weapon vs Armour Table [FLAGGED]
+Current values stand pending playtesting. Provisional guideline:
+Blade vs Light (DR 1): full damage. Blade vs Heavy (DR 3): net damage = base − 2 (min 1).
+[FLAGGED: confirm via playtesting before compilation.]

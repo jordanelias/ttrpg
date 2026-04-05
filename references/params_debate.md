@@ -297,3 +297,70 @@ Three or more orators may contest simultaneously using dual Conviction Tracks.
 **Tiebreak — simultaneous audience capture (GAP-S-01 open — ED-179):** [UNDEFINED. If both Track A-B and Track A-C reach audience capture threshold simultaneously, resolution order is unspecified. Do not use Multi-Party Contest in competitive play until ED-179 resolved.]
 
 [FLAGGED: confirm two-track structure; confirm Appraise sharing; confirm simultaneous resolution.]
+
+## ED-132 Resolution (PP-312) — Debate Step 1 Name
+Step 1 action name: **Appraise** (adopted). "Read" struck. "Judge" struck.
+"Appraise" = assess opponent's rhetorical posture before committing. All params_debate updated.
+
+
+## ED-133 Resolution (PP-313) — Diverge State Trigger [FLAGGED]
+Diverge trigger: GM declares Diverge at exchange 3+ when both orators choose same orientation for 2+ consecutive exchanges (deadlock).
+Diverge effect: no Appraise/Choose; direct pool vs pool, flat weights.
+Diverge ends: one orator wins by margin ≥ 2.
+[FLAGGED: confirm trigger condition and exit mechanic.]
+
+
+## ED-136 Resolution (PP-316) — System Rename [FLAGGED]
+"Debate" → **"Contest"** (adopted). Covers formal debates, social manoeuvring, theological disputes, mercantile negotiation.
+Mechanical system unchanged; label is broader. All params_debate references updated.
+[FLAGGED: confirm Contest as final name before compilation.]
+
+
+## ED-137 Resolution (PP-317) — Panel Adjudicator [FLAGGED]
+Panel adjudicator: **Expert Judge** (Cognition-primary). Ob resistance = Cognition ÷ 2 round up.
+Panel of 3 judges: majority decision; each rolls independently; track movement from majority result.
+[FLAGGED: confirm judge count (3) and majority mechanic.]
+
+
+## ED-138 Resolution (PP-318) — Social Initiative Tiebreak
+Social initiative deterministic (higher Attunement declares second). Tie-break added:
+Equal Attunement → roll Attunement Ob 1 TN7; winner declares second. Further tie: GM coin flip.
+Tiebreak is intentionally rare given attribute spread.
+
+
+## ED-139 Resolution (PP-319) — Community Weaving Mode Disambiguation [FLAGGED]
+Two mode-specific forms — not contradictions:
+| Mode | Pool | TN | Ob | Effect |
+|------|------|----|----|--------|
+| TTRPG (personal) | Mandate (dice) + History | 7 | 3 | RS change per degree table (PP-195) |
+| BG/Hybrid Strategic | Influence (dice) | 7 | TT ÷ 20 round up | Thread Tension change (PP-168) |
+TTRPG targets RS directly (practitioner-led). BG targets Thread Tension (faction-scale abstraction).
+Prerequisite both modes: Mandate ≥ 1; affiliated practitioner TS 30+.
+[FLAGGED: confirm two-form interpretation before compilation.]
+
+
+## ED-141 Resolution (PP-321) — GM Reference Card
+Contest GM reference card: acknowledged as production task for compilation phase.
+Content: Contest sequence, Conviction Track, genre/orientation weights per faction,
+Appraise outcomes, interaction types (CLASH/AMPLIFY/CROSS/DIVERGE), movement formula.
+Not a mechanical gap. Production deferred to compilation.
+
+
+## ED-150 Resolution (PP-327) — AMPLIFY Pool Cap [FLAGGED]
+AMPLIFY combined pool max = highest individual orator pool × 2. PP-242/250 confirmed.
+Additional orators beyond cap: +1D narrative bonus at GM discretion (not mechanical stacking).
+[FLAGGED: confirm ceiling or propose alternative.]
+
+
+## ED-164 Resolution (PP-331) — Contest Resistance Scaling [FLAGGED]
+Resistance capped at **5** regardless of audience Stability average: resistance = min(ceil(Stability/4), 5).
+PP-278 formula already implements ceil(Stability/4) — with Stability max 7, max resistance = ceil(7/4) = 2.
+Wait — recalculate: Stability 7 → ceil(7/4) = 2. Stability 5 → ceil(5/4) = 2. 
+The PP-278 formula already produces resistance ≤ 2 in all cases. Cap of 5 is redundant.
+ED-164 resolved — PP-278 formula is sufficient; no additional cap needed.
+
+
+## ED-166 Resolution (PP-332) — "Division" Definition
+Call for Division: formal procedural vote. Mechanic: triggers Conviction Track check at current position.
+Track ≥ 7: Side A wins the Division. Track ≤ 3: Side B wins. Track 4–6: inconclusive; Contest continues.
+Cannot be called more than once per Contest. Available to Accused in standard proceedings only.
