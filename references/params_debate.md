@@ -8,6 +8,7 @@
 <!--         SIM-DEBT-01 baselines invalidated pending re-sim with corrected pool formula. -->
 <!-- SIM-DEBT-01: RESOLVED 2026-04-03 by SIM-D-05. New baselines in tests/sim_d05_debate_resim.md. -->
 <!-- PP-278 (resistance formula: raw Stability -> ceil(Stability/4), 2026-04-04) -->
+<!-- PP-303 (Memory re-citation restricted to once per debate per source, 2026-04-04) -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage9 before use. -->
 
 # params_debate.md — Debate System (v1, patched)
@@ -24,6 +25,13 @@ Key baselines: Scholar(11D) v Diplomat(8D) Formal: 67/6/27% | Scholar v Scholar 
 | Argue | (Cognition × 2) + History bonus | 7 | Main contest roll. (PP-232) |
 | Step 1 Appraise | Attunement only (no History) | 7 Ob 1 | Per exchange, before Choose. Action name [EDITORIAL: ED-132]. |
 | Memory bonus | +2D | — | When citing specific named verifiable claim. Binary. Any genre. |
+
+## Memory Bonus Re-Citation Rule (PP-303)
+A specific named verifiable source may be cited for the Memory bonus (+2D) **once per debate only**.
+Re-citing the same source in a subsequent exchange grants no bonus.
+A new, distinct verifiable source cited for the first time grants +2D normally.
+Orators may track cited sources on their reference card. Disputed citations: opponent may challenge (Step 1 Appraise, Ob 2 to verify).
+
 
 ## Initiative
 Exchange 1: higher **Attunement** acts last (has most information; declares second). (PP-232)

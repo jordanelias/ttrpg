@@ -1,6 +1,6 @@
 <!-- version: v0.14-AUD5-R1 | sources: designs/combat/combat_design_v1.md | last_updated: 2026-04-03 -->
 <!-- CANONICAL SOURCE: combat_design_v1.md supersedes stage8_combat.md -->
-<!-- PATCHES APPLIED: PP-086, PP-087, PP-088, PP-091, PP-092, PP-165, PP-172, PP-174, PP-210–218 -->
+<!-- PATCHES APPLIED: PP-086–092, PP-165, PP-172, PP-174, PP-210–218, PP-254, PP-304 -->
 <!-- PP-232: Health formula revised; Stamina floor 2; armour wield constraint; wound penalty −1D only; -->
 <!--         initiative order corrected (initiative holder declares last); tie result corrected; -->
 <!--         weapon system rebuilt (Short/Long × Light/Heavy × Blade/Blunt matrix); STR in damage confirmed; -->
@@ -176,6 +176,28 @@ Strike / Establish Distance / Feint / Take a Breath / Full Guard / Disarm / Retr
 
 ## Stamina Minimum (PP-165, revised PP-232)
 Stamina minimum: **2**. Cannot wear armour that would reduce Stamina to 1 or below.
+
+
+## Critical Hit Overflow Wounds (PP-304)
+When a Critical Hit deals damage exceeding the current Health track:
+- Apply damage to Health. If Health reaches 0: take Wound, Health resets to full.
+- Remaining overflow damage continues applying against the fresh Health track.
+- Each time Health reaches 0: take one Wound, Health resets.
+- This repeats until overflow damage is exhausted or max Wounds reached (incapacitation).
+- A single Critical Hit can cause multiple Wounds if damage is large enough.
+
+## Weapon Draw/Switch (PP-304)
+Drawing a ready sidearm (sheathed weapon): **free action**, declared at start of any round before pool split.
+Retrieving a dropped or stowed weapon: **Retrieve action** (full round, contested if in melee contact).
+A sidearm must have been declared "ready" at scene start or prepared in a prior round to draw as free action.
+
+## Partial Operation Ob Stack Reset (PP-304)
+Thread operation Ob stacking from consecutive Partial outcomes:
+- Stack accumulates within a scene (+1 Ob per Partial of the same operation type).
+- Stack resets on a **successful operation** of the same type (Success or Overwhelming).
+- Stack resets at **scene end** regardless of outcome.
+- Stack does NOT carry between scenes or sessions.
+- System cap applies: stacked Ob cannot exceed 20 (Foundational cap).
 
 <!-- patch_history: references/params_combat_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->

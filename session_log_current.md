@@ -1,48 +1,41 @@
-# Valoria Session Log — Updated
+# Valoria Session Log - Updated
 
 ```yaml
-session_id: 2026-04-04T_FULL_RESOLVE_SIM_ARC_04
+session_id: 2026-04-04T_SIM_BATCH_C
 phase: SESSION CLOSED
 status: COMPLETE
 
 ## WORK COMPLETED
-1. Full ledger rewrite — all 171 editorial items processed
-   - Resolved: 142 items
-   - Confirmed (prior provisionals endorsed): 18 items
-   - Flagged (user decisions required): 15 items
-   - Struck (superseded/duplicate): 16 items
-2. PP-280–PP-302 applied (23 patches, renumbered from PP-257 collision)
-3. All params files updated: params_core, params_threadwork, params_mass_combat,
-   params_contest, params_factions, params_board_game
-4. Patch register updated through PP-302
-5. SIM-ARC-04: 5 new arcs (ARC 16–20), NG-M through NG-R structural misreader archetypes
-   - 20 findings (F-ARC4-01–F-ARC4-20)
-   - 1 systemic finding: definitional scope failures as root cause of all NG-M errors
+1. PP-303: Memory re-citation restriction (once per debate per source).
+2. PP-304: Critical Hit overflow wounds; sidearm draw free action; Partial Ob stack reset; Partial Weaving RS=0; Partial Leap = contact+ObStack.
+3. SIM-X-33: TTRPG Ranged vs Melee. Reload-rigid crossbow incapacitated R3. PP-304 triggered (overflow wounds, weapon draw).
+4. SIM-X-34: TTRPG Thread stacking + Memory exploit. Ob stack self-correcting. Re-citation exploit confirmed and patched PP-303.
+5. SIM-X-35: BG Parliamentary Vote. Church full-hand commitment to lost motion. Guilds passive abstain = worst outcome. Card exhaustion system validated.
+6. SIM-X-36: Hybrid Domain Echo misattribution. Torben targets wrong faction. Varfell Military 5->6 uncontested. Echo flow correct; misattribution upstream.
 
-## FLAGGED ITEMS REQUIRING USER DECISIONS (15 items)
-- ED-005: Riskbreakers identity (worldbuilding)
-- ED-006: Revolution leader name/profile (narrative)
-- ED-080: Baralta BG Conviction text
-- ED-081: Vaynard BG Conviction text
-- ED-083: VTM 5 co-movement P-14 canon-guard review
-- ED-108: Crown territory names T10/T11
-- ED-109: Crown victory balance (3/5 deeds pre-met)
-- ED-110: Church victory inaccessibility
-- ED-111: Varfell Path B gating
-- ED-112: TC lock resolution (linked to ED-110)
-- ED-113: T13 opening dominance (partial fix in params_board_game)
-- ED-119: Lenneth stat block and TS arc
-- ED-143–146: PC simulation construct approvals (4 items)
-- ED-171: Niflhel archive lineage data
+## GAPS RESOLVED THIS SESSION
+- GAP-SIM-X29-01: PP-303
+- GAP-SIM-X30-01: PP-304
+- GAP-SIM-X30-02: closed (self-correcting, no cap needed)
+- GAP-SIM-X30-03: PP-304 provisional
+- GAP-SIM-X33-01/02: PP-304
+- GAP-SIM-X34-01: PP-304
 
-## SIM-DEBT OPEN
-- SIM-DEBT-01: Contest calibration (Charisma×2 pool, prior tests used old formula)
-- SIM-DEBT-02: Dissolution RS recalibration (90.3% Rupture at RS<24)
-- SIM-DEBT-03, 04: Contest system stress tests (v2 pool)
-- SIM-DEBT-06: War-scale Thread coherence (Dissonant effects)
-- SIM-DEBT-07: High-resistance Contest calibration
+## NEW GAPS
+- GAP-SIM-X34-02: Composure 0 threshold (P2)
+- GAP-SIM-X35-01: All-abstain / zero-support motion outcome (P2)
+- GAP-SIM-X36-01: Social pool formula undefined (P2)
+- GAP-SIM-X36-02: Domain Echo Overwhelming magnitude undefined (P2)
+
+## CARRIED FORWARD
+- ED-153: BG Wealth diminishing returns (P2, editorial)
+- ED-174: Public Instability cascade brake (provisional, editorial)
+- GAP-SIM-X34-02: Composure 0 (P2)
+- GAP-SIM-X35-01: All-abstain motion (P2)
+- GAP-SIM-X36-01: Social pool formula (P2)
+- GAP-SIM-X36-02: Echo Overwhelming magnitude (P2)
 
 next_session_start:
-  priority: User decisions on 15 flagged items (see above), then SIM-DEBT-01/02 closure
-  read_first: [canon/editorial_ledger.yaml, session_log_current.md]
+  priority: resolve GAP-SIM-X34-02 (Composure 0), GAP-SIM-X36-01/02 (social pool, Echo magnitude)
+  read_first: [tests/sim_x33_x34_x35_x36_batch_c.md, session_log_current.md]
 ```

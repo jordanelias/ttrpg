@@ -558,3 +558,17 @@ Supersedes PP-168 and PP-195 Community Weaving entries.
 - RS target: +1 on Success; +2 on Overwhelming
 - This is a Thread operation, not a Domain Action. No faction stat involvement.
 Community Weaving is the primary player-accessible RS restoration mechanism.
+
+## Partial Operation Ob Stack (PP-304)
+Ob stacking from consecutive Partial outcomes of the same Thread operation type:
+- Accumulates within a scene (+1 Ob per Partial of same type).
+- Resets on a successful operation of the same type (Success or Overwhelming clears the stack).
+- Resets at scene end.
+- Does NOT carry between scenes or sessions.
+- Cannot exceed system Ob cap (20).
+
+## RS Change on Partial Weaving (PP-304 provisional)
+Partial Weaving produces **no RS change**. Only successful Weaving alters RS per operation table.
+Partial Leap: establishes contact (allows subsequent operations) with Op Ob +1 stacking penalty.
+Partial Leap Failure: no contact — subsequent operations cannot proceed this Leap sequence.
+

@@ -90,3 +90,19 @@ Changes:
 - RS baseline decay: −1/year (per 4-season year) confirmed from bg_v05 Part Seven HIS comparison
 - Propagated to params_core.md and params_factions.md
 - Version: v0.14-AUD1-R1 → v0.14-AUD1-R2
+
+## PP-303 (2026-04-04) — Memory Re-Citation Restriction (GAP-SIM-X29-01)
+Source: SIM-X-34 exploit test
+Changes:
+- Memory bonus (+2D): same named source once per debate only
+- Re-citation of same source: no bonus
+- Opponent challenge rule added (Step 1 Appraise Ob 2)
+
+## PP-304 (2026-04-04) — Critical Hit Overflow, Weapon Draw, Partial Ob Stack Reset
+Source: SIM-X-33 (overflow), SIM-X-34 (stack), GAP-SIM-X33-01/02, GAP-SIM-X30-02/03
+Changes:
+- Critical Hit overflow: multiple wounds possible from single hit (each Health-track reset counts as 1 wound)
+- Ready sidearm draw: free action at round start
+- Partial Op Ob stack: resets on success of same type or scene end; system cap 20
+- Partial Weaving: no RS change (provisional)
+- Partial Leap: establishes contact with Op Ob +1; Failure = no contact

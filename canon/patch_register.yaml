@@ -3178,3 +3178,23 @@ PP-234
   source: editorial/SIM-ARC-01 GAP-1
   status: applied
   files_changed: [references/params_factions.md]
+
+- id: PP-303
+  date: 2026-04-04
+  severity: P2
+  description: "Memory bonus re-citation restriction: same named source once per debate only. Resolves GAP-SIM-X29-01."
+  finding_id: "F-34-02, GAP-SIM-X29-01"
+  source: simulation
+  affects: [references/params_debate.md]
+  status: applied
+  applied_commit: ~
+
+- id: PP-304
+  date: 2026-04-04
+  severity: P2
+  description: "Critical Hit overflow wounds (multiple wounds from single hit); weapon draw as free action; Partial Op Ob stack reset rules. Resolves GAP-SIM-X33-01/02, GAP-SIM-X30-02/03, GAP-SIM-X34-01."
+  finding_id: "F-33-04, F-33-05, F-34-01, F-34-03, F-34-04"
+  source: simulation
+  affects: [references/params_combat.md, references/params_threadwork.md, references/params_combat_history.md]
+  status: applied
+  applied_commit: ~
