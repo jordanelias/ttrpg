@@ -351,3 +351,8 @@ Propagation targets:
 | designs/contest/social_contest_system_v2.md | contest-movement | references/params_contest.md | ED-295/296 open — CLASH/REINFORCE formula fixes pending; do not compile until resolved |
 | references/params_combat.md (ED-200/201/202/203 rulings) | combat-rulings-2026-04-04 | designs/combat/combat_design_v1.md | Wound cap, carry-over, recovery, pool floor — resolved by design doc silence. Propagate to compilation on next pass. |
 | references/params_contest.md (PP-401 REINFORCE floor) | reinforce-floor | designs/contest/social_contest_system_v2.md | REINFORCE max(0,...) floor. Propagate to design doc on next compilation. |
+
+## ED-300 Propagation (2026-04-05)
+| Source | Dependency key | Targets | Notes |
+|--------|---------------|---------|-------|
+| canon/editorial_ledger.yaml (ED-300) | domain-echo-scene-availability | designs/board_game/valoria_bg_v05_simulation_and_patches.md, references/params_board_game.md | Domain Echo reframe: availability declaration + escalation clock + primary/secondary yield. All-modes applicability. Propagate to BG design doc when ED-300 resolved. |

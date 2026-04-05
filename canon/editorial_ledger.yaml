@@ -1346,3 +1346,19 @@ editorial_decisions:
     propagation_targets: [references/params_factions.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
     propagation_status: pending
     tags: [board-game, coalition, factions, enumeration]
+
+  - id: ED-300
+    date_flagged: '2026-04-05'
+    date_resolved: null
+    source: design
+    source_file: session_log_current.md
+    description: "Domain Echo as scene-availability declaration (all modes). Instead of Domain Echo = event that fires, Domain Echo = scene is available for player engagement. Uninvestigated echoes escalate on a seasonal clock; at threshold, the situation resolves autonomously without player input (world moves, not player loss). Scenes yield two output categories: Primary (the situation — degree outcome affects trajectory of the character/event) and Secondary (leads, relationship shifts, unlocked echoes, Thread-sensitive information — present at all degrees, content varies by degree). Characters (e.g. Vaynard, Klapp) are world-state contributors with internal clocks, not objectives. Engaging a character node yields secondary information beyond their immediate plotline. Applicable across all modes: TTRPG, Hybrid, Videogame, and Board Game (BG layer already has equivalent in TC passive advance, Stability decay, autonomous Domain Action resolution)."
+    status: open
+    priority: P2
+    decision: ~
+    propagation_targets:
+      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+      - references/params_board_game.md
+      - session_log_current.md
+    propagation_status: pending
+    tags: [domain-echo, scene-generation, hybrid, videogame, board-game, all-modes, escalation, autonomous-resolution, investigation]
