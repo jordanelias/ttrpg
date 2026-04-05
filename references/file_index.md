@@ -29,33 +29,36 @@
 | canon/README.md | INFRA | CURRENT | — |
 | canon/audit_threadwork_v24.md | TTRPG | CURRENT | Audit of v24 threadwork vs foundations |
 | canon/audit_threadwork_v25.md | TTRPG | CURRENT | Audit of v25 threadwork vs foundations |
-| canon/editorial_ledger.yaml | ALL | CURRENT | Source of truth for editorial decisions. 30 items open. |
-| canon/patch_register.yaml | ALL | CURRENT | All patches PP-001–PP-100+. PP-086–092 filled 2026-04-02. |
+| canon/editorial_ledger.yaml | ALL | CURRENT | Source of truth for editorial decisions. 186 items as of 2026-04-04. |
+| canon/patch_register.yaml | ALL | CURRENT | All patches PP-001–PP-400. De-collided 2026-04-04 (104 renumbered entries). PP-086–092 filled 2026-04-02. |
 
 ---
+
+
+> **Note (2026-04-04):** ALL compilation/v0.14 stage documents are OUTDATED. Design docs in designs/ and params files in references/ are canonical. See canonical_sources.yaml.
 
 ## COMPILATION v0.14 (current checkpoint)
 
 | File | Systems | Status | Depends On | Referenced By |
 |------|---------|--------|------------|---------------|
-| compilation/v0.14/stage1_core_engine.md | ALL | CURRENT | 00_philosophical_foundations | references/params_core.md |
-| compilation/v0.14/stage2_characters.md | TTRPG/HYBRID | CURRENT | stage1 | — |
+| compilation/v0.14/stage1_core_engine.md | ALL | OUTDATED | 00_philosophical_foundations | references/params_core.md |
+| compilation/v0.14/stage2_characters.md | TTRPG/HYBRID | OUTDATED | stage1 | — |
 | compilation/v0.14/stage3_thread_operations.md | TTRPG/HYBRID | STALE | designs/ttrpg/threadwork_redesign_v25.md | — |
-| compilation/v0.14/stage4_southernmost.md | TTRPG/HYBRID | CURRENT | stage3 | — |
-| compilation/v0.14/stage5_clocks.md | ALL | CURRENT | stage1 | mass_battle_v3 (Coherence ref) |
+| compilation/v0.14/stage4_southernmost.md | TTRPG/HYBRID | OUTDATED | stage3 | — |
+| compilation/v0.14/stage5_clocks.md | ALL | OUTDATED | stage1 | mass_battle_v3 (Coherence ref) |
 | compilation/v0.14/stage6_factions.md | TTRPG | STALE | — | references/params_factions.md (TTRPG col); NOTE: BG faction mechanics superseded by bg_v05 |
-| compilation/v0.14/stage7_territories.md | ALL | CURRENT | stage6 | — |
-| compilation/v0.14/stage8_combat.md | ALL | CURRENT | stage1, stage2 | references/params_combat.md, references/params_mass_combat.md; PP-086–092 applied 2026-04-02 |
+| compilation/v0.14/stage7_territories.md | ALL | OUTDATED | stage6 | — |
+| compilation/v0.14/stage8_combat.md | ALL | OUTDATED | stage1, stage2 | references/params_combat.md, references/params_mass_combat.md; PP-086–092 applied 2026-04-02 |
 | compilation/v0.14/stage9_social.md | TTRPG | STALE | — | NOTE: debate_system_redesign_v1.md is the operative design. stage9 is empty. |
-| compilation/v0.14/stage10_advancement.md | TTRPG | CURRENT | stage2 | — |
-| compilation/v0.14/stage11_scale_transitions.md | HYBRID | CURRENT | stage1–8 | references/params_scale_transitions.md; PP-089/PP-090 PENDING application |
-| compilation/v0.14/stage12_campaign_modes.md | ALL | CURRENT | stage1–11 | — |
-| compilation/v0.14/stage13_npcs.md | ALL | CURRENT | stage2, stage6 | GAP: Focus+Attunement values missing from Non-Player Character profiles (GAP-ARC31-SIM-01) |
-| compilation/v0.14/stage14_gm_tools.md | ALL | CURRENT | all stages | — |
-| compilation/v0.14/stage15_spell_catalog.md | TTRPG | CURRENT | stage3 | threadwork_redesign_v25 (W-series ops) |
-| compilation/v0.14/stage16_reference.md | ALL | CURRENT | all stages | — |
-| compilation/v0.14/stage17_canon_guard.md | ALL | CURRENT | 00_philosophical_foundations | — |
-| compilation/v0.14/stage3_compilation_report.md | INFRA | CURRENT | — | — |
+| compilation/v0.14/stage10_advancement.md | TTRPG | OUTDATED | stage2 | — |
+| compilation/v0.14/stage11_scale_transitions.md | HYBRID | OUTDATED | stage1–8 | references/params_scale_transitions.md; PP-089/PP-090 PENDING application |
+| compilation/v0.14/stage12_campaign_modes.md | ALL | OUTDATED | stage1–11 | — |
+| compilation/v0.14/stage13_npcs.md | ALL | OUTDATED | stage2, stage6 | GAP: Focus+Attunement values missing from Non-Player Character profiles (GAP-ARC31-SIM-01) |
+| compilation/v0.14/stage14_gm_tools.md | ALL | OUTDATED | all stages | — |
+| compilation/v0.14/stage15_spell_catalog.md | TTRPG | OUTDATED | stage3 | threadwork_redesign_v25 (W-series ops) |
+| compilation/v0.14/stage16_reference.md | ALL | OUTDATED | all stages | — |
+| compilation/v0.14/stage17_canon_guard.md | ALL | OUTDATED | 00_philosophical_foundations | — |
+| compilation/v0.14/stage3_compilation_report.md | INFRA | OUTDATED | — | — |
 | compilation/v0.14/stage_bg_board_game_mode.md | BG | STALE | designs/board_game/valoria_bg_v05_simulation_and_patches.md | NOTE: BG v05 is canonical for BG mode. This stage file is behind. ED-001 (Card-Hand) BLOCKER. |
 | compilation/v0.14/valoria_ruleset_v0.14.md | ALL | CURRENT | all stages | — |
 

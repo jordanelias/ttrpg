@@ -553,7 +553,6 @@ patches:
   status: proposed
   applied_commit: ~
 
-
 - id: PP-086
   date: 2026-04-02
   severity: P1
@@ -1004,6 +1003,7 @@ patches:
   affects: []
   status: approved
   applied_commit: ~
+
 - id: PP-159
   date: 2026-04-01
   severity: P2
@@ -1053,7 +1053,8 @@ patches:
   affects: [stage5_clocks.md §7.2, compilation/v0.14/valoria_ruleset_v0.14.md §7.2]
   status: proposed
   applied_commit: ~
-- id: PP-093
+
+- id: PP-297
   date: 2026-04-02
   severity: P1
   description: "Mass battle stalemate resolution — Tactical Withdrawal after 3 turns 0 damage [PROVISIONAL]"
@@ -1062,8 +1063,10 @@ patches:
   affects: [designs/mass_combat/mass_battle_v3.md]
   status: provisional
   applied_commit: "2026-04-02-session"
+  renumbered_from: PP-093
+  renumber_date: 2026-04-04
 
-- id: PP-094
+- id: PP-298
   date: 2026-04-02
   severity: P1
   description: "Coup Counter successor rule — highest CR officer, counter resets [PROVISIONAL]"
@@ -1072,8 +1075,10 @@ patches:
   affects: [designs/combat/combat_design_v1.md]
   status: provisional
   applied_commit: "2026-04-02-session"
+  renumbered_from: PP-094
+  renumber_date: 2026-04-04
 
-- id: PP-095
+- id: PP-299
   date: 2026-04-02
   severity: P1
   description: "TC seasonal change cap: ±3 Domain Actions, ±5 all sources [PROVISIONAL]"
@@ -1082,8 +1087,10 @@ patches:
   affects: [designs/combat/combat_design_v1.md]
   status: provisional
   applied_commit: "2026-04-02-session"
+  renumbered_from: PP-095
+  renumber_date: 2026-04-04
 
-- id: PP-096
+- id: PP-300
   date: 2026-04-02
   severity: P2
   description: "Faction Stability natural recovery: +1/season when Stability ≤ 3 and no hostile actions [PROVISIONAL]"
@@ -1092,8 +1099,10 @@ patches:
   affects: [designs/combat/combat_design_v1.md]
   status: provisional
   applied_commit: "2026-04-02-session"
+  renumbered_from: PP-096
+  renumber_date: 2026-04-04
 
-- id: PP-097
+- id: PP-301
   date: 2026-04-02
   severity: P1
   description: "DIVERGE+TIE: Tie rule fires on equal successes regardless of interaction type, including Divergence. Both take 1 strain; track +1 toward initiative holder. [PROVISIONAL]"
@@ -1102,8 +1111,10 @@ patches:
   affects: [designs/debate/debate_system_redesign_v1.md §6.4]
   status: provisional
   applied_commit: "2026-04-02-sim-d-01"
+  renumbered_from: PP-097
+  renumber_date: 2026-04-04
 
-- id: PP-098
+- id: PP-302
   date: 2026-04-02
   severity: P2
   description: "Regroup at Concentration=0: consumes Spent state without -2D/+1D penalty. Concentration restores by Focus score. [PROVISIONAL]"
@@ -1112,8 +1123,10 @@ patches:
   affects: [designs/debate/debate_system_redesign_v1.md §6.4 Step 5-6]
   status: provisional
   applied_commit: "2026-04-02-sim-d-01"
+  renumbered_from: PP-098
+  renumber_date: 2026-04-04
 
-- id: PP-099
+- id: PP-303
   date: 2026-04-02
   severity: P2
   description: "Obscuring in Divergence: effective_margin calculated at orientation_weight=1.0. If winner used Obscuring, place Doubt Marker instead of track movement. [PROVISIONAL]"
@@ -1122,8 +1135,10 @@ patches:
   affects: [designs/debate/debate_system_redesign_v1.md §6.4 DIVERGE + OBSCURING WIN]
   status: provisional
   applied_commit: "2026-04-02-sim-d-01"
+  renumbered_from: PP-099
+  renumber_date: 2026-04-04
 
-- id: PP-100
+- id: PP-304
   date: 2026-04-02
   severity: P2
   description: "§6.7 Formal Debate alternating clarification: proposer role alternates; initiative transfers per §6.4 independently. These are separate mechanics. [PROVISIONAL]"
@@ -1133,8 +1148,10 @@ patches:
   applied_to_version: "v1.2"
   status: provisional
   applied_commit: "2026-04-02-sim-d-02"
+  renumbered_from: PP-100
+  renumber_date: 2026-04-04
 
-- id: PP-101
+- id: PP-305
   date: 2026-04-02
   severity: P2
   description: "Presence modifier formula: add max(0,...) — formula gave −1 at Presence 1-2, table says +0. Fixed."
@@ -1144,8 +1161,10 @@ patches:
   applied_to_version: "v1.3"
   status: applied
   applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-101
+  renumber_date: 2026-04-04
 
-- id: PP-102
+- id: PP-306
   date: 2026-04-02
   severity: P2
   description: "Concentration depletion floor: add explicit minimum 0. Double-depletion in one exchange cannot go below 0; Spent fires immediately."
@@ -1155,8 +1174,10 @@ patches:
   applied_to_version: "v1.3"
   status: applied
   applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-102
+  renumber_date: 2026-04-04
 
-- id: PP-103
+- id: PP-307
   date: 2026-04-02
   severity: P2
   description: "Strain minimum 1: CLASH and COMPETITION can produce 0 strain at high Focus defence. Add minimum 1 strain to both."
@@ -1166,8 +1187,10 @@ patches:
   applied_to_version: "v1.3"
   status: applied
   applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-103
+  renumber_date: 2026-04-04
 
-- id: PP-104
+- id: PP-308
   date: 2026-04-02
   severity: P1
   description: "Corroboration stub: §3.5 corroboration mechanic not integrated in §6.4. Added Step 2b stub with provisional reference to §3.5. Full porting pending ED-051 NPC stat block."
@@ -1177,8 +1200,10 @@ patches:
   applied_to_version: "v1.3"
   status: applied
   applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-104
+  renumber_date: 2026-04-04
 
-- id: PP-106
+- id: PP-309
   date: 2026-04-02
   severity: P2
   description: "Rattled + Spent stacking: document cumulative −4D total and pool minimum of 1D applies as floor."
@@ -1188,8 +1213,10 @@ patches:
   applied_to_version: "v1.3"
   status: applied
   applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-106
+  renumber_date: 2026-04-04
 
-- id: PP-107
+- id: PP-310
   date: 2026-04-02
   severity: P2
   description: "Debate initiation gate: add Principle 1 (roll only when meaningful) gate to §6.0."
@@ -1199,8 +1226,10 @@ patches:
   applied_to_version: "v1.3"
   status: applied
   applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-107
+  renumber_date: 2026-04-04
 
-- id: PP-108
+- id: PP-311
   date: 2026-04-02
   severity: P2
   description: "Post-debate recovery: all strain, Rattled, Spent clear at scene end. No persistent character state. Add design note flagging GAP-DS-16 as open question."
@@ -1210,8 +1239,10 @@ patches:
   applied_to_version: "v1.3"
   status: applied
   applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-108
+  renumber_date: 2026-04-04
 
-- id: PP-109
+- id: PP-312
   date: 2026-04-02
   severity: P1
   description: "Tribunal exchange count guidance: P(one-exchange resolution) ~88% at default TC=6 + boosted genre. Add design note with dramatic play guidance."
@@ -1221,8 +1252,10 @@ patches:
   applied_to_version: "v1.3"
   status: applied
   applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-109
+  renumber_date: 2026-04-04
 
-- id: PP-110
+- id: PP-313
   date: 2026-04-02
   severity: P2
   description: "Domain Echo table stub: add canonical consequence table to §6.5 for debate win by genre. Full table pending editorial."
@@ -1232,8 +1265,10 @@ patches:
   applied_to_version: "v1.3"
   status: applied
   applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-110
+  renumber_date: 2026-04-04
 
-- id: PP-111
+- id: PP-314
   date: 2026-04-02
   severity: P3
   description: "DIVERGE negative net successes: add explicit note that negative effective_margin is treated as 0 by the resistance gate."
@@ -1243,8 +1278,10 @@ patches:
   applied_to_version: "v1.3"
   status: applied
   applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-111
+  renumber_date: 2026-04-04
 
-- id: PP-112
+- id: PP-315
   date: 2026-04-02
   severity: P1
   description: "Remove struck Majority-1s override from params_board_game.md. GAP-BG-14."
@@ -1254,8 +1291,10 @@ patches:
   applied_to_version: "v0.14+design-ST"
   status: applied
   applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-112
+  renumber_date: 2026-04-04
 
-- id: PP-113
+- id: PP-316
   date: 2026-04-02
   severity: P2
   description: "Stat ceilings and floors table: faction stats floor 0, ceiling 7. Standing 0-10."
@@ -1265,8 +1304,10 @@ patches:
   applied_to_version: "v0.14+design-ST"
   status: applied
   applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-113
+  renumber_date: 2026-04-04
 
-- id: PP-114
+- id: PP-317
   date: 2026-04-02
   severity: P2
   description: "IP post-80 escalation: IP 81-89 Vanguard +1 territory/season; IP 90-99 Altonian Mil +2; IP 100 shared defeat. Fills GAP-BG-06. PROVISIONAL."
@@ -1276,8 +1317,10 @@ patches:
   applied_to_version: "v0.14+design-ST"
   status: provisional
   applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-114
+  renumber_date: 2026-04-04
 
-- id: PP-115
+- id: PP-318
   date: 2026-04-02
   severity: P2
   description: "PI threshold table. PI 0 = Parliament dissolved + Löwenritter coup. Fills GAP-BG-03. PROVISIONAL ED-055."
@@ -1287,8 +1330,10 @@ patches:
   applied_to_version: "v0.14+design-ST"
   status: provisional
   applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-115
+  renumber_date: 2026-04-04
 
-- id: PP-116
+- id: PP-319
   date: 2026-04-02
   severity: P2
   description: "TC seasonal cap: Domain Actions +-3, all sources +-5. Seizure gains exempt. TC ceiling 100 cosmetic. PROVISIONAL ED-056."
@@ -1298,8 +1343,10 @@ patches:
   applied_to_version: "v0.14+design-ST"
   status: provisional
   applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-116
+  renumber_date: 2026-04-04
 
-- id: PP-117
+- id: PP-320
   date: 2026-04-02
   severity: P1
   description: "Faction collapse exit: 1 season elapsed + no hostile Domain Actions + Govern Ob 2 Success. Auto-exit Season 2 Stability 1 Mandate 0. PROVISIONAL ED-053."
@@ -1309,8 +1356,10 @@ patches:
   applied_to_version: "v0.14+design-ST"
   status: provisional
   applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-117
+  renumber_date: 2026-04-04
 
-- id: PP-118
+- id: PP-321
   date: 2026-04-02
   severity: P1
   description: "Simultaneous RS=0 + IP>=80: Rupture (Step 6) takes precedence. Exception: Restoration Step 5 victory pre-empts. PROVISIONAL ED-054."
@@ -1320,8 +1369,10 @@ patches:
   applied_to_version: "v0.14+design-ST"
   status: provisional
   applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-118
+  renumber_date: 2026-04-04
 
-- id: PP-119
+- id: PP-322
   date: 2026-04-02
   severity: P2
   description: "BG unit Cohesion starting values by type. Track 0-6. At 0: destroyed. +1/season recovery if no battle. PROVISIONAL GAP-BG-07."
@@ -1331,8 +1382,10 @@ patches:
   applied_to_version: "v0.14+design-ST"
   status: provisional
   applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-119
+  renumber_date: 2026-04-04
 
-- id: PP-120
+- id: PP-323
   date: 2026-04-02
   severity: P2
   description: "BG Thread ops: no Coherence cost. TTRPG personal-scale only. Hybrid: PC Coherence via Cascade Step 3. PROVISIONAL ED-057."
@@ -1342,8 +1395,10 @@ patches:
   applied_to_version: "v0.14+design-ST"
   status: provisional
   applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-120
+  renumber_date: 2026-04-04
 
-- id: PP-121
+- id: PP-324
   date: 2026-04-02
   severity: P2
   description: "Reformed Settlement +1 Ob Diplomacy targeting Hafenmark: permanent, no reversal. PROVISIONAL ED-058 open."
@@ -1353,8 +1408,10 @@ patches:
   applied_to_version: "v0.14+design-ST"
   status: provisional
   applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-121
+  renumber_date: 2026-04-04
 
-- id: PP-122
+- id: PP-325
   date: 2026-04-02
   severity: P2
   description: "CP awards in Hybrid: CP +1 on Domain Action Success if PC declares Belief. CP +1 on Mandate decision if Conviction articulated. BG-only: no CP. Fills G-BG-05."
@@ -1364,8 +1421,10 @@ patches:
   applied_to_version: "v0.14+design-ST"
   status: provisional
   applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-122
+  renumber_date: 2026-04-04
 
-- id: PP-118-rev1
+- id: PP-326
   date: 2026-04-02
   severity: P1
   description: "PP-118 Step numbering correction. Restoration pre-check moved to Step 5 (before RS Step 6). Added step-by-step accounting sequence context. Added simultaneous Step 12 editorial flag. Fixes SIM-BG-01-03."
@@ -1376,8 +1435,10 @@ patches:
   status: provisional
   applied_commit: "2026-04-02-audit-bg-sim-01"
   supersedes: PP-118
+  renumbered_from: PP-118-rev1
+  renumber_date: 2026-04-04
 
-- id: PP-112
+- id: PP-327
   date: 2026-04-02
   severity: P2
   description: "§6.4 Step 3: (1) Clarify Argue rolls have no fixed Ob — comparative margin-based. (2) Add Momentum spending on Argue rolls (non-Thread per params_core). (3) Clarify genre pivot is unrestricted between exchanges. [GAP-DS-01/17/07 resolved]"
@@ -1387,8 +1448,10 @@ patches:
   applied_to_version: "v1.4"
   status: applied
   applied_commit: "2026-04-02-gap-fill"
+  renumbered_from: PP-112
+  renumber_date: 2026-04-04
 
-- id: PP-113
+- id: PP-328
   date: 2026-04-02
   severity: P3
   description: "§6.4 OBSCURING WIN: confirm Doubt Marker replacement is intentional — stacking not permitted. [GAP-DS-08 resolved]"
@@ -1398,8 +1461,10 @@ patches:
   applied_to_version: "v1.4"
   status: applied
   applied_commit: "2026-04-02-gap-fill"
+  renumbered_from: PP-113
+  renumber_date: 2026-04-04
 
-- id: PP-114
+- id: PP-329
   date: 2026-04-02
   severity: P2
   description: "§6.5: (1) Add Debate Fatigue — Rattled → −1D next social roll, consumed on use. (2) Add Total Victory — TC≥9/≤1 → additional Mandate−1 (BG) + Momentum+1 (TTRPG). [GAP-DS-03/16 resolved]"
@@ -1409,8 +1474,10 @@ patches:
   applied_to_version: "v1.4"
   status: applied
   applied_commit: "2026-04-02-gap-fill"
+  renumbered_from: PP-114
+  renumber_date: 2026-04-04
 
-- id: PP-115
+- id: PP-330
   date: 2026-04-02
   severity: P2
   description: "§6.6: Add Beliefs integration — winning exchange aligned with stated Belief = Belief achievement for Momentum. 1 Momentum per debate cap. [GAP-DS-19 / ED-054 resolved — PROVISIONAL]"
@@ -1420,8 +1487,10 @@ patches:
   applied_to_version: "v1.4"
   status: applied
   applied_commit: "2026-04-02-gap-fill"
+  renumbered_from: PP-115
+  renumber_date: 2026-04-04
 
-- id: PP-116
+- id: PP-331
   date: 2026-04-02
   severity: P2
   description: "§6.7: (1) Corroboration in asymmetric proceedings — accused may corroborate at Bonds Ob 2 (vs Ob 1 symmetric). (2) Confirm advantaged orator 0-strain in Divergence exchanges is intentional. [GAP-DS-18 / ED-055/058 resolved — PROVISIONAL]"
@@ -1431,8 +1500,10 @@ patches:
   applied_to_version: "v1.4"
   status: applied
   applied_commit: "2026-04-02-gap-fill"
+  renumbered_from: PP-116
+  renumber_date: 2026-04-04
 
-- id: PP-117
+- id: PP-332
   date: 2026-04-02
   severity: P2
   description: "§6.5/6.12/6.13: (1) Debate Fatigue consumed after first roll use. (2) BG zero-zero → automatic committee referral, TTRPG TIE rule does not apply. (3) Corroboration CLASH-specialist design note added. [SIM-D-04 findings]"
@@ -1442,8 +1513,10 @@ patches:
   applied_to_version: "v1.5"
   status: applied
   applied_commit: "2026-04-02-gap-fill"
+  renumbered_from: PP-117
+  renumber_date: 2026-04-04
 
-- id: PP-118
+- id: PP-333
   date: 2026-04-02
   severity: P2
   description: "§6.14: Hybrid debate exchange count is independent of BG vote round count — set by GM per context. [K2 finding / SIM-D-04]"
@@ -1453,89 +1526,97 @@ patches:
   applied_to_version: "v1.5"
   status: applied
   applied_commit: "2026-04-02-gap-fill"
+  renumbered_from: PP-118
+  renumber_date: 2026-04-04
 
-- id: PP-101
+- id: PP-334
   date: 2026-04-02
   severity: P1
   description: "Practitioner positioning rule in mass combat: rear vs front-line Leap timing distinction. BG→TTRPG unit conversion added to §B.5 referencing §B.2 table. Resolves F-HYB-01 and GAP-K2-01."
   finding_id: "F-HYB-01 / GAP-K2-01 / SIM-HYB-01"
   source: simulation
   affects:
-    - designs/mass_combat/mass_battle_v3.md
-    - skills/valoria-orchestrator/references/state_transfer_spec.md
+  - designs/mass_combat/mass_battle_v3.md
+  - skills/valoria-orchestrator/references/state_transfer_spec.md
   applied_to_version: "v4.1"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-101
+  renumber_date: 2026-04-04
 
-  - id: PP-164
-    date: 2026-04-02
-    status: applied
-    source: AUD-TTRPG-01 Mode B
-    description: "params_core: add attribute range 1–7, 10 attributes listed with Memory/Focus definitions, derived scores table (Health=End+6, Composure=Pres+6, Contact Rounds=Focus, Coherence start=10)"
-    files_changed:
-      - references/params_core.md
+- id: PP-164
+  date: 2026-04-02
+  status: applied
+  source: AUD-TTRPG-01 Mode B
+  description: "params_core: add attribute range 1–7, 10 attributes listed with Memory/Focus definitions, derived scores table (Health=End+6, Composure=Pres+6, Contact Rounds=Focus, Coherence start=10)"
+  files_changed:
+  - references/params_core.md
 
-  - id: PP-165
-    date: 2026-04-02
-    status: applied
-    source: AUD-TTRPG-01 Modes A+F
-    description: "params_combat: fix Health formula (End+6 not End), Stamina minimum=1 rule, Offence/Defence allocation procedure, wound dual-penalty quantification"
-    files_changed:
-      - references/params_combat.md
+- id: PP-165
+  date: 2026-04-02
+  status: applied
+  source: AUD-TTRPG-01 Modes A+F
+  description: "params_combat: fix Health formula (End+6 not End), Stamina minimum=1 rule, Offence/Defence allocation procedure, wound dual-penalty quantification"
+  files_changed:
+  - references/params_combat.md
 
-  - id: PP-166
-    date: 2026-04-02
-    status: applied
-    source: AUD-TTRPG-01 Modes B+C
-    description: "params_threadwork: remove phantom Thread Depth (TD) stat (not present in threadwork_redesign_v25 or any formula), add RS=0 lockout gate, confirm Coherence start=10, add RS ceiling=100"
-    files_changed:
-      - references/params_threadwork.md
+- id: PP-166
+  date: 2026-04-02
+  status: applied
+  source: AUD-TTRPG-01 Modes B+C
+  description: "params_threadwork: remove phantom Thread Depth (TD) stat (not present in threadwork_redesign_v25 or any formula), add RS=0 lockout gate, confirm Coherence start=10, add RS ceiling=100"
+  files_changed:
+  - references/params_threadwork.md
 
-  - id: PP-167
-    date: 2026-04-02
-    status: applied
-    source: AUD-TTRPG-01 Mode B
-    description: "params_factions: fix RS TTRPG starting value 60→72 (canonical source: stage12_campaign_modes §12.1 Session Zero step 4 'Set clocks: RS 72')"
-    files_changed:
-      - references/params_factions.md
+- id: PP-167
+  date: 2026-04-02
+  status: applied
+  source: AUD-TTRPG-01 Mode B
+  description: "params_factions: fix RS TTRPG starting value 60→72 (canonical source: stage12_campaign_modes §12.1 Session Zero step 4 'Set clocks: RS 72')"
+  files_changed:
+  - references/params_factions.md
 
-- id: PP-103
+- id: PP-335
   date: 2026-04-02
   severity: P1
   description: "Phase-Lock Protocol for Zoom In (3 legal entry points: after Phase 1, Phase 3, Phase 6 Step 1). Eliminates ghost-unit state (ED-057). Levy unit (CP 1) added to B.2 to fix Military-1 faction gap (F-HYB-08). Str/Morale columns added to B.2."
   finding_id: "F-HYB-08 / F-HYB-09 / ED-055 / ED-057 / SIM-HYB-01"
   source: simulation
   affects:
-    - designs/mass_combat/mass_battle_v3.md
-    - skills/valoria-orchestrator/references/state_transfer_spec.md
-    - designs/gm_ref_cp14/zoom_in_out_reference_card.md
+  - designs/mass_combat/mass_battle_v3.md
+  - skills/valoria-orchestrator/references/state_transfer_spec.md
+  - designs/gm_ref_cp14/zoom_in_out_reference_card.md
   applied_to_version: "v4.2"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-103
+  renumber_date: 2026-04-04
 
-  - id: PP-168
-    date: 2026-04-02
-    status: applied
-    source: AUD-TTRPG-01 Mode D GAP-TTRPG-17
-    description: "params_factions: extract and add all 8 faction unique actions from stage6_factions.md §8.4–8.9 (Hafenmark/Sovereign Authority Doctrine, Varfell/Private Collection full table, Guilds/Economic Leverage, Niflhel/Quiet Network all modes, Restoration Movement/Community Weaving, Löwenritter/Martial Law Coup Trigger)"
-    files_changed:
-      - references/params_factions.md
+- id: PP-168
+  date: 2026-04-02
+  status: applied
+  source: AUD-TTRPG-01 Mode D GAP-TTRPG-17
+  description: "params_factions: extract and add all 8 faction unique actions from stage6_factions.md §8.4–8.9 (Hafenmark/Sovereign Authority Doctrine, Varfell/Private Collection full table, Guilds/Economic Leverage, Niflhel/Quiet Network all modes, Restoration Movement/Community Weaving, Löwenritter/Martial Law Coup Trigger)"
+  files_changed:
+  - references/params_factions.md
 
-- id: PP-104
+- id: PP-336
   date: 2026-04-02
   severity: P2
   description: "4 projectile weapon categories (LP/HP/LBl/HBl) replacing single Projectile. Str corrections in B.2 (−2 all, −3 Ranged/Artillery). Pool split declared Phase 1. Damage formula: Str loss = net hits + Dmg Mod − DR. BG Battle Partial outcome defined. All marked PROVISIONAL."
   finding_id: "SIM-HYB-01 PARAMS-GAP-04/05/06-MC + user audit"
   source: simulation+editorial
   affects:
-    - designs/mass_combat/mass_battle_v3.md
-    - references/params_mass_combat.md
-    - designs/gm_ref_cp14/zoom_in_out_reference_card.md
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
+  - designs/gm_ref_cp14/zoom_in_out_reference_card.md
   applied_to_version: "v4.3"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-104
+  renumber_date: 2026-04-04
 
-- id: PP-105
+- id: PP-337
   date: 2026-04-02
   severity: P1
   description: "TTRPG personal combat projectile weapon types: LP (bow +2), HP (crossbow +4), LBl (sling +1). Ranged combat rules: no Defence allocation, Far zone only, Close zone −3D, Cover +2DR, Reload action for HP, simultaneous ranged-vs-ranged provisional. Sling knife default at Close zone."
@@ -1545,8 +1626,10 @@ patches:
   applied_to_version: "v0.14-AUD2"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-105
+  renumber_date: 2026-04-04
 
-- id: PP-106
+- id: PP-338
   date: 2026-04-02
   severity: P1
   description: "HBl Artillery Dmg Mod +5→+3 (one-shot problem). Artillery sight-line rule: HBl requires unobstructed LoS; Line formation screens block shots; flank to engage Artillery. Applied to mass_battle_v3 §B.2 and §Phase 2 Volley."
@@ -1556,6 +1639,8 @@ patches:
   applied_to_version: "v4.4"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-106
+  renumber_date: 2026-04-04
 
 - id: PP-169
   date: 2026-04-02
@@ -1579,7 +1664,7 @@ patches:
   status: applied
   applied_commit: pending
 
-- id: PP-107
+- id: PP-339
   date: 2026-04-02
   severity: P1
   description: "state_transfer_spec wholesale correction: Unit Str 1:1→B.5 conversion; Unit Cohesion BG 0–6 floor rule; Unit Morale BG absent→derive from Cohesion+1; Unit Martial→use B.2 CP column. Zoom Out table: debate outcome and Gap aversion rows added. Phase 6 continuation protocol added. Concurrent Zoom In provisional procedure added. Non-battle Zoom In note added."
@@ -1589,8 +1674,10 @@ patches:
   applied_to_version: "post-PP-103"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-107
+  renumber_date: 2026-04-04
 
-- id: PP-108
+- id: PP-340
   date: 2026-04-02
   severity: P1
   description: "Domain Echo amount defined provisionally: +1 on Success, +2 on Overwhelming, to most relevant faction stat, cap ±2 per scene. Debate outcome mapping added. Multiple Echo ordering rule added."
@@ -1600,8 +1687,10 @@ patches:
   applied_to_version: "ST2"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-108
+  renumber_date: 2026-04-04
 
-- id: PP-109
+- id: PP-341
   date: 2026-04-02
   severity: P1
   description: "Domain Echo timing discrepancy documented as intentional design: full TTRPG fires immediately; Hybrid queues to Accounting. Rationale: prevents real-time BG stat manipulation from personal scenes."
@@ -1611,8 +1700,10 @@ patches:
   applied_to_version: "ST2"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-109
+  renumber_date: 2026-04-04
 
-- id: PP-110
+- id: PP-342
   date: 2026-04-02
   severity: P1
   description: "Phase 6 Step 1 Zoom In continuation protocol: Steps 2–6 resume after Zoom Out using updated state. General's Step 4 consumed if PC general is Zoom In character."
@@ -1622,8 +1713,10 @@ patches:
   applied_to_version: "PP-107 bundle"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-110
+  renumber_date: 2026-04-04
 
-- id: PP-111
+- id: PP-343
   date: 2026-04-02
   severity: P1
   description: "Mass→Personal time scale: 1 mass combat turn = 1 personal combat exchange. Max 5 exchanges before forced disengage/incapacitation. General loses CR bonus (effective CR 0) per turn in personal combat."
@@ -1633,8 +1726,10 @@ patches:
   applied_to_version: "ST2"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-111
+  renumber_date: 2026-04-04
 
-- id: PP-112
+- id: PP-344
   date: 2026-04-02
   severity: P2
   description: "Concurrent Zoom In provisional: resolve in faction-turn order (Accounting sequence). First battle completes fully before second begins. [PROVISIONAL — ED-072]"
@@ -1644,6 +1739,8 @@ patches:
   applied_to_version: "PP-107 bundle"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-112
+  renumber_date: 2026-04-04
 
 - id: PP-171
   date: 2026-04-02
@@ -1652,14 +1749,14 @@ patches:
   finding_id: "AUDIT-HYBRID-01 + all prior sessions"
   source: editorial
   affects:
-    - references/params_debate.md
-    - references/params_factions.md
-    - references/params_mass_combat.md
-    - references/params_combat.md
-    - references/params_board_game.md
-    - skills/valoria-orchestrator/references/state_transfer_spec.md
-    - references/params_scale_transitions.md
-    - canon/editorial_ledger.yaml
+  - references/params_debate.md
+  - references/params_factions.md
+  - references/params_mass_combat.md
+  - references/params_combat.md
+  - references/params_board_game.md
+  - skills/valoria-orchestrator/references/state_transfer_spec.md
+  - references/params_scale_transitions.md
+  - canon/editorial_ledger.yaml
   applied_to_version: "v0.14 + all ST patches"
   status: applied
   applied_commit: pending
@@ -1693,8 +1790,8 @@ patches:
   finding_id: "SIM-001-F1"
   source: simulation
   affects:
-    - designs/combat/combat_design_v1.md
-    - references/params_combat.md
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
   applied_to_version: "v1.2"
   status: applied
   applied_commit: "pending"
@@ -1721,7 +1818,7 @@ patches:
   status: provisional
   applied_commit: pending
 
-- id: PP-178
+- id: PP-345
   date: 2026-04-02
   severity: P3
   description: "LIR/FF cross-mode applicability note added to stage1. Debate exemption, Thread precedence, BG action-economy equivalence all stated. Hybrid zoom-boundary FF rule added."
@@ -1731,8 +1828,10 @@ patches:
   applied_to_version: "v0.5.5"
   status: provisional
   applied_commit: pending
+  renumbered_from: PP-178
+  renumber_date: 2026-04-04
 
-- id: PP-180
+- id: PP-346
   date: 2026-04-02
   severity: P3
   description: "Hybrid zoom-boundary FF rule: PC Failure complication carries to faction scale as -1 Ob on next Domain Action or Standing -1. Not discarded at zoom boundary."
@@ -1742,8 +1841,10 @@ patches:
   applied_to_version: "v0.5.5"
   status: provisional
   applied_commit: pending
+  renumbered_from: PP-180
+  renumber_date: 2026-04-04
 
-- id: PP-119
+- id: PP-347
   date: 2026-04-02
   severity: P2
   description: "(1) §6.8/6.9: mark resolved items, clean stale list. (2) §6.13 BG: add design note — orientation absent by design; genre pivot between rounds permitted."
@@ -1753,8 +1854,10 @@ patches:
   applied_to_version: "v1.6"
   status: applied
   applied_commit: "2026-04-02-session-close"
+  renumbered_from: PP-119
+  renumber_date: 2026-04-04
 
-- id: PP-120
+- id: PP-348
   date: 2026-04-02
   severity: P1
   description: "§6.14 Hybrid: TC starting position clamped to compromise zone 4-6. BG offset determines position within zone, never pre-decides outcome. Prevents hollow Hybrid debate scenes. [PROVISIONAL]"
@@ -1764,8 +1867,10 @@ patches:
   applied_to_version: "v1.6"
   status: provisional
   applied_commit: "2026-04-02-session-close"
+  renumbered_from: PP-120
+  renumber_date: 2026-04-04
 
-- id: PP-121
+- id: PP-349
   date: 2026-04-02
   severity: P2
   description: "§6.15: Church self-investigation exception — Church does not file Heresy Investigation against own ordained members supporting Church interests. Opposing factions may still file. [PROVISIONAL]"
@@ -1775,8 +1880,10 @@ patches:
   applied_to_version: "v1.6"
   status: provisional
   applied_commit: "2026-04-02-session-close"
+  renumbered_from: PP-121
+  renumber_date: 2026-04-04
 
-- id: PP-122
+- id: PP-350
   date: 2026-04-02
   severity: P1
   description: "§6.5: Debate-generated RS changes subject to RS ceiling (100) and RS=0 lockout (Rupture). At RS=0 or RS=100, no RS changes from §3.8 fire."
@@ -1786,8 +1893,10 @@ patches:
   applied_to_version: "v1.6"
   status: applied
   applied_commit: "2026-04-02-session-close"
+  renumbered_from: PP-122
+  renumber_date: 2026-04-04
 
-- id: PP-123
+- id: PP-351
   date: 2026-04-02
   severity: P1
   description: "§6.15: Temporal axis conflict rule — Past-axis Thread op during Future-primary debate (or reverse) imposes TN 8 on both orators' next Read roll. Same-axis ops and non-temporal ops unaffected. [PROVISIONAL]"
@@ -1797,6 +1906,8 @@ patches:
   applied_to_version: "v1.6"
   status: provisional
   applied_commit: "2026-04-02-session-close"
+  renumbered_from: PP-123
+  renumber_date: 2026-04-04
 
 - id: PP-173
   date: 2026-04-02
@@ -1805,8 +1916,8 @@ patches:
   finding_id: "SIM-002-F"
   source: simulation
   affects:
-    - designs/mass_combat/mass_battle_v3.md
-    - references/params_mass_combat.md
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
   applied_to_version: "v4.5"
   status: applied
   applied_commit: "pending"
@@ -1873,8 +1984,8 @@ patches:
   finding_id: "SIM-005-F1"
   source: simulation
   affects:
-    - designs/mass_combat/mass_battle_v3.md
-    - references/params_mass_combat.md
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
   applied_to_version: "v4.6"
   status: provisional
   applied_commit: "pending"
@@ -1887,44 +1998,46 @@ patches:
   finding_id: "ED-061"
   source: editorial
   affects:
-    - designs/combat/combat_design_v1.md
-    - references/params_combat.md
-    - designs/mass_combat/mass_battle_v3.md
-    - references/params_mass_combat.md
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
   applied_to_version: "v1.4 / v4.6"
   status: applied
   applied_commit: "pending"
 
-  - id: PP-188
-    date: 2026-04-02
-    scope: personal_combat_ranged
-    description: >
-      Correct ranged weapon TN and damage values.
-      Bow (LP): Hit TN 6→7, damage modifier +2→+0 (no damage bonus).
-      Crossbow (HP): Hit TN 5→6, damage modifier +4→+0 base / +2 vs medium and heavy armour.
-      Sling: collapse LBl/HBl into single Sling type at TN8; ammo sub-table:
-      clay +0 / rock +1 / metal +2 / lead +3 vs medium and heavy armour (all +0 vs unarmoured and light armour).
-    files_changed:
-      - designs/combat/combat_design_v1.md
-      - references/params_combat.md
-    status: applied
+- id: PP-352
+  date: 2026-04-02
+  scope: personal_combat_ranged
+  description: >
+  Correct ranged weapon TN and damage values.
+  Bow (LP): Hit TN 6→7, damage modifier +2→+0 (no damage bonus).
+  Crossbow (HP): Hit TN 5→6, damage modifier +4→+0 base / +2 vs medium and heavy armour.
+  Sling: collapse LBl/HBl into single Sling type at TN8; ammo sub-table:
+  clay +0 / rock +1 / metal +2 / lead +3 vs medium and heavy armour (all +0 vs unarmoured and light armour).
+  files_changed:
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
+  status: applied
+  renumbered_from: PP-188
+  renumber_date: 2026-04-04
 
-  - id: PP-189
-    date: 2026-04-02
-    scope: mass_combat_ranged_parallel
-    description: >
-      Parallel mass battle patch for PP-188 personal combat ranged corrections.
-      Bow (LP): Dmg Mod +2→+0; effectiveness vs Light armour reduced (✓→✗).
-      Crossbow (HP): Dmg Mod +2 base→+0 base; post-DR bonus +2 Med/+3 Heavy → +1 Med+Heavy (scaled ÷2 from personal +2).
-      Sling: expand 2-ammo (clay/stone + metal/lead) → 4-ammo (clay/rock/metal/lead), modifiers vs med+heavy: +0/+1/+2/+3.
-      All-ammo modifier applies vs medium and heavy only; vs unarmoured and light: +0 regardless of ammo.
-    files_changed:
-      - designs/mass_combat/mass_battle_v3.md
-      - references/params_mass_combat.md
-    status: applied
-    note: Re-simulation required for crossbow and archer effectiveness numbers (SIM-DEBT flag).
+- id: PP-189
+  date: 2026-04-02
+  scope: mass_combat_ranged_parallel
+  description: >
+  Parallel mass battle patch for PP-188 personal combat ranged corrections.
+  Bow (LP): Dmg Mod +2→+0; effectiveness vs Light armour reduced (✓→✗).
+  Crossbow (HP): Dmg Mod +2 base→+0 base; post-DR bonus +2 Med/+3 Heavy → +1 Med+Heavy (scaled ÷2 from personal +2).
+  Sling: expand 2-ammo (clay/stone + metal/lead) → 4-ammo (clay/rock/metal/lead), modifiers vs med+heavy: +0/+1/+2/+3.
+  All-ammo modifier applies vs medium and heavy only; vs unarmoured and light: +0 regardless of ammo.
+  files_changed:
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
+  status: applied
+  note: Re-simulation required for crossbow and archer effectiveness numbers (SIM-DEBT flag).
 
-- id: PP-188
+- id: PP-353
   date: 2026-04-02
   severity: P1
   description: "Comprehensive params correction from authoritative v04 scan. Reverts PP-171 (Church Deed 4), PP-172 (Crown IP escape), PP-173 (Intel advancement), PP-176 (Varfell Intel deed), PP-183 partial (TC80 cap 4→2 per v04/v05 P-23), PP-186 (Crown Deed 2 territories). Corrects: TC start 28→22, PI start 5→7, Torben Loyalty start 8→3 (active from game start), Varfell Mandate 4→3/Wealth 4→3. Corrects Phase 4 priority order (v04: Intel→Military→Domain→Social→Thread→Unique→Project). Removes Guilds/Niflhel as playable factions with player victory conditions. Adds Crown 5-deed structure, Varfell 3-path victory, Löwenritter full victory conditions, Restoration Movement full playable faction. Flags Ministry faction as undocumented gap."
@@ -1934,111 +2047,115 @@ patches:
   applied_to_version: "v0.7.0"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-188
+  renumber_date: 2026-04-04
 
-  - id: PP-189
-    date: 2026-04-02
-    scope: bg_faction_institutional_mandate
-    description: >
-      Rename Compromise to Appease. Define Uphold/Appease mechanic.
-      Trigger: Mandate>=4 AND Domain Action directly challenges faction core institutional authority.
-      Uphold: roll proceeds, no cost. Appease: declare before roll, action cancelled, Mandate-1.
-      Removes erroneous Standing and Stability costs from provisional.
-      NPC AI: may Appease if Mandate>=4 AND Stability<=3.
-    files_changed:
-      - designs/board_game/valoria_bg_v05_simulation_and_patches.md
-      - references/params_factions.md
-    status: applied
-    resolves: ED-003, ED-004
+- id: PP-354
+  date: 2026-04-02
+  scope: bg_faction_institutional_mandate
+  description: >
+  Rename Compromise to Appease. Define Uphold/Appease mechanic.
+  Trigger: Mandate>=4 AND Domain Action directly challenges faction core institutional authority.
+  Uphold: roll proceeds, no cost. Appease: declare before roll, action cancelled, Mandate-1.
+  Removes erroneous Standing and Stability costs from provisional.
+  NPC AI: may Appease if Mandate>=4 AND Stability<=3.
+  files_changed:
+  - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+  - references/params_factions.md
+  status: applied
+  resolves: ED-003, ED-004
+  renumbered_from: PP-189
+  renumber_date: 2026-04-04
 
-  - id: PP-190
-    date: 2026-04-02
-    source: AUD-TW-001
-    description: "Diagnosis+Leap action economy in combat — 2-round minimum in combat; same-round permitted in non-combat"
-    status: provisional
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
-    tags: [threadwork, combat, timing]
+- id: PP-190
+  date: 2026-04-02
+  source: AUD-TW-001
+  description: "Diagnosis+Leap action economy in combat — 2-round minimum in combat; same-round permitted in non-combat"
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, combat, timing]
 
-  - id: PP-191
-    date: 2026-04-02
-    source: AUD-TW-001
-    description: "Lock phase in mass combat — Offensive Lock=Phase 4, Support Lock=Phase 6; declared at Phase 1"
-    status: provisional
-    files: [references/params_mass_combat.md, references/params_threadwork.md]
-    tags: [threadwork, mass_combat, lock]
+- id: PP-191
+  date: 2026-04-02
+  source: AUD-TW-001
+  description: "Lock phase in mass combat — Offensive Lock=Phase 4, Support Lock=Phase 6; declared at Phase 1"
+  status: provisional
+  files: [references/params_mass_combat.md, references/params_threadwork.md]
+  tags: [threadwork, mass_combat, lock]
 
-  - id: PP-192
-    date: 2026-04-02
-    source: AUD-TW-001
-    description: "Mass battle RS multiplier ×3 — all RS costs from Thread ops in mass battle multiplied by 3; Coherence unaffected"
-    status: provisional
-    files: [references/params_mass_combat.md, references/params_threadwork.md]
-    tags: [threadwork, mass_combat, rendering_stability]
+- id: PP-192
+  date: 2026-04-02
+  source: AUD-TW-001
+  description: "Mass battle RS multiplier ×3 — all RS costs from Thread ops in mass battle multiplied by 3; Coherence unaffected"
+  status: provisional
+  files: [references/params_mass_combat.md, references/params_threadwork.md]
+  tags: [threadwork, mass_combat, rendering_stability]
 
-  - id: PP-193
-    date: 2026-04-02
-    source: AUD-TW-001
-    description: "P-22 paradox window resolution — auto-resolves at window end; early closure via Mending Ob3; exploitation at +2 Ob"
-    status: provisional
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
-    tags: [threadwork, past_oriented_pulling, temporal]
+- id: PP-193
+  date: 2026-04-02
+  source: AUD-TW-001
+  description: "P-22 paradox window resolution — auto-resolves at window end; early closure via Mending Ob3; exploitation at +2 Ob"
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, past_oriented_pulling, temporal]
 
-  - id: PP-194
-    date: 2026-04-02
-    source: AUD-TW-001
-    description: "Rendering Crisis resolution — campaign arc: season withdrawal + 3 Anchoring Scenes + Bonds TN7 Ob3; permanent TS loss on success"
-    status: provisional
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
-    tags: [threadwork, coherence, campaign_arc]
+- id: PP-194
+  date: 2026-04-02
+  source: AUD-TW-001
+  description: "Rendering Crisis resolution — campaign arc: season withdrawal + 3 Anchoring Scenes + Bonds TN7 Ob3; permanent TS loss on success"
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, coherence, campaign_arc]
 
-  - id: PP-195
-    date: 2026-04-02
-    source: AUD-TW-001
-    description: "Community Weaving procedure — Revolution Domain Action: Mandate+History TN7 Ob3; RS+1/+2 on success/overwhelming; Mandate-1 on failure"
-    status: provisional
-    files: [references/params_factions.md, references/params_threadwork.md]
-    tags: [threadwork, factions, community_weaving, revolution]
+- id: PP-195
+  date: 2026-04-02
+  source: AUD-TW-001
+  description: "Community Weaving procedure — Revolution Domain Action: Mandate+History TN7 Ob3; RS+1/+2 on success/overwhelming; Mandate-1 on failure"
+  status: provisional
+  files: [references/params_factions.md, references/params_threadwork.md]
+  tags: [threadwork, factions, community_weaving, revolution]
 
-  - id: PP-196
-    date: 2026-04-02
-    source: ED-103 / Canon §1.1 P-01
-    description: "FR surcharge (Lock/Dissolution) exempt from §3.2 per-op Coherence cap. FR costs: Object/Personal=-1, Relational/Territorial=-2, Structural=-3."
-    status: provisional
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
-    tags: [threadwork, forced_resolution, coherence, canon_derived]
+- id: PP-196
+  date: 2026-04-02
+  source: ED-103 / Canon §1.1 P-01
+  description: "FR surcharge (Lock/Dissolution) exempt from §3.2 per-op Coherence cap. FR costs: Object/Personal=-1, Relational/Territorial=-2, Structural=-3."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, forced_resolution, coherence, canon_derived]
 
-  - id: PP-197
-    date: 2026-04-02
-    source: ED-101 / Canon Amendment 01 §Resonant
-    description: "TS 90+ Coherence 0 practitioners cause RS drain: -1 RS/scene (TS 90+) or -1 RS/session (TS 70-89). Reality strain from continuous self-maintenance threadwork."
-    status: provisional
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
-    tags: [threadwork, coherence, rendering_stability, coherence_zero, canon_derived]
+- id: PP-197
+  date: 2026-04-02
+  source: ED-101 / Canon Amendment 01 §Resonant
+  description: "TS 90+ Coherence 0 practitioners cause RS drain: -1 RS/scene (TS 90+) or -1 RS/session (TS 70-89). Reality strain from continuous self-maintenance threadwork."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, coherence, rendering_stability, coherence_zero, canon_derived]
 
-  - id: PP-198
-    date: 2026-04-02
-    source: ED-105 / Canon Amendment 01 §2-3
-    description: "Hybrid Coherence declaration rule: replace 'narratively leads' with binary declaration at Phase 1 of Cascade Phase. Declaring PC pays Coherence; no declaration = no cost."
-    status: provisional
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
-    tags: [threadwork, hybrid, coherence, canon_derived]
+- id: PP-198
+  date: 2026-04-02
+  source: ED-105 / Canon Amendment 01 §2-3
+  description: "Hybrid Coherence declaration rule: replace 'narratively leads' with binary declaration at Phase 1 of Cascade Phase. Declaring PC pays Coherence; no declaration = no cost."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, hybrid, coherence, canon_derived]
 
-  - id: PP-199
-    date: 2026-04-02
-    source: ED-104 / Canon §1.3, §13.1
-    description: "POP displacement of debate subject: Memory bonus lost for displaced claims; debate continues; opposing party may use displacement as Present-genre argument; Temporal Disjunction -1D Argue one exchange."
-    status: provisional
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
-    tags: [threadwork, debate, past_oriented_pulling, canon_derived]
+- id: PP-199
+  date: 2026-04-02
+  source: ED-104 / Canon §1.3, §13.1
+  description: "POP displacement of debate subject: Memory bonus lost for displaced claims; debate continues; opposing party may use displacement as Present-genre argument; Temporal Disjunction -1D Argue one exchange."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, debate, past_oriented_pulling, canon_derived]
 
-  - id: PP-200
-    date: 2026-04-02
-    source: ED-106 / Canon Amendment 01 §3
-    description: "Coherence initialization BG→Hybrid: first Personal Phase = Coherence 10; subsequent = carry last recorded value. GMs track per PC on Hybrid sheet."
-    status: provisional
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
-    tags: [threadwork, hybrid, coherence, canon_derived]
+- id: PP-200
+  date: 2026-04-02
+  source: ED-106 / Canon Amendment 01 §3
+  description: "Coherence initialization BG→Hybrid: first Personal Phase = Coherence 10; subsequent = carry last recorded value. GMs track per PC on Hybrid sheet."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, hybrid, coherence, canon_derived]
 
-- id: PP-189
+- id: PP-355
   date: 2026-04-02
   severity: P1
   description: "Final v05 corrections over PP-188: TC start 22→28 (P-32 explicit); Church victory TC≥65 not 70 (P-32); TC80 seizure uses Church Military vs Defender Military Ob 2 not Mandate (P-23); majority-1s override struck (v05 DESIGN DECISION); Uphold/Appease terminology adopted (PP-189 in v05); canonical source confirmed as v05."
@@ -2048,8 +2165,10 @@ patches:
   applied_to_version: "v0.7.1"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-189
+  renumber_date: 2026-04-04
 
-- id: PP-190
+- id: PP-356
   date: 2026-04-02
   severity: P1
   description: "Torben Loyalty start: 3→10. Range extended 0-10. Torben begins with full loyalty; degradation is the story. Deed 5 condition unchanged (≥ 5 = still half the track lost = meaningful pressure)."
@@ -2059,8 +2178,10 @@ patches:
   applied_to_version: "v0.7.2"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-190
+  renumber_date: 2026-04-04
 
-- id: PP-191
+- id: PP-357
   date: 2026-04-02
   severity: P1
   description: "Varfell starting stats: Mandate 4, Wealth 4 (user decision). G-10 in v05 was wrong to confirm 3/3. Varfell's handicap is positional: fortified adjacencies (T5 Fort 3, T10 NPC hostile, T12/T13 Thread Wounds). Fortification combat rule documented."
@@ -2070,8 +2191,10 @@ patches:
   applied_to_version: "v0.7.2"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-191
+  renumber_date: 2026-04-04
 
-- id: PP-192
+- id: PP-358
   date: 2026-04-02
   severity: P1
   description: "TC 80 Territorial Seizure redesigned: targets all Crown/Hafenmark territories simultaneously. Per-territory TC gain: standard +1, Hafenvalor +3, Valorsplatz +5, Himmelenger already held (excluded). Roll: Church Mandate vs Ob = Fort+1. Church Military formula (P-23) was wrong — Mandate is the ecclesiastical power instrument, not Military."
@@ -2081,8 +2204,10 @@ patches:
   applied_to_version: "v0.7.2"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-192
+  renumber_date: 2026-04-04
 
-- id: PP-193
+- id: PP-359
   date: 2026-04-02
   severity: P1
   description: "Ministry NPC faction designed: Valorian civil service/administrative apparatus. Stats M3 I4 W2 Mil0 Sta5. AP-tokens track administrative presence per territory. Direct Parliament connections: stabilises PI via Emergency Powers mitigation, Legislative Record at Year-End, Crown Policy dependency, Hafenmark Parliamentary Manoeuvre facilitation. Ministry NPC AI priority tree. Corruption mechanic. Collapse mechanic. Resolves ED-088."
@@ -2092,8 +2217,10 @@ patches:
   applied_to_version: "v0.7.2"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-193
+  renumber_date: 2026-04-04
 
-- id: PP-194
+- id: PP-360
   date: 2026-04-02
   severity: P1
   description: "Canonical source integration: Church Four Cardinals (Fortitude/Justice/Prudence/Temperance) with BG mechanics; Church levy rule (Crown may raise 2/3 Church levies); Excommunication penance mechanic; Lowenritter canonical structure (Lions Table/Helm/Civic Arm); Riskbreakers corrected as Lowenritter sub-unit; Ministry canonical identity (ministries of Law/Guilds/Logothetes/Granaries/Water); Parliament nomination mechanic; Royal Deposition mechanic; Ducal geography conflict flagged as ED-107."
@@ -2103,8 +2230,10 @@ patches:
   applied_to_version: "v0.7.3"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-194
+  renumber_date: 2026-04-04
 
-- id: PP-195
+- id: PP-361
   date: 2026-04-02
   severity: P1
   description: "Territory table reconciled from physical map + canonical source. Hafenmark = T2 (Gransol capital)/T4 (Spartfell)/T8 (Eidursjo). Varfell = T9/T10/T11/T12 (4 territories at start). Crown = T1/T3/T5/T6/T7/T13. Hafenvalor = Crown port T6 (not Hafenmark capital). Church has no starting territorial control (cathedral presence in T3 only). Guilds/Niflhel: commercial/network presence only, no territorial control. Adjacency table derived from physical map. Resolves ED-107."
@@ -2114,8 +2243,10 @@ patches:
   applied_to_version: "v0.7.4"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-195
+  renumber_date: 2026-04-04
 
-- id: PP-196
+- id: PP-362
   date: 2026-04-02
   severity: P1
   description: "Territory cascade corrections from PP-195 reassignment: Crown Deed 2 T1+T2→T1+T6; Hafenmark Path C Deed 3 T6→T2; TC80 duchy capital TC bonus corrected (Gransol T2 +3, Hafenvalor T6 +1); Ministry AP-tokens T2 removed (Crown-only); Varfell expansion constraint text corrected (T10 is Varfell starting territory); Elske contact via T4 (now Hafenmark) — facilitation/obstruction mechanic added."
@@ -2125,8 +2256,10 @@ patches:
   applied_to_version: "v0.7.4"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-196
+  renumber_date: 2026-04-04
 
-- id: PP-197
+- id: PP-363
   date: 2026-04-02
   severity: P1
   description: "Final territory table from annotated physical map. Key correction over PP-195: Halvardshelm T11 = Hafenmark (white dot on map), not Varfell. Hafenmark now has 4 territories (T2/T4/T8/T11). Varfell has 3 (T9/T10/T12). Southernmost radiating zones documented (red arcs = Zone 1/2/3). Two Altonian mountain passes documented (purple routes: northeast near Spartfell T4, northwest near Sigurdshelm T10). Adjacency table finalized from map. Hafenvalor confirmed as Crown port sub-location of T1 area."
@@ -2136,8 +2269,10 @@ patches:
   applied_to_version: "v0.7.5"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-197
+  renumber_date: 2026-04-04
 
-- id: PP-198
+- id: PP-364
   date: 2026-04-02
   severity: P1
   description: "Final territory corrections from starred map: Vargstad = Varfell duchy capital (green star, SW, T12 renamed from Oastad). Halvardshelm T11 = Varfell (green circle — PP-197 was wrong to assign to Hafenmark). Hafenmark = T2/T4/T8 (3 territories). Varfell = T9/T10/T11/T12 (4 territories). Road network generated from circle positions, terrain, pre-industrial geography. Adjacency table finalized. TC80 seizure values corrected for final territory assignments."
@@ -2147,8 +2282,10 @@ patches:
   applied_to_version: "v0.7.5"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-198
+  renumber_date: 2026-04-04
 
-- id: PP-199
+- id: PP-365
   date: 2026-04-02
   severity: P1
   description: "Definitive 15-territory map. Varfell 4 (T1-T4), Hafenmark 4 (T5-T8), Crown 5 (T9-T13), Church 1 (T14 Himmelenger), Southernmost 1 (T15 Askeheim). T16 Schoenland maritime island NPC. Road network, adjacency, Southernmost zones, TC80 table, VC territory references, Ministry/Guilds/Niflhel starting positions all updated. ED-108: T10 Nordhelm/T11 Mittelmark names provisional."
@@ -2158,165 +2295,189 @@ patches:
   applied_to_version: "v0.8.0"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-199
+  renumber_date: 2026-04-04
 
-  - id: PP-201
-    date: 2026-04-02
-    source: SIM-19-01 (P1)
-    description: "Mass battle Dissolution campaign-impact warning — E[RS/attempt]=-18.4; 3 attempts = Critical RS; Failure at RS<24 = Rupture. Mandatory GM communication."
-    status: provisional
-    files: [references/params_mass_combat.md, references/params_threadwork.md]
-    tags: [mass_combat, dissolution, rendering_stability, gm_guidance]
+- id: PP-201
+  date: 2026-04-02
+  source: SIM-19-01 (P1)
+  description: "Mass battle Dissolution campaign-impact warning — E[RS/attempt]=-18.4; 3 attempts = Critical RS; Failure at RS<24 = Rupture. Mandatory GM communication."
+  status: provisional
+  files: [references/params_mass_combat.md, references/params_threadwork.md]
+  tags: [mass_combat, dissolution, rendering_stability, gm_guidance]
 
-  - id: PP-202
-    date: 2026-04-02
-    source: SIM-18-01 (P2)
-    description: "Rendering Crisis arc stability disruption — arc pauses not resets; disrupted seasons extend non-practice; Thread op during disruption resets non-practice counter."
-    status: provisional
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
-    tags: [threadwork, coherence, rendering_crisis, arc]
+- id: PP-202
+  date: 2026-04-02
+  source: SIM-18-01 (P2)
+  description: "Rendering Crisis arc stability disruption — arc pauses not resets; disrupted seasons extend non-practice; Thread op during disruption resets non-practice counter."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, coherence, rendering_crisis, arc]
 
-  - id: PP-203
-    date: 2026-04-02
-    source: SIM-17-01 (P3)
-    description: "Sequential POPs on paradoxed thread auto-fail (no roll, no RS cost). Coherence and Focus consumed. Window unaffected."
-    status: provisional
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
-    tags: [threadwork, past_oriented_pulling, paradox_window]
+- id: PP-203
+  date: 2026-04-02
+  source: SIM-17-01 (P3)
+  description: "Sequential POPs on paradoxed thread auto-fail (no roll, no RS cost). Coherence and Focus consumed. Window unaffected."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, past_oriented_pulling, paradox_window]
 
-  - id: PP-204
-    date: 2026-04-02
-    source: SIM-19-02 (P3)
-    description: "RS<24 mass battle Rupture threshold — GM mandatory disclosure before Dissolution declaration; Failure = -24 RS = Rupture if RS<24."
-    status: provisional
-    files: [references/params_mass_combat.md]
-    tags: [mass_combat, dissolution, rendering_stability, rupture]
+- id: PP-204
+  date: 2026-04-02
+  source: SIM-19-02 (P3)
+  description: "RS<24 mass battle Rupture threshold — GM mandatory disclosure before Dissolution declaration; Failure = -24 RS = Rupture if RS<24."
+  status: provisional
+  files: [references/params_mass_combat.md]
+  tags: [mass_combat, dissolution, rendering_stability, rupture]
 
-  - id: PP-205
-    date: 2026-04-02
-    source: SIM-20-01 (P2) / ED-107
-    description: "Hybrid co-declaration tie-break — highest TS declares; tie = first at table. Non-declaring PC pays no Coherence."
-    status: provisional
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
-    tags: [hybrid, coherence, declaration, tie_break]
+- id: PP-205
+  date: 2026-04-02
+  source: SIM-20-01 (P2) / ED-107
+  description: "Hybrid co-declaration tie-break — highest TS declares; tie = first at table. Non-declaring PC pays no Coherence."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [hybrid, coherence, declaration, tie_break]
 
-  - id: PP-206
-    date: 2026-04-02
-    source: SIM-18-02 (P3)
-    description: "GM guidance: TS 30-31 Rendering Crisis arc may reduce TS below Leap minimum — surface before arc begins."
-    status: provisional
-    files: [designs/ttrpg/threadwork_redesign_v25.md]
-    tags: [threadwork, coherence, thread_sensitivity, gm_guidance]
+- id: PP-206
+  date: 2026-04-02
+  source: SIM-18-02 (P3)
+  description: "GM guidance: TS 30-31 Rendering Crisis arc may reduce TS below Leap minimum — surface before arc begins."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md]
+  tags: [threadwork, coherence, thread_sensitivity, gm_guidance]
 
-  - id: PP-207
-    date: 2026-04-02
-    source: SIM-20-02 (P3)
-    description: "Hybrid Coherence pacing guidance — 1 Personal + 1 Strategic/session is sustainable (Crisis ~S10); 2+2 causes Crisis by S3-5."
-    status: provisional
-    files: [designs/ttrpg/threadwork_redesign_v25.md]
-    tags: [hybrid, coherence, pacing, gm_guidance]
+- id: PP-207
+  date: 2026-04-02
+  source: SIM-20-02 (P3)
+  description: "Hybrid Coherence pacing guidance — 1 Personal + 1 Strategic/session is sustainable (Crisis ~S10); 2+2 causes Crisis by S3-5."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md]
+  tags: [hybrid, coherence, pacing, gm_guidance]
 
-  - id: PP-190
-    date: 2026-04-02
-    scope: mass_combat_commander_bonus
-    description: >
-      Confirm commander bonus formula: Military÷3 round down, min 0, max +2D. Resolves ED-033.
-    files_changed:
-      - designs/mass_combat/mass_battle_v3.md
-      - references/params_mass_combat.md
-    status: applied
+- id: PP-366
+  date: 2026-04-02
+  scope: mass_combat_commander_bonus
+  description: >
+  Confirm commander bonus formula: Military÷3 round down, min 0, max +2D. Resolves ED-033.
+  files_changed:
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
+  status: applied
+  renumbered_from: PP-190
+  renumber_date: 2026-04-04
 
-  - id: PP-193
-    date: 2026-04-02
-    scope: altonian_invasion_units
-    description: >
-      Provisional Altonian unit stats derived from Military ~5. Heavy Infantry, Cavalry, Crossbow, Artillery. Deployment at IP≥75. ED-036 provisional.
-    files_changed:
-      - references/params_mass_combat.md
-    status: applied
+- id: PP-367
+  date: 2026-04-02
+  scope: altonian_invasion_units
+  description: >
+  Provisional Altonian unit stats derived from Military ~5. Heavy Infantry, Cavalry, Crossbow, Artillery. Deployment at IP≥75. ED-036 provisional.
+  files_changed:
+  - references/params_mass_combat.md
+  status: applied
+  renumbered_from: PP-193
+  renumber_date: 2026-04-04
 
-  - id: PP-194
-    date: 2026-04-02
-    scope: mass_combat_dmg_mod
-    description: >
-      Confirm unit Dmg Mod table. Values consistent with personal combat weapon types. Resolves ED-062.
-    files_changed:
-      - references/params_mass_combat.md
-      - designs/mass_combat/mass_battle_v3.md
-    status: applied
+- id: PP-368
+  date: 2026-04-02
+  scope: mass_combat_dmg_mod
+  description: >
+  Confirm unit Dmg Mod table. Values consistent with personal combat weapon types. Resolves ED-062.
+  files_changed:
+  - references/params_mass_combat.md
+  - designs/mass_combat/mass_battle_v3.md
+  status: applied
+  renumbered_from: PP-194
+  renumber_date: 2026-04-04
 
-  - id: PP-195
-    date: 2026-04-02
-    scope: bg_battle_partial_outcome
-    description: >
-      Confirm Partial battle outcome: margin ≤1 either direction = Partial; Attacker Stability −1. Resolves ED-063.
-    files_changed:
-      - designs/mass_combat/mass_battle_v3.md
-    status: applied
+- id: PP-369
+  date: 2026-04-02
+  scope: bg_battle_partial_outcome
+  description: >
+  Confirm Partial battle outcome: margin ≤1 either direction = Partial; Attacker Stability −1. Resolves ED-063.
+  files_changed:
+  - designs/mass_combat/mass_battle_v3.md
+  status: applied
+  renumbered_from: PP-195
+  renumber_date: 2026-04-04
 
-  - id: PP-196
-    date: 2026-04-02
-    scope: mass_combat_projectile_dr
-    description: >
-      Confirm projectile DR table. LP/HP vs None=0 correct (net hits sufficient). LBl vs Light=2 intentional. Resolves ED-061 and ED-064.
-    files_changed:
-      - references/params_mass_combat.md
-    status: applied
+- id: PP-370
+  date: 2026-04-02
+  scope: mass_combat_projectile_dr
+  description: >
+  Confirm projectile DR table. LP/HP vs None=0 correct (net hits sufficient). LBl vs Light=2 intentional. Resolves ED-061 and ED-064.
+  files_changed:
+  - references/params_mass_combat.md
+  status: applied
+  renumbered_from: PP-196
+  renumber_date: 2026-04-04
 
-  - id: PP-197
-    date: 2026-04-02
-    scope: mass_combat_projectile_balance
-    description: >
-      LBl vs LP dominance analysis. LBl better vs Light only. LP equal/better at Medium/Heavy. Intentional weapon role distinction. Resolves ED-065.
-    files_changed:
-      - references/params_mass_combat.md
-    status: applied
+- id: PP-371
+  date: 2026-04-02
+  scope: mass_combat_projectile_balance
+  description: >
+  LBl vs LP dominance analysis. LBl better vs Light only. LP equal/better at Medium/Heavy. Intentional weapon role distinction. Resolves ED-065.
+  files_changed:
+  - references/params_mass_combat.md
+  status: applied
+  renumbered_from: PP-197
+  renumber_date: 2026-04-04
 
-  - id: PP-198
-    date: 2026-04-02
-    scope: mass_combat_artillery_morale
-    description: >
-      Artillery morale cascade capped by existing −3/phase rule. Multiple simultaneous HBl destructions still capped. Resolves ED-066.
-    files_changed:
-      - designs/mass_combat/mass_battle_v3.md
-    status: applied
+- id: PP-372
+  date: 2026-04-02
+  scope: mass_combat_artillery_morale
+  description: >
+  Artillery morale cascade capped by existing −3/phase rule. Multiple simultaneous HBl destructions still capped. Resolves ED-066.
+  files_changed:
+  - designs/mass_combat/mass_battle_v3.md
+  status: applied
+  renumbered_from: PP-198
+  renumber_date: 2026-04-04
 
-  - id: PP-199
-    date: 2026-04-02
-    scope: simultaneous_catastrophe
-    description: >
-      Simultaneous catastrophe resolution order: RS=0 first (Shared Loss), then IP≥80. Independent effects. RS=0 is terminal — IP moot if Shared Loss fires. Resolves ED-077.
-    files_changed:
-      - references/params_factions.md
-    status: applied
+- id: PP-373
+  date: 2026-04-02
+  scope: simultaneous_catastrophe
+  description: >
+  Simultaneous catastrophe resolution order: RS=0 first (Shared Loss), then IP≥80. Independent effects. RS=0 is terminal — IP moot if Shared Loss fires. Resolves ED-077.
+  files_changed:
+  - references/params_factions.md
+  status: applied
+  renumbered_from: PP-199
+  renumber_date: 2026-04-04
 
-  - id: PP-200
-    date: 2026-04-02
-    scope: bg_thread_coherence
-    description: >
-      BG Thread ops always skipped (Phase 4/6). No Coherence cost in BG is correct by design — Thread operates below BG abstraction. Resolves ED-080.
-    files_changed:
-      - references/params_mass_combat.md
-    status: applied
+- id: PP-374
+  date: 2026-04-02
+  scope: bg_thread_coherence
+  description: >
+  BG Thread ops always skipped (Phase 4/6). No Coherence cost in BG is correct by design — Thread operates below BG abstraction. Resolves ED-080.
+  files_changed:
+  - references/params_mass_combat.md
+  status: applied
+  renumbered_from: PP-200
+  renumber_date: 2026-04-04
 
-  - id: PP-201
-    date: 2026-04-02
-    scope: reformed_settlement_ob
-    description: >
-      Reformed Settlement standing effect: +1 Ob on Diplomacy targeting Hafenmark while TC≥40 and Church Resisted. Derived from bg_v05 simulation. Resolves ED-081.
-    files_changed:
-      - references/params_factions.md
-    status: applied
+- id: PP-375
+  date: 2026-04-02
+  scope: reformed_settlement_ob
+  description: >
+  Reformed Settlement standing effect: +1 Ob on Diplomacy targeting Hafenmark while TC≥40 and Church Resisted. Derived from bg_v05 simulation. Resolves ED-081.
+  files_changed:
+  - references/params_factions.md
+  status: applied
+  renumbered_from: PP-201
+  renumber_date: 2026-04-04
 
-  - id: PP-202
-    date: 2026-04-02
-    scope: bg_planning_phase_time
-    description: >
-      Planning phase time: ~8 min/player with reference cards, ~12-15 without. Pre-assign Seasonal Priority on faction cards. No mechanical change. Resolves ED-083.
-    files_changed:
-      - references/params_mass_combat.md
-    status: applied
+- id: PP-376
+  date: 2026-04-02
+  scope: bg_planning_phase_time
+  description: >
+  Planning phase time: ~8 min/player with reference cards, ~12-15 without. Pre-assign Seasonal Priority on faction cards. No mechanical change. Resolves ED-083.
+  files_changed:
+  - references/params_mass_combat.md
+  status: applied
+  renumbered_from: PP-202
+  renumber_date: 2026-04-04
 
-- id: PP-200
+- id: PP-377
   date: 2026-04-02
   severity: P2
   description: "Geographic realism review of road/trade network against terrain. Corrections: (1) Removed T9 (Arcansheld) ↔ T4 (Vargstad) adjacency — no realistic route across mountain terrain; path must go via T3 Halvardshelm. (2) Renamed 'King's Road' to coastal route T12→T14→T13 (correct — follows settled east coast). Old inland route T12→T11→T9 renamed 'Military Road' (Löwenritter patrol route). (3) Clarified Schoenland T7 connection = IP invasion staging only, not trade. (4) Added geographic trade notes documenting east coast trade axis and Varfell trade isolation (mechanically intentional). (5) Renamed 'Fortress Road' to 'Fortress Extension' (T9→T13 interior route, not T9→T4 which is removed)."
@@ -2326,46 +2487,50 @@ patches:
   applied_to_version: "v0.8.1"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-200
+  renumber_date: 2026-04-04
 
-  - id: PP-208
-    date: 2026-04-02
-    source: SIM-21-01 (P3)
-    description: "OA modifier does not carry through brittleness collapse to Shifting Object. Shifting Object is new configuration. Exception: OA applies if Mending targets still-Woven thread."
-    status: provisional
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
-    tags: [threadwork, over_actualisation, shifting_object, brittleness]
+- id: PP-208
+  date: 2026-04-02
+  source: SIM-21-01 (P3)
+  description: "OA modifier does not carry through brittleness collapse to Shifting Object. Shifting Object is new configuration. Exception: OA applies if Mending targets still-Woven thread."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, over_actualisation, shifting_object, brittleness]
 
-  - id: PP-209
-    date: 2026-04-02
-    source: SIM-21-02 (P3)
-    description: "Double OA stacking — two independent successful Weavings of same thread in separate contact windows = two OA stacks (+2 Ob). Compounded brittleness. Overweaving rule is intra-window only."
-    status: provisional
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
-    tags: [threadwork, over_actualisation, collective, stacking]
+- id: PP-209
+  date: 2026-04-02
+  source: SIM-21-02 (P3)
+  description: "Double OA stacking — two independent successful Weavings of same thread in separate contact windows = two OA stacks (+2 Ob). Compounded brittleness. Overweaving rule is intra-window only."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, over_actualisation, collective, stacking]
 
-  - id: PP-203
-    date: 2026-04-02
-    scope: debate_scale_transitions
-    description: >
-      Confirm resolved debate and scale transition mechanics.
-      ED-012: Dual win-conditions confirmed (exchange majority + audience capture).
-      ED-043: Church Tribunal — accused corroboration intentionally prohibited.
-      ED-057a: Hybrid Debate confirmed resolved in debate §6.14.
-      ED-058: Debate end = exchange limit; stalemate = proposer loses.
-      ED-055b: GM Zoom In/Out reference card stub added to stage11.
-      ED-073/075/076: Non-battle Zoom In, PC embedding, co-movement propagation
-      confirmed via stage11 Eight Handoff Rules and §11.7.
-      Gap items ED-009/014/022/049/051/055a/056/057b/072 documented with GAP notes.
-    files_changed:
-      - references/params_debate.md
-      - compilation/v0.14/stage11_scale_transitions.md
-      - canon/editorial_ledger.yaml
-      - canon/patch_register.yaml
-    status: applied
-    resolves: ED-012, ED-043, ED-055b, ED-057a, ED-058, ED-073, ED-075, ED-076
-    gaps_documented: ED-009, ED-014, ED-022, ED-049, ED-051, ED-055a, ED-056, ED-057b, ED-072
+- id: PP-378
+  date: 2026-04-02
+  scope: debate_scale_transitions
+  description: >
+  Confirm resolved debate and scale transition mechanics.
+  ED-012: Dual win-conditions confirmed (exchange majority + audience capture).
+  ED-043: Church Tribunal — accused corroboration intentionally prohibited.
+  ED-057a: Hybrid Debate confirmed resolved in debate §6.14.
+  ED-058: Debate end = exchange limit; stalemate = proposer loses.
+  ED-055b: GM Zoom In/Out reference card stub added to stage11.
+  ED-073/075/076: Non-battle Zoom In, PC embedding, co-movement propagation
+  confirmed via stage11 Eight Handoff Rules and §11.7.
+  Gap items ED-009/014/022/049/051/055a/056/057b/072 documented with GAP notes.
+  files_changed:
+  - references/params_debate.md
+  - compilation/v0.14/stage11_scale_transitions.md
+  - canon/editorial_ledger.yaml
+  - canon/patch_register.yaml
+  status: applied
+  resolves: ED-012, ED-043, ED-055b, ED-057a, ED-058, ED-073, ED-075, ED-076
+  gaps_documented: ED-009, ED-014, ED-022, ED-049, ED-051, ED-055a, ED-056, ED-057b, ED-072
+  renumbered_from: PP-203
+  renumber_date: 2026-04-04
 
-- id: PP-201
+- id: PP-379
   date: 2026-04-02
   severity: P2
   description: "Map v2 provisionally approved. Territory positions finalised: Himmelenger (T14) equidistant from Nordhelm/Lowenskyst/Valorsplatz/Gransol. Mittelmark (T11) between Valorsplatz and Stillhelm. Schoenland = merchant NPC only, no military adjacency, sea-trade connections only (T8/T12). Rivers added: R. Valoris (lake→Valorsplatz), NW tributary, NE stream, R. Vargard (SW peninsula). Connections added: T9↔T12 (Arcansheld-Valorsplatz), T11↔T12/T13 (Mittelmark corridor). Roads deferred to next session. Names provisional (ED-108 open for T10/T11)."
@@ -2375,8 +2540,10 @@ patches:
   applied_to_version: "v0.8.2"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-201
+  renumber_date: 2026-04-04
 
-- id: PP-202
+- id: PP-380
   date: 2026-04-02
   severity: P1
   description: "BAL-BG-02 balance analysis. Stale territory references fixed: Crown Deed 2 (T1/T6→T12/T9); Hafenmark Path C (T6→T5 Gransol); Varfell Path B (T12→T4); Starting Control block updated to PP-199 assignments. P1 design findings flagged as ED-109 through ED-112. P2 finding ED-113. All require user decision before mechanics patch."
@@ -2386,60 +2553,62 @@ patches:
   applied_to_version: "v0.8.3"
   status: applied
   applied_commit: pending
+  renumbered_from: PP-202
+  renumber_date: 2026-04-04
 
-  - id: PP-210
-    date: 2026-04-03
-    source: audit_combat_2026-04-02.md (GAP-CMB-03)
-    system: combat
-    description: "Health formula corrected to accumulation model: Health = Endurance + 6. Damage accumulates per round; at 0 take Wound, Health resets. Replaces erroneous 'Health = Endurance score' single-hit-threshold language in design doc §7 and params_combat Wounds section."
+- id: PP-210
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-03)
+  system: combat
+  description: "Health formula corrected to accumulation model: Health = Endurance + 6. Damage accumulates per round; at 0 take Wound, Health resets. Replaces erroneous 'Health = Endurance score' single-hit-threshold language in design doc §7 and params_combat Wounds section."
 
-  - id: PP-211
-    date: 2026-04-03
-    source: audit_combat_2026-04-02.md (GAP-CMB-04)
-    system: combat
-    description: "Critical Hit rule added to design doc §5 Damage Resolution. Net hits ≥ 3 → weapon damage modifier doubled before DR subtraction. Rule was in params_combat only; now in canonical design doc."
+- id: PP-211
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-04)
+  system: combat
+  description: "Critical Hit rule added to design doc §5 Damage Resolution. Net hits ≥ 3 → weapon damage modifier doubled before DR subtraction. Rule was in params_combat only; now in canonical design doc."
 
-  - id: PP-212
-    date: 2026-04-03
-    source: audit_combat_2026-04-02.md (GAP-CMB-02)
-    system: combat
-    description: "Feint timing defined: 'next exchange' = next round only. −2D Defence penalty expires at end of that round."
+- id: PP-212
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-02)
+  system: combat
+  description: "Feint timing defined: 'next exchange' = next round only. −2D Defence penalty expires at end of that round."
 
-  - id: PP-213
-    date: 2026-04-03
-    source: audit_combat_2026-04-02.md (GAP-CMB-01)
-    system: combat
-    description: "Tie Up 'disadvantage' defined: −2D to Combat Pool for both parties for one round. Replaces undefined 'at disadvantage' language."
+- id: PP-213
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-01)
+  system: combat
+  description: "Tie Up 'disadvantage' defined: −2D to Combat Pool for both parties for one round. Replaces undefined 'at disadvantage' language."
 
-  - id: PP-214
-    date: 2026-04-03
-    source: audit_combat_2026-04-02.md (GAP-CMB-17)
-    system: combat
-    description: "Rescue mechanical resolution defined: attack resolves against rescuer instead of original target; rescuer's armour DR applies. Replaces bare 'Interpose.' language."
+- id: PP-214
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-17)
+  system: combat
+  description: "Rescue mechanical resolution defined: attack resolves against rescuer instead of original target; rescuer's armour DR applies. Replaces bare 'Interpose.' language."
 
-  - id: PP-215
-    date: 2026-04-03
-    source: audit_combat_2026-04-02.md (GAP-CMB-08)
-    system: combat
-    description: "Dodge action added to design doc §4 Actions table. Ranged attacks only; forfeit all offensive action; full pool as passive Defence vs one incoming ranged attack; armour DR applies. Was in params Actions Summary (ED-067 provisional) but absent from design doc."
+- id: PP-215
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-08)
+  system: combat
+  description: "Dodge action added to design doc §4 Actions table. Ranged attacks only; forfeit all offensive action; full pool as passive Defence vs one incoming ranged attack; armour DR applies. Was in params Actions Summary (ED-067 provisional) but absent from design doc."
 
-  - id: PP-216
-    date: 2026-04-03
-    source: audit_combat_2026-04-02.md (GAP-CMB-07)
-    system: combat
-    description: "Fibonacci Group Bonus table expanded from 4-row simplified to 6-row canonical version matching params_combat. Design doc §8 now shows: 1=+0, 2=+1, 3=+2, 4–5=+3, 6–7=+4, 8+=+5."
+- id: PP-216
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-07)
+  system: combat
+  description: "Fibonacci Group Bonus table expanded from 4-row simplified to 6-row canonical version matching params_combat. Design doc §8 now shows: 1=+0, 2=+1, 3=+2, 4–5=+3, 6–7=+4, 8+=+5."
 
-  - id: PP-217
-    date: 2026-04-03
-    source: audit_combat_2026-04-02.md (G-P1-01)
-    system: combat / board_game
-    description: "Anti-Armour keyword defined for BG layer. Units with HP (crossbow) or HBl (lead sling) weapon type carry Anti-Armour: reduces target armour tier by 1 for the engagement. Does not stack. Keyword was referenced in design doc §5 BG note but undefined everywhere."
+- id: PP-217
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (G-P1-01)
+  system: combat / board_game
+  description: "Anti-Armour keyword defined for BG layer. Units with HP (crossbow) or HBl (lead sling) weapon type carry Anti-Armour: reduces target armour tier by 1 for the engagement. Does not stack. Keyword was referenced in design doc §5 BG note but undefined everywhere."
 
-  - id: PP-218
-    date: 2026-04-03
-    source: audit_combat_2026-04-02.md (GAP-CMB-05)
-    system: combat / mass_combat
-    description: "PP-086 mass damage formula clarified. Formula is now: max(0, net successes − Ob) + disposition_modifier. Floor applies to bracketed term only; disposition modifier always adds after. Partial success → 0+modifier. Replaces ambiguous 'net_successes_over_Ob' notation."
+- id: PP-218
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-05)
+  system: combat / mass_combat
+  description: "PP-086 mass damage formula clarified. Formula is now: max(0, net successes − Ob) + disposition_modifier. Floor applies to bracketed term only; disposition modifier always adds after. Partial success → 0+modifier. Replaces ambiguous 'net_successes_over_Ob' notation."
 
 - id: PP-219
   date: 2026-04-02
@@ -2465,86 +2634,86 @@ patches:
 
   # ── SIM-X-22: Combat + Mass Battle + Thread + Temporal Axes (2026-04-03) ───
 
-  - id: PP-221
-    status: provisional
-    source: SIM-X-22 / F-10
-    date: 2026-04-03
-    description: "Coherence 2 (Fractured) = +1 Ob all Thread ops. Consistent with 4–3 band."
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+- id: PP-221
+  status: provisional
+  source: SIM-X-22 / F-10
+  date: 2026-04-03
+  description: "Coherence 2 (Fractured) = +1 Ob all Thread ops. Consistent with 4–3 band."
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
 
-  - id: PP-222
-    status: provisional
-    source: SIM-X-22 / F-11
-    date: 2026-04-03
-    description: "Offensive Lock on formation thread blocks Cohesion degradation checks for lock duration."
-    files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
-    editorial: ED-122
+- id: PP-222
+  status: provisional
+  source: SIM-X-22 / F-11
+  date: 2026-04-03
+  description: "Offensive Lock on formation thread blocks Cohesion degradation checks for lock duration."
+  files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  editorial: ED-122
 
-  - id: PP-223
-    status: provisional
-    source: SIM-X-22 / F-06/F-16
-    date: 2026-04-03
-    description: "Mass battle turn = 1 scene for RS threshold effects, Coherence-0 leakage, paradox window tick."
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
-    editorial: ED-123
+- id: PP-223
+  status: provisional
+  source: SIM-X-22 / F-06/F-16
+  date: 2026-04-03
+  description: "Mass battle turn = 1 scene for RS threshold effects, Coherence-0 leakage, paradox window tick."
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  editorial: ED-123
 
-  - id: PP-224
-    status: provisional
-    source: SIM-X-22 / F-03
-    date: 2026-04-03
-    description: "Diagnosis+Leap collapse to single Phase 4 in mass battle. PP-190 2-round rule = personal combat only."
-    files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
-    editorial: ED-124
+- id: PP-224
+  status: provisional
+  source: SIM-X-22 / F-03
+  date: 2026-04-03
+  description: "Diagnosis+Leap collapse to single Phase 4 in mass battle. PP-190 2-round rule = personal combat only."
+  files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  editorial: ED-124
 
-  - id: PP-225
-    status: provisional
-    source: SIM-X-22 / F-12
-    date: 2026-04-03
-    description: "RS x3 multiplier (PP-192) applies to RS gains as well as costs. Weaving Overwhelming = RS+3 in mass battle."
-    files: [references/params_mass_combat.md, references/params_threadwork.md]
+- id: PP-225
+  status: provisional
+  source: SIM-X-22 / F-12
+  date: 2026-04-03
+  description: "RS x3 multiplier (PP-192) applies to RS gains as well as costs. Weaving Overwhelming = RS+3 in mass battle."
+  files: [references/params_mass_combat.md, references/params_threadwork.md]
 
-  - id: PP-226
-    status: provisional
-    source: SIM-X-22 / F-13
-    date: 2026-04-03
-    description: "Temporal auto-effect RS (PP-181) NOT subject to x3. It is a separate auto-effect system, not an op RS cost."
-    files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+- id: PP-226
+  status: provisional
+  source: SIM-X-22 / F-13
+  date: 2026-04-03
+  description: "Temporal auto-effect RS (PP-181) NOT subject to x3. It is a separate auto-effect system, not an op RS cost."
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
 
-  - id: PP-227
-    status: provisional
-    source: SIM-X-22 / F-15
-    date: 2026-04-03
-    description: "Paradox window (P-22) has no mechanical effect on unit stats during battle. Pre-displacement values used; displaced values apply on window auto-resolution (end of battle turn)."
-    files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
-    editorial: ED-121
+- id: PP-227
+  status: provisional
+  source: SIM-X-22 / F-15
+  date: 2026-04-03
+  description: "Paradox window (P-22) has no mechanical effect on unit stats during battle. Pre-displacement values used; displaced values apply on window auto-resolution (end of battle turn)."
+  files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  editorial: ED-121
 
-  - id: PP-228
-    status: provisional
-    source: SIM-X-22 / F-01
-    date: 2026-04-03
-    description: "Practitioner Leap in personal combat vs pool-8+ opponent: E[Stamina lost before first op] ~3.74/5. Design-intent vulnerability — add GM guidance note, no formula change."
-    files: [designs/combat/combat_design_v1.md]
+- id: PP-228
+  status: provisional
+  source: SIM-X-22 / F-01
+  date: 2026-04-03
+  description: "Practitioner Leap in personal combat vs pool-8+ opponent: E[Stamina lost before first op] ~3.74/5. Design-intent vulnerability — add GM guidance note, no formula change."
+  files: [designs/combat/combat_design_v1.md]
 
-  - id: PP-229
-    status: provisional
-    source: SIM-X-22 / F-04
-    date: 2026-04-03
-    description: "Active Thread contact window suspended (not consumed) during General Zoom In personal exchange. Resumes on return to mass scale. No op rounds consumed."
-    files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+- id: PP-229
+  status: provisional
+  source: SIM-X-22 / F-04
+  date: 2026-04-03
+  description: "Active Thread contact window suspended (not consumed) during General Zoom In personal exchange. Resumes on return to mass scale. No op rounds consumed."
+  files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
 
-  - id: PP-230
-    status: provisional
-    source: SIM-X-22 / F-05
-    date: 2026-04-03
-    description: "Active paradox window does not tick during Zoom In personal exchange (sub-scene of battle turn scene)."
-    files: [designs/mass_combat/mass_battle_v3.md]
+- id: PP-230
+  status: provisional
+  source: SIM-X-22 / F-05
+  date: 2026-04-03
+  description: "Active paradox window does not tick during Zoom In personal exchange (sub-scene of battle turn scene)."
+  files: [designs/mass_combat/mass_battle_v3.md]
 
-  - id: PP-231
-    status: provisional
-    source: SIM-X-22 / F-09
-    date: 2026-04-03
-    description: "Cohesion degradation is an asymmetry mechanic, not attrition. Triggers only with CP asymmetry, Thread-assisted Str loss, or artillery. Add GM note."
-    files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+- id: PP-231
+  status: provisional
+  source: SIM-X-22 / F-09
+  date: 2026-04-03
+  description: "Cohesion degradation is an asymmetry mechanic, not attrition. Triggers only with CP asymmetry, Thread-assisted Str loss, or artillery. Add GM note."
+  files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
 
 - id: PP-232
   date: "2026-04-03"
@@ -2552,11 +2721,11 @@ patches:
   description: "Batch correction from docx review. Core: Ob cap raised to 20, Overwhelming floor 3, Health formula revised to (End+6)×(wounds+1), Stamina floor 2, armour wield constraint added, Certainty flagged ED-128, Composure flagged ED-127. Combat: weapon system rebuilt (Short/Long × Light/Heavy × Blade/Blunt matrix, base TN 7 with modifiers), STR confirmed in damage formula, damage formula revised to armour-dependent modifier table, initiative order corrected (lower initiative declares first; higher declares last), tie result corrected (no damage; initiative stays), wound penalty corrected to −1D only (no Ob penalty), Mass Mismatch Long weapon exemption removed. Debate: Argue pool corrected to (Cognition × 2) + History, initiative stat corrected to Attunement, Step 1 name flagged ED-132, Diverge flagged ED-133. Threadwork: Leap pool adds Spirit, Leap Failure corrected to −1D Thread Pool Score for scene, POP TN corrected to 8, sequential failure rule corrected to ejection+−1D, Weaving Structural Ob corrected to 8, Diagnosis flagged ED-134, FR term flagged ED-135. Mass combat: Strength→Size, Combat Power→Power, Cohesion→Discipline, Command Rating/Coherence Rating→Command throughout."
   source: docx_review
   affects:
-    - references/params_core.md
-    - references/params_combat.md
-    - references/params_debate.md
-    - references/params_threadwork.md
-    - references/params_mass_combat.md
+  - references/params_core.md
+  - references/params_combat.md
+  - references/params_debate.md
+  - references/params_threadwork.md
+  - references/params_mass_combat.md
   status: applied
   applied_commit: "2026-04-03-pp232-docx-review-batch"
   editorial_flags_raised: [ED-127, ED-128, ED-129, ED-130, ED-131, ED-132, ED-133, ED-134, ED-135]
@@ -2567,11 +2736,11 @@ patches:
   description: "Mass battle unit combat formula established. Pool = min(Size,Command)+Command. Command caps both Size contribution to pool and Discipline contribution to Health (min(Discipline,Command)+DR = Health per Size H). Total Health = Size×H using full Size. Damage per success = 1+Power. Size after = floor(remaining Health / H). Damage simultaneous — destroyed unit still delivers outgoing damage. Size loss only reduces pool when Size>Command."
   source: design
   affects:
-    - references/params_mass_combat.md
+  - references/params_mass_combat.md
   status: applied
   applied_commit: "2026-04-03-pp233-mass-combat-unit-formula"
 
-PP-234
+  PP-234
   date: "2026-04-04"
   severity: P1
   description: "Social Contest System v2. Full redesign of debate system. (1) Genre restructure: 3 genres (Past/Present/Future) → 2 genres (Memory/Projection). 'Present' retired as genre — it is the Husserlian operation site, not a temporal position. (2) Attribute renames: Presence→Charisma, Memory→Recall. 'Presence' reserved for Husserlian technical use. (3) Composure = Charisma + 6 (resolves ED-127, parallels Health = Endurance + 6). (4) Faction boost: single-axis selection from 4 options (Memory/Projection/Revealing/Obscuring). Church=Obscuring, Crown=Revealing, Varfell=Projection, Hafenmark=Memory, Restoration=Revealing. (5) Fractional multipliers removed; replaced with integer bonus dice (+1D primary genre, +1D audience boost). (6) Adjudicator-type pool rotation: Cognition (expert judge), Charisma (crowd), Attunement (no adjudicator). (7) Strain minimum 0 (matches combat). (8) Let It Ride explicit for contests. (9) Fail Forward for private ties. (10) Interaction types: CLASH/REINFORCE/CROSS + TIE. All prior SIM-D baselines invalidated."
@@ -2580,16 +2749,16 @@ PP-234
   creates: [ED-136, ED-137, ED-138, SIM-DEBT-03, SIM-DEBT-04]
   invalidates: [SIM-D-01, SIM-D-02, SIM-D-03, SIM-D-04, SIM-D-05]
 
-  - id: PP-235
-    date: 2026-04-04
-    source: designs/cogload_moderate_target.md
-    scope: ALL
-    description: "Cognitive load optimization package. SC-2 (Read once per contest), SC-3 (argument styles), SC-4 (auto-corroborate), SC-5 (resistance token), TM-1 (late Thread declaration), TM-2 (single op per mass battle turn), TM-3 (Command suspension during Thread), MC-1 (battle plan templates), MC-3 (5-phase consolidation option). Plus reference architecture: weapon cards (PC-1), unit cards (MC-4/MC-5), faction mats (BG-1/BG-2), strain card (SC-1), ×3 RS card (TM-4). Threadwork restorations: TW-2/TW-3/TW-5 kept at full complexity (experienced player system). TW-1/TW-4/TW-6 pre-computation aids retained."
-    files_changed:
-      - references/params_contest.md
-      - references/params_mass_combat.md
-    status: applied
-    tags: [cognitive_load, all_modes, optimization]
+- id: PP-235
+  date: 2026-04-04
+  source: designs/cogload_moderate_target.md
+  scope: ALL
+  description: "Cognitive load optimization package. SC-2 (Read once per contest), SC-3 (argument styles), SC-4 (auto-corroborate), SC-5 (resistance token), TM-1 (late Thread declaration), TM-2 (single op per mass battle turn), TM-3 (Command suspension during Thread), MC-1 (battle plan templates), MC-3 (5-phase consolidation option). Plus reference architecture: weapon cards (PC-1), unit cards (MC-4/MC-5), faction mats (BG-1/BG-2), strain card (SC-1), ×3 RS card (TM-4). Threadwork restorations: TW-2/TW-3/TW-5 kept at full complexity (experienced player system). TW-1/TW-4/TW-6 pre-computation aids retained."
+  files_changed:
+  - references/params_contest.md
+  - references/params_mass_combat.md
+  status: applied
+  tags: [cognitive_load, all_modes, optimization]
 
 - id: PP-236
   date: 2026-04-04
@@ -2694,29 +2863,30 @@ PP-234
   affects: [references/params_factions.md]
   status: applied
   provisional: false
+
 - id: PP-247
-    date: 2026-04-04
-    source: SIM-C-01 AUD-F01
-    system: core_engine
-    description: "Combat Pool formula corrected in params_core.md: (Agility x2)+History+3 -> Agility+(History points+3). Matches stage1 ss2.3 and ss3.4."
-    status: applied
-    files_changed: [references/params_core.md]
+  date: 2026-04-04
+  source: SIM-C-01 AUD-F01
+  system: core_engine
+  description: "Combat Pool formula corrected in params_core.md: (Agility x2)+History+3 -> Agility+(History points+3). Matches stage1 ss2.3 and ss3.4."
+  status: applied
+  files_changed: [references/params_core.md]
 
-  - id: PP-248
-    date: 2026-04-04
-    source: SIM-C-01 AUD-F02 AUD-F03
-    system: core_engine
-    description: "Stamina formula corrected in params_core.md: End+History+1 -> End+1 per stage1 ss3.9. Health row clarified: base score End+6, wound-interval mechanics to Notes."
-    status: applied
-    files_changed: [references/params_core.md]
+- id: PP-248
+  date: 2026-04-04
+  source: SIM-C-01 AUD-F02 AUD-F03
+  system: core_engine
+  description: "Stamina formula corrected in params_core.md: End+History+1 -> End+1 per stage1 ss3.9. Health row clarified: base score End+6, wound-interval mechanics to Notes."
+  status: applied
+  files_changed: [references/params_core.md]
 
-  - id: PP-249
-    date: 2026-04-04
-    source: SIM-C-01 AUD-F06 PP-232-propagation
-    system: core_engine
-    description: "Ob cap propagated to stage1 ss1.3: updated from 10 to 20 per PP-232. Ob stacking cap and Ob-20 exception updated throughout ss1.3-1.4."
-    status: applied
-    files_changed: [compilation/v0.14/stage1_core_engine.md]
+- id: PP-249
+  date: 2026-04-04
+  source: SIM-C-01 AUD-F06 PP-232-propagation
+  system: core_engine
+  description: "Ob cap propagated to stage1 ss1.3: updated from 10 to 20 per PP-232. Ob stacking cap and Ob-20 exception updated throughout ss1.3-1.4."
+  status: applied
+  files_changed: [compilation/v0.14/stage1_core_engine.md]
 
 - id: PP-250
   date: 2026-04-04
@@ -2726,8 +2896,8 @@ PP-234
   source: simulation/SIM-STRESS-02
   status: applied
   files_changed:
-    - designs/mass_combat/mass_battle_v3.md
-    - references/params_mass_combat.md
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
 
 - id: PP-251
   date: 2026-04-04
@@ -2737,7 +2907,7 @@ PP-234
   source: simulation/SIM-STRESS-02
   status: applied
   files_changed:
-    - compilation/v0.14/stage11_scale_transitions.md
+  - compilation/v0.14/stage11_scale_transitions.md
 
 - id: PP-252
   date: 2026-04-04
@@ -2747,7 +2917,7 @@ PP-234
   source: simulation/SIM-STRESS-02
   status: applied
   files_changed:
-    - compilation/v0.14/stage11_scale_transitions.md
+  - compilation/v0.14/stage11_scale_transitions.md
 
 - id: PP-253
   date: 2026-04-04
@@ -2757,7 +2927,7 @@ PP-234
   source: simulation/SIM-STRESS-02
   status: applied
   files_changed:
-    - compilation/v0.14/stage11_scale_transitions.md
+  - compilation/v0.14/stage11_scale_transitions.md
 
 - id: PP-254
   date: 2026-04-04
@@ -2767,8 +2937,8 @@ PP-234
   source: simulation/SIM-STRESS-02
   status: applied
   files_changed:
-    - compilation/v0.14/stage11_scale_transitions.md
-    - references/params_factions.md
+  - compilation/v0.14/stage11_scale_transitions.md
+  - references/params_factions.md
 
 - id: PP-255
   date: 2026-04-04
@@ -2778,8 +2948,8 @@ PP-234
   source: simulation/SIM-STRESS-02
   status: applied
   files_changed:
-    - compilation/v0.14/stage6_factions.md
-    - references/params_factions.md
+  - compilation/v0.14/stage6_factions.md
+  - references/params_factions.md
 
 - id: PP-256
   date: 2026-04-04
@@ -2789,8 +2959,8 @@ PP-234
   source: simulation/SIM-STRESS-03
   status: applied
   files_changed:
-    - designs/mass_combat/mass_battle_v3.md
-    - references/params_mass_combat.md
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
 
 - id: PP-257
   date: 2026-04-04
@@ -2800,8 +2970,8 @@ PP-234
   source: batch_resolution
   status: applied
   files_changed:
-    - designs/contest/social_contest_system_v2.md
-    - references/params_contest.md
+  - designs/contest/social_contest_system_v2.md
+  - references/params_contest.md
 
 - id: PP-258
   date: 2026-04-04
@@ -2811,7 +2981,7 @@ PP-234
   source: batch_resolution
   status: applied
   files_changed:
-    - references/params_combat.md
+  - references/params_combat.md
 
 - id: PP-259
   date: 2026-04-04
@@ -2821,7 +2991,7 @@ PP-234
   source: batch_resolution
   status: applied
   files_changed:
-    - compilation/v0.14/stage11_scale_transitions.md
+  - compilation/v0.14/stage11_scale_transitions.md
 
 - id: PP-260
   date: 2026-04-04
@@ -2831,7 +3001,7 @@ PP-234
   source: batch_resolution
   status: applied
   files_changed:
-    - references/params_combat.md
+  - references/params_combat.md
 
 - id: PP-261
   date: 2026-04-04
@@ -2841,7 +3011,7 @@ PP-234
   source: batch_resolution
   status: applied
   files_changed:
-    - references/params_combat.md
+  - references/params_combat.md
 
 - id: PP-262
   date: 2026-04-04
@@ -2851,8 +3021,8 @@ PP-234
   source: batch_resolution
   status: applied
   files_changed:
-    - compilation/v0.14/stage6_factions.md
-    - references/params_factions.md
+  - compilation/v0.14/stage6_factions.md
+  - references/params_factions.md
 
 - id: PP-263
   date: 2026-04-04
@@ -2862,8 +3032,8 @@ PP-234
   source: batch_resolution
   status: applied
   files_changed:
-    - compilation/v0.14/stage6_factions.md
-    - references/params_factions.md
+  - compilation/v0.14/stage6_factions.md
+  - references/params_factions.md
 
 - id: PP-264
   date: 2026-04-04
@@ -2873,8 +3043,8 @@ PP-234
   source: batch_resolution
   status: applied
   files_changed:
-    - compilation/v0.14/stage6_factions.md
-    - references/params_factions.md
+  - compilation/v0.14/stage6_factions.md
+  - references/params_factions.md
 
 - id: PP-266
   date: 2026-04-04
@@ -2884,7 +3054,7 @@ PP-234
   source: batch_resolution
   status: applied
   files_changed:
-    - compilation/v0.14/stage6_factions.md
+  - compilation/v0.14/stage6_factions.md
 
 - id: PP-267
   date: 2026-04-04
@@ -2894,7 +3064,7 @@ PP-234
   source: batch_resolution
   status: applied
   files_changed:
-    - compilation/v0.14/stage11_scale_transitions.md
+  - compilation/v0.14/stage11_scale_transitions.md
 
 - id: PP-268
   date: 2026-04-04
@@ -2904,8 +3074,8 @@ PP-234
   source: batch_resolution
   status: applied
   files_changed:
-    - designs/combat/combat_design_v1.md
-    - references/params_mass_combat.md
+  - designs/combat/combat_design_v1.md
+  - references/params_mass_combat.md
 
 - id: PP-269
   date: 2026-04-04
@@ -2915,7 +3085,7 @@ PP-234
   source: batch_resolution
   status: applied
   files_changed:
-    - designs/combat/combat_design_v1.md
+  - designs/combat/combat_design_v1.md
 
 - id: PP-270
   date: 2026-04-04
@@ -2925,8 +3095,8 @@ PP-234
   source: batch_resolution
   status: applied
   files_changed:
-    - compilation/v0.14/stage6_factions.md
-    - references/params_factions.md
+  - compilation/v0.14/stage6_factions.md
+  - references/params_factions.md
 
 - id: PP-271
   date: 2026-04-04
@@ -2936,7 +3106,7 @@ PP-234
   source: batch_resolution
   status: applied
   files_changed:
-    - references/params_combat.md
+  - references/params_combat.md
 
 - id: PP-272
   date: 2026-04-04
@@ -2946,8 +3116,8 @@ PP-234
   source: batch_resolution
   status: applied
   files_changed:
-    - designs/contest/social_contest_system_v2.md
-    - references/params_contest.md
+  - designs/contest/social_contest_system_v2.md
+  - references/params_contest.md
 
 - id: PP-273
   date: 2026-04-04
@@ -2957,8 +3127,8 @@ PP-234
   source: simulation/SIM-STRESS-04
   status: applied
   files_changed:
-    - designs/mass_combat/mass_battle_v3.md
-    - references/params_mass_combat.md
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
 
 - id: PP-274
   date: 2026-04-04
@@ -2968,7 +3138,7 @@ PP-234
   source: simulation/SIM-STRESS-04
   status: applied
   files_changed:
-    - designs/combat/combat_design_v1.md
+  - designs/combat/combat_design_v1.md
 
 - id: PP-275
   date: 2026-04-04
@@ -2978,8 +3148,8 @@ PP-234
   source: simulation/SIM-STRESS-04
   status: applied
   files_changed:
-    - designs/combat/combat_design_v1.md
-    - references/params_combat.md
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
 
 - id: PP-276
   date: 2026-04-04
@@ -2989,8 +3159,8 @@ PP-234
   source: simulation/SIM-STRESS-04
   status: applied
   files_changed:
-    - designs/combat/combat_design_v1.md
-    - references/params_combat.md
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
 
 - id: PP-277
   date: 2026-04-04
@@ -3000,8 +3170,8 @@ PP-234
   source: simulation/SIM-STRESS-04
   status: applied
   files_changed:
-    - designs/combat/combat_design_v1.md
-    - references/params_combat.md
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
 
 - id: PP-278
   date: 2026-04-04
@@ -3011,8 +3181,8 @@ PP-234
   source: batch_resolution_final
   status: applied
   files_changed:
-    - designs/contest/social_contest_system_v2.md
-    - references/params_contest.md
+  - designs/contest/social_contest_system_v2.md
+  - references/params_contest.md
 
 - id: PP-279
   date: 2026-04-04
@@ -3022,8 +3192,8 @@ PP-234
   source: batch_resolution_final
   status: applied
   files_changed:
-    - designs/contest/social_contest_system_v2.md
-    - references/params_contest.md
+  - designs/contest/social_contest_system_v2.md
+  - references/params_contest.md
 
 - id: PP-281
   date: 2026-04-04
@@ -3033,8 +3203,8 @@ PP-234
   source: batch_resolution_final
   status: applied
   files_changed:
-    - compilation/v0.14/stage6_factions.md
-    - references/params_factions.md
+  - compilation/v0.14/stage6_factions.md
+  - references/params_factions.md
 
 - id: PP-282
   date: 2026-04-04
@@ -3044,8 +3214,8 @@ PP-234
   source: batch_resolution_final
   status: applied
   files_changed:
-    - compilation/v0.14/stage6_factions.md
-    - references/params_mass_combat.md
+  - compilation/v0.14/stage6_factions.md
+  - references/params_mass_combat.md
 
 - id: PP-283
   date: 2026-04-04
@@ -3055,7 +3225,7 @@ PP-234
   source: batch_resolution_final
   status: applied
   files_changed:
-    - designs/mass_combat/mass_battle_v3.md
+  - designs/mass_combat/mass_battle_v3.md
 
 - id: PP-284
   date: 2026-04-04
@@ -3065,8 +3235,8 @@ PP-234
   source: simulation/SIM-STRESS-05
   status: applied
   files_changed:
-    - designs/combat/combat_design_v1.md
-    - references/params_combat.md
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
 
 - id: PP-285
   date: 2026-04-04
@@ -3076,8 +3246,9 @@ PP-234
   source: simulation/SIM-STRESS-06
   status: applied
   files_changed:
-    - designs/combat/combat_design_v1.md
-    - references/params_combat.md
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
+
 - id: PP-286
   date: 2026-04-04
   severity: P2
@@ -3090,8 +3261,9 @@ PP-234
   status: applied
   applied_commit: "pending"
 
-# PP-257 REVERTED — see error audit 2026-04-04
-- id: PP-262
+  # PP-257 REVERTED — see error audit 2026-04-04
+
+- id: PP-381
   date: 2026-04-04
   source: error-audit
   priority: P2
@@ -3099,9 +3271,12 @@ PP-234
   description: "Flag discrepancy: stage1_core_engine.md states face 10 = +1 success + bonus chain die (indefinite). params_core.md states '+2 successes (no extra die)'. Different mechanics. Note added to params_core pending resolution."
   status: flagged
   propagation_targets:
-    - references/params_core.md
+  - references/params_core.md
   propagation_status: flagged
-- id: PP-263
+  renumbered_from: PP-262
+  renumber_date: 2026-04-04
+
+- id: PP-382
   date: 2026-04-04
   source: user-ruling
   priority: P1
@@ -3109,12 +3284,13 @@ PP-234
   description: "Wound max formula corrected: floor(Endurance/2)+1. End=1 → 1 wound max (was 2 in prior table). End 2-7 unchanged. Net successes floor clarified as 0 (pool total, not per die)."
   status: applied
   propagation_targets:
-    - references/params_combat.md
-    - designs/combat/combat_design_v1.md
+  - references/params_combat.md
+  - designs/combat/combat_design_v1.md
   propagation_status: applied
+  renumbered_from: PP-263
+  renumber_date: 2026-04-04
 
-
-- id: PP-246
+- id: PP-383
   date: 2026-04-04
   source: fidelity-correction
   priority: P1
@@ -3123,8 +3299,10 @@ PP-234
   status: applied
   files_changed: [references/params_core.md]
   propagation_status: applied
+  renumbered_from: PP-246
+  renumber_date: 2026-04-04
 
-- id: PP-247
+- id: PP-384
   date: 2026-04-04
   source: editorial/ED-127
   priority: P2
@@ -3132,8 +3310,10 @@ PP-234
   description: "Composure track redesign: Rattled = full track expended in one hit (not threshold). Broken = second Rattled in scene. Recovery = scene rest or voluntary Unmask."
   status: applied
   files_changed: [references/params_core.md]
+  renumbered_from: PP-247
+  renumber_date: 2026-04-04
 
-- id: PP-248
+- id: PP-385
   date: 2026-04-04
   source: editorial/ED-128
   priority: P2
@@ -3141,8 +3321,10 @@ PP-234
   description: "Certainty track defined: 0-10, starts 10, sanity-parallel to Health, Spirit unrelated. Previously PP-289 in this session's docs — renumbered to fit register."
   status: applied
   files_changed: [references/params_core.md]
+  renumbered_from: PP-248
+  renumber_date: 2026-04-04
 
-- id: PP-249
+- id: PP-386
   date: 2026-04-04
   source: editorial/ED-129
   priority: P2
@@ -3150,8 +3332,10 @@ PP-234
   description: "Reach terminology: Short/Long/Ranged replaces Close zone/Far zone. Previously PP-290."
   status: applied
   files_changed: [references/params_core.md, references/params_combat.md]
+  renumbered_from: PP-249
+  renumber_date: 2026-04-04
 
-- id: PP-250
+- id: PP-387
   date: 2026-04-04
   source: editorial/ED-139
   priority: P1
@@ -3159,8 +3343,10 @@ PP-234
   description: "Community Weaving canonical formula: Attunement+History+TPS, Ob3, RS+1/+2. Supersedes PP-168 and PP-195 partial entries. Not a Domain Action."
   status: applied
   files_changed: [references/params_threadwork.md, references/params_factions.md]
+  renumbered_from: PP-250
+  renumber_date: 2026-04-04
 
-- id: PP-251
+- id: PP-388
   date: 2026-04-04
   source: editorial/ED-140
   priority: P1
@@ -3168,8 +3354,10 @@ PP-234
   description: "Discipline degradation asymmetry precondition added: check only fires when unit loss exceeds opposing loss by ≥1 in same Engagement Phase. Symmetric exchanges do not trigger."
   status: applied
   files_changed: [references/params_mass_combat.md]
+  renumbered_from: PP-251
+  renumber_date: 2026-04-04
 
-- id: PP-252
+- id: PP-389
   date: 2026-04-04
   source: editorial/ED-135
   priority: P2
@@ -3177,8 +3365,10 @@ PP-234
   description: "Forced Resolution (FR) renamed to Binding Operations (BO). Lock=Binding to State; Dissolution=Binding to Absence. Previously PP-293."
   status: applied
   files_changed: [references/params_threadwork.md, references/params_core.md]
+  renumbered_from: PP-252
+  renumber_date: 2026-04-04
 
-- id: PP-253
+- id: PP-390
   date: 2026-04-04
   source: editorial/ED-136
   priority: P2
@@ -3186,8 +3376,10 @@ PP-234
   description: "System label 'Debate System' renamed to 'Contest System'. Scene types retain individual names."
   status: applied
   files_changed: [references/params_contest.md]
+  renumbered_from: PP-253
+  renumber_date: 2026-04-04
 
-- id: PP-254
+- id: PP-391
   date: 2026-04-04
   source: editorial/ED-131
   priority: P2
@@ -3195,8 +3387,10 @@ PP-234
   description: "Exchange Step 1 renamed from 'Read' to 'Judge' throughout Contest system."
   status: applied
   files_changed: [references/params_contest.md]
+  renumbered_from: PP-254
+  renumber_date: 2026-04-04
 
-- id: PP-255
+- id: PP-392
   date: 2026-04-04
   source: editorial/ED-056
   priority: P2
@@ -3204,8 +3398,10 @@ PP-234
   description: "Contest stalemate: maximum 10 exchanges per session; forced Unmask at 10."
   status: applied
   files_changed: [references/params_contest.md]
+  renumbered_from: PP-255
+  renumber_date: 2026-04-04
 
-- id: PP-256
+- id: PP-393
   date: 2026-04-04
   source: editorial/ED-087
   priority: P2
@@ -3213,8 +3409,10 @@ PP-234
   description: "Hybrid Debate TC clamp: restricted to range 4-6 regardless of BG lobbying."
   status: applied
   files_changed: [references/params_contest.md]
+  renumbered_from: PP-256
+  renumber_date: 2026-04-04
 
-- id: PP-257
+- id: PP-394
   date: 2026-04-04
   source: editorial/ED-092
   priority: P2
@@ -3222,8 +3420,10 @@ PP-234
   description: "Church self-investigation exception scope: ordained members only; not when Thread op targets Church interests."
   status: applied
   files_changed: [references/params_contest.md]
+  renumbered_from: PP-257
+  renumber_date: 2026-04-04
 
-- id: PP-258
+- id: PP-395
   date: 2026-04-04
   source: editorial/ED-093
   priority: P2
@@ -3231,8 +3431,10 @@ PP-234
   description: "Temporal axis conflict: -1D both parties' Argue rolls (replaces PP-123 TN8)."
   status: applied
   files_changed: [references/params_contest.md]
+  renumbered_from: PP-258
+  renumber_date: 2026-04-04
 
-- id: PP-259
+- id: PP-396
   date: 2026-04-04
   source: sim-arc-01-gap-1
   priority: P2
@@ -3240,8 +3442,10 @@ PP-234
   description: "Church Martyrdom Effect: Stability+1 when public accusatory Contest fails vs Church leader (wrong Resonant Style, public venue, Failure/Partial)."
   status: applied
   files_changed: [references/params_factions.md]
+  renumbered_from: PP-259
+  renumber_date: 2026-04-04
 
-- id: PP-260
+- id: PP-397
   date: 2026-04-04
   source: editorial/ED-125
   priority: P2
@@ -3249,8 +3453,10 @@ PP-234
   description: "Hybrid Strategic Phase temporal auto-effects: Dissolution=TC+1, POP=TC-1, others=none. Paradox window=1 season on POP."
   status: applied
   files_changed: [references/params_threadwork.md]
+  renumbered_from: PP-260
+  renumber_date: 2026-04-04
 
-- id: PP-261
+- id: PP-398
   date: 2026-04-04
   source: editorial/ED-126
   priority: P2
@@ -3258,8 +3464,10 @@ PP-234
   description: "Binding Ops scope gate in mass battle: TS90+ required for >50% success at Relational scale in mass battle context."
   status: applied
   files_changed: [references/params_mass_combat.md]
+  renumbered_from: PP-261
+  renumber_date: 2026-04-04
 
-- id: PP-262
+- id: PP-399
   date: 2026-04-04
   source: editorial/ED-142
   priority: P1
@@ -3267,6 +3475,9 @@ PP-234
   description: "BG Overwhelming: Ob+1 surplus confirmed; floor net≥2 (not 3); PP-179 documentation error corrected."
   status: applied
   files_changed: [references/params_board_game.md]
+  renumbered_from: PP-262
+  renumber_date: 2026-04-04
+
 - id: PP-290
   date: 2026-04-04
   severity: P1
@@ -3277,6 +3488,7 @@ PP-234
   applied_to_version: "v1.6+"
   status: applied
   applied_commit: "pending"
+
 - id: PP-291
   date: 2026-04-04
   severity: P2
@@ -3298,7 +3510,8 @@ PP-234
   applied_to_version: "v1.6+"
   status: applied
   applied_commit: "pending"
-- id: PP-264
+
+- id: PP-400
   date: 2026-04-04
   source: user-ruling
   priority: P1
@@ -3306,9 +3519,12 @@ PP-234
   description: "All compilation/v0.14 stage documents declared outdated and superseded 2026-04-04. canonical_sources.yaml updated: design docs are canonical for all systems that have them. Stage files retained only where no design doc exists, marked unverified. params files are working canonical for core_engine and characters."
   status: applied
   propagation_targets:
-    - references/canonical_sources.yaml
-    - references/file_index.md
+  - references/canonical_sources.yaml
+  - references/file_index.md
   propagation_status: applied
+  renumbered_from: PP-264
+  renumber_date: 2026-04-04
+
 - id: PP-293
   date: 2026-04-04
   severity: P1
@@ -3319,6 +3535,7 @@ PP-234
   applied_to_version: "v1.6+"
   status: applied
   applied_commit: "pending"
+
 - id: PP-294
   date: 2026-04-04
   severity: P1
@@ -3353,3 +3570,14 @@ PP-234
   applied_to_version: "v0.8.5+"
   status: applied
   applied_commit: "pending"
+
+
+- id: PP-401
+  date: 2026-04-04
+  severity: P1
+  description: "REINFORCE track movement floor: max(0, (Margin−1) + Cha modifier − Foc defence). Prevents negative movement for stronger orator. ED-296 resolved."
+  finding_id: "ED-296"
+  source: simulation
+  affects: [references/params_contest.md, designs/contest/social_contest_system_v2.md]
+  status: applied
+  applied_commit: pending

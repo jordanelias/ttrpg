@@ -5,97 +5,80 @@ session_id: 2026-04-04T_DAY_REVIEW_AND_CLEANUP
 phase: SESSION CLOSED
 status: COMPLETE
 
-## WORK PERFORMED — DAY REVIEW SESSION
-1. Full coherency review of all work performed 2026-04-04 (15 sessions, 84 commits)
-2. Identified PP register collision problem: 332 entries, 228 unique IDs, 64 duplicates
-3. Verified staleness of all 29 open/pending/flagged editorial items
-4. Resolved 7 stale editorial items: ED-036, ED-200, ED-201, ED-202, ED-203, ED-204, ED-293
-5. Fixed params_core: removed orphaned ED-128 reference, removed 2 redundant Composure blocks
-6. Reconciled Altonian duplicate stat blocks: struck PP-282, retained PP-193 as canonical
-7. Struck SIM-DEBT-02 (superseded by v2 contest redesign)
-8. Added SIM-DEBT-07 to coverage matrix with unverifiable status
-9. Produced full day summary (below)
+## WORK PERFORMED — THIS SESSION (day review + comprehensive fix pass)
+1. Reviewed all 21 sessions (84 commits) from 2026-04-04 for coherency and correctness
+2. PP register de-collision: 332 entries had 104 duplicates across 68 IDs; all renumbered PP-297–PP-400. Zero duplicates remain.
+3. Resolved 8 stale editorial items:
+   - ED-036 (Altonian stats) flagged→resolved; duplicate PP-282 stat block struck, PP-193 retained
+   - ED-200 (wound cap) → resolved: no cap in design doc
+   - ED-201 (damage carry-over) → resolved: no carry-over in design doc
+   - ED-202 (rest/recovery) → resolved: single recovery model
+   - ED-203 (pool minimum) → resolved: clean floor, no penalty
+   - ED-204 (Certainty/Resolve) → resolved: both defined in params_core PP-289
+   - ED-293 (Mandate suppression) → resolved: PP-296 applied (Ob cap 4 + coalition +2D)
+   - ED-296 (REINFORCE negative) → resolved: PP-401 max(0,...) floor applied
+4. params_core: removed orphaned ED-128 reference; removed 2 redundant Composure blocks
+5. params_combat: added 4 explicit resolved rulings (ED-200/201/202/203)
+6. params_contest: PP-401 REINFORCE floor applied; P1 warnings for ED-295/297
+7. file_index: synced all compilation stage statuses to OUTDATED
+8. coverage_matrix: backfilled 18 simulation entries from 2026-04-04; struck SIM-DEBT-02; added SIM-DEBT-07
+9. propagation_map: added combat rulings + REINFORCE floor cross-references
 
-## DAY SUMMARY — 2026-04-04 (all sessions)
+## FILES MODIFIED THIS SESSION
+- canon/patch_register.yaml (de-collision: 104 entries renumbered + PP-401 added)
+- canon/editorial_ledger.yaml (8 items resolved)
+- references/params_core.md (ED-128 fix, Composure dedup)
+- references/params_combat.md (4 resolved rulings)
+- references/params_contest.md (PP-401 + P1 warnings)
+- references/params_mass_combat.md (PP-282 duplicate struck)
+- references/file_index.md (stage doc status sync)
+- references/propagation_map.md (new cross-refs)
+- tests/coverage_matrix.md (18 sim backfill + SIM-DEBT-02 struck + SIM-DEBT-07 added)
 
-### Sessions (chronological)
-1. Session priorities review — identified open blockers
-2. Editorial decisions (ED-120-126) + Diagnosis struck from threadwork
-3. Editorial review artifact v2 — mobile-first approval UI committed to tools/
-4. Params propagation fix — safe_session_close() introduced to github_ops.py
-5. Simulation coverage analysis — review doc produced, no patches
-6. Token efficiency review — bootstrap optimization applied to orchestrator skill
-7. Solmund Church + governance integration — editorial comprehensive review (49 items)
-8. Game system glossary — 36-item inline corrections doc produced
-9. Social Contest System v2 redesign (PP-234) — full attribute renames, genre restructure
-10. Debate re-simulation (SIM-D-05) — SIM-DEBT-01 resolved
-11. Digital platform cognitive load analysis — no commits
-12. Comprehensive game systems audit — many patches, all stage docs marked OUTDATED
-13. Simulator app cost analysis + BG simulator artifact (valoria-bg.jsx)
-14. BG simulator bug fix + HTML wrapper for Chrome
-15. Mid-campaign hybrid season simulation — PP-286-335, 88 editorials resolved
-16. Stress test 4 systems (debate, combat, mass battle, faction) — PP-285
-17. Full TTRPG campaign simulation — PP-247-289
-18. Mechanical interdependencies chart + audit — PP-264
-19. Emergent narrative arcs with irrational players — PP-246-262
-20. Non-optimal actor simulations — PP-257-296, decision protocol library
-21. This session — day review and cleanup
+## DAY SUMMARY — 2026-04-04 (all 21 sessions)
 
-### Patch range
-PP-234 through PP-296 (with extensive collisions — see CRITICAL below)
-
-### Key deliverables
-- Social Contest System v2 (designs/contest/social_contest_system_v2.md)
-- Decision protocol library (references/sim_decision_protocols.md)
-- Editorial review artifact (tools/editorial_review/valoria-editorial-review.jsx)
-- BG simulator artifact (valoria-bg.jsx / valoria-bg.html)
-- safe_session_close() in github_ops.py
-- Rescue + Feint full mechanical rebuild
+### Key deliverables produced today:
+- Social Contest System v2 (PP-234): full attribute renames (Presence→Charisma, Memory→Recall), genre restructure, adjudicator types
+- Decision protocol library: 16 non-optimal player decision protocols for simulation
+- Editorial review artifact: mobile-first approval UI (tools/editorial_review/valoria-editorial-review.jsx)
+- BG simulator artifact: playable board game sim (valoria-bg.jsx/html) with territory system, card effects, threshold events
+- safe_session_close() added to github_ops.py — prevents session log overwrites
+- Rescue mechanic full rebuild: eligibility, contested roll, double exposure, Momentum on wound (PP-290/292/295)
+- Feint mechanic rebuild: partial commit, ceiling non-stacking, versus roll (PP-291/293/294)
+- BG Mandate suppression ceiling: Ob cap 4 + coalition +2D (PP-296)
 - All compilation stage docs marked OUTDATED in canonical_sources.yaml
+- PP register de-collided: 332 entries, 332 unique IDs (from 228 unique)
+- 8 stale editorial items resolved; ED-296 REINFORCE formula fixed (PP-401)
 
-### CRITICAL — PP REGISTER COLLISION (unresolved)
-64 PP IDs are duplicated (332 entries, 228 unique). Concurrent sessions assigned
-the same PP numbers to different patches independently. De-collision pass required
-before any PP citation can be trusted. This is P1 priority for next session.
+### Patch activity: PP-234 through PP-401 (168 entries; 104 are renumbered duplicates)
+### Editorial: 8 resolved this session; 20 remain (17 flagged/user-decision, 3 open/mechanical)
 
-### Coverage matrix gap
-Zero entries dated 2026-04-04 in coverage_matrix despite 10+ simulation runs.
-Test files exist in commits but matrix was not updated. Backfill required.
+## REMAINING OPEN ITEMS (20 total)
 
-## REMAINING OPEN ITEMS (22 total)
+### Flagged — user decisions required (17):
+ED-005 Riskbreakers identity | ED-006 Restoration leader | ED-024 Southernmost stats
+ED-080/081 Conviction texts | ED-108 T10/T11 names | ED-109-113 BG balance (5)
+ED-119 Lenneth arc | ED-143-146 PC constructs (4) | ED-171 Niflhel lineage
 
-### Flagged — user decisions required (15):
-- ED-005: Riskbreakers faction identity
-- ED-006: Restoration Movement leader
-- ED-024: Southernmost Mode 3 entity stats
-- ED-080/081: Baralta/Vaynard Conviction text
-- ED-108: T10/T11 territory names
-- ED-109-113: BG balance (5 items)
-- ED-119: Lenneth Almqvist arc
-- ED-143-146: PC simulation construct approvals (4)
-- ED-171: Niflhel archive lineage
+### Open — mechanical (3):
+ED-290: Rescue Momentum calibration (+1 vs +2) — balance question
+ED-292: MARTYR failed-Rescue feedback loop — design question
+ED-297: AMPLIFY dominance over CLASH — confirm intent
 
-### Open — mechanical (7):
-- ED-201: Excess damage carry-over (resolved this session — no carry-over)
-- ED-290: Rescue Momentum calibration (+1 vs +2)
-- ED-292: MARTYR failed-Rescue feedback loop
-- ED-295: CLASH movement stalls at median — P1
-- ED-296: REINFORCE negative movement — P1
-- ED-297: AMPLIFY dominance — P1 (may be intentional)
+### P1 open:
+ED-295: CLASH movement stalls at median — 4 fix options (A/B/C/D), user decision required
 
-### SIM-DEBT open:
+### SIM-DEBT:
 - SIM-DEBT-03: PARTIAL (AMPLIFY multi-party + DIVERGE pending)
 - SIM-DEBT-04: PARTIAL (Crowd/NoAdj distinction gap)
 - SIM-DEBT-06: BLOCKED (Dissonant war-scale params missing)
-- SIM-DEBT-07: UNVERIFIABLE (no test file committed)
+- SIM-DEBT-07: UNVERIFIABLE (no test file)
 - SIM-DEBT-08: BLOCKED (PI threshold values missing)
 
 ## NEXT SESSION PRIORITIES
-1. PP register de-collision (P1 — 64 duplicate IDs)
-2. Coverage matrix backfill (all 2026-04-04 simulations)
-3. file_index.md sync with canonical_sources.yaml
-4. ED-295 CLASH formula fix (user selects option A/B/C/D)
-5. ED-296 REINFORCE floor fix (mechanical — apply max(0,...))
-6. ED-297 AMPLIFY dominance — user confirms intent
-7. ED-290/292 Rescue Momentum + MARTYR calibration
+1. ED-295 CLASH formula fix (user selects option A/B/C/D)
+2. ED-297 AMPLIFY dominance — user confirms intent
+3. ED-290/292 Rescue calibration decisions
+4. SIM-DEBT-03 completion (AMPLIFY multi-party + DIVERGE)
+5. ED-109-113 BG balance decisions
 ```

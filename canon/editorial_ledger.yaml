@@ -1301,18 +1301,12 @@ editorial_decisions:
     tags: [board-game, mandate, faction-balance]
   - id: ED-296
     date_flagged: 2026-04-04
-    date_resolved: ~
+    date_resolved: 2026-04-04
     source: simulation
-    source_file: tests/sim_debt_03_04_contest_baselines.md
-    description: "REINFORCE formula produces negative track movement for stronger orator at expected values — floor((margin−1) × gw × ow − resistance) goes negative when margin < 1+resistance. P1: formula error."
-    full_flag_text: "[EDITORIAL: ED-296 — REINFORCE negative movement: formula floor((margin-1)×gw×ow−resistance) produces negative result for stronger orator at median. Fix: floor() should never produce negative movement for the winner — floor max(0, (margin−1)×gw×ow−resistance)]"
-    status: open
-    priority: P1
-    decision: ~
-    propagation_targets: [designs/contest/social_contest_system_v2.md, references/params_contest.md]
-    propagation_status: pending
-    tags: [contest, reinforce, movement-formula, p1, sim-debt-03]
-
+    status: resolved
+    description: "REINFORCE formula negative movement — fixed via max(0,...) floor"
+    decision: "Applied PP-401: max(0, (Margin−1) + Cha modifier − Foc defence). Mechanical fix — formula error, not design decision."
+    tags: [contest, reinforce, movement-formula]
   - id: ED-297
     date_flagged: 2026-04-04
     date_resolved: ~

@@ -349,3 +349,5 @@ Propagation targets:
 | designs/combat/combat_design_v1.md (Rescue §PP-290/292/295) | rescue-contested | references/params_combat.md, references/sim_decision_protocols.md | Rescue eligibility, contest, Momentum wound trigger |
 | references/params_board_game.md (PP-296) | mandate-suppression | designs/board_game/valoria_bg_v05_simulation_and_patches.md | Mandate Ob cap 4 + coalition bonus; must propagate to BG design doc on next compile |
 | designs/contest/social_contest_system_v2.md | contest-movement | references/params_contest.md | ED-295/296 open — CLASH/REINFORCE formula fixes pending; do not compile until resolved |
+| references/params_combat.md (ED-200/201/202/203 rulings) | combat-rulings-2026-04-04 | designs/combat/combat_design_v1.md | Wound cap, carry-over, recovery, pool floor — resolved by design doc silence. Propagate to compilation on next pass. |
+| references/params_contest.md (PP-401 REINFORCE floor) | reinforce-floor | designs/contest/social_contest_system_v2.md | REINFORCE max(0,...) floor. Propagate to design doc on next compilation. |

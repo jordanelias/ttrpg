@@ -86,7 +86,7 @@ Step 7 — GM records.
 | Type | Condition | Resolution | Strain |
 |------|-----------|------------|--------|
 | CLASH | Same genre, opposite orientation | Compare; margin vs resistance → track movement | Margin + Cha modifier − Foc defence (min 0) |
-| REINFORCE | Same genre, same orientation | Same as CLASH | (Margin − 1, min 0) + Cha modifier − Foc defence (min 0) |
+| REINFORCE | Same genre, same orientation | Same as CLASH | max(0, (Margin − 1) + Cha modifier − Foc defence) | (PP-401, ED-296 fix: floor at 0) |
 | CROSS | Different genres | Each side: floor(successes ÷ 2) vs resistance; net movement = difference | None |
 | TIE | Equal successes, any type | Both take 1 strain; track +1 toward initiative holder | 1 each |
 
@@ -221,3 +221,22 @@ All other subjects: no RS consequence. No GM discretion required.
 
 ## BG Doubt Marker Analog
 No analog needed. BG debate fully abstracted. Parliamentary Vote (ED-053) handles faction-level outcomes.
+
+
+## P1 Findings — Awaiting Resolution (2026-04-04)
+
+### ED-295: CLASH movement stalls at median
+floor(margin × genre_weight × orientation_weight − resistance) produces 0 movement
+when margin barely exceeds resistance. At median dice results, CLASH advances
+the Conviction Track by 0 — contest stalls. Four fix options proposed (A-D).
+**User decision required.**
+
+### ED-296: REINFORCE produces negative movement
+(margin − 1) × modifiers − resistance goes negative when the stronger orator's
+margin is small. Fix: apply max(0, ...) floor to REINFORCE movement.
+**Mechanical fix — can apply without user decision if authorized.**
+
+### ED-297: AMPLIFY dominant over CLASH
+AMPLIFY produces ~5 movement/exchange vs CLASH ~0 at median. Coalitions are
+mechanically superior to solo advocacy. May be intended design (rewarding alliances).
+**User decision required: confirm or rebalance.**

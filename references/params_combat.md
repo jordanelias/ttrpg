@@ -1,6 +1,7 @@
 <!-- version: v0.14-AUD5-R1 | sources: designs/combat/combat_design_v1.md | last_updated: 2026-04-03 -->
 <!-- CANONICAL SOURCE: combat_design_v1.md supersedes stage8_combat.md -->
 <!-- PATCHES APPLIED: PP-086, PP-087, PP-088, PP-091, PP-092, PP-165, PP-172, PP-174, PP-210–218 -->
+<!-- ED-200/201/202/203 resolved 2026-04-04: wound cap, carry-over, recovery, pool floor -->
 <!-- PP-232: Health formula revised; Stamina floor 2; armour wield constraint; wound penalty −1D only; -->
 <!--         initiative order corrected (initiative holder declares last); tie result corrected; -->
 <!--         weapon system rebuilt (Short/Long × Light/Heavy × Blade/Blunt matrix); STR in damage confirmed; -->
@@ -249,3 +250,26 @@ Both succeed at different priorities → initiative stays with current holder.
 | Non-stacking | Successive Feints reset reduction to current margin; do not accumulate |
 | Expires | Pool reduction cancelled if Feinting actor incapacitated before reduction round |
 | Initiative note | Higher initiative B sees A's commit and can over-allocate Defence; costs B offensive output |
+
+
+## Resolved Rulings (2026-04-04)
+
+### No wound cap per hit (ED-200 resolved)
+No maximum wounds per single hit. Damage converts to wounds via the Health track
+formula: every (Endurance + 6) Health depleted = 1 wound. A sufficiently powerful
+hit can inflict multiple wounds in a single strike. This is the intended lethality model.
+
+### No excess damage carry-over (ED-201 resolved)
+Damage does not carry over when a wound threshold is crossed. When Health reaches 0,
+a wound is taken and Health resets to (Endurance + 6). Any excess damage beyond the
+0-threshold is lost. Wounds are discrete thresholds.
+
+### Recovery model (ED-202 resolved)
+No Quick Rest / Full Rest distinction. Single recovery model:
+- Take a Breath (combat action): restores Stamina up to base value
+- Scene rest (post-combat): stabilised incapacitated characters return to consciousness
+- Session end: all wounds clear
+
+### Pool minimum — clean floor (ED-203 resolved)
+Combat Pool minimum 5 is a clean floor. No −1D penalty at the floor. If penalties
+would reduce the pool below 5, it stays at 5 with no additional modifier.

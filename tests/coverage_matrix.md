@@ -305,3 +305,25 @@ Open for editorial: ED-061, ED-062, ED-063.
 | SIM-DEBT-03 | Contest re-sim: CLASH/REINFORCE/CROSS/AMPLIFY baselines, two-genre system | TTRPG | PRES | Composure, Concentration, Conviction Track | Crown, Hafenmark | Scholar, Diplomat, Demagogue | GREEDY, SATISFY | COMPLETE | SC-03-A F01/F02 P1→ED-295; SC-03-B F01 P1→ED-296; SC-03-C OK; SC-03-D F01 OK; F02 P2→ED-297 |
 | SIM-DEBT-04 | Adjudicator pool variation baselines | TTRPG | PRES | Composure, Conviction Track | Crown, Hafenmark | Scholar, Diplomat | GREEDY | COMPLETE | SD-04-F01 OK; SD-04-F02 P2→ED-297 (Crowd/NoAdj indistinct at low Cha/Att divergence) |
 | SIM-DEBT-07 | — | Status unverifiable. Referenced in mid-campaign hybrid session (ED-180) as "RS×3 PP-225 trained practitioner in mass combat." No test file committed. If PP-225 RS×3 mechanic is current, re-test under SIM-DEBT-03 scope. |
+
+## 2026-04-04 Simulation Backfill
+| ID | Description | Mode | Status | Date | Notes |
+|----|------------|------|--------|------|-------|
+| SIM-D-05 | Debate re-sim under PP-232 pool (SIM-DEBT-01 resolution) | TTRPG | COMPLETE | 2026-04-04 | Corrected pool: (Cognition×2)+History. New baselines committed. |
+| SIM-C-01 | Full TTRPG campaign (8 seasons, 4 PCs, all systems) | TTRPG | COMPLETE | 2026-04-04 | Combat, debate, threadwork, mass battle, factions. Satisficing PCs. |
+| SIM-MB-01 | Mass battle + Thread integration | TTRPG+HYB | COMPLETE | 2026-04-04 | Thread operations during mass combat. |
+| SIM-SOC-01 | Grand Contest — non-optimal archetypes | TTRPG | COMPLETE | 2026-04-04 | PP-278/279 resistance formula fix. |
+| SIM-ECON-01 | Seasonal economic cascade — Overextended faction | BG | COMPLETE | 2026-04-04 | Wealth/Stability/Mandate interdependency. |
+| SIM-STRESS-04 | Debate stress test | TTRPG | COMPLETE | 2026-04-04 | Multi-archetype. |
+| SIM-STRESS-05 | Combat stress test | TTRPG | COMPLETE | 2026-04-04 | Wound/Stamina/pool edge cases. |
+| SIM-STRESS-06 | Mass battle + faction play | TTRPG+BG | COMPLETE | 2026-04-04 | PP-285 Rescue finding. |
+| SIM-COMP-02 | Full campaign Season 9 | TTRPG | COMPLETE | 2026-04-04 | PP-280-281, 20 editorials closed. |
+| SIM-RES-01–04 | Rescue stress test (4 scenarios) | TTRPG | COMPLETE | 2026-04-04 | PP-290 eligibility, double exposure. |
+| SIM-RES-05–08 | Rescue+Feint combined (4 scenarios) | TTRPG | COMPLETE | 2026-04-04 | PP-291-292 Feint/Rescue rebuild. |
+| SIM-FM-01–03 | Feint+Mandate batch (3 scenarios) | TTRPG+BG | COMPLETE | 2026-04-04 | PP-293-296. |
+| SIM-SC-BASELINE | Contest CLASH/REINFORCE/CROSS/AMPLIFY baselines | TTRPG | COMPLETE | 2026-04-04 | SIM-DEBT-03 partial. P1 findings: ED-295/296/297. |
+| IXC-05–07 | Attribute propagation chains (3 scenarios) | CROSS-MODE | COMPLETE | 2026-04-04 | ED-194-197 flagged. |
+| SIM-X-33–36 | Intensive batch C (4 scenarios, non-optimal actors) | ALL | COMPLETE | 2026-04-04 | 19 findings, 7 gaps resolved, 4 new gaps. |
+| SIM-HYB-SEASON | Mid-campaign hybrid season (full, with flowcharts) | HYBRID | COMPLETE | 2026-04-04 | PP-286-335. 88 editorials resolved. |
+| SIM-ARC-01–20 | Emergent narrative arcs with irrational players (20 arcs) | ALL | COMPLETE | 2026-04-04 | PP-246-262 applied. Non-optimal decision protocols. |
+| SIM-NONOPT-01 | Non-optimal actor simulations across modes | ALL | COMPLETE | 2026-04-04 | 16-protocol library. PP-257-296. |
