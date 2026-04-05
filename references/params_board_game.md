@@ -1080,3 +1080,8 @@ T10 = **Nordhelm** (NW of Arcansheld, buffer territory). T11 = **Sudmarken** (SE
 BG Overwhelming: net ≥ 2×Ob AND net ≥ 3 (PP-179 canonical + PP-232 floor). ED-031 superseded.
 Ob 10 exception: Overwhelming unavailable; Partial requires net ≥ 5.
 [FLAGGED: confirm 2×Ob canonical; confirm floor of 3 applies to BG before BG compilation.]
+
+## BG Overwhelming — Final Ruling (PP-262)
+BG Overwhelming = Ob+1 surplus (attacker's net margin ≥ Ob+1).
+Floor: net ≥ 2 (not 3 — TTRPG floor of 3 is personal-scale drama; BG abstraction warrants lower floor).
+PP-179 ('matches TTRPG') was a documentation error. ED-031 (Ob+1) is correct.

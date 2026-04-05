@@ -184,3 +184,40 @@ Exchange Step 1 renamed Appraise throughout social contest system. Pool: Attunem
 
 ## PP-279 — FR terminology
 "Forced Resolution" label struck. Operations: Weaving, Pulling, Locking, Dissolution, Mending. Locking and Dissolution are self-descriptive.
+
+## Contest System Label (PP-253)
+System label 'Debate System' renamed to 'Contest System'.
+Individual scene types retain names: Formal Debate, Grand Debate, Tribunal, Negotiation, Appeal, Command Contest.
+'Debate' as a system-level label is deprecated.
+
+## Judge Action — Replaces 'Read' (PP-254)
+Exchange Step 1 renamed from 'Read' to 'Judge' throughout.
+Judge: assess opponent's mode, stance, and vulnerability.
+Pool: Attunement + Recall | TN 7 | Ob: opponent's Charisma÷2 (round up)
+Judge result informs Argue roll orientation selection.
+
+## Contest Stalemate — Forced Resolution (PP-255)
+Maximum 10 exchanges per Contest session.
+After 10 consecutive exchanges without resolution: forced Unmask fires.
+Loser = orator whose track is closer to their losing threshold (lower Composure on tie).
+
+## Hybrid Debate TC Clamp (PP-256)
+In Hybrid mode Contest: TC restricted to range 4–6 at session start regardless of BG lobbying.
+BG lobbying shifts starting position ±1 within that range only.
+Prevents BG-layer pre-deciding Contest outcome.
+
+## Church Self-Investigation Exception Scope (PP-257)
+§6.15 exception: ordained members only.
+Does not apply when Thread op targets a Church institutional interest.
+
+## Temporal Axis Conflict Penalty (PP-258)
+Replaces PP-123. When temporal axis conflict fires: −1D to BOTH parties' Argue rolls for that exchange.
+Symmetric: both destabilised equally.
+
+## Passive RS from Contest — Gate (PP-259)
+RS consequence fires automatically when:
+(a) Contest subject is a Thread-factual claim, OR (b) Thread op used in a Contest exchange.
+All other subjects: no RS consequence. No GM discretion required.
+
+## BG Doubt Marker Analog
+No analog needed. BG debate fully abstracted. Parliamentary Vote (ED-053) handles faction-level outcomes.

@@ -3113,26 +3113,157 @@ PP-234
     - designs/combat/combat_design_v1.md
   propagation_status: applied
 
-  - id: PP-287
-    date: 2026-04-04
-    source: SIM-ECON-01 F02 F09
-    system: factions
-    description: "DA intra-season timing: sequential model. Stats update immediately after each DA. Eliminates batch-vs-sequential ambiguity (18-point probability gap)."
-    status: applied
-    files_changed: [references/params_factions.md]
 
-  - id: PP-288
-    date: 2026-04-04
-    source: SIM-ECON-01 F08
-    system: factions
-    description: "Seasonal stat cap: ±2 cap applies to net outcome gains only. DA costs (Wealth expenditure, backlash) are uncapped. Multiple costs in one season all apply."
-    status: applied
-    files_changed: [references/params_factions.md]
+- id: PP-246
+  date: 2026-04-04
+  source: fidelity-correction
+  priority: P1
+  system: core_engine
+  description: "Die rule corrected to match stage1_core_engine.md §1.1: face 10 = +1 success + bonus chain die (chains indefinitely). Prior params_core '+2 no extra die' was a fidelity error. Net successes floor removed (can be negative per stage1)."
+  status: applied
+  files_changed: [references/params_core.md]
+  propagation_status: applied
 
-  - id: PP-289
-    date: 2026-04-04
-    source: SIM-ECON-01 F10
-    system: factions
-    description: "High-Wealth passive recovery: Wealth>=5 faction not under economic attack recovers +1 Wealth at Accounting. Applies to Guilds, Hafenmark."
-    status: applied
-    files_changed: [references/params_factions.md]
+- id: PP-247
+  date: 2026-04-04
+  source: editorial/ED-127
+  priority: P2
+  system: core_engine
+  description: "Composure track redesign: Rattled = full track expended in one hit (not threshold). Broken = second Rattled in scene. Recovery = scene rest or voluntary Unmask."
+  status: applied
+  files_changed: [references/params_core.md]
+
+- id: PP-248
+  date: 2026-04-04
+  source: editorial/ED-128
+  priority: P2
+  system: core_engine
+  description: "Certainty track defined: 0-10, starts 10, sanity-parallel to Health, Spirit unrelated. Previously PP-289 in this session's docs — renumbered to fit register."
+  status: applied
+  files_changed: [references/params_core.md]
+
+- id: PP-249
+  date: 2026-04-04
+  source: editorial/ED-129
+  priority: P2
+  system: combat
+  description: "Reach terminology: Short/Long/Ranged replaces Close zone/Far zone. Previously PP-290."
+  status: applied
+  files_changed: [references/params_core.md, references/params_combat.md]
+
+- id: PP-250
+  date: 2026-04-04
+  source: editorial/ED-139
+  priority: P1
+  system: threadwork
+  description: "Community Weaving canonical formula: Attunement+History+TPS, Ob3, RS+1/+2. Supersedes PP-168 and PP-195 partial entries. Not a Domain Action."
+  status: applied
+  files_changed: [references/params_threadwork.md, references/params_factions.md]
+
+- id: PP-251
+  date: 2026-04-04
+  source: editorial/ED-140
+  priority: P1
+  system: mass_combat
+  description: "Discipline degradation asymmetry precondition added: check only fires when unit loss exceeds opposing loss by ≥1 in same Engagement Phase. Symmetric exchanges do not trigger."
+  status: applied
+  files_changed: [references/params_mass_combat.md]
+
+- id: PP-252
+  date: 2026-04-04
+  source: editorial/ED-135
+  priority: P2
+  system: threadwork
+  description: "Forced Resolution (FR) renamed to Binding Operations (BO). Lock=Binding to State; Dissolution=Binding to Absence. Previously PP-293."
+  status: applied
+  files_changed: [references/params_threadwork.md, references/params_core.md]
+
+- id: PP-253
+  date: 2026-04-04
+  source: editorial/ED-136
+  priority: P2
+  system: social_contest
+  description: "System label 'Debate System' renamed to 'Contest System'. Scene types retain individual names."
+  status: applied
+  files_changed: [references/params_contest.md]
+
+- id: PP-254
+  date: 2026-04-04
+  source: editorial/ED-131
+  priority: P2
+  system: social_contest
+  description: "Exchange Step 1 renamed from 'Read' to 'Judge' throughout Contest system."
+  status: applied
+  files_changed: [references/params_contest.md]
+
+- id: PP-255
+  date: 2026-04-04
+  source: editorial/ED-056
+  priority: P2
+  system: social_contest
+  description: "Contest stalemate: maximum 10 exchanges per session; forced Unmask at 10."
+  status: applied
+  files_changed: [references/params_contest.md]
+
+- id: PP-256
+  date: 2026-04-04
+  source: editorial/ED-087
+  priority: P2
+  system: social_contest
+  description: "Hybrid Debate TC clamp: restricted to range 4-6 regardless of BG lobbying."
+  status: applied
+  files_changed: [references/params_contest.md]
+
+- id: PP-257
+  date: 2026-04-04
+  source: editorial/ED-092
+  priority: P2
+  system: social_contest
+  description: "Church self-investigation exception scope: ordained members only; not when Thread op targets Church interests."
+  status: applied
+  files_changed: [references/params_contest.md]
+
+- id: PP-258
+  date: 2026-04-04
+  source: editorial/ED-093
+  priority: P2
+  system: social_contest
+  description: "Temporal axis conflict: -1D both parties' Argue rolls (replaces PP-123 TN8)."
+  status: applied
+  files_changed: [references/params_contest.md]
+
+- id: PP-259
+  date: 2026-04-04
+  source: sim-arc-01-gap-1
+  priority: P2
+  system: factions
+  description: "Church Martyrdom Effect: Stability+1 when public accusatory Contest fails vs Church leader (wrong Resonant Style, public venue, Failure/Partial)."
+  status: applied
+  files_changed: [references/params_factions.md]
+
+- id: PP-260
+  date: 2026-04-04
+  source: editorial/ED-125
+  priority: P2
+  system: threadwork
+  description: "Hybrid Strategic Phase temporal auto-effects: Dissolution=TC+1, POP=TC-1, others=none. Paradox window=1 season on POP."
+  status: applied
+  files_changed: [references/params_threadwork.md]
+
+- id: PP-261
+  date: 2026-04-04
+  source: editorial/ED-126
+  priority: P2
+  system: mass_combat
+  description: "Binding Ops scope gate in mass battle: TS90+ required for >50% success at Relational scale in mass battle context."
+  status: applied
+  files_changed: [references/params_mass_combat.md]
+
+- id: PP-262
+  date: 2026-04-04
+  source: editorial/ED-142
+  priority: P1
+  system: board_game
+  description: "BG Overwhelming: Ob+1 surplus confirmed; floor net≥2 (not 3); PP-179 documentation error corrected."
+  status: applied
+  files_changed: [references/params_board_game.md]

@@ -576,3 +576,31 @@ Recall Anchor mechanic: practitioner who passes Forgetting Check may anchor one 
 Anchor elevates failing practitioner to fact-retention (as if Success) — emotional conviction still lost.
 One anchor per failed practitioner; Anchor cannot anchor more than one other. Non-practitioners excluded.
 [FLAGGED: confirm Anchor mechanic before Southernmost compilation.]
+
+## Binding Operations (PP-252) — formerly Forced Resolution (FR)
+'Forced Resolution (FR)' deprecated. All references replaced with 'Binding Operations (BO)'.
+- Lock = Binding to State
+- Dissolution = Binding to Absence
+Binding Op surcharge exempt from §3.2 Coherence cap (PP-196): Object/Personal=−1, Relational/Territorial=−2, Structural=−3.
+
+## Community Weaving — Canonical Formula (PP-250)
+Supersedes all prior Community Weaving entries (PP-168, PP-195 partial entries deprecated).
+Pool: Attunement + History bonus + Thread Pool Score
+TN: 7 | Ob: 3
+RS outcome: Success = RS +1; Overwhelming = RS +2
+This is a Thread operation, not a Domain Action. No faction stat involvement.
+Competes for Thread contact window with other ops — cannot be performed as narrative downtime.
+One Community Weave per contact window round; replaces another op that round.
+Primary player-accessible RS restoration mechanism.
+
+## Hybrid Strategic Phase — Temporal Auto-Effects (PP-260)
+Thread operations at Strategic Phase (Hybrid BG layer):
+- Dissolution: TC +1 (destabilising)
+- Past-Oriented Pulling: TC −1
+- Lock / Weave / Mend: no TC change
+Paradox window: POP at Strategic scale opens paradox for current season.
+All contested Domain Actions during that season: +1 Ob from temporal instability. Closes at next Accounting.
+
+## Binding Operations Scope Gate in Mass Battle (PP-261)
+Binding Ops at Relational scale in mass battle require Thread Sensitivity 90+ for >50% success.
+TS 70 practitioners: do not attempt Binding Ops in mass battle. RS cost without viable success probability.

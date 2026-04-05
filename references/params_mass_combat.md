@@ -492,3 +492,11 @@ Symmetric engagements produce attrition (Size loss) only — no Discipline degra
 ## ED-170 Resolution (PP-334) — Coherence Recovery in Multi-Day Battle
 1 Coherence per full overnight rest (min 6 hours, no Thread ops during rest).
 No in-battle Coherence recovery between battle-turns within same day.
+
+## Discipline Degradation — Asymmetry Precondition (PP-251)
+UPDATED TRIGGER (supersedes prior formula):
+Discipline check fires when BOTH conditions met:
+  (1) Unit's Size loss > Discipline threshold in this Engagement Phase
+  (2) Unit's loss exceeds opposing unit's loss in same Engagement Phase by ≥ 1
+Symmetric engagements (equal losses both sides) do NOT trigger Discipline check.
+Rationale: PP-231 intent — mutual-cost exchanges should not produce cascade.

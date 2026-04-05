@@ -8,14 +8,16 @@
 # params_core.md — Core Dice Engine
 
 ## Die Rule (d10)
+<!-- PP-246: Corrected to match stage1_core_engine.md §1.1 canonical source. Prior "+2 no extra die" was a fidelity error. -->
 | Face | Effect |
 |------|--------|
 | 1 | −1 success |
 | 2–6 | 0 |
 | 7–9 | +1 success |
-| 10 | +2 successes (no extra die) |
+| 10 | +1 success + roll one bonus die (chains indefinitely) |
 
-Net successes = sum of all contributions. **Floor: 0** — net successes cannot go below 0.
+Net successes = total successes minus total 1s (including bonus dice results). May be negative.
+Note: expected value of face-10 under chain rule ≈ +1.43 net at TN7 (geometric series). Higher than "+2" model for large pools.
 
 ## TN Values
 | Mode | TN | When |
@@ -155,3 +157,16 @@ Spirit is unrelated to Certainty. Certainty ≠ Coherence (Coherence = personal 
 - Long Reach: extended melee (polearms, spears; ≤ 3 metres).
 - Ranged: everything beyond Long Reach. Ranged weapons are Ranged until GM rules terrain or cover changes effective distance.
 'Close zone' and 'Far zone' are struck from all design documents.
+
+## Net Successes Floor — Correction (PP-246 note)
+Net successes CAN be negative (per stage1 §1.1). Prior "Floor: 0" was an error.
+Negative net successes contribute to Failure degree only; they do not compound penalties further.
+
+## Composure Track (PP-247)
+Composure = Charisma + 6. Range: 7–13.
+Rattled condition: single exchange delivers social damage ≥ full Composure score.
+- Rattled: −2D all social rolls; cannot Amplify; cannot Unmask voluntarily.
+- Broken: second Rattled instance in same scene. Auto-concedes next exchange.
+- Recovery: full scene rest OR voluntary Unmask.
+Rattled is a full-track event (one overwhelming hit), not a threshold accumulation.
+High-Composure NPCs (Himlensendt 12, Baralta 11) require extreme pool stacking to Rattle in a single exchange.
