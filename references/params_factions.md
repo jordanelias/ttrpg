@@ -120,7 +120,7 @@ Roll: Intel vs Ob 2. Once per season.
 | Degree | Result |
 |--------|--------|
 | Success (choose one) | +2D to one Thread-related Domain Action this season; OR reveal one hidden faction attribute; OR −1 Ob to one Einhir Research action this season |
-| Failure | Artefact's Thread signature detected by a practitioner; Church Intel +1D vs Varfell for 1 season; Thread Tension +1 |
+| Failure | Artefact's Thread signature detected by a practitioner; Church Intel +1D vs Varfell for 1 season; [STRUCK-PP-263 Thread Tension] +1 |
 Long-term cost: each use: +1 to Vaynard's hidden Thread Sensitivity (TS). At Thread Sensitivity 14+, each use triggers Spirit check TN 7 Ob 1 for a Discovery Event.
 Player Character takeover: collection transfers as institutional asset; triggers mandatory Discovery Event for new leader (Spirit TN 7 Ob 1; Success: Thread Knowledge (TK) +1; Failure: Certainty −1, new Belief offered).
 
@@ -139,17 +139,17 @@ Choose mode before rolling. One deployment per season.
 **Intelligence mode:** Intel vs target's Intel → Success: learn one hidden faction attribute or one Non-Player Character's active Belief; Overwhelming: learn two.
 **Sabotage mode:** Intel vs target's Stability → Success: Stability −1; Failure: operative exposed (Niflhel Intel −1 for 1 season; target gains Grievance Marker).
 **Assassination mode:** Intel vs target's Intel +2 → Overwhelming: Non-Player Character eliminated, no evidence; Success: eliminated, evidence trail; Partial: wounded, evidence trail; Failure: operative captured, full exposure, Niflhel Stability −2.
-Long-term cost: each Quiet deployment this season: Thread Tension +0.5 (cumulative).
+Long-term cost: each Quiet deployment this season: [STRUCK-PP-263 Thread Tension] +0.5 (cumulative).
 
 ### Restoration Movement — Community Weaving
-Roll: Influence vs Ob = Thread Tension ÷ 20 (round up).
+Roll: Influence vs Ob = [STRUCK-PP-263 Thread Tension] ÷ 20 (round up).
 Requires: at least one practitioner with Thread Sensitivity (TS) 30+ affiliated with the Restoration Movement.
 | Degree | Result |
 |--------|--------|
-| Overwhelming | Thread Tension −2 |
-| Success | Thread Tension −1 |
-| Partial | Thread Tension unchanged; Stability −1 |
-| Failure | Stability −1; Thread Tension +1 |
+| Overwhelming | [STRUCK-PP-263 Thread Tension] −2 |
+| Success | [STRUCK-PP-263 Thread Tension] −1 |
+| Partial | [STRUCK-PP-263 Thread Tension] unchanged; Stability −1 |
+| Failure | Stability −1; [STRUCK-PP-263 Thread Tension] +1 |
 Co-Movement Card drawn on every result (P-01 compliance).
 Prerequisite: Mandate ≥ 1 for Mending prerequisite (see stage6 §8.8).
 

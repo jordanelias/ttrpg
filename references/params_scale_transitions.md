@@ -23,7 +23,7 @@
 | Thread → Faction | Thread op targeting faction-level config resolves as Domain Action. Thread pool, appropriate Ob. No extra roll. |
 | Thread → Mass | Combat ops: Phase 2 (before Engagement). Support ops: Phase 5 (Cascade). Both declared Phase 1. |
 | Mass → Personal | Personal Action available at Phase 5 (Priority 8). Limit: 1 exchange/battle turn. General's Phase 5 consumed until personal combat resolved (Command (PP-232) suspended). |
-| Scene → Mass | Social scene outcomes apply to mass combat opening state before next round declaration. |
+| Scene -> Mass | Social win: +1D to relevant unit Command this turn. Investigation win: +1D first Volley. Combat win: one free Reform action. Modifier to most relevant unit; 1 turn only. (PP-261/ED-151) |
 
 ## Domain Echo Rules (PP-108/PP-109)
 

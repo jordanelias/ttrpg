@@ -140,7 +140,7 @@ Command = 1: cannot restore Discipline to any unit — all degradation permanent
 See §BATTLE TURN PHASE STRUCTURE above (7 phases, ED-050 Option D). The prior 5-phase structure is obsolete.
 
 ## Discipline Degradation (Deterministic) [PROPOSAL] (PP-232)
-Fires at Phase 5 when total Size lost this turn > Discipline → Discipline −1.
+Fires at Phase 6 Cascade: Size lost BY THE ATTACKING UNIT this turn > defending unit Discipline -> defending Discipline -1. Symmetric mutual losses do NOT trigger degradation for either defender. (PP-259/ED-140)
 | Discipline | Power penalty |
 |----------|-----------|
 | 5–7 | None |
@@ -433,3 +433,8 @@ CF wound during Zoom In → +1 Ob to that commander's BG tactic rolls for remain
 
 ## ED-170 provisional — Coherence recovery in multi-day battle
 1 Coherence/night of rest (no Thread ops). Single-day battle: no in-battle Coherence recovery.
+
+## HP Unit Volley-Reload Penalty (PP-260, ED-097)
+HP (heavy projectile) unit that fires in Phase 2 (Volley): -2D to Phase 5 pool.
+HP unit that did not fire in Phase 2: full pool in Phase 5.
+LP (light projectile) units: no reload penalty at mass scale.

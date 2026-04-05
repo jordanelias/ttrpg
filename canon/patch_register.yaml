@@ -2812,3 +2812,67 @@ PP-234
   applied_to_version: "v1.1"
   status: applied
   applied_commit: "pending"
+
+  - id: PP-257
+    date: 2026-04-04
+    source: ED-150 ED-133 ED-136
+    system: contest
+    description: "AMPLIFY cap highest-pool x2. Diverge trigger deterministic. Contest rename applied."
+    status: applied
+    files_changed: [references/params_debate.md]
+
+  - id: PP-258
+    date: 2026-04-04
+    source: ED-030
+    system: threadwork
+    description: "Thread combat vs Mode 3 entities: pool split same as personal combat. Offence vs CR. Defence vs entity pool."
+    status: applied
+    files_changed: [references/params_threadwork.md]
+
+  - id: PP-259
+    date: 2026-04-04
+    source: ED-140
+    system: mass_combat
+    description: "Discipline degradation: asymmetric trigger — attacker Size loss > defender Discipline. Symmetric exchanges do not trigger."
+    status: applied
+    files_changed: [references/params_mass_combat.md]
+
+  - id: PP-260
+    date: 2026-04-04
+    source: ED-097
+    system: mass_combat
+    description: "HP unit Volley-Reload penalty: -2D to Phase 5 if fired in Phase 2."
+    status: applied
+    files_changed: [references/params_mass_combat.md]
+
+  - id: PP-261
+    date: 2026-04-04
+    source: ED-151
+    system: scale_transitions
+    description: "Scene->Mass transition table: Social win +1D Command, Investigation +1D Volley, Combat free Reform. 1 turn."
+    status: applied
+    files_changed: [references/params_scale_transitions.md]
+
+  - id: PP-262
+    date: 2026-04-04
+    source: ED-142
+    system: board_game
+    description: "BG Overwhelming 2xOb + floor 3 confirmed. Matches PP-232/PP-249."
+    status: applied
+    files_changed: [references/params_board_game.md]
+
+  - id: PP-263
+    date: 2026-04-04
+    source: ED-139
+    system: factions
+    description: "Community Weaving: Mandate+History TN7 Ob3 canonical. Conflicting Thread Tension/Influence specs struck."
+    status: applied
+    files_changed: [references/params_factions.md]
+
+  - id: PP-264
+    date: 2026-04-04
+    source: ED-036
+    system: mass_combat
+    description: "Altonian invasion unit stats [PROVISIONAL]. Vanguard/Infantry/Siege. IP>=75 trigger. No Rout."
+    status: applied
+    files_changed: [references/params_mass_combat.md]

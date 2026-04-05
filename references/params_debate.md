@@ -9,7 +9,7 @@
 <!-- SIM-DEBT-01: RESOLVED 2026-04-03 by SIM-D-05. New baselines in tests/sim_d05_debate_resim.md. -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage9 before use. -->
 
-# params_debate.md — Debate System (v1, patched)
+# params_contest.md (renamed ED-136, formerly params_debate.md) — Debate System (v1, patched)
 
 
 ## SIM-DEBT-01 Baselines — RESOLVED (SIM-D-05, 2026-04-03)
@@ -48,9 +48,9 @@ Post-Diverge state: stays with holder.
 | Interaction | Condition | Resolution |
 |-------------|-----------|-----------|
 | CLASH | Same genre, opposite orientation | Compare successes. Margin = difference. Apply movement formula. |
-| AMPLIFY | Same genre, same orientation | Combined pools vs Conviction Track resistance. |
+| AMPLIFY | Same genre, same orientation | Combined pools vs Conviction Track resistance. Cap: highest individual pool x2. (PP-257) |
 | CROSS | Different genres | Each evaluated independently. |
-| DIVERGE | Post-Diverge state | No Step 1/Choose. Direct pool vs pool, flat orientation weights. [EDITORIAL: ED-133] |
+| DIVERGE | Post-Diverge state | Fires when margin would exceed CT bounds. No Step 1. Pool vs pool, flat weight 1.0. (PP-257/ED-133) |
 
 ## Conviction Track
 Range: 0–10. Side A wins ≥ 7. Side B wins ≤ 3. Compromise zone: 4–6.
