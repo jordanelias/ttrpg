@@ -1287,4 +1287,30 @@ editorial_decisions:
     priority: P2
     decision: "Defence: Dodge = TN7, Parry = own weapon Parry TN. Resolved from stage1 §3.5 — apply to params_combat. Stage1 outdated but this ruling is consistent with design intent."
     tags: [combat, defence, TN]
+- id: ED-292
+    date_flagged: 2026-04-04
+    date_resolved: ~
+    source: simulation
+    source_file: tests/sim_intensive_01.md
+    description: "MARTYR failed-Rescue feedback loop — no Momentum return on failed intercept even when rescuer takes wound from own engagement. Consider: failed Rescue + rescuer wounded same round = 1 Momentum."
+    status: open
+    priority: P2
+    decision: ~
+    propagation_targets: [designs/combat/combat_design_v1.md, references/sim_decision_protocols.md]
+    propagation_status: pending
+    tags: [combat, rescue, martyr, momentum]
 
+  - id: ED-293
+    date_flagged: 2026-04-04
+    date_resolved: ~
+    source: simulation
+    source_file: tests/sim_intensive_01.md
+    description: "BG Mandate suppression ceiling — four resolution options: (A) cap Ob at 4, (B) coalition +2D bonus, (C) indirect Stability suppression path, (D) Mandate decay above M5. User decision required."
+    full_flag_text: "[EDITORIAL: ED-293 — BG Mandate suppression Ob=target Mandate creates dominant faction lock at M6-7. Select resolution option A/B/C/D or hybrid.]"
+    status: open
+    priority: P1
+    decision: ~
+    propagation_targets: [designs/board_game/valoria_bg_v05_simulation_and_patches.md, references/params_board_game.md]
+    propagation_status: pending
+    related_ids: [ED-172]
+    tags: [board-game, mandate, faction-balance, p1]

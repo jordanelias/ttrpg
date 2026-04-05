@@ -93,7 +93,7 @@ A practitioner declaring Leap (Priority 5) may be struck at Priority 1 before co
 | Action | Description |
 |--------|-------------|
 | Strike | Allocate pool split, roll, apply damage |
-| Feint | Player chooses commit: allocate N dice (minimum 3) to Offence for the feint; remaining dice available for Defence this round. Roll N dice vs opponent Ob 2. Success: opponent's Defence *ceiling* is reduced by 2D next round — they may allocate at most (pool − 2) dice to Defence. Payoff is fixed regardless of N — more commit increases P(success), not effect magnitude. (PP-277 clarification: −2D is a ceiling reduction on Defence allocation, not a total pool reduction.) (PP-212, PP-238, PP-277, PP-291) |
+| Feint | Player chooses commit: allocate N dice (minimum 3) to Offence for the feint; remaining dice available for Defence this round. Roll N dice vs opponent Ob 2. Success: opponent's Defence *ceiling* is reduced by 2D next round — they may allocate at most (pool − 2) dice to Defence. Payoff is fixed regardless of N — more commit increases P(success), not effect magnitude. **Ceiling non-stacking (PP-293):** successive Feints do not stack — the ceiling is always (pool − 2), not cumulative. **Ceiling expires (PP-293):** if the Feinting actor is incapacitated before the ceiling round, the ceiling effect is cancelled. (PP-277 clarification: −2D is a ceiling reduction on Defence allocation, not a total pool reduction.) (PP-212, PP-238, PP-277, PP-291, PP-293) |
 | Establish Distance | Move to preferred range. Contested Agility if opponent opposes. |
 | Take a Breath | No combat action. Recover Stamina by Endurance score. Cannot if in immediate melee contact. |
 | Full Guard | All dice to Defence. Cannot Attack. |

@@ -3309,4 +3309,13 @@ PP-234
     - references/canonical_sources.yaml
     - references/file_index.md
   propagation_status: applied
-
+- id: PP-293
+  date: 2026-04-04
+  severity: P1
+  description: "Feint ceiling: non-stacking (successive Feints always set ceiling to pool-2, not cumulative); expires if Feinting actor incapacitated before ceiling round applies."
+  finding_id: "SIM-FEINT-F03, SIM-FEINT-F05"
+  source: simulation
+  affects: [designs/combat/combat_design_v1.md]
+  applied_to_version: "v1.6+"
+  status: applied
+  applied_commit: "pending"
