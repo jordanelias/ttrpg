@@ -1327,3 +1327,44 @@ editorial_decisions:
     propagation_status: applied
     related_ids: [ED-292, ED-293, PP-295, PP-296]
     tags: [combat, rescue, momentum, board-game, mandate, resolved]
+- id: ED-295
+    date_flagged: 2026-04-04
+    date_resolved: ~
+    source: simulation
+    source_file: tests/sim_debt_03_04_contest_baselines.md
+    description: "CLASH track movement stalls at median — floor(margin × gw × ow − resistance) produces 0 movement when margin barely exceeds resistance. P1: contest mechanically unresolvable at median pools under current formula."
+    full_flag_text: "[EDITORIAL: ED-295 — Contest CLASH movement formula: floor() + resistance=1 produces 0 movement at E[margin]=1.2. Track does not move at median. Fix options: (A) remove floor() — use fractional accumulation, (B) halve resistance, (C) reduce Ob floor to 0, (D) minimum 1 movement on any margin > 0]"
+    status: open
+    priority: P1
+    decision: ~
+    propagation_targets: [designs/contest/social_contest_system_v2.md, references/params_contest.md]
+    propagation_status: pending
+    tags: [contest, clash, movement-formula, p1, sim-debt-03]
+
+  - id: ED-296
+    date_flagged: 2026-04-04
+    date_resolved: ~
+    source: simulation
+    source_file: tests/sim_debt_03_04_contest_baselines.md
+    description: "REINFORCE formula produces negative track movement for stronger orator at expected values — floor((margin−1) × gw × ow − resistance) goes negative when margin < 1+resistance. P1: formula error."
+    full_flag_text: "[EDITORIAL: ED-296 — REINFORCE negative movement: formula floor((margin-1)×gw×ow−resistance) produces negative result for stronger orator at median. Fix: floor() should never produce negative movement for the winner — floor max(0, (margin−1)×gw×ow−resistance)]"
+    status: open
+    priority: P1
+    decision: ~
+    propagation_targets: [designs/contest/social_contest_system_v2.md, references/params_contest.md]
+    propagation_status: pending
+    tags: [contest, reinforce, movement-formula, p1, sim-debt-03]
+
+  - id: ED-297
+    date_flagged: 2026-04-04
+    date_resolved: ~
+    source: simulation
+    source_file: tests/sim_debt_03_04_contest_baselines.md
+    description: "AMPLIFY dominant over CLASH whenever ally available — 5 movement/exchange vs 0 at median. CLASH is mechanically inferior. May be intended (coalitions rewarded) but needs confirmation."
+    full_flag_text: "[EDITORIAL: ED-297 — AMPLIFY yields ~5 track movement/exchange; CLASH yields 0. AMPLIFY dominant when ally available. Confirm: is CLASH intended as a fallback-only action?]"
+    status: open
+    priority: P2
+    decision: ~
+    propagation_targets: [designs/contest/social_contest_system_v2.md]
+    propagation_status: pending
+    tags: [contest, amplify, clash, balance, sim-debt-03]
