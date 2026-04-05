@@ -1,6 +1,6 @@
-<!-- version: v0.14-AUD3 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-02 -->
+<!-- version: v0.14-AUD3-R2 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-04 -->
 <!-- NOTE: stage6_factions.md is STALE for BG faction mechanics. Use BG column for board game/hybrid. -->
-<!-- PATCHES APPLIED: PP-167, PP-168; PP-195 (Community Weaving procedure) -->
+<!-- PATCHES APPLIED: PP-167, PP-168; PP-195; PP-402 (TC passive advance + Suppress); PP-403 (Failed DA Stability cost) -->
 <!-- STALE CHECK: TTRPG column from v0.14 compiled. BG column from bg_v05 design. -->
 
 # params_factions.md — Factions
@@ -35,6 +35,33 @@ Note: Varfell BG Mandate 3/Wealth 3 is intentional (political isolation at game 
 Ob = target faction's relevant stat (1–7 directly, no division).
 Attacker bonus dice: own faction's relevant stat if holding faction leadership.
 Non-Player Character faction rolls: relevant stat as d10 pool, TN 7.
+
+## TC Passive Advance (PP-402)
+Theocracy Counter (TC) advances by **+1 per season** from institutional momentum, regardless of Church action.
+Applied at Accounting before Assert/Suppress resolution.
+
+| Action | TC effect |
+|--------|-----------|
+| Passive baseline | +1 (always) |
+| Assert (Church) | +2 total (replaces passive; not additive) |
+| Suppress (Crown or Hafenmark Domain Action) | Negates passive +1 for that season only. TC does not decrease. Ob = Church Mandate. |
+
+Suppress may be declared once per season by one faction. It cannot reduce TC below its value at season start.
+TTRPG: same rule applies. BG: same rule applies; Suppress is a Standard Action consuming one card.
+
+
+## Failed Domain Action Stability Cost (PP-403)
+A Domain Action that results in **Failure** (net successes ≤ 0) costs the acting faction **−1 Stability**.
+Partial success (net > 0 but < Ob): no Stability cost.
+Success/Overwhelming: normal effect, no cost.
+
+**Scope exclusions:**
+- Does not apply to self-improvement Domain Actions (acting faction targeting own stats).
+- Does not apply to TTRPG personal scene rolls or Thread operations.
+- Applies to faction-layer Domain Actions only.
+
+**Stability 1 edge case:** If Stability is already 1, a Failure reduces it to 0, triggering an immediate Stability Check (existing mechanic). Factions with low Stability are further discouraged from sub-threshold gambles.
+
 
 ## Ethical Framework Ob Modifiers
 | Condition | Modifier |

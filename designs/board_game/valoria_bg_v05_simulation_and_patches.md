@@ -715,3 +715,20 @@ Alternatively, add an additional Theocracy Counter gain source: "Church wins any
 - **Thread Debt in hybrid:** A Player Character performing a personal Thread operation generates Thread Debt that batches to Cascade. But the board game Thread Debt triggers (Rendering Stability < 30, prior token in territory) may not apply identically at personal scale. Hybrid mode should specify: "Personal Thread operations incur Thread Debt on the board only if the TTRPG scale operation would qualify as 'against temporal flow' by TTRPG criteria. The Game Master determines this at the Cascade phase ledger, not the player mid-scene."
 - **Co-Movement Cards for personal Thread operations:** TTRPG operations that batch to Cascade (Thread consequences step) generate Co-Movement card draws in Cascade, not during the personal scene. The card effects (particularly Temporal effects — Non-Player Character relationship changes) must be retroactively applied to the scene that just finished, which can feel narratively discontinuous. Recommendation: Game Master draws the Co-Movement card for a batched personal Thread operation at the END of the personal scene in which it occurred, records its effects, then applies them at Cascade. The narrative flavoring is immediate; the mechanical application is deferred.
 - **CP awards from board game successes (G-089 in hybrid_gaps_resolved.md):** "Board game successes generate CP." The criteria for CP awards are stated as "Belief engagement, significant Domain Action, Maxim expression." In the board game, Beliefs and Maxims are TTRPG constructs. In board-game-only mode, CP doesn't apply. In hybrid, the board action must be tied back to the Player Character's belief system by the Game Master to earn CP. **This is correct but needs a worked example in the ruleset.** The Institutional Mandate Uphold/Appease decision is the natural bridge: a faction Upholding their Mandate in a way that reflects the Player Character's personal Conviction (their TTRPG Belief arc) earns CP even when resolved at board scale.
+
+---
+
+## Missed Coalition Opportunity Penalty (PP-404)
+
+At Accounting, if **all** of the following conditions were met this season and the coalition was not triggered:
+1. Both factions' relevant stat was observably above the coalition floor — i.e., both showed "Good" (not the ambiguous d6-boundary band) or higher at point of observation.
+2. The coalition trigger was reachable in one standard action for both factions.
+3. Neither faction took the coalition-enabling action.
+
+**Effect:** Each faction's first coalition-enabling action next season is at **+1 Ob** (the missed window hardens the path).
+- Not cumulative: the penalty does not stack across consecutive missed seasons.
+- Cleared at next Accounting whether or not coalition triggered.
+- **Fog of war exemption:** If either faction's relevant stat was in the ambiguous boundary band (stat 4 observed as "Poor" on the d6 roll), the penalty does not apply — the opportunity was not visibly available.
+
+**Tracking:** A single binary "Missed Window" flag per coalition pair, set during Accounting, cleared next Accounting. No additional counter needed.
+

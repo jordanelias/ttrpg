@@ -3581,3 +3581,33 @@ patches:
   affects: [references/params_contest.md, designs/contest/social_contest_system_v2.md]
   status: applied
   applied_commit: pending
+
+- id: PP-402
+  date: 2026-04-04
+  severity: P2
+  description: "TC passive advance +1/season baseline (institutional momentum); Assert = +2 total (not additive); Suppress = Crown/Hafenmark Standard Action negating passive for one season, Ob = Church Mandate."
+  finding_id: "F-27-01, F-32-05 (caution under-incentivised #1A)"
+  source: design
+  affects: [references/params_factions.md]
+  status: applied
+  applied_commit: ~
+
+- id: PP-403
+  date: 2026-04-04
+  severity: P2
+  description: "Failed Domain Action (net <= 0) costs acting faction -1 Stability. Excludes self-improvement actions. Stability 1 -> 0 triggers existing Stability Check."
+  finding_id: "F-27-02, F-28-01 (caution under-incentivised #1B)"
+  source: design
+  affects: [references/params_factions.md]
+  status: applied
+  applied_commit: ~
+
+- id: PP-404
+  date: 2026-04-04
+  severity: P2
+  description: "Missed coalition opportunity: +1 Ob on first coalition-enabling action next season if both factions were visibly within reach and neither acted. Fog-of-war exemption for ambiguous stat-4 boundary. Binary flag per coalition pair, cleared at next Accounting."
+  finding_id: "F-28-02/03 (local optima dominate coalition #2D)"
+  source: design
+  affects: [designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+  status: applied
+  applied_commit: ~
