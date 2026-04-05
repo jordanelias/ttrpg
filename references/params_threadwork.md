@@ -537,38 +537,15 @@ A practitioner who succeeds on their Forgetting boundary Leap may carry companio
 - Focus 1: 0 companions. Focus 3: max 2. Focus 5: max 4.
 - Companion must remain within Thread contact throughout crossing.
 
-## Hybrid Strategic Phase — Temporal Auto-Effects (PP-287)
-Thread operations at Strategic Phase (Hybrid BG layer) produce temporal auto-effects:
-- Dissolution: TC +1 (destabilising)
-- Past-Oriented Pulling: TC −1 (removing suppression)
-- Lock / Weave / Mend: no TC change
-Paradox window: Past-Oriented Pulling at Strategic scale opens a paradox window for the current season. All contested Domain Actions during that season: +1 Ob from temporal instability. Window closes at next Accounting.
+---
+<!-- PP-281 2026-04-04: Untrained Leap auto-fail -->
 
-## Binding Operations Terminology (PP-293)
-'Forced Resolution (FR)' renamed to 'Binding Operations (BO)' throughout.
-- Lock = Binding to State
-- Dissolution = Binding to Absence
-All FR references in prior params entries are superseded by BO terminology.
+## Untrained Leap Auto-Fail (PP-281) [PROVISIONAL — ED-178]
+A practitioner who attempts Leap without the Approach Training tag:
+- The Leap roll **auto-fails** (no dice rolled).
+- Consequence (as for Leap Failure): Thread contact fails; −1D to Thread Pool Score for remainder of scene.
+- Additional consequence (untrained only): **Certainty −1** (uncontrolled contact with Thread substrate without preparation disturbs epistemic grounding).
+- No RS cost from auto-fail (operation never reached the operation phase).
+- Coherence is NOT reduced by auto-fail (only by successful contact that then degrades).
 
-## Community Weaving — Canonical Formula (PP-296)
-Supersedes PP-168 and PP-195 Community Weaving entries.
-- Pool: Attunement + History bonus + Thread Pool Score
-- TN: 7
-- Ob: 3
-- RS target: +1 on Success; +2 on Overwhelming
-- This is a Thread operation, not a Domain Action. No faction stat involvement.
-Community Weaving is the primary player-accessible RS restoration mechanism.
-
-## Partial Operation Ob Stack (PP-304)
-Ob stacking from consecutive Partial outcomes of the same Thread operation type:
-- Accumulates within a scene (+1 Ob per Partial of same type).
-- Resets on a successful operation of the same type (Success or Overwhelming clears the stack).
-- Resets at scene end.
-- Does NOT carry between scenes or sessions.
-- Cannot exceed system Ob cap (20).
-
-## RS Change on Partial Weaving (PP-304 provisional)
-Partial Weaving produces **no RS change**. Only successful Weaving alters RS per operation table.
-Partial Leap: establishes contact (allows subsequent operations) with Op Ob +1 stacking penalty.
-Partial Leap Failure: no contact — subsequent operations cannot proceed this Leap sequence.
-
+[FLAGGED: confirm Certainty −1 as the correct penalty vs alternatives (Coherence −1, wound, Composure).]

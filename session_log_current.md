@@ -1,41 +1,44 @@
-# Valoria Session Log - Updated
+# Valoria Session Log — Updated
 
 ```yaml
-session_id: 2026-04-04T_SIM_BATCH_C
+session_id: 2026-04-04T_SIM_COMP_02
 phase: SESSION CLOSED
 status: COMPLETE
 
 ## WORK COMPLETED
-1. PP-303: Memory re-citation restriction (once per debate per source).
-2. PP-304: Critical Hit overflow wounds; sidearm draw free action; Partial Ob stack reset; Partial Weaving RS=0; Partial Leap = contact+ObStack.
-3. SIM-X-33: TTRPG Ranged vs Melee. Reload-rigid crossbow incapacitated R3. PP-304 triggered (overflow wounds, weapon draw).
-4. SIM-X-34: TTRPG Thread stacking + Memory exploit. Ob stack self-correcting. Re-citation exploit confirmed and patched PP-303.
-5. SIM-X-35: BG Parliamentary Vote. Church full-hand commitment to lost motion. Guilds passive abstain = worst outcome. Card exhaustion system validated.
-6. SIM-X-36: Hybrid Domain Echo misattribution. Torben targets wrong faction. Varfell Military 5->6 uncontested. Echo flow correct; misattribution upstream.
+1. Closed 20 remaining open/provisional editorials:
+   - 18 duplicate -FLAG entries closed
+   - ED-166 and ED-174 closed
+2. SIM-COMP-02: Season 9 comprehensive simulation — 4 new unique non-optimal actors:
+   - Ravn Ostergaard (Hafenmark delegate, principle over pragmatism)
+   - Solveig Harr (Varfell tribune, untrained Leap attempt)
+   - Confessor Mads Brohl (Church rural confessor, tells the truth)
+   - Anders Kroll (Guilds mercenary, over-defends)
+3. Mechanics first-tested: Multi-Party Contest (PP-280), Feigned Retreat PP-256,
+   Mass Mismatch PP-274, Untrained Leap auto-fail PP-281, Ethical Framework Ob live,
+   BG Victory Race + Co-Victory tracking, Dual Win-Conditions (ED-012)
+4. Patches PP-280 and PP-281 applied
 
-## GAPS RESOLVED THIS SESSION
-- GAP-SIM-X29-01: PP-303
-- GAP-SIM-X30-01: PP-304
-- GAP-SIM-X30-02: closed (self-correcting, no cap needed)
-- GAP-SIM-X30-03: PP-304 provisional
-- GAP-SIM-X33-01/02: PP-304
-- GAP-SIM-X34-01: PP-304
+## KEY FINDINGS
+- PP-280 Multi-Party Contest: works cleanly; GAP-S-01 (simultaneous audience capture tiebreak) identified (ED-179, P1)
+- PP-256 Feigned Retreat: validated — Discipline 4-5 holds at 87-95%; levy counter-only
+- Mass Mismatch PP-274: Light vs Heavy creates near-zero Light offensive output; confirmed
+- Untrained Leap: auto-fail + Certainty -1 (PP-281); no RS cost on auto-fail
+- Ethical Framework Ob modifiers: all three variants fired correctly; Crown −1 Ob decisive at Ob2→1
+- BG Victory Race: TC 51 blocked Crown Deed 3 (requires TC<50); Hafenmark Path C closest (2/4 + T5 in progress)
+- RS×3 PP-225: DEFERRED — SIM-DEBT-07 opened (untrained Leap = no successful operation to validate)
 
-## NEW GAPS
-- GAP-SIM-X34-02: Composure 0 threshold (P2)
-- GAP-SIM-X35-01: All-abstain / zero-support motion outcome (P2)
-- GAP-SIM-X36-01: Social pool formula undefined (P2)
-- GAP-SIM-X36-02: Domain Echo Overwhelming magnitude undefined (P2)
+## NEW PATCHES
+PP-280 (Multi-Party Contest) | PP-281 (Untrained Leap auto-fail)
 
-## CARRIED FORWARD
-- ED-153: BG Wealth diminishing returns (P2, editorial)
-- ED-174: Public Instability cascade brake (provisional, editorial)
-- GAP-SIM-X34-02: Composure 0 (P2)
-- GAP-SIM-X35-01: All-abstain motion (P2)
-- GAP-SIM-X36-01: Social pool formula (P2)
-- GAP-SIM-X36-02: Echo Overwhelming magnitude (P2)
+## NEW EDITORIALS
+ED-177 (PP-280 review) | ED-178 (PP-281 review) | ED-179 (GAP-S-01 tiebreak P1) | ED-180 (SIM-DEBT-07)
+
+## OPEN SIM-DEBTS
+SIM-DEBT-07: RS×3 PP-225 — requires trained practitioner successfully Leaping into mass combat
 
 next_session_start:
-  priority: resolve GAP-SIM-X34-02 (Composure 0), GAP-SIM-X36-01/02 (social pool, Echo magnitude)
-  read_first: [tests/sim_x33_x34_x35_x36_batch_c.md, session_log_current.md]
+  priority: ED-179 (GAP-S-01 tiebreak — P1), then SIM-DEBT-07 (RS×3 validation)
+  read_first: [tests/sim_comp02_season9.md, session_log_current.md]
+  context: 88 editorials processed (88 provisional/open → ~20 remain open including new). System approaching compilation readiness on core mechanics.
 ```

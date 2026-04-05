@@ -8,7 +8,6 @@
 <!--         SIM-DEBT-01 baselines invalidated pending re-sim with corrected pool formula. -->
 <!-- SIM-DEBT-01: RESOLVED 2026-04-03 by SIM-D-05. New baselines in tests/sim_d05_debate_resim.md. -->
 <!-- PP-278 (resistance formula: raw Stability -> ceil(Stability/4), 2026-04-04) -->
-<!-- PP-303 (Memory re-citation restricted to once per debate per source, 2026-04-04) -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage9 before use. -->
 
 # params_debate.md — Debate System (v1, patched)
@@ -25,13 +24,6 @@ Key baselines: Scholar(11D) v Diplomat(8D) Formal: 67/6/27% | Scholar v Scholar 
 | Argue | (Cognition × 2) + History bonus | 7 | Main contest roll. (PP-232) |
 | Step 1 Appraise | Attunement only (no History) | 7 Ob 1 | Per exchange, before Choose. Action name [EDITORIAL: ED-132]. |
 | Memory bonus | +2D | — | When citing specific named verifiable claim. Binary. Any genre. |
-
-## Memory Bonus Re-Citation Rule (PP-303)
-A specific named verifiable source may be cited for the Memory bonus (+2D) **once per debate only**.
-Re-citing the same source in a subsequent exchange grants no bonus.
-A new, distinct verifiable source cited for the first time grants +2D normally.
-Orators may track cited sources on their reference card. Disputed citations: opponent may challenge (Step 1 Appraise, Ob 2 to verify).
-
 
 ## Initiative
 Exchange 1: higher **Attunement** acts last (has most information; declares second). (PP-232)
@@ -280,3 +272,28 @@ Given: Stability 4 audience, resistance = ceil(4/4) = 1.
 - B: E[14D] = 4.2 × 1.0 = 4.2 raw. CT move = floor(4.2 − 1) = **+3 toward Side B**
 
 CROSS exchanges strongly favour whichever side has the boosted genre. CLASH in the boosted genre with AMPLIFY is the high-value play.
+
+---
+<!-- PP-280 2026-04-04: Multi-Party Contest procedure -->
+
+## Multi-Party Contest Procedure (PP-280) [PROVISIONAL — ED-177]
+Three or more orators may contest simultaneously using dual Conviction Tracks.
+
+**Setup:**
+- Two tracks in play: Track A-B (orator A vs orator B) and Track A-C (orator A vs orator C).
+- Additional orators add additional pairwise tracks (A-D, B-C, etc.).
+- All tracks start at 5 (neutral).
+
+**Appraise:** All orators roll simultaneously. Results are shared with all parties before Choose.
+
+**Choose:** Each orator selects genre/orientation independently (they hear all Appraise results).
+
+**Argue:** Declaration order: ascending Attunement. Highest Attunement declares last (maximum information).
+
+**Resolve (simultaneous):** For each pair sharing a genre: CLASH or AMPLIFY. For different-genre pairs: CROSS. Apply all movements simultaneously. No sequencing.
+
+**Dual Win-Condition (ED-012):** Exchange majority counted per track. Audience capture per track.
+
+**Tiebreak — simultaneous audience capture (GAP-S-01 open — ED-179):** [UNDEFINED. If both Track A-B and Track A-C reach audience capture threshold simultaneously, resolution order is unspecified. Do not use Multi-Party Contest in competitive play until ED-179 resolved.]
+
+[FLAGGED: confirm two-track structure; confirm Appraise sharing; confirm simultaneous resolution.]
