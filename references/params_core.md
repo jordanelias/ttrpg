@@ -142,3 +142,16 @@ Spending 2 Momentum on Ob 1 (2 auto-successes): auto-successes alone reach Ob 1 
 - Broken: two Rattled instances. Concedes automatically next exchange.
 - Recovery from Rattled: full scene rest or voluntary Unmask.
 - Rattled is NOT a threshold — it is a full-track event parallel to Wounds.
+
+## Certainty Track (PP-289)
+Range 0–10. Starting value: 10. Counts down toward 0.
+Loss triggers: Coherence 0 event (−1), sustained Southernmost exposure >3 scenes (−1/scene), catastrophic ontological revelation (−2).
+At Certainty 0: character cannot distinguish Thread substrate from consensus reality. GM takes partial narrative control. Treated as incapacitated for social/Thread purposes.
+Recovery: +1 Certainty per long rest outside Southernmost with no Thread operations.
+Spirit is unrelated to Certainty. Certainty ≠ Coherence (Coherence = personal rendering integrity; Certainty = epistemological grounding).
+
+## Reach Terminology (PP-290) — replaces Close zone / Far zone
+- Short Reach: melee contact (≤ 1 metre). Applies to most melee weapons.
+- Long Reach: extended melee (polearms, spears; ≤ 3 metres).
+- Ranged: everything beyond Long Reach. Ranged weapons are Ranged until GM rules terrain or cover changes effective distance.
+'Close zone' and 'Far zone' are struck from all design documents.

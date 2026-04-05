@@ -178,3 +178,47 @@ Any declared coalition member can corroborate (Knot not required). Knot-sharing 
 
 ## PP-272 — "Division" stricken
 Term removed from §7 Church Tribunal as vestigial. No mechanic defined.
+
+## Corroboration — Knot Relaxed (PP-280)
+Any declared coalition member can corroborate (Knot not required).
+Knot-sharing coalition member: Ob 1 corroboration.
+Non-Knot coalition member: Ob 2 corroboration.
+Asymmetric proceedings (Tribunal): all disadvantaged-party corroborators use Ob 2.
+
+## Contest Stalemate — Forced Resolution (PP-282)
+Maximum 10 exchanges per Contest session. After 10 consecutive exchanges without resolution:
+Forced Unmask fires. Loser = orator whose track is closer to their losing threshold (or lower Composure on tie).
+Prevents indefinite stalemate when resistance ≥ all achievable effective margins.
+
+## Hybrid Debate TC Clamp (PP-283)
+In Hybrid mode Contest (§6.14): TC restricted to range 4–6 at session start regardless of BG lobbying.
+BG lobbying shifts starting position ±1 within that range only.
+Prevents BG-layer pre-deciding Contest outcome.
+
+## Passive RS from Contest — Gate Tightened (PP-284)
+Passive RS consequence fires AUTOMATICALLY (no GM discretion) when:
+(a) Contest subject is a Thread-factual claim (Thread existence, practitioner capability, RS status), OR
+(b) A Thread operation is used during a Contest exchange.
+All other Contest subjects: no passive RS consequence.
+
+## Church Self-Investigation Exception — Scope (PP-285)
+§6.15 exception covers ordained members of the Church only.
+Does not apply when the Thread operation targets a Church institutional interest (e.g., Dissolution of a Church-controlled Lock; Pulling a Church-controlled document).
+
+## Temporal Axis Conflict Penalty (PP-286)
+Replaces PP-123 TN8 ruling.
+When temporal axis conflict fires in a Contest exchange: −1D to BOTH parties' Argue rolls for that exchange only.
+Symmetric: both parties' argumentative footing is destabilised equally.
+
+## Judge Action — Replaces 'Read' (PP-292)
+Exchange Step 1 action renamed from 'Read' to 'Judge' throughout.
+Judge: assess opponent's mode and state. Attunement + Recall vs Ob (opponent's Charisma÷2, round up).
+The rename applies to all Contest scene types: Formal Debate, Grand Debate, Negotiation, Appeal, Tribunal.
+
+## Social Initiative Tie-Break (PP-295)
+Exchange 1 initiative: higher Attunement goes first. Confirmed deterministic.
+Tie: higher Charisma. Further tie: GM choice or simultaneous resolution.
+
+## 'Division' Struck from Tribunal (PP-301)
+'Division' is a parliamentary motion; it has no meaning in an inquisitorial proceeding.
+Struck from §7 Church Tribunal text. Replacement text: 'The accused may not call for any procedural motion during the Argument Phase.'

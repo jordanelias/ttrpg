@@ -436,3 +436,15 @@ CF wound during Zoom In → +1 Ob to that commander's BG tactic rolls for remain
 
 ## PP-273 — Mass battle minimum pool
 1 die minimum after all penalties. Discipline 0 = Formation Break (no attack). Command=0 general death: units at 1 die minimum.
+
+## Binding Operations Scope Gate in Mass Battle (PP-288)
+Binding Operations (Lock/Dissolution) at Relational scale in mass battle require Thread Sensitivity 90+ for >50% success probability at standard Ob (Ob 5+).
+TS 70 practitioners: P(success at Ob 5, TN 8, 9D) ≈ 1.8% — tactically inert, RS-costly.
+GM guidance: TS 70 practitioners should not attempt Binding Ops in mass battle. Reserve for TS 90+ or as deliberate sacrifice plays.
+
+## Discipline Degradation — Asymmetry Precondition (PP-297)
+Discipline check trigger updated:
+OLD: Fires when Size lost > Discipline threshold.
+NEW: Fires when Size lost > Discipline threshold AND unit's loss exceeds opposing unit's loss in same Engagement Phase by ≥ 1.
+Symmetric engagements (equal losses both sides) do NOT trigger Discipline check.
+Rationale: PP-231 intent — symmetric mutual-cost exchanges should not produce morale cascade.

@@ -1011,3 +1011,9 @@ Crown territory names (provisional): T10 = **Nordhelm** (NW of Arcansheim), T11 
 **ED-112 — TC lock:** Hafenmark suppression capped at −1/season total (cannot be stacked via multiple actions). Church TC gain from T14 remains +1/season. Net: Church can advance TC by investing elsewhere.
 **ED-113 — Varfell T13 opening dominance:** Add Fort 1 to T13 at game start (not Fort 0). Increases seizure Ob from 0-fort to Fort 1 resistance (+1D to defender).
 [FLAGGED: all balance adjustments require playtesting confirmation.]
+
+## BG Overwhelming Threshold — Final (PP-281 / PP-299)
+Supersedes PP-179 (which incorrectly stated 'matches TTRPG').
+BG Overwhelming = Ob+1 surplus (margin ≥ Ob+1 after ties → attacker wins).
+BG Overwhelming floor: net ≥ 2 (not 3 — TTRPG floor of 3 is personal-scale drama; BG abstraction warrants lower floor).
+ED-031 correct. PP-179 was documentation error. ED-142 resolved.

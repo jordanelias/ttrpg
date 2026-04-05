@@ -536,3 +536,25 @@ A practitioner who succeeds on their Forgetting boundary Leap may carry companio
 - Maximum companions = practitioner's Focus − 1
 - Focus 1: 0 companions. Focus 3: max 2. Focus 5: max 4.
 - Companion must remain within Thread contact throughout crossing.
+
+## Hybrid Strategic Phase — Temporal Auto-Effects (PP-287)
+Thread operations at Strategic Phase (Hybrid BG layer) produce temporal auto-effects:
+- Dissolution: TC +1 (destabilising)
+- Past-Oriented Pulling: TC −1 (removing suppression)
+- Lock / Weave / Mend: no TC change
+Paradox window: Past-Oriented Pulling at Strategic scale opens a paradox window for the current season. All contested Domain Actions during that season: +1 Ob from temporal instability. Window closes at next Accounting.
+
+## Binding Operations Terminology (PP-293)
+'Forced Resolution (FR)' renamed to 'Binding Operations (BO)' throughout.
+- Lock = Binding to State
+- Dissolution = Binding to Absence
+All FR references in prior params entries are superseded by BO terminology.
+
+## Community Weaving — Canonical Formula (PP-296)
+Supersedes PP-168 and PP-195 Community Weaving entries.
+- Pool: Attunement + History bonus + Thread Pool Score
+- TN: 7
+- Ob: 3
+- RS target: +1 on Success; +2 on Overwhelming
+- This is a Thread operation, not a Domain Action. No faction stat involvement.
+Community Weaving is the primary player-accessible RS restoration mechanism.
