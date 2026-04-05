@@ -2554,3 +2554,30 @@ on, or social encounter. Phase-Lock only covers battle phases. Need: trigger con
     status: open
     priority: P2
     tags: [threadwork, mending, rs_gain, scale, review_flag]
+
+  - id: ED-152
+    date_flagged: 2026-04-04
+    date_resolved: ~
+    source: simulation
+    source_file: tests/sim_x29_x30_x31_x32_cross_mode_b.md
+    description: "Health formula conflict: params_combat PP-232 states (Endurance+6)×(wound count+1); combat_design_v1 §7 states Health = Endurance+6 with reset at each wound. Design doc wins per PP-254. PP-232 health formula struck."
+    status: resolved
+    priority: P2
+    decision: "combat_design_v1.md §7 is authoritative. Health = Endurance+6, resets at 0. PP-232 health formula struck."
+    propagation_targets: [references/params_combat.md]
+    propagation_status: done
+    tags: [combat, health, params-conflict]
+
+  - id: ED-153
+    date_flagged: 2026-04-04
+    date_resolved: ~
+    source: simulation
+    source_file: tests/sim_x29_x30_x31_x32_cross_mode_b.md
+    description: "BG Wealth diminishing returns above 5 — no rule defined. GAP-SIM-X28-01. Needs design decision: do stats above 5 provide reduced per-point benefit?"
+    status: open
+    priority: P2
+    decision: ~
+    propagation_targets: []
+    propagation_status: pending
+    tags: [board-game, wealth, design-gap]
+
