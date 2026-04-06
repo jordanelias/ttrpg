@@ -1441,3 +1441,40 @@ editorial_decisions:
       Ref: Solmund helping living things is not arbitrary — it is the endpoint of what Solmund was
       already oriented toward.
 
+
+# === BALANCE ITEMS (added 2026-04-05, geography session) ===
+
+- id: BALANCE-001
+  description: "Equal win probability for Crown/Varfell/Hafenmark requires asymmetric victory conditions. Church is easy/hard mode. Restoration Movement is hardest."
+  status: open
+  priority: P1-BLOCKER
+  source: geography_design session 2026-04-05
+  blocks: board game mode balance
+
+- id: BALANCE-002
+  description: "Varfell chain fragility — Sigurdshelm (T12) is single point of failure. Monitor in playtesting."
+  status: open
+  priority: P2
+  source: geography_design session 2026-04-05
+  blocks: null
+
+- id: BALANCE-003
+  description: "Himmelenger (Church, T9) at 5 connections is kingmaker territory. Whoever controls it controls the northern interior."
+  status: open
+  priority: P2
+  source: geography_design session 2026-04-05
+  blocks: null
+
+- id: BALANCE-004
+  description: "Askeheim (T15) needs board game victory condition or scoring mechanic. Currently dead space — no player incentive to enter."
+  status: open
+  priority: P1-BLOCKER
+  source: geography_design session 2026-04-05
+  blocks: board game Southernmost relevance
+
+- id: BALANCE-005
+  description: "Hafenmark food dependency has no mechanical teeth — Feldmark (T5) unreachable by Hafenmark without crossing multiple Crown territories."
+  status: open
+  priority: P2
+  source: geography_design session 2026-04-05
+  blocks: null
