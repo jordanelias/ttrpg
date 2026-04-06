@@ -68,12 +68,12 @@ systems:
     note: "Stage6 OUTDATED. BG/Hybrid: bg_v05 is canonical. TTRPG factions: stage6 is only source but unverified — treat with caution."
 
   territories:
-    canonical: compilation/v0.14/stage7_territories.md
+    canonical: designs/setting/geography_design.md
     params: null
-    design_doc: null
+    design_doc: designs/setting/geography_design.md
     compilation_stage: compilation/v0.14/stage7_territories.md
     compilation_current: false
-    note: "Stage7 OUTDATED. No design-layer territory doc. Retained as only source, unverified."
+    note: "geography_design.md is canonical. 17 territories (was 15). Approved 2026-04-05. stage7 fully superseded."
 
   mass_combat:
     canonical: designs/mass_combat/mass_battle_v3.md

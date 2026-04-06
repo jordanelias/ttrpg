@@ -51,3 +51,25 @@ Design decisions approved and committed:
 3. SIM-DEBT-03 completion
 4. ED-109–113 BG balance
 ```
+
+---
+## Session Close: 2026-04-05
+
+### Completed
+- Full geography redesign: 17 territories (was 15), new adjacency graph
+- Physical geography: Alps-north mountains, Swiss-Hafenmark, Norwegian-Varfell, Italian-Crown
+- Territory ownership: Crown 6, Varfell 4, Hafenmark 4, Church 1, Uncontrolled 1, Schoenland 1
+- Continental context, Schoenland island naval power, maritime Forgetting zone
+- Calamity bleed gradient, Southernmost two-gate problem, lake Eidursjo barrier
+- Church as Altonian-quarantined institution (Himmelenger on mountain ridge)
+- Committed as designs/setting/geography_design.md (canonical)
+
+### Open Items
+- ED-049, ED-053, ED-054, ED-055, ED-058, ED-061
+- BALANCE-001 to BALANCE-005
+
+### Next Session
+- Asymmetric victory conditions per faction
+- Calamity bleed event mechanics (ED-053)
+- Hafenmark food dependency mechanic (ED-054)
+- Askeheim victory condition (BALANCE-004)

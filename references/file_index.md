@@ -340,3 +340,4 @@ These files contain confirmed design decisions that have not been propagated to 
 
 | designs/contest/social_contest_system_v2.md | ALL | DESIGN | CURRENT | canon/00_philosophical_foundations.md, canon/02_canon_constraints.md | references/params_contest.md | PP-234. Supersedes debate_system_redesign_v1 Part 6. |
 | references/params_contest.md | ALL | REF | CURRENT | designs/contest/social_contest_system_v2.md | — | PP-234. Supersedes params_debate.md. |
+| designs/setting/geography_design.md | ALL | CURRENT | — | Canonical geography. 17 territories, adjacency graph, physical geography. Approved 2026-04-05. |
