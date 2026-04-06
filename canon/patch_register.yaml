@@ -3621,3 +3621,23 @@ patches:
   affects: [references/params_factions.md]
   status: applied
   applied_commit: ~
+
+- id: PP-406
+  date: 2026-04-06
+  severity: P2
+  description: "Rescue Momentum upgraded from +1 to +2 on declaration"
+  finding_id: ED-290
+  source: editorial
+  status: applied
+  applied_to: [references/params_combat.md]
+  notes: "Rescuer accepts double wound exposure (~96% both land). +1 undervalued sacrifice."
+
+- id: PP-407
+  date: 2026-04-06
+  severity: P2
+  description: "Martyr rule: failed Rescue + rescuer wounded same round = +1 Momentum"
+  finding_id: ED-292
+  source: editorial
+  status: applied
+  applied_to: [references/params_combat.md]
+  notes: "Distinct from successful intercept payoff (PP-406). Failed intercept with no rescuer wound yields nothing."

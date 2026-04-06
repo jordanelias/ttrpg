@@ -156,3 +156,6 @@ Spirit is unrelated to Certainty. Certainty ≠ Coherence (Coherence = personal 
 Net successes CAN be negative (per stage1 §1.1). Prior "Floor: 0" was an error.
 Negative net successes contribute to Failure degree only; they do not compound penalties further.
 
+## ED-301 Propagation: TS/Coherence Orthogonality
+- TS and Coherence are orthogonal axes. See params_threadwork ED-301 section for full detail.
+- Coherence track models layer 2 integrity (unconscious self-rendering). TS measures perceptual depth. Neither implies the other.

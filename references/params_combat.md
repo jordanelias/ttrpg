@@ -1,6 +1,6 @@
 <!-- version: v0.14-AUD5-R1 | sources: designs/combat/combat_design_v1.md | last_updated: 2026-04-03 -->
 <!-- CANONICAL SOURCE: combat_design_v1.md supersedes stage8_combat.md -->
-<!-- PATCHES APPLIED: PP-086, PP-087, PP-088, PP-091, PP-092, PP-165, PP-172, PP-174, PP-210–218 -->
+<!-- PATCHES APPLIED: PP-086, PP-087, PP-088, PP-091, PP-092, PP-165, PP-172, PP-174, PP-210–218 -->, PP-406, PP-407
 <!-- ED-200/201/202/203 resolved 2026-04-04: wound cap, carry-over, recovery, pool floor -->
 <!-- PP-232: Health formula revised; Stamina floor 2; armour wield constraint; wound penalty −1D only; -->
 <!--         initiative order corrected (initiative holder declares last); tie result corrected; -->
@@ -273,3 +273,12 @@ No Quick Rest / Full Rest distinction. Single recovery model:
 ### Pool minimum — clean floor (ED-203 resolved)
 Combat Pool minimum 5 is a clean floor. No −1D penalty at the floor. If penalties
 would reduce the pool below 5, it stays at 5 with no additional modifier.
+
+## PP-406: Rescue Momentum — ED-290
+- Rescue Momentum on declaration: upgraded from +1 to **+2**
+- Rationale: rescuer accepts double wound exposure (~96% probability both attacks land); +1 undervalued the sacrifice.
+
+## PP-407: Martyr Rule — ED-292
+- New rule: if a Rescue attempt **fails** AND the rescuer takes a wound from their own engagement in the same round → **+1 Momentum**
+- Distinct from successful intercept payoff (which yields +2 per PP-406)
+- Failed intercept with no rescuer wound: no Momentum return (correct tension maintained)

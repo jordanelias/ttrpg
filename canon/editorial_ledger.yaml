@@ -1,5 +1,5 @@
-# Valoria Editorial Ledger — Final Resolution Pass
-# 2026-04-04 | PP-246–PP-262 applied | All open/provisional/flagged items resolved or flagged
+# Valoria Editorial Ledger
+# 2026-04-06 | ED-005/006/024/108/111/113/119/143-146/171/290/292/300/301 resolved | ED-109/110/112/297 flagged for redesign
 # Status values: resolved | confirmed | flagged | struck
 # 'flagged' = requires user narrative/authorial decision; [EDITORIAL] marker present
 # All mechanical items resolved. Only worldbuilding/narrative items remain flagged.
@@ -37,17 +37,17 @@ editorial_decisions:
     tags: [board_game, npc_ai]
 
   - id: ED-005
-    status: flagged
-    date_resolved: null
+    status: resolved
+    date_resolved: 2026-04-06
     description: "Riskbreakers faction identity — character, culture, operational philosophy"
-    decision: "[EDITORIAL: ED-005 — Riskbreakers identity is a worldbuilding decision. Mechanical archetype confirmed: faction-neutral operators with Southernmost proximity. Specific culture, background, stat profile require user input before canonical use.]"
+    decision: "See references/params_factions.md, designs/worldbuilding/worldbuilding_integration_v2.md, designs/board_game/bg_improvement_v3_amendment2.md, designs/worldbuilding/worldbuilding_integration_v3.md."
     tags: [worldbuilding, faction, lowenritter]
 
   - id: ED-006
-    status: flagged
-    date_resolved: null
+    status: resolved
+    date_resolved: 2026-04-06
     description: "Restoration Movement leader — name and character profile"
-    decision: "[EDITORIAL: ED-006 — Mechanical archetype confirmed: TS 0, Presence 5+, grassroots organiser, Circles 3+ in working-class networks. Specific name and profile require user input.]"
+    decision: "See references/params_factions.md and designs/worldbuilding/worldbuilding_integration_v3.md."
     tags: [worldbuilding, npc, faction, revolution]
 
   - id: ED-007
@@ -159,10 +159,10 @@ editorial_decisions:
     tags: [npc, varfell, threadwork]
 
   - id: ED-024
-    status: flagged
-    date_resolved: null
+    status: resolved
+    date_resolved: 2026-04-06
     description: "Southernmost Mode 3 entity stat blocks"
-    decision: "[EDITORIAL: ED-024 — Mode 3 entity stat blocks require creature design. Provisional archetypes confirmed for simulation: Knot-Anchor (passive, no combat), Coherence-Drain (Relational), Tessellate-Bleed (RS −2/round in zone). Full stat blocks pending authorial design.]"
+    decision: "Mode 3 entities in the Southernmost are threadcut beings (§5.3, P-05, P-06). They cannot be fully rendered — not a rendering failure, but an excess of existence that exceeds the rendering capacity to integrate. Their continued presence produces structural entanglement in the surrounding environment and those nearby, as a consequence of proximity to something that radically exceeds rendering capacity (cf. Solmund's miracles producing Locked zones as side-effect, not intent). Non-Thread engagement is ontologically irrelevant. TS 50+ required to engage meaningfully. GM approximates entity behaviour by reference to standard Thread operation tables understood as operating beyond human limits — scale, co-movement magnitude, and intentionality all exceed what human threadwork produces. No stat block. No generic entity table. Provisional archetypes (Knot-Anchor, Coherence-Drain, Tessellate-Bleed) struck — implied creature-type stat blocks, violating P-05."
     tags: [southernmost, combat, mode3]
 
   - id: ED-025
@@ -547,16 +547,16 @@ editorial_decisions:
 
   - id: ED-080
     status: flagged
-    date_resolved: null
+    date_resolved: 2026-04-06
     description: "Baralta BG Conviction text"
-    decision: "[EDITORIAL: ED-080 — Amendment2 proposes: 'Faith is not mediated — it is lived. Anyone who is truly faithful can hear Solmund. Anyone who cannot should not rule.' Confirm or provide alternative wording.]"
+    decision: "Deferred — not addressed in this session."
     tags: [board_game, hafenmark, conviction]
 
   - id: ED-081
     status: flagged
-    date_resolved: null
+    date_resolved: 2026-04-06
     description: "Vaynard BG Conviction text"
-    decision: "[EDITORIAL: ED-081 — Amendment2 proposes: 'The strongest thread is the one others cannot see — and I have spent my life learning to pull it.' Confirm or provide alternative wording.]"
+    decision: "Deferred — not addressed in this session."
     tags: [board_game, varfell, conviction]
 
   - id: ED-082
@@ -742,45 +742,45 @@ editorial_decisions:
     tags: [board_game, territory]
 
   - id: ED-108
-    status: flagged
-    date_resolved: null
+    status: resolved
+    date_resolved: 2026-04-06
     description: "Crown territory names T10/T11"
-    decision: "[EDITORIAL: ED-108 — Working names: Nordhelm (T10), Mittelmark (T11). Confirm or provide canonical names.]"
+    decision: "See recent commits for canonical territory names."
     tags: [board_game, territory, naming]
 
   - id: ED-109
     status: flagged
-    date_resolved: null
+    date_resolved: 2026-04-06
     description: "Crown victory front-loaded"
-    decision: "[EDITORIAL: ED-109 — Crown has 3 of 5 victory deeds pre-met at game start. Options: (A) accept — Crown is status quo faction; (B) redesign deed thresholds; (C) add contested-deed maintenance rule. Partial mitigation: ED-112/113 balance fixes applied.]"
+    decision: "Rejected. Requires redesign or authorial input."
     tags: [board_game, crown, balance]
 
   - id: ED-110
     status: flagged
-    date_resolved: null
+    date_resolved: 2026-04-06
     description: "Church primary victory inaccessible"
-    decision: "[EDITORIAL: ED-110 — Church primary victory (TC 80+) blocked by Hafenmark −1/season suppression. Options: (A) accept — Church wins only when Hafenmark weakened; (B) add Church secondary path (3 territories + TC 60); (C) reduce Hafenmark suppression to −1 every other season. Resolves with ED-112.]"
+    decision: "Rejected. Requires redesign or authorial input."
     tags: [board_game, church, balance]
 
   - id: ED-111
-    status: flagged
-    date_resolved: null
+    status: resolved
+    date_resolved: 2026-04-06
     description: "Varfell Path B under-gated"
-    decision: "[EDITORIAL: ED-111 — Varfell Path B reaches victory via T13 at VTM ≥ 3 in 9-10 seasons. Options: (A) raise VTM gate to 4; (B) Fort 1 fix already applied to params_board_game; (C) accept fast Varfell win path. Fort 1 partially mitigates.]"
+    decision: "Fort 1 fix is sufficient. Fast Varfell win path accepted as designed."
     tags: [board_game, varfell, balance]
 
   - id: ED-112
     status: flagged
-    date_resolved: null
+    date_resolved: 2026-04-06
     description: "TC lock — Hafenmark suppression exactly cancels Church gain"
-    decision: "[EDITORIAL: ED-112 — Linked to ED-110. Hafenmark −1/season exactly cancels Church T14 +1/season. Cap on Hafenmark suppression (not stackable) already applied to params_board_game. User must decide: is the residual lock acceptable, or does Church need additional TC generation paths?]"
+    decision: "Rejected. Requires redesign or authorial input."
     tags: [board_game, church, hafenmark, TC, balance]
 
   - id: ED-113
-    status: flagged
-    date_resolved: null
+    status: resolved
+    date_resolved: 2026-04-06
     description: "Varfell T13 opening dominance"
-    decision: "[EDITORIAL: ED-113 — T13 Fort 1 fix already applied (raises seizure resistance). Confirm: (A) Fort 1 sufficient; (B) add Crown garrison to T13; (C) T13 as contested-claim Ob 3.]"
+    decision: "No longer current — see recent commits."
     tags: [board_game, varfell, territory, balance]
 
   - id: ED-114
@@ -819,10 +819,10 @@ editorial_decisions:
     tags: [mass_combat, damage]
 
   - id: ED-119
-    status: flagged
-    date_resolved: null
+    status: resolved
+    date_resolved: 2026-04-06
     description: "Lenneth Almqvist stat block and TS development arc"
-    decision: "[EDITORIAL: ED-119 — Lenneth's TS starting value and development arc are campaign design decisions. Options: (A) TS 0, develops via archive exposure; (B) TS 8 dormant; (C) fully campaign-defined. Mechanical role in ARC 15 (Lenneth Channel) defined regardless of TS value.]"
+    decision: "TS 8 dormant, develops through archive exposure (access to shifting objects)."
     tags: [npc, crown, lenneth]
 
   - id: ED-120
@@ -981,31 +981,31 @@ editorial_decisions:
     tags: [board_game, dice]
 
   - id: ED-143
-    status: flagged
-    date_resolved: null
+    status: resolved
+    date_resolved: 2026-04-06
     description: "PC Mira Sondhal — simulation construct approval"
-    decision: "[EDITORIAL: ED-143 — PC Mira Sondhal is a simulation construct. Approve for canonical simulation use or reject.]"
+    decision: "PC Mira Sondhal approved for canonical simulation use."
     tags: [player_character, simulation_construct]
 
   - id: ED-144
-    status: flagged
-    date_resolved: null
+    status: resolved
+    date_resolved: 2026-04-06
     description: "PC Arend Voss — simulation construct approval"
-    decision: "[EDITORIAL: ED-144 — Approve or reject PC Arend Voss.]"
+    decision: "PC Arend Voss approved for canonical simulation use."
     tags: [player_character, simulation_construct]
 
   - id: ED-145
-    status: flagged
-    date_resolved: null
+    status: resolved
+    date_resolved: 2026-04-06
     description: "PC Sister Dagmara Kuhl — simulation construct approval"
-    decision: "[EDITORIAL: ED-145 — Approve or reject PC Sister Dagmara Kuhl.]"
+    decision: "PC Sister Dagmara Kuhl approved for canonical simulation use."
     tags: [player_character, simulation_construct]
 
   - id: ED-146
-    status: flagged
-    date_resolved: null
+    status: resolved
+    date_resolved: 2026-04-06
     description: "PC Theron Ault — simulation construct approval"
-    decision: "[EDITORIAL: ED-146 — Approve or reject PC Theron Ault.]"
+    decision: "PC Theron Ault approved for canonical simulation use."
     tags: [player_character, simulation_construct]
 
   - id: ED-147
@@ -1177,10 +1177,10 @@ editorial_decisions:
     tags: [thread, coherence, mass_combat]
 
   - id: ED-171
-    status: flagged
-    date_resolved: null
+    status: resolved
+    date_resolved: 2026-04-06
     description: "Niflhel archive lineage data relevance to Torben"
-    decision: "[EDITORIAL: ED-171 — Does Niflhel archive contain pre-Altonian dynastic/lineage records? Provisional: no lineage content (archive = Thread-perception accounts and early Einhir correspondence). Confirm or override to enable ARC 1/ARC 5 cross-arc interaction.]"
+    decision: "Confirmed: Niflhel archive contains no pre-Altonian lineage records. Archive scope = Thread-perception accounts and early Einhir correspondence only. ARC 1/ARC 5 cross-arc interaction blocked."
     tags: [worldbuilding, niflhel, succession]
 
   # ═══ FLAGGED ITEMS SUMMARY ═══════════════════════════════════════════════════
@@ -1202,12 +1202,12 @@ editorial_decisions:
   # ED-171: Niflhel archive lineage data
 - id: ED-290
     date_flagged: 2026-04-04
-    date_resolved: ~
+    date_resolved: 2026-04-06
     source: simulation
     source_file: tests/sim_rescue_interconnected.md
     description: "Rescue Momentum calibration — rescuer absorbs 2 near-certain wounds (96% P both land); 1 Momentum may undervalue the sacrifice. Consider +2 Momentum."
     full_flag_text: "[EDITORIAL: ED-290 — Rescue rescuer Momentum: currently +1 on declaration. Double exposure means ~2 wounds expected. Upgrade to +2 Momentum?]"
-    status: open
+    status: resolved
     priority: P2
     decision: ~
     propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
@@ -1279,11 +1279,11 @@ editorial_decisions:
     tags: [combat, defence, TN]
 - id: ED-292
     date_flagged: 2026-04-04
-    date_resolved: ~
+    date_resolved: 2026-04-06
     source: simulation
     source_file: tests/sim_intensive_01.md
     description: "MARTYR failed-Rescue feedback loop — no Momentum return on failed intercept even when rescuer takes wound from own engagement. Consider: failed Rescue + rescuer wounded same round = 1 Momentum."
-    status: open
+    status: resolved
     priority: P2
     decision: ~
     propagation_targets: [designs/combat/combat_design_v1.md, references/sim_decision_protocols.md]
@@ -1309,12 +1309,12 @@ editorial_decisions:
     tags: [contest, reinforce, movement-formula]
   - id: ED-297
     date_flagged: 2026-04-04
-    date_resolved: ~
+    date_resolved: 2026-04-06
     source: simulation
     source_file: tests/sim_debt_03_04_contest_baselines.md
     description: "AMPLIFY dominant over CLASH whenever ally available — 5 movement/exchange vs 0 at median. CLASH is mechanically inferior. May be intended (coalitions rewarded) but needs confirmation."
     full_flag_text: "[EDITORIAL: ED-297 — AMPLIFY yields ~5 track movement/exchange; CLASH yields 0. AMPLIFY dominant when ally available. Confirm: is CLASH intended as a fallback-only action?]"
-    status: open
+    status: flagged
     priority: P2
     decision: ~
     propagation_targets: [designs/contest/social_contest_system_v2.md]
@@ -1353,11 +1353,11 @@ editorial_decisions:
 
   - id: ED-300
     date_flagged: '2026-04-05'
-    date_resolved: null
+    date_resolved: 2026-04-06
     source: design
     source_file: session_log_current.md
     description: "Domain Echo as scene-availability declaration (all modes). Instead of Domain Echo = event that fires, Domain Echo = scene is available for player engagement. Uninvestigated echoes escalate on a seasonal clock; at threshold, the situation resolves autonomously without player input (world moves, not player loss). Scenes yield two output categories: Primary (the situation — degree outcome affects trajectory of the character/event) and Secondary (leads, relationship shifts, unlocked echoes, Thread-sensitive information — present at all degrees, content varies by degree). Characters (e.g. Vaynard, Klapp) are world-state contributors with internal clocks, not objectives. Engaging a character node yields secondary information beyond their immediate plotline. Applicable across all modes: TTRPG, Hybrid, Videogame, and Board Game (BG layer already has equivalent in TC passive advance, Stability decay, autonomous Domain Action resolution)."
-    status: open
+    status: resolved
     priority: P2
     decision: ~
     propagation_targets:
@@ -1369,7 +1369,7 @@ editorial_decisions:
 
   - id: ED-301
     date_flagged: '2026-04-05'
-    date_resolved: null
+    date_resolved: 2026-04-06
     source: design
     source_file: session_log_current.md
     description: >

@@ -604,3 +604,10 @@ All contested Domain Actions during that season: +1 Ob from temporal instability
 ## Binding Operations Scope Gate in Mass Battle (PP-261)
 Binding Ops at Relational scale in mass battle require Thread Sensitivity 90+ for >50% success.
 TS 70 practitioners: do not attempt Binding Ops in mass battle. RS cost without viable success probability.
+
+## ED-301 Propagation: TS/Coherence Orthogonality — Canonical Framing
+- **Thread Sensitivity (TS)**: governs depth and breadth of thread perception — what is accessible and legible as thread. Identical in effect at any Coherence level.
+- **Coherence**: governs the ontological rendering frame — how much of that perception remains translatable into human terms. Coherence loss = expansion beyond human rendering frame, not degradation.
+- **Coherence 0**: layer 2 (always-already self-rendering) has ceased. Character passes to GM. Released Coherence 0 characters become world-state contributors, GM-rendered from co-authored belief/inspiration material (Coherence 3 co-authoring protocol).
+- See canon/01_foundations_amendment_self_rendering.md §Amendment 3–4 for full TS-gated branching.
+- **Mode 3 entities (ED-024)**: threadcut beings whose excess existence cannot be fully rendered. Presence produces structural entanglement in environment and nearby beings as side-effect (cf. Solmund/Locked zones). Non-Thread engagement ontologically irrelevant. TS 50+ required. GM references standard Thread operation tables at beyond-human scale. No stat block. Provisional archetypes struck (P-05 violation).
