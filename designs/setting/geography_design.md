@@ -47,11 +47,18 @@ The Calamity's Forgetting extends into coastal waters around the southern penins
 
 ### Calamity Bleed Gradient
 
-| Territory | Proximity | Effects |
-|---|---|---|
-| Askeheim (T15) | Immediate | All non-Thread orders +1 Obstacle (Ob). Monstrous incursions (seasonal). Forgetting active. No permanent settlement. |
-| Oastad (T13) | 1 territory removed | Thread Wound: Thread Tension (TT) threshold events fire at TT −10. Creature sightings. Folk tales. |
-| Stillhelm (T6) | 1 territory removed | Cultural memory of Calamity in oral tradition. Einhir folk practices survive. Church Influence +1 Ob. Minor unsettling events. |
+**Superseded by `designs/setting/calamity_radiation.md`** (canonical, 2026-04-06). The full RS-band × node-distance radiation matrix replaces this static table. Summary of node distances:
+
+| Distance | Territories |
+|---|---|
+| 0 | T15 Askeheim |
+| 1 | T6 Stillhelm, T13 Oastad |
+| 2 | T5 Feldmark, T12 Sigurdshelm |
+| 3 | T1 Valorsplatz, T14 Ehrenfeld, T4 Grauwald, T11 Halvardshelm |
+| 4 | T2 Kronmark, T16 Schoenland, T9 Himmelenger, T7 Rendstad, T10 Spartfell |
+| 5 | T3 Lowenskyst, T8 Gransol, T17 Halvarshelm |
+
+See calamity_radiation.md for full effects by RS band.
 
 ---
 
@@ -119,7 +126,7 @@ Askeheim (T15) accessible from Oastad (T13, Varfell — Gate 1) and Stillhelm (T
 | ID | Description |
 |---|---|
 | ED-049 | Territory renames confirmed this session. Propagation needed across all docs. |
-| ED-053 | Monstrous incursion / creature sighting events need mechanical specification. |
+| ED-302 | Calamity radiation framework — RESOLVED 2026-04-06. See designs/setting/calamity_radiation.md. |
 | ED-054 | Hafenmark food dependency — mechanical constraint needed. |
 | ED-055 | Maritime Forgetting zone — mechanical specification for naval movement. |
 | ED-058 | NW pass (Spartfell) Institutional Pressure (IP) delay value — confirm IP +10. |

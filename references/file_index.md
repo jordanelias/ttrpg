@@ -340,6 +340,7 @@ These files contain confirmed design decisions that have not been propagated to 
 
 | designs/contest/social_contest_system_v2.md | ALL | DESIGN | CURRENT | canon/00_philosophical_foundations.md, canon/02_canon_constraints.md | references/params_contest.md | PP-234. Supersedes debate_system_redesign_v1 Part 6. |
 | references/params_contest.md | ALL | REF | CURRENT | designs/contest/social_contest_system_v2.md | — | PP-234. Supersedes params_debate.md. |
+| designs/setting/calamity_radiation.md | ALL | CURRENT | designs/setting/geography_design.md, designs/ttrpg/threadwork_redesign_v25.md | Calamity radiation framework. Geographic graduation of RS effects by node distance. Supersedes geography Calamity Bleed Gradient. ED-302 resolved. |
 | designs/setting/geography_design.md | ALL | CURRENT | — | Canonical geography. 17 territories, adjacency graph, physical geography. Approved 2026-04-05. |
 
 | designs/conviction_track/opus_design_proposal.md | BG/ALL | WORKING | opus_handoff session 2026-04-06 | Design proposal PP-406–PP-418. NOT committed as patches. Requires ED-306 victory architecture resolution, territory numbering reconciliation, and BG role card mapping before any patches can land. |

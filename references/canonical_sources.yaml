@@ -121,3 +121,11 @@ systems:
 # For systems with only a compilation stage and no design doc, the stage file
 # is the only available source — treat as unverified and flag findings accordingly.
 # Never use stage docs to adjudicate conflicts with design docs.
+
+  calamity_radiation:
+    canonical: designs/setting/calamity_radiation.md
+    params: null
+    design_doc: designs/setting/calamity_radiation.md
+    compilation_stage: null
+    compilation_current: false
+    note: "Geographic graduation of RS threshold effects. Supersedes geography_design.md Calamity Bleed Gradient. Cross-references threadwork_v25 §5.3 and §6. Created 2026-04-06."

@@ -361,3 +361,15 @@ Propagation targets:
 | Source | Dependency key | Targets | Notes |
 |--------|---------------|---------|-------|
 | canon/editorial_ledger.yaml (ED-301) | ts-coherence-orthogonal | designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md, references/params_core.md | TS and Coherence are orthogonal axes. Coherence loss = expansion beyond human rendering frame, not degradation. Knots = relational bindings. Coherence 0 = rendering frame incompatibility, not incapacitation. Propagate to threadwork design doc and params when resolved. |
+
+
+---
+
+## Calamity Radiation System (added 2026-04-06)
+
+| Source | Target | Relationship |
+|--------|--------|-------------|
+| designs/setting/calamity_radiation.md | designs/ttrpg/threadwork_redesign_v25.md §5.3 | Geographic graduation of RS thresholds — PROPAGATION PENDING (annotation only) |
+| designs/setting/calamity_radiation.md | designs/ttrpg/threadwork_redesign_v25.md §6 | Gap-severity classification cross-ref — PROPAGATION PENDING (annotation only) |
+| designs/setting/calamity_radiation.md | designs/setting/geography_design.md | Supersedes Calamity Bleed Gradient section — DONE |
+| designs/setting/geography_design.md | designs/setting/calamity_radiation.md | Node distance map derived from territory adjacency — DONE |
