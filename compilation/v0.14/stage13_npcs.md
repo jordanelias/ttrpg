@@ -80,7 +80,7 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 ### Confessor Arne Himlensendt
 *Head of the Holy Church of Solmund*
 
-**Thread Sensitivity:** 0. Sincerely devout, institutionally effective, and completely without knowledge of what his institution is or what it was built to do. He is the most thorough product of Solmund's theological engineering in the kingdom. His certainty is not the certainty of someone who has considered doubt and rejected it — it is the certainty of someone who has never been given the perceptual tools to approach the question differently.
+**Thread Sensitivity:** 0. Sincerely devout, institutionally effective, and completely without knowledge of what his institution is or what it was built to do. He is the most thorough product of Galbados's theological engineering in the kingdom. His certainty is not the certainty of someone who has considered doubt and rejected it — it is the certainty of someone who has never been given the perceptual tools to approach the question differently.
 
 **Social Profile:**
 - Attributes: Charisma 6, Cognition 5
@@ -92,7 +92,7 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 
 **Belief:** *"The Church must complete Solmund's mandate on the peninsula before the Altonian schism reaches us."*
 
-**Destabilisation trigger.** He would be the most destabilised person in the kingdom if he discovered the truth about Solmund's nature. The Church's relics include originary Locks — objects present at Solmund's actual emergence from the unintelligible ground. Three Cardinals who handled these objects during restricted ceremonies subsequently requested to be relieved of their duties. Their requests were granted without public explanation.
+**Destabilisation trigger.** He would be the most destabilised person in the kingdom if he discovered the truth about Galbados's nature. The Church's relics include originary Locks — objects present at Galbados's actual emergence from the unintelligible ground. Three Cardinals who handled these objects during restricted ceremonies subsequently requested to be relieved of their duties. Their requests were granted without public explanation.
 
 ---
 
@@ -191,7 +191,7 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 | 1–2 | Informed questions. Acute awareness rather than understanding. No Theocracy Counter effect. |
 | 3 | Structural theory (wrong in detail, correct in structure). Succession leverage formally linked to Southernmost access terms. Theocracy Counter +1. |
 | 4 | Urgency. Willing to offer collection access (including originary locks) in exchange for Thread education and Southernmost partnership. Theocracy Counter +2. |
-| 5 | Dangerous knowledge — knows what Solmund was structurally. Seeks capability, not knowledge. Theocracy Counter +3. |
+| 5 | Dangerous knowledge — knows what Galbados was structurally. Seeks capability, not knowledge. Theocracy Counter +3. |
 
 **The Discovery Event.** If Vaynard is present during a Thread event of sufficient intensity, the Game Master may call a Discovery Event. Spirit check TN 7 Ob 1. On success: Thread Sensitivity advances to 30 (Stirring), and the world reorganises itself for him.
 

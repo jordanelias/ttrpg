@@ -749,17 +749,17 @@ editorial_decisions:
     tags: [board_game, territory, naming]
 
   - id: ED-109
-    status: flagged
+    status: resolved
     date_resolved: 2026-04-06
-    description: "Crown victory front-loaded"
-    decision: "Rejected. Requires redesign or authorial input."
+    description: "Crown victory balance"
+    decision: "Confirmed intentional. Crown victory requires suppressing all other factions including Altonia — eradication, surrender, or Crown-favourable treaties. Not easy by design."
     tags: [board_game, crown, balance]
 
   - id: ED-110
-    status: flagged
+    status: resolved
     date_resolved: 2026-04-06
-    description: "Church primary victory inaccessible"
-    decision: "Rejected. Requires redesign or authorial input."
+    description: "Church primary victory pacing"
+    decision: "Church gain outstrips Hafenmark suppression unless Hafenmark actively chooses suppression at expense of other activities. TC freeze at 75 (see ED-303) prevents further clock-based advance; remaining TC 75→100 requires territorial conquest. Church victory is hard but accessible — Hafenmark suppression is a voluntary trade-off, not a permanent lock."
     tags: [board_game, church, balance]
 
   - id: ED-111
@@ -770,10 +770,10 @@ editorial_decisions:
     tags: [board_game, varfell, balance]
 
   - id: ED-112
-    status: flagged
+    status: resolved
     date_resolved: 2026-04-06
-    description: "TC lock — Hafenmark suppression exactly cancels Church gain"
-    decision: "Rejected. Requires redesign or authorial input."
+    description: "TC lock — Hafenmark suppression vs Church gain"
+    decision: "Resolved. Hafenmark suppression only holds so long as Church is actively clocking to 75. Once TC 75 is reached, TC freezes permanently — neither side can increase or decrease TC by passing a season. Church gain rate outstrips Hafenmark suppression unless Hafenmark sacrifices other activities for sustained suppression. Long-term suppression has opportunity cost."
     tags: [board_game, church, hafenmark, TC, balance]
 
   - id: ED-113
@@ -1183,35 +1183,24 @@ editorial_decisions:
     decision: "Confirmed: Niflhel archive contains no pre-Altonian lineage records. Archive scope = Thread-perception accounts and early Einhir correspondence only. ARC 1/ARC 5 cross-arc interaction blocked."
     tags: [worldbuilding, niflhel, succession]
 
-  # ═══ FLAGGED ITEMS SUMMARY ═══════════════════════════════════════════════════
-  # Total flagged (require user decisions): 15
-  # ED-005: Riskbreakers identity
-  # ED-006: Revolution leader name/profile
-  # ED-024: Southernmost Mode 3 entity stat blocks
-  # ED-036: Altonian invasion unit stats (P1 BLOCKER)
-  # ED-080: Baralta BG Conviction text
-  # ED-081: Vaynard BG Conviction text
-  # ED-108: Crown territory names T10/T11
-  # ED-109: Crown victory balance
-  # ED-110: Church victory inaccessibility
-  # ED-111: Varfell Path B gating
-  # ED-112: TC lock resolution
-  # ED-113: T13 opening dominance
-  # ED-119: Lenneth Almqvist stat block
-  # ED-143–146: PC simulation construct approvals (4 items)
-  # ED-171: Niflhel archive lineage data
+  # ═══ FLAGGED ITEMS SUMMARY (updated 2026-04-06) ═════════════════════════════
+  # Total flagged (require user decisions): 5
+  # ED-080: Baralta BG Conviction text (blocked on ED-306)
+  # ED-081: Vaynard BG Conviction text (blocked on ED-306)
+  # ED-306: Victory architecture redesign — P1-BLOCKER
+  # ED-308: Varfell succession — Vaynard death → Maret Uln faction transformation
+  # ED-309: Baralta succession — PI-gated vs named heir
 - id: ED-290
     date_flagged: 2026-04-04
     date_resolved: 2026-04-06
     source: simulation
     source_file: tests/sim_rescue_interconnected.md
-    description: "Rescue Momentum calibration — rescuer absorbs 2 near-certain wounds (96% P both land); 1 Momentum may undervalue the sacrifice. Consider +2 Momentum."
-    full_flag_text: "[EDITORIAL: ED-290 — Rescue rescuer Momentum: currently +1 on declaration. Double exposure means ~2 wounds expected. Upgrade to +2 Momentum?]"
+    description: "Rescue Momentum calibration — +2 Momentum on successful intercept (PP-406)"
     status: resolved
     priority: P2
-    decision: ~
+    decision: "PP-406 applied. Rescue Momentum upgraded from +1 to +2 on successful intercept. Propagated to combat_design_v1.md and params_combat.md."
     propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
-    propagation_status: pending
+    propagation_status: complete
     tags: [combat, rescue, momentum, calibration]
 - id: ED-291
     date_flagged: 2026-04-04
@@ -1282,12 +1271,12 @@ editorial_decisions:
     date_resolved: 2026-04-06
     source: simulation
     source_file: tests/sim_intensive_01.md
-    description: "MARTYR failed-Rescue feedback loop — no Momentum return on failed intercept even when rescuer takes wound from own engagement. Consider: failed Rescue + rescuer wounded same round = 1 Momentum."
+    description: "Martyr Rule — failed Rescue + rescuer wounded = +1 Momentum (PP-407)"
     status: resolved
     priority: P2
-    decision: ~
-    propagation_targets: [designs/combat/combat_design_v1.md, references/sim_decision_protocols.md]
-    propagation_status: pending
+    decision: "PP-407 applied. Failed Rescue + rescuer wounded from own engagement same round = +1 Momentum. Propagated to combat_design_v1.md and params_combat.md."
+    propagation_targets: [designs/combat/combat_design_v1.md, references/params_combat.md]
+    propagation_status: complete
     tags: [combat, rescue, martyr, momentum]
 
   - id: ED-293
@@ -1312,13 +1301,12 @@ editorial_decisions:
     date_resolved: 2026-04-06
     source: simulation
     source_file: tests/sim_debt_03_04_contest_baselines.md
-    description: "AMPLIFY dominant over CLASH whenever ally available — 5 movement/exchange vs 0 at median. CLASH is mechanically inferior. May be intended (coalitions rewarded) but needs confirmation."
-    full_flag_text: "[EDITORIAL: ED-297 — AMPLIFY yields ~5 track movement/exchange; CLASH yields 0. AMPLIFY dominant when ally available. Confirm: is CLASH intended as a fallback-only action?]"
-    status: flagged
+    description: "AMPLIFY dominant over CLASH whenever ally available"
+    status: resolved
     priority: P2
-    decision: ~
+    decision: "CLASH is NOT fallback-only. You cannot always rely on an ally being available during a debate/contest. AMPLIFY dominance when ally available is intended — coalitions are rewarded — but CLASH remains the primary tool when debating solo. No mechanical change needed."
     propagation_targets: [designs/contest/social_contest_system_v2.md]
-    propagation_status: pending
+    propagation_status: complete
     tags: [contest, amplify, clash, balance, sim-debt-03]
 
   - id: ED-298
@@ -1446,9 +1434,11 @@ editorial_decisions:
 
 - id: BALANCE-001
   description: "Equal win probability for Crown/Varfell/Hafenmark requires asymmetric victory conditions. Church is easy/hard mode. Restoration Movement is hardest."
-  status: open
+  status: confirmed
+  date_resolved: 2026-04-06
   priority: P1-BLOCKER
   source: geography_design session 2026-04-05
+  decision: "Confirmed. Win probability must be equal across Crown/Varfell/Hafenmark. Asymmetric victory conditions are the mechanism. Church is easy/hard mode toggle. Restoration Movement is hardest mode. Dependent on ED-306 victory architecture for implementation."
   blocks: board game mode balance
 
 - id: BALANCE-002
@@ -1466,11 +1456,13 @@ editorial_decisions:
   blocks: null
 
 - id: BALANCE-004
-  description: "Askeheim (T15) needs board game victory condition or scoring mechanic. Currently dead space — no player incentive to enter."
-  status: open
+  description: "Askeheim (T15) board game purpose"
+  status: confirmed
+  date_resolved: 2026-04-06
   priority: P1-BLOCKER
   source: geography_design session 2026-04-05
-  blocks: board game Southernmost relevance
+  decision: "Askeheim serves dual purpose: (1) narrative generator and major spoiler — if players do not engage with the Southernmost to help the Wardens, Rendering Stability (RS) trends to 0 and a second Calamity occurs; (2) Thread Sensitivity (TS) power/consequence nexus — increasing TS makes the practitioner increasingly powerful and influential but may accelerate RS decline if Thread operations are not judicious (Mending, careful use). The Southernmost is not dead space; it is the existential threat that gives RS its teeth."
+  blocks: null
 
 - id: BALANCE-005
   description: "Hafenmark food dependency has no mechanical teeth — Feldmark (T5) unreachable by Hafenmark without crossing multiple Crown territories."
@@ -1482,35 +1474,39 @@ editorial_decisions:
 # === CONVICTION TRACK / VICTORY ARCHITECTURE SESSION (2026-04-06) ===
 
   - id: ED-302
-    description: "Confirm track name 'Conviction' (CV) for the 0-5 per-territory Piety/Restoration stat."
-    status: flagged
+    description: "Track name 'Conviction' (CV) for the 0-5 per-territory Piety/Restoration stat."
+    status: confirmed
+    date_resolved: 2026-04-06
     priority: P2
     source: opus_handoff session 2026-04-06
-    blocks: CV track finalization
+    decision: "Confirmed. Track name is Conviction (CV). 0 = Restoration pole, 5 = Piety pole."
     tags: [board_game, naming, conviction-track]
 
   - id: ED-303
-    description: "Does TC freeze at 75 or continue advancing? Design recommends freeze for clean phase transition."
-    status: flagged
+    description: "TC freeze at 75"
+    status: confirmed
+    date_resolved: 2026-04-06
     priority: P1
     source: opus_handoff session 2026-04-06
-    blocks: Church victory architecture
+    decision: "TC freezes at 75. Remaining TC 75→100 requires peninsula territorial conquest, not clock-based advance. Neither side can increase or decrease TC by passing a season once 75 is reached."
     tags: [board_game, church, theocracy-counter]
 
   - id: ED-304
-    description: "Hollow Victory (Church + Hafenmark partition) scoring — co-win or draw? Design recommends conditional victory for both."
-    status: flagged
+    description: "Hollow Victory (Church + Hafenmark partition) scoring"
+    status: confirmed
+    date_resolved: 2026-04-06
     priority: P2
     source: opus_handoff session 2026-04-06
-    blocks: null
+    decision: "Church agrees to leave Hafenmark alone and Hafenmark agrees to leave Church alone. Hafenmark gets Varfell territories, Church gets Crown territories. Conditional co-victory for both factions — a negotiated partition."
     tags: [board_game, victory, church, hafenmark]
 
   - id: ED-305
-    description: "Warden's Accord (Varfell-RM relationship track) starting value — 0 proposed."
-    status: flagged
+    description: "Warden's Accord (Varfell-RM relationship track) starting value"
+    status: confirmed
+    date_resolved: 2026-04-06
     priority: P2
     source: opus_handoff session 2026-04-06
-    blocks: null
+    decision: "Starts at 0."
     tags: [board_game, varfell, restoration-movement]
 
   - id: ED-306
@@ -1531,15 +1527,12 @@ editorial_decisions:
     tags: [board_game, victory, all-factions, architecture]
 
   - id: ED-307
-    description: >
-      Baralta is from a cadet branch of the Almqvist royal house. Implications: Crown vs Hafenmark
-      conflict is partly dynastic. Baralta has a legitimate claim to the throne or co-sovereignty.
-      Succession becomes bloodline, not just institutional. Her 'confirmation' (Catherine's coronation /
-      Isabella's assertion of sole sovereignty) may be the victory condition itself.
-    status: flagged
+    description: "Baralta cadet branch of Almqvist royal house"
+    status: confirmed
+    date_resolved: 2026-04-06
     priority: P2
     source: opus_handoff session 2026-04-06
-    blocks: Hafenmark victory redesign, Baralta NPC update
+    decision: "Confirmed. Baralta is from a cadet branch of the Almqvist dynasty. If Baralta wants to be the dynastic heir, Almqvist must resign and his children must give up their claim to the throne (or die). Crown vs Hafenmark conflict is partly dynastic."
     tags: [setting, hafenmark, succession, baralta]
 
   - id: ED-308
@@ -1568,15 +1561,12 @@ editorial_decisions:
     tags: [setting, hafenmark, succession, baralta]
 
   - id: ED-310
-    description: >
-      Naming correction: all instances of 'Solmund' in Church-facing context must be 'Solmund'.
-      Church is 'Church of Solmund'. Orthodoxy is 'Solmundan'. 'Solmund' is the threadcut being's
-      actual identity — known only at high knowledge tiers (Vaynard TK 5, practitioners, Einhir records).
-      The faithful worship Solmund. stage13_npcs.md still says 'Holy Church of Solmund' — stale.
-    status: flagged
+    description: "Naming correction — Church-facing Galbados → Solmund"
+    status: resolved
+    date_resolved: 2026-04-06
     priority: P1
     source: opus_handoff session 2026-04-06
-    blocks: all Church-referencing documents
+    decision: "Applied to all canonical/active files. Church of Galbados → Church of Solmund. Galbados retained when referring to the actual threadcut being (metaphysical/narrator/Thread-knowledge context). Files corrected this commit: params_board_game.md, stage6_factions.md, stage13_npcs.md, lowenritter_faction_card.md. Remaining 40+ files in deprecated/compilation to be corrected at compilation pass."
     tags: [naming, church, solmund, all-modes]
 
   # ═══ CALAMITY / RENDERING STABILITY ═════════════════════════════════════════

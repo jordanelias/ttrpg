@@ -232,7 +232,8 @@ Both succeed at different priorities → initiative stays with current holder.
 | On win | Attack redirects to rescuer; resolves vs armour DR only (contest dice expended) |
 | On loss | Attack hits original target; rescuer N dice wasted; own engagement Defence unaffected |
 | Weapon speed | TN 5–6 attackers harder to intercept (higher expected net); TN 7–8 easier |
-| Rescuer payoff | +1 Momentum if struck (≥1 wound) this Rescue round, any source; capped 1/round; fires on intercept success OR failure |
+| Rescuer payoff (PP-406) | +2 Momentum on successful intercept if struck (≥1 wound) this Rescue round, any source; capped 2/round |
+| Martyr Rule (PP-407) | Failed intercept + rescuer wounded from own engagement same round → +1 Momentum; no wound = no Momentum |
 | Rescued actor payoff | Fibonacci exempt + untargetable this round (successful intercept only) |
 | Exemption duration | Current round only |
 | Zone | Adjacent zone |
