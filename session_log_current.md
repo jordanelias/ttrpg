@@ -1,43 +1,42 @@
 # Valoria Session Log — Current
 
 ```yaml
-session_id: 2026-04-06T_CALAMITY_RADIATION
-phase: SESSION CLOSED
+session_id: 2026-04-06T_OPUS_EDITORIAL_2
+phase: ED-306 VICTORY ARCHITECTURE
 status: COMPLETE
-last_commit: "90a7f26 — [editorial] Propagate ED-302 into threadwork_v25"
+last_commit: pending
 
 ## WORK COMPLETED THIS SESSION
-- Calamity Radiation Framework (designs/setting/calamity_radiation.md) — canonical
-- RS threshold effects geographically graduated by node distance from Askeheim (T15)
-- Threadcut being Gap-severity classification: Micro-Gap (TS 20-40), Standard Gap (TS 50-70), Catastrophic Gap (TS 80+)
-- Southernmost Surge threshold event at RS ≤ 10 (one-time)
-- RS = 0 confirmed terminal (Rupture)
-- geography_design.md Calamity Bleed Gradient superseded
-- threadwork_v25 §5.3 and §6 annotated with cross-references
-- Propagation map fully resolved (zero pending)
-- ED-302 resolved, ED-303 flagged
+1. Editorial resolution batch: ED-109/110/112/290/292/297/302/303/304/305/307/310, BALANCE-001/004
+2. PP-406/407 propagated to combat_design_v1 and params_combat
+3. Solmund naming correction applied to 4 active files (ED-310)
+4. ED-306 VICTORY ARCHITECTURE REDESIGN:
+   - Full design doc: designs/board_game/victory_architecture_v1.md
+   - Integrates opus_design_proposal.md (PP-406–PP-418)
+   - Adds Crown (PP-419/420), Hafenmark (PP-421/422), RM (PP-423) victory conditions
+   - TCV system (PP-424): 17 territories scored, total 30
+   - Co-victory restructure (PP-425)
+   - Warden Cooperation BG incentive (PP-426)
+   - Deed system dissolution (PP-427)
+   - 11 SIM-DEBT items flagged for simulation validation
 
-## OPEN EDITORIAL (flagged — user decision required)
-  ED-303: RS naming ("Rendering Stability" vs "Substrate Integrity" / "Configurational Stability")
-  ED-295: CLASH formula fix (user selects A/B/C/D)
-  ED-297: AMPLIFY dominance confirmation
-  ED-290/292: Rescue calibration
+## REMAINING FLAGGED ITEMS
+  ED-080: Baralta BG Conviction text (unblocked)
+  ED-081: Vaynard BG Conviction text (unblocked)
+  ED-308: Varfell succession (Maret Uln)
+  ED-309: Baralta succession (PI-gated vs named heir)
 
-## CARRIED ITEMS (unchanged)
-  SIM-DEBT-03: AMPLIFY multi-party + DIVERGE
-  ED-109/110/112: BG balance redesign
-  GAP-SIM-X34-02: Composure 0 threshold
-  GAP-SIM-X35-01: All-abstain motion outcome
-  GAP-SIM-X36-01: Social pool formula
-  GAP-SIM-X36-02: Domain Echo Overwhelming magnitude
+## SIMULATION DEBT
+  SIM-DEBT: TC pacing (P1)
+  SIM-DEBT: TCV balance (P1-BLOCKER for BALANCE-001)
+  SIM-DEBT: Community Weaving feedback loop (P1)
+  SIM-DEBT: AEA pacing (P2)
+  SIM-DEBT: RM emergence frequency (P2)
+  SIM-DEBT: Crown CV maintenance (P2)
+  SIM-DEBT: Calamity Drift cascade (P2)
+  SIM-DEBT-01: Contest recalibration with (Presence×2)+History
 
-## PATCH STATE
-  Next ED: ED-304. Next PP: PP-406.
-
-## SESSION START PROTOCOL FOR NEXT CHAT
-1. Bootstrap github_ops.py from skills/valoria-orchestrator/scripts/github_ops.py
-2. Read session_log_current.md
-3. Read canon/editorial_ledger.yaml — report P1-BLOCKER count
-4. Read references/file_index.md STALE GAPS — report count
-5. Confirm task before proceeding
+## PROPAGATION PENDING
+  ED-298/299: Resentment token + coalition enumeration
+  ED-300/301: Domain Echo + TS/Coherence orthogonality
 ```

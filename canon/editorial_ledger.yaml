@@ -1184,10 +1184,9 @@ editorial_decisions:
     tags: [worldbuilding, niflhel, succession]
 
   # ═══ FLAGGED ITEMS SUMMARY (updated 2026-04-06) ═════════════════════════════
-  # Total flagged (require user decisions): 5
-  # ED-080: Baralta BG Conviction text (blocked on ED-306)
-  # ED-081: Vaynard BG Conviction text (blocked on ED-306)
-  # ED-306: Victory architecture redesign — P1-BLOCKER
+  # Total flagged (require user decisions): 4
+  # ED-080: Baralta BG Conviction text (now unblocked — needs wording confirmation)
+  # ED-081: Vaynard BG Conviction text (now unblocked — needs wording confirmation)
   # ED-308: Varfell succession — Vaynard death → Maret Uln faction transformation
   # ED-309: Baralta succession — PI-gated vs named heir
 - id: ED-290
@@ -1432,7 +1431,7 @@ editorial_decisions:
   date_resolved: 2026-04-06
   priority: P1-BLOCKER
   source: geography_design session 2026-04-05
-  decision: "Confirmed. Win probability must be equal across Crown/Varfell/Hafenmark. Asymmetric victory conditions are the mechanism. Church is easy/hard mode toggle. Restoration Movement is hardest mode. Dependent on ED-306 victory architecture for implementation."
+  decision: "Confirmed. Win probability must be equal across Crown/Varfell/Hafenmark. Asymmetric victory conditions are the mechanism. Church is easy/hard mode toggle. Restoration Movement is hardest mode. Implemented via ED-306 victory architecture (designs/board_game/victory_architecture_v1.md). TCV thresholds require simulation validation (SIM-DEBT)."
   blocks: board game mode balance
 
 - id: BALANCE-002
@@ -1504,22 +1503,22 @@ editorial_decisions:
     tags: [board_game, varfell, restoration-movement]
 
   - id: ED-306
-    description: >
-      Victory architecture redesign — replace Deed checklist system with territorial dominance +
-      ideological alignment for all factions. Each faction wins by controlling enough peninsula territory
-      where conditions match their faction's vision. CV track is the ideological axis contested by all
-      factions. References: Three Kingdoms, Sengoku period, War of the Three Henrys, FFT, Triangle Strategy.
-      Character inspirations: Vaynard=Reinhardt/Brigandine Vaynard (conqueror who discovers Thread path),
-      Baralta=Catherine/Isabella (cadet branch royal, institutional capture), Almud=Liu Bei (inherited
-      coalition, moral legitimacy). Church/Hafenmark structurally blind to RS crisis — can win fast but
-      victory is fragile if RS collapses. Crown/Varfell can address RS via Thread path but at cost of
-      political resources. Two simultaneous contests: who governs the peninsula AND whether it survives.
-    status: flagged
+    description: "Victory architecture redesign — territorial dominance + ideological alignment for all factions"
+    status: resolved
+    date_resolved: 2026-04-06
     priority: P1-BLOCKER
     source: opus_handoff session 2026-04-06
-    blocks: all victory conditions, CV track finalization, Church seizure redesign, Varfell paths
+    decision: >
+      Deed checklist system dissolved for Crown/Church/Hafenmark/Varfell. Victory is now simultaneous
+      conditions (TCV threshold + faction-specific requirements) held for 2 consecutive seasons.
+      Conviction Track (CV) 0-5 per territory is the ideological axis contested by all factions.
+      TC freezes at 75. Church shifts to territorial seizure post-75. TCV values assigned to all
+      17 territories (total 30). Crown Primary: TCV≥18 + Mandate≥5 + TC<50 + IP<60 + PI≥4 + moderate CV.
+      Church Primary: TC≥75 → TCV≥18 with CV≥3 everywhere. Hafenmark Primary: TCV≥14 + Mandate≥4 + PI≥5 +
+      Crown Mandate≤3 + reformed CV. Varfell: 3 paths retained with TCV integration. RM: 5 territories
+      CV≤1 + RS≥40 + 5 Presence markers. Full spec in designs/board_game/victory_architecture_v1.md.
+    blocks: null
     tags: [board_game, victory, all-factions, architecture]
-
   - id: ED-307
     description: "Baralta cadet branch of Almqvist royal house"
     status: confirmed

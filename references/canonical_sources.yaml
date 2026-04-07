@@ -67,6 +67,14 @@ systems:
     compilation_current: false
     note: "Stage6 OUTDATED. BG/Hybrid: bg_v05 is canonical. TTRPG factions: stage6 is only source but unverified — treat with caution."
 
+  victory:
+    canonical: designs/board_game/victory_architecture_v1.md
+    params: null
+    design_doc: designs/board_game/victory_architecture_v1.md
+    compilation_stage: null
+    compilation_current: false
+    note: "victory_architecture_v1.md is canonical for all victory conditions. Supersedes params_board_game §Victory Conditions. Integrates opus_design_proposal.md PP-406–PP-418 + PP-419–PP-427."
+
   territories:
     canonical: designs/setting/geography_design.md
     params: null
