@@ -1478,3 +1478,103 @@ editorial_decisions:
   priority: P2
   source: geography_design session 2026-04-05
   blocks: null
+
+# === CONVICTION TRACK / VICTORY ARCHITECTURE SESSION (2026-04-06) ===
+
+  - id: ED-302
+    description: "Confirm track name 'Conviction' (CV) for the 0-5 per-territory Piety/Restoration stat."
+    status: flagged
+    priority: P2
+    source: opus_handoff session 2026-04-06
+    blocks: CV track finalization
+    tags: [board_game, naming, conviction-track]
+
+  - id: ED-303
+    description: "Does TC freeze at 75 or continue advancing? Design recommends freeze for clean phase transition."
+    status: flagged
+    priority: P1
+    source: opus_handoff session 2026-04-06
+    blocks: Church victory architecture
+    tags: [board_game, church, theocracy-counter]
+
+  - id: ED-304
+    description: "Hollow Victory (Church + Hafenmark partition) scoring — co-win or draw? Design recommends conditional victory for both."
+    status: flagged
+    priority: P2
+    source: opus_handoff session 2026-04-06
+    blocks: null
+    tags: [board_game, victory, church, hafenmark]
+
+  - id: ED-305
+    description: "Warden's Accord (Varfell-RM relationship track) starting value — 0 proposed."
+    status: flagged
+    priority: P2
+    source: opus_handoff session 2026-04-06
+    blocks: null
+    tags: [board_game, varfell, restoration-movement]
+
+  - id: ED-306
+    description: >
+      Victory architecture redesign — replace Deed checklist system with territorial dominance +
+      ideological alignment for all factions. Each faction wins by controlling enough peninsula territory
+      where conditions match their faction's vision. CV track is the ideological axis contested by all
+      factions. References: Three Kingdoms, Sengoku period, War of the Three Henrys, FFT, Triangle Strategy.
+      Character inspirations: Vaynard=Reinhardt/Brigandine Vaynard (conqueror who discovers Thread path),
+      Baralta=Catherine/Isabella (cadet branch royal, institutional capture), Almud=Liu Bei (inherited
+      coalition, moral legitimacy). Church/Hafenmark structurally blind to RS crisis — can win fast but
+      victory is fragile if RS collapses. Crown/Varfell can address RS via Thread path but at cost of
+      political resources. Two simultaneous contests: who governs the peninsula AND whether it survives.
+    status: flagged
+    priority: P1-BLOCKER
+    source: opus_handoff session 2026-04-06
+    blocks: all victory conditions, CV track finalization, Church seizure redesign, Varfell paths
+    tags: [board_game, victory, all-factions, architecture]
+
+  - id: ED-307
+    description: >
+      Baralta is from a cadet branch of the Almqvist royal house. Implications: Crown vs Hafenmark
+      conflict is partly dynastic. Baralta has a legitimate claim to the throne or co-sovereignty.
+      Succession becomes bloodline, not just institutional. Her 'confirmation' (Catherine's coronation /
+      Isabella's assertion of sole sovereignty) may be the victory condition itself.
+    status: flagged
+    priority: P2
+    source: opus_handoff session 2026-04-06
+    blocks: Hafenmark victory redesign, Baralta NPC update
+    tags: [setting, hafenmark, succession, baralta]
+
+  - id: ED-308
+    description: >
+      Varfell succession: if Vaynard dies, VTM resets to 0 (Thread path closes for faction). Maret Uln
+      is the natural successor (practitioner TS, Loyalty 4, People's Revolution-adjacent). Faction
+      transforms from Reinhardt's conquest machine to RM-aligned Thread-aware polity. This is effectively
+      RM Emergence from inside Varfell rather than from outside. Design question: is this the primary
+      RM Emergence path, replacing the hostile-emergence triple-condition trigger?
+    status: flagged
+    priority: P2
+    source: opus_handoff session 2026-04-06
+    blocks: Varfell faction card, RM emergence mechanic
+    tags: [setting, varfell, succession, restoration-movement, vaynard]
+
+  - id: ED-309
+    description: >
+      Baralta succession: should PI (Parliament Integrity) serve as the succession mechanic (high PI =
+      institutions survive her death; low PI = Hafenmark fractures)? Or does Baralta need a named
+      successor NPC with a loyalty track like Torben/Elske? Her royal lineage (cadet branch) means
+      succession is bloodline + institutional, not purely parliamentary.
+    status: flagged
+    priority: P2
+    source: opus_handoff session 2026-04-06
+    blocks: Hafenmark faction card
+    tags: [setting, hafenmark, succession, baralta]
+
+  - id: ED-310
+    description: >
+      Naming correction: all instances of 'Galbados' in Church-facing context must be 'Solmund'.
+      Church is 'Church of Solmund'. Orthodoxy is 'Solmundan'. 'Galbados' is the threadcut being's
+      actual identity — known only at high knowledge tiers (Vaynard TK 5, practitioners, Einhir records).
+      The faithful worship Solmund. stage13_npcs.md still says 'Holy Church of Galbados' — stale.
+    status: flagged
+    priority: P1
+    source: opus_handoff session 2026-04-06
+    blocks: all Church-referencing documents
+    tags: [naming, church, solmund, all-modes]

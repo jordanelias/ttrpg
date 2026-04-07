@@ -78,7 +78,7 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 ---
 
 ### Confessor Arne Himlensendt
-*Head of the Holy Church of Galbados*
+*Head of the Holy Church of Solmund*
 
 **Thread Sensitivity:** 0. Sincerely devout, institutionally effective, and completely without knowledge of what his institution is or what it was built to do. He is the most thorough product of Galbados's theological engineering in the kingdom. His certainty is not the certainty of someone who has considered doubt and rejected it — it is the certainty of someone who has never been given the perceptual tools to approach the question differently.
 
@@ -237,7 +237,7 @@ Counter never decrements. Once marked, Ehrenwall does not revise.
 
 **Relationship to the heir.** Views Torben's potential removal to Altonia as a direct sovereignty threat. If Almud surrenders the heir, coup trigger condition #2 is met.
 
-**Relationship to the Church.** Cold contempt. The Löwenritter predates the Church of Galbados in Valoria. She will not challenge it theologically, but will never cede military authority to Templars.
+**Relationship to the Church.** Cold contempt. The Löwenritter predates the Church of Solmund in Valoria. She will not challenge it theologically, but will never cede military authority to Templars.
 
 ---
 
