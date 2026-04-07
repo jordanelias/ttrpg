@@ -681,6 +681,7 @@ Rendering Stability (RS) is a world-scale tracker measuring the rendered world's
 
 **Threshold timing:** Rendering Stability threshold effects activate and deactivate at Accounting (season end), not mid-scene. If Rendering Stability crosses a threshold boundary during play — due to a Thread operation, Mending, or other mid-scene change — the new effects do not apply until the following Accounting. Exception: the immediate consequences listed in operation degree tables (e.g., "Shifting Object forms," "Gap opens") resolve immediately as written. Only the persistent threshold-band effects (spontaneous Gaps per season, worldwide +1 Ob, faction Stability checks) are Accounting-gated.
 
+> **Geographic graduation (ED-302):** The threshold effects below are not global. They radiate outward from Askeheim (T15) by node distance on the territory adjacency graph. As RS drops, effects reach further from the wound. The full RS-band × node-distance matrix is defined in `designs/setting/calamity_radiation.md`. The table below describes maximum-severity effects (i.e., effects at Askeheim itself and in territories where the radiation has reached). At RS ≤ 10, a one-time Southernmost Surge escalates effects one band worse within node distance 2 for one season.
 
 | Rendering Stability | State | World Effects |
 |---|---|---|
@@ -712,6 +713,8 @@ Rendering Stability advances at Accounting (Cascade Phase). Both TTRPG-sourced c
 Organic beings persist through continuous Ein Sof spooling. A threadcut being does not spool. It maintains itself through continuous Thread work — actively sustaining its own actualization, temporality, and intelligibility at every moment. Where an organic being IS through the ground's continuous provision, a threadcut being IS through its own continuous effort. It radically is without becoming.
 
 In terms of the Leap: organic beings render. A threadcut being's existence IS a permanent Leap — a permanent state of Being beyond ordinary rendering, sustained by continuous originary intentionality directed at self-maintenance. The threadcut being never returns to ordinary rendering because it has no ordinary rendering to return to. This is its paradox and its cost.
+
+> **Gap-severity classification (ED-302):** Threadcut beings are classified by the Gap severity that produced them: **Micro-Gap emergent** (Thread Sensitivity 20–40, hours-to-days duration, non-combat), **Standard Gap emergent** (Thread Sensitivity 50–70, seasons duration, combat-capable), **Catastrophic Gap emergent** (Thread Sensitivity 80+, years-to-indefinite, campaign-level entity). Full classification table and emergence conditions in `designs/setting/calamity_radiation.md`.
 
 ## 6.2 Observer-Dependent Rendering
 

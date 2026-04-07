@@ -369,7 +369,7 @@ Propagation targets:
 
 | Source | Target | Relationship |
 |--------|--------|-------------|
-| designs/setting/calamity_radiation.md | designs/ttrpg/threadwork_redesign_v25.md §5.3 | Geographic graduation of RS thresholds — PROPAGATION PENDING (annotation only) |
-| designs/setting/calamity_radiation.md | designs/ttrpg/threadwork_redesign_v25.md §6 | Gap-severity classification cross-ref — PROPAGATION PENDING (annotation only) |
+| designs/setting/calamity_radiation.md | designs/ttrpg/threadwork_redesign_v25.md §5.3 | Geographic graduation of RS thresholds — DONE 2026-04-06 |
+| designs/setting/calamity_radiation.md | designs/ttrpg/threadwork_redesign_v25.md §6 | Gap-severity classification cross-ref — DONE 2026-04-06 |
 | designs/setting/calamity_radiation.md | designs/setting/geography_design.md | Supersedes Calamity Bleed Gradient section — DONE |
 | designs/setting/geography_design.md | designs/setting/calamity_radiation.md | Node distance map derived from territory adjacency — DONE |

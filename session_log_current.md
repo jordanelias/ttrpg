@@ -15,10 +15,9 @@ last_commit: "[editorial] Calamity Radiation Framework — ED-302 resolved, ED-3
 - geography_design.md Calamity Bleed Gradient superseded by new framework
 - ED-302 resolved, ED-303 flagged (RS naming question)
 
-## PROPAGATION PENDING
-- threadwork_v25 §5.3: Note geographic graduation (cross-ref calamity_radiation.md)
-- threadwork_v25 Part 6: Cross-ref Gap-severity classification
-- Both are annotation-only; no mechanical values change in threadwork_v25
+## PROPAGATION COMPLETED
+- threadwork_v25 §5.3: Geographic graduation note added (cross-ref calamity_radiation.md) — DONE
+- threadwork_v25 Part 6: Gap-severity classification cross-ref added — DONE
 
 ## CARRIED OPEN ITEMS (pre-existing, unchanged)
   ED-295: CLASH formula fix (user selects A/B/C/D)
