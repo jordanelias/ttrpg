@@ -74,7 +74,7 @@ flowchart TD
     H --> J["Baralta's TC suppression holding?\nMandate ≥ 4 required"]
     J -->|"Yes — suppression active"| K["TC growth slowed\nChurch must target Baralta next"]
     J -->|"No — Mandate has eroded"| L["TC suppression removed\nTC +1/season resumes\nChurch territorial seizure threshold approaching"]
-    E --> M["TK 5: Vaynard understands Galbados's structural nature\nSeeks capability not knowledge\nTC +3 cumulative"]
+    E --> M["TK 5: Vaynard understands Solmund's structural nature\nSeeks capability not knowledge\nTC +3 cumulative"]
     M --> N["Vaynard at TS 14+ base\nEach Collection use: Spirit check TN7 Ob1\nDiscovery Event risk fires"]
     N --> O{"Discovery Event"}
     O -->|"Success"| P["TK immediate +2\nVaynard becomes informed actor\nNew Belief generated"]
@@ -139,7 +139,7 @@ flowchart TD
     H -->|"Excommunication of practitioner PC"| I["PC loses Circles bonus with Church contacts\nReputation −1 with all factions\nChurch Mandate −1 on failure (martyr effect)"]
     H -->|"Heresy Investigation vs Revolution shelter"| J["Domain Action: Church Intel vs Revolution Stability\nRevolution Stability −1 on Church success"]
     I & J --> K["Political Axis 2 activates simultaneously:\nKnowledge — Thread truth accessible vs suppressed\nVarfell / Revolution vs Church"]
-    K --> L["Vaynard at TK 5: understands Galbados structurally\nSeeks capability\nNo longer just observing — becomes actor"]
+    K --> L["Vaynard at TK 5: understands Solmund structurally\nSeeks capability\nNo longer just observing — becomes actor"]
     L --> M["Crown forced onto Axis 9:\nCosmological legitimacy of Church authority\nvs constitutional order"]
     M --> N{"Crown's Axis 9 position"}
     N -->|"Crown defends Thread truth access"| O["TC −2 (Sovereign Authority Doctrine)\nHeresy Investigation vs Crown opens\nBaralta invokes constitutional claim\nParliamentary Vote"]

@@ -253,12 +253,12 @@ But what if he fails (8% probability)? Certainty 2→1. At Certainty 1: one more
 
 **Rendering Crisis for Devout character:**
 Standard Rendering Crisis = Belief revision required. For Himlensendt (sincere Devout, zero TS awareness): his Beliefs are:
-1. "Galbados is the ground of being; the Arrogance is the supreme sin."
+1. "Solmund is the ground of being; the Arrogance is the supreme sin."
 2. "The Church must expand to protect Valoria from spiritual contamination."
 
 Rendering Crisis: he must revise one Belief. For a sincere Devout character at Certainty 0:
 - The crisis cannot be framed as "Thread is real" — he has no framework for that interpretation
-- Instead: the Crisis manifests as a profound theological crisis — his sense of Galbados's reality is shaken, not by Thread evidence, but by the visceral experience of something he cannot categorise
+- Instead: the Crisis manifests as a profound theological crisis — his sense of Solmund's reality is shaken, not by Thread evidence, but by the visceral experience of something he cannot categorise
 - Belief revision options: he could revise toward "The Calamity was not caused by human Arrogance — it came from outside human action" (a theological shift, not a Thread acknowledgement)
 - +2 CP for revision; Certainty restores to 3 after revision scene
 

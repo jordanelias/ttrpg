@@ -882,7 +882,7 @@ Player controls one faction using standard Card-Hand system. All others on NPC A
 | B9 Event Deck (30-card structure) | Carry forward; integrate GT-01 |
 | B10 Endgame Events (Rupture, Holy State, Invasion) | Unchanged |
 | B11 Entity Encounters | Unchanged |
-| canon/valoria_canonical_timeline.md | Needs Solmund naming correction (currently says Galbados) |
+| canon/valoria_canonical_timeline.md | Needs Solmund naming correction (currently says Solmund) |
 
 ---
 

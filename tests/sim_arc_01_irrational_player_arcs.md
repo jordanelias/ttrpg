@@ -274,13 +274,13 @@ Axis 9 resolution is an endgame indicator, not a mid-arc event — this arc only
 ## ARC 5: The Niflhel Provenance
 
 ### Mechanical Seed
-Niflhel (no Mandate, no Military, partial sheet) holds historical documents → players discover Niflhel has pre-Galbados Thread records → Church learns players are accessing Niflhel → Intel war begins → Niflhel's Stability becomes the central contested asset → documents change the RS mechanics themselves if published.
+Niflhel (no Mandate, no Military, partial sheet) holds historical documents → players discover Niflhel has pre-Solmund Thread records → Church learns players are accessing Niflhel → Intel war begins → Niflhel's Stability becomes the central contested asset → documents change the RS mechanics themselves if published.
 
 ### Narrative
 
-Niflhel barely registers in the early campaign. They have Influence and Stability and nothing else. Players treating factions as power-players will ignore them — no Military, no Mandate, what threat do they pose? The answer is that Niflhel is the only faction holding memory. They have records of what the world looked like before Galbados rewrote the ontological consensus. Those records are not magical — they are historical, specific, boring to read. Thread Sensitivity 50+ practitioners who encounter them will have a different experience.
+Niflhel barely registers in the early campaign. They have Influence and Stability and nothing else. Players treating factions as power-players will ignore them — no Military, no Mandate, what threat do they pose? The answer is that Niflhel is the only faction holding memory. They have records of what the world looked like before Solmund rewrote the ontological consensus. Those records are not magical — they are historical, specific, boring to read. Thread Sensitivity 50+ practitioners who encounter them will have a different experience.
 
-The arc begins when a player character who has never seen a pre-Galbados account reads one and the text does something no text should do: it describes a physical sensation of Thread contact that the reader feels. The document is not performing a Thread operation — it is a sufficiently accurate first-person account that the substrate responds to being read. Niflhel's leadership, who have kept the documents without understanding them, watches this happen and reassesses everything.
+The arc begins when a player character who has never seen a pre-Solmund account reads one and the text does something no text should do: it describes a physical sensation of Thread contact that the reader feels. The document is not performing a Thread operation — it is a sufficiently accurate first-person account that the substrate responds to being read. Niflhel's leadership, who have kept the documents without understanding them, watches this happen and reassesses everything.
 
 Now Niflhel wants something. They have leverage they didn't know they had. The Church knows the documents exist — their Intel network flagged the access. Himlensendt's institutional perceptual prophylaxis means he doesn't understand what the documents are, but he understands they are dangerous. The Church begins an Intel action to locate and destroy the archive. Niflhel's Stability is the only thing standing between the documents and the fire.
 
@@ -291,7 +291,7 @@ The players must decide whether to use the documents (RS consequences), protect 
 ```mermaid
 flowchart TD
     A["Players access Niflhel archive\n[Circles Ob 2 to establish Niflhel contact\nNiflhel Influence 5 available as introduction path]"]
-    A --> B["Thread Sensitivity 50+ Player Character:\npassive contact with pre-Galbados document\n[RS +3 — substrate responds to accurate account]"]
+    A --> B["Thread Sensitivity 50+ Player Character:\npassive contact with pre-Solmund document\n[RS +3 — substrate responds to accurate account]"]
     B --> C["Niflhel leadership reassessment\nNiflhel Stability holds — they want negotiation\n[Institutional Tendency: preserve and leverage]"]
     C --> D["Church Intel fires:\nIntel network detects Niflhel archive access\n[Church has no Intel stat — proxied via Influence 6]\nIntel action: Influence 6D vs Niflhel Stability 4\nOb 4; P(Church success) ≈ 70%"]
     D -->|"Church success"| E["Church knows document location\nPlanning destruction action — 2 season delay\n(logistical + ethical framework: overt action = +1 Ob)"]

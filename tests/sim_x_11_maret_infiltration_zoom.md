@@ -52,7 +52,7 @@ Most likely: **Partial (38%).** Maret enters but leaves a trace. No immediate de
 
 ## Phase 2: Thread Scale — Diagnosis + Originary Lock
 
-Maret reaches the restricted section. Present: an Originary Lock object (per §13 Klapp: "The Church's relics include originary Locks — objects present at Galbados's actual emergence").
+Maret reaches the restricted section. Present: an Originary Lock object (per §13 Klapp: "The Church's relics include originary Locks — objects present at Solmund's actual emergence").
 
 **Diagnosis fires automatically:** Maret's TS 50 perceives an Originary Lock at arm's reach (§15: "Originary Lock: readable only by TS 30+ Diagnosis"). Diagnosis: free (no roll, no cost — Diagnosis is a structured GM exchange, Priority 4, standard action).
 

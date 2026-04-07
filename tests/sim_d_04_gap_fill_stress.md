@@ -259,7 +259,7 @@ Side B (Baralta) must immediately push TC below 7 in Exchange 1. With resistance
 
 ### D.3 Beliefs Integration — Exchange Win Alignment Check
 
-Himlensendt wins Exchange 3 (CLASH) arguing Future+Revealing. His Belief: "The Church must complete Galbados's mandate before the Altonian schism reaches us."
+Himlensendt wins Exchange 3 (CLASH) arguing Future+Revealing. His Belief: "The Church must complete Solmund's mandate before the Altonian schism reaches us."
 
 Does this exchange align with his Belief? He's arguing that the Church should have succession ratification authority (Future question). This IS an expression of his Belief in completing the Church's mandate. GM confirms alignment. **+1 Momentum gained.** Himlensendt Momentum: 0→1.
 

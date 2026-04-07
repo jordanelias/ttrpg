@@ -16,7 +16,7 @@
 
 Parliament convenes in the cold season with Theocracy Counter at 42. No one calls it a crisis. The Cardinals have spent three seasons placing men in ducal courts and minor administrative offices; Baralta has spent the same three seasons watching each appointment and saying nothing, waiting for a number she had set in her head. She invokes the Sovereign Authority Doctrine in the opening session. The galleries fill. The merchants send observers. By the end of the first week, every faction in Valoria knows a Grand Debate is coming.
 
-The formal proceeding opens in the Parliament chamber. Himlensendt proposes the Church's civil authority claims are grounded in Galbados's revealed mandate; Baralta objects. What no one accounts for is Niflhel. Olafsson has been using Riskbreakers as an intelligence pipeline — a connection Baralta knows about but cannot prove. During the second exchange, a Riskbreaker operative is found dead in the servants' corridor. The discovery breaks the formal register. For a session, it looks as though violence will substitute for argument. It does not. But the interruption costs Baralta two phases of Concentration and transforms what was a procedural debate into a character trial.
+The formal proceeding opens in the Parliament chamber. Himlensendt proposes the Church's civil authority claims are grounded in Solmund's revealed mandate; Baralta objects. What no one accounts for is Niflhel. Olafsson has been using Riskbreakers as an intelligence pipeline — a connection Baralta knows about but cannot prove. During the second exchange, a Riskbreaker operative is found dead in the servants' corridor. The discovery breaks the formal register. For a session, it looks as though violence will substitute for argument. It does not. But the interruption costs Baralta two phases of Concentration and transforms what was a procedural debate into a character trial.
 
 If Baralta wins: Theocracy Counter drops 2, the Church overreach narrative gains traction, and Ehrenwall's count sticks at 2. If she loses: Theocracy Counter rises, Mandate erosion triggers coup counter increment 3, and the Löwenritter mobilise. Either outcome triggers a territorial response. The Church's Templars are already positioned at two duchy borders. Whether to interpret that as defensive posture or military threat becomes the next season's opening question — and the answer is not rhetorical.
 
@@ -121,7 +121,7 @@ flowchart TD
     G["Klapp (Cardinal Scholarship) CE 4\n→ TS growth check during Tribunal proceedings\n(§13.2: Spirit TN7 Ob1 on next Thread-significant encounter)"]
     H1["Klapp TS growth success\n→ Cardinal of Scholarship develops Thread sensitivity\n→ Church splits: Klapp trajectory B/C vs Himlensendt trajectory A\n→ TC generation disrupted (Church Stability ≤3 = TC pause per §7.2)"]
     H2["Klapp TS growth fails\n→ Klapp continues. Doubles down on suppression.\n→ TC +1 from Tribunal conviction\n→ Maret: Dissolve into Southernmost or face Imprisonment"]
-    I["Vaynard post-Discovery: seeks active Thread capability\n→ Direct approach to practitioners (PC or Maret)\n→ TK5: 'understands what Galbados was structurally'\n→ TC +3 (§8.5 TK5 effect)"]
+    I["Vaynard post-Discovery: seeks active Thread capability\n→ Direct approach to practitioners (PC or Maret)\n→ TK5: 'understands what Solmund was structurally'\n→ TC +3 (§8.5 TK5 effect)"]
     J["Campaign question: Who controls Thread knowledge on the peninsula?"]
 
     A --> B
@@ -160,7 +160,7 @@ flowchart TD
 
 ### Gap Log
 
-[GAP-ARC-32-01] Vaynard TK advancement after Discovery Event — TK5 says "understands what Galbados was structurally." There is no rule for what happens if Vaynard reaches TK5 before players do. Is this a hard endgame trigger or an escalation? Flagged: the TK track needs a "Vaynard acts independently at TK5" clause.
+[GAP-ARC-32-01] Vaynard TK advancement after Discovery Event — TK5 says "understands what Solmund was structurally." There is no rule for what happens if Vaynard reaches TK5 before players do. Is this a hard endgame trigger or an escalation? Flagged: the TK track needs a "Vaynard acts independently at TK5" clause.
 
 [EDITORIAL: ED-ARC-32-01 — Vaynard at TK5: does he attempt to acquire Thread capability himself, or does he only pursue knowledge-brokerage?] Proposed: at TK5 he attempts to hire or coerce a practitioner for operational capability, not perform operations himself. His framework is consequentialist — he would never risk the Discovery Event personal cost without understanding the mechanism. This makes him a faction-side actor, not a practitioner, which keeps the system boundary intact.
 

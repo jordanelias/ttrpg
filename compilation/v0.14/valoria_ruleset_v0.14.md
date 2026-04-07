@@ -1143,11 +1143,11 @@ Objects a practitioner has performed FR Lock upon. They persist after the practi
 
 ### Category Two — Originary Locks
 
-Objects present at or interacted with during a monstrous entity's arrival, or at the moment of emergence from the unintelligible ground. Extraordinarily rare. The Church possesses several from Galbados's emergence.
+Objects present at or interacted with during a monstrous entity's arrival, or at the moment of emergence from the unintelligible ground. Extraordinarily rare. The Church possesses several from Solmund's emergence.
 
 **Properties:** Cannot be Pulled, Woven, or subjected to standard FR. They can be sensed, Diagnosed, and held, but not worked.
 
-**Handling an Originary Lock (Thread Sensitivity 50+ required):** When a practitioner handles an Originary Lock for one full scene, they receive a revelation experience: +10 Thread Sensitivity gain immediately, plus a Spirit check (TN 8, Ob = current Wounds + 1) or take 2 Wounds (armour does not apply). The experience is permanent and cannot be unfelt. A practitioner who has handled an Originary Lock from Galbados's emergence has felt the shape of the third mode — the arriving that holds itself together.
+**Handling an Originary Lock (Thread Sensitivity 50+ required):** When a practitioner handles an Originary Lock for one full scene, they receive a revelation experience: +10 Thread Sensitivity gain immediately, plus a Spirit check (TN 8, Ob = current Wounds + 1) or take 2 Wounds (armour does not apply). The experience is permanent and cannot be unfelt. A practitioner who has handled an Originary Lock from Solmund's emergence has felt the shape of the third mode — the arriving that holds itself together.
 
 ### Category Three — Dissolution Residue
 
@@ -1518,7 +1518,7 @@ Three public clocks run simultaneously throughout the campaign. All are displaye
 
 **Thread Tension** (Thread Tension) measures the configurational stress of the thread-substrate. It rises from thread operations and falls from sustained repair work. It is the campaign's metaphysical pressure gauge.
 
-**Theocracy Counter** (Theocracy Clock) measures the Church of Galbados's structural conquest of Valorian civil and political life. Theocracy Counter is not a measure of the Church's goodness — it is a measure of how much of the peninsula's governance has been absorbed into its institutional framework.
+**Theocracy Counter** (Theocracy Clock) measures the Church of Solmund's structural conquest of Valorian civil and political life. Theocracy Counter is not a measure of the Church's goodness — it is a measure of how much of the peninsula's governance has been absorbed into its institutional framework.
 
 **Institutional Pressure** (Altonian Pressure) measures the external threat of Altonian intervention. It is driven primarily by Valoria's internal instability and by Thread Tension/Theocracy Counter conditions that alarm the three Altonian factions for different reasons.
 
@@ -1608,7 +1608,7 @@ When Thread Tension crosses a threshold, the Game Master determines a narrativel
 
 **Theocracy Counter is public.** Displayed alongside Thread Tension and Institutional Pressure.
 
-Theocracy Counter represents the Church of Galbados's slow structural conquest of Valorian civil and political life. At Theocracy Counter 100, the Church does not invade — it has made itself the state. Whether the Crown survives and in what form is the players' decision.
+Theocracy Counter represents the Church of Solmund's slow structural conquest of Valorian civil and political life. At Theocracy Counter 100, the Church does not invade — it has made itself the state. Whether the Crown survives and in what form is the players' decision.
 
 ### Theocracy Counter Rise Sources
 
@@ -1879,11 +1879,11 @@ Once per season, the Crown issues a unilateral political act that bypasses norma
 
 ---
 
-## 8.3 Faction 2: The Church of Galbados
+## 8.3 Faction 2: The Church of Solmund
 
 **Ethical Framework: Divine Command**
 
-Correctness is determined by institutional authority, not outcome or character. Actions are evaluated by whether they conform to Galbados's revealed will as interpreted by the hierarchy.
+Correctness is determined by institutional authority, not outcome or character. Actions are evaluated by whether they conform to Solmund's revealed will as interpreted by the hierarchy.
 
 - Doctrine-aligned actions (suppressing heresy, expanding Piety, enforcing moral law): **−1 Ob**
 - Actions contradicting doctrine or undermining Church authority: **+1 Ob**
@@ -1908,7 +1908,7 @@ Correctness is determined by institutional authority, not outcome or character. 
 
 **Default Leader: Confessor Arne Himlensendt**
 - Conviction: Faith · Resonant Style: Evidence · Thread Sensitivity: 0 (theologically foreclosed)
-- Sincerely devout. Zero awareness of Galbados's actual nature. Not cynical — wrong.
+- Sincerely devout. Zero awareness of Solmund's actual nature. Not cynical — wrong.
 
 ---
 
@@ -1991,7 +1991,7 @@ Vaynard's TK measures his understanding of Thread metaphysics, the Calamity's me
 | 1–2 | Informed questions. Acute awareness, not understanding. No Theocracy Counter effect. |
 | 3 | Structural theory (wrong in detail, correct in structure). Succession leverage formally linked to Southernmost access terms. Theocracy Counter +1. |
 | 4 | Urgency. Willing to offer collection access (including originary locks) for Thread education and Southernmost partnership. Theocracy Counter +2. |
-| 5 | Dangerous knowledge — understands what Galbados was structurally. Seeks capability, not further knowledge. Theocracy Counter +3. |
+| 5 | Dangerous knowledge — understands what Solmund was structurally. Seeks capability, not further knowledge. Theocracy Counter +3. |
 
 TK advances through: practitioner relationship (sustained season, cap ×2); originary lock examination with practitioner context (cap ×1); Church archive access via Niflhel channels (+1/archive); players sharing Thread-level knowledge directly (+1–2 by depth); Discovery Event triggering Thread Sensitivity 30 (+2 immediately).
 
@@ -3443,9 +3443,9 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 ---
 
 ### Confessor Arne Himlensendt
-*Head of the Holy Church of Galbados*
+*Head of the Holy Church of Solmund*
 
-**Thread Sensitivity:** 0. Sincerely devout, institutionally effective, and completely without knowledge of what his institution is or what it was built to do. He is the most thorough product of Galbados's theological engineering in the kingdom. His certainty is not the certainty of someone who has considered doubt and rejected it — it is the certainty of someone who has never been given the perceptual tools to approach the question differently.
+**Thread Sensitivity:** 0. Sincerely devout, institutionally effective, and completely without knowledge of what his institution is or what it was built to do. He is the most thorough product of Solmund's theological engineering in the kingdom. His certainty is not the certainty of someone who has considered doubt and rejected it — it is the certainty of someone who has never been given the perceptual tools to approach the question differently.
 
 **Social Profile:**
 - Attributes: Presence 6, Cognition 5
@@ -3455,9 +3455,9 @@ Named NPCs follow their Beliefs regardless of wound state. They do not withdraw 
 
 **Histories:** Theology (3), Political Negotiation (2)
 
-**Belief:** *"The Church must complete Galbados's mandate on the peninsula before the Altonian schism reaches us."*
+**Belief:** *"The Church must complete Solmund's mandate on the peninsula before the Altonian schism reaches us."*
 
-**Destabilisation trigger.** He would be the most destabilised person in the kingdom if he discovered the truth about Galbados's nature. The Church's relics include originary Locks — objects present at Galbados's actual emergence from the unintelligible ground. Three Cardinals who handled these objects during restricted ceremonies subsequently requested to be relieved of their duties. Their requests were granted without public explanation.
+**Destabilisation trigger.** He would be the most destabilised person in the kingdom if he discovered the truth about Solmund's nature. The Church's relics include originary Locks — objects present at Solmund's actual emergence from the unintelligible ground. Three Cardinals who handled these objects during restricted ceremonies subsequently requested to be relieved of their duties. Their requests were granted without public explanation.
 
 ---
 
@@ -3558,7 +3558,7 @@ This is a structural fault line. Jarnstal is drifting toward unilateral action. 
 | 1–2 | Informed questions. Acute awareness rather than understanding. No Theocracy Counter effect. |
 | 3 | Structural theory (wrong in detail, correct in structure). Succession leverage formally linked to Southernmost access terms. Theocracy Counter +1. |
 | 4 | Urgency. Willing to offer collection access (including originary locks) in exchange for Thread education and Southernmost partnership. Theocracy Counter +2. |
-| 5 | Dangerous knowledge — knows what Galbados was structurally. Seeks capability, not knowledge. Theocracy Counter +3. |
+| 5 | Dangerous knowledge — knows what Solmund was structurally. Seeks capability, not knowledge. Theocracy Counter +3. |
 
 **The Discovery Event.** If Vaynard is present during a Thread event of sufficient intensity, the Game Master may call a Discovery Event. Spirit check TN 7 Ob 1. On success: Thread Sensitivity advances to 30 (Stirring), and the world reorganises itself for him.
 
@@ -3597,7 +3597,7 @@ Vaynard knows this and is calculating: Maret is the most valuable person on the 
 
 **Relationship to the heir.** Views Torben's potential removal to Altonia as a direct sovereignty threat. If Almud surrenders the heir, coup trigger condition #2 is met.
 
-**Relationship to the Church.** Cold contempt. The Löwenritter predates the Church of Galbados in Valoria. She will not challenge it theologically, but will never cede military authority to Templars.
+**Relationship to the Church.** Cold contempt. The Löwenritter predates the Church of Solmund in Valoria. She will not challenge it theologically, but will never cede military authority to Templars.
 
 ---
 
@@ -3876,7 +3876,7 @@ The three clocks are not independent. They form a structural feedback loop that 
 - Rising Thread Tension and Theocracy Counter together create instability that Altonia reads as strategic opportunity → Institutional Pressure rises.
 - Rising Institutional Pressure forces Crown to make concessions → Crown weakens → Theocracy Counter and Thread Tension exploitation accelerates.
 
-**The players' structural position.** PCs hold the only tools that can directly address Thread Tension (Thread operations reducing fabric tension) and the only investigative capacity to address Theocracy Counter's hidden structural driver (the Church-Niflhel connection and the truth about Galbados). They are the campaign's repair mechanism. Whether they act as such is entirely their choice.
+**The players' structural position.** PCs hold the only tools that can directly address Thread Tension (Thread operations reducing fabric tension) and the only investigative capacity to address Theocracy Counter's hidden structural driver (the Church-Niflhel connection and the truth about Solmund). They are the campaign's repair mechanism. Whether they act as such is entirely their choice.
 
 **If the table does nothing actively:** Thread Tension drifts +1 per year at year-end accounting. Theocracy Counter grows from Church Mandate at approximately +3–5 per year at current starting values. Institutional Pressure grows at +2 per season base. A 10-season passive campaign ends near Thread Tension 42, Theocracy Counter 50–60, Institutional Pressure 40. These are livable but increasingly constrained positions.
 
@@ -4084,7 +4084,7 @@ All FR operations require Thread Sensitivity 50+. All FR operations add Thread D
 | **Resources** | Material or institutional assets. History-based; degradable. Used for procurement and material-scale influence. |
 | **Scope Shift** | Changing the scale of one's action within a round. Free; verbal declaration. One action per scope per round; +1 Inspiration for additional scope within same round. |
 | **Shifting Object** | A configuration oscillating between presence, absence, and distortion. Signals elevated Thread Tension. Stabilised by Weaving (Ob 2); destabilised by failure into Gap risk. |
-| **Theocracy Counter** | Theocracy Clock. A 0–100 track measuring the Church of Galbados's institutional conquest of Valorian governance. |
+| **Theocracy Counter** | Theocracy Clock. A 0–100 track measuring the Church of Solmund's institutional conquest of Valorian governance. |
 | **Thread Depth** | Temporal Disjunction. The gap between retained experience and altered factual history produced by Past-Oriented Pulling. Also a per-practitioner track (0–20) for sustained Thread work cost. |
 | **Temporality** | The dimension of Thread operation foregrounding the past-anchored ↔ future-open axis. Operations in this dimension affect what has happened, what persists, and what has potential. |
 | **Thread Sensitivity (TS)** | Hidden 0–100 score tracking a character's capacity to perceive and work threads. Cannot be purchased with CP. Develops through confrontation and practice. |

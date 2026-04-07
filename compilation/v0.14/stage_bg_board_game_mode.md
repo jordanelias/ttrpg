@@ -834,7 +834,7 @@ Tracked on Varfell's faction card. Advances via:
 | 1–2 | Acute awareness, no mechanical effect. |
 | 3 | Theocracy Counter +1 (Vaynard's structural theory destabilises institutions). Succession leverage formalized: +1D Diplomacy with Crown. |
 | 4 | Varfell will offer Collection access for Thread education. Declare to Revolution or any practitioner faction. |
-| 5 | Theocracy Counter +3. Vaynard understands Galbados's structural nature. Seeks capability. Game-level event: TK 5 triggers [EDITORIAL: Varfell TK 5 consequence to be determined — capability-seeking resolution path]. |
+| 5 | Theocracy Counter +3. Vaynard understands Solmund's structural nature. Seeks capability. Game-level event: TK 5 triggers [EDITORIAL: Varfell TK 5 consequence to be determined — capability-seeking resolution path]. |
 
 ---
 
@@ -1127,7 +1127,7 @@ The relationship between rendered world and thread-substrate changes permanently
 - Stillhelm and the Southernmost become habitable. The Forgetting dissolves.
 - Every Lock releases — objects, relationships, and personal threads return to their natural state. Living things that were Locked age at extraordinary speed on release and turn to dust within moments.
 - Shifting Objects stabilise. Thread Wounds and Gaps close.
-- Galbados relics become ordinary objects — no longer holding configurational charge.
+- Solmund relics become ordinary objects — no longer holding configurational charge.
 - Dissolution residue reintegrates into the substrate.
 - Memory, political structures, deaths, and human consequences remain unchanged.
 All factions still in play at Stability ≥ 3: co-survival.

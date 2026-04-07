@@ -123,7 +123,7 @@ CE 4 + 3 = **CE 7.** This exceeds any listed threshold. The table runs to CE 3+ 
 - TC: +1 (per §9.3 Inquisitor trajectory: Doubling Down → TC +1 at accounting).
 - TC: 17→18.
 
-**Devout Constraint status:** Active (1 Dissonance Mark). He remains functional. But his TS is now 10 (Dormant). He can perform passive perception in TS 10–29 range: "sense wrongness near Dissolution residue automatically." He has been doing this. He does not recognise it as Thread sensitivity — he reads it as spiritual discernment granted by Galbados.
+**Devout Constraint status:** Active (1 Dissonance Mark). He remains functional. But his TS is now 10 (Dormant). He can perform passive perception in TS 10–29 range: "sense wrongness near Dissolution residue automatically." He has been doing this. He does not recognise it as Thread sensitivity — he reads it as spiritual discernment granted by Solmund.
 
 **P-08 COMPLIANCE CHECK (Epistemological Barrier):** Valdis's interpretation of his felt wrongness as divine discernment rather than Thread sensitivity directly expresses P-08. The barrier is maintained by his Devout formation even as his TS climbs. CLEAN.
 
@@ -406,7 +406,7 @@ Baralta's strain (3) clears after scene rest. No permanent mechanical damage —
 
 **Critical finding:** Himlensendt's pool (15D base) significantly outclasses Baralta's (13D base) especially when he exploits her resonant tag (+1D, total 16D). Even with the Sovereign Authority unique action bonus, Baralta cannot overcome a 3D pool disadvantage over 5 exchanges. This reflects correct political reality — the Confessor is a supreme institutional debater — but creates a potential design concern: is it possible for any PC or NPC to defeat Himlensendt in a Grand Debate without specific pool advantages?
 
-**DESIGN FLAG (P2):** Himlensendt's debate pool (15D base + resonant exploitation) approaches the ceiling of practical contest. Against him, PCs need: Cognition 5 + History 8+ (pool 16D+), or need to exploit HIS resonant tag (Consequence) while having evidence-based advantages. Himlensendt's resonant vulnerability to Consequence arguments means he LOSES the +1D when opponents correctly address him in Consequence Style. A PC using Consequence Style (−0 mismatch, no +1D) against him has 16D vs 15D. Competitive but not decisive. The system creates a final-boss debater who is defeatable but demanding — this is likely correct for the Confessor of Galbados.
+**DESIGN FLAG (P2):** Himlensendt's debate pool (15D base + resonant exploitation) approaches the ceiling of practical contest. Against him, PCs need: Cognition 5 + History 8+ (pool 16D+), or need to exploit HIS resonant tag (Consequence) while having evidence-based advantages. Himlensendt's resonant vulnerability to Consequence arguments means he LOSES the +1D when opponents correctly address him in Consequence Style. A PC using Consequence Style (−0 mismatch, no +1D) against him has 16D vs 15D. Competitive but not decisive. The system creates a final-boss debater who is defeatable but demanding — this is likely correct for the Confessor of Solmund.
 
 **VERDICT:** CLEAN. Grand Debate procedure functions correctly. Resonant Style tags create meaningful pool asymmetry. TC escalation from failed parliamentary challenge is correctly modelled. One ruling confirmed.
 
@@ -1091,7 +1091,7 @@ GEN-03 (Templar Officer) — Cog4, End5, Str4, Agi3, Pre4, Spi5. TS 0 (Devout �
   Certainty: 5.
   Combat Pool: 12D (Agi3+Sword History 6pts+3=9 = 3+9=12D).
   Unit: Knights Templar (Martial5, End5, Coh6, Health11). +1D Cohesion vs Thread events.
-  Belief: "Galbados protects those who serve with purity of intent."
+  Belief: "Solmund protects those who serve with purity of intent."
 ```
 
 ### Firing Sequence
@@ -1139,7 +1139,7 @@ TT 40 = Wakening. "Threshold events fire." In Sudwald: Thread events trigger at 
 The Templar crisis (CE 3, unmanaged) warrants a Personal Phase zoom-in. Per §12.3 Hybrid Mode (H2): "Zoom In to Personal Phase when: a named character reaches a crisis threshold; a character arc moment occurs." CE crisis counts.
 
 *Personal Phase scene (1 exchange):*
-GEN-03 confronts the experience: the entity's presence felt... familiar? Organized? Not monstrous in the way doctrine described. His Belief ("Galbados protects those who serve with purity of intent") is directly challenged — his pureness of intent was undoubted, but where was the protection?
+GEN-03 confronts the experience: the entity's presence felt... familiar? Organized? Not monstrous in the way doctrine described. His Belief ("Solmund protects those who serve with purity of intent") is directly challenged — his pureness of intent was undoubted, but where was the protection?
 
 Belief challenged: +1 CP. Player (if this is a PC-run scenario) must decide: hold the Belief, or begin revising it. Holding: no change, 1 Unprocessed mark. Revising: +2 CP, Unprocessed mark cleared (but Fractured trajectory begins as the Templar now lacks his primary Belief anchor).
 

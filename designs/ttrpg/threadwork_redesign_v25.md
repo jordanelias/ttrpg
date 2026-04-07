@@ -841,7 +841,7 @@ Replaces Thread Tension track on board. Runs 100→0. Hidden by default (Investi
 | Taint (§5.10, 0→10) | Coherence (low-end effects) | No separate track. Dissolution residue = accelerated Coherence loss. |
 | Thread Tension (Thread Tension, 0→100) | Rendering Stability (Rendering Stability, 100→0) | Board game track, all threshold tables, all operation consequence tables |
 | Gap closure via FR Dissolution | Mending (new operation) | §5.13, board game orders, Southernmost expedition |
-| "Galbados" (all references) | "Solmund" | All files (logged for Haiku batch) |
+| "Solmund" (all references) | "Solmund" | All files (logged for Haiku batch) |
 | AG calendar | AS calendar | All files (logged for Haiku batch) |
 | "Epistemic seduction" | Cut — Coherence degradation | All references |
 | "Taint" | Cut — Coherence degradation | All references |

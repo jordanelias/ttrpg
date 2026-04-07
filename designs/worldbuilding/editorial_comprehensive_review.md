@@ -41,7 +41,7 @@ These require your creative judgment. No canonical source answers them.
 ---
 
 ### ED-NEW-01 — Solmund Rename
-**Context:** You stated "Galbados is now Solmund." All canonical docs currently use "Galbados." Repo-wide rename needed.
+**Context:** You stated "Solmund is now Solmund." All canonical docs currently use "Solmund." Repo-wide rename needed.
 - [ ] CONFIRM: "Solmund" is the canonical name for The First Founder. Proceed with repo-wide rename.
 
 ### ED-NEW-05 — T4 Territory Name

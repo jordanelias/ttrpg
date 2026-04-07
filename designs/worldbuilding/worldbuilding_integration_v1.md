@@ -8,15 +8,15 @@
 
 # 1. GALBADOS → SOLMUND RENAME
 
-**Scope:** All references to "Galbados" become "Solmund" across the repo. "The Church of Galbados" → "The Church of Solmund." Calendar epoch "BG (Before Galbados)" → "BS (Before Solmund)." "AG (After Galbados)" → "AS (After Solmund)."
+**Scope:** All references to "Solmund" become "Solmund" across the repo. "The Church of Solmund" → "The Church of Solmund." Calendar epoch "BG (Before Solmund)" → "BS (Before Solmund)." "AG (After Solmund)" → "AS (After Solmund)."
 
 **Name:** Solmund, The First Founder.
 
 **Exception:** The Almaic Kyriakos (Altonian religious institution) retains its own name — no rename needed.
 
-**Affected files:** Every file containing "Galbados." Haiku-tier cleanup task. Run after all other changes in this document are committed.
+**Affected files:** Every file containing "Solmund." Haiku-tier cleanup task. Run after all other changes in this document are committed.
 
-[EDITORIAL: ED-NEW-01 — Confirm "Solmund" as final canonical name for The First Founder. User stated "Galbados is now Solmund" but formal confirmation needed before repo-wide rename.]
+[EDITORIAL: ED-NEW-01 — Confirm "Solmund" as final canonical name for The First Founder. User stated "Solmund is now Solmund" but formal confirmation needed before repo-wide rename.]
 
 ---
 
@@ -414,7 +414,7 @@ From lore: The Valn Peninsula was home to three indigenous nations (worshipping 
 - Hafenmark: maintained strongest legal tradition from pre-Altonian governance (hence Baralta's constitutional framework)
 - Varfell: maintained strongest connection to Einhir material culture (hence Vaynard's Private Collection)
 
-**Secession Wars (50–67 AS):** 17-year war. The lore says this is when Valoria achieved independence. The canonical timeline places this at 195–200 AG (After Solmund/Galbados). These dates need reconciliation.
+**Secession Wars (50–67 AS):** 17-year war. The lore says this is when Valoria achieved independence. The canonical timeline places this at 195–200 AG (After Solmund/Solmund). These dates need reconciliation.
 
 [EDITORIAL: ED-NEW-08 — Timeline reconciliation: lore says Secession Wars at "50–67" (unclear epoch). Canonical timeline says ~195–200 AG. The lore's "50–67" may be an internal Altonian dating system or draft-era numbers. Canonical timeline (200 AG) governs.]
 

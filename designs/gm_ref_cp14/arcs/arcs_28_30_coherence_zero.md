@@ -49,7 +49,7 @@ He does not work himself beyond human form. The body continues as it was. He is 
 
 What this produces: the most capable intelligence actor in the kingdom, now operating from an epistemic position none of his interlocutors can fully evaluate. Every assessment he makes is correct in ways that exceed his listeners' ability to verify. Every recommendation he gives is grounded in a perception of Thread-configurational reality that the players can trust but not audit. He has become the most reliable and least legible source of strategic knowledge in the campaign.
 
-His TK 5 understanding — what Galbados structurally was, what the Church has been suppressing, what the Southernmost requires — is now not a structural theory but a direct perception. He has seen it. The players who carry his recommendations into political action are acting on the word of someone who is telling the truth at a register they cannot independently confirm.
+His TK 5 understanding — what Solmund structurally was, what the Church has been suppressing, what the Southernmost requires — is now not a structural theory but a direct perception. He has seen it. The players who carry his recommendations into political action are acting on the word of someone who is telling the truth at a register they cannot independently confirm.
 
 The political problem: he cannot testify effectively to anyone without Thread Sensitivity sufficient to receive what he is saying. In Parliament, in a Grand Debate, before Ehrenwall — his understanding exceeds the context. He knows this. He is precise about it. He can identify exactly what each person can and cannot receive, and he shapes his communication accordingly. This makes him more useful than ever and less understood than ever simultaneously.
 

@@ -14,7 +14,7 @@
 - **Year confirmed: 245 AG.** Per canonical_timeline.md, superseding all prior checkpoint references to Year 102 AG.
 - **Starting clock values corrected.** TT/TC/IP alignment with canonical timeline: RS 72 (unchanged), TC 22 (was 15 — adjusted to reflect Church's colonial-period establishment pre-Secession), IP 20 (unchanged). See B2.
 - **Restoration Movement Mandate corrected to 2** (was noted as raised to 4 in v0.3 changelog, but faction sheet shows 2 — the Influence was raised to 4, not Mandate). Clarified in B5 Restoration.
-- **Church of Solmund name retained.** Solmund is the divine figure; Galbados was the catalyst. The Church venerates Solmund's doctrine as transmitted through Galbados's acts and teachings. This is canonical — Baralta's Conviction references Solmund-ordained authority as distinct from Church mediation.
+- **Church of Solmund name retained.** Solmund is the divine figure; Solmund was the catalyst. The Church venerates Solmund's doctrine as transmitted through Solmund's acts and teachings. This is canonical — Baralta's Conviction references Solmund-ordained authority as distinct from Church mediation.
 
 ### Editorial Blockers Resolved
 - **BG-E-NEW-01 (Patience Protocol):** Authored. See B5 Varfell.

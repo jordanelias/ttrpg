@@ -29,7 +29,7 @@
 **Gap:** SIM-ARC-05 assumed RS +3 when a Thread-sensitive character reads a sufficiently accurate first-person Thread-perception document. No canonical rule.
 
 **Resolution — PP-258:**
-- Thread Sensitivity 50+ character reading a pre-Galbados first-person Thread-perception account: RS +2 (not +3; revised down to prevent RS gaming via document farming).
+- Thread Sensitivity 50+ character reading a pre-Solmund first-person Thread-perception account: RS +2 (not +3; revised down to prevent RS gaming via document farming).
 - Mechanism: accurate description resonates with the substrate; the world's legibility marginally increases from recognition.
 - Conditions: document must be a primary first-person account (not secondary analysis), character must have Thread Sensitivity ≥ 50, and must spend a full scene in contact with the document.
 - Limit: one RS gain per document per character. Subsequent readings produce no further RS change.
@@ -40,7 +40,7 @@
 **Gap:** SIM-ARC-01/05 cross-arc interaction assumes Niflhel documents may contain lineage data relevant to Torben. Requires user ruling.
 
 **Resolution — PROVISIONAL (ED-NNN assigned ED-171):**
-- `[PROVISIONAL]` Niflhel archive does not contain Torben-specific lineage data. The archive is pre-Galbados Thread perception accounts and early Einhir correspondence. No dynastic content. The ARC 1/ARC 5 cross-arc interaction as documented in SIM-ARC-01 does not apply.
+- `[PROVISIONAL]` Niflhel archive does not contain Torben-specific lineage data. The archive is pre-Solmund Thread perception accounts and early Einhir correspondence. No dynastic content. The ARC 1/ARC 5 cross-arc interaction as documented in SIM-ARC-01 does not apply.
 - `[EDITORIAL: ED-171 — Confirm: does Niflhel archive contain any pre-Altonian dynastic/lineage records? If yes, specify scope. Current provisional: no lineage content.]`
 
 ---

@@ -369,7 +369,7 @@ Arne's effective_margin: 3. Resistance for prosecution moving toward guilty: we 
 
 Arne's effective_margin: 3. Full resistance 4 (prosecution faces full institutional inertia). 3 ≤ 4 → 0 movement. Arne's Present attack doesn't move the room.
 
-**Maret:** 11D + Memory +2D (citing the specific historical case — "In the year 12 after Galbados, the Synod of Elkenford acquitted Sister Varda of Thread-heresy on grounds that her operation was consistent with healing ministry") = 13D. Rolls: 9,7,3,8,5,7,2,8,4,6,7,1,9 → 7 successes. Past ×1.5, Revealing ×1.0. effective_margin = floor(7 × 1.5 × 1.0) = 10. Resistance 2 (halved for defence). 10 > 2. Movement: 10 − 2 = 8 toward acquittal. Tracker: 3 → 11. **CAPPED AT 10.** Tracker: 3 → 10. Acquittal.
+**Maret:** 11D + Memory +2D (citing the specific historical case — "In the year 12 after Solmund, the Synod of Elkenford acquitted Sister Varda of Thread-heresy on grounds that her operation was consistent with healing ministry") = 13D. Rolls: 9,7,3,8,5,7,2,8,4,6,7,1,9 → 7 successes. Past ×1.5, Revealing ×1.0. effective_margin = floor(7 × 1.5 × 1.0) = 10. Resistance 2 (halved for defence). 10 > 2. Movement: 10 − 2 = 8 toward acquittal. Tracker: 3 → 11. **CAPPED AT 10.** Tracker: 3 → 10. Acquittal.
 
 **Wait.** That's absurd. A single roll shouldn't move the tracker 8 points.
 

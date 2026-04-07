@@ -89,7 +89,7 @@
 [Recalc: History pool = primary attr + (pts+3). Pre5 is base. History 3pts: pool = 5+(3+3)=11D. Using Att for Reading: 4+(3+3)=10D.]
 Inspirations: Duty to Crown 3. Knots: Almud (Close, strain0), Maret (Regular, strain1).
 
-**Valdis** (Devout Inquisitor): Agi3, End4, Str3, Cog4, Mem4, Foc4, Att3, Bon3, Pre4, Spi4. TS0 (Devout). Certainty 5. Combat Pool: 10D. Inspirations: Faith in Galbados 4. Knots: Church (Close strain0), Cardinal Olafsson (Regular strain0).
+**Valdis** (Devout Inquisitor): Agi3, End4, Str3, Cog4, Mem4, Foc4, Att3, Bon3, Pre4, Spi4. TS0 (Devout). Certainty 5. Combat Pool: 10D. Inspirations: Faith in Solmund 4. Knots: Church (Close strain0), Cardinal Olafsson (Regular strain0).
 
 ---
 
