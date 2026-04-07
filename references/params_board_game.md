@@ -1,9 +1,9 @@
-<!-- version: v0.8.5+PP220 | source: valoria_bg_v05_simulation_and_patches.md (canonical per canonical_sources.yaml); action economy from stage_bg_proposal_v02.md | last_updated: 2026-04-03 -->
+<!-- version: v0.9.0 | source: valoria_bg_v05_simulation_and_patches.md + victory_architecture_v1.md + calamity_radiation.md (canonical per canonical_sources.yaml) | last_updated: 2026-04-06 -->
 <!-- PP-249 2026-04-04: ED-142 resolved — BG Overwhelming: 2×Ob + floor 3, supersedes ED-031 -->
 <!-- PATCHES APPLIED: PP-169-PP-187 | CORRECTIONS: PP-188 | PP-189 (v05 final) | PP-190–201 (BG balance, territory table, road network, map v2) | PP-219 (Southernmost access redesign) | PP-220 (Champion TS table) -->
 <!-- AUTHORITATIVE SOURCE: designs/board_game/valoria_bg_v05_simulation_and_patches.md (faction stats, clocks, victory conditions); designs/board_game/stage_bg_proposal_v02.md (action economy, card-hand system PP-177) -->
 <!-- NOTE: v05 is canonical for BG mechanics. v04 B-sections remain structural base. -->
-<!-- STALE CHECK: PP-219/220 propagated. Next: ED-109–113 balance editorials open. -->
+<!-- STALE CHECK: RS Effects rewritten to calamity_radiation.md. Victory rewritten to victory_architecture_v1.md. CV/WC/WA tracks added. TC generation updated. Deed system dissolved. REMAINING STALE: Territory table (L701-798) uses pre-geography_design.md numbering — full renumbering pass required. All T# references outside the new sections use old numbering. -->
 
 # params_board_game.md — Board Game Mode (v0.7.0)
 
@@ -143,7 +143,7 @@ Execute in strict order:
 9b. Vaynard-Edeyja same-season rule: if Warden Emergence at Step 9 AND VTM ≥ 4 AND Varfell played Tribune Inward in T13: Warden Cooperation +1 immediately.
 10. Warden Cooperation check.
 10b. Torben/Elske Loyalty events: apply Loyalty changes.
-11. Hollow Victory totals: announced publicly, recorded.
+11. [DISSOLVED — Hollow Victory totals no longer tracked. Step retained for numbering continuity.]
 12. Victory condition check. Any faction meeting all its victory conditions for 2 consecutive Accounting steps declares victory. See designs/board_game/victory_architecture_v1.md §3 for all faction conditions. Co-victory pairings checked simultaneously (§4). Shared loss conditions checked first (§5).
 13. Season marker advances. If Winter (every 4th season): Year-End Accounting (B11).
 
@@ -177,12 +177,25 @@ Unit starting Discipline: Light Infantry 3, Heavy Infantry 4, Cavalry 4, Ranged 
 ## Clock Environmental Effects (v04 B2)
 
 ### Rendering Stability (RS) Effects
-| RS Range | Effect |
-|----------|--------|
-| 72–50 | No modifier |
-| 49–30 | Thread operations: −1 Ob. Non-Thread orders in T12/T13: +1 Ob |
-| 29–20 | As above. Entity encounters possible in T12/T13. All Muster: +1 Ob |
-| Below 20 | All orders all territories: +1 Ob. Community Projects +1/season. Entity encounters all uncontrolled territories |
+**Canonical source: `designs/setting/calamity_radiation.md`** (Simplified BG Lookup Table).
+
+RS effects are geographically graduated by Proximity Rating (node distance from Askeheim T15), not applied globally.
+Each territory card includes a Proximity Rating (0–5). At Accounting, one lookup per territory: current RS band × Proximity Rating.
+
+| RS Band | Proximity 0 | Proximity 1 | Proximity 2 | Proximity 3 | Proximity 4–5 |
+|---|---|---|---|---|---|
+| 100–60 | +1 Ob non-Thread | Folklore (no mech) | — | — | — |
+| 59–40 | +2 Ob non-Thread; Shifting Objects | +1 Ob Thread; Shifting Objects (1d10: 1–2) | Folklore (no mech) | — | — |
+| 39–20 | Gaps auto; beings present | +1 Ob all; Gaps (1d10: 1–2) | +1 Ob Thread; Shifting Objects (1d10: 1) | Folklore (no mech) | — |
+| 19–1 | +2 Ob Mending; beings; Gaps (1d3) | +1 Ob all; Gaps (1d10: 1–4) | +1 Ob Thread; Gaps (1d10: 1–2) | Shifting Objects (1d10: 1) | Folklore (no mech) |
+
+Additional global RS effects at Critical (19–1): all Thread operations +1 Ob worldwide; seasonal Stability checks for all factions at Ob 1 (failure: Mandate −1).
+RS 0 = Rupture (campaign ends, all factions lose).
+
+Southernmost Surge (one-time, RS ≤ 10): all territories within Proximity 2 of Askeheim experience effects one band worse for one season. See calamity_radiation.md.
+
+[PROVISIONAL: B-01 — Askeheim effects at RS 100–80 (Stable band). Current matrix shows +1 Ob non-Thread at Proximity 0 even in Stable band. Threadwork §5.3 defines RS 100–80 as "no unusual phenomena." Askeheim as the wound may justify effects at any RS level. Awaiting editorial decision.]
+[PROVISIONAL: B-03 — Forgetting at Askeheim listed in the RS-dependent matrix (Proximity 0, RS 100–60). Per P-13 the Forgetting is a permanent metaphysical condition, not RS-dependent. If permanent, should be a T15 property, not in the radiation matrix. Awaiting editorial decision.]
 
 ### Theocracy Clock (TC) Effects
 | TC Range | Effect |
@@ -201,45 +214,66 @@ Unit starting Discipline: Light Infantry 3, Heavy Infantry 4, Cavalry 4, Ranged 
 | 60–74 | Trade disrupted: +2 Ob. Proxy at T4: +1D military |
 | 75+ | Altonian Vanguard deployed. AER ≥ 4: threshold rises to 80. AER 5: IP held at 50 |
 
-## Victory Conditions
-<!-- PP-424: Deed system dissolved. PP-408–PP-425: Conditions-based victory architecture. -->
-**Canonical source:** designs/board_game/victory_architecture_v1.md
+## Victory Conditions — Pointer
+**Canonical source: `designs/board_game/victory_architecture_v1.md`** (all victory conditions, co-victory pairings, shared loss conditions).
 
-All faction victory conditions, co-victory pairings, and shared loss conditions are defined in the victory architecture document. The Deed-based system (v04 B5) is struck in its entirety.
+The Deed-based victory system has been dissolved for ALL factions including Löwenritter (PP-427). Victory = Territory Consolidation Value (TCV) thresholds + faction-specific political conditions, sustained for 2 consecutive Accounting steps.
 
-**Summary (thresholds only — full conditions in victory_architecture_v1.md):**
-| Faction | Primary TCV Target | Key Non-TCV Gate |
-|---------|-------------------|-----------------|
-| Crown | ≥ 16 | All rivals Mandate ≤ 2 or treated |
-| Church | ≥ 10 (post-TC 75) | CV ≥ 3 in all held territories |
-| Hafenmark | ≥ 12 | PI ≥ 5, Crown Mandate ≤ 3 |
-| Varfell A | ≥ 10 | VTM ≥ 3, intel reveals |
-| Varfell B | ≥ 8 | Warden Recognition ≥ 2 (ED-311 pending) |
-| Varfell C | ≥ 10 | VTM = 5, RS ≥ 50 |
-| RM | n/a | 5 territories CV ≤ 1, RS ≥ 40 |
-| Löwenritter | ≥ 10 | TC < 50, IP < 60, RS > 40, PI ≥ 4, successor |
+### Summary (see victory_architecture_v1.md §3 for full conditions)
 
-## Hollow Victory
-<!-- PP-424: Deed-based Hollow Victory modifier table struck. -->
-The Deed-based Hollow Victory modifier table (v04 B12) is struck. No mechanical penalty applies.
+| Faction | Primary Victory | Key Thresholds |
+|---------|----------------|----------------|
+| Crown | Peninsula Sovereignty | TCV ≥ 18 + suppress all rivals + Invasion Pressure (IP) < 60 + Parliament Integrity (PI) ≥ 3 |
+| Church of Solmund | Solmundan Orthodoxy | TCV ≥ 10 + Conviction Track (CV) ≥ 3 all held territories (post-Thread Consciousness (TC) 75) |
+| Hafenmark | Parliamentary Sovereignty | TCV ≥ 12 + Mandate ≥ 4 + PI ≥ 5 + Crown Mandate ≤ 3 |
+| Varfell Path A | Intelligence Hegemony | TCV ≥ 10 + Vaynard Thread Mastery (VTM) ≥ 3 + 2 rival stats revealed + expansion |
+| Varfell Path B | Southernmost Dominion | TCV ≥ 8 + VTM ≥ 3 + T13 control + T15 presence + Warden's Accord (WA) ≥ +1 |
+| Varfell Path C | Thread Supremacy | TCV ≥ 10 + VTM = 5 + Rendering Stability (RS) ≥ 50 |
+| Restoration Movement (RM) | Cultural Revolution (5P only) | ≥ 5 territories CV ≤ 1 + ≥ 5 RM Presence + RS ≥ 40 |
+| Löwenritter | Regency Establishment | TCV ≥ 10 + Thread Consciousness (TC) < 50 + IP < 60 + RS > 40 + PI ≥ 4 + successor |
 
-In Hybrid mode, a BG victory without personal arc resolution is a **narratively qualified victory** (P-32). The faction won; the character's arc is incomplete. This is a narrative marker only — it does not prevent victory declaration or impose a Deed modifier. See victory_architecture_v1.md §9.3.
+### Territory Consolidation Values (TCV)
+Per victory_architecture_v1.md §1. Total TCV = 30 (T16 Schoenland not in territorial play, T15 Askeheim TCV = 0).
 
-## Co-Victory Pairings
-<!-- PP-425: Updated from Deed-based path names to conditions-based. Full conditions in victory_architecture_v1.md §4. -->
+| T# | Territory | TCV | Starting Controller |
+|----|-----------|-----|---------------------|
+| T1 | Valorsplatz | 5 | Crown |
+| T8 | Gransol | 4 | Hafenmark |
+| T9 | Himmelenger | 3 | Church of Solmund |
+| T12 | Sigurdshelm | 3 | Varfell |
+| T3 | Lowenskyst | 2 | Crown |
+| T10 | Spartfell | 2 | Hafenmark |
+| T14 | Ehrenfeld | 2 | Crown |
+| T2 | Kronmark | 1 | Crown |
+| T4 | Grauwald | 1 | Varfell |
+| T5 | Feldmark | 1 | Crown |
+| T6 | Stillhelm | 1 | Crown |
+| T7 | Rendstad | 1 | Hafenmark |
+| T11 | Halvardshelm | 1 | Varfell |
+| T13 | Oastad | 1 | Varfell |
+| T17 | Halvarshelm | 1 | Hafenmark |
 
-| Pair | Minimum Conditions |
-|------|-------------------|
-| **Crown + Hafenmark** | Crown TCV ≥ 12 AND Hafenmark TCV ≥ 9 AND PI ≥ 5 AND TC < 50 |
-| **Crown + Varfell** | Crown TCV ≥ 12 AND Varfell TCV ≥ 8 AND VTM ≥ 3 AND RS ≥ 50 |
-| **Varfell + RM** | VTM ≥ 4 AND Warden Recognition ≥ 2 AND ≥ 4 territories CV ≤ 1 AND RS ≥ 40 AND Varfell controls T13 |
-| **Hafenmark + RM** | Hafenmark TCV ≥ 10 AND ≥ 4 territories CV ≤ 2 AND PI ≥ 4 AND RS ≥ 40 |
-| **Löwenritter + Hafenmark** | Löwenritter TCV ≥ 8 AND Hafenmark TCV ≥ 8 AND PI ≥ 4 |
-| **Church + Hafenmark (Partition)** | Crown Mandate ≤ 1, TC ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no active military conflict |
+Starting TCV: Crown 12, Hafenmark 8, Varfell 6, Church of Solmund 3.
 
-**Incompatible:** Crown + Church, Crown + Löwenritter, Church + Varfell, Church + RM.
+### Co-Victory Pairings
+Per victory_architecture_v1.md §4. All require 2 consecutive Accounting steps except Church+Hafenmark Partition (immediate on mutual agreement).
 
-Co-victories require 2 consecutive Accounting steps except Partition (immediate on mutual declaration).
+| Pair | Key Conditions |
+|------|---------------|
+| Crown + Hafenmark | Crown TCV ≥ 12, Hafenmark TCV ≥ 8, PI ≥ 5, TC < 50 |
+| Crown + Varfell | Crown TCV ≥ 12, Varfell TCV ≥ 8, VTM ≥ 3, RS ≥ 50 |
+| Varfell + RM | VTM ≥ 4, WA ≥ +2, ≥ 4 territories CV ≤ 1, RS ≥ 40 |
+| Hafenmark + RM | Hafenmark TCV ≥ 10, ≥ 4 territories CV ≤ 2, PI ≥ 4, RS ≥ 40 |
+| Löwenritter + Hafenmark | Löwenritter TCV ≥ 8, Hafenmark TCV ≥ 8, PI ≥ 4 |
+| Church + Hafenmark (Partition) | Crown Mandate ≤ 1, TC ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no military conflict |
+
+Incompatible: Crown + Church, Crown + Löwenritter, Church + Varfell, Church + RM.
+
+### Shared Loss Conditions
+Per victory_architecture_v1.md §5. RS = 0 (Rupture), IP ≥ 100 + Altonian External Relationship (AER) ≤ 1 (Altonian Conquest), or all factions Stability 0 (Total Institutional Collapse).
+
+### Hollow Victory — DISSOLVED
+The Hollow Victory modifier system (Deed-count penalties) has been dissolved with the Deed system (PP-427). In Hybrid mode, BG victory without personal arc resolution is a narrative qualifier per P-32 (see victory_architecture_v1.md §9.3).
 
 ## Torben Loyalty Track (v04 B2 + B5 — PP-188 correction)
 Range 0–7. Starts at **3**. Visible to all. Active from game start (no trigger needed).
@@ -266,62 +300,31 @@ Elske Loyalty: 0–7, starts 4. Tracked on off-board card near T4.
 Contact: Crown or Löwenritter Senator Outward in T4 (Ob 2 at IP < 60; Ob 3 at IP ≥ 60).
 Return: Elske Loyalty ≥ 6 + IP < 60 + Crown/Löwenritter unit in T4: Military vs Ob 2. IP +5 on success.
 
-## TC Advancement (v04 B5 Church)
-| Source | TC Gain |
-|--------|---------| 
-| Church controls T14 (Himmelenger) | +1/season |
-| Assert choice (TC > 50, mandatory) | +1 |
-| AER ≥ 3 (Altonian ecclesiastical momentum) | +1/season (PP-203 — bypasses Hafenmark domestic suppression) |
-| Attention Pool reaches threshold 5 | +1 |
-| Emergency Powers (Crown or Löwenritter) | +1 |
-| Free Trade Decree (Crown) | +1 |
-| Church unit in non-Church territory at season end | +0.5/unit (max +1/season) |
-| Church Territorial Seizure success | +2/territory seized |
-| Reformed Settlement — Church Resists | +3 |
-| Heresy Investigation confirmed success | +0.5 |
-| Doctrinal Reach Milestone | +0.5/season |
+## TC Generation — Seasonal (per victory_architecture_v1.md §7)
+**Starting TC: 28. Phase transition at TC 75 (TC freezes — Church shifts to territorial seizure).**
 
-**TC Decreases:**
-Reformed Settlement Accommodate: −5. Reformed Settlement Ignore: Church Stability −1, Influence −1 (penalised for non-response — ED-085 resolved 2026-04-03). Sovereign Authority Doctrine (Hafenmark): −2 to −3. Baralta passive (Mandate ≥ 4): −1/season. Löwenritter Requisition Order success: −1. Royal Decree targeting TC: −1.
+Seasonal TC at Accounting (execute in order):
+1. **Institutional Momentum:** TC +1 (passive).
+2. **Conviction Yield:** for each territory where Church is prominent (Church Mandate > controlling faction's Mandate), add based on CV. CV 5 = +1, CV 4 = +0.5, others = 0. Total = floor(sum).
+3. **Assert** (optional Church action): Influence vs Ob 2. Success: TC +1. Failure: Stability −1.
+4. **Suppress** (optional opponent action): Mandate vs Ob = Church Mandate. Success: negate Step 1 passive. Failure: Stability −1.
+5. **Hafenmark Structural Suppression:** while Baralta Mandate ≥ 4, TC −1/season.
 
-## TC 75 Territorial Seizure (PP-192/PP-421 — TC 75 canonical)
-At TC = 75: Church enters seizure phase. TC freezes at 75. Church shifts mode to territorial seizure. on **all Crown and Hafenmark territories** simultaneously.
-This is not a Military action — it is an ecclesiastical consolidation of temporal power backed by Templar force.
+Legacy TC sources (AER momentum, Attention Pool threshold, Emergency Powers, Free Trade Decree, Church unit presence) are subsumed into the Conviction Yield system — Church prominence in high-CV territories captures the same dynamics. AER ≥ 3 still bypasses Hafenmark structural suppression (PP-203).
 
-### Seizure Roll (per territory)
-Church Mandate vs Ob = territory Fort level + 1 (min Ob 1).
-Roll for each Crown/Hafenmark territory separately. All rolls resolved simultaneously.
+## TC 75 Territorial Seizure (PP-421 — per victory_architecture_v1.md §7)
+**Post-TC 75: TC freezes. Church shifts to territorial seizure campaign.**
 
-### TC Gain per Successful Seizure
-| Territory | TC Gain on Success |
-|-----------|-------------------|
-| Standard Crown/Hafenmark territory | +1 |
-| Gransol (T5, Hafenmark duchy capital) | +3 |
-| Lowenskyst (T8, Hafenmark) | +1 |
-| Eidursjo (T6, Hafenmark) | +1 |
-| Spartfell (T7, Hafenmark) | +1 |
-| Hafenvalor (T6, Crown port) | +1 |
-| Lowenskyst (T7, Crown port) | +1 |
-| Valorsplatz (T12, royal capital) | +5 |
-| Himmelenger (T14, Grand Cathedral) | Already Church-held — excluded from seizure |
+### Seizure Ob
+Ob = 2 + Fort Level + max(0, 3 − CV).
+Prominence required: Church Mandate > controlling faction's Mandate in target territory.
+Church Mandate ≥ 4 required to attempt seizure.
 
 ### Seizure Results
-| Degree | Effect |
-|--------|--------|
-| Overwhelming | Territory seized immediately. No Standing cost. TC +territory value. PI −1. |
-| Success | Territory contested (Church and prior faction both present). Battle required next season. TC +territory value queues to Accounting after battle resolves. |
-| Partial | Templar Staging Token placed (P-30). Territory not seized. Prior faction may remove token with Military card play next season. |
-| Failure | No effect. Church Mandate −1 (failed seizure weakens the Confessor's authority). |
+Per victory_architecture_v1.md §7. Overwhelming seizure: CV +1 in target territory (counts against ±1 CV seasonal cap).
 
 ### Seizure Constraints
-- Seizure fires once when TC first crosses 75. TC freezes at 75 — no further TC advancement. Does not repeat unless TC drops and re-crosses 80.
-- Church must have Mandate ≥ 4 to initiate (faction must be institutionally coherent to press the claim).
-
-**Prominence (PP-417):** Church may only seize a territory where it is Prominent. Prominent = Church's global Mandate stat exceeds the controlling faction's global Mandate stat. Assessed at seizure declaration. Tie: not Prominent (tie goes to defender).
-- Restoration Territory (T14, Eisengrund): not targeted — Church does not press claims against communities, only against political authorities.
-- Varfell Territory (T9): not targeted — Varfell is not a Crown or Hafenmark territory.
-- AER ≥ 3: +1D on all seizure rolls (Altonian ecclesiastical backing).
-- PI at seizure: −1 per territory successfully seized (constitutional rupture cascades).
+One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland).
 
 ## Theocracy Counter Starting Value — Canonical
 TC starts at **28**. (P-32, PP-189 correction. The 22 value from v04 B2 was superseded by P-32 in v05.)
@@ -487,6 +490,31 @@ Condition: any faction's Southernmost Expedition passes Forgetting Check (Phase 
 On Emergence: Warden Token placed at position 0. Warden Cooperation Track activates.
 Edeyja/Wardens NPC AI activates (B13: contain entity; investigate Niflhel; work alongside; emergency Mend).
 
+
+## Warden Cooperation Track (WC)
+**Canonical source: `designs/board_game/victory_architecture_v1.md` §6**
+
+Range: 0–3. Starts at 0.
+
+| WC Level | Effect |
+|----------|--------|
+| ≥ 1 | +1D to all Thread operations peninsula-wide |
+| ≥ 2 | RS decay rate halved |
+| ≥ 3 | RS +2/season at Accounting |
+
+WC advances via successful Southernmost Expedition and Warden engagement actions. Multiple victory conditions require RS thresholds; WC is the primary tool to arrest RS decline.
+
+## Warden's Accord (WA)
+**Canonical source: `designs/board_game/victory_architecture_v1.md` §8**
+
+Range: −3 to +3. Starts at 0.
+
+RM Emergence triple condition: WA ≤ −2 AND ≥ 3 territories CV ≤ 1 AND RS ≤ 50. One-shot.
+RM Suppression: WA ≥ 0 OR all territories CV ≥ 2 OR RM Stability 0.
+Varfell Path B blocked if RM has emerged (WA ≤ −2).
+
+See victory_architecture_v1.md §8 for WA movement rules and full RM stat block.
+
 ## Institutional Mandate Uphold/Appease (PP-189 — v05 names this "Appease" not "Compromise")
 Each faction has a printed Institutional Mandate. When event challenges it:
 - **Uphold** (before roll): Roll proceeds normally. No cost.
@@ -494,8 +522,8 @@ Each faction has a printed Institutional Mandate. When event challenges it:
 NPC rule: NPC factions Appease if Mandate ≥ 4 AND Stability ≤ 3.
 Note: Prior params used "Compromise" — v05 PP-189 establishes "Appease" as the canonical term.
 
-## Hollow Victory Mechanics (v04 B12)
-[See full table above in Hollow Victory section]
+## Hollow Victory Mechanics — DISSOLVED (PP-427)
+Deed system and Hollow Victory modifiers dissolved. See victory_architecture_v1.md §9.3 for Hybrid mode narrative qualifier (P-32).
 
 ## Intel Advancement Counter (PP-180 revised)
 Intel Advancement Counter (0–3) on faction mat.
@@ -787,13 +815,21 @@ T16 (Schoenland) ↔ T8 (sea trade), T12 (sea trade) [merchant NPC only — no m
 | NE Pass | T7 (Spartfell) ↔ T16 (Schoenland/Altonia) | Primary invasion route. IP events fire at T7. Vanguard enters here. |
 | NW Pass | T2 (Sigurdshelm) ↔ off-map Altonia | Event-only. Not a playable march. Fires at IP ≥ 90. |
 
-## Southernmost Zones (PP-199)
-| Zone | Territory | Effect |
-|------|-----------|--------|
-| 3 (Outer) | T1 (Varfell), T9 (Arcansheld) | Thread Resonance +1 all factions when RS < 40. |
-| 2 (Middle) | T4 (Vargstad), T3 (Halvardshelm) | Thread Wound. RS thresholds +10 early. |
-| 1 (Inner) | T13 (Stillhelm) | Normal territory. RS −1/season any occupation (substrate proximity). Southernmost Access point — Expedition into T15 staged from here. |
-| Epicentre | T15 (Askeheim) | RS −2/season non-Warden. Expedition required. |
+## Proximity Ratings (supersedes Southernmost Zones — PP-199)
+**Canonical source: `designs/setting/calamity_radiation.md`** (Node Distance Map + Radiation Matrix).
+
+The Southernmost Zones system is superseded by the Proximity Rating system. Each territory's Proximity Rating is its node distance from Askeheim (T15) on the adjacency graph. Printed on each territory card.
+
+| Proximity | Territories |
+|-----------|------------|
+| 0 | T15 Askeheim |
+| 1 | T6 Stillhelm, T13 Oastad |
+| 2 | T5 Feldmark, T12 Sigurdshelm |
+| 3 | T1 Valorsplatz, T14 Ehrenfeld, T4 Grauwald, T11 Halvardshelm |
+| 4 | T2 Kronmark, T16 Schoenland, T9 Himmelenger, T7 Rendstad, T10 Spartfell |
+| 5 | T3 Lowenskyst, T8 Gransol, T17 Halvarshelm |
+
+RS effects per Proximity Rating: see §Rendering Stability (RS) Effects above (Simplified BG Lookup Table from calamity_radiation.md).
 
 
 ## Southernmost Access System (PP-219)
@@ -869,30 +905,14 @@ but represents Crown's unique royal household angle on the Southernmost.
 - Warden Cooperation track advances through successful Expedition seasons in T15,
   not through territorial control.
 
-## TC 75 Seizure — Territory Values (PP-421)
-Targets all Crown and Hafenmark territories. Roll: Church Mandate vs Ob = Fort + 1.
-
-| Territory | Fort | Ob | TC on Success |
-|-----------|------|----|---------------|
-| T12 Valorsplatz | 2 | 3 | +5 |
-| T5 Gransol | 1 | 2 | +3 |
-| T9 Arcansheld | 3 | 4 | +1 |
-| T10 Nordhelm | 1 | 2 | +1 |
-| T11 Mittelmark | 0 | 1 | +1 |
-| T13 Stillhelm | 0 | 1 | +1 |
-| T6 Eidursjo | 0 | 1 | +1 |
-| T7 Spartfell | 2 | 3 | +1 |
-| T8 Lowenskyst | 0 | 1 | +1 |
-T14 Himmelenger = Church starting territory. Excluded from seizure (already consolidated).
-AER ≥ 3: +1D all rolls. Ministry AP-token in T12: seizure Ob +1.
-
-## Victory Condition Territory References (PP-199)
-Crown Deed 2: control T12 (Valorsplatz) + T9 (Arcansheld) + ≥ 2 others (total ≥ 4).
-Hafenmark Path C Deed 3: control T5 (Gransol, duchy capital).
-Varfell Path B Deed 1: control T4 (Vargstad) + T13 (Stillhelm) simultaneously for 2 consecutive seasons. (PP-203 duration gate)
-Varfell Path C Deed 2: control T4 (Vargstad) + T13 (Stillhelm) + ≥ 1 other. (PP-203 — corrected T-numbers)
-Elske contact: via T7 (Spartfell, Hafenmark). Hafenmark may facilitate (+1D) or obstruct (+1 Ob). (T7 confirmed current numbering.)
-
+## TC 75 Seizure — Territory Values — SUPERSEDED
+**See TCV table in §Victory Conditions above.** Per-territory seizure Ob = 2 + Fort Level + max(0, 3 − CV). Fort levels per geography_design.md territory table.
+[TERRITORY-DEBT: Old PP-421 per-territory values used stale numbering. Replaced by TCV table + seizure Ob formula.]
+## Victory Condition Territory References — SUPERSEDED
+**All victory territory references now use TCV from victory_architecture_v1.md §1.**
+Territory numbering follows geography_design.md (17-territory canonical map).
+Old PP-199 territory references using pre-geography_design numbering are stale.
+[TERRITORY-DEBT: Full T# renumbering pass required across this file. ~170 stale T# references remain in sections not yet updated.]
 ## Ministry AP-Token Starting Positions (PP-203)
 T9 (Arcansheld), T10 (Nordhelm), T11 (Mittelmark), T12 (Valorsplatz — primary Parliament seat).
 
@@ -902,32 +922,11 @@ T3 (Halvardshelm), T5 (Gransol), T8 (Lowenskyst), T12 (Valorsplatz), T14 (Himmel
 ## Niflhel Network Starting Depth (PP-203)
 T2 (Sigurdshelm) depth 2. T12 (Valorsplatz) depth 1. T14 (Himmelenger) depth 1. [Confirmed correct numbering.]
 
-## Balance Findings and Proposals — BAL-BG-02 (PP-202)
-
-### BAL-04 (P1): Crown Victory Front-Loaded
-3 of 5 deeds pre-met at game start (Deed 1: Mandate≥5, Deed 3: TC<60∧IP<75, Deed 4: PI≥5).
-Crown victory reduces to: hold T12+T9+2 others (Deed 2) and maintain Torben ≥ 5 (Deed 5).
-[EDITORIAL: ED-109 — Crown balance. Options: (A) Raise Deed 1 to Mandate ≥ 6 (requires active maintenance). (B) Deed 3 becomes TC < 50 (tighter threshold — must actively suppress Church). (C) Add a 6th deed. (D) Accept as intended — Crown's difficulty is that maintaining passive deeds under pressure is the challenge, not achieving them.]
-
-### BAL-05/06 (P1): Church Primary Victory Inaccessible
-TC at net 0 per season (T14 control +1, Hafenmark suppression −1). TC ≥ 65 requires 37 seasons.
-Church Deed 4 (seize T12) requires Military action at +2 Ob (doctrine penalty) against Fort 2.
-[EDITORIAL: ED-110 — Church balance. Options: (A) Add TC generation source independent of Hafenmark suppression: "AER ≥ 3: TC +1/season additional" (Altonian ecclesiastical momentum bypasses domestic suppression). (B) Replace Deed 4 (seize T12) with "Crown formally acknowledges Church authority over religious appointments" — achievable via Diplomacy/Compromise, not Military. (C) Reduce TC victory threshold from 65 to 55. (D) Combination: (A) + (B).]
-
-### BAL-08 (P1): Varfell Path B Under-Gated
-T4 Vargstad (Varfell start) + T13 Stillhelm (Fort 0, adjacent, Crown cannot effectively hold) = fastest win path on board. VTM ≥ 3 reachable S7–9. Victory by S9–10 in favourable conditions.
-[EDITORIAL: ED-111 — Varfell Path B balance. Options: (A) Add a third deed: "VTM ≥ 3, control T4+T13, AND RS ≥ 55" (RS preservation requirement slows Thread-heavy play). (B) Raise VTM requirement to 4 (adds 3–4 seasons). (C) Replace T13 with T12 Valorsplatz — far harder to seize and hold. (D) Add duration requirement: T4+T13 held simultaneously for 2 consecutive seasons (not just at Accounting).]
-
-### BAL-09 (P1): TC Lock (Church/Hafenmark)
-With Hafenmark Mandate ≥ 4: TC net = 0. Church cannot build TC toward victory.
-Forcing Church to first neutralise Hafenmark before TC can build creates mandatory aggression sequence.
-[EDITORIAL: ED-112 — TC lock resolution. This is likely partially intentional (Church must confront Protestant Reform). But if TC is permanently locked at 28, the Church faction is non-functional as a winner. Options: (A) AER ≥ 3 generates TC +1/season regardless of Hafenmark suppression (Altonian ecclesiastical leverage bypasses domestic politics). (B) Hafenmark suppression capped at −1/season maximum, but Church Assert (TC > 50) generates +2 not +1. (C) Church gets one TC gain per successful Heresy Investigation that Hafenmark cannot suppress. Recommended: (A) — the AER track is underused as a TC accelerant.]
-
-### BAL-10 (P2): Varfell T13 Dominant Opening
-T13 Stillhelm directly adjacent to T4 Vargstad. Fort 0. Crown nominal hold only (+1 Ob all actions).
-Varfell can March T4→T13 in S1 at almost no cost.
-[EDITORIAL: ED-113 — T13 opening. Options: (A) Give T13 Fort 1 (small warden garrison — the Wardens maintain some presence before Emergence). (B) Varfell march into T13 triggers immediate Warden Cooperation check (expedition trigger fires early, forcing Varfell to commit to the Southernmost path). (C) Accept — Crown holding T13 "nominally" is flavour; losing it S1 is correct fiction. Crown should simply not count T13 as a real starting territory for deed purposes.]
-
+## Balance Findings — Status Update
+**BAL-04, BAL-05/06, BAL-08, BAL-09 (all P1):** Superseded by victory_architecture_v1.md redesign. Crown victory restructured (TCV ≥ 18 + political conditions). Church primary restructured (TC 75 phase transition + seizure). Varfell Path B redesigned. TC dynamics recalibrated.
+**BAL-10 (P2):** Varfell T13 (now T13 Oastad) dominant opening — still relevant for monitoring under new TCV system.
+See victory_architecture_v1.md §10 for Monte Carlo win probability assessment.
+[SIM-DEBT: Full faction-AI simulation needed to validate multi-faction interaction under new victory architecture.]
 ## TC Threshold Check — Zoom In Interaction (ED-056 resolved 2026-04-03)
 TC threshold check fires at turn-end regardless of Zoom In suspension.
 Zoom In cannot delay TC threshold check. Clocks continue during Zoom In personal phase.

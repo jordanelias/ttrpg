@@ -124,9 +124,13 @@ This is a single-page reference card. One lookup per territory per season.
 - `compilation/v0.14/stage7_territories.md` Sudwald Thread Wound property (absorbed into the Proximity Rating system)
 
 ### Cross-references requiring propagation
-- `designs/ttrpg/threadwork_redesign_v25.md` §5.3: RS threshold table should note "geographic graduation per calamity_radiation.md" — effects are not global, they radiate. [PROPAGATION PENDING]
-- `designs/ttrpg/threadwork_redesign_v25.md` Part 6: Threadcut Beings section should cross-reference Gap-severity classification defined here. [PROPAGATION PENDING]
-- `compilation/v0.14/stage4_southernmost.md`: Expedition procedures should reference Proximity 0 effects. [PROPAGATION PENDING — low priority, stage4 already OUTDATED]
+- `designs/ttrpg/threadwork_redesign_v25.md` §5.3: RS threshold table notes geographic graduation per calamity_radiation.md (ED-302 callout present). [DONE]
+- `designs/ttrpg/threadwork_redesign_v25.md` Part 6 §6.1: Gap-severity classification cross-reference present. [DONE]
+- `references/params_board_game.md`: RS Effects section rewritten to use Simplified BG Lookup Table; Southernmost Zones replaced with Proximity Rating system. [DONE — 2026-04-06]
+- `compilation/v0.14/stage4_southernmost.md`: Expedition procedures should reference Proximity 0 effects. [DEFERRED — stage4 OUTDATED, low priority]
+
+### Hybrid Mode Note (B-09)
+Calamity Radiation Ob modifiers apply to both Personal Phase Thread operations (TTRPG rules) and Strategic Phase Thread orders (BG rules) in Hybrid mode. Coherence cost from PC-declared leadership (PP-198) stacks independently with Radiation Ob modifiers. This double cost is philosophically correct — operating near the wound is harder AND degrades the practitioner.
 
 ### Open editorial items
 - ED-302: Calamity Radiation Framework — this document. RESOLVED.
