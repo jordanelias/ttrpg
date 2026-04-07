@@ -1576,3 +1576,9 @@ editorial_decisions:
     status: flagged
     description: "RS track naming — 'Rendering Stability' vs alternative. User flagged that rendering is a process of consciousness, not reality. Current name measures substrate stability. Options: keep (defensible), rename to Substrate Integrity or Configurational Stability."
     tags: [threadwork, naming, rendering_stability]
+- id: ED-311
+    status: flagged
+    date_created: 2026-04-06
+    description: "Varfell Path B — Southernmost Dominion cognitive load reduction"
+    decision: "PENDING USER REVIEW. See designs/board_game/varfell_path_b_redesign_ed311.md for options A (4 conditions + WR track), B (5 conditions, keep WA/WC), C (3 conditions, minimal). Current 7-condition path identified as excessive in full-spectrum review."
+    tags: [board_game, varfell, victory, cognitive_load]

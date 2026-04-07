@@ -23,6 +23,7 @@ Triggered when a named PC enters a BG-resolved battle or territory.
 
 | BG Variable | TTRPG Equivalent | Transformation |
 |-------------|-----------------|----------------|
+| Territory CV (0–5) | Scene context (NPC attitudes, crowd faith level) | Read-only. Changes queue as Domain Echo (±1 max per Zoom In, one territory). |
 | Unit Strength (0–10) | Unit Str in TTRPG mass combat | Use B.2 conversion: TTRPG Str = ⌈BG Health ÷ 1.5⌉ (PP-103). state_transfer_spec "1:1" was wrong — corrected PP-107. |
 | Unit Cohesion (BG: 0–6) | Unit Cohesion (TTRPG: 1–7) | BG Cohesion 0 → TTRPG Cohesion 1 (floor). BG 1–6 → TTRPG 1–6 direct. BG max 6 ≠ TTRPG max 7. [PP-107] |
 | Unit Morale | Unit Morale (TTRPG: 1–7) | BG does not track Morale separately (PP-119: Cohesion subsumes both). On Zoom In: set TTRPG Morale = BG Cohesion + 1, max 7. [PROVISIONAL PP-107] |
@@ -58,6 +59,7 @@ After TTRPG scene resolves:
 | PC Domain Action in scene | Queue as Domain Echo; fires at next Accounting |
 | Wounds taken by PC general | BG commander bonus unaffected (wounds are personal) |
 | Thread operation RS consequence | RS track updated immediately (not queued) |
+| Faith-affecting personal scene (sermon, debate, Community Weaving) | CV ±1 in that territory, queued to Accounting. Cap: 1 CV Domain Echo per Zoom In. One territory only. |
 | Fortification damaged (siege scene) | Fortification −N applied immediately |
 | Debate outcome (Conviction Track ≥7 or ≤3) | Queue as Domain Echo: faction Mandate ±1 (winner's faction +1, loser −1 if applicable). Fires at next Accounting. [PP-108] |
 | Gap aversion (Thread Weaving stabilised) | No BG stat change. RS unchanged (Object-scale). Narrative note: territory has a known instability for future Investigation actions. |
@@ -203,8 +205,13 @@ These are always mode-specific and do not transfer:
 | BG Parliamentary Vote → TTRPG Formal Debate (Zoom In) | Remaining vote rounds → Exchange count | **UNDEFINED** [K2-F-02] | GAP — P1 |
 
 **K2-F-02 resolution needed before BG↔TTRPG debate Zoom In is playable.**
-## TC Win-Delay Rule (ED-056b resolved — provisional)
-TC threshold check (TC ≥ 65 = Church win) fires at Seasonal Accounting regardless of active Zoom In suspension. A Zoom In cannot delay or prevent a TC win condition. If TC reaches 65 during an Accounting that is otherwise suspended by Zoom In: Accounting completes the TC check, win fires if applicable, then Zoom In resumes. [PROVISIONAL]
+## Victory Condition Check — Hybrid (PP-420 — replaces TC Win-Delay Rule)
+Victory condition checks for ALL factions fire at Accounting Step 12 regardless of active Zoom In. A Zoom In cannot delay or prevent a victory declaration.
+
+- The 2-Accounting holding requirement is assessed across consecutive Accounting steps. A Zoom In spanning an Accounting boundary counts that Accounting.
+- If a faction meets victory conditions at two consecutive Accounting Steps 12, victory is declared at the second.
+- Church victory is no longer TC-threshold-based. Church wins via TCV ≥ 10 + CV ≥ 3 in all held territories, post-TC 75 phase transition. See victory_architecture_v1.md §3.2.
+- The prior "TC ≥ 65 = Church win" rule is struck (PP-420). The Church does not win by reaching a TC threshold alone.
 
 ## P-01 Co-Movement Propagation — BG Layer (ED-076 resolved — provisional)
 TTRPG scene Thread operations fire all three auto-effects per P-01. On Zoom Out, these propagate to BG as:

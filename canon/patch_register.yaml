@@ -3641,3 +3641,169 @@ patches:
   status: applied
   applied_to: [references/params_combat.md]
   notes: "Distinct from successful intercept payoff (PP-406). Failed intercept with no rescuer wound yields nothing."
+- id: PP-408
+  date: 2026-04-06
+  severity: P1
+  description: "Territory Consolidation Values (TCV) — remapped to PP-199 definitive numbering. Prior TCV table in victory_architecture_v1.md used pre-PP-199 T-numbers. All territory references corrected."
+  finding_id: FLAG-15
+  source: review
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-409
+  date: 2026-04-06
+  severity: P1
+  description: "Crown Peninsula Sovereignty TCV threshold: 18→16. Gap restored to +6 after TCV remapping changed Crown starting TCV from 12 to 10."
+  finding_id: FLAG-15
+  source: review
+  affects: [designs/board_game/victory_architecture_v1.md, references/params_board_game.md]
+  status: applied
+
+- id: PP-410
+  date: 2026-04-06
+  severity: P2
+  description: "Crown Dominion alternate: TCV ≥ 22 (unchanged, confirmed)."
+  source: review
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-411
+  date: 2026-04-06
+  severity: P2
+  description: "Hafenmark Parliamentary Sovereignty: TCV ≥ 12 confirmed (gap +3 under PP-199 numbering, acceptable)."
+  source: review
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-412
+  date: 2026-04-06
+  severity: P1
+  description: "Hafenmark Dynastic Assertion: T-number corrected to T12 (Valorsplatz) per PP-199."
+  finding_id: FLAG-15
+  source: review
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-413
+  date: 2026-04-06
+  severity: P1
+  description: "Church Altonian Theocracy alternate: territory corrected to T14 (Himmelenger) per PP-199. Prior reference to T9 was pre-PP-199 numbering."
+  finding_id: FLAG-15, FLAG-21
+  source: review
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-414
+  date: 2026-04-06
+  severity: P2
+  description: "Varfell Path B: provisional redesign (ED-311 pending user decision). Conditions reduced from 7 to 4 in provisional form. WR track introduced."
+  finding_id: ED-311
+  source: review
+  affects: [designs/board_game/victory_architecture_v1.md, designs/board_game/varfell_path_b_redesign_ed311.md]
+  status: provisional
+
+- id: PP-415
+  date: 2026-04-06
+  severity: P2
+  description: "RM Cultural Revolution RS threshold confirmed at ≥ 40 (victory_architecture_v1.md canonical). Prior params_board_game value of ≥ 50 struck."
+  finding_id: FLAG-17
+  source: review
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-416
+  date: 2026-04-06
+  severity: P2
+  description: "CV action cap clarified: cap (±1 per territory per season) governs deliberate faction actions only. Calamity Drift, Church Seizure Overwhelming CV bonus, and Domain Echoes from Zoom In are consequences — not cap-governed."
+  finding_id: FLAG-4
+  source: review
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-417
+  date: 2026-04-06
+  severity: P2
+  description: "Prominence mechanic defined: Church may only seize where Church global Mandate > controlling faction global Mandate. Tie goes to defender."
+  finding_id: FLAG-2
+  source: review
+  affects: [designs/board_game/victory_architecture_v1.md, references/params_board_game.md]
+  status: applied
+
+- id: PP-418
+  date: 2026-04-06
+  severity: P2
+  description: "Löwenritter Military Consolidation: 8-season timer must be tracked with counter on Löwenritter mat."
+  finding_id: FLAG-19
+  source: review
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-419
+  date: 2026-04-06
+  severity: P2
+  description: "Hybrid CV state transfer: CV read-only on Zoom In; Domain Echo ±1 cap per Zoom In per territory on Zoom Out. Added to state_transfer_spec.md §1 transfer and zoom-out tables."
+  finding_id: FLAG-7, FLAG-8
+  source: review
+  affects: [skills/valoria-orchestrator/references/state_transfer_spec.md]
+  status: applied
+
+- id: PP-420
+  date: 2026-04-06
+  severity: P1
+  description: "TC Win-Delay Rule replaced. Victory condition checks (all factions) fire at Accounting Step 12 regardless of Zoom In. TC ≥ 65 Church win rule struck — Church wins via TCV + CV conditions post-TC 75. state_transfer_spec.md updated."
+  finding_id: FLAG-7
+  source: review
+  affects: [skills/valoria-orchestrator/references/state_transfer_spec.md]
+  status: applied
+
+- id: PP-421
+  date: 2026-04-06
+  severity: P1
+  description: "TC seizure threshold canonical: TC 75 (not TC 80). TC freezes at 75; Church shifts to seizure mode. All params_board_game TC 80 references updated to TC 75. TC Effects table updated with 70-74 and 75+ bands."
+  finding_id: FLAG-5, ED-NNN-A
+  source: editorial
+  affects: [references/params_board_game.md, designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-422
+  date: 2026-04-06
+  severity: P2
+  description: "Co-victory pairings: Varfell+RM pairing updated to reference Warden Recognition (WR) ≥ 2 instead of WA/WC split. All pairings updated to conditions-based language."
+  source: review
+  affects: [references/params_board_game.md, designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-423
+  date: 2026-04-06
+  severity: P2
+  description: "Formal Crown Treaty: added to Standard Action Ob Reference table as Senator Outward, Ob = target faction Mandate, Crown only."
+  finding_id: FLAG-13
+  source: review
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-424
+  date: 2026-04-06
+  severity: P1
+  description: "Deed system dissolved in params_board_game: Victory Conditions section replaced with pointer to victory_architecture_v1.md; Hollow Victory Deed modifier table struck; Accounting Step 12 rewritten."
+  source: review
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-425
+  date: 2026-04-06
+  severity: P2
+  description: "Warden Recognition (WR) track defined (0-4, Varfell-only). Replaces WA+WC split in Varfell Path B. WC track (0-3) retained as separate system for shared Warden engagement. WR and WC are distinct."
+  finding_id: FLAG-18, ED-311
+  source: review
+  affects: [references/params_board_game.md, designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-426
+  date: 2026-04-06
+  severity: P2
+  description: "Warden Cooperation (WC) bonus effects added to params_board_game: WC≥1 +1D Thread ops; WC≥2 RS decay halved; WC=3 RS +2/season at Accounting."
+  finding_id: FLAG-14
+  source: review
+  affects: [references/params_board_game.md]
+  status: applied

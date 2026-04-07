@@ -1,15 +1,13 @@
 # VALORIA BG — Victory Architecture
-## ED-306 Resolution (v2)
-## Date: 2026-04-06 | Status: DESIGN PROPOSAL — User Review Required
-## Supersedes: v1 (same path), params_board_game.md §Victory Conditions, all Deed-based victory systems
+## ED-306 Resolution (v3 — PP-199 territory numbering, TC 75 canonical, CV cap clarified)
+## Date: 2026-04-06 | Status: DESIGN — pending Varfell Path B user decision (ED-311)
+## Supersedes: v2 (same path), params_board_game.md §Victory Conditions, all Deed-based victory systems
 ## Dependencies: ED-302 (CV confirmed), ED-303 (TC freeze at 75), ED-304 (Partition Victory), ED-305 (WA=0), ED-307 (Baralta cadet branch), BALANCE-001 (equal win probability), BALANCE-004 (Askeheim purpose)
-## Source: opus_design_proposal.md (PP-406–PP-418) + user decisions 2026-04-06 + audit findings
+## Territory numbering: PP-199 definitive (all T-numbers match params_board_game PP-199 table)
 
 ---
 
 ## Core Frame
-
-This is a game about conquering a peninsula — or at worst, being a co-owner of it. Every faction wins by holding enough territory under conditions that match their vision. The Deed checklist system is dissolved for ALL factions including Löwenritter.
 
 Victory = Territory Held + Faction-Specific Political Conditions, sustained for 2 consecutive Accounting steps.
 
@@ -22,112 +20,92 @@ Two simultaneous contests: who governs the peninsula AND whether it survives. Ch
 ## 1. Territory Consolidation Values (TCV)
 
 Every territory has a fixed strategic weight. TCV is the universal measure of territorial dominance.
+All territory numbers match PP-199 definitive table.
 
 | T# | Territory | TCV | Controller |
-|----|-----------|-----|-----------|
-| T1 | Valorsplatz | 5 | Crown |
-| T8 | Gransol | 4 | Hafenmark |
-| T9 | Himmelenger | 3 | Church |
-| T12 | Sigurdshelm | 3 | Varfell |
-| T3 | Lowenskyst | 2 | Crown |
-| T10 | Spartfell | 2 | Hafenmark |
-| T14 | Ehrenfeld | 2 | Crown |
-| T2 | Kronmark | 1 | Crown |
-| T4 | Grauwald | 1 | Varfell |
-| T5 | Feldmark | 1 | Crown |
-| T6 | Stillhelm | 1 | Crown |
-| T7 | Rendstad | 1 | Hafenmark |
-| T11 | Halvardshelm | 1 | Varfell |
-| T13 | Oastad | 1 | Varfell |
-| T17 | Halvarshelm | 1 | Hafenmark |
+|----|-----------|-----|-----------| 
+| T12 | Valorsplatz | 5 | Crown★ |
+| T5 | Gransol | 4 | Hafenmark★ |
+| T14 | Himmelenger | 3 | Church★ |
+| T2 | Sigurdshelm | 3 | Varfell |
+| T7 | Spartfell | 2 | Hafenmark |
+| T8 | Lowenskyst | 2 | Hafenmark |
+| T9 | Arcansheld | 2 | Crown |
+| T1 | Varfell | 1 | Varfell |
+| T3 | Halvardshelm | 1 | Varfell |
+| T4 | Vargstad | 1 | Varfell |
+| T6 | Eidursjo | 1 | Hafenmark |
+| T10 | Nordhelm | 1 | Crown |
+| T11 | Mittelmark | 1 | Crown |
+| T13 | Stillhelm | 1 | Crown |
 | T15 | Askeheim | 0 | Uncontrolled |
 | T16 | Schoenland | — | Not in territorial play |
-| | **Total** | **30** | |
+| | **Total** | **28** | |
 
-**Starting TCV by faction:** Crown 12, Hafenmark 8, Varfell 6, Church 3.
+**Starting TCV by faction:** Crown 10, Hafenmark 9, Varfell 6, Church 3.
 
 ---
 
 ## 2. Conviction Track (CV)
 
-Per opus_design_proposal.md §1. Range 0–5 per territory. 0 = Restoration pole, 5 = Piety pole.
+Per-territory track. Range 0–5 per territory. 0 = Restoration pole, 5 = Piety pole.
 
 Starting values, movement rules, Calamity Drift, and Consecrated status per opus_design_proposal.md §1.1–1.4.
 
-Key points:
-- T15 (Askeheim) CV hard-fixed at 0. Cannot increase. Justification: P-03 + Foundations §8 — rendering capacity in the Southernmost is structurally compromised; orthodox conviction cannot be sustained where the rendering of ordinary experience fails.
-- T9 (Himmelenger) starts at 5, soft cap — can drop under pressure, does not auto-recover.
-- CV ±1 per territory per season (cap). One CV movement action per faction per season.
-- Calamity Drift (RS-linked CV erosion) ignores the ±1 cap. RS ≤ 50: T6/T13 CV −1. RS ≤ 35: within 2 steps of T15 CV −1. RS ≤ 20: all territories CV −1.
-- Community Weaving is a Thread operation: it follows the standard Thread operation procedure including Co-Movement card draw. The CV −1 is the intended primary effect; temporal/epistemic/actual auto-effects fire as standard P-01 consequences.
+Key rules:
+- T15 (Askeheim) CV hard-fixed at 0. Cannot increase. (P-03 + Foundations §8)
+- T14 (Himmelenger) starts at 5, soft cap — can drop under pressure, does not auto-recover.
+- **CV action cap:** Each faction may initiate at most one deliberate CV-moving action per territory per season (±1 max). Calamity Drift, Church Seizure Overwhelming CV bonus, and Domain Echoes from Zoom In are consequences — they are not faction actions and are not cap-governed.
+- Calamity Drift (RS-linked CV erosion) ignores the action cap. RS ≤ 50: T6/T13 CV −1. RS ≤ 35: territories within 2 steps of T15 CV −1. RS ≤ 20: all territories CV −1.
+- Community Weaving is a Thread operation: follows standard Thread procedure including Co-Movement card draw. CV −1 is the primary effect; temporal/epistemic/actual auto-effects fire per P-01.
 
 ---
 
 ## 3. Victory Conditions — All Factions
 
-Every victory requires holding conditions for **2 consecutive Accounting steps** (not seasons — Accounting). A faction that meets all conditions can be knocked out during the intervening season, which resets the 2-Accounting counter.
+Every victory requires holding all conditions for **2 consecutive Accounting steps**. A faction knocked out between steps resets its counter.
 
-### 3.1 Crown — Peninsula Sovereignty (Almud = Liu Bei)
-
-Crown wins by ruling the peninsula with no credible rival. This is the hardest solo victory. Every other faction must be suppressed, including managing the Altonian threat. Eradication, surrender, or Crown-favourable treaties.
+### 3.1 Crown — Peninsula Sovereignty
 
 **All conditions simultaneous at Accounting:**
 
-| Condition | Threshold | Rationale |
-|-----------|-----------|-----------|
-| TCV held | ≥ 18 | Crown controls 60% of the peninsula |
-| Rival suppression | Every other playable faction: Mandate ≤ 2 OR eliminated OR formal Crown treaty in effect | No credible political rival remains |
-| IP | < 60 | Altonia is contained |
-| PI | ≥ 3 | Institutions still function (Crown is not a tyrant — it is a constitutional monarchy) |
+| Condition | Threshold |
+|-----------|-----------|
+| TCV held | ≥ 16 |
+| Rival suppression | Every other playable faction: Mandate ≤ 2 OR eliminated OR formal Crown Treaty in effect |
+| IP | < 60 |
+| PI | ≥ 3 |
 
-**Formal Crown Treaty:** A Domain Action (Diplomacy, Ob = target faction's Mandate). Both factions must agree. Treaty terms: target faction acknowledges Crown sovereignty, gains +1 Stability, loses 1 Mandate immediately. Treaty is permanent unless Crown breaks it (Crown Stability −2, Mandate −1) or target faction's Mandate reaches 0 (treaty dissolves — faction has collapsed).
-
-**Why no CV condition:** Crown is a secular monarchy. It governs through political authority (Mandate), not ideological alignment (CV). Crown's interest in CV is purely defensive — extreme CV in either direction empowers rivals (Church at high CV, RM at low CV). Crown fights ideological threats through political tools (Royal Decree, Domain Actions, military conquest), not through preaching or cultural programs.
-
-**Design notes:**
-- Starting position: TCV 12 (needs +6). Mandate already 5 (but must ALSO suppress 3 rivals). IP 20 (met). PI 7 (met).
-- TCV +6 = 3–5 conquests over ~8–12 seasons.
-- Suppressing 3 factions from Mandate 4–5 to Mandate ≤ 2: requires ~3 successful hostile Domain Actions per faction = ~9 total. At ~1/season with opposition, this takes 12–18 seasons.
-- Territory conquest and faction suppression overlap: conquering a faction's territory reduces its stats. Crown's path is to conquer outward while rivals weaken.
-- Crown's total timeline: ~15–18 seasons. The hardest path, achievable in a 20-season game, tight in a 15-season game.
+**Formal Crown Treaty:** Diplomacy action, Ob = target faction's Mandate. Both factions must agree. Target faction: Mandate −1, Stability +1. Treaty dissolves if Crown breaks it (Crown Stability −2, Mandate −1) or target faction Mandate reaches 0.
 
 #### Alternate — Dominion
-
-TCV ≥ 22 AND every other playable faction eliminated (Stability 0). No treaties, no negotiation. Pure conquest. Harder than Peninsula Sovereignty but requires no diplomacy.
+TCV ≥ 22 AND every other playable faction eliminated (Stability 0). No treaties.
 
 ---
 
 ### 3.2 Church of Solmund — Solmundan Orthodoxy
 
-Church wins through TC accumulation → phase transition → territorial seizure → consolidation under orthodox faith. Two phases of play: the accumulation clock and the seizure campaign.
+**Phase 1 (TC 0–74):** Accumulate TC via institutional momentum, Conviction Yield, and Assert. Per opus_design_proposal.md §3.
 
-**Phase 1 (TC 0–74):** Accumulate TC via institutional momentum, Conviction Yield, and Assert actions. Per opus_design_proposal.md §3.
-
-**Phase 2 (TC ≥ 75):** TC freezes at 75. Church shifts to territorial seizure. Remaining "TC 75→100" is peninsula conquest, not clock advancement.
+**Phase 2 (TC ≥ 75):** TC freezes at 75. Church shifts to territorial seizure.
 
 **Victory conditions (all simultaneous at Accounting, post-TC 75):**
 
-| Condition | Threshold | Rationale |
-|-----------|-----------|-----------|
-| TCV held | ≥ 10 | Church controls a third of the peninsula under orthodoxy |
-| CV in all held territories | ≥ 3 | Orthodox population supports Church governance |
+| Condition | Threshold |
+|-----------|-----------|
+| TCV held | ≥ 10 |
+| CV in all held territories | ≥ 3 |
 
-**Church Seizure Ob:** Per opus_design_proposal.md §2. Ob = 2 + Fort Level + max(0, 3 − CV). Prominence required (Church Mandate > controlling faction's Mandate in territory). Church Mandate ≥ 4. On Overwhelming seizure: CV +1 in target territory (population rallies to Church governance).
+**Church Seizure Ob (post-TC 75):** Ob = 2 + Fort Level + max(0, 3 − CV). 
 
-**Design notes:**
-- Starting position: TCV 3 (needs +15). TC 28 (needs 47 to reach 75).
-- TC timeline: ~16–20 seasons to TC 75 (per opus_design_proposal.md §3 pacing analysis).
-- Post-TC 75 seizure: Influence 6 pool against Ob 2–5 depending on Fort and CV. In unforted CV ≥ 3 territory, Ob 2 = ~80% success at pool 6. Church can seize 1–2 territories per season.
-- +7 TCV via seizure = ~5–6 seizures over ~6–8 seasons. Total: ~22–26 seasons.
-- This is LONG. Church is designed as hard mode. Church wins if the game goes long and no one stops TC. Church's presence makes the game interesting for everyone else — the TC clock forces collective response.
-- Church can accelerate via Conviction Yield (raising CV in target territories before seizing) and Altonian Theocracy Path (alternate victory requiring less territory).
+**Prominence prerequisite:** Church may only seize a territory where Church is Prominent — defined as Church Mandate exceeding the controlling faction's Mandate in that territory. Church Mandate is the Church faction's global Mandate stat. Controlling faction Mandate is their global Mandate stat. Prominence is assessed at seizure declaration.
+
+Church Mandate ≥ 4 required to initiate any seizure. Overwhelming seizure: CV +1 in target territory (this is a consequence, not a cap-governed action).
 
 #### Alternate — Altonian Theocracy Path
-
-Per opus_design_proposal.md §4.2. Altonian Ecclesiastical Accord (AEA) clock 0–5. Victory: AEA = 5 + TC ≥ 60 + Church controls T9 (Himmelenger). Requires less territory (only T9 mandatory) but more diplomatic conditions. This is the faster Church path in games where territorial seizure is blocked.
+Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 + Church controls T14 (Himmelenger). Requires less territory but more diplomatic conditions.
 
 #### Partition — Church + Hafenmark (ED-304)
-
 **Trigger (all simultaneous at Accounting):**
 - Crown Mandate ≤ 1
 - TC ≥ 50
@@ -135,174 +113,128 @@ Per opus_design_proposal.md §4.2. Altonian Ecclesiastical Accord (AEA) clock 0�
 - Hafenmark controls ≥ 3 territories
 - No active military conflict between Church and Hafenmark
 
-**Outcome:** Church agrees to leave Hafenmark alone; Hafenmark agrees to leave Church alone. Hafenmark gets Varfell territories; Church gets Crown territories. Both factions score a conditional victory — better than a loss, worse than a solo win. Game ends.
-
-**No holding requirement** — this is a mutual agreement, not a sustained state. Once declared, both factions win.
+**Outcome:** Mutual agreement ends the game. Both factions score a conditional victory. No holding requirement — fires immediately on mutual declaration.
 
 ---
 
-### 3.3 Hafenmark — Parliamentary Sovereignty (Baralta = Catherine/Isabella)
-
-Hafenmark wins by proving parliamentary governance works while eclipsing Crown authority. Baralta is a cadet branch of the Almqvist royal house — her victory is institutional capture that makes the monarchy irrelevant.
+### 3.3 Hafenmark — Parliamentary Sovereignty
 
 **All conditions simultaneous at Accounting:**
 
-| Condition | Threshold | Rationale |
-|-----------|-----------|-----------|
-| TCV held | ≥ 12 | Hafenmark controls enough territory to prove its model |
-| Hafenmark Mandate | ≥ 4 | Parliamentary authority is functioning |
-| PI | ≥ 5 | Institutions are healthy |
-| Crown Mandate | ≤ 3 | Crown's institutional authority has been eclipsed |
-
-**Design notes:**
-- Starting position: TCV 8 (needs +4). Mandate 4 (met). PI 7 (met). Crown Mandate 5 (must bring to ≤ 3).
-- TCV +4 = 2–3 conquests over ~6–10 seasons.
-- Crown Mandate suppression: from 5 to 3 requires ~2–3 successful hostile Domain Actions. Achievable in ~4–6 seasons.
-- Total timeline: ~10–14 seasons. Middle difficulty.
-- Hafenmark's Military 3 is the weakest of the playable factions. Hafenmark must use Wealth (economic pressure, Trade Network Investment) and Influence (Parliamentary Votes, Diplomacy) to expand rather than brute force. This is intentional — Hafenmark wins through institutions, not armies.
+| Condition | Threshold |
+|-----------|-----------|
+| TCV held | ≥ 12 |
+| Hafenmark Mandate | ≥ 4 |
+| PI | ≥ 5 |
+| Crown Mandate | ≤ 3 |
 
 #### Alternate — Dynastic Assertion (ED-307)
 
-Baralta seizes the throne by dynastic right as cadet branch of the Almqvist house. Almqvist must resign and his children must give up their claim (or die).
-
-**All conditions simultaneous at Accounting:**
-
-| Condition | Threshold | Rationale |
-|-----------|-----------|-----------|
-| TCV held | ≥ 12 | Hafenmark controls enough territory to govern |
-| Crown Mandate | ≤ 1 | Crown's authority has collapsed completely |
-| Hafenmark controls T1 (Valorsplatz) | — | Baralta occupies the capital |
-| Hafenmark Mandate | ≥ 5 | Peak institutional authority |
-| Torben Loyalty | ≤ 3 OR Torben removed | Almqvist's heir is alienated or eliminated |
-
-**Design notes:** Harder territorial condition than Reformed Sovereignty (must take Valorsplatz, TCV 5) but lower total TCV (12 vs 14). The difficulty is political: Crown Mandate ≤ 1 requires near-complete institutional collapse. This path is for games where Crown is already weakened and Baralta can deliver the killing blow.
+| Condition | Threshold |
+|-----------|-----------|
+| TCV held | ≥ 12 |
+| Crown Mandate | ≤ 1 |
+| Control T12 (Valorsplatz) | held |
+| Hafenmark Mandate | ≥ 5 |
+| Torben Loyalty | ≤ 3 OR Torben removed |
 
 ---
 
-### 3.4 Varfell — Vaynard's Three Paths (Vaynard = Reinhardt/Brigandine Vaynard)
-
-Varfell starts isolated with the lowest TCV (6). Three victory paths represent three arcs for Vaynard: intelligence hegemon, Southernmost steward, or Thread master. All require Thread awareness and territorial expansion from the fjords.
+### 3.4 Varfell — Vaynard's Three Paths
 
 #### Path A — Intelligence Hegemony
 
-**All conditions simultaneous at Accounting:**
-
-| Condition | Threshold | Rationale |
-|-----------|-----------|-----------|
-| TCV held | ≥ 10 | Varfell has expanded from isolation to peninsular power |
-| VTM | ≥ 3 | Thread awareness provides intelligence advantage |
-| At least 2 rival factions' stats fully revealed | — | Varfell has penetrated rival intelligence (fixed count, player-count-invariant) |
-| Varfell controls ≥ 1 territory outside starting 4 | — | Varfell has expanded |
-
-**Design notes:** TCV +8 from 6 = 4–6 conquests over ~10–16 seasons. VTM 3 requires sustained Thread development. Stat revelation is the intelligence payoff — Varfell's Patience Protocol and Riskbreaker network are the tools. Timeline: ~14–18 seasons.
+| Condition | Threshold |
+|-----------|-----------|
+| TCV held | ≥ 10 |
+| VTM | ≥ 3 |
+| At least 2 rival factions' stats fully revealed | fixed count |
+| Varfell controls ≥ 1 territory outside starting 4 | — |
 
 #### Path B — Southernmost Dominion
+[ED-311 OPEN — awaiting user decision. See designs/board_game/varfell_path_b_redesign_ed311.md]
 
-**All conditions simultaneous at Accounting:**
+Current provisional conditions pending ED-311:
 
-| Condition | Threshold | Rationale |
-|-----------|-----------|-----------|
-| TCV held | ≥ 8 | Minimum viable territorial control |
-| Varfell controls T13 (Oastad) | — | Southern fjords — gateway to Askeheim |
-| Garrison or Tribune present in T15 (Askeheim) | — | Varfell engages the Southernmost |
-| VTM | ≥ 3 | Thread awareness to engage meaningfully |
-| Warden Cooperation | ≥ 1 | Wardens recognise Vaynard's stewardship |
-| Warden's Accord (WA) | ≥ +1 | RM trusts Vaynard |
-| T13 CV | ≤ 1 | Einhir cultural identity maintained in Varfell's southern gateway |
+| Condition | Threshold |
+|-----------|-----------|
+| TCV held | ≥ 8 |
+| Control T4 (Vargstad) AND T13 (Stillhelm) | both held |
+| VTM | ≥ 3 |
+| Warden Recognition (WR) | ≥ 2 |
 
-**Blocked if RM has emerged (WA ≤ −2).** RM emergence means Vaynard has alienated the movement — stewardship path closes.
-
-**Design notes:** Lower TCV (8 from 6 = +2) but multiple non-territorial conditions. This is the narrative path — Vaynard discovers the Thread path and becomes a genuine steward of the Southernmost rather than a conqueror. Timeline: ~12–16 seasons.
+**Blocked if:** WR has ever returned to 0 after advancing past 1.
 
 #### Path C — Thread Supremacy
 
-**All conditions simultaneous at Accounting:**
-
-| Condition | Threshold | Rationale |
-|-----------|-----------|-----------|
-| TCV held | ≥ 10 | Meaningful territorial control |
-| VTM | = 5 | Peak Thread mastery |
-| RS | ≥ 50 | The world is intact — Vaynard's Thread power hasn't destroyed it |
-
-**Design notes:** VTM 5 is a multi-season investment (minimum ~S14–16 to achieve). RS ≥ 50 creates tension with Thread operations that degrade RS. TCV 10 from 6 = +4 = 2–4 conquests. Timeline: ~14–18 seasons.
+| Condition | Threshold |
+|-----------|-----------|
+| TCV held | ≥ 10 |
+| VTM | = 5 |
+| RS | ≥ 50 |
 
 ---
 
 ### 3.5 Restoration Movement — Cultural Revolution (5 players only, hardest mode)
 
-RM wins by spreading cultural restoration across the peninsula while keeping the world alive. RM does not conquer territory conventionally — it transforms the ideological landscape.
-
 **All conditions simultaneous at Accounting:**
 
-| Condition | Threshold | Rationale |
-|-----------|-----------|-----------|
-| Territories at CV ≤ 1 | ≥ 5 | Orthodox conviction has collapsed across a third of the peninsula |
-| RM Presence markers | ≥ 5, in ≥ 5 non-adjacent territories | Grassroots network, not territorial concentration |
-| RS | ≥ 40 | The world survives — RM stewards the rendering, not destroys it |
-
-**Design notes:** No TCV requirement — RM operates through cultural influence (Presence markers), not administrative control. 5 territories at CV ≤ 1 requires sustained Cultural Reclamation and Community Weaving. RS ≥ 40 is the critical tension: Community Weaving produces co-movement consequences (P-01) that can degrade RS. RM must be judicious. Hardest victory in the game — RM is explicitly the challenge mode. Timeline: ~14–20 seasons.
+| Condition | Threshold |
+|-----------|-----------|
+| Territories at CV ≤ 1 | ≥ 5 |
+| RM Presence markers | ≥ 5, in ≥ 5 non-adjacent territories |
+| RS | ≥ 40 |
 
 ---
 
 ### 3.6 Löwenritter — Military Regency (conditional faction, post-coup)
 
-Löwenritter enters after the coup fires. It wins by establishing a legitimate military regency — or failing that, by holding enough territory through force alone.
-
 #### Primary — Regency Establishment
 
-**All conditions simultaneous at Accounting:**
-
-| Condition | Threshold | Rationale |
-|-----------|-----------|-----------|
-| TCV held | ≥ 10 | Löwenritter controls enough territory for a credible government |
-| TC | < 50 | Church theocratic momentum is contained |
-| IP | < 60 | Altonia is not invading |
-| RS | > 40 | The world is intact |
-| PI | ≥ 4 | Institutions support the transition |
-| Successor confirmed | Elske confirmed OR Torben Loyalty ≥ 6 | Legitimate succession |
-
-**Design notes:** Löwenritter has Military 6 (highest in game) but Influence 2 and Mandate 3 (weakest political tools). Territory acquisition is fast (military strength) but political conditions require cooperation from other factions. Löwenritter depends on Crown/Hafenmark managing IP and Elske/Torben loyalty. This creates genuine co-victory incentive (Löwenritter + Hafenmark).
+| Condition | Threshold |
+|-----------|-----------|
+| TCV held | ≥ 10 |
+| TC | < 50 |
+| IP | < 60 |
+| RS | > 40 |
+| PI | ≥ 4 |
+| Successor confirmed | Elske confirmed OR Torben Loyalty ≥ 6 |
 
 #### Alternate — Military Consolidation
+Only available if Regency Establishment not achieved after 8 Löwenritter seasons (track with counter on Löwenritter mat).
 
-**All conditions simultaneous at Accounting:**
-
-| Condition | Threshold | Rationale |
-|-----------|-----------|-----------|
-| TCV held | ≥ 16 | Löwenritter controls over half the peninsula by force |
-| Löwenritter Military | ≥ 5 | Military dominance maintained |
-| RS | > 35 | World is still functional |
-| TC | < 60 | Church has not consolidated |
-
-Only available if Regency Establishment not achieved after 8 Löwenritter seasons.
+| Condition | Threshold |
+|-----------|-----------|
+| TCV held | ≥ 16 |
+| Löwenritter Military | ≥ 5 |
+| RS | > 35 |
+| TC | < 60 |
 
 ---
 
 ## 4. Co-Victory Pairings
 
-Co-victories are the "co-owner of the peninsula" outcomes. Both factions score a conditional victory — the game ends, both win, but neither achieves solo dominance.
+Co-victories require 2 consecutive Accounting steps except Partition (immediate on mutual agreement).
 
 | Pair | Conditions (all simultaneous at Accounting) |
 |------|---------------------------------------------|
-| **Crown + Hafenmark** | Crown TCV ≥ 12 AND Hafenmark TCV ≥ 8 AND PI ≥ 5 AND TC < 50 |
+| **Crown + Hafenmark** | Crown TCV ≥ 12 AND Hafenmark TCV ≥ 9 AND PI ≥ 5 AND TC < 50 |
 | **Crown + Varfell** | Crown TCV ≥ 12 AND Varfell TCV ≥ 8 AND VTM ≥ 3 AND RS ≥ 50 |
-| **Varfell + RM** | VTM ≥ 4 AND WA ≥ +2 AND ≥ 4 territories CV ≤ 1 AND RS ≥ 40 AND Warden Cooperation ≥ 2 AND Varfell controls T13 |
+| **Varfell + RM** | VTM ≥ 4 AND WR ≥ 2 AND ≥ 4 territories CV ≤ 1 AND RS ≥ 40 AND Varfell controls T13 |
 | **Hafenmark + RM** | Hafenmark TCV ≥ 10 AND ≥ 4 territories CV ≤ 2 AND PI ≥ 4 AND RS ≥ 40 |
 | **Löwenritter + Hafenmark** | Löwenritter TCV ≥ 8 AND Hafenmark TCV ≥ 8 AND PI ≥ 4 |
 | **Church + Hafenmark (Partition)** | See §3.2. Crown Mandate ≤ 1, TC ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no active military conflict. |
 
 **Incompatible:** Crown + Church, Crown + Löwenritter, Church + Varfell, Church + RM.
 
-Co-victory pairings are distinct from operational coalition pairs (PP-404/PP-405). Coalitions are in-game alliances with mechanical benefits (combined actions, +1D). Co-victories are game-ending conditions. A faction may pursue a coalition without pursuing a co-victory, and vice versa.
-
-Co-victories require 2 consecutive Accounting steps (same as solo victories) except the Partition, which fires immediately on mutual agreement.
+Co-victories are distinct from operational coalitions (PP-404/405). A faction may pursue a coalition without pursuing a co-victory.
 
 ---
 
 ## 5. Shared Loss Conditions
 
 | Condition | Trigger | Outcome |
-|-----------|---------|---------|
+|-----------|---------|---------| 
 | Rendering Stability Rupture | RS = 0 at Accounting | All factions lose. Second Calamity. |
 | Altonian Conquest | IP ≥ 100 AND AER ≤ 1 | Altonia annexes Valoria. All factions lose. |
 | Total Institutional Collapse | All playable factions at Stability 0 simultaneously | Anarchy. All factions lose. |
@@ -311,9 +243,7 @@ Co-victories require 2 consecutive Accounting steps (same as solo victories) exc
 
 ## 6. Askeheim and RS (BALANCE-004)
 
-If no faction engages with Askeheim (T15) to help the Wardens, RS trends toward 0 and a second Calamity occurs. The Southernmost is not dead space — it is the existential threat that gives RS its teeth.
-
-**Thread Sensitivity (TS) power/consequence nexus:** Increasing TS makes practitioners more powerful and influential. But Thread operations produce co-movement consequences (P-01) that can accelerate RS decline if not judicious. Power costs. Mending and careful threadwork are the only way to gain Thread power without destroying the world.
+If no faction engages with Askeheim (T15), RS trends toward 0 and a second Calamity occurs.
 
 **Warden Cooperation track (0–3):**
 - WC ≥ 1: +1D to all Thread operations peninsula-wide.
@@ -322,26 +252,35 @@ If no faction engages with Askeheim (T15) to help the Wardens, RS trends toward 
 
 Multiple victory conditions require RS thresholds. A faction that ignores RS risks losing to Rupture regardless of territorial control.
 
+**Warden Recognition (WR) track (0–4) — Varfell Path B:**
+- WR 0: Wardens unaware or indifferent.
+- WR 1: Wardens have observed Vaynard (≥ 1 successful Expedition).
+- WR 2: Wardens recognise Vaynard as steward.
+- WR 3: Active cooperation (+1D Thread ops, as WC ≥ 1 equivalent).
+- WR 4: Edeyja makes substantive contact.
+
+WC and WR are distinct tracks. WC advances through any faction's Expedition engagement. WR advances only through Varfell's Expedition actions.
+
 ---
 
 ## 7. TC Generation and Church Seizure
 
-Per opus_design_proposal.md §2–3. Starting TC 28. Phase transition at TC 75 (TC freezes).
+Starting TC: 28. Phase transition at TC 75 (TC freezes, Church shifts to seizure mode).
 
-**Seasonal TC at Accounting (in order):**
+**Seasonal TC at Accounting:**
 1. Institutional Momentum: TC +1 (passive).
-2. Conviction Yield: for each territory where Church is prominent (Church Mandate > controlling faction's Mandate), add based on CV. CV 5 = +1, CV 4 = +0.5, others = 0. Total = floor(sum).
+2. Conviction Yield: per territory where Church is Prominent (Church Mandate > controlling faction Mandate), add by CV. CV 5 = +1, CV 4 = +0.5, others = 0. Total = floor(sum).
 3. Assert (optional Church action): Influence vs Ob 2. Success: TC +1. Failure: Stability −1.
 4. Suppress (optional opponent action): Mandate vs Ob = Church Mandate. Success: negate Step 1 passive. Failure: Stability −1.
 5. Hafenmark Structural Suppression: while Baralta Mandate ≥ 4, TC −1/season.
 
-**Church Seizure Ob (post-TC 75):** Ob = 2 + Fort Level + max(0, 3 − CV). Prominence required. Church Mandate ≥ 4. Overwhelming seizure: CV +1 in target territory (counts against ±1 CV seasonal cap). See opus_design_proposal.md §2 for full seizure results table.
+**Church Seizure Ob (post-TC 75):** Ob = 2 + Fort Level + max(0, 3 − CV). Prominence required. Church Mandate ≥ 4. Overwhelming: CV +1 in target territory.
 
 ---
 
 ## 8. RM Emergence
 
-Per opus_design_proposal.md §5. Warden's Accord (WA) −3 to +3, starts at 0. Triple-condition emergence: WA ≤ −2 AND ≥ 3 territories CV ≤ 1 AND RS ≤ 50. One-shot. Suppression: WA ≥ 0 OR all territories CV ≥ 2 OR RM Stability 0. See opus doc for full stat block and NPC AI.
+WA track −3 to +3, starts 0. Triple-condition emergence: WA ≤ −2 AND ≥ 3 territories CV ≤ 1 AND RS ≤ 50. One-shot. Suppression: WA ≥ 0 OR all territories CV ≥ 2 OR RM Stability 0. See opus_design_proposal.md §5 for full stat block and AI.
 
 ---
 
@@ -349,91 +288,81 @@ Per opus_design_proposal.md §5. Warden's Accord (WA) −3 to +3, starts at 0. T
 
 ### 9.1 CV State Transfer
 
-CV is a per-territory stat that crosses the BG ↔ TTRPG boundary.
-
 | Transition | CV Rule |
 |-----------|---------|
-| **BG → TTRPG (Zoom In)** | Current CV value for the territory is context. GM uses CV to inform NPC attitudes, crowd behaviour, and faith-related scene framing. CV is read-only during the TTRPG scene. |
-| **TTRPG → BG (Zoom Out)** | CV changes from personal-scale scenes queue as Domain Echoes. One Zoom In can produce at most ±1 CV in one territory, firing at next Accounting. A single sermon or debate does not move a territory-wide population stat instantly. |
-| **Calamity Drift during Zoom In** | Calamity Drift fires at Accounting. If Accounting is suspended during Zoom In, Calamity Drift queues and fires when Accounting resumes. It is a global environmental effect, not a player action — it cannot be skipped. |
+| BG → TTRPG (Zoom In) | CV is read-only context. GM uses CV to inform NPC attitudes and faith-related framing. |
+| TTRPG → BG (Zoom Out) | CV changes from personal scenes queue as Domain Echoes. Cap: ±1 CV in one territory per Zoom In, firing at next Accounting. |
+| Calamity Drift during Zoom In | Queues and fires when Accounting resumes. Cannot be skipped. |
 
-Add to state_transfer_spec.md §1 Variables that TRANSFER table:
+**Variables that TRANSFER (BG → TTRPG):**
 
 | BG Variable | TTRPG Equivalent | Transformation |
 |-------------|-----------------|----------------|
 | Territory CV (0–5) | Scene context (NPC attitudes, crowd faith level) | Read-only. Changes queue as Domain Echo (±1 max per Zoom In). |
 
-Add to state_transfer_spec.md §1 Zoom Out table:
+**Zoom Out (TTRPG → BG):**
 
 | TTRPG Outcome | BG State Update |
 |---------------|----------------|
-| Faith-affecting personal scene (sermon, debate about doctrine, Community Weaving) | CV ±1 in that territory, queued to Accounting. Cap: 1 CV Domain Echo per Zoom In. |
+| Faith-affecting personal scene (sermon, debate, Community Weaving) | CV ±1 in that territory, queued to Accounting. Cap: 1 CV Domain Echo per Zoom In. |
 
 ### 9.2 Victory Condition Check — Hybrid
 
-state_transfer_spec.md §TC Win-Delay Rule must be rewritten:
-
-**Old (INVALID):** "TC ≥ 65 = Church win fires at Accounting regardless of Zoom In."
-
-**New:** "Victory condition checks (all factions) fire at Accounting Step 12 regardless of active Zoom In. A Zoom In cannot delay or prevent a victory declaration. The 2-Accounting holding requirement is assessed across consecutive Accounting steps — a Zoom In that spans an Accounting boundary counts that Accounting. If a faction meets victory conditions at two consecutive Accounting steps, victory is declared at the second Accounting Step 12."
+Victory condition checks (all factions) fire at Accounting Step 12 regardless of active Zoom In. A Zoom In cannot delay or prevent a victory declaration. The 2-Accounting holding requirement is assessed across consecutive Accounting steps — a Zoom In spanning an Accounting boundary counts that Accounting.
 
 ### 9.3 Hybrid Victory and P-32
 
-P-32 states: "Hybrid victory = BG victory PLUS personal arc resolution."
-
-This principle is retained. In Hybrid mode, a BG victory (meeting all conditions in §3) is mechanically valid. If the winning faction's PC has unresolved Beliefs or Inspirations, the victory is narratively qualified — the faction won, but the character's arc is incomplete. This is a narrative marker, not a mechanical penalty. No Deed-style modifier applies.
-
-The term "Hollow Victory" in the P-32 sense (BG win without personal arc) is distinct from the Church+Hafenmark Partition Victory (§3.2/§4). These are different concepts with different outcomes.
+P-32 ("Hybrid victory = BG victory PLUS personal arc resolution") is retained. A BG victory is mechanically valid. If the winning faction's PC has unresolved Beliefs or Inspirations, the victory is narratively qualified — no mechanical penalty. "Hollow Victory" in the P-32 sense is distinct from the Church + Hafenmark Partition Victory. These are different concepts.
 
 ### 9.4 Domain Echo Autonomous Resolution (ED-300)
 
-If ED-300's redesign is canonical (Domain Echoes = scenes available for engagement; uninvestigated echoes escalate and resolve autonomously), then autonomous resolution that changes territory control updates TCV at Accounting. Autonomous TCV changes count toward or against victory conditions. The 2-Accounting holding requirement does not exempt autonomous changes — the world moves whether or not players attend to it.
+Autonomous TCV changes from uninvestigated Domain Echoes count toward or against victory conditions. The 2-Accounting holding requirement does not exempt autonomous changes.
 
 ---
 
 ## 10. Win Probability Assessment
 
-| Faction | Starting TCV | Target TCV | TCV Gap | P(territory by S18) | Key Difficulty | Est. Timeline |
-|---------|-------------|------------|---------|--------------------|----|---|
-| Crown | 12 | 18 | +6 | ~61% | Suppress ALL rivals (×3 political actions) | 14–16 seasons |
-| Church | 3 | 10 | +7 | ~49% (seizure post-TC75) | TC 75 clock (~S18) then seizure campaign | 22–26 seasons (hard mode) |
-| Hafenmark | 8 | 12 | +4 | ~77% | Mil 3 handicap + Crown Mandate suppression | 12–14 seasons |
-| Varfell A | 6 | 10 | +4 | ~80% | Geographic isolation + VTM 3 + intel reveals | 12–14 seasons |
-| Varfell B | 6 | 8 | +2 | ~98% | VTM 3 + WA + Warden engagement (territory trivial) | 12–16 seasons |
-| Varfell C | 6 | 10 | +4 | ~80% | VTM 5 (~14+ seasons) + RS maintenance | 14–18 seasons |
-| RM | — | — | — | n/a | 5 territories CV ≤ 1 + RS ≥ 40 (hardest mode) | 14–20 seasons |
-| Löwenritter | varies | 10 | varies | varies | Late entry, high Military, weak politics | depends on coup timing |
+| Faction | Start TCV | Target TCV | Gap | Key Difficulty | Est. Timeline |
+|---------|-----------|------------|-----|----------------|---------------|
+| Crown | 10 | 16 | +6 | Suppress ALL rivals (×3 political) | 14–16 seasons |
+| Church | 3 | 10 | +7 | TC 75 clock (~S16-18) then seizure | 20–24 seasons (hard mode) |
+| Hafenmark | 9 | 12 | +3 | Mil 3 handicap + Crown Mandate suppression | 10–14 seasons |
+| Varfell A | 6 | 10 | +4 | Geographic isolation + VTM 3 + intel reveals | 12–14 seasons |
+| Varfell B | 6 | 8 | +2 | VTM 3 + Warden Recognition + T13 control | 12–16 seasons |
+| Varfell C | 6 | 10 | +4 | VTM 5 (~S14+) + RS maintenance | 14–18 seasons |
+| RM | — | — | — | 5 territories CV ≤ 1 + RS ≥ 40 | 14–20 seasons |
 
-**Equal probability analysis (Crown/Hafenmark/Varfell):**
-Monte Carlo simulation (20,000 trials, d10 pool, snowball conquest model with commander +1D, defender weakening per territory lost):
-- Crown TCV 18 (gap 6): ~61% territorial probability. Political overhead (suppress 3 factions): ~-20%. Overall: ~35-40%.
-- Hafenmark TCV 12 (gap 4): ~77% territorial probability. Mil 3 handicap already reflected. Political overhead (Crown Mandate 5→3): ~-15%. Overall: ~35-40%.
-- Varfell A TCV 10 (gap 4): ~80% territorial probability (vs weaker Hafenmark neighbors). Political overhead (VTM 3 + intel): ~-15%. Overall: ~35-40%.
-- Crown is hardest as intended — same overall probability but highest combined territorial+political demand.
-- Difficulty is distributed differently per faction: Crown = territory+politics, Hafenmark = military weakness+politics, Varfell = isolation+Thread development.
-
-**Church is explicitly hard mode.** Solo Church primary requires ~22–26 seasons (TC 75 at ~S18, then ~6 seizure seasons for TCV gap 7). Altonian Theocracy alternate is faster (~S17–19). Church wins in extended games or via the alternate path. Church's real role is to force all factions to react to TC accumulation — the TC clock is the game's central tension. P(Church solo win in 20-season game) ≈ 15–20% via alternate, <10% via primary. This is hard mode by design.
-
-[SIM-DEBT: Monte Carlo probability estimates validated at threshold level. Full faction-AI simulation still needed to validate with non-military acquisition paths, fortification effects, and multi-faction interaction dynamics. Flag as P1.]
+[SIM-DEBT: Full faction-AI simulation needed to validate non-military acquisition paths, fortification effects, multi-faction interaction dynamics. Flag as P1.]
 
 ---
 
-## 11. Patch Summary
+## 11. Open Editorial Items
+
+| ED | Description | Status |
+|----|-------------|--------|
+| ED-311 | Varfell Path B redesign — see varfell_path_b_redesign_ed311.md | AWAITING USER DECISION |
+
+---
+
+## 12. Patch Register
 
 | PP | Scope | Description |
 |----|-------|-------------|
-| PP-406–418 | Various | Per opus_design_proposal.md |
-| PP-419 | Victory | Crown Peninsula Sovereignty — TCV ≥ 20 + universal rival suppression + IP < 60 + PI ≥ 3 |
-| PP-420 | Victory | Crown Dominion (alternate) — TCV ≥ 22 + all rivals eliminated |
-| PP-421 | Victory | Hafenmark Reformed Sovereignty — TCV ≥ 14 + conditions |
-| PP-422 | Victory | Hafenmark Dynastic Assertion (ED-307) |
-| PP-423 | Victory | RM Cultural Restoration |
-| PP-424 | TCV | Territory Consolidation Values |
-| PP-425 | Co-Victory | Full co-victory pairing restructure |
-| PP-426 | RS | Warden Cooperation track |
-| PP-427 | System | Deed system dissolved for ALL factions including Löwenritter |
-| PP-428 | Löwenritter | Regency Establishment — conditions-based (replaces 5-Deed system) |
-| PP-429 | Löwenritter | Military Consolidation — conditions-based |
-| PP-430 | Hybrid | CV state transfer rules |
-| PP-431 | Hybrid | Victory condition check rewrite (replaces TC Win-Delay Rule) |
-| PP-432 | Crown | Formal Crown Treaty mechanic |
+| PP-408 | TCV | Territory Consolidation Values — remapped to PP-199 numbering |
+| PP-409 | Victory | Crown Peninsula Sovereignty — TCV ≥ 16 (gap restored to +6 after remapping) |
+| PP-410 | Victory | Crown Dominion alternate — TCV ≥ 22 |
+| PP-411 | Victory | Hafenmark Parliamentary Sovereignty — TCV ≥ 12 |
+| PP-412 | Victory | Hafenmark Dynastic Assertion — T12 Valorsplatz (corrected from old T-number) |
+| PP-413 | Victory | Church Altonian Theocracy — T14 Himmelenger (corrected from old T-number) |
+| PP-414 | Victory | Varfell Path B provisional (ED-311 pending) |
+| PP-415 | Victory | RM Cultural Revolution — RS ≥ 40 confirmed canonical |
+| PP-416 | CV | CV action cap clarified — consequences not cap-governed |
+| PP-417 | Church | Prominence mechanic defined (Church Mandate > controlling faction Mandate per territory) |
+| PP-418 | Löwenritter | Military Consolidation — 8-season timer requires counter on Löwenritter mat |
+| PP-419 | Hybrid | CV state transfer rules (replaces §9.1 directives-to-author format) |
+| PP-420 | Hybrid | Victory condition check — replaces TC Win-Delay Rule |
+| PP-421 | TC | TC 75 canonical freeze + seizure threshold. TC 80 in params_board_game struck. |
+| PP-422 | Co-Victory | WA/WC references replaced with WR in Varfell+RM co-victory |
+| PP-423 | Crown | Formal Crown Treaty mechanic |
+| PP-424 | System | Deed system dissolved — all factions |
+| PP-425 | WR | Warden Recognition track defined (0–4) |
