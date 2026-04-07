@@ -1569,10 +1569,10 @@ editorial_decisions:
 
   - id: ED-310
     description: >
-      Naming correction: all instances of 'Galbados' in Church-facing context must be 'Solmund'.
-      Church is 'Church of Solmund'. Orthodoxy is 'Solmundan'. 'Galbados' is the threadcut being's
+      Naming correction: all instances of 'Solmund' in Church-facing context must be 'Solmund'.
+      Church is 'Church of Solmund'. Orthodoxy is 'Solmundan'. 'Solmund' is the threadcut being's
       actual identity — known only at high knowledge tiers (Vaynard TK 5, practitioners, Einhir records).
-      The faithful worship Solmund. stage13_npcs.md still says 'Holy Church of Galbados' — stale.
+      The faithful worship Solmund. stage13_npcs.md still says 'Holy Church of Solmund' — stale.
     status: flagged
     priority: P1
     source: opus_handoff session 2026-04-06

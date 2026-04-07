@@ -52,7 +52,7 @@
 **TK Track (0–5):** Current: ___
 - TK 3: Theocracy Counter +1; succession leverage formalised
 - TK 4: Private Collection offered to practitioners; Originary Locks in play
-- TK 5: Theocracy Counter +3; knows what Galbados was structurally; most dangerous secular actor
+- TK 5: Theocracy Counter +3; knows what Solmund was structurally; most dangerous secular actor
 - Discovery Event: if fires → Thread Sensitivity 30; consequentialist framework destabilised; belief revision forced
 
 **Private Collection (Unique Action, 1/season):** Roll Intelligence vs Ob 2. Success: +2D one Thread Domain Action OR reveal one hidden faction stat OR −1 Ob Einhir Research. Failure: Thread signature detected; Church Intel +1D vs Varfell 1 season; +1 Thread Tension.
@@ -65,7 +65,7 @@
 **Personal:** Thread Sensitivity 0 (most devout; most thoroughly immunised)
 **Conviction:** Faith | **Resonant Style:** Evidence — he responds to documented facts; cannot dismiss them; can only reinterpret them
 **Active Beliefs:**
-1. "The Church is the vessel of Galbados's truth; its institutional holiness is not contingent on its servants' holiness."
+1. "The Church is the vessel of Solmund's truth; its institutional holiness is not contingent on its servants' holiness."
 2. "The thread events are a divine warning; expanded Church authority is the correct response."
 3. [Third Belief: campaign-specific]
 
@@ -85,7 +85,7 @@
 - Trajectory C: Suppression protocol fires — Church hunting its own Education head
 
 **Key facts:**
-- Holds keys to restricted Church archive (first-person Galbados accounts)
+- Holds keys to restricted Church archive (first-person Solmund accounts)
 - Has handled Originary Locks — has felt the shape of the third mode
 - His Combat Endurance accumulation is invisible to Himlensendt
 - If he reaches Thread Sensitivity 30+ during Olafsson crisis: Church double fracture (Collision A)

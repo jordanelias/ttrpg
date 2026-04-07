@@ -10,9 +10,9 @@
 | Wrong | Correct | Notes |
 |-------|---------|-------|
 | Revolution | **Restoration Movement** | Always. Not a revolution — a restoration of what was lost. |
-| Galbados | **Solmund** | Always. The name used in canon. |
-| AG (Anno Galbados) | **AS (Anno Solmundi)** | Calendar system follows the correct name. |
-| Church of Galbados | **Church of Solmund** | Follows from above. |
+| Solmund | **Solmund** | Always. The name used in canon. |
+| AG (Anno Solmund) | **AS (Anno Solmundi)** | Calendar system follows the correct name. |
+| Church of Solmund | **Church of Solmund** | Follows from above. |
 
 These are not optional. Every document in the designs folder uses the wrong names. All need correction before compilation.
 
@@ -98,7 +98,7 @@ The Royal Court (Valorsplatz special property) should mechanically represent the
 
 ### 1. Coherence with Canon
 
-**Score: Moderate.** The prior review identified 4 P-code violations (MP-10 Hafenmark lineage [fixed], MP-24 triggers [fixed], MP-04 TR cap [fixed], MP-18 Restoration split [fixed]) and a P-14 co-movement extension requirement. All fixes were applied in the revised proposal. Remaining canon concern: the Church of Solmund naming is wrong throughout, and the Solmundite theological framework (Divine Command) should reference Solmund, not Galbados.
+**Score: Moderate.** The prior review identified 4 P-code violations (MP-10 Hafenmark lineage [fixed], MP-24 triggers [fixed], MP-04 TR cap [fixed], MP-18 Restoration split [fixed]) and a P-14 co-movement extension requirement. All fixes were applied in the revised proposal. Remaining canon concern: the Church of Solmund naming is wrong throughout, and the Solmundite theological framework (Divine Command) should reference Solmund, not Solmund.
 
 ### 2. Cogency with TTRPG and Hybrid
 

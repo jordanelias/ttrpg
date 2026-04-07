@@ -164,7 +164,7 @@ The three clocks are not independent. They form a structural feedback loop that 
 - Rising Thread Tension and Theocracy Counter together create instability that Altonia reads as strategic opportunity → Institutional Pressure rises.
 - Rising Institutional Pressure forces Crown to make concessions → Crown weakens → Theocracy Counter and Thread Tension exploitation accelerates.
 
-**The players' structural position.** PCs hold the only tools that can directly address Thread Tension (Thread operations reducing fabric tension) and the only investigative capacity to address Theocracy Counter's hidden structural driver (the Church-Niflhel connection and the truth about Galbados). They are the campaign's repair mechanism. Whether they act as such is entirely their choice.
+**The players' structural position.** PCs hold the only tools that can directly address Thread Tension (Thread operations reducing fabric tension) and the only investigative capacity to address Theocracy Counter's hidden structural driver (the Church-Niflhel connection and the truth about Solmund). They are the campaign's repair mechanism. Whether they act as such is entirely their choice.
 
 **If the table does nothing actively:** Thread Tension drifts +1 per year at year-end accounting. Theocracy Counter grows from Church Mandate at approximately +3–5 per year at current starting values. Institutional Pressure grows at +2 per season base. A 10-season passive campaign ends near Thread Tension 42, Theocracy Counter 50–60, Institutional Pressure 40. These are livable but increasingly constrained positions.
 

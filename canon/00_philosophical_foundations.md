@@ -338,7 +338,7 @@ fullness---flooded through the structural opening. It did not 'respond'
 or 'press against' the boundary in any agentive sense. Fullness simply
 is; when the container breaches, fullness fills the opening. What
 specific form the surfeit took as it entered the rendered world---why
-Galbados, why specific monstrous configurations, why this particular
+Solmund, why specific monstrous configurations, why this particular
 pattern of devastation---remains genuinely unknowable. The
 practitioners' knowledge is forensic: what the Calamity left behind. It
 is not explanatory: why the metaphysical mechanism produced these
@@ -408,11 +408,11 @@ lattice that tears does not merely lose its infrastructure. It loses the
 ontological ground upon which its infrastructure, its people, its
 knowledge, and its shared reality were constituted.
 
-**Part Four: Galbados and the Church**
+**Part Four: Solmund and the Church**
 
-**8. Galbados as Catalyst**
+**8. Solmund as Catalyst**
 
-Galbados came to be with a surfeit of Being beyond epistemic
+Solmund came to be with a surfeit of Being beyond epistemic
 intelligibility. His connection to what lies beyond human comprehension
 meant that his being-in-the-world was of a kind that humans cannot
 fathom. He was a threadcut being of the third mode: radically present
@@ -420,7 +420,7 @@ without organic becoming, maintaining his rendering through continuous
 Thread work, existing through an existential-essential excess in the
 worldly fabric.
 
-Galbados did not found the Church in the sense of designing its
+Solmund did not found the Church in the sense of designing its
 institutional structure, rituals, organizational arms, or buildings. He
 served as a catalyst---a presence around which institutional formation
 occurred over centuries. The historical parallels are direct: Jesus did
@@ -429,7 +429,7 @@ generations elaborated it. The Buddha did not write the Vinaya. The
 prophetic figure catalyzes; the human community builds.
 
 The timeline for institutional maturation should reflect this. If
-Galbados is active for a generation or less before his dissolution, and
+Solmund is active for a generation or less before his dissolution, and
 the Church takes two to three centuries to reach its mature
 institutional form, this is historically plausible and avoids
 implausible comprehensiveness in a single being's actions.
@@ -465,9 +465,9 @@ developmental preconditions unavailable.
 
 ***9.2 Emergence, Not Design***
 
-The perceptual prophylaxis was not designed by Galbados to hide his
+The perceptual prophylaxis was not designed by Solmund to hide his
 being in the world. It was the emergent product of human interpretation.
-Galbados taught something about the nature of consciousness and being,
+Solmund taught something about the nature of consciousness and being,
 and the institutional tradition interpreted it through essentialist
 theology because that was the perceptual orientation the post-Calamity
 survivors could bear.
@@ -477,15 +477,15 @@ always filtered through followers' capacities---and philosophically
 richer. The suppression is emergent, not conspiratorial. The
 institutional apparatus that forecloses thread sensitivity arose from
 the community's own limitations, not from the founder's strategic
-deception. Whether Galbados intended any suppressive effect is a
+deception. Whether Solmund intended any suppressive effect is a
 question the framework leaves deliberately ambiguous. The inner
 tradition may debate it; the outer tradition does not have the epistemic
 access to frame the question.
 
-The moral consequence: even if Galbados were a monstrous being---and he
+The moral consequence: even if Solmund were a monstrous being---and he
 was, in the ontological sense---does it matter if his actions catalyzed
 genuine human flourishing alongside a perceptual prophylaxis? The reveal
-of Galbados's non-human nature does not resolve into 'he was bad all
+of Solmund's non-human nature does not resolve into 'he was bad all
 along.' It opens an unresolvable question about whether ontological
 monstrosity and moral goodness are compatible, and whether the
 prophylaxis was a deliberate act or a human misreading of a teaching
@@ -1280,7 +1280,7 @@ to its resolution in this document.
   3.1           Calamity teleology  Structural       Section 6.1--6.2 Over-drawing tears substrate. No
                                                                       ground responsiveness attributed.
 
-  3.2           Galbados's          Developmental    Section 8        Catalyst model adopted.
+  3.2           Solmund's          Developmental    Section 8        Catalyst model adopted.
                 comprehensiveness                                     Institutional maturation over
                                                                       centuries.
 

@@ -46,7 +46,7 @@
 | **Resources** | Material or institutional assets. History-based; degradable. Used for procurement and material-scale influence. |
 | **Scope Shift** | Changing the scale of one's action within a round. Free; verbal declaration. One action per scope per round; +1 Inspiration for additional scope within same round. |
 | **Shifting Object** | A configuration oscillating between presence, absence, and distortion. Signals elevated Thread Tension. Stabilised by Weaving (Ob 2); destabilised by failure into Gap risk. |
-| **Theocracy Counter** | Theocracy Clock. A 0–100 track measuring the Church of Galbados's institutional conquest of Valorian governance. |
+| **Theocracy Counter** | Theocracy Clock. A 0–100 track measuring the Church of Solmund's institutional conquest of Valorian governance. |
 | **Thread Depth** | Temporal Disjunction. The gap between retained experience and altered factual history produced by Past-Oriented Pulling. Also a per-practitioner track (0–20) for sustained Thread work cost. |
 | **Temporality** | The dimension of Thread operation foregrounding the past-anchored ↔ future-open axis. Operations in this dimension affect what has happened, what persists, and what has potential. |
 | **Thread Sensitivity (TS)** | Hidden 0–100 score tracking a character's capacity to perceive and work threads. Cannot be purchased with CP. Develops through confrontation and practice. |

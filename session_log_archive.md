@@ -1345,9 +1345,9 @@ editorial_decisions:
   - Threadcut rendering: observer-dependent at baseline, can render beyond ceiling at cost of accelerated exhaustion
   - Taint track: eliminated. Dissolution residue = accelerated Coherence loss.
   - TT renamed Rendering Stability, inverted (100→0)
-  - Galbados → Solmund (logged for Haiku batch, not yet applied)
+  - Solmund → Solmund (logged for Haiku batch, not yet applied)
   - AG → AS calendar (logged for Haiku batch)
-  - Church of Galbados → Church of Solmund (logged for Haiku batch)
+  - Church of Solmund → Church of Solmund (logged for Haiku batch)
 
 output_files:
   - designs/threadweaving_redesign_v25.md (main design document)
@@ -1440,7 +1440,7 @@ compilation_progress:
   note: Infrastructure audit (valoria_infrastructure_audit.md) indicates all 17 TTRPG stages + BG already compiled. Stage 3 was the only outdated one. Phase 2 compilation may be complete.
 
 deferred_tasks:
-  - Haiku batch: Solmund rename (all files), AG→AS calendar rename, Church of Galbados→Church of Solmund
+  - Haiku batch: Solmund rename (all files), AG→AS calendar rename, Church of Solmund→Church of Solmund
   - Stage 4 cross-reference: SIM5-F-08 (RS threshold at Southernmost)
   - P2 items in §5.8 — assign to relevant downstream stages for polish pass
   - Verify other stages don't reference old Stage 3 terminology (TT, ThS, CD, Intelligibility)
@@ -1515,7 +1515,7 @@ All logged in §5.8 of compiled Stage 3.
 - E-03 (AG calendar name — now blocked on AG→AS rename batch)
 
 ### Deferred tasks (next session)
-1. Haiku batch: Solmund rename (all files), AG→AS calendar, Church of Galbados→Church of Solmund
+1. Haiku batch: Solmund rename (all files), AG→AS calendar, Church of Solmund→Church of Solmund
 2. Cross-stage terminology check: Stages 4–17 may reference old TT/ThS/CD terms
 3. Stage 4 cross-reference: SIM5-F-08 (RS threshold +1 Ob at Southernmost)
 4. Phase 3 gate: simulation coverage matrix now runnable against compiled Stage 3
@@ -1871,7 +1871,7 @@ Phase 3: assemble complete suite after all Phase 2 outputs approved.
 ## OPEN ITEMS
 - D-07 NPC state cards: faction stat values left as blanks (fill from live Dashboard)
 - D-09/D-10: all [OPUS] sections are explicit placeholders, clearly marked
-- Solmund rename (Galbados→Solmund) not yet applied to new gm_ref files — apply at Phase 3 assembly
+- Solmund rename (Solmund→Solmund) not yet applied to new gm_ref files — apply at Phase 3 assembly
 
 ---
 

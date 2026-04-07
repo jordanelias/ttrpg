@@ -50,7 +50,7 @@ The Löwenritter may declare martial law in one territory where they have milita
 - **Personal tension:** Ehrenwall swore her oath to the Crown as institution. Almud is surrendering Valorian sovereignty incrementally — the Altonian succession pressure, the Church's expanding civil authority, weakened border garrisons. She has not yet concluded the Crown has failed the nation, but she is keeping count. When she reaches that conclusion, she will act without hesitation or remorse. She is the most dangerous Non-Player Character in the game: patient, competent, and commanding an army.
 - **Relationship to Almud:** Respect without affection. Decent man governing badly. She will follow his orders until the day she doesn't, and the transition will be instantaneous.
 - **Relationship to the heir:** Views the son's potential removal to Altonia as a direct sovereignty threat. If Almud surrenders the heir, this meets coup trigger condition #2.
-- **Relationship to the Church:** Cold contempt. The Löwenritter predates the Church of Galbados in Valoria. Ehrenwall considers it a colonial institution. She will not challenge it theologically, but will never cede military authority to Templars.
+- **Relationship to the Church:** Cold contempt. The Löwenritter predates the Church of Solmund in Valoria. Ehrenwall considers it a colonial institution. She will not challenge it theologically, but will never cede military authority to Templars.
 
 ---
 

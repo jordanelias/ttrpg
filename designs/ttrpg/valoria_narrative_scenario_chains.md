@@ -165,13 +165,13 @@ ALMUD'S CONSTRAINT — EROSION PATHS
 **[EDITORIAL — no canon source for this arc; included as design intent requiring approval]**
 
 ## Premise
-Baralta invokes a claim that her rule over Hafenmark is ordained not merely by constitutional right but by Solmund — the threadcut being whose presence and dissolution the Church has mythologised as Galbados. If Baralta knows the Church's theological claims are built on a threadcut being whose nature she understands differently, this is the most explosive political assertion possible.
+Baralta invokes a claim that her rule over Hafenmark is ordained not merely by constitutional right but by Solmund — the threadcut being whose presence and dissolution the Church has mythologised as Solmund. If Baralta knows the Church's theological claims are built on a threadcut being whose nature she understands differently, this is the most explosive political assertion possible.
 
 ```
 BARALTA'S SOLMUND CLAIM — PRECONDITIONS
 │
 ├─ What Baralta would need to know:
-│   ├─ That Galbados/Solmund was a real being (threadcut, third mode)
+│   ├─ That Solmund/Solmund was a real being (threadcut, third mode)
 │   ├─ That his works were rendered differently by different observers (§5.5.2)
 │   ├─ That the Church's theology is an interpretive community's response
 │   │   to something they could not fully render
@@ -205,11 +205,11 @@ BARALTA'S SOLMUND CLAIM — PRECONDITIONS
 │       Church's theology can contain.
 │       │
 │       ├─ Himlensendt's response: this is the most dangerous heresy possible —
-│       │   not denial of Galbados, but claim that her authority derives from
-│       │   a Galbados the Church cannot monopolise.
+│       │   not denial of Solmund, but claim that her authority derives from
+│       │   a Solmund the Church cannot monopolise.
 │       │   Heresy Investigation: full activation. Grand Debate 5 exchanges.
 │       │   [EDITORIAL: does the debate become a public theological contest
-│       │   about what Galbados/Solmund actually was? If so, Axis 9 fires.]
+│       │   about what Solmund/Solmund actually was? If so, Axis 9 fires.]
 │       │
 │       ├─ TC consequences:
 │       │   Success: TC −3 (Baralta's version); Church Mandate −2
@@ -636,7 +636,7 @@ VAYNARD THREAD INVESTIGATION TRACK (TK 0–5)
 │   → TC +2 additional (Thread artefacts circulating outside Church control)
 │
 ├─ TK 5: Dangerous knowledge
-│   Vaynard understands what Galbados was structurally.
+│   Vaynard understands what Solmund was structurally.
 │   He seeks capability, not further knowledge.
 │   Effect: TC +3; he is the most informed secular actor on the peninsula
 │            about Thread reality; he is also the most dangerous:
@@ -777,23 +777,23 @@ Baralta claims Solmund-ordained authority (not Church-mediated)
 → Grand Debate opens (5 exchanges, theological contest)
 → Himlensendt's pool: Faith + Evidence (his Resonant Style — he responds to documentation)
 → Baralta's pool: Evidence Style + documented precedent
-→ Players need: someone who can TESTIFY about what Solmund/Galbados actually was
+→ Players need: someone who can TESTIFY about what Solmund/Solmund actually was
 → Revolution elder holds fragmentary inner-tradition knowledge:
   TS uncertain; partially obscured by the Forgetting
-  Can testify to cultural memory of Galbados as a being, not a god
+  Can testify to cultural memory of Solmund as a being, not a god
 → Klapp can testify from Church archive records:
   Three Cardinals requested reassignment after handling the Locks
-  The archive contains first-person accounts of Galbados's works
+  The archive contains first-person accounts of Solmund's works
   (These are the accounts the Church has suppressed — Klapp has read them)
 → If both testify in the Grand Debate:
   Himlensendt's Resonant Style (Evidence) is turned against his institution.
-  The evidence says Galbados was a threadcut being; the Church says otherwise.
+  The evidence says Solmund was a threadcut being; the Church says otherwise.
   He cannot dismiss the evidence. He can only reinterpret it.
 → If Himlensendt's reinterpretation fails (net ≤ 0 on a Debate exchange):
   His Inspiration attacks are exposed as ungrounded → Inspiration loss
   Destabilisation Trigger fires fully: the Church's relics ARE originary Locks
   Church Stability −3 in one season.
-  Axis 9 resolves publicly. The world knows what Galbados was.
+  Axis 9 resolves publicly. The world knows what Solmund was.
 → RS consequence: Axis 9 resolution doesn't change RS directly —
   but if originary Locks are now in public discourse, practitioners
   attempt to work them. Each attempt: standard co-movement.

@@ -96,7 +96,7 @@ flowchart TD
     H --> J{"Baralta's TC suppression holding?\nMandate ≥ 5 required"}
     J -->|"Yes"| K["TC growth slowed\nChurch must target Baralta next"]
     J -->|"No — Mandate eroded"| L["TC suppression removed\nTC +1/season resumes\nChurch territorial seizure threshold approaching"]
-    E --> M["TK 5: Vaynard understands Galbados structurally\nTC +3 cumulative\nSeeks capability not knowledge"]
+    E --> M["TK 5: Vaynard understands Solmund structurally\nTC +3 cumulative\nSeeks capability not knowledge"]
     M --> N["Vaynard TS 14+\nEach Collection use: Spirit check TN7 Ob1\nDiscovery Event risk fires"]
     N --> O{Discovery Event}
     O -->|"Success"| P["TS advances to 30 (Stirring)\nVaynard becomes informed actor\nWorld reorganises for him\nNew Belief generated"]
@@ -167,7 +167,7 @@ The Church has always controlled what people know about the world's fabric by co
 
 The collapse of the Church's epistemic monopoly does not happen through a single revelation. It happens through accumulation. Practitioners operate at Relational and Territorial scale because the campaign has given them reasons to. Coherence degrades toward Fragmented — not because anyone failed, but because sustained practice at scale always produces Coherence loss, and the campaign is now long enough for that to show. A practitioner at Coherence 4–3 functions differently: −1D on social rolls, Memory checks compromised, Beliefs beginning to reorganise under Game Master and player co-authorship. Other NPCs start noticing that the practitioner is slightly wrong, present in a way that doesn't quite match the room.
 
-Meanwhile Vaynard, at TK 5, no longer merely wants to understand Galbados — he understands him structurally. He wants capability. This shift is the moment the Church's suppression machinery recognises something has already happened that it cannot retroactively prevent. Axis 9 is not a future threat. It is a current state. The question the Grand Debate resolves is not whether Thread truth will become public — that has already begun — but whether the institutional structures that suppressed it will survive the transition.
+Meanwhile Vaynard, at TK 5, no longer merely wants to understand Solmund — he understands him structurally. He wants capability. This shift is the moment the Church's suppression machinery recognises something has already happened that it cannot retroactively prevent. Axis 9 is not a future threat. It is a current state. The question the Grand Debate resolves is not whether Thread truth will become public — that has already begun — but whether the institutional structures that suppressed it will survive the transition.
 
 Almud, with Thread Sensitivity 28, perceives none of this consciously. But in the session where the Grand Debate happens, in a room full of practitioners and a debate about ontological authority, he will experience something he attributes to the weight of the occasion. He is the most interesting person in the room precisely because he understands nothing that is happening and yet is correct about the political stakes in a way that no one else is.
 
@@ -184,7 +184,7 @@ flowchart TD
     F --> G{Church response to visible Thread activity}
     G -->|"Excommunication"| H["Church Mandate vs practitioner's Mandate\nOverwhelming: Reputation −1 all factions\nFailure: Church Mandate −1 (martyr effect)\nPC loses Circles bonus with Church contacts"]
     G -->|"Heresy Investigation vs Revolution shelter"| I["Church Intel vs Revolution Stability\nRevolution Stability −1 on success\nAxis 2 activates: Knowledge — Thread truth accessible vs suppressed"]
-    H & I --> J["Vaynard at TK 5\nUnderstands Galbados structurally\nSeeks capability — no longer observing\nBecomes active political actor around Thread truth"]
+    H & I --> J["Vaynard at TK 5\nUnderstands Solmund structurally\nSeeks capability — no longer observing\nBecomes active political actor around Thread truth"]
     J --> K["Crown forced onto Axis 9:\nCosmological legitimacy of Church authority\nvs constitutional order"]
     K --> L{Crown's Axis 9 position}
     L -->|"Crown defends Thread truth access"| M["Sovereign Authority Doctrine (once per arc)\nMandate 7 vs Ob 4\nSuccess: TC −2, Church Mandate −1\nHeresy Investigation opens against Crown"]

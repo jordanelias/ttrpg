@@ -9,7 +9,7 @@
 
 # 1. SOLMUND RENAME
 
-All references to "Galbados" → "Solmund." Calendar: "Before Galbados (BG)" → "Before Solmund (BS)." "After Galbados (AG)" → "After Solmund (AS)." Haiku-tier cleanup. Run last.
+All references to "Solmund" → "Solmund." Calendar: "Before Solmund (BG)" → "Before Solmund (BS)." "After Solmund (AG)" → "After Solmund (AS)." Haiku-tier cleanup. Run last.
 
 [EDITORIAL: ED-NEW-01 — Confirm "Solmund" as final canonical name.]
 

@@ -145,11 +145,11 @@ Invasion wave: 3 Vanguard + 2 Heavy Infantry. NPC general Command 5.
 
 ---
 
-## 8.3 Faction 2: The Church of Galbados
+## 8.3 Faction 2: The Church of Solmund
 
 **Ethical Framework: Divine Command**
 
-Correctness is determined by institutional authority, not outcome or character. Actions are evaluated by whether they conform to Galbados's revealed will as interpreted by the hierarchy.
+Correctness is determined by institutional authority, not outcome or character. Actions are evaluated by whether they conform to Solmund's revealed will as interpreted by the hierarchy.
 
 - Doctrine-aligned actions (suppressing heresy, expanding Piety, enforcing moral law): **−1 Ob**
 - Actions contradicting doctrine or undermining Church authority: **+1 Ob**
@@ -176,7 +176,7 @@ Correctness is determined by institutional authority, not outcome or character. 
 
 **Default Leader: Confessor Arne Himlensendt**
 - Conviction: Faith · Resonant Style: Evidence · Thread Sensitivity: 0 (theologically foreclosed)
-- Sincerely devout. Zero awareness of Galbados's actual nature. Not cynical — wrong.
+- Sincerely devout. Zero awareness of Solmund's actual nature. Not cynical — wrong.
 
 
 **Theocracy Counter 60 — Territorial Seizure Procedure**
@@ -285,7 +285,7 @@ Vaynard's TK measures his understanding of Thread metaphysics, the Calamity's me
 | 1–2 | Informed questions. Acute awareness, not understanding. No Theocracy Counter effect. |
 | 3 | Structural theory (wrong in detail, correct in structure). Succession leverage formally linked to Southernmost access terms. Theocracy Counter +1. |
 | 4 | Urgency. Willing to offer collection access (including originary locks) for Thread education and Southernmost partnership. Theocracy Counter +2. |
-| 5 | Dangerous knowledge — understands what Galbados was structurally. Seeks capability, not further knowledge. Theocracy Counter +3. |
+| 5 | Dangerous knowledge — understands what Solmund was structurally. Seeks capability, not further knowledge. Theocracy Counter +3. |
 
 TK advances through: practitioner relationship (sustained season, cap ×2); originary lock examination with practitioner context (cap ×1); Church archive access via Niflhel channels (+1/archive); players sharing Thread-level knowledge directly (+1–2 by depth); Discovery Event triggering Thread Sensitivity 30 (+2 immediately).
 

@@ -156,7 +156,7 @@ The TTRPG's central progression mechanic is the Belief — an active intention t
 
 **Institutional Belief:** Each faction has a stated **Institutional Mandate** (one sentence, already implied in the setting):
 - Crown: *"The monarchy provides the order that protects Valoria."*
-- Church: *"Galbados's / Solmund's doctrine is the rightful framework for all governance."*
+- Church: *"Solmund's / Solmund's doctrine is the rightful framework for all governance."*
 - Hafenmark: *"Constitutional process is the only legitimate source of authority."*
 - Varfell: *"Information is the truest form of power."*
 - Guilds: *"Commerce is neutral; we serve whoever can pay."*

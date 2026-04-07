@@ -524,7 +524,7 @@ Shifting Objects persist until addressed. Each season unaddressed: +1 Ob to Thre
 [FLAGGED: confirm Coherence check parameters and seasonal Ob accumulation.]
 
 ## Document RS Resonance (PP-258)
-A Thread Sensitivity 50+ practitioner reading a pre-Galbados first-person Thread-perception document gains:
+A Thread Sensitivity 50+ practitioner reading a pre-Solmund first-person Thread-perception document gains:
 - RS +2 (one-time per document per character)
 - Requires: TS ≥ 50, full scene of contact, primary first-person account (not secondary analysis)
 - Does not stack with active Thread operations in the same scene (larger RS change applies)

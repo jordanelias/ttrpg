@@ -952,7 +952,7 @@ Also update the explanatory sentence: remove "including bonus dice" from the net
 > "**Devout character Discovery Event triggers:**
 > A Devout character (TS 0–9) cannot perceive Thread operations and cannot trigger Discovery Events through ordinary Thread exposure. However, a Discovery Event fires when the character faces DIRECT THEOLOGICAL CONFRONTATION — defined as any of:
 > - A practitioner performs a Thread operation in their presence AND explicitly demonstrates or names the mechanism (effects alone are insufficient; the claim must be made)
-> - The character encounters explicit Einhir theological materials framed as directly opposing Galbados doctrine
+> - The character encounters explicit Einhir theological materials framed as directly opposing Solmund doctrine
 > - A trusted peer, authority figure, or close Knot holder defects publicly to Restoration framing in the character's immediate presence
 >
 > Discovery Event Ob: set by the strength of the character's Conviction Beliefs (Ob = number of relevant Conviction Beliefs, minimum 1). The event is a theological confrontation, not a TS check. The Devout character's faith provides the interpretive framework; the confrontation challenges it directly."
@@ -1041,7 +1041,7 @@ Also update the explanatory sentence: remove "including bonus dice" from the net
 > Agi 4 | End 5 | Str 5 | Cog 2 | Mem 2 | Focus 3 | Att 1 | Bonds 3 | Pres 3 | Spirit 4
 > Composure: 9 | Health: 10
 > Histories: Church Military Service 4, Heresy Recognition 2
-> Conviction: Duty / Galbados
+> Conviction: Duty / Solmund
 > Notes: Devout (TS-blocked). CE passive accumulation only — no active investigation authority. Deploys under Cardinal of Fortitude direction. Personal Resonant Style: Character (virtue, duty, honour, shame).
 
 **Source:** G-115 / Batch 3+4
@@ -1711,10 +1711,10 @@ This mirrors the personal combat formula: net hits + weapon modifier + Strength 
 **Finding:** F-70 (SIM-X-15) — Klapp Rendering Crisis content
 **Severity:** P1
 **Mechanic:** §13 NPC Klapp — Certainty track; Rendering Crisis
-**Decision:** B — public fracture. Klapp's Rendering Crisis manifests visibly at his next institutional scene. His behaviour shifts noticeably; other characters can perceive that something has changed. Baralta's Solmund Claim context note: Galbados is always Solmund; AG is always AS (After Solmund). Klapp's starting Certainty is 3 (Spirit score = 3). Crisis fires mid-game, timed to coincide with Collision A (Church Double Fracture).
+**Decision:** B — public fracture. Klapp's Rendering Crisis manifests visibly at his next institutional scene. His behaviour shifts noticeably; other characters can perceive that something has changed. Baralta's Solmund Claim context note: Solmund is always Solmund; AG is always AS (After Solmund). Klapp's starting Certainty is 3 (Spirit score = 3). Crisis fires mid-game, timed to coincide with Collision A (Church Double Fracture).
 **Fix:** Add to §13 NPC Klapp, Certainty/Rendering Crisis entry:
 > "**Klapp Rendering Crisis (Trajectory B — Public Fracture):** When Klapp's Certainty reaches 0, the Crisis does not resolve privately. It manifests at his next public institutional scene (Cardinals' meeting, interrogation, sermon, or formal Church proceeding). His behaviour shifts in ways perceptible to other characters — he cannot maintain the performance of certainty he has sustained throughout his career. Other characters observing him may attempt Cognition rolls (Ob 2) to register that something is fundamentally wrong. He does not reveal Thread knowledge explicitly; the fracture is behavioural, not declarative. This opens the Klapp Revelation arc (see Collision A: Church Double Fracture). Klapp's starting Certainty: 3."
-**Canon note:** Galbados = Solmund throughout all documents. AG = After Solmund (AS). Any references to AG are AS. Any references to Galbados as a theological abstraction are references to Solmund as a historical threadcut being. This has no mechanical effect but must be consistent at compilation.
+**Canon note:** Solmund = Solmund throughout all documents. AG = After Solmund (AS). Any references to AG are AS. Any references to Solmund as a theological abstraction are references to Solmund as a historical threadcut being. This has no mechanical effect but must be consistent at compilation.
 **Status:** APPROVED — editorial decision 2026-03-30
 
 
@@ -1733,4 +1733,4 @@ This mirrors the personal combat formula: net hits + weapon modifier + Strength 
 *PP-154–PP-160: editorial batch 2026-03-30. All 7 pending decisions resolved.*
 *F-27 closed as sim error; PP-117 amended with Size term.*
 *Ehrenwall: she/her throughout — compilation correction flagged.*
-*Galbados = Solmund; AG = AS (After Solmund) — compilation normalisation flagged.*
+*Solmund = Solmund; AG = AS (After Solmund) — compilation normalisation flagged.*

@@ -168,7 +168,7 @@ Each season, Crown may issue one Policy affecting the entire board, in addition 
 
 **Leader/Champion: Confessor Arne Himlensendt** — Conviction: Faith. Deviation cost: Stability check Ob 3.
 
-**Institutional Mandate:** *"Galbados's doctrine is the rightful framework for all governance."*
+**Institutional Mandate:** *"Solmund's doctrine is the rightful framework for all governance."*
 Mandate triggers: TC drops below previous season's value; a parliamentary ruling contradicts Church authority; a Thread operation occurs in Church-controlled territory and Church fails to respond.
 
 **TC-as-Currency:** Church may voluntarily spend TC to pay for enhanced actions:

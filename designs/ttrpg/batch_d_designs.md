@@ -48,7 +48,7 @@ Once per season, the Crown may issue a Royal Decree — a unilateral political a
 # FACTION 2: THE CHURCH OF GALBADOS
 
 ## Ethical Framework: Divine Command
-The Church's institutional logic evaluates actions by whether they conform to Galbados's revealed will as interpreted by the institutional hierarchy. Correctness is determined by authority, not outcome or character.
+The Church's institutional logic evaluates actions by whether they conform to Solmund's revealed will as interpreted by the institutional hierarchy. Correctness is determined by authority, not outcome or character.
 
 **Framework modifier:**
 - Domain Actions aligned with stated Church doctrine (suppressing heresy, expanding Piety, enforcing moral law): −1 Ob.
@@ -59,7 +59,7 @@ The Church's institutional logic evaluates actions by whether they conform to Ga
 Expand Piety. Suppress heresy. Accumulate civil authority. Deploy Templars against perceived threats. The institution does not seek military conquest — it seeks theological conquest. It advances Theocracy Counter, not territory.
 
 **Leadership Deviation:**
-The Confessor acting against doctrine (e.g., tolerating practitioners, acknowledging Thread reality, questioning Galbados's nature): Stability check Ob 3. The Church is the hardest institution to deviate from — its theological coherence is its structural strength. A reforming Confessor faces existential institutional resistance.
+The Confessor acting against doctrine (e.g., tolerating practitioners, acknowledging Thread reality, questioning Solmund's nature): Stability check Ob 3. The Church is the hardest institution to deviate from — its theological coherence is its structural strength. A reforming Confessor faces existential institutional resistance.
 
 **Unique Action — Excommunication:**
 The Church may excommunicate a named individual (Player Character or Non-Player Character).
@@ -72,7 +72,7 @@ The Church may excommunicate a named individual (Player Character or Non-Player 
 
 **Leader (default Non-Player Character): Confessor Arne Himlensendt**
 - Conviction: Faith. Resonant Style: Evidence (paradoxically — he responds to institutional documentation, not emotional appeal).
-- Personal tension: Sincerely devout with zero awareness of what Galbados actually is. His institutional tendency and personal beliefs are perfectly aligned — which makes him the most dangerous kind of leader. He is not cynical. He is wrong.
+- Personal tension: Sincerely devout with zero awareness of what Solmund actually is. His institutional tendency and personal beliefs are perfectly aligned — which makes him the most dangerous kind of leader. He is not cynical. He is wrong.
 
 ---
 

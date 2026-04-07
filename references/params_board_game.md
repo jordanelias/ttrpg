@@ -624,7 +624,7 @@ Failure: Ministry notes the attempt. Corrupting faction Stability −1. Ministry
 | Löwenritter Coup | T1+T2 AP-tokens removed; Ministry Mandate −2; Ministry Stabilisation suspended 1 season |
 
 ## Church of Solmund — Canonical Structure (PP-194, from original source documents)
-Naming: "Church of Galbados" in source = **Church of Solmund** in all current docs (Galbados → Solmund).
+Naming: "Church of Solmund" in source = **Church of Solmund** in all current docs (Solmund → Solmund).
 Holy See = elected from among the Bishopry. Second only to the Monarch.
 
 ### Four Cardinals (appointed by Holy See)

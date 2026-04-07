@@ -588,5 +588,5 @@
 
 **Compilation flags added:**
 - Ehrenwall: she/her throughout — text correction required at compilation
-- Galbados = Solmund; AG = AS (After Solmund) — terminology normalisation at compilation
+- Solmund = Solmund; AG = AS (After Solmund) — terminology normalisation at compilation
 

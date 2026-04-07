@@ -11,7 +11,7 @@
 | Territory names (all 15) | Placeholder | Final proper names | Functional names exist: Valorsplatz, Lowenskyst, Himmelenger, Arcansheld, Stillhelm (Valorsmark); Gransol, Eidursjo, Spartfell, Gransol Coast (Hafenmark); Varfell, Sigursdhelm, Halvardshelm, Oastad, Border Pass (Varfell). Confirm or replace all. |
 | Valn Peninsula name | Placeholder | Confirm or replace | The peninsula is "Valn Peninsula" — is this final? |
 | Southernmost zone names (3) | Unnamed | Names for the 3 unlockable zones | Described only as "locked zones" unlocking via Ceiral Ritual arc |
-| AG calendar name | E-03 | In-world name/meaning for "AG" | "After Galbados"? Something else? |
+| AG calendar name | E-03 | In-world name/meaning for "AG" | "After Solmund"? Something else? |
 | Schoenland | Defined | Confirm as final name | Documented as independent merchant state — name may be placeholder |
 
 ---
@@ -21,7 +21,7 @@
 | Faction | What's Needed | Notes |
 |---------|---------------|-------|
 | **Crown** | Nothing blocking | Identity fully defined |
-| **Church of Galbados** | Nothing blocking | Name final? "Galbados" appears as both deity and calendar root |
+| **Church of Solmund** | Nothing blocking | Name final? "Solmund" appears as both deity and calendar root |
 | **Hafenmark** | Nothing blocking | Identity defined |
 | **Varfell** | Victory condition wording | 3-artifact threshold confirmed; exact Southernmost integration condition for victory needs final wording |
 | **Guilds** | Nothing blocking | Defined as leverage faction, no Military |
