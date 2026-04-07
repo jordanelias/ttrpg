@@ -2,34 +2,37 @@
 
 ```yaml
 session_id: 2026-04-06T_OPUS_EDITORIAL_2
-phase: AUDIT COMPLETE
-status: AWAITING USER REVIEW
+phase: VICTORY ARCHITECTURE v2
+status: COMPLETE — AWAITING USER REVIEW
 last_commit: pending
 
 ## WORK COMPLETED THIS SESSION
 1. Editorial resolution batch: 14 items resolved
 2. PP-406/407 propagated, Solmund naming correction (ED-310)
-3. ED-306 Victory Architecture Redesign (designs/board_game/victory_architecture_v1.md)
-4. Critical review of victory architecture against BG + Hybrid mechanics
-
-## AUDIT FINDINGS (victory_architecture_critique.md)
-  BLOCKERs: 3
-    A-01: CV has no state transfer specification (Hybrid)
-    A-02: TC Win-Delay Rule references obsolete threshold (Hybrid)
-    B-01: params_board_game still contains full Deed system (BG)
-  HIGH: 7 (Crown balance, Hollow Victory collision, Reformed Settlement, CV tools, PP-404 alignment)
-  MEDIUM: 8 | LOW: 3
-
-## NEXT ACTIONS (recommended order)
-  1. Resolve A-01/A-02 (Hybrid state transfer for CV)
-  2. Resolve B-01/B-05 (params_board_game propagation)
-  3. [EDITORIAL] C-01/C-02 (Crown balance + CV tool decision)
-  4. [EDITORIAL] A-03/B-03 (Hollow Victory term + modifier redesign)
-  5. [EDITORIAL] B-02 (Reformed Settlement under new system)
+3. ED-306 Victory Architecture v1 (committed, then audited)
+4. Critical review identified 2 BLOCKERs, 4 HIGH findings
+5. Victory Architecture v2 — full rewrite addressing all findings:
+   - All Deeds dissolved including Löwenritter (PP-427/428/429)
+   - Crown redesigned: TCV ≥ 20 + universal rival suppression (PP-419/432)
+   - Crown CV condition removed (secular monarchy, no ideological tool needed)
+   - Löwenritter converted to conditions-based (PP-428/429)
+   - Hybrid mode: CV state transfer spec added (PP-430)
+   - Hybrid mode: TC Win-Delay Rule rewritten (PP-431)
+   - P-32 Hybrid victory preserved, term collision resolved
+   - P-03 citation fix (was P-07)
+   - Community Weaving P-01 compliance noted
+   - Varfell stat-reveal fixed to player-count-invariant (≥ 2 factions)
+   - Win probability assessment with estimated timelines
 
 ## REMAINING FLAGGED ITEMS
   ED-080: Baralta BG Conviction text
   ED-081: Vaynard BG Conviction text
   ED-308: Varfell succession (Maret Uln)
   ED-309: Baralta succession (PI-gated vs named heir)
+
+## SIMULATION DEBT
+  TCV balance validation (P1)
+  TC pacing simulation (P1)
+  Community Weaving feedback loop (P1)
+  All other SIM-DEBT items from v1 still apply
 ```

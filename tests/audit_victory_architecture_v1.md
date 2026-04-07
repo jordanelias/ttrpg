@@ -1,3 +1,5 @@
+<!-- NOTE: Findings A-01, A-02, C-01, C-02, C-04, D-01, D-02, B-06 addressed in v2. B-01/B-02/B-03/B-05 were stale-content noise — removed from findings. -->
+
 # Victory Architecture v1 — Critical Review
 ## Scope: BG mode + Hybrid mode mechanical consistency, design intent, balance
 ## Reviewer: Claude (Opus)
