@@ -75,7 +75,7 @@ Crown wins by ruling the peninsula with no credible rival. This is the hardest s
 
 | Condition | Threshold | Rationale |
 |-----------|-----------|-----------|
-| TCV held | ≥ 20 | Crown controls two-thirds of the peninsula |
+| TCV held | ≥ 18 | Crown controls 60% of the peninsula |
 | Rival suppression | Every other playable faction: Mandate ≤ 2 OR eliminated OR formal Crown treaty in effect | No credible political rival remains |
 | IP | < 60 | Altonia is contained |
 | PI | ≥ 3 | Institutions still function (Crown is not a tyrant — it is a constitutional monarchy) |
@@ -85,8 +85,8 @@ Crown wins by ruling the peninsula with no credible rival. This is the hardest s
 **Why no CV condition:** Crown is a secular monarchy. It governs through political authority (Mandate), not ideological alignment (CV). Crown's interest in CV is purely defensive — extreme CV in either direction empowers rivals (Church at high CV, RM at low CV). Crown fights ideological threats through political tools (Royal Decree, Domain Actions, military conquest), not through preaching or cultural programs.
 
 **Design notes:**
-- Starting position: TCV 12 (needs +8). Mandate already 5 (but must ALSO suppress 3 rivals). IP 20 (met). PI 7 (met).
-- TCV +8 = 4–6 conquests over ~10–15 seasons.
+- Starting position: TCV 12 (needs +6). Mandate already 5 (but must ALSO suppress 3 rivals). IP 20 (met). PI 7 (met).
+- TCV +6 = 3–5 conquests over ~8–12 seasons.
 - Suppressing 3 factions from Mandate 4–5 to Mandate ≤ 2: requires ~3 successful hostile Domain Actions per faction = ~9 total. At ~1/season with opposition, this takes 12–18 seasons.
 - Territory conquest and faction suppression overlap: conquering a faction's territory reduces its stats. Crown's path is to conquer outward while rivals weaken.
 - Crown's total timeline: ~15–18 seasons. The hardest path, achievable in a 20-season game, tight in a 15-season game.
@@ -109,7 +109,7 @@ Church wins through TC accumulation → phase transition → territorial seizure
 
 | Condition | Threshold | Rationale |
 |-----------|-----------|-----------|
-| TCV held | ≥ 18 | Church controls 60% of available TCV |
+| TCV held | ≥ 10 | Church controls a third of the peninsula under orthodoxy |
 | CV in all held territories | ≥ 3 | Orthodox population supports Church governance |
 
 **Church Seizure Ob:** Per opus_design_proposal.md §2. Ob = 2 + Fort Level + max(0, 3 − CV). Prominence required (Church Mandate > controlling faction's Mandate in territory). Church Mandate ≥ 4. On Overwhelming seizure: CV +1 in target territory (population rallies to Church governance).
@@ -118,7 +118,7 @@ Church wins through TC accumulation → phase transition → territorial seizure
 - Starting position: TCV 3 (needs +15). TC 28 (needs 47 to reach 75).
 - TC timeline: ~16–20 seasons to TC 75 (per opus_design_proposal.md §3 pacing analysis).
 - Post-TC 75 seizure: Influence 6 pool against Ob 2–5 depending on Fort and CV. In unforted CV ≥ 3 territory, Ob 2 = ~80% success at pool 6. Church can seize 1–2 territories per season.
-- +15 TCV via seizure = ~8–12 seizures over ~5–8 seasons. Total: ~22–25 seasons.
+- +7 TCV via seizure = ~5–6 seizures over ~6–8 seasons. Total: ~22–26 seasons.
 - This is LONG. Church is designed as hard mode. Church wins if the game goes long and no one stops TC. Church's presence makes the game interesting for everyone else — the TC clock forces collective response.
 - Church can accelerate via Conviction Yield (raising CV in target territories before seizing) and Altonian Theocracy Path (alternate victory requiring less territory).
 
@@ -149,14 +149,14 @@ Hafenmark wins by proving parliamentary governance works while eclipsing Crown a
 
 | Condition | Threshold | Rationale |
 |-----------|-----------|-----------|
-| TCV held | ≥ 14 | Hafenmark controls nearly half the peninsula |
+| TCV held | ≥ 12 | Hafenmark controls enough territory to prove its model |
 | Hafenmark Mandate | ≥ 4 | Parliamentary authority is functioning |
 | PI | ≥ 5 | Institutions are healthy |
 | Crown Mandate | ≤ 3 | Crown's institutional authority has been eclipsed |
 
 **Design notes:**
-- Starting position: TCV 8 (needs +6). Mandate 4 (met). PI 7 (met). Crown Mandate 5 (must bring to ≤ 3).
-- TCV +6 = 3–4 conquests over ~8–12 seasons.
+- Starting position: TCV 8 (needs +4). Mandate 4 (met). PI 7 (met). Crown Mandate 5 (must bring to ≤ 3).
+- TCV +4 = 2–3 conquests over ~6–10 seasons.
 - Crown Mandate suppression: from 5 to 3 requires ~2–3 successful hostile Domain Actions. Achievable in ~4–6 seasons.
 - Total timeline: ~10–14 seasons. Middle difficulty.
 - Hafenmark's Military 3 is the weakest of the playable factions. Hafenmark must use Wealth (economic pressure, Trade Network Investment) and Influence (Parliamentary Votes, Diplomacy) to expand rather than brute force. This is intentional — Hafenmark wins through institutions, not armies.
@@ -189,7 +189,7 @@ Varfell starts isolated with the lowest TCV (6). Three victory paths represent t
 
 | Condition | Threshold | Rationale |
 |-----------|-----------|-----------|
-| TCV held | ≥ 14 | Varfell controls a major chunk of the peninsula |
+| TCV held | ≥ 10 | Varfell has expanded from isolation to peninsular power |
 | VTM | ≥ 3 | Thread awareness provides intelligence advantage |
 | At least 2 rival factions' stats fully revealed | — | Varfell has penetrated rival intelligence (fixed count, player-count-invariant) |
 | Varfell controls ≥ 1 territory outside starting 4 | — | Varfell has expanded |
@@ -254,7 +254,7 @@ Löwenritter enters after the coup fires. It wins by establishing a legitimate m
 
 | Condition | Threshold | Rationale |
 |-----------|-----------|-----------|
-| TCV held | ≥ 12 | Löwenritter controls enough territory for a credible government |
+| TCV held | ≥ 10 | Löwenritter controls enough territory for a credible government |
 | TC | < 50 | Church theocratic momentum is contained |
 | IP | < 60 | Altonia is not invading |
 | RS | > 40 | The world is intact |
@@ -284,8 +284,8 @@ Co-victories are the "co-owner of the peninsula" outcomes. Both factions score a
 
 | Pair | Conditions (all simultaneous at Accounting) |
 |------|---------------------------------------------|
-| **Crown + Hafenmark** | Crown TCV ≥ 14 AND Hafenmark TCV ≥ 10 AND PI ≥ 5 AND TC < 50 |
-| **Crown + Varfell** | Crown TCV ≥ 14 AND Varfell TCV ≥ 8 AND VTM ≥ 3 AND RS ≥ 50 |
+| **Crown + Hafenmark** | Crown TCV ≥ 12 AND Hafenmark TCV ≥ 8 AND PI ≥ 5 AND TC < 50 |
+| **Crown + Varfell** | Crown TCV ≥ 12 AND Varfell TCV ≥ 8 AND VTM ≥ 3 AND RS ≥ 50 |
 | **Varfell + RM** | VTM ≥ 4 AND WA ≥ +2 AND ≥ 4 territories CV ≤ 1 AND RS ≥ 40 AND Warden Cooperation ≥ 2 AND Varfell controls T13 |
 | **Hafenmark + RM** | Hafenmark TCV ≥ 10 AND ≥ 4 territories CV ≤ 2 AND PI ≥ 4 AND RS ≥ 40 |
 | **Löwenritter + Hafenmark** | Löwenritter TCV ≥ 8 AND Hafenmark TCV ≥ 8 AND PI ≥ 4 |
@@ -393,26 +393,28 @@ If ED-300's redesign is canonical (Domain Echoes = scenes available for engageme
 
 ## 10. Win Probability Assessment
 
-| Faction | Starting TCV | Target TCV | TCV Gap | Key Difficulty | Estimated Timeline |
-|---------|-------------|------------|---------|----------------|-------------------|
-| Crown | 12 | 20 | +8 | Must suppress ALL rivals to Mandate ≤ 2 | 15–18 seasons |
-| Church | 3 | 18 | +15 | TC 75 timeline (~16–20 seasons) then seizure campaign | 22–25 seasons (hard mode) |
-| Hafenmark | 8 | 14 | +6 | Must bring Crown Mandate from 5 to ≤ 3 | 10–14 seasons |
-| Varfell A | 6 | 14 | +8 | Intelligence penetration + expansion from isolation | 14–18 seasons |
-| Varfell B | 6 | 8 | +2 | VTM 3 + WA management + Warden engagement | 12–16 seasons |
-| Varfell C | 6 | 10 | +4 | VTM 5 (~14+ seasons to achieve) + RS maintenance | 14–18 seasons |
-| RM | — | — | — | 5 territories CV ≤ 1 + RS ≥ 40 (hardest mode) | 14–20 seasons |
-| Löwenritter | varies | 12 | varies | Late entry, high Military, weak politics | depends on coup timing |
+| Faction | Starting TCV | Target TCV | TCV Gap | P(territory by S18) | Key Difficulty | Est. Timeline |
+|---------|-------------|------------|---------|--------------------|----|---|
+| Crown | 12 | 18 | +6 | ~61% | Suppress ALL rivals (×3 political actions) | 14–16 seasons |
+| Church | 3 | 10 | +7 | ~49% (seizure post-TC75) | TC 75 clock (~S18) then seizure campaign | 22–26 seasons (hard mode) |
+| Hafenmark | 8 | 12 | +4 | ~77% | Mil 3 handicap + Crown Mandate suppression | 12–14 seasons |
+| Varfell A | 6 | 10 | +4 | ~80% | Geographic isolation + VTM 3 + intel reveals | 12–14 seasons |
+| Varfell B | 6 | 8 | +2 | ~98% | VTM 3 + WA + Warden engagement (territory trivial) | 12–16 seasons |
+| Varfell C | 6 | 10 | +4 | ~80% | VTM 5 (~14+ seasons) + RS maintenance | 14–18 seasons |
+| RM | — | — | — | n/a | 5 territories CV ≤ 1 + RS ≥ 40 (hardest mode) | 14–20 seasons |
+| Löwenritter | varies | 10 | varies | varies | Late entry, high Military, weak politics | depends on coup timing |
 
 **Equal probability analysis (Crown/Hafenmark/Varfell):**
-- Hafenmark ~12 seasons, Varfell ~15 seasons, Crown ~16 seasons. Crown is hardest as intended.
-- Hafenmark's faster timeline is offset by Military 3 (weakest — territorial expansion is slow and expensive). Hafenmark compensates with Wealth and Influence but cannot brute-force territory.
-- Varfell's medium timeline is offset by starting TCV 6 (lowest) and geographic isolation. Varfell compensates with intelligence tools and Thread capability.
-- Crown's slow timeline is offset by the best starting stats and most starting territory. Crown has the strongest tools but the most demanding win condition.
+Monte Carlo simulation (20,000 trials, d10 pool, snowball conquest model with commander +1D, defender weakening per territory lost):
+- Crown TCV 18 (gap 6): ~61% territorial probability. Political overhead (suppress 3 factions): ~-20%. Overall: ~35-40%.
+- Hafenmark TCV 12 (gap 4): ~77% territorial probability. Mil 3 handicap already reflected. Political overhead (Crown Mandate 5→3): ~-15%. Overall: ~35-40%.
+- Varfell A TCV 10 (gap 4): ~80% territorial probability (vs weaker Hafenmark neighbors). Political overhead (VTM 3 + intel): ~-15%. Overall: ~35-40%.
+- Crown is hardest as intended — same overall probability but highest combined territorial+political demand.
+- Difficulty is distributed differently per faction: Crown = territory+politics, Hafenmark = military weakness+politics, Varfell = isolation+Thread development.
 
-**Church is explicitly hard mode.** Solo Church victory requires 22+ seasons — longer than most campaigns. Church wins in extended games or via the Altonian Theocracy alternate path (~18 seasons). Church's real role is to force the other factions to react to TC accumulation. Church is the pace-setter of the game.
+**Church is explicitly hard mode.** Solo Church primary requires ~22–26 seasons (TC 75 at ~S18, then ~6 seizure seasons for TCV gap 7). Altonian Theocracy alternate is faster (~S17–19). Church wins in extended games or via the alternate path. Church's real role is to force all factions to react to TC accumulation — the TC clock is the game's central tension. P(Church solo win in 20-season game) ≈ 15–20% via alternate, <10% via primary. This is hard mode by design.
 
-[SIM-DEBT: These timelines are analytical estimates. Simulation with faction AI needed to validate equal probability. Flag as P1.]
+[SIM-DEBT: Monte Carlo probability estimates validated at threshold level. Full faction-AI simulation still needed to validate with non-military acquisition paths, fortification effects, and multi-faction interaction dynamics. Flag as P1.]
 
 ---
 
