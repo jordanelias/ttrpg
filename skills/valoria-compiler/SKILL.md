@@ -24,6 +24,9 @@ required = [
     '<canonical design doc>',             # from canonical_sources.yaml
 ]
 files = g.read_files_graphql(required)
+for path, content in files.items():
+    if content is None:
+        raise RuntimeError(f"GitHub fetch failed: {path} — cannot compile without live repo data")
 ```
 
 **Gate check:** If `compilation_current: true` in `canonical_sources.yaml`, compilation is already up to date — do not re-compile. If `compilation_current: false`, proceed.
