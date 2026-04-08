@@ -392,3 +392,8 @@ Open for editorial: ED-061, ED-062, ED-063.
 |----|------------|------|--------|------|---------| 
 | SIM-DEBT-BG-01 | Battle resolution — Mode A isolation + D edge cases | BG | COMPLETE | 2026-04-08 | P1-06 (outcome table undefined — PP-476), P2 x5 (Fortify stat, Pontifex pool, Discipline edge cases, multi-unit pooling). See tests/sim_bg_battle_thread_2026_04_08.md |
 | SIM-DEBT-BG-02 | Thread operations BG mode — Mode A + D | BG | COMPLETE | 2026-04-08 | P1-07 (Thread Wound undefined — ED-341), P2 x3 (TC cards neutral, Community Weaving degree table, Partial HR ambiguity). ED-338-342 added. |
+
+## 2026-04-08 PP-476-498 Stress Test
+| ID | Description | Mode | Status | Date | Findings |
+|----|------------|------|--------|------|------|
+| SIM-PP476-498 | Stress test PP-476-498: Crown suppression, PI/TC, Assert Soften, Echo cap, Torben, Conviction texts, successions, AER, Cultural Uprising, weight-of-numbers, elimination territory, captured general, Cardinal succession | A+D+J+L | COMPLETE | 2026-04-08 | P1x8, P2x10, P3x4. ED-339-346 raised. 11 provisionals. See tests/sim_pp476_498.md |

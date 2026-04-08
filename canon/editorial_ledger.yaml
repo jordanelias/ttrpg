@@ -2090,3 +2090,102 @@ editorial_decisions:
     source: STR-BG-D-Thread-03 2026-04-08
     blocks: Community Weaving resolution; RM faction completeness
     tags: [board_game, restoration, community_weaving, degree_table]
+
+  # ═══ SIM-PP476-498 FINDINGS (2026-04-08) ══════════════════════════════════
+
+  - id: ED-339
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Baralta BG Conviction (PP-482) fires in Season 1 trivially. Condition PI >= 6
+      is satisfied at start (PI = 7). Hafenmark gets free Mandate +1 in Season 1
+      without any player action. Conditional dramatic nature dissolved.
+    source: SIM-PP476-498 Mode A 2026-04-08
+    blocks: Baralta Conviction believability
+    tags: [board_game, hafenmark, conviction]
+
+  - id: ED-340
+    status: flagged
+    date_created: 2026-04-08
+    priority: P1
+    description: >
+      Weight-of-numbers Morale check (PP-489) references an undefined dice roll.
+      Factions and units lack a defined Morale check pool and base Ob. PP-489 adds
+      +1 Ob to a non-existent roll. PROVISIONAL: Discipline pool vs Ob 1 base;
+      Size > Command raises to Ob 2. Fail: Morale -1.
+    source: SIM-PP476-498 Mode A 2026-04-08
+    blocks: PP-489 execution
+    tags: [mass_combat, morale, weight_of_numbers]
+
+  - id: ED-341
+    status: flagged
+    date_created: 2026-04-08
+    priority: P1
+    description: >
+      Cultural Uprising BG pool undefined. victory_architecture_v1.md Section 3.5
+      states Weaver Thread pool (TTRPG character stat). No character in BG mode.
+      PROVISIONAL: 1D per Presence marker in T9 + 1D per adjacent territory with RM
+      Presence. Minimum 1D.
+    source: SIM-PP476-498 Mode A 2026-04-08
+    blocks: Cultural Uprising execution in BG
+    tags: [board_game, restoration_movement, cultural_uprising]
+
+  - id: ED-342
+    status: flagged
+    date_created: 2026-04-08
+    priority: P1
+    description: >
+      Lowenritter post-coup card hand undefined. PP-493 Reconstitution uses Senator
+      Inward, absent from any defined Lowenritter hand. Cannot execute without
+      card assignment. PROVISIONAL: 2x Legionary, 1x Senator, 1x Consul, 1x Praetor,
+      1x Recess.
+    source: SIM-PP476-498 Mode A 2026-04-08
+    blocks: PP-493 Reconstitution execution
+    tags: [board_game, lowenritter, card_hand]
+
+  - id: ED-343
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      NPC returned general (PP-496): after 2 unpaid seasons the captured PC General
+      returns as NPC. No stat block, allegiance, or faction assignment defined.
+    source: SIM-PP476-498 Mode A 2026-04-08
+    blocks: PP-496 unpaid ransom resolution
+    tags: [hybrid, mass_combat, general, npc]
+
+  - id: ED-344
+    status: flagged
+    date_created: 2026-04-08
+    priority: P1
+    description: >
+      PP-497 uses PC faction Morale Ob 2. Factions have no Morale stat. Replace with
+      Stability check Ob 2. Fail: Military -1 one season.
+    source: SIM-PP476-498 Mode A 2026-04-08
+    blocks: PP-497 execution
+    tags: [hybrid, mass_combat, npc]
+
+  - id: ED-345
+    status: flagged
+    date_created: 2026-04-08
+    priority: P1
+    description: >
+      PP-478 Assert Overwhelming bonus unreachable. Bonus applies this season only but
+      same-territory Seizure is prohibited same season. Dead text. Fix: within 2
+      seasons of Assert declaration.
+    source: SIM-PP476-498 Mode D 2026-04-08
+    blocks: PP-478 Overwhelming payoff
+    tags: [board_game, church, assert, seizure]
+
+  - id: ED-346
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Post-Maret succession Varfell has no viable victory path. VTM resets to 0; all
+      three Varfell paths require VTM >= 3. PROVISIONAL: post-succession co-victory if
+      Maret succession active AND RM achieves Cultural Uprising.
+    source: SIM-PP476-498 Mode J 2026-04-08
+    blocks: Varfell post-succession agency
+    tags: [board_game, varfell, succession, victory]
