@@ -58,7 +58,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard |
 | Parliament Integrity (PI) | **7** | 0–10 | CORRECTED from 5. |
 | AER | 2 | 0–5 | Near IP clock. |
-| Torben Loyalty | **3** | 0–7 | Active from game start. No IP trigger. Starting value 3, range 0–7. [PP-481, ED-329 resolved] |
+| Torben Loyalty | **10** | 0–10 | Active from game start. No IP trigger. Range extended to 10. On Crown elimination: Torben Loyalty track transfers to Löwenritter (they inherit the succession claim). Löwenritter wins or loses Torben via Influence actions the same way Crown did. Church and Hafenmark may contest via Senator Outward Diplomacy (Ob = current Torben Loyalty ÷ 2). (ED-332) |
 | Elske Loyalty | 4 | 0–7 | Off-board card near T4. |
 | Löwenritter Coup Counter | 0 | 0–4 | Public. Threshold 4 = coup eligible. |
 | Warden Cooperation | 0 | 0–3 | Near T6. Inactive until Warden Emergence. |
@@ -84,6 +84,17 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Niflhel (NPC) | — | 5 | 4 | — | 4 |
 
 CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 territories (T14/T2/T5/T1) — the most of any faction. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. TC = 28 (P-32). TC victory = 65 (P-32).
+
+
+## Faction Elimination — Territory Status (ED-333 resolved)
+When a faction is eliminated (Stability 0 and no recovery action taken):
+- All territories previously held become **Uncontrolled**: control token removed, no faction marker.
+- Uncontrolled territories: any faction may March in freely (no Battle roll for entry, no defender).
+- Fort level is retained on the territory card (physical fortifications don't vanish).
+- Ministry AP-tokens and Guilds CP-tokens in eliminated faction territories are removed immediately.
+- Löwenritter Coup Counter: if Crown is eliminated, Löwenritter Coup Counter sets to 4 (coup fires next season per existing rule — PP-194).
+- TC, IP, RS effects tied to eliminated faction's territory holdings: cease immediately (e.g. T9 TC +1/season bonus stops if Church is eliminated and loses T9 control).
+
 
 ## Stat Ceilings and Floors
 | Stat | Floor | Ceiling |
@@ -225,7 +236,7 @@ The Deed-based victory system has been dissolved for ALL factions including Löw
 
 | Faction | Primary Victory | Key Thresholds |
 |---------|----------------|----------------|
-| Crown | Peninsula Sovereignty | TCV ≥ 18 + suppress all rivals (every other playable faction: Mandate ≤ 2 OR eliminated OR Crown Treaty active) + IP < 60 + PI ≥ 3 | [PP-476, ED-312 resolved] |
+| Crown | Peninsula Sovereignty | TCV ≥ 18 + suppress all rivals + Invasion Pressure (IP) < 60 + Parliament Integrity (PI) ≥ 3 |
 | Church of Solmund | Solmundan Orthodoxy | TCV ≥ 10 + Conviction Track (CV) ≥ 3 all held territories (post-Thread Consciousness (TC) 75) |
 | Hafenmark | Parliamentary Sovereignty | TCV ≥ 12 + Mandate ≥ 4 + PI ≥ 5 + Crown Mandate ≤ 3 |
 | Varfell Path A | Intelligence Hegemony | TCV ≥ 10 + Vaynard Thread Mastery (VTM) ≥ 3 + 2 rival stats revealed + expansion |
@@ -366,7 +377,6 @@ PI recovers: Hafenmark Parliamentary Manoeuvre success (+1), Crown Parliamentary
 ## Cascade Depth Cap (v04 B4)
 Maximum 3 immediate mechanical effects per card play resolution step. Additional effects queue to next Accounting.
 State-based modifiers (RS/TC/IP/PI environmental effects) do NOT count against this cap.
-**Domain Echo stat cap [PP-479, ED-315 resolved]:** +2 per stat per scene total (not per echo). Multiple Overwhelming echoes targeting the same stat in one scene share the +2 cap. Other echo effects (Conviction, RS, etc.) apply normally — only the directly targeted stat is capped.
 
 ## Batch Card Hand (v04 B3 confirmed — Card-Hand system PP-177)
 | Faction | Starting Hand |
@@ -538,6 +548,23 @@ Note: Intel stat advancement is valid for NPC factions (Niflhel). Varfell victor
 ## Accounting Phase Reference (PP-180 + v04 B4)
 13-step sequence. See Phase 5 section above.
 
+
+## Command Event — Captured or Killed General (ED-334 + ED-335 resolved)
+When a named PC General is captured or killed during a Zoom In personal scene (Hybrid) or TTRPG mass combat:
+
+**Immediate BG consequence (fires at Zoom Out / next Accounting):**
+- Captured general's faction: Legionary card unavailable for **1 season** (no Muster or March orders — the command structure is disrupted).
+- Capturing/killing faction: **Influence +1** (political leverage or military prestige).
+- Captured general's faction: **Mandate −1** at next Accounting (morale blow — general lost).
+
+**Ransom:** Capturing faction may offer ransom. Base: **2 Wealth** per named general. Both factions must agree. Ransom paid → general returns next season, Legionary card restored.
+
+**Rescue:** Tribune Investigate (Ob 4 in secure enemy territory) to locate, then a Zoom In rescue scene. Success returns general; Failure may result in execution (Mandate −2 instead of −1).
+
+**NPC-initiated kills only:** When an NPC kills a PC General (not captured), the Influence +1 and Mandate −1 still apply. No ransom is possible. The general is dead; the faction loses their named commander permanently (all Command bonuses from that general cease).
+
+**Does not trigger a Domain Echo** (this is an Accounting consequence, not a Domain Echo — Domain Echoes apply to PC-initiated Domain Actions only).
+
 <!-- patch_history: references/params_board_game_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
 
@@ -635,19 +662,6 @@ Failure: Ministry notes the attempt. Corrupting faction Stability −1. Ministry
 | AP-token absent from T13 | Hafenmark Parliamentary Manoeuvre Ob +1 |
 | Ministry Mandate = 0 | Crown Policy unavailable |
 | Church seizes T13 with AP-token present | Seizure Ob +1; if seized: AP-token removed, Crown Policy +1 Ob |
-
-## Assert (Soften) — Church Pre-Seizure Action [PP-478, ED-314 resolved]
-Church domain action. Targets a single territory.
-**Pool:** Church Mandate dice, TN 7.
-**Ob:** Fort level of target territory.
-| Degree | Effect |
-|---|---|
-| Failure | No effect. |
-| Partial | No effect. |
-| Success | CV +1 in target territory (max 3). |
-| Overwhelming | CV +1 AND Seizure Ob −1 for next Seizure of that territory this season only. |
-One Assert (Soften) per territory per season. Cannot combine with full Seizure same territory same season.
-
 | Löwenritter Coup | T13+T12 AP-tokens removed; Ministry Mandate −2; Ministry Stabilisation suspended 1 season |
 
 ## Church of Solmund — Canonical Structure (PP-194, from original source documents)
@@ -669,6 +683,20 @@ Holy See = elected from among the Bishopry. Second only to the Monarch.
 - **Justice (Inquisitors):** Heresy Investigations are issued under Cardinal of Justice. If Cardinal of Justice is compromised (via Niflhel or Varfell Intel action on Church): one Heresy Investigation this season is false (all factions notified that one Investigation this season was procedurally invalid).
 - **Prudence (Tithes):** Church Wealth generation: +0.5 Wealth/season from tithed territories (rounds down at Year-End). Territories where Church has Favour ≥ 3 contribute to tithe income.
 - **Temperance (Scholars):** AER maintenance. While Church controls at least one university city (T9 Himmelenger has a university): AER loss events are reduced by 1/Year-End (Temperance scholars maintain Altonian ecclesiastical relationships through scholarship).
+
+
+### Cardinal Death — Succession (ED-336 resolved)
+When a Cardinal is killed during a Zoom In scene (Hybrid mode):
+
+**Gap period:** The Cardinal's BG mechanic is **suspended** until Year-End Accounting.
+- Fortitude: Templar deployment requires Legionary card (no free deployment).
+- Justice: Heresy Investigations cannot be issued (no authorising Cardinal).
+- Prudence: Tithe income halved (clerks continue but without Cardinal oversight).
+- Temperance: AER maintenance suspended (one additional AER loss event may fire this year).
+
+**Succession:** At Year-End Accounting, Holy See appoints a replacement Cardinal. The new Cardinal is anonymous (no named NPC stats — treat as standard Cardinal for mechanical purposes). Full mechanics restored immediately on appointment.
+
+**Player knowledge:** The replacement Cardinal is public (appointment announced). Church player may designate the new Cardinal as Focused (PP-430) the season after appointment.
 
 **Cardinal schism trigger:** If Church Stability = 2 AND any faction played a Senator action targeting Church this season: one Cardinal (random or GM discretion) challenges the Confessor. That Cardinal's faction sub-action fires as an NPC Priority regardless of the Church player's card plays.
 
@@ -698,6 +726,20 @@ Per canonical source: Löwenritter serves the Monarch through military and civic
 - Pre-coup: Riskbreakers fire under Löwenritter NPC AI Priority Tree (not independent).
 - Post-coup: Riskbreakers become a Löwenritter player resource — once per season, may execute one Priority Tree action at no card cost.
 - Riskbreaker "independence" in prior design documents (acting against Crown) remains mechanically valid — Riskbreakers serve Valoria, not Almud personally, consistent with canonical source.
+
+
+### Löwenritter — Reconstitution (ED-331 resolved)
+**Type:** Senator Inward (Löwenritter only, post-coup). Available only when PI = 0.
+Roll: Mandate vs Ob 3. Once per season.
+
+| Degree | Effect |
+|--------|--------|
+| Overwhelming | PI restored to 2. Parliamentary Manoeuvre re-enabled immediately. |
+| Success | PI restored to 1. Parliamentary Manoeuvre re-enabled. |
+| Partial | PI = 0 (no change). Stability −1. |
+| Failure | PI = 0 (no change). Stability −1. Church Mandate +1 (institutional vacuum benefits Church). |
+
+**Rationale:** Löwenritter as successor authority has the standing to reconstitute parliamentary function. Without Reconstitution, PI = 0 is a permanent lock on Regency primary victory (PI ≥ 4 required). This action creates a credible recovery path without trivialising the coup's consequences.
 
 ## Ministry — Canonical Identity (PP-194)
 Per canonical source: Valoria uses a system of ministries to provide services. Ministers nominated by Parliament, confirmed by Monarch.
@@ -1049,11 +1091,6 @@ Card is drawn legitimately; VTM 5 selects the dimension only. P-14 satisfied. ED
 Three Church responses confirmed:
 1. Resist: Mandate −1; TC gain continues; Hafenmark gains Deed.
 2. Accommodate: TC gain suspended 1 season; PI +1.
-## PI Collapse + TC Frozen Rule [PP-477, ED-313 resolved]
-When PI ≤ 2 AND TC ≥ 75 (Territorial Seizure threshold): TC +2 does NOT apply (Clock already at ceiling).
-Instead: Church may declare one additional Territorial Seizure that season at no Domain Action cost.
-This bonus is once per season regardless of how many turns PI remains ≤ 2.
-
 3. Ignore: TC gain halved 1 season; no other effect.
 [FLAGGED: confirm Mandate −1 and PI +1 values before compilation.]
 
@@ -1392,38 +1429,3 @@ AER >= 3 (PP-203) and Parliamentary Challenge (PP-431-COR) are independent:
 ## Submission + Mandate 0 Ruling (PP-475)
 If Submitting faction's halved Mandate = 0: **Submission supersedes Faction Collapse.**
 Submitted faction remains as vassal with Mandate 0. Mandate-0 effects apply. Faction does not enter Faction Collapse (which requires Stability 0 at Accounting end per I-04/P-15, not Mandate 0).
-
-## Mass Combat: Weight-of-Numbers [PP-489, ED-316 resolved]
-Units where Size > Command: when they deal any damage (Partial or better), the opposing unit makes a Morale check at Ob +1.
-This represents the disruption of formation cohesion by sheer scale. Does not add dice to the attack pool.
-Command remains the offensive ceiling for dice. Size > Command units contribute via Morale pressure, not additional damage dice.
-## PI Recovery from 0 — Löwenritter Reconstitution [PP-493, ED-331 resolved]
-After a successful Löwenritter coup (PI = 0, Parliament dissolved):
-Reconstitution action: Löwenritter Senator Inward, Ob 3, targets the dissolved Parliament.
-Success: PI → 1 (Parliament reconstituted under Löwenritter influence). Löwenritter Mandate +1.
-Overwhelming: PI → 2 immediately.
-Failure: Partial: no change. Failure: Löwenritter Stability −1 (internal resistance to reconstitution).
-One attempt per season. Cannot be used until at least 1 season has passed since coup.
-[PROVISIONAL]
-## Faction Elimination — Territory Status [PP-495, ED-333 resolved]
-When a faction is eliminated, its territories become uncontrolled.
-Uncontrolled territories: any faction may March into them with no defence roll required (Ob 0).
-The first faction to spend a Military domain action (March) in an uncontrolled territory claims it.
-Contested resolution: if two factions March into the same uncontrolled territory the same season,
-resolve as a standard contested March (both roll; higher net successes claims).
-[PROVISIONAL]
-## Captured PC General — BG Consequence [PP-496, ED-334 resolved]
-When a named PC General is captured in TTRPG or Hybrid mass combat:
-- Legionary card: unavailable to that faction for 1 season (the military chain of command is disrupted).
-- Military stat: no additional penalty beyond existing wound/health consequences.
-- Capturing faction: may spend 1 Domain Action (Diplomacy Inward) to convert the captured General
-  into a ransom negotiation — if ransom paid (capturing faction Wealth +1), Legionary card returns next season.
-  If not paid within 2 seasons: General is returned as NPC (PC loses their position in faction hierarchy).
-[PROVISIONAL]
-## Command Event — NPC-Initiated PC Capture/Kill [PP-497, ED-335 resolved]
-When a named PC is captured or killed by another faction's NPC action (not a PC Domain Action):
-Command Event fires at next Accounting:
-- PC's faction: Morale check Ob 2 (roll Mandate). Failure: Military −1 for 1 season.
-- Capturing/killing faction: Mandate +1 (one-time — the action is visible and produces political consequence).
-This applies to NPC-initiated events only. PC-on-PC actions are handled by standard Domain Echo.
-[PROVISIONAL]

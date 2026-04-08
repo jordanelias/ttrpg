@@ -73,6 +73,8 @@ Movement formula:
 - If (margin × genre_weight × orientation_weight) ≤ resistance → 0 movement.
 - If greater → ⌊(margin × genre_weight × orientation_weight) − resistance⌋ toward winner.
 
+**Resistance decay (ED-330 resolved):** Each exchange that produces 0 CT movement (regardless of who wins) reduces the effective resistance by 0.25, tracked cumulatively. Resistance floor: 0. Reset to base resistance at scene start. This prevents permanent stalemate between near-equal pools — audience patience erodes when no progress is made. Record the running decay value on the ledger sheet.
+
 ## Genre Weights [PP-453]
 Genre weights use an adjacency model (Past→Present→Future arc):
 

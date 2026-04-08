@@ -72,7 +72,7 @@ Every victory requires holding all conditions for **2 consecutive Accounting ste
 | Condition | Threshold |
 |-----------|-----------|
 | TCV held | ≥ 16 |
-| Rival suppression | Every other playable faction: Mandate ≤ 2 OR eliminated OR formal Crown Treaty in effect. [ED-312 resolved — PP-476] |
+| Rival suppression | Every other playable faction: Mandate ≤ 2 OR eliminated OR formal Crown Treaty in effect |
 | IP | < 60 |
 | PI | ≥ 3 |
 
@@ -184,7 +184,9 @@ RM has no faction stats. It operates purely through Presence markers and Communi
 CV ≤ 1 in ≥ 8 of the 15 playable territories (T1–T14, T17). Checked at each Accounting. Once met and held, Phase 2 becomes available. If the majority drops below 8, Phase 2 is locked again until it recovers.
 
 #### Phase 2 — Cultural Uprising of T9 Himmelenger
-Available only while Phase 1 condition is met AND RS ≥ 30. Declared once per game at any Accounting where both conditions hold. If RS drops below 30 after declaration but before the win condition is met, the Uprising continues (the social movement has momentum). RM plays their Pontifex card and rolls: **Weaver Thread pool vs Ob = TC ÷ 10 (round up, min 1, max 5).** [PP-492, ED-337 resolved]
+Available only while Phase 1 condition is met. Declared once per game at any Accounting where Phase 1 holds. RM plays their Pontifex card and rolls: **Weaver Thread pool vs Ob = TC ÷ 10 (round up, min 1, max 5).**
+
+Prerequisites: RS ≥ 25 (substrate must be stable enough for a coherent popular movement — below 25, physical destabilisation overwhelms cultural organisation). If RS < 25, Cultural Uprising is unavailable regardless of Phase 1 status.
 
 Modifiers:
 - T9 CV ≤ 1: Ob −1 (Cathedral already culturally shifted)
