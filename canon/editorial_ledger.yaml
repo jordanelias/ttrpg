@@ -1582,3 +1582,91 @@ editorial_decisions:
     description: "Varfell Path B — Southernmost Dominion cognitive load reduction"
     decision: "PENDING USER REVIEW. See designs/board_game/varfell_path_b_redesign_ed311.md for options A (4 conditions + WR track), B (5 conditions, keep WA/WC), C (3 conditions, minimal). Current 7-condition path identified as excessive in full-spectrum review."
     tags: [board_game, varfell, victory, cognitive_load]
+
+  - id: ED-312
+    status: flagged
+    date_created: 2026-04-07
+    description: >
+      Crown victory condition — "suppress all rivals" is undefined. Does this mean all
+      other playable factions at Mandate ≤ N (specify N), Stability 0, or eliminated?
+      Without a threshold, Crown victory cannot be adjudicated. SIM-BG-03 finding.
+    priority: P1-BLOCKER
+    source: SIM-BG-03 2026-04-07
+    blocks: Crown victory adjudication
+    tags: [board_game, crown, victory]
+
+  - id: ED-313
+    status: flagged
+    date_created: 2026-04-07
+    description: >
+      PI ≤ 2 grants TC +2 per season. But TC is frozen at 75 once Church reaches
+      Territorial Seizure threshold. Does PI collapse TC +2 (a) not apply when TC frozen,
+      (b) apply and stack above 75 with undefined effects, or (c) apply to a parallel
+      institutional-collapse track distinct from the Theocracy Clock? SIM-BG-04 finding.
+    priority: P1
+    source: SIM-BG-04 2026-04-07
+    blocks: PI collapse chain adjudication post-TC 75
+    tags: [board_game, parliament_integrity, theocracy_clock, crown]
+
+  - id: ED-314
+    status: flagged
+    date_created: 2026-04-07
+    description: >
+      Church Seizure Ob formula produces Ob 8 at Fort 3 + CV 0, making that territory
+      de facto immune to seizure at the Church's standard 6D pool (~2% success rate).
+      No mechanic exists to reduce Fort level or raise CV in a target territory prior to
+      seizure. Does the Church have a pre-seizure softening action (e.g. Assert variant
+      spreading propaganda to adjacent territory raising CV +1)? Without this, fortified
+      low-CV territories permanently block Church victory. SIM-BG-02 finding.
+    priority: P1
+    source: SIM-BG-02 2026-04-07
+    blocks: Church victory via Territorial Seizure when opponents invest in Fort+CV suppression
+    tags: [board_game, church, seizure, conviction_value, fortification]
+
+  - id: ED-315
+    status: flagged
+    date_created: 2026-04-07
+    description: >
+      Domain Echo cap rule (currently provisional ED-071) states "cap resets per stat per
+      Echo." This means multiple Overwhelming echoes in one scene targeting the same stat
+      each apply +2, potentially moving a stat +4 or more in one scene (e.g. Crown Mandate
+      5 → 7 ceiling from two Overwhelming echoes). Resolution options: (a) cap applies
+      per stat per scene total (not per echo), (b) confirm per-echo reset is intentional
+      and the +4 spike is designed. SIM-HY-01 finding.
+    priority: P1
+    source: SIM-HY-01 2026-04-07
+    blocks: Hybrid Domain Echo adjudication
+    tags: [hybrid, domain_echo, faction_stats]
+    supersedes_provisional: ED-071
+
+  - id: ED-316
+    status: flagged
+    date_created: 2026-04-07
+    description: >
+      Mass combat: Size 7 Command 2 unit generates only 4D pool (Command cap) — identical
+      to a Size 2 Command 2 unit offensively. Large low-Command formations have no
+      offensive contribution beyond their total Health (survivability only). Should
+      Size > Command units receive a secondary effect (e.g. opponent Morale check Ob +1,
+      or bonus Ob to disengage) representing weight-of-numbers that is not direct damage?
+      SIM-MC-01 finding.
+    priority: P2
+    source: SIM-MC-01 2026-04-07
+    blocks: mass combat tactical diversity
+    tags: [mass_combat, command, size, balance]
+
+  - id: ED-317
+    status: flagged
+    date_created: 2026-04-07
+    description: >
+      Debate AMPLIFY interaction: at low pools (< ~12D combined) targeting a non-primary
+      genre vs resistance 2 audience, AMPLIFY produces zero Conviction Track movement
+      every exchange. No Composure damage rule is defined for AMPLIFY (Composure damage
+      only confirmed for CLASH margin results). If AMPLIFY deals no Composure damage and
+      produces no Track movement, the debate is irresolvable — true stalemate with no
+      exit path except voluntary concession. Resolution: (a) AMPLIFY minimum movement
+      rule (at least 1 if any net successes), or (b) AMPLIFY deals Composure damage equal
+      to floor(net successes / 2). SIM-DB-02 finding.
+    priority: P1
+    source: SIM-DB-02 2026-04-07
+    blocks: Debate resolution when AMPLIFY is the dominant interaction type
+    tags: [debate, amplify, composure, stalemate]

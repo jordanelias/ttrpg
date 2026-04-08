@@ -327,3 +327,25 @@ Open for editorial: ED-061, ED-062, ED-063.
 | SIM-HYB-SEASON | Mid-campaign hybrid season (full, with flowcharts) | HYBRID | COMPLETE | 2026-04-04 | PP-286-335. 88 editorials resolved. |
 | SIM-ARC-01–20 | Emergent narrative arcs with irrational players (20 arcs) | ALL | COMPLETE | 2026-04-04 | PP-246-262 applied. Non-optimal decision protocols. |
 | SIM-NONOPT-01 | Non-optimal actor simulations across modes | ALL | COMPLETE | 2026-04-04 | 16-protocol library. PP-257-296. |
+
+
+## 2026-04-07 Comprehensive Multi-System Stress Test
+| ID | Description | Mode | Temporal | Tracks | Factions | NPCs | Archetypes | Status | Findings |
+|----|------------|------|----------|--------|----------|------|------------|--------|---------|
+| SIM-BG-01 | TC pacing: Church vs Hafenmark suppression S1–S20 | BG | PRES/FUT | TC | Church, Hafenmark | Himlensendt, Baralta | Expansion vs Suppression | COMPLETE | P2: Hafenmark suppression worth ~6 seasons; Assert mandatory post-TC50 removes decision cost |
+| SIM-BG-02 | Church Seizure Ob range — territory immunity analysis | BG | FUT | TC, CV | Church | Himlensendt | Territorial Expansion | COMPLETE | P1: Fort3+CV0=de facto seizure immunity (Ob 8, <2% success rate); no mechanic to reduce Fort level pre-seizure; ED-candidate-G |
+| SIM-BG-03 | Crown TCV 18 bottleneck — late-game victory feasibility | BG | FUT | TCV, IP, PI | Crown | Generic Crown | Hegemonic Expansion | COMPLETE | P1: "Suppress all rivals" undefined — Crown victory unresolvable; ED-candidate-A |
+| SIM-BG-04 | PI collapse cascade — Löwenritter coup chain | BG | MID | PI, TC, Coup Counter | Crown, Löwenritter, Church | Ehrenwall, Almud | Institutional Collapse | COMPLETE | P1: PI≤2 TC+2 interacts with frozen TC undefined; coup window narrow at PI 3–4; ED-candidate-B |
+| SIM-BG-05 | RS passive decay — time to Rupture without Warden Cooperation | BG | FUT | RS | All | Generic | Passive/Negligent | COMPLETE | P2: RS 40 band entry ~S40–44; Rupture not near-term threat; +2 Ob to all non-Thread is real consequence |
+| SIM-HY-01 | Domain Echo stacking — same-scene multiple echoes | Hybrid | CROSS | Faction Mandate, Influence | Crown, Church | Almud, Himlensendt | Politician, Churchman | COMPLETE | P1: Per-echo cap reset enables +4 Mandate in one scene; ED-071 must resolve; ED-candidate-C |
+| SIM-HY-02 | Zoom In at illegal phase entry | Hybrid | PRES | Phase state | Any | Generic | Any | COMPLETE | P2: No rule for illegal Zoom In consequence; mid-Phase-6 Domain Echo undefined; ED-candidate-D |
+| SIM-HY-03 | Scope shift Inspiration cost interaction | Hybrid | PRES | Inspiration | Any | Generic | Any | COMPLETE | CLEAN: linear Inspiration cost coherent |
+| SIM-MC-01 | Command cap degenerate — Size 7 Command 2 horde | TTRPG/BG | PRES | Unit Health, Discipline | Generic | Generic General | Levy Horde | COMPLETE | P1: 7:3 numerical advantage becomes 4D:6D disadvantage; Size>Command has zero offensive benefit; ED-candidate-E |
+| SIM-MC-02 | Heavy Infantry vs Light Infantry asymmetric engagement | TTRPG | PRES | Unit Health, Size | Generic | Generic Commanders | Matched Forces | COMPLETE | P2: HI destroys 2:1 LI advantage; flanking counter mechanics unconfirmed |
+| SIM-MC-03 | Morale cascade from general death | TTRPG | PRES | Morale, Size | Generic | Generic General | Command Disruption | COMPLETE | P2: cascade over 2–3 rounds; secondary commander Morale floor inheritance undefined |
+| SIM-DB-01 | CLASH dominant strategy — Revealing vs Obscuring | TTRPG/Hybrid | PRES | Conviction Track | Crown, Hafenmark | Almud, Baralta | Politicians | COMPLETE | P2: Revealing strictly dominates Obscuring in CLASH; rational players never choose Obscuring in CLASH |
+| SIM-DB-02 | AMPLIFY vs high-resistance audience — stalemate detection | TTRPG | PRES | Conviction Track, Composure | Church+Crown, Hafenmark | Himlensendt+Almud, Baralta | Alliance Debate | COMPLETE | P1: low pool + non-primary genre = zero movement AND zero Composure damage = irresolvable stalemate; ED-candidate-H |
+| SIM-DB-03 | Composure bleed rate — median pool concession threshold | TTRPG | PRES | Conviction Track, Composure | Crown, Varfell | Almud, Vaynard | Politician, Epistemic | COMPLETE | CLEAN: 13D vs 10D resolves in 2–4 exchanges; resistance correctly calibrated |
+| SIM-PC-01 | Weapon TN cliff — TN5 vs TN8 comparative analysis | TTRPG | PRES | Health | Generic | Generic Combatants | Duelists | COMPLETE | P2: Critical Hit frequency advantage TN5 vs unarmoured; TN8 vs armoured — armour-contextual, good design |
+| SIM-PC-02 | Initiative information value — flip probability | TTRPG | PRES | Stamina/Health | Generic | Generic | Duelists | COMPLETE | CLEAN: initiative tactical modifier ~15–20% efficiency gain; not decisive |
+| SIM-PC-03 | Wound accumulation — non-functionality threshold | TTRPG | PRES | Health, Wounds | Generic | Generic Combatant | Sustained Fighter | COMPLETE | P2: pool floor 5 = zombie fighter at 8+ wounds; Ob penalty at high wound counts needed; ED-candidate-F |
