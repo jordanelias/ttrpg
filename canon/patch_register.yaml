@@ -4229,3 +4229,38 @@ patches:
   source: simulation resolution 2026-04-08
   affects: []
   status: noted
+- id: PP-465
+  date: 2026-04-08
+  severity: P1
+  description: "Refute action Ob reduced from 2 to 1. Ob 2 produced ~18% success at Recall 1 (near-impossible). Ob 1 produces ~66% at Recall 1, ~87% at Recall 2 — accessible to any character while preserving skill gradient at Overwhelming. Multi-opponent clarification added: already-denied Memory bonus may not be Refuted again. Resolves AUD-SC-F-07/D-G19."
+  finding_id: AUD-SC-D-G19
+  source: audit/simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_debate.md]
+  status: applied
+
+- id: PP-466
+  date: 2026-04-08
+  severity: P2
+  description: "BG Parliamentary Vote §6.13 Step 2 explicitly scoped to PP-453 adjacency genre weight model. Previously referenced generic genre_weight without specifying which weight values apply. Now confirmed: primary ×1.0, adjacent ×0.75, opposed ×0.5, audience ethical mode +0.25. Resolves AUD-SC-C-01/D-G01/D-G20."
+  finding_id: AUD-SC-C-01
+  source: audit/simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md]
+  status: applied
+
+- id: PP-467
+  date: 2026-04-08
+  severity: P2
+  description: "Deadlock State clarified: Doubt Marker applies normally during Deadlock (GW=1.0, effective_margin = margin, Doubt Marker reduces by 2 as normal). Regroup is legal during Deadlock; forfeiting does not trigger margin-≥2 exit condition. Resolves AUD-SC-SD-02/SD-03."
+  finding_id: AUD-SC-SD-03
+  source: audit/simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md]
+  status: applied
+
+- id: PP-468
+  date: 2026-04-08
+  severity: P2
+  description: "[EDITORIAL: Concentration attribute] in §5.1 (deprecated Part 5) marked resolved — Focus confirmed by PP-460, Poise deprecated. Resolves AUD-SC-D-G04."
+  finding_id: AUD-SC-D-G04
+  source: audit resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md]
+  status: applied

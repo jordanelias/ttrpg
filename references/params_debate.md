@@ -1,8 +1,9 @@
-<!-- version: v0.14+design-ST4-R2 | sources: debate_system_redesign_v1.md Part 6 v1.7 | last_updated: 2026-04-08 -->
+<!-- version: v0.14+design-ST4-R3 | sources: debate_system_redesign_v1.md Part 6 v1.8 | last_updated: 2026-04-08 -->
 <!-- NEW SECTIONS: §6.11 Pre-Debate Prep, §6.12 Multi-Party, §6.13 BG Vote, §6.14 Hybrid, §6.15 Thread -->
 <!-- GAP-DS-01/02/03/04/05/06/07/08/16/17/18/19 all resolved in v1.4/v1.5 -->
 <!-- SIM-DEBT-02: Corroboration in CLASH calibration pending -->
 <!-- PP-449–PP-464 applied 2026-04-08: SIM-SC-01 all P1/P2 resolutions — see patch_register.yaml -->
+<!-- PP-465–PP-468 applied 2026-04-08: audit/sim pass — Refute Ob1, BG adjacency scope, Deadlock clarifications -->
 <!-- PATCHES APPLIED: D-01–D-10, R-01–R-07, v2-P01–v2-P04, R-65, R-66 -->
 <!-- PP-232: Argue pool corrected to (Cognition × 2) + History; Initiative to Attunement; -->
 <!--         Step 1 action name flagged ED-132; Diverge trigger flagged ED-133; -->
@@ -43,13 +44,13 @@ Post-Diverge state: stays with holder.
 
 **Step 2 — Choose:** Each orator selects Genre (Past/Present/Future) + Orientation (Revealing/Obscuring).
 
-**Step 2c — Refute (optional) [PP-458]:** Declared after opponent claims Memory bonus, before dice are rolled. Roll Recall (Rec) alone, Ob 2, TN 7.
+**Step 2c — Refute (optional) [PP-465]:** Declared after opponent claims Memory bonus, before dice are rolled. Roll Recall (Rec) alone, Ob 1, TN 7.
 | Degree | Effect |
 |---|---|
 | Failure | Refute fails silently. Opponent Memory bonus stands. |
 | Success | Memory bonus denied. Opponent loses +2D. |
 | Overwhelming | Memory bonus denied AND opponent −1D on Argue roll. |
-Max one Refute per exchange per orator. Cannot Refute a Refute.
+Max one Refute per exchange per orator. Cannot Refute a Refute. Already-denied Memory bonus may not be Refuted again.
 
 **Step 3 — Argue:** Lower Attunement (lower initiative) declares first. Higher Attunement hears, then declares and rolls. (PP-232)
 

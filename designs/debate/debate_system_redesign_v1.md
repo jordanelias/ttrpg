@@ -330,7 +330,7 @@ Not all Debates are symmetric. The institution shapes the rules.
 
 2. **[EDITORIAL: Proceeding type catalogue]** — Which asymmetric proceedings exist beyond Royal Audience and Church Tribunal? Guild arbitration? Varfell review? Revolution assembly?
 
-3. **[EDITORIAL: Concentration attribute]** — Focus is proposed. Poise is the alternative (composure under sustained pressure). Which?
+3. **[EDITORIAL: Concentration attribute — RESOLVED PP-460]** — Focus confirmed. Concentration = Focus + Presence. Poise deprecated.
 
 4. **[EDITORIAL: Audience Disposition as win-condition]** — Does dual win-condition (exchange + audience) apply to all Formal/Grand Debates, or only Grand Debates?
 
@@ -361,7 +361,7 @@ Not all Debates are symmetric. The institution shapes the rules.
 # PART SIX: COMPILED MECHANICAL SPECIFICATION
 ## Source: debate_stress_test_v1.md + debate_stress_test_v2.md
 ## Status: OPERATIVE — supersedes quaestio design (Parts 3–4) for play purposes
-## Version: v1.7 (PP-449–PP-464 applied 2026-04-08 — SIM-SC-01 P1/P2 resolutions: genre adjacency, interaction names, resistance, Obscuring, TIE scope, Regroup, Composure, Thread co-movement classification)
+## Version: v1.8 (PP-449–PP-468 applied 2026-04-08 — audit/sim pass: Refute Ob1, BG weight scope, Deadlock + Doubt Marker, Concentration editorial closure — SIM-SC-01 P1/P2 resolutions: genre adjacency, interaction names, resistance, Obscuring, TIE scope, Regroup, Composure, Thread co-movement classification)
 ## Parts 1–4 retained as design reference and historical/philosophical foundation
 
 ---
@@ -495,13 +495,13 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 
 **Step 2b — Corroborate (optional) [PP-459, ED-014 resolved]:** Before rolling, a corroborator present at the debate may declare support. Any ally who witnessed the relevant events may corroborate. On success (Bonds, Ob 1, TN 7): primary orator gains +1D for this exchange's Argue roll. Knot holders give full Knot bonus (not capped at +1D). Knot is no longer required — witnessing is. Maximum one corroborator per side per exchange. Asymmetric proceedings: accused corroborators roll Bonds Ob 2 [PP-116]. GAP-DS-12 resolved.
 
-**Step 2c — Refute (optional) [PP-458]:** Declared after opponent claims Memory bonus (+2D), before dice are rolled. Roll Recall (Rec) alone, TN 7, Ob 2.
+**Step 2c — Refute (optional) [PP-465]:** Declared after opponent claims Memory bonus (+2D), before dice are rolled. Roll Recall (Rec) alone, TN 7, Ob 1.
 | Degree | Effect |
 |---|---|
 | Failure | Refute fails. Opponent Memory bonus stands. |
 | Success | Memory bonus denied. Opponent loses +2D. |
 | Overwhelming | Memory bonus denied AND opponent −1D on Argue roll this exchange. |
-Maximum one Refute per exchange per orator. Cannot Refute a Refute.
+Maximum one Refute per exchange per orator. Cannot Refute a Refute. If Memory bonus was already denied this exchange (prior Refute succeeded), a second Refute has no target and may not be declared.
 
 **Step 3 — Argue:** Initiative holder declares argument and rolls first. Respondent hears declaration, then chooses genre/orientation and rolls.
 - Pool: (Presence × 2) + History bonus, TN 7.
@@ -552,7 +552,9 @@ Maximum one Refute per exchange per orator. Cannot Refute a Refute.
 **Deadlock State** (replaces "DIVERGE state" — PP-452):
 - Declared by GM at exchange 3+ when both orators choose same orientation for 2+ consecutive exchanges.
 - No Step 1/Appraise. No Choose. Direct pool vs pool, flat genre weights (×1.0 both sides). [ED-133/PP-313]
-- Ends when one orator wins by margin ≥ 2.
+- Doubt Marker applies normally (reduces effective_margin by 2; GW=1.0 so effective_margin = margin before Doubt reduction). [PP-467]
+- Regroup is available. Forfeiting does not trigger the exit condition (margin ≥2 exit requires an argued exchange win).
+- Ends when one orator wins an argued exchange by margin ≥ 2.
 
 **Step 5 — Forfeit actions [PP-454, PP-455]:**
 - **Regroup:** Forfeit exchange. No argument, no strain, no CT movement. Concentration restores by max(Focus score, 2). Does not count as an exchange win or loss — no Concentration depletion this exchange. **Spent interaction:** If Concentration was 0 when Regroup declared, Regroup consumes the Spent state without applying the −2D/+1D penalty. Concentration restores to max(Focus, 2).
@@ -721,7 +723,7 @@ Faction-level debate resolution for BG scale. Use when the scene is narrated at 
 
 **Step 1 — Declare sides:** Each participating faction declares Side A or Side B. Non-declaring factions Abstain — they do not contribute pool dice.
 
-**Step 2 — Genre and weights:** Same as §6.1 Steps 1–2. Each side declares one genre for all its factions.
+**Step 2 — Genre and weights:** Same as §6.1 Steps 1–2, including the PP-453 adjacency model. Each side declares one genre for all its factions. Weights: primary ×1.0, adjacent ×0.75, opposed ×0.5, with +0.25 boost from audience ethical mode. [PP-466]
 
 **Step 3 — Resistance:** Base 0. Parliament is the institution — no external audience resistance. If a faction with Stability ≥ 6 Abstains: +1 to resistance (maximum +2 from all Abstains). This represents the political weight of their neutrality.
 
