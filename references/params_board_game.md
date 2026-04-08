@@ -1397,3 +1397,33 @@ Submitted faction remains as vassal with Mandate 0. Mandate-0 effects apply. Fac
 Units where Size > Command: when they deal any damage (Partial or better), the opposing unit makes a Morale check at Ob +1.
 This represents the disruption of formation cohesion by sheer scale. Does not add dice to the attack pool.
 Command remains the offensive ceiling for dice. Size > Command units contribute via Morale pressure, not additional damage dice.
+## PI Recovery from 0 — Löwenritter Reconstitution [PP-493, ED-331 resolved]
+After a successful Löwenritter coup (PI = 0, Parliament dissolved):
+Reconstitution action: Löwenritter Senator Inward, Ob 3, targets the dissolved Parliament.
+Success: PI → 1 (Parliament reconstituted under Löwenritter influence). Löwenritter Mandate +1.
+Overwhelming: PI → 2 immediately.
+Failure: Partial: no change. Failure: Löwenritter Stability −1 (internal resistance to reconstitution).
+One attempt per season. Cannot be used until at least 1 season has passed since coup.
+[PROVISIONAL]
+## Faction Elimination — Territory Status [PP-495, ED-333 resolved]
+When a faction is eliminated, its territories become uncontrolled.
+Uncontrolled territories: any faction may March into them with no defence roll required (Ob 0).
+The first faction to spend a Military domain action (March) in an uncontrolled territory claims it.
+Contested resolution: if two factions March into the same uncontrolled territory the same season,
+resolve as a standard contested March (both roll; higher net successes claims).
+[PROVISIONAL]
+## Captured PC General — BG Consequence [PP-496, ED-334 resolved]
+When a named PC General is captured in TTRPG or Hybrid mass combat:
+- Legionary card: unavailable to that faction for 1 season (the military chain of command is disrupted).
+- Military stat: no additional penalty beyond existing wound/health consequences.
+- Capturing faction: may spend 1 Domain Action (Diplomacy Inward) to convert the captured General
+  into a ransom negotiation — if ransom paid (capturing faction Wealth +1), Legionary card returns next season.
+  If not paid within 2 seasons: General is returned as NPC (PC loses their position in faction hierarchy).
+[PROVISIONAL]
+## Command Event — NPC-Initiated PC Capture/Kill [PP-497, ED-335 resolved]
+When a named PC is captured or killed by another faction's NPC action (not a PC Domain Action):
+Command Event fires at next Accounting:
+- PC's faction: Morale check Ob 2 (roll Mandate). Failure: Military −1 for 1 season.
+- Capturing/killing faction: Mandate +1 (one-time — the action is visible and produces political consequence).
+This applies to NPC-initiated events only. PC-on-PC actions are handled by standard Domain Echo.
+[PROVISIONAL]

@@ -539,3 +539,21 @@ Season 1: mark Focus-declared on Church faction mat.
 Season 2 (consecutive): AER +1 fires.
 If the Church misses a season, the consecutive chain resets. No AER gain from a single-season declaration.
 This prevents Season-1 AER 3 and preserves meaningful commitment cost.
+## Torben Loyalty After Crown Elimination [PP-494, ED-332 resolved]
+If Crown is eliminated: Torben Loyalty track transfers to Löwenritter as dynastic successor.
+Löwenritter inherits Torben's current Loyalty value. Track meaning shifts:
+0 = Torben aligns with anti-Löwenritter faction (Church or Restoration). 7 = full Löwenritter loyalty.
+If Löwenritter is also eliminated: Torben Loyalty track becomes contested — all remaining factions
+may spend 1 Domain Action (Diplomat Inward) to bid for Torben's allegiance. Highest bid wins Torben
+as a named NPC ally (+1D on one Domain Action category per season).
+[PROVISIONAL]
+## Cardinal Death — Holy See Succession [PP-498, ED-336 resolved]
+When a Cardinal is killed (by PC action or event):
+- Cardinal-specific BG mechanics (Fortitude Templar, Justice Inquisitor, Prudence Tithes, Temperance AER)
+  are suspended for 1 season (the Holy See appointment procedure takes time).
+- At next Accounting: Church player rolls Church Mandate vs Ob 2 (Holy See appointment).
+  Success: new Cardinal appointed, full mechanics resume.
+  Overwhelming: Appointment + AER +1 (the crisis galvanises Church unity).
+  Failure: gap extended 1 additional season. Another attempt at next Accounting.
+- TC effect: Cardinal death triggers TC +1 (institutional disruption).
+[PROVISIONAL]

@@ -4500,3 +4500,56 @@ patches:
   source: editorial resolution 2026-04-08
   affects: [designs/board_game/victory_architecture_v1.md, references/params_board_game.md]
   status: applied
+- id: PP-493
+  date: 2026-04-08
+  severity: P1
+  description: "ED-331 resolved — PI recovery from 0: Löwenritter Reconstitution action (Senator Inward, Ob 3). Success: PI → 1, Mandate +1. One attempt per season, 1 season post-coup minimum. [PROVISIONAL]"
+  finding_id: ED-331
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-494
+  date: 2026-04-08
+  severity: P2
+  description: "ED-332 resolved — Torben Loyalty after Crown elimination: transfers to Löwenritter as dynastic successor. If Löwenritter also eliminated: contested track, all factions bid via Diplomat Inward. [PROVISIONAL]"
+  finding_id: ED-332
+  source: editorial resolution 2026-04-08
+  affects: [references/params_factions.md]
+  status: applied
+
+- id: PP-495
+  date: 2026-04-08
+  severity: P2
+  description: "ED-333 resolved — Faction elimination: territories become uncontrolled (Ob 0 March to claim). Simultaneous March: contested resolution (highest net successes). [PROVISIONAL]"
+  finding_id: ED-333
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-496
+  date: 2026-04-08
+  severity: P2
+  description: "ED-334 resolved — Captured PC General: Legionary card unavailable 1 season. Ransom option: Diplomacy Inward, Wealth +1 to captor. If unpaid in 2 seasons: General returned as NPC. No additional Military stat penalty. [PROVISIONAL]"
+  finding_id: ED-334
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-497
+  date: 2026-04-08
+  severity: P2
+  description: "ED-335 resolved — NPC-initiated PC capture/kill triggers Command Event at Accounting: PC faction Morale Ob 2 (fail: Military −1 one season); capturing faction Mandate +1 one-time. [PROVISIONAL]"
+  finding_id: ED-335
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-498
+  date: 2026-04-08
+  severity: P2
+  description: "ED-336 resolved — Cardinal death: BG mechanics suspended 1 season. Holy See appointment: Church Mandate Ob 2 at next Accounting. Success resumes all Cardinal mechanics. Failure: extended 1 season. TC +1 on Cardinal death. [PROVISIONAL]"
+  finding_id: ED-336
+  source: editorial resolution 2026-04-08
+  affects: [references/params_factions.md]
+  status: applied
