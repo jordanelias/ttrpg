@@ -349,3 +349,14 @@ Open for editorial: ED-061, ED-062, ED-063.
 | SIM-PC-01 | Weapon TN cliff — TN5 vs TN8 comparative analysis | TTRPG | PRES | Health | Generic | Generic Combatants | Duelists | COMPLETE | P2: Critical Hit frequency advantage TN5 vs unarmoured; TN8 vs armoured — armour-contextual, good design |
 | SIM-PC-02 | Initiative information value — flip probability | TTRPG | PRES | Stamina/Health | Generic | Generic | Duelists | COMPLETE | CLEAN: initiative tactical modifier ~15–20% efficiency gain; not decisive |
 | SIM-PC-03 | Wound accumulation — non-functionality threshold | TTRPG | PRES | Health, Wounds | Generic | Generic Combatant | Sustained Fighter | COMPLETE | P2: pool floor 5 = zombie fighter at 8+ wounds; Ob penalty at high wound counts needed; ED-candidate-F |
+
+
+## 2026-04-07 Proposed Mechanic Stress Tests
+| ID | Description | Mode | Temporal | Tracks | Factions | Status | Findings |
+|----|------------|------|----------|--------|----------|--------|---------|
+| SIM-PP-01 | PP-428 Piety Spread: CV gain rate vs seizure timeline | BG | FUT | TC, CV | Church | COMPLETE | CLEAN: AP >= 1 gate prevents carpet-bombing; Consul opportunity cost real |
+| SIM-PP-02 | PP-429 Active Inquisition: AP accumulation rate | BG | PRES/FUT | AP | Church | COMPLETE | P2: First Inquisitor threshold undefined → ED-322 |
+| SIM-PP-03 | PP-431 Parliamentary Challenge: TC suppression stacking | BG | PRES/FUT | TC | Church, Hafenmark | COMPLETE | P1: Stacks with structural suppression → negative TC → correction PP-431-COR |
+| SIM-PP-04 | PP-433 Royal Charter: Ob range and charter count | BG | PRES | TCV | Crown | COMPLETE | CLEAN: 3-charter cap appropriate; Seizure +1 Ob defensively meaningful |
+| SIM-PP-05 | PP-438 VTM Discretion: TC suppression vs PC cost | BG | FUT | TC, PC | Varfell | COMPLETE | P2: Weak at VTM 3, strong at VTM 5; cost scaling needed → ED-323 |
+| SIM-PP-06 | PP-441 Counter-Narrative: TC stacking analysis | BG | PRES/FUT | TC | Varfell, Church | COMPLETE | P1: Stacks with Hafenmark suppression → negative TC → correction PP-441-COR |

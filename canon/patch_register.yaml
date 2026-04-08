@@ -3935,3 +3935,20 @@ patches:
   source: faction playability review 2026-04-07
   affects: [references/params_board_game.md, references/params_factions.md]
   status: proposed
+
+
+- id: PP-431-COR
+  date: 2026-04-07
+  severity: P1
+  description: "PP-431 Parliamentary Challenge correction (SIM-PP-03): Challenge must REPLACE structural suppression in seasons it is used, not stack with it. When Hafenmark plays Parliamentary Challenge: structural suppression (TC -1/season automatic) does not fire that season. Challenge becomes the sole TC suppression mechanism that season. This prevents combined TC suppression (structural + Challenge) from producing negative TC drift that would make Church victory structurally impossible."
+  source: SIM-PP-03 2026-04-07
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: proposed
+
+- id: PP-441-COR
+  date: 2026-04-07
+  severity: P1
+  description: "PP-441 Counter-Narrative correction (SIM-PP-06): TC effect reduced to prevent stacking with Hafenmark suppression causing negative TC drift. Revised: Overwhelming = TC -0.5 + AP +2 in territory (not TC -1). Success = AP +2 in territory only (no TC effect). TC effect now only fires on Overwhelming, making it a strong but occasional dent rather than a reliable suppressor."
+  source: SIM-PP-06 2026-04-07
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: proposed

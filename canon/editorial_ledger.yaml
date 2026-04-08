@@ -1731,3 +1731,35 @@ editorial_decisions:
     source: faction playability review 2026-04-07
     blocks: RDT as visible progression arc (Priority 16 in review)
     tags: [board_game, hafenmark, rdt, td]
+
+
+  - id: ED-322
+    status: flagged
+    date_created: 2026-04-07
+    description: >
+      First Inquisitor Attention Pool deployment threshold is undefined in all canonical
+      sources. params_board_game.md states 'Second Inquisitor at AP >= 6' but the
+      first deployment threshold is absent. PP-429 (Active Inquisition) generates ~2 AP
+      per use; without knowing the first threshold, the mechanic cannot be fully
+      calibrated. Recommendation: AP >= 3 for first Inquisitor deployment. Requires
+      designer confirmation before PP-429 is applied to design docs.
+    priority: P2
+    source: SIM-PP-02 2026-04-07
+    blocks: PP-429 application
+    tags: [board_game, church, attention_pool, inquisitors]
+
+  - id: ED-323
+    status: flagged
+    date_created: 2026-04-07
+    description: >
+      PP-438 VTM Discretion cost scaling. Simulation (SIM-PP-05) shows Discretion
+      is marginal at VTM 3 (suppresses TC +1 for 1 PC cost, breakeven) but strong
+      at VTM 5 (suppresses TC +3 for 1 PC, excellent value). Proposed cost scaling:
+      0 PC at VTM 3 (cooldown only as limiting factor); 1 PC at VTM 4+. This makes
+      early Discretion always available (low TC contribution = low value = acceptable
+      to give free) and appropriately costly at high VTM where value is high.
+      Requires designer confirmation before PP-438 is applied.
+    priority: P2
+    source: SIM-PP-05 2026-04-07
+    blocks: PP-438 application
+    tags: [board_game, varfell, vtm, patience_protocol]
