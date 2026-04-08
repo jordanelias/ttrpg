@@ -1,46 +1,67 @@
 # Valoria Session Log — Current
 
 ```yaml
-session_id: 2026-04-08_SONNET_STRESS_TEST_BATCH2
+session_id: 2026-04-08_SONNET_STR_PP476_498
 session_close: 2026-04-08
 phase: COMPLETE
 status: CLOSED
 
-## TASKS COMPLETED
-6 stress tests on previously untested mechanics.
+## TASKS COMPLETED THIS SESSION
+
+Stress test of all newly patched mechanics PP-476–498 coverage range.
+Modes A + D + J across 13 mechanic clusters.
 
 ## COMMITS THIS SESSION
-- [this commit] — SIM-NEW-01–06, ED-338–345, PP-468–473, CM updates
+- [this commit] — [simulation] stress test PP-476–498 coverage; PP-478–492 applied; ED-343–351 raised
 
 ## KEY FINDINGS
-- SIM-NEW-01: Conviction Yield requires 16 seasons of dedicated Piety Spread; Temperance Focus
-  AER 3 bypass is a free S1 action with major TC implications.
-- SIM-NEW-02: Partition Victory achievable S11; Crown M effectively ends at M≤3 not M≤1.
-  No advance signal mechanic. ED-338 raised (P2).
-- SIM-NEW-03: IP 75 unreachable in normal play (~55 seasons). Vanguard effects undefined (P1).
-  AER 5 via Temperance Focus in 3 seasons caps IP permanently. ED-340/341 raised.
-- SIM-NEW-04: Resistance decay breaks CLASH stalemate in ~7 exchanges (confirmed working).
-  Crown/Hafenmark co-victory achievable from S2 (ED-342 raised, P2).
-- SIM-NEW-05: PC saturates S3. Overwhelming Investigate outperforms 4-PC Spy chain.
-  VTM 0→3 advance undefined (ED-344 P2).
-- SIM-NEW-06: Cultural Uprising pool undefined — Weaver TS 18 cannot Leap (ED-345 P1, blocks
-  RM win adjudication). Partial Uprising is progress (T9 CV -1 each Partial).
+
+P1 findings: 13 (7 editorial, 6 resolved by PP-478–492)
+P2 findings: 18 (most resolved by PP-478–492; some editorial)
+Gaps: 4 remaining (Soften source, Domain Echo source, AER full table, Weaver Thread pool)
+
+## PATCHES APPLIED THIS SESSION
+PP-478: Battle drawn-battle rule precedence (P2)
+PP-479: Discipline floor + Fort garrison Discipline analog (P2)
+PP-480: Assert mandatory for Church at TC 50–74 (P2)
+PP-481: Löwenritter PI +1/Year-End recovery path (P1)
+PP-482: Torben dissolution at Torben ≤ 2 on Crown elimination (P2)
+PP-483: Torben Year-End modifiers — substitute Löwenritter stats (P2)
+PP-484: Church capital T9 Conviction Yield exception (P1)
+PP-485: Reconstitution failure Church Mandate cap + counter-action (P1)
+PP-486: Weight-of-Numbers primary faction determination (P1)
+PP-487: Weight-of-Numbers valid suppression action definition (P2)
+PP-488: Ministry AP-tokens persist through faction elimination (P2)
+PP-489: Captured General stacking rule (P1)
+PP-490: Captured General Mandate −1 timing confirmation (P2)
+PP-491: Cardinal schism rotation with dead Cardinals (P2)
+PP-492: Conviction Yield Church velocity compensation at TC 30–49 (P1)
+
+## EDITORIALS RAISED THIS SESSION
+ED-343: Battle Ob formula (P1 — blocks degree table)
+ED-344: T9 Conviction Yield intent confirmation
+ED-345: Reconstitution failure Church passive gain + counter-action
+ED-346: AER advancement control mechanisms
+ED-347: Multi-Cardinal assassination cap
+ED-348: Löwenritter post-coup starting territory
+ED-349: Soften action — source unknown [GAP]
+ED-350: Domain Echo mechanic — source unknown [GAP]
+ED-351: Crown elimination + Hafenmark insta-win path
+
+## REMAINING OPEN P1s (total across sessions)
+P1-01: Overwhelming threshold (BG) — prior session
+P1-03: Crown TCV threshold discrepancy (18 in params summary vs 16 in victory_architecture)
+P1-04: Torben starting track (prior session)
+P1-05: Seizure Ob formula confirmation (prior session)
+STR-PP476-A-01 = ED-343: Battle Ob undefined (this session)
+STR-PI-TC-A-02: No Conviction Yield targeting mechanic (design gap — low priority)
 
 ## NEXT ACTION
+
 skill: valoria-orchestrator
-action: Resolve P1 cluster: ED-340 (Vanguard), ED-342 (co-victory balance), ED-345 (Uprising pool).
-Then P2 cluster: ED-338, ED-341, ED-343, ED-344.
+action: Resolve ED-343 (Battle Ob formula — user decision required). Then resolve ED-348 (Löwenritter post-coup territory). Then resolve ED-351 (Hafenmark insta-win path). Then fetch Soften/Domain Echo source documents for remaining gaps.
 
-blockers: [ED-345 blocks RM Cultural Uprising adjudication]
-editorial_decisions_pending: [ED-338, ED-339, ED-340, ED-341, ED-342, ED-343, ED-344, ED-345]
+blockers: [ED-343, ED-349, ED-350]
+editorial_decisions_pending: [ED-343, ED-344, ED-345, ED-346, ED-347, ED-348, ED-349, ED-350, ED-351]
+open_gaps_added: [STR-SOFTEN-01, STR-ECHO-01, STR-AER-A-01, STR-RM-A-01]
 ```
-
-### 2026-04-08 — RM Founding Mechanic (PP-478, design decision)
-- RM not playable in BG-only mode (confirmed canonical).
-- Hybrid mode: RM founded mid-campaign via PW track >= 3 + CV conditions + Founding Agent roll.
-- Popular Will (PW) track defined (0–5, public, no faction owner).
-- Founding degree determines starting stats and Presence markers.
-- RM co-victories struck from BG-only mode; available Hybrid post-Founding only.
-- WA-based spontaneous RM Emergence struck; replaced by Founding Mechanic.
-- Applied: params_board_game.md, victory_architecture_v1.md (override), params_factions.md, propagation_map.md.
-- STALE NOTE remaining: valoria_bg_v05_simulation_and_patches.md "5 players only" — flagged, not patched in-place (read-only stale doc section).

@@ -4483,3 +4483,168 @@ patches:
     - references/params_factions.md
     - designs/board_game/valoria_bg_v05_simulation_and_patches.md
   status: applied
+
+
+- id: PP-478
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Battle Outcome — drawn-battle rule takes precedence when attacker and defender nets are equal. When nets equal, drawn-battle fires (both Discipline −1) and the independent margin calculation does not execute for either side. Drawn-battle is the overriding resolution for equal-net outcomes. Resolves STR-PP476-A-02.
+  finding_id: STR-PP476-A-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-479
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Battle Outcome — Discipline floor = 0. A unit cannot have Discipline below 0. Discipline −4 outcome against a unit at Discipline ≤ 2 destroys the unit immediately (Discipline would go negative). Fort garrisons use Fort level as their Discipline analog: Discipline damage reduces Fort level by the equivalent steps (−2 = Fort −1; −4 = Fort −2; destruction = Fort −2 and garrison removed). Resolves STR-PP476-D-02.
+  finding_id: STR-PP476-D-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-480
+  date: 2026-04-08
+  severity: P2
+  description: >
+    TC 50–74 Mandatory Assert: Assert is mandatory for Church at TC 50–74 (must play one Assert per season, using a standard card slot). If no valid card slot is available, Assert does not fire but mandatory is noted. Suppress remains available for any faction (optional). Resolves STR-PI-TC-D-01.
+  finding_id: STR-PI-TC-D-01
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-481
+  date: 2026-04-08
+  severity: P1
+  description: >
+    Löwenritter PI recovery: PI +1 at Year-End when Löwenritter Mandate ≥ 3 AND TC < 50. Cap: PI 4 (Löwenritter cannot fully reconstitute Parliament — PI 4 is achievable for their PI ≥ 4 victory condition). This creates a recovery path from PI 2 (post-Reconstitution) to victory threshold over 2 years. Resolves STR-PI-TC-A-03.
+  finding_id: STR-PI-TC-A-03
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-482
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Torben Loyalty dissolution on Crown elimination: if Torben Loyalty ≤ 2 when Crown is eliminated, the track dissolves. No transfer to Löwenritter, no contest fires. Record as historical note. At Torben ≤ 2 the succession claim is too weak to generate meaningful politics. At Torben ≥ 3: standard transfer and contest rules (PP-463) apply. Resolves STR-TORBEN-D-01.
+  finding_id: STR-TORBEN-D-01
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-483
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Torben Year-End modifiers post-Crown-elimination: substitute Löwenritter stats for Crown stats in all Torben Year-End modifier conditions. 'Crown PI ≥ 5' → 'Löwenritter PI ≥ 5'. 'Crown upheld Mandate 2+ consecutive seasons' → 'Löwenritter upheld Mandate 2+ consecutive seasons'. Applies from first Year-End after Crown elimination. Resolves STR-TORBEN-D-02.
+  finding_id: STR-TORBEN-D-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-484
+  date: 2026-04-08
+  severity: P1
+  description: >
+    Church capital Conviction Yield exception: Church's own capital territory (T9 Himmelenger) generates Conviction Yield at base rate regardless of Prominence formula. CV 5 = +1 TC; CV 4 = +0.5 TC. This exception applies only to T9 while Church controls it. Rationale: Prominence is a cross-faction comparison; a self-comparison is structurally undefined. T9 is where Church institutional momentum is strongest — yielding 0 from home territory was an unintended consequence of PP-473. Resolves STR-TC-A-02.
+  finding_id: STR-TC-A-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-485
+  date: 2026-04-08
+  severity: P1
+  description: >
+    Reconstitution failure — Church Mandate cap and counter-action. Church Mandate +1 on Löwenritter Reconstitution failure is capped at ceiling 7 (standard stat ceiling). Additionally: Church may play one Senator Outward (Diplomacy, Ob 2 TN 7) per season targeting Löwenritter parliamentary space. Success: Löwenritter may not play Reconstitution this season (Church procedurally blocks the parliamentary convening). Failure: no effect. This action uses Church's Senator card slot. Resolves STR-RECON-D-03.
+  finding_id: STR-RECON-D-03
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-486
+  date: 2026-04-08
+  severity: P1
+  description: >
+    Weight-of-Numbers — primary faction determination: the primary suppressing faction (whose pool the coalition bonus applies to) is the faction with the highest Mandate among all factions playing suppression actions against the same target this phase. Tiebreak priority: Crown > Hafenmark > Varfell > Löwenritter > Restoration Movement. Determination is automatic — no declaration required. Resolves STR-WON-D-01.
+  finding_id: STR-WON-D-01
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-487
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Weight-of-Numbers — valid suppression action definition: a valid suppression action is any Domain Action that directly targets another faction's Mandate stat or their unique clock/track (TC for Church, PI for Hafenmark, VTM for Varfell). This mirrors the Institutional Mandate trigger scope (ED-324). Generic Domain Actions not targeting Mandate or unique tracks do not qualify. Resolves STR-WON-D-02.
+  finding_id: STR-WON-D-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-488
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Ministry AP-tokens on faction elimination: Ministry AP-tokens persist through any faction's elimination. They are Ministry (NPC) assets, not assets of the controlling faction. Territories that go Uncontrolled after faction elimination retain their Ministry AP-tokens. The Ministry NPC AI continues to operate per its priority tree regardless of which faction holds former Crown territories. Corrects STR-ELIM-D-02.
+  finding_id: STR-ELIM-D-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-489
+  date: 2026-04-08
+  severity: P1
+  description: >
+    Captured General — multiple capture stacking: each captured/killed named general adds 1 season to the Legionary card unavailability timer additively. Timer displayed on faction mat. If a general is killed while Legionary is already unavailable, timer extends by 1. No cap stated — sustained military pressure yields proportionate disruption. Resolves STR-GEN-D-01.
+  finding_id: STR-GEN-D-01
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-490
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Captured General — Mandate −1 timing: Mandate −1 fires at Accounting regardless of whether ransom has been offered or accepted. Ransom restores the general next season; the political cost of losing command is immediate and not mitigated by ransom payment. Confirms rule text intent. Resolves STR-GEN-D-02.
+  finding_id: STR-GEN-D-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-491
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Cardinal Succession — schism trigger with dead Cardinal: when a Cardinal is dead (in the gap period before Year-End replacement), that Cardinal is removed from the schism trigger pool. If the schism trigger fires (Church Stability = 2 + Senator action vs Church this season), the acting Cardinal is the next in rotation order: Fortitude → Justice → Prudence → Temperance → Fortitude (skipping any dead Cardinals). If all four Cardinals are dead simultaneously, schism cannot trigger (no Cardinals to challenge). Resolves STR-CARD-D-02.
+  finding_id: STR-CARD-D-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-492
+  date: 2026-04-08
+  severity: P1
+  description: >
+    Conviction Yield — Church velocity compensation: at TC 30–49, Institutional Momentum produces TC +2/season (increased from +1) to compensate for the structural Conviction Yield exclusion of Church-controlled territories (PP-473 + PP-484). At TC 50+, Institutional Momentum reverts to +1/season (standard). Rationale: Church starts with only T9 (its capital, excluded from Conviction Yield pool by PP-473 logic). Early-game TC generation is critically hampered without T9 yield; the +2 momentum at 30–49 provides a credible approach to the 50-threshold where Conviction Yield in other territories can take over. Resolves STR-TC-D-01 (partially — campaign length still a gap).
+  finding_id: STR-TC-D-01
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied

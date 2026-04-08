@@ -2119,3 +2119,60 @@ editorial_decisions:
     source: SIM-NEW-06 2026-04-08
     blocks: RM Cultural Uprising adjudication (PP-460)
     tags: [board_game, restoration_movement, cultural_uprising, victory]
+
+
+  # ═══ PP-476–498 STRESS TEST EDITORIALS ═════════════════════════════════════
+
+  - id: ED-343
+    status: flagged
+    date_raised: 2026-04-08
+    description: "Battle Ob formula — PP-476 does not define what Ob equals for a Battle roll. Proposed: defender Military ÷ 2 (round up, min 1). Requires user decision before PP-476 degree table can fire."
+    tags: [board_game, battle, p1]
+
+  - id: ED-344
+    status: flagged
+    date_raised: 2026-04-08
+    description: "T9 Conviction Yield — PP-484 adds Church capital exception (T9 yields at base rate). Confirm: should Church capital always yield at base regardless of Prominence formula? Or accept T9 yields 0 and apply PP-492 velocity compensation only?"
+    tags: [board_game, church, tc]
+
+  - id: ED-345
+    status: flagged
+    date_raised: 2026-04-08
+    description: "Reconstitution failure — Church passive Mandate +1 on Löwenritter Reconstitution failure (PP-485). Confirm intent: is this the desired passive Church benefit? PP-485 adds a Church active counter-action (Senator Outward Ob 2 to block Reconstitution slot). Confirm both."
+    tags: [board_game, church, lowenritter]
+
+  - id: ED-346
+    status: flagged
+    date_raised: 2026-04-08
+    description: "AER advancement control — which factions can directly advance or reduce AER? Does Hafenmark have a direct AER-advancement action, or does AER move only through Church/Altonian events? Affects Hafenmark endgame IP management."
+    tags: [board_game, hafenmark, aer]
+
+  - id: ED-347
+    status: flagged
+    date_raised: 2026-04-08
+    description: "Multi-Cardinal assassination cap — confirm whether simultaneous multi-Cardinal assassination is acceptable play pattern or whether a cap (max 1 Cardinal death per season) should be enforced. Current: no cap. Two or more Cardinal deaths per season is mechanically legal."
+    tags: [board_game, church, cardinals]
+
+  - id: ED-348
+    status: flagged
+    date_raised: 2026-04-08
+    description: "Löwenritter post-coup starting territory — T14 Ehrenfeld is the Löwenritter garrison pre-coup. On Crown elimination + coup trigger simultaneously: confirm Löwenritter automatically holds T14 rather than T14 going Uncontrolled (Crown territory rule). Affects coup viability."
+    tags: [board_game, lowenritter, territory]
+
+  - id: ED-349
+    status: flagged
+    date_raised: 2026-04-08
+    description: "Soften action — referenced in stress test scope but not found in any fetched canonical source. Confirm whether Soften is a planned mechanic, a renamed existing action, or an error in the scope list. If planned: source document required."
+    tags: [board_game, gap]
+
+  - id: ED-350
+    status: flagged
+    date_raised: 2026-04-08
+    description: "Domain Echo mechanic and cap — referenced in stress test scope but only a negative reference found in params ('does not trigger a Domain Echo'). Full Domain Echo mechanic not in fetched canonical sources. Source document required for simulation."
+    tags: [board_game, gap]
+
+  - id: ED-351
+    status: flagged
+    date_raised: 2026-04-08
+    description: "Crown elimination + Hafenmark insta-win path — Crown elimination frees T1 (TCV 5) for auto-march. Hafenmark starts TCV 8; after auto-march on T1 = TCV 13, above their 12-threshold. If Hafenmark stats (Mandate ≥ 4, PI ≥ 5) were pre-positioned, this is an insta-win trigger on Crown elimination. Confirm whether this is intended or whether a grace period applies."
+    tags: [board_game, hafenmark, crown, victory]
