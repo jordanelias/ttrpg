@@ -78,7 +78,7 @@ systems:
 
   victory:
     canonical: designs/board_game/victory_architecture_v1.md
-    canonical_sha__designs__board_game__victory_architecture_v1_md: "83a3f97a9b04705c087dd0b0185fefdcba3bce3b"
+    canonical_sha__designs__board_game__victory_architecture_v1_md: "f099f1946aea98e47d71fec671c2ec833a4acdcd"
     params: null
     design_doc: designs/board_game/victory_architecture_v1.md
     compilation_stage: null
