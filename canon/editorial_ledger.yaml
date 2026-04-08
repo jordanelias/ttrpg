@@ -1670,3 +1670,64 @@ editorial_decisions:
     source: SIM-DB-02 2026-04-07
     blocks: Debate resolution when AMPLIFY is the dominant interaction type
     tags: [debate, amplify, composure, stalemate]
+
+  - id: ED-318
+    status: flagged
+    date_created: 2026-04-07
+    description: >
+      Total Domination path for all four factions. User established all factions
+      win by holding all territories except T15 (Askeheim) and T16 (Schoenland)
+      via elimination OR submission. Two design questions: (1) TCV threshold —
+      is it TCV 28 (all controllable) or a lower number? (2) Formal Submission
+      mechanic for non-Crown factions — mutual consent (Option A), forced at low
+      Stability (Option B), or elimination-only for non-Crown (Option C)?
+    priority: P2
+    source: faction playability review 2026-04-07
+    blocks: Total Domination victory condition formalisation
+    tags: [board_game, victory, all_factions]
+
+  - id: ED-319
+    status: flagged
+    date_created: 2026-04-07
+    description: >
+      Church Parish/Cathedral building system. Proposed: Church Consul Inward,
+      2 sequential successful Consul actions = Parish (CV floor raised to 1,
+      persists until control change). Further 3 Consul actions = Cathedral
+      (CV floor 2, Church Prominence +1 in that territory for seizure).
+      Requires user confirmation on: (1) 2-season Parish / 5-season Cathedral
+      cadence; (2) whether structures survive control changes; (3) Wealth costs
+      (proposed Parish = 1 Wealth, Cathedral = 2 additional Wealth).
+    priority: P2
+    source: faction playability review 2026-04-07
+    blocks: Church pre-seizure building system
+    tags: [board_game, church, conviction_value, seizure]
+
+  - id: ED-320
+    status: flagged
+    date_created: 2026-04-07
+    description: >
+      Hafenmark Diplomat card is undefined in all canonical sources. Hafenmark's
+      hand includes 1x Diplomat card (confirmed in params_board_game.md card
+      hand table). No action, Ob, or effect is documented — PP-181 mechanics
+      exist only in SUPERSEDED v04 B5. Full Diplomat card mechanics needed
+      before Hafenmark action proposals can be fully specified.
+    priority: P1
+    source: faction playability review 2026-04-07
+    blocks: Hafenmark Parliamentary Session voting procedure; Diplomat card BG compilation
+    tags: [board_game, hafenmark, card_hand]
+
+  - id: ED-321
+    status: flagged
+    date_created: 2026-04-07
+    description: >
+      Hafenmark RDT (Reformed Doctrine Track, 0-6) and TD (Theological
+      Dissatisfaction, 0-5) full mechanics exist only in SUPERSEDED v04 B5.
+      Current canonical sources reference them via PP-181 but do not reproduce
+      the tables. From cascade test inference: RDT advances via Reformed
+      Settlement events; RDT 6 = Diplomatic actions targeting Hafenmark +1 Ob.
+      Full table needed for params_factions.md extraction and any RDT-touching
+      proposals.
+    priority: P2
+    source: faction playability review 2026-04-07
+    blocks: RDT as visible progression arc (Priority 16 in review)
+    tags: [board_game, hafenmark, rdt, td]

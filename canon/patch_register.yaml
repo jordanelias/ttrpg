@@ -3807,3 +3807,131 @@ patches:
   source: review
   affects: [references/params_board_game.md]
   status: applied
+
+- id: PP-427
+  date: 2026-04-06
+  severity: P1
+  description: "Deed system dissolved for Löwenritter (per victory_architecture_v1.md §9.3). Löwenritter victory now uses TCV+condition structure matching all other factions."
+  source: review
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-428
+  date: 2026-04-07
+  severity: P2
+  description: "Church: Piety Spread action (Consul Inward, Church only). Influence vs Ob = controlling faction Mandate div 2 + Fort Level, min 1. Doctrine-aligned -1 Ob. Success: CV +1 in territory. Overwhelming: CV +1 + AP +1. Partial: AP +1. Failure: Stability -1. AP >= 1 prerequisite. Post-TC 75: range-limited to adjacent territories. Addresses CV-static pre-seizure gap."
+  source: faction playability review 2026-04-07
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: proposed
+
+- id: PP-429
+  date: 2026-04-07
+  severity: P2
+  description: "Church: Active Inquisition action (Senator Inward, Church only). Mandate vs Ob = territory Stability div 2, min 1. Overwhelming: AP +3, immediate Inquisitor deployment if at threshold. Success: AP +2. Partial: AP +1. Failure: AP -1, Stability -1. Sustained AP >= 8: territory Stability -1 at Accounting. Gives Church player control over Inquisitor deployment."
+  source: faction playability review 2026-04-07
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: proposed
+
+- id: PP-430
+  date: 2026-04-07
+  severity: P2
+  description: "Church: Cardinal Focus mechanic. Each season, Church designates one Cardinal as Focused (declarative, Phase 1, no cost). Fortitude Focus: Templar deploys without Legionary card. Justice Focus: AP threshold for first Inquisitor -1 this season. Prudence Focus: +1 Wealth (integer) this season. Temperance Focus: AER +1 this season. Schism interaction: schisming Cardinal ignores Focus. Converts passive Cardinal system into weekly decision."
+  source: faction playability review 2026-04-07
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: proposed
+
+- id: PP-431
+  date: 2026-04-07
+  severity: P2
+  description: "Hafenmark: Parliamentary Challenge (Senator Inward, once/season). Mandate vs Ob 2 (-1 Ob if PI >= 5). Overwhelming: TC -2 + Church Uphold/Appease. Success: TC -1. Partial: Stability -1. Failure: Stability -1 + Church Mandate +1. Distinct from Sovereign Authority Doctrine (arc-use). Gives Hafenmark recurring TC-influence agency."
+  source: faction playability review 2026-04-07
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: proposed
+
+- id: PP-432
+  date: 2026-04-07
+  severity: P2
+  description: "Hafenmark: Parliamentary Session (Senator Outward, once/arc). All factions vote or abstain. Majority Support: PI +1, Hafenmark Mandate +1. Majority Opposition: Hafenmark Stability -1. Tie: TC +1 (institutional paralysis). Blocking factions generate Resentment tokens per PP-405. Ministry Vote = Support if AP-token in T12. Proactive PI-building tool."
+  source: faction playability review 2026-04-07
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: proposed
+
+- id: PP-433
+  date: 2026-04-07
+  severity: P2
+  description: "Crown: Royal Charter (Consul Inward, Crown only). Mandate vs Ob = territory Prosperity div 2, min 1. Virtue Ethics -1 Ob. Success: territory becomes Crown Charter Territory (all factions Govern/Trade -1 Ob; Church Seizure +1 Ob; Crown own actions -2 Ob). Charter dissolves on control transfer. Limit: max (Mandate div 2 round up) active Charters."
+  source: faction playability review 2026-04-07
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: proposed
+
+- id: PP-434
+  date: 2026-04-07
+  severity: NOTE
+  description: "Crown: Formal Crown Treaty added to faction action list in params files (documentation only - mechanic already defined in victory_architecture_v1.md sec 3.1). Added: Treaty prevents Crown from attacking Treaty partners; violation dissolves Treaty + Stability -2 + Mandate -1."
+  source: faction playability review 2026-04-07
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: proposed
+
+- id: PP-435
+  date: 2026-04-07
+  severity: P2
+  description: "Crown: Royal Decree Overwhelming enhancement. On Overwhelming (net >= 4 at Ob 2): choose (a) stat +/-2 to one faction, or (b) stat +/-1 to two different factions, or (c) stat +/-1 to one faction AND suspend one threshold effect for one season. Success unchanged: stat +/-1 to one faction. Consecutive fatigue unchanged."
+  source: faction playability review 2026-04-07
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: proposed
+
+- id: PP-436
+  date: 2026-04-07
+  severity: NOTE
+  description: "Crown: Thread Liaison mechanic (declarative, Phase 1, no roll). Crown designates one allied faction. Liaison's Thread operations in Crown-held territories count toward Crown's co-victory RS threshold tracking. Allied = active Treaty partner OR same-side Parliamentary Session voter OR common Resentment target. Dissolves on military conflict."
+  source: faction playability review 2026-04-07
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: proposed
+
+- id: PP-437
+  date: 2026-04-07
+  severity: P2
+  description: "Crown: Diplomatic Outreach to Schoenland (Senator Outward, Crown only). Influence vs Ob = current AER level, min 1. Virtue Ethics -1 Ob. Overwhelming: IP -2 + AER +1. Success: IP -1 + AER +0.5. Partial: AER +0.5. Failure: AER -0.5. Cannot use same season as Formal Crown Treaty. Schoenland fragmentation Ob +2 if 3+ factions Stability <= 2."
+  source: faction playability review 2026-04-07
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: proposed
+
+- id: PP-438
+  date: 2026-04-07
+  severity: P2
+  description: "Varfell: VTM Discretion. At VTM 3+, spend 1 Patience Counter at Accounting to suppress VTM TC contribution for that season. Cooldown: once per 2 consecutive seasons (Discretion Cooldown marker, cleared at Year-End). Does not suppress other TC sources."
+  source: faction playability review 2026-04-07
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: proposed
+
+- id: PP-439
+  date: 2026-04-07
+  severity: P2
+  description: "Varfell: Revelation Tokens for Path A. Full reveal = Overwhelming Tribune Investigate OR 4 PC Spy. On full reveal: Revelation Token placed on target faction mat (public, permanent). Two tokens on two different rival mats = Path A 'fully revealed' condition met. Target knows they've been revealed."
+  source: faction playability review 2026-04-07
+  affects: [references/params_board_game.md, designs/board_game/victory_architecture_v1.md]
+  status: proposed
+
+- id: PP-440
+  date: 2026-04-07
+  severity: NOTE
+  description: "Varfell: Ethical framework clarification. Tribune Intel actions (Investigate, Spy, VTM-building) are concrete measurable outcome actions: Consequentialism -1 Ob applies. +1 Ob penalty applies to: public ideological campaigns, open diplomatic commitments, relationship investments with no Intel yield."
+  source: faction playability review 2026-04-07
+  affects: [references/params_factions.md]
+  status: proposed
+
+- id: PP-441
+  date: 2026-04-07
+  severity: P2
+  description: "Varfell: Counter-Narrative (Tribune Outward, Varfell only). Target = Church-held or Church-prominent territory. Intel vs Ob = Church Mandate div 2, min 1. Consequentialism -1 Ob. Overwhelming: TC -1 + AP +2 in territory. Success: TC -0.5 (fractional). Partial: AP +1. Failure: Intel network exposed (Church notified of Varfell presence, AP +1 tagged as Varfell)."
+  source: faction playability review 2026-04-07
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: proposed
+
+- id: PP-442
+  date: 2026-04-07
+  severity: P2
+  description: "Counter-intelligence postures: (1) Crown Royal Guard surfaced on faction sheet - cancel one successful Intel action targeting Crown per season, no card cost, Phase 4 Priority 1. (2) Hafenmark Procedural Objection - on any Varfell Tribune Investigate success, Hafenmark may declare Procedural Objection (costs Parliamentary Challenge use for season): if Mandate >= 4, revealed stat replaced with false value for non-Varfell observers. (3) Church Sanctuary extension - may also block Varfell 4-PC Spy action once per season."
+  source: faction playability review 2026-04-07
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: proposed
