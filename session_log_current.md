@@ -1,70 +1,47 @@
 # Valoria Session Log — Current
 
 ```yaml
-session_id: 2026-04-06T_SONNET_REVIEW_1
-phase: SESSION IN PROGRESS
-status: TASKS 1-3 COMPLETE — PENDING COMMIT
-last_commit: 732d4f6
+session_id: 2026-04-08_SONNET_INFRA_1
+session_close: 2026-04-08
+phase: COMPLETE
+status: CLOSED
 
 ## TASKS COMPLETED THIS SESSION
-1. Full-spectrum review of victory_architecture_v1.md — 21 flags identified
-2. params_board_game.md propagation:
-   - §Victory Conditions replaced with pointer to victory_architecture_v1.md
-   - §Hollow Victory Deed table struck (P-32 narrative qualifier applies)
-   - §Co-Victory Pairings updated to conditions-based language
-   - Accounting Step 12 rewritten (Deed Tokens → 2-consecutive-Accounting check)
-   - TC 80 → TC 75 throughout (PP-421, FLAG-5 resolved)
-   - §TC Starting Value stale paragraph fixed (was contradicting itself)
-   - Formal Crown Treaty added to Ob Reference table (PP-423)
-   - Warden Cooperation bonus effects added (PP-426)
-   - Prominence mechanic defined (PP-417)
-   - Warden Recognition (WR) track added (PP-425)
-3. state_transfer_spec.md updates:
-   - TC Win-Delay Rule replaced by Victory Condition Check — Hybrid (PP-420)
-   - CV row added to Variables that TRANSFER table (PP-419)
-   - CV Domain Echo added to Zoom Out table (PP-419)
-4. victory_architecture_v1.md v3:
-   - All territory T-numbers remapped to PP-199 (PP-408, FLAG-15)
-   - Crown TCV threshold 18→16 (PP-409, gap restored to +6)
-   - TC 75 confirmed canonical throughout
-   - CV action cap clarified (PP-416)
-   - Church Seizure: Prominence mechanic added, AEA territory corrected to T14
-   - RM RS threshold confirmed ≥ 40 (PP-415)
-   - Varfell Path B provisional (ED-311 flagged for user review)
-5. ED-311 filed: Varfell Path B redesign — 3 options prepared for user review
-6. PP-408 through PP-426 registered
 
-## USER DECISIONS MADE THIS SESSION
-- TC threshold: TC 75 canonical (FLAG-5 / ED-NNN-A resolved)
-- CV cap: consequences not cap-governed (FLAG-4 resolved)
-- Varfell B: reduce conditions — ED-311 document prepared, awaiting choice of option A/B/C
-- RM RS ≥ 40: confirmed canonical
+1. Identified GitHub enforcement gap — skills not fetching from repo before work
+2. Updated valoria-orchestrator/SKILL.md — added Step 0 mandatory GitHub bootstrap
+3. Updated all 10 Valoria skills — added Input Validation, memory warning, fetch log, version check, pre-commit tools, post-commit verify, re-fetch after writes
+4. Created references/effort-guide.md — per-skill effort defaults
+5. Added assert_fetched() + session token system to github_ops.py
+6. Created .github/workflows/valoria-ci.yml — CI with integrity checks, skills lint, hardcoded value detection
+7. Updated orchestrator — bash_tool enforcement, two-message session start, token in fetch log
+8. Propagated assert_fetched() to all 9 remaining skills
+9. Configured VALORIA_PAT as GitHub Actions secret
+10. Updated project instructions — added Structural Enforcement section
 
-## REMAINING WORK
-Priority 1:
-  - ED-311: User must choose Varfell Path B option (A/B/C) from varfell_path_b_redesign_ed311.md
-  - params_board_game propagation: §Starting Values TC note still says "TC 80 = Territorial Seizure" (fixed in this session to TC 75 — verify in commit)
+## COMMITS THIS SESSION
 
-Priority 2 (from prior session, unchanged):
-  - SIM-DEBT: Full faction-AI simulation of TCV balance (Monte Carlo validated thresholds but not multi-faction interaction)
-  - SIM-DEBT: TC pacing simulation (analytical estimate ~S18 to TC 75)
-  - SIM-DEBT: Community Weaving feedback loop (CV + RS dual effect)
-  - ED-080/081: Baralta and Vaynard BG Conviction text
-  - ED-308: Varfell succession
-  - ED-309: Baralta succession
-  - ED-298/299: Resentment token + coalition enumeration — propagation pending
-  - ED-300/301: Domain Echo + TS/Coherence orthogonality — propagation pending
+- d905286 — [skill] enforce GitHub reads in all valoria skills — step 0 bootstrap + input validation
+- 8e49f3 — [skill] enforce GitHub reads in remaining 4 skills; remove hardcoded values; create effort-guide.md
+- 0a5b1e0 — [skill] add failure stop to compiler input validation
+- a05b208 — [skill] add fetch log, memory warning, version check, pre-commit tools, post-commit verify to all skills
+- 4ae06c0 — [infrastructure] session token system, CI workflow, bash_tool enforcement, two-message start, assert_fetched in all skills
 
-Priority 3:
-  - BALANCE-002/003/005: P2 monitoring items
-  - Remaining Galbados→Solmund corrections in ~40 non-canonical files
-  - SIM-DEBT-01: Contest recalibration with (Presence×2)+History
+## KEY DECISIONS
 
-## KEY FILES MODIFIED THIS SESSION
-  designs/board_game/victory_architecture_v1.md (v3 — territory renumbering, TC 75, CV cap)
-  designs/board_game/varfell_path_b_redesign_ed311.md (NEW — for user review)
-  references/params_board_game.md (Victory Conditions, Hollow Victory, Co-Victory, Step 12, TC 75, Prominence, WR track, WC effects, Treaty Ob)
-  skills/valoria-orchestrator/references/state_transfer_spec.md (TC Win-Delay Rule replaced, CV transfer added)
-  canon/editorial_ledger.yaml (ED-311 added)
-  canon/patch_register.yaml (PP-408 through PP-426 added)
+- valoria-dice-model effort: 75 → 100 (feeds simulation; stale die rule is silent corruption)
+- Project memory disabled (liability — stale mechanical values indistinguishable from fetched)
+- CI requires VALORIA_PAT secret (now set)
+- Compiler, chunker remain at effort 75 (no mechanical values at stake)
+- 150 effort: no skill defaults to this; explicit override only for P1-BLOCKER resolution
+
+## NEXT ACTION
+
+skill: valoria-orchestrator
+action: resume prior session work (session_id: 2026-04-06T_SONNET_REVIEW_1 was IN PROGRESS)
+note: Prior session had tasks 1-3 complete, pending commit. Check session_log_archive.md for prior state before proceeding.
+
+blockers: []
+editorial_decisions_pending: []
+open_gaps_added: []
 ```
