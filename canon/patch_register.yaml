@@ -4050,3 +4050,39 @@ patches:
   source: editorial resolution 2026-04-08
   affects: [references/params_board_game.md]
   status: applied
+
+- id: PP-454
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-SC-STRESS-01 finding P1-SC-01: PP-232 Cognition pool and Attunement initiative not backported to design doc Part 6 (§6.3, §6.4 Step 3, §6.10). Design doc still reads Presence×2 for pool and Presence for initiative."
+  finding_id: P1-SC-01
+  source: simulation SIM-SC-STRESS-01 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md]
+  status: registered — backport required
+
+- id: PP-455
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-SC-STRESS-01 finding P1-SC-02: Interaction taxonomy incompatible between design doc (CLASH/COMPETITION/DIVERGENCE) and params (CLASH/AMPLIFY/CROSS/DIVERGE-state). AMPLIFY pool cap, CROSS simultaneous resolution, DIVERGE-state not present in Part 6 operative."
+  finding_id: P1-SC-02
+  source: simulation SIM-SC-STRESS-01 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md]
+  status: registered — Part 6 §6.4 rewrite required
+
+- id: PP-456
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-SC-STRESS-01 finding P1-SC-04: Obscuring ow=0.75 in params Orientation Weights contradicts design doc (Obscuring win = no CT movement, DM placed). Params entry is stale. Strike ow=0.75 from params."
+  finding_id: P1-SC-04
+  source: simulation SIM-SC-STRESS-01 2026-04-08
+  affects: [references/params_debate.md]
+  status: registered — params stale entry to strike
+
+- id: PP-457
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-SC-STRESS-01 finding P1-SC-05: 'Proposer role' alternation in Part 6 §6.7 has no operative mechanical effect (quaestio deprecated). Dangling term. Flag for strike or explicit definition."
+  finding_id: P1-SC-05
+  source: simulation SIM-SC-STRESS-01 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md]
+  status: registered — §6.7 language needs strike or definition
