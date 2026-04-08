@@ -1,44 +1,36 @@
 # Valoria Session Log — Current
 
 ```yaml
-session_id: 2026-04-08_SONNET_SIM_PP476498
-session_open: 2026-04-08
+session_id: 2026-04-08_SONNET_STRESS_TEST_BATCH2
+session_close: 2026-04-08
 phase: COMPLETE
 status: CLOSED
 
-## TASKS COMPLETED THIS SESSION
-
-1. Bootstrap and fetch: session_log, editorial_ledger, file_index, canonical_sources,
-   params_board_game, params_factions, params_mass_combat, canon_constraints,
-   patch_register, victory_architecture_v1, coverage_matrix.
-
-2. Stress test PP-476-498 (Modes A+D+J+L):
-   23 mechanics across Crown suppression, PI/TC, Assert Soften, Echo cap, Torben,
-   Conviction texts, successions, AER, Cultural Uprising, weight-of-numbers,
-   elimination territory, captured general, Cardinal succession.
-   - P1 findings: 8
-   - P2 findings: 10
-   - P3 findings: 4
-   - ED-339 through ED-346 raised
-   - 11 provisional decisions applied
+## TASKS COMPLETED
+6 stress tests on previously untested mechanics.
 
 ## COMMITS THIS SESSION
+- [this commit] — SIM-NEW-01–06, ED-338–345, PP-468–473, CM updates
 
-- [this commit] [simulation] SIM-PP476-498 stress test; ED-339-346; coverage matrix
-
-## OPEN EDITORIALS (P1)
-
-ED-330 — Debate CLASH stalemate (systemic)
-ED-340 — Mass combat Morale check roll procedure undefined (blocks PP-489)
-ED-341 — Cultural Uprising BG pool undefined (blocks PP-492)
-ED-342 — Lowenritter post-coup card hand undefined (blocks PP-493)
-ED-344 — PP-497 faction Morale stat undefined
-ED-345 — PP-478 Assert Overwhelming temporal scope
+## KEY FINDINGS
+- SIM-NEW-01: Conviction Yield requires 16 seasons of dedicated Piety Spread; Temperance Focus
+  AER 3 bypass is a free S1 action with major TC implications.
+- SIM-NEW-02: Partition Victory achievable S11; Crown M effectively ends at M≤3 not M≤1.
+  No advance signal mechanic. ED-338 raised (P2).
+- SIM-NEW-03: IP 75 unreachable in normal play (~55 seasons). Vanguard effects undefined (P1).
+  AER 5 via Temperance Focus in 3 seasons caps IP permanently. ED-340/341 raised.
+- SIM-NEW-04: Resistance decay breaks CLASH stalemate in ~7 exchanges (confirmed working).
+  Crown/Hafenmark co-victory achievable from S2 (ED-342 raised, P2).
+- SIM-NEW-05: PC saturates S3. Overwhelming Investigate outperforms 4-PC Spy chain.
+  VTM 0→3 advance undefined (ED-344 P2).
+- SIM-NEW-06: Cultural Uprising pool undefined — Weaver TS 18 cannot Leap (ED-345 P1, blocks
+  RM win adjudication). Partial Uprising is progress (T9 CV -1 each Partial).
 
 ## NEXT ACTION
-
 skill: valoria-orchestrator
-action: Resolve mechanical P1s without Jordan approval: ED-340 (Morale check define),
-  ED-344 (Morale to Stability rename in PP-497), ED-345 (Assert Overwhelming temporal
-  scope fix to within 2 seasons). Then surface to Jordan: ED-341, ED-342, ED-339, ED-346.
+action: Resolve P1 cluster: ED-340 (Vanguard), ED-342 (co-victory balance), ED-345 (Uprising pool).
+Then P2 cluster: ED-338, ED-341, ED-343, ED-344.
+
+blockers: [ED-345 blocks RM Cultural Uprising adjudication]
+editorial_decisions_pending: [ED-338, ED-339, ED-340, ED-341, ED-342, ED-343, ED-344, ED-345]
 ```

@@ -4412,31 +4412,50 @@ patches:
   affects: [designs/board_game/victory_architecture_v1.md]
   status: applied
 
-- id: PP-476
+- id: PP-468
   date: 2026-04-08
   severity: P1
-  description: >
-    Battle Outcome Table formalised. Both attacker and defender apply their own degree result
-    independently. For each side: calculate margin = own net - opponent net (if positive, else 0).
-    Apply outcome for that margin vs Ob: margin 0 = no outcome for that side; margin 1 to Ob-1
-    = Discipline -2 on opponent unit; margin = Ob = Discipline -4 on opponent; margin > Ob =
-    opponent unit destroyed. Overwhelming applies to each side independently. Drawn battle (equal
-    net) = no degree for either side, both Discipline -1 (existing drawn battle rule preserved).
-    Resolves SIM-DEBT-BG-01 P1-06.
-  finding_id: STR-BG-P1-06
-  source: BG battle/thread simulation 2026-04-08
-  affects: [references/params_board_game.md]
+  description: "SIM-NEW-01: Conviction Yield calibrated. F-CY-01 (P1 late-game accelerator S16+), F-CY-02 (P2 Temperance Focus AER 3 bypass), F-CY-03 (AER asymmetry), F-CY-04 (Yield nullified at TC 75). No rule changes needed."
+  source: simulation 2026-04-08
+  affects: [tests/sim_new_01_conviction_yield.md, tests/coverage_matrix.md]
   status: applied
 
-- id: PP-477
+- id: PP-469
   date: 2026-04-08
-  severity: P3
-  description: >
-    VTM 5 once-per-game ability requires physical tracking marker. Varfell faction mat
-    includes a flip token 'VTM 5 Power Used'. Set to Used when ability fires; not reset
-    between sessions. Not cleared until game ends. VTM cannot decrease once reached 5,
-    so no re-activation path exists.
-  finding_id: STR-BG-D-Thread-02
-  source: BG battle/thread simulation 2026-04-08
-  affects: [references/params_board_game.md]
-  status: noted
+  severity: P1
+  description: "SIM-NEW-02: Partition Victory stress-tested. F-PT-01 (TC binding constraint), F-PT-02 (effective game end at Crown M≤3), F-PT-03 (no advance signal, P2). ED-338 (Partition Pressure marker P2), ED-339 (consolation P3) raised."
+  source: simulation 2026-04-08
+  affects: [tests/sim_new_02_partition.md, tests/coverage_matrix.md]
+  status: applied
+
+- id: PP-470
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-NEW-03: IP crisis + AER threshold. F-IP-01 (Vanguard undefined, P1), F-IP-02 (IP 75 unreachable ~55 seasons, P1), F-IP-03/04 (AER 5 dominant; AER decay undefined). ED-340 (Vanguard P1), ED-341 (AER decay P2) raised."
+  source: simulation 2026-04-08
+  affects: [tests/sim_new_03_ip_crisis.md, tests/coverage_matrix.md]
+  status: applied
+
+- id: PP-471
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-NEW-04: Resistance decay + Crown/Hafenmark co-victory. F-RD-01 (decay breaks stalemate in ~7 exchanges, P1), F-RD-02 (TIE interaction clean). F-CV-01 (co-victory achievable S2, P1), F-CV-02 (TCV thresholds underdone). ED-342 (co-victory balance P2) raised."
+  source: simulation 2026-04-08
+  affects: [tests/sim_new_04_resistance_decay.md, tests/coverage_matrix.md]
+  status: applied
+
+- id: PP-472
+  date: 2026-04-08
+  severity: P2
+  description: "SIM-NEW-05: Patience Protocol full arc. F-PP-01 (saturation S3), F-PP-02 (4-PC chain vs Investigate path), F-PP-03 (Royal Guard sinks 4-PC Spy), F-PP-04 (VTM 0→3 undefined). ED-343 (Royal Guard P2), ED-344 (VTM advance P2) raised."
+  source: simulation 2026-04-08
+  affects: [tests/sim_new_05_patience_protocol.md, tests/coverage_matrix.md]
+  status: applied
+
+- id: PP-473
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-NEW-06: Cultural Uprising first run. F-CU-01 (Uprising pool undefined, P1 — Weaver TS 18 cannot Leap), F-CU-02/03/04/05 (Partial = progress; Church recapture Ob 9; RS pacing). ED-345 (Uprising pool P1) raised."
+  source: simulation 2026-04-08
+  affects: [tests/sim_new_06_cultural_uprising.md, tests/coverage_matrix.md]
+  status: applied

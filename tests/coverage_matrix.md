@@ -381,19 +381,17 @@ Open for editorial: ED-061, ED-062, ED-063.
 | SIM-VAR-04 | Löwenritter post-coup arc S8–S16 | BG | 8-season arc | TC, RS, PI, TCV, Coup Counter | Löwenritter, Church, Hafenmark, Varfell | — | Conditional faction first run | Complete | F-LW-01 (P1 ED-331), F-LW-02/03/04/05 (P2 ED-332/333), F-LW-06 (P3) |
 | SIM-VAR-05 | Hybrid Crown Zoom In — S6 T9 assault, state transfer | HYB | 2-turn battle + personal | Health, Wounds, Military, TCV, Domain Echo | Crown, Church | Marshal Edren, Inquisitor Vald | General assault + personal combat | Complete | F-HY-01 (P1 mutual annihilation), F-HY-02/03 (P2 ED-334), F-HY-04 (P3) |
 | SIM-VAR-06 | Mass combat wound cascade → capture chain | TTRPG+HYB | 2 turns + personal | Health, Wounds, Size, Cohesion, Mandate | Crown, Church | Maret Elstov, Jarnstal | General capture arc | Complete | F-MC-01/02/03/04 (P2 ED-334/335/336), F-MC-05/06 (P3) |
+| SIM-NEW-01 | Conviction Yield + TC cascade — formula, AER 3 bypass, TC 75 nullification | BG | Seasonal | TC, CV, AER | Church | — | Conviction Yield calibration | Complete | F-CY-01 (P1 late-game), F-CY-02/03/04 (P2) |
+| SIM-NEW-02 | Partition Victory — Church + Hafenmark, S11 race | BG | 11-season arc | TC, TCV, PI, Mandate | Church, Hafenmark, Crown, Varfell | — | Partition mechanics first run | Complete | F-PT-01 (P1 TC binding), F-PT-02/03 (P2 ED-338), F-PT-04 (P3 ED-339) |
+| SIM-NEW-03 | IP crisis + AER threshold — Vanguard chain | BG | 20-season arc | IP, AER, TC | All | — | IP threat calibration | Complete | F-IP-01/02 (P1 ED-340), F-IP-03/04 (P2 ED-341), F-IP-05 (P3) |
+| SIM-NEW-04 | Resistance decay (new) + Crown/Hafenmark co-victory | BG + Debate | S2–S8 | CT, resistance, TCV, PI, TC | Crown, Hafenmark, Church | Klapp, Baralta | Resistance decay first test | Complete | F-RD-01 (P1 decay works), F-RD-02 (P2), F-CV-01 (P1 ED-342), F-CV-02 (P2) |
+| SIM-NEW-05 | Patience Protocol full arc → VTM → Revelation Token | BG | 12-season arc | PC, VTM, Tribune, Revelation | Varfell, Crown, Hafenmark, Church | — | Varfell Intel arc first run | Complete | F-PP-01 (P1 saturation), F-PP-02/03 (P2 ED-343), F-PP-04 (P2 ED-344) |
+| SIM-NEW-06 | Cultural Uprising full run (new RM win condition) | BG | 23-season arc | CV, RS, TC, T9 control | RM, Church, All | — | RM Cultural Uprising first run | Complete | F-CU-01 (P1 ED-345), F-CU-02/03/04/05 (P2/P3) |
+| F-IP-01 | SIM-NEW-03 | Altonian Vanguard deployment (IP 75) has no defined mechanical effects — endpoint undefined | Open — ED-340 |
+| F-CV-01 | SIM-NEW-04 | Crown/Hafenmark co-victory achievable from S2 — Hafenmark needs 1 territory; Church has no counter-play at that timeline | Open — ED-342 |
+| F-CU-01 | SIM-NEW-06 | Cultural Uprising pool undefined — Weaver TS 18 cannot Leap; Uprising pool formula needed | Open — ED-345 |
 
 ## 2026-04-08 BG Full Stress Test
 | ID | Description | Mode | Status | Date | Findings |
 |----|------------|------|--------|------|---------| 
 | STR-BG-STRESS-01 | Board Game full stress test — Modes A+D, all mechanics | BG | COMPLETE | 2026-04-08 | P1x5 (Overwhelming threshold, TCV numbering, Crown TCV, Torben start, Seizure Ob), P2x10 (AER dominant, Challenge<structural, Weaving Ob, Conviction Yield dead zone, AER/Challenge, Total Domination, Accounting crunch, Church unreachable, Crown early TCV, Diplomatic Token), P3x4. New ED-327-330. New PP-469-475. SIM-DEBTx6. See tests/sim_stress_bg_2026_04_08.md |
-
-## 2026-04-08 BG Battle + Thread Operations Simulation (SIM-DEBT-BG-01 + 02)
-| ID | Description | Mode | Status | Date | Findings |
-|----|------------|------|--------|------|---------| 
-| SIM-DEBT-BG-01 | Battle resolution — Mode A isolation + D edge cases | BG | COMPLETE | 2026-04-08 | P1-06 (outcome table undefined — PP-476), P2 x5 (Fortify stat, Pontifex pool, Discipline edge cases, multi-unit pooling). See tests/sim_bg_battle_thread_2026_04_08.md |
-| SIM-DEBT-BG-02 | Thread operations BG mode — Mode A + D | BG | COMPLETE | 2026-04-08 | P1-07 (Thread Wound undefined — ED-341), P2 x3 (TC cards neutral, Community Weaving degree table, Partial HR ambiguity). ED-338-342 added. |
-
-## 2026-04-08 PP-476-498 Stress Test
-| ID | Description | Mode | Status | Date | Findings |
-|----|------------|------|--------|------|------|
-| SIM-PP476-498 | Stress test PP-476-498: Crown suppression, PI/TC, Assert Soften, Echo cap, Torben, Conviction texts, successions, AER, Cultural Uprising, weight-of-numbers, elimination territory, captured general, Cardinal succession | A+D+J+L | COMPLETE | 2026-04-08 | P1x8, P2x10, P3x4. ED-339-346 raised. 11 provisionals. See tests/sim_pp476_498.md |

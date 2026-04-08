@@ -2022,170 +2022,100 @@ editorial_decisions:
     date_created: 2026-04-08
     priority: P2
     description: >
-      Fortify action pool stat undefined in params_board_game.md.
-      Ob table exists (Ob = Fort level + 1) but no pool specification.
-      Provisional: Military stat (faction's deployed force capacity includes engineering).
-      Alternatives: Wealth (procurement cost) or Mandate (administrative authority).
-    source: STR-BG-D-01 2026-04-08
-    blocks: Fortify action resolution
-    tags: [board_game, fortify, pool_stat]
+      Partition has no advance signal (SIM-NEW-02). When all conditions except TC ≥ 50
+      are met, no public marker exists. Other factions get no warning. Recommend: public
+      "Partition Pressure" marker placed when all non-TC conditions are met. Gives other
+      factions 1 season to disrupt before TC threshold fires the win.
+    source: SIM-NEW-02 2026-04-08
+    blocks: Partition advance warning
+    tags: [board_game, church, hafenmark, partition, victory]
 
   - id: ED-339
     status: flagged
     date_created: 2026-04-08
-    priority: P2
+    priority: P3
     description: >
-      Thread operation pool stat for non-Varfell, non-Restoration factions is undefined.
-      Varfell confirmed: Influence. Restoration confirmed: 1D + 1D per adjacent Presence marker (PP-460).
-      Church Pontifex: pool stat not stated in params or BG design doc.
-      Provisional: Mandate (institutional authority grounds the Church's Thread relationship).
-      Needs designer confirmation before Church Thread operation simulations are valid.
-    source: STR-BG-A-06 2026-04-08
-    blocks: Church Thread operation balance analysis
-    tags: [board_game, church, pontifex, thread_operation, pool_stat]
-
-  - id: ED-340
-    status: flagged
-    date_created: 2026-04-08
-    priority: P2
-    description: >
-      Co-Movement deck TC cards: 4 of 20 cards produce TC +1 when drawn.
-      Any faction's Thread operation can draw these cards. Varfell performing Thread operations
-      for VTM development generates E(0.20 TC) per Co-Movement draw — inadvertently accelerating
-      Church's primary clock. At Thread Witness Node (2 draws/operation): E(0.40 TC/operation).
-      Question: Is this intentional systemic pressure (Thread activity raises institutional
-      religious tension regardless of who performs it) or an unintended side-effect that benefits
-      Church passively while penalising Thread-active factions?
-    source: STR-BG-A-08 2026-04-08
-    blocks: balance assessment of TC generation
-    tags: [board_game, co_movement, tc_generation, church, varfell, balance]
-
-  - id: ED-341
-    status: flagged
-    date_created: 2026-04-08
-    priority: P2
-    description: >
-      BG Thread Wound consequences undefined. Thread Tension (TT) >= 15 triggers automatic
-      Thread Wound formation in any territory with >= 2 History Resonance markers (per Thread
-      Tension rules in params_board_game.md). But the BG consequence of Thread Wound formation
-      is not specified — TTRPG practitioners have Coherence effects, but BG has no individual
-      practitioners. Suggested BG mechanic: RS -1 per Wound formed at Accounting + Thread
-      operations in that territory +1 Ob (stacking) until Wound Mended. Mending: Pontifex
-      action Ob = current Wound count in territory.
-    source: STR-BG-D-Thread-01 2026-04-08
-    blocks: high-Thread late-game resolution; TT >= 15 trigger
-    tags: [board_game, thread_wound, thread_tension, rendering_stability]
-
-  - id: ED-342
-    status: flagged
-    date_created: 2026-04-08
-    priority: P2
-    description: >
-      Community Weaving degree table is incomplete. Only the Overwhelming and Success outcomes
-      are defined (CV change). Partial and Failure outcomes not specified. The Co-Movement draw
-      on Partial is noted (PP-187: 'Draw on Partial Community Weaving') but the CV consequence
-      of Partial and the consequences of Failure are absent.
-      Suggested table: Overwhelming = CV -2 in territory; Success = CV -1; Partial = Co-Movement
-      draw only, no CV change; Failure = no effect, no Co-Movement draw (operation fizzled).
-    source: STR-BG-D-Thread-03 2026-04-08
-    blocks: Community Weaving resolution; RM faction completeness
-    tags: [board_game, restoration, community_weaving, degree_table]
-
-  # ═══ SIM-PP476-498 FINDINGS (2026-04-08) ══════════════════════════════════
-
-  - id: ED-339
-    status: flagged
-    date_created: 2026-04-08
-    priority: P2
-    description: >
-      Baralta BG Conviction (PP-482) fires in Season 1 trivially. Condition PI >= 6
-      is satisfied at start (PI = 7). Hafenmark gets free Mandate +1 in Season 1
-      without any player action. Conditional dramatic nature dissolved.
-    source: SIM-PP476-498 Mode A 2026-04-08
-    blocks: Baralta Conviction believability
-    tags: [board_game, hafenmark, conviction]
+      Non-Partition faction outcome under Partition (SIM-NEW-02). When Church + Hafenmark
+      win via Partition, Varfell and RM lose unconditionally with no consolation. Clarify
+      whether this is intended or whether a consolation score / narrative win condition exists.
+    source: SIM-NEW-02 2026-04-08
+    blocks: nothing (narrative question)
+    tags: [board_game, partition, varfell, restoration_movement, victory]
 
   - id: ED-340
     status: flagged
     date_created: 2026-04-08
     priority: P1
     description: >
-      Weight-of-numbers Morale check (PP-489) references an undefined dice roll.
-      Factions and units lack a defined Morale check pool and base Ob. PP-489 adds
-      +1 Ob to a non-existent roll. PROVISIONAL: Discipline pool vs Ob 1 base;
-      Size > Command raises to Ob 2. Fail: Morale -1.
-    source: SIM-PP476-498 Mode A 2026-04-08
-    blocks: PP-489 execution
-    tags: [mass_combat, morale, weight_of_numbers]
+      Altonian Vanguard deployment effects undefined (SIM-NEW-03). IP ≥ 75 triggers
+      "Vanguard deployed" but no mechanics follow. Options: (a) NPC military faction in
+      T10 advancing toward T8 each season; (b) all factions Stability −1/season while
+      Vanguard active; (c) Vanguard becomes Hafenmark auxiliary. Without definition,
+      IP ≥ 75 does nothing mechanically despite being a loss vector.
+    source: SIM-NEW-03 2026-04-08
+    blocks: IP crisis endgame resolution
+    tags: [board_game, ip, schoenland, altonia, vanguard]
 
   - id: ED-341
     status: flagged
     date_created: 2026-04-08
-    priority: P1
+    priority: P2
     description: >
-      Cultural Uprising BG pool undefined. victory_architecture_v1.md Section 3.5
-      states Weaver Thread pool (TTRPG character stat). No character in BG mode.
-      PROVISIONAL: 1D per Presence marker in T9 + 1D per adjacent territory with RM
-      Presence. Minimum 1D.
-    source: SIM-PP476-498 Mode A 2026-04-08
-    blocks: Cultural Uprising execution in BG
-    tags: [board_game, restoration_movement, cultural_uprising]
+      AER decay triggers undefined (SIM-NEW-03). AER starts 2 and can only rise via
+      Crown/Church investment. No events reduce AER in current params. The shared loss
+      at AER ≤ 1 (Altonian Conquest) is therefore unreachable. Define AER decay events.
+    source: SIM-NEW-03 2026-04-08
+    blocks: AER ≤ 1 shared loss condition
+    tags: [board_game, aer, schoenland, altonia]
 
   - id: ED-342
     status: flagged
     date_created: 2026-04-08
-    priority: P1
+    priority: P2
     description: >
-      Lowenritter post-coup card hand undefined. PP-493 Reconstitution uses Senator
-      Inward, absent from any defined Lowenritter hand. Cannot execute without
-      card assignment. PROVISIONAL: 2x Legionary, 1x Senator, 1x Consul, 1x Praetor,
-      1x Recess.
-    source: SIM-PP476-498 Mode A 2026-04-08
-    blocks: PP-493 Reconstitution execution
-    tags: [board_game, lowenritter, card_hand]
+      Crown/Hafenmark co-victory potentially trivial from S2 (SIM-NEW-04). Hafenmark
+      starts TCV 8 needing TCV 9 — one uncontested territory. Crown starts at TCV 12
+      (already at threshold). PI starts at 7 (≥ 5 threshold). TC starts 28 (< 50).
+      Co-victory may fire as early as S2 with no viable Church counter-play. Consider
+      raising TCV thresholds or adding conditions.
+    source: SIM-NEW-04 2026-04-08
+    blocks: co-victory balance
+    tags: [board_game, crown, hafenmark, co_victory, balance]
 
   - id: ED-343
     status: flagged
     date_created: 2026-04-08
     priority: P2
     description: >
-      NPC returned general (PP-496): after 2 unpaid seasons the captured PC General
-      returns as NPC. No stat block, allegiance, or faction assignment defined.
-    source: SIM-PP476-498 Mode A 2026-04-08
-    blocks: PP-496 unpaid ransom resolution
-    tags: [hybrid, mass_combat, general, npc]
+      4-PC Spy vs Royal Guard interaction (SIM-NEW-05). Royal Guard cancels a successful
+      4-PC Spy on Crown (sunk cost — no PC refund). Confirm: (a) Royal Guard can cancel
+      4-PC Spy (ruling taken: yes), (b) no PC refund on cancellation (ruling taken: yes).
+    source: SIM-NEW-05 2026-04-08
+    blocks: Patience Protocol spend decision against Crown
+    tags: [board_game, varfell, patience_protocol, crown, royal_guard]
 
   - id: ED-344
     status: flagged
     date_created: 2026-04-08
-    priority: P1
+    priority: P2
     description: >
-      PP-497 uses PC faction Morale Ob 2. Factions have no Morale stat. Replace with
-      Stability check Ob 2. Fail: Military -1 one season.
-    source: SIM-PP476-498 Mode A 2026-04-08
-    blocks: PP-497 execution
-    tags: [hybrid, mass_combat, npc]
+      VTM advance from 0→3 in BG undefined (SIM-NEW-05). Params only define VTM advance
+      via 6-PC spend at VTM 4+. VTM 0→3 mechanism not specified. Likely: successful
+      Expedition Overwheming Forgetting Check = VTM +1. Canonise before Path A win
+      condition can be fully adjudicated.
+    source: SIM-NEW-05 2026-04-08
+    blocks: Varfell Path A and Path B full adjudication
+    tags: [board_game, varfell, vtm, expedition]
 
   - id: ED-345
     status: flagged
     date_created: 2026-04-08
     priority: P1
     description: >
-      PP-478 Assert Overwhelming bonus unreachable. Bonus applies this season only but
-      same-territory Seizure is prohibited same season. Dead text. Fix: within 2
-      seasons of Assert declaration.
-    source: SIM-PP476-498 Mode D 2026-04-08
-    blocks: PP-478 Overwhelming payoff
-    tags: [board_game, church, assert, seizure]
-
-  - id: ED-346
-    status: flagged
-    date_created: 2026-04-08
-    priority: P2
-    description: >
-      Post-Maret succession Varfell has no viable victory path. VTM resets to 0; all
-      three Varfell paths require VTM >= 3. PROVISIONAL: post-succession co-victory if
-      Maret succession active AND RM achieves Cultural Uprising.
-    source: SIM-PP476-498 Mode J 2026-04-08
-    blocks: Varfell post-succession agency
-    tags: [board_game, varfell, succession, victory]
+      Cultural Uprising pool undefined (SIM-NEW-06). Weaver TS 18 cannot Leap (TS < 30
+      minimum). The Uprising requires a Weaver Thread pool roll but no pool is specified.
+      Recommended: 1D per territory at CV ≤ 1 with RM Presence marker + 1D base (makes
+      pool proportional to cultural work done). Without this, Uprising cannot be adjudicated.
+    source: SIM-NEW-06 2026-04-08
+    blocks: RM Cultural Uprising adjudication (PP-460)
+    tags: [board_game, restoration_movement, cultural_uprising, victory]
