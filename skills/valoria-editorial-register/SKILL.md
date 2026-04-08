@@ -33,9 +33,20 @@ for path, content in files.items():
         raise RuntimeError(f"GitHub fetch failed: {path} — cannot proceed")
 ```
 
+**Memory contamination warning:** userMemories may contain mechanical values (track values, territory data, faction stats, etc.) that feel current but are not fetched from GitHub. Do not use any value from memory as a source for mechanical analysis. Fetch only.
+
 **If any fetch fails:** STOP. Report the failure. Do not proceed using memory.
 
 **Additional reads:** Any workflow that touches a specific design file must fetch that file from GitHub before reading or modifying it. Never work from memory of a design file's contents.
+
+**Fetch log (emit before any analysis):**
+```
+## FETCH LOG
+canonical_sources.yaml: ✓ fetched ([N] lines)
+[canonical design doc path]: ✓ fetched ([N] lines)
+references/params_[system].md: ✓ fetched ([N] lines) / ✗ missing
+```
+If any required file is missing from this log, stop — the analysis is invalid.
 
 ## Term Reference
 
@@ -218,6 +229,18 @@ Consolidate ST-INT-02 commander bonus with ED-018.
 Consolidate P2-B11-02 Grand Debate role alternation with ED-013.
 
 ---
+
+**Pre-commit (run before every `atomic_commit()` call):**
+```bash
+python3 tools/freshness_gate.py --update
+python3 tools/broken_dependency_checker.py
+python3 tools/patch_propagation_checker.py
+```
+Exit 0 required on all three. On non-zero exit: fix the reported issue before committing.
+
+**Post-commit verification:** after `atomic_commit()` returns a SHA, re-fetch all files modified in that commit and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
+
+**Re-fetch after writes:** after any `atomic_commit()` call, re-fetch all modified files before referencing them again in the same session. The in-context version and the committed version may differ.
 
 ## Commit Convention
 

@@ -38,12 +38,26 @@ files = g.read_files_graphql([
     'canon/editorial_ledger.yaml',
     'references/file_index.md',
     'references/canonical_sources.yaml',
+    'references/propagation_map.md',
 ])
 ```
+
+**Memory contamination warning:** userMemories may contain mechanical values (track values, territory data, faction stats, etc.) that feel current but are not fetched from GitHub. Do not use any value from memory as a source for mechanical analysis. Fetch only.
 
 **Failure behavior:** If PAT is missing, GitHub is unreachable, or any critical file returns None — STOP. Report the error. State: "GitHub bootstrap failed — cannot proceed without live repo data." Do not continue using memory.
 
 **After bootstrap:** Hold fetched contents in working context. Do not re-fetch within the same session unless a write has occurred since last fetch.
+
+**Fetch log (emit before any analysis):**
+```
+## FETCH LOG
+canonical_sources.yaml: ✓ fetched ([N] lines)
+[canonical design doc path]: ✓ fetched ([N] lines)
+references/params_[system].md: ✓ fetched ([N] lines) / ✗ missing
+```
+If any required file is missing from this log, stop — the analysis is invalid.
+
+**Version check:** confirm `<!-- version: -->` tag in each fetched params file matches current ruleset version in `compilation/README.md`. If mismatch: flag `[STALE PARAMS: <file> is vX.XX, current is vY.YY]` and stop.
 
 **Additional reads:** Any task referencing a specific design doc, params file, or register must fetch that file from GitHub before use. Do not read from memory, local copies, or project files.
 
@@ -123,10 +137,22 @@ Every commit must be atomic and include:
 8. Test output in `tests/` if simulation run
 9. Run `python3 tools/freshness_gate.py --update` after any canonical doc change; include result in same commit
 
+**Pre-commit (run before every `atomic_commit()` call):**
+```bash
+python3 tools/freshness_gate.py --update
+python3 tools/broken_dependency_checker.py
+python3 tools/patch_propagation_checker.py
+```
+Exit 0 required on all three. On non-zero exit: fix the reported issue before committing.
+
+**Post-commit verification:** after `atomic_commit()` returns a SHA, re-fetch all files modified in that commit and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
+
 **Commit message format:** `[scope] description — PP-NNN / ED-NNN if applicable`
 Scopes: `editorial` / `patch` / `simulation` / `compilation` / `infrastructure` / `skill` / `cleanup`
 
 ## Session Close Protocol
+**Re-fetch after writes:** after any `atomic_commit()` call, re-fetch all modified files before referencing them again in the same session. The in-context version and the committed version may differ.
+
 **All commits go to GitHub via `g.atomic_commit()`. Local-only writes are not a valid session close.**
 
 Write YAML resumption block to `session_log_current.md`:

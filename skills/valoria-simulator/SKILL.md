@@ -26,7 +26,20 @@ required = [
 ]
 ```
 
+**Memory contamination warning:** userMemories may contain mechanical values (track values, territory data, faction stats, etc.) that feel current but are not fetched from GitHub. Do not use any value from memory as a source for mechanical analysis. Fetch only.
+
 **If any required file was not fetched from GitHub this session:** STOP. Fetch it. Do not substitute memory or local file content.
+
+**Fetch log (emit before any analysis):**
+```
+## FETCH LOG
+canonical_sources.yaml: ✓ fetched ([N] lines)
+[canonical design doc path]: ✓ fetched ([N] lines)
+references/params_[system].md: ✓ fetched ([N] lines) / ✗ missing
+```
+If any required file is missing from this log, stop — the analysis is invalid.
+
+**Version check:** confirm `<!-- version: -->` tag in each fetched params file matches current ruleset version in `compilation/README.md`. If mismatch: flag `[STALE PARAMS: <file> is vX.XX, current is vY.YY]` and stop.
 
 **If `canonical_sources.yaml` is not loaded:** STOP. You cannot know which design doc is current.
 
@@ -170,4 +183,16 @@ Quick reference:
 - P1 findings: immediately flag in findings section.
 - After each simulation: update `sim_coverage_matrix.md` and commit findings.
 - Simulations exceeding 30 resolution steps: checkpoint mid-simulation, summarize state, continue.
+**Pre-commit (run before every `atomic_commit()` call):**
+```bash
+python3 tools/freshness_gate.py --update
+python3 tools/broken_dependency_checker.py
+python3 tools/patch_propagation_checker.py
+```
+Exit 0 required on all three. On non-zero exit: fix the reported issue before committing.
+
+**Post-commit verification:** after `atomic_commit()` returns a SHA, re-fetch all files modified in that commit and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
+
+**Re-fetch after writes:** after any `atomic_commit()` call, re-fetch all modified files before referencing them again in the same session. The in-context version and the committed version may differ.
+
 - All mechanical values must be sourced from the GitHub-fetched params or design doc. Never use remembered values.

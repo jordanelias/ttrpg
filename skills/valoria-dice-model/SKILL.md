@@ -31,7 +31,20 @@ for path, content in files.items():
         raise RuntimeError(f"GitHub fetch failed: {path} — cannot proceed")
 ```
 
+**Memory contamination warning:** userMemories may contain mechanical values (track values, territory data, faction stats, etc.) that feel current but are not fetched from GitHub. Do not use any value from memory as a source for mechanical analysis. Fetch only.
+
+**Fetch log (emit before any analysis):**
+```
+## FETCH LOG
+canonical_sources.yaml: ✓ fetched ([N] lines)
+[canonical design doc path]: ✓ fetched ([N] lines)
+references/params_[system].md: ✓ fetched ([N] lines) / ✗ missing
+```
+If any required file is missing from this log, stop — the analysis is invalid.
+
 **Version check:** Confirm `<!-- version: -->` tag in `references/params_core.md` matches current ruleset version in `compilation/README.md`. If mismatch: flag `[STALE PARAMS]` and stop.
+
+**Version check:** confirm `<!-- version: -->` tag in each fetched params file matches current ruleset version in `compilation/README.md`. If mismatch: flag `[STALE PARAMS: <file> is vX.XX, current is vY.YY]` and stop.
 
 **The die rule and TN values are read from `references/params_core.md`.** The module source below encodes the current standard rule; if `params_core.md` differs, the module source is stale and must be updated before proceeding.
 

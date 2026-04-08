@@ -31,6 +31,19 @@ for path, content in files.items():
 
 **Gate check:** If `compilation_current: true` in `canonical_sources.yaml`, compilation is already up to date — do not re-compile. If `compilation_current: false`, proceed.
 
+**Memory contamination warning:** userMemories may contain mechanical values (track values, territory data, faction stats, etc.) that feel current but are not fetched from GitHub. Do not use any value from memory as a source for mechanical analysis. Fetch only.
+
+**Fetch log (emit before any analysis):**
+```
+## FETCH LOG
+canonical_sources.yaml: ✓ fetched ([N] lines)
+[canonical design doc path]: ✓ fetched ([N] lines)
+references/params_[system].md: ✓ fetched ([N] lines) / ✗ missing
+```
+If any required file is missing from this log, stop — the analysis is invalid.
+
+**Version check:** confirm `<!-- version: -->` tag in each fetched params file matches current ruleset version in `compilation/README.md`. If mismatch: flag `[STALE PARAMS: <file> is vX.XX, current is vY.YY]` and stop.
+
 **Do not compile from memory, local files, or stale compilation snapshots.**
 
 ## Process
@@ -110,5 +123,17 @@ Every compiled ruleset MUST begin with:
 - Never remove the Foundations supremacy clause
 - Preserve section numbering unless explicitly approved for restructuring
 - All output to md format
+**Pre-commit (run before every `atomic_commit()` call):**
+```bash
+python3 tools/freshness_gate.py --update
+python3 tools/broken_dependency_checker.py
+python3 tools/patch_propagation_checker.py
+```
+Exit 0 required on all three. On non-zero exit: fix the reported issue before committing.
+
+**Post-commit verification:** after `atomic_commit()` returns a SHA, re-fetch all files modified in that commit and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
+
+**Re-fetch after writes:** after any `atomic_commit()` call, re-fetch all modified files before referencing them again in the same session. The in-context version and the committed version may differ.
+
 - Patch log is append-only (never delete entries; mark reverted if needed)
 - All source values cited from GitHub-fetched files
