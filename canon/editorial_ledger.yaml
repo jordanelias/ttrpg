@@ -1918,3 +1918,85 @@ editorial_decisions:
     source: PP-460 redesign 2026-04-08
     blocks: nothing (design question)
     tags: [board_game, restoration_movement, rendering_stability, victory]
+
+  - id: ED-331
+    status: flagged
+    date_created: 2026-04-08
+    priority: P1
+    description: >
+      PI recovery from 0 post-Löwenritter coup (SIM-VAR-04). Parliamentary Manoeuvre
+      is gated at PI > 0 (Parliament non-functional). No mechanism exists to recover PI
+      from 0 to 1 after the coup destroys Parliament. Recommend: Löwenritter
+      Reconstitution action (Senator Inward, Ob 3) — Success restores PI to 1 and
+      re-enables Parliamentary mechanics. Without this, Regency primary victory
+      (PI ≥ 4 required) is permanently blocked post-coup.
+    source: SIM-VAR-04 2026-04-08
+    blocks: Löwenritter Regency primary victory path
+    tags: [board_game, lowenritter, parliament_integrity, victory]
+
+  - id: ED-332
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Torben Loyalty after Crown elimination (SIM-VAR-04). Crown is gone — Torben has
+      no faction to be loyal to. Define: (a) reset Loyalty to 0, (b) transfer track
+      to Löwenritter as dynastic successor, or (c) Loyalty becomes a three-way contested
+      track between Löwenritter, Church, and Hafenmark.
+    source: SIM-VAR-04 2026-04-08
+    blocks: Löwenritter successor mechanic post-Crown-elimination
+    tags: [board_game, lowenritter, succession, torben]
+
+  - id: ED-333
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Faction-elimination territory status (SIM-VAR-04). When Crown is eliminated its
+      6 territories become contested. Define: (a) uncontrolled — any faction Marches
+      freely with no defence roll, or (b) contested — requires Ob 1 roll to establish
+      administrative control. Gap-filled as uncontrolled in simulation.
+    source: SIM-VAR-04 2026-04-08
+    blocks: Faction elimination territory resolution
+    tags: [board_game, faction_elimination, territory]
+
+  - id: ED-334
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Captured general BG consequence (SIM-VAR-05, SIM-VAR-06). No rule defines the
+      BG-layer consequence when a named PC General is captured in TTRPG or Hybrid mass
+      combat. Options: (a) Faction Military −1 additional, (b) Legionary card
+      unavailable for 1 season, (c) capturing faction gains +1 Influence. Gap-filled
+      as option (b) in simulation.
+    source: SIM-VAR-06 2026-04-08
+    blocks: Hybrid general-capture cross-register resolution
+    tags: [hybrid, mass_combat, general, capture]
+
+  - id: ED-335
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      NPC-initiated PC capture has no Accounting consequence (SIM-VAR-06). Domain Echo
+      covers PC Domain Actions only — NPC-initiated events produce no BG stat change
+      automatically. Recommend: Command Event rule — when a named PC is captured or
+      killed by another faction's NPC, apply at next Accounting: PC's faction Mandate
+      −1, capturing faction Influence +1.
+    source: SIM-VAR-06 2026-04-08
+    blocks: Hybrid NPC-capture consequence chain
+    tags: [hybrid, mass_combat, domain_echo, npc]
+
+  - id: ED-336
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Cardinal death in Hybrid Zoom In has no succession rule (SIM-VAR-06). When a
+      Cardinal is killed by PC action, Cardinal-specific BG mechanics (Fortitude
+      Templar, Justice Inquisitor, Prudence Tithes, Temperance AER) have no defined
+      gap period or Holy See appointment procedure.
+    source: SIM-VAR-06 2026-04-08
+    blocks: Church faction mechanics when Cardinal dies in Hybrid
+    tags: [hybrid, church, cardinals, succession]

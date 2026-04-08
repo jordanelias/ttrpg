@@ -123,6 +123,9 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 | ID | Source | Description | Status |
 |----|--------|-------------|--------|
 | F-D-01 | SIM-D-01 | DIVERGE+TIE: both score 0, different genres — Tie rule fires (any interaction type). | PP-097 PROVISIONAL |
+| F-RM-01 | SIM-VAR-01 | RM Community Organising 42% fail rate + PP-403 creates elimination risk before first Presence (resolved by PP-460) | Resolved — PP-460 |
+| F-DB-01 | SIM-VAR-03 | Forced-CLASH stalemate systemic: near-equal pools, resistance ≥ 2, ~0 CT movement per exchange | Open — ED-330 |
+| F-LW-01 | SIM-VAR-04 | PI = 0 post-coup permanently blocks Löwenritter Regency (PI ≥ 4 required; Parliamentary Manoeuvre gated PI > 0) | Open — ED-331 |
 
 ## New P2 Findings (SIM-D-01)
 
@@ -372,6 +375,12 @@ Open for editorial: ED-061, ED-062, ED-063.
 |----|------------|------|----------|--------|----------|------|------------|--------|----------|
 | SIM-D-06 | Social Contest full stress test: pool isolation, CLASH, 3-exchange Formal Debate, Tribunal, strain, edge cases (Modes A+D) | A+D | TTRPG | CT, Concentration, Composure, Strain, Doubt Marker | Church, Hafenmark | Generic archetypes | Scholar, Diplomat, Advocate, Novice | COMPLETE | P1: CONFLICT-1 Obscuring incompatibly defined in design vs params; P2: EC-02 off-genre+res2 dead play; EC-05 Spent guaranteed every Grand Debate; EC-08 pivot freq CONFLICT-2; EC-11 Att1-2 mislead 44-61%; CT-01 halved resistance null at res=1; CONFLICT-3 Composure formula ED-127; P3: EC-03 initiative +8.8pp; EC-04 39% decisive first exchange; SIM-DEBT-03/04/05 opened |
 | SIM-SC-02 | Social Contest: audit A–E + sim A+D on patched system (PP-449–468). Formula validation, number systems, interaction chains, gap detection, principles compliance, genre weight model verification, new mechanic edge cases. | A+D+AuditA-E | TTRPG/BG/Hybrid | CT, Concentration, Composure, Strain, Doubt Marker, Refute, Deadlock State | Crown, Church, Hafenmark, Varfell, Guilds, Restoration | COMPLETE | P1: 0 remaining (Refute Ob fixed PP-465). P2: 1 noted design intent (Concentration range). SIM-DEBT-02 open. System simulation-clean. |
+| SIM-VAR-01 | RM BG arc — Community Organising, Weaving, Warden Emergence, RS | BG | 20-season arc | Mandate, Stability, RS, Presence, WC, CV | Restoration | — | RM hardest mode | Complete | F-RM-01 (P1 ED-327→resolved PP-460), F-RM-02/03/04 (P2), F-RM-05 (P3) |
+| SIM-VAR-02 | Threadwork at RS 22 — Leap, Mending, Dissolution edges | TTRPG | Single scene | RS, Coherence, Ob, TPS | None | Maret Uln | TS 50 at Critical RS | Complete | F-RS-01 (P1 recovery timeline), F-RS-02/03/04 (P2/P3 ED-328) |
+| SIM-VAR-03 | Debate forced-CLASH — Klapp vs Baralta, 5 exchanges | TTRPG | 5 exchanges | Composure, CT, Strain, Doubt | Church, Hafenmark | Klapp, Baralta | Matched pools, institutional authority | Complete | F-DB-01 (P1 ED-330), F-DB-02/03 (P2 ED-329), F-DB-04/05 (P3) |
+| SIM-VAR-04 | Löwenritter post-coup arc S8–S16 | BG | 8-season arc | TC, RS, PI, TCV, Coup Counter | Löwenritter, Church, Hafenmark, Varfell | — | Conditional faction first run | Complete | F-LW-01 (P1 ED-331), F-LW-02/03/04/05 (P2 ED-332/333), F-LW-06 (P3) |
+| SIM-VAR-05 | Hybrid Crown Zoom In — S6 T9 assault, state transfer | HYB | 2-turn battle + personal | Health, Wounds, Military, TCV, Domain Echo | Crown, Church | Marshal Edren, Inquisitor Vald | General assault + personal combat | Complete | F-HY-01 (P1 mutual annihilation), F-HY-02/03 (P2 ED-334), F-HY-04 (P3) |
+| SIM-VAR-06 | Mass combat wound cascade → capture chain | TTRPG+HYB | 2 turns + personal | Health, Wounds, Size, Cohesion, Mandate | Crown, Church | Maret Elstov, Jarnstal | General capture arc | Complete | F-MC-01/02/03/04 (P2 ED-334/335/336), F-MC-05/06 (P3) |
 
 ## 2026-04-08 BG Full Stress Test
 | ID | Description | Mode | Status | Date | Findings |
