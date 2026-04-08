@@ -26,6 +26,7 @@ required = [
     'references/glossary.md',      # term definitions
 ]
 files = g.read_files_graphql(required)
+token = g.assert_fetched(*required)  # raises if any path not fetched
 for path, content in files.items():
     if content is None:
         raise RuntimeError(f"GitHub fetch failed: {path} — cannot proceed")
@@ -36,11 +37,12 @@ for path, content in files.items():
 **Fetch log (emit before any analysis):**
 ```
 ## FETCH LOG
+session token: [16-char hex — from g.assert_fetched() call above]
 canonical_sources.yaml: ✓ fetched ([N] lines)
 [canonical design doc path]: ✓ fetched ([N] lines)
 references/params_[system].md: ✓ fetched ([N] lines) / ✗ missing
 ```
-If any required file is missing from this log, stop — the analysis is invalid.
+If any required file is missing from this log, or session token is absent, stop — the analysis is invalid.
 
 **Version check:** Confirm `<!-- version: -->` tag in `references/params_core.md` matches current ruleset version in `compilation/README.md`. If mismatch: flag `[STALE PARAMS]` and stop.
 

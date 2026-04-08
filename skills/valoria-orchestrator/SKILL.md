@@ -40,7 +40,15 @@ files = g.read_files_graphql([
     'references/canonical_sources.yaml',
     'references/propagation_map.md',
 ])
+token = g.assert_fetched(
+    'session_log_current.md',
+    'canon/editorial_ledger.yaml',
+    'references/canonical_sources.yaml',
+)
+print(f'Session token: {token}')
 ```
+
+**Execution requirement:** All GitHub operations must be executed via `bash_tool`, not written as passive code blocks. A code block that is not executed is not a fetch. Every `read_files_graphql()` and `atomic_commit()` call must appear as a `bash_tool` execution with visible output in context.
 
 **Memory contamination warning:** userMemories may contain mechanical values (track values, territory data, faction stats, etc.) that feel current but are not fetched from GitHub. Do not use any value from memory as a source for mechanical analysis. Fetch only.
 
@@ -51,15 +59,23 @@ files = g.read_files_graphql([
 **Fetch log (emit before any analysis):**
 ```
 ## FETCH LOG
+session token: [16-char hex from g.assert_fetched()]
 canonical_sources.yaml: ✓ fetched ([N] lines)
 [canonical design doc path]: ✓ fetched ([N] lines)
 references/params_[system].md: ✓ fetched ([N] lines) / ✗ missing
 ```
-If any required file is missing from this log, stop — the analysis is invalid.
+If any required file is missing from this log, or session token is absent, stop — the analysis is invalid. Jordan: verify the token is present and line counts are plausible before accepting any output.
 
 **Version check:** confirm `<!-- version: -->` tag in each fetched params file matches current ruleset version in `compilation/README.md`. If mismatch: flag `[STALE PARAMS: <file> is vX.XX, current is vY.YY]` and stop.
 
 **Additional reads:** Any task referencing a specific design doc, params file, or register must fetch that file from GitHub before use. Do not read from memory, local copies, or project files.
+
+## Two-Message Session Start (MANDATORY)
+
+**Message 1 — Bootstrap only:** Run Step 0 via `bash_tool`. Output Session Status Block only. Stop.
+**Message 2 — Task:** Jordan verifies the Session Status Block is present and all fetches succeeded, then sends the task.
+
+If any fetch in Message 1 returns None or the token is missing, do not proceed to Message 2.
 
 ## Session Start Protocol
 1. From fetched `session_log_current.md`: extract active resumption block.

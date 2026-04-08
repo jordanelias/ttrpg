@@ -1,0 +1,119 @@
+name: Valoria Integrity Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  integrity:
+    name: Repository Integrity
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Broken dependency check
+        env:
+          GITHUB_PAT: ${{ secrets.VALORIA_PAT }}
+        run: |
+          python3 tools/broken_dependency_checker.py
+          echo "broken_dependency_checker: exit $?"
+
+      - name: Patch propagation check
+        env:
+          GITHUB_PAT: ${{ secrets.VALORIA_PAT }}
+        run: |
+          python3 tools/patch_propagation_checker.py
+          echo "patch_propagation_checker: exit $?"
+
+      - name: Freshness gate check
+        env:
+          GITHUB_PAT: ${{ secrets.VALORIA_PAT }}
+        run: |
+          python3 tools/freshness_gate.py
+          echo "freshness_gate: exit $?"
+
+  skills-lint:
+    name: Skills Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check all skills have Input Validation block
+        run: |
+          fail=0
+          for f in skills/*/SKILL.md; do
+            skill=$(basename $(dirname $f))
+            if ! grep -q "Input Validation" "$f"; then
+              echo "FAIL: $skill missing Input Validation block"
+              fail=1
+            fi
+          done
+          if ! grep -q "Memory contamination warning" skills/valoria-orchestrator/SKILL.md; then
+            echo "FAIL: orchestrator missing memory contamination warning"
+            fail=1
+          fi
+          if [ $fail -eq 0 ]; then
+            echo "All skills passed lint."
+          fi
+          exit $fail
+
+      - name: Check skills have fetch log
+        run: |
+          fail=0
+          for f in skills/*/SKILL.md; do
+            skill=$(basename $(dirname $f))
+            if ! grep -q "FETCH LOG" "$f"; then
+              echo "FAIL: $skill missing FETCH LOG"
+              fail=1
+            fi
+          done
+          if [ $fail -eq 0 ]; then
+            echo "All skills have fetch log."
+          fi
+          exit $fail
+
+      - name: Check no hardcoded canonical values in skills
+        run: |
+          fail=0
+          for f in skills/*/SKILL.md; do
+            skill=$(basename $(dirname $f))
+            if grep -q "Current Canonical Values" "$f"; then
+              echo "FAIL: $skill has hardcoded canonical values block"
+              fail=1
+            fi
+          done
+          if [ $fail -eq 0 ]; then
+            echo "No hardcoded values found."
+          fi
+          exit $fail
+
+  params-version-check:
+    name: Params Version Tags Present
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check params files have version tags
+        run: |
+          fail=0
+          for f in references/params_*.md; do
+            if [ -f "$f" ]; then
+              if ! grep -q "<!-- version:" "$f"; then
+                echo "WARN: $f missing version tag"
+              fi
+            fi
+          done
+          exit $fail
