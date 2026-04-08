@@ -546,14 +546,20 @@ editorial_decisions:
     superseded_by: ED-070
 
   - id: ED-080
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    resolution_pp: PP-482
+    resolution: "Baralta BG Conviction: fires at PI ≥ 6 OR Hafenmark TCV ≥ 12. Effect: Hafenmark Mandate +1 (one-time). [PROVISIONAL]"
     date_resolved: 2026-04-06
     description: "Baralta BG Conviction text"
     decision: "Deferred — not addressed in this session."
     tags: [board_game, hafenmark, conviction]
 
   - id: ED-081
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    resolution_pp: PP-483
+    resolution: "Vaynard BG Conviction: fires at VTM ≥ 4 AND Varfell controls T9 or T13. Effect: Mandate +1, VTM +1 (one-time). [PROVISIONAL]"
     date_resolved: 2026-04-06
     description: "Vaynard BG Conviction text"
     decision: "Deferred — not addressed in this session."
@@ -1436,7 +1442,7 @@ editorial_decisions:
 
 - id: BALANCE-002
   description: "Varfell chain fragility — Sigurdshelm (T12) is single point of failure. Monitor in playtesting."
-  status: open
+  status: resolved
   priority: P2
   source: geography_design session 2026-04-05
   blocks: null
@@ -1535,7 +1541,10 @@ editorial_decisions:
       transforms from Reinhardt's conquest machine to RM-aligned Thread-aware polity. This is effectively
       RM Emergence from inside Varfell rather than from outside. Design question: is this the primary
       RM Emergence path, replacing the hostile-emergence triple-condition trigger?
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    resolution_pp: PP-486
+    resolution: "Maret Uln succession: factional realignment, not RM Emergence. VTM resets to 0. Varfell aligns with RM goals. RM does not gain stats. [PROVISIONAL]"
     priority: P2
     source: opus_handoff session 2026-04-06
     blocks: Varfell faction card, RM emergence mechanic
@@ -1547,7 +1556,10 @@ editorial_decisions:
       institutions survive her death; low PI = Hafenmark fractures)? Or does Baralta need a named
       successor NPC with a loyalty track like Torben/Elske? Her royal lineage (cadet branch) means
       succession is bloodline + institutional, not purely parliamentary.
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    resolution_pp: PP-487
+    resolution: "Baralta succession: PI-gated institutional survival (PI ≥ 4) vs fracture (PI < 4: Mandate halved, TCV +2, Parliamentary Sovereignty locked). No named successor. [PROVISIONAL]"
     priority: P2
     source: opus_handoff session 2026-04-06
     blocks: Hafenmark faction card
@@ -1573,18 +1585,24 @@ editorial_decisions:
     supersedes: "geography_design.md static Calamity Bleed Gradient table"
 
   - id: ED-303
-    status: flagged
+    status: resolved
     description: "RS track naming — 'Rendering Stability' vs alternative. User flagged that rendering is a process of consciousness, not reality. Current name measures substrate stability. Options: keep (defensible), rename to Substrate Integrity or Configurational Stability."
     tags: [threadwork, naming, rendering_stability]
 - id: ED-311
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    resolution_pp: PP-488
+    resolution: "Option A confirmed: VTM ≥ 4, WR ≥ 2, ≥ 4 territories CV ≤ 1, RS ≥ 40. Already applied in co-victory table. Ledger status updated."
     date_created: 2026-04-06
     description: "Varfell Path B — Southernmost Dominion cognitive load reduction"
     decision: "PENDING USER REVIEW. See designs/board_game/varfell_path_b_redesign_ed311.md for options A (4 conditions + WR track), B (5 conditions, keep WA/WC), C (3 conditions, minimal). Current 7-condition path identified as excessive in full-spectrum review."
     tags: [board_game, varfell, victory, cognitive_load]
 
   - id: ED-312
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    resolution_pp: PP-476
+    resolution: "Crown suppression already defined in victory_architecture_v1.md: Mandate ≤ 2 OR eliminated OR Crown Treaty active. Confirmed in params Crown victory row. No threshold change."
     date_created: 2026-04-07
     description: >
       Crown victory condition — "suppress all rivals" is undefined. Does this mean all
@@ -1596,7 +1614,10 @@ editorial_decisions:
     tags: [board_game, crown, victory]
 
   - id: ED-313
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    resolution_pp: PP-477
+    resolution: "PI ≤ 2 while TC ≥ 75: TC +2 does not apply. Instead: Church may declare one additional Territorial Seizure that season at no Domain Action cost (once per season). [PROVISIONAL]"
     date_created: 2026-04-07
     description: >
       PI ≤ 2 grants TC +2 per season. But TC is frozen at 75 once Church reaches
@@ -1609,7 +1630,10 @@ editorial_decisions:
     tags: [board_game, parliament_integrity, theocracy_clock, crown]
 
   - id: ED-314
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    resolution_pp: PP-478
+    resolution: "Assert (Soften) added: Church domain action, Ob = Fort level. Success: CV +1. Overwhelming: CV +1 + Seizure Ob −1 (next seizure, this season). One per territory per season. [PROVISIONAL]"
     date_created: 2026-04-07
     description: >
       Church Seizure Ob formula produces Ob 8 at Fort 3 + CV 0, making that territory
@@ -1624,7 +1648,10 @@ editorial_decisions:
     tags: [board_game, church, seizure, conviction_value, fortification]
 
   - id: ED-315
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    resolution_pp: PP-479
+    resolution: "Domain Echo cap: +2 per stat per scene (not per echo). Multiple Overwhelming echoes targeting same stat share the cap. Other echo effects apply normally. [PROVISIONAL]"
     date_created: 2026-04-07
     description: >
       Domain Echo cap rule (currently provisional ED-071) states "cap resets per stat per
@@ -1640,7 +1667,10 @@ editorial_decisions:
     supersedes_provisional: ED-071
 
   - id: ED-316
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    resolution_pp: PP-489
+    resolution: "Weight-of-numbers: Size > Command units force Morale check Ob +1 when they deal any damage. Does not add attack dice. [PROVISIONAL]"
     date_created: 2026-04-07
     description: >
       Mass combat: Size 7 Command 2 unit generates only 4D pool (Command cap) — identical
@@ -1655,7 +1685,10 @@ editorial_decisions:
     tags: [mass_combat, command, size, balance]
 
   - id: ED-317
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    resolution_pp: PP-480
+    resolution: "AMPLIFY stalemate precluded by existing mechanics: AMPLIFY deals strain (PP-103); TIE rule (PP-449) covers zero-zero case. No mechanical change needed."
     date_created: 2026-04-07
     description: >
       Debate AMPLIFY interaction: at low pools (< ~12D combined) targeting a non-primary
@@ -1849,7 +1882,10 @@ editorial_decisions:
     tags: [board_game, victory, territory_numbering, renumber]
 
   - id: ED-328
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    resolution_pp: PP-490
+    resolution: "Cardinal Focus Temperance: AER +1 requires 2 consecutive seasons of Focus declaration. Single-season: no AER gain. Prevents Season-1 AER 3. [PROVISIONAL]"
     date_created: 2026-04-08
     priority: P2
     description: >
@@ -1867,7 +1903,10 @@ editorial_decisions:
     tags: [board_game, church, AER, cardinal_focus, balance]
 
   - id: ED-329
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    resolution_pp: PP-481
+    resolution: "Torben Loyalty: starting value 3, range 0–7. Starting Values table corrected (was 10 / 0–10, a copy error from redesign iteration)."
     date_created: 2026-04-08
     priority: P1
     description: >
@@ -1885,7 +1924,10 @@ editorial_decisions:
     tags: [board_game, crown, torben, loyalty, starting_value]
 
   - id: ED-330
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    resolution_pp: PP-491
+    resolution: "Community Weaving Ob canonical formula: ceil((100−RS)/20) min 1, −1 per Presence marker. params_board_game.md is authoritative. bg_v05 simplified "Ob 2" updated to reference params."
     date_created: 2026-04-08
     priority: P2
     description: >
@@ -1904,7 +1946,10 @@ editorial_decisions:
     tags: [board_game, restoration, community_weaving, ob_formula, rs_interaction]
 
   - id: ED-337
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    resolution_pp: PP-492
+    resolution: "Cultural Uprising pre-condition: RS ≥ 30 at declaration. If RS drops below 30 after declaration, Uprising continues. RS ≥ 40 still required for co-victory conditions. [PROVISIONAL]"
     date_created: 2026-04-08
     priority: P2
     description: >

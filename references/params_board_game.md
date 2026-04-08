@@ -58,7 +58,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard |
 | Parliament Integrity (PI) | **7** | 0–10 | CORRECTED from 5. |
 | AER | 2 | 0–5 | Near IP clock. |
-| Torben Loyalty | **10** | 0–10 | Active from game start. No IP trigger. Range extended to 10. |
+| Torben Loyalty | **3** | 0–7 | Active from game start. No IP trigger. Starting value 3, range 0–7. [PP-481, ED-329 resolved] |
 | Elske Loyalty | 4 | 0–7 | Off-board card near T4. |
 | Löwenritter Coup Counter | 0 | 0–4 | Public. Threshold 4 = coup eligible. |
 | Warden Cooperation | 0 | 0–3 | Near T6. Inactive until Warden Emergence. |
@@ -225,7 +225,7 @@ The Deed-based victory system has been dissolved for ALL factions including Löw
 
 | Faction | Primary Victory | Key Thresholds |
 |---------|----------------|----------------|
-| Crown | Peninsula Sovereignty | TCV ≥ 18 + suppress all rivals + Invasion Pressure (IP) < 60 + Parliament Integrity (PI) ≥ 3 |
+| Crown | Peninsula Sovereignty | TCV ≥ 18 + suppress all rivals (every other playable faction: Mandate ≤ 2 OR eliminated OR Crown Treaty active) + IP < 60 + PI ≥ 3 | [PP-476, ED-312 resolved] |
 | Church of Solmund | Solmundan Orthodoxy | TCV ≥ 10 + Conviction Track (CV) ≥ 3 all held territories (post-Thread Consciousness (TC) 75) |
 | Hafenmark | Parliamentary Sovereignty | TCV ≥ 12 + Mandate ≥ 4 + PI ≥ 5 + Crown Mandate ≤ 3 |
 | Varfell Path A | Intelligence Hegemony | TCV ≥ 10 + Vaynard Thread Mastery (VTM) ≥ 3 + 2 rival stats revealed + expansion |
@@ -366,6 +366,7 @@ PI recovers: Hafenmark Parliamentary Manoeuvre success (+1), Crown Parliamentary
 ## Cascade Depth Cap (v04 B4)
 Maximum 3 immediate mechanical effects per card play resolution step. Additional effects queue to next Accounting.
 State-based modifiers (RS/TC/IP/PI environmental effects) do NOT count against this cap.
+**Domain Echo stat cap [PP-479, ED-315 resolved]:** +2 per stat per scene total (not per echo). Multiple Overwhelming echoes targeting the same stat in one scene share the +2 cap. Other echo effects (Conviction, RS, etc.) apply normally — only the directly targeted stat is capped.
 
 ## Batch Card Hand (v04 B3 confirmed — Card-Hand system PP-177)
 | Faction | Starting Hand |
@@ -634,6 +635,19 @@ Failure: Ministry notes the attempt. Corrupting faction Stability −1. Ministry
 | AP-token absent from T13 | Hafenmark Parliamentary Manoeuvre Ob +1 |
 | Ministry Mandate = 0 | Crown Policy unavailable |
 | Church seizes T13 with AP-token present | Seizure Ob +1; if seized: AP-token removed, Crown Policy +1 Ob |
+
+## Assert (Soften) — Church Pre-Seizure Action [PP-478, ED-314 resolved]
+Church domain action. Targets a single territory.
+**Pool:** Church Mandate dice, TN 7.
+**Ob:** Fort level of target territory.
+| Degree | Effect |
+|---|---|
+| Failure | No effect. |
+| Partial | No effect. |
+| Success | CV +1 in target territory (max 3). |
+| Overwhelming | CV +1 AND Seizure Ob −1 for next Seizure of that territory this season only. |
+One Assert (Soften) per territory per season. Cannot combine with full Seizure same territory same season.
+
 | Löwenritter Coup | T13+T12 AP-tokens removed; Ministry Mandate −2; Ministry Stabilisation suspended 1 season |
 
 ## Church of Solmund — Canonical Structure (PP-194, from original source documents)
@@ -1035,6 +1049,11 @@ Card is drawn legitimately; VTM 5 selects the dimension only. P-14 satisfied. ED
 Three Church responses confirmed:
 1. Resist: Mandate −1; TC gain continues; Hafenmark gains Deed.
 2. Accommodate: TC gain suspended 1 season; PI +1.
+## PI Collapse + TC Frozen Rule [PP-477, ED-313 resolved]
+When PI ≤ 2 AND TC ≥ 75 (Territorial Seizure threshold): TC +2 does NOT apply (Clock already at ceiling).
+Instead: Church may declare one additional Territorial Seizure that season at no Domain Action cost.
+This bonus is once per season regardless of how many turns PI remains ≤ 2.
+
 3. Ignore: TC gain halved 1 season; no other effect.
 [FLAGGED: confirm Mandate −1 and PI +1 values before compilation.]
 
@@ -1373,3 +1392,8 @@ AER >= 3 (PP-203) and Parliamentary Challenge (PP-431-COR) are independent:
 ## Submission + Mandate 0 Ruling (PP-475)
 If Submitting faction's halved Mandate = 0: **Submission supersedes Faction Collapse.**
 Submitted faction remains as vassal with Mandate 0. Mandate-0 effects apply. Faction does not enter Faction Collapse (which requires Stability 0 at Accounting end per I-04/P-15, not Mandate 0).
+
+## Mass Combat: Weight-of-Numbers [PP-489, ED-316 resolved]
+Units where Size > Command: when they deal any damage (Partial or better), the opposing unit makes a Morale check at Ob +1.
+This represents the disruption of formation cohesion by sheer scale. Does not add dice to the attack pool.
+Command remains the offensive ceiling for dice. Size > Command units contribute via Morale pressure, not additional damage dice.

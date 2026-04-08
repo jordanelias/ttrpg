@@ -4348,3 +4348,155 @@ patches:
     - references/params_factions.md
     - canon/editorial_ledger.yaml
   status: applied
+- id: PP-476
+  date: 2026-04-08
+  severity: P1
+  description: "ED-312 resolved — Crown 'suppress all rivals' confirmed as: every other playable faction Mandate ≤ 2 OR eliminated OR formal Crown Treaty active. Already in victory_architecture_v1.md §3.1; confirmed in params_board_game.md Crown victory row. No threshold change."
+  finding_id: ED-312
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md, designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-477
+  date: 2026-04-08
+  severity: P1
+  description: "ED-313 resolved — PI ≤ 2 while TC ≥ 75: TC +2 does not apply (Clock already at ceiling). Instead: Church may declare one additional Territorial Seizure that season at no Domain Action cost (once per season). [PROVISIONAL]"
+  finding_id: ED-313
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-478
+  date: 2026-04-08
+  severity: P1
+  description: "ED-314 resolved — Assert (Soften) added as Church pre-seizure action. Pool: Church Mandate. Ob = Fort level. Success: CV +1 (max 3). Overwhelming: CV +1 AND Seizure Ob −1 for next seizure of that territory this season. One use per territory per season. [PROVISIONAL]"
+  finding_id: ED-314
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-479
+  date: 2026-04-08
+  severity: P1
+  description: "ED-315 resolved — Domain Echo stat cap: +2 per stat per scene (not per echo). Multiple Overwhelming echoes targeting same stat in one scene share the cap. Other echo effects (Conviction, RS) apply normally. [PROVISIONAL]"
+  finding_id: ED-315
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-480
+  date: 2026-04-08
+  severity: P1
+  description: "ED-317 resolved — AMPLIFY stalemate already precluded: AMPLIFY deals strain per PP-103 (margin−1, min1 + 1 + PresModifier − FocusDef); TIE rule PP-449 covers both-zero case (both take 1 strain, CT +1). True stalemate impossible. No doc change."
+  finding_id: ED-317
+  source: editorial resolution 2026-04-08
+  affects: []
+  status: applied
+
+- id: PP-481
+  date: 2026-04-08
+  severity: P1
+  description: "ED-329 resolved — Torben Loyalty corrected: starting value 3, range 0–7. Starting Values table entry (10, 0–10) was a copy error from redesign iteration. Range 0–7 starting 3 produces meaningful political management."
+  finding_id: ED-329
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-482
+  date: 2026-04-08
+  severity: P2
+  description: "ED-080 resolved — Baralta BG Conviction: fires at any Accounting where PI ≥ 6 OR Hafenmark TCV ≥ 12. Effect: Hafenmark Mandate +1. One-time per game. [PROVISIONAL]"
+  finding_id: ED-080
+  source: editorial resolution 2026-04-08
+  affects: [references/params_factions.md]
+  status: applied
+
+- id: PP-483
+  date: 2026-04-08
+  severity: P2
+  description: "ED-081 resolved — Vaynard BG Conviction: fires at any Accounting where VTM ≥ 4 AND Varfell controls T9 or T13. Effect: Varfell Mandate +1, VTM +1. One-time per game. [PROVISIONAL]"
+  finding_id: ED-081
+  source: editorial resolution 2026-04-08
+  affects: [references/params_factions.md]
+  status: applied
+
+- id: PP-484
+  date: 2026-04-08
+  severity: P2
+  description: "ED-301 resolved — TS and Coherence confirmed orthogonal. TS = perceptual depth; Coherence = personal rendering integrity. Already stated in params_core. No doc change."
+  finding_id: ED-301
+  source: editorial resolution 2026-04-08
+  affects: []
+  status: applied
+
+- id: PP-485
+  date: 2026-04-08
+  severity: P2
+  description: "ED-303 resolved — Rendering Stability name retained. Design note added: name foregrounds epistemic relationship between consciousness and rendered configuration. Rename cost too high given 400+ line pervasiveness."
+  finding_id: ED-303
+  source: editorial resolution 2026-04-08
+  affects: []
+  status: applied
+
+- id: PP-486
+  date: 2026-04-08
+  severity: P2
+  description: "ED-308 resolved — Varfell succession: Maret Uln is factional realignment (not RM Emergence). VTM resets to 0. Varfell aligns with RM goals (cannot target RM, cannot seize RM territory). RM does not gain faction stats. Triple-condition hostile RM Emergence trigger remains canonical. [PROVISIONAL]"
+  finding_id: ED-308
+  source: editorial resolution 2026-04-08
+  affects: [references/params_factions.md]
+  status: applied
+
+- id: PP-487
+  date: 2026-04-08
+  severity: P2
+  description: "ED-309 resolved — Baralta succession: PI-gated institutional survival. PI ≥ 4: Mandate −1, Stability −1, all mechanics intact. PI < 4: Mandate halved, TCV requirement +2, Parliamentary Sovereignty locked until PI ≥ 4. No named successor. [PROVISIONAL]"
+  finding_id: ED-309
+  source: editorial resolution 2026-04-08
+  affects: [references/params_factions.md]
+  status: applied
+
+- id: PP-488
+  date: 2026-04-08
+  severity: P2
+  description: "ED-311 ledger status updated to resolved. Option A already applied: VTM ≥ 4, WR ≥ 2, ≥ 4 territories CV ≤ 1, RS ≥ 40 in co-victory table. No additional doc changes."
+  finding_id: ED-311
+  source: editorial resolution 2026-04-08
+  affects: []
+  status: applied
+
+- id: PP-489
+  date: 2026-04-08
+  severity: P2
+  description: "ED-316 resolved — Weight-of-numbers: units where Size > Command force opposing unit Morale check Ob +1 when they deal any damage. Does not add attack dice. Command remains offensive ceiling. [PROVISIONAL]"
+  finding_id: ED-316
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-490
+  date: 2026-04-08
+  severity: P2
+  description: "ED-328 resolved — Cardinal Focus Temperance AER gain: requires 2 consecutive seasons of Focus declaration. Single-season declaration does not grant AER. Non-consecutive resets chain. Prevents Season-1 AER 3. [PROVISIONAL]"
+  finding_id: ED-328
+  source: editorial resolution 2026-04-08
+  affects: [references/params_factions.md]
+  status: applied
+
+- id: PP-491
+  date: 2026-04-08
+  severity: P2
+  description: "ED-330 resolved — Community Weaving Ob canonical formula: ceil((100−RS)/20) min 1, −1 per Presence marker. params_board_game.md is authoritative. bg_v05 simplified 'Ob 2' updated to reference params formula."
+  finding_id: ED-330
+  source: editorial resolution 2026-04-08
+  affects: [designs/board_game/valoria_bg_v05_simulation_and_patches.md, references/params_board_game.md]
+  status: applied
+
+- id: PP-492
+  date: 2026-04-08
+  severity: P2
+  description: "ED-337 resolved — Cultural Uprising pre-condition: RS ≥ 30 at declaration. If RS drops below 30 after declaration, Uprising continues (social momentum). RS ≥ 40 still required for Varfell+RM and Hafenmark+RM co-victory conditions. [PROVISIONAL]"
+  finding_id: ED-337
+  source: editorial resolution 2026-04-08
+  affects: [designs/board_game/victory_architecture_v1.md, references/params_board_game.md]
+  status: applied

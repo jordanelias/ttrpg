@@ -516,3 +516,26 @@ Senator Outward, Crown only. Influence vs Ob = AER level min 1. Cannot combine w
 - Crown Royal Guard: cancel 1 Intel action targeting Crown per season (Phase 4 Priority 1, no card).
 - Hafenmark Procedural Objection: on Varfell Investigate success, costs Challenge use; if M ≥ 4, revealed stat falsified for non-Varfell observers.
 - Church Sanctuary extension: also blocks Varfell 4-PC Spy once per season.
+
+## Baralta BG Conviction [PP-482, ED-080 resolved]
+Fires at any Accounting where PI ≥ 6 OR Hafenmark TCV ≥ 12.
+Effect: Hafenmark Mandate +1. One-time per game.
+## Vaynard BG Conviction [PP-483, ED-081 resolved]
+Fires at any Accounting where VTM ≥ 4 AND Varfell controls T9 or T13.
+Effect: Varfell Mandate +1 AND VTM +1. One-time per game.
+## Varfell Succession — Maret Uln [PP-486, ED-308 resolved]
+If Vaynard eliminated (Loyalty 0 + Mandate 0): Maret Uln becomes faction leader. VTM resets to 0.
+Varfell aligns with RM goals: cannot target RM, cannot seize RM-held territory.
+This is factional realignment, NOT RM Emergence — RM does not gain faction stats or independent actions.
+The triple-condition hostile RM Emergence trigger remains the canonical path for RM as a playable faction.
+## Baralta Succession — PI-Gated [PP-487, ED-309 resolved]
+If Baralta eliminated (Loyalty 0 + Mandate 0):
+- PI ≥ 4: institutional succession. Hafenmark Mandate −1, Stability −1. All mechanics intact.
+- PI < 4: fracture. Hafenmark Mandate halved (round down). TCV victory requirement +2. Parliamentary Sovereignty unavailable until PI recovers to ≥ 4.
+No named successor. Hafenmark's identity is institutional.
+## Cardinal Focus Temperance — AER Gain [PP-490, ED-328 resolved]
+AER +1 requires 2 consecutive seasons of Cardinal Focus declaration (not each season).
+Season 1: mark Focus-declared on Church faction mat.
+Season 2 (consecutive): AER +1 fires.
+If the Church misses a season, the consecutive chain resets. No AER gain from a single-season declaration.
+This prevents Season-1 AER 3 and preserves meaningful commitment cost.

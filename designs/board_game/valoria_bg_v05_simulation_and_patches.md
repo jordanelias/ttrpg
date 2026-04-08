@@ -88,7 +88,7 @@ Every action retains at least one point of resistance. This changes the effectiv
 **Specific affected rules:**
 - Hafenmark Diplomat in T6: Influence 4, Diplomat −1 Ob, base Ob 1 = floor 1. Cannot be reduced further. ✓
 - Church in T3 with doctrine-aligned −1 Ob AND territory −1 Ob on a base Ob 2 action = Ob 1 floor. Correct.
-- Restoration Community Weaving with multiple Presence markers: Ob 2 base −1 per marker. At 3+ markers in territory, Ob would drop below 1 → Ob 1 floor. This significantly changes Restoration's Weaving ceiling. See P-19 below.
+- Restoration Community Weaving: Ob = ceil((100−RS)/20) min 1, −1 per Presence marker in territory (floor 1). At RS 72 (start): Ob 2. Formula per params_board_game.md is canonical; bg_v05 simplified "Ob 2" is stale. [PP-491, ED-330 resolved]
 
 > **Policy Instrument definition (PP-036):** **Policy Instrument (Crown only):** When Crown's Mandate ≥ 4, Crown may take one additional Standard Action per season designated as the Policy Instrument. This action may be any action Crown could normally take; it is not limited by card-hand constraints. It activates once per season and cannot be interrupted by Parliamentary Manoeuvre (see P-19). Activation condition: Mandate ≥ 4 at the start of the season.
 
