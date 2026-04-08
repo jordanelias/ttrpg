@@ -68,9 +68,9 @@ systems:
     canonical_ttrpg: compilation/v0.14/stage6_factions.md
     canonical_sha__compilation__v0_14__stage6_factions_md: "da43bdac33ae1079941178c247858318d05ff8c6"
     canonical_bg: designs/board_game/valoria_bg_v05_simulation_and_patches.md
-    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "c71a93554128bdde9845f900f62cbf533fb721e4"
+    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "45f113c22c3e71194a3701111eedff4a521db19c"
     canonical_hybrid: designs/board_game/valoria_bg_v05_simulation_and_patches.md
-    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "c71a93554128bdde9845f900f62cbf533fb721e4"
+    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "45f113c22c3e71194a3701111eedff4a521db19c"
     params: references/params_factions.md
     compilation_stage: compilation/v0.14/stage6_factions.md
     compilation_current: false
@@ -78,7 +78,7 @@ systems:
 
   victory:
     canonical: designs/board_game/victory_architecture_v1.md
-    canonical_sha__designs__board_game__victory_architecture_v1_md: "52bdd9965423696f3c6725ce796e769ab8f91d14"
+    canonical_sha__designs__board_game__victory_architecture_v1_md: "83a3f97a9b04705c087dd0b0185fefdcba3bce3b"
     params: null
     design_doc: designs/board_game/victory_architecture_v1.md
     compilation_stage: null
@@ -114,7 +114,7 @@ systems:
 
   board_game:
     canonical: designs/board_game/valoria_bg_v05_simulation_and_patches.md
-    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "c71a93554128bdde9845f900f62cbf533fb721e4"
+    canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "45f113c22c3e71194a3701111eedff4a521db19c"
     params: references/params_board_game.md
     design_doc: designs/board_game/valoria_bg_v05_simulation_and_patches.md
     compilation_stage: compilation/v0.14/stage_bg_board_game_mode.md
