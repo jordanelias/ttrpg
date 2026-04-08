@@ -78,7 +78,7 @@ systems:
 
   victory:
     canonical: designs/board_game/victory_architecture_v1.md
-    canonical_sha__designs__board_game__victory_architecture_v1_md: "c87f747b306d79802a62db01ad44f8aef9be0fd2"
+    canonical_sha__designs__board_game__victory_architecture_v1_md: "52bdd9965423696f3c6725ce796e769ab8f91d14"
     params: null
     design_doc: designs/board_game/victory_architecture_v1.md
     compilation_stage: null
@@ -105,7 +105,7 @@ systems:
 
   social_debate:
     canonical: designs/debate/debate_system_redesign_v1.md
-    canonical_sha__designs__debate__debate_system_redesign_v1_md: "800a910d664de38aa7c7541e5f9959f512dda568"
+    canonical_sha__designs__debate__debate_system_redesign_v1_md: "fc6d870c2c67c04b04741f676bfe00d480298045"
     params: references/params_debate.md
     design_doc: designs/debate/debate_system_redesign_v1.md
     compilation_stage: compilation/v0.14/stage9_social.md
@@ -148,7 +148,7 @@ systems:
 
   calamity_radiation:
     canonical: designs/setting/calamity_radiation.md
-    canonical_sha__designs__setting__calamity_radiation_md: "48eb26210f6340434156ad650b1042f96b8a1bc8"
+    canonical_sha__designs__setting__calamity_radiation_md: "b1fbed4f15fb4a33435f2d6a392c75f51c0d4bb9"
     params: null
     design_doc: designs/setting/calamity_radiation.md
     compilation_stage: null
