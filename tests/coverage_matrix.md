@@ -366,3 +366,8 @@ Open for editorial: ED-061, ED-062, ED-063.
 | ID | Description | Mode | Status | Date | Findings |
 |----|------------|------|--------|------|---------|
 | SIM-SC-STRESS-01 | Social Contest full stress test — Modes A+B+C+D | TTRPG+Hybrid+BG | COMPLETE | 2026-04-08 | P1×5, P2×3, P3×2, GAP×5, SIM-DEBT×5. See tests/sim_social_contest_stress_v1.md |
+
+## 2026-04-08 Social Contest Stress Test
+| ID | Description | Mode | Temporal | Tracks | Factions | NPCs | Archetypes | Status | Findings |
+|----|------------|------|----------|--------|----------|------|------------|--------|----------|
+| SIM-D-06 | Social Contest full stress test: pool isolation, CLASH, 3-exchange Formal Debate, Tribunal, strain, edge cases (Modes A+D) | A+D | TTRPG | CT, Concentration, Composure, Strain, Doubt Marker | Church, Hafenmark | Generic archetypes | Scholar, Diplomat, Advocate, Novice | COMPLETE | P1: CONFLICT-1 Obscuring incompatibly defined in design vs params; P2: EC-02 off-genre+res2 dead play; EC-05 Spent guaranteed every Grand Debate; EC-08 pivot freq CONFLICT-2; EC-11 Att1-2 mislead 44-61%; CT-01 halved resistance null at res=1; CONFLICT-3 Composure formula ED-127; P3: EC-03 initiative +8.8pp; EC-04 39% decisive first exchange; SIM-DEBT-03/04/05 opened |

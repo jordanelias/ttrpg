@@ -61,3 +61,11 @@ blockers: [ED-323 blocks PP-438 cost scaling, ED-322 blocks PP-429 full applicat
 editorial_decisions_pending: [ED-322, ED-323, ED-324, ED-325, ED-326 — all flagged]
 open_gaps_added: []
 ```
+
+### 2026-04-08 — Social Contest Stress Test (SIM-D-06)
+- Stress test complete: Modes A + D
+- Test output committed: tests/sim_d06_social_contest_stress.md
+- P1 finding: CONFLICT-1 (Obscuring orientation incompatible between design and params)
+- P2 findings: EC-02, EC-05, EC-08/CONFLICT-2, EC-11, CT-01, CONFLICT-3
+- SIM-DEBT-03/04/05 opened
+- Editorial decisions required (see test output)
