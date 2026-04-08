@@ -400,3 +400,11 @@ Open for editorial: ED-061, ED-062, ED-063.
 | ID | Description | Mode | Status | Date | Findings |
 |----|------------|------|--------|------|---------| 
 | DESIGN-RM-01 | RM Founding Mechanic — design propagation | BG+Hybrid | COMPLETE | 2026-04-08 | PP-478 applied. RM not playable in BG. Hybrid: mid-game founding via PW track. Co-victories restricted to Hybrid post-Founding. WA emergence struck. |
+
+## 2026-04-08 BG Remaining SIM-DEBT (BG-03 through BG-06)
+| ID | Description | Mode | Status | Date | Findings |
+|----|------------|------|--------|------|---------| 
+| SIM-DEBT-BG-03 | Co-victory pairings reachability | BG | COMPLETE | 2026-04-08 | P1-08 (Crown+Hafen passive S1-2 — ED-343), P2-07 (Partition tracking — PP-479), P2-12 (Löw+Hafen zero PI margin). |
+| SIM-DEBT-BG-04 | Faction unique action balance | BG | COMPLETE | 2026-04-08 | F-Church-01 (Cardinal Focus dominant), P2-09 (VTM TC — ED-345), P2-10 (Decree Fragmentation — ED-344). |
+| SIM-DEBT-BG-05 | Ministry NPC AI interaction | BG | COMPLETE | 2026-04-08 | P2-08 (Priority 3 dead — ED-346), P2-11 (Domain conflict — PP-480). |
+| SIM-DEBT-BG-06 | RS decay 20-season projection | BG | COMPLETE | 2026-04-08 | CLEAN — system healthy. WC >= 2 critical S8+. Thread-RS-RM feedback loop confirmed intentional. |

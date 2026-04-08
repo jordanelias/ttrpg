@@ -4648,3 +4648,32 @@ patches:
   source: stress test 2026-04-08 PP-476-498 coverage
   affects: ['references/params_board_game.md']
   status: applied
+
+- id: PP-479
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Church + Hafenmark Partition co-victory condition "no active military conflict" defined.
+    Means: no Legionary card played by either faction targeting a territory held by the other
+    in the current season OR the immediately prior season. Physical tracking: a Conflict Marker
+    (flip token) placed on the relevant faction mat when military conflict occurs; removed at
+    the second Accounting after placement. Resolves SIM-DEBT-BG-03 D-03-04.
+  finding_id: STR-BG-D-03-04
+  source: BG remaining SIM-DEBT simulation 2026-04-08
+  affects: [designs/board_game/victory_architecture_v1.md, references/params_board_game.md]
+  status: applied
+
+- id: PP-480
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Ministry NPC Domain action conflict rule added. When Ministry NPC would play a Domain
+    action in a territory already acted on by a player faction in the same Phase 4 resolution,
+    Ministry redirects to the next-priority territory per its AI tree. Ministry does not stack
+    Domain actions with player factions in the same territory same phase. If all viable
+    territories are already acted-on: Ministry takes Priority 5 default action in any uncontested
+    AP-token territory regardless of prior player action there. Resolves SIM-DEBT-BG-05 F-Ministry-01.
+  finding_id: STR-BG-Ministry-01
+  source: BG remaining SIM-DEBT simulation 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied

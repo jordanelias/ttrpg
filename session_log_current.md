@@ -65,3 +65,13 @@ blockers: [ED-343, ED-349, ED-350]
 editorial_decisions_pending: [ED-343, ED-344, ED-345, ED-346, ED-347, ED-348, ED-349, ED-350, ED-351]
 open_gaps_added: [STR-SOFTEN-01, STR-ECHO-01, STR-AER-A-01, STR-RM-A-01]
 ```
+
+### 2026-04-08 — BG Remaining SIM-DEBT (BG-03 through BG-06)
+- Co-victory pairings: P1-08 (Crown+Hafen achievable S1-2 passively — ED-343), P2-07 resolved (PP-479 Partition conflict tracking)
+- Faction unique actions: Cardinal Focus Temperance dominant (ED-328 still open); Challenge <structural confirmed; Royal Decree Fragmentation (ED-344); VTM TC contribution undefined (ED-345)
+- Ministry NPC AI: Priority 3 dead at 4% (ED-346); Domain conflict rule (PP-480 applied)
+- RS decay: system healthy over 20 seasons; WC >= 2 critical for long campaigns; RS/RM/Thread feedback loop confirmed as intended escalation
+- New patches: PP-479 (Partition tracking), PP-480 (Ministry redirect)
+- New editorials: ED-343 (P1 Crown+Hafen passive), ED-344 (Decree Fragmentation), ED-345 (VTM TC contribution), ED-346 (Ministry Priority 3)
+- All SIM-DEBT-BG items complete (BG-01 through BG-06)
+- Test output: tests/sim_bg_remaining_2026_04_08.md

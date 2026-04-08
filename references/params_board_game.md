@@ -1498,3 +1498,10 @@ Pool: 1D base + 1D per adjacent territory with RM Presence marker (PP-460). Fail
 - PW track not used.
 - RM co-victories (Varfell+RM, Hafenmark+RM) not available.
 - "5 players only" restriction struck — RM is not a player faction in any player-count BG game.
+
+## Conflict Marker — Church + Hafenmark Partition (PP-479)
+Conflict Marker: flip token on Church or Hafenmark mat. Placed when either faction plays Legionary targeting the other's territory. Removed at second Accounting after placement.
+"No active military conflict" condition for Partition co-victory = no Conflict Marker active on either mat.
+
+## Ministry Domain Action Conflict (PP-480)
+If Ministry NPC would play a Domain action in a territory already acted on by any player faction this Phase 4 resolution: Ministry redirects to next-priority viable territory per AI tree. If all viable territories are already acted-on this phase: Ministry takes Priority 5 default in any uncontested AP-token territory.
