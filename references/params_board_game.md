@@ -134,6 +134,7 @@ Execute in strict order:
 2. Faction Stability checks: any faction with ≥2 attribute loss this season: Stability pool vs Ob = loss magnitude.
 3. Advance Cooldown Track (all items −1 slot; at 0: return to hand).
 4. Clock advances: RS baseline drift (−1 at Year-End/Winter only). TC per formula. IP per Altonian pressure table. PI changes.
+4b. **Church Prominence update (ED-326):** Church player marks Prominent territories on faction mat — any territory where Church global Mandate exceeds that territory's controlling faction's global Mandate. Updated every Accounting. Used for: Counter-Narrative target eligibility, Seizure Ob formula, Piety Spread.
 5. Church Attention Pool: resolve threshold responses. Pool resets to 0.
 6. Thread Debt: tokens >1 season old: RS −1/token. Serviced tokens: no drain; permanent residual RS −0.5 recorded.
 7. Clear Thread Resonance markers (all factions reset).
@@ -432,7 +433,7 @@ Partial or Failed Mend still places History Resonance marker (temporal auto-effe
 2 existing markers + Partial Mend = Thread Wound. Warning token required at 2 markers.
 
 ## Church Attention Pool — Per-Territory Rules (PP-185)
-Per-territory ceiling: 10. Second Inquisitor at AP ≥ 6. Max 2 Inquisitors/territory.
+Per-territory ceiling: 10. **First Inquisitor at AP ≥ 3. Second Inquisitor at AP ≥ 6.** Max 2 Inquisitors/territory. (ED-322 confirmed 2026-04-08.)
 Community Organizing success: AP −2 + expels one Inquisitor if AP drops below deployment threshold.
 
 ## Ranged Faction Military Modifier (ED-087 resolved 2026-04-03)
@@ -520,6 +521,7 @@ See victory_architecture_v1.md §8 for WA movement rules and full RM stat block.
 Each faction has a printed Institutional Mandate. When event challenges it:
 - **Uphold** (before roll): Roll proceeds normally. No cost.
 - **Appease** (before roll): Triggering action cancelled entirely — no roll made. Mandate −1.
+**Trigger scope (ED-324 resolved 2026-04-08):** Fires when a Domain Action directly targets the faction's Mandate stat OR their unique clock/track — TC for Church, PI for Hafenmark, VTM for Varfell. Stability, Influence, Wealth, Military do not trigger. Deterministic — no GM discretion.
 NPC rule: NPC factions Appease if Mandate ≥ 4 AND Stability ≤ 3.
 Note: Prior params used "Compromise" — v05 PP-189 establishes "Appease" as the canonical term.
 
@@ -1218,7 +1220,7 @@ Spend 1 Patience Counter at Accounting to suppress VTM TC contribution for that 
 **Cooldown:** Once per 2 consecutive seasons (Discretion Cooldown marker, cleared at Year-End).
 Does not suppress other TC sources.
 
-**Cost scaling (ED-323 simulation finding):** VTM 3 base cost 1 PC is marginal value. Recommend: 0 PC at VTM 3 (cooldown-only gate); 1 PC at VTM 4+. [FLAGGED: ED-323 pending designer confirmation before applying cost scaling.]
+**Cost:** 0 PC at VTM 3 (cooldown-only gate; TC contribution is low). 1 PC at VTM 4+ (TC contribution is high; cost is proportional). (ED-323 resolved 2026-04-08.)
 
 ---
 
@@ -1255,6 +1257,7 @@ Roll: Intel vs Ob = Church Mandate ÷ 2 round up, min 1. Consequentialism: −1 
 | Failure | Intel network exposed: Church notified of Varfell presence, AP +1 tagged as Varfell (+2 Ob to Counter-Narrative in this territory next season) |
 
 **TC tracking:** Fractional TC values accumulate. Track running decimal on TC track. Round to integer for threshold checks only.
+**AP note (ED-325):** AP is tracked per-territory (PP-185). Counter-Narrative AP in a territory contributes to that territory's AP pool, not a global pool. Inquisitor deploys in the territory where threshold is crossed.
 
 ---
 

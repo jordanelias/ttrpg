@@ -4005,3 +4005,48 @@ patches:
   source: simulation 2026-04-07
   affects: [tests/coverage_matrix.md]
   status: applied
+
+- id: PP-449
+  date: 2026-04-08
+  severity: P2
+  description: "ED-322 resolved — First Inquisitor AP threshold confirmed at AP ≥ 3 per territory. Added to PP-185 section in params_board_game.md. (Second Inquisitor at AP ≥ 6 unchanged.)"
+  finding_id: ED-322
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-450
+  date: 2026-04-08
+  severity: P2
+  description: "ED-323 resolved — VTM Discretion cost scaling applied: 0 PC at VTM 3 (cooldown-only gate); 1 PC at VTM 4+. Proportional to TC contribution. Applied to PP-438 section in params_board_game.md."
+  finding_id: ED-323
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-451
+  date: 2026-04-08
+  severity: P2
+  description: "ED-324 resolved — Institutional Mandate trigger made deterministic: fires on actions targeting Mandate stat OR unique clock/track (TC/Church, PI/Hafenmark, VTM/Varfell). Stat targeting Stability/Influence/Wealth/Military does not trigger. Added trigger scope clause to Institutional Mandate Uphold/Appease section."
+  finding_id: ED-324
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-452
+  date: 2026-04-08
+  severity: NOTE
+  description: "ED-325 resolved — AP is per-territory per existing PP-185 (no rule change). Inquisitor deploys in territory where AP threshold is crossed. Counter-Narrative AP clarification added to PP-441 section. No mechanical change."
+  finding_id: ED-325
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-453
+  date: 2026-04-08
+  severity: NOTE
+  description: "ED-326 resolved — Church Prominence update folded into Accounting Step 4b (mandatory bookkeeping). Church player marks Prominent territories at Step 4. No new component required. Added to Phase 5 Accounting sequence."
+  finding_id: ED-326
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied

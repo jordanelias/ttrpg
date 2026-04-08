@@ -1710,7 +1710,7 @@ editorial_decisions:
     status: resolved
     date_created: 2026-04-07
     date_resolved: 2026-04-07
-    decision: "Hafenmark Diplomat card defined: Senator Outward, Influence vs Ob = target Mandate ÷ 2. Diplomatic Tokens placed on success/overwhelming (permanent, public, max 1/faction mat). Token effect: target counts as Support in Parliamentary Sessions. Cannot target Church if PI < 3. [FLAG: confirm Parliamentary Session pre-commitment and Token max-1-per-faction before BG compilation.]"
+    decision: "Hafenmark Diplomat card: Senator Outward, Influence vs Ob = target Mandate ÷ 2. Diplomatic Tokens (permanent, public, max 1/faction mat) placed on success/overwhelming. Token effect: target counts as Support in Parliamentary Sessions regardless of declared vote. Cannot target Church if PI < 3. Confirmed."
     description: >
       Hafenmark Diplomat card is undefined in all canonical sources. Hafenmark's
       hand includes 1x Diplomat card (confirmed in params_board_game.md card
@@ -1726,7 +1726,7 @@ editorial_decisions:
     status: resolved
     date_created: 2026-04-07
     date_resolved: 2026-04-07
-    decision: "RDT 0–6 and TD 0–5 tables reconstructed from inference + cascade test data. RDT advancement via Reformed Settlement events (max 1/arc). TD activates at RDT 2; advances when Church Asserts; frozen by Accommodate; regresses on Excommunication without RDT advance. Full tables in params_board_game.md §RDT/TD. [FLAG: confirm RDT 6 (+1 Ob to all diplomatic actions targeting Hafenmark) before compilation.]"
+    decision: "RDT 0–6 and TD 0–5 tables confirmed. RDT advances via Reformed Settlement (max 1/arc). TD activates at RDT 2; advances when Church Asserts; frozen by Accommodate; regresses on Excommunication without RDT advance. RDT 6 effect confirmed: +1 Ob to all diplomatic actions targeting Hafenmark. Full tables in params_board_game.md §RDT/TD."
     description: >
       Hafenmark RDT (Reformed Doctrine Track, 0-6) and TD (Theological
       Dissatisfaction, 0-5) full mechanics exist only in SUPERSEDED v04 B5.
@@ -1742,7 +1742,9 @@ editorial_decisions:
 
 
   - id: ED-322
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "First Inquisitor at AP ≥ 3 per territory (symmetric gap: first ≥3, second ≥6). Active Inquisition generates AP 2–3/use — first deploys after ~1.5 uses. Added to PP-185 in params_board_game.md."
     date_created: 2026-04-07
     description: >
       First Inquisitor Attention Pool deployment threshold is undefined in all canonical
@@ -1757,7 +1759,9 @@ editorial_decisions:
     tags: [board_game, church, attention_pool, inquisitors]
 
   - id: ED-323
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "VTM Discretion cost: 0 PC at VTM 3 (cooldown-only; TC contribution low); 1 PC at VTM 4+ (TC contribution high). Applied to PP-438 in params_board_game.md."
     date_created: 2026-04-07
     description: >
       PP-438 VTM Discretion cost scaling. Simulation (SIM-PP-05) shows Discretion
@@ -1773,7 +1777,9 @@ editorial_decisions:
     tags: [board_game, varfell, vtm, patience_protocol]
 
   - id: ED-324
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "Institutional Mandate trigger is deterministic: fires when a Domain Action targets the faction Mandate stat OR unique clock/track (TC/Church, PI/Hafenmark, VTM/Varfell). Stability, Influence, Wealth, Military do not trigger. No GM discretion."
     date_created: 2026-04-07
     priority: P2
     description: >
@@ -1790,7 +1796,9 @@ editorial_decisions:
     tags: [board_game, institutional_mandate, all_factions]
 
   - id: ED-325
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "Resolved by existing PP-185: AP is per-territory (ceiling 10). Inquisitor deploys in territory where AP threshold is crossed. Counter-Narrative AP in faction-X territory → Inquisitor may deploy there. No rule change."
     date_created: 2026-04-07
     priority: P2
     description: >
@@ -1806,7 +1814,9 @@ editorial_decisions:
     tags: [board_game, church, attention_pool, inquisitors, counter_narrative]
 
   - id: ED-326
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "Church Prominence check folded into Accounting Step 4b (mandatory bookkeeping at clock advance step). Church marks Prominent territories on faction mat each Accounting. No new component. Added to Phase 5 sequence in params_board_game.md."
     date_created: 2026-04-07
     priority: P3
     description: >
