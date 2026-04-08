@@ -1,6 +1,6 @@
-<!-- version: v0.14-AUD3-R2 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-04 -->
+<!-- version: v0.15-PP428-442 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-07 -->
 <!-- NOTE: stage6_factions.md is STALE for BG faction mechanics. Use BG column for board game/hybrid. -->
-<!-- PATCHES APPLIED: PP-167, PP-168; PP-195; PP-402; PP-403; PP-405 (Resentment token ED-298; coalition enumeration ED-299) -->
+<!-- PATCHES APPLIED: PP-167, PP-168; PP-195; PP-402; PP-403; PP-405; PP-428–442; PP-431-COR; PP-441-COR | EDITORIALS RESOLVED: ED-311 (Path B Option A), ED-318 (Total Domination), ED-319 (Parish/Cathedral), ED-320 (Diplomat card), ED-321 (RDT/TD) -->
 <!-- STALE CHECK: TTRPG column from v0.14 compiled. BG column from bg_v05 design. -->
 
 # params_factions.md — Factions
@@ -478,3 +478,40 @@ relevant stats to meet or exceed the listed threshold simultaneously.
 Fog-of-war exemption applies to all coalitions per PP-404.
 Coalition triggers are public knowledge (the threshold conditions are known); only the current stat values are subject to fog of war.
 
+
+
+## Hafenmark — Diplomat Card (ED-320 RESOLVED)
+See params_board_game.md §Hafenmark — Diplomat Card for full mechanics.
+**Summary:** Senator Outward, Influence vs Ob = target Mandate ÷ 2, once/season. Diplomatic Tokens enable Parliamentary Session pre-commitment. Restriction: not Church if PI < 3.
+
+## Hafenmark — RDT/TD Tracks (ED-321 RESOLVED)
+Full tables in params_board_game.md §RDT/TD.
+**Summary:** RDT 0–6 (Reformed Settlement advances); TD 0–5 (activates at RDT 2, advances when Church Asserts).
+
+## Church — Parish/Cathedral (ED-319 RESOLVED)
+Full rules in params_board_game.md §Parish/Cathedral System.
+**Summary:** 2 Consul Inward successes + 1W = Parish (CV floor 1). 5 total + 3W total = Cathedral (CV floor 2 + Prominence +1). Parish survives control change; Cathedral degrades to Parish.
+
+## Total Domination (ED-318 RESOLVED)
+**Available to all factions.** TCV ≥ 28 + all rivals at Stability 0 (eliminated OR Submitted) for 2 consecutive Accounting steps. Submission: voluntary at Stability 0; submitted faction becomes NPC vassal.
+
+## Varfell — Warden Recognition (WR) Track (ED-311 RESOLVED)
+Range 0–4. Replaces WA+WC split for Path B. See params_board_game.md §Varfell Path B for full rules.
+
+## Varfell — Revelation Tokens (PP-439)
+Full reveal = Overwhelming Tribune Investigate OR 4 consecutive PC Spy successes.
+Token placed on target faction mat (public, permanent). Two tokens on different rival mats = Path A fully revealed condition met.
+
+## Crown — Royal Charter (PP-433)
+Max active Charters = Mandate ÷ 2 round up. Charter territory: Govern/Trade −1 Ob for all factions; Church Seizure +1 Ob; Crown own actions −2 Ob. Dissolves on control transfer.
+
+## Crown — Thread Liaison (PP-436)
+Phase 1 declarative. Designate one allied faction. Their Thread operations in Crown territories count toward Crown co-victory RS tracking. Dissolves on military conflict.
+
+## Crown — Diplomatic Outreach to Schoenland (PP-437)
+Senator Outward, Crown only. Influence vs Ob = AER level min 1. Cannot combine with Formal Crown Treaty same season.
+
+## Counter-Intelligence Postures (PP-442)
+- Crown Royal Guard: cancel 1 Intel action targeting Crown per season (Phase 4 Priority 1, no card).
+- Hafenmark Procedural Objection: on Varfell Investigate success, costs Challenge use; if M ≥ 4, revealed stat falsified for non-Varfell observers.
+- Church Sanctuary extension: also blocks Varfell 4-PC Spy once per season.

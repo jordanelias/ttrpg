@@ -152,18 +152,17 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 +
 | Varfell controls ≥ 1 territory outside starting 4 | — |
 
 #### Path B — Southernmost Dominion
-[ED-311 OPEN — awaiting user decision. See designs/board_game/varfell_path_b_redesign_ed311.md]
-
-Current provisional conditions pending ED-311:
+[ED-311 RESOLVED — Option A (4 conditions + WR track), 2026-04-07]
 
 | Condition | Threshold |
 |-----------|-----------|
 | TCV held | ≥ 8 |
-| Control T4 (Vargstad) AND T13 (Stillhelm) | both held |
+| Control T4 (Grauwald) AND T13 (Oastad) | both held |
 | VTM | ≥ 3 |
 | Warden Recognition (WR) | ≥ 2 |
 
-**Blocked if:** WR has ever returned to 0 after advancing past 1.
+**WR track (0–4):** See params_board_game.md §Varfell Path B for full WR track rules.
+**Blocked if:** WR has ever returned to 0 after first advancing past 1.
 
 #### Path C — Thread Supremacy
 
@@ -366,3 +365,29 @@ Autonomous TCV changes from uninvestigated Domain Echoes count toward or against
 | PP-423 | Crown | Formal Crown Treaty mechanic |
 | PP-424 | System | Deed system dissolved — all factions |
 | PP-425 | WR | Warden Recognition track defined (0–4) |
+
+
+---
+
+## 5. Total Domination (ED-318 RESOLVED, 2026-04-07)
+
+Available to all playable factions as alternate victory path.
+
+| Condition | Threshold |
+|-----------|-----------|
+| TCV held | ≥ 28 |
+| All rival factions | Stability 0 (eliminated) OR Submitted |
+
+Both conditions must hold simultaneously for 2 consecutive Accounting steps.
+
+**Submission:** Any faction at Stability 0 that has not been eliminated may formally Submit at Accounting. Submitted faction: removed from victory competition, remains on board as NPC vassal (stats halved rounded down, no independent actions). The Total Domination faction must hold all non-Submitted, non-eliminated rivals at Stability 0 simultaneously.
+
+---
+
+## 6. Notes on Spoiler Dynamics (SIM-SPOILER-BG-01 + SIM-SPOILER-HY-01, 2026-04-07)
+
+Simulation confirms that spoiler strategies are functional. Key findings:
+- Church spoiling Crown: viable 5–8 season delay via Mandate maintenance + Inquisitor deployment. Crown counter: Royal Decree chain.
+- Varfell spoiling Church: TC suppression via Counter-Narrative is minor (−0.135 TC/use expected); primary effect is AP pressure. Hybrid mode allows invisible spoiling via personal-scale Zoom In actions.
+- Institutional Mandate trigger scope: [EDITORIAL: ED-324 — confirm trigger fires on Mandate-targeting actions only.]
+- Church Prominence tracker: [EDITORIAL: ED-326 — recommend tracker on Church mat for Counter-Narrative eligibility.]

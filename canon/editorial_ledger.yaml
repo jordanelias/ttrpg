@@ -1672,8 +1672,10 @@ editorial_decisions:
     tags: [debate, amplify, composure, stalemate]
 
   - id: ED-318
-    status: flagged
+    status: resolved
     date_created: 2026-04-07
+    date_resolved: 2026-04-07
+    decision: "TCV ≥ 28 (all controllable territory). Submission mechanic: Option B — forced at Stability 0. Submitted factions become NPC vassals (stats halved, no actions). Total Domination faction must hold all rivals at Stability 0 simultaneously for 2 consecutive Accounting steps."
     description: >
       Total Domination path for all four factions. User established all factions
       win by holding all territories except T15 (Askeheim) and T16 (Schoenland)
@@ -1687,8 +1689,10 @@ editorial_decisions:
     tags: [board_game, victory, all_factions]
 
   - id: ED-319
-    status: flagged
+    status: resolved
     date_created: 2026-04-07
+    date_resolved: 2026-04-07
+    decision: "2-season Parish (1W) / 5-season Cathedral (3W total). Parish survives control change; Cathedral degrades to Parish. Max 1 per territory. Max 1 upgrade attempt per arc."
     description: >
       Church Parish/Cathedral building system. Proposed: Church Consul Inward,
       2 sequential successful Consul actions = Parish (CV floor raised to 1,
@@ -1703,8 +1707,10 @@ editorial_decisions:
     tags: [board_game, church, conviction_value, seizure]
 
   - id: ED-320
-    status: flagged
+    status: resolved
     date_created: 2026-04-07
+    date_resolved: 2026-04-07
+    decision: "Hafenmark Diplomat card defined: Senator Outward, Influence vs Ob = target Mandate ÷ 2. Diplomatic Tokens placed on success/overwhelming (permanent, public, max 1/faction mat). Token effect: target counts as Support in Parliamentary Sessions. Cannot target Church if PI < 3. [FLAG: confirm Parliamentary Session pre-commitment and Token max-1-per-faction before BG compilation.]"
     description: >
       Hafenmark Diplomat card is undefined in all canonical sources. Hafenmark's
       hand includes 1x Diplomat card (confirmed in params_board_game.md card
@@ -1717,8 +1723,10 @@ editorial_decisions:
     tags: [board_game, hafenmark, card_hand]
 
   - id: ED-321
-    status: flagged
+    status: resolved
     date_created: 2026-04-07
+    date_resolved: 2026-04-07
+    decision: "RDT 0–6 and TD 0–5 tables reconstructed from inference + cascade test data. RDT advancement via Reformed Settlement events (max 1/arc). TD activates at RDT 2; advances when Church Asserts; frozen by Accommodate; regresses on Excommunication without RDT advance. Full tables in params_board_game.md §RDT/TD. [FLAG: confirm RDT 6 (+1 Ob to all diplomatic actions targeting Hafenmark) before compilation.]"
     description: >
       Hafenmark RDT (Reformed Doctrine Track, 0-6) and TD (Theological
       Dissatisfaction, 0-5) full mechanics exist only in SUPERSEDED v04 B5.
@@ -1763,3 +1771,52 @@ editorial_decisions:
     source: SIM-PP-05 2026-04-07
     blocks: PP-438 application
     tags: [board_game, varfell, vtm, patience_protocol]
+
+  - id: ED-324
+    status: flagged
+    date_created: 2026-04-07
+    priority: P2
+    description: >
+      Institutional Mandate trigger scope (SIM-SPOILER-BG-01 finding).
+      Current text: trigger fires when "Domain Action directly challenges faction
+      core institutional authority." Does this apply only when the target stat is
+      Mandate, or for any action with an authority-challenging framing? Recommend
+      clarification: trigger fires when a Domain Action targets the faction's
+      Mandate stat specifically OR directly attacks their unique mechanic (TC for
+      Church, PI for Hafenmark, VTM for Varfell). Stability/Influence/Wealth/Military
+      do not trigger.
+    source: SIM-SPOILER-BG-01 2026-04-07
+    blocks: Institutional Mandate trigger adjudication
+    tags: [board_game, institutional_mandate, all_factions]
+
+  - id: ED-325
+    status: flagged
+    date_created: 2026-04-07
+    priority: P2
+    description: >
+      Attention Pool (AP) per-territory vs global pool (SIM-SPOILER-HY-01 finding).
+      When Counter-Narrative generates AP in faction-X territory, does the Inquisitor
+      deploy in that territory (where AP was generated) or in the closest Church-held
+      territory? Current understanding: AP is a Church global pool, accumulation from
+      any territory contributes to threshold, Inquisitor deploys in the territory where
+      the AP-generating action occurred. Requires designer confirmation before BG
+      compilation.
+    source: SIM-SPOILER-HY-01 2026-04-07
+    blocks: Inquisitor deployment target when AP generated in non-Church territory
+    tags: [board_game, church, attention_pool, inquisitors, counter_narrative]
+
+  - id: ED-326
+    status: flagged
+    date_created: 2026-04-07
+    priority: P3
+    description: >
+      Church Prominence tracker recommendation (SIM-SPOILER-HY-01 finding).
+      Counter-Narrative target eligibility requires comparing Church global Mandate
+      to each territory controller's Mandate each season. Recommend: a "Church
+      Prominent in:" tracker on the Church mat, updated at Accounting. Lists
+      territories where Church Mandate > controller Mandate. Reduces per-action
+      calculation burden. Also useful for Church Seizure Ob formula and for
+      Parish/Cathedral Piety Spread eligibility.
+    source: SIM-SPOILER-HY-01 2026-04-07
+    blocks: nothing (QoL recommendation only)
+    tags: [board_game, church, counter_narrative, seizure, quality_of_life]
