@@ -184,5 +184,5 @@ After RM clears 3 territories (S14 estimate, RS ~55): 3 territories at CV ≤ 1,
 | F-RM-05 | P3 | RM requires 5 non-adjacent Presence territories — the non-adjacency constraint forces RM into hostile territory early (S4–7) when Mandate is lowest. Timing mismatch. |
 
 **New editorial flagged:**
-[EDITORIAL: ED-327 — RM bootstrap problem: Mandate 2 Organising at 42% failure rate with Stability −1 penalty creates elimination risk before RM establishes its first viable Presence base. Recommend: consider whether RM's Community Organising should be exempt from PP-403 (failed Domain Action = Stability −1) as self-preservation mechanic, OR whether RM should start with 1 Presence marker in a neutral territory. P2 — does not block but significantly affects RM playability.]
+[ED-327 — RESOLVED by PP-460: RM redesigned as statless faction. No Mandate, no Stability, no PP-403 exposure. Community Organising failure = retry next season with no cost. Bootstrap problem eliminated. See PP-460.]
 
