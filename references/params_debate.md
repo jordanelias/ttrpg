@@ -1,7 +1,8 @@
-<!-- version: v0.14+design-ST4-R1 | sources: debate_system_redesign_v1.md Part 6 v1.5 | last_updated: 2026-04-03 -->
+<!-- version: v0.14+design-ST4-R2 | sources: debate_system_redesign_v1.md Part 6 v1.7 | last_updated: 2026-04-08 -->
 <!-- NEW SECTIONS: §6.11 Pre-Debate Prep, §6.12 Multi-Party, §6.13 BG Vote, §6.14 Hybrid, §6.15 Thread -->
 <!-- GAP-DS-01/02/03/04/05/06/07/08/16/17/18/19 all resolved in v1.4/v1.5 -->
 <!-- SIM-DEBT-02: Corroboration in CLASH calibration pending -->
+<!-- PP-449–PP-464 applied 2026-04-08: SIM-SC-01 all P1/P2 resolutions — see patch_register.yaml -->
 <!-- PATCHES APPLIED: D-01–D-10, R-01–R-07, v2-P01–v2-P04, R-65, R-66 -->
 <!-- PP-232: Argue pool corrected to (Cognition × 2) + History; Initiative to Attunement; -->
 <!--         Step 1 action name flagged ED-132; Diverge trigger flagged ED-133; -->
@@ -42,47 +43,72 @@ Post-Diverge state: stays with holder.
 
 **Step 2 — Choose:** Each orator selects Genre (Past/Present/Future) + Orientation (Revealing/Obscuring).
 
+**Step 2c — Refute (optional) [PP-458]:** Declared after opponent claims Memory bonus, before dice are rolled. Roll Recall (Rec) alone, Ob 2, TN 7.
+| Degree | Effect |
+|---|---|
+| Failure | Refute fails silently. Opponent Memory bonus stands. |
+| Success | Memory bonus denied. Opponent loses +2D. |
+| Overwhelming | Memory bonus denied AND opponent −1D on Argue roll. |
+Max one Refute per exchange per orator. Cannot Refute a Refute.
+
 **Step 3 — Argue:** Lower Attunement (lower initiative) declares first. Higher Attunement hears, then declares and rolls. (PP-232)
 
 **Step 4 — Resolve** (by interaction type):
 
 | Interaction | Condition | Resolution |
 |-------------|-----------|-----------|
-| CLASH | Same genre, opposite orientation | Compare successes. Margin = difference. Apply movement formula. |
-| AMPLIFY | Same genre, same orientation | Combined pools vs Conviction Track resistance. |
-| CROSS | Different genres | Each evaluated independently. |
-| DIVERGE | Post-Diverge state | No Step 1/Choose. Direct pool vs pool, flat orientation weights. [EDITORIAL: ED-133] |
+| CLASH | Same genre, opposite orientation | Compare successes. Margin = difference. Revealing wins: apply effective_margin formula. Obscuring wins: skip formula, place Doubt Marker. [PP-450] |
+| AMPLIFY | Same genre, same orientation | Combined pools (cap: highest individual pool × 2) vs resistance. Revealing wins: apply formula. Obscuring wins: Doubt Marker. [PP-242/250, PP-450] |
+| CROSS | Different genres | Each side evaluated independently (simultaneous). effective_margin = floor(successes/2 × genre_weight). No strain to either side. No winner/loser designation. [PP-245, PP-456] |
+| Deadlock State | Declared by GM at exchange 3+ after 2+ consecutive same-orientation exchanges | No Step 1/Choose. Direct pool vs pool, flat weights. [PP-452, ED-133/PP-313] |
+| TIE | Equal successes — CLASH or AMPLIFY only; NOT CROSS | Both take 1 strain; CT +1 toward initiative holder. In CROSS: both-zero = no consequence. [PP-449] |
 
 ## Conviction Track
 Range: 0–10. Side A wins ≥ 7. Side B wins ≤ 3. Compromise zone: 4–6.
 Starting position: Game Master-set, typically 4–6 neutral.
-Audience resistance = ceil(average Stability of represented factions / 4). Range: 1–2 for typical factions (Stability 2–7). Example: Hafenmark Stability 4 -> resistance = ceil(4/4) = 1. Guilds Stability 5 -> resistance = ceil(5/4) = 2. (PP-278)
+Audience resistance = ceil(average Stability of represented factions / 4). Range: 1–2 for typical factions (Stability 2–7). Example: Hafenmark Stability 4 → resistance = ceil(4/4) = 1. Guilds Stability 5 → ceil(5/4) = 2. (PP-278, PP-451 — design doc §6.1 aligned to this formula)
 
 Movement formula:
 - If (margin × genre_weight × orientation_weight) ≤ resistance → 0 movement.
 - If greater → ⌊(margin × genre_weight × orientation_weight) − resistance⌋ toward winner.
 
-## Genre Weights
-Primary genre: ×1.0. Other two genres: ×0.5 base.
-One genre boosted +0.5 by audience ethical mode:
-| Faction / Mode | Boosted Genre |
-|----------------|--------------|
-| Crown (Virtue Ethics) | Present |
-| Church (Divine Command) | Past |
-| Hafenmark (Categorical Imperative) | Past |
-| Varfell (Consequentialism) | Future |
-| Guilds (Moral Relativism) | Game Master picks |
-| Restoration (Rawlsian Social Contract) | Future |
+## Genre Weights [PP-453]
+Genre weights use an adjacency model (Past→Present→Future arc):
 
-Weight range: 0.5–1.5. Never 0, never above 1.5. Fixed at setup.
+| Genre vs Question Type | Base Weight |
+|---|---|
+| Primary (matches question type) | ×1.0 |
+| Adjacent (one step on arc) | ×0.75 |
+| Opposed (two steps from primary) | ×0.5 |
 
-## Orientation Weights
-Revealing: ×1.0 | Obscuring: ×0.75 (invertible for specific scenarios).
+Adjacency rules:
+- Past primary: Present = adjacent (×0.75), Future = opposed (×0.5)
+- Present primary: Past = adjacent (×0.75), Future = adjacent (×0.75) — Present is central genre
+- Future primary: Present = adjacent (×0.75), Past = opposed (×0.5)
+
+Audience ethical mode boosts ONE genre by **+0.25** (not +0.5 — revised PP-453):
+| Faction / Mode | Boosted Genre | Boosted Weight |
+|---|---|---|
+| Crown (Virtue Ethics) | Present | ×1.25 if primary, ×1.0 if adjacent |
+| Church (Divine Command) | Past | ×1.25 if primary, ×1.0 if adjacent |
+| Hafenmark (Categorical Imperative) | Past | ×1.25 if primary, ×1.0 if adjacent |
+| Varfell (Consequentialism) | Future | ×1.25 if primary, ×1.0 if adjacent |
+| Guilds (Moral Relativism) | GM picks | ×1.25 on chosen genre |
+| Restoration (Rawlsian Social Contract) | Future | ×1.25 if primary, ×1.0 if adjacent |
+
+Weight range: 0.5–1.25. Fixed at setup.
+
+## Orientation Weights [PP-450]
+Revealing: ×1.0 — used in effective_margin formula for Revealing wins.
+Obscuring: no orientation weight in formula. Obscuring check fires BEFORE effective_margin formula runs.
+- Obscuring win (CLASH or AMPLIFY): skip formula entirely. Place Doubt Marker on opponent. No CT movement.
+- The ×0.75 Obscuring weight is struck — it was never applied (Doubt Marker replaces CT movement).
 Fixed at setup; recorded in ledger.
 
-## Composure
-[EDITORIAL: ED-127 — Composure to mirror Health/Wound structure with Rattled as wound-equivalent threshold. Formula and track pending design decision.]
-Recovery: Reframe action (costs initiative; Cognition Ob 2 — [EDITORIAL: ED-127]).
+## Composure [PP-460, ED-127 resolved]
+Composure = Charisma (Cha) + 6. Range: 7–13. Parallels Health = Endurance + 6.
+Rattled threshold: strain ≥ Composure. Effect: −2D to all debate rolls; Focus defence lost. Persists until Unmask or scene end.
+Recovery: Reframe action (costs initiative; Cognition Ob 2).
 Concession: voluntary, or forced at Composure 0.
 
 ## Diverge State
@@ -93,8 +119,8 @@ Ends: when Conviction Track exits compromise zone or Composure concession fires.
 ## Multi-Party Debates
 [GAP: multi-party procedure not yet defined — design_v1.md F-5 identifies this as a structural gap.]
 
-## Composure Restoration (ED-060 resolved — provisional)
-Full Composure restores at scene end. Between-session: full restore. No partial recovery mechanic. [PROVISIONAL]
+## Composure Restoration (ED-060 resolved)
+Full Composure restores at scene end. Between-session: full restore. No partial recovery mechanic. [PP-460]
 
 ## Momentum in Debate (ED-059 resolved — provisional)
 Momentum may be spent in Debate rolls (1 Momentum = 1 automatic success, reduces effective Ob by 1). Applies to Argue and Step 1 rolls. Does not apply to Coherence Retention rolls. [PROVISIONAL]
@@ -112,11 +138,11 @@ Niflhel cannot participate in Formal or Grand Debates. Their social toolkit:
 - Thread Insight (TS≥30 only): Attunement Step 1 before negotiation; reveals one unstated position.
 [PROVISIONAL — ED-041]
 
-## Poise Attribute (ED-027 resolved — provisional)
-'Poise' is deprecated. All references to Poise in debate mechanics use Composure. [PROVISIONAL — ED-127 governs Composure formula]
+## Poise Attribute (ED-027 resolved)
+'Poise' is deprecated. All references use Composure = Charisma + 6. [PP-460]
 
-## NPC Composure Formula (ED-052 resolved — provisional)
-[PROVISIONAL — pending ED-127 Composure redesign.]
+## NPC Composure Formula (ED-052 resolved)
+NPC Composure = Charisma + 6. Same formula as player characters. [PP-460]
 
 ## Debate Corroboration (ED-014 resolved 2026-04-03)
 General rule: any willing ally present at the scene may corroborate (+1D to Argue roll).
@@ -173,7 +199,10 @@ No countdown track. GM judgment governs behaviour between entry and exit rolls.
 <!-- PP-242 applied 2026-04-04: AMPLIFY combined pool cap (PROVISIONAL — ED-150) -->
 <!-- PP-245 applied 2026-04-04: CROSS exchange simultaneous resolution (PROVISIONAL) -->
 
-## AMPLIFY Combined Pool Cap (PP-242) [PROVISIONAL — ED-150]
+## Doubt Marker — Design Intent [PP-462]
+Doubt Marker scale-dependency is intentional. Against evenly-matched opponents, it denies all CT movement. Against significantly stronger opponents, it reduces but does not cancel movement. Obscuring is the tactically correct play when behind, not a universal denial — dominant opponents must be outargued.
+
+## AMPLIFY Combined Pool Cap (PP-242)
 AMPLIFY (same genre, same orientation) combined pool maximum = **highest individual orator pool × 2**.
 This prevents degenerate stacking with 3+ orators while preserving meaningful collaboration.
 - Example: Lead orator 15D, helper orator 12D → combined cap = 30D (15 × 2).
@@ -212,6 +241,9 @@ Forced Unmask from external disruption (violence, arrest): treated as **Register
 Effect: Debate suspended. Initiating party: Mandate −1 (public violence stigma). Restarting requires new Scene setup.
 If violence targets the Registered orator: the target gains automatic CROSS track movement (1 point) before suspension.
 [FLAGGED: confirm Mandate penalty value.]
+
+## Concentration Floor [PP-463]
+Concentration minimum is 0. Multiple depletion triggers in the same exchange cannot reduce below 0. If Concentration would be reduced below 0 by simultaneous triggers: set to 0, Spent fires once.
 
 ## ED-132 Resolution (PP-287)
 Debate exchange Step 1 action name: **Appraise** (adopted from candidate list).
@@ -297,6 +329,14 @@ Three or more orators may contest simultaneously using dual Conviction Tracks.
 **Tiebreak — simultaneous audience capture (GAP-S-01 open — ED-179):** [UNDEFINED. If both Track A-B and Track A-C reach audience capture threshold simultaneously, resolution order is unspecified. Do not use Multi-Party Contest in competitive play until ED-179 resolved.]
 
 [FLAGGED: confirm two-track structure; confirm Appraise sharing; confirm simultaneous resolution.]
+
+## §3.8 Thread Consequences — Classification [PP-461]
+§3.8 genre-win consequences are **social co-movement events**, not Thread operations. P-01 mandatory three-dimensional auto-effects do not apply. Narrative descriptions in §3.8 are GM guidance, not mechanical mandates.
+Mandatory mechanical triggers (fire automatically):
+- Evidence (Past) genre win: RS +1.
+- Character (Present) genre win: Disposition change with all witnesses.
+- Consequence (Future) genre win: +1D on first Domain Action pursuing argued future within the season.
+Reputation shifts and audience rendering shifts: GM-narrated.
 
 ## ED-132 Resolution (PP-312) — Debate Step 1 Name
 Step 1 action name: **Appraise** (adopted). "Read" struck. "Judge" struck.

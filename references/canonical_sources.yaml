@@ -110,7 +110,7 @@ systems:
     design_doc: designs/debate/debate_system_redesign_v1.md
     compilation_stage: compilation/v0.14/stage9_social.md
     compilation_current: false
-    note: "Stage9 STALE/EMPTY. debate_system_redesign_v1.md is canonical. SIM-DEBT-01 open."
+    note: "Stage9 STALE/EMPTY. debate_system_redesign_v1.md is canonical. SIM-SC-01 resolved 2026-04-08 — PP-449–PP-464 applied. SIM-DEBT-01 resolved. Design doc v1.7."
 
   board_game:
     canonical: designs/board_game/valoria_bg_v05_simulation_and_patches.md

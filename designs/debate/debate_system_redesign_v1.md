@@ -262,7 +262,11 @@ When a Debate concludes, the winning argument's genre determines the type of Thr
 | **Character** | Co-movement — epistemic shift | An Overwhelming Character victory shifts how the audience renders the target's identity. Disposition change with all present witnesses. This is not Thread manipulation — it is the natural co-movement of an epistemic event at social scale. No Rendering Stability change unless a practitioner amplifies it. |
 | **Consequence** | Actualization — Domain Echo | The argued future becomes a probability anchor. +1D on the first Domain Action pursuing that consequence within the season. The argument's force partially actualizes the future it described. Rendering Stability +1 if the consequence involves Thread-sensitive matters. |
 
-**Canon grounding (P-01, Inseparability):** These are not three separate effects. They are three descriptions of the same co-movement. An Evidence argument that invokes the past also shifts how the audience renders the present (epistemic) and partially actualizes a future response (actual). The system foregrounds one dimension per genre for mechanical clarity, but the Game Master should narrate all three dimensions shifting. The Thread consequence fires automatically — social events at sufficient scale always produce co-movement. Debate is high-intensity social rendering; the threads move.
+**Classification [PP-461]:** §3.8 consequences are social co-movement events, not Thread operations. P-01 mandatory three-dimensional auto-effects do not apply. The three-dimensional descriptions above are narrative guidance for the Game Master, not mechanical mandates.
+
+**Mandatory mechanical effects (fire automatically):** RS +1 for Evidence and Consequence genre wins. Disposition change with all witnesses for Character genre wins. Reputation shifts and rendering shifts: Game Master-narrated.
+
+**Canon grounding (P-01, Inseparability):** These are three descriptions of the same co-movement. The system foregrounds one dimension per genre for mechanical clarity, but the Game Master should narrate all three dimensions shifting. Social events at sufficient scale always produce co-movement. Debate is high-intensity social rendering; the threads move.
 
 ## 3.9 Stamina Analogue: Concentration
 
@@ -357,7 +361,7 @@ Not all Debates are symmetric. The institution shapes the rules.
 # PART SIX: COMPILED MECHANICAL SPECIFICATION
 ## Source: debate_stress_test_v1.md + debate_stress_test_v2.md
 ## Status: OPERATIVE — supersedes quaestio design (Parts 3–4) for play purposes
-## Version: v1.6 (PP-119 through PP-123 applied 2026-04-02 — audit D-02 + full three-mode + Thread/temporal verified)
+## Version: v1.7 (PP-449–PP-464 applied 2026-04-08 — SIM-SC-01 P1/P2 resolutions: genre adjacency, interaction names, resistance, Obscuring, TIE scope, Regroup, Composure, Thread co-movement classification)
 ## Parts 1–4 retained as design reference and historical/philosophical foundation
 
 ---
@@ -411,21 +415,32 @@ This declaration is made before the first exchange. Players may not request form
 | "Is X true? / Is this person fit?" | Present |
 | "Should we do X? / What should be done?" | Future |
 
-**Step 2 — Set Genre Weights from Audience Ethical Mode:**
-- Primary genre: ×1.0
-- Other two genres: ×0.5 base
-- Audience ethical mode adjusts ONE genre by +0.5:
+**Step 2 — Set Genre Weights from Audience Ethical Mode [PP-453]:**
 
-| Faction / Mode | Adjustment |
+Genre weights use an adjacency model based on the Past→Present→Future arc:
+
+| Genre vs Question Type | Base Weight |
 |---|---|
-| Virtue ethics (Crown) | Present +0.5 |
-| Divine command (Church) | Past +0.5 |
-| Categorical imperative (Hafenmark) | Past +0.5 |
-| Consequentialism (Varfell) | Future +0.5 |
-| Moral relativism (Guilds) | Game Master chooses based on context (this IS moral relativism) |
-| Rawlsian social contract (Restoration) | Future +0.5 |
+| Primary (matches question type) | ×1.0 |
+| Adjacent (one step on arc) | ×0.75 |
+| Opposed (two steps from primary) | ×0.5 |
 
-Weight range: 0.5, 1.0, or 1.5. Never 0, never above 1.5. Weights are fixed at setup. Do not shift dynamically. Record in ledger.
+Adjacency:
+- Past primary: Present = adjacent (×0.75), Future = opposed (×0.5)
+- Present primary: Past = adjacent (×0.75), Future = adjacent (×0.75) — Present is the central genre
+- Future primary: Present = adjacent (×0.75), Past = opposed (×0.5)
+
+Audience ethical mode boosts ONE genre by +0.25:
+| Faction / Mode | Boosted Genre | Boosted Weight |
+|---|---|---|
+| Virtue ethics (Crown) | Present | ×1.25 if primary, ×1.0 if adjacent |
+| Divine command (Church) | Past | ×1.25 if primary, ×1.0 if adjacent |
+| Categorical imperative (Hafenmark) | Past | ×1.25 if primary, ×1.0 if adjacent |
+| Consequentialism (Varfell) | Future | ×1.25 if primary, ×1.0 if adjacent |
+| Moral relativism (Guilds) | GM chooses | ×1.25 on chosen genre |
+| Rawlsian social contract (Restoration) | Future | ×1.25 if primary, ×1.0 if adjacent |
+
+Weight range: 0.5–1.25. Fixed at setup. Do not shift dynamically. Record in ledger.
 
 **Step 3 — Set Orientation Weights:**
 - Revealing: ×1.0 (default)
@@ -434,7 +449,7 @@ Weight range: 0.5, 1.0, or 1.5. Never 0, never above 1.5. Weights are fixed at s
 **Step 4 — Set Conviction Track:**
 - Scale: 0 to 10. Side A wins at ≥7. Side B wins at ≤3. Compromise zone: 4–6.
 - Starting position: Game Master-set (typical neutral: 4–6). Record in ledger.
-- Audience resistance: average Stability of represented factions, round up, then −1 (minimum 0). Typical range: 0–2.
+- Audience resistance: ceil(average Stability of represented factions / 4). Typical range: 1–2. Example: Hafenmark Stability 4 → ceil(4/4) = 1; Guilds Stability 5 → ceil(5/4) = 2. [PP-451 — aligned with params_debate PP-278]
 
 **Step 5 — Define Stakes:** What each side wins, loses, or compromises on. Record before debate begins.
 
@@ -448,8 +463,8 @@ Weight range: 0.5, 1.0, or 1.5. Never 0, never above 1.5. Weights are fixed at s
 |---|---|
 | Presence modifier | max(0, floor((Presence − 3) / 2)) → Pres 1–3: +0; Pres 4–5: +1; Pres 6–7: +2. Minimum 0 — never negative. [PP-101] |
 | Focus defence | floor(Focus / 2) → passive, no roll |
-| Composure | Poise + Bonds + 3. Range 5–17. |
-| Concentration | Focus + Presence. Depletes per exchange. |
+| Composure | Charisma (Cha) + 6. Range 7–13. Parallels Health = Endurance + 6. [PP-460, ED-127 resolved] |
+| Concentration | Focus + Presence. Depletes per exchange (not during Regroup). Minimum 0. [PP-455] |
 | Attunement read pool | Attunement score only (no History bonus) |
 
 ---
@@ -478,7 +493,15 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 
 **Step 2 — Choose:** Each orator selects genre (Past / Present / Future) and orientation (Revealing / Obscuring).
 
-**Step 2b — Corroborate (optional):** Before rolling, a corroborator present at the debate may declare support (see §3.5 for full procedure — [GAP-DS-12: corroboration not yet fully ported to Part 6; use §3.5 as provisional reference]). On success: primary orator gains +1D for this exchange's Argue roll. Corroborator must share a Knot with the primary orator. [PP-104 — stub; full procedure pending editorial resolution of Knot requirement]
+**Step 2b — Corroborate (optional) [PP-459, ED-014 resolved]:** Before rolling, a corroborator present at the debate may declare support. Any ally who witnessed the relevant events may corroborate. On success (Bonds, Ob 1, TN 7): primary orator gains +1D for this exchange's Argue roll. Knot holders give full Knot bonus (not capped at +1D). Knot is no longer required — witnessing is. Maximum one corroborator per side per exchange. Asymmetric proceedings: accused corroborators roll Bonds Ob 2 [PP-116]. GAP-DS-12 resolved.
+
+**Step 2c — Refute (optional) [PP-458]:** Declared after opponent claims Memory bonus (+2D), before dice are rolled. Roll Recall (Rec) alone, TN 7, Ob 2.
+| Degree | Effect |
+|---|---|
+| Failure | Refute fails. Opponent Memory bonus stands. |
+| Success | Memory bonus denied. Opponent loses +2D. |
+| Overwhelming | Memory bonus denied AND opponent −1D on Argue roll this exchange. |
+Maximum one Refute per exchange per orator. Cannot Refute a Refute.
 
 **Step 3 — Argue:** Initiative holder declares argument and rolls first. Respondent hears declaration, then chooses genre/orientation and rolls.
 - Pool: (Presence × 2) + History bonus, TN 7.
@@ -491,46 +514,57 @@ Roll Attunement alone (no History), TN 7, Ob 1.
 
 **CLASH** (same genre, opposite orientation):
 - Compare successes. Higher wins. Margin = difference.
-- effective_margin = floor(margin × genre_weight × orientation_weight_of_winner).
-- If effective_margin > resistance → Δ = effective_margin − resistance toward winner's position on Conviction Track.
+- **Obscuring check fires first:** if the winner used Obscuring orientation, skip effective_margin formula — place Doubt Marker on opponent, no CT movement. [PP-450]
+- **Revealing winner:** effective_margin = floor(margin × genre_weight). No orientation weight — Revealing weight is ×1.0 (identity; omitted). [PP-450]
+- If effective_margin > resistance → Δ = effective_margin − resistance toward winner's position.
 - If effective_margin ≤ resistance → 0 movement.
-- Strain to loser: margin + 1 + winner's Presence modifier. Reduced by loser's Focus defence: floor(Focus/2). Minimum 1 strain regardless of Focus defence. [PP-103]
+- Strain to loser: margin + 1 + winner's Presence modifier − loser's Focus defence. Minimum 1 strain. [PP-103]
 
-**COMPETITION** (same genre, same orientation):
-- Same resolution as Clash.
-- Strain to loser: (margin − 1, minimum 1) + 1 + winner's Presence modifier. Reduced by Focus defence. Minimum 1 strain regardless of Focus defence. [PP-103]
-- No loser tracker contribution.
+**AMPLIFY** (same genre, same orientation) [renamed from COMPETITION — PP-452]:
+- Combined pool resolution: both orators on same genre+orientation combine dice. Cap: highest individual pool × 2. [PP-242/250]
+- Compare combined pool total successes vs opposing orator's successes. Margin = difference.
+- Obscuring check fires first (same as CLASH). [PP-450]
+- Revealing winner: effective_margin = floor(margin × genre_weight). CT movement if > resistance.
+- Strain to loser: (margin − 1, min 1) + 1 + winner's Presence modifier − loser's Focus defence. Minimum 1 strain. [PP-103]
 
-**DIVERGENCE** (different genre):
-- No direct comparison. Each argument evaluated independently.
-- effective_margin for each = floor((successes / 2) × genre_weight × 1.0). [orientation_weight fixed at 1.0 in Divergence — Obscuring is handled separately below. Half successes brings Divergence into comparable scale with Clash margin.] If net successes are negative (fumbles exceeded hits), effective_margin is negative and is treated as 0 by the gate (not > resistance → no movement). [PP-111]
+**CROSS** (different genres) [renamed from DIVERGENCE — PP-452]:
+- No direct comparison. Each side evaluated independently. Resolution simultaneous. [PP-245]
+- effective_margin for each = floor((successes / 2) × genre_weight). Orientation weight fixed at 1.0 for both (Obscuring in CROSS: if that side had the larger delta, place Doubt Marker instead of CT movement). [PP-099 retained]
+- If net successes negative: effective_margin = 0 (no CT movement). No additional Concentration depletion — CROSS produces no winner/loser designation. [PP-456]
 - For each side: if effective_margin > resistance → Δ = effective_margin − resistance toward that side's position.
-- Net tracker movement = difference between the two deltas; direction: toward the side with the larger delta.
-- **Obscuring in Divergence [PROVISIONAL: PP-099]:** If the side with the larger delta used Obscuring orientation, place a Doubt Marker on the opponent instead of applying tracker movement. Conviction Track does not move.
+- Net CT movement = difference of the two deltas, toward higher-delta side.
 - No strain dealt. Neither argument attacked the other.
 - Initiative stays with holder.
-- **TIE override [PROVISIONAL: PP-097]:** If both orators score equal successes (including both scoring 0), the TIE rule fires instead: both take 1 strain, Conviction Track moves +1 toward initiative holder. The "any interaction type" specification in the TIE rule takes priority over Divergence independent evaluation.
+- **CROSS both-zero:** if both effective_margins = 0 (both below or at resistance), no CT movement, no strain, no initiative transfer. TIE rule does NOT apply to CROSS. [PP-449]
 
-**TIE** (equal successes, any interaction type):
+**TIE** (equal successes — CLASH or AMPLIFY only):
 - Both orators take 1 strain.
-- Conviction Track moves +1 toward initiative holder's position.
+- CT moves +1 toward initiative holder's position.
 - Initiative stays with holder.
+- Does not apply to CROSS. [PP-449]
 
-**OBSCURING WIN** (winning exchange with Obscuring orientation):
-- Conviction Track does not move toward winner.
-- Instead: place a Doubt Marker on the opponent.
-- Doubt Marker effect: opponent's next winning exchange has its effective_margin reduced by 2 before resistance is applied.
-- Only one Doubt Marker can be active at a time. If a second Obscuring win occurs while a Doubt Marker is already active, it replaces the existing marker (no stacking). Replacement intentional — new marker supersedes old, resetting the opportunity. Stacking not permitted. [PP-113 / GAP-DS-08]
-- Doubt Marker is consumed on use.
+**DOUBT MARKER** (placed on Obscuring win in CLASH, AMPLIFY, or CROSS):
+- Opponent's next winning exchange: effective_margin reduced by 2 before resistance is applied.
+- One active at a time. Second Obscuring win replaces existing Doubt Marker (no stacking). [PP-113]
+- Consumed on use.
+- **Design intent [PP-462]:** Doubt Marker is proportional — denies all movement against evenly-matched opponents (margin 2–3), reduces but does not cancel against dominant opponents (margin 5+). Obscuring is the tactically correct play when behind, not a universal denial.
 
-**Step 5 — Forfeit actions:**
-- **Regroup:** Forfeit exchange. No argument, no strain. Conviction Track moves +1 toward non-forfeiting side (fixed, no genre weight). Concentration restores by Focus score. **Spent interaction [PROVISIONAL: PP-098]:** If Concentration was 0 when Regroup is declared, Regroup consumes the Spent state without applying the −2D/+1D penalty — no argue roll occurs during Regroup so the penalty has no target. Concentration then resets to maximum normally.
-- **Concede a Point:** Forfeit exchange. Take 1 strain. Conviction Track moves +1 toward non-forfeiting side. Gain +1D on next exchange's argument roll.
+**Deadlock State** (replaces "DIVERGE state" — PP-452):
+- Declared by GM at exchange 3+ when both orators choose same orientation for 2+ consecutive exchanges.
+- No Step 1/Appraise. No Choose. Direct pool vs pool, flat genre weights (×1.0 both sides). [ED-133/PP-313]
+- Ends when one orator wins by margin ≥ 2.
+
+**Step 5 — Forfeit actions [PP-454, PP-455]:**
+- **Regroup:** Forfeit exchange. No argument, no strain, no CT movement. Concentration restores by max(Focus score, 2). Does not count as an exchange win or loss — no Concentration depletion this exchange. **Spent interaction:** If Concentration was 0 when Regroup declared, Regroup consumes the Spent state without applying the −2D/+1D penalty. Concentration restores to max(Focus, 2).
+- **Concede a Point:** Forfeit exchange. Take 1 strain. CT moves +1 toward non-forfeiting side. Gain +1D on next exchange's argument roll. (Concede and Regroup are distinct: Regroup = neutral recovery; Concede = strategic retreat with a bonus.)
 
 **Step 6 — Strain and Concentration:**
 - Strain accumulates toward Composure.
 - At strain ≥ Composure: **Rattled** — −2D to all debate rolls; Focus defence is lost (strain not reduced). Persists until Unmask or scene end. **Stacking with Spent:** If both Rattled and Spent are active simultaneously, penalties apply cumulatively (−4D total; opponent also gains +1D from Spent). Pool minimum of 1D (params_core) applies as the floor. [PP-106]
-- Concentration depletes: −1 per exchange, −1 additional on any exchange loss. (Regroup counts as a loss for concentration purposes.) Concentration minimum is 0 — it cannot go below 0 from multiple depletion triggers in a single exchange; Spent fires immediately when Concentration reaches 0. [PP-102]
+- Concentration depletes: −1 per exchange end. −1 additional on exchange loss (CLASH or AMPLIFY only — not CROSS, not Regroup). [PP-455, PP-456]
+- Regroup: no Concentration depletion this exchange. Concentration restores instead.
+- CROSS: no winner/loser designation — no additional −1. Standard −1 per exchange applies.
+- Concentration minimum: 0. Multiple triggers cannot reduce below 0. Spent fires once when Concentration reaches 0. [PP-463]
 - At Concentration 0: **Spent** — next exchange: −2D; opponent gets +1D. Concentration then resets to maximum.
 
 **Step 7 — Game Master records exchange on hidden ledger.**
@@ -548,7 +582,7 @@ Roll Attunement alone (no History), TN 7, Ob 1.
   - Decisive win + Character genre (Present): Disposition change with all witnesses; Reputation shift (Game Master-set magnitude).
   - Compromise (4–6): No Domain Echo. Stakes partially resolve per final Conviction Track position proportional to win threshold distance.
 - **Post-debate recovery:** All strain and Concentration depletion clear at scene end. Spent clears at scene end. [PP-108]
-- **Debate Fatigue [PP-114 / PP-117]:** If an orator was Rattled at any point during the debate, they carry Debate Fatigue into this session. Effect: −1D on their next social roll (Argue, Corroborate, or Circles roll); consumed after that roll regardless of outcome. One instance per session regardless of how many debates triggered it. Clears at next session start if unused. [GAP-DS-16 resolved]
+- **Debate Fatigue [PP-457]:** If an orator reaches Rattled threshold at any point during the debate, Debate Fatigue is set immediately — regardless of subsequent outcome (win, lose, concede, Unmask). Effect: −1D on their next social roll this session (Argue, Corroborate, or Circles); consumed after that roll. One instance per session. Clears at next session start if unused.
 - **Total Victory [PP-114]:** If the winning side's final Conviction Track position is ≥ 9 (Side A) or ≤ 1 (Side B), the victory is Total. Additional consequences: losing faction's primary orator gains Debate Fatigue regardless of Rattled status; winning orator gains +1 Momentum (if below cap 4). In BG Parliamentary Vote, Total Victory additionally applies Mandate −1 to the losing coalition's dominant faction for one season. [GAP-DS-03 resolved]
 - **Rendering Stability changes from debate [PP-122]:** Thread co-movement consequences from §3.8 (RS changes from genre-win) are subject to the RS ceiling (100) and RS=0 lockout. If RS = 100, no RS gain from debate fires. If RS = 0, the substrate is Ruptured — no RS changes from debate fire in either direction. Debate-generated RS changes follow the same ceiling/floor rules as direct Thread operations.
 
