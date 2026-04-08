@@ -45,3 +45,13 @@ blockers: []
 editorial_decisions_pending: []
 open_gaps_added: []
 ```
+
+### 2026-04-08 — BG Battle + Thread Simulation (SIM-DEBT-BG-01 + 02)
+- Modes A + D: Battle resolution isolation + Thread operations isolation
+- P1: P1-06 (Battle Outcome Table undefined — PP-476 applied), P1-07 (Thread Wound BG consequences — ED-341)
+- P2: P2-01 (Fortify stat — ED-338), P2-02 (Pontifex pool — ED-339), P2-03 (TC cards drawer-neutral — ED-340), P2-04 (Community Weaving degree table — ED-342), P2-05/06 (Discipline edge cases — provisional)
+- P3: P3-01 (VTM 5 tracking — PP-477 noted)
+- Community Weaving Ob confirmed resolved by PP-491 (dynamic formula canonical)
+- Remaining open P1s from prior stress test: P1-01/03/04/05 still live (Overwhelming threshold, Crown TCV, Torben start, Seizure Ob)
+- SIM-DEBT remaining: BG-03 (co-victory), BG-04 (faction unique actions), BG-05 (Ministry AI), BG-06 (RS decay)
+- Test output: tests/sim_bg_battle_thread_2026_04_08.md

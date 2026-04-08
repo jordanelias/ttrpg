@@ -4411,3 +4411,32 @@ patches:
   source: editorial resolution 2026-04-08
   affects: [designs/board_game/victory_architecture_v1.md]
   status: applied
+
+- id: PP-476
+  date: 2026-04-08
+  severity: P1
+  description: >
+    Battle Outcome Table formalised. Both attacker and defender apply their own degree result
+    independently. For each side: calculate margin = own net - opponent net (if positive, else 0).
+    Apply outcome for that margin vs Ob: margin 0 = no outcome for that side; margin 1 to Ob-1
+    = Discipline -2 on opponent unit; margin = Ob = Discipline -4 on opponent; margin > Ob =
+    opponent unit destroyed. Overwhelming applies to each side independently. Drawn battle (equal
+    net) = no degree for either side, both Discipline -1 (existing drawn battle rule preserved).
+    Resolves SIM-DEBT-BG-01 P1-06.
+  finding_id: STR-BG-P1-06
+  source: BG battle/thread simulation 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-477
+  date: 2026-04-08
+  severity: P3
+  description: >
+    VTM 5 once-per-game ability requires physical tracking marker. Varfell faction mat
+    includes a flip token 'VTM 5 Power Used'. Set to Used when ability fires; not reset
+    between sessions. Not cleared until game ends. VTM cannot decrease once reached 5,
+    so no re-activation path exists.
+  finding_id: STR-BG-D-Thread-02
+  source: BG battle/thread simulation 2026-04-08
+  affects: [references/params_board_game.md]
+  status: noted

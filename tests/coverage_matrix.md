@@ -386,3 +386,9 @@ Open for editorial: ED-061, ED-062, ED-063.
 | ID | Description | Mode | Status | Date | Findings |
 |----|------------|------|--------|------|---------| 
 | STR-BG-STRESS-01 | Board Game full stress test — Modes A+D, all mechanics | BG | COMPLETE | 2026-04-08 | P1x5 (Overwhelming threshold, TCV numbering, Crown TCV, Torben start, Seizure Ob), P2x10 (AER dominant, Challenge<structural, Weaving Ob, Conviction Yield dead zone, AER/Challenge, Total Domination, Accounting crunch, Church unreachable, Crown early TCV, Diplomatic Token), P3x4. New ED-327-330. New PP-469-475. SIM-DEBTx6. See tests/sim_stress_bg_2026_04_08.md |
+
+## 2026-04-08 BG Battle + Thread Operations Simulation (SIM-DEBT-BG-01 + 02)
+| ID | Description | Mode | Status | Date | Findings |
+|----|------------|------|--------|------|---------| 
+| SIM-DEBT-BG-01 | Battle resolution — Mode A isolation + D edge cases | BG | COMPLETE | 2026-04-08 | P1-06 (outcome table undefined — PP-476), P2 x5 (Fortify stat, Pontifex pool, Discipline edge cases, multi-unit pooling). See tests/sim_bg_battle_thread_2026_04_08.md |
+| SIM-DEBT-BG-02 | Thread operations BG mode — Mode A + D | BG | COMPLETE | 2026-04-08 | P1-07 (Thread Wound undefined — ED-341), P2 x3 (TC cards neutral, Community Weaving degree table, Partial HR ambiguity). ED-338-342 added. |

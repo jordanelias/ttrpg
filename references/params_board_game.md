@@ -1429,3 +1429,20 @@ AER >= 3 (PP-203) and Parliamentary Challenge (PP-431-COR) are independent:
 ## Submission + Mandate 0 Ruling (PP-475)
 If Submitting faction's halved Mandate = 0: **Submission supersedes Faction Collapse.**
 Submitted faction remains as vassal with Mandate 0. Mandate-0 effects apply. Faction does not enter Faction Collapse (which requires Stability 0 at Accounting end per I-04/P-15, not Mandate 0).
+
+## Battle Resolution — Formal Outcome Table (PP-476)
+Both attacker and defender apply their own degree result independently.
+For each side: margin = (own net − opponent net), if positive; 0 if own net ≤ opponent net.
+Apply: margin 0 → no outcome for that side; margin 1 to Ob−1 → Discipline −2 on opponent unit;
+margin = Ob → Discipline −4 on opponent unit; margin > Ob → opponent unit destroyed.
+Drawn battle (equal net): no degree for either side; both Discipline −1.
+
+Discipline floor: 0. Any result pushing Discipline to ≤ 0 destroys the unit.
+Multi-unit territory: one roll per faction using Military stat pool. Player assigns Discipline loss to specific unit card of their choice.
+Unit removed (by stat cap reduction): returned to reserve with Discipline reset on next Muster.
+
+## Fortify — Pool Stat (ED-338 provisional)
+[PROVISIONAL: Fortify uses Military stat pool. Confirmation pending.]
+
+## VTM 5 — Once-Per-Game Tracking (PP-477)
+Varfell faction mat: flip token 'VTM 5 Power Used'. Set to Used on ability activation. Not reset between sessions.

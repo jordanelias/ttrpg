@@ -2016,3 +2016,77 @@ editorial_decisions:
     source: SIM-VAR-06 2026-04-08
     blocks: Church faction mechanics when Cardinal dies in Hybrid
     tags: [hybrid, church, cardinals, succession]
+
+  - id: ED-338
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Fortify action pool stat undefined in params_board_game.md.
+      Ob table exists (Ob = Fort level + 1) but no pool specification.
+      Provisional: Military stat (faction's deployed force capacity includes engineering).
+      Alternatives: Wealth (procurement cost) or Mandate (administrative authority).
+    source: STR-BG-D-01 2026-04-08
+    blocks: Fortify action resolution
+    tags: [board_game, fortify, pool_stat]
+
+  - id: ED-339
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Thread operation pool stat for non-Varfell, non-Restoration factions is undefined.
+      Varfell confirmed: Influence. Restoration confirmed: 1D + 1D per adjacent Presence marker (PP-460).
+      Church Pontifex: pool stat not stated in params or BG design doc.
+      Provisional: Mandate (institutional authority grounds the Church's Thread relationship).
+      Needs designer confirmation before Church Thread operation simulations are valid.
+    source: STR-BG-A-06 2026-04-08
+    blocks: Church Thread operation balance analysis
+    tags: [board_game, church, pontifex, thread_operation, pool_stat]
+
+  - id: ED-340
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Co-Movement deck TC cards: 4 of 20 cards produce TC +1 when drawn.
+      Any faction's Thread operation can draw these cards. Varfell performing Thread operations
+      for VTM development generates E(0.20 TC) per Co-Movement draw — inadvertently accelerating
+      Church's primary clock. At Thread Witness Node (2 draws/operation): E(0.40 TC/operation).
+      Question: Is this intentional systemic pressure (Thread activity raises institutional
+      religious tension regardless of who performs it) or an unintended side-effect that benefits
+      Church passively while penalising Thread-active factions?
+    source: STR-BG-A-08 2026-04-08
+    blocks: balance assessment of TC generation
+    tags: [board_game, co_movement, tc_generation, church, varfell, balance]
+
+  - id: ED-341
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      BG Thread Wound consequences undefined. Thread Tension (TT) >= 15 triggers automatic
+      Thread Wound formation in any territory with >= 2 History Resonance markers (per Thread
+      Tension rules in params_board_game.md). But the BG consequence of Thread Wound formation
+      is not specified — TTRPG practitioners have Coherence effects, but BG has no individual
+      practitioners. Suggested BG mechanic: RS -1 per Wound formed at Accounting + Thread
+      operations in that territory +1 Ob (stacking) until Wound Mended. Mending: Pontifex
+      action Ob = current Wound count in territory.
+    source: STR-BG-D-Thread-01 2026-04-08
+    blocks: high-Thread late-game resolution; TT >= 15 trigger
+    tags: [board_game, thread_wound, thread_tension, rendering_stability]
+
+  - id: ED-342
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Community Weaving degree table is incomplete. Only the Overwhelming and Success outcomes
+      are defined (CV change). Partial and Failure outcomes not specified. The Co-Movement draw
+      on Partial is noted (PP-187: 'Draw on Partial Community Weaving') but the CV consequence
+      of Partial and the consequences of Failure are absent.
+      Suggested table: Overwhelming = CV -2 in territory; Success = CV -1; Partial = Co-Movement
+      draw only, no CV change; Failure = no effect, no Co-Movement draw (operation fizzled).
+    source: STR-BG-D-Thread-03 2026-04-08
+    blocks: Community Weaving resolution; RM faction completeness
+    tags: [board_game, restoration, community_weaving, degree_table]
