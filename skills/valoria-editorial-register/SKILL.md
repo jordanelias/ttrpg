@@ -14,17 +14,38 @@ description: >
 
 # VALORIA EDITORIAL REGISTER SKILL
 
+**Model:** Sonnet 4.6.
+
+## Input Validation (MANDATORY BEFORE ANY WORKFLOW)
+
+Fetch the following from GitHub before running any workflow. Do not use memory or local copies.
+
+```python
+required = [
+    'canon/editorial_ledger.yaml',     # the register itself
+    'references/file_index.md',        # for propagation target resolution
+    'references/glossary.md',          # term definitions
+]
+files = g.read_files_graphql(required)
+# Verify nothing returned None before proceeding
+for path, content in files.items():
+    if content is None:
+        raise RuntimeError(f"GitHub fetch failed: {path} — cannot proceed")
+```
+
+**If any fetch fails:** STOP. Report the failure. Do not proceed using memory.
+
+**Additional reads:** Any workflow that touches a specific design file must fetch that file from GitHub before reading or modifying it. Never work from memory of a design file's contents.
+
 ## Term Reference
 
-Read `references/glossary.md` for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
+Use `references/glossary.md` (fetched above) for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
 
 ## Purpose
 
 Maintain `canon/editorial_ledger.yaml` as the single source of truth for all
 editorial decisions. Present unresolved items to the user, record decisions,
 propagate changes to GitHub, and keep the register clean.
-
-**Model:** Sonnet 4.6.
 
 ---
 
@@ -46,11 +67,11 @@ editorial_decisions:
     decision: null
     propagation_targets: []
     propagation_status: "pending | complete | N/A"
-    related_ids: []       # IDs of similar/duplicate items
-    supersedes: []        # IDs this item replaces (consolidated into this one)
-    superseded_by: null   # if this item was merged into another
-    stale_reason: null    # populated when status = struck
-    provisional_assumption: null  # populated when status = provisional; what Claude assumed
+    related_ids: []
+    supersedes: []
+    superseded_by: null
+    stale_reason: null
+    provisional_assumption: null
     tags: []
 ```
 
@@ -58,15 +79,14 @@ editorial_decisions:
 
 ## Workflow A — Resolve Items
 
-1. Read `canon/editorial_ledger.yaml` from GitHub.
-2. Filter: `status: open`, sorted by priority (P1-BLOCKER first).
-3. Present one item at a time: ID, description, flag text, source file, related IDs.
-4. Record user's decision in `decision` field.
-5. Set `status: resolved`, `date_resolved: today`.
-6. Set `propagation_targets` based on `references/file_index.md` (which files depend on this decision).
-7. Apply decision to all propagation targets.
-8. Set `propagation_status: complete`.
-9. Atomic commit: ledger + all target files.
+1. From fetched `canon/editorial_ledger.yaml`: filter `status: open`, sorted by priority (P1-BLOCKER first).
+2. Present one item at a time: ID, description, flag text, source file, related IDs.
+3. Record user's decision in `decision` field.
+4. Set `status: resolved`, `date_resolved: today`.
+5. Set `propagation_targets` based on fetched `references/file_index.md`.
+6. Fetch each propagation target from GitHub, apply decision, commit.
+7. Set `propagation_status: complete`.
+8. Atomic commit: ledger + all target files.
 
 ---
 
@@ -74,11 +94,11 @@ editorial_decisions:
 
 Triggered when a design file contains `[EDITORIAL: ...]` flags not yet in the ledger.
 
-1. Read source file.
+1. Fetch source file from GitHub.
 2. Extract all `[EDITORIAL: ...]` instances.
-3. For each: check if already registered (search by description similarity).
+3. For each: check if already registered (search fetched ledger by description similarity).
 4. If not registered: assign next ED-NNN id, populate schema, append to ledger.
-5. Run dedup check (Workflow D) before committing.
+5. Run Workflow D (dedup) before committing.
 6. Atomic commit: ledger only.
 
 ---
@@ -87,15 +107,15 @@ Triggered when a design file contains `[EDITORIAL: ...]` flags not yet in the le
 
 Run after any batch of resolved items.
 
-1. Read ledger: all items where `status: resolved` AND `propagation_status: pending`.
-2. For each: load target files, apply decision text, mark propagation_status: complete.
+1. From fetched ledger: filter `status: resolved` AND `propagation_status: pending`.
+2. For each: fetch target files from GitHub, apply decision text, mark `propagation_status: complete`.
 3. Atomic commit: all modified files + ledger.
 
 ---
 
 ## Workflow D — Dedup, Consolidate, and Strike
 
-**Run:** at session start (after reading ledger) and whenever new items are added.
+**Run:** at session start (after fetching ledger) and whenever new items are added.
 
 ### Step 1 — Deduplication
 Identify pairs of items that describe the same decision:
@@ -114,7 +134,7 @@ For each duplicate pair:
 Identify items that should be merged because they represent the same underlying decision:
 
 **Consolidation triggers:**
-- Same system + same mechanical area + decisions that cannot differ (e.g., two items asking about the same formula)
+- Same system + same mechanical area + decisions that cannot differ
 - Items explicitly marked `related_ids` pointing to each other
 
 **Consolidation procedure:**
@@ -138,10 +158,10 @@ Identify items that should be merged because they represent the same underlying 
 Mark items as `status: struck` with `stale_reason` when:
 
 **Automatic strike criteria:**
-- The decision was resolved via simulation (stress test produced a definitive answer, not just a recommendation) — mark `status: resolved` with decision text citing the test finding.
-- The feature the item refers to has been CUT (per gap register or editorial decision) — mark `struck`, `stale_reason: "Feature cut — [cut decision]"`.
+- Decision was resolved via simulation — mark `status: resolved` with decision text citing the test finding.
+- Feature the item refers to has been CUT — mark `struck`, `stale_reason: "Feature cut — [cut decision]"`.
 - A later item supersedes this one and the earlier item's decision would conflict — mark `struck`, `stale_reason: "Superseded by ED-NNN"`.
-- The item refers to a document that no longer exists or was deprecated — mark `struck`, `stale_reason: "Source document deprecated"`.
+- Item refers to a document that no longer exists or was deprecated — mark `struck`, `stale_reason: "Source document deprecated"`.
 
 **Do not auto-strike:**
 - Items that are merely low-priority (P3).
@@ -149,8 +169,7 @@ Mark items as `status: struck` with `stale_reason` when:
 - Blockers, regardless of age.
 
 ### Step 4 — Report
-After running dedup/consolidate/strike:
-Output a table:
+After running dedup/consolidate/strike, output a table:
 
 | Action | Count | IDs |
 |--------|-------|-----|
@@ -166,19 +185,19 @@ Output a table:
 
 After any session where design work was done:
 
-1. Read all files modified in the session.
-2. Extract all `[EDITORIAL: ...]` flags from modified files.
-3. Cross-reference against existing ledger (by description match).
+1. Fetch all files modified in the session from GitHub.
+2. Extract all `[EDITORIAL: ...]` flags from fetched files.
+3. Cross-reference against fetched ledger (by description match).
 4. Add unregistered items to ledger.
 5. Run Workflow D (dedup/consolidate/strike).
 6. Report: N new items added, N consolidated, N struck.
 
-**New items from this session (2026-04-02) to add:**
+**New items from session 2026-04-02 to add:**
 
 | Description | Source File | Priority | Tags |
 |-------------|-------------|----------|------|
 | ST-BG-01: Overwhelming threshold (Ob+1 vs 2×Ob) | bg_v05_simulation_and_patches.md | P1 | board_game, dice |
-| ST-BG-05: Theocracy Counter 80 seizure scope (declared target vs all-territory) | bg_v05_simulation_and_patches.md | P1 | board_game, church |
+| ST-BG-05: Theocracy Counter (TC) 80 seizure scope | bg_v05_simulation_and_patches.md | P1 | board_game, church |
 | ST-INT-02: Commander bonus formula (three conflicting formulas) | bg_v05, mass_battle_v3 | P1 | mass_combat, hybrid, commander |
 | ST-INT-07: Ceiral Ritual Rendering Stability gain vs Co-Movement scale | bg_v05, mass_battle_v3 | P2 | threadwork, hybrid, scaling |
 | ST-INT-08: Muster output in BG context (Str=2 off token scale) | bg_v05, mass_battle_v3 | P2 | board_game, hybrid, muster |
@@ -187,27 +206,27 @@ After any session where design work was done:
 | ST-MB-02: Coherence undefined as mass battle stat | mass_battle_v3.md | P1 | mass_combat, threadwork, coherence |
 | ST-INT-04: Military seasonal cap pooled vs separate | bg_v05, mass_battle_v3 | P2 | board_game, hybrid, military |
 | P2-B11-13: Artillery Balanced disposition lock (intentional?) | stage8_combat.md | P3 | mass_combat, artillery |
-| P2-B11-19: Thread Tension 80+ effect in mass battle | stage8_combat.md | P2 | mass_combat, threadwork |
+| P2-B11-19: Thread Tension (TT) 80+ effect in mass battle | stage8_combat.md | P2 | mass_combat, threadwork |
 | Debate: Can accused have corroborators in Church Tribunal? | debate_system_redesign_v1.md | P2 | debate, church |
 | Debate: Obscuring as pure denial/Doubt Marker — confirm design intent | debate_system_redesign_v1.md | P1 | debate, orientation |
 | Debate: Niflhel social mode (what can they do if excluded?) | debate_system_redesign_v1.md | P2 | debate, niflhel |
 | Debate: Genre pivot mid-debate — permitted? penalised? | debate_system_redesign_v1.md | P2 | debate, genre |
-| ST-TW-01: W-24 Object scale under-costed (free Rendering Stability/Coherence?) | threadwork_redesign_v25.md | P2 | threadwork, combat |
+| ST-TW-01: W-24 Object scale under-costed | threadwork_redesign_v25.md | P2 | threadwork, combat |
 
 Consolidate new Niflhel debate item with ED-008.
 Consolidate ST-INT-02 commander bonus with ED-018.
-Consolidate P2-B11-02 Grand Debate role alternation topic with ED-013.
+Consolidate P2-B11-02 Grand Debate role alternation with ED-013.
 
 ---
 
 ## Commit Convention
 
-All editorial register commits use scope `[editorial]` per commit_convention.md:
+All editorial register commits use scope `[editorial]`:
 
 ```
 [editorial] Harvest session items ED-031–046, consolidate ED-011→ED-027, strike ED-005 — 2026-04-02
-[editorial] Resolve ED-027 (Poise/Focus) — E-027
-[editorial] Propagate ED-027 decision to stage2, stage8 — E-027
+[editorial] Resolve ED-027 (Poise/Focus) — ED-027
+[editorial] Propagate ED-027 decision to stage2, stage8 — ED-027
 ```
 
 ---

@@ -13,10 +13,31 @@ description: >
 
 # VALORIA ARC GENERATOR
 
+**Model:** Sonnet 4.6.
+
+## Input Validation (MANDATORY BEFORE ANY ARC GENERATION)
+
+Before generating arcs, fetch the following from GitHub:
+
+```python
+# Step 1: always fetch canonical_sources.yaml first
+files = g.read_files_graphql(['references/canonical_sources.yaml'])
+canonical = files['references/canonical_sources.yaml']
+if canonical is None:
+    raise RuntimeError("canonical_sources.yaml missing — cannot resolve which docs are current")
+
+# Step 2: fetch required docs based on arc scope (see Read Protocol below)
+# Step 3: check gm_ref/ directory to avoid arc duplication
+```
+
+**Do not read compilation stage files from memory.** Even if you have seen them this session, verify via `canonical_sources.yaml` which version is current before using any values.
+
+**If `compilation_current: false` in `canonical_sources.yaml`:** Use the canonical design doc for that system, not the compilation snapshot.
+
 ## What This Produces
 
 Each arc has three components:
-1. **Narrative block** — 3–4 paragraphs in plain prose. Describes what the arc feels like at the table, which NPCs are present, what players observe before they understand what is happening. No mechanical jargon in this block.
+1. **Narrative block** — 3–4 paragraphs in plain prose. Describes what the arc feels like at the table, which Non-Player Characters are present, what players observe before they understand what is happening. No mechanical jargon in this block.
 2. **Mermaid flowchart** — Full causal chain from mechanical seed through branches to resolution. Every node cites the mechanic driving it. Branches represent player choice points.
 3. **Footer** — Emergent logic statement (1–2 sentences: why no player designed this), arc shape (season count and structure).
 
@@ -24,56 +45,56 @@ Deliver 3–5 arcs per batch unless the user specifies otherwise. End each batch
 
 ---
 
-## Read Protocol
+## Read Protocol (GitHub fetches — do not skip)
 
-Read `references/glossary.md` for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
+Fetch in this order. Check `canonical_sources.yaml` to confirm current paths before fetching.
 
-Before generating, read the following in this order. Stop reading a file once you have what you need — do not read documents in full if the relevant section is identifiable.
+**Always required:**
+- `references/canonical_sources.yaml` (done in input validation)
+- `references/glossary.md` — term definitions; fetch before using any game-specific term
+- `references/params_factions.md` — faction stats, Domain Actions, seasonal accounting
+- `references/params_core.md` — dice engine baseline
 
-**Required reads:**
-1. `compilation/stage1_core_engine.md` — dice, TN, Ob, degrees of success
-2. `compilation/stage6_factions.md` — faction stats, ethical frameworks, Domain Actions, unique actions, seasonal accounting
-3. `compilation/stage12_campaign_modes.md` — session structure, endgame indicators, clock synchronisation
+**Fetch if arcs involve Thread mechanics:**
+- `references/params_threadwork.md`
+- `canon/00_philosophical_foundations.md` §1–2 only (inseparability, scale principle) — fetch the file, read only those sections
 
-**Read if arcs involve Thread mechanics:**
-- `designs/threadwork_redesign_v25.md` — Coherence, Rendering Stability, Leap, operations, co-movement
-- `canon/Valoria_Philosophical_Foundations.md` §1–2 only (inseparability, scale principle)
+**Fetch if arcs involve social/debate:**
+- `references/params_debate.md`
 
-**Read if arcs involve social/debate:**
-- `designs/debate_system_redesign_v1.md` — quaestio structure, asymmetric proceedings, genre resonance
+**Fetch if arcs involve mass battle:**
+- `references/params_mass_combat.md`
 
-**Read if arcs involve mass battle:**
-- `designs/mass_battle_v3.md` — Coherence Rating, Cohesion, Thread in battle, co-movement at scale
+**Fetch if arcs involve specific Non-Player Characters:**
+- The canonical NPC doc (check `canonical_sources.yaml` for current path)
 
-**Read if arcs involve specific NPCs:**
-- `compilation/stage13_npcs.md` — Beliefs, Resonant Styles, trigger conditions, mechanical profiles
+**Fetch if arcs involve territories or clocks:**
+- The canonical territories doc (check `canonical_sources.yaml` for current path)
 
-**Read if arcs involve territories or clocks:**
-- `compilation/stage7_territories.md`
-- `compilation/stage5_clocks.md` (if present; check directory first)
+**Check for prior arcs (fetch directory listing, avoid duplication):**
+- `gm_ref/` — list contents via GitHub API before generating; do not reproduce an arc already documented there
 
-**Check for prior arcs (avoid duplication):**
-- `gm_ref/` directory — list contents before generating; do not reproduce an arc already documented there
+**Do not read stage files or design files directly to get mechanical values.** Use params files. If a value is missing from params, flag it as a gap rather than reading the source document mid-generation.
 
 ---
 
 ## Arc Generation Rules
 
-**Mechanical grounding:** Every node in the flowchart must cite a specific mechanic — stat, Ob value, threshold, trigger condition, or faction rule. No nodes that say "situation escalates" without naming the mechanic doing the escalating.
+**Mechanical grounding:** Every node in the flowchart must cite a specific mechanic — stat, Ob value, threshold, trigger condition, or faction rule from the fetched params files. No nodes that say "situation escalates" without naming the mechanic doing the escalating.
 
 **Emergence standard:** Each arc must satisfy: *no single player decision caused this; it required multiple independent systems running simultaneously.* If a single player choice is sufficient to explain the arc, it is a plot hook, not an emergent arc.
 
 **Canon constraints (non-negotiable):**
 - Niflhel does not harvest threads. Never attribute Rendering Stability drain to Niflhel operations.
-- All three clock dimensions (Rendering Stability, Theocracy Counter, Institutional Pressure) are independent. Do not treat them as the same system.
-- Ethical framework penalties apply to factions, not players directly — players have no framework penalty unless they are operating as a faction leader.
+- All three clock dimensions (Rendering Stability, Theocracy Counter (TC), Institutional Pressure (IP)) are independent. Do not treat them as the same system.
+- Ethical framework penalties apply to factions, not players directly.
 - Seasonal cap: ±2 per faction stat per season regardless of Domain Action count.
 
-**Scope:** Keep arcs to systems already compiled or in experimental designs. Do not invent mechanics. If a mechanic needed for an arc has a known gap (GAP-ARC-01 or similar), note the gap inline rather than assuming a value.
+**Scope:** Keep arcs to systems with current params files. Do not invent mechanics. If a mechanic needed for an arc has a known gap, note the gap inline rather than assuming a value.
 
-**Non-Player Character fidelity:** When named NPCs appear, use their documented Beliefs, Resonant Styles, and trigger conditions exactly. Do not invent Non-Player Character motivations. If Non-Player Character data is needed and not in stage13, flag it with [EDITORIAL].
+**Non-Player Character fidelity:** Use documented Beliefs, Resonant Styles, and trigger conditions exactly from the fetched NPC doc. Do not invent Non-Player Character motivations. If Non-Player Character data is needed and not found, flag it with [EDITORIAL].
 
-**Editorial gate:** Any arc that requires a worldbuilding or narrative decision not resolvable from existing documents must be flagged: `[EDITORIAL: requires user approval — description]`.
+**Editorial gate:** Any arc requiring a worldbuilding or narrative decision not resolvable from fetched documents must be flagged: `[EDITORIAL: requires user approval — description]`.
 
 ---
 
@@ -82,7 +103,7 @@ Before generating, read the following in this order. Stop reading a file once yo
 ```
 ## Arc N: [Title]
 
-**Primary mechanics:** [list]
+**Primary mechanics:** [list — each cited to its params file]
 **Primary NPCs (if any):** [list]
 
 ---
@@ -107,6 +128,6 @@ Before generating, read the following in this order. Stop reading a file once yo
 ## Output
 
 - Inline in chat if 3 arcs or fewer and no prior arcs to check.
-- `.md` file to `/mnt/user-data/outputs/` if 4+ arcs or if user requests a document.
-- Commit to `gm_ref/` on GitHub after every batch. File naming: `arcs_NN_MM_[topic].md`.
+- `.md` file if 4+ arcs or if the user requests a document.
+- Commit to `gm_ref/` on GitHub after every batch via `g.atomic_commit()`. File naming: `arcs_NN_MM_[topic].md`.
 - Log any canon corrections found during generation as `[GAP-ARC-NN]` in the output document.

@@ -16,15 +16,38 @@ description: >
 
 ---
 
+## Input Validation (MANDATORY BEFORE ANY TASK)
+
+Fetch the following from GitHub before running any calculation:
+
+```python
+required = [
+    'references/params_core.md',   # canonical die rule, TN values, Ob definitions
+    'references/glossary.md',      # term definitions
+]
+files = g.read_files_graphql(required)
+for path, content in files.items():
+    if content is None:
+        raise RuntimeError(f"GitHub fetch failed: {path} — cannot proceed")
+```
+
+**Version check:** Confirm `<!-- version: -->` tag in `references/params_core.md` matches current ruleset version in `compilation/README.md`. If mismatch: flag `[STALE PARAMS]` and stop.
+
+**The die rule and TN values are read from `references/params_core.md`.** The module source below encodes the current standard rule; if `params_core.md` differs, the module source is stale and must be updated before proceeding.
+
 ## Term Reference
 
-Read `references/glossary.md` for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
+Use `references/glossary.md` (fetched above) for all term definitions and permitted abbreviations.
+
+---
 
 ## Canonical Die Rule
 
+Read from `references/params_core.md`. Current standard:
+
 ```
 d10 face → net successes
-  1        → -1
+  1         → -1
   2 to TN-1 → 0
   TN to 9   → +1
   10        → +2  (flat bonus; no extra die rolled)
@@ -33,6 +56,8 @@ Net successes = sum of all dice contributions (may be negative).
 ```
 
 TN values in Valoria: **6** (Controlled), **7** (Standard), **8** (Desperate).
+
+If `params_core.md` specifies different values, those govern over the above.
 
 ---
 
@@ -140,7 +165,6 @@ def momentum_value(tn: int, ob: int, pool: int, trials: int = TRIALS) -> Dict:
     """Compare: spending 1 Momentum (auto-success) vs rolling 1 extra die."""
     base   = outcome_probs(pool,   tn, ob, trials)
     extra  = outcome_probs(pool+1, tn, ob, trials)
-    # Momentum: guaranteed +1 net — simulate by adding 1 to every roll
     results = simulate_pool(pool, tn, trials)
     mom_full = partial = 0
     for r in results:
@@ -180,7 +204,7 @@ def quick_check(n: int, tn: int, ob: int) -> str:
 **Procedure:**
 1. Run `outcome_probs` at TN 6, 7, 8 for each pool size.
 2. Output three side-by-side tables + delta row (TN6−TN8 gap).
-3. Flag any Ob where the TN shift causes a >20% swing in P(full success) — these are balance-sensitive points.
+3. Flag any Ob where the TN shift causes a >20% swing in P(full success).
 
 ### Task 3 — Opposing Roll Analysis
 **Input:** attacker pool + TN, defender pool + TN
@@ -195,7 +219,7 @@ def quick_check(n: int, tn: int, ob: int) -> str:
 **Procedure:**
 1. Run `optimal_split`.
 2. Output top 5 splits ranked by combined P(hit) × P(avoid).
-3. Note: equal split is not always optimal — flag if asymmetric split dominates by >5%.
+3. Flag if asymmetric split dominates equal split by >5%.
 
 ### Task 5 — Fibonacci Marginal Value
 **Input:** base pool, TN, Ob
@@ -216,11 +240,22 @@ def quick_check(n: int, tn: int, ob: int) -> str:
 **Output:** one-line summary via `quick_check(n, tn, ob)`.
 Use when mechanic-audit or simulator needs a spot probability without a full table.
 
+### Task 8 — Full Multi-TN Probability Tables
+**Input:** pool range (e.g. 3–15), Ob range (e.g. 1–8)
+**Procedure:**
+1. Run `outcome_probs(n, tn, ob)` for TN 6, 7, 8 at every (pool, ob) combination.
+2. Output three tables (one per TN) showing P(full success).
+3. Add a delta table: TN6 minus TN8 at each cell.
+4. Flag cells where TN6→TN8 shift causes >25% swing in P(full).
+
+**Standard reference output** (generate once, cache to `references/tn_full_tables.md` via `g.atomic_commit()`):
+Pool 3–12, Ob 1–6, all three TNs.
+
 ---
 
 ## Output Format
 
-All outputs are **markdown tables**, inline unless >40 lines (then `.md` file).
+All outputs are **markdown tables**, inline unless >40 lines (then `.md` file committed to `references/`).
 Always state sample size: `(n=200,000 trials)` in table caption.
 Round probabilities to 3 decimal places in tables; 1 decimal in prose.
 
@@ -238,38 +273,8 @@ Round probabilities to 3 decimal places in tables; 1 decimal in prose.
 
 ---
 
-## Findings Log
+## Params File Reference
 
-Append mechanical findings here as discovered (do not clear between sessions):
-
-```
-[empty — no findings yet]
-```
-
-### Task 8 — Full Multi-TN Probability Tables
-Produce complete outcome tables across all three TN values for a specified pool range.
-
-**Input:** pool range (e.g. 3–15), Ob range (e.g. 1–8)
-**Procedure:**
-1. Run `outcome_probs(n, tn, ob)` for TN 6, 7, 8 at every (pool, ob) combination.
-2. Output three tables (one per TN) showing P(full success) — overwhelming+success combined.
-3. Add a delta table: TN6 minus TN8 at each cell, showing where TN setting has most mechanical impact.
-4. Flag: cells where TN6→TN8 shift causes >25% swing in P(full) — these are high-leverage balance points.
-
-**Output:** Three markdown tables + one delta table. File `tn_comparison_full.md` if >60 rows total.
-
-**Standard reference output** (generate once, cache to `references/tn_full_tables.md`):
-Pool 3–12, Ob 1–6, all three TNs. This is the canonical reference — other skills link to it rather than recomputing.
-
-## Version Check Protocol (Mandatory)
-Before running any mode that uses mechanical values:
-1. Read the relevant `references/params_*.md` file(s) for this task.
-2. Check the `<!-- version: -->` tag at the top of each params file.
-3. Compare against the current ruleset version (stated in `compilation/README.md`).
-4. If params version ≠ current ruleset version: **halt, flag as `[STALE PARAMS: <file> is v0.XX, current ruleset is vX.XX — update params before proceeding]`**, and do not proceed until the user confirms or params are updated.
-5. If params version matches: proceed. Cost: ~200 tokens per params file read. No GitHub API call required.
-
-Params files and their skill usage:
 | Params file | Used by |
 |-------------|---------|
 | `references/params_core.md` | All skills (dice engine baseline) |

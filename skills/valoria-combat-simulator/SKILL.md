@@ -19,17 +19,29 @@ Statistically simulate personal combat between two characters across all valid
 weapon × armour build combinations. Produces win/loss/draw probabilities,
 identifies balance flags, and generates patch proposals.
 
-**Model:** Sonnet 4.6 (this skill). Never route to Haiku or Opus.
+**Model:** Sonnet 4.6. Never route to Haiku or Opus.
 
 ---
 
-## Step 1 — Load Canonical Parameters
+## Step 1 — Input Validation (MANDATORY, BLOCKING)
 
-Read `references/combat_params.md` before writing any simulation code.
-All mechanical values live there. Never hardcode from memory.
+Fetch the following from GitHub before writing any simulation code or reading any mechanical value:
 
-If `references/combat_params.md` does not match the current ruleset checkpoint,
-flag the discrepancy before proceeding.
+```python
+required = [
+    'references/canonical_sources.yaml',  # confirm current design doc
+    'references/params_combat.md',        # ALL mechanical values — source of truth
+    'references/params_core.md',          # dice engine baseline
+]
+files = g.read_files_graphql(required)
+for path, content in files.items():
+    if content is None:
+        raise RuntimeError(f"GitHub fetch failed: {path} — cannot proceed")
+```
+
+**Version check:** Confirm `<!-- version: -->` tag in `references/params_combat.md` matches current ruleset version in `compilation/README.md`. If mismatch: flag `[STALE PARAMS: params_combat.md is vX.XX, current ruleset is vY.YY — update params before proceeding]` and stop.
+
+**No hardcoded values.** Every mechanical value (weapon stats, armour DR, pool formulas, TN values, threshold values) must be read from the fetched `references/params_combat.md`. Never use remembered values from previous sessions or skill body text.
 
 ---
 
@@ -38,7 +50,7 @@ flag the discrepancy before proceeding.
 | Parameter | Default |
 |---|---|
 | Str / End / Agi | Must be specified |
-| Proficiency level | Competent (pool = Agi + History(points+3)) |
+| Proficiency level | Competent (pool formula from params_combat.md) |
 | Weapon scope | All melee / Ranged / All / Specific subset |
 | Armour scope | All valid / Specific subset |
 | N fights (Monte Carlo) | 5,000 (balance) / 10,000 (precision) |
@@ -49,11 +61,11 @@ flag the discrepancy before proceeding.
 
 ## Step 3 — Build Valid Build List
 
-A build = (weapon_profile, armour_type). A build is valid if:
-1. Str ≥ weapon Str minimum, OR Str = minimum − 1 (−1D penalty applies)
-2. Str ≥ armour Str minimum, OR Str = minimum − 1 (penalty applies)
+A build = (weapon_profile, armour_type). Use weapon Str minimums and armour Str minimums from fetched `references/params_combat.md`. A build is valid if:
+1. Str ≥ weapon Str minimum, OR Str = minimum − 1 (penalty applies per params)
+2. Str ≥ armour Str minimum, OR Str = minimum − 1 (penalty applies per params)
 3. NOT 2+ below either minimum (cannot wield / cannot wear)
-4. **Light armour exception:** no Str minimum, no pool penalty — always valid
+4. Light armour exception: per params_combat.md specification
 
 ---
 
@@ -82,18 +94,17 @@ python3 /path/to/scripts/combat_sim.py \
 
 ## Step 5 — Manoeuvre Coverage
 
-Robust testing must also verify manoeuvre mechanics are consistent with
-simulation assumptions. Check each manoeuvre class:
+Robust testing must verify manoeuvre mechanics are consistent with simulation assumptions. Check each manoeuvre class using values from fetched `references/params_combat.md`:
 
 ### Defensive
 - **Defend!** — Full pool defence. Verify: pool shift works, Overwhelming holds-at-bay fires
 - **Rescue** — Endurance roll. Verify: failure splits damage correctly
 
-### Reach Management  
+### Reach Management
 - **Reorient / Withdraw** — Agility vs Agility. Verify: tie → Long holds; Stamina decrements
 
 ### Offensive
-- **Disarm** — Agility vs Agility. Verify: weapon landing, backup weapon draw at P4
+- **Disarm** — Agility vs Agility. Verify: weapon landing, backup weapon draw
 - **Trip** — Verify: prone penalties apply, stand = Priority 5 action
 - **Tie Up** — Power check. Verify: Overwhelming → Grapple transition
 - **Grapple** — Power vs Power. Verify: reach restriction, unarmed damage, escape cost
@@ -124,7 +135,7 @@ Apply findings framework from `references/findings_template.md`:
 
 ## Step 7 — Output
 
-Write to `/home/claude/sim_results_runN.md`. Push to `tests/sim_results_runN.md`.
+Write to `/home/claude/sim_results_runN.md`. Commit to `tests/sim_results_runN.md` via `g.atomic_commit()`.
 Update `session_log_current.md`.
 
 ---
@@ -135,38 +146,17 @@ Update `session_log_current.md`.
 PP-SIM-NNN: [component] — [finding] — [proposed fix] — Priority P1/P2/P3
 ```
 
-Log to `valoria_patch_proposals.md`.
+Log to `canon/patch_register.yaml`.
 
 ---
 
-## Current Canonical Values (quick reference — read combat_params.md for full spec)
+## Version Check Protocol (Mandatory)
 
-**Combat Pool = (Agi × 2) + History + 3 (min 5)**
-**Stamina = End + History + 1 + armour mod (min 1)**
-**Health = End + 6**
-**Wounds: −1D Combat Pool each (cumulative)**
-
-| Weapon Type | Hit TN | Def TN | Dmg Bonus |
-|---|---|---|---|
-| Light Cut | 5 | 6 | +1 |
-| Heavy Cut | 6 | 7 | +4 |
-| Light Blunt | 6 | 7 | +1 |
-| Heavy Blunt | 7 | 8 | +4 |
-| Unarmed | 8 | 9 | +0 |
-
-**Critical Hit:** excess ≥ 3 → weapon modifier doubled.
-
-**DR per armour vs weapon type:**
-
-| Armour | Str Min | Stamina Mod | vs LightCut | vs HeavyCut | vs LightBlunt | vs HeavyBlunt |
-|---|---|---|---|---|---|---|
-| None | — | +0 | 0 | 0 | 0 | 0 |
-| Light | 2 | +0 | 2 | 1 | 1 | 0 |
-| Medium | 3 | −1 | 4 | 3 | 2 | 1 |
-| Heavy | 4 | −2 | 6 | 5 | 3 | 1 |
-
-**Reach:** Short (Close only) / Long (Far preferred; Close at −1D off + half dmg) / Projectile (no melee range)
-**Versatile reach removed** — see stage8_combat.md reach rules.
+Before running any mode that uses mechanical values:
+1. Read the relevant `references/params_*.md` file(s) from GitHub.
+2. Check the `<!-- version: -->` tag at the top of each params file.
+3. Compare against the current ruleset version (stated in `compilation/README.md`).
+4. If params version ≠ current ruleset version: **halt**, flag as `[STALE PARAMS: <file> is vX.XX, current ruleset is vY.YY — update params before proceeding]`, and do not proceed until the user confirms or params are updated.
 
 ---
 
@@ -174,51 +164,8 @@ Log to `valoria_patch_proposals.md`.
 
 | File | Purpose |
 |---|---|
-| `references/combat_params.md` | Canonical mechanical values |
+| `references/params_combat.md` | Canonical mechanical values — only source |
+| `references/params_core.md` | Dice engine baseline |
 | `references/sim_protocol.md` | State machine, manoeuvre contest protocol |
 | `references/findings_template.md` | Output structure |
 | `scripts/combat_sim.py` | Runnable simulation script |
-
-
-## Read Protocol — Mandatory Before Any Mode
-Read `references/glossary.md` for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
-
-Load params files, not stage files. Stage files are verbose source documents; params files are extracted mechanical values.
-
-1. Always read `references/params_core.md` first (dice engine, TN, Ob, degrees).
-2. Then read only the params files relevant to the subsystem being simulated/audited:
-
-| Subsystem | Params File |
-|-----------|-------------|
-| Core dice/TN/Ob | `references/params_core.md` |
-| Personal combat | `references/params_combat.md` |
-| Mass combat | `references/params_mass_combat.md` |
-| Debate | `references/params_debate.md` |
-| Threadwork | `references/params_threadwork.md` |
-| Factions (TTRPG or BG) | `references/params_factions.md` |
-| Board game mode | `references/params_board_game.md` |
-| Scale/mode transitions | `references/params_scale_transitions.md` |
-
-3. For each params file loaded, check the `<!-- version: -->` tag. If it does not match the current ruleset version (see `compilation/README.md`), halt and flag: `[STALE PARAMS: <file> is <version>, current ruleset is <version> — update params before proceeding]`.
-4. Do NOT read stage files or design files to get mechanical values. If a value is missing from params, flag it as a gap and request a params update rather than reading the source document mid-simulation.
-5. Exception: when specifically auditing a new design document (not yet parameterised), read that document directly and note that params are incomplete for that subsystem.
-
-## Version Check Protocol (Mandatory)
-Before running any mode that uses mechanical values:
-1. Read the relevant `references/params_*.md` file(s) for this task.
-2. Check the `<!-- version: -->` tag at the top of each params file.
-3. Compare against the current ruleset version (stated in `compilation/README.md`).
-4. If params version ≠ current ruleset version: **halt, flag as `[STALE PARAMS: <file> is v0.XX, current ruleset is vX.XX — update params before proceeding]`**, and do not proceed until the user confirms or params are updated.
-5. If params version matches: proceed. Cost: ~200 tokens per params file read. No GitHub API call required.
-
-Params files and their skill usage:
-| Params file | Used by |
-|-------------|---------|
-| `references/params_core.md` | All skills (dice engine baseline) |
-| `references/params_combat.md` | simulator Mode G1, combat-simulator |
-| `references/params_mass_combat.md` | simulator Mode G1 |
-| `references/params_debate.md` | simulator Mode G2 |
-| `references/params_threadwork.md` | simulator Mode G3 |
-| `references/params_factions.md` | simulator Mode G4, mechanic-audit |
-| `references/params_board_game.md` | simulator Mode G5 |
-| `references/params_scale_transitions.md` | simulator Mode G (cross-mode), mechanic-audit Mode G |
