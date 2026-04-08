@@ -80,3 +80,64 @@ open_gaps_added: []
 - Provisional decisions: 8 (all flagged, see sim output)
 - SIM-DEBT: 6 items opened (battle resolution, Thread ops, co-victory, faction unique actions, Ministry AI, RS decay)
 - Test output: tests/sim_stress_bg_2026_04_08.md
+### 2026-04-08 — Social Contest: Stress Test + Resolve + Audit/Sim (this session)
+
+#### TASKS COMPLETED
+
+1. **SIM-SC-01 — Social Contest stress test** (Modes A+D+J+L):
+   - 7 P1 findings, 11 P2, 3 P3.
+   - Major issues: dominant genre strategy, interaction type name conflict (design doc vs params), resistance formula conflict, TIE/CROSS contradiction, Obscuring OW ambiguity, §3.8 P-01 risk.
+   - Output: tests/sim_social_contest_stress.md
+
+2. **PP-449–PP-464 — All SIM-SC-01 findings resolved**:
+   - PP-449: TIE scoped to CLASH/AMPLIFY only (not CROSS)
+   - PP-450: Obscuring check fires before formula; OW ×0.75 struck
+   - PP-451: Design doc §6.1 resistance formula aligned to PP-278
+   - PP-452: Interaction type names aligned (COMPETITION→AMPLIFY, DIVERGENCE→CROSS, DIVERGE→Deadlock State)
+   - PP-453: Genre adjacency model — Adjacent ×0.75 (was ×0.5); boost +0.25 (was +0.5); range 0.5–1.25
+   - PP-454: Regroup removes CT penalty (neutral recovery, mirrors Take a Breath)
+   - PP-455: Regroup restores max(Focus,2); no depletion during Regroup
+   - PP-456: CROSS no winner/loser designation; no additional loss-depletion
+   - PP-457: Debate Fatigue triggers at Rattled moment, not debate outcome
+   - PP-458: Refute action added (Recall Ob 2, TN 7) — subsequently corrected PP-465
+   - PP-459: Corroboration design doc aligned to ED-014 (witnessing ally, no Knot required)
+   - PP-460: Composure = Cha+6; Poise deprecated; Focus confirmed standard attribute
+   - PP-461: §3.8 Thread consequences classified as co-movement events (not Thread ops; P-01 not triggered)
+   - PP-462: Doubt Marker scale-dependency documented as intended design
+   - PP-463: Concentration floor = 0 explicit
+   - PP-464: GM reference card production task acknowledged
+   - Commit: bb544523
+
+3. **SIM-SC-02 — Audit (Modes A–E) + Sim (Modes A+D) on patched system**:
+   - Audit Mode A (22 formulas): 1 P1 found (Refute Ob 2 too harsh), 1 P2 (BG weight scope)
+   - Audit Mode B (10 number systems): 1 P2 noted as design intent (Concentration range 2–14)
+   - Audit Mode C (20 chains): 1 gap (BG weight scope — resolved PP-466)
+   - Audit Mode D (20 checks): 1 P1, 3 P2 found; all resolved
+   - Audit Mode E (13 principles): 0 failures
+   - Sim Mode A: PP-453 adjacency model confirmed — dominant strategy broken
+   - Sim Mode D (4 new mechanic edge cases): SD-03 (Deadlock+Doubt Marker) P2 resolved PP-467
+   - Output: tests/audit_sim_social_contest.md
+
+4. **PP-465–PP-468 — Audit/sim pass findings resolved**:
+   - PP-465: Refute Ob 2→1 (Recall 1 was ~18% success; now ~66%)
+   - PP-466: §6.13 BG vote explicitly scoped to PP-453 adjacency weights
+   - PP-467: Deadlock State + Doubt Marker confirmed active; Regroup legality stated
+   - PP-468: [EDITORIAL: Concentration attribute] §5.1 marked resolved (PP-460)
+   - Commit: 1bb36fc7
+
+5. **Coverage matrix** updated: SIM-SC-01, SIM-SC-02 added.
+   - Commit: df611a08
+
+#### FINAL STATE
+- design_doc: v1.8 (823 lines)
+- params_debate: v0.14+design-ST4-R3 (407 lines)
+- Total patches this session: PP-449–PP-468 (20 patches)
+- P1 findings remaining: 0
+- P2 findings remaining: 1 (B-01: Concentration range — confirmed design intent, no fix)
+- SIM-DEBT-02: corroboration CLASH calibration — still open (carried)
+
+#### NEXT ACTION
+skill: valoria-orchestrator
+action: Address prior session's pending editorial confirmations (ED-322, ED-323, ED-324, ED-325, ED-326) — these require Jordan's input before BG Church mechanics can advance.
+blockers: [ED-322, ED-323 block BG Church patches; ED-324/325 block BG Church compilation]
+editorial_decisions_pending: [ED-322, ED-323, ED-324, ED-325, ED-326]
