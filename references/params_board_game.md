@@ -1,9 +1,9 @@
-<!-- version: v0.9.0 | source: valoria_bg_v05_simulation_and_patches.md + victory_architecture_v1.md + calamity_radiation.md (canonical per canonical_sources.yaml) | last_updated: 2026-04-06 -->
+<!-- version: v0.9.1 | source: valoria_bg_v05_simulation_and_patches.md + victory_architecture_v1.md + calamity_radiation.md + geography_design.md (canonical per canonical_sources.yaml) | last_updated: 2026-04-06 -->
 <!-- PP-249 2026-04-04: ED-142 resolved — BG Overwhelming: 2×Ob + floor 3, supersedes ED-031 -->
 <!-- PATCHES APPLIED: PP-169-PP-187 | CORRECTIONS: PP-188 | PP-189 (v05 final) | PP-190–201 (BG balance, territory table, road network, map v2) | PP-219 (Southernmost access redesign) | PP-220 (Champion TS table) -->
 <!-- AUTHORITATIVE SOURCE: designs/board_game/valoria_bg_v05_simulation_and_patches.md (faction stats, clocks, victory conditions); designs/board_game/stage_bg_proposal_v02.md (action economy, card-hand system PP-177) -->
 <!-- NOTE: v05 is canonical for BG mechanics. v04 B-sections remain structural base. -->
-<!-- STALE CHECK: RS Effects rewritten to calamity_radiation.md. Victory rewritten to victory_architecture_v1.md. CV/WC/WA tracks added. TC generation updated. Deed system dissolved. REMAINING STALE: Territory table (L701-798) uses pre-geography_design.md numbering — full renumbering pass required. All T# references outside the new sections use old numbering. -->
+<!-- STALE CHECK: v0.9.0 — RS Effects, Victory, CV/WC/WA, TC generation updated. Territory renumbering complete: all T# references use geography_design.md canonical numbering (17 territories). Old territory names (Vargstad, Eidursjo, Arcansheld, Nordhelm, Mittelmark) replaced with canonical names (Grauwald, Rendstad, Ehrenfeld, Kronmark, Feldmark). Ducal Geography (ED-107) resolved. Varfell expansion rewritten. -->
 
 # params_board_game.md — Board Game Mode (v0.7.0)
 
@@ -61,7 +61,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Torben Loyalty | **10** | 0–10 | Active from game start. No IP trigger. Range extended to 10. |
 | Elske Loyalty | 4 | 0–7 | Off-board card near T4. |
 | Löwenritter Coup Counter | 0 | 0–4 | Public. Threshold 4 = coup eligible. |
-| Warden Cooperation | 0 | 0–3 | Near T13. Inactive until Warden Emergence. |
+| Warden Cooperation | 0 | 0–3 | Near T6. Inactive until Warden Emergence. |
 
 **Warden Cooperation (WC) Effects:**
 | WC | Effect |
@@ -83,7 +83,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Guilds (NPC) | 3 | 4 | 6 | 2 | 5 |
 | Niflhel (NPC) | — | 5 | 4 | — | 4 |
 
-CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 territories (T9/T10/T11/T12) — the most of any faction. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. TC = 28 (P-32). TC victory = 65 (P-32).
+CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 territories (T14/T2/T5/T1) — the most of any faction. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. TC = 28 (P-32). TC victory = 65 (P-32).
 
 ## Stat Ceilings and Floors
 | Stat | Floor | Ceiling |
@@ -97,10 +97,10 @@ CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 
 ## Standard Action Ob Reference (P-21, v04 B3)
 | Action | Default Ob | Key Modifiers |
 |--------|-----------|---------------|
-| Muster (Legionary Inward) | 2 | −1 T2 garrison |
+| Muster (Legionary Inward) | 2 | −1 T12 garrison |
 | March (Legionary Outward) | No roll | Contested entry = Battle |
 | Govern (Consul Inward) | Prosperity ÷ 2 (round up, min 1) | −1 own capital |
-| Trade (Consul Outward) | Prosperity ÷ 3 (round up, min 1) | +1 IP≥30; +1 T10 |
+| Trade (Consul Outward) | Prosperity ÷ 3 (round up, min 1) | +1 IP≥30; +1 T2 |
 | Diplomacy vs NPC (Senator Outward) | NPC Stability ÷ 2 (round up) | — |
 | Diplomacy between players | Negotiated | Not a roll |
 | Formal Crown Treaty (Senator Outward) | Target faction's Mandate | Crown only. Both factions must agree. See victory_architecture_v1.md §3.1. |
@@ -140,7 +140,7 @@ Execute in strict order:
 8. Check threshold events: draw one Event Card per threshold crossed.
 8b. Milestone Bonus check.
 9. Warden Emergence check.
-9b. Vaynard-Edeyja same-season rule: if Warden Emergence at Step 9 AND VTM ≥ 4 AND Varfell played Tribune Inward in T13: Warden Cooperation +1 immediately.
+9b. Vaynard-Edeyja same-season rule: if Warden Emergence at Step 9 AND VTM ≥ 4 AND Varfell played Tribune Inward in T6: Warden Cooperation +1 immediately.
 10. Warden Cooperation check.
 10b. Torben/Elske Loyalty events: apply Loyalty changes.
 11. [DISSOLVED — Hollow Victory totals no longer tracked. Step retained for numbering continuity.]
@@ -172,7 +172,7 @@ Execute in strict order:
 Unit starting Discipline: Light Infantry 3, Heavy Infantry 4, Cavalry 4, Ranged 3, Artillery 3.
 
 ## Faction Capital Territories — see Territory Table Reconciled (PP-195)
-[Replaced by PP-195 territory table above — Hafenmark capital = Gransol T2, not Hafenvalor T6.]
+[Superseded — Hafenmark capital = Gransol (T8). See Territory Table.]
 
 ## Clock Environmental Effects (v04 B2)
 
@@ -549,20 +549,21 @@ Corrections applied over PP-188:
 
 ## Varfell Territorial Expansion Constraint (PP-191)
 Varfell's starting handicap is **positional**, not statistical.
-Varfell (T9) is adjacent to: T5 (Arnesheld, Fort 3), T10 (Sigurdshalm, NPC/Niflhel), T12 (Oastad, uncontrolled/Thread Wound), T13 (Stillhelm, uncontrolled/Thread Wound).
+Varfell seat T12 (Sigurdshelm) is adjacent to: T4 (Grauwald, Varfell), T11 (Halvardshelm, Varfell), T13 (Oastad, Varfell).
 
-Every viable expansion path from T9 runs into a fortified or hostile position:
-- T5 (Arnesheld): Fort 3 — the strongest fortress on the board. Löwenritter garrison.
-- T10 (Sigurdshelm): Varfell starting territory (Niflhel has network presence here, Trade +1 Ob from Black Market, but Varfell controls it). Expansion from T10 goes to T9 (already Varfell) or T11 (already Varfell) — no outward expansion available from this direction.
-- T12 (Oastad): Varfell starting territory but Thread Wound — occupation costs RS. Not a liability but a constraint on holding it long-term.
-- T13 (Stillhelm): Crown nominal territory, Thread Wound, Southernmost Access. Varfell must pass through T12 to reach T13.
+All four Varfell starting territories form a chain along the western fjords. Expansion paths:
+- From T4 (Grauwald): adjacent to T7 (Rendstad, Hafenmark), T12 (Varfell), T14 (Ehrenfeld, Crown Fort 3). T14 is the strongest fortress on the board — Löwenritter garrison, Fort 3 (max 4).
+- From T11 (Halvardshelm): adjacent to T10 (Spartfell, Hafenmark Fort 2), T12 (Varfell). Spartfell is fortified.
+- From T13 (Oastad): adjacent to T6 (Stillhelm, Crown), T12 (Varfell), T15 (Askeheim, uncontrolled). T6 is the Southernmost Access point. T15 cannot be controlled.
+- From T12 (Sigurdshelm): only adjacent to other Varfell territories — no outward expansion.
 
-**Fortification Combat Rule (clarification for Varfell):** When attacking a fortified territory, defending faction adds Fort level as bonus dice to defensive Military roll. Fort 3 (Arnesheld) = defender rolls Military + 3D. This is the primary mechanical reason Varfell's expansion is delayed — they must either neutralise fortifications first (Fortify-equivalent action in reverse: Tribune Sabotage to reduce Fort by 1, Ob = Fort level) or accept heavily unfavourable odds.
+Every viable expansion runs into fortified or hostile positions. Varfell must either neutralise fortifications (Tribune Sabotage, Ob = Fort level) or accept unfavourable odds.
 
-**Varfell Intelligence Path:** Varfell's dominant early game is information, not territory. The Intelligence Hegemony victory path (3 territories + VTM ≥ 3 + all stats revealed) doesn't require Crown or Hafenmark territory — it requires T9 + 2 others. T12 and T13 are reachable at VTM ≥ 2 (Thread-qualified presence bypasses normal March constraints into Thread Wound sites). Path B (Southernmost Dominion) and Path C (Thread Supremacy) both run through T12/T13.
+**Fortification Combat Rule:** When attacking a fortified territory, defending faction adds Fort level as bonus dice to defensive Military roll. Fort 3 (Ehrenfeld) = defender rolls Military + 3D.
+
+**Varfell Intelligence Path:** Varfell's dominant early game is information, not territory. The Intelligence Hegemony victory path requires TCV ≥ 10 + VTM ≥ 3 + 2 rival stats revealed. Path B (Southernmost Dominion) and Path C (Thread Supremacy) both run through T13 (Oastad)/T15 (Askeheim).
 
 Starting stat total revised: Varfell 4+4+4+4+4 = 20 points (vs Crown 22, Church 25, Hafenmark 20). Equal to Hafenmark on raw points; differentiated by asymmetric mechanics (Patience Protocol, VTM, positional constraint).
-
 
 ## Ministry — NPC Faction (PP-193)
 ### Ethical Framework: Procedural Consequentialism
@@ -581,13 +582,13 @@ The Ministry evaluates actions by whether they preserve the procedural condition
 
 ### Ministry Tokens
 Ministry maintains **Administrative Presence** tokens (AP-tokens, not to be confused with Attention Pool).
-One AP-token per territory in which Ministry has clerks active. Starts with AP-tokens in T9 (Arcansheld), T10 (Nordhelm), T11 (Mittelmark), T12 (Valorsplatz). These represent the administrative apparatus of Parliamentary governance. (PP-204 corrected.)
+One AP-token per territory in which Ministry has clerks active. Starts with AP-tokens in T14 (Ehrenfeld), T2 (Kronmark), T5 (Feldmark), T1 (Valorsplatz). These represent the administrative apparatus of Parliamentary governance. (PP-204 corrected.)
 
 ### Parliament Connection — Direct Mechanics
 Ministry is the mechanical engine behind Parliament Integrity (PI).
 
 **Ministry Stabilisation (fires at Accounting Step 11, before Hollow Victory totals):**
-Each season Ministry has an AP-token in T12 (Valorsplatz, Parliament seat): PI degradation from Crown Emergency Powers is reduced by 1 (to a minimum of −0 — i.e. Ministry can prevent one Emergency Powers PI loss per season). This represents clerks managing the parliamentary record and maintaining continuity despite political disruption.
+Each season Ministry has an AP-token in T1 (Valorsplatz, Parliament seat): PI degradation from Crown Emergency Powers is reduced by 1 (to a minimum of −0 — i.e. Ministry can prevent one Emergency Powers PI loss per season). This represents clerks managing the parliamentary record and maintaining continuity despite political disruption.
 
 **Ministry Legislative Record:**
 At each Year-End Accounting: Ministry produces a Legislative Record for the prior year. Any Parliamentary Manoeuvre that succeeded (Hafenmark) this year is recorded as a Parliamentary Ruling. Effect: the first time each year a Parliamentary Ruling is recorded, PI +1 (the institution acknowledges the precedent). This is in addition to the standard Hafenmark Parliamentary Manoeuvre PI recovery.
@@ -596,19 +597,19 @@ At each Year-End Accounting: Ministry produces a Legislative Record for the prio
 Crown Policy Instruments require Ministry countersignature. If Ministry Mandate < 2 (collapsed or compromised): Crown Policy actions cost +1 Ob (the administrative apparatus is too compromised to implement the decree cleanly). If Ministry Mandate = 0: Crown Policy actions unavailable until Ministry Mandate recovers.
 
 **Ministry and Church Seizure (TC 75):**
-Church Territorial Seizure of T12 (Valorsplatz) requires removing the Ministry AP-token first. If AP-token present: seizure Ob +1 (the administrative apparatus resists institutional capture). If seizure succeeds despite the token: Ministry AP-token in T1 is removed. All Crown Policy actions are now +1 Ob until Ministry reestablishes presence in T1 (requires 1 season of Ministry NPC action in T1).
+Church Territorial Seizure of T1 (Valorsplatz) requires removing the Ministry AP-token first. If AP-token present: seizure Ob +1 (the administrative apparatus resists institutional capture). If seizure succeeds despite the token: Ministry AP-token in T13 is removed. All Crown Policy actions are now +1 Ob until Ministry reestablishes presence in T13 (requires 1 season of Ministry NPC action in T13).
 
 **Ministry and Hafenmark:**
-Hafenmark's Parliamentary Manoeuvre benefits from Ministry presence. If Ministry has AP-token in T1: Hafenmark Parliamentary Manoeuvre Ob −1 (the clerks facilitate process). If Ministry AP-token absent from T1: Parliamentary Manoeuvre Ob +1 (no procedural infrastructure to execute the manoeuvre).
+Hafenmark's Parliamentary Manoeuvre benefits from Ministry presence. If Ministry has AP-token in T13: Hafenmark Parliamentary Manoeuvre Ob −1 (the clerks facilitate process). If Ministry AP-token absent from T13: Parliamentary Manoeuvre Ob +1 (no procedural infrastructure to execute the manoeuvre).
 
 **Ministry and Löwenritter Coup:**
-If Löwenritter Coup fires: Ministry AP-tokens in T1 and T2 are removed immediately. Ministry Mandate −2. PI −3 (standard coup effect) but Ministry Stabilisation does not fire next season (Ministry is recalibrating). Ministry attempts to re-establish AP-tokens in recouped territories at rate of 1/season.
+If Löwenritter Coup fires: Ministry AP-tokens in T13 and T12 are removed immediately. Ministry Mandate −2. PI −3 (standard coup effect) but Ministry Stabilisation does not fire next season (Ministry is recalibrating). Ministry attempts to re-establish AP-tokens in recouped territories at rate of 1/season.
 
 ### Ministry NPC AI Priority Tree (runs at Phase 4, Priority 4 — Domain Actions tier)
 | Priority | Condition | Action |
 |----------|-----------|--------|
-| 1 | PI ≤ 3 | Ministry plays Consul Inward (Govern) in T1: roll Ministry Mandate (3D) vs Ob 1. Success: PI +1 (clerks shore up parliamentary function). |
-| 2 | T1 has no Ministry AP-token | Ministry plays Consul Inward in T1: roll Mandate 3D vs Ob 1. Success: AP-token placed in T1. |
+| 1 | PI ≤ 3 | Ministry plays Consul Inward (Govern) in T13: roll Ministry Mandate (3D) vs Ob 1. Success: PI +1 (clerks shore up parliamentary function). |
+| 2 | T13 has no Ministry AP-token | Ministry plays Consul Inward in T13: roll Mandate 3D vs Ob 1. Success: AP-token placed in T13. |
 | 3 | Any territory with AP-token has PI loss pending from Church Seizure | Ministry plays Senator Outward (Diplomacy) vs Church: Mandate 3D vs Church Mandate. Success: Church seizure of that territory delayed 1 season (Ministry files formal procedural objection). |
 | 4 | Crown Mandate ≥ 4 AND PI < 5 | Ministry plays Senator Inward (Decree support): PI +1 (Ministry facilitates Crown constitutional governance). Requires Crown Mandate ≥ 4 — Ministry does not support a weakened Crown. |
 | 5 (default) | None of above | Ministry plays Consul Inward in highest-Prosperity uncontested territory with AP-token: Prosperity maintained. |
@@ -621,17 +622,17 @@ Success: Ministry NPC Priority 4 fires in favour of the corrupting faction this 
 Overwhelming: As above + Ministry AP-token in one territory of choice acts as if that territory is the corrupting faction's capital for one season (−1 Ob on all their actions there).
 Failure: Ministry notes the attempt. Corrupting faction Stability −1. Ministry sends record to Riskbreakers (Riskbreaker Priority 6 now includes the corrupting faction's territory).
 
-**Ministry Collapse (Mandate 0):** Ministry ceases NPC actions for 2 seasons. All Ministry AP-tokens removed. During collapse: Crown Policy +1 Ob, Parliamentary Manoeuvre +1 Ob, all Hafenmark Deed 3 (Parliamentary Consolidation) checks suspended. Collapse exit: Hafenmark or Crown plays Govern Inward in T1 (Ob 2). Success: Ministry Mandate returns to 1, AP-token placed in T1, collapse ends.
+**Ministry Collapse (Mandate 0):** Ministry ceases NPC actions for 2 seasons. All Ministry AP-tokens removed. During collapse: Crown Policy +1 Ob, Parliamentary Manoeuvre +1 Ob, all Hafenmark Deed 3 (Parliamentary Consolidation) checks suspended. Collapse exit: Hafenmark or Crown plays Govern Inward in T13 (Ob 2). Success: Ministry Mandate returns to 1, AP-token placed in T13, collapse ends.
 
 ### Ministry and PI Track — Summary
 | Ministry State | PI Effect |
 |---------------|-----------|
-| AP-token in T1, Mandate ≥ 2 | Emergency Powers PI loss −1 (Ministry prevents one loss/season) |
-| AP-token in T1, Mandate ≥ 2, Hafenmark Manoeuvre success this year | Additional PI +1 at Year-End (Legislative Record) |
-| AP-token absent from T1 | Hafenmark Parliamentary Manoeuvre Ob +1 |
+| AP-token in T13, Mandate ≥ 2 | Emergency Powers PI loss −1 (Ministry prevents one loss/season) |
+| AP-token in T13, Mandate ≥ 2, Hafenmark Manoeuvre success this year | Additional PI +1 at Year-End (Legislative Record) |
+| AP-token absent from T13 | Hafenmark Parliamentary Manoeuvre Ob +1 |
 | Ministry Mandate = 0 | Crown Policy unavailable |
-| Church seizes T1 with AP-token present | Seizure Ob +1; if seized: AP-token removed, Crown Policy +1 Ob |
-| Löwenritter Coup | T1+T2 AP-tokens removed; Ministry Mandate −2; Ministry Stabilisation suspended 1 season |
+| Church seizes T13 with AP-token present | Seizure Ob +1; if seized: AP-token removed, Crown Policy +1 Ob |
+| Löwenritter Coup | T13+T12 AP-tokens removed; Ministry Mandate −2; Ministry Stabilisation suspended 1 season |
 
 ## Church of Solmund — Canonical Structure (PP-194, from original source documents)
 Naming: "Church of Solmund" in source = **Church of Solmund** in all current docs (Galbados → Solmund).
@@ -651,7 +652,7 @@ Holy See = elected from among the Bishopry. Second only to the Monarch.
 - **Fortitude (Templar):** Templar deployment requires Cardinal of Fortitude to be active (Church Stability ≥ 2). At Stability ≤ 1: Templars do not deploy regardless of card play.
 - **Justice (Inquisitors):** Heresy Investigations are issued under Cardinal of Justice. If Cardinal of Justice is compromised (via Niflhel or Varfell Intel action on Church): one Heresy Investigation this season is false (all factions notified that one Investigation this season was procedurally invalid).
 - **Prudence (Tithes):** Church Wealth generation: +0.5 Wealth/season from tithed territories (rounds down at Year-End). Territories where Church has Favour ≥ 3 contribute to tithe income.
-- **Temperance (Scholars):** AER maintenance. While Church controls at least one university city (T14 Himmelenger has a university): AER loss events are reduced by 1/Year-End (Temperance scholars maintain Altonian ecclesiastical relationships through scholarship).
+- **Temperance (Scholars):** AER maintenance. While Church controls at least one university city (T9 Himmelenger has a university): AER loss events are reduced by 1/Year-End (Temperance scholars maintain Altonian ecclesiastical relationships through scholarship).
 
 **Cardinal schism trigger:** If Church Stability = 2 AND any faction played a Senator action targeting Church this season: one Cardinal (random or GM discretion) challenges the Confessor. That Cardinal's faction sub-action fires as an NPC Priority regardless of the Church player's card plays.
 
@@ -671,7 +672,7 @@ Per canonical source: Löwenritter serves the Monarch through military and civic
 
 ### Structure
 - **Lions' Table:** Military arm. Coordinates military levies. Appoints Royal Guard.
-- **Lions' Helm:** Naval arm. (BG: no direct naval territory but relevant to Schoenland sea route — Löwenritter Helm can deny T7 sea access to Schoenland at IP < 75 if Crown requests.)
+- **Lions' Helm:** Naval arm. (BG: no direct naval territory but relevant to Schoenland sea route — Löwenritter Helm can deny T10 sea access to Schoenland at IP < 75 if Crown requests.)
 - **Riskbreakers:** Sub-unit of Löwenritter, NOT independent faction. Operates outside the law to infiltrate cults and criminal organizations. [CORRECTION: Prior design documents treated Riskbreakers as independent NPC. Canonical source places them inside Löwenritter. They remain NPC-controlled but their Priority Tree now links to Löwenritter's coup counter and Crown's Mandate.]
 - **Civic Arm:**
   - Knights of the Peace: patrol and enforce law. BG: when Löwenritter is active (any phase), one territory per season has its March Ob −1 (pacified roads).
@@ -709,112 +710,97 @@ Per canonical source: "Court Parliament has constitutional right to depose Monar
 Fires if ALL of: PI ≥ 5 (Parliament functional), Church Mandate ≥ 5 (Holy See has standing), Crown Mandate ≤ 1 (Monarch deemed unfit), AND at least 2 other player factions have active Standing tokens against Crown.
 Effect: Crown player must pass the Crown to Löwenritter (succession triggers) OR call an emergency Parliamentary Session (Senator Inward, Ob 3) to restore legitimacy. If neither: Crown faction is eliminated; Löwenritter Coup Counter immediately set to 4 (coup fires next season).
 
-## Ducal Geography — EDITORIAL FLAG (ED-107)
-Canonical source establishes different duchy boundaries than current v04 territory map.
-[EDITORIAL: ED-107 — Territory assignment conflict. See stale_scan_bg_01.md. Requires user decision before territorial reassignment.]
+## Ducal Geography — RESOLVED (ED-107)
+Canonical geography applied. 17 territories per geography_design.md. See Territory Table below.
+All faction starting positions reflect canonical geography. Old v04 map assignments fully superseded.
+## Territory Table — Canonical (geography_design.md)
+17 territories. Faction ownership per geography_design.md. Fort levels, Prosperity (Pros), and special properties listed.
 
-Canonical duchy breakdown (for reference — not yet applied to map):
-- **Valorsmark (Crown):** Valorsplatz (T1), Lowenskyst (T7), Himmelenger (T3), Arnesheld/Arcansheld (T5), Stillhelm (T13)
-- **Hafenmark:** Gransol (T2, duchy capital), Eidursjo (T8), Spartfell (T4)
-- **Varfell:** Varfell (T9, duchy capital), Sigurdshalm (T10), Halvardshelm (T11), Oastad (T12)
+| T# | Territory | Faction | Fort | Pros | Special |
+|----|-----------|---------|------|------|---------|
+| T1 | Valorsplatz | Crown ★ | 2 | 6 | Kingdom capital. Parliament seat. Ministry AP-token. Sea connection to T16 (Schoenland). |
+| T2 | Kronmark | Crown | 1 | 4 | Crown heartland. Adjacent to T1, T3, T9, T14. |
+| T3 | Lowenskyst | Crown | 3 | 3 | Border fortress. Fort max 4. Adjacent to T2, T9, T17. |
+| T4 | Grauwald | Varfell | 0 | 3 | Highland timber. Adjacent to T7, T12, T14. Proximity 3 (Calamity Radiation). |
+| T5 | Feldmark | Crown | 0 | 5 | Crown breadbasket. +1 Pros/season uncontested. Adjacent to T1, T6, T14. Proximity 2 (Calamity Radiation). |
+| T6 | Stillhelm | Crown | 0 | 2 | Southern farmland. Southernmost Access point — Expedition into T15 staged from here. Non-Thread orders +1 Ob (frontier terrain). Proximity 1 (Calamity Radiation). Adjacent to T5, T13, T15. |
+| T7 | Rendstad | Hafenmark | 0 | 4 | Timber valley. Adjacent to T4, T8. |
+| T8 | Gransol | Hafenmark ★ | 1 | 5 | Hafenmark capital. Garrison: Muster +1D. Adjacent to T7, T9, T10, T17. |
+| T9 | Himmelenger | Church ★ | 2 | 5 | Cathedral city. Church starts here. TC +1/season Church controls. Church Unique Power −1 Ob. Adjacent to T2, T3, T8, T14, T17. |
+| T10 | Spartfell | Hafenmark | 2 | 3 | Border castle. NE Altonian pass. Invasion Pressure (IP) events fire here first. Adjacent to T8, T11. |
+| T11 | Halvardshelm | Varfell | 0 | 5 | Central fjords. Breadbasket +1 Pros/season uncontested. Muster Ob −1. Guilds CP-token. Adjacent to T10, T12. |
+| T12 | Sigurdshelm | Varfell ★ | 1 | 3 | Varfell Seat. Niflhel Black Market: Trade +1 Ob, Niflhel Covert −1 Ob. Adjacent to T4, T11, T13. Proximity 2 (Calamity Radiation). |
+| T13 | Oastad | Varfell | 0 | 3 | Southern fjords. Einhir ruins: Restoration Weaving −1 Ob. Adjacent to T6, T12, T15. Proximity 1 (Calamity Radiation). |
+| T14 | Ehrenfeld | Crown | 3 | 4 | Military hinge. Central fortress. Fort max 4. Löwenritter garrison. Martial Law −1 Ob. Adjacent to T1, T2, T4, T5, T9. Proximity 3 (Calamity Radiation). |
+| T15 | Askeheim | Uncontrolled | 0 | 1 | The Southernmost. Epicentre. Warden domain. Not a normal territory — cannot be controlled by any faction. See §Southernmost Access System. Adjacent to T6, T13. Proximity 0 (Calamity Radiation). |
+| T16 | Schoenland | Neutral NPC | 1 | 5 | Maritime island. Sea connection to T1 (Valorsplatz). Altonian Trade. IP ≥ 75: Vanguard deploys. Proximity 4 (Calamity Radiation). |
+| T17 | Halvarshelm | Hafenmark | 0 | 3 | Northern mines. Adjacent to T3, T8, T9. Proximity 5 (Calamity Radiation). |
 
-Current v04 map assignments differ significantly. Applying canonical geography would:
-- Give Crown T7 (Lowenskyst) — currently Hafenmark
-- Give Hafenmark T2 (Gransol) and T4 (Spartfell) — currently Crown and Crown
-- Give Hafenmark T8 (Eidursjo) — currently Guilds NPC
-- Give Varfell T10 (Sigurdshalm), T11 (Halvardshelm), T12 (Oastad) — currently Niflhel NPC, Guilds NPC, Uncontrolled
-- Remove Guilds NPC and Niflhel NPC from territorial starting positions
-
-This changes faction starting positions fundamentally and may destabilise balance. User decision required.
+★ = faction capital.
 
 
-## Territory Table — Definitive (PP-199)
-Faction counts per user: Varfell 4, Hafenmark 4, Crown 5, Church 1, Southernmost 1 = 15 land territories.
-T16 Schoenland = maritime island NPC (off-peninsula extension).
+## Starting Control — Canonical (geography_design.md)
+| Faction | Territories | Count | Starting TCV |
+|---------|------------|-------|-------------|
+| Crown | T1 Valorsplatz★, T2 Kronmark, T3 Lowenskyst, T5 Feldmark, T6 Stillhelm, T14 Ehrenfeld | 6 | 12 |
+| Hafenmark | T7 Rendstad, T8 Gransol★, T10 Spartfell, T17 Halvarshelm | 4 | 8 |
+| Varfell | T4 Grauwald, T11 Halvardshelm, T12 Sigurdshelm★, T13 Oastad | 4 | 6 |
+| Church of Solmund | T9 Himmelenger★ | 1 | 3 |
+| Löwenritter | T14 Ehrenfeld (shared with Crown pre-coup) | shared | — |
+| Uncontrolled | T15 Askeheim | — | 0 |
+| NPC | T16 Schoenland | — | — |
 
-| # | Territory | Faction | Fort | Pros | Special |
-|---|-----------|---------|------|------|---------|
-| 1 | Varfell | Varfell | 1 | 4 | NW lake city. VTM bootstrapping only. Einhir ruins: Restoration Weaving −1 Ob. |
-| 2 | Sigurdshelm | Varfell | 0 | 3 | Far west. NW Altonian pass nearby. Niflhel Black Market: Trade +1 Ob, Niflhel Covert −1 Ob. |
-| 3 | Halvardshelm | Varfell | 0 | 5 | W-central. Breadbasket +1 Pros/season uncontested. Muster Ob −1. Guilds CP-token. |
-| 4 | Vargstad | Varfell ★ | 1 | 3 | SW duchy capital. Thread Wound. RS −1/season after 2 seasons occupation. Southernmost Zone 2. |
-| 5 | Gransol | Hafenmark ★ | 1 | 5 | Center-north duchy capital. Garrison: Muster +1D. |
-| 6 | Eidursjo | Hafenmark | 0 | 4 | Center-lake. March costs 2 cards. |
-| 7 | Spartfell | Hafenmark | 2 | 3 | NE. NE Altonian pass. IP events fire here first. Elske's duchy borders here. |
-| 8 | Lowenskyst | Hafenmark | 0 | 4 | East coast. Trade +1D. Schoenland sea route. |
-| 9 | Arcansheld | Crown/Löwenritter | 3 | 4 | Central fortress. Martial Law −1 Ob. Fort max 4. |
-| 10 | Nordhelm | Crown | 1 | 4 | NW of Arcansheld. Buffer between Crown heartland and Hafenmark/Varfell. [EDITORIAL: ED-108 name provisional] |
-| 11 | Mittelmark | Crown | 0 | 4 | Central, between Arcansheld and Valorsplatz. [EDITORIAL: ED-108 name provisional] |
-| 12 | Valorsplatz | Crown ★ | 2 | 6 | East coast. Kingdom capital. Parliament seat. Ministry AP-token. Hafenvalor = port sub-district. |
-| 13 | Stillhelm | Crown | 0 | 2 | South coast. Southernmost Access point — last normal territory before the Southernmost. Non-Thread orders +1 Ob (difficult frontier terrain). RS −1/season any occupation. Normal military march and territorial control apply. Warden Cooperation track inactive here until Emergence. Expedition into T15 (Askeheim) requires Champion with TS ≥ 30 staging from T13 with at least 1 season of presence. |
-| 14 | Himmelenger | Church ★ | 2 | 5 | Cathedral city. Church starts here. TC +1/season Church controls. Church Unique Power −1 Ob. |
-| 15 | Askeheim | Uncontrolled | 0 | 1 | The Southernmost. Epicentre. Warden domain. **Not a normal territory — cannot be controlled by any faction under any standard military or domain action.** Access requires: (1) Champion with TS ≥ 30 present in T13 for ≥ 1 season. (2) Expedition declared (card play, Praetor or Tribune Inward, Ob 3). (3) Forgetting Check on entry (pool = Champion TS ÷ 10 round down, Ob 2; Restoration Weaver present: Ob −1; VTM 2+: Ob −1). Failure: Champion present but retains nothing — no Warden contact, no Cooperation advance, no VTM progress. Must wait 1 season and retry. Success: Warden Emergence fires if not already active. No faction control token placed. RS −2/season any non-Warden presence. Cannot be seized by TC 75 Church Territorial Seizure. |
-| 16 | Schoenland | Neutral NPC | 1 | 5 | Maritime island, east of Valorsplatz. Altonian Trade. IP ≥ 75: Vanguard deploys. Intel orders visible to Altonia. |
 
-★ = duchy/faction capital. T15 Askeheim = Southernmost territory (uncontrolled). T16 Schoenland = off-peninsula island.
+## Adjacency — Canonical (geography_design.md)
+| Territory | Adjacent To |
+|-----------|------------|
+| T1 Valorsplatz | T2 Kronmark, T5 Feldmark, T14 Ehrenfeld, T16 Schoenland (sea) |
+| T2 Kronmark | T1 Valorsplatz, T3 Lowenskyst, T9 Himmelenger, T14 Ehrenfeld |
+| T3 Lowenskyst | T2 Kronmark, T9 Himmelenger, T17 Halvarshelm |
+| T4 Grauwald | T7 Rendstad, T12 Sigurdshelm, T14 Ehrenfeld |
+| T5 Feldmark | T1 Valorsplatz, T6 Stillhelm, T14 Ehrenfeld |
+| T6 Stillhelm | T5 Feldmark, T13 Oastad, T15 Askeheim |
+| T7 Rendstad | T4 Grauwald, T8 Gransol |
+| T8 Gransol | T7 Rendstad, T9 Himmelenger, T10 Spartfell, T17 Halvarshelm |
+| T9 Himmelenger | T2 Kronmark, T3 Lowenskyst, T8 Gransol, T14 Ehrenfeld, T17 Halvarshelm |
+| T10 Spartfell | T8 Gransol, T11 Halvardshelm |
+| T11 Halvardshelm | T10 Spartfell, T12 Sigurdshelm |
+| T12 Sigurdshelm | T4 Grauwald, T11 Halvardshelm, T13 Oastad |
+| T13 Oastad | T6 Stillhelm, T12 Sigurdshelm, T15 Askeheim |
+| T14 Ehrenfeld | T1 Valorsplatz, T2 Kronmark, T4 Grauwald, T5 Feldmark, T9 Himmelenger |
+| T15 Askeheim | T6 Stillhelm, T13 Oastad |
+| T16 Schoenland | T1 Valorsplatz (sea) |
+| T17 Halvarshelm | T3 Lowenskyst, T8 Gransol, T9 Himmelenger |
 
-## Starting Control — Definitive (PP-199)
-| Faction | Territories | Count |
-|---------|------------|-------|
-| Varfell | T1 Varfell, T2 Sigurdshelm, T3 Halvardshelm, T4 Vargstad★ | 4 |
-| Hafenmark | T5 Gransol★, T6 Eidursjo, T7 Spartfell, T8 Lowenskyst | 4 |
-| Crown | T9 Arcansheld (shared), T10 Nordhelm, T11 Mittelmark, T12 Valorsplatz★, T13 Stillhelm | 5 |
-| Church | T14 Himmelenger | 1 |
-| Löwenritter | T9 (shared with Crown pre-coup) | shared |
-| Uncontrolled | T15 Askeheim | — |
-| NPC | T16 Schoenland | — |
 
-## Adjacency — Definitive (PP-199)
-Mountains impassable except at purple passes. Eidursjo lake: T6 march = 2 cards regardless.
-
-T1 (Varfell) ↔ T2, T3, T6
-T2 (Sigurdshelm) ↔ T1, T3
-T3 (Halvardshelm) ↔ T1, T2, T4, T6, T10
-T4 (Vargstad) ↔ T3, T13, T15
-T5 (Gransol) ↔ T6, T7, T10, T14
-T6 (Eidursjo) ↔ T1, T3, T5, T9, T10
-T7 (Spartfell) ↔ T5, T8
-T8 (Lowenskyst) ↔ T7, T12, T14, T16 (sea trade only)
-T9 (Arcansheld) ↔ T6, T10, T12, T13
-T10 (Nordhelm) ↔ T3, T5, T6, T9, T14
-T11 (Mittelmark) ↔ T9, T12, T13
-T12 (Valorsplatz) ↔ T8, T9, T11, T13, T14, T16 (sea trade only)
-T13 (Stillhelm) ↔ T4, T9, T11, T12, T15
-T14 (Himmelenger) ↔ T5, T8, T10, T12
-T15 (Askeheim) ↔ T4, T13 (expedition access only)
-T16 (Schoenland) ↔ T8 (sea trade), T12 (sea trade) [merchant NPC only — no military access, cannot be conquered]
-
-## Road Network — Definitive (PP-199)
+## Road Network — Canonical (geography_design.md)
 
 ### Primary Roads
-| Road | Route | Notes |
-|------|-------|-------|
-| King's Road | T12 (Valorsplatz) → T14 (Himmelenger) → T13 (Stillhelm) | Coastal arterial south. Natural route following the settled east coast. Church Inquisitor movement. Pilgrims. |
-| Northern Coast Road | T12 → T8 (Lowenskyst) → T7 (Spartfell) | Coastal north. Main trade spine. Flat settled land all the way. Hafenmark primary export route. |
-| Military Road | T12 → T11 (Mittelmark) → T9 (Arcansheld) | Inland strategic road. Löwenritter patrol route. Connects capital to the fortress. |
-| Midland Road | T9 (Arcansheld) → T10 (Nordhelm) → T5 (Gransol) | Crown into Hafenmark. Most contested road. Crosses duchy boundary. |
-| Lake Road | T5 (Gransol) → T6 (Eidursjo) → T1 (Varfell) | East shore of lake north-to-south. Hafenmark-Varfell trade route. Slow in winter (lakeside flooding). |
+| Route | Territories |
+|-------|------------|
+| Crown Corridor | T1 Valorsplatz — T5 Feldmark — T14 Ehrenfeld — T2 Kronmark |
+| Northern Arc | T2 Kronmark — T9 Himmelenger — T8 Gransol |
+| Eastern Coast | T1 Valorsplatz — T2 Kronmark — T3 Lowenskyst |
+| Western Highland | T14 Ehrenfeld — T4 Grauwald — T12 Sigurdshelm |
 
 ### Secondary Roads
-| Road | Route | Notes |
-|------|-------|-------|
-| Western Valley Road | T1 (Varfell) → T3 (Halvardshelm) → T2 (Sigurdshelm) | Follows valley descending from lake to west coast. Remote. Niflhel network uses. |
-| Southern Duchy Road | T1 (Varfell) → T3 (Halvardshelm) → T4 (Vargstad) | Varfell internal. Through Thread-active terrain in south. Only route to the capital from the north. |
-| Fortress Extension | T9 (Arcansheld) → T13 (Stillhelm) | Interior route south through peninsula uplands. Löwenritter patrol. Slower than coastal King's Road but avoids Church territory. |
-| Hill Track | T10 (Nordhelm) → T11 (Mittelmark) | Crown administrative road between buffer territories. |
-| Pilgrims' Road | T11 (Mittelmark) → T14 (Himmelenger) | Inland connection to cathedral. Secondary — most pilgrims use King's Road coastal approach. |
-| Warden Track | T13 (Stillhelm) → T15 (Askeheim) | Barely a track. Expedition access only. Non-Thread +1 Ob throughout. |
+| Route | Territories |
+|-------|------------|
+| Southern Approach | T5 Feldmark — T6 Stillhelm — T13 Oastad |
+| Fjord Route | T12 Sigurdshelm — T11 Halvardshelm — T10 Spartfell |
+| Hafenmark Interior | T8 Gransol — T7 Rendstad — T4 Grauwald |
+| Northern Mining | T8 Gransol — T17 Halvarshelm — T3 Lowenskyst |
 
 ### Geographic Trade Notes
-**East coast trade axis** (T7→T8→T12→T14): The commercial spine of Valoria. Flat coastal terrain, settled, maintained roads. Hafenmark controls the northern half (T7-T8), Crown the southern half (T12-T14 area). Guilds operate throughout.
-**Varfell trade isolation**: All Varfell exports must cross Hafenmark territory (via Lake Road through T6, into T5 Gransol) to reach the east coast market. Varfell has no direct sea access — Sigurdshelm (T2) is on the west coast facing Altonian waters, not the trade sea. This is geographically correct and mechanically intentional (Wealth 4 despite isolation = internal resource wealth from the Halvardshelm breadbasket and Varfell mineral deposits).
-**Schoenland** (T16): Maritime island. Trade connections = T8 (Lowenskyst) and T12 (Valorsplatz) by sea. T7 (Spartfell) connection = Altonian invasion staging route ONLY — IP event mechanic, not a normal trade connection. Schoenland merchants use Lowenskyst as their primary mainland port.
+Sea routes: T1 (Valorsplatz) ↔ T16 (Schoenland). No land connection to Schoenland. No northern circumnavigation.
+Hafenmark is fully landlocked — all maritime trade routes through Crown territory (T1 Valorsplatz or T3 Lowenskyst).
 
 ### Altonian Mountain Passes
 | Pass | Connection | Notes |
 |------|-----------|-------|
-| NE Pass | T7 (Spartfell) ↔ T16 (Schoenland/Altonia) | Primary invasion route. IP events fire at T7. Vanguard enters here. |
-| NW Pass | T2 (Sigurdshelm) ↔ off-map Altonia | Event-only. Not a playable march. Fires at IP ≥ 90. |
+| NE Pass | T10 (Spartfell) ↔ off-map Altonia | Primary invasion route. IP events fire at T10. Vanguard enters here. |
+| NW Pass | T3 (Lowenskyst) ↔ off-map Altonia | Event-only. Not a playable march. Fires at IP ≥ 90. |
+
 
 ## Proximity Ratings (supersedes Southernmost Zones — PP-199)
 **Canonical source: `designs/setting/calamity_radiation.md`** (Node Distance Map + Radiation Matrix).
@@ -836,7 +822,7 @@ RS effects per Proximity Rating: see §Rendering Stability (RS) Effects above (S
 ## Southernmost Access System (PP-219)
 ### Authority: designs/ttrpg/edeyja_npc.md; Philosophical Foundations P-13
 
-**T13 Stillhelm = normal territory.** Standard military march, territorial control,
+**T6 Stillhelm = normal territory.** Standard military march, territorial control,
 Domain Actions all apply. Difficult frontier terrain (+1 Ob non-Thread) and RS drain
 from substrate proximity, but no special access gate.
 
@@ -846,16 +832,16 @@ substrate damage itself make conventional occupation impossible — any military
 that enters encounters Thread operations at TS 75–80 scale. This has never needed
 advertising. It has simply never been necessary.
 
-### Expedition Procedure (T13 → T15)
+### Expedition Procedure (T6 → T15)
 Required sequence to access Askeheim:
 
-1. **Stage in T13 (Stillhelm):** Faction must control T13 AND have a Champion with
+1. **Stage in T6 (Stillhelm):** Faction must control T6 AND have a Champion with
    TS ≥ 30 present there for at least 1 full season. Champion must not have been
    used for military orders that season (Expedition requires full attention).
 
-2. **Declare Expedition:** Phase 4, Praetor or Tribune Inward in T13.
+2. **Declare Expedition:** Phase 4, Praetor or Tribune Inward in T6.
    Roll: Champion pool (TS ÷ 10, rounded down, min 1D, max 3D) vs Ob 3.
-   Modifiers: Restoration Weaver with Presence in T13: −1 Ob. VTM ≥ 2: −1 Ob.
+   Modifiers: Restoration Weaver with Presence in T6: −1 Ob. VTM ≥ 2: −1 Ob.
    Failure: expedition does not depart this season. Try again next season.
    Success/Overwhelming: expedition departs. Move to step 3.
 
@@ -863,7 +849,7 @@ Required sequence to access Askeheim:
    Same pool vs Ob 2. Modifiers same as above.
    | Result | Effect |
    |--------|--------|
-   | Failure | Champion enters T15 but retains nothing. No Warden contact. No Cooperation advance. No VTM progress. Champion returns to T13 next season. |
+   | Failure | Champion enters T15 but retains nothing. No Warden contact. No Cooperation advance. No VTM progress. Champion returns to T6 next season. |
    | Partial | Emotional impressions retained. Warden Emergence fires (if not active). Cooperation +0 (Wardens observe but do not approach). |
    | Success | Facts retained. Warden Emergence fires. Cooperation +1. VTM +1 (Varfell only, if VTM ≥ 2). |
    | Overwhelming | Full retention. Warden Emergence fires. Cooperation +1. VTM +1 (Varfell). Edeyja makes contact. |
@@ -898,10 +884,10 @@ but represents Crown's unique royal household angle on the Southernmost.
 - No control token can be placed in T15.
 - No Govern, Trade, Muster, Fortify, or Decree orders execute in T15.
 - TC 75 Church Territorial Seizure does not target T15.
-- Varfell Path B (T4+T13) refers to control of T13 — a normal territory.
+- Varfell Path B (T4+T6) refers to control of T6 — a normal territory.
   The deed measures political and strategic presence at the Southernmost threshold,
   not occupation of the epicentre itself.
-- Varfell Path C Deed 2 (T4+T13+1 other): same — T13 is the territorial condition.
+- Varfell Path C Deed 2 (T4+T6+1 other): same — T6 is the territorial condition.
   T15 is never the territorial condition.
 - Warden Cooperation track advances through successful Expedition seasons in T15,
   not through territorial control.
@@ -915,13 +901,13 @@ Territory numbering follows geography_design.md (17-territory canonical map).
 Old PP-199 territory references using pre-geography_design numbering are stale.
 [TERRITORY-DEBT: Full T# renumbering pass required across this file. ~170 stale T# references remain in sections not yet updated.]
 ## Ministry AP-Token Starting Positions (PP-203)
-T9 (Arcansheld), T10 (Nordhelm), T11 (Mittelmark), T12 (Valorsplatz — primary Parliament seat).
+T14 (Ehrenfeld), T2 (Kronmark), T5 (Feldmark), T1 (Valorsplatz — primary Parliament seat).
 
 ## Guilds CP-Token Starting Positions (PP-203)
-T3 (Halvardshelm), T5 (Gransol), T8 (Lowenskyst), T12 (Valorsplatz), T14 (Himmelenger). [PP-199 numbering confirmed — all correct.]
+T11 (Halvardshelm), T8 (Gransol), T3 (Lowenskyst), T1 (Valorsplatz), T9 (Himmelenger). [PP-199 numbering confirmed — all correct.]
 
 ## Niflhel Network Starting Depth (PP-203)
-T2 (Sigurdshelm) depth 2. T12 (Valorsplatz) depth 1. T14 (Himmelenger) depth 1. [Confirmed correct numbering.]
+T12 (Sigurdshelm) depth 2. T1 (Valorsplatz) depth 1. T9 (Himmelenger) depth 1. [Confirmed correct numbering.]
 
 ## Balance Findings — Status Update
 **BAL-04, BAL-05/06, BAL-08, BAL-09 (all P1):** Superseded by victory_architecture_v1.md redesign. Crown victory restructured (TCV ≥ 18 + political conditions). Church primary restructured (TC 75 phase transition + seizure). Varfell Path B redesigned. TC dynamics recalibrated.
@@ -996,15 +982,15 @@ BG Co-Movement Resolution Protocol (P-14 compliance):
 All BG Thread operations follow this sequence. No shortcuts.
 
 ## ED-108 Resolution (PP-277) [FLAGGED FOR DESIGNER REVIEW]
-Crown territory names (provisional): T10 = **Nordhelm** (NW of Arcansheim), T11 = **Sudmarken** (SE border).
+Crown territory names (provisional): T2 = **Kronmark** (NW of Arcansheim), T5 = **Sudmarken** (SE border).
 [FLAGGED: confirm names before map publication.]
 
 ## ED-109 through ED-113 Resolution (PP-278) [FLAGGED FOR DESIGNER REVIEW]
 **ED-109 — Crown victory front-loaded:** Remove 1 pre-met deed from Crown starting conditions. Crown starts with 2 of 5 deeds met (not 3). Rebalances opening tempo.
 **ED-110 — Church primary victory inaccessible:** Add fallback: if TC reaches 70 and Church holds 2+ territories, Church may declare Ecclesiastical Mandate victory (partial win, shared with one ally). Unblocks solo Church win path.
-**ED-111 — Varfell Path B under-gated:** Require VTM ≥ 4 (not 3) to seize T13 via Path B. +1 VTM threshold gate.
-**ED-112 — TC lock:** Hafenmark suppression capped at −1/season total (cannot be stacked via multiple actions). Church TC gain from T14 remains +1/season. Net: Church can advance TC by investing elsewhere.
-**ED-113 — Varfell T13 opening dominance:** Add Fort 1 to T13 at game start (not Fort 0). Increases seizure Ob from 0-fort to Fort 1 resistance (+1D to defender).
+**ED-111 — Varfell Path B under-gated:** Require VTM ≥ 4 (not 3) to seize T6 via Path B. +1 VTM threshold gate.
+**ED-112 — TC lock:** Hafenmark suppression capped at −1/season total (cannot be stacked via multiple actions). Church TC gain from T9 remains +1/season. Net: Church can advance TC by investing elsewhere.
+**ED-113 — Varfell T6 opening dominance:** Add Fort 1 to T6 at game start (not Fort 0). Increases seizure Ob from 0-fort to Fort 1 resistance (+1D to defender).
 [FLAGGED: all balance adjustments require playtesting confirmation.]
 
 ## BG Overwhelming Threshold — Final (PP-281 / PP-299)
@@ -1058,16 +1044,16 @@ Protocol (P-14 compliance): 1) Declare order type. 2) Roll faction pool TN7. 3) 
 
 
 ## ED-108 Resolution (PP-302) — Crown Territory Names [FLAGGED]
-T10 = **Nordhelm** (NW of Arcansheld, buffer territory). T11 = **Sudmarken** (SE border zone).
+T2 = **Kronmark** (NW of Ehrenfeld, buffer territory). T5 = **Sudmarken** (SE border zone).
 [FLAGGED: confirm names before map and BG board publication.]
 
 
 ## ED-109–113 Resolution (PP-303) — BG Balance Adjustments [FLAGGED]
 **ED-109 Crown front-loaded:** Remove 1 pre-met deed. Crown starts with 2/5 (not 3). Rebalances opening.
 **ED-110 Church primary inaccessible:** Fallback: if TC ≥ 70 + Church holds 2+ territories → Ecclesiastical Mandate (partial shared victory).
-**ED-111 Varfell Path B under-gated:** Require VTM ≥ 4 (not 3) to seize T13 via Path B.
-**ED-112 TC lock:** Hafenmark suppression capped at −1/season total (cannot stack). Church TC from T14 remains +1/season.
-**ED-113 Varfell T13 dominance:** Add Fort 1 to T13 at game start (+1D to defender, raising seizure difficulty).
+**ED-111 Varfell Path B under-gated:** Require VTM ≥ 4 (not 3) to seize T6 via Path B.
+**ED-112 TC lock:** Hafenmark suppression capped at −1/season total (cannot stack). Church TC from T9 remains +1/season.
+**ED-113 Varfell T6 dominance:** Add Fort 1 to T6 at game start (+1D to defender, raising seizure difficulty).
 [FLAGGED: all balance adjustments require playtesting confirmation before publication.]
 
 
