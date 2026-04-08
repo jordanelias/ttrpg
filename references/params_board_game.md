@@ -1346,3 +1346,30 @@ Available to all playable factions. Alternate path, no TCV requirement met via n
 WR advances: successful Expedition seasons (+1 per Overwhelming or cumulative Successes).
 WR decreases: RM emergence (WR −2); T15 neglect 3+ seasons (no Expedition attempted): WR −1.
 **Blocked if:** WR has ever returned to 0 after first advancing past 1.
+
+## BG Stress Test Patches (2026-04-08)
+<!-- PATCHES APPLIED: PP-470-PP-475 -->
+
+## Total TCV Correction (PP-470)
+Canonical Total TCV = **29** (corrected from stated 30).
+Recount: T1(5)+T2(1)+T3(2)+T4(1)+T5(1)+T6(1)+T7(1)+T8(4)+T9(3)+T10(2)+T11(1)+T12(3)+T13(1)+T14(2)+T15(0)+T17(1) = 29.
+Total Domination (TCV >= 28) leaves 1 uncaptured TCV (any single TCV-1 territory).
+
+## Restoration Senate Market Restriction (PP-471)
+Restoration Movement may not purchase Legionary cards from Senate Market.
+Military 0 makes Muster invalid (PP-039). Legionary cards are unplayable in hand.
+
+## Conviction Yield Dead Zone — Explicit Note (PP-473)
+**Church-controlled territories produce zero Conviction Yield.**
+Church Prominence = Church Mandate > controlling faction Mandate. When Church controls a territory, Church IS the controlling faction. Church Mandate > Church Mandate = False = not Prominent = no Conviction Yield.
+Implication: Post-TC 75 seizure removes territories from Conviction Yield pool. Plan accordingly.
+
+## AER >= 3 and Parliamentary Challenge — Independence Clarification (PP-474)
+AER >= 3 (PP-203) and Parliamentary Challenge (PP-431-COR) are independent:
+- AER >= 3 bypasses Hafenmark Structural Suppression (passive -1/season from Baralta Mandate >= 4).
+- Parliamentary Challenge is a card action; fires when played regardless of AER.
+- When AER >= 3 is active: structural is already negated; Challenge's "replaces structural" clause has no practical effect on structural. Challenge still fires and produces its degree-table TC result.
+
+## Submission + Mandate 0 Ruling (PP-475)
+If Submitting faction's halved Mandate = 0: **Submission supersedes Faction Collapse.**
+Submitted faction remains as vassal with Mandate 0. Mandate-0 effects apply. Faction does not enter Faction Collapse (which requires Stability 0 at Accounting end per I-04/P-15, not Mandate 0).

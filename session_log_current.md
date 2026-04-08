@@ -69,3 +69,14 @@ open_gaps_added: []
 - P2 findings: EC-02, EC-05, EC-08/CONFLICT-2, EC-11, CT-01, CONFLICT-3
 - SIM-DEBT-03/04/05 opened
 - Editorial decisions required (see test output)
+
+### 2026-04-08 — BG Full Stress Test (STR-BG)
+- Modes A + D across all BG mechanics
+- P1 findings: 5 (P1-01 Overwhelming contradiction, P1-02 TCV numbering, P1-03 Crown TCV threshold, P1-04 Torben Loyalty, P1-05 Seizure Ob formula)
+- P2 findings: 10 (AER dominant opening, Challenge<structural, Community Weaving Ob, Conviction Yield dead zone, Parliament Challenge/AER interaction, Diplomatic Token removal, Total Domination TCV, Parliamentary Challenge perverse incentive, Crown early TCV feasibility, Church victory unreachable)
+- P3 findings: 4 (Ob 1 no-Partial, Ministry/Crown deadlock, Guilds CP-token T11, Diplomatic Token seizure)
+- New editorials: ED-327 (TCV renumbering P1), ED-328 (AER dominant P2), ED-329 (Torben start P1), ED-330 (Community Weaving Ob P2)
+- New patches: PP-469 (TCV renumber scheduled), PP-470 (TCV total corrected), PP-471 (Restoration no Legionary), PP-472 (Accounting merge scheduled), PP-473 (Conviction Yield note), PP-474 (AER/Challenge independence), PP-475 (Submission+Mandate0)
+- Provisional decisions: 8 (all flagged, see sim output)
+- SIM-DEBT: 6 items opened (battle resolution, Thread ops, co-victory, faction unique actions, Ministry AI, RS decay)
+- Test output: tests/sim_stress_bg_2026_04_08.md

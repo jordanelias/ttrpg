@@ -4264,3 +4264,66 @@ patches:
   source: audit resolution 2026-04-08
   affects: [designs/debate/debate_system_redesign_v1.md]
   status: applied
+
+- id: PP-469
+  date: 2026-04-08
+  severity: P1
+  description: "SCHEDULED — victory_architecture_v1.md §1 TCV table requires renumbering to geography_design.md canonical T-numbers (T1=Valorsplatz, T8=Gransol, T9=Himmelenger, etc.). The current table uses stale PP-199 numbering which produces incorrect starting TCVs (Crown 10 vs 12, Hafenmark 9 vs 8). Pure renumber pass — no design values change. Execute as dedicated session. Provisional: params_board_game.md TCV table is canonical until renumber is applied."
+  finding_id: STR-BG-P1-02
+  source: BG stress test 2026-04-08
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: scheduled
+
+- id: PP-470
+  date: 2026-04-08
+  severity: P2
+  description: "Total TCV corrected from 30 to 29. Recount from params_board_game.md canonical TCV table: T1(5)+T2(1)+T3(2)+T4(1)+T5(1)+T6(1)+T7(1)+T8(4)+T9(3)+T10(2)+T11(1)+T12(3)+T13(1)+T14(2)+T15(0)+T17(1) = 29. Total Domination requires TCV ≥ 28, leaving 1 TCV uncaptured (any single TCV-1 territory). Stated total of 30 is incorrect."
+  finding_id: STR-BG-D-03
+  source: BG stress test 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-471
+  date: 2026-04-08
+  severity: P2
+  description: "Restoration Movement may not purchase Legionary cards from Senate Market. Restoration has Military 0; Muster is invalid at Military 0 (PP-039). Legionary cards would be unplayable in hand and create confusion. Restriction added to Restoration faction restrictions."
+  finding_id: STR-BG-D-07
+  source: BG stress test 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-472
+  date: 2026-04-08
+  severity: P2
+  description: "Accounting steps 8/8b/9/9b/10/10b collapsed into Step 8 'Events and Emergence' with a physical checklist card. These steps all execute in the same window and separating them adds procedural friction. Renumbering: dissolved Step 11 removed from numbering; Step 12 becomes Step 9; Step 13 becomes Step 10. Full step sequence now: 1-7, 8 (merged), 9 (victory check), 10 (season advance). Reduces accounting procedural load from 13+ steps to 10."
+  finding_id: STR-BG-D-09
+  source: BG stress test 2026-04-08
+  affects: [references/params_board_game.md]
+  status: scheduled
+
+- id: PP-473
+  date: 2026-04-08
+  severity: P2
+  description: "Explicit note added to TC generation table: Conviction Yield = 0 in all Church-controlled territories. Church Prominence requires Church Mandate > controlling faction Mandate. When Church is the controlling faction, Church Mandate = Church Mandate = not Prominent. This is a structural constraint on TC income — Church's Conviction Yield only fires in rival-controlled territories where rivals have Mandate below Church's. As Church seizes territories post-TC 75, those territories exit the Conviction Yield pool."
+  finding_id: STR-BG-D-10
+  source: BG stress test 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-474
+  date: 2026-04-08
+  severity: P2
+  description: "Clarification added: AER >= 3 (bypasses Hafenmark structural suppression, PP-203) and Parliamentary Challenge (PP-431-COR) are independent effects. AER >= 3 bypasses the passive structural suppression. Parliamentary Challenge is a card action that fires on card play regardless of AER. In seasons where AER >= 3 is active, structural suppression is already negated, so Challenge's 'replaces structural' clause has no practical effect — Challenge still fires and produces its degree-table TC result independently."
+  finding_id: STR-BG-D-11
+  source: BG stress test 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-475
+  date: 2026-04-08
+  severity: P2
+  description: "Submission + Mandate 0 interaction ruled: Submission supersedes Collapse. If a Submitting faction's halved Mandate reaches 0: the faction does not enter Faction Collapse (which requires Stability 0 at Accounting end, not Mandate 0 — I-04 correction). Faction remains as vassal with Mandate 0. Mandate 0 effects (Crown Policy unavailable if Crown Mandate 0, Ministry interaction) still apply to that faction's actions."
+  finding_id: STR-BG-D-15
+  source: BG stress test 2026-04-08
+  affects: [references/params_board_game.md, designs/board_game/victory_architecture_v1.md]
+  status: applied

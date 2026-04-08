@@ -1830,3 +1830,73 @@ editorial_decisions:
     source: SIM-SPOILER-HY-01 2026-04-07
     blocks: nothing (QoL recommendation only)
     tags: [board_game, church, counter_narrative, seizure, quality_of_life]
+
+  - id: ED-327
+    status: flagged
+    date_created: 2026-04-08
+    priority: P1
+    description: >
+      victory_architecture_v1.md §1 TCV table uses stale PP-199 territory numbering
+      (T12=Valorsplatz, T5=Gransol, T14=Himmelenger, etc.). geography_design.md canonical
+      numbering (T1=Valorsplatz, T8=Gransol, T9=Himmelenger) was adopted in params_board_game.md
+      but never propagated to victory_architecture_v1.md. Produces incorrect starting TCV
+      (Crown 10 vs 12, Hafenmark 9 vs 8). Pure renumbering pass required — no design values
+      change, only T-number labels. PP-469 scheduled.
+    source: STR-BG-P1-02 2026-04-08
+    blocks: BG victory condition checks, compilation of victory_architecture_v1.md
+    tags: [board_game, victory, territory_numbering, renumber]
+
+  - id: ED-328
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Church Cardinal Focus Temperance generates AER +1 with no card cost, no roll,
+      once per season as a Phase 1 declarative. AER 3 is achievable Season 1.
+      PP-203 states AER >= 3 bypasses Hafenmark structural TC suppression.
+      This means Church can neutralise Hafenmark's primary TC suppression tool
+      from Season 1 with zero cost. By Season 3, AER 5 (IP held at 50,
+      neutralising the Altonian invasion threat). No faction has a counter to
+      Cardinal Focus declarations. Is this intended as a dominant opening strategy
+      for Church, or was the AER bypass of structural suppression intended for
+      earned AER (via diplomacy) rather than free Cardinal Focus ramp?
+    source: STR-BG-A-02 + D-04 2026-04-08
+    blocks: Church balance assessment
+    tags: [board_game, church, AER, cardinal_focus, balance]
+
+  - id: ED-329
+    status: flagged
+    date_created: 2026-04-08
+    priority: P1
+    description: >
+      Torben Loyalty starting value and range conflict in params_board_game.md.
+      Starting Values table: Torben Loyalty starts at 10, range 0-10.
+      Torben Loyalty Track section: Range 0-7, starts at 3.
+      These cannot coexist. Starting at 10 (maximum of extended range) would make
+      early Crown/Löwenritter Torben management trivial and most Loyalty events
+      irrelevant. Starting at 3 (original range 0-7) produces meaningful political
+      management. Provisional: starting 3, range 0-7 per the full mechanical
+      track section. Starting Values table likely contains a copy error from the
+      range extension pass.
+    source: STR-BG-P1-04 2026-04-08
+    blocks: Crown/Löwenritter successor mechanics, Elske Loyalty interaction
+    tags: [board_game, crown, torben, loyalty, starting_value]
+
+  - id: ED-330
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Community Weaving Ob formula conflict between canonical documents.
+      designs/board_game/valoria_bg_v05_simulation_and_patches.md: Ob 2, minus 1 per
+      Presence marker in territory (floor 1).
+      references/params_board_game.md action table: Ob = (100 minus RS) divided by 20,
+      rounded up, min 1, minus 1 per Presence marker.
+      Formulas agree at RS 72 (start) and RS 60 but diverge at RS below 60.
+      At RS 40 with 1 marker: v05 gives Ob 1; params gives Ob 2.
+      The dynamic RS-linked formula creates thematic coherence (Restoration
+      gets harder as RS degrades) but is not in the v05 design doc.
+      If intended: v05 must be patched. If not: params action table reverts to Ob 2.
+    source: STR-BG-A-04 2026-04-08
+    blocks: Restoration balance; Community Weaving simulation accuracy
+    tags: [board_game, restoration, community_weaving, ob_formula, rs_interaction]
