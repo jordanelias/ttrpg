@@ -133,13 +133,9 @@ params_board_game Accounting Step 10 says "Warden Cooperation check" but does no
 
 ## B. FINDINGS — INTERNAL SYSTEM ISSUES
 
-### B-01. Calamity Radiation: RS Band 100–60 Conflates Two Threadwork Bands (MINOR — P3)
+### B-01. Calamity Radiation: RS Band 100–60 Conflates Two Threadwork Bands — RESOLVED
 
-Calamity Radiation uses RS 100–60 as a single band ("Stable / Strained"). Threadwork §5.3 separates these into RS 100–80 (Stable — no phenomena) and RS 79–60 (Strained — occasional wrongness). The Calamity Radiation matrix assigns effects to Proximity 0 even in the 100–60 band (Mending Gaps, micro-Gap emergent beings, +1 Ob non-Thread, Forgetting active). These effects align with threadwork's "Strained" effects, not "Stable."
-
-This is not necessarily wrong — Askeheim is the wound itself, so effects there at even high RS are defensible. But the RS 100–60 label is misleading because the "Stable" half (100–80) should have no effects even at Proximity 0 per threadwork §5.3's "Stable" definition.
-
-**Question for editorial:** Should Askeheim have effects even at RS 100–80 (Stable), or should the Calamity Radiation matrix split this band into two rows matching threadwork?
+Band split into RS 100–80 (Stable) and RS 79–60 (Strained). At Stable: Askeheim has mild contained effects (wound persists, Forgetting active, Wardens Mending) but nothing radiates beyond T15. At Strained: +1 Ob non-Thread at Askeheim, Folklore begins at Proximity 1. Consistent with threadwork §5.3 band definitions.
 
 ---
 
@@ -271,12 +267,12 @@ These are pre-geography_design.md numbering. victory_architecture_v1.md uses the
 | B-05 | WA track not in params_board_game | params_board_game |
 | B-09 | Hybrid + Calamity Radiation Ob stacking not documented | state_transfer_spec.md or calamity_radiation.md |
 
-### P3 Items (Editorial Flags)
+### P3 Items (Editorial Flags) — ALL RESOLVED
 
-| ID | Description | Decision Needed |
-|----|------------|----------------|
-| B-01 | RS 100–60 band conflates Stable/Strained at Proximity 0 | Should Askeheim have effects at RS 100–80? |
-| B-03 | Forgetting in RS-dependent matrix — should it be permanent T15 property instead? | Is Forgetting RS-dependent or permanent? |
+| ID | Description | Resolution |
+|----|------------|-----------|
+| B-01 | RS 100–60 band conflates Stable/Strained at Proximity 0 | Band split. Askeheim has contained effects at Stable; no radiation. |
+| B-03 | Forgetting in RS-dependent matrix | Permanent, conditioned on unhealed Gaps/tears, not RS. Cessation = full territorial Mending. |
 
 ### Canon Compliance
 

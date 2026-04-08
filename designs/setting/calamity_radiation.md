@@ -9,7 +9,7 @@
 
 The RS threshold system (threadwork_v25 §5.3) defines **what** effects occur at each RS band. This document defines **where** those effects manifest, based on node distance from Askeheim (T15) — the epicenter of the Einhir Catastrophe.
 
-RS thresholds are not global. They radiate outward from the wound. As RS drops, the radiation reaches further. This creates geographic gameplay pressure: southern factions face existential threat before northern ones notice.
+RS thresholds are not global. They radiate outward from the wound. As RS drops, the radiation reaches further. This creates geographic gameplay pressure: southern factions face existential threat before northern ones notice. At high RS (Stable, 100–80), the wound is contained — effects persist at Askeheim but do not radiate. The radiation begins at Strained (79–60) and intensifies with each lower band.
 
 ---
 
@@ -30,11 +30,18 @@ RS thresholds are not global. They radiate outward from the wound. As RS drops, 
 
 Each cell describes the instability state for that combination of RS band and node distance. Effects are cumulative downward (lower RS bands include all effects from higher bands).
 
-### RS 100–60 (Stable / Strained)
+### RS 100–80 (Stable)
 
 | Distance | State | Effects |
 |---|---|---|
-| 0 (Askeheim) | Active wound | Mending Gaps, repairing threads. Occasional micro-Gap emergent beings (non-combat, Thread Sensitivity (TS) 20–40). All non-Thread orders +1 Obstacle (Ob). Forgetting active. |
+| 0 (Askeheim) | Wound persists (contained) | Gaps and tears from the Calamity remain open. Wardens maintain active Mending operations. Forgetting active (see §Forgetting below). Micro-Gap emergent beings present intermittently (non-combat, Thread Sensitivity (TS) 20–40). No effects radiate beyond Askeheim at this band. |
+| 1–5 | Normal | No Calamity effects. |
+
+### RS 79–60 (Strained)
+
+| Distance | State | Effects |
+|---|---|---|
+| 0 (Askeheim) | Wound strained | As Stable, plus: all non-Thread orders +1 Obstacle (Ob). Micro-Gap emergent beings more frequent. Forgetting active. |
 | 1 | Folklore | Strange happenings. Non-practitioners uneasy near old Einhir sites. Oral traditions of the Calamity survive. Church Influence +1 Ob (cultural resistance). No mechanical instability. |
 | 2–5 | Normal | No Calamity effects. |
 
@@ -108,7 +115,8 @@ Each territory card includes a **Proximity Rating** (0–5, printed, based on no
 
 | RS Band | Proximity 0 | Proximity 1 | Proximity 2 | Proximity 3 | Proximity 4–5 |
 |---|---|---|---|---|---|
-| 100–60 | +1 Ob non-Thread | Folklore (no mech) | — | — | — |
+| 100–80 | No radiation (Askeheim-only: wound persists, Forgetting active) | — | — | — | — |
+| 79–60 | +1 Ob non-Thread; Forgetting active | Folklore (no mech) | — | — | — |
 | 59–40 | +2 Ob non-Thread; Shifting Objects | +1 Ob Thread; Shifting Objects (1d10: 1–2) | Folklore (no mech) | — | — |
 | 39–20 | Gaps auto; beings present | +1 Ob all; Gaps (1d10: 1–2) | +1 Ob Thread; Shifting Objects (1d10: 1) | Folklore (no mech) | — |
 | 19–1 | +2 Ob Mending; beings; Gaps (1d3) | +1 Ob all; Gaps (1d10: 1–4) | +1 Ob Thread; Gaps (1d10: 1–2) | Shifting Objects (1d10: 1) | Folklore (no mech) |
@@ -129,10 +137,22 @@ This is a single-page reference card. One lookup per territory per season.
 - `references/params_board_game.md`: RS Effects section rewritten to use Simplified BG Lookup Table; Southernmost Zones replaced with Proximity Rating system. [DONE — 2026-04-06]
 - `compilation/v0.14/stage4_southernmost.md`: Expedition procedures should reference Proximity 0 effects. [DEFERRED — stage4 OUTDATED, low priority]
 
+## Forgetting — Permanent Askeheim Condition (B-03 resolved)
+
+The Forgetting is NOT RS-dependent. It is a permanent condition of Askeheim (T15) that persists as long as the Calamity's Gaps and tears remain open within the territory. Per P-13 (Foundations §10.2), Southernmost knowledge is mechanically untransmittable to non-sensitives because the epistemological barrier is metaphysical — it arises from the structural damage to the substrate itself.
+
+**Condition for cessation:** The Forgetting ends only when ALL Gaps and tears within Askeheim have been Mended — i.e., the full territorial substrate is healed. This is a campaign-scale achievement requiring sustained Mending operations across multiple seasons, likely requiring Warden Cooperation (WC) ≥ 3 and RS recovery above the Strained band. No faction has accomplished this in 245 years.
+
+**Mechanical implication:** The Forgetting is listed in the RS 100–80 row of the radiation matrix because it IS active at Askeheim at all RS levels. It appears in the matrix as a reminder, not because it scales with RS. It does not radiate beyond Askeheim at any RS level — the Forgetting is a property of the damaged substrate at the wound site, not a radiating effect.
+
+**Interaction with RS decline:** As RS drops, the Forgetting does not worsen (it is already total within Askeheim). What worsens is the radiation of OTHER effects (Gaps, beings, Ob modifiers) outward from Askeheim. The Forgetting remains contained at T15 regardless of RS.
+
 ### Hybrid Mode Note (B-09)
 Calamity Radiation Ob modifiers apply to both Personal Phase Thread operations (TTRPG rules) and Strategic Phase Thread orders (BG rules) in Hybrid mode. Coherence cost from PC-declared leadership (PP-198) stacks independently with Radiation Ob modifiers. This double cost is philosophically correct — operating near the wound is harder AND degrades the practitioner.
 
 ### Open editorial items
 - ED-302: Calamity Radiation Framework — this document. RESOLVED.
+- B-01: Askeheim effects at RS 100–80 — RESOLVED. Effects contained to Askeheim only at Stable band; no radiation. Band split into 100–80 (Stable) and 79–60 (Strained).
+- B-03: Forgetting RS-dependence — RESOLVED. Forgetting is permanent at Askeheim, conditioned on unhealed Gaps/tears, not on RS. Cessation requires full territorial Mending.
 - [EDITORIAL: ED-303 — RS track naming: "Rendering Stability" vs alternative. User flagged that "rendering" is a process of consciousness, not reality. Current name measures world substrate stability. Options: keep current (defensible — measures stability of the rendered output), rename to "Substrate Integrity" or "Configurational Stability." Deferred to user decision.]
 

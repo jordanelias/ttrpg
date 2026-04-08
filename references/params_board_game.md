@@ -184,7 +184,8 @@ Each territory card includes a Proximity Rating (0–5). At Accounting, one look
 
 | RS Band | Proximity 0 | Proximity 1 | Proximity 2 | Proximity 3 | Proximity 4–5 |
 |---|---|---|---|---|---|
-| 100–60 | +1 Ob non-Thread | Folklore (no mech) | — | — | — |
+| 100–80 | Wound contained; Forgetting active; no radiation | — | — | — | — |
+| 79–60 | +1 Ob non-Thread; Forgetting active | Folklore (no mech) | — | — | — |
 | 59–40 | +2 Ob non-Thread; Shifting Objects | +1 Ob Thread; Shifting Objects (1d10: 1–2) | Folklore (no mech) | — | — |
 | 39–20 | Gaps auto; beings present | +1 Ob all; Gaps (1d10: 1–2) | +1 Ob Thread; Shifting Objects (1d10: 1) | Folklore (no mech) | — |
 | 19–1 | +2 Ob Mending; beings; Gaps (1d3) | +1 Ob all; Gaps (1d10: 1–4) | +1 Ob Thread; Gaps (1d10: 1–2) | Shifting Objects (1d10: 1) | Folklore (no mech) |
@@ -194,8 +195,8 @@ RS 0 = Rupture (campaign ends, all factions lose).
 
 Southernmost Surge (one-time, RS ≤ 10): all territories within Proximity 2 of Askeheim experience effects one band worse for one season. See calamity_radiation.md.
 
-[PROVISIONAL: B-01 — Askeheim effects at RS 100–80 (Stable band). Current matrix shows +1 Ob non-Thread at Proximity 0 even in Stable band. Threadwork §5.3 defines RS 100–80 as "no unusual phenomena." Askeheim as the wound may justify effects at any RS level. Awaiting editorial decision.]
-[PROVISIONAL: B-03 — Forgetting at Askeheim listed in the RS-dependent matrix (Proximity 0, RS 100–60). Per P-13 the Forgetting is a permanent metaphysical condition, not RS-dependent. If permanent, should be a T15 property, not in the radiation matrix. Awaiting editorial decision.]
+
+
 
 ### Theocracy Clock (TC) Effects
 | TC Range | Effect |
