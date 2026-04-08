@@ -1,319 +1,150 @@
-# valoria-orchestrator
-
-## Description
-Route ALL Valoria project tasks. ALWAYS invoke for ANY request involving:
-simulation, combat, threadweaving, social mechanics, mass battle, board game,
-hybrid mode, compilation, assembly, checkpoint, audit, consistency, canon,
-philosophy, editorial decisions, gap register, patches, stress testing, dice,
-probability, coverage, session management, Non-Player Character mechanics, faction mechanics,
-territory, clocks, or any reference to the Valoria ruleset. This is the
-single entry point for all Valoria work — no other skill triggers directly.
-
-## Term Reference
-
-Read `references/glossary.md` for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
-
-## Interface
-- Accepts: any user request involving Valoria
-- Produces: routed task output, committed to GitHub
-- Does NOT delegate commits — all GitHub writes go through orchestrator only
-- On-demand skills write to /home/claude/ only; orchestrator commits
-
+---
+name: valoria-orchestrator
+description: >
+  Orchestrate multi-skill workflows for the Valoria TTRPG/board game/hybrid project.
+  ALWAYS use this skill at the start of any Valoria task, to decompose it into the correct
+  skill sequence, manage inter-skill handoffs, enforce the editorial gate, track the gap register,
+  and ensure outputs feed forward correctly. Trigger on: "start work", "resume", "audit the ruleset",
+  "run a simulation", "stress test", "where did we leave off", "what's the plan", "compile",
+  "build checkpoint", any multi-step Valoria task, or resuming work after a session gap.
+  Also trigger whenever another Valoria skill needs routing or sequencing.
 ---
 
-## ANTI-PATTERNS — PROHIBITED
-**These patterns are banned. Violating any of them produces incorrect or wasted output.**
+## STEP 0 — GitHub Bootstrap (MANDATORY, BLOCKING)
 
-### 1. project_knowledge_search for Valoria state
-NEVER use `project_knowledge_search` to retrieve Valoria project state, mechanics,
-session logs, gap registers, editorial decisions, or any information that lives on GitHub.
-Project knowledge is stale. GitHub is canonical. Always read from GitHub.
-The ONLY permitted use of `project_knowledge_search` is when the user explicitly asks
-a question that has no GitHub equivalent (e.g. "what is today's date").
-
-### 2. Unauthenticated GitHub URLs
-NEVER use `raw.githubusercontent.com` or any GitHub URL without an Authorization header.
-These always fail for private repos. Always use:
-```bash
-PAT="{PAT_FROM_PROJECT_INSTRUCTIONS}"
-curl -s -H "Authorization: token $PAT" "https://api.github.com/repos/jordanelias/ttrpg/contents/PATH"
-```
-
-### 3. web_fetch for GitHub API
-NEVER use the `web_fetch` tool to call GitHub API endpoints. GitHub API requires
-bash_tool with Authorization header. `web_fetch` is for public web pages only.
-
-### 4. Creating files without committing
-NEVER create a file in /home/claude/ and then return a response without committing it
-to GitHub first. The filesystem resets between sessions. Any file not committed is
-permanently lost on session end or context compaction.
-**Rule: create file → commit to GitHub → THEN respond.** No exceptions.
-
-### 5. conversation_search for recent sessions
-NEVER use `conversation_search` to find a session that completed in the last hour.
-Use `recent_chats(n=3)` instead — it returns the most recent sessions directly and
-costs one call. Only use `conversation_search` for topic-based lookup of older sessions.
-
-### 6. Filename assumptions without directory listing
-NEVER attempt to fetch a file without first verifying its name exists.
-If unsure of exact filename: list the directory first (1 call), then fetch.
-This prevents the pattern of 3-5 failed 404 calls to wrong filenames.
-
-### 7. Bootstrap without python3 heredoc wrapper
-NEVER paste the bootstrap block as bare Python into bash_tool without the heredoc wrapper.
-The correct form is always `python3 - <<'EOF'` ... `EOF`. Running bare Python code
-(without the heredoc) causes a syntax error on the first attempt. Retry attempts
-waste 500-1000 tokens per session. Copy the bootstrap block from Project Instructions
-exactly as written — do not reformat.
-
----
-
-## PAT Reference
-The GitHub PAT is always available in Project Instructions. If a session opens without
-it in context, check the Project Instructions system prompt directly — it is embedded there.
-PAT: `{PAT_FROM_PROJECT_INSTRUCTIONS}`
-
-Standard fetch pattern:
-```bash
-PAT="{PAT_FROM_PROJECT_INSTRUCTIONS}"
-curl -s -H "Authorization: token $PAT" \
-  "https://api.github.com/repos/jordanelias/ttrpg/contents/FILE" \
-  | python3 -c "import sys,json,base64; d=json.load(sys.stdin); print(base64.b64decode(d['content']).decode())"
-```
-
-If GitHub returns 401: the PAT has changed. Tell the user immediately — do not attempt
-workarounds or fallbacks.
-
----
-
-## Session Start Protocol
-
-Execute in order on every session start. **Do not skip steps. Do not substitute
-project_knowledge_search for any GitHub read.**
-
-1. **Read session log from GitHub** — use read_files_graphql, not curl
-   After bootstrap, immediately run:
-   ```python
-   files = g.read_files_graphql([
-       'session_log_current.md',
-       'canon/editorial_ledger.yaml',
-       'references/file_index.md',
-   ])
-   ```
-   Report status in ≤3 lines: current phase, last action, what's next.
-
-2. **Freshness Gate** — mandatory before any simulation, audit, or patch work
-   ```bash
-   export GITHUB_PAT="{PAT_FROM_PROJECT_INSTRUCTIONS}"
-   python3 tools/freshness_gate.py
-   ```
-   - Exit 0 → proceed.
-   - Exit 1 → report stale systems. **Do not begin simulation, audit, or patch
-     on any stale system.** Read the updated canonical doc, re-sync params if
-     values changed, then run `python3 tools/freshness_gate.py --update` and
-     re-check before proceeding.
-   - Exit 2 → run `python3 tools/freshness_gate.py --update` first, then re-check.
-
-2b. **Patch Propagation Check** — run if session log mentions recent patches
-   ```bash
-   export GITHUB_PAT="{PAT_FROM_PROJECT_INSTRUCTIONS}"
-   python3 tools/patch_propagation_checker.py --from PP-200
-   ```
-   Exit 0 → proceed. Exit 1 → report missing propagations. Fix before any work that
-   reads params files.
-
-3. **Load skill registry**
-   Read from `/mnt/skills/user/valoria-orchestrator/SKILL.md` local mount if available,
-   otherwise fetch from GitHub at `skills/valoria-orchestrator/SKILL.md`.
-   Do NOT use project_knowledge_search.
-
-4. **Confirm task** with user before proceeding.
-
----
-
-## Task Routing
-
-1. Match user request against trigger keywords in skill registry.
-2. Declare: skill name · model tier · rationale (one line).
-3. Fetch skill SKILL.md from GitHub via read_files_graphql:
-   ```python
-   files = g.read_files_graphql(['skills/{skill-name}/SKILL.md'])
-   ```
-4. Execute per skill instructions.
-5. **Commit output to GitHub BEFORE sending response to user** (see Atomic Commit Discipline).
-6. Update session log as part of same commit.
-
-**If no skill matches:** handle inline if mechanical/deterministic. Flag [EDITORIAL] if creative.
-
----
-
-## Atomic Commit Discipline
-
-**Every file created must be committed to GitHub before the response is sent.**
-
-**After every commit that modifies a canonical doc, run:**
-```bash
-python3 tools/freshness_gate.py --update
-```
-This re-syncs canonical_sha fields in canonical_sources.yaml so the next
-session's freshness gate passes. Include the canonical_sources.yaml update
-in the same atomic commit as the canonical doc change whenever possible.
-If committed separately, message: `[infrastructure] freshness_gate --update`
-
-**After every commit that applies a patch listing params files, run:**
-```bash
-python3 tools/patch_propagation_checker.py --from PP-NNN
-```
-where PP-NNN is the lowest patch ID in the commit. Exit 0 = all propagated.
-Exit 1 = patches registered but not reflected in params headers — fix before
-closing the session. This prevents the pattern where patch_register is updated
-but params files are not.
-
-```
-create_file(/home/claude/output.md)
-  → commit to GitHub (output.md + session_log_current.md in single push)
-  → THEN return response to user
-```
-
-Never create files without immediately committing. Never stage multiple files
-and commit at the end — commit as each deliverable is complete.
-
-If a commit fails: report failure explicitly. Do not pretend the file is safe.
-
----
-
-## Canon Gate
-
-**Mandatory before committing any new or changed mechanical content.**
-
-```
-1. Fetch skills/valoria-canon-guard/SKILL.md from GitHub
-2. Run Mechanical mode on proposed content
-3. FAIL   → do not commit; report violation; stop
-4. PARTIAL → commit with [CANON-PARTIAL] warning; log in gap register
-5. PASS   → proceed to commit
-```
-
----
-
-## Editorial Decision Protocol
-
-When user makes a setting, lore, or design decision:
-
-```
-1. Fetch skills/valoria-editorial-ledger/SKILL.md from GitHub
-2. Create YAML entry: id, date, category, decision, affects list
-3. Run tools/find_references.py to verify affects list completeness
-4. Run tools/propagator.py for each affected compiled stage
-5. Atomic commit: modified stages + updated ledger + session log
-6. Confirm: "Decision E-NNN applied to N files. Zero NOT_APPLIED."
-```
-
----
-
-## Patch Protocol
-
-When a mechanical fix is identified (not an editorial decision):
-
-```
-1. Create entry in canon/patch_register.yaml (id: PP-NNN, status: approved)
-2. If patch changes a value in compiled stages:
-   a. Run tools/find_references.py to locate all occurrences
-   b. Run tools/propagator.py to apply
-3. Run Canon Gate on patched content
-4. Atomic commit: patched files + updated register + session log
-```
-
----
-
-## Compiler Pre-flight
-
-Before any compilation run, verify:
-- `canon/editorial_ledger.yaml`: zero `NOT_APPLIED` entries → BLOCK if any found
-- `canon/patch_register.yaml`: zero `approved` (unapplied) entries → BLOCK if any found
-- `valoria_gap_register_consolidated.md`: zero open P1 items → BLOCK (or get user override)
-
----
-
-## Session Close Protocol
-
-At session end or context limit warning:
-
-**Use `g.safe_session_close()` — never write session_log_current.md manually.**
+**This step executes before anything else. No memory substitution. No skipping.**
 
 ```python
+import os, sys, json, base64, urllib.request
+
+PAT = os.environ['GITHUB_PAT']  # must be set — abort if missing
+REPO = 'jordanelias/ttrpg'
+
+# Bootstrap github_ops.py from repo
+req = urllib.request.Request(
+    f'https://api.github.com/repos/{REPO}/contents/skills/valoria-orchestrator/scripts/github_ops.py?ref=main',
+    headers={'Authorization': f'token {PAT}', 'Accept': 'application/vnd.github.v3+json'}
+)
+with urllib.request.urlopen(req) as r:
+    d = json.loads(r.read())
+    open('/home/claude/github_ops.py', 'w').write(base64.b64decode(d['content']).decode())
+
+sys.path.insert(0, '/home/claude')
 import github_ops as g
 
-new_current = f"""# Valoria Session Log — Updated
-
-session_id: {date}T_{SESSION_LABEL}
-phase: {CURRENT_PHASE}
-status: CLOSED
-
-## SESSION SUMMARY
-### Completed
-{BULLET_LIST_OF_COMPLETED_TASKS}
-
-### GitHub state (committed)
-{FILES_COMMITTED}
-
-### Resume instruction
-{NEXT_ACTION_FOR_NEXT_SESSION}
-"""
-
-# bootstrap_log = the session_log_current.md content read at session START
-# safe_session_close handles:
-#   - Duplicate close detection (same session_id already in current → abort)
-#   - Concurrent close protection (another session closed since we started →
-#     archives THAT session's log, not our stale copy)
-g.safe_session_close(
-    new_session_log=new_current,
-    bootstrap_session_log=bootstrap_log,  # saved at session start
-    message="[infrastructure] Session close — {SESSION_LABEL}",
-)
+# Batch-read all session-critical files
+files = g.read_files_graphql([
+    'session_log_current.md',
+    'canon/editorial_ledger.yaml',
+    'references/file_index.md',
+    'references/canonical_sources.yaml',
+])
 ```
 
-**Session Start — save bootstrap snapshot:**
-At Step 1 of Session Start Protocol, after reading session_log_current.md,
-save the raw content as `bootstrap_log` (a Python variable). This is used by
-`safe_session_close()` to detect intervening closes.
+**Failure behavior:** If PAT is missing, GitHub is unreachable, or any critical file returns None — STOP. Report the error. State: "GitHub bootstrap failed — cannot proceed without live repo data." Do not continue using memory.
 
-```python
-bootstrap_log = g.read_files_graphql(["session_log_current.md"])["session_log_current.md"]
+**After bootstrap:** Hold fetched contents in working context. Do not re-fetch within the same session unless a write has occurred since last fetch.
+
+**Additional reads:** Any task referencing a specific design doc, params file, or register must fetch that file from GitHub before use. Do not read from memory, local copies, or project files.
+
+## Session Start Protocol
+1. From fetched `session_log_current.md`: extract active resumption block.
+   - If found: report last stage + next action in ≤3 lines; confirm before proceeding.
+   - If not found: new session. Confirm task with user.
+2. From fetched `canon/editorial_ledger.yaml`: count P1-BLOCKER items. Report count only.
+3. From fetched `references/file_index.md`: report KNOWN STALE SYNC GAPS count only.
+4. Confirm task with user before proceeding.
+
+## Canonical Hierarchy (immutable)
+1. `canon/00_philosophical_foundations.md` — governs everything
+2. `canon/01_*.md` amendments — extend the Foundations
+3. `canon/02_canon_constraints.md` — mechanical constraints P-01 to P-15
+4. `designs/` working documents — canonical for active mechanics
+5. `compilation/` — snapshots; use only when `compilation_current: true` in `canonical_sources.yaml`
+
+If conflict: higher-ranked document wins. Always.
+When `canonical_sources.yaml` lists a design doc as `canonical:` for a system, use that doc.
+If `compilation_current: false`, never use the compilation as a source of mechanical values.
+
+## Editorial Gate (MANDATORY)
+**User retains exclusive authority over:**
+- Setting, worldbuilding, character, narrative, faction behaviour decisions
+- Ambiguous design intent
+- All `[EDITORIAL: ...]` flagged items
+
+**Flag format:** `[EDITORIAL: ED-NNN — brief description]`
+
+**Claude executes without approval:**
+- Formula fixes, consistency repairs, formatting
+- Simulations and audit reports
+- Mechanical patches derived from simulation findings
+
+**Provisional decisions:** Make the most mechanically defensible choice. Mark `[PROVISIONAL: ...]`, add to editorial ledger with `status: provisional`. Unblocks simulation — not final.
+
+## Skill Registry
+| Skill | Path (on GitHub) | Model | Use When |
+|-------|-----------------|-------|----------|
+| valoria-orchestrator | `skills/valoria-orchestrator/SKILL.md` | Sonnet | Session start, routing, multi-step |
+| valoria-simulator | `skills/valoria-simulator/SKILL.md` | Sonnet | Stress test, simulate |
+| valoria-mechanic-audit | `skills/valoria-mechanic-audit/SKILL.md` | Sonnet | Audit, consistency, gap detection |
+| valoria-canon-guard | `skills/valoria-canon-guard/SKILL.md` | Sonnet | Canon compliance P-01–P-15 |
+| valoria-editorial-register | `skills/valoria-editorial-register/SKILL.md` | Sonnet | Resolve editorials, harvest flags |
+| valoria-compiler | `skills/valoria-compiler/SKILL.md` | Sonnet | Compile (lowest priority) |
+| valoria-chunker | `skills/valoria-chunker/SKILL.md` | Haiku | Pre-process docs >500 lines |
+
+**Skill reads:** Always fetch skill files from GitHub using `read_files_graphql()`. Never use the local `/mnt/skills/` copy — it may be stale.
+
+## Workflows
+
+**Full Mechanical Audit**
+GitHub fetch relevant docs → chunker (A, C, E) → canon-guard → mechanic-audit (A–E) → gap register update → findings report
+
+**Philosophy Compliance Check**
+GitHub fetch relevant docs → chunker (target section) → canon-guard
+
+**Stress Test Suite**
+GitHub fetch relevant docs → chunker (target mechanics + dependencies) → simulator (Mode A then D) → findings report
+
+**Targeted Repair**
+GitHub fetch relevant docs → canon-guard → mechanic-audit → [EDITORIAL GATE if content] → compiler
+
+**New Mechanic Development**
+GitHub fetch all relevant design docs → canon-guard (pre-check) → mechanic-audit (integration) → simulator (stress test) → [EDITORIAL GATE] → compiler
+
+## Commit Protocol (Every Commit)
+Every commit must be atomic and include:
+1. Changed design doc(s)
+2. Corresponding params file(s) if mechanical values changed
+3. `references/canonical_sources.yaml` if source authority changed
+4. `references/propagation_map.md`
+5. `canon/patch_register.yaml` if patches applied
+6. `canon/editorial_ledger.yaml` if editorial items added/resolved
+7. `tests/coverage_matrix.md` if simulation run
+8. Test output in `tests/` if simulation run
+9. Run `python3 tools/freshness_gate.py --update` after any canonical doc change; include result in same commit
+
+**Commit message format:** `[scope] description — PP-NNN / ED-NNN if applicable`
+Scopes: `editorial` / `patch` / `simulation` / `compilation` / `infrastructure` / `skill` / `cleanup`
+
+## Session Close Protocol
+**All commits go to GitHub via `g.atomic_commit()`. Local-only writes are not a valid session close.**
+
+Write YAML resumption block to `session_log_current.md`:
+```yaml
+session_close: YYYY-MM-DD
+last_stage: [stage name]
+next_action:
+  skill: name
+  input_file: filename
+  parameters: {}
+open_gaps_added: []
+editorial_decisions_pending: []
+blockers: []
 ```
 
-**Context limit — HARD CAP AT 90%:**
-
-At any point when context usage reaches or exceeds 90%:
-1. **HALT all ongoing tasks immediately.**
-2. Run Session Close Protocol in full (commit all completed work to GitHub).
-3. Tell the user:
-   > ⚠️ Context at 90%. All work committed to GitHub. Start a new chat and invoke the orchestrator to resume.
-4. Do nothing further in the current session.
-
-This overrides all other instructions.
-
----
-
-## Commit Message Convention
-
-```
-[scope] description — ID(s)
-```
-
-Scopes: `editorial` · `patch` · `compilation` · `simulation` · `infrastructure` · `skill` · `cleanup`
-IDs: `E-NNN` (editorial) · `PP-NNN` (patch) · `G-NNN` (gap) · `SIM-NNN` (simulation finding)
-
----
-
-## Error Handling
-
-| Error | Action |
-|-------|--------|
-| GitHub 401 | PAT has changed or expired. Tell user immediately. Do NOT attempt unauthenticated fallbacks. |
-| GitHub 404 | List directory first to confirm filename. Do not retry same wrong path. |
-| OID mismatch on commit | Retry once with fresh SHA. If second fail: report conflict, do not commit partial state. |
-| Skill not found | Report path, ask user to confirm skill has been built and committed. |
-| Canon gate FAIL | Never commit. Report violation with P-0N reference. Wait for user decision. |
-| Rate limit | Wait 60 seconds, retry once. If still limited: report, ask user to continue in new session. |
-| project_knowledge returns stale data | Discard result. Read from GitHub instead. |
+## Token Rules
+- Never re-read a document already fetched this session. Consume fetched content.
+- Never re-run a completed stage. Consume prior results.
+- Intermediate work: tables, not prose.
+- Context limit approaching → complete current stage → session-close → commit → instruct new chat.
+- Chunk all inputs >500 lines before passing to any analysis skill.
