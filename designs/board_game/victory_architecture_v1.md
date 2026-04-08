@@ -410,3 +410,25 @@ Simulation confirms that spoiler strategies are functional. Key findings:
 - Varfell spoiling Church: TC suppression via Counter-Narrative is minor (−0.135 TC/use expected); primary effect is AP pressure. Hybrid mode allows invisible spoiling via personal-scale Zoom In actions.
 - Institutional Mandate trigger scope: [EDITORIAL: ED-324 — confirm trigger fires on Mandate-targeting actions only.]
 - Church Prominence tracker: [EDITORIAL: ED-326 — recommend tracker on Church mat for Counter-Narrative eligibility.]
+
+## PP-478 Override — §3.5 Restoration Movement
+
+**[PP-478 SUPERSEDES §3.5 above for mode applicability.]**
+
+### RM Mode Applicability
+- **BG-only mode:** RM solo victory and co-victories are UNAVAILABLE. RM is not a player faction.
+- **Hybrid mode:** RM solo victory and co-victories are available ONLY after RM Founding (see params_board_game.md §RM Founding Mechanic).
+
+### RM Solo Victory (Hybrid mode, post-Founding)
+Phase 1: ≥ 5 territories CV ≤ 1, held 2 consecutive Accounting steps.
+Phase 2: Cultural Uprising of T9 Himmelenger. RS ≥ 25 required (PP-467).
+Roll: Weaver Thread pool vs Ob = TC ÷ 10. Win: T9 under RM administration + Phase 1 held × 2 Accounting steps.
+
+### §4 Co-Victory Override (PP-478)
+Varfell+RM and Hafenmark+RM co-victories: **Hybrid mode only, post-Founding.** BG-only: struck.
+
+### §8 RM Emergence Override (PP-478)
+The WA-based spontaneous RM Emergence mechanic (§8) is REPLACED by the Founding mechanic.
+WA track remains (it governs Warden's Accord, not RM emergence). The triple-condition RM emergence
+(WA ≤ −2 AND ≥ 3 territories CV ≤ 1 AND RS ≤ 50) is struck. RM emergence is now exclusively
+via the Founding Mechanic in Hybrid mode.

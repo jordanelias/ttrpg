@@ -557,3 +557,8 @@ When a Cardinal is killed (by PC action or event):
   Failure: gap extended 1 additional season. Another attempt at next Accounting.
 - TC effect: Cardinal death triggers TC +1 (institutional disruption).
 [PROVISIONAL]
+
+## Restoration Movement — Mode and Founding Status (PP-478)
+**BG-only mode:** Not a playable faction. No player controls RM.
+**Hybrid mode:** Not present at game start. Founded mid-campaign via Founding Mechanic (see params_board_game.md §RM Founding Mechanic). Post-founding stats depend on Founding degree (Success: Mandate 1/Influence 2/Wealth 1/Military 0/Stability 3; Overwhelming: Mandate 2/Influence 3/Wealth 1/Military 0/Stability 4).
+Prior RM stat entries (Mandate -, Influence -, etc.) reflect pre-Founding state (RM does not exist). Post-Founding stats supersede those entries.

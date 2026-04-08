@@ -373,3 +373,14 @@ Propagation targets:
 | designs/setting/calamity_radiation.md | designs/ttrpg/threadwork_redesign_v25.md §6 | Gap-severity classification cross-ref — DONE 2026-04-06 |
 | designs/setting/calamity_radiation.md | designs/setting/geography_design.md | Supersedes Calamity Bleed Gradient section — DONE |
 | designs/setting/geography_design.md | designs/setting/calamity_radiation.md | Node distance map derived from territory adjacency — DONE |
+
+## PP-478 — RM Founding Mechanic Propagation
+| Source | Depends On | Change Required |
+|--------|-----------|-----------------|
+| params_board_game.md §RM Founding | PW track definition | params_board_game.md ✓ applied |
+| victory_architecture_v1.md §3.5 | RM mode availability | victory_architecture_v1.md ✓ override appended |
+| victory_architecture_v1.md §4 | RM co-victory availability | ✓ override appended |
+| victory_architecture_v1.md §8 | RM Emergence → replaced | ✓ override appended |
+| params_factions.md | RM faction status | ✓ applied |
+| valoria_bg_v05_simulation_and_patches.md | "5 players only" note, §Balance | STALE NOTE — see PP-478 |
+| tests/coverage_matrix.md | RM simulation entries | updated |

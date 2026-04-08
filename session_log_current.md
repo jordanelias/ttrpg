@@ -34,3 +34,13 @@ Then P2 cluster: ED-338, ED-341, ED-343, ED-344.
 blockers: [ED-345 blocks RM Cultural Uprising adjudication]
 editorial_decisions_pending: [ED-338, ED-339, ED-340, ED-341, ED-342, ED-343, ED-344, ED-345]
 ```
+
+### 2026-04-08 — RM Founding Mechanic (PP-478, design decision)
+- RM not playable in BG-only mode (confirmed canonical).
+- Hybrid mode: RM founded mid-campaign via PW track >= 3 + CV conditions + Founding Agent roll.
+- Popular Will (PW) track defined (0–5, public, no faction owner).
+- Founding degree determines starting stats and Presence markers.
+- RM co-victories struck from BG-only mode; available Hybrid post-Founding only.
+- WA-based spontaneous RM Emergence struck; replaced by Founding Mechanic.
+- Applied: params_board_game.md, victory_architecture_v1.md (override), params_factions.md, propagation_map.md.
+- STALE NOTE remaining: valoria_bg_v05_simulation_and_patches.md "5 players only" — flagged, not patched in-place (read-only stale doc section).

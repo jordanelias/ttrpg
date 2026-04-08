@@ -4459,3 +4459,27 @@ patches:
   source: simulation 2026-04-08
   affects: [tests/sim_new_06_cultural_uprising.md, tests/coverage_matrix.md]
   status: applied
+
+- id: PP-478
+  date: 2026-04-08
+  severity: P1
+  description: >
+    RM Founding Mechanic (canonical design decision). Restoration Movement (RM) is NOT a
+    playable faction in BG-only mode. In Hybrid mode, RM does not exist at game start;
+    it may emerge mid-campaign through a Founding event. Founding requires: Popular Will
+    (PW) track >= 3 AND >= 3 territories CV <= 1 AND RS <= 60, plus a Founding Agent
+    (PC or named NPC) succeeding a roll vs Ob = TC / 10 round up. Founded RM receives
+    starting stats (Mandate 1-2, Influence 2-3, Wealth 1, Military 0, Stability 3-4)
+    based on Founding degree. RM co-victories (Varfell+RM, Hafenmark+RM) available in
+    Hybrid mode post-Founding only; struck from BG-only mode. PW track: 0-5, public,
+    advances via CV pressure and PC community actions, regresses via Church Heresy
+    Investigations and TC >= 60. Applied to: params_board_game.md, victory_architecture_v1.md,
+    params_factions.md. BG doc "5 players only" restriction struck.
+  finding_id: design_decision_rm_founding
+  source: design decision 2026-04-08 (Jordan)
+  affects:
+    - references/params_board_game.md
+    - designs/board_game/victory_architecture_v1.md
+    - references/params_factions.md
+    - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+  status: applied

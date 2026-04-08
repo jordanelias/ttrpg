@@ -1446,3 +1446,55 @@ Unit removed (by stat cap reduction): returned to reserve with Discipline reset 
 
 ## VTM 5 — Once-Per-Game Tracking (PP-477)
 Varfell faction mat: flip token 'VTM 5 Power Used'. Set to Used on ability activation. Not reset between sessions.
+
+## Restoration Movement — Founding Mechanic (PP-478)
+<!-- RM is NOT a playable faction in BG-only mode. -->
+<!-- In Hybrid mode, RM emerges mid-campaign via Founding if conditions are met. -->
+
+### RM Status by Mode
+| Mode | RM Status |
+|------|-----------|
+| BG only | Not a playable faction. Presence markers are environmental tokens (GM/table). No player controls RM. No RM solo or co-victory. |
+| Hybrid | Not present at game start. Emerges via Founding event. Once founded: playable by PC's controlling player (or GM if NPC-founded). |
+
+### Popular Will (PW) Track
+Range 0–5. Public track (placed near RS clock). Starts at 0. Belongs to no faction.
+
+**Advances +1 when:**
+- ≥ 2 territories simultaneously have CV ≤ 1 AND no Church Heresy Investigation is active in any of them (checked at Accounting).
+- A PC performs a successful Community Organising or Community Weaving personal scene in a CV ≤ 1 territory (Zoom In result).
+
+**Regresses −1 when:**
+- Church executes a successful Heresy Investigation in a CV ≤ 1 territory.
+- TC ≥ 60 at Accounting (while TC ≥ 60: PW regresses −1/season automatically).
+
+Floor: 0. Ceiling: 5.
+
+### Founding Trigger (all three at any Accounting, Hybrid mode only)
+| Condition | Threshold |
+|-----------|-----------|
+| PW track | ≥ 3 |
+| Territories with CV ≤ 1 | ≥ 3 |
+| RS | ≤ 60 |
+
+### Founding Procedure
+Founding Agent declared (PC with communal Conviction, or named NPC at GM discretion).
+Roll: Founding Agent's Influence vs Ob = TC ÷ 10 (round up, min 1, max 5).
+
+| Degree | Starting Stats | Presence Markers |
+|--------|---------------|-----------------|
+| Overwhelming | Mandate 2, Influence 3, Wealth 1, Military 0, Stability 4 | 3 markers in CV ≤ 1 territories |
+| Success | Mandate 1, Influence 2, Wealth 1, Military 0, Stability 3 | 2 markers |
+| Partial | PW +1. Not founded. Retry next Accounting. | — |
+| Failure | PW −1. Church gets 1 free Heresy Investigation. Cannot retry until PW resets to ≥ 3. | — |
+
+**Post-founding card hand:** 2× Praetor, 1× Pontifex, 1× Recess.
+**NPC-founded RM AI priority:** CV reduction > Presence spreading > Founding Agent protection > Weaving.
+
+### Community Organising (Restoration, post-Founding)
+Pool: 1D base + 1D per adjacent territory with RM Presence marker (PP-460). Failure: no Stability cost. Retry next season.
+
+### BG-Only Mode Notes
+- PW track not used.
+- RM co-victories (Varfell+RM, Hafenmark+RM) not available.
+- "5 players only" restriction struck — RM is not a player faction in any player-count BG game.
