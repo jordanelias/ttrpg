@@ -92,7 +92,7 @@ If `compilation_current: false`, never use the compilation as a source of mechan
 | valoria-compiler | `skills/valoria-compiler/SKILL.md` | Sonnet | Compile (lowest priority) |
 | valoria-chunker | `skills/valoria-chunker/SKILL.md` | Haiku | Pre-process docs >500 lines |
 
-**Skill reads:** Always fetch skill files from GitHub using `read_files_graphql()`. Never use the local `/mnt/skills/` copy — it may be stale.
+**Skills load from `/mnt/skills/user/` at runtime.** GitHub (`skills/*/SKILL.md`) is the version-controlled source. Do not fetch skills from GitHub during a session.
 
 ## Workflows
 
