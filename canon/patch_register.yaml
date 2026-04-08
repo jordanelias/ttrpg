@@ -4327,3 +4327,24 @@ patches:
   source: BG stress test 2026-04-08
   affects: [references/params_board_game.md, designs/board_game/victory_architecture_v1.md]
   status: applied
+
+- id: PP-460
+  date: 2026-04-08
+  severity: P1
+  description: >
+    Restoration Movement redesigned as statless faction (ED-337 resolution). RM loses all
+    faction stats (M/I/W/Mil/Sta). It operates purely through Presence markers and Community
+    Weaving. Victory condition redesigned: Phase 1 — CV ≤ 1 in ≥ 8 of 15 playable territories;
+    Phase 2 — Cultural Uprising of T9 Himmelenger (Weaver Thread pool vs Ob = TC÷10). Win:
+    T9 under RM administration + Phase 1 held × 2 consecutive Accounting steps. RM card hand
+    reduced: 2× Praetor, 1× Pontifex, 1× Recess. Community Organising pool: 1D base + 1D per
+    adjacent Presence marker. No Stability cost on Organising failure. PP-403 explicitly
+    excludes RM. ED-327 resolved. ED-337 created.
+  finding_id: ED-327, ED-337
+  source: design decision 2026-04-08
+  affects:
+    - designs/board_game/victory_architecture_v1.md
+    - references/params_board_game.md
+    - references/params_factions.md
+    - canon/editorial_ledger.yaml
+  status: applied

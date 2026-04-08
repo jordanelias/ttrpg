@@ -16,7 +16,7 @@
 | Church of Solmund | 2–5 players |
 | Hafenmark | 2–5 players |
 | Varfell | 2–5 players |
-| Restoration Movement | 5 players only (optional) |
+| Restoration Movement | 5 players only (optional) — statless faction; operates through CV and Presence only |
 | Löwenritter | Conditional: post-coup only |
 
 ### NPC-Only Factions (never playable)
@@ -78,7 +78,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Church | 5 | 6 | 5 | 4 | 5 |
 | Hafenmark | 4 | 4 | 5 | 3 | 4 |
 | Varfell | **4** | 4 | **4** | 4 | 4 |
-| Restoration | 2 | 4 | 2 | 0 | 3 |
+| Restoration Movement | — | — | — | — | — | No faction stats. Operates via Presence markers and Community Weaving only. (PP-460) |
 | Löwenritter (post-coup) | 3 | 2 | 3 | 6 | 5 |
 | Guilds (NPC) | 3 | 4 | 6 | 2 | 5 |
 | Niflhel (NPC) | — | 5 | 4 | — | 4 |
@@ -108,7 +108,7 @@ CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 
 | Investigate/Intel (Tribune) | 2 | +2 Ob in Church territory with Inquisitor |
 | Spy (Tribune Outward) | Target Intel ÷ 2 round up | — |
 | Parliamentary Manoeuvre (Hafenmark) | Opponent Influence ÷ 2 round up | — |
-| Community Organising (Restoration) | 2 | — |
+| Community Organising (Restoration) | 2 | Pool: 1D base + 1D per adjacent territory with RM Presence marker. Failure: no Stability cost (RM has no Stability). Try again next season. (PP-460) |
 | Community Weaving (Restoration) | (100−RS)÷20 round up min 1 | −1 per Presence marker in territory |
 | Fortify | Fort level + 1 | — |
 
@@ -231,7 +231,7 @@ The Deed-based victory system has been dissolved for ALL factions including Löw
 | Varfell Path A | Intelligence Hegemony | TCV ≥ 10 + Vaynard Thread Mastery (VTM) ≥ 3 + 2 rival stats revealed + expansion |
 | Varfell Path B | Southernmost Dominion | TCV ≥ 8 + VTM ≥ 3 + T13 control + T15 presence + Warden's Accord (WA) ≥ +1 |
 | Varfell Path C | Thread Supremacy | TCV ≥ 10 + VTM = 5 + Rendering Stability (RS) ≥ 50 |
-| Restoration Movement (RM) | Cultural Revolution (5P only) | ≥ 5 territories CV ≤ 1 + ≥ 5 RM Presence + RS ≥ 40 |
+| Restoration Movement (RM) | Cultural Revolution (5P only) | Phase 1: CV ≤ 1 in ≥ 8/15 territories. Phase 2: Cultural Uprising of T9 Himmelenger. Win: T9 held + Phase 1 × 2 Accounting. No faction stats. (PP-460) |
 | Löwenritter | Regency Establishment | TCV ≥ 10 + Thread Consciousness (TC) < 50 + IP < 60 + RS > 40 + PI ≥ 4 + successor |
 
 ### Territory Consolidation Values (TCV)
@@ -377,7 +377,7 @@ State-based modifiers (RS/TC/IP/PI environmental effects) do NOT count against t
 | Restoration | 1× Pontifex, 2× Praetor, 1× Senator, 1× Tribune, 1× Recess |
 
 Domain Expertise (+1D when playing this card type):
-Crown = Legionary | Church = Senator | Hafenmark = Consul/Prefect | Varfell = Tribune | Restoration = Pontifex
+Crown = Legionary | Church = Senator | Hafenmark = Consul/Prefect | Varfell = Tribune | Restoration = Pontifex (Thread) only. RM hand: 2× Praetor (Community Organising/Project), 1× Pontifex (Community Weaving + Cultural Uprising), 1× Recess. No Legionary, no Senator (for stats-based actions), no Tribune. (PP-460)
 
 ## Mandate Recovery (PP-174 — provisional, no v04 basis but not contradicted)
 Govern Overwhelming in own capital: Mandate +1 (max once/season, max to faction starting Mandate).

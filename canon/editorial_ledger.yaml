@@ -1832,7 +1832,9 @@ editorial_decisions:
     tags: [board_game, church, counter_narrative, seizure, quality_of_life]
 
   - id: ED-327
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "Dissolved by PP-460: RM redesigned as statless faction. No Mandate, no Stability, no PP-403 exposure. Community Organising failure = retry next season with no cost. Bootstrap problem eliminated at root."
     date_created: 2026-04-08
     priority: P1
     description: >
@@ -1900,3 +1902,19 @@ editorial_decisions:
     source: STR-BG-A-04 2026-04-08
     blocks: Restoration balance; Community Weaving simulation accuracy
     tags: [board_game, restoration, community_weaving, ob_formula, rs_interaction]
+
+  - id: ED-337
+    status: flagged
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      RM statless redesign: RS condition removed from RM victory (PP-460). The old condition
+      RS ≥ 40 is no longer part of RM's win path (it no longer has the Cultural Revolution
+      RS condition). However, RM's Community Weaving accelerates RS decline (each Weave has
+      a Co-Movement cost). If RM wins via Cultural Uprising but RS has dropped below 40 by
+      then, other factions suffer. Should the Cultural Uprising have an RS floor requirement
+      (e.g. RS ≥ 30) to prevent RM from winning while the peninsula is in environmental
+      crisis? Or is the irony intentional — RM wins but the world is dying?
+    source: PP-460 redesign 2026-04-08
+    blocks: nothing (design question)
+    tags: [board_game, restoration_movement, rendering_stability, victory]

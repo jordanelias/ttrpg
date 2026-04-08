@@ -18,7 +18,7 @@ Seasonal cap: ±2 per stat per season (TTRPG); ±varies (BG — see accounting).
 | Varfell | 4 | 4 | 4 | 4 | 4 | 4 | — | 4 |
 | Guilds | 3 | 3 | 4 | 6 | 6 | 2 | — | 5 |
 | Niflhel | — | — | 5 | 4 | 4 | — | — | 4 |
-| Restoration Movement | — | 2 | 3/4 | — | 2 | — | — | 3 |
+| Restoration Movement | — | — | — | — | — | — | — | — | No faction stats (PP-460). Operates via Presence markers and Community Weaving. Victory via Cultural Uprising of T9 Himmelenger. |
 | Löwenritter | — | 3 | 2/3 | — | — | 5/6 | 3 | 5/4 |
 
 Note: Varfell BG Mandate 3/Wealth 3 is intentional (political isolation at game start, not their full institutional depth).
@@ -58,6 +58,7 @@ Success/Overwhelming: normal effect, no cost.
 **Scope exclusions:**
 - Does not apply to self-improvement Domain Actions (acting faction targeting own stats).
 - Does not apply to TTRPG personal scene rolls or Thread operations.
+- Does not apply to Restoration Movement (RM has no Stability — PP-460).
 - Applies to faction-layer Domain Actions only.
 
 **Stability 1 edge case:** If Stability is already 1, a Failure reduces it to 0, triggering an immediate Stability Check (existing mechanic). Factions with low Stability are further discouraged from sub-threshold gambles.

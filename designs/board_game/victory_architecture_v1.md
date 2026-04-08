@@ -176,13 +176,30 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 +
 
 ### 3.5 Restoration Movement — Cultural Revolution (5 players only, hardest mode)
 
-**All conditions simultaneous at Accounting:**
+RM has no faction stats. It operates purely through Presence markers and Community Weaving. It cannot hold territory, raise armies, or act in any domain that requires a faction stat. It cannot be targeted by Royal Decree, Excommunicate, or Suppress. Its only vulnerability is CV reversal (Church Piety Spread) and Inquisitor disruption of Weaving.
 
-| Condition | Threshold |
-|-----------|-----------|
-| Territories at CV ≤ 1 | ≥ 5 |
-| RM Presence markers | ≥ 5, in ≥ 5 non-adjacent territories |
-| RS | ≥ 40 |
+**Two-phase win condition:**
+
+#### Phase 1 — Cultural Majority (threshold to unlock Phase 2)
+CV ≤ 1 in ≥ 8 of the 15 playable territories (T1–T14, T17). Checked at each Accounting. Once met and held, Phase 2 becomes available. If the majority drops below 8, Phase 2 is locked again until it recovers.
+
+#### Phase 2 — Cultural Uprising of T9 Himmelenger
+Available only while Phase 1 condition is met. Declared once per game at any Accounting where Phase 1 holds. RM plays their Pontifex card and rolls: **Weaver Thread pool vs Ob = TC ÷ 10 (round up, min 1, max 5).**
+
+Modifiers:
+- T9 CV ≤ 1: Ob −1 (Cathedral already culturally shifted)
+- WC ≥ 2: +1D (Wardens support the Uprising)
+- TC ≥ 50 at declaration: Ob +1 (Church institutional authority is strong enough to resist)
+- Church Mandate ≥ 5: Ob +1 (Church actively suppresses)
+
+| Degree | Effect |
+|--------|--------|
+| Overwhelming | T9 transfers to RM administration. Church Mandate −2. TC −3 (institutional rupture). |
+| Success | T9 transfers to RM administration. Church Mandate −1. |
+| Partial | T9 does not transfer. CV in T9 −1 (popular sentiment shifted). Uprising attempt used up for this arc. |
+| Failure | Uprising crushed. TC +2 (Church authority strengthened by resistance). T9 CV +1. Uprising attempt used up for this arc. |
+
+**Win condition:** T9 under RM administration AND Phase 1 held, for 2 consecutive Accounting steps. Church cannot perform Territorial Seizure on T9 while RM holds it (the population actively resists institutional reconquest — Seizure Ob +3 vs RM-held T9).
 
 ---
 
