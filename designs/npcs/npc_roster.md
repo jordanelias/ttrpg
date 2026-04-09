@@ -247,6 +247,198 @@ Per worldbuilding_integration_v3 §axis system, each NPC sits on 2–3 of the 9 
 
 ---
 
+
+---
+
+## Mode Interface Matrix
+
+Every NPC must have meaningful presence in at least 2 of 3 modes. Their compromise and behavioral flaw must produce consequences in each mode they appear in.
+
+### Legend
+- **Full**: Named character with stat block, dialogue, personal scenes
+- **Event Card**: Named Character Event in the BG deck — triggers on game-state conditions
+- **Modifier**: Always-active NPC effect on faction stats or action Obs
+- **Abstracted**: NPC's effects are present but the character is not directly represented
+- **Absent**: Not present in this mode
+
+---
+
+### 1. Edeyja (Wardens)
+
+| Mode | Presence | Interface |
+|------|----------|-----------|
+| TTRPG | **Full** | Thread operations mentor. Highest-TS living practitioner. PCs who reach Askeheim interact with her directly. Provides Diagnosis, training, and narrative framing for the metaphysical stakes. Moral anchor — she will not compromise, which forces PCs to meet her standard or accept they cannot. |
+| Hybrid | **Full → Modifier** | Personal scenes with Edeyja (Zoom In at T15/T6) generate Domain Echoes: successful Thread training → WC +1 at next Accounting. Edeyja refuses requests that compromise Warden neutrality — PCs cannot weaponise her for faction goals. |
+| BG | **Abstracted** | Edeyja does not appear as a card or token. Her effects are embedded in the WC/WR tracks and the Askeheim Expedition mechanics. Warden Emergence check (Accounting Step 9) is her threshold for engaging with the peninsula at all. |
+
+**Mode bridge:** In Hybrid, the PC's relationship with Edeyja is the human face of the WC track. WC +1 is not an abstract advancement — it is Edeyja deciding that this faction's practitioner has demonstrated sufficient competence and integrity to warrant cooperation. The BG abstraction conceals a personal judgment.
+
+---
+
+### 2. Maret Uln (Varfell)
+
+| Mode | Presence | Interface |
+|------|----------|-----------|
+| TTRPG | **Full** | Intelligence operative. Practitioner (TS ~50). Dual loyalty arc — PCs who discover her RM sympathy can exploit it, reinforce it, or try to resolve it. Belief checks when ordered to act against RM interests. Personal Thread operations during intelligence missions (co-movement fires). |
+| Hybrid | **Full → Event** | CONFLICTED flaw: Varfell intelligence actions targeting RM-adjacent territories are delayed 1 season when Maret leads them (she hesitates). PCs can Zoom In to confront or support her during the hesitation. If Vaynard is eliminated, Maret succession fires as a Domain Echo — VTM resets, Varfell realigns. |
+| BG | **Event Card** | *Card: Varfell Succession.* Trigger: Vaynard eliminated (Loyalty 0 + Mandate 0). Effect: Maret takes leadership. VTM → 0. Varfell cannot target RM. Varfell Stability −1 (faction reorientation). Counter-play: prevent Vaynard's elimination. |
+
+**Mode bridge:** In TTRPG, Maret's hesitation is a personal choice the player witnesses. In BG, it's a 1-season delay on Varfell intelligence actions in RM-adjacent territories. The Hybrid Zoom In lets the player see why the delay happened.
+
+---
+
+### 3. Maret Vossen (Restoration Movement)
+
+| Mode | Presence | Interface |
+|------|----------|-----------|
+| TTRPG | **Full** | RM leader. Founding Agent candidate. PCs who affiliate with RM interact with her directly. Her visibility compromise creates tension — every public appearance risks Church AP accumulation. TS 25 means she can sense Thread-touched artefacts but cannot resist the Forgetting near T13/T15. |
+| Hybrid | **Full** | Key figure in Founding Mechanic. If she is the Founding Agent, her Influence roll determines RM's starting stats. Her IDEALIST flaw (spreads Presence thin) means Hybrid RM is culturally broad but institutionally fragile — Domain Echoes from personal scenes spread markers rather than consolidating them. |
+| BG | **Absent** | RM is not a player faction in BG-only mode (PP-478). Vossen does not appear. Presence markers are environmental tokens with no named NPC driving them. |
+
+**Mode bridge:** Vossen exists only in modes where RM can be player-facing. Her absence from BG-only mode is the mechanical expression of the design principle that RM is a player/NPC-led mid-game emergence, not a starting faction.
+
+---
+
+### 4. Sæmund Haelgrund (Church — Inquisitor)
+
+| Mode | Presence | Interface |
+|------|----------|-----------|
+| TTRPG | **Full** | Inquisitor antagonist/ally. Hidden TS 12. PROCEDURALIST: investigations are slow but thorough. PCs can Diagnose his TS (Cognition vs Ob 2), creating a defection arc. Social scenes with Haelgrund use the contest system — he argues from evidence, not dogma, making him harder to dismiss than a zealot. |
+| Hybrid | **Full → Modifier** | Heresy Investigations Haelgrund leads take +1 season to resolve but resolve at Overwhelming if they complete. Zoom In during an investigation lets PCs intervene (warn the target, plant counter-evidence, attempt Diagnosis). Domain Echo: if Haelgrund's TS is revealed, Church Stability −1 + Heresy Investigation suspended 1 season. |
+| BG | **Event Card** | *Card: Haelgrund Investigation.* Trigger: Church opens Heresy Investigation in any territory. Effect: investigation takes +1 season (Haelgrund is thorough). If it resolves: treat as Overwhelming regardless of roll. Counter-play: any faction may spend 1 Intel action in the target territory to plant counter-evidence (investigation resolves as Partial instead). *Card: Haelgrund Defection.* Trigger: Thread operation Overwhelming within 1 territory of Haelgrund's current investigation AND Church has no active Inquisitor suppression. Effect: Haelgrund removed from Church service. Church Heresy Investigation Ob +1 permanently (best investigator lost). Haelgrund becomes available as a neutral NPC practitioner (TS 12 — low but symbolically devastating for Church). |
+
+**Mode bridge:** In TTRPG, the Diagnosis scene is a dramatic personal moment. In BG, it's the Defection card trigger — a Thread operation near his investigation that finally cracks his worldview. The Hybrid Zoom In is where the player makes it happen.
+
+---
+
+### 5. Sigrid Torsvald (Löwenritter — Riskbreaker)
+
+| Mode | Presence | Interface |
+|------|----------|-----------|
+| TTRPG | **Full** | Undercover operative. TS 35. Lenneth archive connection. PCs encounter her during covert operations or through Lenneth's arc. Her RISK-AVERSE flaw on Thread collateral means she may abort mid-mission — PCs present during an abort can try to resolve the situation she couldn't. |
+| Hybrid | **Modifier** | Riskbreaker operations in Thread-active territories: ~30% abort rate when Torsvald leads. Aborted operations leave evidence → Deniability Debt +1. Domain Echo from a Torsvald abort: Crown covert capability −1D for 1 season. Zoom In: PCs can accompany Torsvald on a Riskbreaker operation and handle the Thread-collateral problem she can't. |
+| BG | **Abstracted** | Torsvald's effects are embedded in the Riskbreaker Exposure card (Deniability Debt tracker). Her abort rate is the reason the Debt accumulates faster than Ehrenwall expects. She does not appear as a named card — Riskbreakers are deniable by design. |
+
+**Mode bridge:** Torsvald is invisible in BG because that's what Riskbreakers are. The Deniability Debt rising "for no apparent reason" in BG is explained by Torsvald's aborts in Hybrid/TTRPG. The player who Zooms In discovers why Crown's covert arm keeps failing.
+
+---
+
+### 6. Halvar Brandt (Löwenritter)
+
+| Mode | Presence | Interface |
+|------|----------|-----------|
+| TTRPG | **Full** | Military officer. Border war veteran. PCs encounter him at T3 (Lowenskyst) or T14 (Ehrenfeld). His EXTERNAL THREAT FIXATED flaw means he interprets every situation through the Altonian lens — useful when the threat is real, catastrophic when it isn't. Personal combat stats: high (career soldier). |
+| Hybrid | **Event** | If Ehrenwall falls, Brandt succession fires. Military assets redirect from internal control to border defence (T3/T10). Domain Echo: Crown-held territories lose Martial Law garrison coverage. PCs can Zoom In to persuade Brandt to maintain internal garrison (Influence vs Ob 3 — his fixation resists). |
+| BG | **Event Card** | *Card: Brandt Succession.* Trigger: Ehrenwall removed (death, player action, or Lions' Table Mutiny). Effect: Löwenritter military redirects — Military actions in T3/T10 at −1 Ob (border focus), Military actions in all other territories at +1 Ob (internal neglect). Coup Counter mechanic continues but Brandt's threshold is 2 not 3 (he acts sooner). Counter-play: Crown Treaty with Löwenritter (Influence vs Ob = Brandt's Military stat) convinces Brandt to maintain balanced deployment. |
+
+**Mode bridge:** Ehrenwall's coup is a political instrument. Brandt's coup is a military instrument aimed at the wrong target. The BG Event Card mechanises the consequence; the TTRPG/Hybrid scenes reveal why Brandt is wrong (or prove him right, if Altonia actually invades).
+
+---
+
+### 7. Annika Feldhaus (Guilds)
+
+| Mode | Presence | Interface |
+|------|----------|-----------|
+| TTRPG | **Full** | Guildmaster. PCs interact with her for trade, contracts, supply access. Her Thread-touched supply chain is discoverable through investigation (Intel + Thread Diagnosis on guild goods, Ob 3). Social contest scenes: she is shrewd, PROFIT-MAXIMISING, and will trade anything for the right price — except her reputation. |
+| Hybrid | **Full → Event** | Thread-touched goods revelation: if a PC Diagnoses guild merchandise during a Zoom In, the Domain Echo is devastating: Guilds Wealth −1, Guilds Stability −2, Feldhaus's network exposed. Church gains grounds for Heresy Investigation targeting Guilds. Alternatively, PCs can quietly warn Feldhaus — she owes them, creating a leverage relationship. |
+| BG | **Modifier + Event Card** | *Modifier (always-active):* Guilds Wealth recovery +1/season (Feldhaus is effective). Guilds Mandate trends toward 2 (she neglects politics). *Card: Supply Chain Exposure.* Trigger: Intel Overwhelming targeting Guilds in territory with Niflhel syndicate presence. Effect: Guilds Wealth −1, Stability −2. Church opens free Heresy Investigation vs Guilds. Virke family network disrupted (Niflhel trade actions +1 Ob for 2 seasons). Counter-play: Guilds may pre-emptively audit supply chain (spend 1 Wealth + 1 Stability at Accounting) to remove Thread-touched goods quietly. No public scandal but revenue drops permanently (Wealth recovery bonus lost). |
+
+**Mode bridge:** The Thread-touched supply chain connects Feldhaus to Virke. Exposing one affects both. In TTRPG, this is a personal investigation. In BG, it's a card trigger. In Hybrid, it's a Zoom In that produces cascading Domain Echoes across two factions.
+
+---
+
+### 8. Peder Almstedt (Ministry)
+
+| Mode | Presence | Interface |
+|------|----------|-----------|
+| TTRPG | **Full** | Parliamentary Clerk. PCs encounter him when navigating Crown bureaucracy — permits, hearings, procedural challenges. His CONSERVATIVE flaw means he blocks radical action through procedure, not force. Social contest scenes with Almstedt are procedural debates (Cognition-heavy, not Presence-heavy). |
+| Hybrid | **Modifier** | PI recovery +1/season when Almstedt is active (he stabilises Parliament). Reform actions +1 Ob (he obstructs them). PCs can Zoom In to co-opt Almstedt (Influence vs Ob 3) or remove him (requires scandal or Crown dismissal — Domain Echo: PI recovery bonus lost for 2 seasons). |
+| BG | **Modifier (always-active)** | Almstedt is the Ministry's operational expression. His effects are the Ministry NPC AI's baseline: AP-token placement, PI recovery, Parliamentary Manoeuvre facilitation. If Ministry Mandate drops to 0, Almstedt is effectively sidelined — PI recovery bonus lost, reform Ob penalty lifted. He is not a card because he doesn't trigger — he persists. Removing him requires destroying the Ministry itself. |
+
+**Mode bridge:** Almstedt is the system. In TTRPG, he's a person you can argue with. In BG, he's the reason PI recovers and reforms are slow. The Hybrid Zoom In is where the player decides whether the system deserves to persist.
+
+---
+
+### 9. Gerik Strand (Crown — Lord Steward)
+
+| Mode | Presence | Interface |
+|------|----------|-----------|
+| TTRPG | **Full** | Court minister. PCs encounter him in Crown administrative scenes — treasury disputes, resource allocation, diplomatic logistics. His flattery vulnerability (−1 Ob to social actions acknowledging his competence) makes him the easiest Crown figure to influence. His OVERPERFORMER flaw means he's running every important task — PCs who need Crown cooperation go through Strand. |
+| Hybrid | **Modifier** | Crown administrative Domain Actions (Tax, Trade, Policy) at +1D when Strand is active. If Strand is removed/turned: Crown admin actions at +1 Ob for 2 seasons. Zoom In: any faction can target Strand with social approaches — flattery vulnerability creates low-Ob influence opportunities that produce Domain Echoes (intelligence leak, resource redirect, schedule manipulation). |
+| BG | **Modifier (always-active)** | Crown Treasury actions +1D. If Strand is removed (Event Card or player action): Crown Tax/Trade/Policy +1 Ob for 2 seasons. *Card: Strand Turned.* Trigger: any non-Crown faction succeeds on Intel action targeting Crown Court with Overwhelming. Effect: Strand has been compromised — intelligence leak. Non-Crown faction learns Crown's full stat line + planned actions for next season. Strand removed. Crown admin penalty applies. Counter-play: Crown may run counter-intelligence (Intel vs Ob 2) each season to detect the approach before it succeeds. |
+
+**Mode bridge:** Strand's competence makes Crown efficient. His insecurity makes Crown vulnerable. In BG, this is a +1D bonus with a Turned-card downside. In TTRPG, it's a person whose need to belong makes him open doors he shouldn't. Hybrid connects the two: a Zoom In scene where a player flatters Strand into sharing Crown plans produces a Domain Echo that IS the Turned card.
+
+---
+
+### 10. Dalla Virke (Virke syndicate)
+
+| Mode | Presence | Interface |
+|------|----------|-----------|
+| TTRPG | **Full** | Syndicate broker. PCs interact with her for black market access, contraband, intelligence. Her trust network creates asymmetric access — PCs who've built a trading relationship get protection; newcomers get exploited. Thread-touched goods investigation arc: Diagnosis on her merchandise reveals the Thread connection. |
+| Hybrid | **Full → Event** | Virke's trust network determines which factions get favourable Niflhel trade terms in BG. PC actions in Zoom In (building or burning the trust relationship) produce Domain Echoes that modify Niflhel trade Obs for specific factions. Thread-touched revelation: Domain Echo cascades to Feldhaus (Guilds) via shared supply chain. |
+| BG | **Modifier** | Niflhel trade actions use Virke's network. Factions inside the trust network (determined by prior Hybrid interactions, or GM-set in BG-only): trade Ob −1. Factions outside: no modifier. *Card: Supply Chain Exposure* (shared with Feldhaus — see #7). If Virke is recalled by her family (trust network collapse), all Niflhel trade actions +1 Ob for remainder of campaign (replacement has no local relationships). |
+
+**Mode bridge:** Virke's trust network is built in TTRPG scenes, expressed as BG trade modifiers, and can be destroyed by a single Hybrid revelation. She is the living connective tissue between the criminal economy and the political board.
+
+---
+
+### 11. Doux Alexios Laskaris (Altonia)
+
+| Mode | Presence | Interface |
+|------|----------|-----------|
+| TTRPG | **Full (conditional)** | PCs encounter Laskaris only if they travel to T4 border or engage with the Altonian diplomatic channel. His PROTECTIVE flaw: scenes involving Elske's safety override his political judgment. PCs can leverage this — threaten Elske's position to force Laskaris's cooperation, or protect Elske to earn his trust. |
+| Hybrid | **Modifier** | IP modifier: IP rises ~1/season slower when Laskaris is the active Altonian representative (he sandbangs imperial directives). If Elske Loyalty ≤ 2: Laskaris flips — IP +3 immediately (Domain Echo). Zoom In at T4: PCs can influence Laskaris's disposition toward Valoria. A successful social scene (Influence vs Ob 2) delays the next Tutoring Demand by 1 season. |
+| BG | **Modifier (always-active) + Event Card** | *Modifier:* IP generation rate −1/season (Laskaris sandbagging). *Card: Laskaris Flip.* Trigger: Elske Loyalty ≤ 2 at Accounting OR Elske Return attempt fails. Effect: IP +3 immediately. Laskaris replaced by imperial-loyal governor. IP generation returns to baseline. Elske's off-board card locked (no further Contact attempts until new diplomatic channel opened — Crown Influence vs Ob 4). Counter-play: maintain Elske Loyalty ≥ 3. |
+
+**Mode bridge:** Laskaris is the IP clock's human face. In BG, IP just rises slower. In TTRPG/Hybrid, a person is making it rise slower because he doesn't want to hurt the woman he was told to use as a weapon. The flip — when Elske is threatened — transforms the IP track from slow-burn to crisis in a single Accounting step.
+
+---
+
+### 12. Rikard Solberg (Schoenland)
+
+| Mode | Presence | Interface |
+|------|----------|-----------|
+| TTRPG | **Full** | Trade factor in Valorsplatz. PCs encounter him in commercial/diplomatic scenes. His STABILITY-SEEKING flaw makes him a natural ally for any PC pursuing peace — and a natural obstacle for any PC pursuing escalation. His motivation (homesickness) is discoverable through social interaction (Read action, Ob 2). |
+| Hybrid | **Modifier** | Schoenland arms shipments: Solberg recommends conservative quantities to all factions (stability-seeking). Domain Echo from Zoom In: PCs who offer a credible stability treaty gain Solberg as an active Crown/Hafenmark asset (Schoenland trade terms improve for the treaty faction). PCs who threaten Solberg's recall leverage gain nothing — he's more afraid of staying than of them. |
+| BG | **Modifier (always-active)** | Schoenland policy modifier: arms supply to all factions −1 unit/season vs optimal (Solberg understates demand). Intelligence reports to Schoenland central: downplayed (Schoenland's external response to crises is 1 season delayed). If Solberg is recalled (discovery of bias, or Schoenland central reassessment): arms supply normalises, intelligence sharpens. All factions receive +1 unit/season. Schoenland becomes a more dangerous neutral actor. |
+
+**Mode bridge:** Solberg's homesickness makes Schoenland less dangerous. His removal makes Schoenland more dangerous. In BG, this is a supply-rate modifier. In TTRPG, it's a man counting the days until he sees his children. The player who understands the personal story can manipulate the strategic reality.
+
+---
+
+### 13. [Name Pending] — Prudence Cardinal (Church)
+
+| Mode | Presence | Interface |
+|------|----------|-----------|
+| TTRPG | **Full** | Church internal politics. PCs encounter him in tithe disputes, charitable operations, Parish leader complaints. His OPTIMISER flaw is visible in every scene: he runs the Church's finances brilliantly and creates friction doing it. PCs aligned with the Church must navigate his Parish conflicts; PCs opposing the Church can exploit the friction. |
+| Hybrid | **Modifier** | Church Wealth recovery +1/season (his tithe efficiency). But: in territories where he has increased tithe quotas, Church Mandate −0.5 at Year-End (fractional, tracked). CV erosion accelerates +1 in over-tithed territories at Year-End (resentful communities become RM recruitment targets). Zoom In at a Parish in an over-tithed territory: PCs can witness the friction firsthand and either support the Parish (Church Mandate preserved but Wealth bonus lost in that territory) or support the Cardinal (Wealth maintained but Mandate loss confirmed). |
+| BG | **Event Card (revised Prudence Crisis)** | *Card: Prudence Crisis.* Trigger: Church Wealth ≤ 2 (tithe income insufficient despite the Cardinal's efforts — external pressure has overwhelmed his optimisation). Effect: Church charities collapse in territories with Prosperity ≤ 3. Church Mandate −1 in each. RM gains +1 Influence in those territories. *Card: Parish Revolt.* Trigger: ≥ 3 territories where Prudence Cardinal has increased tithes AND Church Mandate ≤ 3 in any of them. Effect: Parish leaders refuse collection. Church Wealth −2 for 1 season. CV −1 in all affected territories (communities reject Church authority). TC −1 (institutional fracture). Counter-play: Church spends 1 Stability to discipline Parish leaders (tithes restored but Mandate −1 in affected territories permanently). |
+
+**Mode bridge:** The Prudence Cardinal's efficiency creates two BG event risks that are invisible until they fire. In TTRPG, the Parish friction is visible immediately — PCs see communities struggling under the extraction. The Hybrid Zoom In is where the player decides whether to intervene in a problem that will eventually become a BG crisis.
+
+---
+
+## Mode Coverage Summary
+
+| NPC | TTRPG | Hybrid | BG | Modes Active |
+|-----|-------|--------|-----|-------------|
+| Edeyja | Full | Full→Modifier | Abstracted (WC/WR) | 2.5 |
+| Maret Uln | Full | Full→Event | Event Card | 3 |
+| Maret Vossen | Full | Full | Absent (PP-478) | 2 |
+| Haelgrund | Full | Full→Modifier | Event Card ×2 | 3 |
+| Torsvald | Full | Modifier | Abstracted (Debt) | 2.5 |
+| Brandt | Full | Event | Event Card | 3 |
+| Feldhaus | Full | Full→Event | Modifier + Card | 3 |
+| Almstedt | Full | Modifier | Modifier | 3 |
+| Strand | Full | Modifier | Modifier + Card | 3 |
+| Virke | Full | Full→Event | Modifier + Card | 3 |
+| Laskaris | Full (conditional) | Modifier | Modifier + Card | 3 |
+| Solberg | Full | Modifier | Modifier | 3 |
+| Prudence Cardinal | Full | Modifier | Event Card ×2 | 3 |
+
+All NPCs active in ≥ 2 modes. 10 of 13 active in all 3 modes.
+
 ## Stat Blocks
 
 Deferred to next session. Each NPC requires: 10 TTRPG attributes, TS, Coherence, Beliefs (2), Inspirations (1–2), Resonant Style, and BG Event Card design where applicable.
