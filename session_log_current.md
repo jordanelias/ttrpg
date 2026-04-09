@@ -75,3 +75,38 @@ open_gaps_added: [STR-SOFTEN-01, STR-ECHO-01, STR-AER-A-01, STR-RM-A-01]
 - New editorials: ED-343 (P1 Crown+Hafen passive), ED-344 (Decree Fragmentation), ED-345 (VTM TC contribution), ED-346 (Ministry Priority 3)
 - All SIM-DEBT-BG items complete (BG-01 through BG-06)
 - Test output: tests/sim_bg_remaining_2026_04_08.md
+
+### 2026-04-08 — Project State Evaluation + Resolution Execution
+- Full project evaluation across all files (33 files fetched, all canonical sources read)
+- PP-493: Territory reconciliation — victory_architecture remapped to geography_design.md numbering (45 T# refs, 5 old names). Starting TCV corrected: Crown 12, Hafenmark 8, Varfell 6, Church 3. Total TCV = 30.
+- PP-494: Church Graduated Seizure — Pool = Influence + floor(TC/15), Ob = 7 − CV. Hard TC 75 gate removed. Church TCV ≥ 8. BALANCE-001 revised: Crown, Varfell, Hafenmark, Church all equal.
+- PP-495: RM TTRPG Founding Gate — narrative gate (cultural shift + substrate strain + player engagement), floor session 6.
+- PP-496: Clock registry created (designs/systems/clock_registry.md). Consolidates all tracks.
+- PP-497: Inert Knowledge formalized in params_threadwork (P-08 compliance).
+- P1-01 Overwhelming stale entries fixed (L1066, L1133 struck/updated per PP-249).
+- canonical_sources.yaml: social_debate → social_contest_system_v2.md + params_contest.md.
+- ED-343 collision resolved (Spy/Royal Guard renumbered to ED-360).
+- ED-352/353/354 resolved. ED-355/356/357/358/359/360/361/362/363 flagged.
+- Worldbuilding_integration_v3 old territory names fixed.
+- Maret struck as NPC (ED-357). 12-character NPC roster flagged (ED-358).
+
+## REMAINING OPEN P1s
+ED-329: Torben Loyalty start/range — user decision required (recommend 3, 0–7)
+ED-343: Battle Ob formula — user decision required (proposed: defender Military ÷ 2, min 1)
+
+## OPEN EDITORIAL FLAGS (user decision required)
+ED-355: Fort interaction with Church Seizure
+ED-356: Crown starting TCV 12 vs threshold 16 — balance check
+ED-357: Maret struck — archive references
+ED-358: 12-character NPC development roster
+ED-359: RM TTRPG Founding Gate session-6 floor review
+ED-360: Spy vs Royal Guard interaction
+ED-361: PI-CASCADE threshold values
+ED-362: DISSONANT war-scale Thread rates
+ED-363: P1-01 Overwhelming — confirm PP-249 final
+
+## NEXT ACTION
+skill: valoria-orchestrator
+action: User decisions on ED-329 (Torben), ED-343 (Battle Ob), ED-355 (Fort+Seizure), ED-356 (Crown balance). Then: Church Graduated Seizure simulation. Then: NPC roster design (ED-358).
+blockers: [ED-329, ED-343]
+editorial_decisions_pending: [ED-329, ED-343, ED-355, ED-356, ED-357, ED-358, ED-359, ED-360, ED-361, ED-362, ED-363]

@@ -611,3 +611,12 @@ TS 70 practitioners: do not attempt Binding Ops in mass battle. RS cost without 
 - **Coherence 0**: layer 2 (always-already self-rendering) has ceased. Character passes to GM. Released Coherence 0 characters become world-state contributors, GM-rendered from co-authored belief/inspiration material (Coherence 3 co-authoring protocol).
 - See canon/01_foundations_amendment_self_rendering.md §Amendment 3–4 for full TS-gated branching.
 - **Mode 3 entities (ED-024)**: threadcut beings whose excess existence cannot be fully rendered. Presence produces structural entanglement in environment and nearby beings as side-effect (cf. Solmund/Locked zones). Non-Thread engagement ontologically irrelevant. TS 50+ required. GM references standard Thread operation tables at beyond-human scale. No stat block. Provisional archetypes struck (P-05 violation).
+
+
+## Inert Knowledge (P-08, PP-497)
+
+Non-sensitive characters (Thread Sensitivity (TS) 0) may learn, memorise, and recite Thread-related information from texts, instruction, or observation. This knowledge is Inert: it cannot be used to perform Thread operations, diagnose Thread states, or perceive Thread-level phenomena. The barrier is metaphysical (TS 0 consciousness cannot render Thread-level structure), not institutional. A non-sensitive with complete written instructions for a Weaving cannot execute it. A sensitive (TS ≥ 10) with the same instructions can, because their consciousness renders the Thread-level structure that the instructions describe.
+
+**Mechanical implication:** No amount of study, training, or exposure grants Thread operational capability to a TS 0 character. TS must be ≥ 10 (Practitioner designation) before any Thread operation can be attempted. The epistemological barrier is not a skill check — it is a hard gate on rendering capacity.
+
+**Church and institutional reinforcement (P-08 note):** The Church reinforces the epistemological barrier institutionally, but the barrier would exist without the Church. Publishing all Thread-related documents publicly would not enable non-sensitives to perform Thread operations. It would enable them to recite the procedures — inertly.
