@@ -316,7 +316,7 @@ Starting TC: 28. Phase transition at TC 75 (TC freezes, Church shifts to seizure
 4. Suppress (optional opponent action): Mandate vs Ob = Church Mandate. Success: negate Step 1 passive. Failure: Stability −1.
 5. Hafenmark Structural Suppression: while Baralta Mandate ≥ 4, TC −1/season.
 
-**Church Seizure Ob (post-TC 75):** Ob = 2 + Fort Level + max(0, 3 − CV). Prominence required. Church Mandate ≥ 4. Overwhelming: CV +1 in target territory.
+**Church Seizure (Graduated, PP-494):** Pool = Influence + floor(TC/15). Ob = 7 − CV. Prominence required. Church Mandate ≥ 4. Overwhelming seizure: CV +1 (consequence, not cap-governed). See §3.2 for full table.
 
 ---
 
