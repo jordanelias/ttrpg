@@ -26,13 +26,15 @@ This blame persists as a caste-like system. Southern Einhir heritage marks you. 
 
 ---
 
-## The Hunting Accident (E-01) — Background for All Arcs
+## The Hunting Accident (E-01 RESOLVED) — Background for All Arcs
 
-King Almud's father was killed ~218 AG in circumstances officially ruled accidental. It is an open secret that this was an assassination. The perpetrator is undefined — campaign revelation candidate E-01 (see `designs/ttrpg/valoria_narrative_scenario_chains.md`, Arc 1).
+King Almud's father died ~218 AG in a hunting accident. It was genuinely accidental — a riding accident in rough terrain during a storm. No perpetrator exists.
 
-**Critical framing:** It really may have been an accident. The "open secret" is the political class assuming assassination because they cannot conceive of a king dying without someone's hand in it. The investigation may reveal that the conspiracy theories are wrong, and the political structures built on those theories — Almud's 27-year cautious restraint, factional positioning around assumed culpability — are based on nothing. The accidental resolution is as destabilising as any named perpetrator, because 27 years of political calculation were responses to a phantom.
+**E-01 is resolved.** The "open secret" that it was an assassination is a collective political delusion. The ruling class cannot conceive of a king dying without someone's hand in it. Every major faction built a theory implicating a rival. Every theory is wrong. The political structures built on those theories — Almud's 27-year cautious restraint, factional positioning around assumed culpability, Varfell's intelligence infrastructure justified by the investigation, the Church's defensive posture, Ehrenwall's threat model — are all responses to a phantom.
 
-Four possible perpetrators if it was not accidental: Church, Niflhel, Varfell, Altonian agent. Each has different mechanical consequences per the Arc 1 discovery chain.
+The discovery chain is intact: players investigate, find evidence trails that point to different factions (each faction constructed its narrative to implicate rivals), and must cross-reference 3+ of 4 trails to discover the truth. Partial investigation produces confident wrong answers. Only exhaustive cross-referencing reveals the absence of a perpetrator. If players accuse a faction on partial evidence: the accusation is politically real regardless of its factual basis. A false accusation of regicide is nearly as damaging as a true one.
+
+The accidental truth is the most valuable political currency in the game: every faction has invested in the assassination narrative, so every faction needs the truth buried. Players who discover it hold leverage against everyone simultaneously.
 
 ---
 
@@ -42,7 +44,7 @@ Not a full NPC roster entry (that is [EDITORIAL: ED-NEW-11] territory), but the 
 
 - **Decision-making:** Bayesian. Updates on new information. Holds options open. Does not commit to positions prematurely.
 - **Flaw:** Structural, not personal. Almud manages TC, IP, PI, RS, and internal faction dynamics simultaneously. He can make optimal decisions on any 3 of these. He cannot make optimal decisions on all 5. No ruler could.
-- **Assassination shadow:** 27 years of governing under the assumption that someone in the political system killed his father. This produces structurally paranoid attention to hidden structures and information asymmetry — his greatest administrative asset, born from possible false premises.
+- **Assassination shadow:** 27 years of governing under the assumption that someone in the political system killed his father. This produces structurally paranoid attention to hidden structures and information asymmetry — his greatest administrative asset, born from a false premise.
 - **Strand relationship:** Principal-agent with monitoring. Almud appointed Strand because he is competent. Almud anticipated that Strand's social insecurity would make him vulnerable to cultivation. Almud uses the pattern of cultivation as intelligence. Strand is a monitored honeypot, not an unwitting leak.
 - **Einhir sympathy:** Almud privately sympathises with the Einhir Restoration. Governs through the post-Calamity settlement that suppressed it. His Belief 2 ("I cannot act until I find a path that doesn't require choosing between justice and the monarchy") is shaped by both the assassination shadow and the structural costs of acting: TC +3 (Church), Mandate −2 (northern Valnese nobility), IP +1 (Altonia benefits from Einhir suppression).
 - **TS 28:** Near Stirring. Unrecognised. If Discovery Event fires, the campaign's central dramatic question activates.
@@ -346,7 +348,7 @@ graph TD
 - **Timing:** Year-End Step 7 — fires BEFORE Strand's exposure check.
 - **BG text:** *"The King reviews the annual accounts. He sees what his Lord Steward has not yet reported. He says nothing."*
 - **Mechanical effect:** "King's Patience" token. Crown +1D vs Guilds while present. NPC AI holds 2+ seasons minimum. Plays when: Guilds Wealth ≥ 6 AND Crown needs Mandate boost, OR another faction about to discover (Almud exposes first).
-- **Assassination interaction:** If Arc 1 resolves during King's Patience: perpetrator identified → token gains +1D bonus. Accident confirmed → Almud enters 1-season self-doubt (no offensive Crown actions), then either reaffirms caution or plays King's Patience immediately with Crown Mandate +1.
+- **Assassination interaction:** If Arc 1 resolves during King's Patience (players discover the accidental truth): Almud enters 1-season self-examination (no offensive Crown actions). Then: either reaffirms caution ("the paranoia was useful regardless") and King's Patience resumes, or releases it — plays King's Patience immediately with Crown Mandate +1 (the King acts openly for the first time in 27 years).
 
 **EVENT CARD: THE EXPOSURE**
 - **Trigger:** Successful Investigate vs Guilds while Double Ledger present.
@@ -427,7 +429,7 @@ graph TD
 - **Timing:** Immediate.
 - **BG text:** *"A sealed document. Copies with three intermediaries. Mutual assured destruction."*
 - **Mechanical effect:** If Maret eliminated/captured: File activates next season. VTM public. Church Heresy Investigation automatic. TC +2. Varfell Intel → 1. If Vaynard stands down: Stability −1/season while standoff persists.
-- **Assassination secondary payload:** If players have accessed Varfell Hunting Accident evidence trail: Insurance File contains 218 AG records. Investigate (Ob 2) on released documents: if E-01 = Varfell, Arc 1 advances to Full Evidence. If E-01 ≠ Varfell: empty.
+- **Assassination secondary payload:** If players have accessed Varfell Hunting Accident evidence trail: Insurance File contains 218 AG operational records. Investigate (Ob 2) on released documents reveals that Varfell's 218 AG records show routine intelligence operations — no connection to the death. This is one of the evidence trails that, cross-referenced with others, points toward the accidental truth. Varfell used the assassination assumption as cover for Thread research (VTM development), not because Varfell committed regicide.
 - **NPCs:** Maret Uln (#2); Vaynard; Haelgrund (#4, PROCEDURALIST — if file opens, assigned to investigate Varfell, +1 season gives Vaynard time to destroy evidence).
 
 **EVENT CARD: THE DEFECTION**
@@ -516,8 +518,8 @@ Strand is the best administrator on the peninsula. Every faction needs what he p
 | ED-NEW-6 | All 21 event cards require BG physical card formatting. Template not defined. | FLAGGED |
 | ED-NEW-7 | "Valn" as pre-Altonian Einhir peninsula name. RESOLVED: Valn is the Einhir name. Forgetting does not affect it. Using it is a political act. Valnese = people. Einhir = Thread-sensitive nation within the Valnese. | RESOLVED |
 | ED-NEW-8 | Dedicated Einhir caste arc ("Breaking the Forgetting"). Deferred to future batch. | FLAGGED |
-| ED-NEW-9 | Hunting Accident (E-01) resolution as genuinely accidental. Requires Arc 1 discovery chain revision. | FLAGGED |
-| ED-NEW-10 | Maret Uln Insurance File secondary payload (218 AG Varfell records). Cross-arc mechanic. | FLAGGED |
+| ED-NEW-9 | Hunting Accident (E-01) resolved as genuinely accidental. Arc 1 discovery chain revised in valoria_narrative_scenario_chains.md. | RESOLVED |
+| ED-NEW-10 | Maret Uln Insurance File secondary payload (218 AG Varfell records). Payload reveals Varfell's assassination investigation was cover for Thread research — evidence of innocence, not guilt. Cross-references Arc 1 accidental resolution. | RESOLVED |
 | ED-NEW-11 | Full Almud NPC roster entry. Behavioral assumptions documented here; full profile needed. | FLAGGED |
 
 ---

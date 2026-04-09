@@ -219,3 +219,15 @@ editorial_decisions_pending: [ED-358]
   - Valn/Valnese/Einhir terminology throughout
 - All 4 deprecated files updated to point to consolidated doc.
 - 9 arcs, 25 event cards, 8 gaps, 11 editorial flags (1 resolved: ED-NEW-7).
+
+### 2026-04-08 — E-01 Resolved: Accidental Death
+- E-01 (Hunting Accident) resolved as genuinely accidental. No perpetrator exists.
+- designs/ttrpg/valoria_narrative_scenario_chains.md Arc 1 fully rewritten:
+  - Discovery chain preserved (players still investigate, find faction-constructed false leads).
+  - Full evidence (3+ of 4 trails cross-referenced) reveals absence of perpetrator.
+  - Partial investigation produces confident wrong answers — false accusations mechanically damaging regardless of factual basis.
+  - Accidental truth = most valuable political currency: every faction needs it buried, players hold leverage against all.
+  - Almud's response: 1-season self-examination, then overcompensation or reconstructed caution.
+  - Every faction's 27-year investment in the assassination narrative revealed as foundationless but load-bearing.
+- gm_ref/arcs_10_18_consolidated.md updated: E-01 RESOLVED throughout. ED-NEW-9 and ED-NEW-10 marked RESOLVED.
+- Arc 15 (King's Patience) and Arc 17 (Insurance File) updated to reflect accidental resolution.

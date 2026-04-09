@@ -18,76 +18,144 @@ Terminus labels: **STABLE** · **PRESSURE** · **THRESHOLD** · **CAMPAIGN EVENT
 # ARC 1: THE HUNTING ACCIDENT (~218 AG)
 
 ## What Is Established
-King Almud's father is killed ~218 AG in circumstances officially ruled accidental. It is an open secret that this was an assassination. The perpetrator is **undefined** — this is campaign revelation candidate E-01.
+King Almud's father died ~218 AG in a hunting accident. It was officially ruled accidental. It is an open secret among the political class that this was an assassination. Every major faction has a theory. Some of those theories are weapons.
+
+**E-01 RESOLVED: The death was genuinely accidental.** No perpetrator exists. The "open secret" is a collective political delusion — the ruling class cannot conceive of a king dying without someone's hand in it. This assumption, universally held and universally wrong, is the most consequential false belief in Valorian politics.
 
 ## Why It Matters at Game Start (245 AG)
-Almud has governed under the shadow of this for 27 years. His entire reign — the Altonian trade deal, the Elske marriage, the suppression of the Restoration he personally sympathises with — is shaped by the political position he inherited from a throne that came to him through violence he did not commit and cannot name.
+Almud has governed under the shadow of this for 27 years. His entire reign — the Altonian trade deal, the Elske marriage, the suppression of the Restoration he personally sympathises with, his Bayesian paranoid attention to hidden structures — was shaped by a threat that does not exist. His caution, his refusal to act on the Einhir question, his structural analysis that every move carries a hidden cost from an unknown enemy: all of it is a response to a phantom. The phantom produced a competent, careful, strategically sophisticated ruler. The phantom also prevented that ruler from acting on every conviction he holds.
+
+Twenty-seven years of optimal governance in response to a false premise. The question is not "who killed the king?" The question is "what does Almud become when he discovers nobody did?"
 
 ---
 
 ## Discovery Chain
 
 ```
-PLAYERS INVESTIGATE THE 218 AG ASSASSINATION
+PLAYERS INVESTIGATE THE 218 AG DEATH
 │
-├─ EVIDENCE TRAIL ACCESS
+├─ EVIDENCE TRAIL ACCESS (unchanged — the investigation proceeds normally)
 │   ├─ Crown archives (Royal Investigators): Circles Ob 3 within Crown sphere
 │   ├─ Niflhel records (Quiet Network): Intel vs Ob 3; cost = a favour to Niflhel
 │   ├─ Varfell's private documents (Vaynard TK 2+): requires Vaynard trust (Influence vs Ob 3)
-│   └─ Lenneth's sea-republic archive: she holds a pre-Altonian coastal survey;
-│       her covert network to the Revolution may hold documents from the era
+│   └─ Lenneth's sea-republic archive: pre-Altonian coastal survey;
+│       documents from the era
 │
 ├─ PARTIAL EVIDENCE: suggestion but not proof
-│   └─ Almud becomes a Contested Belief holder:
-│       his suppression of the Restoration reads as either cowardice or
-│       deliberate complicity with whoever killed his father
-│       Resonant Style: Consequence — show him what this costs Valoria going forward
+│   ├─ Each evidence trail points toward a different faction — because each
+│   │   faction has constructed a narrative that serves its interests.
+│   │   The Church's records suggest Niflhel involvement (convenient — implicates
+│   │   the Church's enemy). Niflhel's records suggest Altonian agents (convenient —
+│   │   shifts blame to a foreign power). Varfell's records suggest Church
+│   │   (convenient — implicates Vaynard's institutional rival).
+│   ├─ The partial evidence is REAL but MISINTERPRETED. Each faction genuinely
+│   │   found evidence of suspicious activity near the death. Each correctly
+│   │   documented anomalies. None considered the possibility that the anomalies
+│   │   were unrelated to the death — because they started from the assumption
+│   │   that the death was murder.
+│   └─ Almud at partial evidence: becomes a Contested Belief holder.
+│       His suppression of the Restoration reads as cowardice or complicity.
+│       Resonant Style: Consequence — show him what this costs Valoria.
 │
-├─ FULL EVIDENCE: identity of perpetrator exposed
+├─ FULL EVIDENCE: THE DEATH WAS ACCIDENTAL
 │   │
-│   ├─ PERPETRATOR = CHURCH (most destabilising)
-│   │   ├─ TC −4 (evidence of Church political assassination presented publicly)
-│   │   ├─ Confessor Himlensendt faces crisis: his institution did this;
-│   │   │   he did not know (TS 0, sincerely devout); the revelation is not
-│   │   │   theological — it is institutional. Destabilisation trigger fires.
-│   │   ├─ Baralta: Evidence Style target; this IS her Resonant Style
-│   │   │   She will act. Sovereign Authority Doctrine activated.
-│   │   ├─ Ehrenwall: Coup Counter +1 (Crown's sovereignty was violated; no response for 27 years)
-│   │   └─ Almud: Belief crisis. His Belief 2 ("I cannot act until I find a path
-│   │       that doesn't require choosing between justice and the monarchy")
-│   │       is retroactively revealed as built on a crime he was complicit in by silence.
-│   │       Player must rewrite the Belief or abandon it. CP trigger.
+│   │   Full evidence requires cross-referencing ALL available trails
+│   │   (minimum 3 of 4 evidence sources accessed). No single trail leads
+│   │   here — each trail points to a different faction. Only by comparing
+│   │   all trails does the pattern emerge: every "lead" is circumstantial,
+│   │   every faction's theory contradicts the others, and the physical
+│   │   evidence (accessible only through Crown archives + Lenneth's
+│   │   independent coastal survey confirming weather/terrain conditions)
+│   │   is consistent with a genuine riding accident in rough terrain
+│   │   during a storm.
 │   │
-│   ├─ PERPETRATOR = NIFLHEL (operational exposure)
-│   │   ├─ Niflhel Stability −2 (full exposure)
-│   │   ├─ Church-Niflhel Olafsson connection more plausible to investigators
-│   │   │   → Olafsson vulnerability now active; Baralta's corroborating evidence
-│   │   │   becomes actionable → TC −3 if publicly presented
-│   │   ├─ Niflhel will attempt to silence the evidence: Quiet Network activated
-│   │   │   against whoever holds the proof
-│   │   └─ [STABLE if buried; PRESSURE if surfaced; THRESHOLD if presented to Parliament]
+│   │   The revelation is not "nobody did it." The revelation is:
+│   │   "Everyone has spent 27 years building political structures
+│   │   around the assumption that someone did, and those structures
+│   │   are now load-bearing."
 │   │
-│   ├─ PERPETRATOR = VARFELL (factional detonation)
-│   │   ├─ Vaynard's TK and Private Collection agenda revealed in its worst light
-│   │   ├─ Crown vs Varfell: casus belli (retribution category)
-│   │   │   Almud: Mandate +0 (public understands); Vaynard: Mandate −3 when exposed
-│   │   ├─ Ehrenwall: Coup Counter re-evaluates; Vaynard more dangerous than the Church?
-│   │   └─ Guilds: Wealth-aligned; Varfell trade relationships fracture
-│   │
-│   └─ PERPETRATOR = ALTONIAN AGENT (geopolitical detonation)
-│       ├─ IP +5 immediately (casus belli for war; Almud publicly humiliated)
-│       ├─ Elske's marriage is recontextualised: she was sent to a duchy
-│       │   whose faction may have killed her grandfather
-│       │   → Elske's Conviction: Family axis activated at maximum intensity
-│       │   → Self-Determination follows immediately: she is embedded in the
-│       │      court that did this. Her response depends entirely on what
-│       │      the players bring her as evidence.
-│       ├─ Almud's Belief 1 ("I will hold Altonian trade open regardless of cost")
-│       │   collapses or inverts. Campaign-altering Belief revision.
-│       └─ Ehrenwall: Coup Counter +1; Almud has kept trade open with his father's killers
+│   ├─ IMMEDIATE EFFECTS
+│   │   ├─ Almud: Belief crisis — but different from any assassination reveal.
+│   │   │   His Belief 2 ("I cannot act until I find a path that doesn't
+│   │   │   require choosing between justice and the monarchy") is not
+│   │   │   revealed as complicity. It is revealed as 27 years of self-imposed
+│   │   │   constraint in response to nothing. The path he was looking for
+│   │   │   always existed. He was the obstacle.
+│   │   │   Player must rewrite Belief. CP trigger.
+│   │   │   Almud enters 1-season period of self-examination:
+│   │   │   Crown NPC AI takes no offensive Domain Actions (reassessment).
+│   │   │   After 1 season: Almud either acts on every suppressed conviction
+│   │   │   simultaneously (RM sympathy, Einhir restoration, Thread curiosity —
+│   │   │   overcompensation for 27 years of restraint) or reconstructs the
+│   │   │   caution under a new justification ("the caution was right regardless
+│   │   │   of its origin — the threats are real even if the trigger was not").
+│   │   │
+│   │   ├─ Ehrenwall: No Coup Counter change (no sovereignty violation occurred).
+│   │   │   But: Ehrenwall has built Löwenritter readiness partly on the
+│   │   │   assumption that Crown is vulnerable to internal enemies. If there
+│   │   │   are no internal enemies of that kind, Ehrenwall's institutional
+│   │   │   posture is based on a threat model that doesn't exist.
+│   │   │   Ehrenwall's response: uncertain. He may double down (the threat
+│   │   │   model serves Löwenritter's institutional interests regardless of
+│   │   │   whether the original threat was real) or reassess.
+│   │   │
+│   │   ├─ Church: No TC shift (no Church crime to expose). But: the Church
+│   │   │   has been positioning itself defensively against assassination
+│   │   │   accusations for 27 years. That defensive posture consumed
+│   │   │   institutional resources and shaped Church politics. The revelation
+│   │   │   that no faction committed the act means the Church's defensive
+│   │   │   expenditure was wasted — but the political positions built during
+│   │   │   that defence are now entrenched and cannot be unwound.
+│   │   │
+│   │   ├─ Varfell: Vaynard's intelligence apparatus was partly justified by
+│   │   │   the need to identify the assassin. If there is no assassin,
+│   │   │   Vaynard's intelligence infrastructure is revealed as having served
+│   │   │   his own Thread research agenda from the start, with the assassination
+│   │   │   investigation as cover. This is not criminal (no one was framed),
+│   │   │   but it is politically damaging — Varfell's intelligence budget was
+│   │   │   built on a pretext. Varfell Mandate −1 if this is publicised.
+│   │   │
+│   │   ├─ Every faction: The political structures built on the assassination
+│   │   │   assumption are now revealed as load-bearing but foundationless.
+│   │   │   No faction wants this revelation publicised because every faction
+│   │   │   has invested in the assassination narrative. The truth benefits
+│   │   │   no one. This creates the rarest political dynamic in the game:
+│   │   │   every faction has a shared interest in suppressing the truth.
+│   │   │   The only actors who benefit from publication are the players
+│   │   │   (who can use the information as leverage against everyone
+│   │   │   simultaneously) and the RM (whose suppression was partly
+│   │   │   justified by the instability narrative the assassination fed).
+│   │   │
+│   │   └─ PI effect: If publicised: PI −2 (the political class is embarrassed;
+│   │       the public sees that their rulers have been chasing ghosts).
+│   │       If suppressed: PI +0 (nothing changes publicly).
+│   │       If selectively revealed (players tell specific factions):
+│   │       leverage — each faction told gains the "Accidental Truth" condition
+│   │       (they know the secret, they know the player knows, they owe a
+│   │       debt of silence). This is the most valuable political currency
+│   │       in the game: a truth that everyone needs buried.
+│
+└─ FALSE LEADS THAT PERSIST REGARDLESS
+    ├─ Players who access only 1–2 evidence trails will find "proof" of
+    │   a specific faction's guilt — because that is what the trail was
+    │   constructed to show (each faction built its theory to implicate rivals).
+    │   Partial investigation produces confident wrong answers.
+    │   Only exhaustive cross-referencing reveals the absence of a perpetrator.
+    ├─ If players act on a partial trail (accuse a faction publicly):
+    │   the accused faction suffers the mechanical consequences listed in
+    │   the original perpetrator branches (Mandate loss, TC shift, etc.)
+    │   EVEN THOUGH THEY ARE INNOCENT. The accusation is politically real
+    │   regardless of its factual basis. A false accusation of regicide
+    │   is nearly as damaging as a true one — because the political system
+    │   has primed itself to believe it.
+    └─ If players accuse a faction AND later discover the truth:
+        they have destroyed an innocent faction's standing on false evidence
+        they genuinely believed was correct. This is the moral cost of
+        investigation without patience. The game does not forgive hasty justice.
 ```
 
 ---
+
 
 # ARC 2: ALMUD'S SYMPATHIES — THE SOVEREIGN CONSTRAINT
 
