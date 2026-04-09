@@ -182,3 +182,9 @@ editorial_decisions_pending: [ED-358]
 - Informal Almud behavioral profile added for arc consistency. Full NPC entry flagged as [EDITORIAL].
 - Recommendation: consolidate three-layer arc documents into single arcs_10_18_v2.md in next pass.
 - Committed as gm_ref/arcs_almud_revision.md.
+
+### 2026-04-08 — NPC Mode Interface + Edeyja disposition
+- Mode interface matrix added to NPC roster: TTRPG/Hybrid/BG presence for all 13 NPCs.
+- 8 new Event Cards designed (Haelgrund Investigation, Haelgrund Defection, Varfell Succession, Brandt Succession, Supply Chain Exposure, Strand Turned, Laskaris Flip, Parish Revolt).
+- Edeyja's disposition toward peninsula politics clarified: factions are an environmental hazard, not political actors worth engaging with.
+- All 13 NPCs active in ≥ 2 modes. 10 of 13 active in all 3 modes.

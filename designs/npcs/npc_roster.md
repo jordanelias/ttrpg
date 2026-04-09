@@ -18,7 +18,9 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 
 **Compromise:** None. Edeyja is the moral anchor of the setting. Her conviction (Continuity) is uncompromised and her judgment is sound. She is the standard against which other practitioners measure themselves. Players who reach her find someone who will not bend — and that rigidity is itself a narrative force.
 
-**Behavioral AI:** Evidence-driven. Will not act on political appeals, emotional urgency, or abstract moral claims. Only responds to demonstrated Thread competence and concrete substrate data. **Flaw: None.** Edeyja's "flaw" is that she is correct and the world is dying anyway.
+**Disposition toward peninsula politics:** Contempt is too strong a word. Irrelevance is closer. Edeyja has spent decades maintaining the substrate while factions argue over who gets to sit in which chair. Crown, Church, Hafenmark, Varfell — from Askeheim, they are children fighting over furniture in a house that is on fire. She does not hate them. She does not care about them. The only point at which their politics becomes real to her is when their strife produces Thread tension, knots, and frays that make her job harder — and it always does. Every war, every Heresy Investigation that disrupts a practitioner's work, every Church suppression of Thread knowledge, every intelligence operation that creates collateral Thread damage is another tear she has to mend with fewer wardens and less time. The factions are not her enemies. They are an environmental hazard.
+
+**Behavioral AI:** Evidence-driven. Will not act on political appeals, emotional urgency, or abstract moral claims. Only responds to demonstrated Thread competence and concrete substrate data. **Flaw: None.** Edeyja's "flaw" is that she is correct and the world is dying anyway. PCs who approach her with faction goals get nothing. PCs who approach her with substrate data get her full attention. The gap between these two responses is absolute.
 
 ---
 
