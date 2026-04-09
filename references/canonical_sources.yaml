@@ -56,13 +56,12 @@ systems:
     note: "Stage4 OUTDATED (all stages outdated 2026-04-04). No design-layer doc exists. Stage4 retained as only source but treat as unverified. ED-048 open (Ceiral placeholder)."
 
   clocks:
-    canonical: compilation/v0.14/stage5_clocks.md
-    canonical_sha__compilation__v0_14__stage5_clocks_md: "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    canonical: designs/systems/clock_registry.md
     params: null
-    design_doc: null
+    design_doc: designs/systems/clock_registry.md
     compilation_stage: compilation/v0.14/stage5_clocks.md
     compilation_current: false
-    note: "Stage5 OUTDATED. No design-layer clock doc exists. Stage5 retained as only source but treat as unverified."
+    note: "clock_registry.md created 2026-04-08 (PP-496). Consolidates all clocks, tracks, and counters from across the project. Stage5 was empty. Registry is now canonical."
 
   factions:
     canonical_ttrpg: compilation/v0.14/stage6_factions.md

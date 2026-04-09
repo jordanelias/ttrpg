@@ -1063,7 +1063,7 @@ Crown territory names (provisional): T2 = **Kronmark** (NW of Arcansheim), T5 = 
 ## BG Overwhelming Threshold — Final (PP-281 / PP-299)
 Supersedes PP-179 (which incorrectly stated 'matches TTRPG').
 BG Overwhelming = Ob+1 surplus (margin ≥ Ob+1 after ties → attacker wins).
-BG Overwhelming floor: net ≥ 2 (not 3 — TTRPG floor of 3 is personal-scale drama; BG abstraction warrants lower floor).
+BG Overwhelming floor: net ≥ 3 (PP-249 canonical — matches TTRPG PP-232 floor). Supersedes prior net ≥ 2 proposal.
 ED-031 correct. PP-179 was documentation error. ED-142 resolved.
 
 ## ED-056 Resolution (PP-293) — Zoom In TC Win-Delay Exploit
@@ -1130,7 +1130,7 @@ Ob 10 exception: Overwhelming unavailable; Partial requires net ≥ 5.
 [FLAGGED: confirm 2×Ob canonical; confirm floor of 3 applies to BG before BG compilation.]
 
 ## BG Overwhelming — Final Ruling (PP-262)
-BG Overwhelming = Ob+1 surplus (attacker's net margin ≥ Ob+1).
+[STRUCK — superseded by PP-249: BG Overwhelming = net ≥ 2×Ob AND net ≥ 3.]
 Floor: net ≥ 2 (not 3 — TTRPG floor of 3 is personal-scale drama; BG abstraction warrants lower floor).
 PP-179 ('matches TTRPG') was a documentation error. ED-031 (Ob+1) is correct.
 

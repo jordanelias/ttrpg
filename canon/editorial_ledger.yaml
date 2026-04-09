@@ -2082,7 +2082,7 @@ editorial_decisions:
     blocks: co-victory balance
     tags: [board_game, crown, hafenmark, co_victory, balance]
 
-  - id: ED-343
+  - id: ED-360
     status: flagged
     date_created: 2026-04-08
     priority: P2
@@ -2090,6 +2090,7 @@ editorial_decisions:
       4-PC Spy vs Royal Guard interaction (SIM-NEW-05). Royal Guard cancels a successful
       4-PC Spy on Crown (sunk cost — no PC refund). Confirm: (a) Royal Guard can cancel
       4-PC Spy (ruling taken: yes), (b) no PC refund on cancellation (ruling taken: yes).
+      [Renumbered from ED-343 to resolve collision with Battle Ob ED-343.]
     source: SIM-NEW-05 2026-04-08
     blocks: Patience Protocol spend decision against Crown
     tags: [board_game, varfell, patience_protocol, crown, royal_guard]
@@ -2301,3 +2302,32 @@ editorial_decisions:
     date_raised: 2026-04-08
     description: "RM TTRPG mode Founding Gate (PP-495) — narrative gate added. User to review: is session 6 floor appropriate? Should any mechanical trigger supplement the narrative conditions?"
     tags: [ttrpg, restoration_movement, founding]
+
+  - id: ED-361
+    status: flagged
+    date_raised: 2026-04-08
+    description: >
+      PI-CASCADE threshold values. Proposed: PI 0–4 stable; PI 5–9 Crown +1 Ob;
+      PI 10–14 Crown Stability +1 Ob at Accounting; PI 15–19 Crown loses 1 territory/season
+      (lowest TCV, becomes Uncontrolled), coup check if Coup Counter ≥ 2; PI 20+ Crown 
+      elimination triggered unless reduced before next Accounting. Confirm or modify.
+    tags: [board_game, public_instability, crown, p1]
+
+  - id: ED-362
+    status: flagged
+    date_raised: 2026-04-08
+    description: >
+      DISSONANT war-scale Thread rates. Proposed: ≥ 3 Thread ops per mass battle turn →
+      +1 Ob +1 Coherence cost to subsequent ops (cap +2 each). Dissonant Counter ≥ 3 →
+      all Thread ops in zone +2 Ob for remainder of battle + RS −2 at Accounting.
+      Counter resets at battle end. Confirm or modify.
+    tags: [hybrid, mass_combat, threadwork, p1]
+
+  - id: ED-363
+    status: flagged
+    date_raised: 2026-04-08
+    description: >
+      P1-01 Overwhelming threshold — PP-249 canonical: net ≥ 2×Ob AND net ≥ 3.
+      Stale entries at params_board_game L1066 (old floor 2) and L1133 (Ob+1 surplus)
+      corrected this session. Confirm PP-249 as final.
+    tags: [board_game, degree_table]
