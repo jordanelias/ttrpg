@@ -337,6 +337,8 @@ Seasonal TC at Accounting (execute in order):
 4. **Suppress** (optional opponent action): Mandate vs Ob = Church Mandate. Success: negate Step 1 passive. Failure: Stability −1.
 5. **Hafenmark Structural Suppression:** while Baralta Mandate ≥ 4, TC −1/season.
 
+**TC seasonal cap (PP-504):** ±3 per season from player-initiated Domain Actions. ±5 per season from all sources combined (includes Institutional Momentum, Conviction Yield, Calamity Drift, event cards).
+
 Legacy TC sources (AER momentum, Attention Pool threshold, Emergency Powers, Free Trade Decree, Church unit presence) are subsumed into the Conviction Yield system — Church prominence in high-CV territories captures the same dynamics. AER ≥ 3 still bypasses Hafenmark structural suppression (PP-203).
 
 ## TC 75 Territorial Seizure (PP-421 — per victory_architecture_v1.md §7)

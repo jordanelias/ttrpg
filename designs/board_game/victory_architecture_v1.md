@@ -112,7 +112,8 @@ TC freezes at 75. At TC 75 (pool 11D) vs CV 5 (Ob 2): Seizure is essentially gua
 
 Early Seizure (TC < 50) is possible but carries political consequences: Casus Belli from the controlling faction, and every other faction sees Church territorial ambition. The lower the TC, the more it looks like institutional aggression rather than a natural extension of authority. The civil war scenario is a real cost.
 
-[EDITORIAL: ED-355 — Fort Level interaction with Seizure. Current formula does not include Fort. Options: (a) Fort adds to Ob (Ob = 7 − CV + Fort), making fortified territories much harder; (b) Fort is handled by the Battle that precedes Seizure (you must win the Battle first, then Seizure is political); (c) No Fort modifier — Seizure is political authority, not military. Recommend (b): Battle Ob includes Fort, Seizure Ob does not.]
+**Fort interaction (PP-500, ED-355 resolved):** Fort Level does not modify Seizure Ob. Seizure is a political act — Church institutional authority overriding local governance. If the territory has a garrison (Fort ≥ 1 AND military units present), Church must win a Battle (attacker Military vs Battle Ob, modified by Fort per standard Battle rules) before Seizure can be attempted. An ungarrisoned fortified territory (Fort ≥ 1, no units) can be Seized without Battle.
+[EDITORIAL: ED-355 — resolved provisionally. Option (b): Battle handles Fort, Seizure is political. Flagged for simulation.]
 
 **Victory conditions (all simultaneous at Accounting):**
 
