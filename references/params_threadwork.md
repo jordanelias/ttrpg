@@ -620,3 +620,18 @@ Non-sensitive characters (Thread Sensitivity (TS) 0) may learn, memorise, and re
 **Mechanical implication:** No amount of study, training, or exposure grants Thread operational capability to a TS 0 character. TS must be ≥ 10 (Practitioner designation) before any Thread operation can be attempted. The epistemological barrier is not a skill check — it is a hard gate on rendering capacity.
 
 **Church and institutional reinforcement (P-08 note):** The Church reinforces the epistemological barrier institutionally, but the barrier would exist without the Church. Publishing all Thread-related documents publicly would not enable non-sensitives to perform Thread operations. It would enable them to recite the procedures — inertly.
+
+
+## War-Scale Dissonant Thread Effects (PP-502, ED-362 resolved)
+
+When ≥ 3 Thread operations fire in a single mass battle turn, the substrate becomes saturated:
+
+| Condition | Effect |
+|-----------|--------|
+| 3+ Thread ops in one battle turn | All subsequent Thread ops that turn: +1 Ob, +1 Coherence cost (cap: +2 each) |
+| Dissonant Counter ≥ 3 (cumulative across turns) | All Thread ops in battle zone: +2 Ob for remainder of battle (substrate saturation) |
+| Dissonant Counter ≥ 3 at battle end | RS −2 at next Accounting (in addition to individual op RS costs) |
+
+Dissonant Counter: +1 per battle turn with ≥ 3 Thread operations. Resets at battle end. Does not persist between battles.
+
+[EDITORIAL: ED-362 — resolved provisionally. Creates natural ceiling on mass-battle Thread spam. Flagged for simulation under SIM-DISSONANT.]

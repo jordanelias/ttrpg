@@ -110,3 +110,30 @@ skill: valoria-orchestrator
 action: User decisions on ED-329 (Torben), ED-343 (Battle Ob), ED-355 (Fort+Seizure), ED-356 (Crown balance). Then: Church Graduated Seizure simulation. Then: NPC roster design (ED-358).
 blockers: [ED-329, ED-343]
 editorial_decisions_pending: [ED-329, ED-343, ED-355, ED-356, ED-357, ED-358, ED-359, ED-360, ED-361, ED-362, ED-363]
+
+### 2026-04-08 — Batch Editorial Resolution
+- PP-498: Torben Loyalty corrected to 3 (0–7). Summary table aligned with detailed section.
+- PP-499: Battle Ob = defender Military ÷ 2 (round up, min 1).
+- PP-500: Fort/Seizure resolved (Battle handles Fort, Seizure is political). Political Vacuum rule added (1-season delay on eliminated territory March).
+- PP-501: PI thresholds defined (0–4/5–9/10–14/15–19/20+).
+- PP-502: War-scale Dissonant Thread effects parameterized.
+- PP-503: Co-Movement serialization rule.
+- PP-504: TC seasonal cap confirmed (±3 Domain Actions, ±5 all sources).
+- Maret Uln retained (ED-357 un-struck). NPC roster now 13 characters.
+- ED-329/343/355/356/357/359/360/361/362/363 resolved. ED-358 remains flagged (NPC roster — user creative decisions).
+- SIM-PI-CASCADE and SIM-DISSONANT now unblocked.
+
+## REMAINING OPEN EDITORIAL
+ED-358: 13-character NPC development roster (user creative decisions)
+
+## REMAINING OPEN FLAGGED (prior sessions, not addressed this session)
+See editorial_ledger.yaml — 35 flagged items total. Major categories:
+- Baralta/Vaynard BG Conviction text
+- RS track naming
+- Several faction-specific mechanical confirmations from prior stress tests
+
+## NEXT ACTION
+skill: valoria-orchestrator
+action: (1) Church Graduated Seizure simulation (PP-494). (2) PI-CASCADE simulation (PP-501). (3) DISSONANT simulation (PP-502). (4) NPC roster design session (ED-358).
+blockers: none
+editorial_decisions_pending: [ED-358]

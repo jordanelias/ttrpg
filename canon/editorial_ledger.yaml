@@ -2331,3 +2331,88 @@ editorial_decisions:
       Stale entries at params_board_game L1066 (old floor 2) and L1133 (Ob+1 surplus)
       corrected this session. Confirm PP-249 as final.
     tags: [board_game, degree_table]
+
+  # ═══ 2026-04-08 SESSION — Batch Editorial Resolution ═════════════════════
+
+  - id: ED-329
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Torben Loyalty starting value and range"
+    decision: "PP-498: Torben starts at 3, range 0–7. Summary table corrected to match §Torben Loyalty Track (which already said 3/0–7). The 10/0–10 entry was an erroneous revision. Stale Deed 5 reference struck (PP-424 dissolved Deeds)."
+    tags: [board_game, torben, crown]
+
+  - id: ED-343-RESOLVED
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Battle Ob formula"
+    decision: "PP-499: Battle Ob = defender Military ÷ 2 (round up, min 1). Matches other Domain Action Ob patterns. [EDITORIAL: provisional — flagged for simulation confirmation.]"
+    tags: [board_game, battle]
+
+  - id: ED-355
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Fort Level interaction with Church Graduated Seizure"
+    decision: "PP-500: Option (b). Fort does not modify Seizure Ob. If territory has garrison (Fort ≥ 1 + units), Church must win Battle first. Ungarrisoned fort = Seizure without Battle. Political Vacuum rule also added (1-season delay on eliminated faction territories). [EDITORIAL: provisional — flagged for simulation.]"
+    tags: [board_game, church, seizure, fort]
+
+  - id: ED-356
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Crown starting TCV 12 vs threshold 16 — balance check"
+    decision: "No change. Crown's +4 TCV gap matches Hafenmark's +4 gap. Crown's political conditions (suppress ALL rivals: Mandate ≤ 2 / eliminated / treaty × 3 factions simultaneously) are the most demanding of any faction. TCV gap is compensated by political difficulty. Crown is not over-advantaged."
+    tags: [board_game, crown, balance]
+
+  - id: ED-357
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Maret Uln NPC status"
+    decision: "Maret retained as active NPC. Not struck. Added to 13-character NPC development roster (ED-358 updated)."
+    tags: [npc, worldbuilding]
+
+  - id: ED-358
+    status: flagged
+    date_resolved: null
+    description: >
+      13-character NPC development roster. All require full design: character identity, 
+      stat block, arc trajectory, faction interaction patterns. Roster: (1) Edeyja 
+      (Wardens/Southernmost), (2) Maret Uln (Varfell practitioner), (3) RM Leader(s) 
+      (Restoration), (4) Inquisitor (Church), (5) TS Riskbreaker undercover/knows Lenneth 
+      (Löwenritter covert), (6) Löwenritter officer, (7) Guilds representative, 
+      (8) Ministry bureaucrat, (9) Court figure (Crown), (10) Niflhel operative, 
+      (11) Altonian Prince married to Elske, (12) Schoenland figure, (13) TBD.
+    tags: [npc, worldbuilding, editorial]
+
+  - id: ED-359
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "RM TTRPG Founding Gate session-6 floor"
+    decision: "Session 6 floor confirmed. Mirrors Hybrid PW ≥ 3 timing (~6-8 seasons). No mechanical supplement to narrative conditions."
+    tags: [ttrpg, restoration_movement]
+
+  - id: ED-360
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Spy vs Royal Guard interaction"
+    decision: "Confirmed: Royal Guard cancels successful 4-PC Spy on Crown. No PC refund on cancellation (sunk cost). Ruling stands."
+    tags: [board_game, varfell, crown]
+
+  - id: ED-361
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "PI-CASCADE threshold values"
+    decision: "PP-501: PI 0–4 stable; 5–9 Crown +1 Ob; 10–14 Crown Stability +1 Ob; 15–19 Crown territory loss; 20+ Crown elimination. [EDITORIAL: provisional — flagged for simulation under SIM-PI-CASCADE.]"
+    tags: [board_game, public_instability, crown]
+
+  - id: ED-362
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "DISSONANT war-scale Thread rates"
+    decision: "PP-502: ≥3 ops/turn → +1 Ob +1 Coherence (cap +2). Dissonant Counter ≥ 3 → +2 Ob zone-wide + RS −2. Resets at battle end. [EDITORIAL: provisional — flagged for simulation under SIM-DISSONANT.]"
+    tags: [hybrid, mass_combat, threadwork]
+
+  - id: ED-363
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "P1-01 Overwhelming threshold confirmation"
+    decision: "PP-249 confirmed as canonical: Overwhelming = net ≥ 2×Ob AND net ≥ 3. Stale entries at params_board_game L1066/L1133 corrected in prior commit."
+    tags: [board_game, degree_table]

@@ -20,7 +20,7 @@
 |-------|-------|-------|-------|--------|
 | Vaynard Thread Mastery (VTM) | Varfell | 0–5 | 0 | params_board_game.md §VTM |
 | Altonian Ecclesiastical Accord (AER) | Church/Hafenmark | 0–5 | 0 | victory_architecture_v1.md §AEA |
-| Torben Loyalty | Crown → Löwenritter | 0–10 | 10 | params_board_game.md §Torben [ED-329: start/range disputed — 3 on 0–7 recommended] |
+| Torben Loyalty | Crown → Löwenritter | 0–7 | 3 | params_board_game.md §Torben (PP-498) |
 | Elske Loyalty | Crown | 0–7 | 4 | params_board_game.md §Elske |
 | Coup Counter | Löwenritter (GM private) | 0–3 | 0 | stage6_factions.md §8.9 |
 | Popular Will (PW) | Shared (Hybrid only) | 0–5 | 0 | params_board_game.md §RM Founding |

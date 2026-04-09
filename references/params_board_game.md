@@ -58,7 +58,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard |
 | Parliament Integrity (PI) | **7** | 0–10 | CORRECTED from 5. |
 | AER | 2 | 0–5 | Near IP clock. |
-| Torben Loyalty | **10** | 0–10 | Active from game start. No IP trigger. Range extended to 10. On Crown elimination: Torben Loyalty track transfers to Löwenritter (they inherit the succession claim). Löwenritter wins or loses Torben via Influence actions the same way Crown did. Church and Hafenmark may contest via Senator Outward Diplomacy (Ob = current Torben Loyalty ÷ 2). (ED-332) |
+| Torben Loyalty | **3** | 0–7 | Active from game start. No IP trigger. On Crown elimination: Torben Loyalty track transfers to Löwenritter (they inherit the succession claim). Löwenritter wins or loses Torben via Influence actions the same way Crown did. Church and Hafenmark may contest via Senator Outward Diplomacy (Ob = current Torben Loyalty ÷ 2). (ED-332, PP-498: start 3, range 0–7 per §Torben Loyalty Track canonical.) |
 | Elske Loyalty | 4 | 0–7 | Off-board card near T4. |
 | Löwenritter Coup Counter | 0 | 0–4 | Public. Threshold 4 = coup eligible. |
 | Warden Cooperation | 0 | 0–3 | Near T6. Inactive until Warden Emergence. |
@@ -88,7 +88,7 @@ CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 
 
 ## Faction Elimination — Territory Status (ED-333 resolved)
 When a faction is eliminated (Stability 0 and no recovery action taken):
-- All territories previously held become **Uncontrolled**: control token removed, no faction marker.
+- All territories previously held enter **Political Vacuum** for 1 season (PP-500). During Vacuum: no faction may March in; Fort level retained; tokens removed. After 1 season: Vacuum lifts, territories become Uncontrolled, normal March rules apply.
 - Uncontrolled territories: any faction may March in freely (no Battle roll for entry, no defender).
 - Fort level is retained on the territory card (physical fortifications don't vanish).
 - Ministry AP-tokens and Guilds CP-tokens in eliminated faction territories are removed immediately.
@@ -288,6 +288,20 @@ Per victory_architecture_v1.md §5. RS = 0 (Rupture), IP ≥ 100 + Altonian Exte
 ### Hollow Victory — DISSOLVED
 The Hollow Victory modifier system (Deed-count penalties) has been dissolved with the Deed system (PP-427). In Hybrid mode, BG victory without personal arc resolution is a narrative qualifier per P-32 (see victory_architecture_v1.md §9.3).
 
+### Public Instability (PI) Thresholds (PP-501, ED-361 resolved)
+PI measures popular dissatisfaction with monarchical governance. Higher PI benefits Hafenmark (PI ≥ 5 required for their victory). PI hurts Crown.
+
+| PI Range | Effect |
+|----------|--------|
+| 0–4 | Stable. No mechanical effect. |
+| 5–9 | Tensions. Crown Domain Actions +1 Ob in territories with PI markers. Hafenmark Parliamentary Manoeuvre −1 Ob. |
+| 10–14 | Unrest. Crown Stability check Ob +1 at Accounting. Popular demonstrations — flavour. |
+| 15–19 | Revolt. Crown loses 1 territory per season (lowest TCV, becomes Uncontrolled after 1-season Political Vacuum per PP-500). Löwenritter coup check if Coup Counter ≥ 2. |
+| 20+ | Collapse. Crown elimination at next Accounting unless PI reduced below 20 before then. |
+
+PI advances per existing IP/PI interaction rules. PI markers placed in territories where relevant events fire.
+[EDITORIAL: ED-361 — resolved provisionally. Thresholds designed so PI 5 (Hafenmark victory condition) is achievable without triggering Crown crisis. PI 15+ is catastrophic for Crown. Flagged for simulation.]
+
 ## Torben Loyalty Track (v04 B2 + B5 — PP-188 correction)
 Range 0–7. Starts at **3**. Visible to all. Active from game start (no trigger needed).
 
@@ -303,7 +317,7 @@ Range 0–7. Starts at **3**. Visible to all. Active from game start (no trigger
 - TC crosses 60: −1.
 - Torben sent to Altonia (comply with tutoring demand): −2 immediately.
 
-Crown Deed 5 condition: Torben Loyalty ≥ 5 (i.e. must not have degraded more than 5 points from start).
+[STRUCK — Deed system dissolved PP-424. Torben Loyalty conditions now per victory_architecture_v1.md §3.6 Löwenritter.]
 Altonian Tutoring Demand triggers at IP ≥ **40** (v04 B2: "Torben Tutoring Demand (IP ≥ 40 Event)") (not 30 — v04 B2: "Torben Tutoring Demand (IP ≥ 40 Event)").
 
 ## Elske Off-Board Card (v04 B2)
@@ -347,6 +361,13 @@ One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland)
 **Failure:** Stability −1.
 **Political cost:** Seizure attempt grants controlling faction Casus Belli vs Church.
 [EDITORIAL: ED-355 — Fort Level interaction. See victory_architecture_v1.md §3.2.]
+
+### Battle Ob Formula (PP-499, ED-343 resolved)
+**Battle Ob = defender Military ÷ 2 (round up, min 1).**
+Attacker rolls: Military pool vs Ob. Degree table per standard BG degree table (PP-249).
+[EDITORIAL: ED-343 — resolved provisionally. Defender Military ÷ 2 matches other Domain Action Ob patterns. Min 1 prevents auto-success vs Military 0 factions (RM). Flagged for simulation confirmation.]
+
+
 
 ## Theocracy Counter Starting Value — Canonical
 TC starts at **28**. (P-32, PP-189 correction. The 22 value from v04 B2 was superseded by P-32 in v05.)
@@ -410,6 +431,8 @@ Partial: Token placed, no bonus. Persists.
 Failure: No token, Stability −1.
 
 ## BG Co-Movement Resolution Protocol (PP-182, ED-086 resolved 2026-04-03 — P-14 compliant)
+
+**Serialization (PP-503):** When multiple Thread operations fire in the same season, resolve each operation's Co-Movement card fully (draw → apply all three dimensional effects → discard) before the next operation draws. Effects from earlier cards may alter conditions for later draws (e.g., RS threshold crossings).
 [Full protocol in PP-182 section — three-dimensional auto-effects for all Thread operations]
 History Resonance markers (temporal), Attention Pool (epistemic), Primary result (actualized).
 Thread Tension (TT) = sum of all History Resonance markers across board.
