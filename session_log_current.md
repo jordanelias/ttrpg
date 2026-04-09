@@ -137,3 +137,14 @@ skill: valoria-orchestrator
 action: (1) Church Graduated Seizure simulation (PP-494). (2) PI-CASCADE simulation (PP-501). (3) DISSONANT simulation (PP-502). (4) NPC roster design session (ED-358).
 blockers: none
 editorial_decisions_pending: [ED-358]
+
+### 2026-04-08 — NPC Roster Design
+- 13-character NPC roster designed with structural compromises and behavioral AI flaws.
+- Maret Uln retained (Varfell practitioner, dual RM loyalty).
+- New NPCs: Haelgrund (Church Inquisitor, hidden TS 12), Torsvald (TS Riskbreaker, knows Lenneth),
+  Brandt (Löwenritter officer, premature escalator), Feldhaus (Guilds, Thread-touched supply chain),
+  Almstedt (Ministry, procedural obstructionist), Severin Almud (Crown Court, Altonian sympathies),
+  Virke (Niflhel, unknowing Thread proliferation), Hardar Veldensohn (Altonian Prince, loves Elske),
+  Solberg (Schoenland, biased toward Crown), Prudence Cardinal (Church, charitable embezzlement).
+- ED-358 resolved. All flagged for user review.
+- Committed as designs/npcs/npc_roster.md.

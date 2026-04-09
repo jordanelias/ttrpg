@@ -2416,3 +2416,16 @@ editorial_decisions:
     description: "P1-01 Overwhelming threshold confirmation"
     decision: "PP-249 confirmed as canonical: Overwhelming = net ≥ 2×Ob AND net ≥ 3. Stale entries at params_board_game L1066/L1133 corrected in prior commit."
     tags: [board_game, degree_table]
+
+  - id: ED-358-RESOLVED
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "13-character NPC development roster — identities, compromises, behavioral AI profiles"
+    decision: >
+      Full roster designed in designs/npcs/npc_roster.md. All NPCs except Edeyja carry 
+      structural compromises (dual loyalty, hidden TS, procedural rigidity, profit blindness, 
+      embezzlement, etc.). Each has a named behavioral AI flaw producing mechanical consequences.
+      Existing NPCs (Maret Uln, Maret Vossen, Edeyja) integrated with new designs.
+      [EDITORIAL: All provisional — flagged for user review of names, motivations, 
+      compromises, behavioral profiles. Stat blocks deferred.]
+    tags: [npc, worldbuilding, editorial]
