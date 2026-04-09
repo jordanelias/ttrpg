@@ -155,3 +155,11 @@ editorial_decisions_pending: [ED-358]
 - #11 Hardar Veldensohn → Doux Alexios Laskaris. Greek/Macedonian naming for Altonia. Historical echo: Demetrios Palaiologos.
 - Prudence Cardinal echo: Suger of Saint-Denis. Haelgrund: Bellarmine. Torsvald: Christine Granville. Brandt: Aetius. Feldhaus: Jacques Cœur. Almstedt: Byzantine logothetes. Solberg: Xenophon. Vossen: Luxemburg. Maret Uln: Sorge.
 - 5 NPCs rewritten to purge cliché (Brandt, Virke, Solberg, Prudence Cardinal already fixed in prior commit; Severin fully replaced).
+
+### 2026-04-08 — Historical Parallel Arcs (Batch 03)
+- 8 arcs generated (Arcs 10-17) from historical parallels: Investiture Controversy, Year of Four Emperors, Romance of Three Kingdoms, Sengoku Japan, Byzantine court politics, Borgia papacy, Italian city-states, Sinigaglia.
+- 16 event cards with mechanical triggers across all arcs.
+- All arcs use existing NPCs: Almstedt, Haelgrund, Baralta, Brandt, Torsvald, Feldhaus, Virke, Vossen, Maret Uln, Vaynard, Severin Almud, Hardar Veldensohn, Solberg, Prudence Cardinal. No new NPCs required.
+- 8 gaps identified (GAP-ARC-10 through GAP-ARC-17). 6 editorial flags (ED-NEW-1 through ED-NEW-6).
+- Cross-arc interaction table: 8x8 matrix documenting all arc intersections.
+- Committed as gm_ref/arcs_10_17_historical.md.
