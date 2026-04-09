@@ -172,3 +172,13 @@ editorial_decisions_pending: [ED-358]
 - Arc 18 (The Stolen Steward) added: Strand-dedicated arc, Cromwell parallel, 2 new event cards.
 - Total: 9 arcs, 19 event cards across batch.
 - Committed as gm_ref/arcs_10_17_reassignment.md.
+
+### 2026-04-08 — Almud Competence Revision
+- King Almud reframed across all arcs: competent Bayesian ruler managing compound-clock problem, not passive or oblivious.
+- Arc 11: Crown collapse is tragic (correct decisions, impossible load), not institutional incompetence. New event card: The King's Gambit (HOLD/STRIKE/TRANSITION choices at Stability 1).
+- Arc 14: Church offer decision framed as calculated cost-benefit, not confusion. NPC AI decision matrix by Stability level.
+- Arc 15: Almud has independent detection channels. New event card: The King's Patience (Almud holds leverage as latent intelligence asset).
+- Arc 18: Strand reframed from "unwitting leak" to "monitored honeypot." Almud uses cultivation pattern as intelligence. Strategic Review replaces Discovery. Three-layer intelligence model.
+- Informal Almud behavioral profile added for arc consistency. Full NPC entry flagged as [EDITORIAL].
+- Recommendation: consolidate three-layer arc documents into single arcs_10_18_v2.md in next pass.
+- Committed as gm_ref/arcs_almud_revision.md.
