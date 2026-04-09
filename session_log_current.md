@@ -163,3 +163,12 @@ editorial_decisions_pending: [ED-358]
 - 8 gaps identified (GAP-ARC-10 through GAP-ARC-17). 6 editorial flags (ED-NEW-1 through ED-NEW-6).
 - Cross-arc interaction table: 8x8 matrix documenting all arc intersections.
 - Committed as gm_ref/arcs_10_17_historical.md.
+
+### 2026-04-08 — Arc Reassignment (NPC Roster v3)
+- NPC roster v3 reviewed: Severin Almud removed, Gerik Strand (#9) added, Hardar → Doux Alexios Laskaris (#11), Dalla Virke expanded (#10).
+- Arcs 10-17 reassigned: Severin's COMMITMENT-LOCKED function absorbed by Strand's OVERPERFORMER + flattery vulnerability.
+- Laskaris replaces Hardar (name/framing change, mechanics identical).
+- Virke's Thread-touched supply chain now personal reputation — Arc 12 strengthened with DISCLOSE/CONCEAL choice.
+- Arc 18 (The Stolen Steward) added: Strand-dedicated arc, Cromwell parallel, 2 new event cards.
+- Total: 9 arcs, 19 event cards across batch.
+- Committed as gm_ref/arcs_10_17_reassignment.md.
