@@ -26,6 +26,8 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 
 **Existing references:** params_factions §Varfell Succession (PP-486). TS ~50. Vaynard's intelligence operative and Thread-sensitive agent.
 
+**Historical echo:** Richard Sorge — Soviet intelligence operative in Tokyo who developed genuine sympathy for the society he was infiltrating. Sorge's dual loyalty was not performative; he genuinely cared about Japan while serving Moscow. Maret's sympathy for the Restoration Movement carries the same structural weight: it is real, it conflicts with her mission, and it will eventually force a choice.
+
 **Compromise: Dual loyalty.** Maret is personally sympathetic to the Restoration Movement — she grew up near Einhir communities in the western fjords and considers the Forgetting a tragedy. But she serves Vaynard, whose intelligence-first approach treats RM as a tool for Varfell's political objectives. Maret must choose between Vaynard's pragmatic exploitation of RM sentiment and her own belief that the Restoration deserves genuine autonomy. If Vaynard is eliminated, Maret takes over Varfell and aligns with RM goals (PP-486) — but this alignment comes at the cost of Varfell's intelligence apparatus (VTM resets to 0).
 
 **Ethics:** Rawlsian — veil of ignorance. She believes in equity, but she serves an intelligence faction that weaponises information asymmetry. The contradiction is structural and inescapable while Vaynard leads.
@@ -41,6 +43,8 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 
 **Existing references:** params_factions §ED-005 (PP-286). Primary RM NPC contact.
 
+**Historical echo:** Rosa Luxemburg — revolutionary leader whose visibility was both her political power and her death warrant. Luxemburg could not lead from hiding because the movement required a public face. Vossen occupies the same structural trap: the movement needs her visible, and visibility is what the Church targets.
+
 **Compromise: Visibility as vulnerability.** As the named leader of a movement that the Church considers heretical, Vossen is a permanent Heresy Investigation target. Every season she operates publicly, Church gains +1 Attention Pool (AP) toward her location. She cannot lead from hiding — the movement requires visible leadership to sustain Popular Will — but visibility is what kills her.
 
 **Ethics:** Rawlsian social contract — consistent with RM's ethical framework. Vossen genuinely believes in equity and cultural restoration. But the movement's survival sometimes requires alliances with factions (Varfell, Niflhel) whose ethics she finds repugnant. Every alliance of convenience costs RM Stability −1 (the base fractures when leadership compromises principles).
@@ -54,6 +58,8 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 ## 4. Sæmund Haelgrund — Church Inquisitor (Cardinal Justice)
 
 **New NPC.** Reports to Cardinal Olafsson (Justice). Senior Inquisitor — leads Heresy Investigations in the field.
+
+**Historical echo:** Robert Bellarmine — the Inquisitor who examined Galileo, privately found heliocentrism compelling, but followed institutional duty to its conclusion. Haelgrund is Bellarmine after the trial: the evidence is in, his private conclusions contradict his public role, and he continues to serve because the alternative is institutional collapse.
 
 **Compromise: Evidence he cannot report.** Haelgrund is an effective investigator. Too effective. His investigations have uncovered evidence that Thread Sensitivity is not demonic possession or heretical corruption — it is a natural capacity that some people have. This evidence directly contradicts Church doctrine (the rendered world is all there is; claims of "threads" are heretical). Haelgrund believes in the Church's mission to protect the faithful, but he can no longer believe in its ontological claims. He continues to investigate because the alternative — admitting the Church is wrong about the nature of reality — would destroy the institution he serves.
 
@@ -71,6 +77,8 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 
 **New NPC.** Riskbreaker operative. Officially does not exist. Knows Lenneth Almqvist from a prior covert assignment protecting the Queen's archive.
 
+**Historical echo:** Christine Granville (Krystyna Skarbek) — Polish-British SOE agent who operated so deep undercover that her personal identity was consumed by the role. Torsvald's TS development while undercover is analogous: the role changed her at a level she cannot reverse, and the institution she serves cannot accommodate who she has become.
+
 **Compromise: Thread Sensitivity in an anti-Thread institution.** TS 35. Torsvald's TS developed during prolonged exposure to Thread-touched artefacts in Lenneth's archive — objects the Riskbreakers were tasked with cataloguing and securing. The Löwenritter (and by extension the Riskbreakers) are loyal to Valoria-as-concept, not to Thread metaphysics. If Torsvald's TS were discovered, the Lions' Table would consider her compromised — not because they think TS is evil, but because they cannot trust that her perception of reality is the same as theirs.
 
 **Ethics:** Consequentialist (aligned with Riskbreaker doctrine). The mission justifies the method. But Torsvald's TS means she can perceive the damage that Riskbreaker operations cause at the Thread level — collateral Coherence damage to bystanders, RS effects from covert Thread-adjacent activities. She knows the cost of every operation in a way her colleagues cannot. This knowledge makes her hesitate on operations with high Thread collateral.
@@ -85,6 +93,8 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 
 **New NPC.** Second-in-command to Ehrenwall. Career military officer. If Ehrenwall falls, Brandt is the succession candidate (provisional rule F-30).
 
+**Historical echo:** Flavius Aetius — the "Last Roman," who won every external battle while Rome's internal politics rotted. Aetius focused obsessively on the Hunnic threat and was murdered by the emperor he served because his single-mindedness made him politically uncontrollable. Brandt's border fixation produces the same structural problem: militarily invaluable, politically dangerous.
+
 **Compromise: He fought in the last border war.** Brandt commanded the rearguard during the Altonian incursion 12 years ago. He held Lowenskyst pass for three days against a force that should have overwhelmed him in hours. He lost most of his command. The experience left him with a specific conviction: the peninsula's political factions are playing games while the real threat masses at the border. Church politics, Hafenmark procedure, Crown diplomacy — none of it matters if Altonia comes through the passes again. This conviction makes him an excellent military strategist and a terrible political actor. He cannot take internal Valorian conflicts seriously because he has seen the alternative.
 
 **Ethics:** Protective consequentialism — the peninsula must survive, and survival is a military problem. He is not ambitious in the personal sense. He does not want command. He wants Ehrenwall to act faster because he has calculated how long it takes Altonia to mobilise and he believes the window is closing. His urgency is genuine, not performative.
@@ -96,6 +106,8 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 ## 7. Annika Feldhaus — Guilds Representative
 
 **New NPC.** Senior Guildmaster of the Artisans' Compact (the largest guild consortium). Guilds NPC AI primary decision-maker.
+
+**Historical echo:** Jacques Cœur — medieval French merchant whose commercial empire grew so large he could not know what every branch was doing. Cœur was eventually destroyed when the Crown discovered his network had entangled itself in activities he hadn't authorised. Feldhaus's Thread-touched supply chain is her Jacques Cœur moment waiting to happen.
 
 **Compromise: Thread-touched supply chain.** The Guilds' most profitable trade goods include items sourced through Niflhel's black market network — which, per canon, unknowingly includes Thread-woven artefacts (Niflhel trades items condemned as heretical by the Church, some of which are Thread-touched). Feldhaus knows that ~15% of the Guilds' luxury goods revenue depends on this supply chain. She does not know the goods are Thread-touched — she thinks they're just contraband antiquities. If the Church or a practitioner reveals the Thread connection, Feldhaus faces ruin: the Guilds' economic model is built on heretical goods.
 
@@ -109,6 +121,8 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 
 **New NPC.** Chief Parliamentary Clerk. The Ministry's operational brain. Places AP-tokens, manages PI recovery, facilitates Parliamentary Manoeuvres.
 
+**Historical echo:** The Byzantine *logothetes* — senior bureaucrats who outlived every dynasty because removing them would collapse the administrative apparatus. Almstedt is not powerful. He is necessary. The distinction protects him from every faction that would prefer he did not exist.
+
 **Compromise: Institutional preservation over justice.** Almstedt has served under three monarchs. His loyalty is to the institution of Parliament, not to any faction or ruler. He will facilitate procedural outcomes that preserve Parliamentary function even when those outcomes are unjust — blocking Hafenmark reforms that would destabilise procedure, shielding Crown Emergency Powers from Parliamentary review because "the precedent of review is more dangerous than the abuse." He is the system's immune response, and the system is not always good.
 
 **Ethics:** Procedural — the process is sacred. If the process produces a bad outcome, the process must be reformed through process. Never bypassed. This makes him an obstacle to every faction that wants rapid change, including the player characters.
@@ -117,45 +131,57 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 
 ---
 
-## 9. Severin Almud — Crown Court Figure
+## 9. Gerik Strand — Crown Minister (Lord Steward)
 
-**New NPC.** Not the Duke Almud (who is the Crown faction leader in TTRPG). Severin is Almud's cousin and the Crown's chief diplomatic envoy. Manages the Altonian relationship, Torben's education, and treaty negotiations.
+**New NPC.** Minor lord of Feldmark (T5 — the breadbasket, productive but unglamorous). Appointed Lord Steward by Almud because Strand is competent and the Crown needs administrators who can actually run a treasury. The appointment elevated him above his station. He knows it. Everyone at court knows it.
 
-**Compromise: He solved the wrong problem.** Severin negotiated the current peace with Altonia. It is his life's work. The treaty holds because Severin made specific personal assurances to the Altonian court — assurances that Valoria would modernise its governance, marginalise the Church's political role, and integrate economically with Altonian trade networks. These assurances were reasonable when he made them. They are now incompatible with Valorian sovereignty: every concession Severin promised is a step toward vassalage, and every step he walks back risks the peace he built. He is trapped between a treaty he cannot abandon and a kingdom he cannot surrender.
+**Historical echo:** William Marshal began as a landless younger son who rose through tournament prowess and relentless performance. Strand is a provincial landowner who rose through administrative competence and relentless performance. Both men are defined by the gap between their merit and their birth — and by the knowledge that the gap never fully closes.
 
-**Ethics:** Contractarian — your word is your bond. Severin keeps his promises. This is his strength (Altonia trusts him) and his prison (the promises require Valoria to become something it does not want to be). He does not counsel appeasement from weakness — he counsels it because he literally promised Altonia these things and breaking his word would shatter the treaty framework.
+**Compromise: Conditional position in an unconditional world.** Strand is surrounded by Almud's inner circle (born to it), Hafenmark's parliamentary grandees (institutional weight), and Church Cardinals (divine mandate). His position is royally appointed — which means royally revocable. Theirs is inherited or institutional. If Strand stops outperforming everyone, he's recalled to count wheat yields in Feldmark. If they stop performing, they're still Duke of Something. This structural insecurity drives everything he does.
 
-**Behavioral AI — COMMITMENT-LOCKED:** Severin cannot advocate for any action that contradicts his Altonian assurances, even when circumstances have changed. IP-reduction proposals that require Church concessions: he supports them (he promised Church marginalisation). Hafenmark parliamentary reforms: he supports them (he promised governance modernisation). Crown Emergency Powers: he opposes them (he promised institutional reform). **Consequence:** Severin is an excellent diplomat for the world of 10 years ago. In the current crisis, his locked commitments mean he consistently blocks Crown military responses to Church encroachment (he promised restraint) and consistently enables Altonian economic influence (he promised integration). If Crown removes Severin from the Altonian portfolio, IP +2 immediately (Altonia sees it as a treaty signal) but Crown regains policy freedom.
+**Ethics:** Meritocratic — competence should determine standing. Genuine. Strand believes the peninsula would be better governed if ability mattered more than lineage. This belief is correct and makes him enemies. He is not jealous of specific people — he is jealous of the *principle* that birth outweighs ability. Every aristocratic courtesy he is denied, every committee he is excluded from, every decision made without consulting him confirms that the system is broken. His drive to impress is his proof that the system is wrong.
 
----
+**Behavioral AI — OVERPERFORMER:** Strand takes on too much, executes at high quality, takes credit aggressively, and cannot delegate. Delegating means someone else demonstrates competence, which means Strand becomes dispensable. **Consequence:** Crown administrative efficiency is high when Strand is active — Treasury actions +1D, Accounting errors reduced (fewer misapplied clock changes). But Strand creates institutional brittleness: he IS the Crown's administrative capacity. If he is removed, incapacitated, or turned, Crown Domain Actions that require administrative execution (Tax, Trade, Policy) are at +1 Ob for 2 seasons until a replacement stabilises. He is also susceptible to flattery from anyone who treats him as a peer rather than an appointee — Church diplomatic overtures, Hafenmark parliamentary invitations, even Varfell intelligence approaches that frame him as a "man of substance." Strand will give more access than he should to anyone who makes him feel like he belongs.
 
-## 10. Dalla Virke — Niflhel Operative
-
-**New NPC.** Niflhel's senior trade representative on the peninsula. Manages the black market network that unknowingly traffics Thread-touched goods.
-
-**Compromise: Unknowing complicity in Thread proliferation.** Virke is a skilled merchant and smuggler. TS 0. No knowledge of Thread metaphysics. She genuinely does not know that some of her most valuable goods are Thread-woven. If revealed: she must choose between knowingly distributing metaphysically dangerous goods (maintaining Niflhel's position) or shutting down the supply chain (destroying it). Her Niflhel superiors will not accept the second option.
-
-**Ethics:** Contractarian — honour the deal. Niflhel prizes reliability. But Virke has a secondary ethic her superiors don't share: she has built genuine relationships with her Valorian trade partners over years of operation. She knows their families. She has extended credit during hard seasons and forgiven debts when children were sick. Her network runs on personal trust, not cold transaction — and this trust is what makes her effective. The compromise is that her personal loyalty network sometimes conflicts with Niflhel's institutional interests. She will protect a trade partner from Niflhel enforcement if she judges the partner's default was justified. This has cost Niflhel revenue twice already. A third time triggers recall.
-
-**Behavioral AI — NETWORK PROTECTOR:** Virke's first priority is her relationship network, second is Niflhel revenue. She will not sell intelligence about a trade partner to their enemy — even if the buyer pays more — because burning a source destroys the network she spent a decade building. She will sell intelligence about *non-partners* freely. **Consequence:** Factions inside Virke's trust network (whoever has traded with her consistently) get protection. Factions outside it get exploited. This creates an asymmetry that rewards players who invested in the Niflhel relationship early. But Virke's protectionism also means she withholds information from Niflhel central command — if her superiors discover she's shielding Valorian partners from Niflhel intelligence operations, she's recalled and replaced with someone who has no loyalty to anyone on the peninsula.
+**Flattery vulnerability (mechanical):** Social actions targeting Strand that include genuine acknowledgment of his competence (not transparent manipulation — Strand is smart enough to detect lies): −1 Ob. This makes him the easiest Crown court figure to influence, despite being the most capable.
 
 ---
 
-## 11. Duke Hardar Veldensohn — Altonian Prince (married to Elske)
+## 10. Dalla Virke — Syndicate Broker (Niflhel)
 
-**New NPC.** Altonian duke whose duchy borders T4 (Grauwald). Married to Princess Elske Almqvist.
+**New NPC.** Operates for the Virke family — one of several competing syndicate houses that collectively constitute what Valorians call "the Niflhel." The Niflhel is not a coordinated faction: it is a colloquial name for the constellation of criminal families, smuggling networks, and black market syndicates that operate across the peninsula's margins. The Virke family specialises in antiquities, contraband luxury goods, and discreet logistics. They compete with at least three other major syndicates (unnamed — GM discretion) for territory and clients.
 
-**Compromise: Love in a political marriage.** Hardar was assigned Elske as a political asset — the marriage was Altonia's insurance policy on Valorian compliance. But Hardar has genuine affection for Elske. He does not want to use her as leverage. His Altonian superiors (the Emperor's court) expect him to pressure Valoria through Elske's dynastic claim; Hardar wants to protect her from that role. This conflict makes him an unreliable instrument of Altonian policy — he delays Tutoring Demands, softens ultimatums, and occasionally leaks Altonian intentions to Elske (who may pass them to Crown).
+**Historical echo:** The Medici bank's branch managers operated semi-autonomously — each branch was technically part of the Medici network but practically an independent fiefdom run on personal relationships. When branch managers prioritised local clients over Florence's directives, the tension between personal loyalty and institutional control defined the bank's politics. Virke is a branch manager whose branch is more loyal to her than to the family.
 
-**Ethics:** Noblesse oblige — the aristocrat's duty to those under his protection. Genuine, not performative. He extends this duty to Elske, which means he is betraying his duty to Altonia whenever the two conflict.
+**Compromise: Thread-touched supply chain she built personally.** Virke's most profitable line is antiquities sourced from Einhir ruins and southern communities — goods condemned as heretical by the Church, which is what makes them valuable. Some of these items are Thread-woven. Virke has no TS (TS 0) and no concept of Thread metaphysics. She selected these goods herself, vetted the sources herself, built the supply chain herself. If the Thread connection is revealed, it is not an institutional failing she can blame on the family — it is her personal judgment that was wrong. Her professional reputation, the thing that distinguishes her from every other syndicate broker, is built on the claim that she knows what she's selling. She didn't.
 
-**Behavioral AI — PROTECTIVE:** Hardar's priority is Elske's safety and autonomy. He will take actions that reduce IP (good for Valoria) if those actions also protect Elske. He will resist actions that increase IP (bad for Valoria) if those actions put Elske at risk. **Consequence:** IP rises ~1 point slower per season when Hardar is the active Altonian representative (he's sandbagging). But if Elske is threatened (Elske Loyalty ≤ 2, or Return attempt fails), Hardar flips — IP +3 immediately as he stops protecting Valoria and prioritises Elske's extraction. The protective instinct that helps Valoria can catastrophically reverse.
+**Ethics:** Honour among operators — your word is your network. Virke has built genuine relationships with Valorian trade partners over a decade. She knows their families. She extended credit during hard seasons. Her network runs on personal trust, and this trust is why the Virke family's peninsula operation outperforms larger syndicates. The compromise: her personal loyalty to partners sometimes conflicts with family directives. She will protect a trade partner from rival syndicates and even from her own family's enforcement if she judges the partner's default was justified. This has cost the family revenue twice. A third time, the family sends someone to manage her.
+
+**Behavioral AI — NETWORK PROTECTOR:** Virke's first priority is her relationship network, second is family revenue. She will not burn a source — ever — because the network IS her value. She will sell intelligence about non-partners freely. **Consequence:** Factions inside Virke's trust network get protection. Factions outside it get exploited. But Virke's protectionism also means she withholds information from the Virke family's senior partners. If the family discovers she's shielding Valorian clients from family intelligence operations, they replace her with someone who has no loyalty to anyone on the peninsula — and the trust network collapses overnight.
+
+---
+
+## 11. Doux Alexios Laskaris — Altonian Prince (married to Elske)
+
+**New NPC.** Altonian *doux* (provincial governor-general) whose province borders T4 (Grauwald). Married to Princess Elske Almqvist. The marriage was arranged by the Altonian imperial court as a dynastic insurance policy on Valorian compliance.
+
+**Historical echo:** Demetrios Palaiologos, last Despot of Morea, surrendered his province to the Ottomans partly to protect his family — a decision that was simultaneously rational and treasonous. Laskaris occupies the same structural position: his duty to the empire and his duty to the person he was given as a political instrument are diverging, and he is choosing the person.
+
+**Compromise: Genuine attachment to an assigned asset.** Laskaris was given Elske as leverage. The imperial court expects him to use Elske's dynastic claim to pressure Valoria — Torben Tutoring Demands, succession interference, implied annexation threats. Laskaris has instead developed genuine regard for Elske's autonomy and intelligence. He delays Tutoring Demands, softens ultimatums, and has twice leaked imperial court intentions to Elske (who passed them to Crown through her own channels). He is not a romantic fool — he is a competent administrator who has decided that his province's long-term stability depends on a functional Valoria more than on imperial directives that treat Valorians as subjects-in-waiting.
+
+**Ethics:** Oikonomia — the Byzantine principle that strict application of law can be suspended when pastoral care demands it. Laskaris applies this to statecraft: the empire's formal claim on Valoria is legally valid, but enforcing it would destroy the peninsula that makes the claim valuable. He is loyal to Altonia's *interests* while quietly subverting Altonia's *policies*. The distinction is real to him. It would not survive imperial review.
+
+**Behavioral AI — PROTECTIVE:** Laskaris's priority is Elske's safety and his province's stability. Actions that reduce IP and protect Elske: he enables them. Actions that increase IP or threaten Elske: he resists. **Consequence:** IP rises ~1 point slower per season when Laskaris is the active Altonian representative (he is sandbagging imperial directives). But if Elske is threatened (Elske Loyalty ≤ 2, or Return attempt fails), Laskaris flips — IP +3 immediately as he stops shielding Valoria and prioritises Elske's extraction to his province. The protective instinct that benefits Valoria can catastrophically reverse.
+
+**Naming note:** Altonian names follow Greek/Macedonian conventions. "Doux" = provincial military governor. "Laskaris" = noble dynasty (historical: Empire of Nicaea). Imperial court titles, religious terminology (Almaic Kyriakos), and military ranks should use Greek forms in all Altonian contexts.
 
 ---
 
 ## 12. Rikard Solberg — Schoenland Factor
 
 **New NPC.** Schoenland's trade factor (commercial ambassador) in Valorsplatz. Manages Schoenland's interests on the peninsula.
+
+**Historical echo:** The homesickness that shaped Xenophon's *Anabasis* — ten thousand Greeks fighting their way home because no strategic objective mattered as much as returning. Solberg is not fighting, but the motivational structure is identical: every professional decision is unconsciously filtered through "does this bring me closer to going home?"
 
 **Compromise: He wants to go home.** Solberg is Schoenland-born and Schoenland-loyal. He does not have secret Valorian sympathies. His problem is simpler: Schoenland's profit-from-chaos model means his posting never ends. As long as Valoria is unstable, Solberg is too valuable to recall. Stable Valoria = Solberg goes home to his family. Unstable Valoria = Solberg stays indefinitely. He has been on this posting for 7 years. His children are growing up without him. He is unconsciously steering Schoenland policy toward outcomes that would let him leave — which means outcomes that stabilise Valoria, which means outcomes that harm Schoenland's long-term interests.
 
@@ -168,6 +194,8 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 ## 13. [NAME PENDING] — Fourth Cardinal (Prudence)
 
 **New NPC.** Cardinal of Prudence (economic portfolio). The unnamed fourth Cardinal referenced in ED-007. Manages tithes, charities, Church land.
+
+**Historical echo:** Suger of Saint-Denis — the 12th-century abbot who ran his abbey like a commercial enterprise, maximised revenue, invested in unprecedented infrastructure (the first Gothic cathedral), and created friction with Cistercian reformers who believed the Church should be austere. Suger's logic was "wealth is God's instrument" — exactly the Prudence Cardinal's operating philosophy. Both men are right about the ends and destructive about the means.
 
 **Compromise: The tithe maximiser.** The Prudence Cardinal genuinely cares about the faithful — and his method of caring is to extract every possible coin from the Church's economic apparatus and redistribute it. He runs the Church's finances like a commercial enterprise: renegotiating Parish tithe quotas upward, auditing monastery expenditures, consolidating Church landholdings for efficiency, and pressuring Parish leaders who fall short of revenue targets. The redistribution is real — Church charities are well-funded, Church hospitals function, the poor are fed. But the extraction creates institutional friction: Parish leaders resent being treated as revenue centres, local clergy feel squeezed, and communities that once gave willingly now give resentfully. He is producing the Church's best charitable outcomes while eroding the Church's grassroots loyalty.
 
@@ -189,9 +217,9 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 | 6 | Halvar Brandt | Löwenritter | Border war trauma → threat fixation | EXTERNAL THREAT FIXATED | Redirects military to borders, neglects internal |
 | 7 | Annika Feldhaus | Guilds | Thread-touched supply chain | PROFIT-MAXIMISING | Wealthy but politically marginalised |
 | 8 | Peder Almstedt | Ministry | Preserves system over justice | CONSERVATIVE (blocks reform) | PI recovers faster but reform +1 Ob |
-| 9 | Severin Almud | Crown Court | Treaty commitments he can't walk back | COMMITMENT-LOCKED | Blocks Crown military response; IP +2 if removed |
-| 10 | Dalla Virke | Niflhel | Unknowing Thread proliferation | NETWORK PROTECTOR | Shields trade partners; withholds intel from Niflhel |
-| 11 | Duke Hardar Veldensohn | Altonia | Loves Elske (genuine) | PROTECTIVE (shields Elske) | IP +1/season slower; flips if Elske threatened |
+| 9 | Gerik Strand | Crown Court (Lord Steward) | Conditional position, unconditional world | OVERPERFORMER (can't delegate) | Crown admin +1D but brittle; flattery −1 Ob |
+| 10 | Dalla Virke | Virke syndicate (Niflhel) | Thread-touched supply chain she built | NETWORK PROTECTOR | Shields partners; withholds intel from own family |
+| 11 | Doux Alexios Laskaris | Altonia | Genuine attachment to assigned asset | PROTECTIVE (shields Elske) | IP +1/season slower; flips if Elske threatened |
 | 12 | Rikard Solberg | Schoenland | Wants to go home | STABILITY-SEEKING | Schoenland policy ~1 season behind optimal |
 | 13 | [Name Pending] | Church (Prudence) | Tithe maximiser alienates parishes | OPTIMISER | Church Wealth +1/season but Mandate erodes in squeezed territories |
 
@@ -211,9 +239,9 @@ Per worldbuilding_integration_v3 §axis system, each NPC sits on 2–3 of the 9 
 | Brandt | 5 (order) | 6 (ducal/Crown command) | 8 (resistance) |
 | Feldhaus | 3 (prosperity) | 4 (stability) | 7 (pragmatic secrecy) |
 | Almstedt | 5 (order) | 1 (institutional legitimacy) | 4 (stability) |
-| Severin | 8 (accommodation — locked by treaty) | 1 (Crown legitimacy) | 6 (Altonian integration — promised) |
-| Virke | 7 (secrecy) | 3 (prosperity) | — |
-| Hardar | 8 (accommodation ↔ resistance) | 6 (Altonian authority) | — |
+| Strand | 3 (meritocracy vs birth) | 1 (Crown legitimacy — conditional) | 5 (institutional order — proves worth through) |
+| Virke | 7 (secrecy — syndicate) | 3 (prosperity — network) | — |
+| Laskaris | 8 (oikonomia — imperial law vs pastoral care) | 6 (Altonian authority) | — |
 | Solberg | 3 (prosperity) | 4 (stability — personal need) | — |
 | Prudence Cardinal | 3 (prosperity — maximisation) | 2 (institutional faith) | 5 (order — institutional friction) |
 
