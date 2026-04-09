@@ -2242,3 +2242,62 @@ editorial_decisions:
     source: STR-BG-Ministry-02 2026-04-08
     blocks: Ministry NPC effectiveness; Church seizure pacing
     tags: [board_game, ministry, church, seizure, npc_ai]
+
+  # ═══ 2026-04-08 SESSION — Territory Reconciliation + Church Rebalance ═════
+
+  - id: ED-352
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Church equal-probability rebalancing — Graduated Seizure (PP-494)"
+    decision: "Church Seizure available at any TC. Pool = Influence + floor(TC/15). Ob = 7 − CV. Church TCV threshold reduced to ≥ 8. BALANCE-001 revised to include Church."
+    tags: [board_game, church, balance, victory]
+
+  - id: ED-353
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Territory name mapping — victory_architecture → geography_design"
+    decision: "PP-493 applied. All territory numbers remapped. Old names struck (Arcansheld→Ehrenfeld, Vargstad→Grauwald, Eidursjo→Rendstad, Nordhelm→Kronmark, Mittelmark→Feldmark). Starting TCV: Crown 12, Hafenmark 8, Varfell 6, Church 3."
+    tags: [board_game, territory, infrastructure]
+
+  - id: ED-354
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "TCV for T13 Oastad, T17 Halvarshelm"
+    decision: "T13 Oastad TCV 1 (Varfell). T17 Halvarshelm TCV 1 (Hafenmark). Total TCV = 30."
+    tags: [board_game, territory]
+
+  - id: ED-355
+    status: flagged
+    date_raised: 2026-04-08
+    description: "Fort Level interaction with Church Graduated Seizure. Options: (a) Fort adds to Ob; (b) Fort handled by Battle preceding Seizure; (c) No Fort modifier. Recommend (b)."
+    tags: [board_game, church, seizure]
+
+  - id: ED-356
+    status: flagged
+    date_raised: 2026-04-08
+    description: "Crown starting TCV = 12 vs threshold TCV ≥ 16 = gap of only +4. This is the smallest gap of any faction. Verify Crown is not over-advantaged by the geography_design territorial assignments (Lowenskyst reassigned from Hafenmark to Crown). May need Crown threshold increase or starting territory reassignment."
+    tags: [board_game, crown, balance]
+
+  - id: ED-357
+    status: flagged
+    date_raised: 2026-04-08
+    description: "Maret Uln struck as NPC. Remove from active NPC roster. Archive existing Maret mechanical references."
+    tags: [npc, worldbuilding]
+
+  - id: ED-358
+    status: flagged
+    date_raised: 2026-04-08
+    description: >
+      New NPC development roster (12 characters). All require full design: character identity, 
+      stat block, arc trajectory, faction interaction patterns. Roster: (1) Edeyja (Wardens/Southernmost), 
+      (2) RM Leader(s) (Restoration), (3) Inquisitor (Church), (4) TS Riskbreaker undercover/knows Lenneth 
+      (Löwenritter covert), (5) Löwenritter officer, (6) Guilds representative, (7) Ministry bureaucrat, 
+      (8) Court figure (Crown), (9) Niflhel operative, (10) Altonian Prince married to Elske, 
+      (11) Schoenland figure, (12) TBD.
+    tags: [npc, worldbuilding, editorial]
+
+  - id: ED-359
+    status: flagged
+    date_raised: 2026-04-08
+    description: "RM TTRPG mode Founding Gate (PP-495) — narrative gate added. User to review: is session 6 floor appropriate? Should any mechanical trigger supplement the narrative conditions?"
+    tags: [ttrpg, restoration_movement, founding]

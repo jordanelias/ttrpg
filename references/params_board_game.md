@@ -83,7 +83,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Guilds (NPC) | 3 | 4 | 6 | 2 | 5 |
 | Niflhel (NPC) | — | 5 | 4 | — | 4 |
 
-CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 territories (T14/T2/T5/T1) — the most of any faction. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. TC = 28 (P-32). TC victory = 65 (P-32).
+CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 territories (T4/T11/T12/T13). Handicap is defensive: mountain range + Thread Wounds hem in expansion. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. TC = 28 (P-32). TC phase transition = 75 (per victory_architecture_v1.md §7).
 
 
 ## Faction Elimination — Territory Status (ED-333 resolved)
@@ -236,13 +236,13 @@ The Deed-based victory system has been dissolved for ALL factions including Löw
 
 | Faction | Primary Victory | Key Thresholds |
 |---------|----------------|----------------|
-| Crown | Peninsula Sovereignty | TCV ≥ 18 + suppress all rivals + Invasion Pressure (IP) < 60 + Parliament Integrity (PI) ≥ 3 |
-| Church of Solmund | Solmundan Orthodoxy | TCV ≥ 10 + Conviction Track (CV) ≥ 3 all held territories (post-Thread Consciousness (TC) 75) |
+| Crown | Peninsula Sovereignty | TCV ≥ 16 + suppress all rivals + Invasion Pressure (IP) < 60 + Parliament Integrity (PI) ≥ 3 |
+| Church of Solmund | Solmundan Orthodoxy | TCV ≥ 8 + CV ≥ 3 all held territories. Graduated Seizure: Pool = Influence + floor(TC/15), Ob = 7 − CV (PP-494) |
 | Hafenmark | Parliamentary Sovereignty | TCV ≥ 12 + Mandate ≥ 4 + PI ≥ 5 + Crown Mandate ≤ 3 |
 | Varfell Path A | Intelligence Hegemony | TCV ≥ 10 + Vaynard Thread Mastery (VTM) ≥ 3 + 2 rival stats revealed + expansion |
 | Varfell Path B | Southernmost Dominion | TCV ≥ 8 + VTM ≥ 3 + T13 control + T15 presence + Warden's Accord (WA) ≥ +1 |
 | Varfell Path C | Thread Supremacy | TCV ≥ 10 + VTM = 5 + Rendering Stability (RS) ≥ 50 |
-| Restoration Movement (RM) | Cultural Revolution (5P only) | Phase 1: CV ≤ 1 in ≥ 8/15 territories. Phase 2: Cultural Uprising of T9 Himmelenger. Win: T9 held + Phase 1 × 2 Accounting. No faction stats. (PP-460) |
+| Restoration Movement (RM) | Cultural Revolution (Hybrid only, post-Founding) | Phase 1: CV ≤ 1 in ≥ 8/15 territories. Phase 2: Cultural Uprising of T9 Himmelenger. Win: T9 held + Phase 1 × 2 Accounting. No faction stats. (PP-460, PP-478) |
 | Löwenritter | Regency Establishment | TCV ≥ 10 + Thread Consciousness (TC) < 50 + IP < 60 + RS > 40 + PI ≥ 4 + successor |
 
 ### Territory Consolidation Values (TCV)
@@ -338,6 +338,15 @@ Per victory_architecture_v1.md §7. Overwhelming seizure: CV +1 in target territ
 
 ### Seizure Constraints
 One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland).
+
+### Church Graduated Seizure (PP-494)
+**Pool:** Influence + floor(TC / 15). At TC 28: 7D. At TC 75: 11D.
+**Ob:** 7 − CV (target territory Conviction value). CV 5 = Ob 2. CV 0 = Ob 7.
+**Prerequisites:** Church Mandate ≥ 4. Prominence (Church Mandate > controlling faction Mandate).
+**Overwhelming:** CV +1 in target territory (consequence, not cap-governed).
+**Failure:** Stability −1.
+**Political cost:** Seizure attempt grants controlling faction Casus Belli vs Church.
+[EDITORIAL: ED-355 — Fort Level interaction. See victory_architecture_v1.md §3.2.]
 
 ## Theocracy Counter Starting Value — Canonical
 TC starts at **28**. (P-32, PP-189 correction. The 22 value from v04 B2 was superseded by P-32 in v05.)
@@ -952,12 +961,12 @@ but represents Crown's unique royal household angle on the Southernmost.
 
 ## TC 75 Seizure — Territory Values — SUPERSEDED
 **See TCV table in §Victory Conditions above.** Per-territory seizure Ob = 2 + Fort Level + max(0, 3 − CV). Fort levels per geography_design.md territory table.
-[TERRITORY-DEBT: Old PP-421 per-territory values used stale numbering. Replaced by TCV table + seizure Ob formula.]
+[TERRITORY-DEBT: RESOLVED 2026-04-08 — PP-493. All T# references verified against geography_design.md.]
 ## Victory Condition Territory References — SUPERSEDED
 **All victory territory references now use TCV from victory_architecture_v1.md §1.**
 Territory numbering follows geography_design.md (17-territory canonical map).
 Old PP-199 territory references using pre-geography_design numbering are stale.
-[TERRITORY-DEBT: Full T# renumbering pass required across this file. ~170 stale T# references remain in sections not yet updated.]
+[TERRITORY-DEBT: RESOLVED 2026-04-08 — PP-493. TCV table, territory detail table, adjacencies, and all named T# references verified against geography_design.md canonical numbering.]
 ## Ministry AP-Token Starting Positions (PP-203)
 T14 (Ehrenfeld), T2 (Kronmark), T5 (Feldmark), T1 (Valorsplatz — primary Parliament seat).
 
@@ -968,7 +977,7 @@ T11 (Halvardshelm), T8 (Gransol), T3 (Lowenskyst), T1 (Valorsplatz), T9 (Himmele
 T12 (Sigurdshelm) depth 2. T1 (Valorsplatz) depth 1. T9 (Himmelenger) depth 1. [Confirmed correct numbering.]
 
 ## Balance Findings — Status Update
-**BAL-04, BAL-05/06, BAL-08, BAL-09 (all P1):** Superseded by victory_architecture_v1.md redesign. Crown victory restructured (TCV ≥ 18 + political conditions). Church primary restructured (TC 75 phase transition + seizure). Varfell Path B redesigned. TC dynamics recalibrated.
+**BAL-04, BAL-05/06, BAL-08, BAL-09 (all P1):** Superseded by victory_architecture_v1.md redesign. Crown victory restructured (TCV ≥ 16 + political conditions, per victory_architecture_v1.md). Church primary restructured (TC 75 phase transition + seizure). Varfell Path B redesigned. TC dynamics recalibrated.
 **BAL-10 (P2):** Varfell T13 (now T13 Oastad) dominant opening — still relevant for monitoring under new TCV system.
 See victory_architecture_v1.md §10 for Monte Carlo win probability assessment.
 [SIM-DEBT: Full faction-AI simulation needed to validate multi-faction interaction under new victory architecture.]

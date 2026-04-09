@@ -22,7 +22,7 @@ All references to "Solmund" → "Solmund." Calendar: "Before Solmund (BG)" → "
 | Duke of Varfell | Dienton Vaynard ("The White Wolf") | Magnus Vaynard | ED-NEW-02: which name? Lore gives epithet + military prowess + progressive policies. |
 | Duchess of Hafenmark | Inga | Inge | ED-NEW-03: confirm spelling. |
 | Church leader title | "The Holy See" | "Confessor" | ED-NEW-04: recommend both canonical — "Holy See" = formal title, "Confessor" = address. |
-| T4 territory | Oastad | Vargstad (PP-199) | ED-NEW-05: confirm name. |
+| T4 territory | Oastad | Grauwald (PP-199) | ED-NEW-05: confirm name. |
 | Lowenskyst duchy | Valorsmark (lore) | Hafenmark (PP-199 map) | No conflict — historical Valorsmark, current Hafenmark. Playable tension. |
 
 ---
@@ -261,15 +261,15 @@ Contact point for Restoration affiliation (Circles Ob 2 south, Ob 4 elsewhere). 
 | Valorsplatz | T12 | Valorsmark | Crown | Match |
 | Lowenskyst | T8 | Valorsmark | Hafenmark | Historical vs current control |
 | Himmelenger | T14 | Valorsmark | Church | Church controls cathedral city |
-| Arcansheld | T9 | Valorsmark | Crown (shared) | Match |
+| Ehrenfeld | T9 | Valorsmark | Crown (shared) | Match |
 | Stillhelm | T13 | Valorsmark | Crown | Match |
 | Gransol | T5 | Hafenmark | Hafenmark | Match |
-| Eidursjo | T6 | Hafenmark | Hafenmark | Match |
+| Rendstad | T6 | Hafenmark | Hafenmark | Match |
 | Spartfell | T7 | Hafenmark | Hafenmark | Match |
 | Varfell city | T1 | Varfell | Varfell | Match |
 | Sigurdshelm | T2 | Varfell | Varfell | Match |
 | Halvardshelm | T3 | Varfell | Varfell | Match |
-| Oastad | T4 Vargstad | Varfell | Varfell | ED-NEW-05 |
+| Oastad | T4 Grauwald | Varfell | Varfell | ED-NEW-05 |
 
 [EDITORIAL: ED-NEW-09 — Stage7-to-PP-199 territory name reconciliation needed.]
 
@@ -314,7 +314,7 @@ All new cards from this document, plus existing events confirmed for the deck:
 | ED-NEW-02 | Vaynard first name: Dienton (lore) vs Magnus (design) | P2 |
 | ED-NEW-03 | Baralta spelling: Inga vs Inge | P3 |
 | ED-NEW-04 | Church leader title: Holy See + Confessor both canonical? | P3 |
-| ED-NEW-05 | T4 name: Oastad vs Vargstad | P3 |
+| ED-NEW-05 | T4 name: Oastad vs Grauwald | P3 |
 | ED-NEW-06 | Cardinal of Prudence — name and profile | P2 |
 | ED-NEW-07 | Almaic Kyriakos IP threshold interaction | P2 |
 | ED-NEW-08 | Timeline reconciliation (canonical timeline governs) | P3 |

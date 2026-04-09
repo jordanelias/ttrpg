@@ -1,9 +1,9 @@
 # VALORIA BG — Victory Architecture
-## ED-306 Resolution (v3 — PP-199 territory numbering, TC 75 canonical, CV cap clarified)
+## ED-306 Resolution (v3 — geography_design.md territory numbering, TC 75 canonical, CV cap clarified)
 ## Date: 2026-04-06 | Status: DESIGN — pending Varfell Path B user decision (ED-311)
 ## Supersedes: v2 (same path), params_board_game.md §Victory Conditions, all Deed-based victory systems
 ## Dependencies: ED-302 (CV confirmed), ED-303 (TC freeze at 75), ED-304 (Partition Victory), ED-305 (WA=0), ED-307 (Baralta cadet branch), BALANCE-001 (equal win probability), BALANCE-004 (Askeheim purpose)
-## Territory numbering: PP-199 definitive (all T-numbers match params_board_game PP-199 table)
+## Territory numbering: geography_design.md canonical (all T-numbers match geography_design.md)
 
 ---
 
@@ -11,38 +11,39 @@
 
 Victory = Territory Held + Faction-Specific Political Conditions, sustained for 2 consecutive Accounting steps.
 
-Two simultaneous contests: who governs the peninsula AND whether it survives. Church and Hafenmark are structurally blind to the Rendering Stability (RS) crisis — they can win fast but their victory is fragile if RS collapses. Crown and Varfell can address RS via Thread path but at cost of political resources.
+Two simultaneous contests: who governs the peninsula AND whether it survives. Church and Hafenmark are structurally blind to the Rendering Stability (RS) crisis. Church compensates with Graduated Seizure — available early but strongest at high TC. Crown and Varfell can address RS via Thread path but at cost of political resources.
 
-**Equal win probability** for Crown, Varfell, Hafenmark. Church is the easy/hard mode toggle. Restoration Movement (RM) is hardest mode. (BALANCE-001)
+**Equal win probability** for Crown, Varfell, Hafenmark, Church. Restoration Movement (RM) is hardest mode (Hybrid only). (BALANCE-001, revised PP-494)
 
 ---
 
 ## 1. Territory Consolidation Values (TCV)
 
 Every territory has a fixed strategic weight. TCV is the universal measure of territorial dominance.
-All territory numbers match PP-199 definitive table.
+All territory numbers match geography_design.md canonical table.
 
 | T# | Territory | TCV | Controller |
 |----|-----------|-----|-----------| 
-| T12 | Valorsplatz | 5 | Crown★ |
-| T5 | Gransol | 4 | Hafenmark★ |
-| T14 | Himmelenger | 3 | Church★ |
-| T2 | Sigurdshelm | 3 | Varfell |
-| T7 | Spartfell | 2 | Hafenmark |
-| T8 | Lowenskyst | 2 | Hafenmark |
-| T9 | Arcansheld | 2 | Crown |
-| T1 | Varfell | 1 | Varfell |
-| T3 | Halvardshelm | 1 | Varfell |
-| T4 | Vargstad | 1 | Varfell |
-| T6 | Eidursjo | 1 | Hafenmark |
-| T10 | Nordhelm | 1 | Crown |
-| T11 | Mittelmark | 1 | Crown |
-| T13 | Stillhelm | 1 | Crown |
+| T1 | Valorsplatz | 5 | Crown★ |
+| T8 | Gransol | 4 | Hafenmark★ |
+| T9 | Himmelenger | 3 | Church★ |
+| T12 | Sigurdshelm | 3 | Varfell |
+| T10 | Spartfell | 2 | Hafenmark |
+| T3 | Lowenskyst | 2 | Crown |
+| T14 | Ehrenfeld | 2 | Crown |
+| T13 | Oastad | 1 | Varfell |
+| T11 | Halvardshelm | 1 | Varfell |
+| T4 | Grauwald | 1 | Varfell |
+| T7 | Rendstad | 1 | Hafenmark |
+| T2 | Kronmark | 1 | Crown |
+| T5 | Feldmark | 1 | Crown |
+| T6 | Stillhelm | 1 | Crown |
+| T17 | Halvarshelm | 1 | Hafenmark |
 | T15 | Askeheim | 0 | Uncontrolled |
 | T16 | Schoenland | — | Not in territorial play |
-| | **Total** | **28** | |
+| | **Total** | **30** | |
 
-**Starting TCV by faction:** Crown 10, Hafenmark 9, Varfell 6, Church 3.
+**Starting TCV by faction:** Crown 12, Hafenmark 8, Varfell 6, Church 3.
 
 ---
 
@@ -54,7 +55,7 @@ Starting values, movement rules, Calamity Drift, and Consecrated status per opus
 
 Key rules:
 - T15 (Askeheim) CV hard-fixed at 0. Cannot increase. (P-03 + Foundations §8)
-- T14 (Himmelenger) starts at 5, soft cap — can drop under pressure, does not auto-recover.
+- T9 (Himmelenger) starts at 5, soft cap — can drop under pressure, does not auto-recover.
 - **CV action cap:** Each faction may initiate at most one deliberate CV-moving action per territory per season (±1 max). Calamity Drift, Church Seizure Overwhelming CV bonus, and Domain Echoes from Zoom In are consequences — they are not faction actions and are not cap-governed.
 - Calamity Drift (RS-linked CV erosion) ignores the action cap. RS ≤ 50: T6/T13 CV −1. RS ≤ 35: territories within 2 steps of T15 CV −1. RS ≤ 20: all territories CV −1.
 - Community Weaving is a Thread operation: follows standard Thread procedure including Co-Movement card draw. CV −1 is the primary effect; temporal/epistemic/actual auto-effects fire per P-01.
@@ -85,25 +86,47 @@ TCV ≥ 22 AND every other playable faction eliminated (Stability 0). No treatie
 
 ### 3.2 Church of Solmund — Solmundan Orthodoxy
 
-**Phase 1 (TC 0–74):** Accumulate TC via institutional momentum, Conviction Yield, and Assert. Per opus_design_proposal.md §3.
+**Graduated Seizure (PP-494):** Church may attempt Territorial Seizure at any TC value. TC determines the size of Church's Seizure pool — the higher the TC, the more institutional authority Church projects.
 
-**Phase 2 (TC ≥ 75):** TC freezes at 75. Church shifts to territorial seizure.
+**Church Seizure Pool:** Influence + floor(TC / 15)
+**Church Seizure Ob:** 7 − CV (where CV is the target territory's Conviction value, 0 = Restoration pole, 5 = Piety pole)
 
-**Victory conditions (all simultaneous at Accounting, post-TC 75):**
+| TC | Pool Bonus | Total Pool (Inf 6) |
+|----|-----------|-------------------|
+| 15 | +1 | 7 |
+| 30 | +2 | 8 |
+| 45 | +3 | 9 |
+| 60 | +4 | 10 |
+| 75 | +5 | 11 |
+
+| CV | Seizure Ob | Notes |
+|----|-----------|-------|
+| 5 (Piety) | 2 | Pious territory — Church authority unquestioned |
+| 4 | 3 | |
+| 3 | 4 | |
+| 2 | 5 | Contested ground |
+| 1 | 6 | Restoration-leaning — Church is an invader |
+| 0 (Restoration) | 7 | Hostile population — Seizure is an act of war |
+
+TC freezes at 75. At TC 75 (pool 11D) vs CV 5 (Ob 2): Seizure is essentially guaranteed. Against CV 0 (Ob 7): Church succeeds ~40% — formidable but not certain.
+
+Early Seizure (TC < 50) is possible but carries political consequences: Casus Belli from the controlling faction, and every other faction sees Church territorial ambition. The lower the TC, the more it looks like institutional aggression rather than a natural extension of authority. The civil war scenario is a real cost.
+
+[EDITORIAL: ED-355 — Fort Level interaction with Seizure. Current formula does not include Fort. Options: (a) Fort adds to Ob (Ob = 7 − CV + Fort), making fortified territories much harder; (b) Fort is handled by the Battle that precedes Seizure (you must win the Battle first, then Seizure is political); (c) No Fort modifier — Seizure is political authority, not military. Recommend (b): Battle Ob includes Fort, Seizure Ob does not.]
+
+**Victory conditions (all simultaneous at Accounting):**
 
 | Condition | Threshold |
 |-----------|-----------|
-| TCV held | ≥ 10 |
+| TCV held | ≥ 8 |
 | CV in all held territories | ≥ 3 |
-
-**Church Seizure Ob (post-TC 75):** Ob = 2 + Fort Level + max(0, 3 − CV). 
 
 **Prominence prerequisite:** Church may only seize a territory where Church is Prominent — defined as Church Mandate exceeding the controlling faction's Mandate in that territory. Church Mandate is the Church faction's global Mandate stat. Controlling faction Mandate is their global Mandate stat. Prominence is assessed at seizure declaration.
 
 Church Mandate ≥ 4 required to initiate any seizure. Overwhelming seizure: CV +1 in target territory (this is a consequence, not a cap-governed action).
 
 #### Alternate — Altonian Theocracy Path
-Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 + Church controls T14 (Himmelenger). Requires less territory but more diplomatic conditions.
+Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 + Church controls T9 (Himmelenger). Requires less territory but more diplomatic conditions.
 
 #### Partition — Church + Hafenmark (ED-304)
 **Trigger (all simultaneous at Accounting):**
@@ -134,7 +157,7 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 +
 |-----------|-----------|
 | TCV held | ≥ 12 |
 | Crown Mandate | ≤ 1 |
-| Control T12 (Valorsplatz) | held |
+| Control T1 (Valorsplatz) | held |
 | Hafenmark Mandate | ≥ 5 |
 | Torben Loyalty | ≤ 3 OR Torben removed |
 
@@ -201,7 +224,7 @@ Modifiers:
 | Partial | T9 does not transfer. CV in T9 −1 (popular sentiment shifted). Uprising attempt used up for this arc. |
 | Failure | Uprising crushed. TC +2 (Church authority strengthened by resistance). T9 CV +1. Uprising attempt used up for this arc. |
 
-**Win condition:** T9 under RM administration AND Phase 1 held, for 2 consecutive Accounting steps. Church cannot perform Territorial Seizure on T9 while RM holds it (the population actively resists institutional reconquest — Seizure Ob +3 vs RM-held T9).
+**Win condition:** T9 under RM administration AND Phase 1 held, for 2 consecutive Accounting steps. Church cannot perform Territorial Seizure on T14 while RM holds it (the population actively resists institutional reconquest — Seizure Ob +3 vs RM-held T9).
 
 ---
 
@@ -343,7 +366,7 @@ Autonomous TCV changes from uninvestigated Domain Echoes count toward or against
 | Faction | Start TCV | Target TCV | Gap | Key Difficulty | Est. Timeline |
 |---------|-----------|------------|-----|----------------|---------------|
 | Crown | 10 | 16 | +6 | Suppress ALL rivals (×3 political) | 14–16 seasons |
-| Church | 3 | 10 | +7 | TC 75 clock (~S16-18) then seizure | 20–24 seasons (hard mode) |
+| Church | 3 | 8 | +5 | Graduated Seizure from TC 30+; CV management | 14–18 seasons |
 | Hafenmark | 9 | 12 | +3 | Mil 3 handicap + Crown Mandate suppression | 10–14 seasons |
 | Varfell A | 6 | 10 | +4 | Geographic isolation + VTM 3 + intel reveals | 12–14 seasons |
 | Varfell B | 6 | 8 | +2 | VTM 3 + Warden Recognition + T13 control | 12–16 seasons |
@@ -370,8 +393,8 @@ Autonomous TCV changes from uninvestigated Domain Echoes count toward or against
 | PP-409 | Victory | Crown Peninsula Sovereignty — TCV ≥ 16 (gap restored to +6 after remapping) |
 | PP-410 | Victory | Crown Dominion alternate — TCV ≥ 22 |
 | PP-411 | Victory | Hafenmark Parliamentary Sovereignty — TCV ≥ 12 |
-| PP-412 | Victory | Hafenmark Dynastic Assertion — T12 Valorsplatz (corrected from old T-number) |
-| PP-413 | Victory | Church Altonian Theocracy — T14 Himmelenger (corrected from old T-number) |
+| PP-412 | Victory | Hafenmark Dynastic Assertion — T1 Valorsplatz (corrected from old T-number) |
+| PP-413 | Victory | Church Altonian Theocracy — T9 Himmelenger (corrected from old T-number) |
 | PP-414 | Victory | Varfell Path B provisional (ED-311 pending) |
 | PP-415 | Victory | RM Cultural Revolution — RS ≥ 40 confirmed canonical |
 | PP-416 | CV | CV action cap clarified — consequences not cap-governed |
@@ -384,6 +407,8 @@ Autonomous TCV changes from uninvestigated Domain Echoes count toward or against
 | PP-423 | Crown | Formal Crown Treaty mechanic |
 | PP-424 | System | Deed system dissolved — all factions |
 | PP-425 | WR | Warden Recognition track defined (0–4) |
+| PP-493 | Territory | All T-numbers remapped to geography_design.md canonical. Old names (Arcansheld, Vargstad, Eidursjo, Nordhelm, Mittelmark) replaced. TCV total = 30. Starting TCV: Crown 12, Hafenmark 8, Varfell 6, Church 3. |
+| PP-494 | Church | Graduated Seizure: Pool = Influence + floor(TC/15), Ob = 7 − CV. Replaces TC 75 hard gate. Church TCV threshold reduced to ≥ 8. BALANCE-001 revised to include Church in equal win probability. |
 
 
 ---
