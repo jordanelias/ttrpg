@@ -25,10 +25,10 @@ All territory numbers match geography_design.md canonical table.
 | T# | Territory | TCV | Controller |
 |----|-----------|-----|-----------| 
 | T1 | Valorsplatz | 5 | Crown★ |
-| T8 | Gransol | 4 | Hafenmark★ |
-| T9 | Himmelenger | 3 | Church★ |
+| T8 | Gransol | 3 | Hafenmark★ |
+| T9 | Himmelenger | 5 | Church★ |
 | T12 | Sigurdshelm | 3 | Varfell |
-| T10 | Spartfell | 2 | Hafenmark |
+| T10 | Spartfell | 1 | Hafenmark |
 | T3 | Lowenskyst | 2 | Crown |
 | T14 | Ehrenfeld | 2 | Crown |
 | T13 | Oastad | 1 | Varfell |
