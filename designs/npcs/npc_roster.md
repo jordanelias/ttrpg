@@ -85,11 +85,11 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 
 **New NPC.** Second-in-command to Ehrenwall. Career military officer. If Ehrenwall falls, Brandt is the succession candidate (provisional rule F-30).
 
-**Compromise: Ambition masked as loyalty.** Brandt is genuinely loyal to the Löwenritter's mission, but he believes Ehrenwall's patience is a strategic error. The coup should have fired two seasons ago. Brandt's private assessment is that Ehrenwall is too cautious — she waits for the Coup Counter to reach 3 when decisive action at 2 would catch opponents off-guard. This impatience is masked as institutional loyalty, but if Ehrenwall is removed, Brandt will accelerate the coup timeline.
+**Compromise: He fought in the last border war.** Brandt commanded the rearguard during the Altonian incursion 12 years ago. He held Lowenskyst pass for three days against a force that should have overwhelmed him in hours. He lost most of his command. The experience left him with a specific conviction: the peninsula's political factions are playing games while the real threat masses at the border. Church politics, Hafenmark procedure, Crown diplomacy — none of it matters if Altonia comes through the passes again. This conviction makes him an excellent military strategist and a terrible political actor. He cannot take internal Valorian conflicts seriously because he has seen the alternative.
 
-**Ethics:** Virtue ethics — the good soldier. Loyalty, honour, decisive action. But "decisive action" in Brandt's framework means pre-emptive strikes that the Löwenritter's mandate does not authorise. He would impose Martial Law before the threshold is met, rationalising it as "the threshold was going to be met anyway."
+**Ethics:** Protective consequentialism — the peninsula must survive, and survival is a military problem. He is not ambitious in the personal sense. He does not want command. He wants Ehrenwall to act faster because he has calculated how long it takes Altonia to mobilise and he believes the window is closing. His urgency is genuine, not performative.
 
-**Behavioral AI — AGGRESSIVE:** Brandt escalates. Given two options, he chooses the one that applies military pressure. **Consequence:** If Brandt succeeds Ehrenwall, the Löwenritter's military posture shifts from defensive to offensive. Martial Law fires 1–2 seasons earlier than it would under Ehrenwall, but without the political groundwork — Crown allies are not prepared, Hafenmark is not warned, and the coup generates more opposition. Löwenritter Stability −1 at each Accounting where Martial Law is in effect without Crown Treaty support.
+**Behavioral AI — EXTERNAL THREAT FIXATED:** Brandt evaluates every action against the Altonian threat metric. He supports actions that strengthen the peninsula militarily (even if they destabilise it politically) and opposes actions that weaken it militarily (even if they stabilise it politically). **Consequence:** If Brandt succeeds Ehrenwall, Löwenritter's military posture shifts from political-coup-instrument to border-defence-prioritisation. Martial Law still fires, but Brandt redirects Löwenritter military assets toward T3 (Lowenskyst) and T10 (Spartfell) — the invasion corridors — instead of using them for internal political control. This leaves Crown territories under-garrisoned against internal threats (Church Seizure, Hafenmark expansion) while over-defending against an Altonian invasion that may or may not come. IP-focused players benefit from Brandt; internal-politics players are harmed.
 
 ---
 
@@ -119,13 +119,13 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 
 ## 9. Severin Almud — Crown Court Figure
 
-**New NPC.** Not the Duke Almud (who is the Crown faction leader in TTRPG). Severin is Almud's younger brother. Court diplomat, advisor, and unofficial spymaster.
+**New NPC.** Not the Duke Almud (who is the Crown faction leader in TTRPG). Severin is Almud's cousin and the Crown's chief diplomatic envoy. Manages the Altonian relationship, Torben's education, and treaty negotiations.
 
-**Compromise: Altonian sympathies.** Severin spent 4 years in Altonia as a diplomatic hostage during the last treaty negotiation. He came back with a genuine admiration for Altonian governance — their efficiency, their cultural coherence, their military discipline. He does not want Altonia to conquer Valoria, but he believes Valoria would benefit from Altonian-style centralised authority. This puts him in direct conflict with Hafenmark (decentralisation), the Restoration Movement (cultural autonomy), and even his brother (who governs through consensus).
+**Compromise: He solved the wrong problem.** Severin negotiated the current peace with Altonia. It is his life's work. The treaty holds because Severin made specific personal assurances to the Altonian court — assurances that Valoria would modernise its governance, marginalise the Church's political role, and integrate economically with Altonian trade networks. These assurances were reasonable when he made them. They are now incompatible with Valorian sovereignty: every concession Severin promised is a step toward vassalage, and every step he walks back risks the peace he built. He is trapped between a treaty he cannot abandon and a kingdom he cannot surrender.
 
-**Ethics:** Pragmatic nationalism — Valoria must survive, and survival requires strength. Consistent with Crown ethics, but his definition of "strength" is Altonian, not Valorian. The compromise is that his policy recommendations consistently drift toward authoritarianism — higher IP tolerance, Torben-to-Altonia compliance, Emergency Powers as standard tool.
+**Ethics:** Contractarian — your word is your bond. Severin keeps his promises. This is his strength (Altonia trusts him) and his prison (the promises require Valoria to become something it does not want to be). He does not counsel appeasement from weakness — he counsels it because he literally promised Altonia these things and breaking his word would shatter the treaty framework.
 
-**Behavioral AI — APPEASEMENT:** Severin's diplomatic instinct is to accommodate the stronger party. Against Altonia: he counsels compliance. Against Church: he counsels concession. Against Hafenmark: he counsels compromise. **Consequence:** Crown actions influenced by Severin tend toward IP reduction (good) but also toward Mandate reduction (bad — Crown appears weak). If Severin is the primary Crown advisor for 3+ consecutive seasons, Crown Mandate −1 at Year-End (allies lose confidence in Crown's resolve). Players who recognise this pattern can either marginalise Severin (losing his diplomatic skill) or redirect his instinct (harder but preserves the asset).
+**Behavioral AI — COMMITMENT-LOCKED:** Severin cannot advocate for any action that contradicts his Altonian assurances, even when circumstances have changed. IP-reduction proposals that require Church concessions: he supports them (he promised Church marginalisation). Hafenmark parliamentary reforms: he supports them (he promised governance modernisation). Crown Emergency Powers: he opposes them (he promised institutional reform). **Consequence:** Severin is an excellent diplomat for the world of 10 years ago. In the current crisis, his locked commitments mean he consistently blocks Crown military responses to Church encroachment (he promised restraint) and consistently enables Altonian economic influence (he promised integration). If Crown removes Severin from the Altonian portfolio, IP +2 immediately (Altonia sees it as a treaty signal) but Crown regains policy freedom.
 
 ---
 
@@ -133,11 +133,11 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 
 **New NPC.** Niflhel's senior trade representative on the peninsula. Manages the black market network that unknowingly traffics Thread-touched goods.
 
-**Compromise: Unknowing complicity in Thread proliferation.** Virke is a skilled merchant and smuggler. She has no Thread Sensitivity (TS 0) and no knowledge of Thread metaphysics. She genuinely does not know that some of her most valuable goods are Thread-woven. If this is revealed to her, she faces a choice: continue trading (profitable but now knowingly distributing items that affect Coherence) or shut down the supply chain (destroying Niflhel's economic position on the peninsula). Her Niflhel superiors will not accept the second option.
+**Compromise: Unknowing complicity in Thread proliferation.** Virke is a skilled merchant and smuggler. TS 0. No knowledge of Thread metaphysics. She genuinely does not know that some of her most valuable goods are Thread-woven. If revealed: she must choose between knowingly distributing metaphysically dangerous goods (maintaining Niflhel's position) or shutting down the supply chain (destroying it). Her Niflhel superiors will not accept the second option.
 
-**Ethics:** Contractarian — honour the deal. Niflhel's ethical framework prizes reliability above all. Virke keeps her word, delivers on contracts, and expects the same. But her ethical framework has no category for "the goods you're selling are metaphysically dangerous" — it's outside her ontological frame.
+**Ethics:** Contractarian — honour the deal. Niflhel prizes reliability. But Virke has a secondary ethic her superiors don't share: she has built genuine relationships with her Valorian trade partners over years of operation. She knows their families. She has extended credit during hard seasons and forgiven debts when children were sick. Her network runs on personal trust, not cold transaction — and this trust is what makes her effective. The compromise is that her personal loyalty network sometimes conflicts with Niflhel's institutional interests. She will protect a trade partner from Niflhel enforcement if she judges the partner's default was justified. This has cost Niflhel revenue twice already. A third time triggers recall.
 
-**Behavioral AI — TRANSACTIONAL:** Every interaction is a deal. Virke will help anyone who can pay, and she will betray anyone who defaults. She does not take sides in Valorian politics — she profits from all of them equally. **Consequence:** Niflhel's trade network is efficient and politically neutral — but this neutrality means Virke will sell intelligence to the Church about practitioner activity if the Church pays more than Varfell. The highest bidder always wins. Players who want Niflhel loyalty must either outbid everyone permanently or find leverage (the Thread-touched goods revelation is the ultimate leverage).
+**Behavioral AI — NETWORK PROTECTOR:** Virke's first priority is her relationship network, second is Niflhel revenue. She will not sell intelligence about a trade partner to their enemy — even if the buyer pays more — because burning a source destroys the network she spent a decade building. She will sell intelligence about *non-partners* freely. **Consequence:** Factions inside Virke's trust network (whoever has traded with her consistently) get protection. Factions outside it get exploited. This creates an asymmetry that rewards players who invested in the Niflhel relationship early. But Virke's protectionism also means she withholds information from Niflhel central command — if her superiors discover she's shielding Valorian partners from Niflhel intelligence operations, she's recalled and replaced with someone who has no loyalty to anyone on the peninsula.
 
 ---
 
@@ -157,11 +157,11 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 
 **New NPC.** Schoenland's trade factor (commercial ambassador) in Valorsplatz. Manages Schoenland's interests on the peninsula.
 
-**Compromise: Personal debt to Crown.** Solberg's family were Valorian merchants who fled to Schoenland during the Altonian occupation. He has ancestral ties to Valorsplatz and a personal sense of obligation to Crown. Schoenland's official policy is neutrality (profit from tension, prevent resolution). Solberg's personal inclination is to help Crown — he provides better trade terms, earlier intelligence on Altonian naval movements, and occasionally delays arms shipments to factions opposing Crown. This bias is subtle but cumulative.
+**Compromise: He wants to go home.** Solberg is Schoenland-born and Schoenland-loyal. He does not have secret Valorian sympathies. His problem is simpler: Schoenland's profit-from-chaos model means his posting never ends. As long as Valoria is unstable, Solberg is too valuable to recall. Stable Valoria = Solberg goes home to his family. Unstable Valoria = Solberg stays indefinitely. He has been on this posting for 7 years. His children are growing up without him. He is unconsciously steering Schoenland policy toward outcomes that would let him leave — which means outcomes that stabilise Valoria, which means outcomes that harm Schoenland's long-term interests.
 
-**Ethics:** Mercantile realism — trade is the foundation of civilisation. Consistent with Schoenland's institutional framework. But Solberg's Valorian heritage means he values Valorian stability over Schoenland's profit-from-chaos model. He is a bad Schoenland agent and a decent human being — these are the same thing.
+**Ethics:** Institutional loyalty — he serves Schoenland. But his personal desire for stability has infiltrated his professional judgment in ways he cannot fully see. He genuinely believes his policy recommendations are correct for Schoenland. They are not. They are correct for a man who wants to go home.
 
-**Behavioral AI — BIASED NEUTRAL:** Solberg presents as neutral but consistently advantages Crown in marginal decisions. Arms shipments to anti-Crown factions arrive 1 season late. Intelligence about Altonian movements reaches Crown 1 season before other factions. **Consequence:** If any faction discovers Solberg's bias (Intel action vs Ob 3 targeting Schoenland trade), Schoenland recalls him and replaces him with a genuinely neutral factor — removing Crown's hidden advantage. Crown loses the intelligence pipeline. Schoenland's trade terms equalise across all factions. The revelation is bad for Crown and neutral-to-good for everyone else.
+**Behavioral AI — STABILITY-SEEKING:** Solberg unconsciously favours actions that reduce peninsula tension. Arms shipments to all factions: he recommends conservative quantities ("oversupply invites escalation"). Intelligence reports to Schoenland central: he downplays instability ("the situation is manageable"). Trade terms: he offers slightly better deals to whichever faction is currently losing (stabilising the balance of power). **Consequence:** Schoenland's peninsula policy is ~1 season behind optimal aggression. If a genuinely neutral Schoenland agent replaced him, arms flows would increase, intelligence would be sharper, and Schoenland would extract more value from the chaos. Players who discover Solberg's motivation can leverage it: offer him a plausible path to recall (e.g., a Valorian-Schoenland stability treaty) and he will work actively to make it happen — becoming a genuine Crown/Hafenmark asset. But the treaty must be real. Solberg is not stupid and will not believe a false promise.
 
 ---
 
@@ -169,11 +169,11 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 
 **New NPC.** Cardinal of Prudence (economic portfolio). The unnamed fourth Cardinal referenced in ED-007. Manages tithes, charities, Church land.
 
-**Compromise: Embezzlement from faith.** The Prudence Cardinal has been redirecting tithe revenue to fund emergency charitable operations in territories where Prosperity is collapsing — operations the Church's official budget does not cover. This is not personal enrichment; it is institutional embezzlement in service of genuine need. The money goes to hungry people. But it means the Church's official accounts are short, and if the discrepancy is discovered, Church Wealth drops by 1 immediately and Church Stability −2 (institutional scandal).
+**Compromise: The tithe maximiser.** The Prudence Cardinal genuinely cares about the faithful — and his method of caring is to extract every possible coin from the Church's economic apparatus and redistribute it. He runs the Church's finances like a commercial enterprise: renegotiating Parish tithe quotas upward, auditing monastery expenditures, consolidating Church landholdings for efficiency, and pressuring Parish leaders who fall short of revenue targets. The redistribution is real — Church charities are well-funded, Church hospitals function, the poor are fed. But the extraction creates institutional friction: Parish leaders resent being treated as revenue centres, local clergy feel squeezed, and communities that once gave willingly now give resentfully. He is producing the Church's best charitable outcomes while eroding the Church's grassroots loyalty.
 
-**Ethics:** Consequentialist — the hungry must be fed, regardless of procedure. This is in direct tension with the Church's deontological framework (tithe revenue has canonical allocation rules). The Prudence Cardinal is the Church's only senior figure whose ethics are genuinely about people rather than doctrine.
+**Ethics:** Stewardship — wealth exists to be deployed for the faithful, and deployment requires maximisation. He is not greedy. He lives simply. Every coin he extracts goes back out. But he cannot see that the relationship between the Church and its flock is not a balance sheet. The friction he creates is invisible to him because his metrics all point upward.
 
-**Behavioral AI — CHARITABLE TO A FAULT:** The Prudence Cardinal prioritises Church Wealth expenditure on charitable operations over military or political spending. When Church Wealth is contested (Jarnstal wants military funding, Olafsson wants investigation funding), Prudence Cardinal blocks reallocation. **Consequence:** Church charitable presence is strong (RM gains less ground in territories where Church charities operate — CV erosion slowed by 1 in those territories). But Church Military and Inquisitor funding is perpetually constrained. If the embezzlement is revealed: Church Stability −2, but RM CV reduction in charity territories permanently loses the bonus (the funding stops).
+**Behavioral AI — OPTIMISER:** The Prudence Cardinal maximises Church Wealth throughput. Tithe collection is aggressive — Church Wealth recovers +1 per season when he is active (baseline is +0). But territorial Church Mandate erodes: in any territory where the Prudence Cardinal has increased tithe quotas (GM tracks — typically 2–3 territories per season), Church Mandate suffers −0.5 (tracked fractionally, applied at Year-End: −1 per 2 territories squeezed). **Consequence:** Church is flush with resources but losing popular support. Parish leaders who feel squeezed become RM recruitment targets — CV erosion accelerates in over-tithed territories by +1 per Year-End (the people resent the institution). The Prudence Cardinal is inadvertently funding the Church's charitable mission while undermining its cultural authority — the exact inversion of what the Church needs to win via Conviction Yield.
 
 ---
 
@@ -186,14 +186,14 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 | 3 | Maret Vossen | RM | Visibility = target | IDEALIST (spreads thin) | Presence markers vulnerable |
 | 4 | Sæmund Haelgrund | Church | Evidence he can't report | PROCEDURALIST (slow) | Investigations +1 season but Overwhelming |
 | 5 | Sigrid Torsvald | Löwenritter (covert) | TS 35 in anti-Thread org | RISK-AVERSE on Thread | ~30% abort rate in Thread zones |
-| 6 | Halvar Brandt | Löwenritter | Ambition masked as loyalty | AGGRESSIVE (escalates) | Premature Martial Law, −1 Stability |
+| 6 | Halvar Brandt | Löwenritter | Border war trauma → threat fixation | EXTERNAL THREAT FIXATED | Redirects military to borders, neglects internal |
 | 7 | Annika Feldhaus | Guilds | Thread-touched supply chain | PROFIT-MAXIMISING | Wealthy but politically marginalised |
 | 8 | Peder Almstedt | Ministry | Preserves system over justice | CONSERVATIVE (blocks reform) | PI recovers faster but reform +1 Ob |
-| 9 | Severin Almud | Crown Court | Altonian sympathies | APPEASEMENT (accommodates) | Crown Mandate drift −1 if dominant |
-| 10 | Dalla Virke | Niflhel | Unknowing Thread proliferation | TRANSACTIONAL (highest bidder) | Sells intel to highest bidder |
+| 9 | Severin Almud | Crown Court | Treaty commitments he can't walk back | COMMITMENT-LOCKED | Blocks Crown military response; IP +2 if removed |
+| 10 | Dalla Virke | Niflhel | Unknowing Thread proliferation | NETWORK PROTECTOR | Shields trade partners; withholds intel from Niflhel |
 | 11 | Duke Hardar Veldensohn | Altonia | Loves Elske (genuine) | PROTECTIVE (shields Elske) | IP +1/season slower; flips if Elske threatened |
-| 12 | Rikard Solberg | Schoenland | Personal debt to Crown | BIASED NEUTRAL | Crown gets early intel; discovery removes it |
-| 13 | [Name Pending] | Church (Prudence) | Embezzlement for charity | CHARITABLE (starves other budgets) | CV erosion slowed but Church Mil/Intel underfunded |
+| 12 | Rikard Solberg | Schoenland | Wants to go home | STABILITY-SEEKING | Schoenland policy ~1 season behind optimal |
+| 13 | [Name Pending] | Church (Prudence) | Tithe maximiser alienates parishes | OPTIMISER | Church Wealth +1/season but Mandate erodes in squeezed territories |
 
 ---
 
@@ -211,11 +211,11 @@ Per worldbuilding_integration_v3 §axis system, each NPC sits on 2–3 of the 9 
 | Brandt | 5 (order) | 6 (ducal/Crown command) | 8 (resistance) |
 | Feldhaus | 3 (prosperity) | 4 (stability) | 7 (pragmatic secrecy) |
 | Almstedt | 5 (order) | 1 (institutional legitimacy) | 4 (stability) |
-| Severin | 8 (accommodation) | 6 (centralised authority) | 1 (Crown legitimacy) |
+| Severin | 8 (accommodation — locked by treaty) | 1 (Crown legitimacy) | 6 (Altonian integration — promised) |
 | Virke | 7 (secrecy) | 3 (prosperity) | — |
 | Hardar | 8 (accommodation ↔ resistance) | 6 (Altonian authority) | — |
-| Solberg | 3 (prosperity) | 8 (resistance, covert) | — |
-| Prudence Cardinal | 3 (equity) | 2 (institutional faith) | 5 (order ↔ compassion) |
+| Solberg | 3 (prosperity) | 4 (stability — personal need) | — |
+| Prudence Cardinal | 3 (prosperity — maximisation) | 2 (institutional faith) | 5 (order — institutional friction) |
 
 ---
 
