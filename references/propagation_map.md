@@ -384,3 +384,22 @@ Propagation targets:
 | params_factions.md | RM faction status | ✓ applied |
 | valoria_bg_v05_simulation_and_patches.md | "5 players only" note, §Balance | STALE NOTE — see PP-478 |
 | tests/coverage_matrix.md | RM simulation entries | updated |
+
+
+## 2026-04-08 Propagation Status
+
+### PP-493–504 (Territory + Church + Editorial batch)
+- victory_architecture_v1.md: T-numbers remapped ✓
+- params_board_game.md: Crown TCV, Church Seizure, Torben, PI thresholds, TC cap, Co-Movement serial, Political Vacuum ✓
+- params_factions.md: RM TTRPG Founding Gate ✓
+- params_threadwork.md: Inert Knowledge, Dissonant rates ✓
+- canonical_sources.yaml: social_debate→v2, clocks→registry ✓
+- designs/systems/clock_registry.md: created ✓
+- designs/npcs/npc_roster.md: created ✓
+- worldbuilding_integration_v3.md: old territory names fixed ✓
+- valoria_bg_v04.md: SUPERSEDED — not updated (stale Hardar ref acceptable in deprecated file)
+
+### NPC Naming Propagation
+- Hardar Veldensohn → Doux Alexios Laskaris: params_board_game ✓, npc_roster ✓, session_log ✓
+- bg_v04 retains old name (SUPERSEDED file — no action)
+- Severin Almud → Gerik Strand: npc_roster ✓ (Severin did not appear in any other active file)

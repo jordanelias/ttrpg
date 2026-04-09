@@ -344,3 +344,6 @@ These files contain confirmed design decisions that have not been propagated to 
 | designs/setting/geography_design.md | ALL | CURRENT | — | Canonical geography. 17 territories, adjacency graph, physical geography. Approved 2026-04-05. |
 
 | designs/conviction_track/opus_design_proposal.md | BG/ALL | WORKING | opus_handoff session 2026-04-06 | Design proposal PP-406–PP-418. NOT committed as patches. Requires ED-306 victory architecture resolution, territory numbering reconciliation, and BG role card mapping before any patches can land. |
+
+| designs/npcs/npc_roster.md | ALL | CURRENT | — | 13-character NPC roster with compromises, behavioral AI, historical echoes. ED-358. |
+| designs/systems/clock_registry.md | ALL | CURRENT | — | Unified clock/track registry. PP-496. Supersedes empty stage5_clocks.md. |

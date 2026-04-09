@@ -144,7 +144,7 @@ editorial_decisions_pending: [ED-358]
 - New NPCs: Haelgrund (Church Inquisitor, hidden TS 12), Torsvald (TS Riskbreaker, knows Lenneth),
   Brandt (Löwenritter officer, premature escalator), Feldhaus (Guilds, Thread-touched supply chain),
   Almstedt (Ministry, procedural obstructionist), Severin Almud (Crown Court, Altonian sympathies),
-  Virke (Niflhel, unknowing Thread proliferation), Hardar Veldensohn (Altonian Prince, loves Elske),
+  Virke (Niflhel, unknowing Thread proliferation), Alexios Laskaris (Altonian Prince, loves Elske),
   Solberg (Schoenland, biased toward Crown), Prudence Cardinal (Church, charitable embezzlement).
 - ED-358 resolved. All flagged for user review.
 - Committed as designs/npcs/npc_roster.md.
@@ -152,14 +152,14 @@ editorial_decisions_pending: [ED-358]
 ### 2026-04-08 — NPC Roster v3 (cliché review)
 - #9 Severin Almud struck. Replaced with Gerik Strand (Lord Steward) — vassal landowner from Feldmark, appointed minister, driven by structural insecurity. Historical echo: William Marshal.
 - #10 Virke reframed as Virke family syndicate broker. Niflhel = colloquial name for criminal constellation, not coordinated faction. Historical echo: Medici branch managers.
-- #11 Hardar Veldensohn → Doux Alexios Laskaris. Greek/Macedonian naming for Altonia. Historical echo: Demetrios Palaiologos.
+- #11 Alexios Laskaris → Doux Alexios Laskaris. Greek/Macedonian naming for Altonia. Historical echo: Demetrios Palaiologos.
 - Prudence Cardinal echo: Suger of Saint-Denis. Haelgrund: Bellarmine. Torsvald: Christine Granville. Brandt: Aetius. Feldhaus: Jacques Cœur. Almstedt: Byzantine logothetes. Solberg: Xenophon. Vossen: Luxemburg. Maret Uln: Sorge.
 - 5 NPCs rewritten to purge cliché (Brandt, Virke, Solberg, Prudence Cardinal already fixed in prior commit; Severin fully replaced).
 
 ### 2026-04-08 — Historical Parallel Arcs (Batch 03)
 - 8 arcs generated (Arcs 10-17) from historical parallels: Investiture Controversy, Year of Four Emperors, Romance of Three Kingdoms, Sengoku Japan, Byzantine court politics, Borgia papacy, Italian city-states, Sinigaglia.
 - 16 event cards with mechanical triggers across all arcs.
-- All arcs use existing NPCs: Almstedt, Haelgrund, Baralta, Brandt, Torsvald, Feldhaus, Virke, Vossen, Maret Uln, Vaynard, Severin Almud, Hardar Veldensohn, Solberg, Prudence Cardinal. No new NPCs required.
+- All arcs use existing NPCs: Almstedt, Haelgrund, Baralta, Brandt, Torsvald, Feldhaus, Virke, Vossen, Maret Uln, Vaynard, Severin Almud, Alexios Laskaris, Solberg, Prudence Cardinal. No new NPCs required.
 - 8 gaps identified (GAP-ARC-10 through GAP-ARC-17). 6 editorial flags (ED-NEW-1 through ED-NEW-6).
 - Cross-arc interaction table: 8x8 matrix documenting all arc intersections.
 - Committed as gm_ref/arcs_10_17_historical.md.
