@@ -148,3 +148,10 @@ editorial_decisions_pending: [ED-358]
   Solberg (Schoenland, biased toward Crown), Prudence Cardinal (Church, charitable embezzlement).
 - ED-358 resolved. All flagged for user review.
 - Committed as designs/npcs/npc_roster.md.
+
+### 2026-04-08 — NPC Roster v3 (cliché review)
+- #9 Severin Almud struck. Replaced with Gerik Strand (Lord Steward) — vassal landowner from Feldmark, appointed minister, driven by structural insecurity. Historical echo: William Marshal.
+- #10 Virke reframed as Virke family syndicate broker. Niflhel = colloquial name for criminal constellation, not coordinated faction. Historical echo: Medici branch managers.
+- #11 Hardar Veldensohn → Doux Alexios Laskaris. Greek/Macedonian naming for Altonia. Historical echo: Demetrios Palaiologos.
+- Prudence Cardinal echo: Suger of Saint-Denis. Haelgrund: Bellarmine. Torsvald: Christine Granville. Brandt: Aetius. Feldhaus: Jacques Cœur. Almstedt: Byzantine logothetes. Solberg: Xenophon. Vossen: Luxemburg. Maret Uln: Sorge.
+- 5 NPCs rewritten to purge cliché (Brandt, Virke, Solberg, Prudence Cardinal already fixed in prior commit; Severin fully replaced).

@@ -321,7 +321,7 @@ Range 0–7. Starts at **3**. Visible to all. Active from game start (no trigger
 Altonian Tutoring Demand triggers at IP ≥ **40** (v04 B2: "Torben Tutoring Demand (IP ≥ 40 Event)") (not 30 — v04 B2: "Torben Tutoring Demand (IP ≥ 40 Event)").
 
 ## Elske Off-Board Card (v04 B2)
-Princess Elske Almqvist is in Altonia (not on the board). Married to Duke Hardar Veldensohn, duchy borders T4.
+Princess Elske Almqvist is in Altonia (not on the board). Married to Doux Alexios Laskaris, province borders T4.
 Elske Loyalty: 0–7, starts 4. Tracked on off-board card near T4.
 
 Contact: Crown or Löwenritter Senator Outward in T4 (Ob 2 at IP < 60; Ob 3 at IP ≥ 60).
