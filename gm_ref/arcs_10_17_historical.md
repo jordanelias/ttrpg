@@ -1,4 +1,4 @@
-<!-- DEPRECATED: 2026-04-08 — SUPERSEDED BY gm_ref/arcs_10_18_consolidated.md (pending consolidation). Uses NPC roster v2 names/assignments. Superseded by reassignment.md, almud_revision.md, and assassination_einhir_revision.md.. Do not use as a mechanical reference. Retained for historical record only. -->
+<!-- DEPRECATED: 2026-04-08 — SUPERSEDED BY gm_ref/arcs_10_18_consolidated.md. Do not use as a mechanical reference. Retained for audit trail only. -->
 
 # Valoria Emergent Arcs — Batch 03 (Historical Parallels)
 ## Generated: 2026-04-08 | Source reads: params_factions.md, params_board_game.md, params_core.md, npc_roster.md, canonical_sources.yaml, geography_design.md, victory_architecture_v1.md

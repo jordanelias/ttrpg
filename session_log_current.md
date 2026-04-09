@@ -207,3 +207,15 @@ editorial_decisions_pending: [ED-358]
   - gm_ref/arcs_assassination_einhir_revision.md (interim patch, latest in chain)
 - All deprecated files retained for historical record. Each has a DEPRECATED header naming its replacement.
 - Next action: consolidate all arc revision documents into a single gm_ref/arcs_10_18_consolidated.md that incorporates all NPC roster final assignments, Almud competence, assassination thread, and Einhir caste dynamics.
+
+### 2026-04-08 — Consolidated Arcs + Valn Terminology
+- Valn/Valnese/Einhir terminology canonized: Valn = pre-Altonian Einhir name for the peninsula. Valnese = the people. Einhir = Thread-sensitive nation within the Valnese. Forgetting does not affect the name; using it is a political act. ED-NEW-7 RESOLVED.
+- gm_ref/arcs_10_18_consolidated.md committed. Single authoritative arc document for Batch 03.
+- Merges all content from 4 deprecated revision docs with all revisions applied in-place:
+  - NPC roster final (Strand, Laskaris, Virke expanded, tri-modal)
+  - Almud competence (Bayesian ruler, King's Gambit, King's Patience, Strategic Review)
+  - Hunting Accident E-01 (woven into Arcs 10, 11, 15, 17; accident-as-truth option)
+  - Einhir north-south caste (woven into Arcs 10, 12, 13, 14, 18; Forgetting as enforcement)
+  - Valn/Valnese/Einhir terminology throughout
+- All 4 deprecated files updated to point to consolidated doc.
+- 9 arcs, 25 event cards, 8 gaps, 11 editorial flags (1 resolved: ED-NEW-7).

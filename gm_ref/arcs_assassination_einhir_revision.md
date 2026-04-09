@@ -1,4 +1,4 @@
-<!-- DEPRECATED: 2026-04-08 — SUPERSEDED BY gm_ref/arcs_10_18_consolidated.md (pending consolidation). Latest revision in chain but still an interim patch document, not consolidated.. Do not use as a mechanical reference. Retained for historical record only. -->
+<!-- DEPRECATED: 2026-04-08 — SUPERSEDED BY gm_ref/arcs_10_18_consolidated.md. Do not use as a mechanical reference. Retained for audit trail only. -->
 
 # Arcs 10–18 — Assassination & Einhir Social Dynamics Revision
 ## Date: 2026-04-08
