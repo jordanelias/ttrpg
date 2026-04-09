@@ -188,3 +188,11 @@ editorial_decisions_pending: [ED-358]
 - 8 new Event Cards designed (Haelgrund Investigation, Haelgrund Defection, Varfell Succession, Brandt Succession, Supply Chain Exposure, Strand Turned, Laskaris Flip, Parish Revolt).
 - Edeyja's disposition toward peninsula politics clarified: factions are an environmental hazard, not political actors worth engaging with.
 - All 13 NPCs active in ≥ 2 modes. 10 of 13 active in all 3 modes.
+
+### 2026-04-08 — Assassination & Einhir Caste Revision
+- Hunting Accident (E-01) woven into Arcs 10, 11, 15, 17. Key addition: accident-was-genuinely-accidental as a valid E-01 resolution (phantom conspiracy worse than real one).
+- Einhir north-south caste dynamic woven into Arcs 10, 12, 13, 14, 18. Forgetting as caste enforcement mechanism identified.
+- 2 new event cards: The Unanswered Question (Arc 11), The Southern Voice (Arc 14).
+- 4 new editorial flags: ED-NEW-7 (Valn name), ED-NEW-8 (dedicated caste arc deferred), ED-NEW-9 (E-01 accidental option), ED-NEW-10 (Insurance File Varfell payload).
+- Recommendation: consolidate all revision docs into single arcs_10_18_v2.md. Currently 4 separate files.
+- Committed as gm_ref/arcs_assassination_einhir_revision.md.
