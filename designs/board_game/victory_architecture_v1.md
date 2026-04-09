@@ -38,7 +38,7 @@ All territory numbers match geography_design.md canonical table.
 | T2 | Kronmark | 1 | Crown |
 | T5 | Feldmark | 1 | Crown |
 | T6 | Stillhelm | 1 | Crown |
-| T17 | Halvarshelm | 1 | Hafenmark |
+| T17 | Reinstadt | 1 | Hafenmark |
 | T15 | Askeheim | 0 | Uncontrolled |
 | T16 | Schoenland | — | Not in territorial play |
 | | **Total** | **30** | |
