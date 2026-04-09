@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-08 — SUPERSEDED BY gm_ref/arcs_10_18_consolidated.md (pending consolidation). Interim patch for NPC roster v3 changes. Partially superseded by almud_revision.md and assassination_einhir_revision.md.. Do not use as a mechanical reference. Retained for historical record only. -->
+
 # Arcs 10–17 — Reassignment Notes (NPC Roster v3)
 ## Date: 2026-04-08 | Triggered by: npc_roster_v3.md upload
 

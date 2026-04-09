@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-08 — SUPERSEDED BY gm_ref/arcs_10_18_consolidated.md (pending consolidation). Interim patch for Almud competence. Partially superseded by assassination_einhir_revision.md.. Do not use as a mechanical reference. Retained for historical record only. -->
+
 # Arcs 10–18 — Almud Competence Revision
 ## Date: 2026-04-08 | Triggered by: King Almud is not an incompetent cliché
 

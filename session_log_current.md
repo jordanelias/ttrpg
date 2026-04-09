@@ -196,3 +196,14 @@ editorial_decisions_pending: [ED-358]
 - 4 new editorial flags: ED-NEW-7 (Valn name), ED-NEW-8 (dedicated caste arc deferred), ED-NEW-9 (E-01 accidental option), ED-NEW-10 (Insurance File Varfell payload).
 - Recommendation: consolidate all revision docs into single arcs_10_18_v2.md. Currently 4 separate files.
 - Committed as gm_ref/arcs_assassination_einhir_revision.md.
+
+### 2026-04-08 — NPC Roster Final + Deprecation Pass
+- npc_roster_final.md committed as designs/npcs/npc_roster.md (replaces prior version).
+- Major addition in final roster: tri-modal NPC presence (TTRPG/Hybrid/BG) with event cards and mode bridges for all 13 NPCs.
+- Deprecation headers added to all superseded arc documents:
+  - gm_ref/arcs_10_17_historical.md (uses v2 NPC names, superseded by revision chain)
+  - gm_ref/arcs_10_17_reassignment.md (interim patch)
+  - gm_ref/arcs_almud_revision.md (interim patch)
+  - gm_ref/arcs_assassination_einhir_revision.md (interim patch, latest in chain)
+- All deprecated files retained for historical record. Each has a DEPRECATED header naming its replacement.
+- Next action: consolidate all arc revision documents into a single gm_ref/arcs_10_18_consolidated.md that incorporates all NPC roster final assignments, Almud competence, assassination thread, and Einhir caste dynamics.
