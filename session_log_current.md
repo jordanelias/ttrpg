@@ -231,3 +231,19 @@ editorial_decisions_pending: [ED-358]
   - Every faction's 27-year investment in the assassination narrative revealed as foundationless but load-bearing.
 - gm_ref/arcs_10_18_consolidated.md updated: E-01 RESOLVED throughout. ED-NEW-9 and ED-NEW-10 marked RESOLVED.
 - Arc 15 (King's Patience) and Arc 17 (Insurance File) updated to reflect accidental resolution.
+
+### 2026-04-09 — Consolidation & Deprecation Pass
+- 46 files moved to deprecated/ with DEPRECATED headers:
+  - 19 superseded BG evolution files (bg_v01–v04, proposals, syntheses, improvements)
+  - 4 gm_ref arc revision files (already had DEPRECATED headers, now physically moved)
+  - 7 debate system files (superseded by social_contest_system_v2.md / PP-234)
+  - 3 worldbuilding v1/v2 files (superseded by v3)
+  - 5 root-level orphan files (workplan, gap register, patch proposals, scope map, project_instructions)
+  - 6 stale flat skill files (superseded by dir-based versions)
+  - 1 qwen ruleset (non-authoritative LLM output)
+  - 1 empty `path` file (deleted)
+- 20 compilation/v0.14 stage files: DEPRECATED headers added in-place, naming canonical replacements
+- references/file_index.md fully rebuilt to reflect new structure
+- No mechanical values changed — pure organizational cleanup
+- Commit: fb5bf8865a8f373d8ca36e327ee125df3353e30e
+- 8 files flagged for future editorial decision (batch_a–f status, lir_ff_impact, debate_ref_card rewrite)
