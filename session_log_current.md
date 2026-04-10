@@ -252,3 +252,14 @@ editorial_decisions_pending: [ED-358]
 - Deep character analysis for all 13 NPCs committed to designs/npcs/npc_character_analyses.md.
 - Each analysis covers: dramatic function, internal contradiction, arc trajectory, thematic role relative to canon (P-01–P-15), historical parallel structural mapping, and behavioral AI consequence chain.
 - Key findings: Haelgrund TS reveal is highest-impact personal scene in the roster; Feldhaus-Virke supply chain is highest-impact cross-faction link; Prudence Cardinal's optimisation loop is the most ironic mechanical interaction; Edeyja and Almstedt are fixed-point characters (others arc around them).
+
+### 2026-04-08 — Comprehensive Arc Narrative Analysis
+- All 18 arcs (Batches 01-03) evaluated on 5 criteria: emergence quality, table experience, mechanical grounding, NPC fidelity, thematic coherence (1-5 each).
+- Portfolio average: 21.3/25. No arc below 18/25.
+- Strongest arcs: Arc 1 (Unworked Clause, 23), Arc 3 (Hammer's Reserve, 23), Arc 5 (Quiet Fracture, 23), Arc 9 (Practitioner Who Stopped, 23).
+- Weakest arcs: Arc 8 (What Guilds Know, 18), Arc 18 (Stolen Steward, 19).
+- Best NPC showcase: Arc 12 (Chained Ships) — 4 NPC flaws interlocking to produce catastrophe.
+- Key finding: Batch 03 emergence scores lower than 01-02 due to historical-parallel framework privileging deliberate action over system emergence. Arcs 10, 14, 18 recommended for reclassification as scenario triggers.
+- Structural gaps: no arcs for Edeyja, mass combat, Thread operations, Southernmost/Warden, Altonian invasion, Torben succession. 5 NPCs never primary drivers.
+- Priority actions: formalise 4 mechanical gaps, add checkpoints to 2 accumulation arcs, generate arcs for 5 uncovered NPCs and 5 uncovered arc types.
+- Committed as gm_ref/arc_narrative_analysis.md.
