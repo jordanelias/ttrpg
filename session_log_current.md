@@ -247,3 +247,8 @@ editorial_decisions_pending: [ED-358]
 - No mechanical values changed — pure organizational cleanup
 - Commit: fb5bf8865a8f373d8ca36e327ee125df3353e30e
 - 8 files flagged for future editorial decision (batch_a–f status, lir_ff_impact, debate_ref_card rewrite)
+
+### 2026-04-08 — NPC Character Analyses
+- Deep character analysis for all 13 NPCs committed to designs/npcs/npc_character_analyses.md.
+- Each analysis covers: dramatic function, internal contradiction, arc trajectory, thematic role relative to canon (P-01–P-15), historical parallel structural mapping, and behavioral AI consequence chain.
+- Key findings: Haelgrund TS reveal is highest-impact personal scene in the roster; Feldhaus-Virke supply chain is highest-impact cross-faction link; Prudence Cardinal's optimisation loop is the most ironic mechanical interaction; Edeyja and Almstedt are fixed-point characters (others arc around them).
