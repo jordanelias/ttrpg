@@ -408,3 +408,21 @@ Open for editorial: ED-061, ED-062, ED-063.
 | SIM-DEBT-BG-04 | Faction unique action balance | BG | COMPLETE | 2026-04-08 | F-Church-01 (Cardinal Focus dominant), P2-09 (VTM TC — ED-345), P2-10 (Decree Fragmentation — ED-344). |
 | SIM-DEBT-BG-05 | Ministry NPC AI interaction | BG | COMPLETE | 2026-04-08 | P2-08 (Priority 3 dead — ED-346), P2-11 (Domain conflict — PP-480). |
 | SIM-DEBT-BG-06 | RS decay 20-season projection | BG | COMPLETE | 2026-04-08 | CLEAN — system healthy. WC >= 2 critical S8+. Thread-RS-RM feedback loop confirmed intentional. |
+
+
+## SIM-GS-01 — Church Graduated Seizure (PP-494) — 2026-04-09
+Modes: A + D + J + L
+Source: tests/sim_graduated_seizure_SIM-GS-01.md
+P1 findings: 5 (ED-365, ED-366, ED-368, L2-Casus Belli GAP, J3-Fort Level vs ED-355)
+P2 findings: 7
+Status: COMPLETE
+
+### P1 Findings Summary
+| ID | Finding |
+|----|---------|
+| ED-365 | Graduated Seizure pre-TC 75 availability gate ambiguous |
+| ED-366 | PP-421 vs PP-494 OW CV cap contradiction |
+| ED-368 | Battle trigger on Graduated Seizure unspecified |
+| J3/ED-355 | Fort Level omitted from PP-494 Ob — conflict with PP-421 |
+| GAP-CB | Casus Belli undefined — mechanic entirely missing from ruleset |
+

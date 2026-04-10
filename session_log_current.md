@@ -308,3 +308,11 @@ Next session priority: ED-364 Almud rewrite, then Church Graduated Seizure simul
 - Almud correction plan archived as COMPLETE.
 - NPC audit: all 13 roster NPCs verified for historical echo, behavioral AI, ethics, consequence specification.
 - Remaining editorial items: Prudence Cardinal still unnamed (flagged ED-358), stat blocks deferred.
+
+### 2026-04-09 — Stress Test: Church Graduated Seizure (PP-494)
+- Modes A + D + J + L completed.
+- 5 P1 findings, 7 P2 findings.
+- ED-365 through ED-369 raised.
+- GAP: Casus Belli mechanic undefined (referenced in PP-494, no definition anywhere).
+- ED-355 (Fort Level / Graduated Seizure conflict) flagged as P1 (previously filed as ED only).
+- Test output: tests/sim_graduated_seizure_SIM-GS-01.md

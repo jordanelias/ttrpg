@@ -2456,3 +2456,48 @@ editorial_decisions:
       - designs/npcs/ruler_diamond_foil_analysis.md
       - designs/npcs/ruler_diamond_extended_foils.md
       - gm_ref/arcs_01_04_nongreedy.md
+
+  # ═══ SIM-GS-01 EDITORIALS (2026-04-09) ═════════════════════════════════════
+
+  - id: ED-365
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Graduated Seizure (PP-494) availability gate: pre-TC 75 vs post-TC 75 only. Formula defined at TC=28 in params but mechanic filed under TC 75 seizure section. Ambiguous whether it is available before freeze."
+    priority: P1
+    tags: [church, seizure, TC, gate]
+    blocks: simulation_correctness
+
+  - id: ED-366
+    status: flagged
+    date_raised: 2026-04-09
+    description: "PP-421 vs PP-494 Overwhelming CV cap conflict. PP-421: OW CV+1 counts against ±1 seasonal cap. PP-494: OW CV+1 is not cap-governed. Directly contradictory. PP-494 provisional governs."
+    priority: P1
+    tags: [church, seizure, CV, cap]
+    blocks: seizure_resolution
+
+  - id: ED-367
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Prominence check timing for Graduated Seizure: checked at declaration or resolution? Prominence can shift mid-round via Excommunication. Action sequence not specified."
+    priority: P2
+    tags: [church, seizure, prominence, timing]
+
+  - id: ED-368
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Battle trigger on Graduated Seizure success in contested territory unspecified. PP-494 silent. bg_v05 Cascade Test 4 establishes TC-threshold seizure triggers Battle. Confirm whether same applies to Graduated Seizure."
+    priority: P1
+    tags: [church, seizure, battle, cascade]
+    blocks: cascade_resolution
+
+  - id: ED-369
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Mandatory Assert (PP-480, TC 50-74) suspension post-TC 75. TC frozen = Assert produces no TC gain. Is mandatory Assert suspended in seizure phase? Significant action economy impact if not."
+    priority: P2
+    tags: [church, assert, TC_freeze, action_economy]
+
+  # GAP: Casus Belli (SIM-GS-01 2026-04-09)
+  # Referenced in PP-494 political cost clause but no mechanic definition exists anywhere
+  # in params_board_game.md. Blocks correct simulation of seizure political consequences.
+  # Requires a definition patch before next Church-seizure simulation.
