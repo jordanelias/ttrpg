@@ -2565,3 +2565,38 @@ editorial_decisions:
     description: "Mutual destruction Stability check: replacement of or addition to normal battle-lost consequences. PP-240: mutual destruction → both factions Stability check Ob 1 at Accounting. §A.13: battle lost → Stability check Ob 1. Mutual destruction = draw. Does PP-240 check replace §A.13 check (no loser) or add to it (both checks fire)?"
     priority: P2
     tags: [mass_combat, mutual_destruction, stability, accounting]
+
+  # ═══ SIM-GS-02 / AUDIT EDITORIALS (2026-04-09) ══════════════════════════════
+
+  - id: ED-370
+    status: resolved
+    date_raised: 2026-04-09
+    date_resolved: 2026-04-09
+    description: "Seizure card type: does Graduated Seizure require a card slot? Upgraded to P1 by Audit F1 (Excommunication→Seizure chain exploit if free action)."
+    priority: P1
+    resolved_by: PP-514
+    tags: [church, seizure, card_type, exploit]
+
+  - id: ED-371
+    status: resolved
+    date_raised: 2026-04-09
+    date_resolved: 2026-04-09
+    description: "Battle Partial outcome for garrison gate (PP-506): Partial = Church loss for gate. Seizure aborted, CB still granted."
+    priority: P1
+    resolved_by: PP-513
+    tags: [church, seizure, battle, partial, garrison]
+
+  - id: ED-372
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Assert post-TC 75 is mechanically inert (no TC gain, optional, Stability risk). Consider minor reward (e.g. Influence+1 on OW, Heresy Investigation trigger) to prevent dead card."
+    priority: P2
+    tags: [church, assert, TC_freeze, action_economy]
+
+  - id: ED-373
+    status: flagged
+    date_raised: 2026-04-09
+    description: "CB multi-source stacking: 4-CB scenario (all other factions holding CB simultaneously against one faction) may generate disproportionate free Senator Outward cascade. Flagged for simulation before confirming no cap needed."
+    priority: P2
+    tags: [casus_belli, CB, stacking, balance]
+

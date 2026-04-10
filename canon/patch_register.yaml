@@ -4827,3 +4827,67 @@ patches:
   affects: [references/params_board_game.md]
   status: applied
 
+- id: PP-512
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Graduated Seizure Partial outcome defined. Partial (net = Ob-1): Seizure not achieved.
+    Place Church Contention Marker on territory. Controlling faction must respond at their
+    next card play or territory becomes administratively disputed: Church gains one free
+    Piety Spread (Consul Inward, Ob 1) in that territory next season. Contention Marker
+    removed at next Accounting regardless. No Stability cost to Church on Partial.
+    Rationale: Partial = Church influence growing but not yet decisive; creates a
+    'soft pressure' state between contested and seized. Resolves Audit A gap.
+  finding_id: [AUDIT-A-SIM-GS-02]
+  source: Mechanic Audit post-SIM-GS-01 2026-04-09
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-513
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Battle Partial outcome for garrison gate (PP-506) defined. Partial Battle result
+    in pre-seizure garrison engagement = Church loss for gate purposes. Seizure does
+    not proceed. Casus Belli still granted. Standard Battle consequences apply (territory
+    remains contested). Church may re-attempt Seizure next season; garrison must be
+    re-contested. Rationale: Partial = garrison intact, Church advance checked.
+    Consistent with standard Battle Partial meaning (draw, neither side achieves objective).
+    Resolves ED-NEW-G.
+  finding_id: [D5-SIM-GS-02, ED-NEW-G]
+  source: Mechanic Audit post-SIM-GS-01 2026-04-09
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-514
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Graduated Seizure card type defined. Seizure is a free institutional action in Phase 4,
+    not consuming a card slot. One Seizure declaration per season. Declared alongside card
+    plays. Excommunication-then-Seizure chain is legal (if Excommunication resolves first
+    and creates Prominence, that Prominence is valid at Seizure declaration per PP-509).
+    Anti-exploit constraint: if Church played Excommunication this season targeting the
+    Seizure territory's controlling faction, Seizure Ob +1 (political reaction — target
+    faction reinforces authority). Resolves ED-NEW-F.
+    [PROVISIONAL: +1 Ob on Excommunication-triggered Prominence chain flagged for simulation.]
+  finding_id: [D4-SIM-GS-02, F1-AUDIT-SIM-GS-02, ED-NEW-F]
+  source: Mechanic Audit post-SIM-GS-01 2026-04-09
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-515
+  date: 2026-04-09
+  severity: P2
+  description: >
+    Casus Belli multi-source stacking defined. A faction holding CB from multiple sources
+    holds one CB marker per source. Each marker grants its independent free Senator Outward
+    and Legionary Ob-1. Maximum: 4 CB markers (one from each other faction). Multi-CB
+    accumulation is intentional: reflects expanded political legitimacy of a wronged faction.
+    [PROVISIONAL: 4-CB scenario (full coalition against single faction) flagged for
+    simulation — may require a seasonal cap on free Senator Outward actions from CB.]
+  finding_id: [L2-SIM-GS-02]
+  source: Mechanic Audit post-SIM-GS-01 2026-04-09
+  affects: [references/params_board_game.md]
+  status: applied
+

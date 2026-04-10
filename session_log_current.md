@@ -436,3 +436,24 @@ Next session priority: ED-364 Almud rewrite, then Church Graduated Seizure simul
 - PP-511: Mandatory Assert suspended post-TC 75; Assert optional-only in seizure phase (ED-369 resolved)
 - ED-365 through ED-369 marked resolved in editorial ledger.
 - params_board_game.md updated to v0.9.2.
+
+### 2026-04-09 — Stress Test 2 + Audit + Final Patch
+Stress Test 2 (post-patch PP-506-511):
+- D2-P1: CB cascade from early seizure degrades Church Mandate systematically
+- D5-P1: Battle Partial for garrison gate unresolved → raised ED-371
+- F1-P1: Excommunication→Seizure chain exploit if Seizure is free action → raised ED-370 (upgraded to P1)
+- 5×P2 additional findings
+
+Audit:
+- Completeness: 2 P1 gaps (Seizure Partial, Battle Partial), 2 P2 gaps
+- Balance: self-regulating. CB creates timing dial favouring TC≥50 seizure.
+- Canon: PASS (P-01–P-15 not applicable)
+- Interaction: TD track 4 Ob modifier applies to GS formula — added to params
+
+Final Patch:
+- PP-512: Seizure Partial → Contention Marker mechanic
+- PP-513: Battle Partial for garrison gate → Church loss, no Seizure
+- PP-514: Seizure = free action (no card slot); Excommunication-chain Ob+1 anti-exploit
+- PP-515: CB multi-source stacking permitted; 4-CB provisional
+- ED-370, ED-371 resolved. ED-372, ED-373 flagged (P2).
+- params_board_game.md updated to v0.9.3.
