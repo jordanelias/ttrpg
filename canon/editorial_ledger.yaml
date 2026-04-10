@@ -2673,3 +2673,30 @@ editorial_decisions:
       gain +2D in any Battle vs Church. Is this the intended balance effect?
     priority: P2
     blocks: CB system completeness
+  - id: ED-370
+    status: flagged
+    date_raised: 2026-04-09
+    priority: P2
+    description: "Hybrid: Personal scene Diplomacy success -> BG Treaty bridge rule. Does personal-scale Diplomacy initiate a BG Treaty? Proposed: success grants -1 Ob to board-level Treaty roll at next Accounting, but board roll still required to ratify."
+    tags: [hybrid, diplomacy, treaty]
+
+  - id: ED-371
+    status: flagged
+    date_raised: 2026-04-09
+    priority: P2
+    description: "Coalition Suppression dominant strategy confirmation — is cost-free auto-trigger (PP-296) intended? If not, add declaration cost (Senator card play to formally join coalition). Simulation confirms it is strategically dominant late-game."
+    tags: [board_game, coalition, balance]
+
+  - id: ED-372
+    status: flagged
+    date_raised: 2026-04-09
+    priority: P2
+    description: "Thread Liaison dissolution timing — prospective (already-credited operations remain valid) vs retroactive. Proposed: prospective only."
+    tags: [board_game, hybrid, thread_liaison]
+
+  - id: ED-373
+    status: flagged
+    date_raised: 2026-04-09
+    priority: P3
+    description: "Diplomatic Token on Mandate-0 faction — Token effect suspended while token-holding faction has Mandate 0; resumes on recovery. Applied provisionally in PP-505."
+    tags: [board_game, diplomacy]

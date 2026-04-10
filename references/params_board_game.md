@@ -114,7 +114,7 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 | Trade (Consul Outward) | Prosperity ÷ 3 (round up, min 1) | +1 IP≥30; +1 T2 |
 | Diplomacy vs NPC (Senator Outward) | NPC Stability ÷ 2 (round up) | — |
 | Diplomacy between players | Negotiated | Not a roll |
-| Formal Crown Treaty (Senator Outward) | Target faction's Mandate | Crown only. Both factions must agree. See victory_architecture_v1.md §3.1. |
+| Formal Crown Treaty (Senator Outward) | ceil(target Mandate / 2) min 1 | Crown only. PP-500/501/502/511. See victory_architecture_v1.md §3.1. |
 | Thread Operation (Pontifex/Weaver) | Ob 2 base | See PP-182 co-movement protocol |
 | Investigate/Intel (Tribune) | 2 | +2 Ob in Church territory with Inquisitor |
 | Spy (Tribune Outward) | Target Intel ÷ 2 round up | — |
@@ -463,6 +463,8 @@ All Domain Actions targeting another faction's Mandate stat use Ob = min(target 
 | 4+ | +6D (cap) |
 
 Coalition bonus applies to the primary suppressing faction's pool. Secondary factions must each have a valid suppression action played this phase. Pool floor: 1D.
+
+**Valid suppression action (PP-506):** Any Domain Action whose stated primary effect includes 'Mandate −N' on the target faction (Excommunicate, Baralta Suppress, Counter-Narrative, and equivalent). Actions producing Mandate reduction as secondary, conditional, or cascade effect do NOT qualify.
 
 ## Drawn Battle Rule (PP-180)
 Equal net successes: Stalemate. Both Discipline −1. No territorial change.
@@ -1252,7 +1254,7 @@ Roll: Influence vs Ob = target Mandate ÷ 2 round up, min 1.
 | Partial | PI +1 (no Token) |
 | Failure | Hafenmark Stability −1 |
 
-**Diplomatic Token:** Permanent marker on target faction mat. Removed on military conflict with Hafenmark OR target faction elimination. Maximum 1 per faction mat. Public. Token effects: target faction counts as Support in Parliamentary Sessions.
+**Diplomatic Token (PP-505/509):** Permanent marker on target faction mat. Removed on: (a) military conflict with Hafenmark — any season in which Hafenmark or the token-holding faction plays a Legionary card whose declared target is a territory controlled by the other (intent of play; March to uncontested territory does not count); (b) target faction elimination; (c) Formal Crown Treaty formed with the token-holding faction (Treaty supersedes Token). Maximum 1 per faction mat. Public. Token effects: target faction counts as Support in Parliamentary Sessions. Token effect suspended while token-holding faction has Mandate 0.
 
 ---
 
@@ -1286,6 +1288,8 @@ Cannot target Intel.
 **Timing:** Phase 1 declarative. No roll.
 Crown designates one allied faction. Liaison's Thread operations in Crown-held territories count toward Crown's co-victory RS threshold tracking.
 **Allied definition:** Active Treaty partner OR same-side Parliamentary Session voter OR common Resentment target.
+
+**Thread Liaison 'Allied' scope (PP-508):** For Thread Liaison designation only: 'Allied' = Active Crown Treaty partner. Parliamentary voter and Resentment conditions do not qualify for Liaison.
 **Dissolves on:** Military conflict between Crown and Liaison.
 
 ---
@@ -1749,3 +1753,28 @@ Partial: no Battle; AP +1 only. Success without units present: control transfers
 ### Mandatory Assert Post-TC 75 (PP-523)
 Assert and Suppress suspended post-TC 75 (TC is frozen; no TC effect possible from either).
 Church does not forfeit an action to mandatory Assert in the seizure phase.
+
+
+## Open Pledge System (PP-503)
+Any faction may declare an **Open Pledge** in Phase 1: a publicly stated commitment to a specific mechanical action or abstention for the current season. Recorded openly.
+- **Honour:** +1 Standing.
+- **Breach:** Stability −1 + Casus Belli (standard, 3 seasons) to every witnessing faction.
+- **Simultaneous resolution ruling:** A Pledge to abstain from a Military action is breached if the pledging faction played a Legionary card in Phase 1, regardless of resolution order. Factual test is card declaration, not outcome.
+- **Forced breach exemption:** Pledge honoured if breach results directly from responding to another faction's military action in the pledged territory, provided the pledging faction's card was not yet played when the threat arose. GM adjudicates.
+- **Scope:** One season. Cannot commit future seasons. Limit: 1 active Pledge per faction.
+
+**Closed Pledge (PP-503):** Private two-faction agreement on a face-down card. Breaking: injured party may reveal at any Accounting for same consequences + breaching faction PI −1.
+
+## Casus Belli — Stacking and Consumption (PP-507)
+- **Stacking cap:** Max 1 CB vs any single target. Second CB replaces first (no accumulation).
+- **Consumption:** CB grants −1 Ob to one declared Military action vs target; consumed when roll made.
+- **Declaration timing:** Declared at Phase 4 start, before resolution. Cannot transfer to different action.
+
+## Treaty Betrayal Timing (PP-511)
+Crown-break consequences: Stability −2, Mandate −1 applied end of Phase 4. CB granted to betrayed faction at Accounting Step 1, usable next season.
+
+## Solo/Co-Victory Priority (PP-512)
+Both solo and co-victory conditions met simultaneously: declaring faction chooses at Accounting Step 12 start. 2-Accounting requirement applies to declared path.
+
+## Missed Coalition Penalty — Threshold (PP-510)
+PP-404 applies when both factions' relevant stat is **at or above** the coalition floor (not "above").

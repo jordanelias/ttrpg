@@ -5188,3 +5188,95 @@ patches:
   affects: ['references/params_board_game.md']
   status: applied
 
+
+
+  - id: PP-500
+    date: 2026-04-09
+    description: "Crown Treaty Ob formula — Ob = ceil(target Mandate / 2) min 1 (was Ob = target Mandate). Aligns with all other diplomatic Ob formulas. Crown Treaty now tractable vs strong factions. Mandate <= 1 target invalid. Full degree table added."
+    status: applied
+    affects: [victory_architecture_v1.md, params_board_game.md]
+    finding: A-01-F1/D-17 (P1) from SIM-DIPL-01
+
+  - id: PP-501
+    date: 2026-04-09
+    description: "Crown Treaty consent mechanism — consent timing (following Phase 1), refusal consequence (CB), NPC AI rule (M>=3 AND Sta<=3), consent incentive (Stability +1 already in text). 4-season Treaty period defined."
+    status: applied
+    affects: [victory_architecture_v1.md, params_board_game.md]
+    finding: A-01-F2/D-07 (P1) from SIM-DIPL-01
+
+  - id: PP-502
+    date: 2026-04-09
+    description: "Crown Treaty target-break clause — Treaty partner initiating Domain Action against Crown territory dissolves Treaty immediately; Crown gains permanent CB; partner Stability -1."
+    status: applied
+    affects: [victory_architecture_v1.md]
+    finding: A-01-F3 (P2) from SIM-DIPL-01
+
+  - id: PP-503
+    date: 2026-04-09
+    description: "Open Pledge system for non-Crown factions — publicly declared seasonal commitments; Honour: +1 Standing; Breach: Stability -1 + CB to all witnesses. Simultaneous resolution ruling: card declaration in Phase 1 is factual test. Forced breach exemption. Closed Pledge variant: private card, revelation consequence. Replaces undeclared pure-social-contract diplomacy."
+    status: applied
+    affects: [params_board_game.md]
+    finding: A-05-F1/D-08 (P1) from SIM-DIPL-01; Scenario 2 edge case (simultaneous resolution)
+
+  - id: PP-504
+    date: 2026-04-09
+    description: "Coalition Pairs table replacement — removed Guilds and Niflhel (non-canonical factions per PP-188). Replaced with: Diplomatic Alignment (Church+Hafenmark, Inf>=5), Military Compact (Varfell+Lowenritter, Mil>=5 + Named Enemy rule), Trade Compact (Crown+Hafenmark, TCV-based trigger), Thread Stewardship (Varfell+RM, VTM>=3+Presence>=2). Named Enemy definition added to Military Compact. Trade Compact uses TCV threshold (not static Wealth) to avoid Season 1 trigger."
+    status: applied
+    affects: [params_factions.md]
+    finding: D-12 (P1), D-13 (P2) from SIM-DIPL-01; Scenario 6 (Named Enemy gap)
+
+  - id: PP-505
+    date: 2026-04-09
+    description: "Diplomatic Token 'military conflict' definition — any season Hafenmark or token-holding faction plays Legionary targeting the other's held territory (intent of play, not outcome; March to uncontested territory does not count)."
+    status: applied
+    affects: [params_board_game.md]
+    finding: A-02-F1 (P2) from SIM-DIPL-01
+
+  - id: PP-506
+    date: 2026-04-09
+    description: "Valid suppression action definition for coalition bonus (PP-296) — Domain Action with Mandate -N as stated primary effect only. Secondary/conditional/cascade Mandate reduction does not qualify."
+    status: applied
+    affects: [params_board_game.md]
+    finding: A-03-F2 (P2) from SIM-DIPL-01
+
+  - id: PP-507
+    date: 2026-04-09
+    description: "Casus Belli stacking cap (max 1 per target, second replaces first) and consumption rule (one declared Military action, consumed on roll, CB declared at Phase 4 start)."
+    status: applied
+    affects: [params_board_game.md]
+    finding: A-04-F1/A-04-F2 (P2) from SIM-DIPL-01
+
+  - id: PP-508
+    date: 2026-04-09
+    description: "Thread Liaison 'Allied' scope restriction — for Liaison designation only, Allied = Active Crown Treaty partner. Parliamentary voter and Resentment conditions excluded."
+    status: applied
+    affects: [params_board_game.md]
+    finding: D-11 (P2) from SIM-DIPL-01
+
+  - id: PP-509
+    date: 2026-04-09
+    description: "Diplomatic Token on Crown Treaty partner — Token removed at Treaty formation (Treaty supersedes). Slot freed for new Token placement."
+    status: applied
+    affects: [params_board_game.md]
+    finding: D-10 (P3) from SIM-DIPL-01
+
+  - id: PP-510
+    date: 2026-04-09
+    description: "Missed Coalition Penalty threshold clarification — 'at or above' the coalition floor (not 'above')."
+    status: applied
+    affects: [params_board_game.md]
+    finding: D-03 (P3) from SIM-DIPL-01
+
+  - id: PP-511
+    date: 2026-04-09
+    description: "Treaty betrayal cascade timing — Crown-break: Stability/Mandate at end of Phase 4; CB granted at Accounting Step 1; CB usable next season. Staggers effects within Cascade Depth Cap."
+    status: applied
+    affects: [params_board_game.md, victory_architecture_v1.md]
+    finding: D-14 (P2) from SIM-DIPL-01
+
+  - id: PP-512
+    date: 2026-04-09
+    description: "Solo/co-victory simultaneous declaration — declaring faction chooses path at Accounting Step 12 start; 2-Accounting requirement applies to declared path."
+    status: applied
+    affects: [params_board_game.md]
+    finding: D-15 (P2) from SIM-DIPL-01

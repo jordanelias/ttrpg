@@ -2,6 +2,58 @@
 
 ```yaml
 session_id: 2026-04-09_SONNET_DIPL_AUDIT_PATCH
+session_close: 2026-04-09
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Recovered + committed SIM-DIPL-01 (previous session commit failure)
+2. Full audit (Modes A-D) of negotiations/alliances/treaties system
+3. Identified best solutions for all 7 P1 + 13 P2 findings
+4. Designed PP-500 through PP-512 (13 patches)
+5. Stress tested all patches (pass criteria, NPC AI validation, edge cases)
+6. Ran 7 unique scenario stress tests (2 new findings, both absorbed)
+7. Pre-commit audit: 46/46 checks passed
+8. Committed
+
+## COMMITS THIS SESSION
+- [recovery commit] 0316abd — SIM-DIPL-01 negotiations sim
+- [this commit] — audit+patch diplomacy system PP-500-512; ED-370-373; 7 P1 resolved
+
+## KEY FINDINGS
+P1 findings resolved: 7 (all Crown Treaty structural issues + Coalition Pairs ghost factions)
+P2 findings resolved: 18
+New unique scenario findings: 2 (PP-503 simultaneous resolution, PP-504 Named Enemy)
+Editorials remaining open: 4 (ED-370 Hybrid bridge, ED-371 coalition dominant strategy, ED-372 Liaison timing, ED-373 Token Mandate-0)
+
+## PATCHES APPLIED THIS SESSION
+PP-500: Crown Treaty Ob = ceil(target Mandate/2) min 1
+PP-501: Crown Treaty consent — timing, NPC AI rule, refusal CB, 4-season period
+PP-502: Crown Treaty target-break clause
+PP-503: Open Pledge system (non-Crown binding diplomacy)
+PP-504: Coalition Pairs table replacement (Guilds/Niflhel removed; 4 canonical pairs)
+PP-505: Diplomatic Token military conflict definition + Mandate-0 suspension
+PP-506: Valid suppression action definition for coalition bonus
+PP-507: Casus Belli stacking cap + consumption rule
+PP-508: Thread Liaison Allied scope restriction
+PP-509: Diplomatic Token removal on Crown Treaty formation
+PP-510: Missed Coalition Penalty threshold (at or above)
+PP-511: Treaty betrayal cascade timing
+PP-512: Solo/co-victory simultaneous declaration priority
+
+## EDITORIALS RAISED THIS SESSION
+ED-370: Hybrid personal scene -> BG Treaty bridge rule (P2)
+ED-371: Coalition suppression dominant strategy confirmation (P2)
+ED-372: Thread Liaison dissolution timing prospective vs retroactive (P2)
+ED-373: Token on Mandate-0 faction suspension (P3, provisionally applied in PP-505)
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-09_SONNET_DIPL_AUDIT_PATCH
 session_close: null
 phase: IN PROGRESS
 status: OPEN

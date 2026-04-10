@@ -473,3 +473,19 @@ P1: 7 | P2: 13 | P3: 3 | Status: COMPLETE
 - ED-370: CB gate model confirmation needed
 - ED-371: Diplomatic Transfer card cost confirmation
 - ED-372: Voluntary withdrawal mechanic design decision
+
+## SIM-DIPL-02 — Diplomacy Audit + Patch Stress Test — 2026-04-09
+Modes: Audit A–D + Patch Validation + Unique Scenarios
+Source: tests/sim_diplomacy_audit_patch.md
+Patches: PP-500–PP-512 | Editorials: ED-370–ED-373
+P1 findings resolved: 7 | P2 findings resolved: 18 | P3 findings resolved: 3
+New findings from unique scenarios: 2 (both absorbed into PP-503/PP-504)
+Status: COMPLETE — 46/46 pre-commit checks passed
+
+### P1 Findings Resolved
+| Finding | PP |
+|---------|-----|
+| Crown Treaty Ob inaccessible + negative EV | PP-500 |
+| Consent mechanism undefined / path deadlocked | PP-501 |
+| Non-Crown diplomacy structureless | PP-503 |
+| Coalition Pairs references non-existent factions | PP-504 |

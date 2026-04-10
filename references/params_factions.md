@@ -1,4 +1,4 @@
-<!-- version: v0.15-PP428-442 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-07 -->
+<!-- version: v0.16-PP500-512 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-07 -->
 <!-- NOTE: stage6_factions.md is STALE for BG faction mechanics. Use BG column for board game/hybrid. -->
 <!-- PATCHES APPLIED: PP-167, PP-168; PP-195; PP-402; PP-403; PP-405; PP-428–442; PP-431-COR; PP-441-COR | EDITORIALS RESOLVED: ED-311 (Path B Option A), ED-318 (Total Domination), ED-319 (Parish/Cathedral), ED-320 (Diplomat card), ED-321 (RDT/TD) -->
 <!-- STALE CHECK: TTRPG column from v0.14 compiled. BG column from bg_v05 design. -->
@@ -465,16 +465,16 @@ Generated when a faction votes **No** on a parliamentary motion that is successf
 - Abstaining generates no Resentment and no Standing gain.
 
 
-## Canonical Coalition Pairs (PP-405 — ED-299 resolved)
+## Canonical Coalition Pairs (PP-504 — supersedes PP-405; ED-299 resolved)
 Used by PP-404 (Missed Coalition Ob Penalty). A coalition trigger requires both factions'
 relevant stats to meet or exceed the listed threshold simultaneously.
 
 | Coalition | Factions | Trigger condition | Effect on activation |
 |-----------|---------|-------------------|----------------------|
-| Trade-Mandate Pact | Church + Hafenmark | Both Influence ≥ 6 | Combined Standard Action once per season; +1D to each other's Diplomacy rolls |
-| Military Alliance | Varfell + Löwenritter | Both Military ≥ 5 | Shared unit deployment in adjacent territories; Casus Belli against shared enemy |
-| Economic Bloc | Guilds + Hafenmark | Both Wealth ≥ 6 | +1 Prosperity in shared trade territories per season |
-| Restoration Compact | Restoration + Niflhel | Restoration Influence ≥ 4 AND Niflhel Influence ≥ 4 | Thread Weaving in each other's territories at −1 Ob |
+| Diplomatic Alignment | Church + Hafenmark | Both Influence ≥ 5 | +1D to each other's Diplomacy rolls for the season; one shared Parliamentary motion declared without spending a card (once per season) |
+| Military Compact | Varfell + Löwenritter | Both Military ≥ 5 | Shared unit deployment: one faction's Legionary card may be played in the other's adjacent territory without adjacency restriction; on activation both factions jointly declare one Named Enemy — each gains 1 CB vs Named Enemy (PP-507 cap); Named Enemy may be changed by mutual Phase 1 agreement; Compact dissolves if either partner plays Legionary targeting the other |
+| Trade Compact | Crown + Hafenmark | Crown TCV ≥ 14 AND Hafenmark TCV ≥ 10 | Each faction's Trade/Govern in the other's territory: −1 Ob this season |
+| Thread Stewardship | Varfell + Restoration Movement | VTM ≥ 3 AND RM has ≥ 2 Presence markers | Restoration Community Weaving in Varfell territories: −1 Ob; Varfell Tribune actions in RM Presence territories: +1D |
 
 Fog-of-war exemption applies to all coalitions per PP-404.
 Coalition triggers are public knowledge (the threshold conditions are known); only the current stat values are subject to fog of war.
