@@ -581,3 +581,29 @@ The weakest emergent NPCs are those whose effects are described narratively rath
 8. **Specify Torsvald's abort mechanic precisely** (trigger, Ob, consequence).
 9. **Add Vaynard-Laskaris intelligence interaction.**
 10. **Decide on Torben** — political object or person?
+
+---
+
+## CORRECTION: Elske Assessment (revised 2026-04-09)
+
+The original audit scored Elske at 24/40 based on the roster and existing-NPC analyses, which describe her as a track and triggers with "zero characterization." This was wrong. Elske's characterization exists across multiple files:
+
+- **stage13_npcs.md**: Conviction (Family vs Self-Determination), Resonant Style (Evidence), recruitment mechanics.
+- **CP14 Arc 10** (arcs_09_11_elske_baralta.md): Full narrative, mechanical causal chain, three-exchange social scene, coup counter interaction.
+- **Arc 6** (valoria_narrative_scenario_chains.md): Independence paths (Political Break, Widowing, Parliamentary Annulment), succession states, Thread Sensitivity development possibility.
+- **Arc 20** (arcs_20_23_branching.md): Emergency lever role, Tutoring Demand interaction, stabilisation mechanics.
+
+**Revised scores:**
+
+| Criterion | Original | Revised | Reason |
+|-----------|----------|---------|--------|
+| Complexity | 3 | 5 | Four simultaneous internal tensions (resentment/duty, protect/exploit Torben, ambition/recoil, Laskaris admiration/distrust). Genuinely irreconcilable. |
+| Cliché | 3 | 4 | "Hostage princess" subverted by agency, dual conviction, and independence paths. Minor risk: romantic admiration for Laskaris. |
+| Emergence | 4 | 4 | Unchanged — mechanics are sound but mostly reactive. |
+| Arc Interest | 3 | 5 | Matrix of overlapping decisions, not a binary fork. Three independence paths, each with distinct costs. Succession states. |
+| Importance | 4 | 4 | Unchanged. |
+| Precedent | 1 | 4 | Byzantine porphyrogennete tradition now assigned. |
+| Cross-NPC | 3 | 4 | Laskaris, Torben, Almud, Ehrenwall, Baralta (annulment path), Niflhel (widowing path). |
+| Mode Coverage | 3 | 3 | Unchanged — still limited by geographic constraint. |
+
+**Revised total: 33/40 (Tier 2 — Strong).** The error was in the audit methodology: scoring from the roster/analyses files only, not from the full design corpus. The existing-NPC analysis has been updated to integrate the distributed characterization.

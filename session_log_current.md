@@ -367,3 +367,9 @@ Next session priority: ED-364 Almud rewrite, then Church Graduated Seizure simul
   Graduated Seizure Fort Level added to Ob (PP-509), pre-TC 75 gate explicit (PP-507),
   Assert/Suppress suspended post-TC 75 (PP-523).
 - Next: ED-373 (Altonian Vanguard stats) — P1 blocker for IP clock simulation.
+
+### 2026-04-09 — Elske Characterization Integration (Audit Correction)
+- User identified that Elske characterization work (conviction structure, independence paths, Torben tensions, Laskaris admiration/distrust) existed in stage13, Arc 10, Arc 6, Arc 20 but was not integrated into roster or analyses.
+- npc_character_analyses_existing.md §4 fully rewritten: four specific tensions enumerated (resentment/duty, protect/exploit Torben, ambition/recoil, Laskaris admiration/distrust), three independence paths, succession states, Evidence resonant style, Anna of Byzantium echo.
+- Audit corrected: Elske revised from 24/40 to 33/40 (Tier 2).
+- Root cause: audit scored from roster/analyses files only, missing characterization distributed across arc files.
