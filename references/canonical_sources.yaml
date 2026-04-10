@@ -48,7 +48,7 @@ systems:
 
   southernmost:
     canonical: compilation/v0.14/stage4_southernmost.md
-    canonical_sha__compilation__v0_14__stage4_southernmost_md: "f074fab684ac97da96223794283e4bfddfdd5d35"
+    canonical_sha__compilation__v0_14__stage4_southernmost_md: "c38d8cc1b4862052832807dcd72487e6c37b1607"
     params: null
     design_doc: null
     compilation_stage: compilation/v0.14/stage4_southernmost.md
@@ -57,6 +57,7 @@ systems:
 
   clocks:
     canonical: designs/systems/clock_registry.md
+    canonical_sha__designs__systems__clock_registry_md: "ba58611c68a2dd4ab465f3c85a4338a3079ccfd7"
     params: null
     design_doc: designs/systems/clock_registry.md
     compilation_stage: compilation/v0.14/stage5_clocks.md
@@ -65,7 +66,7 @@ systems:
 
   factions:
     canonical_ttrpg: compilation/v0.14/stage6_factions.md
-    canonical_sha__compilation__v0_14__stage6_factions_md: "da43bdac33ae1079941178c247858318d05ff8c6"
+    canonical_sha__compilation__v0_14__stage6_factions_md: "4eb711be538f8f2b6eab4e2fcffd8b85e5c01120"
     canonical_bg: designs/board_game/valoria_bg_v05_simulation_and_patches.md
     canonical_sha__designs__board_game__valoria_bg_v05_simulation_and_patches_md: "45f113c22c3e71194a3701111eedff4a521db19c"
     canonical_hybrid: designs/board_game/valoria_bg_v05_simulation_and_patches.md
@@ -77,7 +78,7 @@ systems:
 
   victory:
     canonical: designs/board_game/victory_architecture_v1.md
-    canonical_sha__designs__board_game__victory_architecture_v1_md: "f099f1946aea98e47d71fec671c2ec833a4acdcd"
+    canonical_sha__designs__board_game__victory_architecture_v1_md: "df40cb2f0b6e526d6242030e9245607e9ca333c6"
     params: null
     design_doc: designs/board_game/victory_architecture_v1.md
     compilation_stage: null
@@ -95,7 +96,7 @@ systems:
 
   mass_combat:
     canonical: designs/mass_combat/mass_battle_v3.md
-    canonical_sha__designs__mass_combat__mass_battle_v3_md: "f07ba044924f9776c40d5dd19b6f68d7666180d6"
+    canonical_sha__designs__mass_combat__mass_battle_v3_md: "bf238058117185cea0544eacb47f9c08e9d04413"
     params: references/params_mass_combat.md
     design_doc: designs/mass_combat/mass_battle_v3.md
     compilation_stage: null
@@ -104,6 +105,7 @@ systems:
 
   social_debate:
     canonical: designs/contest/social_contest_system_v2.md
+    canonical_sha__designs__contest__social_contest_system_v2_md: "c8233f531bccc582b146e809da2ba59e86835812"
     params: references/params_contest.md
     design_doc: designs/contest/social_contest_system_v2.md
     compilation_stage: compilation/v0.14/stage9_social.md
@@ -121,7 +123,7 @@ systems:
 
   scale_transitions:
     canonical: compilation/v0.14/stage11_scale_transitions.md
-    canonical_sha__compilation__v0_14__stage11_scale_transitions_md: "7b9d635afa3da4e43d0dbdfd42a1b28043125208"
+    canonical_sha__compilation__v0_14__stage11_scale_transitions_md: "277e7ffb787cf6af153462b4cee3bcea09ae4ec6"
     params: null
     design_doc: null
     compilation_stage: compilation/v0.14/stage11_scale_transitions.md
@@ -130,7 +132,7 @@ systems:
 
   campaign_modes:
     canonical: compilation/v0.14/stage12_campaign_modes.md
-    canonical_sha__compilation__v0_14__stage12_campaign_modes_md: "18fd4d7af91818d8581b35742fa1016977fa22f5"
+    canonical_sha__compilation__v0_14__stage12_campaign_modes_md: "029603bb27b7f5835277f42115e5ff3c19985d66"
     params: null
     design_doc: null
     compilation_stage: compilation/v0.14/stage12_campaign_modes.md
