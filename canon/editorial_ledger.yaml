@@ -2734,3 +2734,10 @@ editorial_decisions:
       mechanic to represent secular governance eroding Church's cultural investment.
     priority: P2
     blocks: Church long-game balance
+  - id: ED-358
+    status: flagged
+    date_raised: 2026-04-09
+    description: "§A.8 splitting claim contradicted by simulation. Design doc states: 'Attacker splitting Size=6 into 3+3 against undivided Size=5 defender is disadvantageous.' Simulation (SIM-MB-02 Scenario 8, 30k trials): split wins 95.5% vs concentrated 75.2%. With full Command per sub-unit (PP-504), splitting is always advantageous regardless of defender response strategy. §A.8 note must be struck or replaced with correct analysis of when splitting is and is not optimal (terrain, defender forced-split scenarios, etc.)."
+    priority: P1
+    tags: [mass_combat, sub_units, splitting, design_error]
+    blocks: tactical_guidance_compilation

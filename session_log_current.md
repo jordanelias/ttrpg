@@ -470,3 +470,10 @@ Final Patch:
   clarified (PP-533), three-faction territory state ruled (PP-536).
 - REMAINING P1 BLOCKERS: ED-373 (Vanguard stats), ED-377 (CV starting values).
 - Next: designer input on ED-373 and ED-377 required before further clock/Church simulation.
+
+### 2026-04-09 — Stress Test SIM-MB-02 + Patch Audit
+- Provisional decisions: ED-351→PP-251 (2-condition trigger), ED-352→Power stat for Volley, ED-353→full Command per sub-unit.
+- 9 scenarios run. 1 new P1 finding: ED-358 (§A.8 claim wrong — splitting always superior with full Command per sub-unit).
+- PP-500 through PP-504 applied and committed.
+- ED-351/352/353/356 resolved by patches. ED-358 raised.
+- Test output: tests/sim_mass_battle_SIM-MB-02.md

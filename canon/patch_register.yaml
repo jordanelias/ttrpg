@@ -5215,3 +5215,75 @@ patches:
   affects: ['references/params_board_game.md']
   status: applied
 
+
+- id: PP-500
+  date: 2026-04-09
+  severity: P2
+  description: >
+    Shield Wall +2D Def applies to all simultaneous defensive pools in all engagements,
+    including unmitigated flanks. Blanket formation modifier. PP-MB-07 "applies normally"
+    referred to attacker offensive resolution, not defender pool. Simulation confirmed:
+    Option B (front-only) produces 21% more damage to defender — meaningful mechanical
+    difference. Option A (all engagements) is consistent and correct. [PROVISIONAL — ED-356 resolved]
+  finding_id: SIM-MB-02 Scenario 7
+  source: mass_battle stress test 2026-04-09
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  status: applied
+
+- id: PP-501
+  date: 2026-04-09
+  severity: P2
+  description: >
+    Coherence depletion warning correction. Design doc §A.10 stated "Severed after 9 total
+    operations" and called full-battle Threadweaving a "practitioner self-destruction event."
+    Simulation shows: 7-turn battle = Coherence 10→3 (Dissonant, not Severed). Severance
+    requires ≥9 consecutive operations from full Coherence (battles ≥9 turns). Standard
+    7-turn battle produces Dissonance (+2 Ob next battle), not Severance. [PROVISIONAL — D-15-F1 resolved]
+  finding_id: SIM-MB-01 D-15-F1, SIM-MB-02 Scenario 5
+  source: mass_battle stress test 2026-04-09
+  affects: [designs/mass_combat/mass_battle_v3.md]
+  status: applied
+
+- id: PP-502
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Discipline degradation trigger: propagate PP-251 to design doc. Design doc §A.4 had
+    single-condition trigger (Size lost > Discipline). PP-251 in params added required
+    second condition (unit loss > opposing loss by ≥1). PP-252 governs; design doc now
+    matches. Fires at Phase 6 Step 2 (not Phase 5 as erroneously stated in old text —
+    Phase 5 is Engagement, Phase 6 Step 2 is Discipline checks per phase structure).
+    [PROVISIONAL — ED-351 resolved]
+  finding_id: SIM-MB-01 A-3-F1
+  source: mass_battle stress test 2026-04-09
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  status: applied
+
+- id: PP-503
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Volley Phase pool definition. "Effective Power" in §A.7 was undefined. Resolved as
+    Power stat (1–7 unit quality tier), NOT the engagement pool formula (PP-233).
+    Rationale: ranged output governed by unit quality, not generalship. Preserves
+    meaningful melee/ranged distinction — Command dominates melee; Power dominates ranged.
+    Simulation confirmed: Power=3 Archer vs Light Infantry E[Size loss]=0.70/turn;
+    vs Heavy Infantry=0.05/turn. Design intent validated. [PROVISIONAL — ED-352 resolved]
+  finding_id: SIM-MB-01 A-5-F1, SIM-MB-02 Scenario 4
+  source: mass_battle stress test 2026-04-09
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  status: applied
+
+- id: PP-504
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Command per sub-unit: explicit rule text added. Command applies in full to each
+    commanded sub-unit's pool independently — not divided across sub-units. Sub-unit limit
+    (= Command value, TTRPG cap 3) governs count, not distribution. §A.8 note claiming
+    splitting is disadvantageous is incorrect per simulation (split wins 95.5% vs
+    concentrated 75.2%) and flagged for revision under ED-358. [PROVISIONAL — ED-353 resolved]
+  finding_id: SIM-MB-01 D-13-F1, SIM-MB-02 Scenario 8
+  source: mass_battle stress test 2026-04-09
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  status: applied

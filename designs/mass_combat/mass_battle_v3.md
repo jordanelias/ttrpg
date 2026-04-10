@@ -106,10 +106,11 @@ for units it fields. A Military=3 faction cannot field Power=5 units.
 **Discipline** (1–7) — organisational integrity. Starting value = min(general's
 Command, Military ceiling above).
 
-**Discipline check — DETERMINISTIC:** *[P1-04]*
-When total Size lost this turn (all sources, applied at Phase 5) exceeds
-Discipline rating: Discipline degrades by 1. All checks fire at Phase 5 regardless
-of damage source (Volley, melee, environmental). *[P2-06]*
+**Discipline check — DETERMINISTIC (PP-502, propagating PP-251):** *[P1-04]*
+Discipline degrades by 1 when BOTH conditions are met (checked at Phase 6 Step 2):
+(1) Total Size lost this turn > current Discipline rating
+(2) This unit's Size loss exceeds the opposing unit's Size loss by ≥ 1
+Symmetric losses do NOT trigger degradation. All checks fire at Phase 6 Step 2. *[P2-06, PP-251, PP-502]* [PROVISIONAL]
 
 | Discipline | Effective Power penalty |
 |---|---|
@@ -193,6 +194,8 @@ Command governs:
 **Non-Player Character generals:** Command assigned directly (1–7) as a narrative stat without
 Cha+Cog derivation. *[Command-P2-02]*
 
+**Command applies in full to each sub-unit (PP-504):** The general's full Command value applies to each commanded sub-unit's pool independently. Command is not divided across sub-units. Sub-unit limit (max = Command, TTRPG cap: 3) governs count, not distribution. Note: §A.8 splitting guidance is under revision — see ED-358. [PROVISIONAL]
+
 **General two-stage death:** *[P1-02]*
 - Stage 1 (incapacitated): −1 Morale all units, Command halved, Morale floor
   suspended. Stabilise in Phase 5 with Medicine Ob 2 (1-turn window).
@@ -242,6 +245,8 @@ battle turn after personal combat resolves. *[D3-P2-02]*
 **Formation counter logic:** Wedge beats Line. Shield Wall negates Wedge but
 cannot advance. No formation is universally dominant. *[P2-01]*
 
+**Shield Wall +2D Def — simultaneous engagements (PP-500):** The +2D Def bonus applies to all defensive pools in all simultaneous engagements, including unmitigated flanks. Blanket formation modifier. [PROVISIONAL]
+
 **Units beyond Command limit** fight at Line formation, Discipline = 1 floor,
 no tactics available. *[P3-03]*
 
@@ -267,8 +272,7 @@ support) and target. Diagnosis occurs here (public declaration = rendering
 the configuration). *[P1-01]*
 
 **Phase 2 — Volley**
-Projectile units fire. Roll Effective Power vs TN 6. Net successes − DR
-(Projectile column) = Size loss to record.
+Projectile units fire. Roll [Power stat] dice vs TN 6. Power stat = unit quality tier (1–7). Distinct from engagement pool formula (PP-233) — ranged output is governed by unit quality, not generalship. Net successes − DR (Projectile column) = Size loss to record. (PP-503) [PROVISIONAL]
 Prepared Defence: declare in Phase 1; half Effective Power as passive DR
 against Volley attacks this turn (rounded down, min 0).
 
@@ -407,10 +411,7 @@ splitting Size=6 into 3+3 against undivided Size=5 defender is disadvantageous
 All Coherence loss is automatic (no check, no Ob) per §5.2.2. The Coherence
 cap (−1 per operation, §5.2.3) applies. No additional surcharge. *[THREAD-P1-02, THREAD-P2-01]*
 
-**Coherence depletion warning:** A practitioner operating every turn of a
-7-turn battle loses 7 Coherence. From full (10): Severed after 9 total
-operations. Full-battle Threadweaving is a practitioner self-destruction event.
-*[THREAD-P2-02 — document explicitly]*
+**Coherence depletion warning (PP-501):** A practitioner operating every turn of a 7-turn battle loses 7 Coherence. From full (10): Coherence=3 after 7 turns — Dissonant, not Severed. Severance (Coherence=1) requires ≥9 consecutive operations from full. Battles ≥9 turns with constant operation produce Severance. *[THREAD-P2-02 — corrected PP-501]* [PROVISIONAL]
 
 **Diagnosis timing:** Phase 1 (public declaration = rendering the target
 configuration). Leap phase: Phase 4 (rear practitioner) or Phase 5 (front-line

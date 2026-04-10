@@ -139,8 +139,8 @@ Command = 1: cannot restore Discipline to any unit — all degradation permanent
 ## Battle Phases (TTRPG) — SUPERSEDED
 See §BATTLE TURN PHASE STRUCTURE above (7 phases, ED-050 Option D). The prior 5-phase structure is obsolete.
 
-## Discipline Degradation (Deterministic) [PROPOSAL] (PP-232)
-Fires at Phase 5 when total Size lost this turn > Discipline → Discipline −1.
+## Discipline Degradation (Deterministic) [PROPOSAL] (PP-232, PP-251, PP-502)
+Fires at Phase 6 Step 2 when BOTH: (1) total Size lost this turn > Discipline AND (2) this unit's loss > opposing unit's loss by ≥1. Symmetric losses do not trigger. [PROVISIONAL]
 | Discipline | Power penalty |
 |----------|-----------|
 | 5–7 | None |
@@ -228,6 +228,10 @@ block sight-lines with front-line formations; flank to reach Artillery directly.
 | War | ~5,000 soldiers | 70+ |
 
 
+
+## Volley Phase Pool (PP-503) [PROVISIONAL]
+Volley Phase pool = Power stat (1–7) rolled at TN 6. NOT the engagement pool formula (PP-233). Ranged output is unit-quality-based, not Command-based.
+
 ## Mass Battle RS Multiplier (PP-192, PP-225) [PROVISIONAL]
 All RS costs AND gains from Thread operations in mass battle ×3 (PP-225). Applied after degree table resolution. Coherence costs NOT multiplied. RS ceiling (100) and seasonal cap (±10) still apply.
 | Op | Normal RS (Success) | Mass Battle RS (×3) |
@@ -266,6 +270,9 @@ While a practitioner-general is in Thread contact (Phase 4), their Command bonus
 4. Defensive formation if Size < 50%
 
 Extends PP-111 (Command suspension during personal combat). Thematic: suspended rendering = cannot command.
+
+## Command Per Sub-Unit (PP-504) [PROVISIONAL]
+Full Command applies to each commanded sub-unit's pool independently. Not divided. Sub-unit limit = Command value (TTRPG cap: 3). §A.8 splitting guidance under revision (ED-358).
 
 ## Key Design Axiom
 Generalship dominates. Command asymmetry is intentional. Command=7 vs Command=1 general: near-certain outcome before dice rolled.
@@ -498,3 +505,6 @@ Discipline check fires when BOTH conditions met:
   (2) Unit's loss exceeds opposing unit's loss in same Engagement Phase by ≥ 1
 Symmetric engagements (equal losses both sides) do NOT trigger Discipline check.
 Rationale: PP-231 intent — mutual-cost exchanges should not produce cascade.
+
+## Shield Wall +2D Def Scope (PP-500) [PROVISIONAL]
+Shield Wall +2D Def applies to all simultaneous defensive pools regardless of engagement direction. Blanket formation modifier — not per-engagement. Unmitigated flanks still benefit from the +2D Def bonus. Eliminates 21% damage differential vs Option B interpretation.

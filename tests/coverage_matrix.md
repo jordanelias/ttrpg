@@ -525,3 +525,12 @@ Editorials raised: ED-377 through ED-382
 - ED-379: Diplomatic Transfer card cost
 - ED-380: Voluntary strategic withdrawal
 - ED-381: CV ratchet (intentional design confirmation)
+
+## SIM-MB-02 — Mass Battle Scenario + Patch Audit — 2026-04-09
+Modes: C (scenario) + Mode A re-run with provisional decisions
+Source: tests/sim_mass_battle_SIM-MB-02.md
+P1 findings: 1 (ED-358 — §A.8 claim contradicted by simulation)
+P2 findings: 3 (Coherence warning, PP-273 applicability, Shield Wall differential)
+PP applied: PP-500 through PP-504
+ED resolved: ED-351 (PP-502), ED-352 (PP-503), ED-353 (PP-504), ED-356 (PP-500), D-15-F1 (PP-501)
+Status: COMPLETE
