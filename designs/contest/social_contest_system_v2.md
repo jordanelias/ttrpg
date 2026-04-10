@@ -177,7 +177,7 @@ One orator invokes what has been (Memory); the other projects what could become 
 - Conviction Track moves +1 toward initiative holder's position.
 - Initiative stays with holder.
 
-**OBSCURING WIN** (winning any exchange with Obscuring orientation):
+**OBSCURING WIN** (winning any exchange with Obscuring orientation in CLASH or REINFORCE; see CROSS clause for CROSS-specific Doubt Marker rule):
 - Conviction Track does not move toward winner.
 - Place a Doubt Marker on the opponent.
 - Doubt Marker effect: opponent's next winning exchange has its margin reduced by 2 before resistance is applied (minimum 0).
@@ -265,7 +265,7 @@ One orator invokes what has been (Memory); the other projects what could become 
 | Composure | Charisma + 6 | 7–13 | Health = Endurance + 6 |
 | Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) | 0–2 | — |
 | Focus defence | floor(Foc ÷ 2) | 0–3 | Armour Rating (damage reduction) |
-| Concentration | Focus + Recall | 2–14 | Stamina = Endurance + History + 1 |
+| Concentration | Focus + Recall | 2–14 | Maximum = Focus + Recall (restoration cannot exceed this) | Stamina = Endurance + History + 1 |
 | Appraise pool | Attunement only | 1–7 | — |
 | Argue pool | (Primary Attribute × 2) + History bonus | Variable | Combat Pool = (Agility × 2) + History + 3 |
 
@@ -335,7 +335,7 @@ Total Victory: Conviction Track ≥ 9 or ≤ 1 → losing coalition's dominant f
 
 ## §11 HYBRID CONTEST
 
-1. **BG layer:** run one round of BG Parliamentary Vote (§10). Apply Conviction Track offset, capped at ±2 from neutral.
+1. **BG layer:** run one round of BG Parliamentary Vote (§10). Apply Conviction Track offset, capped at ±2 from neutral. Per PP-256, BG lobbying offset is restricted to the compromise zone (4–6 at Hybrid session start); the BG layer cannot produce a final resolution — the TTRPG layer always runs.
 2. **Set TTRPG starting Conviction Track:** 5 ± capped BG offset, clamped to compromise zone (4–6).
 3. **TTRPG personal contest:** run standard Formal (3 exchanges) or Grand (5 exchanges) per §§4–7 from adjusted starting position.
 4. **Resolution:** final TTRPG Conviction Track position determines outcome. Thread consequences may fire.

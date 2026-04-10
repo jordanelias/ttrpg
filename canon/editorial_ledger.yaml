@@ -2600,3 +2600,45 @@ editorial_decisions:
     priority: P2
     tags: [casus_belli, CB, stacking, balance]
 
+
+  - id: ED-377
+    status: flagged
+    date_raised: 2026-04-09
+    description: "High-resistance Compromise bias: at resistance=2 with equal pools, 37% of 3-exchange Formal Debates stall with no CT movement (modal outcome = Compromise). Confirm this is intended design for high-Stability audiences, or add resistance cap/floor guidance."
+    priority: P2
+    tags: [social_contest, resistance, compromise, calibration]
+
+  - id: ED-378
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Low-Attunement Appraise systematic mislead: Att=1 orators receive wrong boost signal 60% of exchanges; Att=2: 36%. No alternative path (pre-contest Research, skip option) defined. Confirm no floor is intended or add one."
+    priority: P2
+    tags: [social_contest, appraise, attunement, floor]
+
+  - id: ED-379
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Doubt Marker per-target vs global ambiguity: 'only one active at a time; new replaces old' — does this mean one globally or one per target? Clarify to: each orator may have at most one Doubt Marker placed on them; new replaces old on same target."
+    priority: P2
+    tags: [social_contest, doubt_marker, clarification]
+
+  - id: ED-380
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Appraise-to-Argue pool ratio: social specialist with Att=3, History 3pts has Argue=12D but Appraise=3D (ratio 4:1). Likely intentional (Appraise = limited scout action), but no design note confirms. Confirm gap is acceptable."
+    priority: P2
+    tags: [social_contest, appraise, argue, pool_ratio, design_intent]
+
+  - id: ED-381
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Heresy Investigation trigger in §9.3: 'Church may file Heresy Investigation on observation' of practitioner weaving. No Ob, procedure, timing, or cross-reference to Heresy Investigation mechanic defined in this section. Either add cross-ref or define procedure here."
+    priority: P2
+    tags: [social_contest, heresy_investigation, practitioner, procedure]
+
+  - id: ED-382
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Belief Momentum cap (max 1/contest from §9.5) unique across systems — no other mechanic imposes per-action Momentum earn cap. Confirm intentional asymmetry vs combat/threadwork Momentum earn."
+    priority: P2
+    tags: [social_contest, momentum, beliefs, cross_system_consistency]

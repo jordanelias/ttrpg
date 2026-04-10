@@ -88,7 +88,7 @@ Step 7 — GM records.
 | CLASH | Same genre, opposite orientation | Compare; margin vs resistance → track movement | Margin + Cha modifier − Foc defence (min 0) |
 | REINFORCE | Same genre, same orientation | Same as CLASH | max(0, (Margin − 1) + Cha modifier − Foc defence) | (PP-401, ED-296 fix: floor at 0) |
 | CROSS | Different genres | Each side: floor(successes ÷ 2) vs resistance; net movement = difference | None |
-| TIE | Equal successes, any type | Both take 1 strain; track +1 toward initiative holder | 1 each |
+| TIE | Equal successes, any type | Both take 1 strain (except CROSS: no strain — PP-236); track +1 toward initiative holder | 1 each (except CROSS: 0 — PP-236) |
 
 Obscuring win: no track movement; place Doubt Marker on opponent (−2 to opponent's next winning margin; one active at a time; consumed on use).
 
@@ -240,3 +240,13 @@ margin is small. Fix: apply max(0, ...) floor to REINFORCE movement.
 AMPLIFY produces ~5 movement/exchange vs CLASH ~0 at median. Coalitions are
 mechanically superior to solo advocacy. May be intended design (rewarding alliances).
 **User decision required: confirm or rebalance.**
+
+## PP-NEW-A — TIE/CROSS no-strain exception (SIM-DB-STRESS-01 D-04)
+TIE row in Interaction Types table updated to include CROSS exception.
+In CROSS + TIE: no strain to either orator (PP-236 takes precedence). CT +1 toward initiative holder as normal.
+Source: SIM-DB-STRESS-01 D-04 finding. 2026-04-09.
+
+## PP-NEW-D — Concentration maximum (SIM-DB-STRESS-01 D-08b)
+Concentration maximum = Focus + Recall (= starting value at contest setup).
+Restoration (from Regroup or other effects) cannot raise Concentration above this maximum.
+Source: SIM-DB-STRESS-01 D-08b finding. 2026-04-09.

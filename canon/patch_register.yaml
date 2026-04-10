@@ -4891,3 +4891,58 @@ patches:
   affects: [references/params_board_game.md]
   status: applied
 
+
+- id: PP-525
+  date: 2026-04-09
+  severity: P1
+  description: >
+    TIE/CROSS no-strain exception (SIM-DB-STRESS-01 D-04). params_contest.md Interaction
+    Types table TIE row did not include the CROSS exception from PP-236. A GM using only
+    params would apply 1 strain to both orators on a TIE in CROSS, contradicting the design
+    doc. Fix: TIE row updated to state "except CROSS: 0 strain (PP-236)."
+  finding_id: [D-04, SIM-DB-STRESS-01]
+  source: SIM-DB-STRESS-01 stress test 2026-04-09
+  affects: [references/params_contest.md]
+  status: applied
+
+- id: PP-526
+  date: 2026-04-09
+  severity: P1
+  description: >
+    OBSCURING WIN scope clarification (SIM-DB-STRESS-01 D-05). OBSCURING WIN rule text says
+    "winning any exchange with Obscuring orientation" — ambiguous in CROSS exchanges where
+    there is no winner. §4 CROSS already contains a separate Doubt Marker clause for Obscuring
+    in CROSS. Fix: OBSCURING WIN heading scoped to CLASH/REINFORCE only; CROSS clause noted
+    as governing in CROSS.
+  finding_id: [D-05, SIM-DB-STRESS-01]
+  source: SIM-DB-STRESS-01 stress test 2026-04-09
+  affects: [designs/contest/social_contest_system_v2.md]
+  status: applied
+
+- id: PP-527
+  date: 2026-04-09
+  severity: P1
+  description: >
+    §11 Hybrid + PP-256 cross-reference (SIM-DB-STRESS-01 L-05). §11 base text describes
+    BG Parliamentary Vote running first, then TTRPG contest, without noting PP-256's clamp.
+    A GM reading §11 without PP-256 would not know the BG layer cannot produce a final
+    resolution. Fix: §11 Step 1 now cites PP-256 explicitly and states BG layer cannot
+    resolve — TTRPG layer always runs.
+  finding_id: [L-05, SIM-DB-STRESS-01]
+  source: SIM-DB-STRESS-01 stress test 2026-04-09
+  affects: [designs/contest/social_contest_system_v2.md]
+  status: applied
+
+- id: PP-528
+  date: 2026-04-09
+  severity: P2
+  description: >
+    Concentration maximum undefined (SIM-DB-STRESS-01 D-08b). §4 and §8 state Concentration
+    formula (Focus + Recall) but do not state this is also the restoration ceiling. Regroup
+    and Spent reset could theoretically raise Concentration above starting maximum without this
+    cap. Fix: §8 Derived Values table adds explicit note that Concentration maximum =
+    Focus + Recall; restoration cannot exceed this.
+  finding_id: [D-08b, SIM-DB-STRESS-01]
+  source: SIM-DB-STRESS-01 stress test 2026-04-09
+  affects: [designs/contest/social_contest_system_v2.md, references/params_contest.md]
+  status: applied

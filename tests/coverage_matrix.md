@@ -489,3 +489,17 @@ Status: COMPLETE — 46/46 pre-commit checks passed
 | Consent mechanism undefined / path deadlocked | PP-501 |
 | Non-Crown diplomacy structureless | PP-503 |
 | Coalition Pairs references non-existent factions | PP-504 |
+
+## SIM-DB-STRESS-01 — Social Contest System v2 Full Stress Test — 2026-04-09
+Modes: A + D + J + L
+Source: tests/sim_debate_stress_01.md
+P1 new: 3 (D-04, D-05, L-05) | P2 new: 9 | P3: 3 | CLEAN: 4
+Patches applied: PP-525, PP-526, PP-527, PP-528
+Editorials raised: ED-377 through ED-382
+
+### P1 Findings
+| ID | Finding | Action |
+|----|---------|--------|
+| D-04 | TIE/CROSS no-strain exception missing from params Interaction Types table | PP-525 applied |
+| D-05 | OBSCURING WIN "any exchange" conflicts with CROSS no-winner structure | PP-526 applied |
+| L-05 | §11 Hybrid text does not cite PP-256; BG layer resolution path appears open | PP-527 applied |
