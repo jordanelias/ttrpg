@@ -550,3 +550,12 @@ Status: COMPLETE — 36/36 pre-commit checks passed
 | S10 Parliamentary motion | P1 | Diplomatic Alignment effect inoperable | PP-526 |
 | S13 Closed Pledge witnesses | P2 | Revelation witnesses ambiguous | PP-527 |
 | S15 Treaty lapse timing | P2 | Lapse timing within Accounting undefined | PP-528 |
+
+## SIM-MB-03 — Mass Battle Blocker Resolution (ED-354/355/357/358) — 2026-04-09
+Modes: A (stress per blocker) + post-patch validation
+Source: tests/sim_mass_battle_SIM-MB-03.md
+P1 findings: 0 (all blockers resolved)
+PP applied: PP-505 through PP-508
+ED resolved: ED-354, ED-355, ED-357, ED-358
+Open mass battle P1 blockers: 0
+Status: COMPLETE

@@ -2268,7 +2268,9 @@ editorial_decisions:
     tags: [board_game, territory]
 
   - id: ED-355
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-506 — both armies uncommanded (PP-273 1D min) during bilateral general duel"
     date_raised: 2026-04-08
     description: "Fort Level interaction with Church Graduated Seizure. Options: (a) Fort adds to Ob; (b) Fort handled by Battle preceding Seizure; (c) No Fort modifier. Recommend (b)."
     tags: [board_game, church, seizure]
@@ -2280,13 +2282,17 @@ editorial_decisions:
     tags: [board_game, crown, balance]
 
   - id: ED-357
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-507 — PP-240 Ob 1 replaces §A.13 battle-lost check for mutual destruction draw"
     date_raised: 2026-04-08
     description: "Maret Uln struck as NPC. Remove from active NPC roster. Archive existing Maret mechanical references."
     tags: [npc, worldbuilding]
 
   - id: ED-358
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-508 — §A.8 splitting note struck; splitting is structurally dominant; hard counter is Narrow Pass terrain"
     date_raised: 2026-04-08
     description: >
       New NPC development roster (12 characters). All require full design: character identity, 
@@ -2539,7 +2545,9 @@ editorial_decisions:
     blocks: sub_unit_strategy_simulation
 
   - id: ED-354
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-505 — simultaneous-damage governs; unit fights in Phase 5"
     date_raised: 2026-04-09
     description: "Thread destruction in Phase 4 vs Phase 5 participation. Design doc says a unit reduced to 0 by Phase 4 Thread effects does not participate in Phase 5 Engagement. But simultaneous-damage rule means damage is not applied until Phase 6 Step 1 — unit's current Size is non-zero during Phase 5. Exclusion from Phase 5 contradicts simultaneous-damage principle. Which governs?"
     priority: P2

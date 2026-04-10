@@ -519,3 +519,11 @@ Final Patch:
 - PP-500 through PP-504 applied and committed.
 - ED-351/352/353/356 resolved by patches. ED-358 raised.
 - Test output: tests/sim_mass_battle_SIM-MB-02.md
+
+### 2026-04-09 — Blocker Resolution SIM-MB-03 (ED-354/355/357/358)
+- Provisional decisions on all 4 remaining mass battle P1 blockers.
+- Stress tests passed. Post-patch validation passed.
+- PP-505 through PP-508 applied.
+- ED-354/355/357/358 resolved.
+- Open mass battle P1 blockers: 0.
+- Test output: tests/sim_mass_battle_SIM-MB-03.md

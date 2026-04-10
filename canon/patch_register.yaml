@@ -4946,3 +4946,63 @@ patches:
     status: applied
     affects: [victory_architecture_v1.md]
     finding: SIM-DIPL-02 Scenario 15 (P2)
+
+- id: PP-505
+  date: 2026-04-09
+  severity: P2
+  description: >
+    ED-354 resolved. Thread-destroyed unit Phase 5 participation: simultaneous-damage
+    rule governs. A unit reduced to 0 by Phase 4 Thread effects retains Phase 3-end Size
+    during Phase 5 — damage not applied until Phase 6 Step 1. Unit participates in Phase 5
+    Engagement normally. Old design doc exception ("does not participate in Phase 5")
+    struck — it contradicted the load-bearing simultaneous-damage mechanic.
+    Simulation: E[return fire] = ~1.15 Size loss at pool=6D. [PROVISIONAL]
+  finding_id: SIM-MB-01 D-1-F1
+  source: mass_battle stress test 2026-04-09
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  status: applied
+
+- id: PP-506
+  date: 2026-04-09
+  severity: P2
+  description: >
+    ED-355 resolved. Bilateral general personal combat: mass battle does not freeze.
+    Both armies fight uncommanded — PP-273 1D minimum, Line, no tactics — until each
+    general re-establishes Command (Ob 2 check Phase 1 following turn). Sequencing:
+    simultaneous initiative per standard personal combat. Simulation: 3-turn duel
+    leaves ~80% of Size=5 armies intact. Low-Command generals disadvantaged on
+    re-establishment (Cmd=2: 20% success vs Cmd=5: 55%). [PROVISIONAL]
+  finding_id: SIM-MB-01 D-7-F1
+  source: mass_battle stress test 2026-04-09
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  status: applied
+
+- id: PP-507
+  date: 2026-04-09
+  severity: P2
+  description: >
+    ED-357 resolved. Mutual destruction (PP-240) Stability check Ob 1 REPLACES §A.13
+    battle-lost Ob 1 check. A draw has no loser — battle-lost consequence does not fire.
+    Each faction takes exactly one Ob 1 Stability check at Accounting.
+    Simulation: Stability=3 faction passes ~66%, Stability=4 ~73%. [PROVISIONAL]
+  finding_id: SIM-MB-01 D-12-F1
+  source: mass_battle stress test 2026-04-09
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  status: applied
+
+- id: PP-508
+  date: 2026-04-09
+  severity: P1
+  description: >
+    ED-358 resolved. §A.8 splitting note struck and replaced with correct doctrine.
+    Splitting is structurally advantageous in nearly all Command pairings (+9% to +45%
+    win-rate advantage). §A.8 claim ("splitting 3+3 against undivided 5 is disadvantageous")
+    was wrong — it assumed defender could maintain full pool vs each sub-unit simultaneously,
+    which is impossible under current rules (defender pool splits). Hard counters to splitting:
+    (1) Narrow Pass terrain (1 engagement per side — primary counter), (2) Feigned Retreat
+    to disengage and re-concentrate. Matching the split is not an effective counter.
+    Simulation: split dominates in all tested configurations except near-ceiling matchups. [PROVISIONAL]
+  finding_id: SIM-MB-02 Scenario 8, SIM-MB-03 D2
+  source: mass_battle stress test 2026-04-09
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  status: applied

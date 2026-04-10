@@ -206,6 +206,13 @@ Cha+Cog derivation. *[Command-P2-02]*
 **General in personal combat:** suspends all Command effects. Re-establish command
 with Command check Ob 2 in Phase 1 of any subsequent turn. *[P2-10]*
 
+**Bilateral general personal combat (PP-506):** If both generals enter personal combat
+simultaneously in Phase 5, mass battle does not freeze. Both armies fight uncommanded:
+PP-273 floor (1D minimum per unit), Line formation, no tactics available. Mass battle
+continues turn-by-turn until each general resolves their personal combat and re-establishes
+Command (Ob 2 check Phase 1, following turn). Sequencing within the bilateral personal
+combat: simultaneous initiative per standard personal combat rules. [PROVISIONAL — ED-355 resolved]
+
 **Wounds carry over:** Wounds from personal combat add +1 Ob to Command tactic
 execution rolls. A 2-wound general has tactic success probability halved.
 *[D3-P2-01 — confirmed intended]*
@@ -300,11 +307,13 @@ Resolution:
 3. Effects recorded but NOT applied until Phase 6 Step 1 (simultaneous
    with Volley and Engagement damage)
 
-A unit whose Size is reduced to 0 by Phase 4 Thread effects is removed
-at Phase 6 Step 1 and does not participate in Phase 5 Engagement.
-Configuration changes between Phase 1 declaration and Phase 4 resolution:
-practitioner may revise target at no cost if the declared configuration has
-changed significantly (unit destroyed, routed, or repositioned). *[THREAD-P2-03]*
+A unit whose Size is reduced to 0 by Phase 4 Thread effects is NOT removed before Phase 5.
+Simultaneous-damage rule governs: damage is recorded in Phase 4 but applied at Phase 6 Step 1.
+The unit's current Size during Phase 5 is its Phase 3-end Size (pre-Thread damage) and it
+participates in Phase 5 Engagement normally. It is removed at Phase 6 Step 1 when all damage
+applies simultaneously. (PP-505) [PROVISIONAL — ED-354 resolved]
+Configuration changes: practitioner may revise target at no cost if the declared configuration
+has changed significantly (unit destroyed, routed, or repositioned). *[THREAD-P2-03]*
 
 Practitioner rarity note: Phase 4 fires only when a practitioner is present.
 In most battles it is skipped entirely. Board game: no Phase 4 (faction Thread
@@ -336,7 +345,7 @@ Per engagement:
 5. Damage = max(0, net hits + weapon modifier − DR)
 6. Critical hit (net hits ≥ 3): weapon modifier doubled
 7. Engagement damage recorded. NOT applied until Phase 6 Step 1.
-8. Mutual destruction (both to 0) is valid — Pyrrhic outcomes possible *[P2-02]*. **Mutual total destruction — all units both sides to 0 simultaneously (PP-240):** draw; no territory change; both factions Stability check Ob 1 at Accounting.. **Mutual total destruction — all units both sides to 0 simultaneously (PP-240):** draw; no territory change; both factions Stability check Ob 1 at Accounting.
+8. Mutual destruction (both to 0) is valid — Pyrrhic outcomes possible *[P2-02]*. **Mutual total destruction — all units both sides to 0 simultaneously (PP-240, PP-507):** draw; no territory change; both factions Stability check Ob 1 at Accounting. This Ob 1 check REPLACES the §A.13 battle-lost Stability check — a draw produces no loser, so no battle-lost consequence fires. Each faction takes exactly one Ob 1 Stability check at Accounting. [PROVISIONAL — ED-357 resolved]
 
 > **Clarification (PP-MB-01):** "Effective Power is calculated at the start of Phase 4 using Size as of Phase 3 end. All damage within Phase 4 is applied simultaneously at Phase 5 Step 1. Power does not change within a single Phase 4 — a unit that takes damage mid-Phase 4 does not recalculate its Effective Power until Phase 5."
 
@@ -377,9 +386,19 @@ both sides lose 1 Morale in Phase 7. *[P2-02, P2-04]*
 | Refused Flank | Wing anchors on terrain; immune to that flank | 1 | Sacrifices offence |
 | Hammer & Anvil | Shield Wall holds; Fast unit envelops | 3 | Break Anvil first |
 
-Split strategy note: Splitting only helps if defender must split too. Attacker
-splitting Size=6 into 3+3 against undivided Size=5 defender is disadvantageous
-— defender's full pool exceeds each sub-engagement. *[P2-14]*
+Splitting doctrine (PP-508 — replaces P2-14 note, ED-358): Splitting is structurally
+advantageous in most configurations because the defender must distribute their pool
+across simultaneous engagements. Simulation results:
+- Split dominates concentration by +9% to +45% win-rate depending on Command matchup.
+- Only cases where split advantage is negligible (<5%): attacker heavily outcommands defender
+  (Att Cmd=4-5 vs Def Cmd=2) and concentration already approaches win-rate ceiling.
+
+Splitting is suboptimal ONLY when:
+1. Terrain prevents simultaneous engagements (Narrow Pass: 1 engagement per side — hardest counter)
+2. Sub-unit Size drops so far below Command that each sub-unit pool approaches floor (Size=1 edge)
+
+The primary counter to enemy splitting is NOT matching their split — it is Narrow Pass terrain
+or Feigned Retreat to disengage and re-concentrate. [PROVISIONAL — ED-358 resolved]
 
 ---
 

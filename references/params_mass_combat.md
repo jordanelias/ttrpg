@@ -508,3 +508,28 @@ Rationale: PP-231 intent — mutual-cost exchanges should not produce cascade.
 
 ## Shield Wall +2D Def Scope (PP-500) [PROVISIONAL]
 Shield Wall +2D Def applies to all simultaneous defensive pools regardless of engagement direction. Blanket formation modifier — not per-engagement. Unmitigated flanks still benefit from the +2D Def bonus. Eliminates 21% damage differential vs Option B interpretation.
+
+## Thread-Destroyed Unit Phase 5 Participation (PP-505) [PROVISIONAL]
+Simultaneous-damage rule governs. A unit reduced to 0 by Phase 4 Thread effects retains
+its Phase 3-end Size during Phase 5 Engagement — damage not yet applied. It participates
+in Phase 5 normally and is formally removed at Phase 6 Step 1 with all simultaneous damage.
+Practitioner gains no "free kill" window — the unit fights back in Phase 5.
+
+## Bilateral General Personal Combat (PP-506) [PROVISIONAL]
+If both generals enter personal combat in Phase 5 simultaneously: mass battle continues.
+Both armies uncommanded: PP-273 1D minimum, Line formation, no tactics. Each general
+re-establishes Command via Ob 2 check Phase 1 of the following turn.
+P(re-establish): Cmd=2: 20%, Cmd=3: 34%, Cmd=4: 46%, Cmd=5: 55%, Cmd=6: 62%.
+Low-Command generals take significantly longer to re-establish — intended asymmetry.
+
+## Mutual Destruction Stability Check Clarification (PP-507) [PROVISIONAL]
+PP-240 Ob 1 Stability check (mutual destruction = draw) REPLACES §A.13 battle-lost
+Ob 1 check. A draw produces no loser — battle-lost consequence does not fire.
+Each faction takes exactly one Ob 1 check at Accounting.
+
+## Splitting Doctrine (PP-508) [PROVISIONAL]
+Splitting is structurally advantageous in most configurations. Simulation matrix (Att Cmd 2-5 vs Def Cmd 2-5):
+split dominates concentration by +9% to +45% win-rate. Negligible advantage only when
+attacker already near win-rate ceiling (Att Cmd=4-5 vs Def Cmd=2).
+Hard counters to splitting: (1) Narrow Pass terrain (1 engagement per side), (2) Feigned
+Retreat to disengage and re-concentrate. Matching the split is not an effective counter.
