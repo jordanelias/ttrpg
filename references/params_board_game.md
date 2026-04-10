@@ -1,6 +1,6 @@
-<!-- version: v0.9.1 | source: valoria_bg_v05_simulation_and_patches.md + victory_architecture_v1.md + calamity_radiation.md + geography_design.md (canonical per canonical_sources.yaml) | last_updated: 2026-04-06 -->
+<!-- version: v0.9.2 | source: valoria_bg_v05_simulation_and_patches.md + victory_architecture_v1.md + calamity_radiation.md + geography_design.md (canonical per canonical_sources.yaml) | last_updated: 2026-04-06 -->
 <!-- PP-249 2026-04-04: ED-142 resolved — BG Overwhelming: 2×Ob + floor 3, supersedes ED-031 -->
-<!-- PATCHES APPLIED: PP-169-PP-187 | CORRECTIONS: PP-188 | PP-189 (v05 final) | PP-190–201 (BG balance, territory table, road network, map v2) | PP-219 (Southernmost access redesign) | PP-220 (Champion TS table) -->
+<!-- PATCHES APPLIED: PP-500–PP-524 (SIM-TERR-01) | PP-169-PP-187 | CORRECTIONS: PP-188 | PP-189 (v05 final) | PP-190–201 (BG balance, territory table, road network, map v2) | PP-219 (Southernmost access redesign) | PP-220 (Champion TS table) -->
 <!-- AUTHORITATIVE SOURCE: designs/board_game/valoria_bg_v05_simulation_and_patches.md (faction stats, clocks, victory conditions); designs/board_game/stage_bg_proposal_v02.md (action economy, card-hand system PP-177) -->
 <!-- NOTE: v05 is canonical for BG mechanics. v04 B-sections remain structural base. -->
 <!-- STALE CHECK: v0.9.0 — RS Effects, Victory, CV/WC/WA, TC generation updated. Territory renumbering complete: all T# references use geography_design.md canonical numbering (17 territories). Old territory names (Vargstad, Eidursjo, Arcansheld, Nordhelm, Mittelmark) replaced with canonical names (Grauwald, Rendstad, Ehrenfeld, Kronmark, Feldmark). Ducal Geography (ED-107) resolved. Varfell expansion rewritten. -->
@@ -1539,3 +1539,213 @@ Conflict Marker: flip token on Church or Hafenmark mat. Placed when either facti
 
 ## Ministry Domain Action Conflict (PP-480)
 If Ministry NPC would play a Domain action in a territory already acted on by any player faction this Phase 4 resolution: Ministry redirects to next-priority viable territory per AI tree. If all viable territories are already acted-on this phase: Ministry takes Priority 5 default in any uncontested AP-token territory.
+
+
+## Territory Operations System (PP-500–PP-524)
+<!-- PATCHES APPLIED: PP-500–PP-524 -->
+<!-- Source: SIM-TERR-01 stress test 2026-04-09 -->
+
+## Casus Belli (CB) System (PP-500, PP-501, PP-517, PP-518, PP-524)
+<!-- PATCHES APPLIED: PP-500, PP-501, PP-517, PP-518, PP-524 -->
+
+### CB Definition
+CB is a **bonus mechanic**, not a war declaration gate. No faction requires CB to March
+into a controlled territory. Battle is always legal.
+
+**CB Effect:** When spending an active CB vs a target faction at Battle initiation:
+attacker gains **+2D** on their Military roll for that engagement. One CB may be spent
+per Battle engagement (no stacking).
+
+**CB Token:** Physical token on faction mat. Returned to supply on spend or expiration.
+
+### CB Acquisition Sources
+| Source | CB Type | Expiration |
+|--------|---------|------------|
+| Treaty betrayal (PP-014) | Permanent | Never |
+| Brutal faction disposition | Tactical | 3 seasons |
+| Fabricated Heresy Investigation | Tactical | 3 seasons |
+| PP-494 Graduated Seizure attempt | Tactical | 3 seasons |
+| Varfell Patience Protocol | Special | On Riskbreaker exposure OR 3 seasons |
+| PP-505 Diplomatic Transfer (ceding faction receives CB vs receiver) | Tactical | 3 seasons |
+
+**CB Cap:** Max 2 active CBs vs any single faction at one time. Third CB acquired vs
+the same faction: oldest non-permanent CB discarded.
+
+### CB Expiration
+Treaty CB: never expires. All other CBs: expire after 3 seasons unused. Patience Protocol
+CB: additionally expires on Riskbreaker exposure (Riskbreaker Priority 6, PP-524).
+
+### CB and Diplomatic Tokens (PP-518)
+A faction holding a Diplomatic Token on a target faction's mat cannot spend a CB against
+that target in the same season. CB is not lost — suppressed for 1 season only.
+
+### CB and Faction Elimination (PP-517)
+CBs held by eliminated faction: lost. CBs vs eliminated faction: discarded except
+CBs vs Crown → Löwenritter (1-season grace period as new government).
+
+---
+
+## Voluntary Territory Concession / Diplomatic Transfer (PP-505, PP-520)
+<!-- PATCHES APPLIED: PP-505, PP-520 -->
+
+**Diplomatic Transfer:** Voluntary territory transfer between two consenting factions.
+
+**Procedure:**
+1. Both factions agree (Phase 2 Planning declaration, simultaneous). No card play required.
+2. Transfer resolves at Phase 4 Priority 4 (Social tier), after Military.
+3. TCV updates at next Accounting. Transferred TCV frozen for victory calculations
+   for 1 season (Transfer Marker on territory card).
+4. Ceding faction receives 1 CB vs receiving faction (expires 3 seasons).
+5. Victory: co-victory conditions not triggered immediately. Standard 2-Accounting
+   confirmation required. TCV freeze prevents same-season exploitation.
+
+**Territory state after transfer:**
+- Fort Level: transfers unchanged.
+- Ministry AP-tokens, Guild CP-tokens, Thread Debt, History Resonance markers: remain.
+- Church Parish/Cathedral CV floor: persists (territory property, not controller property).
+- Church Prominence: recalculated at next Accounting Step 4b.
+- PI change: none (voluntary transfer generates no PI impact).
+
+**Frequency:** No limit per season (but one-season TCV freeze discourages rapid serial transfers).
+
+---
+
+## Post-Battle Unit Disposition (PP-506, PP-519)
+<!-- PATCHES APPLIED: PP-506, PP-519 -->
+
+### Territory Won by Attacker (Attacker margin > Ob)
+Defending unit retreats to nearest friendly adjacent territory. "Nearest friendly" = any
+adjacent territory under defender's control. Discipline −1 (rout penalty, does not cascade).
+If no adjacent friendly territory: retreat to non-attacker adjacent territory (contested).
+If completely encircled: unit destroyed, Military −1.
+
+### Territory Contested but Not Lost (Partial — margin < Ob)
+Both units remain in territory. Original controller retains control marker. Attacking
+faction's unit is now a **contested occupying force**:
+- Original controller's Domain Actions in contested territory: +1 Ob.
+- Contesting unit persists until Legionary Outward withdrawal OR next Battle loss.
+
+### Military 0 Defender (PP-515)
+No units = no Battle. March resolves as uncontested claim. Military cannot go below 0.
+Exception: units from prior seasons still present → Battle uses unit Martial value as pool.
+Restoration Movement Presence markers are NOT military units — they do not trigger Battle.
+
+---
+
+## BG Battle — Clarifications (PP-502, PP-503, PP-514)
+<!-- PATCHES APPLIED: PP-502, PP-503, PP-514 -->
+
+### Race Condition: Multiple Factions Claiming Same Uncontrolled Territory (PP-502)
+Two factions targeting same Uncontrolled territory same Phase 4:
+- Higher Stability faction claims first (no Battle for them — uncontested entry).
+- Lower Stability faction's March now targets a controlled territory → Battle fires.
+- Equal Stability: Crown > Hafenmark > Varfell > Löwenritter > Restoration Movement.
+
+### Three-Faction Territorial Conflict (PP-503)
+No three-way Battle. Resolution is sequential:
+1. Higher Stability attacker resolves Battle vs defender.
+2. Result of that Battle determines the territory's controller.
+3. Lower Stability attacker then resolves Battle vs new controller.
+
+### BG Discipline Loss — Persistence (PP-514)
+Discipline loss from Battle: cumulative within same Phase 4. Resets at Year-End Accounting.
+Recess card does NOT reset Discipline. Unit at Discipline 0: destroyed (Formation Break).
+
+---
+
+## Domain Actions — Voiding (PP-504)
+<!-- PATCHES APPLIED: PP-504 -->
+
+If a faction loses control of a territory at Priority 2 (Battle), all previously declared
+Domain Actions (Priority 3+) for that territory by the losing faction are void.
+Card is treated as played and discarded — no refund.
+Winning faction's declared Domain Actions for that territory resolve normally.
+
+---
+
+## Govern — Pool Stat and Contested Modifier (PP-511, PP-521)
+<!-- PATCHES APPLIED: PP-511, PP-521 -->
+
+### Action Pool Stats (BG)
+| Card Type | Pool Stat |
+|-----------|-----------|
+| Legionary (all) | Military |
+| Consul Inward (Govern/Piety Spread/Parish) | Mandate |
+| Consul Outward (Trade/Diplomatic Transfer) | Wealth |
+| Senator Inward (Decree/Active Inquisition) | Mandate |
+| Senator Outward (Diplomacy) | Influence |
+| Tribune (Investigate/Spy/Counter-Narrative) | Influence −1 (min 1, proxy until Intel added) |
+| Pontifex/Weaver (Thread) | Influence |
+| Praetor (Community Organising/Projects) | Mandate |
+| Fortify | Military |
+
+### Govern in Contested Territory (PP-521)
+When a non-controlling faction's military unit is present (PP-519 contested state):
+controlling faction's Consul Inward (Govern/Piety Spread/Parish): +1 Ob.
+Church Piety Spread against a non-Church territory under military pressure: standard Ob
+applies (contested modifier only affects controller's actions, not Church's influence work).
+
+---
+
+## Fortify — Maximum and Illegal Attempt (PP-512)
+<!-- PATCHES APPLIED: PP-512 -->
+
+Fort Level maximum: **4** for all territories. (T3 Lowenskyst max 4 and T14 Ehrenfeld
+max 4 are examples of the global maximum, not exceptions.)
+Fortify at max level: illegal declaration. Card returned to hand if caught in Phase 1.
+If caught during Phase 4 resolution: card discarded, action forfeited.
+
+---
+
+## Parish/Cathedral — Ob Confirmation (PP-513)
+<!-- PATCHES APPLIED: PP-513 -->
+
+Parish/Cathedral building uses standard Govern Ob: **Ob = Prosperity ÷ 2 (round up, min 1)**.
+Applies to all five sequential Consul Inward successes required for Cathedral.
+Intent declaration required in Phase 1: Church must declare whether Consul Inward is
+for Govern, Piety Spread, OR Parish-building. All three use Consul Inward card — one per season.
+
+---
+
+## Askeheim March — Illegal Action (PP-516)
+<!-- PATCHES APPLIED: PP-516 -->
+
+Legionary card targeting T15 (Askeheim): illegal. Card returned to hand.
+If caught in Phase 1: redeclaration permitted. If caught during Phase 4: action forfeited.
+
+---
+
+## Graduated Seizure — Updates (PP-507, PP-508, PP-509, PP-510, PP-522, PP-523)
+<!-- PATCHES APPLIED: PP-507, PP-508, PP-509, PP-510, PP-522, PP-523 -->
+
+### Post-TC 75 Gate (PP-507)
+**Graduated Seizure available only post-TC 75 (TC frozen).** Pre-75: action unavailable.
+
+### One-Per-Season Cap (PP-522)
+Standard Seizure (PP-421) and Graduated Seizure are the same action. One per season total.
+
+### Ob Formula Updated (PP-509)
+**Ob = (7 − CV) + Fort Level, minimum 1.**
+Fort Level contribution capped at +3 (Fort 4 territories contribute +3 to Ob, not +4).
+
+| CV | Fort | Ob |
+|----|------|----|
+| 5 | 0 | 2 |
+| 5 | 2 | 4 |
+| 3 | 0 | 4 |
+| 3 | 3 | 7 |
+| 1 | 0 | 6 |
+| 0 | 0 | 7 |
+
+### Overwhelming CV Cap (PP-508)
+Overwhelming Seizure CV +1 IS subject to ±1 CV seasonal cap. PP-494's "not cap-governed"
+text is struck. PP-421 cap language is canonical.
+
+### Battle Trigger on Success in Contested Territory (PP-510)
+Success/Overwhelming Seizure in contested territory (military unit present): Battle fires
+in following season (not same phase). Territory is Disputed (Seizure Claim token placed).
+Partial: no Battle; AP +1 only. Success without units present: control transfers immediately.
+
+### Mandatory Assert Post-TC 75 (PP-523)
+Assert and Suppress suspended post-TC 75 (TC is frozen; no TC effect possible from either).
+Church does not forfeit an action to mandatory Assert in the seizure phase.

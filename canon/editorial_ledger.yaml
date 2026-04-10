@@ -2555,3 +2555,121 @@ editorial_decisions:
     description: "Mutual destruction Stability check: replacement of or addition to normal battle-lost consequences. PP-240: mutual destruction → both factions Stability check Ob 1 at Accounting. §A.13: battle lost → Stability check Ob 1. Mutual destruction = draw. Does PP-240 check replace §A.13 check (no loser) or add to it (both checks fire)?"
     priority: P2
     tags: [mass_combat, mutual_destruction, stability, accounting]
+
+
+  # ═══ TERRITORY OPS SIM-TERR-01 ════════════════════════════════════════
+
+# Editorial Items — Territory Operations SIM-TERR-01
+# ED-370 through ED-376
+# Date: 2026-04-09
+
+  - id: ED-370
+    status: flagged
+    date_raised: 2026-04-09
+    description: >
+      [EDITORIAL: ED-370 — CB gate model vs narrative war declaration]
+      PP-500 rules that CB is a bonus (+2D) not a gate (no CB required to declare war).
+      This is the mechanically simpler and cleaner ruling. However, it creates a narrative
+      gap: factions can attack each other at any time with no political justification required.
+      Games like Here I Stand use CB as an explicit war declaration gate. If the designer
+      wants CB to serve a narrative function (declaring war is a political act requiring
+      justification), CB should be a gate mechanic with a consequence for attacking without
+      CB (e.g., all other factions gain a CB vs the aggressor; Stability −1 for unprovoked
+      aggression). Decision required: bonus model (PP-500 as written) or gate + bonus model.
+    priority: P2
+    blocks: CB-D-02 final ruling
+
+  - id: ED-371
+    status: flagged
+    date_raised: 2026-04-09
+    description: >
+      [EDITORIAL: ED-371 — Diplomatic Transfer (PP-505) card cost]
+      PP-505 rules that Diplomatic Transfer requires no card play from either faction.
+      This may be too generous — diplomatic territory transfers should cost something to
+      prevent trivial reshuffling. Alternative: require one Senator Outward card from the
+      ceding faction (consuming their Diplomat/Senator action for the season). Or: free action
+      but only once per campaign (not once per season). Decision required on card cost
+      and frequency limit.
+    priority: P2
+    blocks: PP-505 finalization
+
+  - id: ED-372
+    status: flagged
+    date_raised: 2026-04-09
+    description: >
+      [EDITORIAL: ED-372 — Strategic withdrawal (voluntary retreat before Battle)]
+      Currently no mechanic for a faction to voluntarily pull units out of a territory
+      before a superior force arrives. The Löwenritter's Iron Discipline tactic says
+      "immune to Route this engagement" — implying Route exists but retreat is not a
+      choice. Should factions be able to voluntarily concede a territory before Battle
+      fires (Legionary card: declare withdrawal instead of fight)? If yes: territory transfers
+      to marching faction without Battle (saves Military but concedes land). If no: all
+      territory disputes require Battle regardless of strategic preference. Strongly recommend
+      adding voluntary withdrawal as an option — it enables historically authentic strategic
+      retreats and prevents forced Battles where one side has no chance.
+    priority: P2
+    blocks: concession mechanic completeness
+
+  - id: ED-373
+    status: flagged
+    date_raised: 2026-04-09
+    description: >
+      [EDITORIAL: ED-373 — Altonian Vanguard unit stats (CLOCK-EDIT-01 unresolved)]
+      The Altonian Vanguard deploys at IP ≥ 75 (or 80 with AER ≥ 4). Vanguard unit stats
+      are referenced throughout bg_v05 (Military 5, Discipline 5 in cascade test) but not
+      confirmed in any params file. Full stat block required: Military, Discipline, Health,
+      Formation, Weapon Type, Armour, Damage Modifier for BG token; and TTRPG Power,
+      Size, Morale, Command for hybrid conversion. Also needed: how many Vanguard units
+      deploy at IP 75? Do more deploy each season IP remains above 75? Is there a NPC AI
+      priority tree for the Vanguard? Resolving CLOCK-EDIT-01.
+    priority: P1
+    blocks: invasion simulation, IP clock playability
+
+  - id: ED-374
+    status: flagged
+    date_raised: 2026-04-09
+    description: >
+      [EDITORIAL: ED-374 — Govern Ob inversion explicit design note]
+      PP-511 and the Govern Ob formula (Ob = Prosperity ÷ 2, round up) create an inversion:
+      governing a high-Prosperity territory is harder than governing a low-Prosperity one.
+      This is counterintuitive to most players. The design rationale — managing high
+      expectations and complex economies requires more political capital — is sound but
+      must be explicitly stated on reference cards and in the faction action descriptions.
+      Request: confirm the Govern Ob inversion is intentional and add a one-sentence
+      design rationale to the reference card for Govern.
+    priority: P2
+    blocks: none (player experience note only)
+
+  - id: ED-375
+    status: flagged
+    date_raised: 2026-04-09
+    description: >
+      [EDITORIAL: ED-375 — Territory trade anti-exploitation season freeze (PP-505)]
+      PP-505 applies a 1-season TCV freeze on transferred territories (transferred TCV
+      does not count toward the receiving faction's victory threshold for 1 season). The
+      co-victory pairings (e.g., Crown + Varfell: Crown TCV ≥ 12, Varfell TCV ≥ 8) could
+      still be exploited by pre-positioning: faction transfers territory such that the freeze
+      expires exactly when co-victory is declared. Is a 1-season freeze sufficient, or should
+      it be 2 seasons (matching the 2-consecutive-Accounting-steps victory confirmation
+      requirement)? If the freeze is 1 season but victory requires 2 consecutive accounting
+      confirmations, the exploit requires coordination across 3 seasons — probably acceptable.
+      Confirm 1-season freeze is sufficient.
+    priority: P2
+    blocks: PP-505 finalization
+
+  - id: ED-376
+    status: flagged
+    date_raised: 2026-04-09
+    description: >
+      [EDITORIAL: ED-376 — CB from Graduated Seizure (PP-494): ceding faction identity]
+      PP-494 states "Seizure attempt grants controlling faction Casus Belli vs Church."
+      With PP-501 (CB cap = 2 per faction pair), a defending faction that repeatedly fends
+      off Church seizure accumulates max 2 CBs vs Church (all subsequent CBs discarded).
+      The CBs are tactical (3-season expiry). Two questions for designer:
+      (1) Should these seizure-derived CBs grant the +2D bonus (PP-500) in any Military
+      action vs Church, or only in Military actions specifically defending seized territories
+      (more thematic)?
+      (2) At TC 75+ when Church is in seizure mode, all factions with CBs vs Church would
+      gain +2D in any Battle vs Church. Is this the intended balance effect?
+    priority: P2
+    blocks: CB system completeness

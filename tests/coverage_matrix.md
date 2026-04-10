@@ -453,3 +453,23 @@ P1: 7 | P2: 13 | P3: 3 | Status: COMPLETE
 | A-01-F2/D-07 | Consent mechanism undefined; path deadlocked by unanimous opponent refusal |
 | A-05-F1/D-08 | Non-Crown diplomacy pure social contract — undeclared design choice |
 | D-12 | Coalition Pairs references Guilds/Niflhel — non-existent factions |
+
+## SIM-TERR-01 — Territory Operations (2026-04-09)
+| System | Modes | P1 Findings | P2 Findings | Patches | Status |
+|--------|-------|-------------|-------------|---------|--------|
+| Casus Belli | A+D+J+L | 3 | 3 | PP-500,501,517,518,524 | Applied |
+| Invading Territory | A+D+J+L | 1 | 4 | PP-502,503,504,514,515 | Applied |
+| Seizing Territory | A+D+J+L | 4 (carry) | 2 | PP-507,508,509,510,522,523 | Applied |
+| Claiming Territory | A+D+J+L | 1 | 2 | PP-502,516 | Applied |
+| Conceding Territory | A+D+J+L | 2 | 2 | PP-505,506,519 | Applied |
+| Trading Territory | A+D+J+L | 1 | 2 | PP-505,520 | Applied |
+| Developing Territory | A+D+J+L | 1 | 5 | PP-504,511,512,513,521 | Applied |
+
+**Total P1: 14 | Total P2: 22 | Patches applied: PP-500–PP-524**
+**Editorials raised: ED-370–ED-376 (7 items, all P2 except ED-373 P1)**
+
+### SIM-DEBT after SIM-TERR-01
+- ED-373: Altonian Vanguard stats undefined (P1) — blocks invasion simulation
+- ED-370: CB gate model confirmation needed
+- ED-371: Diplomatic Transfer card cost confirmation
+- ED-372: Voluntary withdrawal mechanic design decision

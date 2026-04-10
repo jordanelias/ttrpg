@@ -355,3 +355,15 @@ Next session priority: ED-364 Almud rewrite, then Church Graduated Seizure simul
 - Critical findings: (1) Lenneth has zero mechanical expression despite high narrative importance. (2) Almud has no BG mode presence. (3) Elske has mechanical impact but zero characterization. (4) Haelgrund-Torsvald parallel is the most valuable unwritten NPC interaction. (5) 5 NPCs lack historical echoes.
 - 10 structural recommendations prioritised.
 - Committed as designs/npcs/npc_comprehensive_audit.md.
+
+### 2026-04-09 — Stress Test: Territory Operations Suite (SIM-TERR-01)
+- Modes A + D + J + L across 7 mechanics: Casus Belli, Invading, Seizing, Claiming, Conceding, Trading, Developing.
+- 14 P1 findings, 22 P2 findings.
+- PP-500–PP-524 applied (25 patches).
+- ED-370–ED-376 raised (7 editorials; ED-373 is P1 — Altonian Vanguard stats).
+- KEY GAPS CLOSED: Casus Belli fully defined (PP-500,501), Diplomatic Transfer created (PP-505),
+  post-Battle unit disposition defined (PP-506,519), three-faction conflict ruled (PP-503),
+  race condition on Uncontrolled territory ruled (PP-502), Govern pool stat defined (PP-511),
+  Graduated Seizure Fort Level added to Ob (PP-509), pre-TC 75 gate explicit (PP-507),
+  Assert/Suppress suspended post-TC 75 (PP-523).
+- Next: ED-373 (Altonian Vanguard stats) — P1 blocker for IP clock simulation.
