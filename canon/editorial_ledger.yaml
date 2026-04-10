@@ -2501,3 +2501,57 @@ editorial_decisions:
   # Referenced in PP-494 political cost clause but no mechanic definition exists anywhere
   # in params_board_game.md. Blocks correct simulation of seizure political consequences.
   # Requires a definition patch before next Church-seizure simulation.
+
+  # ═══ MASS BATTLE STRESS TEST SIM-MB-01 ══════════════════════════════════════
+
+  - id: ED-351
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Discipline degradation trigger: three conflicting definitions. (1) mass_battle_v3.md §A.4: single condition — Size lost > Discipline. (2) params_mass_combat.md PP-251: two conditions — Size lost > Discipline AND unit loss > opposing loss by ≥1. (3) PP-320/ED-140: two conditions — Size lost > Discipline AND Power asymmetry OR Thread/artillery. Design doc is canonical; PP-251 patch not propagated."
+    priority: P1
+    tags: [mass_combat, discipline, patch_propagation]
+    blocks: discipline_degradation_simulation
+
+  - id: ED-352
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Volley Phase dice pool undefined. mass_battle_v3.md §A.7 says 'Roll Effective Power vs TN 6.' Effective Power is not defined for Volley context. Two candidates: (a) Power stat (unit quality, 1-7); (b) engagement pool formula = min(Size,Command)+Command per PP-233. These produce different values. ED-037 confirms TN 6 but does not address pool definition."
+    priority: P1
+    tags: [mass_combat, volley, pool_formula]
+    blocks: volley_simulation
+
+  - id: ED-353
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Command distribution across sub-units: explicit rule text needed. Formula gives Pool = min(Size,Command)+Command per sub-unit but does not state whether Command applies in full to each sub-unit or is divided. §A.8 note implies full Command per sub-unit (splitting is disadvantageous vs undivided defender), but this is implicit. If Command divides, splitting is always inferior. If full, 3-way split triples total dice — design intent is full Command per sub-unit per §A.8, but needs explicit rule text."
+    priority: P1
+    tags: [mass_combat, command, sub_units, pool_formula]
+    blocks: sub_unit_strategy_simulation
+
+  - id: ED-354
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Thread destruction in Phase 4 vs Phase 5 participation. Design doc says a unit reduced to 0 by Phase 4 Thread effects does not participate in Phase 5 Engagement. But simultaneous-damage rule means damage is not applied until Phase 6 Step 1 — unit's current Size is non-zero during Phase 5. Exclusion from Phase 5 contradicts simultaneous-damage principle. Which governs?"
+    priority: P2
+    tags: [mass_combat, thread, simultaneous_damage, phase_structure]
+
+  - id: ED-355
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Both generals simultaneously in personal combat: mass battle pause rule undefined for bilateral case. If both generals enter personal combat in Phase 5 simultaneously, no rule specifies whether mass battle freezes entirely or units fight uncommanded at 1D minimum, nor sequencing for two simultaneous personal combats."
+    priority: P2
+    tags: [mass_combat, general, personal_combat, pause_rule]
+
+  - id: ED-356
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Shield Wall +2D Def: application across simultaneous multi-direction engagements undefined. PP-MB-07 clarification implies the unmitigated flank applies without +2D Def bonus. But Shield Wall's +2D Def is a blanket formation modifier. Does it apply to all defensive pools in all simultaneous engagements, or only to the front/negated-flank engagements?"
+    priority: P2
+    tags: [mass_combat, formation, shield_wall, multi_engagement]
+
+  - id: ED-357
+    status: flagged
+    date_raised: 2026-04-09
+    description: "Mutual destruction Stability check: replacement of or addition to normal battle-lost consequences. PP-240: mutual destruction → both factions Stability check Ob 1 at Accounting. §A.13: battle lost → Stability check Ob 1. Mutual destruction = draw. Does PP-240 check replace §A.13 check (no loser) or add to it (both checks fire)?"
+    priority: P2
+    tags: [mass_combat, mutual_destruction, stability, accounting]

@@ -316,3 +316,10 @@ Next session priority: ED-364 Almud rewrite, then Church Graduated Seizure simul
 - GAP: Casus Belli mechanic undefined (referenced in PP-494, no definition anywhere).
 - ED-355 (Fort Level / Graduated Seizure conflict) flagged as P1 (previously filed as ED only).
 - Test output: tests/sim_graduated_seizure_SIM-GS-01.md
+
+### 2026-04-09 — Stress Test: Mass Battle (SIM-MB-01)
+- Modes A + D completed across full mass battle subsystem.
+- 3 P1 findings (ED-351, ED-352, ED-353), 12 P2 findings, 3 P3 findings.
+- ED-351 through ED-357 raised.
+- PP-499 applied (Reserve text fix: Phase 4 → Phase 5).
+- Test output: tests/sim_mass_battle_SIM-MB-01.md

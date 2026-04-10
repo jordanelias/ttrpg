@@ -426,3 +426,18 @@ Status: COMPLETE
 | J3/ED-355 | Fort Level omitted from PP-494 Ob — conflict with PP-421 |
 | GAP-CB | Casus Belli undefined — mechanic entirely missing from ruleset |
 
+
+## SIM-MB-01 — Mass Battle (mass_battle_v3.md + params_mass_combat.md) — 2026-04-09
+Modes: A + D
+Source: tests/sim_mass_battle_SIM-MB-01.md
+P1 findings: 3 (ED-351, ED-352, ED-353)
+P2 findings: 12
+P3 findings: 3
+Status: COMPLETE
+
+### P1 Findings Summary
+| ID | Finding |
+|----|---------|
+| ED-351 | Discipline degradation: 3 conflicting trigger definitions |
+| ED-352 | Volley Phase pool: "Effective Power" undefined |
+| ED-353 | Command per sub-unit: explicit rule text needed |

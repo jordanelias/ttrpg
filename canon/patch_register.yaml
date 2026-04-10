@@ -4677,3 +4677,16 @@ patches:
   source: BG remaining SIM-DEBT simulation 2026-04-08
   affects: [references/params_board_game.md]
   status: applied
+
+- id: PP-499
+  date: 2026-04-09
+  severity: P2
+  description: >
+    Reserve clarification text fix. PP-MB-04 stated "unit may engage in Phase 4 of Turn N+1"
+    — Phase 4 is Thread Operations, not Engagement. Corrected to Phase 5 (Engagement).
+    No mechanical change; text error only. Summary: declare Reserve Phase 3 Turn N → commits
+    Phase 3 Turn N+1 → available Phase 5 Engagement Turn N+1.
+  finding_id: A-7-F1 (SIM-MB-01)
+  source: mass_battle stress test 2026-04-09
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  status: applied
