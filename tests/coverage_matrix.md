@@ -534,3 +534,19 @@ P2 findings: 3 (Coherence warning, PP-273 applicability, Shield Wall differentia
 PP applied: PP-500 through PP-504
 ED resolved: ED-351 (PP-502), ED-352 (PP-503), ED-353 (PP-504), ED-356 (PP-500), D-15-F1 (PP-501)
 Status: COMPLETE
+
+## SIM-DIPL-03 — Unique Scenarios Batch 2 + Interdependency — 2026-04-09
+Modes: C + D | Scope: Post-patch interdependency chains
+Source: tests/sim_diplomacy_batch2.md
+Remediation: PP-512–524 register + pbg blocks (PP numbering collision fixed)
+New patches: PP-525–528
+P1 resolved: 1 | P2 resolved: 3 | Clean scenarios: 4 of 8
+Status: COMPLETE — 36/36 pre-commit checks passed
+
+### Findings
+| ID | Sev | Finding | Patch |
+|----|-----|---------|-------|
+| S9 Crown-break trigger | P2 | Crown-break trigger undefined | PP-525 |
+| S10 Parliamentary motion | P1 | Diplomatic Alignment effect inoperable | PP-526 |
+| S13 Closed Pledge witnesses | P2 | Revelation witnesses ambiguous | PP-527 |
+| S15 Treaty lapse timing | P2 | Lapse timing within Accounting undefined | PP-528 |

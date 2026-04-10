@@ -77,17 +77,17 @@ Every victory requires holding all conditions for **2 consecutive Accounting ste
 | IP | < 60 |
 | PI | ≥ 3 |
 
-**Formal Crown Treaty (PP-500/501/502/511):** Senator Outward, Crown only. Cannot combine with Diplomatic Outreach to Schoenland same season. Ob = ceil(target Mandate / 2), min 1. Mandate ≤ 1 target: invalid (insufficient institutional standing).
+**Formal Crown Treaty (PP-512/513/514/523):** Senator Outward, Crown only. Cannot combine with Diplomatic Outreach to Schoenland same season. Ob = ceil(target Mandate / 2), min 1. Mandate ≤ 1 target: invalid (insufficient institutional standing).
 
-**Consent (PP-501):** Target declares consent/refusal at Phase 1 of following season. Refusal: Crown gains Casus Belli (standard, 3 seasons); no retry vs same faction for 2 seasons. NPC AI consent: Mandate ≥ 3 AND Stability ≤ 3.
+**Consent (PP-513):** Target declares consent/refusal at Phase 1 of following season. Refusal: Crown gains Casus Belli (standard, 3 seasons); no retry vs same faction for 2 seasons. NPC AI consent: Mandate ≥ 3 AND Stability ≤ 3.
 
 **Degree effects:** Overwhelming: Treaty formed + target Mandate −1 + Stability +1 + Crown Mandate +1. Success: Treaty formed + target Mandate −1 + Stability +1. Partial: Treaty offered — target accepts (formed, no stat changes) or declines (Crown gains CB). Failure: Crown Stability −1.
 
-**Treaty period:** 4 seasons. Either party may extend (action, no roll) or let lapse. Lapse is not betrayal.
+**Treaty period:** 4 seasons. Either party may extend (action, no roll) or let lapse. Lapse is not betrayal. **Lapse timing (PP-528):** Treaty lapse occurs at Phase 1 of the season after the period ends. Treaty formed Season N lapses at Phase 1 of Season N+5. Accounting of Season N+4 sees the Treaty as active. Extension must be declared at Phase 1 of Season N+5.
 
 **Crown-break (PP-511):** Crown Stability −2, Mandate −1 (end of Phase 4). Betrayed faction gains permanent CB. CB usable next season.
 
-**Target-break (PP-502):** Treaty partner initiates Domain Action directly targeting Crown's held territory → Treaty dissolves immediately. Crown gains permanent CB. Partner Stability −1.
+**Target-break (PP-514):** Treaty partner initiates Domain Action directly targeting Crown's held territory → Treaty dissolves immediately. Crown gains permanent CB. Partner Stability −1.
 
 **Token interaction (PP-509):** Hafenmark Diplomatic Token on Treaty partner removed at Treaty formation.
 

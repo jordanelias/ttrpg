@@ -1,6 +1,6 @@
-<!-- version: v0.9.3 | source: valoria_bg_v05_simulation_and_patches.md + victory_architecture_v1.md + calamity_radiation.md + geography_design.md (canonical per canonical_sources.yaml) | last_updated: 2026-04-09 -->
+<!-- version: v0.9.2 | source: valoria_bg_v05_simulation_and_patches.md + victory_architecture_v1.md + calamity_radiation.md + geography_design.md (canonical per canonical_sources.yaml) | last_updated: 2026-04-09 -->
 <!-- PP-249 2026-04-04: ED-142 resolved — BG Overwhelming: 2×Ob + floor 3, supersedes ED-031 -->
-<!-- PATCHES APPLIED: PP-169-PP-187 | CORRECTIONS: PP-188 | PP-189 (v05 final) | PP-190–201 (BG balance, territory table, road network, map v2) | PP-219 (Southernmost access redesign) | PP-220 (Champion TS table) | PP-493–PP-494 (retroactive register) | PP-506–PP-511 (SIM-GS-01 resolutions) | PP-512–PP-515 (SIM-GS-02 audit: Seizure Partial PP-512, Battle Partial PP-513, Seizure card type PP-514, CB stacking PP-515) -->
+<!-- PATCHES APPLIED: PP-169-PP-187 | CORRECTIONS: PP-188 | PP-189 (v05 final) | PP-190–201 (BG balance, territory table, road network, map v2) | PP-219 (Southernmost access redesign) | PP-220 (Champion TS table) | PP-493–PP-494 (retroactive register) | PP-506–PP-511 (SIM-GS-01 resolutions: Fort/Battle trigger PP-506, Availability gate PP-507, OW cap PP-508, Prominence timing PP-509, Casus Belli PP-510, Assert suspension PP-511) -->
 <!-- AUTHORITATIVE SOURCE: designs/board_game/valoria_bg_v05_simulation_and_patches.md (faction stats, clocks, victory conditions); designs/board_game/stage_bg_proposal_v02.md (action economy, card-hand system PP-177) -->
 <!-- NOTE: v05 is canonical for BG mechanics. v04 B-sections remain structural base. -->
 <!-- STALE CHECK: v0.9.0 — RS Effects, Victory, CV/WC/WA, TC generation updated. Territory renumbering complete: all T# references use geography_design.md canonical numbering (17 territories). Old territory names (Vargstad, Eidursjo, Arcansheld, Nordhelm, Mittelmark) replaced with canonical names (Grauwald, Rendstad, Ehrenfeld, Kronmark, Feldmark). Ducal Geography (ED-107) resolved. Varfell expansion rewritten. -->
@@ -114,7 +114,7 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 | Trade (Consul Outward) | Prosperity ÷ 3 (round up, min 1) | +1 IP≥30; +1 T2 |
 | Diplomacy vs NPC (Senator Outward) | NPC Stability ÷ 2 (round up) | — |
 | Diplomacy between players | Negotiated | Not a roll |
-| Formal Crown Treaty (Senator Outward) | Target faction's Mandate | Crown only. Both factions must agree. See victory_architecture_v1.md §3.1. |
+| Formal Crown Treaty (Senator Outward) | ceil(target Mandate / 2) min 1 | Crown only. PP-512/513/514/523. See victory_architecture_v1.md §3.1. |
 | Thread Operation (Pontifex/Weaver) | Ob 2 base | See PP-182 co-movement protocol |
 | Investigate/Intel (Tribune) | 2 | +2 Ob in Church territory with Inquisitor |
 | Spy (Tribune Outward) | Target Intel ÷ 2 round up | — |
@@ -359,7 +359,6 @@ One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland)
 **Available:** Any TC value from TC ≥ 15 (PP-507). Not gated on TC 75. TC 75 freeze marks the phase transition where seizure becomes Church's primary mode, but seizure was always available.
 **Pool:** Influence + floor(TC / 15). At TC 28: 7D. At TC 75: 11D (frozen cap). (PP-494)
 **Ob:** 7 − CV (target territory Conviction value). CV 5 = Ob 2. CV 0 = Ob 7. (PP-494)
-**Ob modifiers:** Ministry AP-token in territory: Ob +1. Hafenmark TD track level 4 in Hafenmark territories: Ob +2 (applies to GS Ob formula — C1 audit finding). These stack.
 
 | CV | Seizure Ob |
 |----|-----------|
@@ -380,11 +379,7 @@ One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland)
 - TC < 50: all factions observe the seizure attempt. No concealment.
 - TC ≥ 50: only factions with Intel ≥ 3 in the target territory observe. (PP-507) [PROVISIONAL]
 **Mandatory Assert post-TC 75:** Suspended. Assert optional only once TC freezes. (PP-511)
-**Seizure Partial outcome (PP-512):** A Partial result (net successes = Ob − 1) means the Seizure is contested but not achieved. Place a Church Contention Marker on the territory. The controlling faction must respond at their next card play or the territory becomes administratively disputed: Church gains one free Piety Spread (Consul Inward, Ob 1) in that territory next season. Contention Marker removed at next Accounting regardless of response. No Stability cost to Church on Partial.
-**Battle Partial for garrison gate (PP-513):** A Partial result in the pre-seizure garrison Battle is treated as a Church loss for the garrison gate. Seizure does not proceed. Casus Belli is still granted. The Partial Battle result produces standard Battle consequences (contested territory, etc.) but does not clear the garrison. Church may attempt Seizure again next season (garrison must be re-contested). Rationale: Partial Battle = garrison intact, Church advance checked.
-**Seizure card type (PP-514):** Graduated Seizure does not consume a card slot. It is a free institutional action available in Phase 4 (Actions) once per season, declared alongside (not instead of) card plays. Prerequisite checks (TC, Mandate, Prominence, garrison) are assessed at declaration. If Church plays Excommunication in the same season and it resolves before Seizure declaration: the Prominence created by Excommunication IS valid at declaration (legal combo). To prevent the Excommunication→Seizure chain from becoming trivially reliable, add constraint: if Church played Excommunication this season targeting the Seizure target's controlling faction, Seizure Ob +1 (political reaction — the target faction immediately reinforces authority). [PROVISIONAL: +1 Ob on Excommunication-triggered Prominence flagged for simulation.]
-**CB multi-source stacking (PP-515):** A faction holding CB from multiple sources (e.g. Church CB AND Crown CB simultaneously) holds one CB marker per source. Each marker grants its own free Senator Outward action and Legionary Ob−1 independently. Both markers are tracked on the faction mat. This is intentional: a faction that multiple powers have wronged has expanded political legitimacy. Maximum practical accumulation: 4 CB markers (one from each other faction). [PROVISIONAL: 4-CB scenario flagged for simulation — may require a cap.]
-**[ED-355 RESOLVED — PP-506. ED-365 RESOLVED — PP-507. ED-366 RESOLVED — PP-508. ED-367 RESOLVED — PP-509. ED-368 RESOLVED — PP-506. ED-369 RESOLVED — PP-511. ED-NEW-F RESOLVED — PP-514. ED-NEW-G RESOLVED — PP-513.]**
+**[ED-355 RESOLVED — PP-506. ED-365 RESOLVED — PP-507. ED-366 RESOLVED — PP-508. ED-367 RESOLVED — PP-509. ED-368 RESOLVED — PP-506. ED-369 RESOLVED — PP-511.]**
 
 ### Battle Ob Formula (PP-499, ED-343 resolved)
 **Battle Ob = defender Military ÷ 2 (round up, min 1).**
@@ -485,6 +480,8 @@ All Domain Actions targeting another faction's Mandate stat use Ob = min(target 
 | 4+ | +6D (cap) |
 
 Coalition bonus applies to the primary suppressing faction's pool. Secondary factions must each have a valid suppression action played this phase. Pool floor: 1D.
+
+**Valid suppression action (PP-518):** Any Domain Action whose stated primary effect includes 'Mandate −N' on the target faction (Excommunicate, Baralta Suppress, Counter-Narrative, equivalents). Actions producing Mandate reduction as secondary, conditional, or cascade effect do NOT qualify.
 
 ## Drawn Battle Rule (PP-180)
 Equal net successes: Stalemate. Both Discipline −1. No territorial change.
@@ -1292,7 +1289,7 @@ Roll: Influence vs Ob = target Mandate ÷ 2 round up, min 1.
 | Partial | PI +1 (no Token) |
 | Failure | Hafenmark Stability −1 |
 
-**Diplomatic Token:** Permanent marker on target faction mat. Removed on military conflict with Hafenmark OR target faction elimination. Maximum 1 per faction mat. Public. Token effects: target faction counts as Support in Parliamentary Sessions.
+**Diplomatic Token (PP-517/521):** Permanent marker on target faction mat. Removed on: (a) military conflict with Hafenmark — any season either faction plays Legionary targeting the other's held territory (intent of play; March to uncontested territory excluded); (b) target faction elimination; (c) Formal Crown Treaty formed with the token-holding faction (PP-521). Maximum 1 per faction mat. Public. Token effects: target faction counts as Support in Parliamentary Sessions. Token effect suspended while token-holding faction has Mandate 0.
 
 ---
 
@@ -1326,6 +1323,8 @@ Cannot target Intel.
 **Timing:** Phase 1 declarative. No roll.
 Crown designates one allied faction. Liaison's Thread operations in Crown-held territories count toward Crown's co-victory RS threshold tracking.
 **Allied definition:** Active Treaty partner OR same-side Parliamentary Session voter OR common Resentment target.
+
+**Thread Liaison 'Allied' scope (PP-520):** For Thread Liaison designation only, 'Allied' = Active Crown Treaty partner. Parliamentary voter and Resentment conditions do not qualify for Liaison designation.
 **Dissolves on:** Military conflict between Crown and Liaison.
 
 ---
@@ -1580,60 +1579,38 @@ Conflict Marker: flip token on Church or Hafenmark mat. Placed when either facti
 ## Ministry Domain Action Conflict (PP-480)
 If Ministry NPC would play a Domain action in a territory already acted on by any player faction this Phase 4 resolution: Ministry redirects to next-priority viable territory per AI tree. If all viable territories are already acted-on this phase: Ministry takes Priority 5 default in any uncontested AP-token territory.
 
-## Territory Operations — Round 2 Patches (PP-525–PP-537)
-<!-- PATCHES APPLIED: PP-525–PP-537 (SIM-TERR-02) -->
 
-### Dislodgement Battle Role Assignment (PP-527)
-The faction playing the Legionary card is always "attacker." In dislodgement:
-- Territory controller plays Legionary → controller is attacker, contesting unit is defender.
-- Ob = contesting faction Military ÷ 2. Contesting unit does NOT get Fort bonus (fort belongs to controller/attacker).
-- Contesting faction plays Legionary to upgrade occupation → contesting faction is attacker, controller is defender with full Fort bonus.
+## Open Pledge System (PP-515)
+Any faction may declare an **Open Pledge** in Phase 1: a publicly stated commitment to a specific mechanical action or abstention for the current season. Recorded openly (shared tracking card).
+- **Honour:** +1 Standing.
+- **Breach:** Stability −1 + Casus Belli (standard, 3 seasons) to every witnessing faction.
+- **Simultaneous resolution:** A Pledge to abstain from a Military action is breached if the pledging faction played a Legionary card in Phase 1, regardless of resolution order. Factual test is card declaration, not outcome.
+- **Forced breach exemption:** Pledge honoured if breach results directly from responding to another faction's military action in the pledged territory, provided the pledging faction's card was not yet played when the threat arose. GM adjudicates.
+- **Scope:** One season only. Cannot commit future seasons. Limit: 1 active Pledge per faction at a time.
 
-### Contesting Unit — Conquest Upgrade (PP-528)
-Contesting faction may play Legionary in a subsequent season to attempt conquest from their
-contested position. Standard Battle rules apply (PP-476). Defender wins → contesting unit
-retreats entirely per PP-506 (contested state ends). Attacker wins → territory captured.
+**Closed Pledge (PP-515, PP-527):** Private two-faction agreement written on a face-down card. If broken: injured party may reveal at any Accounting. Witnesses at revelation = all factions present at the Accounting where revelation occurs. Consequences: Stability −1 + Casus Belli (3 seasons) to all factions at revelation Accounting + breaching faction PI −1.
 
-### Retreat Timing — Multi-Legionary Offensive (PP-529)
-Retreat from Battle 1 fires BEFORE Battle 2 resolves in the same Phase 4 Priority 2 tier.
-Retreating unit may reinforce a second attacked territory if it retreats there. Retreating
-unit enters Battle 2 at reduced Discipline (PP-506 Discipline −1 from retreat).
+## Casus Belli — Stacking Cap and Consumption (PP-519)
+- **Stacking cap:** Maximum 1 active Casus Belli against any single target at a time. A second CB vs the same target replaces the first. A faction may hold CBs vs multiple different targets simultaneously (no cross-target cap).
+- **Consumption:** A Casus Belli grants −1 Ob to one declared Military action against the target. Consumed when that Military roll is made. Treaty-derived CBs (permanent until used, per PP-510) follow the same consumption rule.
+- **CB declaration timing:** Declared at Phase 4 start (before resolution, after cards played). Cannot be transferred to a different action once declared.
 
-### Retreat Destination — Player Choice (PP-530)
-Retreating faction chooses destination from all valid options (adjacent friendly,
-non-attacker adjacent if no friendly). No mechanical priority beyond validity.
+## Missed Coalition Penalty — Threshold Clarification (PP-522)
+PP-404 Missed Coalition Opportunity Penalty applies when both factions' relevant stat is **at or above** the coalition floor (not "above"). Fog-of-war exemption per PP-404 original text.
 
-### Diplomatic Transfer — Consent Withdrawal (PP-531)
-Phase 2 declaration is binding. Unilateral withdrawal after Phase 2: Stability −1 to
-withdrawing faction + permanent CB to other faction. Mutual simultaneous withdrawal at
-Phase 3 start: no penalty.
+## Crown-Break Trigger Definition (PP-525)
+Crown breaks a Formal Crown Treaty by: (a) playing a Legionary card targeting a territory held by the Treaty partner, or (b) explicit Phase 1 dissolution declaration. Intel actions, Domain Actions in non-partner territory, and Parliamentary actions are not Crown-breaks.
 
-### Bilateral Transfer — Simultaneous Resolution (PP-532)
-Bilateral exchanges (both factions cede to each other) resolve atomically, referencing
-the pre-resolution board state. Exception to within-tier Stability ordering for
-explicitly declared bilateral pairs only.
+## Treaty Betrayal Cascade Timing (PP-523)
+When Crown breaks a Formal Crown Treaty:
+1. Dissolution declared at Phase 1 (before card plays this season).
+2. Crown Stability −2, Crown Mandate −1 applied at end of Phase 4.
+3. Casus Belli granted to betrayed faction at Accounting Step 1.
+4. CB usable from the following season only.
+This staggers effects across resolution windows, keeping each step within the Cascade Depth Cap of 3.
 
-### Diplomatic Token Ownership — PP-518 Clarification (PP-533)
-"Holding" a Diplomatic Token = the faction that PLACED it (not the faction whose mat it
-sits on). Placing faction cannot spend CB vs the token-hosting faction while Token is active.
-Attempting Diplomat card against a faction you hold active CB vs: +2 Ob.
+## Solo/Co-Victory Declaration Priority (PP-524)
+If a faction's solo victory conditions and a co-victory pairing conditions are both met simultaneously at the same Accounting step: the declaring faction chooses which path to claim at the start of Accounting Step 12. Choice cannot be changed during that Accounting step. The 2-consecutive-step requirement applies to the declared path.
 
-### Contesting Unit Destruction (PP-534)
-Contesting unit at Discipline 0: destroyed in place. Military −1. Contested state ends
-immediately. No retreat on destruction.
-
-### Riskbreaker Priority 1 — Success Definition (PP-535)
-"Fired successfully" for PP-524 CB-burn purposes: Riskbreaker Investigates a territory
-where Varfell played a Tribune card this season. Observation is automatic (no roll).
-No Varfell Tribune active this season: Priority 1 does not "fire successfully" for
-CB-burn, even if Riskbreakers play their Investigate action.
-
-### Three-Faction Territory State — Seizure + Contested (PP-536)
-Church Seizure Claim in already-contested territory: Battle next season is Church vs
-controller only. Contesting third-party unit may join either side or remain neutral.
-If neutral: persists regardless of Battle outcome; winner inherits a new contested state
-vs the third-party unit.
-
-### Fort Level Cap — Graduated Seizure (PP-537)
-Fort Level Ob cap of +3 confirmed for Graduated Seizure. Fort 4 territories contribute
-+3 Ob, same as Fort 3. Standard Battle Fort bonus (defensive dice) remains uncapped.
+## Diplomatic Alignment — Parliamentary Motion Definition (PP-526)
+Once per season during a Parliamentary Session, both Church and Hafenmark count as same-side voters regardless of their individually declared votes. Declared at the start of the Parliamentary Session. Public. Applies to one motion per season. Not a free card play; requires no action spend.

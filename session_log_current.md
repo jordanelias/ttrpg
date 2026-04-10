@@ -1,6 +1,48 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-09_SONNET_DIPL_BATCH2
+session_close: 2026-04-09
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Diagnosed remediation needed: PP numbering collision (PP-506-511 taken by Graduated Seizure)
+2. Rebuilt params_board_game.md with correct PP-512-524 numbering for all diplomacy patches
+3. Added PP-512-524 to patch register
+4. Added ED-370-373 to editorial ledger
+5. Ran 8 unique scenario stress tests (Batch 2) — interdependency focus
+6. Patched 4 new findings: PP-525-528
+7. Pre-commit audit: 36/36 checks passed
+8. Committed
+
+## COMMITS THIS SESSION
+- [this commit] — remediation PP-512-524 + batch 2 scenarios PP-525-528; 1 P1 + 3 P2 resolved
+
+## KEY FINDINGS (BATCH 2)
+P1 resolved: 1 (Diplomatic Alignment 'Parliamentary motion' undefined — PP-526)
+P2 resolved: 3 (Crown-break trigger PP-525, Closed Pledge witnesses PP-527, Treaty lapse timing PP-528)
+Clean scenarios: 4 (S8 Coalition Pivot, S11 Thread Stewardship, S12 Multi-CB, S14 Token Timing)
+
+## PATCHES APPLIED THIS SESSION
+PP-512–524: Diplomacy system (renumbered from PP-500-512 due to numbering collision)
+PP-525: Crown-break trigger definition (Legionary or Phase 1 declaration)
+PP-526: Diplomatic Alignment 'shared Parliamentary motion' = same-side voter effect
+PP-527: Closed Pledge witnesses = factions at Accounting of revelation
+PP-528: Crown Treaty lapse timing = Phase 1 of season after period ends
+
+## OPEN EDITORIALS
+ED-370: Hybrid personal scene -> BG Treaty bridge (P2)
+ED-371: Coalition suppression dominant strategy confirmation (P2)
+ED-372: Thread Liaison dissolution timing (P2)
+ED-373: Token on Mandate-0 suspension (P3, provisionally applied PP-517)
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-09_SONNET_DIPL_AUDIT_PATCH
 session_close: 2026-04-09
 phase: COMPLETE

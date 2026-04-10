@@ -471,7 +471,7 @@ relevant stats to meet or exceed the listed threshold simultaneously.
 
 | Coalition | Factions | Trigger condition | Effect on activation |
 |-----------|---------|-------------------|----------------------|
-| Diplomatic Alignment | Church + Hafenmark | Both Influence ≥ 5 | +1D to each other's Diplomacy rolls for the season; one shared Parliamentary motion declared without spending a card (once per season) |
+| Diplomatic Alignment | Church + Hafenmark | Both Influence ≥ 5 | +1D to each other's Diplomacy rolls for the season; once per season during a Parliamentary Session, both factions count as same-side voters regardless of their declared votes (PP-526) |
 | Military Compact | Varfell + Löwenritter | Both Military ≥ 5 | Shared unit deployment: one faction's Legionary card may be played in the other's adjacent territory without adjacency restriction; on activation both factions jointly declare one Named Enemy — each gains 1 CB vs Named Enemy (PP-507 cap); Named Enemy may be changed by mutual Phase 1 agreement; Compact dissolves if either partner plays Legionary targeting the other |
 | Trade Compact | Crown + Hafenmark | Crown TCV ≥ 14 AND Hafenmark TCV ≥ 10 | Each faction's Trade/Govern in the other's territory: −1 Ob this season |
 | Thread Stewardship | Varfell + Restoration Movement | VTM ≥ 3 AND RM has ≥ 2 Presence markers | Restoration Community Weaving in Varfell territories: −1 Ob; Varfell Tribune actions in RM Presence territories: +1D |
