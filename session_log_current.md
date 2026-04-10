@@ -263,3 +263,8 @@ editorial_decisions_pending: [ED-358]
 - Structural gaps: no arcs for Edeyja, mass combat, Thread operations, Southernmost/Warden, Altonian invasion, Torben succession. 5 NPCs never primary drivers.
 - Priority actions: formalise 4 mechanical gaps, add checkpoints to 2 accumulation arcs, generate arcs for 5 uncovered NPCs and 5 uncovered arc types.
 - Committed as gm_ref/arc_narrative_analysis.md.
+
+### 2026-04-08 — Existing NPC Character Analyses
+- Deep character analysis for 11 existing named NPCs committed.
+- Covers: Almud (TS 28 proximity crisis), Lenneth (archive as ontological weapon), Torben (disputed inheritance), Elske (hostage with channels), Vaynard (collector who cannot touch), Baralta (invisible contradiction), Himlensendt (sincere wrong), Klapp (study→perception boundary), Olafsson (instrumentalist corruption), Jarnstal (soldier vs chain of command), Ehrenwall (ledger that never forgives).
+- Key findings: Almud's TS 28 is the campaign's latent catalyst; Baralta's Ob 1 deviation cost means Hafenmark IS Baralta; Ehrenwall is the only NPC who cannot be influenced; Olafsson-Haelgrund vertical creates dual-pressure on Church from within.
