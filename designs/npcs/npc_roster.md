@@ -18,7 +18,11 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 
 **Compromise:** None. Edeyja is the moral anchor of the setting. Her conviction (Continuity) is uncompromised and her judgment is sound. She is the standard against which other practitioners measure themselves. Players who reach her find someone who will not bend — and that rigidity is itself a narrative force.
 
-**Behavioral AI:** Evidence-driven. Will not act on political appeals, emotional urgency, or abstract moral claims. Only responds to demonstrated Thread competence and concrete substrate data. **Flaw: None.** Edeyja's "flaw" is that she is correct and the world is dying anyway.
+**Historical echo:** Hypatia of Alexandria — the last great practitioner of a knowledge tradition that the surrounding civilisation was actively forgetting. The structural parallel is precise: Hypatia maintained mathematical and philosophical knowledge in a city that was destroying the institutions that produced it. Edeyja maintains Thread-substrate knowledge on a peninsula that has forgotten the substrate exists.
+
+**Ethics:** Deontological — duty to the substrate. The work must be done because the work must be done. There is no consequentialist calculus that could override the obligation, because the consequence of failure is ontological collapse.
+
+**Behavioral AI:** Evidence-driven. Will not act on political appeals, emotional urgency, or abstract moral claims. Only responds to demonstrated Thread competence and concrete substrate data. **Flaw: None.** Edeyja's "flaw" is that she is correct and the world is dying anyway. Her inability to communicate the urgency of her work to non-sensitives (P-08: epistemological barrier) means the most important person on the peninsula cannot ask for help from anyone who does not already understand why it is needed.
 
 ---
 

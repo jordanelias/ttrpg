@@ -302,3 +302,9 @@ Next session priority: ED-364 Almud rewrite, then Church Graduated Seizure simul
   - ruler_diamond_extended_foils.md: All 4 subjective perspectives. All 5 triangles/paired foils where Almud appears.
   - arcs_01_04_nongreedy.md: 8 paralysis→restraint corrections in Arc 1.
 - ED-364 resolved. 2 P1-BLOCKERs remaining.
+
+### 2026-04-09 — NPC Characterization Improvements
+- Edeyja roster entry strengthened: added Hypatia historical echo, deontological ethics framework, P-08 barrier consequence.
+- Almud correction plan archived as COMPLETE.
+- NPC audit: all 13 roster NPCs verified for historical echo, behavioral AI, ethics, consequence specification.
+- Remaining editorial items: Prudence Cardinal still unnamed (flagged ED-358), stat blocks deferred.
