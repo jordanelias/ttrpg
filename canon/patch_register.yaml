@@ -4946,3 +4946,272 @@ patches:
   source: SIM-DB-STRESS-01 stress test 2026-04-09
   affects: [designs/contest/social_contest_system_v2.md, references/params_contest.md]
   status: applied
+
+
+# Territory Operations Patches — Round 2 (SIM-TERR-02)
+# PP-525 through PP-540
+# Date: 2026-04-09
+
+- id: PP-525
+  date: 2026-04-09
+  severity: P1
+  description: >
+    TCV table reconciliation — victory_architecture_v1.md §1 body errors corrected.
+    Canonical TCV values (from params_board_game.md, consistent with PP-470 total=29
+    and stated starting TCV summaries): T8 Gransol = 4, T9 Himmelenger = 3.
+    victory_architecture_v1.md §1 body table listed T8=3 and T9=5 — both incorrect.
+    The stated starting TCV summaries in both documents (Crown 12, Hafenmark 8,
+    Varfell 6, Church 3) are canonical anchors. params_board_game.md TCV table is
+    consistent with these anchors; victory_architecture_v1.md §1 body is not.
+    This patch corrects victory_architecture_v1.md §1 body: T8 Gransol TCV = 4,
+    T9 Himmelenger TCV = 3. Total remains 29. Resolves AUD-01, AUD-02.
+  finding_id: AUD-01, AUD-02
+  source: audit SIM-TERR-02 2026-04-09
+  affects: ['designs/board_game/victory_architecture_v1.md']
+  status: applied
+
+- id: PP-526
+  date: 2026-04-09
+  severity: P2
+  description: >
+    victory_architecture_v1.md §1 text fix: T17 named "Reinstadt" — corrected to
+    "Halvarshelm" per geography_design.md canonical territory naming. Resolves AUD-03.
+  finding_id: AUD-03
+  source: audit SIM-TERR-02 2026-04-09
+  affects: ['designs/board_game/victory_architecture_v1.md']
+  status: applied
+
+- id: PP-527
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Dislodgement Battle role assignment (who is attacker, who is defender when a territory
+    controller fights to remove a contesting unit). Rule: the faction playing the Legionary
+    card that triggers the Battle is always "attacker" for purposes of Battle Ob, degree
+    table, and Fort bonus application. The "defender" is the faction whose unit is being
+    attacked — regardless of which faction controls the territory. Specific case: Territory
+    controller playing Legionary to dislodge a contesting unit = controller is attacker.
+    Ob = contesting faction's Military ÷ 2 (round up, min 1). The contesting unit is
+    defending its position. Fort Level bonus applies to the fort-controlling faction
+    ONLY if they are the defender (i.e., the contesting unit does NOT get the fort bonus
+    — the fort belongs to the controller, who in the dislodgement scenario is the attacker).
+    Exception: if the contesting unit is the one playing Legionary to "upgrade" their
+    occupation (see PP-528): they are the attacker and the controller is the defender
+    with full Fort bonus. Resolves CONT-A-03.
+  finding_id: CONT-A-03
+  source: stress test SIM-TERR-02 2026-04-09
+  affects: ['references/params_board_game.md']
+  status: applied
+
+- id: PP-528
+  date: 2026-04-09
+  severity: P2
+  description: >
+    Contesting faction initiating a conquest Battle from contested position. A faction
+    that currently has a contesting unit in a territory (per PP-519) may play a Legionary
+    card in a subsequent season to "upgrade" their occupation to a conquest attempt.
+    This is a standard March/Battle declaration — the fact that the unit is already present
+    does not change the mechanic. Procedure: contesting faction plays Legionary Outward
+    targeting the contested territory (they're already there). Battle fires: contesting
+    faction = attacker, controlling faction = defender (with full Fort bonus). Ob = defender
+    Military ÷ 2 (standard). Outcome per PP-476: Attacker wins (margin > Ob) → territory
+    captured, defender retreats per PP-506. Partial → contested state continues, Discipline
+    losses applied. Defender wins → contesting unit retreats per PP-506 (leaves the
+    territory entirely — contested state ends). This means a contesting unit can be
+    dislodged by losing a Battle they themselves initiated — an aggressive occupation
+    attempt that fails results in complete retreat. Resolves CB2-D-02.
+  finding_id: CB2-D-02
+  source: stress test SIM-TERR-02 2026-04-09
+  affects: ['references/params_board_game.md']
+  status: applied
+
+- id: PP-529
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Retreat timing within Phase 4 Priority 2: multi-Legionary offensive turn. When a
+    faction plays two Legionary cards targeting two different territories in the same
+    Phase 4 Priority 2, and one target territory's defender retreats toward the other
+    target territory: the retreat resolves AFTER the retreating faction's Battle result
+    is determined but BEFORE the second Battle of that Priority 2 tier resolves for
+    that same defending faction. Specific sequence: (1) Battle 1 resolves (higher Stability
+    attacker). (2) Retreat from Battle 1 fires immediately (defending unit moves to nearest
+    friendly adjacent territory). (3) Battle 2 resolves for the next territory in the tier.
+    If the retreat destination happens to be the second attacked territory: the retreated
+    unit IS present and participates in Battle 2's defense. The retreating unit's Discipline
+    has already been reduced by the Battle 1 outcome (Discipline loss applies on retreat,
+    per PP-506 Discipline −1). The reinforced defense in Battle 2 uses the reduced-Discipline
+    unit. This ruling rewards defensive players who arrange retreat paths toward threatened
+    territories, and punishes overextended two-front attackers who don't account for
+    retreat destinations. Resolves RET-A-03.
+  finding_id: RET-A-03
+  source: stress test SIM-TERR-02 2026-04-09
+  affects: ['references/params_board_game.md']
+  status: applied
+
+- id: PP-530
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Retreat destination selection — retreating faction chooses. When a retreating unit
+    has multiple valid retreat destinations (adjacent friendly territories), the controlling
+    player selects the destination. There is no mechanical priority beyond validity
+    (adjacent + friendly/non-attacker controlled). The player may choose strategically.
+    This applies to all three retreat options in PP-506 (friendly adjacent, non-attacker
+    adjacent when no friendly exists, and the destruction case when completely encircled).
+    For option 2 (retreat into non-attacker non-friendly territory): retreating faction
+    chooses which non-attacker adjacent territory to retreat into, creating a contested
+    state there. This mirrors the TTRPG convention (retreating faction nominates destination).
+    Resolves RET-A-01.
+  finding_id: RET-A-01
+  source: stress test SIM-TERR-02 2026-04-09
+  affects: ['references/params_board_game.md']
+  status: applied
+
+- id: PP-531
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Diplomatic Transfer — consent withdrawal window. Once both factions have declared
+    mutual agreement in Phase 2 Planning, consent cannot be unilaterally withdrawn before
+    Phase 4 Priority 4 resolution. The Phase 2 declaration is binding for that season.
+    Mechanically: the Diplomatic Transfer is an irrevocable mutual declaration — both
+    parties have publicly committed. Withdrawal after Phase 2 declaration constitutes
+    Treaty betrayal (same political weight as a Treaty-break). Effect: the withdrawing
+    faction receives Stability −1 (political embarrassment); the other faction receives a
+    permanent CB vs the withdrawing faction (same as Treaty betrayal CB, PP-014 precedent).
+    This creates a strong deterrent against tactical reneging (the CB is permanent and
+    more powerful than the 3-season tactical CB from normal Transfer initiation). If both
+    parties simultaneously withdraw (Phase 2 declaration followed by Phase 3 joint
+    withdrawal): no penalty (mutual retraction before resolution is not a betrayal).
+    Mutual joint withdrawal requires both factions to declare withdrawal at Phase 3 start.
+    Resolves DT-D-02.
+  finding_id: DT-D-02
+  source: stress test SIM-TERR-02 2026-04-09
+  affects: ['references/params_board_game.md']
+  status: applied
+
+- id: PP-532
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Bilateral Diplomatic Transfer — simultaneous resolution rule. When both factions
+    declare mutual Diplomatic Transfer (each ceding a different territory to the other),
+    both transfers resolve simultaneously regardless of Stability order. At the moment of
+    resolution, both factions reference the pre-resolution board state: each ceding faction
+    still controls their territory at declaration time. Both transfers are executed atomically
+    — neither fires before the other, eliminating the exploit where the first-resolving
+    faction's transfer completes before the second is checked. Simultaneous bilateral
+    resolution is a special exception to the within-tier Stability ordering rule (PP-502),
+    applicable only to Diplomatic Transfer pairs where both transfers are explicitly
+    interdependent (declared as a bilateral exchange in Phase 2). Single unilateral transfers
+    retain normal Priority 4 Stability ordering. Resolves DT-D-01.
+  finding_id: DT-D-01
+  source: stress test SIM-TERR-02 2026-04-09
+  affects: ['references/params_board_game.md']
+  status: applied
+
+- id: PP-533
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Diplomatic Token ownership clarification for PP-518 CB suppression. The Diplomatic
+    Token is "held" by the faction that PLACED it (the Diplomat card user), not the faction
+    on whose mat it sits. PP-518 reworded: "The faction that placed a Diplomatic Token on
+    another faction's mat cannot spend a CB against that token-holding faction (the one
+    whose mat it is on) for as long as the Token remains active." Example: Hafenmark places
+    Diplomatic Token on Crown's mat → Hafenmark cannot spend CB vs Crown while the Token
+    is active. Crown is free to spend CBs against Hafenmark (Crown did not place the Token).
+    A faction may not place a Diplomatic Token on a faction they currently hold an active
+    CB against (the relationship is too hostile for diplomatic engagement): attempting to
+    play Diplomat card against a faction you hold CB vs requires Ob +2 (diplomatic friction).
+    Resolves CB2-D-01.
+  finding_id: CB2-D-01
+  source: stress test SIM-TERR-02 2026-04-09
+  affects: ['references/params_board_game.md']
+  status: applied
+
+- id: PP-534
+  date: 2026-04-09
+  severity: P2
+  description: >
+    Contesting unit at Discipline 0 — contested state termination. If a contesting unit's
+    Discipline reaches 0 through cumulative Battle losses (PP-514 within-season cumulation
+    or PP-527 dislodgement Battle): the unit is destroyed (Formation Break, PP-514 precedent).
+    Destruction of the contesting unit immediately ends the contested state. The territory
+    reverts to a clean single-controller state (no contested marker). The destroyed faction
+    takes Military −1 (PP-506 encirclement precedent). There is no retreat when Discipline
+    reaches 0 — the unit is destroyed in place. This prevents a "retreat on death" loop.
+    Resolves CONT-D-01 (confirmation).
+  finding_id: CONT-D-01
+  source: stress test SIM-TERR-02 2026-04-09
+  affects: ['references/params_board_game.md']
+  status: applied
+
+- id: PP-535
+  date: 2026-04-09
+  severity: P2
+  description: >
+    Riskbreaker Priority 1 "fired successfully" definition for PP-524 CB burn. Riskbreaker
+    Priority 1 Investigate is considered "fired successfully" if: the Riskbreaker plays
+    their Investigate action this season AND the investigation targets any territory where
+    Varfell has an active Tribune Inward this season (Tribune card was played by Varfell
+    in the same Phase 4 resolution, at Priority 1 — Riskbreakers act after Varfell per
+    within-tier Stability order, so they can observe Varfell's Tribune placement).
+    If Varfell plays no Tribune this season: Priority 1 Investigate fires but finds no
+    Tribune activity → not "fired successfully" for CB-burn purposes → PP-524 Priority 6
+    does not trigger. The Riskbreaker Investigate has a valid target (any territory) but
+    must observe active Tribune operations to trigger the Patience Protocol CB burn.
+    No roll required for the observation itself — the Riskbreaker Priority 1 observation
+    is automatic if a Varfell Tribune was played in a territory within Riskbreaker's
+    monitored zone (territories in which Riskbreakers have a priority interest per their
+    AI tree). Resolves CB2-D-03.
+  finding_id: CB2-D-03
+  source: stress test SIM-TERR-02 2026-04-09
+  affects: ['references/params_board_game.md']
+  status: applied
+
+- id: PP-536
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Three-faction territory state — Seizure Claim + contesting unit + controller. When
+    Church achieves Seizure Success in a territory that is already contested (PP-519
+    state: controller A + contesting unit B), Church's Seizure Claim token is placed.
+    The following season's Battle (PP-510) is Church vs the territory controller (A),
+    NOT Church vs the contesting unit (B). The contesting unit (B) is a third party —
+    it does not participate in the Church-A Battle as a combatant. However: if the contesting
+    unit belongs to the same faction as the Seizure Claim would dislodge (unusual but
+    possible in a 4-faction game): they are merged — the contesting unit reinforces the
+    controller's defense (add contesting unit's Discipline as +1D to defender pool, if the
+    same faction controls both). If the contesting unit belongs to a different faction from
+    both Church and controller: the contesting unit may choose to join either side in the
+    Battle or hold position as a neutral occupier. If it holds position: it remains in the
+    territory regardless of Battle outcome (the Battle is between Church and A, not about B).
+    After Battle: the winner controls the territory alongside B's contesting unit — a new
+    contested state immediately fires for the winner vs B. Resolves CONT-L-01.
+  finding_id: CONT-L-01
+  source: stress test SIM-TERR-02 2026-04-09
+  affects: ['references/params_board_game.md']
+  status: applied
+
+- id: PP-537
+  date: 2026-04-09
+  severity: P2
+  description: >
+    Fort Level Ob cap for Church Graduated Seizure — confirmed at +3. The Fort Level
+    Ob contribution to Graduated Seizure (PP-509) is capped at +3 regardless of actual
+    Fort Level. Fort 4 territories contribute +3 to Ob, same as Fort 3. Rationale: at
+    Ob = (7 − CV) + 4 (Fort 4 uncapped), a CV=3 Fort-4 territory would have Ob=8.
+    Pool 11D vs Ob 8 produces P(net ≥ 8) ≈ 0.002 — statistically inaccessible, never
+    achievable in practice. The cap at +3 (Ob=7 for CV=3 Fort-4) preserves the same
+    near-impossibility while aligning Fort 4 with Fort 3 resistance. The Fort-4 benefit
+    is fully expressed in standard Battle (additional dice to defensive pool), which
+    remains uncapped. The Seizure cap is appropriate: even the mightiest fortress can
+    eventually fall to a sufficiently legitimate institutional claim. Ob 7 (P(Fail)=0.75
+    per season) represents "very long time horizon" without "impossible." Resolves SEI2-A-02.
+  finding_id: SEI2-A-02
+  source: stress test SIM-TERR-02 2026-04-09
+  affects: ['references/params_board_game.md']
+  status: applied
+

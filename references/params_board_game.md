@@ -1579,3 +1579,61 @@ Conflict Marker: flip token on Church or Hafenmark mat. Placed when either facti
 
 ## Ministry Domain Action Conflict (PP-480)
 If Ministry NPC would play a Domain action in a territory already acted on by any player faction this Phase 4 resolution: Ministry redirects to next-priority viable territory per AI tree. If all viable territories are already acted-on this phase: Ministry takes Priority 5 default in any uncontested AP-token territory.
+
+## Territory Operations — Round 2 Patches (PP-525–PP-537)
+<!-- PATCHES APPLIED: PP-525–PP-537 (SIM-TERR-02) -->
+
+### Dislodgement Battle Role Assignment (PP-527)
+The faction playing the Legionary card is always "attacker." In dislodgement:
+- Territory controller plays Legionary → controller is attacker, contesting unit is defender.
+- Ob = contesting faction Military ÷ 2. Contesting unit does NOT get Fort bonus (fort belongs to controller/attacker).
+- Contesting faction plays Legionary to upgrade occupation → contesting faction is attacker, controller is defender with full Fort bonus.
+
+### Contesting Unit — Conquest Upgrade (PP-528)
+Contesting faction may play Legionary in a subsequent season to attempt conquest from their
+contested position. Standard Battle rules apply (PP-476). Defender wins → contesting unit
+retreats entirely per PP-506 (contested state ends). Attacker wins → territory captured.
+
+### Retreat Timing — Multi-Legionary Offensive (PP-529)
+Retreat from Battle 1 fires BEFORE Battle 2 resolves in the same Phase 4 Priority 2 tier.
+Retreating unit may reinforce a second attacked territory if it retreats there. Retreating
+unit enters Battle 2 at reduced Discipline (PP-506 Discipline −1 from retreat).
+
+### Retreat Destination — Player Choice (PP-530)
+Retreating faction chooses destination from all valid options (adjacent friendly,
+non-attacker adjacent if no friendly). No mechanical priority beyond validity.
+
+### Diplomatic Transfer — Consent Withdrawal (PP-531)
+Phase 2 declaration is binding. Unilateral withdrawal after Phase 2: Stability −1 to
+withdrawing faction + permanent CB to other faction. Mutual simultaneous withdrawal at
+Phase 3 start: no penalty.
+
+### Bilateral Transfer — Simultaneous Resolution (PP-532)
+Bilateral exchanges (both factions cede to each other) resolve atomically, referencing
+the pre-resolution board state. Exception to within-tier Stability ordering for
+explicitly declared bilateral pairs only.
+
+### Diplomatic Token Ownership — PP-518 Clarification (PP-533)
+"Holding" a Diplomatic Token = the faction that PLACED it (not the faction whose mat it
+sits on). Placing faction cannot spend CB vs the token-hosting faction while Token is active.
+Attempting Diplomat card against a faction you hold active CB vs: +2 Ob.
+
+### Contesting Unit Destruction (PP-534)
+Contesting unit at Discipline 0: destroyed in place. Military −1. Contested state ends
+immediately. No retreat on destruction.
+
+### Riskbreaker Priority 1 — Success Definition (PP-535)
+"Fired successfully" for PP-524 CB-burn purposes: Riskbreaker Investigates a territory
+where Varfell played a Tribune card this season. Observation is automatic (no roll).
+No Varfell Tribune active this season: Priority 1 does not "fire successfully" for
+CB-burn, even if Riskbreakers play their Investigate action.
+
+### Three-Faction Territory State — Seizure + Contested (PP-536)
+Church Seizure Claim in already-contested territory: Battle next season is Church vs
+controller only. Contesting third-party unit may join either side or remain neutral.
+If neutral: persists regardless of Battle outcome; winner inherits a new contested state
+vs the third-party unit.
+
+### Fort Level Cap — Graduated Seizure (PP-537)
+Fort Level Ob cap of +3 confirmed for Graduated Seizure. Fort 4 territories contribute
++3 Ob, same as Fort 3. Standard Battle Fort bonus (defensive dice) remains uncapped.

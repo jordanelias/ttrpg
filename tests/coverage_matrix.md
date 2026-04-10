@@ -503,3 +503,25 @@ Editorials raised: ED-377 through ED-382
 | D-04 | TIE/CROSS no-strain exception missing from params Interaction Types table | PP-525 applied |
 | D-05 | OBSCURING WIN "any exchange" conflicts with CROSS no-winner structure | PP-526 applied |
 | L-05 | §11 Hybrid text does not cite PP-256; BG layer resolution path appears open | PP-527 applied |
+
+## SIM-TERR-02 — Territory Operations Round 2 (2026-04-09)
+| Scenario | Modes | P1 | P2 | Patches | Status |
+|----------|-------|----|----|---------|--------|
+| CB under campaign conditions | A+D | 1 | 3 | PP-533,535 | Applied |
+| Diplomatic Transfer exploitation | A+D | 2 | 4 | PP-531,532 | Applied |
+| Contested territory cascade | A+D+J+L | 4 | 4 | PP-527,528,534,536 | Applied |
+| Post-Battle retreat chain | A+D | 2 | 3 | PP-529,530 | Applied |
+| Church Graduated Seizure updated Ob | A | 0 | 2 | PP-537 | Applied |
+| TCV audit | — | 2 | 1 | PP-525,526 | Applied |
+
+**Total P1: 9 | Total P2: 22 | Patches: PP-525–PP-537 (13 patches)**
+**Editorials raised: ED-377–ED-381 (5 items; ED-377 is P1 — CV starting values)**
+
+### Cumulative SIM-DEBT after SIM-TERR-01 + SIM-TERR-02
+- ED-373: Altonian Vanguard stats (P1 — blocks IP clock sim)
+- ED-377: CV starting values (P1 — blocks Church/RM simulation)
+- ED-370: CB gate model confirmation
+- ED-378: Contested state decay decision
+- ED-379: Diplomatic Transfer card cost
+- ED-380: Voluntary strategic withdrawal
+- ED-381: CV ratchet (intentional design confirmation)

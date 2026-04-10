@@ -25,8 +25,8 @@ All territory numbers match geography_design.md canonical table.
 | T# | Territory | TCV | Controller |
 |----|-----------|-----|-----------| 
 | T1 | Valorsplatz | 5 | Crown★ |
-| T8 | Gransol | 3 | Hafenmark★ |
-| T9 | Himmelenger | 5 | Church★ |
+| T8 | Gransol | 4 | Hafenmark★ |
+| T9 | Himmelenger | 3 | Church★ |
 | T12 | Sigurdshelm | 3 | Varfell |
 | T10 | Spartfell | 1 | Hafenmark |
 | T3 | Lowenskyst | 2 | Crown |
@@ -38,7 +38,7 @@ All territory numbers match geography_design.md canonical table.
 | T2 | Kronmark | 1 | Crown |
 | T5 | Feldmark | 1 | Crown |
 | T6 | Stillhelm | 1 | Crown |
-| T17 | Reinstadt | 1 | Hafenmark |
+| T17 | Halvarshelm | 1 | Hafenmark |
 | T15 | Askeheim | 0 | Uncontrolled |
 | T16 | Schoenland | — | Not in territorial play |
 | | **Total** | **30** | |

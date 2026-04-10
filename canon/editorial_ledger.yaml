@@ -2642,3 +2642,95 @@ editorial_decisions:
     description: "Belief Momentum cap (max 1/contest from §9.5) unique across systems — no other mechanic imposes per-action Momentum earn cap. Confirm intentional asymmetry vs combat/threadwork Momentum earn."
     priority: P2
     tags: [social_contest, momentum, beliefs, cross_system_consistency]
+
+
+  # ═══ TERRITORY OPS SIM-TERR-02 ════════════════════════════════════════
+
+# Editorial Items — SIM-TERR-02
+# ED-377 through ED-381
+
+  - id: ED-377
+    status: flagged
+    date_raised: 2026-04-09
+    description: >
+      [EDITORIAL: ED-377 — CV starting values required]
+      Church's Graduated Seizure strategy depends entirely on per-territory CV starting values.
+      No CV starting values exist in any canonical document. The TCV table exists; CV does not.
+      Required: a CV starting value for each of the 15 playable territories (T1–T14, T17).
+      Inferred from context: T9 Himmelenger = 5 (Church capital, piety pole). T15 Askeheim = 0
+      (hard-fixed per victory_architecture §2). All others: unconfirmed. Decision needed.
+      Suggest: T9=5, T3/T14/T2=4 (Crown/Hafenmark institutional heartlands), T1=4 (capital),
+      T8=3 (Hafenmark, more secular), T4/T11/T12/T13=2 (Varfell fjords, folk practice),
+      T5/T6/T7/T10/T17=3 (mixed). Requires designer confirmation before Church simulation.
+    priority: P1
+    blocks: Church seizure simulation, Calamity Drift simulation, RM Cultural Revolution simulation
+
+  - id: ED-378
+    status: flagged
+    date_raised: 2026-04-09
+    description: >
+      [EDITORIAL: ED-378 — Contested state decay decision]
+      PP-519 creates a persistent contested state with no attrition decay. A contesting unit
+      resets Discipline at Year-End, enabling indefinite capital blockade at no ongoing cost.
+      Options: (a) No decay — contested state persists until resolved by Battle or withdrawal
+      (current PP-519 as written). (b) Discipline decay: contesting unit loses Discipline −1
+      per season of contestation (starvation/logistics penalty), with no Year-End reset for
+      contested units specifically. (c) Annual Political Vacuum: if a territory remains
+      contested for 4+ consecutive seasons, it enters Political Vacuum (neither faction
+      maintains governance) for 1 season, then becomes Uncontrolled. Option (a) is simpler.
+      Option (b) creates a siege attrition dynamic. Option (c) is thematic but adds a new
+      state. Decision required.
+    priority: P2
+    blocks: contested state long-game balance
+
+  - id: ED-379
+    status: flagged
+    date_raised: 2026-04-09
+    description: >
+      [EDITORIAL: ED-379 — Diplomatic Transfer card cost decision]
+      Raised from ED-371 and now further supported by DT-D-04: Crown can play a Formal Crown
+      Treaty (Senator Outward) AND a Diplomatic Transfer (no card cost) with the same faction
+      in the same season. This double-diplomatic combo (relationship building + territory gift
+      in one season) may be too efficient. Options: (a) Keep as written — Treaty uses Senator,
+      Transfer is free. (b) Diplomatic Transfer requires Senator Outward card (same card type
+      as Treaty) — forces choice between Treaty and Transfer in same season. (c) Diplomatic
+      Transfer costs no card but only once per 2 seasons (cooldown). Designer decision needed.
+    priority: P2
+    blocks: Diplomatic Transfer finalization
+
+  - id: ED-380
+    status: flagged
+    date_raised: 2026-04-09
+    description: >
+      [EDITORIAL: ED-380 — Voluntary strategic withdrawal before Battle]
+      Raised from ED-372 and further supported by RET analysis. Currently no mechanism for
+      a faction to voluntarily withdraw a unit from a territory before a superior force
+      arrives (avoiding Battle without incurring retreat penalties). In TTRPG: Column
+      formation provides movement-only capability. In BG: no equivalent. Recommendation:
+      add "Tactical Withdrawal" as an optional Legionary card declaration (Phase 1):
+      faction declares withdrawal of their unit from a named territory before Battle fires
+      in Phase 4. The territory is conceded without Battle. The withdrawing unit moves to
+      a friendly adjacent territory (retreating faction chooses, per PP-530). No Discipline
+      loss (voluntary withdrawal vs forced retreat). The attacking faction enters the
+      territory unopposed (no Battle roll). This enables strategic retreats without
+      requiring a fight the defender cannot win. Decision: implement or leave as-is?
+    priority: P2
+    blocks: strategic flexibility for Military-weak factions
+
+  - id: ED-381
+    status: flagged
+    date_raised: 2026-04-09
+    description: >
+      [EDITORIAL: ED-381 — CV ratchet from Church Seizure: intentional design?]
+      PP-509 + Graduated Seizure create a ratchet: Church invests in raising CV (via Piety
+      Spread, Inquisition, Seizure OW), then if the territory is militarily recaptured
+      by another faction, the raised CV remains. Church can re-seize at lower Ob. This means
+      Church investment in a territory is not lost on military defeat — it makes future
+      ecclesiastical reconquest easier. This may be intentional (Church's cultural influence
+      survives military reversals, consistent with historical religious persistence) or an
+      oversight (Church should not gain a permanent advantage from a temporary seizure).
+      If intentional: add a design note to the Graduated Seizure rules. If not: add a
+      "CV degrades −1 per season the territory is held by a non-Church faction after Seizure"
+      mechanic to represent secular governance eroding Church's cultural investment.
+    priority: P2
+    blocks: Church long-game balance

@@ -457,3 +457,16 @@ Final Patch:
 - PP-515: CB multi-source stacking permitted; 4-CB provisional
 - ED-370, ED-371 resolved. ED-372, ED-373 flagged (P2).
 - params_board_game.md updated to v0.9.3.
+
+### 2026-04-09 — Stress Test Round 2: Territory Operations (SIM-TERR-02)
+- New scenarios: CB under campaign conditions, Diplomatic Transfer exploitation,
+  contested-territory cascade, post-Battle retreat chains, Graduated Seizure updated Ob table.
+- TCV audit: found P1 errors in victory_architecture_v1.md §1 (T8=3 should be 4, T9=5 should be 3).
+- 9 P1 findings, 22 P2 findings.
+- PP-525–PP-537 applied (13 patches). ED-377–381 raised.
+- KEY GAPS CLOSED: TCV table fixed (PP-525,526), dislodgement Battle roles defined (PP-527),
+  retreat timing in multi-Legionary turn defined (PP-529), retreat destination = player choice (PP-530),
+  DT consent withdrawal binding (PP-531), bilateral transfer atomic (PP-532), DT Token ownership
+  clarified (PP-533), three-faction territory state ruled (PP-536).
+- REMAINING P1 BLOCKERS: ED-373 (Vanguard stats), ED-377 (CV starting values).
+- Next: designer input on ED-373 and ED-377 required before further clock/Church simulation.
