@@ -295,51 +295,10 @@ editorial_decisions_pending: [ED-358]
 This session: 17 commits, PP-493–504 (12 patches), 13 NPCs designed, 24 NPCs analyzed, foil diamond + extended network.
 Next session priority: ED-364 Almud rewrite, then Church Graduated Seizure simulation.
 
-
----
-
-## SESSION CLOSED — 2026-04-08
-
-**18 commits this session.**
-
-### Patches Applied (PP-493–504)
-| PP | Scope |
-|----|-------|
-| 493 | Territory reconciliation — 45 T-number refs remapped in victory_architecture, old names struck |
-| 494 | Church Graduated Seizure — Pool=Inf+floor(TC/15), Ob=7−CV, TCV≥8, BALANCE-001 revised |
-| 495 | RM TTRPG Founding Gate — narrative conditions, session 6 floor |
-| 496 | Clock registry created |
-| 497 | Inert Knowledge formalized (P-08) |
-| 498 | Torben Loyalty corrected to 3/0–7 |
-| 499 | Battle Ob = defender Military ÷ 2 |
-| 500 | Fort/Seizure resolved + Political Vacuum rule |
-| 501 | PI thresholds defined (0–4/5–9/10–14/15–19/20+) |
-| 502 | War-scale Dissonant Thread effects |
-| 503 | Co-Movement serialization |
-| 504 | TC seasonal cap ±3/±5 |
-
-### NPC Work
-- 13-character roster designed with compromises, behavioral AI, historical echoes
-- Mode interface matrix (TTRPG/Hybrid/BG) for all 13
-- Character analyses for 24 NPCs (13 roster + 11 existing)
-- Ruler diamond foil analysis (Almud/Lenneth/Baralta/Vaynard)
-- Extended foil network (5 triangular + 5 paired foils)
-- Lenneth redesign proposed (Catherine/Comnena/Melisende)
-- Doux Alexios Laskaris (Greek/Macedonian naming for Altonia)
-
-### Editorial
-- 12 EDs resolved (ED-329/343/352–357/359–363)
-- ED-358 resolved (NPC roster)
-- ED-364 flagged P1 (Almud characterization rewrite — next session)
-
-### Infrastructure
-- canonical_sources.yaml: social_debate→social_contest_system_v2
-- Territory numbering unified across victory_architecture + params_board_game + worldbuilding
-- Hardar Veldensohn→Doux Alexios Laskaris propagated
-
-### Open for Next Session
-1. **ED-364 P1** — Almud rewrite (~33 passages across 3 files). Father assassination lore.
-2. Church Graduated Seizure simulation (PP-494)
-3. PI-CASCADE simulation (PP-501)
-4. DISSONANT simulation (PP-502)
-5. NPC stat blocks
+### 2026-04-09 — ED-364 Almud Characterization Rewrite (P1-BLOCKER resolved)
+- Rewrote Almud across 4 files (~41 passages):
+  - npc_character_analyses_existing.md: Full rewrite. Manuel I Komnenos anchor. Assassination shadow. Strand-as-honeypot. Baralta scope comparison.
+  - ruler_diamond_foil_analysis.md: Axis 2 corrected. All 6 pairings. Almud↔Baralta and Almud↔Vaynard renamed.
+  - ruler_diamond_extended_foils.md: All 4 subjective perspectives. All 5 triangles/paired foils where Almud appears.
+  - arcs_01_04_nongreedy.md: 8 paralysis→restraint corrections in Arc 1.
+- ED-364 resolved. 2 P1-BLOCKERs remaining.

@@ -2443,3 +2443,16 @@ editorial_decisions:
       (scope difference, not competence difference). New lore: father's assassination 
       (suspected). See designs/npcs/almud_correction_plan.md.
     tags: [npc, crown, worldbuilding, p1]
+
+  - id: ED-364
+    status: resolved
+    date_created: 2026-04-08
+    date_resolved: 2026-04-09
+    priority: P1-BLOCKER
+    description: "Almud characterization rewrite — paralysis/indecision replaced with shrewd/guarded/strategic patience across all NPC analysis files"
+    resolution: "Rewrote Almud sections in npc_character_analyses_existing.md, ruler_diamond_foil_analysis.md, ruler_diamond_extended_foils.md, arcs_01_04_nongreedy.md. ~41 passages total. Manuel I Komnenos anchor. Assassination shadow. Strategic patience framework."
+    affected_files:
+      - designs/npcs/npc_character_analyses_existing.md
+      - designs/npcs/ruler_diamond_foil_analysis.md
+      - designs/npcs/ruler_diamond_extended_foils.md
+      - gm_ref/arcs_01_04_nongreedy.md
