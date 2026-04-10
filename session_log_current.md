@@ -275,3 +275,10 @@ editorial_decisions_pending: [ED-358]
 - Lenneth redesign proposed: stoic queen of simmering conviction, presses Almud while not acting herself. Archive = search for proof that reform-from-above works (postponing the choice between convictions and privileges). Historical echoes: Catherine, Anna Comnena, Melisende.
 - Lenneth-Vossen confrontation flagged as campaign's moral reckoning.
 - Behavioral AI: RESEARCHER (defaults to more research when pressed to act).
+
+### 2026-04-08 — Extended Foil Network
+- Ruler diamond subjective perspectives: each ruler's view of the other three, grounded in conviction/resonant style/ethics, with historical anchors (Charles V, Anna Comnena, Justinian, Frederick II Stupor Mundi).
+- 5 triangular foils: Lenneth-Vossen-Baralta (three women/cost of conviction), Almud-Ehrenwall-Himlensendt (king/general/priest), Vaynard-Maret-Lenneth (three Thread scholars), Baralta-Himlensendt-Klapp (three doctrinal speeds), Almud-Lenneth-Edeyja (three Thread levels).
+- 5 paired foils: Vaynard-Olafsson (instrumentalist mirror), Lenneth-Torsvald (archive's two readers), Ehrenwall-Almstedt (two clocks), Strand-Baralta (merit and birth), Jarnstal-Brandt (two soldiers/two fixations).
+- Key finding: Lenneth-Torsvald pairing implies the archive is a practitioner-development environment — if demonstrated through Torsvald's example, Lenneth's own TS development becomes narratively inevitable.
+- Context approaching limit. Recommend new chat for further work.
