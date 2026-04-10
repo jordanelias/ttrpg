@@ -235,7 +235,7 @@ battle turn after personal combat resolves. *[D3-P2-02]*
 
 > **Feigned Retreat Discipline check Ob (PP-256):** The pursuing-side Discipline check is **Ob 1**. Pursuing a fleeing enemy is a natural impulse; Ob 1 reflects the difficulty of halting momentum. Discipline-4 unit: ~87% success. Discipline-1 unit: ~40% success.
 
-> **Clarification (PP-MB-04):** "Reserve commitment at Phase 3 of Turn N+1 makes the unit immediately available for Phase 4 engagement in that same turn (Turn N+1). Commitment does not delay the unit to Turn N+2. Summary: declare Reserve in Phase 3 of Turn N → unit commits at Phase 3 of Turn N+1 → unit may engage in Phase 4 of Turn N+1."
+> **Clarification (PP-MB-04, PP-499 text fix):** "Reserve commitment at Phase 3 of Turn N+1 makes the unit immediately available for Phase 5 Engagement in that same turn (Turn N+1). Commitment does not delay the unit to Turn N+2. Summary: declare Reserve in Phase 3 of Turn N → unit commits at Phase 3 of Turn N+1 → unit may engage in Phase 5 (Engagement) of Turn N+1."
 
 > **Clarification (PP-MB-07):** "Three-sided encirclement example: Front, Left flank, Right flank simultaneously. Shield Wall negates one declared flank (say, Left). Front attack is fully defended (+2D Def). Right flank attack applies normally (full flanking bonus to attacker). The defender faces two unmitigated engagements and one defended — this is the intended design ceiling for Shield Wall. Command = 3 maximum means a force cannot be attacked from more than three directions simultaneously."
 
