@@ -268,3 +268,10 @@ editorial_decisions_pending: [ED-358]
 - Deep character analysis for 11 existing named NPCs committed.
 - Covers: Almud (TS 28 proximity crisis), Lenneth (archive as ontological weapon), Torben (disputed inheritance), Elske (hostage with channels), Vaynard (collector who cannot touch), Baralta (invisible contradiction), Himlensendt (sincere wrong), Klapp (study→perception boundary), Olafsson (instrumentalist corruption), Jarnstal (soldier vs chain of command), Ehrenwall (ledger that never forgives).
 - Key findings: Almud's TS 28 is the campaign's latent catalyst; Baralta's Ob 1 deviation cost means Hafenmark IS Baralta; Ehrenwall is the only NPC who cannot be influenced; Olafsson-Haelgrund vertical creates dual-pressure on Church from within.
+
+### 2026-04-08 — Ruler Diamond Foil Analysis + Lenneth Redesign
+- Foil diamond analysis: Almud-Lenneth-Baralta-Vaynard mapped across two axes (institutional risk tolerance, Thread engagement motivation).
+- All 6 pairings analyzed: Lenneth↔Almud (marriage as stalemate), Lenneth↔Baralta (Catherine enthroned/contained), Lenneth↔Vaynard (archive vs collection), Almud↔Baralta (contradiction seen/blind), Almud↔Vaynard (passive/active TS), Baralta↔Vaynard (universalist/pragmatist).
+- Lenneth redesign proposed: stoic queen of simmering conviction, presses Almud while not acting herself. Archive = search for proof that reform-from-above works (postponing the choice between convictions and privileges). Historical echoes: Catherine, Anna Comnena, Melisende.
+- Lenneth-Vossen confrontation flagged as campaign's moral reckoning.
+- Behavioral AI: RESEARCHER (defaults to more research when pressed to act).
