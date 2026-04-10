@@ -4678,605 +4678,152 @@ patches:
   affects: [references/params_board_game.md]
   status: applied
 
-- id: PP-499
+- id: PP-493
   date: 2026-04-09
-  severity: P2
+  severity: infrastructure
   description: >
-    Reserve clarification text fix. PP-MB-04 stated "unit may engage in Phase 4 of Turn N+1"
-    — Phase 4 is Thread Operations, not Engagement. Corrected to Phase 5 (Engagement).
-    No mechanical change; text error only. Summary: declare Reserve Phase 3 Turn N → commits
-    Phase 3 Turn N+1 → available Phase 5 Engagement Turn N+1.
-  finding_id: A-7-F1 (SIM-MB-01)
-  source: mass_battle stress test 2026-04-09
-  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+    Retroactive register entry. Territory renumbering: all T-numbers remapped to
+    geography_design.md canonical (17 territories). Old names (Arcansheld, Vargstad,
+    Eidursjo, Nordhelm, Mittelmark) replaced with canonical names. TCV total = 30.
+    Starting TCV: Crown 12, Hafenmark 8, Varfell 6, Church 3. Previously applied to
+    victory_architecture_v1.md without register entry.
+  finding_id: null
+  source: retroactive register formalisation 2026-04-09
+  affects: [designs/board_game/victory_architecture_v1.md, references/params_board_game.md]
   status: applied
 
-
-# Territory Operations Patches — SIM-TERR-01
-# PP-500 through PP-526
-# Date: 2026-04-09
-
-- id: PP-500
+- id: PP-494
   date: 2026-04-09
   severity: P1
   description: >
-    Casus Belli (CB) mechanic definition — effect and gate model. CB is a bonus mechanic,
-    not a gate mechanic: no faction requires CB to declare war (March into controlled
-    territory already triggers Battle with no prior permission required). CB effect: when
-    a faction holds an active CB vs a target faction, it may spend the CB when initiating
-    a Battle against that faction to gain +2D on their Military roll for that engagement
-    only. Spending the CB removes it. CB is not a declaration requirement; it is a tactical
-    bonus representing political legitimacy behind the use of force. Multiple CBs held
-    against the same faction: only one CB may be spent per Battle engagement (no stacking).
-    Tracking: CB token placed on faction mat; returned to supply on spend or expiration.
-    Resolves CB-A-01, CB-D-02.
-  finding_id: CB-A-01, CB-D-02
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-501
-  date: 2026-04-09
-  severity: P1
-  description: >
-    Casus Belli — unified expiration table. CB expiration rules consolidated:
-    (1) Treaty betrayal CB: permanent until spent. Never expires.
-    (2) All other CBs (Brutal disposition, Heresy Investigation fabrication, PP-494
-    Graduated Seizure, Patience Protocol): expire after 3 seasons unused. Patience
-    Protocol CB additionally expires on Riskbreaker exposure (existing rule).
-    (3) CB cap: max 2 active CBs against any single faction at one time. If a third CB
-    is acquired vs the same faction, the oldest non-permanent CB is discarded.
-    This resolves the contradiction between PP-014 (permanent treaty CB) and other
-    acquisition routes, and prevents CB runaway from repeated Seizure attempts (CB-L-03).
-    Resolves CB-A-02, CB-L-03.
-  finding_id: CB-A-02, CB-L-03
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-502
-  date: 2026-04-09
-  severity: P1
-  description: >
-    Race condition on Uncontrolled territory claim. When two or more factions play
-    Legionary Outward targeting the same Uncontrolled territory in the same Phase 4
-    resolution: the faction with higher Stability resolves first and claims the territory.
-    The second faction's Legionary card now targets a controlled territory — Battle fires
-    immediately (this is a contested-entry Battle, same Phase 4, same priority tier).
-    Tiebreaker on equal Stability: Crown > Hafenmark > Varfell > Löwenritter > Restoration
-    Movement (same tiebreak order as coalition suppression PP-486). The second faction
-    neither automatically retreats nor loses its card play — Battle determines control.
-    Resolves CLM-D-01.
-  finding_id: CLM-D-01
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-503
-  date: 2026-04-09
-  severity: P1
-  description: >
-    Three-way territorial conflict — Battle resolution. When two factions both declare
-    March into the same territory controlled by a third faction in the same Phase 4 (three
-    distinct factions for one territory), resolution proceeds as follows:
-    (1) The two Marching factions first compete: higher Stability faction declares first,
-    other defers. The first attacker resolves Battle against the defender (standard PP-476).
-    (2) If attacker 1 wins: attacker 1 now controls the territory. Attacker 2's March now
-    targets attacker 1's territory — second Battle fires at same Priority 2, same phase.
-    (3) If defender wins both attacks: no control change; both attackers take Military −1.
-    (4) If attacker 1 achieves only Partial (Discipline loss, no control change): attacker 2
-    still resolves their Battle against the original defender (territory still contested).
-    Three-way Battle does not exist — all Battles are two-faction sequential within the
-    priority tier. Resolves INV-D-02.
-  finding_id: INV-D-02
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-504
-  date: 2026-04-09
-  severity: P1
-  description: >
-    Domain Actions in territories lost in Battle same Phase 4. Phase 4 resolution order:
-    Priority 2 (Military/Battle) fires before Priority 3 (Domain) and Priority 6 (Special).
-    Rule: if a faction loses control of a territory in Priority 2 Battle, all Domain Actions
-    (Priority 3+) previously declared for that territory by the losing faction are
-    automatically void — they do not resolve. The card is treated as having been played and
-    discarded (no refund). The winning faction's Domain Actions declared for that territory
-    resolve normally. Rationale: you cannot govern or fortify land you no longer control
-    at the time of resolution. Resolves DEV-D-01.
-  finding_id: DEV-D-01
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-505
-  date: 2026-04-09
-  severity: P1
-  description: >
-    Voluntary territory concession mechanic. A faction may voluntarily cede control of
-    a territory it controls to another faction as a Diplomatic Transfer. Procedure:
-    (1) Both factions must agree (declared simultaneously in Phase 2 Planning, or via
-    Pledge resolution). No card play required from either faction — Diplomatic Transfer
-    is a free action that does not consume a card.
-    (2) Transfer resolves at Phase 4 Priority 4 (Social/Senator tier), after Military.
-    (3) Fort Level is retained by the territory (physical fortifications transfer with the land).
-    (4) Ministry AP-tokens and Guild CP-tokens in the territory: remain (NPC assets,
-    per PP-488 precedent).
-    (5) The receiving faction's control token replaces the ceding faction's control token
-    immediately. TCV updates at next Accounting.
-    (6) Victory condition check: a Diplomatic Transfer that meets a co-victory condition
-    for the receiving faction does NOT trigger immediate victory — victory requires the
-    standard 2 consecutive Accounting steps confirmation.
-    (7) Transferred territory TCV does not count toward the receiving faction's victory
-    threshold for 1 full season (anti-exploitation: prevents same-season Diplomatic
-    Transfer + victory declaration).
-    (8) The ceding faction earns a CB against the receiving faction that expires in 3
-    seasons (codifies the political cost of accepting gifted territory).
-    Resolves CON-A-01, TRA-A-01, CON-D-02.
-  finding_id: CON-A-01, TRA-A-01, CON-D-02
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
+    Retroactive register entry. Church Graduated Seizure: Pool = Influence + floor(TC/15),
+    Ob = 7 − CV. Available at any TC value (not post-75 gate). Replaces TC 75 hard seizure
+    gate. Church TCV victory threshold reduced to ≥ 8. OW CV+1 is a consequence, not
+    cap-governed. Previously applied to victory_architecture_v1.md and params_board_game.md
+    without register entry.
+  finding_id: null
+  source: retroactive register formalisation 2026-04-09
+  affects: [designs/board_game/victory_architecture_v1.md, references/params_board_game.md]
   status: applied
 
 - id: PP-506
   date: 2026-04-09
   severity: P1
   description: >
-    Post-Battle unit disposition (non-elimination). After a Battle where the defender
-    loses control of a territory (Attacker wins per PP-476): the defender's military unit
-    is not destroyed. It retreats to the nearest friendly-controlled adjacent territory.
-    "Nearest friendly" = adjacent territory under defender's control. If no adjacent
-    friendly territory exists (defender is encircled): unit retreats to the territory
-    with the lowest Fort Level among adjacent territories not controlled by the attacker,
-    and immediately enters contested state (defender holds a unit there, loses no control
-    but is vulnerable). If no such territory exists (completely encircled with no retreat
-    path): unit is destroyed (Military −1). Discipline −1 on the retreating unit (rout
-    penalty). The Discipline loss from retreat does NOT trigger further Morale loss cascades
-    (BG-only exception — TTRPG rout rules apply in TTRPG mode per mass_battle_v3.md §A.12).
-    Resolves CON-A-02, CON-A-03.
-  finding_id: CON-A-02, CON-A-03
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md', 'designs/board_game/valoria_bg_v05_simulation_and_patches.md']
+    Fort Level / Battle trigger for Graduated Seizure (ED-355, ED-368 resolved).
+    Fort Level does NOT modify Seizure Ob. Seizure is a political act — Church
+    institutional authority overriding local governance. Fort Level is relevant only
+    to Battle resolution, not to seizure Ob.
+    Battle trigger rule: if the target territory has a garrison (Fort ≥ 1 AND at least
+    one military unit present belonging to the controlling faction), Church must first
+    win a Battle before Seizure can be attempted that season. Battle uses standard rules
+    (attacker Military vs Ob = defender Military ÷ 2, round up, min 1; Fort Level adds
+    bonus dice to defender per standard Battle rules). If Church wins the Battle: Seizure
+    roll proceeds immediately in the same resolution. If Church loses the Battle: Seizure
+    does not fire; Casus Belli still granted. An ungarrisoned fortified territory (Fort ≥ 1,
+    no units) can be Seized directly — no Battle required.
+    Retroactively formalises victory_architecture_v1.md §3.2 PP-500 reference.
+    [PROVISIONAL: ED-355 flagged for simulation confirmation.]
+  finding_id: [D5-J3-SIM-GS-01]
+  source: SIM-GS-01 editorial resolution 2026-04-09
+  affects: [references/params_board_game.md, references/params_factions.md]
   status: applied
 
 - id: PP-507
   date: 2026-04-09
   severity: P1
   description: >
-    Graduated Seizure — post-TC 75 gate explicit. PP-494 Graduated Seizure is only
-    available post-TC 75 (when TC is frozen and Church enters territorial seizure phase).
-    Pre-TC 75: Church may not use Graduated Seizure. Pre-75, Church uses standard Domain
-    Actions (Govern, Piety Spread, Active Inquisition) to build CV and Prominence. The
-    Graduated Seizure formula (Influence + floor(TC/15)) is defined for the frozen-TC
-    phase only — at TC 28, the formula would yield Pool 7 but the action is unavailable.
-    Add explicit gate text to PP-494 entry in params_board_game.md: "Available only
-    post-TC 75 (TC frozen)." Resolves SEI-D-01, D5-SIM-GS.
-  finding_id: SEI-D-01, D5-SIM-GS
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
+    Graduated Seizure availability gate (ED-365 resolved). Church Graduated Seizure
+    (PP-494) is available at ANY TC value from TC ≥ 15 (i.e. as soon as floor(TC/15) ≥ 1).
+    There is no post-TC 75 gate on Graduated Seizure itself. TC 75 is the phase transition
+    where TC freezes and seizure becomes Church's primary strategic mode — but seizure was
+    always available. The params_board_game §TC 75 Territorial Seizure header was a
+    structural artifact grouping seizure rules, not a gate condition. Struck from
+    params_board_game: the implication that seizure requires TC ≥ 75. Corrects SIM-GS-01
+    finding D5.
+    Early Seizure (TC < 50) political consequence: Casus Belli granted plus all factions
+    observe the attempt (no concealment possible pre-TC 50; Church's territorial ambition
+    becomes a political event). Post-TC 50: Casus Belli still granted but observation
+    is limited to factions with Intel ≥ 3 in the target territory.
+    [PROVISIONAL: observation rule flagged for simulation confirmation.]
+  finding_id: [D5-SIM-GS-01, ED-365]
+  source: SIM-GS-01 editorial resolution 2026-04-09
+  affects: [references/params_board_game.md]
   status: applied
 
 - id: PP-508
   date: 2026-04-09
   severity: P1
   description: >
-    Graduated Seizure vs Standard Seizure — Overwhelming CV cap conflict resolution.
-    PP-421 (Standard TC 75 Seizure): Overwhelming seizure "counts against ±1 CV seasonal cap."
-    PP-494 (Graduated Seizure): Overwhelming seizure produces CV +1 described as "not
-    cap-governed." These are different actions. Ruling: Standard Seizure (PP-421) and
-    Graduated Seizure (PP-494) are the same action — PP-494 is the detailed formula that
-    replaces PP-421's simplified version. One seizure attempt per season (they are not
-    additive). The cap ruling: Overwhelming Seizure CV +1 IS subject to the ±1 CV seasonal
-    cap. PP-494's "not cap-governed" text is an error — struck. PP-421's cap language
-    is canonical. CV gains from Overwhelming Seizure cannot exceed +1 per territory per
-    season. Resolves D7-SIM-GS.
-  finding_id: D7-SIM-GS
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
+    OW CV cap conflict resolution (ED-366 resolved). PP-494 governs: Graduated Seizure
+    Overwhelming result grants CV +1 in target territory as a consequence, NOT cap-governed.
+    The ±1 CV seasonal cap applies to player-initiated CV Domain Actions only. Seizure is
+    a distinct category (analogous to PP-254 TC seizure classification). Struck from
+    params_board_game §TC 75 Territorial Seizure Results: the phrase 'counts against ±1 CV
+    seasonal cap.' Replaces with: 'CV +1 on Overwhelming is a consequence effect — not
+    subject to the ±1 CV seasonal cap. State-change effects and conquest consequences are
+    exempt from action caps.' Corrects SIM-GS-01 finding D7.
+  finding_id: [D7-SIM-GS-01, ED-366]
+  source: SIM-GS-01 editorial resolution 2026-04-09
+  affects: [references/params_board_game.md]
   status: applied
 
 - id: PP-509
   date: 2026-04-09
-  severity: P1
+  severity: P2
   description: >
-    Graduated Seizure — Fort Level added to Ob formula (resolves ED-355). The Graduated
-    Seizure Ob formula is updated to: Ob = (7 − CV) + Fort Level, minimum 1.
-    Rationale: physical fortifications defend against seizure as they defend against Battle.
-    Without Fort Level in the Ob, a CV=3 Fort=3 territory (Ehrenfeld) and a CV=3 Fort=0
-    territory (Grauwald) present identical seizure resistance — incorrect. With Fort Level:
-    CV=3 Fort=0 → Ob 4; CV=3 Fort=3 → Ob 7 (requires exactly Ob net = Influence + 5 for
-    even a Partial at TC 75). Fort 3 territories are functionally unsieizable at CV=3, which
-    is correct: physical fortifications and contested CV together create near-impenetrable
-    territories. Fort Level cap: max Fort contribution to Ob = 3 (Fort 4 territories cap at
-    +3 Fort Ob contribution, preventing Ob from exceeding 10). Resolves ED-355, J3-SIM-GS.
-  finding_id: J3-SIM-GS, ED-355
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
+    Prominence check timing (ED-367 resolved). Prominence for Graduated Seizure is assessed
+    at seizure declaration, not at resolution. If Church Mandate falls below the controlling
+    faction's Mandate between declaration and resolution (e.g. via an interrupt action),
+    the seizure roll still proceeds — the declaration locked the prominence check. Rationale:
+    consistency with standard Domain Action resolution (declared conditions govern); prevents
+    exploit where factions artificially inflate their own Mandate mid-resolution to strip
+    prominence. Corrects SIM-GS-01 finding J4.
+  finding_id: [J4-SIM-GS-01, ED-367]
+  source: SIM-GS-01 editorial resolution 2026-04-09
+  affects: [references/params_board_game.md]
   status: applied
 
 - id: PP-510
   date: 2026-04-09
   severity: P1
   description: >
-    Graduated Seizure — Battle trigger on success in contested territory. If Church
-    achieves Success or Overwhelming on Graduated Seizure in a territory that contains
-    a military unit belonging to the controlling faction (contested territory), control
-    transfer is not immediate — Battle fires instead at Priority 2 of the following
-    season (not the current season, to prevent same-phase double-resolution with the
-    Seizure). During the interim, the territory is Disputed: Church has a Seizure Claim
-    token; the prior controller retains the control marker. At the following season's
-    Priority 2: Church resolves Battle (Military vs defender Military). If Church wins:
-    control transfers, CV +1 applies (Overwhelming Seizure from prior season was the
-    precondition). If Church loses: Seizure Claim token removed, no control change.
-    Seizure Partial in contested territory: no Battle fired; AP +1 in territory only.
-    Resolves L5-SIM-GS.
-  finding_id: L5-SIM-GS
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
+    Casus Belli mechanic definition (GAP-CB resolved). Casus Belli (CB) is a one-season
+    political token. When CB is granted: the receiving faction places a CB marker on their
+    faction mat (colour-coded to the offending faction). Effects (all fire at next Accounting
+    after CB is granted):
+    (1) Receiving faction may play one free Senator Outward (Diplomacy) action targeting the
+        offending faction this season without spending a card slot. This represents formal
+        diplomatic protest.
+    (2) If the receiving faction plays a Legionary action against the offending faction this
+        season, Ob is reduced by 1 (min 1). Military action is politically legitimised.
+    (3) All other factions observe the CB grant (public record). Any faction may invoke
+        the CB as justification for joining a coalition this season (coalition Ob −1 for
+        this season only if the CB-holding faction is primary).
+    CB marker is removed at the following Accounting regardless of whether effects were used.
+    Only one CB may be held against any single faction at a time; a new CB from the same
+    source replaces the existing one (timer resets, effects refresh).
+    [PROVISIONAL: CB stacking across multiple sources (e.g. CB from Church AND CB from Crown
+    simultaneously) flagged — confirm whether multiple CB markers can be held.]
+  finding_id: [L2-SIM-GS-01, GAP-CB]
+  source: SIM-GS-01 editorial resolution 2026-04-09
+  affects: [references/params_board_game.md, references/params_factions.md]
   status: applied
 
 - id: PP-511
   date: 2026-04-09
   severity: P2
   description: >
-    Govern pool stat for BG Domain Actions. The dice pool for each BG Domain Action
-    is the faction's stat most associated with the card type, as follows:
-    Legionary (Military/March/Muster/Battle): Military stat.
-    Consul Inward (Govern/Piety Spread/Parish): Mandate stat. Rationale: governing
-    territory is an expression of political authority, not administrative skill (Influence
-    tracks diplomatic reach, not internal governance).
-    Consul Outward (Trade/Diplomatic Transfer): Wealth stat.
-    Senator Inward (Decree/Active Inquisition): Mandate stat.
-    Senator Outward (Diplomacy/Outreach): Influence stat.
-    Tribune Inward (Investigate/Intel): use Intel (not currently a BG stat; proxy with
-    Influence − 1, min 1) until Intel is added as a formal BG stat.
-    Tribune Outward (Spy/Counter-Narrative): same as Tribune Inward proxy.
-    Pontifex/Weaver (Thread operations): Influence stat.
-    Praetor (Community Organising/Projects): Mandate stat.
-    Fortify (Military): Military stat (confirms ED-338 provisional).
-    Resolves DEV-A-01, ED-338 provisional.
-  finding_id: DEV-A-01
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
+    Mandatory Assert suspension post-TC 75 (ED-369 resolved). Mandatory Assert (PP-480,
+    active at TC 50–74) is suspended when TC ≥ 75 (freeze state). Church is no longer
+    required to play Assert once TC freezes — the mandatory Assert was a TC-generation
+    mechanism, and TC generation has ceased. In the seizure phase, Church's action
+    economy is fully available for seizure and supporting actions. Assert remains
+    available as an optional action post-TC 75 (it produces no TC change but can
+    still serve as a Stability-risk action if Church chooses). Corrects SIM-GS-01
+    finding L6.
+  finding_id: [L6-SIM-GS-01, ED-369]
+  source: SIM-GS-01 editorial resolution 2026-04-09
+  affects: [references/params_board_game.md]
   status: applied
 
-- id: PP-512
-  date: 2026-04-09
-  severity: P2
-  description: >
-    Fort maximum for all territories. Fort Level maximum is 4 for all territories
-    unless explicitly stated otherwise. T3 Lowenskyst (max 4) and T14 Ehrenfeld (max 4)
-    have explicit max 4 — these reflect the maximum already applied generally. No
-    territory can be fortified beyond Fort 4. Fortify action at Fort Level = max
-    (4): Fortify card is playable but produces no effect (the fortification is already at
-    maximum engineering capacity). The card play is legal but wasted. Players should be
-    warned: Fortify at max is invalid — card is returned to hand if attempted at max level
-    (making it an illegal declaration, not a wasted play). Resolves DEV-A-02.
-  finding_id: DEV-A-02
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-513
-  date: 2026-04-09
-  severity: P2
-  description: >
-    Parish/Cathedral Ob formula confirmation. The Ob for Church Consul Inward actions
-    building toward Parish/Cathedral status uses the standard Govern Ob: Ob = Prosperity
-    ÷ 2 (round up, min 1). This applies to ALL Church Consul Inward actions in the target
-    territory regardless of whether the specific action is standard Govern, Piety Spread,
-    or a Parish-building sequence action. The five sequential successes required for
-    Cathedral use this same Ob throughout. There is no separate Parish Ob.
-    Piety Spread and Parish-building use the same card type (Consul Inward) and same
-    Ob formula. They are NOT the same action — Piety Spread produces AP and CV effects;
-    Parish-building counts toward the 5-success sequence. Church must choose which outcome
-    applies when they play Consul Inward (declare intent in Phase 1). Resolves DEV-A-03.
-  finding_id: DEV-A-03
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-514
-  date: 2026-04-09
-  severity: P2
-  description: >
-    BG unit Discipline loss persistence. In BG (single-resolution battles), Discipline
-    loss from Battle (per PP-476 margin table) is NOT permanent between seasons. Discipline
-    resets to starting value at Year-End Accounting. Within a season: if multiple Battles
-    fire in the same Phase 4 involving the same unit, cumulative Discipline loss applies
-    (a unit that lost Discipline 2 in Battle 1 starts Battle 2 at reduced Discipline).
-    If cumulative loss reaches Discipline 0: unit is destroyed (Formation Break rule from
-    mass_battle_v3.md applies in BG at the single-battle abstraction level). Between
-    seasons: all surviving units' Discipline resets at Year-End Accounting (armies
-    regroup, recover). Mid-season reset: a faction's Recess card does NOT reset Discipline
-    (Recess is a planning pause, not a rest-and-recovery action). Resolves INV-D-03.
-  finding_id: INV-D-03
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-515
-  date: 2026-04-09
-  severity: P2
-  description: >
-    Military 0 defender in Battle (Restoration Movement and eliminated-but-not-yet-Vacuum
-    factions). When a faction with Military 0 holds a territory with no units deployed,
-    and another faction Marches in: there is no Battle. March resolves as uncontested
-    entry (claim) — the defending faction has no military capacity to contest. Military −1
-    consequence does not apply (Military is already 0; cannot reduce below 0). The
-    faction loses the territory with no combat. Exception: if the Military-0 faction has
-    units already present from a prior season (units from pre-elimination or pre-Military-0
-    state), Battle fires normally using those units' Discipline as the defensive pool (not
-    the faction's Military stat, which is 0 — use the unit's intrinsic Martial value
-    per BG unit table). This covers Restoration Movement's Presence markers: Presence
-    markers are not military units and do not trigger Battle. A March into a Restoration-
-    only territory is uncontested. Resolves INV-L-02.
-  finding_id: INV-L-02
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-516
-  date: 2026-04-09
-  severity: P2
-  description: >
-    Askeheim March attempt resolution. If any faction plays a Legionary card targeting
-    T15 (Askeheim): the action is illegal. The Legionary card is returned to the player's
-    hand immediately (not discarded, not wasted). The faction has not consumed their
-    Legionary card play for the season — they may redeclare a legal target in Phase 2 if
-    the illegal declaration was caught during Phase 1 review (before Phase 4 resolution).
-    If caught during Phase 4 resolution: the card is returned, and the faction loses their
-    action for this priority tier (the Phase 4 slot was forfeited). Game Masters should
-    catch illegal Askeheim March declarations during Phase 1 planning review. Resolves CLM-A-01.
-  finding_id: CLM-A-01
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-517
-  date: 2026-04-09
-  severity: P2
-  description: >
-    CB persistence through faction elimination. When a faction holding active CBs is
-    eliminated: all CBs held by that faction are lost (the faction no longer exists to
-    spend them). CBs held by OTHER factions against the eliminated faction: transferred to
-    the new controlling faction of that faction's former territories, as follows —
-    CBs vs Crown transfer to Löwenritter (per existing succession mechanic). CBs vs any
-    other eliminated faction: discarded (no successor faction). Treaty-based permanent
-    CBs vs an eliminated faction: discarded. Exception: if Löwenritter inherits Crown
-    territories on Crown elimination, any CBs vs Crown become CBs vs Löwenritter for
-    1 season only (Löwenritter grace period — it's a new government). Resolves CB-D-03.
-  finding_id: CB-D-03
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-518
-  date: 2026-04-09
-  severity: P2
-  description: >
-    CB and Diplomatic Tokens interaction. A faction that holds a Diplomatic Token on
-    a target faction's mat (via PP-432 Diplomat card) cannot spend a CB against that
-    faction in the same season. The Diplomatic Token represents an active diplomatic
-    relationship; spending a CB to gain Battle advantage constitutes a political betrayal.
-    Effect: Diplomatic Token suppresses CB spending for one season. The CB is not lost —
-    it remains available for future seasons after the Token expires or is removed. The
-    Token is not removed by the suppression (it remains active per its normal removal
-    conditions: military conflict with Hafenmark OR target elimination). Exception: if a
-    faction attacks the Diplomatic Token holder with or without CB, the Token is removed
-    (military conflict removes it per existing rule). Resolves CB-D-05.
-  finding_id: CB-D-05
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-519
-  date: 2026-04-09
-  severity: P2
-  description: >
-    Post-Battle unit disposition — contested-not-lost territory. When a Battle occurs in
-    a territory and resolves as Partial (margin too small for control change, per PP-476),
-    both units remain in the territory. The territory remains under the original controller's
-    control marker. The attacking faction's unit is now present in the territory as a
-    contested occupying force. This creates a contested-territory state (not a Political
-    Vacuum). In the following season: any Domain Actions by the original controller in
-    that territory are at +1 Ob (military pressure). The contesting unit persists until
-    the contesting faction plays a Legionary Outward card to withdraw it or loses a
-    subsequent Battle there. This formalizes the "contested territory" concept implied
-    throughout but never explicitly defined for BG. Resolves CON-A-03 (non-elimination
-    unit disposition for Partial battles).
-  finding_id: CON-A-03
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-520
-  date: 2026-04-09
-  severity: P2
-  description: >
-    Territory Trade interaction rules. Diplomatic Transfer (PP-505) interaction with
-    tracked game systems:
-    (a) TCV: updates at next Accounting (not immediately). The 1-season freeze on transferred
-    TCV toward victory is tracked with a "Transfer Marker" on the territory card.
-    (b) Fort Level: transfers with the territory. No change.
-    (c) Ministry AP-tokens: remain in territory regardless of control change (NPC assets,
-    PP-488 precedent confirmed to apply to Diplomatic Transfer, not just elimination).
-    (d) Guild CP-tokens: remain. Same precedent.
-    (e) Church Prominence: recalculated at next Accounting Step 4b (existing step).
-    (f) Church Parish/Cathedral CV floor: remains — the religious infrastructure persists
-    through political control changes. The CV floor is a property of the territory, not
-    the controller.
-    (g) Thread Debt tokens and History Resonance markers: remain in territory regardless
-    of control change.
-    (h) PI (Parliament Integrity) effect: Diplomatic Transfer generates PI +0 (no PI
-    change from a voluntary transfer). Contrasts with Battle-seizure which creates PI
-    implications only if accompanied by Emergency Powers or coup.
-    Resolves TRA-A-02, TRA-A-03.
-  finding_id: TRA-A-02, TRA-A-03
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-521
-  date: 2026-04-09
-  severity: P2
-  description: >
-    Govern in contested territory — +1 Ob modifier. Any Consul Inward (Govern) or
-    Consul Inward (Piety Spread/Parish) action in a territory where a non-controlling
-    faction's military unit is present (contested state per PP-519): +1 Ob. This applies
-    to the controlling faction's Govern actions. The non-controlling faction (contester)
-    cannot take Govern actions in that territory (they don't control it). Exception: Church
-    Piety Spread in a contested Church-controlled territory: +1 Ob (standard contested
-    modifier). Exception: Church Piety Spread in a non-Church territory that is contested
-    but Church has active AP: standard Piety Spread Ob applies (the contested modifier
-    only affects the controlling faction's actions, not Church's influence-building).
-    Resolves DEV-L-02.
-  finding_id: DEV-L-02
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-522
-  date: 2026-04-09
-  severity: P2
-  description: >
-    Graduated Seizure one-per-season cap scope. Standard Seizure (PP-421) and Graduated
-    Seizure (PP-494) are confirmed as the same action, not two distinct actions. PP-508
-    already ruled this. This patch confirms: one seizure attempt per season means one
-    total Church seizure action per season regardless of which formula or framing is
-    used. Church cannot play both Standard Seizure and Graduated Seizure in the same
-    season by treating them as separate action types. The one-per-season cap is absolute.
-    Resolves SEI-D-02.
-  finding_id: SEI-D-02
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-523
-  date: 2026-04-09
-  severity: P2
-  description: >
-    Mandatory Assert suspension post-TC 75. At TC 75+ (TC frozen, seizure phase active):
-    Mandatory Assert (which fires per TC 50–74 rules "mandatory Assert each season") is
-    suspended. There is no TC value to gain from Assert (TC is frozen). Assert is no
-    longer a required action in the seizure phase. Church does not lose an action to a
-    mandatory Assert with no mechanical effect. Instead: in the seizure phase, Church's
-    dominant action is the Graduated Seizure (one per season, Special/Unique Priority 6)
-    supplemented by Piety Spread, Active Inquisition, and Cardinal Focus declarations.
-    Suppress (opponent action) has no TC effect in the seizure phase for the same reason.
-    Both Assert and Suppress are inert post-TC 75 freeze. Resolves L6-SIM-GS.
-  finding_id: L6-SIM-GS
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-- id: PP-524
-  date: 2026-04-09
-  severity: P2
-  description: >
-    Riskbreaker detection of Patience Protocol CB — action defined. Riskbreaker Priority
-    Tree (v04 B13): addition — Priority 6 (new): "If Varfell holds an active Patience
-    Protocol CB AND Riskbreakers have intel on Varfell Tribune operations this season
-    (Riskbreaker Priority 1 Investigate fired successfully): Riskbreakers burn the
-    Patience Protocol CB (remove token from Varfell mat). Varfell is notified (token
-    visible when removed)." This formalizes the "Patience Protocol CB expires on
-    Riskbreaker exposure" rule (PP-501) with a concrete Riskbreaker action that executes
-    the expiration. Resolves missing Riskbreaker mechanic for CB-L-03 context.
-  finding_id: CB-A-02 (corollary)
-  source: stress test SIM-TERR-01 2026-04-09
-  affects: ['references/params_board_game.md']
-  status: applied
-
-
-
-  - id: PP-500
-    date: 2026-04-09
-    description: "Crown Treaty Ob formula — Ob = ceil(target Mandate / 2) min 1 (was Ob = target Mandate). Aligns with all other diplomatic Ob formulas. Crown Treaty now tractable vs strong factions. Mandate <= 1 target invalid. Full degree table added."
-    status: applied
-    affects: [victory_architecture_v1.md, params_board_game.md]
-    finding: A-01-F1/D-17 (P1) from SIM-DIPL-01
-
-  - id: PP-501
-    date: 2026-04-09
-    description: "Crown Treaty consent mechanism — consent timing (following Phase 1), refusal consequence (CB), NPC AI rule (M>=3 AND Sta<=3), consent incentive (Stability +1 already in text). 4-season Treaty period defined."
-    status: applied
-    affects: [victory_architecture_v1.md, params_board_game.md]
-    finding: A-01-F2/D-07 (P1) from SIM-DIPL-01
-
-  - id: PP-502
-    date: 2026-04-09
-    description: "Crown Treaty target-break clause — Treaty partner initiating Domain Action against Crown territory dissolves Treaty immediately; Crown gains permanent CB; partner Stability -1."
-    status: applied
-    affects: [victory_architecture_v1.md]
-    finding: A-01-F3 (P2) from SIM-DIPL-01
-
-  - id: PP-503
-    date: 2026-04-09
-    description: "Open Pledge system for non-Crown factions — publicly declared seasonal commitments; Honour: +1 Standing; Breach: Stability -1 + CB to all witnesses. Simultaneous resolution ruling: card declaration in Phase 1 is factual test. Forced breach exemption. Closed Pledge variant: private card, revelation consequence. Replaces undeclared pure-social-contract diplomacy."
-    status: applied
-    affects: [params_board_game.md]
-    finding: A-05-F1/D-08 (P1) from SIM-DIPL-01; Scenario 2 edge case (simultaneous resolution)
-
-  - id: PP-504
-    date: 2026-04-09
-    description: "Coalition Pairs table replacement — removed Guilds and Niflhel (non-canonical factions per PP-188). Replaced with: Diplomatic Alignment (Church+Hafenmark, Inf>=5), Military Compact (Varfell+Lowenritter, Mil>=5 + Named Enemy rule), Trade Compact (Crown+Hafenmark, TCV-based trigger), Thread Stewardship (Varfell+RM, VTM>=3+Presence>=2). Named Enemy definition added to Military Compact. Trade Compact uses TCV threshold (not static Wealth) to avoid Season 1 trigger."
-    status: applied
-    affects: [params_factions.md]
-    finding: D-12 (P1), D-13 (P2) from SIM-DIPL-01; Scenario 6 (Named Enemy gap)
-
-  - id: PP-505
-    date: 2026-04-09
-    description: "Diplomatic Token 'military conflict' definition — any season Hafenmark or token-holding faction plays Legionary targeting the other's held territory (intent of play, not outcome; March to uncontested territory does not count)."
-    status: applied
-    affects: [params_board_game.md]
-    finding: A-02-F1 (P2) from SIM-DIPL-01
-
-  - id: PP-506
-    date: 2026-04-09
-    description: "Valid suppression action definition for coalition bonus (PP-296) — Domain Action with Mandate -N as stated primary effect only. Secondary/conditional/cascade Mandate reduction does not qualify."
-    status: applied
-    affects: [params_board_game.md]
-    finding: A-03-F2 (P2) from SIM-DIPL-01
-
-  - id: PP-507
-    date: 2026-04-09
-    description: "Casus Belli stacking cap (max 1 per target, second replaces first) and consumption rule (one declared Military action, consumed on roll, CB declared at Phase 4 start)."
-    status: applied
-    affects: [params_board_game.md]
-    finding: A-04-F1/A-04-F2 (P2) from SIM-DIPL-01
-
-  - id: PP-508
-    date: 2026-04-09
-    description: "Thread Liaison 'Allied' scope restriction — for Liaison designation only, Allied = Active Crown Treaty partner. Parliamentary voter and Resentment conditions excluded."
-    status: applied
-    affects: [params_board_game.md]
-    finding: D-11 (P2) from SIM-DIPL-01
-
-  - id: PP-509
-    date: 2026-04-09
-    description: "Diplomatic Token on Crown Treaty partner — Token removed at Treaty formation (Treaty supersedes). Slot freed for new Token placement."
-    status: applied
-    affects: [params_board_game.md]
-    finding: D-10 (P3) from SIM-DIPL-01
-
-  - id: PP-510
-    date: 2026-04-09
-    description: "Missed Coalition Penalty threshold clarification — 'at or above' the coalition floor (not 'above')."
-    status: applied
-    affects: [params_board_game.md]
-    finding: D-03 (P3) from SIM-DIPL-01
-
-  - id: PP-511
-    date: 2026-04-09
-    description: "Treaty betrayal cascade timing — Crown-break: Stability/Mandate at end of Phase 4; CB granted at Accounting Step 1; CB usable next season. Staggers effects within Cascade Depth Cap."
-    status: applied
-    affects: [params_board_game.md, victory_architecture_v1.md]
-    finding: D-14 (P2) from SIM-DIPL-01
-
-  - id: PP-512
-    date: 2026-04-09
-    description: "Solo/co-victory simultaneous declaration — declaring faction chooses path at Accounting Step 12 start; 2-Accounting requirement applies to declared path."
-    status: applied
-    affects: [params_board_game.md]
-    finding: D-15 (P2) from SIM-DIPL-01

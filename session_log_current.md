@@ -425,3 +425,14 @@ Next session priority: ED-364 Almud rewrite, then Church Graduated Seizure simul
 - npc_character_analyses_existing.md §4 fully rewritten: four specific tensions enumerated (resentment/duty, protect/exploit Torben, ambition/recoil, Laskaris admiration/distrust), three independence paths, succession states, Evidence resonant style, Anna of Byzantium echo.
 - Audit corrected: Elske revised from 24/40 to 33/40 (Tier 2).
 - Root cause: audit scored from roster/analyses files only, missing characterization distributed across arc files.
+
+### 2026-04-09 — Editorial Resolution + Patch: SIM-GS-01 P1s
+- PP-493, PP-494: retroactive register entries (territory renumber, Graduated Seizure)
+- PP-506: Fort Level omitted from Seizure Ob (correct); garrisoned Battle-first rule (ED-355, ED-368 resolved)
+- PP-507: Graduated Seizure available at any TC ≥ 15 — no post-75 gate (ED-365 resolved)
+- PP-508: OW CV+1 consequence not cap-governed — PP-494 governs; PP-421 stale clause struck (ED-366 resolved)
+- PP-509: Prominence assessed at seizure declaration (ED-367 resolved)
+- PP-510: Casus Belli defined — one-season token, free Senator Outward + Legionary Ob-1 + coalition justification (GAP-CB resolved)
+- PP-511: Mandatory Assert suspended post-TC 75; Assert optional-only in seizure phase (ED-369 resolved)
+- ED-365 through ED-369 marked resolved in editorial ledger.
+- params_board_game.md updated to v0.9.2.
