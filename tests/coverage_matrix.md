@@ -441,3 +441,15 @@ Status: COMPLETE
 | ED-351 | Discipline degradation: 3 conflicting trigger definitions |
 | ED-352 | Volley Phase pool: "Effective Power" undefined |
 | ED-353 | Command per sub-unit: explicit rule text needed |
+
+## SIM-DIPL-01 — Negotiations, Alliances, Treaties — 2026-04-09
+Modes: A + D + J + L | Source: tests/sim_negotiations_alliances_treaties.md
+P1: 7 | P2: 13 | P3: 3 | Status: COMPLETE
+
+### P1 Findings
+| ID | Finding |
+|----|---------| 
+| A-01-F1/D-17 | Crown Treaty Ob = target Mandate → inaccessible + negative EV vs Mandate ≥ 3 |
+| A-01-F2/D-07 | Consent mechanism undefined; path deadlocked by unanimous opponent refusal |
+| A-05-F1/D-08 | Non-Crown diplomacy pure social contract — undeclared design choice |
+| D-12 | Coalition Pairs references Guilds/Niflhel — non-existent factions |

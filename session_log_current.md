@@ -1,6 +1,27 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-09_SONNET_DIPL_AUDIT_PATCH
+session_close: null
+phase: IN PROGRESS
+status: OPEN
+
+## TASKS THIS SESSION
+1. Recover + commit SIM-DIPL-01 (last session): COMPLETE
+2. Audit diplomacy mechanics: IN PROGRESS
+3. Identify best solutions, patch, stress test patches
+4. Stress test new unique scenarios
+5. Audit + commit
+
+## COMMITS THIS SESSION
+- [recovery commit] — [simulation] SIM-DIPL-01 negotiations/alliances/treaties; 7 P1, 13 P2 findings
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-08_SONNET_STR_PP476_498
 session_close: 2026-04-08
 phase: COMPLETE
