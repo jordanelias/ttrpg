@@ -2173,7 +2173,9 @@ editorial_decisions:
     tags: [board_game, gap]
 
   - id: ED-351
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-502 — two-condition trigger propagated from PP-251 to design doc"
     date_raised: 2026-04-08
     description: "Crown elimination + Hafenmark insta-win path — Crown elimination frees T1 (TCV 5) for auto-march. Hafenmark starts TCV 8; after auto-march on T1 = TCV 13, above their 12-threshold. If Hafenmark stats (Mandate ≥ 4, PI ≥ 5) were pre-positioned, this is an insta-win trigger on Crown elimination. Confirm whether this is intended or whether a grace period applies."
     tags: [board_game, hafenmark, crown, victory]
@@ -2276,7 +2278,9 @@ editorial_decisions:
     tags: [board_game, church, seizure]
 
   - id: ED-356
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-500 — Shield Wall +2D Def applies to all simultaneous defensive pools"
     date_raised: 2026-04-08
     description: "Crown starting TCV = 12 vs threshold TCV ≥ 16 = gap of only +4. This is the smallest gap of any faction. Verify Crown is not over-advantaged by the geography_design territorial assignments (Lowenskyst reassigned from Hafenmark to Crown). May need Crown threshold increase or starting territory reassignment."
     tags: [board_game, crown, balance]
@@ -2529,7 +2533,9 @@ editorial_decisions:
     blocks: discipline_degradation_simulation
 
   - id: ED-352
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-503 — Volley pool = Power stat (1-7) at TN6"
     date_raised: 2026-04-09
     description: "Volley Phase dice pool undefined. mass_battle_v3.md §A.7 says 'Roll Effective Power vs TN 6.' Effective Power is not defined for Volley context. Two candidates: (a) Power stat (unit quality, 1-7); (b) engagement pool formula = min(Size,Command)+Command per PP-233. These produce different values. ED-037 confirms TN 6 but does not address pool definition."
     priority: P1
@@ -2554,7 +2560,9 @@ editorial_decisions:
     tags: [mass_combat, thread, simultaneous_damage, phase_structure]
 
   - id: ED-355
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-506 — bilateral general duel: mass battle continues uncommanded"
     date_raised: 2026-04-09
     description: "Both generals simultaneously in personal combat: mass battle pause rule undefined for bilateral case. If both generals enter personal combat in Phase 5 simultaneously, no rule specifies whether mass battle freezes entirely or units fight uncommanded at 1D minimum, nor sequencing for two simultaneous personal combats."
     priority: P2
@@ -2568,7 +2576,9 @@ editorial_decisions:
     tags: [mass_combat, formation, shield_wall, multi_engagement]
 
   - id: ED-357
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-507 — PP-240 Ob 1 replaces §A.13 battle-lost check for mutual destruction"
     date_raised: 2026-04-09
     description: "Mutual destruction Stability check: replacement of or addition to normal battle-lost consequences. PP-240: mutual destruction → both factions Stability check Ob 1 at Accounting. §A.13: battle lost → Stability check Ob 1. Mutual destruction = draw. Does PP-240 check replace §A.13 check (no loser) or add to it (both checks fire)?"
     priority: P2
