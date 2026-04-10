@@ -282,3 +282,15 @@ editorial_decisions_pending: [ED-358]
 - 5 paired foils: Vaynard-Olafsson (instrumentalist mirror), Lenneth-Torsvald (archive's two readers), Ehrenwall-Almstedt (two clocks), Strand-Baralta (merit and birth), Jarnstal-Brandt (two soldiers/two fixations).
 - Key finding: Lenneth-Torsvald pairing implies the archive is a practitioner-development environment — if demonstrated through Torsvald's example, Lenneth's own TS development becomes narratively inevitable.
 - Context approaching limit. Recommend new chat for further work.
+
+### 2026-04-08 — Almud Characterization Error Identified
+- All three NPC analysis docs contain ~33 instances of Almud-as-paralyzed characterization.
+- User correction: Almud is shrewd, guarded, politically capable — not indecisive.
+- New lore: Almud suspects his father was assassinated. This informs guardedness.
+- Baralta comparison wrong: she governs a smaller scope, not better.
+- ED-364 flagged P1: full rewrite required next session.
+- Correction plan committed to designs/npcs/almud_correction_plan.md.
+
+## CONTEXT LIMIT — SESSION CLOSE
+This session: 17 commits, PP-493–504 (12 patches), 13 NPCs designed, 24 NPCs analyzed, foil diamond + extended network.
+Next session priority: ED-364 Almud rewrite, then Church Graduated Seizure simulation.
