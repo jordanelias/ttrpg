@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: designs/setting/geography_design.md. Do not use for mechanical references. -->
+
 # PART SEVEN: TERRITORIES
 
 Valoria comprises fifteen territories arranged in a roughly north-south layout, connected by an adjacency graph (not a hex map). Territories are the primary unit of control in board game and hybrid modes, and the geographic backdrop for TTRPG scenes. Each territory has a Prosperity score, a Fortification level, a starting controller, and at least one special property.

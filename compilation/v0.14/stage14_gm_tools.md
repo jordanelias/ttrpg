@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: No design-layer replacement yet — treat as unverified. Do not use for mechanical references. -->
+
 # PART FOURTEEN: Game Master TOOLS
 
 This part contains operational references for the Game Master: the Session Zero procedure with Editorial Questions, the Ob calibration guide, Hard Move tables, the three-clock feedback model, and the seasonal accounting checklist.

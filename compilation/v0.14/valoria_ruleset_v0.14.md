@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: Compilation snapshot — all stages outdated. Use canonical design docs.. Do not use for mechanical references. -->
+
 ---
 *All mechanics derive from the Philosophical Foundations. Where this document conflicts with the Foundations, the Foundations govern.*
 ---

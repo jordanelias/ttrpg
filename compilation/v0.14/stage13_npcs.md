@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: designs/npcs/npc_roster.md (partial). Do not use for mechanical references. -->
+
 # PART THIRTEEN: NAMED NPCs AND INSTITUTIONAL ACTORS
 
 Every named Non-Player Character in Valoria has a **Resonant Style** tag (Evidence, Character, or Consequence). Using that style earns +1D on social rolls targeting them. Tags are not listed on player-facing materials — discover them through investigation, observation, or prior scenes.

@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: No design-layer replacement yet — treat as unverified. Do not use for mechanical references. -->
+
 # PART ELEVEN: SCALE TRANSITIONS
 ## Version: v0.14-ST — PP-089/090 applied in-place; §11.8 appendix eliminated
 

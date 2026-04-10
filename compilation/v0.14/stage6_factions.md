@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: designs/board_game/valoria_bg_v05_simulation_and_patches.md (BG/Hybrid) — TTRPG factions: no design-layer replacement yet. Do not use for mechanical references. -->
+
 # PART EIGHT: FACTIONS
 
 Valoria's political landscape is contested by eight factions, six with full mechanical presence. Each faction has a distinct ethical framework that modifies how its Domain Actions resolve, a Unique Action only it can perform, and a two-layer structure distinguishing institutional tendency from leadership deviation.

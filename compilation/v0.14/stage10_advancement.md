@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: No design-layer replacement yet — treat as unverified. Do not use for mechanical references. -->
+
 # PART TEN: ADVANCEMENT
 
 Characters advance through two parallel systems: **Test Track** (automatic from play) and **Character Points (CP)** (awarded by the Game Master for Beliefs, Maxims, and domain-level achievements, spent on a structured menu). A third long-arc indicator, **Renown**, tracks cumulative dramatic achievement and unlocks narrative permissions without granting mechanical bonuses.

@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: Process artifact — no replacement. Do not use for mechanical references. -->
+
 # Compilation Report — Stage 3 Thread Operations (v2.5)
 **Date:** 2026-03-27  
 **Base:** stage3_thread_operations.md (pre-v2.5, 38,597 chars)  

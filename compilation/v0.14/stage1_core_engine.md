@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: references/params_core.md. Do not use for mechanical references. -->
+
 # VALORIA TTRPG RULESET — COMPILATION DRAFT
 
 *All mechanics derive from the Philosophical Foundations. Where this document conflicts with the Foundations, the Foundations govern.*

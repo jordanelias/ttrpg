@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: skills/valoria-canon-guard/SKILL.md. Do not use for mechanical references. -->
+
 # Stage 17 — Canon Guard Pass
 ## Document: compilation/valoria_ttrpg_complete.md
 ## Date: 2026-03-26

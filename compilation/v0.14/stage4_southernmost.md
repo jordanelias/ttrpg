@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: No design-layer replacement yet — treat as unverified. Do not use for mechanical references. -->
+
 # PART SIX: THE SOUTHERNMOST
 
 The Southernmost is the peninsula where the Einhir catastrophe occurred. Its Thread configurations have never recovered: three distinct zone-types persist from the collapse, each reflecting a different mode of configurational failure.

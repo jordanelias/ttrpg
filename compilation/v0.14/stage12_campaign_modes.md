@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: No design-layer replacement yet — treat as unverified. Do not use for mechanical references. -->
+
 # PART TWELVE: CAMPAIGN MODES
 
 Valoria is designed to be played in three distinct modes. Each mode uses the same faction stats, three clocks, Thread mechanics, and setting. What differs is the resolution layer, the dominant scale of action, and the time-per-session rate.

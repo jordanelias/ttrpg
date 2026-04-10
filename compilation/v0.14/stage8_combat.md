@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: designs/combat/combat_design_v1.md. Do not use for mechanical references. -->
+
 # PART EIGHT: COMBAT
 ## Version: v0.14-ST2 — PP-086–092 applied in-place; Part Eleven appendix eliminated
 

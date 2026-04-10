@@ -1,3 +1,5 @@
+<!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: references/params_core.md. Do not use for mechanical references. -->
+
 # PART FOUR: CHARACTERS
 
 ## 4.1 Histories
