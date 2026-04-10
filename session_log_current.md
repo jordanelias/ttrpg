@@ -323,3 +323,14 @@ Next session priority: ED-364 Almud rewrite, then Church Graduated Seizure simul
 - ED-351 through ED-357 raised.
 - PP-499 applied (Reserve text fix: Phase 4 → Phase 5).
 - Test output: tests/sim_mass_battle_SIM-MB-01.md
+
+### 2026-04-09 — Comprehensive NPC Characterization Audit
+- Full audit of all 24 named NPCs across 8 criteria (complexity, cliché, emergence, arc interest, importance, precedent quality, cross-NPC interaction, mode coverage).
+- Quantitative analysis: mention frequency, interaction network mapping, primary arc driver counts, cliché detection (25+ patterns — zero genuine positives).
+- Tier 1 (exceptional): Haelgrund (39/40), Vaynard (38), Ehrenwall (37).
+- Tier 2 (strong): Maret Uln (35), Almud (34), Baralta (34), Strand (33), Klapp (32), Almstedt (32), Laskaris (31).
+- Tier 3 (solid): Torsvald (29), Virke (30), Feldhaus (27), Brandt (27), Prudence (28), Lenneth (28), Olafsson (27), Edeyja (27), Himlensendt (25), Vossen (24), Elske (24), Solberg (24), Jarnstal (24).
+- Tier 4: Torben (22).
+- Critical findings: (1) Lenneth has zero mechanical expression despite high narrative importance. (2) Almud has no BG mode presence. (3) Elske has mechanical impact but zero characterization. (4) Haelgrund-Torsvald parallel is the most valuable unwritten NPC interaction. (5) 5 NPCs lack historical echoes.
+- 10 structural recommendations prioritised.
+- Committed as designs/npcs/npc_comprehensive_audit.md.
