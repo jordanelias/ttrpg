@@ -44,7 +44,7 @@ Applied at Accounting before Assert/Suppress resolution.
 |--------|-----------|
 | Passive baseline | +1 (always) |
 | Assert (Church) | +2 total (replaces passive; not additive) |
-| Suppress (Crown or Hafenmark Domain Action) | Negates passive +1 for that season only. TC does not decrease. Ob = Church Mandate. |
+| Suppress (Crown or Hafenmark Domain Action) | Negates passive +1 for that season only. TC does not decrease. Ob = Church Mandate ÷ 2 (round up, min 1). |
 
 Suppress may be declared once per season by one faction. It cannot reduce TC below its value at season start.
 TTRPG: same rule applies. BG: same rule applies; Suppress is a Standard Action consuming one card.
