@@ -527,3 +527,16 @@ Final Patch:
 - ED-354/355/357/358 resolved.
 - Open mass battle P1 blockers: 0.
 - Test output: tests/sim_mass_battle_SIM-MB-03.md
+
+
+### 2026-04-10 — Comprehensive Multi-System Simulation Batch (SIM-COMPREHENSIVE-01)
+Session: 2026-04-10_SONNET_COMPREHENSIVE_SIM
+- Ran 9 simulations across 6 new/unrun systems + 3 unpatched P1 gaps.
+- Batches: A (wound, AMPLIFY stalemate, Command cap), B (Calamity Radiation, Clock Registry, Victory Architecture race), C (co-victory pairings, RM Cultural Uprising calibration).
+- P1 findings: 9 total (AMPL-01 stalemate, CMD-02 size cap, CR-01/02 BG/Hybrid radiation, CLK-03 PI thresholds, VIC-02 Crown timeline, VIC-06 Hafenmark dominance check, CO-02 Varfell+RM infeasibility, VIC-RM-01 Phase 1 conflict).
+- Provisional patches: AMPL-01, CMD-01, CR-01, CR-02, CLK-01 (PI), VIC-01, VIC-RM-01.
+- Gaps logged: 11 (GAP-CR-01/02, GAP-WOUND-01/02, GAP-AMPL-01, GAP-CLK-01/02/03, GAP-VIC-01/02, GAP-VIC-RM-01).
+- Clean scenarios: 8 confirmed.
+- Test output: tests/sim_comprehensive_batch_2026_04_10.md
+- REMAINING P1 BLOCKERS: ED-373 (Vanguard stats), ED-377 (CV starting values) — unchanged from prior session.
+- NEW BLOCKERS: GAP-CR-01 (RS decay season/year conversion), PI thresholds (CLK-03/provisional applied).

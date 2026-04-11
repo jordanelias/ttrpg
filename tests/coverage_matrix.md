@@ -559,3 +559,15 @@ PP applied: PP-505 through PP-508
 ED resolved: ED-354, ED-355, ED-357, ED-358
 Open mass battle P1 blockers: 0
 Status: COMPLETE
+
+## SIM-COMPREHENSIVE-01 — Comprehensive Multi-System Batch — 2026-04-10
+| ID | Description | Mode | Temporal | Tracks | Factions | NPCs | Archetypes | Status | Findings |
+|----|------------|------|----------|--------|----------|------|------------|--------|----------|
+| SIM-WOUND-01 | Wound Ob penalty: pool-reduction calibration, multi-session carry-over, pool floor ambiguity | A+D | PRES | Health, Wounds, Pool | None | Generic combatants | All combat archetypes | COMPLETE | F-WOUND-01(P3 clean), F-WOUND-02(P2 GAP-WOUND-01), F-WOUND-03(P2 GAP-WOUND-02). ED-candidate-F reclassified P3. No patch. |
+| SIM-AMPL-01 | AMPLIFY stalemate: low pool + non-primary genre irresolvable deadlock | A+D | PRES | Conviction Track, Composure | Crown, Church, Hafenmark | Himlensendt, Almud, Baralta | Alliance debaters, institutional authority | COMPLETE | F-AMPL-01(P1→PROVISIONAL AMPL-01), F-AMPL-02(P2), F-AMPL-03(P2 design paradox). |
+| SIM-CMD-01 | Command cap: Size > Command glass cannon, no pool boost mechanism | A+D | PRES | Unit Health, Power, Pool | Generic | Generic General | Levy Horde, disciplined unit | COMPLETE | F-CMD-01(REVISED — not zero-benefit), F-CMD-02(P1→PROVISIONAL CMD-01), F-CMD-03(P2). |
+| SIM-CR-01 | Calamity Radiation cross-mode integration: BG Thread tags, Hybrid echo, Surge timing, Forgetting boundary | A+G | CROSS | RS, Domain Action Ob, Thread Ob, CV | All | Generic practitioners | All archetypes | COMPLETE | F-CR-01(P1→PROV CR-01), F-CR-02(P1→PROV CR-02), F-CR-03(P2), F-CR-04(P2), F-CR-05(P3 CLEAN). GAP-CR-01 blocks RS decay precision. |
+| SIM-CLK-01 | Clock Registry interaction chains: RS/TC/IP/PI/WC/WR/AER interdependency | B+G | CROSS | All shared clocks | All | — | — | COMPLETE | F-CLK-01(P2), F-CLK-02(P2 AER/AEA), F-CLK-03(P1→PROV CLK-01), F-CLK-04(P2). |
+| SIM-VIC-01 | Victory Architecture endgame race: 4-player Season 10 projection | C+D | FUT | TCV, TC, PI, RS, Mandate | Crown, Church, Hafenmark, Varfell | — | All faction archetypes | COMPLETE | F-VIC-01(P2→PROV VIC-01), F-VIC-02(P1 EDITORIAL), F-VIC-03(P2), F-VIC-04(P2), F-VIC-05(P1 CLEAN), F-VIC-06(P1 GAP-VIC-02). |
+| SIM-VIC-02 | Co-victory pairings stress test post PP-528: exclusivity, timing, feasibility, cognitive load | D+L | CROSS | All | All | — | All | COMPLETE | F-CO-01(P2), F-CO-02(P1 EDITORIAL), F-CO-03(P3). 3 clean scenarios. |
+| SIM-VIC-03 | RM Cultural Uprising: Phase 1 conflict, Phase 2 calibration, RS prerequisite | A+C | CROSS | CV, TC, RS, WC, WR | RM, Church | Pontifex | RM hardest mode | COMPLETE | F-VIC-RM-01(P1→PROV VIC-RM-01), F-VIC-RM-02(P2 GAP-VIC-RM-01), F-VIC-RM-03(P2 CLEAN), F-VIC-RM-04(P3). |

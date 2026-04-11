@@ -5006,3 +5006,108 @@ patches:
   source: mass_battle stress test 2026-04-09
   affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
   status: applied
+
+
+- id: PP-529-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P1
+  description: >
+    PROVISIONAL AMPL-01: Stalemate break rule for AMPLIFY and CLASH.
+    Add to social_contest_system_v2.md §4 AMPLIFY + §3 general stalemate:
+    "If net successes = 0 for 3 consecutive exchanges in the same CLASH or AMPLIFY sequence,
+    both sides exhaust their arguments. The exchange ends without Conviction Track movement.
+    Each participant loses 1 Composure (narrative attrition). The Doubt Marker advances 1
+    toward the non-initiating side." [PROVISIONAL — pending user approval]
+  finding_id: F-AMPL-01 (SIM-AMPL-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects: [designs/contest/social_contest_system_v2.md, references/params_contest.md]
+  status: provisional
+
+- id: PP-530-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P1
+  description: >
+    PROVISIONAL CMD-01: Overwhelming Size Advantage bonus.
+    Add to mass_battle_v3.md §Unit Combat:
+    "When Size ≥ 2×Command, unit may add +1D to pool once per Battle Turn (Phase 4 only).
+    Does not apply in Defensive formation or on defensive orders." [PROVISIONAL — pending user approval]
+  finding_id: F-CMD-02 (SIM-CMD-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  status: provisional
+
+- id: PP-531-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P1
+  description: >
+    PROVISIONAL CR-01: Define "Thread orders" in BG Calamity Radiation Table.
+    Add to calamity_radiation.md §BG Implementation:
+    "'Thread orders' = Domain Actions bearing [THREAD] tag in params_board_game.md.
+    Expedition and Mending-coordination actions are always [THREAD]-tagged.
+    Govern, Assert, Reinforce, Suppress, Seize etc. are NOT [THREAD]-tagged." [PROVISIONAL]
+  finding_id: F-CR-01 (SIM-CR-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects: [designs/setting/calamity_radiation.md]
+  status: provisional
+
+- id: PP-532-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P1
+  description: >
+    PROVISIONAL CR-02: Radiation-caused Thread failures in Hybrid Personal Phase.
+    Add to calamity_radiation.md §Hybrid Mode Note:
+    "Radiation-caused Thread failures do NOT generate Domain Echoes. Domain Echoes require
+    deliberate PC Thread operations with faction-intent. Environmental radiation failure is
+    not intentional and queues no echo." [PROVISIONAL]
+  finding_id: F-CR-02 (SIM-CR-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects: [designs/setting/calamity_radiation.md]
+  status: provisional
+
+- id: PP-533-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P1
+  description: >
+    PROVISIONAL CLK-01: PI thresholds pending ED-361.
+    Provisional values for params_board_game.md §PI:
+    PI 0–2: Parliamentary debate only; PI 3: Mandate cap −1;
+    PI 5: Mandatory Parliamentary Session at Accounting; PI 7: Löwenritter Coup Counter +1 auto;
+    PI 10: Structural collapse — all Stability −1 at Accounting until PI < 7. [PROVISIONAL]
+  finding_id: F-CLK-03 (SIM-CLK-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects: [references/params_board_game.md, designs/systems/clock_registry.md]
+  status: provisional
+
+- id: PP-534-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P2
+  description: >
+    PROVISIONAL VIC-01: Church Prominence auto-applies in self-controlled territories.
+    Add to victory_architecture_v1.md §3.2:
+    "Church is automatically Prominent in all territories it controls, regardless of Mandate comparison.
+    Mandate comparison (Church Mandate > controlling faction Mandate) applies only to territories
+    controlled by rival factions." [PROVISIONAL]
+  finding_id: F-VIC-01 (SIM-VIC-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: provisional
+
+- id: PP-535-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P1
+  description: >
+    PROVISIONAL VIC-RM-01: RM Phase 1 threshold reconciled.
+    PP-478 supersedes §3.5 Phase 1 threshold. Phase 1 for RM solo victory (Hybrid mode,
+    post-Founding) = ≥ 5 territories CV ≤ 1. §3.5 text showing ≥ 8 territories is the
+    pre-PP-478 BG-only version, now struck (RM is BG-unavailable per PP-478). [PROVISIONAL]
+  finding_id: F-VIC-RM-01 (SIM-VIC-03)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: provisional

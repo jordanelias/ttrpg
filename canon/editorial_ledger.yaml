@@ -2611,3 +2611,45 @@ editorial_decisions:
     priority: P3
     description: "Diplomatic Token on Mandate-0 faction — Token effect suspended while holder has Mandate 0; resumes on recovery. Applied provisionally in PP-517."
     tags: [board_game, diplomacy]
+
+  # ═══ 2026-04-10 COMPREHENSIVE SIM BATCH ════════════════════════════════════════
+
+  - id: ED-383
+    status: flagged
+    priority: P2
+    date_raised: 2026-04-10
+    description: "Crown victory 'Suppress all rivals' produces 20+ season timeline — intended difficulty spike?"
+    decision: null
+    tags: [board_game, victory, crown]
+
+  - id: ED-384
+    status: flagged
+    priority: P2
+    date_raised: 2026-04-10
+    description: "Varfell+RM co-victory unachievable in race conditions — confirm aspirational design intent"
+    decision: null
+    tags: [board_game, victory, varfell, rm, co_victory]
+
+  - id: ED-385
+    status: flagged
+    priority: P2
+    date_raised: 2026-04-10
+    description: "RS decline → CV erosion → Church Seizure easier on Crown territories (T5 Feldmark) — confirm intentional"
+    decision: null
+    tags: [board_game, calamity, church, crown]
+
+  - id: ED-386
+    status: flagged
+    priority: P3
+    date_raised: 2026-04-10
+    description: "Cultural Uprising 'arc' ambiguity — should be explicitly defined as 'campaign'"
+    decision: null
+    tags: [hybrid, rm, victory]
+
+  - id: ED-387
+    status: flagged
+    priority: P2
+    date_raised: 2026-04-10
+    description: "GAP-VIC-02: Confirm PP-203 balanced Hafenmark passive victory path — scope of fix unclear"
+    decision: null
+    tags: [board_game, hafenmark, balance]
