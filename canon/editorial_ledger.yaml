@@ -2695,3 +2695,135 @@ editorial_decisions:
     description: "Varfell+RM co-victory: is T13 (Oastad) control requirement intentional as a 'must-hold' constraint or redundant (Varfell starts there)? PP-BAL-08 provisionally removes it pending decision."
     decision: null
     tags: [board_game, varfell, rm, co_victory, balance]
+
+  ED-393:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Altonian containment-through-accommodation model for Church of Solmund. Cathedral city (Himmelenger/T14) as colonial religious grant. Church cross-border contiguity. British India parallel."
+      decision: "Canonical. Added to canon/03_canonical_timeline.md."
+      tags: [lore, church, altonia, setting, timeline]
+
+  ED-394:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Secession Wars deed-monarchy legitimation. First Almqvist (Almud's father) as military leader consecrated by Church. Carolingian parallel. Population knows Crown is not royal by blood."
+      decision: "Canonical. Two generations to game start (founder + Almud). Deed-presumption rebuttable via Coup Counter / Motion of No Confidence."
+      tags: [lore, crown, succession, deed_monarchy, timeline]
+
+  ED-395:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Cadet branches as deed-families, not blood-families. Baralta's ducal status from Secession-era service, not Almqvist genealogy."
+      decision: "Canonical. Ducal/ministerial families earned proximity through wartime deeds."
+      tags: [lore, hafenmark, succession, deed_monarchy]
+
+  ED-396:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Baralta personal characterisation: unmarried, childless, heirless. Wants the Crown (active ambition). Henry VIII parallel — sovereign supremacy, not theological reform. Pure adversary of Restoration Movement. Eschatological reward orientation."
+      decision: "Canonical. Reframes Arc 3, Arc 9, Baralta succession mechanics."
+      tags: [npc, baralta, hafenmark, characterisation, succession]
+
+  ED-397:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Caste system reconciliation: southern exclusion from war coalition + Catastrophe stigma + Church suppression logic. Geographic gradient radiating from Southernmost. Southern territories = higher TS baseline, lower Church penetration."
+      decision: "Canonical. Almud's northern Einhir heritage as specifically the 'right kind.' Varfell as stigmatised duchy."
+      tags: [lore, caste, setting, einhir, geography]
+
+  ED-398:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Almud TS revised to 0. Remove secret Einhir sympathy. Einhir policy as governance pragmatism + genuine ethical doubt (not secret sympathy). Discovery Event as rupture not confirmation."
+      decision: "Canonical. Complete rewrite of Almud characterisation."
+      tags: [npc, almud, crown, characterisation, thread_sensitivity]
+
+  ED-399:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Lenneth as institutional Einhir revivalist. Catherine the Great parallel. Overcome caste through Crown authority, not revolution. Thread work as eventual horizon. Sincere + strategic."
+      decision: "Canonical. Lenneth-Baralta collision is campaign-defining confrontation."
+      tags: [npc, lenneth, crown, characterisation, einhir]
+
+  ED-400:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Vaynard as southern Einhir heritage, von Lohengramm parallel. Varfell as stigmatised duchy. TS from environmental exposure. Expulsion agenda (Altonia + Church) as both cultural restoration and Southernmost crisis response."
+      decision: "Canonical. Reframes Vaynard characterisation and Baralta-Vaynard foil."
+      tags: [npc, vaynard, varfell, characterisation, einhir, caste]
+
+  ED-401:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Himlensendt as structural keystone of post-war settlement. Consecration crisis if Baralta claims Crown. Pastoral suppression of RM as genuine compassion producing ethnic suppression. Vaynard as existential heretic."
+      decision: "Canonical. Enriches Arc 9 (consecration question) and Arc 11 (originary Lock stakes)."
+      tags: [npc, himlensendt, church, characterisation, baralta, succession]
+
+  ED-402:
+      priority: P2
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Church institutional memory of containment: Himlensendt's strategy as reverse-containment (making Church indispensable, applying Altonia's logic against Crown)."
+      decision: "Canonical. Added to timeline Altonian containment section."
+      tags: [lore, church, himlensendt, strategy]
+
+  ED-403:
+      priority: P2
+      status: open
+      date_raised: 2026-04-11
+      description: "Vossen's position on Lenneth's institutional revivalism. RM internal split between pragmatic acceptance of Crown patronage and rejection of Crown authority."
+      decision: null
+      tags: [npc, vossen, rm, lenneth, design_gap]
+
+  ED-404:
+      priority: P2
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Almstedt served under two monarchs (founder + Almud), not three. Timeline reconciliation."
+      decision: "Canonical. Founder = Almud's father. Two generations."
+      tags: [npc, almstedt, timeline, deed_monarchy]
+
+  ED-405:
+      priority: P2
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "NPC roster caste-axis annotations. Feldhaus/Virke profit from caste. Almstedt preserves it. Prudence Cardinal extraction deepens it. Haelgrund enforces it. Strand's frustration rebukes its ossification. Systemic reproduction without individual intent."
+      decision: "Canonical. Annotations added as roster companion document."
+      tags: [npc, roster, caste, structural]
+
+  ED-406:
+      priority: P2
+      status: open
+      date_raised: 2026-04-11
+      description: "Ehrenwall succession assessment: who does she identify as viable successor if Almqvist line fails? Baralta as deed-logic candidate requires Lowenritter support (weak military), giving Ehrenwall leverage she currently lacks over Hafenmark."
+      decision: null
+      tags: [npc, ehrenwall, baralta, succession, lowenritter]
+
+  ED-407:
+      priority: P2
+      status: open
+      date_raised: 2026-04-11
+      description: "Himlensendt consecration crisis: if he refuses to consecrate Baralta, this exposes consecration as political veto power. If he consecrates, he installs his own superior. Open design question — which path?"
+      decision: null
+      tags: [npc, himlensendt, baralta, church, succession, design_gap]

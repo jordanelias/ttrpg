@@ -547,3 +547,48 @@ Session: 2026-04-10_SONNET_COMPREHENSIVE_SIM
 - Co-victories: Crown+Hafenmark slowed +3 seasons (PP-544: PI 5→7). Varfell+RM made viable −8 seasons (PP-545: VTM 4→3, territories 4→3). Hafenmark+RM −6 seasons (PP-546: territories 4→3).
 - All interaction checks passed. No condition inversions.
 - Commit: balance
+
+### 2026-04-11 — Deed-Monarchy, Altonian Containment, Caste Reconciliation, Ruler Diamond Repositioning
+
+**Major lore decisions (all canonical):**
+
+1. **Altonian containment of the Church** — British India parallel. Accommodation not suppression. Himmelenger (T14) as quarantine grant. Church incubated over 200 years. Church learns reverse-containment strategy. (ED-393)
+
+2. **Deed-monarchy** — First Almqvist = Almud's father, military leader consecrated by Church. Carolingian model. Two generations to game start. Deed-presumption rebuttable. Cognatic succession native to deed-logic. (ED-394)
+
+3. **Cadet branches as deed-families** — Political proximity from wartime service, not blood. (ED-395)
+
+4. **Caste system** — Geographic gradient from Southernmost. Southern Einhir stigmatised. Structural exclusion from war coalition. Not formal law, but structural consequence. TS distribution follows caste gradient. (ED-397)
+
+5. **Baralta** — Wants the Crown (active ambition). Unmarried, childless, heirless. Henry VIII parallel. Pure RM adversary. Would suppress RM more aggressively than Church. (ED-396)
+
+6. **Almud** — TS 0. Governance pragmatist + ethical doubt. Not secret sympathiser. Discovery Event = rupture. Complicit through cost-benefit, not malice. (ED-398)
+
+7. **Lenneth** — Institutional Einhir revivalist. Catherine the Great parallel. Crown as patron of cultural revival. Thread work eventual horizon. Lenneth↔Baralta = campaign-defining confrontation. (ED-399)
+
+8. **Vaynard** — Southern Einhir heritage. Von Lohengramm parallel. Wants Church + Altonian residue expelled. TS from environmental exposure. Forgetting as political prison. (ED-400)
+
+9. **Himlensendt** — Structural keystone. Consecration crisis with Baralta. Pastoral compassion = ethnic suppression. Vaynard = existential heretic. (ED-401)
+
+10. **NPC roster caste-axis annotations** — All 13 roster NPCs assessed against caste system. Caste is load-bearing for entire NPC ecosystem. (ED-405)
+
+**Files committed:**
+- canon/03_canonical_timeline.md (major rewrite)
+- designs/npcs/npc_character_analyses_existing.md (complete rewrite)
+- designs/npcs/npc_roster_caste_annotations.md (new companion doc)
+- canon/editorial_ledger.yaml (ED-393 through ED-407)
+- session_log_current.md (this entry)
+
+**Open editorial items from this session:**
+- ED-403: Vossen position on Lenneth's programme / RM internal split (P2)
+- ED-406: Ehrenwall succession assessment re Baralta (P2)
+- ED-407: Himlensendt consecration crisis — which path? (P2)
+
+**Files requiring follow-up rewrite (not in this commit):**
+- designs/npcs/ruler_diamond_foil_analysis.md — all pairings need rewriting for new positions
+- designs/npcs/ruler_diamond_extended_foils.md — all subjective perspectives need rewriting (especially Almud's view, which references TS 28 and Einhir sympathy)
+- gm_ref/arcs_01_04_nongreedy.md — Arc 1 (Sovereign Constraint) needs reframing for new Almud
+- gm_ref/arcs_05_09_batch02.md — check for Almud/Baralta characterisation dependencies
+- designs/gm_ref_cp14/arcs/arcs_09_11_elske_baralta.md — Arc 9 needs consecration crisis addition
+
+**Next session priority:** Rewrite ruler_diamond_foil_analysis.md and ruler_diamond_extended_foils.md for new positions. Then Arc 1 reframing.
