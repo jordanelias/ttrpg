@@ -625,3 +625,27 @@ Next session priority: Check arcs_05_09_batch02.md for any remaining stale Almud
 - designs/mechanics/baralta_crown_claim_mechanic.md: New file. Crown Succession Contest, Stake Claim Domain Action, Consecration Crisis BG expression, simulation of three scenarios (early/mid/late game). Four editorial decisions made (ED-408 through ED-411), all provisional/flagged.
 - **Key design finding:** The strategic sweet spot for Baralta is weakening Church to Stability 3 before claiming — creating tension between TC suppression interest and consecration preparation. Four preconditions for viable claim: Crown Mandate ≤ 2, PI ≥ 5, Church Stability ≤ 3, Hafenmark PI ≥ 4.
 - **Session total: 5 commits. ED-393 through ED-411 (19 editorial items: 15 resolved, 4 provisional/flagged).**
+
+### 2026-04-11 — Final Cleanup + Mechanical Gap Assessment (commit 6)
+
+- references/file_index.md: Updated with 3 new files from this session.
+- ED-412: Crown Einhir Revival Domain Action — provisional design for Lenneth's BG expression.
+- ED-119 escalated to P1-BLOCKER: Lenneth full design now critical. Without it, Lenneth-Baralta confrontation (campaign-defining per new characterisation) has no mechanical expression.
+- Varfell Church expulsion: no new mechanic needed — standard faction elimination covers it. Vaynard's agenda is characterisation driving standard play, not a unique mechanic.
+
+## CONTEXT LIMIT — SESSION CLOSE (FINAL)
+**This session: 6 commits. 21 editorial items (ED-393 through ED-412 + ED-119-URGENCY).**
+
+Canonical changes made:
+1. Altonian containment of Church (British India parallel, Himmelenger as quarantine grant)
+2. Deed-monarchy (first Almqvist = Almud's father, military leader, Church-consecrated)
+3. Caste system (geographic gradient, structural exclusion, TS distribution follows caste)
+4. Baralta: wants Crown, Henry VIII sovereign supremacy, pure RM adversary, unmarried/childless
+5. Almud: TS 0, governance pragmatism + ethical doubt, Discovery Event = rupture
+6. Lenneth: institutional Einhir revivalist, Catherine the Great, sincere + strategic
+7. Vaynard: southern Einhir heritage, von Lohengramm, Church expulsion agenda
+8. Himlensendt: structural keystone, consecration crisis conditional on Church Stability
+9. All NPC roster annotated for caste-axis impact
+10. Crown Succession Contest + Baralta Stake Claim + Consecration Crisis BG mechanics
+
+**Next session priority:** ED-119-URGENCY — Lenneth full design (stat block, TS development, BG Domain Action). Then simulate Crown Succession Contest to verify pool balances. Then Lenneth-Baralta confrontation mechanic.

@@ -2862,3 +2862,19 @@ editorial_decisions:
       description: "Hafenmark faction status when Baralta takes Crown. Option B selected: Hafenmark persists as separate faction, PP-487 PI-gated succession fires immediately. Baralta must ensure PI >= 4 before claiming or her faction base collapses behind her."
       decision: "Option B — mechanically richer, creates additional preparation requirement. See designs/mechanics/baralta_crown_claim_mechanic.md. Flagged for user review."
       tags: [board_game, hafenmark, succession, PP-487, mechanic]
+
+  ED-412:
+      priority: P1
+      status: provisional
+      date_raised: 2026-04-11
+      description: "Crown Einhir Revival Domain Action. Lenneth's institutional revivalism as BG mechanic. Crown DA 'Patronise Einhir Revival' — costs Mandate, advances cultural revival track, triggers RM Stability check (ED-403). Precondition: Lenneth alive + Crown Mandate >= 3. Consequence: Church TC assert in response, southern territories RM alignment shifts."
+      decision: "Designed provisionally. Requires Lenneth full stat design (ED-119) before implementation. Flagged for user review."
+      tags: [board_game, crown, lenneth, einhir, domain_action, mechanic]
+
+  ED-119-URGENCY:
+      priority: P1-BLOCKER
+      status: open
+      date_raised: 2026-04-11
+      description: "ED-119 (Lenneth full design) is now P1-BLOCKER due to 2026-04-11 session reframing. Lenneth is the campaign's institutional Einhir revivalist (Catherine the Great parallel). She needs: starting TS, development path, stat block, BG Domain Action for cultural revival, and position in the Lenneth-Baralta confrontation mechanics. Without this design, the campaign's defining political confrontation has no mechanical expression."
+      decision: null
+      tags: [npc, lenneth, crown, characterisation, design_gap, P1_BLOCKER]

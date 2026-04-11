@@ -213,6 +213,12 @@
 
 ---
 
+| designs/npcs/npc_roster_caste_annotations.md | ALL | CURRENT | Caste-axis impact on all 13 roster NPCs |
+| designs/npcs/ed_403_406_407_resolutions.md | ALL | CURRENT | RM split, Ehrenwall assessment, consecration crisis |
+
+## DESIGNS — MECHANICS
+| designs/mechanics/baralta_crown_claim_mechanic.md | BG/HYBRID | CURRENT | Crown Succession Contest, Stake Claim DA, consecration crisis BG expression |
+
 ## GM REFERENCE (gm_ref/)
 
 | File | Systems | Status | Notes |
