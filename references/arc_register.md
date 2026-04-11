@@ -1,6 +1,6 @@
 # Arc Register
 
-> **Version:** 4 (abe1b1e review + new emergent arcs from PP-428–442, foil analysis, mechanical interactions)
+> **Version:** 5 (threadwork decision point testing + new emergent arcs from threadwork interactions)
 > **Status:** WORKING DRAFT
 > **[EDITORIAL: ED-NEW — Tier assignments are provisional pending user review]**
 > **Sources fetched this session:** `designs/gm_ref_cp14/arcs/*` (11 files), `gm_ref/arcs_*` (3 files), `designs/npcs/npc_roster.md`, `designs/npcs/npc_comprehensive_audit.md`, `designs/npcs/npc_character_analyses_existing.md`, `designs/npcs/npc_roster_caste_annotations.md`, `references/params_factions.md`, `references/params_threadwork.md`, `references/params_board_game.md`, `designs/board_game/victory_architecture_v1.md`, `designs/board_game/valoria_bg_v05_simulation_and_patches.md`, `designs/ttrpg/valoria_narrative_scenario_chains.md`, `compilation/v0.14/stage6_factions.md`, `canon/02_canon_constraints.md`
@@ -496,6 +496,36 @@ These are not separate arcs but emergence conditions that should inform existing
 **Emergence:** Crown has a direct IP management tool (Influence vs Ob = AER level; Virtue Ethics −1 Ob; floor 1). Combined with Solberg's unconscious stability bias. Success path: sustained engagement → AER 4+ → IP 75 threshold rises to 80; AER 5 → IP held at 50 (Altonia satisfied). Failure path: AER drops → IP baseline returns; Solberg recalled → Schoenland more dangerous. Complication: if Valoria is fragmented (3+ factions Stability ≤ 2), Ob +2 (Schoenland hedges toward Altonia).
 **Non-Player Characters:** Almud (Crown diplomatic capacity), Strand (administrative execution — but Senator card shared with Treaty, cannot do both in same season), Solberg (STABILITY-SEEKING — active asset if offered credible treaty), Laskaris (IP reduction serves his protective instinct)
 **Classification:** Tertiary — requires sustained Crown investment over multiple seasons. Counter-play: any faction can destabilise Valoria to make Schoenland hedge.
+
+### ARC-S31: The Lock Distribution
+**Engine:** Vaynard TK 4 → offers originary Locks (Private Collection) → simultaneous Discovery Events in multiple TS 10+ characters
+**Emergence:** At TK 4, Vaynard offers the entire Private Collection including originary Locks. Each Lock triggers Spirit TN 7 Ob 1 Discovery Event in any TS 10+ character who handles it. If Locks are distributed to multiple recipients: Haelgrund (TS 12), Klapp (TS 31), Torsvald (TS 35), and Player Characters all roll simultaneously. Expected ~60% success rate per character. 3–5 Discovery Events possible in one season. Cascade: Church triple fracture if Klapp + Haelgrund + Olafsson crises coincide.
+**Non-Player Characters:** Vaynard (TK 4 — distributor), Haelgrund (TS 12 — worldview shatters), Klapp (TS 31 — compounds existing CE development), Torsvald (TS 35 — Riskbreaker crisis compounds), Himmensendt (loses personnel simultaneously), Edeyja (recognises Lock nature immediately)
+**Key decision:** Who receives Locks? Player choice determines which NPC arcs accelerate. The highest-impact single decision in the campaign's threadwork system.
+**Interaction:** ARC-S01 (TK 4), Collision A (Church Double Fracture), NPC-ARC-HAE, ARC-S21, NPC-ARC-TOR
+
+### ARC-S32: The Mending Trap
+**Engine:** Mending = sole practitioner RS recovery (+1/+2 per success) but Coherence −1 per attempt regardless of outcome. Coherence 10→0.
+**Emergence:** RS passive decline (−6 to −9/season with 2 Locks + 1 Gap). One practitioner's entire Coherence budget (~10 Mendings ≈ +10 to +20 RS) covers ~2–3 seasons of passive decline. After ~10 Mendings: Coherence 0 → Rendering Crisis → Non-Player Character if unresolved by season end. Recovery costs TS −1 permanent. The world needs Mending to survive; Mending burns out the practitioners who perform it. The campaign cannot be saved by individual heroism. It requires: multiple practitioners in rotation, Warden Cooperation (WC ≥ 2: decay halved; WC ≥ 3: RS +2/season), Community Weaving (RM Mandate ≥ 1), AND Lock/Gap resolution.
+**Non-Player Characters:** Edeyja (TS 75–80, Coherence 9 — most capable but not inexhaustible), Maret Uln (TS ~50), any practitioner Player Character, Vossen (Community Weaving gated by RM Mandate)
+**Structural significance:** This is the campaign's central mechanical tragedy. The Einhir practitioners reached this same structural position 245 years ago. The game replicates it mechanically.
+**Interaction:** ARC-P02 (RS budget), ARC-S16/S17/S18 (Coherence Zero — burnout destination), ARC-S25 (Warden Cooperation — necessary), ARC-S10 (Community Weaving access), ARC-S15 (Ceiral Ritual — only bulk RS source)
+
+### ARC-S33: The Lattice of Enemies
+**Engine:** Cross-faction collective Thread operations gated by Belief compatibility (threadwork v2.5 §2.5)
+**Emergence:** Endgame RS recovery at RS Critical (19–1) requires practitioner cooperation across faction lines. Collective operations require Belief checks: directly opposing Beliefs → Spirit TN 7 Ob 1 pre-Leap (failure = helper drops, ~40% failure rate); tangential conflicts → helper dice don't chain on 10. The practitioners who must cooperate to save the world may be mechanically unable to cooperate because their factions' Beliefs conflict.
+**Key Belief interactions:** Vaynard (consequentialist) vs Edeyja (deontological) = tangential conflict → non-chaining. Crown vs Varfell practitioners = directly opposing → Spirit check. Maret Uln (RM sympathy) vs Church-aligned = directly opposing. Player Character practitioners with harmonised Beliefs = full dice — the campaign rewards Player Character cooperation and penalises Player Character–Non-Player Character cross-faction cooperation.
+**Non-Player Characters:** Edeyja (best collective partner — substrate-aligned Beliefs compatible with pure Mending intent), Vaynard (diminished partner despite high TS — non-chaining dice), Maret Uln (RM friction), Almud (governance Beliefs tangentially conflict with substrate Beliefs)
+**Structural consequence:** Endgame is not "can practitioners cooperate?" but "which practitioners can cooperate?" Belief compatibility determines viable alliances for RS recovery.
+**Interaction:** ARC-S16/S17/S18, ARC-P02, Collision B (Almud's Beliefs affect viability), ARC-S32 (Mending Trap — collective Mending is more efficient but Belief-gated)
+
+### ARC-T18: The Overweaving Cascade
+**Engine:** Multiple practitioners Weaving same configuration → stacked over-actualisation (PP-209) → catastrophic brittleness
+**Emergence:** Two practitioners independently Weave same configuration in separate contact windows: +2 Ob total (stacked over-actualisation). Shattering consequence escalates one severity tier (Shifting Object forms as if 1 season old → accelerated Gap deterioration). In mass battle (RS ×3 multiplier, PP-192): stacked over-actualisation shattering produces RS −6 to −12 from a single collapsed configuration.
+**Non-Player Characters:** Any two practitioners operating in same theatre without Collective Diagnosis coordination
+**Key mechanic:** During contact, practitioners CANNOT communicate (communication requires rendering). Collective Diagnosis pre-Leap is the only coordination mechanism. Separate Leaps = no knowledge of what the other has Woven → stacking risk.
+**Classification:** Tertiary — requires two practitioners independently targeting same configuration. But when it fires, RS consequences compound rapidly.
+**Interaction:** ARC-S02 (Brittle Peace — over-actualisation), ARC-S04 (Rendering Debt — ×3 in mass battle)
 
 ### COLLISION F: The Succession Triangle
 **Trigger:** Almqvist deed-presumption weakens (Coup Counter ≥ 2, or Almud Discovery Event, or Torben loss) while both Lenneth and Baralta programmes are active
