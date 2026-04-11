@@ -571,3 +571,5 @@ Status: COMPLETE
 | SIM-VIC-01 | Victory Architecture endgame race: 4-player Season 10 projection | C+D | FUT | TCV, TC, PI, RS, Mandate | Crown, Church, Hafenmark, Varfell | — | All faction archetypes | COMPLETE | F-VIC-01(P2→PROV VIC-01), F-VIC-02(P1 EDITORIAL), F-VIC-03(P2), F-VIC-04(P2), F-VIC-05(P1 CLEAN), F-VIC-06(P1 GAP-VIC-02). |
 | SIM-VIC-02 | Co-victory pairings stress test post PP-528: exclusivity, timing, feasibility, cognitive load | D+L | CROSS | All | All | — | All | COMPLETE | F-CO-01(P2), F-CO-02(P1 EDITORIAL), F-CO-03(P3). 3 clean scenarios. |
 | SIM-VIC-03 | RM Cultural Uprising: Phase 1 conflict, Phase 2 calibration, RS prerequisite | A+C | CROSS | CV, TC, RS, WC, WR | RM, Church | Pontifex | RM hardest mode | COMPLETE | F-VIC-RM-01(P1→PROV VIC-RM-01), F-VIC-RM-02(P2 GAP-VIC-RM-01), F-VIC-RM-03(P2 CLEAN), F-VIC-RM-04(P3). |
+
+| BAL-VIC-01 | Victory path balance — solo + co-victory timeline normalisation | ALL | CROSS | TCV, PI, VTM, TC, CV | All | — | All | COMPLETE | PP-540–546 applied. Solo 12–16 seasons all factions. Co-victory 10–14 seasons. 7 patches. |

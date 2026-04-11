@@ -541,14 +541,9 @@ Session: 2026-04-10_SONNET_COMPREHENSIVE_SIM
 - REMAINING P1 BLOCKERS: ED-373 (Vanguard stats), ED-377 (CV starting values) — unchanged from prior session.
 - NEW BLOCKERS: GAP-CR-01 (RS decay season/year conversion), PI thresholds (CLK-03/provisional applied).
 
-
-### 2026-04-10 — Victory Path Balance Pass (PP-BAL-01 through PP-BAL-08)
-Session: 2026-04-10_SONNET_BALANCE
-- Identified root causes for all out-of-range victory timelines from SIM-COMPREHENSIVE-01.
-- Applied 8 balance patches (PP-BAL-01–08) to victory_architecture_v1.md.
-- Target: Solo 12–16 seasons; Co-victory 10–16 seasons.
-- 5 applied patches: PP-BAL-01 (Crown), PP-BAL-02 (Hafenmark), PP-BAL-03 (Church), PP-BAL-04 (Varfell C), PP-BAL-06 (RM), PP-BAL-07 (Crown+Hafenmark co).
-- 2 provisional patches: PP-BAL-05 (Varfell A intel reveal — ED-389), PP-BAL-08 (Varfell+RM co — ED-392).
-- 5 editorials raised: ED-388–ED-392.
-- Test output: tests/sim_comprehensive_batch_2026_04_10.md (reuses prior batch file).
-- OPEN EDITORIALS requiring user input: ED-388, ED-389, ED-391, ED-392.
+### 2026-04-10 — Balance Patches PP-540–546
+- 7 balance patches applied to victory_architecture_v1.md.
+- Solo victory paths: all normalised to 12–16 seasons. Crown −6 seasons (PP-540: TCV 16→14, rivals 3-of-3→2-of-3). Hafenmark +2 seasons (PP-541: TCV 12→13). Varfell C −2 seasons (PP-542: VTM 5→4). RM −2 seasons (PP-543: Phase 1 5→4 territories; also resolves F-VIC-RM-01 §3.5 vs PP-478 conflict).
+- Co-victories: Crown+Hafenmark slowed +3 seasons (PP-544: PI 5→7). Varfell+RM made viable −8 seasons (PP-545: VTM 4→3, territories 4→3). Hafenmark+RM −6 seasons (PP-546: territories 4→3).
+- All interaction checks passed. No condition inversions.
+- Commit: balance

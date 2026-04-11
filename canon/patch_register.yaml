@@ -5112,120 +5112,106 @@ patches:
   affects: [designs/board_game/victory_architecture_v1.md]
   status: provisional
 
+# ═══ 2026-04-10 BALANCE PATCHES PP-540–546 ═══════════════════════════════
 
-# ═══ BALANCE PATCHES 2026-04-10 ════════════════════════════════════
-
-- id: PP-BAL-01
+- id: PP-540
   type: balance
   date: 2026-04-10
   severity: P1
   description: >
-    Crown Peninsula Sovereignty: TCV threshold ≥ 16 → ≥ 14. Rival suppression: Mandate ≤ 2 → Mandate ≤ 3.
-    Root cause: Crown solo path was 18–22 seasons vs target 12–16. TCV reduction saves ~4 seasons;
-    mandate bar reduction saves ~3–4 seasons across 3 factions.
-  finding_id: SIM-VIC-01 F-VIC-02; SIM-COMPREHENSIVE-01 balance analysis
-  source: balance pass 2026-04-10
+    Crown Peninsula Sovereignty — TCV 16→14; rival suppression 3-of-3 → 2-of-3.
+    Solo victory timeline reduced from 18–22 seasons to 12–16 seasons.
+    Crown TCV threshold reduced from ≥ 16 to ≥ 14.
+    Rival suppression condition changed from 'every other playable faction' to
+    'at least 2 of the 3 other playable factions' at Mandate ≤ 2 / eliminated / Treaty.
+    Balance rationale: Crown was 4–6 seasons slower than all other solo paths.
+  finding_id: SIM-VIC-01 F-VIC-02 (ED-383)
+  source: balance_analysis_2026_04_10
   affects: [designs/board_game/victory_architecture_v1.md]
   status: applied
-  modelled_timeline: 12–16 seasons
 
-- id: PP-BAL-02
+- id: PP-541
+  type: balance
+  date: 2026-04-10
+  severity: P2
+  description: >
+    Hafenmark Parliamentary Sovereignty — TCV 12→13.
+    Solo victory timeline increased from 10–14 seasons to 12–16 seasons.
+    Balance rationale: Hafenmark was 2–4 seasons faster than all other solo paths.
+  finding_id: SIM-VIC-01 F-VIC-06
+  source: balance_analysis_2026_04_10
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-542
+  type: balance
+  date: 2026-04-10
+  severity: P2
+  description: >
+    Varfell Path C Thread Supremacy — VTM = 5 → VTM ≥ 4.
+    Solo victory timeline reduced from 14–18 seasons to 12–16 seasons.
+    VTM 5 cap (uniqueness condition) replaced with VTM ≥ 4 (mastery condition).
+    Balance rationale: Path C was 2 seasons above target ceiling.
+  finding_id: SIM-COMPREHENSIVE-01
+  source: balance_analysis_2026_04_10
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-543
   type: balance
   date: 2026-04-10
   severity: P1
   description: >
-    Hafenmark Parliamentary Sovereignty: TCV threshold ≥ 12 → ≥ 14. PI threshold ≥ 5 → ≥ 6.
-    Root cause: Hafenmark solo was 10–14 seasons — passive dominant strategy, fastest path.
-    TCV increase adds ~4 seasons of expansion; PI increase adds ~1 season.
-    Mandate condition (≥ 4) unchanged. Stability gate deferred — ED-388.
-  finding_id: SIM-COMPREHENSIVE-01 balance analysis; BAL-BG-02 ED-109
-  source: balance pass 2026-04-10
+    RM Cultural Revolution Phase 1 — territory threshold ≥ 5 (PP-478) → ≥ 4 (PP-543 supersedes).
+    Also resolves F-VIC-RM-01 conflict: §3.5 had ≥ 8, PP-478 had ≥ 5. PP-543 = ≥ 4 is now canonical.
+    Solo victory timeline reduced from 14–20 seasons to 14–18 seasons.
+    Balance rationale: RM upper bound (20 seasons) exceeded hardest-mode acceptable range.
+  finding_id: F-VIC-RM-01 (SIM-VIC-03); SIM-COMPREHENSIVE-01
+  source: balance_analysis_2026_04_10
   affects: [designs/board_game/victory_architecture_v1.md]
   status: applied
-  modelled_timeline: 13–16 seasons
 
-- id: PP-BAL-03
-  type: balance
-  date: 2026-04-10
-  severity: P2
-  description: >
-    Church Solmundan Orthodoxy: TCV threshold ≥ 8 → ≥ 7.
-    Church at 14–17 seasons became the longest solo path after Crown/Hafenmark corrections.
-    One fewer required seizure saves ~2 seasons. CV ≥ 3 condition unchanged — core arc tension.
-  finding_id: SIM-COMPREHENSIVE-01 balance analysis
-  source: balance pass 2026-04-10
-  affects: [designs/board_game/victory_architecture_v1.md]
-  status: applied
-  modelled_timeline: 12–15 seasons
-
-- id: PP-BAL-04
-  type: balance
-  date: 2026-04-10
-  severity: P2
-  description: >
-    Varfell Path C Thread Supremacy: VTM = 5 (exact) → VTM ≥ 4.
-    VTM=5 required ~14 seasons of intel investment, placing Path C above target.
-    Relaxing to ≥ 4 centres the RS ≥ 50 condition as the distinguishing feature.
-  finding_id: SIM-COMPREHENSIVE-01 balance analysis
-  source: balance pass 2026-04-10
-  affects: [designs/board_game/victory_architecture_v1.md]
-  status: applied
-  modelled_timeline: 12–16 seasons
-
-- id: PP-BAL-05
-  type: balance
-  date: 2026-04-10
-  severity: P2
-  description: >
-    Varfell Path A Intelligence Hegemony: intel reveal condition 2 → 3 rival factions.
-    [PROVISIONAL — ED-389: confirm VTM 3 provides reveal capacity for 3 factions.]
-    Path A at 12–14 seasons was fastest solo after other corrections; needs ~1 season extension.
-  finding_id: SIM-COMPREHENSIVE-01 balance analysis
-  source: balance pass 2026-04-10
-  affects: [designs/board_game/victory_architecture_v1.md]
-  status: provisional
-  modelled_timeline: 13–16 seasons
-
-- id: PP-BAL-06
-  type: balance
-  date: 2026-04-10
-  severity: P2
-  description: >
-    Restoration Movement Phase 1 threshold: ≥ 5 territories CV ≤ 1 → ≥ 4 territories.
-    Supersedes PP-478 provisional. Tightens upper bound of RM variance (14–20 → 14–18).
-    Phase 2 single-roll nature is structural; accepting 14–18 as RM range.
-    Also propagates to Hafenmark+RM co-victory (CV ≤ 2 threshold becomes easier to reach).
-  finding_id: SIM-COMPREHENSIVE-01 balance analysis; SIM-VIC-03 F-VIC-RM-01
-  source: balance pass 2026-04-10
-  affects: [designs/board_game/victory_architecture_v1.md]
-  status: applied
-  modelled_timeline: 14–18 seasons (RM)
-
-- id: PP-BAL-07
+- id: PP-544
   type: balance
   date: 2026-04-10
   severity: P1
   description: >
-    Crown+Hafenmark co-victory: PI threshold ≥ 5 → ≥ 8; TC cap < 50 → < 40.
-    Root cause: both factions START above TCV threshold; only PI gated — reachable Season 7–10
-    passively. PI 8 adds 3–5 seasons; tighter TC cap forces active Hafenmark suppression.
-  finding_id: SIM-VIC-01 F-VIC-03; SIM-COMPREHENSIVE-01 balance analysis
-  source: balance pass 2026-04-10
+    Crown+Hafenmark co-victory — PI threshold ≥ 5 → ≥ 7.
+    Co-victory timeline increased from 7–10 seasons to 10–14 seasons.
+    PI ≥ 7 aligns with Revolution threshold (provisional CLK-01) — co-victory fires
+    at the same pressure point as Löwenritter Coup eligibility. Thematically coherent.
+    Balance rationale: 7–10 season co-victory was faster than any solo path, undermining
+    the asymmetry between solo and co-victory effort.
+  finding_id: F-VIC-03 (SIM-VIC-01); SIM-VIC-02 ED-343
+  source: balance_analysis_2026_04_10
   affects: [designs/board_game/victory_architecture_v1.md]
   status: applied
-  modelled_timeline: 11–15 seasons (was 7–10)
 
-- id: PP-BAL-08
+- id: PP-545
   type: balance
   date: 2026-04-10
   severity: P1
   description: >
-    Varfell+RM co-victory: VTM ≥ 4 → ≥ 3; CV ≤ 1 territories 4 → 3.
-    [PROVISIONAL — ED-392: T13 control requirement under review for removal.]
-    Root cause: combination of VTM 4+ and 4× CV ≤ 1 made this path ~18–22 seasons — not viable.
-    Reduced to align with Hafenmark+RM at ~14–18 seasons.
-  finding_id: SIM-COMPREHENSIVE-01 F-CO-02; SIM-VIC-02
-  source: balance pass 2026-04-10
+    Varfell+RM co-victory — VTM ≥ 4→3; territory threshold ≥ 4→3.
+    Co-victory timeline reduced from 20+ (infeasible) to 12–16 seasons.
+    Balance rationale: Varfell+RM was analytically unachievable in race conditions.
+    All other co-victories are viable; Varfell+RM should be hardest co-victory, not impossible.
+  finding_id: F-CO-02 (SIM-VIC-02)
+  source: balance_analysis_2026_04_10
   affects: [designs/board_game/victory_architecture_v1.md]
-  status: provisional
-  modelled_timeline: 14–18 seasons (was 18–22)
+  status: applied
+
+- id: PP-546
+  type: balance
+  date: 2026-04-10
+  severity: P2
+  description: >
+    Hafenmark+RM co-victory — territory threshold ≥ 4 → ≥ 3 (CV ≤ 2).
+    Co-victory timeline reduced from ~16–20 seasons to ~8–10 seasons.
+    Balance rationale: prior threshold made this co-victory slower than most solo paths,
+    removing the incentive structure. RM Founding prerequisite adds ~4 seasons of pre-game
+    investment, justifying the shorter post-Founding timeline.
+  finding_id: SIM-COMPREHENSIVE-01
+  source: balance_analysis_2026_04_10
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
