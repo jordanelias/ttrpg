@@ -598,3 +598,10 @@ Session: 2026-04-10_SONNET_COMPREHENSIVE_SIM
 - ruler_diamond_foil_analysis.md: Complete rewrite. All 4 axes, all 6 pairings repositioned for deed-monarchy, caste reconciliation, new ruler positions.
 - ruler_diamond_extended_foils.md: Complete rewrite. All 4 subjective perspectives. Almud view corrected (TS 0, no sympathy, governance pragmatism). Himlensendt and Ehrenwall positions relative to diamond. 4 triangular foils.
 - Next: Arc 1 reframing for new Almud (Sovereign Constraint → governance uncertainty).
+
+### 2026-04-11 — Arc Reframing (commit 3)
+
+- gm_ref/arcs_01_04_nongreedy.md: Arc 1 narrative reframed. "Almud knows it is wrong" → "Almud manages governance costs while privately doubting." Sovereign Constraint seed updated. Mechanical chain preserved (costs identical). Cross-arc references updated.
+- designs/gm_ref_cp14/arcs/arcs_09_11_elske_baralta.md: Arc 9 Baralta characterisation updated (sovereign supremacy, not constitutional hygiene). Consecration crisis extension added (ED-407). Both consecration outcomes sketched with provisional mechanical implications.
+- **Session total: 3 commits, 8 files modified/created, ED-393 through ED-407 (15 editorial items: 12 resolved, 3 open).**
+- **Next session priority:** ED-403 (Vossen/RM internal split on Crown patronage), ED-406 (Ehrenwall succession assessment), ED-407 (consecration crisis path decision).

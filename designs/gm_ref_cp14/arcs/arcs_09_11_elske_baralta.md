@@ -1,6 +1,7 @@
 <!-- DERIVED FROM: Checkpoint 14 (compilation/valoria_ruleset_checkpoint_14.md, 2026-03-26) -->
 <!-- SESSION: 2026-03-30 / 2026-03-31 — see session_log_archive.md -->
 <!-- STATUS: Pre-release reference tool. Not valid against any post-CP14 ruleset. -->
+<!-- REVISED: 2026-04-11 — Baralta sovereign supremacy framing, consecration crisis extension (ED-407) -->
 
 # Valoria — Emergent Campaign Arcs 9–11
 *Elske Almqvist · Duchess Inge Baralta · Cardinal Olafsson*
@@ -17,13 +18,13 @@
 
 ### Narrative
 
-Baralta's Mandate is the most structurally important single stat on the board for anyone trying to prevent Theocracy Counter from reaching 60. While her Mandate stays above 5, she suppresses Theocracy Counter at −1/season. This is not charity — it is the direct mechanical expression of her Belief that Church authority does not extend to ducal prerogative. She would describe it, if pressed, as constitutional hygiene. She has been doing it for years. The Church has been doing things that require this counter-pressure for just as long.
+Baralta's Mandate is the most structurally important single stat on the board for anyone trying to prevent Theocracy Counter from reaching 60. While her Mandate stays above 5, she suppresses Theocracy Counter at −1/season. This is not charity — it is the direct mechanical expression of her Belief that Church authority does not extend to ducal prerogative. She would describe it, if pressed, as sovereign prerogative — the direct expression of her conviction that secular authority supersedes Church jurisdiction (Henry VIII parallel). She has been doing it for years. Her TC suppression is simultaneously principled governance and positioning for the Crown she intends to hold. The Church has been doing things that require this counter-pressure for just as long.
 
 The complication the players may not have anticipated: Baralta holds circumstantial evidence of the Olafsson-Niflhel connection. Not proof. Circumstantial evidence — a pattern of operations, a document chain that raises questions, a name that appears in records it should not. She has been sitting on it. The reason is pragmatic: using it requires escalating against a Cardinal of the Church at a moment when her other arm is already occupied defending ducal prerogative. She is a consequentialist enough — despite her Categorical Imperative ethical framework — to understand that timing is everything.
 
 The players can supply the corroborating evidence that makes her evidence chain actionable. Solvind Brak's testimony. Documentary records from Niflhel operations cross-referenced against Church Intelligence activity. When those arrive, Baralta launches a Domain Action: pool Mandate 7 + Reach 5 + player evidence bonus, against Church Stability Ob 3. A success drops Church Stability −2, Theocracy Counter −3, and suspends Olafsson's Inquisitor operations. This is not a political manoeuvre. For Baralta, it is a legal proceeding. The evidence is real. The conclusion is correct. The institutional obligation is to act on it.
 
-What she cannot do — what her essentialist theology has foreclosed entirely — is perceive that Olafsson's operations and the Thread-level disruptions they enable are connected. To Baralta, the Church's overreach is institutional and constitutional. It is not ontological. The players may understand what she doesn't. The question is whether they can work with someone who will hold the line for entirely the wrong reasons, and whether that matters.
+What she cannot do — what her sovereign divine right framework has foreclosed entirely — is perceive that Olafsson's operations and the Thread-level disruptions they enable are connected. To Baralta, the Church's overreach is institutional and constitutional. It is not ontological. The players may understand what she doesn't. The question is whether they can work with someone who will hold the line for entirely the wrong reasons, and whether that matters.
 
 If the Church responds by opening a Heresy Investigation against Baralta herself — which it will — the Sovereign Authority Doctrine becomes relevant. Once per campaign arc, Baralta invokes the constitutional claim that her authority is a direct divine grant superseding Church jurisdiction. The roll: Mandate 7 vs Ob 4. A Grand Debate of 5 exchanges follows, with Olafsson's pool of Church Reach 7 + Ecclesiastical Law across from whatever the players have assembled. Baralta's Resonant Style is Evidence. The quaestio system favours her in Phases 1, 4 (Cognition) and Phase 5 (Poise), but Olafsson's +1D Respondeo from Church Evidence resonance is a structural advantage in Phase 4. The Church is arguing at home. Baralta is arguing on principle.
 
@@ -59,6 +60,22 @@ flowchart TD
 **Why this arc is emergent:** Baralta's Theocracy Counter suppression is passive — it runs every season without player involvement. The Olafsson evidence chain requires player investment to activate. The Sovereign Authority Doctrine is a one-per-arc nuclear option that Baralta holds in reserve. The Grand Debate is the crisis point, using the full quaestio system against the highest-pool Non-Player Character opposition in the game.
 
 **Arc shape:** 1–3 seasons of evidence-gathering. 1 season Domain Action + Church response. 1 session Grand Debate. Immediate Theocracy Counter/Mandate consequences determine the next 2–4 seasons.
+
+---
+
+### Consecration Crisis Extension (ED-407)
+
+If Baralta's Sovereign Authority Doctrine succeeds and her Crown ambition becomes actionable — if the Almqvist deed-claim fails or is weakened sufficiently — Arc 9 extends into the most structurally significant constitutional crisis since the Secession Wars.
+
+**The problem:** The deed-monarchy's legitimation requires Church consecration. Baralta claims the Crown on deed-logic (strongest governance record, decades of institutional command, Ob 1 deviation cost). But Baralta's sovereign supremacy doctrine (Henry VIII parallel) holds that the monarch rules by divine right superseding Church jurisdiction. If Himlensendt consecrates Baralta, he installs a sovereign who will immediately begin subordinating the Church to Crown authority. If he refuses, he exposes consecration as political veto power — damaging the Church's legitimation authority and revealing that the deed-monarchy's theological foundation was always contingent on Church institutional interests.
+
+**Himlensendt's theological position compels refusal.** Divine authority flows through the Church, not through the sovereign independently. Consecrating someone who claims authority over the Church is a theological impossibility within his framework. But his refusal cracks the settlement — the system that has held since the Secession Wars depends on the Church confirming whoever the deed-logic selects.
+
+**Mechanical implications (provisional — ED-407 open):**
+- If Himlensendt refuses consecration: the deed-monarchy's legitimation logic is exposed as having a Church veto. TC +3 (Church overreach visible). Crown Mandate −2 in territories that expected orderly succession. Baralta may claim the Crown without consecration — testing whether deed-logic alone is sufficient. If she governs successfully without Church blessing, the Church's entire legitimation role is permanently diminished.
+- If Himlensendt consecrates under duress or strategic calculation: Baralta takes the Crown. Church subordination begins. TC −5 (sovereign supremacy doctrine enacted). Church Stability −3. The Church becomes a subordinate institution within one reign.
+
+[EDITORIAL: ED-407 — which path Himlensendt takes is an open design question. Both produce campaign-defining consequences.]
 
 ---
 

@@ -1,5 +1,5 @@
 # Valoria Emergent Arcs — Batch 01 (Non-Greedy Decision Frameworks)
-## Generated: 2026-04-06 | Source reads: stage13_npcs.md, stage6_factions.md, stage12_campaign_modes.md, geography_design.md, glossary.md, params_board_game.md
+## Generated: 2026-04-06 | Revised: 2026-04-11 (Almud reframing: governance pragmatism + ethical doubt, not secret sympathy) | Source reads: stage13_npcs.md, stage6_factions.md, stage12_campaign_modes.md, geography_design.md, glossary.md, params_board_game.md
 ## Non-greedy framework typology applied: cost-accounting strategic patience · institutional status quo bias · option value hoarding · strategic ambiguity
 ## Prior arcs checked: gm_ref/ — none (no duplication risk)
 
@@ -15,13 +15,15 @@
 
 ### Narrative
 
-The players notice it gradually. Almud speaks of the Einhir situation with a precision that only belongs to men who have rehearsed the argument against themselves a thousand times. He knows it is wrong. He names the mechanism of its wrongness — the informal caste, the differential access, the way southern Einhir families inherit a ceiling their northern counterparts never encounter. He has not yet acted. When pressed, he describes the coalition he would destroy, the Theocracy Counter he would advance, the Altonian diplomatic note that would arrive within a season. He is not rationalising. He is correct.
+The players notice it gradually. Almud speaks of the Einhir situation with the precision of a competent administrator who has mapped every governance risk on the peninsula. He knows the caste creates problems — Varfell restiveness, Restoration drift, southern territory instability, parliamentary pressure from Hafenmark. He names the costs of intervention: Mandate −2 (northern Valnese nobility), TC +3 (Church counter-escalation), IP +1 (Altonia exploits internal disruption). When pressed, he describes the coalition he would destroy, the Theocracy Counter he would advance, the Altonian diplomatic note that would arrive within a season. He is not rationalising. He is correct about the costs.
+
+What the players may not immediately perceive is that the costs are shelter for a question Almud has not resolved. He sometimes wonders — privately, never publicly — whether a Valnese kingdom should have a caste system at all. This is not secret sympathy. It is genuine ethical doubt that has not become conviction. He does not act because he has not decided whether acting is right, and the costs of acting on an unresolved question are worse than the costs of holding the question open. His restraint is not noble suffering. It is the governance of a man who has not yet decided what he believes.
 
 Himlensendt, meanwhile, accumulates his Theocracy Counter through methods that look, from the outside, like pure pastoral success. He is not forcing a holy state — he is providing one. Hospitals. Resolution of land disputes through Church arbitration rather than Crown courts. Charitable foundations in territories where Crown Mandate is thin. Each season produces a Counter increment of +1, reliable as rainfall, and at no point has anyone given him a specific reason to be stopped. He has not overreached. He has not threatened. The Church's growth is unimpeachable.
 
 What neither actor sees — or sees and cannot speak to — is what their parallel restraint is filling. In southern territories, where Einhir cultural continuity was never formally suppressed but was never formally protected either, the Restoration Movement ambient track has been drifting. Not from any faction's action. From the absence of one. The question of what Einhir cultural life means in Valoria hangs open, and the open question is itself an answer. The players begin to hear it in tavern conversations, in the silence that follows certain toasts, in the density of requests to speak privately after public audiences.
 
-When the arc resolves, it will not be because someone decided to end it. It will be because one of the three systems — the Sovereign Constraint, the Counter's seasonal advance, the Restoration Movement ambient stat — crosses a threshold that forces the restraint to become a position. Almud's calculated patience will have been, in retrospect, a slow decision.
+When the arc resolves, it will not be because someone decided to end it. It will be because one of the three systems — the Sovereign Constraint, the Counter's seasonal advance, the Restoration Movement ambient stat — crosses a threshold that forces the restraint to become a position. Almud's governance pragmatism will have been, in retrospect, a slow decision — not the strategic patience of a man who knew the right answer but the uncertainty of a man who never decided.
 
 ---
 
@@ -29,7 +31,7 @@ When the arc resolves, it will not be because someone decided to end it. It will
 
 ```mermaid
 flowchart TD
-    A["SEED\nAlmud Belief 2 active\n(Sovereign Constraint: acting costs\nMandate −2, TC +3, IP +2)"]
+    A["SEED\nAlmud governance calculus active\n(Sovereign Constraint: acting costs\nMandate −2, TC +3, IP +2\nplus ethical doubt unresolved)"]
     B["SEASON 1\nAlmud holds\nChurch Domain action fires\n(Reach 6 + History 2 = 8D, Ob 2)\nTC +1 (28→29 BG / 0→1 TTRPG)"]
     C["SEASON 2\nRM ambient track drifts\n(no Crown action in Einhir-affected territories\n→ track −0.5 toward Restoration pole per season, passive)"]
     D{"Season 3 threshold check\nRM track ≤ 1 in 2+ Crown territories?"}
@@ -63,7 +65,7 @@ flowchart TD
 
 | Season | Session(s) | Mechanical Events | Forecast |
 |--------|-----------|-------------------|----------|
-| 1 | 1–2 | Church Domain action: 8D vs. Ob 2. Expected net successes: (0.4)(8) − 2 = 1.2. Reliable TC +1. Almud makes no Domain action targeting the Einhir question. | TC advance: ~95% probability. Almud inaction: ~100% (Sovereign Constraint structural). |
+| 1 | 1–2 | Church Domain action: 8D vs. Ob 2. Expected net successes: (0.4)(8) − 2 = 1.2. Reliable TC +1. Almud makes no Domain action targeting the Einhir question. | TC advance: ~95% probability. Almud inaction: ~100% (costs real + ethical doubt unresolved). |
 | 2 | 3–4 | RM ambient track passive drift. If no player or Crown Domain action in southern territories, track moves −0.5 toward Restoration pole. PI check skipped (threshold not met). | RM drift: certain absent intervention. TC now 30–31 BG. |
 | 3 | 5–6 | RM track at 1 in 1 Crown territory. PI −1 check (BG). TC 32–34. Baralta's suppression (−1/season) active only while Mandate >5. | If PI hits 4 (BG): Parliament scrutiny begins. TTRPG: Almud receives a public petition. |
 | 4 | 7–8 | TC 35+. Ehrenwall Coup Counter check: did Crown reduce TC this season? If not, Counter +1. RM at 0 in 1 territory: Emergence conditions check. | Coup Counter increment: ~70% if no Crown action. Emergence check: depends on RM design (pending). |
@@ -291,7 +293,7 @@ flowchart TD
 
 | | Arc 1: Unworked Clause | Arc 2: Unseeing Eye | Arc 3: Hammer's Reserve | Arc 4: Vaynard's Wager |
 |---|---|---|---|---|
-| **Arc 1** | — | Klapp Fracture trajectory (Church Reach −1) removes one leg of the TC accumulation Almud is waiting to outlast. If Klapp fractures, Almud's window widens slightly. | Baralta's Doctrine firing reduces TC to 27–30, which is one of the costs Almud's Sovereign Constraint is waiting to see paid by others. If Baralta fires before Arc 1 forces a position, Almud's path clears by 1 structural cost. | TK 3 activates Vaynard's succession leverage — Almud's Belief 3 becomes urgent. Arc 1 and Arc 4 converge at Session 9 if both run simultaneously. |
+| **Arc 1** | — | Klapp Fracture trajectory (Church Reach −1) removes one leg of the TC accumulation that compounds while Almud holds. If Klapp fractures, the cost calculus shifts slightly. | Baralta's Doctrine firing reduces TC to 27–30, which is one of the costs Almud's Sovereign Constraint is waiting to see paid by others. If Baralta fires before Arc 1 forces a position, Almud's path clears by 1 structural cost. | TK 3 activates Vaynard's succession leverage — Almud's Belief 3 becomes urgent. Arc 1 and Arc 4 converge at Session 9 if both run simultaneously. |
 | **Arc 2** | Klapp's TS development makes him a latent observer of the Einhir cultural question Almud is constrained on. If players connect them (Ob 3 social scene), Klapp's converted awareness may offer Almud the theological framing he cannot find in the Church. | — | Baralta's Doctrine (Overwhelming result) suspends Heresy Investigation. This is the only external mechanism that buys Klapp a full season without Inquisitor attention — one growth-check cycle of safety. | Klapp's archive contains exactly the material Maret is reconstructing. If Klapp converts: Maret gains an unlikely Church-internal ally. If Klapp fractures: Maret loses one degree of cover. |
 | **Arc 3** | Baralta's Doctrine (Overwhelming): Heresy Investigation suspended. This directly extends Maret's safety window (Arc 4) by one season. If timed to Season 2, Maret survives Stage 2. | Baralta cannot target Klapp directly — he is not a Church overreach. But Klapp's Fracture reduces Church Reach, making Stage 2 of the Inquisitor investigation (Ob 4) marginally harder: Reach −1 → pool 7D, expected net: −0.2 → ~45% (down from ~35% failure to ~45% failure). | — | Baralta's Doctrine fired at Overwhelming: Heresy Investigation suspended. This is Maret's best-case Season 2 outcome without Vaynard acting. If Baralta fires for Arc 3 reasons, Arc 4 benefits as a side effect. |
 | **Arc 4** | TK 3 is the mechanic that converts Almud's Belief 3 from future concern to present crisis. Both arcs land in the same Parliament scene if running simultaneously. Players cannot resolve one without affecting the other. | Klapp Conversion trajectory (rare): seeks a practitioner contact. Maret, if still free, is the most accessible practitioner-level scholar. This connection, if it forms, produces the most destabilising knowledge cluster in Valoria: a converted Cardinal and a reconstructing ritual scholar in contact. | See Arc 3 row. Doctrine suspension buys Maret a season. | — |
