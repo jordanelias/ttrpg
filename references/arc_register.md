@@ -1,9 +1,9 @@
 # Arc Register
 
-> **Version:** 2 (audit-corrected)
+> **Version:** 3 (audit-corrected + recent commit review)
 > **Status:** WORKING DRAFT
 > **[EDITORIAL: ED-NEW — Tier assignments are provisional pending user review]**
-> **Sources fetched this session:** `designs/gm_ref_cp14/arcs/*` (11 files), `gm_ref/arcs_*` (3 files), `designs/npcs/npc_roster.md`, `references/params_factions.md`, `references/params_threadwork.md`, `references/params_board_game.md`, `designs/board_game/victory_architecture_v1.md`, `designs/board_game/valoria_bg_v05_simulation_and_patches.md`, `designs/ttrpg/valoria_narrative_scenario_chains.md`, `compilation/v0.14/stage6_factions.md`, `canon/02_canon_constraints.md`
+> **Sources fetched this session:** `designs/gm_ref_cp14/arcs/*` (11 files), `gm_ref/arcs_*` (3 files), `designs/npcs/npc_roster.md`, `designs/npcs/npc_comprehensive_audit.md`, `designs/npcs/npc_character_analyses_existing.md`, `designs/npcs/npc_roster_caste_annotations.md`, `references/params_factions.md`, `references/params_threadwork.md`, `references/params_board_game.md`, `designs/board_game/victory_architecture_v1.md`, `designs/board_game/valoria_bg_v05_simulation_and_patches.md`, `designs/ttrpg/valoria_narrative_scenario_chains.md`, `compilation/v0.14/stage6_factions.md`, `canon/02_canon_constraints.md`
 
 ---
 
@@ -23,17 +23,17 @@
 
 | Non-Player Character | Faction | Key Tracks | Source |
 |------|---------|------------|--------|
-| King Almud | Crown | Beliefs (3: Altonian trade, the path dilemma, RM sympathy), TS potential (28→30 via Discovery Event), Resonant Style: Consequence | `stage6_factions`, `narrative_scenario_chains` ARC 2 |
-| Duchess Inge Baralta | Hafenmark | Mandate (personal: 7 per cp14 arcs; faction: 4 per starting stats), Reach (5 per cp14 arcs), TC suppression (−1/season while her Mandate ≥ 4), Sovereign Authority Doctrine (once per campaign arc), Solmund claim [EDITORIAL] | `params_factions`, `stage6_factions`, `narrative_scenario_chains` ARC 3 |
-| Grandmaster Sigrid Ehrenwall | Löwenritter | Coup Counter (0–3, fires at 3; never decrements), Health/Wound track (incapacitation at ceiling(Health ÷ 2)), Lions' Table | `params_factions`, `arcs_20_23` |
+| King Almud | Crown | Beliefs (3: Altonian trade, unresolved ethical doubt about caste, RM as governance input), TS 0 (northern, Church-culturally integrated; Discovery Event = rupture not confirmation), Resonant Style: Consequence. Historical anchor: Manuel I Komnenos. | `stage6_factions`, `narrative_scenario_chains` ARC 2, `npc_character_analyses_existing` (ED-364 rewrite) |
+| Duchess Inge Baralta | Hafenmark | Mandate (personal: 7 per cp14 arcs; faction: 4 per starting stats), Reach (5 per cp14 arcs), TC suppression (−1/season while her Mandate ≥ 4), Sovereign Authority Doctrine (once per campaign arc), Solmund claim [EDITORIAL]. **Active Crown ambition** — decades-long institutional campaign for throne (deed-claim strongest on peninsula). Pure RM adversary (Einhir revival threatens sovereign divine right). Historical anchor: Isabella I of Castile. Leadership Deviation Ob 1 — she IS Hafenmark. | `params_factions`, `stage6_factions`, `narrative_scenario_chains` ARC 3, `npc_character_analyses_existing` (deed-monarchy reframing) |
+| Grandmaster Sigrid Ehrenwall | Löwenritter | Coup Counter (0–3, fires at 3; never decrements) = deed-logic enforcement mechanism (each increment: data point toward "deed-presumption failing"). Would transfer loyalty to Baralta without experiencing it as betrayal. Health/Wound track (incapacitation at ceiling(Health ÷ 2)), Lions' Table. | `params_factions`, `arcs_20_23`, `npc_character_analyses_existing` (deed-monarchy reframing) |
 | Cardinal Arnlod Olafsson | Church (Justice) | Niflhel connection (hidden — used Niflhel to suppress texts/individuals), Church Intel operations, Heresy Investigation authority | `narrative_scenario_chains` ARC 4, `arcs_09_11` |
-| Duke Magnus Vaynard | Varfell | Thread Investigation Track (TK 0–5; TC effects: TK 3 = +1, TK 4 = +2, TK 5 = +3), Thread Sensitivity (TS starts 14 Dormant), Private Collection (Intel vs Ob 2, each use: hidden TS +1; at TS 14+ triggers Spirit TN 7 Ob 1 Discovery Event), Belief 3 (succession leverage) | `params_factions`, `narrative_scenario_chains` ARC 9 |
-| Confessor Arne Himlensendt | Church (head) | Resonant Style: Evidence, Stability checks under institutional crisis, doctrinal authority over TC/Heresy policy | `arcs_09_11`, `narrative_scenario_chains` |
-| Cardinal Magnus Klapp | Church (Education) | Combat Endurance (CE) 4, TS 31, archive access to originary Locks, essentialist formation (TS growth check Ob raised from 1 to 2) | `arcs_09_11`, `arcs_31_35` |
-| Cardinal Osten Jarnstal | Church | [GAP: minimal mechanical data — no tracks, no AI flaw defined] | `arcs_09_11` |
+| Duke Magnus Vaynard | Varfell | Thread Investigation Track (TK 0–5; TC effects: TK 3 = +1, TK 4 = +2, TK 5 = +3), Thread Sensitivity (TS starts 14 Dormant — from southern Einhir environmental exposure, not artefact contact), Private Collection (Intel vs Ob 2, each use: hidden TS +1; at TS 14+ triggers Spirit TN 7 Ob 1 Discovery Event), Belief 3 (succession leverage). "The Revolutionary" — wants Church and Altonian cultural residue expelled from peninsula. Historical anchor: Reinhard von Lohengramm. The Forgetting is his political prison (cannot build coalition because non-practitioners cannot retain the argument). | `params_factions`, `narrative_scenario_chains` ARC 9, `npc_character_analyses_existing` |
+| Confessor Arne Himlensendt | Church (head) | Resonant Style: Evidence (responds to documentation — ironic vulnerability: cannot perceive the evidence that matters). "Most dangerous person on the peninsula and does not know it" — sincere faith is load-bearing wall of post-war settlement. TC accumulation is pastoring, not strategy. Consecration crisis if Baralta claims Crown. Southernmost Awareness 0. | `arcs_09_11`, `narrative_scenario_chains`, `npc_character_analyses_existing` |
+| Cardinal Magnus Klapp | Church (Temperance) | Combat Endurance (CE) 4, TS 31, archive access to originary Locks, essentialist formation (TS growth check Ob raised from 1 to 2) | `arcs_09_11`, `arcs_31_35` |
+| Cardinal Osten Jarnstal | Church (Fortitude) | Independence Drift counter (0–3, never decrements). At Drift 3: Church Military deploys only against perceived threats, not political operations. Praetorian parallel. Paired foil with Brandt (two soldiers, different chains of command). | `arcs_09_11`, `npc_comprehensive_audit` |
 | Princess Elske Almqvist | Crown/Altonia | Conviction: Family vs Self-Determination, Resonant Style: Evidence, Loyalty (to Valoria — distinct from Torben's Loyalty), independence arc preconditions | `narrative_scenario_chains` ARC 6, `arcs_09_11` |
 | Prince Torben Almqvist | Crown/Altonia | Loyalty track (starts high; −1/season under Altonian influence if Covert Contact fails; floor at 6 if Contact maintained 3 consecutive seasons), Tutoring Demand trigger at Institutional Pressure (IP) 30 | `narrative_scenario_chains` ARC 5, `arcs_09_11` |
-| Lenneth Almqvist | Crown | CE accumulation, TS growth (self-directed), sea-republic archive (pre-Altonian coastal survey, first-person Thread-perception accounts ~180 AG), concealment | `arcs_28_30`, `narrative_scenario_chains` |
+| Lenneth Almqvist | Crown | CE accumulation, TS growth (self-directed, can gain through research), sea-republic archive, concealment, People's Revolution endowment. "The Institutional Revivalist" — wants Crown-led Einhir revival (Catherine the Great anchor). Programme: cultural recognition → institutional reform → Thread work. **Zero mechanical expression** (audit finding #1: no Modifier, no Event Card). Lenneth↔Baralta collision = "the campaign's defining political confrontation." | `arcs_28_30`, `narrative_scenario_chains`, `npc_character_analyses_existing`, `npc_comprehensive_audit` |
 | Solvind Brak | Niflhel (operative) | Testimony value for Olafsson-Niflhel exposure (Intelligence Domain Action vs Ob 3 to find and extract; Social scene to break Niflhel loyalty) | `narrative_scenario_chains` ARC 4, `arcs_09_11` |
 | Revolution elder | Restoration Movement (RM) | Fragmentary inner-tradition knowledge, TS uncertain, Forgetting-impaired. Testimony for Collision E (Grand Debate on Solmund's nature). | `narrative_scenario_chains` **[EDITORIAL — not canonised as named character]** |
 
@@ -202,10 +202,10 @@
 **Emergence:** Discovery Event trigger: Thread activity of sufficient intensity in proximity (practitioner at Relational scale nearby OR originary Lock deployed — per narrative_scenario_chains). Spirit TN 7 Ob 1. Success → TS jumps to 30 (Stirring), Certainty −1. Vaynard begins practice driven by TK urgency. TK +2 immediately.
 **Non-Player Characters:** Vaynard (primary), Maret Uln (may facilitate or obstruct), Edeyja (if Vaynard seeks training)
 
-### ARC-S14: Almud's Sympathies — The Sovereign Constraint
-**Engine:** Almud's Belief 2 (structural lock) + erosion paths
-**Emergence:** Almud privately sympathises with Einhir Restoration but acts within post-war settlement that suppressed it. Belief 2: "I cannot act until I find a path that doesn't require choosing between justice and the monarchy." The constraint erodes when one or more costs is removed: (a) Church discredited (TC −3 or more in one event) → Almud can act without Church opposition carrying weight; (b) northern Einhir nobility shifts (Revolution Influence 5+ in northern territories) → Mandate cost removed; (c) Baralta absorbs institutional cost via Hafenmark Influence in northern territories. If 218 AG truth revealed (accidental death) → Belief 2 revealed as 27 years of constraint in response to nothing → forced Belief revision.
-**Non-Player Characters:** Almud (primary — Resonant Style: Consequence; show him what this costs Valoria), Baralta (can provide political cover), Vossen (RM Influence growth enables path (b)), Ehrenwall (no coup trigger from TS alone — cares about sovereignty, not theology)
+### ARC-S14: Almud's Constraint — The Unresolved Question
+**Engine:** Almud's ethical doubt about caste + erosion paths
+**Emergence:** Almud has genuine ethical doubt about whether a Valnese kingdom should have a caste system. The doubt is intellectual, not experiential (TS 0, northern, Church-culturally integrated). He does not act because he is genuinely uncertain, not because political costs prevent him. If he were certain, he would find a way — he has managed six pressure vectors for 27 years. The constraint erodes when one or more costs is removed AND/OR the Discovery Event ruptures his governance framework: (a) Church discredited (TC −3 or more in one event) → Almud can act without Church opposition carrying weight; (b) northern Einhir nobility shifts (Revolution Influence 5+ in northern territories) → Mandate cost removed; (c) Baralta absorbs institutional cost via Hafenmark Influence in northern territories. If 218 AG truth revealed (accidental death) → Belief 2 revealed as 27 years of constraint in response to nothing → forced Belief revision.
+**Non-Player Characters:** Almud (primary — Resonant Style: Consequence; show him what this costs Valoria. Historical anchor: Manuel I Komnenos — strategic patience that looks like inaction from any single vantage. TS 0; Discovery Event = rupture, not confirmation — his entire governance framework invalidated by personal perception), Baralta (can provide political cover BUT is pure RM adversary — her cover serves her Crown ambition, not RM goals), Vossen (RM Influence growth enables path (b); RM sees Almud as complicit and cowardly — from their perspective, the uncertain/cowardly distinction is irrelevant), Ehrenwall (no coup trigger from TS alone — evaluates deed-logic, not theology)
 
 ### ARC-S15: The Southernmost Spiral
 **Engine:** RS-driven cracking timeline
@@ -223,9 +223,9 @@
 **Non-Player Characters:** Almud, Ehrenwall, Himlensendt, Elske (if installed independently → Almud retires to practitioner path?)
 
 ### ARC-S18: Coherence Zero — Lenneth
-**Engine:** Lenneth CE accumulation → TS growth
-**Emergence:** CE from concealed practice. TS grows through self-directed work using archive holdings.
-**Non-Player Characters:** Lenneth (primary), Torsvald (archive connection — TS 35 developed from same exposure; natural escort for Lenneth's arc), Ehrenwall (if Lenneth exposed → dynastic implications)
+**Engine:** Lenneth CE accumulation → TS growth (can gain through scholarly research)
+**Emergence:** CE from concealed practice via sea-republic archive and People's Revolution endowment. TS grows through self-directed work. Lenneth's programme (cultural recognition → institutional reform → Thread work) provides strategic context for her Thread development.
+**Non-Player Characters:** Lenneth (primary — "The Institutional Revivalist"; Catherine the Great anchor; wants Crown-led Einhir revival, not passive scholarship; **zero mechanical expression per audit**), Torsvald (archive connection — TS 35 developed from same exposure; natural escort for Lenneth's arc; Haelgrund↔Torsvald parallel = most valuable unwritten interaction), Ehrenwall (if Lenneth exposed → dynastic implications), Baralta (Lenneth↔Baralta collision = "the campaign's defining political confrontation" — mutually exclusive programmes)
 
 ### ARC-S19: The Quaestio of Baralta
 **Engine:** TC 42 threshold → Grand Debate + multi-system convergence
@@ -328,6 +328,11 @@
 **Non-Player Characters:** Edeyja (engagement threshold — WC is her decision that practitioners have demonstrated competence and integrity), Vaynard (WR track for Varfell Path B), Maret Uln (if Varfell leader → WR progression style changes)
 **Key values:** WC ≥ 1: +1D all Thread ops. WC ≥ 2: RS decay halved. WC ≥ 3: RS +2/season. WR 4: Edeyja makes substantive contact.
 
+### ARC-S26: The Lenneth-Baralta Collision
+**Engine:** Competing Crown succession programmes (irreconcilable)
+**Emergence:** Lenneth wants Crown authority to revive Einhir heritage (build up — Crown as patron of cultural revival). Baralta wants Crown authority for herself under sovereign divine right (suppress — Einhir revival threatens her theological framework). Their programmes are mutually exclusive. Lenneth's revival delegitimises Baralta's claim. Baralta's reign would terminate Lenneth's programme immediately. Described in npc_character_analyses_existing as "the campaign's defining political confrontation."
+**Non-Player Characters:** Lenneth (primary — Catherine the Great: strengthen institution through incorporation; zero mechanical expression), Baralta (primary — Isabella I: institutional campaign for throne; Mandate 7, Ob 1 deviation), Almud (current holder — Manuel I: manages six threats; his uncertainty means he enables both programmes), Ehrenwall (deed-logic: evaluates both candidates on competence), Vaynard (would regard Lenneth as inadequate and Baralta as the enemy — his revolutionary programme is incompatible with both), Himmensendt (consecration crisis if Baralta wins → ARC-T14)
+
 ---
 
 ## Tertiary Arcs
@@ -395,6 +400,48 @@
 **Non-Player Characters:** Baralta (Hafenmark), Vaynard (Varfell), Almstedt (PI level determines Baralta trigger)
 
 ### ARC-T13: Torben After Crown Elimination
+**Engine:** Crown elimination → Torben Loyalty transfer (PP-494)
+**Emergence:** If Crown eliminated: Torben Loyalty transfers to Löwenritter as dynastic successor. Track meaning shifts (0 = aligns with anti-Löwenritter faction; 7 = full Löwenritter loyalty). Löwenritter inherits current Loyalty value.
+**Non-Player Characters:** Torben, Brandt/Ehrenwall (Löwenritter inheritor), Laskaris (Altonian response)
+
+### ARC-T14: The Consecration Crisis
+**Engine:** Baralta claims Crown → Himmensendt consecration dilemma
+**Emergence:** If Baralta reaches Crown-claim stage, Himmensendt must decide: consecrate (installing sovereign who claims authority over Church — the act confirms divine right that includes Church subordination) or refuse (exposing consecration as political veto, damaging Church legitimation authority). His theology says refuse. Refusing cracks the post-war settlement.
+**Non-Player Characters:** Himmensendt (primary — sincere faith as load-bearing wall), Baralta (Crown claimant — Isabella I parallel), Almud (current holder), Klapp (if converted → theological crisis compounded), Ehrenwall (deed-logic: would accept Baralta as successor)
+**Classification:** Tertiary (requires Baralta to reach Crown-claim stage). But if fires, campaign-defining.
+
+### NPC-ARC-JAR: The Jarnstal Drift
+**Engine:** Jarnstal Independence Drift counter (0–3, never decrements)
+**Emergence:** Progressive independence from Confessor control. Each increment: Church Military acts more autonomously. Drift 3: Church Military deploys only against perceived threats, not political operations.
+**Non-Player Characters:** Jarnstal (primary — Fortitude Cardinal, Praetorian parallel), Himmensendt (chain of command), Brandt (paired foil — two soldiers), Ehrenwall (if Löwenritter and Church Military both acting independently → military coordination collapse)
+**Consequence:** Church loses political control of military arm. Heresy Investigations lose enforcement capacity. TC unaffected mechanically but Church force-projection constrained.
+**Classification:** Secondary (drift accumulates passively). One-directional: no reversal condition, no branching.
+
+---
+
+## Cross-Non-Player Character Interaction Gaps (from npc_comprehensive_audit)
+
+These are not separate arcs but emergence conditions that should inform existing arcs:
+
+| Interaction | Register Arcs | Audit Priority |
+|-------------|--------------|----------------|
+| Haelgrund↔Torsvald: hidden TS in rejecting institutions | NPC-ARC-HAE + NPC-ARC-TOR | Highest — "most valuable unwritten NPC interaction" |
+| Haelgrund↔Klapp: Thread-adjacent crises in Church | NPC-ARC-HAE + ARC-S21 | High — if both exposed, Church loses education + investigation |
+| Vaynard↔Laskaris: intelligence monitoring | ARC-S01 + NPC-ARC-LAK | Medium — Varfell should monitor Altonian representative; no interaction exists |
+| Prudence↔Olafsson: Cardinal portfolio friction | NPC-ARC-PRU + ARC-S06 | Medium — Economics vs Justice = Church-internal friction |
+| Solberg↔Strand: outsider parallel | NPC-ARC-SOL + NPC-ARC-STR | Low — potential cross-faction scene but no mechanical interaction |
+
+---
+
+## Mechanical Expression Gaps (from npc_comprehensive_audit)
+
+| Non-Player Character | Gap | Audit Priority | Register Arcs Affected |
+|------|-----|----------------|----------------------|
+| Lenneth | Zero mechanical expression (no Modifier, no Event Card, no measurable effects) | #1 | ARC-S18, ARC-S26 |
+| Almud | No BG expression (no Event Card, no Modifier) | #2 | ARC-S14, ARC-S17 |
+| Baralta | No BG Event Card | #3 | ARC-S06, ARC-T03, ARC-S24 |
+| Vossen | Zero Hybrid Modifier | #4 | NPC-ARC-VOS, ARC-S22 |
+| Torsvald | Abort mechanic not precisely specified (trigger/Ob/consequence) | #8 | NPC-ARC-TOR |
 **Engine:** Crown elimination → Torben Loyalty transfer (PP-494)
 **Emergence:** If Crown eliminated: Torben Loyalty transfers to Löwenritter as dynastic successor. Track meaning shifts (0 = aligns with anti-Löwenritter faction; 7 = full Löwenritter loyalty). Löwenritter inherits current Loyalty value.
 **Non-Player Characters:** Torben, Brandt/Ehrenwall (Löwenritter inheritor), Laskaris (Altonian response)
@@ -523,9 +570,12 @@ INDEPENDENT ENTRY (player-initiated / NPC-driven)
   NPC-ARC-VIR (Virke Recall)
   NPC-ARC-TOR (Torsvald Exposure)
   NPC-ARC-VOS (Vossen Exposure)
+  NPC-ARC-JAR (Jarnstal Drift — passive accumulation)
   ARC-S11 (Headless Network)
   ARC-S12 (Favour Gate)
   ARC-S23 (Elske Independence)
+  ARC-S26 (Lenneth-Baralta Collision — competing succession programmes)
+    └→ ARC-T14 (Consecration Crisis — if Baralta wins)
   ARC-T07 (Dissolution)
   ARC-T09 (Forgetting Road)
   ARC-T11 (IP 75+ Vanguard)
@@ -557,9 +607,9 @@ COLLISION SCENARIOS
 | ARC-S20 | **Not yet simulated** | Ehrenwall's Count (CP14 arc 34) |
 | ARC-S21 | **Not yet simulated** | Klapp Threshold (CP14 arc 35) |
 | ARC-S22 | Not simulated | RM Emergence |
-| ARC-S23–S25 | Not simulated | Elske Independence, Baralta Succession, Warden Cooperation |
-| NPC-ARC-* | **Not simulated** | All NPC-derived arcs from roster |
-| ARC-T01–T13 | Mixed | T01–T09 partially via CP14; T10–T13 not simulated |
+| ARC-S23–S26 | Not simulated | Elske Independence, Baralta Succession, Warden Cooperation, Lenneth-Baralta Collision |
+| NPC-ARC-* | **Not simulated** | All NPC-derived arcs from roster (including NPC-ARC-JAR Jarnstal Drift) |
+| ARC-T01–T14 | Mixed | T01–T09 partially via CP14; T10–T14 not simulated |
 | Collisions A–E | **Not simulated** | narrative_scenario_chains scenarios |
 
 ---
@@ -570,7 +620,7 @@ COLLISION SCENARIOS
 |----|------|--------|
 | GAP-ARC-01 | Arc S11 — Niflhel Quiet deployment RS/Thread Tension cause | Pending editorial clarification |
 | GAP-ARC-02 | IP generation formula — no canonical base advancement rate | bg_v05 gap; narrative_scenario_chains uses +2/season working assumption |
-| GAP-ARC-03 | Jarnstal — no mechanical tracks, no AI flaw | NPC design gap |
+| GAP-ARC-03 | Jarnstal — Independence Drift counter characterized (Fortitude Cardinal, 0–3) but arc structure one-directional with no branching; no reversal condition | Audit score 27/40, lowest arc interest (2/5) |
 | GAP-ARC-04 | Baralta NPC personal stats — conflicting values between cp14 arcs and narrative_scenario_chains | May represent different evidence levels |
 | ED-NEW-01 | Tier assignments (principal/secondary/tertiary) | Provisional — user review required |
 | ED-NEW-02 | Revolution elder — not canonised as named character | Required for Collision E |
@@ -578,6 +628,10 @@ COLLISION SCENARIOS
 | ED-NEW-04 | 218 AG resolution — narrative_scenario_chains presents accidental death as design intent; E-01 flagged as unresolved elsewhere | Reconciliation needed |
 | ED-358 | Full roster identities, motivations, stat blocks | Provisional — user review pending |
 | E-01 | Perpetrator of 218 AG assassination | Unresolved (but see ED-NEW-04) |
+
+### Caste Gradient Note (701eacf)
+
+Olafsson's Heresy Investigations disproportionately target southern Einhir communities (higher TS, more Thread-adjacent activity). The enforcement pattern is ethnic even if the doctrine is theological. Affects ARC-S03 (Tribunal), NPC-ARC-VOS (Vossen Exposure), ARC-S06 (Duchess Holds the Line). Vaynard's TS is environmental (southern baseline), not artefact-derived — his Thread awareness is what southern Einhir people are when the Church has not completely suppressed their capacity.
 
 ---
 
@@ -594,3 +648,22 @@ COLLISION SCENARIOS
 | Baralta excommunication | Not mentioned | TC +4 immediately, suppression ends permanently | params_factions line 144 |
 | Missing arcs (11) | Not present in v1 | Added: P08, S14, S15, S22–S25, T10–T13 | Various sources |
 | ARC-09 pool | "Mandate 7 + Reach 5 vs Ob 3" only | Flagged conflicting values between sources | cp14 arcs vs narrative_scenario_chains |
+
+### v2 → v3 (review against recent commits)
+
+| Error | v2 Text | v3 Correction | Source |
+|-------|---------|---------------|--------|
+| Klapp cardinal title | "Church (Education)" | "Church (Temperance)" | npc_comprehensive_audit, params_board_game §Cardinal Focus |
+| Almud characterization | "TS potential (28→30), RM sympathy" | TS 0, governance pragmatism + ethical doubt, Manuel I Komnenos, Discovery Event = rupture | ED-364 (5200ab8), npc_character_analyses_existing |
+| Baralta characterization | Faction correct but missing Crown ambition | Active Crown ambition, pure RM adversary, Isabella I, deed-claim strongest | npc_character_analyses_existing (701eacf) |
+| Lenneth characterization | "passive researcher" framing | "Institutional Revivalist", Catherine the Great, zero mechanical expression, Lenneth↔Baralta = defining confrontation | npc_character_analyses_existing (701eacf), npc_comprehensive_audit |
+| Vaynard TS origin | Not specified | Southern Einhir environmental exposure, Reinhard von Lohengramm, Forgetting as political prison | npc_character_analyses_existing (701eacf) |
+| Ehrenwall framing | Coup Counter correct but no deed-logic context | Deed-logic enforcement mechanism, would accept Baralta | npc_character_analyses_existing (5200ab8) |
+| Jarnstal | "GAP: minimal mechanical data" | Fortitude Cardinal, Drift counter 0–3, Independence at 3, Praetorian parallel | npc_comprehensive_audit (bbf9849) |
+| Himmensendt | Basic characterization | "Most dangerous person — doesn't know it", consecration crisis, Southernmost Awareness 0 | npc_character_analyses_existing (701eacf) |
+| Missing: ARC-S26 | Not present | Lenneth-Baralta Collision — competing Crown succession programmes | npc_character_analyses_existing |
+| Missing: ARC-T14 | Not present | Consecration Crisis — Baralta claims Crown → Himmensendt dilemma | npc_character_analyses_existing |
+| Missing: NPC-ARC-JAR | Not present | Jarnstal Independence Drift — Fortitude Cardinal, counter 0–3 | npc_comprehensive_audit |
+| Missing: cross-NPC gaps | Not present | 5 unwritten NPC interactions from audit | npc_comprehensive_audit |
+| Missing: mechanical gaps | Not present | 5 NPC mechanical expression gaps from audit | npc_comprehensive_audit |
+| Missing: caste gradient | Not present | Heresy Investigations disproportionately target southern Einhir (higher TS) — ethnic enforcement pattern | npc_roster_caste_annotations (701eacf) |
