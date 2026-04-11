@@ -2830,3 +2830,35 @@ editorial_decisions:
       description: "Himlensendt consecration crisis: if he refuses to consecrate Baralta, this exposes consecration as political veto power. If he consecrates, he installs his own superior. Open design question — which path?"
       decision: "Conditional on Church Stability. Stability >= 4: refuses (theology clear, institution strong). Stability <= 3: consecrates under duress (cannot afford refusal crisis). Override: if Arc 11 originary Lock encounter has fired, GM discretion (Himlensendt's personal faith state determines outcome). See designs/npcs/ed_403_406_407_resolutions.md."
       tags: [npc, himlensendt, baralta, church, succession, mechanic]
+
+  ED-408:
+      priority: P1
+      status: provisional
+      date_raised: 2026-04-11
+      description: "Crown Succession Contest mechanic. Multi-faction contest when Crown fails — Lowenritter (military), Hafenmark (deed-claim), Church (consecration authority). Highest net successes wins. Fires after Crown elimination, Royal Deposition, or Coup."
+      decision: "Designed. See designs/mechanics/baralta_crown_claim_mechanic.md. Flagged for user review."
+      tags: [board_game, succession, mechanic, hafenmark, lowenritter, church]
+
+  ED-409:
+      priority: P1
+      status: provisional
+      date_raised: 2026-04-11
+      description: "Baralta Stake Claim Domain Action. Preconditions: Crown Mandate <= 2, PI >= 5, Baralta alive. Pool: Hafenmark Mandate + Influence. Success places Claim Token giving +2D on Succession Contest."
+      decision: "Designed. See designs/mechanics/baralta_crown_claim_mechanic.md. Flagged for user review."
+      tags: [board_game, hafenmark, baralta, domain_action, mechanic]
+
+  ED-410:
+      priority: P1
+      status: provisional
+      date_raised: 2026-04-11
+      description: "Consecration Crisis as BG event. Church Stability >= 4: Himlensendt refuses, Crown Mandate -2 penalty, 3-season validation window. Church Stability <= 3: consecrates under duress, TC -5, Church Stability -3, Baralta gets full Mandate + Sovereign Authority as Crown action. Override if Arc 11 Lock encounter fired."
+      decision: "Designed and simulated. Three scenarios tested — early/mid/late game. Mid-game consecration is Baralta's optimal window. See designs/mechanics/baralta_crown_claim_mechanic.md. Flagged for user review."
+      tags: [board_game, church, himlensendt, baralta, consecration, mechanic]
+
+  ED-411:
+      priority: P2
+      status: provisional
+      date_raised: 2026-04-11
+      description: "Hafenmark faction status when Baralta takes Crown. Option B selected: Hafenmark persists as separate faction, PP-487 PI-gated succession fires immediately. Baralta must ensure PI >= 4 before claiming or her faction base collapses behind her."
+      decision: "Option B — mechanically richer, creates additional preparation requirement. See designs/mechanics/baralta_crown_claim_mechanic.md. Flagged for user review."
+      tags: [board_game, hafenmark, succession, PP-487, mechanic]

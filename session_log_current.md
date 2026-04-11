@@ -618,3 +618,10 @@ Session: 2026-04-10_SONNET_COMPREHENSIVE_SIM
 ## CONTEXT LIMIT — SESSION CLOSE
 This session: 4 commits. Deed-monarchy, Altonian containment, caste reconciliation, ruler diamond repositioning, all arc dependencies updated, all editorial items resolved.
 Next session priority: Check arcs_05_09_batch02.md for any remaining stale Almud/Baralta references (none found in grep but full review recommended). Then simulate the consecration crisis mechanic (ED-407) to verify Church Stability thresholds produce balanced outcomes.
+
+### 2026-04-11 — Baralta Crown Claim Mechanic + Consecration Crisis Simulation (commit 5)
+
+- arcs_05_09_batch02.md: Full manual review — no stale references found. Clean.
+- designs/mechanics/baralta_crown_claim_mechanic.md: New file. Crown Succession Contest, Stake Claim Domain Action, Consecration Crisis BG expression, simulation of three scenarios (early/mid/late game). Four editorial decisions made (ED-408 through ED-411), all provisional/flagged.
+- **Key design finding:** The strategic sweet spot for Baralta is weakening Church to Stability 3 before claiming — creating tension between TC suppression interest and consecration preparation. Four preconditions for viable claim: Crown Mandate ≤ 2, PI ≥ 5, Church Stability ≤ 3, Hafenmark PI ≥ 4.
+- **Session total: 5 commits. ED-393 through ED-411 (19 editorial items: 15 resolved, 4 provisional/flagged).**
