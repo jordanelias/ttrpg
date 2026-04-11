@@ -605,3 +605,16 @@ Session: 2026-04-10_SONNET_COMPREHENSIVE_SIM
 - designs/gm_ref_cp14/arcs/arcs_09_11_elske_baralta.md: Arc 9 Baralta characterisation updated (sovereign supremacy, not constitutional hygiene). Consecration crisis extension added (ED-407). Both consecration outcomes sketched with provisional mechanical implications.
 - **Session total: 3 commits, 8 files modified/created, ED-393 through ED-407 (15 editorial items: 12 resolved, 3 open).**
 - **Next session priority:** ED-403 (Vossen/RM internal split on Crown patronage), ED-406 (Ehrenwall succession assessment), ED-407 (consecration crisis path decision).
+
+### 2026-04-11 — Stale Reference Cleanup + ED-403/406/407 Resolution (commit 4)
+
+- gm_ref/arcs_10_18_consolidated.md: Fixed stale Almud TS 28 / Einhir sympathy / Belief 2 references.
+- designs/gm_ref_cp14/arcs/arcs_01_04_rebuilt.md: Fixed stale Almud TS 28 / sympathises references.
+- designs/npcs/ed_403_406_407_resolutions.md: New file — ED-403 (RM split mechanic), ED-406 (Ehrenwall succession assessment), ED-407 (consecration crisis conditional mechanic).
+- canon/editorial_ledger.yaml: ED-403, ED-406, ED-407 resolved.
+- **Session total: 4 commits, 12 files modified/created, ED-393 through ED-407 (15 editorial items, all resolved).**
+- **No remaining open editorial items from this session.**
+
+## CONTEXT LIMIT — SESSION CLOSE
+This session: 4 commits. Deed-monarchy, Altonian containment, caste reconciliation, ruler diamond repositioning, all arc dependencies updated, all editorial items resolved.
+Next session priority: Check arcs_05_09_batch02.md for any remaining stale Almud/Baralta references (none found in grep but full review recommended). Then simulate the consecration crisis mechanic (ED-407) to verify Church Stability thresholds produce balanced outcomes.

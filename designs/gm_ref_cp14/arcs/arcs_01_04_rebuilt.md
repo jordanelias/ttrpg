@@ -77,7 +77,7 @@ A practitioner Player Character who spends sustained time with Vaynard will even
 
 By TK 4, Vaynard is offering the collection — including the originary locks — in exchange for Thread education and partnership on Southernmost access. This is the moment the Church's Intel network notices. The artefact signatures have been detectable for a season; now there is correspondence, meetings, a practitioner present at Varfell. Cardinal Olafsson opens a Heresy Investigation. The question reaches Parliament: does the Crown defend Vaynard or yield him?
 
-Both answers are wrong. Defending Vaynard fractures the Crown-Church relationship and forces Baralta to choose sides against her own Beliefs. Yielding Vaynard destroys the intelligence asset, collapses Southernmost access before the expedition can be mounted, and dissolves the succession leverage in a way that benefits no one. Almud, who privately sympathises with the Restoration and who has Thread Sensitivity 28 and does not know it, makes the decision that best preserves the coalition, which is to say the worst possible decision for every individual in the room.
+Both answers are wrong. Defending Vaynard fractures the Crown-Church relationship and forces Baralta to choose sides against her own Beliefs. Yielding Vaynard destroys the intelligence asset, collapses Southernmost access before the expedition can be mounted, and dissolves the succession leverage in a way that benefits no one. Almud, who manages the Einhir question as a governance variable while privately doubting whether the caste system is defensible, makes the decision that best preserves the coalition, which is to say the worst possible decision for every individual in the room.
 
 ---
 
@@ -169,7 +169,7 @@ The collapse of the Church's epistemic monopoly does not happen through a single
 
 Meanwhile Vaynard, at TK 5, no longer merely wants to understand Solmund — he understands him structurally. He wants capability. This shift is the moment the Church's suppression machinery recognises something has already happened that it cannot retroactively prevent. Axis 9 is not a future threat. It is a current state. The question the Grand Debate resolves is not whether Thread truth will become public — that has already begun — but whether the institutional structures that suppressed it will survive the transition.
 
-Almud, with Thread Sensitivity 28, perceives none of this consciously. But in the session where the Grand Debate happens, in a room full of practitioners and a debate about ontological authority, he will experience something he attributes to the weight of the occasion. He is the most interesting person in the room precisely because he understands nothing that is happening and yet is correct about the political stakes in a way that no one else is.
+Almud, with Thread Sensitivity 0, perceives none of this at any level. In the session where the Grand Debate happens, in a room full of practitioners and a debate about ontological authority, he sees only the political dimension — and he is correct about the political stakes in a way that no one else is, precisely because he is unencumbered by ontological perception. He is the most effective political actor in the room because he is the only one not distracted by what the room actually contains.
 
 ---
 

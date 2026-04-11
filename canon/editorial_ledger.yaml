@@ -2788,11 +2788,12 @@ editorial_decisions:
 
   ED-403:
       priority: P2
-      status: open
+      status: resolved
       date_raised: 2026-04-11
+      date_resolved: 2026-04-11
       description: "Vossen's position on Lenneth's institutional revivalism. RM internal split between pragmatic acceptance of Crown patronage and rejection of Crown authority."
-      decision: null
-      tags: [npc, vossen, rm, lenneth, design_gap]
+      decision: "Conditional RM Stability check when Lenneth's programme activates. Success = unity under cautious cooperation. Partial = radical wing drifts to Vaynard. Failure = RM splits into institutional and radical factions. See designs/npcs/ed_403_406_407_resolutions.md."
+      tags: [npc, vossen, rm, lenneth, mechanic]
 
   ED-404:
       priority: P2
@@ -2814,16 +2815,18 @@ editorial_decisions:
 
   ED-406:
       priority: P2
-      status: open
+      status: resolved
       date_raised: 2026-04-11
+      date_resolved: 2026-04-11
       description: "Ehrenwall succession assessment: who does she identify as viable successor if Almqvist line fails? Baralta as deed-logic candidate requires Lowenritter support (weak military), giving Ehrenwall leverage she currently lacks over Hafenmark."
-      decision: null
-      tags: [npc, ehrenwall, baralta, succession, lowenritter]
+      decision: "Ehrenwall identifies Baralta as strongest deed-claim. Conditional support: Lowenritter institutional independence + border autonomy + no parliamentary subordination. Coup Counter transforms into negotiation track. See designs/npcs/ed_403_406_407_resolutions.md."
+      tags: [npc, ehrenwall, baralta, succession, lowenritter, mechanic]
 
   ED-407:
       priority: P2
-      status: open
+      status: resolved
       date_raised: 2026-04-11
+      date_resolved: 2026-04-11
       description: "Himlensendt consecration crisis: if he refuses to consecrate Baralta, this exposes consecration as political veto power. If he consecrates, he installs his own superior. Open design question — which path?"
-      decision: null
-      tags: [npc, himlensendt, baralta, church, succession, design_gap]
+      decision: "Conditional on Church Stability. Stability >= 4: refuses (theology clear, institution strong). Stability <= 3: consecrates under duress (cannot afford refusal crisis). Override: if Arc 11 originary Lock encounter has fired, GM discretion (Himlensendt's personal faith state determines outcome). See designs/npcs/ed_403_406_407_resolutions.md."
+      tags: [npc, himlensendt, baralta, church, succession, mechanic]
