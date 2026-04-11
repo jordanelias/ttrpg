@@ -1,6 +1,6 @@
 # Arc Register
 
-> **Version:** 3 (audit-corrected + recent commit review)
+> **Version:** 4 (abe1b1e review + new emergent arcs from PP-428–442, foil analysis, mechanical interactions)
 > **Status:** WORKING DRAFT
 > **[EDITORIAL: ED-NEW — Tier assignments are provisional pending user review]**
 > **Sources fetched this session:** `designs/gm_ref_cp14/arcs/*` (11 files), `gm_ref/arcs_*` (3 files), `designs/npcs/npc_roster.md`, `designs/npcs/npc_comprehensive_audit.md`, `designs/npcs/npc_character_analyses_existing.md`, `designs/npcs/npc_roster_caste_annotations.md`, `references/params_factions.md`, `references/params_threadwork.md`, `references/params_board_game.md`, `designs/board_game/victory_architecture_v1.md`, `designs/board_game/valoria_bg_v05_simulation_and_patches.md`, `designs/ttrpg/valoria_narrative_scenario_chains.md`, `compilation/v0.14/stage6_factions.md`, `canon/02_canon_constraints.md`
@@ -405,10 +405,14 @@
 **Non-Player Characters:** Torben, Brandt/Ehrenwall (Löwenritter inheritor), Laskaris (Altonian response)
 
 ### ARC-T14: The Consecration Crisis
-**Engine:** Baralta claims Crown → Himmensendt consecration dilemma
-**Emergence:** If Baralta reaches Crown-claim stage, Himmensendt must decide: consecrate (installing sovereign who claims authority over Church — the act confirms divine right that includes Church subordination) or refuse (exposing consecration as political veto, damaging Church legitimation authority). His theology says refuse. Refusing cracks the post-war settlement.
-**Non-Player Characters:** Himmensendt (primary — sincere faith as load-bearing wall), Baralta (Crown claimant — Isabella I parallel), Almud (current holder), Klapp (if converted → theological crisis compounded), Ehrenwall (deed-logic: would accept Baralta as successor)
+**Engine:** Baralta claims Crown → Himmensendt consecration dilemma (ED-407, abe1b1e)
+**Emergence:** If Baralta's deed-claim becomes actionable (Almqvist deed-presumption fails or weakens sufficiently), Himmensendt must decide: consecrate or refuse. The deed-monarchy's legitimation requires Church consecration. Baralta's sovereign supremacy doctrine (Henry VIII parallel) holds that the monarch rules by divine right superseding Church jurisdiction.
+**Non-Player Characters:** Himmensendt (primary — sincere faith as load-bearing wall; theology compels refusal), Baralta (Crown claimant — Isabella I; deed-claim strongest on peninsula), Almud (current holder — his own consecration implicitly questioned if the question is asked), Klapp (if converted → theological crisis compounded), Ehrenwall (deed-logic: would accept Baralta; a Baralta Crown requires Löwenritter support → Ehrenwall gains leverage she doesn't currently have — ED-406)
+**Provisional mechanics (ED-407 — open design question, both paths campaign-defining):**
+- **Himmensendt refuses:** TC +3 (Church overreach visible). Crown Mandate −2 in territories expecting orderly succession. Baralta may claim without consecration — testing whether deed-logic alone is sufficient. Successful unconsecrated reign → Church legitimation role permanently diminished.
+- **Himmensendt consecrates (under duress or calculation):** TC −5 (sovereign supremacy enacted). Church Stability −3. Church becomes subordinate institution within one reign.
 **Classification:** Tertiary (requires Baralta to reach Crown-claim stage). But if fires, campaign-defining.
+**[Note: arcs_09_11 line 21 says Baralta TC suppression "while Mandate stays above 5" — this conflicts with params_factions (≥ 4) and victory_architecture §7 (≥ 4). The arc file contains a consistency error; ≥ 4 is canonical per params.]**
 
 ### NPC-ARC-JAR: The Jarnstal Drift
 **Engine:** Jarnstal Independence Drift counter (0–3, never decrements)
@@ -447,6 +451,63 @@ These are not separate arcs but emergence conditions that should inform existing
 **Non-Player Characters:** Torben, Brandt/Ehrenwall (Löwenritter inheritor), Laskaris (Altonian response)
 
 ---
+
+## New Emergent Arcs (PP-428–442, foil analysis, mechanical interactions)
+
+### ARC-S27: The Revelation Token Cascade
+**Engine:** Varfell Revelation Tokens (PP-439) — intelligence supremacy becomes public
+**Emergence:** When Varfell fully reveals a rival faction (Overwhelming Investigate or 4 Patience Counter Spy), a permanent Revelation Token is placed on the target's mat, visible to all players. The target faction knows they've been penetrated. Cascade: revealed factions may ally against Varfell, Church may open Heresy Investigation against Varfell intelligence operations, Crown invokes Royal Guard (PP-442). Two tokens on two different factions = Varfell Path A "fully revealed" condition met.
+**Non-Player Characters:** Vaynard (intelligence architect), Maret Uln (if Varfell leader → different intelligence style), Strand (Crown target — flattery vulnerability makes Crown the easiest revelation), Feldhaus (Guilds target — supply chain exposure compounds), all faction leaders (publicly aware of penetration)
+**Interaction:** Each token makes Varfell more politically exposed while making its information advantage more decisive. The tension between intelligence supremacy and political isolation is the arc's core.
+
+### ARC-S28: The Thread Liaison
+**Engine:** Crown Thread Liaison designation (PP-436) — Crown↔practitioner alliance made public
+**Emergence:** Crown designates allied faction's Thread operations to count toward Crown co-victory RS threshold tracking. Designation is public and declarative. The act is Crown formally acknowledging Thread operations as legitimate — creating a visible Crown-practitioner alliance. Church response: TC pressure (Crown endorsing Thread work contradicts Church ontology), possible Heresy Investigation against the Liaison faction.
+**Non-Player Characters:** Almud (designating a Liaison is acting on the Einhir question — a governance decision that reveals his position without requiring full Belief resolution), Himmensendt (theological objection — Crown legitimising Thread work), Vaynard (natural Liaison candidate if Crown Treaty exists), Maret Uln (if Varfell leader → RM-aligned Liaison creates Crown-RM axis)
+**Interaction with ARC-S14:** Designating a Thread Liaison may be the first concrete action Almud takes on the Einhir question.
+
+### ARC-S29: The Cardinal Schism
+**Engine:** Church Stability 2 + hostile Senator action in same season (PP-430 note)
+**Emergence:** Cardinal schism fires. The schisming Cardinal acts independently regardless of Cardinal Focus designation. Focus suppressed on schisming Cardinal. Which Cardinal schisms depends on game state — the Cardinal whose portfolio creates the most institutional friction with the Confessor's current direction.
+**Non-Player Characters:** Jarnstal (Fortitude — if already at Drift 2–3, schism accelerates to functional autonomy; Church Military deploys without Confessor approval), Klapp (Temperance — schism + hidden TS = double crisis; AER maintenance disrupted), Prudence (Economics — schism over tithe policy = Parish Revolt accelerant; NPC-ARC-PRU fires), Olafsson (Justice — schism exposes Niflhel connection if he acts independently), Himmensendt (must manage schism while managing all other crises)
+**Interaction with Collision A:** Cardinal schism at Stability 2 compounds Church Double Fracture. If Klapp + Olafsson crises + Cardinal schism fire simultaneously → Church institutional collapse.
+
+### ARC-S30: The Counter-Narrative War
+**Engine:** Three-faction TC contest — Varfell Counter-Narrative (PP-441) + Hafenmark Parliamentary Challenge (PP-431) + Church Piety Spread (PP-428) / Assert
+**Emergence:** TC is no longer a two-faction contest (Church advance vs Hafenmark suppression). Varfell Counter-Narrative (Intel vs Ob = Church Mandate ÷ 2; consequentialism −1 Ob) gives Varfell TC reduction that also feeds AP — Varfell operatives documenting Church overreach can trigger Heresy Investigations against the Church itself. Hafenmark Parliamentary Challenge (Mandate vs Ob 2; PI ≥ 5: Ob −1) gives seasonal TC reduction independent of Baralta suppression. Church counters with Piety Spread (CV raising pre-seizure) and Cardinal Focus. The three-way dynamic produces TC trajectories more volatile than ARC-P01 captures.
+**Non-Player Characters:** Vaynard (Counter-Narrative — consequentialist Intel vs Church), Baralta (Parliamentary Challenge — constitutional TC tool; used via Senator card, opportunity cost with other Senator actions), Himmensendt (defending on two flanks: Varfell ontological + Hafenmark jurisdictional), Prudence Cardinal (Piety Spread / Church Wealth efficiency), Almstedt (PI level affects Challenge Ob)
+**Key interaction:** VTM Discretion (PP-438) lets Varfell suppress its own TK-derived TC contribution for 1 season (cooldown: 1/2 seasons). Vaynard can simultaneously reduce Church TC via Counter-Narrative while hiding his own TC contribution. The net effect: Varfell manages both sides of the TC equation.
+
+### ARC-T15: The Forgetting Barrier
+**Engine:** The Forgetting prevents non-practitioners (TS < 29) from retaining Thread knowledge
+**Emergence:** Vaynard's political programme requires building coalition around the Southernmost argument. The most important argument for Einhir restoration dissolves in the minds of anyone who cannot perceive Thread reality. Vaynard must find workarounds: documentary evidence (Lenneth's archive — written accounts survive because they are documentary, not experiential), institutional memory (Klapp's archive — first-person accounts the Church suppressed), cultural memory (Revolution elder — fragmentary, partially Forgetting-impaired), or creating new practitioners (Discovery Events via originary Locks offered at TK 4).
+**Non-Player Characters:** Vaynard (primary — "the Forgetting is his political prison"), Lenneth (sea-republic archive — pre-Altonian accounts ~180 AG), Klapp (Church archive — Cardinal reassignment records, Solmund accounts), Vossen (TS 25 — below gate of 29; her knowledge partially self-erasing near T13/T15), Revolution elder [EDITORIAL]
+**Classification:** Tertiary — requires player identification of the Forgetting as strategic barrier and active circumvention work.
+
+### ARC-T16: The Perceptual Prophylaxis
+**Engine:** Himmensendt's pastoral responses simultaneously suppress and address Einhir concerns
+**Emergence:** Himmensendt's pastoral tools (education, charity, missionaries) genuinely help southern Einhir communities while deepening the essentialist framework's penetration into exactly the communities where Thread Sensitivity survives. Every school and mission is simultaneously care and cultural overwrite. His compassion and his suppression are the same act. If someone can make Himmensendt see this through Evidence (his Resonant Style) — it is a Belief crisis. But the Forgetting prevents the evidence from persisting in his mind without TS. The only Church figures who could eventually perceive what Himmensendt cannot are Haelgrund (TS 12) and Klapp (TS 31).
+**Non-Player Characters:** Himmensendt (primary — "simply, completely, sincerely wrong"; Southernmost Awareness 0), Vossen (RM communities targeted by pastoral outreach), Haelgrund (hidden TS 12 — if exposed and defects, he becomes the potential Evidence-bearer), Klapp (archive evidence + developing TS)
+**Classification:** Tertiary — requires practitioner Player Character to identify the contradiction and find Evidence that survives in Himmensendt's perception.
+**Interaction with ARC-S08 (Faith that Destroys):** This is the structural mechanism ARC-S08 fires against. Klapp's TS development is the crack in the prophylaxis. Haelgrund's defection (NPC-ARC-HAE) is the second crack.
+
+### ARC-T17: The Diplomatic Outreach Arc
+**Engine:** Crown Diplomatic Outreach to Schoenland (PP-437) + Solberg STABILITY-SEEKING flaw + AER track
+**Emergence:** Crown has a direct IP management tool (Influence vs Ob = AER level; Virtue Ethics −1 Ob; floor 1). Combined with Solberg's unconscious stability bias. Success path: sustained engagement → AER 4+ → IP 75 threshold rises to 80; AER 5 → IP held at 50 (Altonia satisfied). Failure path: AER drops → IP baseline returns; Solberg recalled → Schoenland more dangerous. Complication: if Valoria is fragmented (3+ factions Stability ≤ 2), Ob +2 (Schoenland hedges toward Altonia).
+**Non-Player Characters:** Almud (Crown diplomatic capacity), Strand (administrative execution — but Senator card shared with Treaty, cannot do both in same season), Solberg (STABILITY-SEEKING — active asset if offered credible treaty), Laskaris (IP reduction serves his protective instinct)
+**Classification:** Tertiary — requires sustained Crown investment over multiple seasons. Counter-play: any faction can destabilise Valoria to make Schoenland hedge.
+
+### COLLISION F: The Succession Triangle
+**Trigger:** Almqvist deed-presumption weakens (Coup Counter ≥ 2, or Almud Discovery Event, or Torben loss) while both Lenneth and Baralta programmes are active
+**Effect:** Three-way succession contest fires. Lenneth's counter-claim: "the family that earned the throne should keep it — and I will make the Crown worthy of keeping." Baralta's claim: deed-logic's obvious choice (strongest governance record, Mandate 7, Ob 1 deviation). Ehrenwall's calculus: competence within the system (Baralta) vs competence to strengthen the system (Lenneth) vs competence to replace the system (Vaynard — excluded by deed-logic's limit). Consecration crisis (ARC-T14) fires if Baralta wins. Lenneth's zero mechanical expression means her claim has narrative weight but no measurable game-state effects — audit gap #1.
+**Non-Player Characters:** Almud (current holder — his uncertainty enables both programmes), Lenneth (cognatic succession candidate — zero mechanical expression), Baralta (institutional campaign — Isabella I), Ehrenwall (deed-logic enforcement — evaluates both), Vaynard (excluded by deed-logic but competence is real), Himmensendt (consecration authority)
+**Source:** ruler_diamond_extended_foils §Almud-Lenneth-Baralta Succession Triangle
+
+### COLLISION G: The Einhir Triangle
+**Trigger:** Lenneth's revival programme, Baralta's suppression, and Vaynard's revolutionary restoration are all active simultaneously
+**Effect:** Three positions on the Einhir question — no two can ally without excluding the third. Lenneth + Vaynard agree on diagnosis but not treatment (build up vs tear down). Lenneth + Baralta share institutional orientation but oppose on Einhir entirely. Vaynard + Baralta agree on nothing. The triangle has no stable resolution — whichever position wins, the other two lose. Player characters positioned within this triangle must choose which axis to support, and the choice excludes one ally permanently.
+**Non-Player Characters:** Lenneth (institutional revival — Catherine the Great), Baralta (sovereign suppression — Henry VIII), Vaynard (revolutionary restoration — Reinhard von Lohengramm), Almud (uncertainty enables all three), Himmensendt (pastoral prophylaxis — his compassion IS the suppression Vaynard fights and Lenneth wants to replace)
+**Source:** ruler_diamond_extended_foils §Lenneth-Baralta-Vaynard Einhir Triangle
 
 ## Collision Scenarios (Multi-Arc Convergence)
 
@@ -515,10 +576,13 @@ ARC-P01 (TC clock — passive +1/season)
   ├→ ARC-S09 (Framework Trap — covert TC acceleration)
   ├→ ARC-S19 (Quaestio — TC 42)
   │    └→ COLLISION E (Einhir Elder + Baralta claim)
+  ├→ ARC-S30 (Counter-Narrative War — 3-faction TC contest)
+  │    └→ PP-438 VTM Discretion (Varfell hides own TC contribution)
   ├→ ARC-T01 (Tied Vote — TC +1 spike)
   ├→ ARC-T10 (TC 75+ Phase Transition — seizure mode)
   ├→ ARC-S21 (Klapp Threshold → TC pause)
   │    └→ COLLISION A (Church Double Fracture)
+  │         └→ ARC-S29 (Cardinal Schism — compounds at Stability 2)
   └→ NPC-ARC-PRU (Parish Revolt — TC −1, CV erosion)
 
 ARC-P03 (Coup Counter — 3 increments)
@@ -574,13 +638,21 @@ INDEPENDENT ENTRY (player-initiated / NPC-driven)
   ARC-S11 (Headless Network)
   ARC-S12 (Favour Gate)
   ARC-S23 (Elske Independence)
-  ARC-S26 (Lenneth-Baralta Collision — competing succession programmes)
-    └→ ARC-T14 (Consecration Crisis — if Baralta wins)
+  ARC-S26 (Lenneth-Baralta Collision — competing succession)
+    └→ ARC-T14 (Consecration Crisis — ED-407)
+    └→ COLLISION F (Succession Triangle)
+  ARC-S27 (Revelation Token Cascade — Varfell intelligence goes public)
+  ARC-S28 (Thread Liaison — Crown↔practitioner alliance)
+  ARC-S29 (Cardinal Schism — Church Stability 2)
+  ARC-S30 (Counter-Narrative War — 3-faction TC)
   ARC-T07 (Dissolution)
   ARC-T09 (Forgetting Road)
   ARC-T11 (IP 75+ Vanguard)
   ARC-T12 (BG Convictions)
   ARC-T13 (Torben After Crown Elimination)
+  ARC-T15 (Forgetting Barrier — Vaynard's political prison)
+  ARC-T16 (Perceptual Prophylaxis — Himmensendt's compassion = suppression)
+  ARC-T17 (Diplomatic Outreach — Crown IP management via Schoenland)
 
 COLLISION SCENARIOS
   A: Church Double Fracture (S21 + S06)
@@ -588,6 +660,8 @@ COLLISION SCENARIOS
   C: Tutoring + Southernmost (S07 + T04 failure)
   D: Niflhel Weaponises (S11 + S06 + assassination)
   E: Einhir Elder + Baralta Claim (S19 + elder + Klapp)
+  F: Succession Triangle (S26 + P03 + Ehrenwall calculus)
+  G: Einhir Triangle (Lenneth revival vs Baralta suppression vs Vaynard revolution)
 ```
 
 ---
@@ -607,10 +681,10 @@ COLLISION SCENARIOS
 | ARC-S20 | **Not yet simulated** | Ehrenwall's Count (CP14 arc 34) |
 | ARC-S21 | **Not yet simulated** | Klapp Threshold (CP14 arc 35) |
 | ARC-S22 | Not simulated | RM Emergence |
-| ARC-S23–S26 | Not simulated | Elske Independence, Baralta Succession, Warden Cooperation, Lenneth-Baralta Collision |
+| ARC-S23–S30 | Not simulated | Elske Independence, Baralta Succession, Warden Cooperation, Lenneth-Baralta Collision, Revelation Token Cascade, Thread Liaison, Cardinal Schism, Counter-Narrative War |
 | NPC-ARC-* | **Not simulated** | All NPC-derived arcs from roster (including NPC-ARC-JAR Jarnstal Drift) |
-| ARC-T01–T14 | Mixed | T01–T09 partially via CP14; T10–T14 not simulated |
-| Collisions A–E | **Not simulated** | narrative_scenario_chains scenarios |
+| ARC-T01–T17 | Mixed | T01–T09 partially via CP14; T10–T17 not simulated |
+| Collisions A–G | **Not simulated** | All collision scenarios |
 
 ---
 
@@ -667,3 +741,19 @@ Olafsson's Heresy Investigations disproportionately target southern Einhir commu
 | Missing: cross-NPC gaps | Not present | 5 unwritten NPC interactions from audit | npc_comprehensive_audit |
 | Missing: mechanical gaps | Not present | 5 NPC mechanical expression gaps from audit | npc_comprehensive_audit |
 | Missing: caste gradient | Not present | Heresy Investigations disproportionately target southern Einhir (higher TS) — ethnic enforcement pattern | npc_roster_caste_annotations (701eacf) |
+
+### v3 → v4 (abe1b1e review + new emergent arcs)
+
+| Change | Detail | Source |
+|--------|--------|--------|
+| ARC-T14 updated | ED-407 provisional mechanics added: refuse (TC +3, Mandate −2) vs consecrate (TC −5, Stability −3). Ehrenwall-Baralta leverage (ED-406). | abe1b1e |
+| Baralta TC suppression discrepancy | arcs_09_11 line 21 says ">5" — flagged as consistency error vs params ≥4 | abe1b1e vs params_factions |
+| ARC-S27 added | Revelation Token Cascade — Varfell intelligence goes public (PP-439) | faction_resolutions |
+| ARC-S28 added | Thread Liaison — Crown designates practitioner ally publicly (PP-436) | faction_resolutions |
+| ARC-S29 added | Cardinal Schism — Church Stability 2 + hostile Senator (PP-430) | faction_resolutions |
+| ARC-S30 added | Counter-Narrative War — 3-faction TC contest (PP-441/431/428) | faction_resolutions |
+| ARC-T15 added | Forgetting Barrier — Vaynard's political prison | npc_character_analyses |
+| ARC-T16 added | Perceptual Prophylaxis — Himmensendt's compassion = suppression | npc_character_analyses + foils |
+| ARC-T17 added | Diplomatic Outreach — Crown IP management via Schoenland (PP-437) | faction_resolutions |
+| COLLISION F added | Succession Triangle — Almud/Lenneth/Baralta | ruler_diamond_extended_foils |
+| COLLISION G added | Einhir Triangle — Lenneth/Baralta/Vaynard (no stable resolution) | ruler_diamond_extended_foils |
