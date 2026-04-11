@@ -72,8 +72,8 @@ Every victory requires holding all conditions for **2 consecutive Accounting ste
 
 | Condition | Threshold |
 |-----------|-----------|
-| TCV held | ≥ 16 |
-| Rival suppression | Every other playable faction: Mandate ≤ 2 OR eliminated OR formal Crown Treaty in effect |
+| TCV held | ≥ 14 | (PP-BAL-01)
+| Rival suppression | Every other playable faction: Mandate ≤ 3 OR eliminated OR formal Crown Treaty in effect (PP-BAL-01) |
 | IP | < 60 |
 | PI | ≥ 3 |
 
@@ -131,7 +131,7 @@ Early Seizure (TC < 50) is possible but carries political consequences: Casus Be
 
 | Condition | Threshold |
 |-----------|-----------|
-| TCV held | ≥ 8 |
+| TCV held | ≥ 7 | (PP-BAL-03)
 | CV in all held territories | ≥ 3 |
 
 **Prominence prerequisite:** Church may only seize a territory where Church is Prominent — defined as Church Mandate exceeding the controlling faction's Mandate in that territory. Church Mandate is the Church faction's global Mandate stat. Controlling faction Mandate is their global Mandate stat. Prominence is assessed at seizure declaration.
@@ -159,9 +159,9 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 +
 
 | Condition | Threshold |
 |-----------|-----------|
-| TCV held | ≥ 12 |
+| TCV held | ≥ 14 | (PP-BAL-02)
 | Hafenmark Mandate | ≥ 4 |
-| PI | ≥ 5 |
+| PI | ≥ 6 | (PP-BAL-02)
 | Crown Mandate | ≤ 3 |
 
 #### Alternate — Dynastic Assertion (ED-307)
@@ -184,7 +184,7 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 +
 |-----------|-----------|
 | TCV held | ≥ 10 |
 | VTM | ≥ 3 |
-| At least 2 rival factions' stats fully revealed | fixed count |
+| At least 3 rival factions' stats fully revealed | fixed count [PROVISIONAL — ED-389] | (PP-BAL-05)
 | Varfell controls ≥ 1 territory outside starting 4 | — |
 
 #### Path B — Southernmost Dominion
@@ -205,7 +205,7 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 +
 | Condition | Threshold |
 |-----------|-----------|
 | TCV held | ≥ 10 |
-| VTM | = 5 |
+| VTM | ≥ 4 | (PP-BAL-04)
 | RS | ≥ 50 |
 
 ---
@@ -217,7 +217,7 @@ RM has no faction stats. It operates purely through Presence markers and Communi
 **Two-phase win condition:**
 
 #### Phase 1 — Cultural Majority (threshold to unlock Phase 2)
-CV ≤ 1 in ≥ 8 of the 15 playable territories (T1–T14, T17). Checked at each Accounting. Once met and held, Phase 2 becomes available. If the majority drops below 8, Phase 2 is locked again until it recovers.
+CV ≤ 1 in ≥ 4 of the 15 playable territories (T1–T14, T17) (PP-BAL-06, supersedes PP-478). Checked at each Accounting. Once met and held, Phase 2 becomes available. If the majority drops below 8, Phase 2 is locked again until it recovers.
 
 #### Phase 2 — Cultural Uprising of T9 Himmelenger
 Available only while Phase 1 condition is met. Declared once per game at any Accounting where Phase 1 holds. RM plays their Pontifex card and rolls: **Weaver Thread pool vs Ob = TC ÷ 10 (round up, min 1, max 5).**
@@ -272,9 +272,9 @@ Co-victories require 2 consecutive Accounting steps except Partition (immediate 
 
 | Pair | Conditions (all simultaneous at Accounting) |
 |------|---------------------------------------------|
-| **Crown + Hafenmark** | Crown TCV ≥ 12 AND Hafenmark TCV ≥ 9 AND PI ≥ 5 AND TC < 50 |
+| **Crown + Hafenmark** | Crown TCV ≥ 12 AND Hafenmark TCV ≥ 9 AND PI ≥ 8 AND TC < 40 | (PP-BAL-07)
 | **Crown + Varfell** | Crown TCV ≥ 12 AND Varfell TCV ≥ 8 AND VTM ≥ 3 AND RS ≥ 50 |
-| **Varfell + RM** | VTM ≥ 4 AND WR ≥ 2 AND ≥ 4 territories CV ≤ 1 AND RS ≥ 40 AND Varfell controls T13 |
+| **Varfell + RM** | VTM ≥ 3 AND WR ≥ 2 AND ≥ 3 territories CV ≤ 1 AND RS ≥ 40 [PROVISIONAL — ED-392: T13 review pending] | (PP-BAL-08)
 | **Hafenmark + RM** | Hafenmark TCV ≥ 10 AND ≥ 4 territories CV ≤ 2 AND PI ≥ 4 AND RS ≥ 40 |
 | **Löwenritter + Hafenmark** | Löwenritter TCV ≥ 8 AND Hafenmark TCV ≥ 8 AND PI ≥ 4 |
 | **Church + Hafenmark (Partition)** | See §3.2. Crown Mandate ≤ 1, TC ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no active military conflict. |
@@ -378,9 +378,9 @@ Autonomous TCV changes from uninvestigated Domain Echoes count toward or against
 
 | Faction | Start TCV | Target TCV | Gap | Key Difficulty | Est. Timeline |
 |---------|-----------|------------|-----|----------------|---------------|
-| Crown | 10 | 16 | +6 | Suppress ALL rivals (×3 political) | 14–16 seasons |
-| Church | 3 | 8 | +5 | Graduated Seizure from TC 30+; CV management | 14–18 seasons |
-| Hafenmark | 9 | 12 | +3 | Mil 3 handicap + Crown Mandate suppression | 10–14 seasons |
+| Crown | 10 | 14 | +4 | (PP-BAL-01) Suppress ALL rivals (×3 political) | 14–16 seasons |
+| Church | 3 | 7 | +4 | (PP-BAL-03) Graduated Seizure from TC 30+; CV management | 14–18 seasons |
+| Hafenmark | 9 | 14 | +5 | (PP-BAL-02) Mil 3 handicap + Crown Mandate suppression | 10–14 seasons |
 | Varfell A | 6 | 10 | +4 | Geographic isolation + VTM 3 + intel reveals | 12–14 seasons |
 | Varfell B | 6 | 8 | +2 | VTM 3 + Warden Recognition + T13 control | 12–16 seasons |
 | Varfell C | 6 | 10 | +4 | VTM 5 (~S14+) + RS maintenance | 14–18 seasons |
@@ -458,7 +458,7 @@ Simulation confirms that spoiler strategies are functional. Key findings:
 - **Hybrid mode:** RM solo victory and co-victories are available ONLY after RM Founding (see params_board_game.md §RM Founding Mechanic).
 
 ### RM Solo Victory (Hybrid mode, post-Founding)
-Phase 1: ≥ 5 territories CV ≤ 1, held 2 consecutive Accounting steps.
+Phase 1: ≥ 4 territories CV ≤ 1, held 2 consecutive Accounting steps. (PP-BAL-06)
 Phase 2: Cultural Uprising of T9 Himmelenger. RS ≥ 25 required (PP-467).
 Roll: Weaver Thread pool vs Ob = TC ÷ 10. Win: T9 under RM administration + Phase 1 held × 2 Accounting steps.
 

@@ -2653,3 +2653,45 @@ editorial_decisions:
     description: "GAP-VIC-02: Confirm PP-203 balanced Hafenmark passive victory path — scope of fix unclear"
     decision: null
     tags: [board_game, hafenmark, balance]
+
+  # ═══ BALANCE EDITORIALS 2026-04-10 ═════════════════════════════════════════
+
+  - id: ED-388
+    status: flagged
+    priority: P2
+    date_raised: 2026-04-10
+    description: "Hafenmark balance: should a Stability ≥ 3 gate be added to Parliamentary Sovereignty (in addition to PP-BAL-02 TCV/PI changes)? Stability gate adds ongoing management pressure but is faction-feel question."
+    decision: null
+    tags: [board_game, hafenmark, balance, victory]
+
+  - id: ED-389
+    status: flagged
+    priority: P2
+    date_raised: 2026-04-10
+    description: "Varfell Path A: is revealing 3 rival factions' stats feasible with VTM 3? VTM 3 unlocks 3 reveals across campaign — tight but mechanically possible. PP-BAL-05 provisional pending this confirmation."
+    decision: null
+    tags: [board_game, varfell, victory, balance]
+
+  - id: ED-390
+    status: flagged
+    priority: P3
+    date_raised: 2026-04-10
+    description: "RM Phase 2: should WC ≥ 1 grant Ob −2 (instead of current −1 per condition) to make Warden cooperation more meaningful? Risk: stacking with T9 CV ≤ 1 brings Ob to 1 at base TC. Confirm intended."
+    decision: null
+    tags: [hybrid, rm, victory, balance]
+
+  - id: ED-391
+    status: flagged
+    priority: P2
+    date_raised: 2026-04-10
+    description: "Crown+Hafenmark co-victory: should a 4-season no-active-conflict condition be added to reinforce cooperative nature? PP-BAL-07 applies PI/TC changes only; this is faction-feel supplement."
+    decision: null
+    tags: [board_game, crown, hafenmark, co_victory, balance]
+
+  - id: ED-392
+    status: flagged
+    priority: P2
+    date_raised: 2026-04-10
+    description: "Varfell+RM co-victory: is T13 (Oastad) control requirement intentional as a 'must-hold' constraint or redundant (Varfell starts there)? PP-BAL-08 provisionally removes it pending decision."
+    decision: null
+    tags: [board_game, varfell, rm, co_victory, balance]
