@@ -661,3 +661,22 @@ Canonical changes made:
 - canon/editorial_ledger.yaml: ED-408 through ED-412 added (5 new open items).
 - Cross-arc interaction table maps 11 interdependencies. Convergence timeline: seeds seasons 1-2, converges seasons 7-8.
 - Next: User review of ED-408-412. Simulate convergence timing.
+
+### 2026-04-11 — Lenneth Full Design + Threadwork at Key Decision Points (commit 7)
+
+- designs/npcs/lenneth_threadwork_design.md: New file. Lenneth stat block (TS 8 starting, Cognition 5, Spirit 4). Archive-based TS development path. Breakthrough condition. Cultural Revival Track (0-10 clock). BG mode expression.
+- Threadwork applied to all ruler diamond decision points:
+  - Almud Discovery Event: TS growth check at Ob 2, ~15% success at Spirit 3. Failure = unfileable memory. Success = existential rupture.
+  - Baralta foreclosure: triple-barrier Ob 4 on TS growth. She will never perceive Thread reality. The most competent governor governing the wrong problem.
+  - Vaynard's Forgetting prison: TS 20 (provisional). Can perceive but cannot communicate. Non-practitioner audience P(retaining testimony) ≈ 1-7%.
+  - Lenneth's development: TS 8→20 (~Season 6) → 30 (~Season 11). Each threshold transforms her programme's scope.
+  - Himlensendt's Lock encounter: P(Success) ≈ 25% at Spirit 5. Override condition for consecration crisis.
+  - Caste as TS gradient: south = high TS + low Church + Forgetting resistance. North = low TS + high Church + Forgetting vulnerability.
+- Key finding: "The settlement is self-consuming." Every faction's rational political actions contribute to RS degradation. The Einhir Catastrophe replicated politically.
+- references/params_threadwork.md: Lenneth TS 72 dissolved, replaced with TS 8 + development path.
+- ED-408-412 confirmed canonical. ED-413-418 created (6 new, 5 resolved, 1 open). ED-119/ED-119-URGENCY resolved.
+- **Session grand total: 7 commits. ED-393 through ED-418 (26 editorial items: 23 resolved, 2 flagged-resolved, 1 open).**
+- **Open: ED-416 (Almud stat block — Spirit value determines Discovery Event probability).**
+
+## CONTEXT LIMIT — SESSION CLOSE
+Next session: Almud stat block (ED-416). Then simulate the Cultural Revival Track to verify pacing (does Lenneth reach TS 30 before RS enters Fractured band? The timing determines whether the institutional bridge to Edeyja is available before the crisis becomes unrecoverable).

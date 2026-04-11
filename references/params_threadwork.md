@@ -493,12 +493,13 @@ Thread combat vs Mode 3 entities: **Thread pool split (Off/Def) applies** identi
 - No separate Thread combat system needed.
 [FLAGGED: confirm Ob derivation for entity Thread resistance.]
 
-## ED-119 Resolution (PP-279) [FLAGGED FOR DESIGNER REVIEW]
-Lenneth Almqvist (Queen of Valoria, Almud's wife): Thread Sensitivity **72** (provisional).
-Rationale: trained Mira (TS now 61); must exceed student; consistent with high-level practitioner profile.
-Southernmost access: confirmed. Can attempt operations up to Territorial scale.
-[FLAGGED: confirm TS value and operational history before NPC roster compilation.]
-Also resolves ED-161 (Lenneth TS undefined — same NPC, same resolution).
+## ED-119 Resolution (PP-279) [SUPERSEDED 2026-04-11]
+<!-- PP-279 DISSOLVED. Lenneth TS 72 replaced by TS 8 (starting) with archive-based development path.
+See designs/npcs/lenneth_threadwork_design.md for full design.
+Lenneth is patron, not practitioner. Catherine the Great parallel.
+Mira relationship: patron-to-practitioner (archive access), not teacher-to-student.
+ED-119 resolved by 2026-04-11 session. ED-161 also resolved. ED-413 documents the dissolution. -->
+Lenneth Almqvist: Thread Sensitivity **8** (starting). Development path: archive research (Spirit + Einhir Scholar, TN 7, Ob 2). Maximum potential TS 40-50.
 
 ## ED-134 Resolution (PP-289)
 Diagnosis as mandatory pre-operation: confirmed as **perception act**, not a separate operation.
@@ -550,11 +551,9 @@ A practitioner who attempts Leap without the Approach Training tag:
 
 [FLAGGED: confirm Certainty −1 as the correct penalty vs alternatives (Coherence −1, wound, Composure).]
 
-## ED-119 Resolution (PP-304) — Lenneth Almqvist TS [FLAGGED]
-Lenneth Almqvist (Queen of Valoria, Almud's wife): Thread Sensitivity **72** (provisional).
-Rationale: trained Mira (TS now 61); must exceed student. Southernmost access confirmed.
-Can attempt operations up to Territorial scale.
-[FLAGGED: confirm TS value before NPC roster compilation. Also resolves ED-161.]
+## ED-119 Resolution (PP-304) — Lenneth Almqvist TS [SUPERSEDED 2026-04-11]
+<!-- PP-304 DISSOLVED. See PP-279 supersession note above. Lenneth TS 8 starting, development via archive. -->
+Lenneth Almqvist: Thread Sensitivity **8** (starting). See designs/npcs/lenneth_threadwork_design.md.
 
 
 ## ED-134 Resolution (PP-314) — Diagnosis Rationale

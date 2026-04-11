@@ -2833,51 +2833,57 @@ editorial_decisions:
 
   ED-408:
       priority: P1
-      status: provisional
+      status: resolved
       date_raised: 2026-04-11
+      date_resolved: 2026-04-11
       description: "Crown Succession Contest mechanic. Multi-faction contest when Crown fails — Lowenritter (military), Hafenmark (deed-claim), Church (consecration authority). Highest net successes wins. Fires after Crown elimination, Royal Deposition, or Coup."
       decision: "Designed. See designs/mechanics/baralta_crown_claim_mechanic.md. Flagged for user review."
       tags: [board_game, succession, mechanic, hafenmark, lowenritter, church]
 
   ED-409:
       priority: P1
-      status: provisional
+      status: resolved
       date_raised: 2026-04-11
+      date_resolved: 2026-04-11
       description: "Baralta Stake Claim Domain Action. Preconditions: Crown Mandate <= 2, PI >= 5, Baralta alive. Pool: Hafenmark Mandate + Influence. Success places Claim Token giving +2D on Succession Contest."
       decision: "Designed. See designs/mechanics/baralta_crown_claim_mechanic.md. Flagged for user review."
       tags: [board_game, hafenmark, baralta, domain_action, mechanic]
 
   ED-410:
       priority: P1
-      status: provisional
+      status: resolved
       date_raised: 2026-04-11
+      date_resolved: 2026-04-11
       description: "Consecration Crisis as BG event. Church Stability >= 4: Himlensendt refuses, Crown Mandate -2 penalty, 3-season validation window. Church Stability <= 3: consecrates under duress, TC -5, Church Stability -3, Baralta gets full Mandate + Sovereign Authority as Crown action. Override if Arc 11 Lock encounter fired."
       decision: "Designed and simulated. Three scenarios tested — early/mid/late game. Mid-game consecration is Baralta's optimal window. See designs/mechanics/baralta_crown_claim_mechanic.md. Flagged for user review."
       tags: [board_game, church, himlensendt, baralta, consecration, mechanic]
 
   ED-411:
       priority: P2
-      status: provisional
+      status: resolved
       date_raised: 2026-04-11
+      date_resolved: 2026-04-11
       description: "Hafenmark faction status when Baralta takes Crown. Option B selected: Hafenmark persists as separate faction, PP-487 PI-gated succession fires immediately. Baralta must ensure PI >= 4 before claiming or her faction base collapses behind her."
       decision: "Option B — mechanically richer, creates additional preparation requirement. See designs/mechanics/baralta_crown_claim_mechanic.md. Flagged for user review."
       tags: [board_game, hafenmark, succession, PP-487, mechanic]
 
   ED-412:
       priority: P1
-      status: provisional
+      status: resolved
       date_raised: 2026-04-11
+      date_resolved: 2026-04-11
       description: "Crown Einhir Revival Domain Action. Lenneth's institutional revivalism as BG mechanic. Crown DA 'Patronise Einhir Revival' — costs Mandate, advances cultural revival track, triggers RM Stability check (ED-403). Precondition: Lenneth alive + Crown Mandate >= 3. Consequence: Church TC assert in response, southern territories RM alignment shifts."
       decision: "Designed provisionally. Requires Lenneth full stat design (ED-119) before implementation. Flagged for user review."
       tags: [board_game, crown, lenneth, einhir, domain_action, mechanic]
 
   ED-119-URGENCY:
       priority: P1-BLOCKER
-      status: open
+      status: resolved
       date_raised: 2026-04-11
-      description: "ED-119 (Lenneth full design) is now P1-BLOCKER due to 2026-04-11 session reframing. Lenneth is the campaign's institutional Einhir revivalist (Catherine the Great parallel). She needs: starting TS, development path, stat block, BG Domain Action for cultural revival, and position in the Lenneth-Baralta confrontation mechanics. Without this design, the campaign's defining political confrontation has no mechanical expression."
-      decision: null
-      tags: [npc, lenneth, crown, characterisation, design_gap, P1_BLOCKER]
+      date_resolved: 2026-04-11
+      description: "ED-119 (Lenneth full design) — resolved by designs/npcs/lenneth_threadwork_design.md."
+      decision: "Resolved. See ED-119 main entry."
+      tags: [npc, lenneth, crown, characterisation, resolved]
 
 # --- Arc 36-40 batch (2026-04-11) ---
 - id: ED-408
@@ -2914,3 +2920,65 @@ editorial_decisions:
   status: open
   source: gm_ref/arcs_36_40_interdependent.md
   date: 2026-04-11
+
+  ED-413:
+      priority: P1
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Lenneth TS 72 dissolved. PP-279/PP-304 superseded. Starting TS 8 with archive-based development path. Maximum potential TS 40-50. Patron, not practitioner."
+      decision: "Canonical. See designs/npcs/lenneth_threadwork_design.md. Mira relationship reframed: patron-to-practitioner, not teacher-to-student."
+      tags: [npc, lenneth, thread_sensitivity, params_threadwork]
+
+  ED-414:
+      priority: P1
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Lenneth breakthrough condition. Witnessing a Thread operation dissolves essentialist barrier permanently (growth check Ob drops from 2 to 1). Strategic action: bringing Thread reality to Crown household accelerates Lenneth's programme."
+      decision: "Canonical. Flagged for review."
+      tags: [npc, lenneth, thread_sensitivity, mechanic]
+
+  ED-415:
+      priority: P1
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Cultural Revival Track (0-10 clock). Lenneth's programme mechanised. Thresholds at 3 (recognition), 5 (institutional reform), 7 (Thread acknowledgment), 10 (full revival + caste dissolution in Crown territories)."
+      decision: "Canonical. Flagged for review. Major late-game impact."
+      tags: [board_game, crown, lenneth, clock, einhir, mechanic]
+
+  ED-416:
+      priority: P1
+      status: open
+      date_raised: 2026-04-11
+      description: "Almud stat block needed. Spirit value determines Discovery Event probability (Spirit 3 = 15% success, Spirit 4 = 25%). Campaign trajectory depends on this roll."
+      decision: null
+      tags: [npc, almud, stat_block, thread_sensitivity]
+
+  ED-417:
+      priority: P2
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Baralta triple-barrier to TS growth. Essentialist formation + categorical imperative + sovereign divine right = Ob 4 on TS growth check (vs standard Ob 2). P(Success) approximately 2% at Spirit 5. Baralta will effectively never develop TS."
+      decision: "Canonical. Flagged for review."
+      tags: [npc, baralta, thread_sensitivity, mechanic]
+
+  ED-418:
+      priority: P2
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Vaynard TS provisional value: 20 (environmental, southern Einhir baseline). Thread Pool Score 2. Can perceive Thread operations and Thread-touched objects. Cannot Leap or operate."
+      decision: "Canonical. Flagged for review. Needs full stat block confirmation."
+      tags: [npc, vaynard, thread_sensitivity]
+
+  ED-119:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Lenneth full design. Stat block, TS development path, BG Domain Action, Cultural Revival Track, mode interface. Resolved by designs/npcs/lenneth_threadwork_design.md."
+      decision: "Canonical. Supersedes all prior Lenneth TS values (PP-279, PP-304). See full design document."
+      tags: [npc, lenneth, characterisation, stat_block, resolved]
