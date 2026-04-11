@@ -11,14 +11,14 @@
 ## Arc 20: The Tutoring Demand
 
 **Pivot roll:** Crown Influence vs Ob 3 (negotiate delay) — or the decision to refuse entirely
-**Primary mechanics:** Institutional Pressure threshold (30 = Tutoring Demand) · Torben Loyalty Clock · Institutional Pressure acceleration on refusal (1.5×) · Institutional Pressure 75 invasion trigger · Border Pass (Territory 4, Altonian entry point) · Ehrenwall Coup Counter
+**Primary mechanics:** Institutional Pressure threshold (40 = Tutoring Demand) · Torben Loyalty Clock · Institutional Pressure acceleration on refusal (1.5×) · Institutional Pressure 75 invasion trigger · Border Pass (Territory 4, Altonian entry point) · Ehrenwall Coup Counter
 **Primary NPCs:** King Almud Almqvist · Prince Torben Almqvist · Grandmaster Ehrenwall · Princess Elske
 
 ---
 
 ### Narrative
 
-Institutional Pressure 30 arrives quietly. The Altonian demand is formal, politely worded, and non-negotiable: Torben must be sent for education in Altonian court. Almud reads it three times. His first Belief — *I will hold the Altonian relationship open regardless of what it costs me* — and his third — *My son must be ratified before the succession becomes a weapon* — have been in latent conflict since the campaign began. The demand forces them into direct collision.
+Institutional Pressure 40 arrives quietly. The Altonian demand is formal, politely worded, and non-negotiable: Torben must be sent for education in Altonian court. Almud reads it three times. His first Belief — *I will hold the Altonian relationship open regardless of what it costs me* — and his third — *My son must be ratified before the succession becomes a weapon* — have been in latent conflict since the campaign began. The demand forces them into direct collision.
 
 Every season Almud delays by negotiating, the Ob rises by 1 — a compounding cost for a king whose Influence pool is not inexhaustible. Every season he refuses outright, Institutional Pressure accelerates to 1.5× pace. The players watching this from outside the Crown understand that neither option is safe. What they may not realise yet is that this is not the crisis. The crisis is what happens after the decision.
 
@@ -38,9 +38,9 @@ If Loyalty hits 1 before Elske stabilises the situation, Torben is an Altonian p
 
 ### Branch B — Crown Refuses
 
-Almud refuses. Institutional Pressure accelerates to +3/season (1.5×). Each subsequent refusal: Schoenland Trade Ob +1 cumulative. The Guilds, who derive revenue from Schoenland trade routes through Sternhaven (Territory 7) and the sea route through Territory 15, begin losing Wealth. By Season 2 of refusal, Guild representatives approach Parliament. By Season 4, Guild Economic Leverage turns against the Crown — not because the Guilds are hostile, but because the trade collapse has made Crown policy directly harmful to their economic interest.
+Almud refuses. Institutional Pressure accelerates to +3/season (1.5×). Each subsequent refusal: Schoenland Trade Ob +1 cumulative. The Guilds, who derive revenue from Schoenland trade routes through Sternhaven (Territory 7) and the sea route through Territory 16, begin losing Wealth. By Season 2 of refusal, Guild representatives approach Parliament. By Season 4, Guild Economic Leverage turns against the Crown — not because the Guilds are hostile, but because the trade collapse has made Crown policy directly harmful to their economic interest.
 
-Institutional Pressure reaches 75 between seasons 8–10 depending on intervention. When it does: Altonian vanguard deploys to Schoenland (Territory 15). The sea route is severed. Sternhaven (Territory 7) is isolated from its primary trade connection. Border Pass (Territory 4, Fort 2) becomes the active invasion front.
+Institutional Pressure reaches 75 between seasons 8–10 depending on intervention. When it does: Altonian vanguard deploys to Schoenland (Territory 16). The sea route is severed. Sternhaven (Territory 7) is isolated from its primary trade connection. Border Pass (Territory 4, Fort 2) becomes the active invasion front.
 
 The invasion itself is a mass combat event. Border Pass's Fortification 2 means attackers require a siege declaration. Ehrenfeld (Territory 5) is the Löwenritter position — adjacent to Border Pass. Ehrenwall must decide whether to commit her forces to a border defense while her Coup Counter is at 2 and the Crown she is defending has spent years failing the institutional tests she has been running. If she commits: the invasion is contested. If she holds back, calculating that a failed invasion is more useful to her than a successful defense: Border Pass falls, Crown loses two territories in one season, Coup Counter hits 3, and Ehrenwall imposes Martial Law on the territories she just failed to protect — because the invasion proved the Crown cannot defend itself and she was always going to act on that conclusion.
 
@@ -50,7 +50,7 @@ The invasion itself is a mass combat event. Border Pass's Fortification 2 means 
 
 ```mermaid
 flowchart TD
-    A["IP reaches 30\nAltonian Tutoring Demand issued\nAlmud: Belief 1 vs Belief 3 in direct collision"] --> B{Crown response each season}
+    A["IP reaches 40\nAltonian Tutoring Demand issued\nAlmud: Belief 1 vs Belief 3 in direct collision"] --> B{Crown response each season}
     B -->|"Negotiate delay\nCrown Influence vs Ob 3 (+1 Ob per prior attempt)"| C{Influence roll result}
     C -->|"Success"| D["Demand deferred 1 season\nIP pace unchanged (+2/season)\nOb for next delay: +1\nWindow to act, not resolution"]
     C -->|"Failure"| E["Treated as Refusal this season\nIP accelerates: +3/season\nSchoenland Trade Ob +1 cumulative"]
@@ -62,7 +62,7 @@ flowchart TD
     G -->|"Loyalty 3–2 (Season 4–6, no intervention)"| I["Crown Mandate −2 cumulative\nEhrenwall Coup Counter +1\nTorben writes public Altonian letters\nCovert extraction: Intel vs Ob 5\nFailure: operative captured, IP +3, Crown Mandate −1"]
     G -->|"Loyalty 1 (Season 6+, no extraction)"| J["EXTREME: Altonian puppet\nRetrieval = military action in Altonian territory\nIP immediately → 75+\nEhrenwall Counter #2 definitively met\nCoup fires at next Accounting"]
     
-    J --> K["IP 75+: Altonian vanguard at Schoenland (T15)\nBorder Pass (T4, Fort 2) = invasion entry\nMass combat: Altonian units vs Crown/Löwenritter\nFortification 2 = siege declared\nEhrenfeld (T5) adjacent: Ehrenwall decides"]
+    J --> K["IP 75+: Altonian vanguard at Schoenland (T16)\nBorder Pass (T4, Fort 2) = invasion entry\nMass combat: Altonian units vs Crown/Löwenritter\nFortification 2 = siege declared\nEhrenfeld (T5) adjacent: Ehrenwall decides"]
     K --> L{Ehrenwall commits?}
     L -->|"Yes: Löwenritter defend Border Pass"| M["Mass combat: Altonian force vs Löwenritter CR 5\nGeneral dominance: CR asymmetry may be decisive\nIF Crown wins: IP pauses; Coup Counter at 2, stays there\nIF Crown loses despite Löwenritter: Border Pass falls\nCrown loses 2 territories → Coup Counter +1 → 3 → Martial Law"]
     L -->|"No: Ehrenwall holds back (calculating)"| N["EXTREME: Border Pass falls without contest\nAltonian occupation of T4\nCrown loses 2+ territories, no military response\nCoup Counter +1 → 3 → Martial Law fires\nEhrenwall imposes law on territories she failed to defend\nELSKE as only viable succession candidate if Torben puppet + Almud deposed"]
@@ -74,7 +74,7 @@ flowchart TD
 
 **Why this arc is emergent:** Almud's Belief collision is structural, not scripted. Institutional Pressure accelerates regardless of player intervention unless specific Domain Actions are run. The Guilds' turn against the Crown follows from their institutional tendency, not hostility. Ehrenwall's calculation at the invasion moment is driven by her Belief and her counter — both of which were building throughout the campaign.
 
-**Arc shape:** Institutional Pressure 30 trigger (Season 3–5 typically). Branch A: 4–6 seasons of loyalty decay, 1–2 seasons of crisis (Elske or extraction). Branch B: 3–5 seasons of Institutional Pressure acceleration, 1 session invasion event, 2–4 seasons of occupation or coup consequence.
+**Arc shape:** Institutional Pressure 40 trigger (Season 5–8 typically). Branch A: 4–6 seasons of loyalty decay, 1–2 seasons of crisis (Elske or extraction). Branch B: 3–5 seasons of Institutional Pressure acceleration, 1 session invasion event, 2–4 seasons of occupation or coup consequence.
 
 ---
 
@@ -159,7 +159,7 @@ flowchart TD
 
 ### Narrative
 
-Getting here took years of campaign time. The Ceiral Text had to be found and held. Southernmost Awareness had to reach 5. A practitioner with Thread Sensitivity 60+ had to be found, prepared, and committed to the ritual — unavailable for other actions for a full preparation season. Two additional participants with Thread Sensitivity 20+ had to be assembled in Askeheim (Territory 13), which requires Thread Sensitivity ≥ 30 for all personnel. Military escort dissolved on entry unless everyone qualified.
+Getting here took years of campaign time. The Ceiral Text had to be found and held. Southernmost Awareness had to reach 5. A practitioner with Thread Sensitivity 60+ had to be found, prepared, and committed to the ritual — unavailable for other actions for a full preparation season. Two additional participants with Thread Sensitivity 20+ had to be assembled in Askeheim (T15), which requires Thread Sensitivity ≥ 30 for all personnel. Military escort dissolved on entry unless everyone qualified.
 
 Maret Uln, Varfell's wild card, is the most likely lead — Thread Sensitivity confirmed practitioner-level, pursuing the Ceiral Ritual as a personal Belief. Vaynard has been managing him as an asset while understanding that Maret is not loyal. If Vaynard let the players cultivate this relationship, Maret is available. If Vaynard made the wrong calculation and tried to control Maret too tightly, Maret's loyalty has been dropping — and a practitioner attempting the Ceiral Ritual while carrying an alignment conflict with the faction that got him there has a different intentionality problem than a practitioner working freely.
 

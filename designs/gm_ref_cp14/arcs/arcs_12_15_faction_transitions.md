@@ -56,19 +56,19 @@ flowchart TD
 
 ## Arc 13: The Dominance Event
 
-**Primary mechanics:** Church Theocracy Counter threshold escalation · Mandate/Stability 7 dominance event · Theocracy Counter 60 territorial seizure procedure · Counter-play timing windows · Axes 1, 2, 9
+**Primary mechanics:** Church Theocracy Counter threshold escalation · Mandate/Stability 7 dominance event · Graduated Seizure (available from TC ≥ 15, PP-494/507; phase transition at TC 75) · Counter-play timing windows · Axes 1, 2, 9
 
 ---
 
 ### Narrative
 
-Theocracy Counter does not move in straight lines. It moves in thresholds. Below 40, it is a background condition — something the factions monitor, something the players track, something that produces moderate seasonal effects. At 40, the Church gains the capacity for territorial seizure. At 60, the seizure procedure becomes active. These thresholds are not abstract. They correspond to observable changes in how Confessor Himlensendt holds himself in a room, in whether Olafsson's Inquisitors have search authorisation, in whether the Templars can deploy without asking.
+Theocracy Counter does not move in straight lines. It moves in thresholds. Below 40, it is a background condition — something the factions monitor, something the players track, something that produces moderate seasonal effects. Graduated Seizure is available from TC ≥ 15 (PP-507) with increasing pool as TC rises (Influence + floor(TC/15), PP-494). The seizure Ob depends on territory CV (CV 5 = Ob 2, CV 0 = Ob 7). At TC 75, the Church hits its phase transition: TC freezes and the Church shifts to a full territorial seizure campaign. These thresholds are not abstract. They correspond to observable changes in how Confessor Himlensendt holds himself in a room, in whether Olafsson's Inquisitors have search authorisation, in whether the Templars can deploy without asking.
 
 The dominance event is what happens if no one arrests the trajectory. Church Mandate 7, Church Stability 7 — either triggers it. The seasonal accounting machinery reads this as a ceiling event, the mirror of the Stability 0 collapse. The world reorganises around the faction that has achieved dominance. What that reorganisation looks like in practice: every other faction's Domain Actions that target Church authority face an additional layer of institutional resistance. The Theocracy Counter suppression mechanisms that have been quietly working — Baralta's −1/season, players' Domain Actions, Revolution community operations — are insufficient against a faction that has, in mechanical terms, become structurally dominant.
 
 The arc is not about what happens after dominance. It is about the last two or three seasons before dominance when it is still preventable and the window is closing. Seasonal accounting is the mechanism: Church Mandate advances most reliably when Theocracy Counter ≥ 40 (Theocracy Counter +1/season from Church's own threshold mechanic), when Baralta's suppression has been removed, and when no Domain Action targets Church Stability or Mandate. The players who can do the arithmetic know when dominance is one or two quiet seasons away.
 
-The three counter-play options for Theocracy Counter 60 seizure — Parliamentary challenge (Influence vs Ob 3), Riskbreaker operation exposing Church-Niflhel connection, Grand Debate challenging Church civil authority — each have different timing requirements and different costs. The Parliamentary challenge is fastest but requires Parliament to be in session. The Riskbreaker exposure adds Deniability Debt to the Crown (at Debt 3, all Crown Domain Actions against non-Crown factions +1 Ob). The Grand Debate is the nuclear option: Overwhelming removes all seizures in one duchy; Success removes one. But Grand Debate requires 5 exchanges, which is a full season's investment of Baralta's time and political capital.
+The three counter-play options for Church territorial seizure — Parliamentary challenge (Influence vs Ob 3), Riskbreaker operation exposing Church-Niflhel connection, Grand Debate challenging Church civil authority — each have different timing requirements and different costs. The Parliamentary challenge is fastest but requires Parliament to be in session. The Riskbreaker exposure adds Deniability Debt to the Crown (at Debt 3, all Crown Domain Actions against non-Crown factions +1 Ob). The Grand Debate is the nuclear option: Overwhelming removes all seizures in one duchy; Success removes one. But Grand Debate requires 5 exchanges, which is a full season's investment of Baralta's time and political capital.
 
 ---
 
@@ -88,7 +88,7 @@ flowchart TD
     H --> H2["Riskbreaker exposure\nExposes Church-Niflhel connection per operation\nEach success: removes one seized territory\nprevents re-seizure for 1 season\nCost: Crown Deniability Debt +1 per operation\nAt Debt 3: all Crown Domain Actions +1 Ob"]
     H --> H3["Grand Debate challenging Church civil authority\nOverwhelming: removes all seizures in one duchy\nSuccess: removes one seizure\nCost: Baralta's full political investment (5 exchanges)\none Grand Debate per season maximum"]
     
-    H1 & H2 & H3 --> I["TC approaches 60\nIf no counter-play succeeds in time:\nTC 60 threshold crossed at Accounting"]
+    H1 & H2 & H3 --> I["TC approaches 75\nIf no counter-play succeeds in time:\nTC 75 phase transition at Accounting\n(TC freezes; Church shifts to seizure campaign)"]
     I --> J["Church Mandate now advancing toward 7\nDominance event within 1–3 seasons\nat Mandate 7 or Stability 7: ceiling event fires"]
     J --> K["Last window:\nReversal requires TC below 40\n(TC suppression can resume if Baralta Mandate restored)\nOR Church Stability driven to 2 (anti-spiral floor)\ngiving players the intervention window before collapse"]
     K --> L{Player action in last window}
@@ -99,7 +99,7 @@ flowchart TD
 
 **Why this arc is emergent:** Theocracy Counter moves through multiple independent sources — Church Mandate threshold, seizure flat values, Baralta suppression status. No single intervention permanently reverses it. The counter-play options each have costs that create new problems. The dominance event is not a scripted villain arc — it is the output of a system running at full load without coordinated opposition.
 
-**Arc shape:** Background Theocracy Counter accumulation across full campaign. Seizure window opens at Theocracy Counter 40 (crisis begins). Theocracy Counter 60 reached in 2–4 seasons without intervention. Last-window play for 1–2 seasons. Dominance event or reversal.
+**Arc shape:** Background Theocracy Counter accumulation across full campaign. Graduated Seizure available from TC ≥ 15 (early game), but Church pool is small. Seizure becomes a serious threat at TC 40+ (pool ≥ 9D). TC 75 phase transition reached in 12-24 seasons without intervention. Last-window play for 1–2 seasons. Dominance event or reversal.
 
 ---
 
@@ -200,7 +200,7 @@ flowchart TD
 
 | Collision | Arcs | Mechanic |
 |---|---|---|
-| Framework Trap + Dominance Event in same season | 12 + 13 | Crown cannot act covertly; Hafenmark needs precedent time; Church seizes territory in the gap; Theocracy Counter jumps to 60 in one accounting without framework-unencumbered response |
+| Framework Trap + Dominance Event in same season | 12 + 13 | Crown cannot act covertly; Hafenmark needs precedent time; Church seizes territory in the gap; Theocracy Counter approaches 75 without framework-unencumbered response |
 | Revolution Mandate reaches 1 during Dominance Event | 14 + 13 | Community Weaving unlocks precisely when Church dominance is making all Thread-revealing Domain Actions +2 Ob; the Weaving that could reverse Rendering Stability is blocked by the same threshold event that made it necessary |
 | Player controlling Niflhel Quiet is also running the Revolution | 15 + 14 | Elite alliance (+1 Ob under Rawlsian framework); Revolution Stability check Ob 3 fires if the player's Niflhel operations become known to the movement; the movement fractures if it discovers its player-affiliate is running the kingdom's assassination network |
 | Reckoners (uncontrolled) contracted to Church during Tribunal arc | 15 + 6 | Niflhel financial resources backstop the Church's Inquisition file-building; players fighting the Tribunal while also trying to control the Reckoners face the arm actively working against them during the most politically exposed moment |

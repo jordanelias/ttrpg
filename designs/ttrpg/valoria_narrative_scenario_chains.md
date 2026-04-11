@@ -812,7 +812,9 @@ Torben at Loyalty 3: Crown Mandate −2; Ehrenwall Coup Counter +1
 
 ## COLLISION D: NIFLHEL WEAPONISES EVERYTHING
 
-**Trigger:** Full Church-Niflhel exposure + Assassination perpetrator = Niflhel + Varfell Private Collection in Niflhel's hands
+**[INVALIDATED by E-01 resolution: the 218 AG death was genuinely accidental. No perpetrator exists. This collision's trigger condition ("Assassination perpetrator = Niflhel") cannot be met. Retained for reference only. The Niflhel leverage scenario may be redesigned around Niflhel's actual secrets (Olafsson connection, Thread-touched supply chain) without the assassination axis.]**
+
+**~~Trigger:~~ Full Church-Niflhel exposure + Assassination perpetrator = Niflhel + Varfell Private Collection in Niflhel's hands**
 
 ```
 Niflhel exposed: Stability −2; but Niflhel responds

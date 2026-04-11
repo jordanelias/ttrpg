@@ -18,15 +18,15 @@
 
 ### Narrative
 
-Baralta's Mandate is the most structurally important single stat on the board for anyone trying to prevent Theocracy Counter from reaching 60. While her Mandate stays above 5, she suppresses Theocracy Counter at −1/season. This is not charity — it is the direct mechanical expression of her Belief that Church authority does not extend to ducal prerogative. She would describe it, if pressed, as sovereign prerogative — the direct expression of her conviction that secular authority supersedes Church jurisdiction (Henry VIII parallel). She has been doing it for years. Her TC suppression is simultaneously principled governance and positioning for the Crown she intends to hold. The Church has been doing things that require this counter-pressure for just as long.
+Baralta's Mandate is the most structurally important single stat on the board for anyone trying to prevent Theocracy Counter from reaching 60. While her Mandate stays at 4 or above, she suppresses Theocracy Counter at −1/season. This is not charity — it is the direct mechanical expression of her Belief that Church authority does not extend to ducal prerogative. She would describe it, if pressed, as sovereign prerogative — the direct expression of her conviction that secular authority supersedes Church jurisdiction (Henry VIII parallel). She has been doing it for years. Her TC suppression is simultaneously principled governance and positioning for the Crown she intends to hold. The Church has been doing things that require this counter-pressure for just as long.
 
 The complication the players may not have anticipated: Baralta holds circumstantial evidence of the Olafsson-Niflhel connection. Not proof. Circumstantial evidence — a pattern of operations, a document chain that raises questions, a name that appears in records it should not. She has been sitting on it. The reason is pragmatic: using it requires escalating against a Cardinal of the Church at a moment when her other arm is already occupied defending ducal prerogative. She is a consequentialist enough — despite her Categorical Imperative ethical framework — to understand that timing is everything.
 
-The players can supply the corroborating evidence that makes her evidence chain actionable. Solvind Brak's testimony. Documentary records from Niflhel operations cross-referenced against Church Intelligence activity. When those arrive, Baralta launches a Domain Action: pool Mandate 7 + Reach 5 + player evidence bonus, against Church Stability Ob 3. A success drops Church Stability −2, Theocracy Counter −3, and suspends Olafsson's Inquisitor operations. This is not a political manoeuvre. For Baralta, it is a legal proceeding. The evidence is real. The conclusion is correct. The institutional obligation is to act on it.
+The players can supply the corroborating evidence that makes her evidence chain actionable. Solvind Brak's testimony. Documentary records from Niflhel operations cross-referenced against Church Intelligence activity. When those arrive, Baralta launches a Domain Action: pool Mandate 7 + Influence 5 + player evidence bonus, against Church Stability Ob 3. A success drops Church Stability −2, Theocracy Counter −3, and suspends Olafsson's Inquisitor operations. This is not a political manoeuvre. For Baralta, it is a legal proceeding. The evidence is real. The conclusion is correct. The institutional obligation is to act on it.
 
 What she cannot do — what her sovereign divine right framework has foreclosed entirely — is perceive that Olafsson's operations and the Thread-level disruptions they enable are connected. To Baralta, the Church's overreach is institutional and constitutional. It is not ontological. The players may understand what she doesn't. The question is whether they can work with someone who will hold the line for entirely the wrong reasons, and whether that matters.
 
-If the Church responds by opening a Heresy Investigation against Baralta herself — which it will — the Sovereign Authority Doctrine becomes relevant. Once per campaign arc, Baralta invokes the constitutional claim that her authority is a direct divine grant superseding Church jurisdiction. The roll: Mandate 7 vs Ob 4. A Grand Debate of 5 exchanges follows, with Olafsson's pool of Church Reach 7 + Ecclesiastical Law across from whatever the players have assembled. Baralta's Resonant Style is Evidence. The quaestio system favours her in Phases 1, 4 (Cognition) and Phase 5 (Poise), but Olafsson's +1D Respondeo from Church Evidence resonance is a structural advantage in Phase 4. The Church is arguing at home. Baralta is arguing on principle.
+If the Church responds by opening a Heresy Investigation against Baralta herself — which it will — the Sovereign Authority Doctrine becomes relevant. Once per campaign arc, Baralta invokes the constitutional claim that her authority is a direct divine grant superseding Church jurisdiction. The roll: Mandate 7 vs Ob 4. A Grand Debate of 5 exchanges follows, with Olafsson's pool of Church Influence 7 + Ecclesiastical Law across from whatever the players have assembled. Baralta's Resonant Style is Evidence. The quaestio system favours her in Phases 1, 4 (Cognition) and Phase 5 (Poise), but Olafsson's +1D Respondeo from Church Evidence resonance is a structural advantage in Phase 4. The Church is arguing at home. Baralta is arguing on principle.
 
 She will win or she will not. Either way, the fight happens.
 
@@ -36,24 +36,24 @@ She will win or she will not. Either way, the fight happens.
 
 ```mermaid
 flowchart TD
-    A["Baralta Mandate ≥ 5\nTC suppression: −1/season (active)\nBaralta holds circumstantial evidence of Olafsson-Niflhel connection"] --> B["Players supply corroborating evidence\nSolvind Brak testimony OR documentary records\ncross-referencing Church Intel with Niflhel operations"]
-    B --> C["Baralta launches Domain Action\nvs Church Stability Ob 3\nPool: Mandate 7 + Reach 5 + evidence bonus"]
+    A["Baralta Mandate ≥ 4\nTC suppression: −1/season (active)\nBaralta holds circumstantial evidence of Olafsson-Niflhel connection"] --> B["Players supply corroborating evidence\nSolvind Brak testimony OR documentary records\ncross-referencing Church Intel with Niflhel operations"]
+    B --> C["Baralta launches Domain Action\nvs Church Stability Ob 3\nPool: Mandate 7 + Influence 5 + evidence bonus"]
     C --> D{Domain Action result}
     D -->|"Success"| E["Church Stability −2\nTC −3\nOlafsson's Inquisitor operations suspended\nChurch loses Heresy Investigation capacity this season"]
     D -->|"Failure"| F["No effect on Church Stability\nOlafsson's network alerted\nBaralta flagged for Heresy Investigation\nTC unchanged"]
-    E --> G["Church responds: Heresy Investigation vs Baralta\nOlafsson leads: Church Reach 7 + Ecclesiastical Law\nGrand Debate (5 exchanges) required for formal accusation"]
+    E --> G["Church responds: Heresy Investigation vs Baralta\nOlafsson leads: Church Influence 7 + Ecclesiastical Law\nGrand Debate (5 exchanges) required for formal accusation"]
     F --> G
     G --> H["Baralta invokes Sovereign Authority Doctrine\nOnce per campaign arc\nMandate 7 vs Ob 4\nPool: Court Law History + Mandate dice"]
     H --> I{Doctrine roll outcome}
     I -->|"Overwhelming"| J["TC −3\nChurch Mandate −1\nHeresy Investigation blocked this season\n+1D social vs Church for the arc"]
     I -->|"Success"| K["TC −2\nChurch Mandate −1\nHeresy Investigation opens: Ob 4 to pursue this season"]
-    I -->|"Partial"| L["TC −1\nHeresy Investigation opens immediately\nChurch Reach +1"]
+    I -->|"Partial"| L["TC −1\nHeresy Investigation opens immediately\nChurch Influence +1"]
     I -->|"Failure"| M["TC +1\nHeresy Investigation fires immediately\nBaralta Mandate −1"]
     
-    K & L & M --> N["Grand Debate: 5 exchanges\nOlafsson: Church Reach 7 + Ecclesiastical Law\nEvidence genre: +1D Respondeo (Church resonance)\nBaralta: Mandate 7 + Court Law\nEvidence genre match — no penalty; Church audience (+1D to Olafsson's Sed Contra)"]
+    K & L & M --> N["Grand Debate: 5 exchanges\nOlafsson: Church Influence 7 + Ecclesiastical Law\nEvidence genre: +1D Respondeo (Church resonance)\nBaralta: Mandate 7 + Court Law\nEvidence genre match — no penalty; Church audience (+1D to Olafsson's Sed Contra)"]
     N --> O{Grand Debate outcome}
     O -->|"Baralta wins exchange majority + audience"| P["TC −3 (Sovereign Authority Doctrine Overwhelming effect)\nOlafsson Mandate −1\nHeresy Investigation closed\nBaralta's TC suppression restored and secured for the arc"]
-    O -->|"Olafsson wins"| Q["Baralta Mandate −2, TC +3\nTC suppression removed\nIf excommunicated: TC +4 immediately\nChurch territorial seizure procedure opens at TC 60"]
+    O -->|"Olafsson wins"| Q["Baralta Mandate −2, TC +3\nTC suppression removed\nIf excommunicated: TC +4 immediately\nChurch seizure campaign intensifies (Graduated Seizure pool grows with TC; phase transition at TC 75)"]
     O -->|"Baralta wins exchange majority but loses audience"| R["Procedural victory — Church institution rejects\nTC unchanged\nPolitical win only: Baralta's public profile strengthened\nOlafsson retains operational capacity this season"]
 ```
 
@@ -106,7 +106,7 @@ Ehrenwall is watching all of this. She has no opinion about Elske except as a st
 
 ```mermaid
 flowchart TD
-    A["IP reaches 30\nAltonia makes formal education demand for Torben\nAlmud faces direct conflict between Belief 1 and Belief 3\nTorben Loyalty starts degrading: −1/season in Altonian influence"] --> B["Torben Loyalty at 5 (Season 2)\nCrown Mandate −1 (loyalty 5–4 transition)\nRetrieval requires Altonian consent or covert extraction"]
+    A["IP reaches 40\nAltonia makes formal education demand for Torben\nAlmud faces direct conflict between Belief 1 and Belief 3\nTorben Loyalty starts degrading: −1/season in Altonian influence"] --> B["Torben Loyalty at 5 (Season 2)\nCrown Mandate −1 (loyalty 5–4 transition)\nRetrieval requires Altonian consent or covert extraction"]
     B --> C["Torben Loyalty drops to 3–2 (Season 3+)\nCrown Mandate −1 (cumulative −2)\nEhrenwall marks Coup Counter +1\n(Torben alignment = trigger condition #2)"]
     C --> D["Coup Counter now at 2\nEhrenwall is one failure from acting\nCounter never decrements"]
     

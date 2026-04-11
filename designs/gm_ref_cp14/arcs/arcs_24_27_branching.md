@@ -82,7 +82,7 @@ flowchart TD
 ## Arc 25: The Schoenland Pivot
 
 **Pivot roll:** Faction Stability checks + Diplomatic Domain Action (Crown Influence vs Ob 3) — Schoenland reads the political situation and decides
-**Primary mechanics:** Schoenland spoiler actor (§8.10) · "Pro-war, anti-conquest" orientation · Diplomatic path (stable Valoria = naval ally, Institutional Pressure −2/year) · Fragmented Valoria = Altonian alignment · Institutional Pressure threshold acceleration · Sea route through Territory 15 and 7 · Territorial adjacency: Schoenland (T15) connects Border Pass (T4) and Sternhaven (T7)
+**Primary mechanics:** Schoenland spoiler actor (§8.10) · "Pro-war, anti-conquest" orientation · Diplomatic path (stable Valoria = naval ally, Institutional Pressure −2/year) · Fragmented Valoria = Altonian alignment · Institutional Pressure threshold acceleration · Sea route through Schoenland (T16) to Valorsplatz (T1) · Territorial adjacency: Schoenland (T16) connects to Valorsplatz (T1) via sea route
 
 ---
 
