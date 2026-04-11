@@ -649,3 +649,15 @@ Canonical changes made:
 10. Crown Succession Contest + Baralta Stake Claim + Consecration Crisis BG mechanics
 
 **Next session priority:** ED-119-URGENCY — Lenneth full design (stat block, TS development, BG Domain Action). Then simulate Crown Succession Contest to verify pool balances. Then Lenneth-Baralta confrontation mechanic.
+
+### 2026-04-11 — Emergent Interdependent Arcs (commit 5)
+
+- gm_ref/arcs_36_40_interdependent.md: New file. Five interdependent emergent arcs (36-40) with mandatory cross-dependencies.
+  - Arc 36: The Tithe That Fed the Enemy (Prudence Cardinal tithe loop → RM recruitment → Church self-sabotage)
+  - Arc 37: The Heresy in the Warehouse (Feldhaus/Virke supply chain → convergent investigations)
+  - Arc 38: The Sandcastle Alliance (Laskaris/Solberg convergent IP suppression → shield collapse)
+  - Arc 39: The Practitioner They Didn't Know They Had (Vaynard hidden TS growth → Discovery Event → Coherence burn)
+  - Arc 40: The Weight That Broke the Balance (convergence of all four → institutional collapse → succession)
+- canon/editorial_ledger.yaml: ED-408 through ED-412 added (5 new open items).
+- Cross-arc interaction table maps 11 interdependencies. Convergence timeline: seeds seasons 1-2, converges seasons 7-8.
+- Next: User review of ED-408-412. Simulate convergence timing.

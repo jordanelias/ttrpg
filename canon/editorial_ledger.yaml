@@ -2878,3 +2878,39 @@ editorial_decisions:
       description: "ED-119 (Lenneth full design) is now P1-BLOCKER due to 2026-04-11 session reframing. Lenneth is the campaign's institutional Einhir revivalist (Catherine the Great parallel). She needs: starting TS, development path, stat block, BG Domain Action for cultural revival, and position in the Lenneth-Baralta confrontation mechanics. Without this design, the campaign's defining political confrontation has no mechanical expression."
       decision: null
       tags: [npc, lenneth, crown, characterisation, design_gap, P1_BLOCKER]
+
+# --- Arc 36-40 batch (2026-04-11) ---
+- id: ED-408
+  summary: "Prudence Cardinal requires a name"
+  priority: P2
+  status: open
+  source: gm_ref/arcs_36_40_interdependent.md
+  date: 2026-04-11
+
+- id: ED-409
+  summary: "Torsvald Deniability Debt threshold for Ehrenwall investigation — proposed 3"
+  priority: P3
+  status: open
+  source: gm_ref/arcs_36_40_interdependent.md
+  date: 2026-04-11
+
+- id: ED-410
+  summary: "Vaynard Private Collection use frequency — proposed 1/season"
+  priority: P2
+  status: open
+  source: gm_ref/arcs_36_40_interdependent.md
+  date: 2026-04-11
+
+- id: ED-411
+  summary: "Solberg recall trigger — proposed when 2+ of Supply Chain Exposure, Parish Revolt, IP>=15 fire same season"
+  priority: P2
+  status: open
+  source: gm_ref/arcs_36_40_interdependent.md
+  date: 2026-04-11
+
+- id: ED-412
+  summary: "Convergence timeline pacing flexibility — GM guidance needed"
+  priority: P3
+  status: open
+  source: gm_ref/arcs_36_40_interdependent.md
+  date: 2026-04-11
