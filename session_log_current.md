@@ -592,3 +592,9 @@ Session: 2026-04-10_SONNET_COMPREHENSIVE_SIM
 - designs/gm_ref_cp14/arcs/arcs_09_11_elske_baralta.md — Arc 9 needs consecration crisis addition
 
 **Next session priority:** Rewrite ruler_diamond_foil_analysis.md and ruler_diamond_extended_foils.md for new positions. Then Arc 1 reframing.
+
+### 2026-04-11 — Foil Analysis and Extended Foils Rewrite (commit 2)
+
+- ruler_diamond_foil_analysis.md: Complete rewrite. All 4 axes, all 6 pairings repositioned for deed-monarchy, caste reconciliation, new ruler positions.
+- ruler_diamond_extended_foils.md: Complete rewrite. All 4 subjective perspectives. Almud view corrected (TS 0, no sympathy, governance pragmatism). Himlensendt and Ehrenwall positions relative to diamond. 4 triangular foils.
+- Next: Arc 1 reframing for new Almud (Sovereign Constraint → governance uncertainty).
