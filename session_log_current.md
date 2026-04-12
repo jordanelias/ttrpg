@@ -737,3 +737,24 @@ Session: 2026-04-11_OPUS_ARC_REGISTER
 - Delay vs preclusion evaluation: 6 of 7 key rolls reclassified as Pure Delay or Costly Delay. Only ARC-T05 (Ehrenwall Medicine) is True Preclusion. Klapp Ob 2 buys ~1-2 seasons, not permanent branch. Ceiral failure = Costly Delay (retryable, RS -8 + 2-season delay), not endgame spiral. GAP-ARC-05 reclassified as intentional gated mechanic. ARC-S32/S34 reframed as resource-exhaustion arcs.
 - Key insight: failed Costly Delay rolls don't create new arcs — they accelerate existing arcs. Clocks don't branch on failure; they accelerate.
 - Files: references/arc_register.md v7, tests/delay_vs_preclusion_evaluation.md
+
+### 2026-04-11 — Emergent Interdependent Arcs Batch 2 (commit 6)
+
+- gm_ref/arcs_41_45_interdependent.md: New file. Five arcs exploiting under-explored cross-system triggers:
+  - Arc 41: The Inquisitor's Unravelling (Haelgrund TS 12 + calamity radiation at Fractured RS → self-discovery)
+  - Arc 42: The Debate That Changed the World (contest system Thread co-movement → RS +1 from parliamentary speech)
+  - Arc 43: The Battle That Ate the South (mass battle RS ×3 at T6 Stillhelm + calamity radiation cascade)
+  - Arc 44: The Invisible Majority (triple-source CV erosion → RM Phase 1 threshold without RM action)
+  - Arc 45: The Tutoring Demand That Started a War (IP ≥ 40 + depleted Crown + intelligence leak = zugzwang)
+- 35 unique triggers catalogued (T-01 through T-35).
+- 4 bidirectional destabilising loops identified.
+- Full 10-arc convergence timeline mapped (seasons 1–11+).
+- canon/editorial_ledger.yaml: ED-413 through ED-417 added (5 new items, 1 P1-BLOCKER: ED-416 RM hold mechanic).
+- **Session total: 6 commits, 10 emergent arcs (36–45), ED-408 through ED-417 (10 editorial items: all open).**
+
+## SESSION CLOSE
+
+This session: 6 commits. Deed-monarchy continuation + 10 emergent interdependent arcs across 2 batches.
+P1-BLOCKER: ED-416 (RM hold T9 mechanic — no Military stat, cultural displacement proposed).
+Open editorial items: ED-408 through ED-417 (10 items).
+Next session priority: Resolve ED-416 (P1-BLOCKER). Then simulate convergence timeline — stress test the 4 bidirectional loops for runaway conditions. Review ED-414 (debate RS frequency) as it affects RS balance across Arcs 42/43.

@@ -2982,3 +2982,39 @@ editorial_decisions:
       description: "Lenneth full design. Stat block, TS development path, BG Domain Action, Cultural Revival Track, mode interface. Resolved by designs/npcs/lenneth_threadwork_design.md."
       decision: "Canonical. Supersedes all prior Lenneth TS values (PP-279, PP-304). See full design document."
       tags: [npc, lenneth, characterisation, stat_block, resolved]
+
+# --- Arc 41-45 batch (2026-04-11) ---
+- id: ED-413
+  summary: "Haelgrund self-documentation timeline at Fractured RS — proposed 2-3 seasons"
+  priority: P3
+  status: open
+  source: gm_ref/arcs_41_45_interdependent.md
+  date: 2026-04-11
+
+- id: ED-414
+  summary: "Debate Thread co-movement RS +1 — per contest or per exchange? Significant if per-exchange."
+  priority: P2
+  status: open
+  source: gm_ref/arcs_41_45_interdependent.md
+  date: 2026-04-11
+
+- id: ED-415
+  summary: "Varfell force composition for T6 battle — Private Collection usage during battle triggers TS threshold"
+  priority: P2
+  status: open
+  source: gm_ref/arcs_41_45_interdependent.md
+  date: 2026-04-11
+
+- id: ED-416
+  summary: "RM 'hold' T9 mechanic for Cultural Uprising — no Military stat, cultural displacement proposed"
+  priority: P1-BLOCKER
+  status: open
+  source: gm_ref/arcs_41_45_interdependent.md
+  date: 2026-04-11
+
+- id: ED-417
+  summary: "Two-front war IP threshold — proposed IP >= 60 (Vanguard preparation) rather than IP 75 (full Vanguard)"
+  priority: P2
+  status: open
+  source: gm_ref/arcs_41_45_interdependent.md
+  date: 2026-04-11
