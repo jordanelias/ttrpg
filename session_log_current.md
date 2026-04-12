@@ -796,3 +796,28 @@ Session: 2026-04-11_OPUS_ARC_REGISTER
 - Almud no BG expression (audit priority #2)
 - Arcs S20, S21 NOT YET SIMULATED (CP14 arcs 34, 35)
 - All NPC-ARC, ARC-S27–S34, ARC-T10–T19, Collisions A–G NOT YET SIMULATED
+
+### 2026-04-11 — Simulation: Arcs 36-45 Batch (commit 7)
+
+- tests/sim_arcs_36_45_batch.md: New file. Comprehensive simulation of Arcs 36-45.
+  - Mode A isolation: Vaynard Spirit check (80-92% success), debate RS co-movement, mass battle probabilities.
+  - Mode B interaction chains: tithe feedback loop, shield collapse timing, RS-radiation-Haelgrund loop, debate-RS-battle asymmetry, tithe self-reinforcement, Tutoring Demand trap.
+  - Mode D edge cases: calamity radiation threshold error, Dissolution impossibility, P-01 debate compliance, Coup Counter inconsistency.
+- **4 P1 findings:**
+  - Arc 41 calamity radiation trigger off by 1 RS band (ED-420)
+  - Arc 43 Dissolution mechanically impossible at T6 (ED-421)
+  - Arc 44 Phase 1 timing requires 16-24 seasons not 9-10 (ED-422)
+  - Coup Counter threshold inconsistency 3 vs 4 (ED-418)
+- **7 P2 findings:** Parish Revolt dependency, Vaynard starting TS, Coherence burn narrative, debate RS frequency, convergence timeline, loop direction inversion, tithe loop non-termination.
+- **8 mechanical gaps identified** (GAP-SIM-01 through GAP-SIM-08).
+- canon/editorial_ledger.yaml: ED-418 through ED-425 added (8 items, 4 P1-BLOCKER).
+
+## SESSION CLOSE
+
+This session: 1 commit (simulation). 4 P1 findings requiring arc revision before the batch is playable.
+Priority for next session:
+1. Resolve ED-418 (Coup Counter threshold — quick fix, update params_factions to match params_board_game threshold 4)
+2. Resolve ED-420 (Haelgrund territory — move to T5 Feldmark, revise Arc 41 narrative)
+3. Resolve ED-421 (Replace Dissolution with Lock/Pull failures in Arc 43)
+4. Resolve ED-422 (Establish CV erosion rates OR reframe Arc 44 as late-game)
+5. Resolve ED-416 (RM hold T9 mechanic — still open from prior session)

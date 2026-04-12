@@ -3018,3 +3018,60 @@ editorial_decisions:
   status: open
   source: gm_ref/arcs_41_45_interdependent.md
   date: 2026-04-11
+
+# --- Simulation findings (2026-04-11) ---
+- id: ED-418
+  summary: "Coup Counter threshold inconsistency: params_factions says 3, params_board_game says 4. Recommend 4 (v04 canonical)."
+  priority: P1-BLOCKER
+  status: open
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
+
+- id: ED-419
+  summary: "Vaynard starting hidden TS not specified. Recommend 8-10 for mid-campaign Discovery Event timing."
+  priority: P2
+  status: open
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
+
+- id: ED-420
+  summary: "Arc 41 calamity radiation trigger incorrect: distance 3 at Fractured RS has no mechanical effects. Move Haelgrund investigation to T5 (distance 2)."
+  priority: P1-BLOCKER
+  status: open
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
+
+- id: ED-421
+  summary: "Arc 43 Territorial Dissolution at T6 is mechanically impossible (8D TN 8 Ob 8). Replace with Pull/Lock failure emphasis."
+  priority: P1-BLOCKER
+  status: open
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
+
+- id: ED-422
+  summary: "Arc 44 Phase 1 timing requires 16-24 seasons, not 9-10. Convergence timeline broken. Needs CV erosion rate establishment or reframing."
+  priority: P1-BLOCKER
+  status: open
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
+
+- id: ED-423
+  summary: "Arc 39 Coherence burn narrative incorrect for Object/Personal ops (loss = 0). Needs explicit overreach narrative."
+  priority: P2
+  status: open
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
+
+- id: ED-424
+  summary: "Arc 36 Parish Revolt requires external Church Mandate erosion to <=3. Not self-contained. Add explicit dependency."
+  priority: P2
+  status: open
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
+
+- id: ED-425
+  summary: "Bidirectional loop (RS-Haelgrund) labelled destabilising but RM Community Weaving is RS-restorative. Loop direction inverted."
+  priority: P2
+  status: open
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
