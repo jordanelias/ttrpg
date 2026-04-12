@@ -733,3 +733,7 @@ Session: 2026-04-11_OPUS_ARC_REGISTER
 - Final count: 8 principal + 34 secondary + 19 tertiary + 12 NPC = 73 arcs + 7 collision scenarios.
 - Key findings: Excommunication mechanic non-functional at game-start stats (GAP-ARC-05). Klapp Ob 2 is single most impactful Ob modifier. Ceiral Ritual 7% failure → endgame spiral. Edeyja burnout = hidden fail state. Mending structurally insufficient without WC + Community Weaving + Lock resolution. Endgame collective ops Belief-gated.
 - Files committed: references/arc_register.md, tests/threadwork_decision_point_analysis.md, tests/arc_branch_simulation.md
+
+- Delay vs preclusion evaluation: 6 of 7 key rolls reclassified as Pure Delay or Costly Delay. Only ARC-T05 (Ehrenwall Medicine) is True Preclusion. Klapp Ob 2 buys ~1-2 seasons, not permanent branch. Ceiral failure = Costly Delay (retryable, RS -8 + 2-season delay), not endgame spiral. GAP-ARC-05 reclassified as intentional gated mechanic. ARC-S32/S34 reframed as resource-exhaustion arcs.
+- Key insight: failed Costly Delay rolls don't create new arcs — they accelerate existing arcs. Clocks don't branch on failure; they accelerate.
+- Files: references/arc_register.md v7, tests/delay_vs_preclusion_evaluation.md

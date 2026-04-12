@@ -1,6 +1,6 @@
 # Arc Register
 
-> **Version:** 6 (branch simulation + Edeyja burnout + Governance Pause + Excommunication gap)
+> **Version:** 7 (delay vs preclusion evaluation — roll failures reclassified)
 > **Status:** WORKING DRAFT
 > **[EDITORIAL: ED-NEW — Tier assignments are provisional pending user review]**
 > **Sources fetched this session:** `designs/gm_ref_cp14/arcs/*` (11 files), `gm_ref/arcs_*` (3 files), `designs/npcs/npc_roster.md`, `designs/npcs/npc_comprehensive_audit.md`, `designs/npcs/npc_character_analyses_existing.md`, `designs/npcs/npc_roster_caste_annotations.md`, `references/params_factions.md`, `references/params_threadwork.md`, `references/params_board_game.md`, `designs/board_game/victory_architecture_v1.md`, `designs/board_game/valoria_bg_v05_simulation_and_patches.md`, `designs/ttrpg/valoria_narrative_scenario_chains.md`, `compilation/v0.14/stage6_factions.md`, `canon/02_canon_constraints.md`
@@ -172,6 +172,7 @@
 **Non-Player Characters:** Torben (Loyalty track), Almud (Belief 1 vs Belief 3 collision), Elske (dynastic link — Resonant Style: Evidence), Laskaris (PROTECTIVE — delays demands; may leak imperial intentions to Elske; but flips if Elske Loyalty ≤ 2 → IP +3), Ehrenwall (Coup Counter +1 if Torben alignment changes)
 
 ### ARC-S08: The Faith that Destroys What It Defends
+**Roll failure category:** Costly Delay — fires eventually through repeated archive exposure. Ob 2 (essentialist formation, raised from 1) creates 34% failure chance per check, buying Church ~1–2 seasons of structural integrity per failed check. Over 3 exposures: P(at least one success) ≈ 96%.
 **Engine:** Klapp CE/TS tracks
 **Emergence:** Cardinal Klapp (CE 4, TS 31) encounters Thread-significant object. TS growth check: Spirit TN 7 Ob 2 (essentialist formation raises Ob from 1 to 2). Success → crisis of faith. Head of Church education perceives what Church suppresses.
 **Non-Player Characters:** Klapp (primary), Himlensendt (must choose: suppress Klapp via Inquisitor protocol, or deviate from doctrine — Spirit Ob 3 Stability check; failure = complies, success = deviates; deviation: Church Stability −1, TC −1), Haelgrund (parallel hidden TS 12 — if both exposed simultaneously: Church loses education AND investigation leadership), Olafsson (if Klapp crisis coincides with Niflhel exposure → Collision A)
@@ -198,6 +199,7 @@
 **Non-Player Characters:** Feldhaus (PROFIT-MAXIMISING — Guilds Wealth over Mandate; Wealth recovery +1/season when she's active), Virke (supply chain connection)
 
 ### ARC-S13: The Duke Awakens
+**Roll failure category:** Pure Delay — fires eventually through repeated Private Collection use (each use: Spirit TN 7 Ob 1; over 5 uses, P(at least one success) ≈ 99.97%). Failure delays arc 1–3 seasons.
 **Engine:** Vaynard TS 14 (Dormant) + Discovery Event
 **Emergence:** Discovery Event trigger: Thread activity of sufficient intensity in proximity (practitioner at Relational scale nearby OR originary Lock deployed — per narrative_scenario_chains). Spirit TN 7 Ob 1. Success → TS jumps to 30 (Stirring), Certainty −1. Vaynard begins practice driven by TK urgency. TK +2 immediately.
 **Non-Player Characters:** Vaynard (primary), Maret Uln (may facilitate or obstruct), Edeyja (if Vaynard seeks training)
@@ -357,9 +359,11 @@
 **Engine:** Multiple narrow prerequisites
 **Emergence:** Ceiral Text held, Awareness 5+, Maret Uln TS 60+, 2× TS 20+ participants, preparation season, all personnel in Askeheim (T13). Lead Weaving pool vs Ob 5. Success: RS −6 to −10 (world healing). Failure: RS +8, Mode 3 entity, lead practitioner incapacitated.
 **Non-Player Characters:** Maret Uln (if lead — TS ~50, may need further growth), Edeyja (Askeheim access), practitioner Player Characters
+**Roll failure category:** Costly Delay — retryable with 2-season delay (1 season recovery + 1 season preparation) + RS −8 cost. Endgame spiral fires only if failure compounds with no Mending during 2-season delay AND simultaneous Lock/Gap decay.
 **Failure cascade (Collision C):** RS +8 + IP +2 + TC +2. If RS near 50 → Southernmost cracking clock resets. Coup Counter may reach 3 from single-season cascade.
 
 ### ARC-T05: The General Falls
+**Roll failure category:** TRUE PRECLUSION — one-turn window, no retry. The only permanent roll outcome in the arc register. Conditional on player choice to commit Ehrenwall to Mass Battle.
 **Engine:** Combat wound threshold + single Medicine roll
 **Emergence:** Ehrenwall in Mass Battle. Wound in Phase 4 or from Thread operation. Wounds reach ceiling(Health ÷ 2). Medicine Ob 2 in Phase 5 — one-turn window.
 **Non-Player Characters:** Ehrenwall (primary), Brandt (immediate succession → NPC-ARC-BRA fires), Torsvald (if present → abort risk)
@@ -508,7 +512,7 @@ These are not separate arcs but emergence conditions that should inform existing
 **Engine:** Mending = sole practitioner RS recovery (+1/+2 per success) but Coherence −1 per attempt regardless of outcome. Coherence 10→0.
 **Emergence:** RS passive decline (−6 to −9/season with 2 Locks + 1 Gap). One practitioner's entire Coherence budget (~10 Mendings ≈ +10 to +20 RS) covers ~2–3 seasons of passive decline. After ~10 Mendings: Coherence 0 → Rendering Crisis → Non-Player Character if unresolved by season end. Recovery costs TS −1 permanent. The world needs Mending to survive; Mending burns out the practitioners who perform it. The campaign cannot be saved by individual heroism. It requires: multiple practitioners in rotation, Warden Cooperation (WC ≥ 2: decay halved; WC ≥ 3: RS +2/season), Community Weaving (RM Mandate ≥ 1), AND Lock/Gap resolution.
 **Non-Player Characters:** Edeyja (TS 75–80, Coherence 9 — most capable but not inexhaustible), Maret Uln (TS ~50), any practitioner Player Character, Vossen (Community Weaving gated by RM Mandate)
-**Structural significance:** This is the campaign's central mechanical tragedy. The Einhir practitioners reached this same structural position 245 years ago. The game replicates it mechanically.
+**Structural significance:** This is the campaign's central mechanical tragedy — a resource-exhaustion arc, not a single-roll event. Individual Mending successes/failures matter tactically (success = RS +1, failure = RS −2) but the trap is structural: even perfect rolls cannot sustain RS indefinitely because Coherence is finite. The Einhir practitioners reached this same position 245 years ago.
 **Interaction:** ARC-P02 (RS budget), ARC-S16/S17/S18 (Coherence Zero — burnout destination), ARC-S25 (Warden Cooperation — necessary), ARC-S10 (Community Weaving access), ARC-S15 (Ceiral Ritual — only bulk RS source)
 
 ### ARC-S33: The Lattice of Enemies
@@ -537,7 +541,7 @@ These are not separate arcs but emergence conditions that should inform existing
 **Engine:** Edeyja Coherence 9 → repeated Mending at Critical RS → Coherence crisis
 **Emergence:** If Ceiral Ritual fails (ARC-T04 failure branch) or RS enters Critical, Edeyja becomes sole high-level Mender (TS 75–80). ~8 Mendings before Coherence 2 (Fractured). ~10 before Coherence 0 (Rendering Crisis → Non-Player Character if unresolved). If she reaches Coherence 0: Wardens lose principal practitioner. Warden Cooperation (WC) track may degrade. No living practitioner can perform Locked Zone border Mending (requires TS 70+ AND Einhir framework). Southernmost becomes mechanically unsalvageable.
 **Non-Player Characters:** Edeyja (primary — finite Coherence despite being the moral anchor), any practitioner Player Characters (Mending rotation extends her timeline), Maret Uln (TS ~50 — can Mend standard Gaps but not Locked Zone borders)
-**Structural significance:** Hidden fail state. Campaign's Southernmost endgame condition becomes permanently unachievable if Edeyja reaches Coherence 0. Invisible until she reaches Coherence 4–5.
+**Structural significance:** Hidden fail state — cumulative resource exhaustion, not a single roll. Each Mending is a Costly Delay decision (spend Coherence now for RS recovery, or preserve for future Mendings). The fail state is invisible until Edeyja reaches Coherence 4–5 and the budget becomes visibly finite.
 **Interaction:** ARC-S32 (Mending Trap), ARC-S25 (WC degrades if Edeyja incapacitated), ARC-S15 (Ceiral Ritual becomes only option if Mending unavailable)
 
 ### COLLISION F: The Succession Triangle
@@ -745,7 +749,7 @@ COLLISION SCENARIOS
 | ED-NEW-04 | 218 AG resolution — narrative_scenario_chains presents accidental death as design intent; E-01 flagged as unresolved elsewhere | Reconciliation needed |
 | ED-358 | Full roster identities, motivations, stat blocks | Provisional — user review pending |
 | E-01 | Perpetrator of 218 AG assassination | Unresolved (but see ED-NEW-04) |
-| GAP-ARC-05 | ARC-T03 Excommunication — Church Mandate pool (5d10) cannot reach Ob 7 (Baralta personal Mandate). Mechanic non-functional at game-start stats. Only fires if Baralta Mandate eroded by prior events. | Mechanical gap — confirmed by branch simulation |
+| GAP-ARC-05 | ARC-T03 Excommunication — Church Mandate pool (5d10) cannot reach Ob 7 (Baralta personal Mandate). Non-functional at game-start stats. Fires only after political erosion reduces Baralta Mandate. Likely intentional: excommunicating the peninsula's most legitimate secular ruler SHOULD be mechanically near-impossible at baseline. At Mandate 4: P(success) ≈ 32%. At Mandate 3: P ≈ 66%. Retryable each season (no unique resource consumed). | Gated mechanic — intentional design per delay evaluation |
 | SIM-BRANCH-05 | Edeyja burnout = hidden fail state. Southernmost endgame condition permanently unachievable if Edeyja Coherence 0. | → ARC-S34 |
 
 ### Caste Gradient Note (701eacf)
