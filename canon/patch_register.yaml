@@ -5233,3 +5233,119 @@ patches:
     Cap of 4 removed from PP-180/PP-296 — formula is self-scaling.
   affects: [references/params_board_game.md]
   status: applied
+
+- id: PP-548
+  type: formula-correction
+  date: 2026-04-11
+  severity: P1
+  description: >
+    All stat÷2 Ob and capacity formulas standardised to floor(stat/2)+1.
+    Applied across params_board_game.md: Govern Ob (L113), Trade Ob (L114,
+    ÷3 eliminated), Diplomacy vs NPC Ob (L115), Crown Treaty Ob (L117),
+    Spy Ob (L120), Parliamentary Manoeuvre Ob (L121), Battle Ob (L385),
+    Corrupt Ministry Ob (L721, min-2 override removed), Active Inquisition Ob
+    (L1221), Royal Charter Ob (L1298), Max active Charters capacity (L1299).
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-549
+  type: formula-correction
+  date: 2026-04-11
+  severity: P1
+  description: >
+    PP-547 extension — floor(stat/2)+1 applied to files missed in original commit.
+    params_factions.md: general diplomatic Ob rule (L35), TC Suppress Ob (L47),
+    TC60 Seizure Ob (L82), Excommunication vs leader Ob (L120), Suppression
+    roll Ob (L129), Hafenmark Diplomacy summary Ob (L486), Max Charters
+    capacity (L507). victory_architecture_v1.md: TC Suppress Ob (L329).
+    social_contest_system_v2.md: Private negotiation Ob (L306).
+    mass_battle_v3.md: Muster unit Power (L515-516).
+  affects:
+    - references/params_factions.md
+    - designs/board_game/victory_architecture_v1.md
+    - designs/contest/social_contest_system_v2.md
+    - designs/mass_combat/mass_battle_v3.md
+  status: applied
+
+- id: PP-550
+  type: formula-correction
+  date: 2026-04-11
+  severity: P2
+  description: >
+    BG Commander bonus: floor(Military/3) max +2D (PP-190) rejected.
+    Replaced with floor(Military/2)+1 throughout. Eliminates all ÷3 formulas
+    from the system. Updated in mass_battle_v3.md, params_mass_combat.md.
+    Self-scaling (max +4D at Military 7); explicit cap removed.
+  affects:
+    - designs/mass_combat/mass_battle_v3.md
+    - references/params_mass_combat.md
+  status: applied
+
+- id: PP-551
+  type: design
+  date: 2026-04-11
+  severity: P2
+  description: >
+    Certainty track redesigned. Old track (epistemological confidence,
+    0-10 countdown, PP-289) struck. New track: cosmological worldview journey
+    from Solmund orthodoxy (5) to Thread acceptance (0). Scale 0-5 oscillating.
+    Everyone holds it; Church can push it back via absolution and community
+    reinforcement. Both poles are stable states. Mechanical effects at
+    Certainty 5, 2-1, and 0. Independent of Coherence and Thread Sensitivity.
+    Not tracked in Board Game mode.
+  affects: [references/params_core.md]
+  status: applied
+
+- id: PP-552
+  type: naming
+  date: 2026-04-11
+  severity: P2
+  description: >
+    CV (territory Conviction) renamed to PT (Piety Track) across all files.
+    "Conviction Yield" becomes "Piety Yield." Resolves naming conflict with
+    social contest "Conviction Track" (unchanged). 34 instances in
+    params_board_game, 2 in params_factions, 49 in victory_architecture,
+    relevant entries in clock_registry. The social contest Conviction Track
+    is unaffected.
+  affects:
+    - references/params_board_game.md
+    - references/params_factions.md
+    - designs/board_game/victory_architecture_v1.md
+    - designs/systems/clock_registry.md
+  status: applied
+
+- id: PP-553
+  type: range-correction
+  date: 2026-04-11
+  severity: P2
+  description: >
+    Range standardisation across all files. PI range corrected 0-10 → 0-20
+    (effects table goes to 20+; auto-resolves at Crown elimination). TC range
+    standardised to 0-75 (freeze ceiling) everywhere. TS hard cap declared at
+    100 (removes undefined +). RS start values documented per mode: TTRPG=60,
+    BG=72. Prosperity scale declared 1-7 (territory values already 1-6, valid).
+    RDT 0-6 → 0-5 [PROVISIONAL: step-6 state consolidated into step-5].
+    Faction stats floor corrected to 1-7 in clock_registry (was 0-7 for all).
+    Missing clock_registry entries added: Intel stat, Certainty, Reputation,
+    Standing, Guild Favour, Church AP, Intel Counter.
+  affects:
+    - references/params_board_game.md
+    - references/params_factions.md
+    - references/params_threadwork.md
+    - references/params_core.md
+    - designs/systems/clock_registry.md
+  status: applied
+
+- id: PP-554
+  type: formula-correction
+  date: 2026-04-11
+  severity: P2
+  description: >
+    Ministry Mandate collapse triggers updated for floor-1 rule.
+    "Ministry Mandate = 0" triggers replaced with "Ministry Mandate ≤ 1"
+    at params_board_game L734 (Crown Policy unavailable) and L825
+    (Guilds trade protections lapse). The Submission Mandate-0 mechanic
+    (PP-475, L1503) is preserved — submitted faction's Mandate-0 vassal
+    state is a deliberate exception to the floor-1 rule [PROVISIONAL: ED-378].
+  affects: [references/params_board_game.md]
+  status: applied

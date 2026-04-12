@@ -303,7 +303,7 @@ Violence in the contest chamber = immediate Unmask. Violent party auto-loses. Ex
 
 ### §9.7 Niflhel Social Toolkit
 Niflhel cannot participate in Formal or Grand Contests. Their social toolkit:
-- Private negotiation: one-on-one only; Attunement-primary pool (per §3 "no adjudicator"); TN 7; Ob = target's Stability.
+- Private negotiation: one-on-one only; Attunement-primary pool (per §3 "no adjudicator"); TN 7; Ob = floor(target Stability / 2) + 1.
 - Thread Insight (TS ≥ 30 only): Attunement read before negotiation reveals one unstated position.
 [EDITORIAL: ED-041 — full Niflhel social toolkit pending design.]
 

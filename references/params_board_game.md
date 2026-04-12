@@ -3,7 +3,7 @@
 <!-- PATCHES APPLIED: PP-169-PP-187 | CORRECTIONS: PP-188 | PP-189 (v05 final) | PP-190–201 (BG balance, territory table, road network, map v2) | PP-219 (Southernmost access redesign) | PP-220 (Champion TS table) | PP-493–PP-494 (retroactive register) | PP-506–PP-511 (SIM-GS-01 resolutions: Fort/Battle trigger PP-506, Availability gate PP-507, OW cap PP-508, Prominence timing PP-509, Casus Belli PP-510, Assert suspension PP-511) -->
 <!-- AUTHORITATIVE SOURCE: designs/board_game/valoria_bg_v05_simulation_and_patches.md (faction stats, clocks, victory conditions); designs/board_game/stage_bg_proposal_v02.md (action economy, card-hand system PP-177) -->
 <!-- NOTE: v05 is canonical for BG mechanics. v04 B-sections remain structural base. -->
-<!-- STALE CHECK: v0.9.0 — RS Effects, Victory, CV/WC/WA, TC generation updated. Territory renumbering complete: all T# references use geography_design.md canonical numbering (17 territories). Old territory names (Vargstad, Eidursjo, Arcansheld, Nordhelm, Mittelmark) replaced with canonical names (Grauwald, Rendstad, Ehrenfeld, Kronmark, Feldmark). Ducal Geography (ED-107) resolved. Varfell expansion rewritten. -->
+<!-- STALE CHECK: v0.9.0 — RS Effects, Victory, PT/WC/WA, TC generation updated. Territory renumbering complete: all T# references use geography_design.md canonical numbering (17 territories). Old territory names (Vargstad, Eidursjo, Arcansheld, Nordhelm, Mittelmark) replaced with canonical names (Grauwald, Rendstad, Ehrenfeld, Kronmark, Feldmark). Ducal Geography (ED-107) resolved. Varfell expansion rewritten. -->
 
 # params_board_game.md — Board Game Mode (v0.7.0)
 
@@ -16,7 +16,7 @@
 | Church of Solmund | 2–5 players |
 | Hafenmark | 2–5 players |
 | Varfell | 2–5 players |
-| Restoration Movement | 5 players only (optional) — statless faction; operates through CV and Presence only |
+| Restoration Movement | 5 players only (optional) — statless faction; operates through PT and Presence only |
 | Löwenritter | Conditional: post-coup only |
 
 ### NPC-Only Factions (never playable)
@@ -54,9 +54,9 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Track | Start | Range | Notes |
 |-------|-------|-------|-------|
 | Rendering Stability (RS) | 72 | 0–100 | Rupture = shared loss |
-| Theocracy Clock (TC) | **28** | 0–100 | TC 75 = Territorial Seizure phase transition (TC freezes). P-32 sets starting value at 28. |
+| Theocracy Clock (TC) | **28** | 0–75 (freeze ceiling) | TC 75 = Territorial Seizure phase transition (TC freezes). P-32 sets starting value at 28. |
 | Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard |
-| Parliament Integrity (PI) | **7** | 0–10 | CORRECTED from 5. |
+| Parliament Integrity (PI) | **7** | 0–20 | Cumulative pressure meter. Auto-resolves at PI ≥ 20 (Crown elimination). |
 | AER | 2 | 0–5 | Near IP clock. |
 | Torben Loyalty | **3** | 0–7 | Active from game start. No IP trigger. On Crown elimination: Torben Loyalty track transfers to Löwenritter (they inherit the succession claim). Löwenritter wins or loses Torben via Influence actions the same way Crown did. Church and Hafenmark may contest via Senator Outward Diplomacy (Ob = current Torben Loyalty ÷ 2). (ED-332, PP-498: start 3, range 0–7 per §Torben Loyalty Track canonical.) |
 | Elske Loyalty | 4 | 0–7 | Off-board card near T4. |
@@ -110,15 +110,15 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 |--------|-----------|---------------|
 | Muster (Legionary Inward) | 2 | −1 T12 garrison |
 | March (Legionary Outward) | No roll | Contested entry = Battle |
-| Govern (Consul Inward) | Prosperity ÷ 2 (round up, min 1) | −1 own capital |
-| Trade (Consul Outward) | Prosperity ÷ 3 (round up, min 1) | +1 IP≥30; +1 T2 |
-| Diplomacy vs NPC (Senator Outward) | NPC Stability ÷ 2 (round up) | — |
+| Govern (Consul Inward) | floor(Prosperity / 2) + 1 | −1 own capital |
+| Trade (Consul Outward) | floor(Prosperity / 2) + 1 | +1 IP≥30; +1 T2 |
+| Diplomacy vs NPC (Senator Outward) | floor(NPC Stability / 2) + 1 | — |
 | Diplomacy between players | Negotiated | Not a roll |
-| Formal Crown Treaty (Senator Outward) | ceil(target Mandate / 2) min 1 | Crown only. PP-512/513/514/523. See victory_architecture_v1.md §3.1. |
+| Formal Crown Treaty (Senator Outward) | floor(target Mandate / 2) + 1 | Crown only. PP-512/513/514/523. See victory_architecture_v1.md §3.1. |
 | Thread Operation (Pontifex/Weaver) | Ob 2 base | See PP-182 co-movement protocol |
 | Investigate/Intel (Tribune) | 2 | +2 Ob in Church territory with Inquisitor |
-| Spy (Tribune Outward) | Target Intel ÷ 2 round up | — |
-| Parliamentary Manoeuvre (Hafenmark) | Opponent Influence ÷ 2 round up | — |
+| Spy (Tribune Outward) | floor(target Intel / 2) + 1 | — |
+| Parliamentary Manoeuvre (Hafenmark) | floor(opponent Influence / 2) + 1 | — |
 | Community Organising (Restoration) | 2 | Pool: 1D base + 1D per adjacent territory with RM Presence marker. Failure: no Stability cost (RM has no Stability). Try again next season. (PP-460) |
 | Community Weaving (Restoration) | (100−RS)÷20 round up min 1 | −1 per Presence marker in territory |
 | Fortify | Fort level + 1 | — |
@@ -237,12 +237,12 @@ The Deed-based victory system has been dissolved for ALL factions including Löw
 | Faction | Primary Victory | Key Thresholds |
 |---------|----------------|----------------|
 | Crown | Peninsula Sovereignty | TCV ≥ 16 + suppress all rivals + Invasion Pressure (IP) < 60 + Parliament Integrity (PI) ≥ 3 |
-| Church of Solmund | Solmundan Orthodoxy | TCV ≥ 8 + CV ≥ 3 all held territories. Graduated Seizure: Pool = Influence + floor(TC/15), Ob = 7 − CV (PP-494) |
+| Church of Solmund | Solmundan Orthodoxy | TCV ≥ 8 + PT ≥ 3 all held territories. Graduated Seizure: Pool = Influence + floor(TC/15), Ob = 7 − PT (PP-494) |
 | Hafenmark | Parliamentary Sovereignty | TCV ≥ 12 + Mandate ≥ 4 + PI ≥ 5 + Crown Mandate ≤ 3 |
 | Varfell Path A | Intelligence Hegemony | TCV ≥ 10 + Vaynard Thread Mastery (VTM) ≥ 3 + 2 rival stats revealed + expansion |
 | Varfell Path B | Southernmost Dominion | TCV ≥ 8 + VTM ≥ 3 + T13 control + T15 presence + Warden's Accord (WA) ≥ +1 |
 | Varfell Path C | Thread Supremacy | TCV ≥ 10 + VTM = 5 + Rendering Stability (RS) ≥ 50 |
-| Restoration Movement (RM) | Cultural Revolution (Hybrid only, post-Founding) | Phase 1: CV ≤ 1 in ≥ 8/15 territories. Phase 2: Cultural Uprising of T9 Himmelenger. Win: T9 held + Phase 1 × 2 Accounting. No faction stats. (PP-460, PP-478) |
+| Restoration Movement (RM) | Cultural Revolution (Hybrid only, post-Founding) | Phase 1: PT ≤ 1 in ≥ 8/15 territories. Phase 2: Cultural Uprising of T9 Himmelenger. Win: T9 held + Phase 1 × 2 Accounting. No faction stats. (PP-460, PP-478) |
 | Löwenritter | Regency Establishment | TCV ≥ 10 + Thread Consciousness (TC) < 50 + IP < 60 + RS > 40 + PI ≥ 4 + successor |
 
 ### Territory Consolidation Values (TCV)
@@ -275,8 +275,8 @@ Per victory_architecture_v1.md §4. All require 2 consecutive Accounting steps e
 |------|---------------|
 | Crown + Hafenmark | Crown TCV ≥ 12, Hafenmark TCV ≥ 8, PI ≥ 5, TC < 50 |
 | Crown + Varfell | Crown TCV ≥ 12, Varfell TCV ≥ 8, VTM ≥ 3, RS ≥ 50 |
-| Varfell + RM | VTM ≥ 4, WA ≥ +2, ≥ 4 territories CV ≤ 1, RS ≥ 40 |
-| Hafenmark + RM | Hafenmark TCV ≥ 10, ≥ 4 territories CV ≤ 2, PI ≥ 4, RS ≥ 40 |
+| Varfell + RM | VTM ≥ 4, WA ≥ +2, ≥ 4 territories PT ≤ 1, RS ≥ 40 |
+| Hafenmark + RM | Hafenmark TCV ≥ 10, ≥ 4 territories PT ≤ 2, PI ≥ 4, RS ≥ 40 |
 | Löwenritter + Hafenmark | Löwenritter TCV ≥ 8, Hafenmark TCV ≥ 8, PI ≥ 4 |
 | Church + Hafenmark (Partition) | Crown Mandate ≤ 1, TC ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no military conflict |
 
@@ -332,25 +332,25 @@ Return: Elske Loyalty ≥ 6 + IP < 60 + Crown/Löwenritter unit in T4: Military 
 
 Seasonal TC at Accounting (execute in order):
 1. **Institutional Momentum:** TC +1 (passive).
-2. **Conviction Yield:** for each territory where Church is prominent (Church Mandate > controlling faction's Mandate), add based on CV. CV 5 = +1, CV 4 = +0.5, others = 0. Total = floor(sum).
+2. **Piety Yield:** for each territory where Church is prominent (Church Mandate > controlling faction's Mandate), add based on PT. PT 5 = +1, PT 4 = +0.5, others = 0. Total = floor(sum).
 3. **Assert** (optional Church action): Influence vs Ob 2. Success: TC +1. Failure: Stability −1.
 4. **Suppress** (optional opponent action): Mandate vs Ob = floor(Church Mandate / 2) + 1. Success: negate Step 1 passive. Failure: Stability −1.
 5. **Hafenmark Structural Suppression:** while Baralta Mandate ≥ 4, TC −1/season.
 
-**TC seasonal cap (PP-504):** ±3 per season from player-initiated Domain Actions. ±5 per season from all sources combined (includes Institutional Momentum, Conviction Yield, Calamity Drift, event cards).
+**TC seasonal cap (PP-504):** ±3 per season from player-initiated Domain Actions. ±5 per season from all sources combined (includes Institutional Momentum, Piety Yield, Calamity Drift, event cards).
 
-Legacy TC sources (AER momentum, Attention Pool threshold, Emergency Powers, Free Trade Decree, Church unit presence) are subsumed into the Conviction Yield system — Church prominence in high-CV territories captures the same dynamics. AER ≥ 3 still bypasses Hafenmark structural suppression (PP-203).
+Legacy TC sources (AER momentum, Attention Pool threshold, Emergency Powers, Free Trade Decree, Church unit presence) are subsumed into the Piety Yield system — Church prominence in high-PT territories captures the same dynamics. AER ≥ 3 still bypasses Hafenmark structural suppression (PP-203).
 
 ## TC 75 Territorial Seizure (PP-421 — per victory_architecture_v1.md §7)
 **Post-TC 75: TC freezes. Church shifts to territorial seizure campaign.**
 
 ### Seizure Ob
-Ob = 2 + Fort Level + max(0, 3 − CV).
+Ob = 2 + Fort Level + max(0, 3 − PT).
 Prominence required: Church Mandate > controlling faction's Mandate in target territory.
 Church Mandate ≥ 4 required to attempt seizure.
 
 ### Seizure Results
-Per victory_architecture_v1.md §7. Overwhelming seizure: CV +1 in target territory. This is a consequence effect — NOT subject to the ±1 CV seasonal cap. State-change consequences from seizure are exempt from action caps. (PP-502)
+Per victory_architecture_v1.md §7. Overwhelming seizure: PT +1 in target territory. This is a consequence effect — NOT subject to the ±1 PT seasonal cap. State-change consequences from seizure are exempt from action caps. (PP-502)
 
 ### Seizure Constraints
 One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland).
@@ -358,9 +358,9 @@ One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland)
 ### Church Graduated Seizure (PP-494, PP-506–PP-511)
 **Available:** Any TC value from TC ≥ 15 (PP-507). Not gated on TC 75. TC 75 freeze marks the phase transition where seizure becomes Church's primary mode, but seizure was always available.
 **Pool:** Influence + floor(TC / 15). At TC 28: 7D. At TC 75: 11D (frozen cap). (PP-494)
-**Ob:** 7 − CV (target territory Conviction value). CV 5 = Ob 2. CV 0 = Ob 7. (PP-494)
+**Ob:** 7 − PT (target territory Conviction value). PT 5 = Ob 2. PT 0 = Ob 7. (PP-494)
 
-| CV | Seizure Ob |
+| PT | Seizure Ob |
 |----|-----------|
 | 5 (Piety) | 2 |
 | 4 | 3 |
@@ -370,7 +370,7 @@ One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland)
 | 0 (Restoration) | 7 |
 
 **Prerequisites:** Church Mandate ≥ 4. Prominence (Church Mandate > controlling faction Mandate). Prominence assessed at seizure declaration. (PP-509)
-**Overwhelming:** CV +1 in target territory (consequence, not cap-governed). (PP-494, PP-508)
+**Overwhelming:** PT +1 in target territory (consequence, not cap-governed). (PP-494, PP-508)
 **Failure:** Stability −1.
 **Political cost:** Casus Belli granted to controlling faction on every seizure attempt. (See §Casus Belli.) (PP-510)
 **Fort Level:** Fort Level does NOT modify Seizure Ob. Seizure is a political act. (PP-506)
@@ -382,7 +382,7 @@ One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland)
 **[ED-355 RESOLVED — PP-506. ED-365 RESOLVED — PP-507. ED-366 RESOLVED — PP-508. ED-367 RESOLVED — PP-509. ED-368 RESOLVED — PP-506. ED-369 RESOLVED — PP-511.]**
 
 ### Battle Ob Formula (PP-499, ED-343 resolved)
-**Battle Ob = defender Military ÷ 2 (round up, min 1).**
+**Battle Ob = floor(defender Military / 2) + 1.**
 Attacker rolls: Military pool vs Ob. Degree table per standard BG degree table (PP-249).
 [EDITORIAL: ED-343 — resolved provisionally. Defender Military ÷ 2 matches other Domain Action Ob patterns. Min 1 prevents auto-success vs Military 0 factions (RM). Flagged for simulation confirmation.]
 
@@ -593,8 +593,8 @@ WC advances via successful Southernmost Expedition and Warden engagement actions
 
 Range: −3 to +3. Starts at 0.
 
-RM Emergence triple condition: WA ≤ −2 AND ≥ 3 territories CV ≤ 1 AND RS ≤ 50. One-shot.
-RM Suppression: WA ≥ 0 OR all territories CV ≥ 2 OR RM Stability 0.
+RM Emergence triple condition: WA ≤ −2 AND ≥ 3 territories PT ≤ 1 AND RS ≤ 50. One-shot.
+RM Suppression: WA ≥ 0 OR all territories PT ≥ 2 OR RM Stability 0.
 Varfell Path B blocked if RM has emerged (WA ≤ −2).
 
 See victory_architecture_v1.md §8 for WA movement rules and full RM stat block.
@@ -718,7 +718,7 @@ If Löwenritter Coup fires: Ministry AP-tokens in T13 and T12 are removed immedi
 ### Ministry Compromise and Corruption
 Factions may attempt to corrupt Ministry via Diplomacy.
 
-**Corrupt Ministry (Consul Outward, any faction, Ob = Ministry Mandate ÷ 2 round up, min 2):**
+**Corrupt Ministry (Consul Outward, any faction, Ob = floor(Ministry Mandate / 2) + 1):**
 Success: Ministry NPC Priority 4 fires in favour of the corrupting faction this season (Ministry supports that faction's Crown Policy or Parliamentary action regardless of current priorities).
 Overwhelming: As above + Ministry AP-token in one territory of choice acts as if that territory is the corrupting faction's capital for one season (−1 Ob on all their actions there).
 Failure: Ministry notes the attempt. Corrupting faction Stability −1. Ministry sends record to Riskbreakers (Riskbreaker Priority 6 now includes the corrupting faction's territory).
@@ -731,7 +731,7 @@ Failure: Ministry notes the attempt. Corrupting faction Stability −1. Ministry
 | AP-token in T13, Mandate ≥ 2 | Emergency Powers PI loss −1 (Ministry prevents one loss/season) |
 | AP-token in T13, Mandate ≥ 2, Hafenmark Manoeuvre success this year | Additional PI +1 at Year-End (Legislative Record) |
 | AP-token absent from T13 | Hafenmark Parliamentary Manoeuvre Ob +1 |
-| Ministry Mandate = 0 | Crown Policy unavailable |
+| Ministry Mandate ≤ 1 | Crown Policy unavailable |
 | Church seizes T13 with AP-token present | Seizure Ob +1; if seized: AP-token removed, Crown Policy +1 Ob |
 | Löwenritter Coup | T13+T12 AP-tokens removed; Ministry Mandate −2; Ministry Stabilisation suspended 1 season |
 
@@ -822,7 +822,7 @@ Named ministries in source: Ministry of Law, Ministry of Guilds, Ministry of Log
 ### Ministry of Guilds — Specific BG Role
 The Ministry of Guilds monitors the guild system, arranges contracts between guilds and Imperial Court, sets taxation. In BG: Ministry of Guilds is the direct connection between Ministry (NPC) and Guilds (NPC).
 - If Ministry Mandate ≥ 2 AND Guilds NPC is active: Guilds may not be targeted by Economic Leverage from other factions without a free Ministry counter (Ministry files procedural objection: +1 Ob to the Economic Leverage roll).
-- If Ministry Mandate = 0: Guilds lose their trade contract protections — all Trade Ob in Guilds-controlled territories +1 (no Ministry to enforce non-competition).
+- If Ministry Mandate ≤ 1: Guilds lose their trade contract protections — all Trade Ob in Guilds-controlled territories +1 (no Ministry to enforce non-competition).
 
 ### Parliament Nomination Mechanic (PP-194)
 Per canonical source: Parliament nominates Ministers (confirmed by Monarch) and Rectorates.
@@ -1022,7 +1022,7 @@ but represents Crown's unique royal household angle on the Southernmost.
   not through territorial control.
 
 ## TC 75 Seizure — Territory Values — SUPERSEDED
-**See TCV table in §Victory Conditions above.** Per-territory seizure Ob = 2 + Fort Level + max(0, 3 − CV). Fort levels per geography_design.md territory table.
+**See TCV table in §Victory Conditions above.** Per-territory seizure Ob = 2 + Fort Level + max(0, 3 − PT). Fort levels per geography_design.md territory table.
 [TERRITORY-DEBT: RESOLVED 2026-04-08 — PP-493. All T# references verified against geography_design.md.]
 ## Victory Condition Territory References — SUPERSEDED
 **All victory territory references now use TCV from victory_architecture_v1.md §1.**
@@ -1209,8 +1209,8 @@ Doctrine-aligned territory: −1 Ob.
 
 | Degree | Effect |
 |--------|--------|
-| Overwhelming | CV +1 in territory + AP +1 |
-| Success | CV +1 in territory |
+| Overwhelming | PT +1 in territory + AP +1 |
+| Success | PT +1 in territory |
 | Partial | AP +1 |
 | Failure | Stability −1 |
 
@@ -1218,7 +1218,7 @@ Doctrine-aligned territory: −1 Ob.
 
 ### Church — Active Inquisition (PP-429)
 **Type:** Senator Inward (Church only).
-Roll: Mandate vs Ob = territory Stability ÷ 2, min 1.
+Roll: Mandate vs Ob = floor(territory Stability / 2) + 1.
 **First Inquisitor threshold:** AP ≥ 3 (ED-322 confirmed). Second: AP ≥ 6.
 
 | Degree | Effect |
@@ -1295,8 +1295,8 @@ Roll: Influence vs Ob = floor(target Mandate / 2) + 1.
 
 ### Crown — Royal Charter (PP-433)
 **Type:** Consul Inward (Crown only).
-Roll: Mandate vs Ob = territory Prosperity ÷ 2 round up, min 1. Virtue Ethics: −1 Ob.
-**Limit:** Max (Mandate ÷ 2 round up) active Charters simultaneously.
+Roll: Mandate vs Ob = floor(territory Prosperity / 2) + 1. Virtue Ethics: −1 Ob.
+**Limit:** Max floor(Mandate / 2) + 1 active Charters simultaneously.
 
 Success: Territory becomes Crown Charter Territory:
 - All factions: Govern/Trade −1 Ob
@@ -1406,8 +1406,8 @@ Existing Sanctuary card: extended to also block Varfell 4-PC Spy action once per
 
 ## Parish / Cathedral System — Church (ED-319 RESOLVED)
 **Prerequisite:** Church Consul Inward action in territory.
-Parish: 2 sequential successful Consul Inward actions + 1 Wealth. Effect: CV floor raised to 1 (persists unless Cathedral). 
-Cathedral: 3 more successful Consul Inward (5 total from zero) + 2 additional Wealth. Effect: CV floor 2 + Church Prominence +1 in territory for seizure calculations.
+Parish: 2 sequential successful Consul Inward actions + 1 Wealth. Effect: PT floor raised to 1 (persists unless Cathedral). 
+Cathedral: 3 more successful Consul Inward (5 total from zero) + 2 additional Wealth. Effect: PT floor 2 + Church Prominence +1 in territory for seizure calculations.
 **Control change:** Parish survives. Cathedral degrades to Parish on control transfer.
 **Limits:** Max 1 Parish or Cathedral per territory. Max 1 upgrade attempt per territory per arc.
 
@@ -1415,7 +1415,7 @@ Cathedral: 3 more successful Consul Inward (5 total from zero) + 2 additional We
 
 ## Hafenmark — RDT/TD Tracks (ED-321 RESOLVED)
 
-### Reformed Doctrine Track (RDT) — Range 0–6
+### Reformed Doctrine Track (RDT) — Range 0–5
 Advances: Reformed Settlement event = +1 (max once per arc). Requires: Hafenmark controls territory where Church has Parish/Cathedral AND Hafenmark M ≥ 3 AND PI ≥ 4.
 
 | RDT | Effect |
@@ -1424,7 +1424,7 @@ Advances: Reformed Settlement event = +1 (max once per arc). Requires: Hafenmark
 | 1 | Parliamentary Manoeuvre targeting TC: −1 Ob |
 | 2 | Formal Reformed Settlement. TD track activates. |
 | 3 | Church Mandate −1 (institutional strain) + Diplomatic actions vs Church: −1 Ob |
-| 4 | TC suppression extends: −1 TC/season while Hafenmark Mandate ≥ 3 (was ≥ 4). Reformed territory CV actions +1 Ob for Church. |
+| 4 | TC suppression extends: −1 TC/season while Hafenmark Mandate ≥ 3 (was ≥ 4). Reformed territory PT actions +1 Ob for Church. |
 | 5 | Excommunication against Hafenmark costs +2 Mandate. Baralta: −2 Ob on TC Suppress actions. |
 | 6 | All diplomatic actions targeting Hafenmark from any faction: +1 Ob |
 
@@ -1439,7 +1439,7 @@ Regression: TD −1 if Church Excommunicates Hafenmark AND RDT does not advance 
 | 2 | Cardinal of Fortitude schism risk when Church Stability < 3 |
 | 3 | Any season Church loses PI: Hafenmark gains PI +1 |
 | 4 | Church Seizure in Hafenmark territories: Ob +2 |
-| 5 | Church cannot seize T8 Gransol (Hafenmark capital) regardless of TC or CV. Permanent. |
+| 5 | Church cannot seize T8 Gransol (Hafenmark capital) regardless of TC or PT. Permanent. |
 
 ---
 
@@ -1488,10 +1488,10 @@ Total Domination (TCV >= 28) leaves 1 uncaptured TCV (any single TCV-1 territory
 Restoration Movement may not purchase Legionary cards from Senate Market.
 Military 0 makes Muster invalid (PP-039). Legionary cards are unplayable in hand.
 
-## Conviction Yield Dead Zone — Explicit Note (PP-473)
-**Church-controlled territories produce zero Conviction Yield.**
-Church Prominence = Church Mandate > controlling faction Mandate. When Church controls a territory, Church IS the controlling faction. Church Mandate > Church Mandate = False = not Prominent = no Conviction Yield.
-Implication: Post-TC 75 seizure removes territories from Conviction Yield pool. Plan accordingly.
+## Piety Yield Dead Zone — Explicit Note (PP-473)
+**Church-controlled territories produce zero Piety Yield.**
+Church Prominence = Church Mandate > controlling faction Mandate. When Church controls a territory, Church IS the controlling faction. Church Mandate > Church Mandate = False = not Prominent = no Piety Yield.
+Implication: Post-TC 75 seizure removes territories from Piety Yield pool. Plan accordingly.
 
 ## AER >= 3 and Parliamentary Challenge — Independence Clarification (PP-474)
 AER >= 3 (PP-203) and Parliamentary Challenge (PP-431-COR) are independent:
@@ -1534,11 +1534,11 @@ Varfell faction mat: flip token 'VTM 5 Power Used'. Set to Used on ability activ
 Range 0–5. Public track (placed near RS clock). Starts at 0. Belongs to no faction.
 
 **Advances +1 when:**
-- ≥ 2 territories simultaneously have CV ≤ 1 AND no Church Heresy Investigation is active in any of them (checked at Accounting).
-- A PC performs a successful Community Organising or Community Weaving personal scene in a CV ≤ 1 territory (Zoom In result).
+- ≥ 2 territories simultaneously have PT ≤ 1 AND no Church Heresy Investigation is active in any of them (checked at Accounting).
+- A PC performs a successful Community Organising or Community Weaving personal scene in a PT ≤ 1 territory (Zoom In result).
 
 **Regresses −1 when:**
-- Church executes a successful Heresy Investigation in a CV ≤ 1 territory.
+- Church executes a successful Heresy Investigation in a PT ≤ 1 territory.
 - TC ≥ 60 at Accounting (while TC ≥ 60: PW regresses −1/season automatically).
 
 Floor: 0. Ceiling: 5.
@@ -1547,7 +1547,7 @@ Floor: 0. Ceiling: 5.
 | Condition | Threshold |
 |-----------|-----------|
 | PW track | ≥ 3 |
-| Territories with CV ≤ 1 | ≥ 3 |
+| Territories with PT ≤ 1 | ≥ 3 |
 | RS | ≤ 60 |
 
 ### Founding Procedure
@@ -1556,13 +1556,13 @@ Roll: Founding Agent's Influence vs Ob = TC ÷ 10 (round up, min 1, max 5).
 
 | Degree | Starting Stats | Presence Markers |
 |--------|---------------|-----------------|
-| Overwhelming | Mandate 2, Influence 3, Wealth 1, Military 0, Stability 4 | 3 markers in CV ≤ 1 territories |
+| Overwhelming | Mandate 2, Influence 3, Wealth 1, Military 0, Stability 4 | 3 markers in PT ≤ 1 territories |
 | Success | Mandate 1, Influence 2, Wealth 1, Military 0, Stability 3 | 2 markers |
 | Partial | PW +1. Not founded. Retry next Accounting. | — |
 | Failure | PW −1. Church gets 1 free Heresy Investigation. Cannot retry until PW resets to ≥ 3. | — |
 
 **Post-founding card hand:** 2× Praetor, 1× Pontifex, 1× Recess.
-**NPC-founded RM AI priority:** CV reduction > Presence spreading > Founding Agent protection > Weaving.
+**NPC-founded RM AI priority:** PT reduction > Presence spreading > Founding Agent protection > Weaving.
 
 ### Community Organising (Restoration, post-Founding)
 Pool: 1D base + 1D per adjacent territory with RM Presence marker (PP-460). Failure: no Stability cost. Retry next season.

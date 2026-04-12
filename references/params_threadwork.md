@@ -10,7 +10,7 @@
 ## Practitioner Stats
 | Stat | Range | Description |
 |------|-------|-------------|
-| Thread Sensitivity (TS) | 0–100+ | Perception depth |
+| Thread Sensitivity (TS) | 0–100 | Perception depth. Hard cap: 100. |
 | Rendering Stability (RS) | 100→0 | World coherence (shared track) |
 | Coherence | 10→0 | Personal rendering stability |
 | Focus | 1–7 | Contact duration in rounds |
@@ -209,7 +209,7 @@ Cost: −1 Coherence per use (additional; not subject to §3.2 op cap at Relatio
 Same source: +1 Ob per prior use.
 
 ## Rendering Stability (RS) Track
-Range: 100→0. Starting: Rendering Stability 60 (default campaign).
+Range: 100→0. Starting: Rendering Stability 60 (TTRPG default campaign). Board Game default: 72 — see params_board_game.
 | Rendering Stability | State | World Effects |
 |----|-------|---------------|
 | 100–80 | Stable | None |

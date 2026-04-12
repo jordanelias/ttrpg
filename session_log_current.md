@@ -1,6 +1,62 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-11_SONNET_FORMULA_RANGE_UNIFICATION
+session_close: 2026-04-11
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. PP-547: Mandate→Ob floor+1 for 6 instances in params_board_game (initial commit)
+2. Cross-system range and formula audit (all canonical files)
+3. Formula unification proposal — 24 confirmed changes across 5 files
+4. Certainty track redesign: struck old epistemological track; new cosmological worldview journey (0-5 oscillating)
+5. PP-548-554: Full commit — formula standardisation, naming, range fixes, Certainty, Ministry triggers
+
+## COMMITS THIS SESSION
+- PP-547: Mandate-Ob formula standardisation (params_board_game only — initial)
+- PP-548-554: Full formula/range/naming/Certainty unification commit
+
+## PATCHES APPLIED (PP-548 to PP-554)
+PP-548: All stat÷2 Ob formulas → floor(stat/2)+1 in params_board_game (11 instances)
+PP-549: PP-547 extension — params_factions, victory_arch, social_contest, mass_battle (9 instances)
+PP-550: BG Commander bonus: floor(Military/3) max+2D → floor(Military/2)+1 (÷3 eliminated)
+PP-551: Certainty track redesigned (old PP-289 struck; new 0-5 cosmological journey)
+PP-552: CV (territory Conviction) renamed → PT (Piety Track) across all files
+PP-553: Range fixes — PI 0-20, TC 0-75, TS cap 100, RS mode labels, Prosperity 1-7, RDT 0-5, clock_registry updated
+PP-554: Ministry Mandate=0 triggers → Mandate≤1
+
+## DESIGN DECISIONS LOCKED THIS SESSION
+- floor(stat/2)+1 for all stat÷2 Obs and capacity derivations
+- No ÷3 anywhere in the system
+- Faction stats: 1-7, floor 1 (Stability: 0-7 for BG faction elimination only)
+- Oscillating trackers: 0-5
+- Territory Prosperity: 1-7
+- Certainty: redesigned as Solmund→Thread cosmology journey (0-5)
+- CV → PT (Piety Track) rename
+- Social combat modifiers excluded from floor+1 (ED-374)
+- Progress tracks: 0-base permitted (ED-375)
+- PI as cumulative pressure meter 0-20 (ED-376, provisional)
+- Submission Mandate-0 exception (ED-377, provisional)
+- RDT 0-6 → 0-5 (ED-378, provisional)
+
+## OPEN EDITORIALS (carried forward)
+ED-370: Hybrid personal scene -> BG Treaty bridge (P2)
+ED-371: Coalition suppression dominant strategy confirmation (P2)
+ED-372: Thread Liaison dissolution timing (P2)
+ED-373: Token on Mandate-0 suspension (P3)
+ED-374: Social combat modifiers floor+1 exclusion (flagged)
+ED-375: Progress track scale category (flagged)
+ED-376: Parliament Integrity 0-20 classification (flagged, provisional)
+ED-377: Submission Mandate-0 exception (flagged, provisional)
+ED-378: RDT step-6 consolidation (flagged, provisional)
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-11_SONNET_MANDATE_OB_FIX
 session_close: 2026-04-11
 phase: COMPLETE

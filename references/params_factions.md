@@ -32,7 +32,7 @@ Note: Varfell BG Mandate 3/Wealth 3 is intentional (political isolation at game 
 | Public Instability | — | 5 | — |
 
 ## Domain Action Rules (TTRPG)
-Ob = target faction's relevant stat (1–7 directly, no division).
+Ob = floor(relevant stat / 2) + 1.
 Attacker bonus dice: own faction's relevant stat if holding faction leadership.
 Non-Player Character faction rolls: relevant stat as d10 pool, TN 7.
 
@@ -44,7 +44,7 @@ Applied at Accounting before Assert/Suppress resolution.
 |--------|-----------|
 | Passive baseline | +1 (always) |
 | Assert (Church) | +2 total (replaces passive; not additive) |
-| Suppress (Crown or Hafenmark Domain Action) | Negates passive +1 for that season only. TC does not decrease. Ob = Church Mandate ÷ 2 (round up, min 1). |
+| Suppress (Crown or Hafenmark Domain Action) | Negates passive +1 for that season only. TC does not decrease. Ob = floor(Church Mandate / 2) + 1 ÷ 2 (round up, min 1). |
 
 Suppress may be declared once per season by one faction. It cannot reduce TC below its value at season start.
 TTRPG: same rule applies. BG: same rule applies; Suppress is a Standard Action consuming one card.
@@ -79,7 +79,7 @@ Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Restoration Movem
 |---------|--------|------|--------|
 | Crown | Royal Decree | Mandate vs Ob 2 | One faction stat ±1 immediate. Consecutive: +1 Ob/season. Cannot target Intel. |
 | Church | Excommunication | Mandate vs target Mandate (leader) / Ob 2 (non-leader) | Strips Circles bonus; target faction Mandate −1. Reversal: Grand Debate (5 exchanges) or new Confessor. |
-| Church | Theocracy Counter 60 Territorial Seizure | Mandate vs owner's Mandate ÷ 2 (round up, min 1) | Per-territory roll. Success: administrative control. Failure: Mandate −1. |
+| Church | Theocracy Counter 60 Territorial Seizure | Mandate vs floor(owner's Mandate / 2) + 1 | Per-territory roll. Success: administrative control. Failure: Mandate −1. |
 | Restoration Movement | Community Weaving | Presence markers −1 Ob (base Ob 2) | Mending Mandate prerequisite: Mandate ≥ 1 |
 | [Others] | See stage6_factions.md §8.4–8.9 | — | Hafenmark, Varfell, Guilds, Niflhel, Löwenritter unique actions not extracted |
 
@@ -117,7 +117,7 @@ Roll: Mandate vs Ob 2. Once per season.
 Cannot target Intel. Effect is immediate and unilateral.
 
 ### Church — Excommunication
-Roll: Mandate vs target Mandate (faction leader) or Ob 2 (non-leader).
+Roll: Mandate vs floor(target Mandate / 2) + 1 (faction leader) or Ob 2 (non-leader).
 | Degree | Result |
 |--------|--------|
 | Success | Strips target's Circles bonus; target faction Mandate −1 |
@@ -126,7 +126,7 @@ Reversal: Grand Debate (5 exchanges) or new Confessor appointed.
 
 ### Church — TC 60 Territorial Seizure
 Trigger: Theocracy Counter (TC) reaches 60. Fires once per territory.
-Roll: Mandate vs owner's Mandate ÷ 2 (round up, min 1).
+Roll: Mandate vs floor(owner's Mandate / 2) + 1.
 | Degree | Result |
 |--------|--------|
 | Success | Administrative control of territory. Domain Actions vs Church authority require +2 Ob. Flat Theocracy Counter value fires immediately. |
@@ -483,15 +483,15 @@ Coalition triggers are public knowledge (the threshold conditions are known); on
 
 ## Hafenmark — Diplomat Card (ED-320 RESOLVED)
 See params_board_game.md §Hafenmark — Diplomat Card for full mechanics.
-**Summary:** Senator Outward, Influence vs Ob = target Mandate ÷ 2, once/season. Diplomatic Tokens enable Parliamentary Session pre-commitment. Restriction: not Church if PI < 3.
+**Summary:** Senator Outward, Influence vs Ob = floor(target Mandate / 2) + 1, once/season. Diplomatic Tokens enable Parliamentary Session pre-commitment. Restriction: not Church if PI < 3.
 
 ## Hafenmark — RDT/TD Tracks (ED-321 RESOLVED)
 Full tables in params_board_game.md §RDT/TD.
-**Summary:** RDT 0–6 (Reformed Settlement advances); TD 0–5 (activates at RDT 2, advances when Church Asserts).
+**Summary:** RDT 0–5 (Reformed Settlement advances); TD 0–5 (activates at RDT 2, advances when Church Asserts).
 
 ## Church — Parish/Cathedral (ED-319 RESOLVED)
 Full rules in params_board_game.md §Parish/Cathedral System.
-**Summary:** 2 Consul Inward successes + 1W = Parish (CV floor 1). 5 total + 3W total = Cathedral (CV floor 2 + Prominence +1). Parish survives control change; Cathedral degrades to Parish.
+**Summary:** 2 Consul Inward successes + 1W = Parish (PT floor 1). 5 total + 3W total = Cathedral (PT floor 2 + Prominence +1). Parish survives control change; Cathedral degrades to Parish.
 
 ## Total Domination (ED-318 RESOLVED)
 **Available to all factions.** TCV ≥ 28 + all rivals at Stability 0 (eliminated OR Submitted) for 2 consecutive Accounting steps. Submission: voluntary at Stability 0; submitted faction becomes NPC vassal.
@@ -504,7 +504,7 @@ Full reveal = Overwhelming Tribune Investigate OR 4 consecutive PC Spy successes
 Token placed on target faction mat (public, permanent). Two tokens on different rival mats = Path A fully revealed condition met.
 
 ## Crown — Royal Charter (PP-433)
-Max active Charters = Mandate ÷ 2 round up. Charter territory: Govern/Trade −1 Ob for all factions; Church Seizure +1 Ob; Crown own actions −2 Ob. Dissolves on control transfer.
+Max active Charters = floor(Mandate / 2) + 1. Charter territory: Govern/Trade −1 Ob for all factions; Church Seizure +1 Ob; Crown own actions −2 Ob. Dissolves on control transfer.
 
 ## Crown — Thread Liaison (PP-436)
 Phase 1 declarative. Designate one allied faction. Their Thread operations in Crown territories count toward Crown co-victory RS tracking. Dissolves on military conflict.

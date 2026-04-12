@@ -361,14 +361,14 @@ The −3 Morale cap per Cascade Phase applies as a total across all non-general 
 | Context | Formula | Notes |
 |---------|---------|-------|
 | TTRPG mass combat | Command = ⌈(Charisma + Cognition) ÷ 2⌉ | Per params_mass_combat (PP-232) |
-| BG battle resolution | Commander bonus = faction Military ÷ 3, round down (max +2D) | Per §B.3 |
+| BG battle resolution | Commander bonus = floor(faction Military / 2) + 1 | Per §B.3 |
 | Hybrid Zoom In | Use TTRPG CR for TTRPG-layer actions; BG commander bonus for BG-layer accounting | No conversion between them |
 [PROVISIONAL]
 
 ## Volley TN (ED-037 resolved — provisional)
 Volley phase uses TN 6 (not TN 7). Rationale: ranged advantage before armour engagement; represents favourable conditions (distance, preparation). [PROVISIONAL — confirmed from prior provisional]
 ## Commander Bonus (PP-190)
-Formula: faction Military ÷ 3, round down. Min 0, max +2D. Applies to BG mode. TTRPG uses Command = ⌈(Cha+Cog)÷2⌉ (PP-232). See consolidated table above.
+Formula: floor(faction Military / 2) + 1. Applies to BG mode. TTRPG uses Command = ⌈(Cha+Cog)÷2⌉ (PP-232). (PP-550 — replaces PP-190 ÷3 formula) See consolidated table above.
 ## Altonian Invasion Units (PP-193, ED-036 resolved 2026-04-03)
 Generated from Altonian Military ~5 (foreign professional standing army; above Crown/Church 4).
 [ED-036 resolved 2026-04-03] Stats confirmed: Vanguard Str5 CP4 Coh4 Mor5 HeavyCut Medium. Elite Guard Str4 CP5 Coh5 Mor5 HeavyCut Heavy. Thread Corps Str3 CP3 Coh4 Mor4 TS40.
@@ -380,7 +380,7 @@ Generated from Altonian Military ~5 (foreign professional standing army; above C
 | Altonian Crossbow | 3 | 2 | 4 | 4 | Light | HP | +0/+2 vs med+heavy |
 | Altonian Artillery | 2 | 2 | 3 | 4 | None | HBl | +3 |
 
-Commander bonus: Military 5 → +1D (5÷3=1, round down).
+Commander bonus: Military 5 → floor(5/2)+1 = 3+1 = 4 → +4D. (PP-550)
 Deployment trigger: Institutional Pressure ≥ 75 (CLOCK-EDIT-01).
 ## LBl vs LP Dominance (PP-197 — ED-065 resolved)
 LBl (sling) outperforms LP (arrows) only vs Light armour (+2 vs +1). LP equals or exceeds LBl at Medium and Heavy. Distinction is intentional: slings = anti-light-infantry; bows = anti-armoured. No change needed.

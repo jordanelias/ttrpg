@@ -71,7 +71,7 @@ Rendering Stability (RS) loses **−1 per in-game year** from baseline drift alo
 - Board Game: −1 RS per Year-End step.
 - Hybrid: same as TTRPG.
 Thread operations accelerate this. Restoration sources can offset but not reverse baseline decay.
-RS floor: 0 (Rupture). RS ceiling: 100.
+RS floor: 0 (Rupture). RS ceiling: 100. Starting value by mode: TTRPG default = 60; Board Game default = 72.
 
 
 ## Pool Minimum
@@ -119,7 +119,7 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 | Composure | Charisma + 6 | 7–13 | Social damage buffer before Rattled. Parallels Health = Endurance + 6. (PP-234, ED-127 resolved) |
 | Combat Pool | Agility + weapon proficiency History (points + 3) | Variable (min 5) | Split Offence/Defence each round. (PP-247) |
 | Contact Rounds | Focus | 1–7 | Max rounds maintaining Thread contact (practitioners only) |
-| Certainty | 10 (starting); countdown to 0 | 0–10 | Epistemological confidence in consensus reality. See PP-289 section below. |
+| Certainty | 5 (starting, varies by background) | 0–5 | Cosmological worldview: Solmund orthodoxy (5) → Thread acceptance (0). See PP-551 section below. |
 | Coherence | 10 (starting); countdown to 0 | 0–10 | Personal rendering legibility |
 | Resolve | Spirit | 1–7 | Maximum total Inspiration value |
 
@@ -139,12 +139,38 @@ Example: Spend 1 Momentum (1 auto-success) + roll 1D TN 7.
 Spending 2 Momentum on Ob 1 (2 auto-successes): auto-successes alone reach Ob 1 but cannot satisfy Overwhelming floor (need ≥ 3 net). Must also roll to reach Overwhelming.
 
 
-## Certainty Track (PP-289)
-Range 0–10. Starting value: 10. Counts down toward 0.
-Loss triggers: Coherence 0 event (−1), sustained Southernmost exposure >3 scenes (−1/scene), catastrophic ontological revelation (−2).
-At Certainty 0: character cannot distinguish Thread substrate from consensus reality. GM takes partial narrative control. Treated as incapacitated for social/Thread purposes.
-Recovery: +1 Certainty per long rest outside Southernmost with no Thread operations.
-Spirit is unrelated to Certainty. Certainty ≠ Coherence (Coherence = personal rendering integrity; Certainty = epistemological grounding).
+## Certainty Track (PP-551 — redesigned from PP-289)
+**Definition:** The character's operative cosmological framework. Tracks the journey from Solmund orthodoxy to Thread cosmology acceptance. Both poles are stable states. This is a transformation track, not a deterioration track.
+
+**Range: 0–5 (oscillating).** 5 = Full Solmund orthodoxy. 0 = Full Thread acceptance.
+
+| Value | Label | Operative belief |
+|-------|-------|-----------------|
+| 5 | Orthodox | Solmund created the rendered world. Thread phenomena are demonic or heretical. |
+| 4 | Faithful | Doctrine is basically correct; Thread phenomena are unusual but explicable within faith. |
+| 3 | Questioning | Doctrine shows cracks; Thread experiences are real but not fully explained. |
+| 2 | Skeptic | Solmund framework has failed to explain too much; Thread substrate is real. |
+| 1 | Transitional | Thread cosmology is the better account; Solmund is a rendering, not the source. |
+| 0 | Accepted | Thread substrate is the ground of being; Solmund is a human rendering that exceeds it. |
+
+**Who has it:** All player characters. Named NPCs at GM discretion. Factions do not hold Certainty.
+
+**Starting value:** Assigned at creation by background. Devout orthodox: 5. Average Valorian: 4. Secular: 3. Post-First Leap practitioner: 2. Thread cosmology adherent: 1.
+
+**Movement toward 0 (Thread acceptance):** Witnessing Thread operation first time in arc (−1); surviving threadcut being contact (−1); completing First Leap (−1, permanent); Coherence 0 event (−1); Southernmost exposure > 2 consecutive scenes (−1); catastrophic revelation (−1, GM-called).
+
+**Movement toward 5 (Solmund reinforcement):** Cardinal absolution (once/arc, +1); sustained orthodox community at Year-End if character present (+1); Overwhelming Church Tribunal victory — defendant/witness who accepts verdict (+1).
+
+**Mechanical effects:**
+- Certainty 5: +1D in Church/orthodox contexts; first Coherence loss per session nullified (doctrine scaffolds).
+- Certainty 2–1: −1D in Church/orthodox contexts; Coherence recovery +1 per long rest.
+- Certainty 0: −2D in Church/orthodox contexts; +1D among Thread-aware communities; Coherence recovery +2 per long rest; TS growth +1 per major Thread encounter (GM-called); arch-heretic classification.
+
+**Church interaction by level:** Certainty 5 → Heresy Investigation Ob +2. Certainty 2–1 → standard Ob. Certainty 0 → Investigation Ob −2; Excommunication automatic on capture.
+
+**Relationships:** Independent of Coherence (operational resource) and Thread Sensitivity (perceptual depth). Can diverge from Beliefs (declared vs confronted). Not tracked in Board Game mode — abstracted into PT dynamics.
+
+Spirit is unrelated to Certainty.
 
 ## Reach Terminology (PP-290) — replaces Close zone / Far zone
 - Short Reach: melee contact (≤ 1 metre). Applies to most melee weapons.

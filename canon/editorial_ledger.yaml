@@ -3075,3 +3075,34 @@ editorial_decisions:
   status: open
   source: tests/sim_arcs_36_45_batch.md
   date: 2026-04-11
+
+  - id: ED-374
+    status: flagged
+    date_flagged: 2026-04-11
+    description: "Social combat modifiers (Cha modifier floor((Cha-3)/2), Focus defence floor(Foc/2)) excluded from floor+1 scope. These are damage formula components, not Obs. Applying +1 would shift social damage economy system-wide. Provisional exclusion pending review."
+    tags: [social_contest, formula, provisional]
+
+  - id: ED-375
+    status: flagged
+    date_flagged: 2026-04-11
+    description: "Progress tracks (VTM, AER, WR, PC, Coup Counter) classified as separate category: 0-base permitted (0 = not yet developed). Distinct from oscillating 0-5 trackers and faction stats 1-7. Provisional classification pending user decision."
+    tags: [board_game, tracks, provisional]
+
+  - id: ED-376
+    status: flagged
+    date_flagged: 2026-04-11
+    description: "Parliament Integrity classified as cumulative pressure meter (not oscillating tracker). Range corrected to 0-20 with auto-resolve at PI >= 20 (Crown elimination). Provisional — user has not explicitly confirmed 0-20 vs redesign."
+    tags: [board_game, parliament, provisional]
+
+  - id: ED-377
+    status: flagged
+    date_flagged: 2026-04-11
+    description: "Submission Mandate-0 exception (PP-475): submitted faction retains Mandate 0 as vassal state. This is a deliberate exception to the faction stat floor-1 rule. Provisional — confirm whether submitted factions are exempt from floor-1."
+    tags: [board_game, faction, submission, provisional]
+
+  - id: ED-378
+    status: flagged
+    date_flagged: 2026-04-11
+    description: "RDT 0-6 → 0-5 applied provisionally. Step-6 state consolidated into step-5 effects. Review whether any mechanic specifically referenced RDT=6 and requires redesign of that final step."
+    tags: [board_game, hafenmark, rdt, provisional]
+
