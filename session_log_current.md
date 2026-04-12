@@ -1,6 +1,53 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-12_SONNET_ED_BATCH_RESOLUTION
+session_close: 2026-04-12
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Full audit and editorial resolution batch (PP-560-568)
+2. 11 P1 blockers addressed (8 resolved, 3 flagged authorial)
+3. 24 P2 items addressed (18 resolved, 6 flagged authorial)
+
+## PATCHES APPLIED (PP-560 to PP-568)
+PP-560: ED-313 — PI≤2 TC+2 does not apply when TC frozen. ED-314 — stale Seizure formula corrected.
+PP-561: ED-342/343 — Crown+Hafenmark co-victory: Hafenmark TCV ≥ 12, Mandate ≥ 4 both factions.
+PP-562: ED-344 — Royal Decree Fragmentation +2 Ob → +1 Ob.
+PP-563: ED-345 — VTM TC contribution defined (+0.5/1/1.5 per season at VTM 3/4/5).
+PP-564: ED-346 — Ministry Priority 3 → automatic procedural delay; AP-token consumed.
+PP-565: ED-328+341 — Temperance AER advancement requires roll; AER decay added.
+PP-566: ED-338 — Partition Pressure public marker mechanic.
+PP-567: ED-351 — Discipline degradation: PP-320 Power-asymmetry struck; PP-251 canonical.
+PP-568: ED-340 — Vanguard mechanics [PROVISIONAL].
+
+## CLOSED WITH NO PATCH (already resolved in text or confirmed)
+ED-312 (suppress defined), ED-315 (Echo cap exists), ED-317 (AMPLIFY=CROSS, Spent exit),
+ED-329 (Torben correct), ED-353 (Command PP-504), ED-356 (Shield Wall PP-500),
+ED-360 (confirmed), ED-383, ED-385, ED-389, ED-392.
+
+## FLAGGED AUTHORIAL (require Jordan decision)
+ED-308: Varfell succession / Maret Uln
+ED-309: Baralta succession mechanic
+ED-316: Weight-of-numbers for Size > Command units
+ED-340: Vanguard identity/route/elimination narrative [PROVISIONAL applied]
+ED-364: Almud characterization rewrite
+ED-384: Varfell+RM co-victory aspirational vs bug
+ED-387: Hafenmark passive victory path scope
+ED-388: Hafenmark Stability gate
+ED-391: Crown+Hafenmark 4-season no-conflict condition
+
+## OPEN EDITORIALS REMAINING
+See editorial_ledger.yaml. ~31 items remain open (primarily authorial worldbuilding,
+session-specific balance confirmations, and older simulation debt).
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-11_SONNET_AUDIT_ED_RESOLUTION
 session_close: 2026-04-11
 phase: COMPLETE

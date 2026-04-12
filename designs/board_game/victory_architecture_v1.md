@@ -150,6 +150,8 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 +
 - Hafenmark controls ≥ 3 territories
 - No active military conflict between Church and Hafenmark
 
+**Partition Pressure marker (ED-338, PP-566):** At Accounting, if all conditions EXCEPT TC ≥ 50 are simultaneously met, place a public Partition Pressure marker. Other factions have 1 season to disrupt conditions before TC threshold check fires. Remove marker if any condition breaks before TC ≥ 50.
+
 **Outcome:** Mutual agreement ends the game. Both factions score a conditional victory. No holding requirement — fires immediately on mutual declaration.
 
 ---
@@ -273,7 +275,7 @@ Co-victories require 2 consecutive Accounting steps except Partition (immediate 
 
 | Pair | Conditions (all simultaneous at Accounting) |
 |------|---------------------------------------------|
-| **Crown + Hafenmark** | Crown TCV ≥ 12 AND Hafenmark TCV ≥ 9 AND PI ≥ 7 AND TC < 50 | *(PP-544: PI was ≥ 5)* |
+| **Crown + Hafenmark** | Crown TCV ≥ 12 AND Hafenmark TCV ≥ 12 AND PI ≥ 7 AND TC < 50 AND Crown Mandate ≥ 4 AND Hafenmark Mandate ≥ 4 | *(PP-561: Haf TCV was ≥ 9, Mandate conditions added — was trivially achievable S1-2)* |
 | **Crown + Varfell** | Crown TCV ≥ 12 AND Varfell TCV ≥ 8 AND VTM ≥ 3 AND RS ≥ 50 |
 | **Varfell + RM** | VTM ≥ 3 AND WR ≥ 2 AND ≥ 3 territories PT ≤ 1 AND RS ≥ 40 AND Varfell controls T13 | *(PP-545: VTM was ≥ 4; territories was ≥ 4)* |
 | **Hafenmark + RM** | Hafenmark TCV ≥ 10 AND ≥ 3 territories PT ≤ 2 AND PI ≥ 4 AND RS ≥ 40 | *(PP-546: territories was ≥ 4)* |

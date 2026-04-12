@@ -480,12 +480,8 @@ Mass battle is hostile to large-scale Thread intervention. Practitioners should 
 Failure rate is correct signal. No patch needed.
 
 
-## ED-140 Resolution (PP-320) — Discipline Degradation Asymmetry [FLAGGED]
-Discipline degradation trigger (PP-248) now requires BOTH:
-1. Total Size lost this turn > Discipline, AND
-2. Power asymmetry (attacking unit Power > defending unit Power) OR Thread/artillery caused Size loss.
-Symmetric engagements produce attrition (Size loss) only — no Discipline degradation.
-[FLAGGED: confirm asymmetry threshold — strict Power > Power or Power difference ≥ 2?]
+## ED-140 Resolution — [SUPERSEDED by PP-251] (PP-567)
+Condition 2 (Power asymmetry / Thread-artillery trigger) was incorrect. PP-251 is the authoritative condition 2: this unit's Size loss exceeds opposing unit's Size loss by ≥ 1. Power asymmetry condition struck. See PP-251 section and mass_battle_v3 §A.4 for canonical rule.
 
 
 ## ED-167–168 Resolution (PP-333) — Zoom Out CF Consequences [FLAGGED]

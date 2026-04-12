@@ -227,6 +227,15 @@ Southernmost Surge (one-time, RS ≤ 10): all territories within Proximity 2 of 
 | 60–74 | Trade disrupted: +2 Ob. Proxy at T4: +1D military |
 | 75+ | Altonian Vanguard deployed. AER ≥ 4: threshold rises to 80. AER 5: IP held at 50 |
 
+**[PROVISIONAL ED-340] Altonian Vanguard Mechanics (PP-568 — flag for authorial review):**
+- Vanguard appears as NPC military presence at T10 (Spartfell — NE Altonian pass).
+- Vanguard stats: Military 5 equivalent; Size 3; cannot be negotiated, traded, or Diplomatically managed.
+- Advance: if no faction contests Vanguard territory for 2 consecutive seasons, Vanguard advances one territory along the invasion route (T10→T3→T2→T1).
+- Contest: any faction in Vanguard's territory triggers automatic Battle (defender Military vs Ob 3). Win: Vanguard held. Loss: Vanguard advances.
+- While Vanguard occupies T1 (Valorsplatz): all factions −1 Stability/season. Shared pressure.
+- Elimination: AER ≥ 4 → Schoenland mediates; IP threshold rises to 80. AER = 5 → IP held at 50 indefinitely; Vanguard halts.
+- [EDITORIAL: authorial review required — Vanguard faction identity, advance route, and elimination conditions]
+
 ## Victory Conditions — Pointer
 **Canonical source: `designs/board_game/victory_architecture_v1.md`** (all victory conditions, co-victory pairings, shared loss conditions).
 
@@ -273,7 +282,7 @@ Per victory_architecture_v1.md §4. All require 2 consecutive Accounting steps e
 
 | Pair | Key Conditions |
 |------|---------------|
-| Crown + Hafenmark | Crown TCV ≥ 12, Hafenmark TCV ≥ 8, PI ≥ 5, TC < 50 |
+| Crown + Hafenmark | Crown TCV ≥ 12, Hafenmark TCV ≥ 12, PI ≥ 7, TC < 50, Crown Mandate ≥ 4, Hafenmark Mandate ≥ 4 | *(PP-561)* |
 | Crown + Varfell | Crown TCV ≥ 12, Varfell TCV ≥ 8, VTM ≥ 3, RS ≥ 50 |
 | Varfell + RM | VTM ≥ 4, WA ≥ +2, ≥ 4 territories PT ≤ 1, RS ≥ 40 |
 | Hafenmark + RM | Hafenmark TCV ≥ 10, ≥ 4 territories PT ≤ 2, PI ≥ 4, RS ≥ 40 |
@@ -384,7 +393,7 @@ One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland)
 ### Battle Ob Formula (PP-499, ED-343 resolved)
 **Battle Ob = floor(defender Military / 2) + 1.**
 Attacker rolls: Military pool vs Ob. Degree table per standard BG degree table (PP-249).
-[EDITORIAL: ED-343 — resolved provisionally. Defender Military ÷ 2 matches other Domain Action Ob patterns. Min 1 prevents auto-success vs Military 0 factions (RM). Flagged for simulation confirmation.]
+[Resolved by PP-548. Battle Ob = floor(defender Military / 2) + 1. Min 1 prevents auto-success vs Military 0 factions (RM). Flagged for simulation confirmation.]
 
 
 
@@ -398,7 +407,7 @@ TC starts at **28**. (P-32, PP-189 correction. The 22 value from v04 B2 was supe
 | 8–10 | Full Parliament. Crown Policy requires Mandate ≥ 4. |
 | 5–7 | Standard. Parliamentary Manoeuvre available. |
 | 3–4 | Degraded. Parliamentary Manoeuvre +1 Ob. Crown Decree Ob reduced to 1. |
-| ≤ 2 | Non-functional. Hafenmark loses Parliamentary Manoeuvre. Crown governs by decree. TC +2. |
+| ≤ 2 | Non-functional. Hafenmark loses Parliamentary Manoeuvre. Crown governs by decree. TC +2 (does not apply when TC is frozen at 75 — PP-560). |
 
 PI degrades: Crown Emergency Powers (−1), Church territorial seizure (−1), Löwenritter coup (−3).
 PI recovers: Hafenmark Parliamentary Manoeuvre success (+1), Crown Parliamentary Session policy (+1).
@@ -534,6 +543,8 @@ No BG Military modifier for ranged-specialist factions. BG correctly abstracts a
 
 ## AER (Altonian Ecclesiastical Relationship) (PP-181, v04 confirmed)
 Track 0–5. Starts 2.
+**AER advancement:** Cardinal of Temperance Phase 1 declaration + roll (Mandate vs Ob = floor(AER/2)+1). Success: AER +1. No roll, no gain.
+**AER decay (PP-565):** At Year-End Accounting, if Cardinal of Temperance focus was NOT maintained that year (no successful Temperance declaration this year): AER −1 (min 0). Represents diplomatic drift without active Church-Altonian engagement.
 [Full table in PP-181 section — confirmed by v04 B2]
 
 ## RDT (Reformed Doctrine Track) (PP-181, v04 B5 confirmed)
@@ -711,7 +722,7 @@ If Löwenritter Coup fires: Ministry AP-tokens in T13 and T12 are removed immedi
 |----------|-----------|--------|
 | 1 | PI ≤ 3 | Ministry plays Consul Inward (Govern) in T13: roll Ministry Mandate (3D) vs Ob 1. Success: PI +1 (clerks shore up parliamentary function). |
 | 2 | T13 has no Ministry AP-token | Ministry plays Consul Inward in T13: roll Mandate 3D vs Ob 1. Success: AP-token placed in T13. |
-| 3 | Any territory with AP-token has PI loss pending from Church Seizure | Ministry plays Senator Outward (Diplomacy) vs Church: Mandate 3D vs Church Mandate. Success: Church seizure of that territory delayed 1 season (Ministry files formal procedural objection). |
+| 3 | Any territory with AP-token has PI loss pending from Church Seizure | Ministry files automatic procedural objection: Church Seizure in that territory delayed 1 season. No roll required. AP-token in that territory is consumed. *(PP-564: Ministry institutional role — procedural delay, not combat)* |
 | 4 | Crown Mandate ≥ 4 AND PI < 5 | Ministry plays Senator Inward (Decree support): PI +1 (Ministry facilitates Crown constitutional governance). Requires Crown Mandate ≥ 4 — Ministry does not support a weakened Crown. |
 | 5 (default) | None of above | Ministry plays Consul Inward in highest-Prosperity uncontested territory with AP-token: Prosperity maintained. |
 
@@ -753,7 +764,7 @@ Holy See = elected from among the Bishopry. Second only to the Monarch.
 - **Fortitude (Templar):** Templar deployment requires Cardinal of Fortitude to be active (Church Stability ≥ 2). At Stability ≤ 1: Templars do not deploy regardless of card play.
 - **Justice (Inquisitors):** Heresy Investigations are issued under Cardinal of Justice. If Cardinal of Justice is compromised (via Niflhel or Varfell Intel action on Church): one Heresy Investigation this season is false (all factions notified that one Investigation this season was procedurally invalid).
 - **Prudence (Tithes):** Church Wealth generation: +0.5 Wealth/season from tithed territories (rounds down at Year-End). Territories where Church has Favour ≥ 3 contribute to tithe income.
-- **Temperance (Scholars):** AER maintenance. While Church controls at least one university city (T9 Himmelenger has a university): AER loss events are reduced by 1/Year-End (Temperance scholars maintain Altonian ecclesiastical relationships through scholarship).
+- **Temperance (Scholars):** AER maintenance. While Church controls T9 (Himmelenger — university city), Cardinal of Temperance may declare AER maintenance at Phase 1. Roll: Mandate vs Ob = floor(current AER / 2) + 1. Success: AER +1. Failure: no change. *(PP-565: was passive reduction of AER loss events; now active roll-gated advancement)*
 
 
 ### Cardinal Death — Succession (ED-336 resolved)
@@ -763,7 +774,7 @@ When a Cardinal is killed during a Zoom In scene (Hybrid mode):
 - Fortitude: Templar deployment requires Legionary card (no free deployment).
 - Justice: Heresy Investigations cannot be issued (no authorising Cardinal).
 - Prudence: Tithe income halved (clerks continue but without Cardinal oversight).
-- Temperance: AER maintenance suspended (one additional AER loss event may fire this year).
+- Temperance: AER maintenance roll unavailable this season. Year-End AER decay fires automatically (no Temperance declaration possible). PP-565.
 
 **Succession:** At Year-End Accounting, Holy See appoints a replacement Cardinal. The new Cardinal is anonymous (no named NPC stats — treat as standard Cardinal for mechanical purposes). Full mechanics restored immediately on appointment.
 
@@ -1333,7 +1344,7 @@ Crown designates one allied faction. Liaison's Thread operations in Crown-held t
 ### Crown — Diplomatic Outreach to Schoenland (PP-437)
 **Type:** Senator Outward (Crown only). Cannot use same season as Formal Crown Treaty.
 Roll: Influence vs Ob = current AER level, min 1. Virtue Ethics: −1 Ob.
-**Fragmentation modifier:** +2 Ob if 3+ factions have Stability ≤ 2.
+**Fragmentation modifier:** +1 Ob if 3+ factions have Stability ≤ 2. *(PP-562: was +2 — punished Crown most when Decree most needed)*
 
 | Degree | Effect |
 |--------|--------|
@@ -1347,6 +1358,7 @@ Roll: Influence vs Ob = current AER level, min 1. Virtue Ethics: −1 Ob.
 ### Varfell — VTM Discretion (PP-438)
 **Type:** Accounting action. **At VTM 3+.**
 Spend 1 Patience Counter at Accounting to suppress VTM TC contribution for that season.
+**VTM TC contribution (PP-563):** Once VTM is publicly visible (VTM 3+), it generates Church institutional pressure: VTM 3 = +0.5 TC/season; VTM 4 = +1 TC/season; VTM 5 = +1.5 TC/season (applied at Accounting, rounded to nearest 0.5, tracking half-TC fractionally). Matches "low"/"high" labels in Discretion cost text.
 **Cooldown:** Once per 2 consecutive seasons (Discretion Cooldown marker, cleared at Year-End).
 Does not suppress other TC sources.
 

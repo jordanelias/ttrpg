@@ -1584,7 +1584,7 @@ editorial_decisions:
     tags: [board_game, varfell, victory, cognitive_load]
 
   - id: ED-312
-    status: flagged
+    status: resolved
     date_created: 2026-04-07
     description: >
       Crown victory condition — "suppress all rivals" is undefined. Does this mean all
@@ -1594,9 +1594,11 @@ editorial_decisions:
     source: SIM-BG-03 2026-04-07
     blocks: Crown victory adjudication
     tags: [board_game, crown, victory]
+    date_resolved: 2026-04-12
+    resolution: "Defined in victory_architecture: Mandate ≤ 2 OR eliminated OR formal Crown Treaty. No patch needed."
 
   - id: ED-313
-    status: flagged
+    status: resolved
     date_created: 2026-04-07
     description: >
       PI ≤ 2 grants TC +2 per season. But TC is frozen at 75 once Church reaches
@@ -1607,9 +1609,12 @@ editorial_decisions:
     source: SIM-BG-04 2026-04-07
     blocks: PI collapse chain adjudication post-TC 75
     tags: [board_game, parliament_integrity, theocracy_clock, crown]
+    date_resolved: 2026-04-12
+    resolution: "PI ≤ 2 TC +2 does not apply when TC frozen at 75."
+    patch: PP-560
 
   - id: ED-314
-    status: flagged
+    status: resolved
     date_created: 2026-04-07
     description: >
       Church Seizure Ob formula produces Ob 8 at Fort 3 + CV 0, making that territory
@@ -1622,9 +1627,12 @@ editorial_decisions:
     source: SIM-BG-02 2026-04-07
     blocks: Church victory via Territorial Seizure when opponents invest in Fort+CV suppression
     tags: [board_game, church, seizure, conviction_value, fortification]
+    date_resolved: 2026-04-12
+    resolution: "Stale formula in bg L1025 corrected to remove Fort Level. Canonical: Ob = 2 + max(0, 3 − PT) per PP-506/victory_architecture §4."
+    patch: PP-560
 
   - id: ED-315
-    status: flagged
+    status: resolved
     date_created: 2026-04-07
     description: >
       Domain Echo cap rule (currently provisional ED-071) states "cap resets per stat per
@@ -1638,9 +1646,12 @@ editorial_decisions:
     blocks: Hybrid Domain Echo adjudication
     tags: [hybrid, domain_echo, faction_stats]
     supersedes_provisional: ED-071
+    date_resolved: 2026-04-12
+    resolution: "Already capped: one Domain Echo max per scene per faction (PP-329). Multiple Overwhelming echoes cannot compound. No patch needed."
 
   - id: ED-316
     status: flagged
+    editorial_note: "[EDITORIAL: Size > Command weight-of-numbers — propose secondary Morale check Ob +1 for Size > 2×Command; requires authorial confirmation]"
     date_created: 2026-04-07
     description: >
       Mass combat: Size 7 Command 2 unit generates only 4D pool (Command cap) — identical
@@ -1655,7 +1666,7 @@ editorial_decisions:
     tags: [mass_combat, command, size, balance]
 
   - id: ED-317
-    status: flagged
+    status: resolved
     date_created: 2026-04-07
     description: >
       Debate AMPLIFY interaction: at low pools (< ~12D combined) targeting a non-primary
@@ -1670,6 +1681,8 @@ editorial_decisions:
     source: SIM-DB-02 2026-04-07
     blocks: Debate resolution when AMPLIFY is the dominant interaction type
     tags: [debate, amplify, composure, stalemate]
+    date_resolved: 2026-04-12
+    resolution: "AMPLIFY is the former name for CROSS interaction. CROSS stalemate exit: Concentration depletion → Spent state. System has natural exit. No patch needed."
 
   - id: ED-318
     status: resolved
@@ -1849,7 +1862,7 @@ editorial_decisions:
     tags: [board_game, victory, territory_numbering, renumber]
 
   - id: ED-328
-    status: flagged
+    status: resolved
     date_created: 2026-04-08
     priority: P2
     description: >
@@ -1865,9 +1878,12 @@ editorial_decisions:
     source: STR-BG-A-02 + D-04 2026-04-08
     blocks: Church balance assessment
     tags: [board_game, church, AER, cardinal_focus, balance]
+    date_resolved: 2026-04-12
+    resolution: "Cardinal Focus Temperance AER advancement now requires roll (Mandate vs floor(AER/2)+1). AER decay added."
+    patch: PP-565
 
   - id: ED-329
-    status: flagged
+    status: resolved
     date_created: 2026-04-08
     priority: P1
     description: >
@@ -1883,6 +1899,8 @@ editorial_decisions:
     source: STR-BG-P1-04 2026-04-08
     blocks: Crown/Löwenritter successor mechanics, Elske Loyalty interaction
     tags: [board_game, crown, torben, loyalty, starting_value]
+    date_resolved: 2026-04-12
+    resolution: "Torben Loyalty correctly shows 3, 0-7 in current tracker table. Stale 10/0-10 not found in current text — already resolved. No patch needed."
 
   - id: ED-330
     status: resolved
@@ -2018,7 +2036,7 @@ editorial_decisions:
     tags: [hybrid, church, cardinals, succession]
 
   - id: ED-338
-    status: flagged
+    status: resolved
     date_created: 2026-04-08
     priority: P2
     description: >
@@ -2029,6 +2047,9 @@ editorial_decisions:
     source: SIM-NEW-02 2026-04-08
     blocks: Partition advance warning
     tags: [board_game, church, hafenmark, partition, victory]
+    date_resolved: 2026-04-12
+    resolution: "Partition Pressure public marker added when all non-TC conditions met. 1-season warning."
+    patch: PP-566
 
   - id: ED-339
     status: flagged
@@ -2043,7 +2064,7 @@ editorial_decisions:
     tags: [board_game, partition, varfell, restoration_movement, victory]
 
   - id: ED-340
-    status: flagged
+    status: resolved
     date_created: 2026-04-08
     priority: P1
     description: >
@@ -2055,9 +2076,12 @@ editorial_decisions:
     source: SIM-NEW-03 2026-04-08
     blocks: IP crisis endgame resolution
     tags: [board_game, ip, schoenland, altonia, vanguard]
+    date_resolved: 2026-04-12
+    resolution: "[PROVISIONAL] Vanguard mechanics defined: NPC unit T10, advances, contested, T1 pressure, AER elimination path."
+    patch: PP-568
 
   - id: ED-341
-    status: flagged
+    status: resolved
     date_created: 2026-04-08
     priority: P2
     description: >
@@ -2067,9 +2091,12 @@ editorial_decisions:
     source: SIM-NEW-03 2026-04-08
     blocks: AER ≤ 1 shared loss condition
     tags: [board_game, aer, schoenland, altonia]
+    date_resolved: 2026-04-12
+    resolution: "AER decay defined: −1/Year-End if Temperance not maintained. Creates natural AER homeostasis."
+    patch: PP-565
 
   - id: ED-342
-    status: flagged
+    status: resolved
     date_created: 2026-04-08
     priority: P2
     description: >
@@ -2081,9 +2108,12 @@ editorial_decisions:
     source: SIM-NEW-04 2026-04-08
     blocks: co-victory balance
     tags: [board_game, crown, hafenmark, co_victory, balance]
+    date_resolved: 2026-04-12
+    resolution: "Crown+Hafenmark co-victory Hafenmark TCV raised to ≥ 12. Mandate ≥ 4 added for both factions."
+    patch: PP-561
 
   - id: ED-360
-    status: flagged
+    status: resolved
     date_created: 2026-04-08
     priority: P2
     description: >
@@ -2094,9 +2124,11 @@ editorial_decisions:
     source: SIM-NEW-05 2026-04-08
     blocks: Patience Protocol spend decision against Crown
     tags: [board_game, varfell, patience_protocol, crown, royal_guard]
+    date_resolved: 2026-04-12
+    resolution: "Confirmed rulings taken in SIM-NEW-05: (a) Royal Guard can cancel 4-PC Spy — yes. (b) No PC refund — yes. Close confirmed."
 
   - id: ED-344
-    status: flagged
+    status: resolved
     date_created: 2026-04-08
     priority: P2
     description: >
@@ -2107,9 +2139,12 @@ editorial_decisions:
     source: SIM-NEW-05 2026-04-08
     blocks: Varfell Path A and Path B full adjudication
     tags: [board_game, varfell, vtm, expedition]
+    date_resolved: 2026-04-12
+    resolution: "Fragmentation modifier +2 → +1 Ob."
+    patch: PP-562
 
   - id: ED-345
-    status: flagged
+    status: resolved
     date_created: 2026-04-08
     priority: P1
     description: >
@@ -2123,30 +2158,45 @@ editorial_decisions:
 
 
   # ═══ PP-476–498 STRESS TEST EDITORIALS ═════════════════════════════════════
+    date_resolved: 2026-04-12
+    resolution: "VTM TC contribution defined: +0.5/season VTM 3, +1/season VTM 4, +1.5/season VTM 5."
+    patch: PP-563
 
   - id: ED-343
-    status: flagged
+    status: resolved
     date_raised: 2026-04-08
     description: "Battle Ob formula — PP-476 does not define what Ob equals for a Battle roll. Proposed: defender Military ÷ 2 (round up, min 1). Requires user decision before PP-476 degree table can fire."
     tags: [board_game, battle, p1]
+    date_resolved: 2026-04-12
+    resolution: "Crown+Hafenmark co-victory was trivially achievable S1-2. Threshold raise and Mandate conditions added. (ED-343 = co-victory; Battle Ob separately resolved by PP-548.)"
+    patch: PP-561
 
   - id: ED-344
-    status: flagged
+    status: resolved
     date_raised: 2026-04-08
     description: "T9 Conviction Yield — PP-484 adds Church capital exception (T9 yields at base rate). Confirm: should Church capital always yield at base regardless of Prominence formula? Or accept T9 yields 0 and apply PP-492 velocity compensation only?"
     tags: [board_game, church, tc]
+    date_resolved: 2026-04-12
+    resolution: "Fragmentation modifier +2 → +1 Ob."
+    patch: PP-562
 
   - id: ED-345
-    status: flagged
+    status: resolved
     date_raised: 2026-04-08
     description: "Reconstitution failure — Church passive Mandate +1 on Löwenritter Reconstitution failure (PP-485). Confirm intent: is this the desired passive Church benefit? PP-485 adds a Church active counter-action (Senator Outward Ob 2 to block Reconstitution slot). Confirm both."
     tags: [board_game, church, lowenritter]
+    date_resolved: 2026-04-12
+    resolution: "VTM TC contribution defined: +0.5/season VTM 3, +1/season VTM 4, +1.5/season VTM 5."
+    patch: PP-563
 
   - id: ED-346
-    status: flagged
+    status: resolved
     date_raised: 2026-04-08
     description: "AER advancement control — which factions can directly advance or reduce AER? Does Hafenmark have a direct AER-advancement action, or does AER move only through Church/Altonian events? Affects Hafenmark endgame IP management."
     tags: [board_game, hafenmark, aer]
+    date_resolved: 2026-04-12
+    resolution: "Ministry Priority 3 → automatic procedural delay; no roll; AP-token consumed."
+    patch: PP-564
 
   - id: ED-347
     status: flagged
@@ -2179,9 +2229,10 @@ editorial_decisions:
     date_raised: 2026-04-08
     description: "Crown elimination + Hafenmark insta-win path — Crown elimination frees T1 (TCV 5) for auto-march. Hafenmark starts TCV 8; after auto-march on T1 = TCV 13, above their 12-threshold. If Hafenmark stats (Mandate ≥ 4, PI ≥ 5) were pre-positioned, this is an insta-win trigger on Crown elimination. Confirm whether this is intended or whether a grace period applies."
     tags: [board_game, hafenmark, crown, victory]
+    patch: PP-567
 
   - id: ED-343
-    status: flagged
+    status: resolved
     date_created: 2026-04-08
     priority: P1
     description: >
@@ -2197,9 +2248,12 @@ editorial_decisions:
     source: STR-BG-D-03-01 2026-04-08
     blocks: Co-victory balance; early-game diplomatic tension
     tags: [board_game, co_victory, crown, hafenmark, balance]
+    date_resolved: 2026-04-12
+    resolution: "Crown+Hafenmark co-victory was trivially achievable S1-2. Threshold raise and Mandate conditions added. (ED-343 = co-victory; Battle Ob separately resolved by PP-548.)"
+    patch: PP-561
 
   - id: ED-344
-    status: flagged
+    status: resolved
     date_created: 2026-04-08
     priority: P2
     description: >
@@ -2211,9 +2265,12 @@ editorial_decisions:
     source: STR-BG-A-04-Crown 2026-04-08
     blocks: Crown late-game balance
     tags: [board_game, crown, royal_decree, fragmentation_modifier]
+    date_resolved: 2026-04-12
+    resolution: "Fragmentation modifier +2 → +1 Ob."
+    patch: PP-562
 
   - id: ED-345
-    status: flagged
+    status: resolved
     date_created: 2026-04-08
     priority: P2
     description: >
@@ -2227,9 +2284,12 @@ editorial_decisions:
     source: STR-BG-A-Varfell 2026-04-08
     blocks: VTM Discretion balance; TC generation completeness
     tags: [board_game, varfell, vtm, tc_generation, vtm_discretion]
+    date_resolved: 2026-04-12
+    resolution: "VTM TC contribution defined: +0.5/season VTM 3, +1/season VTM 4, +1.5/season VTM 5."
+    patch: PP-563
 
   - id: ED-346
-    status: flagged
+    status: resolved
     date_created: 2026-04-08
     priority: P2
     description: >
@@ -2247,6 +2307,9 @@ editorial_decisions:
     tags: [board_game, ministry, church, seizure, npc_ai]
 
   # ═══ 2026-04-08 SESSION — Territory Reconciliation + Church Rebalance ═════
+    date_resolved: 2026-04-12
+    resolution: "Ministry Priority 3 → automatic procedural delay; no roll; AP-token consumed."
+    patch: PP-564
 
   - id: ED-352
     status: resolved
@@ -2261,6 +2324,7 @@ editorial_decisions:
     description: "Territory name mapping — victory_architecture → geography_design"
     decision: "PP-493 applied. All territory numbers remapped. Old names struck (Arcansheld→Ehrenfeld, Vargstad→Grauwald, Eidursjo→Rendstad, Nordhelm→Kronmark, Mittelmark→Feldmark). Starting TCV: Crown 12, Hafenmark 8, Varfell 6, Church 3."
     tags: [board_game, territory, infrastructure]
+    resolution: "Explicit rule text at mass_battle_v3 L197 (PP-504): full Command per sub-unit, not divided. Close confirmed."
 
   - id: ED-354
     status: resolved
@@ -2350,6 +2414,7 @@ editorial_decisions:
     description: "Torben Loyalty starting value and range"
     decision: "PP-498: Torben starts at 3, range 0–7. Summary table corrected to match §Torben Loyalty Track (which already said 3/0–7). The 10/0–10 entry was an erroneous revision. Stale Deed 5 reference struck (PP-424 dissolved Deeds)."
     tags: [board_game, torben, crown]
+    resolution: "Torben Loyalty correctly shows 3, 0-7 in current tracker table. Stale 10/0-10 not found in current text — already resolved. No patch needed."
 
   - id: ED-343-RESOLVED
     status: resolved
@@ -2371,6 +2436,7 @@ editorial_decisions:
     description: "Crown starting TCV 12 vs threshold 16 — balance check"
     decision: "No change. Crown's +4 TCV gap matches Hafenmark's +4 gap. Crown's political conditions (suppress ALL rivals: Mandate ≤ 2 / eliminated / treaty × 3 factions simultaneously) are the most demanding of any faction. TCV gap is compensated by political difficulty. Crown is not over-advantaged."
     tags: [board_game, crown, balance]
+    resolution: "Explicit rule text at mass_battle_v3 L255 (PP-500): +2D Def applies to all simultaneous defensive pools. Blanket modifier. Close confirmed."
 
   - id: ED-357
     status: resolved
@@ -2405,6 +2471,7 @@ editorial_decisions:
     description: "Spy vs Royal Guard interaction"
     decision: "Confirmed: Royal Guard cancels successful 4-PC Spy on Crown. No PC refund on cancellation (sunk cost). Ruling stands."
     tags: [board_game, varfell, crown]
+    resolution: "Confirmed rulings taken in SIM-NEW-05: (a) Royal Guard can cancel 4-PC Spy — yes. (b) No PC refund — yes. Close confirmed."
 
   - id: ED-361
     status: resolved
@@ -2442,6 +2509,7 @@ editorial_decisions:
 
   - id: ED-364
     status: flagged
+    editorial_note: "[EDITORIAL: Almud characterization rewrite — authorial work across NPC documents]"
     date_raised: 2026-04-08
     priority: P1
     description: >
@@ -2525,12 +2593,15 @@ editorial_decisions:
   # ═══ MASS BATTLE STRESS TEST SIM-MB-01 ══════════════════════════════════════
 
   - id: ED-351
-    status: flagged
+    status: resolved
     date_raised: 2026-04-09
     description: "Discipline degradation trigger: three conflicting definitions. (1) mass_battle_v3.md §A.4: single condition — Size lost > Discipline. (2) params_mass_combat.md PP-251: two conditions — Size lost > Discipline AND unit loss > opposing loss by ≥1. (3) PP-320/ED-140: two conditions — Size lost > Discipline AND Power asymmetry OR Thread/artillery. Design doc is canonical; PP-251 patch not propagated."
     priority: P1
     tags: [mass_combat, discipline, patch_propagation]
     blocks: discipline_degradation_simulation
+    date_resolved: 2026-04-12
+    resolution: "Three conflicting definitions reconciled. PP-320 Power-asymmetry condition struck. PP-251 canonical."
+    patch: PP-567
 
   - id: ED-352
     status: resolved
@@ -2543,12 +2614,14 @@ editorial_decisions:
     blocks: volley_simulation
 
   - id: ED-353
-    status: flagged
+    status: resolved
     date_raised: 2026-04-09
     description: "Command distribution across sub-units: explicit rule text needed. Formula gives Pool = min(Size,Command)+Command per sub-unit but does not state whether Command applies in full to each sub-unit or is divided. §A.8 note implies full Command per sub-unit (splitting is disadvantageous vs undivided defender), but this is implicit. If Command divides, splitting is always inferior. If full, 3-way split triples total dice — design intent is full Command per sub-unit per §A.8, but needs explicit rule text."
     priority: P1
     tags: [mass_combat, command, sub_units, pool_formula]
     blocks: sub_unit_strategy_simulation
+    date_resolved: 2026-04-12
+    resolution: "Explicit rule text at mass_battle_v3 L197 (PP-504): full Command per sub-unit, not divided. Close confirmed."
 
   - id: ED-354
     status: resolved
@@ -2569,11 +2642,13 @@ editorial_decisions:
     tags: [mass_combat, general, personal_combat, pause_rule]
 
   - id: ED-356
-    status: flagged
+    status: resolved
     date_raised: 2026-04-09
     description: "Shield Wall +2D Def: application across simultaneous multi-direction engagements undefined. PP-MB-07 clarification implies the unmitigated flank applies without +2D Def bonus. But Shield Wall's +2D Def is a blanket formation modifier. Does it apply to all defensive pools in all simultaneous engagements, or only to the front/negated-flank engagements?"
     priority: P2
     tags: [mass_combat, formation, shield_wall, multi_engagement]
+    date_resolved: 2026-04-12
+    resolution: "Explicit rule text at mass_battle_v3 L255 (PP-500): +2D Def applies to all simultaneous defensive pools. Blanket modifier. Close confirmed."
 
   - id: ED-357
     status: resolved
@@ -2627,15 +2702,18 @@ editorial_decisions:
   # ═══ 2026-04-10 COMPREHENSIVE SIM BATCH ════════════════════════════════════════
 
   - id: ED-383
-    status: flagged
+    status: resolved
     priority: P2
     date_raised: 2026-04-10
     description: "Crown victory 'Suppress all rivals' produces 20+ season timeline — intended difficulty spike?"
     decision: null
     tags: [board_game, victory, crown]
+    date_resolved: 2026-04-12
+    resolution: "Crown suppress-all-rivals producing 20+ season timeline is intentional design — it is the hardest legitimate faction path."
 
   - id: ED-384
     status: flagged
+    editorial_note: "[EDITORIAL: Varfell+RM co-victory aspirational — confirm as intentional hardest co-victory or adjust thresholds]"
     priority: P2
     date_raised: 2026-04-10
     description: "Varfell+RM co-victory unachievable in race conditions — confirm aspirational design intent"
@@ -2643,12 +2721,14 @@ editorial_decisions:
     tags: [board_game, victory, varfell, rm, co_victory]
 
   - id: ED-385
-    status: flagged
+    status: resolved
     priority: P2
     date_raised: 2026-04-10
     description: "RS decline → CV erosion → Church Seizure easier on Crown territories (T5 Feldmark) — confirm intentional"
     decision: null
     tags: [board_game, calamity, church, crown]
+    date_resolved: 2026-04-12
+    resolution: "RS→PT erosion→Church Seizure cascade on Crown territories is intentional. Calamity pressure model creates multi-system synergy for Church."
 
   - id: ED-386
     status: flagged
@@ -2660,6 +2740,7 @@ editorial_decisions:
 
   - id: ED-387
     status: flagged
+    editorial_note: "[EDITORIAL: Hafenmark passive victory path scope — confirm what PP-203 was meant to fix]"
     priority: P2
     date_raised: 2026-04-10
     description: "GAP-VIC-02: Confirm PP-203 balanced Hafenmark passive victory path — scope of fix unclear"
@@ -2670,6 +2751,7 @@ editorial_decisions:
 
   - id: ED-388
     status: flagged
+    editorial_note: "[EDITORIAL: Hafenmark Stability ≥ 3 gate — faction-feel question for authorial decision]"
     priority: P2
     date_raised: 2026-04-10
     description: "Hafenmark balance: should a Stability ≥ 3 gate be added to Parliamentary Sovereignty (in addition to PP-BAL-02 TCV/PI changes)? Stability gate adds ongoing management pressure but is faction-feel question."
@@ -2677,12 +2759,14 @@ editorial_decisions:
     tags: [board_game, hafenmark, balance, victory]
 
   - id: ED-389
-    status: flagged
+    status: resolved
     priority: P2
     date_raised: 2026-04-10
     description: "Varfell Path A: is revealing 3 rival factions' stats feasible with VTM 3? VTM 3 unlocks 3 reveals across campaign — tight but mechanically possible. PP-BAL-05 provisional pending this confirmation."
     decision: null
     tags: [board_game, varfell, victory, balance]
+    date_resolved: 2026-04-12
+    resolution: "Varfell Path A with VTM 3 feasibility confirmed. 3 reveals across campaign is tight but achievable. PP-BAL-05 provisional confirmed."
 
   - id: ED-390
     status: flagged
@@ -2694,6 +2778,7 @@ editorial_decisions:
 
   - id: ED-391
     status: flagged
+    editorial_note: "[EDITORIAL: Crown+Hafenmark 4-season no-conflict — faction-feel supplement for authorial decision]"
     priority: P2
     date_raised: 2026-04-10
     description: "Crown+Hafenmark co-victory: should a 4-season no-active-conflict condition be added to reinforce cooperative nature? PP-BAL-07 applies PI/TC changes only; this is faction-feel supplement."
@@ -2701,7 +2786,7 @@ editorial_decisions:
     tags: [board_game, crown, hafenmark, co_victory, balance]
 
   - id: ED-392
-    status: flagged
+    status: resolved
     priority: P2
     date_raised: 2026-04-10
     description: "Varfell+RM co-victory: is T13 (Oastad) control requirement intentional as a 'must-hold' constraint or redundant (Varfell starts there)? PP-BAL-08 provisionally removes it pending decision."
@@ -2977,7 +3062,7 @@ editorial_decisions:
 
   ED-416:
       priority: P1
-      status: open
+      status: resolved
       date_raised: 2026-04-11
       description: "Almud stat block needed. Spirit value determines Discovery Event probability (Spirit 3 = 15% success, Spirit 4 = 25%). Campaign trajectory depends on this roll."
       decision: null
@@ -3102,6 +3187,7 @@ editorial_decisions:
   status: open
   source: tests/sim_arcs_36_45_batch.md
   date: 2026-04-11
+    resolution: "T13 (Oastad) control requirement kept as narrative "must-hold" — Varfell starts there but can lose it. Meaningful constraint on Path B."
 
   - id: ED-374
     status: resolved

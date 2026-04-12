@@ -5446,3 +5446,131 @@ patches:
   finding_id: ED-373
   affects: [references/params_board_game.md]
   status: applied
+
+- id: PP-560
+  type: mechanical-clarification
+  date: 2026-04-12
+  severity: P1
+  description: >
+    ED-313 resolved: PI ≤ 2 TC +2 effect does not apply when TC is frozen at 75.
+    TC freeze state takes precedence over the institutional-collapse TC bonus.
+    PI ≤ 2 still removes Hafenmark Parliamentary Manoeuvre and enables Crown decree governance.
+  finding_id: ED-313
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-561
+  type: balance
+  date: 2026-04-12
+  severity: P1
+  description: >
+    ED-342/ED-343 resolved: Crown+Hafenmark co-victory was achievable by Season 1-2 with
+    zero active play (Hafenmark needed only +1 TCV from starting 8). Fix: raise Hafenmark
+    TCV threshold from 9 → 12 (requires 4 territory gains). Add: both factions must have
+    Mandate ≥ 4 simultaneously (requires active political maintenance). Updated in both
+    victory_architecture_v1.md §4 and params_board_game co-victory summary table.
+  finding_id: ED-342, ED-343
+  affects:
+    - designs/board_game/victory_architecture_v1.md
+    - references/params_board_game.md
+  status: applied
+
+- id: PP-562
+  type: balance
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-344 resolved: Royal Decree Fragmentation modifier reduced from +2 Ob to +1 Ob.
+    The +2 Ob perversely punished Crown hardest when Decree was most needed (3+ rivals
+    at Stability ≤ 2 = late-game crisis = maximum suppression urgency). +1 Ob preserves
+    the crisis-difficulty flavour without near-prohibitive cost.
+  finding_id: ED-344
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-563
+  type: definition
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-345 resolved: VTM TC contribution defined. Once VTM is publicly visible (VTM 3+),
+    generates Church institutional pressure: VTM 3 = +0.5 TC/season, VTM 4 = +1 TC/season,
+    VTM 5 = +1.5 TC/season (fractional tracking; applied at Accounting). Matches "low"/"high"
+    cost labels already present in VTM Discretion text (PP-438). VTM Discretion (1 PC) still
+    suppresses for 1 season.
+  finding_id: ED-345
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-564
+  type: redesign
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-346 resolved: Ministry Priority 3 redesigned. Old: contested roll (Ministry 3D vs
+    Church Mandate Ob, ~11% success rate) to delay Church Seizure. New: automatic procedural
+    objection — no roll required. Church Seizure in that territory delayed 1 season. AP-token
+    consumed. Rationale: Ministry's institutional role is procedural/administrative, not military.
+    A near-impossible roll made Priority 3 mechanically dead (11% success).
+  finding_id: ED-346
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-565
+  type: redesign
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-328 + ED-341 resolved: AER advancement and decay redesigned.
+    Advancement: Cardinal of Temperance Phase 1 declaration now requires a roll
+    (Mandate vs Ob = floor(current AER / 2) + 1). Success: AER +1. Failure: no change.
+    At AER 2-3: Ob 2 (~54% at Mandate 5). At AER 4-5: Ob 3 (~29% at Mandate 5).
+    Decay: AER -1 at Year-End Accounting if Temperance maintenance was not successfully
+    maintained that year. Creates natural AER homeostasis without trivialising early AER.
+    Was: passive no-roll AER loss reduction; achievable AER 3 by Season 3 automatically.
+  finding_id: ED-328, ED-341
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-566
+  type: design
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-338 resolved: Partition Pressure public marker added. When all Partition conditions
+    EXCEPT TC ≥ 50 are simultaneously met at Accounting, a public Partition Pressure marker
+    is placed. This gives other factions 1 season to disrupt conditions before the TC threshold
+    check can fire the victory. Marker removed if any condition breaks. Addresses no-advance-
+    signal finding from SIM-NEW-02: other factions had no warning.
+  finding_id: ED-338
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-567
+  type: formula-correction
+  date: 2026-04-12
+  severity: P1
+  description: >
+    ED-351 resolved: Three conflicting Discipline degradation definitions reconciled.
+    PP-320/ED-140 Power-asymmetry condition (condition 2: attacking Power > defending Power
+    OR Thread/artillery) is struck as superseded. PP-251 is canonical: condition 2 =
+    this unit's Size loss exceeds opposing unit's Size loss by ≥ 1. Mass_battle_v3 §A.4
+    and params_mass_combat PP-251 now agree. PP-320 section updated to reflect supersession.
+  finding_id: ED-351
+  affects: [references/params_mass_combat.md]
+  status: applied
+
+- id: PP-568
+  type: design
+  date: 2026-04-12
+  severity: P1
+  description: >
+    ED-340 provisional: Altonian Vanguard deployment mechanics defined. IP ≥ 75 places NPC
+    Vanguard (Military 5, Size 3) at T10 (Spartfell). Advances one territory/2 unchallenged
+    seasons along invasion route (T10→T3→T2→T1). Contest triggers automatic Battle vs Ob 3.
+    While at T1: all factions -1 Stability/season. Eliminated by AER management (AER ≥ 4
+    raises IP threshold; AER = 5 halts Vanguard). [PROVISIONAL — authorial review required
+    for Vanguard identity, route, and elimination narrative.]
+  finding_id: ED-340
+  affects: [references/params_board_game.md]
+  status: applied

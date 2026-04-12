@@ -119,7 +119,7 @@ systems:
     design_doc: designs/board_game/valoria_bg_v05_simulation_and_patches.md
     compilation_stage: compilation/v0.14/stage_bg_board_game_mode.md
     compilation_current: false
-    note: "Stage_bg STALE. bg_v05 + victory_architecture_v1.md canonical. params_board_game — PP-548-559 applied (2026-04-11). Formula unification, PT rename, range fixes, Certainty, ED-370-378 resolved."
+    note: "Stage_bg STALE. bg_v05 + victory_architecture_v1.md canonical. PP-548-568 applied (2026-04-11/12). Formula unification, PT rename, Certainty, ED-312-392 batch resolution."
 
   scale_transitions:
     canonical: compilation/v0.14/stage11_scale_transitions.md
