@@ -227,6 +227,8 @@
 | gm_ref/arcs_01_04_nongreedy.md | ALL | CURRENT | Batch 01 arcs |
 | gm_ref/arcs_05_09_batch02.md | ALL | CURRENT | Batch 02 arcs |
 | gm_ref/arcs_10_18_consolidated.md | ALL | CURRENT | Batch 03 consolidated |
+| gm_ref/arcs_36_40_interdependent.md | ALL | CURRENT | Emergent interdependent arcs batch 1 |
+| gm_ref/arcs_41_45_interdependent.md | ALL | CURRENT | Emergent interdependent arcs batch 2 |
 | ~~4 deprecated arc revision files~~ | — | DEPRECATED | Moved to deprecated/gm_ref/ (2026-04-09) |
 | ~~gm_ref/debate_ref_card_v1.md~~ | — | DEPRECATED | Moved to deprecated/ — superseded by contest system |
 
