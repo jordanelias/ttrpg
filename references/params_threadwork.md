@@ -518,7 +518,7 @@ All params_threadwork references to FR updated to RO.
 ## Shifting Object Encounter Rule (PP-303) [PROVISIONAL — ED-173]
 When a Shifting Object is present in a territory (formed from Fragile band RS consequence or operation failure):
 - Practitioners within 50m: Coherence check TN 7 Ob 1 per scene. Failure: Coherence −1.
-- Non-practitioners: Certainty −1 (PP-283) after 1+ hour of proximity.
+- Non-practitioners: Certainty −1 (PP-551) after 1+ hour of proximity. (Witnessing Thread phenomena moves the character toward Thread acceptance.)
 - Mending the Shifting Object: treated as Micro-Gap, Ob 2.
 - Dissolution: Ob 3 (standard small-scale Dissolution).
 Shifting Objects persist until addressed. Each season unaddressed: +1 Ob to Thread operations in that territory.
@@ -549,7 +549,7 @@ A practitioner who attempts Leap without the Approach Training tag:
 - No RS cost from auto-fail (operation never reached the operation phase).
 - Coherence is NOT reduced by auto-fail (only by successful contact that then degrades).
 
-[FLAGGED: confirm Certainty −1 as the correct penalty vs alternatives (Coherence −1, wound, Composure).]
+[Certainty −1 confirmed per PP-551 redesign. Non-practitioner Thread exposure moves toward Thread acceptance. Coherence −1 is reserved for practitioners performing operations.]
 
 ## ED-119 Resolution (PP-304) — Lenneth Almqvist TS [SUPERSEDED 2026-04-11]
 <!-- PP-304 DISSOLVED. See PP-279 supersession note above. Lenneth TS 8 starting, development via archive. -->

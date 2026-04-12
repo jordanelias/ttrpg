@@ -1,6 +1,58 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-11_SONNET_AUDIT_ED_RESOLUTION
+session_close: 2026-04-11
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Full cross-system mechanical audit (Modes A-G) post PP-548-554
+2. 8 findings identified and patched
+3. ED-370 through ED-378 resolved (9 editorial items)
+4. PP-555 through PP-559 committed
+
+## COMMITS THIS SESSION
+- PP-548-554: Formula/range unification + Certainty redesign + PT rename
+- PP-555-559: Audit findings + ED-370-378 resolution
+
+## AUDIT FINDINGS (PP-555)
+P1 resolved: 2
+  - BG Commander bonus floor+1 → floor (pool bonus, not Ob); Military-0 now correctly 0D
+  - RDT row-6 orphan merged into row-5; removed
+P2 resolved: 3
+  - RDT header stale 0-6 → 0-5
+  - 'Conviction value' stale text → 'Piety value' (2 files)
+  - params_threadwork Certainty PP-283 refs updated to PP-551; stale flag resolved
+
+## EDITORIAL RESOLUTIONS (PP-556-559)
+ED-370: Hybrid Diplomacy→Treaty bridge — personal success queues -1 Ob Echo (PP-556)
+ED-371: Coalition suppression auto-trigger — confirmed as designed (PP-557)
+ED-372: Thread Liaison dissolution — prospective only (PP-558)
+ED-373: Diplomatic Token — suspended in submitted/vassal state (PP-559)
+ED-374: Social modifiers — excluded from floor+1; damage components confirmed
+ED-375: Progress tracks — 0-base category confirmed
+ED-376: Parliament Integrity — 0-20 cumulative pressure meter confirmed
+ED-377: Submission exception — Mandate-0 vassal state explicit exception to floor-1
+ED-378: RDT 0-5 — step-6 merged into step-5; complete
+
+## OPEN EDITORIALS (carried forward — pre-existing)
+ED-383: Crown victory timeline (P2)
+ED-384: Varfell+RM co-victory (P2)
+ED-385: RS→PT erosion cascade (P2)
+ED-386: Cultural Uprising arc definition (P3)
+ED-387: Hafenmark passive victory path (P2)
+ED-388: Hafenmark Stability gate (P2)
+ED-389: Varfell Path A feasibility (P2)
+ED-390: RM Phase 2 WC bonus (P3)
+ED-391: Crown+Hafenmark co-victory (P2)
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-11_SONNET_FORMULA_RANGE_UNIFICATION
 session_close: 2026-04-11
 phase: COMPLETE

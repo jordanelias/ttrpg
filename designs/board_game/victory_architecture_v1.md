@@ -84,7 +84,7 @@ Every victory requires holding all conditions for **2 consecutive Accounting ste
 
 **Degree effects:** Overwhelming: Treaty formed + target Mandate −1 + Stability +1 + Crown Mandate +1. Success: Treaty formed + target Mandate −1 + Stability +1. Partial: Treaty offered — target accepts (formed, no stat changes) or declines (Crown gains CB). Failure: Crown Stability −1.
 
-**Treaty period:** 4 seasons. Either party may extend (action, no roll) or let lapse. Lapse is not betrayal. **Lapse timing (PP-528):** Treaty lapse occurs at Phase 1 of the season after the period ends. Treaty formed Season N lapses at Phase 1 of Season N+5. Accounting of Season N+4 sees the Treaty as active. Extension must be declared at Phase 1 of Season N+5.
+**Treaty period:** 4 seasons. Either party may extend (action, no roll) or let lapse. Lapse is not betrayal. **Lapse timing (PP-528):** Treaty lapse occurs at Phase 1 of the season after the period ends. Treaty formed Season N lapses at Phase 1 of Season N+5. Accounting of Season N+4 sees the Treaty as active. Extension must be declared at Phase 1 of Season N+5. **Hybrid Diplomacy bridge (ED-370):** Personal Diplomacy success in TTRPG/Hybrid scene queues −1 Ob Domain Echo on BG Treaty roll at next Accounting. Cap: −1 Ob, once per Treaty target per arc.
 
 **Crown-break (PP-511):** Crown Stability −2, Mandate −1 (end of Phase 4). Betrayed faction gains permanent CB. CB usable next season.
 
@@ -102,7 +102,7 @@ TCV ≥ 22 AND every other playable faction eliminated (Stability 0). No treatie
 **Graduated Seizure (PP-494):** Church may attempt Territorial Seizure at any TC value. TC determines the size of Church's Seizure pool — the higher the TC, the more institutional authority Church projects.
 
 **Church Seizure Pool:** Influence + floor(TC / 15)
-**Church Seizure Ob:** 7 − PT (where PT is the target territory's Conviction value, 0 = Restoration pole, 5 = Piety pole)
+**Church Seizure Ob:** 7 − PT (where PT is the target territory's Piety value, 0 = Restoration pole, 5 = Piety pole)
 
 | TC | Pool Bonus | Total Pool (Inf 6) |
 |----|-----------|-------------------|

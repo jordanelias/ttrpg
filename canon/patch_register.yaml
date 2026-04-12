@@ -5369,3 +5369,80 @@ patches:
   affects: [designs/gm_ref_cp14/zoom_in_out_reference_card.md]
   status: applied
   applied_commit: pending
+
+- id: PP-555
+  type: formula-correction
+  date: 2026-04-11
+  severity: P1
+  description: >
+    Audit findings from post-PP-548-554 review.
+    (1) BG Commander bonus: PP-550 incorrectly applied floor(Military/2)+1.
+    Pool bonuses are not Ob derivations; floor+1 rule does not apply.
+    Corrected to floor(Military/2) — Military 0 now correctly gives 0 bonus dice.
+    Updated in mass_battle_v3.md and params_mass_combat.md.
+    (2) RDT table orphan: row-6 remained after range corrected to 0-5.
+    Row-6 effect (All diplomatic actions targeting Hafenmark +1 Ob) merged into
+    row-5 as capstone. Row-6 removed. RDT stale header at L539 updated to 0-5.
+    (3) Stale 'Conviction value' text in Church Seizure Ob description replaced
+    with 'Piety value' in params_board_game and victory_architecture_v1.md.
+    (4) params_threadwork PP-283 Certainty references updated to PP-551.
+    Stale flag at L552 resolved.
+  affects:
+    - designs/mass_combat/mass_battle_v3.md
+    - references/params_mass_combat.md
+    - references/params_board_game.md
+    - designs/board_game/victory_architecture_v1.md
+    - references/params_threadwork.md
+  status: applied
+
+- id: PP-556
+  type: editorial
+  date: 2026-04-11
+  severity: P2
+  description: >
+    ED-370 resolved: Hybrid Diplomacy→Treaty bridge.
+    Personal Diplomacy success (any degree) in TTRPG/Hybrid scene targeting
+    a faction queues -1 Ob Domain Echo on BG Treaty roll at next Accounting.
+    Cap: -1 Ob regardless of success count. One Echo per Treaty target per arc.
+    Rule added to victory_architecture_v1.md §Treaty period.
+  finding_id: ED-370
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-557
+  type: editorial
+  date: 2026-04-11
+  severity: P2
+  description: >
+    ED-371 resolved: Coalition suppression auto-trigger (PP-296) confirmed
+    as designed. No Senator card required. Cost is the Domain Action itself.
+    Coalition emergence is intentional. No mechanical change.
+  finding_id: ED-371
+  affects: []
+  status: applied
+
+- id: PP-558
+  type: editorial
+  date: 2026-04-11
+  severity: P2
+  description: >
+    ED-372 resolved: Thread Liaison dissolution is prospective only.
+    Thread operations already credited before dissolution remain valid.
+    Future operations after dissolution provide no Liaison benefit.
+    Explicit prospective clause added to params_board_game §Thread Liaison.
+  finding_id: ED-372
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-559
+  type: editorial
+  date: 2026-04-11
+  severity: P3
+  description: >
+    ED-373 resolved: Diplomatic Token suspended while token-holding faction
+    is in submitted (vassal) state (Mandate 0 from submission). Resumes on
+    recovery. Updated from 'Mandate 0' to 'submitted/vassal state' to align
+    with floor-1 rule — Mandate 0 only occurs in submission context.
+  finding_id: ED-373
+  affects: [references/params_board_game.md]
+  status: applied

@@ -609,7 +609,7 @@ Apply Ob and dice modifier.
 
 **Step 3 — Roll.**
 Pool = sum of all engaged unit Martial values + commander bonus.
-Commander bonus = floor(faction Military / 2) + 1. *[PP-550]* TN 7. Ob from table.
+Commander bonus = floor(faction Military / 2). *[PP-555]* TN 7. Ob from table.
 Net successes = damage dealt to opposing units.
 
 **Step 4 — Determine outcome by margin (PP-104):**
@@ -694,7 +694,7 @@ Clock changes still batch to Accounting.
 **Stat translation (TTRPG ↔ BG):**
 - TTRPG unit Size → BG unit Health (Size × 1.5, round up — Health scale
   is 8–11, Size is 1–7; Size 4 ≈ Health 9)
-- TTRPG general Command → BG commander bonus = floor(Command / 2) + 1
+- TTRPG general Command → BG commander bonus = floor(Military / 2)
 - TTRPG Discipline → BG Discipline (direct, same scale)
 - TTRPG Morale (rout) → BG Discipline check (rout equivalent)
 
@@ -709,7 +709,7 @@ All items below require user approval before compilation.
 | Command-EDIT-01 | Military stat → unit Power/Discipline ceiling (§A.4) | Table above — confirm |
 | Command-EDIT-02 | Battle outcome → faction stat consequences (§A.13) | −1 Military/unit destroyed; Stability checks as above |
 | Command-EDIT-03 | Muster → unit stats (§A.13) | Size=2, Power = floor(Military/2)+1 |
-| BG-EDIT-01 | Commander bonus formula (§B.3) | floor(Military/2)+1 (PP-550) |
+| BG-EDIT-01 | Commander bonus formula (§B.3) | floor(Military/2) (PP-555) |
 | BG-EDIT-02 | Faction-specific tactic cards (§B.4) | 8 faction cards above |
 | CLOCK-EDIT-01 | Institutional Pressure 75+ Altonian invasion unit stats | See simulation report |
 | CLOCK-EDIT-02 | Church military victory → Theocracy Counter change | No Theocracy Counter change from military victory alone (confirm) |

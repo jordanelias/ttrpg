@@ -358,7 +358,7 @@ One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland)
 ### Church Graduated Seizure (PP-494, PP-506–PP-511)
 **Available:** Any TC value from TC ≥ 15 (PP-507). Not gated on TC 75. TC 75 freeze marks the phase transition where seizure becomes Church's primary mode, but seizure was always available.
 **Pool:** Influence + floor(TC / 15). At TC 28: 7D. At TC 75: 11D (frozen cap). (PP-494)
-**Ob:** 7 − PT (target territory Conviction value). PT 5 = Ob 2. PT 0 = Ob 7. (PP-494)
+**Ob:** 7 − PT (target territory Piety value). PT 5 = Ob 2. PT 0 = Ob 7. (PP-494)
 
 | PT | Seizure Ob |
 |----|-----------|
@@ -537,7 +537,7 @@ Track 0–5. Starts 2.
 [Full table in PP-181 section — confirmed by v04 B2]
 
 ## RDT (Reformed Doctrine Track) (PP-181, v04 B5 confirmed)
-Hafenmark private track 0–6.
+Hafenmark private track 0–5. (PP-555)
 [Full mechanics in PP-181 section — confirmed by v04 B5]
 
 ## TD (Theological Dissatisfaction) (PP-181, v04 B5 confirmed)
@@ -1289,7 +1289,7 @@ Roll: Influence vs Ob = floor(target Mandate / 2) + 1.
 | Partial | PI +1 (no Token) |
 | Failure | Hafenmark Stability −1 |
 
-**Diplomatic Token (PP-517/521):** Permanent marker on target faction mat. Removed on: (a) military conflict with Hafenmark — any season either faction plays Legionary targeting the other's held territory (intent of play; March to uncontested territory excluded); (b) target faction elimination; (c) Formal Crown Treaty formed with the token-holding faction (PP-521). Maximum 1 per faction mat. Public. Token effects: target faction counts as Support in Parliamentary Sessions. Token effect suspended while token-holding faction has Mandate 0.
+**Diplomatic Token (PP-517/521):** Permanent marker on target faction mat. Removed on: (a) military conflict with Hafenmark — any season either faction plays Legionary targeting the other's held territory (intent of play; March to uncontested territory excluded); (b) target faction elimination; (c) Formal Crown Treaty formed with the token-holding faction (PP-521). Maximum 1 per faction mat. Public. Token effects: target faction counts as Support in Parliamentary Sessions. Token effect suspended while token-holding faction is in submitted (vassal) state or has Mandate 0 from submission. (PP-555 / ED-373)
 
 ---
 
@@ -1326,6 +1326,7 @@ Crown designates one allied faction. Liaison's Thread operations in Crown-held t
 
 **Thread Liaison 'Allied' scope (PP-520):** For Thread Liaison designation only, 'Allied' = Active Crown Treaty partner. Parliamentary voter and Resentment conditions do not qualify for Liaison designation.
 **Dissolves on:** Military conflict between Crown and Liaison.
+**Dissolution timing (ED-372):** Prospective only. Thread operations already credited before dissolution remain valid. Future operations after dissolution provide no Liaison benefit.
 
 ---
 
@@ -1425,8 +1426,7 @@ Advances: Reformed Settlement event = +1 (max once per arc). Requires: Hafenmark
 | 2 | Formal Reformed Settlement. TD track activates. |
 | 3 | Church Mandate −1 (institutional strain) + Diplomatic actions vs Church: −1 Ob |
 | 4 | TC suppression extends: −1 TC/season while Hafenmark Mandate ≥ 3 (was ≥ 4). Reformed territory PT actions +1 Ob for Church. |
-| 5 | Excommunication against Hafenmark costs +2 Mandate. Baralta: −2 Ob on TC Suppress actions. |
-| 6 | All diplomatic actions targeting Hafenmark from any faction: +1 Ob |
+| 5 | Excommunication against Hafenmark costs +2 Mandate. Baralta: −2 Ob on TC Suppress actions. All diplomatic actions targeting Hafenmark from any faction: +1 Ob. |
 
 ### Theological Dissatisfaction (TD) — Range 0–5
 Activates at RDT 2. Advances: +1 per arc when RDT ≥ 2 AND Church plays Assert. Church may freeze TD by playing Accommodate Reformed Settlement.

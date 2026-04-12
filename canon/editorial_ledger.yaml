@@ -2585,31 +2585,43 @@ editorial_decisions:
     tags: [mass_combat, mutual_destruction, stability, accounting]
 
   - id: ED-370
-    status: flagged
+    status: resolved
     date_raised: 2026-04-09
     priority: P2
     description: "Hybrid personal scene Diplomacy -> BG Treaty bridge rule. Personal Diplomacy success proposed to grant -1 Ob to board-level Treaty roll at next Accounting; board roll still required."
+    date_resolved: 2026-04-11
+    resolution: "Personal Diplomacy success in TTRPG/Hybrid queues -1 Ob Domain Echo on BG Treaty roll. Cap -1 Ob, once per Treaty target per arc."
+    patch: PP-556
     tags: [hybrid, diplomacy, treaty]
 
   - id: ED-371
-    status: flagged
+    status: resolved
     date_raised: 2026-04-09
     priority: P2
     description: "Coalition suppression dominant strategy (PP-296) — confirm cost-free auto-trigger is intended. If not, add declaration cost (Senator card to formally join)."
+    date_resolved: 2026-04-11
+    resolution: "Coalition suppression auto-trigger (PP-296) confirmed as designed. No Senator card required."
+    patch: PP-557
     tags: [board_game, coalition, balance]
 
   - id: ED-372
-    status: flagged
+    status: resolved
     date_raised: 2026-04-09
     priority: P2
     description: "Thread Liaison dissolution timing — prospective (already-credited ops remain valid) vs retroactive. Proposed: prospective only."
+    date_resolved: 2026-04-11
+    resolution: "Thread Liaison dissolution is prospective only. Already-credited ops remain valid."
+    patch: PP-558
     tags: [board_game, hybrid, thread_liaison]
 
   - id: ED-373
-    status: flagged
+    status: resolved
     date_raised: 2026-04-09
     priority: P3
     description: "Diplomatic Token on Mandate-0 faction — Token effect suspended while holder has Mandate 0; resumes on recovery. Applied provisionally in PP-517."
+    date_resolved: 2026-04-11
+    resolution: "Diplomatic Token suspended while faction is in submitted/vassal state. Resumes on recovery."
+    patch: PP-559
     tags: [board_game, diplomacy]
 
   # ═══ 2026-04-10 COMPREHENSIVE SIM BATCH ════════════════════════════════════════
@@ -3092,32 +3104,42 @@ editorial_decisions:
   date: 2026-04-11
 
   - id: ED-374
-    status: flagged
+    status: resolved
     date_flagged: 2026-04-11
     description: "Social combat modifiers (Cha modifier floor((Cha-3)/2), Focus defence floor(Foc/2)) excluded from floor+1 scope. These are damage formula components, not Obs. Applying +1 would shift social damage economy system-wide. Provisional exclusion pending review."
+    date_resolved: 2026-04-11
+    resolution: "Social modifiers (Cha modifier, Focus defence) confirmed excluded from floor+1. These are damage components, not Ob derivations."
     tags: [social_contest, formula, provisional]
 
   - id: ED-375
-    status: flagged
+    status: resolved
     date_flagged: 2026-04-11
     description: "Progress tracks (VTM, AER, WR, PC, Coup Counter) classified as separate category: 0-base permitted (0 = not yet developed). Distinct from oscillating 0-5 trackers and faction stats 1-7. Provisional classification pending user decision."
+    date_resolved: 2026-04-11
+    resolution: "Progress tracks (VTM, AER, WR, PC, Coup Counter) classified as separate category. 0-base permitted; 0 = not yet developed."
     tags: [board_game, tracks, provisional]
 
   - id: ED-376
-    status: flagged
+    status: resolved
     date_flagged: 2026-04-11
     description: "Parliament Integrity classified as cumulative pressure meter (not oscillating tracker). Range corrected to 0-20 with auto-resolve at PI >= 20 (Crown elimination). Provisional — user has not explicitly confirmed 0-20 vs redesign."
+    date_resolved: 2026-04-11
+    resolution: "Parliament Integrity confirmed as cumulative pressure meter. Range 0-20. Auto-resolves at PI >= 20 (Crown elimination)."
     tags: [board_game, parliament, provisional]
 
   - id: ED-377
-    status: flagged
+    status: resolved
     date_flagged: 2026-04-11
     description: "Submission Mandate-0 exception (PP-475): submitted faction retains Mandate 0 as vassal state. This is a deliberate exception to the faction stat floor-1 rule. Provisional — confirm whether submitted factions are exempt from floor-1."
+    date_resolved: 2026-04-11
+    resolution: "Submission exception confirmed. Submitted factions retain Mandate 0 as vassal state. Explicit exception to floor-1 rule."
     tags: [board_game, faction, submission, provisional]
 
   - id: ED-378
-    status: flagged
+    status: resolved
     date_flagged: 2026-04-11
     description: "RDT 0-6 → 0-5 applied provisionally. Step-6 state consolidated into step-5 effects. Review whether any mechanic specifically referenced RDT=6 and requires redesign of that final step."
+    date_resolved: 2026-04-11
+    resolution: "RDT step-6 merged into step-5 (capstone). Row-6 removed. 0-5 range confirmed. (PP-555)"
+    patch: PP-555
     tags: [board_game, hafenmark, rdt, provisional]
-
