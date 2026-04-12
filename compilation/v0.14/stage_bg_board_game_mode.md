@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Superseded by designs/board_game/valoria_bg_v05_simulation_and_patches.md (canonical).
+> Do not use as a canonical source.
+
+---
+
 <!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: designs/board_game/valoria_bg_v05_simulation_and_patches.md. Do not use for mechanical references. -->
 
 # VALORIA: BOARD GAME MODE

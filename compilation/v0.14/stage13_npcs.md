@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Superseded by designs/npcs/npc_roster.md (canonical, 2026-04-11 consolidated).
+> Do not use as a canonical source.
+
+---
+
 <!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: designs/npcs/npc_roster.md (partial). Do not use for mechanical references. -->
 
 # PART THIRTEEN: NAMED NPCs AND INSTITUTIONAL ACTORS

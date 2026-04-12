@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Superseded by canon/audit_threadwork_v25.md (full recheck, v2.5 audit).
+> Do not use as a canonical source.
+
+---
+
 # CANON GUARD REVIEW — Threadwork Redesign v2.4
 ## Date: 2026-03-27
 ## Source: threadwork_redesign_v2.4 (30 patches applied, 18 stress tests completed)

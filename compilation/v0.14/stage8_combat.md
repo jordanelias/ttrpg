@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Superseded by designs/combat/combat_design_v1.md (canonical).
+> Do not use as a canonical source.
+
+---
+
 <!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: designs/combat/combat_design_v1.md. Do not use for mechanical references. -->
 
 # PART EIGHT: COMBAT

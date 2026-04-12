@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Superseded by designs/setting/geography_design.md (canonical, approved 2026-04-05).
+> Do not use as a canonical source.
+
+---
+
 <!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: designs/setting/geography_design.md. Do not use for mechanical references. -->
 
 # PART SEVEN: TERRITORIES

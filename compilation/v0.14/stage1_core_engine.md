@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Superseded by references/params_core.md (canonical). All compilation/v0.14 stages outdated 2026-04-04.
+> Do not use as a canonical source.
+
+---
+
 <!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: references/params_core.md. Do not use for mechanical references. -->
 
 # VALORIA TTRPG RULESET — COMPILATION DRAFT

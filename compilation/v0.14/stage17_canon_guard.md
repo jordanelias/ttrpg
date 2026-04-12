@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Outdated v0.14 canon guard report. Superseded by canon/ directory.
+> Do not use as a canonical source.
+
+---
+
 <!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: skills/valoria-canon-guard/SKILL.md. Do not use for mechanical references. -->
 
 # Stage 17 — Canon Guard Pass

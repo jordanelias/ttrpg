@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Outdated v0.14 reference. Superseded by references/ params files.
+> Do not use as a canonical source.
+
+---
+
 <!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: No design-layer replacement yet — treat as unverified. Do not use for mechanical references. -->
 
 # PART SIXTEEN: REFERENCE MATERIALS

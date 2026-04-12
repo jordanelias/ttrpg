@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Assembly report for frozen v0.14 snapshot. Historical record only.
+> Do not use as a canonical source.
+
+---
+
 <!-- DEPRECATED: 2026-04-09 — OUTDATED compilation stage. Canonical source: Process artifact — no replacement. Do not use for mechanical references. -->
 
 # Compilation Report — Stage 3 Thread Operations (v2.5)
