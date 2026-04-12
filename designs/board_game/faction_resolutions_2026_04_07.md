@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Working design notes (PP-428+, ED-318+). Content absorbed into references/params_factions.md and designs/board_game/valoria_bg_v05_simulation_and_patches.md (canonical).
+> Do not use as a canonical source.
+
+---
+
 # Valoria — Faction Playability Resolutions
 <!-- DATE: 2026-04-07 | PP-428 onwards | ED-318 onwards -->
 <!-- Sources: params_factions.md, valoria_bg_v05, victory_architecture_v1.md, params_board_game.md (all canonical, fully read) -->

@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> CP14 arcs 5–8. Superseded by gm_ref/arcs_05_09_batch02.md.
+> Do not use as a canonical source.
+
+---
+
 <!-- DERIVED FROM: Checkpoint 14 (compilation/valoria_ruleset_checkpoint_14.md, 2026-03-26) -->
 <!-- SESSION: 2026-03-30 / 2026-03-31 — see session_log_archive.md -->
 <!-- STATUS: Pre-release reference tool. Not valid against any post-CP14 ruleset. -->

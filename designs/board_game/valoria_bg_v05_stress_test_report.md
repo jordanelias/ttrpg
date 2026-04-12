@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Stress test report output. Findings absorbed into params_board_game.md and patch_register.yaml. Archival record only.
+> Do not use as a canonical source.
+
+---
+
 # VALORIA STRESS TEST REPORT
 ## BG v0.5 Simulation & Patches + Mass Battle v3 — Comprehensive Audit
 ## Cross-system, within-system, and intersection tests

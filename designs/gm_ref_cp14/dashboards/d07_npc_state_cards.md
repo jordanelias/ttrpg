@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> CP14 dashboard. Based on outdated CP14 mechanics. Do not use for table play.
+> Do not use as a canonical source.
+
+---
+
 <!-- DERIVED FROM: Checkpoint 14 (compilation/valoria_ruleset_checkpoint_14.md, 2026-03-26) -->
 <!-- SESSION: 2026-03-30 / 2026-03-31 — see session_log_archive.md -->
 <!-- STATUS: Pre-release reference tool. Not valid against any post-CP14 ruleset. -->

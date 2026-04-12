@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> CP14 flowchart. Based on outdated CP14 mechanics.
+> Do not use as a canonical source.
+
+---
+
 # FLOWCHART: The Templar Crossing
 ## Seed: Season 2. Church deploys Templars into T6 (Varfell Highlands). TC=34. Vaynard present.
 ## Mode: HYB (BG opening → Zoom In → TTRPG personal scene → Zoom Out)

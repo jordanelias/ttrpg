@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> CP14 zoom reference card. Based on outdated CP14 mechanics.
+> Do not use as a canonical source.
+
+---
+
 # ZOOM IN / ZOOM OUT — GM REFERENCE CARD
 ## Version: 1.1 | Source: PP-103/PP-104, state_transfer_spec.md, mass_battle_v3.md §B.2/B.5
 ## Purpose: Single-page reference. Eliminates mid-session multi-document lookup.
