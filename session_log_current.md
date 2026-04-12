@@ -680,3 +680,22 @@ Canonical changes made:
 
 ## CONTEXT LIMIT — SESSION CLOSE
 Next session: Almud stat block (ED-416). Then simulate the Cultural Revival Track to verify pacing (does Lenneth reach TS 30 before RS enters Fractured band? The timing determines whether the institutional bridge to Edeyja is available before the crisis becomes unrecoverable).
+
+### 2026-04-11 — Comprehensive Narrative Analysis + Arc Library Audit + Corrections
+Session: 2026-04-11_OPUS_NARRATIVE_AUDIT
+- Comprehensive character/setting/arc analysis performed across full GitHub narrative corpus (~32 files fetched).
+- Consolidated character cards produced for all principal NPCs (Almud, Lenneth, Baralta, Vaynard, Ehrenwall, Himlensendt, Elske) synthesizing distributed characterization across stage13, stage6, batch_d, canonical timeline, narrative scenario chains, and arc documents.
+- Editorial additions proposed: Reinhardt archetype for Vaynard (user-confirmed), Catherine the Great for Lenneth (user-confirmed), Isabella I for Baralta (user-confirmed). Personal histories, Beliefs, ethical approaches, compromises, relationships, and inspirations added for all principals. 48 editorial items registered (ED-CHAR-01 through ED-CHAR-38, ED-ARC-01 through ED-ARC-04).
+- Self-audit performed: identified P-08 violations (TS-as-inheritance for Almud and Vaynard mothers), dead-mother cliché ×2, Lenneth TS 5 contradiction with P-08/§10.1. Corrections recommended.
+- Four new emergent arcs proposed and atomized: The Architect's Hand (Lenneth coup, Catherine parallel), The Babington Letters (conspiracy to install Elske), The Cathedral Blood (Pazzi conspiracy via Jarnstal independence), The Tudor Settlement (post-victory consolidation).
+- All four arcs reformulated as fully emergent with NPC AI behavioral profiles, mechanical trigger conditions, mermaid flowcharts, and mode-dependent trigger tables.
+- Trigger review performed: 6 mechanical errors corrected (Lenneth threshold too low, Elske Loyalty threshold meaningless, Cathedral TC too high, Niflhel presence undefined, detection paths too narrow, missing NPC AI).
+- Comprehensive arc library audit: ~47 arcs across 13 documents assessed for emergence quality (47% Grade A, 38% Grade B, 15% Grade C, 0% scripted), mechanical consistency, and interdependencies.
+- P1 corrections committed (a1ce5e02): IP 30→40 (Arc 20), TC 60→Graduated Seizure/TC 75 (Arc 13), Reach→Influence + Baralta Mandate ≥4 (Arc 9), Schoenland T15→T16 (Arc 25), Collision D invalidated by E-01.
+- Threadwork probability analysis run on 13 key arc decision points. Critical finding: Crown Suppress TC was non-functional (~1% success rate). Fixed: PP-547 (6758b586) — Suppress Ob = Church Mandate ÷ 2 (round up, min 1).
+- 7 P1 issues identified and 6 corrected. Remaining P1: Southernmost design-layer document (4 arcs depend on undefined mechanics), GAP-ARC-01 (Niflhel Quiet deployment RS/TT cause undefined).
+- Duplicate/stale arc files identified for deprecation: valoria_emergent_campaign_arcs.md, valoria_emergent_arcs_experimental.md.
+- Arc density management gap identified — no tool exists. Arc Priority Matrix proposed.
+- 6 unexpected cross-arc interactions documented (Babington↔Hunting Accident, Cathedral↔Quiet Fracture, Lenneth coup↔Practitioner Who Stopped, Tudor↔Baralta dynasty, Framework Trap as permanent modifier, Empty Fort dual-nature under different crises).
+- REMAINING P1 BLOCKERS: ED-373 (Vanguard stats), ED-377 (CV starting values), Southernmost design document, GAP-ARC-01.
+- Next: simulate arc divergence on key roll outcomes; deprecate stale arc files; create Arc Priority Matrix for GMs.
