@@ -930,3 +930,28 @@ Priority for next session:
 
 ### Open editorials carried forward
 ED-370, ED-371, ED-372, ED-373 (as prior session)
+
+
+## Session 2026-04-12 — Arc Audit Resolution
+
+**Task:** Resolve audit findings from two-day arc collation + canon/NPC review.
+
+**Completed:**
+- ED-408 resolved: Prudence Cardinal named Aldric Tormann (npc_roster §13, arcs_36_40)
+- ED-409 resolved: Torsvald Deniability Debt threshold = 3
+- ED-410 resolved: Collection 1/season confirmed canonical (PP-168); no modification
+- ED-411 resolved: Solberg recall → Schoenland Intel Ob 2 (PP-555 applied); IP threshold corrected 15→8
+- ED-412 resolved: Convergence compression formula N + max(4, 8−N)
+- Arc 40 partial convergence table added (4/4, 3/4, 2/4, 1/4 outcomes)
+- Collision point 4 false positive documented (arc_narrative_analysis)
+- Cross-Batch Collision Register added (arc_narrative_analysis)
+- PP-556: Arc-specific Hybrid Zoom In trigger extension (zoom_in_out reference card)
+- Ehrenwall Counter one-way ratchet documented as intentional (not a gap)
+- Parish Revolt buildup: cross-referenced to existing roster Mandate erosion (no new mechanic)
+
+**Proposals struck after full NPC/canon review:**
+- Ehrenwall Counter decrement: STRUCK — contradicts documented characterisation ("The Ledger That Never Forgives"; never decrements is intentional design per npc_comprehensive_audit)
+- Parish Revolt Stability −1 addition: STRUCK — creates destabilising stack on top of existing Mandate erosion; existing mechanism is sufficient
+- Vaynard Intel escalation to TS growth: STRUCK — Intel already governs Collection roll (Intel vs Ob 2 per PP-168); TS growth is +1/use canonical; no additional modifier warranted
+
+**Open items:** Vaynard full NPC roster entry (blocks Arc 39 simulation); TK track parameterization; Baralta roster entry; Zoom In arc-specific triggers to be added per-arc doc as work continues.

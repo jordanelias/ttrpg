@@ -196,7 +196,7 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 
 ---
 
-## 13. [NAME PENDING] — Fourth Cardinal (Prudence)
+## 13. Aldric Tormann — Fourth Cardinal (Prudence)
 
 **New NPC.** Cardinal of Prudence (economic portfolio). The unnamed fourth Cardinal referenced in ED-007. Manages tithes, charities, Church land.
 
@@ -226,7 +226,7 @@ Each NPC has a **Behavioral AI Profile** governing their autonomous decisions (B
 | 10 | Dalla Virke | Virke syndicate (Niflhel) | Thread-touched supply chain she built | NETWORK PROTECTOR | Shields partners; withholds intel from own family |
 | 11 | Doux Alexios Laskaris | Altonia | Genuine attachment to assigned asset | PROTECTIVE (shields Elske) | IP +1/season slower; flips if Elske threatened |
 | 12 | Rikard Solberg | Schoenland | Wants to go home | STABILITY-SEEKING | Schoenland policy ~1 season behind optimal |
-| 13 | [Name Pending] | Church (Prudence) | Tithe maximiser alienates parishes | OPTIMISER | Church Wealth +1/season but Mandate erodes in squeezed territories |
+| 13 | Aldric Tormann | Church (Prudence) | Tithe maximiser alienates parishes | OPTIMISER | Church Wealth +1/season but Mandate erodes in squeezed territories |
 
 ---
 
@@ -412,7 +412,7 @@ Every NPC must have meaningful presence in at least 2 of 3 modes. Their compromi
 
 ---
 
-### 13. [Name Pending] — Prudence Cardinal (Church)
+### 13. Aldric Tormann — Prudence Cardinal (Church)
 
 | Mode | Presence | Interface |
 |------|----------|-----------|

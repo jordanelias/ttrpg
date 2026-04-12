@@ -96,3 +96,30 @@ Military ≥ unit CP required. Military 1 → Levy only. Military 3 → up to Li
 ---
 
 *Edge cases and full variable list: state_transfer_spec.md. This card handles ~95% of table use.*
+
+
+---
+
+## SIDE C — ARC-SPECIFIC ZOOM IN TRIGGERS (PP-556)
+
+**Design extension (2026-04-12):** In addition to the standard trigger (Named Player Character present in BG battle territory), the following arc-specific board-state conditions call a Zoom In. These are supplementary triggers — the Phase-Lock, Freeze, Transfer, and Zoom Out procedures on Side A apply unchanged.
+
+Each arc document carries a **Hybrid Trigger** field specifying the exact condition. Format:
+
+```
+Hybrid Trigger: [board-state condition] → Zoom In [scene type].
+BG consequence resolves at next Accounting (Domain Echo).
+```
+
+**Example — Haelgrund Defection (Arc 41, npc_roster §4):**
+```
+Hybrid Trigger: Thread operation Overwhelming within 1 territory of Haelgrund's
+current investigation AND Church has no active Inquisitor suppression →
+Zoom In: Defection Scene.
+BG consequence: Church Heresy Investigation Ob +1 permanently (best investigator lost).
+Resolves at Accounting.
+```
+
+**Ordering rule:** Arc-specific triggers follow the same Phase-Lock as battle triggers (Step 2, Side A). If an arc trigger fires during Phase 2, 4, or 5, wait until that phase ends. If multiple arc triggers fire simultaneously, resolve in Mandate order (descending) per PP-269.
+
+**TC threshold note:** TC threshold checks fire at the moment of crossing regardless of any Zoom In (PP-268/PP-293 — applies to victory condition checks, not all TC checks). Arc-specific Zoom Ins may be declared after a TC threshold crossing; they do not delay the threshold consequence.

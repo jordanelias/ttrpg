@@ -2885,41 +2885,56 @@ editorial_decisions:
       decision: "Resolved. See ED-119 main entry."
       tags: [npc, lenneth, crown, characterisation, resolved]
 
-# --- Arc 36-40 batch (2026-04-11) ---
+# --- Arc 36-40 batch (2026-04-11 → resolved 2026-04-12) ---
 - id: ED-408
   summary: "Prudence Cardinal requires a name"
   priority: P2
-  status: open
+  status: resolved
+  date_resolved: 2026-04-12
+  decision: "Named Aldric Tormann. All references in npc_roster.md and arcs_36_40_interdependent.md updated."
   source: gm_ref/arcs_36_40_interdependent.md
   date: 2026-04-11
+  tags: [npc, church, prudence_cardinal]
 
 - id: ED-409
   summary: "Torsvald Deniability Debt threshold for Ehrenwall investigation — proposed 3"
   priority: P3
-  status: open
+  status: resolved
+  date_resolved: 2026-04-12
+  decision: "Threshold confirmed at 3. Three aborted operations leaving detectable evidence triggers Ehrenwall investigation review. Consistent with Ehrenwall behavioral AI (acts at clear evidence of pattern, not on single anomaly)."
   source: gm_ref/arcs_36_40_interdependent.md
   date: 2026-04-11
+  tags: [npc, torsvald, ehrenwall, lowenritter]
 
 - id: ED-410
   summary: "Vaynard Private Collection use frequency — proposed 1/season"
   priority: P2
-  status: open
+  status: resolved
+  date_resolved: 2026-04-12
+  decision: "Confirmed canonical per PP-168: 1/season (Intel vs Ob 2, once per season). TS +1/use canonical. Discovery Event at TS 14+: Spirit TN 7 Ob 1 per use. No modification required."
   source: gm_ref/arcs_36_40_interdependent.md
   date: 2026-04-11
+  tags: [npc, vaynard, varfell, threadwork, private_collection]
 
 - id: ED-411
   summary: "Solberg recall trigger — proposed when 2+ of Supply Chain Exposure, Parish Revolt, IP>=15 fire same season"
   priority: P2
-  status: open
+  status: resolved
+  date_resolved: 2026-04-12
+  decision: "IP threshold corrected from 15 to 8 (PP-255 PI range 0-10). Mechanism revised: Schoenland central Intel check Ob 2 at Year-End fires recall when 2+ conditions present (Supply Chain Exposure, Parish Revolt, PI >= 8). Independent of Solberg's reports — Solberg STABILITY-SEEKING AI means reports downplay severity; Schoenland detects via trade intelligence. PP-555 applied."
   source: gm_ref/arcs_36_40_interdependent.md
   date: 2026-04-11
+  tags: [npc, solberg, schoenland, arc_38]
 
 - id: ED-412
   summary: "Convergence timeline pacing flexibility — GM guidance needed"
   priority: P3
-  status: open
+  status: resolved
+  date_resolved: 2026-04-12
+  decision: "Compression formula: Convergence Season = N + max(4, 8 - N) where N = campaign season at introduction. Floor of 4 seasons regardless of introduction timing. N=0 -> S8 (normal); N=4 -> S8; N=6 -> S10."
   source: gm_ref/arcs_36_40_interdependent.md
   date: 2026-04-11
+  tags: [arc_40, timing, convergence]
 
   ED-413:
       priority: P1

@@ -344,3 +344,34 @@ The portfolio covers: institutional paralysis (1, 3, 13), personal transformatio
 3. Generate arcs for uncovered NPCs: Edeyja, Torsvald (Lenneth connection), Brandt (standalone), Laskaris (standalone), Prudence Cardinal (standalone).
 4. Generate arcs for uncovered arc types: mass combat, Thread operation, Southernmost/Warden, Altonian invasion, Torben succession.
 5. Reclassify Arcs 10, 14, 18 as *scenario triggers* rather than *emergent arcs* in the arc taxonomy.
+
+
+---
+
+## Collision Point 4 — False Positive Audit Note
+
+**Date:** 2026-04-12 | **Finding:** Non-blocking.
+
+The collision point described as "Foundational Pull Ob 12 > Ob 10 cap" (Arcs 7+8 concurrent) was a false positive on two counts:
+
+1. **Wrong cap value.** PP-232 raised the Ob cap to 20. The Ob 10 cap cited predated PP-232.
+2. **Correct application of Fragmented modifier.** The Fragmented Coherence band (+1 Ob on all Thread operations) applies to both the Leap roll (TN 7) and the subsequent Pull operation (TN 8) — "all Thread operations" is unambiguous. Foundational Pull Ob = base 9 (recency Ob 7 + Foundational surcharge +2) + Fragmented +1 = Ob 10. Below the Ob 20 cap.
+
+Net: Arcs 7 and 8 running on the same practitioner produce Foundational Pull at Ob 10, TN 8. Legal under current rules. No patch required.
+
+---
+
+## Cross-Batch Collision Register
+
+Tracks known convergence points between arc batches — points where independent causal chains from different arc batches meet at the same Accounting step. Per-batch interaction tables remain authoritative for intra-batch references.
+
+| Collision | Arc batches | Convergence condition | Accounting step |
+|---|---|---|---|
+| Coup + Parliamentary Vote | 01–04 + 01–04 | Ehrenwall Counter 3 + TC ≥ 40 (Martial Law) blocks non-Military Domain Actions including Parliamentary vote | Phase 5 (Parliament) |
+| RS Fragile + Grand Debate | 01–04 + 05–09 | RS ≤ 60 threshold + TC-driven Church Assert fires debate condition | Year-End Accounting |
+| Klapp CE + Tribunal | 01–04 + 01–04 | Klapp TS growth check success during Evidence Overwhelming co-movement | Year-End Step 7 |
+| Mass battle Coherence + Foundational Pull | 05–09 + 05–09 | Concurrent on same practitioner — Ob 10 under PP-232, legal (see false positive note above) | Intra-session |
+| Baralta Excommunication + Elske recruitment | 05–09 + 09–11 | TC +4 from Excommunication removes TC suppression at moment Elske negotiation is only surviving mitigation | Year-End Accounting |
+| Church double fracture | 01–04 + 01–04 | Klapp CE + Jarnstal Stability + Himlensendt destabilisation fire in same Accounting period | Year-End Step 4 |
+| Parish Revolt + Supply Chain Exposure | 36–40 + 36–40 | Arc 36 + Arc 37 terminal events firing same season — Solberg recall condition met (PP-555) | Year-End Accounting |
+| Vaynard Discovery Event + Laskaris Flip | 36–40 + 36–40 | Arc 39 Spirit check fires same season as Arc 38 IP surge — Vaynard forced to choose Collection use during crisis | Phase 4 (Domain Actions) |

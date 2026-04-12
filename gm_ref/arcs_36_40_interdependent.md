@@ -45,7 +45,7 @@ The interdependence arises from three shared mechanical substrates: the Renderin
 
 **Primary mechanics:** Church Wealth recovery +1/season (Prudence Cardinal OPTIMISER — npc_roster §13), Conviction (CV) erosion in over-tithed territories (+1/Year-End — npc_roster §13 BG interface), Restoration Movement (RM) Presence marker placement (params_factions §RM), TC passive advance +1/season (params_factions §TC Passive Advance PP-402)
 
-**Primary Non-Player Characters (NPCs):** Prudence Cardinal [Name Pending], Maret Vossen, Sæmund Haelgrund
+**Primary Non-Player Characters (NPCs):** Aldric Tormann (Prudence Cardinal), Maret Vossen, Sæmund Haelgrund
 
 ---
 
@@ -373,6 +373,21 @@ flowchart TD
 
 ---
 
+### Arc 40 — Partial Convergence Outcomes
+
+When fewer than all four precursor arcs (36–39) are active at the convergence season, the following degraded outcomes apply:
+
+| Active precursors | Convergence type | Mechanical outcome |
+|---|---|---|
+| 4 of 4 | Full institutional collapse | All five stabilising mechanisms fail simultaneously. Succession politics activate. ED-406/407 live. Almud must act, abdicate, or be replaced. |
+| 3 of 4 | Managed crisis | One stabilising mechanism survives. Almud can act through the surviving channel. TC does not cross Phase Transition unless Arc 36 is among the active 3. |
+| 2 of 4 | Political stress | Mandate pressure across 2–3 factions. No institutional collapse. Players have 1–2 seasons to address remaining precursors before they seed. |
+| 1 of 4 | Background noise | Individual arc fires normally. Arc 40 does not activate — convergence requires minimum 2 simultaneous precursor crises. |
+
+Precursor count is assessed at Year-End of Season 6 (or Season N + max(4, 8 − N) if arcs introduced mid-campaign — see ED-412 resolution below).
+
+---
+
 ## Cross-Arc Interaction Table
 
 | Output Event | Source Arc | Receiving Arc(s) | Mechanical Effect |
@@ -403,12 +418,18 @@ flowchart TD
 
 ---
 
-[EDITORIAL: ED-408 — Prudence Cardinal requires a name. All arc NPC interactions use [Name Pending]. User decision required before finalisation.]
+## Design Notes and Resolved Editorials
 
-[EDITORIAL: ED-409 — Torsvald's Deniability Debt threshold for Ehrenwall investigation needs a specific number. Proposed: 3 (three aborts triggers review). User confirmation requested.]
+**ED-408 — RESOLVED:** Prudence Cardinal named Aldric Tormann. All arc references updated. (2026-04-12)
 
-[EDITORIAL: ED-410 — Vaynard's Private Collection use frequency needs canonical establishment. Current assumption: 1 use/season (conservative). If Vaynard uses it more aggressively, TS growth accelerates and Arc 39 fires 2–3 seasons earlier. User decision on Vaynard's operational tempo requested.]
+**ED-409 — RESOLVED:** Torsvald Deniability Debt threshold = 3. Three aborted operations leaving detectable evidence triggers Ehrenwall's investigation review. (2026-04-12)
 
-[EDITORIAL: ED-411 — Solberg recall trigger needs mechanical specification. Current arc assumes Schoenland central reviews reports when domestic crisis becomes externally visible. Proposed: Solberg is recalled when any two of: Supply Chain Exposure, Parish Revolt, IP ≥ 15 occur in the same season. User confirmation requested.]
+**ED-410 — RESOLVED (canonical per PP-168):** Vaynard's Private Collection use = 1/season (Intel vs Ob 2, once per season — params_factions §Varfell Unique Actions PP-168). TS +1/use is canonical. Discovery Event fires at TS 14+: Spirit TN 7 Ob 1 per use. No modification to frequency or growth check required. (2026-04-12)
 
-[EDITORIAL: ED-412 — The convergence timeline assumes Arcs 36–39 seed in seasons 1–2 and converge in seasons 7–8. If the campaign starts later in the arc lifecycle, the convergence compresses. GM guidance on pacing flexibility needed.]
+**ED-411 — RESOLVED (PP-555):** Solberg recall trigger: Schoenland central Intel check (Ob 2) fires at Year-End when 2+ of the following conditions are present simultaneously — Supply Chain Exposure (Arc 37 terminal event fired), Parish Revolt (Arc 36 terminal event fired), PI ≥ 8 (existing revolt check threshold, PP-255). Schoenland central runs this check independently of Solberg's reports (Solberg's STABILITY-SEEKING AI means his reports downplay severity; Schoenland detects via trade intelligence). One-season warning: if the check fails, Schoenland delays one season before re-checking. (2026-04-12)
+
+**ED-412 — RESOLVED:** Convergence compression formula for mid-campaign introduction: Convergence Season = N + max(4, 8 − N), where N = campaign season at which all five arcs are seeded. Floor of 4 seasons ensures minimum arc development time regardless of introduction point. Examples: N=0 → Convergence S8 (normal); N=4 → Convergence S8 (max(4,4)=4, so S4+4=S8); N=6 → Convergence S10 (max(4,2)=4, so S6+4=S10). (2026-04-12)
+
+**DESIGN NOTE — Parish Revolt buildup:** The buildup signal for Parish Revolt is already specified in the NPC roster (npc_roster §13 Aldric Tormann): Church Mandate −0.5/territory at Year-End in over-tithed territories. When Mandate reaches ≤ 3 in any over-tithed territory AND ≥ 3 territories are over-tithed, the Parish Revolt Event Card trigger condition is met. No additional buildup mechanic required — the Mandate erosion is the warning signal. Arc docs should cross-reference roster §13, not introduce parallel mechanisms.
+
+**DESIGN NOTE — Ehrenwall Counter (one-way ratchet):** The Counter never decrements. This is intentional characterisation: Ehrenwall assesses governance performance, and a finding of inadequacy persists. The de-escalation pathway for the Counter situation is preventing increments (maintaining territorial control with military response, managing TC below 40), not reversing past increments. Documented here to prevent future de-escalation proposals from being raised as gap-fills.

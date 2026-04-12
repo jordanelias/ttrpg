@@ -5349,3 +5349,23 @@ patches:
     state is a deliberate exception to the floor-1 rule [PROVISIONAL: ED-378].
   affects: [references/params_board_game.md]
   status: applied
+
+- id: PP-555
+  date: 2026-04-12
+  severity: P2
+  description: "Solberg recall trigger mechanic. Fires when Schoenland central Intel check (Ob 2) at Year-End succeeds with 2+ of: Supply Chain Exposure (Arc 37 terminal event), Parish Revolt (Arc 36 terminal event), PI >= 8 (PP-255 revolt threshold). Check is independent of Solberg's reports (STABILITY-SEEKING AI produces downplayed reports; Schoenland uses trade intelligence). One-season delay if check fails. Corrects ED-411 proposed IP >= 15 threshold (out of range) to PI >= 8."
+  finding_id: "ED-411"
+  source: editorial
+  affects: [gm_ref/arcs_36_40_interdependent.md, references/params_factions.md]
+  status: applied
+  applied_commit: pending
+
+- id: PP-556
+  date: 2026-04-12
+  severity: P2
+  description: "Arc-specific Hybrid Zoom In trigger extension. Supplements existing PC-presence trigger (PP-103) with arc-documented board-state conditions that call Zoom In scenes. Format: 'Hybrid Trigger: [condition] -> Zoom In [scene type]. BG consequence resolves at Accounting.' Phase-Lock (Side A), Freeze, Transfer, Zoom Out procedures unchanged. Concurrent ordering: Mandate order descending (PP-269). TC threshold crossing not delayed by arc-triggered Zoom In (PP-268/PP-293). First example: Haelgrund Defection trigger (Arc 41 — npc_roster §4 BG Event Card condition)."
+  finding_id: "arc-specific-zoom-in-gap"
+  source: design
+  affects: [designs/gm_ref_cp14/zoom_in_out_reference_card.md]
+  status: applied
+  applied_commit: pending
