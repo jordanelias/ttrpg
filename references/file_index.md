@@ -252,6 +252,7 @@
 | references/glossary.md | ALL | CURRENT | Term expansion reference |
 | references/canonical_sources.yaml | ALL | CURRENT | System authority map |
 | references/file_index.md | ALL | CURRENT | This file |
+| references/arc_register.md | ALL | CURRENT | 73 arcs + 7 collisions. Principal/secondary/tertiary. All NPCs mapped. v7. |
 | references/propagation_map.md | ALL | CURRENT | Cross-reference dependencies |
 | references/effort-guide.md | INFRA | CURRENT | Effort calibration per skill |
 | references/D10_INTEGRATION_GUIDE.md | ALL | CURRENT | — |
@@ -289,6 +290,9 @@
 | tests/coverage_matrix.md | ALL | CURRENT |
 | tests/sim_* (all simulation outputs) | Various | CURRENT |
 | tests/stale_scan_bg_01.md | BG | CURRENT |
+| tests/threadwork_decision_point_analysis.md | ALL | CURRENT | 8 threadwork decision points tested against arc register |
+| tests/arc_branch_simulation.md | ALL | CURRENT | 7 key rolls simulated (Success/Failure branches, RS/TC/IP cascades) |
+| tests/delay_vs_preclusion_evaluation.md | ALL | CURRENT | Roll failures reclassified: 6/7 are delays, 1 True Preclusion |
 
 ---
 

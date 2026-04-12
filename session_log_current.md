@@ -726,35 +726,47 @@ Session: 2026-04-11_OPUS_NARRATIVE_AUDIT
 3. Simulate Cultural Revival Track pacing vs RS degradation (does Lenneth reach TS 30 before RS enters Fractured band?)
 
 
-### 2026-04-11 — Arc Register Creation and Threadwork Simulation
+### 2026-04-11 — Arc Register Build, Threadwork Simulation, Branch Analysis
 Session: 2026-04-11_OPUS_ARC_REGISTER
-- Created arc register from scratch — iterated through 6 versions.
-- v1: 35 named arcs. v2: audit-corrected (Baralta→Hafenmark, TC suppression ≥4, RS cross-clock error removed, 11 arcs added). v3: recent commit review (Klapp→Temperance, Almud ED-364, Baralta Crown ambition, Lenneth-Baralta collision, Jarnstal drift, 8 NPC corrections). v4: abe1b1e review (ED-407 consecration mechanics) + 7 new emergent arcs from PP-428–442 and foil analysis + 2 new collisions (Succession/Einhir Triangles). v5: threadwork decision point analysis (8 decision points, 4 new arcs: Lock Distribution, Mending Trap, Lattice of Enemies, Overweaving Cascade). v6: branch simulation (7 key rolls, 2 new arcs: Governance Pause, Edeyja Burnout).
-- Final count: 8 principal + 34 secondary + 19 tertiary + 12 NPC = 73 arcs + 7 collision scenarios.
-- Key findings: Excommunication mechanic non-functional at game-start stats (GAP-ARC-05). Klapp Ob 2 is single most impactful Ob modifier. Ceiral Ritual 7% failure → endgame spiral. Edeyja burnout = hidden fail state. Mending structurally insufficient without WC + Community Weaving + Lock resolution. Endgame collective ops Belief-gated.
-- Files committed: references/arc_register.md, tests/threadwork_decision_point_analysis.md, tests/arc_branch_simulation.md
 
-- Delay vs preclusion evaluation: 6 of 7 key rolls reclassified as Pure Delay or Costly Delay. Only ARC-T05 (Ehrenwall Medicine) is True Preclusion. Klapp Ob 2 buys ~1-2 seasons, not permanent branch. Ceiral failure = Costly Delay (retryable, RS -8 + 2-season delay), not endgame spiral. GAP-ARC-05 reclassified as intentional gated mechanic. ARC-S32/S34 reframed as resource-exhaustion arcs.
-- Key insight: failed Costly Delay rolls don't create new arcs — they accelerate existing arcs. Clocks don't branch on failure; they accelerate.
-- Files: references/arc_register.md v7, tests/delay_vs_preclusion_evaluation.md
+**Created arc register (references/arc_register.md) — iterated through 7 versions:**
+- v1–v2: 35→46 arcs. Audit-corrected 9 errors (Baralta→Hafenmark, TC suppression ≥4 not ≥5, RS cross-clock removed as non-canonical, Coup Counter increments corrected, Vaynard TK TC per-level, Baralta excommunication TC +4, Mass Battle ×3).
+- v3: Recent commit review. 8 NPC corrections (Klapp→Temperance, Almud ED-364, Baralta Crown ambition, Lenneth Institutional Revivalist, Vaynard southern Einhir TS, Ehrenwall deed-logic, Jarnstal Fortitude, Himmensendt consecration crisis). 3 arcs added (Lenneth-Baralta Collision, Consecration Crisis, Jarnstal Drift).
+- v4: abe1b1e review (ED-407 consecration mechanics). 7 new emergent arcs from PP-428–442 and foil analysis. 2 new collisions (Succession Triangle, Einhir Triangle).
+- v5: Threadwork decision point analysis (8 decision points tested). 4 new arcs (Lock Distribution, Mending Trap, Lattice of Enemies, Overweaving Cascade).
+- v6: Branch simulation (7 key rolls). 2 new arcs (Governance Pause, Edeyja Burnout). GAP-ARC-05 (Excommunication non-functional at baseline — reclassified as intentional gated mechanic).
+- v7: Delay vs preclusion evaluation. 6/7 rolls reclassified as delays. Only ARC-T05 (Ehrenwall Medicine) is True Preclusion.
 
-### 2026-04-11 — Emergent Interdependent Arcs Batch 2 (commit 6)
+**Final register: 8 principal + 34 secondary + 19 tertiary + 12 NPC = 73 arcs + 7 collision scenarios.**
 
-- gm_ref/arcs_41_45_interdependent.md: New file. Five arcs exploiting under-explored cross-system triggers:
-  - Arc 41: The Inquisitor's Unravelling (Haelgrund TS 12 + calamity radiation at Fractured RS → self-discovery)
-  - Arc 42: The Debate That Changed the World (contest system Thread co-movement → RS +1 from parliamentary speech)
-  - Arc 43: The Battle That Ate the South (mass battle RS ×3 at T6 Stillhelm + calamity radiation cascade)
-  - Arc 44: The Invisible Majority (triple-source CV erosion → RM Phase 1 threshold without RM action)
-  - Arc 45: The Tutoring Demand That Started a War (IP ≥ 40 + depleted Crown + intelligence leak = zugzwang)
-- 35 unique triggers catalogued (T-01 through T-35).
-- 4 bidirectional destabilising loops identified.
-- Full 10-arc convergence timeline mapped (seasons 1–11+).
-- canon/editorial_ledger.yaml: ED-413 through ED-417 added (5 new items, 1 P1-BLOCKER: ED-416 RM hold mechanic).
-- **Session total: 6 commits, 10 emergent arcs (36–45), ED-408 through ED-417 (10 editorial items: all open).**
+**Key findings:**
+- Excommunication mechanic is a gated design: near-impossible at baseline, activates after Mandate erosion.
+- Klapp Ob 2 (essentialist formation) buys Church ~1–2 seasons of structural integrity per failed check, not permanent preservation.
+- Ceiral Ritual 7% failure is Costly Delay (retryable, RS −8 + 2-season delay), not endgame preclusion.
+- Ehrenwall Medicine check (~47% failure) is the only True Preclusion roll — permanent, no retry, conditional on player choice.
+- Mending Trap (ARC-S32) and Edeyja Burnout (ARC-S34) are resource-exhaustion arcs, not single-roll events.
+- Failed Costly Delay rolls accelerate existing arcs; they do not create new branches.
+- Lock Distribution at TK 4 (ARC-S31) is the highest-impact single player decision — 3–5 simultaneous Discovery Events.
 
-## SESSION CLOSE
+**Files committed:**
+- references/arc_register.md (v7, 808 lines)
+- tests/threadwork_decision_point_analysis.md (204 lines)
+- tests/arc_branch_simulation.md (303 lines)
+- tests/delay_vs_preclusion_evaluation.md (189 lines)
+- references/file_index.md (updated)
+- session_log_current.md (this entry)
 
-This session: 6 commits. Deed-monarchy continuation + 10 emergent interdependent arcs across 2 batches.
-P1-BLOCKER: ED-416 (RM hold T9 mechanic — no Military stat, cultural displacement proposed).
-Open editorial items: ED-408 through ED-417 (10 items).
-Next session priority: Resolve ED-416 (P1-BLOCKER). Then simulate convergence timeline — stress test the 4 bidirectional loops for runaway conditions. Review ED-414 (debate RS frequency) as it affects RS balance across Arcs 42/43.
+**Open items for next session:**
+- ED-NEW-01: Tier assignments provisional — user review required
+- ED-NEW-02: Revolution elder not canonised as named character
+- ED-NEW-03: Elske TS development not established
+- ED-NEW-04: 218 AG resolution reconciliation (accidental death vs E-01)
+- GAP-ARC-01: Niflhel Quiet RS/Thread Tension cause
+- GAP-ARC-02: IP generation formula (no canonical base rate)
+- GAP-ARC-04: Baralta NPC personal stats conflicting between sources
+- GAP-ARC-05: Excommunication gated mechanic (confirmed intentional)
+- SIM-BRANCH-05: Edeyja burnout hidden fail state (ARC-S34)
+- Lenneth zero mechanical expression (audit priority #1)
+- Almud no BG expression (audit priority #2)
+- Arcs S20, S21 NOT YET SIMULATED (CP14 arcs 34, 35)
+- All NPC-ARC, ARC-S27–S34, ARC-T10–T19, Collisions A–G NOT YET SIMULATED
