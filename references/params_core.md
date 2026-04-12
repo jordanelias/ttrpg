@@ -14,7 +14,7 @@
 | 1 | −1 success |
 | 2–6 | 0 |
 | 7–9 | +1 success |
-| 10 | +1 success + roll one bonus die (chains indefinitely) |
+| 10 | +2 successes |
 
 Net successes = total successes minus total 1s (including bonus dice results). May be negative.
 Note: expected value of face-10 under chain rule ≈ +1.43 net at TN7 (geometric series). Higher than "+2" model for large pools.
