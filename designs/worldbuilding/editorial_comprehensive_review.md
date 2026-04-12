@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Editorial process document (2026-04-03). All items reviewed and absorbed into canon/editorial_ledger.yaml. Superseded.
+> Do not use as a canonical source.
+
+---
+
 # EDITORIAL REGISTER — COMPREHENSIVE REVIEW
 ## Date: 2026-04-03
 ## Scope: All 43 open/provisional editorial items in the ledger

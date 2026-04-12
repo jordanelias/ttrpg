@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Phase 1 mechanic (2026-03-25). TC 80 threshold event. Absorbed into params_board_game.md and params_factions.md. Superseded.
+> Do not use as a canonical source.
+
+---
+
 # CHURCH TERRITORIAL SEIZURE — Theocracy Counter 80 Threshold Event
 ## Date: 2026-03-25 (Session 5)
 ## Status: Designed — approved

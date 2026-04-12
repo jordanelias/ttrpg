@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Phase 1 design briefs — Military and Political gaps (2026-03-25). Absorbed into params files. Superseded.
+> Do not use as a canonical source.
+
+---
+
 # Phase 1 — Batch B: TTRPG Military Gaps + Batch C: TTRPG Political Gaps
 ## Date: 2026-03-25 (Session 4)
 ## Status: Design briefs for editorial review

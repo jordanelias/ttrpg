@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Phase 1 design resolution notes. Content absorbed into params files. Superseded.
+> Do not use as a canonical source.
+
+---
+
 # Editorial Resolutions — Batches A–D + Treaty Consequences
 ## Date: 2026-03-30
 ## Source: User decisions this session

@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Phase 1 design briefs (2026-03-25, Session 4). Content absorbed into params files and compilation/v0.14/. Superseded.
+> Do not use as a canonical source.
+
+---
+
 # Phase 1 — Batch A: TTRPG Core Gap Designs
 ## Date: 2026-03-25 (Session 4)
 ## Status: Design briefs for editorial review

@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Phase 1 design briefs (Batch E). Absorbed into params files. Superseded.
+> Do not use as a canonical source.
+
+---
+
 # Phase 1 — Batch E: Board Game Design
 ## Date: 2026-03-25 (Session 5)
 ## Status: Design briefs

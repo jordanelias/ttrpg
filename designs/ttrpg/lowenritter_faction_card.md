@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Phase 1 faction card (2026-03-25). Content absorbed into references/params_factions.md. Superseded.
+> Do not use as a canonical source.
+
+---
+
 # FACTION 8: THE LÖWENRITTER (Royal Military Order)
 ## Date: 2026-03-25 (Session 5)
 ## Status: Designed — approved

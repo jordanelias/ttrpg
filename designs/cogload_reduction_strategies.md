@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Superseded by designs/cogload_moderate_target.md (Moderate ceiling target), which builds on this document and contains updated scores.
+> Do not use as a canonical source.
+
+---
+
 # COGNITIVE LOAD REDUCTION STRATEGIES
 ## Target: All systems ≤ 10.0 (Moderate-Heavy ceiling)
 ## Constraint: Canon constraints P-01 through P-15 inviolable

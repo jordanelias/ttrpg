@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Phase 1 draft generation tasks (GT-01–GT-03, 2026-03-30). Status was "requires user review." Retained for audit trail.
+> Do not use as a canonical source.
+
+---
+
 # Generation Tasks: GT-01, GT-02, GT-03
 ## Date: 2026-03-30
 ## Status: Draft — requires user review before committing to canonical files

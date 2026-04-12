@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Phase 1 succession mechanic (2026-03-25). Content absorbed into params_factions.md succession axis. Superseded.
+> Do not use as a canonical source.
+
+---
+
 # SUCCESSION MECHANIC — Almud's Dilemma
 ## Date: 2026-03-25 (Session 5, revised)
 ## Status: Designed — approved

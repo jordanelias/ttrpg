@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Phase 1 mechanical tasks and patches (MT-01–MT-03, 2026-03-30). Patches applied to params files. Retained for audit trail.
+> Do not use as a canonical source.
+
+---
+
 # Mechanical Tasks + Patch Propagation
 ## Date: 2026-03-30
 ## Sources: R-54–R-68 (ballot 2026-03-30), MT-01 through MT-03
