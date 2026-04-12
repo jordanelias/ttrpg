@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Editorial resolutions. Content absorbed into relevant design docs. Retained for audit trail.
+> Do not use as a canonical source.
+
+---
+
 ## ED-403, ED-406, ED-407 Resolutions (2026-04-11)
 
 ### ED-403: Vossen/RM Internal Split on Crown Patronage

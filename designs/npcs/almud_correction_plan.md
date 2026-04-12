@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Resolved correction plan. Retained for audit trail only.
+> Do not use as a canonical source.
+
+---
+
 # ALMUD CHARACTERIZATION CORRECTION — COMPLETE
 ## Priority: P1 — RESOLVED 2026-04-09
 ## Affects: npc_character_analyses_existing.md, ruler_diamond_foil_analysis.md, ruler_diamond_extended_foils.md, arcs_01_04_nongreedy.md

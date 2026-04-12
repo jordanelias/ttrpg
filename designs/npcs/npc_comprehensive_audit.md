@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Superseded. Audit findings absorbed into roster and analyses supplements.
+> Do not use as a canonical source.
+
+---
+
 # Valoria — Comprehensive NPC Characterization Audit
 ## Date: 2026-04-09 | Scope: All 24 named NPCs (13 roster + 11 existing)
 ## Methodology: Quantitative mention analysis, interaction network mapping, cliché detection, qualitative assessment across 8 criteria

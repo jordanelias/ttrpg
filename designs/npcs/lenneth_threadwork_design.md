@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Standalone threadwork design. Content absorbed into npc_roster.md and params_threadwork.md. Retained for audit trail.
+> Do not use as a canonical source.
+
+---
+
 # Lenneth Full Design + Threadwork at Key Decision Points
 ## Status: CANONICAL (editorial powers granted) — flagged items marked [FLAG]
 ## Date: 2026-04-11

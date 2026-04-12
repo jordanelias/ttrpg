@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Merged into designs/npcs/npc_character_analyses.md (Part Two).
+> Do not use as a canonical source.
+
+---
+
 # Valoria — Character Analyses: Existing Named NPCs
 ## Date: 2026-04-11 (Deed-monarchy reframing, caste reconciliation, ruler diamond repositioning)
 ## Covers: Faction leaders, Cardinals, Royal Family, Löwenritter Grandmaster

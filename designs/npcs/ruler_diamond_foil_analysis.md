@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Merged into designs/npcs/npc_foils.md (Part One).
+> Do not use as a canonical source.
+
+---
+
 # Valoria — The Ruler Diamond: Foil Analysis
 ## Almud · Lenneth · Baralta · Vaynard
 ## Rewritten: 2026-04-11 (Deed-monarchy, caste reconciliation, ruler diamond repositioning)

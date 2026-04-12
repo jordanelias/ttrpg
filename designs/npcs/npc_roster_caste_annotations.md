@@ -1,3 +1,10 @@
+<!-- DEPRECATED -->
+> **DEPRECATED — 2026-04-11**
+> Merged into designs/npcs/npc_roster.md as §14.
+> Do not use as a canonical source.
+
+---
+
 # NPC Roster — Caste Axis Annotations (2026-04-11)
 ## Companion to: designs/npcs/npc_roster.md
 ## Status: CANONICAL — appended to roster as §14
