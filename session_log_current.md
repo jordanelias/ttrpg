@@ -1,6 +1,32 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-11_SONNET_MANDATE_OB_FIX
+session_close: 2026-04-11
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Applied PP-547: standardised all Mandate-derived Obstacle formulas to floor(Mandate / 2) + 1
+   - 6 instances corrected in params_board_game.md
+   - Raw Mandate and ceiling formulas both unified
+   - PP-180 / PP-296 cap of 4 removed (formula is self-scaling)
+
+## COMMITS THIS SESSION
+- [patch] Mandate-Ob formula standardisation — PP-547
+
+## OPEN EDITORIALS (carried forward)
+ED-370: Hybrid personal scene -> BG Treaty bridge (P2)
+ED-371: Coalition suppression dominant strategy confirmation (P2)
+ED-372: Thread Liaison dissolution timing (P2)
+ED-373: Token on Mandate-0 suspension (P3, provisionally applied PP-517)
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-09_SONNET_DIPL_BATCH2
 session_close: 2026-04-09
 phase: COMPLETE

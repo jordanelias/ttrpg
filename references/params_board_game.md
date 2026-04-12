@@ -334,7 +334,7 @@ Seasonal TC at Accounting (execute in order):
 1. **Institutional Momentum:** TC +1 (passive).
 2. **Conviction Yield:** for each territory where Church is prominent (Church Mandate > controlling faction's Mandate), add based on CV. CV 5 = +1, CV 4 = +0.5, others = 0. Total = floor(sum).
 3. **Assert** (optional Church action): Influence vs Ob 2. Success: TC +1. Failure: Stability −1.
-4. **Suppress** (optional opponent action): Mandate vs Ob = Church Mandate. Success: negate Step 1 passive. Failure: Stability −1.
+4. **Suppress** (optional opponent action): Mandate vs Ob = floor(Church Mandate / 2) + 1. Success: negate Step 1 passive. Failure: Stability −1.
 5. **Hafenmark Structural Suppression:** while Baralta Mandate ≥ 4, TC −1/season.
 
 **TC seasonal cap (PP-504):** ±3 per season from player-initiated Domain Actions. ±5 per season from all sources combined (includes Institutional Momentum, Conviction Yield, Calamity Drift, event cards).
@@ -465,10 +465,10 @@ Thread Tension (TT) = sum of all History Resonance markers across board.
 Cap: 2 territory transfers per seizure event (v04/v05 P-23). Previously set to 4 by PP-183 — reverted.
 
 ## Church Excommunication Ob Cap (PP-180)
-Ob = min(target Mandate, 4). Maximum Ob 4 regardless of target Mandate.
+Ob = floor(target Mandate / 2) + 1.
 
 ## Mandate Suppression — General Cap and Coalition Bonus (PP-296)
-All Domain Actions targeting another faction's Mandate stat use Ob = min(target Mandate, 4). Maximum Ob 4 regardless of target Mandate. Consistent with Excommunication precedent (PP-180).
+All Domain Actions targeting another faction's Mandate stat use Ob = floor(target Mandate / 2) + 1. Consistent with Excommunication precedent (PP-180).
 
 **Coalition suppression bonus (PP-296):** When 2+ factions play Domain Actions targeting the same faction's Mandate in the same Phase 4 resolution, each additional faction beyond the first adds +2D to the suppression pool (automatic — no formal pact declaration required).
 
@@ -1203,7 +1203,7 @@ PP-179 ('matches TTRPG') was a documentation error. ED-031 (Ob+1) is correct.
 
 ### Church — Piety Spread (PP-428)
 **Type:** Consul Inward (Church only). **Prerequisite:** AP ≥ 1.
-Roll: Mandate vs Ob = controlling faction Mandate ÷ 2 round up + Fort Level, min 1.
+Roll: Mandate vs Ob = floor(controlling faction Mandate / 2) + 1 + Fort Level.
 Doctrine-aligned territory: −1 Ob.
 **Post-TC 75:** Range-limited to adjacent territories only.
 
@@ -1279,7 +1279,7 @@ Blocking factions generate Resentment tokens per PP-405.
 
 ### Hafenmark — Diplomat Card (ED-320 RESOLVED)
 **Type:** Senator Outward. **Card type:** Hafenmark faction card. **Once per season.**
-Roll: Influence vs Ob = target Mandate ÷ 2 round up, min 1.
+Roll: Influence vs Ob = floor(target Mandate / 2) + 1.
 **Restriction:** Cannot target Church if PI < 3.
 
 | Degree | Effect |
@@ -1375,7 +1375,7 @@ Target faction knows they've been revealed (public token).
 ### Varfell — Counter-Narrative (PP-441 + PP-441-COR)
 **Type:** Tribune Outward (Varfell only). Target = Church-held or Church-prominent territory.
 Church-prominent = Church global Mandate > controlling faction global Mandate (assessed at action declaration).
-Roll: Intel vs Ob = Church Mandate ÷ 2 round up, min 1. Consequentialism: −1 Ob.
+Roll: Intel vs Ob = floor(Church Mandate / 2) + 1. Consequentialism: −1 Ob.
 **+2 Ob modifier:** If territory has an active Inquisitor (applies to all Tribune Intel actions).
 
 | Degree | Effect |

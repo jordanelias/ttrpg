@@ -5215,3 +5215,21 @@ patches:
   source: balance_analysis_2026_04_10
   affects: [designs/board_game/victory_architecture_v1.md]
   status: applied
+
+- id: PP-547
+  type: formula-correction
+  date: 2026-04-11
+  severity: P1
+  description: >
+    Standardise all Mandate-derived Obstacle formulas to floor(Mandate / 2) + 1.
+    Previous formulas were either raw Mandate (Ob = Mandate or min(Mandate, 4))
+    or ceiling(Mandate / 2). All six instances corrected in params_board_game.md:
+    (1) Theocracy Counter Suppress Ob (L337),
+    (2) Excommunication Ob Cap PP-180 header (L468),
+    (3) Mandate Suppression general rule PP-296 (L471),
+    (4) Church Piety Spread PP-428 (L1206),
+    (5) Hafenmark Diplomat Card ED-320 (L1282),
+    (6) Varfell Counter-Narrative PP-441 (L1378).
+    Cap of 4 removed from PP-180/PP-296 — formula is self-scaling.
+  affects: [references/params_board_game.md]
+  status: applied
