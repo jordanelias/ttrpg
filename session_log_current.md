@@ -955,3 +955,47 @@ ED-370, ED-371, ED-372, ED-373 (as prior session)
 - Vaynard Intel escalation to TS growth: STRUCK — Intel already governs Collection roll (Intel vs Ob 2 per PP-168); TS growth is +1/use canonical; no additional modifier warranted
 
 **Open items:** Vaynard full NPC roster entry (blocks Arc 39 simulation); TK track parameterization; Baralta roster entry; Zoom In arc-specific triggers to be added per-arc doc as work continues.
+
+
+---
+
+## Session: 2026-04-11 — Repository-Wide Consolidation (continued)
+
+### Task: Consolidate all folders (except deprecated/) — mark deprecated
+
+### Decisions made per folder
+
+**tests/, references/, skills/, tools/, docs/, versions/**: No action — test archive, params system, skill SKILL.md structure, and utilities are all correctly structured. No consolidation applicable.
+
+**gm_ref/**: No action — all arc files (arcs 01-04, 05-09, 10-18, 36-40, 41-45, narrative analysis) are current sequential batches. No overlaps.
+
+**designs/setting/, designs/combat/, designs/contest/, designs/conviction_track/, designs/hybrid/, designs/mass_combat/, designs/mechanics/, designs/systems/**: Single-file folders or clean multi-file folders. No action.
+
+### Commits
+
+**Commit `8d08ef2`** — canon/ + compilation/v0.14/
+- Deprecated 1 canon file: audit_threadwork_v24.md (superseded by v25)
+- Deprecated 15 compilation/v0.14 stage files (superseded by design docs or params files)
+- Kept: README, valoria_ruleset_v0.14.md, stage4_southernmost (only southernmost source), stage6_factions (only TTRPG factions source), stage11_scale_transitions (only source), stage12_campaign_modes (only source)
+
+**Commit `a1168683`** — designs/board_game/ + designs/gm_ref_cp14/
+- Deprecated 2 board_game files: faction_resolutions_2026_04_07.md, stress_test_report (absorbed; bg_v05 and victory_architecture are canonical)
+- Kept: valoria_bg_v05_simulation_and_patches.md (canonical), victory_architecture_v1.md (canonical), valoria_map_v2.svg, varfell_path_b_redesign_ed311.md (open editorial ED-311)
+- Deprecated 4 gm_ref_cp14/arcs (arcs 1-12, superseded by gm_ref/ arcs 1-18)
+- Deprecated 10 gm_ref_cp14/dashboards (CP14 mechanics, outdated)
+- Deprecated 3 gm_ref_cp14 other (workplan, zoom card, templar crossing flowchart)
+- Kept: arcs 16-35 + experimental + campaign arcs (no gm_ref/ replacements exist)
+
+**Commit `96c64d14`** — designs/ttrpg/ + designs/worldbuilding/ + designs/ root
+- Deprecated 11 ttrpg/ files: all Phase 1 batch files (batch_a through batch_f, batch_ad_resolutions) + church_territorial_seizure, generation_tasks, lowenritter_faction_card, mechanical_tasks_and_patches, succession_mechanic
+- Kept: threadwork_redesign_v25.md (canonical), edeyja_npc.md (canonical NPC), valoria_emergent_scenarios.md, valoria_narrative_scenario_chains.md (referenced by gm_ref arcs), threadwork_philosophical_reference.md (used by canon-guard skill)
+- Updated SUPERSEDED.md to correctly document kept vs deprecated files
+- Deprecated worldbuilding/editorial_comprehensive_review.md (absorbed into editorial ledger)
+- Deprecated designs/cogload_reduction_strategies.md (superseded by cogload_moderate_target.md)
+
+### Total deprecated this session extension: 48 files across 6 directories
+### Post-commit checks: 15 broken (pre-existing glob patterns), 139 propagation failures (pre-existing) — no new issues introduced
+
+### Open editorials carried forward
+ED-311 (Varfell Path B — awaiting user review)
+ED-370, ED-371, ED-372, ED-373 (carried from prior session)
