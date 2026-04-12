@@ -403,3 +403,37 @@ Propagation targets:
 - Hardar Veldensohn → Doux Alexios Laskaris: params_board_game ✓, npc_roster ✓, session_log ✓
 - bg_v04 retains old name (SUPERSEDED file — no action)
 - Severin Almud → Gerik Strand: npc_roster ✓ (Severin did not appear in any other active file)
+
+## 2026-04-11 Session — New Propagation Entries
+
+### canon/03_canonical_timeline.md
+- -> designs/npcs/npc_character_analyses_existing.md (Almud TS 0, Baralta Crown ambition, Vaynard southern heritage, Lenneth revivalist)
+- -> designs/npcs/ruler_diamond_foil_analysis.md (all pairings)
+- -> designs/npcs/ruler_diamond_extended_foils.md (all perspectives)
+- -> gm_ref/arcs_01_04_nongreedy.md (Arc 1 Almud reframing)
+- -> designs/gm_ref_cp14/arcs/arcs_09_11_elske_baralta.md (Arc 9 consecration crisis)
+- -> designs/mechanics/baralta_crown_claim_mechanic.md (deed-monarchy -> Crown Succession Contest)
+- -> designs/npcs/lenneth_threadwork_design.md (Lenneth characterisation -> TS development)
+
+### designs/npcs/lenneth_threadwork_design.md
+- -> references/params_threadwork.md (Lenneth TS 8 supersedes TS 72)
+- -> designs/mechanics/baralta_crown_claim_mechanic.md (Cultural Revival Track interacts with consecration crisis timing)
+- -> designs/npcs/npc_character_analyses_existing.md (Lenneth section)
+- -> designs/npcs/ruler_diamond_foil_analysis.md (Lenneth-Baralta confrontation)
+- -> gm_ref/arcs_01_04_nongreedy.md (Arc 1 RM ambient track affected by Cultural Revival Track)
+- -> compilation/v0.14/stage4_southernmost.md (Southernmost Awareness — Crown gains access via Lenneth at TS 30)
+
+### designs/mechanics/baralta_crown_claim_mechanic.md
+- -> references/params_board_game.md (Crown Succession Contest, Stake Claim DA — NOT YET INTEGRATED into params)
+- -> designs/npcs/ed_403_406_407_resolutions.md (Ehrenwall assessment, consecration conditional)
+- -> designs/npcs/npc_character_analyses_existing.md (Baralta Crown ambition)
+- -> designs/worldbuilding/worldbuilding_integration_v3.md (Motion of No Confidence — deed-monarchy context)
+
+### designs/npcs/npc_roster_caste_annotations.md
+- -> designs/npcs/npc_roster.md (companion document — all 13 NPCs annotated)
+- -> canon/03_canonical_timeline.md (caste system definition)
+- -> designs/setting/geography_design.md (TS gradient by territory)
+
+### Stale Propagation Note
+- references/params_board_game.md does NOT yet contain the Crown Succession Contest, Stake Claim DA, or Consecration Crisis mechanics. Integration needed next session.
+- references/params_threadwork.md updated (Lenneth TS 72 -> 8) but does NOT yet contain Cultural Revival Track or Lenneth breakthrough condition. These are in the design doc only.

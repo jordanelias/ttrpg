@@ -699,3 +699,28 @@ Session: 2026-04-11_OPUS_NARRATIVE_AUDIT
 - 6 unexpected cross-arc interactions documented (Babington↔Hunting Accident, Cathedral↔Quiet Fracture, Lenneth coup↔Practitioner Who Stopped, Tudor↔Baralta dynasty, Framework Trap as permanent modifier, Empty Fort dual-nature under different crises).
 - REMAINING P1 BLOCKERS: ED-373 (Vanguard stats), ED-377 (CV starting values), Southernmost design document, GAP-ARC-01.
 - Next: simulate arc divergence on key roll outcomes; deprecate stale arc files; create Arc Priority Matrix for GMs.
+
+## SESSION CLOSE — FINAL (2026-04-11)
+
+**8 commits. 17 files modified/created. 26 editorial items (ED-393 through ED-418). 24 resolved, 1 open (ED-416: Almud stat block), 1 escalated and resolved (ED-119).**
+
+### Commit Log
+| # | SHA | Scope |
+|---|-----|-------|
+| 1 | 701eacf | Timeline, character analyses, roster annotations, ED-393-407 |
+| 2 | da2e2c5 | Foil analysis + extended foils rewrites |
+| 3 | abe1b1e | Arc 1 Almud reframing + Arc 9 consecration crisis |
+| 4 | 9e763fb | Stale ref cleanup + ED-403/406/407 resolved |
+| 5 | 26b7442 | Baralta Crown Claim mechanic + consecration simulation |
+| 6 | f1a5e77 | File index + ED-412 + ED-119 escalation |
+| 7 | 4660a27 | Lenneth full design + threadwork at decision points |
+| 8 | (this)  | Propagation, file index, session close |
+
+### Propagation Debt (for next session)
+- params_board_game.md: Crown Succession Contest, Stake Claim DA, Consecration Crisis NOT YET INTEGRATED
+- params_threadwork.md: Cultural Revival Track and Lenneth breakthrough condition NOT YET INTEGRATED (in design doc only)
+
+### Next Session Priority
+1. ED-416: Almud stat block (Spirit value determines Discovery Event probability)
+2. Integrate Baralta Crown Claim mechanics into params_board_game.md
+3. Simulate Cultural Revival Track pacing vs RS degradation (does Lenneth reach TS 30 before RS enters Fractured band?)

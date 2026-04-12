@@ -218,6 +218,7 @@
 
 ## DESIGNS — MECHANICS
 | designs/mechanics/baralta_crown_claim_mechanic.md | BG/HYBRID | CURRENT | Crown Succession Contest, Stake Claim DA, consecration crisis BG expression |
+| designs/npcs/lenneth_threadwork_design.md | ALL | CURRENT | Lenneth stat block, TS development, Cultural Revival Track, threadwork at ruler diamond decision points |
 
 ## GM REFERENCE (gm_ref/)
 
