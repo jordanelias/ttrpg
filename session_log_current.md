@@ -898,3 +898,35 @@ Priority for next session:
 3. Resolve ED-421 (Replace Dissolution with Lock/Pull failures in Arc 43)
 4. Resolve ED-422 (Establish CV erosion rates OR reframe Arc 44 as late-game)
 5. Resolve ED-416 (RM hold T9 mechanic — still open from prior session)
+
+
+---
+
+## Session: 2026-04-11 — NPC Directory Consolidation
+
+### Tasks completed
+1. Consolidated `designs/npcs/` into canonical structure:
+   - **`npc_roster.md`** (492 lines) — merged roster + caste annotations (§14 appended)
+   - **`npc_character_analyses.md`** (333 lines) — Part One: roster NPCs + Part Two: ruler diamond & existing named NPCs
+   - **`npc_foils.md`** (301 lines, new) — Part One: axis analysis + Part Two: subjective perspectives & extended foil network
+
+2. Deprecated 8 files (deprecation banner added, content retained for audit trail):
+   - `npc_roster_caste_annotations.md` → merged into roster §14
+   - `npc_character_analyses_existing.md` → merged into analyses Part Two
+   - `ruler_diamond_foil_analysis.md` → merged into foils Part One
+   - `ruler_diamond_extended_foils.md` → merged into foils Part Two
+   - `npc_comprehensive_audit.md` → superseded
+   - `lenneth_threadwork_design.md` → content absorbed into roster + params_threadwork
+   - `almud_correction_plan.md` → resolved, audit trail only
+   - `ed_403_406_407_resolutions.md` → editorial resolutions absorbed
+
+### Commit
+- `deaf729ccf7a92948d1d0916956e79ca0bc2faa9`
+- `[cleanup] Consolidate designs/npcs — roster, analyses, foils; 8 files deprecated`
+
+### Post-commit checks
+- `broken_dependency_checker.py`: 15 broken (pre-existing glob patterns — not introduced by this commit)
+- `patch_propagation_checker.py`: 138 failures (pre-existing params propagation debt — not introduced)
+
+### Open editorials carried forward
+ED-370, ED-371, ED-372, ED-373 (as prior session)
