@@ -393,6 +393,7 @@ One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland)
 ### Battle Ob Formula (PP-499, ED-343 resolved)
 **Battle Ob = floor(defender Military / 2) + 1.**
 Attacker rolls: Military pool vs Ob. Degree table per standard BG degree table (PP-249).
+**[PROVISIONAL ED-316] Weight-of-numbers (PP-570):** A faction attacking with Military ≥ 2× defending faction Military forces the defender to Stability −1 at Accounting regardless of battle outcome (the sheer scale is demoralising). Applies once per Accounting regardless of attack count.
 [Resolved by PP-548. Battle Ob = floor(defender Military / 2) + 1. Min 1 prevents auto-success vs Military 0 factions (RM). Flagged for simulation confirmation.]
 
 
@@ -401,7 +402,7 @@ Attacker rolls: Military pool vs Ob. Degree table per standard BG degree table (
 TC starts at **28**. (P-32, PP-189 correction. The 22 value from v04 B2 was superseded by P-32 in v05.)
 
 ## Parliament Integrity (PI) Scale
-0–10. Starts at **7**. (Corrected from 5.)
+0–20 (cumulative pressure meter). Starts at **7**. Effects table: §PI Thresholds above. (PP-553)
 | PI | State |
 |----|-------|
 | 8–10 | Full Parliament. Crown Policy requires Mandate ≥ 4. |
@@ -410,6 +411,7 @@ TC starts at **28**. (P-32, PP-189 correction. The 22 value from v04 B2 was supe
 | ≤ 2 | Non-functional. Hafenmark loses Parliamentary Manoeuvre. Crown governs by decree. TC +2 (does not apply when TC is frozen at 75 — PP-560). |
 
 PI degrades: Crown Emergency Powers (−1), Church territorial seizure (−1), Löwenritter coup (−3).
+**Löwenritter T14 on Coup (PP-569, ED-348):** On Coup trigger, Löwenritter assumes immediate full control of T14 Ehrenfeld. T14 does NOT go Uncontrolled — the garrison presence formalises. Crown retains no claim.
 PI recovers: Hafenmark Parliamentary Manoeuvre success (+1), Crown Parliamentary Session policy (+1).
 
 ## Ethical Framework Modifiers (v04 B4)
@@ -425,7 +427,7 @@ PI recovers: Hafenmark Parliamentary Manoeuvre success (+1), Crown Parliamentary
 ## Faction Conviction Texts (PP-181, ED-080/081 resolved 2026-04-03)
 | Faction | Conviction |
 |---------|-----------|
-| Crown (Almud) | "The state is the only legitimate vessel of order." |
+| Crown (Almud) | "Order is not made — it is maintained. Everything depends on not flinching." | *(ED-364: revised from cliché; Almud is shrewd and guarded, not indecisive)* |
 | Church (Himlensendt) | Faith |
 | Hafenmark (Baralta) | "Faith is not mediated — it is lived. Anyone who is truly faithful can hear Solmund. Anyone who cannot should not rule." |
 | Varfell (Vaynard) | "The strongest thread is the one others cannot see — and I have spent my life learning to pull it." |
@@ -768,6 +770,7 @@ Holy See = elected from among the Bishopry. Second only to the Monarch.
 
 
 ### Cardinal Death — Succession (ED-336 resolved)
+**Multi-Cardinal death cap (ED-347):** No hard cap. Multiple Cardinal deaths per season are legally possible. Each death triggers its own succession gap independently. Cost (cascading Church mechanic suspensions) is the natural limiting factor, not a hard rule.
 When a Cardinal is killed during a Zoom In scene (Hybrid mode):
 
 **Gap period:** The Cardinal's BG mechanic is **suspended** until Year-End Accounting.
@@ -886,7 +889,7 @@ All faction starting positions reflect canonical geography. Old v04 map assignme
 | Hafenmark | T7 Rendstad, T8 Gransol★, T10 Spartfell, T17 Halvarshelm | 4 | 8 |
 | Varfell | T4 Grauwald, T11 Halvardshelm, T12 Sigurdshelm★, T13 Oastad | 4 | 6 |
 | Church of Solmund | T9 Himmelenger★ | 1 | 3 |
-| Löwenritter | T14 Ehrenfeld (shared with Crown pre-coup) | shared | — |
+| Löwenritter | T14 Ehrenfeld (shared with Crown pre-coup; full control on Coup trigger per PP-569) | shared → full |
 | Uncontrolled | T15 Askeheim | — | 0 |
 | NPC | T16 Schoenland | — | — |
 
@@ -1004,7 +1007,7 @@ Required sequence to access Askeheim:
 |----------|---------|-------------|-------------------|---------------|
 | Vaynard (VTM 3+) | Varfell | 30 (at VTM 3) | Yes — conditional on VTM development | VTM 3 achieved ~S7–9. Marginal: Forgetting pool = 3D. |
 | Vaynard (VTM 4+) | Varfell | 40 | Yes | VTM 4 ~S10–12. Edeyja will engage substantively. |
-| Almud Almqvist | Crown | 28 | **No** | Discovery Event: any Thread-significant event with Almud present, Spirit Ob 1. On success: TS 30, Certainty −1 (permanent). Politically costly: TC +1; Church learning triggers TC +2 + Heresy Investigation. |
+| Almud Almqvist | Crown | 28 | **No** | Discovery Event: any Thread-significant event with Almud present, Spirit Ob 1. *[ED-364: Almud is shrewd, politically capable, his caution informed by suspected father assassination and the structural impossibility of managing 6+ simultaneous pressure vectors. Comparison to Baralta: scope difference, not competence difference.]* On success: TS 30, Certainty −1 (permanent). Politically costly: TC +1; Church learning triggers TC +2 + Heresy Investigation. |
 | Lenneth Almqvist (Queen) | Crown | Unknown (not yet documented) | **Unknown** | Arc-dependent. Holds pre-Altonian sea-republic archive with first-person Thread-perception accounts (~180 AG). Potential TS development through intellectual confrontation with archive content + Thread exposure. [EDITORIAL: ED-119 — Lenneth full design required: starting TS, development path, stat block.] |
 | Restoration Weaver (TS 18) | Restoration | 18 | No | Does not qualify as expedition leader. Provides Ob −1 support when accompanying a qualifying Champion. |
 | Any other faction Champion | Any | < 30 | No | No standard development path. |

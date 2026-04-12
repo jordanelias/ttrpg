@@ -21,6 +21,7 @@ damage. Two stats unified in personal combat split here:
   training. Determines dice rolled.
 
 **Effective Combat Pool = min(Size, Command) + Command** (PP-233)
+**[PROVISIONAL ED-316] Weight-of-numbers (PP-570):** When a unit's current Size > 2 × the opposing general's Command (the formation is simply too large to be directed against), at Phase 6 Step 2 the opposing unit must pass a Morale check (Ob 1, deterministic). Failure: −1 Morale (the mass is demoralising regardless of casualties). Does not stack with other Morale reductions. [PROVISIONAL — confirm trigger threshold and whether this applies at BG or TTRPG scale only]
 
 As Size drops, the pool shrinks — fewer soldiers means fewer dice
 regardless of individual quality. Command caps both Size and Power contributions. (PP-233) Size determines

@@ -5574,3 +5574,70 @@ patches:
   finding_id: ED-340
   affects: [references/params_board_game.md]
   status: applied
+
+- id: PP-569
+  type: clarification
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-339 resolved: Partition non-winners explicitly score no victory (by design).
+    ED-347 resolved: No cap on multi-Cardinal assassination per season; cascading mechanic
+    suspensions are the natural limiter. Explicit text added to params_board_game.
+    ED-348 resolved: Löwenritter assumes full T14 Ehrenfeld on Coup trigger; T14 does NOT
+    go Uncontrolled. Garrison presence formalises control. Explicit rule added.
+  finding_id: ED-339, ED-347, ED-348
+  affects: [references/params_board_game.md, designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-570
+  type: design
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-316 provisional: Weight-of-numbers rule. When a unit's Size > 2× the opposing
+    general's Command (formation too large to be directed against), opposing unit passes
+    Morale check Ob 1 at Phase 6 Step 2. Failure: -1 Morale. Captures demoralisation
+    from sheer mass regardless of direct damage. [PROVISIONAL — confirm trigger and scale.]
+  finding_id: ED-316
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_board_game.md]
+  status: applied
+
+- id: PP-571
+  type: balance
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-388 provisional: Hafenmark Parliamentary Sovereignty gate added: Hafenmark Stability
+    ≥ 3. Prevents Parliamentary victory while faction is structurally destabilised.
+    Added to victory_architecture_v1.md §3.3 conditions table.
+  finding_id: ED-388
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-572
+  type: balance
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-391 provisional: Crown+Hafenmark co-victory now requires neither faction has played
+    Legionary targeting the other in the preceding 4 seasons. Reinforces the cooperative
+    design intent of the co-victory path — it must represent genuine political alignment,
+    not tactical opportunism. Added to co-victory table in victory_architecture_v1.md.
+  finding_id: ED-391
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-573
+  type: worldbuilding
+  date: 2026-04-12
+  severity: P1
+  description: >
+    ED-364 provisional: Almud Almqvist characterization updated. Conviction text revised to
+    "Order is not made — it is maintained. Everything depends on not flinching." NPC profile
+    note added: shrewd, guarded, politically capable king; caution informed by suspected
+    father assassination and structural impossibility of managing 6+ simultaneous pressure
+    vectors. Baralta comparison: scope difference, not competence difference.
+    [PROVISIONAL — for Jordan review]
+  finding_id: ED-364
+  affects: [references/params_board_game.md]
+  status: applied

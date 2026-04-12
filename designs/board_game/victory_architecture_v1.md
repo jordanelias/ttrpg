@@ -152,6 +152,8 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 +
 
 **Partition Pressure marker (ED-338, PP-566):** At Accounting, if all conditions EXCEPT TC ≥ 50 are simultaneously met, place a public Partition Pressure marker. Other factions have 1 season to disrupt conditions before TC threshold check fires. Remove marker if any condition breaks before TC ≥ 50.
 
+**Non-winner outcome (ED-339):** Crown, Varfell, and RM score no victory under Partition — the negotiated partition forecloses all other victory paths. This is by design: Partition is bilateral and terminal.
+
 **Outcome:** Mutual agreement ends the game. Both factions score a conditional victory. No holding requirement — fires immediately on mutual declaration.
 
 ---
@@ -164,6 +166,7 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 +
 |-----------|-----------|
 | TCV held | ≥ 13 | *(PP-541: was 12)* |
 | Hafenmark Mandate | ≥ 4 |
+| Hafenmark Stability | ≥ 3 | *(PP-571, ED-388: prevents Parliamentary Sovereignty while faction is destabilised)* |
 | PI | ≥ 5 |
 | Crown Mandate | ≤ 3 |
 
@@ -275,7 +278,7 @@ Co-victories require 2 consecutive Accounting steps except Partition (immediate 
 
 | Pair | Conditions (all simultaneous at Accounting) |
 |------|---------------------------------------------|
-| **Crown + Hafenmark** | Crown TCV ≥ 12 AND Hafenmark TCV ≥ 12 AND PI ≥ 7 AND TC < 50 AND Crown Mandate ≥ 4 AND Hafenmark Mandate ≥ 4 | *(PP-561: Haf TCV was ≥ 9, Mandate conditions added — was trivially achievable S1-2)* |
+| **Crown + Hafenmark** | Crown TCV ≥ 12 AND Hafenmark TCV ≥ 12 AND PI ≥ 7 AND TC < 50 AND Crown Mandate ≥ 4 AND Hafenmark Mandate ≥ 4 AND neither faction has played Legionary targeting the other in preceding 4 seasons | *(PP-561 + PP-572, ED-391: 4-season no-active-conflict reinforces cooperative design)* |
 | **Crown + Varfell** | Crown TCV ≥ 12 AND Varfell TCV ≥ 8 AND VTM ≥ 3 AND RS ≥ 50 |
 | **Varfell + RM** | VTM ≥ 3 AND WR ≥ 2 AND ≥ 3 territories PT ≤ 1 AND RS ≥ 40 AND Varfell controls T13 | *(PP-545: VTM was ≥ 4; territories was ≥ 4)* |
 | **Hafenmark + RM** | Hafenmark TCV ≥ 10 AND ≥ 3 territories PT ≤ 2 AND PI ≥ 4 AND RS ≥ 40 | *(PP-546: territories was ≥ 4)* |

@@ -1,6 +1,56 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-12_SONNET_ALL_EDITORIAL_RESOLVED
+session_close: 2026-04-12
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Resolved all remaining 28 open editorial items
+2. PP-569-573: file patches for mechanical and worldbuilding resolutions
+3. P1 blocker count: 0 (all 11 P1s resolved across this session batch)
+
+## PATCHES (PP-569-573)
+PP-569: ED-339/347/348 — Partition non-winner clarification; Cardinal cap none; Löwenritter T14 coup rule
+PP-570: ED-316 — Weight-of-numbers Size > 2×Command Morale check [PROVISIONAL]
+PP-571: ED-388 — Hafenmark Stability ≥ 3 gate on Parliamentary Sovereignty [PROVISIONAL]
+PP-572: ED-391 — Crown+Hafenmark 4-season no-conflict co-victory condition [PROVISIONAL]
+PP-573: ED-364 — Almud characterization updated [PROVISIONAL — for Jordan review]
+
+## EDITORIALS RESOLVED (no patch needed — already in text or confirmed)
+ED-080/081: Baralta/Vaynard conviction texts already defined.
+ED-302/304/305/307: Confirmed decisions already in text.
+ED-303: Rendering Stability name retained.
+ED-308/309: Varfell/Baralta succession already resolved PP-486/487.
+ED-349: Soften action struck as scope error.
+ED-350: Domain Echo resolved PP-329.
+ED-361: PI cascade already in text.
+ED-362: Dissonant Thread already in text PP-502.
+ED-363: PP-249 Overwhelming confirmed canonical.
+ED-384: Varfell+RM aspirational — confirmed.
+ED-386: arc/campaign not a systematic issue.
+ED-387: Hafenmark path resolved PP-541.
+ED-390: WC -1 Ob confirmed (not -2).
+
+## FLAGGED FOR JORDAN REVIEW (all marked [PROVISIONAL])
+ED-316: Weight-of-numbers trigger threshold and scale
+ED-340: Vanguard identity, invasion route, elimination narrative
+ED-358: 13-character NPC roster (full design required)
+ED-364: Almud conviction text and characterization rewrite
+ED-388: Hafenmark Stability gate (faction-feel)
+ED-391: 4-season no-conflict condition (faction-feel)
+
+## STATE
+P1 blockers: 0
+Open editorials: ~0 (all resolved or flagged [PROVISIONAL] for Jordan)
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-12_SONNET_ED_BATCH_RESOLUTION
 session_close: 2026-04-12
 phase: COMPLETE
