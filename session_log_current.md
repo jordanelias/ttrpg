@@ -724,3 +724,12 @@ Session: 2026-04-11_OPUS_NARRATIVE_AUDIT
 1. ED-416: Almud stat block (Spirit value determines Discovery Event probability)
 2. Integrate Baralta Crown Claim mechanics into params_board_game.md
 3. Simulate Cultural Revival Track pacing vs RS degradation (does Lenneth reach TS 30 before RS enters Fractured band?)
+
+
+### 2026-04-11 — Arc Register Creation and Threadwork Simulation
+Session: 2026-04-11_OPUS_ARC_REGISTER
+- Created arc register from scratch — iterated through 6 versions.
+- v1: 35 named arcs. v2: audit-corrected (Baralta→Hafenmark, TC suppression ≥4, RS cross-clock error removed, 11 arcs added). v3: recent commit review (Klapp→Temperance, Almud ED-364, Baralta Crown ambition, Lenneth-Baralta collision, Jarnstal drift, 8 NPC corrections). v4: abe1b1e review (ED-407 consecration mechanics) + 7 new emergent arcs from PP-428–442 and foil analysis + 2 new collisions (Succession/Einhir Triangles). v5: threadwork decision point analysis (8 decision points, 4 new arcs: Lock Distribution, Mending Trap, Lattice of Enemies, Overweaving Cascade). v6: branch simulation (7 key rolls, 2 new arcs: Governance Pause, Edeyja Burnout).
+- Final count: 8 principal + 34 secondary + 19 tertiary + 12 NPC = 73 arcs + 7 collision scenarios.
+- Key findings: Excommunication mechanic non-functional at game-start stats (GAP-ARC-05). Klapp Ob 2 is single most impactful Ob modifier. Ceiral Ritual 7% failure → endgame spiral. Edeyja burnout = hidden fail state. Mending structurally insufficient without WC + Community Weaving + Lock resolution. Endgame collective ops Belief-gated.
+- Files committed: references/arc_register.md, tests/threadwork_decision_point_analysis.md, tests/arc_branch_simulation.md

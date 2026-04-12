@@ -1,6 +1,6 @@
 # Arc Register
 
-> **Version:** 5 (threadwork decision point testing + new emergent arcs from threadwork interactions)
+> **Version:** 6 (branch simulation + Edeyja burnout + Governance Pause + Excommunication gap)
 > **Status:** WORKING DRAFT
 > **[EDITORIAL: ED-NEW — Tier assignments are provisional pending user review]**
 > **Sources fetched this session:** `designs/gm_ref_cp14/arcs/*` (11 files), `gm_ref/arcs_*` (3 files), `designs/npcs/npc_roster.md`, `designs/npcs/npc_comprehensive_audit.md`, `designs/npcs/npc_character_analyses_existing.md`, `designs/npcs/npc_roster_caste_annotations.md`, `references/params_factions.md`, `references/params_threadwork.md`, `references/params_board_game.md`, `designs/board_game/victory_architecture_v1.md`, `designs/board_game/valoria_bg_v05_simulation_and_patches.md`, `designs/ttrpg/valoria_narrative_scenario_chains.md`, `compilation/v0.14/stage6_factions.md`, `canon/02_canon_constraints.md`
@@ -527,6 +527,19 @@ These are not separate arcs but emergence conditions that should inform existing
 **Classification:** Tertiary — requires two practitioners independently targeting same configuration. But when it fires, RS consequences compound rapidly.
 **Interaction:** ARC-S02 (Brittle Peace — over-actualisation), ARC-S04 (Rendering Debt — ×3 in mass battle)
 
+### ARC-T19: The Governance Pause
+**Engine:** Almud Discovery Event attempt (success OR failure) → 1-season Crown Non-Player Character AI pause
+**Emergence:** Whether the Discovery Event succeeds or fails, Almud enters 1-season self-examination. Crown Non-Player Character AI takes no offensive Domain Actions. The ATTEMPT changes him. During this season: TC advances unopposed (no Crown Suppress), IP advances (no Crown diplomatic action), Coup Counter may increment (Crown inaction at TC ≥ 40). All factions have a 1-season window to act without Crown opposition.
+**Non-Player Characters:** Almud (paused), Ehrenwall/Brandt (Coup Counter — Crown inaction counts), Baralta (Parliamentary Challenge without resistance), Vaynard (Counter-Narrative without interference), Himmensendt (Assert without Suppress)
+**Classification:** Tertiary — requires Almud Discovery Event attempt (itself requiring player action to expose him). But fires on BOTH success and failure.
+
+### ARC-S34: The Edeyja Burnout
+**Engine:** Edeyja Coherence 9 → repeated Mending at Critical RS → Coherence crisis
+**Emergence:** If Ceiral Ritual fails (ARC-T04 failure branch) or RS enters Critical, Edeyja becomes sole high-level Mender (TS 75–80). ~8 Mendings before Coherence 2 (Fractured). ~10 before Coherence 0 (Rendering Crisis → Non-Player Character if unresolved). If she reaches Coherence 0: Wardens lose principal practitioner. Warden Cooperation (WC) track may degrade. No living practitioner can perform Locked Zone border Mending (requires TS 70+ AND Einhir framework). Southernmost becomes mechanically unsalvageable.
+**Non-Player Characters:** Edeyja (primary — finite Coherence despite being the moral anchor), any practitioner Player Characters (Mending rotation extends her timeline), Maret Uln (TS ~50 — can Mend standard Gaps but not Locked Zone borders)
+**Structural significance:** Hidden fail state. Campaign's Southernmost endgame condition becomes permanently unachievable if Edeyja reaches Coherence 0. Invisible until she reaches Coherence 4–5.
+**Interaction:** ARC-S32 (Mending Trap), ARC-S25 (WC degrades if Edeyja incapacitated), ARC-S15 (Ceiral Ritual becomes only option if Mending unavailable)
+
 ### COLLISION F: The Succession Triangle
 **Trigger:** Almqvist deed-presumption weakens (Coup Counter ≥ 2, or Almud Discovery Event, or Torben loss) while both Lenneth and Baralta programmes are active
 **Effect:** Three-way succession contest fires. Lenneth's counter-claim: "the family that earned the throne should keep it — and I will make the Crown worthy of keeping." Baralta's claim: deed-logic's obvious choice (strongest governance record, Mandate 7, Ob 1 deviation). Ehrenwall's calculus: competence within the system (Baralta) vs competence to strengthen the system (Lenneth) vs competence to replace the system (Vaynard — excluded by deed-logic's limit). Consecration crisis (ARC-T14) fires if Baralta wins. Lenneth's zero mechanical expression means her claim has narrative weight but no measurable game-state effects — audit gap #1.
@@ -732,6 +745,8 @@ COLLISION SCENARIOS
 | ED-NEW-04 | 218 AG resolution — narrative_scenario_chains presents accidental death as design intent; E-01 flagged as unresolved elsewhere | Reconciliation needed |
 | ED-358 | Full roster identities, motivations, stat blocks | Provisional — user review pending |
 | E-01 | Perpetrator of 218 AG assassination | Unresolved (but see ED-NEW-04) |
+| GAP-ARC-05 | ARC-T03 Excommunication — Church Mandate pool (5d10) cannot reach Ob 7 (Baralta personal Mandate). Mechanic non-functional at game-start stats. Only fires if Baralta Mandate eroded by prior events. | Mechanical gap — confirmed by branch simulation |
+| SIM-BRANCH-05 | Edeyja burnout = hidden fail state. Southernmost endgame condition permanently unachievable if Edeyja Coherence 0. | → ARC-S34 |
 
 ### Caste Gradient Note (701eacf)
 
