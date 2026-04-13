@@ -3477,3 +3477,27 @@ editorial_decisions:
     description: "PP-431-COR self-harm at Partial confirmed as intentional design (high-variance action by design). Document in Hafenmark NPC AI guidance: Challenge is negative EV at Partial outcome; NPC AI should weigh carefully. No mechanical change required — documentation only."
     tags: [hafenmark, parliamentary, simulation]
     source: SIM-ARC-B01
+
+  - id: ED-408
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P1
+    description: "ARC-S19 Quaestio trigger: automatic at TC 42 crossing or Baralta-optional Senator action available from TC ≥ 42? Simulation crossed TC 42 (Seasons 8-9) without the Quaestio firing. If automatic: two seasons of simulation are invalid and the arc register entry needs revision. Proposed resolution: Quaestio is Baralta's optional Senator action (she invokes when ready; NPC AI: invoke when TC ≥ 42 AND Mandate ≥ 5 AND Stability ≥ 3 AND Parliamentary Sovereignty victory within 3 seasons). Requires arc_register.md v8 edit if resolved as optional."
+    tags: [hafenmark, baralta, quaestio, arc_system, simulation]
+    source: SIM-ARC-A01
+
+  - id: ED-409
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P2
+    description: "P2-B09: Baralta Quaestio under Martial Law. If Coup Counter fires before Baralta invokes ARC-S19, the constitutional Grand Debate fires under military governance — Baralta's deed-monarchy constitutional argument is being made while Löwenritter has imposed Martial Law. This is dramatically correct but must be explicitly acknowledged in GM guidance: Martial Law does not prevent the Quaestio (Senator secondary check P ≈ 87% success), but it recontextualises it. Baralta's constitutional argument gains or loses weight depending on how GM frames the Martial Law vs Parliamentary Session coexistence."
+    tags: [hafenmark, baralta, lowenritter, martial_law, quaestio]
+    source: SIM-ARC-A01
+
+  - id: ED-410
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P2
+    description: "P2-B10: Consecration + Schism cascade. If Himmensendt consecrates Baralta (Church Sta −3), Church Stability drops to 2, re-triggering ARC-S29 schism conditions. The act of institutional yielding triggers the fracture that challenges the yielding. Confirmed as intentional design (correct dramatic structure). Document in GM Reference: the season after consecration, if any faction plays a Senator action targeting Church, ARC-S29 automatically fires again. GMs should anticipate this and inform players that the consecration season is a cascade window."
+    tags: [church, baralta, consecration, schism, arc_system]
+    source: SIM-ARC-A01

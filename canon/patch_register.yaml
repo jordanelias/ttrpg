@@ -5732,3 +5732,56 @@ patches:
     - references/params_factions.md
     - references/params_board_game.md
   status: applied
+
+- id: PP-578
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-B05 resolved. Inquisitor +2 Ob Intel bonus applies ONLY in Church-controlled territories
+    (existing rule confirmed as territorial). AP accumulation (Active Inquisition) is confirmed
+    territory-agnostic — Church can build AP toward Inquisitor threshold in any territory.
+    The asymmetry (agnostic accumulation, territorial bonus) is intentional: Church's Inquisitors
+    investigate everywhere but suppress Intel operations only where Church governs.
+    Documentation addition: clarify in params_board_game.md Inquisitor section that +2 Ob
+    applies to Intel actions "in Church-controlled territories only, regardless of where AP
+    was accumulated."
+  finding_id: P2-B05
+  affects:
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-579
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-B06 documented. Crown Suppress is the prerequisite for Hafenmark Structural Suppression
+    to produce a full TC freeze (passive negated to 0 + structural −1 = net 0 rather than
+    passive +1 + structural −1 = net 0 only when Assert also plays 0). The hidden 2-card
+    coordination requirement (Crown Suppress + Hafenmark Structural brake) is confirmed as
+    intentional faction interdependency design. Documentation addition: GM Reference note in
+    TC management section stating that structural suppression's value is maximised when Crown
+    simultaneously Suppresses — not a rule change, a play-guidance clarification.
+  finding_id: P2-B06
+  affects:
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-580
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-B07 resolved. Hafenmark NPC AI guidance: Parliamentary Session (PP-432, once per arc)
+    should only be played when Hafenmark has confirmed ≥ 3 Support votes pre-play via
+    Diplomatic Tokens (Diplomat Card success ≥ 1 season prior). A Tie result (TC +1, Sta −1)
+    violates Hafenmark's own Parliamentary Sovereignty victory condition (Sta ≥ 3 per PP-571).
+    NPC AI should treat Session as high-variance with negative expected value unless majority
+    support is confirmed. Add to params_board_game.md §Hafenmark NPC AI Priority Tree.
+  finding_id: P2-B07
+  affects:
+    - references/params_board_game.md
+  status: applied

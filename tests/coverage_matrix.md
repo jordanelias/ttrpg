@@ -606,3 +606,19 @@ All v8 additions unsimulated. Required before any v8 arc is referenced in a mech
 | ARC-T26 Martial Honour Violation | C+D | COMPLETE | P1-B03 resolved (PP-576); priority sequence validated |
 P1 findings: 1 (P1-B03 → PP-576 applied)
 P2 findings: 4 (P2-B01/B02 → PP-577; P2-B03/B04 confirmed design intent, no patch)
+
+## SIM-ARC-B02 — Season 8 Crown Card Constraint (2026-04-13)
+| Arc interaction | Mode | Status | Key Finding |
+|---|---|---|---|
+| Crown Suppress + Hafenmark Structural TC dependency | B (Interaction) | COMPLETE | Hidden 2-card coordination requirement; PP-579 documents |
+| Inquisitor AP in non-Church territory | D (Edge) | COMPLETE | Asymmetry intentional; PP-578 clarifies |
+
+## SIM-ARC-A01 — Cluster A Baralta Programme (2026-04-13)
+| Arc | Mode | Status | Key Finding |
+|---|---|---|---|
+| ARC-S37 Détente | C | COMPLETE | Named state collapse mechanics confirmed functional |
+| ARC-S45 Deed Claim Activates | C | COMPLETE | Fires at Counter=2; NPC AI priority shift documented |
+| ARC-T14 Consecration Crisis | C+D | COMPLETE | Live at Season 13; consecration→schism cascade P2-B10 |
+| ARC-S24 Baralta Succession | D | COMPLETE | Fracture path (PI<4) functionally unreachable; P2-B11 |
+P1 findings: 1 (P1-B08/ED-408 — Quaestio trigger definition)
+P2 findings: 5 (P2-B05→PP-578; P2-B06→PP-579; P2-B07→PP-580; P2-B09→ED-409; P2-B10→ED-410; P2-B11 confirmed design intent)

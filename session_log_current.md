@@ -4,6 +4,31 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_SONNET_SIM_ARC_B02_A01
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+TASKS:
+1. SIM-ARC-B02: Season 8 Crown card constraint — confirmed designed pressure.
+   PP-578 (Inquisitor territory asymmetry), PP-579 (TC coordination dependency), PP-580 (Hafenmark Session NPC AI).
+2. SIM-ARC-A01: Cluster A Baralta Programme (Seasons 9-13).
+   ARC-S37 collapse mechanics, ARC-S45 CLAIMANT mode, ARC-T14 live at Season 13,
+   ARC-S24 fracture path unreachable. PP-578-580 applied.
+
+P1 OPEN: ED-408 (Quaestio optional vs automatic — P1 design gap)
+NEW EDITORIALS: ED-408 (P1), ED-409 (P2), ED-410 (P2)
+
+P1 BLOCKERS: 0 (ED-408 is design clarification, not mechanical blocker)
+OPEN EDITORIALS: 10 (ED-401-410; non-blocking)
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_SONNET_SIM_ARC_B01
 session_close: 2026-04-13
 phase: COMPLETE
