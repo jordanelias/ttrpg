@@ -4,6 +4,53 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_SONNET_WORLDBUILDING_CLARIFICATIONS
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+WORLDBUILDING CLARIFICATIONS (no mechanical patches required):
+
+1. TK (Thread Knowledge) is an engagement stat, not a knowledge level.
+   Rough conversion: 1 TK ≈ 6 TS as a sanity check on engagement magnitude.
+   Vaynard TK5 ≈ TS30 in terms of equivalent practitioner development.
+   His personal TS remains 14 — he is not Leap-eligible.
+   Implication: Vaynard is theoretically proximate to the Forgetting resistance
+   threshold (TS29+) without having crossed it. His urgency is not naive ignorance
+   but the frustration of long proximity without access.
+
+2. Einhir history is documented, publicly known, treated as romanticised fable.
+   The peninsula knows from surviving documents that the Einhir had a functional
+   threadwork civilisation capable of wonders. These accounts are accurate.
+   They read as fable because the referent (operational Thread reality) is no longer
+   accessible to living experience. The documents transmit words; not the experience
+   those words describe (Inert Knowledge, P-08). ARC-S40 function corrected:
+   not revelation of hidden knowledge — reframing of documented history that has
+   been depoliticised by the fable interpretation. Vaynard assembles a political
+   argument, not a discovery.
+
+3. The Church has a documented evidential basis for its opposition.
+   The Calamity is a recorded historical event with documented civilisational
+   consequences. Church institutional caution ("these practices caused catastrophe")
+   draws on real evidence correctly interpreted causally, but incorrectly prescribed
+   (suppression rather than management). Himmensendt is not superstitious — he is
+   reading the historical record and deriving the wrong prescription from correct
+   evidence. ARC-T16 (Perceptual Prophylaxis) is tragic precisely because his reading
+   has an evidential basis. Axis 2 political contest: two interpretations of the same
+   documents, not knowledge vs ignorance.
+
+4. Axis 9 Resolution (ARC-P04) is not about revealing new information.
+   It is about the contest between two interpretations of documented history that
+   can only be settled by crossing the epistemic threshold (the Leap, TS29+).
+   No propositional argument settles it. The argument is settled experientially.
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_SONNET_FORGETTING_HEIDEGGER_CEIRAL
 session_close: 2026-04-13
 phase: COMPLETE
