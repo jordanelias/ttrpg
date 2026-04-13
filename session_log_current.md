@@ -15,6 +15,7 @@ status: OPEN
 6. Propagation map: 12 broken references fixed
 7. Propagation backlog: params headers updated (all 8 params files)
 8. Patch register: params_debate.md refs → params_contest.md
+9. Params headers: complete PP ranges from patch register (register-authoritative)
 
 ## FIXES APPLIED
 - 30 duplicate ED-ID sets resolved (60 entries renumbered)

@@ -1,5 +1,5 @@
 <!-- version: v0.14-AUD3-R1 | source: threadwork_redesign_v25.md | last_updated: 2026-04-03 -->
-<!-- PATCHES APPLIED (canonical): PP-107, PP-166, PP-168, PP-181–182, PP-190–209, PP-221, PP-223–226, PP-232, PP-239–240, PP-250, PP-252–253, PP-258, PP-260–261, PP-263–265, PP-279, PP-281, PP-289–290, PP-303–304, PP-314–315, PP-330, PP-497, PP-502, PP-551 -->
+<!-- PATCHES APPLIED (canonical): PP-107, PP-166, PP-168, PP-181–182, PP-190–209, PP-221, PP-223–226, PP-232, PP-239–240, PP-250, PP-252–253, PP-258, PP-260–261, PP-263–265, PP-279, PP-281, PP-289–290, PP-303–304, PP-314–315, PP-330, PP-497, PP-502, PP-551, PP-553, PP-555 -->
 <!-- PP-232: Leap pool adds Spirit; Leap Failure outcome corrected; POP TN corrected to 8; sequential failure rule corrected; -->
 <!--         Weaving Structural Ob corrected to 8; Diagnosis struck ED-134; FR term flagged ED-135 (open); ED-030/034/121/124/134 resolved 2026-04-03. -->
 <!-- stage3_thread_operations.md is EMPTY in v0.14. All values from threadwork_redesign_v25.md. -->

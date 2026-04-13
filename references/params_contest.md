@@ -1,5 +1,5 @@
 <!-- version: v2.1-PP235 | sources: designs/contest/social_contest_system_v2.md | last_updated: 2026-04-04 -->
-<!-- PATCHES APPLIED (canonical): PP-123, PP-234–237, PP-253–259, PP-272, PP-278–279, PP-401 -->
+<!-- PATCHES APPLIED (canonical): PP-123, PP-171, PP-232, PP-234–237, PP-242, PP-245, PP-253–259, PP-272, PP-278–279, PP-401, PP-449–450, PP-452–458, PP-460–463, PP-465, PP-529 -->
 <!-- PP-234: Full system redesign. Genre restructure (3→2), attribute renames (Presence→Charisma, Memory→Recall), -->
 <!--         Composure = Charisma + 6, faction boost revision (4 single-axis options), integer bonus dice, -->
 <!--         adjudicator-type pool rotation, Let It Ride explicit, Fail Forward for ties. -->
