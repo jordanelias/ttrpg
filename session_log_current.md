@@ -30,8 +30,8 @@ OPEN EDITORIALS: 7 (ED-401-407; all P2-P3, non-blocking)
 ```yaml
 session_id: 2026-04-13_OPUS_META_ANALYSIS_FIXES
 session_close: 2026-04-13
-phase: IN PROGRESS
-status: OPEN
+phase: COMPLETE
+status: CLOSED
 
 ## TASKS THIS SESSION
 1. Meta-analysis / systematic review of project infrastructure
@@ -45,7 +45,43 @@ status: OPEN
 9. Params headers: complete PP ranges from patch register (register-authoritative)
 10. Checker: files_changed field support added
 11. Params headers: rebuilt with files_changed-derived PPs included
-12. Session log archival: 10 closed sessions moved to archive (1360→~90 lines)
+12. Session log archival: 10 closed sessions moved to archive (1360→93 lines)
+
+## RESULTS SUMMARY
+| Metric | Before | After |
+|--------|--------|-------|
+| Broken dependency checker | 23 failures | 0 (PASS) |
+| Patch propagation checker | 141 failures | 0 (PASS) |
+| Editorial ledger duplicate IDs | 30 sets (60 entries) | 0 |
+| Session log size | 1360 lines | 93 lines |
+| Propagation map broken refs | 12 | 0 |
+| Skill registry broken paths | 5 | 0 |
+
+## COMMITS THIS SESSION
+- cca9d27: Ledger dedup (ED-426–485) + checker glob fix + propagation map repair — PP-576
+- 0cbc995: Params header propagation (body-mentioned PPs)
+- 7729f51: Complete propagation (register-authoritative PP ranges)
+- f9a6ba2: files_changed parser + final rebuilt headers
+- 5bacb71: Session log archival
+
+## STRUCTURAL CHANGES
+1. Editorial ledger: next_id: 486 autoincrement header — prevents future ID collisions
+2. Broken dependency checker: glob pattern filtering — no more false positives from *.md patterns
+3. Patch propagation checker: files_changed field parsing — full register coverage
+4. Params files: canonical PP range headers — register-authoritative tracking
+5. Skill registry: dir-based paths replacing flat paths
+6. Propagation map: deprecated file references updated
+
+## REMAINING (not addressed this session)
+- 33 open editorial items (various systems)
+- 6 flagged editorial items (awaiting user decisions)
+- 5 provisional patches awaiting user review (PP-568, 570, 571, 572, 573)
+- SIM-DEBT: Fieldwork (6), NPC Behaviour (5), Character Histories (0 registered)
+- Hybrid bridge: no design-layer scale_transitions doc
+- P1-BLOCKERs: ED-456 (BG Priority Trees), ED-483 (RM hold T9), ED-485 (Coup Counter 3v4)
+
+P1 BLOCKERS: 3 (ED-456, ED-483, ED-485 — renumbered from prior session IDs)
+OPEN EDITORIALS: 39 (33 open + 6 flagged)
 
 ## FIXES APPLIED
 - 30 duplicate ED-ID sets resolved (60 entries renumbered)
