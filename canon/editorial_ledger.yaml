@@ -3228,21 +3228,27 @@ editorial_decisions:
 - id: ED-420
   summary: "Arc 41 calamity radiation trigger incorrect: distance 3 at Fractured RS has no mechanical effects. Move Haelgrund investigation to T5 (distance 2)."
   priority: P1-BLOCKER
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Arc 41 Haelgrund investigation moved from distance 3 (no Fractured effects) to distance 2 (T5 Feldmark). PP-580."
   source: tests/sim_arcs_36_45_batch.md
   date: 2026-04-11
 
 - id: ED-421
   summary: "Arc 43 Territorial Dissolution at T6 is mechanically impossible (8D TN 8 Ob 8). Replace with Pull/Lock failure emphasis."
   priority: P1-BLOCKER
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Arc 43 Territorial Dissolution (8D TN 8 Ob 8 — impossible) replaced with accumulated Pull/Lock failure emphasis. PP-581."
   source: tests/sim_arcs_36_45_batch.md
   date: 2026-04-11
 
 - id: ED-422
   summary: "Arc 44 Phase 1 timing requires 16-24 seasons, not 9-10. Convergence timeline broken. Needs CV erosion rate establishment or reframing."
   priority: P1-BLOCKER
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Arc 44 reframed as late-game (seasons 12-20+). CV erosion rate produces 16-24 season timeline, not 9-10. PP-582."
   source: tests/sim_arcs_36_45_batch.md
   date: 2026-04-11
 

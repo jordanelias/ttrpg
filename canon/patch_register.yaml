@@ -5817,3 +5817,34 @@ patches:
   affects: [designs/systems/npc_behavior_system_v1.md]
   finding_id: ED-456
   status: applied
+- id: PP-580
+  date: 2026-04-13
+  scope: arc_system
+  description: >
+    Arc 41 Haelgrund calamity radiation: corrected node distance from 3 to 2.
+    Distance 3 has no Fractured-band effects. Investigation route changed from
+    T1 Valorsplatz to T5 Feldmark.
+  affects: [gm_ref/arcs_41_45_interdependent.md]
+  finding_id: ED-420
+  status: applied
+
+- id: PP-581
+  date: 2026-04-13
+  scope: arc_system
+  description: >
+    Arc 43 Territorial Dissolution replaced with accumulated Pull/Lock failure
+    emphasis. Original Dissolution (8D TN 8 Ob 8) was mechanically impossible.
+    Environmental degradation now comes from compounding Thread operation failures.
+  affects: [gm_ref/arcs_41_45_interdependent.md]
+  finding_id: ED-421
+  status: applied
+
+- id: PP-582
+  date: 2026-04-13
+  scope: arc_system
+  description: >
+    Arc 44 reframed as late-game arc (seasons 12-20+). CV erosion rate analysis
+    shows 16-24 season timeline, not 9-10 as originally estimated.
+  affects: [gm_ref/arcs_41_45_interdependent.md]
+  finding_id: ED-422
+  status: applied

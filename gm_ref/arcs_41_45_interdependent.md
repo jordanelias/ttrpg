@@ -35,12 +35,12 @@ Arcs 41–45 presuppose Arcs 36–40 are seeded. Where an Arc 36–40 output fee
 
 ## Arc 41: "The Inquisitor's Unravelling"
 
-**Primary mechanics:** Haelgrund hidden Thread Sensitivity (TS) 12 (npc_roster §4), Calamity Radiation at node distance 3 during Rendering Stability (RS) 39–20 Fractured band (calamity_radiation §Fractured: distance 3 = Folklore, Discovery Events possible), Heresy Investigation procedure (+1 season delay — PROCEDURALIST flaw), Diagnosis by practitioner (Cognition vs Obstacle (Ob) 2 — npc_roster §4 arc trigger), Haelgrund Defection BG Event Card (npc_roster §4 BG interface)
+**Primary mechanics:** Haelgrund hidden Thread Sensitivity (TS) 12 (npc_roster §4), Calamity Radiation at node distance 2 during Rendering Stability (RS) 39–20 Fractured band (calamity_radiation §Fractured: distance 2 effects escalated one band — Discovery Events possible for TS 10+). (PP-580: corrected from distance 3, which has no Fractured-band effects), Heresy Investigation procedure (+1 season delay — PROCEDURALIST flaw), Diagnosis by practitioner (Cognition vs Obstacle (Ob) 2 — npc_roster §4 arc trigger), Haelgrund Defection BG Event Card (npc_roster §4 BG interface)
 
 **Primary Non-Player Characters (NPCs):** Sæmund Haelgrund, Maret Vossen, Edeyja
 
 **← Arc 36:** Haelgrund's primary investigation (RM Presence in over-tithed territories) places him in southern territories where calamity effects are stronger.
-**← Arc 37:** Haelgrund's secondary investigation (Guilds supply chain) moves him through T1 Valorsplatz (node distance 3).
+**← Arc 37:** Haelgrund's secondary investigation (Guilds supply chain) moves him through T5 Feldmark (node distance 2, calamity radiation active at Fractured RS).
 
 ---
 
@@ -50,7 +50,7 @@ Haelgrund has spent his career investigating heresy. He is thorough, procedurall
 
 The buried knowledge is about to become personal.
 
-RS is dropping. Arc 36's feedback loop — tithe extraction eroding Church cultural authority — has been running for seasons. Arc 37's supply chain has been moving Thread-touched artefacts through civilian territories. Arc 39's Vaynard TS growth has added Thread-active operations to the southern peninsula. Each of these produces RS pressure. At RS 39–20 (Fractured), the calamity radiation matrix activates new effects at node distance 3: T1 Valorsplatz, T14 Ehrenfeld, T4 Grauwald, T11 Halvardshelm. Discovery Events become possible for witnesses with TS 10+.
+RS is dropping. Arc 36's feedback loop — tithe extraction eroding Church cultural authority — has been running for seasons. Arc 37's supply chain has been moving Thread-touched artefacts through civilian territories. Arc 39's Vaynard TS growth has added Thread-active operations to the southern peninsula. Each of these produces RS pressure. At RS 39–20 (Fractured), the calamity radiation matrix escalates effects at node distance 2: T5 Feldmark, T12 Sigurdshelm. These territories experience effects one band worse than the global RS band. Discovery Events become possible for witnesses with TS 10+. (PP-580: corrected from distance 3 territories — distance 3 has no Fractured-band effects per calamity_radiation.md)
 
 Haelgrund has TS 12.
 
@@ -188,7 +188,7 @@ flowchart TD
 
 ## Arc 43: "The Battle That Ate the South"
 
-**Primary mechanics:** Mass Battle RS ×3 multiplier (params_mass_combat §PP-192: all RS costs and gains from Thread operations in mass battle ×3), Calamity Radiation at T6 Stillhelm (node distance 1 — calamity_radiation §Fractured: spontaneous Shifting Objects 1/season, Thread ops +1 Ob), Dissolution in mass battle (params_mass_combat §PP-201: E[RS per attempt] = −18.4 at TS 70), Gap persistence RS cost −4/season (params_threadwork §RS Track), Warden Emergence condition (params_board_game §Warden Emergence: any faction's Southernmost Expedition passes Forgetting Check)
+**Primary mechanics:** Mass Battle RS ×3 multiplier (params_mass_combat §PP-192: all RS costs and gains from Thread operations in mass battle ×3), Calamity Radiation at T6 Stillhelm (node distance 1 — calamity_radiation §Fractured: spontaneous Shifting Objects 1/season, Thread ops +1 Ob), accumulated Pull and Lock failures at T6 Stillhelm — each failed Thread operation at Fractured RS compounds structural damage, producing environmental degradation equivalent to localised substrate collapse without requiring a formal Dissolution operation. (PP-581: replaces mechanically impossible 8D TN 8 Ob 8 Dissolution)4 at TS 70), Gap persistence RS cost −4/season (params_threadwork §RS Track), Warden Emergence condition (params_board_game §Warden Emergence: any faction's Southernmost Expedition passes Forgetting Check)
 
 **Primary NPCs:** Edeyja, Brandt, Ehrenwall, Vaynard
 
@@ -268,7 +268,11 @@ flowchart TD
 
 ---
 
-## Arc 44: "The Invisible Majority"
+## Arc 44: (PP-582: reframed as late-game arc, seasons 12–20+) "The Invisible Majority"
+
+> **Timing note (PP-582):** CV erosion from multiple sources (Church Piety Spread decay, RM Community Weaving, secular cultural drift from RS decline) produces PT ≤ 1 across 4+ territories over approximately 16–24 seasons, not 9–10 as originally estimated. This arc is a late-game phenomenon that emerges only if Church TC advance has been partially suppressed AND RS has entered Fractured band. It is NOT achievable in a short campaign. Arc 44 is reclassified from mid-game to late-game.
+
+
 
 **Primary mechanics:** Conviction (CV) track 0–5 per territory (victory_architecture §2), Restoration Movement (RM) Cultural Revolution victory condition (Phase 1: CV ≤ 1 in ≥ 8/15 territories — params_board_game §RM victory), Almstedt CONSERVATIVE blocking (+1 Ob to reform actions — npc_roster §8), Prudence Cardinal tithe extraction → CV erosion +1/Year-End in over-tithed territories (npc_roster §13 Hybrid), TC passive advance +1/season (params_factions §TC PP-402), Vossen IDEALIST spreading thin (npc_roster §3)
 

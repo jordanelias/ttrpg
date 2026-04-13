@@ -105,7 +105,12 @@ status: OPEN
 - Hybrid bridge: no design-layer scale_transitions doc
 - P1-BLOCKERs: ED-456 (BG Priority Trees), ED-483 (RM hold T9), ED-485 (Coup Counter 3v4)
 
-P1 BLOCKERS: 0 (all resolved PP-577–579)
+P1 BLOCKERS: 0 (all resolved PP-577–582)
+
+## PHASE 2: Arc P1 fixes
+- ED-420: Arc 41 distance 3→2 (PP-580)
+- ED-421: Arc 43 Dissolution→Pull/Lock failures (PP-581)
+- ED-422: Arc 44 reframed late-game (PP-582)
 OPEN EDITORIALS: 39 (33 open + 6 flagged)
 
 ## FIXES APPLIED
