@@ -148,6 +148,16 @@ systems:
     compilation_current: false
     note: "NPC ethical stance, resonance style, AI decision trees, arc emergence. Created 2026-04-13. Audit-fixed. ED-384 through ED-400 open."
 
+
+  fieldwork:
+    canonical: designs/fieldwork/fieldwork_design_v1.md
+    canonical_sha__designs__fieldwork__fieldwork_design_v1_md: "pending-first-commit"
+    params: null
+    design_doc: designs/fieldwork/fieldwork_design_v1.md
+    compilation_stage: null
+    compilation_current: false
+    note: "fieldwork_design_v1.md is canonical. v1.1 review corrections applied 2026-04-13. Covers exploration, investigation, socializing for all modes + Godot. No params file yet — extract after ED-NEW-11 (pool formula) resolved. 3 P1 editorials open."
+
 # GLOBAL NOTE (2026-04-04):
 # All compilation/v0.14 stage documents are outdated and superseded.
 # For any system that has a design doc (designs/), use the design doc.

@@ -1,6 +1,37 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_OPUS_FIELDWORK_DESIGN
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Designed Fieldwork System v1 (Exploration / Investigation / Socializing)
+2. Self-review across 7 dimensions (philosophical, ethical, mechanical, validity, applicability, tensions, emergent)
+3. Applied all 11 required corrections + 8 recommended additions → v1.1
+4. Committed: fieldwork_design_v1.md, canonical_sources.yaml, clock_registry.md
+
+## KEY DESIGN DECISIONS
+- Intelligibility Gradient (not "Rendering Gradient") — gradient is in substrate accessibility, not rendering operation
+- Rendering strain (not co-movement) on passive Depth 3+ discovery — P-01 reserved for Thread operations
+- Thread-Read defined as perceptive Leap — only fieldwork action that triggers co-movement
+- Cover derived value (Cognition + History) sets Exposure thresholds — parallels Stamina/Composure
+- Sincerity Gate (Spirit check) prevents Disposition grinding
+- Cold Trail (3 consecutive failures) prevents infinite investigation re-rolling
+- Survey BG action: Ob = (5 − Proximity Rating) + 1 — harder near Calamity
+- Exposure → AP capped at +1/character/season, +2/territory/season
+
+## P1 BLOCKERS: 3 (ED-NEW-04, ED-NEW-10, ED-NEW-11)
+## OPEN EDITORIALS: 13 (ED-NEW-01 through ED-NEW-13)
+## SIM-DEBT: 6 (SIM-DEBT-FW-01 through FW-06)
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-12_SONNET_ED358_AUDIT
 session_close: 2026-04-12
 phase: COMPLETE

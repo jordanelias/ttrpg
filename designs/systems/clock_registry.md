@@ -1,5 +1,5 @@
 # Valoria Clock & Track Registry
-## Created: 2026-04-08 | Updated: 2026-04-11 (PP-548–PP-554) | Status: CANONICAL
+## Created: 2026-04-08 | Updated: 2026-04-13 (PP-548–PP-554, fieldwork tracks added) | Status: CANONICAL
 ## Single source of truth for all clocks, tracks, and counters.
 ## Cross-references to authoritative source for each track's rules.
 
@@ -80,6 +80,15 @@ Reputation and Standing (oscillating, BG):
 |-------|-----|-------|-------|--------|
 | Cardinal Influence | 3 Cardinals | 0–5 each | Varies | params_factions.md §Cardinals |
 | Ministry AP-Tokens | Ministry NPC | per-territory | 4 tokens | params_board_game.md §Ministry |
+
+## Fieldwork Tracks (TTRPG/Hybrid/Godot)
+
+| Track | Range | Start | Scope | Source |
+|-------|-------|-------|-------|--------|
+| Exposure | 0–10+ (vs Cover thresholds) | 0 | Per-character, per-territory, per-season | fieldwork_design_v1.md §6 |
+| Cover (derived) | 2–14 | Cognition + History | Per-character | fieldwork_design_v1.md §6.1 |
+| Evidence Track | 0–threshold (3/5/8) | 0 | Per-investigation | fieldwork_design_v1.md §4.1 |
+| Disposition | −3 to +5 | Faction-indexed | Per-NPC per-PC | fieldwork_design_v1.md §5.1 |
 
 ## Cooldown/Duration Tracks
 
