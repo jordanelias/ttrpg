@@ -1,6 +1,33 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-12_SONNET_ED358_AUDIT
+session_close: 2026-04-12
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Audited ED-358 "13-character NPC roster" — found to be false debt
+2. All 13 NPCs documented in canonical params files
+3. ED-358 struck; ED-358b added (Lenneth TS P3 only)
+4. PP-574 committed
+
+## FINDING
+ED-358 was raised during a simulation session when some NPCs were provisional.
+Subsequently documented: Cardinals (BG mechanics), Torben/Elske (loyalty tracks),
+Maret Uln (PP-486), Almud/Baralta/Vaynard (faction leader profiles), Edeyja (Warden
+mechanics), Lenneth (arc-dependent, documented as such).
+Only genuine gap: Lenneth TTRPG TS (P3, non-blocking).
+
+## P1 BLOCKERS: 0
+## OPEN EDITORIALS: 1 (ED-358b, P3, non-blocking)
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-12_SONNET_ALL_EDITORIAL_RESOLVED
 session_close: 2026-04-12
 phase: COMPLETE

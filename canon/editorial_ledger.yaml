@@ -2487,9 +2487,9 @@ editorial_decisions:
     tags: [npc, worldbuilding]
 
   - id: ED-358
-    status: resolved
+    status: struck
     date_resolved: 2026-04-12
-    resolution: "[EDITORIAL for Jordan] 13-character NPC roster requires full authorial design. Minimal provisional stat blocks exist in individual faction params files for simulation purposes. Full character identity, arc trajectory, and faction interaction patterns deferred for design session."
+    resolution: "FALSE DEBT. All 13 NPCs in the roster have documented presence in canonical params files. The editorial was raised as a simulation gap but NPC documentation has since been completed across multiple sessions. Lenneth TS is intentionally arc-dependent (documented). Cardinals have full BG mechanics. Struck. See note ED-358b." 13-character NPC roster requires full authorial design. Minimal provisional stat blocks exist in individual faction params files for simulation purposes. Full character identity, arc trajectory, and faction interaction patterns deferred for design session."
     description: >
       13-character NPC development roster. All require full design: character identity, 
       stat block, arc trajectory, faction interaction patterns. Roster: (1) Edeyja 
@@ -2499,6 +2499,17 @@ editorial_decisions:
       (8) Ministry bureaucrat, (9) Court figure (Crown), (10) Niflhel operative, 
       (11) Altonian Prince married to Elske, (12) Schoenland figure, (13) TBD.
     tags: [npc, worldbuilding, editorial]
+
+  - id: ED-358b
+    status: flagged
+    date_raised: 2026-04-12
+    priority: P3
+    description: >
+      Lenneth Almqvist (Queen) TTRPG stat block: TS listed as "Unknown — arc-dependent."
+      All other NPCs in the original ED-358 roster have documented presence.
+      This is the only genuine gap: Lenneth needs a starting TS and development path
+      for TTRPG play, once the archive arc is triggered. Not a blocker for BG or Hybrid.
+    tags: [ttrpg, lenneth, npc, worldbuilding]
 
   - id: ED-359
     status: resolved

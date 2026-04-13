@@ -5641,3 +5641,19 @@ patches:
   finding_id: ED-364
   affects: [references/params_board_game.md]
   status: applied
+
+- id: PP-574
+  type: cleanup
+  date: 2026-04-12
+  severity: P3
+  description: >
+    ED-358 struck as false debt. All 13 NPCs in the roster have documented presence
+    in canonical params files. The editorial conflated "simulation-provisional" with
+    "undocumented." Cardinals: full BG mechanics in params_board_game + params_factions.
+    Torben/Elske: loyalty tracks. Maret Uln: succession block PP-486. Edeyja: Warden
+    mechanics. Almud/Baralta/Vaynard: full faction leader profiles. Lenneth: explicitly
+    arc-dependent (documented). Erikssen/Inquisitor/Riskbreaker: faction roles defined.
+    ED-358b added: Lenneth TS P3 tracking only.
+  finding_id: ED-358
+  affects: [canon/editorial_ledger.yaml]
+  status: applied
