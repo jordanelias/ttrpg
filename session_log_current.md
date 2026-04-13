@@ -1,6 +1,28 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_SONNET_ARC_SYSTEM_V8
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+TASKS THIS SESSION:
+1. Analysed emergent arc trigger density — gaps in factions, territories, NPCs
+2. Proposed overhaul: 69 new entries
+3. First audit (cognitive load, excess, crunch cascade, interest, necessity): 7 cuts, 8 merges, 17 redesigns
+4. Intensified audit (cliche, tropes, historical, canon, arc interaction, player interaction):
+   6 canon violations corrected, 5 editorials raised (ED-401-405)
+5. Arc system v8 committed as references/arc_register.md (PP-575)
+
+P1 BLOCKERS: 0
+OPEN EDITORIALS: 5 (ED-401-405, all P2-P3, non-blocking)
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_OPUS_FIELDWORK_DESIGN
 session_close: 2026-04-13
 phase: COMPLETE

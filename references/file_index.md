@@ -254,7 +254,7 @@
 | references/glossary.md | ALL | CURRENT | Term expansion reference |
 | references/canonical_sources.yaml | ALL | CURRENT | System authority map |
 | references/file_index.md | ALL | CURRENT | This file |
-| references/arc_register.md | ALL | CURRENT | 73 arcs + 7 collisions. Principal/secondary/tertiary. All NPCs mapped. v7. |
+| references/arc_register.md | ALL | CURRENT | Arc system v8 (2026-04-13, PP-575). Vector format. 120+ arcs, 5 categories. Replaces v7. ED-401-405 open. |
 | references/propagation_map.md | ALL | CURRENT | Cross-reference dependencies |
 | references/effort-guide.md | INFRA | CURRENT | Effort calibration per skill |
 | references/D10_INTEGRATION_GUIDE.md | ALL | CURRENT | — |

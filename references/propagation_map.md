@@ -453,3 +453,16 @@ Propagation targets:
 | character_histories_lifepath.md | reads | Knot generation, starting Beliefs |
 | canon/00_philosophical_foundations.md | governed by | P-04, P-08, P-10, P-12 |
 | victory_architecture_v1.md | reads | Victory conditions, NPC AI consent |
+
+## Arc Register v8 — Critical Cross-References (2026-04-13, PP-575)
+
+| From | To | Nature |
+|---|---|---|
+| TE-15 | ARC-S34 | Edeyja Coherence <= 5 at TE-15: Dissolution -> Rendering Crisis regardless of outcome |
+| TE-12 | ARC-S15, ARC-T04 | Varfell gate control during S15 cracking phase blocks Ceiral Ritual expedition |
+| ARC-S44 | ARC-T17 | Both target AER via Schoenland; highest-roll success takes priority same season |
+| ARC-S56 | ARC-T26 | T26 resolves first (Leadership Deviation check); S56 resolves under result |
+| TE-09 | NPC-ARC-JAR | Jarnstal threat-assessment governs autonomous deployment trigger |
+| ARC-S40 | ARC-P04 | Documentary Axis 2 before Axis 9: direction of interaction to specify (ED-402) |
+| ARC-S47 | ARC-T16 | Simultaneous in same RM-presence/missionary territories: cultural contest primary |
+| ARC-P09 | ARC-S52 | Crown fiscal distress weakens Charter offer; shifts Feldhaus alignment calculation |

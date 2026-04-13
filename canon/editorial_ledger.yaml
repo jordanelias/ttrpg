@@ -3422,3 +3422,38 @@ editorial_decisions:
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
   note: "AUD-NPC-04"
+
+  - id: ED-401
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P2
+    description: "ARC-T23 Remembrancer: canonise as resolution to ED-NEW-02. Proposed: institutional role, 245-year RM tradition, TS 19-35 (set at first contact), institutional authority in COLLISION E. Confirm or modify."
+    tags: [restoration_movement, arc_system, canon]
+
+  - id: ED-402
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P2
+    description: "P-08/P-13 Forgetting scope: does untransmittable cover documentary transmission? P-08: publishing all documents would not end the barrier. ARC-S40/S47/T15 assume documentary evidence enables political advocacy (recite but not act). Canon ruling required."
+    tags: [canon, forgetting, philosophical_foundations, arc_system]
+
+  - id: ED-403
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P2
+    description: "TE-15 Dissolution Ob: canonical Ob for Structural Dissolution targeting catastrophic Gap emergent (TS 80+) not in threadwork_v25. RS consequence -3 to -8 (FR Dissolution §5.2). Required before TE-15 simulation."
+    tags: [threadwork, arc_system, southernmost]
+
+  - id: ED-404
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P3
+    description: "TE-08 Grand Debate vs TC 42 Quaestio: specify (a) both in same campaign arc?, (b) priority order, (c) whether TE-08 resets or compounds TC 42 trigger."
+    tags: [church, arc_system, grand_debate, tc_clock]
+
+  - id: ED-405
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P3
+    description: "ARC-T20 Winter Court: no canonical institutional basis. Options: pre-Calamity convention; convening condition Crown Mandate >= 3 + TC <= 40; or irregular Crown-called assembly. Decision before simulation."
+    tags: [crown, arc_system, worldbuilding]

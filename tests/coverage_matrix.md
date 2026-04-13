@@ -583,3 +583,17 @@ Status: COMPLETE
 | SIM-NPC-03 | Arc emergence: 3-season TTRPG Almud+Himlensendt | P2 | OPEN |
 | SIM-NPC-04 | Framework Drift: 6-season BG runaway check | P2 | OPEN |
 | SIM-NPC-05 | Belief Scar cascade: 3+ Scars playability | P3 | OPEN |
+
+## Arc System v8 — Simulation Debt (2026-04-13, PP-575)
+
+All v8 additions unsimulated. Required before any v8 arc is referenced in a mechanical ruling.
+
+| Range | Description | Status |
+|---|---|---|
+| TE-01 to TE-34 (31 active) | Territory Event arcs | Not simulated |
+| ARC-P09 | Royal Debt | Not simulated |
+| ARC-S35/S37-S40/S44/S45/S47-S49/S52/S54-S57 | New Secondary arcs | Not simulated |
+| ARC-T20-T26 | New Tertiary arcs | Not simulated |
+| NPC-ARC-VAY | Vaynard Unchecked | Not simulated |
+| BG-CV-01 to BG-CV-05 | BG Conviction Events | Not simulated |
+| COLLISION J | Church Siege of the Southern Gates | Not simulated |

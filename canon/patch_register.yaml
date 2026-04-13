@@ -5657,3 +5657,26 @@ patches:
   finding_id: ED-358
   affects: [canon/editorial_ledger.yaml]
   status: applied
+
+- id: PP-575
+  type: infrastructure
+  date: 2026-04-13
+  severity: P2
+  description: >
+    Arc system overhaul. arc_register.md v7 -> v8. Vector format replaces Principal/Secondary/Tertiary
+    and resolution scaffolding. Five categories: Clock / Thread / Faction / Territory / Convergence.
+    34 Territory Event arcs (tier-weighted). Faction hierarchy: Crown > Church/Varfell/Hafenmark >
+    lower tiers. 7 cuts, 8 merges. Canon fixes: TE-15 De-Actualisation -> Structural Dissolution
+    (§2.4, dead §9.17 ref removed); BG-CV-01 Counter -1 -> threshold increase; ARC-S49 Spirit ->
+    Stability Ob 1; TE-01 AER -1 -> Ob modifier on ARC-T17; TE-14 RS source grounded in §5.2.
+    5 editorials: ED-401 (Remembrancer), ED-402 (Forgetting scope), ED-403 (TE-15 Dissolution Ob),
+    ED-404 (TE-08 Grand Debate interaction), ED-405 (Winter Court basis).
+  finding_id: null
+  affects:
+    - references/arc_register.md
+    - references/canonical_sources.yaml
+    - references/file_index.md
+    - references/propagation_map.md
+    - canon/editorial_ledger.yaml
+    - tests/coverage_matrix.md
+  status: applied
