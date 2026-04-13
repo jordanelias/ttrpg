@@ -885,6 +885,27 @@ Each NPC faction follows a deterministic priority tree during the BG Strategic P
 - **Institutional Mandate trigger:** When any DA targets a faction's Mandate stat or unique clock (TC/Church, PI/Hafenmark, VTM/Varfell), the targeted faction MUST respond next season with a defensive DA targeting the attacker (skipping normal priority tree). One override per season maximum.
 - **Co-victory cooperation:** When co-victory conditions are ≥ 75% met, cooperating factions shift to a simplified tree: (1) protect shared conditions, (2) advance weakest shared condition, (3) normal tree.
 
+
+### §7.10 NPC Stat Values (Thread Sensitivity and Certainty)
+
+Canonical values for NPC Behavior System integration:
+
+| NPC | Thread Sensitivity (TS) | Certainty | Rationale |
+|---|---|---|---|
+| Almud | 0 | 3 | TS 0 per ED-398. Certainty 3 — governance pragmatist with genuine ethical doubt. |
+| Lenneth | 8 (starting, develops) | 3 | TS 8 per lenneth_threadwork_design. Certainty 3 — institutional certainty disrupted by archive encounters. |
+| Baralta | 0 (triple-barrier) | 5 | TS 0, Ob 4 on growth (ED-417). Certainty 5 — unshakeable sovereign divine right conviction. |
+| Vaynard | 10 (hidden) | 2 | TS 10 starting, environmental exposure. Certainty 2 — direct Thread perception has destabilised worldview. |
+| Ehrenwall | 0 | 5 | Non-practitioner. Deed-logic worldview is self-reinforcing. |
+| Himlensendt | 0 | 4 | Non-practitioner. Pastoral certainty — high but not absolute (consecration crisis can shake it). |
+| Torben | 0 | 4 | Contested asset, no Thread exposure. Moderate institutional certainty. |
+| Elske | 0 | 3 | No Thread exposure. Certainty disrupted by hostage status and competing loyalties. |
+| Maret Uln | 35 | 2 | Active practitioner. Low certainty from direct Thread experience. |
+| Haelgrund | 12 (hidden) | 4 | Hidden TS. Certainty 4 — procedural certainty masking buried knowledge. |
+| Torsvald | 20+ | 2 | Active Riskbreaker. Low certainty — operational awareness of Thread reality. |
+| Edeyja | 50+ | 1 | Warden. Certainty 1 — Thread reality is her primary frame. |
+| Maret Vossen | 0 | 3 | Non-practitioner RM leader. Certainty 3 — political conviction with pragmatic flexibility. |
+
 ---
 
 ## §13 PROPAGATION ON ACCEPTANCE

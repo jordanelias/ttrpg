@@ -3174,21 +3174,27 @@ editorial_decisions:
 - id: ED-480
   summary: "Haelgrund self-documentation timeline at Fractured RS — proposed 2-3 seasons"
   priority: P3
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Haelgrund self-documentation timeline = 2 seasons from TS self-discovery to decision point (defection or suppression). PROCEDURALIST flaw adds +1 season to any action — effectively 3 seasons before consequences emerge. PP-585."
   source: gm_ref/arcs_41_45_interdependent.md
   date: 2026-04-11
 
 - id: ED-481
   summary: "Debate Thread co-movement RS +1 — per contest or per exchange? Significant if per-exchange."
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Debate Thread co-movement RS +1 per contest (not per exchange). Per-exchange would produce RS +5 to +10 per Grand Debate — catastrophic for RS economy. One RS change per contest resolution, applied at scene end. PP-584."
   source: gm_ref/arcs_41_45_interdependent.md
   date: 2026-04-11
 
 - id: ED-482
   summary: "Varfell force composition for T6 battle — Private Collection usage during battle triggers TS threshold"
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Varfell force composition for T6 battle: Private Collection usage during battle triggers TS check for Vaynard (Spirit TN 7 Ob 1 per use). At TS 10, success advances TS by +1. If battle occurs at T6 (distance 1 from Askeheim) during Fractured RS, calamity radiation adds +1 to all Thread-related checks in the zone. PP-585."
   source: gm_ref/arcs_41_45_interdependent.md
   date: 2026-04-11
 
@@ -3204,7 +3210,9 @@ editorial_decisions:
 - id: ED-484
   summary: "Two-front war IP threshold — proposed IP >= 60 (Vanguard preparation) rather than IP 75 (full Vanguard)"
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Two-front war IP threshold: IP ≥ 60 for Vanguard preparation (mobilisation begins, Schoenland diplomatic pressure increases). IP ≥ 75 for full Vanguard deployment (NPC unit at T10). The 60 threshold creates a warning window (1-3 seasons) before deployment. PP-587."
   source: gm_ref/arcs_41_45_interdependent.md
   date: 2026-04-11
 
@@ -3221,7 +3229,9 @@ editorial_decisions:
 - id: ED-419
   summary: "Vaynard starting hidden TS not specified. Recommend 8-10 for mid-campaign Discovery Event timing."
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Vaynard starting hidden TS = 10. Mid-campaign Discovery Event timing: at TS 10, Vaynard's Discovery requires environmental TS threshold encounter (calamity radiation at distance 2 during Fractured RS, or Private Collection use at VTM 3+). Discovery fires around season 6-8 if Varfell pursues VTM path. PP-583."
   source: tests/sim_arcs_36_45_batch.md
   date: 2026-04-11
 
@@ -3255,21 +3265,27 @@ editorial_decisions:
 - id: ED-423
   summary: "Arc 39 Coherence burn narrative incorrect for Object/Personal ops (loss = 0). Needs explicit overreach narrative."
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Arc 39 Coherence burn at Object/Personal scale = 0 per threadwork_v25 §3.2. Overreach narrative: Vaynard perceives Thread reality through Private Collection use but does not lose Coherence from perception alone — the burn comes from attempting operations beyond his capacity, producing failed Thread states that accumulate as psychological strain (not mechanical Coherence loss). PP-585."
   source: tests/sim_arcs_36_45_batch.md
   date: 2026-04-11
 
 - id: ED-424
   summary: "Arc 36 Parish Revolt requires external Church Mandate erosion to <=3. Not self-contained. Add explicit dependency."
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Arc 36 Parish Revolt dependency on Church Mandate ≤ 3 is explicit cross-arc. Added dependency note: Arc 36 requires Arc 44 (CV erosion) or direct PC Church suppression to produce Mandate erosion. Not self-contained — intentional. PP-585."
   source: tests/sim_arcs_36_45_batch.md
   date: 2026-04-11
 
 - id: ED-425
   summary: "Bidirectional loop (RS-Haelgrund) labelled destabilising but RM Community Weaving is RS-restorative. Loop direction inverted."
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Loop direction corrected: RM Community Weaving is RS-restorative (Mending component). The RS-Haelgrund loop is: RS decline → Haelgrund investigation in irradiated territory → Haelgrund TS discovery → Church institutional crisis → TC instability → further RS decline. RM Weaving pushes RS UP, partially counteracting this. Loop is not purely destabilising — it has a built-in brake. PP-585."
   source: tests/sim_arcs_36_45_batch.md
   date: 2026-04-11
     resolution: "T13 (Oastad) control requirement kept as narrative "must-hold" — Varfell starts there but can lose it. Meaningful constraint on Path B."
@@ -3350,7 +3366,9 @@ editorial_decisions:
 - id: ED-457
   description: "Resonant Style +1D in Contest: stacking validation needed."
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Resonant Style +1D does not stack with same-style bonus from multiple sources. One +1D per Resonant Style per exchange, regardless of how many allies share that style. Different styles from different allies can each contribute +1D. Maximum style bonus per exchange = number of distinct styles active (practical cap: 2, since ally pool is limited). PP-586."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
@@ -3371,21 +3389,27 @@ editorial_decisions:
 - id: ED-460
   description: "Solidarity Resonant Style requires Knot to NPC. NPC Knot formation not specified. GAP."
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "NPC Knot formation: NPCs form Knots through sustained interaction (3+ scenes with meaningful exchange). Mechanical: Attunement check TN 7 Ob 1 after 3rd qualifying scene. Success = Knot formed. Solidarity Resonant Style requires this Knot. PC can attempt to accelerate via Thread Knot-sharing (Relational scale, P-01 co-movement applies). PP-586."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
 - id: ED-461
   description: "Ehrenwall Thread Sensitivity not specified. Estimate 0-5."
   priority: P3
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Ehrenwall TS = 0. Non-practitioner. No Thread perception. Consistent with deed-logic worldview — Thread is not part of her operational reality. PP-583."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
 - id: ED-462
   description: "Ehrenwall Certainty not specified. Estimate 4."
   priority: P3
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Ehrenwall Certainty = 5. High certainty — institutional worldview is coherent and self-reinforcing. Only the originary Lock encounter (Arc 11) could destabilise it. PP-583."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
@@ -3399,28 +3423,36 @@ editorial_decisions:
 - id: ED-464
   description: "Torben Thread Sensitivity not specified. Probable 0."
   priority: P3
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Torben TS = 0. Contested asset — no Thread exposure. TS development only possible if PCs deliberately expose him. PP-583."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
 - id: ED-465
   description: "Torben Certainty not specified. Probable 4."
   priority: P3
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Torben Certainty = 4. Moderate — he has been raised in institutional certainty but has not tested it personally. Susceptible to disruption by Elske or PC influence. PP-583."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
 - id: ED-466
   description: "Maret Uln Thread Sensitivity not specified."
   priority: P3
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Maret Uln TS = 35 (practitioner-level, southern Einhir heritage, active Thread user per npc_roster §2). Consistent with PP-486 succession mechanics. PP-583."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
 - id: ED-467
   description: "Maret Uln Certainty not specified."
   priority: P3
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Maret Uln Certainty = 2. Low — Maret has direct Thread experience that has destabilised her conventional worldview. She operates in a state of controlled uncertainty. PP-583."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 

@@ -141,6 +141,13 @@ P1 BLOCKERS: 0 (all resolved PP-577–582)
 - ED-420: Arc 41 distance 3→2 (PP-580)
 - ED-421: Arc 43 Dissolution→Pull/Lock failures (PP-581)
 - ED-422: Arc 44 reframed late-game (PP-582)
+
+## PHASE 3: Mechanical editorial batch
+- 17 editorial items resolved (PP-583–587)
+- NPC stat values canonised (TS + Certainty for all 13 NPCs)
+- Debate RS per-contest confirmed
+- Arc cross-dependencies documented
+- NPC Knot formation + Resonant Style stacking defined
 OPEN EDITORIALS: 39 (33 open + 6 flagged)
 
 ## FIXES APPLIED
