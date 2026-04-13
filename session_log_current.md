@@ -1175,3 +1175,64 @@ ED-370, ED-371, ED-372, ED-373 (as prior session)
 ### Open editorials carried forward
 ED-311 (Varfell Path B — awaiting user review)
 ED-370, ED-371, ED-372, ED-373 (carried from prior session)
+
+
+---
+
+## Session — 2026-04-13: Character Histories & Skill System Design
+
+### Stage: Design — Character Creation / Skill Acquisition
+
+### Summary
+Designed and implemented the Character Histories lifepath system with SaGa-style skill sparking, 
+Recall-as-skill-gatekeeper, and skill levels 1–3. Full Godot implementation committed to 
+jordanelias/valoria-game.
+
+### Key Decisions
+1. **Lifepath structure:** 4-stage character creation (Origin → Formation → Vocation → Catalyst)
+   - Origin: geography, culture, Certainty base, first Knot. 0 starting skills.
+   - Formation: education/shaping, Certainty modifier, second Knot. 1 starting skill.
+   - Vocation: profession, faction affiliation, third Knot. 2 starting skills.
+   - Catalyst: inciting event, starting Belief, campaign hook. 0 starting skills.
+   - Total starting skills: 3.
+
+2. **Recall as gatekeeper (triple duty):**
+   - Equip slots: max_equipped = Recall (1–7). Swap loadout between scenes.
+   - Skill depth: Level 2 requires dice_bonus ≥ 3; Level 3 requires dice_bonus ≥ 5. Recall caps dice_bonus.
+   - Learning speed: floor(Recall/2) bonus dice on spark checks.
+
+3. **Coherence degrades equip slots:** Fragmented = −1 slot. Fractured/Severed = −2 slots. 
+   Practitioners lose skill access — not just social/memory rolls — as Coherence drops.
+
+4. **SaGa-style sparking:** Skills acquired through scene use, not menus.
+   - Overwhelming at Ob 3+ → automatic spark
+   - Success at Ob 3+ → Spirit + Recall/2, TN 7, Ob 1
+   - Partial at Ob 2+ → Spirit + Recall/2, TN 7, Ob 2
+   - Failure at Ob 3+ → Spirit + Recall/2, TN 8, Ob 1
+   - Ob 1 → no check (routine)
+   - Cross-History hybrid sparks for simultaneous use of 2+ Histories
+
+5. **Skill levels 1–3:** Sparking prioritises level-ups over new skill acquisition.
+   Level determines effect magnitude (per-level effect arrays in SkillData).
+
+### Commits (jordanelias/valoria-game)
+- `813f27b` — Initial History/Skill/Sparking system (10 files)
+- `ab7c10a` — Recall as equip gatekeeper + skill levels 1–3 (9 files)
+
+### Commits (jordanelias/ttrpg)
+- Character Histories lifepath design doc: designs/characters/character_histories_lifepath.md
+
+### New Editorial Items
+- ED-374: Lifepath system requires user approval
+- ED-375: Skill effects provisional — simulation required
+- ED-377: Intuitive Threadwork + Co-Movement interaction open
+- ED-378: Confirm 3 Knots is the right lifepath count
+- ED-379: Can experienced characters have 2 Catalysts?
+- ED-380: Southern Einhir Descendant +5 Thread Sensitivity at creation — Leap eligibility
+- ED-381: Recall 1 = 1 equip slot — too punishing?
+- ED-382: Coherence equip slot loss — player choice vs auto-drop?
+- ED-383: Level 3 requiring Recall ≥ 5 — intentional specialist gate?
+
+### Open editorials carried forward
+ED-311 (Varfell Path B — awaiting user review)
+ED-370, ED-371, ED-372, ED-373 (carried from prior session)
