@@ -3619,3 +3619,19 @@ editorial_decisions:
     description: "Standard Mending Ob: PP-583 establishes Ob 3 as canonical base. Confirm this value before Mending appears in a player-facing simulation or rules compilation. Ob 3 base + RS-band modifiers (Critical Proximity 0: +2) gives Ob 5 at the most demanding site."
     tags: [mending, threadwork, simulation]
     source: SIM-ARC-C01
+
+  - id: ED-414
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P2
+    description: "P2-D04: Maret Uln resource conflict — seasonal stabilising Weavings (Coherence cost) vs TS development toward Ceiral Ritual prerequisite (TS 60+, currently TS 50). Both peak Seasons 13–14 simultaneously with Baralta political climax. GMs must understand this timeline: no faction can expect Maret to both sustain T15 stabilisation AND develop toward Ritual readiness without coordinated resource management. Suggest adding a Timeline Note to ARC-S15 and ARC-T04 cross-referencing the Maret development constraint."
+    tags: [maret_uln, arc_s15, arc_t04, southernmost, simulation]
+    source: SIM-ARC-D01
+
+  - id: ED-415
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P3
+    description: "GAP-D01: Territory Stability for Ob calculation (Active Inquisition) not explicitly tracked separately from Prosperity in BG. Simulation used Prosperity as proxy (T13 Prosperity 3 → Ob 2). Confirm whether territory-level Stability is a separate tracked value or derived from Prosperity."
+    tags: [territory, stability, inquisition, simulation]
+    source: SIM-ARC-D01

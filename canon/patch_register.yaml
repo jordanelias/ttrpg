@@ -6051,3 +6051,72 @@ patches:
     - references/arc_register.md
     - tests/sim_arc_c01_vaynard_unchecked.md
   status: applied
+
+- id: PP-585
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    P1-D06 resolved. BG Forgetting Check is now TS-gated, not a universal roll.
+    Ruling: (1) Champions with TS 0–9: automatic Forgetting Check Failure. They constitute
+    nothing from T15 — the excessive being at the wound site is categorically epistemically
+    inaccessible. No roll. (2) Champions with TS ≥ 29: automatic Forgetting Check Success.
+    Their consciousness can render Southernmost experience as knowledge. No roll. (3) Champions
+    with TS 10–28: roll as currently specified (same pool vs Ob 2). Their Thread Sensitivity
+    allows partial perception but does not guarantee Forgetting resistance. The roll covers
+    the ambiguous zone. This aligns the BG abstraction with the philosophical foundations
+    (P-08, P-13): the epistemic barrier at T15 is metaphysical, not a skill challenge.
+    It cannot be overcome by effort, preparation, or documentation for TS < 29. Add to
+    params_board_game.md §Southernmost Access System §Expedition Procedure and
+    §Warden Recognition Track as a clarifying note on the Forgetting Check.
+  finding_id: P1-D06
+  affects:
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-586
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    P1-D05 documented. TE-12 (Collector's Chokehold) is a terminal RS path blocker
+    when Varfell is diplomatically isolated at the time the Ceiral Ritual prerequisites
+    are met. The Ritual requires an Askeheim expedition; TE-12 gates that expedition
+    behind Varfell negotiation (Ob 3 for any non-Varfell faction). A PARTIAL negotiation
+    blocks the expedition for that season; 2 consecutive blocked seasons produces RS −4–6
+    from ARC-S15 cracking continuation. Add to: (1) TE-12 arc entry in arc_register.md:
+    "TE-12 active during ARC-S15 cracking phase blocks ARC-T04 expedition — indirect
+    terminal RS path if Varfell is diplomatically isolated when prerequisites are met."
+    (2) ARC-T04 prerequisites section: "Varfell gate control via TE-12 must be assessed
+    before declaring prerequisites met — expedition may be diplomatically blocked regardless
+    of practitioner readiness." This is a P1 design observation, not a mechanical error.
+    No mechanical change required; documentation only.
+  finding_id: P1-D05
+  affects:
+    - references/arc_register.md
+  status: applied
+
+
+- id: PP-587
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-D03 resolved. TE-17 arc text correction: "Haelgrund Overwhelming investigations
+    in T13 at −1 Ob" is misleading. The −1 Ob modifier reduces the action's Ob (easier
+    to reach Success) but the Overwhelming threshold (net ≥ 2×Ob AND ≥ 3) has a
+    floor of net ≥ 3 that is independent of the Ob value. At reduced Ob 1, Overwhelming
+    still requires net ≥ 3. The −1 Ob modifier primarily accelerates AP accumulation
+    (higher P(Success) = faster reach of AP threshold) rather than reliably producing
+    Overwhelming. Correct TE-17 to read: "Haelgrund's Inquisition in T13 during Fragile
+    band: Ob −1 (Thread phenomena provide incriminating evidence). Effect: AP threshold
+    reached in fewer seasons. Overwhelming results are not systematically produced —
+    net ≥ 3 floor still applies." Also: P2-D01 — TE-12 arc entry should state explicitly
+    that RM (statless faction, no Influence) cannot negotiate the Chokehold.
+    P2-D02 — TE-12 arc entry should note that failed negotiations reveal RS urgency to
+    Varfell's intelligence apparatus. Both are documentation additions.
+  finding_id: P2-D01 P2-D02 P2-D03
+  affects:
+    - references/arc_register.md
+  status: applied

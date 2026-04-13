@@ -4,6 +4,40 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_SONNET_SIM_ARC_D01
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+TASK: SIM-ARC-D01 — Cluster D Southern Corridor (TE-12, TE-17, TE-18, TE-19, TE-20, ARC-S15, ARC-S25)
+  Mode: G-Southernmost + C + D
+  Scenario: RS 65 → 50, Seasons 4–8
+
+FORGETTING CORRECTION APPLIED (PP-584):
+  Forgetting is epistemic limit (T15-specific), not content erasure.
+  T6 and T13: Calamity Radiation effects only, NOT the Forgetting.
+  BG Forgetting Check now TS-gated (PP-585).
+
+PRIMARY FINDINGS:
+  P1-D05: TE-12 Chokehold is terminal RS path blocker when Varfell diplomatically isolated (PP-586)
+  P1-D06: BG Forgetting Check TS-gated: TS<29 auto-fail, TS≥29 auto-success, TS10-28 roll (PP-585)
+  P2-D03: TE-17 −1 Ob accelerates AP accumulation; does not produce Overwhelming (PP-587)
+  P2-D04: Maret resource conflict Seasons 13–14 (ED-414)
+  WC 2 doubles available time before RS Fractured
+
+PATCHES: PP-585 (P1 Forgetting Check), PP-586 (P1 Chokehold RS path), PP-587 (P2 TE-17 text)
+EDITORIALS: ED-414 (Maret resource conflict P2), ED-415 (territory Stability P3)
+
+P1 BLOCKERS: 0
+OPEN EDITORIALS: 15 (ED-401-415; non-blocking)
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_SONNET_PP584_FORGETTING_CORRECTION
 session_close: 2026-04-13
 phase: IN_PROGRESS

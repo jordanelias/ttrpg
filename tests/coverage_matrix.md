@@ -635,3 +635,15 @@ P3 gaps: 3 (ED-411-413: Maret stats, Edeyja Resonant Style, Mending Ob confirmed
 | SIM-NPC-01 | NPC Behavior: Priority Tree (Crown 5 seasons) | A | 5 seasons | TC, PI, Stability, Mandate, CC, TL | Crown | None | BG AI validation | Complete | 0 |
 | SIM-NPC-02 | NPC Behavior: Belief Revision Rate | A | 20-contest campaign | Conviction Track, Composure, Scars | All | Named NPCs | Contest calibration | Complete | 0 |
 | SIM-CH-01 | Character Histories: Starting skills + spark rates | A | Character creation + 10 scenes | Skills, Recall, Equip slots | None | None | Lifepath calibration | Complete | 0 |
+
+## SIM-ARC-D01 — Cluster D Southern Corridor (2026-04-13)
+| Arc | Mode | Status | Key Finding |
+|---|---|---|---|
+| TE-12 Collector's Chokehold | G+D | COMPLETE | RM excluded; failed negotiations = Vaynard intel; P1-D05 terminal RS path |
+| TE-17 Presence at Gate | G+C | COMPLETE | −1 Ob accelerates AP but not Overwhelming; P2-D03 arc text correction |
+| TE-18 Fjord Witness | C+D | COMPLETE | Preparation action near-mandatory for any Mending practitioner |
+| TE-19/20 Crown Southern Gates | G | COMPLETE | No fire in Seasons 4–8; geographic loading noted |
+| ARC-S15 Southernmost Spiral | G+C | COMPLETE | Season 8 activation; Maret resource conflict with Ceiral Ritual Seasons 13–14 |
+| ARC-S25 Warden Cooperation | G+C | COMPLETE | WC 2 doubles available time before Fractured; P1-D06 Forgetting Check TS-gating |
+P1 findings: 2 (P1-D05→PP-586; P1-D06→PP-585)
+P2 findings: 3 (P2-D01/02/03→PP-587; P2-D04 design observation)
