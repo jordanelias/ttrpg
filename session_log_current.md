@@ -36,8 +36,8 @@ OPEN EDITORIALS: 13 (ED-401-413; non-blocking)
 ```yaml
 session_id: 2026-04-13_SONNET_SIM_ARC_B02_A01
 session_close: 2026-04-13
-phase: IN PROGRESS
-status: OPEN
+phase: COMPLETE
+status: CLOSED
 
 TASKS:
 1. SIM-ARC-B02: Season 8 Crown card constraint — confirmed designed pressure.
@@ -61,8 +61,8 @@ OPEN EDITORIALS: 10 (ED-401-410; non-blocking)
 ```yaml
 session_id: 2026-04-13_SONNET_SIM_ARC_B01
 session_close: 2026-04-13
-phase: IN PROGRESS
-status: OPEN
+phase: COMPLETE
+status: CLOSED
 
 TASK: SIM-ARC-B01 — Cluster B TC Fracture simulation
   Arcs: ARC-S29 (Cardinal Schism) + ARC-S56 (Lions' Table Fracture) + ARC-T26 (Martial Honour Violation)
@@ -85,8 +85,8 @@ OPEN EDITORIALS: 7 (ED-401-407; all P2-P3, non-blocking)
 ```yaml
 session_id: 2026-04-13_OPUS_META_ANALYSIS_FIXES
 session_close: 2026-04-13
-phase: IN PROGRESS
-status: OPEN
+phase: COMPLETE
+status: CLOSED
 
 ## TASKS THIS SESSION
 1. Meta-analysis / systematic review of project infrastructure
@@ -177,6 +177,23 @@ P1 BLOCKERS: 0 (all resolved PP-577–582)
 - Character Histories: CH-01 (skills), CH-02 (sparks) — both PASS
 - Patches: PP-590 (Survey Ob), PP-591 (Exposure→AP gate), PP-592 (Evidence pacing)
 - SIM-DEBT remaining: FW-03 (Disposition economy), FW-06 (Cover calibration)
+
+## SESSION TOTALS
+- Commits: 15
+- Patches: PP-576 through PP-592 (17 patches)
+- Editorial items resolved: 42 (from 39 open/flagged to 0/0)
+- P1-BLOCKERs resolved: 6 (from 6 to 0)
+- Checker failures fixed: 164 (23 broken deps + 141 propagation)
+- Session log: 1360 → 93 lines
+- Simulations run: 8 (Fieldwork 5, NPC Behavior 2, Character Histories 1)
+
+## REMAINING FOR NEXT SESSION
+- SIM-DEBT: FW-03 (Disposition economy), FW-06 (Cover calibration)
+- Hybrid bridge: no design-layer scale_transitions document
+- Provisional decisions awaiting review: ~14 total across PP-568–589
+- Propagation checker: re-run after this commit to verify headers
+- "Remembrancer" name: flagged as inadequate, replacement TBD
+
 OPEN EDITORIALS: 39 (33 open + 6 flagged)
 
 ## FIXES APPLIED
@@ -199,8 +216,8 @@ OPEN EDITORIALS: 39 (33 open + 6 flagged)
 ```yaml
 session_id: 2026-04-13_SONNET_ARC_SYSTEM_V8
 session_close: 2026-04-13
-phase: IN PROGRESS
-status: OPEN
+phase: COMPLETE
+status: CLOSED
 
 TASKS THIS SESSION:
 1. Analysed emergent arc trigger density — gaps in factions, territories, NPCs
@@ -224,8 +241,8 @@ OPEN EDITORIALS: 5 (ED-401-405, all P2-P3, non-blocking)
 ```yaml
 session_id: 2026-04-13_OPUS_FIELDWORK_DESIGN
 session_close: 2026-04-13
-phase: IN PROGRESS
-status: OPEN
+phase: COMPLETE
+status: CLOSED
 
 ## TASKS COMPLETED THIS SESSION
 1. Designed Fieldwork System v1 (Exploration / Investigation / Socializing)
