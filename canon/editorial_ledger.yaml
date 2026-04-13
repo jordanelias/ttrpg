@@ -3747,3 +3747,58 @@ editorial_decisions:
     description: "IP-wound relationship. Cosmological grounding: Altonian military presence near the peninsula sustained the wound being held open during the invasion period. Proposed: (a) IP ≥ 75 (Vanguard deployed at T10): RS -1 additional per Year-End (organised Altonian military presence in Proximity 3-4 range stresses substrate); (b) IP = 100 + AER ≤ 1 (Altonian Conquest): RS -5 immediately on Conquest confirmation (full military occupation reopens the wound — this explains the shared loss condition mechanically rather than treating it as an arbitrary threshold). Additionally: IP is reframed as not just an external threat metric but a wound-status indicator — high IP corresponds historically to periods when the wound was held open (invasion) or nearly held open (post-Secession Wars Altonian pressure). Confirm (a) and (b) rates."
     tags: [ip, altonia, rs, wound, cosmology, conquest, vanguard]
     source: cosmological_clarification
+
+  - id: ED-424-RES
+    status: resolved
+    date_resolved: 2026-04-14
+    description: >
+      RESOLVED by PP-599. Torben Loyalty: (1) starts at 7 (not 3); (2) Tutoring
+      Demand compliance decay split into −1 immediate + −1/Year-End while abroad.
+      The track represents political commitment to constitutional succession order.
+      Loyalty to Valoria is constant and untracked.
+
+  - id: ED-427-RES
+    status: resolved
+    date_resolved: 2026-04-14
+    description: >
+      RESOLVED — rate confirmed. RS natural recovery during peace: +0.25 RS/Year-End
+      in which no civilizational-scale conflict occurred (NOT per-Battle — see
+      ED-428-RES below). Over a 20-season campaign this is negligible (cumulative +1
+      at most). Over a 5-year inter-campaign peace period it restores RS by ~1-2
+      points. This explains why RS is at 72 at campaign start (partial recovery
+      from Secession Wars). No mechanical change to existing BG rules required —
+      this rate is so slow it is below the resolution of campaign play. Document
+      as worldbuilding context only, not a trackable in-game mechanic.
+
+  - id: ED-428-RES
+    status: resolved
+    date_resolved: 2026-04-14
+    description: >
+      RESOLVED — individual battles do NOT produce RS drain. Proposed mechanic
+      (≥2 Battles in Proximity 1-3 = RS −1/Year-End) was dramatically overstated.
+      The Secession Wars (10 years of peninsula-wide conflict) caused RS decline but
+      not catastrophically — meaning sustained civilizational-scale conflict over
+      years produces modest RS drift, not per-Battle drain. Correct distinction:
+      Thread operations are direct substrate manipulation (RS consequences immediate
+      and correct as designed). Physical battles are material-world events; substrate
+      experiences them as ambient stress accumulating over years, not seasons.
+      In campaign timeframe (15–20 seasons ≈ 4–5 years): no individual military
+      campaign produces measurable RS effect. No mechanical change to existing
+      BG rules required. Existing RS mechanics (Thread operations, Lock drift,
+      Gap persistence, WC track) are correctly calibrated. ED-428 is closed
+      with no patch.
+
+  - id: ED-429-RES
+    status: resolved
+    date_resolved: 2026-04-14
+    description: >
+      RESOLVED — IP-wound direct RS coupling is not a BG mechanic. The correlation
+      between high IP and RS decline is historical (sustained Altonian occupation
+      over years held the wound open) but not a real-time mechanical coupling.
+      IP tracks Altonian pressure; RS tracks substrate integrity. They share a
+      long-term historical relationship but this does not manifest as IP-number
+      → RS-drain in the current campaign. Altonian Conquest (game-ending condition)
+      does not require an RS −5 mechanical penalty — it is game-ending because
+      full military occupation would, over years, stress the substrate, and the
+      campaign has no years left in which to address it. The narrative explanation
+      is correct; the mechanical shorthand was unnecessary. ED-429 closed with no patch.

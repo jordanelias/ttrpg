@@ -6437,3 +6437,30 @@ patches:
     - references/arc_register.md
     - references/params_board_game.md
   status: applied
+
+- id: PP-599
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Torben Loyalty track corrections per user clarification.
+    (1) Starting value corrected: Torben Loyalty starts at 7 (maximum), not 3.
+    He is the heir, raised in the Crown institution, with no reason for ambivalence
+    at campaign start. The track is meaningful only when circumstances erode it.
+    (2) Tutoring Demand compliance (sending Torben to Altonia) decay split:
+    Prior: −2 immediately on departure.
+    Corrected: −1 immediately on departure (rupture of court relationship) +
+    −1/Year-End while Torben remains resident at the Altonian court (sustained
+    Altonian influence erosion). Event cards may produce additional decrements.
+    This preserves the total decay over a one-year stay while making the erosion
+    feel like what it is — gradual influence, not a single event.
+    (3) The compliance dilemma is now: comply → Torben starts at 7 − 1 = 6
+    immediately, then −1/Year-End while abroad (7 → 6 → 5 → 4...); refuse →
+    Torben stays at 7 but IP +5 (per existing rule). At Torben Loyalty 3 (Coup
+    Counter +1 trigger), Crown must recall him or suffer escalating coup pressure.
+    The time window from compliance to Coup Counter increment: roughly 4 Years if
+    starting from 7 and declining at −1/Year, reaching 3 in Year 4 of absence.
+  finding_id: ED-424
+  affects:
+    - references/params_board_game.md
+  status: applied

@@ -4,6 +4,42 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-14_SONNET_CALIBRATION_CORRECTIONS
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+CORRECTIONS:
+1. Torben Loyalty → starts at 7 (PP-599). Decay split: −1 immediate on departure
+   to Altonia + −1/Year-End while abroad. 4-year window before Coup Counter increment
+   from Loyalty ≤ 3 (if complying with Tutoring Demand from full Loyalty 7).
+
+2. AER clarified (no patch — worldbuilding):
+   = Valoria's diplomatic standing with Altonia, maintained through Church scholarly
+   channels (Cardinal of Temperance: universities, monasteries, observatories).
+   Church acts as diplomatic intermediary. Crown cannot build AER independently.
+   T9 loss (TE-08) suspends Temperance AER maintenance — AER drifts −1/Year-End
+   automatically until T9 reclaimed.
+
+3. RS calibration corrected — ED-427/428/429 resolved:
+   - Individual battles: NO RS drain (scale too small)
+   - Sustained civilizational conflict over years: minimal RS drift (~+0.25/Year-End
+     natural recovery during peace, below campaign resolution)
+   - IP-wound RS coupling: historical correlation only, not a BG mechanic
+   - Existing RS mechanics (Thread ops, Lock drift, Gap persistence, WC) correct as designed
+   - ED-428/429 closed with no patch. ED-427 resolved as worldbuilding context only.
+
+PATCHES: PP-599 (Torben starting loyalty 7, decay split)
+RESOLUTIONS: ED-424-RES, ED-427-RES, ED-428-RES, ED-429-RES
+OPEN EDITORIALS: ~25 (non-blocking)
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-14_SONNET_DESIGN_QUESTIONS
 session_close: 2026-04-14
 phase: COMPLETE
