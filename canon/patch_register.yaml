@@ -6179,3 +6179,67 @@ patches:
     - references/arc_register.md
     - tests/sim_arc_c01_vaynard_unchecked.md
   status: applied
+
+- id: PP-590
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    Thread Contact TS Development — mechanism made explicit.
+    Canonical grounding: P-01 (Inseparability), §1 Philosophical Foundations
+    (Threads are the substrate of all being — what things are made of and the
+    condition of possibility for being). Any Thread-marked configuration continues
+    to exert configurational pull on everything in sustained contact with it.
+    Contact with Thread-marked material is a Thread relationship; sustained Thread
+    relationships develop perceptual access to the substrate.
+
+    Three tiers of TS development rate via sustained contact (additive with other sources):
+
+    (1) AMBIENT ENVIRONMENTAL EXPOSURE (lowest rate):
+    Sustained presence near Thread-active conditions (Calamity Radiation Fragile/Fractured
+    effects, Einhir ruin sites, territories with active Gaps/Shifting Objects). Examples:
+    RM communities in Proximity 1 territories; populations near Einhir ruin sites.
+    Canonical mechanic: calamity_radiation.md §RS Critical Distance 3: "Discovery Events
+    possible — TS growth checks for witnesses." This already covers the mechanism; this
+    PP makes it explicit for Fragile/Fractured bands at closer proximity.
+    Rate: Spirit TN7 Ob2 per season of sustained presence in Thread-active territory.
+    Only applies to TS 0–9 characters (below Practitioner threshold). TS 10+ develop
+    through practitioner methods.
+
+    (2) SUSTAINED HANDLING OF THREAD-MARKED OBJECTS (moderate rate):
+    Repeated contact with Woven artifacts, Shifting Objects, confiscated Thread-evidence.
+    Examples: Vaynard's Private Collection use (already canonical: +1 TS hidden/use);
+    Inquisitors handling confiscated Thread-evidence over career; merchants handling
+    Thread-touched goods (cf. NPC-ARC-FEL). Shifting Objects perdure — sustained handling
+    of a Shifting Object is contact with an actively oscillating Thread configuration.
+    Rate: as per the canonical Private Collection mechanic (+1 hidden TS per use) for
+    intentional concentrated handling. For ambient professional handling (Inquisitors,
+    merchants): Spirit TN7 Ob3 per campaign arc of sustained professional contact.
+    This explains Haelgrund TS 12 (career Inquisitor) and Klapp TS 31 (career archivist
+    and head of Church education — extensive contact with suppressed Thread-adjacent texts
+    and artifacts across decades). These are not anomalies; they are expected outcomes.
+
+    (3) DIRECT PRACTITIONER OPERATION OR PROXIMITY TO ACTIVE THREAD WORK (highest rate):
+    Being present as a Thread operation occurs. The operation's co-movement effects extend
+    to all present (P-01 compliance). Examples: any non-practitioner present during a Leap
+    and Thread operation; communities where practitioners operate visibly.
+    Rate: Spirit TN7 Ob1 per scene of direct exposure to active Thread operation.
+    (This rate is already used by Discovery Event mechanics and TE-18.)
+
+    DESIGN CONSEQUENCE (Church self-defeating dynamic):
+    The Inquisitorial programme requires extensive handling of Thread-adjacent evidence.
+    The Church's most diligent Inquisitors are its most Thread-sensitive personnel.
+    The institutional suppression apparatus is simultaneously the institutional
+    Thread-sensitivity development programme. This is the metaphysical foundation
+    of NPC-ARC-HAE (Haelgrund Defection) and ARC-S08/S21 (Klapp Threshold) —
+    not occupational hazard in an abstract sense but the literal mechanism of contact.
+
+    Add to params_threadwork.md §Thread Sensitivity as a clarifying section.
+    Cross-reference: calamity_radiation.md (ambient exposure), params_factions.md
+    §Private Collection (intentional artifact handling), NPC-ARC-HAE, ARC-S08.
+  finding_id: null
+  affects:
+    - references/params_threadwork.md
+    - references/params_factions.md
+    - references/arc_register.md
+  status: applied

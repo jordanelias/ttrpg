@@ -4,6 +4,28 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_SONNET_PP590_THREAD_CONTACT_TS
+session_close: 2026-04-13
+phase: IN_PROGRESS
+
+PATCH: PP-590 — Thread Contact TS Development mechanism made explicit.
+  Three tiers: ambient environmental, sustained artifact handling, direct practitioner proximity.
+  Explains: Vaynard TS growth from Private Collection (canonical mechanic, now metaphysically grounded)
+  Explains: Haelgrund TS 12 (career Inquisitor handling evidence)
+  Explains: Klapp TS 31 (career archivist with suppressed Thread-adjacent material)
+  Explains: RM communities in Proximity 1 territories developing slight Thread perceptual access
+  Key design consequence: Church suppression apparatus = Thread sensitivity development programme.
+  
+EDITORIAL: ED-417 — Shifting Object duration threshold for handler TS development (P2).
+  Continuing: SIM-ARC-E01 Cluster E (RM Pressure).
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_SONNET_WORLDBUILDING_CLARIFICATIONS
 session_close: 2026-04-13
 phase: COMPLETE
