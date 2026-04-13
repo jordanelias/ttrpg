@@ -237,7 +237,7 @@ editorial_decisions:
   - id: ED-034
     status: resolved
     date_resolved: 2026-04-04
-    description: "Ceiral Ritual RS asymmetry vs BG Co-Movement cap"
+    description: "Southernmost Ritual [UNNAMED — ED-416] RS asymmetry vs BG Co-Movement cap"
     decision: "Full TTRPG RS values propagate directly. BG Co-Movement ceiling applies only to BG-initiated Thread abstraction."
     tags: [threadwork, hybrid]
 
@@ -335,8 +335,8 @@ editorial_decisions:
   - id: ED-048
     status: resolved
     date_resolved: 2026-04-02
-    description: "Ceiral — naming status"
-    decision: "Ceiral is a canonical ritual/text name (The Ceiral Ritual), not a character name."
+    description: "[UNNAMED — ED-416] — naming status"
+    decision: "[UNNAMED — ED-416] is a canonical ritual/text name (The Southernmost Ritual [UNNAMED — ED-416]), not a character name."
     tags: [naming]
 
   - id: ED-049
@@ -3624,7 +3624,7 @@ editorial_decisions:
     status: flagged
     date_raised: 2026-04-13
     priority: P2
-    description: "P2-D04: Maret Uln resource conflict — seasonal stabilising Weavings (Coherence cost) vs TS development toward Ceiral Ritual prerequisite (TS 60+, currently TS 50). Both peak Seasons 13–14 simultaneously with Baralta political climax. GMs must understand this timeline: no faction can expect Maret to both sustain T15 stabilisation AND develop toward Ritual readiness without coordinated resource management. Suggest adding a Timeline Note to ARC-S15 and ARC-T04 cross-referencing the Maret development constraint."
+    description: "P2-D04: Maret Uln resource conflict — seasonal stabilising Weavings (Coherence cost) vs TS development toward Southernmost Ritual [UNNAMED — ED-416] prerequisite (TS 60+, currently TS 50). Both peak Seasons 13–14 simultaneously with Baralta political climax. GMs must understand this timeline: no faction can expect Maret to both sustain T15 stabilisation AND develop toward Ritual readiness without coordinated resource management. Suggest adding a Timeline Note to ARC-S15 and ARC-T04 cross-referencing the Maret development constraint."
     tags: [maret_uln, arc_s15, arc_t04, southernmost, simulation]
     source: SIM-ARC-D01
 
@@ -3635,3 +3635,11 @@ editorial_decisions:
     description: "GAP-D01: Territory Stability for Ob calculation (Active Inquisition) not explicitly tracked separately from Prosperity in BG. Simulation used Prosperity as proxy (T13 Prosperity 3 → Ob 2). Confirm whether territory-level Stability is a separate tracked value or derived from Prosperity."
     tags: [territory, stability, inquisition, simulation]
     source: SIM-ARC-D01
+
+  - id: ED-416
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P2
+    description: "'Ceiral' is not a canon word. Establish the canonical name for the multi-practitioner Southernmost healing ritual (ARC-T04). The ritual itself is canonical: multiple prerequisites (texts, TS thresholds, practitioners, Askeheim location), Lead Weaving pool vs Ob, RS consequence on success/failure. Only the name 'Ceiral' is struck. All instances replaced with 'Southernmost Ritual [UNNAMED — ED-416]' pending this decision."
+    tags: [southernmost, ritual, naming, canon]
+    source: PP-588

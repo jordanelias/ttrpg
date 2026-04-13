@@ -53,7 +53,7 @@ systems:
     design_doc: null
     compilation_stage: compilation/v0.14/stage4_southernmost.md
     compilation_current: false
-    note: "Stage4 OUTDATED (all stages outdated 2026-04-04). No design-layer doc exists. Stage4 retained as only source but treat as unverified. ED-048 open (Ceiral placeholder)."
+    note: "Stage4 OUTDATED (all stages outdated 2026-04-04). No design-layer doc exists. Stage4 retained as only source but treat as unverified. ED-048 open ([UNNAMED — ED-416] placeholder)."
 
   clocks:
     canonical: designs/systems/clock_registry.md

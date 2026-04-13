@@ -54,12 +54,12 @@ TC: 35 → 36.
 Without Weaving: cracking at Season 11 (+1 RS/season additional), outer winding fails Season 14 (+2/season).
 With Weaving: sustainable at RS ~45–50 if maintained seasonally.
 
-Maret resource conflict: TS development needed for Ceiral Ritual (TS 60+, currently TS 50)
+Maret resource conflict: TS development needed for Southernmost Ritual [UNNAMED — ED-416] (TS 60+, currently TS 50)
 AND seasonal stabilising Weavings (Coherence cost). Both peak Seasons 13–14. P2-D04.
 
 ## TE-12 ↔ ARC-S15 Interaction (P1-D05)
 
-Ceiral Ritual expedition gate controlled by TE-12 (Varfell holds T12+T13).
+Southernmost Ritual [UNNAMED — ED-416] expedition gate controlled by TE-12 (Varfell holds T12+T13).
 Hafenmark Ritual attempt Season 13 (diplomatically hostile Varfell): I4D TN7 Ob3: 9,3,7,2 → net +2 → PARTIAL.
 Expedition blocked. Outer winding cracking continues: RS −4–6 minimum from 2 blocked seasons.
 TE-12 is the campaign's highest-leverage territorial control for the RS survival condition.
@@ -82,4 +82,4 @@ Season 5: RS Fragile → TE-17 active, TE-21 Folklore bonus, Shifting Object in 
 Season 8: RS 50 → ARC-S15 active, stabilising Weaving required
 Season 11: RS 40 without WC2 (Fractured → TE-18 fires here on crossing)
 Season 13-14: Baralta climax (Coup, Quaestio) + ARC-S15 cracking overlap — competing resources
-Season 14+: Ceiral Ritual viable only if Maret TS 60+ and Chokehold negotiable
+Season 14+: Southernmost Ritual [UNNAMED — ED-416] viable only if Maret TS 60+ and Chokehold negotiable

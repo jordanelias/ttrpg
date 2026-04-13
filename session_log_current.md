@@ -4,6 +4,34 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_SONNET_FORGETTING_HEIDEGGER_CEIRAL
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+CORRECTIONS APPLIED:
+1. Forgetting epistemic structure refined (PP-589):
+   Vaynard operates in present-at-hand mode w.r.t. Thread reality.
+   He RETAINS: propositional knowledge (TK 5), historical facts, observable dissonance effects.
+   He CANNOT render: the ready-to-hand operational dimension — the Leap's experiential substrate.
+   His calculation fails because he cannot evaluate the safety rule against his own situation
+   (evaluation requires ready-to-hand access he lacks). Heidegger ZH/VH distinction is precise.
+   PP-584's overcorrection ("words are Inert") retracted — Vaynard CAN retain the abstract
+   propositional content. He cannot evaluate it operationally. Player role unchanged: structural.
+
+2. 'Ceiral' struck as non-canon word (PP-588, ED-416).
+   Replaced with 'Southernmost Ritual [UNNAMED — ED-416]' throughout.
+
+P1 BLOCKERS: 0
+OPEN EDITORIALS: 16 (ED-401-416; non-blocking)
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_SONNET_SIM_ARC_D01
 session_close: 2026-04-13
 phase: COMPLETE

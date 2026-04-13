@@ -61,7 +61,7 @@ War or sustained Thread operations deplete practitioner Coherence at −1/operat
 RS ≤ 60 satisfies the prerequisite for Past-Oriented Pulling (TS 70+ required; Einhir Ritual Framework additionally required for Foundational events). The window does not close unless RS recovers above 60. Every faction with knowledge of the mechanic has a different agenda for it; the window is a political condition as much as a practitioner opportunity.
 
 **ARC-S15 — Southernmost Spiral** `Wardens | T15, T13, T6 | ALL`
-RS ≤ 50 activates the Southernmost cracking timeline. Without Weaving stabilisation (Ob 3, TS 40+) for 3 consecutive seasons, the outer winding cracks (RS +1/season additional, automatic). Three further seasons without Ceiral Ritual: outer winding fails (RS +2/season, unremovable until Ritual). Expedition prerequisite: RS ≥ 40 and practitioner TS 30+. *If TE-12 (Varfell controls both Askeheim gates) is active, expedition access requires Varfell cooperation — blocking it creates an indirect terminal RS path.*
+RS ≤ 50 activates the Southernmost cracking timeline. Without Weaving stabilisation (Ob 3, TS 40+) for 3 consecutive seasons, the outer winding cracks (RS +1/season additional, automatic). Three further seasons without Southernmost Ritual [UNNAMED — ED-416]: outer winding fails (RS +2/season, unremovable until Ritual). Expedition prerequisite: RS ≥ 40 and practitioner TS 30+. *If TE-12 (Varfell controls both Askeheim gates) is active, expedition access requires Varfell cooperation — blocking it creates an indirect terminal RS path.*
 
 **ARC-S32 — Mending Trap** `Practitioners/Wardens | ALL | TTRPG`
 Mending is the only individual RS recovery source (+1 to +2/success). Each Mending attempt costs −1 Coherence regardless of outcome. Passive RS decline (−6 to −9/season with 2 Locks + 1 Gap) exhausts one practitioner's full Coherence budget in ~10 operations — approximately 2–3 seasons of passive decline covered. The world cannot be saved by individual heroism; it requires multiple practitioners in rotation, Warden Cooperation (WC ≥ 2 halves decay; WC ≥ 3 adds +2/season), Community Weaving, and Lock/Gap resolution in parallel.
@@ -72,8 +72,8 @@ Collective Thread operations require Belief compatibility checks: directly oppos
 **ARC-S34 — Edeyja Burnout** `Wardens | T15 | TTRPG`
 Edeyja's Coherence (9) depletes from repeated Mending at RS Critical. ~8 Mendings before Coherence 2; ~10 before Rendering Crisis. If she reaches Coherence 0: Wardens lose their principal practitioner; WC track may degrade; Locked Zone border Mending (requires TS 70+ and Einhir framework) becomes impossible. Direction: cumulative resource exhaustion toward the campaign's hidden fail state. *At Coherence ≤ 5, TE-15 activation (Structural Dissolution of catastrophic Gap emergent) drives her to Rendering Crisis regardless of success or failure; these two vectors feed into the same terminal condition.*
 
-**ARC-T04 — Ceiral Ritual** `Wardens/Practitioners | T15 | TTRPG`
-Narrow-window event requiring simultaneous: Ceiral Text held, Awareness 5+, Maret Uln TS 60+, 2× TS 20+ additional participants, preparation season, all in Askeheim. Success: RS −6 to −10 (world healing). Failure: RS +8, Mode 3 entity, lead practitioner incapacitated. The ritual is the only bulk RS source; its failure cascade (RS +8 + IP +2 + TC +2 in one season) can accelerate three simultaneous arcs.
+**ARC-T04 — Southernmost Ritual [UNNAMED — ED-416]** `Wardens/Practitioners | T15 | TTRPG`
+Narrow-window event requiring simultaneous: [UNNAMED — ED-416] Text held, Awareness 5+, Maret Uln TS 60+, 2× TS 20+ additional participants, preparation season, all in Askeheim. Success: RS −6 to −10 (world healing). Failure: RS +8, Mode 3 entity, lead practitioner incapacitated. The ritual is the only bulk RS source; its failure cascade (RS +8 + IP +2 + TC +2 in one season) can accelerate three simultaneous arcs.
 
 **ARC-T07 — Dissolution** `Practitioners | ALL | TTRPG`
 TS 50+ required; Diagnosis mandatory. Tears a configuration (NPC arrangement, institutional record, Locked Zone border, political thread) rather than unwinding it. RS consequences: success −5, failure −8. The operation is available when circumstances require it; its cost is structural.
@@ -537,7 +537,7 @@ Trigger: Almud Discovery Event (ARC-S17: TS 28→30) + Elske installed independe
 Combined: the Crown dynasty distributes across three people in three states simultaneously; Almud's practitioner path opens while institutional succession is functionally resolved through Elske. The political implications (TC +3 but RS improves) are not predictable from any individual arc.
 
 **COLLISION C — Tutoring + Southernmost**
-Trigger: Torben Loyalty ≤ 3 (ARC-S07) coincides with Ceiral Ritual failure (ARC-T04).
+Trigger: Torben Loyalty ≤ 3 (ARC-S07) coincides with Southernmost Ritual [UNNAMED — ED-416] failure (ARC-T04).
 Combined: RS +8, IP +2, TC +2 in a single season; if RS near 50, Southernmost cracking clock resets + RS +2/season; Ehrenwall Coup Counter may reach 3 from cascade alone. Players face three simultaneous crises with one practitioner incapacitated.
 
 **COLLISION D — Niflhel Weaponises**

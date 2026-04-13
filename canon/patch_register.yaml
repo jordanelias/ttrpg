@@ -6081,7 +6081,7 @@ patches:
   severity: P1
   description: >
     P1-D05 documented. TE-12 (Collector's Chokehold) is a terminal RS path blocker
-    when Varfell is diplomatically isolated at the time the Ceiral Ritual prerequisites
+    when Varfell is diplomatically isolated at the time the Southernmost Ritual [UNNAMED — ED-416] prerequisites
     are met. The Ritual requires an Askeheim expedition; TE-12 gates that expedition
     behind Varfell negotiation (Ob 3 for any non-Varfell faction). A PARTIAL negotiation
     blocks the expedition for that season; 2 consecutive blocked seasons produces RS −4–6
@@ -6119,4 +6119,63 @@ patches:
   finding_id: P2-D01 P2-D02 P2-D03
   affects:
     - references/arc_register.md
+  status: applied
+
+- id: PP-588
+  type: cleanup
+  date: 2026-04-13
+  severity: P2
+  description: >
+    "Ceiral" is not a canon word. All instances in committed files replaced with
+    "Southernmost Ritual [UNNAMED — ED-416]" pending canonical naming decision.
+    Affected files: arc_register.md, canonical_sources.yaml, patch_register.yaml,
+    editorial_ledger.yaml, sim_arc_d01_southern_corridor.md, coverage_matrix.md.
+    The ritual itself is canonical — it is the multi-practitioner Southernmost healing
+    operation referenced across ARC-T04. Only the name "Ceiral" is struck.
+    ED-416 raised to establish the canonical name.
+  finding_id: null
+  affects:
+    - references/arc_register.md
+    - references/canonical_sources.yaml
+    - canon/patch_register.yaml
+    - canon/editorial_ledger.yaml
+    - tests/sim_arc_d01_southern_corridor.md
+    - tests/coverage_matrix.md
+  status: applied
+
+
+- id: PP-589
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    Refinement of PP-582 and PP-584 on the Forgetting and Vaynard's epistemic position.
+    The Heidegger ready-to-hand / present-at-hand distinction applies precisely.
+    Vaynard operates entirely in present-at-hand mode with respect to Thread reality.
+    He retains: propositional knowledge about threadwork (TK 5 — theoretical framework),
+    historical knowledge about the Einhir and the Southernmost, observable effects he has
+    witnessed (temporal dissonance, memory inconsistencies — he experiences the gap between
+    what he remembers and what is now the case). He does NOT have access to: the experience
+    of Thread contact itself (ready-to-hand), the operational "how" of any Thread operation,
+    the perceptual substrate that TS ≥ 29 renders available.
+    His consequentialist calculation fails specifically because he cannot evaluate the
+    safety rule ("TS 30+ required") against his own situation. That evaluation requires
+    ready-to-hand epistemic access — knowing FROM WITHIN whether TK 5 is sufficient
+    substitute for TS 30+ perceptual capacity. He cannot perform this evaluation. From his
+    present-at-hand position, TK 5 (the most comprehensive theoretical account any
+    non-practitioner has assembled) appears like a reasonable operational substitute.
+    He is wrong in a way he cannot discover except through Thread contact itself.
+    PP-584's correction ("words point at something he cannot render") was too strong:
+    Vaynard can render the abstract and historical referents of those words. What he cannot
+    render is the operational dimension — the ready-to-hand experience that would let him
+    evaluate the words against his own capacity.
+    Player role (PP-584 conclusion) remains correct: structural constraint, not communication.
+    Vaynard cannot be argued out of his calculation because the argument requires him to
+    perform an evaluation he lacks the epistemic equipment to perform. No propositional
+    argument bridges the ready-to-hand gap. He would need to be the kind of entity that
+    can enter Thread contact to know whether his TK 5 substitutes for TS 30+.
+  finding_id: PP-582 PP-584 (refinement)
+  affects:
+    - references/arc_register.md
+    - tests/sim_arc_c01_vaynard_unchecked.md
   status: applied
