@@ -3651,3 +3651,19 @@ editorial_decisions:
     description: "Shifting Objects as active TS development hazard: a Shifting Object (Thread configuration in oscillation that perdures) exerts continuous Thread-level pull on everything in sustained contact. Long-term handlers of Shifting Objects (merchants routing goods through T6, Inquisitors cataloguing them as evidence, residents of territories with persistent Shifting Objects) undergo TS development at the 'sustained handling' rate (PP-590 tier 2). Specify whether there is a Shifting Object duration threshold before handler TS development begins, and whether the rate scales with Shifting Object severity (fresh Shifting Object vs one that has been oscillating for multiple seasons). This may require a note in the Shifting Object rules in threadwork_redesign_v25.md."
     tags: [shifting_object, ts_development, threadwork, inquisitors]
     source: PP-590
+
+  - id: ED-418
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P2
+    description: "Attunement stat undefined in params. Community Weaving canonical formula (PP-250) uses Attunement + History + Thread Pool Score. 'Attunement' appears in PP-250 but is not defined in params_threadwork.md or params_core.md. Simulation used Spirit as proxy. Define Attunement: (a) is it a separate character stat? (b) is it derived from TS or another stat? (c) does it equal Spirit or is it distinct? Required before Community Weaving can be canonically simulated."
+    tags: [community_weaving, attunement, params, rm]
+    source: SIM-ARC-E01
+
+  - id: ED-419
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P2
+    description: "P2-E02: Inquisitor in T13 and PP-590 Thread Contact TS Development. The Inquisitor deployed to T13 (Oastad) handles Thread-adjacent evidence from Einhir ruins, Calamity Radiation effects, and Cultural Reclamation accounts. Per PP-590 tier 2 (sustained professional handling): Spirit TN7 Ob3 per campaign arc for TS development. The suppression operation is a Thread sensitivity programme for its own operative. This should be noted in the Active Inquisition action description as a long-term consequence of repeated deployment to Thread-active territories. Confirm: does the Inquisitor NPC AI take this risk into account when prioritising deployment locations?"
+    tags: [inquisitor, ts_development, pp590, church, simulation]
+    source: SIM-ARC-E01

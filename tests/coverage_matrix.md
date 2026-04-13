@@ -647,3 +647,12 @@ P3 gaps: 3 (ED-411-413: Maret stats, Edeyja Resonant Style, Mending Ob confirmed
 | ARC-S25 Warden Cooperation | G+C | COMPLETE | WC 2 doubles available time before Fractured; P1-D06 Forgetting Check TS-gating |
 P1 findings: 2 (P1-D05→PP-586; P1-D06→PP-585)
 P2 findings: 3 (P2-D01/02/03→PP-587; P2-D04 design observation)
+
+## SIM-ARC-E01 — Cluster E RM Pressure (2026-04-13)
+| Arc | Mode | Status | Key Finding |
+|---|---|---|---|
+| ARC-S47 Cultural Reclamation | G+C | COMPLETE | S47 and S48 mutually limiting (P2-E01/PP-591); PP-590 ambient TS development applies to account-producing communities |
+| ARC-S48 Vossen Saturation | G | COMPLETE | Suspended when T6 reaches Presence 3; IDEALIST flaw delays but doesn't resolve S47/S48 tension |
+| ARC-S49 Rawlsian Bind | C+D | COMPLETE | Principles Maintained correct NPC AI; Suspended near-impossible Mandate path (~11%/season); RM role confirmed Thread-substrate |
+P2 findings: 4 (P2-E01/E04→PP-591; P2-E02→ED-419; P2-E03 design observation)
+GAP: ED-418 (Attunement stat undefined P2)

@@ -6243,3 +6243,31 @@ patches:
     - references/params_factions.md
     - references/arc_register.md
   status: applied
+
+- id: PP-591
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-E01 documented. ARC-S47 and ARC-S48 are mutually limiting arcs.
+    ARC-S47 (Cultural Reclamation) fires from Presence ≥ 4 territories and produces
+    Community Memory Event — which organically deepens Presence in active territories
+    as communities engage with the accounts. This deepening risks breaking ARC-S48's
+    condition (Presence ≥ 4 territories AND no territory at Presence ≥ 3). Once any
+    territory exceeds Presence 2, ARC-S48 suspends. Vossen's IDEALIST flaw (spreads
+    Presence thin) delays the tension by keeping individual territory counts low, but
+    does not resolve it — organic Cultural Reclamation activity in Thread-active territories
+    (PP-590 ambient exposure deepening community engagement) pulls individual territories
+    toward higher Presence counts independently of Vossen's strategic choices.
+    Arc register note: add to both ARC-S47 and ARC-S48 entries that these arcs are
+    mutually limiting, and that IDEALIST flaw is a delay mechanism, not a permanent solution.
+    P2-E04 documented simultaneously: ARC-S49 Principles Suspended Mandate advancement
+    produces ~11% success rate per season at 2D TN7 Ob3 (Ob2 + framework +1). Expected
+    9 seasons to Mandate 2. RM functional role confirmed as Thread-substrate (RS restoration
+    via Community Weaving), not political-institutional. Principles Maintained is the
+    correct NPC AI choice for Vossen at TC ≥ 50. Principles Suspended is structurally
+    losing except in very late-campaign desperate scenarios.
+  finding_id: P2-E01 P2-E04
+  affects:
+    - references/arc_register.md
+  status: applied

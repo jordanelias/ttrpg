@@ -4,6 +4,34 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_SONNET_SIM_ARC_E01
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+TASK: SIM-ARC-E01 — Cluster E RM Pressure (ARC-S47, ARC-S48, ARC-S49)
+  Mode: G-RM + D | Scenario: TC 47→51, RS 50→51, Seasons 10–11
+
+PRIMARY FINDINGS:
+  P2-E01: ARC-S47 and ARC-S48 mutually limiting — S47 deepens; S48 requires shallow (PP-591)
+  P2-E02: Inquisitor in Thread-active territory develops TS via PP-590 — Church suppression = TS programme (ED-419)
+  P2-E03: Remembrancer Coherence 8 remaining — ARC-S32 applies; RM RS restoration finite
+  P2-E04: Principles Suspended near-impossible Mandate path (~11%/season) — RM role confirmed Thread-substrate (PP-591)
+  GAP-E01: Attunement stat undefined (ED-418)
+
+PATCHES: PP-591 (S47/S48 mutual limit; Principles Suspended analysis)
+EDITORIALS: ED-418 (Attunement P2), ED-419 (Inquisitor TS development P2)
+
+P1 BLOCKERS: 0
+OPEN EDITORIALS: 19 (ED-401-419; non-blocking)
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_SONNET_PP590_THREAD_CONTACT_TS
 session_close: 2026-04-13
 phase: IN_PROGRESS
