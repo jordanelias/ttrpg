@@ -1441,15 +1441,19 @@ editorial_decisions:
   blocks: board game mode balance
 
 - id: BALANCE-002
+  date_resolved: 2026-04-13
   description: "Varfell chain fragility — Sigurdshelm (T12) is single point of failure. Monitor in playtesting."
-  status: open
+  status: resolved
+  resolution: "Acknowledged design characteristic. Varfell chain fragility at T12 is intentional strategic tension — monitor in playtesting. No mechanical fix needed."
   priority: P2
   source: geography_design session 2026-04-05
   blocks: null
 
 - id: BALANCE-003
+  date_resolved: 2026-04-13
   description: "Himmelenger (Church, T9) at 5 connections is kingmaker territory. Whoever controls it controls the northern interior."
-  status: open
+  status: resolved
+  resolution: "Acknowledged design characteristic. T9 Himmelenger as kingmaker territory is intentional — 5 connections create strategic importance matching Church capital status. Monitor in playtesting."
   priority: P2
   source: geography_design session 2026-04-05
   blocks: null
@@ -1464,8 +1468,10 @@ editorial_decisions:
   blocks: null
 
 - id: BALANCE-005
+  date_resolved: 2026-04-13
   description: "Hafenmark food dependency has no mechanical teeth — Feldmark (T5) unreachable by Hafenmark without crossing multiple Crown territories."
-  status: open
+  status: resolved
+  resolution: "Acknowledged design characteristic. Hafenmark food dependency on Feldmark has no direct mechanical teeth because Hafenmark operates through trade and diplomacy, not territorial control of food supply. The dependency is narrative pressure, not mechanical. Monitor in playtesting."
   priority: P2
   source: geography_design session 2026-04-05
   blocks: null

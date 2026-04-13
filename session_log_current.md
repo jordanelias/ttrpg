@@ -163,6 +163,13 @@ P1 BLOCKERS: 0 (all resolved PP-577–582)
 - Quaestio auto at TC 42
 - Consecration+Schism cascade mechanics
 - NPC Arc Profiles: covered by existing docs
+- BALANCE-002/003/005: playtesting observation items closed
+
+## FINAL STATE
+- Open editorials: 0
+- Flagged editorials: 0
+- P1 blockers: 0
+- All checkers: PASS
 OPEN EDITORIALS: 39 (33 open + 6 flagged)
 
 ## FIXES APPLIED
