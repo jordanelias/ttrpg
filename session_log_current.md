@@ -4,6 +4,24 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-14_SONNET_PP615_POOL_CORRECTION
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+PATCH: PP-615 — Reverses PP-612.
+  Combat Pool = (Agi × 2) + History (pts + 3), min 5. Doubled, consistent with Contest/Fieldwork.
+  All three systems confirmed: (Attr × 2) + 3 base.
+  Stale: params_core.md and PP-247 note (both non-doubled). params_combat.md body was correct.
+  ED-NEW-11 closed.
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-14_SONNET_STAT_AUDIT
 session_close: 2026-04-14
 phase: COMPLETE

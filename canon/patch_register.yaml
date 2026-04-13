@@ -7137,3 +7137,35 @@ patches:
   affects:
     - references/params_contest.md
   status: applied
+
+- id: PP-615
+  type: correction
+  date: 2026-04-14
+  severity: P1
+  description: >
+    PP-612 REVERSED. PP-612 concluded Combat Pool uses a non-doubled formula
+    (Agi + hist + 3) based on params_core.md and a PP-247 patch note. This was wrong.
+
+    CANONICAL formula confirmed by user:
+    Combat Pool = (Agility × 2) + History (points + 3) — minimum 5.
+
+    The doubled formula (Agi × 2) is consistent across all three active roll systems:
+    - Combat:   (Agility × 2) + weapon History (pts + 3), min 5
+    - Contest:  (Primary Attribute × 2) + History (pts + 3)
+    - Fieldwork: (Primary Attribute × 2) + History (pts + 3)
+
+    The stale entries are params_core.md ("Agility + weapon proficiency History (points + 3)")
+    and the PP-247 patch note ("Agi + hist_pts + 3"). Both incorrectly show non-doubled.
+    params_combat.md body was correct throughout. PP-247 was a mistaken correction.
+
+    params_core.md Combat Pool row corrected to:
+    "Combat Pool | (Agility × 2) + weapon proficiency History (points + 3) | min 5"
+
+    ED-NEW-11 (pool formula contradiction) closed: all three systems use (Attr × 2) + 3.
+    The minimum 5 is a safety floor — at Agi 1 (minimum) × 2 + 0 hist + 3 = 5, so
+    the minimum is always met and effectively redundant, but kept as explicit floor.
+  finding_id: PP-612 ED-NEW-11
+  affects:
+    - references/params_core.md
+    - references/params_combat.md
+  status: applied

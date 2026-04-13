@@ -3915,3 +3915,11 @@ editorial_decisions:
     description: "PP-249 in params_mass_combat.md ('Dissonance impairs Thread operations only. No Coherence penalty on Command tactic rolls') predates PP-607/PP-610 which renamed the mechanic. Update to: 'Spirit pool reductions from Dissonance checks (PP-610) do not impair Command tactic rolls or mass battle dice pools. Coherence loss from Thread operations does not impair Command tactic rolls. Both stats are operationally independent of Command.' Also update PP-606 rename: Dissonant Counter → Substrate Saturation Counter in params_mass_combat.md."
     tags: [dissonance, spirit, command, mass_combat, pp249, pp607]
     source: audit
+
+  - id: ED-NEW-11-CLOSED
+    status: resolved
+    date_resolved: 2026-04-14
+    description: >
+      CLOSED by PP-615. Pool formula confirmed: (Attribute × 2) + History (pts + 3)
+      consistently across Combat, Contest, and Fieldwork. No contradiction exists.
+      params_core.md and PP-247 were the stale entries; params_combat.md body was correct.
