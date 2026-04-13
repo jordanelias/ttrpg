@@ -1,3 +1,38 @@
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-14_SONNET_SIM_ARC_G01-G05
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+TASK: SIM-ARC-G01-G05 — Cluster G Capital Territory Events
+  Five scenarios: T1 (Church Seizure), T8 (Varfell advance), T9 (Crown assault),
+  T12 (Church Seizure), T14 (Löwenritter Coup via PP-569)
+
+P1 FINDINGS (3):
+  P1-G03: TE-08 Church M−3 but Seizure/TC intact (Influence-based) → PP-594
+  P1-G04: TE-10 all Varfell paths suspended simultaneously → PP-598
+  P1-G05: Reconstitution unavailable post-coup at PI 3; Regency needs other factions → PP-595
+
+P2 FINDINGS:
+  P2-G01/GAP-G01: Seizure Prominence blocks T1 at equal Mandate; TC freeze ceiling → PP-596
+  P2-G02/G05: Baralta 7D recovery; Coup PI−3 blocks Baralta own win at PI<8 → PP-597
+
+PATCHES: PP-594–598
+EDITORIALS: ED-422 (Ethical Framework in Battle P3), ED-423 (Grand Debate + Quaestio P2)
+
+EDITORIAL BRANCH HIT: ED-404 (Grand Debate + Quaestio). Simulation stopped.
+  All other Cluster G scenarios ran to completion.
+
+P1 BLOCKERS: 0
+OPEN EDITORIALS: 23 (ED-401-423; non-blocking)
+SIMULATION CLUSTERS COMPLETE: A B C D E F G (all seven)
+```
+
 # Valoria Session Log — Current
 
 ```yaml

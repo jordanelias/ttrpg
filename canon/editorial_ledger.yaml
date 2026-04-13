@@ -3683,3 +3683,19 @@ editorial_decisions:
     description: "P2-F04: COLLISION I temporal sequence — ARC-P09+ARC-S52 fire early-to-mid campaign (Seasons 5–8 typically) while TE-20 (Breadbasket Withers) requires territorial displacement of Crown from T5 or T6, which is a mid-to-late campaign event. Document in COLLISION I entry and both arc entries that the Collision has an expected temporal sequence: economic crisis fires first; TE-20 joins later to escalate from severe to catastrophic. GMs should anticipate this is a late-campaign amplification of an already-active economic pressure, not a single-moment convergence."
     tags: [collision_i, arc_p09, arc_s52, te20, simulation]
     source: SIM-ARC-F01
+
+  - id: ED-422
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P3
+    description: "GAP-G02: Ethical Framework modifiers (−1 Ob) in opposed Military Battle rolls have no fixed Ob to reduce. Provisional ruling used in SIM-G01: treat as +1 net success advantage to attacker in Battle context. Confirm canonical approach: (a) +1 net to attacker's roll outcome; (b) −1 to the effective Ob threshold the attacker must surpass (i.e., in a net-vs-net comparison, attacker's threshold is 1 lower); (c) apply only to Domain Actions, not to Battle rolls (i.e., ethical modifier only applies when there is a fixed Ob, not in opposed rolls). Option (c) is simplest and most defensible but excludes one of Crown's key advantages."
+    tags: [ethical_framework, battle, military, crown]
+    source: SIM-ARC-G01
+
+  - id: ED-423
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P2
+    description: "ED-404 branch reached in SIM-G03: TE-08 Grand Debate + Quaestio (ARC-S19) interaction. When T9 falls to Crown and TE-08 triggers a Grand Debate at next Parliament session, can the Quaestio (TC ≥ 42 Baralta action) fire in the same campaign arc? If both are active simultaneously: two 5-exchange Debates in one arc is potentially unplayable. If they resolve sequentially: which fires first? Possible ruling: Quaestio is Baralta's optional action — she would not invoke it in the same arc as the Grand Debate because the Grand Debate (5 exchanges on Church mission legitimacy) already serves as the constitutional challenge moment. NPC AI: Baralta defers Quaestio while Grand Debate is active."
+    tags: [te08, quaestio, grand_debate, hafenmark, church, simulation]
+    source: SIM-ARC-G03

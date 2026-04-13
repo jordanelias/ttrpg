@@ -665,3 +665,17 @@ GAP: ED-418 (Attunement stat undefined P2)
 | ARC-T24 Tax Revolt | C+D | COMPLETE | Dormant Season 6 (PI < 6); Guilds 70% win rate in Contest; P2-F03 |
 | COLLISION I | C | COMPLETE | P09+S52 active; TE-20 not yet (T5+T6 Crown-held); temporal sequence documented P2-F04 |
 P2 findings: 4 (P2-F01→PP-593; P2-F02/F04→ED-421; P2-F03 design observation; GAP-F01→ED-420)
+
+## SIM-ARC-G01-G05 — Cluster G Capital Territory Events (2026-04-14)
+| Arc | Mode | Status | Key Finding |
+|---|---|---|------|
+| TE-01 T1 Valorsplatz falls | C | COMPLETE | Seizure blocked at equal Mandate (P2-G01/PP-596); TC freeze ceiling clarified (GAP-G01/PP-596) |
+| TE-04 T8 Gransol falls | C | COMPLETE | Baralta 7D pool recovers T8 same season (P2-G02/PP-597); elimination + loss = ARC-S24 PI gate suspended |
+| TE-05 Mineral Leverage | G | COMPLETE | Not triggered (Varfell not Church); Church path noted |
+| TE-07 Crossroads Consolidates | G | COMPLETE | Suspended when T9 falls; prior VTM gain from TE-07 permanent |
+| TE-08 Cathedral Falls | C | COMPLETE | Church M−3 but Seizure/TC intact (P1-G03/PP-594); ED-404 branch reached |
+| TE-10 Duchy Falls Silent | C | COMPLETE | All 3 Varfell paths suspended (P1-G04/PP-598); Private Collection contested |
+| TE-26 The Hinge (Coup) | C | COMPLETE | Reconstitution unavailable at PI 3 (P1-G05/PP-595); PI−3 blocks Baralta win (P2-G05/PP-597) |
+P1 findings: 3 (P1-G03→PP-594; P1-G04→PP-598; P1-G05→PP-595)
+P2 findings: 3 (P2-G01/GAP-G01→PP-596; P2-G02/G05→PP-597)
+Editorial branches: 1 (ED-423/ED-404 Grand Debate + Quaestio — simulation stopped at branch)

@@ -6310,3 +6310,130 @@ patches:
   affects:
     - references/params_board_game.md
   status: applied
+
+- id: PP-594
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    P1-G03 documented. TE-08 (T9 Himmelenger falls): Church Mandate −3 is the game's
+    largest single-action stat reduction, but it leaves Church's Territorial Seizure
+    and Piety Yield mechanics intact because both use Influence (not Mandate) as their
+    pool stat. At Mandate 2, Church can still: (a) Seize territories via Graduated
+    Seizure (Pool = Influence + floor(TC/15)); (b) generate TC via Assert (Influence vs
+    Ob 2); (c) accumulate Piety Yield (territory PT contributes regardless of Mandate).
+    What collapses at Mandate 2: Excommunication (near-impossible at 2D TN7 Ob 2),
+    Heresy Investigation effectiveness (2D pool), Institutional Mandate trigger
+    (requires M ≥ 4), Formal Crown Treaty negotiation capacity.
+    GMs and players must understand: Church losing T9 triggers political collapse but
+    NOT operational Thread/TC collapse. Church remains a viable TC generator and
+    territory seizer at Mandate 2. Add explicit note to TE-08 arc entry and Church
+    faction reference.
+  finding_id: P1-G03
+  affects:
+    - references/arc_register.md
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-595
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    P1-G05 resolved. Löwenritter Reconstitution (PP-431 senator inward action) is
+    available only when PI = 0. The Coup fires PI −3; if pre-coup PI ≈ 6, post-coup
+    PI = 3, placing Reconstitution out of reach. Löwenritter's Regency victory
+    requires PI ≥ 4. The path from PI 3 (post-coup) to PI ≥ 4 CANNOT go through
+    Reconstitution — that action requires PI = 0 as a prerequisite, which means PI
+    must first deteriorate further before Reconstitution becomes available.
+    The intended recovery path: Löwenritter must rely on Hafenmark Parliamentary
+    Manoeuvre success (+1 PI) or Crown Parliamentary Session (+1 PI) or Ministry
+    Mandate ≥ 4 support — all dependent on other factions cooperating. This is
+    correct design: Regency legitimacy must be demonstrated through political
+    reconstruction, not just military authority. However, GMs need this made
+    explicit, as Löwenritter players may assume Reconstitution is their PI recovery
+    tool when it is not available at PI 3.
+    Add to: Löwenritter NPC AI (post-coup priority tree), Reconstitution action
+    description (note: PI 3 post-standard-coup means this action unavailable;
+    requires PI to drop to 0 via further deterioration first).
+  finding_id: P1-G05
+  affects:
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-596
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    GAP-G01 resolved. TC freeze at 75: Piety Yield (Influence-based, territory PT
+    contributions) does NOT push TC above 75 during the Phase Transition freeze.
+    The TC freeze at 75 is a ceiling on all TC sources. Institutional Momentum
+    (+1/season passive) is suppressed by the freeze. Assert still fires but its
+    TC gain is also suppressed (Assert produces TC which is then capped at 75).
+    Piety Yield is similarly capped. After TC 75, TC is fixed at 75 regardless of
+    Assert, Piety Yield, or Institutional Momentum. Only TC-reducing actions
+    (Suppress, Parliamentary Challenge, Sovereign Authority Doctrine) can move TC —
+    they reduce from 75, not below 75 (TC reduction below 75 is still applied;
+    Church could lose TC if opposing factions Suppress successfully during Seizure
+    phase). Add to params_board_game.md §TC Generation §TC 75 Phase Transition.
+    P2-G01 simultaneously documented: Church Seizure Prominence requirement
+    (Church Mandate > controlling faction Mandate) means Church cannot seize T1
+    while Crown Mandate equals Church Mandate. Crown must first be weakened
+    (by another arc) to below Church Mandate. Designed interaction; add to
+    TE-01 arc entry.
+  finding_id: GAP-G01 P2-G01
+  affects:
+    - references/params_board_game.md
+    - references/arc_register.md
+  status: applied
+
+
+- id: PP-597
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    P2-G02 documented. Baralta personal Mandate 7D pool (TE-04) is the game's
+    most powerful individual recovery action: 7D TN7 Ob3 gives ~62% success rate,
+    bypassing faction Military entirely. This fires once per TE-04 activation.
+    P2-G05 simultaneously documented. Coup PI −3 interaction with Baralta's
+    Parliamentary Sovereignty victory condition: Baralta needs PI ≥ 5 to win.
+    The coup she has been accelerating via TC suppression fires PI −3 at time of
+    coup. If pre-coup PI < 8, post-coup PI < 5, blocking her own victory condition
+    temporarily. Add to Baralta NPC AI: she should prioritise PI-building actions
+    (Parliamentary Session, Diplomat Card) to reach PI ≥ 8 before Coup Counter
+    triggers at 3. If PI < 8 and Counter = 2: she should actively Suppress TC
+    to delay Counter increment while building PI.
+  finding_id: P2-G02 P2-G05
+  affects:
+    - references/arc_register.md
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-598
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    P1-G04 documented. TE-10 (T12 Sigurdshelm falls): VTM reset to 0 suspends all
+    three Varfell victory paths simultaneously (all require VTM ≥ 3: Intelligence
+    Hegemony Path A, Southernmost Dominion Path B, Thread Supremacy Path C).
+    This is BALANCE-002 as designed: T12 is Varfell's single point of failure.
+    The simultaneous suspension of all three paths leaves Varfell with no active
+    victory condition. VTM resumes from 0 once T12 is retaken, so the loss is
+    recoverable — but recovery requires a successful Military retake against
+    Church Fort defense (P ≈ 40% per attempt) and then VTM rebuild from 0.
+    GM guidance addition required: before campaign begins, Varfell players must
+    be explicitly informed that T12 is existential. Suggested phrasing for
+    faction reference: "Sigurdshelm is your single point of failure. Its loss
+    collapses all three victory paths simultaneously. Defend it before expanding."
+    Add to: TE-10 arc entry, Varfell faction mat reference, simulation notes.
+  finding_id: P1-G04
+  affects:
+    - references/arc_register.md
+    - references/params_board_game.md
+  status: applied
