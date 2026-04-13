@@ -67,6 +67,18 @@ TN: 7 (Standard). TN 6 (Controlled) when unhurried with preparation. TN 8 (Despe
 
 **History selection:** One History per action, selected by the player, confirmed by GM. The History must be narratively defensible for the specific action (a History of "Einhir Architecture" applies to Examine at a Remnant; it does not apply to Rumour in a tavern). If no History is relevant: pool = (Primary Attribute × 2) + 3 (the base constant without History points).
 
+### §2.2 Core Engine Integration
+
+**Degree table:** Fieldwork uses the core engine degree table (params_core.md). Overwhelming requires net ≥ 2×Ob AND net ≥ 3 (PP-232/PP-249). At Ob 1, Overwhelming requires net ≥ 3 (not net ≥ 2).
+
+**Let It Ride:** A failed fieldwork action on a specific target (a specific POI, a specific NPC, a specific evidence source) cannot be reattempted in the same scene. Circumstances must change before the character can try again — new information, new approach, passage of time, or intervention by another character. A different character may attempt the same target in the same scene. This applies per action type: failing an Examine does not prevent an Interview on the same investigation.
+
+**Wounds:** Physical wounds (−1D per wound, cumulative) apply to fieldwork rolls that require physical exertion: Endurance-based exploration, Surveil. Social and cognitive fieldwork (Examine, Interview, Research, Read, Converse, Connect, Impress, Negotiate, Rumour, Reconstruct) is unaffected by physical wounds. Rattled marks (from Contest, per social_contest_system_v2.md §4 Step 6) apply +1 Ob per mark to social fieldwork actions for the remainder of the scene.
+
+**Inspiration spend:** Before rolling any fieldwork action, a character may spend 1 Inspiration to reduce the Ob by 1 (minimum 1). This follows the same pattern as Inspiration spend for scope shift (stage11 §11.4). A character pursuing their Beliefs through fieldwork can leverage emotional conviction to press through resistance.
+
+**Perception gates:** Gates based on TS are hard — they represent the epistemological barrier (P-08), which is metaphysical, not skill-based. A character below the TS gate cannot perceive what lies at that depth; no amount of effort or penalty will change this. Gates based on attributes (Cognition ≥ 2 for Depth 1, Cognition ≥ 3 for Depth 2) are also hard — they represent the minimum cognitive capacity to process the information. Characters below the gate cannot attempt the action. This is not a Beginner's Luck situation; the gate is about capacity, not training.
+
 ### §2.1 Primary Attribute by Activity
 
 | Activity | Sub-type | Primary Attribute | Reasoning |
@@ -121,7 +133,7 @@ Each territory contains discoverable Points of Interest categorised by Depth. PO
 | Success | POI located with full visible detail. One actionable piece of information gained (a bonus, a route, a clue). |
 | Overwhelming | POI located. Full detail. One hidden feature revealed (something below the POI's own depth — a Secret within a Resource, a Remnant within a Secret). +1 Momentum. |
 
-> **PP-591: Exposure → AP contribution gate.** Fieldwork actions generate Exposure in all cases, but Exposure converts to Attention Pool (AP) contribution ONLY when the fieldwork action involves Thread-sensitive elements (Thread-Read, Depth 3+ discovery, practitioner-detectable activity). Non-sensitive investigation (mundane evidence gathering, social questioning, observation) generates Exposure for Cover/personal risk purposes but does NOT feed AP. This prevents routine investigation from automatically triggering Inquisitor deployment. AP contribution rate unchanged for Thread-sensitive actions: +1/character/season, +2/territory/season cap.
+**Multi-character exploration:** When multiple characters explore together, one character leads the Discovery Procedure and rolls. Other characters may assist: each assistant rolls their own fieldwork pool at the same Ob +1. Each assistant who achieves Success or better adds +1 to the leader's net successes (improving degree). Each assistant who fails adds +1 Exposure for the entire party (more people = more conspicuous). Maximum 2 assistants per leader.
 
 ### §3.3 Movement and Time
 
@@ -171,7 +183,11 @@ The GM sets the threshold at investigation opening. The threshold is not known t
 
 **Evidence Track progress is persistent across scenes and sessions.** An investigation begun in one session can be continued in the next. Evidence does not decay (knowledge, once assembled, remains assembled). However, the world may change around the evidence — a witness may be killed, a document may be destroyed, a site may be altered by Thread operations.
 
-**Depth-limited resolution:** When the Evidence Track reaches its threshold, the investigation resolves at the deepest depth the investigator has accessed. If the answer lies at Depth 4 but the investigator conducted only Depth 1-3 actions, they receive a partial answer — everything the evidence supports up to the depth accessed. The GM communicates this clearly: "You have assembled a complete picture of everything that is available at your level of perception. There is more, but it is beyond your current reach." Investigation can be reopened at greater depth if the character later acquires the perception prerequisites (gains TS, builds Disposition with a key informant, gains institutional access).
+**One track per investigation, regardless of territory.** An investigation into "What is the Restoration's true plan?" might require evidence from T6, T13, and T15. The Evidence Track is unified — progress from any territory contributes to the same track. Exposure, however, is tracked per territory. Investigating in T6 then moving to T13 accumulates Exposure independently in each.
+
+**Depth-limited resolution:** When the Evidence Track reaches its threshold, the investigation resolves at the deepest depth the investigator has accessed. Progress above the threshold has no additional effect. If the answer lies at Depth 4 but the investigator conducted only Depth 1-3 actions, they receive a partial answer — everything the evidence supports up to the depth accessed. The GM communicates this clearly: "You have assembled a complete picture of everything that is available at your level of perception. There is more, but it is beyond your current reach." Investigation can be reopened at greater depth if the character later acquires the perception prerequisites (gains TS, builds Disposition with a key informant, gains institutional access).
+
+**Resolved investigation produces a Finding.** The Finding's reliability equals its strongest constituent evidence tag. A Finding can be cited in a Contest as a complete argument — the orator references a coherent body of evidence, not individual clues. A Finding containing only Thread-verified evidence is admissible only to TS ≥ 30 audiences (and remains Inert Knowledge for non-sensitives). A Finding containing Documentary or Verified evidence alongside Thread-verified evidence uses the non-Thread tag for admissibility (the Thread-verified components are treated as supporting context, not the evidentiary foundation).
 
 ### §4.2 Investigation Actions
 
@@ -224,6 +240,8 @@ Trails never go cold — they become more dangerous. After 3 consecutive failed 
 - **Evidence progress on Partial improves to +2** (from +1). The desperation itself produces insight — every remaining action that lands, lands harder, because the investigator is now operating at the edge of what is accessible.
 
 Desperate Trail clears when: (a) any single action produces a Success or Overwhelming result (the breakthrough resets conditions — TN returns to 7, Exposure normalises); or (b) the season changes (new circumstances, new access, fresh start).
+
+**Desperate Trail persists through Compromised.** If doubled Exposure triggers Compromised (scene ends, must leave territory or go to ground), the Desperate Trail state does not clear — going to ground is not a breakthrough. The character emerges from ground still on Desperate Trail. Leaving the territory resets Exposure but does not clear Desperate Trail (the investigation is still desperate). Only a successful roll on this investigation, or a new season, resets conditions.
 
 **Design principle:** Investigation failures should never produce "nothing happens." A failed Examine reveals that the evidence has been tampered with (who tampered with it?). A failed Interview means the informant was frightened by something (what frightened them?). A failed Research discovers the relevant archive section has been removed (by whom?). Every failure is a clue about the forces working against the investigation.
 
@@ -298,6 +316,7 @@ Social actions outside formal contests use the fieldwork pool. These are individ
 | Impress | Charisma | floor(NPC Cognition / 2) + 1 | Make favourable impression on first meeting. Sets initial Disposition higher than default. |
 | Rumour | Charisma | 1 (in tavern/market); 2 (in hostile territory) | Gather one piece of unverified information. Reliability unknown. |
 | Negotiate | Attunement | floor(NPC's highest relevant stat / 2) + 1 | Reach informal agreement (below Contest threshold — see §5.7). |
+| Gift/Bribe | — (no roll) | — | Improve starting Disposition by +1 before first social action. Requires a gift of narrative value (GM judgment) or an expenditure of personal resources. One gift per NPC per season. Does not work at Disposition ≤ −2 (Hostile/Suspicious NPCs reject gifts from strangers). |
 
 **Disposition shift by degree:**
 
@@ -351,6 +370,8 @@ When a social action aligns with or challenges a character's stated Belief, mech
 
 At Disposition +5 (Bonded), the NPC becomes a Knot candidate per existing threadwork rules. Forming a Knot with a Bonded NPC follows standard Knot procedures (threadwork_redesign_v25.md §8).
 
+**Non-sensitive characters at Disposition +5:** If neither the PC nor the NPC has TS ≥ 30, Knot formation is impossible — Knots require Thread contact. The relationship is as deep as it can be without Thread linkage. Mechanically: no decay, +1D on social actions (these benefits apply at Disposition +5 regardless of Knot status). Relational contagion (P-12) does not apply without a Knot.
+
 Knot-linked characters gain:
 - Automatic Disposition maintenance (no decay)
 - +1D on all social actions with the Knot partner
@@ -389,10 +410,12 @@ Cover determines Exposure thresholds. Higher Cover shifts thresholds upward, par
 
 | Cover | Noticed | Watched | Compromised |
 |-------|---------|---------|-------------|
-| 1–4 | 3 | 5 | 7 |
-| 5–6 | 4 | 6 | 8 |
-| 7–8 | 5 | 7 | 9 |
-| 9+ | 6 | 8 | 10 |
+| 1–3 | 3 | 5 | 7 |
+| 4–5 | 4 | 6 | 8 |
+| 6–7 | 5 | 7 | 9 |
+| 8–9 | 6 | 8 | 10 |
+| 10–11 | 7 | 9 | 11 |
+| 12+ | 8 | 10 | 12 |
 
 ### §6.2 Exposure Track
 
@@ -427,7 +450,7 @@ Cover determines Exposure thresholds. Higher Cover shifts thresholds upward, par
 | Leave territory | Reset to 0 in new territory. |
 | Season change | Reset to 0 in all territories. |
 | Cover identity (requires setup: successful Charisma roll Ob 2 before fieldwork begins) | −1 per scene passively (cover absorbs attention). Cover blown on any Compromised result. |
-| Faction support (allied faction uses resources to shield the character) | −2 per season. Costs the faction 1 Wealth or 1 Influence at BG scale. |
+| Faction support (allied faction uses resources to shield the character) | −2 per season. BG: costs 1 Wealth or 1 Influence. TTRPG: requires a successful Diplomacy or social action (Ob 2) establishing the alliance, or an existing narrative alliance. Hybrid: BG resource cost applies. |
 
 ### §6.5 Exposure and Church Attention Pool
 
@@ -651,13 +674,32 @@ Fieldwork actions consume in-game time:
 | ED-NEW-11 | Pool formula ×2 contradiction. params_core.md (PP-247) says non-doubled; combat_design_v1.md §1 and social_contest_system_v2.md §3 say doubled. Resolve project-wide. Ob calibration depends on resolution. | P1 |
 | ED-NEW-12 | Sincerity Gate (§5.3) uses Spirit. Confirm Spirit is not already overloaded as an attribute (currently: Resolve = Spirit; no other mechanical role). | P3 |
 | ED-NEW-13 | Desperate Trail (§4.4): 3 consecutive failures threshold triggers TN 8 + doubled Exposure + GM complication. Confirm TN 8 does not make recovery impossible for low-pool investigators (4D at TN 8: P(≥1) ≈ 60%, still viable). Confirm Partial +2 progress compensates for increased difficulty. | P2 |
+| ED-NEW-14 | Audit finding D-SIM-5 resolved: §4.1 now defines Finding reliability from resolved investigations. Verify Finding + Contest interaction in simulation. | P3 |
+
+### Items resolved by PP-576 audit (2026-04-13)
+
+| Item | Resolution |
+|------|------------|
+| D-2 (Let It Ride) | Added §2.2. Failed fieldwork action on specific target cannot be reattempted same scene. |
+| D-9 (Overwhelming floor) | Added §2.2. Fieldwork uses core engine degree table (net ≥ 2×Ob AND ≥ 3). |
+| D-3 (Wounds) | Added §2.2. Physical wounds apply to exertion-based fieldwork only. Rattled applies to social. |
+| D-5 (Multi-character) | Added §3.2. Leader + max 2 assistants. Assistant success = +1 net to leader. Assistant fail = +1 Exposure. |
+| D-6 (Cross-territory) | Added §4.1. One track per investigation regardless of territory. Exposure per territory. |
+| D-7 (Desperate Trail persistence) | Added §4.4. Desperate Trail persists through Compromised. Only clears on Success or season change. |
+| D-1 (Perception gates) | Added §2.2. Gates are hard — capacity, not skill. No Beginner's Luck for perception gates. |
+| D-4 (Non-sensitive +5) | Added §5.6. Non-sensitive Bonded: no decay, +1D, but no Knot formation or P-12 contagion. |
+| D-SIM-5 (Finding reliability) | Added §4.1. Resolved investigation produces Finding with strongest tag. |
+| B-2 (Cover plateau) | Fixed §6.1. Extended threshold table: Cover 10-11 = 7/9/11; Cover 12+ = 8/10/12. |
+| C-1 (Faction support TTRPG) | Fixed §6.4. TTRPG: requires Diplomacy Ob 2 or existing alliance. |
+| E (Inspiration spend) | Added §2.2. Spend 1 Inspiration before rolling to reduce Ob by 1 (min 1). |
+| E (Gift/Bribe) | Added §5.2. Gift/Bribe improves starting Disposition +1, no roll, once per NPC per season. |
 
 ### Simulation debt
 
 | ID | Description |
 |----|-------------|
 | SIM-DEBT-FW-01 | Full fieldwork system simulation: Exploration Ob calibration across all 17 territories at varying RS bands. Confirm P(success) for typical pools against Depth 1-5 Obs. Depends on ED-NEW-11 resolution. |
-| SIM-DEBT-FW-02 | Evidence Track pacing: simulate a 5-threshold investigation with mixed action types. Confirm completion in 3-5 scenes (target pacing). |
+| SIM-DEBT-FW-02 | Evidence Track pacing: simulate a 5-threshold investigation with mixed action types. Confirm completion in 3-5 scenes (target pacing). **PARTIALLY RESOLVED** — Himmelenger scenario completed 5-threshold investigation in 3 scenes (3 actions). Pacing confirmed for high-pool characters (15-19D). Low-pool scenario needed. |
 | SIM-DEBT-FW-03 | Disposition economy: simulate 10-session relationship arc from Neutral to Bonded. Confirm pacing requires meaningful investment (not trivially achievable). Include Sincerity Gate impact. |
 | SIM-DEBT-FW-04 | Exposure ↔ Attention Pool feedback loop: simulate 4-season fieldwork-heavy campaign. Confirm capped Exposure feed does not generate TC acceleration beyond ±5/season combined cap. |
 | SIM-DEBT-FW-05 | Survey action BG balance: confirm Survey does not dominate Consul Govern. Survey should be situationally valuable, not universally optimal. |

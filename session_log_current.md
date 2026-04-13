@@ -1,3 +1,49 @@
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-13_OPUS_FIELDWORK_AUDIT_SIM
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Full mechanic-audit (Modes A-E) on Fieldwork System v1.1
+2. Editorial corrections applied (PP-576): 13 items resolved
+3. Simulation: Mixed-sensitivity party investigation in Himmelenger (Mode C + Mode D)
+4. 6 edge cases discovered and resolved
+
+## AUDIT FINDINGS RESOLVED (PP-576)
+- D-2: Let It Ride added (§2.2)
+- D-9: Overwhelming floor stated (§2.2)
+- D-3: Wound interaction defined (§2.2)
+- D-5: Multi-character exploration rules (§3.2)
+- D-6: Cross-territory investigation (§4.1)
+- D-7: Desperate Trail persistence through Compromised (§4.4)
+- D-1: Perception gates = hard gates (§2.2)
+- D-4: Non-sensitive Disposition +5 ruling (§5.6)
+- D-SIM-5: Finding reliability from resolved investigations (§4.1)
+- B-2: Cover plateau fixed — threshold table extended to Cover 12+
+- C-1: Faction support TTRPG equivalent (§6.4)
+- E: Inspiration spend for fieldwork (§2.2)
+- E: Gift/Bribe social action (§5.2)
+
+## SIMULATION SUMMARY
+Scenario: Maret Uln (non-sensitive, 15-17D pools) + Kael (TS 35, 16-19D pools)
+investigate Church relics in Himmelenger T9.
+- 3 scenes, 4 actions, investigation resolved (5/5 threshold)
+- Evidence quality pipeline confirmed (Documentary + Testimonial + Thread-verified)
+- Exposure differential confirmed: Kael (Cover 6) generates Exposure 3× faster than Maret (Cover 9)
+- Emergent party dynamics: non-sensitives provide institutional cover for sensitives
+- No Desperate Trail triggered (high pools, low Obs)
+- SIM-DEBT-FW-02 partially resolved
+
+## P1 BLOCKERS: 3 (ED-NEW-04, ED-NEW-10, ED-NEW-11 — unchanged)
+## OPEN EDITORIALS: 14 (ED-NEW-01 through ED-NEW-14)
+## SIM-DEBT: 6 (FW-01 through FW-06; FW-02 partially resolved)
+```
+
+---
+
 
 ---
 
