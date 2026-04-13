@@ -5694,3 +5694,41 @@ patches:
     - skills/valoria-orchestrator/references/skill_registry.md
     - references/propagation_map.md
   status: applied
+
+- id: PP-576
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    P1-B03 resolved. Martial Law scope clarified: NPC Priority actions (schisming Cardinals,
+    Ministry AP placement, Riskbreaker operations firing under Löwenritter NPC AI) are NOT
+    subject to the secondary Military check imposed by Martial Law. Martial Law governs player
+    card plays only. NPC Priorities represent events beyond any single faction's direct governance
+    and operate outside the card system. Scope: params_factions.md §Löwenritter Martial Law
+    section; params_board_game.md §Löwenritter Canonical Structure.
+  finding_id: P1-B03
+  affects:
+    - references/params_factions.md
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-577
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-B01/B02 resolved. Pre-coup Löwenritter stat gaps from SIM-ARC-B01. Canonical values
+    established: (1) Pre-coup Leadership Deviation uses Stability 4 (institutional military
+    discipline; post-coup Sta5 minus 1 for pre-coup NPC status). (2) Pre-coup Riskbreaker
+    Intel operations use Intel 4 (between Niflhel's 5 and standard faction Intel; Riskbreakers
+    are Löwenritter's specialist covert sub-unit). Both are provisional pending user review.
+    P2-B03 (PP-431-COR self-harm at Partial) and P2-B04 (AP in non-Church territory) are
+    design intent confirmed, not requiring patch: PP-431-COR Partial outcome intentional
+    high-variance design; Church AP accumulation is territory-agnostic but Inquisitor bonus
+    is Church-territory-only (asymmetry is canonical). Both documented in coverage matrix.
+  finding_id: P2-B01 P2-B02
+  affects:
+    - references/params_factions.md
+    - references/params_board_game.md
+  status: applied

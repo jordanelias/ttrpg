@@ -3461,3 +3461,19 @@ editorial_decisions:
     priority: P3
     description: "ARC-T20 Winter Court: no canonical institutional basis. Options: pre-Calamity convention; convening condition Crown Mandate >= 3 + TC <= 40; or irregular Crown-called assembly. Decision before simulation."
     tags: [crown, arc_system, worldbuilding]
+
+  - id: ED-406
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P2
+    description: "Pre-coup Löwenritter Stability (Leadership Deviation) and Intel (Riskbreaker ops): confirm PP-577 provisional values (Sta 4, Intel 4) or set alternatives. Required before any further Löwenritter pre-coup simulation."
+    tags: [lowenritter, arc_system, simulation]
+    source: SIM-ARC-B01
+
+  - id: ED-407
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P3
+    description: "PP-431-COR self-harm at Partial confirmed as intentional design (high-variance action by design). Document in Hafenmark NPC AI guidance: Challenge is negative EV at Partial outcome; NPC AI should weigh carefully. No mechanical change required — documentation only."
+    tags: [hafenmark, parliamentary, simulation]
+    source: SIM-ARC-B01

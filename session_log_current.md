@@ -1,3 +1,30 @@
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-13_SONNET_SIM_ARC_B01
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+TASK: SIM-ARC-B01 — Cluster B TC Fracture simulation
+  Arcs: ARC-S29 (Cardinal Schism) + ARC-S56 (Lions' Table Fracture) + ARC-T26 (Martial Honour Violation)
+  Mode: C (Full Scenario) + D (Edge Cases)
+
+PRIMARY FINDING:
+  T26 and S56 are sequentially dependent. T26 Success prevents S56 same season; T26 Failure allows it.
+  Priority sequence in arc_register.md v8 validated.
+  P(S56 | T26 fires) ≈ 50% — S56 is near-coin-flip, not rare escalation.
+
+PATCHES: PP-576 (P1 Martial Law NPC Priority scope), PP-577 (P2 pre-coup Löwenritter stats)
+EDITORIALS: ED-406 (confirm PP-577 values), ED-407 (Hafenmark NPC AI Challenge guidance)
+
+P1 BLOCKERS: 0
+OPEN EDITORIALS: 7 (ED-401-407; all P2-P3, non-blocking)
+```
+
 # Valoria Session Log — Current
 
 ```yaml

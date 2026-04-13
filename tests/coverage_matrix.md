@@ -597,3 +597,12 @@ All v8 additions unsimulated. Required before any v8 arc is referenced in a mech
 | NPC-ARC-VAY | Vaynard Unchecked | Not simulated |
 | BG-CV-01 to BG-CV-05 | BG Conviction Events | Not simulated |
 | COLLISION J | Church Siege of the Southern Gates | Not simulated |
+
+## SIM-ARC-B01 — Cluster B TC Fracture (2026-04-13)
+| Arc | Mode | Status | Key Finding |
+|---|---|---|---|
+| ARC-S29 Cardinal Schism | C+D | COMPLETE | Olafsson autonomous AP in non-Church territory; 2 consecutive schism seasons → Inquisitor in Crown military hinge |
+| ARC-S56 Lions' Table Fracture | C+D | COMPLETE | P(fires | T26 triggers) ≈ 50%; sequentially dependent on T26 outcome |
+| ARC-T26 Martial Honour Violation | C+D | COMPLETE | P1-B03 resolved (PP-576); priority sequence validated |
+P1 findings: 1 (P1-B03 → PP-576 applied)
+P2 findings: 4 (P2-B01/B02 → PP-577; P2-B03/B04 confirmed design intent, no patch)
