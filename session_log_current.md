@@ -168,7 +168,7 @@ status: CLOSED
 - Thread-Read defined as perceptive Leap — only fieldwork action that triggers co-movement
 - Cover derived value (Cognition + History) sets Exposure thresholds — parallels Stamina/Composure
 - Sincerity Gate (Spirit check) prevents Disposition grinding
-- Cold Trail (3 consecutive failures) prevents infinite investigation re-rolling
+- Desperate Trail (3 consecutive failures) escalates investigation — TN 8, doubled Exposure, GM complication, but Partial progress improves to +2. Fail forward, never dead stop.
 - Survey BG action: Ob = (5 − Proximity Rating) + 1 — harder near Calamity
 - Exposure → AP capped at +1/character/season, +2/territory/season
 

@@ -212,9 +212,18 @@ Thread-verified evidence cannot transfer its full epistemic content to non-sensi
 
 **Investigative asymmetry, both directions:** Sensitive characters access deeper layers but generate more Exposure and produce institutionally inadmissible evidence. Non-sensitive characters are capped at Depth 2 without social mediation but generate lower Exposure at Depth 3+ POIs (+0 vs +1) and produce universally admissible evidence. The optimal investigation team contains both.
 
-### §4.4 Cold Trail
+### §4.4 Desperate Trail (Fail Forward)
 
-After 3 consecutive failed investigation actions (net successes ≤ 0) targeting the same investigation, the trail goes cold. The Evidence Track cannot be advanced for the remainder of the season. The investigation may resume next season with changed circumstances (new witnesses available, environmental changes, faction movements opening new access). This prevents infinite re-rolling and provides narrative justification for investigative pauses.
+Trails never go cold — they become more dangerous. After 3 consecutive failed investigation actions (net successes ≤ 0) targeting the same investigation, the investigation enters **Desperate Trail** state. The Evidence Track remains open, but conditions escalate:
+
+- **TN shifts to 8** (Desperate) for all subsequent actions on this investigation. The easy approaches are exhausted; what remains demands risk.
+- **Exposure doubles** on failed rolls (+2 base becomes +4; +1 becomes +2). The character is now pressing into places and asking questions that attract serious attention.
+- **The GM introduces a complication** — a new obstacle that is itself consequential. The witness who could help is under Church surveillance. The archive is guarded by someone with their own agenda. The site is inside a territory that just changed hands. The complication is not a wall; it is a new situation that must be navigated, producing its own story.
+- **Evidence progress on Partial improves to +2** (from +1). The desperation itself produces insight — every remaining action that lands, lands harder, because the investigator is now operating at the edge of what is accessible.
+
+Desperate Trail clears when: (a) any single action produces a Success or Overwhelming result (the breakthrough resets conditions — TN returns to 7, Exposure normalises); or (b) the season changes (new circumstances, new access, fresh start).
+
+**Design principle:** Investigation failures should never produce "nothing happens." A failed Examine reveals that the evidence has been tampered with (who tampered with it?). A failed Interview means the informant was frightened by something (what frightened them?). A failed Research discovers the relevant archive section has been removed (by whom?). Every failure is a clue about the forces working against the investigation.
 
 ### §4.5 Thread-Read as Perceptive Leap
 
@@ -563,7 +572,7 @@ Journal
 │   ├── Clues[] (individual evidence items with reliability tags)
 │   │   ├── ClueItem { text, source, reliability_tag, depth }
 │   │   └── InertKnowledge { text, source, flagged: true }
-│   └── Status (open / resolved / cold_trail / blocked)
+│   └── Status (open / resolved / desperate_trail / blocked)
 ├── Resolved Investigations[]
 └── Rumour Board (unverified items, no progress tracking)
 ```
@@ -639,7 +648,7 @@ Fieldwork actions consume in-game time:
 | ED-NEW-10 | Breach encounter (Depth 5) interaction with combat incapacitation and Coherence crisis. Confirm Coherence −1 auto-cost does not stack with other Coherence costs to produce unintended Coherence 0 spiral. | P1 |
 | ED-NEW-11 | Pool formula ×2 contradiction. params_core.md (PP-247) says non-doubled; combat_design_v1.md §1 and social_contest_system_v2.md §3 say doubled. Resolve project-wide. Ob calibration depends on resolution. | P1 |
 | ED-NEW-12 | Sincerity Gate (§5.3) uses Spirit. Confirm Spirit is not already overloaded as an attribute (currently: Resolve = Spirit; no other mechanical role). | P3 |
-| ED-NEW-13 | Cold Trail (§4.4): 3 consecutive failures threshold. Confirm this does not punish low-pool investigators excessively. Consider: threshold scales with pool size? | P2 |
+| ED-NEW-13 | Desperate Trail (§4.4): 3 consecutive failures threshold triggers TN 8 + doubled Exposure + GM complication. Confirm TN 8 does not make recovery impossible for low-pool investigators (4D at TN 8: P(≥1) ≈ 60%, still viable). Confirm Partial +2 progress compensates for increased difficulty. | P2 |
 
 ### Simulation debt
 
