@@ -243,6 +243,16 @@ Modifiers:
 | Partial | T9 does not transfer. PT in T9 −1 (popular sentiment shifted). Uprising attempt used up for this arc. |
 | Failure | Uprising crushed. TC +2 (Church authority strengthened by resistance). T9 PT +1. Uprising attempt used up for this arc. |
 
+#### RM Territory Control — Cultural Displacement
+RM holds T9 through cultural presence, not military garrison. Control is maintained while:
+- RM has ≥ 3 Presence markers in T9
+- PT in T9 ≤ 1
+
+If either condition fails at Accounting, T9 reverts to the prior controller (or becomes Uncontrolled if the prior controller has been eliminated). RM cannot March, garrison, or build Fort in any territory. (PP-578)
+
+RM "hold" is functionally different from faction territorial control: RM does not collect TCV from T9, does not gain Domain Action slots from it, and cannot use it as a staging area for military operations. RM's T9 control provides only: (a) the victory condition check, (b) blocking Church Piety Spread in T9, and (c) narrative authority over T9's institutional character.
+
+
 **Win condition:** T9 under RM administration AND Phase 1 held, for 2 consecutive Accounting steps. Church cannot perform Territorial Seizure on T14 while RM holds it (the population actively resists institutional reconquest — Seizure Ob +3 vs RM-held T9).
 
 ---

@@ -808,6 +808,83 @@ When a Zoom In Contest successfully targets an NPC's Resonant Style:
 | Foundations §15 (Deepening vs destabilisation tension) | High-TS NPC arcs (Vaynard Arc C, Edeyja Arc C) reflect this tension mechanically. |
 | Skeleton ruleset principle | This document contains design rationale (necessary for proposal). On acceptance, tables/formulas/procedures extracted to params file. |
 
+
+---
+
+## §7 BG FACTION PRIORITY TREES
+
+Each NPC faction follows a deterministic priority tree during the BG Strategic Phase. The tree selects the Domain Action to execute based on current faction state. Trees are evaluated top-to-bottom; the first matching condition fires.
+
+### §7.1 Crown Priority Tree
+1. **IF** Stability ≤ 2 → Govern (Inward, restore Stability)
+2. **IF** Coup Counter ≥ 3 → Royal Guard (counter coup preparation)
+3. **IF** PI ≥ 10 → Parliamentary Manoeuvre (reduce PI)
+4. **IF** Torben Loyalty ≤ 2 → Senator (Inward, dynasty management)
+5. **IF** TC ≥ 50 AND Church Mandate ≥ 4 → Suppress (target Church TC)
+6. **IF** hostile faction Mandate ≥ Crown Mandate → Royal Decree (target highest-Mandate rival)
+7. **IF** TCV < 16 AND adjacent Uncontrolled territory → March (expand)
+8. **DEFAULT** → Senator (Outward, Diplomacy — build alliances)
+
+### §7.2 Church Priority Tree
+1. **IF** Stability ≤ 2 → Consul (Inward, restore Stability)
+2. **IF** TC ≥ 75 AND eligible seizure target (Prominence + PT conditions met) → Graduated Seizure
+3. **IF** TC < 75 AND Mandate ≥ 3 → Assert (advance TC)
+4. **IF** AER ≤ 1 → Cardinal Focus Temperance (restore AER)
+5. **IF** AP ≥ 3 in any territory → Deploy Inquisitor
+6. **IF** Mandate < 3 → Consul (Outward, Influence — rebuild institutional standing)
+7. **IF** TCV < 8 AND adjacent target with PT ≥ 3 → Consul (Inward, Piety Spread)
+8. **DEFAULT** → Assert (advance TC)
+
+### §7.3 Hafenmark Priority Tree
+1. **IF** Stability ≤ 2 → Senator (Inward, restore Stability)
+2. **IF** PI ≤ 3 → Parliamentary Manoeuvre (restore PI)
+3. **IF** RDT < 6 AND Reformed Settlement available → Senator (Reformed Settlement)
+4. **IF** Crown Mandate ≤ 2 AND Church Stability ≤ 3 AND Hafenmark has Claim Token → [EDITORIAL: Baralta Crown Claim]
+5. **IF** TC ≥ 40 → Senator (Outward, Suppress Church — block TC advance)
+6. **IF** adjacent territory TCV ≥ 2 AND controller Mandate ≤ 2 → Diplomat (build alliance or trade)
+7. **IF** Mandate < 4 → Senator (Outward, Influence — rebuild mandate)
+8. **DEFAULT** → Senator (Outward, Diplomacy — maintain treaties)
+
+### §7.4 Varfell Priority Tree
+1. **IF** Stability ≤ 2 → Tribune (Inward, restore Stability)
+2. **IF** VTM ≥ 3 AND Discretion available AND TC contribution this season ≥ 1 → VTM Discretion (suppress TC)
+3. **IF** Military ≥ 4 AND adjacent target with controller Mandate ≤ 2 → March (expand)
+4. **IF** VTM < target (Path A: 5, Path B: 4, Path C: 3) → Expedition (advance VTM)
+5. **IF** TCV < threshold (Path A: 14, Path B: 12, Path C: 10) → March or Claim
+6. **IF** Mandate < 3 → Tribune (Outward, Influence)
+7. **IF** Warden Cooperation track WC < 2 AND Path B selected → Expedition (Warden contact)
+8. **DEFAULT** → Tribune (Inward, Military — build strength)
+
+### §7.5 Löwenritter Priority Tree (NPC faction — activates on Crown elimination or Coup)
+1. **IF** Stability ≤ 1 → Military action (restore garrison control)
+2. **IF** PI = 0 → Reconstitution (restore Parliament)
+3. **IF** Torben Loyalty ≤ 2 → Dynasty management (secure succession)
+4. **IF** adjacent Uncontrolled territory → March (expand from T14)
+5. **IF** Mandate < 3 → Senator (Inward, institutional legitimacy)
+6. **DEFAULT** → Senator (Outward, Diplomacy — seek recognition)
+
+### §7.6 Ministry Priority Tree (NPC faction — procedural)
+1. **IF** Priority 3 trigger (Church Seizure declared) → Procedural Delay (automatic, AP-token consumed)
+2. **IF** hostile faction Mandate ≥ 5 → Procedural Objection (Ob 2 delay on that faction's next DA)
+3. **IF** Church Mandate ≥ 5 AND TC ≥ 40 → Institutional Warning (public PI +1, signals Church overreach)
+4. **DEFAULT** → Routine Administration (no effect — Ministry passes)
+
+### §7.7 Schoenland Priority Tree (NPC faction — observer)
+1. **IF** IP ≥ 60 → Altonian Preparation (Vanguard mobilisation begins)
+2. **IF** IP ≥ 40 → Diplomatic Pressure (AER −1 if Temperance not maintained)
+3. **IF** Supply Chain Exposure + Parish Revolt + PI ≥ 8 (2+ conditions) → Recall Solberg
+4. **DEFAULT** → Trade (passive Wealth generation for peninsula economy)
+
+### §7.8 Altonian Vanguard Priority Tree (NPC faction — activates at IP ≥ 75)
+1. **IF** deployed at T10 → Advance (march toward T8 along shortest path)
+2. **IF** contested → Battle (fight defending faction)
+3. **IF** AER ≤ 1 → Full Invasion (all territories +1 Ob to all DA for all factions)
+4. **DEFAULT** → Hold position (garrison T10)
+
+### §7.9 Priority Tree Override Conditions
+- **Institutional Mandate trigger:** When any DA targets a faction's Mandate stat or unique clock (TC/Church, PI/Hafenmark, VTM/Varfell), the targeted faction MUST respond next season with a defensive DA targeting the attacker (skipping normal priority tree). One override per season maximum.
+- **Co-victory cooperation:** When co-victory conditions are ≥ 75% met, cooperating factions shift to a simplified tree: (1) protect shared conditions, (2) advance weakest shared condition, (3) normal tree.
+
 ---
 
 ## §13 PROPAGATION ON ACCEPTANCE

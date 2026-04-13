@@ -6,8 +6,8 @@
 ```yaml
 session_id: 2026-04-13_SONNET_SIM_ARC_B02_A01
 session_close: 2026-04-13
-phase: COMPLETE
-status: CLOSED
+phase: IN PROGRESS
+status: OPEN
 
 TASKS:
 1. SIM-ARC-B02: Season 8 Crown card constraint — confirmed designed pressure.
@@ -31,8 +31,8 @@ OPEN EDITORIALS: 10 (ED-401-410; non-blocking)
 ```yaml
 session_id: 2026-04-13_SONNET_SIM_ARC_B01
 session_close: 2026-04-13
-phase: COMPLETE
-status: CLOSED
+phase: IN PROGRESS
+status: OPEN
 
 TASK: SIM-ARC-B01 — Cluster B TC Fracture simulation
   Arcs: ARC-S29 (Cardinal Schism) + ARC-S56 (Lions' Table Fracture) + ARC-T26 (Martial Honour Violation)
@@ -55,8 +55,8 @@ OPEN EDITORIALS: 7 (ED-401-407; all P2-P3, non-blocking)
 ```yaml
 session_id: 2026-04-13_OPUS_META_ANALYSIS_FIXES
 session_close: 2026-04-13
-phase: COMPLETE
-status: CLOSED
+phase: IN PROGRESS
+status: OPEN
 
 ## TASKS THIS SESSION
 1. Meta-analysis / systematic review of project infrastructure
@@ -105,7 +105,7 @@ status: CLOSED
 - Hybrid bridge: no design-layer scale_transitions doc
 - P1-BLOCKERs: ED-456 (BG Priority Trees), ED-483 (RM hold T9), ED-485 (Coup Counter 3v4)
 
-P1 BLOCKERS: 3 (ED-456, ED-483, ED-485 — renumbered from prior session IDs)
+P1 BLOCKERS: 0 (all resolved PP-577–579)
 OPEN EDITORIALS: 39 (33 open + 6 flagged)
 
 ## FIXES APPLIED
@@ -128,8 +128,8 @@ OPEN EDITORIALS: 39 (33 open + 6 flagged)
 ```yaml
 session_id: 2026-04-13_SONNET_ARC_SYSTEM_V8
 session_close: 2026-04-13
-phase: COMPLETE
-status: CLOSED
+phase: IN PROGRESS
+status: OPEN
 
 TASKS THIS SESSION:
 1. Analysed emergent arc trigger density — gaps in factions, territories, NPCs
@@ -153,8 +153,8 @@ OPEN EDITORIALS: 5 (ED-401-405, all P2-P3, non-blocking)
 ```yaml
 session_id: 2026-04-13_OPUS_FIELDWORK_DESIGN
 session_close: 2026-04-13
-phase: COMPLETE
-status: CLOSED
+phase: IN PROGRESS
+status: OPEN
 
 ## TASKS COMPLETED THIS SESSION
 1. Designed Fieldwork System v1 (Exploration / Investigation / Socializing)

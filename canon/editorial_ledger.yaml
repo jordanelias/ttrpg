@@ -3195,7 +3195,9 @@ editorial_decisions:
 - id: ED-483
   summary: "RM 'hold' T9 mechanic for Cultural Uprising — no Military stat, cultural displacement proposed"
   priority: P1-BLOCKER
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "RM holds T9 via Presence markers (≥3) + PT ≤ 1. Cultural displacement, not military garrison. PP-578."
   source: gm_ref/arcs_41_45_interdependent.md
   date: 2026-04-11
 
@@ -3210,7 +3212,9 @@ editorial_decisions:
 - id: ED-485
   summary: "Coup Counter threshold inconsistency: params_factions says 3, params_board_game says 4. Recommend 4 (v04 canonical)."
   priority: P1-BLOCKER
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Coup Counter threshold unified to 4 (params_board_game canonical). params_factions corrected. PP-577."
   source: tests/sim_arcs_36_45_batch.md
   date: 2026-04-11
 
@@ -3331,7 +3335,9 @@ editorial_decisions:
 - id: ED-456
   description: "BG Priority Trees for all NPC factions. Confirm before BG simulation."
   priority: P1-BLOCKER
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "BG Priority Trees added to npc_behavior_system_v1.md §7. 9 faction trees + override conditions. PP-579."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 

@@ -5785,3 +5785,35 @@ patches:
   affects:
     - references/params_board_game.md
   status: applied
+- id: PP-577
+  date: 2026-04-13
+  scope: board_game
+  description: >
+    Coup Counter threshold unified to 4 across all canonical sources.
+    params_factions.md corrected from 3 to 4 (params_board_game.md was already 4).
+  affects: [references/params_factions.md]
+  finding_id: ED-485
+  status: applied
+
+- id: PP-578
+  date: 2026-04-13
+  scope: board_game
+  description: >
+    RM Cultural Displacement mechanic for T9 hold. RM controls T9 via
+    Presence markers (≥3) + PT ≤ 1. Not military garrison. Control reverts
+    if either condition fails. RM gains no TCV, no DA slots, no staging.
+  affects: [designs/board_game/victory_architecture_v1.md]
+  finding_id: ED-483
+  status: applied
+
+- id: PP-579
+  date: 2026-04-13
+  scope: npc_behavior
+  description: >
+    BG Faction Priority Trees added to npc_behavior_system_v1.md §7.
+    9 trees (Crown, Church, Hafenmark, Varfell, Löwenritter, Ministry,
+    Schoenland, Altonian Vanguard) + override conditions (Institutional
+    Mandate, co-victory cooperation).
+  affects: [designs/systems/npc_behavior_system_v1.md]
+  finding_id: ED-456
+  status: applied
