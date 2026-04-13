@@ -139,6 +139,15 @@ systems:
     compilation_current: false
     note: "Stage12 OUTDATED. No design-layer doc. Retained as only source, unverified."
 
+
+  npc_behavior:
+    canonical: designs/systems/npc_behavior_system_v1.md
+    params: null
+    design_doc: designs/systems/npc_behavior_system_v1.md
+    compilation_stage: null
+    compilation_current: false
+    note: "NPC ethical stance, resonance style, AI decision trees, arc emergence. Created 2026-04-13. Audit-fixed. ED-384 through ED-400 open."
+
 # GLOBAL NOTE (2026-04-04):
 # All compilation/v0.14 stage documents are outdated and superseded.
 # For any system that has a design doc (designs/), use the design doc.

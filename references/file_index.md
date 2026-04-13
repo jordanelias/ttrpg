@@ -355,3 +355,6 @@ Major groups moved 2026-04-09:
 ---
 
 *Index maintained by valoria-orchestrator. Update this file in the same commit as any file that changes its status, system classification, or dependency relationships.*
+
+| designs/systems/npc_behavior_system_v1.md | NPC Behavior System design | 2026-04-13 | ACTIVE | Stance Triangles, Priority Trees, Arc Emergence |
+| tests/audit_npc_behavior_system.md | NPC Behavior System audit | 2026-04-13 | COMPLETE | 15 findings |

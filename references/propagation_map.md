@@ -437,3 +437,19 @@ Propagation targets:
 ### Stale Propagation Note
 - references/params_board_game.md does NOT yet contain the Crown Succession Contest, Stake Claim DA, or Consecration Crisis mechanics. Integration needed next session.
 - references/params_threadwork.md updated (Lenneth TS 72 -> 8) but does NOT yet contain Cultural Revival Track or Lenneth breakthrough condition. These are in the design doc only.
+
+## NPC Behavior System (designs/systems/npc_behavior_system_v1.md) — added 2026-04-13
+
+| This file references | Direction | What |
+|---|---|---|
+| stage6_factions.md | reads | Ethical Frameworks, Institutional Tendency, named NPC stubs |
+| social_contest_system_v2.md | extends | Resonant Style targeting, Appraise revelation |
+| params_factions.md | reads + future write | Faction stats, Ob modifiers; will receive Stance Triangles |
+| params_board_game.md | reads + future write | BG mechanics, NPC priority trees |
+| params_core.md | reads | Certainty, Coherence, attributes |
+| params_contest.md | extends | Resonant Style targeting to be extracted |
+| threadwork_redesign_v25.md | reads | Knots, TS thresholds, epistemic seduction |
+| edeyja_npc.md | reads | Edeyja Stance Triangle, Arc profiles |
+| character_histories_lifepath.md | reads | Knot generation, starting Beliefs |
+| canon/00_philosophical_foundations.md | governed by | P-04, P-08, P-10, P-12 |
+| victory_architecture_v1.md | reads | Victory conditions, NPC AI consent |

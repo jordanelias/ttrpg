@@ -3300,3 +3300,125 @@ editorial_decisions:
     resolution: "RDT step-6 merged into step-5 (capstone). Row-6 removed. 0-5 range confirmed. (PP-555)"
     patch: PP-555
     tags: [board_game, hafenmark, rdt, provisional]
+
+# --- NPC Behavior System v1 (2026-04-13) ---
+
+- id: ED-384
+  description: "Confirm Conviction taxonomy: 7 values (Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity). Sufficient?"
+  priority: P2
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-385
+  description: "Confirm Resonant Style taxonomy: 4 styles (Evidence, Consequence, Authority, Solidarity). Sufficient?"
+  priority: P2
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-386
+  description: "Full NPC Arc Profiles for all named NPCs. Confirm arc shapes match user vision."
+  priority: P1
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-387
+  description: "BG Priority Trees for all NPC factions. Confirm before BG simulation."
+  priority: P1-BLOCKER
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-388
+  description: "Resonant Style +1D in Contest: stacking validation needed."
+  priority: P2
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-389
+  description: "Framework Drift mechanics: confirm each drift before params extraction."
+  priority: P2
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-390
+  description: "Belief revision triple gate: sufficiently achievable?"
+  priority: P2
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-391
+  description: "Solidarity Resonant Style requires Knot to NPC. NPC Knot formation not specified. GAP."
+  priority: P2
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-392
+  description: "Ehrenwall Thread Sensitivity not specified. Estimate 0-5."
+  priority: P3
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-393
+  description: "Ehrenwall Certainty not specified. Estimate 4."
+  priority: P3
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-394
+  description: "Torben Conviction starts blank. Confirm contested-asset design."
+  priority: P2
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-395
+  description: "Torben Thread Sensitivity not specified. Probable 0."
+  priority: P3
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-396
+  description: "Torben Certainty not specified. Probable 4."
+  priority: P3
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-397
+  description: "Maret Uln Thread Sensitivity not specified."
+  priority: P3
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-398
+  description: "Maret Uln Certainty not specified."
+  priority: P3
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-399
+  description: "Cardinal Stance Triangles: confirm before Church schism simulation."
+  priority: P2
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-400
+  description: "Baralta Conviction changed from Order (stage6) to Precedent. User approval required."
+  priority: P2
+  status: open
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+  note: "AUD-NPC-04"

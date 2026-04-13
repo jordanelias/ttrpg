@@ -573,3 +573,13 @@ Status: COMPLETE
 | SIM-VIC-03 | RM Cultural Uprising: Phase 1 conflict, Phase 2 calibration, RS prerequisite | A+C | CROSS | CV, TC, RS, WC, WR | RM, Church | Pontifex | RM hardest mode | COMPLETE | F-VIC-RM-01(P1→PROV VIC-RM-01), F-VIC-RM-02(P2 GAP-VIC-RM-01), F-VIC-RM-03(P2 CLEAN), F-VIC-RM-04(P3). |
 
 | BAL-VIC-01 | Victory path balance — solo + co-victory timeline normalisation | ALL | CROSS | TCV, PI, VTM, TC, CV | All | — | All | COMPLETE | PP-540–546 applied. Solo 12–16 seasons all factions. Co-victory 10–14 seasons. 7 patches. |
+
+## NPC Behavior System — Simulation Debt (2026-04-13)
+
+| ID | Description | Priority | Status |
+|---|---|---|---|
+| SIM-NPC-01 | Full BG simulation with all NPC priority trees active | P1 | OPEN |
+| SIM-NPC-02 | Contest: Resonant Style +1D stacking validation | P2 | OPEN |
+| SIM-NPC-03 | Arc emergence: 3-season TTRPG Almud+Himlensendt | P2 | OPEN |
+| SIM-NPC-04 | Framework Drift: 6-season BG runaway check | P2 | OPEN |
+| SIM-NPC-05 | Belief Scar cascade: 3+ Scars playability | P3 | OPEN |

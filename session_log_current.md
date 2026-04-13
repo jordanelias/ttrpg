@@ -1236,3 +1236,23 @@ jordanelias/valoria-game.
 ### Open editorials carried forward
 ED-311 (Varfell Path B — awaiting user review)
 ED-370, ED-371, ED-372, ED-373 (carried from prior session)
+
+---
+
+## Session: 2026-04-13 — NPC Behavior System Design
+
+### Task
+Design NPC ethical stances and resonance styles impacting AI decision trees, arc emergence, and behavior.
+
+### Deliverables
+1. **designs/systems/npc_behavior_system_v1.md** — Full design (860+ lines). Stance Triangles for 13 NPCs, BG Priority Trees for 9 factions, arc profiles, Resonant Style Contest integration, Framework Drift.
+2. **tests/audit_npc_behavior_system.md** — 15 findings. All HIGH/MEDIUM resolved or flagged.
+
+### New Editorial Items
+ED-384 through ED-400 (17 items). P1-BLOCKER: ED-387.
+
+### New Simulation Debt
+SIM-NPC-01 through SIM-NPC-05.
+
+### Open editorials carried forward
+ED-311, ED-370–373, ED-374–383, ED-384–400.
