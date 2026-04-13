@@ -6563,3 +6563,210 @@ patches:
   affects:
     - references/params_threadwork.md
   status: applied
+
+- id: PP-602
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    ARC-T04 (Southernmost Ritual [UNNAMED — ED-416]) struck entirely.
+    Rationale: (1) "Ritual" implies a repeatable procedure and confirmed a priori knowledge
+    of how to heal the substrate — both false. (2) The excess being erupting through a
+    Foundational Gap is radically singular; each Gap has its own configurational character.
+    There is no procedure to teach or repeat — only sustained, expert, sui generis engagement
+    by a TS 70+ practitioner who reads and responds to the specific configurational reality
+    of each tear. (3) ED-416 (naming request) is also void — no ritual exists to name.
+    The RS recovery path at Askeheim is: WR 3 + WC 3 + TS 70+ practitioner (Edeyja)
+    sustaining Mending over multiple seasons. The campaign's RS recovery is a sustained
+    relational process, not a single event.
+    Also: Southernmost Ritual RS outcome table in params_threadwork.md struck (was flagged
+    by ED-430 as likely old-convention; now moot — the operation doesn't exist as a discrete
+    event).
+    Also: ED-416 closed (no naming decision needed; referent doesn't exist).
+  finding_id: null
+  affects:
+    - references/arc_register.md
+    - references/params_threadwork.md
+  status: applied
+
+
+- id: PP-603
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    RS seasonal cap (±10 net per season) struck. Reality takes the full consequence
+    of Thread operations and substrate events without artificial smoothing.
+    Rationale: the cap was a playability constraint that lacks metaphysical grounding.
+    A catastrophic Dissolution should produce catastrophic RS loss. The stabilising force
+    is not a cap but the Gap self-closure model (PP-604) which naturally limits sustained
+    RS drain from normal operations because most Gaps at typical operation scales
+    (Object, Relational) produce minimal or zero ongoing RS drain.
+    Removed from: params_threadwork.md §Rendering Stability (RS) Track
+    "Seasonal cap: ±10 net Rendering Stability change per season (applies at Accounting)"
+    struck.
+  finding_id: null
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+
+- id: PP-604
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Gap Self-Closure by Scale — new model replacing flat −4 RS/season Gap persistence rate.
+
+    FIVE GAP SCALES (n = scale index):
+    Reality self-heals gaps at a rate proportional to the disruption's scale.
+    Larger disruptions take longer to heal; smaller ones close quickly.
+
+    Formula: Gap at scale n closes in 2^n seasons (exceptions: Foundational uses 2^5=32).
+    RS drain per open season = n.
+    Total RS drain if untouched = n × (2^n − 1).
+
+    | Scale      | n | Closes after | Open seasons | RS drain/season | Total untouched |
+    |------------|---|--------------|--------------|-----------------|-----------------|
+    | Object     | 0 | 1 season     | 0            | 0               | 0               |
+    | Relational | 1 | 2 seasons    | 1            | 1               | 1               |
+    | Territory  | 2 | 4 seasons    | 3            | 2               | 6               |
+    | Structural | 3 | 8 seasons    | 7            | 3               | 21              |
+    | Foundational | 5 | 32 seasons  | 31           | 5               | 155             |
+
+    (n=4 skipped for Foundational; the ontological gap between Structural and Foundational
+    is qualitative, not a single step. Foundational breaches affect the conditions of being
+    itself — categorically more severe than Structural ruptures in local Thread configuration.)
+
+    Object Gaps: close in 1 season with no RS drain. Produce Shifting Objects and
+    operational interference while open but do not persistently damage substrate integrity.
+    No Mending action required (or possible — they resolve before meaningful action).
+
+    The Calamity's wound at T15 is a Foundational Gap. Its non-closure after 245 years is not
+    because it cannot self-close (32 seasons is achievable) but because sustained conflict
+    repeatedly resets the closure timer. Each major war or invasion re-opens what was slowly
+    closing. The Wardens are not fighting impossible physics — they are fighting the peninsula's
+    inability to sustain 32 consecutive seasons of substrate peace.
+
+    REPLACES: flat −4 RS/season Gap persistence rate (struck).
+    REPLACES: current 6-tier Mending Gap classification (Shifting Object/Micro/Standard/
+    Entrenched/Catastrophic/Locked Zone) replaced by 5-scale model.
+
+    MENDING Ob formula: 2n (scale index × 2).
+    | Scale      | n | Mending Ob | TS minimum |
+    |------------|---|------------|------------|
+    | Object     | 0 | 0 (n/a)    | n/a        |
+    | Relational | 1 | 2          | 30+        |
+    | Territory  | 2 | 4          | 50+        |
+    | Structural | 3 | 6          | 70+        |
+    | Foundational | 5 | 10       | 90+        |
+
+    Ob 8 ceiling on Mending struck (Foundational is Ob 10, correctly near-impossible).
+
+    LOCK CHRONIC DRIFT (revised by scale):
+    | Lock scale  | Drift seasons 1-3 | Drift seasons 4+ |
+    |-------------|-------------------|------------------|
+    | Object      | 0                 | 0                |
+    | Personal    | −1/season         | −1/season        |
+    | Relational  | −1/season         | −2/season        |
+    | Territorial | −2/season         | −3/season        |
+    | Structural  | −3/season         | −5/season        |
+    Foundational Lock: effectively impossible in practice (Ob 8+ TN8, no Thread Pool Score,
+    TS 90+ required; P < 0.1% even for Edeyja).
+
+    DISSOLUTION GAP CREATION (revised):
+    The Gap scale created by Dissolution = scale of configuration being Dissolved.
+    Immediate breach cost = n RS (one-time; the act of tearing).
+    Ongoing RS drain follows Gap scale table.
+    Degree modifies Gap scale produced:
+    - Overwhelming: Gap forms and closes within scene. Immediate breach cost only.
+    - Success: Gap at target scale (n). Closes per scale table.
+    - Partial: Gap one scale worse than Success (n+1).
+    - Failure: Gap two scales worse than Success (n+2).
+
+    WARDEN COOPERATION effect on Gap drain: WC ≥ 2 halves all RS drain from open Gaps
+    and active Locks at Accounting. This represents the Wardens actively managing the
+    substrate's worst stress points.
+
+    Affects: params_threadwork.md (Gap system, Mending table, Lock drift, RS drain sources).
+  finding_id: null
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+
+- id: PP-605
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Warden Recognition (WR) and Warden Cooperation (WC) redesign.
+
+    WR (Warden Recognition) — Varfell-specific, prerequisite track, 0–3 (was 0–4):
+    Tracks how much the Wardens know and trust the approaching faction's practitioners.
+    WR is the prerequisite for WC. WC cannot advance without WR at threshold.
+
+    | WR | State                                                              |
+    |----|---------------------------------------------------------------------|
+    | 0  | Wardens unaware or indifferent                                     |
+    | 1  | Wardens have observed and are assessing intent                     |
+    | 2  | Wardens recognise this faction as a legitimate steward. WC activates. Edeyja engages at TS 30+. |
+    | 3  | Deep trust. Edeyja coordinates Mending. WC can advance to 3.      |
+
+    WR advancement: Forgetting Check Success (+1); Forgetting Check Overwhelming (+1 additional same expedition).
+    WR decrease: TE-13 Military unit in T15 (−1, was WC only — now WR also); RM emergence
+    WA ≤ −2 (−2); No Expedition 3+ consecutive seasons (−1). Permanently blocked if WR
+    returns to 0 after advancing past 1.
+
+    WC (Warden Cooperation) — peninsula-wide, operational track, 0–3 (scale unchanged):
+    Tracks degree of active Warden operational support. Benefits all Thread operations.
+
+    | WC | Effect                                                     | WR gate |
+    |----|------------------------------------------------------------|---------|
+    | 0  | No cooperation                                             | —       |
+    | 1  | +1D all Thread operations peninsula-wide                   | WR ≥ 2 |
+    | 2  | All RS drain from open Gaps and active Locks halved        | WR ≥ 2 |
+    | 3  | Edeyja actively Mending. RS +2/season at Accounting.       | WR 3   |
+
+    REMOVED: WR 3 granting "+1D Thread ops" (was duplicating WC 1). WR 3 now
+    correctly means "deep trust enabling WC 3" not an independent operational bonus.
+    REMOVED: WR 4 (old tier eliminated — 0–3 now parallel with WC 0–3).
+    UPDATED: TE-13 (Military unit in T15) now reduces BOTH WC −1 AND WR −1 (trust violation
+    affects both tracks).
+
+    Affects: params_board_game.md §Warden Cooperation Track, §Warden Recognition Track.
+  finding_id: null
+  affects:
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-606
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Dissonance concept clarified. Two uses disambiguated.
+
+    (1) PP-502 "Dissonant Counter" renamed to "Substrate Saturation Counter."
+    Tracks substrate saturation from multiple Thread operations in rapid succession
+    during mass battle. Not a character experience — a substrate-level measure.
+    Mechanical effects unchanged (≥3 ops/turn: +1 Ob, +1 Coherence cost;
+    Counter ≥3 at battle end: RS −1 per PP-600). Name change only.
+
+    (2) Personal Dissonance defined as the phenomenological experience of
+    Thread-altered reality (temporal discontinuity, ontological disruption).
+    Not a separate tracked stat — expressed through existing mechanics:
+    - TS 0–9 characters: Certainty −1 (accumulated epistemic damage from
+      witnessing disruptions they cannot render as knowledge)
+    - TS 10–29: Certainty −1 + unsettling Discovery Event (perceives disruption
+      but cannot read it)
+    - TS 30+: Readable Thread information. Discovery Event produces TS growth
+      or Belief revision, not damage. Personal dissonance is legible.
+
+    Affects: references/params_threadwork.md §War-Scale Dissonant Thread Effects
+    (rename counter only); no mechanical changes.
+  finding_id: null
+  affects:
+    - references/params_threadwork.md
+  status: applied

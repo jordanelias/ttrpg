@@ -4,6 +4,56 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-14_SONNET_RS_REDESIGN_MAXEFFORT
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+## COMPREHENSIVE RS/THREAD REDESIGN (max effort session)
+
+### WR/WC (PP-605)
+Both tracks redesigned to 0-3, clearly distinguished:
+  WR = relational prerequisite (Varfell-specific; trust depth with Wardens)
+  WC = operational benefit (peninsula-wide; what Wardens are doing)
+  WR gates WC levels. WR 3 no longer grants +1D (was duplicating WC 1).
+  TE-13 now reduces WR -1 AND WC -1 (trust violation affects both).
+
+### RS Cap (PP-603)
+±10/season cap STRUCK. Reality takes full hit from operations.
+Stability comes from Gap self-closure model, not artificial cap.
+
+### Gap Self-Closure by Scale (PP-604)
+CORE REDESIGN. Replaces flat -4 RS/season Gap persistence.
+5 scales: Object(n=0), Relational(n=1), Territory(n=2), Structural(n=3), Foundational(n=5).
+Self-closes in 2^n seasons. RS drain = n/season while open. Total = n×(2^n-1).
+Object gaps: 0 drain, self-close in 1 season.
+Foundational (Calamity wound): 32 seasons to close, -5/season, 155 total if untouched.
+Mending Ob = 2n. Lock drift scales with Lock scale index.
+Dissolution: degree determines Gap scale created (Overwhelming=closes in scene,
+  Success=target scale, Partial=n+1, Failure=n+2).
+
+### Southernmost Ritual STRUCK (PP-602)
+ARC-T04 struck entirely. No ritual exists -- each Gap is ontologically unique.
+RS recovery path: WR3 + WC3 + Edeyja sustained Mending over multiple seasons.
+ED-416 (naming request) also void.
+
+### Dissonance Clarified (PP-606)
+PP-502 "Dissonant Counter" renamed "Substrate Saturation Counter".
+Personal Dissonance defined: phenomenological experience of Thread-altered reality.
+Expressed through Certainty (TS<30) and Discovery Events (TS 30+). Not a new tracker.
+
+### PATCHES: PP-602-606 (5 patches)
+### EDITORIALS: ED-431 (Foundational n=4 vs n=5 P2), ED-432 (Dissolution degree-scale P2),
+              ED-433 (Certainty full mechanics P2), ED-434 (co-victory RS threshold P3)
+### OPEN EDITORIALS: 34 (ED-401-434)
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-14_SONNET_TRACKER_REFERENCE
 session_close: 2026-04-14
 phase: COMPLETE

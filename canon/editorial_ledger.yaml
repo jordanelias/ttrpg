@@ -3810,3 +3810,35 @@ editorial_decisions:
     description: "Southernmost Ritual [UNNAMED — ED-416] RS outcome table in params_threadwork.md appears to use old-convention RS notation (RS as damage score). Current convention: RS = integrity (higher = better). Likely correct values: Success RS +6, Overwhelming RS +10, Partial RS +3, Failure RS −8. Confirm before applying. The BG Co-Movement card ceiling (RS +1) noted in that section applies only to BG-initiated Thread abstraction, not to TTRPG Zoom In ritual scenes — this distinction remains valid regardless of convention correction."
     tags: [southernmost_ritual, rs, old_convention, params_threadwork]
     source: tracker_reference_compilation
+
+  - id: ED-431
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P2
+    description: "Foundational Gap closure time: 2^5=32 seasons (n=5, skipping n=4) vs 2^4=16 seasons (n=4). User proposed 32 seasons with the note that the jump from Structural (8 seasons) to Foundational (32 seasons) represents a qualitative ontological difference, not just the next step in the sequence. PP-604 applies 32 seasons as the canonical value but flags this for user confirmation. If 16 seasons is preferred: adjust n=4, Mending Ob = 8, RS drain = 4/season, total = 60 untouched. If 32 seasons retained: confirm n=5 skip is intentional."
+    tags: [gap_scale, foundational, rs, pp604]
+    source: pp604
+
+  - id: ED-432
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P2
+    description: "Dissolution degree-to-Gap-scale mapping: PP-604 proposes that Dissolution degree determines how many scale levels worse the Gap is from the target configuration scale (Overwhelming = gap closes in scene, Success = target scale n, Partial = n+1, Failure = n+2). This means Dissolution of a Relational configuration at Failure creates a Structural Gap (n=3) which is catastrophically worse than Success (n=1, Relational). Confirm this is the intended severity gradient. Alternative: Failure = n+1 (only one scale worse than Success), making Failure of a Relational Dissolution produce a Territory Gap (n=2) not Structural."
+    tags: [dissolution, gap_scale, rs, pp604]
+    source: pp604
+
+  - id: ED-433
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P2
+    description: "Certainty track full mechanics. Referenced by PP-551 (redesign), PP-303, PP-281 and now PP-606 (personal dissonance definition), but full track mechanics (range, starting value, recovery) are not in params_threadwork.md as fetched. Required before Certainty can be properly integrated with the dissonance framework. Specifically needed: (a) Certainty range and starting value; (b) recovery mechanic; (c) what Certainty 0 produces; (d) whether Certainty is tracked separately from Coherence or is Coherence renamed for non-practitioners."
+    tags: [certainty, dissonance, params, threadwork]
+    source: pp606
+
+  - id: ED-434
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P3
+    description: "ARC-T04 struck (PP-602). Any existing arc_register arcs that reference or depend on ARC-T04 as a trigger or consequence need review. Also: the co-victory conditions for Varfell Path C (Thread Supremacy) and Crown+Varfell co-victory both require RS ≥ 50 as a threshold condition. These were implicitly designed assuming the Southernmost Ritual could produce a large RS gain event. Without that event, RS ≥ 50 must be achieved through sustained Mending and WC 3 over multiple seasons. Confirm the RS ≥ 50 threshold is still reachable within campaign timeframes under the new design."
+    tags: [arc_t04, varfell, co_victory, rs, campaign_balance]
+    source: pp602

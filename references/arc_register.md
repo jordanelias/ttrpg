@@ -72,7 +72,7 @@ Collective Thread operations require Belief compatibility checks: directly oppos
 **ARC-S34 — Edeyja Burnout** `Wardens | T15 | TTRPG`
 Edeyja's Coherence (9) depletes from repeated Mending at RS Critical. ~8 Mendings before Coherence 2; ~10 before Rendering Crisis. If she reaches Coherence 0: Wardens lose their principal practitioner; WC track may degrade; Locked Zone border Mending (requires TS 70+ and Einhir framework) becomes impossible. Direction: cumulative resource exhaustion toward the campaign's hidden fail state. *At Coherence ≤ 5, TE-15 activation (Structural Dissolution of catastrophic Gap emergent) drives her to Rendering Crisis regardless of success or failure; these two vectors feed into the same terminal condition.*
 
-**ARC-T04 — Southernmost Ritual [UNNAMED — ED-416]** `Wardens/Practitioners | T15 | TTRPG`
+**[STRUCK PP-602] ARC-T04 — Southernmost Ritual [UNNAMED — ED-416]** `Wardens/Practitioners | T15 | TTRPG`
 Narrow-window event requiring simultaneous: [UNNAMED — ED-416] Text held, Awareness 5+, Maret Uln TS 60+, 2× TS 20+ additional participants, preparation season, all in Askeheim. Success: RS −6 to −10 (world healing). Failure: RS +8, Mode 3 entity, lead practitioner incapacitated. The ritual is the only bulk RS source; its failure cascade (RS +8 + IP +2 + TC +2 in one season) can accelerate three simultaneous arcs.
 
 **ARC-T07 — Dissolution** `Practitioners | ALL | TTRPG`
