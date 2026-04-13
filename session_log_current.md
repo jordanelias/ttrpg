@@ -4,6 +4,22 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_SONNET_PP584_FORGETTING_CORRECTION
+session_close: 2026-04-13
+phase: IN_PROGRESS
+status: OPEN
+
+TASK: Correction patch PP-584 — Forgetting is epistemic limit, not erasure.
+  Vaynard arc player role corrected: structural constraint, not communication architecture.
+  Cluster D (Southern Corridor) simulation commencing.
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_SONNET_SIM_ARC_C01
 session_close: 2026-04-13
 phase: COMPLETE

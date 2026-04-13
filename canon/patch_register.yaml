@@ -6017,3 +6017,37 @@ patches:
   affects: [designs/fieldwork/fieldwork_design_v1.md]
   finding_id: SIM-FW-02
   status: applied
+
+- id: PP-584
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    Correction to PP-582. PP-582 framed the Forgetting as content erasure — as though
+    Vaynard had once possessed the safety prerequisites and they were subsequently stripped.
+    This is wrong. The Forgetting is not erasure. It is the consequence of excessive being
+    at Askeheim (Ein Sof erupting through the Calamity's wound) exceeding the epistemic
+    limits of human consciousness below TS 29. Vaynard at TS 14 cannot constitute
+    Southernmost-specific operational knowledge as knowledge in the first place. When Maret
+    tells him he needs TS 30+ to operate safely, he can hear the words and repeat them.
+    He cannot render the referent — the actual substrate condition those words point at
+    is epistemically inaccessible to his consciousness. The words are Inert (P-08). There
+    is no moment during which he possessed the knowledge. The communication did not
+    temporarily transfer it. Accordingly, PP-582's proposed player role ("build a
+    Forgetting-resistant communication structure") is incorrect. No such structure exists.
+    The content is categorically beyond TS < 29 rendering regardless of medium — verbal,
+    documentary, symbolic. Documents (ARC-S40) enable political advocacy via Inert Knowledge
+    (recite but cannot render the referent operationally). They do not transmit what the
+    Forgetting blocks; they offer words that point at something unrenderable.
+    Corrected player role for NPC-ARC-VAY: create STRUCTURAL constraints that prevent
+    Vaynard reaching T15 regardless of his consequentialist calculation. His calculation
+    cannot be corrected by information; it can only be bypassed by making T15 access
+    structurally unavailable — through WC-based Warden gatekeeping, TE-12 (Varfell
+    controlling T13 and delegating gate authority to the Wardens), territorial control
+    of T13 by a faction willing to exercise that authority, or alliance structures that
+    intercept Vaynard before he reaches the gate.
+  finding_id: PP-582 (correction)
+  affects:
+    - references/arc_register.md
+    - tests/sim_arc_c01_vaynard_unchecked.md
+  status: applied
