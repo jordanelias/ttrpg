@@ -1,3 +1,53 @@
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-13_SONNET_SESSION_CLOSE
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## SESSION SUMMARY — 2026-04-13
+
+### Primary Work
+1. Arc system overhaul proposal (69 entries) → first audit (cuts/merges/redesigns) → intensified audit (cliche, tropes, historical, canon, interaction, player) → arc_register.md v8 committed (PP-575)
+2. Simulation strategy document committed
+3. Simulation runs completed:
+   - SIM-ARC-B01: Cluster B TC Fracture (ARC-S29/S56/T26) — PP-576/577
+   - SIM-ARC-B02: Season 8 Crown card constraint — PP-578/579/580
+   - SIM-ARC-A01: Cluster A Baralta Programme (Seasons 9-13) — PP-578-580
+   - SIM-ARC-C01: Cluster C NPC-ARC-VAY Vaynard Unchecked — PP-581/582/583
+   - SIM-ARC-D01: Cluster D Southern Corridor — PP-585/586/587
+   - SIM-ARC-E01: Cluster E RM Pressure — PP-591
+   - SIM-ARC-F01: Cluster F Economic Web — PP-593
+4. Canon corrections:
+   - PP-584/589: Forgetting = epistemic limit (ZH/VH), not erasure
+   - PP-590: Thread contact TS development (three tiers — ambient, artifact, direct)
+   - PP-585: BG Forgetting Check TS-gated
+   - PP-588: 'Ceiral' struck (non-canon); ED-416 for canonical naming
+   - PP-592: SIM-C01 framing corrections per PP-589
+5. Cluster review: Clusters B/A/D/E clean; Cluster C corrected (PP-592)
+6. Worldbuilding clarifications logged:
+   - TK = engagement stat (~1 TK = 6 TS)
+   - Einhir history = documented fable with accurate historical root
+   - Church has evidential basis for opposition (documented Calamity collapse)
+   - Axis 9 Resolution = contest between two interpretations of same documents
+
+### Patches Applied This Session
+PP-575 through PP-593 (19 patches)
+
+### Open Editorials: 21 (ED-401-421)
+P2 priority: ED-401, 402, 403, 404, 406, 407, 408, 409, 410, 411, 413, 414, 416, 417, 418, 419, 420, 421
+P3 priority: ED-405, 412, 415
+
+### Next Session — Recommended First Task
+Resolve ED-408 (Quaestio: automatic vs optional at TC 42). P1 design clarification.
+Then: Cluster G simulation (Capital Territory Events).
+
+### P1 BLOCKERS: 0
+```
+
+---
+
 
 ---
 
