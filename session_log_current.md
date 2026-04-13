@@ -4,6 +4,26 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-14_SONNET_PP600_BATTLE_RS
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+PATCH: PP-600 — Mass battle Thread RS recalibration.
+  Three changes:
+  (1) PP-502 Dissonant Counter RS: −2 → −1, capped at −1 per battle.
+  (2) Battle-context Thread Debt: expires at battle season end, doesn't accumulate.
+  (3) Co-movement card draw: 1 per practitioner per turn (not per operation).
+  Net: 4 seasons heavy battle threadwork = −8 RS (was −28). Manageable.
+  Arc vector/personal scene Thread Debt consequences unchanged.
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-14_SONNET_CALIBRATION_CORRECTIONS
 session_close: 2026-04-14
 phase: COMPLETE

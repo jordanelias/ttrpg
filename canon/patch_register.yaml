@@ -6464,3 +6464,64 @@ patches:
   affects:
     - references/params_board_game.md
   status: applied
+
+- id: PP-600
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Mass battle Thread RS drain recalibration. Three changes to prevent catastrophic
+    RS drain from sustained battle threadwork (4 seasons of heavy use was producing
+    up to −28 RS — unmanageable and discouraging threadwork use).
+
+    (1) PP-502 Dissonant Counter RS consequence reduced:
+    Prior: Dissonant Counter ≥ 3 at battle end → RS −2 at next Accounting.
+    Corrected: Dissonant Counter ≥ 3 at battle end → RS −1 at next Accounting.
+    Hard cap: RS −1 per battle maximum regardless of Dissonant Counter level.
+    A battle with Dissonant Counter 8 and one with Counter 3 both produce RS −1.
+    Rationale: combat-scale Thread interactions are structurally shallow (rapid
+    tactical surface touches, not deep substrate manipulation). The substrate
+    experiences them as collective stress, not structural damage.
+    The Dissonant Counter still applies for in-battle difficulty scaling (existing
+    +1 Ob, +1 Coherence cost mechanics unchanged). Only the battle-end RS
+    consequence is reduced.
+
+    (2) Battle-context Thread Debt expiry:
+    Thread Debt tokens generated from co-movement card draws during mass battle
+    turns expire at the end of that battle's season. They do not accumulate into
+    subsequent seasons' RS drain.
+    Rationale: tactical Thread interactions do not create the sustained substrate
+    obligations that generate long-term Thread Debt. Long-term Thread Debt arises
+    from Locks and Weavings left to persist without servicing outside battle context.
+    Thread Debt from operations outside battle context (dedicated Thread contact
+    windows, arc-vector operations, TTRPG personal scenes) persists normally per
+    existing rules.
+    Implementation: mark Thread Debt tokens generated in a mass battle turn with
+    a battle marker. Clear all battle-marked tokens at Accounting alongside the
+    battle's resolution. Un-marked Thread Debt tokens (from outside battles) drain
+    normally.
+
+    (3) Co-movement card draw cap per practitioner per battle turn:
+    Prior: one draw per Thread operation.
+    Corrected: one draw per practitioner per battle turn regardless of how many
+    Thread operations that practitioner performs in the turn.
+    Rationale: prevents exponential card accumulation when practitioners perform
+    multiple operations in a single turn. Three operations in one turn = one card.
+    This is consistent with the tactical-shallow framing: the co-movement represents
+    the turn's aggregate Thread interaction, not each individual operation's echo.
+
+    Net effect on 4-season heavy battle threadwork (8 battles):
+    Prior: up to −16 RS (Dissonant) + −12 RS (Thread Debt accumulation) = −28 RS.
+    Corrected: −8 RS maximum (8 × −1 Dissonant cap) + 0 RS Thread Debt = −8 RS.
+    Players still feel RS pressure from sustained battle threadwork; it contributes
+    meaningfully to the RS crisis without foreclosing the campaign.
+
+    Note: Mending and Community Weaving remain net-positive RS sources as-is.
+    Failed operations outside battles producing Thread Debt or Thread Wounds retain
+    full RS consequences — those represent real substrate risk from pushing Thread
+    work carelessly. The recalibration applies only to the battle context.
+  finding_id: null
+  affects:
+    - references/params_threadwork.md
+    - references/params_board_game.md
+  status: applied
