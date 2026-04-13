@@ -3356,7 +3356,9 @@ editorial_decisions:
 - id: ED-455
   description: "Full NPC Arc Profiles for all named NPCs. Confirm arc shapes match user vision."
   priority: P1
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL — for Jordan review] NPC Arc Profiles: all 13 named NPCs have arc shapes defined across existing documents (npc_roster.md §arc section, npc_character_analyses.md, npc_foils.md). Arc register v8 maps NPC involvement to specific arcs. Full standalone arc profiles deferred to dedicated creative session — existing documentation is sufficient for simulation. Close as covered; reopen if standalone profiles needed."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
@@ -3480,20 +3482,26 @@ editorial_decisions:
 - id: ED-469
   description: "Baralta Conviction changed from Order (stage6) to Precedent. User approval required."
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL — for Jordan review] Baralta Conviction changed from Order to Precedent. Rationale: Baralta is a constitutional monarchist who derives legitimacy from legal and dynastic precedent (cadet branch of Almqvist, deed-monarchy established procedure), not from Order (stability/procedure). Precedent captures her institutional-legal claim-making behaviour more precisely than Order. If rejected, revert to Order."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
   note: "AUD-NPC-04"
 
   - id: ED-470
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL — for Jordan review] ARC-T23 institutional role canonised. Name "Remembrancer" flagged as inadequate — placeholder until Jordan provides replacement. Role: 245-year RM tradition, TS 19–35, institutional authority in COLLISION E. Resolves ED-NEW-02 (revolution elder not canonised as named character). Mechanical role confirmed; name TBD."
     date_raised: 2026-04-13
     priority: P2
     description: "ARC-T23 Remembrancer: canonise as resolution to ED-NEW-02. Proposed: institutional role, 245-year RM tradition, TS 19-35 (set at first contact), institutional authority in COLLISION E. Confirm or modify."
     tags: [restoration_movement, arc_system, canon]
 
   - id: ED-471
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] P-08/P-13 Forgetting scope: untransmittable DOES cover documentary transmission. Publishing documents would not end the Forgetting barrier — readers who are not Thread-sensitive cannot retain Thread-relevant information from text (it reads as metaphor, fiction, or nonsense). Documentary evidence enables political advocacy (citing without comprehending) but does not transfer Thread sensitivity or perception. This preserves P-08 while allowing Arc S40/S47/T15 documentary evidence arcs to function as political tools (not epistemic ones)."
     date_raised: 2026-04-13
     priority: P2
     description: "P-08/P-13 Forgetting scope: does untransmittable cover documentary transmission? P-08: publishing all documents would not end the barrier. ARC-S40/S47/T15 assume documentary evidence enables political advocacy (recite but not act). Canon ruling required."
@@ -3509,14 +3517,18 @@ editorial_decisions:
     tags: [threadwork, arc_system, southernmost]
 
   - id: ED-473
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] TE-08 Grand Debate and TC 42 Quaestio: both can occur in same campaign arc. Priority: Quaestio triggers automatically at TC 42 crossing (mandatory institutional event). Grand Debate (TE-08) is a player-initiated response to Quaestio. If TE-08 fires before TC 42, it does not prevent Quaestio — Quaestio is a Church institutional response to TC threshold, not a political response to debate. TE-08 after Quaestio compounds TC pressure."
     date_raised: 2026-04-13
     priority: P3
     description: "TE-08 Grand Debate vs TC 42 Quaestio: specify (a) both in same campaign arc?, (b) priority order, (c) whether TE-08 resets or compounds TC 42 trigger."
     tags: [church, arc_system, grand_debate, tc_clock]
 
   - id: ED-474
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] ARC-T20 Winter Court: convening condition = Crown Mandate ≥ 3 + TC ≤ 40. Institutional basis: irregular Crown-called assembly of faction representatives, invoked when Crown perceives existential threat requiring multi-faction coordination. Historical parallel: Reichstag convocation. Not a standing institution — convened at Crown initiative only. Fires when all conditions met AND player declares."
     date_raised: 2026-04-13
     priority: P3
     description: "ARC-T20 Winter Court: no canonical institutional basis. Options: pre-Calamity convention; convening condition Crown Mandate >= 3 + TC <= 40; or irregular Crown-called assembly. Decision before simulation."
@@ -3543,7 +3555,9 @@ editorial_decisions:
     source: SIM-ARC-B01
 
   - id: ED-408
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL — for Jordan review] ARC-S19 Quaestio trigger: AUTOMATIC at TC 42 crossing. Not Baralta-optional. Rationale: Quaestio is a Church institutional response to TC threshold — it fires because the Church perceives sufficient cultural penetration to challenge secular authority, not because any individual faction invokes it. Baralta can respond to Quaestio but does not initiate it."
     date_raised: 2026-04-13
     priority: P1
     description: "ARC-S19 Quaestio trigger: automatic at TC 42 crossing or Baralta-optional Senator action available from TC ≥ 42? Simulation crossed TC 42 (Seasons 8-9) without the Quaestio firing. If automatic: two seasons of simulation are invalid and the arc register entry needs revision. Proposed resolution: Quaestio is Baralta's optional Senator action (she invokes when ready; NPC AI: invoke when TC ≥ 42 AND Mandate ≥ 5 AND Stability ≥ 3 AND Parliamentary Sovereignty victory within 3 seasons). Requires arc_register.md v8 edit if resolved as optional."
@@ -3551,7 +3565,9 @@ editorial_decisions:
     source: SIM-ARC-A01
 
   - id: ED-409
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] Baralta Quaestio under Martial Law: Baralta can invoke ARC-S19 Quaestio-response actions (Parliamentary motion, Diplomatic challenge) even under Martial Law, because these are institutional not military actions. Löwenritter Martial Law restricts Domain Actions (Military check gate), not Parliamentary proceedings. Hafenmark operates through Parliament, which Löwenritter cannot constitutionally dissolve (PI > 0 = Parliament exists)."
     date_raised: 2026-04-13
     priority: P2
     description: "P2-B09: Baralta Quaestio under Martial Law. If Coup Counter fires before Baralta invokes ARC-S19, the constitutional Grand Debate fires under military governance — Baralta's deed-monarchy constitutional argument is being made while Löwenritter has imposed Martial Law. This is dramatically correct but must be explicitly acknowledged in GM guidance: Martial Law does not prevent the Quaestio (Senator secondary check P ≈ 87% success), but it recontextualises it. Baralta's constitutional argument gains or loses weight depending on how GM frames the Martial Law vs Parliamentary Session coexistence."
@@ -3559,7 +3575,9 @@ editorial_decisions:
     source: SIM-ARC-A01
 
   - id: ED-410
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] Consecration + Schism cascade: if Himmensendt consecrates Baralta (Church Stability −3 per ED-407), this triggers Church Schism check (Stability ≤ 2). If Schism fires: Cardinals split — Olafsson/Tormann vs Klapp/Jarnstal on consecration legitimacy. TC −2 (institutional crisis). Church cannot Assert for 2 seasons. Baralta gains Sovereign Authority but Church is weakened as her institutional backer. This is the Baralta trap: winning the Crown costs the institution that legitimises it."
     date_raised: 2026-04-13
     priority: P2
     description: "P2-B10: Consecration + Schism cascade. If Himmensendt consecrates Baralta (Church Sta −3), Church Stability drops to 2, re-triggering ARC-S29 schism conditions. The act of institutional yielding triggers the fracture that challenges the yielding. Confirmed as intentional design (correct dramatic structure). Document in GM Reference: the season after consecration, if any faction plays a Senator action targeting Church, ARC-S29 automatically fires again. GMs should anticipate this and inform players that the consecration season is a cascade window."

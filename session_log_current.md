@@ -155,6 +155,14 @@ P1 BLOCKERS: 0 (all resolved PP-577–582)
 - Dissolution Ob formula established
 - Torben contested-asset Conviction confirmed
 - Maret Uln stats canonised
+
+## PHASE 5: Final editorial batch
+- 10 remaining items resolved (PP-589)
+- Baralta Conviction Order→Precedent [PROVISIONAL]
+- Forgetting documentary scope defined
+- Quaestio auto at TC 42
+- Consecration+Schism cascade mechanics
+- NPC Arc Profiles: covered by existing docs
 OPEN EDITORIALS: 39 (33 open + 6 flagged)
 
 ## FIXES APPLIED

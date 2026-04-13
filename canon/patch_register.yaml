@@ -5972,3 +5972,15 @@ patches:
   affects: [canon/editorial_ledger.yaml]
   finding_id: "ED-301, ED-453, ED-454, ED-458, ED-459, ED-463, ED-468, ED-472, ED-411, ED-412, ED-413, ED-407, ED-406, ED-358b"
   status: applied
+- id: PP-589
+  date: 2026-04-13
+  scope: editorial
+  description: >
+    Final editorial batch: 10 items resolved (9 provisional, 1 confirmed).
+    Baralta Conviction Order→Precedent [PROVISIONAL]. Remembrancer role confirmed,
+    name TBD [PROVISIONAL]. Forgetting documentary scope defined. Quaestio auto
+    at TC 42. Winter Court convening conditions. Consecration+Schism cascade.
+    NPC Arc Profiles covered by existing docs.
+  affects: [canon/editorial_ledger.yaml]
+  finding_id: "ED-301, ED-455, ED-469, ED-470, ED-471, ED-473, ED-474, ED-408, ED-409, ED-410"
+  status: applied
