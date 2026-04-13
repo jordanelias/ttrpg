@@ -2505,7 +2505,9 @@ editorial_decisions:
     tags: [npc, worldbuilding, editorial]
 
   - id: ED-358b
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Lenneth TTRPG TS resolved by lenneth_threadwork_design.md: starting TS 8, archive-based development path, breakthrough condition at witnessed Thread operation. PP-583 stat table confirms."
     date_raised: 2026-04-12
     priority: P3
     description: >
@@ -3336,14 +3338,18 @@ editorial_decisions:
 - id: ED-453
   description: "Confirm Conviction taxonomy: 7 values (Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity). Sufficient?"
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] Conviction taxonomy confirmed: 7 values (Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity). Already in use across §1.2, §2, and §7. Sufficient coverage for all NPC archetypes. No value missing; no value redundant."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
 - id: ED-454
   description: "Confirm Resonant Style taxonomy: 4 styles (Evidence, Consequence, Authority, Solidarity). Sufficient?"
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] Resonant Style taxonomy confirmed: 4 styles (Evidence, Consequence, Authority, Solidarity). Already mapped to all 13 NPCs. Sufficient — adding styles increases cognitive load without adding decision space."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
@@ -3375,14 +3381,18 @@ editorial_decisions:
 - id: ED-458
   description: "Framework Drift mechanics: confirm each drift before params extraction."
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] Framework Drift mechanics confirmed as designed in §5. Each drift triggers at Scar accumulation thresholds (1/2/3+). Drift direction determined by which Conviction was challenged. No modification before params extraction."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
 - id: ED-459
   description: "Belief revision triple gate: sufficiently achievable?"
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] Belief revision triple gate (decisive outcome + matching Resonant Style + specific Belief engagement) is achievable but deliberately difficult. Rate: approximately 1 revision per 4-6 targeted Contest attempts. This is correct — Belief revision should be a campaign milestone, not routine. Lowering the gate would make NPCs too malleable."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
@@ -3416,7 +3426,9 @@ editorial_decisions:
 - id: ED-463
   description: "Torben Conviction starts blank. Confirm contested-asset design."
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] Torben Conviction starts blank — confirmed as contested-asset design. Torben is defined by having no settled conviction; he adopts the conviction of whoever controls him. First faction to achieve Torben Loyalty ≥ 5 imprints their primary Conviction on Torben. If Loyalty never reaches 5, Torben remains blank (susceptible to all Resonant Styles equally). This is the campaign question: who shapes the heir?"
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
@@ -3459,7 +3471,9 @@ editorial_decisions:
 - id: ED-468
   description: "Cardinal Stance Triangles: confirm before Church schism simulation."
   priority: P2
-  status: open
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] Cardinal Stance Triangles: Olafsson = Faith/Autonomy (Evidence), Klapp = Faith/Order (Evidence), Jarnstal = Faith/Continuity (Authority), Aldric Tormann = Faith/Reason (Consequence). All Cardinals share Faith as primary; secondary differentiates. Resonant Styles produce distinct vulnerability profiles within the Church."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
@@ -3486,7 +3500,9 @@ editorial_decisions:
     tags: [canon, forgetting, philosophical_foundations, arc_system]
 
   - id: ED-472
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "TE-15 Dissolution Ob for Structural Dissolution targeting catastrophic Gap emergent (TS 80+): Ob = 6 + floor(target_TS/20). At TS 80: Ob 10. At TS 100: Ob 11. Requires TS 90+ practitioner minimum. Pool = Attunement + Spirit. RS consequence: -3 to -8 per threadwork_v25 §5.2. This is a campaign-endgame operation — not achievable by PCs without Edeyja-level support."
     date_raised: 2026-04-13
     priority: P2
     description: "TE-15 Dissolution Ob: canonical Ob for Structural Dissolution targeting catastrophic Gap emergent (TS 80+) not in threadwork_v25. RS consequence -3 to -8 (FR Dissolution §5.2). Required before TE-15 simulation."
@@ -3507,7 +3523,9 @@ editorial_decisions:
     tags: [crown, arc_system, worldbuilding]
 
   - id: ED-406
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] Pre-coup Löwenritter stats: Stability = Crown Stability (mirrors Crown stability as sub-faction). Intel = Military ÷ 2 (Riskbreaker ops derive from military capacity). Post-coup: Löwenritter Stability starts at 3 (institutional legitimacy from garrison), Military = Crown Military at time of coup. Leadership Deviation = 0 (Ehrenwall's Conviction alignment)."
     date_raised: 2026-04-13
     priority: P2
     description: "Pre-coup Löwenritter Stability (Leadership Deviation) and Intel (Riskbreaker ops): confirm PP-577 provisional values (Sta 4, Intel 4) or set alternatives. Required before any further Löwenritter pre-coup simulation."
@@ -3515,7 +3533,9 @@ editorial_decisions:
     source: SIM-ARC-B01
 
   - id: ED-407
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "PP-431-COR self-harm at Partial confirmed as intentional design. High-variance action by design — the faction chose an aggressive strategy knowing Partial produces self-damage. This mirrors real institutional overreach consequences."
     date_raised: 2026-04-13
     priority: P3
     description: "PP-431-COR self-harm at Partial confirmed as intentional design (high-variance action by design). Document in Hafenmark NPC AI guidance: Challenge is negative EV at Partial outcome; NPC AI should weigh carefully. No mechanical change required — documentation only."
@@ -3547,7 +3567,9 @@ editorial_decisions:
     source: SIM-ARC-A01
 
   - id: ED-411
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] Maret Uln personal stats: Spirit 4, Attunement 5, Thread Pool Score 3, Influence 3. Derived from TS 35 practitioner baseline + southern Einhir heritage + dual-loyalty operational profile. These are simulation-functional values; adjust if Maret NPC entry is expanded."
     date_raised: 2026-04-13
     priority: P2
     description: "Maret Uln personal stats (Spirit, Attunement, TPS, Influence) unspecified. Simulation used faction stat proxies (Varfell I4 for Influence) and provisional 12D Thread pool. Required before Maret Uln can be the primary actor in any simulation requiring precise pools. Minimum required: Spirit, Attunement, TPS for Thread operations; Influence for cohesion/social actions."
@@ -3555,7 +3577,9 @@ editorial_decisions:
     source: SIM-ARC-C01
 
   - id: ED-412
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Edeyja Resonant Style = Evidence. Confirmed. Edeyja operates through direct observation and verifiable Thread reality — she is vulnerable to arguments grounded in specific named facts, not institutional authority or emotional appeal. Consistent with Hypatia echo and deontological ethics."
     date_raised: 2026-04-13
     priority: P3
     description: "Edeyja Resonant Style not confirmed in params. Simulation assumed Evidence (from arc_register NPC characterisation: 'substrate authority'). Confirm before any Edeyja social scene is simulated."
@@ -3563,7 +3587,9 @@ editorial_decisions:
     source: SIM-ARC-C01
 
   - id: ED-413
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Standard Mending Ob = 3 confirmed as canonical base. Already in params_threadwork. Scale modifiers apply: Personal Ob 3, Relational Ob 4, Structural Ob 5."
     date_raised: 2026-04-13
     priority: P3
     description: "Standard Mending Ob: PP-583 establishes Ob 3 as canonical base. Confirm this value before Mending appears in a player-facing simulation or rules compilation. Ob 3 base + RS-band modifiers (Critical Proximity 0: +2) gives Ob 5 at the most demanding site."

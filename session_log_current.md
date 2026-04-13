@@ -148,6 +148,13 @@ P1 BLOCKERS: 0 (all resolved PP-577–582)
 - Debate RS per-contest confirmed
 - Arc cross-dependencies documented
 - NPC Knot formation + Resonant Style stacking defined
+
+## PHASE 4: Mechanical/provisional batch
+- 15 more editorial items resolved (PP-588)
+- Cardinal Stance Triangles derived
+- Dissolution Ob formula established
+- Torben contested-asset Conviction confirmed
+- Maret Uln stats canonised
 OPEN EDITORIALS: 39 (33 open + 6 flagged)
 
 ## FIXES APPLIED

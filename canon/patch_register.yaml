@@ -5959,3 +5959,16 @@ patches:
   affects: [gm_ref/arcs_41_45_interdependent.md]
   finding_id: ED-484
   status: applied
+- id: PP-588
+  date: 2026-04-13
+  scope: editorial
+  description: >
+    Batch mechanical/provisional editorial resolution: 15 items.
+    Conviction/Style taxonomies confirmed. Framework Drift confirmed.
+    Belief revision gate confirmed. Torben blank Conviction as contested-asset.
+    Cardinal Stance Triangles derived. Dissolution Ob formula established.
+    Maret Uln stats. Edeyja Evidence style. Mending Ob 3 confirmed.
+    Pre-coup Löwenritter stats. Lenneth TS resolved.
+  affects: [canon/editorial_ledger.yaml]
+  finding_id: "ED-301, ED-453, ED-454, ED-458, ED-459, ED-463, ED-468, ED-472, ED-411, ED-412, ED-413, ED-407, ED-406, ED-358b"
+  status: applied
