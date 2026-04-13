@@ -4,6 +4,33 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-14_SONNET_PP610_STAT_CORRECTION
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+PATCH: PP-610 — PP-607 correction.
+  Attunement IS in params_core (Social attribute, already defined). ED-418 false gap — closed.
+  Certainty IS fully defined (PP-551, cosmological worldview 0-5). ED-433 closed.
+  Attunement permanent damage concept struck (no permanent penalties per design principle).
+  Dissonance = Spirit check only. Failure = -1D Spirit for scene. Clears at scene end.
+  Long-term Thread consequence = Certainty movement, already canonical.
+
+CLOSED: ED-418, ED-433, ED-436
+
+COMPLETE STAT LIST (from params_core.md canonical):
+  10 Attributes: Agi, End, Str | Cog, Rec, Foc | Att, Bon, Cha | Spi
+  Derived: Health, Stamina, Composure, Combat Pool, Contact Rounds, Resolve
+  Tracks: Momentum (0-4), Certainty (0-5), Coherence (10→0 prac), TS (prac), TPS (derived prac)
+  Narrative: Histories, Beliefs, Inspirations, Instincts, Wises
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-14_SONNET_STAT_REDESIGN_EINHIR_CANON
 session_close: 2026-04-14
 phase: COMPLETE

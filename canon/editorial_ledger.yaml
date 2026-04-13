@@ -3858,3 +3858,28 @@ editorial_decisions:
     description: "Attunement starting value and recovery rate. PP-607 defines Attunement's function but not its starting value or typical character sheet range. Required before character creation rules can include Attunement. Questions: (a) Is Attunement a character creation stat (like Spirit, Coord, Endurance) with a typical range of 1-5? (b) Does starting Attunement vary by character background (someone raised near Einhir sites might start higher)? (c) Is 'full season in Thread-unaffected environment' the right recovery rate for Attunement damage, or should it require specific practices (meditation, community, physical grounding in nature)?"
     tags: [attunement, stat_design, character_creation, pp607]
     source: pp607
+
+  - id: ED-418-CLOSED
+    status: resolved
+    date_resolved: 2026-04-14
+    description: >
+      CLOSED by PP-610. Attunement was already defined in params_core.md as one of the
+      10 core character attributes (Social group, range 1-7). The gap was in params_threadwork
+      not referencing the definition, not in the definition itself.
+
+  - id: ED-433-CLOSED
+    status: resolved
+    date_resolved: 2026-04-14
+    description: >
+      CLOSED by PP-610. Certainty is fully defined in params_core.md (PP-551):
+      0-5 cosmological worldview track, both poles stable, already canonical.
+      PP-607's proposed "Attunement damage replacing Certainty" was wrong.
+      Certainty handles long-term Thread exposure consequence; no additional track needed.
+
+  - id: ED-436-CLOSED
+    status: resolved
+    date_resolved: 2026-04-14
+    description: >
+      CLOSED by PP-610. Attunement starting value is per character creation rules
+      (params_core §Attributes: 31 point pool across 10 attributes, min 1, creation max 5
+      with one exception). No separate Attunement damage track to define.

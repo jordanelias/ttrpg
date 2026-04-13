@@ -6965,3 +6965,61 @@ patches:
     - designs/setting/calamity_radiation.md
     - references/arc_register.md
   status: applied
+
+- id: PP-610
+  type: correction
+  date: 2026-04-14
+  severity: P1
+  description: >
+    PP-607 correction. Two errors identified from reading params_core.md.
+
+    ERROR 1 — Attunement was not undefined:
+    PP-607 stated "Attunement currently undefined (ED-418)" and proposed a definition.
+    Attunement IS defined in params_core.md as one of the 10 core character attributes,
+    Social group, range 1-7. ED-418 (which flagged it as undefined in params_threadwork)
+    was a false gap — Attunement was in params_core all along. PP-607's definition
+    ("felt resonance with world as it is") is consistent with its Social-group positioning
+    and its appearance in Mending/Weaving pool formulas; this framing is retained. But
+    Attunement is not a new stat — it is an existing core attribute. ED-418 closed.
+
+    ERROR 2 — Attunement permanent damage was wrong:
+    PP-607 proposed "Attunement takes permanent −1 damage" from accumulated Thread
+    exposure. This is wrong on two grounds:
+    (a) Design principle: no permanent penalties — always able to recover after a
+        season unless there is a key narrative consequence at play.
+    (b) Certainty already handles long-term consequence of Thread exposure. Certainty
+        moves toward 0 (Thread acceptance) as characters witness Thread operations,
+        undergo First Leaps, and face revelation events. This IS the long-term
+        cosmological shift; it does not belong on Attunement.
+
+    CORRECTED SYSTEM:
+    Dissonance = Spirit check only. No track. No permanent penalty. No Attunement damage.
+    - When Thread operations fire nearby, character enters disrupted space, or POP affects
+      their temporal experience: Spirit check TN7 vs Dissonance Factor (1-4, per PP-607).
+    - Failure: Spirit −1D for rest of scene. Clears at scene end.
+    - No sustained penalty beyond the scene unless GM calls a narrative consequence.
+    - Long-term Thread exposure consequence = Certainty movement (params_core §Certainty,
+      PP-551). Certainty is the transformation track, not a damage track.
+
+    Certainty (params_core, PP-551): 0-5 cosmological worldview track.
+    5 = Solmund orthodox. 0 = Thread acceptance. Both poles are stable states.
+    NOT a deterioration track. Movement in either direction has mechanical effects.
+    This is the correct long-term consequence of Thread exposure, already canonical.
+    No duplication with Dissonance (immediate Spirit check) or Coherence (practitioner
+    operational cost).
+
+    COMPLETE STAT PICTURE (from params_core.md, canonical):
+    10 Attributes (1-7): Agility, Endurance, Strength (Physical); Cognition, Recall,
+      Focus (Mental); Attunement, Bonds, Charisma (Social); Spirit (Metaphysical).
+    Derived: Health (End+6), Stamina (End+1 min2), Composure (Cha+6),
+      Combat Pool (Agi + weapon History), Contact Rounds (=Focus), Resolve (=Spirit).
+    Tracks: Momentum (0-4), Certainty (0-5), Coherence (10→0 practitioners),
+      Thread Sensitivity (0-100 practitioners), TPS (derived TS÷10 practitioners).
+    Narrative: Histories, Beliefs+Conviction Tracks, Inspirations, Instincts, Wises.
+
+    CLOSES: ED-418 (Attunement was already defined in params_core).
+  finding_id: PP-607
+  affects:
+    - references/params_core.md
+    - references/params_threadwork.md
+  status: applied
