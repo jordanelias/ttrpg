@@ -1,6 +1,6 @@
 <!-- version: v0.16-PP500-512 | sources: stage6_factions.md (TTRPG), bg_v05 (BG/Hybrid) | last_updated: 2026-04-07 -->
 <!-- NOTE: stage6_factions.md is STALE for BG faction mechanics. Use BG column for board game/hybrid. -->
-<!-- PATCHES APPLIED (canonical): PP-167–168, PP-171, PP-189, PP-195, PP-199, PP-201, PP-236–238, PP-241–244, PP-246, PP-250, PP-254–255, PP-259, PP-262–264, PP-270, PP-281, PP-286–292, PP-323–326, PP-328–329, PP-335, PP-354, PP-373, PP-375, PP-387, PP-396, PP-402–405, PP-428–442, PP-445–447, PP-460, PP-478, PP-482–483, PP-486–487, PP-490, PP-494–495, PP-498, PP-504, PP-506–507, PP-510, PP-526, PP-549, PP-552–553, PP-555, PP-577 -->
+<!-- PATCHES APPLIED (canonical): PP-167–168, PP-171, PP-189, PP-195, PP-199, PP-201, PP-236–238, PP-241–244, PP-246, PP-250, PP-254–255, PP-259, PP-262, PP-270, PP-281, PP-286–292, PP-323–326, PP-328–329, PP-335, PP-354, PP-373, PP-375, PP-387, PP-396, PP-402–405, PP-428, PP-433, PP-436–437, PP-439, PP-442, PP-445, PP-460, PP-478, PP-482–483, PP-486–487, PP-490, PP-494–495, PP-498, PP-504, PP-506–507, PP-510, PP-526, PP-549, PP-552, PP-555, PP-576–577 -->
 <!-- STALE CHECK: TTRPG column from v0.14 compiled. BG column from bg_v05 design. -->
 
 # params_factions.md — Factions
