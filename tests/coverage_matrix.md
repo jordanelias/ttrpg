@@ -656,3 +656,12 @@ P2 findings: 3 (P2-D01/02/03→PP-587; P2-D04 design observation)
 | ARC-S49 Rawlsian Bind | C+D | COMPLETE | Principles Maintained correct NPC AI; Suspended near-impossible Mandate path (~11%/season); RM role confirmed Thread-substrate |
 P2 findings: 4 (P2-E01/E04→PP-591; P2-E02→ED-419; P2-E03 design observation)
 GAP: ED-418 (Attunement stat undefined P2)
+
+## SIM-ARC-F01 — Cluster F Economic Web (2026-04-13)
+| Arc | Mode | Status | Key Finding |
+|---|---|---|---|
+| ARC-P09 Royal Debt | C | COMPLETE | Charter undeliverable at Wealth 2; weakens S52 Crown offer (P2-F02) |
+| ARC-S52 Feldhaus Gambit | C | COMPLETE | Varfell wins by default (Crown undeliverable, Church coercive); P2-F01 Guilds no Intel stat |
+| ARC-T24 Tax Revolt | C+D | COMPLETE | Dormant Season 6 (PI < 6); Guilds 70% win rate in Contest; P2-F03 |
+| COLLISION I | C | COMPLETE | P09+S52 active; TE-20 not yet (T5+T6 Crown-held); temporal sequence documented P2-F04 |
+P2 findings: 4 (P2-F01→PP-593; P2-F02/F04→ED-421; P2-F03 design observation; GAP-F01→ED-420)

@@ -6290,3 +6290,23 @@ patches:
   affects:
     - tests/sim_arc_c01_vaynard_unchecked.md
   status: applied
+
+- id: PP-593
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-F01 resolved. When Church (or any faction) plays Tribune Investigate targeting
+    a faction with no Intel stat (Guilds, Niflhel has no stat listing for Intel in
+    params_board_game starting table — Niflhel Intel is "—"), the Investigate Ob is
+    derived from the target faction's Stability: floor(Stability / 2) + 1.
+    Rationale: Stability represents institutional coherence and information security.
+    A faction without an Intelligence apparatus is harder to penetrate via raw talent
+    but lacks the active counter-intelligence that a high Intel stat would represent.
+    Stability as proxy preserves the mechanical difficulty gradient while providing
+    a canonical Ob derivation. Add to params_board_game.md §Tribune Investigate action
+    description as a special case note.
+  finding_id: P2-F01
+  affects:
+    - references/params_board_game.md
+  status: applied

@@ -3667,3 +3667,19 @@ editorial_decisions:
     description: "P2-E02: Inquisitor in T13 and PP-590 Thread Contact TS Development. The Inquisitor deployed to T13 (Oastad) handles Thread-adjacent evidence from Einhir ruins, Calamity Radiation effects, and Cultural Reclamation accounts. Per PP-590 tier 2 (sustained professional handling): Spirit TN7 Ob3 per campaign arc for TS development. The suppression operation is a Thread sensitivity programme for its own operative. This should be noted in the Active Inquisition action description as a long-term consequence of repeated deployment to Thread-active territories. Confirm: does the Inquisitor NPC AI take this risk into account when prioritising deployment locations?"
     tags: [inquisitor, ts_development, pp590, church, simulation]
     source: SIM-ARC-E01
+
+  - id: ED-420
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P2
+    description: "GAP-F01: Crown seasonal Wealth generation sources not canonically specified. Crown starting Wealth 4 with no passive income in params. Govern (Consul Inward) actions produce Prosperity gains, not direct Wealth. Trade (Consul Outward) can produce Wealth income but only in adjacent territories with sufficient Prosperity. ARC-P09 (Royal Debt) fires at Wealth ≤ 2 — without knowing Crown's income rate, the trigger timing cannot be reliably projected. Establish: (a) does Crown have any passive Wealth generation? (b) what is the Wealth income from a successful Trade Consul action? (c) does territory Prosperity directly contribute to faction Wealth at Accounting?"
+    tags: [crown, wealth, income, arc_p09, simulation]
+    source: SIM-ARC-F01
+
+  - id: ED-421
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P2
+    description: "P2-F04: COLLISION I temporal sequence — ARC-P09+ARC-S52 fire early-to-mid campaign (Seasons 5–8 typically) while TE-20 (Breadbasket Withers) requires territorial displacement of Crown from T5 or T6, which is a mid-to-late campaign event. Document in COLLISION I entry and both arc entries that the Collision has an expected temporal sequence: economic crisis fires first; TE-20 joins later to escalate from severe to catastrophic. GMs should anticipate this is a late-campaign amplification of an already-active economic pressure, not a single-moment convergence."
+    tags: [collision_i, arc_p09, arc_s52, te20, simulation]
+    source: SIM-ARC-F01

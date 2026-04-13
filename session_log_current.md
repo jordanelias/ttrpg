@@ -4,6 +4,34 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_SONNET_SIM_ARC_F01
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+TASK: SIM-ARC-F01 — Cluster F Economic Web (ARC-P09, ARC-S52, ARC-T24)
+  Mode: C (Full Scenario) | Season 6, Crown fiscal distress
+
+PRIMARY FINDINGS:
+  P2-F01: Guilds no Intel stat — Stability as proxy Ob derivation (PP-593)
+  P2-F02: ARC-P09 weakens Crown's S52 Charter offer — COLLISION I interaction confirmed designed
+  P2-F03: Tax Revolt (T24) heavily favours Guilds at starting stats (~70% win rate)
+  P2-F04: COLLISION I temporal sequence — P09+S52 early; TE-20 joins late (ED-421)
+  Varfell acquires Guilds trade ledger via provisional alignment
+
+PATCHES: PP-593 (P2 Guilds no Intel — Stability proxy)
+EDITORIALS: ED-420 (Crown Wealth income sources P2), ED-421 (COLLISION I temporal sequence P2)
+
+P1 BLOCKERS: 0
+OPEN EDITORIALS: 21 (ED-401-421; non-blocking)
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_SONNET_CLUSTER_REVIEW_AND_F
 session_close: 2026-04-13
 phase: IN_PROGRESS
