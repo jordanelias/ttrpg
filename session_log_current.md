@@ -4,6 +4,44 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-14_SONNET_STAT_REDESIGN_EINHIR_CANON
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+PATCHES: PP-607-609
+
+PP-607: Dissonance → Spirit mechanic. Certainty struck. Attunement defined.
+  Spirit check vs Dissonance Factor (1-4) on Thread disruption exposure.
+  Failure: Spirit -1D scene (acute) or season (sustained). Stacks.
+  Attunement: felt resonance with world; Mending/Weaving pool stat; long-term
+  Thread exposure damage (was Certainty). Canonical practitioner stats:
+  Spirit, Attunement, Focus, TS, TPS (derived: TS÷10), Coherence.
+
+PP-608: Mending Ob = 2n + age modifier (+0/+1/+2 for fresh/established/entrenched).
+  Preserves old table's duration logic as explicit modifier within new scale system.
+  Old table values are near-exact matches to new derivation. Ob ceiling struck.
+
+PP-609: Einhir Foundational sites canonically defined.
+  Einhir worked FROM Foundational-stabilized sites (platform), not AT Foundational scale.
+  Four Foundational conditions: temporal coherence, spatial extension, configurational
+  legibility, actualization. T15 = most significant stabilization site.
+  Calamity = Structural operation failure → stabilization collapse → network of
+  mutually reinforcing Foundational Gaps consuming own self-repair context.
+  Edeyja's work = isolate individual Gaps → restore local stability → allow closure.
+  Major conflicts reset sections she has stabilized.
+
+EDITORIALS: ED-435 (Dissonance Factor calibration P2), ED-436 (Attunement starting value P2)
+OPEN EDITORIALS: 36 (ED-401-436)
+TPS confirmed: TS÷10 (Edeyja at TS90 brings 9D from TPS; meaningful shot at Foundational Mending Ob10)
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-14_SONNET_RS_REDESIGN_MAXEFFORT
 session_close: 2026-04-14
 phase: COMPLETE

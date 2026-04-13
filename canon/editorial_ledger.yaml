@@ -3842,3 +3842,19 @@ editorial_decisions:
     description: "ARC-T04 struck (PP-602). Any existing arc_register arcs that reference or depend on ARC-T04 as a trigger or consequence need review. Also: the co-victory conditions for Varfell Path C (Thread Supremacy) and Crown+Varfell co-victory both require RS ≥ 50 as a threshold condition. These were implicitly designed assuming the Southernmost Ritual could produce a large RS gain event. Without that event, RS ≥ 50 must be achieved through sustained Mending and WC 3 over multiple seasons. Confirm the RS ≥ 50 threshold is still reachable within campaign timeframes under the new design."
     tags: [arc_t04, varfell, co_victory, rs, campaign_balance]
     source: pp602
+
+  - id: ED-435
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P2
+    description: "Dissonance Factor calibration. PP-607 defines Dissonance Factor by source (1-4) and Spirit check as the resolution mechanic. The specific Factor values need simulation/playtesting confirmation before finalisation. Key questions: (a) Is Factor 4 (Foundational-breached zone) appropriate for T15 entry, or should it scale with TS (lower TS = higher effective Factor because less ability to render what's happening)? (b) Should the Factor scale with the disruption's scale index n, making Dissonance Factor = n for Territory/Structural/Foundational sources? (c) Are acute (scene) vs sustained (season) Spirit pool reductions the right duration breakdown?"
+    tags: [dissonance, spirit, factor_calibration, pp607]
+    source: pp607
+
+  - id: ED-436
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P2
+    description: "Attunement starting value and recovery rate. PP-607 defines Attunement's function but not its starting value or typical character sheet range. Required before character creation rules can include Attunement. Questions: (a) Is Attunement a character creation stat (like Spirit, Coord, Endurance) with a typical range of 1-5? (b) Does starting Attunement vary by character background (someone raised near Einhir sites might start higher)? (c) Is 'full season in Thread-unaffected environment' the right recovery rate for Attunement damage, or should it require specific practices (meditation, community, physical grounding in nature)?"
+    tags: [attunement, stat_design, character_creation, pp607]
+    source: pp607

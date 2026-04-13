@@ -6770,3 +6770,198 @@ patches:
   affects:
     - references/params_threadwork.md
   status: applied
+
+- id: PP-607
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Dissonance absorbed into Spirit. Certainty track removed. Attunement defined.
+
+    DISSONANCE → SPIRIT CHECK MECHANIC:
+    When a Thread operation fires near a character, they enter Thread-disrupted space,
+    or POP affects their temporal experience: Dissonance check fires.
+    Roll: Spirit pool (all dice available) TN7 vs Dissonance Factor.
+
+    Dissonance Factor by source:
+    - Thread operation in adjacent area, brief: Factor 1
+    - Thread operation nearby, significant: Factor 2
+    - POP affecting character's own memories: Factor 3
+    - Entering Territory-scale Gap: Factor 2
+    - Entering Structural-scale Gap: Factor 3
+    - Proximity to active Substrate Saturation (Counter ≥ 3): Factor 2
+    - Extended time in Foundational-breached zone: Factor 4
+
+    Failure consequence (duration by exposure type):
+    - Acute (single operation event, brief encounter): Spirit −1D for rest of scene.
+    - Sustained (living or working in disrupted area across seasons): Spirit −1D for rest of season.
+    - Stacking: multiple failures in the same scene reduce Spirit pool cumulatively.
+    Recovery: acute effect clears at scene end; sustained effect clears at season end.
+    Spirit pool reductions are temporary; the stat only permanently changes through
+    Attunement damage (see below) or through deliberate character development.
+
+    TS INTERACTION WITH DISSONANCE:
+    TS 30+ practitioners: on a Dissonance check Success, instead of no-effect, they receive
+    readable Thread information (Discovery Event trigger or Belief revision opportunity).
+    On Failure, they still take the Spirit −1D penalty — perception does not eliminate the
+    phenomenological burden; it changes what the disruption means, not that it has weight.
+
+    ATTUNEMENT — DEFINITION (closes ED-418):
+    Attunement = felt resonance with the world as it is. The receptive, healing-oriented
+    complement to Spirit's assertive dimension. Where Spirit is the force of will that holds
+    the self together under Thread pressure, Attunement is the quality of presence that allows
+    the world to be read without forcing it.
+
+    Mechanical functions:
+    (1) Mending pool: Attunement + Focus + TPS (replaces provisional entries; canonical).
+        Mending is not an act of will on the substrate — it is receptive engagement with
+        what is actually there and what the substrate's own self-repair tendency wants.
+        Attunement is the correct stat for this, not Spirit.
+    (2) Community Weaving pool: Attunement + History + TPS (PP-250 canonical; confirmed).
+    (3) Long-term Thread exposure damage (replaces Certainty track):
+        When a character accumulates Dissonance failures across multiple scenes/seasons,
+        or fails Forgetting checks, or undergoes traumatic Discovery Events: Attunement
+        takes permanent −1 damage. This is the long-term cost of exposure beyond rendering
+        capacity — the felt resonance with the world as-it-is is eroded.
+        Recovery: extended time in Thread-unaffected environments (full season, no Thread
+        operations nearby): Attunement +1. Cannot exceed starting value this way. Warden
+        guidance or Anchoring Scene (Bonds TN7 Ob2): Attunement +1 (as Coherence recovery).
+
+    CERTAINTY TRACK — STRUCK:
+    The Certainty track is removed. Its mechanical function (accumulated epistemic damage
+    from Thread exposure) is now handled by Attunement permanent damage.
+    The phenomenological concept of certainty (epistemic confidence in one's access to
+    reality) remains valid as narrative framing; it has no separate mechanical expression.
+
+    STAT SUMMARY (practitioners):
+    Spirit — assertive self-coherence; Dissonance checks; Leap rolls
+    Attunement — receptive world-resonance; Mending/Weaving pools; long-term exposure damage
+    Focus — contact duration (1–7 rounds)
+    Thread Sensitivity (TS) — perceptual depth (0–100)
+    Thread Pool Score (TPS) — TS ÷ 10 round down; contributes to operation pools
+    Coherence — ontological rendering frame; 10→0; practitioners only
+
+    STAT SUMMARY (non-practitioners in Thread-active environments):
+    Spirit — Dissonance checks; temporary pool reduction on failure
+    Attunement — long-term Thread exposure damage; starting resonance with world
+
+    Affects: params_threadwork.md (Coherence section, Mending pool, Community Weaving pool,
+    Certainty references); session worldbuilding canon.
+  finding_id: ED-418 ED-433
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+
+- id: PP-608
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Mending Ob: age modifier added within scale. The old 6-tier Mending table
+    (Shifting Object Ob2, Micro-Gap Ob3, Standard Ob5, Entrenched Ob6, Catastrophic
+    Ob7, Locked Zone Ob8+) encoded both scale and duration. The new 5-scale table
+    encodes scale via base Ob (2n). Duration is now an explicit modifier:
+
+    Age modifier (applies within any Gap scale):
+    - Fresh (0–1 seasons open): +0 Ob
+    - Established (2–4 seasons open): +1 Ob
+    - Entrenched (5+ seasons open): +2 Ob
+
+    Full Mending Ob = (2n) + age modifier.
+
+    Examples:
+    - Fresh Relational Gap: Ob 2 + 0 = Ob 2 (was: Micro-Gap Ob3, close match)
+    - Established Territory Gap: Ob 4 + 1 = Ob 5 (was: Standard Gap Ob5, exact match)
+    - Entrenched Territory Gap: Ob 4 + 2 = Ob 6 (was: Entrenched Gap Ob6, exact match)
+    - Fresh Structural Gap: Ob 6 + 0 = Ob 6 (was: Catastrophic Gap Ob7, close match)
+    - Entrenched Structural Gap: Ob 6 + 2 = Ob 8 (beyond old table top — correct)
+    - Fresh Foundational Gap: Ob 10 + 0 = Ob 10 (was: Locked Zone Ob8+, now explicit)
+
+    The old table's values were intuitive approximations of what scale+duration produces.
+    The new system derives them from first principles while preserving the old table's
+    duration-based distinctions as an explicit modifier.
+
+    Ob ceiling struck (was 8). Foundational Mending correctly exceeds old ceiling at Ob 10.
+
+    Affects: params_threadwork.md §Mending.
+  finding_id: null
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+
+- id: PP-609
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Einhir Foundational sites — canonical design definition.
+
+    The Einhir did not primarily operate AT the Foundational scale. They operated
+    FROM Foundational-stabilized sites. The distinction is critical.
+
+    FOUNDATIONAL STABILIZATION (what the Einhir actually did):
+    The Einhir maintained and stabilized the four Foundational Thread conditions in
+    specific locations, not as an end in itself, but as the platform from which
+    large-scale Structural operations could be conducted reliably.
+
+    The four Foundational conditions:
+    (1) Temporal coherence: the condition under which things become sequentially and
+        continuously. Stable temporal coherence = memory formation is clear, Thread
+        operations have predictable temporal auto-effects, POP is precise. Disrupted:
+        the relationship between before and after is unreliable at the Thread level;
+        memory formation fails not because memories are damaged but because the temporal
+        substrate through which experience becomes memory is inconsistent.
+    (2) Spatial extension: the condition under which things occupy distinct positions
+        and can be other-than-here. Stable: positioning is exact, Thread configuration
+        of objects is correctly located. Disrupted: the condition for having a position
+        becomes locally compromised; orientation fails not because of disorientation
+        but because the Thread conditions for spatial distinctness are unreliable.
+    (3) Configurational legibility: the condition under which Thread configurations
+        have a character that can be read. Stable: high-TS practitioners perceive
+        configurations clearly even at low effort. Disrupted: practitioners find their
+        perception returning nothing renderable — the Forgetting's specific form for
+        practitioners is this dimension's Foundational disruption.
+    (4) Actualization: the condition under which configurations are determinate rather
+        than oscillating. Stable: things are what they are, fully. Disrupted: configurations
+        oscillate between states at the Thread level (Shifting Objects are Object-scale
+        actualization disruptions; Foundational actualization disruption affects the
+        conditions for anything being determinate in the region).
+
+    Einhir Foundational sites stabilized all four. Result: a location where everything is
+    exactly what it is, exactly where it should be, exactly when it should happen. Thread
+    operations that fail elsewhere from substrate instability succeed here. For non-practitioners:
+    unusual felt reality, stable memory, heightened presence.
+
+    T15 (Askeheim) was the Einhir's most significant Foundational stabilization site —
+    the center from which they managed Thread conditions across the peninsula.
+
+    THE CALAMITY'S MECHANISM:
+    The Einhir were performing large-scale Structural operations from T15 using the
+    Foundational stabilization as the platform. Something caused the Foundational
+    stabilization to collapse — possibly a Structural operation at a scale that exceeded
+    what the stabilization could support. When the stabilization collapsed, what had been
+    the most stable site became the most catastrophically unstable. The organized
+    positive being (Ein Sof) that the stabilization had been holding in configured form
+    erupted through the breach without organization — not because Ein Sof is hostile, but
+    because the container broke and what was inside it does not naturally conform to human
+    rendering categories.
+
+    The wound is not one Foundational Gap but a network of mutually reinforcing Foundational
+    Gaps across the Askeheim region whose combined extent has consumed the surrounding intact
+    Foundational substrate — destroying the self-repair context. Single Foundational Gaps can
+    self-close in 32 seasons (n=5) because the surrounding intact substrate provides the
+    conditions for closure. The Calamity network cannot self-close because there is no
+    surrounding intact Foundational substrate within the wound's influence range to provide
+    those conditions. Edeyja's work is: isolate individual Gaps from the network → restore
+    local Foundational stability around isolated Gaps → allow those to close → expand the
+    stable region → repeat. Each major conflict resets sections she has stabilized.
+
+    Add to: designs/setting/calamity_radiation.md (Foundational section); arc_register.md
+    (T15 entry clarification); session worldbuilding canon.
+  finding_id: null
+  affects:
+    - designs/setting/calamity_radiation.md
+    - references/arc_register.md
+  status: applied
