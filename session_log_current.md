@@ -4,6 +4,36 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_SONNET_SIM_ARC_C01
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+TASK: SIM-ARC-C01 — NPC-ARC-VAY Vaynard Programme Unchecked
+  Mode: A (Isolation) + C (Full Scenario)
+  Trigger: TK 5 + RS 19 (Critical)
+
+PRIMARY FINDINGS:
+  Forgetting preserves dispositional character, strips propositional safety knowledge (P2-C01/PP-582)
+  Clarity 0 Success = directional anchoring only — Forgetting independence confirmed (P1-C03/PP-581)
+  Standard Mending Ob established: Ob 3 base (GAP-C03/PP-583)
+  Expedition self-repeating without Forgetting-resistant external structure (P2-C05/PP-582)
+  Net RS zero: TE-14 occupation cost cancels single Mending (P2-C04, design confirmed)
+  WC 1 → 0 from TE-13 (permanent damage requiring Warden trust rebuilding)
+
+PATCHES: PP-581 (P1 Clarity/Forgetting), PP-582 (P2 Vaynard char+player role), PP-583 (Mending Ob 3)
+EDITORIALS: ED-411 (Maret stats P2), ED-412 (Edeyja Resonant Style P3), ED-413 (Mending Ob confirm P3)
+
+P1 BLOCKERS: 0
+OPEN EDITORIALS: 13 (ED-401-413; non-blocking)
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_SONNET_SIM_ARC_B02_A01
 session_close: 2026-04-13
 phase: IN PROGRESS

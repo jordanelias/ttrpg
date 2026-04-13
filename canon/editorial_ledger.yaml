@@ -3513,3 +3513,27 @@ editorial_decisions:
     description: "P2-B10: Consecration + Schism cascade. If Himmensendt consecrates Baralta (Church Sta −3), Church Stability drops to 2, re-triggering ARC-S29 schism conditions. The act of institutional yielding triggers the fracture that challenges the yielding. Confirmed as intentional design (correct dramatic structure). Document in GM Reference: the season after consecration, if any faction plays a Senator action targeting Church, ARC-S29 automatically fires again. GMs should anticipate this and inform players that the consecration season is a cascade window."
     tags: [church, baralta, consecration, schism, arc_system]
     source: SIM-ARC-A01
+
+  - id: ED-411
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P2
+    description: "Maret Uln personal stats (Spirit, Attunement, TPS, Influence) unspecified. Simulation used faction stat proxies (Varfell I4 for Influence) and provisional 12D Thread pool. Required before Maret Uln can be the primary actor in any simulation requiring precise pools. Minimum required: Spirit, Attunement, TPS for Thread operations; Influence for cohesion/social actions."
+    tags: [maret_uln, npc, simulation]
+    source: SIM-ARC-C01
+
+  - id: ED-412
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P3
+    description: "Edeyja Resonant Style not confirmed in params. Simulation assumed Evidence (from arc_register NPC characterisation: 'substrate authority'). Confirm before any Edeyja social scene is simulated."
+    tags: [edeyja, npc, resonant_style]
+    source: SIM-ARC-C01
+
+  - id: ED-413
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P3
+    description: "Standard Mending Ob: PP-583 establishes Ob 3 as canonical base. Confirm this value before Mending appears in a player-facing simulation or rules compilation. Ob 3 base + RS-band modifiers (Critical Proximity 0: +2) gives Ob 5 at the most demanding site."
+    tags: [mending, threadwork, simulation]
+    source: SIM-ARC-C01

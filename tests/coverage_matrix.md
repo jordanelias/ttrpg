@@ -622,3 +622,11 @@ P2 findings: 4 (P2-B01/B02 → PP-577; P2-B03/B04 confirmed design intent, no pa
 | ARC-S24 Baralta Succession | D | COMPLETE | Fracture path (PI<4) functionally unreachable; P2-B11 |
 P1 findings: 1 (P1-B08/ED-408 — Quaestio trigger definition)
 P2 findings: 5 (P2-B05→PP-578; P2-B06→PP-579; P2-B07→PP-580; P2-B09→ED-409; P2-B10→ED-410; P2-B11 confirmed design intent)
+
+## SIM-ARC-C01 — NPC-ARC-VAY Vaynard Unchecked (2026-04-13)
+| Arc | Mode | Status | Key Finding |
+|---|---|---|---|
+| NPC-ARC-VAY | A + C | COMPLETE | Self-repeating expedition; Forgetting strips content not character; net RS zero; WC destroyed |
+P1 findings: 1 (P1-C03 → PP-581 Clarity/Forgetting independence)
+P2 findings: 4 (P2-C01/C05 → PP-582; P2-C02 design confirmed; P2-C04 design confirmed; GAP-C03 → PP-583)
+P3 gaps: 3 (ED-411-413: Maret stats, Edeyja Resonant Style, Mending Ob confirmed)

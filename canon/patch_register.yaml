@@ -5848,3 +5848,63 @@ patches:
   affects: [gm_ref/arcs_41_45_interdependent.md]
   finding_id: ED-422
   status: applied
+
+- id: PP-581
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    P1-C03 resolved. Clarity 0 Success and Forgetting content loss are independent systems.
+    Ruling: Clarity 0 Success = DIRECTIONAL ANCHORING ONLY. The character retains directional
+    purpose ("I was going to do X") without content basis ("because Y"). The Forgetting
+    continues to strip content regardless of Clarity success. A character at Clarity 0 with
+    a Success may remain in T15 and continue acting toward their last held direction, but cannot
+    reconstruct the evidential basis for that direction from the Success itself. A character
+    who agreed to extract at Clarity 1 and hits Clarity 0 Success: continues toward exit but
+    cannot explain why if asked. Mechanical implication: Clarity Success at 0 does not require
+    or produce a Spirit check for content retention (these are separate checks). Applies to all
+    Southernmost zones, not only T15. Add to params_threadwork.md §Clarity countdown rule.
+  finding_id: P1-C03
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+
+- id: PP-582
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-C01 documented. Forgetting mechanics on TS 14 practitioners: Forgetting strips
+    propositional Southernmost-specific operational knowledge but preserves dispositional
+    character (Conviction text, ethical framework, TK-level theoretical understanding).
+    Vaynard at TK 5 with Forgetting active: reasoning capacity intact, evidential basis
+    for safety decisions stripped. GM guidance: play Vaynard as fully rational throughout,
+    not confused or irrational. His decisions are correct given what he can access. This
+    is the canonical tragic structure of the arc. Add to NPC-ARC-VAY arc entry as GM note.
+    P2-C05 documented simultaneously: Vaynard's expedition self-repeats without
+    Forgetting-resistant external structure (documentary evidence via ARC-S40; real-time
+    Maret communication). Player role confirmed as communication architecture, not
+    direct intervention. Add to NPC-ARC-VAY arc entry as player role note.
+  finding_id: P2-C01 P2-C05
+  affects:
+    - references/arc_register.md
+  status: applied
+
+
+- id: PP-583
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    GAP-C03 resolved. Standard Mending Ob established: Ob 3 (base).
+    Derivation: Mending is a targeted Thread operation on an existing damaged configuration.
+    Ob 3 is consistent with: (a) the established narrative of Mending as demanding but
+    not extraordinary for a TS 50+ practitioner; (b) RS Critical Proximity 0 adding +2
+    producing Ob 5, which gives Maret (12D pool) P(Success) ≈ 87% — a meaningful challenge
+    without being prohibitive for a specialist practitioner. Add to params_threadwork.md
+    §Mending operation table as canonical base Ob.
+  finding_id: GAP-C03
+  affects:
+    - references/params_threadwork.md
+  status: applied
