@@ -2,7 +2,7 @@
 patch_propagation_checker.py — Valoria patch-to-params propagation validator.
 
 Scans patch_register.yaml for patches that list params files in their
-`files:` or `affects:` fields. Cross-checks whether each params file's
+`files:`, `affects:`, or `files_changed:` fields. Cross-checks whether each params file's
 header comment includes that patch ID.
 
 Usage:
@@ -104,6 +104,12 @@ def parse_patches(content, from_id=None):
         affects_m = re.match(r'affects:\s*\[(.+)\]', line_s)
         if affects_m:
             raw = affects_m.group(1)
+            current["files"].extend([f.strip().strip("'\"") for f in raw.split(",")])
+
+        # files_changed field (alternate name)
+        fc_m = re.match(r'files_changed:\s*\[(.+)\]', line_s)
+        if fc_m:
+            raw = fc_m.group(1)
             current["files"].extend([f.strip().strip("'\"") for f in raw.split(",")])
 
     if current.get("id"):

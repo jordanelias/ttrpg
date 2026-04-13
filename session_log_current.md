@@ -16,6 +16,8 @@ status: OPEN
 7. Propagation backlog: params headers updated (all 8 params files)
 8. Patch register: params_debate.md refs → params_contest.md
 9. Params headers: complete PP ranges from patch register (register-authoritative)
+10. Checker: files_changed field support added
+11. Params headers: rebuilt with files_changed-derived PPs included
 
 ## FIXES APPLIED
 - 30 duplicate ED-ID sets resolved (60 entries renumbered)
