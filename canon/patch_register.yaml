@@ -1749,7 +1749,7 @@ patches:
   finding_id: "AUDIT-HYBRID-01 + all prior sessions"
   source: editorial
   affects:
-  - references/params_debate.md
+  - references/params_contest.md
   - references/params_factions.md
   - references/params_mass_combat.md
   - references/params_combat.md
@@ -2520,7 +2520,7 @@ patches:
   confirmed via stage11 Eight Handoff Rules and §11.7.
   Gap items ED-009/014/022/049/051/055a/056/057b/072 documented with GAP notes.
   files_changed:
-  - references/params_debate.md
+  - references/params_contest.md
   - compilation/v0.14/stage11_scale_transitions.md
   - canon/editorial_ledger.yaml
   - canon/patch_register.yaml
@@ -2723,7 +2723,7 @@ patches:
   affects:
   - references/params_core.md
   - references/params_combat.md
-  - references/params_debate.md
+  - references/params_contest.md
   - references/params_threadwork.md
   - references/params_mass_combat.md
   status: applied
@@ -2822,7 +2822,7 @@ patches:
   severity: P1
   description: "AMPLIFY combined pool cap: highest individual pool x2. Prevents degenerate multi-orator stacking. Provisional."
   source: SIM-H-04
-  affects: [references/params_debate.md]
+  affects: [references/params_contest.md]
   status: applied
   provisional: true
   editorial: ED-150
@@ -2851,7 +2851,7 @@ patches:
   severity: P2
   description: "CROSS exchange: both genre evaluations resolve simultaneously. Provisional."
   source: Audit-02
-  affects: [references/params_debate.md]
+  affects: [references/params_contest.md]
   status: applied
   provisional: true
 
@@ -4075,7 +4075,7 @@ patches:
   description: "SIM-SC-STRESS-01 finding P1-SC-04: Obscuring ow=0.75 in params Orientation Weights contradicts design doc (Obscuring win = no CT movement, DM placed). Params entry is stale. Strike ow=0.75 from params."
   finding_id: P1-SC-04
   source: simulation SIM-SC-STRESS-01 2026-04-08
-  affects: [references/params_debate.md]
+  affects: [references/params_contest.md]
   status: registered — params stale entry to strike
 
 - id: PP-457
@@ -4092,7 +4092,7 @@ patches:
   description: "TIE override scoped to CLASH and AMPLIFY only. Does not apply to CROSS. In CROSS: both-zero produces no strain, no CT movement, no initiative transfer. Resolves SIM-SC-01 finding D-09 (TIE/CROSS contradiction)."
   finding_id: SIM-SC-01-D-09
   source: simulation resolution 2026-04-08
-  affects: [designs/debate/debate_system_redesign_v1.md, references/params_debate.md]
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
   status: applied
 
 - id: PP-450
@@ -4101,7 +4101,7 @@ patches:
   description: "Obscuring orientation weight (×0.75) struck from params_debate. Obscuring check fires BEFORE effective_margin formula — if Obscuring wins CLASH or AMPLIFY, skip formula entirely and place Doubt Marker. OW was moot; formula removal eliminates the ambiguity. Resolves SIM-SC-01 D-07."
   finding_id: SIM-SC-01-D-07
   source: simulation resolution 2026-04-08
-  affects: [designs/debate/debate_system_redesign_v1.md, references/params_debate.md]
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
   status: applied
 
 - id: PP-451
@@ -4119,7 +4119,7 @@ patches:
   description: "Interaction type names aligned between design doc and params_debate. COMPETITION→AMPLIFY, DIVERGENCE→CROSS, DIVERGE state→Deadlock State. Design doc §6.4 updated with AMPLIFY combined pool cap (PP-242/250) and CROSS simultaneous resolution (PP-245). Resolves SIM-SC-01 D-11."
   finding_id: SIM-SC-01-D-11
   source: simulation resolution 2026-04-08
-  affects: [designs/debate/debate_system_redesign_v1.md, references/params_debate.md]
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
   status: applied
 
 - id: PP-453
@@ -4128,7 +4128,7 @@ patches:
   description: "Genre weight adjacency model introduced. Base weights: primary ×1.0, adjacent (one step on Past→Present→Future arc) ×0.75, opposed ×0.5. Audience ethical mode boost reduced from +0.5 to +0.25 (boosted weight cap ×1.25, down from ×1.5). Adjacent genre (×0.75) now produces CT movement at margin 3+ against R=1, eliminating dominant-strategy collapse. Resolves SIM-SC-01 D-14/A-01."
   finding_id: SIM-SC-01-D-14
   source: simulation resolution 2026-04-08
-  affects: [designs/debate/debate_system_redesign_v1.md, references/params_debate.md]
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
   status: applied
 
 - id: PP-454
@@ -4137,7 +4137,7 @@ patches:
   description: "Regroup no longer advances CT toward non-forfeiting side. Exchange is forfeited with no CT consequence (neutral recovery). Eliminates recovery cost asymmetry vs combat Take a Breath. Resolves SIM-SC-01 L-01 and D-04 (Regroup-on-Spent exploit neutralised — CT cost that made it rational is removed)."
   finding_id: SIM-SC-01-L-01
   source: simulation resolution 2026-04-08
-  affects: [designs/debate/debate_system_redesign_v1.md, references/params_debate.md]
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
   status: applied
 
 - id: PP-455
@@ -4146,7 +4146,7 @@ patches:
   description: "Concentration restore on Regroup: max(Focus score, 2). Minimum restore of 2 regardless of Focus. Regroup no longer counts as exchange loss for Concentration depletion — no depletion during Regroup at all. Resolves Focus-1 Regroup trap (SIM-SC-01 D-05)."
   finding_id: SIM-SC-01-D-05
   source: simulation resolution 2026-04-08
-  affects: [designs/debate/debate_system_redesign_v1.md, references/params_debate.md]
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
   status: applied
 
 - id: PP-456
@@ -4155,7 +4155,7 @@ patches:
   description: "CROSS exchanges produce no winner/loser designation. Additional −1 Concentration on exchange loss does not apply to CROSS. Fumble in CROSS: effective_margin = 0, no additional Concentration depletion beyond standard −1 per exchange. Resolves SIM-SC-01 D-08."
   finding_id: SIM-SC-01-D-08
   source: simulation resolution 2026-04-08
-  affects: [designs/debate/debate_system_redesign_v1.md, references/params_debate.md]
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
   status: applied
 
 - id: PP-457
@@ -4164,7 +4164,7 @@ patches:
   description: "Debate Fatigue set at moment Rattled threshold is reached, not at debate conclusion. Trigger is Rattled, regardless of subsequent outcome (win, lose, concede, Unmask). Removes perverse incentive that punished winning-while-Rattled more than conceding. Resolves SIM-SC-01 D-13."
   finding_id: SIM-SC-01-D-13
   source: simulation resolution 2026-04-08
-  affects: [designs/debate/debate_system_redesign_v1.md, references/params_debate.md]
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
   status: applied
 
 - id: PP-458
@@ -4173,7 +4173,7 @@ patches:
   description: "Refute action added (Step 2c). Declared after opponent claims Memory bonus, before dice rolled. Roll Recall Ob 2 TN 7. Failure: bonus stands. Success: bonus denied. Overwhelming: bonus denied + opponent −1D on Argue. Max one Refute per exchange per orator. Resolves SIM-SC-01 D-15 (Memory bonus unverifiable)."
   finding_id: SIM-SC-01-D-15
   source: simulation resolution 2026-04-08
-  affects: [designs/debate/debate_system_redesign_v1.md, references/params_debate.md]
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
   status: applied
 
 - id: PP-459
@@ -4191,7 +4191,7 @@ patches:
   description: "Composure formula corrected to Charisma + 6 (range 7–13), aligned with params_core PP-234/ED-127. Design doc §6.2 Poise references struck. Focus confirmed as standard Mental attribute per params_core. NPC Composure: same formula. Resolves SIM-SC-01 D-03."
   finding_id: SIM-SC-01-D-03
   source: simulation resolution 2026-04-08
-  affects: [designs/debate/debate_system_redesign_v1.md, references/params_debate.md]
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
   status: applied
 
 - id: PP-461
@@ -4200,7 +4200,7 @@ patches:
   description: "§3.8 genre-win Thread consequences classified as social co-movement events, not Thread operations. P-01 mandatory three-dimensional auto-effects do not apply. Mandatory mechanical effects: RS +1 for Evidence and Consequence wins; Disposition change for Character wins. Remainder GM-narrated. Resolves SIM-SC-01 J-04."
   finding_id: SIM-SC-01-J-04
   source: simulation resolution 2026-04-08
-  affects: [designs/debate/debate_system_redesign_v1.md, references/params_debate.md]
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
   status: applied
 
 - id: PP-462
@@ -4209,7 +4209,7 @@ patches:
   description: "Doubt Marker scale-dependency confirmed as intended design. Design note added: Doubt Marker is proportional — denies all movement at low margins, reduces but does not cancel at high margins. Obscuring is the losing-side tool, not a universal denial. Resolves SIM-SC-01 D-02 (no mechanical change)."
   finding_id: SIM-SC-01-D-02
   source: simulation resolution 2026-04-08
-  affects: [designs/debate/debate_system_redesign_v1.md, references/params_debate.md]
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
   status: applied
 
 - id: PP-463
@@ -4218,7 +4218,7 @@ patches:
   description: "Concentration floor = 0 made explicit in params_debate. Multiple depletion triggers in same exchange cannot reduce below 0; Spent fires once. Already implicit in design doc; now stated explicitly. Resolves SIM-SC-01 D-06."
   finding_id: SIM-SC-01-D-06
   source: simulation resolution 2026-04-08
-  affects: [references/params_debate.md]
+  affects: [references/params_contest.md]
   status: applied
 
 - id: PP-464
@@ -4235,7 +4235,7 @@ patches:
   description: "Refute action Ob reduced from 2 to 1. Ob 2 produced ~18% success at Recall 1 (near-impossible). Ob 1 produces ~66% at Recall 1, ~87% at Recall 2 — accessible to any character while preserving skill gradient at Overwhelming. Multi-opponent clarification added: already-denied Memory bonus may not be Refuted again. Resolves AUD-SC-F-07/D-G19."
   finding_id: AUD-SC-D-G19
   source: audit/simulation resolution 2026-04-08
-  affects: [designs/debate/debate_system_redesign_v1.md, references/params_debate.md]
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
   status: applied
 
 - id: PP-466
@@ -4355,7 +4355,7 @@ patches:
   description: "ED-330 resolved — Resistance decay added to debate movement formula: each 0-movement exchange reduces effective resistance by 0.25 (floor 0, reset per scene). Prevents forced-CLASH permanent stalemate. Applied to params_debate.md."
   finding_id: ED-330
   source: editorial resolution 2026-04-08
-  affects: [references/params_debate.md]
+  affects: [references/params_contest.md]
   status: applied
 
 - id: PP-462

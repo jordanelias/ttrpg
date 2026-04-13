@@ -1,6 +1,6 @@
 <!-- version: v0.14-AUD1-R2 | sources: stage1_core_engine.md | last_updated: 2026-04-04 -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
-<!-- PATCHES APPLIED: PP-164, PP-255 (Momentum between-scene carry; RS baseline decay −1/year) -->
+<!-- PATCHES APPLIED (canonical): PP-164, PP-232, PP-234, PP-243, PP-246–248, PP-255, PP-261, PP-289–290, PP-551 -->
 <!-- PP-247 (Combat Pool formula corrected to match stage1 §2.3/§3.4: Agi + hist_pts + 3) -->
 <!-- PP-248 (Stamina formula corrected to End+1 per stage1 §3.9; Health row clarified) -->
 <!-- PP-232 (Ob cap raised to 20; Overwhelming floor 3; Health formula revised; Stamina floor 2; armour wield constraint) -->

@@ -1,4 +1,5 @@
 <!-- version: v0.14-ST2-R1 | sources: stage11_scale_transitions.md + PP-107–112 hybrid audit patches | last_updated: 2026-04-03 -->
+<!-- PATCHES APPLIED (canonical): PP-89, PP-103, PP-107–111, PP-232, PP-261 -->
 <!-- CANONICAL SOURCE: stage11 is canonical (no design doc for scale transitions). Updated with PP-089/090 and ED-050 Thread timing fix. -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
 
