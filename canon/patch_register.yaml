@@ -6271,3 +6271,22 @@ patches:
   affects:
     - references/arc_register.md
   status: applied
+
+- id: PP-592
+  type: cleanup
+  date: 2026-04-13
+  severity: P2
+  description: >
+    SIM-ARC-C01 framing corrections per PP-589 (ZH/VH distinction).
+    Two passages updated: (1) Mode A "Lost/Retained" section — corrected to specify that
+    propositional content (safety prerequisites as words, "I need TS 30+") IS retained by
+    Vaynard. What is unavailable is the operational evaluation of whether TK5 substitutes
+    for TS30+ perceptual capacity — that evaluation requires ZH (ready-to-hand) access to
+    Thread contact experience that Vaynard lacks. (2) "Critical Finding" section — corrected
+    to specify that expedition lessons persist propositionally; the calculation resets because
+    propositional lessons do not reach the operational dimension where the calculation operates.
+    Player role confirmed as structural constraint (PP-584). Mechanical conclusions unchanged.
+  finding_id: PP-589
+  affects:
+    - tests/sim_arc_c01_vaynard_unchecked.md
+  status: applied

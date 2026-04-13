@@ -13,9 +13,14 @@ T12 Sigurdshelm → T13 Oastad → T15 Askeheim.
 
 ### Forgetting Dissection (Mode A)
 Vaynard TS 14, below Forgetting resistance gate (TS 29).
-Retained: urgency, TK 5 structural understanding, fact of past warnings
-Lost: specific safety prerequisites (Southernmost-specific operational knowledge)
-Result: consequentialist calculation proceeds with missing evidence. Not irrational — insufficient.
+Retained: urgency, TK 5 structural understanding (propositional), fact of past warnings,
+  proposition "I need TS 30+ to operate safely" (Maret's testimony persists as Inert Knowledge)
+Not lost as proposition: safety prerequisites Maret communicated — he retains the words.
+Unavailable operationally: the evaluation of whether TK 5 substitutes for TS 30+ perceptual
+  capacity. That evaluation requires ZH (ready-to-hand) access to Thread contact experience.
+  He cannot perform it from his PH (present-at-hand) epistemic position.
+Result: consequentialist calculation proceeds with propositional knowledge but no operational
+  evaluation capacity. He knows the rule; he cannot apply it to his own situation. Not irrational.
 
 ### T15 Entry — TE-13 and TE-14
 TE-13: Military unit in T15 → WC −1 (WC 1 → 0). Warden +1D bonus lost.
@@ -62,10 +67,19 @@ Church: Intel alerted — Senator action next season may produce TC +1
 Vaynard: retains urgency, cannot recall expedition specifics. Will recalculate same way.
 
 ## Critical Finding: Expedition Self-Repeating
-Forgetting strips each expedition's lessons. Vaynard's calculation resets.
-Player role: build Forgetting-resistant communication structure, not direct intervention.
-Documentary evidence (ARC-S40) and real-time Maret guidance survive.
-Nothing Vaynard internalises and holds survives re-entry.
+Each expedition's propositional lessons persist: he retains "I went, produced nothing,
+Maret brought me back." What does not develop is operational understanding — the ability
+to evaluate the safety constraint against his own situation from inside his own epistemic
+position. His consequentialist calculation resets not because lessons are stripped but because
+the lessons he can retain (propositional) do not reach the operational dimension where his
+calculation operates. He needs ZH access (the Leap itself) to evaluate the rule; he cannot
+get ZH access without crossing the TS 29 threshold; the calculation therefore produces the
+same answer each time.
+Player role (PP-584 corrected): structural constraint, not communication architecture.
+Documentary evidence (ARC-S40) and Maret guidance produce propositional agreement in the
+moment — he responds via Epistemic Reason — but cannot change the calculation because the
+calculation requires an operational evaluation neither words nor documents can supply.
+Intervention must make T15 structurally inaccessible regardless of his calculation.
 
 ## Findings
 | ID | Description | Severity |
@@ -74,5 +88,5 @@ Nothing Vaynard internalises and holds survives re-entry.
 | P2-C02 | T15 non-Thread Ob 6 at RS Critical: non-practitioner actions impossible. Ob structure enforces what Forgetting stripped as warning | P2 |
 | P1-C03 | Clarity 0 Success and Forgetting content loss: independent or interacting? Proposed ruling: Clarity 0 Success = directional anchoring only. PP amendment required. | P1 |
 | P2-C04 | Single Mending/season at RS Critical Proxy 0 cancelled by TE-14 RS −1. Net RS zero while destroying WC and costing Coherence | P2 |
-| P2-C05 | Expedition self-repeating without Forgetting-resistant external structure. Critical GM guidance. | P2 |
+| P2-C05 | Expedition self-repeating: propositional lessons persist but operational evaluation capacity absent. Structural constraint required. Communication (verbal, documentary) cannot change the calculation — it produces propositional agreement that fades in operational significance because ZH access is unavailable. PP-589. | P2 |
 | GAP-C01-C05 | WC starting value, Maret stats, Mending Ob, Edeyja Resonant Style unspecified | P3 |

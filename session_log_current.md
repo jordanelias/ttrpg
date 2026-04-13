@@ -4,6 +4,28 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_SONNET_CLUSTER_REVIEW_AND_F
+session_close: 2026-04-13
+phase: IN_PROGRESS
+
+CANON REVIEW — all simulation clusters against today's corrections:
+  Cluster B (ARC-S29/S56/T26): CLEAN
+  Cluster A (Baralta Programme): CLEAN
+  Cluster C (NPC-ARC-VAY): Two framing corrections issued (PP-592).
+    Propositional content retained; operational evaluation capacity absent (ZH/VH).
+    Critical Finding section updated. Mechanical conclusions unchanged.
+  Cluster D (Southern Corridor): CLEAN
+  Cluster E (RM Pressure): CLEAN
+
+Proceeding to Cluster F (Economic Web: ARC-P09, ARC-S52, ARC-T24).
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_SONNET_SIM_ARC_E01
 session_close: 2026-04-13
 phase: COMPLETE
