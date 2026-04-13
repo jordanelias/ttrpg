@@ -16,19 +16,19 @@
 - Scripts: `skills/valoria-orchestrator/scripts/github_ops.py`
 
 ### valoria-simulator
-- Path: `skills/valoria-simulator-SKILL.md`
+- Path: `skills/valoria-simulator/SKILL.md`
 - Model: Sonnet 4.6
 - Triggers: stress test, simulate, audit mechanics, edge cases, run scenario, test [mechanic], probability, crunch cascade, cognitive load, flowchart, precedent comparison, cross-mode
 - Modes: A (isolation) B (interaction) C (scenario) D (edge case) E (coverage) F (Non-Player Character) G1-G5 (subsystem) H (substitution) I (patch output + commit) J (cognitive load) K (cross-mode delta + transitions) L (precedent) M (flowchart)
 
 ### valoria-mechanic-audit
-- Path: `skills/valoria-mechanic-audit-SKILL.md`
+- Path: `skills/valoria-mechanic-audit/SKILL.md`
 - Model: Sonnet 4.6
 - Triggers: audit, consistency check, mechanic check, gap detection, redundancy, formula check, what's broken, what's missing, cross-reference audit
 - Modes: A-G (formula/consistency/contradiction/gap/principles/coverage/cross-mode)
 
 ### valoria-canon-guard
-- Path: `skills/valoria-canon-guard-SKILL.md`
+- Path: `skills/valoria-canon-guard/SKILL.md`
 - Model: Sonnet 4.6
 - Triggers: canon, philosophy, foundations, P-01 through P-14, compliance, philosophical violation, lore check
 - Note: also invoked automatically before any compilation pass
@@ -40,13 +40,13 @@
 - Workflows: A (resolve) B (add new) C (propagation pass) D (dedup/consolidate/strike) E (harvest from session)
 
 ### valoria-compiler
-- Path: `skills/valoria-compiler-SKILL.md`
+- Path: `skills/valoria-compiler/SKILL.md`
 - Model: Sonnet 4.6
 - Triggers: compile, assemble, checkpoint, export, new version, full assembly
 - Note: LOWEST PRIORITY. Only run when a system is stable and explicitly requested.
 
 ### valoria-chunker
-- Path: `skills/valoria-chunker-SKILL.md`
+- Path: `skills/valoria-chunker/SKILL.md`
 - Model: Haiku 4.5
 - Triggers: chunk, section map, index, large document (>500 lines), prepare for analysis, extract sections
 - Note: must run before any analysis skill receives >500 lines of input

@@ -1,6 +1,35 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_OPUS_META_ANALYSIS_FIXES
+session_close: 2026-04-13
+phase: IN PROGRESS
+status: OPEN
+
+## TASKS THIS SESSION
+1. Meta-analysis / systematic review of project infrastructure
+2. Editorial ledger deduplication (60 IDs renumbered: ED-426 through ED-485)
+3. Autoincrement header added (next_id: 486)
+4. Broken dependency checker: glob pattern filtering added
+5. Skill registry: 5 flat paths → dir-based paths
+6. Propagation map: 12 broken references fixed
+7. Propagation backlog: IN PROGRESS
+
+## FIXES APPLIED
+- 30 duplicate ED-ID sets resolved (60 entries renumbered)
+- Checker glob false positives eliminated (skills/*.md, tests/sim_*.md patterns)
+- Skill registry paths corrected (valoria-xxx-SKILL.md → valoria-xxx/SKILL.md)
+- Propagation map: 6 compilation stage refs → _deprecated versions, 2 skill refs → dir-based, 2 system refs → successors, 2 dashboard/zoom refs → _deprecated
+
+## P1 BLOCKERS: see meta-analysis
+## OPEN EDITORIALS: 33 (renumbered from collisions)
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_SONNET_ARC_SYSTEM_V8
 session_close: 2026-04-13
 phase: COMPLETE

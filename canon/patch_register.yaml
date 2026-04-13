@@ -5680,3 +5680,17 @@ patches:
     - canon/editorial_ledger.yaml
     - tests/coverage_matrix.md
   status: applied
+- id: PP-576
+  date: 2026-04-13
+  scope: infrastructure
+  description: >
+    Editorial ledger deduplication + autoincrement header. 60 entries renumbered
+    (ED-426 through ED-485) to resolve 30 duplicate ID sets. next_id: 486 header
+    added. Broken dependency checker updated (glob pattern filtering). Skill
+    registry paths corrected. Propagation map 12 broken references fixed.
+  affects:
+    - canon/editorial_ledger.yaml
+    - tools/broken_dependency_checker.py
+    - skills/valoria-orchestrator/references/skill_registry.md
+    - references/propagation_map.md
+  status: applied

@@ -79,6 +79,8 @@ def extract_file_refs(content, source_file=""):
             path = m.group(1).strip()
             if path and not path.startswith("#"):
                 refs.add(path)
+    # Filter out glob patterns (*, ?) — these are not real file references
+    refs = {r for r in refs if '*' not in r and '?' not in r}
     return refs
 
 def check_propagation_map(all_files):

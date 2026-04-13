@@ -85,7 +85,7 @@ The orchestrator applies these rules to any new file before asking for manual in
 | `params_core.md` | ALL skills | `stage1_core_engine.md` |
 | `params_combat.md` | simulator G1, combat-simulator | `designs/combat/combat_design_v1.md`, `stage8_combat.md` |
 | `params_mass_combat.md` | simulator G1 | `designs/mass_combat/mass_battle_v3.md`, `stage8_combat.md` |
-| `params_debate.md` | simulator G2 | `designs/debate/debate_system_redesign_v1.md` |
+| `params_debate.md` | simulator G2 | `designs/contest/social_contest_system_v2.md` |
 | `params_threadwork.md` | simulator G3 | `designs/ttrpg/threadwork_redesign_v25.md` |
 | `params_factions.md` | simulator G4, mechanic-audit | `stage6_factions.md`, `designs/board_game/valoria_bg_v05_simulation_and_patches.md` |
 | `params_board_game.md` | simulator G5 | `designs/board_game/valoria_bg_v05_simulation_and_patches.md` |
@@ -102,7 +102,7 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
 | `canon/00_philosophical_foundations.md` | ALL design files | Canon authority — triggers full canon-guard pass |
-| `compilation/v0.14/stage1_core_engine.md` | `references/params_core.md` | Extracted values |
+| `compilation/v0.14/stage1_core_engine_deprecated.md` | `references/params_core.md` | Extracted values |
 | `references/params_core.md` | All skills (dice engine baseline) | All simulations depend on core |
 
 ### THREADWORK
@@ -111,9 +111,9 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 |-------------|--------------|--------|
 | `designs/ttrpg/threadwork_redesign_v25.md` | `references/params_threadwork.md` | Extracted values |
 | `designs/ttrpg/threadwork_redesign_v25.md` | `designs/mass_combat/mass_battle_v3.md` §A.10 | Thread in mass battle depends on operation definitions |
-| `designs/ttrpg/threadwork_redesign_v25.md` | `compilation/v0.14/stage15_spell_catalog.md` | W-series operations |
-| `designs/ttrpg/threadwork_redesign_v25.md` | `designs/gm_ref_cp14/dashboards/d06_thread_operation_resolution_card.md` | Dashboard sync |
-| `references/params_threadwork.md` | `skills/valoria-simulator-SKILL.md` (Mode G3) | Sim loads params |
+| `designs/ttrpg/threadwork_redesign_v25.md` | `compilation/v0.14/stage15_spell_catalog_deprecated.md` | W-series operations |
+| `designs/ttrpg/threadwork_redesign_v25.md` | `designs/gm_ref_cp14/dashboards/d06_thread_operation_resolution_card_deprecated.md` | Dashboard sync |
+| `references/params_threadwork.md` | `skills/valoria-simulator/SKILL.md` (Mode G3) | Sim loads params |
 
 ### COMBAT
 
@@ -127,15 +127,15 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | `designs/mass_combat/mass_battle_v3.md` | `compilation/v0.14/stage11_scale_transitions.md` | Phase structure referenced in scale transitions |
 | `designs/mass_combat/mass_battle_v3.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | Phase timing drives state transfer rules |
 | `references/params_combat.md` | `skills/valoria-combat-simulator/SKILL.md` | Sim loads params |
-| `references/params_mass_combat.md` | `skills/valoria-simulator-SKILL.md` (Mode G1) | Sim loads params |
+| `references/params_mass_combat.md` | `skills/valoria-simulator/SKILL.md` (Mode G1) | Sim loads params |
 
 ### DEBATE
 
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
-| `designs/debate/debate_system_redesign_v1.md` | `references/params_debate.md` | Extracted values |
-| `designs/debate/debate_system_redesign_v1.md` | `compilation/v0.14/stage9_social.md` | Stale — needs rewrite |
-| `references/params_debate.md` | `skills/valoria-simulator-SKILL.md` (Mode G2) | Sim loads params |
+| `designs/contest/social_contest_system_v2.md` | `references/params_contest.md` | Extracted values |
+| `designs/contest/social_contest_system_v2.md` | `compilation/v0.14/stage9_social_deprecated.md` | Stale — needs rewrite |
+| `references/params_contest.md` | `skills/valoria-simulator/SKILL.md` (Mode G2) | Sim loads params |
 
 ### BOARD GAME
 
@@ -143,24 +143,24 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 |-------------|--------------|--------|
 | `designs/board_game/valoria_bg_v05_simulation_and_patches.md` | `references/params_board_game.md` | Extracted values |
 | `designs/board_game/valoria_bg_v05_simulation_and_patches.md` | `references/params_factions.md` (BG column) | BG faction mechanics |
-| `designs/board_game/valoria_bg_v05_simulation_and_patches.md` | `compilation/v0.14/stage_bg_board_game_mode.md` | Stale — needs sync (ED-001 blocker) |
-| `references/params_board_game.md` | `skills/valoria-simulator-SKILL.md` (Mode G5) | Sim loads params |
+| `designs/board_game/valoria_bg_v05_simulation_and_patches.md` | `compilation/v0.14/stage_bg_board_game_mode_deprecated.md` | Stale — needs sync (ED-001 blocker) |
+| `references/params_board_game.md` | `skills/valoria-simulator/SKILL.md` (Mode G5) | Sim loads params |
 
 ### FACTIONS
 
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
 | `compilation/v0.14/stage6_factions.md` | `references/params_factions.md` (TTRPG column) | Extracted values |
-| `references/params_factions.md` | `skills/valoria-simulator-SKILL.md` (Mode G4) | Sim loads params |
-| `references/params_factions.md` | `skills/valoria-mechanic-audit-SKILL.md` | Audit loads params |
+| `references/params_factions.md` | `skills/valoria-simulator/SKILL.md` (Mode G4) | Sim loads params |
+| `references/params_factions.md` | `skills/valoria-mechanic-audit/SKILL.md` | Audit loads params |
 
 ### DEBATE
 
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
-| `designs/debate/debate_system_redesign_v1.md` | `references/params_debate.md` | Values extracted; patches must sync |
-| `designs/debate/debate_system_redesign_v1.md` | `compilation/v0.14/stage9_social.md` | STALE — stage9 is empty; compile when stable |
-| `references/params_debate.md` | `skills/valoria-simulator-SKILL.md` (Mode G2) | Sim loads params |
+| `designs/contest/social_contest_system_v2.md` | `references/params_contest.md` | Values extracted; patches must sync |
+| `designs/contest/social_contest_system_v2.md` | `compilation/v0.14/stage9_social_deprecated.md` | STALE — stage9 is empty; compile when stable |
+| `references/params_contest.md` | `skills/valoria-simulator/SKILL.md` (Mode G2) | Sim loads params |
 | `tests/sim_d_01_debate_stress_test.md` | `tests/coverage_matrix.md` | Findings logged |
 | `tests/sim_d_02_debate_scenario_c.md` | `tests/coverage_matrix.md` | Findings logged |
 | `tests/sim_d_02_debate_scenario_c.md` | `canon/editorial_ledger.yaml` | ED-051, ED-052 harvested |
@@ -169,11 +169,11 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | `tests/sim_d_03_subsystem_k.md` | `tests/coverage_matrix.md` | G2+K findings logged |
 | `tests/sim_d_03_subsystem_k.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | K2-F-02: debate Zoom In gap |
 | `tests/sim_d_04_gap_fill_stress.md` | `tests/coverage_matrix.md` | Gap-fill verification logged |
-| `designs/debate/debate_system_redesign_v1.md` | `references/params_debate.md` | v1.6 — params_debate needs §§6.11-6.15 values extracted |
+| `designs/contest/social_contest_system_v2.md` | `references/params_contest.md` | v1.6 — params_debate needs §§6.11-6.15 values extracted |
 | `tests/audit_d02_sim_d05.md` | `tests/coverage_matrix.md` | Audit + stress test findings logged |
 | `tests/audit_d02_sim_d05.md` | `canon/editorial_ledger.yaml` | ED-087-091 harvested |
-| `gm_ref/debate_ref_card_v1.md` | `designs/debate/debate_system_redesign_v1.md` | Reference card must track v1.x |
-| `compilation/v0.14/stage13_npcs.md` | `designs/debate/debate_system_redesign_v1.md` | NPC Composure/attributes feed debate sim |
+| `gm_ref/debate_ref_card_v1.md` | `designs/contest/social_contest_system_v2.md` | Reference card must track v1.x |
+| `compilation/v0.14/stage13_npcs_deprecated.md` | `designs/contest/social_contest_system_v2.md` | NPC Composure/attributes feed debate sim |
 
 ### SCALE TRANSITIONS / HYBRID
 
@@ -181,15 +181,15 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 |-------------|--------------|--------|
 | `compilation/v0.14/stage11_scale_transitions.md` | `references/params_scale_transitions.md` | Extracted values |
 | `compilation/v0.14/stage11_scale_transitions.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | Phase structure drives transfer rules |
-| `skills/valoria-orchestrator/references/state_transfer_spec.md` | `skills/valoria-simulator-SKILL.md` (Mode K2) | Transition tests load spec |
+| `skills/valoria-orchestrator/references/state_transfer_spec.md` | `skills/valoria-simulator/SKILL.md` (Mode K2) | Transition tests load spec |
 | `designs/hybrid/hybrid_gaps_resolved.md` | `compilation/v0.14/stage11_scale_transitions.md` | Pending integration |
 | `designs/hybrid/hybrid_gaps_resolved.md` | `designs/board_game/valoria_bg_v05_simulation_and_patches.md` §B.5 | Pending integration |
 
 ### GM REFERENCE / FLOWCHARTS
 
-| `designs/gm_ref_cp14/zoom_in_out_reference_card.md` (NEW) | `skills/valoria-orchestrator/references/state_transfer_spec.md` | Summarises spec §1 for table use |
-| `designs/gm_ref_cp14/zoom_in_out_reference_card.md` (NEW) | `designs/mass_combat/mass_battle_v3.md` §B.2/B.5 | Pulls unit conversion table |
-| `designs/mass_combat/mass_battle_v3.md` | `designs/gm_ref_cp14/zoom_in_out_reference_card.md` | B.5 references this card |
+| `designs/gm_ref_cp14/zoom_in_out_reference_card_deprecated.md` (NEW) | `skills/valoria-orchestrator/references/state_transfer_spec.md` | Summarises spec §1 for table use |
+| `designs/gm_ref_cp14/zoom_in_out_reference_card_deprecated.md` (NEW) | `designs/mass_combat/mass_battle_v3.md` §B.2/B.5 | Pulls unit conversion table |
+| `designs/mass_combat/mass_battle_v3.md` | `designs/gm_ref_cp14/zoom_in_out_reference_card_deprecated.md` | B.5 references this card |
 
 | `tests/sim_hyb_01_templar_crossing.md` (NEW) | `tests/coverage_matrix.md` | Simulation run — log row added |
 | `tests/sim_hyb_01_templar_crossing.md` (NEW) | `canon/patch_register.yaml` | PP-101 sourced from this sim |
@@ -230,9 +230,9 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 
 | File | Broken Reference | Detected | Status |
 |------|-----------------|----------|--------|
-| `compilation/v0.14/stage3_thread_operations.md` | References threadwork operations — empty/stale | 2026-04-02 | KNOWN — awaiting rewrite from threadwork_v25 |
-| `compilation/v0.14/stage9_social.md` | References debate system — empty/stale | 2026-04-02 | KNOWN — awaiting rewrite from debate_system_redesign_v1 Part 6 |
-| `compilation/v0.14/stage_bg_board_game_mode.md` | References BG rules — stale | 2026-04-02 | KNOWN — ED-001 blocker |
+| `compilation/v0.14/stage3_thread_operations_deprecated.md` | References threadwork operations — empty/stale | 2026-04-02 | KNOWN — awaiting rewrite from threadwork_v25 |
+| `compilation/v0.14/stage9_social_deprecated.md` | References debate system — empty/stale | 2026-04-02 | KNOWN — awaiting rewrite from debate_system_redesign_v1 Part 6 |
+| `compilation/v0.14/stage_bg_board_game_mode_deprecated.md` | References BG rules — stale | 2026-04-02 | KNOWN — ED-001 blocker |
 
 ---
 
@@ -249,7 +249,7 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 ## tests/sim_bg_balance_01.md
 - system: BG
 - type: TEST
-- depends_on: [references/params_board_game.md, compilation/v0.14/stage_bg_board_game_mode.md]
+- depends_on: [references/params_board_game.md, compilation/v0.14/stage_bg_board_game_mode_deprecated.md]
 - referenced_by: [tests/coverage_matrix.md, canon/patch_register.yaml]
 
 ## designs/board_game/stage_bg_proposal_v02.md (action economy canonical)
@@ -304,7 +304,7 @@ Propagation targets:
 Propagation complete. All affected params updated in same commit (22ee783).
 - references/params_core.md → DONE
 - references/params_combat.md → DONE
-- references/params_debate.md → DONE
+- references/params_contest.md → DONE
 - references/params_threadwork.md → DONE
 - references/params_mass_combat.md → DONE
 - references/params_scale_transitions.md → DONE (this commit)
@@ -329,7 +329,7 @@ Propagation targets:
 ## Propagation Pass — 2026-04-03 (ED batch from review session)
 **EDs resolved and propagated:** ED-005, 006, 009, 014, 019, 022, 024, 029, 030, 034, 036, 056, 072, 080, 081, 083, 085, 086, 087, 094, 098, 109, 110, 121, 124, 130, 134
 **Files updated:**
-- references/params_debate.md — ED-009 (proceeding types), ED-014 (corroboration), ED-022 (violence/Unmask), ED-029 (Southernmost purpose rolls)
+- references/params_contest.md — ED-009 (proceeding types), ED-014 (corroboration), ED-022 (violence/Unmask), ED-029 (Southernmost purpose rolls)
 - references/params_combat.md — ED-098 (cover Phase 1), ED-130 (Stage 1/2 struck)
 - references/params_threadwork.md — ED-030 (Mode 3 Thread combat), ED-034 (Ceiral Ritual RS), ED-086 (co-movement simultaneous), ED-121 (paradox window scene), ED-124 (Diagnosis struck mass battle), ED-134 (Diagnosis struck)
 - references/params_mass_combat.md — ED-019 (tactic cards), ED-036 (Altonian stats confirmed), ED-094 (HP reload abstracted)
@@ -343,8 +343,8 @@ Propagation targets:
 - debate_system_redesign_v1.md Part 6 superseded by social_contest_system_v2.md.
 - Genre rename: Past→Memory, Present→(turfed), Future→Projection.
 - Files NOT yet propagated: params_debate_history.md (historical, keep as-is), test outputs (flagged stale).
-| references/sim_decision_protocols.md | sim_decision_protocols | skills/valoria-simulator-SKILL.md, tests/coverage_matrix.md | Protocol changes propagate to simulator skill and any test using actor protocol assignments |
-| references/sim_decision_protocols.md | sim_decision_protocols | skills/valoria-simulator-SKILL.md, tests/coverage_matrix.md | Protocol library; changes propagate to all simulation test files using actor assignments |
+| references/sim_decision_protocols.md | sim_decision_protocols | skills/valoria-simulator/SKILL.md, tests/coverage_matrix.md | Protocol changes propagate to simulator skill and any test using actor protocol assignments |
+| references/sim_decision_protocols.md | sim_decision_protocols | skills/valoria-simulator/SKILL.md, tests/coverage_matrix.md | Protocol library; changes propagate to all simulation test files using actor assignments |
 | designs/combat/combat_design_v1.md (Feint §PP-291/293/294) | feint-partial-commit | references/params_combat.md | Feint versus roll + pool reduction; params must reflect current formula |
 | designs/combat/combat_design_v1.md (Rescue §PP-290/292/295) | rescue-contested | references/params_combat.md, references/sim_decision_protocols.md | Rescue eligibility, contest, Momentum wound trigger |
 | references/params_board_game.md (PP-296) | mandate-suppression | designs/board_game/valoria_bg_v05_simulation_and_patches.md | Mandate Ob cap 4 + coalition bonus; must propagate to BG design doc on next compile |
