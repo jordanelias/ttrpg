@@ -3699,3 +3699,51 @@ editorial_decisions:
     description: "ED-404 branch reached in SIM-G03: TE-08 Grand Debate + Quaestio (ARC-S19) interaction. When T9 falls to Crown and TE-08 triggers a Grand Debate at next Parliament session, can the Quaestio (TC ≥ 42 Baralta action) fire in the same campaign arc? If both are active simultaneously: two 5-exchange Debates in one arc is potentially unplayable. If they resolve sequentially: which fires first? Possible ruling: Quaestio is Baralta's optional action — she would not invoke it in the same arc as the Grand Debate because the Grand Debate (5 exchanges on Church mission legitimacy) already serves as the constitutional challenge moment. NPC AI: Baralta defers Quaestio while Grand Debate is active."
     tags: [te08, quaestio, grand_debate, hafenmark, church, simulation]
     source: SIM-ARC-G03
+
+  - id: ED-424
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P2
+    description: "Torben Loyalty track semantic clarification. Current name and description suggest loyalty to Valoria (which is fixed and unconditional). The track should instead represent Torben's political commitment to the current constitutional succession order — contestable by all factions. Starting value 3 justified as an uncommitted but well-disposed heir under multi-faction pressure whose alignment has not yet been fixed. Rename or clarify description: 'Torben's political commitment to constitutional succession. 0 = actively aligned against current succession order; 7 = irreversible public commitment to Crown succession. Loyalty to Valoria is not tracked — it is assumed constant.'"
+    tags: [torben, loyalty, track, hybrid, ttrpg]
+    source: design_question
+
+  - id: ED-425
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P2
+    description: "Schoenland Hybrid travel mechanics undefined. Define: (a) travel cost in Hybrid (proposed: one-season absence from home territory — PC unavailable for T1-adjacent BG actions); (b) what PC presence in T16 enables that BG Domain Actions cannot: personal scenes with Solberg for TE-33 intelligence asset (cannot be secured by Domain Action alone), AER-building via personal diplomacy (Domain Echo to BG Accounting), IP intelligence above BG resolution; (c) Solberg NPC profile — Resonant Style, Conviction, faction alignment. Schoenland travel should be a meaningful Hybrid commitment, not a free action."
+    tags: [schoenland, t16, hybrid, travel, npc, solberg]
+    source: design_question
+
+  - id: ED-426
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P1
+    description: "Hybrid territory presence framework undefined. Currently mechanics establish BG Domain Actions and TTRPG personal scenes but do not define what PC physical presence in a territory enables vs. BG abstraction. Proposed three-category framework: (a) NPC personal scenes — access to Himmensendt, Baralta, Vaynard, Edeyja, Torben requires PC physical presence in their territory; BG cannot replicate this; (b) intelligence above BG resolution — Tribune Investigate tells you a stat; PC presence reveals the specific operational picture (what Vaynard is building, not just his Intel value); (c) Thread perception and Discovery Event access — TS ≥ 10 PCs in Proximity 1-2 territories with RS Fragile/Fractured perceive substrate instability; BG cannot represent this. Distinguish from Domain Echo (effect-queueing into BG) and PC faction bonus (PP-075 +1D). This framework is the core value proposition of Hybrid over BG-only."
+    tags: [hybrid, territory, travel, zoom_in, npc_access, thread_perception]
+    source: design_question
+
+  - id: ED-427
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P2
+    description: "RS natural recovery during peace. Cosmological grounding: reality self-repairs; the Wardens are accelerating a natural process. PP-239 correctly states RS has no natural decay baseline. Proposed amendment: RS has a slow natural recovery baseline during peace. Proposed rate: +0.5 RS per Year-End in which no Battle occurred in any Proximity 1-3 territory that year (rounded down at Year-End, accumulates as fraction). At this rate: full recovery from RS 50 to RS 100 would take 100 Year-Ends (400 seasons) — never in a standard campaign. But 3-4 seasons of peace might produce RS +1, which is meaningful at the margin. Confirm rate and triggering condition (peace = no Battles in Proximity 1-3? or no Military Domain Actions? or no hostile DA of any kind?)."
+    tags: [rs, recovery, peace, cosmology, wardens, substrate]
+    source: cosmological_clarification
+
+  - id: ED-428
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P2
+    description: "Battle RS drain in Proximity territories. Cosmological grounding: large-scale organised violence stresses the Thread substrate, pulling the Southernmost wound open. This explains: (a) why the Altonian invasion held the wound open; (b) why the Secession Wars pulled it open again; (c) why current campaign conflict is pulling it open now. Proposed mechanic: at Year-End Accounting, count Battles that occurred in Proximity 1-3 territories this year. 0-1 Battles: no RS effect. 2-3 Battles: RS -1. 4+ Battles: RS -2. This creates a feedback loop: faction military escalation (Coup Counter, TC rise, Church Seizure triggering Military responses) accelerates RS decline geometrically — the political crisis is a substrate crisis. Confirm thresholds, Proximity scope (1-3 or 1-4?), and whether non-Battle Military Domain Actions (Muster, March into uncontested territory) count."
+    tags: [rs, battle, proximity, military, substrate, cosmology]
+    source: cosmological_clarification
+
+  - id: ED-429
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P2
+    description: "IP-wound relationship. Cosmological grounding: Altonian military presence near the peninsula sustained the wound being held open during the invasion period. Proposed: (a) IP ≥ 75 (Vanguard deployed at T10): RS -1 additional per Year-End (organised Altonian military presence in Proximity 3-4 range stresses substrate); (b) IP = 100 + AER ≤ 1 (Altonian Conquest): RS -5 immediately on Conquest confirmation (full military occupation reopens the wound — this explains the shared loss condition mechanically rather than treating it as an arbitrary threshold). Additionally: IP is reframed as not just an external threat metric but a wound-status indicator — high IP corresponds historically to periods when the wound was held open (invasion) or nearly held open (post-Secession Wars Altonian pressure). Confirm (a) and (b) rates."
+    tags: [ip, altonia, rs, wound, cosmology, conquest, vanguard]
+    source: cosmological_clarification

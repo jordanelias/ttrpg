@@ -4,6 +4,66 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-14_SONNET_DESIGN_QUESTIONS
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+WORLDBUILDING/DESIGN CLARIFICATIONS (no mechanical patches — editorials flagged):
+
+1. Elske/Torben contact:
+   BG: Torben via Senator Outward (any territory); Elske via Senator Outward in T4.
+   Hybrid: physical journey to their location. Personal scenes enable what BG cannot.
+
+2. Torben Loyalty starting value:
+   Track represents political commitment to constitutional succession order, not loyalty
+   to Valoria (that is constant and untracked). Starting 3 = uncommitted but well-disposed
+   heir under multi-faction pressure. ED-424 for semantic clarification.
+
+3. Schoenland travel:
+   One-season Hybrid commitment from T1 port. Enables: Solberg personal scenes (TE-33
+   intelligence asset requires PC presence), AER Domain Echo, IP intelligence above BG
+   resolution. ED-425 for full mechanics.
+
+4. Territory travel in Hybrid:
+   Framework undefined. Three categories proposed: (a) NPC personal access;
+   (b) intelligence above BG resolution; (c) Thread perception/Discovery Events.
+   ED-426 — P1 priority — core value proposition of Hybrid mode.
+
+5. Calamity radiation and arc vectors:
+   RS decline is RS-gated arc activation mechanism. TE-17/TE-18/TE-21 are RS-band-gated.
+   ARC-S47 requires Folklore radiation as substrate. Cross-reference arc_register ↔
+   calamity_radiation.md systemically needed.
+
+6. COSMOLOGICAL CLARIFICATION — The Southernmost Wound History:
+   Ripped open (Calamity) → held open (Altonian Invasion) → slow self-repair →
+   pulled open again (Secession Wars) → fragile recovery → pulling open again (current campaign).
+   
+   Mechanical implications (all flagged as editorials, user decision required):
+   ED-427: RS natural recovery during peace (+0.5/Year-End with no Proximity 1-3 Battles)
+   ED-428: Battle RS drain in Proximity territories (≥2 Battles in Prox 1-3 = RS -1/Year-End)
+   ED-429: IP-wound relationship (Vanguard = RS -1/Year-End; Conquest = RS -5 immediate)
+   
+   Design consequence: political campaign and substrate crisis are the SAME crisis.
+   Every military action, every Inquisition, every faction conflict is pulling the wound open.
+   Church's suppression is wrong in prescription (suppression causes conflict causes RS drain)
+   but right in intuition (conflict and Thread instability are connected — causation reversed).
+
+OPEN EDITORIALS: 29 (ED-401-429; non-blocking)
+  ED-424 P2: Torben track semantics
+  ED-425 P2: Schoenland Hybrid travel
+  ED-426 P1: Hybrid territory presence framework
+  ED-427 P2: RS natural recovery rate
+  ED-428 P2: Battle RS drain in Proximity territories
+  ED-429 P2: IP-wound relationship
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-14_SONNET_SIM_ARC_G01-G05
 session_close: 2026-04-14
 phase: COMPLETE
