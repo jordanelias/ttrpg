@@ -3802,3 +3802,11 @@ editorial_decisions:
       full military occupation would, over years, stress the substrate, and the
       campaign has no years left in which to address it. The narrative explanation
       is correct; the mechanical shorthand was unnecessary. ED-429 closed with no patch.
+
+  - id: ED-430
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P2
+    description: "Southernmost Ritual [UNNAMED — ED-416] RS outcome table in params_threadwork.md appears to use old-convention RS notation (RS as damage score). Current convention: RS = integrity (higher = better). Likely correct values: Success RS +6, Overwhelming RS +10, Partial RS +3, Failure RS −8. Confirm before applying. The BG Co-Movement card ceiling (RS +1) noted in that section applies only to BG-initiated Thread abstraction, not to TTRPG Zoom In ritual scenes — this distinction remains valid regardless of convention correction."
+    tags: [southernmost_ritual, rs, old_convention, params_threadwork]
+    source: tracker_reference_compilation

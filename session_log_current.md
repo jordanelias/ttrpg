@@ -4,6 +4,30 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-14_SONNET_TRACKER_REFERENCE
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+TASK: Comprehensive tracker reference — RS, Coherence, TS, TPS, TT, WC, WR, VTM,
+  Clarity, AER, Thread Debt, Certainty.
+
+PATCH: PP-601 — Three stale/conflicting params_threadwork entries:
+  (1) "Ceiral Ritual" section renamed (PP-588 cleanup incomplete)
+  (2) Southernmost Ritual RS table flagged as old-convention → ED-430
+  (3) PP-192/PP-225 mass battle ×3 multiplier STRUCK (superseded by PP-600)
+
+EDITORIAL: ED-430 (Southernmost Ritual RS table old-convention verification P2)
+
+OPEN EDITORIALS: 30 (ED-401-430; non-blocking)
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-14_SONNET_PP600_BATTLE_RS
 session_close: 2026-04-14
 phase: COMPLETE

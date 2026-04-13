@@ -6525,3 +6525,41 @@ patches:
     - references/params_threadwork.md
     - references/params_board_game.md
   status: applied
+
+- id: PP-601
+  type: cleanup
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Three stale/conflicting entries in params_threadwork.md identified during
+    comprehensive tracker reference compilation.
+
+    (1) "Ceiral Ritual" section (params_threadwork.md line 426): Name struck by PP-588
+    in arc_register.md and other files but not in params_threadwork.md itself.
+    The section header and body still read "Ceiral Ritual." Rename to
+    "Southernmost Ritual [UNNAMED — ED-416] — BG RS Propagation."
+
+    (2) Southernmost Ritual RS outcome table likely uses old-convention RS notation
+    (RS as damage score, lower = better) from pre-redesign. Current convention is
+    RS as integrity (higher = better). Values as listed: Success −6, Overwhelming −10,
+    Partial −3, Failure +8 are internally inconsistent with a healing ritual in
+    current convention. Proposed corrected values: Success RS +6, Overwhelming RS +10,
+    Partial RS +3, Failure RS −8. These require user confirmation before application.
+    Flagged as ED-430.
+
+    (3) PP-192 PROVISIONAL (mass battle RS ×3 multiplier on individual operation costs)
+    conflicts with PP-600 (recalibrated mass battle RS consequences). PP-600 addressed
+    only the Dissonant Counter RS consequence; PP-192's ×3 multiplier on individual
+    operation RS costs was not explicitly struck. Resolution: PP-192 mass battle RS ×3
+    multiplier on individual operation costs is STRUCK. Individual Thread operation RS
+    costs in mass battle are at full TTRPG value (×1), same as outside battle.
+    Only the Dissonant Counter adds an additional RS consequence (−1 per battle, cap
+    per PP-600). PP-225 (gains also ×3) is also struck — gains are at full TTRPG value.
+    The mass battle recalibration (PP-600) is now the sole authority on battle RS.
+    Rationale: ×3 multiplier was provisionally designed to make mass battle Thread use
+    feel consequential; PP-600 achieves this through the Dissonant Counter mechanism
+    without requiring a blanket multiplier that penalised even Mending.
+  finding_id: PP-588 PP-192 PP-225 PP-600
+  affects:
+    - references/params_threadwork.md
+  status: applied
