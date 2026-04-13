@@ -1,3 +1,36 @@
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-14_SONNET_STAT_AUDIT
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+TASK: Cross-system stat consistency audit (params_core, combat, contest, mass_combat,
+  threadwork, fieldwork, board_game).
+
+PATCHES: PP-611-614
+  PP-611: Stamina = End+1 (not End+Hist+1). params_combat body was stale vs PP-248.
+  PP-612: Combat Pool = Agi + History non-doubled. params_combat body stale vs PP-247.
+    DESIGN INTENT confirmed: Combat non-doubled, Contest/Fieldwork doubled, Thread uses TPS.
+    Three different constructions, each intentional.
+  PP-613: Mass battle RS ×3 table struck from params_mass_combat (PP-601 not propagated).
+    Rupture risk from single Dissolution now only at RS ≤ 3 (not ≤ 24). PP-204 updated.
+  PP-614: Contest Step 1 consolidated: Name=Appraise, Pool=Att+Rec, Ob=opp Cha÷2.
+    Replaces three stale entries (Read/Judge/Appraise with conflicting pools and Obs).
+
+EDITORIALS: ED-437-440
+  ED-437 P2: Binding Ops terminology (FR/RO/BO) — cleanup pass needed in params_threadwork
+  ED-438 P3: Health formula presentation harmonisation
+  ED-439 P3: Three design note gaps (TPS exclusion, Attunement doubling, Leap pool)
+  ED-440 P3: PP-249 Dissonance wording predates PP-607 rename
+
+OPEN EDITORIALS: 40 (ED-401-440)
+```
+
 # Valoria Session Log — Current
 
 ```yaml

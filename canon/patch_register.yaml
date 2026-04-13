@@ -7023,3 +7023,117 @@ patches:
     - references/params_core.md
     - references/params_threadwork.md
   status: applied
+
+- id: PP-611
+  type: correction
+  date: 2026-04-14
+  severity: P1
+  description: >
+    params_combat.md Stamina formula corrected.
+    STALE BODY: Stamina = Endurance + Relevant History + 1 (modified by armour) — minimum 2
+    CORRECT (params_core.md, PP-248): Stamina = Endurance + 1 — minimum 2
+    PP-248 applied this correction but params_combat.md body was never updated.
+    The History component in the stale formula has no design basis in current params.
+    Armour modifier still applies: final Stamina = (End + 1) + armour modifier (negative),
+    minimum 2. Armour cannot reduce Stamina to 1 or below (wield constraint unchanged).
+  finding_id: audit-A
+  affects:
+    - references/params_combat.md
+  status: applied
+
+- id: PP-612
+  type: correction
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Combat Pool formula reconciled. params_combat.md body stated doubled formula
+    (Agility × 2) + History + 3; PP-247 correction and params_core.md both state
+    non-doubled: Agility + History (points + 3), minimum 5.
+    CANONICAL (PP-247, params_core.md): Combat Pool = Agility + weapon History (points + 3),
+    minimum 5.
+    The minimum 5 is meaningful only for the non-doubled formula (Agi 1 + 0 hist + 3 = 4
+    < 5); under the doubled formula the minimum would always be met, making it redundant.
+    The minimum 5 confirms PP-247's non-doubled formula is the intended correction.
+
+    DESIGN INTENT NOTE (added to resolve ED-NEW-11 partial):
+    Combat and fieldwork/contest use structurally different pool constructions deliberately:
+    - Combat Pool: Attribute (non-doubled) + History. Combat rewards raw physical capacity
+      with modest History amplification.
+    - Contest/Fieldwork Pool: (Primary Attribute × 2) + History. Social and investigative
+      work rewards intellectual/social depth more heavily relative to raw attribute.
+    - Thread operations: Attribute (non-doubled) + History + TPS. Perceptual depth (TPS)
+      is the amplifier for Thread work, not doubled attribute.
+    This is intentional asymmetry, not an error. params_contest.md note ("equivalent to
+    combat pool Agi×2+H+3") was written against the stale body and is incorrect —
+    contest and combat pools are NOT equivalent in construction.
+  finding_id: audit-B ED-NEW-11
+  affects:
+    - references/params_combat.md
+    - references/params_contest.md
+  status: applied
+
+- id: PP-613
+  type: correction
+  date: 2026-04-14
+  severity: P1
+  description: >
+    params_mass_combat.md: PP-192/PP-225 mass battle RS ×3 multiplier table struck.
+    PP-601 (this session) struck the ×3 multiplier for both RS costs and gains in mass
+    battle, replacing it with: individual Thread op RS costs at full TTRPG value (×1),
+    Dissonant Counter ≥ 3 at battle end = RS −1 (cap −1/battle, PP-600).
+    The table in params_mass_combat.md ("Op | Normal RS | Mass Battle RS (×3)") with
+    entries showing Dissolution failure as −24 RS is now incorrect and struck.
+    Replace with: Thread operation RS costs in mass battle = full TTRPG value (×1).
+    RS consequence from mass battle comes from Substrate Saturation Counter (renamed
+    from Dissonant Counter per PP-606): Counter ≥ 3 at battle end → RS −1 at Accounting.
+    Cap: −1 per battle regardless of Counter level. Battle-context Thread Debt expires
+    at battle season end (PP-600).
+    PP-201 warning note (campaign impact of Dissolution) retains correct framing but the
+    expected RS values must be updated: E[RS per Dissolution attempt] uses TTRPG-scale
+    costs (Success −5, Failure −8 per new gap-scale system), not ×3 values. The warning
+    remains valid — Dissolution in mass battle is still campaign-altering — but the
+    specific numbers (−18.4 expected, −24 failure) are now stale.
+    PP-204 RS<24 threshold warning: Dissolution Failure in mass battle at full TTRPG
+    value = Structural Gap (n=3, immediate breach cost −3 + Structural Gap opens draining
+    −3/season for 7 seasons). Single Dissolution failure no longer produces immediate
+    −24 RS. Rupture risk from single Dissolution in mass battle is now eliminated unless
+    RS is already very low. PP-204 warning retained but threshold recalculated: at RS < 8
+    (Structural breach cost −3 would push below 0 if RS < 3; gap drain is seasonal).
+    Immediate Rupture from mass battle Dissolution is now only possible at RS ≤ 3.
+    Update PP-204 accordingly.
+  finding_id: audit-C PP-601 PP-600
+  affects:
+    - references/params_mass_combat.md
+  status: applied
+
+- id: PP-614
+  type: correction
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Social contest Step 1 action consolidated. Three names and two pools reconciled.
+    HISTORY: Read (original, Attunement only, Ob 1) → Judge (PP-254, Attunement + Recall,
+    Ob = opponent Cha÷2 round up) → Appraise (PP-278, pool not restated).
+    CANONICAL (PP-254 + PP-278 combined):
+    Name: Appraise
+    Pool: Attunement + Recall | TN 7 | Ob = opponent Charisma ÷ 2 (round up), min 1
+    Rationale: assessing an opponent's mode, stance, and vulnerability requires both
+    reading people (Attunement) and memory of prior exchanges and known positions (Recall).
+    Ob = opponent Cha÷2 makes skilled social actors harder to read — correct design.
+    Flat Ob 1 was from the original Read action before PP-254 updated the mechanic.
+
+    OLD §Pools entry "Read pool = Attunement only (no History)" is struck.
+    All references to the action in params_contest.md should use Appraise.
+    The §PP-278 note "Read → Appraise" remains as patch history only.
+
+    RESULT TABLE for Appraise:
+    | Net | Information |
+    | Failure | Misleading signal: wrong boost identified |
+    | Partial (1) | Boosted axis type (genre or orientation) but not which |
+    | Success (≥2) | Full boost identified |
+    | Overwhelming (≥3) | Boost + one specific detail (Belief, threshold, emotional state) |
+    (Unchanged from existing table — only name, pool, and Ob corrected.)
+  finding_id: audit-D
+  affects:
+    - references/params_contest.md
+  status: applied

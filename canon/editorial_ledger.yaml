@@ -3883,3 +3883,35 @@ editorial_decisions:
       CLOSED by PP-610. Attunement starting value is per character creation rules
       (params_core §Attributes: 31 point pool across 10 attributes, min 1, creation max 5
       with one exception). No separate Attunement damage track to define.
+
+  - id: ED-437
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P2
+    description: "Binding Operations terminology: three labels in active use in params_threadwork.md (Forced Resolution/FR, Restricted Operations/RO, Binding Operations/BO). PP-252/PP-579 establish Binding Operations (BO) as canonical. All older FR and RO references in params_threadwork should be updated to BO in the next params_threadwork cleanup pass. Specific locations: §ED-103 resolution uses 'FR surcharge'; §Locking section uses 'FR' in TN reference; §Dissolution section uses 'FR'. Also: params_contest.md §PP-279 says FR terminology struck but uses BO informally — confirm BO is the label used there."
+    tags: [terminology, binding_ops, params_threadwork, params_contest]
+    source: audit
+
+  - id: ED-438
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P3
+    description: "Health formula presentation inconsistency. params_core.md: Health = Endurance + 6 (per-wound buffer, range 7-13). params_combat.md: Health = (End + 6) × (wound count + 1) (total cumulative capacity). Both are correct descriptions of the same mechanic from different perspectives but look inconsistent. Harmonise: params_core should state 'Health threshold = Endurance + 6 per wound; total capacity increases with each wound taken.' params_combat should reference params_core for the base value."
+    tags: [health, wounds, params_core, params_combat]
+    source: audit
+
+  - id: ED-439
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P3
+    description: "Three P3 design note gaps identified in audit: (1) Binding Ops TPS exclusion — the omission of Thread Pool Score from Lock and Dissolution pools is intentional (acts of will against substrate's natural state, not perceptual depth operations) but unstated in params_threadwork. Add one-line design note. (2) Attunement doubled in fieldwork social/Thread-aware pools (×2) but single in Thread operation pools (×1 + TPS amplifier). Intentional — TPS is the perceptual amplifier for Thread work; doubling Attunement there would overlap with TPS function. Add note to fieldwork §2. (3) Leap pool uniquely uses both Spirit AND Attunement (only Thread pool that does). Intentional — Leap requires assertive will (Spirit) and receptive attunement (Attunement) simultaneously. Add design note to Leap section of params_threadwork."
+    tags: [design_notes, tps, attunement, spirit, leap, fieldwork, binding_ops]
+    source: audit
+
+  - id: ED-440
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P3
+    description: "PP-249 in params_mass_combat.md ('Dissonance impairs Thread operations only. No Coherence penalty on Command tactic rolls') predates PP-607/PP-610 which renamed the mechanic. Update to: 'Spirit pool reductions from Dissonance checks (PP-610) do not impair Command tactic rolls or mass battle dice pools. Coherence loss from Thread operations does not impair Command tactic rolls. Both stats are operationally independent of Command.' Also update PP-606 rename: Dissonant Counter → Substrate Saturation Counter in params_mass_combat.md."
+    tags: [dissonance, spirit, command, mass_combat, pp249, pp607]
+    source: audit
