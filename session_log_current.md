@@ -170,6 +170,13 @@ P1 BLOCKERS: 0 (all resolved PP-577–582)
 - Flagged editorials: 0
 - P1 blockers: 0
 - All checkers: PASS
+
+## PHASE 6: SIM-DEBT resolution
+- Fieldwork: FW-01 through FW-05 simulated (2 P1 found+fixed, 1 P2 noted)
+- NPC Behavior: NPC-01 (Priority Tree), NPC-02 (Belief Revision) — both PASS
+- Character Histories: CH-01 (skills), CH-02 (sparks) — both PASS
+- Patches: PP-590 (Survey Ob), PP-591 (Exposure→AP gate), PP-592 (Evidence pacing)
+- SIM-DEBT remaining: FW-03 (Disposition economy), FW-06 (Cover calibration)
 OPEN EDITORIALS: 39 (33 open + 6 flagged)
 
 ## FIXES APPLIED

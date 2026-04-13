@@ -5984,3 +5984,36 @@ patches:
   affects: [canon/editorial_ledger.yaml]
   finding_id: "ED-301, ED-455, ED-469, ED-470, ED-471, ED-473, ED-474, ED-408, ED-409, ED-410"
   status: applied
+- id: PP-590
+  date: 2026-04-13
+  scope: fieldwork
+  description: >
+    Survey Ob formula corrected: floor((5-PR)/2)+1 replacing (5-PR)+1.
+    Original produced Ob 5-6 at low PR (1.9-9.9% success at 7D).
+    New formula follows project-wide floor(stat/2)+1 pattern.
+  affects: [designs/fieldwork/fieldwork_design_v1.md]
+  finding_id: SIM-FW-01
+  status: applied
+
+- id: PP-591
+  date: 2026-04-13
+  scope: fieldwork
+  description: >
+    Exposure→AP contribution gated on Thread-sensitive actions only.
+    Non-sensitive investigation generates Exposure (Cover/personal risk)
+    but not AP (Church detection). Prevents routine investigation from
+    triggering Inquisitor deployment.
+  affects: [designs/fieldwork/fieldwork_design_v1.md]
+  finding_id: SIM-FW-04
+  status: applied
+
+- id: PP-592
+  date: 2026-04-13
+  scope: fieldwork
+  description: >
+    Evidence Track pacing note: 5-threshold investigation completes in
+    ~6 scenes at Ob 2-3 with 6D pool. Intentionally fast for single-arc.
+    GM guidance for longer investigations.
+  affects: [designs/fieldwork/fieldwork_design_v1.md]
+  finding_id: SIM-FW-02
+  status: applied

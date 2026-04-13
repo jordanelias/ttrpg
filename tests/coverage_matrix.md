@@ -630,3 +630,8 @@ P2 findings: 5 (P2-B05→PP-578; P2-B06→PP-579; P2-B07→PP-580; P2-B09→ED-4
 P1 findings: 1 (P1-C03 → PP-581 Clarity/Forgetting independence)
 P2 findings: 4 (P2-C01/C05 → PP-582; P2-C02 design confirmed; P2-C04 design confirmed; GAP-C03 → PP-583)
 P3 gaps: 3 (ED-411-413: Maret stats, Edeyja Resonant Style, Mending Ob confirmed)
+
+| SIM-FW-01 | Fieldwork: Survey Ob, Evidence Track, Exposure→AP, Survey vs Consul | A+D | Multi-season | Exposure, AP, Evidence, Cover | Church | None | Exploration calibration | Complete | 2 P1, 1 P2 |
+| SIM-NPC-01 | NPC Behavior: Priority Tree (Crown 5 seasons) | A | 5 seasons | TC, PI, Stability, Mandate, CC, TL | Crown | None | BG AI validation | Complete | 0 |
+| SIM-NPC-02 | NPC Behavior: Belief Revision Rate | A | 20-contest campaign | Conviction Track, Composure, Scars | All | Named NPCs | Contest calibration | Complete | 0 |
+| SIM-CH-01 | Character Histories: Starting skills + spark rates | A | Character creation + 10 scenes | Skills, Recall, Equip slots | None | None | Lifepath calibration | Complete | 0 |

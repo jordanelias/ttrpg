@@ -121,6 +121,8 @@ Each territory contains discoverable Points of Interest categorised by Depth. PO
 | Success | POI located with full visible detail. One actionable piece of information gained (a bonus, a route, a clue). |
 | Overwhelming | POI located. Full detail. One hidden feature revealed (something below the POI's own depth — a Secret within a Resource, a Remnant within a Secret). +1 Momentum. |
 
+> **PP-591: Exposure → AP contribution gate.** Fieldwork actions generate Exposure in all cases, but Exposure converts to Attention Pool (AP) contribution ONLY when the fieldwork action involves Thread-sensitive elements (Thread-Read, Depth 3+ discovery, practitioner-detectable activity). Non-sensitive investigation (mundane evidence gathering, social questioning, observation) generates Exposure for Cover/personal risk purposes but does NOT feed AP. This prevents routine investigation from automatically triggering Inquisitor deployment. AP contribution rate unchanged for Thread-sensitive actions: +1/character/season, +2/territory/season cap.
+
 ### §3.3 Movement and Time
 
 **TTRPG:** Moving between territories takes time. Adjacent territories: 1 scene of travel. Non-adjacent: GM determines route, 1 scene per territory traversed. Travel through Calamity-affected territories (Proximity Rating ≤ 2) at RS ≤ 40: Endurance check Ob 1 per territory or take 1 Exposure.
