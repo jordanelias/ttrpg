@@ -1256,3 +1256,18 @@ SIM-NPC-01 through SIM-NPC-05.
 
 ### Open editorials carried forward
 ED-311, ED-370–373, ED-374–383, ED-384–400.
+
+### Consolidation commit — 2026-04-13
+Merged character_histories_lifepath.md + character_histories_revision_pass.md into single canonical document.
+- Starting skills: 5 (Origin 1, Formation 1, Vocation 2, Catalyst 1)
+- Canon fix: 1D Forgetting misattribution corrected (Church suppression, not Forgetting)
+- Generic entries rebuilt: 1F (Tideward/Ashmarket modifiers), 1H (Occupation Displaced / Calamity Orphan / Church Ward)
+- 2D rebuilt as Empiricist; 2E Weapons Training changed from TN−1 to +1D Offence
+- 5 new Vocations: Crown Farmer, Diplomat, Independent Criminal, Church Investigator, Löwenritter Patrol Officer (threadcut veteran)
+- Catalysts specified: 4D faction-specific, 4F three specific Valorian conflicts, 4G GM-determines direction
+- Thread-adjacent spark skills added to 4 non-practitioner Vocations
+- Knot audit: 8 weak Knots rewritten for dramatic specificity
+- Skill level principle: L1 base, L2 quantitative, L3 qualitative unlock (7 example skills mapped)
+- 4E Leap Scar changed from −1 Ob to +1D (avoids OB_FLOOR interaction)
+- Literacy model formalised by Formation
+- Revision pass doc deleted (absorbed)
