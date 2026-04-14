@@ -165,7 +165,7 @@ systems:
 
   southernmost:
     canonical: designs/setting/southernmost_v30.md
-    canonical_sha__designs__setting__southernmost_v30_md: "TBD"
+    canonical_sha__designs__setting__southernmost_v30_md: "0a76e4e5721aba2dc03a981d84adba4403d1d434"
     params: null
     design_doc: designs/setting/southernmost_v30.md
     compilation_stage: compilation/v0.14/stage4_southernmost.md
@@ -174,7 +174,7 @@ systems:
 
   factions_ttrpg:
     canonical: designs/ttrpg/factions_ttrpg_v30.md
-    canonical_sha__designs__ttrpg__factions_ttrpg_v30_md: "TBD"
+    canonical_sha__designs__ttrpg__factions_ttrpg_v30_md: "2c6915bcc04b959bc7fe14f4dba3bce4dc4ad46f"
     params: references/params_factions.md
     design_doc: designs/ttrpg/factions_ttrpg_v30.md
     compilation_stage: compilation/v0.14/stage6_factions.md
@@ -183,7 +183,7 @@ systems:
 
   campaign_modes:
     canonical: designs/systems/campaign_modes_v30.md
-    canonical_sha__designs__systems__campaign_modes_v30_md: "TBD"
+    canonical_sha__designs__systems__campaign_modes_v30_md: "83682d25e0f0cf121106a0f7d27dedaeb3fba3be"
     params: null
     design_doc: designs/systems/campaign_modes_v30.md
     compilation_stage: compilation/v0.14/stage12_campaign_modes.md
