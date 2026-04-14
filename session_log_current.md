@@ -1603,3 +1603,52 @@ status: CLOSED
 - Remaining editorial items: ED-512 resolved, ED-513 struck, ED-514 resolved,
   ED-510 resolved, ED-511 resolved, ED-NEW-02 resolved
 ```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-13_SONNET_DISPOSITION_KNOT_REDESIGN
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASK
+User-approved redesign of Disposition and Knot mechanics. Commit, propagate, consolidate, close.
+
+## DESIGN DECISIONS (user-approved)
+DISPOSITION:
+- Range: −4 to floor(Bonds/2)+1
+- Ob rule: max(1, base Ob − Disposition) — direct subtraction, floor 1
+- Starting Disposition: lifepath ±0.5 increments (floor), clamped to range
+- Decay: above +2 (was above +3)
+- Information gates: Settled ≥ 0, Hidden ≥ +1, Buried ≥ +2, Liminal ≥ floor(Bonds/2)+1
+
+KNOTS:
+- Knots are being-with (Mitsein), not Thread operations. Any character. TS not required.
+- Pool: (Bonds × 2) + 3
+- Tiers: Close 5 / Medium 2 / Loose 1
+- Max count: floor(Bonds/2)+1
+- Formation: max Disposition + Connect roll (Ob = tier, Disposition subtracted)
+- Rupture: Disposition →−4, Composure damage = tier cost
+- Loss: Coherence −1 (mandatory, Amendment 01), Composure damage = tier cost
+
+## COMMIT
+4eb2cb0c693be3a828a3e6cafff29fc8911c0b51
+Files: fieldwork_socializing.md (§5 full rewrite), fieldwork_editorial.md (ED harvest),
+  threadwork_redesign_v25.md (Part Six-B Knot Mechanics), params_threadwork.md,
+  params_core.md (Bonds note), canonical_sources.yaml (stale note fixed),
+  patch_register.yaml (PP-632)
+
+## OPEN ITEMS
+ED-507: POI catalog — authorial (Jordan)
+ED-508: Named NPC starting Dispositions — authorial (Jordan)
+ED-509: Godot validation — deferred
+SIM-DEBT-SOC-01: Ob calibration for new Disposition system
+SIM-DEBT-SOC-02: Knot formation pacing
+SIM-DEBT-SOC-03: Knot breaking Composure damage calibration
+
+## P1 BLOCKERS: 0
+## CONTEXT: near limit — session closing
+```
