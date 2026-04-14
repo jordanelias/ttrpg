@@ -544,3 +544,19 @@ Propagation targets:
 
 ### Unverified items — U-01 through U-11 flagged inline in consolidated doc
 Require reads of: params_board_game.md §Coup Counter, threadwork_redesign_v25.md, victory_architecture_v1.md §6, stage6_factions.md §Guilds/Varfell/faction leadership.
+
+
+## GM Reference Arcs — Fully Resolved (arcs_46_55_resolved.md) — 2026-04-13
+
+| Changed File | Propagates To | Reason | Status |
+|-------------|--------------|--------|--------|
+| `gm_ref/arcs_46_55_resolved.md` | `gm_ref/arcs_46_55_consolidated.md` | Supersedes consolidated (retained for history) | DONE |
+| `gm_ref/arcs_46_55_resolved.md` | `references/params_factions.md` | Cites PP-402, PP-403, Domain Action Ob, ethical framework, Guild Leverage | REFERENCE |
+| `gm_ref/arcs_46_55_resolved.md` | `references/params_threadwork.md` | Cites PP-255, RS thresholds, Coherence §3.2, Contact Duration, TS perception table | REFERENCE |
+| `gm_ref/arcs_46_55_resolved.md` | `references/params_board_game.md` | Cites PI track, Coup Counter, Torben/Elske Loyalty, PP-563 VTM-TC, WC effects | REFERENCE |
+| `gm_ref/arcs_46_55_resolved.md` | `canon/02_canon_constraints.md` | P-01/P-03/P-07/P-08/P-15 applied; all canon-compliant | REFERENCE |
+| `gm_ref/arcs_46_55_resolved.md` | `compilation/v0.14/stage6_factions.md` | Domain Action pool formula, Guild Favour trigger, Coup Counter triggers, Varfell Private Collection | REFERENCE |
+
+### Design gaps surfaced (require Jordan decision)
+DESIGN GAP 1: PI per-action contribution amounts — not specified in any source. Needs table in params_board_game.md.
+DESIGN GAP 2: Guild Favour restoration mechanic — no upward movement source documented. Needs design decision.
