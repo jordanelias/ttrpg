@@ -290,9 +290,9 @@ def propose_mechanic_gate(system: str) -> None:
 # ── Hook 7: Context gate ──────────────────────────────────────────────────────
 
 # Fixed context cost estimates
-_SYSTEM_OVERHEAD_TOKENS = 39_000
+_SYSTEM_OVERHEAD_TOKENS = 50_000
 # Accounts for: project instructions (~8k), user prefs (~1.5k), SKILL.md (~4.5k),
-# conversation turns (30 avg * 800 = 24k), tool output tokens (~1k buffer).
+# conversation turns (30 avg * 1000 = 30k), tool output tokens (~3k buffer), safety margin (~3k).
 # Conservative by design — real usage is higher. When in doubt, close earlier.
 
 def context_gate() -> None:
