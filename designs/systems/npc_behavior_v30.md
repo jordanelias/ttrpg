@@ -761,6 +761,75 @@ When a Zoom In Contest successfully targets an NPC's Resonant Style:
 
 ---
 
+## §9.5 NPC RECRUITMENT PROCEDURE (PP-642)
+
+Recruitment is the mechanic by which player factions acquire named NPCs from other factions or from unaligned status. It is a TTRPG-layer procedure; Board Game abstraction uses Diplomacy actions only.
+
+### Step 1 — Identify
+The player must know the NPC exists and is potentially recruitable. Sources: Investigation Finding naming NPC, existing Disposition track (Disposition reached by prior social fieldwork), Tribune Spy Overwhelming revealing NPC dissatisfaction. An NPC with Disposition +4 or +5 toward their current faction **cannot** be targeted for recruitment (not recruitable — genuine loyalty gate).
+
+### Step 2 — Approach
+A dedicated social scene (1 fieldwork scene, personal scale). Pool: (Charisma × 2) + most relevant History, TN 7.
+
+**Ob = floor(NPC's highest current Disposition toward any faction ÷ 2) + 1, minimum Ob 1.**
+
+| NPC Disposition to current faction | Ob |
+|---|---|
+| 0 or negative (disgruntled/indifferent) | 1 |
+| +1–+2 | 2 |
+| +3 | 2 |
+| +4 or +5 | Not recruitable |
+
+If the NPC holds a Hook (see below), apply modifier before rolling.
+
+### Step 3 — Offer
+Player proposes one incentive. Each type modifies Ob:
+
+| Incentive | Ob modifier |
+|---|---|
+| Advisory role matching NPC's declared expertise | −1 |
+| Territory governance (NPC gains administrative role over a territory) | −2 |
+| Wealth commitment (acting faction Wealth −1 per season, sustained) | −1 |
+| Alignment with NPC's active Belief (player commits faction to support it) | −2 |
+| Weak Hook held on NPC | −2 |
+| Strong Hook held on NPC | Ob reduced to 1 (cannot auto-succeed; player still rolls) |
+
+Maximum one incentive per recruitment attempt. Stacking incentives is social coercion, not recruitment — treat as Forced Context (Ob halved, but NPC starts at Disposition +1 instead of Success degree; resentment is built in).
+
+### Step 4 — Resolution by Degree
+
+| Degree | Result |
+|---|---|
+| Failure | NPC refuses. Their current faction is warned within 1 season (Intel leak). Cannot retry for 2 seasons. If Strong Hook was used and player failed: Hook is burned (NPC goes public). |
+| Partial | NPC interested but uncommitted. Disposition toward recruiting faction +1. May retry next season at −1 Ob (partial opening). |
+| Success | NPC joins recruiting faction. Starting Disposition +1. Assumes offered role. Current faction Mandate −1 in NPC's primary territory (talent drain signal). |
+| Overwhelming | NPC joins enthusiastically. Starting Disposition +2. Brings one piece of intelligence about their former faction (one Evidence token, reliability: Verified). |
+
+### Hooks
+
+A Hook is leverage one party holds over another — compromising evidence, a binding obligation, or knowledge that would destroy the NPC's standing if revealed.
+
+**Weak Hook:** Suggestive but not irrefutable leverage (rumour, minor debt, embarrassing but not damning information). −2 Ob on recruitment. If used and recruitment fails, Hook is not burned — may be used again.
+
+**Strong Hook:** Irrefutable leverage (evidence of serious crime, life-debt, binding contract, documented heresy). Reduces recruitment Ob to 1. If used and recruitment fails: Hook is burned — NPC goes public, their faction investigates, and the recruiting faction takes Mandate −2. Use carefully.
+
+**Acquiring Hooks:**
+- Investigation scene produces Overwhelming result targeting a specific NPC → Finding with Hook tag (Weak or Strong, GM determines by evidence nature)
+- Tribune Spy Overwhelming on NPC's territory → Weak Hook on most prominent NPC in territory
+- Narrative (GM decision based on prior scene outcomes)
+
+Hooks are tracked on the NPC's entry in the NPC roster. Maximum one Hook per NPC at a time.
+
+### Defection
+
+An NPC who has been recruited defects if:
+- Their active Belief is contradicted by the recruiting faction's actions for **2 consecutive seasons**, AND
+- A Belief integrity check fails: Spirit pool (NPC's), TN 7, Ob = current Disposition toward recruiting faction.
+
+**Failure → defection:** Disposition drops to −3 toward recruiting faction. NPC returns to previous faction (if viable) or becomes unaligned. Recruiting faction loses all benefits of the NPC's role. The defection is public — former faction Mandate +1 from the return. Defection is NOT a roll the player makes; it fires from the Priority Tree when the Belief-contradiction condition is met.
+
+**Success → confrontation scene:** NPC does not defect but raises the contradiction formally. A social scene is triggered (NPC uses their highest Resonant Style; player must respond). If player's faction commits to honouring the Belief in the confrontation scene: Disposition +1, defection clock resets. If player deflects or refuses: defection fires next season automatically (no further check).
+
 ## §10 EDITORIAL ITEMS
 
 | ID | Description | Priority |

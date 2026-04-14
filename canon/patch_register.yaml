@@ -7874,3 +7874,63 @@ patches:
   affects: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
   status: applied
   provisional: false
+
+- id: PP-633
+  date: 2026-04-13
+  severity: P3
+  description: "Pool floor 1D — named rule added to params_core.md. Formula: max(1, pool − penalties). Applies to Feint pool reduction (combat), Spent+Rattled (contest), fieldwork wounds. Corrects gap B-02 from comparative audit."
+  affects: [references/params_core.md]
+
+- id: PP-634
+  date: 2026-04-13
+  severity: P2
+  description: "Combat surrender/disengage procedure — §11.4 added to combat_design_v1.md. Yield: opponent-choice (accept=combat ends, refuse=unresisting). Disengage: Agility pool TN7 Ob1 contested; partial=one free strike. ED-512 resolved."
+  affects: [designs/combat/combat_design_v1.md]
+
+- id: PP-635
+  date: 2026-04-13
+  severity: P3
+  description: "Combat §11.5 fieldwork transitions — F-TRANS-01/09 cross-reference added. Let It Ride clarification: applies to manoeuvres (Feint/Rescue/Disarm), not standard attacks. Gap C-01 resolved."
+  affects: [designs/combat/combat_design_v1.md]
+
+- id: PP-636
+  date: 2026-04-13
+  severity: P2
+  description: "Contest §9.1 Evidence Track Findings citation — Combined Findings (+1D/Finding max +2D on Exchange 1, stacks with prep for max +3D). Gap C-02 resolved. Contest §5 social initiative — deterministic by design, rationale documented. ED-138/ED-514 resolved."
+  affects: [designs/contest/social_contest_system_v2.md]
+
+- id: PP-637
+  date: 2026-04-13
+  severity: P2
+  description: "Contest §4 Spent timing — assessed after Step 4 (CLASH/REINFORCE); penalty applies next exchange. Triggering exchange resolves normally. Gap D-06 resolved."
+  affects: [designs/contest/social_contest_system_v2.md]
+
+- id: PP-638
+  date: 2026-04-13
+  severity: P3
+  description: "Threadwork §2.3 — Thread-Read-as-fieldwork cross-reference added after Leap failure framing. Gap C-03 resolved."
+  affects: [designs/ttrpg/threadwork_redesign_v25.md]
+
+- id: PP-639
+  date: 2026-04-13
+  severity: P2
+  description: "ARC-T23 Witness — Remembrancer renamed to the Witness throughout arc_register.md. Institutional title: current holder of 245-year RM succession lineage, not a Calamity survivor (TS confers no longevity). COLLISION E operational. ED-NEW-02 resolved."
+  affects: [references/arc_register.md, canon/editorial_ledger.yaml]
+
+- id: PP-640
+  date: 2026-04-13
+  severity: P3
+  description: "Witness canon correction — description fixed: lineage holder not Calamity survivor. Humans are mortal; Thread Sensitivity does not extend lifespan; self-spooling is ontologically incoherent. Authority derives from institutional succession and transmitted record."
+  affects: [references/arc_register.md, canon/editorial_ledger.yaml]
+
+- id: PP-641
+  date: 2026-04-13
+  severity: P1
+  description: "Opposing Operations propagated to threadwork_redesign_v25.md §2.6 — full Contested Intentionality procedure from params_threadwork PP-632 now in design doc. Propagation gap closed."
+  affects: [designs/ttrpg/threadwork_redesign_v25.md]
+
+- id: PP-642
+  date: 2026-04-13
+  severity: P2
+  description: "NPC Recruitment procedure — §10 added to npc_behavior_v30.md. 4-step: Identify/Approach/Offer/Resolution. Ob = floor(NPC highest-faction Disposition / 2) + 1. Hooks defined (Strong=auto-success Ob1, Weak=-2 Ob). Defection: Belief contradiction check 2 consecutive seasons. ED-510 resolved. ED-511 (Hooks) resolved."
+  affects: [designs/systems/npc_behavior_v30.md, canon/editorial_ledger.yaml]

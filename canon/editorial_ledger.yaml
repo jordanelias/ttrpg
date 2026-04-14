@@ -4156,7 +4156,9 @@ editorial_decisions:
   date: 2026-04-13
   source: mechanic_audit_comparative
   priority: P2
-  status: provisional
+  status: resolved
+  date_resolved: 2026-04-13
+  resolution: "PP-642. NPC Recruitment §9.5 added to npc_behavior_v30.md. Ob formula: floor(NPC highest-faction Disposition / 2) + 1. Hooks defined (Strong=Ob 1 / Weak=−2 Ob). Defection: Belief-contradiction 2-season check fires from Priority Tree. ED-511 (Hooks) resolved as part of same patch."
   description: >
     NPC Recruitment Procedure [PROVISIONAL]. Proposed in game mechanics session (2026-04-13):
     4-step procedure (Identify / Approach / Offer / Resolution). Pool: (Charisma × 2) + History.
@@ -4175,7 +4177,9 @@ editorial_decisions:
   date: 2026-04-13
   source: mechanic_audit_comparative
   priority: P2
-  status: open
+  status: resolved
+  date_resolved: 2026-04-13
+  resolution: "PP-642. Hooks defined in npc_behavior_v30.md §9.5: Strong (irrefutable leverage, Ob to 1, burned on failure) and Weak (suggestive, −2 Ob, not burned). Acquisition: Investigation/Spy Overwhelming or GM narrative."
   description: >
     Hooks mechanic undefined. Referenced in NPC Recruitment Procedure (ED-510) and
     CK2/RotTK analysis session: a Hook is leverage held by one party over another (compromising
