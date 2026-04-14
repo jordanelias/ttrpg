@@ -90,7 +90,7 @@ The orchestrator applies these rules to any new file before asking for manual in
 | `params_threadwork.md` | simulator G3 | `designs/ttrpg/threadwork_v30.md` |
 | `params_factions.md` | simulator G4, mechanic-audit | `stage6_factions.md`, `designs/board_game/board_game_v30.md` |
 | `params_board_game.md` | simulator G5 | `designs/board_game/board_game_v30.md` |
-| `params_scale_transitions.md` | simulator K2 | `compilation/v0.14/stage11_scale_transitions.md` |
+| `params_scale_transitions.md` | simulator K2 | `compilation/v0.14/stage11_scale_transitions_deprecated.md` |
 
 When any source doc changes: its params file is stale. Add to `file_index.md` KNOWN STALE SYNC GAPS immediately. Do not wait until the next session.
 
@@ -125,7 +125,7 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | `designs/combat/combat_v30.md` | `designs/mass_combat/mass_battle_v30.md` | Unit stats, reach rules, weapon table shared |
 | `designs/mass_combat/mass_battle_v30.md` | `references/params_mass_combat.md` | Extracted values |
 | `designs/mass_combat/mass_battle_v30.md` | `designs/board_game/board_game_v30.md` §B.3/B.5 | BG battle resolution references mass battle |
-| `designs/mass_combat/mass_battle_v30.md` | `compilation/v0.14/stage11_scale_transitions.md` | Phase structure referenced in scale transitions |
+| `designs/mass_combat/mass_battle_v30.md` | `compilation/v0.14/stage11_scale_transitions_deprecated.md` | Phase structure referenced in scale transitions |
 | `designs/mass_combat/mass_battle_v30.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | Phase timing drives state transfer rules |
 | `references/params_combat.md` | `skills/valoria-combat-simulator/SKILL.md` | Sim loads params |
 | `references/params_mass_combat.md` | `skills/valoria-simulator/SKILL.md` (Mode G1) | Sim loads params |
@@ -151,7 +151,7 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
-| `compilation/v0.14/stage6_factions.md` | `references/params_factions.md` (TTRPG column) | Extracted values |
+| `compilation/v0.14/stage6_factions_deprecated.md` | `references/params_factions.md` (TTRPG column) | Extracted values |
 | `references/params_factions.md` | `skills/valoria-simulator/SKILL.md` (Mode G4) | Sim loads params |
 | `references/params_factions.md` | `skills/valoria-mechanic-audit/SKILL.md` | Audit loads params |
 
@@ -180,10 +180,10 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
-| `compilation/v0.14/stage11_scale_transitions.md` | `references/params_scale_transitions.md` | Extracted values |
-| `compilation/v0.14/stage11_scale_transitions.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | Phase structure drives transfer rules |
+| `compilation/v0.14/stage11_scale_transitions_deprecated.md` | `references/params_scale_transitions.md` | Extracted values |
+| `compilation/v0.14/stage11_scale_transitions_deprecated.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | Phase structure drives transfer rules |
 | `skills/valoria-orchestrator/references/state_transfer_spec.md` | `skills/valoria-simulator/SKILL.md` (Mode K2) | Transition tests load spec |
-| `designs/hybrid/hybrid_gaps_v30.md` | `compilation/v0.14/stage11_scale_transitions.md` | RESOLVED — gaps propagated to board_game_v30 Part Nine (PP-644) |ntegration |
+| `designs/hybrid/hybrid_gaps_v30.md` | `compilation/v0.14/stage11_scale_transitions_deprecated.md` | RESOLVED — gaps propagated to board_game_v30 Part Nine (PP-644) |ntegration |
 | `designs/hybrid/hybrid_gaps_v30.md` | `designs/board_game/board_game_v30.md` §B.5 | Pending integration |
 
 ### GM REFERENCE / FLOWCHARTS
@@ -544,7 +544,7 @@ Require reads of: params_board_game.md §Coup Counter, threadwork_redesign_v25.m
 | `gm_ref/arcs_46_55_resolved.md` | `references/params_threadwork.md` | Cites PP-255, RS thresholds, Coherence §3.2, Contact Duration, TS perception table | REFERENCE |
 | `gm_ref/arcs_46_55_resolved.md` | `references/params_board_game.md` | Cites PI track, Coup Counter, Torben/Elske Loyalty, PP-563 VTM-TC, WC effects | REFERENCE |
 | `gm_ref/arcs_46_55_resolved.md` | `canon/02_canon_constraints.md` | P-01/P-03/P-07/P-08/P-15 applied; all canon-compliant | REFERENCE |
-| `gm_ref/arcs_46_55_resolved.md` | `compilation/v0.14/stage6_factions.md` | Domain Action pool formula, Guild Favour trigger, Coup Counter triggers, Varfell Private Collection | REFERENCE |
+| `gm_ref/arcs_46_55_resolved.md` | `compilation/v0.14/stage6_factions_deprecated.md` | Domain Action pool formula, Guild Favour trigger, Coup Counter triggers, Varfell Private Collection | REFERENCE |
 
 ### Design gaps surfaced (require Jordan decision)
 DESIGN GAP 1: PI per-action contribution amounts — not specified in any source. Needs table in params_board_game.md.
