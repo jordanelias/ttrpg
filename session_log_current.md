@@ -1,6 +1,50 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_OPUS_PARAMS_EXTRACTION
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. params_fieldwork.md extracted (all mechanical values from 856-line design)
+2. SIM-DEBT-FW-01/03/05/06 resolved (Ob calibration, Disposition economy, Survey balance, Cover calibration)
+3. All 10 SIM-DEBT items now RESOLVED
+4. Propagation status updated (3/8 done, 5 pending for next session)
+
+## ALL SIM-DEBT RESOLVED
+FW-01: Ob calibration sound (5D→D1, 9D→D1-2, 13D→D1-3, 17D→D1-4, 24D→D5)
+FW-02: Evidence pacing confirmed (3-5 scenes for threshold 5)
+FW-03: Neutral→Bonded = 6-8 actions, 3-4 seasons. Meaningful investment.
+FW-04: AP feedback = 11% of TC max. Cap sufficient.
+FW-05: Survey and Govern occupy different niches. Neither dominates.
+FW-06: Cover 3 (detected in 3 scenes) vs Cover 12+ (near-immune). Appropriate.
+FW-07-10: All resolved in prior commits.
+
+## FULL SESSION SUMMARY (2026-04-13) — 10 COMMITS
+PP-575: Initial design (609→666 lines)
+PP-575: Desperate Trail (fail forward)
+PP-576: Full audit + 13 corrections
+PP-577: 6-direction transitions
+PP-578: Threadwork × fieldwork
+PP-579: Ontological correction + NPC arcs
+PP-580: Knots, Community Weaving, threadcut beings, Mending, Dissonance
+PP-581: P1 blockers resolved
+PP-582: Canon fidelity audit (Almud TS 0, PP-615 ×2, Torben note)
+PP-583: params_fieldwork.md + remaining SIM-DEBT
+
+## FINAL STATE
+Design: 856 lines. P1 blockers: 0. SIM-DEBT: 10/10 resolved.
+Params: extracted. 4 simulation files committed.
+Propagation: 3/8 complete. 5 pending (propagation_map, params_board_game Survey Ob,
+  params_core attributes, stage11 9th handoff, coverage_matrix).
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_OPUS_FIDELITY_AUDIT
 session_close: 2026-04-13
 phase: COMPLETE

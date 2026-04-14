@@ -830,26 +830,26 @@ Fieldwork actions consume in-game time:
 
 | ID | Description |
 |----|-------------|
-| SIM-DEBT-FW-01 | Full fieldwork system simulation: Exploration Ob calibration across all 17 territories at varying RS bands. Confirm P(success) for typical pools against Depth 1-5 Obs. Pool formula confirmed ×2 (PP-615). |
-| SIM-DEBT-FW-02 | Evidence Track pacing: simulate a 5-threshold investigation with mixed action types. Confirm completion in 3-5 scenes (target pacing). **PARTIALLY RESOLVED** — Himmelenger scenario completed 5-threshold investigation in 3 scenes (3 actions). Pacing confirmed for high-pool characters (15-19D). Low-pool scenario needed. |
-| SIM-DEBT-FW-03 | Disposition economy: simulate 10-session relationship arc from Neutral to Bonded. Confirm pacing requires meaningful investment (not trivially achievable). Include Sincerity Gate impact. |
-| SIM-DEBT-FW-04 | Exposure ↔ Attention Pool feedback loop: simulate 4-season fieldwork-heavy campaign. Confirm capped Exposure feed does not generate TC acceleration beyond ±5/season combined cap. |
-| SIM-DEBT-FW-05 | Survey action BG balance: confirm Survey does not dominate Consul Govern. Survey should be situationally valuable, not universally optimal. |
-| SIM-DEBT-FW-06 | Cover derived value calibration: confirm Cover 3-4 (low) vs Cover 9+ (high) produces meaningfully different Exposure tolerance without making high-Cover characters immune. |
-| SIM-DEBT-FW-07 | **RESOLVED** — Transition simulation (all 6 directions) completed 2026-04-13. 6 P2 and 3 P3 findings discovered and resolved. All transitions functional. See tests/sim_fieldwork_transitions.md. |
-| SIM-DEBT-FW-08 | **RESOLVED** — Threadwork × fieldwork simulation (POP, Lock, Dissolution across all 6 transitions). 1 P1, 3 P2, 8 P3 findings. Investigative hierarchy confirmed: Thread-Read → Pull → POP → Lock → Dissolution. See tests/sim_threadwork_fieldwork.md. |
-| SIM-DEBT-FW-09 | **RESOLVED** — Full ontological scope + NPC arc stress tests (PP-579). 7 Domain Echo cascades tested (Klapp, Torben, Elske, Vaynard, Almud, Wardens). All Thread operations confirmed as evidence sources. Yield is contextual. See tests/sim_threadwork_ontological.md. |
-| SIM-DEBT-FW-10 | **RESOLVED** — Extended threadwork simulation (PP-580). Knot surveillance, Community Weaving detection, threadcut being social fieldwork, Mending arcs, Dissonance on non-sensitives. See tests/sim_extended_threadwork.md. |
+| SIM-DEBT-FW-01 | **RESOLVED** (PP-583). Ob calibration across Depth 1-5 at 5 pool sizes ± hostile/foreign modifiers. Calibration sound: 5D handles D1, 9D handles D1-2, 13D handles D1-3, 17D handles D1-4, 24D challenges at D5. |
+| SIM-DEBT-FW-02 | **RESOLVED** (PP-576 partial, PP-583 complete). 5-threshold investigation completes in 3-5 scenes for high-pool (15-19D). Low-pool (9D): 4-6 scenes at D1-2. Pacing confirmed. |
+| SIM-DEBT-FW-03 | **RESOLVED** (PP-583). Neutral→Bonded: ~6-8 actions across 3-4 seasons (with failures and maintenance at +3). Sincerity Gate adds ~37% failure on instrumental Connect. Meaningful investment confirmed. |
+| SIM-DEBT-FW-04 | **RESOLVED** (PP-581). AP feedback: fieldwork contributes ~11% of max TC acceleration. +1/char/season +2/territory/season cap is sufficient. |
+| SIM-DEBT-FW-05 | **RESOLVED** (PP-583). Survey and Govern occupy different niches. Govern dominates mid-proximity (reliable Prosperity). Survey dominates high-proximity (safe northern territories). Neither dominates the other. |
+| SIM-DEBT-FW-06 | **RESOLVED** (PP-583). Cover 3: detected in 3 scenes. Cover 9: full season before detection. Cover 12+: near-immune to casual detection, threatened only by combat+Thread stacking. Appropriate differentiation. |
+| SIM-DEBT-FW-07 | **RESOLVED** (PP-577). Transition simulation. All 6 directions functional. |
+| SIM-DEBT-FW-08 | **RESOLVED** (PP-578/PP-579). Threadwork × fieldwork. All ops advance Evidence contextually. |
+| SIM-DEBT-FW-09 | **RESOLVED** (PP-579). NPC arc stress tests. 7 Domain Echo cascades tested. |
+| SIM-DEBT-FW-10 | **RESOLVED** (PP-580). Extended threadwork (Knots, Community Weaving, threadcut beings, Mending, Dissonance). |
 
-### Propagation required on approval
+### Propagation status
 
-| File | Change |
-|------|--------|
-| references/canonical_sources.yaml | Add fieldwork system entry; set canonical doc |
-| references/params_fieldwork.md | New params file — extract all mechanical values |
-| references/propagation_map.md | Cross-references to combat, contest, threadwork, board game, geography |
-| designs/systems/clock_registry.md | Add Exposure track, Evidence Track, Disposition track, Cover derived value |
-| references/params_board_game.md | Add Survey action to Standard Action Ob table |
-| references/params_core.md | Confirm attribute usage table includes fieldwork roles |
-| compilation/v0.14/stage11_scale_transitions.md | Add Fieldwork → Faction handoff rule |
-| tests/coverage_matrix.md | Add SIM-DEBT-FW-01 through FW-06 |
+| File | Change | Status |
+|------|--------|--------|
+| references/canonical_sources.yaml | Fieldwork system entry | **DONE** (PP-575) |
+| references/params_fieldwork.md | Mechanical values extraction | **DONE** (PP-583) |
+| designs/systems/clock_registry.md | Exposure, Evidence Track, Disposition, Cover tracks | **DONE** (PP-575) |
+| references/propagation_map.md | Cross-references to combat, contest, threadwork, BG, geography | PENDING |
+| references/params_board_game.md | Survey action in Standard Action Ob table | PENDING |
+| references/params_core.md | Attribute usage table includes fieldwork roles | PENDING |
+| compilation/v0.14/stage11_scale_transitions.md | 9th handoff rule (Fieldwork ↔ all systems) | PENDING |
+| tests/coverage_matrix.md | SIM-DEBT-FW-01 through FW-10 (all RESOLVED) | PENDING |
