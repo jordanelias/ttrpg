@@ -1,3 +1,25 @@
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-14_SONNET_PP621_SCALE_CALIBRATION
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+PATCH: PP-621 — Thread scale physical calibration.
+  Territorial = local area (battlefield, valley, town). NOT a BG territory card.
+  Structural = entire BG territory (T15 Askeheim as a whole region).
+  Foundational = Calamity wound network.
+  Mass battle: formation-level = Relational; battlefield-wide = Territorial.
+  Edeyja T15: Structural Mending Ob6 ~52%. Foundational Mending Ob10 ~14%.
+  Scale hierarchy rule: Mending at scale X cannot hold while X+1 disruption persists.
+  Edeyja's work: isolate Foundational gaps → Mend at Ob10 → Structural stabilises →
+    lower scales self-close → WC3 = cascade of natural healing in cleared areas.
+```
+
 # Valoria Session Log — Current
 
 ```yaml

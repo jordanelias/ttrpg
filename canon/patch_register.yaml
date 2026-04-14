@@ -7415,3 +7415,64 @@ patches:
   affects:
     - references/params_threadwork.md
   status: applied
+
+- id: PP-621
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Thread operation scale physical calibration corrected. "Territorial" ≠ BG territory card.
+    Scales are phenomenological (emergent Thread configuration structure), not political.
+
+    PHYSICAL SCALE CALIBRATION (canonical):
+    | Scale       | Physical scope                                          |
+    |-------------|---------------------------------------------------------|
+    | Object      | One discrete thing                                      |
+    | Personal    | One person's Thread configuration                       |
+    | Relational  | Connections between specific entities; formation-level  |
+    | Territorial | A coherent local area: valley, town, battlefield        |
+    | Structural  | An entire regional domain = one BG territory card       |
+    | Foundational| Thread substrate conditions; the Calamity wound network |
+
+    CONSEQUENCE: BG territories (T1-T17) are Structural scale, not Territorial.
+    T15 Askeheim as a whole is Structural. The Calamity wound is Foundational.
+
+    MASS BATTLE THREADWORK SCALE:
+    - Formation-level operations (Discipline, command coherence): Relational. Ob 3. TS 50+.
+    - Battlefield-wide operations (the battle area as a place): Territorial. Ob 5. TS 50+.
+    - Campaign-level strategic operations (a whole province): Structural. Ob 7. TS 70+.
+    Substrate Saturation Counter fires from multiple Relational operations in one Territorial
+    space — correct framing confirmed.
+
+    EDEYJA AT T15:
+    - T15 is Structural scale. Structural Mending Ob 6, TN 7, 22D: P(≥6) ≈ 52%.
+    - Foundational wounds undermine Structural Mending — repair cannot hold while
+      Foundational conditions are disrupted from below.
+    - Edeyja must isolate individual Foundational gaps, Mend at Ob 10 (~14% per attempt),
+      then Structural Mending can hold in cleared areas.
+    - Lower-scale gaps (Territorial, Relational) self-close once Structural stability
+      is restored — she does not Mend them individually.
+    - WC 3 (RS +2/season) = cascade of natural healing in Foundationally-cleared areas.
+    - Conflict in Proximity 1-3 territories disrupts isolation work, resetting sections.
+
+    SCALE HIERARCHY RULE: Mending at scale X cannot hold while a deeper disruption
+    at scale X+1 or greater persists in the same area. Must work from the deepest
+    disruption upward.
+
+    REVISED OB TABLE (Obs unchanged from PP-620; scale calibration is what changed):
+    | Scale       | n | Standard Op Ob (TN7) | Mending Ob (TN7) | Binding Ob (TN8) |
+    |-------------|---|----------------------|------------------|------------------|
+    | Object      | 0 | 1                    | n/a              | 1                |
+    | Personal    | — | 2                    | n/a              | 2                |
+    | Relational  | 1 | 3                    | 2                | 3                |
+    | Territorial | 2 | 5                    | 4                | 5                |
+    | Structural  | 3 | 7                    | 6                | 7                |
+    | Foundational| 5 | 10                   | 10               | 10               |
+
+    Edeyja (22D TN7): Territorial Ob5 P≈70%; Structural Ob7 P≈45%; Foundational Ob10 P≈14%.
+    Curve confirmed against physical scale interpretation.
+  finding_id: PP-620
+  affects:
+    - references/params_threadwork.md
+    - designs/setting/calamity_radiation.md
+  status: applied
