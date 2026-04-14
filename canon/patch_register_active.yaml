@@ -1,0 +1,1864 @@
+# Patch Register — Active
+# Status: provisional | proposed | approved | other
+# Applied patches moved to: canon/patch_register_archive.yaml
+# Index: canon/patch_register_index.md
+# Next PP number: 645
+# Generated: 2026-04-14
+
+# Valoria Patch Register
+# Backfilled from valoria_patch_proposals.md on 2026-03-29
+# status: proposed | approved | applied
+
+patches:
+
+
+- id: PP-001
+  date: 2026-03-27
+  severity: P1
+  description: "M-013 (Leap), M-016 (Pulling) — TD accumulation"
+  finding_id: "F-B7-08 / F-B7-16 (consolidated)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-002
+  date: 2026-03-27
+  severity: P1
+  description: "M-018 (FR-Dissolution), M-030 (Thread Tension)"
+  finding_id: "F-B7-17"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-003
+  date: 2026-03-27
+  severity: P1
+  description: "M-036 (Parliamentary Vote), M-037 (Grand Debate)"
+  finding_id: "F-B7-06 / F80"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-004
+  date: 2026-03-27
+  severity: P1
+  description: "M-034 (Faction Stats)"
+  finding_id: "F-B7-12 / F-B7-22"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-005
+  date: 2026-03-27
+  severity: P1
+  description: "M-035 (Domain Actions)"
+  finding_id: "F-B7-23"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-006
+  date: 2026-03-27
+  severity: P1
+  description: "M-045 (Mass Combat)"
+  finding_id: "F-B7-29 / F100"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-007
+  date: 2026-03-27
+  severity: P1
+  description: "M-007 (Conditions) — Composure"
+  finding_id: "F-B7-40"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-008
+  date: 2026-03-27
+  severity: P1
+  description: "M-056 (Niflhel Destabilisation) — Faction Stats"
+  finding_id: "F-B7-44 / F84"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-009
+  date: 2026-03-27
+  severity: P1
+  description: "Grand Debate — Reading Exchange"
+  finding_id: "F-B6-RE-01 (Batch 6)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-010
+  date: 2026-03-27
+  severity: P1
+  description: "ThS Crisis + Certainty Rendering Crisis simultaneous"
+  finding_id: "F-27 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-011
+  date: 2026-03-27
+  severity: P1
+  description: "ThS Track"
+  finding_id: "F-25 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-012
+  date: 2026-03-27
+  severity: P1
+  description: "Intelligibility track / Coherence track (§4.5 vs §5.10)"
+  finding_id: "F-26 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-013
+  date: 2026-03-27
+  severity: P1
+  description: "Collective Thread Operations — scaling"
+  finding_id: "F-23 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-014
+  date: 2026-03-27
+  severity: P1
+  description: "Collective Thread Operations — Anchor dropout"
+  finding_id: "F-24 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-015
+  date: 2026-03-27
+  severity: P1
+  description: "TC 80 threshold — territorial seizure procedure"
+  finding_id: "F-34 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-016
+  date: 2026-03-27
+  severity: P1
+  description: "Character archetypes — Knight Templar, Restoration Seeker, Niflhel Operative"
+  finding_id: "F-38 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-017
+  date: 2026-03-27
+  severity: P1
+  description: "CE track — accumulation procedure"
+  finding_id: "F-40 (Batch 4)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-018
+  date: 2026-03-27
+  severity: P1
+  description: "TC pause + Baralta suppressor interaction"
+  finding_id: "F-13 (Batch 3)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-019
+  date: 2026-03-27
+  severity: P1
+  description: "Niflhel network intelligence output"
+  finding_id: "F-14 (Batch 3)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-020
+  date: 2026-03-27
+  severity: P1
+  description: "Knot strain recovery vs Intelligibility decay"
+  finding_id: "F-07 (Batch 3)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-021
+  date: 2026-03-27
+  severity: P1
+  description: "Group combat bonus — dual table conflict"
+  finding_id: "F-B5-M07-A (Batch 5)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-022
+  date: 2026-03-27
+  severity: P1
+  description: "Priority 3 sub-rule B × pool split"
+  finding_id: "F-B5-M06-D (Batch 5)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-023
+  date: 2026-03-27
+  severity: P2
+  description: "M-002 (Wounds) — TN cliff"
+  finding_id: "F-B7-01"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-024
+  date: 2026-03-27
+  severity: P2
+  description: "M-006 (Inspirations) — spend timing"
+  finding_id: "F-B7-04"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-025
+  date: 2026-03-27
+  severity: P2
+  description: "M-003 (Histories) — double-dipping"
+  finding_id: "F-B7-05"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-026
+  date: 2026-03-27
+  severity: P2
+  description: "M-016 (Pulling) — Partial Pull side effects"
+  finding_id: "F-B7-09"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-027
+  date: 2026-03-27
+  severity: P2
+  description: "M-010 (Knots) — escalation loop"
+  finding_id: "F-B7-10"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-028
+  date: 2026-03-27
+  severity: P2
+  description: "M-035 (Domain Actions) — character contribution"
+  finding_id: "F-B7-13"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-029
+  date: 2026-03-27
+  severity: P2
+  description: "M-011 (Circles) — obligation resolution"
+  finding_id: "F-B7-14"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-030
+  date: 2026-03-27
+  severity: P2
+  description: "M-017 (FR-Lock) — failure penalty"
+  finding_id: "F-B7-19"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-031
+  date: 2026-03-27
+  severity: P2
+  description: "M-031 (Theocracy Clock) — Synod duration"
+  finding_id: "F-B7-24"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-032
+  date: 2026-03-27
+  severity: P2
+  description: "M-034 (Faction Stats) — Church structural poverty"
+  finding_id: "F-B7-25"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-033
+  date: 2026-03-27
+  severity: P2
+  description: "M-039 (Combat—Initiative) — tie resolution"
+  finding_id: "F-B7-26"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-034
+  date: 2026-03-27
+  severity: P2
+  description: "M-045 (Mass Combat) — unit attrition"
+  finding_id: "F-B7-30"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-035
+  date: 2026-03-27
+  severity: P2
+  description: "M-040 (Priority Table) — mass combat adaptation"
+  finding_id: "F-B7-31"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-036
+  date: 2026-03-27
+  severity: P2
+  description: "M-046 (Thread Ops in Combat) — timing"
+  finding_id: "F-B7-32"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-037
+  date: 2026-03-27
+  severity: P2
+  description: "M-046 (Thread Ops in Combat), M-048 (Scale Transitions) — TTRPG→BG handoff"
+  finding_id: "F-B7-33"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-038
+  date: 2026-03-27
+  severity: P2
+  description: "M-011 (Circles), M-037 (Grand Debate) — undocumented interaction"
+  finding_id: "F-B7-34"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-039
+  date: 2026-03-27
+  severity: P2
+  description: "M-048 (Scale Transitions) — translation ratio"
+  finding_id: "F-B7-37"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-040
+  date: 2026-03-27
+  severity: P2
+  description: "M-048 (Scale Transitions), M-035 (Domain Actions) — economy"
+  finding_id: "F-B7-38"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-041
+  date: 2026-03-27
+  severity: P2
+  description: "M-002 (Wounds) — permanent criteria"
+  finding_id: "F-B7-41"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-042
+  date: 2026-03-27
+  severity: P2
+  description: "M-054 (Einhir Sites) — detectability"
+  finding_id: "F-B7-42"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-043
+  date: 2026-03-27
+  severity: P2
+  description: "M-034 (Faction Stats) — Stability 0"
+  finding_id: "F-B7-45"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-044
+  date: 2026-03-27
+  severity: P2
+  description: "M-050 (Riskbreakers), M-056 (Destabilisation) — passive faction detection"
+  finding_id: "F-B7-46"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-045
+  date: 2026-03-27
+  severity: P2
+  description: "Stamina — 'in a row' qualifier"
+  finding_id: "F-B5-M03-A (Batch 5)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-046
+  date: 2026-03-27
+  severity: P2
+  description: "Combat — projectile range closing"
+  finding_id: "F-B5-M04-C (Batch 5)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-047
+  date: 2026-03-27
+  severity: P2
+  description: "Group combat bonus — 'unsupported' all-or-nothing nullification"
+  finding_id: "F-B5-M07-C (Batch 5)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-048
+  date: 2026-03-27
+  severity: P2
+  description: "Combat — fleeing/withdrawal"
+  finding_id: "F-B5-D01 (Batch 5)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-049
+  date: 2026-03-27
+  severity: P2
+  description: "Combat — mutual Full Guard stalemate"
+  finding_id: "F-B5-D03 (Batch 5)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-050
+  date: 2026-03-27
+  severity: P2
+  description: "Vaynard Ambition Track — no decrease mechanic"
+  finding_id: "F-10 (Batch 3)"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-079
+  date: 2026-03-27
+  severity: P1
+  description: "M-NPC-Torben — Torben Loyalty Clock"
+  finding_id: "F72 / G-129"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-080
+  date: 2026-03-27
+  severity: P1
+  description: "M-031 (Theocracy Clock) — Church Stability TC brake"
+  finding_id: "F112 / G-136"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-083
+  date: 2026-03-27
+  severity: P2
+  description: "M-055 (Community Weaving), PP-013"
+  finding_id: "F-B10-08"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-084
+  date: 2026-03-27
+  severity: P2
+  description: "M-056 (Niflhel Destabilisation)"
+  finding_id: "F-B10-09"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-085
+  date: 2026-03-27
+  severity: P2
+  description: "PP-081 (Trajectory Reading); M-035 (Domain Actions BG mode)"
+  finding_id: "F-B10-13 + F-B10-14"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-093
+  date: 2026-03-27
+  severity: P1
+  description: "M-006 (Inspirations)"
+  finding_id: "Rule error — §4.3 Inspirations, Stunt rule"
+  source: simulation
+  affects: []
+  status: proposed
+  applied_commit: ~
+
+- id: PP-094
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-095
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-096
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-097
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-098
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-099
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-100
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-101
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-102
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-103
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-104
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-105
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-106
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-107
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-108
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-109
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-110
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-111
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-112
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-113
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-114
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-115
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-116
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-117
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-118
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-119
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-120
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-121
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-122
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-123
+  date: 2026-03-27
+  severity: P1
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-124
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-125
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-126
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-127
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-128
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-129
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-130
+  date: 2026-03-27
+  severity: P2
+  description: ~
+  finding_id: ~
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: ~
+
+- id: PP-159
+  date: 2026-04-01
+  severity: P2
+  description: "Sovereign Authority Doctrine Partial result — add defensive social bonus to prevent net-negative expected value"
+  finding_id: "F-ARC31-01 (SIM-ARC31-C01)"
+  source: simulation
+  affects: [stage6_factions.md Hafenmark section]
+  status: proposed
+  applied_commit: ~
+
+- id: PP-160
+  date: 2026-04-01
+  severity: P1
+  description: "Coup Counter evaluation timing — mid-season TC reduction should avert counter increment if TC drops below 41 before seasonal accounting"
+  finding_id: "F-ARC31-04 (SIM-ARC31-C01)"
+  source: simulation
+  affects: [stage8_combat.md §8.9 Coup Counter, stage6_factions.md Löwenritter]
+  status: proposed
+  applied_commit: ~
+
+- id: PP-161
+  date: 2026-04-01
+  severity: P1
+  description: "Mass combat stalemate resolution — add rule: 2 turns no damage → CR check, winner gains Feigned Retreat, double fail → strategic withdrawal"
+  finding_id: "F-ARC31-05 (SIM-ARC31-C01)"
+  source: simulation
+  affects: [designs/mass_combat/mass_battle_v3.md, stage8_combat.md §8.9]
+  status: proposed
+  applied_commit: ~
+
+- id: PP-162
+  date: 2026-04-01
+  severity: P2
+  description: "Thread support scope note — Thread Weaving improves formation metrics but cannot address weapon/armour matchup deadlock; add design note"
+  finding_id: "F-ARC31-07 (SIM-ARC31-C01)"
+  source: simulation
+  affects: [stage8_combat.md §8.9 Thread in Mass Combat]
+  status: proposed
+  applied_commit: ~
+
+- id: PP-163
+  date: 2026-04-01
+  severity: P1
+  description: "TC spike from Southernmost expedition — add player-facing note to §7.2 one-time events table that spike fires before seasonal accounting"
+  finding_id: "F-ARC33-04 (SIM-ARC33-C01)"
+  source: simulation
+  affects: [stage5_clocks.md §7.2, compilation/v0.14/valoria_ruleset_v0.14.md §7.2]
+  status: proposed
+  applied_commit: ~
+
+- id: PP-297
+  date: 2026-04-02
+  severity: P1
+  description: "Mass battle stalemate resolution — Tactical Withdrawal after 3 turns 0 damage [PROVISIONAL]"
+  finding_id: "F-27 / SIM-X-07"
+  source: simulation
+  affects: [designs/mass_combat/mass_battle_v3.md]
+  status: provisional
+  applied_commit: "2026-04-02-session"
+  renumbered_from: PP-093
+  renumber_date: 2026-04-04
+
+- id: PP-298
+  date: 2026-04-02
+  severity: P1
+  description: "Coup Counter successor rule — highest CR officer, counter resets [PROVISIONAL]"
+  finding_id: "F-30/F-33 / SIM-X-07/X-08"
+  source: simulation
+  affects: [designs/combat/combat_design_v1.md]
+  status: provisional
+  applied_commit: "2026-04-02-session"
+  renumbered_from: PP-094
+  renumber_date: 2026-04-04
+
+- id: PP-299
+  date: 2026-04-02
+  severity: P1
+  description: "TC seasonal change cap: ±3 Domain Actions, ±5 all sources [PROVISIONAL]"
+  finding_id: "F-43 / SIM-X-10"
+  source: simulation
+  affects: [designs/combat/combat_design_v1.md]
+  status: provisional
+  applied_commit: "2026-04-02-session"
+  renumbered_from: PP-095
+  renumber_date: 2026-04-04
+
+- id: PP-300
+  date: 2026-04-02
+  severity: P2
+  description: "Faction Stability natural recovery: +1/season when Stability ≤ 3 and no hostile actions [PROVISIONAL]"
+  finding_id: "F-52 / SIM-X-12"
+  source: simulation
+  affects: [designs/combat/combat_design_v1.md]
+  status: provisional
+  applied_commit: "2026-04-02-session"
+  renumbered_from: PP-096
+  renumber_date: 2026-04-04
+
+- id: PP-301
+  date: 2026-04-02
+  severity: P1
+  description: "DIVERGE+TIE: Tie rule fires on equal successes regardless of interaction type, including Divergence. Both take 1 strain; track +1 toward initiative holder. [PROVISIONAL]"
+  finding_id: "F-D-01 / SIM-D-01"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4]
+  status: provisional
+  applied_commit: "2026-04-02-sim-d-01"
+  renumbered_from: PP-097
+  renumber_date: 2026-04-04
+
+- id: PP-302
+  date: 2026-04-02
+  severity: P2
+  description: "Regroup at Concentration=0: consumes Spent state without -2D/+1D penalty. Concentration restores by Focus score. [PROVISIONAL]"
+  finding_id: "F-D-02 / SIM-D-01"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 Step 5-6]
+  status: provisional
+  applied_commit: "2026-04-02-sim-d-01"
+  renumbered_from: PP-098
+  renumber_date: 2026-04-04
+
+- id: PP-303
+  date: 2026-04-02
+  severity: P2
+  description: "Obscuring in Divergence: effective_margin calculated at orientation_weight=1.0. If winner used Obscuring, place Doubt Marker instead of track movement. [PROVISIONAL]"
+  finding_id: "F-D-03 / SIM-D-01"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 DIVERGE + OBSCURING WIN]
+  status: provisional
+  applied_commit: "2026-04-02-sim-d-01"
+  renumbered_from: PP-099
+  renumber_date: 2026-04-04
+
+- id: PP-304
+  date: 2026-04-02
+  severity: P2
+  description: "§6.7 Formal Debate alternating clarification: proposer role alternates; initiative transfers per §6.4 independently. These are separate mechanics. [PROVISIONAL]"
+  finding_id: "F-C-02 / SIM-D-02"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.7]
+  applied_to_version: "v1.2"
+  status: provisional
+  applied_commit: "2026-04-02-sim-d-02"
+  renumbered_from: PP-100
+  renumber_date: 2026-04-04
+
+- id: PP-317
+  date: 2026-04-02
+  severity: P2
+  description: "IP post-80 escalation: IP 81-89 Vanguard +1 territory/season; IP 90-99 Altonian Mil +2; IP 100 shared defeat. Fills GAP-BG-06. PROVISIONAL."
+  finding_id: "GAP-BG-06 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-114
+  renumber_date: 2026-04-04
+
+- id: PP-318
+  date: 2026-04-02
+  severity: P2
+  description: "PI threshold table. PI 0 = Parliament dissolved + Löwenritter coup. Fills GAP-BG-03. PROVISIONAL ED-055."
+  finding_id: "GAP-BG-03 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-115
+  renumber_date: 2026-04-04
+
+- id: PP-319
+  date: 2026-04-02
+  severity: P2
+  description: "TC seasonal cap: Domain Actions +-3, all sources +-5. Seizure gains exempt. TC ceiling 100 cosmetic. PROVISIONAL ED-056."
+  finding_id: "A-BG-05 / GAP-BG-04 / GAP-BG-09 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-116
+  renumber_date: 2026-04-04
+
+- id: PP-320
+  date: 2026-04-02
+  severity: P1
+  description: "Faction collapse exit: 1 season elapsed + no hostile Domain Actions + Govern Ob 2 Success. Auto-exit Season 2 Stability 1 Mandate 0. PROVISIONAL ED-053."
+  finding_id: "GAP-BG-01 / C-BG-02 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-117
+  renumber_date: 2026-04-04
+
+- id: PP-321
+  date: 2026-04-02
+  severity: P1
+  description: "Simultaneous RS=0 + IP>=80: Rupture (Step 6) takes precedence. Exception: Restoration Step 5 victory pre-empts. PROVISIONAL ED-054."
+  finding_id: "GAP-BG-02 / C-BG-01 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-118
+  renumber_date: 2026-04-04
+
+- id: PP-322
+  date: 2026-04-02
+  severity: P2
+  description: "BG unit Cohesion starting values by type. Track 0-6. At 0: destroyed. +1/season recovery if no battle. PROVISIONAL GAP-BG-07."
+  finding_id: "GAP-BG-07 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-119
+  renumber_date: 2026-04-04
+
+- id: PP-323
+  date: 2026-04-02
+  severity: P2
+  description: "BG Thread ops: no Coherence cost. TTRPG personal-scale only. Hybrid: PC Coherence via Cascade Step 3. PROVISIONAL ED-057."
+  finding_id: "G-BG-03 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-120
+  renumber_date: 2026-04-04
+
+- id: PP-324
+  date: 2026-04-02
+  severity: P2
+  description: "Reformed Settlement +1 Ob Diplomacy targeting Hafenmark: permanent, no reversal. PROVISIONAL ED-058 open."
+  finding_id: "GAP-BG-11 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-121
+  renumber_date: 2026-04-04
+
+- id: PP-325
+  date: 2026-04-02
+  severity: P2
+  description: "CP awards in Hybrid: CP +1 on Domain Action Success if PC declares Belief. CP +1 on Mandate decision if Conviction articulated. BG-only: no CP. Fills G-BG-05."
+  finding_id: "G-BG-05 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-122
+  renumber_date: 2026-04-04
+
+- id: PP-326
+  date: 2026-04-02
+  severity: P1
+  description: "PP-118 Step numbering correction. Restoration pre-check moved to Step 5 (before RS Step 6). Added step-by-step accounting sequence context. Added simultaneous Step 12 editorial flag. Fixes SIM-BG-01-03."
+  finding_id: "SIM-BG-01-03 / SIM-BG-01-04"
+  source: simulation
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: provisional
+  applied_commit: "2026-04-02-audit-bg-sim-01"
+  supersedes: PP-118
+  renumbered_from: PP-118-rev1
+  renumber_date: 2026-04-04
+
+- id: PP-177
+  date: 2026-04-02
+  severity: P2
+  description: "Fail Forward operationalised for BG Domain Actions. Partial = Minor complication (player choice). Failure = Moderate complication (action-type specific, mandatory). Severe tier for Ob>=4 Failures. Parliamentary Manoeuvre Partial supersedes PP-170."
+  finding_id: "SIM-FF-01"
+  source: simulation
+  affects: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md]
+  applied_to_version: "v0.5.5"
+  status: provisional
+  applied_commit: pending
+
+- id: PP-345
+  date: 2026-04-02
+  severity: P3
+  description: "LIR/FF cross-mode applicability note added to stage1. Debate exemption, Thread precedence, BG action-economy equivalence all stated. Hybrid zoom-boundary FF rule added."
+  finding_id: "SIM-FF-01"
+  source: simulation
+  affects: [compilation/v0.14/stage1_core_engine.md, references/params_board_game.md]
+  applied_to_version: "v0.5.5"
+  status: provisional
+  applied_commit: pending
+  renumbered_from: PP-178
+  renumber_date: 2026-04-04
+
+- id: PP-346
+  date: 2026-04-02
+  severity: P3
+  description: "Hybrid zoom-boundary FF rule: PC Failure complication carries to faction scale as -1 Ob on next Domain Action or Standing -1. Not discarded at zoom boundary."
+  finding_id: "SIM-FF-01"
+  source: simulation
+  affects: [references/params_board_game.md, skills/valoria-orchestrator/references/state_transfer_spec.md]
+  applied_to_version: "v0.5.5"
+  status: provisional
+  applied_commit: pending
+  renumbered_from: PP-180
+  renumber_date: 2026-04-04
+
+- id: PP-348
+  date: 2026-04-02
+  severity: P1
+  description: "§6.14 Hybrid: TC starting position clamped to compromise zone 4-6. BG offset determines position within zone, never pre-decides outcome. Prevents hollow Hybrid debate scenes. [PROVISIONAL]"
+  finding_id: "HD-F-01 / SIM-D-05"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.14]
+  applied_to_version: "v1.6"
+  status: provisional
+  applied_commit: "2026-04-02-session-close"
+  renumbered_from: PP-120
+  renumber_date: 2026-04-04
+
+- id: PP-349
+  date: 2026-04-02
+  severity: P2
+  description: "§6.15: Church self-investigation exception — Church does not file Heresy Investigation against own ordained members supporting Church interests. Opposing factions may still file. [PROVISIONAL]"
+  finding_id: "TT-F-02 / SIM-D-05"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.15]
+  applied_to_version: "v1.6"
+  status: provisional
+  applied_commit: "2026-04-02-session-close"
+  renumbered_from: PP-121
+  renumber_date: 2026-04-04
+
+- id: PP-351
+  date: 2026-04-02
+  severity: P1
+  description: "§6.15: Temporal axis conflict rule — Past-axis Thread op during Future-primary debate (or reverse) imposes TN 8 on both orators' next Read roll. Same-axis ops and non-temporal ops unaffected. [PROVISIONAL]"
+  finding_id: "TT-F-04 / SIM-D-05"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.15]
+  applied_to_version: "v1.6"
+  status: provisional
+  applied_commit: "2026-04-02-session-close"
+  renumbered_from: PP-123
+  renumber_date: 2026-04-04
+
+- id: PP-175
+  date: 2026-04-02
+  severity: P1
+  description: "Mass combat ranged DR scaled from personal combat (÷2 rounded up): LP 0/1/2/3, HP 0/1/1/2, LBl 0/1/1/2, HBl 0/0/1/1. Unscaled DRs made all ranged units anti-levy-only at mass combat scale."
+  finding_id: "SIM-005-F1"
+  source: simulation
+  affects:
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
+  applied_to_version: "v4.6"
+  status: provisional
+  applied_commit: "pending"
+  note: "Provisional pending ED-096 user confirmation. Values are mechanically defensible."
+
+- id: PP-190
+  date: 2026-04-02
+  source: AUD-TW-001
+  description: "Diagnosis+Leap action economy in combat — 2-round minimum in combat; same-round permitted in non-combat"
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, combat, timing]
+
+- id: PP-191
+  date: 2026-04-02
+  source: AUD-TW-001
+  description: "Lock phase in mass combat — Offensive Lock=Phase 4, Support Lock=Phase 6; declared at Phase 1"
+  status: provisional
+  files: [references/params_mass_combat.md, references/params_threadwork.md]
+  tags: [threadwork, mass_combat, lock]
+
+- id: PP-192
+  date: 2026-04-02
+  source: AUD-TW-001
+  description: "Mass battle RS multiplier ×3 — all RS costs from Thread ops in mass battle multiplied by 3; Coherence unaffected"
+  status: provisional
+  files: [references/params_mass_combat.md, references/params_threadwork.md]
+  tags: [threadwork, mass_combat, rendering_stability]
+
+- id: PP-193
+  date: 2026-04-02
+  source: AUD-TW-001
+  description: "P-22 paradox window resolution — auto-resolves at window end; early closure via Mending Ob3; exploitation at +2 Ob"
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, past_oriented_pulling, temporal]
+
+- id: PP-194
+  date: 2026-04-02
+  source: AUD-TW-001
+  description: "Rendering Crisis resolution — campaign arc: season withdrawal + 3 Anchoring Scenes + Bonds TN7 Ob3; permanent TS loss on success"
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, coherence, campaign_arc]
+
+- id: PP-195
+  date: 2026-04-02
+  source: AUD-TW-001
+  description: "Community Weaving procedure — Revolution Domain Action: Mandate+History TN7 Ob3; RS+1/+2 on success/overwhelming; Mandate-1 on failure"
+  status: provisional
+  files: [references/params_factions.md, references/params_threadwork.md]
+  tags: [threadwork, factions, community_weaving, revolution]
+
+- id: PP-196
+  date: 2026-04-02
+  source: ED-103 / Canon §1.1 P-01
+  description: "FR surcharge (Lock/Dissolution) exempt from §3.2 per-op Coherence cap. FR costs: Object/Personal=-1, Relational/Territorial=-2, Structural=-3."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, forced_resolution, coherence, canon_derived]
+
+- id: PP-197
+  date: 2026-04-02
+  source: ED-101 / Canon Amendment 01 §Resonant
+  description: "TS 90+ Coherence 0 practitioners cause RS drain: -1 RS/scene (TS 90+) or -1 RS/session (TS 70-89). Reality strain from continuous self-maintenance threadwork."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, coherence, rendering_stability, coherence_zero, canon_derived]
+
+- id: PP-198
+  date: 2026-04-02
+  source: ED-105 / Canon Amendment 01 §2-3
+  description: "Hybrid Coherence declaration rule: replace 'narratively leads' with binary declaration at Phase 1 of Cascade Phase. Declaring PC pays Coherence; no declaration = no cost."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, hybrid, coherence, canon_derived]
+
+- id: PP-199
+  date: 2026-04-02
+  source: ED-104 / Canon §1.3, §13.1
+  description: "POP displacement of debate subject: Memory bonus lost for displaced claims; debate continues; opposing party may use displacement as Present-genre argument; Temporal Disjunction -1D Argue one exchange."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, debate, past_oriented_pulling, canon_derived]
+
+- id: PP-200
+  date: 2026-04-02
+  source: ED-106 / Canon Amendment 01 §3
+  description: "Coherence initialization BG→Hybrid: first Personal Phase = Coherence 10; subsequent = carry last recorded value. GMs track per PC on Hybrid sheet."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, hybrid, coherence, canon_derived]
+
+- id: PP-201
+  date: 2026-04-02
+  source: SIM-19-01 (P1)
+  description: "Mass battle Dissolution campaign-impact warning — E[RS/attempt]=-18.4; 3 attempts = Critical RS; Failure at RS<24 = Rupture. Mandatory GM communication."
+  status: provisional
+  files: [references/params_mass_combat.md, references/params_threadwork.md]
+  tags: [mass_combat, dissolution, rendering_stability, gm_guidance]
+
+- id: PP-202
+  date: 2026-04-02
+  source: SIM-18-01 (P2)
+  description: "Rendering Crisis arc stability disruption — arc pauses not resets; disrupted seasons extend non-practice; Thread op during disruption resets non-practice counter."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, coherence, rendering_crisis, arc]
+
+- id: PP-203
+  date: 2026-04-02
+  source: SIM-17-01 (P3)
+  description: "Sequential POPs on paradoxed thread auto-fail (no roll, no RS cost). Coherence and Focus consumed. Window unaffected."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, past_oriented_pulling, paradox_window]
+
+- id: PP-204
+  date: 2026-04-02
+  source: SIM-19-02 (P3)
+  description: "RS<24 mass battle Rupture threshold — GM mandatory disclosure before Dissolution declaration; Failure = -24 RS = Rupture if RS<24."
+  status: provisional
+  files: [references/params_mass_combat.md]
+  tags: [mass_combat, dissolution, rendering_stability, rupture]
+
+- id: PP-205
+  date: 2026-04-02
+  source: SIM-20-01 (P2) / ED-107
+  description: "Hybrid co-declaration tie-break — highest TS declares; tie = first at table. Non-declaring PC pays no Coherence."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [hybrid, coherence, declaration, tie_break]
+
+- id: PP-206
+  date: 2026-04-02
+  source: SIM-18-02 (P3)
+  description: "GM guidance: TS 30-31 Rendering Crisis arc may reduce TS below Leap minimum — surface before arc begins."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md]
+  tags: [threadwork, coherence, thread_sensitivity, gm_guidance]
+
+- id: PP-207
+  date: 2026-04-02
+  source: SIM-20-02 (P3)
+  description: "Hybrid Coherence pacing guidance — 1 Personal + 1 Strategic/session is sustainable (Crisis ~S10); 2+2 causes Crisis by S3-5."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md]
+  tags: [hybrid, coherence, pacing, gm_guidance]
+
+- id: PP-208
+  date: 2026-04-02
+  source: SIM-21-01 (P3)
+  description: "OA modifier does not carry through brittleness collapse to Shifting Object. Shifting Object is new configuration. Exception: OA applies if Mending targets still-Woven thread."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, over_actualisation, shifting_object, brittleness]
+
+- id: PP-209
+  date: 2026-04-02
+  source: SIM-21-02 (P3)
+  description: "Double OA stacking — two independent successful Weavings of same thread in separate contact windows = two OA stacks (+2 Ob). Compounded brittleness. Overweaving rule is intra-window only."
+  status: provisional
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  tags: [threadwork, over_actualisation, collective, stacking]
+
+- id: PP-210
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-03)
+  system: combat
+  description: "Health formula corrected to accumulation model: Health = Endurance + 6. Damage accumulates per round; at 0 take Wound, Health resets. Replaces erroneous 'Health = Endurance score' single-hit-threshold language in design doc §7 and params_combat Wounds section."
+
+- id: PP-211
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-04)
+  system: combat
+  description: "Critical Hit rule added to design doc §5 Damage Resolution. Net hits ≥ 3 → weapon damage modifier doubled before DR subtraction. Rule was in params_combat only; now in canonical design doc."
+
+- id: PP-212
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-02)
+  system: combat
+  description: "Feint timing defined: 'next exchange' = next round only. −2D Defence penalty expires at end of that round."
+
+- id: PP-213
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-01)
+  system: combat
+  description: "Tie Up 'disadvantage' defined: −2D to Combat Pool for both parties for one round. Replaces undefined 'at disadvantage' language."
+
+- id: PP-214
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-17)
+  system: combat
+  description: "Rescue mechanical resolution defined: attack resolves against rescuer instead of original target; rescuer's armour DR applies. Replaces bare 'Interpose.' language."
+
+- id: PP-215
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-08)
+  system: combat
+  description: "Dodge action added to design doc §4 Actions table. Ranged attacks only; forfeit all offensive action; full pool as passive Defence vs one incoming ranged attack; armour DR applies. Was in params Actions Summary (ED-067 provisional) but absent from design doc."
+
+- id: PP-216
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-07)
+  system: combat
+  description: "Fibonacci Group Bonus table expanded from 4-row simplified to 6-row canonical version matching params_combat. Design doc §8 now shows: 1=+0, 2=+1, 3=+2, 4–5=+3, 6–7=+4, 8+=+5."
+
+- id: PP-217
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (G-P1-01)
+  system: combat / board_game
+  description: "Anti-Armour keyword defined for BG layer. Units with HP (crossbow) or HBl (lead sling) weapon type carry Anti-Armour: reduces target armour tier by 1 for the engagement. Does not stack. Keyword was referenced in design doc §5 BG note but undefined everywhere."
+
+- id: PP-218
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-05)
+  system: combat / mass_combat
+  description: "PP-086 mass damage formula clarified. Formula is now: max(0, net successes − Ob) + disposition_modifier. Floor applies to bracketed term only; disposition modifier always adds after. Partial success → 0+modifier. Replaces ambiguous 'net_successes_over_Ob' notation."
+
+- id: PP-221
+  status: provisional
+  source: SIM-X-22 / F-10
+  date: 2026-04-03
+  description: "Coherence 2 (Fractured) = +1 Ob all Thread ops. Consistent with 4–3 band."
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+
+- id: PP-222
+  status: provisional
+  source: SIM-X-22 / F-11
+  date: 2026-04-03
+  description: "Offensive Lock on formation thread blocks Cohesion degradation checks for lock duration."
+  files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  editorial: ED-122
+
+- id: PP-223
+  status: provisional
+  source: SIM-X-22 / F-06/F-16
+  date: 2026-04-03
+  description: "Mass battle turn = 1 scene for RS threshold effects, Coherence-0 leakage, paradox window tick."
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  editorial: ED-123
+
+- id: PP-224
+  status: provisional
+  source: SIM-X-22 / F-03
+  date: 2026-04-03
+  description: "Diagnosis+Leap collapse to single Phase 4 in mass battle. PP-190 2-round rule = personal combat only."
+  files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  editorial: ED-124
+
+- id: PP-225
+  status: provisional
+  source: SIM-X-22 / F-12
+  date: 2026-04-03
+  description: "RS x3 multiplier (PP-192) applies to RS gains as well as costs. Weaving Overwhelming = RS+3 in mass battle."
+  files: [references/params_mass_combat.md, references/params_threadwork.md]
+
+- id: PP-226
+  status: provisional
+  source: SIM-X-22 / F-13
+  date: 2026-04-03
+  description: "Temporal auto-effect RS (PP-181) NOT subject to x3. It is a separate auto-effect system, not an op RS cost."
+  files: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+
+- id: PP-227
+  status: provisional
+  source: SIM-X-22 / F-15
+  date: 2026-04-03
+  description: "Paradox window (P-22) has no mechanical effect on unit stats during battle. Pre-displacement values used; displaced values apply on window auto-resolution (end of battle turn)."
+  files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  editorial: ED-121
+
+- id: PP-228
+  status: provisional
+  source: SIM-X-22 / F-01
+  date: 2026-04-03
+  description: "Practitioner Leap in personal combat vs pool-8+ opponent: E[Stamina lost before first op] ~3.74/5. Design-intent vulnerability — add GM guidance note, no formula change."
+  files: [designs/combat/combat_design_v1.md]
+
+- id: PP-229
+  status: provisional
+  source: SIM-X-22 / F-04
+  date: 2026-04-03
+  description: "Active Thread contact window suspended (not consumed) during General Zoom In personal exchange. Resumes on return to mass scale. No op rounds consumed."
+  files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+
+- id: PP-230
+  status: provisional
+  source: SIM-X-22 / F-05
+  date: 2026-04-03
+  description: "Active paradox window does not tick during Zoom In personal exchange (sub-scene of battle turn scene)."
+  files: [designs/mass_combat/mass_battle_v3.md]
+
+- id: PP-231
+  status: provisional
+  source: SIM-X-22 / F-09
+  date: 2026-04-03
+  description: "Cohesion degradation is an asymmetry mechanic, not attrition. Triggers only with CP asymmetry, Thread-assisted Str loss, or artillery. Add GM note."
+  files: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+
+- id: PP-381
+  date: 2026-04-04
+  source: error-audit
+  priority: P2
+  system: core_engine
+  description: "Flag discrepancy: stage1_core_engine.md states face 10 = +1 success + bonus chain die (indefinite). params_core.md states '+2 successes (no extra die)'. Different mechanics. Note added to params_core pending resolution."
+  status: flagged
+  propagation_targets:
+  - references/params_core.md
+  propagation_status: flagged
+  renumbered_from: PP-262
+  renumber_date: 2026-04-04
+
+- id: PP-414
+  date: 2026-04-06
+  severity: P2
+  description: "Varfell Path B: provisional redesign (ED-311 pending user decision). Conditions reduced from 7 to 4 in provisional form. WR track introduced."
+  finding_id: ED-311
+  source: review
+  affects: [designs/board_game/victory_architecture_v1.md, designs/board_game/varfell_path_b_redesign_ed311.md]
+  status: provisional
+
+- id: PP-454
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-SC-STRESS-01 finding P1-SC-01: PP-232 Cognition pool and Attunement initiative not backported to design doc Part 6 (§6.3, §6.4 Step 3, §6.10). Design doc still reads Presence×2 for pool and Presence for initiative."
+  finding_id: P1-SC-01
+  source: simulation SIM-SC-STRESS-01 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md]
+  status: registered — backport required
+
+- id: PP-455
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-SC-STRESS-01 finding P1-SC-02: Interaction taxonomy incompatible between design doc (CLASH/COMPETITION/DIVERGENCE) and params (CLASH/AMPLIFY/CROSS/DIVERGE-state). AMPLIFY pool cap, CROSS simultaneous resolution, DIVERGE-state not present in Part 6 operative."
+  finding_id: P1-SC-02
+  source: simulation SIM-SC-STRESS-01 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md]
+  status: registered — Part 6 §6.4 rewrite required
+
+- id: PP-456
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-SC-STRESS-01 finding P1-SC-04: Obscuring ow=0.75 in params Orientation Weights contradicts design doc (Obscuring win = no CT movement, DM placed). Params entry is stale. Strike ow=0.75 from params."
+  finding_id: P1-SC-04
+  source: simulation SIM-SC-STRESS-01 2026-04-08
+  affects: [references/params_contest.md]
+  status: registered — params stale entry to strike
+
+- id: PP-457
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-SC-STRESS-01 finding P1-SC-05: 'Proposer role' alternation in Part 6 §6.7 has no operative mechanical effect (quaestio deprecated). Dangling term. Flag for strike or explicit definition."
+  finding_id: P1-SC-05
+  source: simulation SIM-SC-STRESS-01 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md]
+  status: registered — §6.7 language needs strike or definition
+- id: PP-464
+  date: 2026-04-08
+  severity: NOTE
+  description: "GM reference card for Social Contest acknowledged as required production item before playtesting. Content per ED-141/PP-321. Not a mechanical change."
+  finding_id: SIM-SC-01-D-17
+  source: simulation resolution 2026-04-08
+  affects: []
+  status: noted
+- id: PP-469
+  date: 2026-04-08
+  severity: P1
+  description: "SCHEDULED — victory_architecture_v1.md §1 TCV table requires renumbering to geography_design.md canonical T-numbers (T1=Valorsplatz, T8=Gransol, T9=Himmelenger, etc.). The current table uses stale PP-199 numbering which produces incorrect starting TCVs (Crown 10 vs 12, Hafenmark 9 vs 8). Pure renumber pass — no design values change. Execute as dedicated session. Provisional: params_board_game.md TCV table is canonical until renumber is applied."
+  finding_id: STR-BG-P1-02
+  source: BG stress test 2026-04-08
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: scheduled
+
+- id: PP-472
+  date: 2026-04-08
+  severity: P2
+  description: "Accounting steps 8/8b/9/9b/10/10b collapsed into Step 8 'Events and Emergence' with a physical checklist card. These steps all execute in the same window and separating them adds procedural friction. Renumbering: dissolved Step 11 removed from numbering; Step 12 becomes Step 9; Step 13 becomes Step 10. Full step sequence now: 1-7, 8 (merged), 9 (victory check), 10 (season advance). Reduces accounting procedural load from 13+ steps to 10."
+  finding_id: STR-BG-D-09
+  source: BG stress test 2026-04-08
+  affects: [references/params_board_game.md]
+  status: scheduled
+
+- id: PP-464
+  date: 2026-04-08
+  severity: P2
+  description: "ED-333 resolved — Faction elimination territory status: all territories become Uncontrolled (first March succeeds automatically, no defender). Fort levels retained. AP/CP tokens removed. Löwenritter Coup Counter → 4 on Crown elimination. Applied to params_board_game.md."
+  finding_id: ED-333
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-529-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P1
+  description: >
+    PROVISIONAL AMPL-01: Stalemate break rule for AMPLIFY and CLASH.
+    Add to social_contest_system_v2.md §4 AMPLIFY + §3 general stalemate:
+    "If net successes = 0 for 3 consecutive exchanges in the same CLASH or AMPLIFY sequence,
+    both sides exhaust their arguments. The exchange ends without Conviction Track movement.
+    Each participant loses 1 Composure (narrative attrition). The Doubt Marker advances 1
+    toward the non-initiating side." [PROVISIONAL — pending user approval]
+  finding_id: F-AMPL-01 (SIM-AMPL-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects: [designs/contest/social_contest_system_v2.md, references/params_contest.md]
+  status: provisional
+
+- id: PP-530-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P1
+  description: >
+    PROVISIONAL CMD-01: Overwhelming Size Advantage bonus.
+    Add to mass_battle_v3.md §Unit Combat:
+    "When Size ≥ 2×Command, unit may add +1D to pool once per Battle Turn (Phase 4 only).
+    Does not apply in Defensive formation or on defensive orders." [PROVISIONAL — pending user approval]
+  finding_id: F-CMD-02 (SIM-CMD-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  status: provisional
+
+- id: PP-531-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P1
+  description: >
+    PROVISIONAL CR-01: Define "Thread orders" in BG Calamity Radiation Table.
+    Add to calamity_radiation.md §BG Implementation:
+    "'Thread orders' = Domain Actions bearing [THREAD] tag in params_board_game.md.
+    Expedition and Mending-coordination actions are always [THREAD]-tagged.
+    Govern, Assert, Reinforce, Suppress, Seize etc. are NOT [THREAD]-tagged." [PROVISIONAL]
+  finding_id: F-CR-01 (SIM-CR-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects: [designs/setting/calamity_radiation.md]
+  status: provisional
+
+- id: PP-532-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P1
+  description: >
+    PROVISIONAL CR-02: Radiation-caused Thread failures in Hybrid Personal Phase.
+    Add to calamity_radiation.md §Hybrid Mode Note:
+    "Radiation-caused Thread failures do NOT generate Domain Echoes. Domain Echoes require
+    deliberate PC Thread operations with faction-intent. Environmental radiation failure is
+    not intentional and queues no echo." [PROVISIONAL]
+  finding_id: F-CR-02 (SIM-CR-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects: [designs/setting/calamity_radiation.md]
+  status: provisional
+
+- id: PP-533-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P1
+  description: >
+    PROVISIONAL CLK-01: PI thresholds pending ED-361.
+    Provisional values for params_board_game.md §PI:
+    PI 0–2: Parliamentary debate only; PI 3: Mandate cap −1;
+    PI 5: Mandatory Parliamentary Session at Accounting; PI 7: Löwenritter Coup Counter +1 auto;
+    PI 10: Structural collapse — all Stability −1 at Accounting until PI < 7. [PROVISIONAL]
+  finding_id: F-CLK-03 (SIM-CLK-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects: [references/params_board_game.md, designs/systems/clock_registry.md]
+  status: provisional
+
+- id: PP-534-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P2
+  description: >
+    PROVISIONAL VIC-01: Church Prominence auto-applies in self-controlled territories.
+    Add to victory_architecture_v1.md §3.2:
+    "Church is automatically Prominent in all territories it controls, regardless of Mandate comparison.
+    Mandate comparison (Church Mandate > controlling faction Mandate) applies only to territories
+    controlled by rival factions." [PROVISIONAL]
+  finding_id: F-VIC-01 (SIM-VIC-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: provisional
+
+- id: PP-535-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P1
+  description: >
+    PROVISIONAL VIC-RM-01: RM Phase 1 threshold reconciled.
+    PP-478 supersedes §3.5 Phase 1 threshold. Phase 1 for RM solo victory (Hybrid mode,
+    post-Founding) = ≥ 5 territories CV ≤ 1. §3.5 text showing ≥ 8 territories is the
+    pre-PP-478 BG-only version, now struck (RM is BG-unavailable per PP-478). [PROVISIONAL]
+  finding_id: F-VIC-RM-01 (SIM-VIC-03)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: provisional
+
+# ═══ 2026-04-10 BALANCE PATCHES PP-540–546 ═══════════════════════════════
+
+- id: PP-633
+  date: 2026-04-13
+  severity: P3
+  description: "Pool floor 1D — named rule added to params_core.md. Formula: max(1, pool − penalties). Applies to Feint pool reduction (combat), Spent+Rattled (contest), fieldwork wounds. Corrects gap B-02 from comparative audit."
+  affects: [references/params_core.md]
+
+- id: PP-634
+  date: 2026-04-13
+  severity: P2
+  description: "Combat surrender/disengage procedure — §11.4 added to combat_design_v1.md. Yield: opponent-choice (accept=combat ends, refuse=unresisting). Disengage: Agility pool TN7 Ob1 contested; partial=one free strike. ED-512 resolved."
+  affects: [designs/combat/combat_design_v1.md]
+
+- id: PP-635
+  date: 2026-04-13
+  severity: P3
+  description: "Combat §11.5 fieldwork transitions — F-TRANS-01/09 cross-reference added. Let It Ride clarification: applies to manoeuvres (Feint/Rescue/Disarm), not standard attacks. Gap C-01 resolved."
+  affects: [designs/combat/combat_design_v1.md]
+
+- id: PP-636
+  date: 2026-04-13
+  severity: P2
+  description: "Contest §9.1 Evidence Track Findings citation — Combined Findings (+1D/Finding max +2D on Exchange 1, stacks with prep for max +3D). Gap C-02 resolved. Contest §5 social initiative — deterministic by design, rationale documented. ED-138/ED-514 resolved."
+  affects: [designs/contest/social_contest_system_v2.md]
+
+- id: PP-637
+  date: 2026-04-13
+  severity: P2
+  description: "Contest §4 Spent timing — assessed after Step 4 (CLASH/REINFORCE); penalty applies next exchange. Triggering exchange resolves normally. Gap D-06 resolved."
+  affects: [designs/contest/social_contest_system_v2.md]
+
+- id: PP-638
+  date: 2026-04-13
+  severity: P3
+  description: "Threadwork §2.3 — Thread-Read-as-fieldwork cross-reference added after Leap failure framing. Gap C-03 resolved."
+  affects: [designs/ttrpg/threadwork_redesign_v25.md]
+
+- id: PP-639
+  date: 2026-04-13
+  severity: P2
+  description: "ARC-T23 Witness — Remembrancer renamed to the Witness throughout arc_register.md. Institutional title: current holder of 245-year RM succession lineage, not a Calamity survivor (TS confers no longevity). COLLISION E operational. ED-NEW-02 resolved."
+  affects: [references/arc_register.md, canon/editorial_ledger.yaml]
+
+- id: PP-640
+  date: 2026-04-13
+  severity: P3
+  description: "Witness canon correction — description fixed: lineage holder not Calamity survivor. Humans are mortal; Thread Sensitivity does not extend lifespan; self-spooling is ontologically incoherent. Authority derives from institutional succession and transmitted record."
+  affects: [references/arc_register.md, canon/editorial_ledger.yaml]
+
+- id: PP-641
+  date: 2026-04-13
+  severity: P1
+  description: "Opposing Operations propagated to threadwork_redesign_v25.md §2.6 — full Contested Intentionality procedure from params_threadwork PP-632 now in design doc. Propagation gap closed."
+  affects: [designs/ttrpg/threadwork_redesign_v25.md]
+
+- id: PP-642
+  date: 2026-04-13
+  severity: P2
+  description: "NPC Recruitment procedure — §10 added to npc_behavior_v30.md. 4-step: Identify/Approach/Offer/Resolution. Ob = floor(NPC highest-faction Disposition / 2) + 1. Hooks defined (Strong=auto-success Ob1, Weak=-2 Ob). Defection: Belief contradiction check 2 consecutive seasons. ED-510 resolved. ED-511 (Hooks) resolved."
+  affects: [designs/systems/npc_behavior_v30.md, canon/editorial_ledger.yaml]

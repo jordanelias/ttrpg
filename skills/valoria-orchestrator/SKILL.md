@@ -35,11 +35,17 @@ import github_ops as g
 # Batch-read all session-critical files
 files = g.read_files_graphql([
     'session_log_current.md',
-    'canon/editorial_ledger.yaml',
-    'references/file_index.md',
+    'canon/editorial_ledger_summary.yaml',   # ~166 tokens (replaces 43k-token full ledger)
+    'references/file_index_summary.md',      # ~324 tokens (replaces 6.7k-token full index)
     'references/canonical_sources.yaml',
-    'references/propagation_map.md',
 ])
+# Load full registers only when needed:
+# canon/editorial_ledger.yaml          → adding new editorial items
+# canon/editorial_ledger_archive.yaml  → audit/reference only
+# canon/patch_register_active.yaml     → patch work (190 active patches)
+# canon/patch_register_archive.yaml    → historical audit only
+# tests/coverage_matrix.md            → open SIM-DEBT summary
+# tests/coverage_matrix_archive.md    → historical sim records
 token = g.assert_fetched(
     'session_log_current.md',
     'canon/editorial_ledger.yaml',
@@ -81,8 +87,8 @@ If any fetch in Message 1 returns None or the token is missing, do not proceed t
 1. From fetched `session_log_current.md`: extract active resumption block.
    - If found: report last stage + next action in ≤3 lines; confirm before proceeding.
    - If not found: new session. Confirm task with user.
-2. From fetched `canon/editorial_ledger.yaml`: count P1-BLOCKER items. Report count only.
-3. From fetched `references/file_index.md`: report KNOWN STALE SYNC GAPS count only.
+2. From fetched `canon/editorial_ledger_summary.yaml`: read p1_blocker_count and open_count. Report counts only.
+3. From fetched `references/file_index_summary.md`: report propagation-pending count only.
 4. Confirm task with user before proceeding.
 
 ## Canonical Hierarchy (immutable)

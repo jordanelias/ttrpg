@@ -1,0 +1,21 @@
+# Editorial Ledger — Session Summary
+# Full active ledger: canon/editorial_ledger.yaml (10 lines — currently empty)
+# Full archive: canon/editorial_ledger_archive.yaml
+# Full index: canon/editorial_ledger_index.md
+# Last updated: 2026-04-14
+
+next_id: 535
+p1_blocker_count: 0
+p1_blocker_ids: []
+provisional_count: 0
+provisional_ids: []
+open_count: 0
+open_ids: []
+flagged_count: 0
+flagged_ids: []
+
+note: >
+  All editorial decisions resolved as of 2026-04-13.
+  Next session should fetch this summary only.
+  Fetch canon/editorial_ledger.yaml for active items only when adding new editorials.
+  Fetch canon/editorial_ledger_archive.yaml only for audit/reference work.
