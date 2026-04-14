@@ -96,6 +96,24 @@ TN: 7 (Standard). TN 6 (Controlled) when unhurried with preparation. TN 8 (Despe
 | Socializing | Rumour | Charisma | Gathering unverified intelligence through social networks |
 | Socializing | Negotiate | Attunement | Reaching informal agreement (below Contest threshold — see §5.7) |
 
+### §2.3 System Transition Rules
+
+Fieldwork interacts with Combat, Contest, and Mass Battle. These handoff rules supplement stage11 §11.3 (Eight Handoff Rules).
+
+**Fieldwork → Combat:** When hostile contact interrupts fieldwork, the current fieldwork action resolves (degree applied, Evidence/Exposure updated). Combat then begins per combat_design_v1.md §3 (initiative by Attunement). If the character was at Exposure ≥ Noticed when interrupted, the interrupting hostile party gains +1D on their first exchange Offence (positional awareness from the character's conspicuousness). Evidence gathered before the interruption is retained regardless of combat outcome.
+
+**Fieldwork → Contest (Escalation):** Per §5.7. Current Disposition maps to Conviction Track offset (±1 per 2 Disposition, cap ±2). Evidence from fieldwork may be cited in the Contest for +2D Recall bonus (per social_contest_system_v2.md §4 Step 3). Evidence cited in a Contest is not consumed — the Evidence Track and its contents persist. The investigation continues after the Contest.
+
+**Fieldwork → Mass Battle (Suspension):** Mass battle suspends all active fieldwork. Evidence Tracks freeze at their current value. Battle actions (including Thread operations in Phase 4) do not consume fieldwork time units. Thread-Read during mass battle: resolves in Phase 4 window, classified as intelligence (not offensive). Co-movement fires. May advance an Evidence Track if the Thread-Read targets an investigation question. Fieldwork resumes after the battle at its frozen state.
+
+**Combat → Fieldwork:** Combat ends; fieldwork resumes as a new scene. Wounds persist (−1D to physical fieldwork per wound, per §2.2). Combat generates Exposure in the current territory: +1 for a quiet fight (subdued, no witnesses), +2 for a conspicuous fight (noise, damage, witnesses), +3 for a public battle (multiple combatants, civilian observers).
+
+**Contest → Fieldwork:** Contest ends; fieldwork resumes. Information gained through a Contest Appraise action (social_contest_system_v2.md §4 Step 1) may be applied to an active Evidence Track as +1 progress (Partial quality, Testimonial tag). This is automatic — no additional fieldwork action required. Post-Contest Disposition update: adjudicator's Disposition shifts +1 toward the Contest winner, −1 toward the loser.
+
+**Mass Battle → Fieldwork:** Battle concludes; Zoom Out fires (stage11 §11.2). Fieldwork resumes from frozen state. Post-battle investigation of the battlefield (examining bodies, equipment, terrain) constitutes one fieldwork scene, consuming one time unit. The battle itself does not consume fieldwork time units.
+
+**Combined Findings in Contest:** Multiple resolved Findings on related topics may be presented as a combined argument. The combined argument uses the strongest constituent reliability tag. Each additional Finding beyond the first adds +1D to the Argue roll (max +2D from combined Findings).
+
 ---
 
 ## §3 EXPLORATION
@@ -676,6 +694,20 @@ Fieldwork actions consume in-game time:
 | ED-NEW-13 | Desperate Trail (§4.4): 3 consecutive failures threshold triggers TN 8 + doubled Exposure + GM complication. Confirm TN 8 does not make recovery impossible for low-pool investigators (4D at TN 8: P(≥1) ≈ 60%, still viable). Confirm Partial +2 progress compensates for increased difficulty. | P2 |
 | ED-NEW-14 | Audit finding D-SIM-5 resolved: §4.1 now defines Finding reliability from resolved investigations. Verify Finding + Contest interaction in simulation. | P3 |
 
+### Items resolved by PP-577 transition simulation (2026-04-13)
+
+| Item | Resolution |
+|------|------------|
+| F-TRANS-01 | Fieldwork → Combat handoff added (§2.3). Exposure → ambusher advantage. |
+| F-TRANS-04 | Evidence not consumed by Contest citation — stated explicitly (§2.3). |
+| F-TRANS-06 | Mass battle suspends fieldwork — suspension rule added (§2.3). |
+| F-TRANS-07 | Thread-Read in Phase 4 = intelligence, not offensive. Co-movement fires. (§2.3). |
+| F-TRANS-10 | Contest Appraise → +1 Evidence Track progress (Testimonial). (§2.3). |
+| F-TRANS-12 | Post-battle investigation = 1 fieldwork scene. Battle ≠ fieldwork time. (§2.3). |
+| F-TRANS-05 | Post-Contest Disposition shift: winner +1, loser −1 with adjudicator. (§2.3). |
+| F-TRANS-09 | Combat Exposure codified: quiet +1, conspicuous +2, public +3. (§2.3). |
+| F-TRANS-11 | Combined Findings: +1D per additional Finding in Contest, max +2D. (§2.3). |
+
 ### Items resolved by PP-576 audit (2026-04-13)
 
 | Item | Resolution |
@@ -704,6 +736,7 @@ Fieldwork actions consume in-game time:
 | SIM-DEBT-FW-04 | Exposure ↔ Attention Pool feedback loop: simulate 4-season fieldwork-heavy campaign. Confirm capped Exposure feed does not generate TC acceleration beyond ±5/season combined cap. |
 | SIM-DEBT-FW-05 | Survey action BG balance: confirm Survey does not dominate Consul Govern. Survey should be situationally valuable, not universally optimal. |
 | SIM-DEBT-FW-06 | Cover derived value calibration: confirm Cover 3-4 (low) vs Cover 9+ (high) produces meaningfully different Exposure tolerance without making high-Cover characters immune. |
+| SIM-DEBT-FW-07 | **RESOLVED** — Transition simulation (all 6 directions) completed 2026-04-13. 6 P2 and 3 P3 findings discovered and resolved. All transitions functional. See tests/sim_fieldwork_transitions.md. |
 
 ### Propagation required on approval
 

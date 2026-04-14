@@ -1,3 +1,41 @@
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-13_OPUS_FIELDWORK_TRANSITIONS
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Full 6-direction transition simulation (fieldwork ↔ combat/contest/mass battle)
+2. 6 P2 + 3 P3 findings discovered and resolved (PP-577)
+3. §2.3 System Transition Rules added to fieldwork design
+4. All transitions functional with explicit handoff rules
+
+## TRANSITION FINDINGS (PP-577)
+- F-TRANS-01: Fieldwork → Combat handoff (Exposure → ambusher advantage)
+- F-TRANS-04: Evidence not consumed by Contest citation
+- F-TRANS-06: Mass battle suspends fieldwork
+- F-TRANS-07: Thread-Read in Phase 4 = intelligence, not offensive
+- F-TRANS-10: Contest Appraise → +1 Evidence Track progress
+- F-TRANS-12: Post-battle investigation = 1 fieldwork scene
+- F-TRANS-05: Post-Contest Disposition shift (winner +1, loser −1)
+- F-TRANS-09: Combat Exposure (quiet +1, conspicuous +2, public +3)
+- F-TRANS-11: Combined Findings +1D per additional in Contest (max +2D)
+
+## EMERGENT PROPERTIES CONFIRMED
+- Evidence pipeline: fieldwork → Contest → fieldwork (bidirectional)
+- Exposure as cross-system pressure (combat/battle/fieldwork share territory track)
+- Sensitive/non-sensitive dynamics persist across ALL transitions
+- Domain Echo fires from investigation Findings (stage11 §11.5)
+
+## P1 BLOCKERS: 3 (ED-NEW-04, ED-NEW-10, ED-NEW-11 — unchanged)
+## OPEN EDITORIALS: 14 (unchanged)
+## SIM-DEBT: 7 (FW-02 partially resolved; FW-07 RESOLVED)
+```
+
+---
+
 
 ---
 
