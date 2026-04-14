@@ -1634,3 +1634,119 @@ If a faction's solo victory conditions and a co-victory pairing conditions are b
 
 ## Diplomatic Alignment — Parliamentary Motion Definition (PP-526)
 Once per season during a Parliamentary Session, both Church and Hafenmark count as same-side voters regardless of their individually declared votes. Declared at the start of the Parliamentary Session. Public. Applies to one motion per season. Not a free card play; requires no action spend.
+
+## NPC Faction Priority Trees (from npc_behavior_system_v1.md §8)
+<!-- Source: designs/systems/npc_behavior_system_v1.md. Canonical. -->
+<!-- Ministry Priority Tree (existing, PP-564) retained above. Trees below cover all other NPC factions. -->
+
+### Priority Tree Template (7 levels)
+| Priority | Name | Description |
+|---|---|---|
+| 1 | Survival | Stability ≤ 2: raise Stability or remove threat. Overrides all. |
+| 2 | Conviction-critical | Game-state threatens leader's primary Conviction: address it. |
+| 3 | Framework-aligned | Framework-aligned action (−1 Ob) available + produces stat improvement: take it. |
+| 4 | Institutional Tendency | Faction default behavior (stage6). |
+| 5 | Conviction-secondary | Secondary Conviction relevant + no higher priority fired. |
+| 6 | Reactive | Attacked/threatened: respond proportionally. |
+| 7 | Pass | No action. Bank Standing or accumulate. |
+
+### Church Priority Tree
+| P | Condition | Action |
+|---|---|---|
+| 1 | Stability ≤ 2 | Consul Inward highest-PT territory. Suspend TC Assert if Stability = 1. |
+| 2 | Open Thread op in Church territory OR practitioner public OR Piety −2 | Heresy Investigation. If target = faction leader: Excommunication. |
+| 3 | TC < 75 AND Mandate ≥ 4 | Assert (TC +1). Piety DA if Assert used. |
+| 4 | Default | Expand Piety. Consul Inward lowest-PT territory with Church presence. |
+| 5 | AER maintenance | Temperance declaration if Cardinal active + Church controls T9. |
+| 6 | Attacked | Templar deployment if Fortitude active + Stability ≥ 2. |
+| 7 | Default | Pass. |
+Post-TC 75: P3 → Territorial Seizure (highest-value targets first).
+
+### Crown Priority Tree
+| P | Condition | Action |
+|---|---|---|
+| 1 | Stability ≤ 2 | Consul Inward capital. Royal Decree own Stability if available. |
+| 2 | 2+ territories changed OR Coup Counter = 2 OR PI ≥ 8 | Military response. Legionary in threatened territory. |
+| 3 | Royal Decree available + framework-aligned target | Decree: +1 weakest-stat ally or −1 strongest-stat rival. |
+| 4 | Default | Maintain treaties. Defend territory. Govern. Consul/Senator. |
+| 5 | Torben Loyalty ≤ 3 | Senator Outward targeting Torben. |
+| 6 | Attacked | Military proportional. Crown covert (Influence +1 Ob). |
+| 7 | Default | Pass. Thread Liaison if allied faction identified. |
+
+### Hafenmark Priority Tree
+| P | Condition | Action |
+|---|---|---|
+| 1 | Stability ≤ 2 | Consul Inward capital. |
+| 2 | Church seizes territory OR constitutional bypass | Sovereign Authority Doctrine or Parliamentary objection. |
+| 3 | Suppress available (Church M ≥ 4, Baralta M ≥ 4) | Suppress TC. |
+| 4 | Default | Maintain order. Consul Inward. Diplomatic Senator to Crown/Guilds. |
+| 5 | Trade Compact conditions met | Pursue Compact activation. |
+| 6 | Attacked | Parliamentary Manoeuvre. Legionary defensive only. |
+| 7 | Default | Pass. Wealth Sink if W > 5. |
+
+### Varfell Priority Tree
+| P | Condition | Action |
+|---|---|---|
+| 1 | Stability ≤ 2 | Consul Inward capital. |
+| 2 | TK opportunity: Expedition OR Collection OR practitioner contact | Collection deployment or Tribune Investigate (Thread intel). |
+| 3 | Intel action with measurable outcome | Tribune Investigate vs highest-hidden-stat rival. |
+| 4 | Default | Maximise info advantage. Senator Outward. |
+| 5 | VTM/WR advancement conditions met | Pursue VTM or Warden Recognition. |
+| 6 | Attacked | Intel response: reveal attacker's hidden stat. No military first-strike. |
+| 7 | Default | Pass. Patience Protocol (+2D future). |
+
+### Guilds Priority Tree
+| P | Condition | Action |
+|---|---|---|
+| 1 | Stability ≤ 2 | Consul Inward highest-Favour territory. |
+| 2 | — | No single-leader Conviction. Priority 2 does not fire. |
+| 3 | Economic Leverage available (Favour ≥ 5) | Wealth vs lowest-Wealth target in eligible territory. |
+| 4 | Default | Protect commerce. Consul Inward trade hubs. |
+| 5 | — | No secondary Conviction. |
+| 6 | Attacked | Economic Leverage vs attacker if eligible. Else Senator ally-seek. |
+| 7 | Default | Pass. Favour accumulation. |
+
+### Löwenritter Priority Tree
+| P | Condition | Action |
+|---|---|---|
+| 1 | Stability ≤ 2 | Military Consolidation. |
+| 2 | Coup Counter = 2 + trigger imminent | Prepare: pre-position Legionary T14. |
+| 3 | Sovereignty defence available (border, Altonian) | Legionary border territory (−1 Ob Martial Honour). |
+| 4 | Bordering faction Military > Löwenritter | Military Consolidation (PP-238). |
+| 5 | Crown M < 3 or Torben Loyalty < 3 | Riskbreaker activation vs faction threatening Crown. |
+| 6 | Attacked | Full Military response. No negotiation under military threat. |
+| 7 | Default | Pass. Maintain garrison. |
+Post-Coup: all priorities → Martial Law → consolidate → Reconstitution (PI = 0).
+
+### Niflhel Priority Tree
+| P | Condition | Action |
+|---|---|---|
+| 1 | Stability ≤ 2 | Quiet Intelligence vs strongest rival. |
+| 2 | Exposure threat: evidence trail to Niflhel | Quiet Sabotage vs evidence-holder (Stability −1). |
+| 3 | Covert action available | Quiet Intelligence vs richest faction. |
+| 4 | Default | Invisible. Quiet Intelligence vs least-known faction. |
+| 5 | TT ≥ 40 + Southernmost ops this year | Reduce Southernmost operations to 1/year. |
+| 6 | Exposed | All arms redirect to containment. Assassination if feasible. |
+| 7 | Default | Pass. TT accumulation pauses. |
+
+### Restoration Movement Priority Tree (Post-Founding)
+| P | Condition | Action |
+|---|---|---|
+| 1 | Stability ≤ 2 | Community Organising, most-Presence territory. |
+| 2 | PT ≤ 1 in 3+ territories | Community Organising in lowest-PT adjacent. |
+| 3 | Stability ≥ 3 | Presence spread to adjacent territory. |
+| 4 | Default | Founding Agent protection. |
+| 5 | RS ≤ 60 + TS 30+ practitioner available | Community Weaving. |
+| 6 | Attacked | Non-violent. Diplomatic appeal to ally. |
+| 7 | Default | Pass. Presence maintained. |
+
+### Edeyja/Wardens Priority Tree (Post-Emergence)
+| P | Condition | Action |
+|---|---|---|
+| 1 | Gap or Shifting Object detected | Emergency Mend at Gap site. |
+| 2 | Niflhel supply chain disturbance detected | Investigate. Intercept operatives. |
+| 3 | RS ≤ 40 | Peninsula-wide Weaving. RS +1/Warden (max +2/season). |
+| 4 | Faction performing Thread restoration | Cooperation: +1D allied Thread ops (WC ≥ 1). |
+| 5 | New practitioner enters Southernmost | Assessment. TS ≤ 20: dismissed. TS 40+: useful. |
+| 6 | Attacked | Thread operations at scale rendering force irrelevant. |
+| 7 | Default | Containment. Hold the Southernmost. |

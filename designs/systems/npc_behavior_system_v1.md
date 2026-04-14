@@ -768,7 +768,7 @@ When a Zoom In Contest successfully targets an NPC's Resonant Style:
 | ED-516 | Confirm Resonant Style taxonomy: 4 styles (Evidence, Consequence, Authority, Solidarity). Sufficient? | P2 |
 | ED-517 | Full NPC Arc Profiles: Almud, Himlensendt, Baralta, Vaynard, Ehrenwall, Vossen, Hann, Torben, Edeyja, Maret Uln, Cardinals. All provided in this document — confirm arc shapes. | P1 |
 | ED-518 | BG Priority Trees: all NPC factions provided in this document — confirm before simulation. | P1-BLOCKER for BG sim |
-| ED-519 | Resonant Style +1D in Contest: stacking validation needed. Max +5D positional bonus. | P2 — SIM-DEBT |
+| ED-519 | Resonant Style +1D confirmed. Max +5D positional requires: primary genre match (+1D) AND audience boost match (+1D) AND Resonant Style targeting (+1D) AND specific citable claim (+2D Recall). Each prerequisite independently costly. Practical pools 12–18D with 1–2D positional; 25D+ requires extreme investment + perfect intelligence. SIM-NPC-02 remains registered for validation. RESOLVED. | — |
 | ED-520 | Framework Drift mechanics: some are new stat movements. Confirm each drift before params extraction. | P2 |
 | ED-521 | Belief revision triple gate (decisive + Resonant Style + Belief engagement): sufficiently achievable? | P2 |
 | ED-522 | Solidarity Resonant Style Knot requirement: Knot formation with NPCs not fully specified. Cross-ref threadwork_v25. | P2 |

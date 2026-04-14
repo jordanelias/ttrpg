@@ -1658,3 +1658,23 @@ All ED-515 through ED-531 resolved (editorial permission granted).
 ED-519 (Resonant Style stacking) deferred to SIM-NPC-02.
 16 of 17 items resolved. 1 deferred to simulation.
 ED numbering corrected: original ED-384:400 renumbered to ED-515:531 (collision with pre-existing entries).
+
+### Final Resolution + Propagation (2026-04-13)
+ED-519 resolved: Resonant Style +1D confirmed. Max +5D requires extreme investment. SIM-NPC-02 retained.
+All 17 editorial items (ED-515:531) now resolved.
+
+### Propagation
+- params_factions.md: NPC Stance Triangles (13 NPCs), Conviction/RS taxonomies, Framework Drift, NPC Knot Formation, Belief Revision mechanics.
+- params_contest.md: Resonant Style Targeting rules (Appraise revelation, targeting declaration, effects, TS gate, wrong-style penalty, stacking cap).
+- params_board_game.md: BG NPC Priority Trees (Church, Crown, Hafenmark, Varfell, Guilds, Löwenritter, Niflhel, RM, Edeyja/Wardens). Template + 9 faction-specific trees.
+
+### Commits
+- `8c04b4b` — NPC Behavior System v1 initial (design doc + audit + ledger + canonical sources + session log + coverage + propagation map + file index)
+- `57e8646` — Editorial resolutions ED-515:531 (renumbered from ED-384:400), 16/17 resolved
+- Final commit — ED-519 resolved, full propagation to params_factions, params_contest, params_board_game
+
+### Session Close
+- All editorial items resolved (17/17).
+- 5 SIM-DEBT items registered (SIM-NPC-01:05).
+- Canonical source: designs/systems/npc_behavior_system_v1.md.
+- Next action: SIM-NPC-01 (full BG simulation with all NPC priority trees active).

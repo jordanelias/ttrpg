@@ -265,3 +265,33 @@ Findings from completed fieldwork investigations may be cited in Contest opening
 Findings are **not consumed** by citation — remain on Evidence Track. Must be declared at contest setup. GM determines scope relevance (Finding must relate to contest subject). Stacks with §9.1 preparation bonus (+1D), for maximum Exchange 1 pool bonus of +3D when both available.
 
 Source: fieldwork_investigation.md §2.3 / F-TRANS-11. social_contest_system_v2.md §9.1.
+
+## Resonant Style Targeting (from npc_behavior_system_v1.md §6)
+<!-- Source: designs/systems/npc_behavior_system_v1.md. Canonical. -->
+
+### Appraise Revelation
+| Appraise net | Resonant Style info |
+|---|---|
+| Overwhelming (3+) | Primary Resonant Style revealed (in addition to one Belief per existing rules) |
+| Overwhelming (4+) | Both primary and secondary Resonant Style revealed |
+
+### Targeting Declaration
+Before Argue roll (Step 3): player declares "targeting Resonant Style." GM confirms match.
+Requires: (a) argument uses Contest style mapping to the declared RS, (b) content addresses a known Belief, (c) player has previously discovered the RS.
+
+### Targeting Effects
+| RS | Required form | On confirmed targeting |
+|---|---|---|
+| Evidence | Memory + Revealing. Must cite specific named verifiable claim. | +1D Argue. On win: CT +1 additional (bypasses 1 resistance). |
+| Consequence | Projection + Revealing. Must project specific outcome framework fails to prevent. | +1D Argue. On win: NPC +2 strain. |
+| Authority | Invoke specific binding authority contradicting NPC's position. | +1D Argue. Doubt Marker placed regardless of outcome. |
+| Solidarity | Requires active Knot with NPC. Must invoke the relationship. | +1D Argue. On win: no strain, NPC Belief revision Ob −1. |
+
+### TS Gate (P-08 compliance)
+Thread-level evidence invalid as Evidence targeting vs TS 0 NPCs. Ontical evidence only. Exception: TS 30+ NPCs accept Thread-level evidence.
+
+### Wrong-Style Penalty (Church Martyrdom extension)
+Wrong RS vs Church institutional NPC (Himlensendt, Olafsson, Klapp, Cardinals) in public venue with Failure/Partial: Church Stability +1 (PP-259 fires).
+
+### Stacking
+Max positional bonus: +5D (genre +1, audience +1, RS targeting +1, Recall +2). Each prerequisite independently costly. Practical pools 12–18D; 25D+ extreme.

@@ -3378,8 +3378,8 @@ editorial_decisions:
 - id: ED-519
   description: "Resonant Style +1D Contest stacking validation."
   priority: P2
-  status: open
-  note: "Deferred to SIM-NPC-02. Cannot resolve without simulation."
+  status: resolved
+  resolution: "Confirmed +1D. Max +5D requires extreme investment + perfect intel. Practical pools 12-18D. SIM-NPC-02 retained for validation. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
