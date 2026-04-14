@@ -889,9 +889,9 @@ All faction starting positions reflect canonical geography. Old v04 map assignme
 | Faction | Territories | Count | Starting TCV |
 |---------|------------|-------|-------------|
 | Crown | T1 Valorsplatz★, T2 Kronmark, T3 Lowenskyst, T5 Feldmark, T6 Stillhelm, T14 Ehrenfeld | 6 | 12 |
-| Hafenmark | T7 Rendstad, T8 Gransol★, T10 Spartfell, T17 Halvarshelm | 4 | 8 |
+| Hafenmark | T7 Rendstad, T8 Gransol★, T10 Spartfell, T17 Halvarshelm | 4 | 6 |
 | Varfell | T4 Grauwald, T11 Halvardshelm, T12 Sigurdshelm★, T13 Oastad | 4 | 6 |
-| Church of Solmund | T9 Himmelenger★ | 1 | 3 |
+| Church of Solmund | T9 Himmelenger★ | 1 | 5 |
 | Löwenritter | T14 Ehrenfeld (shared with Crown pre-coup; full control on Coup trigger per PP-569) | shared → full |
 | Uncontrolled | T15 Askeheim | — | 0 |
 | NPC | T16 Schoenland | — | — |
