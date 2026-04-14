@@ -4,6 +4,24 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-14_SONNET_PP619_TN_FINAL
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+PATCH: PP-619 — Thread TN system finalised.
+  Single pool: (Spirit × 2) + History + TPS. Always. No exceptions.
+  TN modifiers: Base 7. Binding Op +1. POP +1. Stack: TN 9 for POP Binding.
+  TPS÷2 for POP struck. Pool is identical for all operations.
+  Difficulty = TN (type) + Ob (scale). Clean.
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-14_SONNET_PP618_CORRECTION
 session_close: 2026-04-14
 phase: COMPLETE

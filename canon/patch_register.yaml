@@ -7319,3 +7319,44 @@ patches:
   affects:
     - references/params_threadwork.md
   status: applied
+
+- id: PP-619
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Thread operation TN system finalised. Replaces all prior TN assignments.
+
+    SINGLE POOL: (Spirit × 2) + History + TPS — all operations, no exceptions.
+
+    TN MODIFIERS (additive):
+    - Base TN: 7
+    - Binding Op (Lock or Dissolution): +1 TN
+    - Past-Oriented Pulling: +1 TN
+    - Both modifiers apply: +2 TN
+
+    CANONICAL TN TABLE:
+    | Operation             | TN |
+    |-----------------------|----|
+    | Leap                  | 7  |
+    | Weaving               | 7  |
+    | Pulling               | 7  |
+    | Mending               | 7  |
+    | Community Weaving     | 7  |
+    | Locking               | 8  |
+    | Dissolution           | 8  |
+    | Past-Oriented Pulling | 8  |
+    | Past-Oriented Locking | 9  |
+    | Past-Oriented Dissolution | 9 |
+
+    Past-Oriented Binding Ops (TN 9) represent attempting to Lock or Dissolve a
+    Thread configuration as it existed at a prior time — targeting the past state of
+    something rather than its present state. Near-impossible in practice.
+
+    STRUCK: TPS÷2 for POP (PP-616 and PP-618 entries on this). Full TPS always.
+    STRUCK: all previous TN distinctions based on pool composition (no TPS for BO, etc.).
+    The pool is identical for all operations. Difficulty is entirely in TN and Ob.
+  finding_id: PP-616 PP-618
+  affects:
+    - references/params_threadwork.md
+  status: applied
