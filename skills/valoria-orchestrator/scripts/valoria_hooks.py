@@ -37,7 +37,7 @@ CONTEXT_HARD    = 180_000
 TASK_REQUIRED_FILES = {
     "simulation":      ["references/canonical_sources.yaml", "canon/02_canon_constraints.md"],
     "audit":           ["references/canonical_sources.yaml", "canon/02_canon_constraints.md"],
-    "canon_check":     ["canon/00_philosophical_foundations.md", "canon/02_canon_constraints.md"],
+    "canon_check":     ["canon/00_philosophical_foundations_rules.md", "canon/02_canon_constraints.md"],
     "editorial":       ["canon/editorial_ledger.yaml"],
     "patch":           ["canon/patch_register_active.yaml"],
     "compilation":     ["references/canonical_sources.yaml", "canon/patch_register_active.yaml"],

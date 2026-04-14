@@ -156,7 +156,7 @@ If any fetch in Message 1 returns None or the token is missing, do not proceed t
 4. Confirm task with user before proceeding.
 
 ## Canonical Hierarchy (immutable)
-1. `canon/00_philosophical_foundations.md` — governs everything
+1. `canon/00_philosophical_foundations_rules.md` — governs everything
 2. `canon/01_*.md` amendments — extend the Foundations
 3. `canon/02_canon_constraints.md` — mechanical constraints P-01 to P-15
 4. `designs/` working documents — canonical for active mechanics
