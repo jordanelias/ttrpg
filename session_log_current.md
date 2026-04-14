@@ -1438,37 +1438,35 @@ status: CLOSED
 # Valoria Session Log — Current
 
 ```yaml
-session_id: 2026-04-13_SONNET_EDITORIAL_CLEANUP
+session_id: 2026-04-13_SONNET_RESOLUTION_AND_CLEANUP
 session_close: 2026-04-13
 phase: COMPLETE
 status: CLOSED
 
 ## TASKS COMPLETED THIS SESSION
-1. Confirmed Praetor stays as RM board game card (already canonical in params_board_game)
-2. Identified Remembrancer as ARC-T23 NPC role title — separate issue from card name
-3. Renamed Remembrancer → Witness (the Witness: RM practitioner, 245-year tradition,
-   TS 19-35, institutional authority in COLLISION E). Patched arc_register.md.
-   ED-NEW-02 resolved. COLLISION E now fully operational.
-4. Combat surrender/disengage procedure added to combat_design_v1.md §11.4
-   (Yield + Disengage with Agility contest). ED-512 resolved.
-5. Social initiative kept deterministic by design — rationale documented in
-   social_contest_system_v2.md §5. ED-138 / ED-514 resolved.
-6. Combat fail-forward (ED-513) STRUCK — attrition IS the combat narrative.
-7. Commit 9bb024b (4 files). Freshness gate updated.
+1. Discovered that ED-486–489, ED-456 (Priority Trees), and ~14 PROVISIONALs were already
+   resolved in prior sessions. Session log notes were stale. Actual state: 0 open P1-BLOCKERs,
+   0 open PROVISIONALs (before this session).
+2. Registered unregistered patches PP-633–642 in patch_register.yaml.
+3. PP-641: Opposing ops procedure propagated from params_threadwork.md to
+   threadwork_redesign_v25.md §2.6 (design doc gap closed).
+4. PP-642: NPC Recruitment §9.5 added to npc_behavior_v30.md.
+   - Ob = floor(NPC highest-faction Disposition / 2) + 1
+   - Hooks defined: Strong (Ob→1, burned on failure) and Weak (−2 Ob, reusable)
+   - Defection: Belief-contradiction 2-season check, fires from Priority Tree
+   - ED-510 and ED-511 resolved.
+5. Commit 52c22f3. Both checkers EXIT 0. Freshness gate updated.
 
-## EDITORIAL DECISIONS MADE
-- the Witness: institutional RM title (replaces Remembrancer placeholder)
-- Yield/Disengage: opponent-choice on Yield; Agility-contested Disengage
-- Social initiative: deterministic (Attunement), not rolled — Appraise already 
-  provides initiative-adjacent information; rolling would be redundant
-- Combat fail-forward: not applicable — combat attrition is the mechanic
+## CANON CORRECTION THIS SESSION
+- Witness (ARC-T23): corrected from "Calamity survivor" to "lineage holder."
+  Humans are mortal. TS does not extend lifespan. Self-spooling is ontologically
+  incoherent (cannot operate on own rendering from outside it). PP-640.
 
-## P1 BLOCKERS: 0
-## ITEMS CLOSED: ED-512 (surrender), ED-513 (struck), ED-514/ED-138 (initiative),
-##               ED-NEW-02 (ARC-T23 Witness)
-## REMAINING EDITORIAL (requires Jordan):
-## - ED-486–489 (opposing threadwork P1-BLOCKERs)
-## - ~14 PROVISIONAL decisions from 2-day session
-## - ED-387 (Priority Trees) — blocks NPC Recruitment (ED-510) + Faction AI gap
-## - ED-510 (NPC Recruitment), ED-511 (Hooks)
+## FINAL STATE
+- Open P1-BLOCKERs: 0
+- Open PROVISIONALs: 0
+- Open editorials of consequence: ED-512 resolved (surrender/disengage), ED-513 struck,
+  ED-514 resolved, ED-510 resolved, ED-511 resolved, ED-NEW-02 resolved.
+- Patch register current: PP-642.
+- Both checkers: EXIT 0.
 ```
