@@ -1,4 +1,4 @@
-<!-- version: v1.0 | source: designs/fieldwork/fieldwork_design_v1.md | last_updated: 2026-04-13 -->
+<!-- version: v1.0 | source: designs/fieldwork/fieldwork_v30.md | last_updated: 2026-04-13 -->
 <!-- PATCHES APPLIED: PP-575 (initial), PP-576 (audit), PP-577 (transitions), PP-578 (threadwork), PP-579 (ontological), PP-580 (extended), PP-581 (P1 resolution), PP-582 (fidelity) -->
 
 # params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing)

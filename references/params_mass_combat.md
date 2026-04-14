@@ -1,4 +1,4 @@
-<!-- version: v0.14+design-ST7-R4-PP235 | sources: designs/mass_combat/mass_battle_v3.md (v4.4, PP-106) | last_updated: 2026-04-03 -->
+<!-- version: v0.14+design-ST7-R4-PP235 | sources: designs/mass_combat/mass_battle_v30.md (v4.4, PP-106) | last_updated: 2026-04-03 -->
 <!-- PATCHES APPLIED (canonical): PP-86, PP-91, PP-104, PP-106, PP-111, PP-171, PP-173, PP-175, PP-188–194, PP-196–197, PP-200–202, PP-204, PP-222–225, PP-227, PP-229, PP-231–233, PP-235, PP-240–241, PP-245, PP-249–251, PP-256, PP-268, PP-273, PP-282–283, PP-300–301, PP-305–306, PP-333–334, PP-336, PP-338, PP-366–368, PP-370–371, PP-374, PP-376, PP-388, PP-398, PP-500, PP-502–508, PP-530, PP-550, PP-555, PP-567, PP-600–601, PP-610, PP-613 -->
 <!-- PP-232: Unit stats renamed (Strength→Size, Combat Power→Power, Cohesion→Discipline, Coherence Rating/Command Rating→Command); -->
 <!--         Power derived from Size; damage formula references updated. -->
@@ -7,7 +7,7 @@
 <!--         Damage per success = 1+Power. Size after = ⌊remaining Health÷H⌋. -->
 <!--         Damage simultaneous. Size loss only reduces pool when Size>Command. -->
 <!-- PHASE STRUCTURE: 7 phases. Thread split: offensive Phase 4, support Phase 6. All damage simultaneous Phase 6 Step 1. -->
-<!-- mass_battle_v3.md is a design proposal. Values marked [COMPILED] are from stage8; [PROPOSAL] from v3. -->
+<!-- mass_battle_v30.md is a design proposal. Values marked [COMPILED] are from stage8; [PROPOSAL] from v3. -->
 <!-- STALE CHECK: Verify [COMPILED] values against current ruleset; verify [PROPOSAL] against compiled stage8 update. -->
 
 # params_mass_combat.md — Mass Battle (v3)

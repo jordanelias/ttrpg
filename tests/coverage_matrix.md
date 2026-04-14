@@ -735,3 +735,21 @@ P1 findings from tests: 0
 P2 findings: 4 (ED-510 NPC Recruitment, ED-511 Hooks, ED-512 surrender, ED-514 social initiative)
 P3 findings: 1 (ED-513 combat fail-forward)
 All PASS tests: patched in same commit (PP-630–634).
+
+## Fieldwork Coverage (2026-04-13)
+
+| Test ID | Mechanics | Mode | Temporal | Tracks | Factions | NPCs | Archetypes | Status | Findings |
+|---------|-----------|------|----------|--------|----------|------|------------|--------|----------|
+| SIM-FW-TRANS | Fieldwork (Examine, Interview, Thread-Read) + Combat + Contest + Mass Battle + Thread transitions | C+D | 1 investigation arc, 4 seasonal scenes | Evidence, Exposure, Disposition, Coherence, RS, Health, Composure, TC, IP | Varfell, Crown, Church | Torsten, Signy | Non-sensitive + practitioner field pair | Complete | 5 transition rules validated; §3.9 confirmed; Desperate Trail rare at normal pool sizes (correct) |
+| SIM-FW-NPC | Fieldwork + NPC character interactions; thread-read on NPCs; cover mechanics | C+B | Single session | Evidence, Exposure, TS detection tiers, Certainty, Cover | Varfell, Church | Multiple | Practitioner investigator | Complete | TS detection tiers consistent; Cover 3-12 range confirmed |
+| SIM-FW-TW | Threadwork-fieldwork integration; Thread-Read pool formula (PP-626) | A+B | Single scene | RS, Coherence, TPS contribution, Contact duration | None | Signy | Practitioner investigator | Complete | Thread-Read = (Spi×2)+Hist+TPS confirmed canonical |
+
+## Fieldwork Ob Calibration Results (SIM-DEBT-FW-01–06, all resolved)
+| Item | Finding | Resolution |
+|------|---------|------------|
+| FW-01 | Ob calibration: 5D→D1, 9D→D1-2, 13D→D1-3, 17D→D1-4, 24D→D5 | Resolved |
+| FW-02 | Evidence pacing: 3-5 scenes for threshold 5 | Resolved |
+| FW-03 | Neutral→Bonded = 6-8 actions, 3-4 seasons | Resolved |
+| FW-04 | AP feedback = 11% of TC max; cap sufficient | Resolved |
+| FW-05 | Survey and Govern occupy different niches; neither dominates | Resolved |
+| FW-06 | Cover 3 (detected in 3 scenes) vs Cover 12+ (near-immune) | Resolved |

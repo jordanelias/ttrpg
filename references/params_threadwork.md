@@ -179,11 +179,11 @@ scales self-close naturally. Conflict in Proximity 1–3 territories resets isol
      Retained below for traceability. Do not use for mechanical reference. -->
 
 
-<!-- version: v0.14-AUD3-R1 | source: threadwork_redesign_v25.md | last_updated: 2026-04-03 -->
+<!-- version: v0.14-AUD3-R1 | source: threadwork_v30.md | last_updated: 2026-04-03 -->
 <!-- PATCHES APPLIED (canonical): PP-107, PP-166, PP-168, PP-181–182, PP-190–209, PP-221, PP-223–226, PP-232, PP-239–240, PP-250, PP-252–253, PP-258, PP-260–261, PP-263–265, PP-279, PP-281, PP-289–290, PP-303–304, PP-314–315, PP-330, PP-387, PP-389, PP-397, PP-497, PP-502, PP-551, PP-553, PP-555, PP-581, PP-583, PP-590, PP-600–610, PP-616–623 -->
 <!-- PP-232: Leap pool adds Spirit; Leap Failure outcome corrected; POP TN corrected to 8; sequential failure rule corrected; -->
 <!--         Weaving Structural Ob corrected to 8; Diagnosis struck ED-134; FR term flagged ED-135 (open); ED-030/034/121/124/134 resolved 2026-04-03. -->
-<!-- stage3_thread_operations.md is EMPTY in v0.14. All values from threadwork_redesign_v25.md. -->
+<!-- stage3_thread_operations.md is EMPTY in v0.14. All values from threadwork_v30.md. -->
 <!-- STALE CHECK: All values [PROPOSAL]. Verify against compiled stage3 before use. -->
 
 # params_threadwork.md — Thread Operations (v2.5)
@@ -208,7 +208,7 @@ RS maximum: **100**. RS cannot exceed 100 through any restoration effect. If a r
 Coherence starts at **10** for all characters (confirmed: stage1_core_engine §2.3). Counts down toward 0. Recovery per stage1 derived stats table.
 
 ## Thread Depth (TD) — REMOVED (PP-166)
-Thread Depth (TD) was defined in prior params versions as a stat with range 0–10. It does not appear in threadwork_redesign_v25.md or any current operation formula. **TD is a phantom definition from a prior design iteration — it has no mechanical function and is not tracked.** Removed from all params files.
+Thread Depth (TD) was defined in prior params versions as a stat with range 0–10. It does not appear in threadwork_v30.md or any current operation formula. **TD is a phantom definition from a prior design iteration — it has no mechanical function and is not tracked.** Removed from all params files.
 
 ## Leap Roll
 Pool: Spirit + Attunement + relevant History bonus + Thread Pool Score | TN: 7 (PP-232)

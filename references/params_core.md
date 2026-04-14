@@ -196,7 +196,7 @@ Negative net successes contribute to Failure degree only; they do not compound p
 - TS and Coherence are orthogonal axes. See params_threadwork ED-301 section for full detail.
 - Coherence track models layer 2 integrity (unconscious self-rendering). TS measures perceptual depth. Neither implies the other.
 
-## Attribute Roles — Fieldwork (PP-628, from fieldwork_design_v1.md §2.1)
+## Attribute Roles — Fieldwork (PP-628, from fieldwork_v30.md §2.1)
 
 | Attribute | Fieldwork Role |
 |-----------|----------------|

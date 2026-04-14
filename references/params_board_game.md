@@ -1,9 +1,9 @@
-<!-- version: v0.9.2 | source: valoria_bg_v05_simulation_and_patches.md + victory_architecture_v1.md + calamity_radiation.md + geography_design.md (canonical per canonical_sources.yaml) | last_updated: 2026-04-09 -->
+<!-- version: v0.9.2 | source: board_game_v30.md + victory_v30.md + calamity_radiation_v30.md + geography_v30.md (canonical per canonical_sources.yaml) | last_updated: 2026-04-09 -->
 <!-- PP-249 2026-04-04: ED-142 resolved — BG Overwhelming: 2×Ob + floor 3, supersedes ED-031 -->
 <!-- PATCHES APPLIED (canonical): PP-39, PP-112, PP-169–171, PP-174, PP-177–189, PP-191–195, PP-199, PP-203–204, PP-219–220, PP-232, PP-249, PP-261–262, PP-268–274, PP-277–278, PP-281, PP-293–299, PP-302–303, PP-315–326, PP-345–346, PP-353, PP-355–365, PP-377, PP-379–380, PP-399, PP-404–405, PP-409, PP-415, PP-417, PP-421–447, PP-449–453, PP-460, PP-462–466, PP-470–494, PP-498–504, PP-506–512, PP-515, PP-517–527, PP-533, PP-547–548, PP-552–555, PP-558–565, PP-568–570, PP-573, PP-576–580, PP-585, PP-593–600, PP-605, PP-628, PP-629 -->
-<!-- AUTHORITATIVE SOURCE: designs/board_game/valoria_bg_v05_simulation_and_patches.md (faction stats, clocks, victory conditions); designs/board_game/stage_bg_proposal_v02.md (action economy, card-hand system PP-177) -->
+<!-- AUTHORITATIVE SOURCE: designs/board_game/board_game_v30.md (faction stats, clocks, victory conditions); designs/board_game/stage_bg_proposal_v02.md (action economy, card-hand system PP-177) -->
 <!-- NOTE: v05 is canonical for BG mechanics. v04 B-sections remain structural base. -->
-<!-- STALE CHECK: v0.9.0 — RS Effects, Victory, PT/WC/WA, TC generation updated. Territory renumbering complete: all T# references use geography_design.md canonical numbering (17 territories). Old territory names (Vargstad, Eidursjo, Arcansheld, Nordhelm, Mittelmark) replaced with canonical names (Grauwald, Rendstad, Ehrenfeld, Kronmark, Feldmark). Ducal Geography (ED-107) resolved. Varfell expansion rewritten. -->
+<!-- STALE CHECK: v0.9.0 — RS Effects, Victory, PT/WC/WA, TC generation updated. Territory renumbering complete: all T# references use geography_v30.md canonical numbering (17 territories). Old territory names (Vargstad, Eidursjo, Arcansheld, Nordhelm, Mittelmark) replaced with canonical names (Grauwald, Rendstad, Ehrenfeld, Kronmark, Feldmark). Ducal Geography (ED-107) resolved. Varfell expansion rewritten. -->
 
 # params_board_game.md — Board Game Mode (v0.7.0)
 
@@ -84,7 +84,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Guilds (NPC) | 3 | 4 | 6 | 2 | 5 |
 | Niflhel (NPC) | — | 5 | 4 | — | 4 |
 
-CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 territories (T4/T11/T12/T13). Handicap is defensive: mountain range + Thread Wounds hem in expansion. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. TC = 28 (P-32). TC phase transition = 75 (per victory_architecture_v1.md §7).
+CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 territories (T4/T11/T12/T13). Handicap is defensive: mountain range + Thread Wounds hem in expansion. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. TC = 28 (P-32). TC phase transition = 75 (per victory_v30.md §7).
 
 
 ## Faction Elimination — Territory Status (ED-333 resolved)
@@ -115,7 +115,7 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 | Trade (Consul Outward) | floor(Prosperity / 2) + 1 | +1 IP≥30; +1 T2 |
 | Diplomacy vs NPC (Senator Outward) | floor(NPC Stability / 2) + 1 | — |
 | Diplomacy between players | Negotiated | Not a roll |
-| Formal Crown Treaty (Senator Outward) | floor(target Mandate / 2) + 1 | Crown only. PP-512/513/514/523. See victory_architecture_v1.md §3.1. |
+| Formal Crown Treaty (Senator Outward) | floor(target Mandate / 2) + 1 | Crown only. PP-512/513/514/523. See victory_v30.md §3.1. |
 | Thread Operation (Pontifex/Weaver) | Ob 2 base | See PP-182 co-movement protocol |
 | Investigate/Intel (Tribune) | 2 | +2 Ob in Church territory with Inquisitor |
 | Spy (Tribune Outward) | floor(target Intel / 2) + 1 | — |
@@ -158,7 +158,7 @@ Execute in strict order:
 10. Warden Cooperation check.
 10b. Torben/Elske Loyalty events: apply Loyalty changes.
 11. [DISSOLVED — Hollow Victory totals no longer tracked. Step retained for numbering continuity.]
-12. Victory condition check. Any faction meeting all its victory conditions for 2 consecutive Accounting steps declares victory. See designs/board_game/victory_architecture_v1.md §3 for all faction conditions. Co-victory pairings checked simultaneously (§4). Shared loss conditions checked first (§5).
+12. Victory condition check. Any faction meeting all its victory conditions for 2 consecutive Accounting steps declares victory. See designs/board_game/victory_v30.md §3 for all faction conditions. Co-victory pairings checked simultaneously (§4). Shared loss conditions checked first (§5).
 13. Season marker advances. If Winter (every 4th season): Year-End Accounting (B11).
 
 ## Year-End Accounting (every 4th season = Winter, v04 B11)
@@ -191,7 +191,7 @@ Unit starting Discipline: Light Infantry 3, Heavy Infantry 4, Cavalry 4, Ranged 
 ## Clock Environmental Effects (v04 B2)
 
 ### Rendering Stability (RS) Effects
-**Canonical source: `designs/setting/calamity_radiation.md`** (Simplified BG Lookup Table).
+**Canonical source: `designs/setting/calamity_radiation_v30.md`** (Simplified BG Lookup Table).
 
 RS effects are geographically graduated by Proximity Rating (node distance from Askeheim T15), not applied globally.
 Each territory card includes a Proximity Rating (0–5). At Accounting, one lookup per territory: current RS band × Proximity Rating.
@@ -207,7 +207,7 @@ Each territory card includes a Proximity Rating (0–5). At Accounting, one look
 Additional global RS effects at Critical (19–1): all Thread operations +1 Ob worldwide; seasonal Stability checks for all factions at Ob 1 (failure: Mandate −1).
 RS 0 = Rupture (campaign ends, all factions lose).
 
-Southernmost Surge (one-time, RS ≤ 10): all territories within Proximity 2 of Askeheim experience effects one band worse for one season. See calamity_radiation.md.
+Southernmost Surge (one-time, RS ≤ 10): all territories within Proximity 2 of Askeheim experience effects one band worse for one season. See calamity_radiation_v30.md.
 
 
 
@@ -239,11 +239,11 @@ Southernmost Surge (one-time, RS ≤ 10): all territories within Proximity 2 of 
 - [EDITORIAL: authorial review required — Vanguard faction identity, advance route, and elimination conditions]
 
 ## Victory Conditions — Pointer
-**Canonical source: `designs/board_game/victory_architecture_v1.md`** (all victory conditions, co-victory pairings, shared loss conditions).
+**Canonical source: `designs/board_game/victory_v30.md`** (all victory conditions, co-victory pairings, shared loss conditions).
 
 The Deed-based victory system has been dissolved for ALL factions including Löwenritter (PP-427). Victory = Territory Consolidation Value (TCV) thresholds + faction-specific political conditions, sustained for 2 consecutive Accounting steps.
 
-### Summary (see victory_architecture_v1.md §3 for full conditions)
+### Summary (see victory_v30.md §3 for full conditions)
 
 | Faction | Primary Victory | Key Thresholds |
 |---------|----------------|----------------|
@@ -257,7 +257,7 @@ The Deed-based victory system has been dissolved for ALL factions including Löw
 | Löwenritter | Regency Establishment | TCV ≥ 10 + Thread Consciousness (TC) < 50 + IP < 60 + RS > 40 + PI ≥ 4 + successor |
 
 ### Territory Consolidation Values (TCV)
-Per victory_architecture_v1.md §1. Total TCV = 30 (T16 Schoenland not in territorial play, T15 Askeheim TCV = 0).
+Per victory_v30.md §1. Total TCV = 30 (T16 Schoenland not in territorial play, T15 Askeheim TCV = 0).
 
 | T# | Territory | TCV | Starting Controller |
 |----|-----------|-----|---------------------|
@@ -280,7 +280,7 @@ Per victory_architecture_v1.md §1. Total TCV = 30 (T16 Schoenland not in territ
 Starting TCV: Crown 12, Hafenmark 8, Varfell 6, Church of Solmund 3.
 
 ### Co-Victory Pairings
-Per victory_architecture_v1.md §4. All require 2 consecutive Accounting steps except Church+Hafenmark Partition (immediate on mutual agreement).
+Per victory_v30.md §4. All require 2 consecutive Accounting steps except Church+Hafenmark Partition (immediate on mutual agreement).
 
 | Pair | Key Conditions |
 |------|---------------|
@@ -294,10 +294,10 @@ Per victory_architecture_v1.md §4. All require 2 consecutive Accounting steps e
 Incompatible: Crown + Church, Crown + Löwenritter, Church + Varfell, Church + RM.
 
 ### Shared Loss Conditions
-Per victory_architecture_v1.md §5. RS = 0 (Rupture), IP ≥ 100 + Altonian External Relationship (AER) ≤ 1 (Altonian Conquest), or all factions Stability 0 (Total Institutional Collapse).
+Per victory_v30.md §5. RS = 0 (Rupture), IP ≥ 100 + Altonian External Relationship (AER) ≤ 1 (Altonian Conquest), or all factions Stability 0 (Total Institutional Collapse).
 
 ### Hollow Victory — DISSOLVED
-The Hollow Victory modifier system (Deed-count penalties) has been dissolved with the Deed system (PP-427). In Hybrid mode, BG victory without personal arc resolution is a narrative qualifier per P-32 (see victory_architecture_v1.md §9.3).
+The Hollow Victory modifier system (Deed-count penalties) has been dissolved with the Deed system (PP-427). In Hybrid mode, BG victory without personal arc resolution is a narrative qualifier per P-32 (see victory_v30.md §9.3).
 
 ### Public Instability (PI) Thresholds (PP-501, ED-361 resolved)
 PI measures popular dissatisfaction with monarchical governance. Higher PI benefits Hafenmark (PI ≥ 5 required for their victory). PI hurts Crown.
@@ -329,7 +329,7 @@ Decay on Altonian Court residence: −1 immediately on departure + −1/Year-End
 - TC crosses 60: −1.
 - Torben sent to Altonia (comply with tutoring demand): −2 immediately.
 
-[STRUCK — Deed system dissolved PP-424. Torben Loyalty conditions now per victory_architecture_v1.md §3.6 Löwenritter.]
+[STRUCK — Deed system dissolved PP-424. Torben Loyalty conditions now per victory_v30.md §3.6 Löwenritter.]
 Altonian Tutoring Demand triggers at IP ≥ **40** (v04 B2: "Torben Tutoring Demand (IP ≥ 40 Event)") (not 30 — v04 B2: "Torben Tutoring Demand (IP ≥ 40 Event)").
 
 ## Elske Off-Board Card (v04 B2)
@@ -339,7 +339,7 @@ Elske Loyalty: 0–7, starts 4. Tracked on off-board card near T4.
 Contact: Crown or Löwenritter Senator Outward in T4 (Ob 2 at IP < 60; Ob 3 at IP ≥ 60).
 Return: Elske Loyalty ≥ 6 + IP < 60 + Crown/Löwenritter unit in T4: Military vs Ob 2. IP +5 on success.
 
-## TC Generation — Seasonal (per victory_architecture_v1.md §7)
+## TC Generation — Seasonal (per victory_v30.md §7)
 **Starting TC: 28. Phase transition at TC 75 (TC freezes — Church shifts to territorial seizure).**
 
 Seasonal TC at Accounting (execute in order):
@@ -353,7 +353,7 @@ Seasonal TC at Accounting (execute in order):
 
 Legacy TC sources (AER momentum, Attention Pool threshold, Emergency Powers, Free Trade Decree, Church unit presence) are subsumed into the Piety Yield system — Church prominence in high-PT territories captures the same dynamics. AER ≥ 3 still bypasses Hafenmark structural suppression (PP-203).
 
-## TC 75 Territorial Seizure (PP-421 — per victory_architecture_v1.md §7)
+## TC 75 Territorial Seizure (PP-421 — per victory_v30.md §7)
 **Post-TC 75: TC freezes. Church shifts to territorial seizure campaign.**
 
 ### Seizure Ob
@@ -362,7 +362,7 @@ Prominence required: Church Mandate > controlling faction's Mandate in target te
 Church Mandate ≥ 4 required to attempt seizure.
 
 ### Seizure Results
-Per victory_architecture_v1.md §7. Overwhelming seizure: PT +1 in target territory. This is a consequence effect — NOT subject to the ±1 PT seasonal cap. State-change consequences from seizure are exempt from action caps. (PP-502)
+Per victory_v30.md §7. Overwhelming seizure: PT +1 in target territory. This is a consequence effect — NOT subject to the ±1 PT seasonal cap. State-change consequences from seizure are exempt from action caps. (PP-502)
 
 ### Seizure Constraints
 One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland).
@@ -592,7 +592,7 @@ Edeyja/Wardens NPC AI activates (B13: contain entity; investigate Niflhel; work 
 
 
 ## Warden Cooperation Track (WC)
-**Canonical source: `designs/board_game/victory_architecture_v1.md` §6**
+**Canonical source: `designs/board_game/victory_v30.md` §6**
 
 Range: 0–3. Starts at 0.
 
@@ -605,7 +605,7 @@ Range: 0–3. Starts at 0.
 WC advances via successful Southernmost Expedition and Warden engagement actions. Multiple victory conditions require RS thresholds; WC is the primary tool to arrest RS decline.
 
 ## Warden's Accord (WA)
-**Canonical source: `designs/board_game/victory_architecture_v1.md` §8**
+**Canonical source: `designs/board_game/victory_v30.md` §8**
 
 Range: −3 to +3. Starts at 0.
 
@@ -613,7 +613,7 @@ RM Emergence triple condition: WA ≤ −2 AND ≥ 3 territories PT ≤ 1 AND RS
 RM Suppression: WA ≥ 0 OR all territories PT ≥ 2 OR RM Stability 0.
 Varfell Path B blocked if RM has emerged (WA ≤ −2).
 
-See victory_architecture_v1.md §8 for WA movement rules and full RM stat block.
+See victory_v30.md §8 for WA movement rules and full RM stat block.
 
 ## Institutional Mandate Uphold/Appease (PP-189 — v05 names this "Appease" not "Compromise")
 Each faction has a printed Institutional Mandate. When event challenges it:
@@ -624,7 +624,7 @@ NPC rule: NPC factions Appease if Mandate ≥ 4 AND Stability ≤ 3.
 Note: Prior params used "Compromise" — v05 PP-189 establishes "Appease" as the canonical term.
 
 ## Hollow Victory Mechanics — DISSOLVED (PP-427)
-Deed system and Hollow Victory modifiers dissolved. See victory_architecture_v1.md §9.3 for Hybrid mode narrative qualifier (P-32).
+Deed system and Hollow Victory modifiers dissolved. See victory_v30.md §9.3 for Hybrid mode narrative qualifier (P-32).
 
 ## Intel Advancement Counter (PP-180 revised)
 Intel Advancement Counter (0–3) on faction mat.
@@ -857,10 +857,10 @@ Fires if ALL of: PI ≥ 5 (Parliament functional), Church Mandate ≥ 5 (Holy Se
 Effect: Crown player must pass the Crown to Löwenritter (succession triggers) OR call an emergency Parliamentary Session (Senator Inward, Ob 3) to restore legitimacy. If neither: Crown faction is eliminated; Löwenritter Coup Counter immediately set to 4 (coup fires next season).
 
 ## Ducal Geography — RESOLVED (ED-107)
-Canonical geography applied. 17 territories per geography_design.md. See Territory Table below.
+Canonical geography applied. 17 territories per geography_v30.md. See Territory Table below.
 All faction starting positions reflect canonical geography. Old v04 map assignments fully superseded.
-## Territory Table — Canonical (geography_design.md)
-17 territories. Faction ownership per geography_design.md. Fort levels, Prosperity (Pros), and special properties listed.
+## Territory Table — Canonical (geography_v30.md)
+17 territories. Faction ownership per geography_v30.md. Fort levels, Prosperity (Pros), and special properties listed.
 
 | T# | Territory | Faction | Fort | Pros | Special |
 |----|-----------|---------|------|------|---------|
@@ -885,7 +885,7 @@ All faction starting positions reflect canonical geography. Old v04 map assignme
 ★ = faction capital.
 
 
-## Starting Control — Canonical (geography_design.md)
+## Starting Control — Canonical (geography_v30.md)
 | Faction | Territories | Count | Starting TCV |
 |---------|------------|-------|-------------|
 | Crown | T1 Valorsplatz★, T2 Kronmark, T3 Lowenskyst, T5 Feldmark, T6 Stillhelm, T14 Ehrenfeld | 6 | 12 |
@@ -897,7 +897,7 @@ All faction starting positions reflect canonical geography. Old v04 map assignme
 | NPC | T16 Schoenland | — | — |
 
 
-## Adjacency — Canonical (geography_design.md)
+## Adjacency — Canonical (geography_v30.md)
 | Territory | Adjacent To |
 |-----------|------------|
 | T1 Valorsplatz | T2 Kronmark, T5 Feldmark, T14 Ehrenfeld, T16 Schoenland (sea) |
@@ -919,7 +919,7 @@ All faction starting positions reflect canonical geography. Old v04 map assignme
 | T17 Halvarshelm | T3 Lowenskyst, T8 Gransol, T9 Himmelenger |
 
 
-## Road Network — Canonical (geography_design.md)
+## Road Network — Canonical (geography_v30.md)
 
 ### Primary Roads
 | Route | Territories |
@@ -949,7 +949,7 @@ Hafenmark is fully landlocked — all maritime trade routes through Crown territ
 
 
 ## Proximity Ratings (supersedes Southernmost Zones — PP-199)
-**Canonical source: `designs/setting/calamity_radiation.md`** (Node Distance Map + Radiation Matrix).
+**Canonical source: `designs/setting/calamity_radiation_v30.md`** (Node Distance Map + Radiation Matrix).
 
 The Southernmost Zones system is superseded by the Proximity Rating system. Each territory's Proximity Rating is its node distance from Askeheim (T15) on the adjacency graph. Printed on each territory card.
 
@@ -962,7 +962,7 @@ The Southernmost Zones system is superseded by the Proximity Rating system. Each
 | 4 | T2 Kronmark, T16 Schoenland, T9 Himmelenger, T7 Rendstad, T10 Spartfell |
 | 5 | T3 Lowenskyst, T8 Gransol, T17 Halvarshelm |
 
-RS effects per Proximity Rating: see §Rendering Stability (RS) Effects above (Simplified BG Lookup Table from calamity_radiation.md).
+RS effects per Proximity Rating: see §Rendering Stability (RS) Effects above (Simplified BG Lookup Table from calamity_radiation_v30.md).
 
 
 ## Southernmost Access System (PP-219)
@@ -1041,13 +1041,13 @@ Champion path in the game. Lenneth's path remains arc-dependent (ED-119 open).
   not through territorial control.
 
 ## TC 75 Seizure — Territory Values — SUPERSEDED
-**See TCV table in §Victory Conditions above.** Per-territory seizure Ob = 2 + Fort Level + max(0, 3 − PT). Fort levels per geography_design.md territory table.
-[TERRITORY-DEBT: RESOLVED 2026-04-08 — PP-493. All T# references verified against geography_design.md.]
+**See TCV table in §Victory Conditions above.** Per-territory seizure Ob = 2 + Fort Level + max(0, 3 − PT). Fort levels per geography_v30.md territory table.
+[TERRITORY-DEBT: RESOLVED 2026-04-08 — PP-493. All T# references verified against geography_v30.md.]
 ## Victory Condition Territory References — SUPERSEDED
-**All victory territory references now use TCV from victory_architecture_v1.md §1.**
-Territory numbering follows geography_design.md (17-territory canonical map).
+**All victory territory references now use TCV from victory_v30.md §1.**
+Territory numbering follows geography_v30.md (17-territory canonical map).
 Old PP-199 territory references using pre-geography_design numbering are stale.
-[TERRITORY-DEBT: RESOLVED 2026-04-08 — PP-493. TCV table, territory detail table, adjacencies, and all named T# references verified against geography_design.md canonical numbering.]
+[TERRITORY-DEBT: RESOLVED 2026-04-08 — PP-493. TCV table, territory detail table, adjacencies, and all named T# references verified against geography_v30.md canonical numbering.]
 ## Ministry AP-Token Starting Positions (PP-203)
 T14 (Ehrenfeld), T2 (Kronmark), T5 (Feldmark), T1 (Valorsplatz — primary Parliament seat).
 
@@ -1058,9 +1058,9 @@ T11 (Halvardshelm), T8 (Gransol), T3 (Lowenskyst), T1 (Valorsplatz), T9 (Himmele
 T12 (Sigurdshelm) depth 2. T1 (Valorsplatz) depth 1. T9 (Himmelenger) depth 1. [Confirmed correct numbering.]
 
 ## Balance Findings — Status Update
-**BAL-04, BAL-05/06, BAL-08, BAL-09 (all P1):** Superseded by victory_architecture_v1.md redesign. Crown victory restructured (TCV ≥ 16 + political conditions, per victory_architecture_v1.md). Church primary restructured (TC 75 phase transition + seizure). Varfell Path B redesigned. TC dynamics recalibrated.
+**BAL-04, BAL-05/06, BAL-08, BAL-09 (all P1):** Superseded by victory_v30.md redesign. Crown victory restructured (TCV ≥ 16 + political conditions, per victory_v30.md). Church primary restructured (TC 75 phase transition + seizure). Varfell Path B redesigned. TC dynamics recalibrated.
 **BAL-10 (P2):** Varfell T13 (now T13 Oastad) dominant opening — still relevant for monitoring under new TCV system.
-See victory_architecture_v1.md §10 for Monte Carlo win probability assessment.
+See victory_v30.md §10 for Monte Carlo win probability assessment.
 [SIM-DEBT: Full faction-AI simulation needed to validate multi-faction interaction under new victory architecture.]
 ## TC Threshold Check — Zoom In Interaction (ED-056 resolved 2026-04-03)
 TC threshold check fires at turn-end regardless of Zoom In suspension.
@@ -1476,7 +1476,7 @@ Available to all playable factions. Alternate path, no TCV requirement met via n
 ---
 
 ## Varfell Path B — Southernmost Dominion (ED-311 RESOLVED — Option A)
-**[Replaces provisional conditions in victory_architecture_v1.md §3.4]**
+**[Replaces provisional conditions in victory_v30.md §3.4]**
 
 | Condition | Threshold |
 |-----------|-----------|
