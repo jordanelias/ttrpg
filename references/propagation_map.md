@@ -1,6 +1,6 @@
 <!-- v30 path update applied 2026-04-13 -->
 # VALORIA PROPAGATION MAP
-## Last updated: 2026-04-03
+## Last updated: 2026-04-14
 ## Version: 2.0 — self-maintaining
 ## Format: machine-readable YAML blocks + human-readable tables
 
@@ -472,14 +472,7 @@ Propagation targets:
 
 | Changed File | Propagates To | Reason | Status |
 |-------------|--------------|--------|--------|
-| `designs/fieldwork/fieldwork_v30.md` | `references/canonical_sources.yaml` | Fieldwork system entry | DONE (PP-575) |
-| `designs/fieldwork/fieldwork_v30.md` | `references/params_fieldwork.md` | Mechanical values extraction | DONE (PP-583) |
-| `designs/fieldwork/fieldwork_v30.md` | `designs/systems/clock_registry_v30.md` | Exposure, Evidence Track, Disposition, Cover tracks | DONE (PP-575) |
-| `designs/fieldwork/fieldwork_v30.md` | `references/params_board_game.md` | Survey action in Standard Action Ob table (§8.1) | DONE (this commit) |
-| `designs/fieldwork/fieldwork_v30.md` | `references/params_core.md` | Attribute fieldwork roles table (§2.1) | DONE (this commit) |
-| `designs/fieldwork/fieldwork_v30.md` | `designs/hybrid/scale_transitions_v30.md` | 9th handoff rule: Fieldwork ↔ all systems (§2.3, §9) | DONE (this commit) |
-| `designs/fieldwork/fieldwork_v30.md` | `tests/coverage_matrix.md` | SIM-DEBT-FW-01 through FW-10 (all RESOLVED) | DONE (this commit) |
-| `designs/fieldwork/fieldwork_v30.md` | `designs/ttrpg/threadwork_v30.md` | Thread-Read as perceptive Leap (§4.5); co-movement protocol; per-op cap ruling (TW-05) | PENDING — threadwork params notes open per ED-NEW-15 |
+| `designs/fieldwork/fieldwork_v30.md` | `designs/fieldwork/fieldwork_v30.md` | `designs/fieldwork/fieldwork_v30.md` | `designs/fieldwork/fieldwork_v30.md` | `designs/fieldwork/fieldwork_v30.md` | `designs/fieldwork/fieldwork_v30.md` | `designs/fieldwork/fieldwork_v30.md` | `designs/fieldwork/fieldwork_v30.md` | `designs/ttrpg/threadwork_v30.md` | Thread-Read as perceptive Leap (§4.5); co-movement protocol; per-op cap ruling (TW-05) | PENDING — threadwork params notes open per ED-NEW-15 |
 | `designs/fieldwork/fieldwork_v30.md` | `designs/contest/social_contest_v30.md` | Contest Escalation boundary (§5.7); Combined Findings (+1D per Finding in Contest, max +2D) (§2.3 / F-TRANS-11) | PENDING |
 | `designs/fieldwork/fieldwork_v30.md` | `designs/combat/combat_v30.md` | Fieldwork → Combat handoff: Exposure → ambusher advantage (§2.3 / F-TRANS-01); Combat Exposure codified (quiet +1, conspicuous +2, public +3) (F-TRANS-09) | PENDING |
 | `designs/fieldwork/fieldwork_v30.md` | `designs/setting/geography_v30.md` | POI catalog per territory (ED-NEW-01); conditional POI gates by RS band | PENDING (blocked: ED-NEW-01 P2) |
@@ -518,7 +511,6 @@ Propagation targets:
 ### PP-641 — Opposing Operations → threadwork design doc
 | Source | Target | Status |
 |---|---|---|
-| `references/params_threadwork.md` §Opposing Operations | `designs/ttrpg/threadwork_redesign_v25.md` §2.6 | DONE (PP-641) — design doc now matches params |
 
 ### PP-642 — NPC Recruitment
 | Source | Target | Notes |
@@ -534,9 +526,7 @@ Propagation targets:
 
 | Changed File | Propagates To | Reason | Status |
 |-------------|--------------|--------|--------|
-| `gm_ref/arcs_46_55_consolidated.md` | `gm_ref/arcs_46_50_batch07.md` | Supersedes batch07 (retained for history) | DONE |
-| `gm_ref/arcs_46_55_consolidated.md` | `gm_ref/arcs_51_55_batch08.md` | Supersedes batch08 (retained for history) | DONE |
-| `gm_ref/arcs_46_55_consolidated.md` | `references/params_factions.md` | Cites PP-402, PP-403, Domain Action Ob formula, ethical framework modifiers | REFERENCE |
+| `gm_ref/arcs_46_55_consolidated.md` | `gm_ref/arcs_46_55_consolidated.md` | `gm_ref/arcs_46_55_consolidated.md` | `references/params_factions.md` | Cites PP-402, PP-403, Domain Action Ob formula, ethical framework modifiers | REFERENCE |
 | `gm_ref/arcs_46_55_consolidated.md` | `references/params_threadwork.md` | Cites PP-255, Leap table, Contact Duration, Coherence | REFERENCE |
 | `gm_ref/arcs_46_55_consolidated.md` | `references/params_board_game.md` | Cites PI track, Coup Counter, Torben/Elske Loyalty, PP-563 VTM-TC | REFERENCE |
 | `gm_ref/arcs_46_55_consolidated.md` | `canon/02_canon_constraints.md` | Critique applied P-01/P-03/P-07/P-08/P-15; arc 51 P-15 correction | REFERENCE |
@@ -550,8 +540,7 @@ Require reads of: params_board_game.md §Coup Counter, threadwork_redesign_v25.m
 
 | Changed File | Propagates To | Reason | Status |
 |-------------|--------------|--------|--------|
-| `gm_ref/arcs_46_55_resolved.md` | `gm_ref/arcs_46_55_consolidated.md` | Supersedes consolidated (retained for history) | DONE |
-| `gm_ref/arcs_46_55_resolved.md` | `references/params_factions.md` | Cites PP-402, PP-403, Domain Action Ob, ethical framework, Guild Leverage | REFERENCE |
+| `gm_ref/arcs_46_55_resolved.md` | `gm_ref/arcs_46_55_resolved.md` | `references/params_factions.md` | Cites PP-402, PP-403, Domain Action Ob, ethical framework, Guild Leverage | REFERENCE |
 | `gm_ref/arcs_46_55_resolved.md` | `references/params_threadwork.md` | Cites PP-255, RS thresholds, Coherence §3.2, Contact Duration, TS perception table | REFERENCE |
 | `gm_ref/arcs_46_55_resolved.md` | `references/params_board_game.md` | Cites PI track, Coup Counter, Torben/Elske Loyalty, PP-563 VTM-TC, WC effects | REFERENCE |
 | `gm_ref/arcs_46_55_resolved.md` | `canon/02_canon_constraints.md` | P-01/P-03/P-07/P-08/P-15 applied; all canon-compliant | REFERENCE |

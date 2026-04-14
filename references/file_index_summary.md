@@ -4,7 +4,7 @@
 
 ## Status
 - Compilation: ALL DEPRECATED (design docs canonical)
-- Propagation-pending: 5 items (batch_ad_resolutions, hybrid_gaps_v30, succession_mechanic, ttrpg/batch_*, lir_ff_impact)
+- Propagation-pending: 0 items (DONE entries trimmed 2026-04-14)
 - Known stale sync gaps: 0
 
 ## Canonical Design Docs (current)
