@@ -142,6 +142,6 @@ systems:
 
   emergent_arcs:
     canonical: references/arc_register.md
-    canonical_sha__references__arc_register_md: "d3c4e225e6362bc4e11d225d4aa02a67a4066903"
+    canonical_sha__references__arc_register_md: "d6c7635fc67b02231e7241fced23bc13330e4f66"
     params: null
     design_doc: null
