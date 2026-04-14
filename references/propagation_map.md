@@ -512,3 +512,19 @@ Propagation targets:
 | `designs/ttrpg/threadwork_v30.md` | `designs/fieldwork/fieldwork_investigation.md` | §2.3 Thread-Read-as-fieldwork cross-reference added |
 | `references/params_core.md` | `designs/combat/combat_v30.md`, `designs/contest/social_contest_v30.md`, `designs/fieldwork/fieldwork_v30.md` | Pool floor 1D named rule — all pool-using systems now have canonical anchor |
 | `canon/editorial_ledger.yaml` | `designs/systems/npc_behavior_v30.md` | ED-510 (NPC Recruitment PROVISIONAL), ED-511 (Hooks), ED-512 (surrender), ED-513 (fail-forward), ED-514 (social initiative) |
+
+## PP-641–642 Propagation (2026-04-13)
+
+### PP-641 — Opposing Operations → threadwork design doc
+| Source | Target | Status |
+|---|---|---|
+| `references/params_threadwork.md` §Opposing Operations | `designs/ttrpg/threadwork_redesign_v25.md` §2.6 | DONE (PP-641) — design doc now matches params |
+
+### PP-642 — NPC Recruitment
+| Source | Target | Notes |
+|---|---|---|
+| `designs/systems/npc_behavior_v30.md` §9.5 | `references/params_contest.md` | Findings citation extracted ✓ |
+| `designs/systems/npc_behavior_v30.md` §9.5 | `references/params_combat.md` | Surrender/disengage extracted ✓ |
+| `designs/systems/npc_behavior_v30.md` §9.5 | `designs/fieldwork/fieldwork_socializing.md` | Hook acquisition via Overwhelming investigation — cross-ref pending |
+| `designs/systems/npc_behavior_v30.md` §9.5 | `designs/systems/clock_registry.md` | Hook tracking: roster-level tag, not a separate clock — no clock_registry change |
+| `designs/systems/npc_behavior_v30.md` §9.5 | `references/params_factions.md` | Mandate −1 on successful recruitment (talent drain) — params_factions update pending |

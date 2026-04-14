@@ -753,3 +753,19 @@ All PASS tests: patched in same commit (PP-630–634).
 | FW-04 | AP feedback = 11% of TC max; cap sufficient | Resolved |
 | FW-05 | Survey and Govern occupy different niches; neither dominates | Resolved |
 | FW-06 | Cover 3 (detected in 3 scenes) vs Cover 12+ (near-immune) | Resolved |
+
+## Session Close — 2026-04-13 Final Propagation Pass
+
+| Item | Status |
+|---|---|
+| PP-633–642 registered in patch_register.yaml | ✓ |
+| Opposing ops (PP-641): params_threadwork → threadwork_redesign §2.6 | ✓ |
+| NPC Recruitment (PP-642): §9.5 in npc_behavior_v30. Hooks + Defection defined | ✓ |
+| Findings citation: params_contest updated | ✓ |
+| Surrender/disengage: params_combat updated | ✓ |
+| propagation_map: PP-641/642 cross-refs added | ✓ |
+| Both checkers: EXIT 0 | ✓ |
+| Freshness gate: updated | ✓ |
+| Open P1-BLOCKERs: 0 | ✓ |
+| Open PROVISIONALs: 0 | ✓ |
+| Remaining propagation pending: params_factions (Mandate −1 on recruitment); fieldwork_socializing (Hook acquisition cross-ref) | PENDING (P3, non-blocking) |

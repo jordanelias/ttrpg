@@ -283,3 +283,16 @@ would reduce the pool below 5, it stays at 5 with no additional modifier.
 - New rule: if a Rescue attempt **fails** AND the rescuer takes a wound from their own engagement in the same round → **+1 Momentum**
 - Distinct from successful intercept payoff (which yields +2 per PP-406)
 - Failed intercept with no rescuer wound: no Momentum return (correct tension maintained)
+
+## Surrender and Disengage (PP-634)
+
+**Yield:** Declared at Phase 1. Opponent chooses: Accept (combat ends; prisoner/withdrawal) or Refuse (unresisting — no contest roll). Cannot Yield while faction's objective is actively contested in zone.
+
+**Disengage:** Phase 1 declaration, viable exit required. Roll Agility pool TN 7 Ob 1, contested if opponent spends action to pursue.
+| Result | Outcome |
+|---|---|
+| Disengager wins or unopposed success | Leaves zone cleanly |
+| Partial (unopposed, net 0) | Exits but opponent gets one free undefended strike |
+| Disengager loses/ties (contested) | Cannot disengage this round |
+
+Out of Breath (Stamina 0): −2D on Agility disengage roll. Wounds do not penalise disengage.

@@ -252,3 +252,16 @@ Source: SIM-DB-STRESS-01 D-04 finding. 2026-04-09.
 Concentration maximum = Focus + Recall (= starting value at contest setup).
 Restoration (from Regroup or other effects) cannot raise Concentration above this maximum.
 Source: SIM-DB-STRESS-01 D-08b finding. 2026-04-09.
+
+## Evidence Track Findings in Contest (PP-636)
+
+Findings from completed fieldwork investigations may be cited in Contest opening (§9.1).
+
+| Findings cited | Exchange 1 bonus |
+|---|---|
+| 1 Finding | +1D |
+| 2+ Findings | +2D (cap) |
+
+Findings are **not consumed** by citation — remain on Evidence Track. Must be declared at contest setup. GM determines scope relevance (Finding must relate to contest subject). Stacks with §9.1 preparation bonus (+1D), for maximum Exchange 1 pool bonus of +3D when both available.
+
+Source: fieldwork_investigation.md §2.3 / F-TRANS-11. social_contest_system_v2.md §9.1.

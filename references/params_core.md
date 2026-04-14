@@ -124,6 +124,7 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 | Resolve | Spirit | 1–7 | Maximum total Inspiration value |
 
 <!-- patch_history: references/params_core_history.md -->
+<!-- PP-633 applied 2026-04-13: Pool Floor 1D named rule added -->
 
 ---
 <!-- PP-243 applied 2026-04-04: Momentum auto-success interaction with roll -->
@@ -196,7 +197,7 @@ Negative net successes contribute to Failure degree only; they do not compound p
 - TS and Coherence are orthogonal axes. See params_threadwork ED-301 section for full detail.
 - Coherence track models layer 2 integrity (unconscious self-rendering). TS measures perceptual depth. Neither implies the other.
 
-## Attribute Roles — Fieldwork (PP-628, from fieldwork_v30.md §2.1)
+## Attribute Roles — Fieldwork (PP-628, from fieldwork_design_v1.md §2.1)
 
 | Attribute | Fieldwork Role |
 |-----------|----------------|
