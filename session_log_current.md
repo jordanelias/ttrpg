@@ -1438,160 +1438,48 @@ status: CLOSED
 # Valoria Session Log — Current
 
 ```yaml
-session_id: 2026-04-13_SONNET_FIELDWORK_PROPAGATION
+session_id: 2026-04-13_SONNET_COMPARATIVE_AUDIT_AND_PATCH
 session_close: 2026-04-13
 phase: COMPLETE
 status: CLOSED
 
 ## TASKS COMPLETED THIS SESSION
-1. Session bootstrap + status block (session_log, editorial_ledger, file_index, canonical_sources)
-2. Fetched all task-required files (fieldwork_design_v1.md, propagation_map, params_board_game,
-   params_core, scale_transitions_design_v1, coverage_matrix, Godot valoria-game repo)
-3. Godot §10 technical validation against jordanelias/valoria-game@main (429 files, docs/audit_2026-04-12.md)
-4. Propagation: params_board_game Survey Ob row, params_core fieldwork roles table,
-   scale_transitions §3.9 (9th handoff rule — 9 directions), coverage_matrix SIM-DEBT-FW-01–10 RESOLVED,
-   propagation_map FIELDWORK section + subsystem cross-references
-5. §13 skeleton split: fieldwork_design_v1.md 856→224 lines; 10 subsystem files created;
-   §13 Design Rationale Index created (rationale sourced from session log + PP-576–583)
-6. canonical_sources.yaml + file_index.md updated for 10 new subsystem files
-7. Commit bdd5031 (18 files)
-8. freshness_gate.py --update run; SHAs refreshed for 17 canonical docs
+1. Mechanic-audit: fieldwork as baseline — Modes B/C/D/E comparative audit across combat,
+   contest, threadwork. Fieldwork confirmed more robust (designed last, baked-in cross-system
+   awareness, highest edge-case coverage).
+2. Past-3-days conversation search: 14 chats reviewed. Key unimplemented proposals identified:
+   - NPC Recruitment Procedure (game mechanics session, CK2/RotTK analysis)
+   - Hooks mechanic (referenced but undefined)
+   - Faction AI decision sequence gap (arc session — blocked on ED-387)
+   - 5 audit cross-system gaps (C-01/C-02/C-03, B-02, E-01, D-06)
+3. Quick interdependency tests (6 tests): 4 PASS (implemented), 2 BLOCKED (ED-387 dependency)
+4. Patches PP-630–634 committed (fb39d86):
+   - params_core.md: Pool floor 1D named rule
+   - combat_design_v1.md §11.5: Fieldwork transitions + Let It Ride clarification
+   - social_contest_system_v2.md §9.1 + §4: Findings citation + Spent timing
+   - threadwork_redesign_v25.md §2.3: Thread-Read-as-fieldwork cross-reference
+5. Editorial items raised: ED-510–514 (NPC Recruitment PROVISIONAL, Hooks, surrender,
+   fail-forward, social initiative resolve ED-138)
+6. freshness_gate.py --update: SHAs refreshed for 21 canonical docs
+7. Commits: fb39d86 (patches) + freshness gate SHA commit
 
-## KEY FINDINGS
-- Godot: No fieldwork system implemented (G10-F01 P3). Infrastructure compatible.
-  4 pre-existing audit blockers (A-02, A-05, B-03, DA-03) gate §10.4/§10.6 integration.
-  No design changes needed — gaps are implementation-only.
-- PP-627 propagation gap (pre-existing): params_combat + params_core headers missing PP-627
-  Health formula note. Not introduced by this session. Flag for next params pass.
-- broken_dependency_checker: EXIT 0 (clean).
-
-## COMMIT
-bdd5031 — [propagation] Fieldwork propagation + §13 skeleton split + Godot §10 validation
+## KEY FINDINGS FROM CONVERSATION REVIEW
+- Opposing Threadwork (ED-486–489): 4 P1-BLOCKERs still unresolved — needs Jordan's editorial
+  decision before procedure can be patched into threadwork_redesign_v25.md
+- ~14 PROVISIONAL decisions from 2-day review session: still awaiting editorial review
+- NPC Recruitment Procedure: fully specified in game mechanics session but 3 interdependency
+  blockers prevent implementation (ED-510 tracks, blocked on ED-387)
+- RM institutional role name: flagged as 'terrible' in session, never renamed — ED-509 area?
+  [NOTE: check if name was resolved in subsequent sessions]
 
 ## P1 BLOCKERS: 0 (this session)
-## OPEN EDITORIALS SURFACED: 0 new (all from prior session)
-## PRE-EXISTING PROPAGATION GAP: PP-627 not in params_combat/params_core headers
+## OPEN EDITORIALS RAISED: 5 (ED-510–514, P2–P3)
+## PROPAGATION: complete
 
-## NEXT ACTIONS
-- ED-NEW-15 (P2): POP Coherence −1 per-op cap ruling — propagate to params_threadwork.md (currently ambiguous)
-- PP-627 propagation: add Health formula note to params_combat.md and params_core.md headers
-- ED-NEW-01 (P2): POI catalog per territory — cross-reference geography_design.md
-- fieldwork → combat_design_v1.md: Exposure→ambusher advantage + Combat Exposure codified (F-TRANS-01/09)
-- fieldwork → social_contest_system_v2.md: Contest Escalation boundary + Combined Findings (F-TRANS-10/11)
-- valoria-game Godot: fix B-03, A-05 (season integration blockers); A-02, DA-03 (NPC memory blockers)
-```
-
----
-
-# Valoria Session Log — Current
-
-```yaml
-session_id: 2026-04-13_SONNET_FIELDWORK_CANON_GUARD
-session_close: 2026-04-13
-phase: COMPLETE
-status: CLOSED
-
-## TASK
-Canon guard review of fieldwork_design_v1.md against philosophical foundations,
-emergence vectors, and Domain Echo. All 15 canon constraints (P-01–P-15) evaluated.
-Five pending propagation items from PP-583 session completed.
-
-## CANON GUARD FINDINGS (PP-628)
-- P-05 FAIL → FIXED: Mode 1 (Ordinary Incursion) vs Mode 2 (Providence) mechanically
-  distinct in §3.1 Anomaly POI. Mode 1 = time-sensitive (evidence halves after 3 scenes).
-  Mode 2 = event not entity (Interview/social unavailable).
-- P-01 PARTIAL → FIXED: §2.4 co-movement note (all Thread ops produce co-movement via
-  threadwork rules). §4.5 clarified "fieldwork-defined action" vs Thread operations.
-- PP-626 PROPAGATION GAP FIXED: §2.1 and §4.2 Thread-Read primary Attunement → Spirit.
-  (§4.5 Step 3 was already corrected in source.)
-- P-06 NOTE ADDED: Threadcut being Knot strain (+1/use, cumulative; instability at 5).
-- DOMAIN ECHO §2.5 GAPS FILLED: scope definition, timing (scene end / Accounting),
-  NPC learning mechanism (Watched, hostile witness, public citation).
-- BREACH × THREADCUT §3.1: confirmed entry sites yield +3 Evidence (Thread-verified).
-- P-02, P-03, P-04, P-07–P-15: all PASS. No violations.
-
-## PROPAGATION (PP-629)
-All 5 pending items completed:
-- propagation_map.md: FIELDWORK section added (12 cross-references)
-- params_board_game.md: Survey (Consul Inward) Ob row added
-- params_core.md: Attribute Roles — Fieldwork section added
-- stage11_scale_transitions.md: 9th handoff rule (Fieldwork ↔ All systems)
-- coverage_matrix.md: SIM-FW-02 through FW-10 added (all RESOLVED);
-  misplaced FW-03/FW-06 from Thread System Redesign section removed
-
-## COMMIT
-7639eb20a3e1434544ce5bf0449ef94d5c82c48f
-Files: fieldwork_design_v1.md, params_board_game.md, params_core.md,
-  params_combat.md (PP-627 header), stage11_scale_transitions.md,
-  propagation_map.md, coverage_matrix.md, canonical_sources.yaml,
-  patch_register.yaml (PP-628, PP-629)
-
-## CHECKERS
-broken_dependency_checker.py: EXIT 0 (clean, 439 files verified)
-patch_propagation_checker.py: EXIT 0 (389 propagations, 0 missing)
-
-## P1 BLOCKERS: 0
-## OPEN EDITORIALS (fieldwork): 14 remaining open (ED-NEW-01–15, minus RESOLVED ED-NEW-11)
-## SIM-DEBT: 0 (all resolved)
-## PROPAGATION STATUS: complete (0 pending)
-```
-
----
-
-# Valoria Session Log — Current
-
-```yaml
-session_id: 2026-04-13_SONNET_FIELDWORK_FULL_AUDIT
-session_close: 2026-04-13
-phase: COMPLETE
-status: CLOSED
-
-## TASK
-Full re-audit of fieldwork_design_v1.md against canon P-01–P-15, emergence vectors,
-Domain Echo, and threadwork redesign (PP-600-623) cross-impact. Fix all. Propagate.
-
-## AUDIT FINDINGS — THREADWORK CROSS-IMPACT (PP-600-623 vs fieldwork)
-- Three-axis Ob system: fieldwork Thread-Read Depth Axis (1/2/3/5/8) aligns with
-  threadwork Fibonacci scale at Single Breadth + Contact Distance defaults. CONSISTENT.
-- Knot-mediated remote Thread-Read: Distance Ob = 0 because Knot = Contact-range.
-  Consistent with §2.6 "distance does not add Ob." CONFIRMED.
-- TPS formula: TS ÷ 10 (round down) unchanged by PP-600-623. CONSISTENT.
-- Spirit × 2 for Thread-Read: already propagated in PP-626/PP-628. CONSISTENT.
-- Dissonance Spirit check: §2.7 references PP-607/PP-610. CONSISTENT.
-- Community Weaving pool: PP-250 (Attunement) superseded by PP-616 (Spirit × 2).
-  FIXED in params_threadwork.md (PP-631).
-
-## CORRECTIONS (PP-630 — fieldwork_design_v1.md)
-1. §4.5 THREE-AXIS Ob: explicit alignment note added. Single Breadth + Contact/Knot
-   Distance = +0 each; standard Thread-Read uses Depth Ob alone. Greater breadth or
-   unmediated distance → add per params_threadwork §Three-Axis Ob System.
-2. §8.1 WARDEN EMERGENCE FIX: undefined term → WR ≥ 2 (canonical threshold).
-3. §12 ED-NEW HARVEST: ED-NEW-01–15 assigned permanent IDs ED-496–509.
-   11 RESOLVED, 3 FLAGGED (ED-507 POI catalog, ED-508 NPC Dispositions, ED-509 Godot).
-
-## CORRECTIONS (PP-631 — params_threadwork.md + editorial_ledger.yaml)
-1. POP CAP NOTE: explicit — POP −1 additional is cap-subject (unlike Binding Ops).
-   Total POP Coherence cost = −1 max regardless of scale.
-2. COMMUNITY WEAVING POOL: (Spirit × 2) + History + TPS canonical entry added.
-   PP-250 Attunement formula marked superseded by PP-616.
-3. EDITORIAL LEDGER: next_id 486 → 510. ED-496–509 added (11 resolved, 3 flagged).
-4. CANONICAL_SOURCES: fieldwork SHA updated for PP-630 content.
-
-## COMMIT
-d4ea69c6466ef7c8732fef8b2cff7591948187e3
-Files: fieldwork_design_v1.md, params_threadwork.md, editorial_ledger.yaml,
-  canonical_sources.yaml, patch_register.yaml (PP-630, PP-631)
-
-## CHECKERS (post-commit)
-broken_dependency_checker.py: EXIT 0 (439 files, clean)
-patch_propagation_checker.py: EXIT 0 (390 propagations, 0 missing)
-
-## REMAINING OPEN EDITORIALS (fieldwork)
-ED-507: POI catalog per territory — authorial (Jordan)
-ED-508: Named NPC Dispositions — authorial (Jordan)
-ED-509: Godot validation — deferred
-
-## P1 BLOCKERS: 0
-## PROPAGATION STATUS: complete (0 pending)
-## OPEN EDITORIAL DEBT (non-authorial): 0
+## NEXT ACTIONS (priority)
+1. Jordan: resolve ED-138 (social initiative) — forced to decision
+2. Jordan: resolve ED-486–489 (opposing threadwork P1-BLOCKERs)
+3. Jordan: review ~14 PROVISIONAL decisions from 2-day session
+4. Jordan: resolve ED-387 (Priority Trees P1-BLOCKER) — unblocks NPC Recruitment + Faction AI
+5. Jordan: name the RM institutional role (Remembrancer placeholder)
 ```
