@@ -23,6 +23,7 @@ npc_behavior: designs/systems/npc_behavior_v30.md
 patch_register_active: canon/patch_register_active.yaml
 patch_register_archive: canon/patch_register_archive.yaml
 patch_register_index: canon/patch_register_index.md
+patch_register_index_archive: canon/patch_register_index_archive.md
 editorial_ledger_active: canon/editorial_ledger.yaml
 editorial_ledger_archive: canon/editorial_ledger_archive.yaml
 editorial_ledger_index: canon/editorial_ledger_index.md

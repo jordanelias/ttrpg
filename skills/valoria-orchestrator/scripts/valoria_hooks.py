@@ -229,8 +229,12 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
             f"  Include if source authority changed."
         )
 
-    # Co-file: patch register write → propagation_map
-    patch_writes = [p for p in paths_in_commit if 'patch_register' in p]
+    # Co-file: patch register content write → propagation_map
+    # Index files (patch_register_index*.md) are excluded — they don't affect propagation.
+    patch_writes = [p for p in paths_in_commit
+                    if 'patch_register' in p
+                    and not p.endswith('_index.md')
+                    and not p.endswith('_index_archive.md')]
     if patch_writes and 'references/propagation_map.md' not in paths_in_commit:
         errors.append(
             f"CO-FILE: patch_register changed but propagation_map.md not included."
