@@ -1535,3 +1535,63 @@ patch_propagation_checker.py: EXIT 0 (389 propagations, 0 missing)
 ## SIM-DEBT: 0 (all resolved)
 ## PROPAGATION STATUS: complete (0 pending)
 ```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-13_SONNET_FIELDWORK_FULL_AUDIT
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASK
+Full re-audit of fieldwork_design_v1.md against canon P-01–P-15, emergence vectors,
+Domain Echo, and threadwork redesign (PP-600-623) cross-impact. Fix all. Propagate.
+
+## AUDIT FINDINGS — THREADWORK CROSS-IMPACT (PP-600-623 vs fieldwork)
+- Three-axis Ob system: fieldwork Thread-Read Depth Axis (1/2/3/5/8) aligns with
+  threadwork Fibonacci scale at Single Breadth + Contact Distance defaults. CONSISTENT.
+- Knot-mediated remote Thread-Read: Distance Ob = 0 because Knot = Contact-range.
+  Consistent with §2.6 "distance does not add Ob." CONFIRMED.
+- TPS formula: TS ÷ 10 (round down) unchanged by PP-600-623. CONSISTENT.
+- Spirit × 2 for Thread-Read: already propagated in PP-626/PP-628. CONSISTENT.
+- Dissonance Spirit check: §2.7 references PP-607/PP-610. CONSISTENT.
+- Community Weaving pool: PP-250 (Attunement) superseded by PP-616 (Spirit × 2).
+  FIXED in params_threadwork.md (PP-631).
+
+## CORRECTIONS (PP-630 — fieldwork_design_v1.md)
+1. §4.5 THREE-AXIS Ob: explicit alignment note added. Single Breadth + Contact/Knot
+   Distance = +0 each; standard Thread-Read uses Depth Ob alone. Greater breadth or
+   unmediated distance → add per params_threadwork §Three-Axis Ob System.
+2. §8.1 WARDEN EMERGENCE FIX: undefined term → WR ≥ 2 (canonical threshold).
+3. §12 ED-NEW HARVEST: ED-NEW-01–15 assigned permanent IDs ED-496–509.
+   11 RESOLVED, 3 FLAGGED (ED-507 POI catalog, ED-508 NPC Dispositions, ED-509 Godot).
+
+## CORRECTIONS (PP-631 — params_threadwork.md + editorial_ledger.yaml)
+1. POP CAP NOTE: explicit — POP −1 additional is cap-subject (unlike Binding Ops).
+   Total POP Coherence cost = −1 max regardless of scale.
+2. COMMUNITY WEAVING POOL: (Spirit × 2) + History + TPS canonical entry added.
+   PP-250 Attunement formula marked superseded by PP-616.
+3. EDITORIAL LEDGER: next_id 486 → 510. ED-496–509 added (11 resolved, 3 flagged).
+4. CANONICAL_SOURCES: fieldwork SHA updated for PP-630 content.
+
+## COMMIT
+d4ea69c6466ef7c8732fef8b2cff7591948187e3
+Files: fieldwork_design_v1.md, params_threadwork.md, editorial_ledger.yaml,
+  canonical_sources.yaml, patch_register.yaml (PP-630, PP-631)
+
+## CHECKERS (post-commit)
+broken_dependency_checker.py: EXIT 0 (439 files, clean)
+patch_propagation_checker.py: EXIT 0 (390 propagations, 0 missing)
+
+## REMAINING OPEN EDITORIALS (fieldwork)
+ED-507: POI catalog per territory — authorial (Jordan)
+ED-508: Named NPC Dispositions — authorial (Jordan)
+ED-509: Godot validation — deferred
+
+## P1 BLOCKERS: 0
+## PROPAGATION STATUS: complete (0 pending)
+## OPEN EDITORIAL DEBT (non-authorial): 0
+```
