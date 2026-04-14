@@ -74,7 +74,7 @@
 
 
 ### valoria-atomizer (PLANNED — not yet built)
-- Path: `skills/valoria-atomizer/SKILL.md` (to be created)
+- Path: (not yet created — will be `skills/valoria-atomizer/SKILL.md`)
 - Model: Sonnet 4.6
 - Triggers: atomize, skeleton, infill, split design doc, extract skeleton, extract prose
 - Purpose: Read a v30 design doc, split into skeleton (tables/formulas/procedures/edge cases)

@@ -1,3 +1,4 @@
+<!-- v30 path update applied 2026-04-13 -->
 # VALORIA PROPAGATION MAP
 ## Last updated: 2026-04-03
 ## Version: 2.0 — self-maintaining
@@ -83,12 +84,12 @@ The orchestrator applies these rules to any new file before asking for manual in
 | Params file | Skills that load it | Design docs that source it |
 |-------------|--------------------|-----------------------------|
 | `params_core.md` | ALL skills | `stage1_core_engine.md` |
-| `params_combat.md` | simulator G1, combat-simulator | `designs/combat/combat_design_v1.md`, `stage8_combat.md` |
-| `params_mass_combat.md` | simulator G1 | `designs/mass_combat/mass_battle_v3.md`, `stage8_combat.md` |
-| `params_debate.md` | simulator G2 | `designs/contest/social_contest_system_v2.md` |
-| `params_threadwork.md` | simulator G3 | `designs/ttrpg/threadwork_redesign_v25.md` |
-| `params_factions.md` | simulator G4, mechanic-audit | `stage6_factions.md`, `designs/board_game/valoria_bg_v05_simulation_and_patches.md` |
-| `params_board_game.md` | simulator G5 | `designs/board_game/valoria_bg_v05_simulation_and_patches.md` |
+| `params_combat.md` | simulator G1, combat-simulator | `designs/combat/combat_v30.md`, `stage8_combat.md` |
+| `params_mass_combat.md` | simulator G1 | `designs/mass_combat/mass_battle_v30.md`, `stage8_combat.md` |
+| `params_debate.md` | simulator G2 | `designs/contest/social_contest_v30.md` |
+| `params_threadwork.md` | simulator G3 | `designs/ttrpg/threadwork_v30.md` |
+| `params_factions.md` | simulator G4, mechanic-audit | `stage6_factions.md`, `designs/board_game/board_game_v30.md` |
+| `params_board_game.md` | simulator G5 | `designs/board_game/board_game_v30.md` |
 | `params_scale_transitions.md` | simulator K2 | `compilation/v0.14/stage11_scale_transitions.md` |
 
 When any source doc changes: its params file is stale. Add to `file_index.md` KNOWN STALE SYNC GAPS immediately. Do not wait until the next session.
@@ -109,23 +110,23 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
-| `designs/ttrpg/threadwork_redesign_v25.md` | `references/params_threadwork.md` | Extracted values |
-| `designs/ttrpg/threadwork_redesign_v25.md` | `designs/mass_combat/mass_battle_v3.md` §A.10 | Thread in mass battle depends on operation definitions |
-| `designs/ttrpg/threadwork_redesign_v25.md` | `compilation/v0.14/stage15_spell_catalog_deprecated.md` | W-series operations |
-| `designs/ttrpg/threadwork_redesign_v25.md` | `designs/gm_ref_cp14/dashboards/d06_thread_operation_resolution_card_deprecated.md` | Dashboard sync |
+| `designs/ttrpg/threadwork_v30.md` | `references/params_threadwork.md` | Extracted values |
+| `designs/ttrpg/threadwork_v30.md` | `designs/mass_combat/mass_battle_v30.md` §A.10 | Thread in mass battle depends on operation definitions |
+| `designs/ttrpg/threadwork_v30.md` | `compilation/v0.14/stage15_spell_catalog_deprecated.md` | W-series operations |
+| `designs/ttrpg/threadwork_v30.md` | `deprecated/designs/gm_ref_cp14/dashboards/d06_thread_operation_resolution_card_deprecated.md` | Dashboard sync |
 | `references/params_threadwork.md` | `skills/valoria-simulator/SKILL.md` (Mode G3) | Sim loads params |
 
 ### COMBAT
 
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
-| `designs/combat/combat_design_v1.md` | `references/params_combat.md` | Extracted values |
-| `designs/combat/combat_design_v1.md` | `references/params_mass_combat.md` | Mass combat unit table sourced here |
-| `designs/combat/combat_design_v1.md` | `designs/mass_combat/mass_battle_v3.md` | Unit stats, reach rules, weapon table shared |
-| `designs/mass_combat/mass_battle_v3.md` | `references/params_mass_combat.md` | Extracted values |
-| `designs/mass_combat/mass_battle_v3.md` | `designs/board_game/valoria_bg_v05_simulation_and_patches.md` §B.3/B.5 | BG battle resolution references mass battle |
-| `designs/mass_combat/mass_battle_v3.md` | `compilation/v0.14/stage11_scale_transitions.md` | Phase structure referenced in scale transitions |
-| `designs/mass_combat/mass_battle_v3.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | Phase timing drives state transfer rules |
+| `designs/combat/combat_v30.md` | `references/params_combat.md` | Extracted values |
+| `designs/combat/combat_v30.md` | `references/params_mass_combat.md` | Mass combat unit table sourced here |
+| `designs/combat/combat_v30.md` | `designs/mass_combat/mass_battle_v30.md` | Unit stats, reach rules, weapon table shared |
+| `designs/mass_combat/mass_battle_v30.md` | `references/params_mass_combat.md` | Extracted values |
+| `designs/mass_combat/mass_battle_v30.md` | `designs/board_game/board_game_v30.md` §B.3/B.5 | BG battle resolution references mass battle |
+| `designs/mass_combat/mass_battle_v30.md` | `compilation/v0.14/stage11_scale_transitions.md` | Phase structure referenced in scale transitions |
+| `designs/mass_combat/mass_battle_v30.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | Phase timing drives state transfer rules |
 | `references/params_combat.md` | `skills/valoria-combat-simulator/SKILL.md` | Sim loads params |
 | `references/params_mass_combat.md` | `skills/valoria-simulator/SKILL.md` (Mode G1) | Sim loads params |
 
@@ -133,17 +134,17 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
-| `designs/contest/social_contest_system_v2.md` | `references/params_contest.md` | Extracted values |
-| `designs/contest/social_contest_system_v2.md` | `compilation/v0.14/stage9_social_deprecated.md` | Stale — needs rewrite |
+| `designs/contest/social_contest_v30.md` | `references/params_contest.md` | Extracted values |
+| `designs/contest/social_contest_v30.md` | `compilation/v0.14/stage9_social_deprecated.md` | Stale — needs rewrite |
 | `references/params_contest.md` | `skills/valoria-simulator/SKILL.md` (Mode G2) | Sim loads params |
 
 ### BOARD GAME
 
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
-| `designs/board_game/valoria_bg_v05_simulation_and_patches.md` | `references/params_board_game.md` | Extracted values |
-| `designs/board_game/valoria_bg_v05_simulation_and_patches.md` | `references/params_factions.md` (BG column) | BG faction mechanics |
-| `designs/board_game/valoria_bg_v05_simulation_and_patches.md` | `compilation/v0.14/stage_bg_board_game_mode_deprecated.md` | Stale — needs sync (ED-001 blocker) |
+| `designs/board_game/board_game_v30.md` | `references/params_board_game.md` | Extracted values |
+| `designs/board_game/board_game_v30.md` | `references/params_factions.md` (BG column) | BG faction mechanics |
+| `designs/board_game/board_game_v30.md` | `compilation/v0.14/stage_bg_board_game_mode_deprecated.md` | Stale — needs sync (ED-001 blocker) |
 | `references/params_board_game.md` | `skills/valoria-simulator/SKILL.md` (Mode G5) | Sim loads params |
 
 ### FACTIONS
@@ -158,8 +159,8 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
-| `designs/contest/social_contest_system_v2.md` | `references/params_contest.md` | Values extracted; patches must sync |
-| `designs/contest/social_contest_system_v2.md` | `compilation/v0.14/stage9_social_deprecated.md` | STALE — stage9 is empty; compile when stable |
+| `designs/contest/social_contest_v30.md` | `references/params_contest.md` | Values extracted; patches must sync |
+| `designs/contest/social_contest_v30.md` | `compilation/v0.14/stage9_social_deprecated.md` | STALE — stage9 is empty; compile when stable |
 | `references/params_contest.md` | `skills/valoria-simulator/SKILL.md` (Mode G2) | Sim loads params |
 | `tests/sim_d_01_debate_stress_test.md` | `tests/coverage_matrix.md` | Findings logged |
 | `tests/sim_d_02_debate_scenario_c.md` | `tests/coverage_matrix.md` | Findings logged |
@@ -169,11 +170,11 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | `tests/sim_d_03_subsystem_k.md` | `tests/coverage_matrix.md` | G2+K findings logged |
 | `tests/sim_d_03_subsystem_k.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | K2-F-02: debate Zoom In gap |
 | `tests/sim_d_04_gap_fill_stress.md` | `tests/coverage_matrix.md` | Gap-fill verification logged |
-| `designs/contest/social_contest_system_v2.md` | `references/params_contest.md` | v1.6 — params_debate needs §§6.11-6.15 values extracted |
+| `designs/contest/social_contest_v30.md` | `references/params_contest.md` | v1.6 — params_debate needs §§6.11-6.15 values extracted |
 | `tests/audit_d02_sim_d05.md` | `tests/coverage_matrix.md` | Audit + stress test findings logged |
 | `tests/audit_d02_sim_d05.md` | `canon/editorial_ledger.yaml` | ED-087-091 harvested |
-| `gm_ref/debate_ref_card_v1.md` | `designs/contest/social_contest_system_v2.md` | Reference card must track v1.x |
-| `compilation/v0.14/stage13_npcs_deprecated.md` | `designs/contest/social_contest_system_v2.md` | NPC Composure/attributes feed debate sim |
+| `gm_ref/debate_ref_card_v1.md` | `designs/contest/social_contest_v30.md` | Reference card must track v1.x |
+| `compilation/v0.14/stage13_npcs_deprecated.md` | `designs/contest/social_contest_v30.md` | NPC Composure/attributes feed debate sim |
 
 ### SCALE TRANSITIONS / HYBRID
 
@@ -182,20 +183,20 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | `compilation/v0.14/stage11_scale_transitions.md` | `references/params_scale_transitions.md` | Extracted values |
 | `compilation/v0.14/stage11_scale_transitions.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | Phase structure drives transfer rules |
 | `skills/valoria-orchestrator/references/state_transfer_spec.md` | `skills/valoria-simulator/SKILL.md` (Mode K2) | Transition tests load spec |
-| `designs/hybrid/hybrid_gaps_resolved.md` | `compilation/v0.14/stage11_scale_transitions.md` | Pending integration |
-| `designs/hybrid/hybrid_gaps_resolved.md` | `designs/board_game/valoria_bg_v05_simulation_and_patches.md` §B.5 | Pending integration |
+| `designs/hybrid/hybrid_gaps_v30.md` | `compilation/v0.14/stage11_scale_transitions.md` | Pending integration |
+| `designs/hybrid/hybrid_gaps_v30.md` | `designs/board_game/board_game_v30.md` §B.5 | Pending integration |
 
 ### GM REFERENCE / FLOWCHARTS
 
-| `designs/gm_ref_cp14/zoom_in_out_reference_card_deprecated.md` (NEW) | `skills/valoria-orchestrator/references/state_transfer_spec.md` | Summarises spec §1 for table use |
-| `designs/gm_ref_cp14/zoom_in_out_reference_card_deprecated.md` (NEW) | `designs/mass_combat/mass_battle_v3.md` §B.2/B.5 | Pulls unit conversion table |
-| `designs/mass_combat/mass_battle_v3.md` | `designs/gm_ref_cp14/zoom_in_out_reference_card_deprecated.md` | B.5 references this card |
+| `deprecated/designs/gm_ref_cp14/zoom_in_out_reference_card_deprecated.md` (NEW) | `skills/valoria-orchestrator/references/state_transfer_spec.md` | Summarises spec §1 for table use |
+| `deprecated/designs/gm_ref_cp14/zoom_in_out_reference_card_deprecated.md` (NEW) | `designs/mass_combat/mass_battle_v30.md` §B.2/B.5 | Pulls unit conversion table |
+| `designs/mass_combat/mass_battle_v30.md` | `deprecated/designs/gm_ref_cp14/zoom_in_out_reference_card_deprecated.md` | B.5 references this card |
 
 | `tests/sim_hyb_01_templar_crossing.md` (NEW) | `tests/coverage_matrix.md` | Simulation run — log row added |
 | `tests/sim_hyb_01_templar_crossing.md` (NEW) | `canon/patch_register.yaml` | PP-101 sourced from this sim |
 | `tests/sim_hyb_01_templar_crossing.md` (NEW) | `canon/editorial_ledger.yaml` | ED-054 flagged from this sim |
-| `designs/mass_combat/mass_battle_v3.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | B.5 BG→TTRPG conversion now cross-refs B.2 |
-| `designs/mass_combat/mass_battle_v3.md` | `references/params_mass_combat.md` | PP-101 applied; params_mass_combat notes open gaps PARAMS-GAP-04/05 |
+| `designs/mass_combat/mass_battle_v30.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | B.5 BG→TTRPG conversion now cross-refs B.2 |
+| `designs/mass_combat/mass_battle_v30.md` | `references/params_mass_combat.md` | PP-101 applied; params_mass_combat notes open gaps PARAMS-GAP-04/05 |
 
 
 | Changed File | Propagates To | Reason |
@@ -221,7 +222,7 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
-| `references/params_board_game.md` | `designs/board_game/valoria_bg_v05_simulation_and_patches.md` | PP-115-122 gap fills |
+| `references/params_board_game.md` | `designs/board_game/board_game_v30.md` | PP-115-122 gap fills |
 | `references/params_board_game.md` | `canon/editorial_ledger.yaml` | ED-053-058 added |
 | `references/params_board_game.md` | `canon/patch_register.yaml` | PP-112-122 added |
 | `canon/editorial_ledger.yaml` | `session_log_current.md` | New editorial decisions pending |
@@ -243,7 +244,7 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 ## tests/sim_bg_01.md
 - system: BG
 - type: TEST
-- depends_on: [references/params_board_game.md, designs/board_game/valoria_bg_v05_simulation_and_patches.md, references/params_factions.md]
+- depends_on: [references/params_board_game.md, designs/board_game/board_game_v30.md, references/params_factions.md]
 - referenced_by: [tests/coverage_matrix.md, canon/editorial_ledger.yaml]
 
 ## tests/sim_bg_balance_01.md
@@ -266,22 +267,22 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 - referenced_by: [tests/coverage_matrix.md, canon/editorial_ledger.yaml, canon/patch_register.yaml]
 
 ### PP-172 — Ranged Subtypes (2026-04-02)
-Source: designs/combat/combat_design_v1.md §5, §6
+Source: designs/combat/combat_v30.md §5, §6
 Propagation targets:
 - references/params_combat.md → DONE (this commit)
-- designs/mass_combat/mass_battle_v3.md → DONE (PP-173, this commit)
+- designs/mass_combat/mass_battle_v30.md → DONE (PP-173, this commit)
 - references/params_mass_combat.md → DONE (PP-173, this commit)
 - designs/board_game/ → NOT REQUIRED (BG abstracts above weapon-type level — confirmed SIM-003)
 
 ### PP-173 — Mass Combat Ranged DR (2026-04-02)
-Source: designs/mass_combat/mass_battle_v3.md §A.4 (DR table)
+Source: designs/mass_combat/mass_battle_v30.md §A.4 (DR table)
 Propagation targets:
 - references/params_mass_combat.md → DONE (this commit)
 - designs/board_game/ → NOT REQUIRED (BG abstracts above weapon type)
 - references/propagation_map.md: PP-172 entry updated: mass_battle → DONE
 
 ### PP-175 — Mass Combat Ranged DR Scaling (2026-04-02)
-Source: designs/mass_combat/mass_battle_v3.md §A.4 (Ranged DR table)
+Source: designs/mass_combat/mass_battle_v30.md §A.4 (Ranged DR table)
 Finding: SIM-005-F1
 Propagation targets:
 - references/params_mass_combat.md → DONE (this commit)
@@ -289,14 +290,14 @@ Propagation targets:
 
 ### ED-098 — Cover declaration ruling (2026-04-02)
 Pending propagation:
-- designs/combat/combat_design_v1.md §5 Environmental Factors → add: "Cover must be declared in Phase 1. Game Master determines physical availability. No declaration = no DR benefit that round."
+- designs/combat/combat_v30.md §5 Environmental Factors → add: "Cover must be declared in Phase 1. Game Master determines physical availability. No declaration = no DR benefit that round."
 
 ### PP-188 — Ranged Redesign (2026-04-02)
-Source: designs/combat/combat_design_v1.md §5 (weapon table, reach rules, armour DR)
+Source: designs/combat/combat_v30.md §5 (weapon table, reach rules, armour DR)
 Resolved: ED-061
 Propagation targets:
 - references/params_combat.md → DONE (this commit)
-- designs/mass_combat/mass_battle_v3.md → DONE (this commit)
+- designs/mass_combat/mass_battle_v30.md → DONE (this commit)
 - references/params_mass_combat.md → DONE (this commit)
 - session_log_current.md → DONE (this commit)
 
@@ -323,7 +324,7 @@ Propagation targets:
 - references/glossary.md → DONE (this commit — new terms: Size, Power, Discipline, Command, H, Total Health)
 - tests/coverage_matrix.md → DONE (SIM-DEBT-03 added)
 - session_log_current.md → DONE (this commit)
-- designs/mass_combat/mass_battle_v3.md → STALE — unit formula in design doc predates PP-233. Needs rewrite on next design pass. [PROP-STALE: mass_battle_v3.md §B.1 unit stats]
+- designs/mass_combat/mass_battle_v30.md → STALE — unit formula in design doc predates PP-233. Needs rewrite on next design pass. [PROP-STALE: mass_battle_v3.md §B.1 unit stats]
 - compilation/v0.14/stage8_combat.md → STALE — mass combat compilation predates PP-232/233. [PROP-STALE: stage8_combat.md]
 
 ## Propagation Pass — 2026-04-03 (ED batch from review session)
@@ -345,22 +346,22 @@ Propagation targets:
 - Files NOT yet propagated: params_debate_history.md (historical, keep as-is), test outputs (flagged stale).
 | references/sim_decision_protocols.md | sim_decision_protocols | skills/valoria-simulator/SKILL.md, tests/coverage_matrix.md | Protocol changes propagate to simulator skill and any test using actor protocol assignments |
 | references/sim_decision_protocols.md | sim_decision_protocols | skills/valoria-simulator/SKILL.md, tests/coverage_matrix.md | Protocol library; changes propagate to all simulation test files using actor assignments |
-| designs/combat/combat_design_v1.md (Feint §PP-291/293/294) | feint-partial-commit | references/params_combat.md | Feint versus roll + pool reduction; params must reflect current formula |
-| designs/combat/combat_design_v1.md (Rescue §PP-290/292/295) | rescue-contested | references/params_combat.md, references/sim_decision_protocols.md | Rescue eligibility, contest, Momentum wound trigger |
-| references/params_board_game.md (PP-296) | mandate-suppression | designs/board_game/valoria_bg_v05_simulation_and_patches.md | Mandate Ob cap 4 + coalition bonus; must propagate to BG design doc on next compile |
-| designs/contest/social_contest_system_v2.md | contest-movement | references/params_contest.md | ED-295/296 open — CLASH/REINFORCE formula fixes pending; do not compile until resolved |
-| references/params_combat.md (ED-200/201/202/203 rulings) | combat-rulings-2026-04-04 | designs/combat/combat_design_v1.md | Wound cap, carry-over, recovery, pool floor — resolved by design doc silence. Propagate to compilation on next pass. |
-| references/params_contest.md (PP-401 REINFORCE floor) | reinforce-floor | designs/contest/social_contest_system_v2.md | REINFORCE max(0,...) floor. Propagate to design doc on next compilation. |
+| designs/combat/combat_v30.md (Feint §PP-291/293/294) | feint-partial-commit | references/params_combat.md | Feint versus roll + pool reduction; params must reflect current formula |
+| designs/combat/combat_v30.md (Rescue §PP-290/292/295) | rescue-contested | references/params_combat.md, references/sim_decision_protocols.md | Rescue eligibility, contest, Momentum wound trigger |
+| references/params_board_game.md (PP-296) | mandate-suppression | designs/board_game/board_game_v30.md | Mandate Ob cap 4 + coalition bonus; must propagate to BG design doc on next compile |
+| designs/contest/social_contest_v30.md | contest-movement | references/params_contest.md | ED-295/296 open — CLASH/REINFORCE formula fixes pending; do not compile until resolved |
+| references/params_combat.md (ED-200/201/202/203 rulings) | combat-rulings-2026-04-04 | designs/combat/combat_v30.md | Wound cap, carry-over, recovery, pool floor — resolved by design doc silence. Propagate to compilation on next pass. |
+| references/params_contest.md (PP-401 REINFORCE floor) | reinforce-floor | designs/contest/social_contest_v30.md | REINFORCE max(0,...) floor. Propagate to design doc on next compilation. |
 
 ## ED-300 Propagation (2026-04-05)
 | Source | Dependency key | Targets | Notes |
 |--------|---------------|---------|-------|
-| canon/editorial_ledger.yaml (ED-300) | domain-echo-scene-availability | designs/board_game/valoria_bg_v05_simulation_and_patches.md, references/params_board_game.md | Domain Echo reframe: availability declaration + escalation clock + primary/secondary yield. All-modes applicability. Propagate to BG design doc when ED-300 resolved. |
+| canon/editorial_ledger.yaml (ED-300) | domain-echo-scene-availability | designs/board_game/board_game_v30.md, references/params_board_game.md | Domain Echo reframe: availability declaration + escalation clock + primary/secondary yield. All-modes applicability. Propagate to BG design doc when ED-300 resolved. |
 
 ## ED-301 Propagation (2026-04-05)
 | Source | Dependency key | Targets | Notes |
 |--------|---------------|---------|-------|
-| canon/editorial_ledger.yaml (ED-301) | ts-coherence-orthogonal | designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md, references/params_core.md | TS and Coherence are orthogonal axes. Coherence loss = expansion beyond human rendering frame, not degradation. Knots = relational bindings. Coherence 0 = rendering frame incompatibility, not incapacitation. Propagate to threadwork design doc and params when resolved. |
+| canon/editorial_ledger.yaml (ED-301) | ts-coherence-orthogonal | designs/ttrpg/threadwork_v30.md, references/params_threadwork.md, references/params_core.md | TS and Coherence are orthogonal axes. Coherence loss = expansion beyond human rendering frame, not degradation. Knots = relational bindings. Coherence 0 = rendering frame incompatibility, not incapacitation. Propagate to threadwork design doc and params when resolved. |
 
 
 ---
@@ -369,10 +370,10 @@ Propagation targets:
 
 | Source | Target | Relationship |
 |--------|--------|-------------|
-| designs/setting/calamity_radiation.md | designs/ttrpg/threadwork_redesign_v25.md §5.3 | Geographic graduation of RS thresholds — DONE 2026-04-06 |
-| designs/setting/calamity_radiation.md | designs/ttrpg/threadwork_redesign_v25.md §6 | Gap-severity classification cross-ref — DONE 2026-04-06 |
-| designs/setting/calamity_radiation.md | designs/setting/geography_design.md | Supersedes Calamity Bleed Gradient section — DONE |
-| designs/setting/geography_design.md | designs/setting/calamity_radiation.md | Node distance map derived from territory adjacency — DONE |
+| designs/setting/calamity_radiation_v30.md | designs/ttrpg/threadwork_v30.md §5.3 | Geographic graduation of RS thresholds — DONE 2026-04-06 |
+| designs/setting/calamity_radiation_v30.md | designs/ttrpg/threadwork_v30.md §6 | Gap-severity classification cross-ref — DONE 2026-04-06 |
+| designs/setting/calamity_radiation_v30.md | designs/setting/geography_v30.md | Supersedes Calamity Bleed Gradient section — DONE |
+| designs/setting/geography_v30.md | designs/setting/calamity_radiation_v30.md | Node distance map derived from territory adjacency — DONE |
 
 ## PP-478 — RM Founding Mechanic Propagation
 | Source | Depends On | Change Required |
@@ -394,7 +395,7 @@ Propagation targets:
 - params_factions.md: RM TTRPG Founding Gate ✓
 - params_threadwork.md: Inert Knowledge, Dissonant rates ✓
 - canonical_sources.yaml: social_debate→v2, clocks→registry ✓
-- designs/systems/clock_registry.md: created ✓
+- designs/systems/clock_registry_v30.md: created ✓
 - designs/npcs/npc_roster.md: created ✓
 - worldbuilding_integration_v3.md: old territory names fixed ✓
 - valoria_bg_v04.md: SUPERSEDED — not updated (stale Hardar ref acceptable in deprecated file)
@@ -432,13 +433,13 @@ Propagation targets:
 ### designs/npcs/npc_roster_caste_annotations.md
 - -> designs/npcs/npc_roster.md (companion document — all 13 NPCs annotated)
 - -> canon/03_canonical_timeline.md (caste system definition)
-- -> designs/setting/geography_design.md (TS gradient by territory)
+- -> designs/setting/geography_v30.md (TS gradient by territory)
 
 ### Stale Propagation Note
 - references/params_board_game.md does NOT yet contain the Crown Succession Contest, Stake Claim DA, or Consecration Crisis mechanics. Integration needed next session.
 - references/params_threadwork.md updated (Lenneth TS 72 -> 8) but does NOT yet contain Cultural Revival Track or Lenneth breakthrough condition. These are in the design doc only.
 
-## NPC Behavior System (designs/systems/npc_behavior_system_v1.md) — added 2026-04-13
+## NPC Behavior System (designs/systems/npc_behavior_v30.md) — added 2026-04-13
 
 | This file references | Direction | What |
 |---|---|---|
@@ -467,24 +468,24 @@ Propagation targets:
 | ARC-S47 | ARC-T16 | Simultaneous in same RM-presence/missionary territories: cultural contest primary |
 | ARC-P09 | ARC-S52 | Crown fiscal distress weakens Charter offer; shifts Feldhaus alignment calculation |
 
-## FIELDWORK (designs/fieldwork/fieldwork_design_v1.md + subsystem files) — added 2026-04-13
+## FIELDWORK (designs/fieldwork/fieldwork_v30.md + subsystem files) — added 2026-04-13
 
 | Changed File | Propagates To | Reason | Status |
 |-------------|--------------|--------|--------|
-| `designs/fieldwork/fieldwork_design_v1.md` | `references/canonical_sources.yaml` | Fieldwork system entry | DONE (PP-575) |
-| `designs/fieldwork/fieldwork_design_v1.md` | `references/params_fieldwork.md` | Mechanical values extraction | DONE (PP-583) |
-| `designs/fieldwork/fieldwork_design_v1.md` | `designs/systems/clock_registry.md` | Exposure, Evidence Track, Disposition, Cover tracks | DONE (PP-575) |
-| `designs/fieldwork/fieldwork_design_v1.md` | `references/params_board_game.md` | Survey action in Standard Action Ob table (§8.1) | DONE (this commit) |
-| `designs/fieldwork/fieldwork_design_v1.md` | `references/params_core.md` | Attribute fieldwork roles table (§2.1) | DONE (this commit) |
-| `designs/fieldwork/fieldwork_design_v1.md` | `designs/hybrid/scale_transitions_design_v1.md` | 9th handoff rule: Fieldwork ↔ all systems (§2.3, §9) | DONE (this commit) |
-| `designs/fieldwork/fieldwork_design_v1.md` | `tests/coverage_matrix.md` | SIM-DEBT-FW-01 through FW-10 (all RESOLVED) | DONE (this commit) |
-| `designs/fieldwork/fieldwork_design_v1.md` | `designs/ttrpg/threadwork_redesign_v25.md` | Thread-Read as perceptive Leap (§4.5); co-movement protocol; per-op cap ruling (TW-05) | PENDING — threadwork params notes open per ED-NEW-15 |
-| `designs/fieldwork/fieldwork_design_v1.md` | `designs/contest/social_contest_system_v2.md` | Contest Escalation boundary (§5.7); Combined Findings (+1D per Finding in Contest, max +2D) (§2.3 / F-TRANS-11) | PENDING |
-| `designs/fieldwork/fieldwork_design_v1.md` | `designs/combat/combat_design_v1.md` | Fieldwork → Combat handoff: Exposure → ambusher advantage (§2.3 / F-TRANS-01); Combat Exposure codified (quiet +1, conspicuous +2, public +3) (F-TRANS-09) | PENDING |
-| `designs/fieldwork/fieldwork_design_v1.md` | `designs/setting/geography_design.md` | POI catalog per territory (ED-NEW-01); conditional POI gates by RS band | PENDING (blocked: ED-NEW-01 P2) |
-| `designs/fieldwork/fieldwork_design_v1.md` | `designs/setting/calamity_radiation.md` | Proximity Rating governs Survey Ob (§8.1); Calamity zone Exposure thresholds | PENDING |
-| `designs/fieldwork/fieldwork_design_v1.md` | `designs/mass_combat/mass_battle_v3.md` | Mass battle suspends fieldwork (§2.3 / F-TRANS-06); Post-battle investigation = 1 fieldwork scene (F-TRANS-12) | PENDING |
-| `designs/fieldwork/fieldwork_design_v1.md` | `references/params_threadwork.md` | POP Coherence −1 additional subject to per-op cap (TW-05 / ED-NEW-15) — currently ambiguous in params | PENDING (ED-NEW-15 P2) |
+| `designs/fieldwork/fieldwork_v30.md` | `references/canonical_sources.yaml` | Fieldwork system entry | DONE (PP-575) |
+| `designs/fieldwork/fieldwork_v30.md` | `references/params_fieldwork.md` | Mechanical values extraction | DONE (PP-583) |
+| `designs/fieldwork/fieldwork_v30.md` | `designs/systems/clock_registry_v30.md` | Exposure, Evidence Track, Disposition, Cover tracks | DONE (PP-575) |
+| `designs/fieldwork/fieldwork_v30.md` | `references/params_board_game.md` | Survey action in Standard Action Ob table (§8.1) | DONE (this commit) |
+| `designs/fieldwork/fieldwork_v30.md` | `references/params_core.md` | Attribute fieldwork roles table (§2.1) | DONE (this commit) |
+| `designs/fieldwork/fieldwork_v30.md` | `designs/hybrid/scale_transitions_v30.md` | 9th handoff rule: Fieldwork ↔ all systems (§2.3, §9) | DONE (this commit) |
+| `designs/fieldwork/fieldwork_v30.md` | `tests/coverage_matrix.md` | SIM-DEBT-FW-01 through FW-10 (all RESOLVED) | DONE (this commit) |
+| `designs/fieldwork/fieldwork_v30.md` | `designs/ttrpg/threadwork_v30.md` | Thread-Read as perceptive Leap (§4.5); co-movement protocol; per-op cap ruling (TW-05) | PENDING — threadwork params notes open per ED-NEW-15 |
+| `designs/fieldwork/fieldwork_v30.md` | `designs/contest/social_contest_v30.md` | Contest Escalation boundary (§5.7); Combined Findings (+1D per Finding in Contest, max +2D) (§2.3 / F-TRANS-11) | PENDING |
+| `designs/fieldwork/fieldwork_v30.md` | `designs/combat/combat_v30.md` | Fieldwork → Combat handoff: Exposure → ambusher advantage (§2.3 / F-TRANS-01); Combat Exposure codified (quiet +1, conspicuous +2, public +3) (F-TRANS-09) | PENDING |
+| `designs/fieldwork/fieldwork_v30.md` | `designs/setting/geography_v30.md` | POI catalog per territory (ED-NEW-01); conditional POI gates by RS band | PENDING (blocked: ED-NEW-01 P2) |
+| `designs/fieldwork/fieldwork_v30.md` | `designs/setting/calamity_radiation_v30.md` | Proximity Rating governs Survey Ob (§8.1); Calamity zone Exposure thresholds | PENDING |
+| `designs/fieldwork/fieldwork_v30.md` | `designs/mass_combat/mass_battle_v30.md` | Mass battle suspends fieldwork (§2.3 / F-TRANS-06); Post-battle investigation = 1 fieldwork scene (F-TRANS-12) | PENDING |
+| `designs/fieldwork/fieldwork_v30.md` | `references/params_threadwork.md` | POP Coherence −1 additional subject to per-op cap (TW-05 / ED-NEW-15) — currently ambiguous in params | PENDING (ED-NEW-15 P2) |
 | `references/params_fieldwork.md` | `skills/valoria-simulator/SKILL.md` | Sim loads params (Mode G-FW — to be created) | PENDING |
 | `designs/fieldwork/fieldwork_godot.md` | `jordanelias/valoria-game` repo | §10 Validation Findings G10-F01 through G10-F07 — implementation gaps logged | REFERENCE ONLY |
 
@@ -492,22 +493,22 @@ Propagation targets:
 
 | File | Reads From | Notes |
 |------|-----------|-------|
-| `designs/fieldwork/fieldwork_exploration.md` | `designs/fieldwork/fieldwork_design_v1.md` §1, §2 | POI depth axis; pool construction |
-| `designs/fieldwork/fieldwork_investigation.md` | `designs/ttrpg/threadwork_redesign_v25.md` §3.2 | Thread-Read co-movement table |
-| `designs/fieldwork/fieldwork_investigation.md` | `designs/contest/social_contest_system_v2.md` | Contested Investigation escalation |
-| `designs/fieldwork/fieldwork_socializing.md` | `designs/contest/social_contest_system_v2.md` | Contest escalation boundary (§5.7) |
-| `designs/fieldwork/fieldwork_socializing.md` | `designs/ttrpg/threadwork_redesign_v25.md` | Threadcut being social fieldwork (§2.8) |
-| `designs/fieldwork/fieldwork_exposure.md` | `designs/systems/clock_registry.md` | Cover, Exposure Track, Church Attention Pool |
-| `designs/fieldwork/fieldwork_bg.md` | `references/params_board_game.md` | Survey Ob table; existing BG action Obs |
-| `designs/fieldwork/fieldwork_hybrid.md` | `designs/hybrid/scale_transitions_design_v1.md` | Fieldwork Offset procedure; §3.9 handoff rule |
+| `designs/fieldwork/fieldwork_exploration.md` | `designs/fieldwork/fieldwork_v30.md` §1, §2 | POI depth axis; pool construction |
+| `designs/fieldwork/fieldwork_investigation.md` | `designs/ttrpg/threadwork_v30.md` §3.2 | Thread-Read co-movement table |
+| `designs/fieldwork/fieldwork_investigation.md` | `designs/contest/social_contest_v30.md` | Contested Investigation escalation |
+| `designs/fieldwork/fieldwork_socializing.md` | `designs/contest/social_contest_v30.md` | Contest escalation boundary (§5.7) |
+| `designs/fieldwork/fieldwork_socializing.md` | `designs/ttrpg/threadwork_v30.md` | Threadcut being social fieldwork (§2.8) |
+| `designs/fieldwork/fieldwork_exposure.md` | `designs/systems/clock_registry_v30.md` | Cover, Exposure Track, Church Attention Pool |
+| `designs/fieldwork/fieldwork_bg_v30.md` | `references/params_board_game.md` | Survey Ob table; existing BG action Obs |
+| `designs/fieldwork/fieldwork_hybrid_v30.md` | `designs/hybrid/scale_transitions_v30.md` | Fieldwork Offset procedure; §3.9 handoff rule |
 | `designs/fieldwork/fieldwork_godot.md` | `jordanelias/valoria-game` | Validated 2026-04-13; G10-F01–F07 |
 
 ## Comparative Audit Patches — 2026-04-13 (PP-630–634)
 
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
-| `designs/combat/combat_design_v1.md` | `designs/fieldwork/fieldwork_investigation.md` | §11.5 fieldwork handoff cross-reference (F-TRANS-01/09) added |
-| `designs/contest/social_contest_system_v2.md` | `designs/fieldwork/fieldwork_investigation.md` | §9.1 Combined Findings citation cross-reference added |
-| `designs/ttrpg/threadwork_redesign_v25.md` | `designs/fieldwork/fieldwork_investigation.md` | §2.3 Thread-Read-as-fieldwork cross-reference added |
-| `references/params_core.md` | `designs/combat/combat_design_v1.md`, `designs/contest/social_contest_system_v2.md`, `designs/fieldwork/fieldwork_design_v1.md` | Pool floor 1D named rule — all pool-using systems now have canonical anchor |
-| `canon/editorial_ledger.yaml` | `designs/systems/npc_behavior_system_v1.md` | ED-510 (NPC Recruitment PROVISIONAL), ED-511 (Hooks), ED-512 (surrender), ED-513 (fail-forward), ED-514 (social initiative) |
+| `designs/combat/combat_v30.md` | `designs/fieldwork/fieldwork_investigation.md` | §11.5 fieldwork handoff cross-reference (F-TRANS-01/09) added |
+| `designs/contest/social_contest_v30.md` | `designs/fieldwork/fieldwork_investigation.md` | §9.1 Combined Findings citation cross-reference added |
+| `designs/ttrpg/threadwork_v30.md` | `designs/fieldwork/fieldwork_investigation.md` | §2.3 Thread-Read-as-fieldwork cross-reference added |
+| `references/params_core.md` | `designs/combat/combat_v30.md`, `designs/contest/social_contest_v30.md`, `designs/fieldwork/fieldwork_v30.md` | Pool floor 1D named rule — all pool-using systems now have canonical anchor |
+| `canon/editorial_ledger.yaml` | `designs/systems/npc_behavior_v30.md` | ED-510 (NPC Recruitment PROVISIONAL), ED-511 (Hooks), ED-512 (surrender), ED-513 (fail-forward), ED-514 (social initiative) |
