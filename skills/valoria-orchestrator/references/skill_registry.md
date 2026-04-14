@@ -9,7 +9,7 @@
 
 ### valoria-orchestrator
 - Path: `skills/valoria-orchestrator/SKILL.md` (directory-based, canonical)
-- Also: `skills/valoria-orchestrator-SKILL.md` (flat stub — do not use)
+- Also: `skills/valoria-orchestrator/SKILL.md` (flat stub — do not use)
 - Model: Sonnet 4.6
 - Triggers: session start, resume, route, what's the plan, start work, orchestrate
 - References: `skills/valoria-orchestrator/references/` (commit_convention, session_protocol, skill_registry, model_routing_table, state_transfer_spec, github_pat)
