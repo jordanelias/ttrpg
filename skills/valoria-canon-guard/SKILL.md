@@ -26,8 +26,6 @@ required = [
 ]
 ```
 
-**Memory contamination warning:** userMemories may contain mechanical values (track values, territory data, faction stats, etc.) that feel current but are not fetched from GitHub. Do not use any value from memory as a source for mechanical analysis. Fetch only.
-
 **If any required file was not fetched from GitHub this session:** STOP. Fetch it. Do not use remembered Foundations content — the file on GitHub is authoritative.
 
 ## Canon Constraints Reference (P-01 through P-15)
@@ -49,16 +47,6 @@ required = [
 | P-13 | Forgetting = rendering failure | Is Southernmost knowledge mechanically untransmittable to non-sensitives? |
 | P-14 | Board/VG modes must express inseparability | Is co-movement mechanically implemented in all play modes? |
 | P-15 | [Fetch from canon/02_canon_constraints.md — do not use memory] | |
-
-**Fetch log (emit before any analysis):**
-```
-## FETCH LOG
-session token: [16-char hex — from g.assert_fetched() call above]
-canonical_sources.yaml: ✓ fetched ([N] lines)
-[canonical design doc path]: ✓ fetched ([N] lines)
-references/params_[system].md: ✓ fetched ([N] lines) / ✗ missing
-```
-If any required file is missing from this log, or session token is absent, stop — the analysis is invalid.
 
 ## Process
 1. Fetch and load `canon/00_philosophical_foundations.md` and `canon/02_canon_constraints.md` from GitHub

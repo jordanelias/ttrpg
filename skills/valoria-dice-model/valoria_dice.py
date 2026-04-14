@@ -1,43 +1,22 @@
-"""
-Valoria Dice Engine — canonical statistical model.
-Die faces (d10):
-  1        → -1 success
-  2 to TN-1 → 0 successes
-  TN to 9   → +1 success
-  10        → +2 successes (flat bonus, no extra die)
-
-Net successes = sum of all die contributions (can be negative).
-"""
-
 import random
-from typing import List, Dict, Tuple
-from collections import defaultdict
+from typing import List, Dict
 
 TRIALS = 200_000
 
-# ── Analytic per-die EV ──────────────────────────────────────────────────────
-
 def die_ev(tn: int) -> float:
-    """Expected net successes from one d10 at given TN."""
-    p_minus = 0.1          # result = 1
-    p_zero  = (tn - 2) / 10  # results 2 .. TN-1
-    p_plus1 = (10 - tn) / 10  # results TN .. 9  (0 when TN=10)
-    p_plus2 = 0.1          # result = 10
-    # clamp: when TN=6, p_plus1 = 4/10; when TN=10, p_plus1 = 0
-    p_plus1 = max(0, (9 - tn + 1) / 10)  # TN..9 inclusive
-    p_zero  = (tn - 2) / 10               # 2..TN-1 inclusive
-    return p_minus * -1 + p_zero * 0 + p_plus1 * 1 + p_plus2 * 2
+    p_minus = 0.1
+    p_plus1 = max(0, (9 - tn + 1) / 10)
+    p_zero  = (tn - 2) / 10
+    return p_minus * -1 + p_plus1 * 1 + 0.1 * 2
 
 def pool_ev(n: int, tn: int) -> float:
     return n * die_ev(tn)
 
-# ── Monte Carlo ──────────────────────────────────────────────────────────────
-
 def _roll_die(tn: int) -> int:
     r = random.randint(1, 10)
-    if r == 1:   return -1
-    if r == 10:  return 2
-    if r >= tn:  return 1
+    if r == 1:  return -1
+    if r == 10: return 2
+    if r >= tn: return 1
     return 0
 
 def _roll_pool(n: int, tn: int) -> int:
@@ -46,168 +25,86 @@ def _roll_pool(n: int, tn: int) -> int:
 def simulate_pool(n: int, tn: int, trials: int = TRIALS) -> List[int]:
     return [_roll_pool(n, tn) for _ in range(trials)]
 
-# ── Outcome probabilities ────────────────────────────────────────────────────
-
 def outcome_probs(n: int, tn: int, ob: int, trials: int = TRIALS) -> Dict[str, float]:
-    """
-    Returns P(overwhelming), P(success), P(partial), P(failure) for a pool/TN/Ob.
-    Ob10 special: overwhelming unavailable, partial requires net>=5.
-    """
     results = simulate_pool(n, tn, trials)
     overwhelming = success = partial = failure = 0
     for r in results:
         if ob == 10:
-            if r >= ob:      success += 1
-            elif r >= 5:     partial += 1
-            else:            failure += 1
+            if r >= ob:   success += 1
+            elif r >= 5:  partial += 1
+            else:         failure += 1
         else:
-            if r >= 2 * ob:  overwhelming += 1
-            elif r >= ob:    success += 1
-            elif r > 0:      partial += 1
-            else:            failure += 1
+            if r >= 2*ob: overwhelming += 1
+            elif r >= ob: success += 1
+            elif r > 0:   partial += 1
+            else:         failure += 1
     t = trials
     return {
-        "overwhelming": overwhelming / t,
-        "success":      success / t,
-        "partial":      partial / t,
-        "failure":      failure / t,
-        "p_hit":        (overwhelming + success + partial) / t,  # net > 0
-        "p_full":       (overwhelming + success) / t,            # net >= ob
+        "overwhelming": overwhelming/t, "success": success/t,
+        "partial": partial/t, "failure": failure/t,
+        "p_full": (overwhelming+success)/t,
     }
 
-# ── Opposing roll ────────────────────────────────────────────────────────────
-
-def opposing_roll(
-    atk_pool: int, atk_tn: int,
-    def_pool: int, def_tn: int,
-    trials: int = TRIALS
-) -> Dict[str, float]:
-    """
-    P(attacker net > defender net) — used for combat offence vs defence.
-    Returns: p_attacker_wins, p_defender_wins, p_tie, ev_margin.
-    """
-    atk_wins = def_wins = ties = 0
-    margin_sum = 0
+def opposing_roll(ap: int, atn: int, dp: int, dtn: int, trials: int = TRIALS) -> Dict[str, float]:
+    atk_wins = def_wins = ties = margin_sum = 0
     for _ in range(trials):
-        a = _roll_pool(atk_pool, atk_tn)
-        d = _roll_pool(def_pool, def_tn)
+        a = _roll_pool(ap, atn); d = _roll_pool(dp, dtn)
         margin_sum += (a - d)
         if a > d:   atk_wins += 1
         elif d > a: def_wins += 1
         else:       ties += 1
-    t = trials
     return {
-        "p_attacker_wins": atk_wins / t,
-        "p_defender_wins": def_wins / t,
-        "p_tie":           ties / t,
-        "ev_margin":       margin_sum / t,
+        "p_attacker_wins": atk_wins/trials, "p_defender_wins": def_wins/trials,
+        "p_tie": ties/trials, "ev_margin": margin_sum/trials,
     }
 
-# ── Pool split optimizer (combat) ────────────────────────────────────────────
-
-def optimal_split(
-    total_pool: int, atk_tn: int,
-    opp_pool: int,   def_tn_opp: int = 7,
-    def_tn_self: int = 7,
-    trials: int = 50_000
-) -> List[Dict]:
-    """
-    For each (offence, defence) split of total_pool, compute:
-      - P(land hit on opponent)
-      - P(avoid hit from opponent)
-    Returns list sorted by combined score.
-    """
+def optimal_split(total: int, atk_tn: int, opp: int, opp_tn: int = 7,
+                  def_tn: int = 7, trials: int = 50_000) -> List[Dict]:
     rows = []
-    for off in range(1, total_pool):  # min 1 each side
-        dfn = total_pool - off
-        hit = opposing_roll(off, atk_tn, opp_pool, def_tn_opp, trials)
-        avoid = opposing_roll(opp_pool, def_tn_opp, dfn, def_tn_self, trials)
-        rows.append({
-            "offence": off,
-            "defence": dfn,
-            "p_hit":   hit["p_attacker_wins"],
-            "p_avoid": avoid["p_defender_wins"],
-            "combined": hit["p_attacker_wins"] * avoid["p_defender_wins"],
-        })
-    rows.sort(key=lambda x: -x["combined"])
+    for off in range(1, total):
+        dfn = total - off
+        hit   = opposing_roll(off, atk_tn, opp, opp_tn, trials)
+        avoid = opposing_roll(opp, opp_tn, dfn, def_tn, trials)
+        rows.append({"offence": off, "defence": dfn,
+                     "p_hit": hit["p_attacker_wins"], "p_avoid": avoid["p_defender_wins"],
+                     "combined": hit["p_attacker_wins"] * avoid["p_defender_wins"]})
+    return sorted(rows, key=lambda x: -x["combined"])
+
+def fibonacci_marginal(base_pool: int, tn: int, ob: int,
+                       max_attackers: int = 8, trials: int = 100_000) -> List[Dict]:
+    """Expected Value gain from Fibonacci group bonus dice. Bonus: 2→+1, 3→+2, 5→+3, 8→+5."""
+    bonus_map = {1: 0, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 3, 8: 5}
+    rows = []
+    base = outcome_probs(base_pool, tn, ob, trials)
+    for n in range(1, max_attackers+1):
+        bonus = bonus_map.get(n, 5)
+        p = outcome_probs(base_pool + bonus, tn, ob, trials)
+        rows.append({"attackers": n, "bonus_dice": bonus,
+                     "p_full": p["p_full"], "delta_vs_solo": p["p_full"] - base["p_full"]})
     return rows
 
-# ── Standard table printers ──────────────────────────────────────────────────
-
-def print_success_table(pool_sizes, tn, ob_values, trials=TRIALS):
-    print(f"\n### TN {tn} — P(full success: net ≥ Ob)")
-    header = "| Pool |" + "".join(f" Ob{ob:2d} |" for ob in ob_values)
-    sep    = "|------|" + "-------|" * len(ob_values)
-    print(header)
-    print(sep)
-    for n in pool_sizes:
-        results = simulate_pool(n, tn, trials)
-        row = f"|  {n:3d} |"
-        for ob in ob_values:
-            p = sum(1 for r in results if r >= ob) / trials
-            row += f" {p:.3f} |"
-        print(row)
-
-def print_outcome_table(pool_sizes, tn, ob, trials=TRIALS):
-    print(f"\n### TN {tn} Ob {ob} — Outcome Distribution")
-    print("| Pool | Overwhelm | Success | Partial | Failure |")
-    print("|------|-----------|---------|---------|---------|")
-    for n in pool_sizes:
-        p = outcome_probs(n, tn, ob, trials)
-        print(f"|  {n:3d} |   {p['overwhelming']:.3f}   |  {p['success']:.3f}  |  {p['partial']:.3f}  |  {p['failure']:.3f}  |")
-
-def print_ev_table(pool_sizes, tns=(6, 7, 8)):
-    print("\n### Analytic EV per pool (net successes)")
-    header = "| Pool |" + "".join(f"  TN{t}  |" for t in tns)
-    print(header)
-    print("|------|" + "--------|" * len(tns))
-    for n in pool_sizes:
-        row = f"|  {n:3d} |"
-        for t in tns:
-            row += f"  {pool_ev(n, t):5.2f}  |"
-        print(row)
-
-# ── Quick-reference function (used by skills) ────────────────────────────────
+def momentum_value(tn: int, ob: int, pool: int, trials: int = TRIALS) -> Dict:
+    """Compare: spending 1 Momentum (auto-success) vs rolling 1 extra die."""
+    base   = outcome_probs(pool,   tn, ob, trials)
+    extra  = outcome_probs(pool+1, tn, ob, trials)
+    results = simulate_pool(pool, tn, trials)
+    mom_full = partial = 0
+    for r in results:
+        net = r + 1
+        if ob == 10:
+            if net >= ob:  mom_full += 1
+            elif net >= 5: partial += 1
+        else:
+            if net >= ob:  mom_full += 1
+    return {
+        "base_p_full":       base["p_full"],
+        "extra_die_p_full":  extra["p_full"],
+        "momentum_p_full":   mom_full / trials,
+        "momentum_vs_die":   (mom_full/trials) - extra["p_full"],
+    }
 
 def quick_check(n: int, tn: int, ob: int) -> str:
-    """One-line summary for inline use."""
-    p = outcome_probs(n, tn, ob)
-    ev = pool_ev(n, tn)
-    return (
-        f"Pool {n} TN{tn} Ob{ob}: "
-        f"Overwhelm {p['overwhelming']:.1%} | "
-        f"Success {p['success']:.1%} | "
-        f"Partial {p['partial']:.1%} | "
-        f"Fail {p['failure']:.1%} | "
-        f"EV {ev:.2f}"
-    )
-
-if __name__ == "__main__":
-    import sys
-    random.seed(42)
-    print("=== VALORIA DICE ENGINE — SELF-TEST ===\n")
-
-    print("Analytic EV per die:")
-    for tn in (6, 7, 8):
-        print(f"  TN{tn}: {die_ev(tn):.4f}")
-
-    print_ev_table(range(3, 12), (6, 7, 8))
-    print_success_table([3,4,5,6,7,8,10,12], 7, [1,2,3,4,5,8,10])
-    print_success_table([3,4,5,6,7,8,10,12], 6, [1,2,3,4,5])
-    print_success_table([3,4,5,6,7,8,10,12], 8, [1,2,3,4,5])
-    print_outcome_table([4,6,8,10], 7, 3)
-    print_outcome_table([4,6,8,10], 7, 5)
-
-    print("\n### Opposing rolls — 6-die pool vs 6-die pool at TN7")
-    r = opposing_roll(6, 7, 6, 7)
-    for k, v in r.items():
-        print(f"  {k}: {v:.3f}")
-
-    print("\n### Pool split — 10 dice total vs 6-die opponent at TN7")
-    splits = optimal_split(10, 7, 6, 7, 7, trials=30_000)
-    print("| Off | Def | P(hit) | P(avoid) | Combined |")
-    print("|-----|-----|--------|----------|----------|")
-    for row in splits[:5]:
-        print(f"|  {row['offence']:2d} |  {row['defence']:2d} | {row['p_hit']:.3f}  |  {row['p_avoid']:.3f}   |  {row['combined']:.3f}   |")
-
-    print(f"\nQuick check: {quick_check(6, 7, 3)}")
+    p = outcome_probs(n, tn, ob, 100_000)
+    return (f"Pool {n} TN{tn} Ob{ob}: "
+            f"Overwhelm {p['overwhelming']:.1%} | Success {p['success']:.1%} | "
+            f"Partial {p['partial']:.1%} | Fail {p['failure']:.1%} | Expected Value {pool_ev(n,tn):.2f}")

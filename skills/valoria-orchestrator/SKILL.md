@@ -62,6 +62,29 @@ print(f'Session token: {token}')
 
 **After bootstrap:** Hold fetched contents in working context. Do not re-fetch within the same session unless a write has occurred since last fetch.
 
+## Register Health (Auto-enforced by github_ops.py)
+
+`check_register_health()` runs automatically on first `read_files_graphql()` call each session.
+**Hard stop on violation — no manual override.**
+
+Thresholds (tokens = chars // 4):
+| File | Limit |
+|------|-------|
+| session_log_current.md | 2,000 |
+| canon/editorial_ledger.yaml (active) | 2,000 |
+| canon/editorial_ledger_summary.yaml | 1,000 |
+| references/file_index_summary.md | 1,000 |
+| references/canonical_sources.yaml | 5,000 |
+| canon/patch_register_active.yaml | 20,000 |
+| tests/coverage_matrix.md (active) | 5,000 |
+
+**On violation:** archive resolved/applied/struck content to `_archive` file before any other work.
+`append_to_register(path, new_entries, message)` enforces threshold before every register write.
+`atomic_commit()` enforces threshold on every file in the commit additions list.
+
+Archive size warning fires at 100,000 tokens — signals need for year-split.
+
+
 **Fetch log (emit before any analysis):**
 ```
 ## FETCH LOG

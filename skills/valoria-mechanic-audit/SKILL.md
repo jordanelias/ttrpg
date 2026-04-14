@@ -27,22 +27,6 @@ required = [
 ]
 ```
 
-**Memory contamination warning:** userMemories may contain mechanical values (track values, territory data, faction stats, etc.) that feel current but are not fetched from GitHub. Do not use any value from memory as a source for mechanical analysis. Fetch only.
-
-**If any required file was not fetched from GitHub this session:** STOP. Fetch it. Do not substitute memory or local file content.
-
-**Fetch log (emit before any analysis):**
-```
-## FETCH LOG
-session token: [16-char hex — from g.assert_fetched() call above]
-canonical_sources.yaml: ✓ fetched ([N] lines)
-[canonical design doc path]: ✓ fetched ([N] lines)
-references/params_[system].md: ✓ fetched ([N] lines) / ✗ missing
-```
-If any required file is missing from this log, or session token is absent, stop — the analysis is invalid.
-
-**Version check:** confirm `<!-- version: -->` tag in each fetched params file matches current ruleset version in `compilation/README.md`. If mismatch: flag `[STALE PARAMS: <file> is vX.XX, current is vY.YY]` and stop.
-
 **Never audit from memory or project-file versions of design docs. The canonical source is always on GitHub.**
 
 ## Audit Modes
@@ -134,14 +118,4 @@ For each: PRESENT / ALTERED (with justification check) / ABSENT
 - All findings assigned severity (P1/P2/P3)
 - P1 findings automatically appended to `canon/editorial_ledger.yaml`
 - No editorial judgment — mechanical analysis only
-**Pre-commit (run before every `atomic_commit()` call):**
-```bash
-python3 tools/freshness_gate.py --update
-python3 tools/broken_dependency_checker.py
-python3 tools/patch_propagation_checker.py
-```
-Exit 0 required on all three. On non-zero exit: fix the reported issue before committing.
-
-**Post-commit verification:** after `atomic_commit()` returns a SHA, re-fetch all files modified in that commit and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
-
 - All mechanical values cited with source file and section from GitHub fetch

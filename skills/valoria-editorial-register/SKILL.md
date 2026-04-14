@@ -33,22 +33,9 @@ for path, content in files.items():
         raise RuntimeError(f"GitHub fetch failed: {path} — cannot proceed")
 ```
 
-**Memory contamination warning:** userMemories may contain mechanical values (track values, territory data, faction stats, etc.) that feel current but are not fetched from GitHub. Do not use any value from memory as a source for mechanical analysis. Fetch only.
-
 **If any fetch fails:** STOP. Report the failure. Do not proceed using memory.
 
 **Additional reads:** Any workflow that touches a specific design file must fetch that file from GitHub before reading or modifying it. Never work from memory of a design file's contents.
-
-**Fetch log (emit before any analysis):**
-```
-## FETCH LOG
-session token: [16-char hex — from g.assert_fetched() call above]
-canonical_sources.yaml: ✓ fetched ([N] lines)
-[canonical design doc path]: ✓ fetched ([N] lines)
-references/params_[system].md: ✓ fetched ([N] lines) / ✗ missing
-```
-If any required file is missing from this log, or session token is absent, stop — the analysis is invalid.
-
 
 ## ED Number Collision Guard (MANDATORY — re-read before every ID assignment)
 
@@ -188,16 +175,6 @@ Identify items that should be merged because they represent the same underlying 
 3. Union all `propagation_targets`.
 4. Mark superseded items as `status: struck`, `stale_reason: "Consolidated into ED-NNN"`.
 
-**Known consolidation candidates (as of 2026-04-02):**
-
-| Consolidate | Into | Reason |
-|-------------|------|--------|
-| ED-011 (Concentration: Focus vs Poise) | ED-027 (Poise attribute / Focus mapping) | Same attribute identity question |
-| ED-018 (Commander bonus formula) | NEW: ST-INT-02 | Both ask about the same three-formula conflict |
-| ED-013 (Grand Debate role alternation) | Debate redesign Part 6, §6.9 untested items | Same question, now in compiled spec |
-| ED-008 (Niflhel formal Debate access) | Debate redesign Part 6, §6.9 editorial items | Same question, now in compiled spec |
-| ED-005, ED-021 (if similar) | Per session log consolidation note | Check before striking |
-| ED-009, ED-010 (if similar) | Per session log consolidation note | Check before striking |
 
 ### Step 3 — Stale Striking
 Mark items as `status: struck` with `stale_reason` when:
@@ -263,18 +240,6 @@ Consolidate ST-INT-02 commander bonus with ED-018.
 Consolidate P2-B11-02 Grand Debate role alternation with ED-013.
 
 ---
-
-**Pre-commit (run before every `atomic_commit()` call):**
-```bash
-python3 tools/freshness_gate.py --update
-python3 tools/broken_dependency_checker.py
-python3 tools/patch_propagation_checker.py
-```
-Exit 0 required on all three. On non-zero exit: fix the reported issue before committing.
-
-**Post-commit verification:** after `atomic_commit()` returns a SHA, re-fetch all files modified in that commit and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
-
-**Re-fetch after writes:** after any `atomic_commit()` call, re-fetch all modified files before referencing them again in the same session. The in-context version and the committed version may differ.
 
 ## Commit Convention
 

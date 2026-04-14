@@ -13,8 +13,6 @@ description: >
 
 ## Input Validation (MANDATORY)
 
-**Memory contamination warning:** userMemories may contain mechanical values (track values, territory data, faction stats, etc.) that feel current but are not fetched from GitHub. Do not use any value from memory as a source for mechanical analysis. Fetch only.
-
 The document to be chunked must be fetched from GitHub this session. Do not chunk a document from memory or a local copy.
 
 ```python
@@ -24,16 +22,6 @@ content = files['<path to document on GitHub>']
 if content is None:
     raise RuntimeError("Document not found on GitHub — cannot chunk")
 ```
-
-**Fetch log (emit before any analysis):**
-```
-## FETCH LOG
-session token: [16-char hex — from g.assert_fetched() call above]
-canonical_sources.yaml: ✓ fetched ([N] lines)
-[canonical design doc path]: ✓ fetched ([N] lines)
-references/params_[system].md: ✓ fetched ([N] lines) / ✗ missing
-```
-If any required file is missing from this log, or session token is absent, stop — the analysis is invalid.
 
 **Requires:** Document version label for file naming (read from `references/canonical_sources.yaml`).
 
