@@ -1470,3 +1470,48 @@ status: CLOSED
 - Patch register current: PP-642.
 - Both checkers: EXIT 0.
 ```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-13_SONNET_FINAL_PROPAGATION_CLOSE
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS THIS SESSION (full day summary)
+1. Fieldwork propagation: params_board_game Survey, params_core fieldwork roles,
+   scale_transitions §3.9, coverage_matrix SIM-DEBT-FW, propagation_map FIELDWORK
+2. Fieldwork §13 skeleton split: 856→224 lines master + 10 subsystem files
+3. Godot §10 validation: G10-F01–F07 logged (no design changes, implementation gaps only)
+4. Comparative mechanic audit: Fieldwork vs Combat/Contest/Threadwork (Modes B/C/D/E)
+5. 3-day conversation review: found ED-486–489/ED-456/~14 PROVISIONALs already resolved
+6. Cross-system integration patches PP-633–642:
+   - Pool floor 1D named rule (params_core)
+   - Combat §11.4 Yield/Disengage + §11.5 fieldwork cross-refs
+   - Contest §9.1 Findings citation + §5 initiative rationale + §4 Spent timing
+   - Threadwork §2.3 Thread-Read-as-fieldwork + §2.6 Opposing Ops (design doc gap)
+   - NPC Recruitment §9.5 (Hooks + Defection defined, ED-510/511 resolved)
+7. Editorial decisions (permission granted):
+   - Praetor stays as RM card (was already canonical)
+   - Witness: ARC-T23 institutional role (lineage holder, not Calamity survivor)
+   - Combat fail-forward: struck (attrition IS the narrative)
+   - Social initiative: deterministic by design (ED-138/ED-514 resolved)
+   - Surrender/disengage: Yield + Agility-contested Disengage (ED-512 resolved)
+8. Canon correction PP-640: Witness description — humans mortal, TS ≠ longevity,
+   self-spooling ontologically incoherent
+9. Final propagation: params_combat (surrender), params_contest (Findings citation),
+   propagation_map PP-641/642, coverage_matrix session close
+10. Both checkers EXIT 0. Freshness gate updated.
+
+## FINAL STATE
+- Open P1-BLOCKERs: 0
+- Open PROVISIONALs: 0
+- Patch register: PP-642 (current)
+- Broken deps: 0
+- Patch propagation: 392/392 (100%)
+- Remaining non-blocking: params_factions (Mandate −1 on NPC recruitment, P3),
+  fieldwork_socializing Hook acquisition cross-ref (P3)
+```
