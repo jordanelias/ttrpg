@@ -418,6 +418,22 @@ Upgrade to elite: 2 consecutive successful Govern orders in territory + Wealth �
 
 ---
 
+## 11.5 FIELDWORK TRANSITIONS
+
+Fieldwork scenes interact with combat at two defined handoff points (scale_transitions_design_v1.md §3.9):
+
+**Fieldwork → Combat (F-TRANS-01/09):**
+- Exposure accumulated during fieldwork converts to ambusher Initiative advantage when combat triggers from fieldwork discovery or surveillance failure.
+- Combat Exposure codified: quiet engagement +1, conspicuous +2, public +3 Exposure to the fieldwork-active character. Applied before the combat scene opens, not during it.
+- Reference: fieldwork_exploration.md §3.2, fieldwork_investigation.md §2.3.
+
+**Combat → Fieldwork (F-TRANS-12):**
+- Post-combat investigation of battle site = 1 fieldwork scene. The battle itself does not consume fieldwork time; only the post-combat investigation does.
+- Evidence of battle events (attacker identity, force composition, timing) follows standard Evidence Track rules.
+
+**Let It Ride in combat (clarification):**
+Standard attack actions are NOT subject to Let It Ride — re-attempting the same attack against the same opponent each round is the core mechanic (round structure handles iteration through pool depletion and Stamina). Let It Ride DOES apply to declared manoeuvres (Feint, Rescue, Disarm, Tie Up): each may only be declared once per round. PP-293 (Feint non-stacking) is the operative implementation. A failed manoeuvre cannot be re-declared in the same round; circumstances must change between rounds.
+
 ## 12. DESIGN NOTES AND OPEN ITEMS
 
 ### From sim_x_06 (confirmed working)

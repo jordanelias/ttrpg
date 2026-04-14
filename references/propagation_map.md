@@ -226,24 +226,6 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | `references/params_board_game.md` | `canon/patch_register.yaml` | PP-112-122 added |
 | `canon/editorial_ledger.yaml` | `session_log_current.md` | New editorial decisions pending |
 
-
-### FIELDWORK (added PP-628 2026-04-13)
-
-| Changed File | Propagates To | Reason |
-|-------------|--------------|--------|
-| `designs/fieldwork/fieldwork_design_v1.md` | `references/params_fieldwork.md` | Extracted mechanical values |
-| `designs/fieldwork/fieldwork_design_v1.md` | `references/params_board_game.md` §Standard Action Ob | Survey action Ob formula |
-| `designs/fieldwork/fieldwork_design_v1.md` | `references/params_core.md` | Attribute roles for fieldwork |
-| `designs/fieldwork/fieldwork_design_v1.md` | `compilation/v0.14/stage11_scale_transitions.md` | 9th handoff rule (Fieldwork ↔ all systems) |
-| `designs/fieldwork/fieldwork_design_v1.md` | `designs/systems/clock_registry.md` | Exposure, Evidence Track, Disposition, Cover clocks |
-| `designs/fieldwork/fieldwork_design_v1.md` | `designs/ttrpg/threadwork_redesign_v25.md` | Thread-Read as perceptive Leap; Knot-mediated remote investigation |
-| `designs/fieldwork/fieldwork_design_v1.md` | `designs/combat/combat_design_v1.md` | Fieldwork → Combat handoff rules (§2.3) |
-| `designs/fieldwork/fieldwork_design_v1.md` | `designs/contest/social_contest_system_v2.md` | Fieldwork → Contest handoff; Disposition ↔ Conviction Track offset |
-| `designs/fieldwork/fieldwork_design_v1.md` | `references/arc_register.md` | Domain Echo from investigation fires arc events |
-| `references/params_fieldwork.md` | `skills/valoria-simulator/SKILL.md` (Mode G-FW) | Sim loads params |
-| `designs/fieldwork/fieldwork_design_v1.md` | `references/canonical_sources.yaml` | Fieldwork system added as canonical source |
-| `tests/sim_fw_*.md` | `tests/coverage_matrix.md` | Fieldwork simulation findings |
-
 ## BROKEN DEPENDENCIES (auto-detected, log here)
 
 | File | Broken Reference | Detected | Status |
@@ -485,13 +467,47 @@ Propagation targets:
 | ARC-S47 | ARC-T16 | Simultaneous in same RM-presence/missionary territories: cultural contest primary |
 | ARC-P09 | ARC-S52 | Crown fiscal distress weakens Charter offer; shifts Feldhaus alignment calculation |
 
-## Opposing Thread Operations (2026-04-13)
-| Source | Depends On | Type |
-|---|---|---|
-| tests/sim_opposing_threadwork_final.md | designs/ttrpg/threadwork_redesign_v25.md | sim references canonical threadwork doc |
-| tests/sim_opposing_threadwork_final.md | canon/00_philosophical_foundations.md §12.2 | lattice topology derivation |
-| tests/sim_opposing_threadwork_final.md | canon/01_foundations_amendment_self_rendering.md | three-layer model for co-movement decomposition |
-| tests/sim_opposing_threadwork_final.md | references/params_threadwork.md | mechanical values |
-| tests/sim_opposing_threadwork_final.md | references/params_contest.md | Composure/Rattled mechanics |
-| ED-486 through ED-495 | tests/sim_opposing_threadwork_final.md | editorials reference sim findings |
-| designs/ttrpg/threadwork_redesign_v25.md P-24 | tests/sim_opposing_threadwork_final.md §C.1 | P-24 completion pending ED-486 |
+## FIELDWORK (designs/fieldwork/fieldwork_design_v1.md + subsystem files) — added 2026-04-13
+
+| Changed File | Propagates To | Reason | Status |
+|-------------|--------------|--------|--------|
+| `designs/fieldwork/fieldwork_design_v1.md` | `references/canonical_sources.yaml` | Fieldwork system entry | DONE (PP-575) |
+| `designs/fieldwork/fieldwork_design_v1.md` | `references/params_fieldwork.md` | Mechanical values extraction | DONE (PP-583) |
+| `designs/fieldwork/fieldwork_design_v1.md` | `designs/systems/clock_registry.md` | Exposure, Evidence Track, Disposition, Cover tracks | DONE (PP-575) |
+| `designs/fieldwork/fieldwork_design_v1.md` | `references/params_board_game.md` | Survey action in Standard Action Ob table (§8.1) | DONE (this commit) |
+| `designs/fieldwork/fieldwork_design_v1.md` | `references/params_core.md` | Attribute fieldwork roles table (§2.1) | DONE (this commit) |
+| `designs/fieldwork/fieldwork_design_v1.md` | `designs/hybrid/scale_transitions_design_v1.md` | 9th handoff rule: Fieldwork ↔ all systems (§2.3, §9) | DONE (this commit) |
+| `designs/fieldwork/fieldwork_design_v1.md` | `tests/coverage_matrix.md` | SIM-DEBT-FW-01 through FW-10 (all RESOLVED) | DONE (this commit) |
+| `designs/fieldwork/fieldwork_design_v1.md` | `designs/ttrpg/threadwork_redesign_v25.md` | Thread-Read as perceptive Leap (§4.5); co-movement protocol; per-op cap ruling (TW-05) | PENDING — threadwork params notes open per ED-NEW-15 |
+| `designs/fieldwork/fieldwork_design_v1.md` | `designs/contest/social_contest_system_v2.md` | Contest Escalation boundary (§5.7); Combined Findings (+1D per Finding in Contest, max +2D) (§2.3 / F-TRANS-11) | PENDING |
+| `designs/fieldwork/fieldwork_design_v1.md` | `designs/combat/combat_design_v1.md` | Fieldwork → Combat handoff: Exposure → ambusher advantage (§2.3 / F-TRANS-01); Combat Exposure codified (quiet +1, conspicuous +2, public +3) (F-TRANS-09) | PENDING |
+| `designs/fieldwork/fieldwork_design_v1.md` | `designs/setting/geography_design.md` | POI catalog per territory (ED-NEW-01); conditional POI gates by RS band | PENDING (blocked: ED-NEW-01 P2) |
+| `designs/fieldwork/fieldwork_design_v1.md` | `designs/setting/calamity_radiation.md` | Proximity Rating governs Survey Ob (§8.1); Calamity zone Exposure thresholds | PENDING |
+| `designs/fieldwork/fieldwork_design_v1.md` | `designs/mass_combat/mass_battle_v3.md` | Mass battle suspends fieldwork (§2.3 / F-TRANS-06); Post-battle investigation = 1 fieldwork scene (F-TRANS-12) | PENDING |
+| `designs/fieldwork/fieldwork_design_v1.md` | `references/params_threadwork.md` | POP Coherence −1 additional subject to per-op cap (TW-05 / ED-NEW-15) — currently ambiguous in params | PENDING (ED-NEW-15 P2) |
+| `references/params_fieldwork.md` | `skills/valoria-simulator/SKILL.md` | Sim loads params (Mode G-FW — to be created) | PENDING |
+| `designs/fieldwork/fieldwork_godot.md` | `jordanelias/valoria-game` repo | §10 Validation Findings G10-F01 through G10-F07 — implementation gaps logged | REFERENCE ONLY |
+
+### Fieldwork subsystem file cross-references
+
+| File | Reads From | Notes |
+|------|-----------|-------|
+| `designs/fieldwork/fieldwork_exploration.md` | `designs/fieldwork/fieldwork_design_v1.md` §1, §2 | POI depth axis; pool construction |
+| `designs/fieldwork/fieldwork_investigation.md` | `designs/ttrpg/threadwork_redesign_v25.md` §3.2 | Thread-Read co-movement table |
+| `designs/fieldwork/fieldwork_investigation.md` | `designs/contest/social_contest_system_v2.md` | Contested Investigation escalation |
+| `designs/fieldwork/fieldwork_socializing.md` | `designs/contest/social_contest_system_v2.md` | Contest escalation boundary (§5.7) |
+| `designs/fieldwork/fieldwork_socializing.md` | `designs/ttrpg/threadwork_redesign_v25.md` | Threadcut being social fieldwork (§2.8) |
+| `designs/fieldwork/fieldwork_exposure.md` | `designs/systems/clock_registry.md` | Cover, Exposure Track, Church Attention Pool |
+| `designs/fieldwork/fieldwork_bg.md` | `references/params_board_game.md` | Survey Ob table; existing BG action Obs |
+| `designs/fieldwork/fieldwork_hybrid.md` | `designs/hybrid/scale_transitions_design_v1.md` | Fieldwork Offset procedure; §3.9 handoff rule |
+| `designs/fieldwork/fieldwork_godot.md` | `jordanelias/valoria-game` | Validated 2026-04-13; G10-F01–F07 |
+
+## Comparative Audit Patches — 2026-04-13 (PP-630–634)
+
+| Changed File | Propagates To | Reason |
+|-------------|--------------|--------|
+| `designs/combat/combat_design_v1.md` | `designs/fieldwork/fieldwork_investigation.md` | §11.5 fieldwork handoff cross-reference (F-TRANS-01/09) added |
+| `designs/contest/social_contest_system_v2.md` | `designs/fieldwork/fieldwork_investigation.md` | §9.1 Combined Findings citation cross-reference added |
+| `designs/ttrpg/threadwork_redesign_v25.md` | `designs/fieldwork/fieldwork_investigation.md` | §2.3 Thread-Read-as-fieldwork cross-reference added |
+| `references/params_core.md` | `designs/combat/combat_design_v1.md`, `designs/contest/social_contest_system_v2.md`, `designs/fieldwork/fieldwork_design_v1.md` | Pool floor 1D named rule — all pool-using systems now have canonical anchor |
+| `canon/editorial_ledger.yaml` | `designs/systems/npc_behavior_system_v1.md` | ED-510 (NPC Recruitment PROVISIONAL), ED-511 (Hooks), ED-512 (surrender), ED-513 (fail-forward), ED-514 (social initiative) |

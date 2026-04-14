@@ -202,6 +202,7 @@ One orator invokes what has been (Memory); the other projects what could become 
 
 **Concentration = Focus + Recall.** Range 2–14. Depletes by 1 per exchange, −1 additional on exchange loss.
 - At Concentration 0: **Spent** — next exchange: −2D to all rolls; opponent gets +1D. Then resets to maximum.
+  **Spent timing:** Concentration is checked after Step 4 (CLASH/REINFORCE resolution). If Concentration reaches 0 at Step 4, Spent is entered immediately — but the penalty applies to the *next* exchange, not the current one (the triggering exchange has already rolled in Step 3). Spent resets to setup total after the penalty exchange resolves.
 - If both Rattled and Spent active: penalties cumulative. Pool minimum 1D per core engine.
 
 **Step 7 — GM records exchange on hidden ledger.**
@@ -285,6 +286,8 @@ Pool: Attunement + most relevant History, TN 7, Ob 1.
 | Overwhelming | +1D on Exchange 1 Argue roll AND Exchange 1 Appraise uses TN 6 |
 
 Time requirement: at least 1 hour. Rushed (< 1 hour): TN 8.
+
+**Evidence Track Findings as preparation (F-TRANS-11):** Findings from a completed fieldwork investigation may be cited in the Contest opening. Each Finding cited grants +1D on Exchange 1 (maximum +2D from Findings, regardless of count). Findings are not consumed by citation — they remain on the Evidence Track for future use. Finding citation must be declared at contest setup (GM sets scope: the Finding must be relevant to the contest's subject matter). This bonus stacks with standard preparation (+1D), for a maximum Exchange 1 bonus of +3D when both are available. Requires prior multi-scene investigation to produce Findings. Reference: fieldwork_investigation.md §2.3, §4.1.
 
 ### §9.2 Multi-Party Contest — Coalition Structure
 Each orator declares Side A or Side B at setup. No side-switching. Each side nominates one Lead per exchange (may change between exchanges). Non-lead coalition members may Corroborate (max 1 per side per exchange). Composure and Rattled tracked individually. **Coalition Concentration — shared pool (PP-237):** Concentration tracks on a shared pool equal to the sum of all coalition members' (Focus + Recall) at contest setup. Each exchange depletes the shared pool by 1 (plus 1 on exchange loss) regardless of which member holds Lead. Rotating Lead does not reset depletion. Spent triggers at 0; pool resets to its setup total. Initiative transfers to winning side; that side nominates holder.

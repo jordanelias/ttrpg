@@ -4129,3 +4129,83 @@ editorial_decisions:
     priority: P3
     description: "Godot POI node architecture (fieldwork §10.1). Requires validation against Valoria-game repo Godot project structure. Deferred until Godot implementation phase."
     tags: [fieldwork, godot, infrastructure]
+
+# ===== AUDIT FINDINGS — 2026-04-13 MECHANIC AUDIT =====
+
+- id: ED-510
+  date: 2026-04-13
+  source: mechanic_audit_comparative
+  priority: P2
+  status: provisional
+  description: >
+    NPC Recruitment Procedure [PROVISIONAL]. Proposed in game mechanics session (2026-04-13):
+    4-step procedure (Identify / Approach / Offer / Resolution). Pool: (Charisma × 2) + History.
+    Incentive table: Advisory role −1 Ob, Territory grant −2, Resource −1, Belief alignment −2,
+    Hook Weak −2 / Strong auto-success. Degree table: Failure (refused, Intel leak, 2-season lockout),
+    Partial (Disposition +1, retry −1 Ob next season), Success (joins, Disposition +1),
+    Overwhelming (joins, Disposition +2, free Intel token from former faction).
+    BLOCKED: (1) Ob formula ambiguous — Disposition-based Ob derivation not fully specified;
+    (2) Defection procedure absent — recruited NPC Beliefs contradiction has no mechanical consequence
+    until ED-387 (Priority Trees, P1-BLOCKER) resolves; (3) Hooks mechanic undefined.
+    Do not implement until ED-387 resolved and Hooks defined.
+  affects: [designs/systems/npc_behavior_system_v1.md, references/params_core.md]
+  blocks: [ED-387]
+
+- id: ED-511
+  date: 2026-04-13
+  source: mechanic_audit_comparative
+  priority: P2
+  status: open
+  description: >
+    Hooks mechanic undefined. Referenced in NPC Recruitment Procedure (ED-510) and
+    CK2/RotTK analysis session: a Hook is leverage held by one party over another (compromising
+    information, debt, obligation). Strong Hook = auto-success on recruitment; Weak Hook = −2 Ob.
+    No canonical definition in any fetched design doc. Required for: NPC Recruitment (ED-510),
+    potentially Investigation Evidence Track (a blackmail Finding could become a Hook).
+    Design question: is Hook a tracked resource (per NPC, per session), a narrative tag, or a
+    mechanics item on the Evidence Track? Resolve before NPC Recruitment implementation.
+  affects: [designs/systems/npc_behavior_system_v1.md]
+
+- id: ED-512
+  date: 2026-04-13
+  source: mechanic_audit_comparative
+  priority: P2
+  status: open
+  description: >
+    Combat surrender/disengage procedure absent (Finding D-01). Combat currently ends only by
+    incapacitation or GM call. No defined mechanics for: (a) voluntary yield — what triggers it,
+    what consequences follow, how opponent responds; (b) breaking engagement — movement action
+    contested by attackers, consequence if successful or failed; (c) pursuit — no rule for
+    what happens after a combatant flees beyond zone. This is a design decision, not a formula fix.
+    [EDITORIAL: D-01 — define surrender/disengage procedure for combat]
+  affects: [designs/combat/combat_design_v1.md]
+
+- id: ED-513
+  date: 2026-04-13
+  source: mechanic_audit_comparative
+  priority: P3
+  status: open
+  description: >
+    Combat fail-forward (Finding D-02). No narrative advancement mechanism for losing combatants.
+    Fieldwork has Desperate Trail; threadwork has co-movement regardless of degree. Combat's only
+    trajectory on sustained loss is wound accumulation → incapacitation, with no recovery path
+    preserving agency. Proposed: Desperate Blow — at last Wound threshold, attacker gets one free
+    undefended strike before incapacitation. Gives the losing character one last moment of agency.
+    [EDITORIAL: D-02 — design decision needed on combat fail-forward mechanic]
+  affects: [designs/combat/combat_design_v1.md]
+
+- id: ED-514
+  date: 2026-04-13
+  source: mechanic_audit_comparative
+  priority: P2
+  status: open
+  description: >
+    Social initiative decision (Finding D-05 — ED-138 follow-up). ED-138 has been open for
+    multiple sessions. Two options: (a) Keep deterministic — higher Attunement always goes second
+    in Exchange 1 (information advantage). Document the reason: social combat rewards perceptual
+    depth, not speed. Combat initiative is rolled because combat rewards preparation and luck;
+    social contest rewards calibration. (b) Switch to rolled — Attunement vs Attunement, Ob 1,
+    winner goes second. Provides variance. Force to decision this session if possible.
+    [EDITORIAL: ED-138 follow-up — resolve deterministic vs rolled social initiative]
+  affects: [designs/contest/social_contest_system_v2.md]
+

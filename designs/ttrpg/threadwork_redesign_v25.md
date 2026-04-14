@@ -133,6 +133,8 @@ Pre-calculate the Leap pool on the character sheet as a named entry separate fro
 
 **Failure framing:** The practitioner could not surrender rendering. Their consciousness held on. This is not weakness — it is the fundamental difficulty of doing something that your being resists constitutively. The aftereffect (−1D Thread Pool Score) represents the psychic friction of the failed attempt — the practitioner's engagement with Thread is degraded for the remainder of the scene, not from injury but from the failed surrender itself. (PP-232)
 
+**Thread-Read as fieldwork (cross-reference):** Thread-Read — using a perceptive Leap to gather investigative evidence from Thread configurations — is also defined as a fieldwork investigation action. It is the only fieldwork action that constitutes a Thread operation and fires co-movement. TS ≥ 30 required. Pool: (Spirit × 2) + History + TPS (same as all Leaps — PP-619). See fieldwork_investigation.md §4.5 for the fieldwork Evidence Track context and scope of Thread-derived evidence.
+
 ### The First Leap (Event Scene)
 
 The first time a character attempts the Leap, it is run as a full event scene. The Game Master describes the approach and the perceptual boundary.

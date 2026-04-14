@@ -178,6 +178,16 @@ Spirit is unrelated to Certainty.
 - Ranged: everything beyond Long Reach. Ranged weapons are Ranged until GM rules terrain or cover changes effective distance.
 'Close zone' and 'Far zone' are struck from all design documents.
 
+## Pool Floor (all systems)
+
+**Pool floor: 1D.** All dice pools have a minimum of 1D regardless of cumulative penalties. Formula: max(1, base_pool − penalties). Applies to:
+- Feint pool reduction in combat (PP-294: pool reduction floor minimum 1D)
+- Spent + Rattled combined penalties in Contest (social_contest_system_v2.md §4 Step 7)
+- Stamina-depleted or wound-penalised fieldwork pools
+- Any other system that applies subtractive penalties to a pool
+
+Pool floor of 1D does NOT prevent Failure — a 1D roll at TN 7 vs Ob 1 has P(success) ≈ 40%. The floor preserves player agency at the mechanical edge without guaranteeing outcome.
+
 ## Net Successes Floor — Correction (PP-246 note)
 Net successes CAN be negative (per stage1 §1.1). Prior "Floor: 0" was an error.
 Negative net successes contribute to Failure degree only; they do not compound penalties further.
