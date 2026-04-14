@@ -1,4 +1,4 @@
-<!-- PATCHES APPLIED (session 2026-04-14): PP-600-623 — full Thread system redesign. PP-631 (2026-04-13): POP cap note, Community Weaving pool corrected to (Spirit×2)+History+TPS.
+<!-- PATCHES APPLIED (session 2026-04-14): PP-600-623 — full Thread system redesign. PP-631 (2026-04-13): POP cap note, Community Weaving pool. PP-632 (2026-04-13): Knot mechanics (pool, tiers, formation, breaking).
      Key changes: pool unified to (Spirit×2)+History+TPS; TN-based difficulty; three-axis Ob;
      Gap self-closure by scale; RS cap struck; WR/WC redesigned; Dissonance→Spirit check.
      All prior pool formulas, Ob tables, and RS cap entries below are superseded by PP-600-623.
@@ -27,6 +27,30 @@ Full TPS always included. No exceptions.
 TN: 7 | Ob: 3 | RS outcome: Success = RS +1; Overwhelming = RS +2
 Requires: Revolution Mandate ≥ 1. One per contact window round. Not a Domain Action — a Thread operation.
 Note: PP-250 Community Weaving formula (Attunement + History + TPS) is superseded by PP-616. (PP-631)
+
+
+## Knot Mechanics (PP-632 — canonical)
+
+**Ontological basis:** Knots are being-with (Mitsein), not Thread operations. Any character. TS not required.
+
+**Pool = (Bonds × 2) + 3**
+| Tier | Point Cost |
+|------|-----------|
+| Close | 5 |
+| Medium | 2 |
+| Loose | 1 |
+
+**Max Knot count = floor(Bonds/2)+1**
+
+**Formation:** Max Disposition (floor(Bonds/2)+1) + Connect roll TN 7, Ob = tier + Disposition subtracted. Partial = one tier below.
+
+**Effects:** +1D social with partner; no Disposition decay; shared Composure buffer; relational contagion (P-12) for practitioners; Knot-mediated remote Thread-Read (TS 30+, +1 strain/use).
+
+**Breaking:**
+- Rupture: points return; Disposition →−4; Composure damage = tier cost
+- Loss: points return; Disposition track removed; Coherence −1; Composure damage = tier cost
+
+**Threadcut being Knot strain:** +1 self-maintenance strain per Knot use. At 5: rendering instability. −1/season rest.
 
 ## TN Modifiers (PP-619 — canonical)
 | Operation type | TN |

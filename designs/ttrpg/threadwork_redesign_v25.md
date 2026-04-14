@@ -827,6 +827,69 @@ When Rendering Strain equals Health, or Wounds reach **Rendering Threshold** (He
 
 ---
 
+
+---
+
+# PART SIX-B: KNOT MECHANICS
+
+## 6B.1 Ontological Basis
+
+Knots are not Thread operations. They are constitutive relational bonds — being-with-others (Mitsein, Heidegger §26) — ontological facts of how consciousness exists in the world with others. Any character can hold Knots regardless of Thread Sensitivity. Knots do not require a Leap and cannot be performed during one.
+
+Thread practitioners can work *through* Knots (Knot-mediated remote Thread-Read, relational contagion per P-12 and §16.3 of the Foundations). The Knot itself, however, is an ontological structure, not a Thread construct. This distinction is load-bearing: the Church cannot suppress Knots by suppressing Thread awareness, because Knots are not Thread operations.
+
+## 6B.2 Knot Pool
+
+**Pool = (Bonds × 2) + 3 points.**
+
+**Tiers:**
+
+| Tier | Point Cost |
+|------|-----------|
+| Close | 5 |
+| Medium | 2 |
+| Loose | 1 |
+
+**Maximum Knot count = floor(Bonds/2)+1.** Same formula as Disposition ceiling — Bonds governs relational depth in both directions simultaneously.
+
+Unspent points are live capacity. They represent unrealised relational potential — connections not yet formed, not a resource that expires.
+
+## 6B.3 Formation
+
+Three conditions must all be met:
+1. Relationship at max Disposition for the character (floor(Bonds/2)+1), per fieldwork_socializing.md §5.1
+2. Available points ≥ tier cost
+3. Dedicated Knot Formation scene — one Connect roll (Bonds pool, TN 7), base Ob = tier (Loose 1 / Medium 2 / Close 3), with Disposition subtracted per fieldwork Ob rule
+
+| Degree | Outcome |
+|--------|---------|
+| Failure | Moment doesn't land. Disposition holds. Retryable next season. No points spent. |
+| Partial | Knot forms at one tier below intended. Lower tier's points spent. |
+| Success | Knot forms at intended tier. Points spent. |
+| Overwhelming | Knot forms at intended tier. +1 Momentum. |
+
+## 6B.4 Effects
+
+- Automatic Disposition maintenance (no seasonal decay)
+- +1D on all social actions with the Knot partner
+- Shared Composure buffer (social_contest_system_v2.md §4 Step 6)
+- **Relational contagion (P-12):** For Thread practitioners only — Thread-shift in one Knotted party propagates force through the Knot to the other. Rate depends on Coherence band (§3.3). This is not a Thread operation; it is the structural consequence of knotting as described in Foundations §16.3.
+- **Knot-mediated remote Thread-Read:** TS ≥ 30 practitioners may Thread-Read a Knotted NPC's configuration remotely through the Knot connection (fieldwork_socializing.md §2.6 via fieldwork_v30.md). Cost: +1 Knot strain per use. The Knotted party may detect the intrusion.
+
+## 6B.5 Breaking
+
+**Rupture (betrayal, deliberate severance):**
+Points return to pool. Disposition → −4. Composure damage = tier cost (Close: 5; Medium: 2; Loose: 1). The wound is in the relationship.
+
+**Loss (death, permanent absence):**
+Points return to pool. Disposition track removed. Coherence −1 (mandatory — a constitutive being-with has been removed from the world; the layer-2 self-rendering that had integrated this relationship is disrupted; per Amendment 01 §three-layer being-persistence and Foundations §16.3). Composure damage = tier cost. The wound is in the self.
+
+## 6B.6 Threadcut Being Knots
+
+A Knotted threadcut being bears additional self-maintenance strain from relational knotting. Each Knot use (remote Thread-Read, relational contagion activation) costs the being +1 self-maintenance strain (cumulative, tracked separately from Rendering Strain). At cumulative strain 5: rendering shows visible instability — facial consistency fails, temporal micro-slippages manifest, the originary state bleeds through the maintained rendering. Strain reduces by 1 per season of Knot non-use.
+
+This does not apply to Knots with organic beings, whose unconscious self-rendering is not burdened by relational knotting.
+
 # PART SEVEN: CROSS-MODE IMPLICATIONS
 
 ## 7.1 Board Game

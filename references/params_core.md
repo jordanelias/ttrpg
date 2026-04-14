@@ -1,6 +1,6 @@
 <!-- version: v0.14-AUD1-R2 | sources: stage1_core_engine.md | last_updated: 2026-04-04 -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
-<!-- PATCHES APPLIED (canonical): PP-164, PP-232, PP-234, PP-243, PP-246–248, PP-255, PP-261, PP-289–290, PP-381, PP-383–386, PP-389, PP-551, PP-553, PP-610–611, PP-615, PP-617, PP-623, PP-627, PP-628, PP-629 -->
+<!-- PATCHES APPLIED (canonical): PP-164, PP-232, PP-234, PP-243, PP-246–248, PP-255, PP-261, PP-289–290, PP-381, PP-383–386, PP-389, PP-551, PP-553, PP-610–611, PP-615, PP-617, PP-623, PP-627, PP-628, PP-629, PP-632 -->
 <!-- PP-247 (Combat Pool formula corrected to match stage1 §2.3/§3.4: Agi + hist_pts + 3) -->
 <!-- PP-248 (Stamina formula corrected to End+1 per stage1 §3.9; Health row clarified) -->
 <!-- PP-232 (Ob cap raised to 20; Overwhelming floor 3; Health formula revised; Stamina floor 2; armour wield constraint) -->
@@ -107,6 +107,8 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 | Social | Attunement (Att), Bonds (Bon), Charisma (Cha) |
 | Metaphysical | Spirit (Spi) |
 
+**Bonds (Bon):** Governs relational depth in two simultaneous directions: (1) Disposition ceiling = floor(Bonds/2)+1; (2) Knot pool = (Bonds×2)+3, max Knot count = floor(Bonds/2)+1. Bonds 7 is the only value where a character can hold 3 Close Knots and fill all slots simultaneously. (PP-632)
+
 **Recall (Rec):** Knowledge, experience, retention. Sets the per-History point cap — a History can never hold more points than the character's Recall score.
 **Focus (Foc):** Concentration, discipline, precision under pressure. Governs Thread contact duration: Contact Rounds = Focus score (range 1–7).
 
@@ -124,7 +126,6 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 | Resolve | Spirit | 1–7 | Maximum total Inspiration value |
 
 <!-- patch_history: references/params_core_history.md -->
-<!-- PP-633 applied 2026-04-13: Pool Floor 1D named rule added -->
 
 ---
 <!-- PP-243 applied 2026-04-04: Momentum auto-success interaction with roll -->
@@ -197,7 +198,7 @@ Negative net successes contribute to Failure degree only; they do not compound p
 - TS and Coherence are orthogonal axes. See params_threadwork ED-301 section for full detail.
 - Coherence track models layer 2 integrity (unconscious self-rendering). TS measures perceptual depth. Neither implies the other.
 
-## Attribute Roles — Fieldwork (PP-628, from fieldwork_design_v1.md §2.1)
+## Attribute Roles — Fieldwork (PP-628, from fieldwork_v30.md §2.1)
 
 | Attribute | Fieldwork Role |
 |-----------|----------------|

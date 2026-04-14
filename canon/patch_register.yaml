@@ -7934,10 +7934,47 @@ patches:
   severity: P2
   description: "NPC Recruitment procedure — §10 added to npc_behavior_v30.md. 4-step: Identify/Approach/Offer/Resolution. Ob = floor(NPC highest-faction Disposition / 2) + 1. Hooks defined (Strong=auto-success Ob1, Weak=-2 Ob). Defection: Belief contradiction check 2 consecutive seasons. ED-510 resolved. ED-511 (Hooks) resolved."
   affects: [designs/systems/npc_behavior_v30.md, canon/editorial_ledger.yaml]
-- id: PP-643
+
+- id: PP-632
+  type: patch
   date: 2026-04-13
-  severity: P3
-  description: "NPC Recruitment faction consequences. params_factions: Mandate −1 on successful recruitment in NPC's primary territory. fieldwork_socializing: §5.5b Hook acquisition — Overwhelming Read → Weak Hook; + prior Verified Finding → Strong Hook. Closes all remaining propagation from PP-642."
+  severity: P1
+  description: >
+    Disposition and Knot system redesign (user-approved 2026-04-13):
+
+    DISPOSITION:
+    - Range: −3 to +5 → −4 to floor(Bonds/2)+1
+    - Ob rule: stepped lookup table → max(1, base Ob − Disposition) direct subtraction
+    - Starting Disposition: faction table → lifepath ±0.5 increments, floor, clamped to range
+    - Decay threshold: above +3 → above +2
+    - Information gates updated for new range
+    - Impress exempt from Disposition subtraction (sets initial Disposition)
+
+    KNOTS:
+    - Ontological basis: Knots are being-with (Mitsein), not Thread operations.
+      Any character. TS not required for formation.
+    - Pool: (Bonds × 2) + 3 points
+    - Tiers: Close 5 / Medium 2 / Loose 1
+    - Max count: floor(Bonds/2)+1 (same formula as Disposition ceiling)
+    - Formation: max Disposition + Connect roll (Ob = tier, Disposition subtracted)
+    - Rupture: points return; Disposition →−4; Composure damage = tier cost
+    - Loss: points return; Disposition removed; Coherence −1 (mandatory, Amendment 01);
+      Composure damage = tier cost
+    - Threadcut being Knot strain: +1/use, −1/season rest, instability at 5
+
+    FILES UPDATED:
+    - designs/fieldwork/fieldwork_socializing.md (§5.1–5.6 full rewrite)
+    - designs/fieldwork/fieldwork_editorial.md (ED harvest, SIM-DEBT-SOC-01–03 added)
+    - designs/ttrpg/threadwork_redesign_v25.md (Part Six-B: Knot Mechanics added)
+    - references/params_threadwork.md (Knot Mechanics canonical section)
+    - references/params_core.md (Bonds attribute note updated)
+    - references/canonical_sources.yaml (stale note fixed)
+  finding_id: disposition-knot-redesign-2026-04-13
   affects:
-  - references/params_factions.md
-  - designs/fieldwork/fieldwork_socializing.md
+    - designs/fieldwork/fieldwork_socializing.md
+    - designs/fieldwork/fieldwork_editorial.md
+    - designs/ttrpg/threadwork_redesign_v25.md
+    - references/params_threadwork.md
+    - references/params_core.md
+    - references/canonical_sources.yaml
+  status: applied

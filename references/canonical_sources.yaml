@@ -14,7 +14,7 @@ systems:
 
   core_engine:
     canonical: references/params_core.md
-    canonical_sha__references__params_core_md: "d4ea17d766fa8617c252342f0c56a84db97a91a8"
+    canonical_sha__references__params_core_md: "e6eb7cb1f226c806bd8d197d09bb3b6add57d62a"
     params: references/params_core.md
     design_doc: null
     compilation_stage: compilation/v0.14/stage1_core_engine.md
@@ -23,7 +23,7 @@ systems:
 
   characters:
     canonical: references/params_core.md
-    canonical_sha__references__params_core_md: "d4ea17d766fa8617c252342f0c56a84db97a91a8"
+    canonical_sha__references__params_core_md: "e6eb7cb1f226c806bd8d197d09bb3b6add57d62a"
     params: references/params_core.md
     design_doc: null
     compilation_stage: compilation/v0.14/stage2_characters.md
@@ -59,7 +59,7 @@ systems:
 
   clocks:
     canonical: designs/systems/clock_registry_v30.md
-    canonical_sha__designs__systems__clock_registry_v30_md: "615dfac8dda524c27eb3f0793803024e3de02e61"
+    canonical_sha__designs__systems__clock_registry_v30_md: "05e69b81ad708acf0d8fb3e28ab2bc66c5b19447"
     params: null
     design_doc: designs/systems/clock_registry_v30.md
     compilation_stage: compilation/v0.14/stage5_clocks.md
@@ -70,9 +70,9 @@ systems:
     canonical_ttrpg: compilation/v0.14/stage6_factions.md
     canonical_sha__compilation__v0_14__stage6_factions_md: "4eb711be538f8f2b6eab4e2fcffd8b85e5c01120"
     canonical_bg: designs/board_game/board_game_v30.md
-    canonical_sha__designs__board_game__board_game_v30_md: "babecfaaaa63e70cd6df715252daf83b8843b753"
+    canonical_sha__designs__board_game__board_game_v30_md: "a378f8cec1b3befd06bad72f43508bbc36814e1f"
     canonical_hybrid: designs/board_game/board_game_v30.md
-    canonical_sha__designs__board_game__board_game_v30_md: "babecfaaaa63e70cd6df715252daf83b8843b753"
+    canonical_sha__designs__board_game__board_game_v30_md: "a378f8cec1b3befd06bad72f43508bbc36814e1f"
     params: references/params_factions.md
     compilation_stage: compilation/v0.14/stage6_factions.md
     compilation_current: false
@@ -80,7 +80,7 @@ systems:
 
   victory:
     canonical: designs/board_game/victory_v30.md
-    canonical_sha__designs__board_game__victory_v30_md: "7dcf3c8d545b2f39842ac0a125ef901cdb29cc53"
+    canonical_sha__designs__board_game__victory_v30_md: "e65adeb1427c5169fb5e377f0c78ede698866246"
     params: null
     design_doc: designs/board_game/victory_v30.md
     compilation_stage: null
@@ -89,7 +89,7 @@ systems:
 
   territories:
     canonical: designs/setting/geography_v30.md
-    canonical_sha__designs__setting__geography_v30_md: "8fb221327605736f5a1f11a0428e33c2494d4b91"
+    canonical_sha__designs__setting__geography_v30_md: "9787c68560e82dd467466ae675c16e7c452cb42c"
     params: null
     design_doc: designs/setting/geography_v30.md
     compilation_stage: compilation/v0.14/stage7_territories.md
@@ -98,7 +98,7 @@ systems:
 
   mass_combat:
     canonical: designs/mass_combat/mass_battle_v30.md
-    canonical_sha__designs__mass_combat__mass_battle_v30_md: "794af1bd1b4a1e47904e2ad309443e67dc2e86e0"
+    canonical_sha__designs__mass_combat__mass_battle_v30_md: "d766ee59fdeb525fc7371af1688d2fde0e4807c7"
     params: references/params_mass_combat.md
     design_doc: designs/mass_combat/mass_battle_v30.md
     compilation_stage: null
@@ -107,7 +107,7 @@ systems:
 
   social_debate:
     canonical: designs/contest/social_contest_v30.md
-    canonical_sha__designs__contest__social_contest_v30_md: "a395043c9f667d03d709cf242643cc9a26d99c5e"
+    canonical_sha__designs__contest__social_contest_v30_md: "2c8e50700d9b71388dc044c0915dec72821695c8"
     params: references/params_contest.md
     design_doc: designs/contest/social_contest_v30.md
     compilation_stage: compilation/v0.14/stage9_social.md
@@ -116,7 +116,7 @@ systems:
 
   board_game:
     canonical: designs/board_game/board_game_v30.md
-    canonical_sha__designs__board_game__board_game_v30_md: "babecfaaaa63e70cd6df715252daf83b8843b753"
+    canonical_sha__designs__board_game__board_game_v30_md: "a378f8cec1b3befd06bad72f43508bbc36814e1f"
     params: references/params_board_game.md
     design_doc: designs/board_game/board_game_v30.md
     compilation_stage: compilation/v0.14/stage_bg_board_game_mode.md
@@ -125,7 +125,7 @@ systems:
 
   scale_transitions:
     canonical: designs/hybrid/scale_transitions_v30.md
-    canonical_sha__designs__hybrid__scale_transitions_v30_md: "88296c23715efbfed4151f1ce48b5c99b1780790"
+    canonical_sha__designs__hybrid__scale_transitions_v30_md: "55fb622ae19e43e533b14398d1292310edf6dc0b"
     canonical_sha__compilation__v0_14__stage11_scale_transitions_md: "277e7ffb787cf6af153462b4cee3bcea09ae4ec6"
     params: null
     design_doc: null
@@ -145,7 +145,7 @@ systems:
 
   npc_behavior:
     canonical: designs/systems/npc_behavior_v30.md
-    canonical_sha__designs__systems__npc_behavior_v30_md: "a0a87290fafc4061b8a2843ce30de729cb951cce"
+    canonical_sha__designs__systems__npc_behavior_v30_md: "4c00e45ffa2d26f1ceecdcf80525b41cf7f92b4b"
     params: null
     design_doc: designs/systems/npc_behavior_v30.md
     compilation_stage: null
@@ -155,40 +155,12 @@ systems:
 
   fieldwork:
     canonical: designs/fieldwork/fieldwork_v30.md
-    canonical_sha__designs__fieldwork__fieldwork_v30_md: "b0767355e57fb7f0245c633ec82e5471dc4e0f8a"
+    canonical_sha__designs__fieldwork__fieldwork_v30_md: "94d60734961a157253f8c5184053f899e8db9830"
     params: null
     design_doc: designs/fieldwork/fieldwork_v30.md
     compilation_stage: null
     compilation_current: false
-    note: "fieldwork_design_v1.md is canonical. v1.1 review corrections applied 2026-04-13. PP-626 applied 2026-04-13: Thread-Read pool corrected to (Spirit×2)+Hist+TPS. Covers exploration, investigation, socializing for all modes + Godot. No params file yet. 1 P1 editorial open (ED-NEW-04)."
-
-
-  southernmost:
-    canonical: designs/setting/southernmost_v30.md
-    canonical_sha__designs__setting__southernmost_v30_md: "0a76e4e5721aba2dc03a981d84adba4403d1d434"
-    params: null
-    design_doc: designs/setting/southernmost_v30.md
-    compilation_stage: compilation/v0.14/stage4_southernmost.md
-    compilation_current: false
-    note: "southernmost_v30.md created 2026-04-13 from stage4. UNVERIFIED — not yet stress-tested."
-
-  factions_ttrpg:
-    canonical: designs/ttrpg/factions_ttrpg_v30.md
-    canonical_sha__designs__ttrpg__factions_ttrpg_v30_md: "2c6915bcc04b959bc7fe14f4dba3bce4dc4ad46f"
-    params: references/params_factions.md
-    design_doc: designs/ttrpg/factions_ttrpg_v30.md
-    compilation_stage: compilation/v0.14/stage6_factions.md
-    compilation_current: false
-    note: "factions_ttrpg_v30.md created 2026-04-13 from stage6 TTRPG content. BG factions in board_game_v30. UNVERIFIED."
-
-  campaign_modes:
-    canonical: designs/systems/campaign_modes_v30.md
-    canonical_sha__designs__systems__campaign_modes_v30_md: "83682d25e0f0cf121106a0f7d27dedaeb3fba3be"
-    params: null
-    design_doc: designs/systems/campaign_modes_v30.md
-    compilation_stage: compilation/v0.14/stage12_campaign_modes.md
-    compilation_current: false
-    note: "campaign_modes_v30.md created 2026-04-13 from stage12. UNVERIFIED — not yet stress-tested."
+    note: "fieldwork_v30.md is canonical (designs/fieldwork/). Sub-files: fieldwork_socializing.md (PP-632: Disposition redesign, Knot mechanics), fieldwork_editorial.md (PP-632: ED harvest). PP-626–632 applied. 3 open editorials: ED-507/508/509. 3 SIM-DEBT items (SOC-01–03)."
 
 # GLOBAL NOTE (2026-04-04):
 # All compilation/v0.14 stage documents are outdated and superseded.
@@ -199,7 +171,7 @@ systems:
 
   calamity_radiation:
     canonical: designs/setting/calamity_radiation_v30.md
-    canonical_sha__designs__setting__calamity_radiation_v30_md: "3a86fbf65e61d9e96caa2efd70ccb5ae8946f1ea"
+    canonical_sha__designs__setting__calamity_radiation_v30_md: "4aad9195d78c85df92ac477d9feb05ba92ea4d00"
     params: null
     design_doc: designs/setting/calamity_radiation_v30.md
     compilation_stage: null
