@@ -3949,7 +3949,9 @@ editorial_decisions:
   # === Opposing Threadwork Operations — Stress Test 2026-04-13 ===
 
   - id: ED-486
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Approved and applied via PP-632."
     date_raised: 2026-04-13
     priority: P1-BLOCKER
     description: "Approve Contested Intentionality procedure for opposing Thread operations (P-24 completion). Includes: opposing engagement modifier (+floor(opponent TPS / 2)), resolution table for all outcome combinations, knot strain consequences, compound co-movement rule. Full procedure in tests/sim_opposing_threadwork_final.md §C.1."
@@ -3957,7 +3959,9 @@ editorial_decisions:
     source: "ST-OPP-01 through ST-OPP-05"
 
   - id: ED-487
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Approved and applied via PP-632."
     date_raised: 2026-04-13
     priority: P1-BLOCKER
     description: "Confirm Mending immunity from direct opposition under P-24. Mending targets substrate absence; all other Thread operations target thread presence. Categorically different targets — P-24 requires 'same configuration.' Mending can be indirectly obstructed (+1 Ob from co-movement at same site, threadcut interference, territory effects) but never directly contested. Derivation in sim §C.5."
@@ -3965,7 +3969,9 @@ editorial_decisions:
     source: "ST-OPP-01, PF-1.1c"
 
   - id: ED-488
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Approved and applied via PP-632."
     date_raised: 2026-04-13
     priority: P1-BLOCKER
     description: "Approve knot strain as a consequence category for overwhelmed practitioners in opposing operations. Overwhelmed practitioners take knot strain (+1 Ob next Thread op this scene, 2 Composure) instead of their operation's degree-table Failure consequences. Degree-table consequences are calibrated for operational failure (snap-back, collapse); being overwhelmed by opposition is a different metaphysical event (knot to thread that moved against intentionality). Canon basis: Foundations §12.2 — 'Disagreement between practitioners produces tension at the knots — potentially damaging both the target configuration and the practitioners themselves.' Full derivation in sim §2.2–2.3."
@@ -3973,7 +3979,9 @@ editorial_decisions:
     source: "ST-OPP-03, Foundations §12.2"
 
   - id: ED-489
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Approved and applied via PP-632."
     date_raised: 2026-04-13
     priority: P1-BLOCKER
     description: "Approve compound co-movement rule: when opposing operations fire on the same thread, Coherence costs are per-practitioner (layer 2 suspension = personal cost), but epistemic and actual co-movement effects fire ONCE for the compound event (one disturbance on one thread, not two independent disturbances). Canon basis: Coherence = Amendment 01 layer 2 integrity. Epistemic/actual = world-level consequences of thread disturbance. Derivation in sim §C.1 Co-Movement."
@@ -3981,7 +3989,9 @@ editorial_decisions:
     source: "ST-OPP-04, PF-CO"
 
   - id: ED-490
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Approved and applied via PP-632."
     date_raised: 2026-04-13
     priority: P2
     description: "Approve N-way opposing operations (3+ practitioners) Lattice Collapse rule. Three or more opposing intentionalities produce automatic Gap at target scale (chaotic interference has no stable oscillation mode — thread collapses). RS = -(2 × number of opposing practitioners). All take elevated knot strain (+2 Ob, 4 Composure). Canon basis: Foundations §12.2 lattice topology; Einhir Catastrophe mechanism (§7.2). Derivation in sim §C.3."
@@ -3989,7 +3999,9 @@ editorial_decisions:
     source: "ST-OPP-07, Finding D-3/3.5a"
 
   - id: ED-491
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Approved and applied via PP-632."
     date_raised: 2026-04-13
     priority: P2
     description: "Approve FR vs FR scaled 'both fail' consequences. When Lock vs Dissolution (or FR vs FR at Structural+ scale) both fail, RS cost scales with operation scale (Object -1, Personal -2, Relational -3, Territorial -4, Structural -5) and d6 Shifting Object risk (1 to scale-tier number). Both take doubled knot strain (4 Composure, +2 Ob). Canon basis: FR operations are the most extreme thread violations; their contradictory engagement should be proportionally catastrophic. Derivation in sim §3.3."
@@ -3997,7 +4009,9 @@ editorial_decisions:
     source: "ST-OPP-08, PF-3.3b"
 
   - id: ED-492
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Approved and applied via PP-632."
     date_raised: 2026-04-13
     priority: P2
     description: "Approve sustained opposition deterioration rule. Opposing operations producing a Shifting Object on an existing Shifting Object advance the Shifting Object one deterioration tier (standard: 1d3 seasons → twice-contested: 1d3 sessions → thrice-contested: end of scene). Canon basis: repeated contradictory engagement intensifies oscillation, accelerating structural failure. Derivation in sim §C.2 point 4."
@@ -4005,7 +4019,9 @@ editorial_decisions:
     source: "ST-OPP-09, Finding B-1b"
 
   - id: ED-493
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Approved and applied via PP-632."
     date_raised: 2026-04-13
     priority: P2
     description: "Define Hybrid TPS-equivalent for BG factions in opposing operations. When a TTRPG practitioner opposes a BG Thread order, the BG faction's opposing engagement modifier uses the faction's Thread-capable NPC's TPS (if specified) or faction Intelligence / 2 (round down, min 1). Derivation in sim §C.8."
@@ -4013,7 +4029,9 @@ editorial_decisions:
     source: "ST-OPP-11, PF-3.6a"
 
   - id: ED-494
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Approved and applied via PP-632."
     date_raised: 2026-04-13
     priority: P2
     description: "Approve BG opposing Thread order resolution. Both factions roll against Obs. Both succeed: Shifting Object in territory (territory status card) + 1 Co-Movement Card. One succeeds: that order resolves + 1 Co-Movement Card. Both fail: no effect. No personal-scale consequences (Coherence, knot strain) in BG mode. Derivation in sim §C.7."
@@ -4021,7 +4039,9 @@ editorial_decisions:
     source: "ST-OPP-10, PF-3.7a"
 
   - id: ED-495
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Approved and applied via PP-632."
     date_raised: 2026-04-13
     priority: P2
     description: "Approve mass battle simplified contest for opposing Thread operations. Highest net successes wins; winner at achieved degree, loser at Partial consequences. Tie: Shifting Object + both Partial. RS x3 multiplier applies. Temporal auto-effects NOT subject to x3 (PP-226). Reduces resolution from ~15 steps to ~6. Derivation in sim §C.4."

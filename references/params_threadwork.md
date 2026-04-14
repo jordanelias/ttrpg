@@ -418,6 +418,65 @@ If pool drops below half Anchor's solo pool: +1 Ob.
 Directly opposing Beliefs: pre-Leap Belief check (Spirit TN7 Ob1) or helper drops out.
 Tangential conflicting Beliefs: helper dice don't chain on 10.
 
+<!-- PP-632 applied 2026-04-13: Opposing Operations — Contested Intentionality -->
+
+## Opposing Operations — Contested Intentionality (PP-632)
+**Scope:** Two practitioners in contact targeting the same configuration with opposing intentionalities.
+**Opposing pairs:** Weave/Pull, Lock/Dissolution, Lock/Pull, Weave/Dissolution.
+**Not opposing:** Weave/Lock, Pull/Dissolution (compound). Any op/Mending (different target category). Different-scale ops (different configurations).
+
+### Opposing Engagement Modifier
++floor(opponent TPS ÷ 2), minimum +1. Stacks with all other Ob modifiers.
+| Opponent TPS | +Ob |
+|---|---|
+| 3 | +1 |
+| 4–5 | +2 |
+| 6–7 | +3 |
+| 8–9 | +4 |
+| 10 | +5 |
+
+### Resolution
+| A | B | Outcome | RS | A Cost | B Cost |
+|---|---|---|---|---|---|
+| ≥Ob | ≥Ob | Shifting Object | worst RS +1 | Coh §3.2; +1 Ob, 2 Comp | same |
+| ≥Ob | Partial | A resolves (O→S; S stays) | A RS +1 | Coh §3.2; 1 Comp | Coh §3.2; +1 Ob, 2 Comp; no degree-table |
+| ≥Ob | Fail | A resolves at degree | A RS only | normal | standard Failure |
+| Partial | Partial | d6: 1–2 SO (−1 scale); 3–6 none | −1 | Coh §3.2; +1 Ob, 2 Comp | same |
+| Partial | Fail | A Partial resolves | A Partial RS | normal | standard Failure |
+| Fail | Fail | nothing | −1 | Coh §3.2; 1 Comp | same |
+
+### FR vs FR Both-Fail
+Object RS −1 (d6:1 SO); Personal −2 (1–2); Relational −3 (1–3); Territorial −4 (1–4); Structural −5 (1–5). Both +2 Ob, 4 Comp.
+
+### Knot Strain
+Standard loser: +1 Ob next op, 2 Composure. Winner: 1 Composure.
+FR loser: +2 Ob, 4 Composure. If winner Dissolved: +1 Wound (knot tear). Winner: 2 Composure.
+Tie (both ≥Ob): both +1 Ob, 2 Comp. FR tie: +2 Ob, 4 Comp.
+Both fail: 1 Composure each.
+Composure restores at scene change. Ob penalty: next Thread op or scene end.
+
+### Co-Movement
+Coherence: per-practitioner §3.2. Epistemic + actual: ONCE for compound event.
+
+### Sustained Opposition
++1 Ob sequential failure if target changed. SO on existing SO: advance 1 deterioration tier (seasons→sessions→scene).
+
+### N-Way (3+)
+Automatic lattice collapse. All fail. Gap at target scale. RS −(2 × n). All: +2 Ob, 4 Comp.
+
+### Mending Immunity
+Cannot be directly opposed. Indirect: +1 Ob co-movement at site; P-17; territory effects. Ceiling 8.
+
+### Mass Battle
+Highest net wins. Winner at degree, loser Partial. Tie: SO + both Partial. RS ×3 (PP-192). Temporal NOT ×3 (PP-226).
+
+### Board Game
+Both succeed: SO + Co-Movement Card. One succeeds: resolves + Co-Movement Card. Both fail: nothing. No personal-scale consequences.
+
+### Hybrid Cross-Phase
+Personal Phase roll stands. BG rolls at Cascade. Modifier: TTRPG uses BG NPC's TPS (or faction Int ÷ 2, min 1). BG uses TTRPG TPS.
+
+
 ## Cross-Mode Thread
 | Rule | TTRPG | Board Game | Hybrid |
 |------|-------|-----------|--------|

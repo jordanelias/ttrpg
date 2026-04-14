@@ -7865,3 +7865,12 @@ patches:
     - canon/editorial_ledger.yaml
     - references/canonical_sources.yaml
   status: applied
+
+- id: PP-632
+  date: 2026-04-13
+  severity: P1
+  description: "Opposing Operations — Contested Intentionality. Completes P-24 truncated resolution table. Adds: opposing engagement modifier (+floor(opponent TPS/2)), full resolution table for all outcome combinations, knot strain consequence category, compound co-movement rule, FR vs FR scaled consequences, sustained opposition deterioration, N-way lattice collapse, Mending immunity, mass battle simplification, BG opposing orders, Hybrid cross-phase. Resolves ED-486 through ED-495."
+  source: "tests/sim_opposing_threadwork_final.md"
+  affects: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  status: applied
+  provisional: false

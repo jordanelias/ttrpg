@@ -1,7 +1,7 @@
 # THREADWORK MECHANICS — v2.6
 ## Date: 2026-03-27 (revised 2026-04-02)
 ## Authority: Philosophical Foundations (immutable) → this document (design proposal, requires editorial approval)
-## Version: v3.1 — Part Nine (S-01–S-06 / P-11–P-26) applied in-place. All appendix sections eliminated.
+## Version: v3.2 — Part Nine (S-01–S-06 / P-11–P-26) applied in-place. All appendix sections eliminated. PP-632: §2.6 Opposing Operations added.
 ## Revision: Incorporates Leap-as-rendering-suspension. Supersedes v1.
 
 ---
@@ -496,6 +496,84 @@ This is not coordination in any ordinary sense. The practitioners cannot communi
 
 ---
 
+## 2.6 Opposing Operations — Contested Intentionality
+
+When two practitioners in contact target the same configuration with opposing intentionalities, their configurations are knotted to the target and transitively to each other (Foundations §12.2). The thread's oscillation is driven in contradictory directions across all three axes (P-01). Neither practitioner is consciously present to manage the interaction — both set intentionality before the Leap.
+
+**What qualifies as opposing:** Weave vs Pull (coherence vs potential). Lock vs Dissolution (frozen actualization vs tearing). Lock vs Pull (frozen vs loosened). Weave vs Dissolution (coherence vs destruction).
+
+**Not opposing:** Weave vs Lock or Pull vs Dissolution (same general direction — compound, not oppose). Any operation vs Mending (Mending targets substrate absence per §2.4; categorically different target). Operations at different scales on the same entity (different configurations — resolve independently; co-movement compounds at the shared site).
+
+### Opposing Engagement Modifier
+
+Each practitioner's Ob is increased by +floor(opponent's Thread Pool Score ÷ 2), minimum +1.
+
+| Opponent Thread Pool Score | Modifier |
+|---|---|
+| 3 (Thread Sensitivity 30–39) | +1 |
+| 4–5 (Thread Sensitivity 40–59) | +2 |
+| 6–7 (Thread Sensitivity 60–79) | +3 |
+| 8–9 (Thread Sensitivity 80–99) | +4 |
+| 10 (Thread Sensitivity 100) | +5 |
+
+The opponent's configuration drives the thread in the opposite direction during contact. Their perceptual depth (Thread Pool Score) determines the resistance they create. This is rendered-side resistance (P-07). Stacks with all other Ob modifiers.
+
+### Resolution Table
+
+Both roll their operation pools against modified Obs.
+
+| A's Result | B's Result | Thread Outcome | Rendering Stability | A's Consequences | B's Consequences |
+|---|---|---|---|---|---|
+| Meets Ob | Meets Ob | **Shifting Object** at target's scale | Worst single degree-table Rendering Stability cost + 1 | Coherence per §3.2. Knot strain: +1 Ob next Thread op this scene, 2 Composure. | Same. |
+| Meets Ob | Partial | **A's operation resolves.** Overwhelming degrades to Success; Success unchanged. | A's degree-table Rendering Stability cost + 1 | Coherence per §3.2. 1 Composure. | Coherence per §3.2. Knot strain: +1 Ob, 2 Composure. No degree-table consequences. |
+| Meets Ob | Failure | **A's operation resolves at achieved degree.** No contest. | A's degree-table Rendering Stability cost | Normal. | Standard Failure per degree table. |
+| Partial | Partial | **Weak oscillation.** d6: 1–2 = Shifting Object one scale below. 3–6 = none. | −1 | Coherence per §3.2. Knot strain: +1 Ob, 2 Composure. | Same. |
+| Partial | Failure | **A's Partial resolves.** | A's Partial Rendering Stability cost | Normal Partial. | Standard Failure. |
+| Failure | Failure | **Nothing resolves.** | −1 | Coherence per §3.2. 1 Composure. | Same. |
+
+**Why overwhelmed practitioners do not take degree-table consequences:** Degree-table Failure consequences (snap-back, collapse) are calibrated for operational failure — the interaction with the thread went wrong. In opposing operations, the overwhelmed practitioner was overpowered, not misaligned. The thread did not snap back — it was redirected by the opposing configuration. The consequence is knot strain (§12.2: tension at the knots), not the degree table's Failure entry.
+
+### Knot Strain
+
+| Scenario | Losing/Tied Practitioner | Winning Practitioner |
+|---|---|---|
+| Standard (Weave/Pull) | +1 Ob next Thread op this scene. 2 Composure. | 1 Composure. |
+| FR (Lock/Dissolution) | +2 Ob. 4 Composure. If winner Dissolved: +1 Wound (tear through knot; no armour). | 2 Composure. |
+| Both meet Ob (tie) | Both: +1 Ob, 2 Composure. (FR: +2 Ob, 4 Composure.) | N/A |
+| Both fail | Both: 1 Composure. | N/A |
+
+Composure restores at scene change. Ob penalty expires after next Thread operation or at scene end.
+
+### Co-Movement
+
+Coherence fires per-practitioner per §3.2 (each suspended their own layer 2). Epistemic and actual effects fire ONCE for the compound event — one disturbance on one thread. If one operation won: use that operation's co-movement profile. If Shifting Object formed: epistemic = observers perceive oscillation (+1 Ob social rolls at site, remainder of scene); actual = roll once on the Weaving actual table.
+
+### FR vs FR Both-Fail Scaling
+
+| Scale | Rendering Stability Cost | Shifting Object Risk (d6) |
+|---|---|---|
+| Object | −1 | 1 = 17% |
+| Personal | −2 | 1–2 = 33% |
+| Relational | −3 | 1–3 = 50% |
+| Territorial | −4 | 1–4 = 67% |
+| Structural | −5 | 1–5 = 83% |
+
+Both practitioners: +2 Ob, 4 Composure.
+
+### Sustained Opposition
+
+Pre-declared operations in subsequent rounds: +1 Ob sequential failure penalty if target state changed. Knot strain Ob stacks with sequential penalty. A Shifting Object receiving a second Shifting Object from opposing operations advances one deterioration tier (1d3 seasons → 1d3 sessions → end of scene).
+
+### N-Way Opposing Operations (3+ Practitioners)
+
+Three or more practitioners with at least two genuinely opposing intentionalities on the same configuration: automatic lattice collapse. All operations fail. Gap forms at target's scale. Rendering Stability −(2 × number of opposing practitioners). All: Coherence per §3.2; knot strain +2 Ob, 4 Composure.
+
+### Combat Timing
+
+Both declare Leap at Priority 5. Declarations (operation type and target) are simultaneous. A practitioner who has declared may withdraw before rolling (forfeiting the round).
+
+
+
 # PART THREE: COHERENCE (10→0)
 
 ## 3.1 What Coherence Measures
@@ -885,4 +963,4 @@ Replaces Thread Tension track on board. Runs 100→0. Hidden by default (Investi
 | 10 | Solmund rename + AG→AS + Church rename (all files) | Haiku |
 | 11 | Canon guard pass on complete redesign | Sonnet |
 
-> **Opposing simultaneous ops (P-24):** When two practitioners in contact target the same configuration with opposing intentionalities (e.g., one Weaving, one Pulling; one Mending, one disrupting), both roll their respective pools against their respective Obs. | Outcome | Resolution | |---|---| | Both succeed | The thread receives contradictory direction. It oscillates. A **Shifting Object** forms at the thread's scale (per §9.5). Both 
+> **Opposing simultaneous ops (P-24 → §2.6, PP-632):** Full Contested Intentionality procedure defined in §2.6. Supersedes this inline note. See §2.6 for resolution table, knot strain, co-movement decomposition, N-way lattice collapse, Mending immunity, and cross-mode rules.
