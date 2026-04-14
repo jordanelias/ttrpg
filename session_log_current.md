@@ -1480,3 +1480,58 @@ bdd5031 — [propagation] Fieldwork propagation + §13 skeleton split + Godot §
 - fieldwork → social_contest_system_v2.md: Contest Escalation boundary + Combined Findings (F-TRANS-10/11)
 - valoria-game Godot: fix B-03, A-05 (season integration blockers); A-02, DA-03 (NPC memory blockers)
 ```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-13_SONNET_FIELDWORK_CANON_GUARD
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASK
+Canon guard review of fieldwork_design_v1.md against philosophical foundations,
+emergence vectors, and Domain Echo. All 15 canon constraints (P-01–P-15) evaluated.
+Five pending propagation items from PP-583 session completed.
+
+## CANON GUARD FINDINGS (PP-628)
+- P-05 FAIL → FIXED: Mode 1 (Ordinary Incursion) vs Mode 2 (Providence) mechanically
+  distinct in §3.1 Anomaly POI. Mode 1 = time-sensitive (evidence halves after 3 scenes).
+  Mode 2 = event not entity (Interview/social unavailable).
+- P-01 PARTIAL → FIXED: §2.4 co-movement note (all Thread ops produce co-movement via
+  threadwork rules). §4.5 clarified "fieldwork-defined action" vs Thread operations.
+- PP-626 PROPAGATION GAP FIXED: §2.1 and §4.2 Thread-Read primary Attunement → Spirit.
+  (§4.5 Step 3 was already corrected in source.)
+- P-06 NOTE ADDED: Threadcut being Knot strain (+1/use, cumulative; instability at 5).
+- DOMAIN ECHO §2.5 GAPS FILLED: scope definition, timing (scene end / Accounting),
+  NPC learning mechanism (Watched, hostile witness, public citation).
+- BREACH × THREADCUT §3.1: confirmed entry sites yield +3 Evidence (Thread-verified).
+- P-02, P-03, P-04, P-07–P-15: all PASS. No violations.
+
+## PROPAGATION (PP-629)
+All 5 pending items completed:
+- propagation_map.md: FIELDWORK section added (12 cross-references)
+- params_board_game.md: Survey (Consul Inward) Ob row added
+- params_core.md: Attribute Roles — Fieldwork section added
+- stage11_scale_transitions.md: 9th handoff rule (Fieldwork ↔ All systems)
+- coverage_matrix.md: SIM-FW-02 through FW-10 added (all RESOLVED);
+  misplaced FW-03/FW-06 from Thread System Redesign section removed
+
+## COMMIT
+7639eb20a3e1434544ce5bf0449ef94d5c82c48f
+Files: fieldwork_design_v1.md, params_board_game.md, params_core.md,
+  params_combat.md (PP-627 header), stage11_scale_transitions.md,
+  propagation_map.md, coverage_matrix.md, canonical_sources.yaml,
+  patch_register.yaml (PP-628, PP-629)
+
+## CHECKERS
+broken_dependency_checker.py: EXIT 0 (clean, 439 files verified)
+patch_propagation_checker.py: EXIT 0 (389 propagations, 0 missing)
+
+## P1 BLOCKERS: 0
+## OPEN EDITORIALS (fieldwork): 14 remaining open (ED-NEW-01–15, minus RESOLVED ED-NEW-11)
+## SIM-DEBT: 0 (all resolved)
+## PROPAGATION STATUS: complete (0 pending)
+```
