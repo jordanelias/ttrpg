@@ -36,7 +36,7 @@ systems:
   combat:
     status: active
     canonical: designs/combat/combat_v30.md
-    canonical_sha__designs__combat__combat_v30_md: "97141aae2e0926d0ee27b2a02a0bbe2fea042c08"
+    canonical_sha__designs__combat__combat_v30_md: "d9dcb47ad730b1c934a9bd1678f2dad552faafba"
     params: references/params_combat.md
     design_doc: designs/combat/combat_v30.md
 
@@ -81,7 +81,7 @@ systems:
   territories:
     status: active
     canonical: designs/setting/geography_v30.md
-    canonical_sha__designs__setting__geography_v30_md: "8fb221327605736f5a1f11a0428e33c2494d4b91"
+    canonical_sha__designs__setting__geography_v30_md: "625ccad8feb36cfa49821060b83b551f8716099e"
     params: null
     design_doc: designs/setting/geography_v30.md
 
@@ -95,7 +95,7 @@ systems:
   social_debate:
     status: active
     canonical: designs/contest/social_contest_v30.md
-    canonical_sha__designs__contest__social_contest_v30_md: "a395043c9f667d03d709cf242643cc9a26d99c5e"
+    canonical_sha__designs__contest__social_contest_v30_md: "db69ee24ef2e4c811d285c4fd08e9347633b011e"
     params: references/params_contest.md
     design_doc: designs/contest/social_contest_v30.md
 
@@ -131,7 +131,7 @@ systems:
   fieldwork:
     status: active
     canonical: designs/fieldwork/fieldwork_v30.md
-    canonical_sha__designs__fieldwork__fieldwork_v30_md: "b0767355e57fb7f0245c633ec82e5471dc4e0f8a"
+    canonical_sha__designs__fieldwork__fieldwork_v30_md: "d17cfcd35280bfb43a3dfc0dc6abbdac58382b64"
     params: null
     design_doc: designs/fieldwork/fieldwork_v30.md
 
