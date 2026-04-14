@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/fieldwork/fieldwork_design_v1.md on 2026-04-13 -->
 # VALORIA — FIELDWORK SYSTEM v1.1
 ## Exploration / Investigation / Socializing
 ## Status: DESIGN — approved for commit. Review corrections: 2026-04-13 (v1.1), PP-628 (canon guard), PP-630 (three-axis Ob, Warden Emergence fix, ED-NEW harvest).

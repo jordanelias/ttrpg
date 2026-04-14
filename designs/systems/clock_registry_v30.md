@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/systems/clock_registry.md on 2026-04-13 -->
 # Valoria Clock & Track Registry
 ## Created: 2026-04-08 | Updated: 2026-04-13 (PP-548–PP-554, fieldwork tracks added) | Status: CANONICAL
 ## Single source of truth for all clocks, tracks, and counters.

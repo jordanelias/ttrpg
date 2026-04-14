@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/mass_combat/mass_battle_v3.md on 2026-04-13 -->
 # VALORIA — MASS BATTLE SYSTEM v4
 ## Version: v4.8 — PP-240,241,245,249,250,256 applied;
 ##  PP-232 (renames: Strength→Size, CP→Power, Cohesion→Discipline, CR→Command) + PP-233 (core formula) propagated.

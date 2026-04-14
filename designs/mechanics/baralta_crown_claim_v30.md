@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/mechanics/baralta_crown_claim_mechanic.md on 2026-04-13 -->
 # Baralta Crown Claim — BG Mechanic Design
 ## Status: DESIGN (editorial decision, flagged for review)
 ## Date: 2026-04-11

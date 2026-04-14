@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/board_game/victory_architecture_v1.md on 2026-04-13 -->
 # VALORIA BG — Victory Architecture
 ## ED-306 Resolution (v3 — geography_design.md territory numbering, TC 75 canonical, PT cap clarified)
 ## PP-540–546 (2026-04-10): Balance patches — solo + co-victory timeline normalisation

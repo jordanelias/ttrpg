@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/fieldwork/fieldwork_hybrid.md on 2026-04-13 -->
 # VALORIA — FIELDWORK SYSTEM v1.1 — §9 Hybrid Mode
 ## Parent: designs/fieldwork/fieldwork_design_v1.md
 ## Status: DESIGN — canonical subsystem file. See parent for full cross-references.

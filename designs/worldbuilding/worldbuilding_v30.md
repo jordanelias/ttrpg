@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/worldbuilding/worldbuilding_integration_v3.md on 2026-04-13 -->
 # WORLDBUILDING INTEGRATION v3 — Lore-to-Mechanics (Final Trimmed)
 ## Source: Pre-project lore documents (Church, Löwenritter, Crown, Guilds, Economy, Governance)
 ## Date: 2026-04-03

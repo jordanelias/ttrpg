@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/ttrpg/threadwork_philosophical_reference.md on 2026-04-13 -->
 # THREADWORK — PHILOSOPHICAL REFERENCE
 ## Extracted from: designs/ttrpg/threadwork_redesign_v25.md Part 1
 ## Extracted: 2026-04-02 (v2.6 → v3.0 skeleton clean)

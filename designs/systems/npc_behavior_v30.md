@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/systems/npc_behavior_system_v1.md on 2026-04-13 -->
 # VALORIA — NPC ETHICAL STANCE AND RESONANCE BEHAVIOR SYSTEM v1
 ## Status: DESIGN PROPOSAL — requires user review before commit
 ## Date: 2026-04-13

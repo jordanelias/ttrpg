@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/hybrid/hybrid_gaps_resolved.md on 2026-04-13 -->
 # Hybrid Gap Resolutions
 ## Session: 2026-03-26
 

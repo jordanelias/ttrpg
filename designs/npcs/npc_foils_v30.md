@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/npcs/npc_foils.md on 2026-04-13 -->
 # Valoria — The Ruler Diamond: Foil Analysis & Extended Perspectives
 ## Almud · Lenneth · Baralta · Vaynard
 ## Consolidated | Date: 2026-04-11 | Status: DESIGN

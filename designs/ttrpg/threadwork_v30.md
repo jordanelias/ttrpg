@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/ttrpg/threadwork_redesign_v25.md on 2026-04-13 -->
 # THREADWORK MECHANICS — v2.6
 ## Date: 2026-03-27 (revised 2026-04-02)
 ## Authority: Philosophical Foundations (immutable) → this document (design proposal, requires editorial approval)

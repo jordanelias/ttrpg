@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/npcs/npc_character_analyses.md on 2026-04-13 -->
 # Valoria — NPC Character Analyses
 ## Consolidated | Date: 2026-04-11 | Status: DESIGN
 ## Incorporates: npc_character_analyses.md (roster NPCs) + npc_character_analyses_existing.md (ruler diamond + existing named NPCs)

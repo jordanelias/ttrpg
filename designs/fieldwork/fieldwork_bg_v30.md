@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/fieldwork/fieldwork_bg.md on 2026-04-13 -->
 # VALORIA — FIELDWORK SYSTEM v1.1 — §8 Board Game Mode
 ## Parent: designs/fieldwork/fieldwork_design_v1.md
 ## Status: DESIGN — canonical subsystem file. See parent for full cross-references.

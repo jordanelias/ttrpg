@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/contest/social_contest_system_v2.md on 2026-04-13 -->
 # VALORIA — SOCIAL CONTEST SYSTEM v2
 ## [EDITORIAL: ED-136 — System name: "Contest" proposed. Candidates: Contest, Contention, Proceeding.]
 ## Patches applied: PP-234, PP-235, PP-236, PP-237, PP-272, PP-278, PP-279

@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/characters/character_histories_lifepath.md on 2026-04-13 -->
 # VALORIA — Character Histories: Lifepath System
 ## Status: DESIGN PROPOSAL — requires editorial approval
 ## Scope: Lifepath-based History generation with SaGa-style sparking, Recall-gated equip slots, skill levels 1–3

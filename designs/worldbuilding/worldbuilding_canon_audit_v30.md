@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/worldbuilding/worldbuilding_v3_canon_audit.md on 2026-04-13 -->
 # WORLDBUILDING v3 — CANON COMPLIANCE & SUPERSESSION AUDIT
 ## Date: 2026-04-03
 ## Method: Cross-referenced every v3 proposal against foundations, canon constraints (P-01–P-15), canonical timeline, stage6, stage13, stage7, BG v05, params_factions, editorial ledger.

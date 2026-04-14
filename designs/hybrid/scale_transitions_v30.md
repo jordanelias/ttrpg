@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/hybrid/scale_transitions_design_v1.md on 2026-04-13 -->
 # Scale Transitions and Mode Bridge Design
 ## Version: v1.0 | Date: 2026-04-13
 ## Status: DESIGN — canonical for scale transitions and mode bridging

@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/conviction_track/opus_design_proposal.md on 2026-04-13 -->
 # Valoria BG — Conviction Track & Church Victory Redesign
 ## PP-406 through PP-418
 ## Date: 2026-04-05 | Status: Design Proposal — Awaiting User Review

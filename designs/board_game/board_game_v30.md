@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/board_game/valoria_bg_v05_simulation_and_patches.md on 2026-04-13 -->
 # VALORIA: THE BOARD GAME
 ## Institutional Mandate — Uphold / Appease (PP-189)
 

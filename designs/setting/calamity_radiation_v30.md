@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/setting/calamity_radiation.md on 2026-04-13 -->
 # VALORIA — Calamity Radiation Framework
 ## Status: CANONICAL — approved 2026-04-06
 ## Scope: Geographic graduation of Rendering Stability (RS) threshold effects by node distance from Askeheim (T15)

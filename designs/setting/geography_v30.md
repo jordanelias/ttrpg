@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/setting/geography_design.md on 2026-04-13 -->
 # VALORIA — Geography & Territory Design
 ## Status: CANONICAL — approved 2026-04-05
 ## Scope: Physical geography, territory map (17 territories), adjacency graph, starting control

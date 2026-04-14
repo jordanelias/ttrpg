@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/combat/combat_design_v1.md on 2026-04-13 -->
 # VALORIA — COMBAT DESIGN (v1)
 ## Date: 2026-04-02
 ## Version: v1.6 (PP-238, PP-239, PP-247 applied; PP-232: weapon system rebuild, wound penalty, initiative, Health/Stamina, Stage 1/2 struck; PP-210–218: audit gap fixes — Health formula, Critical Hit, Feint timing, Tie Up, Rescue, Dodge, Fibonacci, Anti-Armour, PP-086)

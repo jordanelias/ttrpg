@@ -1,3 +1,4 @@
+<!-- v30 baseline — renamed from designs/board_game/varfell_path_b_redesign_ed311.md on 2026-04-13 -->
 # Varfell Path B — Southernmost Dominion (Redesign Proposal)
 ## ED-311 | Status: AWAITING USER REVIEW
 ## Date: 2026-04-06
