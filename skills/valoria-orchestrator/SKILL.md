@@ -277,6 +277,57 @@ After any v30 rename commit, run a propagation pass to update all cross-referenc
 Tools: `tools/find_references.py` can assist with step 2.
 
 
+
+## Two-Repo Architecture
+
+Valoria has two repositories:
+
+| Repo | Purpose | Enforcement |
+|------|---------|-------------|
+| `jordanelias/ttrpg` | Design: mechanics, params, registers, skills | Full — register health, editorial gate, co-files, CI |
+| `jordanelias/valoria-game` | Godot implementation: GDScript, scenes, assets | Commit format only — no register/editorial checks |
+
+**Default is `ttrpg`.** Switch repos with `g.use_repo('valoria-game')` or pass `repo=` per-call.
+
+### Working on valoria-game
+
+```python
+# Fetch Godot files
+files = g.read_files_graphql(['autoload/Meta.gd', 'systems/combat/CombatLogic.gd'],
+                              repo='valoria-game')
+
+# Commit Godot files — same safe_commit, different repo
+oid = h.safe_commit(
+    additions=[('autoload/Meta.gd', new_content)],
+    deletions=[],
+    message='[godot] Meta: add faction stat tracker — PP-644',
+    repo='valoria-game',
+)
+```
+
+**Commit message scopes for valoria-game:** `[godot]` · `[phase]` · `[fix]` · `[bugfix]` · `[infrastructure]`
+
+### Cross-repo work (design change → implementation)
+
+When a design change in ttrpg requires a corresponding change in valoria-game, commit both atomically in sequence:
+
+```python
+# 1. Commit design change to ttrpg
+oid1 = h.safe_commit(design_additions, [], '[patch] PP-NNN: mechanic change', repo='ttrpg')
+
+# 2. Commit implementation to valoria-game
+oid2 = h.safe_commit(godot_additions, [], '[godot] implement PP-NNN: mechanic change', repo='valoria-game')
+```
+
+### What GitHub sources for valoria-game
+
+Read from ttrpg params files to implement. Never invent mechanical values:
+```python
+params = g.read_files_graphql(['references/params_combat.md'], repo='ttrpg')
+# Use params content to derive constants for GDScript
+```
+
+
 ## Workflows
 
 **Full Mechanical Audit**
