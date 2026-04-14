@@ -262,13 +262,28 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
 # ── Hook 6: Propose mechanic ──────────────────────────────────────────────────
 
 def propose_mechanic_gate(system: str) -> None:
-    """Call before any mechanic proposal. Raises if canonical_sources not fetched."""
-    if g._repo_key('references/canonical_sources.yaml', 'ttrpg') not in g._session_fetches:
+    """
+    Call before any mechanic proposal. Enforces full prerequisite chain:
+    1. canonical_sources.yaml fetched
+    2. editorial_ledger_summary.yaml fetched
+    3. Canonical design doc for the system fetched
+    """
+    cs_key = g._repo_key('references/canonical_sources.yaml', 'ttrpg')
+    if cs_key not in g._session_fetches or g._session_fetches[cs_key] is None:
         raise RuntimeError(
             f"[HOOK VIOLATION] propose_mechanic_gate('{system}'):\n"
             f"  canonical_sources.yaml not fetched.\n"
             f"  Cannot propose mechanics without knowing which doc is canonical."
         )
+    els_key = g._repo_key('canon/editorial_ledger_summary.yaml', 'ttrpg')
+    if els_key not in g._session_fetches or g._session_fetches[els_key] is None:
+        raise RuntimeError(
+            f"[HOOK VIOLATION] propose_mechanic_gate('{system}'):\n"
+            f"  editorial_ledger_summary.yaml not fetched.\n"
+            f"  Required before proposing mechanics."
+        )
+    # Delegate to task_gate_with_system for canonical doc verification
+    task_gate_with_system('propose_mechanic', system, g._session_fetches[cs_key])
     print(f"[HOOK ✓] propose_mechanic_gate('{system}')")
 
 

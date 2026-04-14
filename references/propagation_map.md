@@ -155,7 +155,7 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | `references/params_factions.md` | `skills/valoria-simulator/SKILL.md` (Mode G4) | Sim loads params |
 | `references/params_factions.md` | `skills/valoria-mechanic-audit/SKILL.md` | Audit loads params |
 
-### DEBATE
+### SOCIAL CONTEST
 
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
