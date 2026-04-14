@@ -7556,3 +7556,63 @@ patches:
   affects:
     - references/params_threadwork.md
   status: applied
+
+- id: PP-623
+  type: correction
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Probability calculation corrected throughout. Prior simulation used E[net]=0.3
+    per die at TN7, which is wrong. Correct values:
+
+    E[NET PER DIE BY TN:
+    TN 7: faces 1→-1, 2-6→0, 7-9→+1, 10→+2. E = -0.1+0+0.3+0.2 = 0.4
+    TN 8: faces 1→-1, 2-7→0, 8-9→+1, 10→+2. E = -0.1+0+0.2+0.2 = 0.3
+    TN 9: faces 1→-1, 2-8→0, 9→+1, 10→+2. E = -0.1+0+0.1+0.2 = 0.2
+    Each TN step costs exactly 0.1 E[net] per die.
+
+    Variance per die (TN7): E[X²]=0.8, Var=0.64, SD=0.8.
+    For N dice: E=0.4N, SD=√(0.64N)=0.8√N.
+
+    FIBONACCI DEPTH Ob CORRECTED (shift one step up in sequence):
+    | Depth       | Ob | Mending Ob |
+    |-------------|-----|------------|
+    | Object      | 1   | n/a        |
+    | Personal    | 2   | n/a        |
+    | Relational  | 3   | 2          |
+    | Field       | 5   | 4          |
+    | Structural  | 8   | 7          |
+    | Foundational| 13  | 12         |
+
+    Sequence: 1, 2, 3, 5, 8, 13. Fibonacci from F(1) through F(7).
+    Mending: Depth Ob − 1 (working with substrate's self-repair tendency).
+
+    TOTAL OB = Depth Ob + Breadth Ob + Distance Ob + TN modifiers (unchanged from PP-622).
+
+    VERIFICATION (E=0.4/die TN7, normal approx with continuity correction):
+    Beginner 10D (E=4.0, SD=2.53):
+      Object single contact Ob1: P≈92% ✓ any practitioner
+      Relational single contact Ob3: P≈72% ✓ struggle
+    Capable 14D (E=5.6, SD=2.99):
+      Relational single contact Ob3: P≈85% ✓ reliable
+      Field formation 100m (Ob5+2+1=8): P≈40% ✓ expert territory
+    Expert 17D (E=6.8, SD=3.30):
+      Field single contact Ob5: P≈76% ✓
+      Formation 100m Ob(3+2+1=6): P≈65% ✓
+    Master 20D (E=8.0, SD=3.58):
+      Structural single contact Ob8: P≈56% ✓ hard
+    Edeyja 22D (E=8.8, SD=3.75):
+      Foundational Mending single contact Ob12: P≈22% ✓ hard sustained work
+      Foundational standard single contact Ob13: P≈16% ✓
+      Foundational network Ob(13+4+3=20): P<1% ✓ impossible alone
+
+    TN8 (Binding Ops): E=0.3N. For 22D: E=6.6, SD=3.66.
+      Edeyja Relational Lock single contact (Ob3): P≈83% ✓ expert Binding accessible
+      Edeyja Structural Lock single contact (Ob8): P≈47% ✓ hard
+    TN9 (POP Binding): E=0.2N. 22D: E=4.4.
+      Near-impossible except at shallow depth and close range.
+  finding_id: PP-622 probability_error
+  affects:
+    - references/params_threadwork.md
+    - references/params_core.md
+  status: applied

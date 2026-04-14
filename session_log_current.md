@@ -4,6 +4,26 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-14_SONNET_PP623_PROBABILITY_CORRECTION
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+PATCH: PP-623 — Probability calculation corrected.
+  TN7: E=0.4/die (was 0.3). TN8: E=0.3/die. TN9: E=0.2/die.
+  Fibonacci Depth Ob shifted up one step: 1,2,3,5,8,13 (was 1,1,2,3,5,8).
+  Mending: Depth Ob - 1.
+  22D TN7 Ob13 = 16% confirmed correct.
+  Edeyja Foundational Mending (Ob12): ~22%. Foundational standard (Ob13): ~16%.
+  Calamity network (Ob20): <1%. All verify correctly.
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-14_SONNET_PP622_THREE_AXIS_OB
 session_close: 2026-04-14
 phase: COMPLETE
