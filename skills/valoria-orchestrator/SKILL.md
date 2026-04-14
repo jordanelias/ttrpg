@@ -334,6 +334,21 @@ params = g.read_files_graphql(['references/params_combat.md'], repo='ttrpg')
 ```
 
 
+
+## Fetch Depth Routing (Token Efficiency)
+
+**Default: skeleton-first.** Always load the canonical v30 skeleton file, NOT the infill, unless prose rationale is specifically needed.
+
+| Task | Depth | Function |
+|---|---|---|
+| Mechanic proposal | `skeleton` | `g.fetch_system('combat', cs_content)` |
+| Simulation | `params_only` | `g.fetch_system('combat', cs_content, depth='params_only')` |
+| Deep editorial review | `full` | `g.fetch_system('combat', cs_content, depth='full')` |
+| Canon check | Use `canon/00_philosophical_foundations_rules.md` (1,943t) NOT full prose (17,554t) |
+| Audit | `skeleton` + params separately if values needed |
+
+**Infill files exist for rationale/prose.** They are NOT needed for: simulation, audit, mechanic proposal, patch work, compilation. Only load infill when Jordan asks for philosophical justification or narrative context.
+
 ## Workflows
 
 **Full Mechanical Audit**

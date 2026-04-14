@@ -571,6 +571,60 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
     token = _h_mod.assert_bootstrap()
     return _g_mod, _h_mod, files, token
 
+
+
+# ── Smart fetch (skeleton-first) ────────────────────────────────────────────
+
+def fetch_system(system: str, canonical_sources_content: str,
+                 depth: str = 'skeleton', repo: str = None) -> dict:
+    """
+    Fetch system files using depth-aware routing.
+
+    depth:
+      'skeleton'    — canonical doc only (default, sufficient for most work)
+      'full'        — canonical doc + infill (for deep editorial or prose review)
+      'params_only' — params file only (for simulation, value checks)
+      'all'         — canonical + infill + params
+
+    Returns dict of {path: content} for fetched files.
+    """
+    import yaml
+    repo = repo or _active_repo
+
+    try:
+        sources = yaml.safe_load(canonical_sources_content)
+    except Exception as e:
+        raise RuntimeError(f"Cannot parse canonical_sources: {e}")
+
+    systems = sources.get('systems', {})
+    entry = systems.get(system, {})
+    if not entry:
+        raise RuntimeError(
+            f"System '{system}' not in canonical_sources. "
+            f"Available: {sorted(systems.keys())}"
+        )
+
+    canonical = (entry.get('canonical') or entry.get('canonical_bg') or
+                 entry.get('design_doc') or entry.get('canonical_ttrpg'))
+    params = entry.get('params')
+
+    paths = []
+    if depth in ('skeleton', 'full', 'all'):
+        if canonical:
+            paths.append(canonical)
+    if depth in ('full', 'all'):
+        infill = canonical.replace('_v30.md', '_v30_infill.md') if canonical else None
+        if infill and infill != canonical:
+            paths.append(infill)
+    if depth in ('params_only', 'all'):
+        if params:
+            paths.append(params)
+
+    if not paths:
+        raise RuntimeError(f"No fetchable paths for '{system}' at depth '{depth}'")
+
+    return read_files_graphql(paths, repo=repo, skip_health_check=True)
+
 # ── CLI smoke test ────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
