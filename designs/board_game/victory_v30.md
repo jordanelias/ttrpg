@@ -9,6 +9,7 @@
 ## Supersedes: v2 (same path), params_board_game.md §Victory Conditions, all Deed-based victory systems
 ## Dependencies: ED-302 (PT confirmed), ED-303 (TC freeze at 75), ED-304 (Partition Victory), ED-305 (WA=0), ED-307 (Baralta cadet branch), BALANCE-001 (equal win probability), BALANCE-004 (Askeheim purpose)
 ## Territory numbering: geography_design.md canonical (all T-numbers match geography_design.md)
+## See also: designs/board_game/peninsular_strain_v1.md (Accord, Peninsular Strain, universal victory condition, faction acquisition toolkits)
 
 ---
 
@@ -26,27 +27,27 @@ Two simultaneous contests: who governs the peninsula AND whether it survives. Ch
 All territory numbers match geography_design.md canonical table.
 
 | T# | Territory | TCV | Controller |
-|----|-----------|-----|-----------| 
+|----|-----------|-----|------------|
 | T1 | Valorsplatz | 5 | Crown★ |
-| T8 | Gransol | 4 | Hafenmark★ |
-| T9 | Himmelenger | 3 | Church★ |
-| T12 | Sigurdshelm | 3 | Varfell |
-| T10 | Spartfell | 1 | Hafenmark |
+| T9 | Himmelenger | 5 | Church★ |
+| T8 | Gransol | 3 | Hafenmark★ |
+| T12 | Sigurdshelm | 3 | Varfell★ |
 | T3 | Lowenskyst | 2 | Crown |
 | T14 | Ehrenfeld | 2 | Crown |
-| T13 | Oastad | 1 | Varfell |
-| T11 | Halvardshelm | 1 | Varfell |
-| T4 | Grauwald | 1 | Varfell |
+| T10 | Spartfell | 1 | Hafenmark |
 | T7 | Rendstad | 1 | Hafenmark |
+| T17 | Halvarshelm | 1 | Hafenmark |
 | T2 | Kronmark | 1 | Crown |
 | T5 | Feldmark | 1 | Crown |
 | T6 | Stillhelm | 1 | Crown |
-| T17 | Halvarshelm | 1 | Hafenmark |
+| T13 | Oastad | 1 | Varfell |
+| T11 | Halvardshelm | 1 | Varfell |
+| T4 | Grauwald | 1 | Varfell |
 | T15 | Askeheim | 0 | Uncontrolled |
 | T16 | Schoenland | — | Not in territorial play |
-| | **Total** | **30** | |
+| | **Total** | **31** | |
 
-**Starting TCV by faction:** Crown 12, Hafenmark 8, Varfell 6, Church 3.
+**Starting TCV by faction:** Crown 12, Hafenmark 6, Varfell 6, Church 5.
 
 ---
 
@@ -384,9 +385,9 @@ P-32 ("Hybrid victory = BG victory PLUS personal arc resolution") is retained. A
 
 | Faction | Start TCV | Target TCV | Gap | Key Difficulty | Est. Timeline |
 |---------|-----------|------------|-----|----------------|---------------|
-| Crown | 10 | 14 | +4 | Suppress 2 of 3 rivals (×2 political) | 12–16 seasons | *(PP-540)* |
-| Church | 3 | 8 | +5 | Graduated Seizure from TC 30+; PT management | 14–18 seasons |
-| Hafenmark | 9 | 13 | +4 | Mil 3 handicap + Crown Mandate suppression | 12–16 seasons | *(PP-541)* |
+| Crown | 12 | 14 | +4 | Suppress 2 of 3 rivals (×2 political) | 12–16 seasons | *(PP-540)* |
+| Church | 5 | 8 | +5 | Graduated Seizure from TC 30+; PT management | 14–18 seasons |
+| Hafenmark | 6 | 13 | +4 | Mil 3 handicap + Crown Mandate suppression | 12–16 seasons | *(PP-541)* |
 | Varfell A | 6 | 10 | +4 | Geographic isolation + VTM 3 + intel reveals | 12–14 seasons |
 | Varfell B | 6 | 8 | +2 | VTM 3 + Warden Recognition + T13 control | 12–16 seasons |
 | Varfell C | 6 | 10 | +4 | VTM 5 (~S14+) + RS maintenance | 14–18 seasons |
