@@ -1,3 +1,6 @@
+<!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
+<!-- Infill: mass_battle_v30_infill.md -->
+
 <!-- v30 baseline — renamed from designs/mass_combat/mass_battle_v3.md on 2026-04-13 -->
 # VALORIA — MASS BATTLE SYSTEM v4
 ## Version: v4.8 — PP-240,241,245,249,250,256 applied;
@@ -22,7 +25,6 @@ damage. Two stats unified in personal combat split here:
   training. Determines dice rolled.
 
 **Effective Combat Pool = min(Size, Command) + Command** (PP-233)
-**[PROVISIONAL ED-316] Weight-of-numbers (PP-570):** When a unit's current Size > 2 × the opposing general's Command (the formation is simply too large to be directed against), at Phase 6 Step 2 the opposing unit must pass a Morale check (Ob 1, deterministic). Failure: −1 Morale (the mass is demoralising regardless of casualties). Does not stack with other Morale reductions. [PROVISIONAL — confirm trigger threshold and whether this applies at BG or TTRPG scale only]
 
 As Size drops, the pool shrinks — fewer soldiers means fewer dice
 regardless of individual quality. Command caps both Size and Power contributions. (PP-233) Size determines
@@ -177,7 +179,6 @@ Scaled (÷2 rounded up) from personal combat DR. Crossbow post-DR bonus applied 
 Crossbow post-DR bonus (if net hits > 0): +1 vs Medium and Heavy. Scaled ÷2 from personal +2 (PP-189).
 Sling: effective Power −2D; ammo modifier per unit table above.
 
-Personal combat ranged DR (for reference): LP 0/2/3/5 — HP 0/1/2/3 — LBl 0/1/2/3 — HBl 0/0/1/2. See references/params_combat.md.
 
 **Ranged unit roles:** Archer units effective vs None/Light armour. Crossbow units: modest base, post-DR bonus makes them the anti-armour ranged choice. Sling clay: anti-levy. Sling rock: anti-light. Sling metal: anti-medium. Sling lead: anti-heavy. All sling: −2D pool penalty. HBl (Artillery/siege) follow PP-091/PP-106 — distinct unit type.
 
@@ -317,7 +318,6 @@ applies simultaneously. (PP-505) [PROVISIONAL — ED-354 resolved]
 Configuration changes: practitioner may revise target at no cost if the declared configuration
 has changed significantly (unit destroyed, routed, or repositioned). *[THREAD-P2-03]*
 
-Practitioner rarity note: Phase 4 fires only when a practitioner is present.
 In most battles it is skipped entirely. Board game: no Phase 4 (faction Thread
 orders abstracted to Co-Movement cards at strategic scale, not battle scale).
 
@@ -349,7 +349,6 @@ Per engagement:
 7. Engagement damage recorded. NOT applied until Phase 6 Step 1.
 8. Mutual destruction (both to 0) is valid — Pyrrhic outcomes possible *[P2-02]*. **Mutual total destruction — all units both sides to 0 simultaneously (PP-240, PP-507):** draw; no territory change; both factions Stability check Ob 1 at Accounting. This Ob 1 check REPLACES the §A.13 battle-lost Stability check — a draw produces no loser, so no battle-lost consequence fires. Each faction takes exactly one Ob 1 Stability check at Accounting. [PROVISIONAL — ED-357 resolved]
 
-> **Clarification (PP-MB-01):** "Effective Power is calculated at the start of Phase 4 using Size as of Phase 3 end. All damage within Phase 4 is applied simultaneously at Phase 5 Step 1. Power does not change within a single Phase 4 — a unit that takes damage mid-Phase 4 does not recalculate its Effective Power until Phase 5."
 
 Mass Mismatch Penalty: Light weapon defender vs Heavy weapon attack − 1
 defensive success (min 0). Exempt: Shield Wall.
@@ -389,7 +388,6 @@ both sides lose 1 Morale in Phase 7. *[P2-02, P2-04]*
 | Hammer & Anvil | Shield Wall holds; Fast unit envelops | 3 | Break Anvil first |
 
 Splitting doctrine (PP-508 — replaces P2-14 note, ED-358): Splitting is structurally
-advantageous in most configurations because the defender must distribute their pool
 across simultaneous engagements. Simulation results:
 - Split dominates concentration by +9% to +45% win-rate depending on Command matchup.
 - Only cases where split advantage is negligible (<5%): attacker heavily outcommands defender
@@ -527,9 +525,7 @@ turn qualifies as a non-Thread event of sufficient severity — Game Master may 
 the Woven configuration shatters into a Shifting Object. A Woven unit can be
 simultaneously more and less resilient than an unworked unit. *[EDGE-07]*
 
-> **Clarification:** "A Woven unit configuration that shatters (Size loss in a single turn > current Discipline) does not become a Shifting Object during the battle. For the remainder of the battle, it fights at Line formation, Discipline 1. The Shifting Object status is registered for post-battle Thread consequences — the Game Master tracks this and applies it in the narrative aftermath. This prevents mid-battle stat volatility while preserving the Thread consequence."
 
-**Thread Tension references in stage5_clocks.md:** Compilation error — all Thread Tension references
 must be converted to Rendering Stability with inversion (Thread Tension +N → Rendering Stability −N). *[EDGE-06 — P1,
 requires separate compilation pass on stage5_clocks.md]*
 

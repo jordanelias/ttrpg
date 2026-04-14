@@ -84,9 +84,9 @@ registry:
     system: board_game
     mode: BG
     canonical_v30: designs/board_game/board_game_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/board_game/board_game_v30.md
+    infill: designs/board_game/board_game_v30_infill.md
+    atomized: complete
     predecessor: designs/board_game/valoria_bg_v05_simulation_and_patches.md
     params: references/params_board_game.md
 
@@ -115,9 +115,9 @@ registry:
     system: mass_combat
     mode: ALL
     canonical_v30: designs/mass_combat/mass_battle_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/mass_combat/mass_battle_v30.md
+    infill: designs/mass_combat/mass_battle_v30_infill.md
+    atomized: complete
     predecessor: designs/mass_combat/mass_battle_v3.md
     params: references/params_mass_combat.md
 
@@ -126,9 +126,9 @@ registry:
     system: social_debate
     mode: TTRPG
     canonical_v30: designs/contest/social_contest_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/contest/social_contest_v30.md
+    infill: designs/contest/social_contest_v30_infill.md
+    atomized: complete
     predecessor: designs/contest/social_contest_system_v2.md
     params: references/params_contest.md
 
@@ -137,9 +137,9 @@ registry:
     system: fieldwork
     mode: TTRPG
     canonical_v30: designs/fieldwork/fieldwork_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/fieldwork/fieldwork_v30.md
+    infill: designs/fieldwork/fieldwork_v30_infill.md
+    atomized: complete
     predecessor: designs/fieldwork/fieldwork_design_v1.md
     params: null
     mode_variants:
@@ -194,9 +194,9 @@ registry:
     system: scale_transitions
     mode: HYBRID
     canonical_v30: designs/hybrid/scale_transitions_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/hybrid/scale_transitions_v30.md
+    infill: designs/hybrid/scale_transitions_v30_infill.md
+    atomized: complete
     predecessor: designs/hybrid/scale_transitions_design_v1.md
     params: references/params_scale_transitions.md
 

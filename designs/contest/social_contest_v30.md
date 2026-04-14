@@ -1,3 +1,6 @@
+<!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
+<!-- Infill: social_contest_v30_infill.md -->
+
 <!-- v30 baseline — renamed from designs/contest/social_contest_system_v2.md on 2026-04-13 -->
 # VALORIA — SOCIAL CONTEST SYSTEM v2
 ## [EDITORIAL: ED-136 — System name: "Contest" proposed. Candidates: Contest, Contention, Proceeding.]
@@ -8,25 +11,17 @@
 ## Three-mode: TTRPG (§§1–9), Board Game (§10), Hybrid (§11)
 
 ### Attribute renames
-- Presence → Charisma (Cha). "Presence" reserved as Husserlian technical term: the immediacy of being given to consciousness.
 - Memory → Recall (Rec). "Memory" freed for genre name.
-- All other attributes unchanged: Agility (Agi), Endurance (End), Strength (Str), Cognition (Cog), Focus (Foc), Attunement (Att), Bonds (Bon), Spirit (Spi).
 
 ### Genre restructure
 - Three genres (Past/Present/Future) → two genres (Memory/Projection).
-- "Present" is not a temporal position but the operation site where rendering occurs (Husserlian presence). "Character/Present" arguments decompose into retention (Memory) or protention (Projection) claims.
-- Memory = temporal retention, actual, epistemically accessible. What has been given to consciousness.
-- Projection = temporal protention, potential, epistemically inaccessible. What has yet to be given to consciousness.
 
 ---
 
 ## §1 CORE PRINCIPLE: FORMAT FOLLOWS CONTEXT
 
-The contest system does not have a fixed format. Exchange count, role structure, audience weight, and available actions vary by institutional context and adjudicator type. The Game Master (GM) sets the format at setup; players know it before the contest begins.
 
-**A contest is initiated when:** (a) two or more parties with opposed positions are present, AND (b) the outcome is uncertain and consequential. GMs should not call for a contest when one side has no plausible case or when the outcome is predetermined by prior Domain Actions.
 
-**Let It Ride:** once a contest resolves a question, that question cannot be re-contested unless circumstances have significantly changed (new evidence, new faction alignment, intervening Domain Action, changed political situation). This is a direct application of the core engine's Let It Ride principle (§1.5) to the contest system.
 
 ---
 
@@ -50,7 +45,6 @@ The adjudicator type determines the primary attribute for the Argue pool (§4, S
 | "Did X happen? Was X done? What was established?" | Memory |
 | "Should we do X? What will follow? What should become?" | Projection |
 
-If the question does not clearly favour one genre, the GM assigns whichever is more relevant. Both genres are always available to both orators.
 
 **Step 3 — Set genre and orientation dice:**
 
@@ -92,7 +86,6 @@ These dice are added to the Argue pool at Step 3 of each exchange. They are fixe
 | Private Negotiation | 1–3 | Symmetric | N/A (tracker optional) |
 | Personal Appeal | 1 | Appealer proposes | N/A (tracker optional) |
 
-**Step 6 — Define stakes.** What each side wins, loses, or compromises on. Record before first exchange.
 
 **Step 7 — Record all above in the hidden GM ledger.**
 
@@ -117,7 +110,6 @@ This follows the same pool construction pattern as combat: Combat Pool = (Agilit
 
 The Appraise step (§4, Step 1) always uses Attunement regardless of adjudicator type. Appraising the audience or opponent is always an act of empathetic perception. (PP-278)
 
-**Design note:** the three social attributes (Cognition, Charisma, Attunement) each have a domain where they are primary. High-Cognition characters excel before judges and tribunals. High-Charisma characters excel before crowds and parliaments. High-Attunement characters excel in private dealings. This produces meaningful character differentiation across social contexts without adding mechanical complexity — the formula is the same; only the base attribute changes.
 
 ---
 
@@ -135,7 +127,6 @@ Each exchange's Appraise senses the CURRENT state of the audience (which may hav
 | Success (2) | Full boost identified (e.g. "this audience favours Revealing") |
 | Overwhelming (3+) | Boost identified + one specific detail: a key individual's Belief, the audience's resistance threshold, or the opponent's emotional state |
 
-**Step 2 — Choose:** Each orator selects genre (Memory or Projection) and orientation (Revealing or Obscuring).
 
 **Step 2b — Corroborate (optional):** A corroborator present at the contest may declare support before the Argue roll. On success: primary orator gains +1D for this exchange. Corroborator must be a declared coalition member (Knot not required). Knot-sharing corroborators roll at Ob 1; non-Knot coalition members roll at Ob 2. In asymmetric proceedings: all corroborators for the disadvantaged party use Ob 2 regardless of Knot. (PP-257) On failure: corroborator takes 1 strain.
 
@@ -164,7 +155,6 @@ Both orators push in the same direction within the same temporal horizon.
 - Strain to loser: (margin − 1, minimum 0) + Charisma modifier − Focus defence. Minimum 0.
 
 **CROSS** (different genres):
-One orator invokes what has been (Memory); the other projects what could become (Projection). The fundamental rhetorical collision.
 - No direct comparison. Each argument evaluated independently.
 - Effective margin for each = floor(successes ÷ 2).
 - For each side: if effective margin > resistance → that side moves the track (effective margin − resistance) toward their position.
@@ -178,7 +168,6 @@ One orator invokes what has been (Memory); the other projects what could become 
 - Conviction Track moves +1 toward initiative holder's position.
 - Initiative stays with holder.
 
-**OBSCURING WIN** (winning any exchange with Obscuring orientation in CLASH or REINFORCE; see CROSS clause for CROSS-specific Doubt Marker rule):
 - Conviction Track does not move toward winner.
 - Place a Doubt Marker on the opponent.
 - Doubt Marker effect: opponent's next winning exchange has its margin reduced by 2 before resistance is applied (minimum 0).
@@ -194,12 +183,9 @@ One orator invokes what has been (Memory); the other projects what could become 
 **Composure = Charisma + 6.** Range 7–13. Social damage buffer before Rattled. [RESOLVES ED-127. Parallel to Health = Endurance + 6. One attribute + constant per derived track. Charisma governs social resilience the way Endurance governs physical resilience.]
 
 - Strain accumulates toward Composure threshold.
-- At strain ≥ Composure: take a **Rattled** mark (Composure resets to full, excess strain carries over).
 - All subsequent contest rolls: +1 Ob per Rattled level (cumulative).
-- At 2 Rattled marks: socially incapacitated — cannot participate in formal social scenes until recovered. Informal conversation still possible.
 - Rattled recovery: 1 mark clears per full scene of non-social activity or rest.
 - Composure recovery: full restore at scene change (new location, new interlocutors).
-- Knot as Composure buffer: redirect Composure damage to a Knot (+1 strain per use). Prevents Rattled but accelerates Knot decay.
 
 **Concentration = Focus + Recall.** Range 2–14. Depletes by 1 per exchange, −1 additional on exchange loss.
 - At Concentration 0: **Spent** — next exchange: −2D to all rolls; opponent gets +1D. Then resets to maximum.
@@ -215,7 +201,6 @@ One orator invokes what has been (Memory); the other projects what could become 
 - Exchange 1: higher Attunement acts last (declares second; information advantage).
 - Subsequent exchanges: transfers to exchange winner.
 - On tie: stays with current holder.
-- Institutional override: in asymmetric proceedings, the institution determines who proposes regardless of Attunement.
 - [EDITORIAL: ED-138 — Social initiative is deterministic (higher Attunement always wins Exchange 1). Combat initiative is rolled. Consider whether social initiative should be rolled (Attunement vs Attunement, TN 7, Ob 1) for consistency. Current deterministic version kept pending decision.]
 
 ---
@@ -233,7 +218,6 @@ One orator invokes what has been (Memory); the other projects what could become 
 | Memory | Temporal co-movement (retention shift). The audience re-experiences cited configurations. Observers with Thread Sensitivity (TS) 30+ perceive thread-shimmer. Rendering Stability (RS) +1. |
 | Projection | Actualization co-movement (protention anchor). The argued future becomes a probability anchor. +1D on the first Domain Action pursuing that outcome within the season. RS +1 if the projection involves Thread-sensitive matters. |
 
-**Disposition and Reputation shifts** fire from Total Victory regardless of genre. An overwhelming win in any genre shifts how the audience renders the participants — this is a rendering consequence of social intensity, not a genre effect.
 
 **Domain Echo:**
 - Decisive win + Memory genre: winning faction's Mandate +1 in the domain of the cited precedent.
@@ -248,7 +232,6 @@ One orator invokes what has been (Memory); the other projects what could become 
 
 ## §7 ASYMMETRIC PROCEEDINGS
 
-**Standard proceedings (Parliament, inter-faction):** Full symmetric system. Proposer role alternates each exchange. Initiative transfers per §5 independently.
 
 **Asymmetric proceedings (Church Tribunal, Royal Audience, Inquisition):**
 - Institution assigns Proposer/Respondent roles. Roles do NOT alternate.
@@ -303,7 +286,6 @@ A practitioner may initiate a Thread operation between exchanges. Effects apply 
 Winning an exchange while arguing for a position aligned with the orator's stated Belief counts as a Belief achievement for Momentum. Max 1 Momentum per contest from Belief alignment.
 
 ### §9.6 Forced Unmask
-Violence in the contest chamber = immediate Unmask. Violent party auto-loses. Exception: monster incursion or external catastrophe = postponement. Proceeding resumes next scene if both parties survive.
 
 ### §9.7 Niflhel Social Toolkit
 Niflhel cannot participate in Formal or Grand Contests. Their social toolkit:
@@ -341,7 +323,6 @@ Total Victory: Conviction Track ≥ 9 or ≤ 1 → losing coalition's dominant f
 
 1. **BG layer:** run one round of BG Parliamentary Vote (§10). Apply Conviction Track offset, capped at ±2 from neutral. Per PP-256, BG lobbying offset is restricted to the compromise zone (4–6 at Hybrid session start); the BG layer cannot produce a final resolution — the TTRPG layer always runs.
 2. **Set TTRPG starting Conviction Track:** 5 ± capped BG offset, clamped to compromise zone (4–6).
-3. **TTRPG personal contest:** run standard Formal (3 exchanges) or Grand (5 exchanges) per §§4–7 from adjusted starting position.
 4. **Resolution:** final TTRPG Conviction Track position determines outcome. Thread consequences may fire.
 
 ---

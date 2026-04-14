@@ -1,3 +1,6 @@
+<!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
+<!-- Infill: scale_transitions_v30_infill.md -->
+
 <!-- v30 baseline — renamed from designs/hybrid/scale_transitions_design_v1.md on 2026-04-13 -->
 # Scale Transitions and Mode Bridge Design
 ## Version: v1.0 | Date: 2026-04-13
@@ -9,7 +12,6 @@
 
 ## §1 Three-Mode Architecture
 
-Valoria operates in three modes. TTRPG is the baseline layer — all mechanics are grounded here. Board Game (BG) abstracts to strategic scale. Hybrid bridges between them.
 
 | Mode | Resolution | Time scale | Character presence |
 |------|-----------|------------|-------------------|
@@ -17,7 +19,6 @@ Valoria operates in three modes. TTRPG is the baseline layer — all mechanics a
 | Hybrid | BG strategic layer + TTRPG personal scenes via Zoom In/Out | Seasons (BG) + scenes (TTRPG within) | Faction mat + character sheet when zoomed |
 | BG | Turn-based, faction-level Domain Actions, seasonal Accounting | Seasons/arcs | Faction mat only; characters abstracted |
 
-**Frame:** TTRPG ← Hybrid → Board Game. Hybrid is not a third mode — it is the bridge that allows TTRPG scenes to occur within a BG strategic context, and BG outcomes to generate TTRPG scenes.
 
 ---
 
@@ -37,7 +38,6 @@ Operations span five scales. Scale determines base difficulty and Thread require
 
 ## §3 Eight Handoff Rules
 
-These rules govern how actions in one system translate to effects in another. Each handoff is a defined procedure, not a GM judgment call.
 
 ### §3.1 Personal → Thread
 Leap triggers. Contact duration starts on the round Leap succeeds. Thread pool and operations become available. Return to Personal scale on Contact end or voluntary withdrawal.
@@ -46,16 +46,13 @@ Leap triggers. Contact duration starts on the round Leap succeeds. Thread pool a
 GM recognises faction scope. Personal Ob resolves first, then Domain Action Ob. Same roll — the personal action produces the faction consequence through Domain Echo (§5).
 
 ### §3.3 Personal → Scene (Contest)
-Personal roll may serve as opening move or Appeal in a Contest (social_contest_system_v2.md). The personal action transitions to structured social resolution.
 
 ### §3.4 Scene → Faction (Domain Echo)
-Successful Appeal/Debate at sufficient scope (§7) → Domain Echo fires. No extra roll required. The personal-scene outcome directly produces a faction-level consequence.
 
 ### §3.5 Thread → Faction
 Thread operation targeting faction-level configuration resolves as Domain Action. Thread pool used, appropriate Ob applied. No extra roll — the Thread operation IS the faction action.
 
 ### §3.6 Thread → Mass (Mass Battle Integration)
-Combat Thread operations: declared Phase 1, fire Phase 2 (before Engagement). Support Thread operations: declared Phase 1, fire Phase 5 Step 4–5 (Cascade). Binding Operations follow Phase 4 timing (ED-050 resolved).
 
 ### §3.7 Mass → Personal (General Duel)
 Personal Action available at Phase 5 (Priority 8). Limit: 1 exchange per battle turn. General's Command Rating suspended while in personal combat (PP-232). Maximum 5 exchanges before forced disengage or incapacitation. One mass combat turn = one personal combat exchange. (PP-111)
@@ -71,7 +68,6 @@ Modifier to most relevant unit; 1 turn duration. (PP-261, ED-151)
 
 
 ### §3.9 Fieldwork ↔ All Systems
-Fieldwork scenes (exploration, investigation, socializing) are personal-scale TTRPG actions that can handoff to or receive handoffs from any other system. These are defined procedures, not GM judgment calls.
 
 | Direction | Trigger | Procedure |
 |-----------|---------|-----------|
@@ -87,16 +83,13 @@ Fieldwork scenes (exploration, investigation, socializing) are personal-scale TT
 
 ## §4 Zoom In / Zoom Out Protocol
 
-The Zoom mechanism allows Hybrid mode to transition between BG strategic play and TTRPG personal scenes.
 
 ### §4.1 Zoom In
-**Definition:** Transition from BG layer to a personal TTRPG scene occurring within the BG strategic context.
 
 **Legal entry points (PP-103):** After Phase 1 (declarations), After Phase 3 (movement), After Phase 6 Step 1 (damage application). Mid-Phase-5 Zoom In defers to after Phase 6 Step 1 (PP-250, ED-158).
 
 **Non-battle Zoom In:** Fires at end of current Domain Action being resolved. No unit conversion required. RS changes apply immediately. Domain Echoes queue to Accounting. (ED-073 resolved)
 
-**Ordering:** Multiple simultaneous Zoom Ins resolve in Attunement order. Ties: Agility. Further ties: GM. (ED-072, ED-160)
 
 **Scene Opportunity:** The BG Domain Action degree determines the personal scene difficulty:
 - Board FAILURE → scene Ob +1 (harder)
@@ -120,7 +113,6 @@ Certain arcs define mandatory or optional Zoom In triggers at specific threshold
 
 ## §5 Domain Echo
 
-Domain Echo is the primary bridge mechanism between personal-scale outcomes and faction-scale consequences.
 
 ### §5.1 Trigger
 A personal scene qualifies for Domain Echo when it meets Sufficient Scope (§7). One Domain Echo maximum per scene per faction (PP-329).
@@ -137,7 +129,6 @@ Cap: ±2 per stat per Echo. (ED-071 resolved by PP-329: one Echo/scene/faction p
 
 ### §5.3 Timing by Mode
 - **Full TTRPG (Register Shift):** Domain Echo fires immediately at scene end. No extra roll.
-- **Hybrid (Zoom In active):** Domain Echo queues; fires at next BG Seasonal Accounting Step 3 (Cascade Phase).
 
 This timing difference is intentional (PP-109): Zoom In is a personal intervention in a strategic situation. Faction consequences propagate through seasonal accounting to prevent real-time manipulation of BG stats from personal scenes.
 
@@ -153,13 +144,11 @@ This timing difference is intentional (PP-109): Zoom In is a personal interventi
 ## §6 Mode Transition Procedures
 
 ### §6.1 TTRPG → BG (Session Boundary)
-Faction stats carry over from TTRPG narrative into BG faction mat. Personal character stats suspended — characters are abstracted into faction identity. Queued Domain Echoes from the TTRPG session apply at first BG Accounting.
 
 ### §6.2 BG → Hybrid (Mid-Game Zoom In)
 Personal characters enter board state at the BG faction's current position. Character sheet reactivates. Scene resolves under TTRPG rules within the BG strategic context. See §4.
 
 ### §6.3 Hybrid → TTRPG (Zoom Out)
-Board state updated from personal scene results via Domain Echo. Personal character continues in TTRPG mode if the session is transitioning. BG clock advances only at Accounting (not during personal scenes).
 
 ### §6.4 Coherence Initialization (PP-200)
 First activation of a character in Hybrid mode: Coherence = 10 (full). Subsequent activations: carry forward from last personal scene. No free Coherence reset between Zoom cycles.
@@ -171,19 +160,15 @@ Binary declaration rule: the PC who declares leadership at Phase 1 pays any Cohe
 
 ## §7 Sufficient Scope — Register Shift Trigger
 
-A personal scene qualifies as faction-scope (triggering Domain Echo) when it involves at least one of:
 1. A named faction leader or their designated representative
 2. A direct challenge to a faction's institutional authority (not personal reputation)
-3. An action that would normally require a Domain Action roll (treaty negotiation, formal accusation, territorial claim)
 4. A Thread operation targeting a faction-level configuration (Relational+ scale)
 
-Personal conflicts (brawls, private debates, social introductions) are personal scope only. GM makes final scope determination. (ED-074 resolved)
 
 ---
 
 ## §8 Scope Shift Rules
 
-Once per round, declared at turn start. No roll required. Second scope action in same round costs +1 Inspiration. This prevents rapid scale-hopping within a single encounter.
 
 ---
 
@@ -208,7 +193,5 @@ Paradox window = 1 season on POP. Full TTRPG RS values propagate directly to BG 
 
 ## §11 Contested Figure System (ED-167, ED-168)
 
-A Contested Figure is a named NPC who is simultaneously present in both personal and mass battle contexts during a Hybrid Zoom In.
 
 - CF wound during personal combat → +1 Ob to commander's BG tactic rolls for remainder of current battle
-- CF killed between sequential Zoom Ins → redirected to another named NPC, or Zoom Out with no action consumed if no valid target
