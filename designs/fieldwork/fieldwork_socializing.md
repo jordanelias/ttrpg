@@ -98,6 +98,15 @@ When a social action aligns with or challenges a character's stated Belief, mech
 - **Belief-challenging social success:** No Momentum, but the success creates narrative pressure to re-examine the Belief. GM marks as potential Belief revision opportunity.
 - **Social action that requires betraying a Belief:** Certainty pressure — GM marks potential Certainty shift. Does not fire automatically; resolves at session end per accumulated pressure.
 
+### §5.5b Hook Acquisition via Socializing
+
+An Overwhelming result on a **Read** action (§5.2) that reveals a deeply compromising truth about the target NPC produces a **Hook** — leverage usable in NPC Recruitment (npc_behavior_v30.md §9.5).
+
+- **Overwhelming Read → Weak Hook** by default (suggestive but not irrefutable).
+- **Overwhelming Read + prior Verified Finding on same NPC** → Strong Hook (irrefutable; GM confirms).
+
+Hooks are tagged to the NPC in the roster. A character who holds a Hook may use it in a subsequent Recruitment approach. Hooks acquired through social fieldwork are personal to the character who performed the Read — they do not transfer to the faction automatically unless disclosed in a formal intelligence scene.
+
 ### §5.6 Knot Integration
 
 At Disposition +5 (Bonded), the NPC becomes a Knot candidate per existing threadwork rules. Forming a Knot with a Bonded NPC follows standard Knot procedures (threadwork_redesign_v25.md §8).

@@ -7934,3 +7934,10 @@ patches:
   severity: P2
   description: "NPC Recruitment procedure — §10 added to npc_behavior_v30.md. 4-step: Identify/Approach/Offer/Resolution. Ob = floor(NPC highest-faction Disposition / 2) + 1. Hooks defined (Strong=auto-success Ob1, Weak=-2 Ob). Defection: Belief contradiction check 2 consecutive seasons. ED-510 resolved. ED-511 (Hooks) resolved."
   affects: [designs/systems/npc_behavior_v30.md, canon/editorial_ledger.yaml]
+- id: PP-643
+  date: 2026-04-13
+  severity: P3
+  description: "NPC Recruitment faction consequences. params_factions: Mandate −1 on successful recruitment in NPC's primary territory. fieldwork_socializing: §5.5b Hook acquisition — Overwhelming Read → Weak Hook; + prior Verified Finding → Strong Hook. Closes all remaining propagation from PP-642."
+  affects:
+  - references/params_factions.md
+  - designs/fieldwork/fieldwork_socializing.md

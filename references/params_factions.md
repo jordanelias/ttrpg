@@ -563,3 +563,10 @@ When a Cardinal is killed (by PC action or event):
 **Hybrid mode:** Not present at game start. Founded mid-campaign via Founding Mechanic (see params_board_game.md §RM Founding Mechanic). Post-founding stats depend on Founding degree (Success: Mandate 1/Influence 2/Wealth 1/Military 0/Stability 3; Overwhelming: Mandate 2/Influence 3/Wealth 1/Military 0/Stability 4).
 **TTRPG mode (PP-495):** Not present at campaign start. GM introduces RM as an emergent faction when all narrative conditions converge: (1) cultural shift visible — at least 2 communities/NPCs have expressed dissatisfaction with Church authority or sympathy for Einhir practice in play; (2) substrate strain noticeable — Thread operations have produced visible consequences (Thread Wounds, Coherence loss, RS decline); (3) player engagement — at least one PC has interacted with Einhir cultural knowledge, Southernmost artefacts, or practitioner communities. GM declares the Founding Scene. A named NPC or PC becomes the Founding Agent. RM gains the stat block from §8.8. Floor: session 6 of a standard campaign (political landscape must develop before RM complicates it).
 Prior RM stat entries (Mandate -, Influence -, etc.) reflect pre-Founding state (RM does not exist). Post-Founding stats supersede those entries.
+
+## NPC Recruitment — Faction Consequence (PP-643)
+On successful NPC recruitment (npc_behavior_v30.md §9.5 Step 4 — Success or Overwhelming):
+- Losing faction: Mandate −1 in the NPC's primary territory (talent drain signal).
+- Applies once per recruitment. Does not stack with other Mandate penalties.
+- Overwhelming result additionally provides recruiting faction one Evidence token (Verified).
+- NPC's Disposition toward former faction drops to 0 on departure (regardless of prior value).
