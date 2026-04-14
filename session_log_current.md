@@ -1515,3 +1515,64 @@ status: CLOSED
 - Remaining non-blocking: params_factions (Mandate −1 on NPC recruitment, P3),
   fieldwork_socializing Hook acquisition cross-ref (P3)
 ```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-13_SONNET_ATOMIZE_ALL
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Batch 1 atomization (5 docs): board_game_v30, fieldwork_v30, mass_battle_v30,
+   social_contest_v30, scale_transitions_v30 — skeleton + infill files created
+2. Batch 2 atomization (18 docs): npc_behavior, clocks, worldbuilding, worldbuilding_canon_audit,
+   npc_roster, npc_foils, npc_character_analyses, baralta_crown_claim, conviction_track,
+   geography, calamity_radiation, character_histories, victory, varfell_path_b,
+   fieldwork_hybrid, fieldwork_bg, hybrid_gaps, threadwork_philosophical_reference
+3. 3 blocked systems unblocked — design-layer docs created from compilation stages:
+   - designs/setting/southernmost_v30.md (from stage4, 220 lines)
+   - designs/ttrpg/factions_ttrpg_v30.md (from stage6, 497 lines — TTRPG content only)
+   - designs/systems/campaign_modes_v30.md (from stage12, 244 lines)
+   All three atomized immediately (skeleton + infill)
+4. All 3 new docs added to canonical_sources.yaml and design_registry.yaml
+5. Freshness gate, broken_dependency_checker, patch_propagation_checker: all exit 0
+
+## COMMITS THIS SESSION
+Commit 9  (303cff4): batch1 atomization (5 docs, 11 files)
+Commit 10 (5d087b1): batch2 atomization (18 docs, 37 files)
+Commit 11 (320f130): 3 blocked systems unblocked (8 files)
+Freshness: canonical_sources.yaml SHAs updated
+
+## ATOMIZATION STATE — design_registry.yaml
+ALL canonical v30 docs: atomized: complete
+Exceptions (no infill extracted — already pure skeleton):
+  - clock_registry_v30: 0% infill (0 prose lines)
+  - mass_battle_v30: 1% infill (7 lines only)
+  - threadwork_philosophical_reference_v30: already pure philosophy reference
+
+## BLOCKED SYSTEMS — RESOLVED
+factions_ttrpg: designs/ttrpg/factions_ttrpg_v30.md (UNVERIFIED — needs stress test)
+campaign_modes: designs/systems/campaign_modes_v30.md (UNVERIFIED — needs stress test)
+southernmost:   designs/setting/southernmost_v30.md (UNVERIFIED — needs stress test)
+
+## REMAINING WORK (next sessions)
+1. Stress test the 3 new UNVERIFIED docs:
+   - factions_ttrpg_v30: faction domain actions, unique actions, parliamentary vote
+   - campaign_modes_v30: session structure, mode branching, endgame conditions
+   - southernmost_v30: expedition procedure, ritual Ob calibration, forgetting checks
+2. Build params_factions_ttrpg.md (TTRPG faction mechanical values — currently only BG values
+   are in params_factions.md; TTRPG starting values and domain action Obs need extraction)
+3. Build params_southernmost.md (forgetting check Obs, expedition Obs, zone hazard values)
+4. Build params_campaign_modes.md (session timing, pacing values)
+5. Update file_index.md for the 3 new docs + skeleton/infill structure
+6. Address ED-486–489 P1-BLOCKERs (contested intentionality, Mending immunity, knot strain,
+   co-movement) — these are threadwork opposing operations items requiring Jordan's approval
+
+## P1-BLOCKERs: 1 OPEN (ED-509: Godot POI node architecture — not a game mechanic blocker)
+## THREADWORK P1s: 4 (ED-486–489 — require Jordan editorial decision)
+## safe next_id: 515
+```
