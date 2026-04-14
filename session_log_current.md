@@ -1581,3 +1581,77 @@ status: CLOSED
 4. Jordan: resolve ED-387 (Priority Trees P1-BLOCKER) — unblocks NPC Recruitment + Faction AI
 5. Jordan: name the RM institutional role (Remembrancer placeholder)
 ```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-13_SONNET_V30_BASELINE
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. v30 baseline established — 25 canonical design docs renamed to _v30.md suffix
+2. references/design_registry.yaml created (364 lines) — atomization reference map for all design docs
+3. 40 _deprecated files moved from designs/ to deprecated/designs/ (preserving subdir structure)
+4. valoria-orchestrator/SKILL.md updated — collision prevention, v30 naming convention, v30 propagation protocol, design registry protocol
+5. valoria-editorial-register/SKILL.md updated — ED number collision guard (re-fetch before ID assignment)
+6. skill_registry.md updated — valoria-atomizer planned skill documented
+7. propagation_map.md updated — 16 old paths updated to v30 paths
+8. freshness_gate.py ran — canonical_sources.yaml SHAs updated for all v30 paths
+9. broken_dependency_checker: exit 0 (clean)
+10. patch_propagation_checker: exit 0 (clean)
+
+## COMMITS THIS SESSION
+Commit 1 (6fb448b): [infrastructure] design_registry.yaml, collision guards, ED ID guard, v30 convention
+Commit 2 (e7ec6e1): [infrastructure] 25 canonical design docs renamed to _v30.md, canonical_sources updated
+Commit 3 (c77ba65): [cleanup] 40 _deprecated files moved to deprecated/designs/
+Commit 4 (9d2d25b): [cleanup] propagation_map v30 paths, skill_registry atomizer placeholder
+
+## V30 CANONICAL RENAMES APPLIED
+- designs/ttrpg/threadwork_redesign_v25.md → designs/ttrpg/threadwork_v30.md
+- designs/combat/combat_design_v1.md → designs/combat/combat_v30.md
+- designs/board_game/valoria_bg_v05_simulation_and_patches.md → designs/board_game/board_game_v30.md
+- designs/board_game/victory_architecture_v1.md → designs/board_game/victory_v30.md
+- designs/board_game/varfell_path_b_redesign_ed311.md → designs/board_game/varfell_path_b_v30.md
+- designs/mass_combat/mass_battle_v3.md → designs/mass_combat/mass_battle_v30.md
+- designs/contest/social_contest_system_v2.md → designs/contest/social_contest_v30.md
+- designs/fieldwork/fieldwork_design_v1.md → designs/fieldwork/fieldwork_v30.md
+- designs/fieldwork/fieldwork_hybrid.md → designs/fieldwork/fieldwork_hybrid_v30.md
+- designs/fieldwork/fieldwork_bg.md → designs/fieldwork/fieldwork_bg_v30.md
+- designs/systems/clock_registry.md → designs/systems/clock_registry_v30.md
+- designs/systems/npc_behavior_system_v1.md → designs/systems/npc_behavior_v30.md
+- designs/hybrid/scale_transitions_design_v1.md → designs/hybrid/scale_transitions_v30.md
+- designs/hybrid/hybrid_gaps_resolved.md → designs/hybrid/hybrid_gaps_v30.md
+- designs/setting/geography_design.md → designs/setting/geography_v30.md
+- designs/setting/calamity_radiation.md → designs/setting/calamity_radiation_v30.md
+- designs/worldbuilding/worldbuilding_integration_v3.md → designs/worldbuilding/worldbuilding_v30.md
+- designs/worldbuilding/worldbuilding_v3_canon_audit.md → designs/worldbuilding/worldbuilding_canon_audit_v30.md
+- designs/npcs/npc_roster.md → designs/npcs/npc_roster_v30.md
+- designs/npcs/npc_foils.md → designs/npcs/npc_foils_v30.md
+- designs/npcs/npc_character_analyses.md → designs/npcs/npc_character_analyses_v30.md
+- designs/mechanics/baralta_crown_claim_mechanic.md → designs/mechanics/baralta_crown_claim_v30.md
+- designs/conviction_track/opus_design_proposal.md → designs/conviction_track/conviction_track_v30.md
+- designs/characters/character_histories_lifepath.md → designs/characters/character_histories_v30.md
+- designs/ttrpg/threadwork_philosophical_reference.md → designs/ttrpg/threadwork_philosophical_reference_v30.md
+
+## BLOCKED V30 RENAMES (no design-layer doc exists)
+- factions_ttrpg: source = compilation/stage6_factions.md (unverified) — needs design doc first
+- campaign_modes: source = compilation/stage12_campaign_modes.md (unverified)
+- southernmost: source = compilation/stage4_southernmost.md (unverified)
+
+## REMAINING WORK (next sessions)
+1. file_index.md update — 377 lines, needs STALE/PROPAGATION-PENDING entries updated for v30 paths
+2. Skeleton/infill atomization — per-doc split (TTRPG/Hybrid/BG content + mechanical skeleton)
+   Use valoria-atomizer skill (to be built). Reference: references/design_registry.yaml
+   Atomization order (priority): threadwork_v30, combat_v30, board_game_v30, fieldwork_v30, mass_battle_v30
+3. Build valoria-atomizer skill (skills/valoria-atomizer/SKILL.md)
+4. Propagation of 5 pending items from previous session (propagation_map, params_board_game Survey Ob,
+   params_core attributes, stage11 9th handoff, coverage_matrix)
+5. next_id in editorial_ledger.yaml header is stale (says 486, safe next is 490) — correct header
+
+## P1 BLOCKERS: 4 (ED-486–ED-489 — approved Contested Intentionality / Mending / knot strain / co-movement)
+## EDITORIAL LEDGER next_id: safe next = 490 (header stale — shows 486)
+```
