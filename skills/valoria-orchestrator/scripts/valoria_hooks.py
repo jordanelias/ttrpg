@@ -339,10 +339,8 @@ def safe_commit(additions: list, deletions: list, message: str,
                 errors.append(f"FILE TOO LARGE: {path}: {len(content):,} chars — check for accidental duplication")
         if errors:
             raise RuntimeError(
-                "[HOOK VIOLATION] valoria-game pre-commit:
-" +
-                "
-".join(f"  {e}" for e in errors)
+                "[HOOK VIOLATION] valoria-game pre-commit:\n" +
+                "\n".join(f"  {e}" for e in errors)
             )
         print(f"[HOOK ✓] valoria-game pre-commit (format only — {len(additions)} files)")
 
