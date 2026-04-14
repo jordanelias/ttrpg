@@ -1361,6 +1361,7 @@ P1 BLOCKERS: 0 (all resolved PP-577–582)
 ## PHASE 8: Remaining flagged items
 - 29 flagged items resolved (PP-595)
 - POI catalog (ED-507) and Godot architecture (ED-509) deferred to dedicated sessions
+- Second dedup: 20 more duplicate IDs renumbered + resolved (ED-510–529)
 
 
 OPEN EDITORIALS: 39 (33 open + 6 flagged)

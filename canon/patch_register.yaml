@@ -7989,3 +7989,13 @@ patches:
     NPC starting Dispositions (ED-508). POI catalog and Godot architecture deferred.
   affects: [canon/editorial_ledger.yaml]
   status: applied
+- id: PP-596
+  date: 2026-04-13
+  scope: infrastructure
+  description: >
+    Second dedup pass: 20 remaining duplicate flagged IDs renumbered
+    (ED-510 through ED-529) and resolved. next_id
+    updated to 530. All simulation-session flagged items from arcs
+    36-45 batch and comprehensive sim now have unique IDs.
+  affects: [canon/editorial_ledger.yaml]
+  status: applied
