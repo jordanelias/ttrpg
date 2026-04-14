@@ -1576,3 +1576,30 @@ southernmost:   designs/setting/southernmost_v30.md (UNVERIFIED — needs stress
 ## THREADWORK P1s: 4 (ED-486–489 — require Jordan editorial decision)
 ## safe next_id: 515
 ```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-13_SONNET_FULL_CLOSE
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS THIS SESSION
+1. PP-643: params_factions Mandate −1 on NPC recruitment (talent drain consequence)
+2. PP-643: fieldwork_socializing §5.5b — Hook acquisition via Overwhelming Read
+3. propagation_map: all PP-642/643 targets marked DONE — 0 pending propagation
+4. All three tools EXIT 0. Freshness gate updated.
+
+## FINAL STATE — FULLY CLEAN
+- Open P1-BLOCKERs: 0
+- Open PROVISIONALs: 0
+- Pending propagation: 0
+- Broken dependencies: 0
+- Patch propagation: 100%
+- Patch register: PP-643
+- Remaining editorial items: ED-512 resolved, ED-513 struck, ED-514 resolved,
+  ED-510 resolved, ED-511 resolved, ED-NEW-02 resolved
+```
