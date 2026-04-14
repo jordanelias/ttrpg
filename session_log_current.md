@@ -1146,6 +1146,23 @@ P1 BLOCKERS: 0 (all resolved PP-577–582)
 - designs/hybrid/scale_transitions_design_v1.md created (PP-594)
 - canonical_sources.yaml updated: scale_transitions → design doc
 - Supersedes stage11 compilation (deprecated)
+- Params headers: final rebuild (PP-590-594 included)
+
+## GRAND TOTAL (this session + prior session combined)
+- Commits: ~20 across 2 sub-sessions
+- Patches: PP-576 through PP-594 (19 patches)
+- Editorial items: 42 resolved (backlog at zero)
+- P1-BLOCKERs: 6 resolved (none remaining)
+- Checker failures: 164 fixed (both PASS)
+- SIM-DEBT: 10 simulations run, all cleared (FW-01–06, NPC-01–02, CH-01–02)
+- Hybrid bridge: design document created (was missing entirely)
+- Session log: archived from 1360 to ~100 lines
+- Duplicate ED-IDs: 60 entries renumbered
+
+## REMAINING
+- ~14 provisional decisions marked [PROVISIONAL] across PP-568–589 awaiting your review
+- "Remembrancer" institutional role needs a name
+
 
 OPEN EDITORIALS: 39 (33 open + 6 flagged)
 
