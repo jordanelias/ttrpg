@@ -696,23 +696,24 @@ Editorial branches: 1 (ED-423/ED-404 Grand Debate + Quaestio — simulation stop
 | SIM-FW-03 | Fieldwork: Disposition economy 10-session arc | A+D | 10+ sessions | Disposition, Sincerity Gate, Cover | RM | Maret Vossen | Social relationship calibration | Complete | 1 P2 (fixed PP-593) |
 | SIM-FW-06 | Fieldwork: Cover derived value calibration | A | Multi-action | Cover, Exposure | None | None | Detection risk calibration | Complete | 0 |
 
-## Opposing Threadwork Operations — Stress Test 2026-04-13
-| Test | Mode | Status | Key Finding |
-|---|---|---|---|
-| Matched Competent Ob 2 | A | COMPLETE | Undefined rows fire <4% at low Ob (P3) |
-| Matched Competent Ob 4 | A | COMPLETE | Undefined rows fire 32% at Ob 4 (P1 — ST-OPP-02) |
-| Expert Mend vs Competent Dissolve | A | COMPLETE | Mending ≠ Dissolution = different targets, not opposing ops (P1 — ST-OPP-01) |
-| Competent vs Competent Relational | C | COMPLETE | Ob modifier shifts both-succeed from 85% to 56% (ST-OPP-02) |
-| Novice vs Master asymmetric | C | COMPLETE | +4 modifier makes Novice opposition futile; correct (ST-OPP-02) |
-| Multi-round contact | B | COMPLETE | Penalties stack legitimately; Ob 6-7 by Round 3 (B-1a) |
-| Shifting Object on Shifting Object | D | COMPLETE | Advance deterioration tier (ST-OPP-09) |
-| 3-season cascade | B | COMPLETE | RS 52→39 in 3 seasons from single unaddressed opposing op (B-3a) |
-| Combat timing (Priority 5) | D | COMPLETE | Both Leaps simultaneous; withdrawal option noted (B-4) |
-| Ob modifier stacking | D | COMPLETE | No degenerate stacking; all modifiers from distinct systems (B-5) |
-| N-way lattice collapse | D | COMPLETE | Gap formation; RS scales linearly with practitioners (ST-OPP-07) |
-| FR vs FR at Territorial | A+D | COMPLETE | Effective Ob 10 on 12D — correct; near-impossible (ST-OPP-08) |
-| Mending immunity | D | COMPLETE | Categorically immune to direct opposition; indirect obstruction only (ST-OPP-01) |
-P1 findings: 5 (ST-OPP-01 through ST-OPP-05)
-P2 findings: 5 (ST-OPP-06 through ST-OPP-10)
-P3 findings: 3 (ST-OPP-12 through ST-OPP-14)
-Editorials raised: ED-486 through ED-495 (4 P1-BLOCKER, 6 P2)
+## Fieldwork System — Simulation Debt Register (2026-04-13)
+
+All SIM-DEBT-FW items resolved in PP-576 through PP-583.
+
+| ID | Description | Resolved By | Key Finding |
+|----|-------------|-------------|-------------|
+| SIM-DEBT-FW-01 | Ob calibration across Depth 1–5 at 5 pool sizes ± hostile/foreign modifiers | PP-583 | Calibration sound: 5D→D1, 9D→D1–2, 13D→D1–3, 17D→D1–4, 24D challenges D5 |
+| SIM-DEBT-FW-02 | Investigation pacing: Evidence Track 5-threshold completion times by pool size | PP-576 partial, PP-583 complete | High-pool (15–19D): 3–5 scenes at D1–3. Low-pool (9D): 4–6 scenes at D1–2. Pacing confirmed. |
+| SIM-DEBT-FW-03 | Disposition economy: Neutral→Bonded timeline across 3–4 seasons | PP-583 | ~6–8 actions across 3–4 seasons. Sincerity Gate adds ~37% failure on instrumental Connect. Meaningful investment confirmed. |
+| SIM-DEBT-FW-04 | Exposure → Church Attention Pool feedback rate under cap | PP-581 | Fieldwork contributes ~11% of max TC acceleration over 4 seasons. Cap (+1/char/season, +2/territory/season) is sufficient. |
+| SIM-DEBT-FW-05 | Survey vs Govern action economy (niche differentiation) | PP-583 | Govern dominates mid-proximity (reliable Prosperity). Survey dominates high-proximity (safe northern territories). Neither dominates. |
+| SIM-DEBT-FW-06 | Cover derived value calibration: detection risk by Cover level | PP-583 | Cover 3: detected in 3 scenes. Cover 9: full season before detection. Cover 12+: near-immune to casual detection, threatened by combat+Thread stacking. |
+| SIM-DEBT-FW-07 | Transition simulation: all 6 fieldwork ↔ other-system handoff directions | PP-577 | All 6 directions functional. F-TRANS-01 through F-TRANS-12 resolved. |
+| SIM-DEBT-FW-08 | Threadwork × fieldwork: Evidence Track advancement from Thread operations | PP-578, PP-579 | All ops may advance Evidence Track contextually. GM determines yield per target and intent. |
+| SIM-DEBT-FW-09 | NPC arc stress tests: Domain Echo cascades from fieldwork outcomes | PP-579 | 7 Domain Echo cascades tested. NPC Disposition −2 if investigated; +1 if NPC wanted truth found. |
+| SIM-DEBT-FW-10 | Extended threadwork × fieldwork (Knots, Community Weaving, threadcut beings, Mending, Dissonance) | PP-580 | Knot-mediated remote Thread-Read (+1 Knot strain/use). Non-sensitive partner Dissonance (Spirit check). Threadcut being social fieldwork (Testimonial tag). |
+
+P1 findings from fieldwork simulation: 2 (ED-NEW-04 → CONFIRMED SAFE PP-581; ED-NEW-10 → CONFIRMED PROPORTIONAL PP-581)
+P2 findings: 5 (ED-NEW-03, ED-NEW-05, ED-NEW-08, ED-NEW-13, ED-NEW-15)
+P3 findings: 8 (ED-NEW-01, ED-NEW-02, ED-NEW-06, ED-NEW-07, ED-NEW-09, ED-NEW-12, ED-NEW-14 + G10-F01–F07 Godot validation)
+All SIM-DEBT items: RESOLVED.

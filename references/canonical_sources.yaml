@@ -44,7 +44,7 @@ systems:
     design_doc: designs/ttrpg/threadwork_redesign_v25.md
     compilation_stage: compilation/v0.14/stage3_thread_operations.md
     compilation_current: false
-    note: "Stage3 EMPTY/STALE. threadwork_redesign_v25.md is canonical. PP-190-209, PP-232, PP-624-625 applied (pool propagation pass 2026-04-13). All pool formulas now canonical post-PP-619."
+    note: "Stage3 EMPTY/STALE. threadwork_redesign_v25.md is canonical. PP-190-209, PP-232 applied."
 
   southernmost:
     canonical: compilation/v0.14/stage4_southernmost.md
@@ -128,7 +128,7 @@ systems:
     design_doc: null
     compilation_stage: compilation/v0.14/stage11_scale_transitions.md
     compilation_current: false
-    note: "scale_transitions_design_v1.md created 2026-04-13. Consolidates stage11 + params_scale_transitions + PP-089/103/107-112/232/261/340-343. K2-F-02 Zoom In gap resolved."
+    note: "scale_transitions_design_v1.md created 2026-04-13. Consolidates stage11 + params_scale_transitions + PP-089/103/107-112/232/261/340-343. K2-F-02 Zoom In gap resolved. §3.9 (9th handoff rule: Fieldwork ↔ all systems) added 2026-04-13."
 
   campaign_modes:
     canonical: compilation/v0.14/stage12_campaign_modes.md
@@ -151,12 +151,23 @@ systems:
 
   fieldwork:
     canonical: designs/fieldwork/fieldwork_design_v1.md
-    canonical_sha__designs__fieldwork__fieldwork_design_v1_md: "pending-first-commit"
-    params: null
+    canonical_sha__designs__fieldwork__fieldwork_design_v1_md: "pending-next-commit"
+    params: references/params_fieldwork.md
     design_doc: designs/fieldwork/fieldwork_design_v1.md
     compilation_stage: null
     compilation_current: false
-    note: "fieldwork_design_v1.md is canonical. v1.1 review corrections applied 2026-04-13. PP-626 applied 2026-04-13: Thread-Read pool corrected to (Spirit×2)+Hist+TPS. Covers exploration, investigation, socializing for all modes + Godot. No params file yet. 1 P1 editorial open (ED-NEW-04)."
+    subsystem_files:
+      - designs/fieldwork/fieldwork_exploration.md
+      - designs/fieldwork/fieldwork_investigation.md
+      - designs/fieldwork/fieldwork_socializing.md
+      - designs/fieldwork/fieldwork_exposure.md
+      - designs/fieldwork/fieldwork_bg.md
+      - designs/fieldwork/fieldwork_hybrid.md
+      - designs/fieldwork/fieldwork_godot.md
+      - designs/fieldwork/fieldwork_summary.md
+      - designs/fieldwork/fieldwork_editorial.md
+      - designs/fieldwork/fieldwork_rationale.md
+    note: "fieldwork_design_v1.md is canonical master (§1-§2 core + §7 + index). v1.1 applied 2026-04-13. Split 2026-04-13 per Skeleton Ruleset Principle: mode- and system-specific content in subsystem files (856→224 lines). params_fieldwork.md extracted (PP-583). ED-NEW-11 RESOLVED. 3 P1 editorials remain open (ED-NEW-04 CONFIRMED SAFE; ED-NEW-10 CONFIRMED PROPORTIONAL; ED-NEW-11 RESOLVED). All SIM-DEBT-FW-01 through FW-10 RESOLVED."
 
 # GLOBAL NOTE (2026-04-04):
 # All compilation/v0.14 stage documents are outdated and superseded.

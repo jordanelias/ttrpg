@@ -359,3 +359,19 @@ Major groups moved 2026-04-09:
 
 | designs/systems/npc_behavior_system_v1.md | NPC Behavior System design | 2026-04-13 | ACTIVE | Stance Triangles, Priority Trees, Arc Emergence |
 | tests/audit_npc_behavior_system.md | NPC Behavior System audit | 2026-04-13 | COMPLETE | 15 findings |
+
+## FIELDWORK SUBSYSTEM FILES (added 2026-04-13 — skeleton split)
+
+| File | System | Status | Notes |
+|------|--------|--------|-------|
+| designs/fieldwork/fieldwork_design_v1.md | FIELDWORK | CURRENT | Master index + §1 Depth Axis + §2 Fieldwork Pool + §7 Derived Values. 224 lines (split from 856). |
+| designs/fieldwork/fieldwork_exploration.md | FIELDWORK | CURRENT | §3 Exploration. 72 lines. |
+| designs/fieldwork/fieldwork_investigation.md | FIELDWORK | CURRENT | §4 Investigation. 111 lines. |
+| designs/fieldwork/fieldwork_socializing.md | FIELDWORK | CURRENT | §5 Socializing. 132 lines. |
+| designs/fieldwork/fieldwork_exposure.md | FIELDWORK | CURRENT | §6 Exposure. 82 lines. |
+| designs/fieldwork/fieldwork_bg.md | FIELDWORK/BG | CURRENT | §8 Board Game Mode. 47 lines. |
+| designs/fieldwork/fieldwork_hybrid.md | FIELDWORK/HYBRID | CURRENT | §9 Hybrid Mode. 27 lines. |
+| designs/fieldwork/fieldwork_godot.md | FIELDWORK/GODOT | CURRENT | §10 Godot + validation findings G10-F01–F07. 132 lines. |
+| designs/fieldwork/fieldwork_summary.md | FIELDWORK | CURRENT | §11 Three-Mode Summary Table. 20 lines. |
+| designs/fieldwork/fieldwork_editorial.md | FIELDWORK | CURRENT | §12 Open Items and Editorial Flags. 116 lines. |
+| designs/fieldwork/fieldwork_rationale.md | FIELDWORK | CURRENT | §13 Design Rationale Index (NEW). 69 lines. Content file — no mechanical values. |

@@ -122,6 +122,7 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 | Parliamentary Manoeuvre (Hafenmark) | floor(opponent Influence / 2) + 1 | — |
 | Community Organising (Restoration) | 2 | Pool: 1D base + 1D per adjacent territory with RM Presence marker. Failure: no Stability cost (RM has no Stability). Try again next season. (PP-460) |
 | Community Weaving (Restoration) | (100−RS)÷20 round up min 1 | −1 per Presence marker in territory |
+| Survey (Consul Inward variant) | (5 − Proximity Rating) + 1, min 1 | Pool: Influence. Success: reveal one POI (territory bonus per §8.1 table). Overwhelming: reveal POI + Influence +1. Failure: +1 Church Attention Pool if Depth ≥ 3 surveyed. See fieldwork_bg.md §8.1 for full POI bonus table. ED-NEW-03: monitor Govern/Survey balance. |
 | Fortify | Fort level + 1 | — |
 
 All Obs: floor 1.

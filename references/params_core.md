@@ -114,7 +114,7 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 
 | Score | Formula | Range | Notes |
 |-------|---------|-------|-------|
-| Health | Endurance + 6 per wound | 7–13 per wound | Wound threshold = Endurance + 6. On each Wound taken: threshold resets (Health refills). Total capacity = (End + 6) × (wound count + 1). See params_combat.md for cumulative formula. (PP-248, ED-438) |
+| Health | Endurance + 6 | 7–13 | Damage buffer before Wounds. Wound threshold fires every (End+6) damage received; Health resets to full on each Wound. (PP-248) |
 | Stamina | Endurance + 1 | min 2 | Combat resource. Floor 2. Cannot wear armour that would reduce Stamina to 1 or below. (PP-248/PP-611 confirmed) |
 | Composure | Charisma + 6 | 7–13 | Social damage buffer before Rattled. Parallels Health = Endurance + 6. (PP-234, ED-127 resolved) |
 | Combat Pool | (Agility × 2) + weapon History (points + 3) | min 5 | Split Offence/Defence each round. PP-615: doubled formula confirmed canonical; PP-247 note was stale. |
@@ -138,6 +138,30 @@ Example: Spend 1 Momentum (1 auto-success) + roll 1D TN 7.
 
 Spending 2 Momentum on Ob 1 (2 auto-successes): auto-successes alone reach Ob 1 but cannot satisfy Overwhelming floor (need ≥ 3 net). Must also roll to reach Overwhelming.
 
+
+
+## Fieldwork Roles by Attribute (§2.1 — designs/fieldwork/fieldwork_design_v1.md)
+
+| Activity | Sub-type | Primary Attribute | Pool Formula |
+|----------|----------|-------------------|-------------|
+| Exploration | Terrain / navigation | Cognition | (Cog × 2) + History |
+| Exploration | Thread-aware | Attunement | (Att × 2) + History |
+| Exploration | Endurance-based | Endurance | (End × 2) + History |
+| Investigation | Physical evidence | Cognition | (Cog × 2) + History |
+| Investigation | Witness / informant | Attunement | (Att × 2) + History |
+| Investigation | Lore / research | Recall | (Rec × 2) + History |
+| Investigation | Thread-Read (perceptive Leap) | Attunement | (Att × 2) + History; TS ≥ 30 required; Leap cost applies; co-movement fires |
+| Socializing | Read | Attunement | (Att × 2) + History |
+| Socializing | Impress | Charisma | (Cha × 2) + History |
+| Socializing | Connect | Bonds | (Bon × 2) + History |
+| Socializing | Rumour | Charisma | (Cha × 2) + History |
+| Socializing | Negotiate | Attunement | (Att × 2) + History; below Contest threshold only (§5.7) |
+| Sincerity Gate | — | Spirit | vs Dissonance Factor; fires on instrumental Connect/Converse |
+| Survey (BG) | Consul Inward variant | Influence | Faction stat, not character attribute |
+
+**Pool formula:** (Primary Attribute × 2) + History bonus. History bonus = History points + 3 (creation baseline; same as Combat Pool and Contest Pool). TN 7 standard; TN 6 controlled; TN 8 desperate. No History relevant: pool = (Primary Attribute × 2) + 3.
+
+**Physical wounds:** Apply −1D per wound to exertion-based fieldwork (Endurance exploration, Surveil) only. Social and cognitive fieldwork unaffected by physical wounds. Rattled marks: +1 Ob per mark to social fieldwork for remainder of scene.
 
 ## Certainty Track (PP-551 — redesigned from PP-289)
 **Definition:** The character's operative cosmological framework. Tracks the journey from Solmund orthodoxy to Thread cosmology acceptance. Both poles are stable states. This is a transformation track, not a deterioration track.

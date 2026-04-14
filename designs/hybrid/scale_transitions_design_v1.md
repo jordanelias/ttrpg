@@ -68,6 +68,22 @@ Modifier to most relevant unit; 1 turn duration. (PP-261, ED-151)
 
 ---
 
+
+### §3.9 Fieldwork ↔ All Systems
+Fieldwork scenes (exploration, investigation, socializing) are personal-scale TTRPG actions that can handoff to or receive handoffs from any other system. These are defined procedures, not GM judgment calls.
+
+| Direction | Trigger | Procedure |
+|-----------|---------|-----------|
+| Fieldwork → Combat | Exposure threshold reached; ambush triggered | Exposure converts to ambusher Initiative advantage. Active investigation ends; fieldwork scene Ob results carry forward as Combat pre-conditions. (F-TRANS-01) |
+| Fieldwork → Contest | Negotiation exceeds §5.7 boundary; investigation find used as Appeal | Evidence from Evidence Track cited in Contest opening move: +1D per Finding, max +2D additional pool. Evidence not consumed by citation. (F-TRANS-10, F-TRANS-11) |
+| Fieldwork → Thread | Thread-Read declared during investigation scene | Thread-Read is a perceptive Leap (§4.5, fieldwork_investigation.md). Normal Leap procedure applies. Co-movement fires. Thread operation Ob adds to fieldwork scene time cost (+1 time unit per Thread op in scene). (F-TRANS-07) |
+| Fieldwork → Mass Battle | Mass battle declared while fieldwork active | Mass battle suspends fieldwork. Evidence Track state freezes. Exposure does not accumulate during battle. Post-battle: resume as 1 new fieldwork scene (≠ continuation of suspended scene). Battle ≠ fieldwork time. (F-TRANS-06, F-TRANS-12) |
+| Combat → Fieldwork | Post-combat investigation of battle site | Counts as 1 fieldwork scene. Combat Exposure codified: quiet engagement +1, conspicuous +2, public +3. Applies before the investigation scene opens. (F-TRANS-09, F-TRANS-12) |
+| Contest → Fieldwork | Appraise action in Contest; Contest resolved | Appraise success in Contest: +1 Evidence Track progress (Testimonial tag). Post-Contest Disposition shift: winner +1, loser −1 (with adjudicator present). (F-TRANS-10, F-TRANS-05) |
+| BG Survey → TTRPG Discovery | Hybrid mode, Survey degree sets Fieldwork Offset | BG degree: Failure −1 Ob, Partial +0, Success +1 Ob reduction, Overwhelming +2 Ob reduction (cap ±2) on TTRPG personal fieldwork scene. (fieldwork_hybrid.md §9.1) |
+| TTRPG Fieldwork → BG Domain Echo | Sufficient Scope (§7) met in fieldwork scene | Follows §3.4 (Scene → Faction) protocol. Investigation Finding that names faction leader = sufficient scope. Disposition shift reaching Bonded with faction-level NPC = sufficient scope. |
+| TTRPG Fieldwork → Hybrid Personal Phase | Fieldwork scene during Hybrid play | Fieldwork scenes occur during Personal Phase only. Strategic Phase Survey degree provides Fieldwork Offset. Bonus Personal Phase scene available if Strategic Phase order produces immediate fieldwork opportunity (replaces, does not extend, standard 2–3 Personal Phase scenes). (fieldwork_hybrid.md §9.2) |
+
 ## §4 Zoom In / Zoom Out Protocol
 
 The Zoom mechanism allows Hybrid mode to transition between BG strategic play and TTRPG personal scenes.
