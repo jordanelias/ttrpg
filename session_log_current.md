@@ -1,103 +1,5 @@
 # Valoria Session Log — Current
 
-## CURRENT SESSION
-```yaml
-session_id: 2026-04-13_SONNET_ED439_ED438_RESOLUTION
-session_close: 2026-04-13
-phase: COMPLETE
-status: CLOSED
-
-PATCHES: PP-624, PP-625, PP-626, PP-627
-
-PP-624: ED-439 fully resolved.
-  - Item 1: Binding Ops TPS exclusion note — void (PP-618 already includes TPS; no exclusion exists).
-  - Item 2: Attunement doubling in fieldwork — Thread-Read uses Spirit×2 (Leap); Attunement×2 for
-    non-Thread fieldwork only. Clean distinction: Att = social/perceptual calibration, Spi = Thread contact.
-  - Item 3: Leap pool — authorial confirm (Jordan): (Spirit×2)+Hist+TPS. No Attunement. Final.
-  - Wound disruption check during contact: Attunement→Spirit (PP-624). Maintaining the Leap's
-    rendering suspension against physical damage is Spirit's function, not Attunement's.
-
-PP-625: threadwork_redesign_v25.md propagation pass.
-  All 7 Thread operation pools corrected to (Spirit×2)+Hist+TPS. Mending: Attunement+Focus+TPS struck.
-  POP: TPS÷2 struck (PP-619 full TPS). Lock/Dissolution: TN 7→8, min Ob 4 struck, pre-PP-622
-  Ob tables struck (pointer to params_threadwork). Header notice added: Ob values → params_threadwork.
-
-PP-626: fieldwork_design_v1.md §4.5 Thread-Read pool.
-  All three locations updated: §4.5 procedure, §4.2 investigation table, §2 action summary table.
-  Pool: Attunement×2+bonus+TPS → (Spirit×2)+Hist+TPS. Thread-Read is a Leap; Leaps are Spirit-primary.
-
-PP-627: Health formula harmonised (ED-438, P3).
-  params_core: clarifies threshold (End+6 per wound) vs cumulative ((End+6)×(wounds+1)).
-  params_combat: cross-references params_core. Documentation only. No mechanical change.
-  valoria-game implementation (cumulative formula) confirmed correct — no code change needed.
-
-EDITORIALS RESOLVED: ED-438, ED-439
-P1-BLOCKERS: 5
-FLAGGED EDITORIALS: 39
-FILES COMMITTED (fab5eea): 8
-  designs/ttrpg/threadwork_redesign_v25.md (+33/-24)
-  designs/fieldwork/fieldwork_design_v1.md (+3/-3)
-  references/params_core.md (+1/-1)
-  references/params_combat.md (+1/-1)
-  canon/editorial_ledger.yaml (+14/-2)
-  canon/patch_register.yaml (+110/-0)
-  references/canonical_sources.yaml (+2/-2)
-  session_log_current.md (+41/-0)
-```
-
----
-
-## ARCHIVED SESSIONS (2026-04-13 batch — 42 sessions)
-Moved to archive on session close. Session IDs:
-- 2026-04-13_OPUS_PARAMS_EXTRACTION
-- 2026-04-13_OPUS_FIDELITY_AUDIT
-- 2026-04-13_OPUS_P1_RESOLUTION
-- 2026-04-13_OPUS_EXTENDED_THREADWORK
-- 2026-04-13_OPUS_ONTOLOGICAL_CORRECTION
-- 2026-04-13_OPUS_THREADWORK_FIELDWORK_SIM
-- 2026-04-14_SONNET_SESSION_CLOSE
-- 2026-04-14_SONNET_PP623_PROBABILITY_CORRECTION
-- 2026-04-14_SONNET_PP622_THREE_AXIS_OB
-- 2026-04-14_SONNET_PP621_SCALE_CALIBRATION
-- 2026-04-13_OPUS_FIELDWORK_TRANSITIONS
-- 2026-04-14_SONNET_PP620_OB_CALIBRATION
-- 2026-04-14_SONNET_PP619_TN_FINAL
-- 2026-04-14_SONNET_PP618_CORRECTION
-- 2026-04-14_SONNET_THREAD_POOLS_HISTORY
-- 2026-04-14_SONNET_PP615_POOL_CORRECTION
-- 2026-04-14_SONNET_STAT_AUDIT
-- 2026-04-13_OPUS_FIELDWORK_AUDIT_SIM
-- 2026-04-14_SONNET_PP610_STAT_CORRECTION
-- 2026-04-14_SONNET_STAT_REDESIGN_EINHIR_CANON
-- 2026-04-14_SONNET_RS_REDESIGN_MAXEFFORT
-- 2026-04-14_SONNET_TRACKER_REFERENCE
-- 2026-04-14_SONNET_PP600_BATTLE_RS
-- 2026-04-14_SONNET_CALIBRATION_CORRECTIONS
-- 2026-04-14_SONNET_DESIGN_QUESTIONS
-- 2026-04-14_SONNET_SIM_ARC_G01-G05
-- 2026-04-13_SONNET_SESSION_CLOSE
-- 2026-04-13_SONNET_SIM_ARC_F01
-- 2026-04-13_SONNET_CLUSTER_REVIEW_AND_F
-- 2026-04-13_SONNET_SIM_ARC_E01
-- 2026-04-13_SONNET_PP590_THREAD_CONTACT_TS
-- 2026-04-13_SONNET_WORLDBUILDING_CLARIFICATIONS
-- 2026-04-13_SONNET_FORGETTING_HEIDEGGER_CEIRAL
-- 2026-04-13_SONNET_SIM_ARC_D01
-- 2026-04-13_SONNET_PP584_FORGETTING_CORRECTION
-- 2026-04-13_SONNET_SIM_ARC_C01
-- 2026-04-13_SONNET_SIM_ARC_B02_A01
-- 2026-04-13_SONNET_SIM_ARC_B01
-- 2026-04-13_OPUS_META_ANALYSIS_FIXES
-- 2026-04-13_SONNET_ARC_SYSTEM_V8
-- 2026-04-13_OPUS_FIELDWORK_DESIGN
-- 2026-04-13_SONNET_COMPARATIVE_AUDIT_AND_PATCH
-
-Full session content archived. All work committed to GitHub (jordanelias/ttrpg, branch main).
-
----
-
-# Valoria Session Log — Current
-
 ```yaml
 session_id: 2026-04-13_OPUS_PARAMS_EXTRACTION
 session_close: 2026-04-13
@@ -1536,197 +1438,37 @@ status: CLOSED
 # Valoria Session Log — Current
 
 ```yaml
-session_id: 2026-04-13_SONNET_COMPARATIVE_AUDIT_AND_PATCH
+session_id: 2026-04-13_SONNET_EDITORIAL_CLEANUP
 session_close: 2026-04-13
 phase: COMPLETE
 status: CLOSED
 
 ## TASKS COMPLETED THIS SESSION
-1. Mechanic-audit: fieldwork as baseline — Modes B/C/D/E comparative audit across combat,
-   contest, threadwork. Fieldwork confirmed more robust (designed last, baked-in cross-system
-   awareness, highest edge-case coverage).
-2. Past-3-days conversation search: 14 chats reviewed. Key unimplemented proposals identified:
-   - NPC Recruitment Procedure (game mechanics session, CK2/RotTK analysis)
-   - Hooks mechanic (referenced but undefined)
-   - Faction AI decision sequence gap (arc session — blocked on ED-387)
-   - 5 audit cross-system gaps (C-01/C-02/C-03, B-02, E-01, D-06)
-3. Quick interdependency tests (6 tests): 4 PASS (implemented), 2 BLOCKED (ED-387 dependency)
-4. Patches PP-630–634 committed (fb39d86):
-   - params_core.md: Pool floor 1D named rule
-   - combat_design_v1.md §11.5: Fieldwork transitions + Let It Ride clarification
-   - social_contest_system_v2.md §9.1 + §4: Findings citation + Spent timing
-   - threadwork_redesign_v25.md §2.3: Thread-Read-as-fieldwork cross-reference
-5. Editorial items raised: ED-510–514 (NPC Recruitment PROVISIONAL, Hooks, surrender,
-   fail-forward, social initiative resolve ED-138)
-6. freshness_gate.py --update: SHAs refreshed for 21 canonical docs
-7. Commits: fb39d86 (patches) + freshness gate SHA commit
+1. Confirmed Praetor stays as RM board game card (already canonical in params_board_game)
+2. Identified Remembrancer as ARC-T23 NPC role title — separate issue from card name
+3. Renamed Remembrancer → Witness (the Witness: RM practitioner, 245-year tradition,
+   TS 19-35, institutional authority in COLLISION E). Patched arc_register.md.
+   ED-NEW-02 resolved. COLLISION E now fully operational.
+4. Combat surrender/disengage procedure added to combat_design_v1.md §11.4
+   (Yield + Disengage with Agility contest). ED-512 resolved.
+5. Social initiative kept deterministic by design — rationale documented in
+   social_contest_system_v2.md §5. ED-138 / ED-514 resolved.
+6. Combat fail-forward (ED-513) STRUCK — attrition IS the combat narrative.
+7. Commit 9bb024b (4 files). Freshness gate updated.
 
-## KEY FINDINGS FROM CONVERSATION REVIEW
-- Opposing Threadwork (ED-486–489): 4 P1-BLOCKERs still unresolved — needs Jordan's editorial
-  decision before procedure can be patched into threadwork_redesign_v25.md
-- ~14 PROVISIONAL decisions from 2-day review session: still awaiting editorial review
-- NPC Recruitment Procedure: fully specified in game mechanics session but 3 interdependency
-  blockers prevent implementation (ED-510 tracks, blocked on ED-387)
-- RM institutional role name: flagged as 'terrible' in session, never renamed — ED-509 area?
-  [NOTE: check if name was resolved in subsequent sessions]
+## EDITORIAL DECISIONS MADE
+- the Witness: institutional RM title (replaces Remembrancer placeholder)
+- Yield/Disengage: opponent-choice on Yield; Agility-contested Disengage
+- Social initiative: deterministic (Attunement), not rolled — Appraise already 
+  provides initiative-adjacent information; rolling would be redundant
+- Combat fail-forward: not applicable — combat attrition is the mechanic
 
-## P1 BLOCKERS: 0 (this session)
-## OPEN EDITORIALS RAISED: 5 (ED-510–514, P2–P3)
-## PROPAGATION: complete
-
-## NEXT ACTIONS (priority)
-1. Jordan: resolve ED-138 (social initiative) — forced to decision
-2. Jordan: resolve ED-486–489 (opposing threadwork P1-BLOCKERs)
-3. Jordan: review ~14 PROVISIONAL decisions from 2-day session
-4. Jordan: resolve ED-387 (Priority Trees P1-BLOCKER) — unblocks NPC Recruitment + Faction AI
-5. Jordan: name the RM institutional role (Remembrancer placeholder)
-```
-
----
-
-# Valoria Session Log — Current
-
-```yaml
-session_id: 2026-04-13_SONNET_V30_BASELINE
-session_close: 2026-04-13
-phase: COMPLETE
-status: CLOSED
-
-## TASKS COMPLETED THIS SESSION
-1. v30 baseline established — 25 canonical design docs renamed to _v30.md suffix
-2. references/design_registry.yaml created (364 lines) — atomization reference map for all design docs
-3. 40 _deprecated files moved from designs/ to deprecated/designs/ (preserving subdir structure)
-4. valoria-orchestrator/SKILL.md updated — collision prevention, v30 naming convention, v30 propagation protocol, design registry protocol
-5. valoria-editorial-register/SKILL.md updated — ED number collision guard (re-fetch before ID assignment)
-6. skill_registry.md updated — valoria-atomizer planned skill documented
-7. propagation_map.md updated — 16 old paths updated to v30 paths
-8. freshness_gate.py ran — canonical_sources.yaml SHAs updated for all v30 paths
-9. broken_dependency_checker: exit 0 (clean)
-10. patch_propagation_checker: exit 0 (clean)
-
-## COMMITS THIS SESSION
-Commit 1 (6fb448b): [infrastructure] design_registry.yaml, collision guards, ED ID guard, v30 convention
-Commit 2 (e7ec6e1): [infrastructure] 25 canonical design docs renamed to _v30.md, canonical_sources updated
-Commit 3 (c77ba65): [cleanup] 40 _deprecated files moved to deprecated/designs/
-Commit 4 (9d2d25b): [cleanup] propagation_map v30 paths, skill_registry atomizer placeholder
-
-## V30 CANONICAL RENAMES APPLIED
-- designs/ttrpg/threadwork_redesign_v25.md → designs/ttrpg/threadwork_v30.md
-- designs/combat/combat_design_v1.md → designs/combat/combat_v30.md
-- designs/board_game/valoria_bg_v05_simulation_and_patches.md → designs/board_game/board_game_v30.md
-- designs/board_game/victory_architecture_v1.md → designs/board_game/victory_v30.md
-- designs/board_game/varfell_path_b_redesign_ed311.md → designs/board_game/varfell_path_b_v30.md
-- designs/mass_combat/mass_battle_v3.md → designs/mass_combat/mass_battle_v30.md
-- designs/contest/social_contest_system_v2.md → designs/contest/social_contest_v30.md
-- designs/fieldwork/fieldwork_design_v1.md → designs/fieldwork/fieldwork_v30.md
-- designs/fieldwork/fieldwork_hybrid.md → designs/fieldwork/fieldwork_hybrid_v30.md
-- designs/fieldwork/fieldwork_bg.md → designs/fieldwork/fieldwork_bg_v30.md
-- designs/systems/clock_registry.md → designs/systems/clock_registry_v30.md
-- designs/systems/npc_behavior_system_v1.md → designs/systems/npc_behavior_v30.md
-- designs/hybrid/scale_transitions_design_v1.md → designs/hybrid/scale_transitions_v30.md
-- designs/hybrid/hybrid_gaps_resolved.md → designs/hybrid/hybrid_gaps_v30.md
-- designs/setting/geography_design.md → designs/setting/geography_v30.md
-- designs/setting/calamity_radiation.md → designs/setting/calamity_radiation_v30.md
-- designs/worldbuilding/worldbuilding_integration_v3.md → designs/worldbuilding/worldbuilding_v30.md
-- designs/worldbuilding/worldbuilding_v3_canon_audit.md → designs/worldbuilding/worldbuilding_canon_audit_v30.md
-- designs/npcs/npc_roster.md → designs/npcs/npc_roster_v30.md
-- designs/npcs/npc_foils.md → designs/npcs/npc_foils_v30.md
-- designs/npcs/npc_character_analyses.md → designs/npcs/npc_character_analyses_v30.md
-- designs/mechanics/baralta_crown_claim_mechanic.md → designs/mechanics/baralta_crown_claim_v30.md
-- designs/conviction_track/opus_design_proposal.md → designs/conviction_track/conviction_track_v30.md
-- designs/characters/character_histories_lifepath.md → designs/characters/character_histories_v30.md
-- designs/ttrpg/threadwork_philosophical_reference.md → designs/ttrpg/threadwork_philosophical_reference_v30.md
-
-## BLOCKED V30 RENAMES (no design-layer doc exists)
-- factions_ttrpg: source = compilation/stage6_factions.md (unverified) — needs design doc first
-- campaign_modes: source = compilation/stage12_campaign_modes.md (unverified)
-- southernmost: source = compilation/stage4_southernmost.md (unverified)
-
-## REMAINING WORK (next sessions)
-1. file_index.md update — 377 lines, needs STALE/PROPAGATION-PENDING entries updated for v30 paths
-2. Skeleton/infill atomization — per-doc split (TTRPG/Hybrid/BG content + mechanical skeleton)
-   Use valoria-atomizer skill (to be built). Reference: references/design_registry.yaml
-   Atomization order (priority): threadwork_v30, combat_v30, board_game_v30, fieldwork_v30, mass_battle_v30
-3. Build valoria-atomizer skill (skills/valoria-atomizer/SKILL.md)
-4. Propagation of 5 pending items from previous session (propagation_map, params_board_game Survey Ob,
-   params_core attributes, stage11 9th handoff, coverage_matrix)
-5. next_id in editorial_ledger.yaml header is stale (says 486, safe next is 490) — correct header
-
-## P1 BLOCKERS: 4 (ED-486–ED-489 — approved Contested Intentionality / Mending / knot strain / co-movement)
-## EDITORIAL LEDGER next_id: safe next = 490 (header stale — shows 486)
-```
-
-## Session 2026-04-13 — Opposing Threadwork Operations
-
-**Task:** Deep analysis and stress test of multi-practitioner and opposing threadwork operations.
-
-**Work completed:**
-1. Read all canonical threadwork, metaphysics, and philosophical sources (threadwork_v25→v30, philosophical_reference, Foundations, Amendment 01, constraints P-01–P-15, params_threadwork, params_core, params_combat, params_contest).
-2. Identified 6 hard gaps and 3 soft gaps in opposing operations rules (P-24 truncated, §9.13 eliminated, scale mismatch, BG opposing orders, N-way ops, co-movement stacking).
-3. Performed philosophy-first stress test (v1: propose-then-check; v2: derive-from-metaphysics). Tested 3 candidate patch approaches across 13 scenarios (Modes A, B, C, D).
-4. Key philosophical findings: (a) Mending categorically immune to direct opposition (different target category — substrate absence vs thread presence). (b) Opposing engagement modifier (+TPS/2) philosophically necessary (opponent's configuration IS part of thread's resistance). (c) Overwhelmed practitioners take knot strain, not degree-table Failure consequences (different metaphysical event). (d) Co-movement: Coherence per-practitioner, epistemic+actual once per compound event. (e) N-way opposing ops produce Gap via lattice collapse (chaotic interference has no stable mode).
-5. Applied PP-632: §2.6 Opposing Operations (Contested Intentionality) added to threadwork design doc. Full procedure, resolution table, knot strain, FR vs FR scaling, sustained opposition, N-way, Mending immunity, mass battle, BG, Hybrid rules.
-6. Raised and resolved ED-486 through ED-495 (4 P1-BLOCKER, 6 P2).
-
-**Commits:**
-- `81b206cc` — Stress test sim file, editorial ledger, coverage matrix, propagation map
-- `923972dd` — PP-632 applied: §2.6, params, patch register, editorials resolved
-- `f4d38b88` — Canonical sources SHA update
-
-**Next:** File renamed to threadwork_v30.md by parallel session; §2.6 and PP-632 propagated through rename successfully. No outstanding work from this session.
-
----
-
-# Valoria Session Log — Current
-
-```yaml
-session_id: 2026-04-13_SONNET_V30_COMPLETE
-session_close: 2026-04-13
-phase: COMPLETE
-status: CLOSED
-
-## TASKS COMPLETED THIS SESSION (continuation)
-1. file_index.md updated — v30 paths, deprecated moves, design_registry entry, npc_behavior entry
-2. valoria-atomizer skill created (204 lines) — skills/valoria-atomizer/SKILL.md
-3. threadwork_v30 atomized — skeleton (855 lines) + infill (196 lines) created
-4. combat_v30 atomized — skeleton (418 lines) + infill (86 lines) created
-5. design_registry.yaml updated — threadwork/combat marked atomized: complete
-6. Propagation items resolved:
-   - propagation_map: DONE (Commit 4 of prior sub-session)
-   - params_board_game Survey Ob: ALREADY DONE (PP-628, line 122)
-   - params_core attributes: ALREADY DONE (PP-628 fieldwork attr table)
-   - scale_transitions 9th handoff: ALREADY DONE (§3.9 in scale_transitions_v30.md)
-   - coverage_matrix: DONE — 3 fieldwork entries + FW-01–06 calibration table
-7. All params files source path references updated to v30 paths (7 files)
-8. Freshness gate, broken_dependency_checker, patch_propagation_checker: all exit 0
-
-## COMMITS THIS SESSION (continuation)
-Commit 5 (50e4173): file_index.md v30 path updates + design_registry entry
-Commit 6 (98470e4): valoria-atomizer skill created
-Commit 7 (70cbb52): threadwork_v30 + combat_v30 atomized
-Commit 8 (2f28078): coverage_matrix fieldwork + params v30 source refs
-Commit 9 (freshness): canonical_sources.yaml SHAs refreshed
-
-## ATOMIZATION STATE (references/design_registry.yaml)
-  threadwork: complete (skeleton=threadwork_v30.md, infill=threadwork_v30_infill.md)
-  combat: complete (skeleton=combat_v30.md, infill=combat_v30_infill.md)
-  All others: not_started
-
-## REMAINING WORK (next sessions)
-Priority atomization queue (valoria-atomizer skill):
-  1. designs/board_game/board_game_v30.md (~1636 params lines equivalent)
-  2. designs/fieldwork/fieldwork_v30.md
-  3. designs/mass_combat/mass_battle_v30.md
-  4. designs/contest/social_contest_v30.md
-  5. designs/hybrid/scale_transitions_v30.md
-  6. All others per design_registry.yaml priority order
-
-Other pending:
-  - factions_ttrpg, campaign_modes, southernmost: v30 rename BLOCKED — no design-layer doc
-    (needs design sessions to create docs from unverified compilation stages)
-  - editorial_ledger.yaml next_id: safe next is 510 (correctly updated by prior sessions)
-  - 4 open P1-BLOCKERs: ED-486–489 (contested intentionality, Mending immunity, knot strain, co-movement)
-
-## TOTAL COMMITS THIS FULL SESSION (both sub-sessions combined): 10
-PP-583 through freshness gate.
+## P1 BLOCKERS: 0
+## ITEMS CLOSED: ED-512 (surrender), ED-513 (struck), ED-514/ED-138 (initiative),
+##               ED-NEW-02 (ARC-T23 Witness)
+## REMAINING EDITORIAL (requires Jordan):
+## - ED-486–489 (opposing threadwork P1-BLOCKERs)
+## - ~14 PROVISIONAL decisions from 2-day session
+## - ED-387 (Priority Trees) — blocks NPC Recruitment (ED-510) + Faction AI gap
+## - ED-510 (NPC Recruitment), ED-511 (Hooks)
 ```
