@@ -134,6 +134,11 @@ for skill_path in ALL_SKILLS:
     else:
         print(f"OK   bootstrap ref: {skill_path}")
 
+if skeleton_warnings:
+    print(f"\n[SKELETON-DEBT WARNINGS: {len(skeleton_warnings)}] (non-blocking)")
+    for w in skeleton_warnings:
+        print(f"  \u26a0 {w}")
+
 if violations:
     print(f"\n[HOOKS VERIFIER VIOLATIONS: {len(violations)}]\n")
     for i, v in enumerate(violations, 1):
