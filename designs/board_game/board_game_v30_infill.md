@@ -1,3 +1,8 @@
+
+<!-- NOTE (PP-644): board_game_v30.md Part Nine was replaced with full hybrid gap integration.
+     The infill content below was extracted from the pre-PP-644 version. Part Nine (§9.1–9.15)
+     is now mechanical skeleton content and has no corresponding infill. -->
+
 <!-- INFILL — prose/rationale extracted from board_game_v30.md -->
 <!-- Skeleton: board_game_v30.md -->
 

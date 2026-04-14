@@ -437,3 +437,10 @@ All files below: skeleton at `_v30.md`, infill at `_v30_infill.md` in same direc
 | southernmost | designs/setting/southernmost_v30.md | 35 |
 | factions_ttrpg | designs/ttrpg/factions_ttrpg_v30.md | 64 |
 | campaign_modes | designs/systems/campaign_modes_v30.md | 25 |
+
+### Params History Files
+| File | Status | Notes |
+|------|--------|-------|
+| references/params_factions_ttrpg_history.md | CURRENT | Patch history for params_factions_ttrpg.md |
+| references/params_southernmost_history.md | CURRENT | Patch history incl PP-643 |
+| references/params_campaign_modes_history.md | CURRENT | Patch history (procedural) |
