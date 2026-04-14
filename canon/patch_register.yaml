@@ -7638,3 +7638,113 @@ patches:
     figure system.
   affects: [designs/hybrid/scale_transitions_design_v1.md, references/canonical_sources.yaml]
   status: applied
+
+- id: PP-624
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    ED-439 fully resolved. Three items:
+
+    ITEM 1 — Binding Ops TPS exclusion design note:
+    ED-439 item 1 was written against PP-616 which briefly excluded TPS from Binding Ops.
+    PP-618 reversed this on the same day. Item 1 is void — Binding Ops include TPS (PP-618).
+    No design note about exclusion needed; the rationale for inclusion is in PP-618.
+
+    ITEM 2 — Attunement doubling in fieldwork vs Thread ops:
+    Correct framing post-PP-619: Attunement ×2 applies to non-Thread fieldwork actions
+    where it is primary (Interview, Read, Negotiate, Thread-aware exploration). Thread-Read
+    uses (Spirit × 2) + History + TPS — not Attunement — because Thread-Read is a Leap,
+    and all Leaps are Spirit-primary per PP-619. The line is clean: Attunement = social/
+    perceptual calibration; Spirit = Thread contact. TPS is the perceptual depth amplifier
+    for Thread work. Design note added to fieldwork §4.5 and threadwork §2.3.
+
+    ITEM 3 — Leap pool retains Attunement:
+    Confirmed by Jordan: Leap pool = (Spirit × 2) + History + TPS. No Attunement.
+    PP-619 "no exceptions" stands. ED-439 item 3 is resolved by authorial decision.
+
+    WOUND DISRUPTION CHECK (unlisted in ED-439; identified in conferral):
+    threadwork_redesign_v25 §2.3 specified wound disruption during contact as:
+    "Attunement score in d10s, TN 7, Ob 1." Corrected to Spirit score in d10s, TN 7, Ob 1.
+    Rationale: maintaining Thread-state suspension (the Leap's rendering suspension)
+    against physical disruption is Spirit's function — "metaphysical capacity to engage
+    with Thread reality while remaining grounded" (PP-610). Attunement is social/perceptual
+    calibration with no role in maintaining metaphysical states.
+  finding_id: ED-439
+  affects:
+    - designs/ttrpg/threadwork_redesign_v25.md
+    - designs/fieldwork/fieldwork_design_v1.md
+  status: applied
+
+- id: PP-625
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    threadwork_redesign_v25.md propagation pass — all pool formulas corrected to canonical
+    post-PP-619 state. This document was last committed 2026-04-02 and had not received
+    the PP-616 through PP-619 pool unification. Changes applied:
+
+    LEAP (§2.3): Spirit + Attunement + History + TPS → (Spirit × 2) + History + TPS
+    WEAVING (§2.3): Spirit + History + TPS → (Spirit × 2) + History + TPS
+    PULLING (§2.4): Spirit + History + TPS → (Spirit × 2) + History + TPS
+    POP (§2.4): Spirit + History + TPS÷2 → (Spirit × 2) + History + TPS
+      (TPS÷2 struck per PP-619; full TPS always)
+    LOCK (§3.x): Spirit + History [no TPS] → (Spirit × 2) + History + TPS
+      TN 7 → TN 8 (Binding Op per PP-619)
+      Minimum Ob 4 struck (PP-623)
+      Pre-PP-622 Ob table struck; pointer to params_threadwork §Three-Axis Ob System
+    DISSOLUTION (§3.x): Same corrections as Lock
+    MENDING (§4.x): Attunement + Focus + TPS → (Spirit × 2) + History + TPS
+      (PP-616: Attunement and Focus struck from all Thread pools; Focus = Contact Rounds only)
+      Design note updated to reflect Spirit-primary for all Thread contact
+    WOUND DISRUPTION CHECK (§2.3): Attunement score → Spirit score (PP-624)
+
+    Header notice added to document pointing to params_threadwork.md as canonical
+    source for all Ob values (pre-PP-622 single-axis Ob tables in design doc are stale).
+  finding_id: PP-616 PP-618 PP-619 PP-624
+  affects:
+    - designs/ttrpg/threadwork_redesign_v25.md
+  status: applied
+
+- id: PP-626
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    fieldwork_design_v1.md §4.5 Thread-Read pool corrected.
+    Prior: Attunement × 2 + History bonus, TN 7, Ob per Depth. Add TPS as bonus dice.
+    Correct: (Spirit × 2) + History + TPS, TN 7, Ob per Depth.
+    Thread-Read is defined as a perceptive Leap. All Leaps use (Spirit × 2) + History + TPS
+    per PP-619. Attunement struck from all Thread contact pools.
+    §4.2 investigation action table row for Thread-Read also updated: primary = Spirit.
+  finding_id: PP-619 PP-624
+  affects:
+    - designs/fieldwork/fieldwork_design_v1.md
+  status: applied
+
+- id: PP-627
+  type: correction
+  date: 2026-04-13
+  severity: P3
+  description: >
+    Health formula presentation harmonised (ED-438).
+    No mechanical change — documentation clarity only.
+
+    params_core.md Health row updated to:
+    "Wound threshold = Endurance + 6. On each Wound taken: threshold resets (Health refills).
+    Total capacity = (End + 6) × (wound count + 1). See params_combat.md for cumulative formula."
+
+    params_combat.md Pool Formula Health line updated to cross-reference params_core.md
+    for base formula, making explicit that (End+6)×(wound count+1) is the cumulative
+    formulation of the same threshold mechanic.
+
+    Both descriptions were correct from different perspectives (per-wound buffer vs
+    cumulative total); the inconsistency was presentational. Now reconciled.
+    valoria-game CharacterRegistry implementation (cumulative formula) is correct — no
+    code change needed.
+  finding_id: ED-438
+  affects:
+    - references/params_core.md
+    - references/params_combat.md
+  status: applied

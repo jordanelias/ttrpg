@@ -8,6 +8,15 @@
 
 ---
 
+## CANONICAL POOL NOTICE (PP-616, PP-618, PP-619, PP-624, PP-625)
+> **All Thread operation pool formulas in this document have been updated to the canonical
+> post-PP-619 form: (Spirit × 2) + relevant History bonus + Thread Pool Score.**
+> Prior formulas (non-doubled Spirit, Attunement-based Mending, Focus in pools) are struck.
+> Ob tables in this document predate the three-axis Ob system (PP-622/PP-623).
+> **Canonical Ob values: params_threadwork.md §Three-Axis Ob System.**
+> This document remains authoritative for narrative framing, eligibility, contact mechanics,
+> degree outcomes, and chronic consequences. Use params_threadwork.md for all dice values.
+
 ## MODE APPLICABILITY INDEX
 *Added 2026-04-02 — applied per user session instruction*
 
@@ -105,7 +114,7 @@ The Leap is a **full-round action (Priority 5)**. No attack, no movement, no man
 
 ### The Leap Roll
 
-**Pool:** Spirit + Attunement + relevant History bonus (e.g., "Einhir Scholar": points + 3) + Thread Pool Score (Thread Pool Score = Thread Sensitivity ÷ 10, round down) (PP-232)
+**Pool:** (Spirit × 2) + relevant History bonus (points + 3 constant; up to +3D from History level) + Thread Pool Score (TPS = TS ÷ 10, round down) (PP-619, PP-624 — Attunement struck; all Leaps are Spirit-primary)
 **TN:** 7
 **Ob:** Thread Sensitivity 30–49 = 2 · Thread Sensitivity 50+ = 1 · +1 Ob per Wound
 
@@ -163,7 +172,7 @@ At Focus 1, the practitioner gains the experience of contact (relevant for Threa
 
 **Incapacitation during contact:** If a Wound incapacitates the practitioner during contact (Wounds reach or exceed the incapacitation threshold: ceiling(Health ÷ 2)), contact terminates immediately regardless of the Attunement disruption check result. The operation in progress is treated as a Failure. The practitioner returns to rendering incapacitated.
 
-**Wound disruption during contact:** When the practitioner takes a Wound while contact is established, make an Attunement check immediately: Attunement score in d10s, TN 7, Ob 1. Failure: rendering reasserts violently — the body's damage overrides the suspension. Contact drops.
+**Wound disruption during contact:** When the practitioner takes a Wound while contact is established, make a Spirit check immediately: Spirit score in d10s, TN 7, Ob 1. Failure: rendering reasserts violently — the body's damage overrides the suspension. Contact drops. (PP-624: corrected from Attunement. Maintaining Thread-state suspension against physical disruption is Spirit's function — metaphysical grounding while engaged — not Attunement's social/perceptual calibration.)
 
 ### Thread Operation Visibility
 
@@ -201,10 +210,10 @@ During contact, the practitioner is not consciously present. Their configuration
 
 **Why Weaving works with the ground:** Ein Sof spools continuously. Weaving aligns with that process — the practitioner's intentionality toward coherence assists what the ground is already providing. This is why Weaving effects are stable and permanent: the operation did not impose something foreign. It assisted the process that already sustains the thread. Scars are real. The world is consistent. No paradox.
 
-**Pool:** Spirit + relevant History bonus + Thread Pool Score
+**Pool:** (Spirit × 2) + relevant History bonus + Thread Pool Score (PP-616, PP-625)
 **TN:** 7
 
-**Ob by scale (Thread Sensitivity minimum required):**
+**Ob by scale (Thread Sensitivity minimum required):** *(Pre-PP-622 single-axis scale — canonical: params_threadwork.md §Three-Axis Ob System.)*
 
 | Scale | Example | Ob | Min Thread Sensitivity |
 |---|---|---|---|
@@ -258,10 +267,10 @@ Apply to §2.4 Pulling, Foundational/Structural scale section.
 
 **Why Pulling effects expire:** The thread returns to its natural configuration because Ein Sof continues to spool. The ground does not stop providing. The Pull temporarily interrupted the spooling; when the interruption ends, the process resumes. Duration represents how long the practitioner's originary intentionality holds against the ground's continuous provision.
 
-**Pool:** Spirit + relevant History bonus + Thread Pool Score
+**Pool:** (Spirit × 2) + relevant History bonus + Thread Pool Score (PP-616, PP-625)
 **TN:** 7
 
-**Ob by actualization level:**
+**Ob by actualization level:** *(Pre-PP-622 single-axis scale — canonical: params_threadwork.md §Three-Axis Ob System.)*
 
 | Actualization | Example | Ob | Min Thread Sensitivity |
 |---|---|---|---|
@@ -294,8 +303,8 @@ Apply to §2.4 Pulling — Past-Oriented Pulling duration table.
 **Requirements:** Thread Sensitivity 70+ · Rendering Stability ≤ 60 (substrate must be stressed enough for temporal depth to be accessible — in a pristine world, the temporal weight is too firmly actualised to pull against)
 
 **Foundational-scale Past-Oriented Pulling:** Displacing a Foundational event (the Einhir Catastrophe, a civilisation-ending collapse, a foundational institution's origin) requires all standard prerequisites plus: the Einhir framework (§9.15) — the intentionality required to reach Foundational temporal depth cannot be formed without it. Add +2 Ob surcharge to the recency Ob (Ob 7 recency + 2 = Ob 9 for a generational Foundational event). Rendering Stability consequence ×3 on all outcomes (Success: Rendering Stability −9 minimum; Failure: snap-back Wound + Rendering Stability −6 minimum). This is a near-mythic act — maximum conceivable practitioner achieves ~5% success — but it is mechanically possible. It is a legitimate campaign endpoint: the thing the Einhir could not do and the thing a generation of practitioners might spend a campaign attempting.
-**Pool:** Spirit + relevant History bonus + Thread Pool Score÷2 (round down)
-**TN:** 8 (PP-232 — corrected from 7; POP targets deeper temporal weight requiring greater precision)
+**Pool:** (Spirit × 2) + relevant History bonus + Thread Pool Score (PP-619, PP-625 — TPS÷2 struck; full TPS always; TN+1 already encodes temporal-depth difficulty)
+**TN:** 8 (Binding temporal depth — POP targets past configurations)
 
 **Ob by recency:**
 
@@ -321,19 +330,19 @@ Apply to §3.2 Coherence Reduction / Loc
 **What happens:** The practitioner's intentionality is directed toward total actualization — freezing the thread permanently in its current rendered state. During contact, their configuration drives the thread to full actualization. The thread can no longer move between actual and potential. Ein Sof continues to spool, but the thread cannot integrate what the ground provides. It is frozen. Unable to become.
 
 **Requirements:** Thread Sensitivity 50+
-**Pool:** Spirit + relevant History bonus
-**TN:** 7
-**Minimum Ob:** 4
+**Pool:** (Spirit × 2) + relevant History bonus + Thread Pool Score (PP-618, PP-625)
+**TN:** 8 (PP-619 — Binding Operations)
+**Minimum Ob:** Struck (PP-623). Three-axis Ob: see params_threadwork.md §Three-Axis Ob System.
 
-**Ob by scale:**
+*(Pre-PP-622/PP-623 Ob table — struck; retained for patch history only:)*
 
-| Scale | Ob |
+| Scale (STRUCK) | Old Ob |
 |---|---|
-| Object | 4 |
-| Personal | 5 |
-| Relational / Process | 6 |
-| Territorial | 7 |
-| Structural / Foundational | 8+ |
+| Object | ~~4~~ |
+| Personal | ~~5~~ |
+| Relational / Process | ~~6~~ |
+| Territorial | ~~7~~ |
+| Structural / Foundational | ~~8+~~ |
 
 **Thread Sensitivity 70+ Tier Reduction:** −1 to all FR Rendering Stability costs (minimum 1).
 
@@ -370,11 +379,11 @@ Game Master determines domain type when Lock is applied.
 **Why Dissolution is acute:** Tearing is immediate and violent. The substrate ruptures. Ein Sof — infinite positive being — erupts through the tear as excess, not void. Monstrous configurations are forced through the rupture into the rendered world, partially intelligible and exceeding integration capacity.
 
 **Requirements:** Thread Sensitivity 50+
-**Pool:** Spirit + relevant History bonus
-**TN:** 7
-**Minimum Ob:** 4
+**Pool:** (Spirit × 2) + relevant History bonus + Thread Pool Score (PP-618, PP-625)
+**TN:** 8 (PP-619 — Binding Operations)
+**Minimum Ob:** Struck (PP-623). Ob: see params_threadwork.md §Three-Axis Ob System.
 
-**Ob table:** Same as Lock.
+*(Pre-PP-622/PP-623 Ob table: same as Lock above — also struck.)*
 
 | Degree | Outcome |
 |---|---|
@@ -408,10 +417,10 @@ Game Master determines domain type when Lock is applied.
 This requires a different intentionality than thread operations. The practitioner is not directing their configuration toward a thread's coherence or potential. They are directing it toward a structural absence, intending restoration of the conditions under which threads can exist. They are repairing the loom, not working a thread.
 
 **Requirements:** Thread Sensitivity 50+ · Target must be a Gap, Shifting Object, or Locked Zone border
-**Pool:** Attunement + Focus + Thread Pool Score
+**Pool:** (Spirit × 2) + relevant History bonus + Thread Pool Score (PP-616, PP-625 — Attunement and Focus struck from pool dice; Focus still governs Contact Rounds)
 **TN:** 7
 
-**Why Attunement + Focus:** Mending requires sensitivity to the substrate's condition (Attunement) and sustained suspension of rendering while engaging something that is not a thread (Focus). The standard Spirit + History pool targets threads via intentionality. Mending targets the space between threads — the substrate itself. The faculty engaged is different.
+**Design note (PP-616, PP-625):** Mending uses the same pool as all other Thread operations: (Spirit × 2) + History + TPS. The prior Attunement + Focus construction is struck. Spirit is the metaphysical attribute for all Thread contact — this applies whether the operation targets a thread (Weaving, Pulling, Locking) or the substrate's absence (Mending). Focus continues to govern Contact Rounds (duration), not pool dice. Ob table below predates PP-622; canonical Mending Ob: params_threadwork.md §Three-Axis Ob System (Mending Ob = Depth Ob − 1 + age modifier + Breadth + Distance).
 
 **Mending Ob ceiling:** Total Mending Ob cannot exceed 8, regardless of stacked modifiers (threadcut interference per §9.7, Rendering Stability threshold penalties, sequential failure penalties, Wound penalties). The ceiling reflects the substrate's own nature: Mending engages absence, not presence, and the difficulty of engaging absence cannot exceed the difficulty of the most damaged substrate configurations. Individual modifier sources still apply and stack — the ceiling caps the total, not each source.
 

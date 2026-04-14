@@ -3893,7 +3893,9 @@ editorial_decisions:
     source: audit
 
   - id: ED-438
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "PP-627 applied. params_core Health row updated to state threshold vs cumulative distinction. params_combat cross-references params_core for base formula. No mechanical change."
     date_raised: 2026-04-14
     priority: P3
     description: "Health formula presentation inconsistency. params_core.md: Health = Endurance + 6 (per-wound buffer, range 7-13). params_combat.md: Health = (End + 6) × (wound count + 1) (total cumulative capacity). Both are correct descriptions of the same mechanic from different perspectives but look inconsistent. Harmonise: params_core should state 'Health threshold = Endurance + 6 per wound; total capacity increases with each wound taken.' params_combat should reference params_core for the base value."
@@ -3901,7 +3903,17 @@ editorial_decisions:
     source: audit
 
   - id: ED-439
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: >
+      PP-624 applied. All three items resolved:
+      (1) Binding Ops TPS exclusion — void. PP-618 reversed PP-616 and restored TPS to all Binding Ops.
+          No exclusion exists to document. PP-618 rationale (perception aids configuration understanding) is the design note.
+      (2) Attunement doubling in fieldwork — correct framing post-PP-619: Attunement ×2 for non-Thread fieldwork
+          (Interview, Read, Negotiate). Thread-Read uses Spirit ×2 (it is a Leap; all Leaps are Spirit-primary).
+          Design note added to fieldwork §4.5 and threadwork §2.3 header.
+      (3) Leap pool — confirmed by Jordan: (Spirit × 2) + History + TPS. No Attunement. PP-619 "no exceptions" stands.
+      BONUS: wound disruption check during contact corrected from Attunement to Spirit (PP-624).
     date_raised: 2026-04-14
     priority: P3
     description: "Three P3 design note gaps identified in audit: (1) Binding Ops TPS exclusion — the omission of Thread Pool Score from Lock and Dissolution pools is intentional (acts of will against substrate's natural state, not perceptual depth operations) but unstated in params_threadwork. Add one-line design note. (2) Attunement doubled in fieldwork social/Thread-aware pools (×2) but single in Thread operation pools (×1 + TPS amplifier). Intentional — TPS is the perceptual amplifier for Thread work; doubling Attunement there would overlap with TPS function. Add note to fieldwork §2. (3) Leap pool uniquely uses both Spirit AND Attunement (only Thread pool that does). Intentional — Leap requires assertive will (Spirit) and receptive attunement (Attunement) simultaneously. Add design note to Leap section of params_threadwork."

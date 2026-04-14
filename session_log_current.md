@@ -1,6 +1,47 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_SONNET_ED439_ED438_RESOLUTION
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED
+1. ED-439 fully resolved (PP-624):
+   - Item 1: Binding Ops TPS exclusion — void (PP-618 reversed PP-616 same day)
+   - Item 2: Attunement doubling — Thread-Read uses Spirit×2 (it is a Leap); Attunement×2 for non-Thread fieldwork only
+   - Item 3: Leap pool — authorial confirm: (Spirit×2)+Hist+TPS, no Attunement
+   - Bonus: wound disruption check during contact corrected Attunement→Spirit (PP-624)
+
+2. threadwork_redesign_v25 propagation pass (PP-625):
+   - All 7 operation pool formulas updated to (Spirit×2)+Hist+TPS canonical form
+   - TN corrections: Lock/Dissolution → TN 8
+   - Minimum Ob 4 struck (PP-623 already resolved this)
+   - POP TPS÷2 struck (PP-619 already resolved this)
+   - Mending: Attunement+Focus+TPS → (Spirit×2)+Hist+TPS; design note updated
+   - Header notice added: Ob tables pre-date PP-622/PP-623; params_threadwork is canonical for Ob values
+
+3. fieldwork_design_v1 §4.5 Thread-Read pool corrected (PP-626):
+   - Pool: Attunement×2+Hist bonus + TPS bonus → (Spirit×2)+Hist+TPS
+   - §4.2 table row updated: primary attribute → Spirit
+   - Rationale: Thread-Read is a Leap; all Leaps are Spirit-primary per PP-619
+
+4. Health formula harmonised (PP-627, ED-438):
+   - params_core: clarifies threshold vs cumulative distinction
+   - params_combat: cross-references params_core for base formula
+   - No mechanical change; documentation only
+
+## PATCHES: PP-624, PP-625, PP-626, PP-627
+## EDITORIALS RESOLVED: ED-438, ED-439
+## P1 BLOCKERS: 0
+## OPEN EDITORIALS: See prior session counts minus 2
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_OPUS_PARAMS_EXTRACTION
 session_close: 2026-04-13
 phase: COMPLETE

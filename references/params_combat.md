@@ -13,7 +13,7 @@
 ## Pool Formula
 Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)
 Stamina = Endurance + 1 (modified by armour) — minimum 2 (PP-611 corrects PP-232 body; History component struck; matches params_core PP-248)
-Health = (Endurance + 6) × (wound count + 1) — wound threshold every (Endurance + 6) points (PP-232)
+Health = (Endurance + 6) × (wound count + 1) — wound threshold every (Endurance + 6) points (PP-232). Base formula: params_core.md §Derived Scores Health row — Endurance + 6 per wound. (ED-438)
 
 **Armour wield constraint (PP-232):** A character cannot wear armour whose Stamina modifier would reduce their Stamina to 1 or below.
 

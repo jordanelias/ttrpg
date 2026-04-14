@@ -44,7 +44,7 @@ systems:
     design_doc: designs/ttrpg/threadwork_redesign_v25.md
     compilation_stage: compilation/v0.14/stage3_thread_operations.md
     compilation_current: false
-    note: "Stage3 EMPTY/STALE. threadwork_redesign_v25.md is canonical. PP-190-209, PP-232 applied."
+    note: "Stage3 EMPTY/STALE. threadwork_redesign_v25.md is canonical. PP-190-209, PP-232, PP-624-625 applied (pool propagation pass 2026-04-13). All pool formulas now canonical post-PP-619."
 
   southernmost:
     canonical: compilation/v0.14/stage4_southernmost.md
@@ -156,7 +156,7 @@ systems:
     design_doc: designs/fieldwork/fieldwork_design_v1.md
     compilation_stage: null
     compilation_current: false
-    note: "fieldwork_design_v1.md is canonical. v1.1 review corrections applied 2026-04-13. Covers exploration, investigation, socializing for all modes + Godot. No params file yet — extract after ED-NEW-11 (pool formula) resolved. 3 P1 editorials open."
+    note: "fieldwork_design_v1.md is canonical. v1.1 review corrections applied 2026-04-13. PP-626 applied 2026-04-13: Thread-Read pool corrected to (Spirit×2)+Hist+TPS. Covers exploration, investigation, socializing for all modes + Godot. No params file yet. 1 P1 editorial open (ED-NEW-04)."
 
 # GLOBAL NOTE (2026-04-04):
 # All compilation/v0.14 stage documents are outdated and superseded.

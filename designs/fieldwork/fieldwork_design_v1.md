@@ -89,7 +89,7 @@ TN: 7 (Standard). TN 6 (Controlled) when unhurried with preparation. TN 8 (Despe
 | Investigation | Physical evidence | Cognition | Examining objects, documents, architecture, forensics |
 | Investigation | Witness / informant | Attunement | Reading people, sensing deception, calibrating trust |
 | Investigation | Lore / research | Recall | Archives, oral histories, institutional records, precedent |
-| Investigation | Thread-Read | Attunement | Perceiving Thread-level configurations via perceptive Leap (§4.5). TS ≥ 30 required. |
+| Investigation | Thread-Read | Spirit | Perceiving Thread-level configurations via perceptive Leap (§4.5). Pool: (Spirit × 2) + History + TPS (PP-619, PP-626). TS ≥ 30 required. |
 | Socializing | Read | Attunement | Determining NPC's true state, hidden motivation |
 | Socializing | Impress | Charisma | Making a favourable impression, projecting authority |
 | Socializing | Connect | Bonds | Building genuine trust, deepening a relationship |
@@ -286,7 +286,7 @@ Each investigation action represents one scene of focused inquiry. A character c
 | Interview | Attunement | Question a witness, informant, or subject | Up to Hidden (2); Buried (3) at Disposition +3 |
 | Research | Recall | Consult archives, oral histories, institutional records, Einhir documents | Up to Hidden (2); Buried (3) at institutional access |
 | Surveil | Cognition | Observe a location, person, or faction operation over extended time | Up to Hidden (2). +2 Exposure (conspicuous activity). |
-| Thread-Read | Attunement | Perceive Thread-level configurations via perceptive Leap (§4.5) | Depth 3–5. TS ≥ 30 required. Co-movement fires (P-01). +1 Exposure. |
+| Thread-Read | Spirit | Perceive Thread-level configurations via perceptive Leap (§4.5). Pool: (Spirit × 2) + History + TPS (PP-619, PP-626). | Depth 3–5. TS ≥ 30 required. Co-movement fires (P-01). +1 Exposure. |
 | Reconstruct | Recall | Assemble existing evidence into a coherent picture. No new information gathered — this action synthesises. | Any depth already reached. Ob = (threshold − current progress), min 1. On success: reveals what the assembled evidence implies. |
 
 **Evidence progress by degree:**
@@ -339,7 +339,7 @@ Thread-Read is a **perceptive Leap** — the practitioner enters active Thread c
 **Procedure:**
 1. Declare Thread-Read. Requires TS ≥ 30. The practitioner must not be in melee with a declared attacker.
 2. **Leap.** Follow standard Leap procedure: full-round action (Priority 5 in combat time; one scene action in fieldwork time). Vulnerability window applies — the practitioner is in Thread contact and exposed.
-3. **Perception.** Roll Attunement × 2 + History bonus, TN 7, Ob per Depth. Add Thread Pool Score (TS ÷ 10, round down) as bonus dice.
+3. **Perception.** Roll (Spirit × 2) + History bonus + Thread Pool Score (TPS = TS ÷ 10, round down), TN 7, Ob per Depth. (PP-619, PP-626: Thread-Read is a Leap; all Leaps use (Spirit × 2) + History + TPS per PP-619. Attunement struck from Thread contact pools.)
 4. **Co-movement fires (P-01).** Thread-Read is a genuine Thread operation. Three-dimensional auto-effects apply per threadwork_redesign_v25.md §3.2: temporal auto-effect (Calamity Drift + History Resonance), epistemic auto-effect (Certainty modifier, investigation/testimony consequences), actualized auto-effect (d6 consequence table).
 5. **Coherence cost.** Per scale table (stage11 §11.1): Object/Personal scale = 0 auto-cost; Relational+ scale = −1 Coherence.
 6. **Evidence progress.** Apply degree result per §4.2 table.
