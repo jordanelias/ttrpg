@@ -7748,3 +7748,64 @@ patches:
     - references/params_core.md
     - references/params_combat.md
   status: applied
+
+- id: PP-628
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    Canon guard review of fieldwork_design_v1.md against philosophical foundations,
+    emergence vectors, and Domain Echo. Six categories of corrections:
+
+    1. P-05 FIX — Mode 1 (Ordinary Incursion) vs Mode 2 (Providence) mechanically
+       distinguished in §3.1 Anomaly POI row. Mode 1: time-sensitive evidence
+       (progress halves after 3 scenes as config degrades). Mode 2: event not
+       entity — Interview and social fieldwork actions unavailable.
+
+    2. P-01 CLARIFICATION — §2.4 co-movement note added: all Thread operations
+       in the Investigative Yield table produce co-movement per P-01 via threadwork
+       rules. §4.5 "only fieldwork action that produces co-movement" clarified
+       to "only fieldwork-defined action."
+
+    3. PP-626 PROPAGATION — §2.1 and §4.2 tables: Thread-Read primary attribute
+       corrected Attunement → Spirit. (§4.5 Step 3 was already correct in source.)
+
+    4. P-06 NOTE — §2.8: threadcut being Knot formation carries +1 self-maintenance
+       strain per Knot use (distinct from organic being Knots). Cumulative strain 5
+       = rendering instability. Strain −1 per season of Knot non-use.
+
+    5. DOMAIN ECHO §2.5 — Three additions: faction-level scope definition (Structural
+       always fires; Complex if faction institutional; Simple only if faction officer
+       in institutional capacity). Timing (scene end; next Accounting across modes).
+       NPC learning mechanism (Watched threshold, hostile witness, or public citation).
+
+    6. BREACH × THREADCUT §3.1 — confirmed entry sites of threadcut beings yield
+       +3 Evidence (Thread-verified) regardless of roll degree; being may
+       counter-investigate per §2.8.
+  finding_id: canon-guard-review-2026-04-13
+  affects:
+    - designs/fieldwork/fieldwork_design_v1.md
+  status: applied
+
+- id: PP-629
+  type: propagation
+  date: 2026-04-13
+  severity: P2
+  description: >
+    Fieldwork system — 5 pending propagation items from PP-583 session now complete:
+    (1) references/propagation_map.md FIELDWORK section added.
+    (2) references/params_board_game.md Survey action Ob table row added.
+    (3) references/params_core.md Attribute Roles — Fieldwork section added.
+    (4) compilation/v0.14/stage11_scale_transitions.md 9th handoff rule added.
+    (5) tests/coverage_matrix.md SIM-FW-02 through FW-10 added (all RESOLVED);
+        misplaced FW-03 and FW-06 from Thread System Redesign section removed.
+    (6) references/canonical_sources.yaml fieldwork SHA updated; note updated.
+  finding_id: propagation-fieldwork-PP-583-pending
+  affects:
+    - references/propagation_map.md
+    - references/params_board_game.md
+    - references/params_core.md
+    - compilation/v0.14/stage11_scale_transitions.md
+    - tests/coverage_matrix.md
+    - references/canonical_sources.yaml
+  status: applied

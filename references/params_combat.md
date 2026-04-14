@@ -1,6 +1,6 @@
 <!-- version: v0.14-AUD5-R1 | sources: designs/combat/combat_design_v1.md | last_updated: 2026-04-03 -->
 <!-- CANONICAL SOURCE: combat_design_v1.md supersedes stage8_combat.md -->
-<!-- PATCHES APPLIED (canonical): PP-86, PP-91, PP-165, PP-171–172, PP-174, PP-188, PP-210, PP-215, PP-232, PP-238–239, PP-247–248, PP-258, PP-260–261, PP-263, PP-271, PP-273–277, PP-284–286, PP-290–292, PP-294–295, PP-337, PP-352, PP-382, PP-386, PP-406–407, PP-611–612, PP-615 -->
+<!-- PATCHES APPLIED (canonical): PP-86, PP-91, PP-165, PP-171–172, PP-174, PP-188, PP-210, PP-215, PP-232, PP-238–239, PP-247–248, PP-258, PP-260–261, PP-263, PP-271, PP-273–277, PP-284–286, PP-290–292, PP-294–295, PP-337, PP-352, PP-382, PP-386, PP-406–407, PP-611–612, PP-615, PP-627 -->
 <!-- ED-200/201/202/203 resolved 2026-04-04: wound cap, carry-over, recovery, pool floor -->
 <!-- PP-232: Health formula revised; Stamina floor 2; armour wield constraint; wound penalty −1D only; -->
 <!--         initiative order corrected (initiative holder declares last); tie result corrected; -->

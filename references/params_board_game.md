@@ -1,6 +1,6 @@
 <!-- version: v0.9.2 | source: valoria_bg_v05_simulation_and_patches.md + victory_architecture_v1.md + calamity_radiation.md + geography_design.md (canonical per canonical_sources.yaml) | last_updated: 2026-04-09 -->
 <!-- PP-249 2026-04-04: ED-142 resolved — BG Overwhelming: 2×Ob + floor 3, supersedes ED-031 -->
-<!-- PATCHES APPLIED (canonical): PP-39, PP-112, PP-169–171, PP-174, PP-177–189, PP-191–195, PP-199, PP-203–204, PP-219–220, PP-232, PP-249, PP-261–262, PP-268–274, PP-277–278, PP-281, PP-293–299, PP-302–303, PP-315–326, PP-345–346, PP-353, PP-355–365, PP-377, PP-379–380, PP-399, PP-404–405, PP-409, PP-415, PP-417, PP-421–447, PP-449–453, PP-460, PP-462–466, PP-470–494, PP-498–504, PP-506–512, PP-515, PP-517–527, PP-533, PP-547–548, PP-552–555, PP-558–565, PP-568–570, PP-573, PP-576–580, PP-585, PP-593–600, PP-605 -->
+<!-- PATCHES APPLIED (canonical): PP-39, PP-112, PP-169–171, PP-174, PP-177–189, PP-191–195, PP-199, PP-203–204, PP-219–220, PP-232, PP-249, PP-261–262, PP-268–274, PP-277–278, PP-281, PP-293–299, PP-302–303, PP-315–326, PP-345–346, PP-353, PP-355–365, PP-377, PP-379–380, PP-399, PP-404–405, PP-409, PP-415, PP-417, PP-421–447, PP-449–453, PP-460, PP-462–466, PP-470–494, PP-498–504, PP-506–512, PP-515, PP-517–527, PP-533, PP-547–548, PP-552–555, PP-558–565, PP-568–570, PP-573, PP-576–580, PP-585, PP-593–600, PP-605, PP-628, PP-629 -->
 <!-- AUTHORITATIVE SOURCE: designs/board_game/valoria_bg_v05_simulation_and_patches.md (faction stats, clocks, victory conditions); designs/board_game/stage_bg_proposal_v02.md (action economy, card-hand system PP-177) -->
 <!-- NOTE: v05 is canonical for BG mechanics. v04 B-sections remain structural base. -->
 <!-- STALE CHECK: v0.9.0 — RS Effects, Victory, PT/WC/WA, TC generation updated. Territory renumbering complete: all T# references use geography_design.md canonical numbering (17 territories). Old territory names (Vargstad, Eidursjo, Arcansheld, Nordhelm, Mittelmark) replaced with canonical names (Grauwald, Rendstad, Ehrenfeld, Kronmark, Feldmark). Ducal Geography (ED-107) resolved. Varfell expansion rewritten. -->
@@ -119,10 +119,10 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 | Thread Operation (Pontifex/Weaver) | Ob 2 base | See PP-182 co-movement protocol |
 | Investigate/Intel (Tribune) | 2 | +2 Ob in Church territory with Inquisitor |
 | Spy (Tribune Outward) | floor(target Intel / 2) + 1 | — |
+| Survey (Consul Inward) | (5 − Proximity Rating) + 1, min 1 | Askeheim (PR 0) → Ob 6; Lowenskyst (PR 5) → Ob 1. Pool: Influence. On Success: reveal 1 undiscovered POI (Resource: Prosperity +1; Secret: +1D next mil/intel action; Remnant: Thread op Ob −1 ×2 seasons + Thread Debt token; Anomaly: RS −1 immediately + Warden Cooperation +1 eligible). On Failure targeting Depth ≥ 3: +1 Church Attention Pool. See fieldwork_design_v1.md §8.1. (PP-628) |
 | Parliamentary Manoeuvre (Hafenmark) | floor(opponent Influence / 2) + 1 | — |
 | Community Organising (Restoration) | 2 | Pool: 1D base + 1D per adjacent territory with RM Presence marker. Failure: no Stability cost (RM has no Stability). Try again next season. (PP-460) |
 | Community Weaving (Restoration) | (100−RS)÷20 round up min 1 | −1 per Presence marker in territory |
-| Survey (Consul Inward variant) | (5 − Proximity Rating) + 1, min 1 | Pool: Influence. Success: reveal one POI (territory bonus per §8.1 table). Overwhelming: reveal POI + Influence +1. Failure: +1 Church Attention Pool if Depth ≥ 3 surveyed. See fieldwork_bg.md §8.1 for full POI bonus table. ED-NEW-03: monitor Govern/Survey balance. |
 | Fortify | Fort level + 1 | — |
 
 All Obs: floor 1.

@@ -1,6 +1,6 @@
 <!-- version: v0.14-AUD1-R2 | sources: stage1_core_engine.md | last_updated: 2026-04-04 -->
 <!-- STALE CHECK: If current ruleset version ≠ v0.14, halt and flag before using. -->
-<!-- PATCHES APPLIED (canonical): PP-164, PP-232, PP-234, PP-243, PP-246–248, PP-255, PP-261, PP-289–290, PP-381, PP-383–386, PP-389, PP-551, PP-553, PP-610–611, PP-615, PP-617, PP-623 -->
+<!-- PATCHES APPLIED (canonical): PP-164, PP-232, PP-234, PP-243, PP-246–248, PP-255, PP-261, PP-289–290, PP-381, PP-383–386, PP-389, PP-551, PP-553, PP-610–611, PP-615, PP-617, PP-623, PP-627, PP-628, PP-629 -->
 <!-- PP-247 (Combat Pool formula corrected to match stage1 §2.3/§3.4: Agi + hist_pts + 3) -->
 <!-- PP-248 (Stamina formula corrected to End+1 per stage1 §3.9; Health row clarified) -->
 <!-- PP-232 (Ob cap raised to 20; Overwhelming floor 3; Health formula revised; Stamina floor 2; armour wield constraint) -->
@@ -114,7 +114,7 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 
 | Score | Formula | Range | Notes |
 |-------|---------|-------|-------|
-| Health | Endurance + 6 | 7–13 | Damage buffer before Wounds. Wound threshold fires every (End+6) damage received; Health resets to full on each Wound. (PP-248) |
+| Health | Endurance + 6 per wound | 7–13 per wound | Wound threshold = Endurance + 6. On each Wound taken: threshold resets (Health refills). Total capacity = (End + 6) × (wound count + 1). See params_combat.md for cumulative formula. (PP-248, ED-438) |
 | Stamina | Endurance + 1 | min 2 | Combat resource. Floor 2. Cannot wear armour that would reduce Stamina to 1 or below. (PP-248/PP-611 confirmed) |
 | Composure | Charisma + 6 | 7–13 | Social damage buffer before Rattled. Parallels Health = Endurance + 6. (PP-234, ED-127 resolved) |
 | Combat Pool | (Agility × 2) + weapon History (points + 3) | min 5 | Split Offence/Defence each round. PP-615: doubled formula confirmed canonical; PP-247 note was stale. |
@@ -138,30 +138,6 @@ Example: Spend 1 Momentum (1 auto-success) + roll 1D TN 7.
 
 Spending 2 Momentum on Ob 1 (2 auto-successes): auto-successes alone reach Ob 1 but cannot satisfy Overwhelming floor (need ≥ 3 net). Must also roll to reach Overwhelming.
 
-
-
-## Fieldwork Roles by Attribute (§2.1 — designs/fieldwork/fieldwork_design_v1.md)
-
-| Activity | Sub-type | Primary Attribute | Pool Formula |
-|----------|----------|-------------------|-------------|
-| Exploration | Terrain / navigation | Cognition | (Cog × 2) + History |
-| Exploration | Thread-aware | Attunement | (Att × 2) + History |
-| Exploration | Endurance-based | Endurance | (End × 2) + History |
-| Investigation | Physical evidence | Cognition | (Cog × 2) + History |
-| Investigation | Witness / informant | Attunement | (Att × 2) + History |
-| Investigation | Lore / research | Recall | (Rec × 2) + History |
-| Investigation | Thread-Read (perceptive Leap) | Attunement | (Att × 2) + History; TS ≥ 30 required; Leap cost applies; co-movement fires |
-| Socializing | Read | Attunement | (Att × 2) + History |
-| Socializing | Impress | Charisma | (Cha × 2) + History |
-| Socializing | Connect | Bonds | (Bon × 2) + History |
-| Socializing | Rumour | Charisma | (Cha × 2) + History |
-| Socializing | Negotiate | Attunement | (Att × 2) + History; below Contest threshold only (§5.7) |
-| Sincerity Gate | — | Spirit | vs Dissonance Factor; fires on instrumental Connect/Converse |
-| Survey (BG) | Consul Inward variant | Influence | Faction stat, not character attribute |
-
-**Pool formula:** (Primary Attribute × 2) + History bonus. History bonus = History points + 3 (creation baseline; same as Combat Pool and Contest Pool). TN 7 standard; TN 6 controlled; TN 8 desperate. No History relevant: pool = (Primary Attribute × 2) + 3.
-
-**Physical wounds:** Apply −1D per wound to exertion-based fieldwork (Endurance exploration, Surveil) only. Social and cognitive fieldwork unaffected by physical wounds. Rattled marks: +1 Ob per mark to social fieldwork for remainder of scene.
 
 ## Certainty Track (PP-551 — redesigned from PP-289)
 **Definition:** The character's operative cosmological framework. Tracks the journey from Solmund orthodoxy to Thread cosmology acceptance. Both poles are stable states. This is a transformation track, not a deterioration track.
@@ -209,3 +185,17 @@ Negative net successes contribute to Failure degree only; they do not compound p
 ## ED-301 Propagation: TS/Coherence Orthogonality
 - TS and Coherence are orthogonal axes. See params_threadwork ED-301 section for full detail.
 - Coherence track models layer 2 integrity (unconscious self-rendering). TS measures perceptual depth. Neither implies the other.
+
+## Attribute Roles — Fieldwork (PP-628, from fieldwork_design_v1.md §2.1)
+
+| Attribute | Fieldwork Role |
+|-----------|----------------|
+| Cognition (Cog) | Terrain/navigation exploration; physical evidence examination (Examine); Surveil; Concealment pool (Cognition × 2) |
+| Recall (Rec) | Lore/research investigation (Research); Reconstruct action |
+| Attunement (Att) | Thread-aware exploration (sensing); Witness/informant investigation (Interview); Socializing: Read, Negotiate |
+| Spirit (Spi) | Thread-Read (perceptive Leap): (Spirit × 2) + History + TPS. All Thread contact pools. Sincerity Gate check. |
+| Endurance (End) | Endurance-based exploration (forced marches, harsh terrain) |
+| Bonds (Bon) | Socializing: Connect action |
+| Charisma (Cha) | Socializing: Impress, Rumour, Converse |
+
+Cover (derived): Cognition + most relevant History for concealment/tradecraft. Fieldwork Pool: (Primary Attribute × 2) + History bonus (matching Combat Pool and Contest Pool construction per PP-615/PP-234).
