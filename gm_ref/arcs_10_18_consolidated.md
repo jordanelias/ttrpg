@@ -1,7 +1,7 @@
 # Valoria Emergent Arcs — Batch 03 (Consolidated)
 ## Version: 1.0 | Date: 2026-04-08
 ## NPC Reference: designs/npcs/npc_roster.md (final, tri-modal)
-## Source reads: params_factions.md, params_board_game.md, params_core.md, npc_roster.md (final), canonical_sources.yaml, geography_design.md, victory_architecture_v1.md, valoria_narrative_scenario_chains.md (Arc 1: Hunting Accident), canon/00_philosophical_foundations.md §11
+## Source reads: params_factions.md, params_board_game.md, params_core.md, npc_roster.md (final), canonical_sources.yaml, geography_design.md, victory_architecture_v1.md, valoria_narrative_scenario_chains.md (Arc 1: Hunting Accident), canon/00_philosophical_foundations_rules.md §11
 ## Framework typology: historical structural parallels — Investiture Controversy, Year of Four Emperors, Romance of Three Kingdoms, Sengoku Japan, Byzantine court politics, Borgia papacy, Italian city-states, Machiavelli's Sinigaglia
 ## Prior arcs checked: gm_ref/arcs_01_04_nongreedy.md (4 arcs), gm_ref/arcs_05_09_batch02.md (5 arcs). No duplication.
 ## Supersedes (all DEPRECATED):

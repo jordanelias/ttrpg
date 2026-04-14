@@ -579,4 +579,7 @@ All three can fire within the same 6-season window without any player awareness 
 ---
 
 *Supersedes all prior versions. Canonical for arcs 46–55 as of 2026-04-13.*
-*Sources used: stage6_factions.md, threadwork_redesign_v25.md, params_board_game.md, params_factions.md, params_core.md, clock_registry.md, canon/02_canon_constraints.md, canon/00_philosophical_foundations.md §1–3.*
+*Sources used: stage6_factions.md, threadwork_redesign_v25.md, params_board_game.md, params_factions.md, params_core.md, clock_registry.md, canon/02_canon_constraints.md, canon/00_philosophical_foundations_rules.md §1–3.*
+
+
+[PROVISIONAL: reference path updated to philosophical_foundations_rules.md — no content change]
