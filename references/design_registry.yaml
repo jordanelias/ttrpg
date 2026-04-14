@@ -29,7 +29,7 @@ registry:
     canonical_v30: references/params_core.md
     skeleton: null
     infill: null
-    atomized: not_started
+    atomized: not_applicable
     predecessor: null
     params: references/params_core.md
     notes: >
@@ -42,7 +42,7 @@ registry:
     canonical_v30: references/params_core.md
     skeleton: null
     infill: null
-    atomized: not_started
+    atomized: not_applicable
     predecessor: null
     params: references/params_core.md
     notes: "Merged into core_engine. No separate design doc."
@@ -251,9 +251,9 @@ registry:
     system: factions
     mode: BG
     canonical_v30: designs/board_game/board_game_v30.md
-    skeleton: references/params_factions_ttrpg.md
-    infill: references/params_factions_ttrpg.md
-    atomized: not_started
+    skeleton: designs/board_game/board_game_v30.md
+    infill: designs/board_game/board_game_v30_infill.md_ttrpg.md
+    atomized: not_applicable
     predecessor: designs/board_game/valoria_bg_v05_simulation_and_patches.md
     params: references/params_factions.md
     notes: "BG/Hybrid faction mechanics live in board_game_v30."
@@ -358,7 +358,7 @@ registry:
     canonical_v30: references/arc_register.md
     skeleton: null
     infill: null
-    atomized: not_started
+    atomized: not_applicable
     predecessor: null
     params: null
     notes: "Arc register is versioned by patch number, not filename. No rename needed."

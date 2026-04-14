@@ -619,26 +619,177 @@ Alternatively, add an additional Theocracy Counter gain source: "Church wins any
 ---
 
 # PART NINE: HYBRID MODE INTERSECTION
+<!-- PP-644: hybrid_gaps_v30 decisions propagated 2026-04-13 -->
+<!-- Source: designs/hybrid/hybrid_gaps_v30.md (all 17 gaps resolved) -->
 
-
-## Handoff Points Stress-Tested
-
-**Strong integrations:**
-
-**Weak integrations requiring attention:**
-- **Thread Debt in hybrid:** A Player Character performing a personal Thread operation generates Thread Debt that batches to Cascade. But the board game Thread Debt triggers (Rendering Stability < 30, prior token in territory) may not apply identically at personal scale. Hybrid mode should specify: "Personal Thread operations incur Thread Debt on the board only if the TTRPG scale operation would qualify as 'against temporal flow' by TTRPG criteria. The Game Master determines this at the Cascade phase ledger, not the player mid-scene."
-- **CP awards from board game successes (G-089 in hybrid_gaps_resolved.md):** "Board game successes generate CP." The criteria for CP awards are stated as "Belief engagement, significant Domain Action, Maxim expression." In the board game, Beliefs and Maxims are TTRPG constructs. In board-game-only mode, CP doesn't apply. In hybrid, the board action must be tied back to the Player Character's belief system by the Game Master to earn CP. **This is correct but needs a worked example in the ruleset.** The Institutional Mandate Uphold/Appease decision is the natural bridge: a faction Upholding their Mandate in a way that reflects the Player Character's personal Conviction (their TTRPG Belief arc) earns CP even when resolved at board scale.
+All 17 hybrid design gaps resolved and propagated from hybrid_gaps_v30.md.
 
 ---
 
-## Missed Coalition Opportunity Penalty (PP-404)
+## §9.1 Session Structure (G-075, G-091)
 
-2. The coalition trigger was reachable in one standard action for both factions.
-3. Neither faction took the coalition-enabling action.
+Phase sequence: Personal → Strategic → Cascade.
+Personal phase duration: 90–150 minutes (dependent on scene volume).
+Strategic and Cascade phases: accounting-driven, no fixed time target.
+Session minimum: 1 real-world session per in-game season. No maximum — a season may span multiple sessions if scene volume warrants.
+Seasonal accounting fires at end of the session in which the season closes, not mid-session.
 
-**Effect:** Each faction's first coalition-enabling action next season is at **+1 Ob** (the missed window hardens the path).
-- Not cumulative: the penalty does not stack across consecutive missed seasons.
-- Cleared at next Accounting whether or not coalition triggered.
-- **Fog of war exemption:** If either faction's relevant stat was in the ambiguous boundary band (stat 4 observed as "Poor" on the d6 roll), the penalty does not apply — the opportunity was not visibly available.
+---
 
+## §9.2 Information Asymmetry — Fog of War (G-079)
+
+All faction stats (Mandate, Influence, Wealth, Military, Intelligence, Stability) displayed to non-owning players in four qualitative states:
+
+| Display | Underlying value |
+|---------|-----------------|
+| In ruins | 1 |
+| Poor | 2–3 |
+| Good | 4–5 |
+| Excellent | 6–7 |
+
+Own faction: exact values visible. Intel stat: always hidden from all players regardless of ownership.
+
+---
+
+## §9.3 Cross-System Handoff Rules (G-080)
+
+All consequences batch to the Cascade phase via the Game Master ledger. Exception: if the Game Master judges a consequence is simple enough to track inline (single stat change, no threshold risk), they may apply it immediately. This is a Game Master call, not a player option.
+
+| Handoff type | Resolution |
+|---|---|
+| Personal action → faction stat change | Batch to Cascade |
+| Thread op → clock change | Batch to Cascade (applied in Cascade step 2) |
+| Domain Echo from personal scene | Batch to Cascade (applied in Cascade step 1) |
+| Board order → TTRPG scene trigger | Fires at start of next Personal phase (see §9.4) |
+| Faction stat change → personal consequence | Game Master narrates in next Personal phase scene |
+| Non-Player Character action → personal character impact | Game Master narrates; fires in correct scene sequence (§9.4) |
+| Clock threshold → institutional response | Fires in Cascade step 3; Game Master queues response for next Personal phase |
+| Player Character death → faction state | Fires in Cascade (§9.9) |
+| Faction collapse → personal state | Fires in Cascade (§9.10) |
+| Flashback → board state | Not permitted (§9.6) |
+| Resources spent → Wealth impact | Evaluated in Cascade (§9.7) |
+| Expedition absence → faction orders | Handled per §9.11 |
+
+---
+
+## §9.4 Board Game Order → TTRPG Scene Triggers (G-081)
+
+Zoom In trigger: player-initiated only. Non-Player Character actions against players: narrated at board scale unless the Game Master judges it dramatically necessary to Zoom In (rare).
+Scene sequencing: when multiple triggers fire simultaneously, the Game Master sequences them by dramatic logic (most consequential first). No strict mechanical priority.
+
+---
+
+## §9.5 Thread Operations in Hybrid (G-083)
+
+Personal Thread operations: batch to Cascade. Thread Debt incurred by personal Thread operations applies to the board only if the TTRPG-scale operation would qualify as "against temporal flow" by TTRPG criteria. The Game Master determines this at the Cascade phase ledger, not the player mid-scene.
+
+Faction Thread orders: resolve as board game Thread orders. Co-Movement Cards drawn at Cascade step 2.
+
+---
+
+## §9.6 Zoom In Criteria (G-085, G-092)
+
+Zoom In occurs when:
+- A player initiates it during the Strategic phase (player-triggered)
+- A board consequence directly affects a named Player Character or their home territory (mechanical trigger)
+
+Zoom In is restricted to the Personal phase. No Zoom In may be initiated during the Strategic phase itself. Consequences mid-Strategic phase are held and fire at the next Personal phase.
+
+Flashback rule (G-092): No player may initiate a Personal phase flashback scene to alter a Strategic phase outcome already resolved. What has been rolled stands.
+
+---
+
+## §9.7 Resource Spending → Wealth (G-093)
+
+Resource expenditure threshold: 2× rolled net successes. Below threshold = "stressed" — faction takes Wealth −1 at Cascade. Above threshold = sustainable — no Wealth change.
+
+Note: the 2×−1 variant (threshold at 2× Ob minus 1) was tested but produced excessive stress results. 2×rolled is canonical.
+
+---
+
+## §9.8 Cascade Sequence — 5 Steps (G-094)
+
+The Cascade phase resolves all batched consequences in fixed order. Game Master-run; not skippable.
+
+1. Domain Echoes from Personal phase scenes
+2. Thread operation clock changes (RS, TT)
+3. Clock threshold events (TC, IP, RS band transitions)
+4. Board order consequences (Non-Player Character actions, coalition penalties, etc.)
+5. Accounting: attribute changes, seasonal caps applied, victory checks
+
+---
+
+## §9.9 Player Character Death in Hybrid (G-086)
+
+On Player Character death:
+- Crisis penalty fires immediately: faction loses 1 Stability, 1 Mandate at next Accounting
+- Player takes over the highest-loyalty Non-Player Character officer within that faction
+- If no valid Non-Player Character officer: player takes over a new Personal Character from a different faction (or the same, with Game Master approval)
+- No new Player Characters introduced mid-season — succession resolves at next season boundary
+
+---
+
+## §9.10 Faction Collapse in Hybrid (G-087)
+
+On faction reaching Stability 0:
+- Player Character continues playing as a personal character, unaffiliated
+- Faction dice bonuses (from board game faction stats) no longer apply to personal rolls
+- Player may attempt to reconstitute the faction via Influence Domain Actions (Ob 4, multi-season)
+
+---
+
+## §9.11 Downtime (G-088)
+
+Downtime actions run concurrently with the Strategic phase. A Player Character who declares Downtime cannot Zoom In during that Strategic phase. Downtime results batch to Cascade.
+
+---
+
+## §9.12 CP Awards from Board Game Successes (G-089)
+
+Board game successes generate Character Points (CP) when the successful action is tied to the Player Character's TTRPG Belief arc by the Game Master at Cascade. The Institutional Mandate Uphold/Appease decision is the canonical bridge: Upholding a Mandate in a way that reflects the Player Character's Conviction earns CP even when resolved at board scale.
+Criteria: same as TTRPG (Belief engagement, significant Domain Action, Maxim expression).
+
+---
+
+## §9.13 BG Information Gating → TTRPG Scenes (G-090)
+
+Board game discoveries (factional intelligence, revealed stats) may generate TTRPG scenes only if the Player Character has in-scene awareness of the information. Exception: if a board discovery is immediately relevant to the next Personal phase scene (same session), the Game Master may grant limited access without prior in-scene discovery.
+
+---
+
+## §9.14 Player Character Proxy During Expedition Absence (G-095)
+
+A Player Character on an extended expedition (Southernmost, Einhir research) is absent from Strategic phase faction orders. Options:
+- Designate a Non-Player Character proxy officer: proxy receives 1 directive per season from the Player Character
+- No proxy: faction reverts to Non-Player Character artificial intelligence for that Player Character's orders
+
+---
+
+## §9.15 Thread Debt in Hybrid — Design Note
+
+Thread Debt incurred in personal Thread operations applies on the board only when the Game Master determines the operation was "against temporal flow" by TTRPG criteria (Past-Oriented Pulling, contested operations at RS < 30). Standard Weaving, Mending, and Locking do not generate Thread Debt on the board regardless of RS level.
+
+---
+
+## Summary — 17 Hybrid Gaps Resolved
+
+| Gap | Key decision |
+|-----|-------------|
+| G-075 | Personal phase 90–150 min; 1 session min/season |
+| G-079 | Four qualitative states; Intel always hidden |
+| G-080 | Batch to Cascade; Game Master ledger; inline exception at Game Master discretion |
+| G-081 | Zoom In player-only; Non-Player Character actions narrated; sequencing by drama |
+| G-083 | Thread ops batch to Cascade; Thread Debt gated by TTRPG criteria |
+| G-085 | Player-initiated or mechanical trigger; Personal phase only |
+| G-086 | Crisis penalty; take over Non-Player Character officer or succession at season end |
+| G-087 | Continue as personal character; lose faction dice bonuses |
+| G-088 | Downtime concurrent with Strategic phase; no Zoom In during Downtime season |
+| G-089 | Board successes → CP when tied to Belief arc by Game Master at Cascade |
+| G-090 | Gated by in-scene discovery; exception for immediate-next-scene |
+| G-091 | 1 session minimum per season; seasonal accounting at session end |
+| G-092 | No flashback to alter resolved Strategic phase outcomes |
+| G-093 | Threshold = 2× rolled; below = stressed (Wealth −1) |
+| G-094 | 5-step Cascade sequence; Game Master-only; not skippable |
+| G-095 | Non-Player Character proxy gets 1 directive/season; else Non-Player Character artificial intelligence |
+| Thread Debt | Personal ops: board debt only if against temporal flow (TTRPG criteria) |
 

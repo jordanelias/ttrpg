@@ -8008,3 +8008,11 @@ patches:
       - designs/setting/southernmost_v30.md
       - references/params_southernmost.md
     status: applied
+
+  - id: PP-644
+    date: 2026-04-13
+    description: "Propagate hybrid_gaps_v30 all 17 resolved gaps into board_game_v30.md Part Nine (§9.1–9.15). Replaces placeholder stress-test content."
+    source: designs/hybrid/hybrid_gaps_v30.md (G-075, G-079, G-080, G-081, G-083, G-085, G-086, G-087, G-088, G-089, G-090, G-091, G-092, G-093, G-094, G-095, Thread Debt)
+    targets:
+      - designs/board_game/board_game_v30.md
+    status: applied

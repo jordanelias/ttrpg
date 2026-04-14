@@ -183,7 +183,7 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | `compilation/v0.14/stage11_scale_transitions.md` | `references/params_scale_transitions.md` | Extracted values |
 | `compilation/v0.14/stage11_scale_transitions.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | Phase structure drives transfer rules |
 | `skills/valoria-orchestrator/references/state_transfer_spec.md` | `skills/valoria-simulator/SKILL.md` (Mode K2) | Transition tests load spec |
-| `designs/hybrid/hybrid_gaps_v30.md` | `compilation/v0.14/stage11_scale_transitions.md` | Pending integration |
+| `designs/hybrid/hybrid_gaps_v30.md` | `compilation/v0.14/stage11_scale_transitions.md` | RESOLVED — gaps propagated to board_game_v30 Part Nine (PP-644) |ntegration |
 | `designs/hybrid/hybrid_gaps_v30.md` | `designs/board_game/board_game_v30.md` §B.5 | Pending integration |
 
 ### GM REFERENCE / FLOWCHARTS
@@ -324,7 +324,7 @@ Propagation targets:
 - references/glossary.md → DONE (this commit — new terms: Size, Power, Discipline, Command, H, Total Health)
 - tests/coverage_matrix.md → DONE (SIM-DEBT-03 added)
 - session_log_current.md → DONE (this commit)
-- designs/mass_combat/mass_battle_v30.md → STALE — unit formula in design doc predates PP-233. Needs rewrite on next design pass. [PROP-STALE: mass_battle_v3.md §B.1 unit stats]
+- designs/mass_combat/mass_battle_v30.md → RESOLVED — PP-233 applied (unit formula: Pool = min(Size,Command)+Command). Confirmed in params_mass_combat.md header.
 - compilation/v0.14/stage8_combat.md → STALE — mass combat compilation predates PP-232/233. [PROP-STALE: stage8_combat.md]
 
 ## Propagation Pass — 2026-04-03 (ED batch from review session)
