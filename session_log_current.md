@@ -1,47 +1,6 @@
 # Valoria Session Log — Current
 
 ```yaml
-session_id: 2026-04-13_SONNET_ED439_ED438_RESOLUTION
-session_close: 2026-04-13
-phase: COMPLETE
-status: CLOSED
-
-## TASKS COMPLETED
-1. ED-439 fully resolved (PP-624):
-   - Item 1: Binding Ops TPS exclusion — void (PP-618 reversed PP-616 same day)
-   - Item 2: Attunement doubling — Thread-Read uses Spirit×2 (it is a Leap); Attunement×2 for non-Thread fieldwork only
-   - Item 3: Leap pool — authorial confirm: (Spirit×2)+Hist+TPS, no Attunement
-   - Bonus: wound disruption check during contact corrected Attunement→Spirit (PP-624)
-
-2. threadwork_redesign_v25 propagation pass (PP-625):
-   - All 7 operation pool formulas updated to (Spirit×2)+Hist+TPS canonical form
-   - TN corrections: Lock/Dissolution → TN 8
-   - Minimum Ob 4 struck (PP-623 already resolved this)
-   - POP TPS÷2 struck (PP-619 already resolved this)
-   - Mending: Attunement+Focus+TPS → (Spirit×2)+Hist+TPS; design note updated
-   - Header notice added: Ob tables pre-date PP-622/PP-623; params_threadwork is canonical for Ob values
-
-3. fieldwork_design_v1 §4.5 Thread-Read pool corrected (PP-626):
-   - Pool: Attunement×2+Hist bonus + TPS bonus → (Spirit×2)+Hist+TPS
-   - §4.2 table row updated: primary attribute → Spirit
-   - Rationale: Thread-Read is a Leap; all Leaps are Spirit-primary per PP-619
-
-4. Health formula harmonised (PP-627, ED-438):
-   - params_core: clarifies threshold vs cumulative distinction
-   - params_combat: cross-references params_core for base formula
-   - No mechanical change; documentation only
-
-## PATCHES: PP-624, PP-625, PP-626, PP-627
-## EDITORIALS RESOLVED: ED-438, ED-439
-## P1 BLOCKERS: 0
-## OPEN EDITORIALS: See prior session counts minus 2
-```
-
----
-
-# Valoria Session Log — Current
-
-```yaml
 session_id: 2026-04-13_OPUS_PARAMS_EXTRACTION
 session_close: 2026-04-13
 phase: COMPLETE
@@ -1473,3 +1432,51 @@ status: CLOSED
 
 ---
 
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-13_SONNET_FIELDWORK_PROPAGATION
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Session bootstrap + status block (session_log, editorial_ledger, file_index, canonical_sources)
+2. Fetched all task-required files (fieldwork_design_v1.md, propagation_map, params_board_game,
+   params_core, scale_transitions_design_v1, coverage_matrix, Godot valoria-game repo)
+3. Godot §10 technical validation against jordanelias/valoria-game@main (429 files, docs/audit_2026-04-12.md)
+4. Propagation: params_board_game Survey Ob row, params_core fieldwork roles table,
+   scale_transitions §3.9 (9th handoff rule — 9 directions), coverage_matrix SIM-DEBT-FW-01–10 RESOLVED,
+   propagation_map FIELDWORK section + subsystem cross-references
+5. §13 skeleton split: fieldwork_design_v1.md 856→224 lines; 10 subsystem files created;
+   §13 Design Rationale Index created (rationale sourced from session log + PP-576–583)
+6. canonical_sources.yaml + file_index.md updated for 10 new subsystem files
+7. Commit bdd5031 (18 files)
+8. freshness_gate.py --update run; SHAs refreshed for 17 canonical docs
+
+## KEY FINDINGS
+- Godot: No fieldwork system implemented (G10-F01 P3). Infrastructure compatible.
+  4 pre-existing audit blockers (A-02, A-05, B-03, DA-03) gate §10.4/§10.6 integration.
+  No design changes needed — gaps are implementation-only.
+- PP-627 propagation gap (pre-existing): params_combat + params_core headers missing PP-627
+  Health formula note. Not introduced by this session. Flag for next params pass.
+- broken_dependency_checker: EXIT 0 (clean).
+
+## COMMIT
+bdd5031 — [propagation] Fieldwork propagation + §13 skeleton split + Godot §10 validation
+
+## P1 BLOCKERS: 0 (this session)
+## OPEN EDITORIALS SURFACED: 0 new (all from prior session)
+## PRE-EXISTING PROPAGATION GAP: PP-627 not in params_combat/params_core headers
+
+## NEXT ACTIONS
+- ED-NEW-15 (P2): POP Coherence −1 per-op cap ruling — propagate to params_threadwork.md (currently ambiguous)
+- PP-627 propagation: add Health formula note to params_combat.md and params_core.md headers
+- ED-NEW-01 (P2): POI catalog per territory — cross-reference geography_design.md
+- fieldwork → combat_design_v1.md: Exposure→ambusher advantage + Combat Exposure codified (F-TRANS-01/09)
+- fieldwork → social_contest_system_v2.md: Contest Escalation boundary + Combined Findings (F-TRANS-10/11)
+- valoria-game Godot: fix B-03, A-05 (season integration blockers); A-02, DA-03 (NPC memory blockers)
+```
