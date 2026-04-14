@@ -90,26 +90,43 @@ def task_gate(task_type: str) -> None:
 
 
 def task_gate_with_system(task_type: str, system: str, canonical_sources_content: str) -> None:
-    """Extended task gate: also confirms canonical design doc fetched for system."""
+    """
+    Extended task gate: also confirms canonical design doc fetched for system.
+    Parses canonical_sources.yaml with PyYAML (not regex).
+    """
     task_gate(task_type)
-    import re as _re
-    # Find canonical path for system in the YAML content
-    pattern = _re.compile(
-        rf'(?:^|\n)\s*{_re.escape(system)}:.*?\n(?:(?!\n\w)[\s\S])*?canonical:\s*([^\n]+)',
-        _re.MULTILINE
-    )
-    m = pattern.search(canonical_sources_content)
-    if not m:
+    try:
+        import yaml
+        sources = yaml.safe_load(canonical_sources_content)
+    except Exception as e:
         raise RuntimeError(
-            f"[HOOK VIOLATION] System '{system}' not found in canonical_sources.yaml.\n"
-            f"Cannot proceed — canonical doc path unknown."
+            f"[HOOK VIOLATION] Failed to parse canonical_sources.yaml: {e}\n"
+            f"Fetch a valid canonical_sources.yaml before calling task_gate_with_system()."
         )
-    canonical_path = m.group(1).strip()
+
+    systems = sources.get('systems', {}) if sources else {}
+    entry = systems.get(system, {})
+
+    # Try multiple canonical key names used in the file
+    canonical_path = (
+        entry.get('canonical') or
+        entry.get('canonical_bg') or
+        entry.get('design_doc') or
+        entry.get('canonical_ttrpg')
+    )
+
+    if not canonical_path or not isinstance(canonical_path, str):
+        raise RuntimeError(
+            f"[HOOK VIOLATION] System '{system}' not found or has no canonical path\n"
+            f"in canonical_sources.yaml. Available systems: {sorted(systems.keys())}\n"
+            f"Cannot propose or simulate without knowing the canonical source."
+        )
+
     if canonical_path not in g._session_fetches or g._session_fetches[canonical_path] is None:
         raise RuntimeError(
             f"[HOOK VIOLATION] Canonical doc for '{system}' not fetched:\n"
             f"  Required: {canonical_path}\n"
-            f"Fetch before starting."
+            f"Fetch via read_files_graphql(['{canonical_path}']) before starting."
         )
     print(f"[HOOK ✓] system gate '{system}' — {canonical_path}")
 
@@ -237,18 +254,40 @@ def propose_mechanic_gate(system: str) -> None:
 
 # ── Hook 7: Context gate ──────────────────────────────────────────────────────
 
-def context_gate() -> None:
-    """Estimate session token usage. Hard stop at 90%, warn at 70%."""
-    total = sum(len(c) for c in g._session_fetches.values() if c) // 4
+# Known fixed context costs (conservative estimates)
+_SYSTEM_PROMPT_TOKENS  = 15_000   # Project Instructions + user preferences
+_PER_TURN_OVERHEAD     = 800      # avg tokens per conversation exchange
+_MAX_TURNS_ESTIMATE    = 30       # conservative upper bound per session
+
+def context_gate(turn_count: int = 0) -> None:
+    """
+    Estimate actual context usage. Hard stop at 90%, warn at 70%.
+
+    Accounts for:
+    - Fetched file content (_session_fetches)
+    - System prompt (fixed ~15k tokens)
+    - Conversation turns (pass turn_count for accuracy, or use 0 for fetch-only estimate)
+
+    Note: This is a lower-bound estimate. Real usage is higher due to
+    Claude response tokens and tool output tokens not measured here.
+    When in doubt, close the session earlier than the gate suggests.
+    """
+    fetch_tokens = sum(len(c) for c in g._session_fetches.values() if c) // 4
+    turn_tokens  = (turn_count or _MAX_TURNS_ESTIMATE) * _PER_TURN_OVERHEAD
+    total        = fetch_tokens + _SYSTEM_PROMPT_TOKENS + turn_tokens
+
     if total >= CONTEXT_HARD:
         raise RuntimeError(
-            f"[HOOK VIOLATION] Context hard stop: ~{total:,} fetch tokens.\n"
-            f"Run Session Close Protocol immediately. Do not start new work."
+            f"[HOOK VIOLATION] Context hard stop: ~{total:,} estimated tokens\n"
+            f"  (fetches: {fetch_tokens:,} + system: {_SYSTEM_PROMPT_TOKENS:,} + turns: {turn_tokens:,})\n"
+            f"Run Session Close Protocol immediately."
         )
     elif total >= CONTEXT_WARN:
-        print(f"[HOOK ⚠] Context at ~{total:,} tokens (70% threshold). Close soon.")
+        print(f"[HOOK ⚠] Context ~{total:,} tokens (warn threshold). "
+              f"Complete current stage then close.")
     else:
-        print(f"[HOOK ✓] context_gate: ~{total:,} fetch tokens")
+        print(f"[HOOK ✓] context_gate: ~{total:,} estimated tokens "
+              f"(fetches {fetch_tokens:,} + overhead {_SYSTEM_PROMPT_TOKENS + turn_tokens:,})")
 
 
 # ── Hook 8: Memory contamination guard ───────────────────────────────────────
@@ -283,6 +322,9 @@ def safe_commit(additions: list, deletions: list, message: str) -> str:
       4. _authorize_next_commit — single-use token
       5. g.atomic_commit        — actual commit
     """
+    # IMPORTANT: This entire function must run in a SINGLE bash_tool block.
+    # _commit_auth is process-scoped — _authorize_next_commit() and atomic_commit()
+    # must be in the same Python process (same bash_tool execution).
     commit_message_gate(message)
     pre_commit_gate(additions, deletions or [])
     auth = g._authorize_next_commit()

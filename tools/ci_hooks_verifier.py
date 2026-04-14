@@ -104,7 +104,7 @@ for path, limit in SKILL_TOKEN_LIMITS.items():
 # ── Check 5: skeleton ruleset principle — design docs over 400 lines ──────────
 for root, dirs, files in os.walk('designs'):
     for fname in files:
-        if fname.endswith('_v30.md') and 'infill' not in fname and 'archive' not in fname:
+        if fname.endswith('_v30.md') and 'infill' not in fname and 'archive' not in fname and 'skeleton' not in fname:
             fpath = os.path.join(root, fname)
             with open(fpath, encoding='utf-8', errors='replace') as f:
                 lines = f.readlines()

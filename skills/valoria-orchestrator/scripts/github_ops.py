@@ -83,12 +83,36 @@ def assert_fetched(*paths) -> str:
 def _authorize_next_commit() -> str:
     """
     Generate a single-use authorization token for the next atomic_commit() call.
-    Called exclusively by valoria_hooks.safe_commit() after all gates pass.
-    Returns the token; caller must pass it as _auth= to atomic_commit().
-    Token is reset to None immediately after use (or on any commit failure).
+    Called exclusively by valoria_hooks.safe_commit() after all gates pass,
+    OR by safe_session_close() (trusted internal caller).
 
-    For infrastructure bypasses ONLY: call this explicitly and document why.
+    CALLER VERIFICATION: raises if called from outside approved callers.
+    Approved callers: safe_commit (valoria_hooks), safe_session_close (github_ops),
+    append_to_register (github_ops).
+
+    For infrastructure bypasses: call from a bash_tool block that explicitly
+    documents the bypass reason. The call is visible in executed output.
     """
+    import inspect
+    frame = inspect.stack()[1]
+    caller_fn   = frame.function
+    caller_file = frame.filename
+
+    approved = (
+        # valoria_hooks.safe_commit()
+        (caller_fn == 'safe_commit' and 'valoria_hooks' in caller_file) or
+        # github_ops trusted internal callers
+        (caller_fn in ('safe_session_close', 'append_to_register') and 'github_ops' in caller_file) or
+        # Direct infrastructure use from bash_tool (caller_file will be <stdin> or tmp file)
+        ('<stdin>' in caller_file or caller_file.startswith('/tmp') or caller_file == '<string>')
+    )
+    if not approved:
+        raise RuntimeError(
+            f"[AUTH VIOLATION] _authorize_next_commit() called from unapproved context:\n"
+            f"  caller: {caller_fn}() in {caller_file}\n"
+            f"Use h.safe_commit() which calls this automatically after all gates pass.\n"
+            f"For infrastructure bypasses: call directly from a bash_tool block."
+        )
     global _commit_auth
     _commit_auth = secrets.token_hex(8)
     return _commit_auth
@@ -144,8 +168,15 @@ def check_register_health(fetched: dict) -> None:
         threshold = TOKEN_THRESHOLDS.get(path)
         if threshold is None:
             continue
-        status = "✓" if tokens <= threshold else "✗"
-        print(f"  {status}  {path}: {tokens:,} / {threshold:,} tokens")
+        warn_threshold = int(threshold * 0.8)
+        if tokens > threshold:
+            status = "✗ OVER"
+        elif tokens > warn_threshold:
+            status = "⚠ WARN"
+        else:
+            status = "✓"
+        warn_label = f" (warn at {int(threshold*0.8):,})" if status == "⚠ WARN" else ""
+        print(f"  {status}  {path}: {tokens:,} / {threshold:,} tokens{warn_label}")
         if tokens > threshold:
             violations.append(
                 f"  {path}: {tokens:,} tokens exceeds {threshold:,} limit.\n"

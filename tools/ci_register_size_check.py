@@ -28,8 +28,14 @@ for path, threshold in sorted(THRESHOLDS.items()):
     if not os.path.exists(path):
         print(f"SKIP {path}: not present in repo")
         continue
-    with open(path, encoding='utf-8', errors='replace') as f:
-        content = f.read()
+    try:
+        with open(path, encoding='utf-8', errors='strict') as f:
+            content = f.read()
+    except UnicodeDecodeError as e:
+        print(f'FAIL {path}: encoding error — {e}')
+        violations.append((path, -1, threshold))
+        checked += 1
+        continue
     tokens = len(content) // 4
     checked += 1
     if tokens > threshold:

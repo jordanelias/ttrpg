@@ -12,12 +12,34 @@ Uses git diff to get changed files. Exits 1 on violation.
 import subprocess, sys, os, re
 
 def get_changed_files():
-    # Try HEAD~1 first; fall back to full history for initial commit
+    """
+    Get changed files using GitHub event context (accurate for push, PR, squash merge).
+    Falls back to HEAD~1 for local runs.
+    """
+    event   = os.environ.get('GITHUB_EVENT_NAME', '')
+    before  = os.environ.get('GITHUB_EVENT_BEFORE', '')
+    sha     = os.environ.get('GITHUB_SHA', '')
+    base    = os.environ.get('GITHUB_BASE_REF', '')
+
+    if event == 'push' and before and sha and before != '0' * 40:
+        # Push event: diff from before SHA to current SHA (accurate for all push types)
+        r = subprocess.run(['git', 'diff', '--name-only', before, sha],
+                           capture_output=True, text=True)
+        if r.returncode == 0:
+            return set(r.stdout.strip().splitlines())
+
+    if event == 'pull_request' and base:
+        # PR event: all files changed in this PR branch vs base
+        r = subprocess.run(['git', 'diff', '--name-only', f'origin/{base}...HEAD'],
+                           capture_output=True, text=True)
+        if r.returncode == 0:
+            return set(r.stdout.strip().splitlines())
+
+    # Fallback (local run or initial push): HEAD~1 or empty tree
     r = subprocess.run(['git', 'diff', '--name-only', 'HEAD~1', 'HEAD'],
                        capture_output=True, text=True)
     if r.returncode == 0 and r.stdout.strip():
         return set(r.stdout.strip().splitlines())
-    # Initial commit: diff against empty tree
     r2 = subprocess.run(
         ['git', 'diff', '--name-only', '4b825dc642cb6eb9a060e54bf8d69288fbee4904', 'HEAD'],
         capture_output=True, text=True)
@@ -72,14 +94,12 @@ for doc in design_docs:
         f'references/params_{basename.replace("_design","")}.md',
     ]
     if not any(p in changed for p in params_candidates):
-        # Soft check — only flag if no params at all changed
-        any_params = any(f.startswith('references/params_') for f in changed)
-        if not any_params:
-            violations.append(
-                f"DESIGN DOC {doc} changed but no params file in commit.\n"
-                f"  Expected one of: {params_candidates}\n"
-                f"  Include params file if mechanical values changed, or confirm values unchanged."
-            )
+        # Hard check: SPECIFIC params file required, not just any params file
+        violations.append(
+            f"DESIGN DOC {doc} changed but its params file not in commit.\n"
+            f"  Expected one of: {params_candidates}\n"
+            f"  Include the params file if mechanical values changed."
+        )
 
 if violations:
     print(f"[CO-FILE VIOLATIONS: {len(violations)}]\n")
