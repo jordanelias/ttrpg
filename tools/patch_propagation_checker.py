@@ -159,7 +159,7 @@ def main():
     args = parser.parse_args()
 
     print("Loading patch_register.yaml...")
-    pr_content = read_file("canon/patch_register.yaml")
+    pr_content = read_file("canon/patch_register_active.yaml")
     if not pr_content:
         print("[ERROR] Cannot read patch_register.yaml")
         sys.exit(1)
