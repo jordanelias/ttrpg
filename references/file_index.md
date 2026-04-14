@@ -130,7 +130,8 @@
 
 | File | Systems | Status | Notes |
 |------|---------|--------|-------|
-| designs/hybrid/hybrid_gaps_resolved.md | HYBRID | PROPAGATION-PENDING | 17 gaps resolved. Not yet in stage11 or bg_v05. |
+| **designs/hybrid/scale_transitions_design_v1.md** | **HYBRID/ALL** | **CURRENT** | Canonical scale transitions and mode bridging. Supersedes stage11. PP-594. |
+| designs/hybrid/hybrid_gaps_resolved.md | HYBRID | PROPAGATION-PENDING | 17 gaps resolved. Not yet in bg_v05. |
 
 ---
 

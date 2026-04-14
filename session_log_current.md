@@ -1104,6 +1104,11 @@ P1 BLOCKERS: 0 (all resolved PP-577–582)
 - Propagation checker: re-run after this commit to verify headers
 - "Remembrancer" name: flagged as inadequate, replacement TBD
 
+## PHASE 7: Hybrid bridge document
+- designs/hybrid/scale_transitions_design_v1.md created (PP-594)
+- canonical_sources.yaml updated: scale_transitions → design doc
+- Supersedes stage11 compilation (deprecated)
+
 OPEN EDITORIALS: 39 (33 open + 6 flagged)
 
 ## FIXES APPLIED

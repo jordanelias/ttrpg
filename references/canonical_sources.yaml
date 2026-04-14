@@ -122,13 +122,13 @@ systems:
     note: "Stage_bg STALE. bg_v05 + victory_architecture_v1.md canonical. PP-548-573 applied (2026-04-11/12). All open editorials resolved. 0 P1 blockers."
 
   scale_transitions:
-    canonical: compilation/v0.14/stage11_scale_transitions.md
+    canonical: designs/hybrid/scale_transitions_design_v1.md
     canonical_sha__compilation__v0_14__stage11_scale_transitions_md: "277e7ffb787cf6af153462b4cee3bcea09ae4ec6"
     params: null
     design_doc: null
     compilation_stage: compilation/v0.14/stage11_scale_transitions.md
     compilation_current: false
-    note: "Stage11 OUTDATED. No design-layer doc. Retained as only source, unverified. K2-F-02 Zoom In gap open."
+    note: "scale_transitions_design_v1.md created 2026-04-13. Consolidates stage11 + params_scale_transitions + PP-089/103/107-112/232/261/340-343. K2-F-02 Zoom In gap resolved."
 
   campaign_modes:
     canonical: compilation/v0.14/stage12_campaign_modes.md

@@ -7626,3 +7626,15 @@ patches:
   affects: [designs/fieldwork/fieldwork_design_v1.md]
   finding_id: SIM-FW-03
   status: applied
+- id: PP-594
+  date: 2026-04-13
+  scope: hybrid
+  description: >
+    Scale transitions design document v1 created. Consolidates stage11
+    compilation (deprecated), params_scale_transitions, and PP-089/103/107-112
+    /232/261/340-343 into canonical design-layer document. 11 sections covering
+    three-mode architecture, scale table, handoff rules, zoom protocol,
+    domain echo, mode transitions, scope rules, thread timing, contested
+    figure system.
+  affects: [designs/hybrid/scale_transitions_design_v1.md, references/canonical_sources.yaml]
+  status: applied
