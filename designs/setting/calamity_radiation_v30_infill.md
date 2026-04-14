@@ -26,13 +26,16 @@ Threadcut beings are not "types" or "species." Each is a unique entity. Classifi
 ## Integration Notes
 ### Supersedes
 - `designs/setting/geography_design.md` §Calamity Bleed Gradient (replaced by this document's radiation matrix; geography_design.md updated to cross-reference here)
-- `compilation/v0.14/stage7_territories.md` Sudwald Thread Wound property (absorbed into the Proximity Rating system)
+- `compilation/v0.14/stage7_territories_deprecated.md` Sudwald Thread Wound property (absorbed into the Proximity Rating system)
 ### Cross-references requiring propagation
 - `designs/ttrpg/threadwork_redesign_v25.md` Part 6 §6.1: Gap-severity classification cross-reference present. [DONE]
-- `compilation/v0.14/stage4_southernmost.md`: Expedition procedures should reference Proximity 0 effects. [DEFERRED — stage4 OUTDATED, low priority]
+- `compilation/v0.14/stage4_southernmost_deprecated.md`: Expedition procedures should reference Proximity 0 effects. [DEFERRED — stage4 OUTDATED, low priority]
 ## Forgetting — Permanent Askeheim Condition (B-03 resolved)
 The Forgetting is NOT RS-dependent. It is a permanent condition of Askeheim (T15) that persists as long as the Calamity's Gaps and tears remain open within the territory. Per P-13 (Foundations §10.2), Southernmost knowledge is mechanically untransmittable to non-sensitives because the epistemological barrier is metaphysical — it arises from the structural damage to the substrate itself.
 **Condition for cessation:** The Forgetting ends only when ALL Gaps and tears within Askeheim have been Mended — i.e., the full territorial substrate is healed. This is a campaign-scale achievement requiring sustained Mending operations across multiple seasons, likely requiring Warden Cooperation (WC) ≥ 3 and RS recovery above the Strained band. No faction has accomplished this in 245 years.
 **Mechanical implication:** The Forgetting is listed in the RS 100–80 row of the radiation matrix because it IS active at Askeheim at all RS levels. It appears in the matrix as a reminder, not because it scales with RS. It does not radiate beyond Askeheim at any RS level — the Forgetting is a property of the damaged substrate at the wound site, not a radiating effect.
 ### Hybrid Mode Note (B-09)
 ### Open editorial items
+
+
+[PROVISIONAL: compilation path references updated to _deprecated suffix — no content change]

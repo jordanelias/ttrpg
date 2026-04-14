@@ -4,7 +4,7 @@
 # VALORIA — Geography & Territory Design
 ## Status: CANONICAL — approved 2026-04-05
 ## Scope: Physical geography, territory map (17 territories), adjacency graph, starting control
-## Supersedes: compilation/v0.14/stage7_territories.md §7.2, §7.3
+## Supersedes: compilation/v0.14/stage7_territories_deprecated.md §7.2, §7.3
 ## Physical Geography
 ### Terrain Regions
 **Northwestern Highlands (Hafenmark):** Landlocked highland territory. Swiss in character. Rocky terrain, glacial lakes, mineral deposits, limited arable land, no coastal access. During Altonian occupation, Hafenmark was squeezed between Altonian-controlled mountains above and Altonian-controlled Valoria below — no coastal escape. Concentrated Altonian oversight (mineral wealth most valuable to empire) produced a cultural emphasis on institutional order, procedural compliance, and constitutional governance.
@@ -36,3 +36,6 @@ The Calamity's Forgetting extends into coastal waters around the southern penins
 ### Southernmost Access
 Askeheim (T15) accessible from Oastad (T13, Varfell — Gate 1) and Stillhelm (T6, Crown — Gate 2). Sea approach blocked by Forgetting. Vaynard controls one gate; Crown controls the other.
 ## Open Items from This Session
+
+
+[PROVISIONAL: compilation path references updated to _deprecated suffix — no content change]

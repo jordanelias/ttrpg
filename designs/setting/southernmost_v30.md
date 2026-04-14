@@ -1,7 +1,7 @@
 <!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
 <!-- Infill: southernmost_v30_infill.md -->
 
-<!-- v30 baseline — design-layer doc created 2026-04-13 from compilation/v0.14/stage4_southernmost.md -->
+<!-- v30 baseline — design-layer doc created 2026-04-13 from compilation/v0.14/stage4_southernmost_deprecated.md -->
 <!-- UNVERIFIED: mechanical values in this doc have not been confirmed by simulation. -->
 <!-- Flag any value used in simulation: [UNVERIFIED: <value> — pending stress test] -->
 <!-- Mode: TTRPG/HYBRID/BG -->
@@ -192,3 +192,6 @@ In Board Game mode, Southernmost mechanics are abstracted to the faction-level:
 ---
 
 *End of Stage 4 compilation. Stage 5 (Clocks: Thread Tension/Theocracy Counter/Institutional Pressure, threshold events, interaction rules) follows.*
+
+
+[PROVISIONAL: compilation path references updated to _deprecated suffix — no content change]

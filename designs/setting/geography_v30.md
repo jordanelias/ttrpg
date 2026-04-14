@@ -5,7 +5,7 @@
 # VALORIA — Geography & Territory Design
 ## Status: CANONICAL — approved 2026-04-05
 ## Scope: Physical geography, territory map (17 territories), adjacency graph, starting control
-## Supersedes: compilation/v0.14/stage7_territories.md §7.2, §7.3
+## Supersedes: compilation/v0.14/stage7_territories_deprecated.md §7.2, §7.3
 
 ---
 
@@ -123,3 +123,6 @@ See calamity_radiation.md for full effects by RS band.
 | BALANCE-003 | Himmelenger (Church) at 5 connections is kingmaker territory. |
 | BALANCE-004 | Askeheim needs board game victory condition or scoring mechanic to justify existence. |
 | BALANCE-005 | Hafenmark food dependency has no mechanical teeth — Feldmark unreachable by Hafenmark. |
+
+
+[PROVISIONAL: compilation path references updated to _deprecated suffix — no content change]
