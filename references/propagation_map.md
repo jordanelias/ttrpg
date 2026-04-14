@@ -466,3 +466,14 @@ Propagation targets:
 | ARC-S40 | ARC-P04 | Documentary Axis 2 before Axis 9: direction of interaction to specify (ED-402) |
 | ARC-S47 | ARC-T16 | Simultaneous in same RM-presence/missionary territories: cultural contest primary |
 | ARC-P09 | ARC-S52 | Crown fiscal distress weakens Charter offer; shifts Feldhaus alignment calculation |
+
+## Opposing Thread Operations (2026-04-13)
+| Source | Depends On | Type |
+|---|---|---|
+| tests/sim_opposing_threadwork_final.md | designs/ttrpg/threadwork_redesign_v25.md | sim references canonical threadwork doc |
+| tests/sim_opposing_threadwork_final.md | canon/00_philosophical_foundations.md §12.2 | lattice topology derivation |
+| tests/sim_opposing_threadwork_final.md | canon/01_foundations_amendment_self_rendering.md | three-layer model for co-movement decomposition |
+| tests/sim_opposing_threadwork_final.md | references/params_threadwork.md | mechanical values |
+| tests/sim_opposing_threadwork_final.md | references/params_contest.md | Composure/Rattled mechanics |
+| ED-486 through ED-495 | tests/sim_opposing_threadwork_final.md | editorials reference sim findings |
+| designs/ttrpg/threadwork_redesign_v25.md P-24 | tests/sim_opposing_threadwork_final.md §C.1 | P-24 completion pending ED-486 |

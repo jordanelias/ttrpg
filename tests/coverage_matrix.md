@@ -695,3 +695,24 @@ Editorial branches: 1 (ED-423/ED-404 Grand Debate + Quaestio — simulation stop
 | Dissonance | COMPLETE | Spirit check mechanic; no separate tracker |
 | SIM-FW-03 | Fieldwork: Disposition economy 10-session arc | A+D | 10+ sessions | Disposition, Sincerity Gate, Cover | RM | Maret Vossen | Social relationship calibration | Complete | 1 P2 (fixed PP-593) |
 | SIM-FW-06 | Fieldwork: Cover derived value calibration | A | Multi-action | Cover, Exposure | None | None | Detection risk calibration | Complete | 0 |
+
+## Opposing Threadwork Operations — Stress Test 2026-04-13
+| Test | Mode | Status | Key Finding |
+|---|---|---|---|
+| Matched Competent Ob 2 | A | COMPLETE | Undefined rows fire <4% at low Ob (P3) |
+| Matched Competent Ob 4 | A | COMPLETE | Undefined rows fire 32% at Ob 4 (P1 — ST-OPP-02) |
+| Expert Mend vs Competent Dissolve | A | COMPLETE | Mending ≠ Dissolution = different targets, not opposing ops (P1 — ST-OPP-01) |
+| Competent vs Competent Relational | C | COMPLETE | Ob modifier shifts both-succeed from 85% to 56% (ST-OPP-02) |
+| Novice vs Master asymmetric | C | COMPLETE | +4 modifier makes Novice opposition futile; correct (ST-OPP-02) |
+| Multi-round contact | B | COMPLETE | Penalties stack legitimately; Ob 6-7 by Round 3 (B-1a) |
+| Shifting Object on Shifting Object | D | COMPLETE | Advance deterioration tier (ST-OPP-09) |
+| 3-season cascade | B | COMPLETE | RS 52→39 in 3 seasons from single unaddressed opposing op (B-3a) |
+| Combat timing (Priority 5) | D | COMPLETE | Both Leaps simultaneous; withdrawal option noted (B-4) |
+| Ob modifier stacking | D | COMPLETE | No degenerate stacking; all modifiers from distinct systems (B-5) |
+| N-way lattice collapse | D | COMPLETE | Gap formation; RS scales linearly with practitioners (ST-OPP-07) |
+| FR vs FR at Territorial | A+D | COMPLETE | Effective Ob 10 on 12D — correct; near-impossible (ST-OPP-08) |
+| Mending immunity | D | COMPLETE | Categorically immune to direct opposition; indirect obstruction only (ST-OPP-01) |
+P1 findings: 5 (ST-OPP-01 through ST-OPP-05)
+P2 findings: 5 (ST-OPP-06 through ST-OPP-10)
+P3 findings: 3 (ST-OPP-12 through ST-OPP-14)
+Editorials raised: ED-486 through ED-495 (4 P1-BLOCKER, 6 P2)
