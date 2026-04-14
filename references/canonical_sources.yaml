@@ -162,6 +162,34 @@ systems:
     compilation_current: false
     note: "fieldwork_design_v1.md is canonical. v1.1 review corrections applied 2026-04-13. PP-626 applied 2026-04-13: Thread-Read pool corrected to (Spirit×2)+Hist+TPS. Covers exploration, investigation, socializing for all modes + Godot. No params file yet. 1 P1 editorial open (ED-NEW-04)."
 
+
+  southernmost:
+    canonical: designs/setting/southernmost_v30.md
+    canonical_sha__designs__setting__southernmost_v30_md: "TBD"
+    params: null
+    design_doc: designs/setting/southernmost_v30.md
+    compilation_stage: compilation/v0.14/stage4_southernmost.md
+    compilation_current: false
+    note: "southernmost_v30.md created 2026-04-13 from stage4. UNVERIFIED — not yet stress-tested."
+
+  factions_ttrpg:
+    canonical: designs/ttrpg/factions_ttrpg_v30.md
+    canonical_sha__designs__ttrpg__factions_ttrpg_v30_md: "TBD"
+    params: references/params_factions.md
+    design_doc: designs/ttrpg/factions_ttrpg_v30.md
+    compilation_stage: compilation/v0.14/stage6_factions.md
+    compilation_current: false
+    note: "factions_ttrpg_v30.md created 2026-04-13 from stage6 TTRPG content. BG factions in board_game_v30. UNVERIFIED."
+
+  campaign_modes:
+    canonical: designs/systems/campaign_modes_v30.md
+    canonical_sha__designs__systems__campaign_modes_v30_md: "TBD"
+    params: null
+    design_doc: designs/systems/campaign_modes_v30.md
+    compilation_stage: compilation/v0.14/stage12_campaign_modes.md
+    compilation_current: false
+    note: "campaign_modes_v30.md created 2026-04-13 from stage12. UNVERIFIED — not yet stress-tested."
+
 # GLOBAL NOTE (2026-04-04):
 # All compilation/v0.14 stage documents are outdated and superseded.
 # For any system that has a design doc (designs/), use the design doc.
