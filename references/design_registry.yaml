@@ -240,7 +240,7 @@ registry:
     skeleton: references/params_factions_ttrpg.md
     infill: references/params_factions_ttrpg.md
     atomized: complete
-    predecessor: compilation/v0.14/stage6_factions.md
+    predecessor: compilation/v0.14/stage6_factions_deprecated.md
     params: references/params_factions.md
     notes: >
       Source is compilation/stage6, which is unverified. v30 rename BLOCKED
@@ -266,7 +266,7 @@ registry:
     skeleton: references/params_factions_ttrpg.md
     infill: references/params_factions_ttrpg.md
     atomized: complete
-    predecessor: compilation/v0.14/stage12_campaign_modes.md
+    predecessor: compilation/v0.14/stage12_campaign_modes_deprecated.md
     params: references/params_factions_ttrpg.md
     notes: >
       Source is compilation/stage12, unverified. v30 rename BLOCKED
@@ -281,7 +281,7 @@ registry:
     skeleton: references/params_southernmost.md
     infill: references/params_southernmost.md
     atomized: complete
-    predecessor: compilation/v0.14/stage4_southernmost.md
+    predecessor: compilation/v0.14/stage4_southernmost_deprecated.md
     params: references/params_southernmost.md
     notes: >
       Source is compilation/stage4, unverified. v30 rename BLOCKED

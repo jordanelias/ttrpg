@@ -21,7 +21,7 @@ Before compiling, fetch the following from GitHub:
 ```python
 required = [
     'references/canonical_sources.yaml',  # confirm canonical source and compilation_current flag
-    'canon/patch_register.yaml',          # pending approved patches
+    'canon/patch_register_active.yaml',          # pending approved patches
     'canon/editorial_ledger.yaml',        # pending editorial items
     '<canonical design doc>',             # from canonical_sources.yaml
 ]
@@ -38,7 +38,7 @@ for path, content in files.items():
 
 ### 1. Load Current State
 - Read `canonical_sources.yaml` for structure and current canonical docs
-- Read `canon/patch_register.yaml` for pending approved patches
+- Read `canon/patch_register_active.yaml` for pending approved patches
 - Identify: which patches are approved, which are pending, which are editorial
 
 ### 2. Apply Patches

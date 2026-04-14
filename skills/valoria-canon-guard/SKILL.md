@@ -23,7 +23,7 @@ Before running any compliance check, verify the following have been fetched from
 ```python
 # Required files — fetch via g.read_files_graphql() if not already in context
 required = [
-    'canon/00_philosophical_foundations.md',  # primary authority
+    'canon/00_philosophical_foundations_rules.md',  # primary authority
     'canon/02_canon_constraints.md',          # P-01–P-15 derived constraints
     # fetch any canon/01_*.md amendments relevant to the target system
 ]
@@ -52,7 +52,7 @@ required = [
 | P-15 | [Fetch from canon/02_canon_constraints.md — do not use memory] | |
 
 ## Process
-1. Fetch and load `canon/00_philosophical_foundations.md` and `canon/02_canon_constraints.md` from GitHub
+1. Fetch and load `canon/00_philosophical_foundations_rules.md` and `canon/02_canon_constraints.md` from GitHub
 2. Load relevant Foundations section by chunk reference or direct read
 3. For each applicable constraint:
    - **PASS**: mechanic satisfies the constraint

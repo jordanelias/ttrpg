@@ -1,7 +1,7 @@
 <!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
 <!-- Infill: campaign_modes_v30_infill.md -->
 
-<!-- v30 baseline — design-layer doc created 2026-04-13 from compilation/v0.14/stage12_campaign_modes.md -->
+<!-- v30 baseline — design-layer doc created 2026-04-13 from compilation/v0.14/stage12_campaign_modes_deprecated.md -->
 <!-- UNVERIFIED: mechanical values in this doc have not been confirmed by simulation. -->
 <!-- Flag any value used in simulation: [UNVERIFIED: <value> — pending stress test] -->
 <!-- Mode: ALL -->

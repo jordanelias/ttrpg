@@ -1,7 +1,7 @@
 <!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
 <!-- Infill: factions_ttrpg_v30_infill.md -->
 
-<!-- v30 baseline — design-layer doc created 2026-04-13 from compilation/v0.14/stage6_factions.md -->
+<!-- v30 baseline — design-layer doc created 2026-04-13 from compilation/v0.14/stage6_factions_deprecated.md -->
 <!-- UNVERIFIED: mechanical values in this doc have not been confirmed by simulation. -->
 <!-- Flag any value used in simulation: [UNVERIFIED: <value> — pending stress test] -->
 <!-- Mode: TTRPG -->

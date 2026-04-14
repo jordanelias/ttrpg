@@ -9,7 +9,7 @@
 ## Authority: Philosophical Foundations → this document → compilation (when ready)
 ## Mode applicability: ALL (TTRPG baseline; scales to Hybrid and Board Game via params)
 ## Patches incorporated: PP-086–092, P2-B11 series (from sim_combat_batch_11.md), PP-172 (SIM-001 ranged subtypes), PP-210–218 (audit gap fixes 2026-04-03)
-## Source checkpoint: compilation/v0.14/stage8_combat.md (for reference values)
+## Source checkpoint: compilation/v0.14/stage8_combat_deprecated.md (for reference values)
 ## THREE-MODE FRAMING
 TTRPG is always the most granular layer. Hybrid uses TTRPG rules when a named Player Character is present. Board Game uses abstracted equivalents.
 ## 1. COMBAT POOL

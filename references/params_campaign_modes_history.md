@@ -6,7 +6,7 @@
 
 | Patch | Date | Description |
 |-------|------|-------------|
-| Initial extraction | 2026-04-13 | params_campaign_modes.md created from designs/systems/campaign_modes_v30.md (via compilation/v0.14/stage12_campaign_modes.md). Procedural doc — no simulation verification required. |
+| Initial extraction | 2026-04-13 | params_campaign_modes.md created from designs/systems/campaign_modes_v30.md (via compilation/v0.14/stage12_campaign_modes_deprecated.md). Procedural doc — no simulation verification required. |
 
 ## Key Values Reference
 - TTRPG: 2–4 scenes per session (≤1 season). Full campaign: 15–25 sessions.

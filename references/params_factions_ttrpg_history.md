@@ -7,7 +7,7 @@
 | Patch | Date | Description |
 |-------|------|-------------|
 | SIM-FAC-01/02/03 | 2026-04-13 | Initial verification pass. Domain action Ob calibration, unique action calibration, edge case discovery. No mechanical changes — VERIFIED status. |
-| Initial extraction | 2026-04-13 | params_factions_ttrpg.md created from designs/ttrpg/factions_ttrpg_v30.md (via compilation/v0.14/stage6_factions.md). |
+| Initial extraction | 2026-04-13 | params_factions_ttrpg.md created from designs/ttrpg/factions_ttrpg_v30.md (via compilation/v0.14/stage6_factions_deprecated.md). |
 
 ## Open Items
 None. All mechanical values verified by simulation (SIM-FAC-01/02/03, 2026-04-13).

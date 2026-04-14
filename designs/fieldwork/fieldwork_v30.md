@@ -782,5 +782,5 @@ Fieldwork actions consume in-game time:
 | references/propagation_map.md | Cross-references to combat, contest, threadwork, BG, geography | PENDING |
 | references/params_board_game.md | Survey action in Standard Action Ob table | PENDING |
 | references/params_core.md | Attribute usage table includes fieldwork roles | PENDING |
-| compilation/v0.14/stage11_scale_transitions.md | 9th handoff rule (Fieldwork ↔ all systems) | PENDING |
+| compilation/v0.14/stage11_scale_transitions_deprecated.md | 9th handoff rule (Fieldwork ↔ all systems) | PENDING |
 | tests/coverage_matrix.md | SIM-DEBT-FW-01 through FW-10 (all RESOLVED) | PENDING |

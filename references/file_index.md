@@ -33,7 +33,7 @@
 | canon/audit_threadwork_v24.md | TTRPG | CURRENT | Audit of v24 threadwork vs foundations |
 | canon/audit_threadwork_v25.md | TTRPG | CURRENT | Audit of v25 threadwork vs foundations |
 | canon/editorial_ledger.yaml | ALL | CURRENT | Source of truth for editorial decisions |
-| canon/patch_register.yaml | ALL | CURRENT | All patches PP-001 onwards |
+| canon/patch_register_active.yaml | ALL | CURRENT | All patches PP-001 onwards |
 
 ---
 
@@ -43,26 +43,26 @@
 
 | File | Systems | Status | Canonical Replacement |
 |------|---------|--------|----------------------|
-| compilation/v0.14/stage1_core_engine.md | ALL | DEPRECATED | references/params_core.md |
-| compilation/v0.14/stage2_characters.md | TTRPG/HYBRID | DEPRECATED | references/params_core.md |
-| compilation/v0.14/stage3_thread_operations.md | TTRPG/HYBRID | DEPRECATED | designs/ttrpg/threadwork_v30.md |
+| compilation/v0.14/stage1_core_engine_deprecated.md | ALL | DEPRECATED | references/params_core.md |
+| compilation/v0.14/stage2_characters_deprecated.md | TTRPG/HYBRID | DEPRECATED | references/params_core.md |
+| compilation/v0.14/stage3_thread_operations_deprecated.md | TTRPG/HYBRID | DEPRECATED | designs/ttrpg/threadwork_v30.md |
 | compilation/v0.14/stage3_compilation_report.md | INFRA | DEPRECATED | Process artifact |
-| compilation/v0.14/stage4_southernmost.md | TTRPG/HYBRID | DEPRECATED | No design-layer replacement — unverified |
-| compilation/v0.14/stage5_clocks.md | ALL | DEPRECATED | designs/systems/clock_registry_v30.md |
-| compilation/v0.14/stage6_factions.md | TTRPG | DEPRECATED | BG/Hybrid: bg_v05. TTRPG: no replacement — unverified |
-| compilation/v0.14/stage7_territories.md | ALL | DEPRECATED | designs/setting/geography_v30.md |
-| compilation/v0.14/stage8_combat.md | ALL | DEPRECATED | designs/combat/combat_v30.md |
-| compilation/v0.14/stage9_social.md | TTRPG | DEPRECATED | designs/contest/social_contest_v30.md |
+| compilation/v0.14/stage4_southernmost_deprecated.md | TTRPG/HYBRID | DEPRECATED | No design-layer replacement — unverified |
+| compilation/v0.14/stage5_clocks_deprecated.md | ALL | DEPRECATED | designs/systems/clock_registry_v30.md |
+| compilation/v0.14/stage6_factions_deprecated.md | TTRPG | DEPRECATED | BG/Hybrid: bg_v05. TTRPG: no replacement — unverified |
+| compilation/v0.14/stage7_territories_deprecated.md | ALL | DEPRECATED | designs/setting/geography_v30.md |
+| compilation/v0.14/stage8_combat_deprecated.md | ALL | DEPRECATED | designs/combat/combat_v30.md |
+| compilation/v0.14/stage9_social_deprecated.md | TTRPG | DEPRECATED | designs/contest/social_contest_v30.md |
 | compilation/v0.14/stage10_advancement.md | TTRPG | DEPRECATED | No design-layer replacement — unverified |
-| compilation/v0.14/stage11_scale_transitions.md | HYBRID | DEPRECATED | No design-layer replacement — unverified |
-| compilation/v0.14/stage12_campaign_modes.md | ALL | DEPRECATED | No design-layer replacement — unverified |
+| compilation/v0.14/stage11_scale_transitions_deprecated.md | HYBRID | DEPRECATED | No design-layer replacement — unverified |
+| compilation/v0.14/stage12_campaign_modes_deprecated.md | ALL | DEPRECATED | No design-layer replacement — unverified |
 | compilation/v0.14/stage13_npcs.md | ALL | DEPRECATED | designs/npcs/npc_roster_v30.md (partial) |
 | compilation/v0.14/stage14_gm_tools.md | ALL | DEPRECATED | No design-layer replacement — unverified |
 | compilation/v0.14/stage15_spell_catalog.md | TTRPG | DEPRECATED | No design-layer replacement — unverified |
 | compilation/v0.14/stage16_reference.md | ALL | DEPRECATED | No design-layer replacement — unverified |
 | compilation/v0.14/stage17_canon_guard.md | ALL | DEPRECATED | skills/valoria-canon-guard/SKILL.md |
-| compilation/v0.14/stage_bg_board_game_mode.md | BG | DEPRECATED | designs/board_game/board_game_v30.md |
-| compilation/v0.14/valoria_ruleset_v0.14.md | ALL | DEPRECATED | Compilation snapshot — all stages outdated |
+| compilation/v0.14/stage_bg_board_game_mode_deprecated.md | BG | DEPRECATED | designs/board_game/board_game_v30.md |
+| compilation/v0.14/valoria_ruleset_v0.14_deprecated.md | ALL | DEPRECATED | Compilation snapshot — all stages outdated |
 
 ---
 
@@ -314,7 +314,6 @@
 | tools/editorial_review/valoria-editorial-review.jsx | Editorial review UI | CURRENT |
 | tools/find_references.py | Cross-reference finder | CURRENT |
 | tools/freshness_gate.py | Freshness validation | CURRENT |
-| tools/github_ops.py | GitHub operations | CURRENT |
 | tools/model_router.html | Model routing reference | CURRENT |
 | tools/patch_propagation_checker.py | Patch propagation | CURRENT |
 | tools/propagator.py | Propagate patches | CURRENT |

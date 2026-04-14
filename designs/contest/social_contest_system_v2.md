@@ -399,8 +399,8 @@ Total Victory: Conviction Track ≥ 9 or ≤ 1 → losing coalition's dominant f
 | references/params_debate.md | Full rewrite |
 | references/canonical_sources.yaml | Update canonical doc for social_debate |
 | references/propagation_map.md | Update cross-references |
-| compilation/v0.14/stage1_core_engine.md | Attribute rename in attribute table and derived scores |
-| compilation/v0.14/stage2_characters.md | Attribute rename throughout; Composure formula; Circles/Resources pool base; §4.14 social rolls |
+| compilation/v0.14/stage1_core_engine_deprecated.md | Attribute rename in attribute table and derived scores |
+| compilation/v0.14/stage2_characters_deprecated.md | Attribute rename throughout; Composure formula; Circles/Resources pool base; §4.14 social rolls |
 | designs/mass_combat/mass_battle_v3.md | Coherence Rating derivation: ⌈(Charisma + Cognition) ÷ 2⌉ |
 | references/params_mass_combat.md | Coherence Rating derivation |
 | references/params_core.md | Attribute names; Composure in derived scores |

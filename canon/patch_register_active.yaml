@@ -988,7 +988,7 @@ patches:
   description: "TC spike from Southernmost expedition — add player-facing note to §7.2 one-time events table that spike fires before seasonal accounting"
   finding_id: "F-ARC33-04 (SIM-ARC33-C01)"
   source: simulation
-  affects: [stage5_clocks.md §7.2, compilation/v0.14/valoria_ruleset_v0.14.md §7.2]
+  affects: [stage5_clocks.md §7.2, compilation/v0.14/valoria_ruleset_v0.14_deprecated.md §7.2]
   status: proposed
   applied_commit: ~
 
@@ -1237,7 +1237,7 @@ patches:
   description: "LIR/FF cross-mode applicability note added to stage1. Debate exemption, Thread precedence, BG action-economy equivalence all stated. Hybrid zoom-boundary FF rule added."
   finding_id: "SIM-FF-01"
   source: simulation
-  affects: [compilation/v0.14/stage1_core_engine.md, references/params_board_game.md]
+  affects: [compilation/v0.14/stage1_core_engine_deprecated.md, references/params_board_game.md]
   applied_to_version: "v0.5.5"
   status: provisional
   applied_commit: pending

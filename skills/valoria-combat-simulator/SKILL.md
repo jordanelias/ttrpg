@@ -145,7 +145,7 @@ Update `session_log_current.md`.
 PP-SIM-NNN: [component] — [finding] — [proposed fix] — Priority P1/P2/P3
 ```
 
-Log to `canon/patch_register.yaml`.
+Log to `canon/patch_register_active.yaml`.
 
 ---
 

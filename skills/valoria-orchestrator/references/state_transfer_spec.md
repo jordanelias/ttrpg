@@ -1,5 +1,5 @@
 # VALORIA STATE TRANSFER SPECIFICATION
-## Source: compilation/v0.14/stage11_scale_transitions.md §11.1–11.3, §11.8
+## Source: compilation/v0.14/stage11_scale_transitions_deprecated.md §11.1–11.3, §11.8
 ## Purpose: Defines every variable that crosses mode/scale boundaries, with direction and transformation
 ## Used by: valoria-simulator Mode K2 (transition stress test)
 ## Last updated: 2026-04-02 | PP-103 Phase-Lock + PP-107 variable corrections applied

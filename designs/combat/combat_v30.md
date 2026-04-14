@@ -10,7 +10,7 @@
 ## Authority: Philosophical Foundations → this document → compilation (when ready)
 ## Mode applicability: ALL (TTRPG baseline; scales to Hybrid and Board Game via params)
 ## Patches incorporated: PP-086–092, P2-B11 series (from sim_combat_batch_11.md), PP-172 (SIM-001 ranged subtypes), PP-210–218 (audit gap fixes 2026-04-03)
-## Source checkpoint: compilation/v0.14/stage8_combat.md (for reference values)
+## Source checkpoint: compilation/v0.14/stage8_combat_deprecated.md (for reference values)
 
 ---
 
@@ -346,7 +346,7 @@ Field victory alone does not breach — must declare Assault next season.
 Roll Artillery CP vs Ob (Short=1, Med=2, Long=3). No melee exchange. Success = flat 1 Str damage. Overwhelming = flat 2. Cannot Bombard at melee range.
 
 ### PP-089/PP-090 — Hybrid Phase Order and Mode-Switch
-See compilation/v0.14/stage11_scale_transitions.md §11.8.
+See compilation/v0.14/stage11_scale_transitions_deprecated.md §11.8.
 
 ---
 
