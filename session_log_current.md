@@ -1657,3 +1657,61 @@ SIM-DEBT-SOC-03: Knot breaking Composure damage calibration
 ## P1 BLOCKERS: 0
 ## CONTEXT: near limit — session closing
 ```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-13_SONNET_SIM_PARAMS
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Stress tests for 3 previously-UNVERIFIED docs:
+   - factions_ttrpg_v30: SIM-FAC-01/02/03 — VERIFIED. No P1 findings.
+     Domain actions (Ob 1-7 scale) and unique actions calibrated.
+     Key finding: NPC-only contests produce mostly Partial (14% success — correct by design).
+   - southernmost_v30: SIM-STH-01/02/03/04 — VERIFIED with 1 patch.
+     Forgetting checks (TN8, Ob 1-4) calibrated. Expedition/Ritual Obs sound.
+     P2 finding SIM-STH-E1 patched → PP-643: combined TT reduction cap −5/season.
+   - campaign_modes_v30: PROCEDURAL — no simulation needed. Params extracted directly.
+2. 3 new params files created:
+   - references/params_factions_ttrpg.md (112 lines)
+   - references/params_southernmost.md (121 lines — includes PP-643 cap)
+   - references/params_campaign_modes.md (82 lines)
+3. Sim output files committed: tests/sim_factions_stress_2026_04_13.md,
+   tests/sim_southernmost_stress_2026_04_13.md
+4. file_index.md updated — 383 → 439 lines. All new v30 docs, skeleton/infill pairs,
+   3 new params files documented.
+5. PP-643 applied (SIM-STH-E1 combined TT cap)
+6. canonical_sources.yaml, design_registry.yaml, coverage_matrix.md, patch_register.yaml updated
+7. Freshness gate, broken_dependency_checker, patch_propagation_checker: all exit 0
+
+## COMMITS THIS SESSION
+Commit 12 (4c5fc78): sim outputs + 3 params + PP-643 + registry updates (10 files)
+Commit 13 (f987e72): file_index.md v30 complete
+Freshness: canonical_sources.yaml SHAs updated
+
+## FULL SESSION STATE (as of close)
+- All canonical v30 docs: atomized complete
+- All known systems: have design-layer v30 docs (including 3 previously-blocked)
+- All params files: source references updated to v30 paths
+- 3 previously-UNVERIFIED systems: verified by simulation
+- PP-643 applied: Southernmost combined TT reduction cap
+- Propagation map: current (v30 paths)
+- file_index.md: current (439 lines, all new docs documented)
+- coverage_matrix.md: includes fieldwork, factions, southernmost sim results
+
+## REMAINING WORK (next sessions — lower priority)
+1. Build params_factions_history.md (patch history for factions_ttrpg params)
+2. Stress test campaign_modes_v30 timing tables (edge cases: quiet seasons, expanded seasons)
+3. Address ED-509 (Godot POI node architecture) when Godot integration session occurs
+4. Ongoing: as new design work generates editorials, run harvest (valoria-editorial-register Workflow E)
+5. Compilation pass for any stable system (if explicitly requested by Jordan)
+
+## P1-BLOCKERs: 1 OPEN (ED-509 — Godot, not a game mechanic blocker)
+## safe next_id: 515
+## PP count: PP-643 (latest applied)
+```
