@@ -32,7 +32,7 @@ systems:
 
   combat:
     canonical: designs/combat/combat_v30.md
-    canonical_sha__designs__combat__combat_v30_md: "72f7c6260f71e8e3f81c39e107444dc360f48b5c"
+    canonical_sha__designs__combat__combat_v30_md: "a761388e62af627ed9bb8e7c053475fe1a318dae"
     params: references/params_combat.md
     design_doc: designs/combat/combat_v30.md
     compilation_stage: compilation/v0.14/stage8_combat.md
@@ -41,7 +41,7 @@ systems:
 
   threadwork:
     canonical: designs/ttrpg/threadwork_v30.md
-    canonical_sha__designs__ttrpg__threadwork_v30_md: "8f9b0d3b991793277404c89908e9b94a4f692fd1"
+    canonical_sha__designs__ttrpg__threadwork_v30_md: "165150c703ae34e8a5164afc4a507ac4f2b6a40d"
     params: references/params_threadwork.md
     design_doc: designs/ttrpg/threadwork_v30.md
     compilation_stage: compilation/v0.14/stage3_thread_operations.md
@@ -59,7 +59,7 @@ systems:
 
   clocks:
     canonical: designs/systems/clock_registry_v30.md
-    canonical_sha__designs__systems__clock_registry_v30_md: "b33f8b47b388cdc4dcbb7d25d62c91d5a984d32f"
+    canonical_sha__designs__systems__clock_registry_v30_md: "05e69b81ad708acf0d8fb3e28ab2bc66c5b19447"
     params: null
     design_doc: designs/systems/clock_registry_v30.md
     compilation_stage: compilation/v0.14/stage5_clocks.md
@@ -70,9 +70,9 @@ systems:
     canonical_ttrpg: compilation/v0.14/stage6_factions.md
     canonical_sha__compilation__v0_14__stage6_factions_md: "4eb711be538f8f2b6eab4e2fcffd8b85e5c01120"
     canonical_bg: designs/board_game/board_game_v30.md
-    canonical_sha__designs__board_game__board_game_v30_md: "45f113c22c3e71194a3701111eedff4a521db19c"
+    canonical_sha__designs__board_game__board_game_v30_md: "a378f8cec1b3befd06bad72f43508bbc36814e1f"
     canonical_hybrid: designs/board_game/board_game_v30.md
-    canonical_sha__designs__board_game__board_game_v30_md: "45f113c22c3e71194a3701111eedff4a521db19c"
+    canonical_sha__designs__board_game__board_game_v30_md: "a378f8cec1b3befd06bad72f43508bbc36814e1f"
     params: references/params_factions.md
     compilation_stage: compilation/v0.14/stage6_factions.md
     compilation_current: false
@@ -80,7 +80,7 @@ systems:
 
   victory:
     canonical: designs/board_game/victory_v30.md
-    canonical_sha__designs__board_game__victory_v30_md: "bf54a4edd6481a4e455cb1681275edbd3fa24c38"
+    canonical_sha__designs__board_game__victory_v30_md: "e65adeb1427c5169fb5e377f0c78ede698866246"
     params: null
     design_doc: designs/board_game/victory_v30.md
     compilation_stage: null
@@ -89,7 +89,7 @@ systems:
 
   territories:
     canonical: designs/setting/geography_v30.md
-    canonical_sha__designs__setting__geography_v30_md: "5ab539ed05676acd8596cc5bdae923651627483d"
+    canonical_sha__designs__setting__geography_v30_md: "9787c68560e82dd467466ae675c16e7c452cb42c"
     params: null
     design_doc: designs/setting/geography_v30.md
     compilation_stage: compilation/v0.14/stage7_territories.md
@@ -98,7 +98,7 @@ systems:
 
   mass_combat:
     canonical: designs/mass_combat/mass_battle_v30.md
-    canonical_sha__designs__mass_combat__mass_battle_v30_md: "2b7b9081db05cb86a6c00ca2fe3bc060c49933cb"
+    canonical_sha__designs__mass_combat__mass_battle_v30_md: "d766ee59fdeb525fc7371af1688d2fde0e4807c7"
     params: references/params_mass_combat.md
     design_doc: designs/mass_combat/mass_battle_v30.md
     compilation_stage: null
@@ -107,7 +107,7 @@ systems:
 
   social_debate:
     canonical: designs/contest/social_contest_v30.md
-    canonical_sha__designs__contest__social_contest_v30_md: "a983b1757c81820d796105aee95e0ec746067028"
+    canonical_sha__designs__contest__social_contest_v30_md: "2c8e50700d9b71388dc044c0915dec72821695c8"
     params: references/params_contest.md
     design_doc: designs/contest/social_contest_v30.md
     compilation_stage: compilation/v0.14/stage9_social.md
@@ -116,7 +116,7 @@ systems:
 
   board_game:
     canonical: designs/board_game/board_game_v30.md
-    canonical_sha__designs__board_game__board_game_v30_md: "45f113c22c3e71194a3701111eedff4a521db19c"
+    canonical_sha__designs__board_game__board_game_v30_md: "a378f8cec1b3befd06bad72f43508bbc36814e1f"
     params: references/params_board_game.md
     design_doc: designs/board_game/board_game_v30.md
     compilation_stage: compilation/v0.14/stage_bg_board_game_mode.md
@@ -125,7 +125,7 @@ systems:
 
   scale_transitions:
     canonical: designs/hybrid/scale_transitions_v30.md
-    canonical_sha__designs__hybrid__scale_transitions_v30_md: "d794bf96ce4726346341686a698c39c7bc35e716"
+    canonical_sha__designs__hybrid__scale_transitions_v30_md: "55fb622ae19e43e533b14398d1292310edf6dc0b"
     canonical_sha__compilation__v0_14__stage11_scale_transitions_md: "277e7ffb787cf6af153462b4cee3bcea09ae4ec6"
     params: null
     design_doc: null
@@ -145,7 +145,7 @@ systems:
 
   npc_behavior:
     canonical: designs/systems/npc_behavior_v30.md
-    canonical_sha__designs__systems__npc_behavior_v30_md: "e6350906c90438f7e587b52bb9f2741981be056e"
+    canonical_sha__designs__systems__npc_behavior_v30_md: "223547499fb813574e892ad4e5fd16ef872163bd"
     params: null
     design_doc: designs/systems/npc_behavior_v30.md
     compilation_stage: null
@@ -155,7 +155,7 @@ systems:
 
   fieldwork:
     canonical: designs/fieldwork/fieldwork_v30.md
-    canonical_sha__designs__fieldwork__fieldwork_v30_md: "c3ab5188f037ca8b8fb4de4c7650ef06515bf27e"
+    canonical_sha__designs__fieldwork__fieldwork_v30_md: "94d60734961a157253f8c5184053f899e8db9830"
     params: null
     design_doc: designs/fieldwork/fieldwork_v30.md
     compilation_stage: null
@@ -171,7 +171,7 @@ systems:
 
   calamity_radiation:
     canonical: designs/setting/calamity_radiation_v30.md
-    canonical_sha__designs__setting__calamity_radiation_v30_md: "b1fbed4f15fb4a33435f2d6a392c75f51c0d4bb9"
+    canonical_sha__designs__setting__calamity_radiation_v30_md: "4aad9195d78c85df92ac477d9feb05ba92ea4d00"
     params: null
     design_doc: designs/setting/calamity_radiation_v30.md
     compilation_stage: null
