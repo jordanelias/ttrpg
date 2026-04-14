@@ -162,6 +162,19 @@ systems:
     compilation_current: false
     note: "fieldwork_v30.md is canonical (designs/fieldwork/). Sub-files: fieldwork_socializing.md (PP-632: Disposition redesign, Knot mechanics), fieldwork_editorial.md (PP-632: ED harvest). PP-626–632 applied. 3 open editorials: ED-507/508/509. 3 SIM-DEBT items (SOC-01–03)."
 
+
+  params_factions_ttrpg:
+    canonical: references/params_factions_ttrpg.md
+    params: references/params_factions_ttrpg.md
+
+  params_southernmost:
+    canonical: references/params_southernmost.md
+    params: references/params_southernmost.md
+
+  params_campaign_modes:
+    canonical: references/params_campaign_modes.md
+    params: references/params_campaign_modes.md
+
 # GLOBAL NOTE (2026-04-04):
 # All compilation/v0.14 stage documents are outdated and superseded.
 # For any system that has a design doc (designs/), use the design doc.

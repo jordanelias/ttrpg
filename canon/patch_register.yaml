@@ -7999,3 +7999,12 @@ patches:
     36-45 batch and comprehensive sim now have unique IDs.
   affects: [canon/editorial_ledger.yaml]
   status: applied
+
+  - id: PP-643
+    date: 2026-04-13
+    description: "SIM-STH-E1: Add combined TT reduction cap (−5/season) for Southernmost operations (Ritual + Extraordinary Repair). Prevents one-season resolution of campaign central threat."
+    source: sim_southernmost.md SIM-STH-04
+    targets:
+      - designs/setting/southernmost_v30.md
+      - references/params_southernmost.md
+    status: applied

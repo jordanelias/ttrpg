@@ -769,3 +769,21 @@ All PASS tests: patched in same commit (PP-630–634).
 | Open P1-BLOCKERs: 0 | ✓ |
 | Open PROVISIONALs: 0 | ✓ |
 | Remaining propagation pending: params_factions (Mandate −1 on recruitment); fieldwork_socializing (Hook acquisition cross-ref) | PENDING (P3, non-blocking) |
+
+
+## Factions TTRPG Coverage (2026-04-13)
+
+| Test ID | Mechanics | Status | Findings |
+|---------|-----------|--------|---------|
+| SIM-FAC-01 | Domain Action Ob calibration (1-7 scale) | Complete | Equal-stat NPC: 14% success (correct — PC agency matters). Ethical modifiers: ±15-20% per step. |
+| SIM-FAC-02 | Unique action Ob calibration | Complete | All within range. Assassination (5D vs Ob 6) = 4% (appropriately rare). |
+| SIM-FAC-03 | Edge cases: partial sheets, anti-death-spiral, TC cap | Complete | No P1. P2: 2 seasons at Stab 2 before collapse (adequate). Reference card needed for 48-step accounting. |
+
+## Southernmost Coverage (2026-04-13)
+
+| Test ID | Mechanics | Status | Findings |
+|---------|-----------|--------|---------|
+| SIM-STH-01 | Forgetting Check (TN8, Ob 1-4) | Complete | Calibrated. Non-practitioners locked out of core knowledge. TS 40+ meaningful gate. |
+| SIM-STH-02 | Expedition procedure Obs | Complete | Planning 62%, Resources 36%, Zone hazards 57-80%. TS gate enforced. |
+| SIM-STH-03 | Ritual Ob calibration (Ob 5) | Complete | Lead 18D+4 participants = 92% success. Rare failure is appropriately severe. |
+| SIM-STH-04 | Edge cases: crisis timeline, TS gate, ED-048 name | Complete | P2: SIM-STH-E1 applied — combined TT cap (−5/season). PP-635. |

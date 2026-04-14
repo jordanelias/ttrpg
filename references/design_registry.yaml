@@ -237,8 +237,8 @@ registry:
     system: factions
     mode: TTRPG
     canonical_v30: designs/ttrpg/factions_ttrpg_v30.md
-    skeleton: null
-    infill: null
+    skeleton: references/params_factions_ttrpg.md
+    infill: references/params_factions_ttrpg.md
     atomized: complete
     predecessor: compilation/v0.14/stage6_factions.md
     params: references/params_factions.md
@@ -251,8 +251,8 @@ registry:
     system: factions
     mode: BG
     canonical_v30: designs/board_game/board_game_v30.md
-    skeleton: null
-    infill: null
+    skeleton: references/params_factions_ttrpg.md
+    infill: references/params_factions_ttrpg.md
     atomized: not_started
     predecessor: designs/board_game/valoria_bg_v05_simulation_and_patches.md
     params: references/params_factions.md
@@ -263,11 +263,11 @@ registry:
     system: campaign_modes
     mode: ALL
     canonical_v30: designs/systems/campaign_modes_v30.md
-    skeleton: null
-    infill: null
+    skeleton: references/params_factions_ttrpg.md
+    infill: references/params_factions_ttrpg.md
     atomized: complete
     predecessor: compilation/v0.14/stage12_campaign_modes.md
-    params: null
+    params: references/params_factions_ttrpg.md
     notes: >
       Source is compilation/stage12, unverified. v30 rename BLOCKED
       until design-layer doc created.
@@ -278,11 +278,11 @@ registry:
     system: southernmost
     mode: TTRPG
     canonical_v30: designs/setting/southernmost_v30.md
-    skeleton: null
-    infill: null
+    skeleton: references/params_southernmost.md
+    infill: references/params_southernmost.md
     atomized: complete
     predecessor: compilation/v0.14/stage4_southernmost.md
-    params: null
+    params: references/params_southernmost.md
     notes: >
       Source is compilation/stage4, unverified. v30 rename BLOCKED
       until design-layer doc created. ED-048 open.
@@ -297,7 +297,7 @@ registry:
     infill: designs/worldbuilding/worldbuilding_v30_infill.md
     atomized: complete
     predecessor: designs/worldbuilding/worldbuilding_integration_v3.md
-    params: null
+    params: references/params_campaign_modes.md
 
   # ─── NPCs ──────────────────────────────────────────────────────────────────
   npc_roster:

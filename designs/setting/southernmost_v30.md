@@ -159,6 +159,12 @@ Lead practitioner's Weaving pool. Ob 5. Each participant with Thread Sensitivity
 
 ---
 
+
+## Combined TT Reduction Cap — Southernmost Operations (SIM-STH-E1, PP-635)
+Combined TT reduction from Southernmost operations (Ritual + Extraordinary Repair Weaving): max −5 TT per season.
+Rationale: simultaneous Ritual + Repair can otherwise remove up to −12 TT/season, enabling trivial one-season resolution of the campaign's central threat.
+Individual Ritual and Repair mechanics are unchanged — only the combined seasonal ceiling is new.
+
 ## 6.7 Southernmost Crisis Timeline
 
 
