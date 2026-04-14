@@ -14,7 +14,7 @@ systems:
 
   core_engine:
     canonical: references/params_core.md
-    canonical_sha__references__params_core_md: "833cace4c6797c6e608975364fe8a370860c3930"
+    canonical_sha__references__params_core_md: "e6eb7cb1f226c806bd8d197d09bb3b6add57d62a"
     params: references/params_core.md
     design_doc: null
     compilation_stage: compilation/v0.14/stage1_core_engine.md
@@ -23,7 +23,7 @@ systems:
 
   characters:
     canonical: references/params_core.md
-    canonical_sha__references__params_core_md: "833cace4c6797c6e608975364fe8a370860c3930"
+    canonical_sha__references__params_core_md: "e6eb7cb1f226c806bd8d197d09bb3b6add57d62a"
     params: references/params_core.md
     design_doc: null
     compilation_stage: compilation/v0.14/stage2_characters.md
@@ -32,7 +32,7 @@ systems:
 
   combat:
     canonical: designs/combat/combat_v30.md
-    canonical_sha__designs__combat__combat_v30_md: "a761388e62af627ed9bb8e7c053475fe1a318dae"
+    canonical_sha__designs__combat__combat_v30_md: "97141aae2e0926d0ee27b2a02a0bbe2fea042c08"
     params: references/params_combat.md
     design_doc: designs/combat/combat_v30.md
     compilation_stage: compilation/v0.14/stage8_combat.md
@@ -41,7 +41,7 @@ systems:
 
   threadwork:
     canonical: designs/ttrpg/threadwork_v30.md
-    canonical_sha__designs__ttrpg__threadwork_v30_md: "165150c703ae34e8a5164afc4a507ac4f2b6a40d"
+    canonical_sha__designs__ttrpg__threadwork_v30_md: "9a9320325c78d857225171d8514d2d901f050ea8"
     params: references/params_threadwork.md
     design_doc: designs/ttrpg/threadwork_v30.md
     compilation_stage: compilation/v0.14/stage3_thread_operations.md
