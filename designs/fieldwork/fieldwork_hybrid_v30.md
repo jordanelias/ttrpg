@@ -1,3 +1,6 @@
+<!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
+<!-- Infill: fieldwork_hybrid_v30_infill.md -->
+
 <!-- v30 baseline — renamed from designs/fieldwork/fieldwork_hybrid.md on 2026-04-13 -->
 # VALORIA — FIELDWORK SYSTEM v1.1 — §9 Hybrid Mode
 ## Parent: designs/fieldwork/fieldwork_design_v1.md
@@ -16,11 +19,9 @@ Following the established hybrid pattern (social_contest_system_v2.md §11):
 4. **Resolution (Cascade Phase):** TTRPG scene determines final outcome. Consequences propagate:
    - Exploration: POI discovered → territory bonus applied at Accounting.
    - Investigation: Evidence Track advanced → if threshold reached, faction intelligence updated.
-   - Social: NPC Disposition shifted → at high enough Disposition, NPC provides faction-level intelligence or support (Domain Echo).
 
 ### §9.2 Hybrid Fieldwork Timing
 
-Fieldwork scenes occur during Personal Phase. If a Strategic Phase order triggers a fieldwork opportunity (e.g., a Tribune Investigate reveals something that demands personal follow-up), the GM may grant a bonus Personal Phase scene for the follow-up. This bonus scene does not extend the seasonal cap — it replaces one of the standard 2–3 Personal Phase scenes.
 
 Per PP-089: Hybrid season phase order is fixed (Strategic Phase first, Personal Phase second). Fieldwork Offsets from Strategic Phase are available immediately for Personal Phase use.
 

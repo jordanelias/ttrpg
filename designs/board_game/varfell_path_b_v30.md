@@ -1,3 +1,6 @@
+<!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
+<!-- Infill: varfell_path_b_v30_infill.md -->
+
 <!-- v30 baseline — renamed from designs/board_game/varfell_path_b_redesign_ed311.md on 2026-04-13 -->
 # Varfell Path B — Southernmost Dominion (Redesign Proposal)
 ## ED-311 | Status: AWAITING USER REVIEW
@@ -37,17 +40,12 @@ T4 CV ≤ 1 adds a cultural gate that must be actively maintained against natura
 **Warden Recognition (WR)** replaces both WC and WA. WR is a single track 0–4:
 - WR 0: Wardens unaware or indifferent.
 - WR 1: Wardens have observed Vaynard (at least 1 successful Expedition).
-- WR 2: Wardens recognise Vaynard as a steward (WC ≥ 1 AND WA ≥ +1 from prior system — both conditions collapsed into WR 2).
 - WR 3: Wardens actively cooperate (+1D Thread ops peninsula-wide, per §6 Warden effects).
 - WR 4: Edeyja has made substantive contact (Overwhelming Forgetting Check result).
 
-WR advances: successful Expedition seasons (+1 per Overwhelming or cumulative Successes). WR decreases: RM emergence (WA ≤ −2 in prior system → WR −2); neglecting T15 for 3+ seasons (no Expedition attempted) → WR −1.
 
-**Blocked if:** WR has ever reached 0 after first advancing past 1 (Wardens have withdrawn recognition — stewardship path permanently closed).
 
-**Dropped conditions and rationale:**
 - WA ≥ +1 and WC ≥ 1 → collapsed into WR ≥ 2.
-- T4 CV ≤ 1 → dropped. Einhir cultural character of Varfell is established by setting; making it a win condition creates micro-management incentive to actively degrade CV in Vaynard's own capital, which is perverse. Narrative truth (Varfell is culturally Einhir) should not require mechanical maintenance.
 
 ---
 
@@ -63,7 +61,6 @@ If you prefer to keep WA and WC as separate visible tracks:
 | Warden Cooperation (WC) | ≥ 1 |
 | Warden's Accord (WA) | ≥ +1 |
 
-Drops only T4 CV ≤ 1. 5 conditions. WC and WA remain separate (transparency of two distinct relationship dimensions — WC = active cooperation, WA = narrative trust).
 
 ---
 
@@ -77,7 +74,6 @@ For maximum accessibility:
 | Control T4 AND T13 | both held |
 | Warden Recognition (WR) | ≥ 2 |
 
-VTM is dropped as explicit condition — it is an implied prerequisite (cannot achieve WR ≥ 2 without Expeditions; Expeditions require VTM development). Path B becomes: hold the south AND earn Warden trust. Cleanest table but loses explicit Thread mastery gate.
 
 ---
 
@@ -89,6 +85,5 @@ VTM is dropped as explicit condition — it is an implied prerequisite (cannot a
 
 ## Effect on win probability
 
-All options: TCV gap unchanged (+2). Non-TCV conditions simplified but not removed. Win probability for Path B relative to Path A and C unchanged — Path B was always lower-TCV, higher-condition. Simplification does not make Path B easier, only more legible.
 
 **Blocked if RM emerged** (WR collapses on Warden withdrawal) — preserved in all options.

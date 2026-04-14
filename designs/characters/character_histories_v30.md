@@ -1,3 +1,6 @@
+<!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
+<!-- Infill: character_histories_v30_infill.md -->
+
 <!-- v30 baseline — renamed from designs/characters/character_histories_lifepath.md on 2026-04-13 -->
 # VALORIA — Character Histories: Lifepath System
 ## Status: DESIGN PROPOSAL — requires editorial approval
@@ -10,7 +13,6 @@
 
 ## Structure
 
-Character creation moves through **four lifepath stages**. Each stage answers a biographical question and grants one History.
 
 | Stage | Question | What It Determines | Starting Skills |
 |---|---|---|---|
@@ -19,19 +21,14 @@ Character creation moves through **four lifepath stages**. Each stage answers a 
 | 3. Vocation | What were you trained to do? | Professional skills, factional affiliation, third Knot | 2 |
 | 4. Catalyst | What happened that put you on this path? | Inciting event, starting Belief, campaign hook | 1 |
 
-**Starting skills: 5 total.** All start at Level 1 and auto-equip. With Recall ≥ 5 at creation, all fit. Recall 3 forces loadout choices from session 1.
 
-**Sub-modifiers:** Origins, Formations, and Vocations that span multiple geographic or institutional variants include sub-modifiers — a secondary selection that adjusts one skill, one Knot detail, or one narrative element. Sub-modifiers do not add a new History; they specialise the existing one.
 
 **Recall as skill gatekeeper:**
-- **Equip slots:** `max_equipped = Recall` (1–7). All sparked skills retained permanently; only Recall-many active at any time. Swap loadout between scenes.
-- **Skill depth:** Skills have Levels 1–3. Level 2 requires History dice_bonus ≥ 3; Level 3 requires dice_bonus ≥ 5. Recall caps dice_bonus, so Recall indirectly caps max level.
 - **Learning speed:** `floor(Recall/2)` bonus dice on all spark checks.
 - **Coherence erosion:** Fragmented = effective Recall −1. Fractured/Severed = effective Recall −2. Practitioners who push Coherence low lose equipped skill access.
 
 **Knot generation:** Stages 1–3 each produce a suggested Close Knot. Stage 4 produces a starting Belief. Player chooses which Knots are Close (max 3) vs Distant. Every Knot must answer: what does this person want from you? What does maintaining the relationship cost? What happens if it breaks?
 
-**Certainty:** Stage 1 sets the baseline. Later stages modify it. Final Certainty recorded after all four stages.
 
 **Sparking (SaGa-style):** After any meaningful scene roll (Ob ≥ 2), check for skill spark. Overwhelming at Ob 3+ = automatic. Success/Partial/Failure at sufficient Ob = Spirit + floor(Recall/2) check. Sparks prioritise level-ups over new acquisitions. Cross-History hybrid sparks fire when 2+ Histories used in same scene at Ob 2+ and Success+.
 
@@ -53,14 +50,11 @@ Character creation moves through **four lifepath stages**. Each stage answers a 
 
 ## STAGE 1: ORIGIN — Where were you born and who raised you?
 
-Origin establishes geographic and cultural foundation. **Grants 1 starting skill** (first skill listed). Remaining skills on spark list.
 
 ---
 
 ### 1A. Crown Heartland Child
-Born in the eastern lowlands — Valorsplatz, Kronmark, Feldmark, or Stillhelm. The Crown heartland is the granary that feeds the peninsula. Hafenmark cannot feed itself (ED-054). Without Feldmark and Kronmark, the peninsula starves. You grew up understanding food as politics — not abstractly but as the rhythm of your family's labour.
 
-**Who raised you:** A family embedded in the Crown's civil order. Markets on Crown coin, roads Crown-maintained, disputes to Crown magistrates.
 
 **Starting Certainty:** 4 (Average Valorian).
 
@@ -76,16 +70,12 @@ Born in the eastern lowlands — Valorsplatz, Kronmark, Feldmark, or Stillhelm. 
 
 **Knot:** A parent or sibling who still works the land or the river — and who depends on the political stability you are now entangled in. When the Crown's Mandate drops, your family's safety drops with it. Every factional action that weakens the Crown threatens the person who raised you.
 
-**Narrative impact:** You were raised inside the system everyone else is trying to influence, control, or overthrow. You carry an unconscious assumption that the Crown's order is the natural state of things.
 
 ---
 
 ### 1B. Highland Born (Hafenmark)
-Born in the northwestern highlands — Gransol, Rendstad, Spartfell, or Halvarshelm. Landlocked, mineral-rich, Swiss-character territory that Altonia squeezed hardest during the occupation.
 
-**Who raised you:** Highland family — miners, herders, artisans, or minor functionaries. Tight community, procedural, suspicious of outsiders. The occupation ended generations ago but its shadow shapes everything: emphasis on law, distrust of charismatic leaders, institutional stubbornness.
 
-**Starting Certainty:** 4 (Average Valorian). The Church is present but culturally secondary to Hafenmark's constitutional identity.
 
 **Note on Thread absence:** Hafenmark is where Einhir cultural suppression was most thorough during occupation (concentrated Altonian oversight; mineral wealth was the priority). You come from the place where not-knowing about Thread was most systematically enforced. The highlands are node distance 4-5 — even at low RS, Calamity effects barely reach here.
 
@@ -95,16 +85,12 @@ Born in the northwestern highlands — Gransol, Rendstad, Spartfell, or Halvarsh
 | **Institutional Instinct** § | Debate | In proceedings governed by formal rules: +1D on Appraise rolls. |
 | **Community Solidarity** § | Faction Play | In Hafenmark-held territories: +1D on Stability-related Domain Actions. |
 
-**Knot:** A community elder or extended family figure who embodies constitutional values. They taught you that procedure is the wall between civilisation and tyranny. When Baralta invokes Sovereign Authority Doctrine, this person either celebrates (law triumphant) or worries (overreach by a single ruler).
 
-**Narrative impact:** Law over personality, procedure over charisma. Strength against demagogues; blindness to action that can't be procedurally justified.
 
 ---
 
 ### 1C. Fjord Child (Varfell)
-Born on Varfell's western coast — Sigurdshelm, Halvardshelm, Oastad, or Grauwald. Norwegian-character fjord communities connected by sea, separated by mountains.
 
-**Who raised you:** Fjord family — sailors, herders, fisher-folk. Maritime, isolated, self-sufficient. The Einhir presence is strongest here — folk practices survive in the southwest as living tradition.
 
 **Starting Certainty:** 4 (Average Valorian) in northern Varfell.
 
@@ -116,14 +102,11 @@ Born on Varfell's western coast — Sigurdshelm, Halvardshelm, Oastad, or Grauwa
 | **Fjord Isolation** § | Investigation | In Varfell territories: +1D to detect outsiders or changed patterns. Small communities notice everything. |
 | **Practical Self-Reliance** § | Scene Battle / Investigation | When no allies present in zone: +1D to one roll per scene. Help is far away. |
 
-**Knot:** A community member — fisher, elder, childhood rival who became a friend. They represent the small-scale world that factional politics threatens. The Maritime Forgetting blocks the southern sea route and your community feels this as economic isolation that can't be rationally explained — you know the route doesn't work, but you can't say why.
 
 ---
 
 ### 1D. Southern Einhir Descendant
-Born in communities closest to the Southernmost — southern Oastad, settlements ringing Askeheim, hamlets at node distance 1-2.
 
-**Who raised you:** An Einhir-descendant family. Not practitioners — people whose grandparents' grandparents spoke a different language, practised different rites. **245 years of Church institutional suppression** — heresy declarations, text confiscation, practice prohibition, forced conversion of naming conventions — eroded most of this inheritance. What survives does so because it was encoded as folk habit: songs without translatable lyrics, ritual gestures at births and deaths, persistent unease about the Solmund narrative that cannot be articulated. This is not the Forgetting (a metaphysical mechanism localised to Askeheim per calamity_radiation.md). This is cultural destruction by institutional authority, sustained across ten generations, partially successful, never complete.
 
 **Starting Certainty:** 2 (Skeptic). The Church's account does not match your inherited experience.
 
@@ -137,16 +120,12 @@ Born in communities closest to the Southernmost — southern Oastad, settlements
 | **Calamity Familiarity** § | Investigation | At node distance 0-2: +1D on Attunement rolls. The wound is your neighbourhood. |
 | **Cultural Memory** § | Debate / Investigation | +1D engaging with pre-Calamity history, Einhir artefacts, or folk practice. Knowledge as recognition, not intellect. |
 
-**Knot:** A grandmother or elder who carries Einhir tradition. They taught you the songs, the gestures. They could not explain why they matter. They may be dead — and what they gave you is the only record that they existed as carriers of something the Church tried to erase.
 
 ---
 
 ### 1E. Himmelenger Child (Church Territory)
-Born and raised in Himmelenger — Cathedral city, the Church's seat, the theological centre. Bells, scripture, liturgy, towering architecture of institutional faith.
 
-**Who raised you:** A family within the Church's cultural orbit. Himmelenger is not a city with a cathedral; it is a city that IS a cathedral. Every institution operates under the Church's moral framework.
 
-**Starting Certainty:** 5 (Orthodox). The Church's account of reality is not something you were taught — it is the air you breathed.
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -161,13 +140,9 @@ Born and raised in Himmelenger — Cathedral city, the Church's seat, the theolo
 ---
 
 ### 1F. Valorsplatz Underclass
-Born in the capital's lower districts. Not a generic urban poor — a resident of specific Valorsplatz geography.
 
-**Who raised you:** Single parent, extended working family, or the street itself. The capital's wealth flows through your neighbourhood without stopping.
 
-**Starting Certainty:** 3 (Questioning). Neither institution has earned your faith. Neither has lost it entirely.
 
-**Modifier: Tideward (river/harbour district)** — The flood-prone lower district between the river and the eastern harbour. Schoenland ships dock at your doorstep. Niflhel's dockworker arm operates the same routes you grew up on.
 
 Starting skill: ★ **Tideward Rats** (unique) — +1D on all Investigation rolls in Valorsplatz. You know the sewers, warehouses, smuggling routes. Additionally: +1D to detect Niflhel activity specifically (they use the same routes you do).
 
@@ -182,17 +157,12 @@ Starting skill: ★ **Foundations** (unique) — Once per arc, an object from th
 | **Invisible** § | Investigation | Avoiding notice in urban crowds: +1D on Agility concealment. |
 
 **Knot (choose per modifier):**
-- *Tideward:* A sibling who works Niflhel's dockworker arm and doesn't know you know — or who knows and pretends not to. Their safety depends on your silence; your conscience depends on not examining what they move.
-- *Ashmarket:* A Church charity teacher who taught you to read and whose faith you both respect and resent. They believe the Church saved you. You believe the Church demolished the civilisation whose ruins you grew up on.
 
 ---
 
 ### 1G. Border Settlement Child
-Born in northern border territories — Lowenskyst, Spartfell, or Halvarshelm. Communities that exist because a fortress needs people to supply it.
 
-**Who raised you:** Military family or military-adjacent — blacksmiths, provisioners, farriers. The border is a physical presence. You grew up watching the mountain passes.
 
-**Starting Certainty:** 4. The Löwenritter are a visible presence — the military order shapes border life as much as the Crown or Church.
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -200,32 +170,25 @@ Born in northern border territories — Lowenskyst, Spartfell, or Halvarshelm. C
 | **Cold Endurance** § | Scene Battle | No penalty in cold/winter conditions. |
 | **Frontier Self-Reliance** § | Investigation / Scene Battle | No allied reinforcements available: +1D to one roll per scene. |
 
-**Knot:** A garrison soldier or parent who served at the border — and who specifically remembers what it was like when Altonian forces last probed the pass. They carry a warning that the rest of the peninsula doesn't take seriously enough. When Institutional Pressure rises, they write you letters that grow increasingly urgent.
 
 ---
 
 ### 1H. Displaced — No longer generic
 
 **1H-i. Occupation Displaced**
-Family displaced during the Altonian occupation's aftermath — post-liberation resettlement, collaborator property seizure, destroyed communities.
 
 Starting Certainty: 3. Starting skill: ★ **Nowhere to Return** (unique) — No ethical framework modifier on Domain Actions. +1D on rolls involving displacement, refugee communities, or post-conflict resettlement.
 
-Knot: A member of another displaced family whose trajectory diverged from yours — they joined Niflhel, or the Restoration, or the Crown army. You share landlessness and nothing else.
 
 **1H-ii. Calamity Orphan**
-Family destroyed by a Calamity event — Shifting Object, rendering failure, threadcut being encounter at the southern edge.
 
-Starting Certainty: 2. Starting skill: ★ **Scarred by the Unreal** (unique) — Immune to Composure loss and surprise-round penalties from Thread phenomena. Thread Sensitivity +3.
 
-Knot: Surviving family member who witnessed the same event and accepted the Church's explanation (natural disaster). Your insistence that something else happened has strained the relationship. They think you're traumatised. You think they're in denial.
 
 **1H-iii. Church Ward**
 Raised in a Church orphanage. Parents unknown or dead.
 
 Starting Certainty: 4 or 5 (GM determines). Starting skill: ★ **Institutional Child** (unique) — +1D on all rolls involving Church infrastructure, personnel, or procedures. You grew up inside the institution.
 
-Knot: A fellow orphan who chose a different path. The bond is pre-institutional — it exists because you shared a dormitory, not a worldview.
 
 ---
 
@@ -236,7 +199,6 @@ Knot: A fellow orphan who chose a different path. The bond is pre-institutional 
 ---
 
 ### 2A. Church Schooling
-The only widespread education infrastructure on the peninsula. Literacy, numeracy, scripture, Solmund history.
 
 **Certainty modifier:** +1 if starting Certainty below 5. The most powerful socialisation tool the Church possesses.
 
@@ -246,12 +208,10 @@ The only widespread education infrastructure on the peninsula. Literacy, numerac
 | **Doctrinal Fluency** § | Debate / Investigation | +1D on Solmund theology, Church history, liturgical practice. |
 | **Trained Memory** § | Debate | Concentration (Focus + Recall) +2 in social contests. |
 
-**Knot:** School mentor who invested in you personally. Whether you now agree with what they taught defines a live tension. They shaped your intellectual development — and they shaped it within the categories the Church provides.
 
 ---
 
 ### 2B. Ducal Household Education
-Educated as part of a noble or ducal household's retinue — Crown, Hafenmark, or Varfell. Specify which household (affects worldview: Crown = virtue ethics, Hafenmark = proceduralism, Varfell = consequentialism).
 
 **Certainty modifier:** None.
 
@@ -261,12 +221,10 @@ Educated as part of a noble or ducal household's retinue — Crown, Hafenmark, o
 | **Courtly Bearing** § | Debate | In Formal or Grand Contests: immune to first exchange of strain. |
 | **Patron's Connections** § | Faction Play | +1D on one Domain Action per season within the educating household's faction system. |
 
-**Knot:** A fellow student — someone your age who shared Formation. You may now serve the same faction or opposing ones. The bond was formed before politics intervened.
 
 ---
 
 ### 2C. Guild Apprenticeship
-Apprenticed to a master. Trained in a specific craft and socialised into the Guilds' moral relativism — value determined by skill, not birth or doctrine.
 
 **Certainty modifier:** −1 if starting at 5. Guild culture is secular; prolonged immersion in an institution that recognises no universal moral principles loosens orthodoxy through exposure, not argument.
 
@@ -276,14 +234,11 @@ Apprenticed to a master. Trained in a specific craft and socialised into the Gui
 | **Economic Reasoning** § | Debate | +1D to Argue pool in arguments involving economic stakes. |
 | **Guild Network** § | Faction Play / Investigation | +1D when interacting with Guild faction or in high Guild Favour territories. |
 
-**Knot:** Your master craftsperson. Professional standards, craft values, the specific relationship between someone who knows and someone who is learning. Whether kind or demanding, the most formative relationship of your adolescence.
 
 ---
 
 ### 2D. Self-Taught / Empiricist
-No formal education. The Church controls formal education; the Guilds provide trade apprenticeships; ducal households educate retinues. You exist **outside the peninsula's entire epistemological apparatus.** What you learned, you learned by observing the world directly — empirical, fragmented, uncontaminated by institutional framing.
 
-**Certainty modifier:** −1 regardless of starting value. Without institutional education, no framework reinforces any Certainty level. Your Certainty is inherently unstable — it moves in either direction more easily because nothing anchors it.
 
 | Skill | Domain | Effect |
 |---|---|---|
@@ -291,12 +246,10 @@ No formal education. The Church controls formal education; the Guilds provide tr
 | **Street Wisdom** § | Investigation | In urban environments: +1D on Attunement to detect danger or assess intentions. |
 | **Hard to Fool** § | Debate | Opponent's Doubt Marker effect reduced by 1 when used against you. You've been lied to by experts. |
 
-**Knot:** A specific person who showed you something that contradicted institutional reality — a midwife who treated patients the Church said were cursed, a veteran who told you the occupation ended differently than official history claims. Their specific knowledge gave you reason to trust observation over authority.
 
 ---
 
 ### 2E. Military Training
-Educated through military service — Crown army, Hafenmark ducal guard, Varfell household troops, or Löwenritter squire training. Specify which institution (affects military culture).
 
 **Certainty modifier:** None.
 
@@ -306,12 +259,10 @@ Educated through military service — Crown army, Hafenmark ducal guard, Varfell
 | **Formation Instinct** § | Mass Battle | Unit containing this character: +1 Discipline starting value (max 7). |
 | **Physical Conditioning** § | Scene Battle | Stamina base +1. |
 
-**Knot:** Training partner, drill instructor, or fellow recruit. Bonds formed under shared physical hardship. This person knows what you can endure because they endured it beside you.
 
 ---
 
 ### 2F. Practitioner Mentorship
-Educated by a Thread practitioner — warden, solitary practitioner, or scattered practitioner community. Philosophical and practical preparation for Thread practice. You may not have Leaped yet.
 
 **Certainty modifier:** −2 (minimum 0). Practitioner education systematically dismantles Solmund cosmology through experience, not argument.
 
@@ -326,7 +277,6 @@ Educated by a Thread practitioner — warden, solitary practitioner, or scattere
 ---
 
 ### 2G. Monastic Seclusion
-Educated in a remote contemplative house — not the urban seminary but an isolated monastery. Quiet, rigorous, divorced from political reality.
 
 **Certainty modifier:** +1 or −1 (GM determines). Monastic seclusion either deepens faith or cracks it. The player does not choose.
 
@@ -336,15 +286,12 @@ Educated in a remote contemplative house — not the urban seminary but an isola
 | **Archive Access** § | Investigation | +1D on Recall-based rolls researching documents or records. Monasteries have libraries. |
 | **Silence Reader** § | Investigation / Debate | Appraise in one-on-one or small-group: TN 6 instead of TN 7. You read people in a community where no one spoke. |
 
-**Knot:** A fellow monk or abbot/abbess. They represent the quality of attention monastic life produces — and the question of whether that attention reveals truth or illusion.
 
 ---
 
 ## STAGE 3: VOCATION — What were you trained to do?
 
-**Grants 2 starting skills** (★ marked). At least 1 of 2 must be unique. Remaining skills on spark list.
 
-**Vocation determines faction affiliation.** Contradictions between Origin/Formation/Vocation produce character tension — a Crown Heartland Child with Practitioner Mentorship and a Church Vocation is a character whose biography is a argument with itself.
 
 ---
 
@@ -435,14 +382,12 @@ Educated in a remote contemplative house — not the urban seminary but an isola
 
 ## STAGE 4: CATALYST — What happened that put you on this path?
 
-**Grants 1 starting skill** (★ marked). Remaining skills on spark list. Produces a starting Belief shape.
 
 ---
 
 ### 4A. Witnessed Something Impossible
 You saw a Thread phenomenon. Your rendering cracked.
 
-**Canon note on Forgetting:** If the event occurred outside Askeheim (node distance 1+), the Forgetting does not apply — your memory persists because rendering didn't erase it. If at Askeheim (node distance 0), your retention means your TS was high enough for partial retention per the Forgetting Check (stage4_southernmost), which is diagnostically significant.
 
 **Certainty modifier:** −1. **Belief shape:** "The world is not what [institution/faith/common sense] says — I must [investigate/understand/warn]."
 
@@ -467,7 +412,6 @@ You saw a Thread phenomenon. Your rendering cracked.
 ---
 
 ### 4C. Lost Someone
-A Close Knot died, disappeared, or was taken. **Anti-fridge clause:** The GM maintains a hidden "ghost sheet" for the lost person — Beliefs, faction affiliations, most important relationships. Knot Memory draws from this sheet. The lost person continues to influence the campaign.
 
 **Certainty modifier:** None. **Belief shape:** "I will [find/avenge/complete their work/protect what they loved] — nothing else matters."
 
@@ -489,7 +433,6 @@ A Close Knot died, disappeared, or was taken. **Anti-fridge clause:** The GM mai
 
 All variants share spark list: Quick Adaptation § (once/session +1D in a domain with no other skill bonuses), Recruiter's Trust (unique: +1D Investigation pursuing recruiter's objectives).
 
-**Belief shape:** "[Recruiter] believes I can [specific task] — I will prove them [right/wrong/something unexpected]."
 
 ---
 
@@ -508,9 +451,6 @@ Attempted the Leap and succeeded. Prerequisite: Formation 2F or TS ≥ 30 from o
 
 ### 4F. War / Invasion — Specified
 
-**4F-i. Spartfell Incident** — Altonian probe force crossed the NW pass 3-5 years pre-campaign. Repelled at Spartfell.
-**4F-ii. Templar Suppression** — Church deployed Templars against a southern community suspected of Einhir revival 2-4 years pre-campaign. [ED-390: new setting event — requires approval.]
-**4F-iii. Ducal Border Clash** — Hafenmark-Varfell territorial dispute over T10-T11 border escalated to armed skirmish 5-8 years pre-campaign.
 
 **Certainty modifier:** None. **Belief shape:** "War took [what I had] — I will [prevent/fight/build]."
 
@@ -523,7 +463,6 @@ Attempted the Leap and succeeded. Prerequisite: Formation 2F or TS ≥ 30 from o
 ---
 
 ### 4G. Religious Crisis
-Faith broke or deepened in a way that can't be undone. **GM determines direction** (not player) based on Origin and Formation — institutional scaffolding predicts which way the crisis pushes.
 
 **Certainty modifier:** −2 or +2 (GM determines). **Belief shape:** "The Church is [wrong/the only defence] — I will [find truth/defend faith]."
 
@@ -537,7 +476,6 @@ Faith broke or deepened in a way that can't be undone. **GM determines direction
 
 ## Thread-Adjacent Spark List Additions (Non-Practitioner Vocations)
 
-Skills that activate when Thread phenomena occur near non-practitioner characters. Not practitioner abilities — cognitive, perceptual, or emotional responses from exposure.
 
 | Vocation | Spark Skill Added | Effect |
 |---|---|---|
@@ -573,7 +511,6 @@ Skills that activate when Thread phenomena occur near non-practitioner character
 1. **Choose Origin** (Stage 1) → geography, culture, Certainty base, first Knot. 1 starting skill.
 2. **Choose Formation** (Stage 2) → intellectual framework, Certainty modifier, second Knot. 1 starting skill.
 3. **Choose Vocation** (Stage 3) → profession, faction, third Knot. 2 starting skills.
-4. **Choose Catalyst** (Stage 4) → inciting event, starting Belief, campaign hook. 1 starting skill.
 5. **Allocate attributes** (31 points). Recall determines equip slots and skill depth ceiling.
 6. **Resolve Certainty** (base from Origin + modifiers).
 7. **Name Knots** (three suggested; assign Close vs Distant).
@@ -592,7 +529,6 @@ Skills that activate when Thread phenomena occur near non-practitioner character
 | Vocation | 3-VA3: Einhir Antiquarian | Works Varfell's covert antiquities network. **Starting skills: Artefact Authentication, Black Market Contacts.** Knot: a dealer whose ethics differ and whose shared enterprise is shared risk. |
 | Catalyst | 4E: The First Leap | Leap succeeded. Certainty 0 (already there). **Starting skill: Leap Scar.** Belief: "The wound at Askeheim is killing the rendered world — someone must make the factions understand before it is too late." |
 
-**Result:** Practitioner-Scholar. TS 61 (canonical — 8 from Origin + growth through play). Certainty 0. Three Knots. 5 starting skills equipped (Inherited Resonance, Approach Training, Artefact Authentication, Black Market Contacts, Leap Scar). Recall 5 needed to equip all. Remaining spark list skills (Cultural Memory, Calamity Familiarity, Thread Perception, Philosophical Grounding, Einhir Lore, Post-Leap Clarity, Rendering Memory) develop through scene use.
 
 ---
 
@@ -600,10 +536,8 @@ Skills that activate when Thread phenomena occur near non-practitioner character
 
 - [EDITORIAL: ED-374 — Lifepath system requires user approval]
 - [EDITORIAL: ED-375 — Skill effects provisional — Level 1/2/3 scaling needs simulation]
-- [EDITORIAL: ED-377 — Intuitive Threadwork (3-RE3) + Co-Movement interaction: does folk practice trigger P-01?]
 - [EDITORIAL: ED-378 — Confirm 3 Knots is the right lifepath count]
 - [EDITORIAL: ED-379 — Can experienced characters take 2 Catalysts?]
-- [EDITORIAL: ED-380 — Southern Einhir Descendant Deep South +8 TS: Leap-eligible with Formation 2F at session 1?]
 - [EDITORIAL: ED-381 — Recall 1 = 1 equip slot: too punishing for low-Recall builds?]
 - [EDITORIAL: ED-382 — Coherence equip slot loss: player choice vs auto-drop?]
 - [EDITORIAL: ED-383 — Level 3 requiring Recall ≥ 5: intentional specialist gate?]
@@ -611,5 +545,3 @@ Skills that activate when Thread phenomena occur near non-practitioner character
 - [EDITORIAL: ED-386 — Ashmarket modifier (1F): Einhir objects at node distance 3 — archaeological, not Thread-active, at RS 60]
 - [EDITORIAL: ED-388 — Templar "Smite the Heretic": intra-party hostility intentional?]
 - [EDITORIAL: ED-389 — Church Investigator occupational TS +3: canonical?]
-- [EDITORIAL: ED-390 — War/Invasion specific events (Spartfell Incident, Templar Suppression, Ducal Border Clash): new setting content requires approval]
-- [EDITORIAL: ED-391 — Lost Someone "ghost sheet": design-layer requirement or GM-reference recommendation?]

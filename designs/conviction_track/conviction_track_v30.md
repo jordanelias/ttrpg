@@ -1,3 +1,6 @@
+<!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
+<!-- Infill: conviction_track_v30_infill.md -->
+
 <!-- v30 baseline — renamed from designs/conviction_track/opus_design_proposal.md on 2026-04-13 -->
 # Valoria BG — Conviction Track & Church Victory Redesign
 ## PP-406 through PP-418
@@ -12,7 +15,6 @@
 **Range:** 0–5 per territory.
 **Poles:** 0 = Einhir Restoration pole. 5 = Galbadian Orthodoxy pole.
 
-**Rationale for name:** Conviction captures popular belief — what the people hold to be true. This is not institutional Church power (that is Mandate) nor theological correctness (the Church is sincerely wrong per canon). It is the strength of orthodox faith in the population. The Restoration pole is the absence of that conviction — not a competing faith, but recovered cultural memory that displaces orthodox certainty.
 
 [EDITORIAL: ED-302 — Confirm track name "Conviction" (CV). Alternative candidates: "Devotion", "Orthodoxy", "Glaube".]
 
@@ -46,7 +48,6 @@
 
 **Seasonal cap:** ±1 CV per territory per season. No combination of actions can move a territory's CV by more than 1 in a single season.
 
-**Drift:** None. CV is sticky — it holds its current value unless actively pushed. Populations do not spontaneously become more or less devout. This creates strategic friction: changing conviction requires sustained factional investment.
 
 **Exception — Calamity Drift (RS decline):** When Rendering Stability (RS) drops below a threshold, territories adjacent to T15 experience CV erosion. See §1.3.
 
@@ -62,13 +63,11 @@
 | Consecrate | Church | CV +1 | Church controls territory AND CV ≥ 3 | Influence vs Ob 3 | Success: CV +1. Additionally: territory becomes Consecrated (see §1.4) |
 | Missionary Work | Church | CV +1 | Territory not controlled by Church, CV ≤ 3 | Influence vs Ob = controlling faction's Mandate | Success: CV +1 in that territory |
 
-**Frequency:** Each faction may attempt one CV movement action per season total (not per territory). Choose where to invest.
 
 **Church prominence:** Church Mandate > controlling faction's Mandate in that territory. Required for Preach. Not required for Missionary Work (which targets territories where Church lacks prominence — hence the higher Ob).
 
 ### 1.3 Calamity Drift — RS-Linked CV Erosion (PP-409)
 
-The Calamity's Thread damage radiates outward from the Southernmost. As RS declines, the rendering destabilises, and populations closest to the epicentre lose faith — not because they reason their way out of orthodoxy, but because the rendering itself cannot sustain the experiential certainty that grounds belief.
 
 | RS Threshold | Effect |
 |-------------|--------|
@@ -83,7 +82,6 @@ Calamity Drift applies after all faction actions resolve but before TC calculati
 A territory that reaches CV 5 via a Consecrate action gains **Consecrated** status.
 
 Effects:
-- CV cannot drop below 4 while Church controls the territory (institutional infrastructure locks in faith).
 - Church seizure Ob in this territory: −1 (population welcomes Church governance).
 - Consecrated status is lost if Church loses control AND CV drops below 4.
 
@@ -141,7 +139,6 @@ Simplified: **Ob = 2 + Fort Level + max(0, 3 − CV)**
 | Partial | No seizure. Church Mandate +1, controlling faction Mandate −1 in that territory. |
 | Failure | No seizure. Church Mandate −1 (overreach). TC −2 (visible failure undermines institutional momentum). |
 
-**Post-seizure governance:** Church controls the territory. Church ethical framework modifiers apply to all Domain Actions in the territory. Church may Preach and Consecrate freely in controlled territories.
 
 **Loss of seized territory:** If CV drops below 2 in a Church-controlled territory, a Stability check (Ob 2) is required at Accounting. Failure: Church loses administrative control; territory reverts to prior controller (or becomes Uncontrolled if prior controller has Mandate 0).
 
@@ -208,7 +205,6 @@ This gives a 20-season timeline to TC 75 under active Church play with moderate 
 
 [EDITORIAL: ED-303 — Does TC freeze at 75 or continue advancing? Freezing creates cleaner phase transition. Continuing creates pressure for other factions to suppress even post-75. Recommend freeze.]
 
-**Victory condition:** Church holds territories whose Territory Consolidation Values (TCV) sum to ≥ **18**.
 
 **Territory Consolidation Values (user-confirmed):**
 
@@ -228,15 +224,12 @@ This gives a 20-season timeline to TC 75 under active Church play with moderate 
 - Both high-TCV targets (Valorsplatz + Gransol or Sigurdshelm) + several standard territories, OR
 - One high-TCV target + all secondary targets + many standard territories.
 
-18/25 = 72% of available consolidation value. The Church cannot win by cherry-picking — it must achieve broad territorial dominance. But it need not hold everything.
 
-**Holding requirement:** Church must hold qualifying territories for **2 consecutive seasons** after reaching ≥ 18 TCV. This prevents flash seizures from counting as victory.
 
 **Erosion:** If CV drops below 2 in a Church-held territory, Stability check required (see §2). Loss of territory reduces TCV sum — Church can lose its victory position.
 
 ### 4.2 Alternate Victory — Altonian Theocracy Path (PP-414)
 
-**Concept:** The Church works with its Altonian branch to create a cross-border ecclesiastical authority that supersedes national governance in both Valoria and Altonia. This is institutional, not military — Altonia is not conquerable territory.
 
 **Mechanic:** Altonian Ecclesiastical Accord (AEA) clock. Range: 0–5.
 
@@ -270,11 +263,8 @@ This gives a 20-season timeline to TC 75 under active Church play with moderate 
 - Hafenmark controls ≥ 3 territories
 - No active military conflict between Church and Hafenmark
 
-**Outcome:** Crown is functionally dissolved. Church and Hafenmark partition Valoria — Church governs spiritual/cultural sphere, Hafenmark governs civil/economic sphere. Neither achieves full victory. The Hollow Victory is declared at Accounting when all conditions are met; it is a game-ending state but neither faction scores a solo win.
 
-**Narrative:** This is the "comfortable authoritarian duopoly" ending. The Church gets institutional permanence without theocracy; Hafenmark gets mercantile freedom without democratic accountability. Both suppress the Restoration Movement and Varfell. The Southernmost is ignored.
 
-[EDITORIAL: ED-304 — Is the Hollow Victory a "win" for both players or a "draw"? Recommend: both score it as a conditional victory — better than a loss, worse than a solo win.]
 
 ---
 
@@ -314,9 +304,7 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 2. At least 3 territories have CV ≤ 1
 3. RS ≤ 50 (rendering instability feeds cultural desperation)
 
-When RM emerges, it becomes a fully active NPC faction with stats, actions, and territorial ambitions.
 
-**One-shot:** Emergence fires once. If RM is suppressed back to latency (see §5.4), it cannot re-emerge.
 
 ### 5.3 Active RM — Stats and Actions
 
@@ -351,9 +339,7 @@ When RM emerges, it becomes a fully active NPC faction with stats, actions, and 
 - All territories rise to CV ≥ 2 (movement loses popular base), OR
 - RM Stability reaches 0 (movement collapses internally).
 
-**Suppression does not restore RM to its pre-emergence state.** Territories retain their CV values. The movement simply ceases to act as an organised faction.
 
-**If RM is never suppressed:** It persists as a permanent NPC faction for the remainder of the campaign. It cannot achieve a solo victory — it is a spoiler faction that complicates Church, Varfell, and Crown objectives.
 
 ---
 
@@ -369,9 +355,7 @@ When RM emerges, it becomes a fully active NPC faction with stats, actions, and 
 | **Deed 2 — Walk the Wound** | Complete a Southernmost Expedition (existing mechanic) with Vaynard's personal participation. Pass the Forgetting Check. | VTM ≥ 3. Warden Cooperation ≥ 1. |
 | **Deed 3 — Keeper's Mandate** | Hold T13 at CV ≤ 1 AND WA ≥ +1 for 2 consecutive seasons. | VTM ≥ 3. The movement must trust Vaynard — this cannot be achieved if RM has emerged as hostile. |
 
-**Path B is blocked if:** RM has emerged (WA ≤ −2). Once RM emerges, Deed 3 is mechanically impossible (WA cannot reach +1 while RM is active and hostile). Varfell must prevent Emergence to keep Path B open.
 
-**Design logic:** Path B tests whether Vaynard can be a genuine steward of the Southernmost — Thread-aware (VTM ≥ 3), trusted by the Restoration Movement (WA ≥ +1), and willing to sustain low-conviction Einhir culture in his own territories (CV ≤ 1 in T13).
 
 ### 6.2 Path C — Thread Supremacy (territory name correction + validation)
 
@@ -406,9 +390,7 @@ When RM emerges, it becomes a fully active NPC faction with stats, actions, and 
 | Warden Cooperation ≥ 2 | Varfell |
 | Vaynard controls T13 (Oastad) | Varfell |
 
-**Narrative:** Vaynard and the Restoration Movement together recover enough Einhir cultural memory to create a viable alternative to Galbadian orthodoxy, while keeping the rendering stable enough for the world to survive the transition. The Wardens recognise Vaynard as a legitimate steward of the Southernmost.
 
-**Scoring:** This is a co-victory — Varfell player scores a win. RM (latent NPC faction) does not "win" in the scoring sense, but the narrative outcome is positive for the movement. If RM has emerged as hostile, this co-victory is impossible (WA ≥ +2 cannot coexist with active hostile RM).
 
 ---
 

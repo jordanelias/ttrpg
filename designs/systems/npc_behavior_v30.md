@@ -1,3 +1,6 @@
+<!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
+<!-- Infill: npc_behavior_v30_infill.md -->
+
 <!-- v30 baseline — renamed from designs/systems/npc_behavior_system_v1.md on 2026-04-13 -->
 # VALORIA — NPC ETHICAL STANCE AND RESONANCE BEHAVIOR SYSTEM v1
 ## Status: DESIGN PROPOSAL — requires user review before commit
@@ -14,13 +17,9 @@
 
 Every named NPC holds three interconnected attributes.
 
-**Conviction** — the NPC's operative worldview. What they believe grounds value. Determines what the NPC wants to do.
 
-**Ethical Framework** — inherited from the NPC's faction. What the institution incentivises. Determines what the NPC is rewarded for doing. Already defined in stage6_factions.md; referenced, not redefined here.
 
-**Resonant Style** — the argument form that bypasses the NPC's defenses. Their structural vulnerability in social engagement. Determines how the NPC can be moved.
 
-These three attributes jointly produce NPC decisions in TTRPG, NPC priority trees in BG, and arc transitions in all modes.
 
 ### §1.2 Conviction Taxonomy
 
@@ -34,7 +33,6 @@ These three attributes jointly produce NPC decisions in TTRPG, NPC priority tree
 | Autonomy | Value is chosen by the actor | Self-determination, operational freedom, survival | Universal moral claims, institutional demands |
 | Continuity | Value is sustained through practice | The work itself, applied necessity, endurance | Politics, ideology, anything that does not directly serve the ongoing task |
 
-NPCs hold a primary Conviction (default decision driver) and a secondary Conviction (activates under pressure per §5 Arc Emergence).
 
 ### §1.3 Resonant Style Taxonomy
 
@@ -45,7 +43,6 @@ NPCs hold a primary Conviction (default decision driver) and a secondary Convict
 | Authority | Appeals from a source their framework recognises as binding | ...defers to certain authorities. When that authority contradicts their position, they face structural bind. | Memory + Obscuring (Suppression style) — the authority's accumulated weight forecloses dismissal |
 | Solidarity | Appeals grounded in relational obligation — debts, shared history, personal bonds | ...values relationships. When a relationship demands what the position forbids, the bind is genuine. | Any genre + Revealing; requires active Knot with the NPC |
 
-Each NPC has a primary Resonant Style and a secondary (activates after primary engagement fails to shift them — escalation path).
 
 ---
 
@@ -64,7 +61,6 @@ Each NPC has a primary Resonant Style and a secondary (activates after primary e
 | Certainty | 3 (Questioning) | Already cracking. Further decline possible through play. |
 
 **Beliefs:**
-1. "The peace holds because I hold it — I will not flinch from maintaining order."
 2. "The Restoration whispers truth, but acting on it would destroy everything I maintain."
 3. "Torben must be kept from Altonian influence — he is Valoria's future."
 
@@ -107,7 +103,6 @@ Each NPC has a primary Resonant Style and a secondary (activates after primary e
 
 **Beliefs:**
 1. "Constitutional procedure IS justice — when it is followed, justice follows."
-2. "The Church overreaches because no one stands on law against them — I will."
 3. "Hafenmark's independence is the model for all of Valoria."
 
 **Leadership Deviation Ob:** 1 (lowest — she IS the institution; deviation costs her almost nothing internally).
@@ -169,8 +164,6 @@ Each NPC has a primary Resonant Style and a secondary (activates after primary e
 | Certainty | 2 (Skeptic) | Solmund framework has failed her community. Thread substrate is probably real. |
 
 **Beliefs:**
-1. "The people of Valoria deserve to know their own history — I will recover what the Church buried."
-2. "Power without accountability is tyranny — I will hold every faction to this standard, including our own."
 3. "Violence is the tool of the powerful — the movement wins through community, not force."
 
 **Leadership Deviation Ob:** 2 (movement, not institution — ideological coherence matters but no formal hierarchy).
@@ -210,9 +203,7 @@ Each NPC has a primary Resonant Style and a secondary (activates after primary e
 | Certainty | [EDITORIAL: ED-396 — Torben Certainty not specified. Probable 4 (Faithful) — conventional education. Could be lower if Almud's private sympathy influenced his upbringing. Confirm.] |
 
 **Beliefs:**
-1. Undefined at game start. Torben's Beliefs form through play interaction. First Belief generated after first meaningful NPC or PC engagement.
 
-**Arc significance:** Torben is the most malleable named NPC. His Stance Triangle is largely blank, making him the primary target for faction social investment. Whoever shapes Torben shapes the succession.
 
 ---
 
@@ -232,7 +223,6 @@ Each NPC has a primary Resonant Style and a secondary (activates after primary e
 **Beliefs:**
 1. "The work is all that matters — I will hold the Southernmost as long as I draw breath."
 2. "No outsider has earned the right to the wardens' knowledge — competence is the only currency."
-3. [Latent — activates only if PCs demonstrate sustained competence] "Help has come. I will not waste it."
 
 **Leadership Deviation Ob:** N/A (no faction structure). She answers to no institution.
 
@@ -305,7 +295,6 @@ Cardinals are institutional officers, not independent actors. They activate as i
 | Prudence (Tithes) | Order + Autonomy | Evidence (fiscal data) | Protects Church wealth; may resist TC expansion if economically costly |
 | Temperance (Scholar) | Reason + Faith | Evidence (scholarly findings) | Pursues AER maintenance; most likely Cardinal to experience Conviction crisis if exposed to Thread evidence |
 
-Full stat blocks deferred to campaign development. Stance Triangles activate only on schism. [EDITORIAL: ED-399 — Confirm Cardinal Stance Triangles before Church schism simulation.]
 
 ---
 
@@ -313,14 +302,11 @@ Full stat blocks deferred to campaign development. Stance Triangles activate onl
 
 ### §3.1 Belief Structure
 
-**Named NPC definition:** An NPC holds Beliefs if they have (a) a Stance Triangle defined in this document, OR (b) a canonical NPC document (e.g., edeyja_npc.md), OR (c) faction leader status. All other NPCs are non-named for Belief purposes, regardless of whether they have a proper name.
 
-Named NPCs hold 2–3 Beliefs structured as: **Conviction-derived commitment + situation-specific application.**
 
 Beliefs are revealed to players through:
 - Contest Appraise step (Overwhelming: one Belief revealed per §4 social_contest_system_v2.md)
 - Niflhel Intelligence mode (Success: one NPC's active Belief per stage6 §8.7)
-- PC relationship (Knot at Close or Intimate: one Belief revealed per season of sustained relationship)
 - Observation (GM grants Belief revelation when the NPC acts on a Belief in a way the PC witnesses)
 
 ### §3.2 Belief Revision
@@ -328,9 +314,7 @@ Beliefs are revealed to players through:
 An NPC revises a Belief when ALL of the following hold:
 1. A Contest produces decisive outcome (Conviction Track ≥ 7 or ≤ 3) against the NPC
 2. The winning argument used the NPC's primary or secondary Resonant Style
-3. The winning argument specifically engaged the Belief in question (GM judgment: the argument's content must textually address the commitment)
 
-On revision: the old Belief becomes a **Scar** (recorded permanently, cannot be re-invoked, carries narrative weight). A new Belief forms that accounts for the experience — it does not contradict the Scar but incorporates the failure.
 
 ### §3.3 Scar Accumulation and Conviction Effects
 
@@ -355,11 +339,9 @@ On revision: the old Belief becomes a **Scar** (recorded permanently, cannot be 
 
 ### §4.1 Decision Procedure for Named NPCs
 
-When a named NPC must choose between options:
 
 **Step 1 — Institutional Filter.** What does the faction's Ethical Framework favour? Apply Ob modifiers. For officers and functionaries (non-named NPCs), this filter IS the decision. They do whatever the institution incentivises.
 
-**Step 2 — Conviction Filter.** Does the institutionally favoured action align with the NPC's primary Conviction? If yes: NPC takes it without hesitation. If no: proceed to Step 3.
 
 **Step 3 — Decision Fork.** The NPC faces a genuine choice. Resolution:
 
@@ -370,13 +352,10 @@ When a named NPC must choose between options:
 | Scar count ≥ 2 | GM uses Conviction crisis table (§3.3) | Leadership Deviation + potential Belief revision |
 | Stability ≤ 1 | Autonomy (survival) regardless of Conviction | No Leadership Deviation (survival is exempt) |
 
-**Step 4 — Resonant Style Interaction.** If a PC is present and engages the NPC in Contest during the Decision Fork, the Fork is suspended until Contest resolution. Contest outcome may cause Belief revision (§3.2) which changes the Fork's resolution. This is the primary mechanism by which PCs influence NPC decisions.
 
 ### §4.2 Non-Named NPC Behavior
 
-Non-named NPCs (officers, functionaries, soldiers, citizens) follow the Ethical Framework filter only. They have no Conviction, no Resonant Style, no Beliefs. They are institutional actors.
 
-Exception: NPCs who have been promoted to named status through play interaction (sustained PC Knot, campaign-significant events) receive a Stance Triangle at the GM's discretion.
 
 ---
 
@@ -394,7 +373,6 @@ Per Foundations §16.3: a transforming NPC's thread-shift exerts force on everyo
 
 This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), Himlensendt Arc C (TS awakens from 0 → rapid advancement). Does NOT apply to: Almud (TS 28, no threshold crossing in any arc), Edeyja (TS 75-80 but stable, not transforming).
 
-Strain propagates to PCs and NPCs knotted to the transforming NPC. PCs experience this as Knot strain per threadwork_v25 §Knots. NPCs experience it as a rendering disruption that may trigger their own Certainty movement (−1 Certainty per season of sustained Close Knot strain from a transforming NPC).
 
 ### §5.1 Generic Transition Triggers
 
@@ -410,7 +388,6 @@ Strain propagates to PCs and NPCs knotted to the transforming NPC. PCs experienc
 
 ### §5.2 Named NPC Arc Profiles
 
-Each named NPC has 2–3 predefined arc paths that the GM tracks. Arc paths are NOT mutually exclusive until a branch point fires. Branch points are specific game-state conditions.
 
 ---
 
@@ -418,22 +395,16 @@ Each named NPC has 2–3 predefined arc paths that the GM tracks. Arc paths are 
 
 **Arc A: The Reformer**
 - Branch condition: Almud's Certainty reaches 1 or 0 AND Löwenritter Coup Counter ≤ 1.
-- Conviction shift: Order → Reason (primary). He acknowledges Thread reality and begins pursuing reform.
-- Behavior: Almud supports practitioner rights, contacts Restoration Movement, possibly seeks Southernmost alliance. Crown-Restoration co-victory enabler.
 - Risk: TC acceleration (Church responds to Crown heresy). Löwenritter Coup Counter advances if reforms perceived as weakness.
-- Resonant Style shift: Consequence remains primary but now calibrated to Thread-aware worldview. He can no longer be moved by arguments that Thread reality is uncertain — he knows.
 
 **Arc B: The Fortress**
 - Branch condition: Crown Stability ≤ 2 at any point AND Almud's Certainty ≥ 3 (he has not been confronted).
 - Conviction shift: Order doubles down. Secondary Conviction (Reason) suppressed entirely.
-- Behavior: Almud becomes the iron king. Maintains order through force of will. Effective at preventing Theocracy but personally hollowed. Will not engage with Thread truth. Relationships strain.
 - Resonant Style shift: Authority only. He can only be moved by someone he personally respects and whose competence he has witnessed — Ehrenwall, possibly PCs with Military or Mandate achievements.
-- Risk: Torben alienation (young prince pushed away by inflexible father → Torben Loyalty declines).
 
 **Arc C: The Overthrown**
 - Branch condition: Löwenritter Coup Counter reaches 3. Coup fires.
 - Conviction shift: Order → Autonomy (survival). Almud becomes an exile.
-- Behavior: No Resonant Style active initially (shock). If PCs locate him: Solidarity activates via Knot. Possible restoration sub-campaign.
 - Risk: Torben's Loyalty track transfers to Löwenritter. Crown faction under Löwenritter control.
 
 ---
@@ -441,23 +412,13 @@ Each named NPC has 2–3 predefined arc paths that the GM tracks. Arc paths are 
 #### Arne Himlensendt — Arc Map
 
 **Arc A: The Zealot (Default — No Intervention)**
-- Branch condition: No Contest defeat via Evidence Resonant Style in first 3 seasons. No Thread confrontation.
 - Conviction: Faith remains unchallenged. TC advances to 75+ and territorial seizure begins.
-- Behavior: Static institutional momentum. This arc is "boring" by design — unchallenged fundamentalism produces no character development. The burden is on PCs to intervene.
-- Resonant Style: Evidence remains primary but increasingly difficult to deploy as Church institutional power insulates Himlensendt from confrontation.
 
 **Arc B: Crisis of Faith**
 - Branch condition: Total Victory Contest defeat via Evidence Resonant Style. OR: Cardinal of Temperance presents Thread-adjacent scholarly findings that Himlensendt cannot dismiss (AER ≥ 3 AND Temperance Cardinal has Conviction Reason).
-- First Scar: Himlensendt's Belief 1 ("Solmund's word is the only truth") becomes Scar. New Belief: "Solmund's word may be incomplete — I must investigate carefully before acting."
-- Conviction: Faith primary remains but is now qualified. Secondary (Order) becomes active. He retreats to institutional authority as his theological certainty wavers.
 - Behavior: TC pressure decreases (Himlensendt is less aggressive). But Church Stability may also decrease (the Confessor appears to waver publicly → Church Stability −1 at next accounting if Scar is publicly known).
-- Resonant Style: Authority activates as secondary. He is now reachable by appeals from sources his framework recognises.
 
 **Arc C: Confrontation**
-- Branch condition: Direct contact with threadcut being (PCs engineer this) OR brought to Locked Zone. Requires physical presence — cannot be achieved through argument alone.
-- Effect: Certainty drops by 2–3 (confrontation development model, Foundations §14). TS may awaken from 0 (confrontation is the development mechanism). If TS reaches Stirring (30), Himlensendt's entire theological framework shatters.
-- Conviction: Faith becomes paradoxical. He has experienced what his theology forbids. Both Faith and a new, unnamed conviction (something like "Truth" — he has no framework for it) compete. Decision Fork fires on EVERY subsequent decision.
-- Behavior: Genuinely unpredictable. The campaign's most dramatic NPC transformation. May become a reformer, a madman, or a saint. GM should use the Conviction crisis table (§3.3) freely.
 - Risk: If this becomes public, Church Stability −3 (the Confessor is a heretic). TC may actually decrease rapidly as the institutional engine loses its driver. But the vacuum may be worse — Cardinal of Justice or Fortitude may seize control and be more dangerous than Himlensendt ever was.
 
 ---
@@ -465,43 +426,25 @@ Each named NPC has 2–3 predefined arc paths that the GM tracks. Arc paths are 
 #### Inge Baralta — Arc Map
 
 **Arc A: Constitutional Triumph**
-- Branch condition: Hafenmark achieves Parliamentary Sovereignty victory condition. Baralta's Precedent conviction validated.
 - Conviction: Precedent reinforced. No arc transformation — this IS the arc resolution.
-- Behavior: Baralta becomes the most powerful constitutional authority in Valoria. Her framework governs the political landscape. This is a stable end state.
 
 **Arc B: The Pragmatist**
 - Branch condition: Church seizes Hafenmark territory via TC AND Baralta's Sovereign Authority Doctrine fails (Failure result).
-- First Scar: Belief 1 ("Constitutional procedure IS justice") becomes Scar. New Belief: "Procedure that permits injustice is not procedure worth defending — I must adapt."
-- Conviction shift: Precedent → secondary. Faith activates as primary (she turns to her privatised faith for guidance when procedure fails). This is her paradox: the legalist becomes a believer because the law failed.
 - Behavior: Baralta becomes willing to take extralegal action. Alliance with Crown, Restoration, or even Niflhel becomes possible. Leadership Deviation Ob still 1 (she IS the institution — the institution follows her, not the other way around).
-- Resonant Style shift: Consequence becomes primary (she is now evaluating by outcomes, not precedent).
 
 **Arc C: Excommunication**
 - Branch condition: Church Excommunication succeeds against Baralta. TC +4 immediate. Hafenmark Mandate crisis.
-- Conviction: Precedent collapses (the institution that should protect her has been weaponised against her). Faith collapses (the Church has declared her outside Solmund's grace). Falls to Autonomy.
-- Behavior: Baralta in exile or underground. If PCs support her: Solidarity Resonant Style activates. Possible Hafenmark restoration campaign.
 
 ---
 
 #### Magnus Vaynard — Arc Map
 
 **Arc A: The Scholar**
-- Branch condition: TK reaches 5 AND TS remains below 30 (no personal Thread experience). Vaynard understands structurally but has not experienced.
-- Conviction: Reason remains primary. His understanding is intellectual, not experiential. He becomes dangerous: someone who knows enough to act but lacks the felt encounter that would make him cautious.
-- Behavior: Seeks capability, not further knowledge. May attempt to weaponise Thread knowledge. May seek Edeyja — per edeyja_npc.md, she will engage substantively at TK 5 because he understands the Calamity's mechanism structurally. However, she will not grant full collaboration (Warden Cooperation) without demonstrated Thread competence (TS 30+). The conversation is real; the operational partnership requires more.
-- Resonant Style: Evidence becomes primary (he can no longer be moved by Consequence arguments about bad outcomes — he has weighed the costs and accepted them). Only harder evidence — Thread-level data he cannot explain — reaches him.
 
 **Arc B: The Awakened**
-- Branch condition: TS crosses Stirring (30) via Private Collection Discovery Event or practitioner contact. TK ≥ 3.
-- Conviction: Reason → Continuity (he has experienced Thread reality and now understands the wardens' urgency). His consequentialism is replaced by a practitioner's applied necessity.
-- Behavior: Vaynard becomes a Restoration ally or independent Thread-aware actor. His resources (Collection, Intel network, territorial control) become available to Thread-restoration efforts. Varfell-Restoration co-victory path opens.
-- Resonant Style: Solidarity activates (he has experienced what Edeyja experiences; relational bonds with practitioners become meaningful).
 
 **Arc C: Consumed**
-- Branch condition: Private Collection use at TS 14+ triggers Discovery Event with Spirit check Failure. OR: TS advances past Stirring without adequate support → epistemic seduction (Foundations §16.1).
-- Conviction: Reason → collapses. The epistemic seduction dissolves his normative framework. He sees the rendered world's categories as contingent.
 - Behavior: Vaynard becomes a local threat — a non-practitioner experiencing the consequences of practitioner-level perception without the training to manage it. Coherence may degrade. Certainty drops to 0 but without the stability that genuine practitioners develop.
-- Resonant Style: All styles suppressed (he is no longer persuadable in normal terms — his framework has dissolved).
 
 ---
 
@@ -513,16 +456,12 @@ Each named NPC has 2–3 predefined arc paths that the GM tracks. Arc paths are 
 - Behavior: Static. She holds. The Southernmost slowly loses ground. RS decline accelerates.
 
 **Arc B: The Collaboration**
-- Branch condition: PCs reach primary site (Season 3+) AND demonstrate Thread competence (successful Weaving in her presence).
-- Conviction: Continuity remains primary. Reason activates as secondary (she begins to consider strategic options beyond pure endurance).
 - Behavior: Edeyja shares warden knowledge. Campaign-altering information flows. RS stabilisation becomes possible.
-- Resonant Style shift: Solidarity activates (she now has colleagues for the first time in decades). PCs who build Knot with her gain access to the deepest Thread knowledge in the setting.
 - Belief 3 activates: "Help has come. I will not waste it."
 
 **Arc C: The Crisis**
 - Branch condition: Warden count reaches 0 (all other wardens killed or incapacitated) OR RS ≤ 20.
 - Conviction: Continuity → Autonomy (the work has failed; she must survive to try again).
-- Behavior: Edeyja may leave the Southernmost for the first time. This is a campaign-defining event. [NOTE: This arc explicitly overrides edeyja_npc.md §'She never leaves the Southernmost.' The canonical statement describes current behavior under current conditions. Arc C specifies conditions under which that behavior changes. The canonical document's statement — 'She needs help she cannot ask for from people who don't know she exists' — implies she would act differently if the Southernmost's survival required it.] A TS 75–80 practitioner entering the peninsula's political space changes everything.
 - Risk: Her presence strains RS in the territories she passes through (per threadwork_v25 §Coherence/TS 70+ RS drain). She is a walking Calamity echo.
 
 ---
@@ -531,24 +470,18 @@ Each named NPC has 2–3 predefined arc paths that the GM tracks. Arc paths are 
 
 ### §6.1 Appraise Revelation
 
-When a player achieves Overwhelming on the Appraise step (Attunement, TN 7, Ob 1, net ≥ 3): GM reveals the NPC's primary Resonant Style in addition to one Belief (per existing social_contest_system_v2.md rules).
 
-When a player achieves Overwhelming + net ≥ 4: GM reveals both primary and secondary Resonant Style.
 
 ### §6.1b Evidence Resonant Style — Thread Sensitivity Gate (AUD-NPC-01 fix)
 
-Evidence targeting against TS 0 NPCs is restricted to ontical evidence: documents, testimony, political facts, historical records. Thread-level evidence (Thread state data, ontological observations, practitioner-only perceptions) does not function as Evidence Resonant Style against non-sensitives. Per Foundations §10.1: "The knowledge is propositionally available — they can recite what they have been told — but they cannot epistemologically reconcile it." A fact that cannot be epistemologically reconciled cannot function as a Resonant Style attack.
 
-Exception: if the NPC's TS crosses Stirring (30+) during play, Thread-level evidence becomes valid Evidence targeting. This is the mechanical gate for Himlensendt Arc C and similar confrontation arcs.
 
 ### §6.2 Targeting Declaration
 
-Before the Argue roll (Step 3), a player may declare "targeting Resonant Style." The GM confirms or denies the match based on the argument's content and form.
 
 **Confirmation requires:**
 - The argument uses the Contest style that maps to the declared Resonant Style (per §1.3 table)
 - The argument's content specifically addresses a known Belief of the NPC
-- The player has previously discovered the NPC's Resonant Style (via Appraise, Niflhel Intelligence, or relationship)
 
 ### §6.3 Targeting Effects
 
@@ -561,7 +494,6 @@ Before the Argue roll (Step 3), a player may declare "targeting Resonant Style."
 
 ### §6.4 Wrong-Style Penalty (Church Martyrdom Extension)
 
-Using the WRONG Resonant Style against a Church institutional NPC (Himlensendt, Olafsson, Klapp, Cardinals) in a public venue:
 - If result is Failure or Partial: Church Stability +1 (existing PP-259 Martyrdom effect fires).
 - The wrong-style penalty makes intelligence (knowing the correct Resonant Style) strategically essential before engaging Church NPCs.
 
@@ -575,7 +507,6 @@ Maximum bonus dice from Resonant Style targeting: +1D. This stacks with genre bo
 
 ### §7.1 Drift Rules
 
-Each Ethical Framework produces a natural drift — the direction the faction moves without PC intervention.
 
 **Drift constraints:** All Framework Drift is subject to stat ceiling (7) and stat floor (1). Drift is a passive effect, not a Domain Action — it does not count toward the ±2 Domain Action seasonal cap. It IS subject to absolute stat bounds.
 
@@ -593,13 +524,8 @@ Each Ethical Framework produces a natural drift — the direction the faction mo
 
 ### §7.2 Drift and NPC Arc Interaction
 
-Framework Drift feeds arc emergence: unchecked drift produces the conditions under which NPC arc branch points fire. Examples:
 
-- Church Influence drift + unchallenged Himlensendt → Arc A (Zealot) branch fires because no Evidence confrontation occurred.
-- Crown Certainty drift upward + Almud unchallenged → Arc B (Fortress) conditions met (Certainty stays ≥ 3).
-- Varfell TK drift to 3 + no PC interaction → Vaynard stalls at intellectual understanding, never reaching Arc B (Awakened).
 
-PCs shape NPC arcs by disrupting or accelerating these drifts through Domain Actions, Contests, and relationship-building.
 
 ---
 
@@ -737,21 +663,15 @@ All NPC faction priority trees follow a standardised 7-level structure:
 
 ### §9.1 BG Layer → TTRPG Layer Translation
 
-When a Zoom In fires during a BG season:
 - The NPC's BG Priority Tree has already determined their strategic intent for the season.
 - In the TTRPG scene, the NPC pursues that strategic intent using the Decision Procedure (§4).
-- If the TTRPG scene produces a Belief Scar or arc transition, the NPC's next-season BG Priority Tree is evaluated with the new Stance Triangle configuration.
 
 ### §9.2 TTRPG Layer → BG Layer Translation
 
-When a TTRPG scene produces NPC state changes:
-- Belief Scars are recorded on the NPC's BG faction mat (public if the Scar event was witnessed; private if not).
 - Conviction shifts update the Priority 2 trigger for the next season.
-- Resonant Style changes are tracked privately (only revealed through BG-layer Intel actions or Zoom In Appraise).
 
 ### §9.3 Domain Echo from Resonant Style Engagement
 
-When a Zoom In Contest successfully targets an NPC's Resonant Style:
 
 | Contest outcome | Domain Echo |
 |---|---|
@@ -763,7 +683,6 @@ When a Zoom In Contest successfully targets an NPC's Resonant Style:
 
 ## §9.5 NPC RECRUITMENT PROCEDURE (PP-642)
 
-Recruitment is the mechanic by which player factions acquire named NPCs from other factions or from unaligned status. It is a TTRPG-layer procedure; Board Game abstraction uses Diplomacy actions only.
 
 ### Step 1 — Identify
 The player must know the NPC exists and is potentially recruitable. Sources: Investigation Finding naming NPC, existing Disposition track (Disposition reached by prior social fieldwork), Tribune Spy Overwhelming revealing NPC dissatisfaction. An NPC with Disposition +4 or +5 toward their current faction **cannot** be targeted for recruitment (not recruitable — genuine loyalty gate).
@@ -807,14 +726,12 @@ Maximum one incentive per recruitment attempt. Stacking incentives is social coe
 
 ### Hooks
 
-A Hook is leverage one party holds over another — compromising evidence, a binding obligation, or knowledge that would destroy the NPC's standing if revealed.
 
 **Weak Hook:** Suggestive but not irrefutable leverage (rumour, minor debt, embarrassing but not damning information). −2 Ob on recruitment. If used and recruitment fails, Hook is not burned — may be used again.
 
 **Strong Hook:** Irrefutable leverage (evidence of serious crime, life-debt, binding contract, documented heresy). Reduces recruitment Ob to 1. If used and recruitment fails: Hook is burned — NPC goes public, their faction investigates, and the recruiting faction takes Mandate −2. Use carefully.
 
 **Acquiring Hooks:**
-- Investigation scene produces Overwhelming result targeting a specific NPC → Finding with Hook tag (Weak or Strong, GM determines by evidence nature)
 - Tribune Spy Overwhelming on NPC's territory → Weak Hook on most prominent NPC in territory
 - Narrative (GM decision based on prior scene outcomes)
 
@@ -823,12 +740,10 @@ Hooks are tracked on the NPC's entry in the NPC roster. Maximum one Hook per NPC
 ### Defection
 
 An NPC who has been recruited defects if:
-- Their active Belief is contradicted by the recruiting faction's actions for **2 consecutive seasons**, AND
 - A Belief integrity check fails: Spirit pool (NPC's), TN 7, Ob = current Disposition toward recruiting faction.
 
 **Failure → defection:** Disposition drops to −3 toward recruiting faction. NPC returns to previous faction (if viable) or becomes unaligned. Recruiting faction loses all benefits of the NPC's role. The defection is public — former faction Mandate +1 from the return. Defection is NOT a roll the player makes; it fires from the Priority Tree when the Belief-contradiction condition is met.
 
-**Success → confrontation scene:** NPC does not defect but raises the contradiction formally. A social scene is triggered (NPC uses their highest Resonant Style; player must respond). If player's faction commits to honouring the Belief in the confrontation scene: Disposition +1, defection clock resets. If player deflects or refuses: defection fires next season automatically (no further check).
 
 ## §10 EDITORIAL ITEMS
 
@@ -883,7 +798,6 @@ An NPC who has been recruited defects if:
 
 ## §7 BG FACTION PRIORITY TREES
 
-Each NPC faction follows a deterministic priority tree during the BG Strategic Phase. The tree selects the Domain Action to execute based on current faction state. Trees are evaluated top-to-bottom; the first matching condition fires.
 
 ### §7.1 Crown Priority Tree
 1. **IF** Stability ≤ 2 → Govern (Inward, restore Stability)
@@ -934,9 +848,7 @@ Each NPC faction follows a deterministic priority tree during the BG Strategic P
 6. **DEFAULT** → Senator (Outward, Diplomacy — seek recognition)
 
 ### §7.6 Ministry Priority Tree (NPC faction — procedural)
-1. **IF** Priority 3 trigger (Church Seizure declared) → Procedural Delay (automatic, AP-token consumed)
 2. **IF** hostile faction Mandate ≥ 5 → Procedural Objection (Ob 2 delay on that faction's next DA)
-3. **IF** Church Mandate ≥ 5 AND TC ≥ 40 → Institutional Warning (public PI +1, signals Church overreach)
 4. **DEFAULT** → Routine Administration (no effect — Ministry passes)
 
 ### §7.7 Schoenland Priority Tree (NPC faction — observer)
@@ -953,7 +865,6 @@ Each NPC faction follows a deterministic priority tree during the BG Strategic P
 
 ### §7.9 Priority Tree Override Conditions
 - **Institutional Mandate trigger:** When any DA targets a faction's Mandate stat or unique clock (TC/Church, PI/Hafenmark, VTM/Varfell), the targeted faction MUST respond next season with a defensive DA targeting the attacker (skipping normal priority tree). One override per season maximum.
-- **Co-victory cooperation:** When co-victory conditions are ≥ 75% met, cooperating factions shift to a simplified tree: (1) protect shared conditions, (2) advance weakest shared condition, (3) normal tree.
 
 
 ### §7.10 NPC Stat Values (Thread Sensitivity and Certainty)

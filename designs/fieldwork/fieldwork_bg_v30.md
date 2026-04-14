@@ -1,3 +1,6 @@
+<!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
+<!-- Infill: fieldwork_bg_v30_infill.md -->
+
 <!-- v30 baseline — renamed from designs/fieldwork/fieldwork_bg.md on 2026-04-13 -->
 # VALORIA — FIELDWORK SYSTEM v1.1 — §8 Board Game Mode
 ## Parent: designs/fieldwork/fieldwork_design_v1.md
@@ -6,11 +9,9 @@
 
 ## §8 BOARD GAME MODE
 
-At Board Game scale, fieldwork is abstracted into faction-level actions using existing card types plus one new action variant.
 
 ### §8.1 New BG Action: Survey (Consul Inward variant)
 
-**Survey** represents a faction directing resources to explore and develop a territory's hidden assets.
 
 - **Card type:** Consul Inward (uses existing card slot — no new card type required).
 - **Pool:** Influence.
@@ -24,7 +25,6 @@ At Board Game scale, fieldwork is abstracted into faction-level actions using ex
 | Remnant | Thread operation Ob −1 in this territory for 2 seasons; Thread Debt token placed |
 | Anomaly | RS −1 at this territory immediately; Warden Cooperation +1 eligible (if Warden Emergence active) |
 
-- **Effect on Overwhelming:** Reveal POI + gain +1 Influence (the discovery enhances the faction's knowledge base).
 - **Effect on Failure:** No POI found. +1 Church Attention Pool in this territory if the survey targeted Depth ≥ 3 content.
 
 ### §8.2 Existing Actions as Fieldwork
@@ -38,7 +38,6 @@ At Board Game scale, fieldwork is abstracted into faction-level actions using ex
 | Exploration (governance) | Consul Govern | Already defined | Prosperity development = territory-level exploration. |
 | Thread exploration | Thread Operation | Already defined | Pontifex/Weaver card. |
 
-**No new card types.** Survey uses Consul Inward. All other fieldwork maps to existing actions. This preserves the BG action economy.
 
 ### §8.3 BG Social Interaction
 

@@ -1,3 +1,6 @@
+<!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
+<!-- Infill: worldbuilding_v30_infill.md -->
+
 <!-- v30 baseline — renamed from designs/worldbuilding/worldbuilding_integration_v3.md on 2026-04-13 -->
 # WORLDBUILDING INTEGRATION v3 — Lore-to-Mechanics (Final Trimmed)
 ## Source: Pre-project lore documents (Church, Löwenritter, Crown, Guilds, Economy, Governance)
@@ -10,7 +13,6 @@
 
 # 1. SOLMUND RENAME
 
-All references to "Solmund" → "Solmund." Calendar: "Before Solmund (BG)" → "Before Solmund (BS)." "After Solmund (AG)" → "After Solmund (AS)." Haiku-tier cleanup. Run last.
 
 [EDITORIAL: ED-NEW-01 — Confirm "Solmund" as final canonical name.]
 
@@ -41,7 +43,6 @@ All references to "Solmund" → "Solmund." Calendar: "Before Solmund (BG)" → "
 
 ## 3.2 Cardinal Mechanics (TTRPG)
 
-Cardinals act as officers. Each rolls the Church faction stat relevant to their portfolio. No new pools.
 
 **Cardinal Independence Check:** Cardinal acts against explicit Holy See instruction: relevant pool vs Ob 3. Success: action proceeds, Church Stability −1. Failure: blocked.
 
@@ -53,30 +54,24 @@ Cardinals act as officers. Each rolls the Church faction stat relevant to their 
 
 ## 3.3 Cardinal Events (Board Game — Named Character Event Cards)
 
-Cardinals are NOT passive modifiers. They exist in the Named Character Events deck as targetable/triggerable event cards. Each Cardinal matters when something happens TO them — when they break, defect, or are exposed. This creates player decisions (do I target Olafsson? Do I let Jarnstal drift?) without inflating Church stats.
 
 **Card: Jarnstal Independence**
-- Trigger: Jarnstal Independence Counter reaches 3 (Game Master-tracked; increments when Church Military is deployed without explicit Confessor authorisation — operationally, when Church plays a Military card in a territory where Confessor token is absent).
 - Effect: Church Military stat now controlled by Jarnstal, not the Church player. Jarnstal acts as a semi-independent NPC: deploys only against perceived threats to the Church (monstrous incursions, territorial attacks on Church territories). Will NOT deploy for political operations. Church Stability −2. TC +2.
 - Counter-play: Church player may spend 1 Influence + 1 Stability to recall Jarnstal and reset the counter. Can only be done once per game.
 
 **Card: Olafsson Exposure**
-- Trigger: Any faction successfully executes an Intel action (Spy/Investigate) targeting Church in a territory where Niflhel has presence, AND rolls Overwhelming.
 - Effect: Olafsson-Niflhel connection revealed. Church Stability −2, TC −3. Olafsson removed (Inquisitor operations suspended for 2 seasons). Church Heresy Investigation actions +1 Ob until replacement Cardinal appointed.
 - Counter-play: Church may pre-emptively remove Olafsson (spend 1 Stability at Accounting) to prevent the exposure — but loses Inquisitor effectiveness permanently.
 
 **Card: Klapp Awakening**
 - Trigger: Already defined in BG v05 Scenario A — Thread operation within 1 territory of T3 (Himmelstift/Himmelenger), TC ≥ 30, no Heresy Investigation opened this season.
-- Effect: Three trajectories (Suppress/Fracture/Convert) as per BG v05 Scenario A. Already designed. No changes needed.
 
 **Card: Prudence Crisis**
-- Trigger: Church Wealth drops to 2 or below (tithe income insufficient — economic pressure from Guilds or Crown taxation).
 - Effect: Church charities collapse in low-Prosperity territories. Church Mandate −1 in each territory where Prosperity ≤ 3. Restoration Movement gains +1 Influence in those territories (they fill the gap).
 - Counter-play: Crown or Guilds may spend 1 Wealth to prop up Church charities in one territory (prevents Mandate loss there but creates a debt relationship).
 
 ## 3.4 Church Taxation (Simple Rule — All Modes)
 
-Church-controlled territories at Prosperity 4+: Crown gains +1 Wealth/season (taxation on Church lands). This is a simple accounting rule, not a new mechanic. Already implicit in the Crown-Church economic relationship.
 
 ## 3.5 Excommunication Reversal Paths
 
@@ -116,21 +111,17 @@ Deniability Debt: already in stage13. No changes.
 ## 4.3 Löwenritter Event Cards (Board Game — Named Character Events)
 
 **Card: Ehrenwall Coup**
-- Already defined (stage6 §8.9, Coup Counter 0–3). No new design needed. Confirm it belongs in Named Character Events deck.
 
 **Card: Riskbreaker Exposure**
 - Trigger: Deniability Debt reaches 3 (tracked per stage13).
 - Effect: Crown Domain Actions against non-Crown factions +1 Ob. At Debt 5: Parliamentary inquiry opens — Grand Debate (Crown Influence + Mandate at stake).
-- This is already in stage13 but should be formalised as a Named Character Event card for BG consistency.
 
 **Card: Lions' Table Mutiny**
 - Trigger: Löwenritter Military drops to 2 or below AND Ehrenwall has been removed or neutralised.
-- Effect: Löwenritter fragments. Military stat halved (round down). Crown loses deniable covert arm. Remaining Löwenritter units become NPC-controlled (defend fortress territory only).
 - This is a late-game catastrophic event. Low probability but high consequence.
 
 ## 4.4 Levy System
 
-**CUT.** The lore fact (Crown can raise 2/3 of vassal/Church levies) is already reflected in starting Military stats. Crown Military 4 already incorporates levy access. Löwenritter Military 5 is the professional core. No standalone levy mechanic needed. If a TTRPG scenario requires requisitioning Church troops specifically, the Game Master resolves it as a standard Domain Action.
 
 ---
 
@@ -138,7 +129,6 @@ Deniability Debt: already in stage13. No changes.
 
 ## 5.1 Reference (TTRPG Worldbuilding — Not Mechanics)
 
-Guild hierarchy: Guild Masters (own businesses, Council seat) → Free Masters (contractors) → Journeymen (qualified, mobile) → Apprentices (trainees). Each guild elects a Council of five Guild Masters. Ministry of Guilds provides Crown oversight.
 
 Burgher status: Guild Masters and Free Masters qualify for political participation.
 
@@ -150,13 +140,11 @@ Player Character travels 3+ territories working in different guilds over 2+ seas
 
 **Card: Guild Schism**
 - Trigger: Guilds Stability drops to 2 or below (internal disputes between guild factions).
-- Effect: Guilds Wealth −1, Influence −1 for 1 season. One territory where Guilds have presence: Guild Favour drops to 0 (local guild chapter collapses).
 - Counter-play: any faction may spend 1 Influence to mediate (Guilds Stability +1, mediating faction gains +1 Influence with Guilds for 1 season).
 
 **Card: Guild Forum Revolt**
 - Trigger: Crown raises Guild taxation (Crown plays Economic Leverage or Policy Instrument targeting Guilds) AND Guilds Stability ≤ 3.
 - Effect: Guilds withdraw from Ministry oversight. Crown loses Ministry of Guilds benefits (no Guild taxation income, no non-competition enforcement). Guilds Wealth +1 (no taxes). Restoration Movement gains +1D Influence in Guild-heavy territories (workers radicalise).
-- Counter-play: Crown restores normal relations by reducing taxation (spend 1 Wealth) or Parliamentary Vote to reinstate Ministry authority.
 
 ## 5.4 Guild Arbitration (ED-009 — Route to Debate System)
 
@@ -176,13 +164,10 @@ Proposal only — route to debate system design doc for integration.
 | Rectorates | Judicial | Execute law. |
 | Praefectures | Local governance | Administer regions. |
 
-Parliament recommends. Monarch decides. Existing Parliamentary Vote (stage6 §8.11) handles contested votes.
 
-**Ducal Presence (Game Master note):** Dukes absent from Imperial Court for a full season: halved Parliamentary Influence. TTRPG only.
 
 ## 6.2 Motion of No Confidence (New Mechanic — All Modes)
 
-Constitutional right to depose the Monarch. Requires BOTH Parliamentary Vote AND Holy See concurrence.
 
 | Step | Mechanic |
 |------|----------|
@@ -200,11 +185,9 @@ Constitutional right to depose the Monarch. Requires BOTH Parliamentary Vote AND
 **Card: Constitutional Crisis**
 - Trigger: Crown Mandate drops to 1 OR Crown loses 3+ territories in a single season.
 - Effect: Motion of No Confidence automatically raised in Parliament. Parliamentary Vote fires at next Accounting. If Crown loses the vote AND Confessor concurs: deposal (§6.2 consequences). If Crown loses but Confessor refuses: TC +3, TT +2.
-- This makes deposal a live threat in BG without requiring players to initiate it — it fires from game state.
 
 **Card: Ministry Collapse**
 - Trigger: Crown Stability drops to 2 or below.
-- Effect: One Ministry (Game Master choice or random) ceases to function for 1 season. Effects by Ministry:
   - Law: no legal proceedings. Disputes escalate.
   - Taxation: Crown Wealth −1.
   - Guilds: Guilds Wealth +1 (no oversight), Crown loses Guild tax income.
@@ -225,11 +208,9 @@ Constitutional right to depose the Monarch. Requires BOTH Parliamentary Vote AND
 
 ## 7.2 Altonian Cultural Imperialism
 
-Altonia systematically destroyed Valnese records, monuments, and temples. This is a political fact — NOT the source of the Forgetting. The Forgetting is epistemological (P-08): Thread knowledge is experiential, cannot be transmitted through text or study. The barrier is metaphysical and would exist even if every record survived. The destruction matters politically (Restoration Movement grievance) but has zero bearing on the epistemological barrier.
 
 ## 7.3 Cognatic Senior Succession
 
-All duchies follow cognatic senior succession — eldest child inherits regardless of gender. Elske is a legitimate Crown succession candidate.
 
 ---
 
@@ -247,7 +228,6 @@ All duchies follow cognatic senior succession — eldest child inherits regardle
 | Composure | 9 (Presence 4 + 5) |
 | Histories | Einhir Oral Tradition (3), Herbalism (2), Community Organising (2) |
 
-**Belief:** *"The old ways are not dead. They are sleeping in the land and in us. I will not let them be forgotten while I am alive."*
 
 Contact point for Restoration affiliation (Circles Ob 2 south, Ob 4 elsewhere). Cannot anchor Community Weaving (TS 22 < 30 threshold). Needs Player Character practitioner.
 
@@ -301,7 +281,6 @@ All new cards from this document, plus existing events confirmed for the deck:
 | Constitutional Crisis | Crown | Mandate ≤ 1 OR loses 3+ territories in one season | Motion of No Confidence fires automatically. Deposal possible. |
 | Ministry Collapse | Crown | Stability ≤ 2 | One Ministry ceases function for 1 season. |
 
-**Design principle:** These cards fire from game state, not player initiative. They reward strategic targeting (weaken Church Wealth to trigger Prudence Crisis; destabilise Crown to trigger Constitutional Crisis) and create cascading consequences without adding passive stat inflation. Players interact with Cardinals and institutions by attacking the conditions that keep them stable, not by receiving free bonuses for having them.
 
 ---
 
@@ -345,4 +324,3 @@ All new cards from this document, plus existing events confirmed for the deck:
 
 ---
 
-*End of Worldbuilding Integration v3. 8 new Named Character Event cards proposed. All worldbuilding content requires user editorial approval.*

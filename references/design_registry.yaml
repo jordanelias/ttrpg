@@ -51,9 +51,9 @@ registry:
     system: characters
     mode: TTRPG
     canonical_v30: designs/characters/character_histories_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/characters/character_histories_v30.md
+    infill: designs/characters/character_histories_v30_infill.md
+    atomized: complete
     predecessor: designs/characters/character_histories_lifepath.md
     params: null
 
@@ -94,9 +94,9 @@ registry:
     system: victory
     mode: BG
     canonical_v30: designs/board_game/victory_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/board_game/victory_v30.md
+    infill: designs/board_game/victory_v30_infill.md
+    atomized: complete
     predecessor: designs/board_game/victory_architecture_v1.md
     params: null
 
@@ -104,9 +104,9 @@ registry:
     system: board_game
     mode: BG
     canonical_v30: designs/board_game/varfell_path_b_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/board_game/varfell_path_b_v30.md
+    infill: designs/board_game/varfell_path_b_v30_infill.md
+    atomized: complete
     predecessor: designs/board_game/varfell_path_b_redesign_ed311.md
     params: null
 
@@ -151,9 +151,9 @@ registry:
     system: fieldwork
     mode: HYBRID
     canonical_v30: designs/fieldwork/fieldwork_hybrid_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/fieldwork/fieldwork_hybrid_v30.md
+    infill: designs/fieldwork/fieldwork_hybrid_v30_infill.md
+    atomized: complete
     predecessor: designs/fieldwork/fieldwork_hybrid.md
     params: null
 
@@ -161,9 +161,9 @@ registry:
     system: fieldwork
     mode: BG
     canonical_v30: designs/fieldwork/fieldwork_bg_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/fieldwork/fieldwork_bg_v30.md
+    infill: designs/fieldwork/fieldwork_bg_v30_infill.md
+    atomized: complete
     predecessor: designs/fieldwork/fieldwork_bg.md
     params: null
 
@@ -172,9 +172,9 @@ registry:
     system: clocks
     mode: ALL
     canonical_v30: designs/systems/clock_registry_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/systems/clock_registry_v30.md
+    infill: designs/systems/clock_registry_v30_infill.md
+    atomized: complete
     predecessor: designs/systems/clock_registry.md
     params: null
 
@@ -183,9 +183,9 @@ registry:
     system: npc_behavior
     mode: ALL
     canonical_v30: designs/systems/npc_behavior_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/systems/npc_behavior_v30.md
+    infill: designs/systems/npc_behavior_v30_infill.md
+    atomized: complete
     predecessor: designs/systems/npc_behavior_system_v1.md
     params: null
 
@@ -204,9 +204,9 @@ registry:
     system: scale_transitions
     mode: HYBRID
     canonical_v30: designs/hybrid/hybrid_gaps_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/hybrid/hybrid_gaps_v30.md
+    infill: designs/hybrid/hybrid_gaps_v30_infill.md
+    atomized: complete
     predecessor: designs/hybrid/hybrid_gaps_resolved.md
     params: null
     notes: "PROPAGATION-PENDING — 17 hybrid gaps not yet in bg_v05 / stage11."
@@ -216,9 +216,9 @@ registry:
     system: territories
     mode: ALL
     canonical_v30: designs/setting/geography_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/setting/geography_v30.md
+    infill: designs/setting/geography_v30_infill.md
+    atomized: complete
     predecessor: designs/setting/geography_design.md
     params: null
 
@@ -226,9 +226,9 @@ registry:
     system: calamity_radiation
     mode: ALL
     canonical_v30: designs/setting/calamity_radiation_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/setting/calamity_radiation_v30.md
+    infill: designs/setting/calamity_radiation_v30_infill.md
+    atomized: complete
     predecessor: designs/setting/calamity_radiation.md
     params: null
 
@@ -293,9 +293,9 @@ registry:
     system: worldbuilding
     mode: ALL
     canonical_v30: designs/worldbuilding/worldbuilding_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/worldbuilding/worldbuilding_v30.md
+    infill: designs/worldbuilding/worldbuilding_v30_infill.md
+    atomized: complete
     predecessor: designs/worldbuilding/worldbuilding_integration_v3.md
     params: null
 
@@ -304,9 +304,9 @@ registry:
     system: npcs
     mode: ALL
     canonical_v30: designs/npcs/npc_roster_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/npcs/npc_roster_v30.md
+    infill: designs/npcs/npc_roster_v30_infill.md
+    atomized: complete
     predecessor: designs/npcs/npc_roster.md
     params: null
 
@@ -314,9 +314,9 @@ registry:
     system: npcs
     mode: ALL
     canonical_v30: designs/npcs/npc_foils_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/npcs/npc_foils_v30.md
+    infill: designs/npcs/npc_foils_v30_infill.md
+    atomized: complete
     predecessor: designs/npcs/npc_foils.md
     params: null
 
@@ -324,9 +324,9 @@ registry:
     system: npcs
     mode: ALL
     canonical_v30: designs/npcs/npc_character_analyses_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/npcs/npc_character_analyses_v30.md
+    infill: designs/npcs/npc_character_analyses_v30_infill.md
+    atomized: complete
     predecessor: designs/npcs/npc_character_analyses.md
     params: null
 
@@ -335,9 +335,9 @@ registry:
     system: mechanics
     mode: ALL
     canonical_v30: designs/mechanics/baralta_crown_claim_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/mechanics/baralta_crown_claim_v30.md
+    infill: designs/mechanics/baralta_crown_claim_v30_infill.md
+    atomized: complete
     predecessor: designs/mechanics/baralta_crown_claim_mechanic.md
     params: null
 
@@ -345,9 +345,9 @@ registry:
     system: mechanics
     mode: ALL
     canonical_v30: designs/conviction_track/conviction_track_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/conviction_track/conviction_track_v30.md
+    infill: designs/conviction_track/conviction_track_v30_infill.md
+    atomized: complete
     predecessor: designs/conviction_track/opus_design_proposal.md
     params: null
 

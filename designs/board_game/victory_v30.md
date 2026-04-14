@@ -1,3 +1,6 @@
+<!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
+<!-- Infill: victory_v30_infill.md -->
+
 <!-- v30 baseline — renamed from designs/board_game/victory_architecture_v1.md on 2026-04-13 -->
 # VALORIA BG — Victory Architecture
 ## ED-306 Resolution (v3 — geography_design.md territory numbering, TC 75 canonical, PT cap clarified)
@@ -11,7 +14,6 @@
 
 ## Core Frame
 
-Victory = Territory Held + Faction-Specific Political Conditions, sustained for 2 consecutive Accounting steps.
 
 Two simultaneous contests: who governs the peninsula AND whether it survives. Church and Hafenmark are structurally blind to the Rendering Stability (RS) crisis. Church compensates with Graduated Seizure — available early but strongest at high TC. Crown and Varfell can address RS via Thread path but at cost of political resources.
 
@@ -21,7 +23,6 @@ Two simultaneous contests: who governs the peninsula AND whether it survives. Ch
 
 ## 1. Territory Consolidation Values (TCV)
 
-Every territory has a fixed strategic weight. TCV is the universal measure of territorial dominance.
 All territory numbers match geography_design.md canonical table.
 
 | T# | Territory | TCV | Controller |
@@ -53,20 +54,17 @@ All territory numbers match geography_design.md canonical table.
 
 Per-territory track. Range 0–5 per territory. 0 = Restoration pole, 5 = Piety pole.
 
-Starting values, movement rules, Calamity Drift, and Consecrated status per opus_design_proposal.md §1.1–1.4.
 
 Key rules:
 - T15 (Askeheim) PT hard-fixed at 0. Cannot increase. (P-03 + Foundations §8)
 - T9 (Himmelenger) starts at 5, soft cap — can drop under pressure, does not auto-recover.
 - **PT action cap:** Each faction may initiate at most one deliberate PT-moving action per territory per season (±1 max). Calamity Drift, Church Seizure Overwhelming PT bonus, and Domain Echoes from Zoom In are consequences — they are not faction actions and are not cap-governed.
 - Calamity Drift (RS-linked PT erosion) ignores the action cap. RS ≤ 50: T6/T13 PT −1. RS ≤ 35: territories within 2 steps of T15 PT −1. RS ≤ 20: all territories PT −1.
-- Community Weaving is a Thread operation: follows standard Thread procedure including Co-Movement card draw. PT −1 is the primary effect; temporal/epistemic/actual auto-effects fire per P-01.
 
 ---
 
 ## 3. Victory Conditions — All Factions
 
-Every victory requires holding all conditions for **2 consecutive Accounting steps**. A faction knocked out between steps resets its counter.
 
 ### 3.1 Crown — Peninsula Sovereignty
 
@@ -127,7 +125,6 @@ TC freezes at 75. At TC 75 (pool 11D) vs PT 5 (Ob 2): Seizure is essentially gua
 Early Seizure (TC < 50) is possible but carries political consequences: Casus Belli from the controlling faction, and every other faction sees Church territorial ambition. The lower the TC, the more it looks like institutional aggression rather than a natural extension of authority. The civil war scenario is a real cost.
 
 **Fort interaction (PP-500, ED-355 resolved):** Fort Level does not modify Seizure Ob. Seizure is a political act — Church institutional authority overriding local governance. If the territory has a garrison (Fort ≥ 1 AND military units present), Church must win a Battle (attacker Military vs Battle Ob, modified by Fort per standard Battle rules) before Seizure can be attempted. An ungarrisoned fortified territory (Fort ≥ 1, no units) can be Seized without Battle.
-[EDITORIAL: ED-355 — resolved provisionally. Option (b): Battle handles Fort, Seizure is political. Flagged for simulation.]
 
 **Victory conditions (all simultaneous at Accounting):**
 
@@ -153,9 +150,7 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 +
 
 **Partition Pressure marker (ED-338, PP-566):** At Accounting, if all conditions EXCEPT TC ≥ 50 are simultaneously met, place a public Partition Pressure marker. Other factions have 1 season to disrupt conditions before TC threshold check fires. Remove marker if any condition breaks before TC ≥ 50.
 
-**Non-winner outcome (ED-339):** Crown, Varfell, and RM score no victory under Partition — the negotiated partition forecloses all other victory paths. This is by design: Partition is bilateral and terminal.
 
-**Outcome:** Mutual agreement ends the game. Both factions score a conditional victory. No holding requirement — fires immediately on mutual declaration.
 
 ---
 
@@ -219,7 +214,6 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 +
 
 ### 3.5 Restoration Movement — Cultural Revolution (5 players only, hardest mode)
 
-RM has no faction stats. It operates purely through Presence markers and Community Weaving. It cannot hold territory, raise armies, or act in any domain that requires a faction stat. It cannot be targeted by Royal Decree, Excommunicate, or Suppress. Its only vulnerability is PT reversal (Church Piety Spread) and Inquisitor disruption of Weaving.
 
 **Two-phase win condition:**
 
@@ -251,7 +245,6 @@ RM holds T9 through cultural presence, not military garrison. Control is maintai
 
 If either condition fails at Accounting, T9 reverts to the prior controller (or becomes Uncontrolled if the prior controller has been eliminated). RM cannot March, garrison, or build Fort in any territory. (PP-578)
 
-RM "hold" is functionally different from faction territorial control: RM does not collect TCV from T9, does not gain Domain Action slots from it, and cannot use it as a staging area for military operations. RM's T9 control provides only: (a) the victory condition check, (b) blocking Church Piety Spread in T9, and (c) narrative authority over T9's institutional character.
 
 
 **Win condition:** T9 under RM administration AND Phase 1 held, for 2 consecutive Accounting steps. Church cannot perform Territorial Seizure on T14 while RM holds it (the population actively resists institutional reconquest — Seizure Ob +3 vs RM-held T9).
@@ -285,7 +278,6 @@ Only available if Regency Establishment not achieved after 8 Löwenritter season
 
 ## 4. Co-Victory Pairings
 
-Co-victories require 2 consecutive Accounting steps except Partition (immediate on mutual agreement).
 
 | Pair | Conditions (all simultaneous at Accounting) |
 |------|---------------------------------------------|
@@ -330,7 +322,6 @@ Multiple victory conditions require RS thresholds. A faction that ignores RS ris
 - WR 3: Active cooperation (+1D Thread ops, as WC ≥ 1 equivalent).
 - WR 4: Edeyja makes substantive contact.
 
-WC and WR are distinct tracks. WC advances through any faction's Expedition engagement. WR advances only through Varfell's Expedition actions.
 
 ---
 
@@ -379,7 +370,6 @@ WA track −3 to +3, starts 0. Triple-condition emergence: WA ≤ −2 AND ≥ 3
 
 ### 9.2 Victory Condition Check — Hybrid
 
-Victory condition checks (all factions) fire at Accounting Step 12 regardless of active Zoom In. A Zoom In cannot delay or prevent a victory declaration. The 2-Accounting holding requirement is assessed across consecutive Accounting steps — a Zoom In spanning an Accounting boundary counts that Accounting.
 
 ### 9.3 Hybrid Victory and P-32
 
@@ -387,7 +377,6 @@ P-32 ("Hybrid victory = BG victory PLUS personal arc resolution") is retained. A
 
 ### 9.4 Domain Echo Autonomous Resolution (ED-300)
 
-Autonomous TCV changes from uninvestigated Domain Echoes count toward or against victory conditions. The 2-Accounting holding requirement does not exempt autonomous changes.
 
 ---
 
@@ -403,7 +392,6 @@ Autonomous TCV changes from uninvestigated Domain Echoes count toward or against
 | Varfell C | 6 | 10 | +4 | VTM 5 (~S14+) + RS maintenance | 14–18 seasons |
 | RM | — | — | — | 4 territories PT ≤ 1 (Phase 1) + Phase 2 roll | 14–18 seasons | *(PP-543)* |
 
-[SIM-DEBT: Full faction-AI simulation needed to validate non-military acquisition paths, fortification effects, multi-faction interaction dynamics. Flag as P1.]
 
 ---
 
@@ -464,7 +452,6 @@ Simulation confirms that spoiler strategies are functional. Key findings:
 - Church spoiling Crown: viable 5–8 season delay via Mandate maintenance + Inquisitor deployment. Crown counter: Royal Decree chain.
 - Varfell spoiling Church: TC suppression via Counter-Narrative is minor (−0.135 TC/use expected); primary effect is AP pressure. Hybrid mode allows invisible spoiling via personal-scale Zoom In actions.
 - Institutional Mandate trigger scope: [EDITORIAL: ED-324 — confirm trigger fires on Mandate-targeting actions only.]
-- Church Prominence tracker: [EDITORIAL: ED-326 — recommend tracker on Church mat for Counter-Narrative eligibility.]
 
 ## PP-478 Override — §3.5 Restoration Movement
 
@@ -472,7 +459,6 @@ Simulation confirms that spoiler strategies are functional. Key findings:
 
 ### RM Mode Applicability
 - **BG-only mode:** RM solo victory and co-victories are UNAVAILABLE. RM is not a player faction.
-- **Hybrid mode:** RM solo victory and co-victories are available ONLY after RM Founding (see params_board_game.md §RM Founding Mechanic).
 
 ### RM Solo Victory (Hybrid mode, post-Founding)
 Phase 1: ≥ 4 territories PT ≤ 1, held 2 consecutive Accounting steps. *(PP-543: was ≥ 5)*
