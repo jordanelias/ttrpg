@@ -1,5 +1,5 @@
 <!-- version: v1.0 | source: designs/setting/southernmost_v30.md | last_updated: 2026-04-13 -->
-<!-- PATCHES APPLIED: SIM-STH-E1 (2026-04-13) — combined TT reduction cap added -->
+<!-- PATCHES APPLIED: PP-643 (SIM-STH-E1 2026-04-13) — combined TT reduction cap (−5/season) for Southernmost operations -->
 <!-- SIM STATUS: VERIFIED — forgetting checks, expedition Obs, ritual Ob calibrated -->
 
 # params_southernmost.md — Southernmost Mechanics
