@@ -39,7 +39,7 @@ systems:
 
   threadwork:
     canonical: designs/ttrpg/threadwork_redesign_v25.md
-    canonical_sha__designs__ttrpg__threadwork_redesign_v25_md: "5ef31affddf36290c5fe08fefd61013ffb5f37a5"
+    canonical_sha__designs__ttrpg__threadwork_redesign_v25_md: "8f9b0d3b991793277404c89908e9b94a4f692fd1"
     params: references/params_threadwork.md
     design_doc: designs/ttrpg/threadwork_redesign_v25.md
     compilation_stage: compilation/v0.14/stage3_thread_operations.md
