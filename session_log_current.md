@@ -1,6 +1,42 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_OPUS_P1_RESOLUTION
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Resolved all 3 fieldwork P1 blockers (PP-581)
+2. ED-NEW-04: Exposure→AP feedback confirmed safe (~11% of TC max). P1 → P3.
+3. ED-NEW-10: Breach+Coherence stacking confirmed proportional. No spiral. P1 → P3.
+4. ED-NEW-11: Pool ×2 reclassified project-wide P2. Recommend params_core.md correction.
+
+## P1 BLOCKERS: 0 (all resolved or reclassified)
+## OPEN EDITORIALS: 15 (3 downgraded, 1 reclassified project-wide)
+
+## FULL SESSION SUMMARY (2026-04-13)
+8 commits this session (PP-575 through PP-581):
+- PP-575: Fieldwork System v1 initial design (609 lines)
+- PP-575: Self-review (11 corrections, 8 additions → v1.1)
+- PP-575: Cold Trail → Desperate Trail (fail forward)
+- PP-576: Full audit (Modes A-E) + Himmelenger simulation. 13 editorial corrections.
+- PP-577: 6-direction transition simulation. §2.3 System Transition Rules.
+- PP-578: Threadwork × fieldwork (POP/Lock/Dissolution). §2.4 rewritten.
+- PP-579: Ontological correction (all ops advance Evidence Track contextually).
+         7 NPC arc stress tests. §2.5 Domain Echo. False hierarchy struck.
+- PP-580: Extended threadwork (Knots, Community Weaving, threadcut beings,
+         Mending arcs, Dissonance). §2.6-2.8 added.
+- PP-581: All P1 blockers resolved.
+
+Final design: 856+ lines. 10 SIM-DEBT resolved. 0 P1 blockers.
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_OPUS_EXTENDED_THREADWORK
 session_close: 2026-04-13
 phase: COMPLETE
