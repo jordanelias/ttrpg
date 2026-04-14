@@ -1,5 +1,103 @@
 # Valoria Session Log — Current
 
+## CURRENT SESSION
+```yaml
+session_id: 2026-04-13_SONNET_ED439_ED438_RESOLUTION
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+PATCHES: PP-624, PP-625, PP-626, PP-627
+
+PP-624: ED-439 fully resolved.
+  - Item 1: Binding Ops TPS exclusion note — void (PP-618 already includes TPS; no exclusion exists).
+  - Item 2: Attunement doubling in fieldwork — Thread-Read uses Spirit×2 (Leap); Attunement×2 for
+    non-Thread fieldwork only. Clean distinction: Att = social/perceptual calibration, Spi = Thread contact.
+  - Item 3: Leap pool — authorial confirm (Jordan): (Spirit×2)+Hist+TPS. No Attunement. Final.
+  - Wound disruption check during contact: Attunement→Spirit (PP-624). Maintaining the Leap's
+    rendering suspension against physical damage is Spirit's function, not Attunement's.
+
+PP-625: threadwork_redesign_v25.md propagation pass.
+  All 7 Thread operation pools corrected to (Spirit×2)+Hist+TPS. Mending: Attunement+Focus+TPS struck.
+  POP: TPS÷2 struck (PP-619 full TPS). Lock/Dissolution: TN 7→8, min Ob 4 struck, pre-PP-622
+  Ob tables struck (pointer to params_threadwork). Header notice added: Ob values → params_threadwork.
+
+PP-626: fieldwork_design_v1.md §4.5 Thread-Read pool.
+  All three locations updated: §4.5 procedure, §4.2 investigation table, §2 action summary table.
+  Pool: Attunement×2+bonus+TPS → (Spirit×2)+Hist+TPS. Thread-Read is a Leap; Leaps are Spirit-primary.
+
+PP-627: Health formula harmonised (ED-438, P3).
+  params_core: clarifies threshold (End+6 per wound) vs cumulative ((End+6)×(wounds+1)).
+  params_combat: cross-references params_core. Documentation only. No mechanical change.
+  valoria-game implementation (cumulative formula) confirmed correct — no code change needed.
+
+EDITORIALS RESOLVED: ED-438, ED-439
+P1-BLOCKERS: 5
+FLAGGED EDITORIALS: 39
+FILES COMMITTED (fab5eea): 8
+  designs/ttrpg/threadwork_redesign_v25.md (+33/-24)
+  designs/fieldwork/fieldwork_design_v1.md (+3/-3)
+  references/params_core.md (+1/-1)
+  references/params_combat.md (+1/-1)
+  canon/editorial_ledger.yaml (+14/-2)
+  canon/patch_register.yaml (+110/-0)
+  references/canonical_sources.yaml (+2/-2)
+  session_log_current.md (+41/-0)
+```
+
+---
+
+## ARCHIVED SESSIONS (2026-04-13 batch — 42 sessions)
+Moved to archive on session close. Session IDs:
+- 2026-04-13_OPUS_PARAMS_EXTRACTION
+- 2026-04-13_OPUS_FIDELITY_AUDIT
+- 2026-04-13_OPUS_P1_RESOLUTION
+- 2026-04-13_OPUS_EXTENDED_THREADWORK
+- 2026-04-13_OPUS_ONTOLOGICAL_CORRECTION
+- 2026-04-13_OPUS_THREADWORK_FIELDWORK_SIM
+- 2026-04-14_SONNET_SESSION_CLOSE
+- 2026-04-14_SONNET_PP623_PROBABILITY_CORRECTION
+- 2026-04-14_SONNET_PP622_THREE_AXIS_OB
+- 2026-04-14_SONNET_PP621_SCALE_CALIBRATION
+- 2026-04-13_OPUS_FIELDWORK_TRANSITIONS
+- 2026-04-14_SONNET_PP620_OB_CALIBRATION
+- 2026-04-14_SONNET_PP619_TN_FINAL
+- 2026-04-14_SONNET_PP618_CORRECTION
+- 2026-04-14_SONNET_THREAD_POOLS_HISTORY
+- 2026-04-14_SONNET_PP615_POOL_CORRECTION
+- 2026-04-14_SONNET_STAT_AUDIT
+- 2026-04-13_OPUS_FIELDWORK_AUDIT_SIM
+- 2026-04-14_SONNET_PP610_STAT_CORRECTION
+- 2026-04-14_SONNET_STAT_REDESIGN_EINHIR_CANON
+- 2026-04-14_SONNET_RS_REDESIGN_MAXEFFORT
+- 2026-04-14_SONNET_TRACKER_REFERENCE
+- 2026-04-14_SONNET_PP600_BATTLE_RS
+- 2026-04-14_SONNET_CALIBRATION_CORRECTIONS
+- 2026-04-14_SONNET_DESIGN_QUESTIONS
+- 2026-04-14_SONNET_SIM_ARC_G01-G05
+- 2026-04-13_SONNET_SESSION_CLOSE
+- 2026-04-13_SONNET_SIM_ARC_F01
+- 2026-04-13_SONNET_CLUSTER_REVIEW_AND_F
+- 2026-04-13_SONNET_SIM_ARC_E01
+- 2026-04-13_SONNET_PP590_THREAD_CONTACT_TS
+- 2026-04-13_SONNET_WORLDBUILDING_CLARIFICATIONS
+- 2026-04-13_SONNET_FORGETTING_HEIDEGGER_CEIRAL
+- 2026-04-13_SONNET_SIM_ARC_D01
+- 2026-04-13_SONNET_PP584_FORGETTING_CORRECTION
+- 2026-04-13_SONNET_SIM_ARC_C01
+- 2026-04-13_SONNET_SIM_ARC_B02_A01
+- 2026-04-13_SONNET_SIM_ARC_B01
+- 2026-04-13_OPUS_META_ANALYSIS_FIXES
+- 2026-04-13_SONNET_ARC_SYSTEM_V8
+- 2026-04-13_OPUS_FIELDWORK_DESIGN
+- 2026-04-13_SONNET_COMPARATIVE_AUDIT_AND_PATCH
+
+Full session content archived. All work committed to GitHub (jordanelias/ttrpg, branch main).
+
+---
+
+# Valoria Session Log — Current
+
 ```yaml
 session_id: 2026-04-13_OPUS_PARAMS_EXTRACTION
 session_close: 2026-04-13
