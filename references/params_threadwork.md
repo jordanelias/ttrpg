@@ -47,7 +47,7 @@ Note: PP-250 Community Weaving formula (Attunement + History + TPS) is supersede
 **Effects:** +1D social with partner; no Disposition decay; shared Composure buffer; relational contagion (P-12) for practitioners; Knot-mediated remote Thread-Read (TS 30+, +1 strain/use).
 
 **Breaking:**
-- Rupture: points return; Disposition →−4; Composure damage = tier cost
+- Rupture: points return; Disposition →−4; Composure damage = tier cost. **Simultaneous Rupture cap (PP-633):** multiple Knots rupturing same scene → total Composure damage capped at floor(Composure×0.75), min = highest single-tier cost. Non-Composure effects uncapped.
 - Loss: points return; Disposition track removed; Coherence −1; Composure damage = tier cost
 
 **Threadcut being Knot strain:** +1 self-maintenance strain per Knot use. At 5: rendering instability. −1/season rest.

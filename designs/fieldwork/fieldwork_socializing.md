@@ -167,6 +167,8 @@ The Sincerity Gate is not a punishment for strategic play. It is the NPC's rende
 
 *Rupture (betrayal, deliberate severance):* Points return to pool. Disposition → −4 (floor). Composure damage = tier cost (Close: 5, Medium: 2, Loose: 1 — damage absorbed by Composure track; overflow to Rattled marks). The wound is in the relationship.
 
+**Simultaneous Rupture cap (PP-633):** When multiple Knots rupture in the same scene, total Composure damage from Rupture is capped at floor(Composure × 0.75) rounded down, minimum = the highest single-tier cost among rupturing Knots. Prevents catastrophic stacking incapacitation while preserving severity. Disposition → −4 and all non-Composure consequences apply per Knot regardless of cap.
+
 *Loss (death, permanent absence):* Points return to pool. Disposition track removed — the relationship no longer exists as a social object. Coherence −1 (layer-2 self-rendering is disrupted when a constitutive being-with is removed from the world; mandatory per P-12 and Amendment 01 §three-layer being-persistence). Composure damage = tier cost. The wound is in the self.
 
 The distinction matters: rupture leaves a wound in the relationship. Loss leaves a wound in the self.
