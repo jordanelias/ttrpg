@@ -3923,3 +3923,11 @@ editorial_decisions:
       CLOSED by PP-615. Pool formula confirmed: (Attribute × 2) + History (pts + 3)
       consistently across Combat, Contest, and Fieldwork. No contradiction exists.
       params_core.md and PP-247 were the stale entries; params_combat.md body was correct.
+
+  - id: ED-441
+    status: flagged
+    date_raised: 2026-04-14
+    priority: P3
+    description: "Name for Thread depth level 3 (Fibonacci Ob 3): the emergent Thread configuration of a coherent local area (battlefield, town, community). Currently using 'Field' provisionally. Prior names tried: 'Territorial' (confused with BG territory cards, struck). User flagged as 'whatever it's called' — confirm canonical name before compilation. Options: Field, Local, Emergent, Domain, Common. 'Field' has precedent from early design discussion in this session."
+    tags: [terminology, thread_scale, depth, naming]
+    source: pp622

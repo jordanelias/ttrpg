@@ -4,6 +4,28 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-14_SONNET_PP622_THREE_AXIS_OB
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+PATCH: PP-622 — Thread Ob redesigned as three independent axes.
+  Total Ob = Depth + Breadth + Distance + TN modifiers.
+  Depth Ob: Fibonacci (1,1,2,3,5,8) for Object/Personal/Relational/Field/Structural/Foundational.
+  Mending Depth Ob: Fibonacci - 1 (going with self-repair tendency).
+  Breadth Ob: 0-4 (single to regional).
+  Distance Ob: 0-3 (contact to 1km+), gated by TS.
+  "Field" replaces "Territorial" for depth level 3 (ED-441 for naming confirmation).
+  Edeyja: single Foundational gap beside her = Ob8 (~33%). Full Calamity network = Ob15 (<1%).
+  Calamity impossible to fix at once without special rule — math handles it.
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-14_SONNET_PP621_SCALE_CALIBRATION
 session_close: 2026-04-14
 phase: COMPLETE

@@ -7476,3 +7476,83 @@ patches:
     - references/params_threadwork.md
     - designs/setting/calamity_radiation.md
   status: applied
+
+- id: PP-622
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Thread operation Ob system redesigned. Three independent axes replace the single
+    scale-based Ob. Total Ob = Depth Ob + Breadth Ob + Distance Ob + TN modifiers.
+
+    DEPTH OB — Fibonacci (how primordial is the Thread being engaged?):
+    | Depth       | Ob | TS minimum | Description                                      |
+    |-------------|----|-----------|-------------------------------------------------|
+    | Object      | 1  | 30+       | Discrete thing-configurations                   |
+    | Personal    | 1  | 30+       | One person's individual Thread configuration    |
+    | Relational  | 2  | 50+       | Thread connections between specific entities    |
+    | Field       | 3  | 50+       | Coherent local area: battlefield, town, community |
+    | Structural  | 5  | 70+       | Domain conditions (= one BG territory at scale) |
+    | Foundational| 8  | 90+       | Thread substrate conditions; closest to Ein Sof |
+
+    Object and Personal both Ob 1: same Thread depth, different configuration type.
+    Fibonacci: 1, 1, 2, 3, 5, 8. The escalation between levels grows — the jump
+    from Structural to Foundational (3 Ob) exceeds any prior gap. Correct.
+
+    "Field" replaces "Territorial" as name for the intermediate level. A field of
+    shared Thread coherence — the emergent configuration of a coherent local area.
+    Not a BG territory card (those are Structural scale).
+
+    MENDING DEPTH OB: Depth Ob − 1 (working with substrate's self-repair tendency).
+    | Mending Depth | Ob |
+    |---------------|-----|
+    | Relational    | 1   |
+    | Field         | 2   |
+    | Structural    | 4   |
+    | Foundational  | 7   |
+    Object-scale gaps self-close; no Mending needed.
+
+    BREADTH OB — How much at that depth level?
+    | Breadth     | Example                           | Ob |
+    |-------------|-----------------------------------|----|
+    | Single      | One entity, one connection        | 0  |
+    | Small group | 2–10 entities                     | 1  |
+    | Formation   | 10–1000; a town                   | 2  |
+    | Battlefield | 1000–10000; a battle area         | 3  |
+    | Regional    | Entire BG territory               | 4  |
+
+    DISTANCE OB — How far from the practitioner's body?
+    | Distance    | Range          | Ob | TS required |
+    |-------------|----------------|----|-------------|
+    | Contact     | 0–1m           | 0  | 30+         |
+    | Close       | 1–10m          | 0  | 30+         |
+    | Near        | 10–100m        | 1  | 50+         |
+    | Distant     | 100m–1km       | 2  | 70+         |
+    | Far         | 1km+           | 3  | 90+         |
+
+    TN MODIFIERS (unchanged from PP-619):
+    Base TN 7. Binding Op: +1 TN. POP: +1 TN. POP Binding: +2 TN.
+
+    VERIFICATION:
+    Beginner (10D TN7 E=3.0): Object beside (Ob1) P≈82% ✓; Relational beside (Ob2) P≈50% ✓
+    Capable (14D TN7 E=4.2): Relational beside (Ob2) P≈68% ✓
+    Expert (17D TN7 E=5.1): Formation 100m (Ob5: 2+2+1) P≈52% ✓
+    Master (20D TN7 E=6.0): Battlefield (Ob6: 2+3+1) P≈40% ✓
+    Edeyja (22D TN7 E=6.6): Single Foundational gap beside (Ob8) P≈33% ✓
+    Edeyja (22D TN7 E=6.6): Entire Calamity network (Ob15: 8+4+3) P<1% ✓
+
+    The Calamity network is impossible to repair at once without any special rule —
+    Breadth+Distance penalties make it so. Edeyja's work must be one isolated gap at
+    a time, at close range, at Ob 7 (Mending) or Ob 8 (other Foundational ops).
+
+    STRIKES: All prior single-axis Ob tables for Thread operations (PP-620, PP-621).
+    The old scale-based Obs (2n+1) are superseded.
+    Gap self-closure timers and Mending age modifiers (PP-604, PP-608) unchanged.
+    Mending Ob in PP-604 replaced by: Depth Ob (Fibonacci) − 1 + age modifier + Breadth + Distance.
+
+    [EDITORIAL: ED-441 — "Field" as canonical name for depth level 3. User flagged as
+    provisional ("whatever it's called"). Confirm or propose alternative before compilation.]
+  finding_id: PP-620 PP-621
+  affects:
+    - references/params_threadwork.md
+  status: applied
