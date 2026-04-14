@@ -4,6 +4,37 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-14_SONNET_THREAD_POOLS_HISTORY
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+PATCHES: PP-616, PP-617
+
+PP-616: Thread operation pools standardised to (Spirit × 2) + History + TPS.
+  Attunement removed from ALL Thread pools (Mending, Leap, Community Weaving).
+  Focus removed from all pool dice (Focus = Contact Rounds duration only).
+  Attunement stays: combat initiative, social contest Appraise, No-Adjudicator arguing,
+  fieldwork social/Thread-aware reads.
+  Binding Ops (Lock/Dissolution): no TPS — intentional, design note added.
+  POP: half TPS, TN8 — intentional, design note added.
+  Realistic ceiling: Spirit 5, TS 60, Hist 3 → 19D. Edeyja: ~22D.
+
+PP-617: History system formalised.
+  Level 1-3 per History, cap 3. Recall governs cap (History ≤ Recall score).
+  Primary only per roll (+1D per point, max +3D).
+  +3D constant in pool formula = floor, independent of History.
+  Pool = (Attr × 2) + 3 + History level (0-3D). Min 5. Max realistic ~16-19D.
+
+OPEN EDITORIALS: 40 (ED-401-440)
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-14_SONNET_PP615_POOL_CORRECTION
 session_close: 2026-04-14
 phase: COMPLETE
