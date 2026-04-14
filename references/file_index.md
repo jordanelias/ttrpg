@@ -1,5 +1,5 @@
 # VALORIA REPOSITORY FILE INDEX
-## Last updated: 2026-04-13
+## Last updated: 2026-04-13 (v30 complete)
 ## Purpose: Single-source map of every committed file → game system → status
 ## Maintained by: valoria-orchestrator skill (update on every commit that adds/modifies a file)
 ## Format: path | systems | type | status | depends_on | referenced_by
@@ -381,3 +381,59 @@ Major groups moved 2026-04-09:
 | designs/fieldwork/fieldwork_summary.md | FIELDWORK | CURRENT | §11 Three-Mode Summary Table. 20 lines. |
 | designs/fieldwork/fieldwork_editorial.md | FIELDWORK | CURRENT | §12 Open Items and Editorial Flags. 116 lines. |
 | designs/fieldwork/fieldwork_rationale.md | FIELDWORK | CURRENT | §13 Design Rationale Index (NEW). 69 lines. Content file — no mechanical values. |
+
+
+## NEW DOCS — v30 Skeleton/Infill (added 2026-04-13)
+
+### Structure Note
+Every v30 design doc now has a companion `_infill.md` file in the same directory.
+Skeleton (`_v30.md`): tables, formulas, procedures, edge case rulings.
+Infill (`_v30_infill.md`): prose, rationale, design history, examples.
+Registry: `references/design_registry.yaml` tracks atomization status for all docs.
+
+### Previously Unverified Systems — Now Unblocked
+| File | Systems | Status | Notes |
+|------|---------|--------|-------|
+| designs/ttrpg/factions_ttrpg_v30.md | TTRPG | CURRENT | From stage6. TTRPG faction mechanics. SIM-FAC verified. |
+| designs/ttrpg/factions_ttrpg_v30_infill.md | TTRPG | CURRENT | Infill: prose/rationale |
+| designs/setting/southernmost_v30.md | TTRPG/BG | CURRENT | From stage4. PP-643 (SIM-STH-E1) applied. SIM-STH verified. |
+| designs/setting/southernmost_v30_infill.md | TTRPG/BG | CURRENT | Infill |
+| designs/systems/campaign_modes_v30.md | ALL | CURRENT | From stage12. Procedural. |
+| designs/systems/campaign_modes_v30_infill.md | ALL | CURRENT | Infill |
+
+### New Params Files
+| File | Systems | Status | Source |
+|------|---------|--------|--------|
+| references/params_factions_ttrpg.md | TTRPG | CURRENT | factions_ttrpg_v30.md |
+| references/params_southernmost.md | TTRPG/BG | CURRENT | southernmost_v30.md + SIM-STH |
+| references/params_campaign_modes.md | ALL | CURRENT | campaign_modes_v30.md |
+
+### Skeleton/Infill Pairs (batch-created 2026-04-13)
+All files below: skeleton at `_v30.md`, infill at `_v30_infill.md` in same directory.
+| System | Skeleton | Infill Lines |
+|--------|----------|-------------|
+| threadwork | designs/ttrpg/threadwork_v30.md | 196 |
+| combat | designs/combat/combat_v30.md | 86 |
+| board_game | designs/board_game/board_game_v30.md | 94 |
+| fieldwork | designs/fieldwork/fieldwork_v30.md | 85 |
+| mass_battle | designs/mass_combat/mass_battle_v30.md | 7 |
+| social_contest | designs/contest/social_contest_v30.md | 22 |
+| scale_transitions | designs/hybrid/scale_transitions_v30.md | 20 |
+| npc_behavior | designs/systems/npc_behavior_v30.md | 92 |
+| worldbuilding | designs/worldbuilding/worldbuilding_v30.md | 25 |
+| npc_roster | designs/npcs/npc_roster_v30.md | 78 |
+| npc_foils | designs/npcs/npc_foils_v30.md | 91 |
+| npc_character_analyses | designs/npcs/npc_character_analyses_v30.md | 85 |
+| baralta_crown_claim | designs/mechanics/baralta_crown_claim_v30.md | 17 |
+| conviction_track | designs/conviction_track/conviction_track_v30.md | 21 |
+| geography | designs/setting/geography_v30.md | 17 |
+| calamity_radiation | designs/setting/calamity_radiation_v30.md | 13 |
+| character_histories | designs/characters/character_histories_v30.md | 71 |
+| victory | designs/board_game/victory_v30.md | 17 |
+| varfell_path_b | designs/board_game/varfell_path_b_v30.md | 8 |
+| fieldwork_hybrid | designs/fieldwork/fieldwork_hybrid_v30.md | 2 |
+| fieldwork_bg | designs/fieldwork/fieldwork_bg_v30.md | 4 |
+| hybrid_gaps | designs/hybrid/hybrid_gaps_v30.md | 32 |
+| southernmost | designs/setting/southernmost_v30.md | 35 |
+| factions_ttrpg | designs/ttrpg/factions_ttrpg_v30.md | 64 |
+| campaign_modes | designs/systems/campaign_modes_v30.md | 25 |
