@@ -28,7 +28,7 @@ EDITORIAL_PATHS = (
 EDITORIAL_MARKERS = ('[EDITORIAL:', '[PROVISIONAL:', '[EDITORIAL GATE]')
 
 VALID_SCOPES    = {'editorial','patch','simulation','compilation','infrastructure','skill','cleanup'}
-COMMIT_FORMAT   = re.compile(r'^\[(editorial|patch|simulation|compilation|infrastructure|skill|cleanup)\] .{10,}')
+COMMIT_FORMAT   = re.compile(r'^\[(editorial|patch|simulation|compilation|infrastructure|skill|cleanup|godot|phase|fix|bugfix)\] .{10,}')
 
 CONTEXT_WARN    = 140_000
 CONTEXT_HARD    = 180_000
@@ -310,29 +310,49 @@ def memory_contamination_guard(path: str, content: str) -> None:
 
 # ── safe_commit: the only valid way to commit ─────────────────────────────────
 
-def safe_commit(additions: list, deletions: list, message: str) -> str:
+def safe_commit(additions: list, deletions: list, message: str,
+               repo: str = None) -> str:
     """
     The ONLY valid path to atomic_commit(). Runs all gates in sequence.
-    Replaces direct g.atomic_commit() calls everywhere except infrastructure.
 
-    Sequence:
-      1. commit_message_gate    — format check
-      2. editorial_gate         — per-path (via pre_commit_gate)
-      3. pre_commit_gate        — size + co-files
-      4. _authorize_next_commit — single-use token
-      5. g.atomic_commit        — actual commit
+    repo: 'ttrpg' (default) or 'valoria-game'
+      - ttrpg: full gates (editorial, size, co-files)
+      - valoria-game: commit message format only (no editorial/size gates for GDScript)
+
+    IMPORTANT: entire function must run in a SINGLE bash_tool block.
+    _commit_auth is process-scoped.
     """
-    # IMPORTANT: This entire function must run in a SINGLE bash_tool block.
-    # _commit_auth is process-scoped — _authorize_next_commit() and atomic_commit()
-    # must be in the same Python process (same bash_tool execution).
+    repo = repo or g.active_repo()
+    repo_config = g.REPOS.get(repo, {})
+
     commit_message_gate(message)
-    pre_commit_gate(additions, deletions or [])
+
+    if repo_config.get('enforce_editorial', False):
+        # Full gates for design repo
+        pre_commit_gate(additions, deletions or [])
+    else:
+        # Godot code: only size sanity check (no editorial/co-file gates)
+        errors = []
+        for path, content in additions:
+            # Sanity: single GDScript file shouldn't exceed 500k chars
+            if len(content) > 500_000:
+                errors.append(f"FILE TOO LARGE: {path}: {len(content):,} chars — check for accidental duplication")
+        if errors:
+            raise RuntimeError(
+                "[HOOK VIOLATION] valoria-game pre-commit:
+" +
+                "
+".join(f"  {e}" for e in errors)
+            )
+        print(f"[HOOK ✓] valoria-game pre-commit (format only — {len(additions)} files)")
+
     auth = g._authorize_next_commit()
     oid = g.atomic_commit(
         additions=additions,
         deletions=deletions or [],
         message=message,
+        repo=repo,
         _auth=auth,
     )
-    print(f"[HOOK ✓] safe_commit — {oid}")
+    print(f"[HOOK ✓] safe_commit → {repo} — {oid}")
     return oid

@@ -1,30 +1,53 @@
 """
 github_ops.py — Valoria GitHub operations
-Single source of truth for all GitHub reads/writes.
+Supports two repos: ttrpg (design) and valoria-game (Godot implementation).
 
-COMMIT AUTHORIZATION:
-  All commits must go through valoria_hooks.safe_commit().
-  Direct atomic_commit() calls are blocked unless authorized via _authorize_next_commit().
-  This prevents bypassing enforcement gates under task pressure.
+Usage:
+    import github_ops as g
 
-REGISTER HEALTH:
-  check_register_health() runs automatically on first read_files_graphql() call.
-  Hard stop on any file exceeding TOKEN_THRESHOLDS. Not a warning.
+    # Default: operates on ttrpg
+    files = g.read_files_graphql(['session_log_current.md'])
 
-SESSION TOKEN:
-  read_files_graphql() generates a session token (SHA-256 of fetched content).
-  assert_fetched() verifies files were fetched this session.
+    # Switch to valoria-game for Godot work
+    g.use_repo('valoria-game')
+    files = g.read_files_graphql(['autoload/Meta.gd'])
+    g.use_repo('ttrpg')  # switch back
+
+    # Or: one-shot with repo= parameter
+    files = g.read_files_graphql(['autoload/Meta.gd'], repo='valoria-game')
+    oid   = g.atomic_commit(additions, deletions, message, repo='valoria-game', _auth=auth)
+
+REPO RULES:
+  ttrpg        — design docs, params, registers, skills. Full hook + CI enforcement.
+  valoria-game — Godot GDScript. No register health checks (different file types).
+                 Commit message format still enforced. Editorial gate not enforced
+                 (no worldbuilding in code). Size thresholds do not apply.
 """
 
-import os, sys, json, base64, re, hashlib, secrets, urllib.request, urllib.error
+import os, sys, json, base64, re, hashlib, secrets, inspect, urllib.request, urllib.error
 
-REPO_OWNER  = "jordanelias"
-REPO_NAME   = "ttrpg"
-BRANCH      = "main"
-API_BASE    = "https://api.github.com"
+REPO_OWNER = "jordanelias"
+BRANCH     = "main"
+API_BASE   = "https://api.github.com"
 GRAPHQL_URL = "https://api.github.com/graphql"
 
-# ── Register health thresholds (tokens = chars // 4) ─────────────────────────
+# Valid repos and their characteristics
+REPOS = {
+    'ttrpg': {
+        'name': 'ttrpg',
+        'enforce_health': True,    # register size checks apply
+        'enforce_editorial': True, # editorial path checks apply
+        'description': 'Design repo — full enforcement',
+    },
+    'valoria-game': {
+        'name': 'valoria-game',
+        'enforce_health': False,   # no register thresholds for GDScript
+        'enforce_editorial': False,# no editorial gates for code files
+        'description': 'Godot implementation — commit format enforced only',
+    },
+}
+
+# ── Token thresholds (ttrpg only) ─────────────────────────────────────────────
 TOKEN_THRESHOLDS = {
     "session_log_current.md":                  2_000,
     "canon/editorial_ledger.yaml":             2_000,
@@ -38,14 +61,33 @@ TOKEN_THRESHOLDS = {
     "references/propagation_map.md":         15_000,
     "references/design_registry.yaml":        8_000,
 }
+ARCHIVE_WARN_THRESHOLD = 100_000
 
-ARCHIVE_WARN_THRESHOLD = 100_000  # tokens — triggers year-split warning
+# ── Session state (per-repo) ───────────────────────────────────────────────────
+_active_repo:      str  = 'ttrpg'
+_session_fetches:  dict = {}   # path -> content (merged across repos; use _repo_key)
+_session_token:    str  = None
+_health_checked:   bool = False
+_commit_auth:      str  = None
 
-# ── Session state ─────────────────────────────────────────────────────────────
-_session_fetches: dict = {}
-_session_token:   str  = None
-_health_checked:  bool = False
-_commit_auth:     str  = None   # single-use token set by _authorize_next_commit()
+def _repo_key(path: str, repo: str) -> str:
+    """Namespace fetch keys by repo to avoid collisions."""
+    return f"{repo}:{path}"
+
+
+def use_repo(repo: str) -> None:
+    """Switch the default active repo. Use 'ttrpg' or 'valoria-game'."""
+    global _active_repo
+    if repo not in REPOS:
+        raise RuntimeError(
+            f"Unknown repo '{repo}'. Valid: {list(REPOS.keys())}"
+        )
+    _active_repo = repo
+    print(f"[g] Active repo: {repo} ({REPOS[repo]['description']})")
+
+
+def active_repo() -> str:
+    return _active_repo
 
 
 # ── Session token ─────────────────────────────────────────────────────────────
@@ -53,7 +95,7 @@ _commit_auth:     str  = None   # single-use token set by _authorize_next_commit
 def _refresh_token() -> str:
     global _session_token
     blob = json.dumps(
-        {p: c for p, c in sorted(_session_fetches.items()) if c},
+        {k: c for k, c in sorted(_session_fetches.items()) if c},
         sort_keys=True
     )
     _session_token = hashlib.sha256(blob.encode()).hexdigest()[:16]
@@ -68,12 +110,15 @@ def get_session_token() -> str:
     return _session_token
 
 
-def assert_fetched(*paths) -> str:
-    missing = [p for p in paths if p not in _session_fetches or _session_fetches[p] is None]
+def assert_fetched(*paths, repo: str = None) -> str:
+    repo = repo or _active_repo
+    missing = [p for p in paths
+               if _repo_key(p, repo) not in _session_fetches
+               or _session_fetches[_repo_key(p, repo)] is None]
     if missing:
         raise RuntimeError(
-            f"Required paths not fetched this session: {missing}\n"
-            f"Call read_files_graphql({missing}) before proceeding."
+            f"[{repo}] Required paths not fetched: {missing}\n"
+            f"Call read_files_graphql({missing}, repo='{repo}') before proceeding."
         )
     return get_session_token()
 
@@ -82,36 +127,27 @@ def assert_fetched(*paths) -> str:
 
 def _authorize_next_commit() -> str:
     """
-    Generate a single-use authorization token for the next atomic_commit() call.
-    Called exclusively by valoria_hooks.safe_commit() after all gates pass,
-    OR by safe_session_close() (trusted internal caller).
+    Single-use commit authorization. Called by valoria_hooks.safe_commit()
+    and trusted internal callers (safe_session_close, append_to_register).
 
-    CALLER VERIFICATION: raises if called from outside approved callers.
-    Approved callers: safe_commit (valoria_hooks), safe_session_close (github_ops),
-    append_to_register (github_ops).
-
-    For infrastructure bypasses: call from a bash_tool block that explicitly
-    documents the bypass reason. The call is visible in executed output.
+    Caller verification via inspect.stack():
+    - valoria_hooks.safe_commit()
+    - github_ops.safe_session_close()
+    - github_ops.append_to_register()
+    - Direct bash_tool calls (<stdin>, /tmp, <string>) for infrastructure work
     """
-    import inspect
     frame = inspect.stack()[1]
-    caller_fn   = frame.function
-    caller_file = frame.filename
-
+    caller_fn, caller_file = frame.function, frame.filename
     approved = (
-        # valoria_hooks.safe_commit()
         (caller_fn == 'safe_commit' and 'valoria_hooks' in caller_file) or
-        # github_ops trusted internal callers
         (caller_fn in ('safe_session_close', 'append_to_register') and 'github_ops' in caller_file) or
-        # Direct infrastructure use from bash_tool (caller_file will be <stdin> or tmp file)
         ('<stdin>' in caller_file or caller_file.startswith('/tmp') or caller_file == '<string>')
     )
     if not approved:
         raise RuntimeError(
             f"[AUTH VIOLATION] _authorize_next_commit() called from unapproved context:\n"
-            f"  caller: {caller_fn}() in {caller_file}\n"
-            f"Use h.safe_commit() which calls this automatically after all gates pass.\n"
-            f"For infrastructure bypasses: call directly from a bash_tool block."
+            f"  {caller_fn}() in {caller_file}\n"
+            f"Use h.safe_commit() or call directly from a bash_tool block."
         )
     global _commit_auth
     _commit_auth = secrets.token_hex(8)
@@ -123,7 +159,7 @@ def _authorize_next_commit() -> str:
 def _get_pat() -> str:
     pat = os.environ.get("GITHUB_PAT", "")
     if not pat:
-        raise RuntimeError("GITHUB_PAT environment variable not set")
+        raise RuntimeError("GITHUB_PAT not set")
     return pat
 
 
@@ -135,8 +171,8 @@ def _headers() -> dict:
     }
 
 
-def _get(path: str) -> dict:
-    url = f"{API_BASE}/repos/{REPO_OWNER}/{REPO_NAME}/contents/{path}"
+def _get(path: str, repo: str) -> dict:
+    url = f"{API_BASE}/repos/{REPO_OWNER}/{repo}/contents/{path}"
     req = urllib.request.Request(url, headers=_headers())
     with urllib.request.urlopen(req) as r:
         return json.loads(r.read())
@@ -149,91 +185,57 @@ def _graphql(query: str, variables: dict = None) -> dict:
         return json.loads(r.read())
 
 
-# ── Register health ───────────────────────────────────────────────────────────
+# ── Register health (ttrpg only) ──────────────────────────────────────────────
 
-def check_register_health(fetched: dict) -> None:
+def check_register_health(fetched_with_keys: dict) -> None:
     """
-    Hard stop if any fetched file exceeds its TOKEN_THRESHOLDS limit.
-    Called automatically on first read_files_graphql() of session-start files.
-    Raises RuntimeError on violation — no bypass.
+    Hard stop if any fetched ttrpg file exceeds TOKEN_THRESHOLDS.
+    Skipped entirely for valoria-game files.
     """
     global _health_checked
     violations = []
     print("\n## REGISTER HEALTH CHECK")
-
-    for path, content in fetched.items():
-        if content is None:
+    for key, content in fetched_with_keys.items():
+        if content is None or not key.startswith('ttrpg:'):
             continue
-        tokens = len(content) // 4
+        path = key[len('ttrpg:'):]
         threshold = TOKEN_THRESHOLDS.get(path)
         if threshold is None:
             continue
+        tokens = len(content) // 4
         warn_threshold = int(threshold * 0.8)
         if tokens > threshold:
             status = "✗ OVER"
+            violations.append(f"  {path}: {tokens:,} tokens exceeds {threshold:,} limit.")
         elif tokens > warn_threshold:
             status = "⚠ WARN"
         else:
             status = "✓"
-        warn_label = f" (warn at {int(threshold*0.8):,})" if status == "⚠ WARN" else ""
-        print(f"  {status}  {path}: {tokens:,} / {threshold:,} tokens{warn_label}")
-        if tokens > threshold:
-            violations.append(
-                f"  {path}: {tokens:,} tokens exceeds {threshold:,} limit.\n"
-                f"    → Archive resolved/applied/struck content to the _archive file.\n"
-                f"    → See register chunking protocol in orchestrator SKILL.md."
-            )
+        print(f"  {status}  {path}: {tokens:,} / {threshold:,} tokens")
 
     if violations:
         raise RuntimeError(
-            "\n[HARD STOP] Register health check FAILED:\n\n"
-            + "\n".join(violations)
-            + "\n\nChunk registers before any other work. Session cannot proceed."
+            "\n[HARD STOP] Register health FAILED:\n" + "\n".join(violations) +
+            "\n\nArchive content before proceeding."
         )
-
     _health_checked = True
     print("  Register health: ALL PASS\n")
 
 
-def check_append_size(path: str, current: str, new_content: str) -> None:
-    tokens = len(current + new_content) // 4
-    threshold = TOKEN_THRESHOLDS.get(path)
-    if threshold and tokens > threshold:
-        raise RuntimeError(
-            f"[CHUNK REQUIRED] {path} would reach {tokens:,} tokens (limit {threshold:,}).\n"
-            f"Archive old content first."
-        )
-    if tokens > ARCHIVE_WARN_THRESHOLD and '_archive' in path:
-        print(
-            f"[ARCHIVE WARNING] {path}: {tokens:,} tokens approaching limit. "
-            f"Consider year-split."
-        )
-
-
-def append_to_register(path: str, new_entries: str, commit_message: str) -> str:
-    """Safe register append — checks size, then commits via safe_commit path."""
-    fresh = read_files_graphql([path], skip_health_check=True)
-    current = fresh.get(path) or ""
-    check_append_size(path, current, new_entries)
-    auth = _authorize_next_commit()
-    return atomic_commit(
-        additions=[(path, current + new_entries)],
-        deletions=[],
-        message=commit_message,
-        _auth=auth,
-    )
-
-
 # ── Core reads ────────────────────────────────────────────────────────────────
 
-def read_files_graphql(paths: list, skip_health_check: bool = False) -> dict:
+def read_files_graphql(paths: list, repo: str = None,
+                       skip_health_check: bool = False) -> dict:
     """
-    Batch-read files via GraphQL. Runs register health check on first
-    call that touches threshold-governed files (unless skip_health_check=True).
+    Batch-read files from a repo via GraphQL.
 
-    skip_health_check: use ONLY for archive reads and infrastructure bootstrap.
+    repo: 'ttrpg' (default) or 'valoria-game'
+    Returns: dict {path -> content_str | None}
     """
     global _health_checked
+    repo = repo or _active_repo
+    if repo not in REPOS:
+        raise RuntimeError(f"Unknown repo '{repo}'")
 
     if not paths:
         return {}
@@ -250,42 +252,44 @@ def read_files_graphql(paths: list, skip_health_check: bool = False) -> dict:
       }}
     }}
     """
-    result = _graphql(query, {"owner": REPO_OWNER, "name": REPO_NAME})
-    repo = result["data"]["repository"]
+    result = _graphql(query, {"owner": REPO_OWNER, "name": repo})
+    repo_data = result["data"]["repository"]
 
     output = {}
     for alias, path in aliases.items():
-        content = repo[alias]["text"] if repo[alias] else None
-        _session_fetches[path] = content
+        content = repo_data[alias]["text"] if repo_data[alias] else None
+        key = _repo_key(path, repo)
+        _session_fetches[key] = content
         output[path] = content
 
     _refresh_token()
 
-    if not _health_checked and not skip_health_check:
-        governed = {p: c for p, c in output.items() if p in TOKEN_THRESHOLDS and c}
+    # Health check: only for ttrpg, only on first call with threshold-governed files
+    if not _health_checked and not skip_health_check and REPOS[repo]['enforce_health']:
+        governed = {_repo_key(p, repo): c
+                    for p, c in output.items()
+                    if p in TOKEN_THRESHOLDS and c}
         if governed:
             check_register_health(governed)
 
     return output
 
 
-def read_file(path: str) -> str:
-    d = _get(path)
+def read_file(path: str, repo: str = None) -> str:
+    repo = repo or _active_repo
+    d = _get(path, repo)
     content = base64.b64decode(d["content"]).decode("utf-8")
-    _session_fetches[path] = content
+    _session_fetches[_repo_key(path, repo)] = content
     _refresh_token()
     return content
 
 
-def read_files(paths: list) -> dict:
-    return {p: read_file(p) for p in paths}
-
-
 # ── Directory helpers ─────────────────────────────────────────────────────────
 
-def file_exists(path: str) -> bool:
+def file_exists(path: str, repo: str = None) -> bool:
+    repo = repo or _active_repo
     try:
-        _get(path)
+        _get(path, repo)
         return True
     except urllib.error.HTTPError as e:
         if e.code == 404:
@@ -293,21 +297,24 @@ def file_exists(path: str) -> bool:
         raise
 
 
-def file_size(path: str) -> int:
+def file_size(path: str, repo: str = None) -> int:
+    repo = repo or _active_repo
     try:
-        return _get(path).get("size", 0)
+        return _get(path, repo).get("size", 0)
     except urllib.error.HTTPError:
         return -1
 
 
-def list_directory(path: str) -> list:
-    items = _get(path)
+def list_directory(path: str, repo: str = None) -> list:
+    repo = repo or _active_repo
+    items = _get(path, repo)
     return [item["name"] for item in items if isinstance(item, dict)]
 
 
 # ── Write ─────────────────────────────────────────────────────────────────────
 
-def get_head_oid() -> str:
+def get_head_oid(repo: str = None) -> str:
+    repo = repo or _active_repo
     q = """
     query($owner: String!, $name: String!, $branch: String!) {
       repository(owner: $owner, name: $name) {
@@ -315,7 +322,7 @@ def get_head_oid() -> str:
       }
     }
     """
-    result = _graphql(q, {"owner": REPO_OWNER, "name": REPO_NAME, "branch": BRANCH})
+    result = _graphql(q, {"owner": REPO_OWNER, "name": repo, "branch": BRANCH})
     return result["data"]["repository"]["ref"]["target"]["oid"]
 
 
@@ -323,45 +330,38 @@ def atomic_commit(
     additions: list,
     deletions: list,
     message:   str,
+    repo:      str  = None,
     expected_oid: str = None,
-    _auth: str = None,
+    _auth:     str  = None,
 ) -> str:
     """
-    Atomic commit via GraphQL.
+    Atomic commit to ttrpg or valoria-game.
 
-    REQUIRES authorization: must pass _auth=g._authorize_next_commit().
-    valoria_hooks.safe_commit() does this automatically after all gates pass.
-    Direct calls without authorization raise RuntimeError.
-
-    Exception: safe_session_close() is a trusted internal caller and passes
-    its own authorization token.
+    REQUIRES authorization token from _authorize_next_commit().
+    Use h.safe_commit(additions, deletions, message, repo='valoria-game') instead.
     """
     global _commit_auth, _session_token
+    repo = repo or _active_repo
 
-    # Authorization check
     if _auth != _commit_auth or _commit_auth is None:
         raise RuntimeError(
-            "[COMMIT BLOCKED] atomic_commit() called without authorization.\n"
-            "Use h.safe_commit(additions, deletions, message) — it runs all\n"
-            "enforcement gates and authorizes the commit automatically.\n\n"
-            "For infrastructure-only bypasses:\n"
-            "  auth = g._authorize_next_commit()\n"
-            "  g.atomic_commit(..., _auth=auth)\n"
-            "This bypass is visible in code and auditable."
+            f"[COMMIT BLOCKED] atomic_commit() to '{repo}' called without authorization.\n"
+            f"Use h.safe_commit(additions, deletions, message, repo='{repo}')."
         )
-    _commit_auth = None  # single-use — reset immediately
+    _commit_auth = None
 
-    # Size check (redundant with pre_commit_gate but defense-in-depth)
-    for path, content in additions:
-        tokens = len(content) // 4
-        threshold = TOKEN_THRESHOLDS.get(path)
-        if threshold and tokens > threshold:
-            raise RuntimeError(
-                f"[COMMIT BLOCKED] {path}: {tokens:,} tokens exceeds {threshold:,} limit."
-            )
+    # Size check (ttrpg only)
+    if REPOS[repo]['enforce_health']:
+        for path, content in additions:
+            tokens = len(content) // 4
+            threshold = TOKEN_THRESHOLDS.get(path)
+            if threshold and tokens > threshold:
+                raise RuntimeError(
+                    f"[COMMIT BLOCKED] {path}: {tokens:,} tokens exceeds {threshold:,} limit."
+                )
 
     if expected_oid is None:
-        expected_oid = get_head_oid()
+        expected_oid = get_head_oid(repo)
 
     file_additions = [
         {"path": p, "contents": base64.b64encode(c.encode("utf-8")).decode("ascii")}
@@ -379,7 +379,7 @@ def atomic_commit(
     variables = {
         "input": {
             "branch": {
-                "repositoryNameWithOwner": f"{REPO_OWNER}/{REPO_NAME}",
+                "repositoryNameWithOwner": f"{REPO_OWNER}/{repo}",
                 "branchName": BRANCH,
             },
             "message": {"headline": message},
@@ -396,19 +396,19 @@ def atomic_commit(
         if "errors" in result:
             errs = result["errors"]
             if any("expectedHeadOid" in str(e) for e in errs):
-                variables["input"]["expectedHeadOid"] = get_head_oid()
+                variables["input"]["expectedHeadOid"] = get_head_oid(repo)
                 result = _graphql(mutation, variables)
                 if "errors" in result:
-                    raise RuntimeError(f"Atomic commit failed after OID retry: {result['errors']}")
+                    raise RuntimeError(f"Commit failed after OID retry: {result['errors']}")
             else:
-                raise RuntimeError(f"Atomic commit failed: {errs}")
+                raise RuntimeError(f"Commit failed: {errs}")
 
         oid = result["data"]["createCommitOnBranch"]["commit"]["oid"]
 
         for path, _ in additions:
-            _session_fetches.pop(path, None)
+            _session_fetches.pop(_repo_key(path, repo), None)
         for path in (deletions or []):
-            _session_fetches.pop(path, None)
+            _session_fetches.pop(_repo_key(path, repo), None)
         if _session_fetches:
             _refresh_token()
         else:
@@ -417,10 +417,30 @@ def atomic_commit(
         return oid
 
     except Exception as e:
-        raise RuntimeError(f"Atomic commit error: {e}")
+        raise RuntimeError(f"Commit error [{repo}]: {e}")
 
 
-# ── Session close ─────────────────────────────────────────────────────────────
+def append_to_register(path: str, new_entries: str,
+                       commit_message: str, repo: str = None) -> str:
+    """Safe register append with size check. ttrpg only."""
+    repo = repo or 'ttrpg'
+    fresh = read_files_graphql([path], repo=repo, skip_health_check=True)
+    current = fresh.get(path) or ""
+    combined = current + new_entries
+    tokens = len(combined) // 4
+    threshold = TOKEN_THRESHOLDS.get(path)
+    if threshold and tokens > threshold:
+        raise RuntimeError(
+            f"[CHUNK REQUIRED] {path} would reach {tokens:,} tokens (limit {threshold:,})."
+        )
+    auth = _authorize_next_commit()
+    return atomic_commit(
+        additions=[(path, combined)], deletions=[],
+        message=commit_message, repo=repo, _auth=auth,
+    )
+
+
+# ── Session close (ttrpg only) ────────────────────────────────────────────────
 
 def _extract_session_id(content: str) -> str:
     m = re.search(r'session_id:\s*(.+)', content)
@@ -433,66 +453,55 @@ def safe_session_close(
     extra_additions: list = None,
     message: str = "[infrastructure] Session close",
 ) -> str:
-    """
-    Safely close a session. Enforces session_log size limit.
-    Trusted internal caller — authorizes its own commit.
-    """
     tokens = len(new_session_log) // 4
     limit  = TOKEN_THRESHOLDS.get("session_log_current.md", 2_000)
     if tokens > limit:
         raise RuntimeError(
-            f"[COMMIT BLOCKED] session_log_current.md would be {tokens:,} tokens "
-            f"(limit {limit:,}). Trim to resumption block only."
+            f"[COMMIT BLOCKED] session_log_current.md: {tokens:,} tokens (limit {limit:,}).\n"
+            f"Trim to resumption block only."
         )
 
     fresh = read_files_graphql(
         ["session_log_current.md", "session_log_archive.md"],
-        skip_health_check=True
+        repo='ttrpg', skip_health_check=True
     )
     live_current = fresh.get("session_log_current.md", "") or ""
     live_archive  = fresh.get("session_log_archive.md",  "") or ""
 
-    # Archive size warning
     archive_tokens = len(live_archive) // 4
     if archive_tokens > ARCHIVE_WARN_THRESHOLD:
-        print(
-            f"[ARCHIVE WARNING] session_log_archive.md: {archive_tokens:,} tokens. "
-            f"Consider year-split: session_log_archive_2026_q1.md"
-        )
+        print(f"[ARCHIVE WARNING] session_log_archive.md: {archive_tokens:,} tokens. Year-split soon.")
 
     live_id      = _extract_session_id(live_current)
     new_id       = _extract_session_id(new_session_log)
     bootstrap_id = _extract_session_id(bootstrap_session_log)
 
     if live_id and new_id and live_id == new_id:
-        raise RuntimeError(
-            f"DUPLICATE CLOSE BLOCKED: session_id '{live_id}' already closed."
-        )
+        raise RuntimeError(f"DUPLICATE CLOSE BLOCKED: '{live_id}' already closed.")
 
     if live_current.strip() != bootstrap_session_log.strip():
-        print(
-            f"[safe_session_close] Intervening session: "
-            f"bootstrap='{bootstrap_id}', live='{live_id}'. Archiving live first."
-        )
+        print(f"[safe_session_close] Intervening session: '{bootstrap_id}'→'{live_id}'. Archiving.")
 
-    updated_archive = live_archive + "\n---\n\n" + live_current
     additions = [
         ("session_log_current.md", new_session_log),
-        ("session_log_archive.md", updated_archive),
+        ("session_log_archive.md", live_archive + "\n---\n\n" + live_current),
     ]
     if extra_additions:
         additions.extend(extra_additions)
 
-    # Trusted internal caller — self-authorize
     auth = _authorize_next_commit()
-    return atomic_commit(additions=additions, deletions=[], message=message, _auth=auth)
+    return atomic_commit(additions=additions, deletions=[], message=message,
+                         repo='ttrpg', _auth=auth)
 
 
 # ── CLI smoke test ────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    print("Head OID:", get_head_oid())
-    files = read_files_graphql(["session_log_current.md", "canon/editorial_ledger_summary.yaml"])
-    print("Session token:", get_session_token())
-    assert_fetched("session_log_current.md")
+    print("ttrpg HEAD:", get_head_oid('ttrpg'))
+    print("valoria-game HEAD:", get_head_oid('valoria-game'))
+    files = read_files_graphql(["session_log_current.md"], repo='ttrpg')
+    print("ttrpg session token:", get_session_token())
+    files2 = read_files_graphql(["README.md"], repo='valoria-game',
+                                 skip_health_check=True)
+    print("valoria-game README:", len((files2.get('README.md') or '').splitlines()), "lines")
     print("Smoke test passed.")
