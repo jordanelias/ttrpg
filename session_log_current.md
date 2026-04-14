@@ -1,6 +1,54 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_OPUS_ONTOLOGICAL_CORRECTION
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Corrected false "0 Evidence progress" claim for Lock/Dissolution (ontological error)
+2. Rewrote §2.4: all Thread operations may advance Evidence Track contextually
+3. Added forensic applications (Dissolution Gap topology, Lock resistance, POP paradox window)
+4. Added scale/distance/breadth (Knot-mediated Thread-Read, Collective at Structural scale)
+5. Added §2.5: Domain Echo from Investigation + NPC Disposition on investigation
+6. 7 NPC arc stress tests: Klapp, Torben, Elske, Vaynard, Almud, Wardens, collective
+
+## KEY CORRECTION (PP-579)
+The prior simulation asserted Lock/Dissolution produce "0 Evidence Track progress."
+This was ontologically false. Per Foundations §1, threads constitute ALL that is
+experienceable. No configuration is excluded from Thread operations and no operation
+is incapable of producing investigatively relevant consequences. The investigative
+yield depends on WHAT is targeted and WHY, not on the operation TYPE.
+
+## DOMAIN ECHO STRESS TEST RESULTS
+- Investigation → Klapp arc: 3 branching trajectories, each reshaping faction landscape
+- POP on scribe → Torben Loyalty +2, Elske Loyalty +2, Coup Counter −1, Crown Mandate +1
+- Dissolution of concealment → Vaynard VTM +1, WC/WR advancement, triple evidence yield
+- Lock at crime scene → Almud Discovery Event trigger (TS 28→30), Crown Champion eligibility
+- Fieldwork Finding → Elske Return → IP +5 cascade
+- Collective Thread-Read at Structural scale → Warden Cooperation, campaign pivot
+- Orphaned configuration from POP → counter-investigation trigger for opposing factions
+
+## FINDINGS
+- DE-01: Investigation of NPC can trigger that NPC's arc
+- DE-02: POP on NPC memories fires multiple arc triggers simultaneously
+- DE-03: Orphaned configurations are themselves arc triggers (counter-investigation)
+- DE-04: Dissolution reveals content + concealer identity + timing (triple evidence)
+- DE-05: Lock co-movement can trigger NPC Discovery Events as side effects
+- DE-06: Fieldwork Finding → NPC return event → geopolitical clock acceleration
+- DE-07: Structural collective Thread-Read resolves campaign's central question
+
+## P1 BLOCKERS: 3 (ED-NEW-04, ED-NEW-10, ED-NEW-11 — unchanged)
+## OPEN EDITORIALS: 15 (unchanged)
+## SIM-DEBT: 9 (FW-07, FW-08, FW-09 RESOLVED)
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_OPUS_THREADWORK_FIELDWORK_SIM
 session_close: 2026-04-13
 phase: COMPLETE

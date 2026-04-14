@@ -116,13 +116,45 @@ Fieldwork interacts with Combat, Contest, and Mass Battle. These handoff rules s
 
 ### §2.4 Threadwork During Fieldwork
 
-**Thread-Read is the investigation-optimal Thread operation.** Standard Pulling, Locking, Dissolution, and Past-Oriented Pulling (POP) are available during fieldwork but serve different purposes. Only Thread-Read and standard Pulling advance the Evidence Track. Locking and Dissolution produce defensive/offensive effects but zero Evidence Track progress. POP is viable only at same-session recency (Ob 3, ~42% success for a high-pool practitioner) and creates dual-layer evidence (ontical + ontological per P-08).
+**Every Thread operation may advance investigation.** Per the Foundations §1, threads constitute all that is experienceable. There is no configuration excluded from Thread operations, and no Thread operation that cannot produce investigatively relevant consequences. The Evidence Track advances when an operation's consequences reveal something relevant to an active investigation, regardless of operation type. The GM determines whether the consequences yield investigation-relevant information.
 
-**Wounds and Thread operations:** Physical wounds do not apply −1D to Thread operation pools (Thread operations are consciousness-performed per P-03, not physically exerted). Instead, wounds apply +1 Ob to Thread operations requiring Leap — pain disrupts the concentration needed to sustain Thread contact. This parallels how Rattled applies +1 Ob to social actions.
+**Thread Operation Investigative Yield:**
 
-**FR operations suppress fieldwork.** A practitioner may perform one Thread operation per scene action (fieldwork) or per battle turn (mass battle). Thread-Read and FR operations (Lock/Dissolution) are mutually exclusive within a single action — both require active Leap contact but for incompatible purposes (perception vs manipulation). The practitioner must choose: intelligence gathering (Thread-Read, advances Evidence Track, low cost) or structural intervention (Lock/Dissolution, no Evidence progress, extreme cost).
+| Operation | Primary Effect | Investigative Yield | Typical Evidence Progress |
+|-----------|---------------|--------------------|--------------------|
+| Thread-Read | Perception of Thread configuration | Direct: the practitioner perceives what is there | +2 (Success), +3 (Overwhelming) |
+| Weaving | Cohering a configuration | Co-movement may reveal adjacent structures; stabilised configs are easier to examine | +1 if co-movement reveals (GM) |
+| Pulling (standard) | Opening a configuration | The pulled state reveals what was hidden, frozen, or compressed | +2 (Success), +3 (Overwhelming) |
+| Past-Oriented Pulling | Displacing temporal config | The displaced past reveals what was overwritten; orphaned config is evidence | +2 (Success), +3 (Overwhelming) |
+| Locking | Freezing a configuration | Preserves evidence against tampering; resistance to Lock reveals internal structure | +1 (preservation); +2 if resistance reveals structure |
+| Dissolution | Destroying a configuration | Gap topology IS forensic evidence; concealment destroyed reveals hidden content; Weaver's Thread signature readable from Gap | +2 if concealment destroyed; +1 from Gap topology |
+| Mending | Repairing substrate damage | Repairing a Gap reveals original configuration; Mending a Locked boundary opens access | +1 (reveals original); +2 if opens access |
+| Collective | Pooled operation (any type) | Same as base type at achieved scale | Same as base type |
 
-**Leap vulnerability at transition.** When combat interrupts a Thread-Read, the Leap vulnerability window applies only if the interruption occurs DURING the Leap (before the Thread-Read resolves). If the Thread-Read has already resolved and the interruption follows from its consequences (e.g., an actualized auto-effect alerting a hostile), the vulnerability window has closed. Combat proceeds normally.
+**Forensic applications:**
+
+- **Dissolution forensics:** A fresh Gap's topology reflects the structure of what was dissolved. Thread-Read of the Gap (same scene, Ob 3) reveals the original configuration. Additionally, a Woven concealment dissolved by Dissolution reveals both the hidden content AND the concealer's Thread signature — triple evidence (what was hidden, who hid it, when).
+- **Lock forensics:** A configuration that resists Lock reveals its internal structure through the resistance pattern. A Lock Failure is itself diagnostic. A successful Lock freezes evidence for repeated examination without degradation.
+- **POP forensics:** The paradox window (PP-193) produces simultaneous perception of past and present states — the practitioner sees what changed and how. The paradox window is the investigation's most powerful perceptual moment.
+
+**Scale, distance, and breadth:**
+
+- **Scale** (stage11 §11.1): Higher scale = broader investigative reach, higher Ob, higher Coherence/RS cost. Territorial Thread-Read perceives an entire settlement's substrate (TS 50+, Coherence −1).
+- **Distance:** Thread contact requires presence at the site OR a Knot connection to the target. Knot-mediated Thread-Read: the practitioner perceives the Knotted NPC's Thread configuration remotely. Each use: +1 Knot strain (the relationship bears force from being used as an intelligence channel).
+- **Temporal reach (POP only):** Accesses past configurations. Same-session (Ob 3) is the viable investigative range. Generational (Ob 7+) is near-impossible (<0.1% success).
+- **Breadth (Collective):** Collective Thread-Read pools practitioners' dice, extending reach to Structural scale — the deepest possible perception. This is the Einhir's capability in miniature and carries the Einhir's costs.
+
+**One Thread operation per scene action.** Thread-Read and other Thread operations are mutually exclusive within a single action (both require active Leap contact for incompatible purposes). The practitioner chooses which operation to perform each action.
+
+**Wounds and Thread operations:** Physical wounds do not apply −1D to Thread operation pools (Thread operations are consciousness-performed per P-03). Instead, wounds apply +1 Ob to Thread operations requiring Leap — pain disrupts concentration needed to sustain contact.
+
+**Leap vulnerability at transition.** When combat interrupts a Thread-Read, the Leap vulnerability window applies only if the interruption occurs DURING the Leap (before resolution). If the Thread-Read has resolved and the interruption follows from its consequences (e.g., an actualized auto-effect alerting a hostile), the vulnerability window has closed.
+
+### §2.5 Domain Echo from Investigation
+
+A resolved fieldwork Finding with faction-level scope fires Domain Echo per stage11 §11.5. The GM recognises scope and announces the echo. The Domain Echo may trigger NPC arc events (Discovery Events, Loyalty shifts, clock advances, Coalition triggers). The investigator does not control which arcs fire — the consequences follow from the Finding's content and the current game state. Investigation is a cause; Domain Echo is the effect; NPC arc cascades are the consequence.
+
+**NPC Disposition after investigation reveals their secrets:** When a Finding concerns a named NPC's hidden information, that NPC's Disposition toward the investigator shifts −2 if the NPC learns they were investigated. Exception: NPCs who wanted the truth found (e.g., Vaynard pursuing knowledge, Torben seeking legitimacy) gain Disposition +1.
 
 ---
 
@@ -705,6 +737,17 @@ Fieldwork actions consume in-game time:
 | ED-NEW-14 | Audit finding D-SIM-5 resolved: §4.1 now defines Finding reliability from resolved investigations. Verify Finding + Contest interaction in simulation. | P3 |
 | ED-NEW-15 | POP Coherence −1 additional: resolved as subject to per-op cap (not exempt). Confirm this in params_threadwork.md — currently ambiguous. Propagate ruling. | P2 |
 
+### Items resolved by PP-579 ontological correction (2026-04-13)
+
+| Item | Resolution |
+|------|------------|
+| PP-578 TW-11 | FALSE CLAIM STRUCK. "Lock/Dissolution produce 0 Evidence progress" was ontologically incorrect. All Thread operations may advance Evidence Track when consequences reveal investigation-relevant information. §2.4 rewritten. |
+| PP-578 TW hierarchy | Replaced with contextual yield model. Investigation yield depends on what is targeted and why, not on operation type. GM determines yield. |
+| Domain Echo integration | §2.5 added. Resolved Findings fire Domain Echo per stage11 §11.5. NPC arc cascades follow. |
+| NPC Disposition on investigation | §2.5 added. Disposition −2 if NPC learns they were investigated; +1 if NPC wanted truth found. |
+| Forensic applications | §2.4 added. Dissolution (Gap topology + concealer signature), Lock (resistance pattern diagnostics), POP (paradox window dual-state). |
+| Scale/distance/breadth | §2.4 added. Knot-mediated remote Thread-Read. Collective Thread-Read at Structural scale. Temporal reach via POP recency. |
+
 ### Items resolved by PP-578 threadwork transition simulation (2026-04-13)
 
 | Item | Resolution |
@@ -758,6 +801,7 @@ Fieldwork actions consume in-game time:
 | SIM-DEBT-FW-06 | Cover derived value calibration: confirm Cover 3-4 (low) vs Cover 9+ (high) produces meaningfully different Exposure tolerance without making high-Cover characters immune. |
 | SIM-DEBT-FW-07 | **RESOLVED** — Transition simulation (all 6 directions) completed 2026-04-13. 6 P2 and 3 P3 findings discovered and resolved. All transitions functional. See tests/sim_fieldwork_transitions.md. |
 | SIM-DEBT-FW-08 | **RESOLVED** — Threadwork × fieldwork simulation (POP, Lock, Dissolution across all 6 transitions). 1 P1, 3 P2, 8 P3 findings. Investigative hierarchy confirmed: Thread-Read → Pull → POP → Lock → Dissolution. See tests/sim_threadwork_fieldwork.md. |
+| SIM-DEBT-FW-09 | **RESOLVED** — Full ontological scope + NPC arc stress tests (PP-579). 7 Domain Echo cascades tested (Klapp, Torben, Elske, Vaynard, Almud, Wardens). All Thread operations confirmed as evidence sources. Yield is contextual. See tests/sim_threadwork_ontological.md. |
 
 ### Propagation required on approval
 
