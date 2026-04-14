@@ -1,6 +1,44 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_OPUS_THREADWORK_FIELDWORK_SIM
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Full threadwork × fieldwork simulation: POP, Locking, Dissolution across all 6 transition directions
+2. §2.4 Threadwork During Fieldwork section added
+3. 1 P1 + 3 P2 + 8 P3 findings discovered; P2s resolved in design
+4. Investigative hierarchy confirmed (emergent, not designed)
+
+## KEY FINDINGS (PP-578)
+- Thread-Read and standard Pulling are the investigation-optimal Thread operations (low cost, +2 Evidence)
+- Lock/Dissolution produce 0 Evidence Track progress (offensive/defensive, not investigative)
+- POP viable ONLY at same-session recency (Ob 3, ~42% success); generational POP is impossible (<0.1%)
+- POP creates dual-layer evidence (ontical + ontological) — P-08 operating as designed
+- Wounds → +1 Ob to Leap-based Thread ops (concentration), not −1D pool (not physical)
+- FR ops and Thread-Read mutually exclusive per action (choose intelligence OR intervention)
+- Dissolution at Coherence 4+ is self-defeating (+1 Ob from Fragmented stacks fatally)
+- Deep Thread-investigation of Locked Einhir sites is mechanically a campaign arc (2-4 seasons)
+- Mending (full pool, TN 7) is viable for Locked Zones; Dissolution (FR pool, TN 8) is not
+
+## EMERGENT SYSTEM PICTURE
+Perception (Thread-Read) vs Operation (Lock/Dissolution/POP) cost differential
+mechanically expresses P-03: rendering is consciousness-performed.
+Understanding the world is cheaper than changing the world because
+understanding does not alter the substrate.
+
+## P1 BLOCKERS: 3 (ED-NEW-04, ED-NEW-10, ED-NEW-11) + 1 new (TW-05: POP Coherence cap)
+## OPEN EDITORIALS: 15 (ED-NEW-01 through ED-NEW-15)
+## SIM-DEBT: 8 (FW-07, FW-08 RESOLVED)
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-14_SONNET_SESSION_CLOSE
 session_close: 2026-04-14
 phase: COMPLETE

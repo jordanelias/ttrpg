@@ -55,9 +55,6 @@ Ob floor: 1 (per core engine).
 
 ---
 
-
-> **PP-593: Disposition advance Ob recalibrated.** Social interaction Ob for disposition advance = floor((6 − current_disposition) / 2) + 1. This produces: Neutral(0)→Receptive(+1) at Ob 4, Receptive→Trusting at Ob 3, Trusting→Bonded at Ob 3, with final step easing to Ob 2. Median time Neutral→Bonded: ~5 sessions (2 interactions/session). Follows project-standard floor(stat/2)+1 pattern. Original formula max(1, 3−d) produced Ob 1 too quickly (median 3 sessions — insufficient dramatic buildup).
-
 ## §2 FIELDWORK POOL
 
 **Pool = (Primary Attribute × 2) + History bonus**
@@ -116,6 +113,16 @@ Fieldwork interacts with Combat, Contest, and Mass Battle. These handoff rules s
 **Mass Battle → Fieldwork:** Battle concludes; Zoom Out fires (stage11 §11.2). Fieldwork resumes from frozen state. Post-battle investigation of the battlefield (examining bodies, equipment, terrain) constitutes one fieldwork scene, consuming one time unit. The battle itself does not consume fieldwork time units.
 
 **Combined Findings in Contest:** Multiple resolved Findings on related topics may be presented as a combined argument. The combined argument uses the strongest constituent reliability tag. Each additional Finding beyond the first adds +1D to the Argue roll (max +2D from combined Findings).
+
+### §2.4 Threadwork During Fieldwork
+
+**Thread-Read is the investigation-optimal Thread operation.** Standard Pulling, Locking, Dissolution, and Past-Oriented Pulling (POP) are available during fieldwork but serve different purposes. Only Thread-Read and standard Pulling advance the Evidence Track. Locking and Dissolution produce defensive/offensive effects but zero Evidence Track progress. POP is viable only at same-session recency (Ob 3, ~42% success for a high-pool practitioner) and creates dual-layer evidence (ontical + ontological per P-08).
+
+**Wounds and Thread operations:** Physical wounds do not apply −1D to Thread operation pools (Thread operations are consciousness-performed per P-03, not physically exerted). Instead, wounds apply +1 Ob to Thread operations requiring Leap — pain disrupts the concentration needed to sustain Thread contact. This parallels how Rattled applies +1 Ob to social actions.
+
+**FR operations suppress fieldwork.** A practitioner may perform one Thread operation per scene action (fieldwork) or per battle turn (mass battle). Thread-Read and FR operations (Lock/Dissolution) are mutually exclusive within a single action — both require active Leap contact but for incompatible purposes (perception vs manipulation). The practitioner must choose: intelligence gathering (Thread-Read, advances Evidence Track, low cost) or structural intervention (Lock/Dissolution, no Evidence progress, extreme cost).
+
+**Leap vulnerability at transition.** When combat interrupts a Thread-Read, the Leap vulnerability window applies only if the interruption occurs DURING the Leap (before the Thread-Read resolves). If the Thread-Read has already resolved and the interruption follows from its consequences (e.g., an actualized auto-effect alerting a hostile), the vulnerability window has closed. Combat proceeds normally.
 
 ---
 
@@ -696,6 +703,16 @@ Fieldwork actions consume in-game time:
 | ED-NEW-12 | Sincerity Gate (§5.3) uses Spirit. Confirm Spirit is not already overloaded as an attribute (currently: Resolve = Spirit; no other mechanical role). | P3 |
 | ED-NEW-13 | Desperate Trail (§4.4): 3 consecutive failures threshold triggers TN 8 + doubled Exposure + GM complication. Confirm TN 8 does not make recovery impossible for low-pool investigators (4D at TN 8: P(≥1) ≈ 60%, still viable). Confirm Partial +2 progress compensates for increased difficulty. | P2 |
 | ED-NEW-14 | Audit finding D-SIM-5 resolved: §4.1 now defines Finding reliability from resolved investigations. Verify Finding + Contest interaction in simulation. | P3 |
+| ED-NEW-15 | POP Coherence −1 additional: resolved as subject to per-op cap (not exempt). Confirm this in params_threadwork.md — currently ambiguous. Propagate ruling. | P2 |
+
+### Items resolved by PP-578 threadwork transition simulation (2026-04-13)
+
+| Item | Resolution |
+|------|------------|
+| TW-01 | Leap vulnerability timing: window closes when Thread-Read resolves. §2.4. |
+| TW-10 | FR ops suppress fieldwork: one Thread op per action, Thread-Read and FR mutually exclusive. §2.4. |
+| TW-12 | Wounds → +1 Ob to Thread ops requiring Leap (not −1D pool). §2.4. |
+| TW-05 | POP Coherence −1 additional IS subject to per-op cap (not exempt like FR surcharge). Distinct cost profiles. |
 
 ### Items resolved by PP-577 transition simulation (2026-04-13)
 
@@ -740,6 +757,7 @@ Fieldwork actions consume in-game time:
 | SIM-DEBT-FW-05 | Survey action BG balance: confirm Survey does not dominate Consul Govern. Survey should be situationally valuable, not universally optimal. |
 | SIM-DEBT-FW-06 | Cover derived value calibration: confirm Cover 3-4 (low) vs Cover 9+ (high) produces meaningfully different Exposure tolerance without making high-Cover characters immune. |
 | SIM-DEBT-FW-07 | **RESOLVED** — Transition simulation (all 6 directions) completed 2026-04-13. 6 P2 and 3 P3 findings discovered and resolved. All transitions functional. See tests/sim_fieldwork_transitions.md. |
+| SIM-DEBT-FW-08 | **RESOLVED** — Threadwork × fieldwork simulation (POP, Lock, Dissolution across all 6 transitions). 1 P1, 3 P2, 8 P3 findings. Investigative hierarchy confirmed: Thread-Read → Pull → POP → Lock → Dissolution. See tests/sim_threadwork_fieldwork.md. |
 
 ### Propagation required on approval
 
