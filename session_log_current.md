@@ -1655,3 +1655,22 @@ Commit 4 (9d2d25b): [cleanup] propagation_map v30 paths, skill_registry atomizer
 ## P1 BLOCKERS: 4 (ED-486–ED-489 — approved Contested Intentionality / Mending / knot strain / co-movement)
 ## EDITORIAL LEDGER next_id: safe next = 490 (header stale — shows 486)
 ```
+
+## Session 2026-04-13 — Opposing Threadwork Operations
+
+**Task:** Deep analysis and stress test of multi-practitioner and opposing threadwork operations.
+
+**Work completed:**
+1. Read all canonical threadwork, metaphysics, and philosophical sources (threadwork_v25→v30, philosophical_reference, Foundations, Amendment 01, constraints P-01–P-15, params_threadwork, params_core, params_combat, params_contest).
+2. Identified 6 hard gaps and 3 soft gaps in opposing operations rules (P-24 truncated, §9.13 eliminated, scale mismatch, BG opposing orders, N-way ops, co-movement stacking).
+3. Performed philosophy-first stress test (v1: propose-then-check; v2: derive-from-metaphysics). Tested 3 candidate patch approaches across 13 scenarios (Modes A, B, C, D).
+4. Key philosophical findings: (a) Mending categorically immune to direct opposition (different target category — substrate absence vs thread presence). (b) Opposing engagement modifier (+TPS/2) philosophically necessary (opponent's configuration IS part of thread's resistance). (c) Overwhelmed practitioners take knot strain, not degree-table Failure consequences (different metaphysical event). (d) Co-movement: Coherence per-practitioner, epistemic+actual once per compound event. (e) N-way opposing ops produce Gap via lattice collapse (chaotic interference has no stable mode).
+5. Applied PP-632: §2.6 Opposing Operations (Contested Intentionality) added to threadwork design doc. Full procedure, resolution table, knot strain, FR vs FR scaling, sustained opposition, N-way, Mending immunity, mass battle, BG, Hybrid rules.
+6. Raised and resolved ED-486 through ED-495 (4 P1-BLOCKER, 6 P2).
+
+**Commits:**
+- `81b206cc` — Stress test sim file, editorial ledger, coverage matrix, propagation map
+- `923972dd` — PP-632 applied: §2.6, params, patch register, editorials resolved
+- `f4d38b88` — Canonical sources SHA update
+
+**Next:** File renamed to threadwork_v30.md by parallel session; §2.6 and PP-632 propagated through rename successfully. No outstanding work from this session.
