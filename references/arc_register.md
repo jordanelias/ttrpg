@@ -312,10 +312,10 @@ RM Presence in ≥ 4 territories: Community Memory Event. Non-practitioners in P
 RM Presence in ≥ 4 territories AND no territory at Presence ≥ 3. Wide-shallow distribution produced by Vossen's IDEALIST flaw creates structural durability: Church can eliminate Presence in only 1 territory/season (1 Heresy Investigation = 1 territory); RM replaces it faster in uncontested territories than Church can suppress it. The flaw is tactically inefficient and strategically durable.
 
 **ARC-S49 — Rawlsian Bind** `Restoration Movement | ALL | ALL`
-TC ≥ 50: RM's ethical framework directly conflicts with survival-necessary actions. RM leadership (Vossen or Remembrancer or PC) must explicitly declare: Principles maintained (+1 Ob on power-concentrating actions, Stability +1 from internal cohesion) or Principles suspended (standard Ob, Stability −1, one territory loses Presence as the principled wing splits). This is a decision point, not a roll. Players with established diplomatic legitimation of RM in specific territories (Crown/Varfell action, Ob 2, before TC = 50) convert that legitimation into Stability buffer during the declaration.
+TC ≥ 50: RM's ethical framework directly conflicts with survival-necessary actions. RM leadership (Vossen or the Witness or PC) must explicitly declare: Principles maintained (+1 Ob on power-concentrating actions, Stability +1 from internal cohesion) or Principles suspended (standard Ob, Stability −1, one territory loses Presence as the principled wing splits). This is a decision point, not a roll. Players with established diplomatic legitimation of RM in specific territories (Crown/Varfell action, Ob 2, before TC = 50) convert that legitimation into Stability buffer during the declaration.
 
-**ARC-T23 — The Remembrancer** `Restoration Movement | T6, T13, T15 | TTRPG`
-[EDITORIAL: ARC-T23 resolves ED-NEW-02. Proposed: the "Revolution elder" is an institutional role — Remembrancer — a practitioner appointed by RM inner tradition to hold Thread memory across generational shifts. Current Remembrancer TS: variable (19–35), determined at time of first player contact. Testimony in COLLISION E carries institutional authority (245 years of maintained tradition), not merely personal witness. Confirm or modify before commit.]
+**ARC-T23 — The Witness** `Restoration Movement | T6, T13, T15 | TTRPG`
+[ARC-T23 resolved. The institutional role is the Witness — a practitioner appointed by RM inner tradition to hold Thread memory across generational shifts. Title canonised 2026-04-13. Current Witness TS: variable (19–35), determined at time of first player contact. Testimony in COLLISION E carries institutional authority (245 years of maintained tradition), not merely personal witness.]
 
 **NPC-ARC-VOS — Vossen Exposure** `Restoration Movement | ALL | ALL`
 Church AP accumulates against Vossen at +1/season when she operates publicly (RM movement requires visible leadership for Popular Will). Heresy Investigation accumulates toward resolution. If Varfell aligned with RM (NPC-ARC-ULN): Maret provides protection, slowing AP accumulation.
@@ -518,7 +518,7 @@ Coup Counter = 2 AND no Counter increment fires that same Accounting AND Ehrenwa
 Guilds Wealth ≥ 6 AND Guild Favour ≥ 5 in 3+ territories → Guilds Mandate +1; Guilds may convert 1 Wealth token to 1 Mandate once this campaign. This is the Compact declaration — the moment economic supremacy translates into political standing.
 
 **BG-CV-05 — The Memory Lives** `Restoration Movement | BG/Hybrid/TTRPG`
-RM Presence in ≥ 5 territories AND RS ≤ 50. TTRPG: RM gains a practitioner affiliate TS ≥ 25 (Remembrancer, ARC-T23 if canonised, or unnamed). Hybrid: Founding Mechanic fires (PP-478). BG: RM Presence publicly declared — Church opens Parliamentary motion to proscribe (Church Mandate vs RM Influence; Church win suppresses Presence to 2 territories).
+RM Presence in ≥ 5 territories AND RS ≤ 50. TTRPG: RM gains a practitioner affiliate TS ≥ 25 (the Witness, ARC-T23, or unnamed). Hybrid: Founding Mechanic fires (PP-478). BG: RM Presence publicly declared — Church opens Parliamentary motion to proscribe (Church Mandate vs RM Influence; Church win suppresses Presence to 2 territories).
 
 ---
 
@@ -545,9 +545,9 @@ Trigger: Full Church-Niflhel exposure + 218 AG assassination perpetrator identif
 Combined: Niflhel has leverage over every faction simultaneously (Church via Olafsson, Crown via assassination secret, Varfell via Collection). Sells to highest bidder. Whatever faction pays has its intelligence position transformed; whatever faction doesn't may face immediate political exposure.
 
 **COLLISION E — Einhir Elder and Baralta's Claim**
-Trigger: Remembrancer testimony (ARC-T23) + Baralta Solmund claim (ARC-S19) + Klapp archive access.
+Trigger: Witness testimony (ARC-T23) + Baralta Solmund claim (ARC-S19) + Klapp archive access.
 Combined: Himmensendt's Evidence Resonant Style is turned against his institution by three simultaneous testimony sources. Grand Debate (5 exchanges). If reinterpretation fails: Inspiration loss, Destabilisation Trigger fires fully (Church relics ARE originary Locks), Church Stability −3 in one season.
-`[Requires ARC-T23 editorial resolution before COLLISION E is fully operational.]`
+`[ARC-T23 resolved 2026-04-13. COLLISION E is operational.]`
 
 **COLLISION F — Succession Triangle**
 Trigger: Almqvist deed-presumption weakens (Coup Counter ≥ 2 or Almud Discovery Event or Torben loss) while both Lenneth and Baralta programmes are active (ARC-S26 + ARC-S35).
