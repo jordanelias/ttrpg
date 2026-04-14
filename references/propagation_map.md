@@ -528,3 +528,19 @@ Propagation targets:
 | `designs/systems/npc_behavior_v30.md` §9.5 | `designs/fieldwork/fieldwork_socializing.md` | Hook acquisition §5.5b — DONE (PP-643) |
 | `designs/systems/npc_behavior_v30.md` §9.5 | `designs/systems/clock_registry_v30.md` | Hook tracking: roster-level tag, not a separate clock — no clock_registry change |
 | `designs/systems/npc_behavior_v30.md` §9.5 | `references/params_factions.md` | Mandate −1 on successful recruitment — DONE (PP-643) |
+
+
+## GM Reference Arcs — Batches 07–08 Consolidated (arcs_46_55_consolidated.md) — 2026-04-13
+
+| Changed File | Propagates To | Reason | Status |
+|-------------|--------------|--------|--------|
+| `gm_ref/arcs_46_55_consolidated.md` | `gm_ref/arcs_46_50_batch07.md` | Supersedes batch07 (retained for history) | DONE |
+| `gm_ref/arcs_46_55_consolidated.md` | `gm_ref/arcs_51_55_batch08.md` | Supersedes batch08 (retained for history) | DONE |
+| `gm_ref/arcs_46_55_consolidated.md` | `references/params_factions.md` | Cites PP-402, PP-403, Domain Action Ob formula, ethical framework modifiers | REFERENCE |
+| `gm_ref/arcs_46_55_consolidated.md` | `references/params_threadwork.md` | Cites PP-255, Leap table, Contact Duration, Coherence | REFERENCE |
+| `gm_ref/arcs_46_55_consolidated.md` | `references/params_board_game.md` | Cites PI track, Coup Counter, Torben/Elske Loyalty, PP-563 VTM-TC | REFERENCE |
+| `gm_ref/arcs_46_55_consolidated.md` | `canon/02_canon_constraints.md` | Critique applied P-01/P-03/P-07/P-08/P-15; arc 51 P-15 correction | REFERENCE |
+| `gm_ref/arcs_46_55_consolidated.md` | `designs/systems/clock_registry.md` | Cites PI, Coup Counter, WC, VTM, Torben/Elske tracks | REFERENCE |
+
+### Unverified items — U-01 through U-11 flagged inline in consolidated doc
+Require reads of: params_board_game.md §Coup Counter, threadwork_redesign_v25.md, victory_architecture_v1.md §6, stage6_factions.md §Guilds/Varfell/faction leadership.
