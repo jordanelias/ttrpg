@@ -1674,3 +1674,59 @@ Commit 4 (9d2d25b): [cleanup] propagation_map v30 paths, skill_registry atomizer
 - `f4d38b88` — Canonical sources SHA update
 
 **Next:** File renamed to threadwork_v30.md by parallel session; §2.6 and PP-632 propagated through rename successfully. No outstanding work from this session.
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-13_SONNET_V30_COMPLETE
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION (continuation)
+1. file_index.md updated — v30 paths, deprecated moves, design_registry entry, npc_behavior entry
+2. valoria-atomizer skill created (204 lines) — skills/valoria-atomizer/SKILL.md
+3. threadwork_v30 atomized — skeleton (855 lines) + infill (196 lines) created
+4. combat_v30 atomized — skeleton (418 lines) + infill (86 lines) created
+5. design_registry.yaml updated — threadwork/combat marked atomized: complete
+6. Propagation items resolved:
+   - propagation_map: DONE (Commit 4 of prior sub-session)
+   - params_board_game Survey Ob: ALREADY DONE (PP-628, line 122)
+   - params_core attributes: ALREADY DONE (PP-628 fieldwork attr table)
+   - scale_transitions 9th handoff: ALREADY DONE (§3.9 in scale_transitions_v30.md)
+   - coverage_matrix: DONE — 3 fieldwork entries + FW-01–06 calibration table
+7. All params files source path references updated to v30 paths (7 files)
+8. Freshness gate, broken_dependency_checker, patch_propagation_checker: all exit 0
+
+## COMMITS THIS SESSION (continuation)
+Commit 5 (50e4173): file_index.md v30 path updates + design_registry entry
+Commit 6 (98470e4): valoria-atomizer skill created
+Commit 7 (70cbb52): threadwork_v30 + combat_v30 atomized
+Commit 8 (2f28078): coverage_matrix fieldwork + params v30 source refs
+Commit 9 (freshness): canonical_sources.yaml SHAs refreshed
+
+## ATOMIZATION STATE (references/design_registry.yaml)
+  threadwork: complete (skeleton=threadwork_v30.md, infill=threadwork_v30_infill.md)
+  combat: complete (skeleton=combat_v30.md, infill=combat_v30_infill.md)
+  All others: not_started
+
+## REMAINING WORK (next sessions)
+Priority atomization queue (valoria-atomizer skill):
+  1. designs/board_game/board_game_v30.md (~1636 params lines equivalent)
+  2. designs/fieldwork/fieldwork_v30.md
+  3. designs/mass_combat/mass_battle_v30.md
+  4. designs/contest/social_contest_v30.md
+  5. designs/hybrid/scale_transitions_v30.md
+  6. All others per design_registry.yaml priority order
+
+Other pending:
+  - factions_ttrpg, campaign_modes, southernmost: v30 rename BLOCKED — no design-layer doc
+    (needs design sessions to create docs from unverified compilation stages)
+  - editorial_ledger.yaml next_id: safe next is 510 (correctly updated by prior sessions)
+  - 4 open P1-BLOCKERs: ED-486–489 (contested intentionality, Mending immunity, knot strain, co-movement)
+
+## TOTAL COMMITS THIS FULL SESSION (both sub-sessions combined): 10
+PP-583 through freshness gate.
+```
