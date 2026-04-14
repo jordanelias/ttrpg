@@ -58,10 +58,11 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard |
 | Parliament Integrity (PI) | **7** | 0–20 | Cumulative pressure meter. Auto-resolves at PI ≥ 20 (Crown elimination). |
 | AER | 2 | 0–5 | Near IP clock. |
-| Torben Loyalty | **3** | 0–7 | Active from game start. No IP trigger. On Crown elimination: Torben Loyalty track transfers to Löwenritter (they inherit the succession claim). Löwenritter wins or loses Torben via Influence actions the same way Crown did. Church and Hafenmark may contest via Senator Outward Diplomacy (Ob = current Torben Loyalty ÷ 2). (ED-332, PP-498: start 3, range 0–7 per §Torben Loyalty Track canonical.) |
+| Torben Loyalty | **7** | 0–7 | Active from game start. No IP trigger. On Crown elimination: Torben Loyalty track transfers to Löwenritter (they inherit the succession claim). Löwenritter wins or loses Torben via Influence actions the same way Crown did. Church and Hafenmark may contest via Senator Outward Diplomacy (Ob = current Torben Loyalty ÷ 2). (ED-332, PP-498: start 3, range 0–7 per §Torben Loyalty Track canonical.) |
 | Elske Loyalty | 4 | 0–7 | Off-board card near T4. |
 | Löwenritter Coup Counter | 0 | 0–4 | Public. Threshold 4 = coup eligible. |
-| Warden Cooperation | 0 | 0–3 | Near T6. Inactive until Warden Emergence. |
+| Warden Cooperation (WC) | 0 | 0–3 | Peninsula-wide. WR ≥ 2 required to advance. (PP-605) |
+| Warden Recognition (WR) | 0 | 0–3 | Varfell-only private track. Gates WC. (PP-605) |
 
 **Warden Cooperation (WC) Effects:**
 | WC | Effect |
@@ -312,7 +313,8 @@ PI advances per existing IP/PI interaction rules. PI markers placed in territori
 [EDITORIAL: ED-361 — resolved provisionally. Thresholds designed so PI 5 (Hafenmark victory condition) is achievable without triggering Crown crisis. PI 15+ is catastrophic for Crown. Flagged for simulation.]
 
 ## Torben Loyalty Track (v04 B2 + B5 — PP-188 correction)
-Range 0–7. Starts at **3**. Visible to all. Active from game start (no trigger needed).
+Range 0–7. Starts at **7** (PP-599). Visible to all. Active from game start.
+Decay on Altonian Court residence: −1 immediately on departure + −1/Year-End while abroad.
 
 **Gaining:**
 - Senator Outward targeting Torben: Overwhelming +2; Success +1.

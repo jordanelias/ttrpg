@@ -232,18 +232,12 @@ block sight-lines with front-line formations; flank to reach Artillery directly.
 ## Volley Phase Pool (PP-503) [PROVISIONAL]
 Volley Phase pool = Power stat (1–7) rolled at TN 6. NOT the engagement pool formula (PP-233). Ranged output is unit-quality-based, not Command-based.
 
-## Mass Battle RS Multiplier (PP-192, PP-225) [PROVISIONAL]
-All RS costs AND gains from Thread operations in mass battle ×3 (PP-225). Applied after degree table resolution. Coherence costs NOT multiplied. RS ceiling (100) and seasonal cap (±10) still apply.
-| Op | Normal RS (Success) | Mass Battle RS (×3) |
-|----|--------------------|-----------------------|
-| Pulling (failure) | −2 | −6 |
-| Locking (success) | −1 | −3 |
-| Dissolution (success) | −5 | −15 |
-| Dissolution (failure) | −8 | −24 |
-| Mending (success) | +1 | +3 |
-| Mending (overwhelming) | +2 | +6 |
-| Weaving Overwhelming (Relational+) | +1 | +3 |
-Source: ST-TW-03 design note + PP-225 (gains also ×3).
+## Mass Battle Thread RS (PP-601, PP-613 — canonical)
+×3 multiplier STRUCK (PP-601 struck PP-192/PP-225). Individual Thread op RS costs in mass
+battle = full TTRPG value (×1). RS consequences in mass battle come from Substrate
+Saturation Counter only (see params_threadwork.md §Substrate Saturation Counter):
+Counter ≥ 3 at battle end: RS −1 at next Accounting. Hard cap −1/battle.
+Battle-context Thread Debt expires at battle season end (PP-600).
 
 ## Thread Integration [COMPILED — stage11]
 
@@ -426,8 +420,10 @@ TTRPG Dmg Mod = ⌈BG Dmg Mod ÷ 2⌉.
 | Artillery | +2 |
 | Knights Templar | +3 |
 
-## PP-249 — Coherence → Command: no penalty
-Dissonance impairs Thread operations only. No Coherence penalty on Command tactic rolls.
+## PP-249/PP-610 — Spirit and Coherence: no Command penalty
+Spirit pool reductions from Dissonance checks (PP-610) do not impair Command tactic rolls.
+Coherence loss from Thread operations does not impair Command tactic rolls.
+Both are operationally independent of Command.
 
 ## PP-250 — Zoom In mid-Phase-5 deferral fix
 Mid-phase Zoom In fires at next legal phase-lock point. Phase-5 trigger → After Phase 6 Step 1 (not end-of-Phase-5).

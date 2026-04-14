@@ -679,3 +679,17 @@ P2 findings: 4 (P2-F01→PP-593; P2-F02/F04→ED-421; P2-F03 design observation;
 P1 findings: 3 (P1-G03→PP-594; P1-G04→PP-598; P1-G05→PP-595)
 P2 findings: 3 (P2-G01/GAP-G01→PP-596; P2-G02/G05→PP-597)
 Editorial branches: 1 (ED-423/ED-404 Grand Debate + Quaestio — simulation stopped at branch)
+
+## Thread System Redesign — Session 2026-04-14 (PP-600-623)
+| Area | Status | Key Changes |
+|---|---|---|
+| Thread pool unification | COMPLETE | (Spirit×2)+History+TPS all ops |
+| TN system | COMPLETE | Base 7; Binding +1; POP +1; POP Binding +2 |
+| Three-axis Ob | COMPLETE | Depth(Fibonacci 1,2,3,5,8,13)+Breadth+Distance |
+| Gap self-closure | COMPLETE | 5 scales; RS drain by scale; age modifier |
+| RS cap | STRUCK | No ±10 cap; reality takes full consequences |
+| Southernmost Ritual | STRUCK | ARC-T04 struck; no ritual exists |
+| WR/WC redesign | COMPLETE | Both 0-3; WR gates WC |
+| Einhir canon | COMPLETE | Foundational stabilization sites; Calamity mechanism |
+| Probability corrected | COMPLETE | TN7=0.4/die; Fibonacci calibrated |
+| Dissonance | COMPLETE | Spirit check mechanic; no separate tracker |

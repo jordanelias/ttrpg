@@ -20,7 +20,7 @@
 | Argue (Crowd) | (Charisma × 2) + History bonus | 7 | Crowd responds to delivery/authority |
 | Argue (No Adjudicator) | (Attunement × 2) + History bonus | 7 | Must read and calibrate to counterpart |
 | Argue (Panel) | (Cognition × 2) + History bonus | 7 | [PROVISIONAL — ED-137] |
-| Read | Attunement only (no History) | 7 Ob 1 | Once per contest (PP-235). Result persists; degrades one tier per exchange after first. Action name [ED-132]. |
+| Appraise | Attunement + Recall | 7 | Ob = opponent Charisma ÷ 2 (round up), min 1. Once per exchange. PP-614: consolidates Read/Judge/Appraise into single canonical entry. |
 | Recall bonus | +2D | — | Citing specific named verifiable claim. Binary. Either genre. |
 | Pre-contest prep | Attunement + History | 7 Ob 1 | Requires 1+ hour. Rushed: TN 8. |
 
@@ -180,8 +180,9 @@ Any declared coalition member can corroborate (Knot not required). Knot-sharing 
 ## PP-272 — "Division" stricken
 Term removed from §7 Church Tribunal as vestigial. No mechanic defined.
 
-## PP-278 — Read → Appraise
-Exchange Step 1 renamed Appraise throughout social contest system. Pool: Attunement only, TN 7 Ob 1.
+## PP-614/PP-278 — Appraise (canonical)
+Exchange Step 1: Appraise. Pool: Attunement + Recall | TN 7 | Ob = opponent Cha÷2 (round up), min 1.
+PP-254 (Judge/Att+Rec pool) + PP-278 (Appraise name) consolidated. Old "Read pool = Attunement only Ob1" struck.
 
 ## PP-279 — FR terminology
 "Forced Resolution" label struck. Operations: Weaving, Pulling, Locking, Dissolution, Mending. Locking and Dissolution are self-descriptive.

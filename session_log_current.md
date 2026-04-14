@@ -1,3 +1,60 @@
+# Valoria Session Log — Current
+
+```yaml
+session_id: 2026-04-14_SONNET_SESSION_CLOSE
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+## SESSION SUMMARY — 2026-04-14
+
+### Primary Work
+1. Simulation Cluster G (Capital Territory Events) — SIM-ARC-G01-G05
+   Five capital fall scenarios. PP-594-598. 3 P1 findings.
+2. Design questions: WR/WC, Torben, Schoenland, Hybrid territory, RS cosmology.
+   ED-424-429 raised. PP-599-600 (Torben 7 start; battle RS recalibration).
+3. Comprehensive Thread system redesign:
+   - RS seasonal cap struck (PP-603)
+   - Gap self-closure by scale Fibonacci model (PP-604)
+   - WR/WC redesigned 0-3 (PP-605)
+   - Dissonance → Spirit check; Attunement defined (PP-607, PP-610)
+   - Mending Ob age modifier (PP-608)
+   - Einhir Foundational sites canon (PP-609)
+   - Southernmost Ritual/ARC-T04 struck (PP-601, PP-602)
+   - Thread pool unified: (Spirit×2)+History+TPS all ops (PP-616-619)
+   - History system formalised 1-3pts cap (PP-617)
+   - Three-axis Ob: Depth(Fibonacci)+Breadth+Distance (PP-622)
+   - Scale calibration: Territorial=battlefield, Structural=BG territory (PP-621)
+   - Probability corrected: TN7=0.4/die; Fibonacci 1,2,3,5,8,13 (PP-623)
+4. Stat consistency audit:
+   - Stamina = End+1 confirmed (PP-611)
+   - Combat Pool = (Agi×2)+Hist+3 confirmed (PP-612/615)
+   - Mass battle RS×3 struck (PP-613)
+   - Appraise consolidated: Att+Rec, Ob=Cha÷2 (PP-614)
+5. Einhir and scale ontology design discussion:
+   - Foundational = conditions for Thread itself (PP-609)
+   - Field depth = emergent local area Thread configuration
+   - Scale hierarchy rule: cannot Mend above the deepest disruption
+
+### Patches Applied This Session
+PP-594 through PP-623 (30 patches)
+
+### Open Editorials: ~40 (ED-401-441; non-blocking)
+Key open: ED-431 (Foundational n=4 vs n=5), ED-432 (Dissolution degree-scale),
+          ED-434 (co-victory RS reachability), ED-441 (Field name confirmation)
+
+### P1 BLOCKERS: 0
+
+### Next Session — Recommended Tasks
+1. Confirm ED-431 (Foundational closure: 32 seasons confirmed?)
+2. Confirm ED-441 ("Field" as name for depth level 3)
+3. Confirm ED-432 (Dissolution Partial = n+1 or n+2?)
+4. Fieldwork simulation debt: SIM-DEBT-FW-01 through FW-06
+5. Review all Coherence tables for consistency with new Spirit/Dissonance system
+```
+
+---
+
 
 ---
 

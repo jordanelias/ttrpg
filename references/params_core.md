@@ -115,9 +115,9 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 | Score | Formula | Range | Notes |
 |-------|---------|-------|-------|
 | Health | Endurance + 6 | 7–13 | Damage buffer before Wounds. Wound threshold fires every (End+6) damage received; Health resets to full on each Wound. (PP-248) |
-| Stamina | Endurance + 1 | min 2 | Combat resource. Floor 2. Cannot wear armour that would reduce Stamina to 1 or below. (PP-248) |
+| Stamina | Endurance + 1 | min 2 | Combat resource. Floor 2. Cannot wear armour that would reduce Stamina to 1 or below. (PP-248/PP-611 confirmed) |
 | Composure | Charisma + 6 | 7–13 | Social damage buffer before Rattled. Parallels Health = Endurance + 6. (PP-234, ED-127 resolved) |
-| Combat Pool | Agility + weapon proficiency History (points + 3) | Variable (min 5) | Split Offence/Defence each round. (PP-247) |
+| Combat Pool | (Agility × 2) + weapon History (points + 3) | min 5 | Split Offence/Defence each round. PP-615: doubled formula confirmed canonical; PP-247 note was stale. |
 | Contact Rounds | Focus | 1–7 | Max rounds maintaining Thread contact (practitioners only) |
 | Certainty | 5 (starting, varies by background) | 0–5 | Cosmological worldview: Solmund orthodoxy (5) → Thread acceptance (0). See PP-551 section below. |
 | Coherence | 10 (starting); countdown to 0 | 0–10 | Personal rendering legibility |
