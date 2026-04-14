@@ -787,3 +787,9 @@ All PASS tests: patched in same commit (PP-630–634).
 | SIM-STH-02 | Expedition procedure Obs | Complete | Planning 62%, Resources 36%, Zone hazards 57-80%. TS gate enforced. |
 | SIM-STH-03 | Ritual Ob calibration (Ob 5) | Complete | Lead 18D+4 participants = 92% success. Rare failure is appropriately severe. |
 | SIM-STH-04 | Edge cases: crisis timeline, TS gate, ED-048 name | Complete | P2: SIM-STH-E1 applied — combined TT cap (−5/season). PP-635. |
+
+## SIM-DEBT-SOC Results (2026-04-13)
+| SIM-DEBT-SOC-01 | COMPLETE | CLEAN | ED-532 resolved |
+| SIM-DEBT-SOC-02 | COMPLETE | CLEAN | ED-533 resolved |
+| SIM-DEBT-SOC-03 | COMPLETE | P1→PP-633 | ED-534 resolved |
+| SIM-ED-519 | COMPLETE | CLEAN | PP-633 documented |

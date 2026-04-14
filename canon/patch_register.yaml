@@ -8016,3 +8016,18 @@ patches:
     targets:
       - designs/board_game/board_game_v30.md
     status: applied
+
+- id: PP-633
+  date: 2026-04-13
+  scope: patch
+  description: >
+    SIM-DEBT-SOC-01/02/03 + ED-519. SOC-01/02 CLEAN. SOC-03 P1 fix: Simultaneous
+    Rupture Composure cap = floor(Composure*0.75). ED-519: RS +1D third independent
+    source. EDs resolved: ED-519 update, ED-532/533/534.
+  affects:
+    - designs/fieldwork/fieldwork_socializing.md
+    - references/params_threadwork.md
+    - references/params_contest.md
+    - canon/editorial_ledger.yaml
+    - tests/coverage_matrix.md
+  status: applied

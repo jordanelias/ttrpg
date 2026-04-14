@@ -4,7 +4,31 @@
 # 'flagged' = requires user narrative/authorial decision; [EDITORIAL] marker present
 # All mechanical items resolved. Only worldbuilding/narrative items remain flagged.
 
-# next_id: 510
+- id: ED-532
+  priority: P3
+  status: resolved
+  system: fieldwork_socializing
+  description: "Disposition ≤ −3 recovery undefined mechanically."
+  resolution: "PP-633: GM-adjudicated narrative event required. No roll."
+  patch: PP-633
+
+- id: ED-533
+  priority: P2
+  status: resolved
+  system: fieldwork_socializing
+  description: "Loose/Medium Knot formation trivially fast."
+  resolution: "PP-633: Intended design — casual bonds form quickly."
+  patch: PP-633
+
+- id: ED-534
+  priority: P1
+  status: resolved
+  system: fieldwork_socializing
+  description: "Simultaneous Rupture of all Close Knots catastrophic, no cap."
+  resolution: "PP-633: Composure damage cap = floor(Composure×0.75), min = highest single-tier cost."
+  patch: PP-633
+
+# next_id: 535
 # IMPORTANT: All new editorial items MUST use the next_id value and increment it.
 # NOTE: ED-486 through ED-495 used by opposing threadwork session (2026-04-13).
 # NOTE: ED-496 through ED-509 used for fieldwork editorial harvest (PP-631, 2026-04-13).
@@ -3379,7 +3403,7 @@ editorial_decisions:
   description: "Resonant Style +1D Contest stacking validation."
   priority: P2
   status: resolved
-  resolution: "Confirmed +1D. Max +5D requires extreme investment + perfect intel. Practical pools 12-18D. SIM-NPC-02 retained for validation. 2026-04-13."
+  resolution: "PP-633: RS +1D is third independent source; not subject to Genre+Audience +2D cap. Full +3D pre-roll stack not degenerate. Documented params_contest.md. SIM validated 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
