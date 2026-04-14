@@ -32,26 +32,39 @@ with urllib.request.urlopen(req) as r:
 sys.path.insert(0, '/home/claude')
 import github_ops as g
 
-# Batch-read all session-critical files
+# Step 1: fetch hooks (alongside github_ops — same REST call pattern)
+import urllib.request as _ur, base64 as _b64, json as _j
+_hr = _ur.Request(
+    f'https://api.github.com/repos/jordanelias/ttrpg/contents/skills/valoria-orchestrator/scripts/valoria_hooks.py?ref=main',
+    headers={'Authorization': f'token {PAT}', 'Accept': 'application/vnd.github.v3+json'}
+)
+with _ur.urlopen(_hr) as _r:
+    open('/home/claude/valoria_hooks.py', 'w').write(_b64.b64decode(_j.loads(_r.read())['content']).decode())
+import valoria_hooks as h
+
+# Step 2: batch-read session-critical files (triggers register health check automatically)
 files = g.read_files_graphql([
     'session_log_current.md',
-    'canon/editorial_ledger_summary.yaml',   # ~166 tokens (replaces 43k-token full ledger)
-    'references/file_index_summary.md',      # ~324 tokens (replaces 6.7k-token full index)
+    'canon/editorial_ledger_summary.yaml',
+    'references/file_index_summary.md',
     'references/canonical_sources.yaml',
 ])
-# Load full registers only when needed:
-# canon/editorial_ledger.yaml          → adding new editorial items
-# canon/editorial_ledger_archive.yaml  → audit/reference only
-# canon/patch_register_active.yaml     → patch work (190 active patches)
-# canon/patch_register_archive.yaml    → historical audit only
-# tests/coverage_matrix.md            → open SIM-DEBT summary
-# tests/coverage_matrix_archive.md    → historical sim records
+# Full registers — load only when needed:
+# canon/editorial_ledger.yaml           → adding new editorials
+# canon/patch_register_active.yaml      → patch work
+# tests/coverage_matrix.md             → open SIM-DEBT
+# *_archive.yaml / *_archive.md        → audit/reference only
+
+# Step 3: confirm bootstrap and run all session-start hooks
+h.assert_bootstrap()
+h.context_gate()
 token = g.assert_fetched(
     'session_log_current.md',
-    'canon/editorial_ledger.yaml',
+    'canon/editorial_ledger_summary.yaml',
     'references/canonical_sources.yaml',
 )
 print(f'Session token: {token}')
+print('Bootstrap complete. All hooks active.')
 ```
 
 **Execution requirement:** All GitHub operations must be executed via `bash_tool`, not written as passive code blocks. A code block that is not executed is not a fetch. Every `read_files_graphql()` and `atomic_commit()` call must appear as a `bash_tool` execution with visible output in context.
@@ -61,6 +74,24 @@ print(f'Session token: {token}')
 **Failure behavior:** If PAT is missing, GitHub is unreachable, or any critical file returns None — STOP. Report the error. State: "GitHub bootstrap failed — cannot proceed without live repo data." Do not continue using memory.
 
 **After bootstrap:** Hold fetched contents in working context. Do not re-fetch within the same session unless a write has occurred since last fetch.
+
+
+## Hook Quick Reference (valoria_hooks.py)
+
+All hooks imported as `h` at bootstrap. All raise `RuntimeError` — no warnings.
+
+| Hook | When to call | Blocks |
+|------|-------------|--------|
+| `h.assert_bootstrap()` | Immediately after bootstrap | Work before GitHub fetch |
+| `h.task_gate(type)` | Before starting any task | Missing canonical sources |
+| `h.task_gate_with_system(type, system, sources)` | Simulation/audit with specific system | Missing design doc |
+| `h.editorial_gate(path, content)` | Called automatically by safe_commit | Unflagged editorial commits |
+| `h.propose_mechanic_gate(system)` | Before any mechanic proposal | Proposing without sources |
+| `h.pre_commit_gate(additions, deletions)` | Before every commit | Size, co-files, tools |
+| `h.commit_message_gate(message)` | Before every commit | Bad message format |
+| `h.context_gate()` | Every ~10 bash_tool calls | Context limit violations |
+| `h.memory_contamination_guard(path, content)` | When reusing fetched content | Stale/injected content |
+| `h.safe_commit(additions, deletions, message)` | **Always** — replaces g.atomic_commit() | All of the above |
 
 ## Register Health (Auto-enforced by github_ops.py)
 
@@ -271,13 +302,14 @@ Every commit must be atomic and include:
 8. Test output in `tests/` if simulation run
 9. Run `python3 tools/freshness_gate.py --update` after any canonical doc change; include result in same commit
 
-**Pre-commit (run before every `atomic_commit()` call):**
-```bash
-python3 tools/freshness_gate.py --update
-python3 tools/broken_dependency_checker.py
-python3 tools/patch_propagation_checker.py
+**Pre-commit — use `h.safe_commit()` instead of `g.atomic_commit()` directly:**
+```python
+oid = h.safe_commit(additions, deletions, message)
+# Automatically runs: commit_message_gate + editorial_gate + pre_commit_gate
+# (which includes freshness_gate, broken_dependency_checker, patch_propagation_checker)
+# Raises RuntimeError on any violation — no bypass.
 ```
-Exit 0 required on all three. On non-zero exit: fix the reported issue before committing.
+Direct `g.atomic_commit()` is permitted only in infrastructure commits where hooks are being updated.
 
 **Post-commit verification:** after `atomic_commit()` returns a SHA, re-fetch all files modified in that commit and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
 
