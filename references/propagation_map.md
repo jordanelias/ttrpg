@@ -69,11 +69,11 @@ The orchestrator applies these rules to any new file before asking for manual in
 | Any `designs/` file | `references/file_index.md` |
 | Any `designs/` file | `references/propagation_map.md` (this file) |
 | Any `designs/` file with `[EDITORIAL: ...]` flags | `canon/editorial_ledger.yaml` |
-| Any `designs/` file with patches | `canon/patch_register.yaml` |
+| Any `designs/` file with patches | `canon/patch_register_active.yaml` |
 | Any `references/params_*.md` | Any skill that loads that params file (see params-skill map below) |
 | Any `tests/sim_*.md` | `tests/coverage_matrix.md` |
 | Any `tests/sim_*.md` | Patched design files (via Mode I) |
-| Any `canon/patch_register.yaml` | `references/file_index.md` KNOWN STALE SYNC GAPS |
+| Any `canon/patch_register_active.yaml` | `references/file_index.md` KNOWN STALE SYNC GAPS |
 | Any `canon/editorial_ledger.yaml` | `session_log_current.md` editorial_decisions_pending |
 | Any `compilation/v0.14/*.md` | Its corresponding `references/params_*.md` |
 | Any `skills/*.md` | `skills/valoria-orchestrator/references/skill_registry.md` |
@@ -193,7 +193,7 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 | `designs/mass_combat/mass_battle_v30.md` | `deprecated/designs/gm_ref_cp14/zoom_in_out_reference_card_deprecated.md` | B.5 references this card |
 
 | `tests/sim_hyb_01_templar_crossing.md` (NEW) | `tests/coverage_matrix.md` | Simulation run — log row added |
-| `tests/sim_hyb_01_templar_crossing.md` (NEW) | `canon/patch_register.yaml` | PP-101 sourced from this sim |
+| `tests/sim_hyb_01_templar_crossing.md` (NEW) | `canon/patch_register_active.yaml` | PP-101 sourced from this sim |
 | `tests/sim_hyb_01_templar_crossing.md` (NEW) | `canon/editorial_ledger.yaml` | ED-054 flagged from this sim |
 | `designs/mass_combat/mass_battle_v30.md` | `skills/valoria-orchestrator/references/state_transfer_spec.md` | B.5 BG→TTRPG conversion now cross-refs B.2 |
 | `designs/mass_combat/mass_battle_v30.md` | `references/params_mass_combat.md` | PP-101 applied; params_mass_combat notes open gaps PARAMS-GAP-04/05 |
@@ -210,7 +210,7 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 
 | Changed File | Propagates To | Reason |
 |-------------|--------------|--------|
-| `canon/patch_register.yaml` | `references/file_index.md` | Stale gap tracking |
+| `canon/patch_register_active.yaml` | `references/file_index.md` | Stale gap tracking |
 | `canon/editorial_ledger.yaml` | `session_log_current.md` | editorial_decisions_pending |
 | `session_log_current.md` | `session_log_archive.md` | On session close |
 
@@ -224,7 +224,7 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 |-------------|--------------|--------|
 | `references/params_board_game.md` | `designs/board_game/board_game_v30.md` | PP-115-122 gap fills |
 | `references/params_board_game.md` | `canon/editorial_ledger.yaml` | ED-053-058 added |
-| `references/params_board_game.md` | `canon/patch_register.yaml` | PP-112-122 added |
+| `references/params_board_game.md` | `canon/patch_register_active.yaml` | PP-112-122 added |
 | `canon/editorial_ledger.yaml` | `session_log_current.md` | New editorial decisions pending |
 
 ## BROKEN DEPENDENCIES (auto-detected, log here)
@@ -251,7 +251,7 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 - system: BG
 - type: TEST
 - depends_on: [references/params_board_game.md, compilation/v0.14/stage_bg_board_game_mode_deprecated.md]
-- referenced_by: [tests/coverage_matrix.md, canon/patch_register.yaml]
+- referenced_by: [tests/coverage_matrix.md, canon/patch_register_active.yaml]
 
 ## designs/board_game/stage_bg_proposal_v02.md (action economy canonical)
 - system: BG
@@ -264,7 +264,7 @@ When any source doc changes: its params file is stale. Add to `file_index.md` KN
 - system: BG
 - type: TEST
 - depends_on: [designs/board_game/*.md, designs/gm_ref_cp14/arcs/*.md, references/params_board_game.md]
-- referenced_by: [tests/coverage_matrix.md, canon/editorial_ledger.yaml, canon/patch_register.yaml]
+- referenced_by: [tests/coverage_matrix.md, canon/editorial_ledger.yaml, canon/patch_register_active.yaml]
 
 ### PP-172 — Ranged Subtypes (2026-04-02)
 Source: designs/combat/combat_v30.md §5, §6
@@ -311,7 +311,7 @@ Propagation complete. All affected params updated in same commit (22ee783).
 - references/params_scale_transitions.md → DONE (this commit)
 - references/glossary.md → DONE (this commit)
 - canon/editorial_ledger.yaml → DONE (ED-127–135 added)
-- canon/patch_register.yaml → DONE
+- canon/patch_register_active.yaml → DONE
 - tests/coverage_matrix.md → DONE (this commit)
 - session_log_current.md → DONE (this commit)
 - references/params_board_game.md → NOT REQUIRED (BG battle abstracts above unit-stat level; BG uses faction Military stat for battle resolution, not Size/Power/Discipline)

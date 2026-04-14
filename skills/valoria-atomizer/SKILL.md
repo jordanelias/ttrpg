@@ -12,7 +12,6 @@ description: >
 
 **Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
 
-
 # VALORIA ATOMIZER SKILL
 
 **Model:** Sonnet 4.6.
@@ -69,11 +68,6 @@ target_files = g.read_files_graphql([canonical_v30_path])
 
 ## Fetch Log (emit before any work)
 
-```
-## FETCH LOG
-session token: [from g.assert_fetched()]
-references/design_registry.yaml: ✓ fetched ([N] lines)
-[canonical_v30_path]: ✓ fetched ([N] lines)
 ```
 
 ## Workflow

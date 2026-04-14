@@ -14,7 +14,6 @@ description: >
 
 **Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
 
-
 # Valoria Combat Simulator
 
 ## Purpose
@@ -42,22 +41,6 @@ for path, content in files.items():
     if content is None:
         raise RuntimeError(f"GitHub fetch failed: {path} — cannot proceed")
 ```
-
-**Fetch log (emit before any analysis):**
-```
-## FETCH LOG
-session token: [16-char hex — from g.assert_fetched() call above]
-canonical_sources.yaml: ✓ fetched ([N] lines)
-[canonical design doc path]: ✓ fetched ([N] lines)
-references/params_[system].md: ✓ fetched ([N] lines) / ✗ missing
-```
-If any required file is missing from this log, or session token is absent, stop — the analysis is invalid.
-
-**Version check:** Confirm `<!-- version: -->` tag in `references/params_combat.md` matches current ruleset version in `compilation/README.md`. If mismatch: flag `[STALE PARAMS: params_combat.md is vX.XX, current ruleset is vY.YY — update params before proceeding]` and stop.
-
-**Memory contamination warning:** userMemories may contain mechanical values (track values, territory data, faction stats, etc.) that feel current but are not fetched from GitHub. Do not use any value from memory as a source for mechanical analysis. Fetch only.
-
-**No hardcoded values.** Every mechanical value (weapon stats, armour DR, pool formulas, TN values, threshold values) must be read from the fetched `references/params_combat.md`. Never use remembered values from previous sessions or skill body text.
 
 ---
 
@@ -166,12 +149,6 @@ Log to `canon/patch_register.yaml`.
 
 ---
 
-**Pre-commit (run before every `atomic_commit()` call):**
-```bash
-python3 tools/freshness_gate.py --update
-python3 tools/broken_dependency_checker.py
-python3 tools/patch_propagation_checker.py
-```
 Exit 0 required on all three. On non-zero exit: fix the reported issue before committing.
 
 **Post-commit verification:** after `atomic_commit()` returns a SHA, re-fetch all files modified in that commit and confirm content matches what was committed. If content differs: flag immediately, do not proceed.

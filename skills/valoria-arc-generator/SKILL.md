@@ -13,7 +13,6 @@ description: >
 
 **Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
 
-
 # VALORIA ARC GENERATOR
 
 **Model:** Sonnet 4.6.
@@ -32,8 +31,6 @@ if canonical is None:
 # Step 2: fetch required docs based on arc scope (see Read Protocol below)
 # Step 3: check gm_ref/ directory to avoid arc duplication
 ```
-
-**Memory contamination warning:** userMemories may contain mechanical values (track values, territory data, faction stats, etc.) that feel current but are not fetched from GitHub. Do not use any value from memory as a source for mechanical analysis. Fetch only.
 
 **Do not read compilation stage files from memory.** Even if you have seen them this session, verify via `canonical_sources.yaml` which version is current before using any values.
 
@@ -78,20 +75,6 @@ Fetch in this order. Check `canonical_sources.yaml` to confirm current paths bef
 
 **Check for prior arcs (fetch directory listing, avoid duplication):**
 - `gm_ref/` — list contents via GitHub API before generating; do not reproduce an arc already documented there
-
-**Fetch log (emit before any analysis):**
-```
-## FETCH LOG
-session token: [16-char hex — from g.assert_fetched() call above]
-canonical_sources.yaml: ✓ fetched ([N] lines)
-[canonical design doc path]: ✓ fetched ([N] lines)
-references/params_[system].md: ✓ fetched ([N] lines) / ✗ missing
-```
-If any required file is missing from this log, or session token is absent, stop — the analysis is invalid.
-
-**Version check:** confirm `<!-- version: -->` tag in each fetched params file matches current ruleset version in `compilation/README.md`. If mismatch: flag `[STALE PARAMS: <file> is vX.XX, current is vY.YY]` and stop.
-
-**Do not read stage files or design files directly to get mechanical values.** Use params files. If a value is missing from params, flag it as a gap rather than reading the source document mid-generation.
 
 ---
 
@@ -146,12 +129,6 @@ If any required file is missing from this log, or session token is absent, stop 
 
 - Inline in chat if 3 arcs or fewer and no prior arcs to check.
 - `.md` file if 4+ arcs or if the user requests a document.
-**Pre-commit (run before every `atomic_commit()` call):**
-```bash
-python3 tools/freshness_gate.py --update
-python3 tools/broken_dependency_checker.py
-python3 tools/patch_propagation_checker.py
-```
 Exit 0 required on all three. On non-zero exit: fix the reported issue before committing.
 
 **Post-commit verification:** after `atomic_commit()` returns a SHA, re-fetch all files modified in that commit and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
