@@ -38,7 +38,7 @@ systems:
 
   southernmost:
     canonical: compilation/v0.14/stage4_southernmost_deprecated.md
-    canonical_sha__compilation__v0_14__stage4_southernmost_md: "c38d8cc1b4862052832807dcd72487e6c37b1607"
+    canonical_sha__compilation__v0_14__stage4_southernmost_deprecated_md: "c38d8cc1b4862052832807dcd72487e6c37b1607"
     params: null
     design_doc: null
 
@@ -50,7 +50,7 @@ systems:
 
   factions:
     canonical_ttrpg: compilation/v0.14/stage6_factions_deprecated.md
-    canonical_sha__compilation__v0_14__stage6_factions_md: "4eb711be538f8f2b6eab4e2fcffd8b85e5c01120"
+    canonical_sha__compilation__v0_14__stage6_factions_deprecated_md: "4eb711be538f8f2b6eab4e2fcffd8b85e5c01120"
     canonical_bg: designs/board_game/board_game_v30.md
     canonical_sha__designs__board_game__board_game_v30_md: "f6ff31a7ff0bfdd69875e5dc9a498eeea10a5247"
     canonical_hybrid: designs/board_game/board_game_v30.md
@@ -90,13 +90,13 @@ systems:
   scale_transitions:
     canonical: designs/hybrid/scale_transitions_v30.md
     canonical_sha__designs__hybrid__scale_transitions_v30_md: "88296c23715efbfed4151f1ce48b5c99b1780790"
-    canonical_sha__compilation__v0_14__stage11_scale_transitions_md: "277e7ffb787cf6af153462b4cee3bcea09ae4ec6"
+    canonical_sha__compilation__v0_14__stage11_scale_transitions_deprecated_md: "277e7ffb787cf6af153462b4cee3bcea09ae4ec6"
     params: null
     design_doc: null
 
   campaign_modes:
     canonical: compilation/v0.14/stage12_campaign_modes_deprecated.md
-    canonical_sha__compilation__v0_14__stage12_campaign_modes_md: "029603bb27b7f5835277f42115e5ff3c19985d66"
+    canonical_sha__compilation__v0_14__stage12_campaign_modes_deprecated_md: "029603bb27b7f5835277f42115e5ff3c19985d66"
     params: null
     design_doc: null
 
