@@ -1358,6 +1358,10 @@ P1 BLOCKERS: 0 (all resolved PP-577–582)
 - ~14 provisional decisions marked [PROVISIONAL] across PP-568–589 awaiting your review
 - "Remembrancer" institutional role needs a name
 
+## PHASE 8: Remaining flagged items
+- 29 flagged items resolved (PP-595)
+- POI catalog (ED-507) and Godot architecture (ED-509) deferred to dedicated sessions
+
 
 OPEN EDITORIALS: 39 (33 open + 6 flagged)
 

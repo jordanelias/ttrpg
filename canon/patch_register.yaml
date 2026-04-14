@@ -7978,3 +7978,14 @@ patches:
     - references/params_core.md
     - references/canonical_sources.yaml
   status: applied
+- id: PP-595
+  date: 2026-04-13
+  scope: editorial
+  description: >
+    Final flagged items batch: 29 items resolved. Territory presence (ED-426),
+    Ceiral Rite naming (ED-416), Attunement derivation (ED-418/436), Crown Wealth
+    (ED-420), RS recovery (ED-427), Battle RS drain (ED-428), Certainty full
+    mechanics (ED-433), Dissonance calibration (ED-435), Confluence naming (ED-441),
+    NPC starting Dispositions (ED-508). POI catalog and Godot architecture deferred.
+  affects: [canon/editorial_ledger.yaml]
+  status: applied

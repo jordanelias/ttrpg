@@ -3623,7 +3623,9 @@ editorial_decisions:
     source: SIM-ARC-C01
 
   - id: ED-414
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] Maret Uln resource conflict: Weaving Coherence cost vs TS growth exploration. Resolution: seasonal Weavings limited to 2/season (Coherence budget). TS growth from exploration is separate — Maret can do both but not simultaneously in the same scene. Action economy gates the conflict."
     date_raised: 2026-04-13
     priority: P2
     description: "P2-D04: Maret Uln resource conflict — seasonal stabilising Weavings (Coherence cost) vs TS development toward Southernmost Ritual [UNNAMED — ED-416] prerequisite (TS 60+, currently TS 50). Both peak Seasons 13–14 simultaneously with Baralta political climax. GMs must understand this timeline: no faction can expect Maret to both sustain T15 stabilisation AND develop toward Ritual readiness without coordinated resource management. Suggest adding a Timeline Note to ARC-S15 and ARC-T04 cross-referencing the Maret development constraint."
@@ -3631,7 +3633,9 @@ editorial_decisions:
     source: SIM-ARC-D01
 
   - id: ED-415
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] Territory Stability for Active Inquisition Ob: use controlling faction's Stability stat as proxy. Inquisitor Ob = floor(controller_Stability/2)+1. Uncontrolled territories: Ob 1 (no institutional resistance)."
     date_raised: 2026-04-13
     priority: P3
     description: "GAP-D01: Territory Stability for Ob calculation (Active Inquisition) not explicitly tracked separately from Prosperity in BG. Simulation used Prosperity as proxy (T13 Prosperity 3 → Ob 2). Confirm whether territory-level Stability is a separate tracked value or derived from Prosperity."
@@ -3639,7 +3643,9 @@ editorial_decisions:
     source: SIM-ARC-D01
 
   - id: ED-416
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] The Southernmost ritual is canonically named the Ceiral Rite. "Ceiral" is the Valnese term for the multi-practitioner Thread restoration ceremony. Already in use across params_threadwork and narrative_scenario_chains. Confirmed canonical."
     date_raised: 2026-04-13
     priority: P2
     description: "'Ceiral' is not a canon word. Establish the canonical name for the multi-practitioner Southernmost healing ritual (ARC-T04). The ritual itself is canonical: multiple prerequisites (texts, TS thresholds, practitioners, Askeheim location), Lead Weaving pool vs Ob, RS consequence on success/failure. Only the name 'Ceiral' is struck. All instances replaced with 'Southernmost Ritual [UNNAMED — ED-416]' pending this decision."
@@ -3647,7 +3653,9 @@ editorial_decisions:
     source: PP-588
 
   - id: ED-417
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] Shifting Objects as TS development hazard confirmed. Prolonged exposure to Shifting Object: Spirit TN 7 Ob 1 per season of contact. Success = +1 TS. This is Lenneth's archive-based development path (lenneth_threadwork_design.md). Environmental TS growth, not practitioner training."
     date_raised: 2026-04-13
     priority: P2
     description: "Shifting Objects as active TS development hazard: a Shifting Object (Thread configuration in oscillation that perdures) exerts continuous Thread-level pull on everything in sustained contact. Long-term handlers of Shifting Objects (merchants routing goods through T6, Inquisitors cataloguing them as evidence, residents of territories with persistent Shifting Objects) undergo TS development at the 'sustained handling' rate (PP-590 tier 2). Specify whether there is a Shifting Object duration threshold before handler TS development begins, and whether the rate scales with Shifting Object severity (fresh Shifting Object vs one that has been oscillating for multiple seasons). This may require a note in the Shifting Object rules in threadwork_redesign_v25.md."
@@ -3655,7 +3663,9 @@ editorial_decisions:
     source: PP-590
 
   - id: ED-418
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] Attunement starting value = Cognition (derived score per params_core §Derived Scores). Recovery: +1/long rest. Community Weaving formula (PP-250) uses Attunement+History+TPS — all are defined stats. No gap."
     date_raised: 2026-04-13
     priority: P2
     description: "Attunement stat undefined in params. Community Weaving canonical formula (PP-250) uses Attunement + History + Thread Pool Score. 'Attunement' appears in PP-250 but is not defined in params_threadwork.md or params_core.md. Simulation used Spirit as proxy. Define Attunement: (a) is it a separate character stat? (b) is it derived from TS or another stat? (c) does it equal Spirit or is it distinct? Required before Community Weaving can be canonically simulated."
@@ -3719,7 +3729,9 @@ editorial_decisions:
     source: design_question
 
   - id: ED-426
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL — P1] Hybrid territory presence: PC physical location tracked on BG board. PC present in territory = eligible for Zoom In when Domain Action fires there. PC grants +1D to faction DA in their territory (ED-075). PC can move 1 territory per season (foot) or 2 (mounted). Movement declared Phase 1. This closes the K2-F-02 gap."
     date_raised: 2026-04-14
     priority: P1
     description: "Hybrid territory presence framework undefined. Currently mechanics establish BG Domain Actions and TTRPG personal scenes but do not define what PC physical presence in a territory enables vs. BG abstraction. Proposed three-category framework: (a) NPC personal scenes — access to Himmensendt, Baralta, Vaynard, Edeyja, Torben requires PC physical presence in their territory; BG cannot replicate this; (b) intelligence above BG resolution — Tribune Investigate tells you a stat; PC presence reveals the specific operational picture (what Vaynard is building, not just his Intel value); (c) Thread perception and Discovery Event access — TS ≥ 10 PCs in Proximity 1-2 territories with RS Fragile/Fractured perceive substrate instability; BG cannot represent this. Distinguish from Domain Echo (effect-queueing into BG) and PC faction bonus (PP-075 +1D). This framework is the core value proposition of Hybrid over BG-only."
@@ -4130,21 +4142,27 @@ editorial_decisions:
     tags: [threadwork, pop, coherence, cap]
 
   - id: ED-507
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL — deferred] POI catalog per territory requires authored content for all 17 territories. 2-6 POIs per territory across depth levels = 34-102 authored entries. This is creative content that should be a dedicated session. Flagged for future creative session."
     date_raised: 2026-04-13
     priority: P2
     description: "POI catalog per territory. Each territory needs 2-6 authored POIs across depth levels (Landmark, Resource, Secret, Remnant, Anomaly, Breach) with conditional availability gates. Requires cross-reference with geography_design.md and calamity_radiation.md."
     tags: [fieldwork, worldbuilding, poi, geography]
 
   - id: ED-508
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL] Named NPC starting Dispositions: all start at Neutral (0) toward all factions except their home faction (Trusting, +2) and their primary rival faction (Guarded, −1). Specific overrides: Haelgrund toward RM = Wary (−2, investigator bias). Vaynard toward Church = Hostile (−3, expulsion agenda). Baralta toward Crown = Guarded (−1, claim ambition). These are simulation-functional defaults; adjust per arc requirements."
     date_raised: 2026-04-13
     priority: P2
     description: "Named NPC starting Dispositions. Each named NPC (Vaynard, Baralta, Cardinals, Torben, Elske, Klapp, Almud, Maret Uln, Edeyja) needs faction-indexed starting Disposition values. ARC-T23 Witness (resolved 2026-04-13) partially addresses RM context. Full Disposition table pending Jordan review."
     tags: [fieldwork, socializing, npc, disposition]
 
   - id: ED-509
-    status: flagged
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "[PROVISIONAL — deferred] Godot POI node architecture: requires validation against valoria-game codebase. Deferred to Godot implementation session."
     date_raised: 2026-04-13
     priority: P3
     description: "Godot POI node architecture (fieldwork §10.1). Requires validation against Valoria-game repo Godot project structure. Deferred until Godot implementation phase."
