@@ -325,7 +325,7 @@ Propagation targets:
 - tests/coverage_matrix.md → DONE (SIM-DEBT-03 added)
 - session_log_current.md → DONE (this commit)
 - designs/mass_combat/mass_battle_v30.md → RESOLVED — PP-233 applied (unit formula: Pool = min(Size,Command)+Command). Confirmed in params_mass_combat.md header.
-- compilation/v0.14/stage8_combat.md → STALE — mass combat compilation predates PP-232/233. [PROP-STALE: stage8_combat.md]
+- compilation/v0.14/stage8_combat_deprecated.md → STALE — mass combat compilation predates PP-232/233. [PROP-STALE: stage8_combat.md]
 
 ## Propagation Pass — 2026-04-03 (ED batch from review session)
 **EDs resolved and propagated:** ED-005, 006, 009, 014, 019, 022, 024, 029, 030, 034, 036, 056, 072, 080, 081, 083, 085, 086, 087, 094, 098, 109, 110, 121, 124, 130, 134
@@ -422,7 +422,7 @@ Propagation targets:
 - -> designs/npcs/npc_character_analyses_existing.md (Lenneth section)
 - -> designs/npcs/ruler_diamond_foil_analysis.md (Lenneth-Baralta confrontation)
 - -> gm_ref/arcs_01_04_nongreedy.md (Arc 1 RM ambient track affected by Cultural Revival Track)
-- -> compilation/v0.14/stage4_southernmost.md (Southernmost Awareness — Crown gains access via Lenneth at TS 30)
+- -> compilation/v0.14/stage4_southernmost_deprecated.md (Southernmost Awareness — Crown gains access via Lenneth at TS 30)
 
 ### designs/mechanics/baralta_crown_claim_mechanic.md
 - -> references/params_board_game.md (Crown Succession Contest, Stake Claim DA — NOT YET INTEGRATED into params)
