@@ -34,12 +34,16 @@ import github_ops as g
 
 # Step 1: fetch hooks (alongside github_ops — same REST call pattern)
 import urllib.request as _ur, base64 as _b64, json as _j
-_hr = _ur.Request(
-    f'https://api.github.com/repos/jordanelias/ttrpg/contents/skills/valoria-orchestrator/scripts/valoria_hooks.py?ref=main',
-    headers={'Authorization': f'token {PAT}', 'Accept': 'application/vnd.github.v3+json'}
-)
-with _ur.urlopen(_hr) as _r:
-    open('/home/claude/valoria_hooks.py', 'w').write(_b64.b64decode(_j.loads(_r.read())['content']).decode())
+for _src, _dst in [
+    ('skills/valoria-orchestrator/scripts/valoria_hooks.py', '/home/claude/valoria_hooks.py'),
+    ('tools/ci_register_size_check.py', '/home/claude/ci_register_size_check.py'),
+]:
+    _rq = _ur.Request(
+        f'https://api.github.com/repos/jordanelias/ttrpg/contents/{_src}?ref=main',
+        headers={'Authorization': f'token {PAT}', 'Accept': 'application/vnd.github.v3+json'}
+    )
+    with _ur.urlopen(_rq) as _r:
+        open(_dst, 'w').write(_b64.b64decode(_j.loads(_r.read())['content']).decode())
 import valoria_hooks as h
 
 # Step 2: batch-read session-critical files (triggers register health check automatically)
@@ -296,7 +300,7 @@ Every commit must be atomic and include:
 2. Corresponding params file(s) if mechanical values changed
 3. `references/canonical_sources.yaml` if source authority changed
 4. `references/propagation_map.md`
-5. `canon/patch_register.yaml` if patches applied
+5. `canon/patch_register_active.yaml` if patches applied
 6. `canon/editorial_ledger.yaml` if editorial items added/resolved
 7. `tests/coverage_matrix.md` if simulation run
 8. Test output in `tests/` if simulation run
@@ -319,7 +323,9 @@ Scopes: `editorial` / `patch` / `simulation` / `compilation` / `infrastructure` 
 ## Session Close Protocol
 **Re-fetch after writes:** after any `atomic_commit()` call, re-fetch all modified files before referencing them again in the same session. The in-context version and the committed version may differ.
 
-**All commits go to GitHub via `g.atomic_commit()`. Local-only writes are not a valid session close.**
+**All commits go to GitHub via `h.safe_commit()` or `g.safe_session_close()`. Direct `g.atomic_commit()` raises RuntimeError without authorization from safe_commit().**
+
+**Session log archive:** `session_log_archive.md` grows every session. `safe_session_close()` warns at 100,000 tokens — year-split at that point (e.g. `session_log_archive_2026_q1.md`).
 
 Write YAML resumption block to `session_log_current.md`:
 ```yaml

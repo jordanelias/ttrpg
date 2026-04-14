@@ -7,33 +7,77 @@ on:
     branches: [main]
 
 jobs:
+
+  # ── EXTERNAL ENFORCEMENT: runs outside Claude, cannot be bypassed ──────────
+
+  register-sizes:
+    name: Register Size Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check all register sizes within thresholds
+        run: python3 tools/ci_register_size_check.py
+
+  co-file-check:
+    name: Co-File Requirements
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2   # need HEAD~1 for diff
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check co-file rules satisfied
+        run: python3 tools/ci_co_file_checker.py
+
+  editorial-check:
+    name: Editorial Path Markers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check editorial paths have [EDITORIAL] markers
+        run: python3 tools/ci_editorial_checker.py
+
+  hooks-verifier:
+    name: Enforcement Architecture Intact
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify hooks wired correctly, skills clean, skeleton limits
+        run: python3 tools/ci_hooks_verifier.py
+
   integrity:
     name: Repository Integrity
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Broken dependency check
         env:
           GITHUB_PAT: ${{ secrets.VALORIA_PAT }}
         run: |
           python3 tools/broken_dependency_checker.py
           echo "broken_dependency_checker: exit $?"
-
       - name: Patch propagation check
         env:
           GITHUB_PAT: ${{ secrets.VALORIA_PAT }}
         run: |
           python3 tools/patch_propagation_checker.py
           echo "patch_propagation_checker: exit $?"
-
       - name: Freshness gate check
         env:
           GITHUB_PAT: ${{ secrets.VALORIA_PAT }}
@@ -44,76 +88,54 @@ jobs:
   skills-lint:
     name: Skills Lint
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Check all skills have Input Validation block
+      - uses: actions/checkout@v4
+      - name: Verify hooks imported in orchestrator
+        run: |
+          if ! grep -q "import valoria_hooks" skills/valoria-orchestrator/SKILL.md; then
+            echo "FAIL: orchestrator missing 'import valoria_hooks'"
+            exit 1
+          fi
+          if ! grep -q "assert_bootstrap()" skills/valoria-orchestrator/SKILL.md; then
+            echo "FAIL: orchestrator missing assert_bootstrap() call"
+            exit 1
+          fi
+          if ! grep -q "h.safe_commit" skills/valoria-orchestrator/SKILL.md; then
+            echo "FAIL: orchestrator missing h.safe_commit reference"
+            exit 1
+          fi
+          echo "Orchestrator hook wiring: OK"
+      - name: Verify non-orchestrator skills do not contain redundant enforcement blocks
         run: |
           fail=0
           for f in skills/*/SKILL.md; do
             skill=$(basename $(dirname $f))
-            if ! grep -q "Input Validation" "$f"; then
-              echo "FAIL: $skill missing Input Validation block"
+            if [ "$skill" = "valoria-orchestrator" ]; then continue; fi
+            if grep -q "Pre-commit (run before every" "$f"; then
+              echo "FAIL: $skill contains redundant pre-commit block — strip it"
+              fail=1
+            fi
+            if grep -q "Memory contamination warning:" "$f"; then
+              echo "FAIL: $skill contains redundant memory warning block — strip it"
+              fail=1
+            fi
+            if grep -q "FETCH LOG" "$f"; then
+              echo "FAIL: $skill contains redundant fetch log block — strip it"
               fail=1
             fi
           done
-          if ! grep -q "Memory contamination warning" skills/valoria-orchestrator/SKILL.md; then
-            echo "FAIL: orchestrator missing memory contamination warning"
-            fail=1
-          fi
-          if [ $fail -eq 0 ]; then
-            echo "All skills passed lint."
-          fi
+          if [ $fail -eq 0 ]; then echo "Skills lint: all clean"; fi
           exit $fail
-
-      - name: Check skills have fetch log
+      - name: Verify valoria_hooks.py has all required functions
         run: |
           fail=0
-          for f in skills/*/SKILL.md; do
-            skill=$(basename $(dirname $f))
-            if ! grep -q "FETCH LOG" "$f"; then
-              echo "FAIL: $skill missing FETCH LOG"
+          hooks="skills/valoria-orchestrator/scripts/valoria_hooks.py"
+          for fn in assert_bootstrap task_gate editorial_gate pre_commit_gate \
+                    commit_message_gate propose_mechanic_gate context_gate safe_commit; do
+            if ! grep -q "def $fn" "$hooks"; then
+              echo "FAIL: $hooks missing function: $fn"
               fail=1
             fi
           done
-          if [ $fail -eq 0 ]; then
-            echo "All skills have fetch log."
-          fi
-          exit $fail
-
-      - name: Check no hardcoded canonical values in skills
-        run: |
-          fail=0
-          for f in skills/*/SKILL.md; do
-            skill=$(basename $(dirname $f))
-            if grep -q "Current Canonical Values" "$f"; then
-              echo "FAIL: $skill has hardcoded canonical values block"
-              fail=1
-            fi
-          done
-          if [ $fail -eq 0 ]; then
-            echo "No hardcoded values found."
-          fi
-          exit $fail
-
-  params-version-check:
-    name: Params Version Tags Present
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Check params files have version tags
-        run: |
-          fail=0
-          for f in references/params_*.md; do
-            if [ -f "$f" ]; then
-              if ! grep -q "<!-- version:" "$f"; then
-                echo "WARN: $f missing version tag"
-              fi
-            fi
-          done
+          if [ $fail -eq 0 ]; then echo "Hooks functions: all present"; fi
           exit $fail
