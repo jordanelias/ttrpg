@@ -27,7 +27,8 @@ EDITORIAL_PATHS = (
 )
 EDITORIAL_MARKERS = ('[EDITORIAL:', '[PROVISIONAL:', '[EDITORIAL GATE]')
 
-VALID_SCOPES    = {'editorial','patch','simulation','compilation','infrastructure','skill','cleanup'}
+# Informational — enforcing gate is COMMIT_FORMAT regex below
+VALID_SCOPES    = {'editorial','patch','simulation','compilation','infrastructure','skill','cleanup','godot','phase','fix','bugfix'}
 COMMIT_FORMAT   = re.compile(r'^\[(editorial|patch|simulation|compilation|infrastructure|skill|cleanup|godot|phase|fix|bugfix)\] .{10,}')
 
 CONTEXT_WARN    = 140_000
@@ -77,8 +78,10 @@ def task_gate(task_type: str) -> None:
             f"[HOOK VIOLATION] Unknown task type '{task_type}'.\n"
             f"Valid: {sorted(TASK_REQUIRED_FILES)}"
         )
+    repo = g.active_repo()
     missing = [p for p in required
-               if p not in g._session_fetches or g._session_fetches[p] is None]
+               if g._repo_key(p, repo) not in g._session_fetches
+               or g._session_fetches[g._repo_key(p, repo)] is None]
     if missing:
         raise RuntimeError(
             f"[HOOK VIOLATION] Task '{task_type}' — files not fetched:\n"
@@ -122,7 +125,8 @@ def task_gate_with_system(task_type: str, system: str, canonical_sources_content
             f"Cannot propose or simulate without knowing the canonical source."
         )
 
-    if canonical_path not in g._session_fetches or g._session_fetches[canonical_path] is None:
+    _cs_key = g._repo_key(canonical_path, g.active_repo())
+    if _cs_key not in g._session_fetches or g._session_fetches[_cs_key] is None:
         raise RuntimeError(
             f"[HOOK VIOLATION] Canonical doc for '{system}' not fetched:\n"
             f"  Required: {canonical_path}\n"
@@ -243,7 +247,7 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
 
 def propose_mechanic_gate(system: str) -> None:
     """Call before any mechanic proposal. Raises if canonical_sources not fetched."""
-    if 'references/canonical_sources.yaml' not in g._session_fetches:
+    if g._repo_key('references/canonical_sources.yaml', 'ttrpg') not in g._session_fetches:
         raise RuntimeError(
             f"[HOOK VIOLATION] propose_mechanic_gate('{system}'):\n"
             f"  canonical_sources.yaml not fetched.\n"
@@ -294,7 +298,8 @@ def context_gate(turn_count: int = 0) -> None:
 
 def memory_contamination_guard(path: str, content: str) -> None:
     """Verify content for path came from GitHub this session, not memory."""
-    fetched = g._session_fetches.get(path)
+    _key = g._repo_key(path, g.active_repo())
+    fetched = g._session_fetches.get(_key)
     if fetched is None:
         raise RuntimeError(
             f"[HOOK VIOLATION] '{path}' not fetched this session.\n"
