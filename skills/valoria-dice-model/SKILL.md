@@ -11,6 +11,9 @@ description: >
   "dice math", or whenever mechanic-audit or simulator needs quantitative support.
 ---
 
+**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
+
+
 **Model:** Haiku 4.5 for all execution (simulation is arithmetic, not reasoning).
 **Sonnet** may call this skill and interpret results; it never reruns the math inline.
 

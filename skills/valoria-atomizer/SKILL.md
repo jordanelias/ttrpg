@@ -10,6 +10,9 @@ description: >
   Skeleton Ruleset Principle (doc > 400 lines with explanatory content).
 ---
 
+**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
+
+
 # VALORIA ATOMIZER SKILL
 
 **Model:** Sonnet 4.6.

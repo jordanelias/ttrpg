@@ -12,6 +12,9 @@ description: >
   reconstruct the parameter block or simulation logic inline.
 ---
 
+**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
+
+
 # Valoria Combat Simulator
 
 ## Purpose

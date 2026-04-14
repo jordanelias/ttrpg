@@ -8,6 +8,9 @@ description: >
   "apply patches", "produce clean version", "write it up", or when the orchestrator routes assembly.
 ---
 
+**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
+
+
 **Model:** Haiku 4.5 for structural assembly. Sonnet 4.6 for final canon-guard pass.
 
 **Priority:** Lowest. Never block design, simulation, or editorial work for compilation. Compile only when a system is stable (no open P1 editorials, no unresolved stress-test findings) and the user explicitly requests it.

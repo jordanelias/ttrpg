@@ -10,6 +10,9 @@ description: >
   or when the orchestrator routes a mechanical audit.
 ---
 
+**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
+
+
 **Model:** Sonnet 4.6. Requires cross-referencing complex interacting systems.
 
 ## Input Validation (MANDATORY BEFORE ANY AUDIT)

@@ -11,6 +11,9 @@ description: >
   This skill NEVER approves content that contradicts the Foundations.
 ---
 
+**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
+
+
 **Model:** Sonnet 4.6. Requires deep philosophical reasoning.
 
 ## Input Validation (MANDATORY BEFORE ANY COMPLIANCE CHECK)

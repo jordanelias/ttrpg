@@ -10,6 +10,9 @@ description: >
   "push this to its limits", or when the orchestrator routes a simulation.
 ---
 
+**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
+
+
 **Model:** Sonnet 4.6. Requires multi-step mechanical reasoning with full state tracking.
 
 ## Input Validation (MANDATORY BEFORE ANY SIMULATION)

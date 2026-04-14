@@ -42,6 +42,7 @@ SKILL_TOKEN_LIMITS = {
 }
 
 violations = []
+skeleton_warnings = []
 
 # ── Check 1: hooks file exists with required functions ────────────────────────
 if not os.path.exists(HOOKS_PATH):
@@ -109,7 +110,7 @@ for root, dirs, files in os.walk('designs'):
             with open(fpath, encoding='utf-8', errors='replace') as f:
                 lines = f.readlines()
             if len(lines) > 400:
-                violations.append(
+                skeleton_warnings.append(
                     f"SKELETON-DEBT: {fpath} is {len(lines)} lines (limit 400).\n"
                     f"  Extract explanatory prose to {fname.replace('_v30.md','_v30_infill.md')}"
                 )

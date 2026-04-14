@@ -11,6 +11,9 @@ description: >
   arcs inline.
 ---
 
+**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
+
+
 # VALORIA ARC GENERATOR
 
 **Model:** Sonnet 4.6.

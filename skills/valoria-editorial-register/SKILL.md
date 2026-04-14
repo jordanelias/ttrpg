@@ -12,6 +12,9 @@ description: >
   This skill owns all editorial register work — never process editorials inline.
 ---
 
+**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
+
+
 # VALORIA EDITORIAL REGISTER SKILL
 
 **Model:** Sonnet 4.6.
