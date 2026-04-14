@@ -540,7 +540,7 @@ Propagation targets:
 | `gm_ref/arcs_46_55_consolidated.md` | `references/params_threadwork.md` | Cites PP-255, Leap table, Contact Duration, Coherence | REFERENCE |
 | `gm_ref/arcs_46_55_consolidated.md` | `references/params_board_game.md` | Cites PI track, Coup Counter, Torben/Elske Loyalty, PP-563 VTM-TC | REFERENCE |
 | `gm_ref/arcs_46_55_consolidated.md` | `canon/02_canon_constraints.md` | Critique applied P-01/P-03/P-07/P-08/P-15; arc 51 P-15 correction | REFERENCE |
-| `gm_ref/arcs_46_55_consolidated.md` | `designs/systems/clock_registry.md` | Cites PI, Coup Counter, WC, VTM, Torben/Elske tracks | REFERENCE |
+| `gm_ref/arcs_46_55_consolidated.md` | `designs/systems/clock_registry_v30.md` | Cites PI, Coup Counter, WC, VTM, Torben/Elske tracks | REFERENCE |
 
 ### Unverified items — U-01 through U-11 flagged inline in consolidated doc
 Require reads of: params_board_game.md §Coup Counter, threadwork_redesign_v25.md, victory_architecture_v1.md §6, stage6_factions.md §Guilds/Varfell/faction leadership.
