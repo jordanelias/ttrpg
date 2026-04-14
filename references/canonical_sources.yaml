@@ -180,7 +180,7 @@ systems:
 
   emergent_arcs:
     canonical: references/arc_register.md
-    canonical_sha__references__arc_register_md: "afb11714c2fc7e94320a39f757a39488a23031e3"
+    canonical_sha__references__arc_register_md: "f41a7e266f8fd03caee76fefb9989e18efc4c5c9"
     params: null
     design_doc: null
     compilation_stage: null
