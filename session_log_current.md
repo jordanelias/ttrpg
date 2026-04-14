@@ -1,6 +1,44 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_OPUS_EXTENDED_THREADWORK
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Extended threadwork × fieldwork simulation: Knots, Community Weaving, threadcut beings, Mending arcs, Dissonance
+2. §2.6-2.8 added (Knot investigation, Dissonance, threadcut being social fieldwork)
+3. Mending arc as investigation rule added to §2.4
+4. 5 simulation tests completed (Tests 7-11)
+
+## KEY FINDINGS (PP-580)
+- KN-01: Knot-mediated investigation is trivially easy (Ob 2 at 27D) and socially devastating (+1 strain, detection → Disposition −3)
+- CW-01: Community Weaving inherently detectable — every Weave is potential evidence for investigators
+- TC-04: Threadcut being testimony bridges the epistemological barrier — the being translates ontological→ontical
+- MA-02: Mending arcs ARE investigation — each severity reduction reveals evidence. Campaign-pacing mechanic.
+- MA-01: Solo Mending of Locked Zones drives Rendering Crisis — collective/multi-season required
+- DIS-01: Non-sensitive partners degrade over sustained Thread exposure — field team rotation needed
+- TC-02: Evidence Track = player-level knowledge, not character memory. Memory-Pull does not reverse track.
+
+## DESIGN STATE
+Fieldwork System v1 is now at 855 lines. 10 SIM-DEBT items resolved.
+Remaining P1 blockers: 3 (ED-NEW-04, ED-NEW-10, ED-NEW-11).
+The system has been tested across:
+- All 6 fieldwork ↔ combat/contest/mass_battle transitions
+- All Thread operation types (Weave, Pull, POP, Lock, Dissolution, Mend, Collective)
+- Named NPC arc cascades (Klapp, Torben, Elske, Vaynard, Almud, Wardens)
+- Domain Echo propagation through faction mechanics
+- Knot surveillance, Community Weaving detection, threadcut being interaction
+- Non-sensitive partner Dissonance degradation
+- Multi-session Mending arc pacing
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_OPUS_ONTOLOGICAL_CORRECTION
 session_close: 2026-04-13
 phase: COMPLETE

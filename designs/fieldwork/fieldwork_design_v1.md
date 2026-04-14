@@ -146,6 +146,8 @@ Fieldwork interacts with Combat, Contest, and Mass Battle. These handoff rules s
 
 **One Thread operation per scene action.** Thread-Read and other Thread operations are mutually exclusive within a single action (both require active Leap contact for incompatible purposes). The practitioner chooses which operation to perform each action.
 
+**Mending arcs as investigation.** When a Locked Zone or Gap blocks access to deeper content, Mending IS investigation. Each successful Mending reduces the barrier's severity by one step (Locked → Catastrophic → Entrenched → Standard → Micro → Closed). Each reduction reveals more Thread configuration through the thinned barrier (Thread-Read at progressively lower Ob). Evidence yield per severity reduction: +1 (first reduction, faint impressions), +2 (second/third, increasing detail), +3 (final reduction, full access). A multi-season Mending arc with investigation milestones at each reduction creates built-in campaign structure.
+
 **Wounds and Thread operations:** Physical wounds do not apply −1D to Thread operation pools (Thread operations are consciousness-performed per P-03). Instead, wounds apply +1 Ob to Thread operations requiring Leap — pain disrupts concentration needed to sustain contact.
 
 **Leap vulnerability at transition.** When combat interrupts a Thread-Read, the Leap vulnerability window applies only if the interruption occurs DURING the Leap (before resolution). If the Thread-Read has resolved and the interruption follows from its consequences (e.g., an actualized auto-effect alerting a hostile), the vulnerability window has closed.
@@ -155,6 +157,31 @@ Fieldwork interacts with Combat, Contest, and Mass Battle. These handoff rules s
 A resolved fieldwork Finding with faction-level scope fires Domain Echo per stage11 §11.5. The GM recognises scope and announces the echo. The Domain Echo may trigger NPC arc events (Discovery Events, Loyalty shifts, clock advances, Coalition triggers). The investigator does not control which arcs fire — the consequences follow from the Finding's content and the current game state. Investigation is a cause; Domain Echo is the effect; NPC arc cascades are the consequence.
 
 **NPC Disposition after investigation reveals their secrets:** When a Finding concerns a named NPC's hidden information, that NPC's Disposition toward the investigator shifts −2 if the NPC learns they were investigated. Exception: NPCs who wanted the truth found (e.g., Vaynard pursuing knowledge, Torben seeking legitimacy) gain Disposition +1.
+
+### §2.6 Knot-Mediated Remote Investigation
+
+A practitioner Knotted to an NPC may Thread-Read that NPC's Thread configuration remotely through the Knot connection, without physical presence. The Knot IS the connection — distance does not add Ob.
+
+**Pool:** Standard Thread-Read pool. **TN:** 7. **Ob:** Personal scale (Ob 2).
+**Cost per use:** +1 Knot strain. The relational thread bears force from being used as an intelligence channel. The Knotted party may detect the intrusion: Spirit check TN 7, Ob = practitioner's Cognition ÷ 2 (round down, min 1). If the Knotted party detects: Disposition −3 (betrayal of relational trust). The Knot itself does not break — Knots are constitutive, not contractual — but the relationship may be destroyed.
+
+**Evidence yield:** Thread-verified. Inert Knowledge for non-sensitives. Advances Evidence Track normally.
+
+### §2.7 Non-Sensitive Partners and Dissonance
+
+When a non-sensitive character (TS < 10) accompanies a practitioner during Thread operations, they are exposed to co-movement consequences. Per PP-607/PP-610: Spirit check TN 7 vs Dissonance Factor (1 for brief nearby op; 2 for significant op; 3 for POP affecting their memories; 4 for extended Foundational zone exposure).
+
+**Failure:** Spirit −1D for remainder of scene. Multiple failures in a season compound — each failure makes subsequent checks harder. Non-sensitive partners degrade over sustained Thread exposure. Recovery: penalty clears at scene end. No permanent damage.
+
+**Field team rotation:** Sustained deep investigation (Depth 3+) with repeated Thread operations erodes non-sensitive partners. Optimal strategy: rotate non-sensitive team members every 3-4 Thread-adjacent scenes. This creates a logistics dimension to investigation — the practitioner needs multiple colleagues for sustained operations.
+
+### §2.8 Threadcut Being Social Fieldwork
+
+Social fieldwork actions (Read, Converse, Connect) work on threadcut beings. Social interaction is rendering-level, and threadcut beings maintain a rendering through continuous Thread work. Disposition tracks apply normally.
+
+At Disposition +3 or higher, a threadcut being may volunteer testimony about its origin, the nature of the tear, or what lies beyond the rendering boundary. This testimony is **uniquely valuable**: it is a first-person account from a being that exists in a mode alien to organic consciousness, delivered in communicable form (ontical, not ontological). Evidence tag: **Testimonial** — transmissible to non-sensitives. The epistemological barrier (P-08) does not block this pathway because the being itself performs the translation from ontological to ontical.
+
+**Counter-investigation:** A threadcut being perceives Thread-Reads directed at it (it is always in the originary state). It may respond with its own Thread operations: concealing its configuration, Pulling the investigator's memory, or Weaving misdirection. Contested investigation (§4.6) applies. The Evidence Track is player-level knowledge — if the being Pulls the investigator's memory of a prior Thread-Read, the Evidence Track does not reverse (the knowledge persists in notes, allies, and physical records). The character loses conscious access; the investigation's accumulated state persists.
 
 ---
 
@@ -737,6 +764,16 @@ Fieldwork actions consume in-game time:
 | ED-NEW-14 | Audit finding D-SIM-5 resolved: §4.1 now defines Finding reliability from resolved investigations. Verify Finding + Contest interaction in simulation. | P3 |
 | ED-NEW-15 | POP Coherence −1 additional: resolved as subject to per-op cap (not exempt). Confirm this in params_threadwork.md — currently ambiguous. Propagate ruling. | P2 |
 
+### Items resolved by PP-580 extended threadwork simulation (2026-04-13)
+
+| Item | Resolution |
+|------|------------|
+| KN-01/02 | Knot-mediated remote Thread-Read: §2.6. +1 Knot strain per use. Detection → Disposition −3. |
+| DIS-01/02 | Non-sensitive partner Dissonance: §2.7. Spirit check vs Dissonance Factor. Field team rotation. |
+| TC-01/02/03/04 | Threadcut being social fieldwork: §2.8. Testimonial tag. P-08 bridged by being's translation. Evidence Track = player-level knowledge. Counter-investigation possible. |
+| MA-02/03 | Mending arcs as investigation: §2.4. Severity reduction = evidence. Multi-season campaign pacing. |
+| CW-01 | Community Weaving detectable: §2.4 table (Weaving row covers Community Weaving). |
+
 ### Items resolved by PP-579 ontological correction (2026-04-13)
 
 | Item | Resolution |
@@ -802,6 +839,7 @@ Fieldwork actions consume in-game time:
 | SIM-DEBT-FW-07 | **RESOLVED** — Transition simulation (all 6 directions) completed 2026-04-13. 6 P2 and 3 P3 findings discovered and resolved. All transitions functional. See tests/sim_fieldwork_transitions.md. |
 | SIM-DEBT-FW-08 | **RESOLVED** — Threadwork × fieldwork simulation (POP, Lock, Dissolution across all 6 transitions). 1 P1, 3 P2, 8 P3 findings. Investigative hierarchy confirmed: Thread-Read → Pull → POP → Lock → Dissolution. See tests/sim_threadwork_fieldwork.md. |
 | SIM-DEBT-FW-09 | **RESOLVED** — Full ontological scope + NPC arc stress tests (PP-579). 7 Domain Echo cascades tested (Klapp, Torben, Elske, Vaynard, Almud, Wardens). All Thread operations confirmed as evidence sources. Yield is contextual. See tests/sim_threadwork_ontological.md. |
+| SIM-DEBT-FW-10 | **RESOLVED** — Extended threadwork simulation (PP-580). Knot surveillance, Community Weaving detection, threadcut being social fieldwork, Mending arcs, Dissonance on non-sensitives. See tests/sim_extended_threadwork.md. |
 
 ### Propagation required on approval
 
