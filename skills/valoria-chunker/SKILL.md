@@ -11,6 +11,44 @@ description: >
 
 **Model:** Haiku 4.5. Structural extraction only — no content judgment.
 
+
+## Bootstrap & Commit Protocol (MANDATORY)
+
+Chunker writes files to GitHub. All writes go through hooks.
+
+```python
+import sys; sys.path.insert(0, '/home/claude')
+from github_ops import quick_bootstrap
+g, h, files, token = quick_bootstrap(['references/canonical_sources.yaml'])
+h.context_gate()
+h.task_gate('design')
+
+# Fetch target document
+doc_files = g.read_files_graphql(['<path/to/document.md>'])
+content = doc_files.get('<path/to/document.md>')
+if not content:
+    raise RuntimeError("Document not found — cannot chunk")
+
+# ... perform chunking work ...
+
+# Commit ALL chunk outputs atomically
+oid = h.safe_commit(
+    additions=[
+        ('references/<chunk_output>.md', chunk_content),
+        # add all chunk files here
+    ],
+    deletions=[],
+    message='[infrastructure] chunk <document> — section map + extractions'
+)
+print(f"Chunks committed: {oid}")
+```
+
+**Rules:**
+- Never write chunk files without going through `h.safe_commit()`
+- Never use `g.atomic_commit()` directly
+- All chunk output paths must be in `references/` or `tests/` — not root
+- Commit all chunks for a document in one atomic commit
+
 ## Input Validation (MANDATORY)
 
 The document to be chunked must be fetched from GitHub this session. Do not chunk a document from memory or a local copy.

@@ -468,6 +468,26 @@ def safe_session_close(
             f"Trim to resumption block only."
         )
 
+    # Validate required YAML fields are present
+    REQUIRED_LOG_FIELDS = ['session_id', 'session_close', 'phase', 'status',
+                           'last_stage', 'next_action', 'blockers']
+    missing = [fld for fld in REQUIRED_LOG_FIELDS if fld not in new_session_log]
+    if missing:
+        raise RuntimeError(
+            f"[COMMIT BLOCKED] session_log_current.md missing required fields: {missing}\n"
+            f"Required: {REQUIRED_LOG_FIELDS}\n"
+            f"Session log must be resumption-block YAML only — no prose, no task summaries."
+        )
+
+    # Reject narrative content (## headers = prose summary, not resumption block)
+    import re as _re
+    if _re.search(r'^## ', new_session_log, _re.MULTILINE):
+        raise RuntimeError(
+            "[COMMIT BLOCKED] session_log_current.md contains prose headers (## ...).\n"
+            "Protocol: resumption block only — pure YAML, no summaries, no task lists.\n"
+            "Move narrative content to the session_log_archive.md entry instead."
+        )
+
     fresh = read_files_graphql(
         ["session_log_current.md", "session_log_archive.md"],
         repo='ttrpg', skip_health_check=True

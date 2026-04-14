@@ -8,6 +8,7 @@ This is the external enforcement gate — runs outside Claude, cannot be bypasse
 import os, sys
 
 THRESHOLDS = {
+    # ── Active registers (strict limits — must chunk before exceeding) ──────
     "session_log_current.md":                  2_000,
     "canon/editorial_ledger.yaml":             2_000,
     "canon/editorial_ledger_summary.yaml":     1_000,
@@ -19,6 +20,12 @@ THRESHOLDS = {
     "references/arc_register.md":            20_000,
     "references/propagation_map.md":         15_000,
     "references/design_registry.yaml":        8_000,
+    # ── Archives (soft limits — warn when approaching split threshold) ──────
+    # These are large by design; alert when year-split is needed
+    "canon/patch_register_archive.yaml":     100_000,
+    "canon/editorial_ledger_archive.yaml":    80_000,
+    "session_log_archive.md":               100_000,
+    "canon/patch_register_index.md":         20_000,
 }
 
 violations = []

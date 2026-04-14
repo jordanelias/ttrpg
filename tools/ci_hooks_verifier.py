@@ -116,6 +116,23 @@ for root, dirs, files in os.walk('designs'):
             else:
                 print(f"OK   skeleton {fpath}: {len(lines)} lines")
 
+
+# ── Check 6: all skills must reference bootstrap ─────────────────────────────
+ALL_SKILLS = [p for p in SKILL_TOKEN_LIMITS.keys() if p != ORCH_PATH]
+for skill_path in ALL_SKILLS:
+    if not os.path.exists(skill_path):
+        continue
+    with open(skill_path, encoding='utf-8', errors='replace') as f:
+        content = f.read()
+    if 'assert_bootstrap' not in content and 'quick_bootstrap' not in content:
+        violations.append(
+            f"BOOTSTRAP MISSING: {skill_path} does not reference assert_bootstrap or quick_bootstrap.\n"
+            f"  All skills that do bash_tool work must call quick_bootstrap() or assert_bootstrap().\n"
+            f"  Add the Standard Work Block Template from orchestrator SKILL.md."
+        )
+    else:
+        print(f"OK   bootstrap ref: {skill_path}")
+
 if violations:
     print(f"\n[HOOKS VERIFIER VIOLATIONS: {len(violations)}]\n")
     for i, v in enumerate(violations, 1):
