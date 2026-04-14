@@ -377,6 +377,33 @@ Direct `g.atomic_commit()` is permitted only in infrastructure commits where hoo
 **Commit message format:** `[scope] description — PP-NNN / ED-NNN if applicable`
 Scopes: `editorial` / `patch` / `simulation` / `compilation` / `infrastructure` / `skill` / `cleanup`
 
+
+---
+
+## Standard Work Block Template
+
+Every bash_tool block after bootstrap uses this preamble. Copy-paste verbatim:
+
+```python
+import sys; sys.path.insert(0, '/home/claude')
+from github_ops import quick_bootstrap
+g, h, files, token = quick_bootstrap()
+# For task-specific extra files:
+# g, h, files, token = quick_bootstrap(['canon/patch_register_active.yaml'])
+
+h.context_gate()
+h.task_gate('design')  # replace with actual task type
+# ... work ...
+```
+
+`quick_bootstrap()` handles: PAT load from `.valoria_pat`, env set, session-start fetch,
+`assert_bootstrap()`, module reload. No manual boilerplate required.
+
+Valid task types: `audit` · `canon_check` · `compilation` · `design` · `editorial` · `patch` · `propose_mechanic` · `simulation`
+
+Each type pre-fetches its required files — see `TASK_REQUIRED_FILES` in `valoria_hooks.py`.
+
+---
 ## Session Close Protocol
 **Re-fetch after writes:** after any `atomic_commit()` call, re-fetch all modified files before referencing them again in the same session. The in-context version and the committed version may differ.
 

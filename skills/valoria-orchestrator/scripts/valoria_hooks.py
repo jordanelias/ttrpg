@@ -175,15 +175,27 @@ def commit_message_gate(message: str) -> None:
 def pre_commit_gate(additions: list, deletions: list = None) -> None:
     """
     Hard gate before every commit. Checks:
-    1. Editorial gate per path
-    2. Size thresholds (via github_ops — defense in depth)
-    3. Required co-files (design doc → canonical_sources, patch → register, sim → matrix)
+    1. Task gate was passed this process (task_gate() called before committing)
+    2. Editorial gate per path
+    3. Size thresholds (via github_ops — defense in depth)
+    4. Required co-files (design doc → canonical_sources, patch → register, sim → matrix)
 
     Tool runner (freshness_gate, broken_dependency_checker, patch_propagation_checker)
     is NOT run here — those tools run in CI against the full repo after push.
     Running them client-side from a container without the full repo is unreliable.
     CI is the authoritative gate for those checks.
     """
+    if not _bootstrap_confirmed:
+        raise RuntimeError(
+            "[HOOK VIOLATION] pre_commit_gate() before assert_bootstrap().\n"
+            "Run bootstrap sequence before committing."
+        )
+    if not _task_gates_passed:
+        raise RuntimeError(
+            "[HOOK VIOLATION] pre_commit_gate(): no task_gate() called this process.\n"
+            "Call h.task_gate('type') before committing. Valid: "
+            + str(sorted(TASK_REQUIRED_FILES))
+        )
     if deletions is None:
         deletions = []
 
@@ -258,32 +270,25 @@ def propose_mechanic_gate(system: str) -> None:
 
 # ── Hook 7: Context gate ──────────────────────────────────────────────────────
 
-# Known fixed context costs (conservative estimates)
-_SYSTEM_PROMPT_TOKENS  = 15_000   # Project Instructions + user preferences
-_PER_TURN_OVERHEAD     = 800      # avg tokens per conversation exchange
-_MAX_TURNS_ESTIMATE    = 30       # conservative upper bound per session
+# Fixed context cost estimates
+_SYSTEM_OVERHEAD_TOKENS = 39_000
+# Accounts for: project instructions (~8k), user prefs (~1.5k), SKILL.md (~4.5k),
+# conversation turns (30 avg * 800 = 24k), tool output tokens (~1k buffer).
+# Conservative by design — real usage is higher. When in doubt, close earlier.
 
-def context_gate(turn_count: int = 0) -> None:
+def context_gate() -> None:
     """
-    Estimate actual context usage. Hard stop at 90%, warn at 70%.
-
-    Accounts for:
-    - Fetched file content (_session_fetches)
-    - System prompt (fixed ~15k tokens)
-    - Conversation turns (pass turn_count for accuracy, or use 0 for fetch-only estimate)
-
-    Note: This is a lower-bound estimate. Real usage is higher due to
-    Claude response tokens and tool output tokens not measured here.
-    When in doubt, close the session earlier than the gate suggests.
+    Estimate context usage. Hard stop at 90% (180k), warn at 70% (140k) of 200k window.
+    Counts fetched file content + fixed overhead. Lower-bound — real usage is higher.
+    Call at session start and every ~10 tool calls.
     """
     fetch_tokens = sum(len(c) for c in g._session_fetches.values() if c) // 4
-    turn_tokens  = (turn_count or _MAX_TURNS_ESTIMATE) * _PER_TURN_OVERHEAD
-    total        = fetch_tokens + _SYSTEM_PROMPT_TOKENS + turn_tokens
+    total        = fetch_tokens + _SYSTEM_OVERHEAD_TOKENS
 
     if total >= CONTEXT_HARD:
         raise RuntimeError(
             f"[HOOK VIOLATION] Context hard stop: ~{total:,} estimated tokens\n"
-            f"  (fetches: {fetch_tokens:,} + system: {_SYSTEM_PROMPT_TOKENS:,} + turns: {turn_tokens:,})\n"
+            f"  (fetches: {fetch_tokens:,} + overhead: {_SYSTEM_OVERHEAD_TOKENS:,})\n"
             f"Run Session Close Protocol immediately."
         )
     elif total >= CONTEXT_WARN:
@@ -291,7 +296,7 @@ def context_gate(turn_count: int = 0) -> None:
               f"Complete current stage then close.")
     else:
         print(f"[HOOK ✓] context_gate: ~{total:,} estimated tokens "
-              f"(fetches {fetch_tokens:,} + overhead {_SYSTEM_PROMPT_TOKENS + turn_tokens:,})")
+              f"(fetches {fetch_tokens:,} + overhead {_SYSTEM_OVERHEAD_TOKENS:,})")
 
 
 # ── Hook 8: Memory contamination guard ───────────────────────────────────────
@@ -324,9 +329,21 @@ def safe_commit(additions: list, deletions: list, message: str,
       - ttrpg: full gates (editorial, size, co-files)
       - valoria-game: commit message format only (no editorial/size gates for GDScript)
 
+    additions: list of (path, content) tuples — NOT a dict.
     IMPORTANT: entire function must run in a SINGLE bash_tool block.
     _commit_auth is process-scoped.
     """
+    # Type guard — catch dict/wrong-type early with a clear message
+    if not isinstance(additions, list):
+        raise TypeError(
+            f"[HOOK VIOLATION] safe_commit() additions must be list[tuple], got {type(additions).__name__}.\n"
+            f"Use: additions=[('path/to/file.md', content_str), ...]"
+        )
+    if additions and not isinstance(additions[0], (tuple, list)):
+        raise TypeError(
+            f"[HOOK VIOLATION] safe_commit() additions[0] must be tuple, got {type(additions[0]).__name__}.\n"
+            f"Use: additions=[('path/to/file.md', content_str), ...]"
+        )
     repo = repo or g.active_repo()
     repo_config = g.REPOS.get(repo, {})
 

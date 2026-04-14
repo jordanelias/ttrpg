@@ -501,6 +501,43 @@ def safe_session_close(
                          repo='ttrpg', _auth=auth)
 
 
+
+
+# ── quick_bootstrap: one-call preamble for all subsequent bash blocks ─────────
+
+def quick_bootstrap(extra_paths: list = None) -> tuple:
+    """
+    Standard preamble for every bash_tool block after the initial bootstrap.
+
+    Reads PAT from .valoria_pat (written by bootstrap), sets env, fetches
+    session-start files + any extra_paths, calls assert_bootstrap() on the
+    imported valoria_hooks module.
+
+    Returns: (g, h, files, token) — ready to use immediately.
+
+    Usage in any bash_tool block:
+        import sys; sys.path.insert(0, '/home/claude')
+        from github_ops import quick_bootstrap
+        g, h, files, token = quick_bootstrap(['canon/patch_register_active.yaml'])
+        h.task_gate('patch')
+        # ... do work ...
+    """
+    import importlib, valoria_hooks as _h_mod
+    importlib.reload(_h_mod)  # reset process-scoped state (bootstrap_confirmed etc.)
+
+    session_paths = [
+        'session_log_current.md',
+        'canon/editorial_ledger_summary.yaml',
+        'references/file_index_summary.md',
+        'references/canonical_sources.yaml',
+    ]
+    all_paths = session_paths + [p for p in (extra_paths or []) if p not in session_paths]
+    files = read_files_graphql(all_paths)
+
+    import github_ops as _g_mod
+    token = _h_mod.assert_bootstrap()
+    return _g_mod, _h_mod, files, token
+
 # ── CLI smoke test ────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
