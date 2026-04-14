@@ -598,6 +598,13 @@ def fetch_system(system: str, canonical_sources_content: str,
 
     systems = sources.get('systems', {})
     entry = systems.get(system, {})
+    status = entry.get('status', 'active')
+    if status == 'deprecated':
+        print(f"[SKIP] System '{system}' is deprecated — no fetch needed.")
+        return {}
+    if status == 'design_debt':
+        print(f"[WARN] System '{system}' has no proper design doc (canonical points to compilation).")
+
     if not entry:
         raise RuntimeError(
             f"System '{system}' not in canonical_sources. "
