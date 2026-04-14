@@ -189,7 +189,7 @@ The proposal uses "Consequentialist Pragmatism" (stage6 label) and derives Vayna
 
 The design intent is clear (Torben as contested narrative asset), and the Loyalty track (existing mechanic, range 0–7) already models factional competition for Torben's allegiance. Adding Conviction as a second dimension of contest is defensible.
 
-**No fix required.** Already flagged as ED-394 in the proposal. User confirmation needed.
+**No fix required.** Already flagged as ED-525 in the proposal. User confirmation needed.
 
 ---
 

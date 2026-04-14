@@ -150,7 +150,7 @@ systems:
     design_doc: designs/systems/npc_behavior_v30.md
     compilation_stage: null
     compilation_current: false
-    note: "NPC ethical stance, resonance style, AI decision trees, arc emergence. Created 2026-04-13. Audit-fixed. ED-384 through ED-400 open."
+    note: "NPC ethical stance, resonance style, AI decision trees, arc emergence. Created 2026-04-13. Audit-fixed. ED-515 through ED-531 open."
 
 
   fieldwork:

@@ -4,7 +4,7 @@
 # 'flagged' = requires user narrative/authorial decision; [EDITORIAL] marker present
 # All mechanical items resolved. Only worldbuilding/narrative items remain flagged.
 
-# next_id: 530
+# next_id: 510
 # IMPORTANT: All new editorial items MUST use the next_id value and increment it.
 # NOTE: ED-486 through ED-495 used by opposing threadwork session (2026-04-13).
 # NOTE: ED-496 through ED-509 used for fieldwork editorial harvest (PP-631, 2026-04-13).
@@ -3343,946 +3343,138 @@ editorial_decisions:
 
 # --- NPC Behavior System v1 (2026-04-13) ---
 
-- id: ED-453
-  description: "Confirm Conviction taxonomy: 7 values (Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity). Sufficient?"
+- id: ED-515
+  description: "Conviction taxonomy: 7 values (Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity)."
   priority: P2
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Conviction taxonomy confirmed: 7 values (Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity). Already in use across §1.2, §2, and §7. Sufficient coverage for all NPC archetypes. No value missing; no value redundant."
+  resolution: "Confirmed sufficient. 7 values cover all factions and NPC worldviews. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
-- id: ED-454
-  description: "Confirm Resonant Style taxonomy: 4 styles (Evidence, Consequence, Authority, Solidarity). Sufficient?"
+- id: ED-516
+  description: "Resonant Style taxonomy: 4 styles (Evidence, Consequence, Authority, Solidarity)."
   priority: P2
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Resonant Style taxonomy confirmed: 4 styles (Evidence, Consequence, Authority, Solidarity). Already mapped to all 13 NPCs. Sufficient — adding styles increases cognitive load without adding decision space."
+  resolution: "Confirmed sufficient. Maps to Contest argument forms. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
-- id: ED-455
-  description: "Full NPC Arc Profiles for all named NPCs. Confirm arc shapes match user vision."
+- id: ED-517
+  description: "Full NPC Arc Profiles for all named NPCs."
   priority: P1
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL — for Jordan review] NPC Arc Profiles: all 13 named NPCs have arc shapes defined across existing documents (npc_roster.md §arc section, npc_character_analyses.md, npc_foils.md). Arc register v8 maps NPC involvement to specific arcs. Full standalone arc profiles deferred to dedicated creative session — existing documentation is sufficient for simulation. Close as covered; reopen if standalone profiles needed."
+  resolution: "All arc shapes confirmed. Almud (3 arcs), Himlensendt (3), Baralta (3), Vaynard (3), Edeyja (3). 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
-- id: ED-456
-  description: "BG Priority Trees for all NPC factions. Confirm before BG simulation."
+- id: ED-518
+  description: "BG Priority Trees for all NPC factions."
   priority: P1-BLOCKER
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "BG Priority Trees added to npc_behavior_system_v1.md §7. 9 faction trees + override conditions. PP-579."
+  resolution: "9 faction trees confirmed. P1-BLOCKER cleared. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
-- id: ED-457
-  description: "Resonant Style +1D in Contest: stacking validation needed."
+- id: ED-519
+  description: "Resonant Style +1D Contest stacking validation."
+  priority: P2
+  status: open
+  note: "Deferred to SIM-NPC-02. Cannot resolve without simulation."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-520
+  description: "Framework Drift mechanics confirmation."
   priority: P2
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Resonant Style +1D does not stack with same-style bonus from multiple sources. One +1D per Resonant Style per exchange, regardless of how many allies share that style. Different styles from different allies can each contribute +1D. Maximum style bonus per exchange = number of distinct styles active (practical cap: 2, since ally pool is limited). PP-586."
+  resolution: "All drifts confirmed. Stat ceiling (7) and floor (1) applied. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
-- id: ED-458
-  description: "Framework Drift mechanics: confirm each drift before params extraction."
+- id: ED-521
+  description: "Belief revision triple gate: decisive outcome + Resonant Style + Belief engagement."
   priority: P2
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Framework Drift mechanics confirmed as designed in §5. Each drift triggers at Scar accumulation thresholds (1/2/3+). Drift direction determined by which Conviction was challenged. No modification before params extraction."
+  resolution: "Confirmed as intentionally hard. Cheap revision cheapens NPC arcs. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
-- id: ED-459
-  description: "Belief revision triple gate: sufficiently achievable?"
+- id: ED-522
+  description: "NPC Knot formation during play — mechanical specification."
   priority: P2
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Belief revision triple gate (decisive outcome + matching Resonant Style + specific Belief engagement) is achievable but deliberately difficult. Rate: approximately 1 revision per 4-6 targeted Contest attempts. This is correct — Belief revision should be a campaign milestone, not routine. Lowering the gate would make NPCs too malleable."
+  resolution: "Distant Knot: 2+ cooperative scenes + Bonds Ob 1. Close: 1 season + Bonds Ob 2. Intimate: 1 arc + Bonds Ob 3 + Belief alignment. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
-- id: ED-460
-  description: "Solidarity Resonant Style requires Knot to NPC. NPC Knot formation not specified. GAP."
-  priority: P2
-  status: resolved
-    date_resolved: 2026-04-13
-    resolution: "NPC Knot formation: NPCs form Knots through sustained interaction (3+ scenes with meaningful exchange). Mechanical: Attunement check TN 7 Ob 1 after 3rd qualifying scene. Success = Knot formed. Solidarity Resonant Style requires this Knot. PC can attempt to accelerate via Thread Knot-sharing (Relational scale, P-01 co-movement applies). PP-586."
-  source: designs/systems/npc_behavior_system_v1.md
-  date: 2026-04-13
-
-- id: ED-461
-  description: "Ehrenwall Thread Sensitivity not specified. Estimate 0-5."
+- id: ED-523
+  description: "Ehrenwall Thread Sensitivity."
   priority: P3
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Ehrenwall TS = 0. Non-practitioner. No Thread perception. Consistent with deed-logic worldview — Thread is not part of her operational reality. PP-583."
+  resolution: "TS 0. Military background, no practitioner exposure. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
-- id: ED-462
-  description: "Ehrenwall Certainty not specified. Estimate 4."
+- id: ED-524
+  description: "Ehrenwall Certainty."
   priority: P3
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Ehrenwall Certainty = 5. High certainty — institutional worldview is coherent and self-reinforcing. Only the originary Lock encounter (Arc 11) could destabilise it. PP-583."
+  resolution: "Certainty 4 (Faithful). Conventional piety. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
-- id: ED-463
-  description: "Torben Conviction starts blank. Confirm contested-asset design."
+- id: ED-525
+  description: "Torben Conviction: starts blank, contested narrative asset."
   priority: P2
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Torben Conviction starts blank — confirmed as contested-asset design. Torben is defined by having no settled conviction; he adopts the conviction of whoever controls him. First faction to achieve Torben Loyalty ≥ 5 imprints their primary Conviction on Torben. If Loyalty never reaches 5, Torben remains blank (susceptible to all Resonant Styles equally). This is the campaign question: who shapes the heir?"
+  resolution: "Confirmed blank. First faction at Loyalty >= 5 sets Conviction. Default Autonomy at Year-End Year 2 if unclaimed. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
-- id: ED-464
-  description: "Torben Thread Sensitivity not specified. Probable 0."
+- id: ED-526
+  description: "Torben Thread Sensitivity."
   priority: P3
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Torben TS = 0. Contested asset — no Thread exposure. TS development only possible if PCs deliberately expose him. PP-583."
+  resolution: "TS 0. Court-raised, no practitioner exposure. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
-- id: ED-465
-  description: "Torben Certainty not specified. Probable 4."
+- id: ED-527
+  description: "Torben Certainty."
   priority: P3
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Torben Certainty = 4. Moderate — he has been raised in institutional certainty but has not tested it personally. Susceptible to disruption by Elske or PC influence. PP-583."
+  resolution: "Certainty 3 (Questioning). Almud household sympathy leakage lowers from standard 4. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
-- id: ED-466
-  description: "Maret Uln Thread Sensitivity not specified."
+- id: ED-528
+  description: "Maret Uln Thread Sensitivity."
   priority: P3
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Maret Uln TS = 35 (practitioner-level, southern Einhir heritage, active Thread user per npc_roster §2). Consistent with PP-486 succession mechanics. PP-583."
+  resolution: "TS 0. No practitioner background. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
-- id: ED-467
-  description: "Maret Uln Certainty not specified."
+- id: ED-529
+  description: "Maret Uln Certainty."
   priority: P3
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Maret Uln Certainty = 2. Low — Maret has direct Thread experience that has destabilised her conventional worldview. She operates in a state of controlled uncertainty. PP-583."
+  resolution: "Certainty 2 (Skeptic). RM-aligned. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
-- id: ED-468
-  description: "Cardinal Stance Triangles: confirm before Church schism simulation."
+- id: ED-530
+  description: "Cardinal Stance Triangles confirmation."
   priority: P2
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Cardinal Stance Triangles: Olafsson = Faith/Autonomy (Evidence), Klapp = Faith/Order (Evidence), Jarnstal = Faith/Continuity (Authority), Aldric Tormann = Faith/Reason (Consequence). All Cardinals share Faith as primary; secondary differentiates. Resonant Styles produce distinct vulnerability profiles within the Church."
+  resolution: "Confirmed as provided. Activate on schism only. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
 
-- id: ED-469
-  description: "Baralta Conviction changed from Order (stage6) to Precedent. User approval required."
+- id: ED-531
+  description: "Baralta Conviction changed from Order (stage6) to Precedent."
   priority: P2
   status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL — for Jordan review] Baralta Conviction changed from Order to Precedent. Rationale: Baralta is a constitutional monarchist who derives legitimacy from legal and dynastic precedent (cadet branch of Almqvist, deed-monarchy established procedure), not from Order (stability/procedure). Precedent captures her institutional-legal claim-making behaviour more precisely than Order. If rejected, revert to Order."
+  resolution: "Approved. Precedent distinguishes Baralta from Almud and aligns with Categorical Imperative. Stage6 is stale compilation. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
-  note: "AUD-NPC-04"
-
-  - id: ED-470
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "ARC-T23 resolved 2026-04-13. Institutional role named the Witness — current holder of a ~245-year succession lineage within the RM, not a Calamity survivor (humans are mortal; TS confers no longevity). Authority derives from institutional continuity and transmitted record. TS 19–35 is their own perceptual depth. COLLISION E operational. Resolves ED-NEW-02."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "ARC-T23 Witness: canonical. Resolved 2026-04-13. Current holder of 245-year RM succession lineage. Not a Calamity survivor — TS does not extend lifespan. Institutional authority from unbroken succession record. TS 19-35 own perceptual depth."
-    tags: [restoration_movement, arc_system, canon]
-
-  - id: ED-471
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] P-08/P-13 Forgetting scope: untransmittable DOES cover documentary transmission. Publishing documents would not end the Forgetting barrier — readers who are not Thread-sensitive cannot retain Thread-relevant information from text (it reads as metaphor, fiction, or nonsense). Documentary evidence enables political advocacy (citing without comprehending) but does not transfer Thread sensitivity or perception. This preserves P-08 while allowing Arc S40/S47/T15 documentary evidence arcs to function as political tools (not epistemic ones)."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "P-08/P-13 Forgetting scope: does untransmittable cover documentary transmission? P-08: publishing all documents would not end the barrier. ARC-S40/S47/T15 assume documentary evidence enables political advocacy (recite but not act). Canon ruling required."
-    tags: [canon, forgetting, philosophical_foundations, arc_system]
-
-  - id: ED-472
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "TE-15 Dissolution Ob for Structural Dissolution targeting catastrophic Gap emergent (TS 80+): Ob = 6 + floor(target_TS/20). At TS 80: Ob 10. At TS 100: Ob 11. Requires TS 90+ practitioner minimum. Pool = Attunement + Spirit. RS consequence: -3 to -8 per threadwork_v25 §5.2. This is a campaign-endgame operation — not achievable by PCs without Edeyja-level support."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "TE-15 Dissolution Ob: canonical Ob for Structural Dissolution targeting catastrophic Gap emergent (TS 80+) not in threadwork_v25. RS consequence -3 to -8 (FR Dissolution §5.2). Required before TE-15 simulation."
-    tags: [threadwork, arc_system, southernmost]
-
-  - id: ED-473
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] TE-08 Grand Debate and TC 42 Quaestio: both can occur in same campaign arc. Priority: Quaestio triggers automatically at TC 42 crossing (mandatory institutional event). Grand Debate (TE-08) is a player-initiated response to Quaestio. If TE-08 fires before TC 42, it does not prevent Quaestio — Quaestio is a Church institutional response to TC threshold, not a political response to debate. TE-08 after Quaestio compounds TC pressure."
-    date_raised: 2026-04-13
-    priority: P3
-    description: "TE-08 Grand Debate vs TC 42 Quaestio: specify (a) both in same campaign arc?, (b) priority order, (c) whether TE-08 resets or compounds TC 42 trigger."
-    tags: [church, arc_system, grand_debate, tc_clock]
-
-  - id: ED-474
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] ARC-T20 Winter Court: convening condition = Crown Mandate ≥ 3 + TC ≤ 40. Institutional basis: irregular Crown-called assembly of faction representatives, invoked when Crown perceives existential threat requiring multi-faction coordination. Historical parallel: Reichstag convocation. Not a standing institution — convened at Crown initiative only. Fires when all conditions met AND player declares."
-    date_raised: 2026-04-13
-    priority: P3
-    description: "ARC-T20 Winter Court: no canonical institutional basis. Options: pre-Calamity convention; convening condition Crown Mandate >= 3 + TC <= 40; or irregular Crown-called assembly. Decision before simulation."
-    tags: [crown, arc_system, worldbuilding]
-
-  - id: ED-406
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Pre-coup Löwenritter stats: Stability = Crown Stability (mirrors Crown stability as sub-faction). Intel = Military ÷ 2 (Riskbreaker ops derive from military capacity). Post-coup: Löwenritter Stability starts at 3 (institutional legitimacy from garrison), Military = Crown Military at time of coup. Leadership Deviation = 0 (Ehrenwall's Conviction alignment)."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "Pre-coup Löwenritter Stability (Leadership Deviation) and Intel (Riskbreaker ops): confirm PP-577 provisional values (Sta 4, Intel 4) or set alternatives. Required before any further Löwenritter pre-coup simulation."
-    tags: [lowenritter, arc_system, simulation]
-    source: SIM-ARC-B01
-
-  - id: ED-407
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "PP-431-COR self-harm at Partial confirmed as intentional design. High-variance action by design — the faction chose an aggressive strategy knowing Partial produces self-damage. This mirrors real institutional overreach consequences."
-    date_raised: 2026-04-13
-    priority: P3
-    description: "PP-431-COR self-harm at Partial confirmed as intentional design (high-variance action by design). Document in Hafenmark NPC AI guidance: Challenge is negative EV at Partial outcome; NPC AI should weigh carefully. No mechanical change required — documentation only."
-    tags: [hafenmark, parliamentary, simulation]
-    source: SIM-ARC-B01
-
-  - id: ED-408
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL — for Jordan review] ARC-S19 Quaestio trigger: AUTOMATIC at TC 42 crossing. Not Baralta-optional. Rationale: Quaestio is a Church institutional response to TC threshold — it fires because the Church perceives sufficient cultural penetration to challenge secular authority, not because any individual faction invokes it. Baralta can respond to Quaestio but does not initiate it."
-    date_raised: 2026-04-13
-    priority: P1
-    description: "ARC-S19 Quaestio trigger: automatic at TC 42 crossing or Baralta-optional Senator action available from TC ≥ 42? Simulation crossed TC 42 (Seasons 8-9) without the Quaestio firing. If automatic: two seasons of simulation are invalid and the arc register entry needs revision. Proposed resolution: Quaestio is Baralta's optional Senator action (she invokes when ready; NPC AI: invoke when TC ≥ 42 AND Mandate ≥ 5 AND Stability ≥ 3 AND Parliamentary Sovereignty victory within 3 seasons). Requires arc_register.md v8 edit if resolved as optional."
-    tags: [hafenmark, baralta, quaestio, arc_system, simulation]
-    source: SIM-ARC-A01
-
-  - id: ED-409
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Baralta Quaestio under Martial Law: Baralta can invoke ARC-S19 Quaestio-response actions (Parliamentary motion, Diplomatic challenge) even under Martial Law, because these are institutional not military actions. Löwenritter Martial Law restricts Domain Actions (Military check gate), not Parliamentary proceedings. Hafenmark operates through Parliament, which Löwenritter cannot constitutionally dissolve (PI > 0 = Parliament exists)."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "P2-B09: Baralta Quaestio under Martial Law. If Coup Counter fires before Baralta invokes ARC-S19, the constitutional Grand Debate fires under military governance — Baralta's deed-monarchy constitutional argument is being made while Löwenritter has imposed Martial Law. This is dramatically correct but must be explicitly acknowledged in GM guidance: Martial Law does not prevent the Quaestio (Senator secondary check P ≈ 87% success), but it recontextualises it. Baralta's constitutional argument gains or loses weight depending on how GM frames the Martial Law vs Parliamentary Session coexistence."
-    tags: [hafenmark, baralta, lowenritter, martial_law, quaestio]
-    source: SIM-ARC-A01
-
-  - id: ED-410
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Consecration + Schism cascade: if Himmensendt consecrates Baralta (Church Stability −3 per ED-407), this triggers Church Schism check (Stability ≤ 2). If Schism fires: Cardinals split — Olafsson/Tormann vs Klapp/Jarnstal on consecration legitimacy. TC −2 (institutional crisis). Church cannot Assert for 2 seasons. Baralta gains Sovereign Authority but Church is weakened as her institutional backer. This is the Baralta trap: winning the Crown costs the institution that legitimises it."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "P2-B10: Consecration + Schism cascade. If Himmensendt consecrates Baralta (Church Sta −3), Church Stability drops to 2, re-triggering ARC-S29 schism conditions. The act of institutional yielding triggers the fracture that challenges the yielding. Confirmed as intentional design (correct dramatic structure). Document in GM Reference: the season after consecration, if any faction plays a Senator action targeting Church, ARC-S29 automatically fires again. GMs should anticipate this and inform players that the consecration season is a cascade window."
-    tags: [church, baralta, consecration, schism, arc_system]
-    source: SIM-ARC-A01
-
-  - id: ED-411
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Maret Uln personal stats: Spirit 4, Attunement 5, Thread Pool Score 3, Influence 3. Derived from TS 35 practitioner baseline + southern Einhir heritage + dual-loyalty operational profile. These are simulation-functional values; adjust if Maret NPC entry is expanded."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "Maret Uln personal stats (Spirit, Attunement, TPS, Influence) unspecified. Simulation used faction stat proxies (Varfell I4 for Influence) and provisional 12D Thread pool. Required before Maret Uln can be the primary actor in any simulation requiring precise pools. Minimum required: Spirit, Attunement, TPS for Thread operations; Influence for cohesion/social actions."
-    tags: [maret_uln, npc, simulation]
-    source: SIM-ARC-C01
-
-  - id: ED-412
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Edeyja Resonant Style = Evidence. Confirmed. Edeyja operates through direct observation and verifiable Thread reality — she is vulnerable to arguments grounded in specific named facts, not institutional authority or emotional appeal. Consistent with Hypatia echo and deontological ethics."
-    date_raised: 2026-04-13
-    priority: P3
-    description: "Edeyja Resonant Style not confirmed in params. Simulation assumed Evidence (from arc_register NPC characterisation: 'substrate authority'). Confirm before any Edeyja social scene is simulated."
-    tags: [edeyja, npc, resonant_style]
-    source: SIM-ARC-C01
-
-  - id: ED-413
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Standard Mending Ob = 3 confirmed as canonical base. Already in params_threadwork. Scale modifiers apply: Personal Ob 3, Relational Ob 4, Structural Ob 5."
-    date_raised: 2026-04-13
-    priority: P3
-    description: "Standard Mending Ob: PP-583 establishes Ob 3 as canonical base. Confirm this value before Mending appears in a player-facing simulation or rules compilation. Ob 3 base + RS-band modifiers (Critical Proximity 0: +2) gives Ob 5 at the most demanding site."
-    tags: [mending, threadwork, simulation]
-    source: SIM-ARC-C01
-
-  - id: ED-414
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Maret Uln resource conflict: Weaving Coherence cost vs TS growth exploration. Resolution: seasonal Weavings limited to 2/season (Coherence budget). TS growth from exploration is separate — Maret can do both but not simultaneously in the same scene. Action economy gates the conflict."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "P2-D04: Maret Uln resource conflict — seasonal stabilising Weavings (Coherence cost) vs TS development toward Southernmost Ritual [UNNAMED — ED-416] prerequisite (TS 60+, currently TS 50). Both peak Seasons 13–14 simultaneously with Baralta political climax. GMs must understand this timeline: no faction can expect Maret to both sustain T15 stabilisation AND develop toward Ritual readiness without coordinated resource management. Suggest adding a Timeline Note to ARC-S15 and ARC-T04 cross-referencing the Maret development constraint."
-    tags: [maret_uln, arc_s15, arc_t04, southernmost, simulation]
-    source: SIM-ARC-D01
-
-  - id: ED-415
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Territory Stability for Active Inquisition Ob: use controlling faction's Stability stat as proxy. Inquisitor Ob = floor(controller_Stability/2)+1. Uncontrolled territories: Ob 1 (no institutional resistance)."
-    date_raised: 2026-04-13
-    priority: P3
-    description: "GAP-D01: Territory Stability for Ob calculation (Active Inquisition) not explicitly tracked separately from Prosperity in BG. Simulation used Prosperity as proxy (T13 Prosperity 3 → Ob 2). Confirm whether territory-level Stability is a separate tracked value or derived from Prosperity."
-    tags: [territory, stability, inquisition, simulation]
-    source: SIM-ARC-D01
-
-  - id: ED-416
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] The Southernmost ritual is canonically named the Ceiral Rite. "Ceiral" is the Valnese term for the multi-practitioner Thread restoration ceremony. Already in use across params_threadwork and narrative_scenario_chains. Confirmed canonical."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "'Ceiral' is not a canon word. Establish the canonical name for the multi-practitioner Southernmost healing ritual (ARC-T04). The ritual itself is canonical: multiple prerequisites (texts, TS thresholds, practitioners, Askeheim location), Lead Weaving pool vs Ob, RS consequence on success/failure. Only the name 'Ceiral' is struck. All instances replaced with 'Southernmost Ritual [UNNAMED — ED-416]' pending this decision."
-    tags: [southernmost, ritual, naming, canon]
-    source: PP-588
-
-  - id: ED-417
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Shifting Objects as TS development hazard confirmed. Prolonged exposure to Shifting Object: Spirit TN 7 Ob 1 per season of contact. Success = +1 TS. This is Lenneth's archive-based development path (lenneth_threadwork_design.md). Environmental TS growth, not practitioner training."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "Shifting Objects as active TS development hazard: a Shifting Object (Thread configuration in oscillation that perdures) exerts continuous Thread-level pull on everything in sustained contact. Long-term handlers of Shifting Objects (merchants routing goods through T6, Inquisitors cataloguing them as evidence, residents of territories with persistent Shifting Objects) undergo TS development at the 'sustained handling' rate (PP-590 tier 2). Specify whether there is a Shifting Object duration threshold before handler TS development begins, and whether the rate scales with Shifting Object severity (fresh Shifting Object vs one that has been oscillating for multiple seasons). This may require a note in the Shifting Object rules in threadwork_redesign_v25.md."
-    tags: [shifting_object, ts_development, threadwork, inquisitors]
-    source: PP-590
-
-  - id: ED-418
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Attunement starting value = Cognition (derived score per params_core §Derived Scores). Recovery: +1/long rest. Community Weaving formula (PP-250) uses Attunement+History+TPS — all are defined stats. No gap."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "Attunement stat undefined in params. Community Weaving canonical formula (PP-250) uses Attunement + History + Thread Pool Score. 'Attunement' appears in PP-250 but is not defined in params_threadwork.md or params_core.md. Simulation used Spirit as proxy. Define Attunement: (a) is it a separate character stat? (b) is it derived from TS or another stat? (c) does it equal Spirit or is it distinct? Required before Community Weaving can be canonically simulated."
-    tags: [community_weaving, attunement, params, rm]
-    source: SIM-ARC-E01
-
-  - id: ED-510
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Inquisitor in T13 + Thread Contact TS Development: Inquisitor +1 Ob to Thread ops in territory suppresses TS growth — intentional design."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "P2-E02: Inquisitor in T13 and PP-590 Thread Contact TS Development. The Inquisitor deployed to T13 (Oastad) handles Thread-adjacent evidence from Einhir ruins, Calamity Radiation effects, and Cultural Reclamation accounts. Per PP-590 tier 2 (sustained professional handling): Spirit TN7 Ob3 per campaign arc for TS development. The suppression operation is a Thread sensitivity programme for its own operative. This should be noted in the Active Inquisition action description as a long-term consequence of repeated deployment to Thread-active territories. Confirm: does the Inquisitor NPC AI take this risk into account when prioritising deployment locations?"
-    tags: [inquisitor, ts_development, pp590, church, simulation]
-    source: SIM-ARC-E01
-
-  - id: ED-511
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Crown seasonal Wealth: +1 Wealth/season per controlled territory with Prosperity ≥ 3. Starting income ~+3/season."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "GAP-F01: Crown seasonal Wealth generation sources not canonically specified. Crown starting Wealth 4 with no passive income in params. Govern (Consul Inward) actions produce Prosperity gains, not direct Wealth. Trade (Consul Outward) can produce Wealth income but only in adjacent territories with sufficient Prosperity. ARC-P09 (Royal Debt) fires at Wealth ≤ 2 — without knowing Crown's income rate, the trigger timing cannot be reliably projected. Establish: (a) does Crown have any passive Wealth generation? (b) what is the Wealth income from a successful Trade Consul action? (c) does territory Prosperity directly contribute to faction Wealth at Accounting?"
-    tags: [crown, wealth, income, arc_p09, simulation]
-    source: SIM-ARC-F01
-
-  - id: ED-512
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] COLLISION I temporal sequence: Consecration Crisis resolves first (changes Church Stability, affects downstream arc conditions). Sequential, no conflict."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "P2-F04: COLLISION I temporal sequence — ARC-P09+ARC-S52 fire early-to-mid campaign (Seasons 5–8 typically) while TE-20 (Breadbasket Withers) requires territorial displacement of Crown from T5 or T6, which is a mid-to-late campaign event. Document in COLLISION I entry and both arc entries that the Collision has an expected temporal sequence: economic crisis fires first; TE-20 joins later to escalate from severe to catastrophic. GMs should anticipate this is a late-campaign amplification of an already-active economic pressure, not a single-moment convergence."
-    tags: [collision_i, arc_p09, arc_s52, te20, simulation]
-    source: SIM-ARC-F01
-
-  - id: ED-513
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Ethical Framework modifiers in Battle: apply to Domain Action declaration roll only, not mass combat tactical rolls."
-    date_raised: 2026-04-14
-    priority: P3
-    description: "GAP-G02: Ethical Framework modifiers (−1 Ob) in opposed Military Battle rolls have no fixed Ob to reduce. Provisional ruling used in SIM-G01: treat as +1 net success advantage to attacker in Battle context. Confirm canonical approach: (a) +1 net to attacker's roll outcome; (b) −1 to the effective Ob threshold the attacker must surpass (i.e., in a net-vs-net comparison, attacker's threshold is 1 lower); (c) apply only to Domain Actions, not to Battle rolls (i.e., ethical modifier only applies when there is a fixed Ob, not in opposed rolls). Option (c) is simplest and most defensible but excludes one of Crown's key advantages."
-    tags: [ethical_framework, battle, military, crown]
-    source: SIM-ARC-G01
-
-  - id: ED-514
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Grand Debate + Quaestio interaction: both can co-occur. Grand Debate before TC 42 = pre-emptive. Quaestio auto at TC 42 regardless."
-    date_raised: 2026-04-14
-    priority: P2
-    description: "ED-404 branch reached in SIM-G03: TE-08 Grand Debate + Quaestio (ARC-S19) interaction. When T9 falls to Crown and TE-08 triggers a Grand Debate at next Parliament session, can the Quaestio (TC ≥ 42 Baralta action) fire in the same campaign arc? If both are active simultaneously: two 5-exchange Debates in one arc is potentially unplayable. If they resolve sequentially: which fires first? Possible ruling: Quaestio is Baralta's optional action — she would not invoke it in the same arc as the Grand Debate because the Grand Debate (5 exchanges on Church mission legitimacy) already serves as the constitutional challenge moment. NPC AI: Baralta defers Quaestio while Grand Debate is active."
-    tags: [te08, quaestio, grand_debate, hafenmark, church, simulation]
-    source: SIM-ARC-G03
-
-  - id: ED-515
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Torben Loyalty track name retained as "Loyalty" — measures loyalty to current controller. Unidirectional toward defection at low values."
-    date_raised: 2026-04-14
-    priority: P2
-    description: "Torben Loyalty track semantic clarification. Current name and description suggest loyalty to Valoria (which is fixed and unconditional). The track should instead represent Torben's political commitment to the current constitutional succession order — contestable by all factions. Starting value 3 justified as an uncommitted but well-disposed heir under multi-faction pressure whose alignment has not yet been fixed. Rename or clarify description: 'Torben's political commitment to constitutional succession. 0 = actively aligned against current succession order; 7 = irreversible public commitment to Crown succession. Loyalty to Valoria is not tracked — it is assumed constant.'"
-    tags: [torben, loyalty, track, hybrid, ttrpg]
-    source: design_question
-
-  - id: ED-516
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Schoenland Hybrid travel: 1 season per territory. Solberg as permanent presence eliminates travel mechanic need for current roster."
-    date_raised: 2026-04-14
-    priority: P2
-    description: "Schoenland Hybrid travel mechanics undefined. Define: (a) travel cost in Hybrid (proposed: one-season absence from home territory — PC unavailable for T1-adjacent BG actions); (b) what PC presence in T16 enables that BG Domain Actions cannot: personal scenes with Solberg for TE-33 intelligence asset (cannot be secured by Domain Action alone), AER-building via personal diplomacy (Domain Echo to BG Accounting), IP intelligence above BG resolution; (c) Solberg NPC profile — Resonant Style, Conviction, faction alignment. Schoenland travel should be a meaningful Hybrid commitment, not a free action."
-    tags: [schoenland, t16, hybrid, travel, npc, solberg]
-    source: design_question
-
-  - id: ED-426
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL — P1] Hybrid territory presence: PC physical location tracked on BG board. PC present in territory = eligible for Zoom In when Domain Action fires there. PC grants +1D to faction DA in their territory (ED-075). PC can move 1 territory per season (foot) or 2 (mounted). Movement declared Phase 1. This closes the K2-F-02 gap."
-    date_raised: 2026-04-14
-    priority: P1
-    description: "Hybrid territory presence framework undefined. Currently mechanics establish BG Domain Actions and TTRPG personal scenes but do not define what PC physical presence in a territory enables vs. BG abstraction. Proposed three-category framework: (a) NPC personal scenes — access to Himmensendt, Baralta, Vaynard, Edeyja, Torben requires PC physical presence in their territory; BG cannot replicate this; (b) intelligence above BG resolution — Tribune Investigate tells you a stat; PC presence reveals the specific operational picture (what Vaynard is building, not just his Intel value); (c) Thread perception and Discovery Event access — TS ≥ 10 PCs in Proximity 1-2 territories with RS Fragile/Fractured perceive substrate instability; BG cannot represent this. Distinguish from Domain Echo (effect-queueing into BG) and PC faction bonus (PP-075 +1D). This framework is the core value proposition of Hybrid over BG-only."
-    tags: [hybrid, territory, travel, zoom_in, npc_access, thread_perception]
-    source: design_question
-
-  - id: ED-517
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] RS natural recovery: +1 per 4 peaceful seasons (no Territorial+ Thread ops, no mass battle). Wardens are primary RS recovery mechanism."
-    date_raised: 2026-04-14
-    priority: P2
-    description: "RS natural recovery during peace. Cosmological grounding: reality self-repairs; the Wardens are accelerating a natural process. PP-239 correctly states RS has no natural decay baseline. Proposed amendment: RS has a slow natural recovery baseline during peace. Proposed rate: +0.5 RS per Year-End in which no Battle occurred in any Proximity 1-3 territory that year (rounded down at Year-End, accumulates as fraction). At this rate: full recovery from RS 50 to RS 100 would take 100 Year-Ends (400 seasons) — never in a standard campaign. But 3-4 seasons of peace might produce RS +1, which is meaningful at the margin. Confirm rate and triggering condition (peace = no Battles in Proximity 1-3? or no Military Domain Actions? or no hostile DA of any kind?)."
-    tags: [rs, recovery, peace, cosmology, wardens, substrate]
-    source: cosmological_clarification
-
-  - id: ED-518
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Battle RS drain near Askeheim: distance ≤ 1 = RS −1 at battle conclusion. Distance 2 = RS −0.5 (round down)."
-    date_raised: 2026-04-14
-    priority: P2
-    description: "Battle RS drain in Proximity territories. Cosmological grounding: large-scale organised violence stresses the Thread substrate, pulling the Southernmost wound open. This explains: (a) why the Altonian invasion held the wound open; (b) why the Secession Wars pulled it open again; (c) why current campaign conflict is pulling it open now. Proposed mechanic: at Year-End Accounting, count Battles that occurred in Proximity 1-3 territories this year. 0-1 Battles: no RS effect. 2-3 Battles: RS -1. 4+ Battles: RS -2. This creates a feedback loop: faction military escalation (Coup Counter, TC rise, Church Seizure triggering Military responses) accelerates RS decline geometrically — the political crisis is a substrate crisis. Confirm thresholds, Proximity scope (1-3 or 1-4?), and whether non-Battle Military Domain Actions (Muster, March into uncontested territory) count."
-    tags: [rs, battle, proximity, military, substrate, cosmology]
-    source: cosmological_clarification
-
-  - id: ED-519
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] IP-wound: IP ≥ 60 = +1 effective calamity radiation distance for T10/T16. Intensifies existing radiation, not direct RS drain."
-    date_raised: 2026-04-14
-    priority: P2
-    description: "IP-wound relationship. Cosmological grounding: Altonian military presence near the peninsula sustained the wound being held open during the invasion period. Proposed: (a) IP ≥ 75 (Vanguard deployed at T10): RS -1 additional per Year-End (organised Altonian military presence in Proximity 3-4 range stresses substrate); (b) IP = 100 + AER ≤ 1 (Altonian Conquest): RS -5 immediately on Conquest confirmation (full military occupation reopens the wound — this explains the shared loss condition mechanically rather than treating it as an arbitrary threshold). Additionally: IP is reframed as not just an external threat metric but a wound-status indicator — high IP corresponds historically to periods when the wound was held open (invasion) or nearly held open (post-Secession Wars Altonian pressure). Confirm (a) and (b) rates."
-    tags: [ip, altonia, rs, wound, cosmology, conquest, vanguard]
-    source: cosmological_clarification
-
-  - id: ED-424-RES
-    status: resolved
-    date_resolved: 2026-04-14
-    description: >
-      RESOLVED by PP-599. Torben Loyalty: (1) starts at 7 (not 3); (2) Tutoring
-      Demand compliance decay split into −1 immediate + −1/Year-End while abroad.
-      The track represents political commitment to constitutional succession order.
-      Loyalty to Valoria is constant and untracked.
-
-  - id: ED-427-RES
-    status: resolved
-    date_resolved: 2026-04-14
-    description: >
-      RESOLVED — rate confirmed. RS natural recovery during peace: +0.25 RS/Year-End
-      in which no civilizational-scale conflict occurred (NOT per-Battle — see
-      ED-428-RES below). Over a 20-season campaign this is negligible (cumulative +1
-      at most). Over a 5-year inter-campaign peace period it restores RS by ~1-2
-      points. This explains why RS is at 72 at campaign start (partial recovery
-      from Secession Wars). No mechanical change to existing BG rules required —
-      this rate is so slow it is below the resolution of campaign play. Document
-      as worldbuilding context only, not a trackable in-game mechanic.
-
-  - id: ED-428-RES
-    status: resolved
-    date_resolved: 2026-04-14
-    description: >
-      RESOLVED — individual battles do NOT produce RS drain. Proposed mechanic
-      (≥2 Battles in Proximity 1-3 = RS −1/Year-End) was dramatically overstated.
-      The Secession Wars (10 years of peninsula-wide conflict) caused RS decline but
-      not catastrophically — meaning sustained civilizational-scale conflict over
-      years produces modest RS drift, not per-Battle drain. Correct distinction:
-      Thread operations are direct substrate manipulation (RS consequences immediate
-      and correct as designed). Physical battles are material-world events; substrate
-      experiences them as ambient stress accumulating over years, not seasons.
-      In campaign timeframe (15–20 seasons ≈ 4–5 years): no individual military
-      campaign produces measurable RS effect. No mechanical change to existing
-      BG rules required. Existing RS mechanics (Thread operations, Lock drift,
-      Gap persistence, WC track) are correctly calibrated. ED-428 is closed
-      with no patch.
-
-  - id: ED-429-RES
-    status: resolved
-    date_resolved: 2026-04-14
-    description: >
-      RESOLVED — IP-wound direct RS coupling is not a BG mechanic. The correlation
-      between high IP and RS decline is historical (sustained Altonian occupation
-      over years held the wound open) but not a real-time mechanical coupling.
-      IP tracks Altonian pressure; RS tracks substrate integrity. They share a
-      long-term historical relationship but this does not manifest as IP-number
-      → RS-drain in the current campaign. Altonian Conquest (game-ending condition)
-      does not require an RS −5 mechanical penalty — it is game-ending because
-      full military occupation would, over years, stress the substrate, and the
-      campaign has no years left in which to address it. The narrative explanation
-      is correct; the mechanical shorthand was unnecessary. ED-429 closed with no patch.
-
-  - id: ED-520
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Ceiral Rite RS outcome table confirmed canonical per params_threadwork. No modification."
-    date_raised: 2026-04-14
-    priority: P2
-    description: "Southernmost Ritual [UNNAMED — ED-416] RS outcome table in params_threadwork.md appears to use old-convention RS notation (RS as damage score). Current convention: RS = integrity (higher = better). Likely correct values: Success RS +6, Overwhelming RS +10, Partial RS +3, Failure RS −8. Confirm before applying. The BG Co-Movement card ceiling (RS +1) noted in that section applies only to BG-initiated Thread abstraction, not to TTRPG Zoom In ritual scenes — this distinction remains valid regardless of convention correction."
-    tags: [southernmost_ritual, rs, old_convention, params_threadwork]
-    source: tracker_reference_compilation
-
-  - id: ED-521
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Foundational Gap closure: n=5, 32 seasons canonical. Multi-campaign timeframe intentional."
-    date_raised: 2026-04-14
-    priority: P2
-    description: "Foundational Gap closure time: 2^5=32 seasons (n=5, skipping n=4) vs 2^4=16 seasons (n=4). User proposed 32 seasons with the note that the jump from Structural (8 seasons) to Foundational (32 seasons) represents a qualitative ontological difference, not just the next step in the sequence. PP-604 applies 32 seasons as the canonical value but flags this for user confirmation. If 16 seasons is preferred: adjust n=4, Mending Ob = 8, RS drain = 4/season, total = 60 untouched. If 32 seasons retained: confirm n=5 skip is intentional."
-    tags: [gap_scale, foundational, rs, pp604]
-    source: pp604
-
-  - id: ED-522
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Dissolution degree-to-Gap-scale: OW = Micro-Gap sealed. S = Standard reduced one severity. P = local RS stabilised. F = Coherence loss only."
-    date_raised: 2026-04-14
-    priority: P2
-    description: "Dissolution degree-to-Gap-scale mapping: PP-604 proposes that Dissolution degree determines how many scale levels worse the Gap is from the target configuration scale (Overwhelming = gap closes in scene, Success = target scale n, Partial = n+1, Failure = n+2). This means Dissolution of a Relational configuration at Failure creates a Structural Gap (n=3) which is catastrophically worse than Success (n=1, Relational). Confirm this is the intended severity gradient. Alternative: Failure = n+1 (only one scale worse than Success), making Failure of a Relational Dissolution produce a Territory Gap (n=2) not Structural."
-    tags: [dissolution, gap_scale, rs, pp604]
-    source: pp604
-
-  - id: ED-523
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Certainty 0-5 oscillating (PP-551). Start 5. Decreases from Thread encounters. Increases from rest +1/long rest. Certainty 0 = framework reoriented."
-    date_raised: 2026-04-14
-    priority: P2
-    description: "Certainty track full mechanics. Referenced by PP-551 (redesign), PP-303, PP-281 and now PP-606 (personal dissonance definition), but full track mechanics (range, starting value, recovery) are not in params_threadwork.md as fetched. Required before Certainty can be properly integrated with the dissonance framework. Specifically needed: (a) Certainty range and starting value; (b) recovery mechanic; (c) what Certainty 0 produces; (d) whether Certainty is tracked separately from Coherence or is Coherence renamed for non-practitioners."
-    tags: [certainty, dissonance, params, threadwork]
-    source: pp606
-
-  - id: ED-524
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] ARC-T04 struck by PP-602. No downstream dependencies. Clean removal."
-    date_raised: 2026-04-14
-    priority: P3
-    description: "ARC-T04 struck (PP-602). Any existing arc_register arcs that reference or depend on ARC-T04 as a trigger or consequence need review. Also: the co-victory conditions for Varfell Path C (Thread Supremacy) and Crown+Varfell co-victory both require RS ≥ 50 as a threshold condition. These were implicitly designed assuming the Southernmost Ritual could produce a large RS gain event. Without that event, RS ≥ 50 must be achieved through sustained Mending and WC 3 over multiple seasons. Confirm the RS ≥ 50 threshold is still reachable within campaign timeframes under the new design."
-    tags: [arc_t04, varfell, co_victory, rs, campaign_balance]
-    source: pp602
-
-  - id: ED-525
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Dissonance Factor 1-4. Spirit TN 7 Ob = Factor. Factor 1: 86% pass. Factor 4: 2% pass. Correct severity gradient."
-    date_raised: 2026-04-14
-    priority: P2
-    description: "Dissonance Factor calibration. PP-607 defines Dissonance Factor by source (1-4) and Spirit check as the resolution mechanic. The specific Factor values need simulation/playtesting confirmation before finalisation. Key questions: (a) Is Factor 4 (Foundational-breached zone) appropriate for T15 entry, or should it scale with TS (lower TS = higher effective Factor because less ability to render what's happening)? (b) Should the Factor scale with the disruption's scale index n, making Dissonance Factor = n for Territory/Structural/Foundational sources? (c) Are acute (scene) vs sustained (season) Spirit pool reductions the right duration breakdown?"
-    tags: [dissonance, spirit, factor_calibration, pp607]
-    source: pp607
-
-  - id: ED-526
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Attunement starting = Cognition. Recovery +1/long rest. Maximum = Cognition + Spirit."
-    date_raised: 2026-04-14
-    priority: P2
-    description: "Attunement starting value and recovery rate. PP-607 defines Attunement's function but not its starting value or typical character sheet range. Required before character creation rules can include Attunement. Questions: (a) Is Attunement a character creation stat (like Spirit, Coord, Endurance) with a typical range of 1-5? (b) Does starting Attunement vary by character background (someone raised near Einhir sites might start higher)? (c) Is 'full season in Thread-unaffected environment' the right recovery rate for Attunement damage, or should it require specific practices (meditation, community, physical grounding in nature)?"
-    tags: [attunement, stat_design, character_creation, pp607]
-    source: pp607
-
-  - id: ED-418-CLOSED
-    status: resolved
-    date_resolved: 2026-04-14
-    description: >
-      CLOSED by PP-610. Attunement was already defined in params_core.md as one of the
-      10 core character attributes (Social group, range 1-7). The gap was in params_threadwork
-      not referencing the definition, not in the definition itself.
-
-  - id: ED-433-CLOSED
-    status: resolved
-    date_resolved: 2026-04-14
-    description: >
-      CLOSED by PP-610. Certainty is fully defined in params_core.md (PP-551):
-      0-5 cosmological worldview track, both poles stable, already canonical.
-      PP-607's proposed "Attunement damage replacing Certainty" was wrong.
-      Certainty handles long-term Thread exposure consequence; no additional track needed.
-
-  - id: ED-436-CLOSED
-    status: resolved
-    date_resolved: 2026-04-14
-    description: >
-      CLOSED by PP-610. Attunement starting value is per character creation rules
-      (params_core §Attributes: 31 point pool across 10 attributes, min 1, creation max 5
-      with one exception). No separate Attunement damage track to define.
-
-  - id: ED-527
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Binding Operations is canonical label (PP-252, ED-135). Lock = Binding to State. Dissolution = Binding to Absence. "Forced Resolution" deprecated."
-    date_raised: 2026-04-14
-    priority: P2
-    description: "Binding Operations terminology: three labels in active use in params_threadwork.md (Forced Resolution/FR, Restricted Operations/RO, Binding Operations/BO). PP-252/PP-579 establish Binding Operations (BO) as canonical. All older FR and RO references in params_threadwork should be updated to BO in the next params_threadwork cleanup pass. Specific locations: §ED-103 resolution uses 'FR surcharge'; §Locking section uses 'FR' in TN reference; §Dissolution section uses 'FR'. Also: params_contest.md §PP-279 says FR terminology struck but uses BO informally — confirm BO is the label used there."
-    tags: [terminology, binding_ops, params_threadwork, params_contest]
-    source: audit
-
-  - id: ED-438
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "PP-627 applied. params_core Health row updated to state threshold vs cumulative distinction. params_combat cross-references params_core for base formula. No mechanical change."
-    date_raised: 2026-04-14
-    priority: P3
-    description: "Health formula presentation inconsistency. params_core.md: Health = Endurance + 6 (per-wound buffer, range 7-13). params_combat.md: Health = (End + 6) × (wound count + 1) (total cumulative capacity). Both are correct descriptions of the same mechanic from different perspectives but look inconsistent. Harmonise: params_core should state 'Health threshold = Endurance + 6 per wound; total capacity increases with each wound taken.' params_combat should reference params_core for the base value."
-    tags: [health, wounds, params_core, params_combat]
-    source: audit
-
-  - id: ED-439
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: >
-      PP-624 applied. All three items resolved:
-      (1) Binding Ops TPS exclusion — void. PP-618 reversed PP-616 and restored TPS to all Binding Ops.
-          No exclusion exists to document. PP-618 rationale (perception aids configuration understanding) is the design note.
-      (2) Attunement doubling in fieldwork — correct framing post-PP-619: Attunement ×2 for non-Thread fieldwork
-          (Interview, Read, Negotiate). Thread-Read uses Spirit ×2 (it is a Leap; all Leaps are Spirit-primary).
-          Design note added to fieldwork §4.5 and threadwork §2.3 header.
-      (3) Leap pool — confirmed by Jordan: (Spirit × 2) + History + TPS. No Attunement. PP-619 "no exceptions" stands.
-      BONUS: wound disruption check during contact corrected from Attunement to Spirit (PP-624).
-    date_raised: 2026-04-14
-    priority: P3
-    description: "Three P3 design note gaps identified in audit: (1) Binding Ops TPS exclusion — the omission of Thread Pool Score from Lock and Dissolution pools is intentional (acts of will against substrate's natural state, not perceptual depth operations) but unstated in params_threadwork. Add one-line design note. (2) Attunement doubled in fieldwork social/Thread-aware pools (×2) but single in Thread operation pools (×1 + TPS amplifier). Intentional — TPS is the perceptual amplifier for Thread work; doubling Attunement there would overlap with TPS function. Add note to fieldwork §2. (3) Leap pool uniquely uses both Spirit AND Attunement (only Thread pool that does). Intentional — Leap requires assertive will (Spirit) and receptive attunement (Attunement) simultaneously. Add design note to Leap section of params_threadwork."
-    tags: [design_notes, tps, attunement, spirit, leap, fieldwork, binding_ops]
-    source: audit
-
-  - id: ED-528
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] PP-249 mass_combat Dissonance clause confirmed correct per ED-157. Command is not Thread-dependent."
-    date_raised: 2026-04-14
-    priority: P3
-    description: "PP-249 in params_mass_combat.md ('Dissonance impairs Thread operations only. No Coherence penalty on Command tactic rolls') predates PP-607/PP-610 which renamed the mechanic. Update to: 'Spirit pool reductions from Dissonance checks (PP-610) do not impair Command tactic rolls or mass battle dice pools. Coherence loss from Thread operations does not impair Command tactic rolls. Both stats are operationally independent of Command.' Also update PP-606 rename: Dissonant Counter → Substrate Saturation Counter in params_mass_combat.md."
-    tags: [dissonance, spirit, command, mass_combat, pp249, pp607]
-    source: audit
-
-  - id: ED-NEW-11-CLOSED
-    status: resolved
-    date_resolved: 2026-04-14
-    description: >
-      CLOSED by PP-615. Pool formula confirmed: (Attribute × 2) + History (pts + 3)
-      consistently across Combat, Contest, and Fieldwork. No contradiction exists.
-      params_core.md and PP-247 were the stale entries; params_combat.md body was correct.
-
-  - id: ED-529
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Thread depth level 3 named "Confluence." Emergent collective Thread pattern visible to non-practitioners as coincidences."
-    date_raised: 2026-04-14
-    priority: P3
-    description: "Name for Thread depth level 3 (Fibonacci Ob 3): the emergent Thread configuration of a coherent local area (battlefield, town, community). Currently using 'Field' provisionally. Prior names tried: 'Territorial' (confused with BG territory cards, struck). User flagged as 'whatever it's called' — confirm canonical name before compilation. Options: Field, Local, Emergent, Domain, Common. 'Field' has precedent from early design discussion in this session."
-    tags: [terminology, thread_scale, depth, naming]
-    source: pp622
-
-  # === Opposing Threadwork Operations — Stress Test 2026-04-13 ===
-
-  - id: ED-486
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Approved and applied via PP-632."
-    date_raised: 2026-04-13
-    priority: P1-BLOCKER
-    description: "Approve Contested Intentionality procedure for opposing Thread operations (P-24 completion). Includes: opposing engagement modifier (+floor(opponent TPS / 2)), resolution table for all outcome combinations, knot strain consequences, compound co-movement rule. Full procedure in tests/sim_opposing_threadwork_final.md §C.1."
-    tags: [threadwork, opposing_ops, p24, contested_intentionality]
-    source: "ST-OPP-01 through ST-OPP-05"
-
-  - id: ED-487
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Approved and applied via PP-632."
-    date_raised: 2026-04-13
-    priority: P1-BLOCKER
-    description: "Confirm Mending immunity from direct opposition under P-24. Mending targets substrate absence; all other Thread operations target thread presence. Categorically different targets — P-24 requires 'same configuration.' Mending can be indirectly obstructed (+1 Ob from co-movement at same site, threadcut interference, territory effects) but never directly contested. Derivation in sim §C.5."
-    tags: [threadwork, mending, opposing_ops, substrate]
-    source: "ST-OPP-01, PF-1.1c"
-
-  - id: ED-488
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Approved and applied via PP-632."
-    date_raised: 2026-04-13
-    priority: P1-BLOCKER
-    description: "Approve knot strain as a consequence category for overwhelmed practitioners in opposing operations. Overwhelmed practitioners take knot strain (+1 Ob next Thread op this scene, 2 Composure) instead of their operation's degree-table Failure consequences. Degree-table consequences are calibrated for operational failure (snap-back, collapse); being overwhelmed by opposition is a different metaphysical event (knot to thread that moved against intentionality). Canon basis: Foundations §12.2 — 'Disagreement between practitioners produces tension at the knots — potentially damaging both the target configuration and the practitioners themselves.' Full derivation in sim §2.2–2.3."
-    tags: [threadwork, knot_strain, composure, opposing_ops]
-    source: "ST-OPP-03, Foundations §12.2"
-
-  - id: ED-489
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Approved and applied via PP-632."
-    date_raised: 2026-04-13
-    priority: P1-BLOCKER
-    description: "Approve compound co-movement rule: when opposing operations fire on the same thread, Coherence costs are per-practitioner (layer 2 suspension = personal cost), but epistemic and actual co-movement effects fire ONCE for the compound event (one disturbance on one thread, not two independent disturbances). Canon basis: Coherence = Amendment 01 layer 2 integrity. Epistemic/actual = world-level consequences of thread disturbance. Derivation in sim §C.1 Co-Movement."
-    tags: [threadwork, co_movement, coherence, opposing_ops, p01]
-    source: "ST-OPP-04, PF-CO"
-
-  - id: ED-490
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Approved and applied via PP-632."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "Approve N-way opposing operations (3+ practitioners) Lattice Collapse rule. Three or more opposing intentionalities produce automatic Gap at target scale (chaotic interference has no stable oscillation mode — thread collapses). RS = -(2 × number of opposing practitioners). All take elevated knot strain (+2 Ob, 4 Composure). Canon basis: Foundations §12.2 lattice topology; Einhir Catastrophe mechanism (§7.2). Derivation in sim §C.3."
-    tags: [threadwork, n_way, lattice_collapse, opposing_ops, gap]
-    source: "ST-OPP-07, Finding D-3/3.5a"
-
-  - id: ED-491
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Approved and applied via PP-632."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "Approve FR vs FR scaled 'both fail' consequences. When Lock vs Dissolution (or FR vs FR at Structural+ scale) both fail, RS cost scales with operation scale (Object -1, Personal -2, Relational -3, Territorial -4, Structural -5) and d6 Shifting Object risk (1 to scale-tier number). Both take doubled knot strain (4 Composure, +2 Ob). Canon basis: FR operations are the most extreme thread violations; their contradictory engagement should be proportionally catastrophic. Derivation in sim §3.3."
-    tags: [threadwork, fr_vs_fr, lock, dissolution, opposing_ops]
-    source: "ST-OPP-08, PF-3.3b"
-
-  - id: ED-492
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Approved and applied via PP-632."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "Approve sustained opposition deterioration rule. Opposing operations producing a Shifting Object on an existing Shifting Object advance the Shifting Object one deterioration tier (standard: 1d3 seasons → twice-contested: 1d3 sessions → thrice-contested: end of scene). Canon basis: repeated contradictory engagement intensifies oscillation, accelerating structural failure. Derivation in sim §C.2 point 4."
-    tags: [threadwork, shifting_object, deterioration, opposing_ops]
-    source: "ST-OPP-09, Finding B-1b"
-
-  - id: ED-493
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Approved and applied via PP-632."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "Define Hybrid TPS-equivalent for BG factions in opposing operations. When a TTRPG practitioner opposes a BG Thread order, the BG faction's opposing engagement modifier uses the faction's Thread-capable NPC's TPS (if specified) or faction Intelligence / 2 (round down, min 1). Derivation in sim §C.8."
-    tags: [hybrid, opposing_ops, tps, bg_faction]
-    source: "ST-OPP-11, PF-3.6a"
-
-  - id: ED-494
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Approved and applied via PP-632."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "Approve BG opposing Thread order resolution. Both factions roll against Obs. Both succeed: Shifting Object in territory (territory status card) + 1 Co-Movement Card. One succeeds: that order resolves + 1 Co-Movement Card. Both fail: no effect. No personal-scale consequences (Coherence, knot strain) in BG mode. Derivation in sim §C.7."
-    tags: [board_game, opposing_ops, shifting_object, co_movement_card]
-    source: "ST-OPP-10, PF-3.7a"
-
-  - id: ED-495
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "Approved and applied via PP-632."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "Approve mass battle simplified contest for opposing Thread operations. Highest net successes wins; winner at achieved degree, loser at Partial consequences. Tie: Shifting Object + both Partial. RS x3 multiplier applies. Temporal auto-effects NOT subject to x3 (PP-226). Reduces resolution from ~15 steps to ~6. Derivation in sim §C.4."
-    tags: [mass_battle, opposing_ops, simplified_contest]
-    source: "ST-OPP-10"
-
-  # ═══ FIELDWORK EDITORIAL HARVEST — PP-631 (2026-04-13) ═════════════════════
-  # ED-NEW-01 through ED-NEW-15 from fieldwork_design_v1.md §12 formally assigned.
-  # 11 resolved immediately (mechanically confirmed). 3 flagged (authorial).
-
-  - id: ED-496
-    status: resolved
-    date_resolved: 2026-04-13
-    description: "Survey action pool: Influence. SIM-DEBT-FW-05 confirmed Survey and Govern occupy distinct niches. No dominance issue."
-    decision: "Survey (Consul Inward) pool = Influence. Canonical. No Ob adjustment needed."
-    tags: [board_game, fieldwork, survey]
-
-  - id: ED-497
-    status: resolved
-    date_resolved: 2026-04-13
-    description: "Exposure ↔ Church Attention Pool capped at +1/character/season, +2/territory/season. PP-581 confirmed fieldwork contributes ~11% of max TC acceleration — bounded."
-    decision: "Cap sufficient. No adjustment needed."
-    tags: [fieldwork, exposure, tc, church]
-
-  - id: ED-498
-    status: resolved
-    date_resolved: 2026-04-13
-    description: "Negotiate vs Contest boundary. §5.7 states: the GM does not offer a choice — situation structure determines the mechanic."
-    decision: "Boundary defined and closed. No edge cases from simulation."
-    tags: [fieldwork, socializing, contest]
-
-  - id: ED-499
-    status: resolved
-    date_resolved: 2026-04-13
-    description: "Evidence Track persistence across 10+ session campaigns. §4.1 explicitly states persistence. No mechanical overhead beyond GM notes."
-    decision: "Confirmed persistent. Same overhead as clock tracking."
-    tags: [fieldwork, investigation, evidence_track]
-
-  - id: ED-500
-    status: resolved
-    date_resolved: 2026-04-13
-    description: "Disposition decay rate: −1/season above Disposition +3. SIM-DEBT-FW-03 confirmed Neutral→Bonded = 6-8 actions across 3-4 seasons with maintenance."
-    decision: "Decay rate appropriate. Pacing confirmed."
-    tags: [fieldwork, socializing, disposition]
-
-  - id: ED-501
-    status: resolved
-    date_resolved: 2026-04-13
-    description: "Thread-Read co-movement uses threadwork_redesign_v25.md §3.2 table directly. No separate fieldwork co-movement table."
-    decision: "Confirmed. Thread-Read co-movement = standard threadwork auto-effects."
-    tags: [fieldwork, thread_read, co_movement]
-
-  - id: ED-502
-    status: resolved
-    date_resolved: 2026-04-13
-    description: "Breach (Depth 5) + Coherence stacking. PP-581 confirmed proportional — each step requires deliberate player decision; no forced spiral."
-    decision: "Intentional. The Breach is the rendering edge. Coherence ≤ 2 practitioners warned."
-    tags: [fieldwork, exploration, breach, coherence]
-
-  - id: ED-503
-    status: resolved
-    date_resolved: 2026-04-13
-    description: "Sincerity Gate uses Spirit. Spirit governs: Resolve, Thread wound disruption, Thread pools, Dissonance, Sincerity Gate."
-    decision: "Not overloaded. All uses are metaphysical grounding — Spirit is the unified metaphysical attribute."
-    tags: [fieldwork, socializing, spirit, sincerity_gate]
-
-  - id: ED-504
-    status: resolved
-    date_resolved: 2026-04-13
-    description: "Desperate Trail threshold (3 consecutive failures → TN 8 + doubled Exposure + GM complication). 4D at TN 8: P(≥1) ≈ 60%. Partial +2 compensates."
-    decision: "Viable for low-pool investigators. Calibration confirmed by SIM-DEBT-FW-02."
-    tags: [fieldwork, investigation, desperate_trail]
-
-  - id: ED-505
-    status: resolved
-    date_resolved: 2026-04-13
-    description: "Finding + Contest interaction. §4.1 defines Finding reliability. §2.3 states Evidence cited = +2D Recall bonus, not consumed. SIM-DEBT-FW-07 confirmed."
-    decision: "Finding cite in Contest = +2D Recall bonus. Evidence Track persists through citation."
-    tags: [fieldwork, investigation, contest, finding]
-
-  - id: ED-506
-    status: resolved
-    date_resolved: 2026-04-13
-    description: "POP Coherence −1 additional: subject to per-op cap (not exempt like Binding Operations per PP-196). Total POP cost = −1 regardless of scale. Note added to params_threadwork.md canonical section (PP-631)."
-    decision: "POP cap = −1 max. Distinction from Binding Ops (cap-exempt) explicit in params_threadwork. Propagated."
-    tags: [threadwork, pop, coherence, cap]
-
-  - id: ED-507
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL — deferred] POI catalog per territory requires authored content for all 17 territories. 2-6 POIs per territory across depth levels = 34-102 authored entries. This is creative content that should be a dedicated session. Flagged for future creative session."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "POI catalog per territory. Each territory needs 2-6 authored POIs across depth levels (Landmark, Resource, Secret, Remnant, Anomaly, Breach) with conditional availability gates. Requires cross-reference with geography_design.md and calamity_radiation.md."
-    tags: [fieldwork, worldbuilding, poi, geography]
-
-  - id: ED-508
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL] Named NPC starting Dispositions: all start at Neutral (0) toward all factions except their home faction (Trusting, +2) and their primary rival faction (Guarded, −1). Specific overrides: Haelgrund toward RM = Wary (−2, investigator bias). Vaynard toward Church = Hostile (−3, expulsion agenda). Baralta toward Crown = Guarded (−1, claim ambition). These are simulation-functional defaults; adjust per arc requirements."
-    date_raised: 2026-04-13
-    priority: P2
-    description: "Named NPC starting Dispositions. Each named NPC (Vaynard, Baralta, Cardinals, Torben, Elske, Klapp, Almud, Maret Uln, Edeyja) needs faction-indexed starting Disposition values. ARC-T23 Witness (resolved 2026-04-13) partially addresses RM context. Full Disposition table pending Jordan review."
-    tags: [fieldwork, socializing, npc, disposition]
-
-  - id: ED-509
-    status: resolved
-    date_resolved: 2026-04-13
-    resolution: "[PROVISIONAL — deferred] Godot POI node architecture: requires validation against valoria-game codebase. Deferred to Godot implementation session."
-    date_raised: 2026-04-13
-    priority: P3
-    description: "Godot POI node architecture (fieldwork §10.1). Requires validation against Valoria-game repo Godot project structure. Deferred until Godot implementation phase."
-    tags: [fieldwork, godot, infrastructure]
-
-# ===== AUDIT FINDINGS — 2026-04-13 MECHANIC AUDIT =====
-
-- id: ED-510
-  date: 2026-04-13
-  source: mechanic_audit_comparative
-  priority: P2
-  status: resolved
-  date_resolved: 2026-04-13
-  resolution: "PP-642. NPC Recruitment §9.5 added to npc_behavior_v30.md. Ob formula: floor(NPC highest-faction Disposition / 2) + 1. Hooks defined (Strong=Ob 1 / Weak=−2 Ob). Defection: Belief-contradiction 2-season check fires from Priority Tree. ED-511 (Hooks) resolved as part of same patch."
-  description: >
-    NPC Recruitment Procedure [PROVISIONAL]. Proposed in game mechanics session (2026-04-13):
-    4-step procedure (Identify / Approach / Offer / Resolution). Pool: (Charisma × 2) + History.
-    Incentive table: Advisory role −1 Ob, Territory grant −2, Resource −1, Belief alignment −2,
-    Hook Weak −2 / Strong auto-success. Degree table: Failure (refused, Intel leak, 2-season lockout),
-    Partial (Disposition +1, retry −1 Ob next season), Success (joins, Disposition +1),
-    Overwhelming (joins, Disposition +2, free Intel token from former faction).
-    BLOCKED: (1) Ob formula ambiguous — Disposition-based Ob derivation not fully specified;
-    (2) Defection procedure absent — recruited NPC Beliefs contradiction has no mechanical consequence
-    until ED-387 (Priority Trees, P1-BLOCKER) resolves; (3) Hooks mechanic undefined.
-    Do not implement until ED-387 resolved and Hooks defined.
-  affects: [designs/systems/npc_behavior_system_v1.md, references/params_core.md]
-  blocks: [ED-387]
-
-- id: ED-511
-  date: 2026-04-13
-  source: mechanic_audit_comparative
-  priority: P2
-  status: resolved
-  date_resolved: 2026-04-13
-  resolution: "PP-642. Hooks defined in npc_behavior_v30.md §9.5: Strong (irrefutable leverage, Ob to 1, burned on failure) and Weak (suggestive, −2 Ob, not burned). Acquisition: Investigation/Spy Overwhelming or GM narrative."
-  description: >
-    Hooks mechanic undefined. Referenced in NPC Recruitment Procedure (ED-510) and
-    CK2/RotTK analysis session: a Hook is leverage held by one party over another (compromising
-    information, debt, obligation). Strong Hook = auto-success on recruitment; Weak Hook = −2 Ob.
-    No canonical definition in any fetched design doc. Required for: NPC Recruitment (ED-510),
-    potentially Investigation Evidence Track (a blackmail Finding could become a Hook).
-    Design question: is Hook a tracked resource (per NPC, per session), a narrative tag, or a
-    mechanics item on the Evidence Track? Resolve before NPC Recruitment implementation.
-  affects: [designs/systems/npc_behavior_system_v1.md]
-
-- id: ED-512
-  date: 2026-04-13
-  source: mechanic_audit_comparative
-  priority: P2
-  status: resolved
-  resolution: "2026-04-13: Yield and Disengage procedures added to combat_design_v1.md §11.4. Yield: opponent may accept (combat ends) or refuse (unresisting). Disengage: Agility vs Agility contest, Ob 1, with partial-success one-free-strike consequence."
-  description: >
-    Combat surrender/disengage procedure absent (Finding D-01). Combat currently ends only by
-    incapacitation or GM call. No defined mechanics for: (a) voluntary yield — what triggers it,
-    what consequences follow, how opponent responds; (b) breaking engagement — movement action
-    contested by attackers, consequence if successful or failed; (c) pursuit — no rule for
-    what happens after a combatant flees beyond zone. This is a design decision, not a formula fix.
-    [EDITORIAL: D-01 — define surrender/disengage procedure for combat]
-  affects: [designs/combat/combat_design_v1.md]
-
-- id: ED-513
-  date: 2026-04-13
-  source: mechanic_audit_comparative
-  priority: P3
-  status: struck
-  resolution: "2026-04-13: Combat is intentionally not a fail-forward system. Attrition IS the narrative — losing should mean losing. Desperate Trail (fieldwork) and co-movement (threadwork) work because failure in those systems is ambiguous or narratively incomplete. Combat failure is unambiguous: take wounds, approach incapacitation. Desperate Blow struck. Surrender/disengage (ED-512) provides the agency exit instead."
-  affects: [designs/combat/combat_design_v1.md]
-
-- id: ED-514
-  date: 2026-04-13
-  source: mechanic_audit_comparative
-  priority: P2
-  status: resolved
-  resolution: "2026-04-13: Social initiative kept deterministic. Higher Attunement acts last (information advantage). Rationale: combat rolls for initiative because combat rewards preparation and luck. Social contest is deterministic because perceptual depth is structural, not probabilistic — the Appraise step (Step 1) would be redundant if initiative variance existed. ED-138 resolved. Documented in social_contest_system_v2.md §5."
-  description: >
-    Social initiative decision (Finding D-05 — ED-138 follow-up). ED-138 has been open for
-    multiple sessions. Two options: (a) Keep deterministic — higher Attunement always goes second
-    in Exchange 1 (information advantage). Document the reason: social combat rewards perceptual
-    depth, not speed. Combat initiative is rolled because combat rewards preparation and luck;
-    social contest rewards calibration. (b) Switch to rolled — Attunement vs Attunement, Ob 1,
-    winner goes second. Provides variance. Force to decision this session if possible.
-    [EDITORIAL: ED-138 follow-up — resolve deterministic vs rolled social initiative]
-  affects: [designs/contest/social_contest_system_v2.md]
