@@ -1,5 +1,5 @@
 # VALORIA REPOSITORY FILE INDEX
-## Last updated: 2026-04-09
+## Last updated: 2026-04-13
 ## Purpose: Single-source map of every committed file → game system → status
 ## Maintained by: valoria-orchestrator skill (update on every commit that adds/modifies a file)
 ## Format: path | systems | type | status | depends_on | referenced_by
@@ -7,6 +7,9 @@
 ## TTRPG = source layer. Hybrid = bridge. Board Game = abstraction. designs/ = working layer. compilation/ = snapshot.
 
 ---
+
+## v30 Baseline Applied (2026-04-13)
+> All canonical design docs renamed to `_v30.md` suffix. 40 deprecated files moved to `deprecated/designs/`. See `references/design_registry.yaml` for full atomization registry.
 
 ## HOW TO USE
 
@@ -42,23 +45,23 @@
 |------|---------|--------|----------------------|
 | compilation/v0.14/stage1_core_engine.md | ALL | DEPRECATED | references/params_core.md |
 | compilation/v0.14/stage2_characters.md | TTRPG/HYBRID | DEPRECATED | references/params_core.md |
-| compilation/v0.14/stage3_thread_operations.md | TTRPG/HYBRID | DEPRECATED | designs/ttrpg/threadwork_redesign_v25.md |
+| compilation/v0.14/stage3_thread_operations.md | TTRPG/HYBRID | DEPRECATED | designs/ttrpg/threadwork_v30.md |
 | compilation/v0.14/stage3_compilation_report.md | INFRA | DEPRECATED | Process artifact |
 | compilation/v0.14/stage4_southernmost.md | TTRPG/HYBRID | DEPRECATED | No design-layer replacement — unverified |
-| compilation/v0.14/stage5_clocks.md | ALL | DEPRECATED | designs/systems/clock_registry.md |
+| compilation/v0.14/stage5_clocks.md | ALL | DEPRECATED | designs/systems/clock_registry_v30.md |
 | compilation/v0.14/stage6_factions.md | TTRPG | DEPRECATED | BG/Hybrid: bg_v05. TTRPG: no replacement — unverified |
-| compilation/v0.14/stage7_territories.md | ALL | DEPRECATED | designs/setting/geography_design.md |
-| compilation/v0.14/stage8_combat.md | ALL | DEPRECATED | designs/combat/combat_design_v1.md |
-| compilation/v0.14/stage9_social.md | TTRPG | DEPRECATED | designs/contest/social_contest_system_v2.md |
+| compilation/v0.14/stage7_territories.md | ALL | DEPRECATED | designs/setting/geography_v30.md |
+| compilation/v0.14/stage8_combat.md | ALL | DEPRECATED | designs/combat/combat_v30.md |
+| compilation/v0.14/stage9_social.md | TTRPG | DEPRECATED | designs/contest/social_contest_v30.md |
 | compilation/v0.14/stage10_advancement.md | TTRPG | DEPRECATED | No design-layer replacement — unverified |
 | compilation/v0.14/stage11_scale_transitions.md | HYBRID | DEPRECATED | No design-layer replacement — unverified |
 | compilation/v0.14/stage12_campaign_modes.md | ALL | DEPRECATED | No design-layer replacement — unverified |
-| compilation/v0.14/stage13_npcs.md | ALL | DEPRECATED | designs/npcs/npc_roster.md (partial) |
+| compilation/v0.14/stage13_npcs.md | ALL | DEPRECATED | designs/npcs/npc_roster_v30.md (partial) |
 | compilation/v0.14/stage14_gm_tools.md | ALL | DEPRECATED | No design-layer replacement — unverified |
 | compilation/v0.14/stage15_spell_catalog.md | TTRPG | DEPRECATED | No design-layer replacement — unverified |
 | compilation/v0.14/stage16_reference.md | ALL | DEPRECATED | No design-layer replacement — unverified |
 | compilation/v0.14/stage17_canon_guard.md | ALL | DEPRECATED | skills/valoria-canon-guard/SKILL.md |
-| compilation/v0.14/stage_bg_board_game_mode.md | BG | DEPRECATED | designs/board_game/valoria_bg_v05_simulation_and_patches.md |
+| compilation/v0.14/stage_bg_board_game_mode.md | BG | DEPRECATED | designs/board_game/board_game_v30.md |
 | compilation/v0.14/valoria_ruleset_v0.14.md | ALL | DEPRECATED | Compilation snapshot — all stages outdated |
 
 ---
@@ -67,11 +70,11 @@
 
 | File | Systems | Status | Notes |
 |------|---------|--------|-------|
-| **designs/board_game/valoria_bg_v05_simulation_and_patches.md** | **BG/HYBRID** | **CURRENT** | Canonical BG faction mechanics. P-12–P-32 applied. |
-| designs/board_game/valoria_bg_v05_stress_test_report.md | BG/HYBRID | CURRENT | Source for ST-BG/MB/INT patches |
-| designs/board_game/victory_architecture_v1.md | BG/ALL | CURRENT | Canonical victory conditions. PP-406–PP-427. |
-| designs/board_game/faction_resolutions_2026_04_07.md | BG/ALL | CURRENT | PP-428 onwards. Active. |
-| designs/board_game/varfell_path_b_redesign_ed311.md | BG | AWAITING REVIEW | ED-311 |
+| **designs/board_game/board_game_v30.md** | **BG/HYBRID** | **CURRENT** | Canonical BG faction mechanics. P-12–P-32 applied. |
+| ~~designs/board_game/valoria_bg_v05_stress_test_report_deprecated.md~~ | — | DEPRECATED | Moved to deprecated/designs/board_game/ (2026-04-13) |
+| designs/board_game/victory_v30.md | BG/ALL | CURRENT | Canonical victory conditions. PP-406–PP-427. |
+| ~~designs/board_game/faction_resolutions_2026_04_07_deprecated.md~~ | — | DEPRECATED | Moved to deprecated/designs/board_game/ (2026-04-13) |
+| designs/board_game/varfell_path_b_v30.md | BG | AWAITING REVIEW | ED-311 |
 | designs/board_game/valoria_map_v2.svg | BG | CURRENT | Visual map |
 | ~~19 superseded BG files~~ | — | DEPRECATED | Moved to deprecated/designs/board_game/ (2026-04-09) |
 
@@ -81,7 +84,7 @@
 
 | File | Systems | Status | Notes |
 |------|---------|--------|-------|
-| **designs/combat/combat_design_v1.md** | **ALL** | **CURRENT** | Canonical combat design. PP-086–092+. |
+| **designs/combat/combat_v30.md** | **ALL** | **CURRENT** | Canonical combat design. PP-086–092+. |
 
 ---
 
@@ -89,7 +92,7 @@
 
 | File | Systems | Status | Notes |
 |------|---------|--------|-------|
-| **designs/mass_combat/mass_battle_v3.md** | **ALL** | **CURRENT** | Canonical mass battle spec. ST-MB patches. |
+| **designs/mass_combat/mass_battle_v30.md** | **ALL** | **CURRENT** | Canonical mass battle spec. ST-MB patches. |
 
 ---
 
@@ -97,7 +100,7 @@
 
 | File | Systems | Status | Notes |
 |------|---------|--------|-------|
-| **designs/contest/social_contest_system_v2.md** | **ALL** | **CURRENT** | Canonical social contest. PP-234. Supersedes debate_system_redesign_v1. |
+| **designs/contest/social_contest_v30.md** | **ALL** | **CURRENT** | Canonical social contest. PP-234. Supersedes debate_system_redesign_v1. |
 | ~~designs/debate/*~~ | — | DEPRECATED | Moved to deprecated/ (2026-04-09). Superseded by contest system. |
 
 ---
@@ -106,8 +109,8 @@
 
 | File | Systems | Status | Notes |
 |------|---------|--------|-------|
-| **designs/ttrpg/threadwork_redesign_v25.md** | **TTRPG/HYBRID/BG** | **CURRENT** | Canonical threadwork spec. |
-| designs/ttrpg/threadwork_philosophical_reference.md | TTRPG | REFERENCE | Extracted from threadwork v25 Part 1 |
+| **designs/ttrpg/threadwork_v30.md** | **TTRPG/HYBRID/BG** | **CURRENT** | Canonical threadwork spec. |
+| designs/ttrpg/threadwork_philosophical_reference_v30.md | TTRPG | REFERENCE | Extracted from threadwork v25 Part 1 |
 | designs/ttrpg/batch_a_designs.md | TTRPG | REFERENCE | Session 4 gap designs — check if gaps still open |
 | designs/ttrpg/batch_ad_resolutions.md | TTRPG | PROPAGATION-PENDING | Approved decisions not yet in working files |
 | designs/ttrpg/batch_bc_designs.md | TTRPG | REFERENCE | Session 4 military+political gap designs |
@@ -122,7 +125,7 @@
 | designs/ttrpg/succession_mechanic.md | ALL | PROPAGATION-PENDING | Approved. No home in working files yet. |
 | designs/ttrpg/valoria_emergent_scenarios.md | TTRPG | WORKING | Emergent scenario map |
 | designs/ttrpg/valoria_narrative_scenario_chains.md | TTRPG | WORKING | NPC arcs. Contains "Ceiral" references (ED-048). |
-| designs/ttrpg/SUPERSEDED.md | INFRA | CURRENT | Notice file for Phase 1 artifacts |
+| designs/ttrpg/SUPERSEDED.md | INFRA | DEPRECATED → deprecated/designs/ttrpg/ | Notice file for Phase 1 artifacts |
 
 ---
 
@@ -130,8 +133,8 @@
 
 | File | Systems | Status | Notes |
 |------|---------|--------|-------|
-| **designs/hybrid/scale_transitions_design_v1.md** | **HYBRID/ALL** | **CURRENT** | Canonical scale transitions and mode bridging. Supersedes stage11. PP-594. |
-| designs/hybrid/hybrid_gaps_resolved.md | HYBRID | PROPAGATION-PENDING | 17 gaps resolved. Not yet in bg_v05. |
+| **designs/hybrid/scale_transitions_v30.md** | **HYBRID/ALL** | **CURRENT** | Canonical scale transitions and mode bridging. Supersedes stage11. PP-594. |
+| designs/hybrid/hybrid_gaps_v30.md | HYBRID | PROPAGATION-PENDING | 17 gaps resolved. Not yet in bg_v05. |
 
 ---
 
@@ -139,7 +142,7 @@
 
 | File | Systems | Status | Notes |
 |------|---------|--------|-------|
-| designs/conviction_track/opus_design_proposal.md | BG/ALL | WORKING | PP-406–PP-418 design proposal. NOT committed as patches. |
+| designs/conviction_track/conviction_track_v30.md | BG/ALL | WORKING | PP-406–PP-418 design proposal. NOT committed as patches. |
 
 ---
 
@@ -147,8 +150,8 @@
 
 | File | Systems | Status | Notes |
 |------|---------|--------|-------|
-| designs/setting/geography_design.md | ALL | CURRENT | Canonical geography. 17 territories. |
-| designs/setting/calamity_radiation.md | ALL | CURRENT | Calamity radiation framework. |
+| designs/setting/geography_v30.md | ALL | CURRENT | Canonical geography. 17 territories. |
+| designs/setting/calamity_radiation_v30.md | ALL | CURRENT | Calamity radiation framework. |
 | designs/setting/adjacency_map.jsx | ALL | CURRENT | Visual adjacency tool |
 
 ---
@@ -157,7 +160,7 @@
 
 | File | Systems | Status | Notes |
 |------|---------|--------|-------|
-| designs/systems/clock_registry.md | ALL | CURRENT | Unified clock/track registry. PP-496. |
+| designs/systems/clock_registry_v30.md | ALL | CURRENT | Unified clock/track registry. PP-496. |
 
 ---
 
@@ -165,7 +168,7 @@
 
 | File | Systems | Status | Notes |
 |------|---------|--------|-------|
-| designs/npcs/npc_roster.md | ALL | CURRENT | 13-character roster. ED-358. |
+| designs/npcs/npc_roster_v30.md | ALL | CURRENT | 13-character roster. ED-358. |
 
 ---
 
@@ -173,9 +176,9 @@
 
 | File | Systems | Status | Notes |
 |------|---------|--------|-------|
-| designs/worldbuilding/worldbuilding_integration_v3.md | ALL | CURRENT | Latest worldbuilding integration |
-| designs/worldbuilding/worldbuilding_v3_canon_audit.md | ALL | CURRENT | Audit of v3 |
-| designs/worldbuilding/editorial_comprehensive_review.md | ALL | CURRENT | Comprehensive editorial review |
+| designs/worldbuilding/worldbuilding_v30.md | ALL | CURRENT | Latest worldbuilding integration |
+| designs/worldbuilding/worldbuilding_canon_audit_v30.md | ALL | CURRENT | Audit of v3 |
+| designs/worldbuilding/editorial_comprehensive_review.md | ALL | DEPRECATED | Comprehensive editorial review |
 | ~~v1, v1_audit, v2~~ | — | DEPRECATED | Moved to deprecated/ (2026-04-09) |
 
 ---
@@ -196,11 +199,11 @@
 
 | File | Systems | Status | Notes |
 |------|---------|--------|-------|
-| designs/gm_ref_cp14/gm_reference_workplan.md | ALL | CURRENT | — |
-| designs/gm_ref_cp14/arcs/arcs_01_04_rebuilt.md | ALL | CURRENT | Campaign arcs 1–4 |
-| designs/gm_ref_cp14/arcs/arcs_05_08_rebuilt.md | ALL | CURRENT | — |
-| designs/gm_ref_cp14/arcs/arcs_09_11_elske_baralta.md | ALL | CURRENT | — |
-| designs/gm_ref_cp14/arcs/arcs_12_15_faction_transitions.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/gm_reference_workplan.md | ALL | DEPRECATED | — |
+| designs/gm_ref_cp14/arcs/arcs_01_04_rebuilt.md | ALL | DEPRECATED | Campaign arcs 1–4 |
+| designs/gm_ref_cp14/arcs/arcs_05_08_rebuilt.md | ALL | DEPRECATED | — |
+| designs/gm_ref_cp14/arcs/arcs_09_11_elske_baralta.md | ALL | DEPRECATED | — |
+| designs/gm_ref_cp14/arcs/arcs_12_15_faction_transitions.md | ALL | DEPRECATED | — |
 | designs/gm_ref_cp14/arcs/arcs_16_19_faction_domain_echoes.md | ALL | CURRENT | — |
 | designs/gm_ref_cp14/arcs/arcs_20_23_branching.md | ALL | CURRENT | — |
 | designs/gm_ref_cp14/arcs/arcs_24_27_branching.md | ALL | CURRENT | — |
@@ -208,18 +211,18 @@
 | designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md | HYBRID | CURRENT | Arcs 32, 34, 35 NOT YET SIMULATED. |
 | designs/gm_ref_cp14/arcs/valoria_emergent_arcs_experimental.md | ALL | CURRENT | — |
 | designs/gm_ref_cp14/arcs/valoria_emergent_campaign_arcs.md | ALL | CURRENT | — |
-| designs/gm_ref_cp14/dashboards/d01–d10 | ALL | CURRENT | All 10 dashboard files |
-| designs/gm_ref_cp14/flowcharts/flowchart_templar_crossing.md | ALL | CURRENT | — |
-| designs/gm_ref_cp14/zoom_in_out_reference_card.md | ALL | CURRENT | — |
+| designs/gm_ref_cp14/dashboards/d01–d10 | ALL | DEPRECATED | All 10 dashboard files |
+| designs/gm_ref_cp14/flowcharts/flowchart_templar_crossing.md | ALL | DEPRECATED | — |
+| designs/gm_ref_cp14/zoom_in_out_reference_card.md | ALL | DEPRECATED | — |
 
 ---
 
-| designs/npcs/npc_roster_caste_annotations.md | ALL | CURRENT | Caste-axis impact on all 13 roster NPCs |
-| designs/npcs/ed_403_406_407_resolutions.md | ALL | CURRENT | RM split, Ehrenwall assessment, consecration crisis |
+| designs/npcs/npc_roster_caste_annotations.md | ALL | DEPRECATED | Caste-axis impact on all 13 roster NPCs |
+| designs/npcs/ed_403_406_407_resolutions.md | ALL | DEPRECATED | RM split, Ehrenwall assessment, consecration crisis |
 
 ## DESIGNS — MECHANICS
-| designs/mechanics/baralta_crown_claim_mechanic.md | BG/HYBRID | CURRENT | Crown Succession Contest, Stake Claim DA, consecration crisis BG expression |
-| designs/npcs/lenneth_threadwork_design.md | ALL | CURRENT | Lenneth stat block, TS development, Cultural Revival Track, threadwork at ruler diamond decision points |
+| designs/mechanics/baralta_crown_claim_v30.md | BG/HYBRID | CURRENT | Crown Succession Contest, Stake Claim DA, consecration crisis BG expression |
+| designs/npcs/lenneth_threadwork_design.md | ALL | DEPRECATED | Lenneth stat block, TS development, Cultural Revival Track, threadwork at ruler diamond decision points |
 
 ## GM REFERENCE (gm_ref/)
 
@@ -240,12 +243,14 @@
 | File | Systems | Status | Source Document |
 |------|---------|--------|----------------|
 | references/params_core.md | ALL | CURRENT | stage1 (legacy source) |
-| references/params_combat.md | ALL | CURRENT | combat_design_v1.md |
-| references/params_mass_combat.md | ALL | CURRENT | mass_battle_v3.md |
+| references/params_combat.md | ALL | CURRENT | combat_v30.md |
+| references/params_mass_combat.md | ALL | CURRENT | mass_battle_v30.md |
 | references/params_factions.md | ALL | CURRENT | stage6 (TTRPG) + bg_v05 (BG) |
 | references/params_board_game.md | BG | CURRENT | bg_v05 |
-| references/params_contest.md | ALL | CURRENT | social_contest_system_v2.md |
-| references/params_threadwork.md | TTRPG/HYBRID | CURRENT | threadwork_redesign_v25.md |
+| references/params_contest.md | ALL | CURRENT | social_contest_v30.md |
+| references/params_fieldwork.md | TTRPG/HYBRID/BG | CURRENT | fieldwork_v30.md |
+
+| references/params_threadwork.md | TTRPG/HYBRID | CURRENT | threadwork_v30.md |
 | references/params_scale_transitions.md | HYBRID | CURRENT | stage11 (legacy source) |
 | references/params_core_history.md | ALL | CURRENT | Patch history |
 | references/params_combat_history.md | ALL | CURRENT | Patch history |
@@ -253,6 +258,7 @@
 | references/params_board_game_history.md | BG | CURRENT | Patch history |
 | references/params_threadwork_history.md | TTRPG/HYBRID | CURRENT | Patch history |
 | references/glossary.md | ALL | CURRENT | Term expansion reference |
+| references/design_registry.yaml | ALL | CURRENT | v30 design doc atomization map. Established 2026-04-13. |
 | references/canonical_sources.yaml | ALL | CURRENT | System authority map |
 | references/file_index.md | ALL | CURRENT | This file |
 | references/arc_register.md | ALL | CURRENT | Arc system v8 (2026-04-13, PP-575). Vector format. 120+ arcs, 5 categories. Replaces v7. ED-401-405 open. |
@@ -350,21 +356,21 @@ Major groups moved 2026-04-09:
 | designs/ttrpg/batch_ad_resolutions.md | G-053, G-040, G-054, G-042, G-038, G-044, Varfell transfer | threadwork_v25, characters, faction files |
 | designs/ttrpg/succession_mechanic.md | Almud succession mechanic | Needs political_mechanics.md or similar |
 | designs/ttrpg/church_territorial_seizure.md | TC 80 per-territory roll | Verify parity with bg_v05 |
-| designs/hybrid/hybrid_gaps_resolved.md | 17 hybrid gaps | stage11, bg_v05 §B.5 |
+| designs/hybrid/hybrid_gaps_v30.md | 17 hybrid gaps | stage11, bg_v05 §B.5 |
 | designs/ttrpg/mechanical_tasks_and_patches.md | R-65/R-66 blocked by ED-047 | stage15, stage5 |
 
 ---
 
 *Index maintained by valoria-orchestrator. Update this file in the same commit as any file that changes its status, system classification, or dependency relationships.*
 
-| designs/systems/npc_behavior_system_v1.md | NPC Behavior System design | 2026-04-13 | ACTIVE | Stance Triangles, Priority Trees, Arc Emergence |
+| designs/systems/npc_behavior_v30.md | NPC Behavior System design | 2026-04-13 | ACTIVE | Stance Triangles, Priority Trees, Arc Emergence |
 | tests/audit_npc_behavior_system.md | NPC Behavior System audit | 2026-04-13 | COMPLETE | 15 findings |
 
 ## FIELDWORK SUBSYSTEM FILES (added 2026-04-13 — skeleton split)
 
 | File | System | Status | Notes |
 |------|--------|--------|-------|
-| designs/fieldwork/fieldwork_design_v1.md | FIELDWORK | CURRENT | Master index + §1 Depth Axis + §2 Fieldwork Pool + §7 Derived Values. 224 lines (split from 856). |
+| designs/fieldwork/fieldwork_v30.md | FIELDWORK | CURRENT | Master index + §1 Depth Axis + §2 Fieldwork Pool + §7 Derived Values. 224 lines (split from 856). |
 | designs/fieldwork/fieldwork_exploration.md | FIELDWORK | CURRENT | §3 Exploration. 72 lines. |
 | designs/fieldwork/fieldwork_investigation.md | FIELDWORK | CURRENT | §4 Investigation. 111 lines. |
 | designs/fieldwork/fieldwork_socializing.md | FIELDWORK | CURRENT | §5 Socializing. 132 lines. |
