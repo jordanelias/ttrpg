@@ -3500,10 +3500,10 @@ editorial_decisions:
   - id: ED-470
     status: resolved
     date_resolved: 2026-04-13
-    resolution: "ARC-T23 resolved 2026-04-13. Institutional role named the Witness — practitioner appointed by RM inner tradition to hold Thread memory across generational shifts. TS 19–35. COLLISION E now fully operational. Resolves ED-NEW-02."
+    resolution: "ARC-T23 resolved 2026-04-13. Institutional role named the Witness — current holder of a ~245-year succession lineage within the RM, not a Calamity survivor (humans are mortal; TS confers no longevity). Authority derives from institutional continuity and transmitted record. TS 19–35 is their own perceptual depth. COLLISION E operational. Resolves ED-NEW-02."
     date_raised: 2026-04-13
     priority: P2
-    description: "ARC-T23 Witness: canonical. Resolved 2026-04-13. Institutional role, 245-year RM tradition, TS 19-35. Name: the Witness."
+    description: "ARC-T23 Witness: canonical. Resolved 2026-04-13. Current holder of 245-year RM succession lineage. Not a Calamity survivor — TS does not extend lifespan. Institutional authority from unbroken succession record. TS 19-35 own perceptual depth."
     tags: [restoration_movement, arc_system, canon]
 
   - id: ED-471
