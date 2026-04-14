@@ -551,8 +551,21 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
         'references/file_index_summary.md',
         'references/canonical_sources.yaml',
     ]
-    all_paths = session_paths + [p for p in (extra_paths or []) if p not in session_paths]
-    files = read_files_graphql(all_paths)
+    # Skip re-fetching session paths already cached (saves API calls within a session)
+    # Safety: atomic_commit() invalidates cache for committed paths
+    cached = [p for p in session_paths
+              if _repo_key(p, 'ttrpg') in _session_fetches
+              and _session_fetches[_repo_key(p, 'ttrpg')] is not None]
+    needed = [p for p in session_paths if p not in cached]
+    extras = [p for p in (extra_paths or []) if p not in session_paths]
+    fetch_paths = needed + extras
+    if fetch_paths:
+        files = read_files_graphql(fetch_paths)
+    else:
+        files = {}
+    # Merge cached content into return dict
+    for p in cached:
+        files[p] = _session_fetches[_repo_key(p, 'ttrpg')]
 
     import github_ops as _g_mod
     token = _h_mod.assert_bootstrap()

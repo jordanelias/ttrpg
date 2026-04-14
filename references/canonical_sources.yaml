@@ -17,54 +17,36 @@ systems:
     canonical_sha__references__params_core_md: "b29c807ce204a9f9d487926371b084b17be2e565"
     params: references/params_core.md
     design_doc: null
-    compilation_stage: compilation/v0.14/stage1_core_engine.md
-    compilation_current: false
-    note: "Stage1 OUTDATED — all compilation stages superseded 2026-04-04. params_core.md is working canonical for core engine (dice, TN, Ob, Momentum, attributes, derived scores). No design-layer core doc exists; params is the authoritative record."
 
   characters:
     canonical: references/params_core.md
     canonical_sha__references__params_core_md: "b29c807ce204a9f9d487926371b084b17be2e565"
     params: references/params_core.md
     design_doc: null
-    compilation_stage: compilation/v0.14/stage2_characters.md
-    compilation_current: false
-    note: "Stage2 OUTDATED. params_core.md covers character creation, attributes, Histories, Beliefs, Inspirations as extracted from design sessions. No separate character design doc."
 
   combat:
     canonical: designs/combat/combat_v30.md
     canonical_sha__designs__combat__combat_v30_md: "97141aae2e0926d0ee27b2a02a0bbe2fea042c08"
     params: references/params_combat.md
     design_doc: designs/combat/combat_v30.md
-    compilation_stage: compilation/v0.14/stage8_combat.md
-    compilation_current: false
-    note: "Stage8 OUTDATED. combat_design_v1.md is canonical. PP-232 and subsequent patches applied. params_combat.md is extracted summary."
 
   threadwork:
     canonical: designs/ttrpg/threadwork_v30.md
     canonical_sha__designs__ttrpg__threadwork_v30_md: "9a9320325c78d857225171d8514d2d901f050ea8"
     params: references/params_threadwork.md
     design_doc: designs/ttrpg/threadwork_v30.md
-    compilation_stage: compilation/v0.14/stage3_thread_operations.md
-    compilation_current: false
-    note: "Stage3 EMPTY/STALE. threadwork_redesign_v25.md is canonical. PP-190-209, PP-232, PP-624-625 applied (pool propagation pass 2026-04-13). All pool formulas now canonical post-PP-619."
 
   southernmost:
     canonical: compilation/v0.14/stage4_southernmost.md
     canonical_sha__compilation__v0_14__stage4_southernmost_md: "c38d8cc1b4862052832807dcd72487e6c37b1607"
     params: null
     design_doc: null
-    compilation_stage: compilation/v0.14/stage4_southernmost.md
-    compilation_current: false
-    note: "Stage4 OUTDATED (all stages outdated 2026-04-04). No design-layer doc exists. Stage4 retained as only source but treat as unverified. ED-048 open ([UNNAMED — ED-416] placeholder)."
 
   clocks:
     canonical: designs/systems/clock_registry_v30.md
     canonical_sha__designs__systems__clock_registry_v30_md: "615dfac8dda524c27eb3f0793803024e3de02e61"
     params: null
     design_doc: designs/systems/clock_registry_v30.md
-    compilation_stage: compilation/v0.14/stage5_clocks.md
-    compilation_current: false
-    note: "clock_registry.md created 2026-04-08 (PP-496). Consolidates all clocks, tracks, and counters from across the project. Stage5 was empty. Registry is now canonical."
 
   factions:
     canonical_ttrpg: compilation/v0.14/stage6_factions.md
@@ -74,54 +56,36 @@ systems:
     canonical_hybrid: designs/board_game/board_game_v30.md
     canonical_sha__designs__board_game__board_game_v30_md: "f6ff31a7ff0bfdd69875e5dc9a498eeea10a5247"
     params: references/params_factions.md
-    compilation_stage: compilation/v0.14/stage6_factions.md
-    compilation_current: false
-    note: "Stage6 OUTDATED. BG/Hybrid: bg_v05 is canonical. TTRPG factions: stage6 is only source but unverified — treat with caution."
 
   victory:
     canonical: designs/board_game/victory_v30.md
     canonical_sha__designs__board_game__victory_v30_md: "7dcf3c8d545b2f39842ac0a125ef901cdb29cc53"
     params: null
     design_doc: designs/board_game/victory_v30.md
-    compilation_stage: null
-    compilation_current: false
-    note: "victory_architecture_v1.md is canonical for all victory conditions. Supersedes params_board_game §Victory Conditions. Integrates opus_design_proposal.md PP-406–PP-418 + PP-419–PP-427."
 
   territories:
     canonical: designs/setting/geography_v30.md
     canonical_sha__designs__setting__geography_v30_md: "8fb221327605736f5a1f11a0428e33c2494d4b91"
     params: null
     design_doc: designs/setting/geography_v30.md
-    compilation_stage: compilation/v0.14/stage7_territories.md
-    compilation_current: false
-    note: "geography_design.md is canonical. 17 territories (was 15). Approved 2026-04-05. stage7 fully superseded."
 
   mass_combat:
     canonical: designs/mass_combat/mass_battle_v30.md
     canonical_sha__designs__mass_combat__mass_battle_v30_md: "794af1bd1b4a1e47904e2ad309443e67dc2e86e0"
     params: references/params_mass_combat.md
     design_doc: designs/mass_combat/mass_battle_v30.md
-    compilation_stage: null
-    compilation_current: false
-    note: "mass_battle_v3.md is canonical. No compilation stage for mass combat."
 
   social_debate:
     canonical: designs/contest/social_contest_v30.md
     canonical_sha__designs__contest__social_contest_v30_md: "a395043c9f667d03d709cf242643cc9a26d99c5e"
     params: references/params_contest.md
     design_doc: designs/contest/social_contest_v30.md
-    compilation_stage: compilation/v0.14/stage9_social.md
-    compilation_current: false
-    note: "Stage9 STALE/EMPTY. social_contest_system_v2.md (PP-234) is canonical. Supersedes debate_system_redesign_v1.md Part 6. params_contest.md supersedes params_debate.md. SIM-SC-01 resolved 2026-04-08."
 
   board_game:
     canonical: designs/board_game/board_game_v30.md
     canonical_sha__designs__board_game__board_game_v30_md: "f6ff31a7ff0bfdd69875e5dc9a498eeea10a5247"
     params: references/params_board_game.md
     design_doc: designs/board_game/board_game_v30.md
-    compilation_stage: compilation/v0.14/stage_bg_board_game_mode.md
-    compilation_current: false
-    note: "Stage_bg STALE. bg_v05 + victory_architecture_v1.md canonical. PP-548-573 applied (2026-04-11/12). All open editorials resolved. 0 P1 blockers."
 
   scale_transitions:
     canonical: designs/hybrid/scale_transitions_v30.md
@@ -129,39 +93,24 @@ systems:
     canonical_sha__compilation__v0_14__stage11_scale_transitions_md: "277e7ffb787cf6af153462b4cee3bcea09ae4ec6"
     params: null
     design_doc: null
-    compilation_stage: compilation/v0.14/stage11_scale_transitions.md
-    compilation_current: false
-    note: "scale_transitions_design_v1.md created 2026-04-13. Consolidates stage11 + params_scale_transitions + PP-089/103/107-112/232/261/340-343. K2-F-02 Zoom In gap resolved."
 
   campaign_modes:
     canonical: compilation/v0.14/stage12_campaign_modes.md
     canonical_sha__compilation__v0_14__stage12_campaign_modes_md: "029603bb27b7f5835277f42115e5ff3c19985d66"
     params: null
     design_doc: null
-    compilation_stage: compilation/v0.14/stage12_campaign_modes.md
-    compilation_current: false
-    note: "Stage12 OUTDATED. No design-layer doc. Retained as only source, unverified."
-
 
   npc_behavior:
     canonical: designs/systems/npc_behavior_v30.md
     canonical_sha__designs__systems__npc_behavior_v30_md: "a0a87290fafc4061b8a2843ce30de729cb951cce"
     params: null
     design_doc: designs/systems/npc_behavior_v30.md
-    compilation_stage: null
-    compilation_current: false
-    note: "NPC ethical stance, resonance style, AI decision trees, arc emergence. Created 2026-04-13. Audit-fixed. ED-515 through ED-531 open."
-
 
   fieldwork:
     canonical: designs/fieldwork/fieldwork_v30.md
     canonical_sha__designs__fieldwork__fieldwork_v30_md: "b0767355e57fb7f0245c633ec82e5471dc4e0f8a"
     params: null
     design_doc: designs/fieldwork/fieldwork_v30.md
-    compilation_stage: null
-    compilation_current: false
-    note: "fieldwork_v30.md is canonical (designs/fieldwork/). Sub-files: fieldwork_socializing.md (PP-632: Disposition redesign, Knot mechanics), fieldwork_editorial.md (PP-632: ED harvest). PP-626–632 applied. 3 open editorials: ED-507/508/509. 3 SIM-DEBT items (SOC-01–03)."
-
 
   params_factions_ttrpg:
     canonical: references/params_factions_ttrpg.md
@@ -190,15 +139,9 @@ systems:
     canonical_sha__designs__setting__calamity_radiation_v30_md: "3a86fbf65e61d9e96caa2efd70ccb5ae8946f1ea"
     params: null
     design_doc: designs/setting/calamity_radiation_v30.md
-    compilation_stage: null
-    compilation_current: false
-    note: "Geographic graduation of RS threshold effects. Supersedes geography_design.md Calamity Bleed Gradient. Cross-references threadwork_v25 §5.3 and §6. Created 2026-04-06."
 
   emergent_arcs:
     canonical: references/arc_register.md
     canonical_sha__references__arc_register_md: "d3c4e225e6362bc4e11d225d4aa02a67a4066903"
     params: null
     design_doc: null
-    compilation_stage: null
-    compilation_current: false
-    note: "arc_register.md v8 (2026-04-13, PP-575). Vector format. Replaces v7. Open editorials ED-401-405."
