@@ -61,7 +61,7 @@ Ob floor: 1 (per core engine).
 
 Same construction as Contest Pool (social_contest_system_v2.md §3: Primary Attribute × 2 + History bonus). History bonus = relevant History points + 3 (per params_core.md §4.1 character creation).
 
-**[EDITORIAL: ED-NEW-11 — Pool formula ×2 contradiction. This formula matches the Contest system but conflicts with PP-247, which corrected Combat Pool to Agility + History points + 3 (non-doubled) in params_core.md. combat_design_v1.md §1 still states (Agility × 2). Resolve project-wide: either all three systems use doubled attribute, or none do. Ob calibration of the entire Depth Axis depends on this resolution. Current Obs assume the doubled formula. If non-doubled is canonical, all Depth 3+ Obs must be reduced by 1-2.]**
+**[RESOLVED: ED-NEW-11 — Pool formula ×2 confirmed canonical by PP-615 (params_core.md). The doubled formula (Primary Attribute × 2) is consistent across Combat (PP-615), Contest (PP-234), and Fieldwork. Ob calibration is correct as-is.]**
 
 TN: 7 (Standard). TN 6 (Controlled) when unhurried with preparation. TN 8 (Desperate) under duress, exhaustion, or active Calamity exposure.
 
@@ -758,7 +758,7 @@ Fieldwork actions consume in-game time:
 | ED-NEW-08 | Disposition decay rate (§5.2: −1/season above +3). Requires simulation to confirm pacing. | P2 |
 | ED-NEW-09 | Thread-Read co-movement effects (§4.5). Confirmed: uses threadwork_redesign_v25.md §3.2 co-movement table directly. No separate fieldwork co-movement table. | P3 |
 | ED-NEW-10 | Breach encounter (Depth 5) + Coherence stacking. **CONFIRMED PROPORTIONAL** (PP-581: each step requires deliberate player decision; no forced spiral. A Coherence ≤ 2 practitioner entering a Breach risks Crisis from Breach −1 + Thread op −1 = 0. This is intentional — the Breach is the rendering's edge). | P3 |
-| ED-NEW-11 | Pool formula ×2 contradiction. **PROJECT-WIDE** — cannot resolve in fieldwork alone. params_core.md (PP-247) says non-doubled; combat_design_v1.md §1 and social_contest_system_v2.md §3 say doubled. Fieldwork matches Contest. Recommendation: ×2 is canonical (2 design docs vs 1 params file); patch params_core.md to restore ×2. If non-doubled resolves as canonical: recalibrate Depth Axis Obs −1 to −2. | P2 (project-wide) |
+| ED-NEW-11 | Pool formula ×2 — **RESOLVED** by PP-615. params_core.md now confirms (Agility × 2) as canonical. PP-247 note was stale. Fieldwork Ob calibration is correct. | RESOLVED |
 | ED-NEW-12 | Sincerity Gate (§5.3) uses Spirit. Confirm Spirit is not already overloaded as an attribute (currently: Resolve = Spirit; no other mechanical role). | P3 |
 | ED-NEW-13 | Desperate Trail (§4.4): 3 consecutive failures threshold triggers TN 8 + doubled Exposure + GM complication. Confirm TN 8 does not make recovery impossible for low-pool investigators (4D at TN 8: P(≥1) ≈ 60%, still viable). Confirm Partial +2 progress compensates for increased difficulty. | P2 |
 | ED-NEW-14 | Audit finding D-SIM-5 resolved: §4.1 now defines Finding reliability from resolved investigations. Verify Finding + Contest interaction in simulation. | P3 |
@@ -830,7 +830,7 @@ Fieldwork actions consume in-game time:
 
 | ID | Description |
 |----|-------------|
-| SIM-DEBT-FW-01 | Full fieldwork system simulation: Exploration Ob calibration across all 17 territories at varying RS bands. Confirm P(success) for typical pools against Depth 1-5 Obs. Depends on ED-NEW-11 resolution. |
+| SIM-DEBT-FW-01 | Full fieldwork system simulation: Exploration Ob calibration across all 17 territories at varying RS bands. Confirm P(success) for typical pools against Depth 1-5 Obs. Pool formula confirmed ×2 (PP-615). |
 | SIM-DEBT-FW-02 | Evidence Track pacing: simulate a 5-threshold investigation with mixed action types. Confirm completion in 3-5 scenes (target pacing). **PARTIALLY RESOLVED** — Himmelenger scenario completed 5-threshold investigation in 3 scenes (3 actions). Pacing confirmed for high-pool characters (15-19D). Low-pool scenario needed. |
 | SIM-DEBT-FW-03 | Disposition economy: simulate 10-session relationship arc from Neutral to Bonded. Confirm pacing requires meaningful investment (not trivially achievable). Include Sincerity Gate impact. |
 | SIM-DEBT-FW-04 | Exposure ↔ Attention Pool feedback loop: simulate 4-season fieldwork-heavy campaign. Confirm capped Exposure feed does not generate TC acceleration beyond ±5/season combined cap. |

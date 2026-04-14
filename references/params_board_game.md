@@ -58,7 +58,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard |
 | Parliament Integrity (PI) | **7** | 0–20 | Cumulative pressure meter. Auto-resolves at PI ≥ 20 (Crown elimination). |
 | AER | 2 | 0–5 | Near IP clock. |
-| Torben Loyalty | **7** | 0–7 | Active from game start. No IP trigger. On Crown elimination: Torben Loyalty track transfers to Löwenritter (they inherit the succession claim). Löwenritter wins or loses Torben via Influence actions the same way Crown did. Church and Hafenmark may contest via Senator Outward Diplomacy (Ob = current Torben Loyalty ÷ 2). (ED-332, PP-498: start 3, range 0–7 per §Torben Loyalty Track canonical.) |
+| Torben Loyalty | **7** | 0–7 | Active from game start. No IP trigger. On Crown elimination: Torben Loyalty track transfers to Löwenritter (they inherit the succession claim). Löwenritter wins or loses Torben via Influence actions the same way Crown did. Church and Hafenmark may contest via Senator Outward Diplomacy (Ob = current Torben Loyalty ÷ 2). (PP-599: start 7, range 0–7. PP-498 start 3 superseded.) |
 | Elske Loyalty | 4 | 0–7 | Off-board card near T4. |
 | Löwenritter Coup Counter | 0 | 0–4 | Public. Threshold 4 = coup eligible. |
 | Warden Cooperation (WC) | 0 | 0–3 | Peninsula-wide. WR ≥ 2 required to advance. (PP-605) |
@@ -1009,20 +1009,22 @@ Required sequence to access Askeheim:
 |----------|---------|-------------|-------------------|---------------|
 | Vaynard (VTM 3+) | Varfell | 30 (at VTM 3) | Yes — conditional on VTM development | VTM 3 achieved ~S7–9. Marginal: Forgetting pool = 3D. |
 | Vaynard (VTM 4+) | Varfell | 40 | Yes | VTM 4 ~S10–12. Edeyja will engage substantively. |
-| Almud Almqvist | Crown | 28 | **No** | Discovery Event: any Thread-significant event with Almud present, Spirit Ob 1. *[ED-364: Almud is shrewd, politically capable, his caution informed by suspected father assassination and the structural impossibility of managing 6+ simultaneous pressure vectors. Comparison to Baralta: scope difference, not competence difference.]* On success: TS 30, Certainty −1 (permanent). Politically costly: TC +1; Church learning triggers TC +2 + Heresy Investigation. |
+| Almud Almqvist | Crown | 0 | **No** | Discovery Event as rupture (not confirmation): any Thread-significant event with Almud present, Spirit Ob 1. At TS 0, Almud perceives nothing of Thread phenomena — the Discovery Event is first contact with something entirely outside his framework. On success: TS gains initial awareness (GM sets value, likely 10-15 Stirring range), Certainty −1 (permanent). Politically costly: TC +1; Church learning triggers TC +2 + Heresy Investigation. *[ED-364 resolved 2026-04-11: Almud TS revised to 0. Remove secret Einhir sympathy. Einhir policy as governance pragmatism + genuine ethical doubt. Discovery Event as rupture not confirmation.]* |
 | Lenneth Almqvist (Queen) | Crown | Unknown (not yet documented) | **Unknown** | Arc-dependent. Holds pre-Altonian sea-republic archive with first-person Thread-perception accounts (~180 AG). Potential TS development through intellectual confrontation with archive content + Thread exposure. [EDITORIAL: ED-119 — Lenneth full design required: starting TS, development path, stat block.] |
 | Restoration Weaver (TS 18) | Restoration | 18 | No | Does not qualify as expedition leader. Provides Ob −1 support when accompanying a qualifying Champion. |
 | Any other faction Champion | Any | < 30 | No | No standard development path. |
 
 **Crown's Southernmost access is conditional on in-game development.**
-Neither Almud nor Lenneth qualifies at game start. Crown must trigger
-specific arc events (Almud Discovery Event; Lenneth archive arc) to
-develop an eligible Champion. This is slower than Varfell's VTM path
-but represents Crown's unique royal household angle on the Southernmost.
+Neither Almud nor Lenneth qualifies at game start. Almud starts at TS 0 — Crown must trigger
+his Discovery Event (rupture: first Thread contact) to develop any Thread awareness at all.
+Even after a successful Discovery Event, Almud's TS will be in the Stirring range (10-15),
+far below the Champion TS 30 threshold. Crown's Champion path requires MULTIPLE Discovery
+Events or sustained Thread exposure over several seasons to reach TS 30. This is the slowest
+Champion path in the game. Lenneth's path remains arc-dependent (ED-119 open).
 
 **Three factions have Southernmost access paths:**
 - Varfell: fastest (VTM development, S7–12)
-- Crown: conditional (Discovery Event / archive arc, unpredictable timing)
+- Crown: slowest (Almud TS 0 → Discovery Event → sustained development to TS 30; multiple seasons)
 - Restoration: support role only (Weaver provides Ob −1, cannot lead)
 
 ### What "No Faction Control" Means in BG

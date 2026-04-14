@@ -298,19 +298,14 @@ reveals the concealment's age). Triple evidence yield from one operation.
 
 ### TEST 4: Locking a crime scene → Almud Discovery Event trigger
 
-**Setup:** Season 6. RS: 62. Almud TS: 28 (below 30 — does not qualify as Champion).
+**Setup:** Season 6. RS: 62. Almud TS: 0 (canonical per ED-364 resolved 2026-04-11 — revised from 28 to 0. No secret Einhir sympathy. Discovery Event is rupture, not confirmation).
 
 **Situation:** A monstrous incursion (Mode 1) occurred in the Ehrenfeld garrison courtyard.
 The creature has been destroyed, but the Thread scars remain. Edda arrives and Locks the
 courtyard's Thread configuration to preserve the forensic evidence before it degrades.
 
-**Lock target:** Relational/Process scale (the courtyard's relationship to the surrounding
-substrate — the incursion altered the configuration of the space itself).
-
-Lock pool: 11D, TN 8, Ob 6 (Relational). P(≥6) ≈ 0.2%. Near-impossible as established.
-
-**Reduce to Object scale** (Lock the specific incursion scar, not the whole courtyard).
-Ob: 4. P(≥4 at 11D TN8) ≈ 5%.
+**Lock target:** Object scale (Lock the specific incursion scar).
+Lock pool: 11D, TN 8, Ob 4. P(≥4 at 11D TN8) ≈ 5%.
 
 **Lock Success (5%):**
 The incursion scar is Locked. It is now stable, examinable, and will not degrade.
@@ -318,37 +313,48 @@ The incursion scar is Locked. It is now stable, examinable, and will not degrade
 **Almud is present.** He commanded the garrison during the incursion. He is standing in the
 courtyard when Edda Locks the scar.
 
-**Rendering strain on Almud (TS 28, non-sensitive):** The Lock's co-movement produces actualized
-auto-effect (d6 table). If d6 = 3: "A nearby person (TS 0) feels brief disorientation or dread."
-At TS 28, Almud is not fully non-sensitive — he is in the 10-29 band ("Vague unease" per
-observation table). The Lock's co-movement, combined with the monstrous incursion he just
-witnessed, pushes Almud to the edge of his perception.
+**Rendering strain on Almud (TS 0):** At TS 0, Almud perceives NOTHING of Thread phenomena.
+The Lock's co-movement produces actualized auto-effect (d6 table). If d6 = 3: "A nearby
+person (TS 0) feels brief disorientation or dread." At TS 0, this is the ONLY Thread-adjacent
+experience Almud can have — not perception but rendering disturbance. The disorientation is
+real but incomprehensible to Almud. He has no framework for it.
 
-**Almud Discovery Event trigger:** Per params_board_game.md: "Discovery Event: any Thread-significant
-event with Almud present, Spirit Ob 1." The Lock IS a Thread-significant event. Almud IS present.
+**Almud Discovery Event trigger:** Per params_board_game.md: "Discovery Event: any
+Thread-significant event with Almud present, Spirit Ob 1." The Lock IS a Thread-significant
+event. Almud IS present.
 
-**Spirit check:** Almud Spirit (estimated) 4. Pool: 4D, TN 7, Ob 1. P(≥1) ≈ 80%.
+**Spirit check:** Almud Spirit (per editorial note: Spirit 3 or 4 — using 3 as lower bound).
+Pool: 3D, TN 7, Ob 1. P(≥1) ≈ 63%.
 
-**On Success:** Almud TS: 28 → 30. Certainty −1 (permanent). "Politically costly: TC +1; Church
-learning triggers TC +2 + Heresy Investigation."
+**On Success — RUPTURE (not confirmation):** At TS 0, the Discovery Event is first contact with
+something entirely outside Almud's framework. He was not approaching Thread awareness — he had
+ZERO. The successful Spirit check means Almud's consciousness registers the disturbance as
+something real rather than dismissing it as stress. He does not gain TS 30 (he was not near 30).
+He gains initial Thread awareness: TS in the Stirring range (GM sets, likely 10-15). Certainty
+−1 (permanent — his worldview has been ruptured). "Politically costly: TC +1; Church learning
+triggers TC +2 + Heresy Investigation."
 
-**Arc cascade:**
+**This is NOT the same as the prior simulation's claim.** At TS 0 → Stirring (10-15), Almud
+does NOT qualify as Champion (requires TS 30). Crown does NOT gain a Southernmost access path
+from this single event. Almud would need sustained Thread exposure over multiple seasons, or
+additional Discovery Events, to reach TS 30. Crown's Champion path is the SLOWEST in the game.
+
+**Arc cascade (corrected):**
 
 | Consequence | Effect |
 |-------------|--------|
-| Almud TS 30 | Almud now qualifies as Champion. Crown has a Southernmost access path. |
-| Almud Certainty −1 | Almud's faith framework shifts. Political behaviour may change. |
+| Almud TS 0 → ~12 (Stirring) | Almud has first Thread awareness. He is NOT a Champion. Perceives "vague unease" near Thread sites (10-29 band). |
+| Almud Certainty −1 | Almud's faith framework cracks — the disturbance was real and inexplicable. |
 | TC +1 | TC: 38 → 39 (from the Discovery Event itself). |
-| If Church learns: TC +2 + HI | TC: 39 → 41. Heresy Investigation against Almud or against whoever performed the Lock. |
-| Crown Champion eligibility | Crown can now declare Expedition to Askeheim (T15). Crown-Restoration alliance path opens. |
-| Torben Loyalty | If Almud (Crown leader) is investigated for heresy: Torben Loyalty −1 (institutional instability). |
+| If Church learns: TC +2 + HI | TC: 39 → 41. The Crown's king having a Thread experience is institutionally dangerous. |
+| Crown Champion eligibility | **NOT YET.** Almud at TS ~12 needs to reach TS 30. This requires FURTHER development — additional Thread exposure, further Discovery Events, or deliberate training (which would be politically catastrophic for a king). |
+| Campaign arc | Almud's Development arc opens: pursue Thread awareness (risk everything politically) or suppress it (lose access to Crown's only Champion path). This is a multi-season arc, not a single-event resolution. |
 
-**[FINDING DE-05]: A Lock performed for forensic preservation can trigger an NPC's Discovery Event
-as a side effect.** Edda Locked the incursion scar to preserve evidence. Almud's presence was
-incidental. The Lock's co-movement pushed Almud past his TS threshold. The investigation's
-forensic procedure caused a campaign-altering NPC arc advancement. This is emergent gameplay
-at its most powerful — the players did not intend to advance Almud's arc; they intended to
-preserve evidence. The consequences followed from the metaphysics, not from player intent.
+**[FINDING DE-05 CORRECTED]: A Lock performed for forensic preservation can trigger an NPC's
+Discovery Event as a side effect. But at TS 0, the Discovery Event is RUPTURE — first contact,
+not threshold-crossing. The consequences are less mechanically immediate (no instant Champion
+eligibility) but more narratively profound (a king's worldview fractures). The investigation's
+forensic procedure planted a seed that will take seasons to grow.**
 
 ---
 

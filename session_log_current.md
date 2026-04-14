@@ -1,6 +1,35 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-13_OPUS_FIDELITY_AUDIT
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+## TASKS COMPLETED THIS SESSION
+1. Full canon fidelity audit against GitHub sources
+2. Found and corrected 4 errors, 2 stale propagations
+
+## ERRORS CORRECTED (PP-582)
+1. Almud TS 28 → 0 (ED-364 resolved 2026-04-11, not propagated to params_board_game.md).
+   Champion TS table corrected. Test 4 in sim_threadwork_ontological.md rewritten.
+   At TS 0, Discovery Event is RUPTURE (first contact), not confirmation (threshold crossing).
+   Almud does NOT immediately qualify as Champion. Crown path is slowest in the game.
+2. ED-NEW-11 (pool ×2) already resolved by PP-615. params_core.md confirms ×2 canonical.
+   Fieldwork editorial flag marked RESOLVED. SIM-DEBT-FW-01 dependency cleared.
+3. Torben Loyalty Starting Values table note: PP-498 "start 3" stale (superseded by PP-599 "start 7").
+   Table value was correct (7); note corrected.
+4. Crown Champion access text updated for Almud TS 0 reality.
+
+## P1 BLOCKERS: 0
+## STALE PROPAGATION FOUND AND FIXED: 2 (Almud TS in Champion table; Torben note)
+```
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-13_OPUS_P1_RESOLUTION
 session_close: 2026-04-13
 phase: COMPLETE
