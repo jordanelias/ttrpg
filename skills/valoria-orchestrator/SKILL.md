@@ -17,7 +17,13 @@ description: >
 ```python
 import os, sys, json, base64, urllib.request
 
-PAT = os.environ['GITHUB_PAT']  # must be set — abort if missing
+# PAT: read from env, fallback to file written by bootstrap
+_pat_file = '/home/claude/.valoria_pat'
+PAT = os.environ.get('GITHUB_PAT') or (open(_pat_file).read().strip() if __import__('os').path.exists(_pat_file) else '')
+if not PAT:
+    raise RuntimeError('GITHUB_PAT not set and .valoria_pat not found — re-run bootstrap')
+os.environ['GITHUB_PAT'] = PAT
+open(_pat_file, 'w').write(PAT)  # ensure file is always written
 REPO = 'jordanelias/ttrpg'
 
 # Bootstrap github_ops.py from repo

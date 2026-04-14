@@ -159,7 +159,14 @@ def _authorize_next_commit() -> str:
 def _get_pat() -> str:
     pat = os.environ.get("GITHUB_PAT", "")
     if not pat:
-        raise RuntimeError("GITHUB_PAT not set")
+        try:
+            pat = open(os.path.expanduser('/home/claude/.valoria_pat')).read().strip()
+            os.environ["GITHUB_PAT"] = pat  # cache in env for this process
+        except FileNotFoundError:
+            raise RuntimeError(
+                "GITHUB_PAT not set and /home/claude/.valoria_pat not found.\n"
+                "Re-run bootstrap to write the PAT file."
+            )
     return pat
 
 
