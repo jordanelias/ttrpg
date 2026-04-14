@@ -7360,3 +7360,58 @@ patches:
   affects:
     - references/params_threadwork.md
   status: applied
+
+- id: PP-620
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Thread operation Ob table recalibrated against new pool formula.
+    Prior Obs were designed for old pool construction (Spirit + History, non-doubled).
+    New pool (Spirit × 2) + History + TPS produces higher expected nets; Obs revised upward.
+
+    CANONICAL OB TABLE:
+
+    Standard operations (TN 7): Weaving, Pulling, Mending, Community Weaving, Leap.
+    Binding Ops (TN 8): Locking, Dissolution.
+    POP (TN 8): Past-Oriented Pulling.
+    POP Binding (TN 9): Past-Oriented Locking/Dissolution.
+
+    | Scale       | n | TS min | Standard Op Ob | Mending Ob | Binding Op Ob |
+    |-------------|---|--------|----------------|------------|---------------|
+    | Object      | 0 | 30+    | 1              | n/a        | 1             |
+    | Personal    | — | 30+    | 2              | n/a        | 2             |
+    | Relational  | 1 | 50+    | 3              | 2          | 3             |
+    | Territorial | 2 | 50+    | 5              | 4          | 5             |
+    | Structural  | 3 | 70+    | 7              | 6          | 7             |
+    | Foundational| 5 | 90+    | 10             | 10         | 10            |
+
+    FORMULA DERIVATION:
+    Standard op Ob = 2n + 1 (standard operations impose on substrate; +1 above Mending).
+    Mending Ob = 2n (per PP-604; Mending facilitates substrate's self-repair tendency).
+    Binding Op Ob = same as standard op Ob; difficulty from TN+1, not Ob+1.
+    Foundational converges at Ob 10 (the gap between "imposing" and "facilitating" collapses
+    when the substrate's own conditions are what you're engaging).
+
+    MENDING AGE MODIFIER (PP-608): +0 fresh / +1 established (2-4 seasons) / +2 entrenched (5+).
+
+    PERSONAL SCALE: no Gap equivalent (Personal-scale failure collapses to Relational Gap).
+    No Mending Ob for Personal scale; operation Ob 2.
+
+    OLD MINIMUM OB 4 FOR BINDING OPS: struck. Object Binding Op = Ob 1 at TN8 is correct —
+    TS 30 practitioners can perceive Object configurations well enough to Lock or Dissolve
+    them; the TN8 provides the difficulty, not an artificial floor.
+
+    VERIFICATION (normal approximation, E per die: TN7=0.3, TN8=0.2):
+    Beginner (10D): Object TN7 Ob1 → P≈82%. Object Lock TN8 Ob1 → P≈73%.
+    Capable (14D): Relational TN7 Ob3 → P≈68%.
+    Expert (17D): Territorial TN7 Ob5 → P≈52%. Relational Lock TN8 Ob3 → P≈55%.
+    Master (20D): Structural TN7 Ob7 → P≈37%. Territorial Lock TN8 Ob5 → P≈35%.
+    Edeyja (22D): Foundational TN7 Ob10 → P≈14%. Structural Lock TN8 Ob7 → P≈16%.
+
+    Curve confirmed: Object/Personal = general practitioner access. Relational = capable work.
+    Territorial = expert territory. Structural = legendary. Foundational = Edeyja's limit.
+  finding_id: null
+  affects:
+    - references/params_threadwork.md
+  status: applied

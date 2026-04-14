@@ -4,6 +4,24 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-14_SONNET_PP620_OB_CALIBRATION
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+PATCH: PP-620 — Thread operation Obs recalibrated against new pool.
+  Standard op Ob = 2n+1. Mending Ob = 2n. Binding Ob = same as standard, TN+1.
+  Foundational converges at Ob 10 for all operation types.
+  Old minimum Ob 4 for Binding Ops struck (TN8 provides difficulty, not floor).
+  Verified against pool probabilities — curve holds across all practitioner levels.
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-14_SONNET_PP619_TN_FINAL
 session_close: 2026-04-14
 phase: COMPLETE
