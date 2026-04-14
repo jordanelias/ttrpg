@@ -120,3 +120,32 @@ Freshness: canonical_sources.yaml SHAs refreshed
 ## safe next_id: 532
 ## Latest PP: PP-644
 ```
+---
+
+```yaml
+session_id: 2026-04-13_SONNET_SOC_SIM_RESOLVE
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+tasks_completed:
+  - SIM-DEBT-SOC-01: Disposition Ob calibration — CLEAN
+  - SIM-DEBT-SOC-02: Knot formation pacing — CLEAN (Loose/Medium trivial formation confirmed intended)
+  - SIM-DEBT-SOC-03: Knot Rupture Composure damage — P1 fixed (simultaneous Rupture cap added PP-633)
+  - ED-519: Resonant Style +1D stacking — CLEAN, documented as third independent source PP-633
+  - ED-532/533/534: all resolved in PP-633
+  - Checkers: all dependencies verified, 399 patches propagated, exit 0
+
+patches_applied:
+  PP-633 (1/2): SHA 36ea764 — fieldwork_socializing, params_threadwork, params_contest, sim results
+  PP-633 (2/2): SHA 31b12c2 — editorial_ledger, patch_register, coverage_matrix
+
+open_items: none
+p1_blockers: 0 (for this session's scope; prior 60 P1s pre-existing)
+
+resume_instruction: >
+  Next session — invoke orchestrator per normal protocol.
+  All SIM-DEBT items from Disposition/Knot redesign session resolved.
+  Outstanding workplan: mass combat section 8.9 editorial gap, Phase 0 items 0.19-0.22,
+  cross-stage terminology audit, 83 design-needed gap items.
+```
