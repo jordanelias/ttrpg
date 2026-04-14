@@ -26,7 +26,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: pip
       - name: Verify all CI tools and repo tools are importable
         run: |
           python -m py_compile tools/ci_register_size_check.py
@@ -52,7 +51,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: pip
       - name: Check all register sizes within thresholds
         run: python3 tools/ci_register_size_check.py
 
@@ -68,7 +66,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: pip
       - name: Verify hooks wired, skills clean, skeleton limits
         run: python3 tools/ci_hooks_verifier.py
 
@@ -86,7 +83,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: pip
       - name: Check co-file rules satisfied
         env:
           GITHUB_EVENT_BEFORE: ${{ github.event.before }}
@@ -109,7 +105,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: pip
       - name: Check editorial paths have markers, including deleted files
         env:
           GITHUB_EVENT_BEFORE: ${{ github.event.before }}
@@ -130,7 +125,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: pip
       - name: Broken dependency check
         env:
           GITHUB_PAT: ${{ secrets.VALORIA_PAT }}
