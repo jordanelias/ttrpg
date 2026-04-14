@@ -49,6 +49,39 @@ references/params_[system].md: ✓ fetched ([N] lines) / ✗ missing
 ```
 If any required file is missing from this log, or session token is absent, stop — the analysis is invalid.
 
+
+## ED Number Collision Guard (MANDATORY — re-read before every ID assignment)
+
+The session-start fetch of `canon/editorial_ledger.yaml` is **not sufficient** for safe ID assignment.
+Another session may have written new items since then. Always re-fetch immediately before assigning:
+
+```python
+# Re-fetch the ledger RIGHT NOW, not at session start
+fresh_ledger_files = g.read_files_graphql(["canon/editorial_ledger.yaml"])
+raw = fresh_ledger_files["canon/editorial_ledger.yaml"]
+if raw is None:
+    raise RuntimeError("Failed to re-fetch editorial ledger — cannot assign IDs safely")
+
+import re
+nid_match = re.search(r"# next_id:\s*(\d+)", raw)
+if not nid_match:
+    raise RuntimeError("next_id header missing from ledger — do not proceed")
+
+next_id = int(nid_match.group(1))
+# SAFETY: also scan for highest ED-NNN actually present in the file
+all_ids = [int(m) for m in re.findall(r"ED-(\d+)", raw)]
+highest_present = max(all_ids) if all_ids else 0
+safe_next = max(next_id, highest_present + 1)
+
+# Use safe_next for assignment. Increment per item.
+print(f"Safe next ED ID: {safe_next}")
+```
+
+**Assign IDs starting from `safe_next`.** After committing, verify the committed file's `# next_id:` equals the batch-end + 1.
+
+**Known state (2026-04-13):** `# next_id: 486` in header is stale. Items up to ED-489 exist. Safe next = **490**. The guard above will compute this correctly.
+
+
 ## Term Reference
 
 Use `references/glossary.md` (fetched above) for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.

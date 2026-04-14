@@ -1,0 +1,364 @@
+# VALORIA DESIGN REGISTRY
+# Version baseline: v30 (established 2026-04-13)
+# Single source of truth for: mode assignment, v30 canonical path,
+#   atomization status (skeleton/infill split), and predecessor lineage.
+#
+# Used by: valoria-orchestrator, valoria-atomizer (planned), valoria-compiler
+# Updated atomically on every rename, atomization, or deprecation event.
+#
+# Atomization status values:
+#   not_started  — v30 rename done; no skeleton/infill split yet
+#   in_progress  — skeleton extracted; infill file pending
+#   complete     — skeleton and infill both exist as separate files
+#
+# Mode values: TTRPG | HYBRID | BG | ALL | SETTING | WORLDBUILDING | INFRA
+# canonical_v30: null = unverified source; v30 rename blocked until design doc created
+
+version: 30
+established: 2026-04-13
+
+# next_id_note: legacy next_id (486) in editorial_ledger.yaml is stale.
+#   Confirmed items exist up to ED-489. Use 490 as next valid ID.
+
+registry:
+
+  # ─── CORE ENGINE / CHARACTERS ──────────────────────────────────────────────
+  core_engine:
+    system: core_engine
+    mode: ALL
+    canonical_v30: references/params_core.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: null
+    params: references/params_core.md
+    notes: >
+      No design doc layer. params_core.md IS the authoritative record.
+      No rename needed (params files are not versioned by filename).
+
+  characters:
+    system: characters
+    mode: TTRPG
+    canonical_v30: references/params_core.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: null
+    params: references/params_core.md
+    notes: "Merged into core_engine. No separate design doc."
+
+  character_histories:
+    system: characters
+    mode: TTRPG
+    canonical_v30: designs/characters/character_histories_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/characters/character_histories_lifepath.md
+    params: null
+
+  # ─── THREADWORK ────────────────────────────────────────────────────────────
+  threadwork:
+    system: threadwork
+    mode: TTRPG
+    canonical_v30: designs/ttrpg/threadwork_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/ttrpg/threadwork_redesign_v25.md
+    params: references/params_threadwork.md
+
+  # ─── COMBAT ────────────────────────────────────────────────────────────────
+  combat:
+    system: combat
+    mode: ALL
+    canonical_v30: designs/combat/combat_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/combat/combat_design_v1.md
+    params: references/params_combat.md
+
+  # ─── BOARD GAME ────────────────────────────────────────────────────────────
+  board_game:
+    system: board_game
+    mode: BG
+    canonical_v30: designs/board_game/board_game_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    params: references/params_board_game.md
+
+  victory:
+    system: victory
+    mode: BG
+    canonical_v30: designs/board_game/victory_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/board_game/victory_architecture_v1.md
+    params: null
+
+  varfell_path_b:
+    system: board_game
+    mode: BG
+    canonical_v30: designs/board_game/varfell_path_b_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/board_game/varfell_path_b_redesign_ed311.md
+    params: null
+
+  # ─── MASS COMBAT ───────────────────────────────────────────────────────────
+  mass_combat:
+    system: mass_combat
+    mode: ALL
+    canonical_v30: designs/mass_combat/mass_battle_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/mass_combat/mass_battle_v3.md
+    params: references/params_mass_combat.md
+
+  # ─── SOCIAL / DEBATE ───────────────────────────────────────────────────────
+  social_debate:
+    system: social_debate
+    mode: TTRPG
+    canonical_v30: designs/contest/social_contest_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/contest/social_contest_system_v2.md
+    params: references/params_contest.md
+
+  # ─── FIELDWORK (mode-split) ─────────────────────────────────────────────────
+  fieldwork:
+    system: fieldwork
+    mode: TTRPG
+    canonical_v30: designs/fieldwork/fieldwork_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/fieldwork/fieldwork_design_v1.md
+    params: null
+    mode_variants:
+      hybrid: designs/fieldwork/fieldwork_hybrid_v30.md
+      bg: designs/fieldwork/fieldwork_bg_v30.md
+    notes: "Sub-docs (exploration, investigation, socializing, exposure) are infill candidates."
+
+  fieldwork_hybrid:
+    system: fieldwork
+    mode: HYBRID
+    canonical_v30: designs/fieldwork/fieldwork_hybrid_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/fieldwork/fieldwork_hybrid.md
+    params: null
+
+  fieldwork_bg:
+    system: fieldwork
+    mode: BG
+    canonical_v30: designs/fieldwork/fieldwork_bg_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/fieldwork/fieldwork_bg.md
+    params: null
+
+  # ─── CLOCKS ────────────────────────────────────────────────────────────────
+  clocks:
+    system: clocks
+    mode: ALL
+    canonical_v30: designs/systems/clock_registry_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/systems/clock_registry.md
+    params: null
+
+  # ─── NPC BEHAVIOR ──────────────────────────────────────────────────────────
+  npc_behavior:
+    system: npc_behavior
+    mode: ALL
+    canonical_v30: designs/systems/npc_behavior_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/systems/npc_behavior_system_v1.md
+    params: null
+
+  # ─── SCALE TRANSITIONS (HYBRID) ────────────────────────────────────────────
+  scale_transitions:
+    system: scale_transitions
+    mode: HYBRID
+    canonical_v30: designs/hybrid/scale_transitions_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/hybrid/scale_transitions_design_v1.md
+    params: references/params_scale_transitions.md
+
+  hybrid_gaps:
+    system: scale_transitions
+    mode: HYBRID
+    canonical_v30: designs/hybrid/hybrid_gaps_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/hybrid/hybrid_gaps_resolved.md
+    params: null
+    notes: "PROPAGATION-PENDING — 17 hybrid gaps not yet in bg_v05 / stage11."
+
+  # ─── TERRITORIES / GEOGRAPHY ───────────────────────────────────────────────
+  territories:
+    system: territories
+    mode: ALL
+    canonical_v30: designs/setting/geography_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/setting/geography_design.md
+    params: null
+
+  calamity_radiation:
+    system: calamity_radiation
+    mode: ALL
+    canonical_v30: designs/setting/calamity_radiation_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/setting/calamity_radiation.md
+    params: null
+
+  # ─── FACTIONS (mode-split required) ────────────────────────────────────────
+  factions_ttrpg:
+    system: factions
+    mode: TTRPG
+    canonical_v30: null
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: compilation/v0.14/stage6_factions.md
+    params: references/params_factions.md
+    notes: >
+      Source is compilation/stage6, which is unverified. v30 rename BLOCKED
+      until a design-layer doc is created from stage6 content. Flag for design session.
+    blocker: "[EDITORIAL: no design-layer TTRPG factions doc — stage6 unverified]"
+
+  factions_bg_hybrid:
+    system: factions
+    mode: BG
+    canonical_v30: designs/board_game/board_game_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/board_game/valoria_bg_v05_simulation_and_patches.md
+    params: references/params_factions.md
+    notes: "BG/Hybrid faction mechanics live in board_game_v30."
+
+  # ─── CAMPAIGN MODES ────────────────────────────────────────────────────────
+  campaign_modes:
+    system: campaign_modes
+    mode: ALL
+    canonical_v30: null
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: compilation/v0.14/stage12_campaign_modes.md
+    params: null
+    notes: >
+      Source is compilation/stage12, unverified. v30 rename BLOCKED
+      until design-layer doc created.
+    blocker: "[EDITORIAL: no design-layer campaign modes doc — stage12 unverified]"
+
+  # ─── SOUTHERNMOST ──────────────────────────────────────────────────────────
+  southernmost:
+    system: southernmost
+    mode: TTRPG
+    canonical_v30: null
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: compilation/v0.14/stage4_southernmost.md
+    params: null
+    notes: >
+      Source is compilation/stage4, unverified. v30 rename BLOCKED
+      until design-layer doc created. ED-048 open.
+    blocker: "[EDITORIAL: no design-layer southernmost doc — stage4 unverified]"
+
+  # ─── WORLDBUILDING ─────────────────────────────────────────────────────────
+  worldbuilding:
+    system: worldbuilding
+    mode: ALL
+    canonical_v30: designs/worldbuilding/worldbuilding_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/worldbuilding/worldbuilding_integration_v3.md
+    params: null
+
+  # ─── NPCs ──────────────────────────────────────────────────────────────────
+  npc_roster:
+    system: npcs
+    mode: ALL
+    canonical_v30: designs/npcs/npc_roster_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/npcs/npc_roster.md
+    params: null
+
+  npc_foils:
+    system: npcs
+    mode: ALL
+    canonical_v30: designs/npcs/npc_foils_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/npcs/npc_foils.md
+    params: null
+
+  npc_character_analyses:
+    system: npcs
+    mode: ALL
+    canonical_v30: designs/npcs/npc_character_analyses_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/npcs/npc_character_analyses.md
+    params: null
+
+  # ─── MECHANICS ─────────────────────────────────────────────────────────────
+  baralta_crown_claim:
+    system: mechanics
+    mode: ALL
+    canonical_v30: designs/mechanics/baralta_crown_claim_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/mechanics/baralta_crown_claim_mechanic.md
+    params: null
+
+  conviction_track:
+    system: mechanics
+    mode: ALL
+    canonical_v30: designs/conviction_track/conviction_track_v30.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: designs/conviction_track/opus_design_proposal.md
+    params: null
+
+  # ─── EMERGENT ARCS ─────────────────────────────────────────────────────────
+  emergent_arcs:
+    system: emergent_arcs
+    mode: ALL
+    canonical_v30: references/arc_register.md
+    skeleton: null
+    infill: null
+    atomized: not_started
+    predecessor: null
+    params: null
+    notes: "Arc register is versioned by patch number, not filename. No rename needed."

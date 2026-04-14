@@ -124,6 +124,95 @@ If `compilation_current: false`, never use the compilation as a source of mechan
 
 **Skills load from `/mnt/skills/user/` at runtime.** GitHub (`skills/*/SKILL.md`) is the version-controlled source. Do not fetch skills from GitHub during a session.
 
+
+## Collision Prevention (MANDATORY — run before every `atomic_commit()` call)
+
+A session collision occurs when another session writes a file between your fetch and your commit.
+This causes silent overwrites. Prevent it:
+
+```python
+import os, sys
+os.environ['GITHUB_PAT'] = '<PAT>'
+sys.path.insert(0, '/home/claude')
+import github_ops as g
+
+# Before committing: re-fetch the specific files you are about to modify
+# and compare content against what you fetched at session start.
+files_to_write = ['path/to/file1.md', 'path/to/file2.md']
+fresh = g.read_files_graphql(files_to_write)
+
+for path in files_to_write:
+    fresh_content = fresh.get(path)
+    session_content = session_fetched[path]   # your original fetch
+    if fresh_content != session_content:
+        print(f"[COLLISION: {path} was modified since session fetch — DO NOT OVERWRITE]")
+        print("Stop commit. Review changes before proceeding.")
+        raise SystemExit(1)
+
+# Only if all match: proceed with atomic_commit()
+```
+
+**On collision detected:** STOP. Do not commit. Surface the conflict to the user. Show a diff summary if possible.
+
+## ED Number Collision Guard
+
+The editorial ledger `# next_id:` counter must be read from a FRESH fetch immediately before assigning new ED numbers — not from the session-start fetch. Two concurrent sessions can otherwise assign the same IDs.
+
+```python
+# Right before assigning any new ED-NNN:
+fresh_ledger = g.read_files_graphql(['canon/editorial_ledger.yaml'])
+import re
+raw = fresh_ledger['canon/editorial_ledger.yaml']
+nid_match = re.search(r'# next_id:\s*(\d+)', raw)
+if not nid_match:
+    raise RuntimeError("next_id not found in ledger — cannot safely assign ED numbers")
+next_id = int(nid_match.group(1))
+# Assign: next_id, next_id+1, ... for this batch
+# After committing: confirm the committed file has next_id incremented correctly
+```
+
+**Known issue (2026-04-13):** Ledger header says `# next_id: 486` but items ED-486 through ED-489 exist. Actual safe next_id is **490**. The collision guard will catch this correctly if you re-fetch.
+
+## Design Registry
+
+`references/design_registry.yaml` is the single source of truth for v30 design doc paths and atomization state.
+
+**Fetch on any session that touches design doc paths:**
+```python
+files = g.read_files_graphql(['references/design_registry.yaml'])
+```
+
+**Before renaming or creating skeleton/infill files:** read the registry, update `canonical_v30`, `skeleton`, `infill`, `atomized` fields atomically.
+
+**After any rename, atomization, or deprecation:** include `references/design_registry.yaml` in the same atomic commit.
+
+## v30 Naming Convention (from 2026-04-13)
+
+All active canonical design docs use the `_v30.md` suffix. Pre-v30 filenames are deprecated.
+
+| File type | Pattern |
+|-----------|---------|
+| Canonical design doc | `designs/{system}/{name}_v30.md` |
+| Skeleton (mechanical spec only) | `designs/{system}/{name}_v30_skeleton.md` |
+| Content infill (prose, rationale) | `designs/{system}/{name}_v30_infill.md` |
+| Mode-split variant | `designs/{system}/{name}_v30_{mode}.md` (mode = ttrpg \| hybrid \| bg) |
+
+If any skill, params file, or cross-reference still uses a pre-v30 path, flag it:
+`[STALE REF: <file> references <old-path> — update to <v30-path>]`
+
+## v30 Propagation Protocol
+
+After any v30 rename commit, run a propagation pass to update all cross-references:
+
+1. Fetch `references/propagation_map.md` and `references/design_registry.yaml`
+2. For each renamed doc: grep all repo files that reference the old path
+3. Update all references to the new v30 path
+4. Include `references/propagation_map.md` + all updated files in one atomic commit
+5. Run freshness_gate after: `python3 tools/freshness_gate.py --update`
+
+Tools: `tools/find_references.py` can assist with step 2.
+
+
 ## Workflows
 
 **Full Mechanical Audit**
