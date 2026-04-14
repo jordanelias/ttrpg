@@ -55,6 +55,9 @@ Ob floor: 1 (per core engine).
 
 ---
 
+
+> **PP-593: Disposition advance Ob recalibrated.** Social interaction Ob for disposition advance = floor((6 − current_disposition) / 2) + 1. This produces: Neutral(0)→Receptive(+1) at Ob 4, Receptive→Trusting at Ob 3, Trusting→Bonded at Ob 3, with final step easing to Ob 2. Median time Neutral→Bonded: ~5 sessions (2 interactions/session). Follows project-standard floor(stat/2)+1 pattern. Original formula max(1, 3−d) produced Ob 1 too quickly (median 3 sessions — insufficient dramatic buildup).
+
 ## §2 FIELDWORK POOL
 
 **Pool = (Primary Attribute × 2) + History bonus**

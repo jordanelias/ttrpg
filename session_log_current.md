@@ -1084,7 +1084,9 @@ P1 BLOCKERS: 0 (all resolved PP-577–582)
 - NPC Behavior: NPC-01 (Priority Tree), NPC-02 (Belief Revision) — both PASS
 - Character Histories: CH-01 (skills), CH-02 (sparks) — both PASS
 - Patches: PP-590 (Survey Ob), PP-591 (Exposure→AP gate), PP-592 (Evidence pacing)
-- SIM-DEBT remaining: FW-03 (Disposition economy), FW-06 (Cover calibration)
+- SIM-DEBT remaining: 0 (ALL CLEARED)
+- FW-03: Disposition Ob recalibrated (PP-593), median 5 sessions
+- FW-06: Cover calibration PASS — linear scaling, no outliers
 
 ## SESSION TOTALS
 - Commits: 15

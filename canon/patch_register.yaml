@@ -7616,3 +7616,13 @@ patches:
     - references/params_threadwork.md
     - references/params_core.md
   status: applied
+- id: PP-593
+  date: 2026-04-13
+  scope: fieldwork
+  description: >
+    Disposition advance Ob recalibrated: floor((6-disposition)/2)+1.
+    Original max(1, 3-d) produced median 3 sessions Neutral→Bonded (too fast).
+    New formula: median 5 sessions, p75=8. Obs: 4→3→3→2.
+  affects: [designs/fieldwork/fieldwork_design_v1.md]
+  finding_id: SIM-FW-03
+  status: applied

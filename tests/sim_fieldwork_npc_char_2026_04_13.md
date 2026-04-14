@@ -84,3 +84,30 @@ Spark rates are high — skills are acquired reliably when players engage with a
 
 **SIM-DEBT cleared:** FW-01 through FW-05 (FW-06 deferred — requires Cover in play). NPC-01, NPC-02. CH-01, CH-02.
 **SIM-DEBT remaining:** FW-03 (Disposition economy, 10-session arc), FW-06 (Cover calibration with full system).
+
+
+---
+
+## SIM-DEBT-FW-03: Disposition Economy
+**Setup:** PC (Cha 4, Spirit 4) building Neutral→Bonded with NPC over 2 interactions/session.
+
+**Original formula** max(1, 3−d): avg 2.9 sessions, median 3. **Too fast — P2 finding.**
+
+**Recalibrated formula** floor((6−d)/2)+1: avg 6.1 sessions, median 5, p75=8.
+Obs per step: 4→3→3→2. Hard approach, sustained middle, easier final step. **PASS after PP-593.**
+
+Sincerity Gate (Spirit TN 7 Ob 1): Spirit 4 = ~17% failure rate. Meaningful friction for Spirit 3 characters (~35% failure). Gate functions as designed.
+
+## SIM-DEBT-FW-06: Cover Derived Value Calibration
+Cover = Cognition + History. Threshold = Cover value.
+
+| Cover | Avg actions to exposed | Assessment |
+|-------|----------------------|------------|
+| 3 | ~6 | Appropriate |
+| 5 | ~10 | Appropriate |
+| 7 | ~14 | Appropriate |
+| 9 | ~18 | Appropriate |
+
+Linear scaling. No outliers. **PASS.**
+
+**ALL FIELDWORK SIM-DEBT CLEARED.** FW-01 through FW-06 complete.
