@@ -7271,3 +7271,51 @@ patches:
     - references/params_core.md
     - references/params_threadwork.md
   status: applied
+
+- id: PP-618
+  type: correction
+  date: 2026-04-14
+  severity: P1
+  description: >
+    PP-616 correction: Binding Ops (Lock, Dissolution) include TPS.
+
+    PP-616 stated Binding Ops use (Spirit × 2) + History with NO TPS. This was wrong.
+
+    RATIONALE (reversed): Perceptual depth (TPS) is directly relevant to Locking and
+    Dissolution. The deeper a practitioner perceives a Thread configuration, the better
+    they understand its internal structure — its joints, tolerances, and the points at
+    which it can be fixed in place (Lock) or unmade (Dissolution). A TS 30 practitioner
+    attempting Dissolution on something they can barely perceive has far less information
+    about where and how to apply the operation than a TS 70 practitioner who sees the
+    full architecture. Knowing a configuration's limits is how you break it.
+
+    The TN 8 for Binding Ops is what makes them genuinely difficult — not a reduced pool.
+
+    CORRECTED CANONICAL THREAD POOLS:
+
+    | Operation             | Pool                                 | TN |
+    |-----------------------|--------------------------------------|----|
+    | Leap                  | (Spirit × 2) + History + TPS         | 7  |
+    | Weaving               | (Spirit × 2) + History + TPS         | 7  |
+    | Pulling               | (Spirit × 2) + History + TPS         | 7  |
+    | Past-Oriented Pulling | (Spirit × 2) + History + TPS÷2      | 8  |
+    | Mending               | (Spirit × 2) + History + TPS         | 7  |
+    | Community Weaving     | (Spirit × 2) + History + TPS         | 7  |
+    | Locking               | (Spirit × 2) + History + TPS         | 8  |
+    | Dissolution           | (Spirit × 2) + History + TPS         | 8  |
+
+    All Thread operations now use the same pool construction.
+    Differentiation comes from: TN (7 vs 8), Ob (scale-dependent), TS minimum gates,
+    Coherence costs, and Gap consequences (Dissolution only).
+    POP retains TPS÷2 and TN 8 — temporal distance limits perceptual access to past
+    configurations; this is the remaining pool asymmetry.
+
+    COMBAT INITIATIVE CLARIFICATION (PP-239 confirmed):
+    Attunement primary: higher Attunement acts last in Exchange 1 (more information).
+    Agility tiebreaker: if Attunement equal, higher Agility acts last.
+    Both stats involved — Attunement is the primary initiative stat; Agility resolves ties.
+    This was not changed by PP-616; clarification only.
+  finding_id: PP-616
+  affects:
+    - references/params_threadwork.md
+  status: applied

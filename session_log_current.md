@@ -4,6 +4,26 @@
 # Valoria Session Log — Current
 
 ```yaml
+session_id: 2026-04-14_SONNET_PP618_CORRECTION
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+
+PATCH: PP-618 — PP-616 correction.
+  Binding Ops (Lock/Dissolution) include TPS. Rationale: deeper perception = better
+  understanding of configuration's structure, joints, failure points. TN8 provides
+  difficulty, not pool reduction.
+  All Thread operations now: (Spirit × 2) + History + TPS. TN7 standard, TN8 for BO+POP.
+  POP retains TPS÷2 (temporal distance limits perceptual access to past configurations).
+  Combat initiative: Attunement primary, Agility tiebreaker. Both involved. Confirmed.
+```
+
+
+---
+
+# Valoria Session Log — Current
+
+```yaml
 session_id: 2026-04-14_SONNET_THREAD_POOLS_HISTORY
 session_close: 2026-04-14
 phase: COMPLETE
