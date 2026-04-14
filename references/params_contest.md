@@ -47,10 +47,7 @@ Interaction type derived: same style = REINFORCE, same genre opposite orientatio
 |--------|-------|-----------|
 | Primary genre | +1D | Orator's chosen genre matches GM-set primary genre |
 | Audience boost | +1D | Orator's chosen genre OR orientation matches audience faction's boosted axis |
-| Maximum combined (Genre+Audience) | +2D | Genre and audience conditions both met |
-| Resonant Style (RS) match | +1D | Argument style matches NPC primary Resonant Style (npc_behavior_v30.md §1.3). Third independent source; does not count toward Genre+Audience cap. (PP-633) |
-| Maximum total pre-roll | +3D | Genre+Audience+RS all met simultaneously |
-| Corroborate | +1D | Post-roll, conditional on success. Bonds ≥ 3 symmetric or ≥ 4 asymmetric. Independent of all above caps. |
+| Maximum combined | +2D | Both conditions met |
 
 ## Faction Boosts (single axis per faction)
 | Faction | Ethical Mode | Boost | Axis |

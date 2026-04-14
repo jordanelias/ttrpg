@@ -637,7 +637,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | Priority | Condition | Action |
 |---|---|---|
 | 1 | Stability ≤ 2 | Consul Inward in capital territory. Royal Decree targeting own Stability if available. |
-| 2 | 2+ territories changed control this season OR Löwenritter Coup Counter = 2 OR PI ≥ 8 | Military response: Legionary in threatened territory. If no Legionary: Royal Decree targeting Military. |
+| 2 | TC ≥ 35 (TC awareness — coordinate Suppress with Hafenmark or target Church Mandate) OR 2+ territories changed OR Coup Counter = 2 OR PI ≥ 8 | TC ≥ 35: Senator Outward to Hafenmark or DA vs Church Mandate. Other triggers: Military response. (PP-NPC-02) |
 | 3 | Royal Decree available AND framework-aligned target exists (public, visible, virtuous) | Royal Decree: +1 to weakest-stat ally or −1 to strongest-stat rival. |
 | 4 | Maintain treaties. Defend held territory. Govern in capital. | Consul Inward or Senator Outward (diplomacy). |
 | 5 | Torben Loyalty ≤ 3: Senator Outward targeting Torben. | Secondary |
@@ -661,7 +661,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | Priority | Condition | Action |
 |---|---|---|
 | 1 | Stability ≤ 2 | Consul Inward in Varfell capital. |
-| 2 | TK advancement opportunity: Expedition possible (T6 accessible) OR Private Collection usable (Intel vs Ob 2) OR practitioner contact available | Private Collection deployment. OR: Tribune Investigate if target has Thread-relevant intel. |
+| 2 | TK opportunity AND Collection not yet used this season: Expedition OR Collection (Intel vs Ob 2) OR practitioner contact | Collection deployment (1/season — PP-NPC-04). OR: Tribune Investigate. |
 | 3 | Intel action available with measurable one-season outcome: Tribune Investigate vs rival faction | Tribune Investigate against faction with highest hidden stats. |
 | 4 | Maximise information advantage. Acquire resources. Senator Outward (diplomatic positioning). | Standard |
 | 5 | VTM advancement if conditions met. Warden Recognition pursuit if Path B available. | Secondary |

@@ -793,3 +793,12 @@ All PASS tests: patched in same commit (PP-630–634).
 | SIM-DEBT-SOC-02 | COMPLETE | CLEAN | ED-533 resolved |
 | SIM-DEBT-SOC-03 | COMPLETE | P1→PP-633 | ED-534 resolved |
 | SIM-ED-519 | COMPLETE | CLEAN | PP-633 documented |
+
+## SIM-NPC-01 Results (2026-04-13 — NPC Priority Tree Validation)
+| Test ID | Mechanics | Status | Findings |
+|---------|-----------|--------|----------|
+| SIM-NPC-01 | Full BG NPC priority trees (5 seeds × 12 seasons) | COMPLETE | F-01 Crown Mandate spiral (PP-NPC-01), F-02 Church Influence ceiling (PP-NPC-03), F-03 Coup deterministic (PP-NPC-02), F-04 No eliminations (expected), F-05 RS slow (expected), F-06 Varfell cooldown (PP-NPC-04), F-07 Interaction loop PASS |
+| SIM-NPC-02 | Contest Resonant Style +1D pool calibration | OPEN | — |
+| SIM-NPC-03 | Arc emergence 3-season TTRPG | OPEN | — |
+| SIM-NPC-04 | Framework Drift 6-season BG runaway | OPEN | Partially addressed by PP-NPC-03 (Church drift fix). Re-run needed. |
+| SIM-NPC-05 | Belief Scar cascade playability | OPEN | — |

@@ -149,3 +149,50 @@ resume_instruction: >
   Outstanding workplan: mass combat section 8.9 editorial gap, Phase 0 items 0.19-0.22,
   cross-stage terminology audit, 83 design-needed gap items.
 ```
+
+---
+
+```yaml
+session_id: 2026-04-13_OPUS_NPC_BEHAVIOR_SIM
+session_close: 2026-04-13
+phase: COMPLETE
+status: CLOSED
+
+tasks_completed:
+  - NPC Behavior System v1 designed (npc_behavior_system_v1.md, 826 lines)
+  - Audit completed (15 findings, all resolved/flagged)
+  - ED-515:531 raised and resolved (17 items, renumbered from ED-384:400)
+  - Propagated to params_factions, params_contest, params_board_game
+  - SIM-NPC-01 executed (5 seeds × 12 seasons)
+  - PP-NPC-01:04 patches derived from simulation findings
+  - Propagated patches to design doc + both params files
+
+patches_applied:
+  PP-NPC-01: Crown Royal Decree Mandate ≥ 3 gate
+  PP-NPC-02: Crown TC awareness at TC ≥ 35 + Coup Counter requires active Church Assert
+  PP-NPC-03: Church Framework Drift conditioned on Stability ≥ 4 + TC advance + per year
+  PP-NPC-04: Varfell Collection once-per-season state tracking
+
+sim_findings:
+  F-01 (CRITICAL): Crown Mandate death spiral → PP-NPC-01
+  F-02 (CRITICAL): Church Influence ceiling by S4 → PP-NPC-03
+  F-03 (CRITICAL): Coup deterministic in 5/5 runs → PP-NPC-02
+  F-04 (MODERATE): No eliminations (expected — P1 survival prevents NPC self-destruct)
+  F-05 (MODERATE): RS decline slow (expected — Thread ops are PC-driven)
+  F-06 (MODERATE): Varfell P2 no cooldown → PP-NPC-04
+  F-07 (LOW/PASS): Interaction loop functional, no degenerate cycles
+
+commits:
+  8c04b4b: NPC Behavior System v1 initial
+  57e8646: Editorial resolutions ED-515:531
+  1582179: ED-519 resolved + full propagation
+  final: SIM-NPC-01 results + PP-NPC-01:04 patches + session close
+
+open_items: none
+p1_blockers: 0 (for this session scope)
+
+resume_instruction: >
+  Next session: SIM-NPC-02 through SIM-NPC-05 remain registered.
+  Re-run SIM-NPC-01 with PP-NPC-01:04 applied to validate fixes.
+  Priority: SIM-NPC-02 (Contest Resonant Style pool calibration).
+```

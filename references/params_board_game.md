@@ -1750,3 +1750,23 @@ Post-Coup: all priorities → Martial Law → consolidate → Reconstitution (PI
 | 5 | New practitioner enters Southernmost | Assessment. TS ≤ 20: dismissed. TS 40+: useful. |
 | 6 | Attacked | Thread operations at scale rendering force irrelevant. |
 | 7 | Default | Containment. Hold the Southernmost. |
+
+## PP-NPC-01 — Crown Royal Decree Gate (SIM-NPC-01 F-01)
+Crown Priority Tree P3 (Royal Decree): do NOT attempt if Crown Mandate ≤ 2. At Mandate ≤ 2, Crown defaults to P4.
+Royal Decree failure cost (Mandate −1) applies only at Mandate ≥ 3. At Mandate ≤ 2: failure produces no Mandate loss (institution too weak for additional reputational damage).
+
+## PP-NPC-02 — Crown TC Awareness + Coup Counter Refinement (SIM-NPC-01 F-02/F-03)
+Crown Priority Tree P2: insert trigger "If TC ≥ 35: Crown takes TC-reducing action (Senator Outward to Hafenmark for coordinated Suppress, OR direct DA targeting Church Mandate). This fires BEFORE the standard P2 triggers (territory loss, coup, PI)."
+Coup Counter increment: TC ≥ 40 trigger requires BOTH conditions: (a) TC ≥ 40, AND (b) Church actively Asserted this season. Passive TC advance alone does not trigger counter. Crown must have failed to prevent active Church expansion, not merely failed to counter institutional drift.
+
+## PP-NPC-03 — Church Framework Drift Revision (SIM-NPC-01 F-02)
+Church Framework Drift (Influence +1) conditions revised:
+- (a) No faction targeted Church with any hostile DA this season, AND
+- (b) Church Stability ≥ 4, AND
+- (c) TC advanced this season (Influence drift IS the TC advance — same institutional process).
+- Frequency: per year (at Year-End Accounting), not per 2 seasons.
+Replaces prior unconditional 2-season drift.
+
+## PP-NPC-04 — Varfell Collection Cooldown (SIM-NPC-01 F-06)
+Varfell Priority Tree P2: fires only if Private Collection not yet used this season. After P2 fires, mark Collection as used (state flag). Flag resets at Accounting. If Collection used, skip to P3 (Tribune Investigate).
+Aligns with canonical stage6 §8.5 once-per-season limit.

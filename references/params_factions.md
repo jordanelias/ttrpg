@@ -616,7 +616,7 @@ Torben: first faction at Loyalty ≥ 5 sets primary Conviction. Default Autonomy
 ### Framework Drift
 | Framework | Faction | Drift | Frequency | Cap |
 |---|---|---|---|---|
-| Divine Command | Church | Influence +1 if no external challenge 2 consecutive seasons | Per 2 seasons | Stat ceiling 7 |
+| Divine Command | Church | Influence +1 if: no hostile DA vs Church + Stability ≥ 4 + TC advanced | Per year (Year-End) | Stat ceiling 7 (PP-NPC-03) |
 | Virtue Ethics | Crown | Crown NPCs Certainty ≥ 3: +1 Certainty/year unchallenged | Per year | Certainty 5 |
 | Categorical Imperative | Hafenmark | Influence +1 per season all actions framework-aligned | Per season (conditional) | Stat ceiling 7 |
 | Consequentialist Pragmatism | Varfell | TK +0.5/season active investigation; caps TK 3 without PC | Per season | TK 3 |

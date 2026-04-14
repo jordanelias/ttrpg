@@ -3502,3 +3502,37 @@ editorial_decisions:
   resolution: "Approved. Precedent distinguishes Baralta from Almud and aligns with Categorical Imperative. Stage6 is stale compilation. 2026-04-13."
   source: designs/systems/npc_behavior_system_v1.md
   date: 2026-04-13
+
+# --- SIM-NPC-01 Patches (2026-04-13) ---
+
+- id: PP-NPC-01
+  description: "Crown Royal Decree Mandate >= 3 gate. Failure cost only at M >= 3."
+  priority: P1
+  status: resolved
+  resolution: "Applied to Crown Priority Tree P3 and params_board_game. 2026-04-13."
+  source: SIM-NPC-01 F-01
+  date: 2026-04-13
+
+- id: PP-NPC-02
+  description: "Crown TC awareness at TC >= 35. Coup Counter requires active Church Assert."
+  priority: P1
+  status: resolved
+  resolution: "Applied to Crown Priority Tree P2 and Coup Counter rules. 2026-04-13."
+  source: SIM-NPC-01 F-02/F-03
+  date: 2026-04-13
+
+- id: PP-NPC-03
+  description: "Church Framework Drift: conditioned on Stability >= 4, TC advance, per year."
+  priority: P1
+  status: resolved
+  resolution: "Applied to Framework Drift in design doc, params_factions, params_board_game. 2026-04-13."
+  source: SIM-NPC-01 F-02
+  date: 2026-04-13
+
+- id: PP-NPC-04
+  description: "Varfell Collection once-per-season state tracking."
+  priority: P2
+  status: resolved
+  resolution: "Applied to Varfell Priority Tree P2. 2026-04-13."
+  source: SIM-NPC-01 F-06
+  date: 2026-04-13
