@@ -145,7 +145,7 @@ systems:
 
   npc_behavior:
     canonical: designs/systems/npc_behavior_v30.md
-    canonical_sha__designs__systems__npc_behavior_v30_md: "223547499fb813574e892ad4e5fd16ef872163bd"
+    canonical_sha__designs__systems__npc_behavior_v30_md: "4c00e45ffa2d26f1ceecdcf80525b41cf7f92b4b"
     params: null
     design_doc: designs/systems/npc_behavior_v30.md
     compilation_stage: null
@@ -180,7 +180,7 @@ systems:
 
   emergent_arcs:
     canonical: references/arc_register.md
-    canonical_sha__references__arc_register_md: "f41a7e266f8fd03caee76fefb9989e18efc4c5c9"
+    canonical_sha__references__arc_register_md: "d3c4e225e6362bc4e11d225d4aa02a67a4066903"
     params: null
     design_doc: null
     compilation_stage: null
