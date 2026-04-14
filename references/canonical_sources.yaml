@@ -151,7 +151,7 @@ systems:
 
   fieldwork:
     canonical: designs/fieldwork/fieldwork_design_v1.md
-    canonical_sha__designs__fieldwork__fieldwork_design_v1_md: "bb32ddfa7a98006909f222a29817e0f9d90cda86"
+    canonical_sha__designs__fieldwork__fieldwork_design_v1_md: "c3ab5188f037ca8b8fb4de4c7650ef06515bf27e"
     params: null
     design_doc: designs/fieldwork/fieldwork_design_v1.md
     compilation_stage: null

@@ -1,6 +1,6 @@
 # VALORIA — FIELDWORK SYSTEM v1.1
 ## Exploration / Investigation / Socializing
-## Status: DESIGN — approved for commit. Review corrections applied 2026-04-13.
+## Status: DESIGN — approved for commit. Review corrections: 2026-04-13 (v1.1), PP-628 (canon guard), PP-630 (three-axis Ob, Warden Emergence fix, ED-NEW harvest).
 ## Mode applicability: ALL (TTRPG baseline; Hybrid bridging; Board Game abstraction; Godot video game)
 ## Canon compliance: P-01 (inseparability — applied to Thread-Read operations, not passive discovery), P-03 (rendering = consciousness-performed), P-05 (three emergence modes — Mode 1/2 distinction added to §3.1), P-07 (Calamity = rendered-side mechanism), P-08 (epistemological barrier), P-14 (all modes express inseparability), P-15 (three-layer being-persistence)
 ## Cross-references: params_core.md, social_contest_system_v2.md, combat_design_v1.md, threadwork_redesign_v25.md, geography_design.md, calamity_radiation.md, clock_registry.md
@@ -350,6 +350,8 @@ Thread-Read is a **perceptive Leap** — the practitioner enters active Thread c
 1. Declare Thread-Read. Requires TS ≥ 30. The practitioner must not be in melee with a declared attacker.
 2. **Leap.** Follow standard Leap procedure: full-round action (Priority 5 in combat time; one scene action in fieldwork time). Vulnerability window applies — the practitioner is in Thread contact and exposed.
 3. **Perception.** Roll (Spirit × 2) + History bonus + Thread Pool Score (TPS = TS ÷ 10, round down), TN 7, Ob per Depth. (PP-619, PP-626: Thread-Read is a Leap; all Leaps use (Spirit × 2) + History + TPS per PP-619. Attunement struck from Thread contact pools.)
+
+**Three-axis Ob alignment.** Thread-Read Ob values (§1 Depth Axis: 1/2/3/5/8 for Depths 1–5) equal the threadwork three-axis Ob system at fieldwork defaults: Single Breadth (+0 Ob) and Contact/Knot Distance (+0 Ob). Standard Thread-Read against one entity at the investigator's location uses Depth Ob alone. At greater breadth (targeting multiple entities simultaneously) or at physical distance without a Knot, add Breadth Ob and Distance Ob per params_threadwork.md §Three-Axis Ob System. Knot-mediated remote Thread-Read (§2.6) sets Distance Ob = 0 because the Knot constitutes Contact-range Thread connection regardless of physical separation. (PP-630)
 4. **Co-movement fires (P-01).** Thread-Read is a genuine Thread operation. Three-dimensional auto-effects apply per threadwork_redesign_v25.md §3.2: temporal auto-effect (Calamity Drift + History Resonance), epistemic auto-effect (Certainty modifier, investigation/testimony consequences), actualized auto-effect (d6 consequence table).
 5. **Coherence cost.** Per scale table (stage11 §11.1): Object/Personal scale = 0 auto-cost; Relational+ scale = −1 Coherence.
 6. **Evidence progress.** Apply degree result per §4.2 table.
@@ -590,7 +592,7 @@ At Board Game scale, fieldwork is abstracted into faction-level actions using ex
 | Resource | Prosperity +1 in this territory |
 | Secret | +1D on next military or intelligence action in this territory |
 | Remnant | Thread operation Ob −1 in this territory for 2 seasons; Thread Debt token placed |
-| Anomaly | RS −1 at this territory immediately; Warden Cooperation +1 eligible (if Warden Emergence active) |
+| Anomaly | RS −1 at this territory immediately; Warden Cooperation (WC) +1 eligible when Warden Recognition (WR) ≥ 2 (Wardens recognise the faction as a steward). See params_board_game.md §Warden Cooperation and §Warden Recognition. (PP-630) |
 
 - **Effect on Overwhelming:** Reveal POI + gain +1 Influence (the discovery enhances the faction's knowledge base).
 - **Effect on Failure:** No POI found. +1 Church Attention Pool in this territory if the survey targeted Depth ≥ 3 content.
@@ -758,21 +760,21 @@ Fieldwork actions consume in-game time:
 
 | ID | Description | Priority |
 |----|-------------|----------|
-| ED-NEW-01 | POI catalog per territory. Requires cross-reference with geography_design.md and calamity_radiation.md. Each territory needs 2-6 authored POIs across depth levels with conditional availability gates. | P2 |
-| ED-NEW-02 | Named NPC starting Dispositions. Requires cross-reference with existing NPC roster (Vaynard, Baralta, Cardinals, Torben, Elske, Klapp, Almud, Maret Uln, Edeyja). Each named NPC needs faction-indexed starting Disposition values. | P2 |
-| ED-NEW-03 | Survey action stat assignment confirmed: Influence. Monitor in simulation — if Survey dominates Govern, consider Ob adjustment. | P2 |
-| ED-NEW-04 | Exposure ↔ Church Attention Pool interaction. §6.5 caps at +1/character/season and +2/territory/season from fieldwork. **CONFIRMED SAFE** (PP-581 simulation: fieldwork contributes ~11% of max TC acceleration over 4 seasons — bounded to insignificance relative to primary TC drivers). | P3 |
-| ED-NEW-05 | Negotiate vs Contest boundary defined (§5.7). Confirm this does not create edge cases where players attempt to Negotiate situations that structurally require Contest. | P2 |
-| ED-NEW-06 | Godot POI node architecture (§10.1). Requires validation against Valoria-game repo Godot project structure. | P3 |
-| ED-NEW-07 | Evidence Track persistence. Confirm tracking overhead is manageable across 10+ session campaigns. | P3 |
-| ED-NEW-08 | Disposition decay rate (§5.2: −1/season above +3). Requires simulation to confirm pacing. | P2 |
-| ED-NEW-09 | Thread-Read co-movement effects (§4.5). Confirmed: uses threadwork_redesign_v25.md §3.2 co-movement table directly. No separate fieldwork co-movement table. | P3 |
-| ED-NEW-10 | Breach encounter (Depth 5) + Coherence stacking. **CONFIRMED PROPORTIONAL** (PP-581: each step requires deliberate player decision; no forced spiral. A Coherence ≤ 2 practitioner entering a Breach risks Crisis from Breach −1 + Thread op −1 = 0. This is intentional — the Breach is the rendering's edge). | P3 |
+| ED-507 (was ED-NEW-01) | POI catalog per territory. Requires cross-reference with geography_design.md and calamity_radiation.md. Each territory needs 2-6 authored POIs across depth levels with conditional availability gates. **FLAGGED — authorial decision.** | P2 |
+| ED-508 (was ED-NEW-02) | Named NPC starting Dispositions. Requires cross-reference with NPC roster. Partially addressed by ARC-T23 Remembrancer (ED ledger entry, 2026-04-13). Full NPC Disposition table pending. **FLAGGED — authorial decision.** | P2 |
+| ED-496 (was ED-NEW-03) | Survey action stat assignment confirmed: Influence. Monitor in simulation — if Survey dominates Govern, consider Ob adjustment. Resolved: Influence confirmed canonical for Survey (fieldwork_design_v1.md §8.1 states explicitly). SIM-DEBT-FW-05 confirms Survey and Govern occupy different niches. **RESOLVED.** | P2 → RESOLVED |
+| ED-497 (was ED-NEW-04) | Exposure ↔ Church Attention Pool interaction. §6.5 caps at +1/character/season and +2/territory/season from fieldwork. **CONFIRMED SAFE** (PP-581 simulation: fieldwork contributes ~11% of max TC acceleration over 4 seasons). **RESOLVED.** | P3 → RESOLVED |
+| ED-498 (was ED-NEW-05) | Negotiate vs Contest boundary defined (§5.7): "The GM does not offer a choice — the situation's structure determines the mechanic." Edge cases foreclosed by design. **RESOLVED.** | P2 → RESOLVED |
+| ED-509 (was ED-NEW-06) | Godot POI node architecture (§10.1). Requires validation against Valoria-game repo Godot project structure. Deferred until Godot implementation phase. **FLAGGED.** | P3 |
+| ED-499 (was ED-NEW-07) | Evidence Track persistence. §4.1 explicitly states "persistent across scenes and sessions." No mechanical overhead beyond GM notes — same as clocks. **RESOLVED.** | P3 → RESOLVED |
+| ED-500 (was ED-NEW-08) | Disposition decay rate (§5.2: −1/season above +3). SIM-DEBT-FW-03 confirmed: Neutral→Bonded = 6-8 actions across 3-4 seasons; maintenance actions needed at +3. Pacing appropriate. **RESOLVED.** | P2 → RESOLVED |
+| ED-501 (was ED-NEW-09) | Thread-Read co-movement effects (§4.5). Confirmed: uses threadwork_redesign_v25.md §3.2 co-movement table directly. **RESOLVED.** | P3 → RESOLVED |
+| ED-502 (was ED-NEW-10) | Breach encounter (Depth 5) + Coherence stacking. **CONFIRMED PROPORTIONAL** (PP-581). Intentional — the Breach is the rendering's edge. **RESOLVED.** | P3 → RESOLVED |
 | ED-NEW-11 | Pool formula ×2 — **RESOLVED** by PP-615. params_core.md now confirms (Agility × 2) as canonical. PP-247 note was stale. Fieldwork Ob calibration is correct. | RESOLVED |
-| ED-NEW-12 | Sincerity Gate (§5.3) uses Spirit. Confirm Spirit is not already overloaded as an attribute (currently: Resolve = Spirit; no other mechanical role). | P3 |
-| ED-NEW-13 | Desperate Trail (§4.4): 3 consecutive failures threshold triggers TN 8 + doubled Exposure + GM complication. Confirm TN 8 does not make recovery impossible for low-pool investigators (4D at TN 8: P(≥1) ≈ 60%, still viable). Confirm Partial +2 progress compensates for increased difficulty. | P2 |
-| ED-NEW-14 | Audit finding D-SIM-5 resolved: §4.1 now defines Finding reliability from resolved investigations. Verify Finding + Contest interaction in simulation. | P3 |
-| ED-NEW-15 | POP Coherence −1 additional: resolved as subject to per-op cap (not exempt). Confirm this in params_threadwork.md — currently ambiguous. Propagate ruling. | P2 |
+| ED-503 (was ED-NEW-12) | Sincerity Gate (§5.3) uses Spirit. Spirit governs: Resolve (Inspiration max), Thread contact wound disruption check (PP-624), Thread-Read pool, Dissonance checks, Sincerity Gate. All are manifestations of metaphysical grounding — Spirit is the appropriate attribute for all. Not overloaded; unified. **RESOLVED.** | P3 → RESOLVED |
+| ED-504 (was ED-NEW-13) | Desperate Trail (§4.4). 4D at TN 8: P(≥1) ≈ 60% (viable). SIM-DEBT-FW-02 confirmed pacing. Partial +2 compensates. **RESOLVED.** | P2 → RESOLVED |
+| ED-505 (was ED-NEW-14) | Finding + Contest interaction. §4.1 defines Finding reliability. §2.3 Fieldwork→Contest handoff states: Evidence cited = +2D Recall bonus, Evidence not consumed. SIM-DEBT-FW-07 (transition sim) confirmed. **RESOLVED.** | P3 → RESOLVED |
+| ED-506 (was ED-NEW-15) | POP Coherence −1 additional: subject to per-op cap of −1 (unlike FR/Binding Operations, which are cap-exempt per PP-196). Total POP Coherence cost = −1 regardless of scale (−1 scale at Relational+ + −1 additional, capped at −1). Note propagated to params_threadwork.md canonical section. **RESOLVED.** | P2 → RESOLVED |
 
 ### Items resolved by PP-580 extended threadwork simulation (2026-04-13)
 

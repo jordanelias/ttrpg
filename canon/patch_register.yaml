@@ -7809,3 +7809,59 @@ patches:
     - tests/coverage_matrix.md
     - references/canonical_sources.yaml
   status: applied
+
+- id: PP-630
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    Fieldwork canon follow-up audit corrections:
+
+    1. THREE-AXIS Ob ALIGNMENT — §4.5: explicit note added. Thread-Read Ob values
+       (Depth Axis 1/2/3/5/8) equal three-axis system at Single Breadth (+0) and
+       Contact/Knot Distance (+0). Greater breadth or distance without Knot → add
+       Breadth Ob and Distance Ob per params_threadwork §Three-Axis Ob System.
+       Knot-mediated remote Thread-Read = Contact range (Distance Ob = 0).
+
+    2. WARDEN EMERGENCE FIX — §8.1 Survey Anomaly result: "Warden Emergence active"
+       → "Warden Recognition (WR) ≥ 2 (Wardens recognise the faction as steward)."
+       Undefined term replaced with canonical WR threshold.
+
+    3. ED-NEW HARVEST — §12 open items table: ED-NEW-01 through ED-NEW-15 assigned
+       permanent IDs (ED-496–ED-509). 11 resolved immediately (mechanically confirmed).
+       3 flagged pending authorial decisions (ED-507 POI catalog, ED-508 NPC
+       Dispositions, ED-509 Godot validation).
+
+    4. HEADER updated: v1.2 notation.
+  finding_id: canon-guard-follow-up-2026-04-13
+  affects:
+    - designs/fieldwork/fieldwork_design_v1.md
+  status: applied
+
+- id: PP-631
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    params_threadwork.md canonical section updates:
+
+    1. POP CAP EXPLICIT NOTE — Coherence table: POP −1 additional is subject to
+       per-op cap of −1 (unlike Binding Operations per PP-196 which are cap-exempt).
+       Total POP cost = −1 max. Distinction from FR/BO now explicit.
+
+    2. COMMUNITY WEAVING POOL — New canonical entry added: (Spirit × 2) + History
+       + TPS, TN 7, Ob 3. PP-250 Attunement-based formula superseded by PP-616.
+       BG Community Mending (Domain Action) uses faction pool separately.
+
+    3. HEADER updated with PP-631.
+
+    4. editorial_ledger.yaml: next_id updated 486 → 510. ED-496 through ED-509
+       added (fieldwork editorial harvest). 11 resolved, 3 flagged.
+
+    5. canonical_sources.yaml: fieldwork SHA updated for PP-630 changes.
+  finding_id: threadwork-params-followup-2026-04-13
+  affects:
+    - references/params_threadwork.md
+    - canon/editorial_ledger.yaml
+    - references/canonical_sources.yaml
+  status: applied

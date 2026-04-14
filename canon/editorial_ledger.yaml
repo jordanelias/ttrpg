@@ -4,8 +4,10 @@
 # 'flagged' = requires user narrative/authorial decision; [EDITORIAL] marker present
 # All mechanical items resolved. Only worldbuilding/narrative items remain flagged.
 
-# next_id: 486
+# next_id: 510
 # IMPORTANT: All new editorial items MUST use the next_id value and increment it.
+# NOTE: ED-486 through ED-495 used by opposing threadwork session (2026-04-13).
+# NOTE: ED-496 through ED-509 used for fieldwork editorial harvest (PP-631, 2026-04-13).
 # Sessions MUST read this value before assigning new ED numbers.
 
 editorial_decisions:
@@ -4025,3 +4027,105 @@ editorial_decisions:
     description: "Approve mass battle simplified contest for opposing Thread operations. Highest net successes wins; winner at achieved degree, loser at Partial consequences. Tie: Shifting Object + both Partial. RS x3 multiplier applies. Temporal auto-effects NOT subject to x3 (PP-226). Reduces resolution from ~15 steps to ~6. Derivation in sim §C.4."
     tags: [mass_battle, opposing_ops, simplified_contest]
     source: "ST-OPP-10"
+
+  # ═══ FIELDWORK EDITORIAL HARVEST — PP-631 (2026-04-13) ═════════════════════
+  # ED-NEW-01 through ED-NEW-15 from fieldwork_design_v1.md §12 formally assigned.
+  # 11 resolved immediately (mechanically confirmed). 3 flagged (authorial).
+
+  - id: ED-496
+    status: resolved
+    date_resolved: 2026-04-13
+    description: "Survey action pool: Influence. SIM-DEBT-FW-05 confirmed Survey and Govern occupy distinct niches. No dominance issue."
+    decision: "Survey (Consul Inward) pool = Influence. Canonical. No Ob adjustment needed."
+    tags: [board_game, fieldwork, survey]
+
+  - id: ED-497
+    status: resolved
+    date_resolved: 2026-04-13
+    description: "Exposure ↔ Church Attention Pool capped at +1/character/season, +2/territory/season. PP-581 confirmed fieldwork contributes ~11% of max TC acceleration — bounded."
+    decision: "Cap sufficient. No adjustment needed."
+    tags: [fieldwork, exposure, tc, church]
+
+  - id: ED-498
+    status: resolved
+    date_resolved: 2026-04-13
+    description: "Negotiate vs Contest boundary. §5.7 states: the GM does not offer a choice — situation structure determines the mechanic."
+    decision: "Boundary defined and closed. No edge cases from simulation."
+    tags: [fieldwork, socializing, contest]
+
+  - id: ED-499
+    status: resolved
+    date_resolved: 2026-04-13
+    description: "Evidence Track persistence across 10+ session campaigns. §4.1 explicitly states persistence. No mechanical overhead beyond GM notes."
+    decision: "Confirmed persistent. Same overhead as clock tracking."
+    tags: [fieldwork, investigation, evidence_track]
+
+  - id: ED-500
+    status: resolved
+    date_resolved: 2026-04-13
+    description: "Disposition decay rate: −1/season above Disposition +3. SIM-DEBT-FW-03 confirmed Neutral→Bonded = 6-8 actions across 3-4 seasons with maintenance."
+    decision: "Decay rate appropriate. Pacing confirmed."
+    tags: [fieldwork, socializing, disposition]
+
+  - id: ED-501
+    status: resolved
+    date_resolved: 2026-04-13
+    description: "Thread-Read co-movement uses threadwork_redesign_v25.md §3.2 table directly. No separate fieldwork co-movement table."
+    decision: "Confirmed. Thread-Read co-movement = standard threadwork auto-effects."
+    tags: [fieldwork, thread_read, co_movement]
+
+  - id: ED-502
+    status: resolved
+    date_resolved: 2026-04-13
+    description: "Breach (Depth 5) + Coherence stacking. PP-581 confirmed proportional — each step requires deliberate player decision; no forced spiral."
+    decision: "Intentional. The Breach is the rendering edge. Coherence ≤ 2 practitioners warned."
+    tags: [fieldwork, exploration, breach, coherence]
+
+  - id: ED-503
+    status: resolved
+    date_resolved: 2026-04-13
+    description: "Sincerity Gate uses Spirit. Spirit governs: Resolve, Thread wound disruption, Thread pools, Dissonance, Sincerity Gate."
+    decision: "Not overloaded. All uses are metaphysical grounding — Spirit is the unified metaphysical attribute."
+    tags: [fieldwork, socializing, spirit, sincerity_gate]
+
+  - id: ED-504
+    status: resolved
+    date_resolved: 2026-04-13
+    description: "Desperate Trail threshold (3 consecutive failures → TN 8 + doubled Exposure + GM complication). 4D at TN 8: P(≥1) ≈ 60%. Partial +2 compensates."
+    decision: "Viable for low-pool investigators. Calibration confirmed by SIM-DEBT-FW-02."
+    tags: [fieldwork, investigation, desperate_trail]
+
+  - id: ED-505
+    status: resolved
+    date_resolved: 2026-04-13
+    description: "Finding + Contest interaction. §4.1 defines Finding reliability. §2.3 states Evidence cited = +2D Recall bonus, not consumed. SIM-DEBT-FW-07 confirmed."
+    decision: "Finding cite in Contest = +2D Recall bonus. Evidence Track persists through citation."
+    tags: [fieldwork, investigation, contest, finding]
+
+  - id: ED-506
+    status: resolved
+    date_resolved: 2026-04-13
+    description: "POP Coherence −1 additional: subject to per-op cap (not exempt like Binding Operations per PP-196). Total POP cost = −1 regardless of scale. Note added to params_threadwork.md canonical section (PP-631)."
+    decision: "POP cap = −1 max. Distinction from Binding Ops (cap-exempt) explicit in params_threadwork. Propagated."
+    tags: [threadwork, pop, coherence, cap]
+
+  - id: ED-507
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P2
+    description: "POI catalog per territory. Each territory needs 2-6 authored POIs across depth levels (Landmark, Resource, Secret, Remnant, Anomaly, Breach) with conditional availability gates. Requires cross-reference with geography_design.md and calamity_radiation.md."
+    tags: [fieldwork, worldbuilding, poi, geography]
+
+  - id: ED-508
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P2
+    description: "Named NPC starting Dispositions. Each named NPC (Vaynard, Baralta, Cardinals, Torben, Elske, Klapp, Almud, Maret Uln, Edeyja) needs faction-indexed starting Disposition values. ARC-T23 Remembrancer partially addresses RM context. Full Disposition table pending Jordan review."
+    tags: [fieldwork, socializing, npc, disposition]
+
+  - id: ED-509
+    status: flagged
+    date_raised: 2026-04-13
+    priority: P3
+    description: "Godot POI node architecture (fieldwork §10.1). Requires validation against Valoria-game repo Godot project structure. Deferred until Godot implementation phase."
+    tags: [fieldwork, godot, infrastructure]

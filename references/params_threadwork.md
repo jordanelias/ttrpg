@@ -1,4 +1,4 @@
-<!-- PATCHES APPLIED (session 2026-04-14): PP-600-623 — full Thread system redesign.
+<!-- PATCHES APPLIED (session 2026-04-14): PP-600-623 — full Thread system redesign. PP-631 (2026-04-13): POP cap note, Community Weaving pool corrected to (Spirit×2)+History+TPS.
      Key changes: pool unified to (Spirit×2)+History+TPS; TN-based difficulty; three-axis Ob;
      Gap self-closure by scale; RS cap struck; WR/WC redesigned; Dissonance→Spirit check.
      All prior pool formulas, Ob tables, and RS cap entries below are superseded by PP-600-623.
@@ -21,6 +21,12 @@ Pool = (Spirit × 2) + History + TPS
 
 History: 1D per point, cap 3 points. +3D constant (floor) always present.
 Full TPS always included. No exceptions.
+
+## Community Weaving — Canonical Pool (PP-616 supersedes PP-250)
+**Pool = (Spirit × 2) + History + TPS** (PP-616: all Thread operations unified)
+TN: 7 | Ob: 3 | RS outcome: Success = RS +1; Overwhelming = RS +2
+Requires: Revolution Mandate ≥ 1. One per contact window round. Not a Domain Action — a Thread operation.
+Note: PP-250 Community Weaving formula (Attunement + History + TPS) is superseded by PP-616. (PP-631)
 
 ## TN Modifiers (PP-619 — canonical)
 | Operation type | TN |
@@ -361,7 +367,7 @@ Loss per operation cap: −1 max per single operation regardless of combined sou
 | Territorial scale op | −1 |
 | Structural scale op | −2 |
 | FR Lock or Dissolution (any scale) | −1 additional |
-| Past-Oriented Pulling | −1 additional |
+| Past-Oriented Pulling | −1 additional. **Cap applies** (unlike Binding Ops per PP-196). Total POP cost = −1 max regardless of scale. (PP-631) |
 | Mending | −1 |
 | Dissolution residue use | −1 additional (not subject to cap) |
 | History Resonance risk die shows 1 | −1 |
