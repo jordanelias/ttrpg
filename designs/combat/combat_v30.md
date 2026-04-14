@@ -1,3 +1,7 @@
+<!-- SKELETON — mechanical spec only — atomized 2026-04-13 from designs/combat/combat_v30.md -->
+<!-- Infill: designs/combat/combat_v30_infill.md -->
+<!-- DO NOT add prose. Rationale/examples live in the infill file. -->
+
 <!-- v30 baseline — renamed from designs/combat/combat_design_v1.md on 2026-04-13 -->
 # VALORIA — COMBAT DESIGN (v1)
 ## Date: 2026-04-02
@@ -21,7 +25,6 @@ Translation rules for each scale are noted inline.
 | Zone-based (no maps or grids) | Zone-based for personal scenes; operational zones for mass combat | Territory-adjacency map; zone-based mass combat within territory |
 | All 10 attributes active | Player Character attributes active; Non-Player Character stats simplified | Faction stats (Military, Wealth, etc.); no personal attributes |
 
-TTRPG is always the most granular layer. Hybrid uses TTRPG rules when a named Player Character is present. Board Game uses abstracted equivalents.
 
 ---
 
@@ -30,14 +33,12 @@ TTRPG is always the most granular layer. Hybrid uses TTRPG rules when a named Pl
 **TTRPG:**
 Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)
 
-Pool split: allocate between Offence and Defence before any dice are revealed. This split IS the action economy — no separate action declaration needed.
 
 Modifiers:
 - Wounds: −1D per wound (cumulative)
 - Fibonacci group bonus: +dice to Offence allocation only (see §8)
 - Stamina Out of Breath: −2D to all rolls until recovery action taken
 
-**Board Game equivalent:** Unit Martial stat replaces Combat Pool. No split — Martial dice used for both attack and defence (abstracted).
 
 **Hybrid:** Player Character uses full TTRPG pool. Non-Player Character units use Martial stat.
 
@@ -61,18 +62,14 @@ Round duration: 6–10 seconds narrative.
 
 ## 3. INITIATIVE (PP-232)
 
-Initiative determines declaration order, not action speed. Higher initiative = more information.
 
-**Exchange 1:** Higher Attunement acts last (highest information advantage). **Tiebreaker — equal Attunement (PP-239):** higher Agility acts last. If Agility is also equal: GM determines or coin flip.
 **Subsequent rounds:** Initiative transfers to the exchange winner.
 **Tie result:** No damage to either side; initiative stays with current holder.
-**Mixed outcome (PP-276):** When both combatants succeed in the same exchange at different priorities (e.g. opponent lands a Strike at Priority 1 while PC lands a Feint at Priority 2), initiative stays with the current holder. No decisive momentum shift occurred — both sides scored their intended outcome.
 
 **Declaration order each round:**
 1. Lower initiative holder declares Offence/Defence split first.
 2. Higher initiative holder sees that split, then declares their own.
 
-Initiative replaces the prior range-priority system. Positional advantage from weapon reach is handled by the weapon TN matrix (§5). Longer weapon user must manoeuvre at disadvantage to re-establish distance.
 
 ---
 
@@ -89,7 +86,6 @@ Initiative replaces the prior range-priority system. Positional advantage from w
 | 5 | Leap (Thread — full-round) |
 | — | Full Guard, Take a Breath, Dodge, Rescue (reactive; trigger-timed) |
 
-A practitioner declaring Leap (Priority 5) may be struck at Priority 1 before contact. Consistent with mass battle ruling: a declared attacker targeting a practitioner in their Leap round makes the Leap ineligible.
 
 | Action | Description |
 |--------|-------------|
@@ -106,12 +102,10 @@ A practitioner declaring Leap (Priority 5) may be struck at Priority 1 before co
 | Dodge | Ranged attacks only. Forfeit all offensive action this round. Allocate full Combat Pool as passive Defence against one incoming ranged attack. Armour DR applies normally. (PP-215) |
 | Stunt | Declared with Strike. +N dice to Offence from environmental/positional narrative (Game Master sets N, max 5). Chain dice (10s) chain normally, independent of Stunt effect. |
 
-**Incapacitation timing:** Complete currently-resolving action. Fall at end of that priority step. Later-declared actions do not resolve.
 
 **Incapacitation stages — personal combat (PP-269):**
 - **Stage 1 (Incapacitated/Down):** Health reaches 0 at max Wounds. Character is unable to act. Can be stabilised with a Medicine roll (Ob 2) within the same scene. Stabilised characters survive but cannot participate further this scene. **Recovery (PP-284/ED-177):** Stabilised characters may return to action after one full scene of rest. Wounds clear at end of session (or after extended rest per GM). Stabilised characters retain all Wounds until rest.
 - **Stage 2 (Dying):** If not stabilised by scene end, or if **any attack dealing at least 1 net hit lands on a downed Stage 1 character** (PP-284/ED-178): Stage 2. Downed characters cannot defend (Defence = 0); any landed strike is potentially finishing. Will die without intervention. Medicine Ob 3 within one scene; failure = death.
-Note: Stage 1/Stage 2 in personal combat are the same framework as general incapacitation in mass battle (§A.5), applied at personal scale.
 
 ---
 
@@ -139,7 +133,6 @@ Final Hit TN = 7 + reach modifier + weight modifier + type modifier.
 
 Penalty if 1 below minimum: −1D Combat Pool. Cannot wield if 2+ below minimum.
 
-**"Blade"** encompasses cutting, piercing, and stabbing weapons. **"Blunt"** encompasses bludgeoning weapons.
 
 | Combination | TN | Examples |
 |-------------|-----|---------|
@@ -201,16 +194,9 @@ No catastrophic outcome category. Majority-1s produces standard Failure.
 ### Reach Rules
 **Zone terminology (PP-268):** Close zone renamed **Melee range**; Far zone renamed **Ranged distance** throughout. These plain-language terms replace 'Close' and 'Far' to align with the Short/Long weapon reach matrix.
 
-- Short vs Long at **Melee range**: Short weapon has priority. Long weapon user must manoeuvre at disadvantage to re-establish Long weapon range.
-- Long vs Short at **Ranged distance**: Long weapon has priority. Short weapon user must close at disadvantage.
-- Ranged weapons (LP/HP/LBl/HBl): require Far zone to attack. At Close zone, ranged weapons cannot make an Offence roll. Melee weapons cannot retaliate against a ranged attack from Far zone.
 - Ranged defence at Close zone: a character carrying a ranged weapon may defend at Def TN 8 if forced into Close zone by a melee attacker. The full pool is allocated to Defence; no Offence allocation is permitted. This represents using the weapon as a physical barrier or emergency grapple resist.
-- Sling at Close zone: LBl and HBl slingers who are forced to Close zone are assumed to carry a melee weapon (typically a knife, Light Cut). May draw it as a Retrieve Weapon action.
-- HP crossbow reload: after firing, HP user must take a full-round Reload action before firing again. No other action may be taken during Reload.
-- Ranged vs closing melee: closing character must take a Move action each round. While closing, they are exposed to ranged fire and cannot allocate dice to Defence against it.
 
 ### Environmental Factors (Ranged Combat)
-Melee users must close to reach a ranged attacker. Terrain affects the number of rounds of exposure and imposes penalties.
 
 | Terrain | Rounds to close | Penalty to closer |
 |---------|----------------|-------------------|
@@ -220,14 +206,12 @@ Melee users must close to reach a ranged attacker. Terrain affects the number of
 | Deep river | 3 rounds + Swim check (Ob 2) | Ob 2 to cross; failure = swept back |
 | Wall or rampart | Climb action (TN 8 Ob 1) per obstacle | Action lost if climb fails |
 
-Cover (a physical obstacle between attacker and defender) adds DR to the defender:
 
 | Cover | vs LP | vs HP | vs LBl | vs HBl |
 |-------|-------|-------|--------|--------|
 | Soft (trees, wagon, bale) | +2 DR | +1 DR | +2 DR | +2 DR |
 | Hard (stone wall, fortification) | Blocks shot | Blocks shot | Blocks shot | Blocks shot |
 
-Cover must be declared in Phase 1 (Movement) to take effect. Cover does not move with the defender. The Game Master determines whether a physical obstacle is present in the zone. A character who does not declare Cover in Phase 1 receives no DR benefit that round, even if physically behind an obstacle. [PROVISIONAL — ED-098]
 
 **Board Game:** Weapon types map to BG unit type. No TN variation — units use Martial stat pool vs standard TN 7. Anti-Armour keyword (PP-217): units with HP (crossbow) or HBl (lead sling) weapon type carry the Anti-Armour keyword. When an Anti-Armour unit attacks, reduce target unit's effective armour tier by 1 for that engagement (e.g. Heavy → Medium DR applies). Does not stack from multiple attacking units.
 
@@ -255,7 +239,6 @@ Damage Reduction (DR) is subsumed into the weapon modifier vs armour tier table 
 | Medium | 3 | 2 | 2 | 1 |
 | Heavy | 5 | 3 | 3 | 2 |
 
-**Ranged DR design note:** LP (arrows) are deflected by plate at high angles — Heavy armour DR 5 reflects this. HP (bolts) penetrate all armour tiers best — Heavy armour DR only 3. LBl (stone) follows same curve as LP (blunt impact degrades similarly). HBl (lead) is anti-armour: uniquely flat DR curve (0/0/1/2) — non-deflecting dense mass transfers energy through armour. Heavy armour + cover stacks: DR totals apply cumulatively.
 
 DR is subtracted from damage after net hits + weapon modifier.
 
@@ -304,35 +287,26 @@ Each additional attacker beyond the first against a single unsupported target ad
 | 6–7 | +4 |
 | 8+ | +5 (cap) |
 
-Bonus only applies when target has no allies in the zone (unsupported). Supported target uses standard pool split against each attacker.
 
 ### Rescue
 
 **Eligibility (PP-290):** Rescue may only be declared if the rescued actor is outnumbered at Phase 1 declaration — facing 2+ attackers with no supporting ally (subject to Fibonacci bonus this round). Assessed at declaration only; mid-round incapacitations do not retroactively qualify. Ineligible Rescue fails silently — action lost.
 
-One ally may interpose against one incoming attack. Rescuer must specify which attacker is being contested. Declare in Phase 1 before resolution. Requires adjacent zone. Fails silently if no incoming attack was declared — action lost.
 
 **Commit and contest (PP-292):** Rescuer allocates N Offence dice (minimum 1) to contest the redirect. Remaining dice (pool − N) are available for Defence against the rescuer's own engagement's attacker only.
 
 Rescuer rolls N dice (TN 7) vs the target attacker's Offence roll (contested):
-- **Rescuer wins (net ≥ attacker net):** Attack redirects to rescuer. Redirected attack resolves against rescuer's armour DR only — contest dice are expended and unavailable for Defence against this attack. Rescuer may be wounded by both the redirected attack (DR only) and their own engagement's attacker (pool−N Defence applies).
-- **Rescuer loses (net < attacker net):** Attack resolves against original target. Rescuer's N dice are wasted. Remaining (pool−N) dice still defend the rescuer's own engagement normally. No wounds from the contested attack.
 
 **Weapon speed note:** Attacker TN affects contest difficulty. Light/fast weapons (TN 5–6) roll more net successes on average — harder to intercept. Heavy weapons (TN 7–8) are slower and easier to redirect. Rescuers should commit more dice against fast attackers.
 
 **Rescue payoffs (PP-292, PP-295, PP-406, PP-407):**
-- **Rescuer Momentum (PP-406):** Gains **2 Momentum** on successful intercept (rescuer struck by ≥1 wound from any source — own engagement or redirected attack). Capped at 2 Momentum per Rescue round regardless of number of wounds taken.
-- **Martyr Rule (PP-407):** If Rescue attempt **fails** AND the rescuer takes ≥1 wound from their own engagement in the same round → **+1 Momentum**. Distinct from successful intercept payoff. Failed intercept with no rescuer wound: no Momentum return.
-- **Rescued actor (successful intercept only):** Exempt from Fibonacci group penalty this round; cannot be targeted by any other attacker this round.
 
 Rescued actor exemptions expire at round end.
 
 **Rescue chain block (PP-290):** A character who has declared Rescue this round cannot themselves be the target of another Rescue declaration.
 
-**Rescuer incapacitated before resolution (PP-290):** If the rescuer is incapacitated at Priority 1 before the contest resolves, the Rescue fails. The attack reverts to the original target. No Momentum is granted.
 
 ### Multi-Engagement (3v2, 4v3)
-Each combatant is engaged in one primary pairing per round. Extras choose which pairing to support (Fibonacci bonus) or maintain their own engagement.
 
 **Multi-engagement pool split (PP-274):** A target facing multiple attackers in separate pairings declares one Offence/Defence split for the round. All attackers roll against the same Defence allocation independently. The target cannot declare a different split against each attacker. This forces the target to choose a single defensive posture, accepting vulnerability to one attacker while defending against another.
 
@@ -354,7 +328,6 @@ Each combatant is engaged in one primary pairing per round. Extras choose which 
 - **Weapon Type:** Inherits personal combat TN table (above).
 - **Armour Tier:** Inherits DR table (above).
 
-**Effective CP = min(CP, current Strength).** As Strength drops, fewer dice regardless of quality.
 
 ### PP-086 — Base Damage Formula (mass combat)
 Damage = max(0, net successes − Ob) + disposition_modifier. (PP-218 clarification)
@@ -408,23 +381,17 @@ Default unit stats (board game / mass combat):
 | Revolution | 0 | 0 | No standing units. Community defence possible via Community Weaving. |
 | Löwenritter | 5 (→6 post-coup) | 5 (→6) | All units elite: Cohesion 5, Martial 4. +1 unit from Crown transfer post-coup. |
 
-> **[PROVISIONAL] Coup Counter — successor rule:** If the Löwenritter Grandmaster is killed (personal combat, mass battle, or other means) while the Coup Counter is ≥ 1: the Löwenritter council immediately selects the highest-Coherence Rating surviving named officer as acting Grandmaster. The Coup Counter resets to 0. The coup attempt is treated as disrupted — the new acting Grandmaster's first action is to consolidate the Order rather than pursue the coup. If no named officers remain, the Löwenritter enter a leaderless state (all units −1D to all rolls until a new Grandmaster is appointed through narrative play).
 
 **Mustering:** Muster order raises 1 new unit per success (up to Military cap) at standard stats.
-Upgrade to elite: 2 consecutive successful Govern orders in territory + Wealth ≥ 4.
 
-> **[PROVISIONAL] Theocracy Counter seasonal cap:** Theocracy Counter cannot change by more than ±3 per season from Domain Actions alone. All Theocracy Counter sources combined (Domain Actions, Rendering Stability-driven cascade, Thread operations, military outcomes) cannot produce more than ±5 Theocracy Counter change per season. Changes exceeding the cap are discarded. This prevents runaway Theocracy Counter spirals from multi-action stacking.
 
-> **[PROVISIONAL] Stability recovery:** A faction with Stability ≤ 3 that receives no hostile Domain Actions targeting its Stability in a season gains +1 Stability at Accounting. This represents institutional resilience — factions recover slowly if left alone. Factions at Stability ≥ 4 do not recover this way (they are stable already). Maximum recovery from this rule: +1 per season.
 
 ---
 
 ## 11.5 FIELDWORK TRANSITIONS
 
-Fieldwork scenes interact with combat at two defined handoff points (scale_transitions_design_v1.md §3.9):
 
 **Fieldwork → Combat (F-TRANS-01/09):**
-- Exposure accumulated during fieldwork converts to ambusher Initiative advantage when combat triggers from fieldwork discovery or surveillance failure.
 - Combat Exposure codified: quiet engagement +1, conspicuous +2, public +3 Exposure to the fieldwork-active character. Applied before the combat scene opens, not during it.
 - Reference: fieldwork_exploration.md §3.2, fieldwork_investigation.md §2.3.
 

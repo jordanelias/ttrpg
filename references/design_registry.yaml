@@ -62,9 +62,9 @@ registry:
     system: threadwork
     mode: TTRPG
     canonical_v30: designs/ttrpg/threadwork_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/ttrpg/threadwork_v30.md
+    infill: designs/ttrpg/threadwork_v30_infill.md
+    atomized: complete
     predecessor: designs/ttrpg/threadwork_redesign_v25.md
     params: references/params_threadwork.md
 
@@ -73,9 +73,9 @@ registry:
     system: combat
     mode: ALL
     canonical_v30: designs/combat/combat_v30.md
-    skeleton: null
-    infill: null
-    atomized: not_started
+    skeleton: designs/combat/combat_v30.md
+    infill: designs/combat/combat_v30_infill.md
+    atomized: complete
     predecessor: designs/combat/combat_design_v1.md
     params: references/params_combat.md
 

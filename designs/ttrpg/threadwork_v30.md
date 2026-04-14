@@ -1,3 +1,7 @@
+<!-- SKELETON — mechanical spec only — atomized 2026-04-13 from designs/ttrpg/threadwork_v30.md -->
+<!-- Infill: designs/ttrpg/threadwork_v30_infill.md -->
+<!-- DO NOT add prose. Rationale/examples live in the infill file. -->
+
 <!-- v30 baseline — renamed from designs/ttrpg/threadwork_redesign_v25.md on 2026-04-13 -->
 # THREADWORK MECHANICS — v2.6
 ## Date: 2026-03-27 (revised 2026-04-02)
@@ -12,18 +16,14 @@
 ## CANONICAL POOL NOTICE (PP-616, PP-618, PP-619, PP-624, PP-625)
 > **All Thread operation pool formulas in this document have been updated to the canonical
 > post-PP-619 form: (Spirit × 2) + relevant History bonus + Thread Pool Score.**
-> Prior formulas (non-doubled Spirit, Attunement-based Mending, Focus in pools) are struck.
 > Ob tables in this document predate the three-axis Ob system (PP-622/PP-623).
 > **Canonical Ob values: params_threadwork.md §Three-Axis Ob System.**
-> This document remains authoritative for narrative framing, eligibility, contact mechanics,
-> degree outcomes, and chronic consequences. Use params_threadwork.md for all dice values.
 
 ## MODE APPLICABILITY INDEX
 *Added 2026-04-02 — applied per user session instruction*
 
 ### ALL MODES (TTRPG, Board Game, Hybrid)
 - Part 1: Philosophical Framing — foundational for all modes
-- Part 4: Co-Movement (Version C) — core mechanic; BG uses card abstraction, TTRPG uses dice
 - Part 5: Rendering Stability (World Track) — world-level track applies in all modes
   - §5.4: Rendering Stability in Board Game (BG only)
   - §5.5: Rendering Stability in Hybrid (Hybrid only)
@@ -32,18 +32,15 @@
 
 > **Scale-based Rendering Stability (P-25):** Rendering Stability consequences on Partial and Failure results scale with operation scale. The below-the-waterline portion of a Structural thread is enormously larger than an Object thread's; when the interaction fails, the unintelligible portion's response is proportionally more severe. **Override degree table Rendering Stability values with the following:** | Scale | Partial Rendering Stability Cost | Failure Rendering Stability Cost | |---|---|---| | Object | 
 
-> **BG Thread degree table (P-23):** Board game Thread orders use the standard four-degree system (Overwhelming / Success / Partial / Failure), consistent with the core engine. | Order | Overwhelming | Success | Partial | Failure | |---|---|---|---|---| | **Weave** | Rendering Stability +2 | Rendering Stability +1 | Rendering Stability unchanged; draw Co-Movement Card | Rendering Stability −1; draw Co-Movement Card | | **Mend** | Gap closed; Rendering Stability +2 | Gap closed; Rendering Stability +1 | Gap reduced one category; Rendering Stability un
 
 > **Mass battle Rendering Stability cost note (ST-TW-03):** **Finding from sim_x_03_massbattle_thread.md**
 **[DESIGN NOTE]**
 The ×3 Rendering Stability multiplier for mass battle Thread operations means a practitioner performing 5+ Thread operations in a single large battle risks significant Coherence drain (−1/op = Coherence 5 after 5 ops → Dissonant threshold). This is pro
 
 ### TTRPG ONLY
-- Part 2: Operations — Approach Training, Leap, all named operations (Weaving, Pulling, Locking, Dissolution, Mending, Collective)
 - Part 3: Coherence (10→0) — personal practitioner track; no BG equivalent
 - Part 6: Threadcut Beings — TTRPG encounter mechanics
 
-> **Delayed manifestation (P-22):** When the actual co-movement d6 produces "delayed manifestation" (result 6) on a Past-Oriented Pull, the temporal displacement has occurred at the Thread level but the physical facts have not yet updated. For 1d3 scenes, the world contains a paradox window: - Practitioners with Thread Sensitivity 30+: perceive the target's thread as both present and absent — the displacement is visible at the Thread level even tho
 
 > **Paradox window resolution (PP-193):** [PROVISIONAL] The P-22 paradox window resolves as follows. **Auto-resolution:** At window end (1d3 scenes), physical facts update; thread snaps to displaced state. Observers Thread Sensitivity 30+ perceive sudden realignment. **Early closure:** A practitioner may Mend the paradox window site (treat as Micro-Gap, Ob 3). Success: window closes immediately. Partial: duration halved. Failure: window persists full duration; RS −2. **Exploitation during window:** Another practitioner may target the paradoxed thread at +2 Ob (two simultaneous configurations resist). On Failure: window collapses immediately and operation's Failure consequences also apply. **After window:** Temporal Disjunction persists (memories intact; physical facts now match displaced state). No further mechanics unless new operation targets displaced thread.
 
@@ -56,7 +53,6 @@ The ×3 Rendering Stability multiplier for mass battle Thread operations means a
 > **Opposing beliefs (P-12):** *Already patched into §2.5.* Directly opposing Beliefs require a pre-Leap Belief check. Tangential conflicts: non-chaining dice.
 
 > **Pool floor correction (R-57):** Minimum 5 dice before rolling any Pull. Below 5D (from wounds, degradation, low stats):
-practitioner cannot Pull. Lock is still available (does not require the same sustained openness).
 Apply to §2.4 Pulling, eligibility section.
 
 > **Ob correction (R-55):** For Dissolution targeting a living being at Personal scale:
@@ -65,7 +61,6 @@ Apply to §2.4 Pulling, eligibility section.
 > Overwhelming required for immediate incapacitation.
 Replaces: "same as Lock" for Pe
 
-> **Scaled shifting objects (P-15):** Shifting Objects can form at any scale. The oscillation manifests differently by scale: | Scale | Manifestation | |---|---| | Object | Physical object oscillates between presence, absence, and distortion. The classic Shifting Object. | | Personal | A person's rendering flickers. Others perceive inconsistency — the person seems to be two things at once, or to phase between states. Not a Thread oper
 
 ### BOARD GAME ONLY
 - §5.4: Rendering Stability in Board Game
@@ -77,7 +72,6 @@ Replaces: "same as Lock" for Pe
 - §7.3: Updated Mode Branching
 
 ### CROSS-MODE (applies in both TTRPG and Hybrid)
-- §2.3–2.4: All named operations — applicable whenever a practitioner Player Character is present (TTRPG and Hybrid personal scenes)
 - §A.10 of mass_battle_v3.md: Thread operations in mass battle (Hybrid / TTRPG mass combat)
 
 > **Cross-reference (ST-TW-05):** Coherence referenced in mass_battle_v3 §A.10 = this document's personal Coherence track (10→0). Not a unit stat. auto-cost −1/op depletes personal track by 1 per mass battle operation.
@@ -85,33 +79,26 @@ Replaces: "same as Lock" for Pe
 ---
 
 ## PHILOSOPHICAL FOUNDATION
-See `designs/ttrpg/threadwork_philosophical_reference.md` for the complete philosophical framing (What Threads Are, Ein Sof and Spooling, The Scale Principle, The Two States, Why Operations Produce Unpredicted Consequences). That document is the canonical reference for canon-guard P-01–P-15 compliance checks on threadwork mechanics.
 
 # PART TWO: OPERATIONS
 
 ## 2.1 Approach Training
 
-*No changes from current §5.1. Full season commitment, narrative confirmation, Approach Training tag granted.*
 
 ## 2.2 Diagnosis — STRUCK (ED-134/ED-124, 2026-04-03)
 
-> Diagnosis as a standalone action is removed from the system. Practitioner either suspends their sense of self and Leaps, or does not. No preparatory gate action exists. In mass combat, Leap proceeds directly in Phase 4 without Diagnosis. In personal combat, Leap is a Priority 5 full-round action with no Diagnosis prerequisite. See params_threadwork.md §Diagnosis — STRUCK.
 
 
 ## 2.3 The Leap — Suspending Rendering
 
-The Leap is the practitioner's transition from rendering to contact — the act of suspending their own always-already human rendering so that their configuration can interact with threads in originary intentionality.
 
-This is not entering another state. It is leaving the only state consciousness knows. There is no bridge, no gradient, no partial Leap. You cannot get there from here by degrees. You must let go of the thing that constitutes your being as a conscious agent — your rendering — and trust that your configuration's intentionality, set during Diagnosis and declaration, will direct what happens in your absence from yourself.
 
 ### Eligibility (verify before rolling)
 
 - Approach Training tag ✓
 - Thread Sensitivity 30+ ✓
-- Not currently engaged in melee with an opponent who has declared an attack this round ✓
 - Not incapacitated (Health > 0) (PP-232 — prior ceiling(Health÷2) threshold removed; incapacitation is binary under current wound system)
 
-The Leap is a **full-round action (Priority 5)**. No attack, no movement, no manoeuvres in the same round. Only reactive defence available: Parry or Dodge Backwards (character's choice when declaring). These are pre-conscious physical responses that do not require rendering.
 
 ### The Leap Roll
 
@@ -130,7 +117,6 @@ Pre-calculate the Leap pool on the character sheet as a named entry separate fro
 | Partial | Unstable suspension — rendering keeps reasserting. Operation Ob +1. Take 2 Composure strain. |
 | Failure | Thread contact fails. −1D to Thread Pool Score for remainder of scene. (PP-232) |
 
-**Partial result framing:** The rendering keeps bleeding through. The practitioner is partly present to themselves, which means they are partly interfering with the contact. Their consciousness is fighting the suspension. The operation is still possible but compromised — the practitioner's rendering is contaminating the interaction with their own categories.
 
 **Failure framing:** The practitioner could not surrender rendering. Their consciousness held on. This is not weakness — it is the fundamental difficulty of doing something that your being resists constitutively. The aftereffect (−1D Thread Pool Score) represents the psychic friction of the failed attempt — the practitioner's engagement with Thread is degraded for the remainder of the scene, not from injury but from the failed surrender itself. (PP-232)
 
@@ -138,25 +124,17 @@ Pre-calculate the Leap pool on the character sheet as a named entry separate fro
 
 ### The First Leap (Event Scene)
 
-The first time a character attempts the Leap, it is run as a full event scene. The Game Master describes the approach and the perceptual boundary.
 
-On success: the character experiences what it is to Be beyond their own being. They perceive — no, they do not perceive, that is the wrong word, but there is no right word because language IS rendering — they interact with the constitutive process that underlies everything they have ever known. When they return, they know their rendering is partial. Not intellectually. Ontologically. They have been outside it.
 
-Thread Sensitivity score is revealed to the player. Practitioner designation granted. Certainty −1 (permanent: the old framework can never feel complete again).
 
-On failure: **Dissociation** — the character's rendering reasserted violently. They are present in the world but shaken. Cannot attempt Thread operations for one season. Thread Sensitivity is frozen. They may attempt again next season.
 
 ### Contact Duration
 
-Once the Leap succeeds, rendering is suspended for a number of rounds equal to the practitioner's **Focus score**. The Leap round itself counts as Round 1. At Round (Focus + 1), rendering reasserts naturally — the practitioner's consciousness reclaims its constitutive function.
 
 > **Focus Halving (P-11):** When an environmental effect halves contact duration, round down. Focus 1 after halving = zero operations (experience only). Focus 3 halved = 1 = zero operations. Focus 5 halved = 2 = one operation. Environmental Focus reduction affects contact duration only, not pool calculation — the attribute itself is unchanged.
 
-The window counts down whether or not the practitioner acts within it. Focus is how long you can hold your own rendering at bay. It is not concentration in the ordinary sense. It is the capacity to sustain the absence of the thing that makes you human.
 
 **Revised standard sequence (Diagnosis precedes Leap):**
-- **Pre-Leap round(s):** Diagnosis (Priority 4). Practitioner renders the target, reads configuration, sets intentionality. Declares operation type(s) and target(s).
-- **Round 1 (Leap):** Rendering suspends. Contact established. No operation this round — the practitioner's configuration is orienting in originary intentionality. The suspension must settle before directed interaction can occur.
 - **Round 2+:** Operations proceed as declared.
 - **Round (Focus + 1):** Contact drops. Rendering reasserts. Practitioner returns to themselves.
 
@@ -169,7 +147,6 @@ The window counts down whether or not the practitioner acts within it. Focus is 
 | 3 | 3 | 2 | Two operations. |
 | 4+ | 4+ | 3+ | Three or more. Rare — Focus 4+ requires significant investment. |
 
-At Focus 1, the practitioner gains the experience of contact (relevant for Thread Sensitivity growth, First Leap) but cannot perform operations. This creates a meaningful progression gate: Focus 2 is the minimum for functional practice.
 
 **Wound during the Leap round (before contact is established):** If the practitioner takes a Wound in the same round as the Leap roll, before the roll is resolved, apply +1 Ob to the Leap roll as normal (Wound penalty). The Attunement disruption check does not apply — it only triggers once contact is established. If the Leap succeeds despite the Wound penalty, contact proceeds normally.
 
@@ -179,7 +156,6 @@ At Focus 1, the practitioner gains the experience of contact (relevant for Threa
 
 ### Thread Operation Visibility
 
-Operations are invisible to characters with Thread Sensitivity 0–9. Detection by tier:
 
 | Observer Thread Sensitivity | Perception |
 |---|---|
@@ -197,21 +173,15 @@ Physical effects (a wound closing, an object moving) are visible to all.
 
 ## 2.4 Operations During Contact
 
-During contact, the practitioner is not consciously present. Their configuration interacts with threads directed by the intentionality set during Diagnosis and declaration. The player rolls dice — this is a game abstraction. In-fiction, the practitioner does not experience the operation as a sequence of decisions. They set intent, Leaped, and when they return to rendering, the outcome has occurred.
 
-**Declaration before Leap:** The player declares the operation type (Weave, Pull, Mend, Lock, Dissolve) and the target (identified during Diagnosis) before the Leap roll. This declaration is the intentionality. Once the Leap succeeds, the operation proceeds as declared. The player cannot change operation type or target during contact — that would require rendering, which is suspended.
 
-**Multiple operations in one contact window:** If Focus allows multiple rounds, the practitioner may perform sequential operations, but each was declared before the Leap as part of the overall intentionality. The sequence was set in advance. Adapting mid-contact is impossible.
 
-**Sequential failure penalty:** If an operation fails, all subsequent operations in the same contact window are at +1 Ob (cumulative per failure). The practitioner's intentionality was set assuming each step would succeed. When one fails, the remaining intentions are directed at a state that no longer matches what the practitioner rendered during Diagnosis. The intentionality is misaligned. The interaction continues — the configuration still attempts the declared sequence — but the misalignment degrades the outcome.
 
 ### Weaving — Things Cohere
 
 > **Design note (ST-TW-01):** W-24 (Coherent Strike) at Object scale: Rendering Stability unchanged, Coherence −0 on Success. If Leap round is protected (opponent at wrong range), operation is free in Thread terms. Design question: is this intended? See ED-046.
 
-**What happens:** The practitioner's configuration interacts with a thread, and the thread is drawn toward greater coherence — toward stable actualization. The practitioner directed this through intentionality: they intended coherence, healing, stabilisation, and their configuration's interaction with the thread produced it.
 
-**Why Weaving works with the ground:** Ein Sof spools continuously. Weaving aligns with that process — the practitioner's intentionality toward coherence assists what the ground is already providing. This is why Weaving effects are stable and permanent: the operation did not impose something foreign. It assisted the process that already sustains the thread. Scars are real. The world is consistent. No paradox.
 
 **Pool:** (Spirit × 2) + relevant History bonus + Thread Pool Score (PP-616, PP-625)
 **TN:** 7
@@ -235,7 +205,6 @@ During contact, the practitioner is not consciously present. Their configuration
 
 **Over-Actualisation Hazard (Relational+ scale):**
 
-Successful Weaving at Relational scale or above drives a configuration toward more coherence than the substrate naturally supports. Ein Sof continues to spool through the thread, but the thread is now too rigid to integrate what the ground provides. The thread stiffens.
 
 | Scale | Over-Actualisation Consequence on Success |
 |---|---|
@@ -246,29 +215,22 @@ Successful Weaving at Relational scale or above drives a configuration toward mo
 
 On Overwhelming at Relational+: over-actualisation effects halved in duration.
 
-> **Over-actualisation modifier — Shifting Object carry-through (PP-208):** [PROVISIONAL] When a Woven thread shatters into a Shifting Object via the brittleness rule (§2.4 Weaving GM sidebar), the over-actualisation +1 Ob modifier **does not carry through** to the Shifting Object. The OA modifier was a property of the Woven configuration. When that configuration collapses into a Shifting Object, it ceases to exist as the target of the OA modifier — the Shifting Object is a new configuration formed from the collapse residue, not the Woven thread in a damaged state. Mending the Shifting Object therefore proceeds at base Ob without the OA penalty. Exception: if the Woven configuration did not shatter (e.g., OA persists on a still-Woven thread that a practitioner then Mends to prevent Gap formation), the OA modifier applies to the Mending attempt as normal (+1 Ob stacked on Mending base Ob).
-
-> **Double over-actualisation — two independent Weavings (PP-209):** [PROVISIONAL] If two practitioners independently Weave the same configuration in separate contact windows within the same scene (e.g., both Leap separately after a lattice failure), and both succeed: the configuration acquires **two stacked OA modifiers** (+2 Ob total to subsequent ops targeting this configuration). Both stacks clear after 1 season or after a Pull. Brittleness is compounded: when a non-Thread stress event of sufficient severity strikes a doubly over-actualised thread, the shattering consequence is proportionally more severe — the GM may rule the Shifting Object is already at the next severity tier (e.g., Shifting Object forms as if already 1 season old, making its deterioration timeline shorter). The Overweaving +1 Ob cumulative rule (§2.4) applies only within a single contact window and does not govern separate contact windows — separate windows accumulate OA stacks, not Overweaving penalties.
 
 
 
-**Game Master sidebar — Brittleness in volatile contexts:** Weaving at Relational+ scale stabilises a configuration but makes it rigid. A Woven diplomatic agreement, stabilised faction, or reinforced institution cannot adapt to stress the way an unworked configuration can. If a non-Thread event of sufficient severity strikes a Woven configuration — a siege, betrayal, institutional collapse — the Game Master may rule it shatters into a Shifting Object at its scale rather than simply failing. A broken Woven treaty may become a Relational Shifting Object (deteriorating to a Relational Gap within 1d3 seasons) rather than just a broken treaty.
 
-Before Weaving in a politically volatile context, the Game Master should ask: is this configuration likely to face severe stress before it can be Pulled or allowed to expire naturally? If yes, Weaving may be counterproductive. The practitioner cannot know this during Diagnosis — brittleness is a consequence of over-actualisation that manifests only when external stress arrives.
+
 
 **Overweaving:** Each operation after the first in the same contact window: +1 Ob (cumulative). A collapsed overweave: Rendering Stability −3 and local Shifting Object risk.
 
 ### Pulling — Things Open
 
-> **Past-Pull reversion (P-21):** When Past-Oriented Pulling displaces an event, mechanical states triggered by that event may or may not revert. The Game Master determines which states revert based on their causal source: - **Physical-fact-triggered states revert.** Knot strain from "external events" (territory conquest, death of a Knot entity) was caused by a physical fact. If the fact is displaced, the strain reverts. The Knot entity is
 
 > **Fortification Ob addition (R-67):** When Pulling a structural/territorial configuration that includes a fortified site (Fortification ≥ 1):
 add the Fortification level to the Ob. Physical reinforcement increases actualization.
 Apply to §2.4 Pulling, Foundational/Structural scale section.
 
-**What happens:** The practitioner's configuration interacts with a thread, and the thread is drawn toward potential — toward looseness, openness, the constitutive ground. The practitioner intended loosening, and their configuration's interaction produced it.
 
-**Why Pulling effects expire:** The thread returns to its natural configuration because Ein Sof continues to spool. The ground does not stop providing. The Pull temporarily interrupted the spooling; when the interruption ends, the process resumes. Duration represents how long the practitioner's originary intentionality holds against the ground's continuous provision.
 
 **Pool:** (Spirit × 2) + relevant History bonus + Thread Pool Score (PP-616, PP-625)
 **TN:** 7
@@ -301,11 +263,8 @@ Apply to §2.4 Pulling — Past-Oriented Pulling duration table.
 
 ### Past-Oriented Pulling
 
-**What happens:** The practitioner's intentionality is directed toward the thread's accumulated temporal depth — the history of spoolings that constitute what it has been. During contact, their configuration interacts with the thread at this deeper level, displacing temporal weight. The physical facts are removed. Memories — which are themselves spooled configurations in other beings — remain intact, producing Temporal Disjunction.
 
-**Requirements:** Thread Sensitivity 70+ · Rendering Stability ≤ 60 (substrate must be stressed enough for temporal depth to be accessible — in a pristine world, the temporal weight is too firmly actualised to pull against)
 
-**Foundational-scale Past-Oriented Pulling:** Displacing a Foundational event (the Einhir Catastrophe, a civilisation-ending collapse, a foundational institution's origin) requires all standard prerequisites plus: the Einhir framework (§9.15) — the intentionality required to reach Foundational temporal depth cannot be formed without it. Add +2 Ob surcharge to the recency Ob (Ob 7 recency + 2 = Ob 9 for a generational Foundational event). Rendering Stability consequence ×3 on all outcomes (Success: Rendering Stability −9 minimum; Failure: snap-back Wound + Rendering Stability −6 minimum). This is a near-mythic act — maximum conceivable practitioner achieves ~5% success — but it is mechanically possible. It is a legitimate campaign endpoint: the thing the Einhir could not do and the thing a generation of practitioners might spend a campaign attempting.
 **Pool:** (Spirit × 2) + relevant History bonus + Thread Pool Score (PP-619, PP-625 — TPS÷2 struck; full TPS always; TN+1 already encodes temporal-depth difficulty)
 **TN:** 8 (Binding temporal depth — POP targets past configurations)
 
@@ -326,11 +285,8 @@ Apply to §2.4 Pulling — Past-Oriented Pulling duration table.
 ### Locking — Unable to Become
 
 > **Rendering Stability drain cap (R-58):** Regardless of concurrent active Locks: Rendering Stability drain from Locks cannot exceed −1/round in combat
-or −1/scene in non-combat. Multiple Locks do not stack Rendering Stability drain within a scene.
-Seasonal drift is unaffected (each active Lock contributes independently at Accounting).
 Apply to §3.2 Coherence Reduction / Loc
 
-**What happens:** The practitioner's intentionality is directed toward total actualization — freezing the thread permanently in its current rendered state. During contact, their configuration drives the thread to full actualization. The thread can no longer move between actual and potential. Ein Sof continues to spool, but the thread cannot integrate what the ground provides. It is frozen. Unable to become.
 
 **Requirements:** Thread Sensitivity 50+
 **Pool:** (Spirit × 2) + relevant History bonus + Thread Pool Score (PP-618, PP-625)
@@ -366,9 +322,7 @@ Apply to §3.2 Coherence Reduction / Loc
 | Permanent (never reversed) | Substrate adapts. Rendering Stability drift ceases. Permanent +1 Ob to adjacent operations. This is how Locked Zones form. |
 
 > **Variable Rendering Stability drift (R-63):** Replaces uniform −1 Rendering Stability/season for locked institutions:
-- Static domain (frozen process, unchanging institution): −0 Rendering Stability/season
 - Slow-change domain (seasonal/yearly evolution): −1 Rendering Stability/season
-- Dynamic domain (active contestation, living relationship): −2 Rendering Stability/season
 Game Master determines domain type when Lock is applied.
 
 **Reversing a Lock:** Pulling at Ob = (original practitioner's Thread Sensitivity ÷ 10, round up) − 2, minimum Ob 1. Successful release: Rendering Stability +1 per season the Lock persisted (max +5), as the substrate decompresses.
@@ -377,9 +331,7 @@ Game Master determines domain type when Lock is applied.
 
 ### Dissolution — Unable to Be
 
-**What happens:** The practitioner's intentionality is directed toward the unintelligible pole — driving the thread's intelligible face away entirely. During contact, their configuration interacts with the thread and tears its rendered surface from the constitutive ground. What remains is the ground showing through: a Gap. The thread is unable to be in the rendered world.
 
-**Why Dissolution is acute:** Tearing is immediate and violent. The substrate ruptures. Ein Sof — infinite positive being — erupts through the tear as excess, not void. Monstrous configurations are forced through the rupture into the rendered world, partially intelligible and exceeding integration capacity.
 
 **Requirements:** Thread Sensitivity 50+
 **Pool:** (Spirit × 2) + relevant History bonus + Thread Pool Score (PP-618, PP-625)
@@ -409,15 +361,12 @@ Game Master determines domain type when Lock is applied.
 
 ### Mending — Repairing the Substrate
 
-> **Mending co-movement (P-19):** The Mending epistemic co-movement profile now differentiates by outcome: | Degree | Epistemic Effect | |---|---| | Overwhelming | Strong settling. Observers with Thread Sensitivity 10+ perceive the area as markedly calmer. Non-sensitives notice a distinct easing of tension. | | Success | Settling. Observers with Thread Sensitivity 10+ perceive calming. Non-sensitives may notice subtle easing. | | Partial | Ambiguous. Observers p
 
 > **Correction (R-56):** Healing operations (W-08 and variants) use accelerated Overweave: each healing operation in the same contact window adds +2 Ob (not +1). Sequence: 1st heal Ob 1, 2nd Ob 3, 3rd Ob 5, 4th Ob 7.
 
 > **W-33 note (P-31):** W-33 is effective only for units with CP ≥ 3. A rallied unit with CP ≤ 2 will have an effective combat pool of 0 despite Cohesion restoration — the Cohesion penalty from Cohesion 2 eliminates the entire pool at low CP values. W-33's primary use case is Professional or Elite infantry (CP 3+) that has broken under morale pressure while retaining Strength.
 
-**What happens:** Mending does not work on threads. The practitioner's intentionality is directed toward the substrate itself — the rendered world's capacity to integrate what Ein Sof provides. A Gap is where that capacity has failed. The practitioner Leaps, and during contact their configuration interacts not with a thread but with the absence of one — the place where the substrate should be supporting a thread and is not.
 
-This requires a different intentionality than thread operations. The practitioner is not directing their configuration toward a thread's coherence or potential. They are directing it toward a structural absence, intending restoration of the conditions under which threads can exist. They are repairing the loom, not working a thread.
 
 **Requirements:** Thread Sensitivity 50+ · Target must be a Gap, Shifting Object, or Locked Zone border
 **Pool:** (Spirit × 2) + relevant History bonus + Thread Pool Score (PP-616, PP-625 — Attunement and Focus struck from pool dice; Focus still governs Contact Rounds)
@@ -425,7 +374,6 @@ This requires a different intentionality than thread operations. The practitione
 
 **Design note (PP-616, PP-625):** Mending uses the same pool as all other Thread operations: (Spirit × 2) + History + TPS. The prior Attunement + Focus construction is struck. Spirit is the metaphysical attribute for all Thread contact — this applies whether the operation targets a thread (Weaving, Pulling, Locking) or the substrate's absence (Mending). Focus continues to govern Contact Rounds (duration), not pool dice. Ob table below predates PP-622; canonical Mending Ob: params_threadwork.md §Three-Axis Ob System (Mending Ob = Depth Ob − 1 + age modifier + Breadth + Distance).
 
-**Mending Ob ceiling:** Total Mending Ob cannot exceed 8, regardless of stacked modifiers (threadcut interference per §9.7, Rendering Stability threshold penalties, sequential failure penalties, Wound penalties). The ceiling reflects the substrate's own nature: Mending engages absence, not presence, and the difficulty of engaging absence cannot exceed the difficulty of the most damaged substrate configurations. Individual modifier sources still apply and stack — the ceiling caps the total, not each source.
 
 **Ob by Gap severity:**
 
@@ -449,7 +397,6 @@ This requires a different intentionality than thread operations. The practitione
 
 **Mending co-movement profile:**
 
-*Temporal auto-effect:* Coherence −1. The practitioner engaged with damaged substrate, absorbing temporal dissonance.
 
 *Epistemic auto-effect (by degree):*
 
@@ -475,11 +422,8 @@ No investigation Ob modifiers on Success or Overwhelming — Mending resolves ep
 
 ## 2.5 Collective Operations
 
-When multiple practitioners operate on the same configuration, they Leap together. Each suspends their own rendering. Their configurations interact with each other and with the threads in a lattice of originary intentionality.
 
-This is not coordination in any ordinary sense. The practitioners cannot communicate during contact — communication requires rendering. They share intentionality, set during collective Diagnosis before the Leap. They interact with each other's configurations below the level of consciousness.
 
-**Collective Diagnosis:** Multiple practitioners may Diagnose in the same round as part of collective preparation. This is a shared Game Master exchange, not sequential individual rolls — all practitioners listen to the same description of the target configuration and set their intentionality together.
 
 **Collective Leap procedure:** All practitioners roll their own Leap in the same round (Priority 5). If the Anchor fails: the collective lattice does not form. Helpers who succeeded are in individual contact (their own Focus windows) but pool their dice to no one — each may perform individual operations at their own Ob, without collective bonuses. If the Anchor succeeds but helpers fail: subtract their contributed dice; if remaining pool drops below half the Anchor's solo pool, apply +1 Ob (lattice fracture). If all fail: all take individual Leap failure consequences.
 
@@ -491,19 +435,14 @@ This is not coordination in any ordinary sense. The practitioners cannot communi
 - Helpers cannot Fork; Anchor cannot Fork when acting as Anchor.
 - If a helper's contact drops (rendering reasserts) before the roll: remove their contributed dice. If total pool drops below half the Anchor's solo pool: +1 Ob (the lattice fractures — one configuration reasserted its rendering and disrupted the interaction).
 - Conflicting Beliefs: if a helper's Belief is tangentially conflicting (relevant tension but not direct opposition), their dice cannot chain on 10 — their intentionality is misaligned, limiting coherence. If a helper's Belief **directly opposes** the operation's declared goal, the helper must pass a pre-Leap Belief check (Spirit TN 7 Ob 1) to suppress their opposing intentionality enough to align with the Anchor. Failure: the helper cannot align and drops out before the Leap. Success: participates with non-chaining dice.
-- Stunt in collective operations: Anchor's auto-successes replace rolled dice; helpers' contributed dice do not apply to a Stunt.
 
-**Co-movement scales with participant count.** Multiple configurations interacting simultaneously produces correspondingly significant consequences across all three dimensions.
 
 ---
 
 ## 2.6 Opposing Operations — Contested Intentionality
 
-When two practitioners in contact target the same configuration with opposing intentionalities, their configurations are knotted to the target and transitively to each other (Foundations §12.2). The thread's oscillation is driven in contradictory directions across all three axes (P-01). Neither practitioner is consciously present to manage the interaction — both set intentionality before the Leap.
 
-**What qualifies as opposing:** Weave vs Pull (coherence vs potential). Lock vs Dissolution (frozen actualization vs tearing). Lock vs Pull (frozen vs loosened). Weave vs Dissolution (coherence vs destruction).
 
-**Not opposing:** Weave vs Lock or Pull vs Dissolution (same general direction — compound, not oppose). Any operation vs Mending (Mending targets substrate absence per §2.4; categorically different target). Operations at different scales on the same entity (different configurations — resolve independently; co-movement compounds at the shared site).
 
 ### Opposing Engagement Modifier
 
@@ -532,7 +471,6 @@ Both roll their operation pools against modified Obs.
 | Partial | Failure | **A's Partial resolves.** | A's Partial Rendering Stability cost | Normal Partial. | Standard Failure. |
 | Failure | Failure | **Nothing resolves.** | −1 | Coherence per §3.2. 1 Composure. | Same. |
 
-**Why overwhelmed practitioners do not take degree-table consequences:** Degree-table Failure consequences (snap-back, collapse) are calibrated for operational failure — the interaction with the thread went wrong. In opposing operations, the overwhelmed practitioner was overpowered, not misaligned. The thread did not snap back — it was redirected by the opposing configuration. The consequence is knot strain (§12.2: tension at the knots), not the degree table's Failure entry.
 
 ### Knot Strain
 
@@ -571,7 +509,6 @@ Three or more practitioners with at least two genuinely opposing intentionalitie
 
 ### Combat Timing
 
-Both declare Leap at Priority 5. Declarations (operation type and target) are simultaneous. A practitioner who has declared may withdraw before rolling (forfeiting the round).
 
 
 
@@ -579,20 +516,15 @@ Both declare Leap at Priority 5. Declarations (operation type and target) are si
 
 ## 3.1 What Coherence Measures
 
-Coherence tracks the stability of a practitioner's rendering — their capacity to render the world and themselves as a conscious being within it. Each Leap temporarily surrenders rendering. Each return restores it. But repeated practice of suspending the thing that constitutes your human being makes that thing less stable on return. Coherence measures how much of that stability remains.
 
-Low Coherence is not corruption, seduction, or moral failure. It is what happens when you have repeatedly practiced the absence of your own consciousness from itself. Your rendering comes back each time, but it comes back a little less firmly. The categories it provides — self/other, past/present, human/monstrous, real/unreal — hold a little less tightly. Eventually, they do not hold at all.
 
-This includes the effects previously attributed to dissolution residue use and the former Taint track. Contact with dissolution residue — compressed potential oriented toward the unintelligible ground — produces accelerated Coherence loss because the residue's volatile proximity to the ground intensifies the practitioner's exposure to what lies beyond rendering. The perceptual shift formerly called "epistemic seduction" is Coherence degradation: the categories that structure consciousness dissolving because the practitioner has spent too much time beyond them.
 
 **Range:** 10 (fully coherent) → 0 (rendering crisis).
 **Starting value:** 10 (all practitioners). Non-practitioners do not track Coherence.
 
 ## 3.2 Coherence Reduction
 
-Coherence loss follows the scale principle. At Object and Personal scale, the practitioner's configuration interacts shallowly — the suspension is brief, the below-the-waterline engagement is minimal, and rendering reasserts with negligible destabilisation. At Relational scale and above, the practitioner's configuration engages deeply enough that the suspension leaves a mark on their rendering.
 
-Co-movement still fires on every operation regardless of scale (P-11). The temporal auto-effect exists at all scales — but at Object/Personal, the temporal disturbance manifests in the world (d6 consequences, narrative effects) rather than as personal Coherence loss. The practitioner's own rendering absorbs negligible impact from shallow engagements.
 
 | Source | Coherence Loss |
 |---|---|
@@ -608,18 +540,14 @@ Co-movement still fires on every operation regardless of scale (P-11). The tempo
 | Practitioner Flashback anchoring (Game Master discretion) | −1 |
 | Extended proximity to Structural-scale Gap | −1 per season |
 
-**Campaign pacing:** A practitioner who restricts themselves to Object and Personal scale work can operate indefinitely without Coherence loss. The moment they scale up — and the campaign will pressure them to scale up — degradation begins. Over a 30-session campaign with ~10–15 Relational+ operations, the practitioner loses ~10–15 Coherence. This produces a late-campaign crisis arc if they don't take recovery seasons. This is the Einhir trajectory in miniature: small-scale work is sustainable; ambition and necessity push toward larger scales; the costs accumulate.
 
-**Coherence loss cap per operation:** Regardless of scale, degree table outcomes, combined auto-effects, or bonus costs (FR, residue, Past-Oriented Pulling), a single operation — from Leap through resolution — cannot reduce Coherence by more than 1.
 > **FR surcharge cap exemption (PP-196):** [PROVISIONAL — canon: §1.1 Inseparability, P-01] The Forced Resolution (FR) surcharge (−1 Coherence additional for Lock or Dissolution) is **exempt from the §3.2 per-operation cap.** FR operations are deeper ontological violations than Pull or Weave: Lock drives actuality to total actualization (preventing becoming); Dissolution tears the intelligible face (preventing being). The inseparability principle requires that this greater ontological depth register differently at the personal track, not be flattened by a general cap. Consistent with: Dissolution residue use is already cap-exempt (§3.4). **Revised Coherence costs for FR:**
 - FR Lock or Dissolution at Object/Personal scale: −1 total (FR surcharge only; scale cost = 0, but FR surcharge applies and is not capped).
 - FR Lock or Dissolution at Relational scale: −2 total (−1 scale + −1 FR; cap does not suppress the FR surcharge).
 - FR Lock or Dissolution at Territorial scale: −2 total (same as Relational).
 - FR Lock or Dissolution at Structural scale: −3 total (−2 scale + −1 FR).
 The §3.2 per-operation cap still governs non-FR operations.
- All Coherence costs from a single operation are treated as a single event and capped at −1 total. Multiple operations in a single contact window are each capped independently.
 
-**Interaction with degree tables:** Some operation degree tables list additional Coherence costs (e.g., "Coherence −1" on Partial, "Coherence −2" on Failure). These are outcome costs, separate from the scale-based auto-effect above. They represent the additional destabilisation from an operation going wrong — the snap-back, the misaligned interaction, the violent reassertion of rendering. At Object/Personal scale: ignore degree-table Coherence costs on Partial results (the interaction was too shallow to destabilise rendering even when it went partially wrong). Apply degree-table Coherence costs on Failure (the violent snap-back shakes rendering regardless of scale). At Relational+ scale: apply all degree-table Coherence costs as written.
 
 ## 3.3 Coherence Thresholds
 
@@ -632,7 +560,6 @@ The §3.2 per-operation cap still governs non-FR operations.
 | 1 | Severed | −2D social, −2D Recall. (PP-234) Dissociative episodes once per scene regardless of operations (fire at scene start, not mid-operation). Involuntary perceptual events. All Knots +2 strain per session. +2 Ob on all Thread operations including the Leap (rendering barely holds; suspension is constitutively dangerous). The practitioner's rendering is barely functional. The distinction between self and world, between human and monstrous, between actual and potential, is dissolving. Not because something evil is happening to them. Because they have been outside rendering so many times that rendering no longer holds. |
 | 0 | Rendering Crisis | Campaign event. Reality as commonly rendered is no longer accessible. The practitioner's spooling is destabilised — their organic drawing-from-ground is compromised. They must resolve the crisis narratively: sustained engagement with the world's rendered state, relational anchoring, or withdrawal from practice. If unresolved by season end: Non-Player Character. |
 
-**Game Master protocol — Dissonant entry:** When a practitioner's Coherence drops to 7 (entering Dissonant), the Game Master names this to the player explicitly: "Your Coherence is now 7 — Dissonant. Each operation at Relational+ scale costs −1 Coherence. At this pace, Fragmented is [N] operations away." This is not a mechanical rule; it is a table protocol. The practitioner's rendering is still solid at Dissonant — but the player should make informed decisions about scale from this point forward.
 
 ## 3.4 Dissolution Residue
 
@@ -644,15 +571,11 @@ Dissolution residue is compressed potential oriented toward the unintelligible g
 
 **Coherence cap interaction:** Residue use is a distinct Coherence event from the operation itself and is not subject to the §3.2 cap. At Object or Personal scale (base operation cost = 0): residue use costs −1 Coherence — the only cost of the operation. At Relational+ scale (base operation cost = −1, already capped): the cap absorbs the residue cost — total remains −1. In practice: residue use has a real Coherence cost when the operation would otherwise be free (Object/Personal), and no additional cost when the operation already costs −1 (Relational+). This preserves the philosophical weight — engaging with residue at shallow scale still pushes the practitioner deeper into beyond-rendering states — without stacking costs at the scales where the cap already governs.
 
-**Why residue accelerates Coherence loss:** The residue's proximity to the ground intensifies the practitioner's exposure during contact. They are not just suspending rendering — they are suspending it while in contact with something that pulls toward the unintelligible. Each use pushes them deeper into the beyond-rendering state, and each return leaves rendering less stable.
 
-**There is no "Taint" track.** There is no separate transformation mechanic. There is Coherence, and it degrades. What the former Taint track described — the dissolution of perceptual categories, the softening of moral distinctions, the shift toward perceiving the human/monstrous distinction as a rendering artifact — IS Coherence degradation at low levels. A practitioner at Coherence 2 has not been "corrupted." They have been outside their own consciousness so many times, and so deeply, that the categories their consciousness provides are no longer firm.
 
-**Community Intervention:** At Coherence 4–3, another practitioner may perform corrective Weaving (Ob 3) to stabilise the degraded practitioner's configuration: +1 Coherence per season. Below Coherence 3: requires the degraded practitioner's active cooperation, which their loosened categories make increasingly unlikely — not because they resist, but because they no longer perceive the need. From their perspective, the categories that others are trying to restore are arbitrary rendering artifacts. They are not wrong. They are also not functional.
 
 ## 3.5 Recovery
 
-Coherence does not recover passively. Recovery requires the practitioner's spooling — their organic drawing-from-ground — to reassert itself. This means stepping back from the practice that destabilised rendering.
 
 - **Full season of non-practice (no Thread operations):** +1 Coherence. Spooling reasserts when the practitioner stops suspending it.
 - **A Close Knot voluntarily anchoring through a dedicated Anchoring Scene (Bonds check TN 7, Ob 2):** +1 Coherence. The shared thread of being — the relational spooling — helps stabilise rendering. Costs the Knot +1 strain.
@@ -666,13 +589,11 @@ Coherence does not recover passively. Recovery requires the practitioner's spool
 **Fragmented Fallout (d6):**
 1. You vividly remember a conversation others recall differently
 2. A specific skill-memory requires Memory check Ob 2 to access correctly
-3. Your sense of timing this scene is wrong — you feel you arrived at a different moment
 4. Someone you have not seen recently feels as though you just spoke to them
 5. Something you said this session feels like it was said last session
 6. A Knot's emotional valence briefly reverses
 
 **Fractured Fallout (d6):**
-1. A vivid memory of an event the world no longer contains — you do not know it is orphaned
 2. Your most recent History advancement feels uncertain — borrowed, not learned
 3. A named Knot briefly does not recognise you, or vice versa. Lasts one scene.
 4. You perform an action you do not remember. Game Master describes the gap.
@@ -683,12 +604,10 @@ Coherence does not recover passively. Recovery requires the practitioner's spool
 
 ## 3.7 Rendering Crisis Resolution (PP-194) [PROVISIONAL]
 
-Rendering Crisis (Coherence 0) cannot be resolved by standard recovery (§3.5). Resolution requires a structured campaign arc.
 
 **Minimum conditions:**
 1. Full season withdrawal from Thread practice (no Leap, no Thread operations).
 2. Three Anchoring Scenes with Close Knots (each: Bonds check TN 7, Ob 2; failed scene costs the scene without progress).
-3. Physical stability — no active siege, no ongoing catastrophe in the practitioner's territory.
 
 **Resolution attempt** (at Accounting after conditions met):
 Pool: highest Close Knot's Bonds score + number of successful Anchoring Scenes, TN 7, Ob 3.
@@ -700,9 +619,7 @@ Pool: highest Close Knot's Bonds score + number of successful Anchoring Scenes, 
 | Partial | Coherence → 1 (Severed). Another full-season arc required for further recovery. |
 | Failure | No recovery. Practitioner becomes Non-Player Character at season end. |
 
-Rendering Crisis resolution is not guaranteed. A practitioner who reaches Coherence 0 may not return.
 
-> **Rendering Crisis arc — stability disruption (PP-202):** [PROVISIONAL] If the physical stability prerequisite fails mid-arc (siege begins, territory invaded, active catastrophe), the arc **pauses**, it does not reset. Completed Anchoring Scenes and logged non-practice seasons are retained. The arc resumes when stability is restored. The non-practice requirement extends by disrupted seasons (siege seasons do not count as non-practice even with no Thread ops — environmental Thread load of mass conflict counts against the substrate). If the practitioner performs any Thread op during a disrupted season, the non-practice requirement resets entirely.
 
 
 > **GM guidance — TS 30-31 Rendering Crisis risk (PP-206):** [PROVISIONAL] Before a practitioner with Thread Sensitivity 30 or 31 begins the Rendering Crisis arc (PP-194), the GM must inform the player: Success or Overwhelming results permanently reduce Thread Sensitivity by 1. At TS 30, this reduction yields TS 29 — below the Leap minimum. The practitioner survives the crisis but loses Thread ops permanently. This is intended. Surface this before the arc begins so the player makes an informed choice: attempt resolution (risk losing Thread access) or accept NPC status directly.
@@ -717,17 +634,13 @@ Rendering Crisis resolution is not guaranteed. A practitioner who reaches Cohere
 
 ## 4.1 Core Principle
 
-Every Thread operation produces consequences across all three dimensions simultaneously. The three auto-effects are three descriptions of one event — the same disturbance perceived from three angles after the practitioner returns to rendering.
 
-The practitioner was not consciously present during contact. When they return, the consequences are already in motion. They can perceive what changed (through Thread Sensitivity perception, which is rendering). They cannot trace all consequences to their own actions because they were not there as a conscious agent when those consequences occurred.
 
 ## 4.2 Why the Actual Effect Is Random
 
-The temporal and epistemic auto-effects are consequences the practitioner can make sense of upon returning to rendering — they follow from the intelligible aspect of what happened. The actual d6 is random because it represents consequences of the originary interaction that do not resolve into intelligible patterns. The practitioner's configuration interacted with the threads, and something happened in the actual dimension that their returned rendering cannot trace to any intention or cause. This is structurally inevitable, not a design flaw.
 
 ## 4.3 Auto-Effect Tables
 
-*Revised from current §5.8. All "ThS" references become "Coherence." All "Thread Tension" references become "Rendering Stability" (inverted). Temporal auto-effect Coherence costs revised per §3.2 scale principle: Object/Personal operations produce narrative temporal effects but 0 personal Coherence loss; Relational+ operations produce Coherence loss per the §3.2 table. Epistemic and actual tables unchanged except terminology.*
 
 ## 4.4 History Resonance and Flashback Anchoring
 
@@ -739,10 +652,8 @@ The temporal and epistemic auto-effects are consequences the practitioner can ma
 
 ## 5.1 What Rendering Stability Measures
 
-Rendering Stability (RS) is a world-scale tracker measuring the rendered world's remaining capacity to integrate what Ein Sof provides. As Thread operations strain the substrate, as Gaps persist, as calamities occur, the world's rendering becomes less stable. Weird things happen more frequently. The fabric frays.
 
 **Range:** 100 (fully stable) → 0 (the Rupture).
-**Starting value:** Campaign-dependent. Default: Rendering Stability 60 (the Valorian peninsula's substrate is already strained from the Einhir Catastrophe, the Locked Zones, and 245 years of unaddressed damage).
 
 ## 5.2 Rendering Stability Degradation Sources
 
@@ -769,9 +680,7 @@ Rendering Stability (RS) is a world-scale tracker measuring the rendered world's
 
 > **Rendering Stability threshold cumulation (P-14):** Rendering Stability threshold effects are cumulative. Each lower band includes all effects from higher bands: - **Fractured (39–20)** includes all Fragile effects (spontaneous Shifting Objects, +1 Ob in affected territories) PLUS Fractured-specific effects (spontaneous Gaps, Monstrous Incursion risk, rendering failures for non-practitioners). - **Critical (19–1)** includes all Fragile + Fractured effects PLUS Crit
 
-**Threshold timing:** Rendering Stability threshold effects activate and deactivate at Accounting (season end), not mid-scene. If Rendering Stability crosses a threshold boundary during play — due to a Thread operation, Mending, or other mid-scene change — the new effects do not apply until the following Accounting. Exception: the immediate consequences listed in operation degree tables (e.g., "Shifting Object forms," "Gap opens") resolve immediately as written. Only the persistent threshold-band effects (spontaneous Gaps per season, worldwide +1 Ob, faction Stability checks) are Accounting-gated.
 
-> **Geographic graduation (ED-302):** The threshold effects below are not global. They radiate outward from Askeheim (T15) by node distance on the territory adjacency graph. As RS drops, effects reach further from the wound. The full RS-band × node-distance matrix is defined in `designs/setting/calamity_radiation.md`. The table below describes maximum-severity effects (i.e., effects at Askeheim itself and in territories where the radiation has reached). At RS ≤ 10, a one-time Southernmost Surge escalates effects one band worse within node distance 2 for one season.
 
 | Rendering Stability | State | World Effects |
 |---|---|---|
@@ -786,7 +695,6 @@ Rendering Stability (RS) is a world-scale tracker measuring the rendered world's
 
 ## 5.4 Rendering Stability in Board Game
 
-Rendering Stability replaces Thread Tension on the board game track. Invert all Thread Tension references: where Thread Tension went up, Rendering Stability goes down. Shared loss condition: Rendering Stability reaches 0.
 
 **Rendering Stability is hidden from players by default.** The Investigate Thread order (Intelligence vs Ob 3) reveals the current Rendering Stability value. Overwhelming: also reveals which territories have Gaps. Players know the world is degrading (they see the threshold effects) but do not know the exact number without investigation.
 
@@ -800,11 +708,8 @@ Rendering Stability advances at Accounting (Cascade Phase). Both TTRPG-sourced c
 
 ## 6.1 Ontological Status
 
-Organic beings persist through continuous Ein Sof spooling. A threadcut being does not spool. It maintains itself through continuous Thread work — actively sustaining its own actualization, temporality, and intelligibility at every moment. Where an organic being IS through the ground's continuous provision, a threadcut being IS through its own continuous effort. It radically is without becoming.
 
-In terms of the Leap: organic beings render. A threadcut being's existence IS a permanent Leap — a permanent state of Being beyond ordinary rendering, sustained by continuous originary intentionality directed at self-maintenance. The threadcut being never returns to ordinary rendering because it has no ordinary rendering to return to. This is its paradox and its cost.
 
-> **Gap-severity classification (ED-302):** Threadcut beings are classified by the Gap severity that produced them: **Micro-Gap emergent** (Thread Sensitivity 20–40, hours-to-days duration, non-combat), **Standard Gap emergent** (Thread Sensitivity 50–70, seasons duration, combat-capable), **Catastrophic Gap emergent** (Thread Sensitivity 80+, years-to-indefinite, campaign-level entity). Full classification table and emergence conditions in `designs/setting/calamity_radiation.md`.
 
 ## 6.2 Observer-Dependent Rendering
 
@@ -820,7 +725,6 @@ Each observer perceives a threadcut being at their own rendering ceiling.
 
 ### Rendering Beyond Observer Capacity
 
-A threadcut being may render itself more intensely — making itself more present, more visible, more coherent than any observer's ceiling supports. Solmund did this: his works were ineffable and miraculous because he rendered himself at a level that exceeded what observers could hold.
 
 **Cost:** Each scene of beyond-ceiling rendering: +1 **Rendering Strain** (cumulative). When Rendering Strain equals Health: De-actualisation begins.
 
@@ -828,24 +732,20 @@ The more intensely the being renders itself, the sooner it ceases to be.
 
 ## 6.3 Mechanical Distinctions
 
-- **Past-Oriented Pulling:** Auto-produces a Gap. No temporal thread to pull — no accumulated past, no spooled depth.
 - **Wounds:** Each costs 1 additional point of sustained Thread work rather than conventional Ob penalty.
 - **Coherence track:** Does not apply. Threadcut beings do not render — they have no rendering to destabilise.
 - **External Thread operations:** A threadcut being may direct their originary intentionality toward external threads rather than self-maintenance. No Leap is required — they are already in the originary state that organic practitioners must Leap to reach. Declare operation type and target; roll standard operation pool (Spirit + History + Thread Pool Score) against standard Ob. Cost: each external Thread operation adds +1 Rendering Strain (directing intentionality outward strains the continuous self-maintenance that constitutes the being's existence). A threadcut being performing external operations accelerates their own De-Actualisation. This is the Solmund dilemma: the being capable of Structural intervention faces the choice between acting (and beginning to cease) and withholding (and preserving existence at the cost of inaction).
-- **Diagnosis:** Reveals the temporal paradox. No accumulated past. No natural trajectory. Something held rather than persisting.
 
 ## 6.4 De-Actualisation
 
 When Rendering Strain equals Health, or Wounds reach **Rendering Threshold** (Health ÷ 2), the being can no longer sustain self-rendering.
 
-**Triggers (independent):** Both triggers independently initiate De-Actualisation — whichever is reached first activates the sequence. If both cross simultaneously, the sequence begins once.
 
 **Sequence:**
 - **Round 1:** Intelligible face dissolving. Thread Sensitivity 30+ observers perceive loss of coherence. All operations +2 Ob. May attempt stabilisation: Weaving on itself (standard pool vs Ob = Wounds + Rendering Strain).
 - **Round 2:** Perceivable only by Thread Sensitivity 50+. Operations +4 Ob. Second stabilisation attempt possible.
 - **Round 3+:** Configuration returns to the unintelligible ground. Not death — cessation of self-rendering. Micro-Gap forms, closes within scene. Dissolution residue remains.
 
-**Voluntary cessation:** The being may choose to stop sustaining itself at any time. This is Solmund's path. De-actualisation proceeds without Ob penalties — the being is not struggling but letting go.
 
 ---
 
@@ -857,7 +757,6 @@ When Rendering Strain equals Health, or Wounds reach **Rendering Threshold** (He
 
 Available to any faction with an affiliated Thread Sensitivity 50+ character, or Revolution (via Community Mending).
 
-**Revolution Community Mending prerequisite:** Revolution must have Mandate ≥ 1 to perform Community Mending. At Mandate 0, the community substrate has fractured and Community Mending is unavailable. Note: this creates a late-campaign feedback loop — Rendering Stability degradation reduces Stability, Stability failures reduce Mandate, Mandate 0 blocks Community Mending, Rendering Stability continues falling. The Revolution's Thread contribution fails precisely when the world needs it most. (Cross-reference: Community Weaving constraint defined in batch_d_designs.md §G-049.)
 
 | Order | Roll | Effect |
 |---|---|---|
@@ -883,26 +782,18 @@ Cards 16–18 added:
 
 ### Lock Chronic Drift
 
-Territories with Locked configurations: Rendering Stability −1/season at Accounting. Shown on territory status card. Clearing requires Pull or Weave order targeting the Lock.
 
 ### Rendering Stability Track
 
 Replaces Thread Tension track on board. Runs 100→0. Hidden by default (Investigate Thread reveals). Shared loss at 0.
 
 ## 7.2 Hybrid Mode
-> **Coherence initialization — BG to Hybrid (PP-200):** [PROVISIONAL — canon: Amendment 01 §3] Coherence starts at 10 for all organic practitioners (Amendment 01: Coherence measures layer 2 integrity, which is fully intact before any Leap). In Board Game mode, Coherence is not tracked (practitioners are abstracted as faction assets; no Leaps occur). When a campaign transitions to Hybrid mode and a PC practitioner enters their first Personal Phase: **Coherence = 10** (no Leaps have occurred in BG mode; layer 2 is intact). After the first Personal Phase, Coherence is tracked explicitly and carries forward between all subsequent Personal Phases. If the campaign has had prior Personal Phases (e.g., after a previous Hybrid activation), use the practitioner's last recorded Coherence value. If no prior value exists: Coherence = 10. GMs should note each PC practitioner's Coherence on the Hybrid tracking sheet at the end of every Personal Phase.
-
-> **Hybrid Coherence pacing guidance (PP-207):** [PROVISIONAL] Design intent for sustainable Hybrid campaign pacing: a practitioner who leads Thread orders should average **one Personal Phase Relational+ operation and one Strategic Phase leadership declaration per season** to reach Rendering Crisis at approximately session 10 (the intended late-campaign arc). Two Personal Phase Relational+ ops per session combined with two Strategic Phase declarations per session produces Rendering Crisis by session 3-5, which destroys the practitioner before the campaign develops. GMs should treat two Strategic Phase declarations per session as a high-stakes deviation requiring narrative justification, not routine play.
 
 
 
-- **Mending:** Personal Phase = full TTRPG rules. Strategic Phase = Mend order. Both count toward Rendering Stability.
-- **Coherence:** Tracked per Player Character practitioner during Personal Phase. Strategic Phase Thread orders: −1 Coherence only if a Player Character practitioner narratively leads the operation.
+
 > **Hybrid Coherence declaration rule (PP-198):** [PROVISIONAL — canon: Amendment 01 §2, §3] Coherence cost in Hybrid Strategic Phase is paid by the Player Character who **declares leadership at Phase 1 of the Cascade Phase** (committing to have performed the Leap for that order). This declaration is binary and mechanical — it is not a narrative judgment. The declaring PC's layer 2 was suspended for that order; therefore their Coherence decrements. If no PC declares leadership at Phase 1: no Coherence cost applies to any PC for that order (the order was executed by Non-Player Character practitioners). Multiple PCs cannot co-declare leadership for a single order; only the declared PC pays. Replace all instances of "narratively leads" in Hybrid Coherence rules with "declared leadership at Phase 1 of Cascade Phase."
- Leadership is declared at the start of Cascade Phase — one Player Character per order. If no Player Character declares leadership, no Coherence cost is paid (the order was Non-Player Character-led). Multiple PCs cannot co-lead a single order; the leading Player Character pays the full Coherence cost alone.
-- **Lock chronic effects:** TTRPG Lock registered on territory card at Cascade Phase. Drift begins next Accounting.
 - **Rendering Stability changes:** Both Personal and Strategic Phase changes applied at Accounting. Seasonal cap: ±10 net (the cap applies to the net Rendering Stability change after all sources — positive and negative — are resolved at Accounting).
-- **Cross-phase opposing operations:** If a TTRPG Thread operation (Personal Phase) and a board game Thread order (Strategic Phase) target the same configuration with opposing intentionalities, flag at Personal Phase declaration. Both are held and resolved simultaneously at Cascade Phase using the opposing operations procedure (§9.13). The TTRPG practitioner's roll from Personal Phase stands as their input; the board game order roll is made at Cascade Phase.
 
 > **Hybrid co-declaration tie-break (PP-205):** [PROVISIONAL] If two or more Player Characters simultaneously declare leadership for the same Strategic Phase Thread order at Phase 1 of the Cascade Phase, the declaration resolves as follows: (1) The PC with the highest Thread Sensitivity declares. (2) If Thread Sensitivity is tied: the PC who declared first at the table (in real-world turn order, not game priority order) declares. (3) The non-declaring PC's declaration is void; they pay no Coherence cost for that order. This ruling applies only to simultaneous declarations. If PCs choose to negotiate among themselves before Phase 1 closes, that negotiation determines the declarer with no tie-break needed.
 
@@ -945,8 +836,6 @@ Replaces Thread Tension track on board. Runs 100→0. Hidden by default (Investi
 - Political axes, mass combat, siege
 - Histories, Beliefs, Inspirations
 - Circles, Resources
-- Clocks (Theocracy Counter, Institutional Pressure) — unchanged. Rendering Stability replaces Thread Tension as the third clock.
-- Knot mechanics — strain sources consolidated but mechanical structure unchanged
 
 ## 8.3 Implementation Sequence
 
@@ -964,4 +853,3 @@ Replaces Thread Tension track on board. Runs 100→0. Hidden by default (Investi
 | 10 | Solmund rename + AG→AS + Church rename (all files) | Haiku |
 | 11 | Canon guard pass on complete redesign | Sonnet |
 
-> **Opposing simultaneous ops (P-24 → §2.6, PP-632):** Full Contested Intentionality procedure defined in §2.6. Supersedes this inline note. See §2.6 for resolution table, knot strain, co-movement decomposition, N-way lattice collapse, Mending immunity, and cross-mode rules.
