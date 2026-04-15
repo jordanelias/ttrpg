@@ -40,3 +40,6 @@ blockers: []
 2. Update clock_registry_v30.md (17 safe changes from staleness report)
 3. Run ED-538 and ED-539 compound simulations
 4. Write 20-30 Zoom In triggers for videogame (ED-545)
+
+## ADDITIONAL COMMIT
+- designs/audit/valoria_how_to_play.md — complete campaign guide
