@@ -2033,3 +2033,9 @@ patches:
   description: "Accounting steps 4c (Accord checks), 4d (Strain update), 4e (Battle consequence accounting) added to params_board_game.md Phase 5 Seasonal Accounting."
   affects: [references/params_board_game.md]
   status: applied
+- id: PP-658
+  date: 2026-04-14
+  severity: P1
+  description: "Faction Layer ↔ Peninsular Strain integration. Occupation → Accord resolution (3-season transfer → Accord 1, treaty cession → Accord 2, recapture → restored). Treaty types for effective hegemony defined (Peace/Alliance/Capitulation/Tributary count; Truce/Commercial don't). Parliament Strain interaction documented. Accounting sequence unified (Steps 4c-4e + 11.5). Institutional Consolidation → Accord +1."
+  affects: [designs/board_game/faction_layer_v30.md, references/propagation_map.md]
+  status: applied

@@ -583,3 +583,11 @@ DESIGN GAP 2: Guild Favour restoration mechanic — no upward movement source do
 | tc_political_redesign_v30.md §3 | params_board_game.md political pool | PENDING |
 | peninsular_strain_v1.md §7b | faction_layer_v30.md §2 Occupation | Harmonization added |
 | peninsular_strain_v1.md §7c | tc_political_redesign_v30.md §2 TC 0-100 | Harmonization added |
+## PP-658 Faction Layer ↔ Peninsular Strain Integration (2026-04-14)
+| PP | Source | Target | Status |
+|---|---|---|---|
+| PP-658 | peninsular_strain_v1.md §2 | faction_layer_v30.md §2.3 (Occupation Accord) | DONE |
+| PP-658 | peninsular_strain_v1.md §6.1 | faction_layer_v30.md §3.4 (Treaty hegemony types) | DONE |
+| PP-658 | peninsular_strain_v1.md §4 | faction_layer_v30.md §5.6b (Parliament Strain) | DONE |
+| PP-658 | peninsular_strain_v1.md §7 | faction_layer_v30.md §7 (Accounting sequence) | DONE |
+| PP-658 | peninsular_strain_v1.md §2.3 | faction_layer_v30.md §1.3 (Consolidation Accord) | DONE |

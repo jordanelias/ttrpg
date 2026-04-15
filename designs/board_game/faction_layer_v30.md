@@ -3,7 +3,7 @@
 <!-- PP-TBD series — awaiting patch number assignment -->
 <!-- Supersedes: PP-403 (Failed DA Stability Cost — REPEALED except §Suppress exception) -->
 <!-- Extends: PP-512–514/523 (Crown Treaty), ED-334/335 (Officer Capture), PP-500 (Political Vacuum) -->
-<!-- Integrates with: Phase 4 Priority-4 Social actions; Phase 5 Accounting steps 1–13 -->
+<!-- Integrates with: Phase 4 Priority-4 Social actions; Phase 5 Accounting steps 1–13; peninsular_strain_v1.md (Accord, Strain, battle consequences) -->
 <!-- Status: PROPOSAL — draft for approval. Do not push until patch numbers assigned. -->
 <!-- Date: 2026-04-14 -->
 
@@ -81,6 +81,14 @@ Crown Treaty (PP-512–514/523) has its own degree effects per victory_v30.md §
 
 **Treaty breach:** Breaching faction: Mandate −2, Stability −1, all co-signatories gain Casus Belli (§3.5). Faction at Stability 1 facing elimination: Mandate cost waived (survival exception); Stability and CB costs still apply.
 
+**Accord on treaty-based control transfer (peninsular_strain_v1.md §2.3):**
+- Territory ceded via Truce or Peace: Accord set to 2 (diplomatic legitimacy).
+- Territory ceded via Capitulation: Accord set to 1 (population views cession as humiliation, resists new ruler).
+- Territory ceded via Tributary: Accord set to 2 (institutional continuity maintained).
+
+**Treaty types and effective hegemony (peninsular_strain_v1.md §6.1):**
+Treaties that count toward "effective hegemony" for universal victory: Peace, Alliance, Capitulation, Tributary (these represent genuine subordination). Truce and Commercial treaty do NOT count (temporary/economic only, no political submission).
+
 ---
 
 #### Trigger 3 — Antagonistic Parliamentary Vote
@@ -140,7 +148,7 @@ Three-condition gate. ALL three must be met simultaneously.
 | Mutual peace treaty | Both parties Stability ≥ 2 | +1 |
 | Recapture own occupied territory | Military_advance Success | +1 |
 | Rebuttal roll Overwhelming (Parliament) | See §5.5 | +1 |
-| Institutional consolidation | No Trigger 1–5 fired against this faction this season at Accounting | +1 |
+| Institutional consolidation | No Trigger 1–5 fired against this faction this season at Accounting | +1 (also: Accord +1 in one territory at controller choice, cap 2 — stable governance builds trust) |
 | Church Absolution (Church unique action) | Target Stability ≤ 2; costs Church Mandate −1 | +1 to target; Church Influence +1 |
 | Löwenritter public endorsement | Löwenritter Stability ≥ 3, Military ≥ 4 | +1 to target; Löwenritter Mandate +1 |
 
@@ -203,6 +211,14 @@ Ob for military_advance = 2 + (defending territory's Fort level).
 | Wealth | −1/season | 0 (extraction inefficient) |
 | Military | No recruitment from territory | Garrison cost: −1 pool per occupied territory |
 | Stability | See Trigger 1 | — |
+| Accord | Frozen at pre-Occupation value (population loyalty suspended during military contest) | N/A (occupier has no Accord — not yet the controller) |
+
+**Accord on Occupation resolution (peninsular_strain_v1.md §2):**
+- Occupation → automatic control transfer (3 seasons): Accord set to 1 (Resistant). Population endured 3 seasons of military occupation — they do not welcome the new ruler.
+- Occupation → treaty cession: Accord set to 2 (diplomatic transfer carries legitimacy).
+- Occupation → Overwhelming military recapture by displaced faction: Accord restored to pre-Occupation value (population rallies behind liberator).
+- Occupation → Success military recapture: Accord set to max(pre-Occupation − 1, 1) (liberation is welcome but the territory suffered).
+- Church Seizure overriding Occupation (§2.7): Accord per Church Seizure formula (PP-648).
 
 ### §2.4 Occupation Duration and Control Transfer
 
@@ -391,7 +407,13 @@ The targeted faction may Rebuttal any Censure or Outlawry vote:
 
 ### §5.6 TC Parliament Interaction
 
-Parliamentary actions do NOT directly affect TC. TC changes only through the named TC Accounting formula (Passive, Piety Yield, Assert, Suppress, Hafenmark Structural Suppression). Parliament can indirectly weaken Church (Censure, Embargo) reducing their effective Mandate for Suppress resistance rolls. It cannot directly suppress TC.
+Parliamentary actions do NOT directly affect TC.
+
+### §5.6b Peninsular Strain Parliament Interaction
+
+Parliamentary Censure, Embargo, Blockade, and Outlawry reduce target Stability. If Stability drops to ≤ 2, Accord −1 in all territories controlled by that faction (peninsular_strain_v1.md §2.4). Combined Embargo+Blockade (−1 Stability/season ongoing) will erode Accord progressively. Parliament is a legitimacy weapon: sustained institutional pressure degrades governance without triggering battle consequences (no RS cost, no IP cost, no Strain).
+
+Parliamentary vote to lift an Embargo/Blockade: Strain −1 (diplomatic resolution per peninsular_strain_v1.md §4.2). TC changes only through the named TC Accounting formula (Passive, Piety Yield, Assert, Suppress, Hafenmark Structural Suppression). Parliament can indirectly weaken Church (Censure, Embargo) reducing their effective Mandate for Suppress resistance rolls. It cannot directly suppress TC.
 
 ### §5.7 Wealth Zero Consequence
 
@@ -489,9 +511,21 @@ PHASE 5 — SEASONAL ACCOUNTING (13 steps)
   Step 10:  Warden Cooperation check
   Step 10b: Torben/Elske Loyalty events
   Step 11:  [DISSOLVED — Hollow Victory. Retained for numbering continuity]
-  Step 11.5:[NEW] Occupation duration check:
+  Step 4c: [PENINSULAR STRAIN] Accord checks:
+             → Accord 1 without garrison: Accord → 0
+             → Accord 0: Revolt (Military vs Ob 2 or retreat; Uncontrolled; Strain +1)
+             → Passive normalisation: garrison + no hostile action 2 seasons: Accord +1 (cap 2)
+  Step 4d: [PENINSULAR STRAIN] Peninsular Strain update:
+             → No inter-faction battles AND no Revolts: Strain −1 (min 0)
+             → Diplomatic resolution (Treaty, Pledge honoured): Strain −1 (max 1/season)
+             → Apply Strain threshold effects
+  Step 4e: [PENINSULAR STRAIN] Battle consequence accounting:
+             → IP +2 if inter-faction battle this season
+             → RS adjustments from battles already applied during Phase 4
+  [Steps 5–11 unchanged]
+  Step 11.5:[FACTION LAYER] Occupation duration check:
              → Any territory in Occupation for 3rd consecutive season: control transfer fires
-             → Trigger 1 (formal transfer) applies
+             → Trigger 1 (formal transfer) applies; Accord set to 1 (3-season occupation)
              → Institutional Consolidation check: any faction with no Trigger 1–5 this season: Stability +1
   Step 12:  Victory condition check (2 consecutive Accounting)
   Step 13:  Season marker advances → Winter: Year-End Accounting
