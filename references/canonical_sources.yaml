@@ -173,3 +173,25 @@ systems:
     canonical_sha__references__arc_register_md: "d6c7635fc67b02231e7241fced23bc13330e4f66"
     params: null
     design_doc: null
+
+  faction_layer:
+    status: active
+    canonical: designs/board_game/faction_layer_v30.md
+    canonical_sha__designs__board_game__faction_layer_v30_md: "pending"
+    params: references/params_factions.md
+    design_doc: designs/board_game/faction_layer_v30.md
+    infill_doc: designs/board_game/faction_layer_v30_infill.md
+
+  military_layer:
+    status: active
+    canonical: designs/systems/military_layer_v30.md
+    canonical_sha__designs__systems__military_layer_v30_md: "pending"
+    params: references/params_board_game.md
+    design_doc: designs/systems/military_layer_v30.md
+
+  tc_political:
+    status: active
+    canonical: designs/systems/tc_political_redesign_v30.md
+    canonical_sha__designs__systems__tc_political_redesign_v30_md: "pending"
+    params: references/params_board_game.md
+    design_doc: designs/systems/tc_political_redesign_v30.md
