@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 543
+# next_id: 548
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Index: canon/editorial_ledger_index.md
 # Last updated: 2026-04-14
@@ -60,3 +60,38 @@ editorial_decisions:
     status: open
     severity: P2
     affects: [designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-543
+    date: 2026-04-15
+    description: "clock_registry_v30.md has 23 stale items."
+    status: open
+    severity: P1
+    affects: [designs/systems/clock_registry_v30.md]
+
+  - id: ED-544
+    date: 2026-04-15
+    description: "P-03 videogame rendering model undefined."
+    status: open
+    severity: P2
+    affects: []
+
+  - id: ED-545
+    date: 2026-04-15
+    description: "Only 5 Zoom In triggers for 120+ arcs."
+    status: open
+    severity: P1
+    affects: [designs/hybrid/scale_transitions_v30.md]
+
+  - id: ED-546
+    date: 2026-04-15
+    description: "RM has no BG mode mechanical actor."
+    status: open
+    severity: P2
+    affects: [designs/board_game/board_game_v30.md]
+
+  - id: ED-547
+    date: 2026-04-15
+    description: "Fieldwork no resource cost for extended investigation."
+    status: open
+    severity: P3
+    affects: [designs/fieldwork/fieldwork_v30.md]
