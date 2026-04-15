@@ -1928,3 +1928,108 @@ patches:
   severity: P2
   description: "Hybrid Accord Domain Echo §5.5. Accounting steps 4c/4d/4e."
   affects: [designs/hybrid/scale_transitions_v30.md, references/params_board_game.md]
+
+- id: PP-643
+  date: 2026-04-14
+  severity: P1
+  description: "TCV revaluation: Himmelenger 3→5, Gransol 4→3. Total 30→31. Starting TCV: Crown 12, Hafenmark 6, Church 5, Varfell 6."
+  affects: [designs/board_game/victory_v30.md, references/params_board_game.md]
+  status: applied
+
+- id: PP-644
+  date: 2026-04-14
+  severity: P1
+  description: "Universal Peninsular Sovereignty victory condition: all 15 territories at Accord ≥ 2, Strain ≤ 6, held 2 consecutive Accountings. Faction-specific conditions retained as alternates."
+  affects: [designs/board_game/peninsular_strain_v1.md, designs/board_game/victory_v30.md, references/params_board_game.md]
+  status: applied
+
+- id: PP-645
+  date: 2026-04-14
+  severity: P1
+  description: "Accord per-territory attribute (0–3). Modifies effective Prosperity. Accord ≥ 2 required for TCV contribution. Military conquest → Accord 1. Non-military acquisition → Accord 2+. Starting values: capitals 3, home territories 2."
+  affects: [designs/board_game/peninsular_strain_v1.md, references/params_board_game.md]
+  status: applied
+
+- id: PP-646
+  date: 2026-04-14
+  severity: P1
+  description: "Peninsular Strain counter (0–10). Advances from inter-faction battles (+1/season), faction eliminations (+2), revolts (+1). 5 threshold tiers (Peace → Collapse). Decays −1/peaceful season."
+  affects: [designs/board_game/peninsular_strain_v1.md, references/params_board_game.md]
+  status: applied
+
+- id: PP-647
+  date: 2026-04-14
+  severity: P1
+  description: "Battle consequences: RS −1 per battle on Valorian soil (RS −2 Campaign/War scale). IP +2 per season with inter-faction battle. Applies to all battles including Popular Uprisings and Altonian Vanguard (RS only). Covert and ungarrisoned Seizure exempt."
+  affects: [designs/board_game/peninsular_strain_v1.md, references/params_board_game.md, designs/mass_combat/mass_battle_v30.md]
+  status: applied
+
+- id: PP-648
+  date: 2026-04-14
+  severity: P1
+  description: "Church Graduated Seizure Accord formula revised. Success → max(floor(PT/2)+1, 2) guaranteeing ≥ 2. Overwhelming → floor(PT/2)+2 max 3. Seizure is categorically better than military conquest for Accord."
+  affects: [designs/board_game/peninsular_strain_v1.md, designs/board_game/victory_v30.md]
+  status: applied
+
+- id: PP-649
+  date: 2026-04-14
+  severity: P2
+  description: "Hafenmark Dynastic Proclamation (Diplomat card). Senator Outward equivalent for territory acquisition via divine-right claim. Pool: Influence. Ob: floor(target Stability/2)+1. Accord 2 on success. Interacts with Diplomatic Token (−1 Ob), Standing, Open Pledge."
+  affects: [designs/board_game/peninsular_strain_v1.md, references/params_board_game.md, designs/systems/npc_behavior_v30.md]
+  status: applied
+
+- id: PP-650
+  date: 2026-04-14
+  severity: P2
+  description: "Varfell Cultural Reformation (Colonist card). Territory acquisition via cultural transformation. Pool: Influence + floor(VTM/2). Ob: PT+1. Prerequisite: VTM ≥ 2, target PT ≤ 3. Accord 2 on success. PT −1 on success."
+  affects: [designs/board_game/peninsular_strain_v1.md, references/params_board_game.md, designs/systems/npc_behavior_v30.md]
+  status: applied
+
+- id: PP-651
+  date: 2026-04-14
+  severity: P2
+  description: "Hafenmark Parliamentary Sovereignty struck. Dynastic Assertion promoted to primary victory path. Baralta identity is divine-right claimant, not constitutional reformer."
+  affects: [designs/board_game/victory_v30.md]
+  status: applied
+
+- id: PP-652
+  date: 2026-04-14
+  severity: P2
+  description: "Starting PT values per territory proposed. T9 Himmelenger 5, T6 Stillhelm 1, T13 Oastad 1, T4/T11/T12 at 2 (Varfell-area old Einhir traditions), remainder at 3."
+  affects: [designs/board_game/peninsular_strain_v1.md, references/params_board_game.md]
+  status: provisional
+
+- id: PP-653
+  date: 2026-04-14
+  severity: P2
+  description: "Löwenritter Accord adaptation: Martial Governance (Military pool Govern variant, Ob +1 over standard, cap Accord 2). Strain exemption for first 2 seasons post-coup."
+  affects: [designs/board_game/peninsular_strain_v1.md]
+  status: applied
+
+- id: PP-654
+  date: 2026-04-14
+  severity: P2
+  description: "Peninsular Partition co-victory: both factions collectively control 15 territories, each TCV ≥ 10, Accord ≥ 2, no inter-faction battle 4 seasons, Strain ≤ 6, both Mandate ≥ 3."
+  affects: [designs/board_game/peninsular_strain_v1.md, designs/board_game/victory_v30.md, references/params_board_game.md]
+  status: applied
+
+- id: PP-655
+  date: 2026-04-14
+  severity: P2
+  description: "NPC priority trees updated for Accord-aware governance. All 4 playable faction trees modified. Hafenmark NPC uses Dynastic Proclamation at Priority 3b. Varfell NPC uses Cultural Reformation at Priority 4b. Template §8.1 includes Accord-aware governance note."
+  affects: [designs/systems/npc_behavior_v30.md]
+  status: applied
+
+- id: PP-656
+  date: 2026-04-14
+  severity: P2
+  description: "Hybrid Accord Domain Echo (§5.5 in scale_transitions_v30.md). Personal scenes produce ±1 Accord per Zoom In. Queued to Accounting step 4c."
+  affects: [designs/hybrid/scale_transitions_v30.md]
+  status: applied
+
+- id: PP-657
+  date: 2026-04-14
+  severity: P2
+  description: "Accounting steps 4c (Accord checks), 4d (Strain update), 4e (Battle consequence accounting) added to params_board_game.md Phase 5 Seasonal Accounting."
+  affects: [references/params_board_game.md]
+  status: applied

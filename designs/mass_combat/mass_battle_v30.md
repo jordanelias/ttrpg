@@ -505,6 +505,13 @@ Resource cost. Thread effects on units (over-actualisation, Locks) persist
 across battle boundaries unless cleared. *[EDGE-08]*
 
 **Battle outcome → faction consequences:** *[FACTION-P2-02 — proposed, EDITORIAL]*
+**Battle outcome → peninsular consequences (PP-647, peninsular_strain_v1.md §3):**
+- Each Battle resolved on Valorian soil: RS −1 (Campaign/War scale: RS −2). Immediate.
+- Each season with inter-faction battle: IP +2 (checked at Accounting step 4e).
+- Each season with inter-faction battle: Peninsular Strain +1 (checked at Accounting step 4d).
+- Popular Uprising (Accord 0 territory): RS −1. Does NOT trigger IP +2 or Strain +1 (not inter-faction).
+- Altonian Vanguard battle: RS −1. Does NOT trigger IP +2 (Altonia's own operation) or Strain +1.
+- Territory conquered by military victory: Accord set to 1 (peninsular_strain_v1.md §2.4).
 - Unit destroyed: faction Military −1 (subject to ±2/season cap)
 - Battle lost (defending force routed): Stability check Ob 1
 - Campaign-scale defeat: Stability check Ob 2, Mandate −1
@@ -617,6 +624,8 @@ Net successes = damage dealt to opposing units.
 | Attacker net ≥ Defender net + 2 | Attacker wins | Territory captured; Defender Military −1 |
 | Margin ≤ 1 either direction | Partial | No territory change; Attacker Stability −1 (commitment cost) |
 | Defender net ≥ Attacker net + 2 | Defender wins | No territory change; Attacker Military −1 |
+
+**Accord consequence (PP-645):** Territory gained via BG Battle: Accord set to 1 (Resistant). Defender loses Accord −1 in defended territory (war came to their home). See peninsular_strain_v1.md §2.4.
 
 Partial reflects a costly inconclusive engagement — forces committed, ground unchanged.
 *[PP-195 — confirmed: margin ≤1 = Partial; Attacker Stability −1]*

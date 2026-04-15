@@ -549,3 +549,26 @@ Require reads of: params_board_game.md §Coup Counter, threadwork_redesign_v25.m
 ### Design gaps surfaced (require Jordan decision)
 DESIGN GAP 1: PI per-action contribution amounts — not specified in any source. Needs table in params_board_game.md.
 DESIGN GAP 2: Guild Favour restoration mechanic — no upward movement source documented. Needs design decision.
+
+## PP-643–657 Peninsular Strain System (2026-04-14)
+| PP | Source | Target | Status |
+|---|---|---|---|
+| PP-643 | peninsular_strain_v1.md §1 | victory_v30.md §1 TCV table | DONE |
+| PP-643 | peninsular_strain_v1.md §1 | params_board_game.md Starting TCV | DONE |
+| PP-644 | peninsular_strain_v1.md §6 | victory_v30.md §0 | DONE |
+| PP-644 | peninsular_strain_v1.md §6 | params_board_game.md Victory summary | DONE |
+| PP-645 | peninsular_strain_v1.md §2 | params_board_game.md Accord table | DONE |
+| PP-646 | peninsular_strain_v1.md §4 | params_board_game.md Strain thresholds | DONE |
+| PP-647 | peninsular_strain_v1.md §3 | params_board_game.md battle consequences | DONE |
+| PP-647 | peninsular_strain_v1.md §3 | mass_battle_v30.md faction consequences | DONE |
+| PP-648 | peninsular_strain_v1.md §5.2 | victory_v30.md §3.2 Church Seizure | DONE |
+| PP-649 | peninsular_strain_v1.md §5.3 | params_board_game.md Ob reference | DONE |
+| PP-650 | peninsular_strain_v1.md §5.4 | params_board_game.md Ob reference | DONE |
+| PP-651 | peninsular_strain_v1.md | victory_v30.md §3.3 | DONE |
+| PP-652 | peninsular_strain_v1.md §2.2 | params_board_game.md Starting PT | DONE (provisional) |
+| PP-653 | peninsular_strain_v1.md §2.6 | params_board_game.md Ob reference | DONE |
+| PP-654 | peninsular_strain_v1.md §6.3 | victory_v30.md §0.1 | DONE |
+| PP-654 | peninsular_strain_v1.md §6.3 | params_board_game.md co-victory | DONE |
+| PP-655 | peninsular_strain_v1.md §5 | npc_behavior_v30.md §8 | DONE |
+| PP-656 | peninsular_strain_v1.md | scale_transitions_v30.md §5.5 | DONE |
+| PP-657 | peninsular_strain_v1.md §7 | params_board_game.md Accounting 4c-4e | DONE |
