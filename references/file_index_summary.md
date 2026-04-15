@@ -4,7 +4,7 @@
 
 ## Status
 - Compilation: ALL DEPRECATED (design docs canonical)
-- Propagation-pending: 13 items (batch_ad_resolutions, hybrid_gaps_v30, succession_mechanic, ttrpg/batch_*, lir_ff_impact)
+- Propagation-pending: 13 items (peninsular_strain batch added 2026-04-14 — P1 complete, P2 propagation to npc/hybrid done) (batch_ad_resolutions, hybrid_gaps_v30, succession_mechanic, ttrpg/batch_*, lir_ff_impact)
 - Known stale sync gaps: 0
 
 ## Canonical Design Docs (current)
@@ -15,6 +15,7 @@ contest: designs/contest/social_contest_v30.md
 threadwork: designs/ttrpg/threadwork_v30.md
 hybrid: designs/hybrid/scale_transitions_v30.md
 victory: designs/board_game/victory_v30.md
+peninsular_strain: designs/board_game/peninsular_strain_v1.md
 geography: designs/setting/geography_v30.md
 fieldwork: designs/fieldwork/fieldwork_v30.md
 npc_behavior: designs/systems/npc_behavior_v30.md
