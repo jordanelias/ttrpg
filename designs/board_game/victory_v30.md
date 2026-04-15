@@ -22,6 +22,71 @@ Two simultaneous contests: who governs the peninsula AND whether it survives. Ch
 
 ---
 
+## 0. Universal Victory Condition — Peninsular Sovereignty
+
+**All factions share this victory condition.** Faction-specific conditions in §3 below are retained as alternate (easier) paths.
+
+All conditions simultaneous at Accounting, held for 2 consecutive Accountings:
+
+| Condition | Threshold |
+|-----------|-----------|
+| Territory control | All 15 playable territories (T1–T14, T17) — directly or via effective hegemony |
+| Accord | ≥ 2 in all directly-controlled territories |
+| Peninsular Strain | ≤ 6 |
+
+**Effective hegemony** counts rival-held territories if the rival is: Treaty-bound (Crown Treaty or equivalent), Submitted (Stability 0, formal submission), or institutionally dominated (rival Mandate ≤ 1 AND hegemon Mandate ≥ 5).
+
+**Full rules:** See designs/board_game/peninsular_strain_v1.md §6.
+
+### 0.1 Peninsular Partition (Co-Victory, multiplayer)
+
+All conditions simultaneous at Accounting, held for 2 consecutive Accountings:
+
+| Condition | Threshold |
+|-----------|-----------|
+| Collective territory control | Both factions collectively control all 15 playable territories (directly or via hegemony) |
+| Individual minimum | Each faction TCV ≥ 10 |
+| Accord | ≥ 2 in all territories controlled by each faction |
+| Non-aggression | No Battle between the two factions in preceding 4 seasons |
+| Peninsular Strain | ≤ 6 |
+| Institutional standing | Both factions Mandate ≥ 3 |
+
+**Incompatible pairings:** Crown + Church, Crown + Löwenritter, Church + Varfell, Church + RM.
+
+Existing co-victory pairings in §4 below are retained as alternate co-victories with their existing thresholds.
+
+### 0.2 Accord System
+
+Per-territory attribute (0–3). Modifies effective Prosperity. See peninsular_strain_v1.md §2 for full rules.
+- Accord 3 (Aligned): full Prosperity, defender +1D.
+- Accord 2 (Compliant): full Prosperity, normal.
+- Accord 1 (Resistant): no Prosperity contribution, Govern Ob +1, garrison required.
+- Accord 0 (Revolt): territory becomes Uncontrolled.
+- **TCV counts only at Accord ≥ 2.**
+- Military conquest → Accord 1. Faction-specific non-military acquisition → Accord 2+.
+
+### 0.3 Peninsular Strain Counter
+
+Global track (0–10). Advances from inter-faction battles, faction eliminations, revolts. See peninsular_strain_v1.md §4.
+
+### 0.4 Battle Consequences
+
+Each Battle on Valorian soil: RS −1 (Campaign/War scale: RS −2). Each season with inter-faction battle: IP +2, Strain +1. See peninsular_strain_v1.md §3.
+
+### 0.5 Faction Acquisition Toolkits
+
+| Faction | Non-Military Acquisition | Card Type | Accord on Success |
+|---------|------------------------|-----------|-------------------|
+| Crown | Formal Crown Treaty | Senator | 2 (diplomatic transfer) |
+| Church | Graduated Seizure | Special/Unique | max(floor(PT/2)+1, 2) |
+| Hafenmark | Dynastic Proclamation | Diplomat | 2 |
+| Varfell | Cultural Reformation | Colonist | 2 |
+| Löwenritter | Martial Governance | Legionary (Govern variant) | +1 per success (cap 2) |
+
+Full specifications: peninsular_strain_v1.md §5.
+
+---
+
 ## 1. Territory Consolidation Values (TCV)
 
 All territory numbers match geography_design.md canonical table.
@@ -64,7 +129,9 @@ Key rules:
 
 ---
 
-## 3. Victory Conditions — All Factions
+## 3. Faction-Specific Victory Conditions — Alternate Paths
+
+These are retained as alternate (easier) victory conditions alongside the universal Peninsular Sovereignty condition (§0). A faction may win by achieving EITHER §0 OR its faction-specific condition below.
 
 
 ### 3.1 Crown — Peninsula Sovereignty
@@ -103,6 +170,7 @@ TCV ≥ 22 AND every other playable faction eliminated (Stability 0). No treatie
 
 **Church Seizure Pool:** Influence + floor(TC / 15)
 **Church Seizure Ob:** 7 − PT (where PT is the target territory's Piety value, 0 = Restoration pole, 5 = Piety pole)
+**Seizure Accord:** Success → max(floor(PT/2)+1, 2). Overwhelming → floor(PT/2)+2, max 3. Partial → 1. See peninsular_strain_v1.md §5.2.
 
 | TC | Pool Bonus | Total Pool (Inf 6) |
 |----|-----------|-------------------|
@@ -155,7 +223,9 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 +
 
 ---
 
-### 3.3 Hafenmark — Parliamentary Sovereignty
+### 3.3 Hafenmark — Dynastic Assertion (Primary)
+
+**[Parliamentary Sovereignty STRUCK — replaced by Dynastic Assertion as primary per peninsular_strain_v1.md. Baralta's identity is divine-right claimant, not constitutional reformer.]**
 
 **All conditions simultaneous at Accounting:**
 
@@ -387,7 +457,7 @@ P-32 ("Hybrid victory = BG victory PLUS personal arc resolution") is retained. A
 |---------|-----------|------------|-----|----------------|---------------|
 | Crown | 12 | 14 | +4 | Suppress 2 of 3 rivals (×2 political) | 12–16 seasons | *(PP-540)* |
 | Church | 5 | 8 | +5 | Graduated Seizure from TC 30+; PT management | 14–18 seasons |
-| Hafenmark | 6 | 13 | +4 | Mil 3 handicap + Crown Mandate suppression | 12–16 seasons | *(PP-541)* |
+| Hafenmark | 6 | 12 | +4 | Mil 3 handicap + Crown Mandate suppression | 12–16 seasons | *(PP-541)* |
 | Varfell A | 6 | 10 | +4 | Geographic isolation + VTM 3 + intel reveals | 12–14 seasons |
 | Varfell B | 6 | 8 | +2 | VTM 3 + Warden Recognition + T13 control | 12–16 seasons |
 | Varfell C | 6 | 10 | +4 | VTM 5 (~S14+) + RS maintenance | 14–18 seasons |
