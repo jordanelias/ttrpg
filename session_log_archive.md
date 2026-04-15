@@ -3504,3 +3504,14 @@ gaps_next_session:
   - ED_NEW_TC_11_seizure_ob_post_milestone
   - all_docs_pending_PP_numbers
 blockers: []
+
+---
+
+session_id: peninsular_strain_integration
+session_close: 2026-04-14
+phase: COMPLETE
+status: CLOSED
+last_stage: done
+next_action:
+  skill: confirm with Jordan
+blockers: []
