@@ -195,3 +195,9 @@ systems:
     canonical_sha__designs__systems__tc_political_redesign_v30_md: "pending"
     params: references/params_board_game.md
     design_doc: designs/systems/tc_political_redesign_v30.md
+
+  player_agency:
+    status: proposal
+    canonical: designs/systems/player_agency_v30.md
+    params: null
+    design_doc: designs/systems/player_agency_v30.md

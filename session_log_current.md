@@ -43,3 +43,6 @@ blockers: []
 
 ## ADDITIONAL COMMIT
 - designs/audit/valoria_how_to_play.md — complete campaign guide
+
+## ADDITIONAL COMMIT 2
+- designs/systems/player_agency_v30.md — Beliefs, Duties, Scene Slate, Stature Progression
