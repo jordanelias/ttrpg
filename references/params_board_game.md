@@ -63,6 +63,51 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Löwenritter Coup Counter | 0 | 0–4 | Public. Threshold 4 = coup eligible. |
 | Warden Cooperation (WC) | 0 | 0–3 | Peninsula-wide. WR ≥ 2 required to advance. (PP-605) |
 | Warden Recognition (WR) | 0 | 0–3 | Varfell-only private track. Gates WC. (PP-605) |
+| Peninsular Strain | 0 | 0–10 | Public. Advances from inter-faction battles (+1/season), faction eliminations (+2), revolts (+1). Decays −1/peaceful season. See peninsular_strain_v1.md §4. |
+
+**Accord (per-territory attribute, range 0–3):** Tracks population acceptance of controller. Modifies effective Prosperity. Accord ≥ 2 required for TCV contribution toward victory. See peninsular_strain_v1.md §2 for full rules.
+
+| Accord | Name | Effective Prosperity | Other Effects |
+|--------|------|---------------------|---------------|
+| 3 | Aligned | Base (full) | Defender +1D in Battle. |
+| 2 | Compliant | Base (full) | Normal operations. |
+| 1 | Resistant | 0 | Govern Ob +1. Garrison required (≥ 1 unit) or Accord → 0 at Accounting. |
+| 0 | Revolt | N/A | Territory becomes Uncontrolled at Accounting. Garrison fights Popular Uprising (Military vs Ob 2). |
+
+**Starting Accord:** Faction capitals = 3 (Aligned). All other home territories = 2 (Compliant). T15 Askeheim: no Accord (no settled population). T16 Schoenland: not in play.
+
+**Starting Piety Track (PT) values:**
+
+| T# | Territory | Starting PT |
+|----|-----------|-------------|
+| T1 | Valorsplatz | 3 |
+| T2 | Kronmark | 3 |
+| T3 | Lowenskyst | 3 |
+| T4 | Grauwald | 2 |
+| T5 | Feldmark | 3 |
+| T6 | Stillhelm | 1 |
+| T7 | Rendstad | 3 |
+| T8 | Gransol | 3 |
+| T9 | Himmelenger | 5 |
+| T10 | Spartfell | 3 |
+| T11 | Halvardshelm | 2 |
+| T12 | Sigurdshelm | 2 |
+| T13 | Oastad | 1 |
+| T14 | Ehrenfeld | 3 |
+| T15 | Askeheim | 0 (hard-fixed) |
+| T17 | Halvarshelm | 3 |
+
+[PROVISIONAL — starting PT values pending user review. Source: peninsular_strain_v1.md §2.2.]
+
+**Peninsular Strain Threshold Effects:**
+
+| Strain | Name | Effect |
+|--------|------|--------|
+| 0–2 | Peace | No effect. |
+| 3–4 | Tension | All factions: Mandate check at Accounting (Mandate pool vs Ob 1). Failure: Mandate −1. |
+| 5–6 | Fracture | All factions: Accord −1 in one territory (lowest-Accord first, controller choice). |
+| 7–8 | Crisis | All factions: Accord −1 in ALL non-capital territories. Mandate check Ob 2. |
+| 9–10 | Collapse | Non-capital territories: Accord cap 2. Mandate check Ob 3. RS −1/season additional. |
 
 **Warden Cooperation (WC) Effects:**
 | WC | Effect |
@@ -123,6 +168,9 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 | Parliamentary Manoeuvre (Hafenmark) | floor(opponent Influence / 2) + 1 | — |
 | Community Organising (Restoration) | 2 | Pool: 1D base + 1D per adjacent territory with RM Presence marker. Failure: no Stability cost (RM has no Stability). Try again next season. (PP-460) |
 | Community Weaving (Restoration) | (100−RS)÷20 round up min 1 | −1 per Presence marker in territory |
+| Dynastic Proclamation (Hafenmark) | floor(target Stability / 2) + 1 | Diplomat card. Hafenmark M ≥ 4, M > target controller M. +1 Ob if PT ≤ 1. −1 Ob if Diplomatic Token on target. See peninsular_strain_v1.md §5.3. |
+| Cultural Reformation (Varfell) | PT + 1 (target territory) | Colonist card. VTM ≥ 2. Target PT ≤ 3. Pool: Influence + floor(VTM/2). See peninsular_strain_v1.md §5.4. |
+| Martial Governance (Löwenritter) | floor(Prosperity / 2) + 2 | Löwenritter only. Military pool. Accord +1 (cap 2). |
 | Fortify | Fort level + 1 | — |
 
 All Obs: floor 1.
@@ -148,6 +196,9 @@ Execute in strict order:
 3. Advance Cooldown Track (all items −1 slot; at 0: return to hand).
 4. Clock advances: RS baseline drift (−1 at Year-End/Winter only). TC per formula. IP per Altonian pressure table. PI changes.
 4b. **Church Prominence update (ED-326):** Church player marks Prominent territories on faction mat — any territory where Church global Mandate exceeds that territory's controlling faction's global Mandate. Updated every Accounting. Used for: Counter-Narrative target eligibility, Seizure Ob formula, Piety Spread.
+4c. **Accord checks:** (i) Each territory at Accord 1 without garrison (no military unit from controlling faction): Accord → 0. (ii) Each territory at Accord 0: Revolt — garrison fights Popular Uprising (Military vs Ob 2) or retreats; territory becomes Uncontrolled; Peninsular Strain +1. (iii) Passive normalisation: each territory with garrison AND no hostile action for 2 consecutive seasons: Accord +1 (cap 2).
+4d. **Peninsular Strain update:** (i) If no inter-faction battles AND no Revolts this season: Strain −1 (min 0). (ii) If diplomatic resolution occurred (Treaty formed, Pledge honoured): Strain −1 (max one from this source/season). (iii) Apply Strain threshold effects.
+4e. **Battle consequence accounting:** IP +2 if inter-faction battle occurred this season. RS adjustments from battles already applied during Phase 4 resolution.
 5. Church Attention Pool: resolve threshold responses. Pool resets to 0.
 6. Thread Debt: tokens >1 season old: RS −1/token. Serviced tokens: no drain; permanent residual RS −0.5 recorded.
 7. Clear Thread Resonance markers (all factions reset).
@@ -229,6 +280,10 @@ Southernmost Surge (one-time, RS ≤ 10): all territories within Proximity 2 of 
 | 60–74 | Trade disrupted: +2 Ob. Proxy at T4: +1D military |
 | 75+ | Altonian Vanguard deployed. AER ≥ 4: threshold rises to 80. AER 5: IP held at 50 |
 
+**Battle Consequences (peninsular_strain_v1.md §3):**
+All battles on Valorian soil: RS −1 (RS −2 for Campaign/War scale). Each season with inter-faction battle: IP +2. Each season with inter-faction battle: Peninsular Strain +1. Faction elimination: Strain +2. Territory Revolt (Accord 0): Strain +1. Covert actions and ungarrisoned Church Seizure: no RS/IP/Strain cost.
+
+
 **[PROVISIONAL ED-340] Altonian Vanguard Mechanics (PP-568 — flag for authorial review):**
 - Vanguard appears as NPC military presence at T10 (Spartfell — NE Altonian pass).
 - Vanguard stats: Military 5 equivalent; Size 3; cannot be negotiated, traded, or Diplomatically managed.
@@ -255,6 +310,10 @@ The Deed-based victory system has been dissolved for ALL factions including Löw
 | Varfell Path C | Thread Supremacy | TCV ≥ 10 + VTM = 5 + Rendering Stability (RS) ≥ 50 |
 | Restoration Movement (RM) | Cultural Revolution (Hybrid only, post-Founding) | Phase 1: PT ≤ 1 in ≥ 8/15 territories. Phase 2: Cultural Uprising of T9 Himmelenger. Win: T9 held + Phase 1 × 2 Accounting. No faction stats. (PP-460, PP-478) |
 | Löwenritter | Regency Establishment | TCV ≥ 10 + Thread Consciousness (TC) < 50 + IP < 60 + RS > 40 + PI ≥ 4 + successor |
+
+**Universal Victory — Peninsular Sovereignty (all factions):** All 15 playable territories (T1–T14, T17) controlled directly or via effective hegemony (Treaty-bound, Submitted, or institutionally dominated rivals). Accord ≥ 2 in all directly-controlled territories. Peninsular Strain ≤ 6. Held 2 consecutive Accountings. Faction-specific victories above are retained as alternate (easier) paths. See peninsular_strain_v1.md §6.
+
+**Peninsular Partition (Co-Victory, multiplayer):** Both factions collectively control all 15 territories. Each TCV ≥ 10. Accord ≥ 2 everywhere. No inter-faction battle preceding 4 seasons. Strain ≤ 6. Both Mandate ≥ 3. See peninsular_strain_v1.md §6.3.
 
 ### Territory Consolidation Values (TCV)
 Per victory_v30.md §1. Total TCV = 30 (T16 Schoenland not in territorial play, T15 Askeheim TCV = 0).
