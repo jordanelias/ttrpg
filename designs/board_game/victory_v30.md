@@ -455,13 +455,14 @@ P-32 ("Hybrid victory = BG victory PLUS personal arc resolution") is retained. A
 
 | Faction | Start TCV | Target TCV | Gap | Key Difficulty | Est. Timeline |
 |---------|-----------|------------|-----|----------------|---------------|
-| Crown | 12 | 14 | +4 | Suppress 2 of 3 rivals (×2 political) | 12–16 seasons | *(PP-540)* |
-| Church | 5 | 8 | +5 | Graduated Seizure from TC 30+; PT management | 14–18 seasons |
-| Hafenmark | 6 | 12 | +4 | Mil 3 handicap + Crown Mandate suppression | 12–16 seasons | *(PP-541)* |
+| Crown | 12 | 14 | +2 | Suppress 2 of 3 rivals (×2 political) | 12–16 seasons | *(PP-540)* |
+| Church | 5 | 8 | +3 | Graduated Seizure from TC 30+; PT management | 14–18 seasons |
+| Hafenmark | 6 | 12 | +6 | Dynastic Proclamation + Mil 3 handicap + Crown Mandate suppression | 12–16 seasons | *(PP-541)* |
 | Varfell A | 6 | 10 | +4 | Geographic isolation + VTM 3 + intel reveals | 12–14 seasons |
 | Varfell B | 6 | 8 | +2 | VTM 3 + Warden Recognition + T13 control | 12–16 seasons |
 | Varfell C | 6 | 10 | +4 | VTM 5 (~S14+) + RS maintenance | 14–18 seasons |
 | RM | — | — | — | 4 territories PT ≤ 1 (Phase 1) + Phase 2 roll | 14–18 seasons | *(PP-543)* |
+| **Universal** | any | 31 (all) | varies | All 15 territories, Accord ≥ 2, Strain ≤ 6 | 20–30 seasons | Prestige win |
 
 
 ---

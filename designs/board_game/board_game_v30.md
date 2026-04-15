@@ -169,6 +169,10 @@ All rolls use **d10**. Results per die:
 
 > **Clarification (PP-034):** Drawn battle: "On exactly tied net successes: the battle is drawn. Both sides take Discipline −1 and hold position. Neither side claims or loses territory from this engagement. On the subsequent turn, the initiating attacker may re-engage or withdraw; the territory is contested."
 
+
+
+> **Battle Consequences (PP-647):** Each Battle resolved on Valorian soil: RS −1 (Campaign/War scale: RS −2). Each season with inter-faction Battle: IP +2, Peninsular Strain +1. Attacker conquest: territory Accord → 1. Defender territory: Accord −1. Covert actions and ungarrisoned Church Seizure: no RS/IP/Strain cost. See peninsular_strain_v1.md §3.
+
 ---
 
 ## I-06 — Restoration Victory Rendering Stability ≥ 50 vs Rendering Stability Starting at 72

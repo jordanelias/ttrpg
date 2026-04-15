@@ -1862,3 +1862,69 @@ patches:
   severity: P2
   description: "NPC Recruitment procedure — §10 added to npc_behavior_v30.md. 4-step: Identify/Approach/Offer/Resolution. Ob = floor(NPC highest-faction Disposition / 2) + 1. Hooks defined (Strong=auto-success Ob1, Weak=-2 Ob). Defection: Belief contradiction check 2 consecutive seasons. ED-510 resolved. ED-511 (Hooks) resolved."
   affects: [designs/systems/npc_behavior_v30.md, canon/editorial_ledger.yaml]
+
+- id: PP-643
+  date: 2026-04-14
+  severity: P1
+  description: "TCV revaluation: Himmelenger 5, Gransol 3. Total 31. Crown 12, Hafenmark 6, Church 5, Varfell 6."
+  affects: [designs/board_game/victory_v30.md, references/params_board_game.md]
+
+- id: PP-644
+  date: 2026-04-14
+  severity: P1
+  description: "Universal Peninsular Sovereignty victory + Partition co-victory. Faction-specific retained as alternates."
+  affects: [designs/board_game/victory_v30.md, designs/board_game/peninsular_strain_v1.md, references/params_board_game.md]
+
+- id: PP-645
+  date: 2026-04-14
+  severity: P1
+  description: "Accord (0-3) per territory. Modifies Prosperity. Accord ≥ 2 for TCV. Conquest → 1. Seizure/Proclamation/Reformation → 2+."
+  affects: [designs/board_game/peninsular_strain_v1.md, references/params_board_game.md]
+
+- id: PP-646
+  date: 2026-04-14
+  severity: P1
+  description: "Peninsular Strain (0-10). Battles +1, eliminations +2, revolts +1. Thresholds at 3/5/7/9."
+  affects: [designs/board_game/peninsular_strain_v1.md, references/params_board_game.md]
+
+- id: PP-647
+  date: 2026-04-14
+  severity: P1
+  description: "Battle consequences: RS −1/battle (−2 Campaign/War). IP +2/battle-season. Accord on conquest/defense."
+  affects: [designs/board_game/peninsular_strain_v1.md, references/params_board_game.md, designs/board_game/board_game_v30.md]
+
+- id: PP-648
+  date: 2026-04-14
+  severity: P1
+  description: "Dynastic Proclamation (Hafenmark Diplomat). Parliamentary Sovereignty struck."
+  affects: [designs/board_game/peninsular_strain_v1.md, references/params_board_game.md, designs/systems/npc_behavior_v30.md, designs/board_game/victory_v30.md]
+
+- id: PP-649
+  date: 2026-04-14
+  severity: P1
+  description: "Cultural Reformation (Varfell Colonist). Ob=PT+1. VTM≥2. PT−1 on success."
+  affects: [designs/board_game/peninsular_strain_v1.md, references/params_board_game.md, designs/systems/npc_behavior_v30.md]
+
+- id: PP-650
+  date: 2026-04-14
+  severity: P2
+  description: "Church Seizure Accord formula: Success → max(floor(PT/2)+1, 2). Overwhelming → floor(PT/2)+2 max 3."
+  affects: [designs/board_game/peninsular_strain_v1.md, designs/board_game/victory_v30.md]
+
+- id: PP-651
+  date: 2026-04-14
+  severity: P2
+  description: "Starting PT values per territory (PROVISIONAL). Löwenritter Martial Governance + Strain exemption."
+  affects: [designs/board_game/peninsular_strain_v1.md, references/params_board_game.md]
+
+- id: PP-652
+  date: 2026-04-14
+  severity: P2
+  description: "NPC Accord-aware priority trees. Proclamation/Reformation NPC logic. Accord governance targeting."
+  affects: [designs/systems/npc_behavior_v30.md]
+
+- id: PP-653
+  date: 2026-04-14
+  severity: P2
+  description: "Hybrid Accord Domain Echo §5.5. Accounting steps 4c/4d/4e."
+  affects: [designs/hybrid/scale_transitions_v30.md, references/params_board_game.md]

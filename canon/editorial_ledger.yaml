@@ -1,10 +1,62 @@
 # Valoria Editorial Ledger — Active
-# next_id: 535
-# IMPORTANT: All new editorial items MUST use next_id and increment it.
+# next_id: 543
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Index: canon/editorial_ledger_index.md
-# Status values: open | provisional | flagged | deferred
 # Last updated: 2026-04-14
-# NOTE: No active items. All editorial decisions resolved as of 2026-04-13.
 
-editorial_decisions: []
+editorial_decisions:
+  - id: ED-535
+    date: 2026-04-14
+    description: "Starting PT values — proposed, pending user review."
+    status: provisional
+    severity: P2
+    affects: [references/params_board_game.md]
+
+  - id: ED-536
+    date: 2026-04-14
+    description: "Church Counter-Reformation defensive action needs formal PP."
+    status: open
+    severity: P2
+    affects: [designs/board_game/peninsular_strain_v1.md]
+
+  - id: ED-537
+    date: 2026-04-14
+    description: "Godot check_victory stale. Deferred to Godot session."
+    status: deferred
+    severity: P2
+    affects: []
+
+  - id: ED-538
+    date: 2026-04-14
+    description: "Sim re-run needed with Accord/Strain/battle consequences."
+    status: open
+    severity: P1
+    affects: []
+
+  - id: ED-539
+    date: 2026-04-14
+    description: "TC reform + TCV 5 + Seizure Accord ≥ 2 compound effect unvalidated."
+    status: open
+    severity: P1
+    affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-540
+    date: 2026-04-14
+    description: "RS −1 flat vs scaled — consider RS −2 when RS ≤ 50. Deferred to sim."
+    status: deferred
+    severity: P3
+    affects: [designs/board_game/peninsular_strain_v1.md]
+
+  - id: ED-541
+    date: 2026-04-14
+    description: "military_layer_v30.md / faction_layer_v30.md — uncommitted from sim session."
+    status: open
+    severity: P2
+    affects: [designs/board_game/]
+
+  - id: ED-542
+    date: 2026-04-14
+    description: "Battle consequences not in mass_battle_v30.md. Propagation gap."
+    status: open
+    severity: P2
+    affects: [designs/mass_combat/mass_battle_v30.md]
