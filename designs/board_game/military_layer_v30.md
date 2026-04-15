@@ -2,6 +2,7 @@
 <!-- Infill: military_layer_v30_infill.md -->
 <!-- PP-TBD series — awaiting patch assignment -->
 <!-- Sources: mass_battle_v30.md §A.4, §A.13, §B.2, §B.3, §B.5; params_board_game.md §Unit Muster Ob Table, §Accord, §TC Generation; canonical_sources.yaml -->
+<!-- Integration: peninsular_strain_v1.md (battle consequences §3, Accord §2, Strain §4) -->
 <!-- Status: PROPOSAL — draft for approval -->
 <!-- Date: 2026-04-14 -->
 
@@ -184,7 +185,23 @@ Per mass_battle_v30 §B.3, §PP-104:
 
 **Unit damage:** distribute net successes × Martial Damage Modifier across defender's units (attacker chooses which units take damage, reducing their Health/Size). Formation Break at Size 0.
 
-**Fort bonus dice to defender:** applies to the defender's pool, not as Ob. A Fort 3 territory gives the defender +3 dice on top of their Martial sum + commander bonus. This represents fortifications giving defenders a material advantage in the engagement, not making attackers less accurate.
+**Fort bonus dice to defender:** applies to the defender's pool, not as Ob.
+
+### §2.2b Peninsular Consequences of Battle (PP-647, peninsular_strain_v1.md §3)
+
+Every battle resolved on Valorian soil carries systemic costs beyond the immediate tactical outcome:
+
+| Consequence | Trigger | Value |
+|---|---|---|
+| Substrate Fracture | Any battle | RS −1 (Campaign/War scale: RS −2) |
+| Vulnerability Signal | Inter-faction battle this season | IP +2 at Accounting |
+| Peninsular Strain | Inter-faction battle this season | Strain +1 at Accounting |
+| Accord degradation | Territory conquered via battle | Accord set to 1 (Resistant) |
+| Accord erosion | Battle in territory you control (defender) | Accord −1 |
+
+Covert operations and ungarrisoned Church Seizure do not trigger these costs. Popular Uprisings and Altonian Vanguard battles trigger RS −1 only (not IP or Strain — these are not inter-faction civil war).
+
+**Design intent:** Military conquest is always available but structurally expensive. Four costs compound: RS toward Rupture, IP toward Altonian invasion, Strain toward peninsular Crisis, and Accord toward Revolt. Each faction has non-military acquisition tools that avoid all four costs (see peninsular_strain_v1.md §5). A Fort 3 territory gives the defender +3 dice on top of their Martial sum + commander bonus. This represents fortifications giving defenders a material advantage in the engagement, not making attackers less accurate.
 
 ### §2.3 BG → TTRPG Handoff
 
