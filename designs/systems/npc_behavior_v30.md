@@ -545,6 +545,8 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | 6 | Reactive | Threat response | If attacked or threatened this season: respond proportionally. |
 | 7 | Pass | Default | No action. Bank Standing or accumulate resources. |
 
+**Accord-aware governance (peninsular_strain_v1.md):** All NPC factions check Accord at Priority 1 extension: if any held territory at Accord 1 (Resistant) AND garrison present, shift Priority 4 to include Consul Inward in lowest-Accord territory. If any territory at Accord 0 (Revolt imminent) AND no garrison: redeploy one unit to that territory (Legionary Inward) at Priority 2 equivalent. NPC factions treat Accord ≥ 2 maintenance as prerequisite to expansion.
+
 ### §8.2 Church NPC Priority Tree
 
 | Priority | Condition | Action |
@@ -552,7 +554,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | 1 | Stability ≤ 2 | Consul Inward in highest-PT territory. If Stability = 1: also suspend TC Assert this season. |
 | 2 | Open Thread operation in Church territory OR practitioner identified publicly OR Piety loss ≥ 2 this season | Heresy Investigation (Cardinal of Justice). If target is faction leader: Excommunication. |
 | 3 | TC < 75 AND Mandate ≥ 4 | Assert (TC +1). Piety Domain Action if Assert already used. |
-| 4 | Expand Piety. Consul Inward in territory with lowest PT where Church has presence. | Standard |
+| 4 | Expand Piety AND maintain Accord. Consul Inward in lowest-Accord Church territory if Accord ≤ 1; otherwise lowest-PT territory where Church has presence. | Standard |
 | 5 | AER maintenance (if Cardinal of Temperance active and Church controls T9). Temperance declaration. | Secondary |
 | 6 | If attacked (Mandate targeted, territory seized): Templar deployment to contested territory (if Cardinal of Fortitude active and Stability ≥ 2). | Reactive |
 | 7 | Pass. | Default |
@@ -566,7 +568,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | 1 | Stability ≤ 2 | Consul Inward in capital territory. Royal Decree targeting own Stability if available. |
 | 2 | 2+ territories changed control this season OR Löwenritter Coup Counter = 2 OR PI ≥ 8 | Military response: Legionary in threatened territory. If no Legionary: Royal Decree targeting Military. |
 | 3 | Royal Decree available AND framework-aligned target exists (public, visible, virtuous) | Royal Decree: +1 to weakest-stat ally or −1 to strongest-stat rival. |
-| 4 | Maintain treaties. Defend held territory. Govern in capital. | Consul Inward or Senator Outward (diplomacy). |
+| 4 | Maintain treaties. Defend held territory. Govern in lowest-Accord territory (prioritise Accord 1 before capital). | Consul Inward (Accord governance) or Senator Outward (diplomacy/Treaty). |
 | 5 | Torben Loyalty ≤ 3: Senator Outward targeting Torben. | Secondary |
 | 6 | If attacked: Military response proportional to threat. Crown covert action (Influence pool +1 Ob) if threat is covert. | Reactive |
 | 7 | Pass. Thread Liaison declaration if allied faction identified. | Default |
@@ -578,7 +580,8 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | 1 | Stability ≤ 2 | Consul Inward in Hafenmark capital. |
 | 2 | Church seizes any territory via TC OR constitutional procedure bypassed (Martial Law, unilateral Royal Decree targeting Hafenmark) | Sovereign Authority Doctrine (if available). Else: Parliamentary objection (Influence vs Ob 3). |
 | 3 | Suppress action available (Church Mandate ≥ 4) AND Baralta Mandate ≥ 4 | Suppress TC (negate passive +1 this season). |
-| 4 | Maintain constitutional order. Consul Inward in Hafenmark territories. Diplomatic Senator Outward to Crown or Guilds. | Standard |
+| 3b | Hafenmark Mandate > adjacent non-Hafenmark territory controller Mandate AND Hafenmark Mandate ≥ 4 | Dynastic Proclamation (Diplomat card) targeting adjacent territory with weakest controller Mandate. Prerequisite for NPC use: target controller Mandate < Hafenmark Mandate AND target territory PT ≥ 2. (peninsular_strain_v1.md §5.3) |
+| 4 | Maintain constitutional order. Consul Inward in Hafenmark territories (prioritise lowest-Accord territory). Diplomatic Senator Outward to Crown or Guilds. | Standard |
 | 5 | Trade Compact conditions met (Crown TCV ≥ 14 AND Hafenmark TCV ≥ 10): pursue Compact activation. | Secondary |
 | 6 | If attacked: Parliamentary Manoeuvre (constitutional response). If military attack: Legionary in defensive position only (Hafenmark Military is 3 — weakest major faction). | Reactive |
 | 7 | Pass. Hafenmark Wealth Sink (+1D trade DA if Wealth > 5). | Default |
@@ -591,6 +594,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | 2 | TK advancement opportunity: Expedition possible (T6 accessible) OR Private Collection usable (Intel vs Ob 2) OR practitioner contact available | Private Collection deployment. OR: Tribune Investigate if target has Thread-relevant intel. |
 | 3 | Intel action available with measurable one-season outcome: Tribune Investigate vs rival faction | Tribune Investigate against faction with highest hidden stats. |
 | 4 | Maximise information advantage. Acquire resources. Senator Outward (diplomatic positioning). | Standard |
+| 4b | VTM ≥ 2 AND adjacent territory PT ≤ 2 AND Varfell Influence + floor(VTM/2) ≥ PT + 1 (viable Ob) | Cultural Reformation (Colonist card) targeting adjacent territory with lowest PT. NPC uses Reformation over military expansion when viable. (peninsular_strain_v1.md §5.4) |
 | 5 | VTM advancement if conditions met. Warden Recognition pursuit if Path B available. | Secondary |
 | 6 | If attacked: Intel-based response (reveal attacker's hidden stat, expose their action). No military first-strike. | Reactive |
 | 7 | Pass. Patience Protocol (bank +2D for future roll). | Default |

@@ -99,7 +99,7 @@ Modifier to most relevant unit; 1 turn duration. (PP-261, ED-151)
 ### §4.2 Zoom Out
 **Definition:** Transition from TTRPG scene back to BG layer.
 
-**State transfer:** Personal scene outcomes translate to BG consequences via Domain Echo (§5). PC incapacitation consequences (Stage 1) apply immediately on Zoom Out (ED-159). Contested Figure wound → +1 Ob to commander's BG tactic rolls for remainder of battle (ED-167).
+**State transfer:** Personal scene outcomes translate to BG consequences via Domain Echo (§5). Accord changes from personal scenes queue as Domain Echoes per §5.5 (±1 Accord max per Zoom In). PC incapacitation consequences (Stage 1) apply immediately on Zoom Out (ED-159). Contested Figure wound → +1 Ob to commander's BG tactic rolls for remainder of battle (ED-167).
 
 **Phase 6 continuation:** Steps 2–6 resolve after Zoom Out using the updated state from the personal scene (PP-110). The Zoom In does not pause the BG clock — it inserts a personal scene into the resolution sequence.
 
@@ -138,6 +138,19 @@ This timing difference is intentional (PP-109): Zoom In is a personal interventi
 | Track ≥ 7 (winner's side) | Winner faction: +1 Mandate. Loser faction: −1 Mandate if they held institutional authority. |
 | Track 4–6 (compromise) | No Domain Echo. Scene-level consequence only. |
 | Track ≤ 3 (loser's side) | Reversed — loser faction receives penalty. |
+
+### §5.5 Accord Domain Echo (peninsular_strain_v1.md)
+
+Personal scenes in Hybrid mode may produce Accord changes via Domain Echo. Cap: ±1 Accord in one territory per Zoom In.
+
+| Personal Scene Outcome | Accord Domain Echo |
+|----------------------|-------------------|
+| PC publicly governs/administers a territory (sermon, public address, dispute resolution) — Overwhelming/Success | Accord +1 in that territory (queued to next Accounting) |
+| PC action destabilises territory governance (assassination, public betrayal, inciting unrest) — Success | Accord −1 in that territory (queued to next Accounting) |
+| PC negotiates territorial transfer between factions (personal diplomacy success) | Transferred territory Accord set to 2 (queued to next Accounting) |
+| PC action triggers violence at territorial scale (initiating battle, coup, uprising) | RS −1 immediate. Accord −1 in that territory. |
+
+Accord Domain Echoes fire at Accounting Step 4c alongside other Accord checks. They do not stack with faction-level Govern actions in the same territory the same season — whichever produces the higher Accord applies.
 
 ---
 
