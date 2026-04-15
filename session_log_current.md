@@ -1,4 +1,4 @@
-session_id: peninsular_strain_cross_session_integration
+session_id: peninsular_strain_final_integration
 session_close: 2026-04-15
 phase: COMPLETE
 status: CLOSED
