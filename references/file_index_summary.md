@@ -16,6 +16,8 @@ threadwork: designs/ttrpg/threadwork_v30.md
 hybrid: designs/hybrid/scale_transitions_v30.md
 victory: designs/board_game/victory_v30.md
 peninsular_strain: designs/board_game/peninsular_strain_v1.md
+military_layer: designs/board_game/military_layer_v30.md
+tc_political_redesign: designs/board_game/tc_political_redesign_v30.md
 geography: designs/setting/geography_v30.md
 fieldwork: designs/fieldwork/fieldwork_v30.md
 npc_behavior: designs/systems/npc_behavior_v30.md

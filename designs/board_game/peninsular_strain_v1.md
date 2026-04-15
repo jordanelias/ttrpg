@@ -392,6 +392,47 @@ Modify existing Step 12 (Victory condition check): Check universal Peninsular So
 
 ---
 
+## §7b Occupation / Accord Harmonization (faction_layer_v30.md integration)
+
+Occupation (faction_layer_v30.md §2) and Accord (this document §2) address different moments in the territorial lifecycle.
+
+**During Occupation (territory controlled by Faction B, occupied by Faction A):**
+- Accord tracks Faction B's (the displaced controller's) relationship with the population. Accord may drop due to inability to defend (Stability drop from faction_layer §1.2 Trigger 1).
+- The occupying faction has no Accord in this territory — they don't control it yet. They bear garrison costs per faction_layer §2.3.
+- TCV counts as 0 for both parties during Occupation (faction_layer §0 OCCUPATION_TCV_UNSPECIFIED).
+
+**At Control Transfer (3-season occupation conversion, Overwhelming military victory, or Treaty cession):**
+- Accord resets based on method of transfer:
+
+| Transfer method | Accord at transfer | Source |
+|-----------------|-------------------|--------|
+| Military occupation (3-season conversion) | 1 (Resistant) | §2.4 this document |
+| Military Overwhelming (immediate transfer) | 1 (Resistant) | §2.4 this document |
+| Treaty cession (negotiated) | 2 (Compliant) | §2.3 this document |
+| Church Seizure (Success) | max(floor(PT/2)+1, 2) | §5.2 this document |
+| Church Seizure (Overwhelming) | floor(PT/2)+2, max 3 | §5.2 this document |
+| Dynastic Proclamation (Success/OW) | 2 (Compliant) | §5.3 this document |
+| Cultural Reformation (Success/OW) | 2 (Compliant) | §5.4 this document |
+
+**Recapture:** The displaced faction may attempt military_advance at -1 Ob (home territory advantage per faction_layer §2.2). If successful, territory returns to their control. Accord resets to 2 (population welcomes return of familiar governance), not the original pre-occupation value.
+
+**Key principle:** Occupation is the transition phase. Accord only matters for the controlling faction. During Occupation, the territory is contested. Accord kicks in when the question of "who governs" is settled.
+
+---
+
+## §7c TC 0-100 Integration (tc_political_redesign_v30.md)
+
+This document's Church Seizure pool formula (Influence + floor(TC/15)) is compatible with TC running to 100 (no freeze at 75). At TC 100: pool bonus = floor(100/15) = 6 (vs 5 at old TC 75 ceiling). The Seizure Ob formula (7 - PT) is unchanged.
+
+TC milestone effects (tc_political_redesign_v30.md §2.1) interact with Seizure availability:
+- TC >= 40: Church Seizure available (replaces old TC >= 75 gate)
+- TC 80: Seizure Ob -1 globally (stacks with 7 - PT formula)
+- TC 100: Theocracy Unification Attempt (Seizure on any territory, not just Prominent)
+
+Accord on Seizure follows this document §5.2 regardless of TC milestone. Seizure is always a political act; Accord reflects institutional legitimacy, not TC level.
+
+---
+
 ## §8 Open Items
 
 | # | Item | Status |

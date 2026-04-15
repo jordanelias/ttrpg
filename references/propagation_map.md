@@ -572,3 +572,14 @@ DESIGN GAP 2: Guild Favour restoration mechanic — no upward movement source do
 | PP-655 | peninsular_strain_v1.md §5 | npc_behavior_v30.md §8 | DONE |
 | PP-656 | peninsular_strain_v1.md | scale_transitions_v30.md §5.5 | DONE |
 | PP-657 | peninsular_strain_v1.md §7 | params_board_game.md Accounting 4c-4e | DONE |
+
+## Military Layer & TC Redesign (2026-04-14)
+| Source | Target | Status |
+|---|---|---|
+| military_layer_v30.md §1 | mass_battle_v30.md §B.2 unit types | Cross-ref (consistent) |
+| military_layer_v30.md §3 | params_board_game.md §TC Generation | PENDING |
+| tc_political_redesign_v30.md §1 | territory cards (SW attribute) | PENDING |
+| tc_political_redesign_v30.md §2 | victory_v30.md TC freeze refs | PENDING |
+| tc_political_redesign_v30.md §3 | params_board_game.md political pool | PENDING |
+| peninsular_strain_v1.md §7b | faction_layer_v30.md §2 Occupation | Harmonization added |
+| peninsular_strain_v1.md §7c | tc_political_redesign_v30.md §2 TC 0-100 | Harmonization added |
