@@ -1,5 +1,5 @@
-session_id: peninsular_strain_full_propagation
-session_close: 2026-04-14
+session_id: peninsular_strain_harmonization
+session_close: 2026-04-15
 phase: COMPLETE
 status: CLOSED
 last_stage: done
