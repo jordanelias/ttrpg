@@ -77,6 +77,7 @@ Round duration: 6–10 seconds narrative.
 
 **Combat action priority order (PP-247):** Lower number = resolves first within a round.
 
+****THIS DOESN'T MAKE SENSE RE PRIORITY. IT'S ALL SIMULTANEOUS****
 | Priority | Action |
 |----------|--------|
 | 1 | Strike |
