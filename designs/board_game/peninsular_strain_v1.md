@@ -140,6 +140,38 @@ RM does not use Accord. RM controls T9 (if taken via Cultural Uprising) through 
 
 Löwenritter uses Accord but gains access to **Martial Governance**: a Govern variant using Military as pool instead of Influence. Accord +1 on Success, same as standard Govern. Ob = floor(Prosperity/2) + 2 (harder than civil governance). Löwenritter cannot exceed Accord 2 via Martial Governance (cap); reaching Accord 3 requires standard Govern with Influence pool.
 
+### §2.7 Personal-Scale Accord Pathways (NEW — Hybrid/TTRPG)
+
+The faction-level Accord changes in §2.3–2.4 operate at BG scale. In Hybrid and TTRPG modes, the player's personal actions can also affect Accord via Domain Echo (scale_transitions_v30 §5.5). This section expands the available pathways.
+
+| Player Action | Accord Effect | Condition | Domain Echo Route |
+|--------------|--------------|-----------|------------------|
+| Social fieldwork: reach Disposition +3 with 2+ local NPCs in one territory in one season | Accord +1 (queued to Accounting) | Player spent ≥ 2 scene actions on social fieldwork in the territory | §5.5: PC publicly governs/administers |
+| Investigation: resolve a local concern (Evidence Track threshold reached for a Simple or Complex question affecting the territory's population) | Accord +1 (queued to Accounting) | Finding is publicly shared (published, announced, or cited in Contest) | §5.5: PC publicly governs — the investigation's resolution IS governance |
+| Community Weaving: RM-aligned or Warden-aligned Thread practice in territory | Accord +1 (queued to Accounting) | Territory PT ≤ 2 (Einhir heritage receptive) AND Community Weaving Success | §5.5: PC publicly administers — the practice IS cultural governance |
+| Public violence: player initiates combat in territory (public, 3+ witnesses) | Accord −1 (immediate) | Combat Exposure ≥ 3 (public) | §5.5: PC destabilises territory governance |
+| Assassination or killing of local named NPC | Accord −1 (immediate) | Dead NPC had Disposition ≥ +1 with local population NPCs | §5.5: PC destabilises — violence against a known figure |
+| Player publicly defies controlling faction's authority in the territory | Accord −1 (immediate) | Player's action is witnessed (Exposure ≥ Noticed) and contradicts the controlling faction's institutional position | §5.5: PC destabilises |
+
+**Cap:** ±1 Accord per territory per season from personal-scale actions (per existing §5.5 cap). Personal-scale Accord changes do not stack with faction-level Govern actions — whichever produces the higher Accord applies.
+
+### §2.8 Accord Environmental Legibility (NEW — presentation layer)
+
+Accord is the game's victory condition foundation. It should be experienceable, not just trackable.
+
+**TTRPG/Hybrid:** When the player enters or remains in a territory, the GM describes the environment using the following cues:
+
+| Accord | Environmental Description |
+|--------|--------------------------|
+| 3 (Aligned) | Markets are busy and well-stocked. People greet the patrol warmly. Public buildings are maintained. Children play in the square. The faction's banners fly without graffiti. |
+| 2 (Compliant) | Life proceeds normally. People are civil but reserved with officials. Trade functions. No visible unrest, but no visible enthusiasm. The status quo is tolerated. |
+| 1 (Resistant) | Shops close early. People avoid the patrol's gaze. Graffiti appears on faction buildings overnight and is scrubbed by morning. A garrison is visible and the population keeps its distance. Whispered conversations stop when strangers approach. |
+| 0 (Revolt) | A barricade blocks the main road. Someone has painted slogans on the faction hall. The garrison is confined to the fortress. Armed civilians watch from rooftops. The market has moved to an unofficial location the patrol cannot reach. |
+
+**Videogame:** Environmental art, NPC ambient dialogue, and crowd behavior shift based on Accord value. At Accord 3: warm lighting, populated streets, friendly greetings. At Accord 0: dark palette, empty streets, hostile stares, barricades as navigation obstacles.
+
+**Accord change visibility:** When Accord changes in a territory where the player is present, the GM or game narrates the transition: "Over the past weeks, you've noticed the market closing earlier. The baker who used to greet you by name now serves you in silence." This is not a stat notification — it is world texture.
+
 ---
 
 ## §3 Battle Consequences — NEW

@@ -77,3 +77,9 @@ blockers: []
 - fieldwork_v30.md: Investigation Synthesis via Reconstruct (4-degree completion mechanic), §5.9 NPC-Initiated Social Engagement (outreach/demand scene rules)
 - social_contest_v30.md: §6.1 Obligations (binding post-contest commitments with violation consequences), §6.2 Conviction Scar Visibility, §6.3 Chain Contests (compromise→follow-up, max 3 chains)
 - combat_v30.md: §13 Combat World Bridge — Domain Echo on named NPC combat, Combat Reputation cascade (0-6+ scale), Death Cascade (5-step consequence chain)
+### BRIDGE PRIORITIES 7-9-10 APPLIED
+- peninsular_strain_v1.md: §2.7 personal-scale Accord pathways (6 player actions → Accord change), §2.8 Accord environmental legibility (4-level description table)
+- conviction_track_v30.md: §11 CV presentation layer — CV change environmental events, Church AP player-facing indicators (5-level table), TC milestone presentation (4 thresholds)
+- mass_battle_v30.md: PART D mass combat world bridge — §D.1 post-battle consequence scenes (3 choices), §D.2 named unit officers (profile, disposition, death rules), §D.3 player morale effect
+
+ALL 10 BRIDGE PRIORITIES NOW APPLIED. Next: holistic W→P / P→W review.

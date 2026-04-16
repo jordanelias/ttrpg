@@ -444,3 +444,45 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 | PP-416 | RM | RM Emergence — Warden's Accord track, triple-condition trigger, active NPC rules |
 | PP-417 | Varfell | Path B redesign (3 Deeds) + Path C territory correction |
 | PP-418 | Co-Victory | Einhir Restoration Co-Victory — Varfell + latent RM, 6 conditions |
+
+---
+
+## 11. Conviction Track Presentation Layer (NEW — World→Player Bridge)
+
+### §11.1 CV Change Environmental Events
+
+When Conviction (CV) changes in a territory, the change should be experienceable by any player present. CV is not just a number — it is the cultural identity of a community shifting.
+
+| CV Transition | Environmental Description |
+|--------------|--------------------------|
+| CV +1 (any → higher) | Church influence deepens. New description: the morning bells ring longer. A priest who used to preach from memory now reads directly from the Solmund Codex. A shrine appears at the crossroads that wasn't there last season. The tavern-keeper has hung a blessing plaque by the door. |
+| CV −1 (any → lower) | Einhir heritage resurfaces. New description: someone has left wildflowers at the old Einhir stone circle outside town. Children are singing a song in a language the Church doesn't teach. An elder tells a story about what the land was before Solmund, and no one shushes them. |
+| CV reaches 5 (Consecrated) | Total Church dominance. The territory feels different. Church officials are present in every public space. The old Einhir names for landmarks have been replaced with Solmundic names on the official signposts. Non-Church social gatherings require permission. |
+| CV reaches 0 | Einhir restoration complete. Church architecture is repurposed or abandoned. Thread-sensitive characters perceive a subtle difference in the substrate — the rendering is thinner here, closer to what it was before the orthodoxy. |
+
+**TTRPG/Hybrid:** GM narrates the transition. The description does not specify the CV number — the player perceives the change through lived texture, not statistics.
+
+**Videogame:** Environmental art shifts per CV level: shrine placement, banner type, ambient NPC dialogue, architectural details, lighting warmth.
+
+### §11.2 Church Attention Pool — Player-Facing Indicators
+
+The Church Attention Pool (AP) per territory (params_board_game.md) operates behind the scenes. The player should perceive its effects without knowing the number.
+
+| AP Level | Player-Perceivable Indicator |
+|----------|------------------------------|
+| 0 | No Church surveillance activity. Normal environment. |
+| 1 | A clerk in Church vestments is seen watching the market from a second-floor window. A merchant mentions that a Church official asked about recent visitors. |
+| 2 | A Church procession passes through the territory — formal and deliberate. An NPC mentions that the Church has been "asking questions about Thread activity." |
+| 3 | Inquisitor's seal appears on a public notice in the town square. NPCs with Disposition ≤ 0 toward the player avoid being seen with them in public. |
+| 4+ | The Inquisitor is present. Church guards patrol. NPCs whisper. Anyone seen talking to the player in private may be questioned afterward. Fieldwork Exposure +1 automatic per scene (the environment itself is hostile to investigation). |
+
+### §11.3 TC Milestone Presentation
+
+When the Theocracy Counter (TC) crosses a milestone threshold, the change is visible across the peninsula — not just in the affected territory.
+
+| TC Threshold | Presentation |
+|-------------|-------------|
+| TC 40 | Church authority is becoming assertive. In Church-controlled territories: new construction (chapels, schools). In non-Church territories: Church envoys arrive with formal diplomatic proposals. |
+| TC 55 | Church is the dominant institutional force. Parliamentary debates increasingly reference Church doctrine. Crown officials are seen attending Church ceremonies. Trade guilds negotiate with Church officials directly. |
+| TC 65 | Church is approaching hegemony. Non-Church factions must actively resist or be absorbed. Suppress Heresy actions fire in border territories. The atmosphere shifts from institutional competition to institutional survival. |
+| TC 75 (phase transition) | Graduated Seizure eligible. The Church is no longer competing — it is consolidating. The question for every other faction is not "how do we win" but "how do we survive." |

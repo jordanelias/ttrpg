@@ -720,3 +720,54 @@ All items below require user approval before compilation.
 | BG-EDIT-02 | Faction-specific tactic cards (§B.4) | 8 faction cards above |
 | CLOCK-EDIT-01 | Institutional Pressure 75+ Altonian invasion unit stats | See simulation report |
 | CLOCK-EDIT-02 | Church military victory → Theocracy Counter change | No Theocracy Counter change from military victory alone (confirm) |
+---
+
+## PART D: MASS COMBAT WORLD BRIDGE (NEW)
+
+### §D.1 Post-Battle Consequence Scenes
+
+After every mass battle, the player receives a mandatory Scene Slate entry (Priority 0 per player_agency_v30 §4.2 Step 1 if present in territory; Priority 1 per scale_transitions_v30 §4.3.3 if adjacent). The post-battle scene does not cost a scene action — it is the aftermath, and it is always worth experiencing.
+
+**Aftermath scene structure:**
+
+The player arrives at or remains in the battlefield territory after the battle resolves. The scene presents three choice points (the player selects one — the others resolve through NPC AI):
+
+| Choice | Action | Mechanical Consequence |
+|--------|--------|----------------------|
+| Tend the wounded | Endurance or Attunement check, Ob 2 | Success: 1 surviving unit recovers +1 Size (casualties saved). Disposition +1 with all surviving unit officers. Overwhelming: +1 Accord in this territory (compassion as governance). |
+| Survey the damage | Cognition check, Ob 1 | Success: reveals exact casualties, territory infrastructure damage, and one hidden consequence (NPC death, Accord shift, or evidence planted during the chaos). Overwhelming: +1 Momentum (tactical understanding). |
+| Address the population | Charisma check, Ob 2 | Success: Accord +1 in this territory (speech as governance). Failure: Accord −1 (the population needed comfort and received platitudes). Overwhelming: +1 Renown (the player's words mattered to the people). |
+
+**If the player was not present for the battle:** The aftermath scene is replaced by a "Where Were You?" retrospective scene per scale_transitions_v30 §4.4. The player learns about the battle's outcome through their social network. The three aftermath choices are not available — the moment has passed.
+
+### §D.2 Named Unit Officers
+
+Each mustered unit has one named officer NPC. The officer is generated at Muster with a minimal profile:
+
+| Attribute | Value |
+|-----------|-------|
+| Name | Generated from territory of muster (GM or procedural). |
+| Conviction | Inherited from faction (one of the faction's two Conviction values per npc_behavior_v30 §2). |
+| Disposition toward player | Starting: +1 (the player's faction mustered them). |
+| Resonant Style | Same as faction leader's primary Resonant Style. |
+
+**Officer Disposition shifts:**
+- Player issues a tactically sound command (Battle turn where player's choice contributes to victory): +1
+- Player orders a retreat or sacrifice that saves the unit: +1
+- Player orders the unit into a situation that costs Size ≥ 2: −1
+- Player is absent from a battle where the unit fights: −1
+
+**Officer death:** When a unit takes Size loss, the officer may be killed. Roll: 1d10. On result ≤ Size lost, the officer is killed. Example: unit loses 2 Size → officer killed on 1 or 2.
+
+**Death consequences:**
+- Player receives notification: "Captain [Name] fell at [location]."
+- If Disposition was ≥ +2: player's Conviction may be strained (same mechanic as combat death cascade in combat_v30 §13.3).
+- If the unit had been with the player for 3+ seasons: +1 Renown (the loss is publicly mourned — the player's leadership is noted).
+
+**Officer at Disposition +3:** The officer becomes eligible for companionship (per companion_specification_v30 §2.1). A unit officer who travels with the player as a companion still commands their unit in battle — dual role. If the companion-officer is killed in battle, the departure scene fires as a combat death, not a social departure.
+
+### §D.3 Player Morale Effect
+
+Units in the player's current territory gain +1 Discipline while the player is physically present during battle. If the player is wounded (2+ wounds) or incapacitated during the battle, all friendly units in the battle take −1 Discipline immediately (morale shock). This is the Mount & Blade effect — the player's presence on the battlefield matters to the soldiers.
+
+**Board Game adaptation:** If a PC is embedded in a territory during battle (per scale_transitions_v30 §9 PC Faction Embedding), friendly units gain +1D on the first battle roll. This stacks with Commander bonus but is capped at +1D total from PC presence.
