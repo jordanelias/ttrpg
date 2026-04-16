@@ -247,20 +247,24 @@ DR is subtracted from damage after net hits + weapon modifier.
 
 ## 7. WOUNDS AND STAMINA
 
-### Wounds
-Health = (Endurance + 6) × (max Wounds + 1) — total pool, never resets. Wounds accumulate at intervals of every (Endurance + 6) damage. Each threshold crossed: Wound counter +1, −1D penalty applies. At 0 Health: incapacitated (max Wounds reached). (PP-232, ED-438)
+### Wounds (ED-548 correction, 2026-04-16)
 
-**Max wounds formula: floor(Endurance ÷ 2) + 1** (PP-263)
+**Wound Interval = Endurance + 6** (range 7–13). Damage accumulates against the current wound's interval. At Wound Interval damage: take one Wound, damage counter resets to zero, continue accumulating toward the next Wound. (PP-210, structural correction applied)
 
-| Endurance | Max Wounds before incapacitation |
-|-----------|----------------------------------|
-| 1 | 1 |
-| 2–3 | 2 |
-| 4–5 | 3 |
-| 6–7 | 4 |
+**Max Wounds = floor(Endurance ÷ 2) + 1** (PP-263)
 
-At max Wounds the Health pool reaches 0: incapacitated. No staged incapacitation states. (PP-232, ED-130 resolved)
+| Endurance | Wound Interval | Max Wounds | Total Damage Capacity = WI × (MW + 1) |
+|-----------|----------------|------------|---------------------------------------|
+| 1 | 7 | 1 | 14 |
+| 2–3 | 8–9 | 2 | 24–27 |
+| 4–5 | 10–11 | 3 | 40–44 |
+| 6–7 | 12–13 | 4 | 60–65 |
+
+Total damage capacity before incapacitation = Wound Interval × (Max Wounds + 1). The final Wound Interval (the one after the maximum number of Wounds) is the incapacitation threshold — filling it is what pushes the character past Max Wounds. At Max Wounds + 1 Wound accrued: incapacitated. No staged incapacitation states. (PP-232, ED-130 resolved; ED-548 corrects prior formula.)
+
 Each Wound: −1D Combat Pool only (cumulative). No Ob penalty from wounds. (PP-232, replaces PP-165)
+
+**Design note:** the prior formulation ("Health = Endurance + 6, resets to full on Wound") produced a cliff effect — Wounds always appeared at the same perceived threshold, and the Combat Pool penalty stacked at a uniform rate regardless of the character's actual resilience. The corrected formulation scales total capacity with both Endurance (via Wound Interval) and Max Wounds (via the multiplier), producing a smooth curve. A high-Endurance character absorbs more total damage AND accrues Wounds more slowly. The −1D per Wound penalty now reflects a genuine resource depletion, not a ticking clock to inevitable incapacitation.
 
 ### Stamina
 Stamina = Endurance + Relevant History + 1 − armour modifier. **Minimum 2. Maximum = base value (PP-275).** (PP-232) Take a Breath restores Endurance score, capped at base Stamina value. Cannot wear armour whose Stamina modifier would reduce Stamina to 1 or below. (PP-232)

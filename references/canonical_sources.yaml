@@ -36,7 +36,7 @@ systems:
   combat:
     status: active
     canonical: designs/combat/combat_v30.md
-    canonical_sha__designs__combat__combat_v30_md: "d9dcb47ad730b1c934a9bd1678f2dad552faafba"
+    canonical_sha__designs__combat__combat_v30_md: "ee5ae9a52b5f59169a416ccb8444f54f3d872065"
     params: references/params_combat.md
     design_doc: designs/combat/combat_v30.md
 

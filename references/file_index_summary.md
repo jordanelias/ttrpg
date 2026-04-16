@@ -1,6 +1,6 @@
 # File Index — Session Summary
 # Full index: references/file_index.md (446 lines)
-# Last updated: 2026-04-14
+# Last updated: 2026-04-16
 
 ## Status
 - Compilation: ALL DEPRECATED (design docs canonical)
@@ -9,7 +9,7 @@
 
 ## Canonical Design Docs (current)
 board_game: designs/board_game/board_game_v30.md
-combat: designs/combat/combat_v30.md
+combat: designs/combat/combat_v30.md  # ED-548 patched 2026-04-16 (Wound Interval formula)
 mass_combat: designs/mass_combat/mass_battle_v30.md
 contest: designs/contest/social_contest_v30.md
 threadwork: designs/ttrpg/threadwork_v30.md
@@ -21,6 +21,7 @@ tc_political_redesign: designs/board_game/tc_political_redesign_v30.md
 geography: designs/setting/geography_v30.md
 fieldwork: designs/fieldwork/fieldwork_v30.md
 npc_behavior: designs/systems/npc_behavior_v30.md
+ui_ux_reference: designs/ui/valoria_ui_ux_v4.md  # NEW 2026-04-16 — Godot-facing spec
 
 ## Register Locations (chunked)
 patch_register_active: canon/patch_register_active.yaml

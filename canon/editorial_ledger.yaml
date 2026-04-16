@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 548
+# next_id: 549
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Index: canon/editorial_ledger_index.md
 # Last updated: 2026-04-14
@@ -95,3 +95,11 @@ editorial_decisions:
     status: open
     severity: P3
     affects: [designs/fieldwork/fieldwork_v30.md]
+
+  - id: ED-548
+    date: 2026-04-16
+    description: "Wound Interval formula correction. Health = (Endurance + 6) * (Max Wounds + 1); Wound accrues every (Endurance + 6) damage. Replaces single-WI-with-reset formulation with scaling total capacity. Applied to combat_v30 §7."
+    status: resolved
+    severity: P1
+    affects: [designs/combat/combat_v30.md]
+
