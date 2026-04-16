@@ -228,6 +228,43 @@ Both orators push in the same direction within the same temporal horizon.
 
 **Post-contest recovery:** all strain and Concentration depletion clear at scene end. Spent clears at scene end. RS changes subject to RS ceiling (100) and RS=0 lockout.
 
+### §6.1 Obligations (NEW — post-contest binding commitments)
+
+A Decisive win (Conviction Track ≥ 7 or ≤ 3) in a Formal or Grand Contest produces a binding **Obligation** — a mechanical commitment that persists across seasons. The Obligation is the contest's lasting consequence in the game world, not just a stat change.
+
+**Obligation structure:** The winning side names one specific commitment that the losing side must honor. The commitment must be achievable and verifiable (not "be good" but "withdraw Templars from Gransol within 2 seasons").
+
+| Contest Type | Obligation Duration | Violation Consequence |
+|-------------|--------------------|--------------------|
+| Formal Contest (Parliament) | 2 seasons | Violating faction: Mandate −1. Reputation shift. Contest Fatigue on faction leader. |
+| Grand Contest | 4 seasons or until a specified game-state condition changes | Violating faction: Mandate −2. Stability −1. Faction's next DA targeting the violated party faces +2 Ob (institutional credibility lost). |
+| Royal Audience | 2 seasons (Crown-imposed) | Crown Mandate −1 on violation (the Crown's word is broken). |
+| Church Tribunal | Until formally revoked by Church authority | Heresy Investigation acceleration. Excommunication eligible. |
+
+**Obligation tracking:** Obligations are tracked as clocks per clock_registry_v30. Each Obligation has: source (which contest), parties (who is bound), commitment (what must be done or not done), duration (seasons remaining), and violation trigger (what constitutes breach).
+
+**Player Obligations:** When the player loses a contest, they receive an Obligation. The player is not forced to comply — they may violate it. Violation consequences apply: the player's faction loses Mandate, the player loses Reputation, and the NPC who won the original contest gains Disposition +1 toward the player's rivals (the violation justifies their position).
+
+**NPC Obligations:** When an NPC faction loses a contest and receives an Obligation, the NPC priority tree is modified: any action that would violate the Obligation is blocked for the Obligation's duration unless the faction enters Survival priority (Stability ≤ 2). This means a won contest has lasting strategic impact — the player can constrain an NPC faction's behavior through political victory, not just stat changes.
+
+### §6.2 Conviction Scar Visibility (NEW — player-facing)
+
+When a player's contest argument produces a Conviction Scar on an NPC (per npc_behavior_v30 §3.2 — decisive outcome via Resonant Style targeting with Conviction engagement), the player receives a narrative signal. The GM states: "Something shifted in [NPC]'s expression. Your argument reached something they cannot dismiss." This is not a stat reveal — the player does not learn the Scar count. They learn that their words had structural impact.
+
+**Videogame implementation:** NPC portrait shows a subtle visual indicator (a crack, a flicker, a moment of instability) when a Scar is produced. The indicator is momentary — it does not persist on the portrait. The player must remember that they wounded this NPC's conviction. If they Appraise in a future contest, the Scar count is revealed per npc_behavior §3.1 (Appraise Overwhelming: one Conviction revealed).
+
+### §6.3 Chain Contests (NEW — unresolved tension generates follow-up)
+
+When a contest ends in Compromise (Conviction Track 4–6), the tension is deferred, not resolved. The unresolved contest generates a Scene Slate entry for the following season per player_agency_v30 §4.2 (Priority 1 — the unresolved political tension is a crisis event).
+
+**Chain contest rules:**
+- The follow-up contest starts at the Conviction Track's final position from the previous contest (not reset to 5). If the first contest ended at Track 4, the chain contest starts at Track 4.
+- All strain and Concentration reset normally between sessions.
+- Disposition changes from the first contest carry into the second.
+- The NPC's Scar count from the first contest persists — accumulated wounds do not heal between chain contests.
+- A chain contest's Decisive win produces an Obligation (§6.1) as normal. A second Compromise extends the chain — another follow-up Scene Slate entry for the next season.
+- Maximum chain length: 3 contests. After 3 consecutive Compromises, the tension resolves as a permanent stalemate: both parties establish a cold equilibrium. Disposition freezes at current level. Neither party can initiate a contest on this topic for 4 seasons.
+
 ---
 
 ## §7 ASYMMETRIC PROCEEDINGS

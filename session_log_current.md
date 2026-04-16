@@ -73,3 +73,7 @@ blockers: []
 ### BRIDGE PRIORITIES 3-4 APPLIED
 - scale_transitions_v30.md: §4.3 extended with 6 mandatory Zoom In triggers, 5 world-state triggers, §4.4 Where Were You retrospective scenes, §7 Sufficient Scope extended
 - npc_behavior_v30.md: §8.11 NPC Personal Outreach Generation — outreach/demand conditions, scene structure, volume control
+### BRIDGE PRIORITIES 5-6-8 APPLIED
+- fieldwork_v30.md: Investigation Synthesis via Reconstruct (4-degree completion mechanic), §5.9 NPC-Initiated Social Engagement (outreach/demand scene rules)
+- social_contest_v30.md: §6.1 Obligations (binding post-contest commitments with violation consequences), §6.2 Conviction Scar Visibility, §6.3 Chain Contests (compromise→follow-up, max 3 chains)
+- combat_v30.md: §13 Combat World Bridge — Domain Echo on named NPC combat, Combat Reputation cascade (0-6+ scale), Death Cascade (5-step consequence chain)

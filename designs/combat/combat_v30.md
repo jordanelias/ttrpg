@@ -417,3 +417,51 @@ All P2-B11 clarifications incorporated above.
 - ED-033: Commander bonus formula conflict (three formulas).
 - ED-040: Artillery Balanced disposition lock — intentional?
 - [EDITORIAL: P2-B11-19 Thread Tension 80+ effect in mass battle — define or confirm no effect]
+
+---
+
+## 13. COMBAT WORLD BRIDGE (NEW)
+
+### §13.1 Combat Domain Echo
+
+Combat against named NPCs who hold faction office (officer, cardinal, commander, agent, faction leader) fires Domain Echo per scale_transitions_v30 §7 condition 5. The combat IS an institutional event — violence against a faction representative challenges that faction's authority.
+
+| Combat Outcome | Domain Echo |
+|---------------|-------------|
+| Player defeats faction officer (incapacitation or surrender) | Acting faction: relevant stat +1. Target faction: Stability −1. |
+| Player kills faction officer | Acting faction: relevant stat +1. Target faction: Stability −1, Mandate −1. |
+| Player is defeated by faction officer | Target faction: Mandate +1 (authority demonstrated). Player's faction: no stat change (the defeat is personal). |
+| Player kills faction leader | All consequences of officer death above. Additionally: faction enters Succession per npc_behavior_v30 §5.2 arc profiles. |
+
+**Combat Domain Echo fires at scene end**, not mid-combat. If the player initiates combat with a faction officer, they should know that the consequences will propagate.
+
+### §13.2 Combat Reputation Cascade
+
+Public combat accumulates a Combat Reputation that modifies NPC behavior toward the player.
+
+**Combat Reputation Sources:**
+- Public combat victory (3+ witnesses): +1 Combat Reputation
+- Killing a named NPC in combat: +1 Combat Reputation
+- Overwhelming victory: +1 additional Combat Reputation
+- Public combat defeat: −1 Combat Reputation (minimum 0)
+
+**Combat Reputation Effects:**
+
+| Reputation | Effect |
+|-----------|--------|
+| 0–1 | No effect. The player is not known as a combatant. |
+| 2–3 | NPCs at Disposition ≤ 0 are less likely to initiate combat (NPC evaluates: is this fight worth it?). +1 Ob to Intimidate equivalent (Impress with hostile intent). |
+| 4–5 | NPCs at Disposition ≤ −2 avoid direct confrontation (prefer ambush, institutional action, or proxy violence). Church Attention Pool +1 in territories where combat occurred (violence draws institutional notice). |
+| 6+ | The player is feared. All first-meeting NPC Dispositions shift −1 (fear, not respect). Faction leaders evaluate the player as a military threat at Priority 6 (Reactive) of their trees. |
+
+Combat Reputation decays: −1 per year of no public combat.
+
+### §13.3 Death Cascade
+
+Killing a named NPC in combat triggers the following cascade:
+
+1. **Immediate:** All NPCs Knotted to the dead NPC suffer Knot rupture (per threadwork_v30 Knot strain rules). Rupture produces: Disposition toward the killer −3, Conviction Scar if the dead NPC was central to the Knotted NPC's active Conviction.
+2. **Scene Slate:** All NPCs with Disposition ≥ +2 toward the dead NPC receive a Priority 1 Scene Slate entry next season — their grief, their response, their reckoning. These are the people who will remember what the player did.
+3. **Faction:** If the dead NPC was a faction officer: Stability trigger per faction_layer_v30 §1.2. If faction leader: Succession fires per npc_behavior_v30 §5.2.
+4. **Exposure:** Killing a named NPC in combat generates Exposure per §11.5 (quiet +1, conspicuous +2, public +3). Additionally: +2 Exposure in every territory where the dead NPC had Disposition ≥ +2 with local NPCs (the news spreads through the dead NPC's relational network).
+5. **Player Conviction test:** If the player has an active Conviction that the dead NPC was relevant to (e.g., "I will protect Torben" and Torben is killed), the Conviction is immediately strained. If the killing was the player's action: the player must revise the Conviction (the goal has failed or transformed). If the killing was another NPC's action: the player may keep the Conviction but it transforms — "I will protect Torben" becomes "I will avenge Torben" or "I will ensure Torben's death was not meaningless."
