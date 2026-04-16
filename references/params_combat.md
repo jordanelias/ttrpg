@@ -131,10 +131,10 @@ Exchange 1 initiative: higher Attunement acts last (highest information). Subseq
 
 ## Wounds / Incapacitation (PP-232)
 
-Health = (Endurance + 6) × (wound count + 1).
+Health = (Endurance + 6) × (max Wounds + 1). Total pool — never resets.
 Wound threshold = every (Endurance + 6) points of accumulated damage.
-Taking a Wound: the wound counter increments; Health resets to (Endurance + 6) × (new wound count + 1).
-Example: Endurance 4, 2 wounds → Health = 30; wounds at 20 and 10; incapacitated at 0.
+Taking a Wound: the Wound counter increments by 1; the pool continues depleting without reset.
+Example: Endurance 4 → max Wounds 3, total Health 40. Wounds at 30 HP, 20 HP, 10 HP; incapacitated at 0 HP.
 Allows critical hits to deal multiple wounds simultaneously.
 
 Per Wound: **−1D Combat Pool only** (no Ob penalty). (PP-232)
@@ -261,9 +261,9 @@ formula: every (Endurance + 6) Health depleted = 1 wound. A sufficiently powerfu
 hit can inflict multiple wounds in a single strike. This is the intended lethality model.
 
 ### No excess damage carry-over (ED-201 resolved)
-Damage does not carry over when a wound threshold is crossed. When Health reaches 0,
-a wound is taken and Health resets to (Endurance + 6). Any excess damage beyond the
-0-threshold is lost. Wounds are discrete thresholds.
+Wound thresholds are milestones on a non-resetting pool. Health depletes continuously;
+each time an (Endurance + 6) interval is crossed the Wound counter increments.
+No excess damage is lost and no reset occurs. Wounds are discrete milestones, not resets.
 
 ### Recovery model (ED-202 resolved)
 No Quick Rest / Full Rest distinction. Single recovery model:

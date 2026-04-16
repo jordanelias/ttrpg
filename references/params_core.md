@@ -116,7 +116,7 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 
 | Score | Formula | Range | Notes |
 |-------|---------|-------|-------|
-| Health | Endurance + 6 per wound | 7–13 per wound | Wound threshold = Endurance + 6. On each Wound taken: threshold resets (Health refills). Total capacity = (End + 6) × (wound count + 1). See params_combat.md for cumulative formula. (PP-248, ED-438) |
+| Health | (Endurance + 6) × (max Wounds + 1) | 14–44 | Total pool; never resets. Wounds accumulate every (End + 6) damage; −1D per Wound. Incapacitated at 0 HP. See params_combat.md. (PP-232, ED-438) |
 | Stamina | Endurance + 1 | min 2 | Combat resource. Floor 2. Cannot wear armour that would reduce Stamina to 1 or below. (PP-248/PP-611 confirmed) |
 | Composure | Charisma + 6 | 7–13 | Social damage buffer before Rattled. Parallels Health = Endurance + 6. (PP-234, ED-127 resolved) |
 | Combat Pool | (Agility × 2) + weapon History (points + 3) | min 5 | Split Offence/Defence each round. PP-615: doubled formula confirmed canonical; PP-247 note was stale. |

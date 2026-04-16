@@ -71,7 +71,11 @@ Your Disposition with each NPC ranges from −4 to floor(Bonds/2)+1. At Disposit
 
 Damage = net hits + Strength + weapon modifier − armor DR. Damage accumulates toward your Wound Threshold (Endurance + 6). At threshold: you take a Wound (−1D to all pools), counter resets. At max Wounds (floor(Endurance/2)+1): incapacitated.
 
-**Debate** (Social Contest). Engage in formal argument. The adjudicator determines your primary attribute: Expert judge → Cognition, Crowd → Charisma, No adjudicator → Attunement. You choose a genre (Precedent = arguing from the past, Prospect = arguing from the future) and orientation (Revealing = showing truth, Obscuring = hiding truth), producing one of four styles: Citation, Vision, Suppression, or Insinuation.
+**Debate** (Social Contest). Engage in formal argument. The adjudicator determines your primary attribute: Expert judge → Cognition, Crowd → Charisma, No adjudicator → Attunement. You choose one of four argument styles — each is a single choice, not two separate steps:
+- **Precedent** (Memory + Revealing): cite what happened openly.
+- **Suppression** (Memory + Obscuring): bury inconvenient history.
+- **Vision** (Projection + Revealing): propose a transparent future.
+- **Insinuation** (Projection + Obscuring): imply unstated consequences.
 
 Each exchange: Appraise (read opponent) → Declare style → optionally Corroborate (spend gathered evidence for +1D) → Argue (roll your contest pool) → Resolve (compare results). The Conviction Track moves toward your position or your opponent's. When one side hits 0 or 10, the contest ends. Composure (Charisma + 6) is your social health — take enough social damage and you're Rattled (+1 Ob) or Spent (−2D, must regroup).
 

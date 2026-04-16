@@ -248,7 +248,7 @@ DR is subtracted from damage after net hits + weapon modifier.
 ## 7. WOUNDS AND STAMINA
 
 ### Wounds
-Health = Endurance + 6 (range 7–13). Damage accumulates each round against Health. At 0 Health: take one Wound, Health resets to full. (PP-210)
+Health = (Endurance + 6) × (max Wounds + 1) — total pool, never resets. Wounds accumulate at intervals of every (Endurance + 6) damage. Each threshold crossed: Wound counter +1, −1D penalty applies. At 0 Health: incapacitated (max Wounds reached). (PP-232, ED-438)
 
 **Max wounds formula: floor(Endurance ÷ 2) + 1** (PP-263)
 
@@ -259,7 +259,7 @@ Health = Endurance + 6 (range 7–13). Damage accumulates each round against Hea
 | 4–5 | 3 |
 | 6–7 | 4 |
 
-At max Wounds: incapacitated. Health track runs to 0 = incapacitated. No staged incapacitation states. (PP-232, ED-130 resolved)
+At max Wounds the Health pool reaches 0: incapacitated. No staged incapacitation states. (PP-232, ED-130 resolved)
 Each Wound: −1D Combat Pool only (cumulative). No Ob penalty from wounds. (PP-232, replaces PP-165)
 
 ### Stamina
