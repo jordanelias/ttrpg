@@ -70,6 +70,34 @@ _session_token:    str  = None
 _health_checked:   bool = False
 _commit_auth:      str  = None
 
+# ── Disk cache (persists across bash_tool subprocesses) ──────────────────────
+_CACHE_PATH = '/home/claude/.valoria_cache.json'
+
+def _save_cache() -> None:
+    """Write _session_fetches to disk. Called after reads and commits."""
+    try:
+        with open(_CACHE_PATH, 'w') as f:
+            json.dump({
+                'fetches': {k: v for k, v in _session_fetches.items() if v is not None},
+                'token': _session_token,
+            }, f)
+    except Exception:
+        pass  # non-fatal — cache is optimization, not requirement
+
+def _load_cache() -> bool:
+    """Restore _session_fetches from disk. Returns True if cache loaded."""
+    global _session_fetches, _session_token, _health_checked
+    try:
+        with open(_CACHE_PATH) as f:
+            data = json.load(f)
+        _session_fetches = data.get('fetches', {})
+        _session_token = data.get('token')
+        _health_checked = True  # health was checked when cache was written
+        return bool(_session_fetches)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return False
+
+
 def _repo_key(path: str, repo: str) -> str:
     """Namespace fetch keys by repo to avoid collisions."""
     return f"{repo}:{path}"
@@ -270,6 +298,7 @@ def read_files_graphql(paths: list, repo: str = None,
         output[path] = content
 
     _refresh_token()
+    _save_cache()
 
     # Health check: only for ttrpg, only on first call with threshold-governed files
     if not _health_checked and not skip_health_check and REPOS[repo]['enforce_health']:
@@ -420,6 +449,7 @@ def atomic_commit(
             _refresh_token()
         else:
             _session_token = None
+        _save_cache()
 
         return oid
 
@@ -529,9 +559,9 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
     """
     Standard preamble for every bash_tool block after the initial bootstrap.
 
-    Reads PAT from .valoria_pat (written by bootstrap), sets env, fetches
-    session-start files + any extra_paths, calls assert_bootstrap() on the
-    imported valoria_hooks module.
+    Uses disk cache to avoid re-fetching files already read this session.
+    Only fetches from GitHub when: (a) cache miss, or (b) extra_paths not cached.
+    atomic_commit() invalidates cache for committed paths, ensuring freshness.
 
     Returns: (g, h, files, token) — ready to use immediately.
 
@@ -545,27 +575,30 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
     import importlib, valoria_hooks as _h_mod
     importlib.reload(_h_mod)  # reset process-scoped state (bootstrap_confirmed etc.)
 
+    # Restore session state from disk cache (written by previous bash_tool blocks)
+    cache_hit = _load_cache()
+
     session_paths = [
         'session_log_current.md',
         'canon/editorial_ledger_summary.yaml',
         'references/file_index_summary.md',
         'references/canonical_sources.yaml',
     ]
-    # Skip re-fetching session paths already cached (saves API calls within a session)
-    # Safety: atomic_commit() invalidates cache for committed paths
-    cached = [p for p in session_paths
-              if _repo_key(p, 'ttrpg') in _session_fetches
-              and _session_fetches[_repo_key(p, 'ttrpg')] is not None]
-    needed = [p for p in session_paths if p not in cached]
-    extras = [p for p in (extra_paths or []) if p not in session_paths]
-    fetch_paths = needed + extras
-    if fetch_paths:
-        files = read_files_graphql(fetch_paths)
-    else:
-        files = {}
-    # Merge cached content into return dict
-    for p in cached:
-        files[p] = _session_fetches[_repo_key(p, 'ttrpg')]
+    all_needed = session_paths + [p for p in (extra_paths or []) if p not in session_paths]
+
+    # Only fetch paths not already in cache
+    to_fetch = [p for p in all_needed
+                if _repo_key(p, 'ttrpg') not in _session_fetches
+                or _session_fetches[_repo_key(p, 'ttrpg')] is None]
+
+    if to_fetch:
+        read_files_graphql(to_fetch)  # populates _session_fetches + saves cache
+
+    # Build return dict from cache
+    files = {}
+    for p in all_needed:
+        key = _repo_key(p, 'ttrpg')
+        files[p] = _session_fetches.get(key)
 
     import github_ops as _g_mod
     token = _h_mod.assert_bootstrap()
