@@ -46,3 +46,23 @@ blockers: []
 
 ## ADDITIONAL COMMIT 2
 - designs/systems/player_agency_v30.md — Beliefs, Duties, Scene Slate, Stature Progression
+
+## SESSION: 2026-04-16 (player-world bridge)
+
+### TASKS COMPLETED
+1. File reorganization: 14 loose files renamed/moved, 3 duplicates deleted (ffe51d6)
+2. Player-world bridge overview: 326 lines, 11 systems audited, rated W→P and P→W (d6fc20e)
+3. Bridge Part 1 revision package: Renown track, mechanical Scene Slate, companion specification, 22-item implementation sequence
+
+### COMMITS
+- ffe51d6: [editorial] file reorganization
+- d6fc20e: [editorial] player-world bridge overview
+- this commit: Part 1 revision package (Renown + Scene Slate + Companions)
+
+### NEXT SESSION PRIORITIES (ordered)
+1. Apply Part 1 revisions to player_agency_v30.md (rename Beliefs→Convictions, add Renown §5.4, replace §4.2)
+2. Create companion_specification_v30.md as new canonical file
+3. Priorities 3-5 from bridge overview: NPC Outreach, mandatory Zoom In, fieldwork extensions
+4. Priorities 6-8: Obligations, Scar visibility, Accord pathways, combat bridge
+5. Priorities 9-10: CV presentation, mass combat aftermath
+6. Holistic W→P / P→W review of all revised documents
