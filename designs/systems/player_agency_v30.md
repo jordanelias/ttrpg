@@ -2,7 +2,7 @@
 ## Design Proposal — PP-TBD
 ## Status: PROPOSAL — requires approval before integration
 ## Date: 2026-04-15
-## Scope: Player motivation, scene generation, belief system, faction role, moment-to-moment decision loop
+## Scope: Player motivation, scene generation, conviction system, faction role, moment-to-moment decision loop
 ## Affects: character creation (params_core), season structure (board_game_v30), fieldwork (fieldwork_v30), scale transitions (scale_transitions_v30), NPC behavior (npc_behavior_v30)
 ## Canon compliance: P-03 (consciousness-performed rendering — player's perceptual horizon defines available scenes), P-15 (three-layer being-persistence — Beliefs are personal, Duties are cultural, Convictions are metaphysical)
 
@@ -62,37 +62,39 @@ Pentiment's protagonist investigates in a community. Every conversation changes 
 
 ---
 
-## §2 — BELIEFS
+## §2 — CONVICTIONS
 
 ### 2.1 Definition
 
-A Belief is a player-authored statement of what their character intends to do, values, or wants to discover. It is not a conviction (that's an NPC system tracking ethical commitments). It is not a quest (there is no quest-giver and no guaranteed resolution). It is a declared intention that the game tracks and the player pursues.
+A Conviction is a player-authored statement of what their character intends to do, values, or wants to discover. It is not a quest (there is no quest-giver and no guaranteed resolution). It is a declared stance that the game tracks and the player pursues.
+
+**Vocabulary unification:** Player Convictions and NPC Convictions (npc_behavior_v30 §1.2) share the same name because they serve the same function — driving action and creating vulnerability. Both are targetable via Resonant Styles (npc_behavior §1.3). When an NPC's argument targets a player's Conviction successfully (Contest victory using the correct Resonant Style), the player marks a Conviction strain. Three strains on one Conviction: it must transform or be abandoned. This symmetry means the world affects the player the same way the player affects the world.
 
 ### 2.2 Structure
 
-Three Beliefs at any time. Each Belief is one sentence: a subject, an action or stance, and an implicit obstacle.
+Three Convictions at any time. Each Conviction is one sentence: a subject, an action or stance, and an implicit obstacle.
 
-Good Beliefs: "I will discover what Haelgrund is hiding from the Church." "I will protect Torben from becoming an Altonian pawn." "I will prove to Almud that the Thread is real without destroying his authority." "I will build a network of Thread-aware allies before the Church finds me."
+Good Convictions: "I will discover what Haelgrund is hiding from the Church." "I will protect Torben from becoming an Altonian pawn." "I will prove to Almud that the Thread is real without destroying his authority." "I will build a network of Thread-aware allies before the Church finds me."
 
-Bad Beliefs (too vague, too passive, no obstacle): "I want to help my faction." "I believe in justice." "I will see what happens."
+Bad Convictions (too vague, too passive, no obstacle): "I want to help my faction." "I believe in justice." "I will see what happens."
 
 ### 2.3 Mechanical Integration
 
-**Creation:** During character creation, write 3 Beliefs. One should relate to a personal goal, one to a faction concern, one to a relationship or NPC.
+**Creation:** During character creation, write 3 Convictions. One should relate to a personal goal, one to a faction concern, one to a relationship or NPC.
 
-**Scene generation:** The Scene Slate (§4) prioritizes opportunities that intersect with active Beliefs. If the player has "I will discover what Haelgrund is hiding," scenes involving Haelgrund, Church internal politics, and secret Thread sensitivity surface more frequently.
+**Scene generation:** The Scene Slate (§4) prioritizes opportunities that intersect with active Convictions. If the player has "I will discover what Haelgrund is hiding," scenes involving Haelgrund, Church internal politics, and secret Thread sensitivity surface more frequently.
 
-**Momentum:** Pursuing a Belief in a scene grants +1 Momentum. The action must be a genuine step toward the Belief, not a retroactive justification. Momentum is spent for +1D or to invoke a Stunt.
+**Momentum:** Pursuing a Conviction in a scene grants +1 Momentum. The action must be a genuine step toward the Conviction, not a retroactive justification. Momentum is spent for +1D or to invoke a Stunt.
 
-**Fulfillment:** When a Belief is achieved or fundamentally abandoned, the player writes a new Belief. Fulfillment grants a one-time +2 Momentum and may trigger a character development moment (Certainty shift, NPC arc trigger, or Domain Echo if the fulfillment had Sufficient Scope).
+**Fulfillment:** When a Conviction is achieved or fundamentally abandoned, the player writes a new Conviction. Fulfillment grants a one-time +2 Momentum and may trigger a character development moment (Certainty shift, NPC arc trigger, or Domain Echo if the fulfillment had Sufficient Scope).
 
-**Contradiction:** If a Belief directly contradicts a Duty (§3), the player must choose which to pursue in any scene where both are relevant. This choice is the game's central tension for non-leader characters — personal meaning vs institutional obligation.
+**Contradiction:** If a Conviction directly contradicts a Duty (§3), the player must choose which to pursue in any scene where both are relevant. This choice is the game's central tension for non-leader characters — personal meaning vs institutional obligation.
 
-### 2.4 Why Beliefs Work
+### 2.4 Why Convictions Work
 
-Beliefs solve the "why does my character get out of bed" problem without railroading. The player decides what matters. The game responds by generating relevant opportunities. The player executes using the existing mechanical systems (combat, contest, fieldwork, Thread). The outcome feeds back into clocks, NPC states, and territory conditions. The cycle repeats.
+Convictions solve the "why does my character get out of bed" problem without railroading. The player decides what matters. The game responds by generating relevant opportunities. The player executes using the existing mechanical systems (combat, contest, fieldwork, Thread). The outcome feeds back into clocks, NPC states, and territory conditions. The cycle repeats.
 
-Beliefs also solve the "creative player" problem: a player who writes "I will forge a secret alliance between Varfell and the Restoration Movement" has invented a strategic objective that no NPC priority stack would generate. The game doesn't need to anticipate this — it needs to present scenes where the player can pursue it (meetings with Vaynard, meetings with Vossen, territories where both factions have Presence, contests where both factions' interests align).
+Convictions also solve the "creative player" problem: a player who writes "I will forge a secret alliance between Varfell and the Restoration Movement" has invented a strategic objective that no NPC priority stack would generate. The game doesn't need to anticipate this — it needs to present scenes where the player can pursue it (meetings with Vaynard, meetings with Vossen, territories where both factions have Presence, contests where both factions' interests align).
 
 ---
 
@@ -131,13 +133,13 @@ At the start of each season, the player's faction leader evaluates the faction's
 
 **Exceeding:** Completing the Duty AND producing additional value (discovered a conspiracy, turned an enemy NPC, generated Casus Belli). Standing +2 instead of +1.
 
-### 3.5 Duty vs Belief Tension
+### 3.5 Duty vs Conviction Tension
 
 The game's richest moments emerge when Duty and Belief conflict. Examples:
 
-- **Duty:** "Investigate Church activity in Gransol." **Belief:** "I will prove to Almud that the Thread is real." The investigation might reveal Church corruption — useful for the Belief — but acting on that evidence publicly might destabilize the faction's Church relationship, failing the implicit diplomatic goal behind the Duty.
+- **Duty:** "Investigate Church activity in Gransol." **Conviction:** "I will prove to Almud that the Thread is real." The investigation might reveal Church corruption — useful for the Belief — but acting on that evidence publicly might destabilize the faction's Church relationship, failing the implicit diplomatic goal behind the Duty.
 
-- **Duty:** "Protect Torben from Altonian influence." **Belief:** "I will build a network of Thread-aware allies." Spending a scene action on Torben protection means one fewer action for network-building. The player must triage.
+- **Duty:** "Protect Torben from Altonian influence." **Conviction:** "I will build a network of Thread-aware allies." Spending a scene action on Torben protection means one fewer action for network-building. The player must triage.
 
 The game does not resolve this tension. The player does. And their choice defines their character.
 
@@ -149,27 +151,65 @@ The game does not resolve this tension. The player does. And their choice define
 
 At the start of each season's Personal Phase, the game generates a **Scene Slate**: a set of available scene opportunities drawn from the current game state. The player chooses which to pursue with their limited scene actions (3–5 per season, set by game difficulty).
 
-### 4.2 Generation Sources
+### 4.2 Generation Algorithm
 
-Scene opportunities are drawn from five sources, evaluated in priority order:
+At the start of each season's Personal Phase, the game executes the following steps to produce the Scene Slate. Generation is deterministic — the same game state produces the same Slate.
 
-**Priority 1 — Crisis events (mandatory presentation):**
-- Territory at Accord 0 (Revolt) where player is present or adjacent.
-- NPC arc moment (conviction wound, loyalty threshold, Certainty shift) involving an NPC the player has Disposition ≥ +1 with.
-- Clock threshold crossed (MS band transition, CI milestone, IP threshold).
-- Active threat to the player (Heresy Investigation targeting the player, assassination attempt, military confrontation in player's territory).
+**Step 1 — Mandatory Crisis (Priority 0 — cannot be declined):**
 
-**Priority 2 — Duty-aligned opportunities:**
-- Scenes that advance the current season's Duty. If Duty is "Investigate Church activity in Gransol," scenes involving Church NPCs in Gransol, Church records, and Church-aligned territory residents are generated.
+For each condition TRUE, generate one mandatory scene entry:
+- Player is in or adjacent to a territory at Accord 0 (Revolt)
+- Player is the target of an active Heresy Investigation
+- A mass battle is occurring in the player's territory
+- Player's faction leader is assassinated, overthrown, or incapacitated this season
 
-**Priority 3 — Belief-aligned opportunities:**
-- Scenes that intersect with one or more active Beliefs. The game scans Belief text for NPC names, faction references, territory references, and system keywords (Thread, Church, treaty, etc.) and surfaces scenes containing those elements.
+Mandatory scenes consume 1 scene action each and cannot be deferred. If mandatory scenes exceed the scene action budget, remaining mandatory scenes resolve through NPC AI with the player present but unable to direct outcomes.
 
-**Priority 4 — Territorial opportunities:**
-- Events in the player's current territory or adjacent territories: NPC arrivals, trade caravans, military movements, Thread phenomena, RM community gatherings, Calamity radiation effects.
+**Step 2 — Crisis Events (Priority 1 — presented, optional):**
 
-**Priority 5 — Ambient world events:**
-- Low-priority scenes that add world texture: overheard conversations, rumors, environmental details, minor NPC interactions. These cost scene actions to pursue but may reveal unexpected leads.
+For each condition TRUE, generate one scene entry:
+- Any territory within 2 adjacencies of player at Accord ≤ 1
+- Any NPC with Disposition ≥ +1 toward player has Scar count ≥ 2 (conviction crisis)
+- Any NPC Knotted to the player has arc branch trigger condition met
+- Any global clock crossed a band threshold this season (MS, CI, IP)
+- Any NPC with Disposition ≥ +2 has an active Conviction that conflicts with their faction's current priority
+
+**Step 3 — Duty-Aligned (Priority 2):**
+
+Parse current Duty type. Generate 1–2 scenes matching Duty requirements:
+- Investigate → scene in target territory with relevant NPC or location
+- Diplomacy → scene with target NPC
+- Governance → scene in target territory with local NPCs
+- Protection → scene with threatened NPC or asset
+- Other types → map to most relevant fieldwork activity
+
+**Step 4 — Conviction-Aligned (Priority 3):**
+
+For each active Conviction, scan for intersection with:
+- Named NPCs (exact name match in Conviction text)
+- Faction references (faction name match)
+- Territory references (territory name match)
+- System keywords ("Thread," "Church," "investigation," "treaty," "Einhir," "Calamity")
+
+For each intersection found, generate one scene entry with the matching NPC/location. Maximum 3 Conviction-generated scenes.
+
+**Step 5 — NPC Outreach (Priority 3):**
+
+For each named NPC where ALL hold: Disposition ≥ +2 toward player, NPC has active Conviction relevant to player's location or faction, NPC's priority tree fired an action this season that could benefit from player involvement — generate one scene: "[NPC] seeks to meet with you. [Agenda description]."
+
+For each named NPC where ALL hold: Disposition ≤ −2 toward player, NPC holds institutional authority over player's territory, NPC's priority tree fired an action targeting player's faction — generate one scene: "[NPC] has summoned you. [Demand description]." Declining a demand: Disposition −1 with the NPC, +1 Exposure in their territory.
+
+**Step 6 — Territorial (Priority 4):**
+
+Generate 1–2 scenes from the player's current territory: NPC arrival, trade/economic event, Thread phenomenon (if RS ≤ 60 in this territory's Calamity band), military movement.
+
+**Step 7 — Ambient (Priority 5):**
+
+Generate 1 ambient scene: unstructured encounter offering low-stakes information or minor relationship opportunity.
+
+### 4.2b Slate Presentation
+
+Each entry shows: NPC name and location, one-sentence description, tag(s) indicating which Conviction/Duty/game-state condition generated this entry, and priority level (visible to the player).
 
 ### 4.3 Scene Slate Size
 
@@ -194,11 +234,18 @@ A single scene may involve multiple systems. Interviewing a reluctant NPC might 
 
 ### 4.5 Opportunities Not Pursued
 
-This is the design's sharpest edge. Unpursued opportunities produce consequences:
+Unpursued opportunities produce consequences. The world does not pause for the protagonist.
 
-- An NPC arc moment you missed: the NPC resolves their crisis based on their conviction and AI priority, without player influence. Haelgrund's secret TS is discovered by the Church instead of by you — and the Church responds with Heresy Investigation rather than the nuanced conversation you might have had.
-- A territory crisis you didn't attend: the faction AI handles it (Govern roll at faction stat level). Succeed or fail, you had no say.
-- A Thread event you didn't respond to: MS takes the hit. The Gap persists. The radiation zone may expand.
+| Entry Source | Resolution When Not Pursued |
+|-------------|---------------------------|
+| NPC arc moment (Priority 1) | NPC resolves based on their Conviction and AI priority. Conviction Scar may occur without player influence. Player's Disposition with NPC unchanged (they were not involved). |
+| Territory crisis (Priority 0–1) | Faction AI handles via Govern roll at faction stat level. Accord adjusts based on result. |
+| Clock threshold (Priority 1) | Effects propagate normally. No player mitigation. |
+| Duty-aligned (Priority 2) | Duty not completed. Standing −1 at Accounting. |
+| NPC Outreach (Priority 3) | NPC acts without player. Disposition −1 if NPC Disposition was ≥ +3 (NPC feels ignored). |
+| NPC Demand (Priority 3) | Disposition −1 with NPC. +1 Exposure. Potential escalation (Heresy Investigation, military action) at NPC discretion per priority tree. |
+| Territorial (Priority 4) | Event resolves through ambient systems. Opportunity lost permanently. |
+| Ambient (Priority 5) | No consequence. The world moved on. |
 
 The player cannot prevent the world from moving. They can only choose where to be when it does.
 
@@ -231,13 +278,44 @@ Leadership can also be seized: a Standing 4+ character can call a leadership cha
 
 A player can choose to refuse faction alignment entirely or abandon their faction. An independent character:
 - Receives no Duties.
-- Generates their own scene opportunities from Beliefs only.
-- Has no faction stat pool for Domain Actions.
+- Generates their own scene opportunities from Convictions only.
+- Has no faction stat pool for Domain Actions — until Renown 7+ (see §5.4).
 - Cannot participate in Parliament or faction military.
 - CAN pursue Thread operations, fieldwork, and personal combat freely.
 - CAN build relationships with NPCs across all factions without factional Disposition penalties.
 
-This is the Disco Elysium path — the player is an investigator, a Thread practitioner, a wanderer. Their impact on the game world comes through personal-scale actions and their Domain Echoes, not through institutional authority. It is a viable but harder path.
+This is the Disco Elysium path — the player is an investigator, a Thread practitioner, a wanderer. Their impact on the game world comes through personal-scale actions and their Domain Echoes, not through institutional authority. At low Renown, this path is harder. At Renown 7+, the player's personal authority substitutes for institutional backing (see §5.4).
+
+### 5.4 Renown Track (Cross-Faction Personal Authority)
+
+Standing (0–5) measures the player's relationship with one faction. Renown (0–10) measures the player's personal significance across the peninsula. Renown persists across faction changes and survives faction collapse.
+
+**Renown Sources:**
+
+| Source | Renown Gained | Condition |
+|--------|--------------|-----------|
+| Conviction fulfilled | +1 | Conviction completed per §2.3 |
+| Duty exceeded | +1 | Duty completed with Exceeding result per §3.4 |
+| Domain Echo produced | +1 | Any personal-scale action that fires Domain Echo per scale_transitions §5 |
+| NPC arc influenced | +1 | Player action causes NPC Conviction Scar per npc_behavior §3.2 |
+| Investigation resolved (Complex+) | +1 | Evidence Track threshold 5+ reached per fieldwork §4.1 |
+| Mass battle participated | +1 | Player present for mass battle resolution |
+| Territory Accord improved | +1 | Player governs territory and Accord increases during tenure |
+| Knot formed | +1 | New Knot established with named NPC |
+
+**Cap:** +2 Renown per season maximum. Renown does not decay.
+
+**Renown Thresholds:**
+
+| Renown | Stature | Mechanical Unlock |
+|--------|---------|-------------------|
+| 0–2 | Unknown | No cross-faction recognition. Default. |
+| 3–4 | Noted | NPCs at neutral Disposition start at +1 instead of 0. |
+| 5–6 | Respected | Cross-faction influence: player may suggest Domain Actions to any faction whose leader has Disposition ≥ +1 toward them. +1D on Impress actions. |
+| 7–8 | Renowned | Independent Domain Action: player may declare one Domain Action per season using floor(Renown ÷ 2) as pool, without faction backing. Targets one territory the player is present in. |
+| 9–10 | Sovereign | Political entity status. May found an organization. May call a Grand Contest at any time. All NPC factions evaluate whether to court, oppose, or accommodate the player at Priority 2 of their trees. |
+
+**Standing and Renown are independent.** Standing 5 / Renown 3 = faction insider without cross-faction reputation. Standing 0 / Renown 8 = independent operator with personal authority. Both are viable.
 
 ---
 
@@ -273,7 +351,7 @@ The scene action budget is the game's primary pacing lever. It determines how mu
 ### 7.1 Character Creation (params_core)
 
 Add to character creation:
-- Step: Write 3 Beliefs.
+- Step: Write 3 Convictions.
 - Step: Choose faction alignment (or independent).
 - Derived: Starting Standing = 1 (faction members) or 0 (independent).
 
@@ -284,7 +362,7 @@ Revise the three-phase season:
 - **Phase 1b — Scene Slate Generation.** Game generates 4–9 opportunities from five sources.
 - **Phase 1c — Personal Phase.** Player chooses and resolves scene actions.
 - **Phase 2 — Strategic Phase.** Domain Actions as existing.
-- **Phase 3 — Accounting.** As existing, plus: Standing update (Duty success/failure), Belief review (player may revise Beliefs).
+- **Phase 3 — Accounting.** As existing, plus: Standing update (Duty success/failure), Conviction review (player may revise Convictions).
 
 ### 7.3 Fieldwork (fieldwork_v30)
 
@@ -302,7 +380,7 @@ NPC faction leaders generate Duties by evaluating their AI priority stack. The D
 
 ### 7.6 Emergent Arcs
 
-Beliefs function as player-authored arc vectors. They have a source (the player), a direction (the Belief statement), and conditions that modulate their strength (NPC relationships, territory access, system knowledge). They integrate with the existing vector-based arc architecture: player Beliefs are active pressures that intersect with NPC arc pressures and clock pressures to produce emergent narrative.
+Convictions function as player-authored arc vectors. They have a source (the player), a direction (the Belief statement), and conditions that modulate their strength (NPC relationships, territory access, system knowledge). They integrate with the existing vector-based arc architecture: player Convictions are active pressures that intersect with NPC arc pressures and clock pressures to produce emergent narrative.
 
 ---
 
@@ -310,13 +388,13 @@ Beliefs function as player-authored arc vectors. They have a source (the player)
 
 | Problem | Solution |
 |---------|----------|
-| "Why does my character act?" | Beliefs provide self-authored motivation. Duties provide faction-assigned motivation. |
+| "Why does my character act?" | Convictions provide self-authored motivation. Duties provide faction-assigned motivation. |
 | "What are my options?" | Scene Slate presents 4–9 opportunities per season, generated from game state. |
 | "Why can't I do everything?" | Scene action budget (3–5) forces triage. Unpursued opportunities resolve without player input. |
 | "How do I gain political influence?" | Standing track (0–5) represents faction trust, earned through Duty completion. |
 | "Can I become the faction leader?" | Standing 5 enables succession or leadership challenge. |
 | "What if I don't want to serve a faction?" | Independent path sacrifices faction resources for cross-faction freedom. |
-| "Why does investigation matter?" | Evidence feeds Corroboration, Casus Belli, NPC arc triggers, and Belief fulfillment. |
+| "Why does investigation matter?" | Evidence feeds Corroboration, Casus Belli, NPC arc triggers, and Conviction fulfillment. |
 | "How do I know what's happening in the world?" | Scene Slate surfaces world events relevant to the player's location, Beliefs, and Duties. |
 | ED-545 (Zoom In triggers) | Scene Slate Priority 1 IS the Zoom In system — any game state change generates a scene opportunity. |
 | ED-546 (RM actor) | An independent player aligned with RM pursues RM Beliefs without faction infrastructure. RM Community Weaving is a scene opportunity in territories with Piety ≤ 1. |

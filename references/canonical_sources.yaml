@@ -201,3 +201,10 @@ systems:
     canonical: designs/systems/player_agency_v30.md
     params: null
     design_doc: designs/systems/player_agency_v30.md
+
+  companion_specification:
+    canonical_doc: designs/systems/companion_specification_v30.md
+    params_file: null
+    status: proposal
+    last_patch: null
+    notes: "NPC travel companion system — formation, departure, actions, world bridge"

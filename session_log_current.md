@@ -66,3 +66,7 @@ blockers: []
 4. Priorities 6-8: Obligations, Scar visibility, Accord pathways, combat bridge
 5. Priorities 9-10: CV presentation, mass combat aftermath
 6. Holistic W→P / P→W review of all revised documents
+### ADDITIONAL COMMITS (same session)
+- player_agency_v30.md revised: Beliefs→Convictions rename, mechanical Scene Slate (7-step algorithm), NPC Outreach generation, opportunity resolution table, §5.4 Renown Track (0-10), Conviction symmetry with NPC system
+- companion_specification_v30.md created: formation, departure, scene participation, combat/contest/fieldwork/Thread integration, Domain Echo threshold modification, faction feedback loop, arc integration
+- canonical_sources.yaml updated with companion_specification entry
