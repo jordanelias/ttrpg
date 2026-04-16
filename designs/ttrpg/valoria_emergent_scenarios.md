@@ -117,10 +117,10 @@ Fighter takes damage
 │
 ├─ Damage < current Health → subtract; no further effect
 │
-└─ Damage ≥ current Health → WOUND TRIGGERS
+└─ Damage crosses (Endurance + 6) milestone → WOUND TRIGGERS
     │
-    ├─ Health resets to full
-    ├─ Carry excess damage into new Health pool
+    ├─ Wound counter +1 (pool does NOT reset — depletion continues)
+    ├─ No excess damage carry-over (milestones, not pool resets)
     ├─ Wound count +1 → −1D to Combat Pool (cumulative)
     │
     ├─ SINGLE HIT CAP: max 2 Wounds per hit (excess damage discarded)
