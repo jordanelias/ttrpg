@@ -91,8 +91,8 @@ propagate changes to GitHub, and keep the register clean.
 ```yaml
 editorial_decisions:
   - id: ED-NNN
-    date_flagged: YYYY-MM-DD
-    date_resolved: YYYY-MM-DD   # null if unresolved
+    date_flagged: YYYY-MM-DD HH:MM
+    date_resolved: YYYY-MM-DD HH:MM   # null if unresolved
     source: "session | simulation | design-file | arc-generation"
     source_file: "path/to/file.md"
     description: "Short description of the decision required"
