@@ -104,3 +104,13 @@ next_action:
 - Province Accord derived from settlement Order averages
 - 9 open editorial items (ED-SETT-01 through 09)
 - 14-file propagation map
+### SETTLEMENT-BRIDGE UNIFICATION
+- 15 conflicts identified and resolved between settlement layer and bridge revisions
+- 8 editorial items resolved (ED-SETT-03/05/06/07/08/09, ED-COMP-04, ED-SETT-10)
+- Unified 3-layer architecture: World Physics (strategic) ↔ Settlement Physics (institutional) ↔ Player Physics (personal)
+- 10-file revision spec produced
+- Mutual constitution principle: every action at every scale produces consequences at the other two scales
+
+last_stage: done
+next_action:
+  skill: confirm with Jordan
