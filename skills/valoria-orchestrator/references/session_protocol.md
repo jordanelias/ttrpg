@@ -20,7 +20,7 @@
 
 ## YAML Block Schema
 ```yaml
-session_id: YYYY-MM-DDT_LABEL
+session_id: YYYY-MM-DD-HH-mm-T_LABEL
 phase: Phase N (description)
 status: CLOSED
 
