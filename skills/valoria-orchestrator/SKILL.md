@@ -428,7 +428,7 @@ Each type pre-fetches its required files — see `TASK_REQUIRED_FILES` in `valor
 
 Write YAML resumption block to `session_log_current.md`:
 ```yaml
-session_close: YYYY-MM-DD HH:MM
+session_close: YYYY-MM-DD HH:mm
 last_stage: [stage name]
 next_action:
   skill: name
