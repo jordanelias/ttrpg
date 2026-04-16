@@ -149,7 +149,7 @@ The faction controlling a province assigns governors to its settlements. Assignm
 | 4 (Lieutenant) | Eligible for Governor of one City, Fortress, or Mine. |
 | 5 (Successor) | Eligible for Governor of a Seat or Cathedral (requires faction leader approval). |
 
-**Player as Governor:** When a player is assigned as Settlement Governor, their seasonal Duty IS governance. Each season, the player receives one mandatory governance action (no scene action cost) plus their normal scene actions for personal pursuits. The governance action targets the settlement's stats:
+**Player as Governor:** When a player is assigned as Settlement Governor, their seasonal Duty IS governance. Each season, the player receives one mandatory governance action (no scene action cost) plus their normal scene actions for personal pursuits. **Companion-governor (per settlement_bridge_unification C-04):** A companion serving as governor gets 1 free action per season — social OR governance, player chooses. Not both. The governance action targets the settlement's stats:
 
 | Governance Action | Pool | Ob | Effect on Success |
 |------------------|------|-----|-------------------|
@@ -250,7 +250,7 @@ Ungarrisoned settlements with Defense 0 are auto-captured on any hostile militar
 
 # PART 6: PLAYER PROGRESSION — SETTLEMENT TO NATIONAL
 
-## §6.1 The Stature Ladder (Revised)
+## §6.1 The Stature Ladder (Canonical — referenced by player_agency_v30 §5.4)
 
 The existing Standing track (0–5 per faction) and Renown track (0–10 cross-faction) from player_agency_v30 now map to a concrete progression of governance scope:
 
@@ -326,7 +326,7 @@ The existing clocks assume a 13–15 year game. With settlements adding governan
 A 30-year game spans a generation. The first leaders (Almud, Baralta, Vaynard, Himlensendt) will age, weaken, and potentially die of natural causes. Generational Shift tracks this.
 
 - Rate: +1 per 5 years of game time.
-- Threshold 2 (Year 10): First generation leaders begin showing age. All original faction leaders: −1 to their highest attribute (age penalty). Succession planning becomes relevant.
+- Threshold 2 (Year 10): First generation leaders begin showing age. All original faction leaders: −1 to their highest attribute (age penalty). Succession planning becomes relevant. **Exception:** Characters (NPC or PC) with Thread Sensitivity ≥ 50 are exempt — the rendering sustains high-TS beings more robustly (metaphysical justification per P-15).
 - Threshold 4 (Year 20): Second generation leaders emerge. Original leaders who have not been replaced are at −2 to highest attribute. NPC arc branches for retirement, abdication, or natural death activate.
 - Threshold 6 (Year 30): Original leaders who survive are elderly. −3 to highest attribute. The game's political landscape has fundamentally shifted — the players' generation IS the leadership class, whether they sought it or not.
 

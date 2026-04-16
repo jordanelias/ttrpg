@@ -241,6 +241,8 @@ A Decisive win (Conviction Track ≥ 7 or ≤ 3) in a Formal or Grand Contest pr
 | Royal Audience | 2 seasons (Crown-imposed) | Crown Mandate −1 on violation (the Crown's word is broken). |
 | Church Tribunal | Until formally revoked by Church authority | Heresy Investigation acceleration. Excommunication eligible. |
 
+**Settlement-targeted Obligations (per settlement_bridge_unification C-08):** Obligations may target specific settlements instead of provinces. Examples: "Church must not station Inquisitors in S-017 Gransol Market Quarter for 2 seasons"; "Crown must maintain Defense ≥ 2 in S-006 Lowenskyst Fortress"; "Varfell must not develop Prosperity in S-032 Oastad Shrine." Settlement-targeted Obligations use the settlement stat as the verification condition. Violation consequences are the same as province-level Obligations.
+
 **Obligation tracking:** Obligations are tracked as clocks per clock_registry_v30. Each Obligation has: source (which contest), parties (who is bound), commitment (what must be done or not done), duration (seasons remaining), and violation trigger (what constitutes breach).
 
 **Player Obligations:** When the player loses a contest, they receive an Obligation. The player is not forced to comply — they may violate it. Violation consequences apply: the player's faction loses Mandate, the player loses Reputation, and the NPC who won the original contest gains Disposition +1 toward the player's rivals (the violation justifies their position).

@@ -117,10 +117,10 @@ The following events generate Priority 0 Scene Slate entries per player_agency_v
 
 | Trigger | Condition | Scene Content |
 |---------|-----------|---------------|
-| Territory Revolt | Player is in or adjacent to a territory at Accord 0 | The revolt unfolds around the player. They choose: support the garrison (combat), negotiate with the populace (social contest), investigate the cause (fieldwork), or flee (movement). |
+| Settlement Revolt | Player is in a province containing a settlement at Order 0 | The revolt unfolds at the specific settlement. The player is present at or travels to the settlement in revolt. They choose: support the garrison (combat), negotiate with the populace (social contest), investigate the cause (fieldwork), or flee (movement). |
 | Heresy Investigation Target | Player is the target of an active Heresy Investigation | The Inquisitor arrives. Interrogation scene (asymmetric social contest per social_contest §7). The player may resist, comply, or attempt to redirect. |
 | Faction Leader Removal | Player's faction leader is assassinated, overthrown, or incapacitated | The player witnesses or learns of the event directly. Succession mechanics fire (player_agency §5.2). If Standing ≥ 5: leadership offer. If Standing < 5: the player is present for the transition and may intervene. |
-| Mass Battle in Territory | A mass battle occurs in the player's current territory | The player is caught in the battle. They must participate (command or personal combat) or attempt to escape (Endurance check Ob 2; failure = caught in crossfire, take 1 wound). |
+| Mass Battle at Settlement | A mass battle targets a settlement in the player's current province | The player is caught in the battle. They must participate (command or personal combat) or attempt to escape (Endurance check Ob 2; failure = caught in crossfire, take 1 wound). |
 | Companion Arc Trigger | A companion's arc branch trigger fires (npc_behavior §5.2) | The companion's transformation scene plays out with the player present. The player witnesses and may influence the companion's arc resolution. |
 | Knot Partner in Crisis | An NPC Knotted to the player reaches Conviction crisis (Scar count ≥ 3) | The Knot transmits the crisis. The player perceives the NPC's distress through the relational thread (per P-12). Scene: the player may seek out the NPC or experience the crisis at distance through Thread perception. |
 
@@ -227,6 +227,7 @@ A personal scene qualifies for Domain Echo when it involves any of the following
 4. A Thread operation targeting a faction-level configuration (Relational+ scale)
 5. Combat victory against a named NPC who holds faction office (officer, cardinal, commander, agent) — violence against an institutional representative IS an institutional event
 6. Reaching Disposition +4 (Devoted) or +5 (Bonded) with any named NPC who holds faction office — the relationship itself is strategically significant
+7. Settlement governance action that changes Order by ±1 or more — the governor's institutional authority produced a measurable political outcome
 
 **Companion modifier:** If the player has a companion present (per companion_specification_v30), add +1 to the player's net successes for Sufficient Scope evaluation. The companion makes personal actions more politically visible.
 

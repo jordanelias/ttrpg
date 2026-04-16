@@ -73,7 +73,7 @@ Successful persuasion: companion stays for 1 additional season. The underlying c
 
 ### §4.1 Free Social Action
 
-Each companion generates 1 free social fieldwork action per season. This represents conversation during travel. The player does not spend a scene action. The free action can be:
+Each companion generates 1 free action per season that can be used as EITHER a social fieldwork action (companion role) OR a governance action (governor role, if the companion is also a settlement governor per settlement_layer_v30 §3.2). The player chooses each season which role the companion prioritizes. This creates a meaningful trade-off: relationship deepening vs settlement development. The player does not spend a scene action. The free action can be:
 - **Read** (learn companion's current state — emotional condition, active Conviction, attitude toward recent events)
 - **Converse** (shift Disposition, gather information the companion knows)
 - **Connect** (deepen the relationship toward Knot eligibility)

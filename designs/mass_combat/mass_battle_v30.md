@@ -726,17 +726,19 @@ All items below require user approval before compilation.
 
 ### §D.1 Post-Battle Consequence Scenes
 
-After every mass battle, the player receives a mandatory Scene Slate entry (Priority 0 per player_agency_v30 §4.2 Step 1 if present in territory; Priority 1 per scale_transitions_v30 §4.3.3 if adjacent). The post-battle scene does not cost a scene action — it is the aftermath, and it is always worth experiencing.
+After every mass battle, the player receives a mandatory Scene Slate entry (Priority 0 per player_agency_v30 §4.2 Step 1 if present in province; Priority 1 per scale_transitions_v30 §4.3.3 if adjacent). The post-battle scene does not cost a scene action — it is the aftermath, and it is always worth experiencing.
+
+**Settlement anchoring (per settlement_bridge_unification C-09):** The aftermath scene occurs at the specific settlement that was assaulted, besieged, or defended. Stat effects target that settlement's Prosperity/Defense/Order, not province Accord directly.
 
 **Aftermath scene structure:**
 
-The player arrives at or remains in the battlefield territory after the battle resolves. The scene presents three choice points (the player selects one — the others resolve through NPC AI):
+The player arrives at or remains at the battle settlement after the battle resolves. The scene presents three choice points (the player selects one — the others resolve through NPC AI):
 
 | Choice | Action | Mechanical Consequence |
 |--------|--------|----------------------|
-| Tend the wounded | Endurance or Attunement check, Ob 2 | Success: 1 surviving unit recovers +1 Size (casualties saved). Disposition +1 with all surviving unit officers. Overwhelming: +1 Accord in this territory (compassion as governance). |
+| Tend the wounded | Endurance or Attunement check, Ob 2 | Success: 1 surviving unit recovers +1 Size (casualties saved). Disposition +1 with all surviving unit officers. Overwhelming: Settlement Order +1 (compassion as governance). |
 | Survey the damage | Cognition check, Ob 1 | Success: reveals exact casualties, territory infrastructure damage, and one hidden consequence (NPC death, Accord shift, or evidence planted during the chaos). Overwhelming: +1 Momentum (tactical understanding). |
-| Address the population | Charisma check, Ob 2 | Success: Accord +1 in this territory (speech as governance). Failure: Accord −1 (the population needed comfort and received platitudes). Overwhelming: +1 Renown (the player's words mattered to the people). |
+| Address the population | Charisma check, Ob 2 | Success: Settlement Order +1 (speech as governance). Failure: Settlement Order −1 (the population needed comfort and received platitudes). Overwhelming: +1 Renown. |
 
 **If the player was not present for the battle:** The aftermath scene is replaced by a "Where Were You?" retrospective scene per scale_transitions_v30 §4.4. The player learns about the battle's outcome through their social network. The three aftermath choices are not available — the moment has passed.
 
@@ -763,6 +765,8 @@ Each mustered unit has one named officer NPC. The officer is generated at Muster
 - Player receives notification: "Captain [Name] fell at [location]."
 - If Disposition was ≥ +2: player's Conviction may be strained (same mechanic as combat death cascade in combat_v30 §13.3).
 - If the unit had been with the player for 3+ seasons: +1 Renown (the loss is publicly mourned — the player's leadership is noted).
+
+**Officer as settlement governor:** After a battle, a named officer at Disposition ≥ +2 may be assigned as governor of the battle settlement or any garrisoned settlement (per settlement_layer_v30 §3.2). The military officer transitions to civil administrator — the ROTK post-conquest appointment.
 
 **Officer at Disposition +3:** The officer becomes eligible for companionship (per companion_specification_v30 §2.1). A unit officer who travels with the player as a companion still commands their unit in battle — dual role. If the companion-officer is killed in battle, the departure scene fires as a combat death, not a social departure.
 

@@ -146,20 +146,20 @@ The faction-level Accord changes in §2.3–2.4 operate at BG scale. In Hybrid a
 
 | Player Action | Accord Effect | Condition | Domain Echo Route |
 |--------------|--------------|-----------|------------------|
-| Social fieldwork: reach Disposition +3 with 2+ local NPCs in one territory in one season | Accord +1 (queued to Accounting) | Player spent ≥ 2 scene actions on social fieldwork in the territory | §5.5: PC publicly governs/administers |
-| Investigation: resolve a local concern (Evidence Track threshold reached for a Simple or Complex question affecting the territory's population) | Accord +1 (queued to Accounting) | Finding is publicly shared (published, announced, or cited in Contest) | §5.5: PC publicly governs — the investigation's resolution IS governance |
-| Community Weaving: RM-aligned or Warden-aligned Thread practice in territory | Accord +1 (queued to Accounting) | Territory PT ≤ 2 (Einhir heritage receptive) AND Community Weaving Success | §5.5: PC publicly administers — the practice IS cultural governance |
-| Public violence: player initiates combat in territory (public, 3+ witnesses) | Accord −1 (immediate) | Combat Exposure ≥ 3 (public) | §5.5: PC destabilises territory governance |
-| Assassination or killing of local named NPC | Accord −1 (immediate) | Dead NPC had Disposition ≥ +1 with local population NPCs | §5.5: PC destabilises — violence against a known figure |
-| Player publicly defies controlling faction's authority in the territory | Accord −1 (immediate) | Player's action is witnessed (Exposure ≥ Noticed) and contradicts the controlling faction's institutional position | §5.5: PC destabilises |
+| Social fieldwork: reach Disposition +3 with 2+ local NPCs in one settlement in one season | Settlement Order +1 (queued to Accounting) | Player spent ≥ 2 scene actions on social fieldwork in the settlement | §5.5: PC publicly governs/administers |
+| Investigation: resolve a local concern affecting a settlement's population (Evidence Track threshold reached) | Settlement Order +1 (queued to Accounting) | Finding is publicly shared in or about the settlement | §5.5: PC publicly governs — the investigation's resolution IS governance |
+| Community Weaving in a settlement | Settlement Order +1 (queued to Accounting) | Settlement in territory with PT ≤ 2 AND Community Weaving Success | §5.5: PC publicly administers — the practice IS cultural governance |
+| Public violence: player initiates combat in settlement (public, 3+ witnesses) | Settlement Order −1 (immediate) | Combat Exposure ≥ 3 (public) | §5.5: PC destabilises settlement governance |
+| Assassination or killing of named NPC residing in settlement | Settlement Order −1 (immediate) | Dead NPC had Disposition ≥ +1 with local settlement NPCs | §5.5: PC destabilises — violence against a known figure |
+| Player publicly defies controlling authority in a settlement | Settlement Order −1 (immediate) | Player's action is witnessed (Exposure ≥ Noticed) and contradicts the controlling faction's or governor's institutional position | §5.5: PC destabilises |
 
-**Cap:** ±1 Accord per territory per season from personal-scale actions (per existing §5.5 cap). Personal-scale Accord changes do not stack with faction-level Govern actions — whichever produces the higher Accord applies.
+**Cap:** ±1 Order per settlement per season from personal-scale actions. Province Accord is derived at Accounting: floor(mean(settlement Order values)), capped at 3. Personal-scale Order changes and governor governance actions stack normally — they target different settlements or stack within the same settlement (cap ±1 per source per settlement per season).
 
 ### §2.8 Accord Environmental Legibility (NEW — presentation layer)
 
 Accord is the game's victory condition foundation. It should be experienceable, not just trackable.
 
-**TTRPG/Hybrid:** When the player enters or remains in a territory, the GM describes the environment using the following cues:
+**TTRPG/Hybrid:** When the player enters or remains in a settlement, the GM describes the environment using the following cues. Different settlements within the same province may have different atmospheres — a Cathedral at Order 4 feels different from a Town at Order 1.
 
 | Accord | Environmental Description |
 |--------|--------------------------|

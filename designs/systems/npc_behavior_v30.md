@@ -718,6 +718,17 @@ Maximum Outreach entries per season per player: 3 (prevents inbox overload). If 
 
 Maximum Demand entries per season per player: 2. If more than 2 NPCs qualify, prioritize by: (1) lowest Disposition toward player (most hostile first), (2) highest institutional authority.
 
+#### §8.11.6 Subnational Faction Outreach (NEW — per settlement_bridge_unification C-12)
+
+Subnational faction leaders may generate Outreach entries when anchored to specific settlements:
+
+- **Guild Council members** in Guild-managed settlements (City, Port, Market, Mine): Outreach if Disposition ≥ +2 AND player is in or adjacent to their settlement. Typical agenda: trade proposal, arbitration request, labor dispute.
+- **Ministry officials** in Seat/City settlements: Outreach to players governing nearby settlements. Typical agenda: bureaucratic coordination, administrative request, procedural requirement.
+- **RM organizers** in RM-managed settlements (Outpost, Town in low-CV territories): Outreach to players with Convictions mentioning Einhir, Thread, or Restoration. Typical agenda: community support request, cultural preservation, practitioner protection.
+- **Warden-post NPCs** in Warden Outpost settlements: Outreach to players with TS ≥ 10. Typical agenda: Thread assistance, Mending cooperation, Southernmost expedition.
+
+Subnational Outreach counts toward the 3-entry maximum (§8.11.5), competing with national-level Outreach. This creates natural tension between institutional demands at different scales.
+
 ---
 
 ## §9 HYBRID MODE: CROSS-LAYER BEHAVIOR

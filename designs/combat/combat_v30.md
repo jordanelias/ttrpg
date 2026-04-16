@@ -456,6 +456,18 @@ Public combat accumulates a Combat Reputation that modifies NPC behavior toward 
 
 Combat Reputation decays: −1 per year of no public combat.
 
+### §13.2b Settlement-Level Combat Consequences (NEW — per settlement_bridge_unification C-07)
+
+Combat in a settlement produces settlement-level consequences on top of province-level effects:
+
+| Combat Context | Settlement Effect |
+|---------------|------------------|
+| Public combat in a settlement (3+ witnesses) | Order −1 in that settlement |
+| Combat against the settlement's governor | Order −2 in that settlement |
+| Killing a named NPC who resides in the settlement | All NPC Dispositions in that settlement toward the killer: −2 |
+
+These effects are immediate and stack with existing Domain Echo and reputation effects from §13.1 and §13.2.
+
 ### §13.3 Death Cascade
 
 Killing a named NPC in combat triggers the following cascade:

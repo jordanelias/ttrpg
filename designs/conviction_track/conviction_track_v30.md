@@ -455,8 +455,8 @@ When Conviction (CV) changes in a territory, the change should be experienceable
 
 | CV Transition | Environmental Description |
 |--------------|--------------------------|
-| CV +1 (any → higher) | Church influence deepens. New description: the morning bells ring longer. A priest who used to preach from memory now reads directly from the Solmund Codex. A shrine appears at the crossroads that wasn't there last season. The tavern-keeper has hung a blessing plaque by the door. |
-| CV −1 (any → lower) | Einhir heritage resurfaces. New description: someone has left wildflowers at the old Einhir stone circle outside town. Children are singing a song in a language the Church doesn't teach. An elder tells a story about what the land was before Solmund, and no one shushes them. |
+| CV +1 (any → higher) | Church influence deepens. **Settlement type modulation:** Cathedral settlements amplify this effect (total Church presence). Market/Port settlements mute it (commerce dampens extremes). Outpost settlements show minimal change. New description: the morning bells ring longer. A priest who used to preach from memory now reads directly from the Solmund Codex. A shrine appears at the crossroads that wasn't there last season. The tavern-keeper has hung a blessing plaque by the door. |
+| CV −1 (any → lower) | Einhir heritage resurfaces. **Settlement type modulation:** Outpost/Town settlements show this most strongly (frontier culture is closer to Einhir roots). Cathedral settlements resist (institutional inertia). New description: someone has left wildflowers at the old Einhir stone circle outside town. Children are singing a song in a language the Church doesn't teach. An elder tells a story about what the land was before Solmund, and no one shushes them. |
 | CV reaches 5 (Consecrated) | Total Church dominance. The territory feels different. Church officials are present in every public space. The old Einhir names for landmarks have been replaced with Solmundic names on the official signposts. Non-Church social gatherings require permission. |
 | CV reaches 0 | Einhir restoration complete. Church architecture is repurposed or abandoned. Thread-sensitive characters perceive a subtle difference in the substrate — the rendering is thinner here, closer to what it was before the orthodoxy. |
 
@@ -466,7 +466,7 @@ When Conviction (CV) changes in a territory, the change should be experienceable
 
 ### §11.2 Church Attention Pool — Player-Facing Indicators
 
-The Church Attention Pool (AP) per territory (params_board_game.md) operates behind the scenes. The player should perceive its effects without knowing the number.
+The Church Attention Pool (AP) is now tracked per settlement (per settlement_bridge_unification C-15), not per province. AP accumulates where the player acts, not across the whole territory. The player should perceive its effects without knowing the number.
 
 | AP Level | Player-Perceivable Indicator |
 |----------|------------------------------|

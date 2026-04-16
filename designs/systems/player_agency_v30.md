@@ -155,6 +155,8 @@ At the start of each season's Personal Phase, the game generates a **Scene Slate
 
 At the start of each season's Personal Phase, the game executes the following steps to produce the Scene Slate. Generation is deterministic — the same game state produces the same Slate.
 
+**Settlement anchoring (per settlement_bridge_unification C-01):** Every Scene Slate entry specifies a settlement, not just a province. Province-level events (clock thresholds, faction crises) anchor to the province's Seat settlement by default. NPCs reside in specific settlements per NPC roster. Travel within a province is free; travel between provinces costs 1 scene action per province traversed.
+
 **Step 1 — Mandatory Crisis (Priority 0 — cannot be declined):**
 
 For each condition TRUE, generate one mandatory scene entry:
@@ -305,15 +307,16 @@ Standing (0–5) measures the player's relationship with one faction. Renown (0�
 
 **Cap:** +2 Renown per season maximum. Renown does not decay.
 
-**Renown Thresholds:**
+**Renown Thresholds and Governance Scope:** See settlement_layer_v30 §6.1 for the unified stature ladder mapping Renown thresholds to settlement governance scope, faction emergence stages, and ROTK/CK3 parallels. Renown is the quantitative axis; settlement control is the qualitative axis.
 
-| Renown | Stature | Mechanical Unlock |
-|--------|---------|-------------------|
-| 0–2 | Unknown | No cross-faction recognition. Default. |
-| 3–4 | Noted | NPCs at neutral Disposition start at +1 instead of 0. |
-| 5–6 | Respected | Cross-faction influence: player may suggest Domain Actions to any faction whose leader has Disposition ≥ +1 toward them. +1D on Impress actions. |
-| 7–8 | Renowned | Independent Domain Action: player may declare one Domain Action per season using floor(Renown ÷ 2) as pool, without faction backing. Targets one territory the player is present in. |
-| 9–10 | Sovereign | Political entity status. May found an organization. May call a Grand Contest at any time. All NPC factions evaluate whether to court, oppose, or accommodate the player at Priority 2 of their trees. |
+**Renown effects that are independent of governance scope:**
+
+| Renown | Effect |
+|--------|--------|
+| 3+ | NPCs at neutral Disposition start at +1 instead of 0. |
+| 5+ | +1D on Impress actions. Cross-faction Domain Action suggestions. |
+| 7+ | Independent Domain Action: floor(Renown ÷ 2) as pool. |
+| 9+ | May call Grand Contest at any time. All factions evaluate player at Priority 2. |
 
 **Standing and Renown are independent.** Standing 5 / Renown 3 = faction insider without cross-faction reputation. Standing 0 / Renown 8 = independent operator with personal authority. Both are viable.
 
