@@ -1,6 +1,6 @@
 # VALORIA — Comprehensive System Audit
 ## Agency System · Investigation Systems · Scalability · Domain Echoes
-## Date: 2026-04-15
+## Date: 2026-04-15-21-04
 ## Scope: Player Agency Proposal + Investigation Systems Proposal, audited against each other, against the holistic audit, against the How to Play document, and against a wide reference library of precedent games.
 ## Method: Six-axis system audit (Coherence, Consistency, Creativity, Elegance, Connectivity, Robustness) → precedent game analysis → domain echo enshrinement audit → scalability audit → prioritised recommendations.
 
