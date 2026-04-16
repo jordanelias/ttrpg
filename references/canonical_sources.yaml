@@ -208,3 +208,10 @@ systems:
     status: proposal
     last_patch: null
     notes: "NPC travel companion system — formation, departure, actions, world bridge"
+
+  settlement_layer:
+    canonical_doc: designs/systems/settlement_layer_v30.md
+    params_file: null
+    status: proposal
+    last_patch: null
+    notes: "36 settlements across 17 provinces — dual-authority governance, faction emergence/collapse, extended timeline"

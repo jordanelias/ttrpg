@@ -93,3 +93,14 @@ ALL 10 BRIDGE PRIORITIES NOW APPLIED. Next: holistic W→P / P→W review.
 last_stage: done
 next_action:
   skill: confirm with Jordan
+### SETTLEMENT LAYER SPECIFICATION
+- 36 settlements across 17 provinces (Seat, City, Town, Fortress, Port, Cathedral, Mine, Outpost)
+- Dual-authority governance: Provincial Authority + Settlement Governor
+- Subnational faction management (Church cathedrals, Guild markets, Löwenritter fortresses, RM outposts, Warden posts)
+- Player progression: Settlement Governor (Renown 3) → Multi-Settlement (5) → Provincial Authority (7) → National Actor (9)
+- Faction emergence (local→national in 5 stages) and collapse (national→city-state→dissolution)
+- Military granularity: Assault/Siege/Bypass at settlement level, Fortress chokepoints
+- Extended timeline: IP halved, Generational Shift clock (age penalties at Year 10/20/30), cross-generational play
+- Province Accord derived from settlement Order averages
+- 9 open editorial items (ED-SETT-01 through 09)
+- 14-file propagation map
