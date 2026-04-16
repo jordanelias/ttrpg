@@ -103,11 +103,57 @@ Modifier to most relevant unit; 1 turn duration. (PP-261, ED-151)
 
 **Phase 6 continuation:** Steps 2–6 resolve after Zoom Out using the updated state from the personal scene (PP-110). The Zoom In does not pause the BG clock — it inserts a personal scene into the resolution sequence.
 
-### §4.3 Arc-Specific Zoom In Triggers (PP-556)
+### §4.3 Zoom In Triggers (PP-556, extended)
+
+#### §4.3.1 Arc-Specific Triggers (existing)
 Certain arcs define mandatory or optional Zoom In triggers at specific thresholds:
 - Haelgrund Defection: Church Stability ≤ 2 + AP ≥ 6 in Haelgrund's territory
 - Consecration Crisis: Church Stability-dependent (§ED-407 resolution)
 - Per-arc triggers documented in arc source files with Zoom In entry conditions
+
+#### §4.3.2 Mandatory Zoom In Triggers (NEW — cannot be declined)
+
+The following events generate Priority 0 Scene Slate entries per player_agency_v30 §4.2 Step 1. The player experiences these events as personal scenes regardless of their current activity. Mandatory scenes consume 1 scene action each.
+
+| Trigger | Condition | Scene Content |
+|---------|-----------|---------------|
+| Territory Revolt | Player is in or adjacent to a territory at Accord 0 | The revolt unfolds around the player. They choose: support the garrison (combat), negotiate with the populace (social contest), investigate the cause (fieldwork), or flee (movement). |
+| Heresy Investigation Target | Player is the target of an active Heresy Investigation | The Inquisitor arrives. Interrogation scene (asymmetric social contest per social_contest §7). The player may resist, comply, or attempt to redirect. |
+| Faction Leader Removal | Player's faction leader is assassinated, overthrown, or incapacitated | The player witnesses or learns of the event directly. Succession mechanics fire (player_agency §5.2). If Standing ≥ 5: leadership offer. If Standing < 5: the player is present for the transition and may intervene. |
+| Mass Battle in Territory | A mass battle occurs in the player's current territory | The player is caught in the battle. They must participate (command or personal combat) or attempt to escape (Endurance check Ob 2; failure = caught in crossfire, take 1 wound). |
+| Companion Arc Trigger | A companion's arc branch trigger fires (npc_behavior §5.2) | The companion's transformation scene plays out with the player present. The player witnesses and may influence the companion's arc resolution. |
+| Knot Partner in Crisis | An NPC Knotted to the player reaches Conviction crisis (Scar count ≥ 3) | The Knot transmits the crisis. The player perceives the NPC's distress through the relational thread (per P-12). Scene: the player may seek out the NPC or experience the crisis at distance through Thread perception. |
+
+If mandatory scenes exceed the scene action budget, the player chooses which to attend personally. Remaining mandatory scenes resolve through NPC AI with reduced player influence: the player is present but overwhelmed, able to observe but not direct.
+
+#### §4.3.3 World-State Zoom In Triggers (NEW — Scene Slate Priority 1)
+
+These events generate Priority 1 Scene Slate entries. They are presented but optional — the player may choose not to attend.
+
+| Trigger | Condition | Scene Content |
+|---------|-----------|---------------|
+| Clock Band Transition | Any global clock (MS, CI, IP) crosses a band threshold | Environmental scene: the world visibly changes. At MS band transition: Thread phenomena manifest. At CI milestone: Church institutional action visible. At IP threshold: border activity intensifies. |
+| NPC Conviction Crisis | Any NPC with Disposition ≥ +1 has Scar count ≥ 2 | The NPC is visibly struggling. Social scene: the player may engage, support, challenge, or observe. |
+| Treaty Proposed or Broken | Any faction proposes, ratifies, or breaks a treaty involving the player's faction | Political scene: the player learns the terms and may advocate for their faction's position (social contest or fieldwork investigation of the treaty's implications). |
+| Territory Control Change | Any territory adjacent to the player changes controller | The consequences are visible: new banners, displaced populations, altered trade routes. The player may investigate, assist displaced people, or exploit the transition. |
+| Warden Emergency | RS ≤ 40 and the player has WR ≥ 1 or has met Edeyja | Thread crisis scene: the Wardens need help. The player may contribute Thread operations, investigate the cause, or support logistics. |
+
+### §4.4 "Where Were You?" — Retrospective Scene Generation (NEW)
+
+When a major world event occurs that the player was not present for, the game generates a retrospective Scene Slate entry the following season. This entry does not cost a scene action — it is a free narrative moment.
+
+**Qualifying events:** Faction leader removal (if player was not present), territory conquest (if player was not in either territory), mass battle resolution (if player was not present), Church Graduated Seizure, Löwenritter Coup, Altonian Invasion launch.
+
+**Scene content:** The player learns about the event through their social environment. The scene is not about the event — it is about the player's relationship to the event.
+
+| Player Context | Scene Shape |
+|---------------|------------|
+| Player has a companion | Companion delivers the news and states their reaction. The companion's Conviction colors the report. |
+| Player has Knot with involved NPC | The Knot transmits emotional resonance. The player perceives the NPC's state at the moment of the event (fear, triumph, despair). |
+| Player has Disposition ≥ +2 with involved NPC | A messenger or letter arrives from the NPC. The NPC's account reflects their Conviction and relationship with the player. |
+| Player has no connection to involved parties | The player hears about it from ambient sources — tavern conversation, broadsheet, market rumor. The information is Unverified (reliability tag per fieldwork §4.3). |
+
+The retrospective scene does not allow the player to change the event's outcome. It allows them to experience its emotional weight and decide how to respond in the current season. The response may generate a new Conviction ("I will avenge Almud"), a new Scene Slate entry (investigating the aftermath), or a new Duty (faction reassignment in response to the crisis).
 
 ---
 
@@ -173,9 +219,16 @@ Binary declaration rule: the PC who declares leadership at Phase 1 pays any Cohe
 
 ## §7 Sufficient Scope — Register Shift Trigger
 
+A personal scene qualifies for Domain Echo when it involves any of the following:
+
 1. A named faction leader or their designated representative
 2. A direct challenge to a faction's institutional authority (not personal reputation)
+3. A completed Complex or Structural investigation (Evidence Track threshold 5+ reached per fieldwork §4.1) whose subject concerns a faction's institutional acts — the evidence IS the scope
 4. A Thread operation targeting a faction-level configuration (Relational+ scale)
+5. Combat victory against a named NPC who holds faction office (officer, cardinal, commander, agent) — violence against an institutional representative IS an institutional event
+6. Reaching Disposition +4 (Devoted) or +5 (Bonded) with any named NPC who holds faction office — the relationship itself is strategically significant
+
+**Companion modifier:** If the player has a companion present (per companion_specification_v30), add +1 to the player's net successes for Sufficient Scope evaluation. The companion makes personal actions more politically visible.
 
 
 ---

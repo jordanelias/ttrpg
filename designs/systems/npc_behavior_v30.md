@@ -663,6 +663,63 @@ All NPC faction priority trees follow a standardised 7-level structure:
 
 ---
 
+### §8.11 NPC Personal Outreach Generation (NEW — feeds player_agency_v30 §4.2 Step 5)
+
+Each season, after the NPC priority tree fires its faction-level action, each named NPC evaluates whether to generate a personal-level Scene Slate entry for the player. This is the World→Player bridge for the NPC system — the world's actors do not wait to be approached.
+
+#### §8.11.1 Outreach Conditions
+
+An NPC generates an Outreach entry when ALL of the following hold:
+- Disposition ≥ +2 toward the player
+- The NPC has an active Conviction relevant to the player's location, faction, or active Convictions
+- The NPC's priority tree fired an action this season that could benefit from the player's involvement
+
+**Relevance evaluation:** The NPC's active Conviction is "relevant" if any of the following match between the Conviction text and the player's state: shared territory, shared faction, shared NPC relationship (both have Disposition ≥ +1 with the same third NPC), or keyword intersection (Thread, Church, investigation, treaty, Einhir, Calamity).
+
+#### §8.11.2 Demand Conditions
+
+An NPC generates a Demand entry when ALL of the following hold:
+- Disposition ≤ −2 toward the player
+- The NPC holds institutional authority over the player's current territory (faction controls territory OR NPC is a faction leader)
+- The NPC's priority tree fired an action this season that targets the player's faction or interests
+
+#### §8.11.3 Outreach by Faction
+
+| Faction | Outreach NPC | Typical Outreach Content | Typical Demand Content |
+|---------|-------------|------------------------|----------------------|
+| Crown | Almud, Torben, Ehrenwall | Request for intelligence, military counsel, diplomatic mission | Royal summons, loyalty test, military conscription |
+| Church | Himlensendt, Cardinals | Request for doctrine support, investigation assistance, piety demonstration | Heresy summons, attendance at tribunal, submission to orthodoxy |
+| Hafenmark | Baralta | Request for parliamentary support, constitutional advocacy, trade negotiation | Legal summons, constitutional obligation, diplomatic demand |
+| Varfell | Vaynard, Maret Uln | Request for Thread knowledge, expedition partnership, intelligence sharing | Accusation, territorial demand, intelligence confrontation |
+| Löwenritter | Ehrenwall | Request for military cooperation, sovereignty defense, border patrol | Military conscription, loyalty challenge, operational demand |
+| RM | Vossen, Hann | Request for community support, resource sharing, practitioner protection | Solidarity demand, community obligation |
+| Guilds | Council | Trade proposal, arbitration request, economic cooperation | Trade embargo threat, debt collection, guild law enforcement |
+| Niflhel | (arms) | Covert offer, intelligence exchange, service proposal | Threat, blackmail, exposure warning |
+| Wardens | Edeyja | Thread assistance request, Southernmost expedition, Mending cooperation | Assessment demand, territorial boundary enforcement |
+
+#### §8.11.4 Outreach Scene Structure
+
+Each Outreach entry specifies:
+- **NPC name and location** (where the meeting occurs — typically the NPC's territory or a neutral location)
+- **Agenda** (one sentence describing what the NPC wants from the player)
+- **Conviction alignment** (which of the NPC's Convictions drives this outreach)
+- **Consequence of acceptance** (what the player gains: information, Disposition, faction standing, or material support)
+- **Consequence of refusal** (Disposition −1 if NPC Disposition was ≥ +3; no penalty below +3)
+
+Each Demand entry specifies:
+- **NPC name and location** (the NPC's territory — the player must go to them)
+- **Demand** (one sentence describing what the NPC requires)
+- **Consequence of compliance** (typically: no further escalation; sometimes: Disposition +1)
+- **Consequence of refusal** (Disposition −1, +1 Exposure in NPC's territory, potential escalation per NPC priority tree — Heresy Investigation, military action, political pressure)
+
+#### §8.11.5 Volume Control
+
+Maximum Outreach entries per season per player: 3 (prevents inbox overload). If more than 3 NPCs qualify, prioritize by: (1) highest Disposition toward player, (2) highest priority-tree action level that fired this season, (3) most recent interaction with the player.
+
+Maximum Demand entries per season per player: 2. If more than 2 NPCs qualify, prioritize by: (1) lowest Disposition toward player (most hostile first), (2) highest institutional authority.
+
+---
+
 ## §9 HYBRID MODE: CROSS-LAYER BEHAVIOR
 
 ### §9.1 BG Layer → TTRPG Layer Translation

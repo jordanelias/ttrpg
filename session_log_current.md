@@ -70,3 +70,6 @@ blockers: []
 - player_agency_v30.md revised: Beliefs→Convictions rename, mechanical Scene Slate (7-step algorithm), NPC Outreach generation, opportunity resolution table, §5.4 Renown Track (0-10), Conviction symmetry with NPC system
 - companion_specification_v30.md created: formation, departure, scene participation, combat/contest/fieldwork/Thread integration, Domain Echo threshold modification, faction feedback loop, arc integration
 - canonical_sources.yaml updated with companion_specification entry
+### BRIDGE PRIORITIES 3-4 APPLIED
+- scale_transitions_v30.md: §4.3 extended with 6 mandatory Zoom In triggers, 5 world-state triggers, §4.4 Where Were You retrospective scenes, §7 Sufficient Scope extended
+- npc_behavior_v30.md: §8.11 NPC Personal Outreach Generation — outreach/demand conditions, scene structure, volume control
