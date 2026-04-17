@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 668
+# next_id: 670
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Last updated: 2026-04-17 (PP-661 close — ledger split)
 
@@ -82,4 +82,20 @@ editorial_decisions:
     description: "Adjudicator Thread response."
     status: open
     priority: P1
+    date: "2026-04-17"
+
+  - id: ED-668
+    scope: references
+    file: references/rs_budget.md
+    description: "RS Budget centralization. All RS drain/recovery sources in single document."
+    status: open
+    priority: P0
+    date: "2026-04-17"
+
+  - id: ED-669
+    scope: victory
+    file: references/wc_survival_spine.md
+    description: "WC as survival spine. Two-contest architecture. IP/expedition tension. UI requirement."
+    status: open
+    priority: P0
     date: "2026-04-17"

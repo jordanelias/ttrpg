@@ -284,6 +284,23 @@ systems:
     design_doc: designs/systems/throughline_resolutions_v1.md
     notes: "10 throughline integration fixes for PP-660 faction politics expansion. PP-661, 2026-04-17. Applied fixes: character creation caste viability, Std 0 carve-out, Warden × TC scale, Generational × Coup × IP × Baralta interaction, NPC roster capacity, Hall Tier settlement integration, SIM-POL discoverability, register-split future marker. ED-659."
 
+
+  rs_budget:
+    status: active
+    canonical: references/rs_budget.md
+    canonical_sha__references__rs_budget_md: "pending"
+    params: null
+    design_doc: null
+    notes: "Centralized RS budget. All drain/recovery sources. ED-668."
+
+  wc_survival_spine:
+    status: active
+    canonical: references/wc_survival_spine.md
+    canonical_sha__references__wc_survival_spine_md: "pending"
+    params: null
+    design_doc: null
+    notes: "WC as survival contest mechanism. Two-contest architecture. ED-669."
+
 # 2026-04-17 — editorial batch acceptance
 # 23 proposal files promoted to CANONICAL status. See canon/editorial_ledger.yaml ED-628.
 # Legacy predecessors npc_behavior_system_v1.md and social_contest_system_v2.md marked SUPERSEDED (retained as historical reference).
