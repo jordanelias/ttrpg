@@ -53,3 +53,38 @@ editorial_decisions:
     status: provisional
     severity: P2
     affects: [designs/systems/npc_behavior_v30.md, designs/hybrid/scale_transitions_v30.md, designs/contest/social_contest_v30.md]
+
+  - id: ED-611
+    date: 2026-04-16
+    description: "Niflhel political influence arm lacks formal Asset placement mechanic for long-term operative infiltration of other factions. Current rules only specify reactive sabotage (Priority 2)."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-612
+    date: 2026-04-16
+    description: "Guilds have no solo victory condition. Unplayable as solo faction. Need either: formal co-victory path, or Merchant Hegemony condition (Wealth >= 8 + Favour >= 5 in 5 territories + Treaty with winning faction)."
+    status: open
+    severity: P1
+    affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-613
+    date: 2026-04-16
+    description: "Löwenritter Torben Loyalty >= 6 primary victory path: achieving Loyalty 6 from post-Coup position (1-2) requires ~10 seasons. Combined with Mandate instability (Restoration fires at Mandate <= 2), Primary victory window is narrow. Acceleration mechanics needed."
+    status: open
+    severity: P2
+    affects: [designs/board_game/victory_v30.md, designs/systems/npc_behavior_v30.md]
+
+  - id: ED-614
+    date: 2026-04-16
+    description: "Cardinal subfaction play during Church Stability <= 2: no mechanic specifies duration of Cardinal independence or conditions restoring Confessor authority. Is restoration automatic at Stability 3+?"
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-615
+    date: 2026-04-16
+    description: "Schoenland Treaty: terms undefined. What does Schoenland receive from Crown Treaty beyond tactical deferral? Treaty mechanical terms should be specified (concessions Schoenland extracts)."
+    status: open
+    severity: P2
+    affects: [designs/board_game/victory_v30.md]

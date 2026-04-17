@@ -300,3 +300,35 @@
 | Zoom In triggers | 6 new Mandatory + 5 new World-State |
 | New mechanics | Mediation contest type; Torben Conviction emergence |
 
+
+## New Findings — sim_faction_ambition_2026-04-16
+
+### P1 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| FAC-SIM-12 | Guilds | Guilds have no solo victory condition — unplayable as solo faction | Open — ED-612 |
+
+### Confirmed Working
+
+| System | Source | Status |
+|--------|--------|--------|
+| Baralta S1 Proclamation on T13 near-certain — correct strategic disruption | FAC-SIM-01 | ✓ |
+| Almud S12 win via Treaty+March in favorable environment | FAC-SIM-11 | ✓ |
+| Vaynard Path B achievable S10 if T4/T13 held and WR advanced | FAC-SIM-08 | ✓ Fastest single-faction path |
+| Baralta Alternate T1 seizure gated correctly behind Military 4 buildup | FAC-SIM-05 | ✓ |
+| Cultural Reformation is intelligence extraction + territorial expansion simultaneously | FAC-SIM-07 | ✓ |
+| Baralta co-victory optionality (4 pairings) is her primary strategic asset | FAC-SIM-03 | ✓ |
+| Mandate race more consequential than TCV race in most scenarios | FAC-SIM-17 | ✓ |
+| Cardinals: richest single-institution internal drama in game | FAC-SIM-15 | ✓ |
+| Guilds optimal: fund the winner + maintain economic leverage | FAC-SIM-12 | ✓ |
+
+### New SIM-DEBT
+
+| ID | Description | Status |
+|----|-------------|--------|
+| SIM-FAC-01 | Niflhel full campaign: Thread Tension accumulation vs Warden detection timeline | OPEN |
+| SIM-FAC-02 | Cardinal conflict: all 4 active simultaneously during 3-season crisis | OPEN |
+| SIM-FAC-03 | Baralta+Almud Mandate race calibration | OPEN |
+| SIM-FAC-04 | Schoenland IP leverage concession calibration | OPEN |
+
