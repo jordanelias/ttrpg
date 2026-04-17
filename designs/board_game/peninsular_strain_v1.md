@@ -132,6 +132,16 @@ Accord represents the population's acceptance of the current controller's govern
 | Faction that conquered by force loses Battle elsewhere | −1 in all force-conquered territories held by that faction | Military weakness emboldens resistance. |
 | Peninsular Strain threshold effects | See §4 | Global war-weariness erosion. |
 
+### §2.4b Accord vs Order — Scale Distinction (ED-626)
+
+**Accord** (0–3) is a *province-level* attribute governing territorial TCV contribution and population acceptance of the controlling faction's governance. It is tracked per territory.
+
+**Order** (0–5) is a *settlement-level* attribute governing local stability within a specific settlement inside a territory. It is tracked per settlement, not per territory.
+
+They are independent: a province at Accord 2 (Compliant governance) may contain a settlement at Order 1 (simmering unrest). Peninsular Strain threshold effects (§4.3) affect province-level Accord. Settlement Order is governed by: garrison presence (+1/season), Govern success (+1 from Success, +2 from Overwhelming in that settlement), battle at settlement (−2 immediately), sustained hostile occupation (−1/season), Church Heresy Investigation at settlement level (Order −1 for non-Church-aligned population in that settlement only).
+
+**Both can reach 0 simultaneously.** When Province Accord 0 and Settlement Order 0 both trigger in the same territory at the same Accounting, resolve in this sequence: **(1) Settlement Order 0 first** — garrison fights Popular Uprising (Military vs Ob 2). Win: territory held, Accord → 1. **(2) Province Accord 0 consequence second** — if garrison won the Uprising: territory is contested but held (Accord at 1 from the garrison win). If garrison lost the Uprising: the garrison has retreated; the territory becomes Uncontrolled per the Accord 0 rule. This ordering means a garrison victory in a Popular Uprising can prevent the Accord 0 Uncontrolled consequence in the same Accounting. (ED-632)
+
 ### §2.5 Accord — Restoration Movement Exception
 
 RM does not use Accord. RM controls T9 (if taken via Cultural Uprising) through cultural presence, not governance. RM-held T9 control is maintained while RM has ≥ 3 Presence markers in T9 AND PT ≤ 1 (existing rule from victory_v30.md §3.5). RM has no Stability, Mandate, or Military — Accord triggers do not apply.
@@ -195,9 +205,11 @@ Each Battle resolved on Valorian soil: **RS −1.**
 
 ### §3.2 Vulnerability Signal (Pressure 2)
 
-Each season in which a Battle between playable factions is resolved: **IP +2.**
+Each season in which a Battle between playable factions is resolved: **IP +3** (revised from +2, ED-623 — validated by ST-42 simulation confirming +2 rate produced a threat that rarely manifested in standard campaigns).
 
 Altonia monitors the peninsula for weakness. Civil war signals vulnerability. This fires once per season regardless of how many battles occur (one season of warfare = one intelligence signal). Battles against NPC factions (Altonian Vanguard, Popular Uprising, Löwenritter coup) do NOT trigger IP advancement — Altonia does not gain intelligence from its own operations, and internal unrest is a different signal from inter-faction civil war.
+
+**TC-based IP advancement (ED-623):** When TC ≥ 60, Altonia reads Church dominance as peninsula vulnerability. Add **IP +2 per season** while TC ≥ 60 (in addition to civil war IP). This fires automatically at Accounting alongside other IP sources. Revised from +1 (prior rate produced insufficient pressure in moderate-TC campaigns).
 
 **IP advancement from civil war is independent of Peninsular Strain (§4).** The two tracks do not feed each other.
 

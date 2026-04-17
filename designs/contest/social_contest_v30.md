@@ -136,6 +136,8 @@ Initiative holder declares argument and rolls first. Respondent hears, then decl
 Pool: (Primary Attribute × 2) + History bonus (per §3), TN 7.
 Add genre/orientation bonus dice per §2 Step 3 (primary genre +1D; audience boost match +1D; max +2D total).
 Recall bonus: +2D when citing a specific, named, verifiable claim (document, date, prior statement, named precedent). Binary. Available in either genre.
+
+**Grand Contest Recall (PP-NEW, ED-617):** In Grand Contests (5-exchange format), the Recall bonus (+2D) applies *once per cited source for the entire contest*, not once per exchange. After Recall is used for a specific document, date, or named precedent, that source is exhausted and cannot generate a new Recall bonus in later exchanges. The orator must cite a different source to claim Recall in subsequent exchanges. This prevents pool-compounding from repeating a single high-quality citation across all five exchanges. Formal Contests (3 exchanges) retain per-exchange Recall (shorter format makes source-cycling mechanically impractical).
 Momentum: before rolling, spend any amount of Momentum to add automatic successes (1 Momentum = 1 success, per core engine §1.7).
 
 **Step 4 — Resolve by interaction type:**
@@ -229,6 +231,8 @@ Both orators push in the same direction within the same temporal horizon.
 **Post-contest recovery:** all strain and Concentration depletion clear at scene end. Spent clears at scene end. RS changes subject to RS ceiling (100) and RS=0 lockout.
 
 ### §6.1 Obligations (NEW — post-contest binding commitments)
+
+**GM advisory — Obligation tracking (ED-619):** GMs are advised to cap active Obligations at 3 simultaneously across all parties for tracking tractability. Beyond 3 active Obligations in the same campaign season, use a dedicated ledger rather than session notes. The system allows any number of concurrent Obligations; the cap is a GM guidance note, not a mechanical limit.
 
 A Decisive win (Conviction Track ≥ 7 or ≤ 3) in a Formal or Grand Contest produces a binding **Obligation** — a mechanical commitment that persists across seasons. The Obligation is the contest's lasting consequence in the game world, not just a stat change.
 
@@ -324,19 +328,9 @@ A practitioner may initiate a Thread operation between exchanges. Effects apply 
 ### §9.5 Beliefs Integration
 Winning an exchange while arguing for a position aligned with the orator's stated Belief counts as a Belief achievement for Momentum. Max 1 Momentum per contest from Belief alignment.
 
-### §9.6 Fieldwork Integration (F-TRANS-05/11)
+### §9.6 Forced Unmask
 
-**Contest Escalation boundary (fieldwork_v30 §5.7):** When a fieldwork Negotiate action cannot resolve the situation (opposing convictions, institutional constraints, or stakes beyond individual authority), the GM does not offer a choice — the situation escalates to a formal Contest. Current Disposition maps to starting Conviction Track offset: ±1 per 2 Disposition points, cap ±2. The relationship built during fieldwork carries forward; it does not reset.
-
-**Combined Findings (F-TRANS-11):** See §9.1. Multiple resolved Findings on related topics may be presented as a combined argument. Each additional Finding beyond the first adds +1D to the Argue roll (max +2D from combined Findings). Finding citation must be relevant to the contest's subject matter.
-
-**Post-Contest Disposition (F-TRANS-05):** After a Contest, the adjudicator's Disposition shifts +1 toward the winner and −1 toward the loser. This persists into subsequent fieldwork scenes.
-
-**Contest Appraise → Evidence (fieldwork_v30 §2.3):** Information gained through a Contest Appraise action may be applied to an active Evidence Track as +1 progress (Partial quality, Testimonial tag). This is automatic — no additional fieldwork action required.
-
-### §9.7 Forced Unmask
-
-### §9.8 Niflhel Social Toolkit
+### §9.7 Niflhel Social Toolkit
 Niflhel cannot participate in Formal or Grand Contests. Their social toolkit:
 - Private negotiation: one-on-one only; Attunement-primary pool (per §3 "no adjudicator"); TN 7; Ob = floor(target Stability / 2) + 1.
 - Thread Insight (TS ≥ 30 only): Attunement read before negotiation reveals one unstated position.
@@ -353,6 +347,8 @@ Faction-level contest resolution for BG scale. To zoom into personal scale, use 
 2. Each side declares one genre (Memory or Projection).
 3. Resistance: base 0. If a faction with Stability ≥ 6 Abstains: +1 resistance (max +2).
 4. Starting Conviction Track: 5 ± lobbying offset. Each successful Diplomacy action targeting this vote in preceding season: +1 toward lobbying side (max ±2).
+
+**Lobby cap — BG mode (ED-621):** The lobbying offset is restricted to the compromise zone at BG Vote start. Maximum starting Conviction Track: 6. Minimum starting track: 4. Lobbying cannot predetermine a vote — it provides advantage, not a guaranteed outcome. This matches the Hybrid mode restriction (§11 / PP-256). Example: if lobbying would push the track to 7, it is capped at 6.
 
 ### BG Vote Resolution
 Pool: sum of Mandate of all factions on each side. Roll combined pool TN 7.
@@ -373,6 +369,22 @@ Total Victory: Conviction Track ≥ 9 or ≤ 1 → losing coalition's dominant f
 1. **BG layer:** run one round of BG Parliamentary Vote (§10). Apply Conviction Track offset, capped at ±2 from neutral. Per PP-256, BG lobbying offset is restricted to the compromise zone (4–6 at Hybrid session start); the BG layer cannot produce a final resolution — the TTRPG layer always runs.
 2. **Set TTRPG starting Conviction Track:** 5 ± capped BG offset, clamped to compromise zone (4–6).
 4. **Resolution:** final TTRPG Conviction Track position determines outcome. Thread consequences may fire.
+
+---
+
+## §10.1 Parliamentary Stay (ED-631)
+
+A Parliamentary Stay is a Senator Inward motion that halts an active Church Tribunal filing for 1 season. It represents Parliament asserting civil jurisdiction over an ecclesiastical proceeding.
+
+**Requirements:** 2+ factions on Side A (the filing-suspension side). Church on Side B. Standard BG Parliamentary Vote resolution (§10).
+
+**Availability:** Only while TC < 55. At TC 55+, the Church's TC political pool bonus (floor(TC/20)) makes the Stay motion effectively unpassable — Church's institutional authority at that level exceeds Parliamentary reach.
+
+**Effect on success:** The Church Tribunal is suspended for 1 season. Church may re-file in the following season (no permanent bar). The Stay buys 1 season of disruption window — enough for the target to address one prerequisite condition (Attention Pool reduction, prior conviction, Obligation status).
+
+**Effect on failure:** The Tribunal proceeds immediately. The motion's failure cannot be appealed or re-filed in the same season.
+
+**TC < 55 gate rationale:** As Church grows more prominent (TC 55 = Church Prominent milestone), Parliamentary institutions lose the political standing to override ecclesiastical authority. The Stay window closes as Church grows — creating a genuine strategic timing incentive: suppress TC before it reaches 55, or lose the ability to check Church judicial power through Parliament.
 
 ---
 
@@ -406,7 +418,7 @@ Total Victory: Conviction Track ≥ 9 or ≤ 1 → losing coalition's dominant f
 |---|---|---|
 | ED-132 | Appraise step action name resolved: Appraise (PP-278) | P3 |
 | ED-133 | Diverge state — superseded by CROSS. Confirm Diverge no longer needed. | P2 |
-| ED-041 | Niflhel social toolkit — provisional stub in §9.8 | P2 |
+| ED-041 | Niflhel social toolkit — provisional stub in §9.7 | P2 |
 | ED-051 | Corroboration full port (Knot requirement removed per ED-014) | P3 |
 
 ### Future design work (not blocking)

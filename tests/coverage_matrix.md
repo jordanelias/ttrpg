@@ -119,3 +119,35 @@ Threadcut being TS-gated, two-scale Uprising, three-faction bilateral sequential
 RM collective Weaving near-infallible, Torben window S1-8, Last Declaration scene,
 Partition Phase 1 declaration, battle consequences consolidated.
 
+
+## Throughline Analysis + Propagation — 2026-04-17
+
+Top-down audit across all 8 batches (ST-01 through ST-60).
+
+### Robustness: ✓ working
+Victory race convergence, TC/RS pyrrhic collision, Obligation cascade, Torben investment race, Calamity reversal gate, co-victory hold, Elske subversive strategy, Niflhel intelligence market
+
+### Robustness: ✗ gaps addressed
+IP rate too mild → revised (+3/battle, +2/season TC60+); No Parliamentary block on Excommunication → Parliamentary Stay added; Guilds solo victory resolved (ED-612)
+
+### Elegance: ✓ working
+TC Reform, Church Accord governance condition, Feigned Retreat dual utility, Excommunication fait accompli, Shield Wall/Wedge counter, Depth 5 non-investigative
+
+### Elegance: ✗ gaps addressed
+Grand Contest Recall → once-per-source rule; Accord/Order invisible → clarified; IP published wrong → corrected; BG lobby pre-determination → capped at 4-6
+
+### Smoothness: ✓ working
+Zoom In/Out (cleanest system), 5-step Cascade, collective co-movement fires once, three-faction bilateral sequential, mass battle tactic cards
+
+### Smoothness: ✗ gaps addressed
+Accord/Order co-fire sequence → Order 0 first, Accord 0 second; Partition silent win → Phase 1 declaration required; Siege mechanic absent → §1.9 added; Parliamentary Stay → §10.1 added
+
+### Propagated
+social_contest: Grand Contest Recall fix, BG lobby cap, Obligation 3-cap advisory, Parliamentary Stay §10.1
+victory_v30: Rupture Scene + Last Declaration, RM Presence vs Phase 1 distinction, Partition Phase 1 declaration
+peninsular_strain: IP rate +3/battle +2/season-TC60, Accord/Order distinction §2.4b, co-fire sequence
+mass_battle: §E Battle Consequences (canonical consolidation from 4 source docs)
+military_layer: §1.9 Siege Action mechanic
+scale_transitions: Stability Crisis Zoom In trigger
+npc_behavior: Constrained sub-arc state, Torben Conviction window S1-8
+

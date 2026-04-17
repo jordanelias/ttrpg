@@ -313,6 +313,10 @@ Modifiers:
 | Failure | Uprising crushed. TC +2 (Church authority strengthened by resistance). T9 PT +1. Uprising attempt used up for this arc. |
 
 #### RM Territory Control — Cultural Displacement
+**Presence markers vs Phase 1 (important distinction):** Presence markers are the *holding mechanic* for post-Uprising T9 (≥ 3 required in T9). They are NOT the Phase 1 mechanic. Phase 1 (PT ≤ 1 in ≥ 4 territories) tracks Piety Track values, not Presence marker counts. Community Weaving places Presence markers; it does not directly reduce PT. PT reduction comes from: Cultural Reformation OW (Varfell, −1 PT), successful Uprising OW (T9, −2 PT), Calamity Drift (RS ≤ 50 in low-PT territories), and natural secular drift (−1 PT per 5 seasons without Church cultivation). RM players should prioritise PT reduction for Phase 1 and Presence markers for post-Uprising T9 holding — these are parallel but distinct goals.
+
+**Overwhelming Uprising bonus:** An Overwhelming Cultural Uprising result automatically places +2 Presence markers in T9 (population mobilisation from the Uprising itself). These markers are placed before the holding condition is checked, ensuring OW Uprising immediately provides the foundation for holding T9.
+
 RM holds T9 through cultural presence, not military garrison. Control is maintained while:
 - RM has ≥ 3 Presence markers in T9
 - PT in T9 ≤ 3 *(ED-588 resolved 2026-04-16: revised from PT ≤ 1. T9 starts PT 5 under Church management; ≤ 1 was unreachable post-Uprising without 4+ seasons of RM governance. PT ≤ 3 is achievable immediately after Uprising OW: PT 5 − 2 = PT 3. RM must then prevent Church Govern actions from rebuilding PT above 3.)*
@@ -362,7 +366,9 @@ Only available if Regency Establishment not achieved after 8 Löwenritter season
 | **Varfell + RM** | VTM ≥ 3 AND WR ≥ 2 AND ≥ 3 territories PT ≤ 1 AND RS ≥ 40 AND Varfell controls T13 | *(PP-545: VTM was ≥ 4; territories was ≥ 4)* |
 | **Hafenmark + RM** | Hafenmark TCV ≥ 10 AND ≥ 3 territories PT ≤ 2 AND PI ≥ 4 AND RS ≥ 40 | *(PP-546: territories was ≥ 4)* |
 | **Löwenritter + Hafenmark** | Löwenritter TCV ≥ 8 AND Hafenmark TCV ≥ 8 AND PI ≥ 4 |
-| **Church + Hafenmark (Partition)** | See §3.2. Crown Mandate ≤ 1, TC ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no active military conflict. |
+| **Church + Hafenmark (Partition)** | See §3.2. Crown Mandate ≤ 1, TC ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no active military conflict. Requires Phase 1 Declaration (see below). |
+
+**Partition Phase 1 Declaration (ED-629):** Church+Hafenmark Partition cannot fire silently at Accounting. At Phase 1 of the season in which all Partition conditions are simultaneously met, either the Church player (or NPC Church AI) OR the Hafenmark player (or NPC Hafenmark AI) must publicly declare: "We assert Peninsular Partition this season." This declaration is visible to all players at Phase 1. Other factions then have the full Phase 4 Domain Action window to disrupt any single Partition condition: restore Crown Mandate from ≤ 1 to ≥ 2 (Crown Govern OW), initiate Battle between Church and Hafenmark (breaking non-aggression), reduce Church or Hafenmark territory count below the required minimum, or suppress TC below 50 (Hafenmark OW Suppress + Varfell VTM Discretion). If all conditions survive Phase 4 and hold at Accounting: Partition fires. **NPC AI Partition Declaration:** NPC Hafenmark and NPC Church both declare when all 5 conditions are met at Phase 1 evaluation. NPC AI never suppresses a Partition declaration.
 
 **Incompatible:** Crown + Church, Crown + Löwenritter, Church + Varfell, Church + RM.
 
@@ -374,9 +380,23 @@ Co-victories are distinct from operational coalitions (PP-404/405). A faction ma
 
 | Condition | Trigger | Outcome |
 |-----------|---------|---------| 
-| Rendering Stability Rupture | RS = 0 at Accounting | All factions lose. Second Calamity. |
+| Rendering Stability Rupture | RS = 0 at Accounting | All factions lose. Second Calamity. Triggers The Rupture Scene (see below). |
 | Altonian Conquest | IP ≥ 100 AND AER ≤ 1 | Altonia annexes Valoria. All factions lose. |
 | Total Institutional Collapse | All playable factions at Stability 0 simultaneously | Anarchy. All factions lose. |
+
+### The Rupture Scene (ED-630)
+
+When RS reaches 0 at Accounting, the Rupture Scene fires before the Shared Loss is formally declared. All campaign activity pauses.
+
+**Step 1 — World state narration:** The GM describes what RS 0 feels like in the territory the player currently occupies. Sensory, immediate, not abstract. 2–3 minutes. Players listen.
+
+**Step 2 — The Last Declaration (all PCs):**
+
+Each PC states: (1) their primary Belief as currently written; (2) one specific action over the campaign that most clearly expressed that Belief; (3) whether, given everything, they would do that action again. No roll. Not mechanically adjudicated.
+
+**Step 3 — GM narration through each Belief lens:** 1–2 sentences per PC, acknowledging the action through the Belief lens. No judgment.
+
+**Step 4 — Shared Loss declared.**
 
 ---
 
@@ -403,30 +423,16 @@ Multiple victory conditions require RS thresholds. A faction that ignores RS ris
 
 ## 7. TC Generation and Church Seizure
 
-**CANONICAL SOURCE: tc_political_redesign_v30.md §§1–3 and military_layer_v30.md §3.**
+Starting TC: 28. Phase transition at TC 75 (TC freezes, Church shifts to seizure mode).
 
-Starting TC: 28. TC runs to 100 (no freeze). Milestone system replaces TC 75 phase transition:
+**Seasonal TC at Accounting:**
+1. Institutional Momentum: TC +1 (passive).
+2. Piety Yield: per territory where Church is Prominent (Church Mandate > controlling faction Mandate), add by PT. PT 5 = +1, PT 4 = +0.5, others = 0. Total = floor(sum).
+3. Assert (optional Church action): Influence vs Ob 2. Success: TC +1. Failure: Stability −1.
+4. Suppress (optional opponent action): Mandate vs Ob = floor(Church Mandate / 2) + 1. Success: negate Step 1 passive. Failure: Stability −1.
+5. Hafenmark Structural Suppression: while Baralta Mandate ≥ 4, TC −1/season.
 
-| TC | Milestone | Effect |
-|---|---|---|
-| 40 | Church Assertive | +1D on Assert and Seizure rolls |
-| 55 | Church Prominent | Ob +1 to actions directly opposing Church Domain Actions |
-| 65 | Church Dominant | Secular factions spend extra action slot to pass anti-Church Parliamentary motions |
-| 80 | Church Ascendant | Seizure Ob −1 globally; PT drifts +1 toward piety pole at Year-End |
-| 100 | Theocracy Unification | See tc_political_redesign_v30 §2.2 |
-
-**Seasonal TC at Accounting (military_layer_v30 §3):**
-1. Conditional Passive: TC +1 only if Church Mandate > controlling faction Mandate in ≥ 2 territories (§3.2).
-2. Piety Yield: per prominent territory, yield weighted by Spiritual Weight (SW). TC += Σ(PT tier × SW/5) per prominent territory, floored (§3.3).
-3. Charity Advantage: Church Wealth spent on charity → TC +1 per 2 Wealth spent, cap 2/season (§3.4).
-4. Templar Presence: +1 TC per territory where Church military unit AND Church Prominence (§3.5).
-5. Assert (optional Church action): Influence vs Ob 2. Success: TC +1. Failure: Stability −1 (§3.6).
-6. Suppress (optional opponent action): Mandate vs Ob = floor(Church Mandate / 2) + 1. Success: negate Step 1 passive. Failure: Stability −1 (§3.7).
-7. Hafenmark Structural Suppression: while Baralta Mandate ≥ 4, TC −1/season (§3.8).
-
-**Faction Political Pool (tc_political_redesign_v30 §3.4):** Church political pool = Mandate + floor(TC/20). Non-Church political pool in anti-Church motions = Mandate − floor(TC/30).
-
-**Church Seizure (Graduated, PP-494):** Pool = Influence + floor(TC/15). Ob = 7 − PT. Prominence required. Church Mandate ≥ 4. Overwhelming seizure: PT +1 (consequence, not cap-governed). See §3.2 for full table. Available from TC ≥ 15 (not gated on TC 75).
+**Church Seizure (Graduated, PP-494):** Pool = Influence + floor(TC/15). Ob = 7 − PT. Prominence required. Church Mandate ≥ 4. Overwhelming seizure: PT +1 (consequence, not cap-governed). See §3.2 for full table.
 
 ---
 

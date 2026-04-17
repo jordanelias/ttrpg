@@ -526,10 +526,6 @@ A Muster action produces 1 unit with Size = 2, Power = floor(faction Military / 
 
 ### A.14 CROSS-SYSTEM NOTES
 
-**Fieldwork suspension (F-TRANS-06, fieldwork_v30 §2.3):** Mass battle suspends all active fieldwork. Evidence Tracks freeze at their current value. Battle actions (including Thread operations in Phase 4) do not consume fieldwork time units. Thread-Read during mass battle resolves in the Phase 4 window and is classified as intelligence (not offensive). Co-movement fires. May advance an Evidence Track if the Thread-Read targets an investigation question. Fieldwork resumes after the battle at its frozen state.
-
-**Post-battle investigation (F-TRANS-12, fieldwork_v30 §2.3):** Post-battle investigation of a battle site = 1 fieldwork scene. The battle itself does not consume fieldwork time. The investigation scene uses standard Discovery Procedure (fieldwork_v30 §3.2) with the battle site as the target. Battle aftermath provides automatic Depth 1 access (surface evidence is everywhere).
-
 **Woven units — brittleness:** Thread-Woven Discipline or Morale boosts are
 subject to §4.3.4 brittleness rules. Taking Size loss > Discipline in a single
 turn qualifies as a non-Thread event of sufficient severity — Game Master may rule
@@ -779,3 +775,36 @@ Each mustered unit has one named officer NPC. The officer is generated at Muster
 Units in the player's current territory gain +1 Discipline while the player is physically present during battle. If the player is wounded (2+ wounds) or incapacitated during the battle, all friendly units in the battle take −1 Discipline immediately (morale shock). This is the Mount & Blade effect — the player's presence on the battlefield matters to the soldiers.
 
 **Board Game adaptation:** If a PC is embedded in a territory during battle (per scale_transitions_v30 §9 PC Faction Embedding), friendly units gain +1D on the first battle roll. This stacks with Commander bonus but is capped at +1D total from PC presence.
+
+
+## PART E: BATTLE CONSEQUENCES (CANONICAL — ED-542)
+
+Every Battle resolved on Valorian soil carries systemic costs beyond the immediate tactical outcome. These consequences are automatic — they do not require a roll and cannot be mitigated by the battle's outcome.
+
+### §E.1 Immediate Consequences (at Battle resolution)
+
+| Consequence | Trigger | Value |
+|------------|---------|-------|
+| Substrate Fracture | Any inter-faction Battle | RS −1 (Campaign/War scale: RS −2) |
+| Accord erosion — conquered territory | Attacker conquers via Battle | Accord set to 1 |
+| Accord erosion — defender's territory | Battle occurs in a territory the defender controls | Accord −1 |
+
+### §E.2 Accounting Consequences (per season in which ≥ 1 inter-faction Battle occurred)
+
+| Consequence | Trigger | Value |
+|------------|---------|-------|
+| Vulnerability Signal | Any inter-faction Battle this season | IP +3 at Accounting (revised from +2, ED-623) |
+| Peninsular Strain | Any inter-faction Battle this season | Strain +1 at Accounting |
+
+### §E.3 Exceptions
+
+- Covert operations (Niflhel sabotage, Church Seizure of ungarrisoned territories): no RS/IP/Strain cost.
+- Altonian Vanguard battles: RS −1 (siege) only; no IP or Strain from these.
+- Popular Uprisings (Accord 0 garrison combat): RS −1 only; no IP or Strain.
+- Löwenritter Coup activation battles: Strain +1 only for first 2 seasons; no IP (per peninsular_strain §4.3 exemption).
+
+### §E.4 Cumulative caps per season
+
+Maximum RS change from battles: −3 per season (regardless of battle count within season). Maximum Strain advancement from battles: +2 per season. IP advancement is uncapped — each battle season = +3 IP, stacking with TC-based IP advancement (peninsular_strain §3.2).
+
+*Sources: peninsular_strain_v1.md §3, military_layer_v30.md §2.2b, victory_v30.md §0.4, board_game PP-647. This section consolidates those references into one canonical location.*

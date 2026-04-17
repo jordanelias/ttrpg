@@ -194,6 +194,7 @@ Every named NPC holds three interconnected attributes.
 
 | Attribute | Value | Notes |
 |---|---|---|
+| Primary Conviction | **Emergence window: Seasons 1–8 (ED-618).** Torben starts with no primary Conviction. The first faction to reach Disposition ≥ +2 with Torben before Season 8 sets his primary Conviction. If two factions reach +2 simultaneously (same Accounting): tiebreak by (1) higher total Disposition, then (2) chronologically earliest first investment action. After Season 8: primary Conviction is locked — it cannot be changed through further investment or Contest victories. Secondary Conviction can be added through Scars (1–2 Scars from decisive RS targeting activate secondary). If no faction reaches Disposition ≥ +2 before Season 8: Torben defaults to Order (Crown institutional baseline). Each primary Conviction produces distinct Crown Priority Tree behavior when Torben leads (see arc profiles below). |
 | Primary Conviction | [EDITORIAL: ED-394 — Torben Conviction not specified. At Loyalty 3 (start), he is uncommitted. Conviction emerges through play. Proposed: starts with no primary Conviction — first faction to invest in him sets his initial Conviction. This makes Torben a contested narrative asset.] |
 | Secondary Conviction | Autonomy (always present — a prince who has been bargained over his entire life defaults to self-determination when cornered) |
 | Ethical Framework | Inherits from whichever faction holds his Loyalty (Crown at start). Framework shifts on Loyalty transfer. |
@@ -385,6 +386,8 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 | TS crosses threshold (Stirring 30 / Active 50) | Ontological confrontation challenges Conviction | Evidence style intensifies | Certainty movement; less predictable behavior |
 | Certainty reaches 0 | Conviction permanently altered | Primary becomes Authority (old framework's authority void) | NPC in crisis; new arc phase |
 | Faction eliminated | Conviction collapses to Autonomy | All styles suppressed for 1 season (shock) | NPC becomes unaffiliated actor; new Belief set forms |
+
+**Constrained sub-arc state (ED-586):** When a named NPC's faction Mandate drops below 3, the NPC's primary arc behaviors that require Mandate expenditure are suspended. The NPC enters a "Constrained" sub-arc state for as long as Mandate < 3. In Constrained state: Priority 2 (Conviction-critical) and Priority 3 (Domain expansion) actions are replaced by Priority 6 (institutional rebuilding: Govern, Trade). The NPC's Conviction and Resonant Style are unchanged — only their behavioral priority sequence shifts. When Mandate recovers to ≥ 3, the NPC exits Constrained state and resumes their active arc from its prior state. Scar count and arc progress are preserved during Constrained state.
 
 ### §5.2 Named NPC Arc Profiles
 

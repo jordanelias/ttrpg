@@ -281,3 +281,9 @@ systems:
 # Legacy predecessors npc_behavior_system_v1.md and social_contest_system_v2.md marked SUPERSEDED (retained as historical reference).
 # Duplicate top-level companion_specification entry removed; canonical entry under `systems:` block.
 
+
+- file: tests/throughline_analysis_2026-04-17.md
+  type: simulation_synthesis
+  date: 2026-04-17
+  description: "Cross-batch throughline analysis (ST-01 through ST-60). Robustness/elegance/smoothness audit. Propagation record for all P0/P1 items from batches 1-8."
+  authority: design_proposal

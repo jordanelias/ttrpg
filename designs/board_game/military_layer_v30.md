@@ -382,3 +382,28 @@ Territory Prosperity governs the industrial, agricultural, and population base r
 | ED-NEW-TC-03 | PT 3 as fractional Piety Yield (+0.25) — confirm or raise to +0.5 | PROVISIONAL |
 | BALANCE-NEW-TC-01 | TC reform may make TC too slow/fast depending on Church play style — simulation required | Simulation pending |
 | CLOCK-EDIT-02 | Church military victory → no TC change from military victory alone (confirm) | PROVISIONAL |
+
+
+### §1.9 Siege Action (NEW — ED-633)
+
+A Siege is an extended encirclement operation targeting a fortified territory. It replaces the Battle declaration against a garrisoned territory with Fort Level ≥ 2. Siege is declared instead of March+Battle; the attacker surrounds but does not assault directly.
+
+**Card:** Legionary Inward (same card as standard Muster). Siege requires 1 Legionary card AND at least 1 unit already adjacent to the target territory.
+
+**Pool:** Attacker Military stat, TN 7.  
+**Ob:** 2 + Fort Level (Fort 0 = Ob 2, Fort 1 = Ob 3, Fort 2 = Ob 4, Fort 3 = Ob 5).
+
+| Degree | Fort effect | Other effects |
+|--------|-------------|--------------|
+| Overwhelming | Fort −2 | RS −1 (concentrated suffering). Attacker Wealth −1 (supply cost). |
+| Success | Fort −1 | RS −1. Attacker Wealth −1. |
+| Partial | No Fort reduction | RS −1. Attacker Wealth −1. |
+| Failure | No Fort reduction | Attacker Stability −1 (morale). Siege may continue or be ended. Attacker Wealth −1. |
+
+**Duration cap:** Maximum 5 seasons. After 5 seasons the attacker must Assault (standard Battle at current Fort Level) or Withdraw (no territory gain).
+
+**Garrison response:** Defending faction may attempt Supply Run each season (Consul Outward from adjacent friendly territory, Ob 2). Success: garrison holds (no Discipline degradation). Failure: Garrison Discipline −1 per season of failed supply.
+
+**RS cost:** Siege (per season) −1 RS (per threadwork_v30.md §5.2 — canonical; this entry formally incorporates that cost into playable faction mechanics).
+
+**Calibration note (from ST-44):** Fort 3 at Military 4 is Ob 5. P(Success) ≈ 2% per season. Fort 3 is effectively impregnable to Military 4 through Siege. Fort 3 requires Military 5+ for reliable progress (~25% Success per season at 5D Ob 5). The correct counter to an impregnable Fort 3 is political (reduce defender Mandate until garrison is withdrawn voluntarily) or Sabotage (Tribune Intel OW in the territory, −1 Ob to subsequent Siege).
