@@ -51,3 +51,4 @@ editorial_ledger_index: canon/editorial_ledger_index.md
 coverage_matrix_active: tests/coverage_matrix.md
 coverage_matrix_archive: tests/coverage_matrix_archive.md
 - references/rs_budget.md — RS Budget (all drain/restoration sources, peak scenarios, WC modifiers)
+- references/videogame_mode_spec.md — Videogame Mode Collapse (single-mode extraction reference for Godot)
