@@ -3680,3 +3680,11 @@ editorial_decisions:
 # 2026-04-17 ED-634 propagation
 # Resolved: ED-634 (umbrella), ED-635/636/637/638/641/654 (propagated)
 # Registered: ED-640-658, SIM-POL-R01/02/05 as sub-items
+
+  - id: ED-611
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Niflhel political influence arm lacks formal Asset placement mechanic. Superseded by ED-633 (Deniability Debt, which is the canonical covert-asset mechanic)."
+    status: superseded
+    severity: P2
+

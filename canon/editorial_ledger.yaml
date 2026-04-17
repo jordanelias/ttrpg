@@ -170,3 +170,17 @@ editorial_decisions:
     status: open
     severity: P1
     affects: [designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-632
+    date: 2026-04-17
+    description: "Shadow Renown: referenced in faction_politics_expanded (REN-03) but no implementation — no track, no unlock conditions, no conversion to public Renown, no exposure consequences. Full mechanic specification required."
+    status: open
+    severity: P1
+    affects: [designs/systems/faction_politics_expanded_v1.md, designs/systems/player_agency_v30.md]
+
+  - id: ED-633
+    date: 2026-04-17
+    description: "Deniability Debt (Riskbreaker): referenced in faction_politics_expanded §2.2 as 'stage13 mechanic, retained' but not defined in any current canonical doc. Accumulation rate, consequences, and resolution mechanic all absent."
+    status: open
+    severity: P1
+    affects: [designs/systems/faction_politics_expanded_v1.md]

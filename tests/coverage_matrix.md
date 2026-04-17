@@ -213,3 +213,37 @@ Faction Politics rank-ladder expansion (PP-660). Propagated to:
 
 Remaining open sub-EDs: ED-640/642/643/644/645/648/649/650/651/652/655/656/657/658, SIM-POL-R01/02/05. All P2 except ED-643 (Solmund propagation P1) and SIM-POL-R01/02/05 (P1 sim-debt).
 
+
+## New Findings — sim_npc_player_batch3_2026-04-17
+
+### Staleness Audit
+- AER: **confirmed live** in board_game_v30. Modifies Altonian Vanguard deployment threshold. Prior simulation usage was correct.
+- faction_politics_expanded_v1.md (PP-660, accepted 2026-04-17): canonical source for all sub-office ladders, named inner circle NPCs, Ministry expansion. Prior simulations pre-dated this document.
+
+### P1 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| GAP-B3-01 | Multiple | Shadow Renown referenced across docs but no implementation specification | Open — ED-632 |
+| — | Riskbreaker §2.2 | Deniability Debt referenced as "stage13 mechanic, retained" but not defined in canonical docs | Open — ED-633 |
+
+### Confirmed Working
+
+| System | Source | Status |
+|--------|--------|--------|
+| Spymaster: double-agent methodology (controlling compromised assets rather than severing them) | KOLT-SIM-01 | ✓ Correct intelligence model |
+| Spymaster: 1-season verification delay produces actionable vs. speculative intelligence | KOLT-SIM-02 | ✓ Mechanically correct |
+| Royal Guard dual-chain: Kreutz cannot transmit Counter information without chain breach | KREU-SIM-03 | ✓ Institutional blind spot confirmed |
+| Guild Comptroller: Parliamentary Committee motions = cheapest Domain Action equivalents | FELD-SIM-02 | ✓ Free binding law from Scene action |
+| Templar: converting military provocation into Parliamentary weapon through formal Protest | TEMP-SIM-01 | ✓ Defensive constraint as political tool |
+| Riskbreaker: institutional activation (making institutions act without knowing they're directed) is highest-skill mission outcome | RB-SIM-01 | ✓ |
+| Journeyman: victory depended entirely on Feldhaus's discretion — systemic, not personal | JOUR-SIM-01 | ✓ Honest statement about institutional power |
+
+### Cross-Simulation Findings
+
+| Finding | Description |
+|---------|-------------|
+| CROSS-B3-01 | Mid-rank characters experience the moral cost that faction leaders export |
+| CROSS-B3-02 | Institutional blind spot is always one step up — constraints are positional, not systemic |
+| CROSS-B3-03 | Shadow Renown lacks formal game support across three character types |
+
