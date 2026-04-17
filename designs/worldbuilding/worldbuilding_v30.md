@@ -38,7 +38,7 @@
 |----------|-----|-----------|-----------|
 | Fortitude | Military | Knights Templar, enforcement, monstrous incursion suppression | Osten Jarnstal |
 | Justice | Judicial | Inquisitors, Grand Adjudication, heresy investigation, text suppression | Arnlod Olafsson |
-| Prudence | Economic | Tithes, charities, Church land management | [UNNAMED — ED-NEW-06] |
+| Prudence | Economic | Tithes, charities, Church land management | Aldric Tormann |
 | Temperance | Knowledge | Universities, observatories, monasteries, archives | Magnus Klapp |
 
 ## 3.2 Cardinal Mechanics (TTRPG)

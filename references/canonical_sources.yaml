@@ -268,6 +268,14 @@ systems:
     design_doc: designs/audit/bridge_part1_revisions_2026-04-16.md
     notes: "Player Agency canonization + Renown + Mechanical Scene Slate revision block. Accepted 2026-04-17 (editorial batch acceptance)."
 
+
+  faction_politics_expanded:
+    status: active
+    canonical: designs/systems/faction_politics_expanded_v1.md
+    params: null
+    design_doc: designs/systems/faction_politics_expanded_v1.md
+    notes: "Rank-ladder expansion (Standing 0-7), sub-office ladders, caste integration, TC × rank, Baralta × rank, Ministry expansion, Generational Shift fix. PP-660, 2026-04-17. Supersedes original faction_politics_patch_register_2026-04-16.md draft. Raises ED-634 through ED-658."
+
 # 2026-04-17 — editorial batch acceptance
 # 23 proposal files promoted to CANONICAL status. See canon/editorial_ledger.yaml ED-628.
 # Legacy predecessors npc_behavior_system_v1.md and social_contest_system_v2.md marked SUPERSEDED (retained as historical reference).

@@ -2045,3 +2045,10 @@ patches:
   description: "Military Layer ↔ Peninsular Strain integration: §2.2b battle consequences added (RS/IP/Strain/Accord per battle). Header cross-reference added. Patch register archive split (applied < 2026-04-13 → archive)."
   affects: [designs/board_game/military_layer_v30.md, canon/patch_register_active.yaml, canon/patch_register_archive.yaml]
   status: applied
+
+- id: PP-660
+  date: 2026-04-17
+  severity: P1
+  description: "Faction Politics rank-ladder expansion. Standing ladder 0-5 → 0-7 with Skyrim-guild progression patterns (Initiation Duty, specialty branches, Hall Tier, livery, mentor, demotion). Faction-specific 8-rank ladders for Crown/Hafenmark/Varfell/Church with named inner circles. Seven sub-office rank ladders (Löwenritter, Riskbreakers, Inquisitors, Templars, Guilds, Niflhel, Wardens of the Thread). Caste integration layer (Northern/Central/Southern Einhir modifiers to advancement, Renown, Initiation Duty, Inner Circle Disposition, Conviction Scar). TC political legitimacy × Church rank interaction (floor(TC/20) bonus dice propagates to rank privileges). Baralta Crown Claim × rank interaction (new Hafenmark-to-Crown Recognition Ceremony mechanic). Ministry system expansion: Hafenmark Parliamentary Committees (6), Church Dicasteries (4 matched to Cardinals), Varfell Jarl Assembly Councils (5 with Readiness Track). Generational Shift Torben maturation fix (4-trigger replacement for unreachable 10-year spec). Cross-faction parity table. Raises ED-634 through ED-658 (25 new items, 23 open + 2 resolved). Full spec: designs/systems/faction_politics_expanded_v1.md."
+  affects: [designs/systems/faction_politics_expanded_v1.md, designs/systems/player_agency_v30.md, designs/conviction_track/conviction_track_v30.md, designs/worldbuilding/worldbuilding_v30.md, designs/mechanics/baralta_crown_claim_v30.md, designs/hybrid/scale_transitions_v30.md, designs/board_game/tc_political_redesign_v30.md, references/canonical_sources.yaml, references/propagation_map.md, references/file_index.md, references/file_index_summary.md, canon/editorial_ledger.yaml]
+  status: applied

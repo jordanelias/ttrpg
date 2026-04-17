@@ -161,6 +161,7 @@
 | File | Systems | Status | Notes |
 |------|---------|--------|-------|
 | designs/systems/clock_registry_v30.md | ALL | CURRENT | Unified clock/track registry. PP-496. |
+| designs/systems/faction_politics_expanded_v1.md | ALL | CURRENT | Rank-ladder expansion (0-7), sub-office ladders, caste integration. PP-660, 2026-04-17. Supersedes faction_politics_patch_register_2026-04-16.md draft. |
 
 ---
 

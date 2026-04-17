@@ -163,6 +163,22 @@ For non-Church factions, the political pool in Parliament is:
 
 This creates an asymmetry that mirrors historical reality: the Church's opponents pay a legitimacy cost proportional to TC; the Church gains a legitimacy bonus proportional to TC.
 
+### §3.5 TC × Rank Ladder Interaction (2026-04-17, PP-660)
+
+Per faction_politics_expanded_v1.md §5, the TC political legitimacy system interacts with the Church rank ladder (Standing 0–7). Church officers at Standing 3 and above acquire TC-dependent capability scaling:
+
+| Church Standing | TC 0–39 | TC 40–64 (Assertive+) | TC 65–99 (Prominent/Dominant) | TC 100 (Unification) |
+|-----------------|---------|----------------------|------------------------------|---------------------|
+| 3 Canon | Standard | +1D Interview in Church territories | +1D Interview in all territories | Canon authority extends across any territory |
+| 4 Bishop's Delegate | Standard | Ecclesiastical trials in any Church-presence territory | Heresy Proceedings vs Std 5+ rivals | May deputize Inquisitors for Unification Seizure |
+| 5 Prelate | Standard | +1D ceremonial social contests | +2D; Crown Treaty defenses doubled-penalty | May speak with Confessor-equivalent authority |
+| 6 Cardinal | Standard | +1D Cardinal Independence Checks | +1D; arm-specific modifier (see §5.2 of expansion) | Cardinal retains arm authority even if Confessor contested |
+| 7 Confessor-Presumptive | Standard | Named Character Event Cards fire at reduced cost | TC political legitimacy fully transfers during Confessor absence | Unification operations centered on Presumptive |
+
+Non-Church rank interactions (Crown Prince, Hafenmark Chancellor, Varfell Senior Jarl) acquire TC pressure proportional to the Church's institutional weight — full specification in faction_politics_expanded_v1.md §5.3.
+
+[EDITORIAL: ED-634 — Church rank × TC subsection. Full integration in faction_politics_expanded_v1.md.]
+
 ---
 
 ## §4 — STAT ECONOMY: INCREASE AND DECREASE RULES

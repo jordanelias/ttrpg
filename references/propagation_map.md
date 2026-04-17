@@ -596,3 +596,20 @@ DESIGN GAP 2: Guild Favour restoration mechanic — no upward movement source do
 |---|---|---|---|
 | PP-659 | peninsular_strain_v1.md §3 | military_layer_v30.md §2.2b | DONE |
 | PP-659 | patch_register_active.yaml | patch_register_archive.yaml (split) | DONE |
+
+## PP-660 — Faction Politics Rank-Ladder Expansion (2026-04-17)
+
+| Changed File | Propagates To | Reason |
+|-------------|--------------|--------|
+| `designs/systems/faction_politics_expanded_v1.md` | `designs/systems/player_agency_v30.md` §5.1, §6.2 | Rank ladder 0-5 → 0-7; Stature table rewrite; scene action modifier extension |
+| `designs/systems/faction_politics_expanded_v1.md` | `designs/conviction_track/conviction_track_v30.md` §1 | CV ≡ PT equivalence note; Solmund correction at line 16 |
+| `designs/systems/faction_politics_expanded_v1.md` | `designs/worldbuilding/worldbuilding_v30.md` §3.1 | Cardinal Prudence name sync (Aldric Tormann from npc_roster_v30 §13) |
+| `designs/systems/faction_politics_expanded_v1.md` | `designs/mechanics/baralta_crown_claim_v30.md` §5 | Hafenmark-to-Crown Recognition Ceremony cross-reference |
+| `designs/systems/faction_politics_expanded_v1.md` | `designs/hybrid/scale_transitions_v30.md` §4.3.2 | Rank Advancement Recognition Event added to Mandatory Zoom In triggers |
+| `designs/systems/faction_politics_expanded_v1.md` | `designs/board_game/tc_political_redesign_v30.md` §3.5 | TC × Rank Ladder Interaction subsection added |
+| `designs/systems/faction_politics_expanded_v1.md` | `designs/ttrpg/factions_ttrpg_v30.md` §8 | Rank-ladder callouts required per faction; ED-640 (Hafenmark Militia), ED-642 (Guild Grand Guildmaster) pending |
+| `designs/systems/faction_politics_expanded_v1.md` | `designs/npcs/npc_roster_v30.md` §14 | Caste-gating layer per rank; inner circle provisional names (ED-634 through ED-638) |
+| `designs/systems/faction_politics_expanded_v1.md` | `designs/systems/npc_behavior_v30.md` §1.2, §3, §7 | Warden Conviction (ED-641); caste-transgressive Conviction Scar (ED-654); cross-rank advancement (ED-656) |
+| `designs/systems/faction_politics_expanded_v1.md` | `designs/board_game/varfell_path_b_v30.md` | Warden Ladder × Path B integration (ED-658) |
+| `designs/systems/faction_politics_expanded_v1.md` | `tests/coverage_matrix.md` | 5 SIM-DEBT items (SIM-POL-R01 through R05) |
+| `designs/conviction_track/conviction_track_v30.md` (Solmund fix) | References citing "Galbadian Orthodoxy" across designs/, references/, canon/ | Propagation-pending grep for any remaining occurrences |

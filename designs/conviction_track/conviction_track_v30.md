@@ -4,7 +4,7 @@
 <!-- v30 baseline — renamed from designs/conviction_track/opus_design_proposal.md on 2026-04-13 -->
 # Valoria BG — Conviction Track & Church Victory Redesign
 ## PP-406 through PP-418
-## Date: 2026-04-05 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
+## Date: 2026-04-05 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) | Solmund correction applied 2026-04-17 (ED-643)
 ## Scope: Conviction Track, Church Seizure, TC Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory
 
 ---
@@ -13,10 +13,12 @@
 
 **Name:** Conviction (CV)
 **Range:** 0–5 per territory.
-**Poles:** 0 = Einhir Restoration pole. 5 = Galbadian Orthodoxy pole.
+**Poles:** 0 = Einhir Restoration pole. 5 = Solmund Orthodoxy pole.
 
 
 [EDITORIAL: ED-302 — Confirm track name "Conviction" (CV). Alternative candidates: "Devotion", "Orthodoxy", "Glaube".]
+
+[EDITORIAL: ED-644 — CV ≡ PT terminology equivalence (2026-04-17). Conviction (CV) here is the same per-territory stat as Piety (PT) in tc_political_redesign_v30 §1. Newer design docs prefer "PT" terminology; this file retains "CV" for skeleton stability. Full rename (CV → PT, file rename conviction_track_v30.md → piety_track_v30.md) deferred to future cleanup pass. Mechanical equivalence: use PT rules in tc_political_redesign when conflict arises.]
 
 ### 1.1 Starting Values (PP-406)
 

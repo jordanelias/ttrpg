@@ -255,26 +255,34 @@ The player cannot prevent the world from moving. They can only choose where to b
 
 ## §5 — STATURE PROGRESSION
 
-### 5.1 Stature Levels
+### 5.1 Stature Levels (revised 2026-04-17, PP-660)
 
-The player's relationship to the faction layer changes as they accumulate Standing:
+The player's relationship to the faction layer changes as they accumulate Standing. The Standing ladder runs 0–7, with faction-specific titles specified in faction_politics_expanded_v1.md §1:
 
 | Standing | Stature | Faction Relationship |
 |----------|---------|---------------------|
-| 0–1 | Operative | Receives Duties. No faction-layer input. Sees public faction state only. |
+| 0 | Petitioner | Pre-initiation status. No Duty assignment yet. Sees public faction state only. Must complete an Initiation Duty (see §3.3) to advance. |
+| 1 | Operative | Receives Duties. Sees public faction state. |
 | 2 | Agent | Receives Duties. Sees faction intelligence (rival faction stats, territory conditions). Can suggest Domain Actions to leader (non-binding). |
-| 3 | Counselor | Receives Duties but can negotiate or refuse. Invited to faction council — sees the leader's priority evaluation and can argue for different priorities via social contest. |
+| 3 | Counselor | Receives Duties but can negotiate or refuse. Invited to faction council — sees the leader's priority evaluation and can argue for different priorities via social contest. Specialty branch unlocks (faction-specific — see expansion §1). |
 | 4 | Lieutenant | Can issue sub-commands to NPC officers (direct minor NPC actions). Duty becomes a strategic directive rather than a specific task. One bonus scene action per season from faction resources. |
-| 5 | Successor | Eligible for faction leadership if the current leader is eliminated, incapacitated, or overthrown. At this level, the player can initiate a leadership challenge (social contest against current leader, with faction council as adjudicator). |
+| 5 | Senior | Council voting member. May speak in faction's name in limited negotiations. Inner-circle-adjacent (sees inner-circle deliberation). |
+| 6 | Prince/Chancellor/Senior-Jarl/Cardinal | Inner-circle voting member. May initiate Ministry reforms. Two scene actions per season. Nomination authority for junior ranks. |
+| 7 | Regent-Designate | Succession-eligible. May act in leader's name in their absence (with Legitimacy Token damage per POW-03). At this level, the player can initiate a leadership challenge OR succeed on leader vacancy. |
+
+Full rank specification (titles, initiation gates, hall tier, livery, mentor, demotion) per faction in faction_politics_expanded_v1.md §1.
 
 ### 5.2 Leadership Acquisition
 
 When a faction leader is removed (Almud overthrown by Coup, Himlensendt's Crisis of Faith, Baralta's succession, Vaynard's death), the game evaluates succession:
 
-- If the player is Standing 5 in that faction: they are offered leadership. Accepting transforms them from operative to leader — they now issue Domain Actions directly, play the faction's card hand, and lose the Duty system (replaced by faction AI evaluation as their "advisor").
-- If the player is below Standing 5: succession follows the canonical NPC rules (Torben inherits Crown, Cardinals contend for Church, Maret Uln may inherit Varfell, Baralta's succession is undefined).
+- If the player is Standing 7 in that faction: they are offered leadership (per the Regent-Designate role). Accepting transforms them from operative to leader — they now issue Domain Actions directly, play the faction's card hand, and lose the Duty system (replaced by faction AI evaluation as their "advisor").
+- If the player is Standing 5–6: succession contest per SUC-01 through SUC-03 (see faction_politics_expanded_v1.md §2). Inner-circle support determines outcome.
+- If the player is below Standing 5: succession follows the canonical NPC rules (Torben inherits Crown, Cardinals contend for Church, Maret Uln may inherit Varfell, Baralta's succession under Option A/B per baralta_crown_claim_v30).
 
 Leadership can also be seized: a Standing 4+ character can call a leadership challenge at any time via social contest against the current leader, with the faction council as expert adjudicator (Cognition-based). Success: player becomes faction leader. Failure: Standing drops to 2, Disposition with deposed leader drops to −4.
+
+[EDITORIAL: ED-634 — Ladder rewrite per faction_politics_expanded_v1.md §1. Faction-specific titles and full progression gates specified there.]
 
 ### 5.3 Staying Independent
 
@@ -336,7 +344,8 @@ Standing (0–5) measures the player's relationship with one faction. Renown (0�
 
 ### 6.2 Modifiers
 
-- **Standing 4+ (Lieutenant):** +1 scene action from faction resources.
+- **Standing 4–5 (Lieutenant/Senior):** +1 scene action from faction resources.
+- **Standing 6–7 (Inner Circle/Regent-Designate):** +2 scene actions from faction resources.
 - **Knot with a local NPC:** +1 scene action in that NPC's territory (the relationship opens doors that save time).
 - **Out of Breath (Stamina 0):** −1 scene action (physical exhaustion limits your capacity).
 - **Wounded (2+ Wounds):** −1 scene action (injuries slow you down).

@@ -1,8 +1,8 @@
 # Valoria Editorial Ledger — Active
-# next_id: 634
+# next_id: 637
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Index: canon/editorial_ledger_index.md
-# Last updated: 2026-04-17
+# Last updated: 2026-04-17 (faction politics rank-ladder expansion PP-660)
 
 editorial_decisions:
   - id: ED-591-609
@@ -60,3 +60,26 @@ editorial_decisions:
     status: open
     severity: P0
     affects: [designs/ttrpg/threadwork_v30.md, references/params_threadwork.md, designs/systems/companion_specification_v30.md, designs/systems/settlement_layer_v30.md, designs/systems/npc_behavior_v30.md, designs/contest/social_contest_v30.md, designs/hybrid/scale_transitions_v30.md, designs/fieldwork/fieldwork_v30.md, designs/mass_combat/mass_battle_v30.md, designs/board_game/victory_v30.md]
+
+  - id: ED-634
+    date: 2026-04-17
+    description: "Faction Politics rank-ladder expansion v1 (PP-660). 23 open editorial items raised by expansion of Standing ladder 0-5 → 0-7, sub-office ladders (Löwenritter/Riskbreakers/Inquisitors/Templars/Guilds/Niflhel/Wardens), caste integration layer, TC × rank interaction, Baralta Crown Claim × rank interaction, Ministry expansion to non-Crown factions, Generational Shift Torben maturation fix. Full register: designs/systems/faction_politics_expanded_v1.md. Sub-items (tracked in register §10.2): Crown IC names (Voss/Reichard/Thale/Linder/Kreutz) P1 provisional; Hafenmark IC names (Heljason/Geirson) P1 provisional; Varfell IC names (Holdar/Stenskald) P1 provisional; Hafenmark Militia sub-ladder P2; Warden Conviction formalization P2; Guild Grand Guildmaster rank P2; CV ≡ PT equivalence documented, rename deferred; T15 Southernmost/Askeheim reconciliation P2; worldbuilding §9.1 lore-to-map audit P2; Hafenmark-to-Crown Recognition Ceremony P2; Crown Hochschule Ministry P2; 2 additional Prelates naming P2; succession rivals naming P2; Markamt Minister naming P2; rank dismissal mechanics P2; Banner Legacy Attribute table P3; caste-transgressive Conviction Scar P2; Ministry/Committee Position mechanic P2; cross-rank advancement interaction P2; rank restoration after dismissal P2; Warden Ladder × VTM Path B integration P2. Plus 5 SIM-DEBT items (SIM-POL-R01-R05) tracked in tests/coverage_matrix.md."
+    status: open
+    severity: P1
+    affects: [designs/systems/faction_politics_expanded_v1.md, designs/npcs/npc_roster_v30.md, designs/systems/npc_behavior_v30.md, designs/systems/player_agency_v30.md, designs/ttrpg/factions_ttrpg_v30.md, designs/board_game/varfell_path_b_v30.md, designs/setting/geography_v30.md, designs/mechanics/baralta_crown_claim_v30.md]
+
+  - id: ED-635
+    date: 2026-04-17
+    description: "Church Cardinal Prudence: canonical name is Aldric Tormann (npc_roster_v30 §13). worldbuilding_v30 §3.1 stale entry '[UNNAMED — ED-NEW-06]' updated to 'Aldric Tormann' in this commit. ED-NEW-06 closed."
+    status: resolved
+    resolution: "2026-04-17: worldbuilding_v30 §3.1 synced to npc_roster canonical name."
+    severity: P1
+    affects: [designs/worldbuilding/worldbuilding_v30.md]
+
+  - id: ED-636
+    date: 2026-04-17
+    description: "Solmund naming rule violation at conviction_track_v30.md line 16. 'Galbadian Orthodoxy' → 'Solmund Orthodoxy' fix applied in this commit."
+    status: resolved
+    resolution: "2026-04-17: conviction_track_v30 line 16 fixed."
+    severity: P1
+    affects: [designs/conviction_track/conviction_track_v30.md]
