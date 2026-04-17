@@ -107,3 +107,53 @@
 | SIM2-08 | Obligation fulfillment: Disposition +1 toward imposing party | Provisional — ED-579 |
 | SIM2-12 | Hafenmark Proclamation on Crown impossible under Mandate cap — confirm intended (ED-583) | Provisional — awaiting user |
 
+
+## New Findings — sim_batch_3_2026-04-16
+
+### P1 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| SIM3-01 | TC+TCV compound | Church TCV ≥ 8 met in Seasons 2-4 — not meaningful constraint. Fix: Accord ≥ 3 in 3 non-capital territories added to Church victory. | Open — ED-585 |
+
+### Confirmed Working
+
+| System | Source | Status |
+|--------|--------|--------|
+| Assert-Pontifex: TC 40 in Season 12 (vs S4 old system) | SIM-NPC-01 | ✓ 8-season delay confirmed |
+| Hafenmark Suppress stalls TC at 41-43 ceiling (max suppression) | SIM-NPC-01 | ✓ Correct structural counter |
+| Varfell Cultural Reformation OW reduces TC −1 directly | SIM-NPC-01 | ✓ Working cross-pressure |
+| Evidence RS + Authority Doubt Marker combo optimal vs Faith NPCs | SIM-NPC-03 | ✓ Confirmed strategy |
+| Social victories → Mandate 3 → Priority 6 → TC clock halts | SIM-NPC-03 | ✓ Cross-system chain works |
+| Parliamentary Censure window at Mandate 3 (no TC-65 barrier) | SIM-NPC-03 | ✓ Political domino as intended |
+| Companion spec: 9D pool at Military 4, WI=9, Max Wounds 2 | Companion spec | ✓ Calibrated — fragile as intended |
+| Departure scene mandatory on non-voluntary departure | Companion spec | ✓ |
+
+### P2 Gaps
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| SIM3-04 | NPC-03 | Arc behavioral state vs Priority 6 override contradiction at Mandate < 3 | Open — ED-586 |
+| SIM3-07 | Zoom In | Stability Crisis Zoom In trigger absent | Open — ED-587 |
+
+### Resolved SIM-DEBT
+
+| ID | Description | Status |
+|----|-------------|--------|
+| SIM-NPC-01 | 6-faction BG simulation with all priority trees | RESOLVED — see sim_batch_3_2026-04-16 §C |
+| SIM-NPC-03 | Almud/Himlensendt 3-season arc emergence | RESOLVED — see sim_batch_3_2026-04-16 §D |
+
+### Resolved P1s (per sim_batch_3_2026-04-16)
+
+| ED | Description |
+|----|-------------|
+| ED-539 | TC + TCV compound validated — Accord ≥ 3 condition added to Church victory |
+| ED-545 | Zoom In triggers: 11+ categories, sufficient. New Stability Crisis trigger proposed. |
+| ED-551 | Vanguard Assault entry: Priority 2b added |
+| ED-555 | companion_specification_v30.md created |
+| ED-557 | Companion stat generation formula defined |
+| ED-559 | Companion combat AI priority tree defined |
+| ED-571 | Companion vs recruited NPC distinction formalized |
+| ED-572 | Assert → Pontifex-exclusive confirmed and documented |
+| ED-583 | Hafenmark Mandate cap: intended; Grand Contest +1 Mandate (cap 6) as growth path |
+

@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 585
+# next_id: 588
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Index: canon/editorial_ledger_index.md
 # Last updated: 2026-04-16
@@ -8,7 +8,7 @@ editorial_decisions:
   - id: ED-539
     date: 2026-04-14
     description: "TC reform + TCV 5 + Seizure Accord ≥ 2 compound effect unvalidated."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/board_game/victory_v30.md]
 
@@ -22,42 +22,42 @@ editorial_decisions:
   - id: ED-545
     date: 2026-04-15
     description: "Only 5 Zoom In triggers for 120+ arcs."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/hybrid/scale_transitions_v30.md]
 
   - id: ED-551
     date: 2026-04-16
     description: "Altonian Vanguard NPC priority tree (npc_behavior §7.8) has no Assault entry. Vanguard cannot mechanically siege garrisoned ter..."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/systems/npc_behavior_v30.md]
 
   - id: ED-555
     date: 2026-04-16
     description: "companion_specification_v30.md referenced in mass_battle_v30 §D.2 but does not exist. Required: companion vs. recruited NPC dis..."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/mass_combat/mass_battle_v30.md]
 
   - id: ED-557
     date: 2026-04-16
     description: "Companion personal combat stat generation undefined. Proposed: Agility = STR = floor(faction Military / 2); Endurance = floor(f..."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/mass_combat/mass_battle_v30.md]
 
   - id: ED-559
     date: 2026-04-16
     description: "Companion combat AI priority tree undefined. Proposed 5-level tree: (1) Survival/Full Guard, (2) Conviction-critical/Rescue, (3..."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/mass_combat/mass_battle_v30.md]
 
   - id: ED-571
     date: 2026-04-16
     description: "Companion vs. recruited NPC formal distinction absent. Proposed: companions = personal travel + scene-level action; recruited N..."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/mass_combat/mass_battle_v30.md]
 
@@ -65,13 +65,34 @@ editorial_decisions:
   - id: ED-572
     date: 2026-04-16
     description: "Assert → Pontifex-exclusive. 2x Senator Assert reaches TC 40 milestone S4 (should be S11). Assert moves from Senator to Pontifex. Victory pushed to S24-28."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/board_game/tc_political_redesign_v30.md, designs/board_game/board_game_v30.md]
 
   - id: ED-583
     date: 2026-04-16
     description: "Hafenmark Mandate cap (PP-174) at starting value 4 blocks Dynastic Proclamation on Crown (Mandate 5). Framework Drift gives Influence not Mandate. Proclamation on Crown structurally impossible. Confirm intended: Proclamation targets only weakened rivals (Mandate ≤ 3)."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/board_game/peninsular_strain_v1.md, designs/board_game/board_game_v30.md]
+
+  - id: ED-585
+    date: 2026-04-16
+    description: "Church TCV victory condition (TCV ≥ 8) met by Season 4 under Accord ≥ 2 rules — not a meaningful constraint. Fix: add Accord ≥ 3 in 3 non-capital territories to Church victory condition."
+    status: open
+    severity: P1
+    affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-586
+    date: 2026-04-16
+    description: "Arc behavioral state vs priority tree contradiction when Himlensendt Mandate < 3. Proposed: 'Constrained' sub-arc state suspends zealot behavior when Mandate < 3; resumes from prior arc state on recovery."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-587
+    date: 2026-04-16
+    description: "Faction Stability Crisis Zoom In trigger absent. Proposed mandatory Zoom In: player faction Stability drops ≤ 2 OR drops ≥ 2 in single Accounting."
+    status: open
+    severity: P2
+    affects: [designs/hybrid/scale_transitions_v30.md]

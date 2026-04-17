@@ -224,3 +224,10 @@ systems:
     design_doc: designs/ui/valoria_ui_ux_v4_1.md
     notes: "Godot-facing UI/UX comprehensive reference. Supersedes valoria_ui_ux_v4.md. Resolves UI-01 through UI-15, ED-544, ED-545, ED-548, ED-572. v4 retained in repo as historical reference."
 
+
+# Added 2026-04-16 — companion specification
+companion_specification:
+  file: designs/systems/companion_specification_v30.md
+  status: DESIGN_PROPOSAL
+  date: 2026-04-16
+  resolves: [ED-555, ED-557, ED-559, ED-571]
