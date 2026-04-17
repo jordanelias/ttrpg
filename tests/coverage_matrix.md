@@ -157,3 +157,45 @@
 | ED-572 | Assert → Pontifex-exclusive confirmed and documented |
 | ED-583 | Hafenmark Mandate cap: intended; Grand Contest +1 Mandate (cap 6) as growth path |
 
+
+## New Findings — sim_batch_4_2026-04-16
+
+### P1 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| SIM4-01 | ST-14 | RM Phase 2 T9 holding condition (PT ≤ 1) unreachable — T9 PT 5 maintained by Church | Open — ED-588 |
+| SIM4-02 | ST-14 | RM Presence marker mechanics undefined | Open — ED-589 |
+| ED-585 | ST-11 applied | Church victory: Accord ≥ 3 condition + TC ≥ 65 gate | Open — ED-590 (apply) |
+
+### Resolved P1
+
+| ED | Status |
+|----|--------|
+| ED-585 | Resolved — Church victory revision confirmed by simulation |
+
+### Confirmed Working (sim_batch_4)
+
+| System | Source |
+|--------|--------|
+| Fieldwork structural investigation (4 scenes, Structural) | ST-11 |
+| Varfell path ordering: B < A < C (correct timelines) | ST-13 |
+| Löwenritter coup: 7 cascading consequences clean | ST-15 |
+| Strain 7 Crisis band mass Revolt cascade | ST-16 |
+| FR Lock Pull Reversal strategy | ST-17 |
+| Companion departure arc: 3 Scars → appeal | ST-18 |
+| 30-season generational campaign structure | ST-19 |
+| 5-system simultaneous cross-system stress: no conflicts | ST-20 |
+
+### New P2 Gaps
+
+| ID | Description |
+|----|-------------|
+| SIM4-03 | Accord 3 passive erosion rule absent |
+| SIM4-04 | Church Lock trivially reversible (TS 0) — design note needed |
+| SIM4-05 | Pull Reversal vs Dissolution not documented as strategy |
+| SIM4-06 | Uprising roll TN unspecified — propose TN 7 |
+| SIM4-07 | Strain 7 → RS −10 from mass Revolts — add warning |
+| SIM4-08 | Church Tribunal halved-resistance too strong for high-pool players |
+| SIM4-09 | OW departure appeal → Companion arc transformation not specified |
+
