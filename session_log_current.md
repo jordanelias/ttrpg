@@ -22,3 +22,8 @@ open_items:
   - ED-629 Heresy Proceedings against Confessor authorization (P1)
   - ED-628/630/631 (P2)
   - All prior open items carried forward
+throughline_specifications:
+  date: 2026-04-17
+  items: 8
+  lines: 554
+  status: committed
