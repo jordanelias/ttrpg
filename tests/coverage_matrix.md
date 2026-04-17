@@ -66,3 +66,21 @@ BG lobby cap, Varfell Parliamentary constraint, IP rate, Elske arc, Excommunicat
 ### Confirmed Working
 Guilds Merchant Hegemony (~S15-17), TC bonus equalising Parliament pools, Memory genre advantage, Thread collective op (72D Calamity reversal), Fort defense bonus, Elske pre-coup investment → Regency S17, double Priority 0 Zoom In choice, double longevity death cascade.
 
+
+## Consolidation — sim sessions 2026-04-16
+
+### Jordan Design Corrections Applied
+
+| Correction | Impact |
+|------------|--------|
+| Guilds, Niflhel = spoiler/pressure factions; they do not win | ED-612, ED-627 closed as by-design |
+| Löwenritter post-coup holds until new monarch faction takes over | ED-613 closed as by-design; §3.6 reframed |
+
+### Propagations to victory_v30.md
+
+| ED | Change | Section |
+|----|--------|---------|
+| ED-588 | RM holding: PT ≤ 3 (was ≤ 1). Uprising OW: T9 PT −2 added. | §3.5 |
+| ED-590 | Church victory: Accord ≥ 3 in ≥ 3 non-capital territories. | §3.2 |
+| — | Löwenritter design note: transitional faction, not conventional winner. | §3.6 |
+

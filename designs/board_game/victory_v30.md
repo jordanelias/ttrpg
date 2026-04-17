@@ -201,6 +201,9 @@ Early Seizure (TC < 50) is possible but carries political consequences: Casus Be
 |-----------|-----------|
 | TCV held | ≥ 8 |
 | PT in all held territories | ≥ 3 |
+| Accord in non-capital territories | ≥ 3 in at least 3 non-capital Church territories (not T9) |
+
+*(ED-585/590 resolved 2026-04-16: Accord ≥ 3 condition added. TCV + PT alone was insufficient — Church met TCV ≤ Season 4 in simulation, making it no constraint on TC timing. Accord ≥ 3 requires Govern OW or Seizure OW in 3 non-capital territories, creating a sustained governance burden that competes with Assert and Seizure for Church's Consul card each season.)*
 
 **Prominence prerequisite:** Church may only seize a territory where Church is Prominent — defined as Church Mandate exceeding the controlling faction's Mandate in that territory. Church Mandate is the Church faction's global Mandate stat. Controlling faction Mandate is their global Mandate stat. Prominence is assessed at seizure declaration.
 
@@ -304,7 +307,7 @@ Modifiers:
 
 | Degree | Effect |
 |--------|--------|
-| Overwhelming | T9 transfers to RM administration. Church Mandate −2. TC −3 (institutional rupture). |
+| Overwhelming | T9 transfers to RM administration. Church Mandate −2. TC −3 (institutional rupture). T9 PT −2 (population has decisively shifted — makes PT ≤ 3 holding condition immediately achievable from a PT 5 starting position). |
 | Success | T9 transfers to RM administration. Church Mandate −1. |
 | Partial | T9 does not transfer. PT in T9 −1 (popular sentiment shifted). Uprising attempt used up for this arc. |
 | Failure | Uprising crushed. TC +2 (Church authority strengthened by resistance). T9 PT +1. Uprising attempt used up for this arc. |
@@ -312,7 +315,7 @@ Modifiers:
 #### RM Territory Control — Cultural Displacement
 RM holds T9 through cultural presence, not military garrison. Control is maintained while:
 - RM has ≥ 3 Presence markers in T9
-- PT in T9 ≤ 1
+- PT in T9 ≤ 3 *(ED-588 resolved 2026-04-16: revised from PT ≤ 1. T9 starts PT 5 under Church management; ≤ 1 was unreachable post-Uprising without 4+ seasons of RM governance. PT ≤ 3 is achievable immediately after Uprising OW: PT 5 − 2 = PT 3. RM must then prevent Church Govern actions from rebuilding PT above 3.)*
 
 If either condition fails at Accounting, T9 reverts to the prior controller (or becomes Uncontrolled if the prior controller has been eliminated). RM cannot March, garrison, or build Fort in any territory. (PP-578)
 
@@ -323,6 +326,8 @@ If either condition fails at Accounting, T9 reverts to the prior controller (or 
 ---
 
 ### 3.6 Löwenritter — Military Regency (conditional faction, post-coup)
+
+**[Design note: Löwenritter is a transitional faction, not a conventional winning faction. Post-coup, Löwenritter holds government until a legitimate successor is installed and their own faction takes over — that new ruler leads Crown (or whichever faction claimed the capital), not Löwenritter. Regency Establishment marks a successful handoff, not a Löwenritter victory in the traditional sense. Military Consolidation represents the edge case where no legitimate successor emerges within 8 seasons — a contested end state, not a stable governance resolution.]**
 
 #### Primary — Regency Establishment
 
