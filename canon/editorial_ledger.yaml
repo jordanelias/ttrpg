@@ -71,7 +71,7 @@ editorial_decisions:
   - id: ED-666
     scope: companion
     file: designs/systems/companion_specification_v30.md
-    description: "Companion departure Thread triggers. Propagation from ED-663."
+    description: "Companion departure Thread triggers. Propagation from ED-663. RESOLVED 2026-04-17."
     status: open
     priority: P1
     date: "2026-04-17"

@@ -156,6 +156,11 @@ When both PC and Companion are in the same territory during Strategic Phase: the
 | Rival faction recruitment succeeds | Defection | Departure scene. Counter-offer eligible (npc_behavior §9.5 incentive table). |
 | PC faction collapses (Stability 0) | Dissolution | Companion becomes unaligned. May rejoin without new companionship scene when faction reconstitutes. |
 
+
+| PC performs Restricted Operation (Dissolution/Lock on living being) while companion with Faith, Order, or Equity Conviction is present | Thread violation departure (ED-666) | Departure scene: companion states violation. No appeal roll — the act is unambiguous. Companion Conviction determines which operations trigger: Faith scars from any Thread operation except Mending; Order/Equity scar from Dissolution and unjust Lock. |
+| PC Coherence reaches 0 (Severance) while companion is present | Practitioner crisis departure (ED-666) | Departure scene: companion fears for safety. Appeal roll allowed (1 contest exchange). |
+| PC performs POP and companion has Reason or Precedent Conviction | Ontological crisis departure (ED-666) | Departure scene: companion's epistemic/legal framework violated. Appeal roll allowed. |
+
 ### §6.2 Departure Scene
 
 Priority 0 (mandatory) fires on any non-voluntary departure. Scene structure by type:
@@ -205,6 +210,8 @@ Companions generate scenes through:
 ---
 
 ## §9 PROPAGATION
+
+- ED-666: Thread departure triggers added to §6.1 (2026-04-17, from npc_behavior_v30 ED-663 propagation).
 
 | File | Change |
 |------|--------|
