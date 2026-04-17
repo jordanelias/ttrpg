@@ -1,30 +1,12 @@
 # Valoria Editorial Ledger — Active
-# next_id: 601
+# next_id: 611
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Index: canon/editorial_ledger_index.md
 # Last updated: 2026-04-16
 
 editorial_decisions:
-  - id: ED-542
-    date: 2026-04-14
-    description: "Battle consequences not in mass_battle_v30.md. Propagation gap."
-    status: open
-    severity: P2
-    affects: [designs/mass_combat/mass_battle_v30.md]
 
-  - id: ED-586
-    date: 2026-04-16
-    description: "Arc behavioral state vs priority tree contradiction when Himlensendt Mandate < 3. Proposed: 'Constrained' sub-arc state suspends zealot behavior when Mandate < 3; resumes from prior arc state on recovery."
-    status: open
-    severity: P2
-    affects: [designs/systems/npc_behavior_v30.md]
 
-  - id: ED-587
-    date: 2026-04-16
-    description: "Faction Stability Crisis Zoom In trigger absent. Proposed mandatory Zoom In: player faction Stability drops ≤ 2 OR drops ≥ 2 in single Accounting."
-    status: open
-    severity: P2
-    affects: [designs/hybrid/scale_transitions_v30.md]
 
   - id: ED-588
     date: 2026-04-16
@@ -116,3 +98,73 @@ editorial_decisions:
     status: open
     severity: P3
     affects: [designs/systems/companion_specification_v30.md]
+
+  - id: ED-601
+    date: 2026-04-16
+    description: "Delegation-filtering mechanic absent. No rule for Conviction-filtered delegate reports or unfiltered-intelligence access cost."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-602
+    date: 2026-04-16
+    description: "Faction-leader scene overload: 7+ mandatory scenes/year-arc at Standing 5. Scene delegation cost rules and ceremony proxy mechanics needed."
+    status: open
+    severity: P2
+    affects: [designs/hybrid/scale_transitions_v30.md]
+
+  - id: ED-603
+    date: 2026-04-16
+    description: "RM Founding trigger undefined. §8.9 RM Priority Tree fires Post-Founding Only but Founding mechanic unspecified. P1 for Vossen-as-player."
+    status: open
+    severity: P1
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-604
+    date: 2026-04-16
+    description: "Pre-Emergence Edeyja has no BG Domain Action economy. §8.10 post-emergence only. Warden season structure undefined."
+    status: open
+    severity: P1
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-605
+    date: 2026-04-16
+    description: "Torsvald TS advancement at 4 missions/season reaches Stirring in ~8 seasons. No practitioner pathway available without Edeyja collaboration. Expected playable lifespan 12-15 seasons."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-606
+    date: 2026-04-16
+    description: "SUC-03 2-season Resolution Window insufficient for post-Arc-C succession complexity. Recommend 3-season window."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-607
+    date: 2026-04-16
+    description: "POW-03 + ED-594 paradox: Torben as simultaneous companion (personal) and Figurehead (BG). Disposition and BG Loyalty interaction undefined."
+    status: open
+    severity: P2
+    affects: [designs/systems/companion_specification_v30.md, designs/systems/npc_behavior_v30.md]
+
+  - id: ED-608
+    date: 2026-04-16
+    description: "Ministry system (MIN-01-06) Crown-only. No equivalent for Hafenmark, Varfell, Church. Cross-faction parity gap."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-609
+    date: 2026-04-16
+    description: "Warden count tracking absent. No mechanic tracks warden numbers or triggers Arc C when count reaches 0."
+    status: open
+    severity: P1
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-610
+    date: 2026-04-16
+    description: "Coup Counter advancement Leadership Deviation cost not explicitly tied to Martial Honour Framework penalty. Confirm Counter advancement vs. Coup execution as Deviation trigger."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]

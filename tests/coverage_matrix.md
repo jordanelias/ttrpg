@@ -240,3 +240,43 @@
 | SIM-COMP-03 | Companion departure rate calibration: validate ~75% S30 rate | OPEN |
 | SIM-COMP-04 | Torsvald full sim (pending ED-591 §2 entry) | OPEN |
 
+
+## New Findings — sim_npc_as_player_2026-04-16
+
+### P1 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| POL-SIM-01 | All faction leaders | Delegation-filtering: delegate reports carry Conviction bias — no mechanic | Open — ED-601 |
+| POL-SIM-13 | Vossen | RM has no rank ladder, founding trigger, movement tracker, or pre-founding BG economy | Open — ED-603 |
+| POL-SIM-17 | Edeyja | Pre-emergence: no BG economy; warden count tracking absent | Open — ED-604, ED-609 |
+
+### P2 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| POL-SIM-22 | Faction leaders | Scene slate overload at Standing 5 | Open — ED-602 |
+| POL-SIM-19 | Torsvald | Expected playable lifespan 12–15 seasons from TS accumulation | Open — ED-605 |
+| POL-SIM-18 | Maret Uln | SUC-03 2-season window insufficient for post-Arc-C succession | Open — ED-606 |
+
+### Confirmed Working (NPC-as-player)
+
+| System | Source | Status |
+|--------|--------|--------|
+| Conviction-obligation loop self-reinforces in calm, breaks in crisis | All faction leaders | ✓ |
+| Baralta Suppress obligation mandatory from inside (correct lock-in) | POL-SIM-10 | ✓ |
+| Ehrenwall Coup Counter as ethical player tool | POL-SIM-16 | ✓ |
+| Torben blank Conviction formation via scene choice | POL-SIM-15 | ✓ |
+| Himlensendt Arc C inverts Inquisition tools against himself | POL-SIM-08 | ✓ |
+| Vaynard Discovery Events probabilistically unavoidable | POL-SIM-12 | ✓ |
+| FAC-02 Torben timeline produces Figurehead gap — POW-01 is expected outcome | POL-SIM-24 | ✓ |
+
+### New SIM-DEBT
+
+| ID | Description | Status |
+|----|-------------|--------|
+| SIM-POL-01 | Ministry competence decay calibration | OPEN |
+| SIM-POL-02 | Torben generational clock vs Coup Counter timing | OPEN |
+| SIM-POL-03 | Hann-as-player dual-agenda 30-season sim | OPEN |
+| SIM-POL-04 | Edeyja pre-emergence warden season structure | OPEN |
+

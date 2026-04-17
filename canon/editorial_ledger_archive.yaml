@@ -3566,3 +3566,25 @@ editorial_decisions:
 # --- Archived 2026-04-16 batch 4 ---
 # ED-539/545/551/555/557/559/571/572/583: all resolved batch 3 (see sim_batch_3)
 # ED-585: resolved this batch — Church victory Accord ≥ 3 condition confirmed, apply via ED-590
+
+  - id: ED-542
+    date: 2026-04-14
+    archived: 2026-04-16
+    description: "Battle consequences propagation gap in mass_battle_v30.md."
+    status: open
+    severity: P2
+
+  - id: ED-586
+    date: 2026-04-16
+    archived: 2026-04-16
+    description: "Arc behavioral state vs Priority 6 contradiction at Mandate < 3. Constrained sub-arc proposed."
+    status: open
+    severity: P2
+
+  - id: ED-587
+    date: 2026-04-16
+    archived: 2026-04-16
+    description: "Stability Crisis Zoom In trigger absent. Proposed: Stability drops <= 2 OR drops >= 2 in one Accounting."
+    status: open
+    severity: P2
+
