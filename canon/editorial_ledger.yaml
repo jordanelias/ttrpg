@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 591
+# next_id: 601
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Index: canon/editorial_ledger_index.md
 # Last updated: 2026-04-16
@@ -46,3 +46,73 @@ editorial_decisions:
     status: open
     severity: P1
     affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-591
+    date: 2026-04-16
+    description: "Torsvald §2 entry absent — Stance Triangle, Convictions, Resonant Styles, Beliefs, arc profile all unspecified. Listed as playable companion with stats but no behavioral definition."
+    status: open
+    severity: P1
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-592
+    date: 2026-04-16
+    description: "Arc profiles absent for 5 playable companions: Vossen, Hann, Torben, Ehrenwall, Maret Uln. Only 5 of 12 playable NPCs have arc maps. Companion behavior S20+ is entirely GM-emergent without system support."
+    status: open
+    severity: P1
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-593
+    date: 2026-04-16
+    description: "Almud as companion: Crown faction BG effect undefined. King as personal-scale companion creates unclear BG faction disposition."
+    status: open
+    severity: P2
+    affects: [designs/systems/companion_specification_v30.md, designs/systems/npc_behavior_v30.md]
+
+  - id: ED-594
+    date: 2026-04-16
+    description: "Torben companion + Coup scenario: Companionship (personal-scale) vs BG Loyalty (faction-scale) conflict unresolved. Ruling required on whether Coup seizes companion or only BG Loyalty resource."
+    status: open
+    severity: P2
+    affects: [designs/systems/companion_specification_v30.md, designs/systems/npc_behavior_v30.md]
+
+  - id: ED-595
+    date: 2026-04-16
+    description: "Dual companion simultaneous Outreach behavior unspecified — Scene Slate handling when 2 companions both generate Outreach on the same event."
+    status: open
+    severity: P2
+    affects: [designs/systems/companion_specification_v30.md]
+
+  - id: ED-596
+    date: 2026-04-16
+    description: "Multi-source Knot strain stacking rule absent. Dual practitioner companions in concurrent TS-advancing arcs could accumulate +3/season Close Knot strain. No cap or stacking rule defined."
+    status: open
+    severity: P2
+    affects: [designs/systems/companion_specification_v30.md, designs/ttrpg/threadwork_v30.md]
+
+  - id: ED-597
+    date: 2026-04-16
+    description: "Edeyja Arc C RS drain rate per season in non-Southernmost territories unspecified. §5.2 notes she is a walking Calamity echo but provides no RS drain value."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-598
+    date: 2026-04-16
+    description: "§5.0b Knot strain exemption ambiguous for stable TS 30–49 NPCs. Edeyja (stable) explicitly exempt. Maret Uln (TS 35, stable) exemption status unclear."
+    status: open
+    severity: P3
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-599
+    date: 2026-04-16
+    description: "Torben companion-specific mechanical bonuses (Legitimacy/Crown-context Ob bonus) undocumented."
+    status: open
+    severity: P3
+    affects: [designs/systems/companion_specification_v30.md]
+
+  - id: ED-600
+    date: 2026-04-16
+    description: "Officer companion rival-recruitment vulnerability: advisory role as counter-incentive not formalized. Officers with Dis 0 toward rival faction are near-certain recruitment targets (Ob 1, P ≈ 93%)."
+    status: open
+    severity: P3
+    affects: [designs/systems/companion_specification_v30.md]

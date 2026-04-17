@@ -199,3 +199,44 @@
 | SIM4-08 | Church Tribunal halved-resistance too strong for high-pool players |
 | SIM4-09 | OW departure appeal → Companion arc transformation not specified |
 
+
+## New Findings — sim_companions_2026-04-16
+
+### P1 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| SIM-C-01 | Companion sim | Officer companions near-certain recruited away (Ob 1) without advisory-role counter-incentive | Open — ED-600 |
+| SIM-C-15 | Companion sim | 7 of 12 playable NPCs lack arc maps — S20+ behavior entirely GM-emergent | Open — ED-591, ED-592 |
+
+### P2 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| SIM-C-06 | Torben sim | Companionship vs BG Loyalty paradox if Coup fires while Torben is companion | Open — ED-594 |
+| SIM-C-10 | Almud sim | Almud companion may grant de facto Crown faction control | Open — ED-593 |
+| SIM-C-14 | All companions | ~75% companion departure rate by S30 — validate if intended | Open — SIM-COMP-03 |
+| SIM-C-16 | Practitioner pairs | Multi-source Knot strain stacking undefined | Open — ED-596 |
+
+### Confirmed Working (sim_companions_2026-04-16)
+
+| System | Source | Status |
+|--------|--------|--------|
+| Edeyja acquisition structurally coupled to Arc B | SIM-C-11 | ✓ Elegant |
+| Vossen departure tied to Church TC 65 — structural anti-Church incentive | SIM-C-03 | ✓ Works |
+| Baralta Arc B near-certain when acquired via Evidence | SIM-C-08 | ✓ Correct |
+| Dual Hann+Vossen Belief divergence under pressure | SIM-C-04 | ✓ Best social pair |
+| Ehrenwall 12D combat validates hard acquisition barrier | SIM-C-07 | ✓ Cost/benefit correct |
+| Edeyja Arc C: RS solution and RS drain simultaneously | SIM-C-12 | ✓ Brilliant design |
+| Himlensendt companion = controlled/uncontrolled theological bomb | SIM-C-09 | ✓ Intentional |
+| Torben blank Conviction = uniquely shapeable | SIM-C-05 | ✓ Only malleable named NPC |
+
+### New SIM-DEBT
+
+| ID | Description | Status |
+|----|-------------|--------|
+| SIM-COMP-01 | Arc profile sims for Vossen, Hann, Torben, Ehrenwall, Maret Uln (pending ED-592) | OPEN |
+| SIM-COMP-02 | Multi-companion Knot strain stacking stress test — 2 practitioner companions concurrent | OPEN |
+| SIM-COMP-03 | Companion departure rate calibration: validate ~75% S30 rate | OPEN |
+| SIM-COMP-04 | Torsvald full sim (pending ED-591 §2 entry) | OPEN |
+
