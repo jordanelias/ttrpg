@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 610
+# next_id: 620
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Index: canon/editorial_ledger_index.md
 # Last updated: 2026-04-16
@@ -43,7 +43,7 @@ editorial_decisions:
   - id: ED-590
     date: 2026-04-16
     description: "Apply Church victory revision to victory_v30 §3.2: TC ≥ 65 + Accord ≥ 3 in ≥ 3 non-capital territories."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/board_game/victory_v30.md]
 
@@ -88,3 +88,31 @@ editorial_decisions:
     status: open
     severity: P2
     affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-616
+    date: 2026-04-16
+    description: "No Parliamentary mechanic blocks Tribune Domain Actions. Proposed: Intelligence Embargo motion."
+    status: open
+    severity: P2
+    affects: [designs/board_game/board_game_v30.md]
+
+  - id: ED-617
+    date: 2026-04-16
+    description: "Grand Contest Recall (+2D): once per cited source per contest, not per exchange."
+    status: open
+    severity: P2
+    affects: [designs/contest/social_contest_v30.md]
+
+  - id: ED-618
+    date: 2026-04-16
+    description: "Torben Conviction emergence window: formally Seasons 1-8."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-619
+    date: 2026-04-16
+    description: "GM advisory: 3-active-Obligation cap for tractability. Add to social_contest §6.1."
+    status: open
+    severity: P3
+    affects: [designs/contest/social_contest_v30.md]
