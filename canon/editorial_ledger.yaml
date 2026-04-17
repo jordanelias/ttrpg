@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 660
+# next_id: 663
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Last updated: 2026-04-17 (PP-661 close — ledger split)
 
@@ -116,3 +116,23 @@ editorial_decisions:
     severity: P1
     affects: [designs/systems/faction_politics_expanded_v1.md]
 
+  - id: ED-660
+    date: 2026-04-17
+    description: "Certainty scale: faction_politics_expanded lists Almstedt at Certainty 6, exceeding the 0-5 scale. Requires formal definition of Certainty 6 ('Foundational' — direct witnessed experience) or correction to Certainty 5 with special notation."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md, designs/systems/npc_behavior_v30.md]
+
+  - id: ED-661
+    date: 2026-04-17
+    description: "Ministry Protocol 3 (Warden Administrative Coordination, 110 seasons old, suspended): predates current factional governance. No rule governs protocol seniority conflicts when pre-Calamity mandate conflicts with current faction request for Ministry neutrality."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-662
+    date: 2026-04-17
+    description: "Elske residency post-Coup: Diplomatic Exchange produces 'willing resident' status. Legal implications for Löwenritter governance, Hafenmark diplomatic recognition, and Schoenland treaty obligations all undefined."
+    status: open
+    severity: P2
+    affects: [designs/board_game/victory_v30.md]

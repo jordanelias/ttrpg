@@ -3754,3 +3754,18 @@ editorial_decisions:
   resolution: "2026-04-17: applied PP-661."
   severity: P1
   affects: [designs/systems/throughline_resolutions_v1.md, designs/systems/player_agency_v30.md, designs/systems/settlement_layer_v30.md, designs/systems/npc_behavior_v30.md, designs/mechanics/baralta_crown_claim_v30.md]
+
+  - id: ED-615
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Schoenland Treaty terms undefined. What does Schoenland receive from Crown Treaty?"
+    status: open
+    severity: P2
+
+  - id: ED-616
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "No Parliamentary mechanic blocks Tribune Domain Actions. Intelligence Embargo motion proposed."
+    status: open
+    severity: P2
+

@@ -262,3 +262,34 @@ Per user instruction 2026-04-17, simulation validation of PP-660 faction politic
 | SIM-POL-R05 | Generational Shift Disposition outcomes — confirm 5-tier outcome table does not produce degenerate paths (always +3 in 2 seasons) | P1 | DEFERRED 2026-04-17 |
 
 Resume trigger: (a) user-initiated simulation review, or (b) patch to faction_politics_expanded_v1 that changes rank-advancement formulas.
+
+
+## New Findings — sim_npc_player_batch4_2026-04-17
+
+### P2 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| ALM-SIM-01 | Almstedt | Constitutional irregularity (40-season-old amendment insufficient supermajority): most potent undisclosed institutional information in the game | Open — ED-660 adjacent |
+| HAEL-SIM-02 | Haelgrund | Archives are Thread-constituted live objects, not static records — Ministry maintaining a sense organ no one knows is attached to a body | Noted |
+| ELS-SIM-02 | Elske | Diplomatic Exchange produced by 8-season relational investment, not tactical argument — relationship is the precondition | Confirmed |
+
+### Confirmed Working
+
+| System | Source | Status |
+|--------|--------|--------|
+| Almstedt certification of thin precedent enables Baralta Grand Contest — enables while constraining | ALM-SIM-02 | ✓ |
+| Voss bifurcated intelligence (formal quarterly vs. War Council true picture) creates strategic reserve unknown to Löwenritter | VOSS-SIM-01 | ✓ |
+| Klapp fiscal framing of buffer wins College vote where theological framing would lose | KL-SIM-02 | ✓ |
+| Stenskald equal-validity ruling makes Maret Uln's claim an Assembly vote, not a blocked path | STEN-SIM-01 | ✓ |
+| Haelgrund's Protocol 3 compliance (administrative routine) produces Warden intelligence access without deliberate choice | HAEL-SIM-01 | ✓ |
+| Ehrenwall's 8-season relationship investment with Elske produces IP −10, AER +1 | ELS-SIM-01 | ✓ |
+
+### Cross-Simulation Findings
+
+| Finding | Description |
+|---------|-------------|
+| CROSS-B4-01 | Gatekeepers govern through withholding — negative power is the mid-rank character's primary tool |
+| CROSS-B4-02 | Institutional memory is catastrophic risk — each character carries a specific piece of dangerous knowledge |
+| CROSS-B4-03 | Relationship is political infrastructure — genuine relationship produces disproportionate returns at crisis moments |
+
