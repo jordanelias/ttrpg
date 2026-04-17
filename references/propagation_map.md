@@ -613,3 +613,12 @@ DESIGN GAP 2: Guild Favour restoration mechanic — no upward movement source do
 | `designs/systems/faction_politics_expanded_v1.md` | `designs/board_game/varfell_path_b_v30.md` | Warden Ladder × Path B integration (ED-658) |
 | `designs/systems/faction_politics_expanded_v1.md` | `tests/coverage_matrix.md` | 5 SIM-DEBT items (SIM-POL-R01 through R05) |
 | `designs/conviction_track/conviction_track_v30.md` (Solmund fix) | References citing "Galbadian Orthodoxy" across designs/, references/, canon/ | DONE — factions_ttrpg_v30 (2 hits), conviction_track_v30_infill (1 hit) corrected 2026-04-17. params_board_game historical annotation retained. |
+
+## RS Budget Document (2026-04-17)
+| Source | Target | Status |
+|--------|--------|--------|
+| threadwork_v30.md §5.2 | references/rs_budget.md §2 | DONE — aggregated |
+| victory_v30.md §0.4 | references/rs_budget.md §2.1 (battle drain) | DONE — aggregated |
+| params_board_game.md §Accounting | references/rs_budget.md §7.1 | DONE — referenced |
+| peninsular_strain_v1.md §3 | references/rs_budget.md §2.1 (siege) | DONE — aggregated |
+| tests/thread_stress/threadwork_audit_register.md §F | references/rs_budget.md §5 | DONE — peak scenarios incorporated |
