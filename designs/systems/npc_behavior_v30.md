@@ -391,6 +391,10 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 
 ### §5.2 Named NPC Arc Profiles
 
+*Arc expansion v1 (ED-591-609, approved 2026-04-17): Full A/B/C arc sets for all named NPCs and sub-faction NPCs are specified in `designs/systems/arc_expansion_v1_2026-04-16.md`. That document is the canonical source for: Cardinal Officers (Stark/Voss/Vorn/Kald), Ehrenwall, Torsvald/Riskbreakers, Vossen/Hann, Orm (Second Warden), Niflhel operatives (Quartermaster/The Quiet One), Almud Arc C (3-trajectory), Vaynard Arc A/B full, environmental arc conditioners, cross-NPC conditioners, obligation conditioners, and 11 Zoom In triggers. The profiles below are the abbreviated canonical summaries; consult arc_expansion_v1 for full arc map detail.*
+
+### §5.2 Named NPC Arc Profiles
+
 
 ---
 

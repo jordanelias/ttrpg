@@ -3667,3 +3667,13 @@ editorial_decisions:
     status: open
     severity: P2
 
+# 2026-04-17 editorial approval: all items approved
+# ED-591-609 approved — arc expansion v1 canonical (arc_expansion_v1_2026-04-16.md)
+# ED-616 approved and propagated to tc_political_redesign §8 (Intelligence Embargo)
+# ED-620 approved and propagated to victory_v30 §8 (RM Founding Mechanic)
+# ED-624 approved and propagated to victory_v30 §3.6 (Elske Loyalty Track)
+# ED-625 approved and propagated to social_contest §7.1 (Excommunication Tribunal)
+# ED-628/629/630/631 (duplicate IDs from other session) — approved, npc_behavior items to be addressed in dedicated NPC session
+# ED-634 — approved for implementation, propagation pending dedicated session
+# ED-635/636 — resolved in prior commit
+# ED-637 — UI/UX fix, pending dedicated UI session

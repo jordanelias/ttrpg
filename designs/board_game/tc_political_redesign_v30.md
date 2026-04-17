@@ -434,3 +434,22 @@ Accord recovery: Govern action (Success → +1, max 3).
 All §1-6 mechanics apply to BG and Hybrid modes.
 TTRPG mode: TC political legitimacy bonus (§3) applies when Church acts in social contests or domain scenes. Floor(TC/20) bonus dice on relevant Influence/Mandate rolls.
 No conflict with scale_transitions_v30 §3 (Domain Echo handles TTRPG → faction layer translation).
+
+
+## §8 INTELLIGENCE EMBARGO (Parliamentary Motion — ED-616, approved 2026-04-17)
+
+A Parliamentary motion restricting a named faction's Tribune covert operations for 2 seasons.
+
+**Card:** Senator (any Senator-holding faction). Requires ≥ 1 additional faction on Side A.
+**Pool:** Σ Mandate of Side A factions, TN 7. Genre: Memory (citing specific operations — territory, season, finding).
+**Resolution:** Standard BG Parliamentary Vote (social_contest §10).
+
+**Embargo effect (motion passes):**
+- Target faction's Tribune cards Embargoed for 2 seasons.
+- Cannot play Tribune for Intel or Spy. Cards on Embargo Track (not Cooldown). Return immediately on expiry.
+- Not subject to Institutional Mandate (PP-189) — this is a Parliamentary act.
+- Varfell VTM advancement (requires Tribune Intel OW) blocked for Embargo duration → victory delayed 2 seasons.
+
+**Coalition requirement:** Intelligence Embargo designed as coalition tool. Crown alone (~9D) vs Varfell (~3D): ~50% pass rate. Adding Hafenmark or RM: ~80–90%. Cannot be filed while prior Embargo on same target is active. Once per Political Cycle (4 seasons).
+
+*Validated ST-49: Intelligence Embargo correctly calibrated as a spoiler tool — blocks Varfell's final-condition Intel runs (e.g., ST-21 Season 19 scenario). Requires genuine coalition to pass reliably.*

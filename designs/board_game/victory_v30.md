@@ -344,6 +344,21 @@ If either condition fails at Accounting, T9 reverts to the prior controller (or 
 | PI | ≥ 4 |
 | Successor confirmed | Elske confirmed OR Torben Loyalty ≥ 6 |
 
+### Elske Loyalty Track (ED-624 — approved 2026-04-17)
+
+| Loyalty | Status | IP effect |
+|---------|--------|-----------|
+| 0–1 | Hostile | IP +1/season |
+| 2–3 | Hostage (start) | None |
+| 4–5 | Aligned | IP −1/season |
+| 6–7 | Devoted | IP −2/season; Diplomatic Exchange eligible |
+
+**Advancement:** Senator Outward (Diplomacy Ob 2) Success +1, OW +2. Personal scene Disposition ≥ +2 (Solidarity RS) +1. Fair trade treatment of Schoenland routes: +1/year. Conviction violation: −1. War on Schoenland: −3.
+
+**Diplomatic Exchange (Loyalty ≥ 6, IP < 60):** Senator Outward, Ob 2. Success: IP −10, threshold +5, AER +1, Elske status changes to willing resident. OW: All above + Schoenland Treaty.
+
+**"Elske confirmed"** = Diplomatic Exchange success. Satisfies Regency Establishment condition above. *Conviction: Order. RS: Solidarity. Certainty: 4.*
+
 #### Alternate — Military Consolidation
 Only available if Regency Establishment not achieved after 8 Löwenritter seasons (track with counter on Löwenritter mat).
 
@@ -436,9 +451,24 @@ Starting TC: 28. Phase transition at TC 75 (TC freezes, Church shifts to seizure
 
 ---
 
-## 8. RM Emergence
+## 8. RM Founding Mechanic (ED-620 — approved 2026-04-17)
 
-WA track −3 to +3, starts 0. Triple-condition emergence: WA ≤ −2 AND ≥ 3 territories PT ≤ 1 AND RS ≤ 50. One-shot. Suppression: WA ≥ 0 OR all territories PT ≥ 2 OR RM Stability 0. See opus_design_proposal.md §5 for full stat block and AI.
+WA-based spontaneous emergence struck (PP-478). RM emergence in Hybrid mode is exclusively via the Founding Mechanic.
+
+**Prerequisites (all required):**
+- Player PC Disposition ≥ +3 with Maret Vossen
+- ≥ 2 territories have PT ≤ 2
+- RS ≥ 40
+- Player has completed ≥ 1 Community Weaving (Relational-scale Thread operation protecting or supporting a non-practitioner community)
+
+**Founding Scene (mandatory Priority 0 Zoom In when prerequisites met):**
+1. Player proposes: a named territory (first cell location), a Commitment, a Belief declaration.
+2. Vossen evaluates via Solidarity RS. Argue roll: Attunement primary, No Adjudicator, Ob 2. Success → Founding. Partial → 1 additional Community Weaving required next season. Failure → retry after 1 season.
+3. On Founding, RM is created with: Mandate 2, Influence 4, Wealth 1, Military 0, Stability 4.
+
+**Post-Founding:** Praetor card activates (Community Projects). Mandate cap 4. PC Embedding: +1D on RM Domain Actions in Founding territory. Phase 1 objective: PT ≤ 1 in ≥ 4 territories.
+
+*Validated Season 8 with deliberate investment (ST-34). Full arc: Founding S8 → Uprising OW S14 → Victory S15 (ST-48).*
 
 ---
 

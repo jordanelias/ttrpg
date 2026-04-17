@@ -372,6 +372,27 @@ Total Victory: Conviction Track ≥ 9 or ≤ 1 → losing coalition's dominant f
 
 ---
 
+## §7.1 Excommunication Tribunal (ED-625 — approved 2026-04-17)
+
+Special Asymmetric Proceeding (§7) initiated by Church. Prerequisites: TC ≥ 40, Church Mandate ≥ 4, Evidence Track ≥ 3 on target from prior HI OR documented Obligation violation OR 2 prior Tribunal convictions.
+
+**Modifications vs standard §7:**
+- Conviction Track starts at **7** (Church near-decisive before Exchange 1 — institutional fait accompli)
+- No accused corroboration permitted
+- Exchange count: 1–3 (set by Inquisitor)
+- Resistance for accused: halved (same as standard)
+
+*The correct strategic counter is preventing the filing, not defending at Tribunal. See §10.1 Parliamentary Stay. Filing can be prevented while TC < 55.*
+
+**Consequences on success:**
+- Named NPC: TC +4; target Mandate −2; Certainty forced to min(current, 2); arc transition; all NPCs Disposition ≥ +1 to target check Certainty Ob 1 or lose Disposition −1.
+- Player Character: Faction Mandate −3; excluded from Parliamentary motions; Standing −2; Faith-conviction Companions make departure scene check (Scar 1).
+- Faction: Mandate −2; all Church Domain Actions vs faction Ob −1; TC +3.
+
+**Revocation — Act of Contrition:** Church declares (Mandate ≥ 5, TC ≥ 50 required). Target fulfils Obligation abjuring the violation. Result: Church Mandate −1, TC −1, Excommunication lifted.
+
+---
+
 ## §10.1 Parliamentary Stay (ED-631)
 
 A Parliamentary Stay is a Senator Inward motion that halts an active Church Tribunal filing for 1 season. It represents Parliament asserting civil jurisdiction over an ecclesiastical proceeding.

@@ -182,3 +182,17 @@ npc_behavior: Constrained sub-arc state, Torben Conviction window S1-8
 | SIM-B2-02 | Ehrenwall moral ledger 30-season timing | OPEN |
 | SIM-B2-03 | Justice-as-Confessor 10-season Church governance sim | OPEN |
 
+
+## Editorial Approval — 2026-04-17
+
+All open editorial items approved by Jordan. Propagated this batch:
+
+| Item | Target | Status |
+|------|--------|--------|
+| ED-620 RM Founding Mechanic | victory_v30 §8 | Propagated |
+| ED-624 Elske Loyalty Track | victory_v30 §3.6 | Propagated |
+| ED-625 Excommunication Tribunal | social_contest §7.1 | Propagated |
+| ED-616 Intelligence Embargo | tc_political_redesign §8 | Propagated |
+| ED-591-609 Arc Expansion v1 | npc_behavior §5.2 reference note | Approved + noted |
+| ED-634 Faction Politics expansion | faction_politics_expanded_v1 | Approved, propagation pending |
+

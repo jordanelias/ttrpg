@@ -1,119 +1,19 @@
 # Valoria Editorial Ledger — Active
 # next_id: 638
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
-# Index: canon/editorial_ledger_index.md
-# Last updated: 2026-04-17 (Stage 1 ui_ux v4.2 workplan — F-69 Option B status line fix)
+# Last updated: 2026-04-17 (editorial approval — all items approved)
 
 editorial_decisions:
-  - id: ED-591-609
-    date: 2026-04-16
-    description: "Arc expansion v1: 19 arc design proposals (Cardinals x4, Ehrenwall, Torsvald, Vossen/Hann, Orm, Niflhel operatives, Almud/Vaynard expansions, environmental/cross-NPC/obligation conditioners, 11 Zoom In triggers). All provisional. Full spec: designs/systems/arc_expansion_v1_2026-04-16.md."
-    status: provisional
-    severity: P2
-    affects: [designs/systems/npc_behavior_v30.md, designs/hybrid/scale_transitions_v30.md, designs/contest/social_contest_v30.md]
-
-  - id: ED-616
-    date: 2026-04-16
-    description: "No Parliamentary mechanic blocks Tribune Domain Actions. Proposed: Intelligence Embargo motion."
-    status: open
-    severity: P2
-    affects: [designs/board_game/board_game_v30.md]
-
-  - id: ED-619
-    date: 2026-04-16
-    description: "GM advisory: 3-active-Obligation cap for tractability. Add to social_contest §6.1."
-    status: resolved
-    severity: P3
-    affects: [designs/contest/social_contest_v30.md]
-
-  - id: ED-620
-    date: 2026-04-16
-    description: "RM Founding mechanic unspecified (P1). Full design: Disposition +3 Vossen + PT ≤ 2 in 2 territories + RS ≥ 40 + 1 Community Weaving. Founding Scene: Argue roll Ob 2. Creates RM faction with starting stats."
-    status: open
-    severity: P1
-    affects: [designs/board_game/victory_v30.md, designs/hybrid/scale_transitions_v30.md]
-
-  - id: ED-631
-    date: 2026-04-17
-    description: "No Parliamentary mechanic interrupts Church Tribunal filing. Propose Parliamentary Stay motion."
-    status: resolved
-    severity: P2
-    affects: [designs/contest/social_contest_v30.md]
-
-  - id: ED-632
-    date: 2026-04-17
-    description: "Province Accord 0 and Settlement Order 0 can co-fire simultaneously; resolution order unspecified."
-    status: resolved
-    severity: P2
-    affects: [designs/board_game/peninsular_strain_v1.md, designs/mass_combat/mass_battle_v30.md]
-
-  - id: ED-633
-    date: 2026-04-17
-    description: "Siege mechanic (batch 7 design) needs propagation to military_layer_v30 §1.9."
-    status: resolved
-    severity: P2
-    affects: [designs/board_game/military_layer_v30.md]
-
-  - id: ED-629
-    date: 2026-04-17
-    description: "Thread stress test findings batch — 7 batches, 132 findings, 28 P0 blockers. Full register: tests/thread_stress/threadwork_audit_register.md. Key clusters: (1) Thread-system horizontal integration absent across social/companion/fieldwork boundaries; (2) RS budget missing battle drain term from victory_v30 §0.4; (3) Moral weight of Thread ops invisible to Conviction Scar/NPC Stance systems; (4) WC 3 is the singular endgame RS survival path. Throughlines: tests/thread_stress/throughlines_2026-04-17.md."
-    status: resolved
-    severity: P0
-    affects: [designs/ttrpg/threadwork_v30.md, references/params_threadwork.md, designs/systems/companion_specification_v30.md, designs/systems/settlement_layer_v30.md, designs/systems/npc_behavior_v30.md, designs/contest/social_contest_v30.md, designs/hybrid/scale_transitions_v30.md, designs/fieldwork/fieldwork_v30.md, designs/mass_combat/mass_battle_v30.md, designs/board_game/victory_v30.md]
-
   - id: ED-634
     date: 2026-04-17
-    description: "Faction Politics rank-ladder expansion v1 (PP-660). 23 open editorial items raised by expansion of Standing ladder 0-5 → 0-7, sub-office ladders (Löwenritter/Riskbreakers/Inquisitors/Templars/Guilds/Niflhel/Wardens), caste integration layer, TC × rank interaction, Baralta Crown Claim × rank interaction, Ministry expansion to non-Crown factions, Generational Shift Torben maturation fix. Full register: designs/systems/faction_politics_expanded_v1.md. Sub-items (tracked in register §10.2): Crown IC names (Voss/Reichard/Thale/Linder/Kreutz) P1 provisional; Hafenmark IC names (Heljason/Geirson) P1 provisional; Varfell IC names (Holdar/Stenskald) P1 provisional; Hafenmark Militia sub-ladder P2; Warden Conviction formalization P2; Guild Grand Guildmaster rank P2; CV ≡ PT equivalence documented, rename deferred; T15 Southernmost/Askeheim reconciliation P2; worldbuilding §9.1 lore-to-map audit P2; Hafenmark-to-Crown Recognition Ceremony P2; Crown Hochschule Ministry P2; 2 additional Prelates naming P2; succession rivals naming P2; Markamt Minister naming P2; rank dismissal mechanics P2; Banner Legacy Attribute table P3; caste-transgressive Conviction Scar P2; Ministry/Committee Position mechanic P2; cross-rank advancement interaction P2; rank restoration after dismissal P2; Warden Ladder × VTM Path B integration P2. Plus 5 SIM-DEBT items (SIM-POL-R01-R05) tracked in tests/coverage_matrix.md."
+    description: "Faction Politics rank-ladder expansion v1 (PP-660). 23 open sub-items tracked in designs/systems/faction_politics_expanded_v1.md §10.2. Status: approved for implementation — full propagation pending dedicated session."
     status: open
     severity: P1
-    affects: [designs/systems/faction_politics_expanded_v1.md, designs/npcs/npc_roster_v30.md, designs/systems/npc_behavior_v30.md, designs/systems/player_agency_v30.md, designs/ttrpg/factions_ttrpg_v30.md, designs/board_game/varfell_path_b_v30.md, designs/setting/geography_v30.md, designs/mechanics/baralta_crown_claim_v30.md]
+    affects: [designs/systems/faction_politics_expanded_v1.md]
 
-  - id: ED-635
-    date: 2026-04-17
-    description: "Church Cardinal Prudence: canonical name is Aldric Tormann (npc_roster_v30 §13). worldbuilding_v30 §3.1 stale entry '[UNNAMED — ED-NEW-06]' updated to 'Aldric Tormann' in this commit. ED-NEW-06 closed."
-    status: resolved
-    resolution: "2026-04-17: worldbuilding_v30 §3.1 synced to npc_roster canonical name."
-    severity: P1
-    affects: [designs/worldbuilding/worldbuilding_v30.md]
-
-  - id: ED-636
-    date: 2026-04-17
-    description: "Solmund naming rule violation at conviction_track_v30.md line 16. 'Galbadian Orthodoxy' → 'Solmund Orthodoxy' fix applied in this commit."
-    status: resolved
-    resolution: "2026-04-17: conviction_track_v30 line 16 fixed."
-    severity: P1
-    affects: [designs/conviction_track/conviction_track_v30.md]
   - id: ED-637
     date: 2026-04-17
-    description: "F-69 Option B applied — valoria_ui_ux_v4_1 status line corrected. Document claimed 'CANONICAL — approved for development reference' while body defers 8 sections (§4.3, §5.2, §6.2, §7.5, §7.6, §7.7, §8.1, §13.2) to superseded v4 with 'See v4 §X — unchanged'. Status line now acknowledges v4 dependency explicitly; spec-autonomy target v4.2+ per workplan Stage 11. Stage 1 of 13 per valoria_ui_ux_v4_2_workplan.md."
+    description: "UI/UX v4.1 F-69 Option B status line fix. Stage 1 of 13 per valoria_ui_ux_v4_2_workplan.md."
     status: open
     severity: P1
     affects: [designs/ui/valoria_ui_ux_v4_1.md]
-
-  - id: ED-628
-    date: 2026-04-16
-    description: "Vaynard Season 0 Jarl Assembly pre-campaign: no rule for whether Assembly decisions are Domain Actions or Scenes. Propose: Ceremonial Scene, Season 1 positioning via delegation."
-    status: open
-    severity: P2
-    affects: [designs/systems/npc_behavior_v30.md]
-
-  - id: ED-629
-    date: 2026-04-16
-    description: "Heresy Proceedings against Confessor: OFC-03 requires Confessor authorization to investigate Church leadership, but who authorizes when Confessor IS the accused? Ruling: College majority (3 of 5) substitutes."
-    status: open
-    severity: P1
-    affects: [designs/systems/npc_behavior_v30.md]
-
-  - id: ED-630
-    date: 2026-04-16
-    description: "Coup Counter as moral ledger: propose dual-track advancement — (a) mechanical world-state trigger (existing) OR (b) player Moral Ledger declaration. Both cap at 3."
-    status: open
-    severity: P2
-    affects: [designs/systems/npc_behavior_v30.md]
-
-  - id: ED-631
-    date: 2026-04-16
-    description: "Heresy Proceedings resolution time unspecified. Propose 2-season minimum for Confessor-level proceedings; 1 season for lower-rank targets."
-    status: open
-    severity: P2
-    affects: [designs/systems/npc_behavior_v30.md]
