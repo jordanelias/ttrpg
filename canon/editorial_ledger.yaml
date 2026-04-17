@@ -79,7 +79,7 @@ editorial_decisions:
   - id: ED-667
     scope: social_contest
     file: designs/contest/social_contest_v30.md
-    description: "Adjudicator Thread response."
+    description: "Adjudicator Thread response. RESOLVED 2026-04-17."
     status: open
     priority: P1
     date: "2026-04-17"

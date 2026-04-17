@@ -325,6 +325,23 @@ A practitioner with TS ≥ 30 in active Thread contact adds bonus dice: floor(TS
 ### §9.4 Thread Operations Between Exchanges
 A practitioner may initiate a Thread operation between exchanges. Effects apply before next exchange's Read step. Genre/orientation dice are fixed at setup — Thread operations cannot change them mid-contest. Temporal axis conflict: if the Thread operation's temporal axis contradicts the contest's primary genre (Memory-axis operation during Projection-primary contest, or vice versa), both orators' Read rolls in the next exchange use TN 8.
 
+### §9.4b Adjudicator Thread Response (ED-667)
+
+When an adjudicator (NPC presiding over formal proceedings — Court, Tribunal, Parliamentary Session, Church Inquiry) witnesses Thread use during the proceeding:
+
+| Adjudicator Certainty | Response |
+|---|---|
+| C5 (Orthodox) | Declares proceedings **corrupted**. Contest immediately suspended. Church Heresy Investigation fires (existing PP-182 pathway). Adjudicator's Faith Conviction receives Scar per §3.4 of npc_behavior_v30. Results from the corrupted exchange are voided — last exchange before Thread use stands as final. |
+| C4 (Faithful) | Declares **irregularity**. Current exchange result stands but adjudicator applies +1 Ob to all subsequent rolls by the Thread-using party (procedural suspicion). Church Investigation optional (adjudicator discretion based on Scar count). |
+| C3 (Questioning) | Notes the event. No procedural consequence. Adjudicator's internal conflict deepens — Conviction Scar check per §3.4. May influence post-contest Disposition shift toward the Thread-using party (curiosity or fear, GM judgment). |
+| C2–0 (Skeptic to Accepted) | No procedural response. Thread use is understood as part of reality. If adjudicator has TS ≥ 30: may privately note the Thread-user's technique as relevant evidence (adds +1 to Evidence Track if investigation active). |
+
+**Scope:** This applies only to formal adjudicated proceedings (Court, Tribunal, Parliamentary Session, Church Inquiry). Informal debates, tavern arguments, and private conversations are not adjudicated and do not fire this response.
+
+**Visibility gate:** Adjudicator must perceive the Thread use. Per threadwork_v30 §2.3 visibility table: TS 0–9 perceives nothing; TS 10–29 perceives vague unease (triggers at C5 only if adjudicator is already suspicious); TS 30+ perceives the operation. If the practitioner successfully conceals (Cognition roll per §2.3), adjudicator does not respond.
+
+---
+
 ### §9.5 Beliefs Integration
 Winning an exchange while arguing for a position aligned with the orator's stated Belief counts as a Belief achievement for Momentum. Max 1 Momentum per contest from Belief alignment.
 
@@ -410,6 +427,8 @@ A Parliamentary Stay is a Senator Inward motion that halts an active Church Trib
 ---
 
 ## §12 OPEN ITEMS AND EDITORIAL FLAGS
+
+| ED-667 | Adjudicator Thread Response: §9.4b added. Certainty-indexed response table. Visibility gate. Propagation from npc_behavior_v30 ED-663. | P1 — resolved |
 
 ### Resolved by this version (PP-234)
 | Item | Resolution |

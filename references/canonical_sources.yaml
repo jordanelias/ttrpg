@@ -95,7 +95,7 @@ systems:
   social_debate:
     status: active
     canonical: designs/contest/social_contest_v30.md
-    canonical_sha__designs__contest__social_contest_v30_md: "db69ee24ef2e4c811d285c4fd08e9347633b011e"
+    canonical_sha__designs__contest__social_contest_v30_md: "pending"
     params: references/params_contest.md
     design_doc: designs/contest/social_contest_v30.md
 
