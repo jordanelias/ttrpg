@@ -3677,3 +3677,6 @@ editorial_decisions:
 # ED-634 — approved for implementation, propagation pending dedicated session
 # ED-635/636 — resolved in prior commit
 # ED-637 — UI/UX fix, pending dedicated UI session
+# 2026-04-17 ED-634 propagation
+# Resolved: ED-634 (umbrella), ED-635/636/637/638/641/654 (propagated)
+# Registered: ED-640-658, SIM-POL-R01/02/05 as sub-items

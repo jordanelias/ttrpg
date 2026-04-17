@@ -1,19 +1,172 @@
 # Valoria Editorial Ledger — Active
-# next_id: 638
+# next_id: 659
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
-# Last updated: 2026-04-17 (editorial approval — all items approved)
+# Last updated: 2026-04-17 (ED-634 propagation — faction politics rank-ladder)
 
 editorial_decisions:
-  - id: ED-634
+  - id: ED-635
     date: 2026-04-17
-    description: "Faction Politics rank-ladder expansion v1 (PP-660). 23 open sub-items tracked in designs/systems/faction_politics_expanded_v1.md §10.2. Status: approved for implementation — full propagation pending dedicated session."
+    description: "Hafenmark Legal Advisor: Torvi Heljason — confirm name and Stance Triangle (provisional values in npc_behavior §2.14)."
+    status: resolved
+    resolution: "2026-04-17: provisional Triangle added to npc_behavior §2.14."
+    severity: P1
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-636
+    date: 2026-04-17
+    description: "Hafenmark Military Commander: Olaf Geirson — confirm name and Stance Triangle."
+    status: resolved
+    resolution: "2026-04-17: provisional Triangle added to npc_behavior §2.14."
+    severity: P1
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-637
+    date: 2026-04-17
+    description: "Varfell Senior Jarl: Björn Holdar — confirm name and Triangle."
+    status: resolved
+    resolution: "2026-04-17: added to npc_behavior §2.15."
+    severity: P1
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-638
+    date: 2026-04-17
+    description: "Varfell Skald-Chief: Ingrid Stenskald — confirm name and Triangle."
+    status: resolved
+    resolution: "2026-04-17: added to npc_behavior §2.15."
+    severity: P1
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-640
+    date: 2026-04-17
+    description: "Hafenmark Militia sub-rank ladder (equivalent to Löwenritter Knight, internal to Hafenmark Martial-branch Parliamentarians)."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-641
+    date: 2026-04-17
+    description: "Warden Conviction: formalize as 8th Conviction. Community and Warden both added to npc_behavior §1.2 taxonomy (2026-04-17). Confirm total list: Faith/Order/Reason/Equity/Precedent/Autonomy/Continuity/Community/Warden."
+    status: resolved
+    resolution: "2026-04-17: Community and Warden added to npc_behavior §1.2."
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-642
+    date: 2026-04-17
+    description: "Guild Grand Guildmaster rank (Std 6) — confirm whether this rank exists or is omitted per collective-leadership design."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-643
+    date: 2026-04-17
+    description: "Solmund naming propagation: conviction_track_v30 line 16 fixed (Galbadian → Solmund Orthodoxy). Grep remaining designs/ for Galbados/Galbadian references."
+    status: open
+    severity: P1
+    affects: [designs/conviction_track/conviction_track_v30.md]
+
+  - id: ED-644
+    date: 2026-04-17
+    description: "CV≡PT terminology: same per-territory stat. Full rename (conviction_track_v30 → piety_track_v30, CV → PT throughout) deferred pending cost-benefit review. Equivalence note added to conviction_track_v30 §1."
+    status: open
+    severity: P2
+    affects: [designs/conviction_track/conviction_track_v30.md]
+
+  - id: ED-645
+    date: 2026-04-17
+    description: "T15 Southernmost / Askeheim reconciliation (naming conflict in cross-references)."
+    status: open
+    severity: P2
+    affects: [designs/setting/geography_v30.md]
+
+  - id: ED-648
+    date: 2026-04-17
+    description: "Crown Ministry of Universities (Hochschule) — proposed new Ministry alongside existing six. Confirm inclusion. Seasonal cost 1 Wealth."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-649
+    date: 2026-04-17
+    description: "College of Prelates: 2 additional Prelates need naming (Standing 5, not Cardinal-rank)."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-650
+    date: 2026-04-17
+    description: "Succession rivals need naming and Stance Triangles: Crown Cadet Claimant, Varfell Vaynard-protégé, Hafenmark alternative candidate(s)."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-651
+    date: 2026-04-17
+    description: "Markamt Minister — explicit name and Stance Triangle needed."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-652
+    date: 2026-04-17
+    description: "Rank dismissal mechanics: cost of re-entry at Std 1→0; Dishonored flag persistence; handling across mode transitions."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-654
+    date: 2026-04-17
+    description: "Conviction Scar × caste-transgressive modifier. Propagated to npc_behavior §3.3."
+    status: resolved
+    resolution: "2026-04-17: caste-transgressive Scar note added to npc_behavior §3.3."
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-655
+    date: 2026-04-17
+    description: "Ministry/Committee Position mechanic: uniform mechanic across Crown/Hafenmark/Church/Varfell or faction-specific variants? Recommend uniform with faction-specific titles."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-656
+    date: 2026-04-17
+    description: "Cross-rank advancement interaction: player holds Löwenritter sub-office rank AND Crown primary rank. Confirm Duty conflicts handled via faction AI evaluation."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-657
+    date: 2026-04-17
+    description: "Rank restoration after dismissal: what paths exist, and at what cost?"
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-658
+    date: 2026-04-17
+    description: "Warden Ladder integration with VTM Path B: Warden rank does not grant automatic Path B progression but Warden-Chief designation must interact with Path B Deed sequence."
+    status: open
+    severity: P2
+    affects: [designs/board_game/varfell_path_b_v30.md, designs/systems/faction_politics_expanded_v1.md]
+
+  - id: SIM-POL-R01
+    date: 2026-04-17
+    description: "SIM-DEBT: 7-rank progression pacing — validate player can reach Std 5 by S14 and Std 7 by S20 under normal play."
     status: open
     severity: P1
     affects: [designs/systems/faction_politics_expanded_v1.md]
 
-  - id: ED-637
+  - id: SIM-POL-R02
     date: 2026-04-17
-    description: "UI/UX v4.1 F-69 Option B status line fix. Stage 1 of 13 per valoria_ui_ux_v4_2_workplan.md."
+    description: "SIM-DEBT: caste modifier impact — confirm Southern Einhir gates do not create unwinnable game states."
     status: open
     severity: P1
-    affects: [designs/ui/valoria_ui_ux_v4_1.md]
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+  - id: SIM-POL-R05
+    date: 2026-04-17
+    description: "SIM-DEBT: Generational Shift Disposition outcomes — confirm five-tier outcome table does not produce degenerate paths."
+    status: open
+    severity: P1
+    affects: [designs/systems/faction_politics_expanded_v1.md]

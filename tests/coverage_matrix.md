@@ -196,3 +196,20 @@ All open editorial items approved by Jordan. Propagated this batch:
 | ED-591-609 Arc Expansion v1 | npc_behavior §5.2 reference note | Approved + noted |
 | ED-634 Faction Politics expansion | faction_politics_expanded_v1 | Approved, propagation pending |
 
+
+## ED-634 Propagation — 2026-04-17
+
+Faction Politics rank-ladder expansion (PP-660). Propagated to:
+
+| Target | Change |
+|--------|--------|
+| npc_behavior_v30 §1.2 | Community and Warden added to Conviction taxonomy |
+| npc_behavior_v30 §3.3 | Caste-transgressive Scar risk modifier noted |
+| npc_behavior_v30 §2.13 | Crown inner circle (Voss/Reichard/Thale/Linder/Kreutz) Stance Triangles |
+| npc_behavior_v30 §2.14 | Hafenmark inner council (Heljason/Geirson) Stance Triangles |
+| npc_behavior_v30 §2.15 | Varfell Jarl council (Holdar/Stenskald) Stance Triangles |
+| player_agency_v30 §3.3 | Initiation Duty category added |
+| Ledger | ED-634 resolved; sub-EDs 635-658 and SIM-POL-R01/02/05 registered |
+
+Remaining open sub-EDs: ED-640/642/643/644/645/648/649/650/651/652/655/656/657/658, SIM-POL-R01/02/05. All P2 except ED-643 (Solmund propagation P1) and SIM-POL-R01/02/05 (P1 sim-debt).
+
