@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 673
+# next_id: 670
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Last updated: 2026-04-17 (audit resolution — dedup, schema normalization, archive backfill, summary rebuild)
 
@@ -91,3 +91,31 @@ editorial_decisions:
     status: open
     severity: P0
     affects: [references/wc_survival_spine.md]
+
+  - id: ED-666
+    date: 2026-04-17
+    description: "Path B speed-run calibration: conditions met at S9-10 while other factions' primary conditions require S22-28. Confirm whether S9 Path B victory is intended design or requires WR advancement gating."
+    status: open
+    severity: P1
+    affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-667
+    date: 2026-04-17
+    description: "Coup Counter readiness gap: Counter reaches 3 based on Crown failures, but Regency Establishment conditions (Elske or Torben Loyalty 6) may not be met. No mechanic prevents premature Counter triggering. Requires ruling: does Counter 3 fire regardless, or require readiness-gate?"
+    status: open
+    severity: P1
+    affects: [designs/systems/npc_behavior_v30.md, designs/board_game/victory_v30.md]
+
+  - id: ED-668
+    date: 2026-04-17
+    description: "RS decline rate without warden cooperation: reaches ~21 at S30 without stabilization. Shared loss at RS 0 — campaign may not reach threshold within 30-season window. Is RS decline intentionally background pressure only, or should it be steeper?"
+    status: open
+    severity: P2
+    affects: [designs/board_game/board_game_v30.md, designs/board_game/victory_v30.md]
+
+  - id: ED-669
+    date: 2026-04-17
+    description: "Irreversible institutional precedent: in-campaign decisions (published documents, legal records, intelligence disclosures) — do they persist across campaign instances or reset? Requires setting-level decision on campaign persistence."
+    status: open
+    severity: P2
+    affects: [designs/board_game/victory_v30.md]

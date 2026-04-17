@@ -3996,3 +3996,25 @@ editorial_decisions:
     status: resolved
     severity: P2
     resolution: "Resolved batch 8."
+
+  - id: ED-620
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "RM Founding mechanic unspecified — full design proposed."
+    status: open
+    severity: P1
+
+  - id: ED-621
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "BG Parliamentary Vote: lobby offset can pre-determine outcome. Starting track restriction proposed."
+    status: open
+    severity: P2
+
+  - id: ED-622
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Varfell cannot file Parliamentary motions (no Senator card). Explicit note needed."
+    status: open
+    severity: P2
+

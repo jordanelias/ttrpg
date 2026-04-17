@@ -321,3 +321,39 @@ Resume trigger: (a) user-initiated simulation review, or (b) patch to faction_po
 | CROSS-B5-02 | Coalition logic is asymmetric — preventing a majority is more efficient than building one |
 | CROSS-B5-03 | Long-horizon investment wins mid-range crises — every successful character here invested 2+ seasons ahead |
 
+
+## New Findings — sim_alternate_branches_2026-04-17
+
+### P1 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| ALT-C-01 | Branch C | Path B wins at S9 while other factions 15 seasons from their conditions — speed-run calibration issue | Open — ED-666 |
+| ALT-I-01 | Branch I | Coup Counter can fire at S17 before Regency Establishment conditions exist — premature triggering gap | Open — ED-667 |
+
+### P2 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| ALT-J-01 | Branch J | Without warden cooperation, RS reaches ~21 at S30 — outside standard campaign window | Open — ED-668 |
+
+### Confirmed Working
+
+| System | Source | Status |
+|--------|--------|--------|
+| Almstedt deploys irregularity → forced supermajority → stronger Baralta victory (paradox) | ALT-A-01 | ✓ Constitutional stress-test produces better outcome |
+| Voss's reserve makes Coup mechanically impossible without Ehrenwall violating Martial Honour Framework | ALT-B-01 | ✓ Military prep is Counter's check |
+| Thale warning Almud produces strongest Crown outcome at highest personal cost | ALT-E-01 | ✓ Spymaster dilemma real |
+| Klapp's publication produces Confessor endorsement via casting vote | ALT-D-01 | ✓ Church doctrinal transformation path confirmed |
+| Heljason's refusal produces stronger legal brief than compliance | ALT-F-01 | ✓ Obstruction as highest-value advisor function |
+| Haelgrund's report enters multi-faction intelligence chains; Niflhel pursues archives | ALT-G-01 | ✓ Silence vs disclosure has institutional cascade |
+| Hann winning Assembly produces figurehead Sigurd + factional fragmentation | ALT-H-01 | ✓ Bloodline succession without governance produces POW-01 equivalent |
+
+### Cross-Branch Findings
+
+| Finding | Description |
+|---------|-------------|
+| CROSS-ALT-01 | Information timing is primary resource — who knows what, when controls outcomes more than military or TCV |
+| CROSS-ALT-02 | Premature victory creates shallow worlds — mechanical win before narrative transformation produces stable but incomplete campaigns |
+| CROSS-ALT-03 | Irreversible institutional precedent — published documents, legal records, disclosed intelligence cannot be recalled |
+
