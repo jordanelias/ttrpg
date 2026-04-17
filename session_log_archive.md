@@ -3884,3 +3884,9 @@ open_items:
   - CV ≡ PT full rename deferred (ED-644) — file rename conviction_track_v30.md → piety_track_v30.md pending future cleanup pass
   - All prior open items carry forward (ED-542, ED-586, ED-587, ED-589, ED-591-609, ED-611, ED-615-627, ED-631-633, ED-629 Thread stress)
 commit: 04c4c6e23b3232874fb6f8213fc5598c0b288d5a
+
+---
+
+session_id: throughline_propagation_2026-04-17
+last_stage: done
+status: CLOSED
