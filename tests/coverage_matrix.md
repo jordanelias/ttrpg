@@ -103,3 +103,19 @@ Coalition rebuff IP reset, RS Critical Stability checks, HI chain 2-scene → Tr
 RM 30-season arc S8→S14→S15, Assert Mandate gate critical, Varfell Path C S14-15,
 Intelligence Embargo coalition spoiler.
 
+
+## Batch 8 (ST-51 through ST-60) — sim_batch_8_2026-04-17
+
+### Resolved (8 + 8 prior re-sync)
+ED-542,611,615,618,624,625,629,630 (batch 8)
+ED-586,587,589,617,621,622,623,626 (prior sessions, now archived)
+
+### New EDs
+ED-631 (Parliamentary Stay vs Church Tribunal), ED-632 (Accord/Order co-fire), ED-633 (Siege propagation)
+
+### Confirmed Working
+Niflhel asset placement, Elske Loyalty arc, Schoenland Treaty, Excommunication procedure,
+Threadcut being TS-gated, two-scale Uprising, three-faction bilateral sequential,
+RM collective Weaving near-infallible, Torben window S1-8, Last Declaration scene,
+Partition Phase 1 declaration, battle consequences consolidated.
+

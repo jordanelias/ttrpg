@@ -3635,3 +3635,4 @@ editorial_decisions:
   description: "Guilds solo victory constraint 'no rival Wealth ≥ Guild Wealth − 2' broken at standard Wealth cap 7. Fix: absolute 'no rival Wealth ≥ Guild Wealth'."
   resolution: "Jordan 2026-04-16: by-design. Guilds are a spoiler/pressure faction; solo victory moot per design intent."
   affects: ['designs/board_game/victory_v30.md']
+# Batch 8 archived: ['ED-542', 'ED-586', 'ED-587', 'ED-589', 'ED-611', 'ED-615', 'ED-617', 'ED-618', 'ED-621', 'ED-622', 'ED-623', 'ED-624', 'ED-625', 'ED-626', 'ED-628'] (resolved/re-synced)
