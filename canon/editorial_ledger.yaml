@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 572
+# next_id: 573
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Index: canon/editorial_ledger_index.md
 # Last updated: 2026-04-16
@@ -179,4 +179,11 @@ editorial_decisions:
     status: open
     severity: P1
     affects: [designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-572
+    date: 2026-04-16
+    description: "UI/UX v4.1 consolidation — resolves Jordan corrections C-1 (cut Layer 3 haptic-equivalent), C-2 (TS-progressive Thread UI unlock per threadwork §2.3 TS 30+ Leap gate + P-08 epistemological barrier), C-3 (chrome capability-gating per P-03); fills canon gaps P-04 monster encounter UI, P-06 Threadcut UI, P-09 memory pulling UI, P-13 Southernmost forgetting; adds P-01 pre-commit co-movement preview, P-08 Codex epistemic access rules, P-10 Taint/Coherence distinction, P-11 CD track, P-12 Knot graph, P-15 Coherence 0 TS-branching; corrects setting violations (period ensemble music not orchestral, Church purple not indigo, RM woad not teal, Varfell slate not violet, hermetic Thread typography not illuminated, pre-Gothic portrait era, Pentiment/medieval map not Triangle Strategy); consolidates 25 parts → 14 parts + 5 appendices (82KB vs 162KB). Supersedes designs/ui/valoria_ui_ux_v4.md."
+    status: resolved
+    severity: P1
+    affects: [designs/ui/valoria_ui_ux_v4_1.md]
 

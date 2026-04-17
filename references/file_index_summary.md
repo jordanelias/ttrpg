@@ -21,7 +21,7 @@ tc_political_redesign: designs/board_game/tc_political_redesign_v30.md
 geography: designs/setting/geography_v30.md
 fieldwork: designs/fieldwork/fieldwork_v30.md
 npc_behavior: designs/systems/npc_behavior_v30.md
-ui_ux_reference: designs/ui/valoria_ui_ux_v4.md  # NEW 2026-04-16 — Godot-facing spec
+ui_ux_reference: designs/ui/valoria_ui_ux_v4_1.md  # v4.1 consolidation 2026-04-16 — ED-572 (supersedes v4)
 
 ## Register Locations (chunked)
 patch_register_active: canon/patch_register_active.yaml

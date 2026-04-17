@@ -215,3 +215,12 @@ systems:
     status: proposal
     last_patch: null
     notes: "36 settlements across 17 provinces — dual-authority governance, faction emergence/collapse, extended timeline"
+
+  ui_ux_reference:
+    status: active
+    canonical: designs/ui/valoria_ui_ux_v4_1.md
+    canonical_sha__designs__ui__valoria_ui_ux_v4_1_md: "3e8f401c8df21ff7cbb4d40a60069a93efec30f0"
+    params: null
+    design_doc: designs/ui/valoria_ui_ux_v4_1.md
+    notes: "Godot-facing UI/UX comprehensive reference. Supersedes valoria_ui_ux_v4.md. Resolves UI-01 through UI-15, ED-544, ED-545, ED-548, ED-572. v4 retained in repo as historical reference."
+
