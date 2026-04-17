@@ -1,13 +1,31 @@
 ---
 name: valoria-orchestrator
 description: >
-  Orchestrate multi-skill workflows for the Valoria TTRPG/board game/hybrid project.
+  Orchestrate multi-skill workflows for the Valoria videogame project (Godot 4.3).
   ALWAYS use this skill at the start of any Valoria task, to decompose it into the correct
   skill sequence, manage inter-skill handoffs, enforce the editorial gate, track the gap register,
   and ensure outputs feed forward correctly. Trigger on: "start work", "resume", "audit the ruleset",
   "run a simulation", "stress test", "where did we leave off", "what's the plan", "compile",
   "build checkpoint", any multi-step Valoria task, or resuming work after a session gap.
   Also trigger whenever another Valoria skill needs routing or sequencing.
+---
+
+## PROJECT CONTEXT — VIDEOGAME ONLY
+
+**As of 2026-04-17, Valoria is a videogame project.** TTRPG, board game, and hybrid modes are abandoned. All design work targets the Godot 4.3 implementation in `jordanelias/valoria-game`.
+
+**Implications for all skills:**
+- Design docs containing TTRPG/BG/Hybrid mode-branching tables: extract the videogame-relevant rules only. Do not design for tabletop play.
+- Mode applicability sections in design docs (`Three-mode: TTRPG/Hybrid/BG`) are historical. The videogame uses a unified ruleset that combines personal-scale mechanics (formerly "TTRPG") with strategic-scale mechanics (formerly "BG") in a single continuous experience.
+- "Board game" mechanical abstractions (card-hand economy, phase-locked resolution, territory-level orders) remain valid as strategic-scale videogame mechanics. They are not board game mechanics — they are the videogame's strategic layer.
+- "TTRPG" mechanical detail (dice pools, degree tables, skill checks, social contests, fieldwork procedures) remains valid as personal-scale videogame mechanics. There is no GM — the engine handles all resolution.
+- Scale transitions between personal and strategic are the videogame's core architectural challenge. The zoom system (personal ↔ settlement ↔ territory ↔ peninsula) is the game's primary UX flow.
+- All simulation, audit, and design work should evaluate mechanics through the lens of: "Can this be implemented in Godot? Does the player experience this through UI, or is it invisible engine logic?"
+
+**Two repos:**
+- `jordanelias/ttrpg` — design source of truth (mechanics, params, registers, skills)
+- `jordanelias/valoria-game` — Godot implementation (GDScript, scenes, assets)
+
 ---
 
 ## STEP 0 — GitHub Bootstrap (MANDATORY, BLOCKING)
@@ -265,7 +283,7 @@ All active canonical design docs use the `_v30.md` suffix. Pre-v30 filenames are
 | Canonical design doc | `designs/{system}/{name}_v30.md` |
 | Skeleton (mechanical spec only) | `designs/{system}/{name}_v30_skeleton.md` |
 | Content infill (prose, rationale) | `designs/{system}/{name}_v30_infill.md` |
-| Mode-split variant | `designs/{system}/{name}_v30_{mode}.md` (mode = ttrpg \| hybrid \| bg) |
+| Mode-split variant | DEPRECATED — videogame is the sole target. Existing mode-split files are historical. |
 
 If any skill, params file, or cross-reference still uses a pre-v30 path, flag it:
 `[STALE REF: <file> references <old-path> — update to <v30-path>]`
