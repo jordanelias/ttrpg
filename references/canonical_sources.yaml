@@ -204,17 +204,17 @@ systems:
     notes: "Accepted 2026-04-17 (editorial batch acceptance)."
 
   companion_specification:
-    canonical_doc: designs/systems/companion_specification_v30.md
-    params_file: null
+    canonical: designs/systems/companion_specification_v30.md
+    params: null
     status: active
-    last_patch: null
+    design_doc: designs/systems/companion_specification_v30.md
     notes: "NPC travel companion system — formation, departure, actions, world bridge. Accepted 2026-04-17 (editorial batch acceptance). Resolves ED-555, ED-557, ED-559, ED-571."
 
   settlement_layer:
-    canonical_doc: designs/systems/settlement_layer_v30.md
-    params_file: null
+    canonical: designs/systems/settlement_layer_v30.md
+    params: null
     status: active
-    last_patch: null
+    design_doc: designs/systems/settlement_layer_v30.md
     notes: "36 settlements across 17 provinces — dual-authority governance, faction emergence/collapse, extended timeline. Accepted 2026-04-17 (editorial batch acceptance)."
 
   ui_ux_reference:
@@ -314,8 +314,8 @@ systems:
   authority: design_proposal
 
   throughline_specifications:
-    canonical_doc: designs/audit/throughline_specifications_2026-04-17.md
-    params_file: null
+    canonical: designs/audit/throughline_specifications_2026-04-17.md
+    params: null
     status: design
-    last_patch: null
+    design_doc: designs/audit/throughline_specifications_2026-04-17.md
     notes: "8 structural gap specifications: Thread-settlements, player economy, POIs, Ministry, Loewenritter governance, Altonian campaign, local populace, conviction legacy"

@@ -2,23 +2,43 @@
 # Full active ledger: canon/editorial_ledger.yaml
 # Full archive: canon/editorial_ledger_archive.yaml
 # Full index: canon/editorial_ledger_index.md
-# Last updated: 2026-04-17 (PP-661 close — ledger split)
+# Last updated: 2026-04-17 (audit resolution — dedup, archive backfill, summary rebuild)
 
-next_id: 660
+next_id: 673
+p0_blocker_count: 5
+p0_blocker_ids: ['ED-670', 'ED-671', 'ED-672', 'ED-668', 'ED-669']
 p1_blocker_count: 3
-p1_blocker_ids: ['ED-643', 'ED-632', 'ED-633']
+p1_blocker_ids: ['ED-663', 'ED-666', 'ED-667']
 provisional_count: 0
 provisional_ids: []
-open_count: 16
-open_ids: ['ED-640', 'ED-642', 'ED-643', 'ED-644', 'ED-645', 'ED-648', 'ED-649', 'ED-650', 'ED-651', 'ED-652', 'ED-655', 'ED-656', 'ED-657', 'ED-658', 'ED-632', 'ED-633']
+open_count: 12
+open_ids: ['ED-661', 'ED-662', 'ED-663', 'ED-664', 'ED-665', 'ED-670', 'ED-671', 'ED-672', 'ED-666', 'ED-667', 'ED-668', 'ED-669']
 flagged_count: 0
 flagged_ids: []
 
+# Cross-register blocker tracking (added per audit recommendation):
+external_blockers:
+  thread_stress_register:
+    location: tests/thread_stress/threadwork_audit_register.md
+    note: "Thread horizontal integration items. ED-629 archived; successor items ED-668-672 in active ledger. Full register retained for reference."
+  sim_debt:
+    location: tests/coverage_matrix.md
+    items: ['SIM-POL-R01', 'SIM-POL-R02', 'SIM-POL-R03', 'SIM-POL-R04', 'SIM-POL-R05']
+    count: 5
+    note: "Faction politics rank-ladder simulation deferred per Jordan instruction."
+  unsimulated_canonical:
+    note: "settlement_layer_v30 (497 lines), faction_politics_expanded_v1 (947 lines), throughline_resolutions_v1 (412 lines) committed without simulation coverage."
+
+total_blocker_view: >
+  5 P0 + 3 P1 editorial blockers in active ledger.
+  5 SIM-DEBT items deferred (coverage_matrix).
+  ~1,800 lines unsimulated canonical content.
+
 note: >
-  2026-04-17 (PP-661 close) ledger split: ED-659 (resolved) archived;
-  SIM-POL-R01/R02/R05 removed from ledger as duplicates (canonical locus is
-  tests/coverage_matrix.md, where all 5 SIM-POL-R01..R05 are tracked).
-  Prior 2026-04-17 editorial batch (ED-628) promoted 23 proposal files to CANONICAL;
-  open items on canonical docs carry forward.
-  Fetch canon/editorial_ledger.yaml for active items only when adding new editorials.
-  Fetch canon/editorial_ledger_archive.yaml only for audit/reference work.
+  2026-04-17 audit resolution commit:
+  - 3 duplicate ED IDs (663/664/665) renumbered to ED-670/671/672.
+  - 5 non-standard schema entries normalized (scope/file/priority → date/severity/affects).
+  - 9 batch 7/8 resolved EDs backfilled into archive (ED-589,621-626,629,630).
+  - Cross-register blocker tracking added.
+  - canonical_sources.yaml schema normalized (canonical_doc → canonical).
+  - Prior session archived ED-632/633/640-658/643; new items ED-661-669 added.

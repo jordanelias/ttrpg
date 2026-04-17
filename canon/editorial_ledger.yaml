@@ -1,7 +1,7 @@
 # Valoria Editorial Ledger — Active
-# next_id: 670
+# next_id: 673
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
-# Last updated: 2026-04-17 (PP-661 close — ledger split)
+# Last updated: 2026-04-17 (audit resolution — dedup, schema normalization, archive backfill, summary rebuild)
 
 editorial_decisions:
   - id: ED-661
@@ -44,58 +44,50 @@ editorial_decisions:
     affects: [designs/systems/npc_behavior_v30.md, designs/systems/faction_politics_expanded_v1.md]
 
 
-  - id: ED-663
-    scope: npc_behavior
-    file: designs/systems/npc_behavior_v30.md
-    description: "Thread -> Conviction Scar Triggers (3.4). 7x6 matrix. Certainty scaling. Season cap."
+  - id: ED-670
+    date: 2026-04-17
+    description: "Thread → Conviction Scar Triggers (§3.4). 7×6 matrix. Certainty scaling. Season cap. [Renumbered from duplicate ED-663]"
     status: open
-    priority: P0
-    date: "2026-04-17"
+    severity: P0
+    affects: [designs/systems/npc_behavior_v30.md]
 
-  - id: ED-664
-    scope: npc_behavior
-    file: designs/systems/npc_behavior_v30.md
-    description: "Player Conviction x Thread events. Spirit TN 7 Ob 1."
+  - id: ED-671
+    date: 2026-04-17
+    description: "Player Conviction × Thread events. Spirit TN 7 Ob 1. [Renumbered from duplicate ED-664]"
     status: open
-    priority: P0
-    date: "2026-04-17"
+    severity: P0
+    affects: [designs/systems/npc_behavior_v30.md]
 
-  - id: ED-665
-    scope: npc_behavior
-    file: designs/systems/npc_behavior_v30.md
-    description: "NPC Practitioner Coherence AI (4.3). 6-tier table. Warden RS override."
+  - id: ED-672
+    date: 2026-04-17
+    description: "NPC Practitioner Coherence AI (§4.3). 6-tier table. Warden RS override. [Renumbered from duplicate ED-665]"
     status: open
-    priority: P0
-    date: "2026-04-17"
+    severity: P0
+    affects: [designs/systems/npc_behavior_v30.md]
 
   - id: ED-666
-    scope: companion
-    file: designs/systems/companion_specification_v30.md
-    description: "Companion departure Thread triggers. Propagation from ED-663. RESOLVED 2026-04-17."
+    date: 2026-04-17
+    description: "Companion departure Thread triggers. Propagation from ED-670 (was ED-663)."
     status: open
-    priority: P1
-    date: "2026-04-17"
-
+    severity: P1
+    affects: [designs/systems/companion_specification_v30.md]
   - id: ED-667
-    scope: social_contest
-    file: designs/contest/social_contest_v30.md
-    description: "Adjudicator Thread response. RESOLVED 2026-04-17."
+    date: 2026-04-17
+    description: "Adjudicator Thread response."
     status: open
-    priority: P1
-    date: "2026-04-17"
+    severity: P1
+    affects: [designs/contest/social_contest_v30.md]
 
   - id: ED-668
-    scope: references
-    file: references/rs_budget.md
+    date: 2026-04-17
     description: "RS Budget centralization. All RS drain/recovery sources in single document."
     status: open
-    priority: P0
-    date: "2026-04-17"
+    severity: P0
+    affects: [references/rs_budget.md]
 
   - id: ED-669
-    scope: victory
-    file: references/wc_survival_spine.md
+    date: 2026-04-17
     description: "WC as survival spine. Two-contest architecture. IP/expedition tension. UI requirement."
     status: open
-    priority: P0
-    date: "2026-04-17"
+    severity: P0
+    affects: [references/wc_survival_spine.md]

@@ -3925,3 +3925,74 @@ editorial_decisions:
     severity: P2
     affects: [designs/systems/faction_politics_expanded_v1.md, designs/systems/npc_behavior_v30.md]
 
+  - id: ED-589
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "RM Presence marker mechanics undefined."
+    status: resolved
+    severity: P1
+    resolution: "Resolved batch 7 (ST-41 through ST-50): Strategy C canonical. Presence markers specified."
+
+  - id: ED-621
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "BG lobby cap."
+    status: resolved
+    severity: P2
+    resolution: "Resolved batch 7: cap applied."
+
+  - id: ED-622
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Varfell Parliamentary constraint (no-Senator note)."
+    status: resolved
+    severity: P2
+    resolution: "Resolved batch 7."
+
+  - id: ED-623
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "IP rate validated."
+    status: resolved
+    severity: P2
+    resolution: "Resolved batch 7: confirmed +3/battle, +2/season TC60+."
+
+  - id: ED-624
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Elske arc track."
+    status: resolved
+    severity: P2
+    resolution: "Resolved batch 8: Elske Loyalty arc validated."
+
+  - id: ED-625
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Excommunication procedure."
+    status: resolved
+    severity: P2
+    resolution: "Resolved batch 8: procedure specified."
+
+  - id: ED-626
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Accord/Order distinction."
+    status: resolved
+    severity: P2
+    resolution: "Resolved batch 7."
+
+  - id: ED-629
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Thread stress test P0 blockers (28 items). Full register: tests/thread_stress/threadwork_audit_register.md §A. Throughlines: tests/thread_stress/throughlines_2026-04-17.md."
+    status: resolved
+    severity: P0
+    resolution: "Resolved via throughline propagation 2026-04-17. 8 throughlines applied to 12 design files. RS budget document created. Remaining Thread integration tracked in Thread stress register and via ED-668-672."
+
+  - id: ED-630
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "RS Rupture needs Last Declaration scene spec."
+    status: resolved
+    severity: P2
+    resolution: "Resolved batch 8."
