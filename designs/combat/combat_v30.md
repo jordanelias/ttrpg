@@ -460,6 +460,10 @@ Public combat accumulates a Combat Reputation that modifies NPC behavior toward 
 
 Combat Reputation decays: −1 per year of no public combat.
 
+### §13.1b Economic Actions in Settlements (Throughline T2)
+
+Player Resources (0–5) interact with combat context: loot from combat (+1 Resources per valuable recovered). Equipment purchases (1 Resource) follow existing weapon/armor lists. Military equipment upgrades (3 Resources) provide +1 effective Power to one unit for one battle. Full Resources specification: player_agency_v30 §9. Trade action (Cognition + History, Port/City settlements): player_agency_v30 §9.
+
 ### §13.2b Settlement-Level Combat Consequences (NEW — per settlement_bridge_unification C-07)
 
 Combat in a settlement produces settlement-level consequences on top of province-level effects:

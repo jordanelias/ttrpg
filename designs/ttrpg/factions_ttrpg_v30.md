@@ -385,6 +385,31 @@ The Guilds apply economic pressure to any faction present in a territory where G
 
 ---
 
+## 8.9b The Ministry of the Peninsula (Institutional Actor — Throughline T4)
+
+**Ethical Framework: Administrative Proceduralism**
+- Actions maintaining institutional function (census, records, road maintenance, administrative transition): **−1 Ob**
+- Actions disrupting institutional procedure (altering records, blocking census, politicizing administration): **+1 Ob**
+
+**Partial sheet:** Influence 4, Stability 5. No Mandate, no Military, no Wealth, no Intel.
+
+The Ministry is infrastructure, not a faction. It administers roads, courts, tax collection, land records, census, and inter-territorial communication. It predates the current faction structure. Its continued function prevents Valoria from collapsing into feudal anarchy.
+
+**Leader: Registrar Lennart Haelgrund** (see npc_behavior_v30 §2.14)
+
+**Settlement-level priority tree:**
+1. If any Ministry-managed settlement has Order ≤ 1: Administrative Intervention (Order +1).
+2. If controlling faction changed: Administrative Transition (Govern Ob −1 for new controller's first action).
+3. Census (every 4 seasons): reveals population, economic conditions, anomalies. Available to controlling faction and any player with Ministry Standing 2+.
+4. Road/communication maintenance: passive. If Ministry management revoked from all settlements in a province, travel Ob +1 for that province.
+5. Archive requests: provide Documentary evidence from records. Ob 1 (Surface/Settled), 2 (Hidden), 3+ (Buried — deep archives).
+
+**Player interface:** Player-governors with Ministry management receive: −1 Ob on Administer action, one free Research action/season at Ministry archive, Census data access.
+
+**The Deep Archives:** Pre-Catastrophe records containing inconsistencies — place names for unknown geography, census counts for nonexistent settlements, references to a "Rendering Commission," documents that change between readings. The archives are a Thread artifact. See npc_behavior_v30 §2.14 (Haelgrund Arc C) and throughline_specifications §T4.6.
+
+---
+
 ## 8.10 Schoenland (Spoiler Actor)
 
 

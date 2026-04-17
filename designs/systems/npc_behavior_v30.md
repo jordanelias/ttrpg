@@ -32,8 +32,6 @@ Every named NPC holds three interconnected attributes.
 | Precedent | Value is inherited from what has been established | Legal continuity, constitutional procedure, institutional memory | Ad hoc decisions, revolutionary action |
 | Autonomy | Value is chosen by the actor | Self-determination, operational freedom, survival | Universal moral claims, institutional demands |
 | Continuity | Value is sustained through practice | The work itself, applied necessity, endurance | Politics, ideology, anything that does not directly serve the ongoing task |
-| Community | Value is constituted through collective being | The group, the living tradition, the practice as shared act | Individual claims of authority or exception; hierarchy that displaces communal determination |
-| Warden | Value is the maintenance of the boundary between rendering and collapse | The work of holding — Thread practice, Mending, substrate care | Political agendas that interfere with the maintenance work; ideology that claims priority over immediate necessity |
 
 
 ### §1.3 Resonant Style Taxonomy
@@ -231,40 +229,6 @@ Every named NPC holds three interconnected attributes.
 
 ---
 
-### §2.13 Crown Inner Circle (faction_politics_expanded_v1 §1.1d — ED-634, approved 2026-04-17)
-
-Five named officers of the Crown council. Full Stance Triangles provisional; confirmed in this entry.
-
-| Role | Name | Conviction | Resonant Style | Certainty | Notes |
-|------|------|------------|----------------|-----------|-------|
-| Royal Marshal | Wilhelm Voss | Order | Authority | 4 | Conservative Valorsmark aristocrat. Distrusts Löwenritter because LR answers to its own Grand Master. Disposition toward Ehrenwall: −1. Default Disposition vs Southern Einhir PC: −1. |
-| Lord Treasurer | Annalie Reichard | Precedent | Evidence | 5 | Mercantile family married into aristocracy. Distant Feldhaus cousin (publicly distanced). Disposition toward Baralta: +1 (constitutional alignment). Default vs Southern Einhir: −1. |
-| Spymaster | Kolbrun Thale | Autonomy | Consequence | 3 | Background obscured; rumored Southern Einhir heritage. Only inner-circle member with Niflhel contacts. Disposition toward Haelgrund: −1. Default vs Southern Einhir: 0 (caste-sympathetic). |
-| Archbishop's Representative | Father Gustav Linder | Faith | Authority | 5 | Church Canon seconded by Himlensendt. Reports to Himmensendt weekly. Disposition toward visible Thread practitioners: −2 (structural). Default vs Southern Einhir: −2. |
-| Captain of the Royal Guard / Löwenritter Liaison | Theodor Kreutz | Order | Authority | 4 | Knight-Commander of LR seconded to Royal Guard. Answers to both Ehrenwall and Almud; pre-designated allegiance to Almud personally. Coup Counter increment linked to his death or removal. Default vs Southern Einhir: −1. |
-
-**Leadership Deviation Ob:** 3 (inner circle; any one officer can file an Objection that costs 1 Legitimacy Token if overruled).
-
----
-
-### §2.14 Hafenmark Inner Council (faction_politics_expanded_v1 §1.2c — ED-635, ED-636, approved 2026-04-17)
-
-| Role | Name | Conviction | Resonant Style | Certainty |
-|------|------|------------|----------------|-----------|
-| Legal Advisor | Torvi Heljason | Precedent | Evidence | 5 |
-| Military Commander | Olaf Geirson | Order | Consequence | 4 |
-
----
-
-### §2.15 Varfell Jarl Council (faction_politics_expanded_v1 §1.3c — ED-637, ED-638, approved 2026-04-17)
-
-| Role | Name | Conviction | Resonant Style | Certainty |
-|------|------|------------|----------------|-----------|
-| Senior Jarl of the Western Highlands | Björn Holdar | Continuity | Consequence | 3 |
-| Skald-Chief | Ingrid Stenskald | Community | Solidarity | 3 |
-
----
-
 ### §2.10 Maret Uln (Varfell — Succession)
 
 Activates only if Vaynard is eliminated (Loyalty 0 + Mandate 0, per PP-486).
@@ -335,6 +299,32 @@ Cardinals are institutional officers, not independent actors. They activate as i
 
 ---
 
+### §2.14 Registrar Lennart Haelgrund (Ministry — Throughline T4)
+
+| Attribute | Value | Notes |
+|---|---|---|
+| Primary Conviction | Continuity | "The work continues regardless of who sits on the throne." |
+| Secondary Conviction | Precedent | When Continuity fails (the system is breaking down), Haelgrund falls back on procedural correctness. |
+| Ethical Framework | Administrative Proceduralism (Ministry) | Aligned: −1 Ob on actions maintaining institutional function. Contradictory: +1 Ob on actions disrupting procedure. |
+| Primary Resonant Style | Consequence | Show him that the Ministry's neutrality enables harm. His Continuity conviction claims the work is apolitical. Demonstrated political consequences challenge this. |
+| Secondary Resonant Style | Evidence | Present documentary evidence the Ministry has been politicized — census alterations, maintenance priority biases, intelligence leaks to factions. |
+| Thread Sensitivity | 12 (Hidden) | Encountered Thread-adjacent phenomena in deep archives. Documents that remember differently. Does not understand what he has seen. |
+| Certainty | 3 (Questioning) | Institutional certainty intact. Metaphysical certainty disrupted. |
+| Home Settlement | S-013 Ehrenfeld Market |
+
+**Beliefs:**
+1. "The Ministry serves whoever governs. We do not choose sides."
+2. "The archives are the peninsula's memory. Without them, we are nothing."
+3. "Something is wrong in the deep records. I do not know what, and I am afraid to find out."
+
+**Leadership Deviation Ob:** 1 (the Ministry IS neutrality — deviation costs almost nothing internally because no faction punishes the Ministry for being neutral).
+
+**Arc A: The Neutral.** Default. Ministry continues. No transformation.
+**Arc B: The Whistleblower.** Branch: player shows Haelgrund Evidence (Resonant Style) that Ministry records have been altered by a faction. Total Victory contest. Haelgrund goes public with the corruption, destabilizing the corrupting faction (Mandate −2) but exposing the Ministry to political retaliation (Ministry Stability −2).
+**Arc C: The Archivist.** Branch: player investigates the deep archives (Depth 3+ in Ministry settlements). Haelgrund confronts the Thread artifact nature of the archives. His TS advances to 20+. He becomes a covert Thread-aware bureaucrat — the most dangerous kind of ally, because he controls the peninsula's institutional memory and now understands that memory is metaphysically constituted.
+
+---
+
 ## §3 NPC BELIEFS: FORMATION, REVISION, AND SCARS
 
 ### §3.1 Belief Structure
@@ -354,8 +344,6 @@ An NPC revises a Belief when ALL of the following hold:
 
 
 ### §3.3 Scar Accumulation and Conviction Effects
-
-**Caste-transgressive Conviction modifier (ED-654, faction_politics_expanded_v1 §3.6):** A player of any caste who publicly adopts a Conviction that is caste-transgressive faces elevated Scar risk. Caste-transgressive pairings: Northern Einhir + Community or Warden Conviction; Southern Einhir + Order or Precedent Conviction. Effect: when a caste-transgressive Conviction is tested (Decisive Contest loss via that Conviction's weak point), Scar accumulation occurs at +1 rate (next Scar level triggers 1 Accounting earlier than standard). This applies only to public Conviction expression — covert Thread or RM practice that does not become Exposure is caste-neutral.
 
 | Scars | Effect on Conviction | Effect on Resonant Style | Effect on Behavior |
 |---|---|---|---|

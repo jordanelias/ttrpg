@@ -16,6 +16,21 @@ The RS threshold system (threadwork_v25 §5.3) defines **what** effects occur at
 
 ---
 
+## Settlement-Type Radiation Modifier (Throughline T1)
+
+Within a province, different settlement types experience radiation effects at different MS bands:
+
+| Settlement Type | Radiation Modifier |
+|----------------|-------------------|
+| Outpost (near Askeheim: S-011, S-033, S-034) | Effects manifest one MS band earlier than province level |
+| Town, Mine (distance-1/2 provinces) | Effects manifest at province level (no modifier) |
+| Fortress, City, Seat | Effects manifest one MS band later (institutional buffer) |
+| Cathedral | Population Certainty preserved one band later (psychological buffer). Physical substrate effects at province level. |
+
+The radiation creeps inward from the periphery. Frontier outposts fall first. The Seat is the last to feel the Catastrophe's reach.
+
+---
+
 ## Node Distance Map (from Askeheim T15)
 
 | Distance | Territories |

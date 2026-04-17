@@ -411,3 +411,36 @@ Convictions function as player-authored arc vectors. They have a source (the pla
 | ED-545 (Zoom In triggers) | Scene Slate Priority 1 IS the Zoom In system — any game state change generates a scene opportunity. |
 | ED-546 (RM actor) | An independent player aligned with RM pursues RM Beliefs without faction infrastructure. RM Community Weaving is a scene opportunity in territories with Piety ≤ 1. |
 | ED-547 (Fieldwork resource cost) | Scene action budget IS the fieldwork cost — each investigation scene costs a scene action that could have been spent elsewhere. |
+
+---
+
+## §9 — RESOURCES (Throughline T2)
+
+Personal economic capacity. Range: 0–5. Cap: 5.
+
+| Resources | Meaning |
+|-----------|---------|
+| 0 | Destitute. Cannot afford lodging, equipment, or services. |
+| 1 | Subsistence. Basic needs met. |
+| 2 | Comfortable. Equipment, travel, modest bribes. |
+| 3 | Prosperous. Fund small operations, hire agents, maintain household. |
+| 4 | Wealthy. Military equipment, sponsorships, settlement investment. |
+| 5 | Magnate. Faction-level economic influence. |
+
+**Starting Resources:** Crown officer: 2. Hafenmark merchant: 3. Varfell scholar: 2. Church functionary: 2. RM organizer: 1. Independent: 1.
+
+**Sources:** Faction salary (+1/season at Standing 2+, +2 at Standing 4+). Settlement governance (+1/season per settlement with Prosperity ≥ 3). Trade action (Cognition + History, Ob varies by settlement Trade stat, in Port/City). Guild contracts (+1 to +3, one-time). Loot (+1 per valuable). Gifts received (+1).
+
+**Uses:** Equipment (1). Bribe/gift (1). Hire agent for 1 season (2). Fund settlement development +1D (2). Military equipment upgrade (3). Sponsor settlement event, Order +1 (1). Economic Leverage via personal Resources (3).
+
+---
+
+## §10 — CONVICTION LEGACY (Throughline T8)
+
+When a player character retires or dies, the player designates one active Conviction as a Legacy Conviction. The new character inherits it transformed:
+
+- Unfulfilled goal "I will [X]" → "I will complete what [predecessor] began" or "I will understand why [predecessor] failed"
+- Fulfilled goal "I will [X]" → "I will protect [predecessor]'s achievement" or "I will surpass what [predecessor] built"
+- Relationship "I will [NPC]" → "I will honor [predecessor]'s bond with [NPC]" (if alive) or "I will carry [predecessor]'s grief" (if dead)
+
+Legacy Conviction occupies 1 of 3 Conviction slots. Can be revised normally. Renown inherited: floor(predecessor ÷ 2). Dispositions: predecessor's allies (+3) start at +1; enemies (−2) start at −1; others at 0. Knotted NPCs: Knot does not transfer but +1D on first Connect (Knot scar). Settlement governance transfers to designated protégé automatically.

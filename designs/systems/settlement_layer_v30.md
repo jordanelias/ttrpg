@@ -220,6 +220,34 @@ Each settlement generates 0–1 local events per season based on its stats and t
 | Mine type + Prosperity 3+ | Resource surplus. Province Wealth +1 at Accounting (economic contribution). |
 | Fortress type + hostile military in province | Garrison mobilization. Defense check: Defense pool vs Ob 2. Success: settlement holds. Failure: attacker bypasses or captures. |
 
+### §4.4 Thread Operations at Settlement Level (Throughline T1)
+
+Thread operations at Relational scale or above performed within a settlement produce settlement-level consequences alongside province-level MS effects. Cap: ±1 per settlement stat per season from Thread operations.
+
+| Operation (Relational+ scale) | Settlement Effect on Success | Settlement Effect on Failure |
+|-------------------------------|-----------------------------|-----------------------------|
+| Weaving | Order +1 (social configurations stabilize) | No settlement effect |
+| Pulling | No positive effect | Order −1 (co-movement disrupts local configurations) |
+| Past-Oriented Pulling | No positive effect | Prosperity −1 (paradox window disrupts routine) |
+| Dissolution | No positive effect | Defense −1 AND Order −1 (substrate torn, structures weaken) |
+| Mending | Prosperity +1 (substrate coherence restored, infrastructure strengthens) | No settlement effect |
+| Community Weaving | Order +1 AND Prosperity +1 (if PT ≤ 2 in province) | No settlement effect |
+| Lock | Defense +1 (configuration becomes architecturally permanent) | No settlement effect |
+
+Object/Personal scale operations: no settlement effect (scale too small).
+
+### §4.5 Local Actors (Throughline T7)
+
+Each settlement generates 1–2 Local Actors — lightweight non-faction NPCs representing the population.
+
+**Profile:** Name (culture-derived), Role (Elder/Magistrate/Merchant/Priest/Artisan/Farmer/Fisher/Miner/Scholar/Healer), one Conviction, Disposition (starting +1 toward governor, 0 toward all others).
+
+**Count by type:** Seat: 2. City: 2. Town: 1. Fortress: 1. Port: 2. Cathedral: 1. Mine: 1. Outpost: 0. Total: ~45–50 across 36 settlements.
+
+**Functions:** Generate Priority 5 Scene Slate entries. Provide free Settled-depth (Depth 1) information. Serve as governance feedback (their Disposition reflects population satisfaction). Recruitment pool for faction emergence (Stage 2→3 at Disposition +3).
+
+**Disposition drivers:** Player governs, Order improves: +1. Order declines: −1. Sponsor event: +1. Public combat in settlement: −2. Defend settlement from invasion: +2. Settlement changes controller: reset to 0. Player fulfills Conviction relevant to settlement: +1.
+
 ---
 
 # PART 5: MILITARY GRANULARITY
@@ -368,6 +396,23 @@ A 30-year game spans a generation. The first leaders (Almud, Baralta, Vaynard, H
 - Calamity radiation — operates at province level per node distance. Settlements within a province share the same radiation band.
 
 ---
+
+### §4.6 Settlement POI Templates (Throughline T3)
+
+Each settlement has 2–4 POIs across Depth levels, authored per settlement type.
+
+| Type | Depth 0 (Surface) | Depth 1 (Settled) | Depth 2 (Hidden) | Depth 3+ (Buried/Liminal) |
+|------|-------------------|-------------------|-------------------|--------------------------|
+| Seat | Court, public buildings | Administrative archives, court records | Private chambers, secret passages, intelligence archives | Thread-locked vault, hidden foundations |
+| City | Market square, artisan quarters | Guild halls, merchant ledgers | Smuggling routes, underground economy | Einhir-era foundations, Thread scars |
+| Town | Village square, inn | Elder's records, family histories | Concealed caches, factional safe houses | Remnant sites, oral Thread memory |
+| Fortress | Battlements, armory | Command archives, prisoner records | Secret sally ports, covert comms | Pre-Catastrophe fortification, Locked configurations |
+| Port | Docks, warehouses | Shipping manifests, harbor records | Smuggling networks, Niflhel supply nodes | Submerged Einhir harbor, maritime Thread signatures |
+| Cathedral | Nave, clergy quarters | Church archives, theological records | Hidden reliquaries, pre-Solmundic architecture, Inquisition files | Thread-locked artifacts, cathedral as Thread anchor |
+| Mine | Mine entrance, worker housing | Geological surveys, production records | Collapsed tunnels with artifacts | Einhir excavation sites, substrate exposure |
+| Outpost | Observation post | Patrol logs, environmental readings | Thread monitoring equipment, knowledge caches | Active Thread phenomena, Gap proximity |
+
+**Named narrative-critical POIs:** See throughline_specifications §T3.3 for 7 campaign-defining POIs including the Sealed Codex (Himmelenger), Foundation Stones (Valorsplatz Cathedral), and the Wound Core (Askeheim).
 
 # PART 9: OPEN ITEMS
 

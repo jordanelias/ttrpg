@@ -19,6 +19,12 @@
 > Ob tables in this document predate the three-axis Ob system (PP-622/PP-623).
 > **Canonical Ob values: params_threadwork.md §Three-Axis Ob System.**
 
+## SETTLEMENT-LEVEL THREAD CONSEQUENCES (Throughline T1)
+
+Thread operations at Relational scale or above produce settlement-level stat consequences alongside province-level MS effects. Full table: settlement_layer_v30 §4.4. Key effects: Weaving → Order +1. Dissolution Failure → Defense −1, Order −1. Mending → Prosperity +1. Community Weaving → Order +1, Prosperity +1. Lock → Defense +1 (permanent). Cap: ±1 per settlement stat per season from Thread.
+
+Thread perception is settlement-modulated: +1 Ob in Cathedral settlements (rendering thick with doctrine). −1 Ob in Outposts near Askeheim (rendering thin). Einhir heritage settlements reveal historical Thread layers on Success.
+
 ## MODE APPLICABILITY INDEX
 *Added 2026-04-02 — applied per user session instruction*
 

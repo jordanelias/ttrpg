@@ -180,6 +180,8 @@ A practitioner Knotted to an NPC may Thread-Read that NPC's Thread configuration
 
 ### §3.1 Points of Interest (POI)
 
+**Settlement anchoring (Throughline T3):** POIs are now assigned per settlement, not per province. Each settlement has 2–4 POIs across Depth levels. POI templates by settlement type and named narrative-critical POIs are defined in settlement_layer_v30 §4.6 and throughline_specifications §T3.3.
+
 
 **POI Categories:**
 

@@ -104,3 +104,19 @@ Reputation and Standing (oscillating, BG):
 ---
 
 *Registry maintained by valoria-orchestrator. Update in same commit as any clock/track creation or modification.*
+
+## Player Tracks (Throughline T2, T7)
+
+| Track | Range | Start | Source |
+|-------|-------|-------|--------|
+| Resources | 0–5 | Varies by background (1–3) | player_agency_v30 §9 |
+
+## Settlement Tracks (Throughlines T1, T7)
+
+| Track | Range | Start | Source |
+|-------|-------|-------|--------|
+| Settlement Prosperity | 0–5 | Per settlement registry | settlement_layer_v30 §1.3, §2.1 |
+| Settlement Defense | 0–5 | Per settlement registry | settlement_layer_v30 §1.3, §2.1 |
+| Settlement Order | 0–5 | Per settlement registry | settlement_layer_v30 §1.3, §2.1 |
+| Local Actor Disposition | −3 to +5 | +1 toward governor, 0 others | settlement_layer_v30 §4.5 |
+| Guild Favor (per settlement) | 1–7 | 3 (Guild-managed) / 1 (other) | player_agency_v30 §9 (T2) |

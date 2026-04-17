@@ -407,3 +407,42 @@ A Siege is an extended encirclement operation targeting a fortified territory. I
 **RS cost:** Siege (per season) −1 RS (per threadwork_v30.md §5.2 — canonical; this entry formally incorporates that cost into playable faction mechanics).
 
 **Calibration note (from ST-44):** Fort 3 at Military 4 is Ob 5. P(Success) ≈ 2% per season. Fort 3 is effectively impregnable to Military 4 through Siege. Fort 3 requires Military 5+ for reliable progress (~25% Success per season at 5D Ob 5). The correct counter to an impregnable Fort 3 is political (reduce defender Mandate until garrison is withdrawn voluntarily) or Sabotage (Tribune Intel OW in the territory, −1 Ob to subsequent Siege).
+
+---
+
+## §3 — ALTONIAN INVASION CAMPAIGN (Throughline T6)
+
+At IP threshold, the Altonian Vanguard enters the peninsula. Settlement-by-settlement target sequence:
+
+### §3.1 Primary Route (Lowenskyst, NE Pass)
+
+| Stage | Target | Objective | Bypass |
+|-------|--------|-----------|--------|
+| 1 | S-006 Lowenskyst Fortress (Def 4) | Must capture or siege | Only if Def reduced to ≤ 1 |
+| 2 | S-005 Kronmark Watchtower (Def 3) | Capture or bypass | Military > Def + 2 |
+| 3 | S-004 Kronmark Town | Capture (supply base) | Cannot bypass |
+| 4 | S-001 Valorsplatz Palace | Strategic objective | — |
+
+### §3.2 Secondary Route (Spartfell, NW Pass — IP 75+)
+
+| Stage | Target | Objective | Bypass |
+|-------|--------|-----------|--------|
+| 1 | S-019 Spartfell Fortress (Def 3) | Must capture or siege | Only if Def reduced to ≤ 1 |
+| 2 | S-020 Spartfell Village | Capture for supply | Military > Def + 2 |
+| 3 | S-021 Halvarshelm Mines | Economic target | Bypassable |
+| 4 | S-015 Gransol Parliament | Strategic objective | — |
+
+### §3.3 Naval Route (Schoenland Permission, IP 75+)
+
+| Stage | Target | Objective |
+|-------|--------|-----------|
+| 1 | S-002 Valorsplatz Riverside (Port) | Landing site |
+| 2 | S-001 Valorsplatz Palace | Direct strike |
+
+### §3.4 Occupation Effects
+
+Vanguard-occupied settlements: Defense = Vanguard Military (5–6). Order = 0. Prosperity −2. CV = 0.
+
+### §3.5 Löwenritter Coup Interaction
+
+Coup fires → Crown border defense weakens → IP +5 (acceleration). Lowenskyst Fortress garrison may be reassigned to coup operations, reducing S-006 Defense. The player must choose: stabilize post-Coup settlements or defend the border.

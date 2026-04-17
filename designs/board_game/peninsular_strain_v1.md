@@ -150,6 +150,21 @@ RM does not use Accord. RM controls T9 (if taken via Cultural Uprising) through 
 
 Löwenritter uses Accord but gains access to **Martial Governance**: a Govern variant using Military as pool instead of Influence. Accord +1 on Success, same as standard Govern. Ob = floor(Prosperity/2) + 2 (harder than civil governance). Löwenritter cannot exceed Accord 2 via Martial Governance (cap); reaching Accord 3 requires standard Govern with Influence pool.
 
+### §2.6b Martial Law at Settlement Level (Throughline T5)
+
+When the Löwenritter Coup fires, all Crown-controlled settlements enter Martial Law:
+
+| Settlement Type | Under Martial Law |
+|----------------|-------------------|
+| Fortress | No change. Löwenritter governance is natural. |
+| Seat | Military governor. Govern pool: Military. Govern Ob +1. Order −1 at onset. |
+| City | Military governor. Prosperity −1 at onset. Guild management revoked unless explicitly re-granted (Influence, Ob 2). |
+| Cathedral | Church management NOT revoked (Martial Honour respects Church authority). |
+| Town | Military patrol. Govern Ob +2. |
+| Port | Trade continues under supervision. Prosperity maintained if Guilds retained. |
+
+**Governance cap under Martial Law:** Prosperity cannot exceed Coup-onset value. Order cannot exceed 2. Löwenritter NEEDS civilian partners (Ministry, Guilds, player-governors) to govern effectively. Ehrenwall's Outreach to capable players intensifies during Martial Law.
+
 ### §2.7 Personal-Scale Accord Pathways (NEW — Hybrid/TTRPG)
 
 The faction-level Accord changes in §2.3–2.4 operate at BG scale. In Hybrid and TTRPG modes, the player's personal actions can also affect Accord via Domain Echo (scale_transitions_v30 §5.5). This section expands the available pathways.
