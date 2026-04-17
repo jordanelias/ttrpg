@@ -280,3 +280,23 @@
 | SIM-POL-03 | Hann-as-player dual-agenda 30-season sim | OPEN |
 | SIM-POL-04 | Edeyja pre-emergence warden season structure | OPEN |
 
+
+## Arc Expansion v1 — 2026-04-16 (ED-591 through ED-609)
+
+19 arc design proposals — all provisional. Full document: designs/systems/arc_expansion_v1_2026-04-16.md
+
+| Category | Coverage added |
+|----------|---------------|
+| Cardinal Officers (4) | Full A/B/C arcs for Fortitude/Justice/Prudence/Temperance |
+| Ehrenwall (LR) | Full A/B/C + 6-criteria coup evaluation + succession |
+| Torsvald (Riskbreakers) | Full A/B/C + TS development arc |
+| Vossen / Hann (RM) | Full arc expansions + 3-trajectory Arc C for Vossen |
+| Orm (Second Warden) | Full A/B/C including self-sacrifice Arc C |
+| Niflhel operatives | Quartermaster + The Quiet One full arcs |
+| Almud / Vaynard | Arc skeleton fills + Arc C 3-trajectory (Almud) |
+| Environmental conditioners | RS/TC/Strain → systematic NPC arc effects |
+| Cross-NPC conditioners | 4 dependency chains across faction boundaries |
+| Obligation conditioners | 6 Obligation-event arc triggers |
+| Zoom In triggers | 6 new Mandatory + 5 new World-State |
+| New mechanics | Mediation contest type; Torben Conviction emergence |
+
