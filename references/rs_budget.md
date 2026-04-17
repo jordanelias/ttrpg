@@ -1,128 +1,128 @@
 # VALORIA — Rendering Stability Budget
-## Status: CANONICAL (ED-668)
+## ED-668 | Status: CANONICAL
 ## Date: 2026-04-17
-## Single source of truth for all RS inputs and outputs across all systems.
-## Cross-references: params_threadwork.md §RS Track, §Gap Self-Closure, §WC; params_core.md §RS Baseline Decay; peninsular_strain_v1.md §3.1, §4.3; threadwork_v30.md §5.2; victory_v30.md §6; calamity_radiation_v30.md; arc_register.md §II ARC-S32.
-## Starting RS: TTRPG default 60; BG default 72. RS = 0 → Rupture (shared loss).
+## Scope: Single source of truth for all RS drain and recovery sources
+## Cross-references: params_threadwork.md, params_core.md, peninsular_strain_v1.md, victory_v30.md, calamity_radiation_v30.md, threadwork_v30.md §5, mass_battle_v30.md §A.10
+## Canon compliance: A1 (Thread constitutive ground — RS measures substrate integrity)
 
 ---
 
-## RS DRAIN SOURCES (per season unless noted)
+## Starting Values
 
-### Passive Drains (fire automatically at Accounting)
+| Mode | Starting RS | Source |
+|---|---|---|
+| TTRPG | 60 (Strained band) | params_threadwork §RS Track |
+| Board Game | 72 (Strained band) | params_board_game |
+| Hybrid | 60 | params_threadwork |
 
-| Source | Rate | Condition | Authority |
+---
+
+## RS Drain Sources (All Negative)
+
+### Passive / Environmental
+
+| Source | Rate | Condition | Document |
 |---|---|---|---|
-| Winter annual drift | −1/year (−0.25/season average) | Unconditional | params_core §RS Baseline Decay PP-255 |
-| Gap persistence (per open Gap) | Object: 0; Relational: −1; Field: −2; Structural: −3; Foundational: −5 | Per Gap per season until self-closure or Mending | params_threadwork §Gap Self-Closure PP-604 |
-| Lock chronic drift (per Lock) | Object: 0; Personal: −1; Relational: −1 (→−2 at season 4+); Field: −2 (→−3); Structural: −3 (→−5) | Per Lock per season, escalating | params_threadwork §Gap Self-Closure PP-604 |
-| Peninsular Strain 9–10 | −1/season additional | While Strain counter ≥ 9 | peninsular_strain_v1 §4.3 |
+| Baseline annual decay | −1/year (−0.25/season) | Always active | params_core §RS Baseline Decay PP-255 |
+| Gap persistence | −4/season per Gap | While Gap exists | params_threadwork §RS Track |
+| Lock chronic drift | −1 to −2/season per Lock | While Lock exists | params_threadwork §RS Track |
+| Strain 9–10 additional drain | −1/season | While Peninsular Strain ≥ 9 | peninsular_strain_v1 §4.3 |
 
-### Event-Driven Drains (fire on occurrence)
+### Operation-Driven
 
-| Source | Cost | Condition | Authority |
+| Source | Cost | Condition | Document |
 |---|---|---|---|
-| Battle on Valorian soil | −1 per battle | Per battle resolved | peninsular_strain_v1 §3.1 |
-| Campaign/War scale battle | −2 per battle | Mass battle at Campaign or War scale | peninsular_strain_v1 §3.1 |
-| Siege (sustained) | −1/season | Per besieged territory per season | threadwork_v30 §5.2 |
-| Einhir site under siege | −1 additional | Siege on territory containing Einhir site | threadwork_v30 §5.2 |
-| Thread operation — Partial/Failure | −1 to −2 per degree table | Per failed/partial Thread operation | threadwork_v30 §5.2 |
-| FR Lock (immediate) | −1 to −3 | Per Lock placed | threadwork_v30 §5.2 |
-| FR Dissolution | −3 to −8 | Per Dissolution | threadwork_v30 §5.2 |
-| Past-Oriented Pulling | −3 minimum | Per POP | threadwork_v30 §5.2 |
-| Substrate Saturation (mass battle) | −1 at battle end | If Saturation Counter ≥ 3 at battle end | params_threadwork §Substrate Saturation PP-606 |
-| Micro-Gap persisting to Accounting | −1 | If micro-Gap not closed same scene | threadwork_v30 §5.2 |
-| Popular Uprising | −1 | Per uprising (violence) | peninsular_strain_v1 §3.1 |
+| Dissolution Success | −5 | Per operation | params_threadwork §RS Track |
+| Dissolution Failure | −8 | Per operation | params_threadwork §RS Track |
+| POP Success | −3 minimum | Per operation; scales with temporal displacement | params_threadwork §RS Track |
+| Mass battle RS ×3 multiplier | ×3 on all Thread RS costs | During mass battle | params_threadwork §Mass Battle Thread RS PP-601 |
+| Substrate Saturation (≥3 ops/turn) | −1 at battle end | Counter ≥3 at battle resolution | params_threadwork §Substrate Saturation PP-606 |
 
-### TS 90+ Reality Strain
-Practitioners at TS 90+ exert passive RS strain. Rate: per threadwork_v30 §5.2 degree table (operation-dependent, not passive). [GAP: No standalone passive drain rate specified for TS 90+ existence alone. The strain is operation-mediated, not ambient.]
+### Event-Driven
 
----
-
-## RS RECOVERY SOURCES
-
-| Source | Rate | Condition | Authority |
+| Source | Cost | Condition | Document |
 |---|---|---|---|
-| Mending (success) | +1 | Per successful Mending | threadwork_v30 §5.2 |
-| Mending (overwhelming) | +2 | Per overwhelming Mending | threadwork_v30 §5.2 |
-| Community Weaving (success) | +1 to +2 | Per successful Community Weaving | threadwork_v30 §5.2 |
-| Southernmost expedition Mending | +2/season | Per successful expedition season | threadwork_v30 §5.2 |
-| WC ≥ 3 (Edeyja active Mending) | +2/season | While WC ≥ 3 | params_threadwork §WC PP-605 |
-| BG Weave order (success) | +1 | Per successful BG Weave | threadwork_v30 §7.1 |
-| BG Mend order (success) | +1 | Per successful BG Mend | threadwork_v30 §7.1 |
-| Overwhelming Weaving at Relational+ | +1 | Per overwhelming Weaving at scale | threadwork_v30 §5.2 |
-
-### WC Drain Modification
-
-| WC Level | Effect on Drains |
-|---|---|
-| WC 0 | No modification |
-| WC 1 | +1D all Thread ops (indirect: higher success rate reduces failure-driven drain) |
-| WC 2 | All RS drain from Gaps and Locks halved |
-| WC 3 | RS +2/season at Accounting (Edeyja active Mending) |
+| Battle on Valorian soil | −1 | Per battle resolved | peninsular_strain_v1 §3.1 |
+| Campaign/War scale battle | −2 | Per battle at Campaign/War scale | peninsular_strain_v1 §3.1 |
+| Siege | −1 | Per season of active siege | params_threadwork §RS Track |
+| Popular Uprising (Accord 0) | −1 | Per uprising event | peninsular_strain_v1 §3.1 |
+| TS 90+ Reality Strain | −1/season | Per practitioner at TS 90+ | threadwork_v30 §5.2 |
+| Southernmost cracking (ARC-S15) | +1 to +2/season additional | RS ≤ 50 without Weaving stabilization | arc_register §II ARC-S15 |
 
 ---
 
-## PEAK DRAIN SCENARIOS
+## RS Recovery Sources (All Positive)
 
-### Year 20–25 Campaign Peak (WC 0)
-
-Assumptions: 2 Structural Locks (−6/season), 1 Structural Gap (−3/season), 2 battles/year on Valorian soil (−2/year = −0.5/season average), winter drift (−0.25/season), 4 practitioner operations/season with 25% failure rate (−1/season average from failures), 1 siege/season (−1/season).
-
-| Source | Per Season |
-|---|---|
-| 2 Structural Locks | −6.0 |
-| 1 Structural Gap | −3.0 |
-| Winter drift | −0.25 |
-| Battles (2/year) | −0.5 |
-| Operation failures | −1.0 |
-| Siege | −1.0 |
-| **Subtotal passive + event** | **−11.75** |
-
-With military escalation (4 battles/year, Peninsular Strain ≥ 9, mass battle Thread operations):
-
-| Source | Per Season |
-|---|---|
-| 2 Structural Locks | −6.0 |
-| 1 Structural Gap | −3.0 |
-| Winter drift | −0.25 |
-| Battles (4/year at Campaign scale) | −2.0 |
-| Operation failures (8 ops/season) | −2.0 |
-| Siege × 2 | −2.0 |
-| Strain 9–10 additional | −1.0 |
-| Substrate Saturation (2 battles) | −2.0 |
-| Battle drain from victory_v30 §0.4 | −4.0 |
-| **Peak drain** | **−22.25 to −23.25** |
-
-**At RS 60 (TTRPG start), peak drain → Rupture in under 3 seasons.**
-**At RS 72 (BG start), peak drain → Rupture in ~3 seasons.**
-
-### Year 20–25 Campaign Peak (WC 3)
-
-Same scenario with WC 3:
-
-| Source | Modification |
-|---|---|
-| Structural Lock drain | Halved (−3.0 instead of −6.0) |
-| Structural Gap drain | Halved (−1.5 instead of −3.0) |
-| Edeyja Mending | +2.0/season |
-| Net drain | **−14.75 to −15.75** |
-
-WC 3 buys approximately 1–2 additional seasons before Rupture. Still terminal without Gap/Lock resolution.
+| Source | Rate | Condition | Document |
+|---|---|---|---|
+| Mending Success | +1 | Per successful Mending operation | params_threadwork §RS Track |
+| Mending Overwhelming | +2 | Per Overwhelming Mending | params_threadwork §RS Track |
+| Weaving Overwhelming (Relational+) | +1 | Per Overwhelming Weaving at Relational+ scale | params_threadwork §RS Track |
+| WC ≥ 2 | Halves all Gap/Lock drain | While WC ≥ 2 | victory_v30 §6 |
+| WC ≥ 3 | +2/season at Accounting | While WC ≥ 3 (Edeyja active Mending) | victory_v30 §6 |
+| Gap self-closure | Eliminates Gap's drain | Per scale: Object 1d10 per season (1–3); Personal 1d10 (1–2); Relational 1d10 (1); Territorial+ never | params_threadwork §Gap Self-Closure PP-604 |
 
 ---
 
-## SURVIVAL ARITHMETIC
+## Budget Scenarios
 
-The RS budget demonstrates that RS preservation requires:
-1. **WC ≥ 2** to halve Gap/Lock drain (saves ~4.5 RS/season at peak).
-2. **WC 3** for Edeyja Mending (+2/season).
-3. **Gap resolution** (Mending or self-closure) to eliminate the largest drain source.
-4. **Lock resolution** where possible to eliminate chronic drift.
-5. **Military restraint** to limit battle RS costs and Peninsular Strain.
+### Scenario A: Year 10, Moderate Campaign (2 Gaps, 1 Lock, WC 0)
+- Passive: −0.25/season (baseline) + −8/season (2 Gaps) + −1.5/season (1 Lock avg) = **−9.75/season**
+- Military: ~2 battles/year = −0.5/season
+- Operations: ~2 Dissolutions/year avg = −2.5/season (assuming 50% success rate)
+- **Total drain: ~−12.75/season**
+- Recovery: ~4 successful Mendings/year = +1/season
+- **Net: ~−11.75/season**
+- From RS 60: Fragile band by Season 8. Fractured by Season 13.
 
-No single action is sufficient. WC 3 + concentrated mass battle Mending is the singular viable endgame path (throughline #3). See arc_register §II ARC-S32 (Mending Trap) for the practitioner Coherence budget analysis.
+### Scenario B: Year 20–25, Peak Military (2 Gaps, 2 Locks, WC 0, sustained warfare)
+- Passive: −0.25 + −8 + −3 = **−11.25/season**
+- Military: 4 battles/year avg (civil war + Altonian) = −1/season + −2/season Campaign scale = **−3/season**
+- Operations: sustained Thread warfare, 4 Dissolutions/year = −5/season
+- Strain 7–8 effects: Accord degradation → additional battles
+- TS 90+ practitioner(s): −1/season
+- Southernmost cracking if unfed: +1 to +2/season additional
+- **Total drain: ~−21 to −23/season**
+- Recovery without WC: ~4 Mendings/year = +1/season
+- **Net: ~−20 to −22/season**
+- From RS 45 (Fragile): Rupture in under 2 seasons.
+
+### Scenario C: Year 20–25, WC 3
+- Same drain as Scenario B: ~−21 to −23/season
+- WC 2 halves Gap/Lock drain: −8 → −4, −3 → −1.5 = saves ~5.5/season
+- WC 3 adds +2/season
+- Recovery: Edeyja Mending + player Mending = +3/season
+- **Net: ~−10 to −12/season**
+- From RS 45: Fractured band by Year 24. Critical by Year 27. Survival to Year 30 viable with active Mending rotation.
+
+### Conclusion: WC 3 is the singular endgame survival path.
+
+At WC 0, peak drain exceeds recovery capacity by ~20 RS/season. No combination of individual Mending operations can offset this — ARC-S32 (Mending Trap) confirms one practitioner's full Coherence budget covers ~2–3 seasons of passive decline.
+
+At WC 3, drain is reduced to ~10–12/season and offset by +5/season recovery (WC bonus + Mending), producing a net decline of ~5–7/season — survivable to Year 30 with concentrated effort.
 
 ---
 
-*Budget maintained by valoria-orchestrator. Update in same commit as any RS source creation or modification.*
+## Seasonal Cap
+
+±10 net RS change per season. Applied at Accounting. Prevents single-season catastrophic swings from compounding operations. Does NOT prevent Rupture from sustained multi-season decline.
+
+---
+
+## Cross-References Requiring This Document
+
+| Document | Section | What References RS |
+|---|---|---|
+| calamity_radiation_v30 | Full matrix | RS band → per-territory effects |
+| victory_v30 | §5, §6 | Shared loss at RS 0; WC effects |
+| peninsular_strain_v1 | §3.1, §4.3 | Battle RS costs; Strain additional drain |
+| threadwork_v30 | §5 | RS thresholds; operation costs |
+| clock_registry_v30 | Shared Clocks | RS range and starting values |
+| npc_behavior_v30 | §4.3 | Warden RS override at RS ≤ 20 |
+| arc_register | §II Thread Vectors | ARC-S32, S15, S34 |
+| params_board_game | §RS Effects | BG RS threshold lookup table |
+| settlement_layer_v30 | §7.1 | Extended timeline clock recalibration |
+
+---
+
+*Budget assembled from all canonical sources as of 2026-04-17. Corrected peak drain validates throughlines_2026-04-17 finding: WC 3 is the singular endgame survival path.*

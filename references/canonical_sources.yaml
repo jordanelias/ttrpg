@@ -319,3 +319,18 @@ systems:
     status: design
     design_doc: designs/audit/throughline_specifications_2026-04-17.md
     notes: "8 structural gap specifications: Thread-settlements, player economy, POIs, Ministry, Loewenritter governance, Altonian campaign, local populace, conviction legacy"
+
+  rs_budget:
+    status: active
+    canonical: references/rs_budget.md
+    notes: "RS budget. ED-668. 2026-04-17."
+
+  wc_survival_spine:
+    status: active
+    canonical: references/wc_survival_spine.md
+    notes: "WC survival spine. ED-669. 2026-04-17."
+
+  thread_horizontal_integration:
+    status: active
+    canonical: designs/systems/thread_horizontal_integration_spec.md
+    notes: "Thread integration spec. ED-673-681. 2026-04-17."

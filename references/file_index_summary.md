@@ -52,3 +52,8 @@ coverage_matrix_active: tests/coverage_matrix.md
 coverage_matrix_archive: tests/coverage_matrix_archive.md
 - references/rs_budget.md — RS Budget (all drain/restoration sources, peak scenarios, WC modifiers)
 - references/videogame_mode_spec.md — Videogame Mode Collapse (single-mode extraction reference for Godot)
+
+## Thread Horizontal Integration — 2026-04-17
+rs_budget: references/rs_budget.md
+wc_survival_spine: references/wc_survival_spine.md
+thread_horizontal_integration: designs/systems/thread_horizontal_integration_spec.md

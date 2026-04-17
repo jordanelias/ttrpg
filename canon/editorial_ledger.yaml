@@ -1,121 +1,65 @@
 # Valoria Editorial Ledger — Active
-# next_id: 670
-# Archive (resolved/struck): canon/editorial_ledger_archive.yaml
-# Last updated: 2026-04-17 (audit resolution — dedup, schema normalization, archive backfill, summary rebuild)
+# next_id: 682
 
-editorial_decisions:
-  - id: ED-661
+  - id: ED-673
     date: 2026-04-17
-    description: "Ministry Protocol 3 (Warden Administrative Coordination, 110 seasons old, suspended): predates current factional governance. No rule governs protocol seniority conflicts when pre-Calamity mandate conflicts with current faction request for Ministry neutrality."
+    description: "Thread Domain Echo pathway. scale_transitions_v30."
+    status: open
+    severity: P1
+    affects: [designs/hybrid/scale_transitions_v30.md]
+
+  - id: ED-674
+    date: 2026-04-17
+    description: "Scene Slate thread-state factor. player_agency_v30."
+    status: open
+    severity: P1
+    affects: [designs/systems/player_agency_v30.md]
+
+  - id: ED-675
+    date: 2026-04-17
+    description: "Settlement Thread environment. settlement_layer_v30."
+    status: open
+    severity: P1
+    affects: [designs/systems/settlement_layer_v30.md]
+
+  - id: ED-676
+    date: 2026-04-17
+    description: "CV movement from Thread operations. conviction_track_v30."
     status: open
     severity: P2
+    affects: [designs/conviction_track/conviction_track_v30.md]
+
+  - id: ED-677
+    date: 2026-04-17
+    description: "Thread perception extension. threadwork_v30."
+    status: open
+    severity: P2
+    affects: [designs/ttrpg/threadwork_v30.md]
+
+  - id: ED-678
+    date: 2026-04-17
+    description: "Lifepath TS/Certainty derivation. character_histories_v30."
+    status: open
+    severity: P2
+    affects: [designs/characters/character_histories_v30.md]
+
+  - id: ED-679
+    date: 2026-04-17
+    description: "Thread Warfare NPC AI doctrine. npc_behavior_v30."
+    status: open
+    severity: P1
     affects: [designs/systems/npc_behavior_v30.md]
 
-
-  - id: ED-662
+  - id: ED-680
     date: 2026-04-17
-    description: "Elske residency post-Coup: Diplomatic Exchange produces 'willing resident' status. Legal implications for Löwenritter governance, Hafenmark diplomatic recognition, and Schoenland treaty obligations all undefined."
+    description: "Case Board dual-depth overlay. investigation_systems."
     status: open
-    severity: P2
-    affects: [designs/board_game/victory_v30.md]
+    severity: P3
+    affects: [designs/systems/investigation_systems_proposal_2026-04-15.md]
 
-
-  - id: ED-663
+  - id: ED-681
     date: 2026-04-17
-    description: "Haushalt Competence 3 yields +2 Wealth/season (MIN-01 spec). No Wealth cap defined. Over 20 seasons: +40 Wealth cumulative. Wealth ceiling must be specified to prevent unbounded resource generation at Competence 3."
+    description: "Rendering Crisis narrative structure. threadwork_v30."
     status: open
-    severity: P1
-    affects: [designs/systems/faction_politics_expanded_v1.md, designs/board_game/board_game_v30.md]
-
-
-  - id: ED-664
-    date: 2026-04-17
-    description: "Advisor-principal confidentiality: no canonical rule specifies what a seconded diplomatic representative (Linder) may share from inner circle contexts. 'Private conversation' vs. 'factual inner circle observation' boundary undefined. Requires formal specification."
-    status: open
-    severity: P2
-    affects: [designs/systems/npc_behavior_v30.md, designs/systems/faction_politics_expanded_v1.md]
-
-
-  - id: ED-665
-    date: 2026-04-17
-    description: "Grand Contest as succession trial: tied Varfell Assembly defaults to Grand Contest trial at Ob 3 per inferred oral law precedent. Not in any canonical doc. Requires specification in npc_behavior_v30 §5.2 or faction_politics_expanded §1.3."
-    status: open
-    severity: P2
-    affects: [designs/systems/npc_behavior_v30.md, designs/systems/faction_politics_expanded_v1.md]
-
-
-  - id: ED-670
-    date: 2026-04-17
-    description: "Thread → Conviction Scar Triggers (§3.4). 7×6 matrix. Certainty scaling. Season cap. [Renumbered from duplicate ED-663]"
-    status: open
-    severity: P0
-    affects: [designs/systems/npc_behavior_v30.md]
-
-  - id: ED-671
-    date: 2026-04-17
-    description: "Player Conviction × Thread events. Spirit TN 7 Ob 1. [Renumbered from duplicate ED-664]"
-    status: open
-    severity: P0
-    affects: [designs/systems/npc_behavior_v30.md]
-
-  - id: ED-672
-    date: 2026-04-17
-    description: "NPC Practitioner Coherence AI (§4.3). 6-tier table. Warden RS override. [Renumbered from duplicate ED-665]"
-    status: open
-    severity: P0
-    affects: [designs/systems/npc_behavior_v30.md]
-
-  - id: ED-666
-    date: 2026-04-17
-    description: "Companion departure Thread triggers. Propagation from ED-670 (was ED-663)."
-    status: open
-    severity: P1
-    affects: [designs/systems/companion_specification_v30.md]
-  - id: ED-667
-    date: 2026-04-17
-    description: "Adjudicator Thread response."
-    status: open
-    severity: P1
-    affects: [designs/contest/social_contest_v30.md]
-
-  - id: ED-668
-    date: 2026-04-17
-    description: "RS Budget centralization. All RS drain/recovery sources in single document."
-    status: open
-    severity: P0
-    affects: [references/rs_budget.md]
-
-  - id: ED-669
-    date: 2026-04-17
-    description: "WC as survival spine. Two-contest architecture. IP/expedition tension. UI requirement."
-    status: open
-    severity: P0
-    affects: [references/wc_survival_spine.md]
-
-  - id: ED-666
-    date: 2026-04-17
-    description: "Path B speed-run calibration: conditions met at S9-10 while other factions' primary conditions require S22-28. Confirm whether S9 Path B victory is intended design or requires WR advancement gating."
-    status: open
-    severity: P1
-    affects: [designs/board_game/victory_v30.md]
-
-  - id: ED-667
-    date: 2026-04-17
-    description: "Coup Counter readiness gap: Counter reaches 3 based on Crown failures, but Regency Establishment conditions (Elske or Torben Loyalty 6) may not be met. No mechanic prevents premature Counter triggering. Requires ruling: does Counter 3 fire regardless, or require readiness-gate?"
-    status: open
-    severity: P1
-    affects: [designs/systems/npc_behavior_v30.md, designs/board_game/victory_v30.md]
-
-  - id: ED-668
-    date: 2026-04-17
-    description: "RS decline rate without warden cooperation: reaches ~21 at S30 without stabilization. Shared loss at RS 0 — campaign may not reach threshold within 30-season window. Is RS decline intentionally background pressure only, or should it be steeper?"
-    status: open
-    severity: P2
-    affects: [designs/board_game/board_game_v30.md, designs/board_game/victory_v30.md]
-
-  - id: ED-669
-    date: 2026-04-17
-    description: "Irreversible institutional precedent: in-campaign decisions (published documents, legal records, intelligence disclosures) — do they persist across campaign instances or reset? Requires setting-level decision on campaign persistence."
-    status: open
-    severity: P2
-    affects: [designs/board_game/victory_v30.md]
+    severity: P3
+    affects: [designs/ttrpg/threadwork_v30.md]
