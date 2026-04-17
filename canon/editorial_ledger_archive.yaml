@@ -3636,3 +3636,11 @@ editorial_decisions:
   resolution: "Jordan 2026-04-16: by-design. Guilds are a spoiler/pressure faction; solo victory moot per design intent."
   affects: ['designs/board_game/victory_v30.md']
 # Batch 8 archived: ['ED-542', 'ED-586', 'ED-587', 'ED-589', 'ED-611', 'ED-615', 'ED-617', 'ED-618', 'ED-621', 'ED-622', 'ED-623', 'ED-624', 'ED-625', 'ED-626', 'ED-628'] (resolved/re-synced)
+
+- id: ED-628
+  priority: P1
+  status: resolved
+  archived: 2026-04-17
+  description: "Editorial batch acceptance — all 23 design-proposal files promoted to CANONICAL."
+  resolution: "Jordan 2026-04-17: accept all, consolidate, propagate commit."
+  affects: [designs/systems/player_agency_v30.md, designs/systems/settlement_layer_v30.md, designs/systems/companion_specification_v30.md, designs/systems/npc_behavior_v30.md, designs/contest/social_contest_v30.md, references/canonical_sources.yaml]

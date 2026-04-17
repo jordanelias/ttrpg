@@ -53,3 +53,10 @@ editorial_decisions:
     status: open
     severity: P2
     affects: [designs/board_game/military_layer_v30.md]
+
+  - id: ED-629
+    date: 2026-04-17
+    description: "Thread stress test findings batch — 7 batches, 132 findings, 28 P0 blockers. Full register: tests/thread_stress/threadwork_audit_register.md. Key clusters: (1) Thread-system horizontal integration absent across social/companion/fieldwork boundaries; (2) RS budget missing battle drain term from victory_v30 §0.4; (3) Moral weight of Thread ops invisible to Conviction Scar/NPC Stance systems; (4) WC 3 is the singular endgame RS survival path. Throughlines: tests/thread_stress/throughlines_2026-04-17.md."
+    status: open
+    severity: P0
+    affects: [designs/ttrpg/threadwork_v30.md, references/params_threadwork.md, designs/systems/companion_specification_v30.md, designs/systems/settlement_layer_v30.md, designs/systems/npc_behavior_v30.md, designs/contest/social_contest_v30.md, designs/hybrid/scale_transitions_v30.md, designs/fieldwork/fieldwork_v30.md, designs/mass_combat/mass_battle_v30.md, designs/board_game/victory_v30.md]
