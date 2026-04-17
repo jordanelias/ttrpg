@@ -128,6 +128,8 @@ Pre-calculate the Leap pool on the character sheet as a named entry separate fro
 
 **Thread-Read as fieldwork (cross-reference):** Thread-Read — using a perceptive Leap to gather investigative evidence from Thread configurations — is also defined as a fieldwork investigation action. It is the only fieldwork action that constitutes a Thread operation and fires co-movement. TS ≥ 30 required. Pool: (Spirit × 2) + History + TPS (same as all Leaps — PP-619). See fieldwork_investigation.md §4.5 for the fieldwork Evidence Track context and scope of Thread-derived evidence.
 
+**Fieldwork integration (TW-05, fieldwork_v30 §2.3, §4.5):** Thread-Read fired during fieldwork follows the standard Leap procedure with co-movement firing on all three axes (temporal, epistemic, actualized) per threadwork §3.2. Evidence Track advances when the operation's consequences reveal investigation-relevant information. Per-op cap ruling (TW-05): POP Coherence −1 additional IS subject to per-op cap (total POP Coherence cost = −1 max regardless of scale), unlike FR/Binding Operations which are cap-exempt per PP-196. Thread-Read and FR operations are mutually exclusive within a single fieldwork action (TW-10). Thread-Read Evidence advances are gated to Depth ≥ 4 investigation questions only (P1-16 ruling: prevents Thread-Read from trivializing mundane investigation).
+
 ### The First Leap (Event Scene)
 
 

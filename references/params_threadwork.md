@@ -391,7 +391,7 @@ Loss per operation cap: −1 max per single operation regardless of combined sou
 | Territorial scale op | −1 |
 | Structural scale op | −2 |
 | FR Lock or Dissolution (any scale) | −1 additional |
-| Past-Oriented Pulling | −1 additional. **Cap applies** (unlike Binding Ops per PP-196). Total POP cost = −1 max regardless of scale. (PP-631) |
+| Past-Oriented Pulling | −1 additional. **Cap applies** (unlike Binding Ops per PP-196). Total POP cost = −1 max regardless of scale. (PP-631, TW-05) Cross-ref: fieldwork_v30 §4.5; POP during fieldwork investigation follows same cap. ED-NEW-15 RESOLVED. |
 | Mending | −1 |
 | Dissolution residue use | −1 additional (not subject to cap) |
 | History Resonance risk die shows 1 | −1 |

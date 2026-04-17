@@ -89,6 +89,43 @@ See calamity_radiation.md for full effects by RS band.
 | Schoenland | Schoenland | 1 |
 | **Total** | | **17** |
 
+### Points of Interest (POI) — Per Territory
+
+POI are discovered through the Survey action (fieldwork_v30 §8.1, BG Consul Inward). Each territory contains 1–4 undiscovered POI at game start. Categories: Resource, Secret, Remnant, Anomaly (see fieldwork_v30 §8.1 for BG bonuses).
+
+**POI availability by RS band:**
+
+| RS Band | Effect |
+|---------|--------|
+| 100–60 (Stable/Strained) | All categories discoverable. Standard Survey Ob. |
+| 59–40 (Fragile) | Anomaly POI activate in territories at Proximity ≤ 2. +1 Anomaly per affected territory. |
+| 39–20 (Fractured) | Remnant POI may shift location (1-in-6 at Accounting). Thread-scarred landscape reconfigures. |
+| 19–1 (Critical) | Secret POI may self-reveal (1-in-4 at Accounting). Institutional collapse exposes hidden things. |
+
+**Starting POI per territory:**
+
+| T# | Territory | Res | Sec | Rem | Ano | Total | Rationale |
+|----|-----------|-----|-----|-----|-----|-------|-----------|
+| T1 | Valorsplatz | 1 | 1 | 0 | 0 | 2 | Capital trade hub |
+| T2 | Kronmark | 1 | 0 | 1 | 0 | 2 | Crown heartland, old sites |
+| T3 | Lowenskyst | 0 | 1 | 0 | 0 | 1 | Border fortress, military secrets |
+| T4 | Grauwald | 1 | 0 | 1 | 0 | 2 | Highland timber, Einhir ruins |
+| T5 | Feldmark | 1 | 0 | 0 | 0 | 1 | Breadbasket |
+| T6 | Stillhelm | 0 | 1 | 1 | 1 | 3 | Calamity-proximate, Southernmost staging |
+| T7 | Rendstad | 1 | 0 | 0 | 0 | 1 | Timber valley |
+| T8 | Gransol | 1 | 1 | 0 | 0 | 2 | Trade city, Hafenmark capital |
+| T9 | Himmelenger | 0 | 1 | 1 | 0 | 2 | Cathedral city, Church archives |
+| T10 | Spartfell | 0 | 1 | 0 | 0 | 1 | Border castle, military intel |
+| T11 | Halvardshelm | 1 | 0 | 1 | 0 | 2 | Fjords, old Einhir settlement |
+| T12 | Sigurdshelm | 0 | 1 | 1 | 0 | 2 | Varfell seat, Niflhel presence |
+| T13 | Oastad | 0 | 0 | 1 | 1 | 2 | Calamity-proximate, Einhir ruins |
+| T14 | Ehrenfeld | 1 | 1 | 0 | 0 | 2 | Military hinge, Löwenritter |
+| T15 | Askeheim | 0 | 0 | 2 | 2 | 4 | Calamity epicentre |
+| T16 | Schoenland | 0 | 1 | 0 | 0 | 1 | Island, foreign secrets |
+| T17 | Halvarshelm | 1 | 0 | 0 | 0 | 1 | Northern mines |
+
+[EDITORIAL: ED-NEW-01 RESOLVED — POI catalog established. Specific POI content (names, narrative hooks, exact mechanical bonuses) deferred to per-territory design pass.]
+
 ### Adjacency Notes
 
 - **Valorsplatz (T1):** 4 connections including Schoenland sea route. River-sea nexus, trade hub.

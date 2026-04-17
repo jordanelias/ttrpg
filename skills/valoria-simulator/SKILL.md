@@ -131,6 +131,27 @@ Systematic search across nine categories:
 
 **Output:** `sim_edge_cases_[domain].md`
 
+### Mode F — Fieldwork Simulation (G-FW)
+
+Simulate fieldwork operations across investigation, exploration, and socializing tracks.
+
+**Params source:** `references/params_fieldwork.md`
+**Design source:** `designs/fieldwork/fieldwork_v30.md`
+
+**Test categories:**
+1. Evidence Track progression rates (Depth 1–5, by action type)
+2. Exposure accumulation vs Cover threshold pacing
+3. Thread-Read vs mundane investigation efficiency (P1-16 gate: Evidence limited to Depth ≥ 4)
+4. Contest Escalation boundary (§5.7 Disposition→CT offset)
+5. NPC Disposition trajectory over multi-season investigation
+6. Survey action Ob curve by Proximity Rating
+7. Church Attention Pool feed rate from fieldwork Exposure (§6.5 caps)
+8. Niflhel social toolkit +2 Exposure cost-benefit
+9. Combined Findings in Contest (+1D per Finding, max +2D)
+10. Cross-territory investigation (one track, per-territory Exposure)
+
+**State tracked:** Evidence Track, Exposure (per territory/character), Disposition (per NPC), Cover level, Church Attention Pool, Finding count/reliability.
+
 ### Mode E — Coverage Matrix
 Track which mechanics have been tested in which modes.
 

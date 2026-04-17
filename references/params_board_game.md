@@ -951,6 +951,33 @@ All faction starting positions reflect canonical geography. Old v04 map assignme
 
 ★ = faction capital.
 
+### Spiritual Weight (SW) — Territory Attribute (tc_political_redesign_v30 §1)
+
+SW is a fixed attribute per territory representing ecclesiastical importance. Pre-printed on territory cards. SW gates TC generation (Piety Yield weighting), Church political pool, and PT momentum.
+
+| T# | Territory | SW | Rationale |
+|----|-----------|-----|-----------|
+| T1 | Valorsplatz | 2 | Seat of secular power; Church present but contested |
+| T2 | Kronmark | 2 | Crown heartland |
+| T3 | Lowenskyst | 2 | Border fortress |
+| T4 | Grauwald | 1 | Highland, limited Church presence |
+| T5 | Feldmark | 2 | Breadbasket |
+| T6 | Stillhelm | 1 | Southern farmland, Calamity-proximate |
+| T7 | Rendstad | 2 | Timber valley |
+| T8 | Gransol | 3 | Trade city, strong Church commercial presence |
+| T9 | Himmelenger | 5 | Cathedral city, Church primary anchor |
+| T10 | Spartfell | 2 | Border castle |
+| T11 | Halvardshelm | 1 | Fjords, minimal Church |
+| T12 | Sigurdshelm | 2 | Varfell seat |
+| T13 | Oastad | 1 | Southern fjords, minimal Church |
+| T14 | Ehrenfeld | 3 | Military stronghold, Church benediction tradition |
+| T15 | Askeheim | 0 | Calamity ground, Church presence impossible |
+| T16 | Schoenland | 1 | Island |
+| T17 | Halvarshelm | 2 | Northern mines |
+| **Total** | | **32** | |
+
+**SW use cases:** (1) Piety Yield: TC += Σ(PT tier × SW/5) per prominent territory. (2) Church political pool: += Σ(SW of prominent territories)/5. (3) PT momentum: +1D to PT change actions in SW ≥ 3 territories.
+
 
 ## Starting Control — Canonical (geography_v30.md)
 | Faction | Territories | Count | Starting TCV |
