@@ -398,22 +398,30 @@ Elske Loyalty: 0–7, starts 4. Tracked on off-board card near T4.
 Contact: Crown or Löwenritter Senator Outward in T4 (Ob 2 at IP < 60; Ob 3 at IP ≥ 60).
 Return: Elske Loyalty ≥ 6 + IP < 60 + Crown/Löwenritter unit in T4: Military vs Ob 2. IP +5 on success.
 
-## TC Generation — Seasonal (per victory_v30.md §7)
-**Starting TC: 28. Phase transition at TC 75 (TC freezes — Church shifts to territorial seizure).**
+## TC Generation — Seasonal (canonical: military_layer_v30 §3, tc_political_redesign_v30 §§1–3)
+**Starting TC: 28. TC runs to 100 (no freeze). Milestone system: see victory_v30 §7.**
 
-Seasonal TC at Accounting (execute in order):
-1. **Institutional Momentum:** TC +1 (passive).
-2. **Piety Yield:** for each territory where Church is prominent (Church Mandate > controlling faction's Mandate), add based on PT. PT 5 = +1, PT 4 = +0.5, others = 0. Total = floor(sum).
-3. **Assert** (optional Church action): Influence vs Ob 2. Success: TC +1. Failure: Stability −1.
-4. **Suppress** (optional opponent action): Mandate vs Ob = floor(Church Mandate / 2) + 1. Success: negate Step 1 passive. Failure: Stability −1.
-5. **Hafenmark Structural Suppression:** while Baralta Mandate ≥ 4, TC −1/season.
+Seasonal TC at Accounting (execute in order, per military_layer_v30 §3):
+1. **Conditional Passive (§3.2):** TC +1 only if Church Mandate > controlling faction Mandate in ≥ 2 territories.
+2. **Piety Yield (§3.3):** TC += Σ(PT tier × SW/5) per prominent territory, floored. SW = Spiritual Weight per territory (tc_political_redesign_v30 §1).
+3. **Charity Advantage (§3.4):** Church Wealth spent on charity → TC +1 per 2 Wealth, cap 2/season.
+4. **Templar Presence (§3.5):** +1 TC per territory with Church military unit AND Church Prominence.
+5. **Assert (§3.6):** Optional Church action. Influence vs Ob 2. Success: TC +1. Failure: Stability −1.
+6. **Suppress (§3.7):** Optional opponent action. Mandate vs Ob = floor(Church Mandate / 2) + 1. Success: negate Step 1. Failure: Stability −1.
+7. **Hafenmark Structural Suppression (§3.8):** While Baralta Mandate ≥ 4, TC −1/season.
 
-**TC seasonal cap (PP-504):** ±3 per season from player-initiated Domain Actions. ±5 per season from all sources combined (includes Institutional Momentum, Piety Yield, Calamity Drift, event cards).
+**TC seasonal cap (PP-504):** ±3 per season from player-initiated Domain Actions. ±5 per season from all sources combined (includes Conditional Passive, Piety Yield, Calamity Drift, event cards).
 
 Legacy TC sources (AER momentum, Attention Pool threshold, Emergency Powers, Free Trade Decree, Church unit presence) are subsumed into the Piety Yield system — Church prominence in high-PT territories captures the same dynamics. AER ≥ 3 still bypasses Hafenmark structural suppression (PP-203).
 
+## Faction Political Pool (tc_political_redesign_v30 §3.4)
+**Church:** Political pool = Mandate + floor(TC/20).
+**Non-Church (anti-Church motions):** Political pool = Mandate − floor(TC/30).
+**Non-Church (non-Church motions):** Political pool = Mandate (no TC modifier).
+TC creates asymmetric legitimacy: Church gains political bonus proportional to TC; opponents pay a legitimacy cost proportional to TC when directly opposing Church.
+
 ## TC 75 Territorial Seizure (PP-421 — per victory_v30.md §7)
-**Post-TC 75: TC freezes. Church shifts to territorial seizure campaign.**
+**Note: TC no longer freezes at 75 (see tc_political_redesign_v30 §2). TC 75 marks the milestone where seizure becomes Church's primary mode, but seizure is available from TC ≥ 15 (PP-507). TC continues to 100.**
 
 ### Seizure Ob
 Ob = 2 + Fort Level + max(0, 3 − PT).

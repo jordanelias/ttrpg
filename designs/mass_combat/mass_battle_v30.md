@@ -526,6 +526,10 @@ A Muster action produces 1 unit with Size = 2, Power = floor(faction Military / 
 
 ### A.14 CROSS-SYSTEM NOTES
 
+**Fieldwork suspension (F-TRANS-06, fieldwork_v30 §2.3):** Mass battle suspends all active fieldwork. Evidence Tracks freeze at their current value. Battle actions (including Thread operations in Phase 4) do not consume fieldwork time units. Thread-Read during mass battle resolves in the Phase 4 window and is classified as intelligence (not offensive). Co-movement fires. May advance an Evidence Track if the Thread-Read targets an investigation question. Fieldwork resumes after the battle at its frozen state.
+
+**Post-battle investigation (F-TRANS-12, fieldwork_v30 §2.3):** Post-battle investigation of a battle site = 1 fieldwork scene. The battle itself does not consume fieldwork time. The investigation scene uses standard Discovery Procedure (fieldwork_v30 §3.2) with the battle site as the target. Battle aftermath provides automatic Depth 1 access (surface evidence is everywhere).
+
 **Woven units — brittleness:** Thread-Woven Discipline or Morale boosts are
 subject to §4.3.4 brittleness rules. Taking Size loss > Discipline in a single
 turn qualifies as a non-Thread event of sufficient severity — Game Master may rule

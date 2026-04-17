@@ -324,9 +324,19 @@ A practitioner may initiate a Thread operation between exchanges. Effects apply 
 ### §9.5 Beliefs Integration
 Winning an exchange while arguing for a position aligned with the orator's stated Belief counts as a Belief achievement for Momentum. Max 1 Momentum per contest from Belief alignment.
 
-### §9.6 Forced Unmask
+### §9.6 Fieldwork Integration (F-TRANS-05/11)
 
-### §9.7 Niflhel Social Toolkit
+**Contest Escalation boundary (fieldwork_v30 §5.7):** When a fieldwork Negotiate action cannot resolve the situation (opposing convictions, institutional constraints, or stakes beyond individual authority), the GM does not offer a choice — the situation escalates to a formal Contest. Current Disposition maps to starting Conviction Track offset: ±1 per 2 Disposition points, cap ±2. The relationship built during fieldwork carries forward; it does not reset.
+
+**Combined Findings (F-TRANS-11):** See §9.1. Multiple resolved Findings on related topics may be presented as a combined argument. Each additional Finding beyond the first adds +1D to the Argue roll (max +2D from combined Findings). Finding citation must be relevant to the contest's subject matter.
+
+**Post-Contest Disposition (F-TRANS-05):** After a Contest, the adjudicator's Disposition shifts +1 toward the winner and −1 toward the loser. This persists into subsequent fieldwork scenes.
+
+**Contest Appraise → Evidence (fieldwork_v30 §2.3):** Information gained through a Contest Appraise action may be applied to an active Evidence Track as +1 progress (Partial quality, Testimonial tag). This is automatic — no additional fieldwork action required.
+
+### §9.7 Forced Unmask
+
+### §9.8 Niflhel Social Toolkit
 Niflhel cannot participate in Formal or Grand Contests. Their social toolkit:
 - Private negotiation: one-on-one only; Attunement-primary pool (per §3 "no adjudicator"); TN 7; Ob = floor(target Stability / 2) + 1.
 - Thread Insight (TS ≥ 30 only): Attunement read before negotiation reveals one unstated position.
@@ -396,7 +406,7 @@ Total Victory: Conviction Track ≥ 9 or ≤ 1 → losing coalition's dominant f
 |---|---|---|
 | ED-132 | Appraise step action name resolved: Appraise (PP-278) | P3 |
 | ED-133 | Diverge state — superseded by CROSS. Confirm Diverge no longer needed. | P2 |
-| ED-041 | Niflhel social toolkit — provisional stub in §9.7 | P2 |
+| ED-041 | Niflhel social toolkit — provisional stub in §9.8 | P2 |
 | ED-051 | Corroboration full port (Knot requirement removed per ED-014) | P3 |
 
 ### Future design work (not blocking)

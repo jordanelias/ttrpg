@@ -130,6 +130,7 @@ This is a single-page reference card. One lookup per territory per season.
 ### Cross-references requiring propagation
 - `designs/ttrpg/threadwork_redesign_v25.md` §5.3: RS threshold table notes geographic graduation per calamity_radiation.md (ED-302 callout present). [DONE]
 - `references/params_board_game.md`: RS Effects section rewritten to use Simplified BG Lookup Table; Southernmost Zones replaced with Proximity Rating system. [DONE — 2026-04-06]
+- `designs/fieldwork/fieldwork_v30.md` §8.1: Survey action (BG Consul Inward variant) uses Proximity Rating to set Ob. Formula: Ob = (5 − Proximity Rating) + 1, min 1. Askeheim (PR 0) → Ob 6; Lowenskyst (PR 5) → Ob 1. Calamity zone Exposure thresholds apply to fieldwork actions in proximity territories per §6 Exposure Track. [DONE — 2026-04-17]
 
 ## Forgetting — Permanent Askeheim Condition (B-03 resolved)
 

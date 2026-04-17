@@ -403,16 +403,30 @@ Multiple victory conditions require RS thresholds. A faction that ignores RS ris
 
 ## 7. TC Generation and Church Seizure
 
-Starting TC: 28. Phase transition at TC 75 (TC freezes, Church shifts to seizure mode).
+**CANONICAL SOURCE: tc_political_redesign_v30.md §§1–3 and military_layer_v30.md §3.**
 
-**Seasonal TC at Accounting:**
-1. Institutional Momentum: TC +1 (passive).
-2. Piety Yield: per territory where Church is Prominent (Church Mandate > controlling faction Mandate), add by PT. PT 5 = +1, PT 4 = +0.5, others = 0. Total = floor(sum).
-3. Assert (optional Church action): Influence vs Ob 2. Success: TC +1. Failure: Stability −1.
-4. Suppress (optional opponent action): Mandate vs Ob = floor(Church Mandate / 2) + 1. Success: negate Step 1 passive. Failure: Stability −1.
-5. Hafenmark Structural Suppression: while Baralta Mandate ≥ 4, TC −1/season.
+Starting TC: 28. TC runs to 100 (no freeze). Milestone system replaces TC 75 phase transition:
 
-**Church Seizure (Graduated, PP-494):** Pool = Influence + floor(TC/15). Ob = 7 − PT. Prominence required. Church Mandate ≥ 4. Overwhelming seizure: PT +1 (consequence, not cap-governed). See §3.2 for full table.
+| TC | Milestone | Effect |
+|---|---|---|
+| 40 | Church Assertive | +1D on Assert and Seizure rolls |
+| 55 | Church Prominent | Ob +1 to actions directly opposing Church Domain Actions |
+| 65 | Church Dominant | Secular factions spend extra action slot to pass anti-Church Parliamentary motions |
+| 80 | Church Ascendant | Seizure Ob −1 globally; PT drifts +1 toward piety pole at Year-End |
+| 100 | Theocracy Unification | See tc_political_redesign_v30 §2.2 |
+
+**Seasonal TC at Accounting (military_layer_v30 §3):**
+1. Conditional Passive: TC +1 only if Church Mandate > controlling faction Mandate in ≥ 2 territories (§3.2).
+2. Piety Yield: per prominent territory, yield weighted by Spiritual Weight (SW). TC += Σ(PT tier × SW/5) per prominent territory, floored (§3.3).
+3. Charity Advantage: Church Wealth spent on charity → TC +1 per 2 Wealth spent, cap 2/season (§3.4).
+4. Templar Presence: +1 TC per territory where Church military unit AND Church Prominence (§3.5).
+5. Assert (optional Church action): Influence vs Ob 2. Success: TC +1. Failure: Stability −1 (§3.6).
+6. Suppress (optional opponent action): Mandate vs Ob = floor(Church Mandate / 2) + 1. Success: negate Step 1 passive. Failure: Stability −1 (§3.7).
+7. Hafenmark Structural Suppression: while Baralta Mandate ≥ 4, TC −1/season (§3.8).
+
+**Faction Political Pool (tc_political_redesign_v30 §3.4):** Church political pool = Mandate + floor(TC/20). Non-Church political pool in anti-Church motions = Mandate − floor(TC/30).
+
+**Church Seizure (Graduated, PP-494):** Pool = Influence + floor(TC/15). Ob = 7 − PT. Prominence required. Church Mandate ≥ 4. Overwhelming seizure: PT +1 (consequence, not cap-governed). See §3.2 for full table. Available from TC ≥ 15 (not gated on TC 75).
 
 ---
 

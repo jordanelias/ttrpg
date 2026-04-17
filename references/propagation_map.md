@@ -473,11 +473,11 @@ Propagation targets:
 | Changed File | Propagates To | Reason | Status |
 |-------------|--------------|--------|--------|
 | `designs/fieldwork/fieldwork_v30.md` | `designs/fieldwork/fieldwork_v30.md` | `designs/fieldwork/fieldwork_v30.md` | `designs/fieldwork/fieldwork_v30.md` | `designs/fieldwork/fieldwork_v30.md` | `designs/fieldwork/fieldwork_v30.md` | `designs/fieldwork/fieldwork_v30.md` | `designs/fieldwork/fieldwork_v30.md` | `designs/ttrpg/threadwork_v30.md` | Thread-Read as perceptive Leap (§4.5); co-movement protocol; per-op cap ruling (TW-05) | PENDING — threadwork params notes open per ED-NEW-15 |
-| `designs/fieldwork/fieldwork_v30.md` | `designs/contest/social_contest_v30.md` | Contest Escalation boundary (§5.7); Combined Findings (+1D per Finding in Contest, max +2D) (§2.3 / F-TRANS-11) | PENDING |
-| `designs/fieldwork/fieldwork_v30.md` | `designs/combat/combat_v30.md` | Fieldwork → Combat handoff: Exposure → ambusher advantage (§2.3 / F-TRANS-01); Combat Exposure codified (quiet +1, conspicuous +2, public +3) (F-TRANS-09) | PENDING |
+| `designs/fieldwork/fieldwork_v30.md` | `designs/contest/social_contest_v30.md` | Contest Escalation boundary (§5.7); Combined Findings (+1D per Finding in Contest, max +2D) (§2.3 / F-TRANS-11) | DONE — social_contest_v30 §9.6 added 2026-04-17 |
+| `designs/fieldwork/fieldwork_v30.md` | `designs/combat/combat_v30.md` | Fieldwork → Combat handoff: Exposure → ambusher advantage (§2.3 / F-TRANS-01); Combat Exposure codified (quiet +1, conspicuous +2, public +3) (F-TRANS-09) | DONE — combat_v30 §11.5 already present |
 | `designs/fieldwork/fieldwork_v30.md` | `designs/setting/geography_v30.md` | POI catalog per territory (ED-NEW-01); conditional POI gates by RS band | PENDING (blocked: ED-NEW-01 P2) |
-| `designs/fieldwork/fieldwork_v30.md` | `designs/setting/calamity_radiation_v30.md` | Proximity Rating governs Survey Ob (§8.1); Calamity zone Exposure thresholds | PENDING |
-| `designs/fieldwork/fieldwork_v30.md` | `designs/mass_combat/mass_battle_v30.md` | Mass battle suspends fieldwork (§2.3 / F-TRANS-06); Post-battle investigation = 1 fieldwork scene (F-TRANS-12) | PENDING |
+| `designs/fieldwork/fieldwork_v30.md` | `designs/setting/calamity_radiation_v30.md` | Proximity Rating governs Survey Ob (§8.1); Calamity zone Exposure thresholds | DONE — calamity_radiation_v30 cross-references added 2026-04-17 |
+| `designs/fieldwork/fieldwork_v30.md` | `designs/mass_combat/mass_battle_v30.md` | Mass battle suspends fieldwork (§2.3 / F-TRANS-06); Post-battle investigation = 1 fieldwork scene (F-TRANS-12) | DONE — mass_battle_v30 A.14 added 2026-04-17 |
 | `designs/fieldwork/fieldwork_v30.md` | `references/params_threadwork.md` | POP Coherence −1 additional subject to per-op cap (TW-05 / ED-NEW-15) — currently ambiguous in params | PENDING (ED-NEW-15 P2) |
 | `references/params_fieldwork.md` | `skills/valoria-simulator/SKILL.md` | Sim loads params (Mode G-FW — to be created) | PENDING |
 | `designs/fieldwork/fieldwork_godot.md` | `jordanelias/valoria-game` repo | §10 Validation Findings G10-F01 through G10-F07 — implementation gaps logged | REFERENCE ONLY |
@@ -577,10 +577,10 @@ DESIGN GAP 2: Guild Favour restoration mechanic — no upward movement source do
 | Source | Target | Status |
 |---|---|---|
 | military_layer_v30.md §1 | mass_battle_v30.md §B.2 unit types | Cross-ref (consistent) |
-| military_layer_v30.md §3 | params_board_game.md §TC Generation | PENDING |
+| military_layer_v30.md §3 | params_board_game.md §TC Generation | DONE — params_board_game TC Generation rewritten 2026-04-17 |
 | tc_political_redesign_v30.md §1 | territory cards (SW attribute) | PENDING |
-| tc_political_redesign_v30.md §2 | victory_v30.md TC freeze refs | PENDING |
-| tc_political_redesign_v30.md §3 | params_board_game.md political pool | PENDING |
+| tc_political_redesign_v30.md §2 | victory_v30.md TC freeze refs | DONE — victory_v30 §7 rewritten, TC 0-100 milestones 2026-04-17 |
+| tc_political_redesign_v30.md §3 | params_board_game.md political pool | DONE — params_board_game Political Pool section added 2026-04-17 |
 | peninsular_strain_v1.md §7b | faction_layer_v30.md §2 Occupation | Harmonization added |
 | peninsular_strain_v1.md §7c | tc_political_redesign_v30.md §2 TC 0-100 | Harmonization added |
 ## PP-658 Faction Layer ↔ Peninsular Strain Integration (2026-04-14)
