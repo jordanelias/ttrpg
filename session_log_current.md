@@ -1,44 +1,41 @@
-session_id: faction_politics_rank_expansion_2026-04-17
+session_id: ui_ux_v4_1_audit_workplan_stage_1_2026-04-17
 session_close: 2026-04-17
-phase: COMPLETE
-status: CLOSED
-last_stage: done
+phase: STAGE_1_COMPLETE
+status: OPEN_WORKPLAN
+last_stage: Stage 1 of 13 — honest status line fix (ED-637)
 next_action:
-  skill: confirm with Jordan
+  skill: valoria-orchestrator editorial
+  stage: Stage 2 — canon breach deletions (F-15, F-16, F-55, F-58)
+  allocation: ED-638 through ED-641
+  first_fetch: [designs/ttrpg/threadwork_v30.md, designs/systems/npc_behavior_v30.md, designs/ui/valoria_ui_ux_v4_1.md]
 blockers: []
 resolutions_this_session:
-  - ED-635: Cardinal Prudence naming sync — worldbuilding_v30 §3.1 updated to Aldric Tormann (npc_roster_v30 §13 canonical). ED-NEW-06 closed.
-  - ED-636: Solmund naming correction applied — conviction_track_v30 line 16 "Galbadian Orthodoxy" → "Solmund Orthodoxy".
-  - Faction politics rank-ladder expansion PP-660 committed (13 files, single atomic commit).
-  - Standing ladder expanded 0-5 → 0-7 with Skyrim-guild progression patterns.
-  - 8-rank ladders specified for Crown/Hafenmark/Varfell/Church with named inner circles.
-  - 7 sub-office rank ladders (Löwenritter, Riskbreakers, Inquisitors, Templars, Guilds, Niflhel, Wardens).
-  - Caste integration layer (Northern/Central/Southern Einhir modifiers).
-  - TC × rank interaction integrated into tc_political_redesign_v30 §3.5.
-  - Baralta Crown Claim × rank interaction + new Hafenmark-to-Crown Recognition Ceremony mechanic.
-  - Ministry system expanded to Hafenmark Committees, Church Dicasteries, Varfell Councils.
-  - Generational Shift Torben maturation fix (4-trigger replacement for unreachable 10-year spec).
-  - Cross-faction parity table.
-  - player_agency §5.1 rewritten for 0-7 ladder; §6.2 scene action modifier extended.
-  - scale_transitions §4.3.2 Rank Advancement Recognition Event added to Mandatory Zoom In triggers.
+  - Audit produced: designs/ui/valoria_ui_ux_v4_1_max_audit.md (69 findings, 20 P1 / 37 P2 / 12 P3).
+  - Re-test applied 5 in-place corrections to audit findings (F-4, F-5, F-17, F-26, F-38).
+  - Second-order sweep added F-57 through F-69 (13 findings covering Part 0, 13, 14, Appendices A/E).
+  - 3 canon-compliance breaches identified (F-15 CD track, F-16 Taint track, F-55 Knot propagation).
+  - 5 integration_proposal H-items identified as absent (F-7, F-11, F-32, F-33, F-36).
+  - Workplan produced: designs/ui/valoria_ui_ux_v4_2_workplan.md (13 stages, 95 work items).
+  - Jordan accepted workplan Option A.
+  - Pre-Stage-1 correction: workplan ED allocations shifted 601-660 → 637-696 (ledger had advanced to next_id=637 between workplan authorship and execution).
+  - Stage 1 executed — ED-637 recorded, F-69 Option B applied to valoria_ui_ux_v4_1.md status line.
 files_modified:
-  - designs/systems/faction_politics_expanded_v1.md (new — 944 lines, 139,940 chars)
-  - canon/editorial_ledger.yaml (ED-634, ED-635, ED-636 added; next_id → 637)
-  - canon/patch_register_active.yaml (PP-660 appended)
-  - references/canonical_sources.yaml (faction_politics_expanded entry added)
-  - references/propagation_map.md (PP-660 section appended)
-  - references/file_index.md (DESIGNS — SYSTEMS row added)
-  - references/file_index_summary.md (canonical list entry added)
-  - designs/conviction_track/conviction_track_v30.md (Solmund fix line 16 + CV≡PT equivalence note §1)
-  - designs/worldbuilding/worldbuilding_v30.md (§3.1 Cardinal Prudence = Aldric Tormann)
-  - designs/mechanics/baralta_crown_claim_v30.md (§5 Recognition Ceremony cross-reference)
-  - designs/hybrid/scale_transitions_v30.md (§4.3.2 Rank Recognition Event row)
-  - designs/board_game/tc_political_redesign_v30.md (§3.5 TC × Rank Ladder Interaction)
-  - designs/systems/player_agency_v30.md (§5.1 Stature Levels rewrite, §6.2 modifier extension)
+  - designs/ui/valoria_ui_ux_v4_1_max_audit.md (new — 741 lines, 103 KB)
+  - designs/ui/valoria_ui_ux_v4_2_workplan.md (new — 593 lines, then ED-renumbered)
+  - designs/ui/valoria_ui_ux_v4_1.md (Stage 1 — status line corrected, 1 line changed)
+  - canon/editorial_ledger.yaml (ED-637 appended; next_id 637 → 638)
 open_items:
-  - ED-634 (batch): 23 sub-items from faction politics register tracked in designs/systems/faction_politics_expanded_v1.md §10.2
-  - 5 SIM-DEBT items (SIM-POL-R01 through R05) — per Jordan instruction, simulation deferred
-  - Solmund propagation: grep for any remaining "Galbadian"/"Galbados" occurrences across designs/, references/, canon/ (conviction_track line 16 done; other files unchecked)
-  - CV ≡ PT full rename deferred (ED-644) — file rename conviction_track_v30.md → piety_track_v30.md pending future cleanup pass
-  - All prior open items carry forward (ED-542, ED-586, ED-587, ED-589, ED-591-609, ED-611, ED-615-627, ED-631-633, ED-629 Thread stress)
-commit: 04c4c6e23b3232874fb6f8213fc5598c0b288d5a
+  - Stages 2-13 of valoria_ui_ux_v4_2_workplan.md pending. See designs/ui/valoria_ui_ux_v4_2_workplan.md §2 for per-stage details.
+  - Next-session handoff document: /mnt/user-data/outputs/v4_2_workplan_handoff.md (not committed — session-scratch only).
+  - ED-637 status open. Will close at Stage 13 (v4.2 publication) per workplan.
+  - All prior-session open items carry forward unchanged (ED-542, ED-586, ED-587, ED-589, ED-591-609, ED-611, ED-615-634 from faction_politics session).
+commits_this_session:
+  - 08861489cc92ddb1eb6f7646007cf335c485b8a5 — audit + workplan initial commit
+  - 9d026f0a2ec5d0d24e6c6fedc200b5d1ab16e732 — workplan ED renumbering 601-660 → 637-696
+  - f4b796c8c718b143988e916eef5db3352b91d6d8 — Stage 1 status line fix + ED-637
+handoff_notes:
+  - Stage 1 chosen over Stages 1-13 to preserve quality per user preferences (quality > completion).
+  - Stage 2 execution protocol: bootstrap → fetch canonical sources → begin work items 2.1 through 2.8 → single commit [editorial] v4_1 canon breaches — ED-638 through ED-641.
+  - GAP: editorial_ledger next_id may drift across sessions; each stage must re-verify before allocating EDs.
+  - GAP: Stage 4 F-32 Domain Echo Reference Table — 13 rows to cross-verify against v30 sources; budget 40%+ of session context; consider splitting across sessions.
+  - GAP: Stage 11 F-68 — 22 cutscene triggers currently deferred to v4; need to fetch v4 or obtain list from Jordan before authoring.
