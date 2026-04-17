@@ -1,49 +1,35 @@
-# Session Log — Current
-session_id: thread_constitutive_integration_2026-04-17
-session_close: "2026-04-17"
-phase: editorial
-status: complete
-last_stage: Thread Constitutive Integration — all P0 and P1 items committed
+session_id: sim_alternate_branches_2026-04-17
+session_close: 2026-04-17
+phase: COMPLETE
+status: CLOSED
+last_stage: done
 next_action:
-  skill: valoria-orchestrator editorial
-  stage: P2 items from thread_constitutive_integration_analysis_v2.md
-  allocation: ED-670+
-  first_fetch: [designs/ttrpg/threadwork_v30.md, designs/systems/settlement_layer_v30.md, designs/conviction_track/conviction_track_v30.md]
+  skill: confirm with Jordan
 blockers: []
 resolutions_this_session:
-  - P0-1 ED-663 Thread Conviction Scar Triggers npc_behavior_v30 3.4
-  - P0-1b ED-664 Player Conviction Thread parallel
-  - P0-4 ED-665 NPC Practitioner Coherence AI npc_behavior_v30 4.3
-  - P0-2 ED-668 RS Budget references/rs_budget.md
-  - P0-3 ED-669 WC survival spine references/wc_survival_spine.md
-  - P1 ED-666 Companion departure Thread triggers companion_specification_v30 6.1
-  - P1 ED-667 Adjudicator Thread response social_contest_v30 9.4b
+  - 10 alternate branches simulated across Batches 1-5
+  - Branch A: Almstedt deploys irregularity -- forced supermajority produces stronger Baralta victory
+  - Branch B: Voss deploys reserve -- Coup mechanically impossible without Martial Honour violation
+  - Branch C: Vaynard Path B S9 -- shallow world, Himlensendt never confronted
+  - Branch D: Klapp publishes framework -- Confessor endorsement via casting vote, Church transformation
+  - Branch E: Thale warns Almud -- Crown survives at highest personal cost to Thale
+  - Branch F: Heljason refuses restoration brief -- stronger legal case than compliance
+  - Branch G: Haelgrund reports anomaly -- multi-faction cascade, Niflhel pursues archives
+  - Branch H: Hann gets Holdar vote -- figurehead Sigurd, Varfell fragments
+  - Branch I: Ehrenwall Counter fires S5 -- premature S17 Coup, Military Consolidation path
+  - Branch J: Edeyja never reaches Arc B -- RS 21 at S30, shared loss threshold near but not crossed
+  - Cross-branch: information timing primary resource; premature victory shallow; institutional precedent irreversible
 files_modified:
-  - designs/systems/npc_behavior_v30.md
-  - designs/systems/companion_specification_v30.md
-  - designs/contest/social_contest_v30.md
-  - references/rs_budget.md
-  - references/wc_survival_spine.md
-  - canon/editorial_ledger.yaml
-  - canon/editorial_ledger_archive.yaml
-  - references/canonical_sources.yaml
-commits_this_session:
-  - b9fa077dbe643b1d154c4937ba4216d4469b2e40
-  - 09cc7f47798b6234e7ea4e74b7232cfdcf8393f3
-  - 9ff8d6175f5cce9943c157f6825a4e635c3861b7
-  - 4dfdae3602598fb73564de1ca417fd9897006907
+  - tests/sim_alternate_branches_2026-04-17.md (new)
+  - canon/editorial_ledger.yaml (ED-666/667/668/669; ED-620/621/622 archived; next_id: 670)
+  - canon/editorial_ledger_archive.yaml (ED-620/621/622 archived)
+  - tests/coverage_matrix.md (alternate branch findings)
 open_items:
-  - P2 Thread perception extension threadwork_v30
-  - P2 CV movement from visible Thread ops conviction_track_v30
-  - P2 Lifepath TS/Certainty derivation character_histories_v30
-  - P2 Settlement Thread environment settlement_layer_v30
-  - P2 Scene Slate thread-state player_agency_v30
-  - P2 NPC faction AI Thread doctrine npc_behavior_v30 BG trees
-  - P2 Battle TS development mass_battle_v30
-  - P3 Case Board dual-depth investigation_systems
-  - P3 Rendering Crisis narrative beats threadwork_v30 3.7
-  - v4.2 workplan Stages 2-13 carry forward
-handoff_notes:
-  - Analysis docs in /mnt/user-data/outputs/ session-scratch only
-  - Pending SHAs need freshness_gate.py
-  - P2 items interleave with v4.2 workplan
+  - ED-666 Path B speed-run calibration (P1)
+  - ED-667 Coup Counter readiness gap (P1)
+  - ED-632 Shadow Renown mechanic (P1)
+  - ED-633 Deniability Debt (P1)
+  - ED-629 Heresy Proceedings auth loop (P1)
+  - ED-663 Wealth cap (P1)
+  - ED-668/669 (P2)
+  - All prior open items carried forward
