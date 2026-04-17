@@ -124,7 +124,7 @@ systems:
   npc_behavior:
     status: active
     canonical: designs/systems/npc_behavior_v30.md
-    canonical_sha__designs__systems__npc_behavior_v30_md: "a0a87290fafc4061b8a2843ce30de729cb951cce"
+    canonical_sha__designs__systems__npc_behavior_v30_md: "pending"
     params: null
     design_doc: designs/systems/npc_behavior_v30.md
 

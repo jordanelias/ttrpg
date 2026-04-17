@@ -362,6 +362,33 @@ An NPC revises a Belief when ALL of the following hold:
 
 ---
 
+### §3.4 Thread Operation → Conviction Scar Triggers (ED-663, ED-664)
+
+Thread operations witnessed by NPCs produce Conviction Scars. Parallels the Certainty Track movement triggers (params_core PP-551) but targets a different track: Certainty = cosmological framework shift; Conviction Scar = moral wound.
+
+**Thread Event × Conviction Scar Matrix:**
+
+| Thread Event Witnessed | Faith | Order | Reason | Equity | Precedent | Autonomy | Continuity |
+|---|---|---|---|---|---|---|---|
+| Dissolution of living being | **Scar** | **Scar** | **Scar** | **Scar** if powerless victim | **Scar** | **Scar** if unwilling | No |
+| POP (history rewrite) | **Scar** | **Scar** | **Scar** | No | **Scar** | No | **Scar** if disrupts work |
+| Lock on a being | No | No | No | **Scar** | **Scar** if no legal basis | **Scar** | **Scar** if prevents work |
+| Mending a Gap | No | No | No | No | No | No | No |
+| Weaving (non-harmful) | **Scar** | No | No | No | No | No | No |
+| Rendering Crisis (witnessed) | **Scar** | **Scar** if disrupts environment | **Scar** | **Scar** if harms bystanders | No | **Scar** | **Scar** if disrupts work |
+
+**Conditions:**
+- **Witness requirement:** Direct witness (present in scene) or credible testimony (Evidence Track contribution + Disposition ≥ +1).
+- **Certainty scaling:** C5: +1 Scar severity. C0: −1 Scar severity. C2–3: standard.
+- **Season cap:** Max 1 Scar per season from Thread witnessing per NPC.
+- **Mending exception:** Mending never produces Scars.
+- **Faith specificity:** Faith NPCs Scar from ANY Thread operation except Mending.
+
+**Player Conviction Checks (ED-664):**
+Player witnesses Thread event → Spirit pool, TN 7, Ob 1. Failure: active Conviction shaken (mechanical = NPC Scar 1 effect) for 1 season.
+
+---
+
 ## §4 DECISION DERIVATION: TTRPG MODE
 
 ### §4.1 Decision Procedure for Named NPCs
@@ -383,6 +410,25 @@ An NPC revises a Belief when ALL of the following hold:
 ### §4.2 Non-Named NPC Behavior
 
 
+
+---
+
+### §4.3 NPC Practitioner Coherence Decision Thresholds (ED-665)
+
+NPC practitioners use the following Coherence thresholds. Applies TTRPG (GM guidance) and BG/Hybrid (NPC AI). Model: ARC-S04, ARC-S34.
+
+| Coherence | Label | NPC Decision Rule |
+|---|---|---|
+| 10–6 | Stable | Operate freely per tactical/strategic need. |
+| 5 | Dissonant | Self-limit to defensive Thread ops only (Mending, defensive Weaving). No offensive Dissolution/Lock/POP. |
+| 4–3 | Degraded | Cease Thread operations. Non-Thread combatant. Exception: RS ≤ 20 + Warden → Mending only. |
+| 2 | Fractured | Seek withdrawal. Reserve in mass battle. Disengage in personal combat. Arc transition consideration. |
+| 1 | Severed | Crisis mode. Arc transition fires. +2 Ob all Thread ops. Dissociative episodes (EDGE-02). |
+| 0 | Conversion | NPC Transition per params_core PP-261. |
+
+**RS Override (Warden):** RS ≤ 20 → Warden NPCs override Degraded/Fractured for Mending only. Continuity Conviction overrides personal safety. Mechanism for ARC-S34 (Edeyja Burnout).
+
+**BG Priority Trees:** Amend Varfell §8.5, Edeyja/Wardens §8.10: Priority 2 Coherence gate per this table.
 
 ---
 
@@ -872,6 +918,12 @@ An NPC who has been recruited defects if:
 | ED-399 | Cardinal Stance Triangles: confirm before Church schism simulation. | P2 |
 
 ---
+
+| ED-663 | Thread → Conviction Scar Triggers: §3.4. 7×6 matrix. Certainty scaling. Season cap. Player parallel. | P0 — resolved |
+| ED-664 | Player Conviction × Thread events: Spirit TN 7 Ob 1. In §3.4. | P0 — resolved |
+| ED-665 | NPC Practitioner Coherence AI: §4.3. 6-tier table. Warden RS override. BG priority tree note. | P0 — resolved |
+| ED-666 | Companion departure Thread triggers: propagation to companion_specification_v30. | P1 — pending |
+| ED-667 | Adjudicator Thread response: propagation to social_contest_v30. | P1 — pending |
 
 ## §11 SIMULATION DEBT
 
