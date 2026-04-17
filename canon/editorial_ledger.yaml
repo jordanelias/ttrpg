@@ -1,55 +1,15 @@
 # Valoria Editorial Ledger — Active
-# next_id: 659
+# next_id: 660
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
-# Last updated: 2026-04-17 (ED-634 propagation — faction politics rank-ladder)
+# Last updated: 2026-04-17 (PP-661) (ED-634 propagation — faction politics rank-ladder)
 
 editorial_decisions:
-  - id: ED-635
-    date: 2026-04-17
-    description: "Hafenmark Legal Advisor: Torvi Heljason — confirm name and Stance Triangle (provisional values in npc_behavior §2.14)."
-    status: resolved
-    resolution: "2026-04-17: provisional Triangle added to npc_behavior §2.14."
-    severity: P1
-    affects: [designs/systems/npc_behavior_v30.md]
-
-  - id: ED-636
-    date: 2026-04-17
-    description: "Hafenmark Military Commander: Olaf Geirson — confirm name and Stance Triangle."
-    status: resolved
-    resolution: "2026-04-17: provisional Triangle added to npc_behavior §2.14."
-    severity: P1
-    affects: [designs/systems/npc_behavior_v30.md]
-
-  - id: ED-637
-    date: 2026-04-17
-    description: "Varfell Senior Jarl: Björn Holdar — confirm name and Triangle."
-    status: resolved
-    resolution: "2026-04-17: added to npc_behavior §2.15."
-    severity: P1
-    affects: [designs/systems/npc_behavior_v30.md]
-
-  - id: ED-638
-    date: 2026-04-17
-    description: "Varfell Skald-Chief: Ingrid Stenskald — confirm name and Triangle."
-    status: resolved
-    resolution: "2026-04-17: added to npc_behavior §2.15."
-    severity: P1
-    affects: [designs/systems/npc_behavior_v30.md]
-
   - id: ED-640
     date: 2026-04-17
     description: "Hafenmark Militia sub-rank ladder (equivalent to Löwenritter Knight, internal to Hafenmark Martial-branch Parliamentarians)."
     status: open
     severity: P2
     affects: [designs/systems/faction_politics_expanded_v1.md]
-
-  - id: ED-641
-    date: 2026-04-17
-    description: "Warden Conviction: formalize as 8th Conviction. Community and Warden both added to npc_behavior §1.2 taxonomy (2026-04-17). Confirm total list: Faith/Order/Reason/Equity/Precedent/Autonomy/Continuity/Community/Warden."
-    status: resolved
-    resolution: "2026-04-17: Community and Warden added to npc_behavior §1.2."
-    severity: P2
-    affects: [designs/systems/npc_behavior_v30.md]
 
   - id: ED-642
     date: 2026-04-17
@@ -114,14 +74,6 @@ editorial_decisions:
     severity: P2
     affects: [designs/systems/faction_politics_expanded_v1.md]
 
-  - id: ED-654
-    date: 2026-04-17
-    description: "Conviction Scar × caste-transgressive modifier. Propagated to npc_behavior §3.3."
-    status: resolved
-    resolution: "2026-04-17: caste-transgressive Scar note added to npc_behavior §3.3."
-    severity: P2
-    affects: [designs/systems/npc_behavior_v30.md]
-
   - id: ED-655
     date: 2026-04-17
     description: "Ministry/Committee Position mechanic: uniform mechanic across Crown/Hafenmark/Church/Varfell or faction-specific variants? Recommend uniform with faction-specific titles."
@@ -184,3 +136,11 @@ editorial_decisions:
     status: open
     severity: P1
     affects: [designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-659
+    date: 2026-04-17
+    description: "Faction politics throughline resolutions PP-661. Four applied fixes for 10 post-PP-660 findings: caste viability matrix at character creation + Std 0 carve-out + §3.4 range 0-7 + Warden × TC scale + RM stub + SIM discoverability + split marker (TL-1,2,3,9,10); Generational × Coup × IP × Baralta interaction (TL-4, baralta §7); NPC roster 3-tier ~35 capacity (TL-5, npc_behavior §11); Hall Tier settlement integration (TL-6, settlement_layer §1.4). Spec: throughline_resolutions_v1.md."
+    status: resolved
+    resolution: "2026-04-17: applied PP-661."
+    severity: P1
+    affects: [designs/systems/throughline_resolutions_v1.md, designs/systems/player_agency_v30.md, designs/systems/settlement_layer_v30.md, designs/systems/npc_behavior_v30.md, designs/mechanics/baralta_crown_claim_v30.md]

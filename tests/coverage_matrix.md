@@ -247,3 +247,18 @@ Remaining open sub-EDs: ED-640/642/643/644/645/648/649/650/651/652/655/656/657/6
 | CROSS-B3-02 | Institutional blind spot is always one step up — constraints are positional, not systemic |
 | CROSS-B3-03 | Shadow Renown lacks formal game support across three character types |
 
+---
+
+## SIM-POL — Faction Politics Simulation Debt (PP-660 / PP-661, DEFERRED)
+
+Per user instruction 2026-04-17, simulation validation of PP-660 faction politics rank-ladder expansion is deferred. These items are tracked here for discoverability; no active simulation work is scheduled.
+
+| ID | Description | Priority | Status |
+|----|-------------|----------|--------|
+| SIM-POL-R01 | 7-rank progression pacing — validate player from Std 0 can reach Std 5 by S14 and Std 7 by S20 under normal play | P1 | DEFERRED 2026-04-17 |
+| SIM-POL-R02 | Caste modifier impact — confirm Southern Einhir rank-advancement gates do not create unwinnable game states | P1 | DEFERRED 2026-04-17 |
+| SIM-POL-R03 | Baralta Crown Claim × rank interaction — confirm Hafenmark-to-Crown Recognition Ceremony does not create exploit paths for free Crown Std 5 | P2 | DEFERRED 2026-04-17 |
+| SIM-POL-R04 | TC × rank interaction — confirm TC 100 Unification does not trivialize or over-constrain Church rank advancement | P2 | DEFERRED 2026-04-17 |
+| SIM-POL-R05 | Generational Shift Disposition outcomes — confirm 5-tier outcome table does not produce degenerate paths (always +3 in 2 seasons) | P1 | DEFERRED 2026-04-17 |
+
+Resume trigger: (a) user-initiated simulation review, or (b) patch to faction_politics_expanded_v1 that changes rank-advancement formulas.

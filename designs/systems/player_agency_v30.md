@@ -112,6 +112,8 @@ At the start of each season, the player's faction leader evaluates the faction's
 - **Player's skills:** Investigation duties for high-Cognition characters, diplomatic duties for high-Charisma characters, Thread duties for practitioners.
 - **Faction urgency:** Survival-tier priorities (Stability ≤ 2) generate urgent defensive Duties. Expansion-tier priorities generate offensive Duties.
 
+**Standing 0 carve-out (PP-661):** Duty assignment requires Standing ≥ 1. At Standing 0 (Petitioner), the player receives the **Initiation Duty** only — a faction-specific scene arc specified in faction_politics_expanded_v1 §1 that must be completed before standard Duty generation begins. The Initiation Duty is a fixed narrative gate, not drawn from the faction AI priority stack. Successful completion transitions the player to Standing 1 and activates the Duty system as defined below. See throughline_resolutions_v1 §2 for full reconciliation.
+
 ### 3.3 Duty Types
 
 | Duty | Assigned When | Success Condition | Failure Consequence |
@@ -127,9 +129,15 @@ At the start of each season, the player's faction leader evaluates the faction's
 
 ### 3.4 Duty Completion
 
-**Success:** Standing +1 (faction-specific track, 0–5). High Standing unlocks: access to faction intelligence (Standing 2), invitation to faction council discussions (Standing 3), authority to issue sub-commands to NPC officers (Standing 4), candidacy for faction leadership succession (Standing 5).
+**Success:** Standing +1 (faction-specific track, 0–7 per faction_politics_expanded_v1 §1). Rank thresholds unlock (PP-661 revision):
+- Standing 2 — faction intelligence access (rival stats, territory conditions)
+- Standing 3 — council observation, specialty branch selection, Formal Recognition Event required
+- Standing 4 — NPC officer sub-commands, +1 scene action
+- Standing 5 — treaty-level standing, inner-circle adjacency
+- Standing 6 — inner-circle voting, +2 scene actions, Hall Tier residency (see settlement_layer §1.4)
+- Standing 7 — succession-eligible, Regent-Designate authority
 
-**Failure:** Standing −1. Below Standing 0: the faction stops assigning Duties — the player is functionally independent but loses faction support (no Domain Action influence, no faction intelligence, no territorial safe harbor).
+**Failure:** Standing −1, floor-protected above Standing 1. A player who fails a Duty at Standing 1+ drops by 1 step but cannot fall below Standing 1 once initiated — the faction membership is durable absent explicit dismissal (see ED-647 for dismissal mechanics). A player at Standing 0 (Petitioner) who fails the Initiation Duty remains at Standing 0 until they retry, complete it, or declare for a different faction.
 
 **Exceeding:** Completing the Duty AND producing additional value (discovered a conspiracy, turned an enemy NPC, generated Casus Belli). Standing +2 instead of +1.
 
@@ -362,10 +370,21 @@ The scene action budget is the game's primary pacing lever. It determines how mu
 
 ### 7.1 Character Creation (params_core)
 
-Add to character creation:
-- Step: Write 3 Convictions.
-- Step: Choose faction alignment (or independent).
-- Derived: Starting Standing = 1 (faction members) or 0 (independent).
+Character creation steps (revised PP-661 for caste + Initiation integration):
+
+1. **Write 3 Convictions** (per §2.2). One should relate to a personal goal, one to a faction concern, one to a relationship or NPC.
+2. **Choose caste background** (new PP-661 step): Northern Einhir / Central Einhir / Southern Einhir. See faction_politics_expanded_v1 §3.1 for caste definitions.
+3. **Review Viability Matrix** (new PP-661 display): 4-faction × 3-caste × specialty-branch grid showing which combinations play at Favored (★★★), Standard (★★), Gated (★), or Closed (✕) difficulty. See throughline_resolutions_v1 §1.3 for the canonical matrix.
+4. **Choose faction alignment** (or independent) — with the Viability Matrix visible.
+5. **If faction member:** the specialty branch (where applicable — Crown, Hafenmark, Varfell, Church) is selected at Standing 3 via in-game Formal Recognition Event, not at character creation. At character creation the player may only *indicate* intent for GM use.
+6. **Derived: Starting Standing = 0 (Petitioner)** for faction members; independent characters have no Standing. *(Change from prior spec which derived Standing = 1 — PP-660 introduced the Standing 0 Petitioner state with Initiation Duty; character creation now aligns.)*
+7. **Display Initiation Duty preview** — the first-season scene the faction-aligned character will play. See faction_politics_expanded_v1 §1 for per-faction Initiation Duties.
+
+**Advisory text (canonical, display to players):**
+
+> Valoria's caste system is not a difficulty setting. It is a structural feature of the peninsula's politics. A Southern Einhir character facing the Crown is not playing a harder version of the same game — they are playing a different game, one where covert paths (Riskbreakers, Niflhel, Wardens) are structurally open while overt institutional advancement is structurally difficult. A Northern Einhir character facing Varfell's Cultural branch faces the mirror challenge. If this is your first Valoria campaign, a Standard (★★) or Favored (★★★) pairing is recommended. A Gated (★) or Closed (✕) pairing is a deliberate thematic commitment, not a mistake. Both produce valid stories.
+
+[EDITORIAL: ED-659 — Character creation caste + viability onboarding applied PP-661.]
 
 ### 7.2 Season Structure (board_game_v30)
 

@@ -1007,3 +1007,48 @@ Canonical values for NPC Behavior System integration:
 | references/propagation_map.md | Cross-references to contest, factions, threadwork, core |
 
 *End of document.*
+
+---
+
+## §11 — Named NPC Roster Tracking Capacity (PP-661)
+
+### §11.1 Tiers
+
+Every named NPC is classified into one of three tiers:
+
+| Tier | Tracking Required | Scene Eligibility | Storage |
+|------|-------------------|-------------------|---------|
+| **Active** | Disposition per PC, Availability State, active-Duty reference, Scar count, current-season action flag | All scene types | Companion app primary surface |
+| **Passive** | Disposition per PC (stable), Availability State | Ceremonial scenes, Scene Slate Priority 3+ only | Companion app secondary surface |
+| **Background** | Identity only (name, faction, canonical role) | Reference only; appears in generated text | Game Master memory / roster reference |
+
+### §11.2 Capacity
+
+The peninsula supports approximately **35 named NPCs at Active tier** at any time. This is the soft cap based on companion-app tracking and Game Master narrative load. When a 36th NPC becomes Active (via inner-circle entry, Companion acquisition, or player-initiated arc), one Active NPC is demoted to Passive.
+
+### §11.3 Demotion Triggers (priority order)
+
+1. **Off-screen duration:** Active NPC with no scene appearance, Duty assignment, or Disposition shift for ≥ 4 seasons.
+2. **Low Disposition inertia:** Disposition has been −1 to +1, unchanged for ≥ 4 seasons, no active Duty thread.
+3. **Faction removal:** NPC's faction has collapsed, been eliminated, or formally dismissed the NPC.
+4. **Player-declared:** Player signals no interest. Game Master may demote.
+
+Demotion is reversible: a Passive NPC returns to Active when player scene directly engages them, Disposition shifts by ≥ 2, or faction priority tree selects them for a named action.
+
+### §11.4 Background Tier
+
+Background NPCs exist only as canonical references. They have no tracked state. If a scene requires them (a Background senator casts a vote), behavior defaults to their faction AI tendency. They cannot be Companion, cannot hold rank-ladder position for the player to interact with personally. Promotion to Passive requires a Priority 1 Scene Slate entry bringing them into interactive presence.
+
+### §11.5 Inner-Circle NPCs
+
+Per faction_politics_expanded_v1 §§1–2, inner-circle NPCs (Crown 5, Hafenmark 4, Varfell 5, Church 5) and Cardinals (4) are **structurally Active** — they cannot be demoted below Passive while their faction is in play. If one is deposed, killed, or exiled, they are replaced per faction succession rules and the replacement enters Active tier.
+
+### §11.6 Companion App Display
+
+- **Active tier:** Full state panel (Disposition, Availability, active Duty, Scar count, next-expected-action).
+- **Passive tier:** Compact panel (name, faction, last-known Disposition, faction role).
+- **Background tier:** Searchable directory only, no state panel.
+
+Capacity at these weights: ~35 Active + ~30 Passive + unlimited Background.
+
+[EDITORIAL: ED-659 — Roster tracking capacity formalized PP-661.]

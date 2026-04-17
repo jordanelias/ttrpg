@@ -162,6 +162,7 @@
 |------|---------|--------|-------|
 | designs/systems/clock_registry_v30.md | ALL | CURRENT | Unified clock/track registry. PP-496. |
 | designs/systems/faction_politics_expanded_v1.md | ALL | CURRENT | Rank-ladder expansion (0-7), sub-office ladders, caste integration. PP-660, 2026-04-17. Supersedes faction_politics_patch_register_2026-04-16.md draft. |
+| designs/systems/throughline_resolutions_v1.md | ALL | CURRENT | 10 throughline resolutions for PP-660. Character creation caste, Std 0 carve-out, Warden × TC, three-clock interaction, NPC roster capacity, Hall Tier settlement integration, SIM discoverability. PP-661, 2026-04-17. |
 
 ---
 

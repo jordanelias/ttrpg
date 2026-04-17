@@ -622,3 +622,17 @@ DESIGN GAP 2: Guild Favour restoration mechanic — no upward movement source do
 | params_board_game.md §Accounting | references/rs_budget.md §7.1 | DONE — referenced |
 | peninsular_strain_v1.md §3 | references/rs_budget.md §2.1 (siege) | DONE — aggregated |
 | tests/thread_stress/threadwork_audit_register.md §F | references/rs_budget.md §5 | DONE — peak scenarios incorporated |
+
+
+## PP-661 — Faction Politics Throughline Resolutions (2026-04-17)
+
+| Changed File | Propagates To | Reason |
+|-------------|--------------|--------|
+| `designs/systems/throughline_resolutions_v1.md` (NEW) | `designs/systems/faction_politics_expanded_v1.md` | Extends PP-660 register with 10 throughline resolutions; canonical companion doc |
+| `designs/systems/throughline_resolutions_v1.md` | `designs/systems/player_agency_v30.md` §3.2, §3.4, §7.1 | Standing 0 carve-out, range update 0-7, character creation caste step |
+| `designs/systems/throughline_resolutions_v1.md` | `designs/systems/settlement_layer_v30.md` §1.4 | Institutional Facility Tiers mechanical integration for Hall Tier |
+| `designs/systems/throughline_resolutions_v1.md` | `designs/systems/npc_behavior_v30.md` §11 | Named NPC 3-tier capacity system |
+| `designs/systems/throughline_resolutions_v1.md` | `designs/mechanics/baralta_crown_claim_v30.md` §7 | Three-clock interaction spec (Generational × Coup × IP × Baralta) |
+| `designs/systems/throughline_resolutions_v1.md` | `tests/coverage_matrix.md` | SIM-POL-R01 through R05 discoverability (DEFERRED status) |
+| `designs/systems/throughline_resolutions_v1.md` | `designs/systems/faction_politics_expanded_v1.md` §2.7 | Warden × TC pressure scale (cross-reference) |
+| `designs/ttrpg/threadwork_v30.md` (ED-629 dependency) | `designs/systems/faction_politics_expanded_v1.md` §2.7 | ED-629 Thread stress resolution may require Warden audit |

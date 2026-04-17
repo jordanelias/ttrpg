@@ -34,6 +34,7 @@ character_histories: designs/characters/character_histories_v30.md
 arc_expansion: designs/systems/arc_expansion_v1_2026-04-16.md
 bridge_part1_revisions: designs/audit/bridge_part1_revisions_2026-04-16.md
 faction_politics_expanded: designs/systems/faction_politics_expanded_v1.md  # PP-660, 2026-04-17
+throughline_resolutions: designs/systems/throughline_resolutions_v1.md  # PP-661, 2026-04-17
 
 ## Superseded — 2026-04-17 (retained as historical reference)
 npc_behavior_system_v1: designs/systems/npc_behavior_system_v1.md (canonical: designs/systems/npc_behavior_v30.md)

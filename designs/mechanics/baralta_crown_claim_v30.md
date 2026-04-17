@@ -146,3 +146,59 @@ Hafenmark ranks below Std 7 do NOT auto-transfer. Crown ranks under Baralta are 
 ---
 
 *End of mechanic design. All decisions flagged for user review.*
+
+---
+
+## 7. Generational Shift × Coup Counter × IP × Crown Claim Interaction (PP-661)
+
+PP-660 revised Torben's maturation from "10 years game-time" to a 4-trigger Generational Shift. Three existing clocks interact with this in ways requiring explicit spec:
+
+### 7.1 Generational Shift × Coup Counter
+
+When Generational Shift fires (any trigger), evaluate Torben's Disposition to the player and his Loyalty vector:
+
+| Shift Trigger | Torben Disposition to player | Torben Loyalty vector | Coup Counter effect |
+|---------------|-----------------------------|-----------------------|---------------------|
+| Campaign Seasons ≥ 24 (natural) | Any | ≥ 4 (Crown-aligned) | No effect |
+| Campaign Seasons ≥ 24 | Any | ≤ 3 (Altonian) | +1 (standard per factions_ttrpg §8.9) |
+| Readiness ≥ 5 (precocious) | ≥ +1 | Any | No effect; Loyalty transfers stabilize |
+| Readiness ≥ 5 | ≤ 0 | Any | +1 (Torben as rival rather than successor) |
+| Crown Stability ≤ 1 (emergency) | Any | Any | +1 automatic (institutional panic, in addition to Loyalty-based increment) |
+| Almud death | Any | Any | Succession Declaration Scene takes precedence; no automatic Coup increment |
+
+The Crown Stability ≤ 1 trigger is the most dangerous path — it increments the Counter in addition to any Loyalty-based increment. If Counter was at 2 when this trigger fires, Coup fires immediately.
+
+### 7.2 Generational Shift × IP (Institutional Pressure)
+
+If IP ≥ 60 (Altonian Preparation active) at Generational Shift:
+- Torben's Loyalty threshold for Altonian-alignment drops from ≤ 3 to ≤ 4. Mid-loyalty Torben becomes legible as defection risk.
+
+If IP ≥ 75 (Vanguard active) AND Torben Disposition to player ≤ 0 at Generational Shift:
+- Torben becomes formal Altonian diplomatic contact point (npc_behavior §7.8). Altonia may use him diplomatically. This adds Torben diplomatic intervention scenes to the Scene Slate at Priority 2 (not automatic Coup).
+
+### 7.3 Generational Shift × Baralta Crown Claim
+
+**Scenario A — Generational Shift fires before Baralta Crown Claim triggers:**
+- Torben is mature when Hafenmark wins Succession Contest.
+- Baralta's Consecration path (§3) takes Disposition penalty: +1 Ob to Consecration ceremony roll if Torben Disposition to Baralta ≤ 0.
+- Torben may be formally exiled by Baralta (Parliament concurrence scene arc, +1 Ob), OR
+- Torben becomes rival claimant creating de facto civil war at reduced scale (COUP-02 Contested Coup mechanics).
+
+**Scenario B — Baralta Crown Claim fires before Generational Shift:**
+- Baralta holds Crown while Torben is a ward.
+- Option A (merger) or Option B (institutional successor) applies per §5.
+- At subsequent Generational Shift: Torben matures under Baralta's regency. Disposition to Baralta is a new variable (default 0, modified by ward-relationship scenes). At Disposition ≤ −2, Torben becomes rival claimant post-Shift — delayed Scenario A.
+
+**Scenario C — Generational Shift AND Baralta Crown Claim fire concurrently:**
+- Contested Crown Succession Contest. Hafenmark, Torben, and Löwenritter (if Coup Counter ≥ 2) all stake claim.
+- Torben's pool = Mandate + Bloodline Legitimacy bonus (+2D, Bloodline claim tier per LIN-01).
+- If Torben wins: Crown stays Bloodline claim; Hafenmark's attempt fails; Baralta reverts to pre-contest status with Stability −1 (overreach per §2 failure clause); Löwenritter Coup Counter +1.
+
+### 7.4 Sequencing Rules
+
+When multiple clocks fire same Accounting:
+1. **Succession takes precedence** — Almud death or Generational Shift Declaration Scene fires first, pauses other clock resolutions within 1 season.
+2. **Coup Counter resolves next** — if Counter reaches 3, Coup fires after Succession declared but before IP effects apply.
+3. **IP effects apply last** — peninsula's post-succession state is what Altonia reacts to.
+
+[EDITORIAL: ED-659 — Three-clock interaction table applied PP-661.]

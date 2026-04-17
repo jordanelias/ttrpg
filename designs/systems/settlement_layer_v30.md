@@ -50,6 +50,48 @@ Each settlement has 3 stats tracked on a 0–5 scale:
 
 **Province Accord derivation (REVISED):** Province Accord is now the floor of the average Order across all settlements in the province, rounded down. If a province has 3 settlements with Order 4, 2, and 1, the province Accord = floor((4+2+1)/3) = floor(2.33) = 2. This means province Accord emerges from settlement governance rather than being set directly. Existing Accord change rules (peninsular_strain §2.3–2.4) now operate by modifying settlement Order values, which cascade upward.
 
+## §1.4 Institutional Facility Tiers (PP-661)
+
+Each Seat-type and certain City-type settlements offer a bounded number of **Institutional Facility slots** that the faction controlling the settlement can allocate to rank-holders per faction_politics_expanded_v1 §1 Hall Tier specification. Facility slots are a finite settlement resource; when full, new rank-holders at the corresponding tier receive "pending" status until a slot opens.
+
+### §1.4.1 Facility Slot Capacity by Settlement Type
+
+| Settlement Type | Wing Slots (Std 6+) | Suite Slots (Std 5) | Chamber Slots (Std 3–4) | Billet Slots (Std 1–2) |
+|-----------------|--------------------|--------------------|--------------------------|-------------------------|
+| Seat | 3 | 5 | 8 | unlimited (shared quarters) |
+| City | 1 | 3 | 5 | unlimited |
+| Town | 0 | 1 | 3 | unlimited |
+| Fortress | 0 | 1 | 4 (military chambers) | unlimited |
+| Cathedral | 1 (Prelate's Palace) | 3 (Bishop's Suites) | 5 (Canon's Chambers) | unlimited (cloister) |
+| Port | 0 | 1 | 3 | unlimited |
+| Mine | 0 | 0 | 1 | unlimited |
+| Outpost | 0 | 0 | 1 | unlimited |
+
+### §1.4.2 Allocation Rules
+
+- Slots are allocated by the settlement's controlling authority (usually the province faction).
+- At Seat settlements, the faction leader occupies one Wing automatically (counted against the 3-cap). Inner circle NPCs occupy additional Wings per rank.
+- Player advancement to Standing 6+ requires an available Wing slot. If none available, advancement is "pending" (FAC-02 standing-debt equivalent per faction_politics_expanded_v1 §1.0).
+- Wing occupancy is durable across seasons until death, succession, exile, or formal transfer.
+
+### §1.4.3 Capacity Pressure as Political Mechanic
+
+At full capacity, rank advancement becomes politically charged. If a Seat has 3 Wings occupied (leader + 2 inner circle) and the player reaches Standing 6 as a fourth claimant:
+
+1. **Existing Wing-holder departs** (Generational Shift, death, exile, political transition), OR
+2. **Settlement expands capacity** via Domain Action **Expand Institutional Capacity** (Wealth −3, scene action at settlement, +1 Wing added; cap: +1 Wing per settlement per decade), OR
+3. **Player accepts Prince-in-Waiting provisional rank** — Std 6 privileges without Wing residency. Each season without Wing, player makes social contest (Disposition pool vs Ob 2) to maintain inner-circle standing. Failure reverts to Standing 5.
+
+This creates structural political pressure: full capacity drives exile, succession, or formal expansion rather than permitting unlimited inner-circle accumulation.
+
+### §1.4.4 Cross-Faction Wing Allocation
+
+At Seat settlements of composite control (e.g., Valorsplatz Cathedral S-003 is Church-controlled within Crown territory T1), Wing slots belong to the settlement's direct controller, not the province's controller. Church-controlled Seats host Prelates and Cardinals regardless of Crown occupation of Valorsplatz Palace.
+
+Cross-faction Wings may be ceded as treaty concessions (ambassadorial residences). A ceded Wing counts against the ceding faction's capacity while occupied by the allied faction.
+
+[EDITORIAL: ED-659 — Hall Tier mechanical integration applied PP-661.]
+
 ---
 
 # PART 2: THE 36 SETTLEMENTS

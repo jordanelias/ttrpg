@@ -276,6 +276,14 @@ systems:
     design_doc: designs/systems/faction_politics_expanded_v1.md
     notes: "Rank-ladder expansion (Standing 0-7), sub-office ladders, caste integration, TC × rank, Baralta × rank, Ministry expansion, Generational Shift fix. PP-660, 2026-04-17. Supersedes original faction_politics_patch_register_2026-04-16.md draft. Raises ED-634 through ED-658."
 
+
+  throughline_resolutions:
+    status: active
+    canonical: designs/systems/throughline_resolutions_v1.md
+    params: null
+    design_doc: designs/systems/throughline_resolutions_v1.md
+    notes: "10 throughline integration fixes for PP-660 faction politics expansion. PP-661, 2026-04-17. Applied fixes: character creation caste viability, Std 0 carve-out, Warden × TC scale, Generational × Coup × IP × Baralta interaction, NPC roster capacity, Hall Tier settlement integration, SIM-POL discoverability, register-split future marker. ED-659."
+
 # 2026-04-17 — editorial batch acceptance
 # 23 proposal files promoted to CANONICAL status. See canon/editorial_ledger.yaml ED-628.
 # Legacy predecessors npc_behavior_system_v1.md and social_contest_system_v2.md marked SUPERSEDED (retained as historical reference).
