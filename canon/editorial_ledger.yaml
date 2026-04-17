@@ -1,58 +1,16 @@
 # Valoria Editorial Ledger — Active
-# next_id: 549
+# next_id: 572
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Index: canon/editorial_ledger_index.md
-# Last updated: 2026-04-14
+# Last updated: 2026-04-16
 
 editorial_decisions:
-  - id: ED-535
-    date: 2026-04-14
-    description: "Starting PT values — proposed, pending user review."
-    status: provisional
-    severity: P2
-    affects: [references/params_board_game.md]
-
-  - id: ED-536
-    date: 2026-04-14
-    description: "Church Counter-Reformation defensive action needs formal PP."
-    status: open
-    severity: P2
-    affects: [designs/board_game/peninsular_strain_v1.md]
-
-  - id: ED-537
-    date: 2026-04-14
-    description: "Godot check_victory stale. Deferred to Godot session."
-    status: deferred
-    severity: P2
-    affects: []
-
-  - id: ED-538
-    date: 2026-04-14
-    description: "Sim re-run needed with Accord/Strain/battle consequences."
-    status: open
-    severity: P1
-    affects: []
-
   - id: ED-539
     date: 2026-04-14
     description: "TC reform + TCV 5 + Seizure Accord ≥ 2 compound effect unvalidated."
     status: open
     severity: P1
     affects: [designs/board_game/victory_v30.md]
-
-  - id: ED-540
-    date: 2026-04-14
-    description: "RS −1 flat vs scaled — consider RS −2 when RS ≤ 50. Deferred to sim."
-    status: deferred
-    severity: P3
-    affects: [designs/board_game/peninsular_strain_v1.md]
-
-  - id: ED-541
-    date: 2026-04-14
-    description: "military_layer_v30.md / faction_layer_v30.md — uncommitted from sim session."
-    status: open
-    severity: P2
-    affects: [designs/board_game/]
 
   - id: ED-542
     date: 2026-04-14
@@ -82,24 +40,143 @@ editorial_decisions:
     severity: P1
     affects: [designs/hybrid/scale_transitions_v30.md]
 
-  - id: ED-546
-    date: 2026-04-15
-    description: "RM has no BG mode mechanical actor."
+  - id: ED-549
+    date: 2026-04-16
+    description: "Order stat range undefined. Settlement-level Order (from combat_v30 §13.2b) has no canonical range, floor, or ceiling. Proposed..."
     status: open
     severity: P2
-    affects: [designs/board_game/board_game_v30.md]
+    affects: [designs/combat/combat_v30.md, references/params_board_game.md]
 
-  - id: ED-547
-    date: 2026-04-15
-    description: "Fieldwork no resource cost for extended investigation."
-    status: open
-    severity: P3
-    affects: [designs/fieldwork/fieldwork_v30.md]
-
-  - id: ED-548
+  - id: ED-550
     date: 2026-04-16
-    description: "Wound Interval formula correction. Health = (Endurance + 6) * (Max Wounds + 1); Wound accrues every (Endurance + 6) damage. Replaces single-WI-with-reset formulation with scaling total capacity. Applied to combat_v30 §7."
-    status: resolved
+    description: "Settlement Order degradation during siege: −1/siege season not formally stated. Mirrors RS cost at settlement scale. Proposed PP."
+    status: open
+    severity: P2
+    affects: [designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-551
+    date: 2026-04-16
+    description: "Altonian Vanguard NPC priority tree (npc_behavior §7.8) has no Assault entry. Vanguard cannot mechanically siege garrisoned ter..."
+    status: open
     severity: P1
-    affects: [designs/combat/combat_v30.md]
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-553
+    date: 2026-04-16
+    description: "Niflhel contact trigger undefined — no settlement anchor, no Outreach path. Proposed: Investigation-triggered contact (Tribune ..."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-555
+    date: 2026-04-16
+    description: "companion_specification_v30.md referenced in mass_battle_v30 §D.2 but does not exist. Required: companion vs. recruited NPC dis..."
+    status: open
+    severity: P1
+    affects: [designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-556
+    date: 2026-04-16
+    description: "Named unit officer reaction to player faction-misaligned action undefined. Proposed: −1 Disposition if action contradicts offic..."
+    status: open
+    severity: P2
+    affects: [designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-557
+    date: 2026-04-16
+    description: "Companion personal combat stat generation undefined. Proposed: Agility = STR = floor(faction Military / 2); Endurance = floor(f..."
+    status: open
+    severity: P1
+    affects: [designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-558
+    date: 2026-04-16
+    description: "Companion proxy Command when PC general incapacitated: no rule. Proposed: Ob 3 re-establish Command check (harder than PC's Ob ..."
+    status: open
+    severity: P2
+    affects: [designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-559
+    date: 2026-04-16
+    description: "Companion combat AI priority tree undefined. Proposed 5-level tree: (1) Survival/Full Guard, (2) Conviction-critical/Rescue, (3..."
+    status: open
+    severity: P1
+    affects: [designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-560
+    date: 2026-04-16
+    description: "Companion mass combat capability undefined beyond unit command. Proposed tiered by Disposition: +3 = unit command; +4 = sub-com..."
+    status: open
+    severity: P2
+    affects: [designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-561
+    date: 2026-04-16
+    description: "Companion tactic capability as sub-commander undefined. Proposed: Tier-1 tactics (Standard Advance, Disciplined Defence) automa..."
+    status: open
+    severity: P2
+    affects: [designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-562
+    date: 2026-04-16
+    description: "Panel Adjudicator type (social contest) undefined — blocks ED-137 and UI-07. Resolved: Model B (Institutional Authority NPC). D..."
+    status: open
+    severity: P1
+    affects: [designs/contest/social_contest_v30.md]
+
+  - id: ED-563
+    date: 2026-04-16
+    description: "Panel pre-contest adjudicator selection rule undefined. Proposed: Influence vs target NPC's Leadership Deviation Ob. Success: p..."
+    status: open
+    severity: P2
+    affects: [designs/contest/social_contest_v30.md]
+
+  - id: ED-564
+    date: 2026-04-16
+    description: "Social contest stalemate: no tie-break if Track movement = 0 for multiple exchanges. Proposed: after 5 exchanges with no moveme..."
+    status: open
+    severity: P2
+    affects: [designs/contest/social_contest_v30.md]
+
+  - id: ED-565
+    date: 2026-04-16
+    description: "IP passive advancement rate produces 4–6 Vanguard deployments in 30-year (120-season) games — too frequent. Proposed: passive I..."
+    status: open
+    severity: P2
+    affects: [references/params_board_game.md]
+
+  - id: ED-566
+    date: 2026-04-16
+    description: "Vanguard repulsion cooldown undefined — nothing prevents immediate threshold re-breach after repulsion. Proposed: 3-season cool..."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md, references/params_board_game.md]
+
+  - id: ED-567
+    date: 2026-04-16
+    description: "NPC leader mortality mechanic absent — named leaders are effectively immortal, breaking 30-year games. Proposed: Longevity Trac..."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-568
+    date: 2026-04-16
+    description: "Succession procedure on natural death undefined. Proposed: named successor from Arc profiles → assumes leadership; no successor..."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-570
+    date: 2026-04-16
+    description: "Siege duration summary not explicitly stated in any doc. PP-088 covers it implicitly (Fort −1/successful Assault). Proposed: ad..."
+    status: open
+    severity: P2
+    affects: [designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-571
+    date: 2026-04-16
+    description: "Companion vs. recruited NPC formal distinction absent. Proposed: companions = personal travel + scene-level action; recruited N..."
+    status: open
+    severity: P1
+    affects: [designs/mass_combat/mass_battle_v30.md]
 

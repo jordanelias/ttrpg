@@ -1,7 +1,7 @@
 # Coverage Matrix — Active
 # Full archive: tests/coverage_matrix_archive.md
-# Last updated: 2026-04-14
-# Total sim runs completed: 25 (see archive for full history)
+# Last updated: 2026-04-16
+# Total sim runs completed: 29 (see archive for full history)
 
 ## Open SIM-DEBT
 
@@ -18,6 +18,11 @@
 |----|--------|-------------|--------|
 | SIM-DEBT-01 | Debate system | RESOLVED. Mode C (SIM-D-02) confirmed: resistance dominates track movement; genre weight > pool size adjustments; 3-exchange Formal Debate → Compromise ~95%. CLASH strain calibration (2-3/exchange) analytically confirmed, scenario validation pending forced-CLASH run. | RESOLVED |
 | AUD-TTRPG-01 | Modes A–G: Formula, Number Systems, Interaction Chains, Gap Detection, Core Principles, Playtest Burden, Cross-Mode | TTRPG | — | All tracks | All factions | All named NPCs | Full TTRPG mode | Complete | 11 P1s, 14 P2s, 4 P3s — see tests/aud_ttrpg_01.md |
+| SIM-NPC-01 | npc_behavior_v30 §11 | Full BG simulation with all NPC priority trees active. Validate multi-faction interaction under priority tree model. | OPEN — sim_open_items_2026-04-16 §B covers partial; full 6-faction BG sim pending |
+| SIM-NPC-02 | npc_behavior_v30 §11 | Contest simulation: Resonant Style +1D stacking with genre/audience/Recall bonuses. Validate pool sizes and Conviction Track movement rates. | COVERED — SIM-02 chain contest convergence confirms convergence ≤5 exchanges |
+| SIM-NPC-03 | npc_behavior_v30 §11 | Arc emergence simulation: run 3-season TTRPG campaign with Almud and Himlensendt arc triggers. | OPEN — pending |
+| SIM-NPC-04 | npc_behavior_v30 §11 | Framework Drift simulation: run 6-season BG game with all drift mechanics active. | OPEN — pending |
+| SIM-NPC-05 | npc_behavior_v30 §11 | Belief Scar cascade: validate 3+ Scars on single NPC. | OPEN — pending |
 
 
 ## Open P1 Findings
@@ -38,6 +43,16 @@
 |----|--------|-------------|--------|
 | F-58 | X-14 | RS 22 is 2 points from Dormant (Leap-disabled) threshold — any failed Weaving crosses the line globally | Open — campaign awareness item |
 
+## New P1/P2 Findings (sim_open_items_2026-04-16)
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| F-59 | SIM-SETT-04 | Altonian Vanguard priority tree missing Assault entry — cannot siege garrisoned Fort territories under NPC AI | Open — ED-551 |
+| F-60 | SIM-COMP | companion_specification_v30.md forward-referenced but does not exist; companion stat gen, AI, mass combat role all undefined | Open — ED-555, 557, 559, 571 |
+| F-61 | SIM-ED137 | Panel Adjudicator type undefined — blocks social_contest_v30 Panel mechanic and UI-07 | Open — ED-562 |
+| F-62 | SIM-03 | IP passive advancement overproduces Vanguard deployments in 30-year (120-season) games | Open — ED-565, 566 |
+| F-63 | SIM-04 | NPC leader mortality absent — all named leaders immortal in 30-year games; generational shift cannot emerge without Longevity mechanic | Open — ED-567, 568, 569 |
+
 
 ## Provisional Decisions Pending Application
 
@@ -49,5 +64,7 @@
 | F-30/F-33 | Coup Counter successor: highest-CR officer, Counter resets | Provisional — apply to designs/combat |
 | F-43 | TC change cap: ±3/season Domain Actions, ±5 all sources | Provisional — apply to stage5_clocks or designs |
 | F-52 | Stability recovery: +1/season with no hostile actions when Stability ≤ 3 | Provisional — apply to faction rules |
-
+| SIM-02 | Social contest stalemate: 5-exchange cap → forced Partial in current Track direction | Provisional — ED-564; apply to social_contest_v30 |
+| SIM-03 | IP recalibration: passive IP ×0.5 after season 40; ×0.25 after season 80; 3-season Vanguard cooldown | Provisional — ED-565/566; apply to params_board_game |
+| SIM-04 | Longevity Track + Year-End mortality roll; Succession Procedure on death | Provisional — ED-567/568/569; apply to npc_behavior_v30 |
 

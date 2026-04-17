@@ -3541,3 +3541,17 @@ editorial_decisions:
   resolution: "Applied to Varfell Priority Tree P2. 2026-04-13."
   source: SIM-NPC-01 F-06
   date: 2026-04-13
+
+# --- Archived 2026-04-16 (slim pass — resolved/deferred/P3) ---
+# ED-535: Starting PT values provisional (moved to params_board_game backlog)
+# ED-536: Church Counter-Reformation PP needed (deferred to peninsular_strain next session)
+# ED-537: Godot check_victory stale (deferred to Godot session)
+# ED-538: Sim re-run needed — RESOLVED by sim_open_items_2026-04-16
+# ED-540: RS −1 flat vs scaled — deferred P3
+# ED-541: military_layer/faction_layer uncommitted — deferred to next commit session
+# ED-546: RM no BG mode actor — deferred P2
+# ED-547: Fieldwork resource cost — deferred P3
+# ED-548: Wound Interval formula — RESOLVED 2026-04-16, applied to combat_v30 §7
+# ED-552: RM organizer starting Disposition — P3, propose 0 (neutral)
+# ED-554: Hann home settlement T11 Halvardshelm — provisional P3
+# ED-569: Longevity Track NPC values — P3, see ED-567/568
