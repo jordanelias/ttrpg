@@ -2,20 +2,23 @@
 # Full active ledger: canon/editorial_ledger.yaml
 # Full archive: canon/editorial_ledger_archive.yaml
 # Full index: canon/editorial_ledger_index.md
-# Last updated: 2026-04-17
+# Last updated: 2026-04-17 (PP-661 close — ledger split)
 
-next_id: 629
-p1_blocker_count: 2
-p1_blocker_ids: ['ED-589', 'ED-620']
-provisional_count: 1
-provisional_ids: ['ED-591-609']
-open_count: 17
-open_ids: ['ED-542', 'ED-586', 'ED-587', 'ED-589', 'ED-611', 'ED-615', 'ED-616', 'ED-617', 'ED-618', 'ED-619', 'ED-620', 'ED-621', 'ED-622', 'ED-623', 'ED-624', 'ED-625', 'ED-626']
+next_id: 660
+p1_blocker_count: 3
+p1_blocker_ids: ['ED-643', 'ED-632', 'ED-633']
+provisional_count: 0
+provisional_ids: []
+open_count: 16
+open_ids: ['ED-640', 'ED-642', 'ED-643', 'ED-644', 'ED-645', 'ED-648', 'ED-649', 'ED-650', 'ED-651', 'ED-652', 'ED-655', 'ED-656', 'ED-657', 'ED-658', 'ED-632', 'ED-633']
 flagged_count: 0
 flagged_ids: []
 
 note: >
-  2026-04-17 editorial batch acceptance (ED-628) promoted 23 proposal files to CANONICAL.
-  Open items on now-canonical docs carry forward; registry consolidated.
+  2026-04-17 (PP-661 close) ledger split: ED-659 (resolved) archived;
+  SIM-POL-R01/R02/R05 removed from ledger as duplicates (canonical locus is
+  tests/coverage_matrix.md, where all 5 SIM-POL-R01..R05 are tracked).
+  Prior 2026-04-17 editorial batch (ED-628) promoted 23 proposal files to CANONICAL;
+  open items on canonical docs carry forward.
   Fetch canon/editorial_ledger.yaml for active items only when adding new editorials.
   Fetch canon/editorial_ledger_archive.yaml only for audit/reference work.

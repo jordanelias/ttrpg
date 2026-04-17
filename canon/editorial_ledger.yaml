@@ -1,7 +1,7 @@
 # Valoria Editorial Ledger — Active
 # next_id: 660
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
-# Last updated: 2026-04-17 (PP-661) (ED-634 propagation — faction politics rank-ladder)
+# Last updated: 2026-04-17 (PP-661 close — ledger split)
 
 editorial_decisions:
   - id: ED-640
@@ -102,27 +102,6 @@ editorial_decisions:
     severity: P2
     affects: [designs/board_game/varfell_path_b_v30.md, designs/systems/faction_politics_expanded_v1.md]
 
-  - id: SIM-POL-R01
-    date: 2026-04-17
-    description: "SIM-DEBT: 7-rank progression pacing — validate player can reach Std 5 by S14 and Std 7 by S20 under normal play."
-    status: open
-    severity: P1
-    affects: [designs/systems/faction_politics_expanded_v1.md]
-
-  - id: SIM-POL-R02
-    date: 2026-04-17
-    description: "SIM-DEBT: caste modifier impact — confirm Southern Einhir gates do not create unwinnable game states."
-    status: open
-    severity: P1
-    affects: [designs/systems/faction_politics_expanded_v1.md]
-
-  - id: SIM-POL-R05
-    date: 2026-04-17
-    description: "SIM-DEBT: Generational Shift Disposition outcomes — confirm five-tier outcome table does not produce degenerate paths."
-    status: open
-    severity: P1
-    affects: [designs/systems/faction_politics_expanded_v1.md]
-
   - id: ED-632
     date: 2026-04-17
     description: "Shadow Renown: referenced in faction_politics_expanded (REN-03) but no implementation — no track, no unlock conditions, no conversion to public Renown, no exposure consequences. Full mechanic specification required."
@@ -137,10 +116,3 @@ editorial_decisions:
     severity: P1
     affects: [designs/systems/faction_politics_expanded_v1.md]
 
-  - id: ED-659
-    date: 2026-04-17
-    description: "Faction politics throughline resolutions PP-661. Four applied fixes for 10 post-PP-660 findings: caste viability matrix at character creation + Std 0 carve-out + §3.4 range 0-7 + Warden × TC scale + RM stub + SIM discoverability + split marker (TL-1,2,3,9,10); Generational × Coup × IP × Baralta interaction (TL-4, baralta §7); NPC roster 3-tier ~35 capacity (TL-5, npc_behavior §11); Hall Tier settlement integration (TL-6, settlement_layer §1.4). Spec: throughline_resolutions_v1.md."
-    status: resolved
-    resolution: "2026-04-17: applied PP-661."
-    severity: P1
-    affects: [designs/systems/throughline_resolutions_v1.md, designs/systems/player_agency_v30.md, designs/systems/settlement_layer_v30.md, designs/systems/npc_behavior_v30.md, designs/mechanics/baralta_crown_claim_v30.md]

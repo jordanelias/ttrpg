@@ -3743,3 +3743,14 @@ editorial_decisions:
   resolution: "2026-04-17: caste-transgressive Scar note added to npc_behavior §3.3."
   severity: P2
   affects: [designs/systems/npc_behavior_v30.md]
+
+# 2026-04-17 — Session-close archive (PP-661 resolved items)
+
+- id: ED-659
+  archived: 2026-04-17
+  date: 2026-04-17
+  description: "Faction politics throughline resolutions PP-661. Four applied fixes for 10 post-PP-660 findings: caste viability matrix at character creation + Std 0 carve-out + §3.4 range 0-7 + Warden × TC scale + RM stub + SIM discoverability + split marker (TL-1,2,3,9,10); Generational × Coup × IP × Baralta interaction (TL-4, baralta §7); NPC roster 3-tier ~35 capacity (TL-5, npc_behavior §11); Hall Tier settlement integration (TL-6, settlement_layer §1.4). Spec: throughline_resolutions_v1.md."
+  status: resolved
+  resolution: "2026-04-17: applied PP-661."
+  severity: P1
+  affects: [designs/systems/throughline_resolutions_v1.md, designs/systems/player_agency_v30.md, designs/systems/settlement_layer_v30.md, designs/systems/npc_behavior_v30.md, designs/mechanics/baralta_crown_claim_v30.md]
