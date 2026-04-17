@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 573
+# next_id: 585
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Index: canon/editorial_ledger_index.md
 # Last updated: 2026-04-16
@@ -19,20 +19,6 @@ editorial_decisions:
     severity: P2
     affects: [designs/mass_combat/mass_battle_v30.md]
 
-  - id: ED-543
-    date: 2026-04-15
-    description: "clock_registry_v30.md has 23 stale items."
-    status: open
-    severity: P1
-    affects: [designs/systems/clock_registry_v30.md]
-
-  - id: ED-544
-    date: 2026-04-15
-    description: "P-03 videogame rendering model undefined."
-    status: open
-    severity: P2
-    affects: []
-
   - id: ED-545
     date: 2026-04-15
     description: "Only 5 Zoom In triggers for 120+ arcs."
@@ -40,32 +26,11 @@ editorial_decisions:
     severity: P1
     affects: [designs/hybrid/scale_transitions_v30.md]
 
-  - id: ED-549
-    date: 2026-04-16
-    description: "Order stat range undefined. Settlement-level Order (from combat_v30 §13.2b) has no canonical range, floor, or ceiling. Proposed..."
-    status: open
-    severity: P2
-    affects: [designs/combat/combat_v30.md, references/params_board_game.md]
-
-  - id: ED-550
-    date: 2026-04-16
-    description: "Settlement Order degradation during siege: −1/siege season not formally stated. Mirrors RS cost at settlement scale. Proposed PP."
-    status: open
-    severity: P2
-    affects: [designs/mass_combat/mass_battle_v30.md]
-
   - id: ED-551
     date: 2026-04-16
     description: "Altonian Vanguard NPC priority tree (npc_behavior §7.8) has no Assault entry. Vanguard cannot mechanically siege garrisoned ter..."
     status: open
     severity: P1
-    affects: [designs/systems/npc_behavior_v30.md]
-
-  - id: ED-553
-    date: 2026-04-16
-    description: "Niflhel contact trigger undefined — no settlement anchor, no Outreach path. Proposed: Investigation-triggered contact (Tribune ..."
-    status: open
-    severity: P2
     affects: [designs/systems/npc_behavior_v30.md]
 
   - id: ED-555
@@ -75,25 +40,11 @@ editorial_decisions:
     severity: P1
     affects: [designs/mass_combat/mass_battle_v30.md]
 
-  - id: ED-556
-    date: 2026-04-16
-    description: "Named unit officer reaction to player faction-misaligned action undefined. Proposed: −1 Disposition if action contradicts offic..."
-    status: open
-    severity: P2
-    affects: [designs/mass_combat/mass_battle_v30.md]
-
   - id: ED-557
     date: 2026-04-16
     description: "Companion personal combat stat generation undefined. Proposed: Agility = STR = floor(faction Military / 2); Endurance = floor(f..."
     status: open
     severity: P1
-    affects: [designs/mass_combat/mass_battle_v30.md]
-
-  - id: ED-558
-    date: 2026-04-16
-    description: "Companion proxy Command when PC general incapacitated: no rule. Proposed: Ob 3 re-establish Command check (harder than PC's Ob ..."
-    status: open
-    severity: P2
     affects: [designs/mass_combat/mass_battle_v30.md]
 
   - id: ED-559
@@ -103,76 +54,6 @@ editorial_decisions:
     severity: P1
     affects: [designs/mass_combat/mass_battle_v30.md]
 
-  - id: ED-560
-    date: 2026-04-16
-    description: "Companion mass combat capability undefined beyond unit command. Proposed tiered by Disposition: +3 = unit command; +4 = sub-com..."
-    status: open
-    severity: P2
-    affects: [designs/mass_combat/mass_battle_v30.md]
-
-  - id: ED-561
-    date: 2026-04-16
-    description: "Companion tactic capability as sub-commander undefined. Proposed: Tier-1 tactics (Standard Advance, Disciplined Defence) automa..."
-    status: open
-    severity: P2
-    affects: [designs/mass_combat/mass_battle_v30.md]
-
-  - id: ED-562
-    date: 2026-04-16
-    description: "Panel Adjudicator type (social contest) undefined — blocks ED-137 and UI-07. Resolved: Model B (Institutional Authority NPC). D..."
-    status: open
-    severity: P1
-    affects: [designs/contest/social_contest_v30.md]
-
-  - id: ED-563
-    date: 2026-04-16
-    description: "Panel pre-contest adjudicator selection rule undefined. Proposed: Influence vs target NPC's Leadership Deviation Ob. Success: p..."
-    status: open
-    severity: P2
-    affects: [designs/contest/social_contest_v30.md]
-
-  - id: ED-564
-    date: 2026-04-16
-    description: "Social contest stalemate: no tie-break if Track movement = 0 for multiple exchanges. Proposed: after 5 exchanges with no moveme..."
-    status: open
-    severity: P2
-    affects: [designs/contest/social_contest_v30.md]
-
-  - id: ED-565
-    date: 2026-04-16
-    description: "IP passive advancement rate produces 4–6 Vanguard deployments in 30-year (120-season) games — too frequent. Proposed: passive I..."
-    status: open
-    severity: P2
-    affects: [references/params_board_game.md]
-
-  - id: ED-566
-    date: 2026-04-16
-    description: "Vanguard repulsion cooldown undefined — nothing prevents immediate threshold re-breach after repulsion. Proposed: 3-season cool..."
-    status: open
-    severity: P2
-    affects: [designs/systems/npc_behavior_v30.md, references/params_board_game.md]
-
-  - id: ED-567
-    date: 2026-04-16
-    description: "NPC leader mortality mechanic absent — named leaders are effectively immortal, breaking 30-year games. Proposed: Longevity Trac..."
-    status: open
-    severity: P2
-    affects: [designs/systems/npc_behavior_v30.md]
-
-  - id: ED-568
-    date: 2026-04-16
-    description: "Succession procedure on natural death undefined. Proposed: named successor from Arc profiles → assumes leadership; no successor..."
-    status: open
-    severity: P2
-    affects: [designs/systems/npc_behavior_v30.md]
-
-  - id: ED-570
-    date: 2026-04-16
-    description: "Siege duration summary not explicitly stated in any doc. PP-088 covers it implicitly (Fort −1/successful Assault). Proposed: ad..."
-    status: open
-    severity: P2
-    affects: [designs/mass_combat/mass_battle_v30.md]
-
   - id: ED-571
     date: 2026-04-16
     description: "Companion vs. recruited NPC formal distinction absent. Proposed: companions = personal travel + scene-level action; recruited N..."
@@ -180,10 +61,17 @@ editorial_decisions:
     severity: P1
     affects: [designs/mass_combat/mass_battle_v30.md]
 
+
   - id: ED-572
     date: 2026-04-16
-    description: "UI/UX v4.1 consolidation — resolves Jordan corrections C-1 (cut Layer 3 haptic-equivalent), C-2 (TS-progressive Thread UI unlock per threadwork §2.3 TS 30+ Leap gate + P-08 epistemological barrier), C-3 (chrome capability-gating per P-03); fills canon gaps P-04 monster encounter UI, P-06 Threadcut UI, P-09 memory pulling UI, P-13 Southernmost forgetting; adds P-01 pre-commit co-movement preview, P-08 Codex epistemic access rules, P-10 Taint/Coherence distinction, P-11 CD track, P-12 Knot graph, P-15 Coherence 0 TS-branching; corrects setting violations (period ensemble music not orchestral, Church purple not indigo, RM woad not teal, Varfell slate not violet, hermetic Thread typography not illuminated, pre-Gothic portrait era, Pentiment/medieval map not Triangle Strategy); consolidates 25 parts → 14 parts + 5 appendices (82KB vs 162KB). Supersedes designs/ui/valoria_ui_ux_v4.md."
-    status: resolved
+    description: "Assert → Pontifex-exclusive. 2x Senator Assert reaches TC 40 milestone S4 (should be S11). Assert moves from Senator to Pontifex. Victory pushed to S24-28."
+    status: open
     severity: P1
-    affects: [designs/ui/valoria_ui_ux_v4_1.md]
+    affects: [designs/board_game/tc_political_redesign_v30.md, designs/board_game/board_game_v30.md]
 
+  - id: ED-583
+    date: 2026-04-16
+    description: "Hafenmark Mandate cap (PP-174) at starting value 4 blocks Dynastic Proclamation on Crown (Mandate 5). Framework Drift gives Influence not Mandate. Proclamation on Crown structurally impossible. Confirm intended: Proclamation targets only weakened rivals (Mandate ≤ 3)."
+    status: open
+    severity: P1
+    affects: [designs/board_game/peninsular_strain_v1.md, designs/board_game/board_game_v30.md]

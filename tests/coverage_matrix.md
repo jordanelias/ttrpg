@@ -68,3 +68,42 @@
 | SIM-03 | IP recalibration: passive IP ×0.5 after season 40; ×0.25 after season 80; 3-season Vanguard cooldown | Provisional — ED-565/566; apply to params_board_game |
 | SIM-04 | Longevity Track + Year-End mortality roll; Succession Procedure on death | Provisional — ED-567/568/569; apply to npc_behavior_v30 |
 
+
+## New P1/P2 Findings (sim_stress_batch_2_2026-04-16)
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| F-64 | ST-01 | 2x Senator Assert engine: Church reaches TC 40 S4, victory S18 — 7+ seasons too fast | Open — ED-572 |
+| F-65 | ST-01 | TC 80 PT drift neutralises Varfell Cultural Reformation in all target territories | Open — ED-573 |
+| F-66 | ST-01 | Hafenmark Dynastic Proclamation on Crown structurally impossible (Mandate cap PP-174) | Open — ED-583 |
+| F-67 | ST-07 | NPC tactic selection formation-unaware; Iron Discipline chosen over Shield Wall vs Cavalry | Open — ED-574 |
+| F-68 | ST-06 | Post-combat fieldwork when player fled: access undefined | Open — ED-576 |
+| F-69 | ST-07 | Co-Movement Cards 1-15 content not in canonical docs | Open — ED-577 |
+| F-70 | ST-07 | TTRPG mass battle melee damage formula not explicitly stated | Open — ED-578 |
+| F-71 | ST-05 | Charity Advantage (Church Wealth ≥ rival+2) rarely activates in competitive games | Open — ED-580 |
+| F-72 | ST-03 | RS targeting essential for Resistance-2 Chain Contests; not documented | Open — ED-582 |
+
+## New Confirmed Working (sim_stress_batch_2_2026-04-16)
+
+| System | Source | Status |
+|--------|--------|--------|
+| TC milestone political effects (all five) | ST-01 | ✓ All produce correct effects |
+| Obligation → NPC priority tree behavioral constraint | ST-03/09 | ✓ Elegant |
+| Zoom In at Phase 3 legal entry point | ST-02 | ✓ Clean |
+| BG → TTRPG unit conversion | ST-02 | ✓ Correct |
+| General duel (3 exchanges, decisive) | ST-02 | ✓ Calibrated |
+| RS targeting breaks Resistance-2 stalls | ST-03 | ✓ Mechanically essential |
+| Church TC + RS Rupture pyrrhic collision | ST-10 | ✓ Brilliant design validated |
+| Warden expedition as RS stabiliser | ST-10 | ✓ Correctly designed save-world arc |
+| Wedge + HeavyCut Cavalry vs Heavy armour | ST-07 | ✓ Shield Wall as correct counter |
+| NPC Arc B + Arc A synergistic pressure | ST-08 | ✓ Emergent crisis as intended |
+
+## Provisional Decisions (sim_stress_batch_2_2026-04-16)
+
+| Finding | Provisional Rule | Status |
+|---------|-----------------|--------|
+| SIM2-01 | Assert → Pontifex-exclusive (ED-572) | Provisional — requires tc_political_redesign_v30 §5.2 revision |
+| SIM2-05 | Post-combat fieldwork requires site control (player can't flee and investigate) | Provisional — ED-576 |
+| SIM2-08 | Obligation fulfillment: Disposition +1 toward imposing party | Provisional — ED-579 |
+| SIM2-12 | Hafenmark Proclamation on Crown impossible under Mandate cap — confirm intended (ED-583) | Provisional — awaiting user |
+

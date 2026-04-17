@@ -1,4 +1,4 @@
-session_id: ui_ux_v4_1_consolidation_2026-04-16
+session_id: sim_stress_batch_2_2026-04-16
 session_close: 2026-04-16
 phase: COMPLETE
 status: CLOSED
@@ -7,54 +7,31 @@ next_action:
   skill: confirm with Jordan
 blockers: []
 resolutions_this_session:
-  - ED-572 UI/UX v4.1 consolidation — resolved (supersedes valoria_ui_ux_v4.md)
-  - Jordan correction C-1 — Layer 3 haptic-equivalent cut from feel layer spec
-  - Jordan correction C-2 — Thread UI progressively gated by TS per threadwork §2.3; TS 0 sees no Thread UI, TS 1-29 sees Thread sight only, TS 30+ with Approach unlocks full panel
-  - Jordan correction C-3 — chrome capability-gating table (§2.1) — all UI elements conditional on character possessing the relevant capability
-  - Canon P-01 — pre-commit co-movement preview in Thread panel (§9.4)
-  - Canon P-03 — chrome-as-character-performed rendering (§2.1 + §9.1)
-  - Canon P-04 — monster encounter UI (§10.1)
-  - Canon P-06 — Threadcut encounter UI (§10.2)
-  - Canon P-08 — Codex epistemic access rules (§11.4)
-  - Canon P-09 — memory pulling detection UI (§10.3)
-  - Canon P-10 — Taint distinguished from Coherence (§9.7)
-  - Canon P-11 — CD accumulation track in Thread HUD (§9.8)
-  - Canon P-12 — Knot graph in Relationships screen (§11.5)
-  - Canon P-13 — Southernmost forgetting in Journal (§4.5.1) + Southernmost entities UI (§10.4)
-  - Canon P-15 — Coherence 0 TS-branched outcomes (§9.7)
-  - Setting SET-1 — "orchestral" → "period ensemble" (Appendix D)
-  - Setting SET-2 — Thread typography hermetic not illuminated
-  - Setting SET-3 — faction typefaces specified (Appendix C)
-  - Setting SET-4 — map precedent Pentiment/medieval portolan, not Triangle Strategy
-  - Setting SET-5 — portrait era pre-Gothic (12th-14th c), not Pentiment (16th c)
-  - Setting SET-6 — Church purple/sable, RM woad-blue, Varfell slate (corrected palette)
-  - Setting SET-7 — weather terrain-regional
-  - Prior audit E-03/S-02 — unified Scene Action Cost Table (§1.3)
-  - Prior audit E-01 — 25 parts consolidated to 14 parts + 5 appendices
-  - Prior audit L-01 — right rail scene-aware ordering (§2.7)
-  - Prior audit L-02 — Slate dock overflow rules (§2.5)
-  - Prior audit I-01 — atmospheric mini-cutscenes (§13.4)
-  - Prior audit I-02 — Thread sight always-payoff (§9.2)
-  - Prior audit I-04 — Oath Violation Tests (§0)
+  - ST-01 4-faction BG campaign (S1-20): TC reform, AI trees, military layer, Accord/Strain all validated
+  - ST-02 Cross-scale transition chain (Zoom In/general duel/Zoom Out): all phases execute correctly
+  - ST-03 Social contest chain (3-contest arc): RS targeting essential for Resistance-2 stalls; Obligation constrains NPC tree
+  - ST-04 Hybrid full season: Domain Echo, PC Embedding, Cascade sequence all correct
+  - ST-05 TC reform stress test: Assert Pontifex fix required (ED-572); S24-28 victory with fix
+  - ST-06 Fieldwork-combat-contest pipeline: post-combat fieldwork gap when player fled (ED-576)
+  - ST-07 Mass battle 7-phase: NPC tactic gap (ED-574); melee formula gap (ED-578); CM deck gap (ED-577)
+  - ST-08 NPC arc emergence (Almud Arc B + Himlensendt Arc A): synergistic crisis validated
+  - ST-09 Obligation cascade under Peninsular Strain: redirection behavior correct; fulfillment gap (ED-579)
+  - ST-10 RS decline curve: -1.45/season; Critical S38; Rupture S47; pyrrhic Church victory validated
 files_modified:
-  - designs/ui/valoria_ui_ux_v4_1.md (new — 82KB, 14 parts + 5 appendices)
-  - canon/editorial_ledger.yaml (ED-572 added; next_id 572→573)
-  - references/canonical_sources.yaml (ui_ux_reference system added)
-  - references/file_index_summary.md (ui_ux_reference path updated v4→v4_1)
-  - session_log_current.md (this file)
+  - tests/sim_stress_batch_2_2026-04-16.md (new)
+  - canon/editorial_ledger.yaml (ED-572 and ED-583 P1s; archived P2/P3 items)
+  - tests/coverage_matrix.md (F-64 through F-72; confirmed working table; provisional decisions)
 open_items:
-  - ED-539 TC reform + TCV compound effect unvalidated
-  - ED-541 military_layer_v30 / faction_layer_v30 uncommitted
-  - ED-542 battle consequences propagation gap
-  - ED-543 clock_registry_v30 23 stale items
-  - ED-544 P-03 videogame rendering model  # resolved-in-design-via-v4.1 but ledger entry remains until formally closed
-  - ED-545 Zoom In triggers  # resolved-in-design-via-v4.1
+  - ED-545 Zoom In triggers
   - ED-546 RM no BG mode actor
   - ED-551 Vanguard priority tree Assault entry (P1)
   - ED-555 companion_specification_v30 does not exist (P1)
-  - ED-562 Panel Adjudicator definition (P1)
-  - SIM-NPC-01 full 6-faction BG simulation
+  - ED-557 Companion personal combat stats (P1)
+  - ED-559 Companion combat AI priority tree (P1)
+  - ED-562 Panel Adjudicator definition (P1) - archived from active but still open
+  - ED-571 Companion vs recruited NPC distinction (P1)
+  - ED-572 Assert Pontifex-exclusive (P1) - NEW
+  - ED-583 Hafenmark Mandate cap blocks Proclamation on Crown (P1) - NEW
+  - SIM-NPC-01 Full 6-faction BG simulation with all priority trees
   - SIM-NPC-03 Almud/Himlensendt 3-season arc emergence
-  - SIM-NPC-04 Framework Drift 6-season
-  - SIM-NPC-05 Belief Scar cascade
-  - v4.2 backlog: A-01/A-02/A-03/A-04 accessibility depth, L-03/L-04 minor legibility, R-01/R-02/R-03 robustness enhancements, precedent table full audit
+  - All P2 EDs from this and prior sessions (see ledger archive and index)
