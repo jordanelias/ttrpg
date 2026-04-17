@@ -50,7 +50,7 @@ When RM emerges, it becomes a fully active NPC faction with stats, actions, and 
 **Design logic:** Path B tests whether Vaynard can be a genuine steward of the Southernmost — Thread-aware (VTM ≥ 3), trusted by the Restoration Movement (WA ≥ +1), and willing to sustain low-conviction Einhir culture in his own territories (CV ≤ 1 in T13).
 ### 6.2 Path C — Thread Supremacy (territory name correction + validation)
 ## 7. Co-Victory Replacement — Varfell + RM (PP-418)
-**Narrative:** Vaynard and the Restoration Movement together recover enough Einhir cultural memory to create a viable alternative to Galbadian orthodoxy, while keeping the rendering stable enough for the world to survive the transition. The Wardens recognise Vaynard as a legitimate steward of the Southernmost.
+**Narrative:** Vaynard and the Restoration Movement together recover enough Einhir cultural memory to create a viable alternative to Solmund orthodoxy, while keeping the rendering stable enough for the world to survive the transition. The Wardens recognise Vaynard as a legitimate steward of the Southernmost.
 **Scoring:** This is a co-victory — Varfell player scores a win. RM (latent NPC faction) does not "win" in the scoring sense, but the narrative outcome is positive for the movement. If RM has emerged as hostile, this co-victory is impossible (WA ≥ +2 cannot coexist with active hostile RM).
 ## 8. Resolved Editorial Items
 ## 9. Gaps Identified

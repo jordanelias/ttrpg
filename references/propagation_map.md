@@ -612,4 +612,4 @@ DESIGN GAP 2: Guild Favour restoration mechanic — no upward movement source do
 | `designs/systems/faction_politics_expanded_v1.md` | `designs/systems/npc_behavior_v30.md` §1.2, §3, §7 | Warden Conviction (ED-641); caste-transgressive Conviction Scar (ED-654); cross-rank advancement (ED-656) |
 | `designs/systems/faction_politics_expanded_v1.md` | `designs/board_game/varfell_path_b_v30.md` | Warden Ladder × Path B integration (ED-658) |
 | `designs/systems/faction_politics_expanded_v1.md` | `tests/coverage_matrix.md` | 5 SIM-DEBT items (SIM-POL-R01 through R05) |
-| `designs/conviction_track/conviction_track_v30.md` (Solmund fix) | References citing "Galbadian Orthodoxy" across designs/, references/, canon/ | Propagation-pending grep for any remaining occurrences |
+| `designs/conviction_track/conviction_track_v30.md` (Solmund fix) | References citing "Galbadian Orthodoxy" across designs/, references/, canon/ | DONE — factions_ttrpg_v30 (2 hits), conviction_track_v30_infill (1 hit) corrected 2026-04-17. params_board_game historical annotation retained. |
