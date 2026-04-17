@@ -1,5 +1,5 @@
 # VALORIA BG — Peninsular Strain System v1
-## Status: DESIGN — proposal for integration into victory_v30.md
+## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance). Integrated into victory_v30.md.
 ## Date: 2026-04-14
 ## Supersedes: victory_v30.md §1 TCV table (partial — TCV revaluation), victory_v30.md §3 (faction-specific victory conditions replaced by universal condition), victory_v30.md §4 (co-victory restructured), victory_v30.md §5 (shared loss retained with modifications)
 ## Dependencies: geography_v30.md (territory numbering), params_board_game.md (card-hand PP-177, faction stats, Prosperity per territory, Diplomatic Token PP-517/521, Standing PP-515, Institutional Mandate PP-189), victory_v30.md §2 (PT track retained), victory_v30.md §6 (Askeheim/RS retained), victory_v30.md §7 (TC generation retained), victory_v30.md §9 (Hybrid integration retained)

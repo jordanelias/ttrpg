@@ -4,7 +4,7 @@
 <!-- v30 baseline — renamed from designs/conviction_track/opus_design_proposal.md on 2026-04-13 -->
 # Valoria BG — Conviction Track & Church Victory Redesign
 ## PP-406 through PP-418
-## Date: 2026-04-05 | Status: Design Proposal — Awaiting User Review
+## Date: 2026-04-05 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
 ## Scope: Conviction Track, Church Seizure, TC Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory
 
 ---

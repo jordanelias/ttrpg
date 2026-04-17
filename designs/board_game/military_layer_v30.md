@@ -3,7 +3,7 @@
 <!-- PP-TBD series — awaiting patch assignment -->
 <!-- Sources: mass_battle_v30.md §A.4, §A.13, §B.2, §B.3, §B.5; params_board_game.md §Unit Muster Ob Table, §Accord, §TC Generation; canonical_sources.yaml -->
 <!-- Integration: peninsular_strain_v1.md (battle consequences §3, Accord §2, Strain §4) -->
-<!-- Status: PROPOSAL — draft for approval -->
+<!-- Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) -->
 <!-- Date: 2026-04-14 -->
 
 # VALORIA — Military Layer: Unit Bridge & TC Revision

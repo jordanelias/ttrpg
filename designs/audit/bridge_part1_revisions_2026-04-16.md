@@ -2,7 +2,7 @@
 ## Priority 1: Player Agency System — Canonization + Renown + Mechanical Scene Slate
 ## Priority 2: Companion Specification
 ## Date: 2026-04-16
-## Status: PROPOSAL — requires approval before integration
+## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
 ## Supersedes: player_agency_v30.md §4 (Scene Slate generation), §5 (Stature Progression — extended, not replaced)
 ## Affects: S06 Faction Layer, S10 NPC Behavior, S12 Social Contests, S14 Fieldwork, S17 Scale Transitions, S18 Characters
 ## Bridge document reference: designs/audit/player_world_bridge_2026-04-16.md

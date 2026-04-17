@@ -5,7 +5,7 @@
 # VALORIA — SOCIAL CONTEST SYSTEM v2
 ## [EDITORIAL: ED-136 — System name: "Contest" proposed. Candidates: Contest, Contention, Proceeding.]
 ## Patches applied: PP-234, PP-235, PP-236, PP-237, PP-272, PP-278, PP-279
-## Status: DESIGN PROPOSAL — supersedes debate_system_redesign_v1.md Part 6 upon approval
+## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance). Supersedes debate_system_redesign_v1.md Part 6.
 ## Source: Opus 4.6 session 2026-04-04
 ## Patch: PP-234 (genre restructure, attribute renames, Composure resolution, faction boost revision, dice consistency)
 ## Three-mode: TTRPG (§§1–9), Board Game (§10), Hybrid (§11)

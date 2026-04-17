@@ -1,6 +1,6 @@
 # VALORIA — Investigation Systems Proposal
 ## Systems: NPE · Investigation Interface · Dialogue Lattice · Response Matrix
-## Status: PROPOSAL — requires approval before integration
+## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
 ## Date: 2026-04-15-21-07
 ## Affects: S10 NPC Behavior, S14 Fieldwork, S12 Social Contests, S16 Emergent Arcs, S17 Scale Transitions, S03 Geography, S18 Characters
 ## Canon compliance: P-01 (co-movement), P-03 (consciousness-performed rendering — player's perceptual horizon defines available scenes), P-15 (three-layer being-persistence — Certainty is personal, Conviction is cultural-ethical, Thread substrate is metaphysical)

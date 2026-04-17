@@ -1,21 +1,21 @@
 # Editorial Ledger — Session Summary
-# Full active ledger: canon/editorial_ledger.yaml (10 lines — currently empty)
+# Full active ledger: canon/editorial_ledger.yaml
 # Full archive: canon/editorial_ledger_archive.yaml
 # Full index: canon/editorial_ledger_index.md
-# Last updated: 2026-04-14
+# Last updated: 2026-04-17
 
-next_id: 535
-p1_blocker_count: 0
-p1_blocker_ids: []
-provisional_count: 0
-provisional_ids: []
-open_count: 0
-open_ids: []
+next_id: 629
+p1_blocker_count: 2
+p1_blocker_ids: ['ED-589', 'ED-620']
+provisional_count: 1
+provisional_ids: ['ED-591-609']
+open_count: 17
+open_ids: ['ED-542', 'ED-586', 'ED-587', 'ED-589', 'ED-611', 'ED-615', 'ED-616', 'ED-617', 'ED-618', 'ED-619', 'ED-620', 'ED-621', 'ED-622', 'ED-623', 'ED-624', 'ED-625', 'ED-626']
 flagged_count: 0
 flagged_ids: []
 
 note: >
-  All editorial decisions resolved as of 2026-04-13.
-  Next session should fetch this summary only.
+  2026-04-17 editorial batch acceptance (ED-628) promoted 23 proposal files to CANONICAL.
+  Open items on now-canonical docs carry forward; registry consolidated.
   Fetch canon/editorial_ledger.yaml for active items only when adding new editorials.
   Fetch canon/editorial_ledger_archive.yaml only for audit/reference work.

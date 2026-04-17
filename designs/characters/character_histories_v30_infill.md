@@ -2,7 +2,7 @@
 <!-- Skeleton: character_histories_v30.md -->
 
 # VALORIA — Character Histories: Lifepath System
-## Status: DESIGN PROPOSAL — requires editorial approval
+## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
 ## Scope: Lifepath-based History generation with SaGa-style sparking, Recall-gated equip slots, skill levels 1–3
 ## Cross-references: params_core.md, combat_design_v1.md, social_contest_system_v2.md, mass_battle_v3.md, stage6_factions.md, threadwork_redesign_v25.md, calamity_radiation.md
 ## [EDITORIAL: ED-374 — Character Histories system. Setting/worldbuilding/character content — editorial gate applies.]

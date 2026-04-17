@@ -8,7 +8,7 @@
 ## Status: WORKING DESIGN — no appendix sections. Read straight through.
 ## Three-mode: TTRPG/Hybrid (Part A); Board Game (Part B); Hybrid Handoff (§B.5)
 ## All P1/P2/P3 patches applied. Gaps filled. Editorial notes flagged.
-## Status: PROPOSAL — awaiting approval before GitHub push
+## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
 
 ---
 

@@ -4,7 +4,7 @@
 <!-- Supersedes: PP-403 (Failed DA Stability Cost — REPEALED except §Suppress exception) -->
 <!-- Extends: PP-512–514/523 (Crown Treaty), ED-334/335 (Officer Capture), PP-500 (Political Vacuum) -->
 <!-- Integrates with: Phase 4 Priority-4 Social actions; Phase 5 Accounting steps 1–13; peninsular_strain_v1.md (Accord, Strain, battle consequences) -->
-<!-- Status: PROPOSAL — draft for approval. Do not push until patch numbers assigned. -->
+<!-- Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) -->
 <!-- Date: 2026-04-14 -->
 
 # VALORIA — Faction Layer: Stability, Occupation, Treaties, Negotiation & Parliament

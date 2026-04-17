@@ -3,7 +3,7 @@
 
 <!-- v30 baseline — renamed from designs/systems/npc_behavior_system_v1.md on 2026-04-13 -->
 # VALORIA — NPC ETHICAL STANCE AND RESONANCE BEHAVIOR SYSTEM v1
-## Status: DESIGN PROPOSAL — requires user review before commit
+## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
 ## Date: 2026-04-13
 ## Cross-references: stage6_factions.md, social_contest_system_v2.md, params_factions.md, params_board_game.md, params_core.md (Certainty), threadwork_redesign_v25.md (Coherence, TS), edeyja_npc.md, character_histories_lifepath.md, victory_architecture_v1.md
 ## Three-mode: TTRPG (§§1–7), Board Game (§8), Hybrid (§9)

@@ -7,7 +7,7 @@
 ## Status: WORKING DESIGN — no appendix sections. Read straight through.
 ## Three-mode: TTRPG/Hybrid (Part A); Board Game (Part B); Hybrid Handoff (§B.5)
 ## All P1/P2/P3 patches applied. Gaps filled. Editorial notes flagged.
-## Status: PROPOSAL — awaiting approval before GitHub push
+## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
 ## PART A: TTRPG MASS BATTLE
 ### A.1 OVERVIEW
 **[PROVISIONAL ED-316] Weight-of-numbers (PP-570):** When a unit's current Size > 2 × the opposing general's Command (the formation is simply too large to be directed against), at Phase 6 Step 2 the opposing unit must pass a Morale check (Ob 1, deterministic). Failure: −1 Morale (the mass is demoralising regardless of casualties). Does not stack with other Morale reductions. [PROVISIONAL — confirm trigger threshold and whether this applies at BG or TTRPG scale only]

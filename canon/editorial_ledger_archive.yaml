@@ -3594,4 +3594,44 @@ editorial_decisions:
 # ED-590 resolved (Church victory revised+validated) 2026-04-16 batch 5
 # ED-612/614 resolved batch 6 (Guilds victory, Cardinal restoration)
 # Archived resolved: ['ED-590', 'ED-612', 'ED-614']
-# Batch 7 archived: ['ED-612', 'ED-613', 'ED-614'] (already resolved). ED-589/586/587/617/621/622/626 resolved.
+
+
+# --- Archived 2026-04-17 — ED-628 editorial batch acceptance ---
+
+- id: ED-588
+  priority: P1
+  status: resolved
+  archived: 2026-04-17
+  description: "RM Phase 2 holding condition T9 PT ≤ 1 unreachable. Fix: Uprising OW PT −2; holding revised to PT ≤ 3."
+  resolution: "Propagated 2026-04-16: victory_v30 §3.5 Overwhelming result now includes T9 PT −2; holding condition changed to PT ≤ 3."
+  affects: ['designs/board_game/victory_v30.md']
+
+- id: ED-612
+  priority: P1
+  status: resolved
+  archived: 2026-04-17
+  description: "Guilds have no solo victory condition. Unplayable as solo faction. Need either: formal co-victory path, or Merchant Hegemony condition (Wealth >= 8 + Favour >= 5 in 5 territories + Treaty with winning faction)."
+  affects: ['designs/board_game/victory_v30.md']
+
+- id: ED-613
+  priority: P2
+  status: resolved
+  archived: 2026-04-17
+  description: "Löwenritter Torben Loyalty >= 6 primary victory path: achieving Loyalty 6 from post-Coup position (1-2) requires ~10 seasons. Combined with Mandate instability (Restoration fires at Mandate <= 2), Primary victory window is narrow. Acceleration mechanics needed."
+  resolution: "Jordan 2026-04-16: by-design. Löwenritter holds until new monarch faction takes over; Regency Establishment is the handoff mechanic not a win condition."
+  affects: ['designs/board_game/victory_v30.md', 'designs/systems/npc_behavior_v30.md']
+
+- id: ED-614
+  priority: P2
+  status: resolved
+  archived: 2026-04-17
+  description: "Cardinal subfaction play during Church Stability <= 2: no mechanic specifies duration of Cardinal independence or conditions restoring Confessor authority. Is restoration automatic at Stability 3+?"
+  affects: ['designs/systems/npc_behavior_v30.md']
+
+- id: ED-627
+  priority: P2
+  status: resolved
+  archived: 2026-04-17
+  description: "Guilds solo victory constraint 'no rival Wealth ≥ Guild Wealth − 2' broken at standard Wealth cap 7. Fix: absolute 'no rival Wealth ≥ Guild Wealth'."
+  resolution: "Jordan 2026-04-16: by-design. Guilds are a spoiler/pressure faction; solo victory moot per design intent."
+  affects: ['designs/board_game/victory_v30.md']

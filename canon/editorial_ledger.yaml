@@ -1,8 +1,8 @@
 # Valoria Editorial Ledger — Active
-# next_id: 631
+# next_id: 629
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Index: canon/editorial_ledger_index.md
-# Last updated: 2026-04-16
+# Last updated: 2026-04-17
 
 editorial_decisions:
   - id: ED-542
@@ -15,29 +15,21 @@ editorial_decisions:
   - id: ED-586
     date: 2026-04-16
     description: "Arc behavioral state vs Priority 6 contradiction at Mandate < 3. Proposed Constrained sub-arc state."
-    status: resolved
+    status: open
     severity: P2
     affects: [designs/systems/npc_behavior_v30.md]
 
   - id: ED-587
     date: 2026-04-16
     description: "Faction Stability Crisis Zoom In trigger absent. Proposed mandatory Zoom In: Stability drops ≤ 2 OR ≥ 2 in single Accounting."
-    status: resolved
+    status: open
     severity: P2
     affects: [designs/hybrid/scale_transitions_v30.md]
-
-  - id: ED-588
-    date: 2026-04-16
-    description: "RM Phase 2 holding condition T9 PT ≤ 1 unreachable. Fix: Uprising OW PT −2; holding revised to PT ≤ 3."
-    status: resolved
-    resolution: "Propagated 2026-04-16: victory_v30 §3.5 Overwhelming result now includes T9 PT −2; holding condition changed to PT ≤ 3."
-    severity: P1
-    affects: [designs/board_game/victory_v30.md]
 
   - id: ED-589
     date: 2026-04-16
     description: "RM Presence marker mechanics undefined. Post-Uprising T9 administration requires Presence markers but mechanic unspecified."
-    status: resolved
+    status: open
     severity: P1
     affects: [designs/board_game/victory_v30.md]
 
@@ -72,7 +64,7 @@ editorial_decisions:
   - id: ED-617
     date: 2026-04-16
     description: "Grand Contest Recall (+2D): once per cited source per contest, not per exchange."
-    status: resolved
+    status: open
     severity: P2
     affects: [designs/contest/social_contest_v30.md]
 
@@ -100,14 +92,14 @@ editorial_decisions:
   - id: ED-621
     date: 2026-04-16
     description: "BG Parliamentary Vote: lobby offset can pre-determine outcome at +2 lobby (Track starts at 7, above win threshold). Restrict starting track to compromise zone 4-6, matching Hybrid restriction in §11."
-    status: resolved
+    status: open
     severity: P2
     affects: [designs/contest/social_contest_v30.md]
 
   - id: ED-622
     date: 2026-04-16
     description: "Varfell cannot file Parliamentary motions (no Senator card). Add explicit note to Varfell faction profile and tc_political_redesign §5.1."
-    status: resolved
+    status: open
     severity: P2
     affects: [designs/board_game/tc_political_redesign_v30.md, designs/systems/npc_behavior_v30.md]
 
@@ -135,35 +127,14 @@ editorial_decisions:
   - id: ED-626
     date: 2026-04-16
     description: "Accord (province, 0-3) and Order (settlement, 0-5) are distinct independent stats. Relationship between them and to Peninsular Strain unspecified. Add clarification."
-    status: resolved
+    status: open
     severity: P2
     affects: [designs/board_game/peninsular_strain_v1.md, designs/mass_combat/mass_battle_v30.md]
 
-  - id: ED-627
-    date: 2026-04-16
-    description: "Guilds solo victory constraint 'no rival Wealth ≥ Guild Wealth − 2' broken at standard Wealth cap 7. Fix: absolute 'no rival Wealth ≥ Guild Wealth'."
-    status: resolved
-    resolution: "Jordan 2026-04-16: by-design. Guilds are a spoiler/pressure faction; solo victory moot per design intent."
-    severity: P2
-    affects: [designs/board_game/victory_v30.md]
-
   - id: ED-628
-    date: 2026-04-16
-    description: "Siege mechanic not specified for playable factions. Legionary Inward Siege: pool=Military vs Ob=2+Fort; Fort -1/Success, -2/OW; Wealth -1/season; RS -1/season. Replaces Battle declaration on fortified territory."
-    status: open
-    severity: P2
-    affects: [designs/mass_combat/mass_battle_v30.md, designs/board_game/military_layer_v30.md]
-
-  - id: ED-629
-    date: 2026-04-16
-    description: "Church+Hafenmark Partition fires silently at Accounting with no warning. Add Phase 1 declaration requirement: both parties declare in Phase 1, giving other factions a full action window to disrupt any single condition."
-    status: open
-    severity: P2
-    affects: [designs/board_game/victory_v30.md]
-
-  - id: ED-630
-    date: 2026-04-16
-    description: "RS Rupture shared loss lacks experiential scene specification. Add 'Last Declaration' scene: mandatory Priority 0 Zoom In for all PCs, each states primary Belief, GM narrates Rupture through that lens. No mechanical outcome."
-    status: open
-    severity: P2
-    affects: [designs/board_game/victory_v30.md]
+    date: 2026-04-17
+    description: "Editorial batch acceptance — all 23 design-proposal files promoted to CANONICAL. Consolidation: canonical_sources.yaml flipped player_agency/companion_specification/settlement_layer to active; added registry entries for investigation_systems, conviction_track, character_histories, peninsular_strain, arc_expansion, bridge_part1_revisions; removed duplicate top-level companion_specification entry. Legacy predecessors npc_behavior_system_v1.md and social_contest_system_v2.md marked SUPERSEDED (retained as historical reference). Open editorial items on now-canonical docs carry forward: ED-542, ED-586, ED-587, ED-589, ED-591-609, ED-611, ED-615-627."
+    status: resolved
+    resolution: "Jordan 2026-04-17: accept all, consolidate, propagate commit."
+    severity: P1
+    affects: [designs/systems/player_agency_v30.md, designs/systems/settlement_layer_v30.md, designs/systems/companion_specification_v30.md, designs/systems/investigation_systems_proposal_2026-04-15.md, designs/systems/military_layer_v30.md, designs/systems/tc_political_redesign_v30.md, designs/systems/npc_behavior_v30.md, designs/systems/npc_behavior_v30_infill.md, designs/systems/npc_behavior_system_v1.md, designs/systems/arc_expansion_v1_2026-04-16.md, designs/board_game/tc_political_redesign_v30.md, designs/board_game/faction_layer_v30.md, designs/board_game/military_layer_v30.md, designs/board_game/peninsular_strain_v1.md, designs/mass_combat/mass_battle_v30.md, designs/mass_combat/mass_battle_v30_infill.md, designs/contest/social_contest_v30.md, designs/contest/social_contest_v30_infill.md, designs/contest/social_contest_system_v2.md, designs/conviction_track/conviction_track_v30.md, designs/characters/character_histories_v30.md, designs/characters/character_histories_v30_infill.md, designs/audit/bridge_part1_revisions_2026-04-16.md, references/canonical_sources.yaml]

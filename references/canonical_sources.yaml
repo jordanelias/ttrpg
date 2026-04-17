@@ -197,24 +197,25 @@ systems:
     design_doc: designs/systems/tc_political_redesign_v30.md
 
   player_agency:
-    status: proposal
+    status: active
     canonical: designs/systems/player_agency_v30.md
     params: null
     design_doc: designs/systems/player_agency_v30.md
+    notes: "Accepted 2026-04-17 (editorial batch acceptance)."
 
   companion_specification:
     canonical_doc: designs/systems/companion_specification_v30.md
     params_file: null
-    status: proposal
+    status: active
     last_patch: null
-    notes: "NPC travel companion system — formation, departure, actions, world bridge"
+    notes: "NPC travel companion system — formation, departure, actions, world bridge. Accepted 2026-04-17 (editorial batch acceptance). Resolves ED-555, ED-557, ED-559, ED-571."
 
   settlement_layer:
     canonical_doc: designs/systems/settlement_layer_v30.md
     params_file: null
-    status: proposal
+    status: active
     last_patch: null
-    notes: "36 settlements across 17 provinces — dual-authority governance, faction emergence/collapse, extended timeline"
+    notes: "36 settlements across 17 provinces — dual-authority governance, faction emergence/collapse, extended timeline. Accepted 2026-04-17 (editorial batch acceptance)."
 
   ui_ux_reference:
     status: active
@@ -224,10 +225,51 @@ systems:
     design_doc: designs/ui/valoria_ui_ux_v4_1.md
     notes: "Godot-facing UI/UX comprehensive reference. Supersedes valoria_ui_ux_v4.md. Resolves UI-01 through UI-15, ED-544, ED-545, ED-548, ED-572. v4 retained in repo as historical reference."
 
+  investigation_systems:
+    status: active
+    canonical: designs/systems/investigation_systems_proposal_2026-04-15.md
+    params: null
+    design_doc: designs/systems/investigation_systems_proposal_2026-04-15.md
+    notes: "NPE · Investigation Interface · Dialogue Lattice. Accepted 2026-04-17 (editorial batch acceptance)."
 
-# Added 2026-04-16 — companion specification
-companion_specification:
-  file: designs/systems/companion_specification_v30.md
-  status: DESIGN_PROPOSAL
-  date: 2026-04-16
-  resolves: [ED-555, ED-557, ED-559, ED-571]
+  conviction_track:
+    status: active
+    canonical: designs/conviction_track/conviction_track_v30.md
+    params: null
+    design_doc: designs/conviction_track/conviction_track_v30.md
+    notes: "Conviction track + Church victory redesign (PP-406 through PP-418). Accepted 2026-04-17 (editorial batch acceptance)."
+
+  character_histories:
+    status: active
+    canonical: designs/characters/character_histories_v30.md
+    params: null
+    design_doc: designs/characters/character_histories_v30.md
+    infill_doc: designs/characters/character_histories_v30_infill.md
+    notes: "Lifepath system. Resolves ED-374. Accepted 2026-04-17 (editorial batch acceptance). Open editorial items ED-375, ED-377, ED-380 carry forward on canonical doc."
+
+  peninsular_strain:
+    status: active
+    canonical: designs/board_game/peninsular_strain_v1.md
+    params: null
+    design_doc: designs/board_game/peninsular_strain_v1.md
+    notes: "Victory condition restructure — integrated into victory_v30.md. Accepted 2026-04-17 (editorial batch acceptance). Open item ED-626 (Accord/Order relationship) carries forward."
+
+  arc_expansion:
+    status: active
+    canonical: designs/systems/arc_expansion_v1_2026-04-16.md
+    params: null
+    design_doc: designs/systems/arc_expansion_v1_2026-04-16.md
+    notes: "Arc density expansion — 19 arc design additions (ED-591 through ED-609). Accepted 2026-04-17 (editorial batch acceptance). Provisional items promoted to canonical; individual open arc items carry forward."
+
+  bridge_part1_revisions:
+    status: active
+    canonical: designs/audit/bridge_part1_revisions_2026-04-16.md
+    params: null
+    design_doc: designs/audit/bridge_part1_revisions_2026-04-16.md
+    notes: "Player Agency canonization + Renown + Mechanical Scene Slate revision block. Accepted 2026-04-17 (editorial batch acceptance)."
+
+# 2026-04-17 — editorial batch acceptance
+# 23 proposal files promoted to CANONICAL status. See canon/editorial_ledger.yaml ED-628.
+# Legacy predecessors npc_behavior_system_v1.md and social_contest_system_v2.md marked SUPERSEDED (retained as historical reference).
+# Duplicate top-level companion_specification entry removed; canonical entry under `systems:` block.
+

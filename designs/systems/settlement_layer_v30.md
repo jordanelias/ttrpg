@@ -1,6 +1,6 @@
 # VALORIA — Settlement Layer Specification
 ## Date: 2026-04-16
-## Status: PROPOSAL — requires approval before integration
+## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
 ## Scope: Sub-territory settlement nodes, dual-authority governance, subnational factions, invasion granularity, player progression from settlement to national, faction emergence/collapse, extended timeline, succession
 ## Precedent: KOEI ROTK (officer-city assignment, development, provincial control), Crusader Kings III (barony-county-duchy-kingdom hierarchy, vassal governance, realm fragmentation)
 ## Affects: S03 Geography, S04 Clocks, S06 Faction Layer, S07 Victory, S08 TC, S09 Military, S10 NPC Behavior, S14 Fieldwork, S15 Mass Combat, S17 Scale Transitions, Player Agency, Companion Specification

@@ -1,6 +1,6 @@
 # VALORIA — Arc Expansion: Emergent Conditioners and Triggers v1.0
 ## Date: 2026-04-16
-## Status: DESIGN PROPOSAL — comprehensive arc density expansion
+## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance). Comprehensive arc density expansion accepted.
 ## Resolves: Gap analysis across all factions and sub-factions
 ## Methodology: Follows npc_behavior_v30 §5 Arc Emergence State Machine.
 ##   Each arc has: (A) default, (B) branch-condition transformation, (C) crisis/collapse.

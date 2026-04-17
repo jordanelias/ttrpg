@@ -2,7 +2,7 @@
 <!-- Companion infill: tc_political_redesign_v30_infill.md -->
 <!-- Sources: params_board_game.md, mass_battle_v30.md, victory_v30.md, geography_v30.md, faction_layer_v30.md -->
 <!-- PP-TBD — awaiting patch assignment -->
-<!-- Status: PROPOSAL — awaiting approval -->
+<!-- Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) -->
 <!-- Date: 2026-04-14 -->
 
 # VALORIA — TC Political Legitimacy Redesign, Stat Economy & Card System

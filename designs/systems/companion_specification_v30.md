@@ -1,7 +1,7 @@
 <!-- companion_specification_v30.md — created 2026-04-16 -->
 <!-- Resolves: ED-555 (missing doc), ED-557 (stat gen), ED-559 (combat AI), ED-571 (distinction) -->
 <!-- Sources: mass_battle_v30 §D.2, npc_behavior_v30 §9.5, scale_transitions_v30 §4.3.2, combat_v30 §4 -->
-<!-- Status: DESIGN PROPOSAL — awaiting approval -->
+<!-- Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) -->
 
 # VALORIA — Companion Specification v1.0
 ## Date: 2026-04-16

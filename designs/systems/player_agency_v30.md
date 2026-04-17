@@ -1,6 +1,6 @@
 # VALORIA — Player Agency System
 ## Design Proposal — PP-TBD
-## Status: PROPOSAL — requires approval before integration
+## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
 ## Date: 2026-04-15
 ## Scope: Player motivation, scene generation, conviction system, faction role, moment-to-moment decision loop
 ## Affects: character creation (params_core), season structure (board_game_v30), fieldwork (fieldwork_v30), scale transitions (scale_transitions_v30), NPC behavior (npc_behavior_v30)
