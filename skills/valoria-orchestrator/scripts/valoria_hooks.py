@@ -43,6 +43,7 @@ TASK_REQUIRED_FILES = {
     "compilation":     ["references/canonical_sources.yaml", "canon/patch_register_active.yaml"],
     "propose_mechanic":["references/canonical_sources.yaml", "canon/editorial_ledger_summary.yaml"],
     "design":          ["references/canonical_sources.yaml"],
+    "infrastructure":  [],
 }
 
 
@@ -335,6 +336,62 @@ def memory_contamination_guard(path: str, content: str) -> None:
             f"Re-fetch after any commit that modifies this file."
         )
     print(f"[HOOK ✓] memory_contamination_guard — {path}")
+
+
+# ── Hook 9: Audit gate (heading-gated reads) ─────────────────────────────────
+
+_AUDIT_KEYWORDS = {'audit', 'review', 'critique', 'comparison'}
+
+def audit_gate(task_description: str, paths: list) -> None:
+    """
+    Enforce heading-gated reads for audit/review tasks.
+    
+    On audit-keyword tasks: every design doc in `paths` MUST go through
+    g.read_skeleton() before g.read_files_graphql() or any full read.
+    Raises RuntimeError if a full read is attempted without prior skeleton.
+    
+    Call this BEFORE reading any design files for audit tasks.
+    After this gate passes, use g.read_skeleton(path) then g.read_sections(path, [...]).
+    """
+    task_lower = task_description.lower()
+    is_audit = any(kw in task_lower for kw in _AUDIT_KEYWORDS)
+    
+    if not is_audit:
+        return  # non-audit tasks are not gated
+    
+    design_paths = [p for p in paths if p.startswith('designs/')]
+    if not design_paths:
+        return  # no design docs = no gate needed
+    
+    # Check that none of these paths were already full-read without skeleton
+    repo = g.active_repo()
+    already_fetched_without_skeleton = [
+        p for p in design_paths
+        if g._repo_key(p, repo) in g._session_fetches
+        and not g.was_skeletonized(p, repo)
+    ]
+    
+    if already_fetched_without_skeleton:
+        print(f"[HOOK ⚠] audit_gate: {len(already_fetched_without_skeleton)} files were full-read "
+              f"without skeleton. For future reads, use g.read_skeleton() first.")
+    
+    print(f"[HOOK ✓] audit_gate — {len(design_paths)} design docs require skeleton-first reads")
+    print(f"  Protocol: g.read_skeleton(path) → evaluate headings → g.read_sections(path, [relevant_indices])")
+
+
+def assert_skeleton_before_full_read(path: str) -> None:
+    """
+    Call before any full file read in audit context.
+    Raises if the path is a design doc that wasn't skeletonized first.
+    """
+    if not path.startswith('designs/'):
+        return
+    if not g.was_skeletonized(path):
+        raise RuntimeError(
+            f"[HOOK VIOLATION] Full read of '{path}' without prior skeleton.\n"
+            f"Audit protocol: call g.read_skeleton('{path}') first, then\n"
+            f"g.read_sections('{path}', [relevant_heading_indices])."
+        )
 
 
 # ── safe_commit: the only valid way to commit ─────────────────────────────────

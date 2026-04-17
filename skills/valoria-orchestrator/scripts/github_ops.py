@@ -676,3 +676,114 @@ if __name__ == "__main__":
                                  skip_health_check=True)
     print("valoria-game README:", len((files2.get('README.md') or '').splitlines()), "lines")
     print("Smoke test passed.")
+
+
+# ── Heading-gated reads (skeleton-first audit pattern) ─────────────────────
+
+import re as _re_mod
+
+def read_skeleton(path: str, repo: str = None) -> list:
+    """
+    Fetch a file and return its heading structure without body content.
+    
+    Returns list of dicts:
+      [{'line': int, 'level': int, 'text': str, 'idx': int}, ...]
+    
+    Also caches the full content internally (avoids double-fetch on infill).
+    Prints skeleton to stdout for Claude's context.
+    """
+    repo = repo or _active_repo
+    key = _repo_key(path, repo)
+    
+    # Use cached content if available
+    content = _session_fetches.get(key)
+    if content is None:
+        fetched = read_files_graphql([path], repo=repo, skip_health_check=True)
+        content = fetched.get(path)
+        if content is None:
+            raise RuntimeError(f"[SKELETON] File not found: {path} in {repo}")
+    
+    lines = content.splitlines()
+    headings = []
+    for i, line in enumerate(lines):
+        m = _re_mod.match(r'^(#{1,6})\s+(.+)', line)
+        if m:
+            headings.append({
+                'line': i + 1,
+                'level': len(m.group(1)),
+                'text': m.group(2).strip(),
+                'idx': len(headings),
+            })
+    
+    # Track that this path has been skeletonized
+    _skeleton_reads[_repo_key(path, repo)] = True
+    
+    # Print compact skeleton
+    total_lines = len(lines)
+    total_tokens = total_lines * 10 // 4  # rough estimate
+    print(f"\n[SKELETON] {path} — {total_lines} lines, ~{len(content)//4} tokens, {len(headings)} headings")
+    for h in headings:
+        indent = "  " * (h['level'] - 1)
+        print(f"  {h['idx']:>3}  L{h['line']:<5} {indent}{h['text']}")
+    
+    return headings
+
+
+def read_sections(path: str, heading_indices: list, repo: str = None) -> str:
+    """
+    Return content under specified headings only.
+    
+    heading_indices: list of idx values from read_skeleton() output.
+    Returns concatenated section content (heading + body until next same-or-higher heading).
+    """
+    repo = repo or _active_repo
+    key = _repo_key(path, repo)
+    
+    content = _session_fetches.get(key)
+    if content is None:
+        raise RuntimeError(f"[SECTIONS] File not fetched: {path}. Call read_skeleton() first.")
+    
+    lines = content.splitlines()
+    
+    # Rebuild heading map
+    headings = []
+    for i, line in enumerate(lines):
+        m = _re_mod.match(r'^(#{1,6})\s+(.+)', line)
+        if m:
+            headings.append({'line': i + 1, 'level': len(m.group(1)), 'idx': len(headings)})
+    
+    if not headings:
+        return content  # no headings = return all
+    
+    # Build heading index → (start_line, end_line) map
+    sections = {}
+    for i, h in enumerate(headings):
+        start = h['line'] - 1  # 0-indexed
+        # End at next heading of same or higher level, or EOF
+        end = len(lines)
+        for j in range(i + 1, len(headings)):
+            if headings[j]['level'] <= h['level']:
+                end = headings[j]['line'] - 1
+                break
+        sections[h['idx']] = (start, end)
+    
+    # Extract requested sections
+    result_parts = []
+    for idx in sorted(heading_indices):
+        if idx not in sections:
+            print(f"[SECTIONS] Warning: heading index {idx} not found in {path}")
+            continue
+        start, end = sections[idx]
+        result_parts.append("\n".join(lines[start:end]))
+    
+    extracted = "\n\n".join(result_parts)
+    print(f"[SECTIONS] {path}: extracted {len(heading_indices)} sections, ~{len(extracted)//4} tokens (full file: ~{len(content)//4} tokens)")
+    return extracted
+
+# Skeleton tracking state
+_skeleton_reads: dict = {}
+
+def was_skeletonized(path: str, repo: str = None) -> bool:
+    """Check if a path went through read_skeleton() this session."""
+    repo = repo or _active_repo
+    return _skeleton_reads.get(_repo_key(path, repo), False)
