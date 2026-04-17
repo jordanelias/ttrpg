@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 663
+# next_id: 666
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Last updated: 2026-04-17 (PP-661 close — ledger split)
 
@@ -136,3 +136,24 @@ editorial_decisions:
     status: open
     severity: P2
     affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-663
+    date: 2026-04-17
+    description: "Haushalt Competence 3 yields +2 Wealth/season (MIN-01 spec). No Wealth cap defined. Over 20 seasons: +40 Wealth cumulative. Wealth ceiling must be specified to prevent unbounded resource generation at Competence 3."
+    status: open
+    severity: P1
+    affects: [designs/systems/faction_politics_expanded_v1.md, designs/board_game/board_game_v30.md]
+
+  - id: ED-664
+    date: 2026-04-17
+    description: "Advisor-principal confidentiality: no canonical rule specifies what a seconded diplomatic representative (Linder) may share from inner circle contexts. 'Private conversation' vs. 'factual inner circle observation' boundary undefined. Requires formal specification."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md, designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-665
+    date: 2026-04-17
+    description: "Grand Contest as succession trial: tied Varfell Assembly defaults to Grand Contest trial at Ob 3 per inferred oral law precedent. Not in any canonical doc. Requires specification in npc_behavior_v30 §5.2 or faction_politics_expanded §1.3."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md, designs/systems/faction_politics_expanded_v1.md]

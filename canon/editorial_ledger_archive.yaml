@@ -3769,3 +3769,24 @@ editorial_decisions:
     status: open
     severity: P2
 
+  - id: ED-617
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Grand Contest Recall (+2D): once per cited source per contest, not per exchange."
+    status: open
+    severity: P2
+
+  - id: ED-618
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Torben Conviction emergence window: formally Seasons 1-8."
+    status: open
+    severity: P2
+
+  - id: ED-619
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "GM advisory: 3-active-Obligation cap for tractability."
+    status: open
+    severity: P3
+

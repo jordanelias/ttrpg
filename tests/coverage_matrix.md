@@ -293,3 +293,31 @@ Resume trigger: (a) user-initiated simulation review, or (b) patch to faction_po
 | CROSS-B4-02 | Institutional memory is catastrophic risk — each character carries a specific piece of dangerous knowledge |
 | CROSS-B4-03 | Relationship is political infrastructure — genuine relationship produces disproportionate returns at crisis moments |
 
+
+## New Findings — sim_npc_player_batch5_2026-04-17
+
+### P1 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| REICH-SIM-01 | Reichard | Haushalt Competence 3 +2/season has no Wealth cap — unbounded resource generation over long campaigns | Open — ED-663 |
+
+### Confirmed Working
+
+| System | Source | Status |
+|--------|--------|--------|
+| Reichard bifurcated record-keeping (inquiry notes vs. War Council true picture) preserves institutional memory | REICH-SIM-02 | ✓ |
+| Heljason counter-argument addendum: internal preparation without burdening principal | HELJ-SIM-01 | ✓ |
+| Father Linder's mutual management with Thale: institutionally stable dual-service without deception | LIND-SIM-01 | ✓ |
+| Jarnstal partial compliance with Baralta's Doctrine preserves strongest ecclesiastical immunity ground | JAR-SIM-02 | ✓ |
+| Hann's genealogical research produces his own best counter-argument | HANN-SIM-01 | ✓ Correct structural irony |
+| Maret Uln's win-win construction: indispensable to Vaynard's success and to post-elimination continuity | MULN-SIM-02 | ✓ |
+
+### Cross-Simulation Findings
+
+| Finding | Description |
+|---------|-------------|
+| CROSS-B5-01 | Advisor as bottleneck — inconvenient truths are managed not delivered; systemic, not individual failure |
+| CROSS-B5-02 | Coalition logic is asymmetric — preventing a majority is more efficient than building one |
+| CROSS-B5-03 | Long-horizon investment wins mid-range crises — every successful character here invested 2+ seasons ahead |
+
