@@ -78,7 +78,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 | Item | File | Change | Validation |
 |---|---|---|---|
 | 1.1 | `designs/ui/valoria_ui_ux_v4_1.md` line 5 | Status: `CANONICAL` → `CANONICAL — structural supplement to v4. v4 remains authoritative for content-level UI specification until incremental restatement completes. Spec-autonomy target: v4.2+` | Grep confirms new status line; diff ≤ 3 lines |
-| 1.2 | `canon/editorial_ledger.yaml` | New entry: ED-601 (F-69 recorded) | next_id bumped to 602 |
+| 1.2 | `canon/editorial_ledger.yaml` | New entry: ED-637 (F-69 recorded) | next_id bumped to 602 |
 
 **Acceptance gate:** Jordan confirms Option B (status line change) over Option A (full immediate restatement).
 
@@ -89,7 +89,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 [DOC] ui_ux_v4_1 honest status line (F-69 Option B)
 
 - Status line now acknowledges v4 dependency explicitly
-- ED-601 records spec-autonomy pattern for v4.2 remediation
+- ED-637 records spec-autonomy pattern for v4.2 remediation
 - No mechanical change
 ```
 
@@ -109,7 +109,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 | 2.4 | F-16 (cont) | `valoria_ui_ux_v4_1.md` §10.2 | Delete "Taint track does not apply" line (Threadcut beings) | N/A — Taint removed globally |
 | 2.5 | F-55 | `valoria_ui_ux_v4_1.md` §9.9 | Rewrite "Strain auto-accumulates per P-12 Patch O (+1 strain/season on Close Knots at Taint 4–6)" per canonical TS-state table from `npc_behavior_v30.md` §5.0b. Color-code graph edges by TS state, not Taint | `npc_behavior_v30.md` §5.0b |
 | 2.6 | F-58 | `valoria_ui_ux_v4_1.md` Part 14 rows 1204–1205 | Delete row 1204 (P-10 falsely resolved). Rewrite row 1205 (P-11): cite §9.5 co-movement panel, not §9.8 | N/A — derived |
-| 2.7 | Register | `canon/editorial_ledger.yaml` | Entries: ED-602 (F-15), ED-603 (F-16), ED-604 (F-55), ED-605 (F-58) | — |
+| 2.7 | Register | `canon/editorial_ledger.yaml` | Entries: ED-638 (F-15), ED-639 (F-16), ED-640 (F-55), ED-641 (F-58) | — |
 | 2.8 | Register | `references/file_index_summary.md` | Mark ui_ux as propagation-pending until Stage 13 | — |
 
 **Acceptance gate:** Canon-guard CI pass confirms no Taint/CD references remain in v4.1.
@@ -124,7 +124,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 - F-16: Taint references across §9.7, §10.2, §11.3 (threadwork §3.4)
 - F-55: Knot propagation rewritten per npc_behavior §5.0b TS-state table
 - F-58: Part 14 rows 1204–1205 revised (P-10 falsely resolved; P-11 cited wrong section)
-- ED-602 through ED-605 recorded
+- ED-638 through ED-641 recorded
 ```
 
 ---
@@ -142,7 +142,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 | 3.3 | F-56 | `valoria_ui_ux_v4_1.md` §9.7 TS 70+ row | Split into TS 70–89 (−1 RS/session) and TS 90+ (−1 RS/scene) | `threadwork_v30.md` PP-197 |
 | 3.4 | F-59 | `valoria_ui_ux_v4_1.md` Part 14 UI-03 | Update threshold reference from Coherence ≤ 5 to ≤ 7 to align with 3.1 | Derived from 3.1 |
 | 3.5 | F-67 | `valoria_ui_ux_v4_1.md` §9.4 | Rename three-axis first axis from "Scale" to "Breadth" | `threadwork_v30.md` §2.4 (PP-622/PP-623 rename) |
-| 3.6 | Register | `canon/editorial_ledger.yaml` | Entries: ED-606 (F-17), ED-607 (F-26), ED-608 (F-56), ED-609 (F-67) | — |
+| 3.6 | Register | `canon/editorial_ledger.yaml` | Entries: ED-642 (F-17), ED-643 (F-26), ED-644 (F-56), ED-645 (F-67) | — |
 
 **Acceptance gate:** Numeric grep confirms all threshold values match canon sources.
 
@@ -157,7 +157,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 - F-56: TS 70+ row split — 70–89 vs 90+ (threadwork PP-197)
 - F-59: UI-03 threshold aligned with §13.7.3 repair
 - F-67: Three-axis "Scale" → "Breadth" (threadwork §2.4 post-PP-622)
-- ED-606 through ED-609 recorded
+- ED-642 through ED-645 recorded
 ```
 
 ---
@@ -175,7 +175,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 | 4.3 | F-32 | `valoria_ui_ux_v4_1.md` §9.4 and §11.1 | Add Domain Echo Reference Table as pre-commit UI in Thread panel (§9.4) and Domain Action panel (§11.1). Table content per integration_proposal Part 8 (13 rows). Stature modifier visible | `integration_proposal_2026-04-15.md` Part 8 |
 | 4.4 | F-33 | `valoria_ui_ux_v4_1.md` §6.2 | Add Parliamentary Intent scene action for Standing 3+ characters. Binds Finding to next Parliamentary vote; +1D Corroboration appears on next Senator card | `integration_proposal_2026-04-15.md` Gap 3 |
 | 4.5 | F-36 | `valoria_ui_ux_v4_1.md` new §11.1c "Independent Actor progression" | Panel shows current Stage (1–5) + requirements for next stage. Cutscene tier per Stage-up | `settlement_layer_v30.md` §6.2 + `player_agency_v30.md` §5.4 |
-| 4.6 | Register | `canon/editorial_ledger.yaml` | Entries: ED-610 (F-7), ED-611 (F-11), ED-612 (F-32), ED-613 (F-33), ED-614 (F-36) | — |
+| 4.6 | Register | `canon/editorial_ledger.yaml` | Entries: ED-646 (F-7), ED-647 (F-11), ED-648 (F-32), ED-649 (F-33), ED-650 (F-36) | — |
 
 **Acceptance gate:** integration_proposal H-1 through H-6 recommendations cross-referenced; each has a v4.1 repair cited.
 
@@ -190,7 +190,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 - F-32: Domain Echo Reference Table pre-commit UI in §9.4 and §11.1
 - F-33: §6.2 Parliamentary Intent for Standing 3+
 - F-36: §11.1c Independent Actor Stage 1–5 progression panel
-- ED-610 through ED-614 recorded
+- ED-646 through ED-650 recorded
 ```
 
 ---
@@ -211,7 +211,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 | 5.6 | F-13 | §7.6 | Specify 5-panel Death Cascade animated sequence: Knot rupture → Slate entries added → faction Stability tick → Exposure strip → Conviction prompt. Each 0.8–1.2s | `combat_v30` §13.3 |
 | 5.7 | F-19 | §9.7 Coherence 0 row | Replace "Cutscene fires — TS-branched outcome" with Rendering Crisis arc: Priority 0 Slate entry, season counter, Anchoring Scenes progress (0/3), Bonds resolution roll at Accounting. PP-206 TS 30–31 warning modal | `threadwork_v30` §3.7 + PP-194 + PP-206 |
 | 5.8 | F-20 | §11.5 | Separate Companion Connection (Disp +5) from Knot formation (TS ≥ 30 both parties). Add "Knot candidate" chip at Disp +5; Knot Formation action opens only if TS gate met | `fieldwork_v30` §5.6 + `npc_behavior_v30` §6.3 |
-| 5.9 | Register | `canon/editorial_ledger.yaml` | Entries: ED-615 through ED-622 | — |
+| 5.9 | Register | `canon/editorial_ledger.yaml` | Entries: ED-651 through ED-658 | — |
 
 **Blocks:** Stage 8 (Oath II preview depends on these surfaces existing).
 
@@ -227,7 +227,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 - F-13: 5-panel Death Cascade animation sequence
 - F-19: Rendering Crisis arc UI (replaces single cutscene)
 - F-20: Companion Connection / Knot formation gate separation
-- ED-615 through ED-622 recorded
+- ED-651 through ED-658 recorded
 ```
 
 ---
@@ -250,7 +250,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 | 6.8 | F-35 | §11.1b new subsection "Leadership" | Standing 4+: "Challenge Leadership" action in Hand Panel footer. Standing 5 on leader removal: Priority 0 Slate entry offering leadership | `player_agency_v30` §5.2 |
 | 6.9 | F-52 | §2.1 visibility table | Add PI row: visible at Counselor+ in Parliament-participating factions (Crown/Hafenmark/Church/Guilds/Löwenritter/RM). Tooltip: "Parliament Integrity — N/20. Auto-resolves at 20." | `clock_registry_v30` §Shared Clocks |
 | 6.10 | F-54 | §2.1 visibility + §11.3 | Generational Shift visible from Year 8. Character sheet shows age penalty. NPC sheets show succession-candidate arrow at Threshold 4+ | `settlement_layer_v30` §7.2 |
-| 6.11 | Register | `canon/editorial_ledger.yaml` | Entries: ED-623 through ED-632 | — |
+| 6.11 | Register | `canon/editorial_ledger.yaml` | Entries: ED-659 through ED-668 | — |
 
 **Blocks:** Stage 8 (preview requires these panels exist).
 
@@ -268,7 +268,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 - F-35: Leadership Challenge action (Standing 4+)
 - F-52: PI clock visibility at Counselor+ Parliament factions
 - F-54: Generational Shift clock + character-sheet age penalty
-- ED-623 through ED-632 recorded
+- ED-659 through ED-668 recorded
 ```
 
 ---
@@ -291,7 +291,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 | 7.8 | F-44 | §13 + §1.4 | Retrospective Zoom In mini-cutscene: fires when player arrives/communicates with territory where major event occurred offscreen. Routes via companion → Knot → messenger → ambient rumor per scale_transitions §4.3 Retrospective | `scale_transitions_v30` §4.3 |
 | 7.9 | F-45 | §12.1 | Add 5 missing transition rows: Fieldwork → Contest (Findings as +1D/Finding prep); Fieldwork → Mass Battle (suspension); BG Survey → TTRPG (Fieldwork Offset from degree); Combat → Fieldwork (Exposure codification +1/+2/+3); Contest → Fieldwork (Appraise → Evidence +1 Testimonial) | `scale_transitions_v30` §3.9 |
 | 7.10 | F-47 | §7.7 + §9.4 + §11.1 + §6 | Extend Sufficient Scope indicator beyond personal combat to all four gateway points: Combat (§7.7 existing), Thread (§9.4), Domain Action (§11.1), Contest (§6). Show which of 7 conditions apply; companion +1 modifier visible | `scale_transitions_v30` §7 |
-| 7.11 | Register | `canon/editorial_ledger.yaml` | Entries: ED-633 through ED-642 | — |
+| 7.11 | Register | `canon/editorial_ledger.yaml` | Entries: ED-669 through ED-678 | — |
 
 **Blocks:** Stage 8.
 
@@ -309,7 +309,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 - F-44: Retrospective Zoom In mini-cutscene
 - F-45: 5 missing transitions added to §12.1 inventory
 - F-47: Sufficient Scope indicator extended to all 4 gateways
-- ED-633 through ED-642 recorded
+- ED-669 through ED-678 recorded
 ```
 
 ---
@@ -328,7 +328,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 | 8.4 | F-50 | §2.1 three-clock summary | TC threshold markers visible: seasons-to-threshold trajectory (passive +1/season → seasons to 65/75/80) | `victory_v30` TC milestones |
 | 8.5 | F-51 | §2.1 three-clock summary | IP threshold markers visible: 40 / 60 / 75 / 100 milestones | `clock_registry_v30` + `victory_v30` |
 | 8.6 | F-53 | §4.3 per-action preview | Add Calamity Ob modifier row: +1 Ob per RS band below 60 at current Proximity per fieldwork §1 | `fieldwork_v30` §1 + `calamity_radiation_v30` |
-| 8.7 | Register | `canon/editorial_ledger.yaml` | Entries: ED-643 through ED-647 | — |
+| 8.7 | Register | `canon/editorial_ledger.yaml` | Entries: ED-679 through ED-683 | — |
 
 **Blocks:** Stage 10 (index rewrite must reflect final state).
 
@@ -340,7 +340,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 - F-28: §11.1 Uphold/Appease precise trigger (institutional challenge AND Mandate ≥ 4)
 - F-50/F-51: TC/IP threshold markers in three-clock summary
 - F-53: Calamity Ob modifier in fieldwork per-action preview
-- ED-643 through ED-647 recorded
+- ED-679 through ED-683 recorded
 ```
 
 ---
@@ -357,7 +357,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 | 9.2 | F-62 | Appendix E Signal bus | Enumerate ≥ 30 signals (currently 3). Full list in work document; minimum: obligation_added/removed, knot_formed/strained/ruptured, coherence_band_crossed, rs_band_crossed, tc/ip/pi_threshold_crossed, belief_scar_added, conviction_strain_added/revised, disposition_changed, exposure_threshold_crossed, season_boundary, phase_transition, scene_action_spent, sufficient_scope_triggered, domain_echo_fired, cutscene_queued |
 | 9.3 | F-64 | Appendix E Save system | Expand: resource-ref vs embedded-copy strategy; version header format; migration fallback behavior; expected file size bounds |
 | 9.4 | F-65 | Appendix A Input | Capability-gated shortcut remapping rule: remapped bindings persist across capability state; keystroke = no-op until capability acquired; no re-map prompt on capability gain |
-| 9.5 | Register | `canon/editorial_ledger.yaml` | Entries: ED-648 through ED-651 |
+| 9.5 | Register | `canon/editorial_ledger.yaml` | Entries: ED-684 through ED-687 |
 
 **Independent of:** Stages 5, 6, 7 (engineering spec depth is orthogonal to UI-surface additions).
 
@@ -369,7 +369,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 - F-62: Signal bus enumerated (≥ 30 signals)
 - F-64: Save system strategy specified
 - F-65: Capability-gated shortcut remapping rule
-- ED-648 through ED-651 recorded
+- ED-684 through ED-687 recorded
 ```
 
 ---
@@ -386,7 +386,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 | 10.2 | F-59 (complete) | Part 14 UI-03 | Coherence threshold matches Stage 3 §13.7.3 repair |
 | 10.3 | F-60 | Part 14 UI-09 | Split compound row: UI-09a (settlement capture side-panel, §8.4); UI-09b (General Duel Zoom In, §8.3) |
 | 10.4 | Add rows for new resolutions from Stages 4–8 | Part 14 | UI-16 (Dialogue Lattice 7-gate per F-7), UI-17 (Style Decision UI per F-11), UI-18 (Domain Echo Reference Table per F-32), UI-19 (Parliamentary Intent per F-33), UI-20 (Independent progression per F-36), UI-21 (Sincerity Gate UI per F-8), UI-22 (Case Board per F-6), UI-23 (Rendering Crisis arc per F-19), UI-24 (Sufficient Scope across 4 gateways per F-47) |
-| 10.5 | Register | `canon/editorial_ledger.yaml` | Entry ED-652 |
+| 10.5 | Register | `canon/editorial_ledger.yaml` | Entry ED-688 |
 
 **Blocks:** Stage 13 publication.
 
@@ -398,7 +398,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 - F-59: UI-03 threshold aligned
 - F-60: UI-09 split into UI-09a / UI-09b
 - UI-16 through UI-24 added for Stages 4–8 resolutions
-- ED-652 recorded
+- ED-688 recorded
 ```
 
 ---
@@ -420,7 +420,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 | 11.7 | F-69 Opt A | §7.7 | Restate Sufficient Scope indicator (extended in Stage 7 F-47) | Trivial — already extended |
 | 11.8 | F-69 Opt A | §8.1 | Restate battle map visual spec (16×10 hex, unit tokens, formation indicators, terrain modifiers) | Medium |
 | 11.9 | Status line | Header | Change status from "structural supplement to v4" (Stage 1) to "CANONICAL — standalone Godot development reference" | Trivial |
-| 11.10 | Register | `canon/editorial_ledger.yaml` | Entry ED-653 (F-68 complete), ED-654 (F-69 Option A complete) |
+| 11.10 | Register | `canon/editorial_ledger.yaml` | Entry ED-689 (F-68 complete), ED-690 (F-69 Option A complete) |
 
 **Blocks:** Stage 13 publication.
 
@@ -431,7 +431,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 - F-68: §13.2 22 mandatory triggers enumerated inline
 - F-69 Opt A: §§4.3, 5.2, 6.2, 7.5, 7.6, 7.7, 8.1 restated inline
 - Status line: v4.2 becomes standalone canonical reference
-- ED-653 and ED-654 recorded
+- ED-689 and ED-690 recorded
 ```
 
 ---
@@ -452,7 +452,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 | 12.6 | F-57 | §P0 Oath II Violation Test 3 | Tighten: "Does the UI reveal content at a Depth the character's perception cannot reach via *any* of the gates specified in fieldwork §1?" |
 | 12.7 | F-63 | Appendix E | Verify card count against game repo authoritative registry; update manifest |
 | 12.8 | F-66 | Appendix A | Expand shortcut list with layer navigation (S = Settlement / Strategic, B = breadcrumb jump, etc.) |
-| 12.9 | Register | `canon/editorial_ledger.yaml` | Entries: ED-655 through ED-660 |
+| 12.9 | Register | `canon/editorial_ledger.yaml` | Entries: ED-691 through ED-696 |
 
 **Commit message:**
 ```
@@ -466,7 +466,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 - F-57: Oath II Violation Test 3 precision
 - F-63: Card manifest verified against game repo
 - F-66: Shortcut list expanded
-- ED-655 through ED-660 recorded
+- ED-691 through ED-696 recorded
 ```
 
 ---
@@ -497,7 +497,7 @@ All 69 audit findings resolved (Stages 1–12).
 - Domain Echo Reference Table canonical in UI
 - 5 integration_proposal H-items absorbed
 - Standalone Godot development reference status achieved
-- ED-601 through ED-660 closed
+- ED-637 through ED-696 closed
 ```
 
 ---
@@ -528,20 +528,20 @@ Workplan treats these as mechanical-enumerable (what's listed in v30 sources) bu
 
 | Stage | Items | P1 count | P2 count | P3 count | EDs allocated | Blocking? |
 |---|---|---|---|---|---|---|
-| 1 | 2 | 1 (F-69) | — | — | ED-601 | Yes, blocks all |
-| 2 | 8 | 4 | — | — | ED-602–605 | Yes, blocks 3–7 |
-| 3 | 6 | 2 | 3 | — | ED-606–609 | Yes, blocks 5–7 |
-| 4 | 6 | 5 | — | — | ED-610–614 | Yes, blocks 5, 8 |
-| 5 | 9 | 5 | 3 | — | ED-615–622 | Partial blocker 8 |
-| 6 | 11 | 3 | 7 | — | ED-623–632 | Partial blocker 8 |
-| 7 | 11 | 4 | 6 | — | ED-633–642 | Partial blocker 8 |
-| 8 | 7 | 1 | 5 | — | ED-643–647 | Yes, blocks 10 |
-| 9 | 5 | 2 | 2 | — | ED-648–651 | Independent |
-| 10 | 5 | 1 | 2 | 1 | ED-652 | Yes, blocks 13 |
-| 11 | 10 | 2 | 6 | — | ED-653–654 | Yes, blocks 13 |
-| 12 | 9 | — | — | 8 | ED-655–660 | Independent |
+| 1 | 2 | 1 (F-69) | — | — | ED-637 | Yes, blocks all |
+| 2 | 8 | 4 | — | — | ED-638–605 | Yes, blocks 3–7 |
+| 3 | 6 | 2 | 3 | — | ED-642–609 | Yes, blocks 5–7 |
+| 4 | 6 | 5 | — | — | ED-646–614 | Yes, blocks 5, 8 |
+| 5 | 9 | 5 | 3 | — | ED-651–622 | Partial blocker 8 |
+| 6 | 11 | 3 | 7 | — | ED-659–632 | Partial blocker 8 |
+| 7 | 11 | 4 | 6 | — | ED-669–642 | Partial blocker 8 |
+| 8 | 7 | 1 | 5 | — | ED-679–647 | Yes, blocks 10 |
+| 9 | 5 | 2 | 2 | — | ED-684–651 | Independent |
+| 10 | 5 | 1 | 2 | 1 | ED-688 | Yes, blocks 13 |
+| 11 | 10 | 2 | 6 | — | ED-689–654 | Yes, blocks 13 |
+| 12 | 9 | — | — | 8 | ED-691–660 | Independent |
 | 13 | 6 | — | — | — | — | — |
-| **Total** | **95** | **30** | **34** | **9** | **ED-601–660** | — |
+| **Total** | **95** | **30** | **34** | **9** | **ED-637–660** | — |
 
 P-count reflects workplan *items*, which exceeds the 69 findings because several findings split across multiple work items (e.g., F-16 across 2.2, 2.3, 2.4; F-47 across 7.10 and 8.3). All 69 findings are covered.
 
