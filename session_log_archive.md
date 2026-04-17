@@ -3804,3 +3804,9 @@ open_items:
   - ED-611 Niflhel asset placement (P2)
   - ED-615 Schoenland Treaty terms (P2)
   - ED-616-627 from arc expansion batch (various)
+
+---
+
+session_id: sim_batch_8_2026-04-17
+last_stage: done
+status: CLOSED
