@@ -1,8 +1,8 @@
 # Valoria Editorial Ledger — Active
-# next_id: 637
+# next_id: 638
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Index: canon/editorial_ledger_index.md
-# Last updated: 2026-04-17 (faction politics rank-ladder expansion PP-660)
+# Last updated: 2026-04-17 (Stage 1 ui_ux v4.2 workplan — F-69 Option B status line fix)
 
 editorial_decisions:
   - id: ED-591-609
@@ -83,3 +83,10 @@ editorial_decisions:
     resolution: "2026-04-17: conviction_track_v30 line 16 fixed."
     severity: P1
     affects: [designs/conviction_track/conviction_track_v30.md]
+  - id: ED-637
+    date: 2026-04-17
+    description: "F-69 Option B applied — valoria_ui_ux_v4_1 status line corrected. Document claimed 'CANONICAL — approved for development reference' while body defers 8 sections (§4.3, §5.2, §6.2, §7.5, §7.6, §7.7, §8.1, §13.2) to superseded v4 with 'See v4 §X — unchanged'. Status line now acknowledges v4 dependency explicitly; spec-autonomy target v4.2+ per workplan Stage 11. Stage 1 of 13 per valoria_ui_ux_v4_2_workplan.md."
+    status: open
+    severity: P1
+    affects: [designs/ui/valoria_ui_ux_v4_1.md]
+

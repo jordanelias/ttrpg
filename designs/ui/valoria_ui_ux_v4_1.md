@@ -3,7 +3,7 @@
 
 **Date:** 2026-04-16
 **Supersedes:** valoria_ui_ux_v4.md (earlier today)
-**Status:** CANONICAL — approved for development reference
+**Status:** CANONICAL — structural supplement to v4. v4 remains authoritative for content-level UI specification until incremental restatement completes. Spec-autonomy target: v4.2+ (see valoria_ui_ux_v4_2_workplan.md, F-69 Option B)
 **Audit trail:** incorporates all critical findings from valoria_ui_ux_v4_audit.md + valoria_ui_ux_v4_audit_addendum.md (both 2026-04-16)
 **Structural changes from v4:** 25 parts → 14 parts + 5 appendices; Layer 3 haptic-equivalent deleted; Thread UI progressively gated by TS; chrome visibility rules capability-gated; setting violations corrected (period music, non-anachronistic colors, hermetic Thread typography, pre-Gothic portrait era); canon gaps filled (monster encounter, Threadcut, memory pulling, Southernmost forgetting)
 **Dependencies:** all 19 v30 canonical design documents + combat_v30 ED-548 Wound Interval patch
