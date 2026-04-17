@@ -84,3 +84,22 @@ Guilds Merchant Hegemony (~S15-17), TC bonus equalising Parliament pools, Memory
 | ED-590 | Church victory: Accord ≥ 3 in ≥ 3 non-capital territories. | §3.2 |
 | — | Löwenritter design note: transitional faction, not conventional winner. | §3.6 |
 
+
+## Batch 7 Summary (sim_batch_7_2026-04-16) — ST-41 through ST-50
+
+### Resolved EDs
+ED-589 (Presence marker mechanics), ED-586 (Constrained sub-arc), ED-587 (Stability Crisis Zoom In),
+ED-617 (Grand Contest Recall fix), ED-621 (BG lobby cap), ED-622 (Varfell no-Senator note),
+ED-626 (Accord/Order distinction), ED-623 (IP rate validated)
+
+### New EDs
+| ED-628 | Siege mechanic missing for playable factions | P2 |
+| ED-629 | Partition needs Phase 1 declaration | P2 |
+| ED-630 | RS Rupture needs Last Declaration scene spec | P2 |
+
+### Batch 7 Confirmed Working
+RM Presence markers (Strategy C canonical), Altonian invasion at S25 (revised IP),
+Coalition rebuff IP reset, RS Critical Stability checks, HI chain 2-scene → Tribunal,
+RM 30-season arc S8→S14→S15, Assert Mandate gate critical, Varfell Path C S14-15,
+Intelligence Embargo coalition spoiler.
+

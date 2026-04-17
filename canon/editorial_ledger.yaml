@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 628
+# next_id: 631
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Index: canon/editorial_ledger_index.md
 # Last updated: 2026-04-16
@@ -15,14 +15,14 @@ editorial_decisions:
   - id: ED-586
     date: 2026-04-16
     description: "Arc behavioral state vs Priority 6 contradiction at Mandate < 3. Proposed Constrained sub-arc state."
-    status: open
+    status: resolved
     severity: P2
     affects: [designs/systems/npc_behavior_v30.md]
 
   - id: ED-587
     date: 2026-04-16
     description: "Faction Stability Crisis Zoom In trigger absent. Proposed mandatory Zoom In: Stability drops ≤ 2 OR ≥ 2 in single Accounting."
-    status: open
+    status: resolved
     severity: P2
     affects: [designs/hybrid/scale_transitions_v30.md]
 
@@ -37,7 +37,7 @@ editorial_decisions:
   - id: ED-589
     date: 2026-04-16
     description: "RM Presence marker mechanics undefined. Post-Uprising T9 administration requires Presence markers but mechanic unspecified."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/board_game/victory_v30.md]
 
@@ -52,28 +52,6 @@ editorial_decisions:
     date: 2026-04-16
     description: "Niflhel political influence arm lacks formal Asset placement mechanic for long-term operative infiltration of other factions. Current rules only specify reactive sabotage (Priority 2)."
     status: open
-    severity: P2
-    affects: [designs/systems/npc_behavior_v30.md]
-
-  - id: ED-612
-    date: 2026-04-16
-    description: "Guilds have no solo victory condition. Unplayable as solo faction. Need either: formal co-victory path, or Merchant Hegemony condition (Wealth >= 8 + Favour >= 5 in 5 territories + Treaty with winning faction)."
-    status: resolved
-    severity: P1
-    affects: [designs/board_game/victory_v30.md]
-
-  - id: ED-613
-    date: 2026-04-16
-    description: "Löwenritter Torben Loyalty >= 6 primary victory path: achieving Loyalty 6 from post-Coup position (1-2) requires ~10 seasons. Combined with Mandate instability (Restoration fires at Mandate <= 2), Primary victory window is narrow. Acceleration mechanics needed."
-    status: resolved
-    resolution: "Jordan 2026-04-16: by-design. Löwenritter holds until new monarch faction takes over; Regency Establishment is the handoff mechanic not a win condition."
-    severity: P2
-    affects: [designs/board_game/victory_v30.md, designs/systems/npc_behavior_v30.md]
-
-  - id: ED-614
-    date: 2026-04-16
-    description: "Cardinal subfaction play during Church Stability <= 2: no mechanic specifies duration of Cardinal independence or conditions restoring Confessor authority. Is restoration automatic at Stability 3+?"
-    status: resolved
     severity: P2
     affects: [designs/systems/npc_behavior_v30.md]
 
@@ -94,7 +72,7 @@ editorial_decisions:
   - id: ED-617
     date: 2026-04-16
     description: "Grand Contest Recall (+2D): once per cited source per contest, not per exchange."
-    status: open
+    status: resolved
     severity: P2
     affects: [designs/contest/social_contest_v30.md]
 
@@ -122,14 +100,14 @@ editorial_decisions:
   - id: ED-621
     date: 2026-04-16
     description: "BG Parliamentary Vote: lobby offset can pre-determine outcome at +2 lobby (Track starts at 7, above win threshold). Restrict starting track to compromise zone 4-6, matching Hybrid restriction in §11."
-    status: open
+    status: resolved
     severity: P2
     affects: [designs/contest/social_contest_v30.md]
 
   - id: ED-622
     date: 2026-04-16
     description: "Varfell cannot file Parliamentary motions (no Senator card). Add explicit note to Varfell faction profile and tc_political_redesign §5.1."
-    status: open
+    status: resolved
     severity: P2
     affects: [designs/board_game/tc_political_redesign_v30.md, designs/systems/npc_behavior_v30.md]
 
@@ -157,7 +135,7 @@ editorial_decisions:
   - id: ED-626
     date: 2026-04-16
     description: "Accord (province, 0-3) and Order (settlement, 0-5) are distinct independent stats. Relationship between them and to Peninsular Strain unspecified. Add clarification."
-    status: open
+    status: resolved
     severity: P2
     affects: [designs/board_game/peninsular_strain_v1.md, designs/mass_combat/mass_battle_v30.md]
 
@@ -166,5 +144,26 @@ editorial_decisions:
     description: "Guilds solo victory constraint 'no rival Wealth ≥ Guild Wealth − 2' broken at standard Wealth cap 7. Fix: absolute 'no rival Wealth ≥ Guild Wealth'."
     status: resolved
     resolution: "Jordan 2026-04-16: by-design. Guilds are a spoiler/pressure faction; solo victory moot per design intent."
+    severity: P2
+    affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-628
+    date: 2026-04-16
+    description: "Siege mechanic not specified for playable factions. Legionary Inward Siege: pool=Military vs Ob=2+Fort; Fort -1/Success, -2/OW; Wealth -1/season; RS -1/season. Replaces Battle declaration on fortified territory."
+    status: open
+    severity: P2
+    affects: [designs/mass_combat/mass_battle_v30.md, designs/board_game/military_layer_v30.md]
+
+  - id: ED-629
+    date: 2026-04-16
+    description: "Church+Hafenmark Partition fires silently at Accounting with no warning. Add Phase 1 declaration requirement: both parties declare in Phase 1, giving other factions a full action window to disrupt any single condition."
+    status: open
+    severity: P2
+    affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-630
+    date: 2026-04-16
+    description: "RS Rupture shared loss lacks experiential scene specification. Add 'Last Declaration' scene: mandatory Priority 0 Zoom In for all PCs, each states primary Belief, GM narrates Rupture through that lens. No mechanical outcome."
+    status: open
     severity: P2
     affects: [designs/board_game/victory_v30.md]
