@@ -50,3 +50,19 @@ revised, all 6 tactic cards + counter-formations.
 Settlement mechanics, Guilds victory design, 6-faction Parliamentary sim,
 Altonian Vanguard, RM Founding, Elske arc, Thread collective op,
 Cardinal restoration, Baralta Arc C, longevity cascade.
+
+## Batch 6 Findings (sim_batch_6_2026-04-16) — ST-31 through ST-40
+
+### New P1
+| SIM6-01 | RM Founding mechanic missing from all docs | ED-620 |
+
+### Resolved
+| ED-612 | Guilds solo victory (Merchant Hegemony) designed and validated |
+| ED-614 | Cardinal restoration conditions specified |
+
+### New P2 EDs (621-627)
+BG lobby cap, Varfell Parliamentary constraint, IP rate, Elske arc, Excommunication procedure, Accord/Order distinction, Guilds victory constraint fix.
+
+### Confirmed Working
+Guilds Merchant Hegemony (~S15-17), TC bonus equalising Parliament pools, Memory genre advantage, Thread collective op (72D Calamity reversal), Fort defense bonus, Elske pre-coup investment → Regency S17, double Priority 0 Zoom In choice, double longevity death cascade.
+

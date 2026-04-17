@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 620
+# next_id: 628
 # Archive (resolved/struck): canon/editorial_ledger_archive.yaml
 # Index: canon/editorial_ledger_index.md
 # Last updated: 2026-04-16
@@ -40,13 +40,6 @@ editorial_decisions:
     severity: P1
     affects: [designs/board_game/victory_v30.md]
 
-  - id: ED-590
-    date: 2026-04-16
-    description: "Apply Church victory revision to victory_v30 §3.2: TC ≥ 65 + Accord ≥ 3 in ≥ 3 non-capital territories."
-    status: resolved
-    severity: P1
-    affects: [designs/board_game/victory_v30.md]
-
   - id: ED-591-609
     date: 2026-04-16
     description: "Arc expansion v1: 19 arc design proposals (Cardinals x4, Ehrenwall, Torsvald, Vossen/Hann, Orm, Niflhel operatives, Almud/Vaynard expansions, environmental/cross-NPC/obligation conditioners, 11 Zoom In triggers). All provisional. Full spec: designs/systems/arc_expansion_v1_2026-04-16.md."
@@ -64,7 +57,7 @@ editorial_decisions:
   - id: ED-612
     date: 2026-04-16
     description: "Guilds have no solo victory condition. Unplayable as solo faction. Need either: formal co-victory path, or Merchant Hegemony condition (Wealth >= 8 + Favour >= 5 in 5 territories + Treaty with winning faction)."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/board_game/victory_v30.md]
 
@@ -78,7 +71,7 @@ editorial_decisions:
   - id: ED-614
     date: 2026-04-16
     description: "Cardinal subfaction play during Church Stability <= 2: no mechanic specifies duration of Cardinal independence or conditions restoring Confessor authority. Is restoration automatic at Stability 3+?"
-    status: open
+    status: resolved
     severity: P2
     affects: [designs/systems/npc_behavior_v30.md]
 
@@ -116,3 +109,59 @@ editorial_decisions:
     status: open
     severity: P3
     affects: [designs/contest/social_contest_v30.md]
+
+  - id: ED-620
+    date: 2026-04-16
+    description: "RM Founding mechanic unspecified (P1). Full design: Disposition +3 Vossen + PT ≤ 2 in 2 territories + RS ≥ 40 + 1 Community Weaving. Founding Scene: Argue roll Ob 2. Creates RM faction with starting stats."
+    status: open
+    severity: P1
+    affects: [designs/board_game/victory_v30.md, designs/hybrid/scale_transitions_v30.md]
+
+  - id: ED-621
+    date: 2026-04-16
+    description: "BG Parliamentary Vote: lobby offset can pre-determine outcome at +2 lobby (Track starts at 7, above win threshold). Restrict starting track to compromise zone 4-6, matching Hybrid restriction in §11."
+    status: open
+    severity: P2
+    affects: [designs/contest/social_contest_v30.md]
+
+  - id: ED-622
+    date: 2026-04-16
+    description: "Varfell cannot file Parliamentary motions (no Senator card). Add explicit note to Varfell faction profile and tc_political_redesign §5.1."
+    status: open
+    severity: P2
+    affects: [designs/board_game/tc_political_redesign_v30.md, designs/systems/npc_behavior_v30.md]
+
+  - id: ED-623
+    date: 2026-04-16
+    description: "IP advancement too slow: +2/battle-season, +1/season TC≥60. Propose +3/battle-season, +2/season TC≥60 to bring threat to S20-25 in moderate campaigns."
+    status: open
+    severity: P2
+    affects: [designs/board_game/board_game_v30.md, designs/board_game/victory_v30.md]
+
+  - id: ED-624
+    date: 2026-04-16
+    description: "Elske Loyalty track (0-7), IP effects, and Diplomatic Exchange procedure not in any doc. Track and arc proposed in sim_batch_6."
+    status: open
+    severity: P2
+    affects: [designs/board_game/victory_v30.md, designs/systems/npc_behavior_v30.md]
+
+  - id: ED-625
+    date: 2026-04-16
+    description: "Church Excommunication procedure not in any doc. Tribunal-based: Church 17D vs Ob 1 at TC70 = near-certain win. Pre-TC55 Parliamentary block is correct counter. Consequences: TC+4, Hafenmark Mandate-2."
+    status: open
+    severity: P2
+    affects: [designs/contest/social_contest_v30.md, designs/systems/npc_behavior_v30.md]
+
+  - id: ED-626
+    date: 2026-04-16
+    description: "Accord (province, 0-3) and Order (settlement, 0-5) are distinct independent stats. Relationship between them and to Peninsular Strain unspecified. Add clarification."
+    status: open
+    severity: P2
+    affects: [designs/board_game/peninsular_strain_v1.md, designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-627
+    date: 2026-04-16
+    description: "Guilds solo victory constraint 'no rival Wealth ≥ Guild Wealth − 2' broken at standard Wealth cap 7. Fix: absolute 'no rival Wealth ≥ Guild Wealth'."
+    status: open
+    severity: P2
+    affects: [designs/board_game/victory_v30.md]
