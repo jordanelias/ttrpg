@@ -151,3 +151,34 @@ military_layer: §1.9 Siege Action mechanic
 scale_transitions: Stability Crisis Zoom In trigger
 npc_behavior: Constrained sub-arc state, Torben Conviction window S1-8
 
+
+## New Findings — sim_npc_player_batch2_2026-04-16
+
+### P1 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| JUS-SIM-02 | Cardinal Justice | Heresy Proceedings against Confessor: authorization loop — College majority substitute needed | Open — ED-629 |
+
+### Confirmed Working
+
+| System | Source | Status |
+|--------|--------|--------|
+| Vaynard Path B met at S9 from Season 1 hold — fastest single path | VAY-SIM-04 | ✓ |
+| Vaynard S0 Assembly pre-garrisons T13 before Baralta can Proclaim | VAY-SIM-01 | ✓ Reinhard Principle |
+| Intelligence auction: 2 major world events from S1 intel, zero Domain Actions | VAY-SIM-05 | ✓ Force multiplication |
+| Baralta Sovereign Authority Doctrine = constitutional fortification | BAR-SIM-01 | ✓ |
+| Almud institutional ambiguity as governance — Thread absorbed without public acknowledgment | ALM-SIM-03 | ✓ |
+| Ehrenwall Counter fires from information failure (withholding RS data), not military failure | EHR-SIM-01 | ✓ Conviction correctly distinguishes |
+| Justice winning Proceedings → shared loss conditions more likely | JUS-SIM-01 | ✓ Institutional winner / peninsula loser |
+| Reinhard Principle generalizes to all faction leaders | CROSS-01 | ✓ Core strategic principle |
+| Conviction = permanent Ob economy on aligned actions | CROSS-02 | ✓ |
+
+### New SIM-DEBT
+
+| ID | Description | Status |
+|----|-------------|--------|
+| SIM-B2-01 | Vaynard simultaneous 3-path Accounting conflict verification | OPEN |
+| SIM-B2-02 | Ehrenwall moral ledger 30-season timing | OPEN |
+| SIM-B2-03 | Justice-as-Confessor 10-season Church governance sim | OPEN |
+

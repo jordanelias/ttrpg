@@ -3645,3 +3645,25 @@ editorial_decisions:
   resolution: "Jordan 2026-04-17: accept all, consolidate, propagate commit."
   affects: [designs/systems/player_agency_v30.md, designs/systems/settlement_layer_v30.md, designs/systems/companion_specification_v30.md, designs/systems/npc_behavior_v30.md, designs/contest/social_contest_v30.md, references/canonical_sources.yaml]
 # Throughline propagation 2026-04-17: ['ED-619', 'ED-631', 'ED-632', 'ED-633', 'ED-629'] resolved and propagated
+
+  - id: ED-542
+    date: 2026-04-14
+    archived: 2026-04-16
+    description: "Battle consequences propagation gap — mass_battle_v30.md missing section."
+    status: open
+    severity: P2
+
+  - id: ED-586
+    date: 2026-04-16
+    archived: 2026-04-16
+    description: "Arc behavioral state vs Priority 6 contradiction at Mandate < 3. Constrained sub-arc proposed."
+    status: open
+    severity: P2
+
+  - id: ED-587
+    date: 2026-04-16
+    archived: 2026-04-16
+    description: "Stability Crisis Zoom In trigger absent. Proposed: drops <= 2 OR >= 2 in one Accounting."
+    status: open
+    severity: P2
+

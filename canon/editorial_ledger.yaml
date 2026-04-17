@@ -90,3 +90,30 @@ editorial_decisions:
     severity: P1
     affects: [designs/ui/valoria_ui_ux_v4_1.md]
 
+  - id: ED-628
+    date: 2026-04-16
+    description: "Vaynard Season 0 Jarl Assembly pre-campaign: no rule for whether Assembly decisions are Domain Actions or Scenes. Propose: Ceremonial Scene, Season 1 positioning via delegation."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-629
+    date: 2026-04-16
+    description: "Heresy Proceedings against Confessor: OFC-03 requires Confessor authorization to investigate Church leadership, but who authorizes when Confessor IS the accused? Ruling: College majority (3 of 5) substitutes."
+    status: open
+    severity: P1
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-630
+    date: 2026-04-16
+    description: "Coup Counter as moral ledger: propose dual-track advancement — (a) mechanical world-state trigger (existing) OR (b) player Moral Ledger declaration. Both cap at 3."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-631
+    date: 2026-04-16
+    description: "Heresy Proceedings resolution time unspecified. Propose 2-season minimum for Confessor-level proceedings; 1 season for lower-rank targets."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
