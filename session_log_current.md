@@ -1,29 +1,49 @@
-session_id: sim_npc_player_batch5_2026-04-17
-session_close: 2026-04-17
-phase: COMPLETE
-status: CLOSED
-last_stage: done
+# Session Log — Current
+session_id: thread_constitutive_integration_2026-04-17
+session_close: "2026-04-17"
+phase: editorial
+status: complete
+last_stage: Thread Constitutive Integration — all P0 and P1 items committed
 next_action:
-  skill: confirm with Jordan
+  skill: valoria-orchestrator editorial
+  stage: P2 items from thread_constitutive_integration_analysis_v2.md
+  allocation: ED-670+
+  first_fetch: [designs/ttrpg/threadwork_v30.md, designs/systems/settlement_layer_v30.md, designs/conviction_track/conviction_track_v30.md]
 blockers: []
 resolutions_this_session:
-  - Batch 5: 6 NPC-as-player sims (Reichard, Heljason, Linder, Jarnstal, Hann, Maret Uln)
-  - Reichard: Haushalt Competence 3 from S4; bifurcated record produces Treasury Reserve that survives Coup
-  - Heljason: counter-argument addendum; S14 drafts brief he wouldn't sign as accurate; private record preserved
-  - Linder: mutual management with Thale; Priority 1 flag on Sovereign Authority Doctrine speeds Church response
-  - Jarnstal: partial Doctrine compliance preserves ecclesiastical immunity ground; wins S16 College vote
-  - Hann: genealogical research produces own counter-argument; loses Assembly when Holdar abstains; serves Maret Uln
-  - Maret Uln: Council of Warden S5-S22; win-win position across all Vaynard arc outcomes
-  - Cross-sim: advisor as bottleneck; asymmetric coalition logic; long-horizon investment wins mid-range crises
+  - P0-1 ED-663 Thread Conviction Scar Triggers npc_behavior_v30 3.4
+  - P0-1b ED-664 Player Conviction Thread parallel
+  - P0-4 ED-665 NPC Practitioner Coherence AI npc_behavior_v30 4.3
+  - P0-2 ED-668 RS Budget references/rs_budget.md
+  - P0-3 ED-669 WC survival spine references/wc_survival_spine.md
+  - P1 ED-666 Companion departure Thread triggers companion_specification_v30 6.1
+  - P1 ED-667 Adjudicator Thread response social_contest_v30 9.4b
 files_modified:
-  - tests/sim_npc_player_batch5_2026-04-17.md (new)
-  - canon/editorial_ledger.yaml (ED-663/664/665; ED-617/618/619 archived; next_id: 666)
-  - canon/editorial_ledger_archive.yaml (ED-617/618/619 archived)
-  - tests/coverage_matrix.md (batch 5 findings)
+  - designs/systems/npc_behavior_v30.md
+  - designs/systems/companion_specification_v30.md
+  - designs/contest/social_contest_v30.md
+  - references/rs_budget.md
+  - references/wc_survival_spine.md
+  - canon/editorial_ledger.yaml
+  - canon/editorial_ledger_archive.yaml
+  - references/canonical_sources.yaml
+commits_this_session:
+  - b9fa077dbe643b1d154c4937ba4216d4469b2e40
+  - 09cc7f47798b6234e7ea4e74b7232cfdcf8393f3
+  - 9ff8d6175f5cce9943c157f6825a4e635c3861b7
+  - 4dfdae3602598fb73564de1ca417fd9897006907
 open_items:
-  - ED-663 Wealth cap undefined (P1)
-  - ED-632 Shadow Renown mechanic absent (P1)
-  - ED-633 Deniability Debt undefined (P1)
-  - ED-629 Heresy Proceedings against Confessor auth loop (P1)
-  - ED-664/665 (P2) -- this batch
-  - All prior open items carried forward
+  - P2 Thread perception extension threadwork_v30
+  - P2 CV movement from visible Thread ops conviction_track_v30
+  - P2 Lifepath TS/Certainty derivation character_histories_v30
+  - P2 Settlement Thread environment settlement_layer_v30
+  - P2 Scene Slate thread-state player_agency_v30
+  - P2 NPC faction AI Thread doctrine npc_behavior_v30 BG trees
+  - P2 Battle TS development mass_battle_v30
+  - P3 Case Board dual-depth investigation_systems
+  - P3 Rendering Crisis narrative beats threadwork_v30 3.7
+  - v4.2 workplan Stages 2-13 carry forward
+handoff_notes:
+  - Analysis docs in /mnt/user-data/outputs/ session-scratch only
+  - Pending SHAs need freshness_gate.py
+  - P2 items interleave with v4.2 workplan
