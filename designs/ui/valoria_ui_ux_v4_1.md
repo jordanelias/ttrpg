@@ -828,6 +828,16 @@ Shows:
 
 The Peninsula breathes with RS. RS 85 play feels different from RS 25 play.
 
+## §9.6b World Survival Display — RS and WC (F-04, wc_survival_spine.md)
+
+RS and WC are the survival contest's two axes. They require persistent, prominent UI presence.
+
+**RS indicator (persistent HUD):** Numerical value + band label (Stable/Strained/Fragile/Fractured/Critical). Color-coded green→amber→red matching §9.6. Visible at ALL times in the persistent world-state strip alongside season clock.
+
+**WC indicator (persistent HUD, adjacent to RS):** 4-pip track (0–3). WC 0: all grey. WC 1: first lit (blue). WC 2: two (brighter). WC 3: three (gold glow — Edeyja active Mending). Tooltip: current WC effects.
+
+**Rationale:** Every other track is the political contest. RS and WC are the survival contest. The player must always see both — the problem (RS) and the response (WC). See wc_survival_spine.md.
+
 ## §9.7 Coherence and rendering corruption (TS 30+ only)
 
 **Coherence is a practitioner-only stat.** It does not exist for non-sensitive characters. It initializes at 10/10 when the character first Leaps.

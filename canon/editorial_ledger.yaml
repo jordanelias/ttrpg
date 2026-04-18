@@ -18,14 +18,14 @@
   - id: ED-675
     date: 2026-04-17
     description: "Settlement Thread environment. settlement_layer_v30."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/systems/settlement_layer_v30.md]
 
   - id: ED-676
     date: 2026-04-17
     description: "CV movement from Thread operations. conviction_track_v30."
-    status: open
+    status: resolved
     severity: P2
     affects: [designs/conviction_track/conviction_track_v30.md]
 
@@ -39,7 +39,7 @@
   - id: ED-678
     date: 2026-04-17
     description: "Lifepath TS/Certainty derivation. character_histories_v30."
-    status: open
+    status: resolved
     severity: P2
     affects: [designs/characters/character_histories_v30.md]
 
