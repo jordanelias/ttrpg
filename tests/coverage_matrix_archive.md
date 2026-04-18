@@ -806,3 +806,87 @@ All PASS tests: patched in same commit (PP-630–634).
 | SIM-NPC-03 | Arc emergence 3-season TTRPG | OPEN | — |
 | SIM-NPC-04 | Framework Drift 6-season BG runaway | OPEN | Partially addressed by PP-NPC-03 (Church drift fix). Re-run needed. |
 | SIM-NPC-05 | Belief Scar cascade playability | OPEN | — |
+
+## Archived 2026-04-17 — Batch 5–8 (ST-21–ST-60)
+
+## Batch 5 Confirmed Working (ST-21 through ST-30)
+
+Victory race convergence, Grand Contest CLASH-always, Torben Conviction emergence,
+arc conditioner system (env/cross-NPC/obligation all fire clean), Depth 4-5 fieldwork,
+co-victory hold phase robust, TS 30→70 trajectory, 3-Obligation cascade, Church victory
+revised, all 6 tactic cards + counter-formations.
+
+## Batch 6 Scope (ST-31 through ST-40)
+
+Settlement mechanics, Guilds victory design, 6-faction Parliamentary sim,
+Altonian Vanguard, RM Founding, Elske arc, Thread collective op,
+Cardinal restoration, Baralta Arc C, longevity cascade.
+
+## Batch 6 Findings (sim_batch_6_2026-04-16) — ST-31 through ST-40
+
+### New P1
+| SIM6-01 | RM Founding mechanic missing from all docs | ED-620 |
+
+### Resolved
+| ED-612 | Guilds solo victory (Merchant Hegemony) designed and validated |
+| ED-614 | Cardinal restoration conditions specified |
+
+### New P2 EDs (621-627)
+BG lobby cap, Varfell Parliamentary constraint, IP rate, Elske arc, Excommunication procedure, Accord/Order distinction, Guilds victory constraint fix.
+
+### Confirmed Working
+Guilds Merchant Hegemony (~S15-17), TC bonus equalising Parliament pools, Memory genre advantage, Thread collective op (72D Calamity reversal), Fort defense bonus, Elske pre-coup investment → Regency S17, double Priority 0 Zoom In choice, double longevity death cascade.
+
+
+## Consolidation — sim sessions 2026-04-16
+
+### Jordan Design Corrections Applied
+
+| Correction | Impact |
+|------------|--------|
+| Guilds, Niflhel = spoiler/pressure factions; they do not win | ED-612, ED-627 closed as by-design |
+| Löwenritter post-coup holds until new monarch faction takes over | ED-613 closed as by-design; §3.6 reframed |
+
+### Propagations to victory_v30.md
+
+| ED | Change | Section |
+|----|--------|---------|
+| ED-588 | RM holding: PT ≤ 3 (was ≤ 1). Uprising OW: T9 PT −2 added. | §3.5 |
+| ED-590 | Church victory: Accord ≥ 3 in ≥ 3 non-capital territories. | §3.2 |
+| — | Löwenritter design note: transitional faction, not conventional winner. | §3.6 |
+
+
+## Batch 7 Summary (sim_batch_7_2026-04-16) — ST-41 through ST-50
+
+### Resolved EDs
+ED-589 (Presence marker mechanics), ED-586 (Constrained sub-arc), ED-587 (Stability Crisis Zoom In),
+ED-617 (Grand Contest Recall fix), ED-621 (BG lobby cap), ED-622 (Varfell no-Senator note),
+ED-626 (Accord/Order distinction), ED-623 (IP rate validated)
+
+### New EDs
+| ED-628 | Siege mechanic missing for playable factions | P2 |
+| ED-629 | Partition needs Phase 1 declaration | P2 |
+| ED-630 | RS Rupture needs Last Declaration scene spec | P2 |
+
+### Batch 7 Confirmed Working
+RM Presence markers (Strategy C canonical), Altonian invasion at S25 (revised IP),
+Coalition rebuff IP reset, RS Critical Stability checks, HI chain 2-scene → Tribunal,
+RM 30-season arc S8→S14→S15, Assert Mandate gate critical, Varfell Path C S14-15,
+Intelligence Embargo coalition spoiler.
+
+
+## Batch 8 (ST-51 through ST-60) — sim_batch_8_2026-04-17
+
+### Resolved (8 + 8 prior re-sync)
+ED-542,611,615,618,624,625,629,630 (batch 8)
+ED-586,587,589,617,621,622,623,626 (prior sessions, now archived)
+
+### New EDs
+ED-631 (Parliamentary Stay vs Church Tribunal), ED-632 (Accord/Order co-fire), ED-633 (Siege propagation)
+
+### Confirmed Working
+Niflhel asset placement, Elske Loyalty arc, Schoenland Treaty, Excommunication procedure,
+Threadcut being TS-gated, two-scale Uprising, three-faction bilateral sequential,
+RM collective Weaving near-infallible, Torben window S1-8, Last Declaration scene,
+Partition Phase 1 declaration, battle consequences consolidated.
+

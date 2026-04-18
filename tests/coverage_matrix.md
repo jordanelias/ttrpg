@@ -38,88 +38,6 @@
 | ED-545/551/555/557/559/571/583 | See sim_batch_3 |
 | ED-539/585 | See sim_batch_3/4 |
 
-## Batch 5 Confirmed Working (ST-21 through ST-30)
-
-Victory race convergence, Grand Contest CLASH-always, Torben Conviction emergence,
-arc conditioner system (env/cross-NPC/obligation all fire clean), Depth 4-5 fieldwork,
-co-victory hold phase robust, TS 30→70 trajectory, 3-Obligation cascade, Church victory
-revised, all 6 tactic cards + counter-formations.
-
-## Batch 6 Scope (ST-31 through ST-40)
-
-Settlement mechanics, Guilds victory design, 6-faction Parliamentary sim,
-Altonian Vanguard, RM Founding, Elske arc, Thread collective op,
-Cardinal restoration, Baralta Arc C, longevity cascade.
-
-## Batch 6 Findings (sim_batch_6_2026-04-16) — ST-31 through ST-40
-
-### New P1
-| SIM6-01 | RM Founding mechanic missing from all docs | ED-620 |
-
-### Resolved
-| ED-612 | Guilds solo victory (Merchant Hegemony) designed and validated |
-| ED-614 | Cardinal restoration conditions specified |
-
-### New P2 EDs (621-627)
-BG lobby cap, Varfell Parliamentary constraint, IP rate, Elske arc, Excommunication procedure, Accord/Order distinction, Guilds victory constraint fix.
-
-### Confirmed Working
-Guilds Merchant Hegemony (~S15-17), TC bonus equalising Parliament pools, Memory genre advantage, Thread collective op (72D Calamity reversal), Fort defense bonus, Elske pre-coup investment → Regency S17, double Priority 0 Zoom In choice, double longevity death cascade.
-
-
-## Consolidation — sim sessions 2026-04-16
-
-### Jordan Design Corrections Applied
-
-| Correction | Impact |
-|------------|--------|
-| Guilds, Niflhel = spoiler/pressure factions; they do not win | ED-612, ED-627 closed as by-design |
-| Löwenritter post-coup holds until new monarch faction takes over | ED-613 closed as by-design; §3.6 reframed |
-
-### Propagations to victory_v30.md
-
-| ED | Change | Section |
-|----|--------|---------|
-| ED-588 | RM holding: PT ≤ 3 (was ≤ 1). Uprising OW: T9 PT −2 added. | §3.5 |
-| ED-590 | Church victory: Accord ≥ 3 in ≥ 3 non-capital territories. | §3.2 |
-| — | Löwenritter design note: transitional faction, not conventional winner. | §3.6 |
-
-
-## Batch 7 Summary (sim_batch_7_2026-04-16) — ST-41 through ST-50
-
-### Resolved EDs
-ED-589 (Presence marker mechanics), ED-586 (Constrained sub-arc), ED-587 (Stability Crisis Zoom In),
-ED-617 (Grand Contest Recall fix), ED-621 (BG lobby cap), ED-622 (Varfell no-Senator note),
-ED-626 (Accord/Order distinction), ED-623 (IP rate validated)
-
-### New EDs
-| ED-628 | Siege mechanic missing for playable factions | P2 |
-| ED-629 | Partition needs Phase 1 declaration | P2 |
-| ED-630 | RS Rupture needs Last Declaration scene spec | P2 |
-
-### Batch 7 Confirmed Working
-RM Presence markers (Strategy C canonical), Altonian invasion at S25 (revised IP),
-Coalition rebuff IP reset, RS Critical Stability checks, HI chain 2-scene → Tribunal,
-RM 30-season arc S8→S14→S15, Assert Mandate gate critical, Varfell Path C S14-15,
-Intelligence Embargo coalition spoiler.
-
-
-## Batch 8 (ST-51 through ST-60) — sim_batch_8_2026-04-17
-
-### Resolved (8 + 8 prior re-sync)
-ED-542,611,615,618,624,625,629,630 (batch 8)
-ED-586,587,589,617,621,622,623,626 (prior sessions, now archived)
-
-### New EDs
-ED-631 (Parliamentary Stay vs Church Tribunal), ED-632 (Accord/Order co-fire), ED-633 (Siege propagation)
-
-### Confirmed Working
-Niflhel asset placement, Elske Loyalty arc, Schoenland Treaty, Excommunication procedure,
-Threadcut being TS-gated, two-scale Uprising, three-faction bilateral sequential,
-RM collective Weaving near-infallible, Torben window S1-8, Last Declaration scene,
-Partition Phase 1 declaration, battle consequences consolidated.
-
-
 ## Throughline Analysis + Propagation — 2026-04-17
 
 Top-down audit across all 8 batches (ST-01 through ST-60).
@@ -357,3 +275,37 @@ Resume trigger: (a) user-initiated simulation review, or (b) patch to faction_po
 | CROSS-ALT-02 | Premature victory creates shallow worlds — mechanical win before narrative transformation produces stable but incomplete campaigns |
 | CROSS-ALT-03 | Irreversible institutional precedent — published documents, legal records, disclosed intelligence cannot be recalled |
 
+
+## New Findings — sim_mending_coherence_2026-04-17
+
+### P1 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| MEND-SIM-01 | SIM 2 | OW Mending Coherence cost contradiction: campaign_architecture_v1 §3.2 says −1, params_threadwork degree table says 0 | Open — ruling required from Jordan |
+| MEND-SIM-02 | SIM 6 | ARC-S32 text states "costs −1 Coherence regardless of outcome" — now wrong under 0-Coherence rule | Open — arc_register update required |
+| MEND-SIM-03 | SIM 6 | ARC-S34 (Edeyja Burnout) primary path eliminated; TE-15 secondary unreachable (Coh equilibrium ~7, never near ≤5 gate) | Open — ARC-S34 redesign required |
+
+### P2 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| MEND-SIM-04 | SIM 3–4 | rs_budget.md recovery assumption (+1/season) is ~10x understated; scenario net figures need update | Open — rs_budget propagation |
+| MEND-SIM-05 | SIM 4 | wc_survival_spine.md resource tension table lists Practitioner Coherence as competing resource — no longer accurate for Mending | Open — wc_survival_spine propagation |
+
+### Confirmed Working
+
+| System | Source | Status |
+|--------|--------|--------|
+| Seasonal fatigue (+1 cumulative Ob, resets each season) throttles Mending effectively — self-correcting at negative E[RS] | MEND-SIM-01 | ✓ |
+| WC3-is-singular-endgame conclusion holds; net −3.66/season at WC3 + community Mending survivable to Year 30 | MEND-SIM-04 | ✓ |
+| Journeyman practitioners (Spirit 2, TS 50) have negative E[RS] at Field Ob 5; Relational-only targeting is correct | MEND-SIM-06 | ✓ |
+| Old system caused permanent Severed equilibrium (Coh ~1, +2 Ob all ops) — new rule eliminates hidden impairment | MEND-SIM-02 | ✓ Design improvement confirmed |
+
+### Cross-Simulation Findings
+
+| Finding | Description |
+|---------|-------------|
+| CROSS-MEND-01 | Seasonal fatigue is the correct throttle — transparent to player, resets cleanly, no permanent impairment |
+| CROSS-MEND-02 | ARC-S32 and ARC-S34 were built on Mending-as-Coherence-drain; both require text revision |
+| CROSS-MEND-03 | Community Mending capacity is ~10x RS budget assumption; scenario narratives valid but net figures stale |
