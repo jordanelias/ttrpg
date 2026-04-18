@@ -1,26 +1,26 @@
-session_id: 2026-04-17-mending-fatigue-propagation
+session_id: 2026-04-17-mending-consolidation
 session_close: 2026-04-17
-phase: patch
+phase: editorial
 status: complete
 last_stage: done
 next_action:
   skill: confirm with Jordan
 blockers: []
 resolutions_this_session:
-  - Mending 0-Coherence confirmed (all degrees including OW)
-  - Threadwork fatigue two-tier mechanic confirmed and simmed
-  - In-scene Fibonacci pool penalty (0/-1/-2/-4/-7/-12D per consecutive op, resets per scene)
-  - Cross-scene +2 Ob per prior threadwork scene in season, resets per season
-  - Calibration sim confirmed +2 Ob cross-scene produces community output ~20/season (capped at 10 by seasonal cap)
-  - ARC-S32 and ARC-S34 texts corrected to remove Coherence-from-Mending language
-  - ARC-S34 burnout reframed as fatigue/overwork-driven not Coherence-driven; TE-15 as terminal trigger preserved
+  - Mending 0-Coherence fully consolidated across all docs
+  - Threadwork fatigue two-tier mechanic propagated and quality-checked
+  - campaign_architecture_v1 §3.2 restructured: fatigue pulled into own §3.2a, Coherence table clean
+  - params_threadwork Mending pool formula corrected (Attunement+Focus struck, canonical Spirit×2+History+TPS)
+  - rs_budget Scenario C recovery figures updated to reflect new fatigue-system throughput
+  - rs_budget Conclusion paragraph updated (Coherence budget reference struck, fatigue mechanics substituted)
+  - wc_survival_spine Coherence row corrected (Mending no longer competes for Coherence)
+  - Feedback loop verified: Coherence still drains from non-Mending ops; fatigue is Mending brake; both interact correctly within scenes
 files_modified:
-  - references/params_threadwork.md (fatigue two-tier rule; Coherence table row)
-  - designs/systems/campaign_architecture_v1.md (§3.2 OW cost corrected to 0; fatigue rows updated)
-  - references/arc_register.md (ARC-S32 and ARC-S34 text corrected)
+  - designs/systems/campaign_architecture_v1.md (§3.2 restructured; §3.2a fatigue added)
+  - references/params_threadwork.md (Mending pool formula corrected)
+  - references/rs_budget.md (Scenario C recovery + Conclusion updated)
+  - references/wc_survival_spine.md (Coherence row corrected)
 open_items:
-  - MEND-SIM-04: rs_budget.md scenario net figures stale (P2)
-  - MEND-SIM-05: wc_survival_spine.md resource tension table Coherence row (P2)
   - ED-666 Path B speed-run calibration (P1)
   - ED-667 Coup Counter readiness gap (P1)
   - ED-632 Shadow Renown mechanic (P1)
