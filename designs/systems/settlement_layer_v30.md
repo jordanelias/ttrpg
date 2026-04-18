@@ -92,6 +92,46 @@ Cross-faction Wings may be ceded as treaty concessions (ambassadorial residences
 
 [EDITORIAL: ED-659 — Hall Tier mechanical integration applied PP-661.]
 
+### §1.5 Church Settlement Infrastructure — Four Independent Axes (campaign_architecture_v1 Part 1)
+
+Church presence in a settlement is NOT a linear tier progression. It is four independent binary/tiered axes that combine in any valid configuration. See campaign_architecture_v1.md §1.1 for the canonical specification.
+
+**Axis 1 — Religious Building (mutually exclusive, one per settlement):** None / Chapel (+0.5 PT/season) / Church (+1 PT/season) / Cathedral (+2 PT/season, +0.5 PT to adjacent territories).
+
+**Axis 2 — Templar Station (binary):** +1 TC/season in territory. Church can interrupt rival Domain Actions (+1 Ob, costs 1 TC).
+
+**Axis 3 — Inquisitor Base (binary):** Surveillance Zone: Thread practitioners make Concealment test each season. RM governance-building actions +1 Ob. RM cultural presence generates 1 Church Attention/season.
+
+**Axis 4 — Church Governor (binary):** Settlement governance uses Church faction stats. De facto Church territory. Removal requires Mass Battle, Mandate Challenge (Ob 6+), or RM community action at OW.
+
+**Seizure Ob Modifiers (stacking, per settlement):** Chapel −0, Church −1, Cathedral −2, Templar −1, Inquisitor −1, Church Governor −2. Cap: −4 per settlement (campaign_architecture_v1 refinement). CI=100 Mass Seizure Declaration triggers simultaneous Seizure across all territories containing Church infrastructure.
+
+**Historical grounding (Papal States, Calvin's Geneva, 1979 Iran):** Church infrastructure grows through governance vacuum filling, institutional capture via demonstrated competence, and pre-positioned parallel infrastructure that activates when existing order fails. See historical_precedents_analysis §1.
+
+### §1.6 Parish Social Services (NEW — historical_precedents_analysis §1.4)
+
+Church buildings provide a Stability bonus to the settlement they occupy, reflecting the social services (education, welfare, dispute resolution) the parish provides. This makes Church infrastructure instrumentally useful to secular governors — the Geneva trap.
+
+| Church Building | Settlement Stability Bonus |
+|----------------|--------------------------|
+| Chapel | +0.5 Order/season (rounds: +1 every other season) |
+| Church | +1 Order at installation (one-time) |
+| Cathedral | +1 Order at installation + Order decay −1 (Order is more stable) |
+
+This bonus applies regardless of whether the Church controls the settlement. A Crown governor who permits a Chapel in their settlement benefits from the social cohesion the parish provides — but also accepts the PT generation that comes with it.
+
+**Design intent:** Historically, theocracies grew not through hostility but through helpfulness. Populations and even secular leaders wanted Church infrastructure because it solved real governance problems. The theocratic endpoint was a consequence of rational, self-interested decisions at each step.
+
+### §1.7 Pastoral Assumption (NEW — historical_precedents_analysis §1.4)
+
+When a settlement has no governor (governor killed, faction collapsed, settlement at Order 0 with governor expelled per §4.3) AND the settlement contains at least a Chapel (Axis 1), the Church may install a Church Governor (Axis 4) as a Domain Action at Ob 1 (vs normal governor assignment Ob).
+
+**Rationale:** In post-collapse scenarios historically, the parish priest was often the de facto civil authority — the only literate person with institutional backing still present. This mechanic formalizes the Church's ability to fill governance vacuums.
+
+**Restrictions:** Pastoral Assumption does not change Provincial Authority — the province faction retains taxation, military, and legal framework. It only installs a Church Governor at the settlement level. The province faction may revoke this per §3.3 revocation rules (Ob = Church Influence ÷ 2, Order −1, Disposition −2 with Church).
+
+[EDITORIAL: ED-670 — Historical precedent integration for Church settlement mechanics. Source: historical_precedents_analysis.md §1.]
+
 ---
 
 # PART 2: THE 36 SETTLEMENTS
@@ -135,7 +175,7 @@ Cross-faction Wings may be ceded as treaty concessions (ambassadorial residences
 | S-029 | Grauwald Lodge | T4 Grauwald | Outpost | RM (covert) | 1/0/2 | Einhir cultural preservation. RM meeting site. Hidden. |
 | S-030 | Halvardshelm | T11 Halvardshelm | Town | Varfell | 2/0/2 | Central fjord settlement. |
 | S-031 | Oastad | T13 Oastad | Town | Varfell | 2/0/2 | Southern fishing settlement. Calamity-adjacent. |
-| S-032 | Oastad Shrine | T13 Oastad | Outpost | RM (overt) | 0/0/1 | Old Einhir ceremonial site. RM stronghold. Lowest CV territory. Community Weaving site. |
+| S-032 | Oastad Shrine | T13 Oastad | Outpost | RM (overt) | 0/0/1 | Old Einhir ceremonial site. RM stronghold. Lowest CV territory. Community Organizing site. |
 | **Uncontrolled** | | | | | | |
 | S-033 | Askeheim Ruins | T15 Askeheim | Outpost | Wardens | 0/1/1 | Einhir Catastrophe epicenter. Active Warden operations. Forgetting barrier. |
 | S-034 | Askeheim Gate | T15 Askeheim | Outpost | Uncontrolled | 0/0/0 | Southern access point. Observation camp. No permanent population. |
@@ -216,11 +256,15 @@ Certain settlement types naturally align with subnational factions. The provinci
 | Wardens | Outpost (Askeheim, Stillhelm Watch) | Thread monitoring: RS effects detected 1 band earlier. Warden governor operates independently. |
 | Niflhel | Any (covert) | Niflhel does not govern openly. Niflhel infiltrates a settlement by placing an operative as a secondary influence. Effect: Intel-gathering at +1D in that settlement. Detection: province faction may discover Niflhel presence via Investigation (Evidence Track threshold 3). |
 
+**RM Cell Resilience (NEW — historical_precedents_analysis §3.4):** If RM has Presence markers in ≥ 3 settlements within a province, Church/Crown suppression actions against RM in that province take +1 Ob. Historical precedent (Solidarity in Poland, Bolshevik cells, ANC underground): distributed cell structures are harder to suppress than concentrated organizations because no single arrest can destroy the network. This modifier stacks with the Inquisitor surveillance +1 Ob (which represents surveillance, not suppression). Result: a well-distributed RM network in a territory with an Inquisitor faces +1 Ob to organize (surveillance) and gives the Church +1 Ob to suppress (resilience). Strategic equilibrium.
+
+[EDITORIAL: ED-671 — RM cell resilience mechanic. Source: historical_precedents_analysis.md §3.]
+
 **Granting management:** The province faction may grant management of a settlement to a subnational faction as a Domain Action (Influence, Ob 1 — it is an administrative act, not a contested one). The subnational faction's governor replaces the faction governor for that settlement. The province faction retains Provincial Authority (taxation, military, legal framework).
 
 **Revoking management:** The province faction may revoke subnational management as a Domain Action (Influence, Ob = subnational faction's Influence ÷ 2, round up). Revocation costs Order −1 in the settlement (the population perceives institutional disruption) and Disposition −2 with the subnational faction's leadership.
 
-**Contested management:** If the subnational faction's interests conflict with the province faction's orders (e.g., Church governor refuses to allow RM Community Weaving in a Cathedral settlement), the conflict resolves through social contest (per social_contest_v30 §7 — asymmetric, with the province faction as institutional authority and the subnational faction as petitioner).
+**Contested management:** If the subnational faction's interests conflict with the province faction's orders (e.g., Church governor refuses to allow RM Community Organizing in a Cathedral settlement), the conflict resolves through social contest (per social_contest_v30 §7 — asymmetric, with the province faction as institutional authority and the subnational faction as petitioner).
 
 ---
 
@@ -258,6 +302,8 @@ Each settlement generates 0–1 local events per season based on its stats and t
 | Defense 0 + adjacent hostile military | Raid or siege. Mandatory scene if player is present. |
 | Order 0 | Local revolt (analogous to province Accord 0 but at settlement scale). Governor expelled unless garrison present. |
 | Order 5 + Prosperity 4+ | Flourishing. Local festival, trade fair, or cultural event. +1 Disposition with all local NPCs. Scene opportunity for the player. |
+| RM takes control of settlement | **Governance Transition scene** (historical_precedents_analysis §4.3). Player (or Vossen if NPC) chooses: **Disestablishment** (remove existing governance infrastructure; −1 Order for 2 seasons, then Accord growth +0.5/season; PT −1 immediate); **Accommodation** (maintain existing infrastructure under RM oversight; no penalty, PT drops 0.5 only, standard Accord); **Transformation** (4-season gradual conversion; no penalty during transition; PT −1 and Accord +0.5/season after completion). |
+| RM-governed settlement, emergency action | **Consensus Delay** (historical_precedents_analysis §3.4). Emergency Domain Actions (Muster, Fortify, Emergency Diplomacy) in RM settlements take +1 season to resolve. Waivable: RM leader spends 1 Mandate + loses 1 Presence marker in that province (community perceives consensus violation). |
 | Cathedral type + CV change in province | Religious event: sermon, ceremony, procession, or protest depending on CV direction. |
 | Mine type + Prosperity 3+ | Resource surplus. Province Wealth +1 at Accounting (economic contribution). |
 | Fortress type + hostile military in province | Garrison mobilization. Defense check: Defense pool vs Ob 2. Success: settlement holds. Failure: attacker bypasses or captures. |
@@ -273,7 +319,7 @@ Thread operations at Relational scale or above performed within a settlement pro
 | Past-Oriented Pulling | No positive effect | Prosperity −1 (paradox window disrupts routine) |
 | Dissolution | No positive effect | Defense −1 AND Order −1 (substrate torn, structures weaken) |
 | Mending | Prosperity +1 (substrate coherence restored, infrastructure strengthens) | No settlement effect |
-| Community Weaving | Order +1 AND Prosperity +1 (if PT ≤ 2 in province) | No settlement effect |
+| Community Organizing | Order +1 AND Prosperity +1 (if PT ≤ 2 in province) | No settlement effect |
 | Lock | Defense +1 (configuration becomes architecturally permanent) | No settlement effect |
 
 Object/Personal scale operations: no settlement effect (scale too small).

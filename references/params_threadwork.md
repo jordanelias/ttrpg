@@ -1,4 +1,4 @@
-<!-- PATCHES APPLIED (session 2026-04-14): PP-600-623 — full Thread system redesign. PP-631 (2026-04-13): POP cap note, Community Weaving pool. PP-632 (2026-04-13): Knot mechanics (pool, tiers, formation, breaking).
+<!-- PATCHES APPLIED (session 2026-04-14): PP-600-623 — full Thread system redesign. PP-631 (2026-04-13): POP cap note, Community Organizing pool. PP-632 (2026-04-13): Knot mechanics (pool, tiers, formation, breaking).
      Key changes: pool unified to (Spirit×2)+History+TPS; TN-based difficulty; three-axis Ob;
      Gap self-closure by scale; RS cap struck; WR/WC redesigned; Dissonance→Spirit check.
      All prior pool formulas, Ob tables, and RS cap entries below are superseded by PP-600-623.
@@ -22,11 +22,11 @@ Pool = (Spirit × 2) + History + TPS
 History: 1D per point, cap 3 points. +3D constant (floor) always present.
 Full TPS always included. No exceptions.
 
-## Community Weaving — Canonical Pool (PP-616 supersedes PP-250)
+## Community Organizing — Canonical Pool (PP-616 supersedes PP-250)
 **Pool = (Spirit × 2) + History + TPS** (PP-616: all Thread operations unified)
 TN: 7 | Ob: 3 | RS outcome: Success = RS +1; Overwhelming = RS +2
 Requires: Revolution Mandate ≥ 1. One per contact window round. Not a Domain Action — a Thread operation.
-Note: PP-250 Community Weaving formula (Attunement + History + TPS) is superseded by PP-616. (PP-631)
+Note: PP-250 Community Organizing formula (Attunement + History + TPS) is superseded by PP-616. (PP-631)
 
 
 ## Knot Mechanics (PP-632 — canonical)
@@ -373,10 +373,14 @@ Ob ceiling: 8 (regardless of stacked modifiers).
 
 | Degree | Rendering Stability | Coherence |
 |--------|----|-----------|
-| Overwhelming | +2 | −1 (base) |
-| Success | +1 | −1 (base) |
-| Partial | 0 | −1 (cap); Gap reduced one severity |
-| Failure | −2 | −1 (cap) |
+| Overwhelming | +2 | 0 (Mending asymmetry — campaign_architecture_v1 §3.2) |
+| Success | +1 | 0 (Mending asymmetry) |
+| Partial | 0 | 0 (Mending asymmetry); Gap reduced one severity |
+| Failure | −2 | 0 (Mending asymmetry) |
+
+**Mending Coherence Asymmetry (campaign_architecture_v1 §3.2):** Mending costs 0 Coherence per operation. Rationale: Mending works with the substrate's self-repair tendency, not against it. The practitioner is not imposing their rendering on reality — they are supporting reality's own coherence. This is philosophically distinct from all other Thread operations, which impose the practitioner's will on the substrate.
+
+**Seasonal fatigue limit:** Each consecutive Mending in the same season adds +1 Ob cumulative (fatigue). A practitioner who Mends 4 times in a season rolls at +3 Ob on the fourth attempt. Resets each season. This preserves the physical limit (the work is tiring, not corrosive) without making Mending specialists invulnerable to the Coherence system.
 
 Threadcut being interference: +Ob = being's Thread Sensitivity ÷ 20 (round up), max +4.
 
@@ -392,7 +396,7 @@ Loss per operation cap: −1 max per single operation regardless of combined sou
 | Structural scale op | −2 |
 | FR Lock or Dissolution (any scale) | −1 additional |
 | Past-Oriented Pulling | −1 additional. **Cap applies** (unlike Binding Ops per PP-196). Total POP cost = −1 max regardless of scale. (PP-631, TW-05) Cross-ref: fieldwork_v30 §4.5; POP during fieldwork investigation follows same cap. ED-NEW-15 RESOLVED. |
-| Mending | −1 |
+| Mending | 0 (asymmetry — campaign_architecture_v1 §3.2; seasonal fatigue +1 Ob cumulative instead) |
 | Dissolution residue use | −1 additional (not subject to cap) |
 | History Resonance risk die shows 1 | −1 |
 | Degree table Failure (Relational+ scale) | apply as written |
@@ -492,7 +496,7 @@ Automatic lattice collapse. All fail. Gap at target scale. RS −(2 × n). All: 
 Cannot be directly opposed. Indirect: +1 Ob co-movement at site; P-17; territory effects. Ceiling 8.
 
 ### Mass Battle
-Highest net wins. Winner at degree, loser Partial. Tie: SO + both Partial. RS ×3 (PP-192). Temporal NOT ×3 (PP-226).
+Highest net wins. Winner at degree, loser Partial. Tie: SO + both Partial. RS: flat −1 per battle (PP-192 struck, campaign_architecture_v1 §3.1). Temporal auto-effects at standard rate.
 
 ### Board Game
 Both succeed: SO + Co-Movement Card. One succeeds: resolves + Co-Movement Card. Both fail: nothing. No personal-scale consequences.
@@ -540,14 +544,14 @@ Resolution roll: Close Knot Bonds + successful Anchoring Scenes, TN7 Ob3.
 | Partial | 1 (another arc needed) |
 | Failure | 0 → Non-Player Character at season end |
 
-### PP-192: Mass Battle RS Multiplier [PROVISIONAL]
-All RS costs from Thread ops in mass battle ×3. Coherence costs unaffected.
-See params_mass_combat §Mass Battle RS Multiplier.
+### PP-192: Mass Battle RS Multiplier [STRUCK — campaign_architecture_v1 §3.1]
+~~Mass battle RS cost: flat −1 per battle (campaign_architecture_v1 §3.1). ×3 multiplier struck. Coherence costs unaffected.~~
+**REPLACED:** Mass battle RS cost is flat −1 per battle in which any Thread operation occurs (campaign_architecture_v1 §3.1). The ×3 multiplier is struck. Rationale: ×3 created disproportionate RS drain that made Thread operations in mass battle strategically suicidal. Flat −1 makes Thread in battle a meaningful cost without being prohibitive. Coherence costs unaffected.
 
 ### PP-191: Lock Phase in Mass Combat [PROVISIONAL]
 Offensive Lock = Phase 4 (declared at Phase 1). Support Lock = Phase 6 Step 5 (declared at Phase 1). Default if undeclared: Phase 6.
 
-### PP-195: Community Weaving Procedure [PROVISIONAL]
+### PP-195: Community Organizing Procedure [PROVISIONAL]
 Revolution Domain Action. Pool: Mandate (as dice) + History, TN7, Ob3.
 Success=RS+1, Overwhelming=RS+2, Partial=RS+0, Failure=RS+0 and Mandate−1. Once/season. Mandate≥1 required.
 
@@ -627,11 +631,13 @@ Coherence 2 (Fractured) = +1 Ob all Thread operations. Consistent with the 4–3
 ### PP-223: Mass Battle Turn = 1 Scene [PROVISIONAL]
 One mass battle turn = 1 scene for all RS threshold effects, Coherence-0 leakage, and paradox window ticking. This means: RS threshold effects activate/deactivate once per battle turn (at Phase 6 Cascade); Coherence-0 leakage fires once per battle turn; paradox window duration counts 1 tick per battle turn. ED-123 pending confirmation.
 
-### PP-225: RS ×3 Multiplier Applies to Gains [PROVISIONAL]
-The mass battle RS ×3 multiplier (PP-192) applies to RS gains as well as costs. Weaving Overwhelming at Relational+ scale in mass battle = RS +3 (not +1). Mending Success = RS +3 (not +1). Mending Overwhelming = RS +6 (not +2). This makes Mending viable as a strategic mass-battle action.
+### PP-225: RS ×3 Multiplier Applies to Gains [STRUCK — campaign_architecture_v1 §3.1]
+~~The mass battle RS ×3 multiplier (PP-192) applies to RS gains as well as costs.~~
+**REPLACED:** With PP-192 struck (flat −1 per battle replaces ×3), this patch is moot. Mending in mass battle follows standard RS gain tables. Mending remains viable as a strategic mass-battle action because the cost side (flat −1) no longer punishes practitioners for operating in battle.
 
-### PP-226: Temporal Auto-Effect RS NOT Subject to ×3 [PROVISIONAL]
-Temporal auto-effect RS costs from Past-Oriented Pulling (PP-181) are NOT subject to the mass battle ×3 multiplier. The temporal auto-effect is a separate system triggered by recency band, not an operation RS cost. It fires independently of mass battle context. The ×3 multiplier applies only to operation-table RS costs (degree outcomes).
+### PP-226: Temporal Auto-Effect RS NOT Subject to ×3 [STRUCK — campaign_architecture_v1 §3.1]
+~~Temporal auto-effect RS costs from Past-Oriented Pulling (PP-181) are NOT subject to the mass battle ×3 multiplier.~~
+**REPLACED:** With PP-192 struck (flat −1 per battle replaces ×3), the ×3 exclusion question is moot. Temporal auto-effects continue to fire independently of mass battle context at their standard rates.
 
 <!-- patch_history: references/params_threadwork_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
@@ -846,14 +852,14 @@ One anchor per failed practitioner; Anchor cannot anchor more than one other. No
 - Dissolution = Binding to Absence
 Binding Op surcharge exempt from §3.2 Coherence cap (PP-196): Object/Personal=−1, Relational/Territorial=−2, Structural=−3.
 
-## Community Weaving — Canonical Formula (PP-250)
-Supersedes all prior Community Weaving entries (PP-168, PP-195 partial entries deprecated).
+## Community Organizing — Canonical Formula (PP-250)
+Supersedes all prior Community Organizing entries (PP-168, PP-195 partial entries deprecated).
 Pool: Attunement + History bonus + Thread Pool Score
 TN: 7 | Ob: 3
 RS outcome: Success = RS +1; Overwhelming = RS +2
 This is a Thread operation, not a Domain Action. No faction stat involvement.
 Competes for Thread contact window with other ops — cannot be performed as narrative downtime.
-One Community Weave per contact window round; replaces another op that round.
+One Community Organize per contact window round; replaces another op that round.
 Primary player-accessible RS restoration mechanism.
 
 ## Hybrid Strategic Phase — Temporal Auto-Effects (PP-260)

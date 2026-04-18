@@ -58,7 +58,7 @@ RM is a sociopolitical movement to end the caste system and restore Einhir gover
 
 ## §2.2 RM Actions — Political, Not Thread
 
-"Community Weaving" for RM is political organizing, NOT a Thread operation. Rename across all docs to **Community Organizing** when RM is the actor. The action:
+"Community Organizing" for RM is political organizing, NOT a Thread operation. Rename across all docs to **Community Organizing** when RM is the actor. The action:
 - Builds consensus-governance cells in settlements
 - Uses social stats (Charisma, Attunement), not Thread stats (Spirit)
 - Produces Presence markers, PT reduction through cultural displacement, governance-cell establishment
@@ -239,7 +239,7 @@ This document is the canonical source for all systems above. The following exist
 | params_threadwork §Coherence | Cost table | Replace with Part 3 §3.2 |
 | rs_budget §2.2 | Mass battle drain | Update from ×3 to flat −1 |
 | player_agency_v30 §2 | Convictions | Add resolution-state tracking from Part 7 §7.3 |
-| All RM references | "Community Weaving" | Rename to "Community Organizing" per Part 2 §2.2 |
+| All RM references | "Community Organizing" | Rename to "Community Organizing" per Part 2 §2.2 |
 | worldbuilding_v30 or threadwork_v30 | Thread visibility | Add revelation curve from Part 4 |
 | npc_behavior_v30 | Warden paths | Add cross-ref to Part 6 |
 | videogame_mode_spec | All sections | Update for Portrait Retirement, Lineage, CI=100, IP phases |

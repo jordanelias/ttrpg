@@ -88,6 +88,23 @@ Bad Convictions (too vague, too passive, no obstacle): "I want to help my factio
 
 **Fulfillment:** When a Conviction is achieved or fundamentally abandoned, the player writes a new Conviction. Fulfillment grants a one-time +2 Momentum and may trigger a character development moment (Certainty shift, NPC arc trigger, or Domain Echo if the fulfillment had Sufficient Scope).
 
+**Resolution States (campaign_architecture_v1 §7.3):** When a Conviction resolves, it enters one of four states:
+
+| State | Condition | Narrative Effect |
+|-------|-----------|-----------------|
+| **Fulfilled** | The player achieved what the Conviction stated. | +2 Momentum. Certainty may shift toward the value the Conviction expressed. Portrait records this as an accomplished belief. |
+| **Failed** | The player pursued the Conviction but circumstances prevented achievement. | +1 Momentum (the attempt mattered). Certainty may shift away from the value. Portrait records this as a tested and broken belief. |
+| **Transformed** | Through play, the Conviction evolved into something different from what was originally written. | +2 Momentum. The player writes the transformed Conviction as a new Conviction (it does not count against the 3-Conviction cap for one season). Portrait records the transformation arc. |
+| **Unresolved** | The Conviction was abandoned without pursuit — the player lost interest or events overtook it. | No Momentum. Portrait does not record this — it simply fades. If all 3 Convictions are simultaneously Unresolved, the player receives a "drift" warning: "Your character has no active purpose." |
+
+**Sufficient Scope gating:** A Conviction resolution (any state except Unresolved) only counts for Portrait and retirement purposes if the player took ≥ 2 scene actions pursuing or responding to the Conviction. This prevents trivial resolutions from qualifying for Portrait Retirement.
+
+**Portrait Retirement trigger:** At any season transition after the player has resolved at least 2 of 3 starting Convictions (any resolution state except Unresolved), the option "Conclude this story" appears. Selecting it fires the Portrait Sequence. The player can also continue indefinitely — the option is always available once unlocked, never forced.
+
+**Draft Portrait:** Available from the main menu at any time. Shows what the Portrait would say if the campaign ended now — Conviction resolution states, Knot history, faction standing, Thread relationship, world state. This is the in-play feedback mechanism for "A Life in Valoria" players.
+
+[EDITORIAL: ED-674 — Conviction resolution states, Portrait Retirement, Draft Portrait. Source: campaign_architecture_v1 §7.]
+
 **Contradiction:** If a Conviction directly contradicts a Duty (§3), the player must choose which to pursue in any scene where both are relevant. This choice is the game's central tension for non-leader characters — personal meaning vs institutional obligation.
 
 ### 2.4 Why Convictions Work
@@ -442,7 +459,7 @@ Convictions function as player-authored arc vectors. They have a source (the pla
 | "Why does investigation matter?" | Evidence feeds Corroboration, Casus Belli, NPC arc triggers, and Conviction fulfillment. |
 | "How do I know what's happening in the world?" | Scene Slate surfaces world events relevant to the player's location, Beliefs, and Duties. |
 | ED-545 (Zoom In triggers) | Scene Slate Priority 1 IS the Zoom In system — any game state change generates a scene opportunity. |
-| ED-546 (RM actor) | An independent player aligned with RM pursues RM Beliefs without faction infrastructure. RM Community Weaving is a scene opportunity in territories with Piety ≤ 1. |
+| ED-546 (RM actor) | An independent player aligned with RM pursues RM Beliefs without faction infrastructure. RM Community Organizing is a scene opportunity in territories with Piety ≤ 1. |
 | ED-547 (Fieldwork resource cost) | Scene action budget IS the fieldwork cost — each investigation scene costs a scene action that could have been spent elsewhere. |
 
 ---

@@ -313,7 +313,7 @@ Modifiers:
 | Failure | Uprising crushed. TC +2 (Church authority strengthened by resistance). T9 PT +1. Uprising attempt used up for this arc. |
 
 #### RM Territory Control — Cultural Displacement
-**Presence markers vs Phase 1 (important distinction):** Presence markers are the *holding mechanic* for post-Uprising T9 (≥ 3 required in T9). They are NOT the Phase 1 mechanic. Phase 1 (PT ≤ 1 in ≥ 4 territories) tracks Piety Track values, not Presence marker counts. Community Weaving places Presence markers; it does not directly reduce PT. PT reduction comes from: Cultural Reformation OW (Varfell, −1 PT), successful Uprising OW (T9, −2 PT), Calamity Drift (RS ≤ 50 in low-PT territories), and natural secular drift (−1 PT per 5 seasons without Church cultivation). RM players should prioritise PT reduction for Phase 1 and Presence markers for post-Uprising T9 holding — these are parallel but distinct goals.
+**Presence markers vs Phase 1 (important distinction):** Presence markers are the *holding mechanic* for post-Uprising T9 (≥ 3 required in T9). They are NOT the Phase 1 mechanic. Phase 1 (PT ≤ 1 in ≥ 4 territories) tracks Piety Track values, not Presence marker counts. Community Organizing places Presence markers; it does not directly reduce PT. PT reduction comes from: Cultural Reformation OW (Varfell, −1 PT), successful Uprising OW (T9, −2 PT), Calamity Drift (RS ≤ 50 in low-PT territories), and natural secular drift (−1 PT per 5 seasons without Church cultivation). RM players should prioritise PT reduction for Phase 1 and Presence markers for post-Uprising T9 holding — these are parallel but distinct goals.
 
 **Overwhelming Uprising bonus:** An Overwhelming Cultural Uprising result automatically places +2 Presence markers in T9 (population mobilisation from the Uprising itself). These markers are placed before the holding condition is checked, ensuring OW Uprising immediately provides the foundation for holding T9.
 
@@ -399,6 +399,23 @@ Co-victories are distinct from operational coalitions (PP-404/405). A faction ma
 |-----------|---------|------------|
 | Post-Calamity Era | RS = 0 at Accounting | Substrate tears. Faction acquisition suspended 3 seasons. Mending Domain Echo doubled. Dissolution/Lock +2 Ob. Recovery: MS restored to 20 within 10 seasons. |
 | Occupation Era | IP ≥ 100 AND AER ≤ 1 | Altonian Governorate activates (Mandate 3, Military 5, Stability 4). All faction Domain Actions in occupied territories +2 Ob. Underground Network and Resistance Work activate. Recovery: IP reduced below 60 through sustained resistance. |
+
+**Occupation Era — Expanded (historical_precedents_analysis §2, campaign_architecture_v1 Part 5):**
+
+**Critical design note:** During Occupation, the game world continues ticking. RS continues to decline. Thread phenomena continue to intensify. The Southernmost calamity clock does not pause. Faction internal politics continue. The Occupation is a new constraint layered on top of existing systems, not a replacement for them. A player dealing with Occupation must simultaneously manage: Altonian resistance, internal faction politics, RS/Thread crisis, and their personal character arc. This is historically accurate — occupied nations face the full weight of their pre-existing problems plus the occupation itself.
+
+**IP Visibility Milestones (NEW — historical_precedents_analysis §2.3):**
+- **IP 60:** All factions receive Intelligence Report: "Altonian forces massing at border." Mandatory notification in Scene Slate (Priority 2). Factions currently in inter-faction conflict make Mandate check (Ob 2) to divert resources to border defense. Failure: faction is too consumed by internal politics to respond (no defensive Domain Actions targeting Altonia permitted this season).
+- **IP 80:** Second Intelligence Report: "Altonian advance forces in Schoenland corridor." Mandatory Priority 1 scene: faction leaders convene emergency session. Player may attempt coalition-building via Social Contest.
+- **IP 90:** Final warning: "Invasion imminent." All factions aware. Any faction still engaged in inter-faction Battle takes Stability −1 (population perceives leadership as fiddling while the border burns).
+
+**Altonian Alignment (NEW — historical_precedents_analysis §2.4):** Available to any faction at Mandate ≤ 2 (desperate). The faction secretly contacts the Altonian Vanguard Commander and offers strategic intelligence in exchange for favorable treatment during Occupation. Uses Emissary card slot. Effect: IP +5 immediate. Aligning faction gets −2 Ob on all Domain Actions during Occupation Era (collaborator status). Discoverable: Niflhel intelligence or Riskbreaker investigation (Evidence Track threshold 4). If exposed: aligning faction's Accord drops to 0 in all territories, Peninsular Strain +3, all other factions gain Casus Belli. Historical precedent: Byzantine Kantakouzenos inviting Ottomans (1354), French collaboration during WWII.
+
+[EDITORIAL: ED-672 — IP milestones and Altonian Alignment. Source: historical_precedents_analysis.md §2.]
+
+**RM Presence → Underground Network (NEW — historical_precedents_analysis §2.3):** When Occupation Era begins, RM Presence markers in occupied territories convert 1:1 to Underground Network points. RM's political organizing infrastructure — consensus-governance cells, mutual-aid networks, community contacts — functions as resistance infrastructure. Historical precedent: French Resistance built on pre-war communist and socialist party cell structures; Polish Solidarity's workplace networks became underground resistance during martial law. This gives RM a meaningful advantage in resistance scenarios without making Occupation trivially easy (RM caps at ~5-6 Presence per territory; Occupation likely lasts 10+ seasons).
+
+[EDITORIAL: ED-673 — RM Underground Network conversion. Source: historical_precedents_analysis.md §2.]
 | Anarchy Era | All playable factions at Stability 0 simultaneously | Parliament dissolved. Direct governance via personal Charisma. Founded Organizations claim ungoverned territories. New faction formation available (Mandate 3 + 2 territories + Founding Declaration). Recovery: two formal factions establish Parliament quorum. |
 
 **The only true campaign terminal:** Second Calamity. Fires after 10 seasons sustained at MS ≤ 5 during Post-Calamity Era. Requires a decade of complete failure to reach.
@@ -441,6 +458,8 @@ Multiple victory conditions require RS thresholds. A faction that ignores RS ris
 
 Starting TC: 28. Phase transition at TC 75 (TC freezes, Church shifts to seizure mode).
 
+**CI=100 Mass Seizure Declaration (campaign_architecture_v1 §1.3, settlement_layer_v30 §1.5):** When CI reaches 100, every territory where at least one settlement has a Church building (Chapel or higher) becomes a simultaneous Seizure target. Individual Seizure Ob calculated per-territory based on PT and infrastructure modifiers. The Mass Seizure is a mandatory Zoom In event — the Archbishop declares, other factions get 1 season of Emergency Session to respond, then each territory resolves independently. CI=100 does NOT mean the Church wins — it means the Church makes its bid for theocracy. See campaign_architecture_v1.md §1.3 for full specification.
+
 **Seasonal TC at Accounting:**
 1. Institutional Momentum: TC +1 (passive).
 2. Piety Yield: per territory where Church is Prominent (Church Mandate > controlling faction Mandate), add by PT. PT 5 = +1, PT 4 = +0.5, others = 0. Total = floor(sum).
@@ -460,11 +479,11 @@ WA-based spontaneous emergence struck (PP-478). RM emergence in Hybrid mode is e
 - Player PC Disposition ≥ +3 with Maret Vossen
 - ≥ 2 territories have PT ≤ 2
 - RS ≥ 40
-- Player has completed ≥ 1 Community Weaving (Relational-scale Thread operation protecting or supporting a non-practitioner community)
+- Player has completed ≥ 1 Community Organizing (Relational-scale Thread operation protecting or supporting a non-practitioner community)
 
 **Founding Scene (mandatory Priority 0 Zoom In when prerequisites met):**
 1. Player proposes: a named territory (first cell location), a Commitment, a Belief declaration.
-2. Vossen evaluates via Solidarity RS. Argue roll: Attunement primary, No Adjudicator, Ob 2. Success → Founding. Partial → 1 additional Community Weaving required next season. Failure → retry after 1 season.
+2. Vossen evaluates via Solidarity RS. Argue roll: Attunement primary, No Adjudicator, Ob 2. Success → Founding. Partial → 1 additional Community Organizing required next season. Failure → retry after 1 season.
 3. On Founding, RM is created with: Mandate 2, Influence 4, Wealth 1, Military 0, Stability 4.
 
 **Post-Founding:** Praetor card activates (Community Projects). Mandate cap 4. PC Embedding: +1D on RM Domain Actions in Founding territory. Phase 1 objective: PT ≤ 1 in ≥ 4 territories.
@@ -493,7 +512,7 @@ WA-based spontaneous emergence struck (PP-478). RM emergence in Hybrid mode is e
 
 | TTRPG Outcome | BG State Update |
 |---------------|----------------|
-| Faith-affecting personal scene (sermon, debate, Community Weaving) | PT ±1 in that territory, queued to Accounting. Cap: 1 PT Domain Echo per Zoom In. |
+| Faith-affecting personal scene (sermon, debate, Community Organizing) | PT ±1 in that territory, queued to Accounting. Cap: 1 PT Domain Echo per Zoom In. |
 
 ### 9.2 Victory Condition Check — Hybrid
 

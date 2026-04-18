@@ -730,7 +730,7 @@ Fieldwork actions consume in-game time:
 | DIS-01/02 | Non-sensitive partner Dissonance: §2.7. Spirit check vs Dissonance Factor. Field team rotation. |
 | TC-01/02/03/04 | Threadcut being social fieldwork: §2.8. Testimonial tag. P-08 bridged by being's translation. Evidence Track = player-level knowledge. Counter-investigation possible. |
 | MA-02/03 | Mending arcs as investigation: §2.4. Severity reduction = evidence. Multi-season campaign pacing. |
-| CW-01 | Community Weaving detectable: §2.4 table (Weaving row covers Community Weaving). |
+| CW-01 | Community Organizing detectable: §2.4 table (Weaving row covers Community Organizing). |
 
 ### Items resolved by PP-579 ontological correction (2026-04-13)
 
@@ -797,7 +797,7 @@ Fieldwork actions consume in-game time:
 | SIM-DEBT-FW-07 | **RESOLVED** (PP-577). Transition simulation. All 6 directions functional. |
 | SIM-DEBT-FW-08 | **RESOLVED** (PP-578/PP-579). Threadwork × fieldwork. All ops advance Evidence contextually. |
 | SIM-DEBT-FW-09 | **RESOLVED** (PP-579). NPC arc stress tests. 7 Domain Echo cascades tested. |
-| SIM-DEBT-FW-10 | **RESOLVED** (PP-580). Extended threadwork (Knots, Community Weaving, threadcut beings, Mending, Dissonance). |
+| SIM-DEBT-FW-10 | **RESOLVED** (PP-580). Extended threadwork (Knots, Community Organizing, threadcut beings, Mending, Dissonance). |
 
 ### Propagation status
 

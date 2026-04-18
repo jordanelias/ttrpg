@@ -543,6 +543,8 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 - Conviction: Continuity → Autonomy (the work has failed; she must survive to try again).
 - Risk: Her presence strains RS in the territories she passes through (per threadwork_v25 §Coherence/TS 70+ RS drain). She is a walking Calamity echo.
 
+**Warden Faction Paths (campaign_architecture_v1 §6):** Five paths to Warden political relevance: (A) Recruited by Varfell (WR 3+, institutional integration); (B) Recruited by RM post-revelation (Embrace arc, philosophical alliance); (C) Recruited by player (WR ≥ 3 + Founded Organization); (D) Recruited by Lenneth (Crown integration via Elske Loyalty Track); (E) Independent faction at MS ≤ 20 (crisis-driven, Mending Sanctuary declaration). See campaign_architecture_v1.md §6.2 for full specification. If activated, Warden governance uses consensus model with collective Spirit-derived governance stat.
+
 ---
 
 ## §6 RESONANT STYLE IN THE CONTEST SYSTEM
@@ -726,7 +728,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | 2 | PT ≤ 1 in 3+ territories (population losing faith connection → Founding conditions for RM political emergence) | Community Organising in lowest-PT territory adjacent to RM Presence. |
 | 3 | Presence marker expansion to adjacent territory (if Stability ≥ 3) | Community Organising in adjacent territory without Presence marker. |
 | 4 | Founding Agent protection: if Founding Agent in threatened territory, relocate before hostile action resolves. | Standard |
-| 5 | Community Weaving (if RS ≤ 60 and practitioner with TS 30+ available) | RS restoration |
+| 5 | Community Organizing (if RS ≤ 60 and practitioner with TS 30+ available) | RS restoration |
 | 6 | If attacked: no military response (RM has no Military). Diplomatic appeal to allied faction. Senator Outward if Influence ≥ 2. | Reactive — non-violent |
 | 7 | Pass. Presence markers maintained. | Default |
 
@@ -737,7 +739,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | 1 | Gap or Shifting Object detected in any territory | Emergency Mend at Gap site. Wardens deploy to location. |
 | 2 | Niflhel supply chain disturbance detected (Thread Tension source traced to Southernmost harvesting) | Investigate source. Wardens intercept Niflhel operatives in Southernmost territory. |
 | 3 | RS ≤ 40 | Peninsula-wide Weaving. RS +1 per Warden deployment (max +2/season). |
-| 4 | Work alongside any faction performing Thread restoration (Community Weaving, Mending, RS-positive actions) | Cooperation: +1D to allied Thread operations in Southernmost-adjacent territories (Warden Cooperation Track ≥ 1). |
+| 4 | Work alongside any faction performing Thread restoration (Community Organizing, Mending, RS-positive actions) | Cooperation: +1D to allied Thread operations in Southernmost-adjacent territories (Warden Cooperation Track ≥ 1). |
 | 5 | Assess any new practitioner who enters Southernmost territory | Assessment interview. TS ≤ 20: dismissed. TS 21–39: acknowledged. TS 40+: useful. |
 | 6 | If attacked: Thread operations at a scale that renders conventional force irrelevant. Wardens do not advertise this. | Absolute deterrence |
 | 7 | Continue containment work. Hold the Southernmost. | Default |

@@ -35,7 +35,7 @@
 | Dissolution Success | −5 | Per operation | params_threadwork §RS Track |
 | Dissolution Failure | −8 | Per operation | params_threadwork §RS Track |
 | POP Success | −3 minimum | Per operation; scales with temporal displacement | params_threadwork §RS Track |
-| Mass battle RS ×3 multiplier | ×3 on all Thread RS costs | During mass battle | params_threadwork §Mass Battle Thread RS PP-601 |
+| ~~Mass battle RS ×3 multiplier~~ | **STRUCK (campaign_architecture_v1 §3.1).** Replaced by flat −1 per battle in which any Thread operation occurs. | During mass battle | params_threadwork PP-192 (struck) |
 | Substrate Saturation (≥3 ops/turn) | −1 at battle end | Counter ≥3 at battle resolution | params_threadwork §Substrate Saturation PP-606 |
 
 ### Event-Driven
