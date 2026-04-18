@@ -184,6 +184,20 @@ For each condition TRUE, generate one scene entry:
 - Any global clock crossed a band threshold this season (MS, CI, IP)
 - Any NPC with Disposition ≥ +2 has an active Conviction that conflicts with their faction's current priority
 
+**Step 2b — Thread-State Scenes (ED-674, Priority 1–3):**
+
+Check local thread state (RS band × territory proximity per calamity_radiation_v30):
+
+| Condition | Scene | Priority |
+|---|---|---|
+| RS ≤ 20 (Critical) in current territory | Thread Crisis: substrate instability manifests per radiation matrix | 1 (mandatory) |
+| RS dropped below threshold band since last Slate | Threshold-Crossing: world visibly changes per radiation band | 2 |
+| Active Gap in current territory | Investigation/Mending Opportunity at Gap site | 2 |
+| Active Lock in current territory | Governance Rigidity: frozen policy/relationship manifests as obstruction | 3 |
+| WC advanced since last Slate | Warden Cooperation: new Thread resources, new Warden NPC relationships | 3 |
+
+Max 1 Thread-State scene per Slate. Highest priority fires.
+
 **Step 3 — Duty-Aligned (Priority 2):**
 
 Parse current Duty type. Generate 1–2 scenes matching Duty requirements:

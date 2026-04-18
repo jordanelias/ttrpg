@@ -4,14 +4,14 @@
   - id: ED-673
     date: 2026-04-17
     description: "Thread Domain Echo pathway. scale_transitions_v30."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/hybrid/scale_transitions_v30.md]
 
   - id: ED-674
     date: 2026-04-17
     description: "Scene Slate thread-state factor. player_agency_v30."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/systems/player_agency_v30.md]
 
@@ -46,7 +46,7 @@
   - id: ED-679
     date: 2026-04-17
     description: "Thread Warfare NPC AI doctrine. npc_behavior_v30."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/systems/npc_behavior_v30.md]
 

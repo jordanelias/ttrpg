@@ -202,6 +202,25 @@ Accord Domain Echoes fire at Accounting Step 4c alongside other Accord checks. T
 
 ---
 
+### §5.6 Thread Domain Echo (ED-673)
+
+Thread events produce Domain Echo to faction stats when they meet Thread Significance — distinct from Sufficient Scope (§7).
+
+**Fires when:** (a) Thread operation produces RS change ≥ 1, OR (b) Thread operation witnessed by NPC whose Conviction Scar fires (npc_behavior_v30 §3.4), OR (c) Thread operation creates/destroys Gap, Lock, or Knot at Territorial+ scale.
+
+| Thread Event | Affected Stat | Direction |
+|---|---|---|
+| Dissolution Success | Controlling faction Stability | −1 |
+| Mending Success (Territorial+) | Controlling faction Mandate | +1 |
+| Gap creation | Controlling faction Stability | −1 |
+| Lock creation (unauthorized) | Controlling faction Mandate | −1 |
+| Public Thread op, Church territory | Church Mandate | −1 |
+| Public Thread op, Varfell territory (VTM ≥ 3) | Varfell Mandate | +1 |
+
+**Timing:** Queued to Accounting. **Cap:** 1 Thread Domain Echo per scene per faction (PP-329). **Model:** Extends Epistemic TC Trigger (PP-182) to all factions. TC trigger fires independently. Thread Domain Echo and Accord Domain Echo (§5.5) may both fire from same scene on different stats.
+
+---
+
 ## §6 Mode Transition Procedures
 
 ### §6.1 TTRPG → BG (Session Boundary)

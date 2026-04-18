@@ -712,9 +712,11 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | 2 | Exposure threat: any faction has evidence trail pointing to Niflhel operations | Quiet Sabotage mode targeting the faction holding evidence (Stability −1 to disrupt their capacity to act on evidence). |
 | 3 | Covert action available (−1 Ob): Quiet Intelligence mode against richest faction (learn hidden Wealth or Intel stat). | Intelligence harvesting |
 | 4 | Acquire resources. Sell services. Remain invisible. Quiet Intelligence mode against least-known faction. | Standard |
-| 5 | Southernmost supply chain maintenance: if Thread Tension ≥ 40 and Niflhel has operated in Southernmost this year, reduce Southernmost operations to 1/year (self-preservation). | Supply chain management |
-| 6 | If exposed (operative captured, evidence published): all four arms redirect to exposure containment. Assassination mode against witness if Intel vs Intel +2 is feasible. | Reactive — existential threat |
-| 7 | Pass. No deployment. Thread Tension accumulation pauses. | Default |
+| 5 | **Thread Harvest gate (ED-679):** RS ≤ 30 → Harvest (Dissolution Residue via Quiet arm) max 1/season. RS ≤ 20 → Harvest suspended. | RS-gated Harvest |
+| 6 | **Lock-and-cede (ED-679):** Territory about to be conquered → practitioner (Coherence ≥ 5) Locks critical configs before ceding. Conqueror inherits RS drain + ungovernable province. | Strategic denial |
+| 7 | Southernmost supply chain: RS ≤ 40 → reduce Southernmost ops to 1/year. | Supply chain management |
+| 8 | If exposed (operative captured, evidence published): all four arms redirect to exposure containment. Assassination mode against witness if Intel vs Intel +2 is feasible. | Reactive — existential threat |
+| 9 | Pass. No deployment. | Default |
 
 ### §8.9 Restoration Movement NPC Priority Tree (Post-Founding Only)
 
