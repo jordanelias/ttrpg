@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 682
+# next_id: 684
 
   - id: ED-673
     date: 2026-04-17
@@ -63,3 +63,18 @@
     status: resolved
     severity: P3
     affects: [designs/ttrpg/threadwork_v30.md]
+
+  - id: ED-682
+    date: 2026-04-18
+    description: "Derived stats integration — §8 personal-scale applications added: Bonds→Disposition cap propagated to fieldwork §5.1, Army Morale composite added to mass_battle cross-ref, Renown→governance penalty bridge added to player_agency §5.4, Garrison Strength combat feedback added to combat §13.2b. §8.5 documents what NOT to add."
+    status: resolved
+    severity: P2
+    affects: [designs/systems/derived_stats_v1.md, designs/fieldwork/fieldwork_v30.md, designs/combat/combat_v30.md, designs/systems/player_agency_v30.md, designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-683
+    date: 2026-04-18
+    description: "Disposition +5 (Bonded/Knot candidate) unreachable under PP-632 Bonds cap floor(Bonds/2)+1. Attribute max 7 → ceiling 4. Knot formation requires +5 per fieldwork §5.6. Three resolution options in derived_stats §8.1."
+    status: open
+    severity: P1
+    affects: [references/params_core.md, designs/fieldwork/fieldwork_v30.md, designs/systems/derived_stats_v1.md]
+

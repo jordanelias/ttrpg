@@ -352,7 +352,9 @@ Standing (0–5) measures the player's relationship with one faction. Renown (0�
 | Territory Accord improved | +1 | Player governs territory and Accord increases during tenure |
 | Knot formed | +1 | New Knot established with named NPC |
 
-**Cap:** +2 Renown per season maximum. Renown does not decay.
+**Cap:** +2 Renown per season maximum. Renown does not decay naturally.
+
+**Governance Responsibility (derived_stats_v1 §8.3):** Players at Standing ≥ 3 who hold governance positions risk Renown from governance failures. Accord drops in governed territory, faction Treasury reaching 0, or battle losses in governed territory each cost Renown −1 (cap: −2/season). Leadership is earned through the Renown track and risked through governance stakes.
 
 **Renown Thresholds and Governance Scope:** See settlement_layer_v30 §6.1 for the unified stature ladder mapping Renown thresholds to settlement governance scope, faction emergence stages, and ROTK/CK3 parallels. Renown is the quantitative axis; settlement control is the qualitative axis.
 

@@ -192,6 +192,89 @@ All derived value numbers in this document are PROVISIONAL. They need simulation
 
 The specific multipliers (×100 for Treasury, ×20 for Legitimacy, etc.) are tuning knobs that can be adjusted without changing the architecture.
 
+
+
+## §8 — Personal-Scale Derived Value Applications
+
+The derived value principle (separate structural capability from current state) already exists in personal-scale systems (Health, Composure, Coherence). This section formalizes three additional applications identified by cross-system audit.
+
+### 8.1 Disposition Cap by Bonds Attribute
+
+Disposition (−3 to +5 per NPC per PC) has a maximum value capped by the player's Bonds attribute: **Disposition ceiling = floor(Bonds/2)+1** (PP-632, params_core). A character with Bonds 3 can reach Disposition +2 with any NPC. Bonds 5 reaches +3. Bonds 7 reaches +4 — the only value permitting Devoted (+4). Bonded (+5) requires Bonds 9 (floor(9/2)+1 = 5), which exceeds the attribute creation cap of 5 and requires advancement to 9 — meaning +5 Disposition is an endgame achievement, not a starting condition.
+
+This makes Bonds the structural capability (how deep relationships CAN go) and Disposition the current state (how deep this specific relationship IS). The pattern is identical to Wealth→Treasury: Bonds determines the ceiling; social fieldwork fills toward it.
+
+**Design consequence:** Companion formation (Disposition ≥ +3) requires Bonds ≥ 5. A character who prioritizes Bonds at creation (Bonds 5, one of the max-5 slots) can form companions immediately. A character who neglects Bonds (Bonds 1, ceiling +1) cannot even reach Friendly (+2) — their relationships are structurally shallow.
+
+**[DESIGN CONFLICT — ED-684]:** Knot formation requires Disposition +5 (fieldwork §5.6). Under the PP-632 cap (floor(Bonds/2)+1), Disposition +5 requires Bonds ≥ 9. Attribute advancement maximum is 7. Therefore **Disposition +5 is unreachable** under current rules, which means **Knot formation is mechanically impossible.** The Disposition table's "+5 = Bonded = Knot candidate" row describes an unreachable state. Resolution options: (a) adjust cap formula to ceil(Bonds/2)+1 (Bonds 7 → ceiling 5), (b) lower Knot formation threshold to +4 (reachable at Bonds 7), (c) add a Bonds-advancement pathway beyond 7 for Knot specialists. Jordan decision required.
+
+**Cross-reference:** fieldwork_v30 §5.1 (Disposition Track), params_core §Bonds (PP-632), companion_specification §2.1 (eligibility).
+
+### 8.2 Army Morale (Mass Combat Derived Value)
+
+Unit-level Morale (1–7) already exists as a per-unit stat. Army Morale is a derived composite that gives the player a single legible indicator of "will my army hold."
+
+**Army Morale = floor(average unit Morale) + Command modifier + Cohesion modifier**
+
+| Component | Source | Range |
+|-----------|--------|-------|
+| Average unit Morale | mean of all active units' Morale, floored | 1–7 |
+| Command modifier | +1 if general's Command ≥ 4; −1 if Command ≤ 2 | −1 to +1 |
+| Cohesion modifier | +1 if faction Cohesion ≥ 75% of max; −1 if Cohesion ≤ 25% of max | −1 to +1 |
+
+**Army Morale thresholds:**
+- 6+: Resolute. Units hold under pressure. Rout contagion does not spread.
+- 4–5: Steady. Normal operation.
+- 2–3: Shaken. All units −1D on Morale checks. General must make Command check (Ob 2) each Cascade Phase to prevent involuntary Withdrawal.
+- 1: Wavering. All units −2D on Morale checks. Withdrawal begins next phase unless General rallies (Command check Ob 3).
+- 0: Routed. Army-level rout. All units retreat. Battle lost.
+
+Army Morale changes when: units are destroyed (average drops), general is killed (Command modifier lost), faction Cohesion drops from off-field events (Cohesion modifier shifts), battle proceeds through Cascade Phases (individual unit Morale degrades per existing rules).
+
+The player sees Army Morale as a single number on the battle interface. Individual unit Morale is still tracked but displayed as a per-unit detail, not the primary indicator.
+
+### 8.3 Renown ↔ Derived Value Bridge
+
+Renown (0–10) measures cross-faction personal significance. It should interact with faction derived values when the player holds governance responsibility.
+
+**Governance Responsibility Modifier:** When the player holds a governance position (Standing ≥ 3, per player_agency §5.1), faction derived value drains from governance failures apply a Renown-proportional penalty:
+
+| Event | Derived Value Drain | Renown Consequence |
+|-------|--------------------|--------------------|
+| Accord drops in governed territory | Cohesion −20 (existing) | If player is Governor: Renown −1 |
+| Treasury reaches 0 while player is faction officer | Wealth −1 at Accounting (existing) | If player is Counselor+: Renown −1 |
+| Battle loss in territory player governs | Cohesion −15 (existing) | If player is Governor: Renown −1 |
+| Faction Stability reaches 0 | Faction collapses (existing) | If player is faction member: Renown −2 |
+
+Renown penalties from governance failures cap at −2 per season. Renown does not decay below 0.
+
+**The feedback loop:** Player gains Renown through competent governance (§5.4 sources). Player takes governance responsibility (Standing ≥ 3). Governance failures drain Renown. This creates stakes for governance positions — leadership is earned through the Renown track and risked through the derived value bridge.
+
+### 8.4 Settlement Combat Defense Feedback
+
+When a player personally defends a settlement in combat and wins, the settlement's Garrison Strength recovers:
+
+| Combat Outcome | Garrison Strength Effect |
+|----------------|------------------------|
+| Player wins defense combat (repels attacker) | Garrison Strength +10 (immediate) |
+| Player wins defense combat with Overwhelming | Garrison Strength +20 + Public Order +5 (the population saw competent defense) |
+| Player loses defense combat | Garrison Strength −10 (the garrison is weakened) |
+| Settlement falls during player defense | Garrison Strength → 0, Defense stat check Ob 2 at next Accounting |
+
+This cascade (personal combat outcome → settlement derived value → faction derived value income) is the most complete personal→faction feedback loop in the game. The player who fights to defend a settlement sees the mechanical consequence in the settlement's Garrison number, which feeds into faction Military capacity via the Levies Available ceiling.
+
+### 8.5 Derived Values the System Does NOT Need
+
+Personal-scale systems that already have functional derived scores and should not receive additional layers:
+
+- **Combat Pool** (Agi×2 + History + 3): Already derived. Adding "Combat Readiness" would duplicate Stamina.
+- **Composure** (Cha+6): Already the social damage buffer. Adding "Social Capital" would duplicate it.
+- **Coherence** (10→0): Already granular with named thresholds. No additional layer needed.
+- **Cover** (Cog + History): Already the fieldwork exposure buffer.
+- **Thread Sensitivity** (percentage growth): Already granular.
+
+The principle: add derived values only where the current stat-as-pool conflation causes granularity, feedback, or visibility problems. Personal-scale systems already solved this.
+
 [EDITORIAL: ED-683 — Derived stat system. Architectural addition to videogame layer. Does not modify existing board game / hybrid mechanics — adds a presentation and simulation layer for Godot implementation.]
 
 ## §7 — Stat Modification Conversion Registry (PP-680)

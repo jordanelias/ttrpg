@@ -748,7 +748,12 @@ All items below require user approval before compilation.
 | CLOCK-EDIT-02 | Church military victory → Theocracy Counter change | No Theocracy Counter change from military victory alone (confirm) |
 ---
 
-## PART D: MASS COMBAT WORLD BRIDGE (NEW)
+#
+### Army Morale (Derived Composite — derived_stats_v1 §8.2)
+
+Army Morale = floor(average unit Morale) + Command modifier + Cohesion modifier. Gives the player a single legible indicator. Thresholds: 6+ Resolute (rout contagion blocked), 4–5 Steady, 2–3 Shaken (−1D Morale checks, Command check Ob 2 each phase), 1 Wavering (−2D, Command Ob 3 or Withdrawal), 0 Routed (army-level retreat, battle lost). See derived_stats_v1 §8.2 for full specification.
+
+# PART D: MASS COMBAT WORLD BRIDGE (NEW)
 
 ### §D.1 Post-Battle Consequence Scenes
 

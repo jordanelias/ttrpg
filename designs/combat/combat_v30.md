@@ -502,6 +502,8 @@ Combat in a settlement produces settlement-level consequences on top of province
 
 These effects are immediate and stack with existing Domain Echo and reputation effects from §13.1 and §13.2.
 
+**Garrison Strength feedback (derived_stats_v1 §8.4):** When the player personally defends a settlement, combat outcome modifies Garrison Strength: victory +10, Overwhelming victory +20 + Public Order +5, defeat −10, settlement falls → Garrison Strength 0 + Defense stat check Ob 2. This cascade (personal combat → settlement derived value → faction income) is the most direct personal→faction feedback loop.
+
 ### §13.3 Death Cascade
 
 Killing a named NPC in combat triggers the following cascade:
