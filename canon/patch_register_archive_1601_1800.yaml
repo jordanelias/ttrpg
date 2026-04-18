@@ -816,3 +816,290 @@
   - designs/systems/derived_stats_v1.md
   status: applied
   applied_commit: null
+
+# Archived from active — Phase 1 (no-status + registered entries)
+- id: PP-210
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-03)
+  system: combat
+  description: 'Health formula corrected to accumulation model: Health = Endurance
+    + 6. Damage accumulates per round; at 0 take Wound, Health resets. Replaces erroneous
+    ''Health = Endurance score'' single-hit-threshold language in design doc §7 and
+    params_combat Wounds section.'
+- id: PP-211
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-04)
+  system: combat
+  description: Critical Hit rule added to design doc §5 Damage Resolution. Net hits
+    ≥ 3 → weapon damage modifier doubled before DR subtraction. Rule was in params_combat
+    only; now in canonical design doc.
+- id: PP-212
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-02)
+  system: combat
+  description: 'Feint timing defined: ''next exchange'' = next round only. −2D Defence
+    penalty expires at end of that round.'
+- id: PP-213
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-01)
+  system: combat
+  description: 'Tie Up ''disadvantage'' defined: −2D to Combat Pool for both parties
+    for one round. Replaces undefined ''at disadvantage'' language.'
+- id: PP-214
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-17)
+  system: combat
+  description: 'Rescue mechanical resolution defined: attack resolves against rescuer
+    instead of original target; rescuer''s armour DR applies. Replaces bare ''Interpose.''
+    language.'
+- id: PP-215
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-08)
+  system: combat
+  description: Dodge action added to design doc §4 Actions table. Ranged attacks only;
+    forfeit all offensive action; full pool as passive Defence vs one incoming ranged
+    attack; armour DR applies. Was in params Actions Summary (ED-067 provisional)
+    but absent from design doc.
+- id: PP-216
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-07)
+  system: combat
+  description: 'Fibonacci Group Bonus table expanded from 4-row simplified to 6-row
+    canonical version matching params_combat. Design doc §8 now shows: 1=+0, 2=+1,
+    3=+2, 4–5=+3, 6–7=+4, 8+=+5.'
+- id: PP-217
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (G-P1-01)
+  system: combat / board_game
+  description: 'Anti-Armour keyword defined for BG layer. Units with HP (crossbow)
+    or HBl (lead sling) weapon type carry Anti-Armour: reduces target armour tier
+    by 1 for the engagement. Does not stack. Keyword was referenced in design doc
+    §5 BG note but undefined everywhere.'
+- id: PP-218
+  date: 2026-04-03
+  source: audit_combat_2026-04-02.md (GAP-CMB-05)
+  system: combat / mass_combat
+  description: 'PP-086 mass damage formula clarified. Formula is now: max(0, net successes
+    − Ob) + disposition_modifier. Floor applies to bracketed term only; disposition
+    modifier always adds after. Partial success → 0+modifier. Replaces ambiguous ''net_successes_over_Ob''
+    notation.'
+- id: PP-454
+  date: 2026-04-08
+  severity: P1
+  description: 'SIM-SC-STRESS-01 finding P1-SC-01: PP-232 Cognition pool and Attunement
+    initiative not backported to design doc Part 6 (§6.3, §6.4 Step 3, §6.10). Design
+    doc still reads Presence×2 for pool and Presence for initiative.'
+  finding_id: P1-SC-01
+  source: simulation SIM-SC-STRESS-01 2026-04-08
+  affects:
+  - designs/debate/debate_system_redesign_v1.md
+  status: registered — backport required
+- id: PP-455
+  date: 2026-04-08
+  severity: P1
+  description: 'SIM-SC-STRESS-01 finding P1-SC-02: Interaction taxonomy incompatible
+    between design doc (CLASH/COMPETITION/DIVERGENCE) and params (CLASH/AMPLIFY/CROSS/DIVERGE-state).
+    AMPLIFY pool cap, CROSS simultaneous resolution, DIVERGE-state not present in
+    Part 6 operative.'
+  finding_id: P1-SC-02
+  source: simulation SIM-SC-STRESS-01 2026-04-08
+  affects:
+  - designs/debate/debate_system_redesign_v1.md
+  status: registered — Part 6 §6.4 rewrite required
+- id: PP-456
+  date: 2026-04-08
+  severity: P1
+  description: 'SIM-SC-STRESS-01 finding P1-SC-04: Obscuring ow=0.75 in params Orientation
+    Weights contradicts design doc (Obscuring win = no CT movement, DM placed). Params
+    entry is stale. Strike ow=0.75 from params.'
+  finding_id: P1-SC-04
+  source: simulation SIM-SC-STRESS-01 2026-04-08
+  affects:
+  - references/params_contest.md
+  status: registered — params stale entry to strike
+- id: PP-457
+  date: 2026-04-08
+  severity: P1
+  description: 'SIM-SC-STRESS-01 finding P1-SC-05: ''Proposer role'' alternation in
+    Part 6 §6.7 has no operative mechanical effect (quaestio deprecated). Dangling
+    term. Flag for strike or explicit definition.'
+  finding_id: P1-SC-05
+  source: simulation SIM-SC-STRESS-01 2026-04-08
+  affects:
+  - designs/debate/debate_system_redesign_v1.md
+  status: registered — §6.7 language needs strike or definition
+- id: PP-633
+  date: 2026-04-13
+  severity: P3
+  description: 'Pool floor 1D — named rule added to params_core.md. Formula: max(1,
+    pool − penalties). Applies to Feint pool reduction (combat), Spent+Rattled (contest),
+    fieldwork wounds. Corrects gap B-02 from comparative audit.'
+  affects:
+  - references/params_core.md
+- id: PP-634
+  date: 2026-04-13
+  severity: P2
+  description: 'Combat surrender/disengage procedure — §11.4 added to combat_design_v1.md.
+    Yield: opponent-choice (accept=combat ends, refuse=unresisting). Disengage: Agility
+    pool TN7 Ob1 contested; partial=one free strike. ED-512 resolved.'
+  affects:
+  - designs/combat/combat_design_v1.md
+- id: PP-635
+  date: 2026-04-13
+  severity: P3
+  description: 'Combat §11.5 fieldwork transitions — F-TRANS-01/09 cross-reference
+    added. Let It Ride clarification: applies to manoeuvres (Feint/Rescue/Disarm),
+    not standard attacks. Gap C-01 resolved.'
+  affects:
+  - designs/combat/combat_design_v1.md
+- id: PP-636
+  date: 2026-04-13
+  severity: P2
+  description: Contest §9.1 Evidence Track Findings citation — Combined Findings (+1D/Finding
+    max +2D on Exchange 1, stacks with prep for max +3D). Gap C-02 resolved. Contest
+    §5 social initiative — deterministic by design, rationale documented. ED-138/ED-514
+    resolved.
+  affects:
+  - designs/contest/social_contest_system_v2.md
+- id: PP-637
+  date: 2026-04-13
+  severity: P2
+  description: Contest §4 Spent timing — assessed after Step 4 (CLASH/REINFORCE);
+    penalty applies next exchange. Triggering exchange resolves normally. Gap D-06
+    resolved.
+  affects:
+  - designs/contest/social_contest_system_v2.md
+- id: PP-638
+  date: 2026-04-13
+  severity: P3
+  description: Threadwork §2.3 — Thread-Read-as-fieldwork cross-reference added after
+    Leap failure framing. Gap C-03 resolved.
+  affects:
+  - designs/ttrpg/threadwork_redesign_v25.md
+- id: PP-639
+  date: 2026-04-13
+  severity: P2
+  description: 'ARC-T23 Witness — Remembrancer renamed to the Witness throughout arc_register.md.
+    Institutional title: current holder of 245-year RM succession lineage, not a Calamity
+    survivor (TS confers no longevity). COLLISION E operational. ED-NEW-02 resolved.'
+  affects:
+  - references/arc_register.md
+  - canon/editorial_ledger.yaml
+- id: PP-640
+  date: 2026-04-13
+  severity: P3
+  description: 'Witness canon correction — description fixed: lineage holder not Calamity
+    survivor. Humans are mortal; Thread Sensitivity does not extend lifespan; self-spooling
+    is ontologically incoherent. Authority derives from institutional succession and
+    transmitted record.'
+  affects:
+  - references/arc_register.md
+  - canon/editorial_ledger.yaml
+- id: PP-641
+  date: 2026-04-13
+  severity: P1
+  description: Opposing Operations propagated to threadwork_redesign_v25.md §2.6 —
+    full Contested Intentionality procedure from params_threadwork PP-632 now in design
+    doc. Propagation gap closed.
+  affects:
+  - designs/ttrpg/threadwork_redesign_v25.md
+- id: PP-642
+  date: 2026-04-13
+  severity: P2
+  description: 'NPC Recruitment procedure — §10 added to npc_behavior_v30.md. 4-step:
+    Identify/Approach/Offer/Resolution. Ob = floor(NPC highest-faction Disposition
+    / 2) + 1. Hooks defined (Strong=auto-success Ob1, Weak=-2 Ob). Defection: Belief
+    contradiction check 2 consecutive seasons. ED-510 resolved. ED-511 (Hooks) resolved.'
+  affects:
+  - designs/systems/npc_behavior_v30.md
+  - canon/editorial_ledger.yaml
+- id: PP-643
+  date: 2026-04-14
+  severity: P1
+  description: 'TCV revaluation: Himmelenger 5, Gransol 3. Total 31. Crown 12, Hafenmark
+    6, Church 5, Varfell 6.'
+  affects:
+  - designs/board_game/victory_v30.md
+  - references/params_board_game.md
+- id: PP-644
+  date: 2026-04-14
+  severity: P1
+  description: Universal Peninsular Sovereignty victory + Partition co-victory. Faction-specific
+    retained as alternates.
+  affects:
+  - designs/board_game/victory_v30.md
+  - designs/board_game/peninsular_strain_v1.md
+  - references/params_board_game.md
+- id: PP-645
+  date: 2026-04-14
+  severity: P1
+  description: Accord (0-3) per territory. Modifies Prosperity. Accord ≥ 2 for TCV.
+    Conquest → 1. Seizure/Proclamation/Reformation → 2+.
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  - references/params_board_game.md
+- id: PP-646
+  date: 2026-04-14
+  severity: P1
+  description: Peninsular Strain (0-10). Battles +1, eliminations +2, revolts +1.
+    Thresholds at 3/5/7/9.
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  - references/params_board_game.md
+- id: PP-647
+  date: 2026-04-14
+  severity: P1
+  description: 'Battle consequences: RS −1/battle (−2 Campaign/War). IP +2/battle-season.
+    Accord on conquest/defense.'
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  - references/params_board_game.md
+  - designs/board_game/board_game_v30.md
+- id: PP-648
+  date: 2026-04-14
+  severity: P1
+  description: Dynastic Proclamation (Hafenmark Diplomat). Parliamentary Sovereignty
+    struck.
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  - references/params_board_game.md
+  - designs/systems/npc_behavior_v30.md
+  - designs/board_game/victory_v30.md
+- id: PP-649
+  date: 2026-04-14
+  severity: P1
+  description: Cultural Reformation (Varfell Colonist). Ob=PT+1. VTM≥2. PT−1 on success.
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  - references/params_board_game.md
+  - designs/systems/npc_behavior_v30.md
+- id: PP-650
+  date: 2026-04-14
+  severity: P2
+  description: 'Church Seizure Accord formula: Success → max(floor(PT/2)+1, 2). Overwhelming
+    → floor(PT/2)+2 max 3.'
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  - designs/board_game/victory_v30.md
+- id: PP-651
+  date: 2026-04-14
+  severity: P2
+  description: Starting PT values per territory (PROVISIONAL). Löwenritter Martial
+    Governance + Strain exemption.
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  - references/params_board_game.md
+- id: PP-652
+  date: 2026-04-14
+  severity: P2
+  description: NPC Accord-aware priority trees. Proclamation/Reformation NPC logic.
+    Accord governance targeting.
+  affects:
+  - designs/systems/npc_behavior_v30.md
+- id: PP-653
+  date: 2026-04-14
+  severity: P2
+  description: Hybrid Accord Domain Echo §5.5. Accounting steps 4c/4d/4e.
+  affects:
+  - designs/hybrid/scale_transitions_v30.md
+  - references/params_board_game.md
