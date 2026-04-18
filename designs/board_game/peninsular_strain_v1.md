@@ -325,7 +325,7 @@ Baralta's divine-right claim. "Faith is not mediated — it is lived. Anyone who
 
 **Diplomatic Token interaction (PP-517/521):** If Hafenmark has Diplomatic Token on target faction AND uses Proclamation: Token provides −1 Ob (above). On Overwhelming Proclamation: Token is NOT consumed (unlike military conflict, which removes Tokens). On Partial/Failure: Token remains. Token is consumed only if Hafenmark subsequently uses military force against that faction (existing PP-517 rule).
 
-**Standing interaction (PP-515):** Proclamation may be declared as an Open Pledge in Phase 1 ("I will assert my divine right over [territory] this season"). Honour: +1 Standing. Breach (failing to play Diplomat card for Proclamation): Stability −1 + Casus Belli per PP-515 rules.
+**Standing interaction (PP-515):** Proclamation may be declared as an Open Pledge in Phase 1 ("I will assert my divine right over [territory] this season"). Honour: +1 Standing. Breach (failing to play Diplomat card for Proclamation): Cohesion −20 + Reputation −15 (derived_stats_v1) + Casus Belli per PP-515 rules.
 
 **Defensive interaction:** Target faction may invoke Institutional Mandate (PP-189) if Mandate ≥ 4 (Appease: Mandate −1, Proclamation cancelled). Target faction may also contest via Parliamentary Session (Hafenmark's Proclamation is a constitutional claim — Parliament has standing to adjudicate). If Parliamentary Session vote opposes Proclamation: +1 Ob to Proclamation this season.
 
@@ -474,7 +474,7 @@ Occupation (faction_layer_v30.md §2) and Accord (this document §2) address dif
 
 **Note:** Cultural Reformation upgraded from Accord 2 to Accord 3. Rationale: Cultural Reformation takes the longest of any acquisition method (requires sustained cultural investment across multiple seasons). The population didn't just accept new governance — it internalized a new cultural identity. This is the slowest path but produces the best governance outcome, which is the correct incentive structure.
 
-[EDITORIAL: ED-681 — Accord by acquisition method revision. Source: historical_precedents_warfare.md §5.3.]
+[EDITORIAL: ED-692 — Accord by acquisition method revision. Source: historical_precedents_warfare.md §5.3.]
 
 **Recapture:** The displaced faction may attempt military_advance at -1 Ob (home territory advantage per faction_layer §2.2). If successful, territory returns to their control. Accord resets to 2 (population welcomes return of familiar governance), not the original pre-occupation value.
 

@@ -103,7 +103,7 @@ Bad Convictions (too vague, too passive, no obstacle): "I want to help my factio
 
 **Draft Portrait:** Available from the main menu at any time. Shows what the Portrait would say if the campaign ended now — Conviction resolution states, Knot history, faction standing, Thread relationship, world state. This is the in-play feedback mechanism for "A Life in Valoria" players.
 
-[EDITORIAL: ED-674 — Conviction resolution states, Portrait Retirement, Draft Portrait. Source: campaign_architecture_v1 §7.]
+[EDITORIAL: ED-686 — Conviction resolution states, Portrait Retirement, Draft Portrait. Source: campaign_architecture_v1 §7.]
 
 **Contradiction:** If a Conviction directly contradicts a Duty (§3), the player must choose which to pursue in any scene where both are relevant. This choice is the game's central tension for non-leader characters — personal meaning vs institutional obligation.
 

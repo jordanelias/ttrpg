@@ -275,7 +275,7 @@ Personal-scale systems that already have functional derived scores and should no
 
 The principle: add derived values only where the current stat-as-pool conflation causes granularity, feedback, or visibility problems. Personal-scale systems already solved this.
 
-[EDITORIAL: ED-683 — Derived stat system. Architectural addition to videogame layer. Does not modify existing board game / hybrid mechanics — adds a presentation and simulation layer for Godot implementation.]
+[EDITORIAL: ED-694 — Derived stat system. Architectural addition to videogame layer. Does not modify existing board game / hybrid mechanics — adds a presentation and simulation layer for Godot implementation.]
 
 ## §7 — Stat Modification Conversion Registry (PP-680)
 

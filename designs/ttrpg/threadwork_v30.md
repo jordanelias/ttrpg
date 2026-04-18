@@ -768,7 +768,7 @@ Branch on RM choice:
 
 **Thread-active settlement mapping:** A settlement is Thread-active if: (a) it is in a territory with Proximity ≤ 2 to T15 Askeheim, OR (b) it contains a POI tagged as a former Threadweaving site in geography_v30. Current Thread-active settlements: S-010 Stillhelm, S-011 Stillhelm Watch, S-031 Oastad, S-032 Oastad Shrine, S-033 Askeheim Ruins, S-034 Askeheim Gate, S-028 Grauwald (Einhir heritage site), S-029 Grauwald Lodge.
 
-[EDITORIAL: ED-682 — Thread Revelation Curve propagated. Source: campaign_architecture_v1 §4, historical_precedents_analysis §4.3.]
+[EDITORIAL: ED-693 — Thread Revelation Curve propagated. Source: campaign_architecture_v1 §4, historical_precedents_analysis §4.3.]
 
 ---
 

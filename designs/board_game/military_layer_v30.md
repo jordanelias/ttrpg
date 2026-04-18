@@ -132,7 +132,7 @@ The settlement where Muster occurs modifies the output:
 
 **Design rationale:** Fortress settlements represent established military infrastructure — barracks, armouries, training grounds. Units mustered there start larger because the infrastructure supports equipping more soldiers at once. This makes controlling Fortress settlements (Lowenskyst Fortress, Ehrenfeld Citadel, Spartfell Fortress) militarily meaningful beyond their defensive Fort Level. The player who controls more Fortress settlements fields a larger army.
 
-[EDITORIAL: ED-680 — Settlement Muster bonuses (simplified — Militia and Sapper unit types cut as unnecessary complexity). Source: historical_precedents_warfare.md §3.2.]
+[EDITORIAL: ED-691 — Settlement Muster bonuses (simplified — Militia and Sapper unit types cut as unnecessary complexity). Source: historical_precedents_warfare.md §3.2.]
 
 ### §1.6 Experience
 
@@ -445,7 +445,7 @@ During any season of active siege, either side may declare **Parley** — a Soci
 
 **Design rationale:** Most medieval sieges ended through negotiation, not storm. The Accord 2 outcome makes Parley mechanically attractive vs assault (which yields Accord 1). This creates a genuine choice: assault for speed (Accord 1, expensive to govern) or parley for governance quality (Accord 2, requires social capability).
 
-[EDITORIAL: ED-678 — Siege Parley and civilian consequences. Source: historical_precedents_warfare.md §2.]
+[EDITORIAL: ED-689 — Siege Parley and civilian consequences. Source: historical_precedents_warfare.md §2.]
 
 ---
 
@@ -465,7 +465,7 @@ A faction may move units to a territory border without declaring Battle — mili
 
 **Design rationale:** Most historical territorial transfers happened through threat of battle, not battle itself. Gun-boat diplomacy. This makes military capability strategically valuable beyond actual combat — a faction with Military 6 can compel concessions without fighting, avoiding RS and Strain costs.
 
-[EDITORIAL: ED-679 — Show of Force. Source: historical_precedents_warfare.md §4.3.]
+[EDITORIAL: ED-690 — Show of Force. Source: historical_precedents_warfare.md §4.3.]
 
 ---
 

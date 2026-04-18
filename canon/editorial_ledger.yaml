@@ -78,3 +78,93 @@
     severity: P1
     affects: [references/params_core.md, designs/fieldwork/fieldwork_v30.md, designs/systems/derived_stats_v1.md]
 
+  - id: ED-682
+    date: 2026-04-17
+    description: "Church settlement historical precedent integration — Parish Social Services, Pastoral Assumption. PP-675."
+    status: resolved
+    severity: P2
+    affects: [designs/systems/settlement_layer_v30.md]
+
+  - id: ED-683
+    date: 2026-04-17
+    description: "RM cell resilience mechanic. PP-675."
+    status: resolved
+    severity: P2
+    affects: [designs/systems/settlement_layer_v30.md]
+
+  - id: ED-684
+    date: 2026-04-17
+    description: "IP visibility milestones and Altonian Alignment (NPC-only). PP-675."
+    status: resolved
+    severity: P1
+    affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-685
+    date: 2026-04-17
+    description: "RM Presence → Underground Network conversion during Occupation. PP-675."
+    status: resolved
+    severity: P2
+    affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-686
+    date: 2026-04-17
+    description: "Conviction resolution states, Portrait Retirement, Draft Portrait. PP-675."
+    status: resolved
+    severity: P1
+    affects: [designs/systems/player_agency_v30.md]
+
+  - id: ED-687
+    date: 2026-04-17
+    description: "Campaign Supply — flat Treasury −100/season in hostile territory. PP-677/678."
+    status: resolved
+    severity: P1
+    affects: [designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-688
+    date: 2026-04-17
+    description: "Morale Cascade — rout spreads via Discipline Ob 1 check. PP-677."
+    status: resolved
+    severity: P2
+    affects: [designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-689
+    date: 2026-04-17
+    description: "Siege Parley and civilian consequences. PP-677."
+    status: resolved
+    severity: P2
+    affects: [designs/board_game/military_layer_v30.md]
+
+  - id: ED-690
+    date: 2026-04-17
+    description: "Show of Force — military demonstration without battle. PP-677."
+    status: resolved
+    severity: P2
+    affects: [designs/board_game/military_layer_v30.md]
+
+  - id: ED-691
+    date: 2026-04-17
+    description: "Settlement Muster bonuses — Fortress +1 Size. Militia/Sapper cut. PP-677/678."
+    status: resolved
+    severity: P3
+    affects: [designs/board_game/military_layer_v30.md]
+
+  - id: ED-692
+    date: 2026-04-17
+    description: "Accord by acquisition method — differentiated starting Accord. Cultural Reformation → Accord 3. PP-677."
+    status: resolved
+    severity: P1
+    affects: [designs/board_game/peninsular_strain_v1.md]
+
+  - id: ED-693
+    date: 2026-04-17
+    description: "Thread Revelation Curve propagated to threadwork_v30 §5.6. Hidden Thread-site bonus for RM. PP-677."
+    status: resolved
+    severity: P1
+    affects: [designs/ttrpg/threadwork_v30.md]
+
+  - id: ED-694
+    date: 2026-04-17
+    description: "Derived stat system — Treasury, Legitimacy, Reputation, Cohesion, Levies Available. 18 routine stat mods converted to derived value drain. PP-679/680."
+    status: resolved
+    severity: P0
+    affects: [designs/systems/derived_stats_v1.md, designs/mass_combat/mass_battle_v30.md, designs/board_game/military_layer_v30.md, designs/board_game/tc_political_redesign_v30.md, designs/board_game/peninsular_strain_v1.md, designs/board_game/victory_v30.md, designs/systems/settlement_layer_v30.md]

@@ -495,7 +495,7 @@ Over-pursuing exposes flanks. *[confirmed]*
 
 **Morale Cascade (NEW — historical_precedents_warfare §1.3c):** When a unit routs (Morale reaches 0), all friendly units in the same engagement make an immediate Discipline check (Ob 1). Failure: Morale −1. Multiple simultaneous routs compound — each triggers a separate cascade check. This models the historical reality where battles were lost when one section of the line broke and panic spread (Cannae, Hastings). The check is Ob 1 — Discipline 4 units pass ~87% — so cascades primarily threaten low-Discipline formations (Levy, militia), which is historically correct.
 
-[EDITORIAL: ED-677 — Morale Cascade. Source: historical_precedents_warfare.md §1.3c.]
+[EDITORIAL: ED-688 — Morale Cascade. Source: historical_precedents_warfare.md §1.3c.]
 
 ---
 
@@ -520,7 +520,7 @@ Units in friendly territory cost nothing (the population supports them).
 
 **Design rationale:** Historical armies could not exist indefinitely in hostile territory without economic support. One flat cost creates economic pressure to conquer quickly or consolidate — the player feels their treasury draining without tracking per-unit logistics.
 
-[EDITORIAL: ED-676 — Campaign Supply (simplified from per-unit table). Source: historical_precedents_warfare.md §1.3a.]
+[EDITORIAL: ED-687 — Campaign Supply (simplified from per-unit table). Source: historical_precedents_warfare.md §1.3a.]
 
 ### A.14c LEVY RESTRICTION (NEW — historical_precedents_warfare §1.3b, simplified)
 

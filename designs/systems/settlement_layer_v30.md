@@ -140,7 +140,7 @@ When a settlement has no governor (governor killed, faction collapsed, settlemen
 
 **Restrictions:** Pastoral Assumption does not change Provincial Authority — the province faction retains taxation, military, and legal framework. It only installs a Church Governor at the settlement level. The province faction may revoke this per §3.3 revocation rules (Ob = Church Influence ÷ 2, Order −1, Disposition −2 with Church).
 
-[EDITORIAL: ED-670 — Historical precedent integration for Church settlement mechanics. Source: historical_precedents_analysis.md §1.]
+[EDITORIAL: ED-682 — Historical precedent integration for Church settlement mechanics. Source: historical_precedents_analysis.md §1.]
 
 ---
 
@@ -268,7 +268,7 @@ Certain settlement types naturally align with subnational factions. The provinci
 
 **RM Cell Resilience (NEW — historical_precedents_analysis §3.4):** If RM has Presence markers in ≥ 3 settlements within a province, Church/Crown suppression actions against RM in that province take +1 Ob. Historical precedent (Solidarity in Poland, Bolshevik cells, ANC underground): distributed cell structures are harder to suppress than concentrated organizations because no single arrest can destroy the network. This modifier stacks with the Inquisitor surveillance +1 Ob (which represents surveillance, not suppression). Result: a well-distributed RM network in a territory with an Inquisitor faces +1 Ob to organize (surveillance) and gives the Church +1 Ob to suppress (resilience). Strategic equilibrium.
 
-[EDITORIAL: ED-671 — RM cell resilience mechanic. Source: historical_precedents_analysis.md §3.]
+[EDITORIAL: ED-683 — RM cell resilience mechanic. Source: historical_precedents_analysis.md §3.]
 
 **Granting management:** The province faction may grant management of a settlement to a subnational faction as a Domain Action (Influence, Ob 1 — it is an administrative act, not a contested one). The subnational faction's governor replaces the faction governor for that settlement. The province faction retains Provincial Authority (taxation, military, legal framework).
 
