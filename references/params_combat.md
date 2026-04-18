@@ -296,3 +296,14 @@ would reduce the pool below 5, it stays at 5 with no additional modifier.
 | Disengager loses/ties (contested) | Cannot disengage this round |
 
 Out of Breath (Stamina 0): −2D on Agility disengage roll. Wounds do not penalise disengage.
+
+## Thread Integration Cross-References (F-07)
+
+Combat mechanics operate on thread-configurations at the rendered level (Foundations A1). The following cross-references apply:
+
+- **Wound → Thread Ob:** +1 Ob per Wound to all Thread operations (threadwork_v30 §2.3). The body's damage impedes substrate-level suspension.
+- **Incapacitation → Thread contact:** Contact terminates immediately on incapacitation (threadwork_v30 §2.3). Operation in progress resolves as Failure.
+- **Death → Thread cascade:** Killing named NPC fires Knot rupture, Conviction Scar, Scene Slate entries, faction Stability trigger, Exposure (combat_v30 §13.3).
+- **Dissolution in combat:** RS cost per threadwork_v30 §5.2. Scar on all witnesses per npc_behavior_v30 §3.4. Companion Thread departure per companion_specification_v30 §6.1.
+- **Thread perception:** TS-sensitive observers perceive combat as thread events. See combat_v30 §10.2 and threadwork_v30 §2.3 ED-677 rendered-level visibility table.
+

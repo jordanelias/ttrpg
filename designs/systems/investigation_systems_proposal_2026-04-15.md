@@ -171,6 +171,20 @@ Evidence discovered in nodes appears on a **visual Case Board** — a map of con
 
 The Case Board is persistent across seasons (existing rule: Evidence Track carries forward). The visual representation makes the accumulation of evidence tangible, not abstract.
 
+### Case Board Thread Layer (ED-680)
+
+When a PC with TS ≥ 30 opens the Case Board, a toggle enables the **Thread Layer**:
+
+**Thread Layer ON:** Each evidence node shows dual-depth information:
+- **Rendered level** (always visible): physical evidence, testimony, documents
+- **Substrate level** (TS ≥ 30): thread-configuration data from Thread-Read operations
+
+Evidence from Thread-Read and evidence from mundane investigation that describe the same event are **linked**. The link is the constitutive insight: the physical trace and the substrate disruption are the same event at different depths.
+
+**Insight bonus:** When a player connects rendered evidence to substrate evidence for the same event, Evidence Track advances +1 (max 1 insight bonus per investigation).
+
+**Below TS 30:** Substrate evidence appears as "something is wrong here" — no linkage, no insight bonus.
+
 ### Temporal Dimension
 
 Drift NPCs create a temporal puzzle: the player must be at the right node at the right time. Time-of-day matters for:

@@ -437,10 +437,14 @@ The player states: (1) their primary Belief as currently written; (2) one specif
 
 If no faction engages with Askeheim (T15), RS trends toward 0 and a second Calamity occurs.
 
+**See also:** references/rs_budget.md (centralized RS drain/recovery budget), references/wc_survival_spine.md (WC as the mechanism of the survival contest).
+
+**The Two Contests:** The campaign presents two simultaneous contests: (1) political sovereignty — which faction governs, and (2) world survival — does the world survive. WC is the mechanism of Contest 2. RS 0 = Rupture = all factions lose. See wc_survival_spine.md for the full strategic architecture, including the IP/expedition resource tension that makes the contests compete.
+
 **Warden Cooperation track (0–3):**
 - WC ≥ 1: +1D to all Thread operations peninsula-wide.
-- WC ≥ 2: RS decay rate halved.
-- WC ≥ 3: RS +2/season at Accounting.
+- WC ≥ 2: All RS drain from Gaps and Locks halved.
+- WC ≥ 3: RS +2/season at Accounting (Edeyja active Mending). **This is the singular endgame survival path** — see rs_budget.md Scenario C.
 
 Multiple victory conditions require RS thresholds. A faction that ignores RS risks losing to Rupture regardless of territorial control.
 

@@ -53,7 +53,7 @@
   - id: ED-680
     date: 2026-04-17
     description: "Case Board dual-depth overlay. investigation_systems."
-    status: open
+    status: resolved
     severity: P3
     affects: [designs/systems/investigation_systems_proposal_2026-04-15.md]
 
