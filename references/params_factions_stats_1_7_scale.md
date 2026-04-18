@@ -1,0 +1,362 @@
+## Stats (1–7 scale)
+
+Mandate / Influence / Wealth / Military / Intel / Stability
+Seasonal cap: ±2 per stat per season (TTRPG); ±varies (BG — see accounting).
+
+## Starting Stats
+
+| Faction | M (TTRPG) | M (BG) | I | W (TTRPG) | W (BG) | Mil | Int | Sta |
+|---------|-----------|--------|---|-----------|--------|-----|-----|-----|
+| Crown | 5 | 5 | 5 | 4 | 4 | 4 | — | 4 |
+| Church | 5 | 5 | 6 | 5 | 5 | 4 | — | 5 |
+| Hafenmark | 4 | 4 | 4 | 5 | 5 | 3 | — | 4 |
+| Varfell | 4 | 4 | 4 | 4 | 4 | 4 | — | 4 |
+| Guilds | 3 | 3 | 4 | 6 | 6 | 2 | — | 5 |
+| Niflhel | — | — | 5 | 4 | 4 | — | — | 4 |
+| Restoration Movement | — | — | — | — | — | — | — | — | No faction stats (PP-460). Operates via Presence markers and Community Weaving. Victory via Cultural Uprising of T9 Himmelenger. |
+| Löwenritter | — | 3 | 2/3 | — | — | 5/6 | 3 | 5/4 |
+
+Note: Varfell BG Mandate 3/Wealth 3 is intentional (political isolation at game start, not their full institutional depth).
+
+## Clock Starting Values
+
+| Clock | TTRPG | BG (bg_v05 P-32) | Shared Loss |
+|-------|-------|-----------------|-------------|
+| Theocracy Counter | 0 | 28 | — |
+| Rendering Stability | 60 | 72 | Rendering Stability = 0 |
+| Institutional Pressure | 20 | 20 | — |
+| Public Instability | — | 5 | — |
+
+## Domain Action Rules (TTRPG)
+
+Ob = floor(relevant stat / 2) + 1.
+Attacker bonus dice: own faction's relevant stat if holding faction leadership.
+Non-Player Character faction rolls: relevant stat as d10 pool, TN 7.
+
+## TC Passive Advance (PP-402)
+
+Theocracy Counter (TC) advances by **+1 per season** from institutional momentum, regardless of Church action.
+Applied at Accounting before Assert/Suppress resolution.
+
+| Action | TC effect |
+|--------|-----------|
+| Passive baseline | +1 (always) |
+| Assert (Church) | +2 total (replaces passive; not additive) |
+| Suppress (Crown or Hafenmark Domain Action) | Negates passive +1 for that season only. TC does not decrease. Ob = floor(Church Mandate / 2) + 1 ÷ 2 (round up, min 1). |
+
+Suppress may be declared once per season by one faction. It cannot reduce TC below its value at season start.
+TTRPG: same rule applies. BG: same rule applies; Suppress is a Standard Action consuming one card.
+
+## Failed Domain Action Stability Cost (PP-403)
+
+A Domain Action that results in **Failure** (net successes ≤ 0) costs the acting faction **−1 Stability**.
+Partial success (net > 0 but < Ob): no Stability cost.
+Success/Overwhelming: normal effect, no cost.
+
+**Scope exclusions:**
+- Does not apply to self-improvement Domain Actions (acting faction targeting own stats).
+- Does not apply to TTRPG personal scene rolls or Thread operations.
+- Does not apply to Restoration Movement (RM has no Stability — PP-460).
+- Applies to faction-layer Domain Actions only.
+
+**Stability 1 edge case:** If Stability is already 1, a Failure reduces it to 0, triggering an immediate Stability Check (existing mechanic). Factions with low Stability are further discouraged from sub-threshold gambles.
+
+## Ethical Framework Ob Modifiers
+
+| Condition | Modifier |
+|-----------|---------|
+| Action aligned with framework | −1 Ob |
+| Action contradicts framework | +1 Ob |
+| Church only: reveals Thread truth | +2 Ob |
+
+## Leadership Deviation Stability Check Obs
+
+Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Restoration Movement: 2 | Löwenritter: 2
+
+## Unique Actions (TTRPG, from stage6)
+
+| Faction | Action | Roll | Effect |
+|---------|--------|------|--------|
+| Crown | Royal Decree | Mandate vs Ob 2 | One faction stat ±1 immediate. Consecutive: +1 Ob/season. Cannot target Intel. |
+| Church | Excommunication | Mandate vs target Mandate (leader) / Ob 2 (non-leader) | Strips Circles bonus; target faction Mandate −1. Reversal: Grand Debate (5 exchanges) or new Confessor. |
+| Church | Theocracy Counter 60 Territorial Seizure | Mandate vs floor(owner's Mandate / 2) + 1 | Per-territory roll. Success: administrative control. Failure: Mandate −1. |
+| Restoration Movement | Community Weaving | Presence markers −1 Ob (base Ob 2) | Mending Mandate prerequisite: Mandate ≥ 1 |
+| [Others] | See stage6_factions.md §8.4–8.9 | — | Hafenmark, Varfell, Guilds, Niflhel, Löwenritter unique actions not extracted |
+
+## Nine Political Axes (qualitative — not tracked numerically)
+
+1. Sovereignty: Crown authority vs Church authority
+2. Knowledge: Thread truth accessible vs suppressed
+3. Legitimacy: Constitutional monarchy vs Theocratic governance
+4. Cultural identity: Einhir recovery vs Colonial settlement
+5. Economic control: Guild autonomy vs State/Church taxation
+6. Military authority: Ducal/Crown vs Templar independence
+7. Information: Transparency vs Secrecy
+8. External threat: Accommodation vs Resistance to Altonia
+9. Ontological: World as it appears vs World is more
+
+## Faction Non-Player Character Trigger Conditions (key)
+
+| Non-Player Character | Trigger | Effect |
+|-----|---------|--------|
+| Ehrenwall | Coup trigger | Martial Law; Crown Loyalty check |
+| Vaynard | TK threshold | Research acceleration |
+| Baralta | Theocracy Counter suppression | Church Mandate −1/season while Mandate ≥ 4 |
+| Schoenland | Active spoiler | Various faction disruptions |
+
+Rendering Stability ≤ 10 adds +1 to coup/succession trigger check pools.
+
+## Unique Actions — All Factions (PP-168)
+
+### Crown — Royal Decree
+Roll: Mandate vs Ob 2. Once per season.
+| Degree | Result |
+|--------|--------|
+| Overwhelming | One faction stat ±1 immediate; consecutive seasons: +1 Ob/season |
+| Success | One faction stat ±1 immediate; consecutive seasons: +1 Ob/season |
+| Failure | — |
+Cannot target Intel. Effect is immediate and unilateral.
+
+### Church — Excommunication
+Roll: Mandate vs floor(target Mandate / 2) + 1 (faction leader) or Ob 2 (non-leader).
+| Degree | Result |
+|--------|--------|
+| Success | Strips target's Circles bonus; target faction Mandate −1 |
+| Failure | — |
+Reversal: Grand Debate (5 exchanges) or new Confessor appointed.
+
+### Church — TC 60 Territorial Seizure
+Trigger: Theocracy Counter (TC) reaches 60. Fires once per territory.
+Roll: Mandate vs floor(owner's Mandate / 2) + 1.
+| Degree | Result |
+|--------|--------|
+| Success | Administrative control of territory. Domain Actions vs Church authority require +2 Ob. Flat Theocracy Counter value fires immediately. |
+| Failure | Mandate −1 |
+Riskbreaker exposure removes seized territory and prevents re-seizure for one season.
+
+### Hafenmark — Sovereign Authority Doctrine
+Roll: Mandate vs Ob 4. Once per campaign arc.
+| Degree | Result |
+|--------|--------|
+| Overwhelming | Theocracy Counter −3; Church Mandate −1; Heresy Investigation blocked this season; +1D social vs Church for the arc |
+| Success | Theocracy Counter −2; Church Mandate −1; Heresy Investigation opens (Ob 4 to pursue) |
+| Partial | Theocracy Counter −1; Heresy Investigation opens immediately; Church Influence +1 |
+| Failure | Theocracy Counter +1; Heresy Investigation immediate; Baralta's Mandate −1 |
+TC Suppression: while Baralta's Mandate ≥ 4, Theocracy Counter −1/season. Suppression ends if Mandate < 4 or excommunication (TC +4 immediately).
+
+### Varfell — The Private Collection
+Roll: Intel vs Ob 2. Once per season.
+| Degree | Result |
+|--------|--------|
+| Success (choose one) | +2D to one Thread-related Domain Action this season; OR reveal one hidden faction attribute; OR −1 Ob to one Einhir Research action this season |
+| Failure | Artefact's Thread signature detected by a practitioner; Church Intel +1D vs Varfell for 1 season; Thread Tension +1 |
+Long-term cost: each use: +1 to Vaynard's hidden Thread Sensitivity (TS). At Thread Sensitivity 14+, each use triggers Spirit check TN 7 Ob 1 for a Discovery Event.
+Player Character takeover: collection transfers as institutional asset; triggers mandatory Discovery Event for new leader (Spirit TN 7 Ob 1; Success: Thread Knowledge (TK) +1; Failure: Certainty −1, new Belief offered).
+
+### Guilds — Economic Leverage
+Trigger: Guild Favour ≥ 5 in target territory (1–7 territory track).
+Roll: Wealth vs target faction's Wealth.
+| Degree | Result |
+|--------|--------|
+| Overwhelming | Target loses 1 Wealth + 1 Prosperity in that territory |
+| Success | Target faction loses 1 Wealth for 1 season |
+| Failure | Guild Favour −1 in that territory |
+Cannot target factions in territories where Guild Favour < 5.
+
+### Niflhel — The Quiet Network
+Choose mode before rolling. One deployment per season.
+**Intelligence mode:** Intel vs target's Intel → Success: learn one hidden faction attribute or one Non-Player Character's active Belief; Overwhelming: learn two.
+**Sabotage mode:** Intel vs target's Stability → Success: Stability −1; Failure: operative exposed (Niflhel Intel −1 for 1 season; target gains Grievance Marker).
+**Assassination mode:** Intel vs target's Intel +2 → Overwhelming: Non-Player Character eliminated, no evidence; Success: eliminated, evidence trail; Partial: wounded, evidence trail; Failure: operative captured, full exposure, Niflhel Stability −2.
+Long-term cost: each Quiet deployment this season: Thread Tension +0.5 (cumulative).
+
+### Restoration Movement — Community Weaving
+Roll: Influence vs Ob = Thread Tension ÷ 20 (round up).
+Requires: at least one practitioner with Thread Sensitivity (TS) 30+ affiliated with the Restoration Movement.
+| Degree | Result |
+|--------|--------|
+| Overwhelming | Thread Tension −2 |
+| Success | Thread Tension −1 |
+| Partial | Thread Tension unchanged; Stability −1 |
+| Failure | Stability −1; Thread Tension +1 |
+Co-Movement Card drawn on every result (P-01 compliance).
+Prerequisite: Mandate ≥ 1 for Mending prerequisite (see stage6 §8.8).
+
+### Löwenritter — Martial Law / Coup Trigger
+No standard Unique Action roll — Löwenritter action is triggered by Coup Counter reaching 4.
+**Coup Counter increments (+1 each):**
+- Theocracy Counter reaches 40 while Crown took no action to reduce it that season
+- Torben's loyalty reaches 3–2 or lower
+- Crown loses 2+ territories in one season without a military response Domain Action
+Counter never decrements. Fires at next seasonal accounting once at 4. (PP-577: threshold unified to 4, per params_board_game canonical)
+**Martial Law effects:** All non-Military Domain Actions in Crown territories require secondary Military check (Löwenritter Military pool, TN 7, Ob 2); failure blocks the action. Persists until players remove it (Influence vs Ob = Löwenritter Military ÷ 2, round up, min Ob 3) or Theocracy Counter drops below 40.
+
+## Mandate Recovery (ED-066b resolved — provisional)
+
+Factions with Mandate < starting value recover +1 Mandate/season when:
+- No hostile Domain Action targeting that faction this season
+- Stability ≥ 2
+Cap: cannot recover above starting Mandate value via this mechanic. [PROVISIONAL]
+
+## Hafenmark Wealth Sink (ED-064b resolved — provisional)
+
+Wealth above 5 may be spent as bonus dice on trade-adjacent Domain Actions:
+- 1 Wealth token → +1D on Trade or Diplomacy Domain Action (max +2D per action)
+- Token is consumed on spend
+[PROVISIONAL]
+
+## Military Stat Change on Unit Destruction (ED-017 resolved — provisional)
+
+When a unit is destroyed in TTRPG mass combat: Faction Military −1 (immediate). Cap: −2 per season from destruction. [PROVISIONAL]
+
+## Military Seasonal Cap (ED-039 resolved — provisional)
+
+Military stat cap: ±2/season from all Domain Actions combined. Hard cap = faction Military rating (cannot exceed starting value +1 via Domain Actions alone). [PROVISIONAL]
+
+## Institutional Mandate Trigger (ED-003 resolved — provisional)
+
+Institutional Mandate fires when:
+- Faction Mandate ≥ 4, AND
+- A Domain Action directly challenges the faction's core institutional authority:
+  Crown: sovereignty or legal authority; Church: spiritual authority or excommunication power;
+  Guilds: trade monopoly or taxation; Hafenmark: guild autonomy; Varfell: territorial governance;
+  Restoration: community organizing; Löwenritter: military authority.
+[PROVISIONAL]
+
+## PC Faction Embedding — BG Layer (ED-075 resolved — provisional)
+
+PCs are always mechanically present in their primary faction between Zoom Ins.
+Effect: the PC's faction gains +1D on one Domain Action per season in territories the PC is physically located in (narrative confirmation required). [PROVISIONAL]
+
+## Institutional Mandate — Uphold / Appease (PP-189)
+
+Trigger: Mandate ≥ 4 AND Domain Action directly challenges faction core institutional authority.
+| Choice | Timing | Effect | Cost |
+|--------|--------|--------|------|
+| Uphold | Before roll | Roll proceeds | None |
+| Appease | Before roll | Action cancelled | Mandate −1 |
+NPC: Appease if Mandate ≥ 4 AND Stability ≤ 3.
+
+## Community Weaving — Procedure (PP-195) [PROVISIONAL]
+
+Revolution Domain Action. Pool: Mandate (as dice) + History, TN 7, Ob 3. Prerequisite: Mandate ≥ 1.
+| Degree | RS Effect | Other |
+|--------|-----------|-------|
+| Overwhelming | RS +2 | Mandate unchanged |
+| Success | RS +1 | Mandate unchanged |
+| Partial | RS +0 | Wasted action |
+| Failure | RS +0 | Mandate −1 |
+Frequency: once per season. Consumes 1 Domain Action.
+
+## Simultaneous Catastrophe Rule (PP-199 — ED-077)
+
+If RS=0 AND IP≥80 both trigger in the same Accounting phase:
+1. RS=0 resolves first (Shared Loss: game-ending Thread collapse condition).
+2. IP≥80 Altonian invasion pressure resolves second.
+Both are independent effects. Priority: RS=0 > IP threshold. If RS=0 triggers Shared Loss end condition, IP escalation is moot.
+
+## Reformed Settlement Standing Effect (PP-201 — ED-081)
+
+When Reformed Settlement is in force (Theocracy Counter ≥ 40 and Church has Resisted):
+- All Diplomacy Domain Actions targeting Hafenmark: permanent +1 Ob (Church institutional antagonism).
+- Effect persists until Theocracy Counter drops below 40 OR Reformed Settlement is withdrawn.
+[Source: bg_v05 Cascade Test 2 simulation]
+
+## Restoration Movement — Named NPCs (ED-005 resolved 2026-04-03)
+
+1. **MARET VOSSEN** — Primary contact. Grassroots organiser. TS 0, Charisma 5+, Circles 3+ in working-class networks. Non-practitioner. Full stat block deferred to campaign development.
+2. **ALDRIC HANN** — Operational doer. Lower Charisma than Vossen, higher Circles in logistics and street-level networks. Full stat block deferred.
+
+## Riskbreakers — Identity Confirmed (ED-006 resolved 2026-04-03)
+
+Extralegal arm of the Löwenritter. Small-cadre elite consequentialists loyal to Valoria as concept — not to Crown, institution, or faith.
+Will go extralegal (blackmail, hostage, theft, murder) when judged necessary for Valoria's survival.
+Existence known only to Crown and Lions' Table. Active concealment is core doctrine.
+Some members are Thread Practitioners. Operate alone or in small teams; present as ordinary people.
+Will not permit Valoria to fall under weak-willed, foreign, or religious rule.
+Parallel archetype: Shadow Warriors (Sousou no Frieren).
+Individual profiles and stat blocks deferred to campaign development.
+
+---
+<!-- PP-236 applied 2026-04-04: Crown covert actions rule -->
+<!-- PP-237 applied 2026-04-04: Public Instability Hybrid definition -->
+<!-- PP-238 applied 2026-04-04: Lowenritter reactive Military NPC guidance -->
+<!-- PP-241 applied 2026-04-04: Crown-Lowenritter covert delegation rule (PROVISIONAL) -->
+<!-- PP-244 applied 2026-04-04: Scene→Mass transition modifier table (PROVISIONAL) -->
+<!-- PP-246 applied 2026-04-04: Niflhel + Lowenritter ethical framework modifiers extracted -->
+
+## Crown Covert Actions (PP-236) [PROVISIONAL — ED-147]
+
+Crown has NO Intel stat. Crown covert actions (investigation, sabotage, intelligence gathering) use the **Influence** pool at **+1 Ob**. This is a faction design constraint: Crown is institutionally weakest at covert operations. The +1 Ob penalty applies to all Crown-initiated covert Domain Actions regardless of the action's formal label.
+
+## Crown-Lowenritter Covert Delegation (PP-241) [PROVISIONAL — ED-149]
+
+When Crown delegates a covert Domain Action to Lowenritter, the roll uses **Lowenritter Intel** pool. The Crown covert +1 Ob penalty does NOT apply — the constraint is institutional, not operational. Lowenritter acts as Crown's deniable agent. Political consequences of Lowenritter action discovery fall on Crown, not Lowenritter.
+
+## Public Instability — Hybrid Mode (PP-237) [PROVISIONAL — ED-148]
+
+Public Instability is a Hybrid-mode secondary clock.
+- Range: 0–10. Starting value: 5.
+- In TTRPG mode: not a separate clock. Effects folded into Institutional Pressure.
+- Hybrid increases: +1 per season Revolution Agitation resolves (any degree); +1 per season IP increases while TC > 40.
+- Hybrid decreases: −1 per season Crown or Guilds completes successful social Domain Action in contested territory.
+- Threshold 8: Revolution gains one free Agitation action at no Domain Action cost.
+- Threshold 10: Shared loss condition check (Institutional collapse — distinct from RS=0 Rupture).
+
+## Lowenritter Reactive Military NPC Guidance (PP-238)
+
+Lowenritter NPC AI priority: if any bordering faction's Military exceeds Lowenritter Military, Lowenritter NPC AI prioritises Military Consolidation (internal) the following season. This is a guidance rule, not a threshold mechanic — no automatic trigger fires.
+
+## Scene→Mass Transition Modifiers — Hybrid (PP-244) [PROVISIONAL — ED-151]
+
+When a personal combat scene precedes or overlaps a Strategic Phase mass action:
+- PC Overwhelming success: mass action at −1 Ob (officer neutralised, morale advantage)
+- PC Success: no modifier
+- PC Partial: mass action at +1 Ob (position degraded)
+- PC Failure: mass action at +2 Ob (PC captured/incapacitated; morale cost)
+Mid-combat zoom: pause combat. Resolve Strategic Phase. Apply mass outcome as context. Resume personal combat next session.
+
+## Ethical Framework Modifiers — Niflhel and Lowenritter (PP-246)
+
+| Faction | Framework | Aligned (−1 Ob) | Contradict (+1 Ob) |
+|---------|-----------|----------------|-------------------|
+| Niflhel | Transactional Survival | Covert actions (always −1 Ob; covert is their native mode) | Open/public actions |
+| Löwenritter | Martial Honour | Military actions + Crown-loyal actions | Political manipulation; acting against Crown interest |
+
+## PP-242 — Seasonal cap timing
+
+±2 cap applied at accounting. Multiple actions within a season tally; net clipped at accounting.
+
+## PP-243 — Royal Decree partial-sheet
+
+Decree may only target stats present on target faction's sheet.
+
+## PP-244 — PC excommunication succession
+
+Excommunicated PC faction leader: faction reverts to NPC institutional tendency until PC reinstated (Reversal) or replacement designated (Influence DA Ob 2 or GM succession).
+
+## PP-246 — DA→Contest escalation
+
+DA always produces outcome. Contest escalation only when: (a) both parties present, (b) stakes contested, (c) DA roll = Partial. On Partial: Contest at Conviction Track 5. On Success/Failure: no Contest.
+
+## PP-254 — TC seizure classification
+
+Territory seizure TC gains = distinct category (not DA). All TC sources subject to ±5/season combined cap. ±3 DA sub-cap does not apply to seizure.
+
+## PP-255 — Public Instability full design (BG)
+
+Range 0–10. Start 5. Accrual: +1/season any faction Mandate < 3 at accounting. Recovery: −1/season zero hostile Stability-targeting DAs. PI ≥ 8: revolt check (Stability ≤ 3 factions → Stability Ob 2; fail → Mandate −1). PI = 10: GM narrative uprising event.
+
+## ED-174 provisional — PI cascade brake
+
+At PI ≥ 8: factions passing Stability Ob 2 gain Stability +1. PI increase cap +2/season from all sources combined. Awaiting user confirmation.
+
+## PP-281 — PI cascade brake
+
+At PI ≥ 8: revolt-pass → Stability +1. PI increase rate cap: +2/season max from all combined sources.
+
+## ED-005 Resolution (PP-286) — Restoration Movement Leader [FLAGGED]
+
+Primary NPC contact: **Maret Vossen** (confirmed existing). Secondary: **Aldric Hann**.
+Full stat blocks deferred to campaign development. Names canonical from existing params.
+[FLAGGED: stat blocks required before NPC roster compilation.]
