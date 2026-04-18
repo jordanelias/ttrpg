@@ -110,7 +110,7 @@ systems:
     status: active
     canonical: designs/architecture/scale_transitions_v30.md
     canonical_sha__designs__architecture__scale_transitions_v30_md: "b3bd53481d9577e9d7e097b6608fc6fd3cf8b075"
-    canonical_sha__compilation__v0_14__stage11_scale_transitions_deprecated_md: "277e7ffb787cf6af153462b4cee3bcea09ae4ec6"
+    canonical_sha__deprecated__compilation__v0_14__stage11_scale_transitions_deprecated_md: "277e7ffb787cf6af153462b4cee3bcea09ae4ec6"
     params: null
     design_doc: null
 
