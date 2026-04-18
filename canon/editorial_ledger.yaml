@@ -1,69 +1,6 @@
 # Valoria Editorial Ledger — Active
 # next_id: 684
 
-  - id: ED-673
-    date: 2026-04-17
-    description: "Thread Domain Echo pathway. scale_transitions_v30."
-    status: resolved
-    severity: P1
-    affects: [designs/hybrid/scale_transitions_v30.md]
-
-  - id: ED-674
-    date: 2026-04-17
-    description: "Scene Slate thread-state factor. player_agency_v30."
-    status: resolved
-    severity: P1
-    affects: [designs/systems/player_agency_v30.md]
-
-  - id: ED-675
-    date: 2026-04-17
-    description: "Settlement Thread environment. settlement_layer_v30."
-    status: resolved
-    severity: P1
-    affects: [designs/systems/settlement_layer_v30.md]
-
-  - id: ED-676
-    date: 2026-04-17
-    description: "CV movement from Thread operations. conviction_track_v30."
-    status: resolved
-    severity: P2
-    affects: [designs/conviction_track/conviction_track_v30.md]
-
-  - id: ED-677
-    date: 2026-04-17
-    description: "Thread perception extension. threadwork_v30."
-    status: resolved
-    severity: P2
-    affects: [designs/ttrpg/threadwork_v30.md]
-
-  - id: ED-678
-    date: 2026-04-17
-    description: "Lifepath TS/Certainty derivation. character_histories_v30."
-    status: resolved
-    severity: P2
-    affects: [designs/characters/character_histories_v30.md]
-
-  - id: ED-679
-    date: 2026-04-17
-    description: "Thread Warfare NPC AI doctrine. npc_behavior_v30."
-    status: resolved
-    severity: P1
-    affects: [designs/systems/npc_behavior_v30.md]
-
-  - id: ED-680
-    date: 2026-04-17
-    description: "Case Board dual-depth overlay. investigation_systems."
-    status: resolved
-    severity: P3
-    affects: [designs/systems/investigation_systems_proposal_2026-04-15.md]
-
-  - id: ED-681
-    date: 2026-04-17
-    description: "Rendering Crisis narrative structure. threadwork_v30."
-    status: resolved
-    severity: P3
-    affects: [designs/ttrpg/threadwork_v30.md]
-
   - id: ED-682
     date: 2026-04-18
     description: "Derived stats integration — §8 personal-scale applications added: Bonds→Disposition cap propagated to fieldwork §5.1, Army Morale composite added to mass_battle cross-ref, Renown→governance penalty bridge added to player_agency §5.4, Garrison Strength combat feedback added to combat §13.2b. §8.5 documents what NOT to add."
@@ -103,93 +40,50 @@
     resolution: "[GAP: Source doc not located. Mechanic cited in REICH-SIM-01. Requires source before cap can be applied.]"
     affects: [unknown]
 
-  - id: ED-682
-    date: 2026-04-17
-    description: "Church settlement historical precedent integration — Parish Social Services, Pastoral Assumption. PP-675."
-    status: resolved
-    severity: P2
-    affects: [designs/systems/settlement_layer_v30.md]
-
-  - id: ED-683
-    date: 2026-04-17
-    description: "RM cell resilience mechanic. PP-675."
-    status: resolved
-    severity: P2
-    affects: [designs/systems/settlement_layer_v30.md]
-
-  - id: ED-684
-    date: 2026-04-17
-    description: "IP visibility milestones and Altonian Alignment (NPC-only). PP-675."
+  - id: ED-576
+    date: 2026-04-18
+    description: "Post-combat fieldwork when player fled undefined."
     status: resolved
     severity: P1
-    affects: [designs/board_game/victory_v30.md]
+    resolution: "Fled/Retreated transition added to combat_v30 §11.5. No post-combat scene; site becomes standard POI; evidence degrades +1 Ob/season. Exposure still applies."
+    affects: [designs/combat/combat_v30.md]
 
-  - id: ED-685
-    date: 2026-04-17
-    description: "RM Presence → Underground Network conversion during Occupation. PP-675."
-    status: resolved
-    severity: P2
-    affects: [designs/board_game/victory_v30.md]
-
-  - id: ED-686
-    date: 2026-04-17
-    description: "Conviction resolution states, Portrait Retirement, Draft Portrait. PP-675."
+  - id: ED-577
+    date: 2026-04-18
+    description: "Co-Movement Cards 1-15 not in canonical docs."
     status: resolved
     severity: P1
-    affects: [designs/systems/player_agency_v30.md]
-
-  - id: ED-687
-    date: 2026-04-17
-    description: "Campaign Supply — flat Treasury −100/season in hostile territory. PP-677/678."
-    status: resolved
-    severity: P1
-    affects: [designs/mass_combat/mass_battle_v30.md]
-
-  - id: ED-688
-    date: 2026-04-17
-    description: "Morale Cascade — rout spreads via Discipline Ob 1 check. PP-677."
-    status: resolved
-    severity: P2
-    affects: [designs/mass_combat/mass_battle_v30.md]
-
-  - id: ED-689
-    date: 2026-04-17
-    description: "Siege Parley and civilian consequences. PP-677."
-    status: resolved
-    severity: P2
-    affects: [designs/board_game/military_layer_v30.md]
-
-  - id: ED-690
-    date: 2026-04-17
-    description: "Show of Force — military demonstration without battle. PP-677."
-    status: resolved
-    severity: P2
-    affects: [designs/board_game/military_layer_v30.md]
-
-  - id: ED-691
-    date: 2026-04-17
-    description: "Settlement Muster bonuses — Fortress +1 Size. Militia/Sapper cut. PP-677/678."
-    status: resolved
-    severity: P3
-    affects: [designs/board_game/military_layer_v30.md]
-
-  - id: ED-692
-    date: 2026-04-17
-    description: "Accord by acquisition method — differentiated starting Accord. Cultural Reformation → Accord 3. PP-677."
-    status: resolved
-    severity: P1
-    affects: [designs/board_game/peninsular_strain_v1.md]
-
-  - id: ED-693
-    date: 2026-04-17
-    description: "Thread Revelation Curve propagated to threadwork_v30 §5.6. Hidden Thread-site bonus for RM. PP-677."
-    status: resolved
-    severity: P1
+    resolution: "Full 15-card table added to threadwork_v30 §4.3. All TT references converted to RS (inverted). Deck composition note added."
     affects: [designs/ttrpg/threadwork_v30.md]
 
-  - id: ED-694
-    date: 2026-04-17
-    description: "Derived stat system — Treasury, Legitimacy, Reputation, Cohesion, Levies Available. 18 routine stat mods converted to derived value drain. PP-679/680."
+  - id: ED-578
+    date: 2026-04-18
+    description: "TTRPG mass battle melee damage formula implicit."
     status: resolved
-    severity: P0
-    affects: [designs/systems/derived_stats_v1.md, designs/mass_combat/mass_battle_v30.md, designs/board_game/military_layer_v30.md, designs/board_game/tc_political_redesign_v30.md, designs/board_game/peninsular_strain_v1.md, designs/board_game/victory_v30.md, designs/systems/settlement_layer_v30.md]
+    severity: P1
+    resolution: "combat_v30 §9 PP-086 now cross-references mass_battle_v30 Phase 5 as canonical formula. PP-086 retained for personal-scale abstraction only."
+    affects: [designs/combat/combat_v30.md]
+
+  - id: ED-581
+    date: 2026-04-18
+    description: "Social initiative deterministic vs combat rolled."
+    status: resolved
+    severity: P1
+    resolution: "social_contest_v30 §5 changed to rolled initiative (Attunement vs Attunement, TN 7, Ob 1). Aligns with combat initiative. ED-138 resolved."
+    affects: [designs/contest/social_contest_v30.md]
+
+  - id: ED-582
+    date: 2026-04-18
+    description: "Chain Contest Resistance-2 stall not documented."
+    status: resolved
+    severity: P1
+    resolution: "Deadlock rule added to social_contest_v30 §6.3. Two consecutive zero-movement exchanges: Resistance drops by 1. Third consecutive zero-movement: contest ends as Compromise."
+    affects: [designs/contest/social_contest_v30.md]
+
+  - id: ED-663
+    date: 2026-04-18
+    description: "Haushalt Competence 3 +2 Wealth/season has no cap."
+    status: resolved
+    severity: P1
+    resolution: "Mechanic canonicalized in derived_stats_v1 Treasury section. Income = Competence x 25 gold/season, capped at Wealth x 50/season."
+    affects: [designs/systems/derived_stats_v1.md]

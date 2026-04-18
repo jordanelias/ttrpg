@@ -40,6 +40,7 @@ Each derived value has **seasonal income** (automatic at Accounting) and **drain
 - Seasonal income: Σ(Prosperity of controlled settlements) × 10 gold/season
 - Trade Success: +Wealth × 25 gold (one-time)
 - Trade Overwhelming: +Wealth × 50 gold
+- Haushalt Competence bonus: +Competence × 25 gold/season (Competence 0–3). Cap: Haushalt Competence income cannot exceed Wealth × 50 per season. At Wealth 4/Competence 3: +75/season, capped at 200. (ED-663 resolution: mechanic canonicalized here with cap to prevent unbounded generation. Competence income supplements but cannot dominate territorial Prosperity income.)
 - Campaign Supply (units in hostile territory): −100 gold/season
 - Siege (attacker): −100 gold/season per active siege
 - Muster (Levy): −50 gold

@@ -7,11 +7,11 @@
 | ID | Source | Description | ED |
 |----|--------|-------------|-----|
 | SIM2-01 | ST-01 | 2x Senator Assert engine too fast | ED-572 (resolved) |
-| SIM2-05 | ST-06 | Post-combat fieldwork when player fled undefined | ED-576 |
-| SIM2-06 | ST-07 | Co-Movement Cards 1-15 not in canonical docs | ED-577 |
-| SIM2-07 | ST-07 | TTRPG mass battle melee damage formula implicit | ED-578 |
-| SIM2-10 | ST-03 | Social initiative deterministic vs combat rolled | ED-581 |
-| SIM2-11 | ST-03 | Chain Contest Resistance-2 stall not documented | ED-582 |
+| SIM2-05 | ST-06 | Post-combat fieldwork when player fled undefined | Resolved — ED-576 |
+| SIM2-06 | ST-07 | Co-Movement Cards 1-15 not in canonical docs | Resolved — ED-577 |
+| SIM2-07 | ST-07 | TTRPG mass battle melee damage formula implicit | Resolved — ED-578 |
+| SIM2-10 | ST-03 | Social initiative deterministic vs combat rolled | Resolved — ED-581 |
+| SIM2-11 | ST-03 | Chain Contest Resistance-2 stall not documented | Resolved — ED-582 |
 | SIM3-04 | NPC-03 | Arc state vs Priority 6 at Mandate < 3 | ED-586 |
 | SIM3-07 | Zoom In | Stability Crisis Zoom In trigger absent | ED-587 |
 | SIM4-01 | ST-14 | RM Phase 2 T9 holding condition unreachable | ED-588 |
@@ -218,7 +218,7 @@ Resume trigger: (a) user-initiated simulation review, or (b) patch to faction_po
 
 | ID | Source | Description | Status |
 |----|--------|-------------|--------|
-| REICH-SIM-01 | Reichard | Haushalt Competence 3 +2/season has no Wealth cap — unbounded resource generation over long campaigns | Open — ED-663 |
+| REICH-SIM-01 | Reichard | Haushalt Competence 3 +2/season has no Wealth cap — unbounded resource generation over long campaigns | Resolved — ED-663 |
 
 ### Confirmed Working
 

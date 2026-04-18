@@ -335,6 +335,14 @@ Rescued actor exemptions expire at round end.
 
 
 ### PP-086 — Base Damage Formula (mass combat)
+
+**Canonical mass battle melee damage: mass_battle_v30 §A.7 Phase 5.** The formula below (PP-086) applies to personal-scale mass combat abstraction only (when the engine resolves a skirmish without entering full mass battle). For full mass battle engagement damage, use:
+
+> Damage = max(0, net hits + weapon modifier − DR)
+
+where net hits = Offence successes − Defence successes, weapon modifier per §A.2, DR per unit armour tier. Critical hit (net hits ≥ 3): weapon modifier doubled. (ED-578 resolution)
+
+**Personal-scale mass combat abstraction (PP-086, retained for hybrid/simplified resolution):**
 Damage = max(0, net successes − Ob) + disposition_modifier. (PP-218 clarification)
 "Net successes − Ob" = total net successes minus the Obstacle value. Floor of 0 applies to the bracketed term before adding disposition modifier. Partial success (0 < net < Ob) → bracket is negative → floored to 0; disposition modifier still adds. Example: net 1, Ob 2, Offensive (+2) → max(0, 1−2)+2 = 0+2 = 2 damage.
 Disposition modifiers: Offensive +2 flat; Defensive +4 flat.
@@ -429,6 +437,13 @@ Default unit stats (board game / mass combat):
 **Combat → Fieldwork (F-TRANS-12):**
 - Post-combat investigation of battle site = 1 fieldwork scene. The battle itself does not consume fieldwork time; only the post-combat investigation does.
 - Evidence of battle events (attacker identity, force composition, timing) follows standard Evidence Track rules.
+
+
+**Combat → Fieldwork (Fled/Retreated) (ED-576):**
+- If the player fled or retreated from combat, no post-combat fieldwork scene is available at the battle site. The player forfeited scene control by leaving.
+- The battle site becomes a standard POI (fieldwork §3.1) discoverable in a future season. Evidence degrades: +1 Ob to investigation per season elapsed since the battle.
+- Fleeing combat does NOT reset the player's fieldwork state — any active investigation or social engagement in the territory continues from where it was when combat interrupted.
+- Exposure from the fled combat still applies per F-TRANS-01/09 (quiet +1, conspicuous +2, public +3). Flight does not reduce Exposure — witnesses saw the player arrive, even if they left.
 
 **Let It Ride in combat (clarification):**
 Standard attack actions are NOT subject to Let It Ride — re-attempting the same attack against the same opponent each round is the core mechanic (round structure handles iteration through pool depletion and Stamina). Let It Ride DOES apply to declared manoeuvres (Feint, Rescue, Disarm, Tie Up): each may only be declared once per round. PP-293 (Feint non-stacking) is the operative implementation. A failed manoeuvre cannot be re-declared in the same round; circumstances must change between rounds.

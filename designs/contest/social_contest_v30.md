@@ -200,10 +200,9 @@ Both orators push in the same direction within the same temporal horizon.
 
 ## §5 INITIATIVE
 
-- Exchange 1: higher Attunement acts last (declares second; information advantage).
+- Exchange 1: **Rolled** — both orators roll Attunement, TN 7, Ob 1. Higher net successes acts last (declares second; information advantage). On tie: higher Attunement stat wins. On stat tie: neutral party (adjudicator) assigns. (ED-581 resolution: rolled initiative aligns with combat initiative for cross-system consistency. The roll adds variance to opening exchanges — a less attuned orator can occasionally seize the read.)
 - Subsequent exchanges: transfers to exchange winner.
 - On tie: stays with current holder.
-- [EDITORIAL: ED-138 — Social initiative is deterministic (higher Attunement always wins Exchange 1). Combat initiative is rolled. Consider whether social initiative should be rolled (Attunement vs Attunement, TN 7, Ob 1) for consistency. Current deterministic version kept pending decision.]
 
 ---
 
@@ -269,6 +268,11 @@ When a contest ends in Compromise (Conviction Track 4–6), the tension is defer
 - Disposition changes from the first contest carry into the second.
 - The NPC's Scar count from the first contest persists — accumulated wounds do not heal between chain contests.
 - A chain contest's Decisive win produces an Obligation (§6.1) as normal. A second Compromise extends the chain — another follow-up Scene Slate entry for the next season.
+
+**Resistance stall-break (ED-582):** If two consecutive exchanges in a chain contest produce zero track movement (both sides' margins ≤ resistance), the contest enters Deadlock. In Deadlock:
+- Resistance for both sides drops by 1 (minimum 0) for the remainder of this contest.
+- If a third consecutive zero-movement exchange occurs after the Resistance drop, the contest ends immediately as a Compromise at the current track position.
+- Rationale: prolonged mutual stonewalling exhausts the audience's patience. The institutional pressure forces resolution or capitulation.
 - Maximum chain length: 3 contests. After 3 consecutive Compromises, the tension resolves as a permanent stalemate: both parties establish a cold equilibrium. Disposition freezes at current level. Neither party can initiate a contest on this topic for 4 seasons.
 
 ---
@@ -451,7 +455,7 @@ A Parliamentary Stay is a Senator Inward motion that halts an active Church Trib
 |---|---|---|
 | ED-136 | System rename: "Debate" → "Contest" (or alternative). Pending user decision. | P1 |
 | ED-137 | Panel adjudicator type not yet designed. Using Expert Judge as provisional. | P2 |
-| ED-138 | Social initiative deterministic vs rolled. Current: deterministic (higher Attunement). Combat: rolled. Consistency question. | P2 |
+| ED-138 | Social initiative deterministic vs rolled. **Resolved (ED-581):** Changed to rolled (Attunement vs Attunement, TN 7, Ob 1). See §5. | Resolved |
 
 ### Carried forward
 | ID | Description | Priority |
