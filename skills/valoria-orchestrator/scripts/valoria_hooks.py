@@ -317,12 +317,16 @@ def pre_commit_gate_mutating(additions: list, deletions: list = None) -> list:
         viols = cc.validate_commit(additions, deletions or [])
 
         auto_viols = [v for v in viols if v.auto_fixable]
-        manual_viols = [v for v in viols if not v.auto_fixable]
+        manual_errors = [v for v in viols if not v.auto_fixable and v.severity == 'error']
+        manual_warns = [v for v in viols if not v.auto_fixable and v.severity == 'warn']
 
-        if manual_viols:
+        if manual_warns:
+            print(f"[COMPLIANCE ⚠] {len(manual_warns)} warning(s) — non-blocking")
+
+        if manual_errors:
             raise RuntimeError(
                 "[COMPLIANCE VIOLATION] Commit would violate rules:\n"
-                + cc.report(manual_viols)
+                + cc.report(manual_errors)
             )
 
         if auto_viols:
