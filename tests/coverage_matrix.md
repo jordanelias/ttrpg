@@ -76,7 +76,7 @@ npc_behavior: Constrained sub-arc state, Torben Conviction window S1-8
 
 | ID | Source | Description | Status |
 |----|--------|-------------|--------|
-| JUS-SIM-02 | Cardinal Justice | Heresy Proceedings against Confessor: authorization loop — College majority substitute needed | Open — ED-629 |
+| JUS-SIM-02 | Cardinal Justice | Heresy Proceedings: authorization loop | ✓ Archived — ED-629 resolved 2026-04-17 |
 
 ### Confirmed Working
 
@@ -142,7 +142,7 @@ Remaining open sub-EDs: ED-640/642/643/644/645/648/649/650/651/652/655/656/657/6
 
 | ID | Source | Description | Status |
 |----|--------|-------------|--------|
-| GAP-B3-01 | Multiple | Shadow Renown referenced across docs but no implementation specification | Open — ED-632 |
+| GAP-B3-01 | Multiple | Shadow Renown referenced across docs but no implementation specification | ✓ Archived — ED-632 resolved 2026-04-17 |
 | — | Riskbreaker §2.2 | Deniability Debt referenced as "stage13 mechanic, retained" but not defined in canonical docs | Open — ED-633 |
 
 ### Confirmed Working
@@ -282,16 +282,16 @@ Resume trigger: (a) user-initiated simulation review, or (b) patch to faction_po
 
 | ID | Source | Description | Status |
 |----|--------|-------------|--------|
-| MEND-SIM-01 | SIM 2 | OW Mending Coherence cost contradiction: campaign_architecture_v1 §3.2 says −1, params_threadwork degree table says 0 | Open — ruling required from Jordan |
-| MEND-SIM-02 | SIM 6 | ARC-S32 text states "costs −1 Coherence regardless of outcome" — now wrong under 0-Coherence rule | Open — arc_register update required |
-| MEND-SIM-03 | SIM 6 | ARC-S34 (Edeyja Burnout) primary path eliminated; TE-15 secondary unreachable (Coh equilibrium ~7, never near ≤5 gate) | Open — ARC-S34 redesign required |
+| MEND-SIM-01 | SIM 2 | OW Mending Coherence cost contradiction | ✓ Resolved — params_threadwork authoritative (0 all degrees); §3.2 corrected |
+| MEND-SIM-02 | SIM 6 | ARC-S32 Coherence text wrong | ✓ Resolved — arc_register updated; fatigue mechanics substituted |
+| MEND-SIM-03 | SIM 6 | ARC-S34 Edeyja Burnout primary path broken | ✓ Resolved — reframed as overwork/fatigue burnout; TE-15 terminal trigger preserved |
 
 ### P2 Findings
 
 | ID | Source | Description | Status |
 |----|--------|-------------|--------|
-| MEND-SIM-04 | SIM 3–4 | rs_budget.md recovery assumption (+1/season) is ~10x understated; scenario net figures need update | Open — rs_budget propagation |
-| MEND-SIM-05 | SIM 4 | wc_survival_spine.md resource tension table lists Practitioner Coherence as competing resource — no longer accurate for Mending | Open — wc_survival_spine propagation |
+| MEND-SIM-04 | SIM 3–4 | rs_budget.md recovery figures stale | ✓ Resolved — Scenario C updated; Conclusion corrected |
+| MEND-SIM-05 | SIM 4 | wc_survival_spine.md Coherence row wrong | ✓ Resolved — resource tension table corrected |
 
 ### Confirmed Working
 

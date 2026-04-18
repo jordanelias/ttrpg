@@ -73,10 +73,35 @@
 
   - id: ED-683
     date: 2026-04-18
-    description: "Disposition +5 (Bonded/Knot candidate) unreachable under PP-632 Bonds cap floor(Bonds/2)+1. Attribute max 7 → ceiling 4. Knot formation requires +5 per fieldwork §5.6. Three resolution options in derived_stats §8.1."
+    description: "Disposition +5 unreachable under PP-632 floor(Bonds/2)+1 cap. Knot formation mechanically impossible at attribute max 7."
+    status: resolved
+    severity: P1
+    resolution: "PP-684 applied prior session: ceiling = Bonds. Bonds 5 reaches +5 at creation. All docs updated. Confirmed closed on audit."
+    affects: [references/params_core.md, designs/fieldwork/fieldwork_v30.md, designs/systems/derived_stats_v1.md]
+
+  - id: ED-666
+    date: 2026-04-18
+    description: "Path B speed-run: Vaynard wins S9 while all other factions 15+ seasons from conditions."
+    status: resolved
+    severity: P1
+    resolution: "Season ≥ 12 (Year 3) gate added to Path B conditions. victory_v30 §3.4."
+    affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-667
+    date: 2026-04-18
+    description: "Coup Counter fires S17 before Regency Establishment structurally achievable."
+    status: resolved
+    severity: P1
+    resolution: "Season ≥ 20 (Year 5) gate added to Regency Establishment. victory_v30 §3.6."
+    affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-663
+    date: 2026-04-18
+    description: "Haushalt Competence 3 +2 Wealth/season has no cap — unbounded Wealth generation."
     status: open
     severity: P1
-    affects: [references/params_core.md, designs/fieldwork/fieldwork_v30.md, designs/systems/derived_stats_v1.md]
+    resolution: "[GAP: Source doc not located. Mechanic cited in REICH-SIM-01. Requires source before cap can be applied.]"
+    affects: [unknown]
 
   - id: ED-682
     date: 2026-04-17

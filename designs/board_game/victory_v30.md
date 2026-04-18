@@ -272,9 +272,11 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 +
 | Control T4 (Grauwald) AND T13 (Oastad) | both held |
 | VTM | ≥ 3 |
 | Warden Recognition (WR) | ≥ 2 |
+| Season | ≥ 12 (Year 3) |
 
 **WR track (0–4):** See params_board_game.md §Varfell Path B for full WR track rules.
 **Blocked if:** WR has ever returned to 0 after first advancing past 1.
+**Season gate (ED-666):** Path B represents demonstrated stewardship over time, not just accumulated territorial control. Season 12 is the earliest at which WR ≥ 2 through legitimate expedition work is plausible. Prevents S9 speed-run wins before other factions have reached meaningful development.
 
 #### Path C — Thread Supremacy
 
@@ -343,6 +345,9 @@ If either condition fails at Accounting, T9 reverts to the prior controller (or 
 | RS | > 40 |
 | PI | ≥ 4 |
 | Successor confirmed | Elske confirmed OR Torben Loyalty ≥ 6 |
+| Season | ≥ 20 (Year 5) |
+
+**Season gate (ED-667):** Elske confirmation requires minimum 4 successful Senator Outward actions from Loyalty 2 start — not achievable before Season 10–12 even optimally. Season 20 is the realistic floor for successor infrastructure to exist. Prevents premature Coup Counter cascade enabling Regency before the succession path is mechanically possible.
 
 ### Elske Loyalty Track (ED-624 — approved 2026-04-17)
 
