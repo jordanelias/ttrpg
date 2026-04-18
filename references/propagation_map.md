@@ -636,3 +636,10 @@ DESIGN GAP 2: Guild Favour restoration mechanic — no upward movement source do
 | `designs/systems/throughline_resolutions_v1.md` | `tests/coverage_matrix.md` | SIM-POL-R01 through R05 discoverability (DEFERRED status) |
 | `designs/systems/throughline_resolutions_v1.md` | `designs/systems/faction_politics_expanded_v1.md` §2.7 | Warden × TC pressure scale (cross-reference) |
 | `designs/ttrpg/threadwork_v30.md` (ED-629 dependency) | `designs/systems/faction_politics_expanded_v1.md` §2.7 | ED-629 Thread stress resolution may require Warden audit |
+
+### PP-684 — Disposition ceiling = Bonds (was floor(Bonds/2)+1)
+| Source | Target | Status |
+|--------|--------|--------|
+| references/params_core.md (Bonds definition) | designs/fieldwork/fieldwork_v30.md §5.1 | DONE |
+| references/params_core.md (Bonds definition) | designs/systems/derived_stats_v1.md §8.1 | DONE |
+| references/params_core.md (Bonds definition) | designs/systems/companion_specification_v30.md §2.1 | CHECK — companion eligibility may reference old formula |

@@ -200,13 +200,13 @@ The derived value principle (separate structural capability from current state) 
 
 ### 8.1 Disposition Cap by Bonds Attribute
 
-Disposition (−3 to +5 per NPC per PC) has a maximum value capped by the player's Bonds attribute: **Disposition ceiling = floor(Bonds/2)+1** (PP-632, params_core). A character with Bonds 3 can reach Disposition +2 with any NPC. Bonds 5 reaches +3. Bonds 7 reaches +4 — the only value permitting Devoted (+4). Bonded (+5) requires Bonds 9 (floor(9/2)+1 = 5), which exceeds the attribute creation cap of 5 and requires advancement to 9 — meaning +5 Disposition is an endgame achievement, not a starting condition.
+Disposition (−3 to +5 per NPC per PC) has a maximum value capped by the player's Bonds attribute: **Disposition ceiling = Bonds** (PP-684, revised from PP-632). A character with Bonds 3 can reach Disposition +3 (Trusting, companion eligible). Bonds 5 reaches +5 (Bonded, Knot candidate — achievable at creation). Bonds 7 reaches +5 with room for the maximum 3 Close Knots at full capacity.
 
 This makes Bonds the structural capability (how deep relationships CAN go) and Disposition the current state (how deep this specific relationship IS). The pattern is identical to Wealth→Treasury: Bonds determines the ceiling; social fieldwork fills toward it.
 
 **Design consequence:** Companion formation (Disposition ≥ +3) requires Bonds ≥ 5. A character who prioritizes Bonds at creation (Bonds 5, one of the max-5 slots) can form companions immediately. A character who neglects Bonds (Bonds 1, ceiling +1) cannot even reach Friendly (+2) — their relationships are structurally shallow.
 
-**[DESIGN CONFLICT — ED-684]:** Knot formation requires Disposition +5 (fieldwork §5.6). Under the PP-632 cap (floor(Bonds/2)+1), Disposition +5 requires Bonds ≥ 9. Attribute advancement maximum is 7. Therefore **Disposition +5 is unreachable** under current rules, which means **Knot formation is mechanically impossible.** The Disposition table's "+5 = Bonded = Knot candidate" row describes an unreachable state. Resolution options: (a) adjust cap formula to ceil(Bonds/2)+1 (Bonds 7 → ceiling 5), (b) lower Knot formation threshold to +4 (reachable at Bonds 7), (c) add a Bonds-advancement pathway beyond 7 for Knot specialists. Jordan decision required.
+**Resolved (PP-684):** The original PP-632 cap formula floor(Bonds/2)+1 made Disposition +5 unreachable (attribute max 7 → ceiling 4), which made Knot formation mechanically impossible. PP-684 simplifies the cap to **ceiling = Bonds**. Disposition ceiling now equals the Bonds attribute directly. Bonds 5 (achievable at creation) reaches Disposition +5 and unlocks Knot candidacy. Bonds 3 reaches +3 (companion eligibility). This is cleaner than the floor formula, preserves the gating intent (Bonds investment determines relationship depth), and makes every Disposition tier reachable through attribute progression.
 
 **Cross-reference:** fieldwork_v30 §5.1 (Disposition Track), params_core §Bonds (PP-632), companion_specification §2.1 (eligibility).
 

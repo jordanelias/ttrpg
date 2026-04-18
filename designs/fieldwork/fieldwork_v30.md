@@ -346,7 +346,7 @@ This resolves per action, not per investigation. Each investigation action faces
 ### §5.1 Disposition Track
 
 
-**Disposition range: −3 to +5.** Maximum Disposition per NPC is capped by the player's Bonds attribute: **ceiling = floor(Bonds/2)+1** (PP-632, params_core). Bonds 1 caps at +1 (Interested). Bonds 3 caps at +2 (Friendly). Bonds 5 caps at +3 (Trusting — companion eligibility). Bonds 7 caps at +4 (Devoted). Bonds 9 caps at +5 (Bonded — Knot candidate). This makes Bonds the structural capacity for relationship depth; Disposition is the current state within that capacity.
+**Disposition range: −3 to +5.** Maximum Disposition per NPC is capped by the player's Bonds attribute: **ceiling = Bonds** (PP-684, revised from PP-632 floor formula). Bonds 1 caps at +1 (Interested). Bonds 2 caps at +2 (Friendly). Bonds 3 caps at +3 (Trusting — companion eligibility). Bonds 4 caps at +4 (Devoted). Bonds 5 caps at +5 (Bonded — Knot candidate, achievable at creation). This makes Bonds the structural capacity for relationship depth; Disposition is the current state within that capacity.
 
 | Value | Label | Effect on Social Ob | Information Gate |
 |-------|-------|---------------------|-----------------|

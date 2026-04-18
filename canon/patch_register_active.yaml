@@ -2059,3 +2059,13 @@ patches:
   description: "Faction politics throughline resolutions. Addresses 10 post-PP-660 integration findings with 4 applied fixes. New design doc throughline_resolutions_v1.md. Edits: player_agency §3.2 Standing 0 Petitioner carve-out, §3.4 range 0-7 + floor-protection, §7.1 character creation caste step + Viability Matrix + advisory text; settlement_layer §1.4 Institutional Facility Tiers (Wing/Suite/Chamber/Billet slots with capacity-pressure mechanics); npc_behavior §11 Named NPC Roster 3-tier Active/Passive/Background; baralta_crown_claim §7 Generational × Coup × IP × Baralta three-clock interaction with sequencing rules; tests/coverage_matrix SIM-POL-R01-R05 DEFERRED discoverability. 6 resolved editorial items archived. Raises ED-659 (resolved in this commit)."
   affects: [designs/systems/throughline_resolutions_v1.md, designs/systems/player_agency_v30.md, designs/systems/settlement_layer_v30.md, designs/systems/npc_behavior_v30.md, designs/mechanics/baralta_crown_claim_v30.md, tests/coverage_matrix.md, canon/editorial_ledger.yaml, canon/editorial_ledger_archive.yaml, references/canonical_sources.yaml, references/propagation_map.md, references/file_index.md, references/file_index_summary.md]
   status: applied
+
+- id: PP-662
+  date: 2026-04-18
+  severity: P1
+  description: "Disposition ceiling simplified: floor(Bonds/2)+1 → Bonds. Resolves ED-683 (Knot formation impossible under old cap). Bonds 5 = Disposition +5 = Knot candidate at creation."
+  finding_id: "ED-683"
+  source: audit
+  affects: [references/params_core.md, designs/fieldwork/fieldwork_v30.md, designs/systems/derived_stats_v1.md]
+  status: applied
+  applied_commit: ~
