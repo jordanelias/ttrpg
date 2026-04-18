@@ -168,6 +168,7 @@ def _authorize_next_commit() -> str:
     caller_fn, caller_file = frame.function, frame.filename
     approved = (
         (caller_fn == 'safe_commit' and 'valoria_hooks' in caller_file) or
+        (caller_fn == 'assert_bootstrap' and 'valoria_hooks' in caller_file) or
         (caller_fn in ('safe_session_close', 'append_to_register') and 'github_ops' in caller_file) or
         ('<stdin>' in caller_file or caller_file.startswith('/tmp') or caller_file == '<string>')
     )

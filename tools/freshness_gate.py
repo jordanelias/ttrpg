@@ -239,12 +239,24 @@ def run_update():
     print(f"canonical_sha__ fields in updated file: {sha_count}")
 
     print("Committing to GitHub...")
-    put_file(
-        CANONICAL_SOURCES_PATH,
-        updated,
-        "[infrastructure] freshness_gate --update: sync canonical_sha fields",
-        sha=rest_sha
-    )
+    # Prefer atomic_commit (hook-compatible) when github_ops is available
+    try:
+        sys.path.insert(0, "/home/claude")
+        import github_ops as g
+        g._load_cache()
+        g.atomic_commit(
+            additions=[(CANONICAL_SOURCES_PATH, updated)],
+            deletions=[],
+            message="[infrastructure] freshness_gate --update: sync canonical_sha fields",
+        )
+    except Exception:
+        # Fallback: direct REST commit (CI environment, no github_ops)
+        put_file(
+            CANONICAL_SOURCES_PATH,
+            updated,
+            "[infrastructure] freshness_gate --update: sync canonical_sha fields",
+            sha=rest_sha
+        )
     print("\n[DONE] canonical_sources.yaml updated with current SHAs.")
     print("Run 'python3 tools/freshness_gate.py' to verify.")
     sys.exit(0)

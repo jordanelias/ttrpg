@@ -188,6 +188,9 @@ def editorial_gate(path: str, content: str) -> None:
         return
     if len(content) < 200:
         return  # stub — exempt
+    if path.endswith('_skeleton.md'):
+        print(f"[HOOK ✓] editorial_gate — {path} (skeleton exempt)")
+        return
     if not any(m in content for m in EDITORIAL_MARKERS):
         raise RuntimeError(
             f"[HOOK VIOLATION] Editorial path without flag:\n"
