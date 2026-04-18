@@ -407,7 +407,7 @@ Co-victories are distinct from operational coalitions (PP-404/405). A faction ma
 **IP Visibility Milestones (NEW — historical_precedents_analysis §2.3):**
 - **IP 60:** All factions receive Intelligence Report: "Altonian forces massing at border." Mandatory notification in Scene Slate (Priority 2). Factions currently in inter-faction conflict make Mandate check (Ob 2) to divert resources to border defense. Failure: faction is too consumed by internal politics to respond (no defensive Domain Actions targeting Altonia permitted this season).
 - **IP 80:** Second Intelligence Report: "Altonian advance forces in Schoenland corridor." Mandatory Priority 1 scene: faction leaders convene emergency session. Player may attempt coalition-building via Social Contest.
-- **IP 90:** Final warning: "Invasion imminent." All factions aware. Any faction still engaged in inter-faction Battle takes Stability −1 (population perceives leadership as fiddling while the border burns).
+- **IP 90:** Final warning: "Invasion imminent." All factions aware. Any faction still engaged in inter-faction Battle takes Cohesion −20 (population perceives leadership failure, derived_stats_v1).
 
 **Altonian Alignment (NEW — historical_precedents_analysis §2.4):** NPC faction AI behavior — when an NPC faction reaches Mandate ≤ 2 (desperate), there is a chance it secretly contacts the Altonian Vanguard Commander, offering strategic intelligence in exchange for favorable treatment during Occupation. This is NOT a player action — it is a world event the player discovers through investigation. Effect: IP +5 immediate. Aligning faction gets −2 Ob on Domain Actions during Occupation Era (collaborator status). **Discoverable:** Niflhel intelligence or Riskbreaker investigation (Evidence Track threshold 4). Discovery produces a Revelation Event scene — the player learns that a faction they may have trusted has betrayed the peninsula. If exposed publicly: aligning faction's Accord drops to 0 in all territories, Peninsular Strain +3, all other factions gain Casus Belli. Historical precedent: Byzantine Kantakouzenos inviting Ottomans (1354), French collaboration during WWII. This generates emergent narrative — the betrayal is a story the player discovers and responds to as a character, not a button they press.
 
@@ -467,8 +467,8 @@ Starting TC: 28. Phase transition at TC 75 (TC freezes, Church shifts to seizure
 **Seasonal TC at Accounting:**
 1. Institutional Momentum: TC +1 (passive).
 2. Piety Yield: per territory where Church is Prominent (Church Mandate > controlling faction Mandate), add by PT. PT 5 = +1, PT 4 = +0.5, others = 0. Total = floor(sum).
-3. Assert (optional Church action): Influence vs Ob 2. Success: TC +1. Failure: Stability −1.
-4. Suppress (optional opponent action): Mandate vs Ob = floor(Church Mandate / 2) + 1. Success: negate Step 1 passive. Failure: Stability −1.
+3. Assert (optional Church action): Influence vs Ob 2. Success: TC +1. Failure: Cohesion −15 (derived_stats_v1).
+4. Suppress (optional opponent action): Mandate vs Ob = floor(Church Mandate / 2) + 1. Success: negate Step 1 passive. Failure: Cohesion −15 (derived_stats_v1).
 5. Hafenmark Structural Suppression: while Baralta Mandate ≥ 4, TC −1/season.
 
 **Church Seizure (Graduated, PP-494):** Pool = Influence + floor(TC/15). Ob = 7 − PT. Prominence required. Church Mandate ≥ 4. Overwhelming seizure: PT +1 (consequence, not cap-governed). See §3.2 for full table.

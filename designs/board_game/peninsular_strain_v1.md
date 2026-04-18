@@ -254,7 +254,7 @@ Global track, range 0–10. Starts at 0. Public (visible counter on board).
 | Strain | Name | Effect |
 |--------|------|--------|
 | 0–2 | Peace | No effect. |
-| 3–4 | Tension | All factions: Mandate check at Accounting (Mandate pool vs Ob 1). Failure: Mandate −1. |
+| 3–4 | Tension | All factions: Legitimacy −25 at Accounting (derived_stats_v1). |
 | 5–6 | Fracture | All factions: Accord −1 in one territory (lowest-Accord first, controller's choice among ties). |
 | 7–8 | Crisis | All factions: Accord −1 in ALL non-capital territories. Mandate check Ob 2 at Accounting. |
 | 9–10 | Collapse | Non-capital territories: Accord cap at 2. Mandate check Ob 3. RS −1/season additional. |
@@ -301,7 +301,7 @@ See victory_v30.md §3.2 for full Seizure mechanics (PP-494).
 | Overwhelming | floor(PT/2) + 2, max 3 | High institutional authority. PT 5 → Accord 3. PT 3 → Accord 3. PT 1 → Accord 2. |
 | Success | max(floor(PT/2) + 1, 2) | Guaranteed ≥ 2. PT 5 → Accord 3. PT 3 → Accord 2. PT 1 → Accord 2. |
 | Partial | 1 | Politically messy. Contested seizure fails to establish authority. |
-| Failure | N/A | Seizure fails. Stability −1. |
+| Failure | N/A | Seizure fails. Cohesion −20 (derived_stats_v1). |
 
 **Defensive interaction:** Controlling faction gains Casus Belli on every seizure attempt (PP-510, existing rule). Institutional Mandate (PP-189) applies — controlling faction may Appease to cancel Seizure before roll.
 
@@ -321,7 +321,7 @@ Baralta's divine-right claim. "Faith is not mediated — it is lived. Anyone who
 | Overwhelming | Territory control transfers. Accord set to 2. Target faction Mandate −1. Hafenmark Mandate +1 (momentum of divine right). No Casus Belli (legitimate succession claim). +1 Standing (PP-515: the claim was publicly made and upheld). |
 | Success | Territory control transfers. Accord set to 2. Target faction Mandate −1. |
 | Partial | Territory does not transfer. Hafenmark gains Casus Belli vs target (rejected claim = justification for force). Target territory Accord −1 (population destabilised by competing claims). |
-| Failure | Hafenmark Stability −1 (overreach). No Casus Belli. |
+| Failure | Hafenmark Cohesion −20 (overreach, derived_stats_v1). No Casus Belli. |
 
 **Diplomatic Token interaction (PP-517/521):** If Hafenmark has Diplomatic Token on target faction AND uses Proclamation: Token provides −1 Ob (above). On Overwhelming Proclamation: Token is NOT consumed (unlike military conflict, which removes Tokens). On Partial/Failure: Token remains. Token is consumed only if Hafenmark subsequently uses military force against that faction (existing PP-517 rule).
 
@@ -345,7 +345,7 @@ Vaynard's revolutionary program: shatter the caste system, expel Altonian influe
 | Overwhelming | Territory control transfers. Accord set to 2. PT −1 in target territory. TC −1 (Church institutional grip weakens). |
 | Success | Territory control transfers. Accord set to 2. PT −1 in target territory. |
 | Partial | Territory does not transfer. PT −1 in target territory (cultural seed planted). Varfell gains intelligence presence in territory if not already present. |
-| Failure | Varfell Stability −1. TC +1 (Church reaction). Church Attention Pool +1. |
+| Failure | Varfell Cohesion −20 (derived_stats_v1). TC +1 (Church reaction). Church Attention Pool +1. |
 
 **Why Ob = PT + 1:** This makes Varfell's expansion tool inversely correlated with Church's. As PT drops (through Calamity Drift, RM activity, or Varfell's own Partial results planting seeds), Varfell's Reformation becomes easier. As PT rises (through Church cultivation), it becomes harder. Varfell can directly influence PT through Tribune intelligence operations, Counter-Narrative (existing action targeting Church-Prominent territories), and by succeeding at Reformation (each success lowers PT further). This creates a feedback loop: success → lower PT → easier future success — but only in the low-PT band.
 

@@ -193,3 +193,53 @@ All derived value numbers in this document are PROVISIONAL. They need simulation
 The specific multipliers (×100 for Treasury, ×20 for Legitimacy, etc.) are tuning knobs that can be adjusted without changing the architecture.
 
 [EDITORIAL: ED-683 — Derived stat system. Architectural addition to videogame layer. Does not modify existing board game / hybrid mechanics — adds a presentation and simulation layer for Godot implementation.]
+
+## §7 — Stat Modification Conversion Registry (PP-680)
+
+Audit of all 51 stat ±1/±2 references across design docs. Each classified as CONVERT (routine → derived value drain) or KEEP (structural → direct stat modification).
+
+### Converted to Derived Value (routine fluctuations):
+
+| Original | Converted To | Files Affected |
+|----------|-------------|----------------|
+| Campaign Supply: Wealth −1/season | Treasury −100/season | mass_battle_v30 |
+| Battle Partial: Stability −1 | Cohesion −15 | mass_battle_v30, military_layer_v30 |
+| Battle loss (routed): Stability check Ob 1 | Cohesion −15 | mass_battle_v30 |
+| Campaign defeat: Stability check Ob 2 | Cohesion −30 | mass_battle_v30 |
+| Siege supply: Wealth −1/season | Treasury −100/season | military_layer_v30 |
+| Siege failure: Stability −1 | Cohesion −15 | military_layer_v30 |
+| Siege parley rejected: Stability −1 | Cohesion −15 | military_layer_v30 |
+| Assert failure: Stability −1 | Cohesion −15 | tc_political, victory_v30 |
+| Suppress failure: Stability −1 | Cohesion −15 | tc_political, victory_v30 |
+| Govern failure at Prosperity 0: Stability −1 | Cohesion −15 | tc_political |
+| Trade Success: Wealth +1 | Treasury +Wealth×25 | tc_political |
+| Strain 3–4: Mandate check → Mandate −1 | Legitimacy −25 | tc_political, peninsular_strain |
+| Seizure failure: Stability −1 | Cohesion −20 | peninsular_strain |
+| Proclamation failure: Stability −1 | Cohesion −20 | peninsular_strain |
+| Cultural Reformation failure: Stability −1 | Cohesion −20 | peninsular_strain |
+| IP 90 inter-faction Battle: Stability −1 | Cohesion −20 | victory_v30 |
+| Settlement expansion: Wealth −3 | Treasury −300 | settlement_layer |
+| Mine surplus: Wealth +1 | Treasury +50/season | settlement_layer |
+
+### Kept as Direct Stat Modification (structural events):
+
+| Event | Stat Change | Rationale |
+|-------|-----------|-----------|
+| Battle loss (margin ≥2): Military −1 | KEEP | Losing a battle decisively IS structural military damage |
+| Unit destroyed: Military −1 | KEEP | Permanent force loss |
+| Campaign defeat: Mandate −1 | KEEP | Major political event |
+| Crown Treaty: target Mandate −1 | KEEP | Diplomatic victory — structural |
+| Appease (Institutional Mandate): Mandate −1 | KEEP | Deliberate institutional sacrifice |
+| Parliamentary Censure/Outlawry: Mandate −1/−2 | KEEP | Formal political action |
+| Crown-break: Stability −2, Mandate −1 | KEEP | Treaty betrayal — structural crisis |
+| RM Uprising: Church Mandate −2/−1 | KEEP | Loss of territory — structural |
+| Dynastic Proclamation success: target Mandate −1 | KEEP | Major political act |
+| Trade Overwhelming: Wealth +1 | KEEP | Exceptional success = structural improvement |
+| Govern OW in capital: Mandate +1 | KEEP | Exceptional governance = structural |
+| Faction collapse triggers | KEEP | Terminal events |
+| Coup, Occupation, Generational Shift | KEEP | Campaign-altering events |
+| Peninsular Strain ≥7: Mandate check | KEEP | Existential crisis level |
+
+### Design Principle
+
+The dividing line: **would a real-world state experience this as "we had a bad quarter" (derived drain) or "our government has been fundamentally weakened" (stat damage)?** A failed siege is a bad quarter. A campaign-scale military defeat is structural. A failed trade mission is a bad quarter. An Overwhelming trade success that opens new markets is structural. The derived value layer absorbs the routine. The stat layer records the permanent.

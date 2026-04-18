@@ -195,7 +195,7 @@ Per mass_battle_v30 §B.3, §PP-104:
 | Result | Condition | Outcome |
 |---|---|---|
 | Attacker wins | Attacker net ≥ Defender net + 2 | Territory captured; Defender Military −1 |
-| Partial | Margin ≤ 1 either direction | No territory change; Attacker Stability −1 (commitment cost) |
+| Partial | Margin ≤ 1 either direction | No territory change; Attacker Cohesion −15 (commitment cost, derived_stats_v1) |
 | Defender wins | Defender net ≥ Attacker net + 2 | No territory change; Attacker Military −1 |
 
 **Unit damage:** distribute net successes × Martial Damage Modifier across defender's units (attacker chooses which units take damage, reducing their Health/Size). Formation Break at Size 0.
@@ -309,7 +309,7 @@ Assert (existing Standard Action, Church only, Pontifex/Senator Priority):
 | Overwhelming | +2 TC | — |
 | Success | +1 TC | — |
 | Partial | +0 TC | — |
-| Failure | +0 TC | Church Stability −1 |
+| Failure | +0 TC | Church Cohesion −15 (derived_stats_v1) |
 
 Assert represents Church actively preaching, issuing papal decrees, performing public ecclesiastical acts of authority. The Overwhelming result represents Assert so decisive that no secular argument can answer it — the Church has won the narrative battle for that season.
 
@@ -324,7 +324,7 @@ Existing rule retained. Any PLAYABLE faction may declare Suppress as a Senator/M
 | Overwhelming | Negate this season's conditional passive AND Piety Yield | — |
 | Success | Negate this season's conditional passive only | — |
 | Partial | No effect | — |
-| Failure | No TC effect | Suppressing faction Stability −1 (existing named exception to PP-403 repeal) |
+| Failure | No TC effect | Suppressing faction Cohesion −15 (derived_stats_v1) |
 
 Suppress requires real political capital — it is a public act of secular authority challenging Church institutional claims. A powerful, stable Crown or Hafenmark can do this successfully. A weakened, occupied faction cannot.
 
@@ -410,10 +410,10 @@ A Siege is an extended encirclement operation targeting a fortified territory. I
 
 | Degree | Fort effect | Other effects |
 |--------|-------------|--------------|
-| Overwhelming | Fort −2 | RS −1 (concentrated suffering). Attacker Wealth −1 (supply cost). |
-| Success | Fort −1 | RS −1. Attacker Wealth −1. |
-| Partial | No Fort reduction | RS −1. Attacker Wealth −1. |
-| Failure | No Fort reduction | Attacker Stability −1 (morale). Siege may continue or be ended. Attacker Wealth −1. |
+| Overwhelming | Fort −2 | RS −1 (concentrated suffering). Attacker Treasury −100 (supply cost, derived_stats_v1). |
+| Success | Fort −1 | RS −1. Attacker Treasury −100 (derived_stats_v1). |
+| Partial | No Fort reduction | RS −1. Attacker Treasury −100 (derived_stats_v1). |
+| Failure | No Fort reduction | Attacker Cohesion −15 (morale, derived_stats_v1). Siege may continue or be ended. Attacker Treasury −100 (derived_stats_v1). |
 
 **Duration cap:** Maximum 5 seasons. After 5 seasons the attacker must Assault (standard Battle at current Fort Level) or Withdraw (no territory gain).
 
@@ -440,7 +440,7 @@ During any season of active siege, either side may declare **Parley** — a Soci
 | Outcome | Effect |
 |---------|--------|
 | Attacker wins | Defender surrenders on terms. Territory transfers at Accord 2 (negotiated, not conquered). Fort Level unchanged. Defender units may withdraw to adjacent friendly territory. |
-| Defender wins | Siege continues. Attacker Stability −1 (rejected terms, publicly). |
+| Defender wins | Siege continues. Attacker Cohesion −15 (rejected terms, derived_stats_v1). |
 | Tie | Both sides agree to temporary truce (1 season cease-fire, no siege progression, Prosperity stops declining). |
 
 **Design rationale:** Most medieval sieges ended through negotiation, not storm. The Accord 2 outcome makes Parley mechanically attractive vs assault (which yields Accord 1). This creates a genuine choice: assault for speed (Accord 1, expensive to govern) or parley for governance quality (Accord 2, requires social capability).

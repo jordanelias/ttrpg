@@ -510,7 +510,7 @@ across battle boundaries unless cleared. *[EDGE-08]*
 
 ### A.14b CAMPAIGN SUPPLY (NEW — historical_precedents_warfare §1.3a)
 
-Any faction with military units stationed in hostile territory (territory NOT controlled by the unit's faction) pays **Wealth −1/season** at Accounting. This is a flat cost regardless of how many units are deployed — it represents the logistical overhead of maintaining supply lines into hostile territory, not per-soldier expenses.
+Any faction with military units stationed in hostile territory (territory NOT controlled by the unit's faction) pays **Treasury −100/season** at Accounting (derived_stats_v1 §3.1). This is a flat cost regardless of how many units are deployed — it represents the logistical overhead of maintaining supply lines into hostile territory. Treasury depletion to 0 triggers Wealth −1 at the following Accounting (structural economic damage).
 
 Units in friendly territory cost nothing (the population supports them).
 
@@ -539,8 +539,8 @@ Professional units (Light Infantry and above) have no such restriction — they 
 - Altonian Vanguard battle: RS −1. Does NOT trigger IP +2 (Altonia's own operation) or Strain +1.
 - Territory conquered by military victory: Accord set to 1 (peninsular_strain_v1.md §2.4).
 - Unit destroyed: faction Military −1 (subject to ±2/season cap)
-- Battle lost (defending force routed): Stability check Ob 1
-- Campaign-scale defeat: Stability check Ob 2, Mandate −1
+- Battle lost (defending force routed): Cohesion −15 (derived_stats_v1)
+- Campaign-scale defeat: Cohesion −30 (derived_stats_v1). Mandate −1 (structural — campaign-scale defeats are major events)
 [EDITORIAL: confirm Military stat change on unit destruction and Stability
 check thresholds]
 
@@ -648,13 +648,13 @@ Net successes = damage dealt to opposing units.
 | Margin | Outcome | Effect |
 |--------|---------|--------|
 | Attacker net ≥ Defender net + 2 | Attacker wins | Territory captured; Defender Military −1 |
-| Margin ≤ 1 either direction | Partial | No territory change; Attacker Stability −1 (commitment cost) |
+| Margin ≤ 1 either direction | Partial | No territory change; Attacker Cohesion −15 (commitment cost, derived_stats_v1) |
 | Defender net ≥ Attacker net + 2 | Defender wins | No territory change; Attacker Military −1 |
 
 **Accord consequence (PP-645):** Territory gained via BG Battle: Accord set to 1 (Resistant). Defender loses Accord −1 in defended territory (war came to their home). See peninsular_strain_v1.md §2.4.
 
 Partial reflects a costly inconclusive engagement — forces committed, ground unchanged.
-*[PP-195 — confirmed: margin ≤1 = Partial; Attacker Stability −1]*
+*[PP-195 — confirmed: margin ≤1 = Partial; Attacker Cohesion −15 (derived_stats_v1)]*
 
 **Step 5 — Apply damage.** Reduce Health per Step 3 net successes × unit damage modifier − DR.
 Formation Break at Health 0.

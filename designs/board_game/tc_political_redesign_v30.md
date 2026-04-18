@@ -231,9 +231,9 @@ Govern (Consul Inward) pool = Mandate, Ob = floor(Prosperity/2)+1, −1 in own c
 
 | Degree | Effect |
 |---|---|
-| Failure | No change; Stability −1 if Prosperity was 0 in that territory (resource mismanagement) |
+| Failure | No change; Cohesion −15 if Prosperity was 0 in that territory (resource mismanagement, derived_stats_v1) |
 | Partial | Accord maintained (no drift this season); no improvement |
-| Success | Accord +1 in target territory (max 3); OR Mandate recovery +1 if in capital (max starting Mandate, once/season, PP-174) |
+| Success | Accord +1 in target territory (max 3) + Legitimacy +Mandate×5 (derived_stats_v1). Mandate recovery +1 in capital only on OW (PP-174). |
 | Overwhelming | Both: Accord +1 AND Mandate +1 in own capital (PP-174) |
 
 **Govern is the primary stat-maintenance action.** Without Govern, Accord drifts downward under Peninsular Strain pressure, eventually triggering revolts that cost Stability. Factions that neglect Govern for military expansion find their home territories destabilising behind them — exactly the dynamic that destabilised over-extended Italian condottiere states.
@@ -246,8 +246,8 @@ Trade (Consul Outward) pool = Wealth, Ob = floor(Prosperity/2)+1. +1 Ob at IP≥
 |---|---|
 | Failure | No income |
 | Partial | Wealth maintained (no change) |
-| Success | Wealth +1 |
-| Overwhelming | Wealth +2 (capped by seasonal cap of +2) |
+| Success | Treasury +Wealth×25 (derived_stats_v1). Wealth stat unchanged. |
+| Overwhelming | Treasury +Wealth×50 AND Wealth +1 (structural economic improvement, derived_stats_v1). |
 
 ### §4.4 Peninsular Strain Effects on Stats
 
@@ -256,7 +256,7 @@ Peninsular Strain (range 0–10) rises from inter-faction battles (+1/season wit
 | Strain | Effect on faction stats |
 |---|---|
 | 0–2 | No effect |
-| 3–4 | All factions: Mandate check at Accounting (Mandate pool vs Ob 1). Failure → Mandate −1 |
+| 3–4 | All factions: Legitimacy −25 at Accounting (derived_stats_v1). Mandate check only at Strain ≥ 7. |
 | 5–6 | All factions: Accord −1 in one non-capital territory (controller's choice) |
 | 7–8 | All factions: Accord −1 in ALL non-capital territories. Mandate check Ob 2 |
 | 9–10 | Non-capital territories: Accord cap 2. Mandate check Ob 3. RS −1/season additional |

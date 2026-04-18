@@ -40,6 +40,16 @@ The existing 17 territories become **provinces** — the strategic layer. Each p
 
 ## §1.3 Settlement Stats
 
+**Derived values (derived_stats_v1 §4):** Settlement stats (Prosperity/Defense/Order, 0–5) produce derived values for the videogame layer:
+
+| Stat | Derived Value | Derivation | Player Sees |
+|------|--------------|-----------|-------------|
+| Prosperity | Local Economy | Prosperity × 50 | Gold income contribution to faction Treasury |
+| Defense | Garrison Strength | Defense × 20 + Fort Level × 30 | Settlement defensibility score |
+| Order | Public Order | Order × 20 | Civil stability meter — below 0 triggers riot events |
+
+Settlement derived values feed upward to faction derived values: Local Economy contributes to faction Treasury income. Garrison Strength is displayed when evaluating military targets. Public Order generates events when drained. Stat damage (Prosperity −1) only occurs when a derived value hits 0 and stays through Accounting — same rule as faction stats.
+
 Each settlement has 3 stats tracked on a 0–5 scale:
 
 | Stat | What it represents | Effect |
@@ -79,7 +89,7 @@ Each Seat-type and certain City-type settlements offer a bounded number of **Ins
 At full capacity, rank advancement becomes politically charged. If a Seat has 3 Wings occupied (leader + 2 inner circle) and the player reaches Standing 6 as a fourth claimant:
 
 1. **Existing Wing-holder departs** (Generational Shift, death, exile, political transition), OR
-2. **Settlement expands capacity** via Domain Action **Expand Institutional Capacity** (Wealth −3, scene action at settlement, +1 Wing added; cap: +1 Wing per settlement per decade), OR
+2. **Settlement expands capacity** via Domain Action **Expand Institutional Capacity** (Treasury −300 (derived_stats_v1), scene action at settlement, +1 Wing added; cap: +1 Wing per settlement per decade), OR
 3. **Player accepts Prince-in-Waiting provisional rank** — Std 6 privileges without Wing residency. Each season without Wing, player makes social contest (Disposition pool vs Ob 2) to maintain inner-circle standing. Failure reverts to Standing 5.
 
 This creates structural political pressure: full capacity drives exile, succession, or formal expansion rather than permitting unlimited inner-circle accumulation.
@@ -305,7 +315,7 @@ Each settlement generates 0–1 local events per season based on its stats and t
 | RM takes control of settlement | **Governance Transition scene** (historical_precedents_analysis §4.3). Player (or Vossen if NPC) chooses: **Disestablishment** (remove existing governance infrastructure; −1 Order for 2 seasons, then Accord growth +0.5/season; PT −1 immediate); **Accommodation** (maintain existing infrastructure under RM oversight; no penalty, PT drops 0.5 only, standard Accord); **Transformation** (4-season gradual conversion; no penalty during transition; PT −1 and Accord +0.5/season after completion). |
 | RM-governed settlement, emergency action | **Consensus Delay** (historical_precedents_analysis §3.4). Emergency Domain Actions (Muster, Fortify, Emergency Diplomacy) in RM settlements take +1 season to resolve. Waivable: RM leader spends 1 Mandate + loses 1 Presence marker in that province (community perceives consensus violation). |
 | Cathedral type + CV change in province | Religious event: sermon, ceremony, procession, or protest depending on CV direction. |
-| Mine type + Prosperity 3+ | Resource surplus. Province Wealth +1 at Accounting (economic contribution). |
+| Mine type + Prosperity 3+ | Resource surplus. Province Treasury +50/season at Accounting (economic contribution, derived_stats_v1). |
 | Fortress type + hostile military in province | Garrison mobilization. Defense check: Defense pool vs Ob 2. Success: settlement holds. Failure: attacker bypasses or captures. |
 
 ### §4.4 Thread Operations at Settlement Level (Throughline T1)

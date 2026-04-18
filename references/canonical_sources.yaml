@@ -352,3 +352,10 @@ systems:
     params: null
     design_doc: null
     notes: "Historical precedent analysis for warfare, mustering, territory seizure. PP-676."
+
+  derived_stats:
+    status: active
+    canonical: designs/systems/derived_stats_v1.md
+    params: null
+    design_doc: designs/systems/derived_stats_v1.md
+    notes: "Derived stat system — Treasury, Legitimacy, Reputation, Cohesion, Levies Available. PP-679/680."
