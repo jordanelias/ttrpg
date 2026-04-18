@@ -119,22 +119,20 @@ Per params_board_game §Unit Muster Ob Table:
 
 **Wealth** gates professional unit quality — you need money to equip and pay soldiers. Wealth expenditure (Ob 2 for HI, Ob 4 for Artillery) is a separate roll from the Muster roll. Both must succeed for the unit to be raised at that quality. On Muster Success but Wealth Failure: unit raised as Light Infantry instead (the cheaper available type).
 
-### §1.5b Settlement-Type Muster Bonuses (NEW — historical_precedents_warfare §3.2)
+### §1.5b Settlement-Type Muster Bonuses (NEW — historical_precedents_warfare §3.2, simplified)
 
 The settlement where Muster occurs modifies the output:
 
 | Settlement Type | Muster Modifier |
 |----------------|----------------|
-| Fortress | +1 initial Size for Heavy Infantry and Cavalry (military infrastructure). |
-| City / Port | May Muster **Militia** (new type: Power 2, Discipline 3, Service 4 seasons, Levy cost. Armed citizenry — better than Levy, no Wealth gate). |
-| Town | Standard (Levy and above per prerequisites). |
-| Mine | May Muster **Sappers** (new type: Power 1, Discipline 2, unlimited service at −0.5 Wealth/season. +2D on Siege actions — historical mining specialists). |
+| Fortress | +1 initial Size for Heavy Infantry and Cavalry (military infrastructure supports equipping and training). |
 | Cathedral | Knights Templar only (existing rule, Church faction). |
 | Outpost | Cannot Muster (insufficient population). |
+| All others | Standard per §1.5 prerequisites. |
 
-**Design rationale:** Different settlements historically produced different types of soldiers. Castle towns equipped heavy troops. Trading cities armed militia. Mining communities provided siege specialists. This makes geographic control of settlement types militarily meaningful.
+**Design rationale:** Fortress settlements represent established military infrastructure — barracks, armouries, training grounds. Units mustered there start larger because the infrastructure supports equipping more soldiers at once. This makes controlling Fortress settlements (Lowenskyst Fortress, Ehrenfeld Citadel, Spartfell Fortress) militarily meaningful beyond their defensive Fort Level. The player who controls more Fortress settlements fields a larger army.
 
-[EDITORIAL: ED-680 — Settlement Muster bonuses. Source: historical_precedents_warfare.md §3.2.]
+[EDITORIAL: ED-680 — Settlement Muster bonuses (simplified — Militia and Sapper unit types cut as unnecessary complexity). Source: historical_precedents_warfare.md §3.2.]
 
 ### §1.6 Experience
 

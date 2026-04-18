@@ -510,34 +510,25 @@ across battle boundaries unless cleared. *[EDGE-08]*
 
 ### A.14b CAMPAIGN SUPPLY (NEW — historical_precedents_warfare §1.3a)
 
-Units stationed in hostile territory (territory NOT controlled by the unit's faction) cost Wealth at Accounting:
+Any faction with military units stationed in hostile territory (territory NOT controlled by the unit's faction) pays **Wealth −1/season** at Accounting. This is a flat cost regardless of how many units are deployed — it represents the logistical overhead of maintaining supply lines into hostile territory, not per-soldier expenses.
 
-| Unit Type | Hostile Territory Cost |
-|-----------|----------------------|
-| Levy | 0 (forage locally — but see Service Duration below) |
-| Light Infantry | −0.5/season (round: −1 every other season) |
-| Heavy Infantry / Cavalry | −1/season |
-| Ranged | −0.5/season |
-| Artillery | −1.5/season |
+Units in friendly territory cost nothing (the population supports them).
 
-Units in friendly territory cost nothing (population supports them). Units in territories with Prosperity 0 cannot be supplied — they lose Size −1/season from attrition regardless of ownership.
+**Attrition in devastated territory:** Units in any territory with Prosperity 0 lose **Size −1/season** from attrition — starvation, disease, desertion. Applies regardless of territorial control. A faction that devastates a territory's economy to conquer it cannot then garrison it effectively.
 
-**Altonian exception:** Altonian Vanguard forces do NOT pay Campaign Supply in territories they occupy (they control supply through invasion corridor). Valorian factions operating offensively in occupied zones DO pay.
+**Altonian exception:** Altonian Vanguard forces do NOT pay Campaign Supply in territories they occupy (they control supply through the invasion corridor). Valorian factions operating offensively in occupied zones DO pay.
 
-**Design rationale:** Historical armies could not exist indefinitely in hostile territory. This creates economic pressure to conquer quickly or consolidate supply. The mechanic already exists for siege (Wealth −1/season per §1.9) — this extends it to general hostile occupation.
+**Design rationale:** Historical armies could not exist indefinitely in hostile territory without economic support. One flat cost creates economic pressure to conquer quickly or consolidate — the player feels their treasury draining without tracking per-unit logistics.
 
-[EDITORIAL: ED-676 — Campaign Supply. Source: historical_precedents_warfare.md §1.3a.]
+[EDITORIAL: ED-676 — Campaign Supply (simplified from per-unit table). Source: historical_precedents_warfare.md §1.3a.]
 
-### A.14c SERVICE DURATION (NEW — historical_precedents_warfare §1.3b)
+### A.14c LEVY RESTRICTION (NEW — historical_precedents_warfare §1.3b, simplified)
 
-| Unit Type | Service Duration | Overstay Consequence |
-|-----------|-----------------|---------------------|
-| Levy | 4 seasons | Discipline −1/season after expiry. At Discipline 0: unit disbands. |
-| Light Infantry+ | Unlimited | Requires Campaign Supply payment (see A.14b). On faction Wealth 0: all professional units Discipline −1/season. |
+Levy units **cannot be used for offensive operations outside their home territory.** They defend the territory where they were mustered. They can be moved to adjacent friendly territories for defensive positioning but cannot March into hostile territory or participate in offensive Battle declarations.
 
-Levy service can be extended by paying Wealth −1/season (converting conscripts to paid service). This represents the historical transition from feudal levy to paid army.
+Professional units (Light Infantry and above) have no such restriction — they campaign wherever the faction sends them, subject to Campaign Supply costs (§A.14b).
 
-**BG simplification:** Levy units auto-disband after 4 seasons unless the faction pays Wealth −1 to extend.
+**Design rationale:** Feudal levies historically served close to home for limited terms. Rather than tracking service counters per unit, this rule captures the same strategic truth in one sentence: if you want to project force, you need professionals. Levies hold the line. This makes army composition a genuine choice — levies are free but defensive, professionals cost Wealth but can conquer.
 
 **Battle outcome → faction consequences:** *[FACTION-P2-02 — proposed, EDITORIAL]*
 **Battle outcome → peninsular consequences (PP-647, peninsular_strain_v1.md §3):**

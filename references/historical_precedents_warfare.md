@@ -287,3 +287,40 @@ The additions here interact with PP-675 additions:
 ---
 
 *This analysis identifies 10 historically-grounded additions to the warfare, mustering, and territory seizure systems. Each is traced to specific historical precedents, mapped to existing Valoria mechanics, audited for robustness/smoothness/elegance, and cross-checked for interactions with PP-675. The "generalship dominates" axiom and formation counter system are validated as historically correct. The primary gaps are logistics/supply, feudal levy service terms, morale cascade, siege negotiation, economic acquisition, and differentiated Accord by acquisition method.*
+
+---
+
+## §8 — Post-Commit Audit: Complexity vs. Narrative Value (2026-04-17)
+
+All additions audited against the core design criterion: does this mechanic contribute to the character↔world feedback loop that generates emergent narrative?
+
+### Committed (simplified where noted):
+
+| Addition | Narrative Value | Simplification |
+|----------|----------------|----------------|
+| Campaign Supply | Player feels treasury drain from hostile occupation — genuine strategic pressure | Simplified: flat Wealth −1/season for any units in hostile territory (was per-unit-type table) |
+| Levy Restriction | Army composition becomes a genuine choice — levies defend, professionals conquer | Simplified: "Levy cannot attack outside home territory" (was 4-season countdown timer) |
+| Morale Cascade | Dramatic battle moments — one unit breaks, panic spreads | None needed — already elegant (Discipline Ob 1 check) |
+| Siege Civilian Consequences | Moral dimension to siege — civilians suffer, garrison faces surrender pressure | None needed |
+| Siege Parley | Most historical sieges ended in negotiation — Accord 2 vs 1 makes the choice meaningful | None needed |
+| Show of Force | Military capability as diplomatic leverage — avoids RS/Strain costs of battle | None needed |
+| Settlement Muster (Fortress only) | Controlling Fortress settlements is militarily meaningful | Simplified: kept only Fortress +1 Size bonus |
+| Accord by Acquisition Method | How you take territory determines how well you govern it — direct feedback loop | None needed |
+
+### Cut (insufficient narrative return for complexity cost):
+
+| Addition | Why Cut |
+|----------|---------|
+| Militia unit type | Mechanically "slightly better Levy" — no narrative situation it creates that Levy doesn't |
+| Sapper unit type | Niche unit for a mechanic (siege mining) that doesn't exist. Zero character↔world feedback |
+| Per-unit Campaign Supply costs | Granular tracking without proportional narrative return. One flat rule communicates the same strategic truth |
+| Service Duration countdown | Per-unit timer is bookkeeping, not narrative. Levy restriction captures the same truth in one sentence |
+| RM Accord ceiling | Invisible cap → player frustration. Hidden Thread-site bonus (kept) communicates the same idea through positive signal |
+| Mutual Aid bonus | Small modifier, zero narrative moments |
+| Trade Mandate | Premature — needs Guild system that doesn't exist yet |
+
+### Deprioritized (systems already functional, precedent grounding is polish):
+- Peninsular Strain cascade precedent
+- Social Contest precedent
+- Caste system precedent
+- Faction collapse/emergence precedent

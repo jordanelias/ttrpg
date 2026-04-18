@@ -378,3 +378,20 @@ Do any of the additions create unexpected interactions between factions?
 ---
 
 *This analysis identifies 12 historically-grounded mechanical additions across four domains (theocracy, invasion, movement governance, cultural revival). Each is traced to specific historical precedents, mapped to existing Valoria systems, audited for robustness/smoothness/elegance, and cross-checked for unintended interactions. Priority ordering reflects mechanical cleanliness and integration risk.*
+
+---
+
+## §8 — Post-Commit Audit: Complexity vs. Narrative Value (2026-04-17)
+
+Additions audited against core criterion: character↔world feedback loop generating emergent narrative.
+
+### Committed as-is:
+Parish Social Services, Pastoral Assumption, Cell Resilience, IP Milestones, RM Underground conversion, Governance Transition, Consensus Delay, Hidden Thread-site bonus (all generate character-level decisions or narrative discovery moments).
+
+### Revised:
+- **Altonian Alignment:** Changed from player action to NPC AI behavior. Players discover the betrayal through investigation — that IS the narrative moment.
+
+### Cut:
+- **RM Accord ceiling (§4.4 item 2):** Invisible cap creates frustration, not narrative. Hidden Thread-site bonus already communicates the same idea through positive signal (bonus at Thread sites) rather than negative signal (cap elsewhere).
+- **Mutual Aid bonus (§4.4 item 4):** Small modifier, zero narrative moments.
+- **Trade Mandate (§5 item 9 priority C):** Premature — needs Guild system integration.
