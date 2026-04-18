@@ -14,13 +14,13 @@ import subprocess, sys, os, re
 
 EDITORIAL_PATHS = (
     'designs/npcs/',
-    'designs/worldbuilding/',
     'designs/world/',
     'designs/arcs/gm_ref/',
     'canon/03_',
 )
 MARKERS = ('[EDITORIAL:', '[PROVISIONAL:', '[EDITORIAL GATE]')
 MIN_LEN  = 200  # below this = stub, exempt
+SKELETON_EXEMPT = '_skeleton.md'  # auto-generated, exempt from editorial markers
 
 def get_changed_files():
     """
