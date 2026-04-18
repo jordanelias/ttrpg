@@ -1,447 +1,740 @@
-# VALORIA REPOSITORY FILE INDEX
-## Last updated: 2026-04-13 (v30 complete)
-## Purpose: Single-source map of every committed file → game system → status
-## Maintained by: valoria-orchestrator skill (update on every commit that adds/modifies a file)
-## Format: path | systems | type | status | depends_on | referenced_by
-## Three-mode framing: ALL systems stated as TTRPG baseline → Hybrid → Board Game.
-## TTRPG = source layer. Hybrid = bridge. Board Game = abstraction. designs/ = working layer. compilation/ = snapshot.
-
----
-
-## v30 Baseline Applied (2026-04-13)
-> All canonical design docs renamed to `_v30.md` suffix. 40 deprecated files moved to `deprecated/designs/`. See `references/design_registry.yaml` for full atomization registry.
-
-## HOW TO USE
-
-- **systems**: which game mode(s) the file primarily covers (ALL / TTRPG / BG / HYBRID / INFRA)
-- **type**: CANON (immutable) | COMPILED (checkpoint) | DESIGN (proposal) | TEST (simulation) | SKILL | TOOL | REF (parameter/reference) | LOG
-- **status**: CURRENT | STALE | SUPERSEDED | DEPRECATED
-- **depends_on**: files this file's content relies on being correct
-- **referenced_by**: files that cite or build on this file
-
----
-
-## CANON (immutable — do not modify without explicit canon amendment)
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| canon/00_philosophical_foundations.md | ALL | CURRENT | Highest authority. Governs all design. |
-| canon/01_foundations_amendment_self_rendering.md | ALL | CURRENT | Amendment to foundations |
-| canon/02_canon_constraints.md | ALL | CURRENT | Mechanical constraints derived from foundations |
-| canon/03_canonical_timeline.md | ALL | CURRENT | World timeline |
-| canon/README.md | INFRA | CURRENT | — |
-| canon/audit_threadwork_v24.md | TTRPG | CURRENT | Audit of v24 threadwork vs foundations |
-| canon/audit_threadwork_v25.md | TTRPG | CURRENT | Audit of v25 threadwork vs foundations |
-| canon/editorial_ledger.yaml | ALL | CURRENT | Source of truth for editorial decisions |
-| canon/patch_register_active.yaml | ALL | CURRENT | All patches PP-001 onwards |
-
----
-
-## COMPILATION v0.14 (DEPRECATED — all stages outdated as of 2026-04-09)
-
-> **All compilation/v0.14 stage documents are DEPRECATED.** Design docs in designs/ and params files in references/ are canonical. See canonical_sources.yaml. Each stage file now has a DEPRECATED header naming its replacement.
-
-| File | Systems | Status | Canonical Replacement |
-|------|---------|--------|----------------------|
-| compilation/v0.14/stage1_core_engine_deprecated.md | ALL | DEPRECATED | references/params_core.md |
-| compilation/v0.14/stage2_characters_deprecated.md | TTRPG/HYBRID | DEPRECATED | references/params_core.md |
-| compilation/v0.14/stage3_thread_operations_deprecated.md | TTRPG/HYBRID | DEPRECATED | designs/ttrpg/threadwork_v30.md |
-| compilation/v0.14/stage3_compilation_report.md | INFRA | DEPRECATED | Process artifact |
-| compilation/v0.14/stage4_southernmost_deprecated.md | TTRPG/HYBRID | DEPRECATED | No design-layer replacement — unverified |
-| compilation/v0.14/stage5_clocks_deprecated.md | ALL | DEPRECATED | designs/systems/clock_registry_v30.md |
-| compilation/v0.14/stage6_factions_deprecated.md | TTRPG | DEPRECATED | BG/Hybrid: bg_v05. TTRPG: no replacement — unverified |
-| compilation/v0.14/stage7_territories_deprecated.md | ALL | DEPRECATED | designs/setting/geography_v30.md |
-| compilation/v0.14/stage8_combat_deprecated.md | ALL | DEPRECATED | designs/combat/combat_v30.md |
-| compilation/v0.14/stage9_social_deprecated.md | TTRPG | DEPRECATED | designs/contest/social_contest_v30.md |
-| compilation/v0.14/stage10_advancement.md | TTRPG | DEPRECATED | No design-layer replacement — unverified |
-| compilation/v0.14/stage11_scale_transitions_deprecated.md | HYBRID | DEPRECATED | No design-layer replacement — unverified |
-| compilation/v0.14/stage12_campaign_modes_deprecated.md | ALL | DEPRECATED | No design-layer replacement — unverified |
-| compilation/v0.14/stage13_npcs.md | ALL | DEPRECATED | designs/npcs/npc_roster_v30.md (partial) |
-| compilation/v0.14/stage14_gm_tools.md | ALL | DEPRECATED | No design-layer replacement — unverified |
-| compilation/v0.14/stage15_spell_catalog.md | TTRPG | DEPRECATED | No design-layer replacement — unverified |
-| compilation/v0.14/stage16_reference.md | ALL | DEPRECATED | No design-layer replacement — unverified |
-| compilation/v0.14/stage17_canon_guard.md | ALL | DEPRECATED | skills/valoria-canon-guard/SKILL.md |
-| compilation/v0.14/stage_bg_board_game_mode_deprecated.md | BG | DEPRECATED | designs/board_game/board_game_v30.md |
-| compilation/v0.14/valoria_ruleset_v0.14_deprecated.md | ALL | DEPRECATED | Compilation snapshot — all stages outdated |
-
----
-
-## DESIGNS — BOARD GAME
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| **designs/board_game/board_game_v30.md** | **BG/HYBRID** | **CURRENT** | Canonical BG faction mechanics. P-12–P-32 applied. |
-| ~~designs/board_game/valoria_bg_v05_stress_test_report_deprecated.md~~ | — | DEPRECATED | Moved to deprecated/designs/board_game/ (2026-04-13) |
-| designs/board_game/victory_v30.md | BG/ALL | CURRENT | Canonical victory conditions. PP-406–PP-427. |
-| ~~designs/board_game/faction_resolutions_2026_04_07_deprecated.md~~ | — | DEPRECATED | Moved to deprecated/designs/board_game/ (2026-04-13) |
-| designs/board_game/varfell_path_b_v30.md | BG | AWAITING REVIEW | ED-311 |
-| designs/board_game/valoria_map_v2.svg | BG | CURRENT | Visual map |
-| ~~19 superseded BG files~~ | — | DEPRECATED | Moved to deprecated/designs/board_game/ (2026-04-09) |
-
----
-
-## DESIGNS — COMBAT
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| **designs/combat/combat_v30.md** | **ALL** | **CURRENT** | Canonical combat design. PP-086–092+. |
-
----
-
-## DESIGNS — MASS COMBAT
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| **designs/mass_combat/mass_battle_v30.md** | **ALL** | **CURRENT** | Canonical mass battle spec. ST-MB patches. |
-
----
-
-## DESIGNS — CONTEST (Social/Debate)
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| **designs/contest/social_contest_v30.md** | **ALL** | **CURRENT** | Canonical social contest. PP-234. Supersedes debate_system_redesign_v1. |
-| ~~designs/debate/*~~ | — | DEPRECATED | Moved to deprecated/ (2026-04-09). Superseded by contest system. |
+# FILE INDEX
+# Auto-generated: 2026-04-18 (post-restructure)
+# Total files: 697
+
+## (root)/ (2 files)
+
+- `session_log_archive.md`
+- `session_log_current.md`
+
+## .github/ (1 files)
+
+- `.github/workflows/valoria-ci.yml`
+
+## archives/ (23 files)
+
+- `archives/editorials/editorial_ledger_archive_001_200.yaml`
+- `archives/editorials/editorial_ledger_archive_1001_1200.yaml`
+- `archives/editorials/editorial_ledger_archive_201_400.yaml`
+- `archives/editorials/editorial_ledger_archive_401_600.yaml`
+- `archives/editorials/editorial_ledger_archive_601_800.yaml`
+- `archives/editorials/editorial_ledger_archive_801_1000.yaml`
+- `archives/patches/patch_register_archive_001_200.yaml`
+- `archives/patches/patch_register_archive_1001_1200.yaml`
+- `archives/patches/patch_register_archive_1201_1400.yaml`
+- `archives/patches/patch_register_archive_1401_1600.yaml`
+- `archives/patches/patch_register_archive_1601_1800.yaml`
+- `archives/patches/patch_register_archive_201_400.yaml`
+- `archives/patches/patch_register_archive_401_600.yaml`
+- `archives/patches/patch_register_archive_601_800.yaml`
+- `archives/patches/patch_register_archive_801_1000.yaml`
+- `archives/patches/patch_register_index_archive.md`
+- `archives/session/session_log_archive_part_1.md`
+- `archives/session/session_log_archive_part_2.md`
+- `archives/session/session_log_archive_part_3.md`
+- `archives/session/session_log_archive_part_4.md`
+- `archives/session/session_log_archive_part_5.md`
+- `archives/session/session_log_archive_part_6.md`
+- `archives/session/session_log_archive_part_7.md`
+
+## canon/ (11 files)
+
+- `canon/00_philosophical_foundations.md`
+- `canon/00_philosophical_foundations_rules.md`
+- `canon/01_foundations_amendment_self_rendering.md`
+- `canon/02_canon_constraints.md`
+- `canon/03_canonical_timeline.md`
+- `canon/README.md`
+- `canon/editorial_ledger.yaml`
+- `canon/editorial_ledger_index.md`
+- `canon/editorial_ledger_summary.yaml`
+- `canon/patch_register_active.yaml`
+- `canon/patch_register_index.md`
+
+## deprecated/ (123 files)
+
+- `deprecated/.gitkeep`
+- `deprecated/README.md`
+- `deprecated/compilation/README.md`
+- `deprecated/compilation/v0.14/README.md`
+- `deprecated/compilation/v0.14/stage10_advancement_deprecated.md`
+- `deprecated/compilation/v0.14/stage11_scale_transitions_deprecated.md`
+- `deprecated/compilation/v0.14/stage12_campaign_modes_deprecated.md`
+- `deprecated/compilation/v0.14/stage13_npcs_deprecated.md`
+- `deprecated/compilation/v0.14/stage14_gm_tools_deprecated.md`
+- `deprecated/compilation/v0.14/stage15_spell_catalog_deprecated.md`
+- `deprecated/compilation/v0.14/stage16_reference_deprecated.md`
+- `deprecated/compilation/v0.14/stage17_canon_guard_deprecated.md`
+- `deprecated/compilation/v0.14/stage1_core_engine_deprecated.md`
+- `deprecated/compilation/v0.14/stage2_characters_deprecated.md`
+- `deprecated/compilation/v0.14/stage3_compilation_report_deprecated.md`
+- `deprecated/compilation/v0.14/stage3_thread_operations_deprecated.md`
+- `deprecated/compilation/v0.14/stage4_southernmost_deprecated.md`
+- `deprecated/compilation/v0.14/stage5_clocks_deprecated.md`
+- `deprecated/compilation/v0.14/stage6_factions_deprecated.md`
+- `deprecated/compilation/v0.14/stage7_territories_deprecated.md`
+- `deprecated/compilation/v0.14/stage8_combat_deprecated.md`
+- `deprecated/compilation/v0.14/stage9_social_deprecated.md`
+- `deprecated/compilation/v0.14/stage_bg_board_game_mode_deprecated.md`
+- `deprecated/compilation/v0.14/valoria_ruleset_v0.14_deprecated.md`
+- `deprecated/designs/board_game/bg_consolidated_synthesis.md`
+- `deprecated/designs/board_game/bg_improvement_review.md`
+- `deprecated/designs/board_game/bg_improvement_v1.md`
+- `deprecated/designs/board_game/bg_improvement_v2.md`
+- `deprecated/designs/board_game/bg_improvement_v3.md`
+- `deprecated/designs/board_game/bg_improvement_v3_amendment2.md`
+- `deprecated/designs/board_game/bg_improvement_v4.md`
+- `deprecated/designs/board_game/bg_proposal_critical_review.md`
+- `deprecated/designs/board_game/bg_synthesis.md`
+- `deprecated/designs/board_game/bg_synthesis_amendment_1.md`
+- `deprecated/designs/board_game/faction_resolutions_2026_04_07_deprecated.md`
+- `deprecated/designs/board_game/military_layer_v30.md`
+- `deprecated/designs/board_game/stage_bg_proposal.md`
+- `deprecated/designs/board_game/stage_bg_proposal_v02.md`
+- `deprecated/designs/board_game/tc_political_redesign_v30.md`
+- `deprecated/designs/board_game/valoria_bg_v01.md`
+- `deprecated/designs/board_game/valoria_bg_v02.md`
+- `deprecated/designs/board_game/valoria_bg_v02_sim_report.md`
+- `deprecated/designs/board_game/valoria_bg_v03_part1.md`
+- `deprecated/designs/board_game/valoria_bg_v03_part2.md`
+- `deprecated/designs/board_game/valoria_bg_v03_part3.md`
+- `deprecated/designs/board_game/valoria_bg_v04.md`
+- `deprecated/designs/board_game/valoria_bg_v05_stress_test_report_deprecated.md`
+- `deprecated/designs/cogload_reduction_strategies_deprecated.md`
+- `deprecated/designs/debate/debate_example_v1.md`
+- `deprecated/designs/debate/debate_stress_test_v1.md`
+- `deprecated/designs/debate/debate_stress_test_v2.md`
+- `deprecated/designs/debate/debate_system_redesign_v1.md`
+- `deprecated/designs/gm_ref_cp14/arcs/arcs_01_04_rebuilt_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/arcs/arcs_05_08_rebuilt_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/arcs/arcs_09_11_elske_baralta_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/arcs/arcs_12_15_faction_transitions_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/dashboards/d01_cascade_consequence_reference_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/dashboards/d02_seasonal_accounting_form_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/dashboards/d03_gm_dashboard_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/dashboards/d04_gap_escalation_table_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/dashboards/d05_coherence_band_track_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/dashboards/d06_thread_operation_resolution_card_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/dashboards/d07_npc_state_cards_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/dashboards/d08_knot_registry_template_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/dashboards/d09_comovement_matrix_skeleton_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/dashboards/d10_framing_process_skeleton_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/flowcharts/flowchart_templar_crossing_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/gm_reference_workplan_deprecated.md`
+- `deprecated/designs/gm_ref_cp14/zoom_in_out_reference_card_deprecated.md`
+- `deprecated/designs/npcs/almud_correction_plan_deprecated.md`
+- `deprecated/designs/npcs/ed_403_406_407_resolutions_deprecated.md`
+- `deprecated/designs/npcs/lenneth_threadwork_design_deprecated.md`
+- `deprecated/designs/npcs/npc_character_analyses_existing_deprecated.md`
+- `deprecated/designs/npcs/npc_comprehensive_audit_deprecated.md`
+- `deprecated/designs/npcs/ruler_diamond_extended_foils_deprecated.md`
+- `deprecated/designs/npcs/ruler_diamond_foil_analysis_deprecated.md`
+- `deprecated/designs/qwen_ruleset.md`
+- `deprecated/designs/ttrpg/SUPERSEDED.md`
+- `deprecated/designs/ttrpg/batch_a_designs_deprecated.md`
+- `deprecated/designs/ttrpg/batch_ad_resolutions_deprecated.md`
+- `deprecated/designs/ttrpg/batch_bc_designs_deprecated.md`
+- `deprecated/designs/ttrpg/batch_d_designs_deprecated.md`
+- `deprecated/designs/ttrpg/batch_e_designs_deprecated.md`
+- `deprecated/designs/ttrpg/batch_f_designs_deprecated.md`
+- `deprecated/designs/ttrpg/church_territorial_seizure_deprecated.md`
+- `deprecated/designs/ttrpg/generation_tasks_gt01_gt02_gt03_deprecated.md`
+- `deprecated/designs/ttrpg/lowenritter_faction_card_deprecated.md`
+- `deprecated/designs/ttrpg/mechanical_tasks_and_patches_deprecated.md`
+- `deprecated/designs/ttrpg/succession_mechanic_deprecated.md`
+- `deprecated/designs/worldbuilding/editorial_comprehensive_review_deprecated.md`
+- `deprecated/designs/worldbuilding/worldbuilding_integration_v1.md`
+- `deprecated/designs/worldbuilding/worldbuilding_integration_v1_audit.md`
+- `deprecated/designs/worldbuilding/worldbuilding_integration_v2.md`
+- `deprecated/gm_ref/arcs_10_17_historical.md`
+- `deprecated/gm_ref/arcs_10_17_reassignment.md`
+- `deprecated/gm_ref/arcs_almud_revision.md`
+- `deprecated/gm_ref/arcs_assassination_einhir_revision.md`
+- `deprecated/gm_ref/debate_ref_card_v1.md`
+- `deprecated/project_instructions.md`
+- `deprecated/references/params_debate.md`
+- `deprecated/references/params_debate_history.md`
+- `deprecated/sim_coverage_matrix_legacy.md`
+- `deprecated/skills/valoria-canon-guard-SKILL.md`
+- `deprecated/skills/valoria-chunker-SKILL.md`
+- `deprecated/skills/valoria-compiler-SKILL.md`
+- `deprecated/skills/valoria-mechanic-audit-SKILL.md`
+- `deprecated/skills/valoria-orchestrator-SKILL.md`
+- `deprecated/skills/valoria-simulator-SKILL.md`
+- `deprecated/stage8_combat_legacy.md`
+- `deprecated/tests/auditing_matrix.md`
+- `deprecated/tests/mechanic_audit_sim_patches.md`
+- `deprecated/tests/threadweaving_stress_tests_batch1.md`
+- `deprecated/tests/threadweaving_stress_tests_batch2.md`
+- `deprecated/tests/threadweaving_stress_tests_batch3.md`
+- `deprecated/tests/valoria_f33b_simulation.md`
+- `deprecated/tests/valoria_mechanic_audit_p1.md`
+- `deprecated/valoria_comprehensive_workplan.md`
+- `deprecated/valoria_editorial_authorship_register.md`
+- `deprecated/valoria_gap_register_consolidated.md`
+- `deprecated/valoria_patch_proposals.md`
+- `deprecated/valoria_scope_map.md`
+- `deprecated/valoria_session_log.md`
+- `deprecated/valoria_ttrpg_complete.md`
+
+## designs/ (189 files)
+
+- `designs/README.md`
+- `designs/architecture/campaign_architecture_v30.md`
+- `designs/architecture/campaign_modes_v30.md`
+- `designs/architecture/campaign_modes_v30_infill.md`
+- `designs/architecture/canonical_registry.md`
+- `designs/architecture/cogload_moderate_target.md`
+- `designs/architecture/companion_app_design_note.md`
+- `designs/architecture/complete_systems_reference.md`
+- `designs/architecture/hybrid_gaps_v30.md`
+- `designs/architecture/hybrid_gaps_v30_infill.md`
+- `designs/architecture/integration_proposal_v30.md`
+- `designs/architecture/integration_proposal_v30_skeleton.md`
+- `designs/architecture/player_agency_v30.md`
+- `designs/architecture/player_agency_v30_skeleton.md`
+- `designs/architecture/scale_transitions_v30.md`
+- `designs/architecture/scale_transitions_v30_infill.md`
+- `designs/architecture/scale_transitions_v30_skeleton.md`
+- `designs/architecture/videogame_mode_spec.md`
+- `designs/arcs/README.md`
+- `designs/arcs/arc_expansion_v30.md`
+- `designs/arcs/arc_expansion_v30_skeleton.md`
+- `designs/arcs/arcs_16_19.md`
+- `designs/arcs/arcs_16_19_skeleton.md`
+- `designs/arcs/arcs_20_23.md`
+- `designs/arcs/arcs_20_23_skeleton.md`
+- `designs/arcs/arcs_24_27.md`
+- `designs/arcs/arcs_24_27_skeleton.md`
+- `designs/arcs/arcs_28_30.md`
+- `designs/arcs/arcs_28_30_skeleton.md`
+- `designs/arcs/arcs_31_35.md`
+- `designs/arcs/arcs_31_35_skeleton.md`
+- `designs/arcs/emergent_arcs_experimental.md`
+- `designs/arcs/emergent_arcs_experimental_skeleton.md`
+- `designs/arcs/emergent_campaign_arcs.md`
+- `designs/arcs/emergent_scenarios.md`
+- `designs/arcs/emergent_scenarios_skeleton.md`
+- `designs/arcs/gm_ref/README.md`
+- `designs/arcs/gm_ref/arc_narrative_analysis.md`
+- `designs/arcs/gm_ref/arcs_01_04.md`
+- `designs/arcs/gm_ref/arcs_05_09.md`
+- `designs/arcs/gm_ref/arcs_10_18.md`
+- `designs/arcs/gm_ref/arcs_36_40.md`
+- `designs/arcs/gm_ref/arcs_41_45.md`
+- `designs/arcs/gm_ref/arcs_46_55.md`
+- `designs/arcs/gm_ref/arcs_46_55_resolved.md`
+- `designs/arcs/narrative_scenario_chains.md`
+- `designs/arcs/narrative_scenario_chains_skeleton.md`
+- `designs/arcs/throughline_resolutions_v30.md`
+- `designs/arcs/throughline_resolutions_v30_skeleton.md`
+- `designs/audit/bridge_holistic_review_2026-04-16.md`
+- `designs/audit/bridge_part1_revisions.md`
+- `designs/audit/clock_registry_staleness_report.md`
+- `designs/audit/comprehensive_system_audit_2026-04-15.md`
+- `designs/audit/comprehensive_system_audit_2026-04-15_skeleton.md`
+- `designs/audit/cross_conversation_review_2026-04-15.md`
+- `designs/audit/integration_audit_v1_2026-04-15.md`
+- `designs/audit/integration_audit_v1_2026-04-15_skeleton.md`
+- `designs/audit/integration_audit_v2_2026-04-16.md`
+- `designs/audit/integration_audit_v2_2026-04-16_skeleton.md`
+- `designs/audit/integration_audit_v3_2026-04-16.md`
+- `designs/audit/player_world_bridge_2026-04-16.md`
+- `designs/audit/player_world_bridge_2026-04-16_skeleton.md`
+- `designs/audit/settlement_bridge_unification_2026-04-16.md`
+- `designs/audit/settlement_bridge_unification_2026-04-16_skeleton.md`
+- `designs/audit/simulation_review_2026-04-15.md`
+- `designs/audit/systematic_critique_2026-04-04.md`
+- `designs/audit/throughline_specifications_2026-04-17.md`
+- `designs/audit/throughline_specifications_2026-04-17_skeleton.md`
+- `designs/audit/throughlines_transitions_hierarchy.md`
+- `designs/audit/valoria_complete_system_audit.md`
+- `designs/audit/valoria_holistic_audit.md`
+- `designs/audit/valoria_holistic_audit_skeleton.md`
+- `designs/audit/valoria_how_to_play.md`
+- `designs/audit/valoria_how_to_play_skeleton.md`
+- `designs/audit/valoria_rse_critique.md`
+- `designs/audit/valoria_rse_critique_skeleton.md`
+- `designs/audit/valoria_systems_workplan.md`
+- `designs/audit/valoria_systems_workplan_skeleton.md`
+- `designs/audit/valoria_workplan_final.md`
+- `designs/npcs/companion_specification_v30.md`
+- `designs/npcs/edeyja_npc.md`
+- `designs/npcs/npc_behavior_system_v1.md`
+- `designs/npcs/npc_behavior_system_v1_skeleton.md`
+- `designs/npcs/npc_behavior_v30.md`
+- `designs/npcs/npc_behavior_v30_infill.md`
+- `designs/npcs/npc_behavior_v30_skeleton.md`
+- `designs/npcs/npc_character_analyses_v30.md`
+- `designs/npcs/npc_character_analyses_v30_infill.md`
+- `designs/npcs/npc_foils_v30.md`
+- `designs/npcs/npc_foils_v30_infill.md`
+- `designs/npcs/npc_roster_caste_annotations_deprecated.md`
+- `designs/npcs/npc_roster_v30.md`
+- `designs/npcs/npc_roster_v30_infill.md`
+- `designs/npcs/npc_roster_v30_skeleton.md`
+- `designs/provincial/baralta_crown_claim_v30.md`
+- `designs/provincial/baralta_crown_claim_v30_infill.md`
+- `designs/provincial/clock_registry_v30.md`
+- `designs/provincial/clock_registry_v30_infill.md`
+- `designs/provincial/faction_layer_v30.md`
+- `designs/provincial/faction_layer_v30_infill.md`
+- `designs/provincial/faction_layer_v30_skeleton.md`
+- `designs/provincial/faction_politics_v30.md`
+- `designs/provincial/faction_politics_v30_skeleton.md`
+- `designs/provincial/factions_personal_v30.md`
+- `designs/provincial/factions_personal_v30_infill.md`
+- `designs/provincial/factions_personal_v30_skeleton.md`
+- `designs/provincial/fail_forward_pp177.md`
+- `designs/provincial/mass_battle_v30.md`
+- `designs/provincial/mass_battle_v30_infill.md`
+- `designs/provincial/mass_battle_v30_skeleton.md`
+- `designs/provincial/military_layer_v30.md`
+- `designs/provincial/military_layer_v30_skeleton.md`
+- `designs/provincial/peninsular_strain_v30.md`
+- `designs/provincial/peninsular_strain_v30_skeleton.md`
+- `designs/provincial/strategic_layer_v30.md`
+- `designs/provincial/strategic_layer_v30_infill.md`
+- `designs/provincial/strategic_layer_v30_skeleton.md`
+- `designs/provincial/tc_political_v30.md`
+- `designs/provincial/tc_political_v30_skeleton.md`
+- `designs/provincial/valoria_map_v2.svg`
+- `designs/provincial/varfell_path_b_v30.md`
+- `designs/provincial/varfell_path_b_v30_infill.md`
+- `designs/provincial/victory_v30.md`
+- `designs/provincial/victory_v30_infill.md`
+- `designs/provincial/victory_v30_skeleton.md`
+- `designs/scene/combat_design_v1.md`
+- `designs/scene/combat_design_v1_skeleton.md`
+- `designs/scene/combat_v30.md`
+- `designs/scene/combat_v30_infill.md`
+- `designs/scene/combat_v30_skeleton.md`
+- `designs/scene/conviction_track_v30.md`
+- `designs/scene/conviction_track_v30_infill.md`
+- `designs/scene/conviction_track_v30_skeleton.md`
+- `designs/scene/derived_stats_v30.md`
+- `designs/scene/derived_stats_v30_skeleton.md`
+- `designs/scene/fieldwork_bg_v30.md`
+- `designs/scene/fieldwork_bg_v30_infill.md`
+- `designs/scene/fieldwork_editorial.md`
+- `designs/scene/fieldwork_exploration.md`
+- `designs/scene/fieldwork_exposure.md`
+- `designs/scene/fieldwork_godot.md`
+- `designs/scene/fieldwork_hybrid_v30.md`
+- `designs/scene/fieldwork_hybrid_v30_infill.md`
+- `designs/scene/fieldwork_investigation.md`
+- `designs/scene/fieldwork_rationale.md`
+- `designs/scene/fieldwork_socializing.md`
+- `designs/scene/fieldwork_summary.md`
+- `designs/scene/fieldwork_v30.md`
+- `designs/scene/fieldwork_v30_infill.md`
+- `designs/scene/fieldwork_v30_skeleton.md`
+- `designs/scene/investigation_systems_v30.md`
+- `designs/scene/investigation_systems_v30_skeleton.md`
+- `designs/scene/social_contest_system_v2.md`
+- `designs/scene/social_contest_system_v2_skeleton.md`
+- `designs/scene/social_contest_v30.md`
+- `designs/scene/social_contest_v30_infill.md`
+- `designs/scene/social_contest_v30_skeleton.md`
+- `designs/territory/settlement_layer_v30.md`
+- `designs/territory/settlement_layer_v30_skeleton.md`
+- `designs/threadwork/thread_horizontal_integration_spec.md`
+- `designs/threadwork/threadwork_philosophical_reference_v30.md`
+- `designs/threadwork/threadwork_philosophical_reference_v30_infill.md`
+- `designs/threadwork/threadwork_v25_historical.md`
+- `designs/threadwork/threadwork_v25_historical_skeleton.md`
+- `designs/threadwork/threadwork_v30.md`
+- `designs/threadwork/threadwork_v30_infill.md`
+- `designs/threadwork/threadwork_v30_skeleton.md`
+- `designs/ui/valoria_ui_ux_v4.md`
+- `designs/ui/valoria_ui_ux_v4_1.md`
+- `designs/ui/valoria_ui_ux_v4_1_max_audit.md`
+- `designs/ui/valoria_ui_ux_v4_1_max_audit_skeleton.md`
+- `designs/ui/valoria_ui_ux_v4_1_skeleton.md`
+- `designs/ui/valoria_ui_ux_v4_2_workplan.md`
+- `designs/ui/valoria_ui_ux_v4_2_workplan_skeleton.md`
+- `designs/ui/valoria_ui_ux_v4_skeleton.md`
+- `designs/world/adjacency_map.jsx`
+- `designs/world/calamity_radiation_v30.md`
+- `designs/world/calamity_radiation_v30_infill.md`
+- `designs/world/character_histories_v30.md`
+- `designs/world/character_histories_v30_infill.md`
+- `designs/world/character_histories_v30_skeleton.md`
+- `designs/world/geography_v30.md`
+- `designs/world/geography_v30_infill.md`
+- `designs/world/southernmost_v30.md`
+- `designs/world/southernmost_v30_infill.md`
+- `designs/world/worldbuilding_canon_audit_v30.md`
+- `designs/world/worldbuilding_canon_audit_v30_infill.md`
+- `designs/world/worldbuilding_v30.md`
+- `designs/world/worldbuilding_v30_infill.md`
+
+## docs/ (1 files)
+
+- `docs/freshness_gate_spec.md`
+
+## params/ (41 files)
+
+- `params/bg/clocks.md`
+- `params/bg/core.md`
+- `params/bg/ed_resolutions.md`
+- `params/bg/faction_actions.md`
+- `params/bg/geography.md`
+- `params/bg/institutions.md`
+- `params/bg/military.md`
+- `params/bg/ministry.md`
+- `params/bg/npc_priority_trees.md`
+- `params/bg/npcs_special.md`
+- `params/bg/parliament.md`
+- `params/bg/phases.md`
+- `params/bg/stress_patches.md`
+- `params/bg/tc_seizure.md`
+- `params/bg/tracks.md`
+- `params/bg/victory.md`
+- `params/board_game.md`
+- `params/board_game_misc.md`
+- `params/campaign_modes.md`
+- `params/combat.md`
+- `params/contest.md`
+- `params/core.md`
+- `params/factions.md`
+- `params/factions/npc_stance_triangles.md`
+- `params/factions/riskbreakers_identity.md`
+- `params/factions/stats_1_7_scale.md`
+- `params/factions_personal.md`
+- `params/fieldwork.md`
+- `params/history/board_game.md`
+- `params/history/campaign_modes.md`
+- `params/history/combat.md`
+- `params/history/core.md`
+- `params/history/factions_personal.md`
+- `params/history/mass_combat.md`
+- `params/history/southernmost.md`
+- `params/history/threadwork.md`
+- `params/mass_combat.md`
+- `params/scale_transitions.md`
+- `params/southernmost.md`
+- `params/threadwork.md`
+- `params/threadwork_superseded.md`
+
+## references/ (25 files)
+
+- `references/D10_INTEGRATION_GUIDE.md`
+- `references/arc_register.md`
+- `references/arc_register_infill.md`
+- `references/arcs/arc_register_clocks.md`
+- `references/arcs/arc_register_events.md`
+- `references/arcs/arc_register_factions.md`
+- `references/arcs/arc_register_territory.md`
+- `references/arcs/arc_register_threads.md`
+- `references/atomization_rules.yaml`
+- `references/canonical_sources.yaml`
+- `references/canonical_sources_notes.md`
+- `references/d10_success_probabilities.json`
+- `references/design_registry.yaml`
+- `references/effort-guide.md`
+- `references/file_index.md`
+- `references/file_index_summary.md`
+- `references/glossary.md`
+- `references/historical/precedents_analysis.md`
+- `references/historical/precedents_warfare.md`
+- `references/propagation_log.md`
+- `references/propagation_map.md`
+- `references/restructure_ledger.md`
+- `references/rs_budget.md`
+- `references/splits/params_board_game_split.yaml`
+- `references/wc_survival_spine.md`
+
+## skills/ (25 files)
+
+- `skills/valoria-arc-generator/SKILL.md`
+- `skills/valoria-atomizer/SKILL.md`
+- `skills/valoria-canon-guard/SKILL.md`
+- `skills/valoria-chunker/SKILL.md`
+- `skills/valoria-combat-simulator/SKILL.md`
+- `skills/valoria-combat-simulator/references/combat_params.md`
+- `skills/valoria-combat-simulator/references/findings_template.md`
+- `skills/valoria-combat-simulator/references/sim_protocol.md`
+- `skills/valoria-combat-simulator/scripts/combat_sim.py`
+- `skills/valoria-compiler/SKILL.md`
+- `skills/valoria-dice-model/SKILL.md`
+- `skills/valoria-dice-model/valoria_dice.py`
+- `skills/valoria-editorial-register/SKILL.md`
+- `skills/valoria-mechanic-audit/SKILL.md`
+- `skills/valoria-orchestrator/SKILL.md`
+- `skills/valoria-orchestrator/references/commit_convention.md`
+- `skills/valoria-orchestrator/references/github_pat.md`
+- `skills/valoria-orchestrator/references/model_routing_table.md`
+- `skills/valoria-orchestrator/references/session_protocol.md`
+- `skills/valoria-orchestrator/references/skill_registry.md`
+- `skills/valoria-orchestrator/references/state_transfer_spec.md`
+- `skills/valoria-orchestrator/scripts/github_ops.py`
+- `skills/valoria-orchestrator/scripts/valoria_hooks.py`
+- `skills/valoria-orchestrator/sim/valoria_sim.py`
+- `skills/valoria-simulator/SKILL.md`
+
+## tests/ (236 files)
+
+- `tests/audit/aud_bg_01.md`
+- `tests/audit/aud_bg_02_03.md`
+- `tests/audit/aud_ttrpg_01.md`
+- `tests/audit/aud_tw_001_threadwork_audit.md`
+- `tests/audit/audit_combat_2026-04-02.md`
+- `tests/audit/audit_cross_system_2026_04_06.md`
+- `tests/audit/audit_d02_sim_d05.md`
+- `tests/audit/audit_debate_a_g.md`
+- `tests/audit/audit_graduated_seizure_AUDIT-GS-01.md`
+- `tests/audit/audit_hybrid_01.md`
+- `tests/audit/audit_npc_behavior_system.md`
+- `tests/audit/audit_phase1_params_crosssystem.md`
+- `tests/audit/audit_phase2_canonical_docs.md`
+- `tests/audit/audit_phase3_crossmode_cogload.md`
+- `tests/audit/audit_phase3_remaining_systems.md`
+- `tests/audit/audit_sim_social_contest.md`
+- `tests/audit/audit_threadwork_v24_deprecated.md`
+- `tests/audit/audit_threadwork_v25.md`
+- `tests/audit/audit_victory_architecture_v1.md`
+- `tests/audit/delay_vs_preclusion_evaluation.md`
+- `tests/audit/editorial_resolution_pass.md`
+- `tests/audit/session_critical_review.md`
+- `tests/audit/stale_scan_bg_01.md`
+- `tests/audit/throughline_analysis.md`
+- `tests/audit/throughline_synthesis_holistic.md`
+- `tests/coverage_matrix.md`
+- `tests/coverage_matrix_archive.md`
+- `tests/misc/commit_test.md`
+- `tests/misc/hook_test.md`
+- `tests/sim/arc_branch_simulation.md`
+- `tests/sim/bal_bg_02.md`
+- `tests/sim/sim_alternate_branches2_2026-04-17.md`
+- `tests/sim/sim_alternate_branches_2026-04-17.md`
+- `tests/sim/sim_arc_01_irrational_player_arcs.md`
+- `tests/sim/sim_arc_02_nongreedy_player_arcs.md`
+- `tests/sim/sim_arc_03_new_nongreedy_arcs.md`
+- `tests/sim/sim_arc_04_structural_misreaders.md`
+- `tests/sim/sim_arc_a01_baralta_programme.md`
+- `tests/sim/sim_arc_b01_tc_fracture.md`
+- `tests/sim/sim_arc_b02_season8_constraint.md`
+- `tests/sim/sim_arc_c01_vaynard_unchecked.md`
+- `tests/sim/sim_arc_d01_southern_corridor.md`
+- `tests/sim/sim_arc_e01_rm_pressure.md`
+- `tests/sim/sim_arc_f01_economic_web.md`
+- `tests/sim/sim_arc_g01_g05_capitals.md`
+- `tests/sim/sim_arcs_36_45_batch.md`
+- `tests/sim/sim_batch_3_2026-04-16.md`
+- `tests/sim/sim_batch_4_2026-04-16.md`
+- `tests/sim/sim_batch_5_2026-04-16.md`
+- `tests/sim/sim_batch_6_2026-04-16.md`
+- `tests/sim/sim_batch_7_2026-04-16.md`
+- `tests/sim/sim_batch_8_2026-04-17.md`
+- `tests/sim/sim_bg_01.md`
+- `tests/sim/sim_bg_balance_01.md`
+- `tests/sim/sim_bg_battle_thread_2026_04_08.md`
+- `tests/sim/sim_bg_ff_01.md`
+- `tests/sim/sim_bg_remaining_2026_04_08.md`
+- `tests/sim/sim_cascade_01.md`
+- `tests/sim/sim_combat_004.md`
+- `tests/sim/sim_combat_batch_11.md`
+- `tests/sim/sim_combat_exhaustive.py`
+- `tests/sim/sim_combat_group.py`
+- `tests/sim/sim_combat_rescue.py`
+- `tests/sim/sim_combat_tieup.py`
+- `tests/sim/sim_combat_v11.py`
+- `tests/sim/sim_comp01_season8.md`
+- `tests/sim/sim_comp02_season9.md`
+- `tests/sim/sim_companions_2026-04-16.md`
+- `tests/sim/sim_comprehensive_batch_2026_04_10.md`
+- `tests/sim/sim_comprehensive_multisystem_2026_04_07.md`
+- `tests/sim/sim_d05_debate_resim.md`
+- `tests/sim/sim_d06_social_contest_stress.md`
+- `tests/sim/sim_d_01_debate_stress_test.md`
+- `tests/sim/sim_d_02_debate_scenario_c.md`
+- `tests/sim/sim_d_03_subsystem_k.md`
+- `tests/sim/sim_d_04_gap_fill_stress.md`
+- `tests/sim/sim_debate_stress_01.md`
+- `tests/sim/sim_debt_03_04_contest_baselines.md`
+- `tests/sim/sim_decision_protocols.md`
+- `tests/sim/sim_diplomacy_audit_patch.md`
+- `tests/sim/sim_diplomacy_batch2.md`
+- `tests/sim/sim_econ_01.md`
+- `tests/sim/sim_extended_threadwork.md`
+- `tests/sim/sim_faction_ambition_2026-04-16.md`
+- `tests/sim/sim_factions_stress_2026_04_13.md`
+- `tests/sim/sim_feint_rescue_mandate_batch.md`
+- `tests/sim/sim_fieldwork_npc_char_2026_04_13.md`
+- `tests/sim/sim_fieldwork_transitions.md`
+- `tests/sim/sim_graduated_seizure_SIM-GS-01.md`
+- `tests/sim/sim_h01_hybrid_season6.md`
+- `tests/sim/sim_h01_to_h07_resolution_and_audit.md`
+- `tests/sim/sim_h08_to_h13_nongreedy_batch.md`
+- `tests/sim/sim_hyb_01_templar_crossing.md`
+- `tests/sim/sim_intensive_01.md`
+- `tests/sim/sim_ixc_01_02_03.md`
+- `tests/sim/sim_ixc_05_06_07.md`
+- `tests/sim/sim_mass_battle_SIM-MB-01.md`
+- `tests/sim/sim_mass_battle_SIM-MB-02.md`
+- `tests/sim/sim_mass_battle_SIM-MB-03.md`
+- `tests/sim/sim_mass_battle_batch_11.md`
+- `tests/sim/sim_mass_combat_005.md`
+- `tests/sim/sim_mending_coherence_2026-04-17.md`
+- `tests/sim/sim_negotiations_alliances_treaties.md`
+- `tests/sim/sim_new_01_conviction_yield.md`
+- `tests/sim/sim_new_02_partition.md`
+- `tests/sim/sim_new_03_ip_crisis.md`
+- `tests/sim/sim_new_04_resistance_decay.md`
+- `tests/sim/sim_new_05_patience_protocol.md`
+- `tests/sim/sim_new_06_cultural_uprising.md`
+- `tests/sim/sim_npc_01.py`
+- `tests/sim/sim_npc_01_results.md`
+- `tests/sim/sim_npc_as_player_2026-04-16.md`
+- `tests/sim/sim_npc_player_batch2_2026-04-16.md`
+- `tests/sim/sim_npc_player_batch3_2026-04-17.md`
+- `tests/sim/sim_npc_player_batch4_2026-04-17.md`
+- `tests/sim/sim_npc_player_batch5_2026-04-17.md`
+- `tests/sim/sim_open_items_2026-04-16.md`
+- `tests/sim/sim_opposing_threadwork_final.md`
+- `tests/sim/sim_pp431_cor_retest.md`
+- `tests/sim/sim_pp441_cor_retest.md`
+- `tests/sim/sim_pp476_498.md`
+- `tests/sim/sim_proj_01_projectile_categories.md`
+- `tests/sim/sim_ranged_001.md`
+- `tests/sim/sim_ranged_002_003.md`
+- `tests/sim/sim_ranged_004_005_006.md`
+- `tests/sim/sim_rescue_feint_partial_commit.md`
+- `tests/sim/sim_rescue_interconnected.md`
+- `tests/sim/sim_run22_brackets.md`
+- `tests/sim/sim_run22_report.md`
+- `tests/sim/sim_soc_01.md`
+- `tests/sim/sim_soc_debt_2026_04_13.md`
+- `tests/sim/sim_social_contest_stress.md`
+- `tests/sim/sim_social_contest_stress_v1.md`
+- `tests/sim/sim_southernmost_stress_2026_04_13.md`
+- `tests/sim/sim_spoiler_bg_01.md`
+- `tests/sim/sim_spoiler_hybrid_01.md`
+- `tests/sim/sim_str_pp476_498_2026_04_08.md`
+- `tests/sim/sim_stress_01.md`
+- `tests/sim/sim_stress_03.md`
+- `tests/sim/sim_stress_04.md`
+- `tests/sim/sim_stress_05.md`
+- `tests/sim/sim_stress_06.md`
+- `tests/sim/sim_stress_batch_2_2026-04-16.md`
+- `tests/sim/sim_stress_bg_2026_04_08.md`
+- `tests/sim/sim_territory_ops_2_SIM-TERR-02.md`
+- `tests/sim/sim_territory_ops_SIM-TERR-01.md`
+- `tests/sim/sim_thread_01.md`
+- `tests/sim/sim_thread_batch_01.md`
+- `tests/sim/sim_thread_batch_02.md`
+- `tests/sim/sim_thread_batch_03.md`
+- `tests/sim/sim_thread_batch_04.md`
+- `tests/sim/sim_thread_batch_05.md`
+- `tests/sim/sim_thread_batch_06.md`
+- `tests/sim/sim_thread_batch_07.md`
+- `tests/sim/sim_thread_batch_08.md`
+- `tests/sim/sim_thread_combat_comprehensive.md`
+- `tests/sim/sim_thread_combat_extreme.md`
+- `tests/sim/sim_thread_combat_matrix_v2.md`
+- `tests/sim/sim_thread_combat_narrative.md`
+- `tests/sim/sim_threadwork_fieldwork.md`
+- `tests/sim/sim_threadwork_ontological.md`
+- `tests/sim/sim_ttrpg_batch_02.md`
+- `tests/sim/sim_ttrpg_batch_03.md`
+- `tests/sim/sim_ttrpg_batch_04.md`
+- `tests/sim/sim_ttrpg_batch_05.md`
+- `tests/sim/sim_ttrpg_batch_05b.md`
+- `tests/sim/sim_ttrpg_batch_06.md`
+- `tests/sim/sim_ttrpg_batch_07.md`
+- `tests/sim/sim_ttrpg_batch_08.md`
+- `tests/sim/sim_ttrpg_batch_09.md`
+- `tests/sim/sim_ttrpg_batch_10.md`
+- `tests/sim/sim_ttrpg_batch_legacy_02.md`
+- `tests/sim/sim_ttrpg_batch_legacy_03.md`
+- `tests/sim/sim_ttrpg_batch_legacy_04.md`
+- `tests/sim/sim_ttrpg_batch_r01.md`
+- `tests/sim/sim_ttrpg_batch_r02.md`
+- `tests/sim/sim_ttrpg_batch_r03.md`
+- `tests/sim/sim_ttrpg_batch_r05a.md`
+- `tests/sim/sim_ttrpg_batch_r05b.md`
+- `tests/sim/sim_ttrpg_batch_r06a.md`
+- `tests/sim/sim_ttrpg_batch_r06b.md`
+- `tests/sim/sim_ttrpg_batch_r07.md`
+- `tests/sim/sim_ttrpg_batch_sonnet46.md`
+- `tests/sim/sim_tw_01.md`
+- `tests/sim/sim_var_01_rm.md`
+- `tests/sim/sim_var_02_rs_crisis.md`
+- `tests/sim/sim_var_03_debate_clash.md`
+- `tests/sim/sim_var_04_lowenritter.md`
+- `tests/sim/sim_var_05_hybrid_crown.md`
+- `tests/sim/sim_var_06_mass_combat_wounds.md`
+- `tests/sim/sim_x26_x27_x28_cross_mode.md`
+- `tests/sim/sim_x26r_personal_combat_protocol.md`
+- `tests/sim/sim_x27r_hybrid_domain_protocol.md`
+- `tests/sim/sim_x28r_bg_multifaction_protocol.md`
+- `tests/sim/sim_x29_x30_x31_x32_cross_mode_b.md`
+- `tests/sim/sim_x33_x34_x35_x36_batch_c.md`
+- `tests/sim/sim_x_01_combat_thread.md`
+- `tests/sim/sim_x_02_debate_thread.md`
+- `tests/sim/sim_x_03_massbattle_thread.md`
+- `tests/sim/sim_x_04_massbattle_personal.md`
+- `tests/sim/sim_x_05_debate_thread_npcs.md`
+- `tests/sim/sim_x_06_combat_wounds_npcs.md`
+- `tests/sim/sim_x_07_massbattle_npcs_thread.md`
+- `tests/sim/sim_x_08_seasonal_cascade.md`
+- `tests/sim/sim_x_09_vaynard_almud_zoom.md`
+- `tests/sim/sim_x_10_doctrine_evidence_tc.md`
+- `tests/sim/sim_x_11_maret_infiltration_zoom.md`
+- `tests/sim/sim_x_12_three_season_cascade.md`
+- `tests/sim/sim_x_13_pulling_dissolution.md`
+- `tests/sim/sim_x_14_mode2_entity_political.md`
+- `tests/sim/sim_x_15_knot_crisis_klapp.md`
+- `tests/sim/sim_x_16_collective_weave.md`
+- `tests/sim/sim_x_17_paradox_window.md`
+- `tests/sim/sim_x_18_rendering_crisis_arc.md`
+- `tests/sim/sim_x_19_mass_battle_rs_multiplier.md`
+- `tests/sim/sim_x_20_hybrid_coherence_campaign.md`
+- `tests/sim/sim_x_21_collective_weaving_brittleness.md`
+- `tests/sim/sim_x_22_combat_massbattle_threadwork_temporal.md`
+- `tests/sim/simulation_report_arcs_31_33.md`
+- `tests/stress/emergent_arc_2026-04-17_batch2.md`
+- `tests/stress/emergent_arc_2026-04-17_batch3_with_audit.md`
+- `tests/stress/emergent_arc_2026-04-17_batch4.md`
+- `tests/stress/emergent_arc_2026-04-17_batch5.md`
+- `tests/stress/emergent_arc_2026-04-17_batch6.md`
+- `tests/stress/emergent_arc_2026-04-17_batch7.md`
+- `tests/stress/emergent_arc_2026-04-17_batch8_counterfactual.md`
+- `tests/stress/thread/threadwork_audit_register.md`
+- `tests/stress/thread/threadwork_stress_test.md`
+- `tests/stress/thread/threadwork_stress_test_batch2.md`
+- `tests/stress/thread/threadwork_stress_test_batch3.md`
+- `tests/stress/thread/threadwork_stress_test_batch4.md`
+- `tests/stress/thread/threadwork_stress_test_batch5.md`
+- `tests/stress/thread/threadwork_stress_test_batch6.md`
+- `tests/stress/thread/threadwork_stress_test_batch7.md`
+- `tests/stress/thread/throughlines_2026-04-17.md`
+- `tests/stress/threadwork_decision_point_analysis.md`
+
+## tools/ (19 files)
+
+- `tools/README.md`
+- `tools/atomizer.py`
+- `tools/broken_dependency_checker.py`
+- `tools/ci_co_file_checker.py`
+- `tools/ci_editorial_checker.py`
+- `tools/ci_hooks_verifier.py`
+- `tools/ci_register_size_check.py`
+- `tools/compliance_check.py`
+- `tools/compliance_dryrun.py`
+- `tools/coverage_matrix.py`
+- `tools/editorial_review/valoria-editorial-review.jsx`
+- `tools/find_references.py`
+- `tools/freshness_gate.py`
+- `tools/index_gen.py`
+- `tools/model_router.html`
+- `tools/patch_propagation_checker.py`
+- `tools/propagator.py`
+- `tools/skeleton_gen.py`
+- `tools/verify_cuts.py`
+
+## versions/ (1 files)
+
+- `versions/.gitkeep`
 
----
-
-## DESIGNS — TTRPG (Threadwork & Mechanics)
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| **designs/ttrpg/threadwork_v30.md** | **TTRPG/HYBRID/BG** | **CURRENT** | Canonical threadwork spec. |
-| designs/ttrpg/threadwork_philosophical_reference_v30.md | TTRPG | REFERENCE | Extracted from threadwork v25 Part 1 |
-| designs/ttrpg/batch_a_designs.md | TTRPG | REFERENCE | Session 4 gap designs — check if gaps still open |
-| designs/ttrpg/batch_ad_resolutions.md | TTRPG | PROPAGATION-PENDING | Approved decisions not yet in working files |
-| designs/ttrpg/batch_bc_designs.md | TTRPG | REFERENCE | Session 4 military+political gap designs |
-| designs/ttrpg/batch_d_designs.md | TTRPG | REFERENCE | Session 4 faction identity packages |
-| designs/ttrpg/batch_e_designs.md | TTRPG | REFERENCE | Session 5 BG design briefs — mostly in bg_v05 |
-| designs/ttrpg/batch_f_designs.md | TTRPG | REFERENCE | Session 5 hybrid+endgame |
-| designs/ttrpg/church_territorial_seizure.md | TTRPG/BG | VERIFY | Approved. Check parity with bg_v05 TC 80. |
-| designs/ttrpg/edeyja_npc.md | TTRPG | WORKING | Canonical NPC (ED-048 adjacent) |
-| designs/ttrpg/generation_tasks_gt01_gt02_gt03.md | TTRPG | AWAITING REVIEW | Do not propagate without user sign-off |
-| designs/ttrpg/lowenritter_faction_card.md | BG | WORKING | Verify parity with bg_v05 |
-| designs/ttrpg/mechanical_tasks_and_patches.md | TTRPG | WORKING | R-54–R-68 applied |
-| designs/ttrpg/succession_mechanic.md | ALL | PROPAGATION-PENDING | Approved. No home in working files yet. |
-| designs/ttrpg/valoria_emergent_scenarios.md | TTRPG | WORKING | Emergent scenario map |
-| designs/ttrpg/valoria_narrative_scenario_chains.md | TTRPG | WORKING | NPC arcs. Contains "Ceiral" references (ED-048). |
-| designs/ttrpg/SUPERSEDED.md | INFRA | DEPRECATED → deprecated/designs/ttrpg/ | Notice file for Phase 1 artifacts |
-
----
-
-## DESIGNS — HYBRID
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| **designs/hybrid/scale_transitions_v30.md** | **HYBRID/ALL** | **CURRENT** | Canonical scale transitions and mode bridging. Supersedes stage11. PP-594. |
-| designs/hybrid/hybrid_gaps_v30.md | HYBRID | PROPAGATION-PENDING | 17 gaps resolved. Not yet in bg_v05. |
-
----
-
-## DESIGNS — CONVICTION TRACK
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| designs/conviction_track/conviction_track_v30.md | BG/ALL | WORKING | PP-406–PP-418 design proposal. NOT committed as patches. |
-
----
-
-## DESIGNS — SETTING
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| designs/setting/geography_v30.md | ALL | CURRENT | Canonical geography. 17 territories. |
-| designs/setting/calamity_radiation_v30.md | ALL | CURRENT | Calamity radiation framework. |
-| designs/setting/adjacency_map.jsx | ALL | CURRENT | Visual adjacency tool |
-
----
-
-## DESIGNS — SYSTEMS
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| designs/systems/clock_registry_v30.md | ALL | CURRENT | Unified clock/track registry. PP-496. |
-| designs/systems/faction_politics_expanded_v1.md | ALL | CURRENT | Rank-ladder expansion (0-7), sub-office ladders, caste integration. PP-660, 2026-04-17. Supersedes faction_politics_patch_register_2026-04-16.md draft. |
-| designs/systems/throughline_resolutions_v1.md | ALL | CURRENT | 10 throughline resolutions for PP-660. Character creation caste, Std 0 carve-out, Warden × TC, three-clock interaction, NPC roster capacity, Hall Tier settlement integration, SIM discoverability. PP-661, 2026-04-17. |
-
----
-
-## DESIGNS — NPCs
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| designs/npcs/npc_roster_v30.md | ALL | CURRENT | 13-character roster. ED-358. |
-
----
-
-## DESIGNS — WORLDBUILDING
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| designs/worldbuilding/worldbuilding_v30.md | ALL | CURRENT | Latest worldbuilding integration |
-| designs/worldbuilding/worldbuilding_canon_audit_v30.md | ALL | CURRENT | Audit of v3 |
-| designs/worldbuilding/editorial_comprehensive_review.md | ALL | DEPRECATED | Comprehensive editorial review |
-| ~~v1, v1_audit, v2~~ | — | DEPRECATED | Moved to deprecated/ (2026-04-09) |
-
----
-
-## DESIGNS — COGNITIVE LOAD & META
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| designs/cogload_moderate_target.md | ALL | CURRENT | Moderate ceiling target |
-| designs/cogload_reduction_strategies.md | ALL | CURRENT | Moderate-Heavy ceiling |
-| designs/companion_app_design_note.md | ALL | CURRENT | Companion app design note |
-| designs/valoria_systematic_critique.md | ALL | CURRENT | Full systematic critique |
-| designs/lir_ff_impact.md | BG | WORKING | PP-177. Status: "not yet committed" — verify. |
-
----
-
-## DESIGNS — Game Master REFERENCE (CP14)
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| designs/gm_ref_cp14/gm_reference_workplan.md | ALL | DEPRECATED | — |
-| designs/gm_ref_cp14/arcs/arcs_01_04_rebuilt.md | ALL | DEPRECATED | Campaign arcs 1–4 |
-| designs/gm_ref_cp14/arcs/arcs_05_08_rebuilt.md | ALL | DEPRECATED | — |
-| designs/gm_ref_cp14/arcs/arcs_09_11_elske_baralta.md | ALL | DEPRECATED | — |
-| designs/gm_ref_cp14/arcs/arcs_12_15_faction_transitions.md | ALL | DEPRECATED | — |
-| designs/gm_ref_cp14/arcs/arcs_16_19_faction_domain_echoes.md | ALL | CURRENT | — |
-| designs/gm_ref_cp14/arcs/arcs_20_23_branching.md | ALL | CURRENT | — |
-| designs/gm_ref_cp14/arcs/arcs_24_27_branching.md | ALL | CURRENT | — |
-| designs/gm_ref_cp14/arcs/arcs_28_30_coherence_zero.md | ALL | CURRENT | — |
-| designs/gm_ref_cp14/arcs/arcs_31_35_hybrid_systems.md | HYBRID | CURRENT | Arcs 32, 34, 35 NOT YET SIMULATED. |
-| designs/gm_ref_cp14/arcs/valoria_emergent_arcs_experimental.md | ALL | CURRENT | — |
-| designs/gm_ref_cp14/arcs/valoria_emergent_campaign_arcs.md | ALL | CURRENT | — |
-| designs/gm_ref_cp14/dashboards/d01–d10 | ALL | DEPRECATED | All 10 dashboard files |
-| designs/gm_ref_cp14/flowcharts/flowchart_templar_crossing.md | ALL | DEPRECATED | — |
-| designs/gm_ref_cp14/zoom_in_out_reference_card.md | ALL | DEPRECATED | — |
-
----
-
-| designs/npcs/npc_roster_caste_annotations.md | ALL | DEPRECATED | Caste-axis impact on all 13 roster NPCs |
-| designs/npcs/ed_403_406_407_resolutions.md | ALL | DEPRECATED | RM split, Ehrenwall assessment, consecration crisis |
-
-## DESIGNS — MECHANICS
-| designs/mechanics/baralta_crown_claim_v30.md | BG/HYBRID | CURRENT | Crown Succession Contest, Stake Claim DA, consecration crisis BG expression |
-| designs/npcs/lenneth_threadwork_design.md | ALL | DEPRECATED | Lenneth stat block, TS development, Cultural Revival Track, threadwork at ruler diamond decision points |
-
-## GM REFERENCE (gm_ref/)
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| gm_ref/arcs_01_04_nongreedy.md | ALL | CURRENT | Batch 01 arcs |
-| gm_ref/arcs_05_09_batch02.md | ALL | CURRENT | Batch 02 arcs |
-| gm_ref/arcs_10_18_consolidated.md | ALL | CURRENT | Batch 03 consolidated |
-| gm_ref/arcs_36_40_interdependent.md | ALL | CURRENT | Emergent interdependent arcs batch 1 |
-| gm_ref/arcs_41_45_interdependent.md | ALL | CURRENT | Emergent interdependent arcs batch 2 |
-| ~~4 deprecated arc revision files~~ | — | DEPRECATED | Moved to deprecated/gm_ref/ (2026-04-09) |
-| ~~gm_ref/debate_ref_card_v1.md~~ | — | DEPRECATED | Moved to deprecated/ — superseded by contest system |
-
----
-
-## REFERENCES (parameter files)
-
-| File | Systems | Status | Source Document |
-|------|---------|--------|----------------|
-| references/params_core.md | ALL | CURRENT | stage1 (legacy source) |
-| references/params_combat.md | ALL | CURRENT | combat_v30.md |
-| references/params_mass_combat.md | ALL | CURRENT | mass_battle_v30.md |
-| references/params_factions.md | ALL | CURRENT | stage6 (TTRPG) + bg_v05 (BG) |
-| references/params_board_game.md | BG | CURRENT | bg_v05 |
-| references/params_contest.md | ALL | CURRENT | social_contest_v30.md |
-| references/params_fieldwork.md | TTRPG/HYBRID/BG | CURRENT | fieldwork_v30.md |
-
-| references/params_threadwork.md | TTRPG/HYBRID | CURRENT | threadwork_v30.md |
-| references/params_scale_transitions.md | HYBRID | CURRENT | stage11 (legacy source) |
-| references/params_core_history.md | ALL | CURRENT | Patch history |
-| references/params_combat_history.md | ALL | CURRENT | Patch history |
-| references/params_mass_combat_history.md | ALL | CURRENT | Patch history |
-| references/params_board_game_history.md | BG | CURRENT | Patch history |
-| references/params_threadwork_history.md | TTRPG/HYBRID | CURRENT | Patch history |
-| references/glossary.md | ALL | CURRENT | Term expansion reference |
-| references/design_registry.yaml | ALL | CURRENT | v30 design doc atomization map. Established 2026-04-13. |
-| references/canonical_sources.yaml | ALL | CURRENT | System authority map |
-| references/file_index.md | ALL | CURRENT | This file |
-| references/arc_register.md | ALL | CURRENT | Arc system v8 (2026-04-13, PP-575). Vector format. 120+ arcs, 5 categories. Replaces v7. ED-401-405 open. |
-| references/propagation_map.md | ALL | CURRENT | Cross-reference dependencies |
-| references/effort-guide.md | INFRA | CURRENT | Effort calibration per skill |
-| references/D10_INTEGRATION_GUIDE.md | ALL | CURRENT | — |
-| references/d10_success_probabilities.json | ALL | CURRENT | — |
-| references/sim_decision_protocols.md | ALL | CURRENT | — |
-| ~~references/params_debate.md~~ | — | DEPRECATED | Moved to deprecated/ — superseded by params_contest.md |
-| ~~references/params_debate_history.md~~ | — | DEPRECATED | Moved to deprecated/ |
-
----
-
-## SKILLS (dir-based — canonical)
-
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| skills/valoria-orchestrator/SKILL.md | INFRA | CURRENT | Session management |
-| skills/valoria-orchestrator/references/* | INFRA | CURRENT | Orchestrator reference files |
-| skills/valoria-orchestrator/scripts/github_ops.py | INFRA | CURRENT | GraphQL batch reader |
-| skills/valoria-canon-guard/SKILL.md | INFRA | CURRENT | Canon compliance |
-| skills/valoria-chunker/SKILL.md | INFRA | CURRENT | Pre-process large docs |
-| skills/valoria-mechanic-audit/SKILL.md | INFRA | CURRENT | Audit + consistency |
-| skills/valoria-simulator/SKILL.md | INFRA | CURRENT | Simulation Modes A–M |
-| skills/valoria-compiler/SKILL.md | INFRA | CURRENT | Compilation |
-| skills/valoria-editorial-register/SKILL.md | INFRA | CURRENT | Editorial management |
-| skills/valoria-arc-generator/SKILL.md | INFRA | CURRENT | Arc generation |
-| skills/valoria-combat-simulator/SKILL.md + refs | INFRA | CURRENT | Combat simulation |
-| skills/valoria-dice-model/SKILL.md + script | INFRA | CURRENT | Dice math |
-| ~~6 flat skill files~~ | — | DEPRECATED | Moved to deprecated/skills/ (2026-04-09) |
-
----
-
-## TESTS (all current)
-
-| File | Systems | Status |
-|------|---------|--------|
-| tests/coverage_matrix.md | ALL | CURRENT |
-| tests/sim_* (all simulation outputs) | Various | CURRENT |
-| tests/stale_scan_bg_01.md | BG | CURRENT |
-| tests/threadwork_decision_point_analysis.md | ALL | CURRENT | 8 threadwork decision points tested against arc register |
-| tests/arc_branch_simulation.md | ALL | CURRENT | 7 key rolls simulated (Success/Failure branches, RS/TC/IP cascades) |
-| tests/delay_vs_preclusion_evaluation.md | ALL | CURRENT | Roll failures reclassified: 6/7 are delays, 1 True Preclusion |
-
----
-
-## TOOLS (all current)
-
-| File | Purpose | Status |
-|------|---------|--------|
-| tools/broken_dependency_checker.py | Validate references | CURRENT |
-| tools/coverage_matrix.py | Track simulation coverage | CURRENT |
-| tools/editorial_review/valoria-editorial-review.jsx | Editorial review UI | CURRENT |
-| tools/find_references.py | Cross-reference finder | CURRENT |
-| tools/freshness_gate.py | Freshness validation | CURRENT |
-| tools/model_router.html | Model routing reference | CURRENT |
-| tools/patch_propagation_checker.py | Patch propagation | CURRENT |
-| tools/propagator.py | Propagate patches | CURRENT |
-| tools/verify_cuts.py | Verify patch cuts | CURRENT |
-
----
-
-## INFRASTRUCTURE
-
-| File | Status | Notes |
-|------|--------|-------|
-| .github/workflows/valoria-ci.yml | CURRENT | CI workflow |
-| docs/freshness_gate_spec.md | CURRENT | Freshness gate spec |
-| session_log_current.md | CURRENT | Active session log |
-| session_log_archive.md | CURRENT | Archived sessions |
-
----
-
-## DEPRECATED (deprecated/ directory)
-
-All files in `deprecated/` are superseded and retained for audit trail only. Each has a DEPRECATED header naming its replacement. Do not reference in new design work.
-
-Major groups moved 2026-04-09:
-- 19 board game evolution files (bg_v01–v04, proposals, syntheses, improvements)
-- 4 gm_ref arc revision files (superseded by arcs_10_18_consolidated.md)
-- 4 debate system files + 2 debate params + 1 debate ref card (superseded by contest system)
-- 3 worldbuilding v1/v2 files (superseded by v3)
-- 5 root-level orphan files (workplan, gap register, patch proposals, scope map, project instructions)
-- 6 flat skill files (superseded by dir-based versions)
-- 1 qwen ruleset (non-authoritative)
-- 1 empty `path` file (deleted)
-
----
-
-## PROPAGATION-PENDING
-
-| File | Decisions Pending | Target Files |
-|------|-------------------|--------------|
-| designs/ttrpg/batch_ad_resolutions.md | G-053, G-040, G-054, G-042, G-038, G-044, Varfell transfer | threadwork_v25, characters, faction files |
-| designs/ttrpg/succession_mechanic.md | Almud succession mechanic | Needs political_mechanics.md or similar |
-| designs/ttrpg/church_territorial_seizure.md | TC 80 per-territory roll | Verify parity with bg_v05 |
-| designs/hybrid/hybrid_gaps_v30.md | 17 hybrid gaps | stage11, bg_v05 §B.5 |
-| designs/ttrpg/mechanical_tasks_and_patches.md | R-65/R-66 blocked by ED-047 | stage15, stage5 |
-
----
-
-*Index maintained by valoria-orchestrator. Update this file in the same commit as any file that changes its status, system classification, or dependency relationships.*
-
-| designs/systems/npc_behavior_v30.md | NPC Behavior System design | 2026-04-13 | ACTIVE | Stance Triangles, Priority Trees, Arc Emergence |
-| tests/audit_npc_behavior_system.md | NPC Behavior System audit | 2026-04-13 | COMPLETE | 15 findings |
-
-## FIELDWORK SUBSYSTEM FILES (added 2026-04-13 — skeleton split)
-
-| File | System | Status | Notes |
-|------|--------|--------|-------|
-| designs/fieldwork/fieldwork_v30.md | FIELDWORK | CURRENT | Master index + §1 Depth Axis + §2 Fieldwork Pool + §7 Derived Values. 224 lines (split from 856). |
-| designs/fieldwork/fieldwork_exploration.md | FIELDWORK | CURRENT | §3 Exploration. 72 lines. |
-| designs/fieldwork/fieldwork_investigation.md | FIELDWORK | CURRENT | §4 Investigation. 111 lines. |
-| designs/fieldwork/fieldwork_socializing.md | FIELDWORK | CURRENT | §5 Socializing. 132 lines. |
-| designs/fieldwork/fieldwork_exposure.md | FIELDWORK | CURRENT | §6 Exposure. 82 lines. |
-| designs/fieldwork/fieldwork_bg.md | FIELDWORK/BG | CURRENT | §8 Board Game Mode. 47 lines. |
-| designs/fieldwork/fieldwork_hybrid.md | FIELDWORK/HYBRID | CURRENT | §9 Hybrid Mode. 27 lines. |
-| designs/fieldwork/fieldwork_godot.md | FIELDWORK/GODOT | CURRENT | §10 Godot + validation findings G10-F01–F07. 132 lines. |
-| designs/fieldwork/fieldwork_summary.md | FIELDWORK | CURRENT | §11 Three-Mode Summary Table. 20 lines. |
-| designs/fieldwork/fieldwork_editorial.md | FIELDWORK | CURRENT | §12 Open Items and Editorial Flags. 116 lines. |
-| designs/fieldwork/fieldwork_rationale.md | FIELDWORK | CURRENT | §13 Design Rationale Index (NEW). 69 lines. Content file — no mechanical values. |
-
-
-## NEW DOCS — v30 Skeleton/Infill (added 2026-04-13)
-
-### Structure Note
-Every v30 design doc now has a companion `_infill.md` file in the same directory.
-Skeleton (`_v30.md`): tables, formulas, procedures, edge case rulings.
-Infill (`_v30_infill.md`): prose, rationale, design history, examples.
-Registry: `references/design_registry.yaml` tracks atomization status for all docs.
-
-### Previously Unverified Systems — Now Unblocked
-| File | Systems | Status | Notes |
-|------|---------|--------|-------|
-| designs/ttrpg/factions_ttrpg_v30.md | TTRPG | CURRENT | From stage6. TTRPG faction mechanics. SIM-FAC verified. |
-| designs/ttrpg/factions_ttrpg_v30_infill.md | TTRPG | CURRENT | Infill: prose/rationale |
-| designs/setting/southernmost_v30.md | TTRPG/BG | CURRENT | From stage4. PP-643 (SIM-STH-E1) applied. SIM-STH verified. |
-| designs/setting/southernmost_v30_infill.md | TTRPG/BG | CURRENT | Infill |
-| designs/systems/campaign_modes_v30.md | ALL | CURRENT | From stage12. Procedural. |
-| designs/systems/campaign_modes_v30_infill.md | ALL | CURRENT | Infill |
-
-### New Params Files
-| File | Systems | Status | Source |
-|------|---------|--------|--------|
-| references/params_factions_ttrpg.md | TTRPG | CURRENT | factions_ttrpg_v30.md |
-| references/params_southernmost.md | TTRPG/BG | CURRENT | southernmost_v30.md + SIM-STH |
-| references/params_campaign_modes.md | ALL | CURRENT | campaign_modes_v30.md |
-
-### Skeleton/Infill Pairs (batch-created 2026-04-13)
-All files below: skeleton at `_v30.md`, infill at `_v30_infill.md` in same directory.
-| System | Skeleton | Infill Lines |
-|--------|----------|-------------|
-| threadwork | designs/ttrpg/threadwork_v30.md | 196 |
-| combat | designs/combat/combat_v30.md | 86 |
-| board_game | designs/board_game/board_game_v30.md | 94 |
-| fieldwork | designs/fieldwork/fieldwork_v30.md | 85 |
-| mass_battle | designs/mass_combat/mass_battle_v30.md | 7 |
-| social_contest | designs/contest/social_contest_v30.md | 22 |
-| scale_transitions | designs/hybrid/scale_transitions_v30.md | 20 |
-| npc_behavior | designs/systems/npc_behavior_v30.md | 92 |
-| worldbuilding | designs/worldbuilding/worldbuilding_v30.md | 25 |
-| npc_roster | designs/npcs/npc_roster_v30.md | 78 |
-| npc_foils | designs/npcs/npc_foils_v30.md | 91 |
-| npc_character_analyses | designs/npcs/npc_character_analyses_v30.md | 85 |
-| baralta_crown_claim | designs/mechanics/baralta_crown_claim_v30.md | 17 |
-| conviction_track | designs/conviction_track/conviction_track_v30.md | 21 |
-| geography | designs/setting/geography_v30.md | 17 |
-| calamity_radiation | designs/setting/calamity_radiation_v30.md | 13 |
-| character_histories | designs/characters/character_histories_v30.md | 71 |
-| victory | designs/board_game/victory_v30.md | 17 |
-| varfell_path_b | designs/board_game/varfell_path_b_v30.md | 8 |
-| fieldwork_hybrid | designs/fieldwork/fieldwork_hybrid_v30.md | 2 |
-| fieldwork_bg | designs/fieldwork/fieldwork_bg_v30.md | 4 |
-| hybrid_gaps | designs/hybrid/hybrid_gaps_v30.md | 32 |
-| southernmost | designs/setting/southernmost_v30.md | 35 |
-| factions_ttrpg | designs/ttrpg/factions_ttrpg_v30.md | 64 |
-| campaign_modes | designs/systems/campaign_modes_v30.md | 25 |
-
-### Params History Files
-| File | Status | Notes |
-|------|--------|-------|
-| references/params_factions_ttrpg_history.md | CURRENT | Patch history for params_factions_ttrpg.md |
-| references/params_southernmost_history.md | CURRENT | Patch history incl PP-643 |
-| references/params_campaign_modes_history.md | CURRENT | Patch history (procedural) |
