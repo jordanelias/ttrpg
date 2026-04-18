@@ -39,7 +39,7 @@ policies:
   # REGISTERS — patches
   # ────────────────────────────────────────────────────────────
   - match: "canon/patch_register_active.yaml"
-    max_tokens: 10000
+    max_tokens: 15000
     auto_archive_status: [applied, struck, superseded]
     archive_target_pattern: "canon/patch_register_archive_{range}.yaml"
     archive_chunk_max: 10000

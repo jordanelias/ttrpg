@@ -55,7 +55,7 @@ TOKEN_THRESHOLDS = {
     "references/file_index_summary.md":        1_000,
     "references/canonical_sources.yaml":       5_000,
     "skills/valoria-orchestrator/SKILL.md":    8_000,
-    "canon/patch_register_active.yaml":       20_000,
+    "canon/patch_register_active.yaml":       15_000,
     "tests/coverage_matrix.md":               5_000,
     "references/arc_register.md":            20_000,
     "references/propagation_map.md":         15_000,
