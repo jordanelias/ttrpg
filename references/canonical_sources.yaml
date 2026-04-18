@@ -170,7 +170,7 @@ systems:
   emergent_arcs:
     status: active
     canonical: references/arc_register.md
-    canonical_sha__references__arc_register_md: "d6c7635fc67b02231e7241fced23bc13330e4f66"
+    canonical_sha__references__arc_register_md: "f97e3a078c63242e5b76d29f3b7171d578d65ed5"
     params: null
     design_doc: null
 
@@ -199,12 +199,14 @@ systems:
   player_agency:
     status: active
     canonical: designs/architecture/player_agency_v30.md
+    canonical_sha__designs__architecture__player_agency_v30_md: "baf4d2f265563c6e4e6468072fb0a4a88fcdd683"
     params: null
     design_doc: designs/architecture/player_agency_v30.md
     notes: "Accepted 2026-04-17 (editorial batch acceptance)."
 
   companion_specification:
     canonical: designs/npcs/companion_specification_v30.md
+    canonical_sha__designs__npcs__companion_specification_v30_md: "d6ef0cc1fccb6ff358224148d53ca88f7b000184"
     params: null
     status: active
     design_doc: designs/npcs/companion_specification_v30.md
@@ -212,6 +214,7 @@ systems:
 
   settlement_layer:
     canonical: designs/territory/settlement_layer_v30.md
+    canonical_sha__designs__territory__settlement_layer_v30_md: "70f1115a9288fc5af4cfa203513d2ca673151e14"
     params: null
     status: active
     design_doc: designs/territory/settlement_layer_v30.md
@@ -220,7 +223,7 @@ systems:
   ui_ux_reference:
     status: active
     canonical: designs/ui/valoria_ui_ux_v4_1.md
-    canonical_sha__designs__ui__valoria_ui_ux_v4_1_md: "3e8f401c8df21ff7cbb4d40a60069a93efec30f0"
+    canonical_sha__designs__ui__valoria_ui_ux_v4_1_md: "ba4e3c5d1cfbb4e25d66d70edf43639ad34f219e"
     params: null
     design_doc: designs/ui/valoria_ui_ux_v4_1.md
     notes: "Godot-facing UI/UX comprehensive reference. Supersedes valoria_ui_ux_v4.md. Resolves UI-01 through UI-15, ED-544, ED-545, ED-548, ED-572. v4 retained in repo as historical reference."
@@ -228,6 +231,7 @@ systems:
   investigation_systems:
     status: active
     canonical: designs/scene/investigation_systems_v30.md
+    canonical_sha__designs__scene__investigation_systems_v30_md: "8e9ead674fafae64c107ed84abb157abf55ee3b8"
     params: null
     design_doc: designs/scene/investigation_systems_v30.md
     notes: "NPE · Investigation Interface · Dialogue Lattice. Accepted 2026-04-17 (editorial batch acceptance)."
@@ -235,6 +239,7 @@ systems:
   conviction_track:
     status: active
     canonical: designs/scene/conviction_track_v30.md
+    canonical_sha__designs__scene__conviction_track_v30_md: "952d5605a46f4af19e760a91081f20cd56f5c0d2"
     params: null
     design_doc: designs/scene/conviction_track_v30.md
     notes: "Conviction track + Church victory redesign (PP-406 through PP-418). Accepted 2026-04-17 (editorial batch acceptance)."
@@ -242,6 +247,7 @@ systems:
   character_histories:
     status: active
     canonical: designs/world/character_histories_v30.md
+    canonical_sha__designs__world__character_histories_v30_md: "5e7e99a134f1de07844141a64347c427c128de3b"
     params: null
     design_doc: designs/world/character_histories_v30.md
     infill_doc: designs/world/character_histories_v30_infill.md
@@ -250,6 +256,7 @@ systems:
   peninsular_strain:
     status: active
     canonical: designs/provincial/peninsular_strain_v30.md
+    canonical_sha__designs__provincial__peninsular_strain_v30_md: "d9e7c659aea63b3ca9b2f4438bf5151c0190f519"
     params: null
     design_doc: designs/provincial/peninsular_strain_v30.md
     notes: "Victory condition restructure — integrated into victory_v30.md. Accepted 2026-04-17 (editorial batch acceptance). Open item ED-626 (Accord/Order relationship) carries forward."
@@ -257,6 +264,7 @@ systems:
   arc_expansion:
     status: active
     canonical: designs/arcs/arc_expansion_v30.md
+    canonical_sha__designs__arcs__arc_expansion_v30_md: "fc80c1f0bc9c88e6fe199e419a5f73329e3b6ddb"
     params: null
     design_doc: designs/arcs/arc_expansion_v30.md
     notes: "Arc density expansion — 19 arc design additions (ED-591 through ED-609). Accepted 2026-04-17 (editorial batch acceptance). Provisional items promoted to canonical; individual open arc items carry forward."
@@ -264,6 +272,7 @@ systems:
   bridge_part1_revisions:
     status: active
     canonical: designs/audit/bridge_part1_revisions.md
+    canonical_sha__designs__audit__bridge_part1_revisions_md: "f85086b9826d77b79303e2a3e9676afb16462217"
     params: null
     design_doc: designs/audit/bridge_part1_revisions.md
     notes: "Player Agency canonization + Renown + Mechanical Scene Slate revision block. Accepted 2026-04-17 (editorial batch acceptance)."
@@ -272,6 +281,7 @@ systems:
   faction_politics_expanded:
     status: active
     canonical: designs/provincial/faction_politics_v30.md
+    canonical_sha__designs__provincial__faction_politics_v30_md: "e7297b2445de33328c59b9e32765eb838b887869"
     params: null
     design_doc: designs/provincial/faction_politics_v30.md
     notes: "Rank-ladder expansion (Standing 0-7), sub-office ladders, caste integration, TC × rank, Baralta × rank, Ministry expansion, Generational Shift fix. PP-660, 2026-04-17. Supersedes original faction_politics_patch_register_2026-04-16.md draft. Raises ED-634 through ED-658."
@@ -280,6 +290,7 @@ systems:
   throughline_resolutions:
     status: active
     canonical: designs/arcs/throughline_resolutions_v30.md
+    canonical_sha__designs__arcs__throughline_resolutions_v30_md: "0ec51a93f0cd8ce053d6a0f50977dce689fe8b5c"
     params: null
     design_doc: designs/arcs/throughline_resolutions_v30.md
     notes: "10 throughline integration fixes for PP-660 faction politics expansion. PP-661, 2026-04-17. Applied fixes: character creation caste viability, Std 0 carve-out, Warden × TC scale, Generational × Coup × IP × Baralta interaction, NPC roster capacity, Hall Tier settlement integration, SIM-POL discoverability, register-split future marker. ED-659."
@@ -288,7 +299,7 @@ systems:
   rs_budget:
     status: active
     canonical: references/rs_budget.md
-    canonical_sha__references__rs_budget_md: "pending"
+    canonical_sha__references__rs_budget_md: "cce081962829761b2592e7fc0714a287f5141ae1"
     params: null
     design_doc: null
     notes: "Centralized RS budget. All drain/recovery sources. ED-668."
@@ -296,7 +307,7 @@ systems:
   wc_survival_spine:
     status: active
     canonical: references/wc_survival_spine.md
-    canonical_sha__references__wc_survival_spine_md: "pending"
+    canonical_sha__references__wc_survival_spine_md: "e499d4b9faccbe9d2755ee9adf5dfbbce84a41be"
     params: null
     design_doc: null
     notes: "WC as survival contest mechanism. Two-contest architecture. ED-669."
@@ -315,6 +326,7 @@ systems:
 
   throughline_specifications:
     canonical: designs/audit/throughline_specifications_2026-04-17.md
+    canonical_sha__designs__audit__throughline_specifications_2026-04-17_md: "bea164b3610b6a1fcd7f4f8dc2563f55426529dd"
     params: null
     status: design
     design_doc: designs/audit/throughline_specifications_2026-04-17.md
@@ -323,25 +335,30 @@ systems:
   rs_budget:
     status: active
     canonical: references/rs_budget.md
+    canonical_sha__references__rs_budget_md: "cce081962829761b2592e7fc0714a287f5141ae1"
     notes: "RS budget. ED-668. 2026-04-17."
 
   wc_survival_spine:
     status: active
     canonical: references/wc_survival_spine.md
+    canonical_sha__references__wc_survival_spine_md: "e499d4b9faccbe9d2755ee9adf5dfbbce84a41be"
     notes: "WC survival spine. ED-669. 2026-04-17."
 
   thread_horizontal_integration:
     status: active
     canonical: designs/threadwork/thread_horizontal_integration_spec.md
+    canonical_sha__designs__threadwork__thread_horizontal_integration_spec_md: "052525dac8dfa9478aa1f567509658951988f478"
     notes: "Thread integration spec. ED-673-681. 2026-04-17."
   campaign_architecture:
     canonical: designs/architecture/campaign_architecture_v30.md
+    canonical_sha__designs__architecture__campaign_architecture_v30_md: "8932db3116e09c5986a1b84e26e6d5bd94731d93"
     status: active
     note: "2026-04-17: Church 4-axis infrastructure, CI=100 mass seizure, RM identity correction, Thread revelation curve, phased IP, Altonia repulsion, MS reform, Coherence asymmetry, Mending community, Portrait Retirement, Lineage Acts, Warden faction paths."
 
   historical_precedents:
     status: active
     canonical: references/historical/precedents_analysis.md
+    canonical_sha__references__historical__precedents_analysis_md: "04c8490760bb780bd865ff5eb04ed38ed6baac2d"
     params: null
     design_doc: null
     notes: "Historical precedent analysis informing Church, RM, invasion, cultural revival mechanics. PP-675."
@@ -349,6 +366,7 @@ systems:
   historical_precedents_warfare:
     status: active
     canonical: references/historical/precedents_warfare.md
+    canonical_sha__references__historical__precedents_warfare_md: "4e87e6e53a54186503ccbbcf375ac356e833c723"
     params: null
     design_doc: null
     notes: "Historical precedent analysis for warfare, mustering, territory seizure. PP-676."
@@ -356,6 +374,7 @@ systems:
   derived_stats:
     status: active
     canonical: designs/scene/derived_stats_v30.md
+    canonical_sha__designs__scene__derived_stats_v30_md: "5e8ecfd7066eec331e626b76a426f5be227a0f64"
     params: null
     design_doc: designs/scene/derived_stats_v30.md
     notes: "Derived stat system — Treasury, Legitimacy, Reputation, Cohesion, Levies Available. PP-679/680."
