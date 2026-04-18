@@ -49,7 +49,7 @@ patches:
   source: simulation
   affects:
   - designs/mass_combat/mass_battle_v3.md
-  status: provisional
+  status: applied
   applied_commit: 2026-04-02-session
   renumbered_from: PP-093
   renumber_date: 2026-04-04
@@ -91,7 +91,7 @@ patches:
   affects:
   - designs/debate/debate_system_redesign_v1.md §6.15
   applied_to_version: v1.6
-  status: provisional
+  status: applied
   applied_commit: 2026-04-02-session-close
   renumbered_from: PP-121
   renumber_date: 2026-04-04
@@ -106,7 +106,7 @@ patches:
   affects:
   - designs/debate/debate_system_redesign_v1.md §6.15
   applied_to_version: v1.6
-  status: provisional
+  status: applied
   applied_commit: 2026-04-02-session-close
   renumbered_from: PP-123
   renumber_date: 2026-04-04
@@ -116,7 +116,7 @@ patches:
   description: 'OA modifier does not carry through brittleness collapse to Shifting
     Object. Shifting Object is new configuration. Exception: OA applies if Mending
     targets still-Woven thread.'
-  status: provisional
+  status: applied
   files:
   - designs/ttrpg/threadwork_redesign_v25.md
   - references/params_threadwork.md
@@ -154,7 +154,7 @@ patches:
   affects:
   - designs/mass_combat/mass_battle_v3.md
   - references/params_mass_combat.md
-  status: provisional
+  status: applied
 - id: PP-531-PROV
   type: provisional
   date: 2026-04-10
@@ -170,7 +170,7 @@ patches:
   source: sim_comprehensive_batch_2026_04_10.md
   affects:
   - designs/setting/calamity_radiation.md
-  status: provisional
+  status: applied
 - id: PP-532-PROV
   type: provisional
   date: 2026-04-10
@@ -186,7 +186,7 @@ patches:
   source: sim_comprehensive_batch_2026_04_10.md
   affects:
   - designs/setting/calamity_radiation.md
-  status: provisional
+  status: applied
 - id: PP-534-PROV
   type: provisional
   date: 2026-04-10
@@ -202,7 +202,7 @@ patches:
   source: sim_comprehensive_batch_2026_04_10.md
   affects:
   - designs/board_game/victory_architecture_v1.md
-  status: provisional
+  status: applied
 - id: PP-652
   date: 2026-04-14
   severity: P2

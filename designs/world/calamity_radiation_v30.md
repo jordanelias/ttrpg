@@ -138,6 +138,8 @@ This is a single-page reference card. One lookup per territory per season.
 
 ---
 
+
+**[THREAD]-Tagged Domain Actions (PP-531):** For purposes of the Calamity Radiation BG table, "Thread orders" refers to Domain Actions bearing the [THREAD] tag. The following actions are always [THREAD]-tagged: Expedition, Mending-coordination. The following actions are NOT [THREAD]-tagged: Govern, Assert, Reinforce, Suppress, Seize, Trade, Fortify, Muster. A faction ordering a [THREAD]-tagged action in a radiation-affected territory applies the radiation modifier from the Radiation Matrix to the action's Thread component.
 ## Integration Notes
 
 ### Supersedes
@@ -157,6 +159,8 @@ This is a single-page reference card. One lookup per territory per season.
 ### Hybrid Mode Note (B-09)
 Calamity Radiation Ob modifiers apply to both Personal Phase Thread operations (TTRPG rules) and Strategic Phase Thread orders (BG rules) in Hybrid mode. Coherence cost from PC-declared leadership (PP-198) stacks independently with Radiation Ob modifiers. This double cost is philosophically correct — operating near the wound is harder AND degrades the practitioner.
 
+
+**Radiation × Domain Echo Exception (PP-532):** Radiation-caused Thread failures do NOT generate Domain Echoes. Domain Echoes require deliberate PC Thread operations performed with faction-intent (i.e., the PC declared leadership at Phase 1 of the Cascade Phase per PP-198). Environmental radiation failure is not intentional — it is substrate interference — and therefore queues no echo. This prevents radiation zones from generating spurious Domain Echoes that would distort the faction-layer signal.
 ### Open editorial items
 - ED-302: Calamity Radiation Framework — this document. RESOLVED.
 - B-01: Askeheim effects at RS 100–80 — RESOLVED. Effects contained to Askeheim only at Stable band; no radiation. Band split into 100–80 (Stable) and 79–60 (Strained).

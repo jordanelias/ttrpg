@@ -310,7 +310,10 @@ Resolution:
 3. Effects recorded but NOT applied until Phase 6 Step 1 (simultaneous
    with Volley and Engagement damage)
 
-A unit whose Size is reduced to 0 by Phase 4 Thread effects is NOT removed before Phase 5.
+A unit whose Size is reduced to 0 by Phase 4 Thread effects is NOT removed before 
+**Overwhelming Size Advantage (PP-530):** When a unit's Size is ≥ 2× the opposing unit's Command score, the larger unit may add +1D to its Offence pool once per Battle Turn (Phase 4 only). This bonus does not apply when the larger unit is in Defensive formation or executing defensive orders (Hold, Fortify). Rationale: a numerically overwhelming force that is actively attacking can leverage its mass; a defensive posture neutralises the advantage.
+
+Phase 5.
 Simultaneous-damage rule governs: damage is recorded in Phase 4 but applied at Phase 6 Step 1.
 The unit's current Size during Phase 5 is its Phase 3-end Size (pre-Thread damage) and it
 participates in Phase 5 Engagement normally. It is removed at Phase 6 Step 1 when all damage
@@ -496,6 +499,9 @@ Over-pursuing exposes flanks. *[confirmed]*
 **Morale Cascade (NEW — historical_precedents_warfare §1.3c):** When a unit routs (Morale reaches 0), all friendly units in the same engagement make an immediate Discipline check (Ob 1). Failure: Morale −1. Multiple simultaneous routs compound — each triggers a separate cascade check. This models the historical reality where battles were lost when one section of the line broke and panic spread (Cannae, Hastings). The check is Ob 1 — Discipline 4 units pass ~87% — so cascades primarily threaten low-Discipline formations (Levy, militia), which is historically correct.
 
 [EDITORIAL: ED-688 — Morale Cascade. Source: historical_precedents_warfare.md §1.3c.]
+
+
+**Stalemate Break (PP-297):** If 3 consecutive Battle Turns produce 0 total damage across all engagements (no Health loss on either side), both armies execute Tactical Withdrawal. Effects: no Conviction Track movement, no pursuit, no Rout. Each side's general rolls Command Ob 1 to maintain formation during withdrawal; failure = −1 Discipline on one unit (disorderly retreat). The battle ends as inconclusive. Neither side claims victory. Accounting consequences: IP +1 (military posturing without resolution).
 
 ---
 

@@ -209,6 +209,8 @@ Early Seizure (TC < 50) is possible but carries political consequences: Casus Be
 
 Church Mandate ≥ 4 required to initiate any seizure. Overwhelming seizure: PT +1 in target territory (this is a consequence, not a cap-governed action).
 
+
+**Prominence Self-Control Rule (PP-534):** The Church is automatically Prominent in all territories it controls, regardless of Mandate comparison. The Mandate comparison mechanic (Church Mandate > controlling faction's Mandate → Church is Prominent in that territory) applies only to territories controlled by rival factions. This prevents the absurdity of the Church failing its own Prominence check in territories it already governs.
 #### Alternate — Altonian Theocracy Path
 Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 + Church controls T9 (Himmelenger). Requires less territory but more diplomatic conditions.
 

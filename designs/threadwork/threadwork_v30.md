@@ -237,6 +237,8 @@ No mechanical changes. Provides narrative and investigative information. Supplem
 
 On Overwhelming at Relational+: over-actualisation effects halved in duration.
 
+**Over-Actualisation through State Transitions (PP-208):** OA modifier does NOT carry through brittleness collapse to Shifting Object. A Shifting Object is a new configuration — OA accumulated on the prior stable configuration is lost. Exception: if a Mending operation targets a thread that is still in its original Woven state (i.e., has not collapsed), OA modifiers from prior Weavings of that thread still apply.
+
 
 
 

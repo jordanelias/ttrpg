@@ -329,6 +329,8 @@ A practitioner with TS ≥ 30 in active Thread contact adds bonus dice: floor(TS
 ### §9.4 Thread Operations Between Exchanges
 A practitioner may initiate a Thread operation between exchanges. Effects apply before next exchange's Read step. Genre/orientation dice are fixed at setup — Thread operations cannot change them mid-contest. Temporal axis conflict: if the Thread operation's temporal axis contradicts the contest's primary genre (Memory-axis operation during Projection-primary contest, or vice versa), both orators' Read rolls in the next exchange use TN 8.
 
+
+**Temporal Axis Conflict (PP-351):** If a practitioner initiates a Thread operation on a temporal axis that opposes the contest's primary temporal orientation (e.g., a Past-axis operation during a Future-primary contest, or vice versa), the resulting temporal dissonance imposes TN 8 on both orators' next Read roll. This applies regardless of which side the practitioner supports — temporal contradiction disrupts the entire epistemic field. Same-axis operations and non-temporal Thread operations (Object-scale, Relational without temporal component) are unaffected.
 ### §9.4b Adjudicator Thread Response (ED-667)
 
 When an adjudicator (NPC presiding over formal proceedings — Court, Tribunal, Parliamentary Session, Church Inquiry) witnesses Thread use during the proceeding:
@@ -414,6 +416,8 @@ Special Asymmetric Proceeding (§7) initiated by Church. Prerequisites: TC ≥ 4
 
 ---
 
+
+**Church Self-Investigation Exception (PP-349):** The Church does not file Heresy Investigation against its own ordained members who are supporting Church interests. An ordained member acting in alignment with Church doctrine, even if their methods are controversial, is shielded from internal investigation. This does not prevent: (1) opposing factions from filing Heresy Investigation against Church members via the standard PP-182 path, or (2) the Church from investigating ordained members who are actively working against Church interests (e.g., aiding the Restoration Movement, collaborating with Niflhel).
 ## §10.1 Parliamentary Stay (ED-631)
 
 A Parliamentary Stay is a Senator Inward motion that halts an active Church Tribunal filing for 1 season. It represents Parliament asserting civil jurisdiction over an ecclesiastical proceeding.
