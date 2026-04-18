@@ -79,6 +79,22 @@
 
 Calamity Drift applies after all faction actions resolve but before TC calculation. Calamity Drift ignores the ±1/season cap (it stacks with faction-driven movement). Calamity Drift cannot reduce T15 below 0 (already there) or increase any CV.
 
+### 1.3b Thread Operation CV Drift (ED-676)
+
+Visible Thread operations in a territory shift CV:
+
+| Thread Event | CV Change | Condition |
+|---|---|---|
+| Public Dissolution | CV −1 | Witnesses present. Thread reality undeniable. |
+| Public Mending | No change | Ambiguous: Church claims miracle; practitioners claim mastery. |
+| Public Weaving (non-harmful) | CV −0.5 (rounded at Accounting) | Mild exposure. Accumulates slowly. |
+| Visible Rendering Crisis | CV +1 | Thread danger reinforces Church framework. |
+| Monstrous Incursion (spontaneous, from radiation) | CV −1 | Substrate instability visible beyond Church explanation. |
+
+**Scope:** "Public" = witnessed by non-practitioner NPCs. Concealed operations (threadwork_v30 §2.3) do not trigger.
+
+**Interaction with Calamity Drift (§1.3):** Stacks. Both fire at Accounting. Cap: CV ±2 per territory per season from Thread sources (Calamity Drift + Thread Operation Drift combined).
+
 ### 1.4 Consecrated Status (PP-410)
 
 A territory that reaches CV 5 via a Consecrate action gains **Consecrated** status.
