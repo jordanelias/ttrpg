@@ -129,9 +129,9 @@ Key rules:
 
 ---
 
-## 3. Faction-Specific Victory Conditions — Alternate Paths
+## 3. Faction Strategies — Asymmetric Approaches to Peninsular Sovereignty
 
-These are retained as alternate (easier) victory conditions alongside the universal Peninsular Sovereignty condition (§0). A faction may win by achieving EITHER §0 OR its faction-specific condition below.
+**These are NOT victory conditions.** They describe each faction's unique toolkit for territorial acquisition. The ONLY faction victory is Peninsular Sovereignty (§0): control all 15 territories, Accord ≥ 2, Strain ≤ 6, held 2 consecutive Accountings. Every faction pursues the same goal through different means.
 
 
 ### 3.1 Crown — Peninsula Sovereignty
@@ -391,28 +391,29 @@ Co-victories are distinct from operational coalitions (PP-404/405). A faction ma
 
 ---
 
-## 5. Shared Loss Conditions
+## 5. World-State Transitions
 
-| Condition | Trigger | Outcome |
-|-----------|---------|---------| 
-| Rendering Stability Rupture | RS = 0 at Accounting | All factions lose. Second Calamity. Triggers The Rupture Scene (see below). |
-| Altonian Conquest | IP ≥ 100 AND AER ≤ 1 | Altonia annexes Valoria. All factions lose. |
-| Total Institutional Collapse | All playable factions at Stability 0 simultaneously | Anarchy. All factions lose. |
+**No shared loss. No fade to black.** Every crisis becomes a new chapter. The campaign continues.
+
+| Condition | Trigger | Transition |
+|-----------|---------|------------|
+| Post-Calamity Era | RS = 0 at Accounting | Substrate tears. Faction acquisition suspended 3 seasons. Mending Domain Echo doubled. Dissolution/Lock +2 Ob. Recovery: MS restored to 20 within 10 seasons. |
+| Occupation Era | IP ≥ 100 AND AER ≤ 1 | Altonian Governorate activates (Mandate 3, Military 5, Stability 4). All faction Domain Actions in occupied territories +2 Ob. Underground Network and Resistance Work activate. Recovery: IP reduced below 60 through sustained resistance. |
+| Anarchy Era | All playable factions at Stability 0 simultaneously | Parliament dissolved. Direct governance via personal Charisma. Founded Organizations claim ungoverned territories. New faction formation available (Mandate 3 + 2 territories + Founding Declaration). Recovery: two formal factions establish Parliament quorum. |
+
+**The only true campaign terminal:** Second Calamity. Fires after 10 seasons sustained at MS ≤ 5 during Post-Calamity Era. Requires a decade of complete failure to reach.
 
 ### The Rupture Scene (ED-630)
 
-When RS reaches 0 at Accounting, the Rupture Scene fires before the Shared Loss is formally declared. All campaign activity pauses.
+When RS reaches 0 at Accounting, the Rupture Scene fires as a narrative transition into the Post-Calamity Era.
 
-**Step 1 — World state narration:** The GM describes what RS 0 feels like in the territory the player currently occupies. Sensory, immediate, not abstract. 2–3 minutes. Players listen.
+**Step 1 — World state narration:** The engine describes what RS 0 feels like in the territory the player currently occupies. Sensory, immediate, not abstract.
 
-**Step 2 — The Last Declaration (all PCs):**
+**Step 2 — The Last Declaration:**
 
-Each PC states: (1) their primary Belief as currently written; (2) one specific action over the campaign that most clearly expressed that Belief; (3) whether, given everything, they would do that action again. No roll. Not mechanically adjudicated.
+The player states: (1) their primary Belief as currently written; (2) one specific action over the campaign that most clearly expressed that Belief; (3) whether, given everything, they would do that action again.
 
-**Step 3 — GM narration through each Belief lens:** 1–2 sentences per PC, acknowledging the action through the Belief lens. No judgment.
-
-**Step 4 — Shared Loss declared.**
-
+**Step 3 — Post-Calamity Era begins.** Faction acquisition suspended. Mending becomes the most consequential action in the game.
 ---
 
 ## 6. Askeheim and RS (BALANCE-004)

@@ -380,20 +380,9 @@ All conditions simultaneous at Accounting, held for 2 consecutive Accountings:
 
 Territories held by Treaty-bound or Submitted factions do not need to meet Accord ≥ 2 for the hegemon — the legitimacy question belongs to the subordinate.
 
-### §6.2 Faction-Specific Victory Conditions — RETAINED as Alternate Paths
+### §6.2 Faction-Specific Victory Conditions — STRUCK
 
-The existing faction-specific conditions from victory_v30.md §3 are retained as alternate victory paths, representing each faction's ideological endpoint rather than total peninsular control.
-
-- Crown Peninsula Sovereignty (TCV ≥ 14, suppress 2 of 3 rivals, IP < 60, PI ≥ 3)
-- Church Solmundan Orthodoxy (TCV ≥ 8, PT ≥ 3 in all held territories)
-- Hafenmark Dynastic Assertion (TCV ≥ 12, Crown Mandate ≤ 1, hold T1, Hafenmark Mandate ≥ 5, Torben Loyalty ≤ 3)
-- Varfell three paths (A/B/C retained as-is)
-- RM Cultural Revolution (Hybrid only, retained as-is)
-- Löwenritter Regency / Military Consolidation (retained as-is)
-
-These are EASIER than full Peninsular Sovereignty and represent shorter-game victories. Peninsular Sovereignty is the prestige win. Faction-specific victories are the standard wins.
-
-**Note:** Hafenmark Parliamentary Sovereignty is replaced by Dynastic Assertion as the primary path (per faction identity discussion). Parliamentary Sovereignty is struck.
+**There are no faction-specific victory conditions.** The only faction victory is Peninsular Sovereignty (§6.1). All existing faction-specific condition sets are reframed as descriptions of each faction's asymmetric approach to territorial acquisition in victory_v30.md §3. They describe HOW each faction pursues peninsular sovereignty, not WHEN a faction has won.
 
 ### §6.3 Co-Victory: Peninsular Partition
 
@@ -416,14 +405,17 @@ All conditions simultaneous at Accounting, held for 2 consecutive Accountings:
 
 Existing co-victory pairings from victory_v30.md §4 are retained as alternate co-victories with their existing (lower) thresholds, alongside the new Partition option.
 
-### §6.4 Shared Loss Conditions
+### §6.4 World-State Transitions
 
-| Condition | Trigger | Outcome |
-|-----------|---------|---------|
-| Rendering Stability Rupture | RS = 0 at Accounting | All factions lose. Second Calamity. |
-| Altonian Conquest | IP ≥ 100 AND AER ≤ 1 at Accounting | Altonia annexes Valoria. All factions lose. |
+**No shared loss. No fade to black.**
 
-Total Institutional Collapse (all factions Stability 0) is subsumed — if all factions are eliminated, the outcome is determined by whichever shared loss condition fires first (RS Rupture or Altonian Conquest) or anarchy (all territories Uncontrolled, no governance).
+| Condition | Trigger | Transition |
+|-----------|---------|------------|
+| Post-Calamity Era | RS = 0 at Accounting | Substrate tears. Faction acquisition suspended 3 seasons. Mending doubled. Recovery: MS to 20 within 10 seasons. |
+| Occupation Era | IP ≥ 100 AND AER ≤ 1 at Accounting | Altonian Governorate activates. Faction actions +2 Ob in occupied territories. Recovery: IP below 60. |
+| Anarchy Era | All factions Stability 0 | Direct governance via personal action. Founded Organization faction formation available. Recovery: Parliament quorum restored. |
+
+The only campaign terminal: Second Calamity after 10 seasons sustained at MS ≤ 5.
 
 ---
 
