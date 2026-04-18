@@ -1,30 +1,26 @@
-session_id: 2026-04-17-mending-coherence-sim
+session_id: 2026-04-17-mending-fatigue-propagation
 session_close: 2026-04-17
-phase: simulation
+phase: patch
 status: complete
 last_stage: done
 next_action:
   skill: confirm with Jordan
-blockers:
-  - MEND-SIM-01: OW Mending Coherence cost contradiction — campaign_architecture_v1 §3.2 (OW=-1) vs params_threadwork degree table (OW=0) — Jordan ruling required before propagation (P1)
-  - MEND-SIM-03: ARC-S34 (Edeyja Burnout) primary path mechanically broken — redesign required (P1)
+blockers: []
 resolutions_this_session:
-  - 6 sims run on Mending 0-Coherence impact
-  - SIM 1: seasonal fatigue confirmed as effective Mending throttle
-  - SIM 2: no Rendering Crisis from Mending alone; old system caused permanent Severed equilibrium (Coh ~1, +2 Ob all ops)
-  - SIM 3-4: community Mending capacity ~10x RS budget assumption; WC3-singular-endgame conclusion holds
-  - SIM 6: ARC-S34 primary burnout path eliminated (Mending costs 0 Coh); TE-15 unreachable (Coh equilibrium ~7)
-  - Coverage matrix Batch 5-8 archived to free space; MEND-SIM findings appended
+  - Mending 0-Coherence confirmed (all degrees including OW)
+  - Threadwork fatigue two-tier mechanic confirmed and simmed
+  - In-scene Fibonacci pool penalty (0/-1/-2/-4/-7/-12D per consecutive op, resets per scene)
+  - Cross-scene +2 Ob per prior threadwork scene in season, resets per season
+  - Calibration sim confirmed +2 Ob cross-scene produces community output ~20/season (capped at 10 by seasonal cap)
+  - ARC-S32 and ARC-S34 texts corrected to remove Coherence-from-Mending language
+  - ARC-S34 burnout reframed as fatigue/overwork-driven not Coherence-driven; TE-15 as terminal trigger preserved
 files_modified:
-  - tests/sim_mending_coherence_2026-04-17.md (new)
-  - tests/coverage_matrix.md (archived Batch 5-8; MEND-SIM findings added)
-  - tests/coverage_matrix_archive.md (Batch 5-8 appended)
+  - references/params_threadwork.md (fatigue two-tier rule; Coherence table row)
+  - designs/systems/campaign_architecture_v1.md (§3.2 OW cost corrected to 0; fatigue rows updated)
+  - references/arc_register.md (ARC-S32 and ARC-S34 text corrected)
 open_items:
-  - MEND-SIM-01: OW Mending Coherence cost contradiction (P1 — ruling required)
-  - MEND-SIM-02: ARC-S32 text states costs -1 Coherence — must be updated (P1)
-  - MEND-SIM-03: ARC-S34 Edeyja Burnout primary path broken — redesign required (P1)
   - MEND-SIM-04: rs_budget.md scenario net figures stale (P2)
-  - MEND-SIM-05: wc_survival_spine.md Coherence row in resource tension table (P2)
+  - MEND-SIM-05: wc_survival_spine.md resource tension table Coherence row (P2)
   - ED-666 Path B speed-run calibration (P1)
   - ED-667 Coup Counter readiness gap (P1)
   - ED-632 Shadow Renown mechanic (P1)
