@@ -4,14 +4,14 @@
 # Full index: canon/editorial_ledger_index.md
 # Last updated: 2026-04-17 (audit resolution — dedup, archive backfill, summary rebuild)
 
-next_id: 673
+next_id: 679
 p0_blocker_count: 5
 p0_blocker_ids: ['ED-670', 'ED-671', 'ED-672', 'ED-668', 'ED-669']
-p1_blocker_count: 3
+p1_blocker_count: 6
 p1_blocker_ids: ['ED-663', 'ED-666', 'ED-667']
 provisional_count: 0
 provisional_ids: []
-open_count: 12
+open_count: 18
 open_ids: ['ED-661', 'ED-662', 'ED-663', 'ED-664', 'ED-665', 'ED-670', 'ED-671', 'ED-672', 'ED-666', 'ED-667', 'ED-668', 'ED-669']
 flagged_count: 0
 flagged_ids: []
