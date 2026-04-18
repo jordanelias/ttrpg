@@ -51,7 +51,7 @@ The mechanism that makes the two contests feel simultaneous:
 | Military assets | Defense against rival factions, Altonian Vanguard | Expedition escort, Southernmost protection |
 | Faction actions | Domain Actions for territorial control | Expedition support, Warden cooperation |
 | Player time (scenes) | Political maneuvering, combat, investigation | Expedition participation, Mending operations |
-| Practitioner Coherence | Battlefield Thread operations, intelligence gathering | Mending at Southernmost, Gap closure |
+| Practitioner Coherence | Battlefield Thread operations (Lock, Dissolution), intelligence gathering | Non-Mending Thread ops at Southernmost; aggressive substrate work. Mending does not cost Coherence but competes for scene slots and incurs fatigue. |
 
 As IP rises (driven by civil war — peninsular_strain §3.2: IP +3/season during inter-faction battles), military attention must shift to border defense. But Southernmost expeditions require military escort. A faction fighting a war and mounting expeditions simultaneously must split resources.
 

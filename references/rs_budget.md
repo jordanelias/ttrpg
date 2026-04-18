@@ -91,15 +91,15 @@
 - Same drain as Scenario B: ~−21 to −23/season
 - WC 2 halves Gap/Lock drain: −8 → −4, −3 → −1.5 = saves ~5.5/season
 - WC 3 adds +2/season
-- Recovery: Edeyja Mending + player Mending = +3/season
-- **Net: ~−10 to −12/season**
+- Recovery: Edeyja Mending (5 ops across 4 scenes ≈ +6–8/season) + player community Mending (+2–4/season) = +8–12/season total; capped at +10/season by seasonal cap
+- **Net: ~−4 to −8/season (capped)**
 - From RS 45: Fractured band by Year 24. Critical by Year 27. Survival to Year 30 viable with active Mending rotation.
 
 ### Conclusion: WC 3 is the singular endgame survival path.
 
-At WC 0, peak drain exceeds recovery capacity by ~20 RS/season. No combination of individual Mending operations can offset this — ARC-S32 (Mending Trap) confirms one practitioner's full Coherence budget covers ~2–3 seasons of passive decline.
+At WC 0, peak drain exceeds recovery capacity by ~20 RS/season. No combination of individual Mending operations can offset this — ARC-S32 (Mending Trap) confirms that threadwork fatigue mechanics cap a single practitioner's seasonal output at +6–10 RS, insufficient against peak drain.
 
-At WC 3, drain is reduced to ~10–12/season and offset by +5/season recovery (WC bonus + Mending), producing a net decline of ~5–7/season — survivable to Year 30 with concentrated effort.
+At WC 3, drain is reduced to ~10–12/season (after WC halving of Gap/Lock drain) and offset by +8–12/season community Mending recovery (capped at +10/season by seasonal cap) plus +2/season WC bonus, producing a net decline of ~4–8/season — survivable to Year 30 with concentrated effort.
 
 ---
 

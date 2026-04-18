@@ -91,10 +91,7 @@ Three battles per season = −3 MS. Predictable. Cumulative. No spikes. Player c
 
 | Threadwork Type | Coherence Cost | Rationale |
 |----------------|---------------|-----------|
-| Mending (standard) | 0 | Aligned with substrate coherence. Healing, not violation. |
-| Mending (OW or extended) | 0 | Corrected — overwork manifests as pool depletion and Ob fatigue, not Coherence cost. See §3.2 note. |
-| Threadwork (all ops, including Mending) — in-scene | Pool −Fibonacci per consecutive op (0/−1/−2/−4/−7/−12D). Resets each scene. | Physical overwork within a contact window. |
-| Threadwork (all ops, including Mending) — cross-scene | +2 Ob per prior threadwork scene this season. Resets each season. | Cumulative seasonal exhaustion from repeated substrate exposure. |
+| Mending (any degree) | 0 | Aligned with substrate coherence. Healing, not violation. Overwork is expressed through fatigue mechanics (§3.2 below), not Coherence drain. |
 | Sight (passive) | 0 | Observation doesn't alter flow. |
 | Sight (active/forced) | 1 | Forcing sight into torn areas is against the flow. |
 | Lock | 1 per test | Freezing flow is against substrate nature. |
@@ -102,7 +99,17 @@ Three battles per season = −3 MS. Predictable. Cumulative. No spikes. Player c
 | Extraction | 1–2 (by scale) | Removing from substrate carries cost. |
 | Binding | 2 per test | Imposing permanent constraint. |
 
-Mending at 0 Coherence cost means practitioners can Mend sustainably without self-destruction. Overwork is expressed through two-tier threadwork fatigue (in-scene Fibonacci pool penalty; cross-scene +2 Ob per prior threadwork scene) rather than Coherence drain. The OW Mending row (previously cost 1 Coherence) is corrected to 0 — the overwork cost is already captured by the fatigue mechanics.
+Mending costs 0 Coherence at any degree of success. All other threadwork operations cost Coherence as above. Coherence therefore measures the cost of imposing the practitioner's will on the substrate — Mending, which supports the substrate's own coherence, does not impose.
+
+## §3.2a Threadwork Fatigue
+
+Fatigue from repeated threadwork operates at two scales and applies to all operations including Mending:
+
+**In-scene (pool depletion):** Each consecutive threadwork operation in the same scene reduces the pool by a Fibonacci amount. Op 1 = full pool, op 2 = −1D, op 3 = −2D, op 4 = −4D, op 5 = −7D, op 6 = −12D. Pool restores fully at the start of each new scene. Models acute overwork within a contact window.
+
+**Cross-scene (Ob fatigue):** Each scene in a season in which threadwork is used adds +2 Ob to all threadwork in subsequent scenes that season. Resets each season. Models cumulative seasonal exhaustion from repeated substrate exposure.
+
+These two mechanics together mean that a practitioner who Mends across many scenes per season faces compounding difficulty, and a practitioner who attempts many operations within a single scene degrades their pool rapidly — without either costing Coherence.
 
 ## §3.3 Mending Community
 

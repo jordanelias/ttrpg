@@ -359,7 +359,7 @@ Requirements: Thread Sensitivity 50+. Min Ob: 4. Same Ob table as Lock.
 | Failure | −8 | −1 (cap); full Gap; Monstrous Incursion; Practitioner incapacitated |
 
 ### Mending (Substrate Repair)
-Pool: Attunement + Focus + Thread Pool Score | TN 7
+Pool: (Spirit × 2) + History + Thread Pool Score | TN 7  *(PP-616 canonical pool — Attunement + Focus formula struck)*
 Requirements: Thread Sensitivity 50+. Target must be a Gap, Shifting Object, or Locked Zone border.
 Ob ceiling: 8 (regardless of stacked modifiers).
 | Gap Type | Ob | Min Thread Sensitivity |
