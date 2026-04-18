@@ -1,29 +1,32 @@
-session_id: sim_alternate_branches_2026-04-17
+session_id: 2026-04-17-historical-precedent
 session_close: 2026-04-17
-phase: COMPLETE
-status: CLOSED
+phase: design
+status: complete
 last_stage: done
 next_action:
   skill: confirm with Jordan
 blockers: []
 resolutions_this_session:
-  - 10 alternate branches simulated across Batches 1-5
-  - Branch A: Almstedt deploys irregularity -- forced supermajority produces stronger Baralta victory
-  - Branch B: Voss deploys reserve -- Coup mechanically impossible without Martial Honour violation
-  - Branch C: Vaynard Path B S9 -- shallow world, Himlensendt never confronted
-  - Branch D: Klapp publishes framework -- Confessor endorsement via casting vote, Church transformation
-  - Branch E: Thale warns Almud -- Crown survives at highest personal cost to Thale
-  - Branch F: Heljason refuses restoration brief -- stronger legal case than compliance
-  - Branch G: Haelgrund reports anomaly -- multi-faction cascade, Niflhel pursues archives
-  - Branch H: Hann gets Holdar vote -- figurehead Sigurd, Varfell fragments
-  - Branch I: Ehrenwall Counter fires S5 -- premature S17 Coup, Military Consolidation path
-  - Branch J: Edeyja never reaches Arc B -- RS 21 at S30, shared loss threshold near but not crossed
-  - Cross-branch: information timing primary resource; premature victory shallow; institutional precedent irreversible
+  - PP-675 historical precedent Church/RM/invasion/cultural revival + campaign_architecture propagation
+  - PP-676 historical precedent warfare/mustering/territory seizure
+  - PP-677 warfare propagation + Thread revelation curve + Accord by acquisition
 files_modified:
-  - tests/sim_alternate_branches_2026-04-17.md (new)
-  - canon/editorial_ledger.yaml (ED-666/667/668/669; ED-620/621/622 archived; next_id: 670)
-  - canon/editorial_ledger_archive.yaml (ED-620/621/622 archived)
-  - tests/coverage_matrix.md (alternate branch findings)
+  - settlement_layer_v30.md
+  - victory_v30.md
+  - params_threadwork.md
+  - rs_budget.md
+  - threadwork_v30.md
+  - player_agency_v30.md
+  - board_game_v30.md
+  - npc_behavior_v30.md
+  - peninsular_strain_v1.md
+  - fieldwork_v30.md
+  - campaign_architecture_v1.md
+  - mass_battle_v30.md
+  - military_layer_v30.md
+  - canonical_sources.yaml
+  - historical_precedents_analysis.md (new)
+  - historical_precedents_warfare.md (new)
 open_items:
   - ED-666 Path B speed-run calibration (P1)
   - ED-667 Coup Counter readiness gap (P1)
@@ -31,5 +34,7 @@ open_items:
   - ED-633 Deniability Debt (P1)
   - ED-629 Heresy Proceedings auth loop (P1)
   - ED-663 Wealth cap (P1)
-  - ED-668/669 (P2)
-  - All prior open items carried forward
+  - videogame_mode_spec updates (deferred)
+  - RM Accord ceiling visibility design
+  - Trade Mandate economic acquisition
+  - Militia/Sapper unit balancing
