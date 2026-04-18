@@ -334,3 +334,7 @@ systems:
     status: active
     canonical: designs/systems/thread_horizontal_integration_spec.md
     notes: "Thread integration spec. ED-673-681. 2026-04-17."
+  campaign_architecture:
+    canonical: designs/systems/campaign_architecture_v1.md
+    status: active
+    note: "2026-04-17: Church 4-axis infrastructure, CI=100 mass seizure, RM identity correction, Thread revelation curve, phased IP, Altonia repulsion, MS reform, Coherence asymmetry, Mending community, Portrait Retirement, Lineage Acts, Warden faction paths."

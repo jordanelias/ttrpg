@@ -57,3 +57,4 @@ coverage_matrix_archive: tests/coverage_matrix_archive.md
 rs_budget: references/rs_budget.md
 wc_survival_spine: references/wc_survival_spine.md
 thread_horizontal_integration: designs/systems/thread_horizontal_integration_spec.md
+- designs/systems/campaign_architecture_v1.md — Campaign Architecture (Church infrastructure, RM identity, Thread revelation, IP phases, MS reform, Coherence asymmetry, Wardens, Portrait Retirement, Lineage)
