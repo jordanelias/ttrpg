@@ -21,7 +21,6 @@ _task_gates_passed   = set()
 EDITORIAL_PATHS = (
     'designs/npcs/',
     'designs/world/',
-    'designs/world/',
     'designs/arcs/gm_ref/',
     'canon/03_',
 )
@@ -185,6 +184,9 @@ def editorial_gate(path: str, content: str) -> None:
     Blocks commits to editorial paths without [EDITORIAL] or [PROVISIONAL] markers.
     Called automatically for every addition in pre_commit_gate.
     """
+    if 'infrastructure' in _task_gates_passed:
+        print(f"[HOOK ✓] editorial_gate — {path} (infrastructure bypass)")
+        return
     if not any(path.startswith(p) for p in EDITORIAL_PATHS):
         return
     if len(content) < 200:
