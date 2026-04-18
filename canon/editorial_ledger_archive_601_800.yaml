@@ -1,0 +1,612 @@
+    description: "T9 Conviction Yield — PP-484 adds Church capital exception (T9 yields at base rate). Confirm: should Church capital always yield at base regardless of Prominence formula? Or accept T9 yields 0 and apply PP-492 velocity compensation only?"
+    tags: [board_game, church, tc]
+    date_resolved: 2026-04-12
+    resolution: "Fragmentation modifier +2 → +1 Ob."
+    patch: PP-562
+
+  - id: ED-433
+    status: resolved
+    date_raised: 2026-04-08
+    description: "Reconstitution failure — Church passive Mandate +1 on Löwenritter Reconstitution failure (PP-485). Confirm intent: is this the desired passive Church benefit? PP-485 adds a Church active counter-action (Senator Outward Ob 2 to block Reconstitution slot). Confirm both."
+    tags: [board_game, church, lowenritter]
+    date_resolved: 2026-04-12
+    resolution: "VTM TC contribution defined: +0.5/season VTM 3, +1/season VTM 4, +1.5/season VTM 5."
+    patch: PP-563
+
+  - id: ED-346
+    status: resolved
+    date_raised: 2026-04-08
+    description: "AER advancement control — which factions can directly advance or reduce AER? Does Hafenmark have a direct AER-advancement action, or does AER move only through Church/Altonian events? Affects Hafenmark endgame IP management."
+    tags: [board_game, hafenmark, aer]
+    date_resolved: 2026-04-12
+    resolution: "Ministry Priority 3 → automatic procedural delay; no roll; AP-token consumed."
+    patch: PP-564
+
+  - id: ED-347
+    status: resolved
+    date_raised: 2026-04-08
+    description: "Multi-Cardinal assassination cap — confirm whether simultaneous multi-Cardinal assassination is acceptable play pattern or whether a cap (max 1 Cardinal death per season) should be enforced. Current: no cap. Two or more Cardinal deaths per season is mechanically legal."
+    tags: [board_game, church, cardinals]
+    date_resolved: 2026-04-12
+    resolution: "No cap on multi-Cardinal death per season. Cascading mechanic suspensions are the natural limiter. Explicit text added."
+    patch: PP-569
+
+  - id: ED-348
+    status: resolved
+    date_raised: 2026-04-08
+    description: "Löwenritter post-coup starting territory — T14 Ehrenfeld is the Löwenritter garrison pre-coup. On Crown elimination + coup trigger simultaneously: confirm Löwenritter automatically holds T14 rather than T14 going Uncontrolled (Crown territory rule). Affects coup viability."
+    tags: [board_game, lowenritter, territory]
+    date_resolved: 2026-04-12
+    resolution: "Löwenritter assumes full control of T14 Ehrenfeld on Coup trigger — garrison formalises. Does not go Uncontrolled. Explicit rule added PP-569."
+    patch: PP-569
+
+  - id: ED-349
+    status: resolved
+    date_raised: 2026-04-08
+    description: "Soften action — referenced in stress test scope but not found in any fetched canonical source. Confirm whether Soften is a planned mechanic, a renamed existing action, or an error in the scope list. If planned: source document required."
+    tags: [board_game, gap]
+    date_resolved: 2026-04-12
+    resolution: "Soften action not found in any canonical source. Scope list error in simulation. Struck as undefined/non-existent."
+
+  - id: ED-350
+    status: resolved
+    date_raised: 2026-04-08
+    description: "Domain Echo mechanic and cap — referenced in stress test scope but only a negative reference found in params ('does not trigger a Domain Echo'). Full Domain Echo mechanic not in fetched canonical sources. Source document required for simulation."
+    tags: [board_game, gap]
+    date_resolved: 2026-04-12
+    resolution: "Domain Echo fully defined in params_factions PP-329: one Echo/scene/faction, Overwhelming=±2/±3, Success=±1/±2, Partial=narrative, Failure=-1 own stat. Close."
+
+  - id: ED-351
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-502 — two-condition trigger propagated from PP-251 to design doc"
+    date_raised: 2026-04-08
+    description: "Crown elimination + Hafenmark insta-win path — Crown elimination frees T1 (TCV 5) for auto-march. Hafenmark starts TCV 8; after auto-march on T1 = TCV 13, above their 12-threshold. If Hafenmark stats (Mandate ≥ 4, PI ≥ 5) were pre-positioned, this is an insta-win trigger on Crown elimination. Confirm whether this is intended or whether a grace period applies."
+    tags: [board_game, hafenmark, crown, victory]
+    patch: PP-567
+
+  - id: ED-430
+    status: resolved
+    date_created: 2026-04-08
+    priority: P1
+    description: >
+      Crown + Hafenmark co-victory achievable Season 1-2 with zero active play.
+      Crown TCV 12 meets threshold at game start. Hafenmark needs TCV 9 (has 8 — gains 1
+      from any existing territory hold). TC < 50 and PI >= 5 both satisfied at game start.
+      If neither faction is attacked and they hold existing territories for 2 Accounting steps:
+      co-victory declared automatically. No other faction can prevent this purely by holding
+      their own territories. The co-victory provides no meaningful arc goal.
+      Options: (a) Crown TCV >= 14 (forces active expansion), (b) add Crown Mandate >= 4
+      sustained condition, (c) raise PI requirement to >= 7 (starts 7, easily degraded).
+      Provisional: add Crown Mandate >= 4 sustained 2 consecutive seasons as additional condition.
+    source: STR-BG-D-03-01 2026-04-08
+    blocks: Co-victory balance; early-game diplomatic tension
+    tags: [board_game, co_victory, crown, hafenmark, balance]
+    date_resolved: 2026-04-12
+    resolution: "Crown+Hafenmark co-victory was trivially achievable S1-2. Threshold raise and Mandate conditions added. (ED-343 = co-victory; Battle Ob separately resolved by PP-548.)"
+    patch: PP-561
+
+  - id: ED-432
+    status: resolved
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Royal Decree Fragmentation modifier: currently +2 Ob when 3+ factions have Stability <= 2.
+      This fires exactly when Crown needs Decree most (late-game political crisis = suppression
+      urgency). The modifier punishes Crown in scenarios where active political management is
+      most necessary, creating a perverse incentive (Crown avoids Decree when rivals are weakest).
+      Suggested: reduce to +1 Ob. Preserves crisis-difficulty flavour without near-prohibitive Ob.
+    source: STR-BG-A-04-Crown 2026-04-08
+    blocks: Crown late-game balance
+    tags: [board_game, crown, royal_decree, fragmentation_modifier]
+    date_resolved: 2026-04-12
+    resolution: "Fragmentation modifier +2 → +1 Ob."
+    patch: PP-562
+
+  - id: ED-434
+    status: resolved
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      VTM TC contribution per level is not specified anywhere in canonical docs.
+      VTM Discretion (PP-438) spends 1 PC (at VTM 4+) to suppress VTM's TC contribution for
+      one season. But the TC generated by public VTM (VTM 3+, publicly visible) is not defined.
+      Without this value, VTM Discretion cannot be costed or balanced. Does VTM 3 generate
+      TC +0.5/season? TC +1? Per the Co-Movement deck analysis, each Thread operation generates
+      E(0.20 TC) from deck cards — does VTM presence add to this, or is VTM TC contribution
+      separate from Co-Movement?
+    source: STR-BG-A-Varfell 2026-04-08
+    blocks: VTM Discretion balance; TC generation completeness
+    tags: [board_game, varfell, vtm, tc_generation, vtm_discretion]
+    date_resolved: 2026-04-12
+    resolution: "VTM TC contribution defined: +0.5/season VTM 3, +1/season VTM 4, +1.5/season VTM 5."
+    patch: PP-563
+
+  - id: ED-435
+    status: resolved
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Ministry NPC Priority 3 vs Church Seizure: currently a contested roll (Ministry Mandate 3D
+      vs Ob = Church Mandate 5) with ~4% success rate. Near-impossible, making Priority 3
+      mechanically dead. Ministry's institutional role (procedural objection, legislative record)
+      suggests the delay should not depend on a high-Ob roll.
+      Suggested redesign: Priority 3 fires = Church Seizure automatically delayed 1 season
+      (Ministry files procedural objection). Roll: Ministry Mandate vs Ob 2. Success: no
+      Ministry damage. Failure: Ministry Stability -1 (Church overrides the objection,
+      damaging the institution). This preserves the narrative (clerks resist, may pay for it)
+      while making Priority 3 mechanically meaningful.
+    source: STR-BG-Ministry-02 2026-04-08
+    blocks: Ministry NPC effectiveness; Church seizure pacing
+    tags: [board_game, ministry, church, seizure, npc_ai]
+
+  # ═══ 2026-04-08 SESSION — Territory Reconciliation + Church Rebalance ═════
+    date_resolved: 2026-04-12
+    resolution: "Ministry Priority 3 → automatic procedural delay; no roll; AP-token consumed."
+    patch: PP-564
+
+  - id: ED-352
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Church equal-probability rebalancing — Graduated Seizure (PP-494)"
+    decision: "Church Seizure available at any TC. Pool = Influence + floor(TC/15). Ob = 7 − CV. Church TCV threshold reduced to ≥ 8. BALANCE-001 revised to include Church."
+    tags: [board_game, church, balance, victory]
+
+  - id: ED-353
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Territory name mapping — victory_architecture → geography_design"
+    decision: "PP-493 applied. All territory numbers remapped. Old names struck (Arcansheld→Ehrenfeld, Vargstad→Grauwald, Eidursjo→Rendstad, Nordhelm→Kronmark, Mittelmark→Feldmark). Starting TCV: Crown 12, Hafenmark 8, Varfell 6, Church 3."
+    tags: [board_game, territory, infrastructure]
+    resolution: "Explicit rule text at mass_battle_v3 L197 (PP-504): full Command per sub-unit, not divided. Close confirmed."
+
+  - id: ED-354
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "TCV for T13 Oastad, T17 Halvarshelm"
+    decision: "T13 Oastad TCV 1 (Varfell). T17 Halvarshelm TCV 1 (Hafenmark). Total TCV = 30."
+    tags: [board_game, territory]
+
+  - id: ED-355
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-506 — both armies uncommanded (PP-273 1D min) during bilateral general duel"
+    date_raised: 2026-04-08
+    description: "Fort Level interaction with Church Graduated Seizure. Options: (a) Fort adds to Ob; (b) Fort handled by Battle preceding Seizure; (c) No Fort modifier. Recommend (b)."
+    tags: [board_game, church, seizure]
+
+  - id: ED-356
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-500 — Shield Wall +2D Def applies to all simultaneous defensive pools"
+    date_raised: 2026-04-08
+    description: "Crown starting TCV = 12 vs threshold TCV ≥ 16 = gap of only +4. This is the smallest gap of any faction. Verify Crown is not over-advantaged by the geography_design territorial assignments (Lowenskyst reassigned from Hafenmark to Crown). May need Crown threshold increase or starting territory reassignment."
+    tags: [board_game, crown, balance]
+
+  - id: ED-357
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-507 — PP-240 Ob 1 replaces §A.13 battle-lost check for mutual destruction draw"
+    date_raised: 2026-04-08
+    description: "Maret Uln struck as NPC. Remove from active NPC roster. Archive existing Maret mechanical references."
+    tags: [npc, worldbuilding]
+
+  - id: ED-358
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-508 — §A.8 splitting note struck; splitting is structurally dominant; hard counter is Narrow Pass terrain"
+    date_raised: 2026-04-08
+    description: >
+      New NPC development roster (12 characters). All require full design: character identity, 
+      stat block, arc trajectory, faction interaction patterns. Roster: (1) Edeyja (Wardens/Southernmost), 
+      (2) RM Leader(s) (Restoration), (3) Inquisitor (Church), (4) TS Riskbreaker undercover/knows Lenneth 
+      (Löwenritter covert), (5) Löwenritter officer, (6) Guilds representative, (7) Ministry bureaucrat, 
+      (8) Court figure (Crown), (9) Niflhel operative, (10) Altonian Prince married to Elske, 
+      (11) Schoenland figure, (12) TBD.
+    tags: [npc, worldbuilding, editorial]
+
+  - id: ED-359
+    status: resolved
+    date_raised: 2026-04-08
+    description: "RM TTRPG mode Founding Gate (PP-495) — narrative gate added. User to review: is session 6 floor appropriate? Should any mechanical trigger supplement the narrative conditions?"
+    tags: [ttrpg, restoration_movement, founding]
+    date_resolved: 2026-04-12
+    resolution: "Session 6 floor for RM TTRPG Founding Gate confirmed appropriate. Mid-campaign emergence matches RM narrative arc. No change needed."
+
+  - id: ED-361
+    status: resolved
+    date_raised: 2026-04-08
+    description: >
+      PI-CASCADE threshold values. Proposed: PI 0–4 stable; PI 5–9 Crown +1 Ob;
+      PI 10–14 Crown Stability +1 Ob at Accounting; PI 15–19 Crown loses 1 territory/season
+      (lowest TCV, becomes Uncontrolled), coup check if Coup Counter ≥ 2; PI 20+ Crown 
+      elimination triggered unless reduced before next Accounting. Confirm or modify.
+    tags: [board_game, public_instability, crown, p1]
+    date_resolved: 2026-04-12
+    resolution: "PI cascade table already implemented in params_board_game §PI Thresholds (PP-501): 0-4 Stable, 5-9 Tensions, 10-14 Unrest, 15-19 Revolt, 20+ Collapse. Range header corrected to 0-20 this session."
+
+  - id: ED-362
+    status: resolved
+    date_raised: 2026-04-08
+    description: >
+      DISSONANT war-scale Thread rates. Proposed: ≥ 3 Thread ops per mass battle turn →
+      +1 Ob +1 Coherence cost to subsequent ops (cap +2 each). Dissonant Counter ≥ 3 →
+      all Thread ops in zone +2 Ob for remainder of battle + RS −2 at Accounting.
+      Counter resets at battle end. Confirm or modify.
+    tags: [hybrid, mass_combat, threadwork, p1]
+    date_resolved: 2026-04-12
+    resolution: "Dissonant Thread rules already in params_threadwork PP-502: ≥3 Thread ops/battle turn triggers +1 Ob +1 Coherence; Dissonant Counter ≥3 = +2 Ob + RS-2. Close."
+
+  - id: ED-363
+    status: resolved
+    date_raised: 2026-04-08
+    description: >
+      P1-01 Overwhelming threshold — PP-249 canonical: net ≥ 2×Ob AND net ≥ 3.
+      Stale entries at params_board_game L1066 (old floor 2) and L1133 (Ob+1 surplus)
+      corrected this session. Confirm PP-249 as final.
+    tags: [board_game, degree_table]
+
+  # ═══ 2026-04-08 SESSION — Batch Editorial Resolution ═════════════════════
+    date_resolved: 2026-04-12
+    resolution: "PP-249 Overwhelming confirmed canonical: net ≥ 2×Ob AND net ≥ 3. L1066 and L1133 are about Crown victory (ED-109) and balance notes (ED-113), not Overwhelming threshold. No stale entries."
+
+  - id: ED-429
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Torben Loyalty starting value and range"
+    decision: "PP-498: Torben starts at 3, range 0–7. Summary table corrected to match §Torben Loyalty Track (which already said 3/0–7). The 10/0–10 entry was an erroneous revision. Stale Deed 5 reference struck (PP-424 dissolved Deeds)."
+    tags: [board_game, torben, crown]
+    resolution: "Torben Loyalty correctly shows 3, 0-7 in current tracker table. Stale 10/0-10 not found in current text — already resolved. No patch needed."
+
+  - id: ED-343-RESOLVED
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Battle Ob formula"
+    decision: "PP-499: Battle Ob = defender Military ÷ 2 (round up, min 1). Matches other Domain Action Ob patterns. [EDITORIAL: provisional — flagged for simulation confirmation.]"
+    tags: [board_game, battle]
+
+  - id: ED-440
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Fort Level interaction with Church Graduated Seizure"
+    decision: "PP-500: Option (b). Fort does not modify Seizure Ob. If territory has garrison (Fort ≥ 1 + units), Church must win Battle first. Ungarrisoned fort = Seizure without Battle. Political Vacuum rule also added (1-season delay on eliminated faction territories). [EDITORIAL: provisional — flagged for simulation.]"
+    tags: [board_game, church, seizure, fort]
+
+  - id: ED-442
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Crown starting TCV 12 vs threshold 16 — balance check"
+    decision: "No change. Crown's +4 TCV gap matches Hafenmark's +4 gap. Crown's political conditions (suppress ALL rivals: Mandate ≤ 2 / eliminated / treaty × 3 factions simultaneously) are the most demanding of any faction. TCV gap is compensated by political difficulty. Crown is not over-advantaged."
+    tags: [board_game, crown, balance]
+    resolution: "Explicit rule text at mass_battle_v3 L255 (PP-500): +2D Def applies to all simultaneous defensive pools. Blanket modifier. Close confirmed."
+
+  - id: ED-444
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Maret Uln NPC status"
+    decision: "Maret retained as active NPC. Not struck. Added to 13-character NPC development roster (ED-358 updated)."
+    tags: [npc, worldbuilding]
+
+  - id: ED-446
+    status: struck
+    date_resolved: 2026-04-12
+    resolution: "FALSE DEBT. All 13 NPCs in the roster have documented presence in canonical params files. The editorial was raised as a simulation gap but NPC documentation has since been completed across multiple sessions. Lenneth TS is intentionally arc-dependent (documented). Cardinals have full BG mechanics. Struck. See note ED-358b." 13-character NPC roster requires full authorial design. Minimal provisional stat blocks exist in individual faction params files for simulation purposes. Full character identity, arc trajectory, and faction interaction patterns deferred for design session."
+    description: >
+      13-character NPC development roster. All require full design: character identity, 
+      stat block, arc trajectory, faction interaction patterns. Roster: (1) Edeyja 
+      (Wardens/Southernmost), (2) Maret Uln (Varfell practitioner), (3) RM Leader(s) 
+      (Restoration), (4) Inquisitor (Church), (5) TS Riskbreaker undercover/knows Lenneth 
+      (Löwenritter covert), (6) Löwenritter officer, (7) Guilds representative, 
+      (8) Ministry bureaucrat, (9) Court figure (Crown), (10) Niflhel operative, 
+      (11) Altonian Prince married to Elske, (12) Schoenland figure, (13) TBD.
+    tags: [npc, worldbuilding, editorial]
+
+  - id: ED-358b
+    status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Lenneth TTRPG TS resolved by lenneth_threadwork_design.md: starting TS 8, archive-based development path, breakthrough condition at witnessed Thread operation. PP-583 stat table confirms."
+    date_raised: 2026-04-12
+    priority: P3
+    description: >
+      Lenneth Almqvist (Queen) TTRPG stat block: TS listed as "Unknown — arc-dependent."
+      All other NPCs in the original ED-358 roster have documented presence.
+      This is the only genuine gap: Lenneth needs a starting TS and development path
+      for TTRPG play, once the archive arc is triggered. Not a blocker for BG or Hybrid.
+    tags: [ttrpg, lenneth, npc, worldbuilding]
+
+  - id: ED-447
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "RM TTRPG Founding Gate session-6 floor"
+    decision: "Session 6 floor confirmed. Mirrors Hybrid PW ≥ 3 timing (~6-8 seasons). No mechanical supplement to narrative conditions."
+    tags: [ttrpg, restoration_movement]
+
+  - id: ED-448
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "Spy vs Royal Guard interaction"
+    decision: "Confirmed: Royal Guard cancels successful 4-PC Spy on Crown. No PC refund on cancellation (sunk cost). Ruling stands."
+    tags: [board_game, varfell, crown]
+    resolution: "Confirmed rulings taken in SIM-NEW-05: (a) Royal Guard can cancel 4-PC Spy — yes. (b) No PC refund — yes. Close confirmed."
+
+  - id: ED-449
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "PI-CASCADE threshold values"
+    decision: "PP-501: PI 0–4 stable; 5–9 Crown +1 Ob; 10–14 Crown Stability +1 Ob; 15–19 Crown territory loss; 20+ Crown elimination. [EDITORIAL: provisional — flagged for simulation under SIM-PI-CASCADE.]"
+    tags: [board_game, public_instability, crown]
+
+  - id: ED-450
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "DISSONANT war-scale Thread rates"
+    decision: "PP-502: ≥3 ops/turn → +1 Ob +1 Coherence (cap +2). Dissonant Counter ≥ 3 → +2 Ob zone-wide + RS −2. Resets at battle end. [EDITORIAL: provisional — flagged for simulation under SIM-DISSONANT.]"
+    tags: [hybrid, mass_combat, threadwork]
+
+  - id: ED-451
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "P1-01 Overwhelming threshold confirmation"
+    decision: "PP-249 confirmed as canonical: Overwhelming = net ≥ 2×Ob AND net ≥ 3. Stale entries at params_board_game L1066/L1133 corrected in prior commit."
+    tags: [board_game, degree_table]
+
+  - id: ED-358-RESOLVED
+    status: resolved
+    date_resolved: 2026-04-08
+    description: "13-character NPC development roster — identities, compromises, behavioral AI profiles"
+    decision: >
+      Full roster designed in designs/npcs/npc_roster.md. All NPCs except Edeyja carry 
+      structural compromises (dual loyalty, hidden TS, procedural rigidity, profit blindness, 
+      embezzlement, etc.). Each has a named behavioral AI flaw producing mechanical consequences.
+      Existing NPCs (Maret Uln, Maret Vossen, Edeyja) integrated with new designs.
+      [EDITORIAL: All provisional — flagged for user review of names, motivations, 
+      compromises, behavioral profiles. Stat blocks deferred.]
+    tags: [npc, worldbuilding, editorial]
+
+  - id: ED-364
+    status: resolved
+    editorial_note: "[EDITORIAL: Almud characterization rewrite — authorial work across NPC documents]"
+    date_raised: 2026-04-08
+    priority: P1
+    description: >
+      Almud characterization rewrite across 3 NPC analysis documents (~33 passages). 
+      Current characterization (paralyzed/indecisive) is cliché and inconsistent with 
+      mechanical profile. Replace with: shrewd, guarded, politically capable king whose 
+      caution is informed by suspected father assassination and structural impossibility 
+      of bearing 6+ simultaneous pressure vectors. Baralta comparison must be revised 
+      (scope difference, not competence difference). New lore: father's assassination 
+      (suspected). See designs/npcs/almud_correction_plan.md.
+    tags: [npc, crown, worldbuilding, p1]
+    date_resolved: 2026-04-12
+    resolution: "[PROVISIONAL for Jordan review] Almud conviction text updated: \"Order is not made — it is maintained. Everything depends on not flinching.\" NPC profile note added: shrewd, guarded, caution from suspected father assassination. Baralta comparison: scope not competence."
+    patch: PP-573
+
+  - id: ED-452
+    status: resolved
+    date_created: 2026-04-08
+    date_resolved: 2026-04-09
+    priority: P1-BLOCKER
+    description: "Almud characterization rewrite — paralysis/indecision replaced with shrewd/guarded/strategic patience across all NPC analysis files"
+    resolution: "Rewrote Almud sections in npc_character_analyses_existing.md, ruler_diamond_foil_analysis.md, ruler_diamond_extended_foils.md, arcs_01_04_nongreedy.md. ~41 passages total. Manuel I Komnenos anchor. Assassination shadow. Strategic patience framework."
+    affected_files:
+      - designs/npcs/npc_character_analyses_existing.md
+      - designs/npcs/ruler_diamond_foil_analysis.md
+      - designs/npcs/ruler_diamond_extended_foils.md
+      - gm_ref/arcs_01_04_nongreedy.md
+
+  # ═══ SIM-GS-01 EDITORIALS (2026-04-09) ═════════════════════════════════════
+
+  - id: ED-365
+    status: resolved
+    date_resolved: 2026-04-09
+    resolved_by: PP-507
+    date_raised: 2026-04-09
+    description: "Graduated Seizure (PP-494) availability gate: pre-TC 75 vs post-TC 75 only. Formula defined at TC=28 in params but mechanic filed under TC 75 seizure section. Ambiguous whether it is available before freeze."
+    priority: P1
+    tags: [church, seizure, TC, gate]
+    blocks: simulation_correctness
+
+  - id: ED-366
+    status: resolved
+    date_resolved: 2026-04-09
+    resolved_by: PP-508
+    date_raised: 2026-04-09
+    description: "PP-421 vs PP-494 Overwhelming CV cap conflict. PP-421: OW CV+1 counts against ±1 seasonal cap. PP-494: OW CV+1 is not cap-governed. Directly contradictory. PP-494 provisional governs."
+    priority: P1
+    tags: [church, seizure, CV, cap]
+    blocks: seizure_resolution
+
+  - id: ED-367
+    status: resolved
+    date_resolved: 2026-04-09
+    resolved_by: PP-509
+    date_raised: 2026-04-09
+    description: "Prominence check timing for Graduated Seizure: checked at declaration or resolution? Prominence can shift mid-round via Excommunication. Action sequence not specified."
+    priority: P2
+    tags: [church, seizure, prominence, timing]
+
+  - id: ED-368
+    status: resolved
+    date_resolved: 2026-04-09
+    resolved_by: PP-506
+    date_raised: 2026-04-09
+    description: "Battle trigger on Graduated Seizure success in contested territory unspecified. PP-494 silent. bg_v05 Cascade Test 4 establishes TC-threshold seizure triggers Battle. Confirm whether same applies to Graduated Seizure."
+    priority: P1
+    tags: [church, seizure, battle, cascade]
+    blocks: cascade_resolution
+
+  - id: ED-369
+    status: resolved
+    date_resolved: 2026-04-09
+    resolved_by: PP-511
+    date_raised: 2026-04-09
+    description: "Mandatory Assert (PP-480, TC 50-74) suspension post-TC 75. TC frozen = Assert produces no TC gain. Is mandatory Assert suspended in seizure phase? Significant action economy impact if not."
+    priority: P2
+    tags: [church, assert, TC_freeze, action_economy]
+
+  # GAP: Casus Belli (SIM-GS-01 2026-04-09)
+  # Referenced in PP-494 political cost clause but no mechanic definition exists anywhere
+  # in params_board_game.md. Blocks correct simulation of seizure political consequences.
+  # Requires a definition patch before next Church-seizure simulation.
+
+  # ═══ MASS BATTLE STRESS TEST SIM-MB-01 ══════════════════════════════════════
+
+  - id: ED-436
+    status: resolved
+    date_raised: 2026-04-09
+    description: "Discipline degradation trigger: three conflicting definitions. (1) mass_battle_v3.md §A.4: single condition — Size lost > Discipline. (2) params_mass_combat.md PP-251: two conditions — Size lost > Discipline AND unit loss > opposing loss by ≥1. (3) PP-320/ED-140: two conditions — Size lost > Discipline AND Power asymmetry OR Thread/artillery. Design doc is canonical; PP-251 patch not propagated."
+    priority: P1
+    tags: [mass_combat, discipline, patch_propagation]
+    blocks: discipline_degradation_simulation
+    date_resolved: 2026-04-12
+    resolution: "Three conflicting definitions reconciled. PP-320 Power-asymmetry condition struck. PP-251 canonical."
+    patch: PP-567
+
+  - id: ED-437
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-503 — Volley pool = Power stat (1-7) at TN6"
+    date_raised: 2026-04-09
+    description: "Volley Phase dice pool undefined. mass_battle_v3.md §A.7 says 'Roll Effective Power vs TN 6.' Effective Power is not defined for Volley context. Two candidates: (a) Power stat (unit quality, 1-7); (b) engagement pool formula = min(Size,Command)+Command per PP-233. These produce different values. ED-037 confirms TN 6 but does not address pool definition."
+    priority: P1
+    tags: [mass_combat, volley, pool_formula]
+    blocks: volley_simulation
+
+  - id: ED-438
+    status: resolved
+    date_raised: 2026-04-09
+    description: "Command distribution across sub-units: explicit rule text needed. Formula gives Pool = min(Size,Command)+Command per sub-unit but does not state whether Command applies in full to each sub-unit or is divided. §A.8 note implies full Command per sub-unit (splitting is disadvantageous vs undivided defender), but this is implicit. If Command divides, splitting is always inferior. If full, 3-way split triples total dice — design intent is full Command per sub-unit per §A.8, but needs explicit rule text."
+    priority: P1
+    tags: [mass_combat, command, sub_units, pool_formula]
+    blocks: sub_unit_strategy_simulation
+    date_resolved: 2026-04-12
+    resolution: "Explicit rule text at mass_battle_v3 L197 (PP-504): full Command per sub-unit, not divided. Close confirmed."
+
+  - id: ED-439
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-505 — simultaneous-damage governs; unit fights in Phase 5"
+    date_raised: 2026-04-09
+    description: "Thread destruction in Phase 4 vs Phase 5 participation. Design doc says a unit reduced to 0 by Phase 4 Thread effects does not participate in Phase 5 Engagement. But simultaneous-damage rule means damage is not applied until Phase 6 Step 1 — unit's current Size is non-zero during Phase 5. Exclusion from Phase 5 contradicts simultaneous-damage principle. Which governs?"
+    priority: P2
+    tags: [mass_combat, thread, simultaneous_damage, phase_structure]
+
+  - id: ED-441
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-506 — bilateral general duel: mass battle continues uncommanded"
+    date_raised: 2026-04-09
+    description: "Both generals simultaneously in personal combat: mass battle pause rule undefined for bilateral case. If both generals enter personal combat in Phase 5 simultaneously, no rule specifies whether mass battle freezes entirely or units fight uncommanded at 1D minimum, nor sequencing for two simultaneous personal combats."
+    priority: P2
+    tags: [mass_combat, general, personal_combat, pause_rule]
+
+  - id: ED-443
+    status: resolved
+    date_raised: 2026-04-09
+    description: "Shield Wall +2D Def: application across simultaneous multi-direction engagements undefined. PP-MB-07 clarification implies the unmitigated flank applies without +2D Def bonus. But Shield Wall's +2D Def is a blanket formation modifier. Does it apply to all defensive pools in all simultaneous engagements, or only to the front/negated-flank engagements?"
+    priority: P2
+    tags: [mass_combat, formation, shield_wall, multi_engagement]
+    date_resolved: 2026-04-12
+    resolution: "Explicit rule text at mass_battle_v3 L255 (PP-500): +2D Def applies to all simultaneous defensive pools. Blanket modifier. Close confirmed."
+
+  - id: ED-445
+    status: resolved
+    date_resolved: 2026-04-09
+    resolution: "PP-507 — PP-240 Ob 1 replaces §A.13 battle-lost check for mutual destruction"
+    date_raised: 2026-04-09
+    description: "Mutual destruction Stability check: replacement of or addition to normal battle-lost consequences. PP-240: mutual destruction → both factions Stability check Ob 1 at Accounting. §A.13: battle lost → Stability check Ob 1. Mutual destruction = draw. Does PP-240 check replace §A.13 check (no loser) or add to it (both checks fire)?"
+    priority: P2
+    tags: [mass_combat, mutual_destruction, stability, accounting]
+
+  - id: ED-370
+    status: resolved
+    date_raised: 2026-04-09
+    priority: P2
+    description: "Hybrid personal scene Diplomacy -> BG Treaty bridge rule. Personal Diplomacy success proposed to grant -1 Ob to board-level Treaty roll at next Accounting; board roll still required."
+    date_resolved: 2026-04-11
+    resolution: "Personal Diplomacy success in TTRPG/Hybrid queues -1 Ob Domain Echo on BG Treaty roll. Cap -1 Ob, once per Treaty target per arc."
+    patch: PP-556
+    tags: [hybrid, diplomacy, treaty]
+
+  - id: ED-371
+    status: resolved
+    date_raised: 2026-04-09
+    priority: P2
+    description: "Coalition suppression dominant strategy (PP-296) — confirm cost-free auto-trigger is intended. If not, add declaration cost (Senator card to formally join)."
+    date_resolved: 2026-04-11
+    resolution: "Coalition suppression auto-trigger (PP-296) confirmed as designed. No Senator card required."
+    patch: PP-557
+    tags: [board_game, coalition, balance]
+
+  - id: ED-372
+    status: resolved
+    date_raised: 2026-04-09
+    priority: P2
+    description: "Thread Liaison dissolution timing — prospective (already-credited ops remain valid) vs retroactive. Proposed: prospective only."
+    date_resolved: 2026-04-11
+    resolution: "Thread Liaison dissolution is prospective only. Already-credited ops remain valid."
+    patch: PP-558
+    tags: [board_game, hybrid, thread_liaison]
+
+  - id: ED-373
+    status: resolved
+    date_raised: 2026-04-09
+    priority: P3
+    description: "Diplomatic Token on Mandate-0 faction — Token effect suspended while holder has Mandate 0; resumes on recovery. Applied provisionally in PP-517."
+    date_resolved: 2026-04-11
+    resolution: "Diplomatic Token suspended while faction is in submitted/vassal state. Resumes on recovery."
+    patch: PP-559
+    tags: [board_game, diplomacy]
+
+  # ═══ 2026-04-10 COMPREHENSIVE SIM BATCH ════════════════════════════════════════
+
+  - id: ED-383
+    status: resolved
+    priority: P2
+    date_raised: 2026-04-10
+    description: "Crown victory 'Suppress all rivals' produces 20+ season timeline — intended difficulty spike?"
+    decision: null
+    tags: [board_game, victory, crown]
+    date_resolved: 2026-04-12
+    resolution: "Crown suppress-all-rivals producing 20+ season timeline is intentional design — it is the hardest legitimate faction path."
+
+  - id: ED-384
+    status: resolved
+    editorial_note: "[EDITORIAL: Varfell+RM co-victory aspirational — confirm as intentional hardest co-victory or adjust thresholds]"
+    priority: P2
+    date_raised: 2026-04-10
+    description: "Varfell+RM co-victory unachievable in race conditions — confirm aspirational design intent"
+    decision: null
+    tags: [board_game, victory, varfell, rm, co_victory]
+    date_resolved: 2026-04-12
+    resolution: "Varfell+RM co-victory confirmed aspirational — intentional hardest co-victory. Not a bug."
+
+  - id: ED-385
+    status: resolved
+    priority: P2
+    date_raised: 2026-04-10
+    description: "RS decline → CV erosion → Church Seizure easier on Crown territories (T5 Feldmark) — confirm intentional"
+    decision: null
+    tags: [board_game, calamity, church, crown]
+    date_resolved: 2026-04-12
+    resolution: "RS→PT erosion→Church Seizure cascade on Crown territories is intentional. Calamity pressure model creates multi-system synergy for Church."
+
+  - id: ED-386
+    status: resolved
+    priority: P3
+    date_raised: 2026-04-10
+    description: "Cultural Uprising 'arc' ambiguity — should be explicitly defined as 'campaign'"
+    decision: null
+    tags: [hybrid, rm, victory]
+    date_resolved: 2026-04-12
+    resolution: "\"Arc\" in RM Uprising context (vic L240) is natural prose referencing campaign arc. No systematic renaming needed. Close as not a mechanical issue."
+
+  - id: ED-387
+    status: resolved
+    editorial_note: "[EDITORIAL: Hafenmark passive victory path scope — confirm what PP-203 was meant to fix]"
+    priority: P2
+    date_raised: 2026-04-10
+    description: "GAP-VIC-02: Confirm PP-203 balanced Hafenmark passive victory path — scope of fix unclear"
+    decision: null
+    tags: [board_game, hafenmark, balance]
+

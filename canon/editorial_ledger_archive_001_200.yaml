@@ -1,0 +1,954 @@
+# Valoria Editorial Ledger — Archive
+# Contains: resolved | struck | complete | confirmed items
+# Do NOT fetch at session start — audit trail only
+# Active ledger: canon/editorial_ledger.yaml
+# Index: canon/editorial_ledger_index.md
+# Last updated: 2026-04-14
+
+# 2026-04-06 | ED-302 resolved (Calamity Radiation) | ED-303 flagged (RS naming)
+# Status values: resolved | confirmed | flagged | struck
+# 'flagged' = requires user narrative/authorial decision; [EDITORIAL] marker present
+# All mechanical items resolved. Only worldbuilding/narrative items remain flagged.
+- id: ED-532
+  priority: P3
+  status: resolved
+  system: fieldwork_socializing
+  description: "Disposition ≤ −3 recovery undefined mechanically."
+  resolution: "PP-633: GM-adjudicated narrative event required. No roll."
+  patch: PP-633
+
+- id: ED-533
+  priority: P2
+  status: resolved
+  system: fieldwork_socializing
+  description: "Loose/Medium Knot formation trivially fast."
+  resolution: "PP-633: Intended design — casual bonds form quickly."
+  patch: PP-633
+
+- id: ED-534
+  priority: P1
+  status: resolved
+  system: fieldwork_socializing
+  description: "Simultaneous Rupture of all Close Knots catastrophic, no cap."
+  resolution: "PP-633: Composure damage cap = floor(Composure×0.75), min = highest single-tier cost."
+  patch: PP-633
+
+# next_id: 535
+# IMPORTANT: All new editorial items MUST use the next_id value and increment it.
+# NOTE: ED-486 through ED-495 used by opposing threadwork session (2026-04-13).
+# NOTE: ED-496 through ED-509 used for fieldwork editorial harvest (PP-631, 2026-04-13).
+# Sessions MUST read this value before assigning new ED numbers.
+
+editorial_decisions:
+
+  # ═══ BOARD GAME BLOCKERS ════════════════════════════════════════════════════
+
+  - id: ED-001
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Card-Hand system for BG action selection"
+    decision: "6-card hand (4 shared + 2 faction). Draw 1/Battle. Discard after use. Refresh at Accounting."
+    tags: [board_game, action_economy]
+
+  - id: ED-002
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Champion Renown ability text"
+    decision: "Once per season, Champion spends 1 Mandate → +1D to one allied Domain Action in Champion's territory."
+    tags: [board_game, npc]
+
+  - id: ED-003
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Institutional Mandate trigger conditions"
+    decision: "Fires when Mandate ≥ 4 AND Domain Action directly challenges faction core institutional authority."
+    tags: [board_game, faction]
+
+  - id: ED-004
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "NPC AI priority order"
+    decision: "(1) protect Stability if ≤ 2; (2) advance Mandate if ≤ 3; (3) target highest-threat opponent's lowest stat."
+    tags: [board_game, npc_ai]
+
+  - id: ED-005
+    status: resolved
+    date_resolved: 2026-04-06
+    description: "Riskbreakers faction identity — character, culture, operational philosophy"
+    decision: "See references/params_factions.md, designs/worldbuilding/worldbuilding_integration_v2.md, designs/board_game/bg_improvement_v3_amendment2.md, designs/worldbuilding/worldbuilding_integration_v3.md."
+    tags: [worldbuilding, faction, lowenritter]
+
+  - id: ED-006
+    status: resolved
+    date_resolved: 2026-04-06
+    description: "Restoration Movement leader — name and character profile"
+    decision: "See references/params_factions.md and designs/worldbuilding/worldbuilding_integration_v3.md."
+    tags: [worldbuilding, npc, faction, revolution]
+
+  - id: ED-007
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Fourth Cardinal identity"
+    decision: "Reform faction archetype. Canon cardinals: Olafsson, Klapp, Jarnstal. Fourth deferred to campaign development."
+    tags: [worldbuilding, npc, church]
+
+  # ═══ CONTEST SYSTEM ═════════════════════════════════════════════════════════
+
+  - id: ED-008
+    status: struck
+    superseded_by: ED-041
+    description: "Niflhel formal Debate access"
+
+  - id: ED-009
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Concentration attribute: Focus vs Poise"
+    decision: "Focus confirmed. Poise deprecated. PP-234 applied."
+    tags: [contest, attributes]
+
+  - id: ED-010
+    status: struck
+    superseded_by: ED-009
+
+  - id: ED-011
+    status: struck
+    superseded_by: ED-027
+
+  - id: ED-012
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Audience Disposition as dual win-condition"
+    decision: "Applies to all Formal and Grand Debates. Audience Disposition → Hostile (0) = auto-concede."
+    tags: [contest, victory_condition]
+
+  - id: ED-013
+    status: struck
+    superseded_by: ED-042
+
+  - id: ED-014
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Corroboration Knot requirement"
+    decision: "Any coalition member can corroborate. Knot-sharing = Ob 1; non-Knot = Ob 2."
+    tags: [contest, knots]
+
+  - id: ED-015
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Thread consequences for Casual Disputes"
+    decision: "Rattled in casual dispute → +1 Ob on next Thread op this scene."
+    tags: [contest, threadwork]
+
+  # ═══ MASS COMBAT ════════════════════════════════════════════════════════════
+
+  - id: ED-016
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Military stat → unit quality mapping"
+    decision: "Confirmed: Military = max CP ceiling and starting Cohesion ceiling."
+    tags: [mass_combat, faction]
+
+  - id: ED-017
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Military stat on unit destruction"
+    decision: "−1 Military per unit destroyed (immediate); cap −2/season from destruction."
+    tags: [mass_combat, faction]
+
+  - id: ED-018
+    status: struck
+    superseded_by: ED-033
+
+  - id: ED-019
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Pulling enemy general's command capacity"
+    decision: "Confirmed intended. Pull targeting general's Coherence drops CR by 1/degree above Failure for 1 battle turn."
+    tags: [mass_combat, threadwork]
+
+  - id: ED-020
+    status: struck
+    superseded_by: ED-019
+
+  # ═══ ARC EDITORIALS ═════════════════════════════════════════════════════════
+
+  - id: ED-021
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Revolution NPC contact point"
+    decision: "Archetype defined. See ED-006 for name/profile."
+    tags: [worldbuilding, faction]
+
+  - id: ED-022
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Forced Unmask from violence in chamber"
+    decision: "Violence = immediate Unmask. Violent party auto-loses on stated stakes."
+    tags: [contest, unmask]
+
+  - id: ED-023
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Vaynard at TK5 — acquire Thread capability"
+    decision: "Yes: approaches Maret first. If refused, approaches via Niflhel network."
+    tags: [npc, varfell, threadwork]
+
+  - id: ED-024
+    status: resolved
+    date_resolved: 2026-04-06
+    description: "Southernmost Mode 3 entity stat blocks"
+    decision: "Mode 3 entities in the Southernmost are threadcut beings (§5.3, P-05, P-06). They cannot be fully rendered — not a rendering failure, but an excess of existence that exceeds the rendering capacity to integrate. Their continued presence produces structural entanglement in the surrounding environment and those nearby, as a consequence of proximity to something that radically exceeds rendering capacity (cf. Solmund's miracles producing Locked zones as side-effect, not intent). Non-Thread engagement is ontologically irrelevant. TS 50+ required to engage meaningfully. GM approximates entity behaviour by reference to standard Thread operation tables understood as operating beyond human limits — scale, co-movement magnitude, and intentionality all exceed what human threadwork produces. No stat block. No generic entity table. Provisional archetypes (Knot-Anchor, Coherence-Drain, Tessellate-Bleed) struck — implied creature-type stat blocks, violating P-05."
+    tags: [southernmost, combat, mode3]
+
+  - id: ED-025
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Almud's Torben yield — automatic at IP threshold"
+    decision: "Automatic at IP ≥ 40. PC can prevent via Domain Action Ob 3."
+    tags: [npc, succession, ip_track]
+
+  - id: ED-026
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Klapp trajectory"
+    decision: "Path B (suppression). Conversion only if PC exposes Church assassination evidence directly to Klapp."
+    tags: [npc, church, threadwork]
+
+  # ═══ SIMULATION EDITORIALS ══════════════════════════════════════════════════
+
+  - id: ED-027
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Poise attribute → Composure"
+    decision: "Poise deprecated → Composure (Charisma + 6). PP-171/PP-234 applied."
+    tags: [contest, attributes]
+
+  - id: ED-028
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Forgetting boundary dissolution"
+    decision: "Dramatic scene. Practitioner anchors 1 person at −2 Coherence/round."
+    tags: [southernmost, forgetting]
+
+  - id: ED-029
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Southernmost Purpose tracking (Clarity)"
+    decision: "Clarity countdown from 5. −1/failed Purpose check (Spirit+History TN7 Ob 2). Clarity 0 = GM controls character. Restore +1/successful Thread grounding op."
+    tags: [southernmost, mechanics]
+
+  - id: ED-030
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Thread combat vs Mode 3 entities — pool split"
+    decision: "Pool split applies to Thread pool same as combat pool. Thread Offence vs entity CR. Thread Defence vs counter-unravelling."
+    tags: [threadwork, combat, mode3]
+
+  - id: ED-031
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "BG Overwhelming threshold"
+    decision: "BG Overwhelming = Ob+1 surplus. Floor net ≥ 2. PP-262 applied."
+    tags: [board_game, dice]
+
+  - id: ED-032
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "TC 80 seizure scope"
+    decision: "Declared target only. Cannot sweep all territories."
+    tags: [board_game, church, territory]
+
+  - id: ED-033
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Commander bonus formula"
+    decision: "TTRPG: CR. BG: Military÷3 (max +2D). Hybrid: TTRPG CR personal layer, BG formula at accounting."
+    tags: [mass_combat, hybrid]
+
+  - id: ED-034
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Southernmost Ritual [UNNAMED — ED-416] RS asymmetry vs BG Co-Movement cap"
+    decision: "Full TTRPG RS values propagate directly. BG Co-Movement ceiling applies only to BG-initiated Thread abstraction."
+    tags: [threadwork, hybrid]
+
+  - id: ED-035
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Muster Str=2 in BG context"
+    decision: "Str=2 → BG token minimum Str=3. No conflict."
+    tags: [board_game, hybrid]
+
+  - id: ED-036
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Altonian invasion unit stats — P1 BLOCKER"
+    decision: "Resolved-provisional via PP-193/PP-282. Stats in params_mass_combat §Altonian Invasion Units. PP-282 duplicate struck (see PP-193 block as canonical). User confirmation pending at compilation."
+    tags: [hybrid, mass_combat, altonia]
+
+  - id: ED-037
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Volley TN 6 — intentional exception"
+    decision: "Confirmed intentional. Massed coordinated fire structural advantage. Documented in params_mass_combat."
+    tags: [mass_combat, TN]
+
+  - id: ED-038
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Coherence in mass battle = personal track"
+    decision: "= personal Coherence track (10→0). Not a unit stat."
+    tags: [mass_combat, threadwork]
+
+  - id: ED-039
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Military seasonal cap pooled with Domain Actions"
+    decision: "Pools with Domain Actions. Total ±2/season from all sources combined."
+    tags: [board_game, military]
+
+  - id: ED-040
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Artillery Balanced disposition lock"
+    decision: "Confirmed intentional. Siege weapons cannot manoeuvre tactically."
+    tags: [mass_combat, artillery]
+
+  - id: ED-041
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Niflhel social toolkit"
+    decision: "Private Negotiation (Cognition+History TN7 Ob=target Stability); Bribery (1 Wealth → −1 Ob); Thread Insight (TS≥30 Attunement Read)."
+    tags: [contest, niflhel]
+
+  - id: ED-042
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Grand Contest role alternation"
+    decision: "First proposer = higher Charisma. Alternates per exchange."
+    tags: [contest, grand_debate]
+
+  - id: ED-043
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Corroborators in Church Tribunal"
+    decision: "No corroborators for accused."
+    tags: [contest, tribunal]
+
+  - id: ED-044
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Obscuring as pure denial"
+    decision: "Confirmed: Obscuring win → Doubt Marker, no track movement."
+    tags: [contest, obscuring]
+
+  - id: ED-045
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Genre pivot mid-debate"
+    decision: "Allowed once per debate. Costs Concentration −1 on pivot exchange."
+    tags: [contest, genre]
+
+  - id: ED-046
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "W-24 Object scale cost"
+    decision: "RS unchanged and Coherence 0 on Success at Object scale. Confirmed correct."
+    tags: [threadwork, weaving]
+
+  - id: ED-047
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Contest pool formula"
+    decision: "(Charisma × 2) + History bonus. TN 7. SIM-DEBT-01 open for recalibration."
+    tags: [contest, pool_formula]
+
+  - id: ED-048
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "[UNNAMED — ED-416] — naming status"
+    decision: "[UNNAMED — ED-416] is a canonical ritual/text name (The Southernmost Ritual [UNNAMED — ED-416]), not a character name."
+    tags: [naming]
+
+  - id: ED-049
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Church Stability brake scope"
+    decision: "Suppresses all TC changes from Church Domain Actions. Baralta effect −1 TC/season while Mandate ≥ 4."
+    tags: [church, stability, TC]
+
+  - id: ED-050
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Thread timing in mass battle"
+    decision: "Option D: Binding Ops fire Phase 4. Support Thread fires Phase 6 Steps 4–5."
+    tags: [mass_combat, threadwork, timing]
+
+  # ═══ REMAINING ITEMS (bulk resolution) ══════════════════════════════════════
+
+  - id: ED-051
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "NPC debate stat block defaults"
+    decision: "Attunement = ⌈Cognition÷2⌉; Focus = 3; Composure = Charisma+6; Bonds = 2."
+    tags: [npcs, contest]
+
+  - id: ED-052
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "NPC Composure formula"
+    decision: "Composure = Charisma + 6."
+    tags: [npcs, contest]
+
+  - id: ED-053
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "BG Parliamentary Vote procedure"
+    decision: "Influence pool TN7. Ob = highest opposing Influence÷2. Higher net wins. Ties → higher Mandate."
+    tags: [board_game, contest]
+
+  - id: ED-054
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Beliefs in Contest — narrative only"
+    decision: "Beliefs confirmed narrative only in Contest. No mechanical bonus."
+    tags: [contest, beliefs]
+
+  - id: ED-055
+    status: struck
+    superseded_by: ED-043
+
+  - id: ED-056
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Contest stalemate forced resolution"
+    decision: "Maximum 10 exchanges. After 10: forced Unmask. Loser = closer to losing threshold. PP-255 applied."
+    tags: [contest, stalemate]
+
+  - id: ED-057
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Debate RS changes in Hybrid propagation"
+    decision: "Queue to BG Accounting as RS±1."
+    tags: [contest, hybrid, RS]
+
+  - id: ED-058
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Asymmetric proceedings strain"
+    decision: "Advantaged orator 0-strain confirmed intentional."
+    tags: [contest, tribunal]
+
+  - id: ED-059
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Momentum in Contest"
+    decision: "Allowed. 1 Momentum = 1 auto-success on Argue and Judge rolls."
+    tags: [contest, momentum]
+
+  - id: ED-060
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Composure restoration"
+    decision: "Full restore at scene end and between sessions."
+    tags: [contest, composure]
+
+  - id: ED-061
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Projectile weapon categories"
+    decision: "2 categories (Piercing/Blunt). PP-188 applied."
+    tags: [mass_combat, weapons]
+
+  - id: ED-062
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Unit damage modifiers and Morale starting values"
+    decision: "Values accepted from PP-104 table."
+    tags: [mass_combat]
+
+  - id: ED-063
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "BG Battle Partial outcome"
+    decision: "Margin ≤ 1 = Partial. Attacker Stability −1."
+    tags: [board_game, battle]
+
+  - id: ED-064
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "BG projectile type matchup"
+    decision: "BG fully abstracted. 4 projectile categories have no BG mechanical effect."
+    tags: [board_game, projectile]
+
+  - id: ED-065
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "LBl sling differentiation"
+    decision: "LBl ignores Prepared Defence bonus."
+    tags: [mass_combat, sling]
+
+  - id: ED-066
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Artillery morale cascade cap"
+    decision: "−3/phase total across all non-general sources."
+    tags: [mass_combat, artillery]
+
+  - id: ED-067
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Dodge action"
+    decision: "Forfeit attack; full pool as passive Defence vs ranged. PP-215 applied."
+    tags: [combat, ranged]
+
+  - id: ED-068
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Faction collapse exit (BG)"
+    decision: "PP-117: exit requires 1 full season + no hostile DAs + Govern Ob 2 success. Auto-exit Season 2 at Stability 1, Mandate 0."
+    tags: [board_game, faction]
+
+  - id: ED-069
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Simultaneous RS=0 + IP≥80"
+    decision: "RS Rupture (Step 6) takes precedence. Restoration victory at Step 5 pre-empts."
+    tags: [board_game, clock]
+
+  - id: ED-070
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "TC ceiling"
+    decision: "TC ceiling 100 cosmetic. No effect above 80 except seizure."
+    tags: [board_game, TC]
+
+  - id: ED-071
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Domain Echo amount formula"
+    decision: "Success +1 / Overwhelming +2 / Partial no change / Failure −1 to most relevant faction stat. Cap ±2/season."
+    tags: [hybrid, domain_echo]
+
+  - id: ED-072
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Concurrent Zoom In ordering"
+    decision: "Attunement order. Ties: Agility. Further ties: GM."
+    tags: [hybrid, zoom]
+
+  - id: ED-073
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Non-battle Zoom In procedure"
+    decision: "Fires at end of Domain Action being resolved. No unit conversion. RS immediate. Domain Echoes queue."
+    tags: [hybrid, zoom]
+
+  - id: ED-074
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Sufficient scope for Register Shift"
+    decision: "Named faction leader/institution, Domain Action equivalent, or Relational+ Thread op."
+    tags: [hybrid, register_shift]
+
+  - id: ED-075
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "PC faction embedding in BG layer"
+    decision: "PCs grant +1D to faction Domain Action in their physical territory per season."
+    tags: [hybrid, faction]
+
+  - id: ED-076
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "P-01 co-movement propagation to BG layer"
+    decision: "Relational+ ops → RS±1 at Accounting. Epistemic → Investigation Action available. Actual → narrative."
+    tags: [hybrid, thread]
+
+  - id: ED-077
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Hafenmark Wealth sink"
+    decision: "Trade Network Investment (PP-178): 2 Wealth → Trade Route tokens for +1D Trade bonuses."
+    tags: [board_game, hafenmark]
+
+  - id: ED-078
+    status: struck
+    superseded_by: ED-043
+
+  - id: ED-079
+    status: struck
+    superseded_by: ED-070
+
+  - id: ED-080
+    status: resolved
+    date_resolved: 2026-04-06
+    description: "Baralta BG Conviction text"
+    decision: "Deferred — not addressed in this session."
+    tags: [board_game, hafenmark, conviction]
+    resolution: "Conviction text exists at L1094 (PP-270): \"Faith is not mediated — it is immediate, or it is nothing.\" Mechanical effect defined. Close."
+
+  - id: ED-081
+    status: resolved
+    date_resolved: 2026-04-06
+    description: "Vaynard BG Conviction text"
+    decision: "Deferred — not addressed in this session."
+    tags: [board_game, varfell, conviction]
+    resolution: "Conviction text exists at L1099: \"The strongest thread is the one that does not know it is being pulled.\" Close."
+
+  - id: ED-082
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Almud BG Conviction text"
+    decision: "Amendment2 text confirmed as archetype placeholder. Mechanical function unchanged."
+    tags: [board_game, crown]
+
+  - id: ED-083
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "VTM 5 co-movement direction ability — P-14 compliance"
+    decision: "Provisional confirmed: follows standard three-dimensional sequence. P-14 compliant (sensitivity grounds operation; direction does not). Mark for canon-guard review before compilation."
+    tags: [board_game, varfell, vtm, p14]
+
+  - id: ED-084
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "AER starting value"
+    decision: "AER = 2 (neutral) at game start."
+    tags: [board_game, altonia]
+
+  - id: ED-085
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Reformed Settlement Church responses"
+    decision: "Three responses confirmed: Resist (TC+3, Mandate−1), Accommodate (TC−1), Ignore (no change)."
+    tags: [board_game, hafenmark, church]
+
+  - id: ED-086
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "BG Co-Movement Resolution Protocol — P-14 compliance"
+    decision: "Card-draw system: each card maps to one primary dimension (Temporal=clock, Epistemic=Influence, Actual=d6 table). All three fire sequentially per Thread order. P-14 compliant."
+    tags: [board_game, thread, co_movement]
+
+  - id: ED-087
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Hybrid TC clamp — compromise zone"
+    decision: "TC restricted to range 4–6 in Hybrid Contest. BG lobbying ±1 within zone only. PP-256 applied."
+    tags: [contest, hybrid, TC]
+
+  - id: ED-088
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Ministry NPC faction"
+    decision: "Ministry = Valorian civil service. NPC-only. PP-193 applied."
+    tags: [board_game, ministry]
+
+  - id: ED-089
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Ranged-specialist BG Military modifier"
+    decision: "No BG modifier. BG correctly abstracts above weapon-type level."
+    tags: [ranged, board_game]
+
+  - id: ED-090
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Passive RS from Contest — gate tightened"
+    decision: "Auto-fires on Thread-factual subject or Thread op in exchange. No GM discretion required."
+    tags: [contest, thread, RS]
+
+  - id: ED-091
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "BG Doubt Marker analog"
+    decision: "No analog needed. BG debate fully abstracted. Parliamentary Vote handles faction-level outcomes."
+    tags: [contest, board_game]
+
+  - id: ED-092
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Church self-investigation exception scope"
+    decision: "Ordained members only. Not when Thread op targets Church institutional interest. PP-257 applied."
+    tags: [contest, church]
+
+  - id: ED-093
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Temporal axis conflict penalty"
+    decision: "−1D both parties' Argue rolls (replaces PP-123 TN8). PP-258 applied."
+    tags: [contest, temporal]
+
+  - id: ED-094
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "HP crossbow reload at mass combat scale"
+    decision: "No reload penalty. Unit staggers reloads; fires every Volley Phase."
+    tags: [ranged, mass_combat]
+
+  - id: ED-095
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Ranged units in Phase 5 Engagement"
+    decision: "Light Cut (drawn sidearm). Makes ranged units poor in melee — intended."
+    tags: [ranged, mass_combat]
+
+  - id: ED-096
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Mass combat ranged DR scaling"
+    decision: "Mass ranged DR = ⌈personal_DR÷2⌉. PP-175 applied."
+    tags: [ranged, mass_combat]
+
+  - id: ED-097
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "HP mass combat unit CP"
+    decision: "No CP penalty. Mass combat abstracts over Volley Phase."
+    tags: [mass_combat, ranged]
+
+  - id: ED-098
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Cover declaration timing"
+    decision: "Must be declared Phase 1. GM determines physical availability."
+    tags: [combat, cover]
+
+  - id: ED-099
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Temporal weight inert for non-POP ops"
+    decision: "Intended. Canon §1.3+§19.1: temporal weight manifests through co-movement auto-effects."
+    tags: [threadwork, temporal]
+
+  - id: ED-100
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Lock axis attribution"
+    decision: "Actuality primary. Intelligibility/temporality are constitutive co-movement consequences."
+    tags: [threadwork, lock]
+
+  - id: ED-101
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Coherence/RS mechanical independence"
+    decision: "Independent. Exception: TS 90+ at Coherence 0 → RS drain per scene. PP-197 applied."
+    tags: [threadwork, coherence, RS]
+
+  - id: ED-102
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "POP RS≤60 gate perverse incentive"
+    decision: "Intended. Canon §6.1+§23.3: stressed substrate enables temporal depth."
+    tags: [threadwork, POP, RS]
+
+  - id: ED-103
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Binding Op surcharge cap exemption"
+    decision: "Binding Op surcharge exempt from §3.2 Coherence cap. PP-196 applied."
+    tags: [threadwork, binding_ops]
+
+  - id: ED-104
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "POP displacement of debate subject"
+    decision: "Displaced event → Memory bonus lost. Temporal Disjunction −1D Argue for one exchange. PP-199 applied."
+    tags: [threadwork, contest]
+
+  - id: ED-105
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Hybrid Coherence cost qualifier"
+    decision: "Binary declaration rule: PC who declares leadership at Phase 1 pays. PP-198 applied."
+    tags: [threadwork, hybrid]
+
+  - id: ED-106
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Coherence initialization BG→Hybrid"
+    decision: "First activation: Coherence = 10. Subsequent: carry forward. PP-200 applied."
+    tags: [threadwork, hybrid]
+
+  - id: ED-107
+    status: resolved
+    date_resolved: 2026-04-02
+    description: "Territory assignment"
+    decision: "Hafenmark: T2/T4/T8. Varfell: T9/T10/T11/T12. Crown: T1/T3/T5/T6/T7/T13. PP-195 applied."
+    tags: [board_game, territory]
+
+  - id: ED-108
+    status: resolved
+    date_resolved: 2026-04-06
+    description: "Crown territory names T10/T11"
+    decision: "See recent commits for canonical territory names."
+    tags: [board_game, territory, naming]
+
+  - id: ED-109
+    status: resolved
+    date_resolved: 2026-04-06
+    description: "Crown victory balance"
+    decision: "Confirmed intentional. Crown victory requires suppressing all other factions including Altonia — eradication, surrender, or Crown-favourable treaties. Not easy by design."
+    tags: [board_game, crown, balance]
+
+  - id: ED-110
+    status: resolved
+    date_resolved: 2026-04-06
+    description: "Church primary victory pacing"
+    decision: "Church gain outstrips Hafenmark suppression unless Hafenmark actively chooses suppression at expense of other activities. TC freeze at 75 (see ED-303) prevents further clock-based advance; remaining TC 75→100 requires territorial conquest. Church victory is hard but accessible — Hafenmark suppression is a voluntary trade-off, not a permanent lock."
+    tags: [board_game, church, balance]
+
+  - id: ED-111
+    status: resolved
+    date_resolved: 2026-04-06
+    description: "Varfell Path B under-gated"
+    decision: "Fort 1 fix is sufficient. Fast Varfell win path accepted as designed."
+    tags: [board_game, varfell, balance]
+
+  - id: ED-112
+    status: resolved
+    date_resolved: 2026-04-06
+    description: "TC lock — Hafenmark suppression vs Church gain"
+    decision: "Resolved. Hafenmark suppression only holds so long as Church is actively clocking to 75. Once TC 75 is reached, TC freezes permanently — neither side can increase or decrease TC by passing a season. Church gain rate outstrips Hafenmark suppression unless Hafenmark sacrifices other activities for sustained suppression. Long-term suppression has opportunity cost."
+    tags: [board_game, church, hafenmark, TC, balance]
+
+  - id: ED-113
+    status: resolved
+    date_resolved: 2026-04-06
+    description: "Varfell T13 opening dominance"
+    decision: "No longer current — see recent commits."
+    tags: [board_game, varfell, territory, balance]
+
+  - id: ED-114
+    status: resolved
+    date_resolved: 2026-04-03
+    description: "Rescue action — 'interpose' undefined"
+    decision: "Attack redirects fully to rescuer. Rescuer's DR applies. PP-214 applied."
+    tags: [combat]
+
+  - id: ED-115
+    status: resolved
+    date_resolved: 2026-04-03
+    description: "Dodge action in design doc"
+    decision: "Added to design doc §4. PP-215 applied."
+    tags: [combat]
+
+  - id: ED-116
+    status: resolved
+    date_resolved: 2026-04-03
+    description: "Fibonacci cap discrepancy"
+    decision: "Design doc aligned to 6-row params table. PP-216 applied."
+    tags: [combat]
+
+  - id: ED-117
+    status: resolved
+    date_resolved: 2026-04-03
+    description: "Anti-Armour keyword"
+    decision: "HP/HBl carry Anti-Armour: reduce target armour tier by 1 for engagement. PP-217 applied."
+    tags: [combat, weapons]
+
+  - id: ED-118
+    status: resolved
+    date_resolved: 2026-04-03
+    description: "Mass damage formula ambiguity"
+    decision: "max(0, net−Ob) + disposition_modifier. PP-218 applied."
+    tags: [mass_combat, damage]
+
+  - id: ED-119
+    status: resolved
+    date_resolved: 2026-04-06
+    description: "Lenneth Almqvist stat block and TS development arc"
+    decision: "TS 8 dormant, develops through archive exposure (access to shifting objects)."
+    tags: [npc, crown, lenneth]
+
+  - id: ED-120
+    status: resolved
+    date_resolved: 2026-04-03
+    description: "Dissolution 90.3% Rupture at RS<24 — recalibration needed"
+    decision: "SIM-DEBT-02 registered. No gate until recalibration complete."
+    tags: [thread, mass_combat, RS]
+
+  - id: ED-121
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Battle-turn = scene for Thread timing"
+    decision: "Battle-turn = scene for all Thread timing purposes. PP-223 confirmed."
+    tags: [thread, mass_combat]
+
+  - id: ED-122
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Offensive Lock blocking Cohesion degradation"
+    decision: "Confirmed intended. Locking is expensive; tactical payoff is meaningful. PP-222 confirmed."
+    tags: [thread, mass_combat]
+
+  - id: ED-123
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Battle-turn = scene for RS threshold effects"
+    decision: "Confirmed. Consistent with ED-121."
+    tags: [thread, mass_combat, RS]
+
+  - id: ED-124
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Diagnosis+Leap collapse to single Phase 4 in mass battle"
+    decision: "Confirmed. PP-190 2-round rule is personal combat only."
+    tags: [thread, mass_combat]
+
+  - id: ED-125
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Hybrid Strategic Phase temporal auto-effects"
+    decision: "Dissolution=TC+1, POP=TC−1, Lock/Weave/Mend=none. Paradox window = 1 season on POP. PP-260 applied."
+    tags: [thread, hybrid, temporal]
+
+  - id: ED-126
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Binding Ops in mass battle — 98.3% failure at TS70"
+    decision: "Deterrent-only at TS70. TS90+ required. GM note added. PP-261 applied."
+    tags: [thread, mass_combat, binding_ops]
+
+  - id: ED-127
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Certainty stat design direction"
+    decision: "Certainty: 0-10, starts 10. Parallel sanity track to Health. Spirit unrelated. PP-248 applied to params_core."
+    tags: [core, threadwork, certainty]
+
+  - id: ED-128
+    status: struck
+    superseded_by: ED-127
+
+  - id: ED-129
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Zone terminology — Close/Far replaced with Reach"
+    decision: "Short Reach (≤1m) / Long Reach (≤3m) / Ranged. PP-249 applied to params_core."
+    tags: [combat, terminology]
+
+  - id: ED-130
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Stage 1 (Down) / Stage 2 (Dying) definitions"
+    decision: "Stage 1: Wounds ≥ Endurance; no offence; half speed; Rescue-able. Stage 2: additional Wound while Stage 1; −1 Health/round; −2 Morale to witnesses."
+    tags: [combat, incapacitation]
+
+  - id: ED-131
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Contest exchange Step 1 name"
+    decision: "'Read' renamed to 'Judge.' PP-254 applied."
+    tags: [contest, terminology]
+
+  - id: ED-132
+    status: struck
+    superseded_by: ED-131
+
+  - id: ED-133
+    status: resolved
+    date_resolved: 2026-04-04
+    description: "Diagnosis as mandatory pre-operation action"
+    decision: "Struck. Diagnosis removed as mandatory gate. PP-134/ED-134 confirmed removal."

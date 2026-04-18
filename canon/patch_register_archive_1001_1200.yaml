@@ -1,0 +1,715 @@
+  type: infrastructure
+  date: 2026-04-13
+  severity: P2
+  description: >
+    Arc system overhaul. arc_register.md v7 -> v8. Vector format replaces Principal/Secondary/Tertiary
+    and resolution scaffolding. Five categories: Clock / Thread / Faction / Territory / Convergence.
+    34 Territory Event arcs (tier-weighted). Faction hierarchy: Crown > Church/Varfell/Hafenmark >
+    lower tiers. 7 cuts, 8 merges. Canon fixes: TE-15 De-Actualisation -> Structural Dissolution
+    (§2.4, dead §9.17 ref removed); BG-CV-01 Counter -1 -> threshold increase; ARC-S49 Spirit ->
+    Stability Ob 1; TE-01 AER -1 -> Ob modifier on ARC-T17; TE-14 RS source grounded in §5.2.
+    5 editorials: ED-401 (Remembrancer), ED-402 (Forgetting scope), ED-403 (TE-15 Dissolution Ob),
+    ED-404 (TE-08 Grand Debate interaction), ED-405 (Winter Court basis).
+  finding_id: null
+  affects:
+    - references/arc_register.md
+    - references/canonical_sources.yaml
+    - references/file_index.md
+    - references/propagation_map.md
+    - canon/editorial_ledger.yaml
+    - tests/coverage_matrix.md
+  status: applied
+- id: PP-576
+  date: 2026-04-13
+  scope: infrastructure
+  description: >
+    Editorial ledger deduplication + autoincrement header. 60 entries renumbered
+    (ED-426 through ED-485) to resolve 30 duplicate ID sets. next_id: 486 header
+    added. Broken dependency checker updated (glob pattern filtering). Skill
+    registry paths corrected. Propagation map 12 broken references fixed.
+  affects:
+    - canon/editorial_ledger.yaml
+    - tools/broken_dependency_checker.py
+    - skills/valoria-orchestrator/references/skill_registry.md
+    - references/propagation_map.md
+  status: applied
+
+- id: PP-576
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    P1-B03 resolved. Martial Law scope clarified: NPC Priority actions (schisming Cardinals,
+    Ministry AP placement, Riskbreaker operations firing under Löwenritter NPC AI) are NOT
+    subject to the secondary Military check imposed by Martial Law. Martial Law governs player
+    card plays only. NPC Priorities represent events beyond any single faction's direct governance
+    and operate outside the card system. Scope: params_factions.md §Löwenritter Martial Law
+    section; params_board_game.md §Löwenritter Canonical Structure.
+  finding_id: P1-B03
+  affects:
+    - references/params_factions.md
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-577
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-B01/B02 resolved. Pre-coup Löwenritter stat gaps from SIM-ARC-B01. Canonical values
+    established: (1) Pre-coup Leadership Deviation uses Stability 4 (institutional military
+    discipline; post-coup Sta5 minus 1 for pre-coup NPC status). (2) Pre-coup Riskbreaker
+    Intel operations use Intel 4 (between Niflhel's 5 and standard faction Intel; Riskbreakers
+    are Löwenritter's specialist covert sub-unit). Both are provisional pending user review.
+    P2-B03 (PP-431-COR self-harm at Partial) and P2-B04 (AP in non-Church territory) are
+    design intent confirmed, not requiring patch: PP-431-COR Partial outcome intentional
+    high-variance design; Church AP accumulation is territory-agnostic but Inquisitor bonus
+    is Church-territory-only (asymmetry is canonical). Both documented in coverage matrix.
+  finding_id: P2-B01 P2-B02
+  affects:
+    - references/params_factions.md
+    - references/params_board_game.md
+  status: applied
+
+- id: PP-578
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-B05 resolved. Inquisitor +2 Ob Intel bonus applies ONLY in Church-controlled territories
+    (existing rule confirmed as territorial). AP accumulation (Active Inquisition) is confirmed
+    territory-agnostic — Church can build AP toward Inquisitor threshold in any territory.
+    The asymmetry (agnostic accumulation, territorial bonus) is intentional: Church's Inquisitors
+    investigate everywhere but suppress Intel operations only where Church governs.
+    Documentation addition: clarify in params_board_game.md Inquisitor section that +2 Ob
+    applies to Intel actions "in Church-controlled territories only, regardless of where AP
+    was accumulated."
+  finding_id: P2-B05
+  affects:
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-579
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-B06 documented. Crown Suppress is the prerequisite for Hafenmark Structural Suppression
+    to produce a full TC freeze (passive negated to 0 + structural −1 = net 0 rather than
+    passive +1 + structural −1 = net 0 only when Assert also plays 0). The hidden 2-card
+    coordination requirement (Crown Suppress + Hafenmark Structural brake) is confirmed as
+    intentional faction interdependency design. Documentation addition: GM Reference note in
+    TC management section stating that structural suppression's value is maximised when Crown
+    simultaneously Suppresses — not a rule change, a play-guidance clarification.
+  finding_id: P2-B06
+  affects:
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-580
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-B07 resolved. Hafenmark NPC AI guidance: Parliamentary Session (PP-432, once per arc)
+    should only be played when Hafenmark has confirmed ≥ 3 Support votes pre-play via
+    Diplomatic Tokens (Diplomat Card success ≥ 1 season prior). A Tie result (TC +1, Sta −1)
+    violates Hafenmark's own Parliamentary Sovereignty victory condition (Sta ≥ 3 per PP-571).
+    NPC AI should treat Session as high-variance with negative expected value unless majority
+    support is confirmed. Add to params_board_game.md §Hafenmark NPC AI Priority Tree.
+  finding_id: P2-B07
+  affects:
+    - references/params_board_game.md
+  status: applied
+- id: PP-577
+  date: 2026-04-13
+  scope: board_game
+  description: >
+    Coup Counter threshold unified to 4 across all canonical sources.
+    params_factions.md corrected from 3 to 4 (params_board_game.md was already 4).
+  affects: [references/params_factions.md]
+  finding_id: ED-485
+  status: applied
+
+- id: PP-578
+  date: 2026-04-13
+  scope: board_game
+  description: >
+    RM Cultural Displacement mechanic for T9 hold. RM controls T9 via
+    Presence markers (≥3) + PT ≤ 1. Not military garrison. Control reverts
+    if either condition fails. RM gains no TCV, no DA slots, no staging.
+  affects: [designs/board_game/victory_architecture_v1.md]
+  finding_id: ED-483
+  status: applied
+
+- id: PP-579
+  date: 2026-04-13
+  scope: npc_behavior
+  description: >
+    BG Faction Priority Trees added to npc_behavior_system_v1.md §7.
+    9 trees (Crown, Church, Hafenmark, Varfell, Löwenritter, Ministry,
+    Schoenland, Altonian Vanguard) + override conditions (Institutional
+    Mandate, co-victory cooperation).
+  affects: [designs/systems/npc_behavior_system_v1.md]
+  finding_id: ED-456
+  status: applied
+- id: PP-580
+  date: 2026-04-13
+  scope: arc_system
+  description: >
+    Arc 41 Haelgrund calamity radiation: corrected node distance from 3 to 2.
+    Distance 3 has no Fractured-band effects. Investigation route changed from
+    T1 Valorsplatz to T5 Feldmark.
+  affects: [gm_ref/arcs_41_45_interdependent.md]
+  finding_id: ED-420
+  status: applied
+
+- id: PP-581
+  date: 2026-04-13
+  scope: arc_system
+  description: >
+    Arc 43 Territorial Dissolution replaced with accumulated Pull/Lock failure
+    emphasis. Original Dissolution (8D TN 8 Ob 8) was mechanically impossible.
+    Environmental degradation now comes from compounding Thread operation failures.
+  affects: [gm_ref/arcs_41_45_interdependent.md]
+  finding_id: ED-421
+  status: applied
+
+- id: PP-582
+  date: 2026-04-13
+  scope: arc_system
+  description: >
+    Arc 44 reframed as late-game arc (seasons 12-20+). CV erosion rate analysis
+    shows 16-24 season timeline, not 9-10 as originally estimated.
+  affects: [gm_ref/arcs_41_45_interdependent.md]
+  finding_id: ED-422
+  status: applied
+
+- id: PP-581
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    P1-C03 resolved. Clarity 0 Success and Forgetting content loss are independent systems.
+    Ruling: Clarity 0 Success = DIRECTIONAL ANCHORING ONLY. The character retains directional
+    purpose ("I was going to do X") without content basis ("because Y"). The Forgetting
+    continues to strip content regardless of Clarity success. A character at Clarity 0 with
+    a Success may remain in T15 and continue acting toward their last held direction, but cannot
+    reconstruct the evidential basis for that direction from the Success itself. A character
+    who agreed to extract at Clarity 1 and hits Clarity 0 Success: continues toward exit but
+    cannot explain why if asked. Mechanical implication: Clarity Success at 0 does not require
+    or produce a Spirit check for content retention (these are separate checks). Applies to all
+    Southernmost zones, not only T15. Add to params_threadwork.md §Clarity countdown rule.
+  finding_id: P1-C03
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+
+- id: PP-582
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-C01 documented. Forgetting mechanics on TS 14 practitioners: Forgetting strips
+    propositional Southernmost-specific operational knowledge but preserves dispositional
+    character (Conviction text, ethical framework, TK-level theoretical understanding).
+    Vaynard at TK 5 with Forgetting active: reasoning capacity intact, evidential basis
+    for safety decisions stripped. GM guidance: play Vaynard as fully rational throughout,
+    not confused or irrational. His decisions are correct given what he can access. This
+    is the canonical tragic structure of the arc. Add to NPC-ARC-VAY arc entry as GM note.
+    P2-C05 documented simultaneously: Vaynard's expedition self-repeats without
+    Forgetting-resistant external structure (documentary evidence via ARC-S40; real-time
+    Maret communication). Player role confirmed as communication architecture, not
+    direct intervention. Add to NPC-ARC-VAY arc entry as player role note.
+  finding_id: P2-C01 P2-C05
+  affects:
+    - references/arc_register.md
+  status: applied
+
+
+- id: PP-583
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    GAP-C03 resolved. Standard Mending Ob established: Ob 3 (base).
+    Derivation: Mending is a targeted Thread operation on an existing damaged configuration.
+    Ob 3 is consistent with: (a) the established narrative of Mending as demanding but
+    not extraordinary for a TS 50+ practitioner; (b) RS Critical Proximity 0 adding +2
+    producing Ob 5, which gives Maret (12D pool) P(Success) ≈ 87% — a meaningful challenge
+    without being prohibitive for a specialist practitioner. Add to params_threadwork.md
+    §Mending operation table as canonical base Ob.
+  finding_id: GAP-C03
+  affects:
+    - references/params_threadwork.md
+  status: applied
+- id: PP-583
+  date: 2026-04-13
+  scope: npc_behavior
+  description: >
+    NPC stat values canonised: TS and Certainty for all 13 named NPCs.
+    Ehrenwall 0/5, Torben 0/4, Maret Uln 35/2, Vaynard 10/2.
+  affects: [designs/systems/npc_behavior_system_v1.md]
+  finding_id: "ED-461, ED-462, ED-464, ED-465, ED-466, ED-467, ED-419"
+  status: applied
+
+- id: PP-584
+  date: 2026-04-13
+  scope: contest
+  description: >
+    Debate Thread co-movement RS +1 per contest (not per exchange).
+    Per-exchange would produce catastrophic RS economy disruption.
+  affects: [designs/systems/npc_behavior_system_v1.md]
+  finding_id: ED-481
+  status: applied
+
+- id: PP-585
+  date: 2026-04-13
+  scope: arc_system
+  description: >
+    Arc fixes batch: Arc 39 Coherence burn narrative (Object/Personal = 0,
+    psychological strain framing). Arc 36 cross-arc dependency explicit.
+    RS-Haelgrund loop direction corrected (RM Weaving is RS-restorative brake).
+    Haelgrund self-documentation 3 seasons. Varfell T6 battle TS check.
+  affects: [gm_ref/arcs_41_45_interdependent.md, gm_ref/arcs_36_40_interdependent.md]
+  finding_id: "ED-423, ED-424, ED-425, ED-480, ED-482"
+  status: applied
+
+- id: PP-586
+  date: 2026-04-13
+  scope: npc_behavior
+  description: >
+    NPC Knot formation: 3+ qualifying scenes + Attunement TN 7 Ob 1.
+    Resonant Style +1D non-stacking (one per style per exchange, cap 2).
+  affects: [designs/systems/npc_behavior_system_v1.md]
+  finding_id: "ED-460, ED-457"
+  status: applied
+
+- id: PP-587
+  date: 2026-04-13
+  scope: board_game
+  description: >
+    Two-front war IP threshold: IP >= 60 for Vanguard preparation,
+    IP >= 75 for full deployment. Creates warning window.
+  affects: [gm_ref/arcs_41_45_interdependent.md]
+  finding_id: ED-484
+  status: applied
+- id: PP-588
+  date: 2026-04-13
+  scope: editorial
+  description: >
+    Batch mechanical/provisional editorial resolution: 15 items.
+    Conviction/Style taxonomies confirmed. Framework Drift confirmed.
+    Belief revision gate confirmed. Torben blank Conviction as contested-asset.
+    Cardinal Stance Triangles derived. Dissolution Ob formula established.
+    Maret Uln stats. Edeyja Evidence style. Mending Ob 3 confirmed.
+    Pre-coup Löwenritter stats. Lenneth TS resolved.
+  affects: [canon/editorial_ledger.yaml]
+  finding_id: "ED-301, ED-453, ED-454, ED-458, ED-459, ED-463, ED-468, ED-472, ED-411, ED-412, ED-413, ED-407, ED-406, ED-358b"
+  status: applied
+- id: PP-589
+  date: 2026-04-13
+  scope: editorial
+  description: >
+    Final editorial batch: 10 items resolved (9 provisional, 1 confirmed).
+    Baralta Conviction Order→Precedent [PROVISIONAL]. Remembrancer role confirmed,
+    name TBD [PROVISIONAL]. Forgetting documentary scope defined. Quaestio auto
+    at TC 42. Winter Court convening conditions. Consecration+Schism cascade.
+    NPC Arc Profiles covered by existing docs.
+  affects: [canon/editorial_ledger.yaml]
+  finding_id: "ED-301, ED-455, ED-469, ED-470, ED-471, ED-473, ED-474, ED-408, ED-409, ED-410"
+  status: applied
+- id: PP-590
+  date: 2026-04-13
+  scope: fieldwork
+  description: >
+    Survey Ob formula corrected: floor((5-PR)/2)+1 replacing (5-PR)+1.
+    Original produced Ob 5-6 at low PR (1.9-9.9% success at 7D).
+    New formula follows project-wide floor(stat/2)+1 pattern.
+  affects: [designs/fieldwork/fieldwork_design_v1.md]
+  finding_id: SIM-FW-01
+  status: applied
+
+- id: PP-591
+  date: 2026-04-13
+  scope: fieldwork
+  description: >
+    Exposure→AP contribution gated on Thread-sensitive actions only.
+    Non-sensitive investigation generates Exposure (Cover/personal risk)
+    but not AP (Church detection). Prevents routine investigation from
+    triggering Inquisitor deployment.
+  affects: [designs/fieldwork/fieldwork_design_v1.md]
+  finding_id: SIM-FW-04
+  status: applied
+
+- id: PP-592
+  date: 2026-04-13
+  scope: fieldwork
+  description: >
+    Evidence Track pacing note: 5-threshold investigation completes in
+    ~6 scenes at Ob 2-3 with 6D pool. Intentionally fast for single-arc.
+    GM guidance for longer investigations.
+  affects: [designs/fieldwork/fieldwork_design_v1.md]
+  finding_id: SIM-FW-02
+  status: applied
+
+- id: PP-584
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    Correction to PP-582. PP-582 framed the Forgetting as content erasure — as though
+    Vaynard had once possessed the safety prerequisites and they were subsequently stripped.
+    This is wrong. The Forgetting is not erasure. It is the consequence of excessive being
+    at Askeheim (Ein Sof erupting through the Calamity's wound) exceeding the epistemic
+    limits of human consciousness below TS 29. Vaynard at TS 14 cannot constitute
+    Southernmost-specific operational knowledge as knowledge in the first place. When Maret
+    tells him he needs TS 30+ to operate safely, he can hear the words and repeat them.
+    He cannot render the referent — the actual substrate condition those words point at
+    is epistemically inaccessible to his consciousness. The words are Inert (P-08). There
+    is no moment during which he possessed the knowledge. The communication did not
+    temporarily transfer it. Accordingly, PP-582's proposed player role ("build a
+    Forgetting-resistant communication structure") is incorrect. No such structure exists.
+    The content is categorically beyond TS < 29 rendering regardless of medium — verbal,
+    documentary, symbolic. Documents (ARC-S40) enable political advocacy via Inert Knowledge
+    (recite but cannot render the referent operationally). They do not transmit what the
+    Forgetting blocks; they offer words that point at something unrenderable.
+    Corrected player role for NPC-ARC-VAY: create STRUCTURAL constraints that prevent
+    Vaynard reaching T15 regardless of his consequentialist calculation. His calculation
+    cannot be corrected by information; it can only be bypassed by making T15 access
+    structurally unavailable — through WC-based Warden gatekeeping, TE-12 (Varfell
+    controlling T13 and delegating gate authority to the Wardens), territorial control
+    of T13 by a faction willing to exercise that authority, or alliance structures that
+    intercept Vaynard before he reaches the gate.
+  finding_id: PP-582 (correction)
+  affects:
+    - references/arc_register.md
+    - tests/sim_arc_c01_vaynard_unchecked.md
+  status: applied
+
+- id: PP-585
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    P1-D06 resolved. BG Forgetting Check is now TS-gated, not a universal roll.
+    Ruling: (1) Champions with TS 0–9: automatic Forgetting Check Failure. They constitute
+    nothing from T15 — the excessive being at the wound site is categorically epistemically
+    inaccessible. No roll. (2) Champions with TS ≥ 29: automatic Forgetting Check Success.
+    Their consciousness can render Southernmost experience as knowledge. No roll. (3) Champions
+    with TS 10–28: roll as currently specified (same pool vs Ob 2). Their Thread Sensitivity
+    allows partial perception but does not guarantee Forgetting resistance. The roll covers
+    the ambiguous zone. This aligns the BG abstraction with the philosophical foundations
+    (P-08, P-13): the epistemic barrier at T15 is metaphysical, not a skill challenge.
+    It cannot be overcome by effort, preparation, or documentation for TS < 29. Add to
+    params_board_game.md §Southernmost Access System §Expedition Procedure and
+    §Warden Recognition Track as a clarifying note on the Forgetting Check.
+  finding_id: P1-D06
+  affects:
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-586
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    P1-D05 documented. TE-12 (Collector's Chokehold) is a terminal RS path blocker
+    when Varfell is diplomatically isolated at the time the Southernmost Ritual [UNNAMED — ED-416] prerequisites
+    are met. The Ritual requires an Askeheim expedition; TE-12 gates that expedition
+    behind Varfell negotiation (Ob 3 for any non-Varfell faction). A PARTIAL negotiation
+    blocks the expedition for that season; 2 consecutive blocked seasons produces RS −4–6
+    from ARC-S15 cracking continuation. Add to: (1) TE-12 arc entry in arc_register.md:
+    "TE-12 active during ARC-S15 cracking phase blocks ARC-T04 expedition — indirect
+    terminal RS path if Varfell is diplomatically isolated when prerequisites are met."
+    (2) ARC-T04 prerequisites section: "Varfell gate control via TE-12 must be assessed
+    before declaring prerequisites met — expedition may be diplomatically blocked regardless
+    of practitioner readiness." This is a P1 design observation, not a mechanical error.
+    No mechanical change required; documentation only.
+  finding_id: P1-D05
+  affects:
+    - references/arc_register.md
+  status: applied
+
+
+- id: PP-587
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-D03 resolved. TE-17 arc text correction: "Haelgrund Overwhelming investigations
+    in T13 at −1 Ob" is misleading. The −1 Ob modifier reduces the action's Ob (easier
+    to reach Success) but the Overwhelming threshold (net ≥ 2×Ob AND ≥ 3) has a
+    floor of net ≥ 3 that is independent of the Ob value. At reduced Ob 1, Overwhelming
+    still requires net ≥ 3. The −1 Ob modifier primarily accelerates AP accumulation
+    (higher P(Success) = faster reach of AP threshold) rather than reliably producing
+    Overwhelming. Correct TE-17 to read: "Haelgrund's Inquisition in T13 during Fragile
+    band: Ob −1 (Thread phenomena provide incriminating evidence). Effect: AP threshold
+    reached in fewer seasons. Overwhelming results are not systematically produced —
+    net ≥ 3 floor still applies." Also: P2-D01 — TE-12 arc entry should state explicitly
+    that RM (statless faction, no Influence) cannot negotiate the Chokehold.
+    P2-D02 — TE-12 arc entry should note that failed negotiations reveal RS urgency to
+    Varfell's intelligence apparatus. Both are documentation additions.
+  finding_id: P2-D01 P2-D02 P2-D03
+  affects:
+    - references/arc_register.md
+  status: applied
+
+- id: PP-588
+  type: cleanup
+  date: 2026-04-13
+  severity: P2
+  description: >
+    "Ceiral" is not a canon word. All instances in committed files replaced with
+    "Southernmost Ritual [UNNAMED — ED-416]" pending canonical naming decision.
+    Affected files: arc_register.md, canonical_sources.yaml, patch_register.yaml,
+    editorial_ledger.yaml, sim_arc_d01_southern_corridor.md, coverage_matrix.md.
+    The ritual itself is canonical — it is the multi-practitioner Southernmost healing
+    operation referenced across ARC-T04. Only the name "Ceiral" is struck.
+    ED-416 raised to establish the canonical name.
+  finding_id: null
+  affects:
+    - references/arc_register.md
+    - references/canonical_sources.yaml
+    - canon/patch_register.yaml
+    - canon/editorial_ledger.yaml
+    - tests/sim_arc_d01_southern_corridor.md
+    - tests/coverage_matrix.md
+  status: applied
+
+
+- id: PP-589
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    Refinement of PP-582 and PP-584 on the Forgetting and Vaynard's epistemic position.
+    The Heidegger ready-to-hand / present-at-hand distinction applies precisely.
+    Vaynard operates entirely in present-at-hand mode with respect to Thread reality.
+    He retains: propositional knowledge about threadwork (TK 5 — theoretical framework),
+    historical knowledge about the Einhir and the Southernmost, observable effects he has
+    witnessed (temporal dissonance, memory inconsistencies — he experiences the gap between
+    what he remembers and what is now the case). He does NOT have access to: the experience
+    of Thread contact itself (ready-to-hand), the operational "how" of any Thread operation,
+    the perceptual substrate that TS ≥ 29 renders available.
+    His consequentialist calculation fails specifically because he cannot evaluate the
+    safety rule ("TS 30+ required") against his own situation. That evaluation requires
+    ready-to-hand epistemic access — knowing FROM WITHIN whether TK 5 is sufficient
+    substitute for TS 30+ perceptual capacity. He cannot perform this evaluation. From his
+    present-at-hand position, TK 5 (the most comprehensive theoretical account any
+    non-practitioner has assembled) appears like a reasonable operational substitute.
+    He is wrong in a way he cannot discover except through Thread contact itself.
+    PP-584's correction ("words point at something he cannot render") was too strong:
+    Vaynard can render the abstract and historical referents of those words. What he cannot
+    render is the operational dimension — the ready-to-hand experience that would let him
+    evaluate the words against his own capacity.
+    Player role (PP-584 conclusion) remains correct: structural constraint, not communication.
+    Vaynard cannot be argued out of his calculation because the argument requires him to
+    perform an evaluation he lacks the epistemic equipment to perform. No propositional
+    argument bridges the ready-to-hand gap. He would need to be the kind of entity that
+    can enter Thread contact to know whether his TK 5 substitutes for TS 30+.
+  finding_id: PP-582 PP-584 (refinement)
+  affects:
+    - references/arc_register.md
+    - tests/sim_arc_c01_vaynard_unchecked.md
+  status: applied
+
+- id: PP-590
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    Thread Contact TS Development — mechanism made explicit.
+    Canonical grounding: P-01 (Inseparability), §1 Philosophical Foundations
+    (Threads are the substrate of all being — what things are made of and the
+    condition of possibility for being). Any Thread-marked configuration continues
+    to exert configurational pull on everything in sustained contact with it.
+    Contact with Thread-marked material is a Thread relationship; sustained Thread
+    relationships develop perceptual access to the substrate.
+
+    Three tiers of TS development rate via sustained contact (additive with other sources):
+
+    (1) AMBIENT ENVIRONMENTAL EXPOSURE (lowest rate):
+    Sustained presence near Thread-active conditions (Calamity Radiation Fragile/Fractured
+    effects, Einhir ruin sites, territories with active Gaps/Shifting Objects). Examples:
+    RM communities in Proximity 1 territories; populations near Einhir ruin sites.
+    Canonical mechanic: calamity_radiation.md §RS Critical Distance 3: "Discovery Events
+    possible — TS growth checks for witnesses." This already covers the mechanism; this
+    PP makes it explicit for Fragile/Fractured bands at closer proximity.
+    Rate: Spirit TN7 Ob2 per season of sustained presence in Thread-active territory.
+    Only applies to TS 0–9 characters (below Practitioner threshold). TS 10+ develop
+    through practitioner methods.
+
+    (2) SUSTAINED HANDLING OF THREAD-MARKED OBJECTS (moderate rate):
+    Repeated contact with Woven artifacts, Shifting Objects, confiscated Thread-evidence.
+    Examples: Vaynard's Private Collection use (already canonical: +1 TS hidden/use);
+    Inquisitors handling confiscated Thread-evidence over career; merchants handling
+    Thread-touched goods (cf. NPC-ARC-FEL). Shifting Objects perdure — sustained handling
+    of a Shifting Object is contact with an actively oscillating Thread configuration.
+    Rate: as per the canonical Private Collection mechanic (+1 hidden TS per use) for
+    intentional concentrated handling. For ambient professional handling (Inquisitors,
+    merchants): Spirit TN7 Ob3 per campaign arc of sustained professional contact.
+    This explains Haelgrund TS 12 (career Inquisitor) and Klapp TS 31 (career archivist
+    and head of Church education — extensive contact with suppressed Thread-adjacent texts
+    and artifacts across decades). These are not anomalies; they are expected outcomes.
+
+    (3) DIRECT PRACTITIONER OPERATION OR PROXIMITY TO ACTIVE THREAD WORK (highest rate):
+    Being present as a Thread operation occurs. The operation's co-movement effects extend
+    to all present (P-01 compliance). Examples: any non-practitioner present during a Leap
+    and Thread operation; communities where practitioners operate visibly.
+    Rate: Spirit TN7 Ob1 per scene of direct exposure to active Thread operation.
+    (This rate is already used by Discovery Event mechanics and TE-18.)
+
+    DESIGN CONSEQUENCE (Church self-defeating dynamic):
+    The Inquisitorial programme requires extensive handling of Thread-adjacent evidence.
+    The Church's most diligent Inquisitors are its most Thread-sensitive personnel.
+    The institutional suppression apparatus is simultaneously the institutional
+    Thread-sensitivity development programme. This is the metaphysical foundation
+    of NPC-ARC-HAE (Haelgrund Defection) and ARC-S08/S21 (Klapp Threshold) —
+    not occupational hazard in an abstract sense but the literal mechanism of contact.
+
+    Add to params_threadwork.md §Thread Sensitivity as a clarifying section.
+    Cross-reference: calamity_radiation.md (ambient exposure), params_factions.md
+    §Private Collection (intentional artifact handling), NPC-ARC-HAE, ARC-S08.
+  finding_id: null
+  affects:
+    - references/params_threadwork.md
+    - references/params_factions.md
+    - references/arc_register.md
+  status: applied
+
+- id: PP-591
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-E01 documented. ARC-S47 and ARC-S48 are mutually limiting arcs.
+    ARC-S47 (Cultural Reclamation) fires from Presence ≥ 4 territories and produces
+    Community Memory Event — which organically deepens Presence in active territories
+    as communities engage with the accounts. This deepening risks breaking ARC-S48's
+    condition (Presence ≥ 4 territories AND no territory at Presence ≥ 3). Once any
+    territory exceeds Presence 2, ARC-S48 suspends. Vossen's IDEALIST flaw (spreads
+    Presence thin) delays the tension by keeping individual territory counts low, but
+    does not resolve it — organic Cultural Reclamation activity in Thread-active territories
+    (PP-590 ambient exposure deepening community engagement) pulls individual territories
+    toward higher Presence counts independently of Vossen's strategic choices.
+    Arc register note: add to both ARC-S47 and ARC-S48 entries that these arcs are
+    mutually limiting, and that IDEALIST flaw is a delay mechanism, not a permanent solution.
+    P2-E04 documented simultaneously: ARC-S49 Principles Suspended Mandate advancement
+    produces ~11% success rate per season at 2D TN7 Ob3 (Ob2 + framework +1). Expected
+    9 seasons to Mandate 2. RM functional role confirmed as Thread-substrate (RS restoration
+    via Community Weaving), not political-institutional. Principles Maintained is the
+    correct NPC AI choice for Vossen at TC ≥ 50. Principles Suspended is structurally
+    losing except in very late-campaign desperate scenarios.
+  finding_id: P2-E01 P2-E04
+  affects:
+    - references/arc_register.md
+  status: applied
+
+- id: PP-592
+  type: cleanup
+  date: 2026-04-13
+  severity: P2
+  description: >
+    SIM-ARC-C01 framing corrections per PP-589 (ZH/VH distinction).
+    Two passages updated: (1) Mode A "Lost/Retained" section — corrected to specify that
+    propositional content (safety prerequisites as words, "I need TS 30+") IS retained by
+    Vaynard. What is unavailable is the operational evaluation of whether TK5 substitutes
+    for TS30+ perceptual capacity — that evaluation requires ZH (ready-to-hand) access to
+    Thread contact experience that Vaynard lacks. (2) "Critical Finding" section — corrected
+    to specify that expedition lessons persist propositionally; the calculation resets because
+    propositional lessons do not reach the operational dimension where the calculation operates.
+    Player role confirmed as structural constraint (PP-584). Mechanical conclusions unchanged.
+  finding_id: PP-589
+  affects:
+    - tests/sim_arc_c01_vaynard_unchecked.md
+  status: applied
+
+- id: PP-593
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    P2-F01 resolved. When Church (or any faction) plays Tribune Investigate targeting
+    a faction with no Intel stat (Guilds, Niflhel has no stat listing for Intel in
+    params_board_game starting table — Niflhel Intel is "—"), the Investigate Ob is
+    derived from the target faction's Stability: floor(Stability / 2) + 1.
+    Rationale: Stability represents institutional coherence and information security.
+    A faction without an Intelligence apparatus is harder to penetrate via raw talent
+    but lacks the active counter-intelligence that a high Intel stat would represent.
+    Stability as proxy preserves the mechanical difficulty gradient while providing
+    a canonical Ob derivation. Add to params_board_game.md §Tribune Investigate action
+    description as a special case note.
+  finding_id: P2-F01
+  affects:
+    - references/params_board_game.md
+  status: applied
+
+- id: PP-594
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    P1-G03 documented. TE-08 (T9 Himmelenger falls): Church Mandate −3 is the game's
+    largest single-action stat reduction, but it leaves Church's Territorial Seizure
+    and Piety Yield mechanics intact because both use Influence (not Mandate) as their
+    pool stat. At Mandate 2, Church can still: (a) Seize territories via Graduated
+    Seizure (Pool = Influence + floor(TC/15)); (b) generate TC via Assert (Influence vs
+    Ob 2); (c) accumulate Piety Yield (territory PT contributes regardless of Mandate).
+    What collapses at Mandate 2: Excommunication (near-impossible at 2D TN7 Ob 2),
+    Heresy Investigation effectiveness (2D pool), Institutional Mandate trigger
+    (requires M ≥ 4), Formal Crown Treaty negotiation capacity.
+    GMs and players must understand: Church losing T9 triggers political collapse but
+    NOT operational Thread/TC collapse. Church remains a viable TC generator and
+    territory seizer at Mandate 2. Add explicit note to TE-08 arc entry and Church
+    faction reference.
+  finding_id: P1-G03
+  affects:
+    - references/arc_register.md
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-595
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    P1-G05 resolved. Löwenritter Reconstitution (PP-431 senator inward action) is
+    available only when PI = 0. The Coup fires PI −3; if pre-coup PI ≈ 6, post-coup
+    PI = 3, placing Reconstitution out of reach. Löwenritter's Regency victory
+    requires PI ≥ 4. The path from PI 3 (post-coup) to PI ≥ 4 CANNOT go through
+    Reconstitution — that action requires PI = 0 as a prerequisite, which means PI
+    must first deteriorate further before Reconstitution becomes available.
+    The intended recovery path: Löwenritter must rely on Hafenmark Parliamentary
+    Manoeuvre success (+1 PI) or Crown Parliamentary Session (+1 PI) or Ministry
+    Mandate ≥ 4 support — all dependent on other factions cooperating. This is
+    correct design: Regency legitimacy must be demonstrated through political
+    reconstruction, not just military authority. However, GMs need this made
+    explicit, as Löwenritter players may assume Reconstitution is their PI recovery
+    tool when it is not available at PI 3.
+    Add to: Löwenritter NPC AI (post-coup priority tree), Reconstitution action
+    description (note: PI 3 post-standard-coup means this action unavailable;
+    requires PI to drop to 0 via further deterioration first).
+  finding_id: P1-G05
+  affects:
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-596
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    GAP-G01 resolved. TC freeze at 75: Piety Yield (Influence-based, territory PT
+    contributions) does NOT push TC above 75 during the Phase Transition freeze.
+    The TC freeze at 75 is a ceiling on all TC sources. Institutional Momentum
+    (+1/season passive) is suppressed by the freeze. Assert still fires but its
+    TC gain is also suppressed (Assert produces TC which is then capped at 75).
+    Piety Yield is similarly capped. After TC 75, TC is fixed at 75 regardless of

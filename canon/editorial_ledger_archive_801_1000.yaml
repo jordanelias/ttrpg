@@ -1,0 +1,665 @@
+  # ═══ BALANCE EDITORIALS 2026-04-10 ═════════════════════════════════════════
+    date_resolved: 2026-04-12
+    resolution: "PP-203 was Thread paradox (unrelated). Hafenmark passive victory path balanced by PP-541 (TCV ≥ 13). Close as resolved by PP-541."
+    patch: PP-541
+
+  - id: ED-388
+    status: resolved
+    editorial_note: "[EDITORIAL: Hafenmark Stability ≥ 3 gate — faction-feel question for authorial decision]"
+    priority: P2
+    date_raised: 2026-04-10
+    description: "Hafenmark balance: should a Stability ≥ 3 gate be added to Parliamentary Sovereignty (in addition to PP-BAL-02 TCV/PI changes)? Stability gate adds ongoing management pressure but is faction-feel question."
+    decision: null
+    tags: [board_game, hafenmark, balance, victory]
+    date_resolved: 2026-04-12
+    resolution: "[PROVISIONAL] Hafenmark Parliamentary Sovereignty: Stability ≥ 3 gate added. Prevents Parliamentary victory while destabilised. Applied PP-571."
+    patch: PP-571
+
+  - id: ED-389
+    status: resolved
+    priority: P2
+    date_raised: 2026-04-10
+    description: "Varfell Path A: is revealing 3 rival factions' stats feasible with VTM 3? VTM 3 unlocks 3 reveals across campaign — tight but mechanically possible. PP-BAL-05 provisional pending this confirmation."
+    decision: null
+    tags: [board_game, varfell, victory, balance]
+    date_resolved: 2026-04-12
+    resolution: "Varfell Path A with VTM 3 feasibility confirmed. 3 reveals across campaign is tight but achievable. PP-BAL-05 provisional confirmed."
+
+  - id: ED-390
+    status: resolved
+    priority: P3
+    date_raised: 2026-04-10
+    description: "RM Phase 2: should WC ≥ 1 grant Ob −2 (instead of current −1 per condition) to make Warden cooperation more meaningful? Risk: stacking with T9 CV ≤ 1 brings Ob to 1 at base TC. Confirm intended."
+    decision: null
+    tags: [hybrid, rm, victory, balance]
+    date_resolved: 2026-04-12
+    resolution: "WC ≥ 1 confirmed at −1 Ob (not −2). Stacking risk at −2 (reaches Ob 1 at base TC) is unacceptable. Current −1 is correct."
+
+  - id: ED-391
+    status: resolved
+    editorial_note: "[EDITORIAL: Crown+Hafenmark 4-season no-conflict — faction-feel supplement for authorial decision]"
+    priority: P2
+    date_raised: 2026-04-10
+    description: "Crown+Hafenmark co-victory: should a 4-season no-active-conflict condition be added to reinforce cooperative nature? PP-BAL-07 applies PI/TC changes only; this is faction-feel supplement."
+    decision: null
+    tags: [board_game, crown, hafenmark, co_victory, balance]
+    date_resolved: 2026-04-12
+    resolution: "[PROVISIONAL] Crown+Hafenmark co-victory: 4-season no-Legionary-targeting-each-other condition added. Reinforces cooperative design intent. PP-572."
+    patch: PP-572
+
+  - id: ED-392
+    status: resolved
+    priority: P2
+    date_raised: 2026-04-10
+    description: "Varfell+RM co-victory: is T13 (Oastad) control requirement intentional as a 'must-hold' constraint or redundant (Varfell starts there)? PP-BAL-08 provisionally removes it pending decision."
+    decision: null
+    tags: [board_game, varfell, rm, co_victory, balance]
+
+  ED-393:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Altonian containment-through-accommodation model for Church of Solmund. Cathedral city (Himmelenger/T14) as colonial religious grant. Church cross-border contiguity. British India parallel."
+      decision: "Canonical. Added to canon/03_canonical_timeline.md."
+      tags: [lore, church, altonia, setting, timeline]
+
+  ED-394:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Secession Wars deed-monarchy legitimation. First Almqvist (Almud's father) as military leader consecrated by Church. Carolingian parallel. Population knows Crown is not royal by blood."
+      decision: "Canonical. Two generations to game start (founder + Almud). Deed-presumption rebuttable via Coup Counter / Motion of No Confidence."
+      tags: [lore, crown, succession, deed_monarchy, timeline]
+
+  ED-395:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Cadet branches as deed-families, not blood-families. Baralta's ducal status from Secession-era service, not Almqvist genealogy."
+      decision: "Canonical. Ducal/ministerial families earned proximity through wartime deeds."
+      tags: [lore, hafenmark, succession, deed_monarchy]
+
+  ED-396:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Baralta personal characterisation: unmarried, childless, heirless. Wants the Crown (active ambition). Henry VIII parallel — sovereign supremacy, not theological reform. Pure adversary of Restoration Movement. Eschatological reward orientation."
+      decision: "Canonical. Reframes Arc 3, Arc 9, Baralta succession mechanics."
+      tags: [npc, baralta, hafenmark, characterisation, succession]
+
+  ED-397:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Caste system reconciliation: southern exclusion from war coalition + Catastrophe stigma + Church suppression logic. Geographic gradient radiating from Southernmost. Southern territories = higher TS baseline, lower Church penetration."
+      decision: "Canonical. Almud's northern Einhir heritage as specifically the 'right kind.' Varfell as stigmatised duchy."
+      tags: [lore, caste, setting, einhir, geography]
+
+  ED-398:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Almud TS revised to 0. Remove secret Einhir sympathy. Einhir policy as governance pragmatism + genuine ethical doubt (not secret sympathy). Discovery Event as rupture not confirmation."
+      decision: "Canonical. Complete rewrite of Almud characterisation."
+      tags: [npc, almud, crown, characterisation, thread_sensitivity]
+
+  ED-399:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Lenneth as institutional Einhir revivalist. Catherine the Great parallel. Overcome caste through Crown authority, not revolution. Thread work as eventual horizon. Sincere + strategic."
+      decision: "Canonical. Lenneth-Baralta collision is campaign-defining confrontation."
+      tags: [npc, lenneth, crown, characterisation, einhir]
+
+  ED-400:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Vaynard as southern Einhir heritage, von Lohengramm parallel. Varfell as stigmatised duchy. TS from environmental exposure. Expulsion agenda (Altonia + Church) as both cultural restoration and Southernmost crisis response."
+      decision: "Canonical. Reframes Vaynard characterisation and Baralta-Vaynard foil."
+      tags: [npc, vaynard, varfell, characterisation, einhir, caste]
+
+  ED-401:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Himlensendt as structural keystone of post-war settlement. Consecration crisis if Baralta claims Crown. Pastoral suppression of RM as genuine compassion producing ethnic suppression. Vaynard as existential heretic."
+      decision: "Canonical. Enriches Arc 9 (consecration question) and Arc 11 (originary Lock stakes)."
+      tags: [npc, himlensendt, church, characterisation, baralta, succession]
+
+  ED-402:
+      priority: P2
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Church institutional memory of containment: Himlensendt's strategy as reverse-containment (making Church indispensable, applying Altonia's logic against Crown)."
+      decision: "Canonical. Added to timeline Altonian containment section."
+      tags: [lore, church, himlensendt, strategy]
+
+  ED-403:
+      priority: P2
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Vossen's position on Lenneth's institutional revivalism. RM internal split between pragmatic acceptance of Crown patronage and rejection of Crown authority."
+      decision: "Conditional RM Stability check when Lenneth's programme activates. Success = unity under cautious cooperation. Partial = radical wing drifts to Vaynard. Failure = RM splits into institutional and radical factions. See designs/npcs/ed_403_406_407_resolutions.md."
+      tags: [npc, vossen, rm, lenneth, mechanic]
+
+  ED-404:
+      priority: P2
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Almstedt served under two monarchs (founder + Almud), not three. Timeline reconciliation."
+      decision: "Canonical. Founder = Almud's father. Two generations."
+      tags: [npc, almstedt, timeline, deed_monarchy]
+
+  ED-405:
+      priority: P2
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "NPC roster caste-axis annotations. Feldhaus/Virke profit from caste. Almstedt preserves it. Prudence Cardinal extraction deepens it. Haelgrund enforces it. Strand's frustration rebukes its ossification. Systemic reproduction without individual intent."
+      decision: "Canonical. Annotations added as roster companion document."
+      tags: [npc, roster, caste, structural]
+
+  ED-406:
+      priority: P2
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Ehrenwall succession assessment: who does she identify as viable successor if Almqvist line fails? Baralta as deed-logic candidate requires Lowenritter support (weak military), giving Ehrenwall leverage she currently lacks over Hafenmark."
+      decision: "Ehrenwall identifies Baralta as strongest deed-claim. Conditional support: Lowenritter institutional independence + border autonomy + no parliamentary subordination. Coup Counter transforms into negotiation track. See designs/npcs/ed_403_406_407_resolutions.md."
+      tags: [npc, ehrenwall, baralta, succession, lowenritter, mechanic]
+
+  ED-407:
+      priority: P2
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Himlensendt consecration crisis: if he refuses to consecrate Baralta, this exposes consecration as political veto power. If he consecrates, he installs his own superior. Open design question — which path?"
+      decision: "Conditional on Church Stability. Stability >= 4: refuses (theology clear, institution strong). Stability <= 3: consecrates under duress (cannot afford refusal crisis). Override: if Arc 11 originary Lock encounter has fired, GM discretion (Himlensendt's personal faith state determines outcome). See designs/npcs/ed_403_406_407_resolutions.md."
+      tags: [npc, himlensendt, baralta, church, succession, mechanic]
+
+  ED-408:
+      priority: P1
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Crown Succession Contest mechanic. Multi-faction contest when Crown fails — Lowenritter (military), Hafenmark (deed-claim), Church (consecration authority). Highest net successes wins. Fires after Crown elimination, Royal Deposition, or Coup."
+      decision: "Designed. See designs/mechanics/baralta_crown_claim_mechanic.md. Flagged for user review."
+      tags: [board_game, succession, mechanic, hafenmark, lowenritter, church]
+
+  ED-409:
+      priority: P1
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Baralta Stake Claim Domain Action. Preconditions: Crown Mandate <= 2, PI >= 5, Baralta alive. Pool: Hafenmark Mandate + Influence. Success places Claim Token giving +2D on Succession Contest."
+      decision: "Designed. See designs/mechanics/baralta_crown_claim_mechanic.md. Flagged for user review."
+      tags: [board_game, hafenmark, baralta, domain_action, mechanic]
+
+  ED-410:
+      priority: P1
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Consecration Crisis as BG event. Church Stability >= 4: Himlensendt refuses, Crown Mandate -2 penalty, 3-season validation window. Church Stability <= 3: consecrates under duress, TC -5, Church Stability -3, Baralta gets full Mandate + Sovereign Authority as Crown action. Override if Arc 11 Lock encounter fired."
+      decision: "Designed and simulated. Three scenarios tested — early/mid/late game. Mid-game consecration is Baralta's optimal window. See designs/mechanics/baralta_crown_claim_mechanic.md. Flagged for user review."
+      tags: [board_game, church, himlensendt, baralta, consecration, mechanic]
+
+  ED-411:
+      priority: P2
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Hafenmark faction status when Baralta takes Crown. Option B selected: Hafenmark persists as separate faction, PP-487 PI-gated succession fires immediately. Baralta must ensure PI >= 4 before claiming or her faction base collapses behind her."
+      decision: "Option B — mechanically richer, creates additional preparation requirement. See designs/mechanics/baralta_crown_claim_mechanic.md. Flagged for user review."
+      tags: [board_game, hafenmark, succession, PP-487, mechanic]
+
+  ED-412:
+      priority: P1
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Crown Einhir Revival Domain Action. Lenneth's institutional revivalism as BG mechanic. Crown DA 'Patronise Einhir Revival' — costs Mandate, advances cultural revival track, triggers RM Stability check (ED-403). Precondition: Lenneth alive + Crown Mandate >= 3. Consequence: Church TC assert in response, southern territories RM alignment shifts."
+      decision: "Designed provisionally. Requires Lenneth full stat design (ED-119) before implementation. Flagged for user review."
+      tags: [board_game, crown, lenneth, einhir, domain_action, mechanic]
+
+  ED-119-URGENCY:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "ED-119 (Lenneth full design) — resolved by designs/npcs/lenneth_threadwork_design.md."
+      decision: "Resolved. See ED-119 main entry."
+      tags: [npc, lenneth, crown, characterisation, resolved]
+
+# --- Arc 36-40 batch (2026-04-11 → resolved 2026-04-12) ---
+- id: ED-475
+  summary: "Prudence Cardinal requires a name"
+  priority: P2
+  status: resolved
+  date_resolved: 2026-04-12
+  decision: "Named Aldric Tormann. All references in npc_roster.md and arcs_36_40_interdependent.md updated."
+  source: gm_ref/arcs_36_40_interdependent.md
+  date: 2026-04-11
+  tags: [npc, church, prudence_cardinal]
+
+- id: ED-476
+  summary: "Torsvald Deniability Debt threshold for Ehrenwall investigation — proposed 3"
+  priority: P3
+  status: resolved
+  date_resolved: 2026-04-12
+  decision: "Threshold confirmed at 3. Three aborted operations leaving detectable evidence triggers Ehrenwall investigation review. Consistent with Ehrenwall behavioral AI (acts at clear evidence of pattern, not on single anomaly)."
+  source: gm_ref/arcs_36_40_interdependent.md
+  date: 2026-04-11
+  tags: [npc, torsvald, ehrenwall, lowenritter]
+
+- id: ED-477
+  summary: "Vaynard Private Collection use frequency — proposed 1/season"
+  priority: P2
+  status: resolved
+  date_resolved: 2026-04-12
+  decision: "Confirmed canonical per PP-168: 1/season (Intel vs Ob 2, once per season). TS +1/use canonical. Discovery Event at TS 14+: Spirit TN 7 Ob 1 per use. No modification required."
+  source: gm_ref/arcs_36_40_interdependent.md
+  date: 2026-04-11
+  tags: [npc, vaynard, varfell, threadwork, private_collection]
+
+- id: ED-478
+  summary: "Solberg recall trigger — proposed when 2+ of Supply Chain Exposure, Parish Revolt, IP>=15 fire same season"
+  priority: P2
+  status: resolved
+  date_resolved: 2026-04-12
+  decision: "IP threshold corrected from 15 to 8 (PP-255 PI range 0-10). Mechanism revised: Schoenland central Intel check Ob 2 at Year-End fires recall when 2+ conditions present (Supply Chain Exposure, Parish Revolt, PI >= 8). Independent of Solberg's reports — Solberg STABILITY-SEEKING AI means reports downplay severity; Schoenland detects via trade intelligence. PP-555 applied."
+  source: gm_ref/arcs_36_40_interdependent.md
+  date: 2026-04-11
+  tags: [npc, solberg, schoenland, arc_38]
+
+- id: ED-479
+  summary: "Convergence timeline pacing flexibility — GM guidance needed"
+  priority: P3
+  status: resolved
+  date_resolved: 2026-04-12
+  decision: "Compression formula: Convergence Season = N + max(4, 8 - N) where N = campaign season at introduction. Floor of 4 seasons regardless of introduction timing. N=0 -> S8 (normal); N=4 -> S8; N=6 -> S10."
+  source: gm_ref/arcs_36_40_interdependent.md
+  date: 2026-04-11
+  tags: [arc_40, timing, convergence]
+
+  ED-413:
+      priority: P1
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Lenneth TS 72 dissolved. PP-279/PP-304 superseded. Starting TS 8 with archive-based development path. Maximum potential TS 40-50. Patron, not practitioner."
+      decision: "Canonical. See designs/npcs/lenneth_threadwork_design.md. Mira relationship reframed: patron-to-practitioner, not teacher-to-student."
+      tags: [npc, lenneth, thread_sensitivity, params_threadwork]
+
+  ED-414:
+      priority: P1
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Lenneth breakthrough condition. Witnessing a Thread operation dissolves essentialist barrier permanently (growth check Ob drops from 2 to 1). Strategic action: bringing Thread reality to Crown household accelerates Lenneth's programme."
+      decision: "Canonical. Flagged for review."
+      tags: [npc, lenneth, thread_sensitivity, mechanic]
+
+  ED-415:
+      priority: P1
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Cultural Revival Track (0-10 clock). Lenneth's programme mechanised. Thresholds at 3 (recognition), 5 (institutional reform), 7 (Thread acknowledgment), 10 (full revival + caste dissolution in Crown territories)."
+      decision: "Canonical. Flagged for review. Major late-game impact."
+      tags: [board_game, crown, lenneth, clock, einhir, mechanic]
+
+  ED-416:
+      priority: P1
+      status: resolved
+      date_raised: 2026-04-11
+      description: "Almud stat block needed. Spirit value determines Discovery Event probability (Spirit 3 = 15% success, Spirit 4 = 25%). Campaign trajectory depends on this roll."
+      decision: null
+      tags: [npc, almud, stat_block, thread_sensitivity]
+
+  ED-417:
+      priority: P2
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Baralta triple-barrier to TS growth. Essentialist formation + categorical imperative + sovereign divine right = Ob 4 on TS growth check (vs standard Ob 2). P(Success) approximately 2% at Spirit 5. Baralta will effectively never develop TS."
+      decision: "Canonical. Flagged for review."
+      tags: [npc, baralta, thread_sensitivity, mechanic]
+
+  ED-418:
+      priority: P2
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Vaynard TS provisional value: 20 (environmental, southern Einhir baseline). Thread Pool Score 2. Can perceive Thread operations and Thread-touched objects. Cannot Leap or operate."
+      decision: "Canonical. Flagged for review. Needs full stat block confirmation."
+      tags: [npc, vaynard, thread_sensitivity]
+
+  ED-426:
+      priority: P1-BLOCKER
+      status: resolved
+      date_raised: 2026-04-11
+      date_resolved: 2026-04-11
+      description: "Lenneth full design. Stat block, TS development path, BG Domain Action, Cultural Revival Track, mode interface. Resolved by designs/npcs/lenneth_threadwork_design.md."
+      decision: "Canonical. Supersedes all prior Lenneth TS values (PP-279, PP-304). See full design document."
+      tags: [npc, lenneth, characterisation, stat_block, resolved]
+
+# --- Arc 41-45 batch (2026-04-11) ---
+- id: ED-480
+  summary: "Haelgrund self-documentation timeline at Fractured RS — proposed 2-3 seasons"
+  priority: P3
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Haelgrund self-documentation timeline = 2 seasons from TS self-discovery to decision point (defection or suppression). PROCEDURALIST flaw adds +1 season to any action — effectively 3 seasons before consequences emerge. PP-585."
+  source: gm_ref/arcs_41_45_interdependent.md
+  date: 2026-04-11
+
+- id: ED-481
+  summary: "Debate Thread co-movement RS +1 — per contest or per exchange? Significant if per-exchange."
+  priority: P2
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Debate Thread co-movement RS +1 per contest (not per exchange). Per-exchange would produce RS +5 to +10 per Grand Debate — catastrophic for RS economy. One RS change per contest resolution, applied at scene end. PP-584."
+  source: gm_ref/arcs_41_45_interdependent.md
+  date: 2026-04-11
+
+- id: ED-482
+  summary: "Varfell force composition for T6 battle — Private Collection usage during battle triggers TS threshold"
+  priority: P2
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Varfell force composition for T6 battle: Private Collection usage during battle triggers TS check for Vaynard (Spirit TN 7 Ob 1 per use). At TS 10, success advances TS by +1. If battle occurs at T6 (distance 1 from Askeheim) during Fractured RS, calamity radiation adds +1 to all Thread-related checks in the zone. PP-585."
+  source: gm_ref/arcs_41_45_interdependent.md
+  date: 2026-04-11
+
+- id: ED-483
+  summary: "RM 'hold' T9 mechanic for Cultural Uprising — no Military stat, cultural displacement proposed"
+  priority: P1-BLOCKER
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "RM holds T9 via Presence markers (≥3) + PT ≤ 1. Cultural displacement, not military garrison. PP-578."
+  source: gm_ref/arcs_41_45_interdependent.md
+  date: 2026-04-11
+
+- id: ED-484
+  summary: "Two-front war IP threshold — proposed IP >= 60 (Vanguard preparation) rather than IP 75 (full Vanguard)"
+  priority: P2
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Two-front war IP threshold: IP ≥ 60 for Vanguard preparation (mobilisation begins, Schoenland diplomatic pressure increases). IP ≥ 75 for full Vanguard deployment (NPC unit at T10). The 60 threshold creates a warning window (1-3 seasons) before deployment. PP-587."
+  source: gm_ref/arcs_41_45_interdependent.md
+  date: 2026-04-11
+
+# --- Simulation findings (2026-04-11) ---
+- id: ED-485
+  summary: "Coup Counter threshold inconsistency: params_factions says 3, params_board_game says 4. Recommend 4 (v04 canonical)."
+  priority: P1-BLOCKER
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Coup Counter threshold unified to 4 (params_board_game canonical). params_factions corrected. PP-577."
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
+
+- id: ED-419
+  summary: "Vaynard starting hidden TS not specified. Recommend 8-10 for mid-campaign Discovery Event timing."
+  priority: P2
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Vaynard starting hidden TS = 10. Mid-campaign Discovery Event timing: at TS 10, Vaynard's Discovery requires environmental TS threshold encounter (calamity radiation at distance 2 during Fractured RS, or Private Collection use at VTM 3+). Discovery fires around season 6-8 if Varfell pursues VTM path. PP-583."
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
+
+- id: ED-420
+  summary: "Arc 41 calamity radiation trigger incorrect: distance 3 at Fractured RS has no mechanical effects. Move Haelgrund investigation to T5 (distance 2)."
+  priority: P1-BLOCKER
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Arc 41 Haelgrund investigation moved from distance 3 (no Fractured effects) to distance 2 (T5 Feldmark). PP-580."
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
+
+- id: ED-421
+  summary: "Arc 43 Territorial Dissolution at T6 is mechanically impossible (8D TN 8 Ob 8). Replace with Pull/Lock failure emphasis."
+  priority: P1-BLOCKER
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Arc 43 Territorial Dissolution (8D TN 8 Ob 8 — impossible) replaced with accumulated Pull/Lock failure emphasis. PP-581."
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
+
+- id: ED-422
+  summary: "Arc 44 Phase 1 timing requires 16-24 seasons, not 9-10. Convergence timeline broken. Needs CV erosion rate establishment or reframing."
+  priority: P1-BLOCKER
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Arc 44 reframed as late-game (seasons 12-20+). CV erosion rate produces 16-24 season timeline, not 9-10. PP-582."
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
+
+- id: ED-423
+  summary: "Arc 39 Coherence burn narrative incorrect for Object/Personal ops (loss = 0). Needs explicit overreach narrative."
+  priority: P2
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Arc 39 Coherence burn at Object/Personal scale = 0 per threadwork_v25 §3.2. Overreach narrative: Vaynard perceives Thread reality through Private Collection use but does not lose Coherence from perception alone — the burn comes from attempting operations beyond his capacity, producing failed Thread states that accumulate as psychological strain (not mechanical Coherence loss). PP-585."
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
+
+- id: ED-424
+  summary: "Arc 36 Parish Revolt requires external Church Mandate erosion to <=3. Not self-contained. Add explicit dependency."
+  priority: P2
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Arc 36 Parish Revolt dependency on Church Mandate ≤ 3 is explicit cross-arc. Added dependency note: Arc 36 requires Arc 44 (CV erosion) or direct PC Church suppression to produce Mandate erosion. Not self-contained — intentional. PP-585."
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
+
+- id: ED-425
+  summary: "Bidirectional loop (RS-Haelgrund) labelled destabilising but RM Community Weaving is RS-restorative. Loop direction inverted."
+  priority: P2
+  status: resolved
+    date_resolved: 2026-04-13
+    resolution: "Loop direction corrected: RM Community Weaving is RS-restorative (Mending component). The RS-Haelgrund loop is: RS decline → Haelgrund investigation in irradiated territory → Haelgrund TS discovery → Church institutional crisis → TC instability → further RS decline. RM Weaving pushes RS UP, partially counteracting this. Loop is not purely destabilising — it has a built-in brake. PP-585."
+  source: tests/sim_arcs_36_45_batch.md
+  date: 2026-04-11
+    resolution: "T13 (Oastad) control requirement kept as narrative "must-hold" — Varfell starts there but can lose it. Meaningful constraint on Path B."
+
+  - id: ED-374
+    status: resolved
+    date_flagged: 2026-04-11
+    description: "Social combat modifiers (Cha modifier floor((Cha-3)/2), Focus defence floor(Foc/2)) excluded from floor+1 scope. These are damage formula components, not Obs. Applying +1 would shift social damage economy system-wide. Provisional exclusion pending review."
+    date_resolved: 2026-04-11
+    resolution: "Social modifiers (Cha modifier, Focus defence) confirmed excluded from floor+1. These are damage components, not Ob derivations."
+    tags: [social_contest, formula, provisional]
+
+  - id: ED-375
+    status: resolved
+    date_flagged: 2026-04-11
+    description: "Progress tracks (VTM, AER, WR, PC, Coup Counter) classified as separate category: 0-base permitted (0 = not yet developed). Distinct from oscillating 0-5 trackers and faction stats 1-7. Provisional classification pending user decision."
+    date_resolved: 2026-04-11
+    resolution: "Progress tracks (VTM, AER, WR, PC, Coup Counter) classified as separate category. 0-base permitted; 0 = not yet developed."
+    tags: [board_game, tracks, provisional]
+
+  - id: ED-376
+    status: resolved
+    date_flagged: 2026-04-11
+    description: "Parliament Integrity classified as cumulative pressure meter (not oscillating tracker). Range corrected to 0-20 with auto-resolve at PI >= 20 (Crown elimination). Provisional — user has not explicitly confirmed 0-20 vs redesign."
+    date_resolved: 2026-04-11
+    resolution: "Parliament Integrity confirmed as cumulative pressure meter. Range 0-20. Auto-resolves at PI >= 20 (Crown elimination)."
+    tags: [board_game, parliament, provisional]
+
+  - id: ED-377
+    status: resolved
+    date_flagged: 2026-04-11
+    description: "Submission Mandate-0 exception (PP-475): submitted faction retains Mandate 0 as vassal state. This is a deliberate exception to the faction stat floor-1 rule. Provisional — confirm whether submitted factions are exempt from floor-1."
+    date_resolved: 2026-04-11
+    resolution: "Submission exception confirmed. Submitted factions retain Mandate 0 as vassal state. Explicit exception to floor-1 rule."
+    tags: [board_game, faction, submission, provisional]
+
+  - id: ED-378
+    status: resolved
+    date_flagged: 2026-04-11
+    description: "RDT 0-6 → 0-5 applied provisionally. Step-6 state consolidated into step-5 effects. Review whether any mechanic specifically referenced RDT=6 and requires redesign of that final step."
+    date_resolved: 2026-04-11
+    resolution: "RDT step-6 merged into step-5 (capstone). Row-6 removed. 0-5 range confirmed. (PP-555)"
+    patch: PP-555
+    tags: [board_game, hafenmark, rdt, provisional]
+
+# --- NPC Behavior System v1 (2026-04-13) ---
+
+- id: ED-515
+  description: "Conviction taxonomy: 7 values (Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity)."
+  priority: P2
+  status: resolved
+  resolution: "Confirmed sufficient. 7 values cover all factions and NPC worldviews. 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-516
+  description: "Resonant Style taxonomy: 4 styles (Evidence, Consequence, Authority, Solidarity)."
+  priority: P2
+  status: resolved
+  resolution: "Confirmed sufficient. Maps to Contest argument forms. 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-517
+  description: "Full NPC Arc Profiles for all named NPCs."
+  priority: P1
+  status: resolved
+  resolution: "All arc shapes confirmed. Almud (3 arcs), Himlensendt (3), Baralta (3), Vaynard (3), Edeyja (3). 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-518
+  description: "BG Priority Trees for all NPC factions."
+  priority: P1-BLOCKER
+  status: resolved
+  resolution: "9 faction trees confirmed. P1-BLOCKER cleared. 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-519
+  description: "Resonant Style +1D Contest stacking validation."
+  priority: P2
+  status: resolved
+  resolution: "PP-633: RS +1D is third independent source; not subject to Genre+Audience +2D cap. Full +3D pre-roll stack not degenerate. Documented params_contest.md. SIM validated 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-520
+  description: "Framework Drift mechanics confirmation."
+  priority: P2
+  status: resolved
+  resolution: "All drifts confirmed. Stat ceiling (7) and floor (1) applied. 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-521
+  description: "Belief revision triple gate: decisive outcome + Resonant Style + Belief engagement."
+  priority: P2
+  status: resolved
+  resolution: "Confirmed as intentionally hard. Cheap revision cheapens NPC arcs. 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-522
+  description: "NPC Knot formation during play — mechanical specification."
+  priority: P2
+  status: resolved
+  resolution: "Distant Knot: 2+ cooperative scenes + Bonds Ob 1. Close: 1 season + Bonds Ob 2. Intimate: 1 arc + Bonds Ob 3 + Belief alignment. 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-523
+  description: "Ehrenwall Thread Sensitivity."
+  priority: P3
+  status: resolved
+  resolution: "TS 0. Military background, no practitioner exposure. 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-524
+  description: "Ehrenwall Certainty."
+  priority: P3
+  status: resolved
+  resolution: "Certainty 4 (Faithful). Conventional piety. 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-525
+  description: "Torben Conviction: starts blank, contested narrative asset."
+  priority: P2
+  status: resolved
+  resolution: "Confirmed blank. First faction at Loyalty >= 5 sets Conviction. Default Autonomy at Year-End Year 2 if unclaimed. 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-526
+  description: "Torben Thread Sensitivity."
+  priority: P3
+  status: resolved
+  resolution: "TS 0. Court-raised, no practitioner exposure. 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-527
+  description: "Torben Certainty."
+  priority: P3
+  status: resolved
+  resolution: "Certainty 3 (Questioning). Almud household sympathy leakage lowers from standard 4. 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-528
+  description: "Maret Uln Thread Sensitivity."
+  priority: P3
+  status: resolved
+  resolution: "TS 0. No practitioner background. 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-529
+  description: "Maret Uln Certainty."
+  priority: P3
+  status: resolved
+  resolution: "Certainty 2 (Skeptic). RM-aligned. 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-530
+  description: "Cardinal Stance Triangles confirmation."
+  priority: P2
+  status: resolved
+  resolution: "Confirmed as provided. Activate on schism only. 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+- id: ED-531
+  description: "Baralta Conviction changed from Order (stage6) to Precedent."
+  priority: P2
+  status: resolved
+  resolution: "Approved. Precedent distinguishes Baralta from Almud and aligns with Categorical Imperative. Stage6 is stale compilation. 2026-04-13."
+  source: designs/systems/npc_behavior_system_v1.md
+  date: 2026-04-13
+
+# --- SIM-NPC-01 Patches (2026-04-13) ---
+
+- id: PP-NPC-01
+  description: "Crown Royal Decree Mandate >= 3 gate. Failure cost only at M >= 3."
+  priority: P1
+  status: resolved
+  resolution: "Applied to Crown Priority Tree P3 and params_board_game. 2026-04-13."

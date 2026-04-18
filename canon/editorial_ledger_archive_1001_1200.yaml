@@ -1,0 +1,763 @@
+  source: SIM-NPC-01 F-01
+  date: 2026-04-13
+
+- id: PP-NPC-02
+  description: "Crown TC awareness at TC >= 35. Coup Counter requires active Church Assert."
+  priority: P1
+  status: resolved
+  resolution: "Applied to Crown Priority Tree P2 and Coup Counter rules. 2026-04-13."
+  source: SIM-NPC-01 F-02/F-03
+  date: 2026-04-13
+
+- id: PP-NPC-03
+  description: "Church Framework Drift: conditioned on Stability >= 4, TC advance, per year."
+  priority: P1
+  status: resolved
+  resolution: "Applied to Framework Drift in design doc, params_factions, params_board_game. 2026-04-13."
+  source: SIM-NPC-01 F-02
+  date: 2026-04-13
+
+- id: PP-NPC-04
+  description: "Varfell Collection once-per-season state tracking."
+  priority: P2
+  status: resolved
+  resolution: "Applied to Varfell Priority Tree P2. 2026-04-13."
+  source: SIM-NPC-01 F-06
+  date: 2026-04-13
+
+# --- Archived 2026-04-16 (slim pass — resolved/deferred/P3) ---
+# ED-535: Starting PT values provisional (moved to params_board_game backlog)
+# ED-536: Church Counter-Reformation PP needed (deferred to peninsular_strain next session)
+# ED-537: Godot check_victory stale (deferred to Godot session)
+# ED-538: Sim re-run needed — RESOLVED by sim_open_items_2026-04-16
+# ED-540: RS −1 flat vs scaled — deferred P3
+# ED-541: military_layer/faction_layer uncommitted — deferred to next commit session
+# ED-546: RM no BG mode actor — deferred P2
+# ED-547: Fieldwork resource cost — deferred P3
+# ED-548: Wound Interval formula — RESOLVED 2026-04-16, applied to combat_v30 §7
+# ED-552: RM organizer starting Disposition — P3, propose 0 (neutral)
+# ED-554: Hann home settlement T11 Halvardshelm — provisional P3
+# ED-569: Longevity Track NPC values — P3, see ED-567/568
+
+# --- Archived 2026-04-16 batch 2 (P2/P3 slim pass) ---
+# ED-543/544/549/550/553/556/558/560/561/562/563/564/565/566/567/568/570 (P2/P3 prior session)
+# ED-573/574/575/576/577/578/579/580/581/582/584 (P2/P3 new batch — see sim_stress_batch_2)
+
+# --- Archived 2026-04-16 batch 3 (resolved) ---
+# ED-539/545/551/555/557/559/571/572/583 — all resolved; see sim_batch_3_2026-04-16.md
+
+# --- Archived 2026-04-16 batch 4 ---
+# ED-539/545/551/555/557/559/571/572/583: all resolved batch 3 (see sim_batch_3)
+# ED-585: resolved this batch — Church victory Accord ≥ 3 condition confirmed, apply via ED-590
+
+  - id: ED-542
+    date: 2026-04-14
+    archived: 2026-04-16
+    description: "Battle consequences propagation gap in mass_battle_v30.md."
+    status: open
+    severity: P2
+
+  - id: ED-586
+    date: 2026-04-16
+    archived: 2026-04-16
+    description: "Arc behavioral state vs Priority 6 contradiction at Mandate < 3. Constrained sub-arc proposed."
+    status: open
+    severity: P2
+
+  - id: ED-587
+    date: 2026-04-16
+    archived: 2026-04-16
+    description: "Stability Crisis Zoom In trigger absent. Proposed: Stability drops <= 2 OR drops >= 2 in one Accounting."
+    status: open
+    severity: P2
+
+
+# --- Archived 2026-04-16 arc expansion — all prior resolved EDs confirmed archived ---
+# ED-591-609 are now in active ledger as provisional block entry ED-591-609
+# ED-590 resolved (Church victory revised+validated) 2026-04-16 batch 5
+# ED-612/614 resolved batch 6 (Guilds victory, Cardinal restoration)
+# Archived resolved: ['ED-590', 'ED-612', 'ED-614']
+
+
+# --- Archived 2026-04-17 — ED-628 editorial batch acceptance ---
+
+- id: ED-588
+  priority: P1
+  status: resolved
+  archived: 2026-04-17
+  description: "RM Phase 2 holding condition T9 PT ≤ 1 unreachable. Fix: Uprising OW PT −2; holding revised to PT ≤ 3."
+  resolution: "Propagated 2026-04-16: victory_v30 §3.5 Overwhelming result now includes T9 PT −2; holding condition changed to PT ≤ 3."
+  affects: ['designs/board_game/victory_v30.md']
+
+- id: ED-612
+  priority: P1
+  status: resolved
+  archived: 2026-04-17
+  description: "Guilds have no solo victory condition. Unplayable as solo faction. Need either: formal co-victory path, or Merchant Hegemony condition (Wealth >= 8 + Favour >= 5 in 5 territories + Treaty with winning faction)."
+  affects: ['designs/board_game/victory_v30.md']
+
+- id: ED-613
+  priority: P2
+  status: resolved
+  archived: 2026-04-17
+  description: "Löwenritter Torben Loyalty >= 6 primary victory path: achieving Loyalty 6 from post-Coup position (1-2) requires ~10 seasons. Combined with Mandate instability (Restoration fires at Mandate <= 2), Primary victory window is narrow. Acceleration mechanics needed."
+  resolution: "Jordan 2026-04-16: by-design. Löwenritter holds until new monarch faction takes over; Regency Establishment is the handoff mechanic not a win condition."
+  affects: ['designs/board_game/victory_v30.md', 'designs/systems/npc_behavior_v30.md']
+
+- id: ED-614
+  priority: P2
+  status: resolved
+  archived: 2026-04-17
+  description: "Cardinal subfaction play during Church Stability <= 2: no mechanic specifies duration of Cardinal independence or conditions restoring Confessor authority. Is restoration automatic at Stability 3+?"
+  affects: ['designs/systems/npc_behavior_v30.md']
+
+- id: ED-627
+  priority: P2
+  status: resolved
+  archived: 2026-04-17
+  description: "Guilds solo victory constraint 'no rival Wealth ≥ Guild Wealth − 2' broken at standard Wealth cap 7. Fix: absolute 'no rival Wealth ≥ Guild Wealth'."
+  resolution: "Jordan 2026-04-16: by-design. Guilds are a spoiler/pressure faction; solo victory moot per design intent."
+  affects: ['designs/board_game/victory_v30.md']
+# Batch 8 archived: ['ED-542', 'ED-586', 'ED-587', 'ED-589', 'ED-611', 'ED-615', 'ED-617', 'ED-618', 'ED-621', 'ED-622', 'ED-623', 'ED-624', 'ED-625', 'ED-626', 'ED-628'] (resolved/re-synced)
+
+- id: ED-628
+  priority: P1
+  status: resolved
+  archived: 2026-04-17
+  description: "Editorial batch acceptance — all 23 design-proposal files promoted to CANONICAL."
+  resolution: "Jordan 2026-04-17: accept all, consolidate, propagate commit."
+  affects: [designs/systems/player_agency_v30.md, designs/systems/settlement_layer_v30.md, designs/systems/companion_specification_v30.md, designs/systems/npc_behavior_v30.md, designs/contest/social_contest_v30.md, references/canonical_sources.yaml]
+# Throughline propagation 2026-04-17: ['ED-619', 'ED-631', 'ED-632', 'ED-633', 'ED-629'] resolved and propagated
+
+  - id: ED-542
+    date: 2026-04-14
+    archived: 2026-04-16
+    description: "Battle consequences propagation gap — mass_battle_v30.md missing section."
+    status: open
+    severity: P2
+
+  - id: ED-586
+    date: 2026-04-16
+    archived: 2026-04-16
+    description: "Arc behavioral state vs Priority 6 contradiction at Mandate < 3. Constrained sub-arc proposed."
+    status: open
+    severity: P2
+
+  - id: ED-587
+    date: 2026-04-16
+    archived: 2026-04-16
+    description: "Stability Crisis Zoom In trigger absent. Proposed: drops <= 2 OR >= 2 in one Accounting."
+    status: open
+    severity: P2
+
+# 2026-04-17 editorial approval: all items approved
+# ED-591-609 approved — arc expansion v1 canonical (arc_expansion_v1_2026-04-16.md)
+# ED-616 approved and propagated to tc_political_redesign §8 (Intelligence Embargo)
+# ED-620 approved and propagated to victory_v30 §8 (RM Founding Mechanic)
+# ED-624 approved and propagated to victory_v30 §3.6 (Elske Loyalty Track)
+# ED-625 approved and propagated to social_contest §7.1 (Excommunication Tribunal)
+# ED-628/629/630/631 (duplicate IDs from other session) — approved, npc_behavior items to be addressed in dedicated NPC session
+# ED-634 — approved for implementation, propagation pending dedicated session
+# ED-635/636 — resolved in prior commit
+# ED-637 — UI/UX fix, pending dedicated UI session
+# 2026-04-17 ED-634 propagation
+# Resolved: ED-634 (umbrella), ED-635/636/637/638/641/654 (propagated)
+# Registered: ED-640-658, SIM-POL-R01/02/05 as sub-items
+
+  - id: ED-611
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Niflhel political influence arm lacks formal Asset placement mechanic. Superseded by ED-633 (Deniability Debt, which is the canonical covert-asset mechanic)."
+    status: superseded
+    severity: P2
+
+# 2026-04-17 — Archived from active ledger (PP-661 cleanup, 6 resolved items)
+
+- id: ED-635
+  archived: 2026-04-17
+  date: 2026-04-17
+  description: "Hafenmark Legal Advisor: Torvi Heljason — confirm name and Stance Triangle (provisional values in npc_behavior §2.14)."
+  status: resolved
+  resolution: "2026-04-17: provisional Triangle added to npc_behavior §2.14."
+  severity: P1
+  affects: [designs/systems/npc_behavior_v30.md]
+
+- id: ED-636
+  archived: 2026-04-17
+  date: 2026-04-17
+  description: "Hafenmark Military Commander: Olaf Geirson — confirm name and Stance Triangle."
+  status: resolved
+  resolution: "2026-04-17: provisional Triangle added to npc_behavior §2.14."
+  severity: P1
+  affects: [designs/systems/npc_behavior_v30.md]
+
+- id: ED-637
+  archived: 2026-04-17
+  date: 2026-04-17
+  description: "Varfell Senior Jarl: Björn Holdar — confirm name and Triangle."
+  status: resolved
+  resolution: "2026-04-17: added to npc_behavior §2.15."
+  severity: P1
+  affects: [designs/systems/npc_behavior_v30.md]
+
+- id: ED-638
+  archived: 2026-04-17
+  date: 2026-04-17
+  description: "Varfell Skald-Chief: Ingrid Stenskald — confirm name and Triangle."
+  status: resolved
+  resolution: "2026-04-17: added to npc_behavior §2.15."
+  severity: P1
+  affects: [designs/systems/npc_behavior_v30.md]
+
+- id: ED-641
+  archived: 2026-04-17
+  date: 2026-04-17
+  description: "Warden Conviction: formalize as 8th Conviction. Community and Warden both added to npc_behavior §1.2 taxonomy (2026-04-17). Confirm total list: Faith/Order/Reason/Equity/Precedent/Autonomy/Continuity/Community/Warden."
+  status: resolved
+  resolution: "2026-04-17: Community and Warden added to npc_behavior §1.2."
+  severity: P2
+  affects: [designs/systems/npc_behavior_v30.md]
+
+- id: ED-654
+  archived: 2026-04-17
+  date: 2026-04-17
+  description: "Conviction Scar × caste-transgressive modifier. Propagated to npc_behavior §3.3."
+  status: resolved
+  resolution: "2026-04-17: caste-transgressive Scar note added to npc_behavior §3.3."
+  severity: P2
+  affects: [designs/systems/npc_behavior_v30.md]
+
+# 2026-04-17 — Session-close archive (PP-661 resolved items)
+
+- id: ED-659
+  archived: 2026-04-17
+  date: 2026-04-17
+  description: "Faction politics throughline resolutions PP-661. Four applied fixes for 10 post-PP-660 findings: caste viability matrix at character creation + Std 0 carve-out + §3.4 range 0-7 + Warden × TC scale + RM stub + SIM discoverability + split marker (TL-1,2,3,9,10); Generational × Coup × IP × Baralta interaction (TL-4, baralta §7); NPC roster 3-tier ~35 capacity (TL-5, npc_behavior §11); Hall Tier settlement integration (TL-6, settlement_layer §1.4). Spec: throughline_resolutions_v1.md."
+  status: resolved
+  resolution: "2026-04-17: applied PP-661."
+  severity: P1
+  affects: [designs/systems/throughline_resolutions_v1.md, designs/systems/player_agency_v30.md, designs/systems/settlement_layer_v30.md, designs/systems/npc_behavior_v30.md, designs/mechanics/baralta_crown_claim_v30.md]
+
+  - id: ED-615
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Schoenland Treaty terms undefined. What does Schoenland receive from Crown Treaty?"
+    status: open
+    severity: P2
+
+  - id: ED-616
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "No Parliamentary mechanic blocks Tribune Domain Actions. Intelligence Embargo motion proposed."
+    status: open
+    severity: P2
+
+  - id: ED-617
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Grand Contest Recall (+2D): once per cited source per contest, not per exchange."
+    status: open
+    severity: P2
+
+  - id: ED-618
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Torben Conviction emergence window: formally Seasons 1-8."
+    status: open
+    severity: P2
+
+  - id: ED-619
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "GM advisory: 3-active-Obligation cap for tractability."
+    status: open
+    severity: P3
+
+  - id: ED-640
+    date: 2026-04-17
+    description: "Hafenmark Militia sub-rank ladder (equivalent to Löwenritter Knight, internal to Hafenmark Martial-branch Parliamentarians)."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+
+  - id: ED-642
+    date: 2026-04-17
+    description: "Guild Grand Guildmaster rank (Std 6) — confirm whether this rank exists or is omitted per collective-leadership design."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+
+  - id: ED-643
+    date: 2026-04-17
+    description: "Solmund naming propagation: conviction_track_v30 line 16 fixed (Galbadian → Solmund Orthodoxy). Grep remaining designs/ for Galbados/Galbadian references."
+    status: open
+    severity: P1
+    affects: [designs/conviction_track/conviction_track_v30.md]
+
+
+  - id: ED-644
+    date: 2026-04-17
+    description: "CV≡PT terminology: same per-territory stat. Full rename (conviction_track_v30 → piety_track_v30, CV → PT throughout) deferred pending cost-benefit review. Equivalence note added to conviction_track_v30 §1."
+    status: open
+    severity: P2
+    affects: [designs/conviction_track/conviction_track_v30.md]
+
+
+  - id: ED-645
+    date: 2026-04-17
+    description: "T15 Southernmost / Askeheim reconciliation (naming conflict in cross-references)."
+    status: open
+    severity: P2
+    affects: [designs/setting/geography_v30.md]
+
+
+  - id: ED-648
+    date: 2026-04-17
+    description: "Crown Ministry of Universities (Hochschule) — proposed new Ministry alongside existing six. Confirm inclusion. Seasonal cost 1 Wealth."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+
+  - id: ED-649
+    date: 2026-04-17
+    description: "College of Prelates: 2 additional Prelates need naming (Standing 5, not Cardinal-rank)."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+
+  - id: ED-650
+    date: 2026-04-17
+    description: "Succession rivals need naming and Stance Triangles: Crown Cadet Claimant, Varfell Vaynard-protégé, Hafenmark alternative candidate(s)."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+
+  - id: ED-651
+    date: 2026-04-17
+    description: "Markamt Minister — explicit name and Stance Triangle needed."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+
+  - id: ED-652
+    date: 2026-04-17
+    description: "Rank dismissal mechanics: cost of re-entry at Std 1→0; Dishonored flag persistence; handling across mode transitions."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+
+  - id: ED-655
+    date: 2026-04-17
+    description: "Ministry/Committee Position mechanic: uniform mechanic across Crown/Hafenmark/Church/Varfell or faction-specific variants? Recommend uniform with faction-specific titles."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+
+  - id: ED-656
+    date: 2026-04-17
+    description: "Cross-rank advancement interaction: player holds Löwenritter sub-office rank AND Crown primary rank. Confirm Duty conflicts handled via faction AI evaluation."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+
+  - id: ED-657
+    date: 2026-04-17
+    description: "Rank restoration after dismissal: what paths exist, and at what cost?"
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+
+  - id: ED-658
+    date: 2026-04-17
+    description: "Warden Ladder integration with VTM Path B: Warden rank does not grant automatic Path B progression but Warden-Chief designation must interact with Path B Deed sequence."
+    status: open
+    severity: P2
+    affects: [designs/board_game/varfell_path_b_v30.md, designs/systems/faction_politics_expanded_v1.md]
+
+
+  - id: ED-632
+    date: 2026-04-17
+    description: "Shadow Renown: referenced in faction_politics_expanded (REN-03) but no implementation — no track, no unlock conditions, no conversion to public Renown, no exposure consequences. Full mechanic specification required."
+    status: open
+    severity: P1
+    affects: [designs/systems/faction_politics_expanded_v1.md, designs/systems/player_agency_v30.md]
+
+
+  - id: ED-633
+    date: 2026-04-17
+    description: "Deniability Debt (Riskbreaker): referenced in faction_politics_expanded §2.2 as 'stage13 mechanic, retained' but not defined in any current canonical doc. Accumulation rate, consequences, and resolution mechanic all absent."
+    status: open
+    severity: P1
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+
+  - id: ED-660
+    date: 2026-04-17
+    description: "Certainty scale: faction_politics_expanded lists Almstedt at Certainty 6, exceeding the 0-5 scale. Requires formal definition of Certainty 6 ('Foundational' — direct witnessed experience) or correction to Certainty 5 with special notation."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md, designs/systems/npc_behavior_v30.md]
+
+  - id: ED-589
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "RM Presence marker mechanics undefined."
+    status: resolved
+    severity: P1
+    resolution: "Resolved batch 7 (ST-41 through ST-50): Strategy C canonical. Presence markers specified."
+
+  - id: ED-621
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "BG lobby cap."
+    status: resolved
+    severity: P2
+    resolution: "Resolved batch 7: cap applied."
+
+  - id: ED-622
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Varfell Parliamentary constraint (no-Senator note)."
+    status: resolved
+    severity: P2
+    resolution: "Resolved batch 7."
+
+  - id: ED-623
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "IP rate validated."
+    status: resolved
+    severity: P2
+    resolution: "Resolved batch 7: confirmed +3/battle, +2/season TC60+."
+
+  - id: ED-624
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Elske arc track."
+    status: resolved
+    severity: P2
+    resolution: "Resolved batch 8: Elske Loyalty arc validated."
+
+  - id: ED-625
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Excommunication procedure."
+    status: resolved
+    severity: P2
+    resolution: "Resolved batch 8: procedure specified."
+
+  - id: ED-626
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Accord/Order distinction."
+    status: resolved
+    severity: P2
+    resolution: "Resolved batch 7."
+
+  - id: ED-629
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Thread stress test P0 blockers (28 items). Full register: tests/thread_stress/threadwork_audit_register.md §A. Throughlines: tests/thread_stress/throughlines_2026-04-17.md."
+    status: resolved
+    severity: P0
+    resolution: "Resolved via throughline propagation 2026-04-17. 8 throughlines applied to 12 design files. RS budget document created. Remaining Thread integration tracked in Thread stress register and via ED-668-672."
+
+  - id: ED-630
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "RS Rupture needs Last Declaration scene spec."
+    status: resolved
+    severity: P2
+    resolution: "Resolved batch 8."
+
+  - id: ED-620
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "RM Founding mechanic unspecified — full design proposed."
+    status: open
+    severity: P1
+
+  - id: ED-621
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "BG Parliamentary Vote: lobby offset can pre-determine outcome. Starting track restriction proposed."
+    status: open
+    severity: P2
+
+  - id: ED-622
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Varfell cannot file Parliamentary motions (no Senator card). Explicit note needed."
+    status: open
+    severity: P2
+
+# Archived 2026-04-18 — pre-2026-04-18 resolved entries
+  - id: ED-673
+    date: 2026-04-17
+    description: "Thread Domain Echo pathway. scale_transitions_v30."
+    status: resolved
+    severity: P1
+    affects: [designs/hybrid/scale_transitions_v30.md]
+
+  - id: ED-674
+    date: 2026-04-17
+    description: "Scene Slate thread-state factor. player_agency_v30."
+    status: resolved
+    severity: P1
+    affects: [designs/systems/player_agency_v30.md]
+
+  - id: ED-675
+    date: 2026-04-17
+    description: "Settlement Thread environment. settlement_layer_v30."
+    status: resolved
+    severity: P1
+    affects: [designs/systems/settlement_layer_v30.md]
+
+  - id: ED-676
+    date: 2026-04-17
+    description: "CV movement from Thread operations. conviction_track_v30."
+    status: resolved
+    severity: P2
+    affects: [designs/conviction_track/conviction_track_v30.md]
+
+  - id: ED-677
+    date: 2026-04-17
+    description: "Thread perception extension. threadwork_v30."
+    status: resolved
+    severity: P2
+    affects: [designs/ttrpg/threadwork_v30.md]
+
+  - id: ED-678
+    date: 2026-04-17
+    description: "Lifepath TS/Certainty derivation. character_histories_v30."
+    status: resolved
+    severity: P2
+    affects: [designs/characters/character_histories_v30.md]
+
+  - id: ED-679
+    date: 2026-04-17
+    description: "Thread Warfare NPC AI doctrine. npc_behavior_v30."
+    status: resolved
+    severity: P1
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-680
+    date: 2026-04-17
+    description: "Case Board dual-depth overlay. investigation_systems."
+    status: resolved
+    severity: P3
+    affects: [designs/systems/investigation_systems_proposal_2026-04-15.md]
+
+  - id: ED-681
+    date: 2026-04-17
+    description: "Rendering Crisis narrative structure. threadwork_v30."
+    status: resolved
+    severity: P3
+    affects: [designs/ttrpg/threadwork_v30.md]
+
+  - id: ED-682
+    date: 2026-04-17
+    description: "Church settlement historical precedent integration — Parish Social Services, Pastoral Assumption. PP-675."
+    status: resolved
+    severity: P2
+    affects: [designs/systems/settlement_layer_v30.md]
+
+  - id: ED-683
+    date: 2026-04-17
+    description: "RM cell resilience mechanic. PP-675."
+    status: resolved
+    severity: P2
+    affects: [designs/systems/settlement_layer_v30.md]
+
+  - id: ED-684
+    date: 2026-04-17
+    description: "IP visibility milestones and Altonian Alignment (NPC-only). PP-675."
+    status: resolved
+    severity: P1
+    affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-685
+    date: 2026-04-17
+    description: "RM Presence → Underground Network conversion during Occupation. PP-675."
+    status: resolved
+    severity: P2
+    affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-686
+    date: 2026-04-17
+    description: "Conviction resolution states, Portrait Retirement, Draft Portrait. PP-675."
+    status: resolved
+    severity: P1
+    affects: [designs/systems/player_agency_v30.md]
+
+  - id: ED-687
+    date: 2026-04-17
+    description: "Campaign Supply — flat Treasury −100/season in hostile territory. PP-677/678."
+    status: resolved
+    severity: P1
+    affects: [designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-688
+    date: 2026-04-17
+    description: "Morale Cascade — rout spreads via Discipline Ob 1 check. PP-677."
+    status: resolved
+    severity: P2
+    affects: [designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-689
+    date: 2026-04-17
+    description: "Siege Parley and civilian consequences. PP-677."
+    status: resolved
+    severity: P2
+    affects: [designs/board_game/military_layer_v30.md]
+
+  - id: ED-690
+    date: 2026-04-17
+    description: "Show of Force — military demonstration without battle. PP-677."
+    status: resolved
+    severity: P2
+    affects: [designs/board_game/military_layer_v30.md]
+
+  - id: ED-691
+    date: 2026-04-17
+    description: "Settlement Muster bonuses — Fortress +1 Size. Militia/Sapper cut. PP-677/678."
+    status: resolved
+    severity: P3
+    affects: [designs/board_game/military_layer_v30.md]
+
+  - id: ED-692
+    date: 2026-04-17
+    description: "Accord by acquisition method — differentiated starting Accord. Cultural Reformation → Accord 3. PP-677."
+    status: resolved
+    severity: P1
+    affects: [designs/board_game/peninsular_strain_v1.md]
+
+  - id: ED-693
+    date: 2026-04-17
+    description: "Thread Revelation Curve propagated to threadwork_v30 §5.6. Hidden Thread-site bonus for RM. PP-677."
+    status: resolved
+    severity: P1
+    affects: [designs/ttrpg/threadwork_v30.md]
+
+  - id: ED-694
+    date: 2026-04-17
+    description: "Derived stat system — Treasury, Legitimacy, Reputation, Cohesion, Levies Available. 18 routine stat mods converted to derived value drain. PP-679/680."
+    status: resolved
+    severity: P0
+    affects: [designs/systems/derived_stats_v1.md, designs/mass_combat/mass_battle_v30.md, designs/board_game/military_layer_v30.md, designs/board_game/tc_political_redesign_v30.md, designs/board_game/peninsular_strain_v1.md, designs/board_game/victory_v30.md, designs/systems/settlement_layer_v30.md]
+
+  - id: ED-623
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "IP advancement too slow."
+    status: open
+    severity: P2
+
+  - id: ED-624
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Elske Loyalty track and Diplomatic Exchange procedure not documented."
+    status: open
+    severity: P2
+
+  - id: ED-625
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Church Excommunication procedure not documented."
+    status: open
+    severity: P2
+
+  - id: ED-626
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Accord/Order relationship in peninsular_strain_v1."
+    status: open
+    severity: P2
+
+  - id: ED-627
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Thread-settlement interaction gaps."
+    status: open
+    severity: P2
+
+  - id: ED-628
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Vaynard Season 0 Jarl Assembly as pre-campaign scene."
+    status: open
+    severity: P2
+
+  - id: ED-630
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Coup Counter as moral ledger: dual-track advancement proposal."
+    status: open
+    severity: P2
+
+  - id: ED-631
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Heresy Proceedings resolution time unspecified."
+    status: open
+    severity: P2
+
+  - id: ED-660
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Certainty 6 scale issue for Almstedt."
+    status: open
+    severity: P2
+
+  - id: ED-661
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Ministry Protocol 3 seniority conflict."
+    status: open
+    severity: P2
+
+  - id: ED-662
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Elske residency post-Coup legal implications."
+    status: open
+    severity: P2
+
+  - id: ED-664
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Advisor-principal confidentiality boundary undefined."
+    status: open
+    severity: P2
+
+  - id: ED-665
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Grand Contest as succession trial not in canonical docs."
+    status: open
+    severity: P2
+
+  - id: ED-668
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "RS decline rate calibration question."
+    status: open
+    severity: P2
+
+  - id: ED-669
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Irreversible institutional precedent persistence across campaigns."
+    status: open
+    severity: P2
+

@@ -1,0 +1,818 @@
+    params_combat.md Pool Formula Health line updated to cross-reference params_core.md
+    for base formula, making explicit that (End+6)×(wound count+1) is the cumulative
+    formulation of the same threshold mechanic.
+
+    Both descriptions were correct from different perspectives (per-wound buffer vs
+    cumulative total); the inconsistency was presentational. Now reconciled.
+    valoria-game CharacterRegistry implementation (cumulative formula) is correct — no
+    code change needed.
+  finding_id: ED-438
+  affects:
+    - references/params_core.md
+    - references/params_combat.md
+  status: applied
+
+- id: PP-628
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    Canon guard review of fieldwork_design_v1.md against philosophical foundations,
+    emergence vectors, and Domain Echo. Six categories of corrections:
+
+    1. P-05 FIX — Mode 1 (Ordinary Incursion) vs Mode 2 (Providence) mechanically
+       distinguished in §3.1 Anomaly POI row. Mode 1: time-sensitive evidence
+       (progress halves after 3 scenes as config degrades). Mode 2: event not
+       entity — Interview and social fieldwork actions unavailable.
+
+    2. P-01 CLARIFICATION — §2.4 co-movement note added: all Thread operations
+       in the Investigative Yield table produce co-movement per P-01 via threadwork
+       rules. §4.5 "only fieldwork action that produces co-movement" clarified
+       to "only fieldwork-defined action."
+
+    3. PP-626 PROPAGATION — §2.1 and §4.2 tables: Thread-Read primary attribute
+       corrected Attunement → Spirit. (§4.5 Step 3 was already correct in source.)
+
+    4. P-06 NOTE — §2.8: threadcut being Knot formation carries +1 self-maintenance
+       strain per Knot use (distinct from organic being Knots). Cumulative strain 5
+       = rendering instability. Strain −1 per season of Knot non-use.
+
+    5. DOMAIN ECHO §2.5 — Three additions: faction-level scope definition (Structural
+       always fires; Complex if faction institutional; Simple only if faction officer
+       in institutional capacity). Timing (scene end; next Accounting across modes).
+       NPC learning mechanism (Watched threshold, hostile witness, or public citation).
+
+    6. BREACH × THREADCUT §3.1 — confirmed entry sites of threadcut beings yield
+       +3 Evidence (Thread-verified) regardless of roll degree; being may
+       counter-investigate per §2.8.
+  finding_id: canon-guard-review-2026-04-13
+  affects:
+    - designs/fieldwork/fieldwork_design_v1.md
+  status: applied
+
+- id: PP-629
+  type: propagation
+  date: 2026-04-13
+  severity: P2
+  description: >
+    Fieldwork system — 5 pending propagation items from PP-583 session now complete:
+    (1) references/propagation_map.md FIELDWORK section added.
+    (2) references/params_board_game.md Survey action Ob table row added.
+    (3) references/params_core.md Attribute Roles — Fieldwork section added.
+    (4) compilation/v0.14/stage11_scale_transitions.md 9th handoff rule added.
+    (5) tests/coverage_matrix.md SIM-FW-02 through FW-10 added (all RESOLVED);
+        misplaced FW-03 and FW-06 from Thread System Redesign section removed.
+    (6) references/canonical_sources.yaml fieldwork SHA updated; note updated.
+  finding_id: propagation-fieldwork-PP-583-pending
+  affects:
+    - references/propagation_map.md
+    - references/params_board_game.md
+    - references/params_core.md
+    - compilation/v0.14/stage11_scale_transitions.md
+    - tests/coverage_matrix.md
+    - references/canonical_sources.yaml
+  status: applied
+
+- id: PP-630
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    Fieldwork canon follow-up audit corrections:
+
+    1. THREE-AXIS Ob ALIGNMENT — §4.5: explicit note added. Thread-Read Ob values
+       (Depth Axis 1/2/3/5/8) equal three-axis system at Single Breadth (+0) and
+       Contact/Knot Distance (+0). Greater breadth or distance without Knot → add
+       Breadth Ob and Distance Ob per params_threadwork §Three-Axis Ob System.
+       Knot-mediated remote Thread-Read = Contact range (Distance Ob = 0).
+
+    2. WARDEN EMERGENCE FIX — §8.1 Survey Anomaly result: "Warden Emergence active"
+       → "Warden Recognition (WR) ≥ 2 (Wardens recognise the faction as steward)."
+       Undefined term replaced with canonical WR threshold.
+
+    3. ED-NEW HARVEST — §12 open items table: ED-NEW-01 through ED-NEW-15 assigned
+       permanent IDs (ED-496–ED-509). 11 resolved immediately (mechanically confirmed).
+       3 flagged pending authorial decisions (ED-507 POI catalog, ED-508 NPC
+       Dispositions, ED-509 Godot validation).
+
+    4. HEADER updated: v1.2 notation.
+  finding_id: canon-guard-follow-up-2026-04-13
+  affects:
+    - designs/fieldwork/fieldwork_design_v1.md
+  status: applied
+
+- id: PP-631
+  type: patch
+  date: 2026-04-13
+  severity: P2
+  description: >
+    params_threadwork.md canonical section updates:
+
+    1. POP CAP EXPLICIT NOTE — Coherence table: POP −1 additional is subject to
+       per-op cap of −1 (unlike Binding Operations per PP-196 which are cap-exempt).
+       Total POP cost = −1 max. Distinction from FR/BO now explicit.
+
+    2. COMMUNITY WEAVING POOL — New canonical entry added: (Spirit × 2) + History
+       + TPS, TN 7, Ob 3. PP-250 Attunement-based formula superseded by PP-616.
+       BG Community Mending (Domain Action) uses faction pool separately.
+
+    3. HEADER updated with PP-631.
+
+    4. editorial_ledger.yaml: next_id updated 486 → 510. ED-496 through ED-509
+       added (fieldwork editorial harvest). 11 resolved, 3 flagged.
+
+    5. canonical_sources.yaml: fieldwork SHA updated for PP-630 changes.
+  finding_id: threadwork-params-followup-2026-04-13
+  affects:
+    - references/params_threadwork.md
+    - canon/editorial_ledger.yaml
+    - references/canonical_sources.yaml
+  status: applied
+
+- id: PP-632
+  date: 2026-04-13
+  severity: P1
+  description: "Opposing Operations — Contested Intentionality. Completes P-24 truncated resolution table. Adds: opposing engagement modifier (+floor(opponent TPS/2)), full resolution table for all outcome combinations, knot strain consequence category, compound co-movement rule, FR vs FR scaled consequences, sustained opposition deterioration, N-way lattice collapse, Mending immunity, mass battle simplification, BG opposing orders, Hybrid cross-phase. Resolves ED-486 through ED-495."
+  source: "tests/sim_opposing_threadwork_final.md"
+  affects: [designs/ttrpg/threadwork_redesign_v25.md, references/params_threadwork.md]
+  status: applied
+  provisional: false
+
+- id: PP-632
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    Disposition and Knot system redesign (user-approved 2026-04-13):
+
+    DISPOSITION:
+    - Range: −3 to +5 → −4 to floor(Bonds/2)+1
+    - Ob rule: stepped lookup table → max(1, base Ob − Disposition) direct subtraction
+    - Starting Disposition: faction table → lifepath ±0.5 increments, floor, clamped to range
+    - Decay threshold: above +3 → above +2
+    - Information gates updated for new range
+    - Impress exempt from Disposition subtraction (sets initial Disposition)
+
+    KNOTS:
+    - Ontological basis: Knots are being-with (Mitsein), not Thread operations.
+      Any character. TS not required for formation.
+    - Pool: (Bonds × 2) + 3 points
+    - Tiers: Close 5 / Medium 2 / Loose 1
+    - Max count: floor(Bonds/2)+1 (same formula as Disposition ceiling)
+    - Formation: max Disposition + Connect roll (Ob = tier, Disposition subtracted)
+    - Rupture: points return; Disposition →−4; Composure damage = tier cost
+    - Loss: points return; Disposition removed; Coherence −1 (mandatory, Amendment 01);
+      Composure damage = tier cost
+    - Threadcut being Knot strain: +1/use, −1/season rest, instability at 5
+
+    FILES UPDATED:
+    - designs/fieldwork/fieldwork_socializing.md (§5.1–5.6 full rewrite)
+    - designs/fieldwork/fieldwork_editorial.md (ED harvest, SIM-DEBT-SOC-01–03 added)
+    - designs/ttrpg/threadwork_redesign_v25.md (Part Six-B: Knot Mechanics added)
+    - references/params_threadwork.md (Knot Mechanics canonical section)
+    - references/params_core.md (Bonds attribute note updated)
+    - references/canonical_sources.yaml (stale note fixed)
+  finding_id: disposition-knot-redesign-2026-04-13
+  affects:
+    - designs/fieldwork/fieldwork_socializing.md
+    - designs/fieldwork/fieldwork_editorial.md
+    - designs/ttrpg/threadwork_redesign_v25.md
+    - references/params_threadwork.md
+    - references/params_core.md
+    - references/canonical_sources.yaml
+  status: applied
+- id: PP-595
+  date: 2026-04-13
+  scope: editorial
+  description: >
+    Final flagged items batch: 29 items resolved. Territory presence (ED-426),
+    Ceiral Rite naming (ED-416), Attunement derivation (ED-418/436), Crown Wealth
+    (ED-420), RS recovery (ED-427), Battle RS drain (ED-428), Certainty full
+    mechanics (ED-433), Dissonance calibration (ED-435), Confluence naming (ED-441),
+    NPC starting Dispositions (ED-508). POI catalog and Godot architecture deferred.
+  affects: [canon/editorial_ledger.yaml]
+  status: applied
+- id: PP-596
+  date: 2026-04-13
+  scope: infrastructure
+  description: >
+    Second dedup pass: 20 remaining duplicate flagged IDs renumbered
+    (ED-510 through ED-529) and resolved. next_id
+    updated to 530. All simulation-session flagged items from arcs
+    36-45 batch and comprehensive sim now have unique IDs.
+  affects: [canon/editorial_ledger.yaml]
+  status: applied
+
+  - id: PP-643
+    date: 2026-04-13
+    description: "SIM-STH-E1: Add combined TT reduction cap (−5/season) for Southernmost operations (Ritual + Extraordinary Repair). Prevents one-season resolution of campaign central threat."
+    source: sim_southernmost.md SIM-STH-04
+    targets:
+      - designs/setting/southernmost_v30.md
+      - references/params_southernmost.md
+    status: applied
+
+  - id: PP-644
+    date: 2026-04-13
+    description: "Propagate hybrid_gaps_v30 all 17 resolved gaps into board_game_v30.md Part Nine (§9.1–9.15). Replaces placeholder stress-test content."
+    source: designs/hybrid/hybrid_gaps_v30.md (G-075, G-079, G-080, G-081, G-083, G-085, G-086, G-087, G-088, G-089, G-090, G-091, G-092, G-093, G-094, G-095, Thread Debt)
+    targets:
+      - designs/board_game/board_game_v30.md
+    status: applied
+
+- id: PP-633
+  date: 2026-04-13
+  scope: patch
+  description: >
+    SIM-DEBT-SOC-01/02/03 + ED-519. SOC-01/02 CLEAN. SOC-03 P1 fix: Simultaneous
+    Rupture Composure cap = floor(Composure*0.75). ED-519: RS +1D third independent
+    source. EDs resolved: ED-519 update, ED-532/533/534.
+  affects:
+    - designs/fieldwork/fieldwork_socializing.md
+    - references/params_threadwork.md
+    - references/params_contest.md
+    - canon/editorial_ledger.yaml
+    - tests/coverage_matrix.md
+  status: applied
+
+
+# Archived from active — Phase 1
+- id: PP-094
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-095
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-096
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-097
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-098
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-099
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-100
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-101
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-102
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-103
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-104
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-105
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-106
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-107
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-108
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-109
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-110
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-111
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-112
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-113
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-114
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-115
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-116
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-117
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-118
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-119
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-120
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-121
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-122
+  date: 2026-03-27
+  severity: P2
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-123
+  date: 2026-03-27
+  severity: P1
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-124
+  date: 2026-03-27
+  severity: P2
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-125
+  date: 2026-03-27
+  severity: P2
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-126
+  date: 2026-03-27
+  severity: P2
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-127
+  date: 2026-03-27
+  severity: P2
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-128
+  date: 2026-03-27
+  severity: P2
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-129
+  date: 2026-03-27
+  severity: P2
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-130
+  date: 2026-03-27
+  severity: P2
+  description: null
+  finding_id: null
+  source: simulation
+  affects: []
+  status: approved
+  applied_commit: null
+- id: PP-464
+  date: 2026-04-08
+  severity: P2
+  description: 'ED-333 resolved — Faction elimination territory status: all territories
+    become Uncontrolled (first March succeeds automatically, no defender). Fort levels
+    retained. AP/CP tokens removed. Löwenritter Coup Counter → 4 on Crown elimination.
+    Applied to params_board_game.md.'
+  finding_id: ED-333
+  source: editorial resolution 2026-04-08
+  affects:
+  - references/params_board_game.md
+  status: applied
+- id: PP-643
+  date: 2026-04-14
+  severity: P1
+  description: 'TCV revaluation: Himmelenger 3→5, Gransol 4→3. Total 30→31. Starting
+    TCV: Crown 12, Hafenmark 6, Church 5, Varfell 6.'
+  affects:
+  - designs/board_game/victory_v30.md
+  - references/params_board_game.md
+  status: applied
+- id: PP-644
+  date: 2026-04-14
+  severity: P1
+  description: 'Universal Peninsular Sovereignty victory condition: all 15 territories
+    at Accord ≥ 2, Strain ≤ 6, held 2 consecutive Accountings. Faction-specific conditions
+    retained as alternates.'
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  - designs/board_game/victory_v30.md
+  - references/params_board_game.md
+  status: applied
+- id: PP-645
+  date: 2026-04-14
+  severity: P1
+  description: 'Accord per-territory attribute (0–3). Modifies effective Prosperity.
+    Accord ≥ 2 required for TCV contribution. Military conquest → Accord 1. Non-military
+    acquisition → Accord 2+. Starting values: capitals 3, home territories 2.'
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  - references/params_board_game.md
+  status: applied
+- id: PP-646
+  date: 2026-04-14
+  severity: P1
+  description: Peninsular Strain counter (0–10). Advances from inter-faction battles
+    (+1/season), faction eliminations (+2), revolts (+1). 5 threshold tiers (Peace
+    → Collapse). Decays −1/peaceful season.
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  - references/params_board_game.md
+  status: applied
+- id: PP-647
+  date: 2026-04-14
+  severity: P1
+  description: 'Battle consequences: RS −1 per battle on Valorian soil (RS −2 Campaign/War
+    scale). IP +2 per season with inter-faction battle. Applies to all battles including
+    Popular Uprisings and Altonian Vanguard (RS only). Covert and ungarrisoned Seizure
+    exempt.'
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  - references/params_board_game.md
+  - designs/mass_combat/mass_battle_v30.md
+  status: applied
+- id: PP-648
+  date: 2026-04-14
+  severity: P1
+  description: Church Graduated Seizure Accord formula revised. Success → max(floor(PT/2)+1,
+    2) guaranteeing ≥ 2. Overwhelming → floor(PT/2)+2 max 3. Seizure is categorically
+    better than military conquest for Accord.
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  - designs/board_game/victory_v30.md
+  status: applied
+- id: PP-649
+  date: 2026-04-14
+  severity: P2
+  description: 'Hafenmark Dynastic Proclamation (Diplomat card). Senator Outward equivalent
+    for territory acquisition via divine-right claim. Pool: Influence. Ob: floor(target
+    Stability/2)+1. Accord 2 on success. Interacts with Diplomatic Token (−1 Ob),
+    Standing, Open Pledge.'
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  - references/params_board_game.md
+  - designs/systems/npc_behavior_v30.md
+  status: applied
+- id: PP-650
+  date: 2026-04-14
+  severity: P2
+  description: 'Varfell Cultural Reformation (Colonist card). Territory acquisition
+    via cultural transformation. Pool: Influence + floor(VTM/2). Ob: PT+1. Prerequisite:
+    VTM ≥ 2, target PT ≤ 3. Accord 2 on success. PT −1 on success.'
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  - references/params_board_game.md
+  - designs/systems/npc_behavior_v30.md
+  status: applied
+- id: PP-651
+  date: 2026-04-14
+  severity: P2
+  description: Hafenmark Parliamentary Sovereignty struck. Dynastic Assertion promoted
+    to primary victory path. Baralta identity is divine-right claimant, not constitutional
+    reformer.
+  affects:
+  - designs/board_game/victory_v30.md
+  status: applied
+- id: PP-653
+  date: 2026-04-14
+  severity: P2
+  description: 'Löwenritter Accord adaptation: Martial Governance (Military pool Govern
+    variant, Ob +1 over standard, cap Accord 2). Strain exemption for first 2 seasons
+    post-coup.'
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  status: applied
+- id: PP-654
+  date: 2026-04-14
+  severity: P2
+  description: 'Peninsular Partition co-victory: both factions collectively control
+    15 territories, each TCV ≥ 10, Accord ≥ 2, no inter-faction battle 4 seasons,
+    Strain ≤ 6, both Mandate ≥ 3.'
+  affects:
+  - designs/board_game/peninsular_strain_v1.md
+  - designs/board_game/victory_v30.md
+  - references/params_board_game.md
+  status: applied
+- id: PP-655
+  date: 2026-04-14
+  severity: P2
+  description: NPC priority trees updated for Accord-aware governance. All 4 playable
+    faction trees modified. Hafenmark NPC uses Dynastic Proclamation at Priority 3b.
+    Varfell NPC uses Cultural Reformation at Priority 4b. Template §8.1 includes Accord-aware
+    governance note.
+  affects:
+  - designs/systems/npc_behavior_v30.md
+  status: applied
+- id: PP-656
+  date: 2026-04-14
+  severity: P2
+  description: Hybrid Accord Domain Echo (§5.5 in scale_transitions_v30.md). Personal
+    scenes produce ±1 Accord per Zoom In. Queued to Accounting step 4c.
+  affects:
+  - designs/hybrid/scale_transitions_v30.md
+  status: applied
+- id: PP-657
+  date: 2026-04-14
+  severity: P2
+  description: Accounting steps 4c (Accord checks), 4d (Strain update), 4e (Battle
+    consequence accounting) added to params_board_game.md Phase 5 Seasonal Accounting.
+  affects:
+  - references/params_board_game.md
+  status: applied
+- id: PP-658
+  date: 2026-04-14
+  severity: P1
+  description: Faction Layer ↔ Peninsular Strain integration. Occupation → Accord
+    resolution (3-season transfer → Accord 1, treaty cession → Accord 2, recapture
+    → restored). Treaty types for effective hegemony defined (Peace/Alliance/Capitulation/Tributary
+    count; Truce/Commercial don't). Parliament Strain interaction documented. Accounting
+    sequence unified (Steps 4c-4e + 11.5). Institutional Consolidation → Accord +1.
+  affects:
+  - designs/board_game/faction_layer_v30.md
+  - references/propagation_map.md
+  status: applied
+- id: PP-659
+  date: 2026-04-15
+  severity: P2
+  description: 'Military Layer ↔ Peninsular Strain integration: §2.2b battle consequences
+    added (RS/IP/Strain/Accord per battle). Header cross-reference added. Patch register
+    archive split (applied < 2026-04-13 → archive).'
+  affects:
+  - designs/board_game/military_layer_v30.md
+  - canon/patch_register_active.yaml
+  - canon/patch_register_archive.yaml
+  status: applied
+- id: PP-660
+  date: 2026-04-17
+  severity: P1
+  description: 'Faction Politics rank-ladder expansion. Standing ladder 0-5 → 0-7
+    with Skyrim-guild progression patterns (Initiation Duty, specialty branches, Hall
+    Tier, livery, mentor, demotion). Faction-specific 8-rank ladders for Crown/Hafenmark/Varfell/Church
+    with named inner circles. Seven sub-office rank ladders (Löwenritter, Riskbreakers,
+    Inquisitors, Templars, Guilds, Niflhel, Wardens of the Thread). Caste integration
+    layer (Northern/Central/Southern Einhir modifiers to advancement, Renown, Initiation
+    Duty, Inner Circle Disposition, Conviction Scar). TC political legitimacy × Church
+    rank interaction (floor(TC/20) bonus dice propagates to rank privileges). Baralta
+    Crown Claim × rank interaction (new Hafenmark-to-Crown Recognition Ceremony mechanic).
+    Ministry system expansion: Hafenmark Parliamentary Committees (6), Church Dicasteries
+    (4 matched to Cardinals), Varfell Jarl Assembly Councils (5 with Readiness Track).
+    Generational Shift Torben maturation fix (4-trigger replacement for unreachable
+    10-year spec). Cross-faction parity table. Raises ED-634 through ED-658 (25 new
+    items, 23 open + 2 resolved). Full spec: designs/systems/faction_politics_expanded_v1.md.'
+  affects:
+  - designs/systems/faction_politics_expanded_v1.md
+  - designs/systems/player_agency_v30.md
+  - designs/conviction_track/conviction_track_v30.md
+  - designs/worldbuilding/worldbuilding_v30.md
+  - designs/mechanics/baralta_crown_claim_v30.md
+  - designs/hybrid/scale_transitions_v30.md
+  - designs/board_game/tc_political_redesign_v30.md
+  - references/canonical_sources.yaml
+  - references/propagation_map.md
+  - references/file_index.md
+  - references/file_index_summary.md
+  - canon/editorial_ledger.yaml
+  status: applied
+- id: PP-661
+  date: 2026-04-17
+  severity: P1
+  description: 'Faction politics throughline resolutions. Addresses 10 post-PP-660
+    integration findings with 4 applied fixes. New design doc throughline_resolutions_v1.md.
+    Edits: player_agency §3.2 Standing 0 Petitioner carve-out, §3.4 range 0-7 + floor-protection,
+    §7.1 character creation caste step + Viability Matrix + advisory text; settlement_layer
+    §1.4 Institutional Facility Tiers (Wing/Suite/Chamber/Billet slots with capacity-pressure
+    mechanics); npc_behavior §11 Named NPC Roster 3-tier Active/Passive/Background;
+    baralta_crown_claim §7 Generational × Coup × IP × Baralta three-clock interaction
+    with sequencing rules; tests/coverage_matrix SIM-POL-R01-R05 DEFERRED discoverability.
+    6 resolved editorial items archived. Raises ED-659 (resolved in this commit).'
+  affects:
+  - designs/systems/throughline_resolutions_v1.md
+  - designs/systems/player_agency_v30.md
+  - designs/systems/settlement_layer_v30.md
+  - designs/systems/npc_behavior_v30.md
+  - designs/mechanics/baralta_crown_claim_v30.md
+  - tests/coverage_matrix.md
+  - canon/editorial_ledger.yaml
+  - canon/editorial_ledger_archive.yaml
+  - references/canonical_sources.yaml
+  - references/propagation_map.md
+  - references/file_index.md
+  - references/file_index_summary.md
+  status: applied
+- id: PP-662
+  date: 2026-04-18
+  severity: P1
+  description: 'Disposition ceiling simplified: floor(Bonds/2)+1 → Bonds. Resolves
+    ED-683 (Knot formation impossible under old cap). Bonds 5 = Disposition +5 = Knot
+    candidate at creation.'
+  finding_id: ED-683
+  source: audit
+  affects:
+  - references/params_core.md
+  - designs/fieldwork/fieldwork_v30.md
+  - designs/systems/derived_stats_v1.md
+  status: applied
+  applied_commit: null

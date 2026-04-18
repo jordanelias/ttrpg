@@ -1,0 +1,656 @@
+    Assert, Piety Yield, or Institutional Momentum. Only TC-reducing actions
+    (Suppress, Parliamentary Challenge, Sovereign Authority Doctrine) can move TC —
+    they reduce from 75, not below 75 (TC reduction below 75 is still applied;
+    Church could lose TC if opposing factions Suppress successfully during Seizure
+    phase). Add to params_board_game.md §TC Generation §TC 75 Phase Transition.
+    P2-G01 simultaneously documented: Church Seizure Prominence requirement
+    (Church Mandate > controlling faction Mandate) means Church cannot seize T1
+    while Crown Mandate equals Church Mandate. Crown must first be weakened
+    (by another arc) to below Church Mandate. Designed interaction; add to
+    TE-01 arc entry.
+  finding_id: GAP-G01 P2-G01
+  affects:
+    - references/params_board_game.md
+    - references/arc_register.md
+  status: applied
+
+
+- id: PP-597
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    P2-G02 documented. Baralta personal Mandate 7D pool (TE-04) is the game's
+    most powerful individual recovery action: 7D TN7 Ob3 gives ~62% success rate,
+    bypassing faction Military entirely. This fires once per TE-04 activation.
+    P2-G05 simultaneously documented. Coup PI −3 interaction with Baralta's
+    Parliamentary Sovereignty victory condition: Baralta needs PI ≥ 5 to win.
+    The coup she has been accelerating via TC suppression fires PI −3 at time of
+    coup. If pre-coup PI < 8, post-coup PI < 5, blocking her own victory condition
+    temporarily. Add to Baralta NPC AI: she should prioritise PI-building actions
+    (Parliamentary Session, Diplomat Card) to reach PI ≥ 8 before Coup Counter
+    triggers at 3. If PI < 8 and Counter = 2: she should actively Suppress TC
+    to delay Counter increment while building PI.
+  finding_id: P2-G02 P2-G05
+  affects:
+    - references/arc_register.md
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-598
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    P1-G04 documented. TE-10 (T12 Sigurdshelm falls): VTM reset to 0 suspends all
+    three Varfell victory paths simultaneously (all require VTM ≥ 3: Intelligence
+    Hegemony Path A, Southernmost Dominion Path B, Thread Supremacy Path C).
+    This is BALANCE-002 as designed: T12 is Varfell's single point of failure.
+    The simultaneous suspension of all three paths leaves Varfell with no active
+    victory condition. VTM resumes from 0 once T12 is retaken, so the loss is
+    recoverable — but recovery requires a successful Military retake against
+    Church Fort defense (P ≈ 40% per attempt) and then VTM rebuild from 0.
+    GM guidance addition required: before campaign begins, Varfell players must
+    be explicitly informed that T12 is existential. Suggested phrasing for
+    faction reference: "Sigurdshelm is your single point of failure. Its loss
+    collapses all three victory paths simultaneously. Defend it before expanding."
+    Add to: TE-10 arc entry, Varfell faction mat reference, simulation notes.
+  finding_id: P1-G04
+  affects:
+    - references/arc_register.md
+    - references/params_board_game.md
+  status: applied
+
+- id: PP-599
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Torben Loyalty track corrections per user clarification.
+    (1) Starting value corrected: Torben Loyalty starts at 7 (maximum), not 3.
+    He is the heir, raised in the Crown institution, with no reason for ambivalence
+    at campaign start. The track is meaningful only when circumstances erode it.
+    (2) Tutoring Demand compliance (sending Torben to Altonia) decay split:
+    Prior: −2 immediately on departure.
+    Corrected: −1 immediately on departure (rupture of court relationship) +
+    −1/Year-End while Torben remains resident at the Altonian court (sustained
+    Altonian influence erosion). Event cards may produce additional decrements.
+    This preserves the total decay over a one-year stay while making the erosion
+    feel like what it is — gradual influence, not a single event.
+    (3) The compliance dilemma is now: comply → Torben starts at 7 − 1 = 6
+    immediately, then −1/Year-End while abroad (7 → 6 → 5 → 4...); refuse →
+    Torben stays at 7 but IP +5 (per existing rule). At Torben Loyalty 3 (Coup
+    Counter +1 trigger), Crown must recall him or suffer escalating coup pressure.
+    The time window from compliance to Coup Counter increment: roughly 4 Years if
+    starting from 7 and declining at −1/Year, reaching 3 in Year 4 of absence.
+  finding_id: ED-424
+  affects:
+    - references/params_board_game.md
+  status: applied
+
+- id: PP-600
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Mass battle Thread RS drain recalibration. Three changes to prevent catastrophic
+    RS drain from sustained battle threadwork (4 seasons of heavy use was producing
+    up to −28 RS — unmanageable and discouraging threadwork use).
+
+    (1) PP-502 Dissonant Counter RS consequence reduced:
+    Prior: Dissonant Counter ≥ 3 at battle end → RS −2 at next Accounting.
+    Corrected: Dissonant Counter ≥ 3 at battle end → RS −1 at next Accounting.
+    Hard cap: RS −1 per battle maximum regardless of Dissonant Counter level.
+    A battle with Dissonant Counter 8 and one with Counter 3 both produce RS −1.
+    Rationale: combat-scale Thread interactions are structurally shallow (rapid
+    tactical surface touches, not deep substrate manipulation). The substrate
+    experiences them as collective stress, not structural damage.
+    The Dissonant Counter still applies for in-battle difficulty scaling (existing
+    +1 Ob, +1 Coherence cost mechanics unchanged). Only the battle-end RS
+    consequence is reduced.
+
+    (2) Battle-context Thread Debt expiry:
+    Thread Debt tokens generated from co-movement card draws during mass battle
+    turns expire at the end of that battle's season. They do not accumulate into
+    subsequent seasons' RS drain.
+    Rationale: tactical Thread interactions do not create the sustained substrate
+    obligations that generate long-term Thread Debt. Long-term Thread Debt arises
+    from Locks and Weavings left to persist without servicing outside battle context.
+    Thread Debt from operations outside battle context (dedicated Thread contact
+    windows, arc-vector operations, TTRPG personal scenes) persists normally per
+    existing rules.
+    Implementation: mark Thread Debt tokens generated in a mass battle turn with
+    a battle marker. Clear all battle-marked tokens at Accounting alongside the
+    battle's resolution. Un-marked Thread Debt tokens (from outside battles) drain
+    normally.
+
+    (3) Co-movement card draw cap per practitioner per battle turn:
+    Prior: one draw per Thread operation.
+    Corrected: one draw per practitioner per battle turn regardless of how many
+    Thread operations that practitioner performs in the turn.
+    Rationale: prevents exponential card accumulation when practitioners perform
+    multiple operations in a single turn. Three operations in one turn = one card.
+    This is consistent with the tactical-shallow framing: the co-movement represents
+    the turn's aggregate Thread interaction, not each individual operation's echo.
+
+    Net effect on 4-season heavy battle threadwork (8 battles):
+    Prior: up to −16 RS (Dissonant) + −12 RS (Thread Debt accumulation) = −28 RS.
+    Corrected: −8 RS maximum (8 × −1 Dissonant cap) + 0 RS Thread Debt = −8 RS.
+    Players still feel RS pressure from sustained battle threadwork; it contributes
+    meaningfully to the RS crisis without foreclosing the campaign.
+
+    Note: Mending and Community Weaving remain net-positive RS sources as-is.
+    Failed operations outside battles producing Thread Debt or Thread Wounds retain
+    full RS consequences — those represent real substrate risk from pushing Thread
+    work carelessly. The recalibration applies only to the battle context.
+  finding_id: null
+  affects:
+    - references/params_threadwork.md
+    - references/params_board_game.md
+  status: applied
+
+- id: PP-601
+  type: cleanup
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Three stale/conflicting entries in params_threadwork.md identified during
+    comprehensive tracker reference compilation.
+
+    (1) "Ceiral Ritual" section (params_threadwork.md line 426): Name struck by PP-588
+    in arc_register.md and other files but not in params_threadwork.md itself.
+    The section header and body still read "Ceiral Ritual." Rename to
+    "Southernmost Ritual [UNNAMED — ED-416] — BG RS Propagation."
+
+    (2) Southernmost Ritual RS outcome table likely uses old-convention RS notation
+    (RS as damage score, lower = better) from pre-redesign. Current convention is
+    RS as integrity (higher = better). Values as listed: Success −6, Overwhelming −10,
+    Partial −3, Failure +8 are internally inconsistent with a healing ritual in
+    current convention. Proposed corrected values: Success RS +6, Overwhelming RS +10,
+    Partial RS +3, Failure RS −8. These require user confirmation before application.
+    Flagged as ED-430.
+
+    (3) PP-192 PROVISIONAL (mass battle RS ×3 multiplier on individual operation costs)
+    conflicts with PP-600 (recalibrated mass battle RS consequences). PP-600 addressed
+    only the Dissonant Counter RS consequence; PP-192's ×3 multiplier on individual
+    operation RS costs was not explicitly struck. Resolution: PP-192 mass battle RS ×3
+    multiplier on individual operation costs is STRUCK. Individual Thread operation RS
+    costs in mass battle are at full TTRPG value (×1), same as outside battle.
+    Only the Dissonant Counter adds an additional RS consequence (−1 per battle, cap
+    per PP-600). PP-225 (gains also ×3) is also struck — gains are at full TTRPG value.
+    The mass battle recalibration (PP-600) is now the sole authority on battle RS.
+    Rationale: ×3 multiplier was provisionally designed to make mass battle Thread use
+    feel consequential; PP-600 achieves this through the Dissonant Counter mechanism
+    without requiring a blanket multiplier that penalised even Mending.
+  finding_id: PP-588 PP-192 PP-225 PP-600
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+- id: PP-602
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    ARC-T04 (Southernmost Ritual [UNNAMED — ED-416]) struck entirely.
+    Rationale: (1) "Ritual" implies a repeatable procedure and confirmed a priori knowledge
+    of how to heal the substrate — both false. (2) The excess being erupting through a
+    Foundational Gap is radically singular; each Gap has its own configurational character.
+    There is no procedure to teach or repeat — only sustained, expert, sui generis engagement
+    by a TS 70+ practitioner who reads and responds to the specific configurational reality
+    of each tear. (3) ED-416 (naming request) is also void — no ritual exists to name.
+    The RS recovery path at Askeheim is: WR 3 + WC 3 + TS 70+ practitioner (Edeyja)
+    sustaining Mending over multiple seasons. The campaign's RS recovery is a sustained
+    relational process, not a single event.
+    Also: Southernmost Ritual RS outcome table in params_threadwork.md struck (was flagged
+    by ED-430 as likely old-convention; now moot — the operation doesn't exist as a discrete
+    event).
+    Also: ED-416 closed (no naming decision needed; referent doesn't exist).
+  finding_id: null
+  affects:
+    - references/arc_register.md
+    - references/params_threadwork.md
+  status: applied
+
+
+- id: PP-603
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    RS seasonal cap (±10 net per season) struck. Reality takes the full consequence
+    of Thread operations and substrate events without artificial smoothing.
+    Rationale: the cap was a playability constraint that lacks metaphysical grounding.
+    A catastrophic Dissolution should produce catastrophic RS loss. The stabilising force
+    is not a cap but the Gap self-closure model (PP-604) which naturally limits sustained
+    RS drain from normal operations because most Gaps at typical operation scales
+    (Object, Relational) produce minimal or zero ongoing RS drain.
+    Removed from: params_threadwork.md §Rendering Stability (RS) Track
+    "Seasonal cap: ±10 net Rendering Stability change per season (applies at Accounting)"
+    struck.
+  finding_id: null
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+
+- id: PP-604
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Gap Self-Closure by Scale — new model replacing flat −4 RS/season Gap persistence rate.
+
+    FIVE GAP SCALES (n = scale index):
+    Reality self-heals gaps at a rate proportional to the disruption's scale.
+    Larger disruptions take longer to heal; smaller ones close quickly.
+
+    Formula: Gap at scale n closes in 2^n seasons (exceptions: Foundational uses 2^5=32).
+    RS drain per open season = n.
+    Total RS drain if untouched = n × (2^n − 1).
+
+    | Scale      | n | Closes after | Open seasons | RS drain/season | Total untouched |
+    |------------|---|--------------|--------------|-----------------|-----------------|
+    | Object     | 0 | 1 season     | 0            | 0               | 0               |
+    | Relational | 1 | 2 seasons    | 1            | 1               | 1               |
+    | Territory  | 2 | 4 seasons    | 3            | 2               | 6               |
+    | Structural | 3 | 8 seasons    | 7            | 3               | 21              |
+    | Foundational | 5 | 32 seasons  | 31           | 5               | 155             |
+
+    (n=4 skipped for Foundational; the ontological gap between Structural and Foundational
+    is qualitative, not a single step. Foundational breaches affect the conditions of being
+    itself — categorically more severe than Structural ruptures in local Thread configuration.)
+
+    Object Gaps: close in 1 season with no RS drain. Produce Shifting Objects and
+    operational interference while open but do not persistently damage substrate integrity.
+    No Mending action required (or possible — they resolve before meaningful action).
+
+    The Calamity's wound at T15 is a Foundational Gap. Its non-closure after 245 years is not
+    because it cannot self-close (32 seasons is achievable) but because sustained conflict
+    repeatedly resets the closure timer. Each major war or invasion re-opens what was slowly
+    closing. The Wardens are not fighting impossible physics — they are fighting the peninsula's
+    inability to sustain 32 consecutive seasons of substrate peace.
+
+    REPLACES: flat −4 RS/season Gap persistence rate (struck).
+    REPLACES: current 6-tier Mending Gap classification (Shifting Object/Micro/Standard/
+    Entrenched/Catastrophic/Locked Zone) replaced by 5-scale model.
+
+    MENDING Ob formula: 2n (scale index × 2).
+    | Scale      | n | Mending Ob | TS minimum |
+    |------------|---|------------|------------|
+    | Object     | 0 | 0 (n/a)    | n/a        |
+    | Relational | 1 | 2          | 30+        |
+    | Territory  | 2 | 4          | 50+        |
+    | Structural | 3 | 6          | 70+        |
+    | Foundational | 5 | 10       | 90+        |
+
+    Ob 8 ceiling on Mending struck (Foundational is Ob 10, correctly near-impossible).
+
+    LOCK CHRONIC DRIFT (revised by scale):
+    | Lock scale  | Drift seasons 1-3 | Drift seasons 4+ |
+    |-------------|-------------------|------------------|
+    | Object      | 0                 | 0                |
+    | Personal    | −1/season         | −1/season        |
+    | Relational  | −1/season         | −2/season        |
+    | Territorial | −2/season         | −3/season        |
+    | Structural  | −3/season         | −5/season        |
+    Foundational Lock: effectively impossible in practice (Ob 8+ TN8, no Thread Pool Score,
+    TS 90+ required; P < 0.1% even for Edeyja).
+
+    DISSOLUTION GAP CREATION (revised):
+    The Gap scale created by Dissolution = scale of configuration being Dissolved.
+    Immediate breach cost = n RS (one-time; the act of tearing).
+    Ongoing RS drain follows Gap scale table.
+    Degree modifies Gap scale produced:
+    - Overwhelming: Gap forms and closes within scene. Immediate breach cost only.
+    - Success: Gap at target scale (n). Closes per scale table.
+    - Partial: Gap one scale worse than Success (n+1).
+    - Failure: Gap two scales worse than Success (n+2).
+
+    WARDEN COOPERATION effect on Gap drain: WC ≥ 2 halves all RS drain from open Gaps
+    and active Locks at Accounting. This represents the Wardens actively managing the
+    substrate's worst stress points.
+
+    Affects: params_threadwork.md (Gap system, Mending table, Lock drift, RS drain sources).
+  finding_id: null
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+
+- id: PP-605
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Warden Recognition (WR) and Warden Cooperation (WC) redesign.
+
+    WR (Warden Recognition) — Varfell-specific, prerequisite track, 0–3 (was 0–4):
+    Tracks how much the Wardens know and trust the approaching faction's practitioners.
+    WR is the prerequisite for WC. WC cannot advance without WR at threshold.
+
+    | WR | State                                                              |
+    |----|---------------------------------------------------------------------|
+    | 0  | Wardens unaware or indifferent                                     |
+    | 1  | Wardens have observed and are assessing intent                     |
+    | 2  | Wardens recognise this faction as a legitimate steward. WC activates. Edeyja engages at TS 30+. |
+    | 3  | Deep trust. Edeyja coordinates Mending. WC can advance to 3.      |
+
+    WR advancement: Forgetting Check Success (+1); Forgetting Check Overwhelming (+1 additional same expedition).
+    WR decrease: TE-13 Military unit in T15 (−1, was WC only — now WR also); RM emergence
+    WA ≤ −2 (−2); No Expedition 3+ consecutive seasons (−1). Permanently blocked if WR
+    returns to 0 after advancing past 1.
+
+    WC (Warden Cooperation) — peninsula-wide, operational track, 0–3 (scale unchanged):
+    Tracks degree of active Warden operational support. Benefits all Thread operations.
+
+    | WC | Effect                                                     | WR gate |
+    |----|------------------------------------------------------------|---------|
+    | 0  | No cooperation                                             | —       |
+    | 1  | +1D all Thread operations peninsula-wide                   | WR ≥ 2 |
+    | 2  | All RS drain from open Gaps and active Locks halved        | WR ≥ 2 |
+    | 3  | Edeyja actively Mending. RS +2/season at Accounting.       | WR 3   |
+
+    REMOVED: WR 3 granting "+1D Thread ops" (was duplicating WC 1). WR 3 now
+    correctly means "deep trust enabling WC 3" not an independent operational bonus.
+    REMOVED: WR 4 (old tier eliminated — 0–3 now parallel with WC 0–3).
+    UPDATED: TE-13 (Military unit in T15) now reduces BOTH WC −1 AND WR −1 (trust violation
+    affects both tracks).
+
+    Affects: params_board_game.md §Warden Cooperation Track, §Warden Recognition Track.
+  finding_id: null
+  affects:
+    - references/params_board_game.md
+  status: applied
+
+
+- id: PP-606
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Dissonance concept clarified. Two uses disambiguated.
+
+    (1) PP-502 "Dissonant Counter" renamed to "Substrate Saturation Counter."
+    Tracks substrate saturation from multiple Thread operations in rapid succession
+    during mass battle. Not a character experience — a substrate-level measure.
+    Mechanical effects unchanged (≥3 ops/turn: +1 Ob, +1 Coherence cost;
+    Counter ≥3 at battle end: RS −1 per PP-600). Name change only.
+
+    (2) Personal Dissonance defined as the phenomenological experience of
+    Thread-altered reality (temporal discontinuity, ontological disruption).
+    Not a separate tracked stat — expressed through existing mechanics:
+    - TS 0–9 characters: Certainty −1 (accumulated epistemic damage from
+      witnessing disruptions they cannot render as knowledge)
+    - TS 10–29: Certainty −1 + unsettling Discovery Event (perceives disruption
+      but cannot read it)
+    - TS 30+: Readable Thread information. Discovery Event produces TS growth
+      or Belief revision, not damage. Personal dissonance is legible.
+
+    Affects: references/params_threadwork.md §War-Scale Dissonant Thread Effects
+    (rename counter only); no mechanical changes.
+  finding_id: null
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+- id: PP-607
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Dissonance absorbed into Spirit. Certainty track removed. Attunement defined.
+
+    DISSONANCE → SPIRIT CHECK MECHANIC:
+    When a Thread operation fires near a character, they enter Thread-disrupted space,
+    or POP affects their temporal experience: Dissonance check fires.
+    Roll: Spirit pool (all dice available) TN7 vs Dissonance Factor.
+
+    Dissonance Factor by source:
+    - Thread operation in adjacent area, brief: Factor 1
+    - Thread operation nearby, significant: Factor 2
+    - POP affecting character's own memories: Factor 3
+    - Entering Territory-scale Gap: Factor 2
+    - Entering Structural-scale Gap: Factor 3
+    - Proximity to active Substrate Saturation (Counter ≥ 3): Factor 2
+    - Extended time in Foundational-breached zone: Factor 4
+
+    Failure consequence (duration by exposure type):
+    - Acute (single operation event, brief encounter): Spirit −1D for rest of scene.
+    - Sustained (living or working in disrupted area across seasons): Spirit −1D for rest of season.
+    - Stacking: multiple failures in the same scene reduce Spirit pool cumulatively.
+    Recovery: acute effect clears at scene end; sustained effect clears at season end.
+    Spirit pool reductions are temporary; the stat only permanently changes through
+    Attunement damage (see below) or through deliberate character development.
+
+    TS INTERACTION WITH DISSONANCE:
+    TS 30+ practitioners: on a Dissonance check Success, instead of no-effect, they receive
+    readable Thread information (Discovery Event trigger or Belief revision opportunity).
+    On Failure, they still take the Spirit −1D penalty — perception does not eliminate the
+    phenomenological burden; it changes what the disruption means, not that it has weight.
+
+    ATTUNEMENT — DEFINITION (closes ED-418):
+    Attunement = felt resonance with the world as it is. The receptive, healing-oriented
+    complement to Spirit's assertive dimension. Where Spirit is the force of will that holds
+    the self together under Thread pressure, Attunement is the quality of presence that allows
+    the world to be read without forcing it.
+
+    Mechanical functions:
+    (1) Mending pool: Attunement + Focus + TPS (replaces provisional entries; canonical).
+        Mending is not an act of will on the substrate — it is receptive engagement with
+        what is actually there and what the substrate's own self-repair tendency wants.
+        Attunement is the correct stat for this, not Spirit.
+    (2) Community Weaving pool: Attunement + History + TPS (PP-250 canonical; confirmed).
+    (3) Long-term Thread exposure damage (replaces Certainty track):
+        When a character accumulates Dissonance failures across multiple scenes/seasons,
+        or fails Forgetting checks, or undergoes traumatic Discovery Events: Attunement
+        takes permanent −1 damage. This is the long-term cost of exposure beyond rendering
+        capacity — the felt resonance with the world as-it-is is eroded.
+        Recovery: extended time in Thread-unaffected environments (full season, no Thread
+        operations nearby): Attunement +1. Cannot exceed starting value this way. Warden
+        guidance or Anchoring Scene (Bonds TN7 Ob2): Attunement +1 (as Coherence recovery).
+
+    CERTAINTY TRACK — STRUCK:
+    The Certainty track is removed. Its mechanical function (accumulated epistemic damage
+    from Thread exposure) is now handled by Attunement permanent damage.
+    The phenomenological concept of certainty (epistemic confidence in one's access to
+    reality) remains valid as narrative framing; it has no separate mechanical expression.
+
+    STAT SUMMARY (practitioners):
+    Spirit — assertive self-coherence; Dissonance checks; Leap rolls
+    Attunement — receptive world-resonance; Mending/Weaving pools; long-term exposure damage
+    Focus — contact duration (1–7 rounds)
+    Thread Sensitivity (TS) — perceptual depth (0–100)
+    Thread Pool Score (TPS) — TS ÷ 10 round down; contributes to operation pools
+    Coherence — ontological rendering frame; 10→0; practitioners only
+
+    STAT SUMMARY (non-practitioners in Thread-active environments):
+    Spirit — Dissonance checks; temporary pool reduction on failure
+    Attunement — long-term Thread exposure damage; starting resonance with world
+
+    Affects: params_threadwork.md (Coherence section, Mending pool, Community Weaving pool,
+    Certainty references); session worldbuilding canon.
+  finding_id: ED-418 ED-433
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+
+- id: PP-608
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Mending Ob: age modifier added within scale. The old 6-tier Mending table
+    (Shifting Object Ob2, Micro-Gap Ob3, Standard Ob5, Entrenched Ob6, Catastrophic
+    Ob7, Locked Zone Ob8+) encoded both scale and duration. The new 5-scale table
+    encodes scale via base Ob (2n). Duration is now an explicit modifier:
+
+    Age modifier (applies within any Gap scale):
+    - Fresh (0–1 seasons open): +0 Ob
+    - Established (2–4 seasons open): +1 Ob
+    - Entrenched (5+ seasons open): +2 Ob
+
+    Full Mending Ob = (2n) + age modifier.
+
+    Examples:
+    - Fresh Relational Gap: Ob 2 + 0 = Ob 2 (was: Micro-Gap Ob3, close match)
+    - Established Territory Gap: Ob 4 + 1 = Ob 5 (was: Standard Gap Ob5, exact match)
+    - Entrenched Territory Gap: Ob 4 + 2 = Ob 6 (was: Entrenched Gap Ob6, exact match)
+    - Fresh Structural Gap: Ob 6 + 0 = Ob 6 (was: Catastrophic Gap Ob7, close match)
+    - Entrenched Structural Gap: Ob 6 + 2 = Ob 8 (beyond old table top — correct)
+    - Fresh Foundational Gap: Ob 10 + 0 = Ob 10 (was: Locked Zone Ob8+, now explicit)
+
+    The old table's values were intuitive approximations of what scale+duration produces.
+    The new system derives them from first principles while preserving the old table's
+    duration-based distinctions as an explicit modifier.
+
+    Ob ceiling struck (was 8). Foundational Mending correctly exceeds old ceiling at Ob 10.
+
+    Affects: params_threadwork.md §Mending.
+  finding_id: null
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+
+- id: PP-609
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Einhir Foundational sites — canonical design definition.
+
+    The Einhir did not primarily operate AT the Foundational scale. They operated
+    FROM Foundational-stabilized sites. The distinction is critical.
+
+    FOUNDATIONAL STABILIZATION (what the Einhir actually did):
+    The Einhir maintained and stabilized the four Foundational Thread conditions in
+    specific locations, not as an end in itself, but as the platform from which
+    large-scale Structural operations could be conducted reliably.
+
+    The four Foundational conditions:
+    (1) Temporal coherence: the condition under which things become sequentially and
+        continuously. Stable temporal coherence = memory formation is clear, Thread
+        operations have predictable temporal auto-effects, POP is precise. Disrupted:
+        the relationship between before and after is unreliable at the Thread level;
+        memory formation fails not because memories are damaged but because the temporal
+        substrate through which experience becomes memory is inconsistent.
+    (2) Spatial extension: the condition under which things occupy distinct positions
+        and can be other-than-here. Stable: positioning is exact, Thread configuration
+        of objects is correctly located. Disrupted: the condition for having a position
+        becomes locally compromised; orientation fails not because of disorientation
+        but because the Thread conditions for spatial distinctness are unreliable.
+    (3) Configurational legibility: the condition under which Thread configurations
+        have a character that can be read. Stable: high-TS practitioners perceive
+        configurations clearly even at low effort. Disrupted: practitioners find their
+        perception returning nothing renderable — the Forgetting's specific form for
+        practitioners is this dimension's Foundational disruption.
+    (4) Actualization: the condition under which configurations are determinate rather
+        than oscillating. Stable: things are what they are, fully. Disrupted: configurations
+        oscillate between states at the Thread level (Shifting Objects are Object-scale
+        actualization disruptions; Foundational actualization disruption affects the
+        conditions for anything being determinate in the region).
+
+    Einhir Foundational sites stabilized all four. Result: a location where everything is
+    exactly what it is, exactly where it should be, exactly when it should happen. Thread
+    operations that fail elsewhere from substrate instability succeed here. For non-practitioners:
+    unusual felt reality, stable memory, heightened presence.
+
+    T15 (Askeheim) was the Einhir's most significant Foundational stabilization site —
+    the center from which they managed Thread conditions across the peninsula.
+
+    THE CALAMITY'S MECHANISM:
+    The Einhir were performing large-scale Structural operations from T15 using the
+    Foundational stabilization as the platform. Something caused the Foundational
+    stabilization to collapse — possibly a Structural operation at a scale that exceeded
+    what the stabilization could support. When the stabilization collapsed, what had been
+    the most stable site became the most catastrophically unstable. The organized
+    positive being (Ein Sof) that the stabilization had been holding in configured form
+    erupted through the breach without organization — not because Ein Sof is hostile, but
+    because the container broke and what was inside it does not naturally conform to human
+    rendering categories.
+
+    The wound is not one Foundational Gap but a network of mutually reinforcing Foundational
+    Gaps across the Askeheim region whose combined extent has consumed the surrounding intact
+    Foundational substrate — destroying the self-repair context. Single Foundational Gaps can
+    self-close in 32 seasons (n=5) because the surrounding intact substrate provides the
+    conditions for closure. The Calamity network cannot self-close because there is no
+    surrounding intact Foundational substrate within the wound's influence range to provide
+    those conditions. Edeyja's work is: isolate individual Gaps from the network → restore
+    local Foundational stability around isolated Gaps → allow those to close → expand the
+    stable region → repeat. Each major conflict resets sections she has stabilized.
+
+    Add to: designs/setting/calamity_radiation.md (Foundational section); arc_register.md
+    (T15 entry clarification); session worldbuilding canon.
+  finding_id: null
+  affects:
+    - designs/setting/calamity_radiation.md
+    - references/arc_register.md
+  status: applied
+
+- id: PP-610
+  type: correction
+  date: 2026-04-14
+  severity: P1
+  description: >
+    PP-607 correction. Two errors identified from reading params_core.md.
+
+    ERROR 1 — Attunement was not undefined:
+    PP-607 stated "Attunement currently undefined (ED-418)" and proposed a definition.
+    Attunement IS defined in params_core.md as one of the 10 core character attributes,
+    Social group, range 1-7. ED-418 (which flagged it as undefined in params_threadwork)
+    was a false gap — Attunement was in params_core all along. PP-607's definition
+    ("felt resonance with world as it is") is consistent with its Social-group positioning
+    and its appearance in Mending/Weaving pool formulas; this framing is retained. But
+    Attunement is not a new stat — it is an existing core attribute. ED-418 closed.
+
+    ERROR 2 — Attunement permanent damage was wrong:
+    PP-607 proposed "Attunement takes permanent −1 damage" from accumulated Thread
+    exposure. This is wrong on two grounds:
+    (a) Design principle: no permanent penalties — always able to recover after a
+        season unless there is a key narrative consequence at play.
+    (b) Certainty already handles long-term consequence of Thread exposure. Certainty
+        moves toward 0 (Thread acceptance) as characters witness Thread operations,
+        undergo First Leaps, and face revelation events. This IS the long-term
+        cosmological shift; it does not belong on Attunement.
+
+    CORRECTED SYSTEM:
+    Dissonance = Spirit check only. No track. No permanent penalty. No Attunement damage.
+    - When Thread operations fire nearby, character enters disrupted space, or POP affects
+      their temporal experience: Spirit check TN7 vs Dissonance Factor (1-4, per PP-607).
+    - Failure: Spirit −1D for rest of scene. Clears at scene end.
+    - No sustained penalty beyond the scene unless GM calls a narrative consequence.
+    - Long-term Thread exposure consequence = Certainty movement (params_core §Certainty,
+      PP-551). Certainty is the transformation track, not a damage track.
+
+    Certainty (params_core, PP-551): 0-5 cosmological worldview track.
+    5 = Solmund orthodox. 0 = Thread acceptance. Both poles are stable states.
+    NOT a deterioration track. Movement in either direction has mechanical effects.
+    This is the correct long-term consequence of Thread exposure, already canonical.
+    No duplication with Dissonance (immediate Spirit check) or Coherence (practitioner
+    operational cost).
+
+    COMPLETE STAT PICTURE (from params_core.md, canonical):
+    10 Attributes (1-7): Agility, Endurance, Strength (Physical); Cognition, Recall,
+      Focus (Mental); Attunement, Bonds, Charisma (Social); Spirit (Metaphysical).
+    Derived: Health (End+6), Stamina (End+1 min2), Composure (Cha+6),
+      Combat Pool (Agi + weapon History), Contact Rounds (=Focus), Resolve (=Spirit).
+    Tracks: Momentum (0-4), Certainty (0-5), Coherence (10→0 practitioners),
+      Thread Sensitivity (0-100 practitioners), TPS (derived TS÷10 practitioners).
+    Narrative: Histories, Beliefs+Conviction Tracks, Inspirations, Instincts, Wises.
+
+    CLOSES: ED-418 (Attunement was already defined in params_core).
+  finding_id: PP-607
+  affects:
+    - references/params_core.md
+    - references/params_threadwork.md
+  status: applied
+
+- id: PP-611
+  type: correction
+  date: 2026-04-14
+  severity: P1
+  description: >
+    params_combat.md Stamina formula corrected.

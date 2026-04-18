@@ -1,0 +1,855 @@
+# Patch Register — Archive (Applied Only)
+# All patches in this file have status: applied
+# Do not fetch at session start — reference only when auditing patch history
+# Active patches: canon/patch_register_active.yaml
+# Index: canon/patch_register_index.md
+# Generated: 2026-04-14
+
+
+- id: PP-086
+  date: 2026-04-02
+  severity: P1
+  description: "Mass combat base damage = net successes over Ob (before disposition modifiers)"
+  finding_id: "P1-B11-01"
+  source: simulation
+  affects: [compilation/v0.14/stage8_combat.md]
+  status: applied
+  applied_commit: "2026-04-02-session"
+
+- id: PP-087
+  date: 2026-04-02
+  severity: P1
+  description: "Formation Break Ob stacking — cumulative +1 Ob per break, persists through rally, cap at 3 breaks (Dispersed)"
+  finding_id: "P1-B11-02"
+  source: simulation
+  affects: [compilation/v0.14/stage8_combat.md]
+  status: applied
+  applied_commit: "2026-04-02-session"
+
+- id: PP-088
+  date: 2026-04-02
+  severity: P1
+  description: "Siege Assault vs mass combat linkage — mass combat win = Fortification −1; field win ≠ breach"
+  finding_id: "P1-B11-03"
+  source: simulation
+  affects: [compilation/v0.14/stage8_combat.md]
+  status: applied
+  applied_to_version: "mass_battle_v4"
+  applied_commit: "2026-04-02-session"
+
+- id: PP-089
+  date: 2026-04-02
+  severity: P1
+  description: "Hybrid season phase order — Strategic first, then Personal, with explicit carryover rules"
+  finding_id: "P1-B11-04"
+  source: simulation
+  affects: [compilation/v0.14/stage11_scale_transitions.md]
+  status: applied
+  applied_commit: "2026-04-02-session"
+
+- id: PP-090
+  date: 2026-04-02
+  severity: P1
+  description: "Mode-switch mid-siege conversion — each Endurance lost = −0.5 Fortification"
+  finding_id: "P1-B11-05"
+  source: simulation
+  affects: [compilation/v0.14/stage11_scale_transitions.md]
+  status: applied
+  applied_commit: "2026-04-02-session"
+
+- id: PP-091
+  date: 2026-04-02
+  severity: P1
+  description: "Artillery Bombard resolution — flat damage, no melee exchange, distance-based Ob (1/2/3)"
+  finding_id: "P1-B11-06"
+  source: simulation
+  affects: [compilation/v0.14/stage8_combat.md]
+  status: applied
+  applied_commit: "2026-04-02-session"
+
+- id: PP-092
+  date: 2026-04-02
+  severity: P2
+  description: "P2-B11 series — personal combat and mass combat clarifications (B11-01 through B11-19)"
+  finding_id: "P2-B11-01 through P2-B11-19"
+  source: simulation
+  affects: [compilation/v0.14/stage8_combat.md]
+  status: applied
+  applied_commit: "2026-04-02-session"
+
+- id: PP-305
+  date: 2026-04-02
+  severity: P2
+  description: "Presence modifier formula: add max(0,...) — formula gave −1 at Presence 1-2, table says +0. Fixed."
+  finding_id: "FA-01 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.2]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-101
+  renumber_date: 2026-04-04
+
+- id: PP-306
+  date: 2026-04-02
+  severity: P2
+  description: "Concentration depletion floor: add explicit minimum 0. Double-depletion in one exchange cannot go below 0; Spent fires immediately."
+  finding_id: "FA-02 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 Step 6]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-102
+  renumber_date: 2026-04-04
+
+- id: PP-307
+  date: 2026-04-02
+  severity: P2
+  description: "Strain minimum 1: CLASH and COMPETITION can produce 0 strain at high Focus defence. Add minimum 1 strain to both."
+  finding_id: "FA-03/FA-04 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 CLASH, COMPETITION]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-103
+  renumber_date: 2026-04-04
+
+- id: PP-308
+  date: 2026-04-02
+  severity: P1
+  description: "Corroboration stub: §3.5 corroboration mechanic not integrated in §6.4. Added Step 2b stub with provisional reference to §3.5. Full porting pending ED-051 NPC stat block."
+  finding_id: "GAP-DS-12 / C-01 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-104
+  renumber_date: 2026-04-04
+
+- id: PP-309
+  date: 2026-04-02
+  severity: P2
+  description: "Rattled + Spent stacking: document cumulative −4D total and pool minimum of 1D applies as floor."
+  finding_id: "C-02/GAP-DS-14 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 Step 6]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-106
+  renumber_date: 2026-04-04
+
+- id: PP-310
+  date: 2026-04-02
+  severity: P2
+  description: "Debate initiation gate: add Principle 1 (roll only when meaningful) gate to §6.0."
+  finding_id: "GAP-DS-13 / E-01 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.0]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-107
+  renumber_date: 2026-04-04
+
+- id: PP-311
+  date: 2026-04-02
+  severity: P2
+  description: "Post-debate recovery: all strain, Rattled, Spent clear at scene end. No persistent character state. Add design note flagging GAP-DS-16 as open question."
+  finding_id: "GAP-DS-16 / K2-F-01 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.5]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-108
+  renumber_date: 2026-04-04
+
+- id: PP-312
+  date: 2026-04-02
+  severity: P1
+  description: "Tribunal exchange count guidance: P(one-exchange resolution) ~88% at default TC=6 + boosted genre. Add design note with dramatic play guidance."
+  finding_id: "G2-F-01 / SIM-D-03"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.7]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-109
+  renumber_date: 2026-04-04
+
+- id: PP-313
+  date: 2026-04-02
+  severity: P2
+  description: "Domain Echo table stub: add canonical consequence table to §6.5 for debate win by genre. Full table pending editorial."
+  finding_id: "K1-04/K2-F-03 / SIM-D-03"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.5]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-110
+  renumber_date: 2026-04-04
+
+- id: PP-314
+  date: 2026-04-02
+  severity: P3
+  description: "DIVERGE negative net successes: add explicit note that negative effective_margin is treated as 0 by the resistance gate."
+  finding_id: "FA-07/GAP-DS-20 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 DIVERGENCE]
+  applied_to_version: "v1.3"
+  status: applied
+  applied_commit: "2026-04-02-audit-d-01"
+  renumbered_from: PP-111
+  renumber_date: 2026-04-04
+
+- id: PP-315
+  date: 2026-04-02
+  severity: P1
+  description: "Remove struck Majority-1s override from params_board_game.md. GAP-BG-14."
+  finding_id: "GAP-BG-14 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: applied
+  applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-112
+  renumber_date: 2026-04-04
+
+- id: PP-316
+  date: 2026-04-02
+  severity: P2
+  description: "Stat ceilings and floors table: faction stats floor 0, ceiling 7. Standing 0-10."
+  finding_id: "A-BG-07 / AUDIT-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.14+design-ST"
+  status: applied
+  applied_commit: "2026-04-02-audit-bg-01"
+  renumbered_from: PP-113
+  renumber_date: 2026-04-04
+
+- id: PP-327
+  date: 2026-04-02
+  severity: P2
+  description: "§6.4 Step 3: (1) Clarify Argue rolls have no fixed Ob — comparative margin-based. (2) Add Momentum spending on Argue rolls (non-Thread per params_core). (3) Clarify genre pivot is unrestricted between exchanges. [GAP-DS-01/17/07 resolved]"
+  finding_id: "GAP-DS-01/07/17 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 Step 3]
+  applied_to_version: "v1.4"
+  status: applied
+  applied_commit: "2026-04-02-gap-fill"
+  renumbered_from: PP-112
+  renumber_date: 2026-04-04
+
+- id: PP-328
+  date: 2026-04-02
+  severity: P3
+  description: "§6.4 OBSCURING WIN: confirm Doubt Marker replacement is intentional — stacking not permitted. [GAP-DS-08 resolved]"
+  finding_id: "GAP-DS-08 / AUDIT-D-01"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.4 OBSCURING WIN]
+  applied_to_version: "v1.4"
+  status: applied
+  applied_commit: "2026-04-02-gap-fill"
+  renumbered_from: PP-113
+  renumber_date: 2026-04-04
+
+- id: PP-329
+  date: 2026-04-02
+  severity: P2
+  description: "§6.5: (1) Add Debate Fatigue — Rattled → −1D next social roll, consumed on use. (2) Add Total Victory — TC≥9/≤1 → additional Mandate−1 (BG) + Momentum+1 (TTRPG). [GAP-DS-03/16 resolved]"
+  finding_id: "GAP-DS-03/16 / AUDIT-D-01 / SIM-D-04"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.5]
+  applied_to_version: "v1.4"
+  status: applied
+  applied_commit: "2026-04-02-gap-fill"
+  renumbered_from: PP-114
+  renumber_date: 2026-04-04
+
+- id: PP-330
+  date: 2026-04-02
+  severity: P2
+  description: "§6.6: Add Beliefs integration — winning exchange aligned with stated Belief = Belief achievement for Momentum. 1 Momentum per debate cap. [GAP-DS-19 / ED-054 resolved — PROVISIONAL]"
+  finding_id: "GAP-DS-19 / ED-054"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.6]
+  applied_to_version: "v1.4"
+  status: applied
+  applied_commit: "2026-04-02-gap-fill"
+  renumbered_from: PP-115
+  renumber_date: 2026-04-04
+
+- id: PP-331
+  date: 2026-04-02
+  severity: P2
+  description: "§6.7: (1) Corroboration in asymmetric proceedings — accused may corroborate at Bonds Ob 2 (vs Ob 1 symmetric). (2) Confirm advantaged orator 0-strain in Divergence exchanges is intentional. [GAP-DS-18 / ED-055/058 resolved — PROVISIONAL]"
+  finding_id: "GAP-DS-18 / ED-055/058"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.7]
+  applied_to_version: "v1.4"
+  status: applied
+  applied_commit: "2026-04-02-gap-fill"
+  renumbered_from: PP-116
+  renumber_date: 2026-04-04
+
+- id: PP-332
+  date: 2026-04-02
+  severity: P2
+  description: "§6.5/6.12/6.13: (1) Debate Fatigue consumed after first roll use. (2) BG zero-zero → automatic committee referral, TTRPG TIE rule does not apply. (3) Corroboration CLASH-specialist design note added. [SIM-D-04 findings]"
+  finding_id: "A.2-03/A.3-01/C-02 / SIM-D-04"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.5, §6.12, §6.13]
+  applied_to_version: "v1.5"
+  status: applied
+  applied_commit: "2026-04-02-gap-fill"
+  renumbered_from: PP-117
+  renumber_date: 2026-04-04
+
+- id: PP-333
+  date: 2026-04-02
+  severity: P2
+  description: "§6.14: Hybrid debate exchange count is independent of BG vote round count — set by GM per context. [K2 finding / SIM-D-04]"
+  finding_id: "K2 / SIM-D-04"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.14]
+  applied_to_version: "v1.5"
+  status: applied
+  applied_commit: "2026-04-02-gap-fill"
+  renumbered_from: PP-118
+  renumber_date: 2026-04-04
+
+- id: PP-334
+  date: 2026-04-02
+  severity: P1
+  description: "Practitioner positioning rule in mass combat: rear vs front-line Leap timing distinction. BG→TTRPG unit conversion added to §B.5 referencing §B.2 table. Resolves F-HYB-01 and GAP-K2-01."
+  finding_id: "F-HYB-01 / GAP-K2-01 / SIM-HYB-01"
+  source: simulation
+  affects:
+  - designs/mass_combat/mass_battle_v3.md
+  - skills/valoria-orchestrator/references/state_transfer_spec.md
+  applied_to_version: "v4.1"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-101
+  renumber_date: 2026-04-04
+
+- id: PP-164
+  date: 2026-04-02
+  status: applied
+  source: AUD-TTRPG-01 Mode B
+  description: "params_core: add attribute range 1–7, 10 attributes listed with Memory/Focus definitions, derived scores table (Health=End+6, Composure=Pres+6, Contact Rounds=Focus, Coherence start=10)"
+  files_changed:
+  - references/params_core.md
+
+- id: PP-165
+  date: 2026-04-02
+  status: applied
+  source: AUD-TTRPG-01 Modes A+F
+  description: "params_combat: fix Health formula (End+6 not End), Stamina minimum=1 rule, Offence/Defence allocation procedure, wound dual-penalty quantification"
+  files_changed:
+  - references/params_combat.md
+
+- id: PP-166
+  date: 2026-04-02
+  status: applied
+  source: AUD-TTRPG-01 Modes B+C
+  description: "params_threadwork: remove phantom Thread Depth (TD) stat (not present in threadwork_redesign_v25 or any formula), add RS=0 lockout gate, confirm Coherence start=10, add RS ceiling=100"
+  files_changed:
+  - references/params_threadwork.md
+
+- id: PP-167
+  date: 2026-04-02
+  status: applied
+  source: AUD-TTRPG-01 Mode B
+  description: "params_factions: fix RS TTRPG starting value 60→72 (canonical source: stage12_campaign_modes §12.1 Session Zero step 4 'Set clocks: RS 72')"
+  files_changed:
+  - references/params_factions.md
+
+- id: PP-335
+  date: 2026-04-02
+  severity: P1
+  description: "Phase-Lock Protocol for Zoom In (3 legal entry points: after Phase 1, Phase 3, Phase 6 Step 1). Eliminates ghost-unit state (ED-057). Levy unit (CP 1) added to B.2 to fix Military-1 faction gap (F-HYB-08). Str/Morale columns added to B.2."
+  finding_id: "F-HYB-08 / F-HYB-09 / ED-055 / ED-057 / SIM-HYB-01"
+  source: simulation
+  affects:
+  - designs/mass_combat/mass_battle_v3.md
+  - skills/valoria-orchestrator/references/state_transfer_spec.md
+  - designs/gm_ref_cp14/zoom_in_out_reference_card.md
+  applied_to_version: "v4.2"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-103
+  renumber_date: 2026-04-04
+
+- id: PP-168
+  date: 2026-04-02
+  status: applied
+  source: AUD-TTRPG-01 Mode D GAP-TTRPG-17
+  description: "params_factions: extract and add all 8 faction unique actions from stage6_factions.md §8.4–8.9 (Hafenmark/Sovereign Authority Doctrine, Varfell/Private Collection full table, Guilds/Economic Leverage, Niflhel/Quiet Network all modes, Restoration Movement/Community Weaving, Löwenritter/Martial Law Coup Trigger)"
+  files_changed:
+  - references/params_factions.md
+
+- id: PP-336
+  date: 2026-04-02
+  severity: P2
+  description: "4 projectile weapon categories (LP/HP/LBl/HBl) replacing single Projectile. Str corrections in B.2 (−2 all, −3 Ranged/Artillery). Pool split declared Phase 1. Damage formula: Str loss = net hits + Dmg Mod − DR. BG Battle Partial outcome defined. All marked PROVISIONAL."
+  finding_id: "SIM-HYB-01 PARAMS-GAP-04/05/06-MC + user audit"
+  source: simulation+editorial
+  affects:
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
+  - designs/gm_ref_cp14/zoom_in_out_reference_card.md
+  applied_to_version: "v4.3"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-104
+  renumber_date: 2026-04-04
+
+- id: PP-337
+  date: 2026-04-02
+  severity: P1
+  description: "TTRPG personal combat projectile weapon types: LP (bow +2), HP (crossbow +4), LBl (sling +1). Ranged combat rules: no Defence allocation, Far zone only, Close zone −3D, Cover +2DR, Reload action for HP, simultaneous ranged-vs-ranged provisional. Sling knife default at Close zone."
+  finding_id: "F-PROJ-04 / F-PROJ-06 / F-PROJ-07 / SIM-PROJ-01"
+  source: simulation
+  affects: [references/params_combat.md]
+  applied_to_version: "v0.14-AUD2"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-105
+  renumber_date: 2026-04-04
+
+- id: PP-338
+  date: 2026-04-02
+  severity: P1
+  description: "HBl Artillery Dmg Mod +5→+3 (one-shot problem). Artillery sight-line rule: HBl requires unobstructed LoS; Line formation screens block shots; flank to engage Artillery. Applied to mass_battle_v3 §B.2 and §Phase 2 Volley."
+  finding_id: "F-PROJ-01 / F-PROJ-08 / SIM-PROJ-01"
+  source: simulation
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  applied_to_version: "v4.4"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-106
+  renumber_date: 2026-04-04
+
+- id: PP-169
+  date: 2026-04-02
+  severity: P2
+  description: "params_board_game.md: Add phase structure, order priority, unit Muster Ob, faction capitals, Order token rules from compilation B4/B6/B3."
+  finding_id: "SIM-BG-01-PG-01,PG-02,PG-04,PG-05"
+  source: simulation
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.5.1"
+  status: applied
+  applied_commit: pending
+
+- id: PP-170
+  date: 2026-04-02
+  severity: P2
+  description: "params_board_game.md: Parliamentary Manoeuvre Partial=no effect (explicit ruling); Failure=Mandate -1 for 1 season. Fills spec gap."
+  finding_id: "SIM-BG-01-F-07"
+  source: simulation
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.5.1"
+  status: applied
+  applied_commit: pending
+
+- id: PP-339
+  date: 2026-04-02
+  severity: P1
+  description: "state_transfer_spec wholesale correction: Unit Str 1:1→B.5 conversion; Unit Cohesion BG 0–6 floor rule; Unit Morale BG absent→derive from Cohesion+1; Unit Martial→use B.2 CP column. Zoom Out table: debate outcome and Gap aversion rows added. Phase 6 continuation protocol added. Concurrent Zoom In provisional procedure added. Non-battle Zoom In note added."
+  finding_id: "GAP-HYB-02/03/04/09, ST-K2-01, ST-K2-02, ST-K2-05, AUDIT-HYBRID-01"
+  source: audit
+  affects: [skills/valoria-orchestrator/references/state_transfer_spec.md]
+  applied_to_version: "post-PP-103"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-107
+  renumber_date: 2026-04-04
+
+- id: PP-340
+  date: 2026-04-02
+  severity: P1
+  description: "Domain Echo amount defined provisionally: +1 on Success, +2 on Overwhelming, to most relevant faction stat, cap ±2 per scene. Debate outcome mapping added. Multiple Echo ordering rule added."
+  finding_id: "GAP-HYB-01, AUDIT-HYBRID-01"
+  source: audit
+  affects: [references/params_scale_transitions.md]
+  applied_to_version: "ST2"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-108
+  renumber_date: 2026-04-04
+
+- id: PP-341
+  date: 2026-04-02
+  severity: P1
+  description: "Domain Echo timing discrepancy documented as intentional design: full TTRPG fires immediately; Hybrid queues to Accounting. Rationale: prevents real-time BG stat manipulation from personal scenes."
+  finding_id: "GAP-HYB-07, AUDIT-C-01, AUDIT-HYBRID-01"
+  source: audit
+  affects: [references/params_scale_transitions.md]
+  applied_to_version: "ST2"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-109
+  renumber_date: 2026-04-04
+
+- id: PP-342
+  date: 2026-04-02
+  severity: P1
+  description: "Phase 6 Step 1 Zoom In continuation protocol: Steps 2–6 resume after Zoom Out using updated state. General's Step 4 consumed if PC general is Zoom In character."
+  finding_id: "GAP-HYB-05, ST-K2-01, AUDIT-HYBRID-01"
+  source: audit
+  affects: [skills/valoria-orchestrator/references/state_transfer_spec.md]
+  applied_to_version: "PP-107 bundle"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-110
+  renumber_date: 2026-04-04
+
+- id: PP-343
+  date: 2026-04-02
+  severity: P1
+  description: "Mass→Personal time scale: 1 mass combat turn = 1 personal combat exchange. Max 5 exchanges before forced disengage/incapacitation. General loses CR bonus (effective CR 0) per turn in personal combat."
+  finding_id: "ST-K2-04, GAP-HYB-10, AUDIT-HYBRID-01"
+  source: audit
+  affects: [references/params_scale_transitions.md]
+  applied_to_version: "ST2"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-111
+  renumber_date: 2026-04-04
+
+- id: PP-344
+  date: 2026-04-02
+  severity: P2
+  description: "Concurrent Zoom In provisional: resolve in faction-turn order (Accounting sequence). First battle completes fully before second begins. [PROVISIONAL — ED-072]"
+  finding_id: "GAP-HYB-08, AUDIT-C-02, AUDIT-HYBRID-01"
+  source: audit
+  affects: [skills/valoria-orchestrator/references/state_transfer_spec.md]
+  applied_to_version: "PP-107 bundle"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-112
+  renumber_date: 2026-04-04
+
+- id: PP-171
+  date: 2026-04-02
+  severity: P2
+  description: "Bulk editorial resolution: 70+ open editorial items marked provisional with decisions. Mechanical patches applied to params_debate (Composure restore, Niflhel toolkit, Genre pivot, Grand Debate alternation, Momentum, Poise→Composure, NPC formula), params_factions (Mandate recovery, Hafenmark Wealth sink, Military destruction cap, Institutional Mandate trigger, PC embedding), params_mass_combat (LBl Prepared Defence exception, Artillery cascade cap, commander formula, Volley TN), params_combat (Dodge action), params_board_game (Parliamentary Vote, Card-Hand provisional, TC win-delay rule), state_transfer_spec (TC win-delay, non-battle Zoom In, P-01 propagation), params_scale_transitions (sufficient scope). Duplicate IDs ED-054/055/056/057/058/064/065/066 renumbered to ED-077/078/079/080/081/082/083/084."
+  finding_id: "AUDIT-HYBRID-01 + all prior sessions"
+  source: editorial
+  affects:
+  - references/params_contest.md
+  - references/params_factions.md
+  - references/params_mass_combat.md
+  - references/params_combat.md
+  - references/params_board_game.md
+  - skills/valoria-orchestrator/references/state_transfer_spec.md
+  - references/params_scale_transitions.md
+  - canon/editorial_ledger.yaml
+  applied_to_version: "v0.14 + all ST patches"
+  status: applied
+  applied_commit: pending
+
+- id: PP-178
+  date: 2026-04-02
+  severity: P2
+  description: "Trade Network Investment: Hafenmark Wealth sink. Consul Inward, 2 Wealth cost, places Trade Route tokens for +1D Trade bonuses. Resolves ED-077."
+  finding_id: "ED-077 / BAL-BG-01-F-01"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.5.4"
+  status: applied
+  applied_commit: pending
+
+- id: PP-179
+  date: 2026-04-02
+  severity: P1
+  description: "BG Overwhelming degree table aligned with TTRPG: net >= 2xOb (was net >= Ob+1). Resolves ST-BG-01. User decision."
+  finding_id: "ST-BG-01"
+  source: simulation
+  affects: [references/params_board_game.md, compilation/v0.14/stage_bg_board_game_mode.md]
+  applied_to_version: "v0.5.4"
+  status: applied
+  applied_commit: pending
+
+- id: PP-172
+  date: 2026-04-02
+  severity: P2
+  description: "Ranged weapon subtypes: LP/HP/LBl/HBl with distinct TN/modifier/DR profiles; TN8 melee-range defence; environmental terrain table; HBl STR minimum 2; cover DR by type"
+  finding_id: "SIM-001-F1"
+  source: simulation
+  affects:
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
+  applied_to_version: "v1.2"
+  status: applied
+  applied_commit: "pending"
+
+- id: PP-180
+  date: 2026-04-02
+  severity: P2
+  description: "Audit bundle: Accounting Phase 13-step sequence; PI scale clarification; Intel advancement simplified to counter (no fractional); Excommunication Ob capped at 4; Drawn battle rule; Policy Instrument defined; Co-movement VTM cap conversion; Restoration Organizing/Weaving split; Thread Debt hybrid bridge rule."
+  finding_id: "AUD-BG-01: F-01, B-01, B-02, C-02, GAP-BG-02/03/04/06, G-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.5.5"
+  status: applied
+  applied_commit: pending
+
+- id: PP-347
+  date: 2026-04-02
+  severity: P2
+  description: "(1) §6.8/6.9: mark resolved items, clean stale list. (2) §6.13 BG: add design note — orientation absent by design; genre pivot between rounds permitted."
+  finding_id: "GAP-DS-21/22/26 / AUDIT-D-02"
+  source: audit
+  affects: [designs/debate/debate_system_redesign_v1.md §6.8, §6.9, §6.13]
+  applied_to_version: "v1.6"
+  status: applied
+  applied_commit: "2026-04-02-session-close"
+  renumbered_from: PP-119
+  renumber_date: 2026-04-04
+
+- id: PP-350
+  date: 2026-04-02
+  severity: P1
+  description: "§6.5: Debate-generated RS changes subject to RS ceiling (100) and RS=0 lockout (Rupture). At RS=0 or RS=100, no RS changes from §3.8 fire."
+  finding_id: "TT-F-03/TT-F-05 / SIM-D-05"
+  source: simulation
+  affects: [designs/debate/debate_system_redesign_v1.md §6.5]
+  applied_to_version: "v1.6"
+  status: applied
+  applied_commit: "2026-04-02-session-close"
+  renumbered_from: PP-122
+  renumber_date: 2026-04-04
+
+- id: PP-173
+  date: 2026-04-02
+  severity: P1
+  description: "Mass combat DR table: replace single Projectile column with LP/HP/LBl/HBl ranged columns; update HBl personal combat cross-reference; add LBl anti-levy note"
+  finding_id: "SIM-002-F"
+  source: simulation
+  affects:
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
+  applied_to_version: "v4.5"
+  status: applied
+  applied_commit: "pending"
+
+- id: PP-183
+  date: 2026-04-02
+  severity: P1
+  description: "TC 80 sweep capped: 4 territories/season (Church player chooses). TC gain from Seizure capped at +4/season. Unlimited sweep was game-ending in one season (expected 6.5 territories seized)."
+  finding_id: "SIM-BG-03-F1"
+  source: simulation
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.6.1"
+  status: applied
+  applied_commit: pending
+
+- id: PP-184
+  date: 2026-04-02
+  severity: P1
+  description: "Partial Mend temporal auto-effect documented: Partial/Failed Mend still places History Resonance marker; 2-marker + Partial Mend = Thread Wound. Warning token added for 2-marker territories."
+  finding_id: "AUD-BG-03-E-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.6.1"
+  status: applied
+  applied_commit: pending
+
+- id: PP-185
+  date: 2026-04-02
+  severity: P1
+  description: "Church Attention Pool per-territory ceiling = 10. Second Inquisitor at AP >= 6. Multi-Inquisitor generates +3 AP/season. Inquisitor removal via Community Organizing. Resolves GAP-BG-17."
+  finding_id: "AUD-BG-03-D-01 / GAP-BG-17"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.6.1"
+  status: applied
+  applied_commit: pending
+
+- id: PP-186
+  date: 2026-04-02
+  severity: P2
+  description: "Crown Deed 2: requirement raised from >=4 to >=5 territories. T5 Arnesheld (Lowenritter shared) does not count until reintegrated. Crown starts with 3 unambiguous territories, needs active expansion."
+  finding_id: "AUD-BG-02-A2-03"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.6.1"
+  status: applied
+  applied_commit: pending
+
+- id: PP-187
+  date: 2026-04-02
+  severity: P2
+  description: "Co-Movement card effects parameterised for BG: 20-card deck categorised (TC effect x4, RS stabilisation x3, intel leak x3, Thread Debt adjacent x3, History Resonance adjacent x3, benign x4). Resolves GAP-BG-16."
+  finding_id: "AUD-BG-03-B-02 / GAP-BG-16"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.6.1"
+  status: applied
+  applied_commit: pending
+
+- id: PP-188
+  date: 2026-04-02
+  severity: P2
+  description: "Ranged redesign: collapse LP/HP/LBl/HBl to Piercing/Blunt categories. Fire rates (bow/throw every round; crossbow/sling every other round). Crossbow post-DR armour bonus (+2 Med / +3 Heavy if hit). Sling -2D pool, ammo modifier (Clay+1/Stone+2/Metal+3/Lead+4). No Fibonacci group bonus for ranged."
+  finding_id: "ED-061"
+  source: editorial
+  affects:
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
+  applied_to_version: "v1.4 / v4.6"
+  status: applied
+  applied_commit: "pending"
+
+- id: PP-352
+  date: 2026-04-02
+  scope: personal_combat_ranged
+  description: >
+  Correct ranged weapon TN and damage values.
+  Bow (LP): Hit TN 6→7, damage modifier +2→+0 (no damage bonus).
+  Crossbow (HP): Hit TN 5→6, damage modifier +4→+0 base / +2 vs medium and heavy armour.
+  Sling: collapse LBl/HBl into single Sling type at TN8; ammo sub-table:
+  clay +0 / rock +1 / metal +2 / lead +3 vs medium and heavy armour (all +0 vs unarmoured and light armour).
+  files_changed:
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
+  status: applied
+  renumbered_from: PP-188
+  renumber_date: 2026-04-04
+
+- id: PP-189
+  date: 2026-04-02
+  scope: mass_combat_ranged_parallel
+  description: >
+  Parallel mass battle patch for PP-188 personal combat ranged corrections.
+  Bow (LP): Dmg Mod +2→+0; effectiveness vs Light armour reduced (✓→✗).
+  Crossbow (HP): Dmg Mod +2 base→+0 base; post-DR bonus +2 Med/+3 Heavy → +1 Med+Heavy (scaled ÷2 from personal +2).
+  Sling: expand 2-ammo (clay/stone + metal/lead) → 4-ammo (clay/rock/metal/lead), modifiers vs med+heavy: +0/+1/+2/+3.
+  All-ammo modifier applies vs medium and heavy only; vs unarmoured and light: +0 regardless of ammo.
+  files_changed:
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
+  status: applied
+  note: Re-simulation required for crossbow and archer effectiveness numbers (SIM-DEBT flag).
+
+- id: PP-353
+  date: 2026-04-02
+  severity: P1
+  description: "Comprehensive params correction from authoritative v04 scan. Reverts PP-171 (Church Deed 4), PP-172 (Crown IP escape), PP-173 (Intel advancement), PP-176 (Varfell Intel deed), PP-183 partial (TC80 cap 4→2 per v04/v05 P-23), PP-186 (Crown Deed 2 territories). Corrects: TC start 28→22, PI start 5→7, Torben Loyalty start 8→3 (active from game start), Varfell Mandate 4→3/Wealth 4→3. Corrects Phase 4 priority order (v04: Intel→Military→Domain→Social→Thread→Unique→Project). Removes Guilds/Niflhel as playable factions with player victory conditions. Adds Crown 5-deed structure, Varfell 3-path victory, Löwenritter full victory conditions, Restoration Movement full playable faction. Flags Ministry faction as undocumented gap."
+  finding_id: "STALE-SCAN-BG-01"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.0"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-188
+  renumber_date: 2026-04-04
+
+- id: PP-354
+  date: 2026-04-02
+  scope: bg_faction_institutional_mandate
+  description: >
+  Rename Compromise to Appease. Define Uphold/Appease mechanic.
+  Trigger: Mandate>=4 AND Domain Action directly challenges faction core institutional authority.
+  Uphold: roll proceeds, no cost. Appease: declare before roll, action cancelled, Mandate-1.
+  Removes erroneous Standing and Stability costs from provisional.
+  NPC AI: may Appease if Mandate>=4 AND Stability<=3.
+  files_changed:
+  - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+  - references/params_factions.md
+  status: applied
+  resolves: ED-003, ED-004
+  renumbered_from: PP-189
+  renumber_date: 2026-04-04
+
+- id: PP-355
+  date: 2026-04-02
+  severity: P1
+  description: "Final v05 corrections over PP-188: TC start 22→28 (P-32 explicit); Church victory TC≥65 not 70 (P-32); TC80 seizure uses Church Military vs Defender Military Ob 2 not Mandate (P-23); majority-1s override struck (v05 DESIGN DECISION); Uphold/Appease terminology adopted (PP-189 in v05); canonical source confirmed as v05."
+  finding_id: "v05 authoritative read"
+  source: audit
+  affects: [references/params_board_game.md, references/canonical_sources.yaml]
+  applied_to_version: "v0.7.1"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-189
+  renumber_date: 2026-04-04
+
+- id: PP-356
+  date: 2026-04-02
+  severity: P1
+  description: "Torben Loyalty start: 3→10. Range extended 0-10. Torben begins with full loyalty; degradation is the story. Deed 5 condition unchanged (≥ 5 = still half the track lost = meaningful pressure)."
+  finding_id: "User decision"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.2"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-190
+  renumber_date: 2026-04-04
+
+- id: PP-357
+  date: 2026-04-02
+  severity: P1
+  description: "Varfell starting stats: Mandate 4, Wealth 4 (user decision). G-10 in v05 was wrong to confirm 3/3. Varfell's handicap is positional: fortified adjacencies (T5 Fort 3, T10 NPC hostile, T12/T13 Thread Wounds). Fortification combat rule documented."
+  finding_id: "User decision"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.2"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-191
+  renumber_date: 2026-04-04
+
+- id: PP-358
+  date: 2026-04-02
+  severity: P1
+  description: "TC 80 Territorial Seizure redesigned: targets all Crown/Hafenmark territories simultaneously. Per-territory TC gain: standard +1, Hafenvalor +3, Valorsplatz +5, Himmelenger already held (excluded). Roll: Church Mandate vs Ob = Fort+1. Church Military formula (P-23) was wrong — Mandate is the ecclesiastical power instrument, not Military."
+  finding_id: "User decision"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.2"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-192
+  renumber_date: 2026-04-04
+
+- id: PP-359
+  date: 2026-04-02
+  severity: P1
+  description: "Ministry NPC faction designed: Valorian civil service/administrative apparatus. Stats M3 I4 W2 Mil0 Sta5. AP-tokens track administrative presence per territory. Direct Parliament connections: stabilises PI via Emergency Powers mitigation, Legislative Record at Year-End, Crown Policy dependency, Hafenmark Parliamentary Manoeuvre facilitation. Ministry NPC AI priority tree. Corruption mechanic. Collapse mechanic. Resolves ED-088."
+  finding_id: "ED-088 / User design decision"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.2"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-193
+  renumber_date: 2026-04-04
+
+- id: PP-360
+  date: 2026-04-02
+  severity: P1
+  description: "Canonical source integration: Church Four Cardinals (Fortitude/Justice/Prudence/Temperance) with BG mechanics; Church levy rule (Crown may raise 2/3 Church levies); Excommunication penance mechanic; Lowenritter canonical structure (Lions Table/Helm/Civic Arm); Riskbreakers corrected as Lowenritter sub-unit; Ministry canonical identity (ministries of Law/Guilds/Logothetes/Granaries/Water); Parliament nomination mechanic; Royal Deposition mechanic; Ducal geography conflict flagged as ED-107."
+  finding_id: "Original canonical source documents"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.3"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-194
+  renumber_date: 2026-04-04
+
+- id: PP-361
+  date: 2026-04-02
+  severity: P1

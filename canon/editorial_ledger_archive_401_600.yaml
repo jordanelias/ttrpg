@@ -1,0 +1,625 @@
+    decision: "Applied to all canonical/active files. Church of Galbados → Church of Solmund. Galbados retained when referring to the actual threadcut being (metaphysical/narrator/Thread-knowledge context). Files corrected this commit: params_board_game.md, stage6_factions.md, stage13_npcs.md, lowenritter_faction_card.md. Remaining 40+ files in deprecated/compilation to be corrected at compilation pass."
+    tags: [naming, church, solmund, all-modes]
+
+  # ═══ CALAMITY / RENDERING STABILITY ═════════════════════════════════════════
+
+  - id: ED-427
+    status: resolved
+    date_resolved: 2026-04-06
+    description: "Calamity radiation framework — geographic graduation of RS threshold effects by node distance from Askeheim"
+    decision: "RS thresholds define WHAT effects occur; node distance from Askeheim defines WHERE. Threadcut beings classified by Gap severity (Micro-Gap emergent TS 20-40, Standard Gap emergent TS 50-70, Catastrophic Gap emergent TS 80+). RS=0 stays terminal. Southernmost Surge threshold event at RS<=10. Full matrix in designs/setting/calamity_radiation.md."
+    tags: [threadwork, geography, calamity, rendering_stability]
+    supersedes: "geography_design.md static Calamity Bleed Gradient table"
+
+  - id: ED-428
+    status: resolved
+    date_resolved: 2026-04-12
+    resolution: "Rendering Stability name retained. The name measures stability of the rendering process — defensible. Rename rejected."
+    description: "RS track naming — 'Rendering Stability' vs alternative. User flagged that rendering is a process of consciousness, not reality. Current name measures substrate stability. Options: keep (defensible), rename to Substrate Integrity or Configurational Stability."
+    tags: [threadwork, naming, rendering_stability]
+- id: ED-311
+    status: resolved
+    date_resolved: 2026-04-06
+    resolution: "Option A selected (4 conditions + WR track). Implemented in victory_architecture_v1.md §3.4."
+    date_created: 2026-04-06
+    description: "Varfell Path B — Southernmost Dominion cognitive load reduction"
+    decision: "PENDING USER REVIEW. See designs/board_game/varfell_path_b_redesign_ed311.md for options A (4 conditions + WR track), B (5 conditions, keep WA/WC), C (3 conditions, minimal). Current 7-condition path identified as excessive in full-spectrum review."
+    tags: [board_game, varfell, victory, cognitive_load]
+
+  - id: ED-312
+    status: resolved
+    date_created: 2026-04-07
+    description: >
+      Crown victory condition — "suppress all rivals" is undefined. Does this mean all
+      other playable factions at Mandate ≤ N (specify N), Stability 0, or eliminated?
+      Without a threshold, Crown victory cannot be adjudicated. SIM-BG-03 finding.
+    priority: P1-BLOCKER
+    source: SIM-BG-03 2026-04-07
+    blocks: Crown victory adjudication
+    tags: [board_game, crown, victory]
+    date_resolved: 2026-04-12
+    resolution: "Defined in victory_architecture: Mandate ≤ 2 OR eliminated OR formal Crown Treaty. No patch needed."
+
+  - id: ED-313
+    status: resolved
+    date_created: 2026-04-07
+    description: >
+      PI ≤ 2 grants TC +2 per season. But TC is frozen at 75 once Church reaches
+      Territorial Seizure threshold. Does PI collapse TC +2 (a) not apply when TC frozen,
+      (b) apply and stack above 75 with undefined effects, or (c) apply to a parallel
+      institutional-collapse track distinct from the Theocracy Clock? SIM-BG-04 finding.
+    priority: P1
+    source: SIM-BG-04 2026-04-07
+    blocks: PI collapse chain adjudication post-TC 75
+    tags: [board_game, parliament_integrity, theocracy_clock, crown]
+    date_resolved: 2026-04-12
+    resolution: "PI ≤ 2 TC +2 does not apply when TC frozen at 75."
+    patch: PP-560
+
+  - id: ED-314
+    status: resolved
+    date_created: 2026-04-07
+    description: >
+      Church Seizure Ob formula produces Ob 8 at Fort 3 + CV 0, making that territory
+      de facto immune to seizure at the Church's standard 6D pool (~2% success rate).
+      No mechanic exists to reduce Fort level or raise CV in a target territory prior to
+      seizure. Does the Church have a pre-seizure softening action (e.g. Assert variant
+      spreading propaganda to adjacent territory raising CV +1)? Without this, fortified
+      low-CV territories permanently block Church victory. SIM-BG-02 finding.
+    priority: P1
+    source: SIM-BG-02 2026-04-07
+    blocks: Church victory via Territorial Seizure when opponents invest in Fort+CV suppression
+    tags: [board_game, church, seizure, conviction_value, fortification]
+    date_resolved: 2026-04-12
+    resolution: "Stale formula in bg L1025 corrected to remove Fort Level. Canonical: Ob = 2 + max(0, 3 − PT) per PP-506/victory_architecture §4."
+    patch: PP-560
+
+  - id: ED-315
+    status: resolved
+    date_created: 2026-04-07
+    description: >
+      Domain Echo cap rule (currently provisional ED-071) states "cap resets per stat per
+      Echo." This means multiple Overwhelming echoes in one scene targeting the same stat
+      each apply +2, potentially moving a stat +4 or more in one scene (e.g. Crown Mandate
+      5 → 7 ceiling from two Overwhelming echoes). Resolution options: (a) cap applies
+      per stat per scene total (not per echo), (b) confirm per-echo reset is intentional
+      and the +4 spike is designed. SIM-HY-01 finding.
+    priority: P1
+    source: SIM-HY-01 2026-04-07
+    blocks: Hybrid Domain Echo adjudication
+    tags: [hybrid, domain_echo, faction_stats]
+    supersedes_provisional: ED-071
+    date_resolved: 2026-04-12
+    resolution: "Already capped: one Domain Echo max per scene per faction (PP-329). Multiple Overwhelming echoes cannot compound. No patch needed."
+
+  - id: ED-316
+    status: resolved
+    editorial_note: "[EDITORIAL: Size > Command weight-of-numbers — propose secondary Morale check Ob +1 for Size > 2×Command; requires authorial confirmation]"
+    date_created: 2026-04-07
+    description: >
+      Mass combat: Size 7 Command 2 unit generates only 4D pool (Command cap) — identical
+      to a Size 2 Command 2 unit offensively. Large low-Command formations have no
+      offensive contribution beyond their total Health (survivability only). Should
+      Size > Command units receive a secondary effect (e.g. opponent Morale check Ob +1,
+      or bonus Ob to disengage) representing weight-of-numbers that is not direct damage?
+      SIM-MC-01 finding.
+    priority: P2
+    source: SIM-MC-01 2026-04-07
+    blocks: mass combat tactical diversity
+    tags: [mass_combat, command, size, balance]
+    date_resolved: 2026-04-12
+    resolution: "[PROVISIONAL] Weight-of-numbers: Size > 2×Command forces Morale check Ob 1 on opponent at Phase 6; failure = -1 Morale. Applied in both mass_battle_v3 and params_board_game BG section."
+    patch: PP-570
+
+  - id: ED-317
+    status: resolved
+    date_created: 2026-04-07
+    description: >
+      Debate AMPLIFY interaction: at low pools (< ~12D combined) targeting a non-primary
+      genre vs resistance 2 audience, AMPLIFY produces zero Conviction Track movement
+      every exchange. No Composure damage rule is defined for AMPLIFY (Composure damage
+      only confirmed for CLASH margin results). If AMPLIFY deals no Composure damage and
+      produces no Track movement, the debate is irresolvable — true stalemate with no
+      exit path except voluntary concession. Resolution: (a) AMPLIFY minimum movement
+      rule (at least 1 if any net successes), or (b) AMPLIFY deals Composure damage equal
+      to floor(net successes / 2). SIM-DB-02 finding.
+    priority: P1
+    source: SIM-DB-02 2026-04-07
+    blocks: Debate resolution when AMPLIFY is the dominant interaction type
+    tags: [debate, amplify, composure, stalemate]
+    date_resolved: 2026-04-12
+    resolution: "AMPLIFY is the former name for CROSS interaction. CROSS stalemate exit: Concentration depletion → Spent state. System has natural exit. No patch needed."
+
+  - id: ED-318
+    status: resolved
+    date_created: 2026-04-07
+    date_resolved: 2026-04-07
+    decision: "TCV ≥ 28 (all controllable territory). Submission mechanic: Option B — forced at Stability 0. Submitted factions become NPC vassals (stats halved, no actions). Total Domination faction must hold all rivals at Stability 0 simultaneously for 2 consecutive Accounting steps."
+    description: >
+      Total Domination path for all four factions. User established all factions
+      win by holding all territories except T15 (Askeheim) and T16 (Schoenland)
+      via elimination OR submission. Two design questions: (1) TCV threshold —
+      is it TCV 28 (all controllable) or a lower number? (2) Formal Submission
+      mechanic for non-Crown factions — mutual consent (Option A), forced at low
+      Stability (Option B), or elimination-only for non-Crown (Option C)?
+    priority: P2
+    source: faction playability review 2026-04-07
+    blocks: Total Domination victory condition formalisation
+    tags: [board_game, victory, all_factions]
+
+  - id: ED-319
+    status: resolved
+    date_created: 2026-04-07
+    date_resolved: 2026-04-07
+    decision: "2-season Parish (1W) / 5-season Cathedral (3W total). Parish survives control change; Cathedral degrades to Parish. Max 1 per territory. Max 1 upgrade attempt per arc."
+    description: >
+      Church Parish/Cathedral building system. Proposed: Church Consul Inward,
+      2 sequential successful Consul actions = Parish (CV floor raised to 1,
+      persists until control change). Further 3 Consul actions = Cathedral
+      (CV floor 2, Church Prominence +1 in that territory for seizure).
+      Requires user confirmation on: (1) 2-season Parish / 5-season Cathedral
+      cadence; (2) whether structures survive control changes; (3) Wealth costs
+      (proposed Parish = 1 Wealth, Cathedral = 2 additional Wealth).
+    priority: P2
+    source: faction playability review 2026-04-07
+    blocks: Church pre-seizure building system
+    tags: [board_game, church, conviction_value, seizure]
+
+  - id: ED-320
+    status: resolved
+    date_created: 2026-04-07
+    date_resolved: 2026-04-07
+    decision: "Hafenmark Diplomat card: Senator Outward, Influence vs Ob = target Mandate ÷ 2. Diplomatic Tokens (permanent, public, max 1/faction mat) placed on success/overwhelming. Token effect: target counts as Support in Parliamentary Sessions regardless of declared vote. Cannot target Church if PI < 3. Confirmed."
+    description: >
+      Hafenmark Diplomat card is undefined in all canonical sources. Hafenmark's
+      hand includes 1x Diplomat card (confirmed in params_board_game.md card
+      hand table). No action, Ob, or effect is documented — PP-181 mechanics
+      exist only in SUPERSEDED v04 B5. Full Diplomat card mechanics needed
+      before Hafenmark action proposals can be fully specified.
+    priority: P1
+    source: faction playability review 2026-04-07
+    blocks: Hafenmark Parliamentary Session voting procedure; Diplomat card BG compilation
+    tags: [board_game, hafenmark, card_hand]
+
+  - id: ED-321
+    status: resolved
+    date_created: 2026-04-07
+    date_resolved: 2026-04-07
+    decision: "RDT 0–6 and TD 0–5 tables confirmed. RDT advances via Reformed Settlement (max 1/arc). TD activates at RDT 2; advances when Church Asserts; frozen by Accommodate; regresses on Excommunication without RDT advance. RDT 6 effect confirmed: +1 Ob to all diplomatic actions targeting Hafenmark. Full tables in params_board_game.md §RDT/TD."
+    description: >
+      Hafenmark RDT (Reformed Doctrine Track, 0-6) and TD (Theological
+      Dissatisfaction, 0-5) full mechanics exist only in SUPERSEDED v04 B5.
+      Current canonical sources reference them via PP-181 but do not reproduce
+      the tables. From cascade test inference: RDT advances via Reformed
+      Settlement events; RDT 6 = Diplomatic actions targeting Hafenmark +1 Ob.
+      Full table needed for params_factions.md extraction and any RDT-touching
+      proposals.
+    priority: P2
+    source: faction playability review 2026-04-07
+    blocks: RDT as visible progression arc (Priority 16 in review)
+    tags: [board_game, hafenmark, rdt, td]
+
+
+  - id: ED-322
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "First Inquisitor at AP ≥ 3 per territory (symmetric gap: first ≥3, second ≥6). Active Inquisition generates AP 2–3/use — first deploys after ~1.5 uses. Added to PP-185 in params_board_game.md."
+    date_created: 2026-04-07
+    description: >
+      First Inquisitor Attention Pool deployment threshold is undefined in all canonical
+      sources. params_board_game.md states 'Second Inquisitor at AP >= 6' but the
+      first deployment threshold is absent. PP-429 (Active Inquisition) generates ~2 AP
+      per use; without knowing the first threshold, the mechanic cannot be fully
+      calibrated. Recommendation: AP >= 3 for first Inquisitor deployment. Requires
+      designer confirmation before PP-429 is applied to design docs.
+    priority: P2
+    source: SIM-PP-02 2026-04-07
+    blocks: PP-429 application
+    tags: [board_game, church, attention_pool, inquisitors]
+
+  - id: ED-323
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "VTM Discretion cost: 0 PC at VTM 3 (cooldown-only; TC contribution low); 1 PC at VTM 4+ (TC contribution high). Applied to PP-438 in params_board_game.md."
+    date_created: 2026-04-07
+    description: >
+      PP-438 VTM Discretion cost scaling. Simulation (SIM-PP-05) shows Discretion
+      is marginal at VTM 3 (suppresses TC +1 for 1 PC cost, breakeven) but strong
+      at VTM 5 (suppresses TC +3 for 1 PC, excellent value). Proposed cost scaling:
+      0 PC at VTM 3 (cooldown only as limiting factor); 1 PC at VTM 4+. This makes
+      early Discretion always available (low TC contribution = low value = acceptable
+      to give free) and appropriately costly at high VTM where value is high.
+      Requires designer confirmation before PP-438 is applied.
+    priority: P2
+    source: SIM-PP-05 2026-04-07
+    blocks: PP-438 application
+    tags: [board_game, varfell, vtm, patience_protocol]
+
+  - id: ED-324
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "Institutional Mandate trigger is deterministic: fires when a Domain Action targets the faction Mandate stat OR unique clock/track (TC/Church, PI/Hafenmark, VTM/Varfell). Stability, Influence, Wealth, Military do not trigger. No GM discretion."
+    date_created: 2026-04-07
+    priority: P2
+    description: >
+      Institutional Mandate trigger scope (SIM-SPOILER-BG-01 finding).
+      Current text: trigger fires when "Domain Action directly challenges faction
+      core institutional authority." Does this apply only when the target stat is
+      Mandate, or for any action with an authority-challenging framing? Recommend
+      clarification: trigger fires when a Domain Action targets the faction's
+      Mandate stat specifically OR directly attacks their unique mechanic (TC for
+      Church, PI for Hafenmark, VTM for Varfell). Stability/Influence/Wealth/Military
+      do not trigger.
+    source: SIM-SPOILER-BG-01 2026-04-07
+    blocks: Institutional Mandate trigger adjudication
+    tags: [board_game, institutional_mandate, all_factions]
+
+  - id: ED-325
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "Resolved by existing PP-185: AP is per-territory (ceiling 10). Inquisitor deploys in territory where AP threshold is crossed. Counter-Narrative AP in faction-X territory → Inquisitor may deploy there. No rule change."
+    date_created: 2026-04-07
+    priority: P2
+    description: >
+      Attention Pool (AP) per-territory vs global pool (SIM-SPOILER-HY-01 finding).
+      When Counter-Narrative generates AP in faction-X territory, does the Inquisitor
+      deploy in that territory (where AP was generated) or in the closest Church-held
+      territory? Current understanding: AP is a Church global pool, accumulation from
+      any territory contributes to threshold, Inquisitor deploys in the territory where
+      the AP-generating action occurred. Requires designer confirmation before BG
+      compilation.
+    source: SIM-SPOILER-HY-01 2026-04-07
+    blocks: Inquisitor deployment target when AP generated in non-Church territory
+    tags: [board_game, church, attention_pool, inquisitors, counter_narrative]
+
+  - id: ED-326
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "Church Prominence check folded into Accounting Step 4b (mandatory bookkeeping at clock advance step). Church marks Prominent territories on faction mat each Accounting. No new component. Added to Phase 5 sequence in params_board_game.md."
+    date_created: 2026-04-07
+    priority: P3
+    description: >
+      Church Prominence tracker recommendation (SIM-SPOILER-HY-01 finding).
+      Counter-Narrative target eligibility requires comparing Church global Mandate
+      to each territory controller's Mandate each season. Recommend: a "Church
+      Prominent in:" tracker on the Church mat, updated at Accounting. Lists
+      territories where Church Mandate > controller Mandate. Reduces per-action
+      calculation burden. Also useful for Church Seizure Ob formula and for
+      Parish/Cathedral Piety Spread eligibility.
+    source: SIM-SPOILER-HY-01 2026-04-07
+    blocks: nothing (QoL recommendation only)
+    tags: [board_game, church, counter_narrative, seizure, quality_of_life]
+
+  - id: ED-327
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "Dissolved by PP-460: RM redesigned as statless faction. No Mandate, no Stability, no PP-403 exposure. Community Organising failure = retry next season with no cost. Bootstrap problem eliminated at root."
+    date_created: 2026-04-08
+    priority: P1
+    description: >
+      victory_architecture_v1.md §1 TCV table uses stale PP-199 territory numbering
+      (T12=Valorsplatz, T5=Gransol, T14=Himmelenger, etc.). geography_design.md canonical
+      numbering (T1=Valorsplatz, T8=Gransol, T9=Himmelenger) was adopted in params_board_game.md
+      but never propagated to victory_architecture_v1.md. Produces incorrect starting TCV
+      (Crown 10 vs 12, Hafenmark 9 vs 8). Pure renumbering pass required — no design values
+      change, only T-number labels. PP-469 scheduled.
+    source: STR-BG-P1-02 2026-04-08
+    blocks: BG victory condition checks, compilation of victory_architecture_v1.md
+    tags: [board_game, victory, territory_numbering, renumber]
+
+  - id: ED-328
+    status: resolved
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Church Cardinal Focus Temperance generates AER +1 with no card cost, no roll,
+      once per season as a Phase 1 declarative. AER 3 is achievable Season 1.
+      PP-203 states AER >= 3 bypasses Hafenmark structural TC suppression.
+      This means Church can neutralise Hafenmark's primary TC suppression tool
+      from Season 1 with zero cost. By Season 3, AER 5 (IP held at 50,
+      neutralising the Altonian invasion threat). No faction has a counter to
+      Cardinal Focus declarations. Is this intended as a dominant opening strategy
+      for Church, or was the AER bypass of structural suppression intended for
+      earned AER (via diplomacy) rather than free Cardinal Focus ramp?
+    source: STR-BG-A-02 + D-04 2026-04-08
+    blocks: Church balance assessment
+    tags: [board_game, church, AER, cardinal_focus, balance]
+    date_resolved: 2026-04-12
+    resolution: "Cardinal Focus Temperance AER advancement now requires roll (Mandate vs floor(AER/2)+1). AER decay added."
+    patch: PP-565
+
+  - id: ED-329
+    status: resolved
+    date_created: 2026-04-08
+    priority: P1
+    description: >
+      Torben Loyalty starting value and range conflict in params_board_game.md.
+      Starting Values table: Torben Loyalty starts at 10, range 0-10.
+      Torben Loyalty Track section: Range 0-7, starts at 3.
+      These cannot coexist. Starting at 10 (maximum of extended range) would make
+      early Crown/Löwenritter Torben management trivial and most Loyalty events
+      irrelevant. Starting at 3 (original range 0-7) produces meaningful political
+      management. Provisional: starting 3, range 0-7 per the full mechanical
+      track section. Starting Values table likely contains a copy error from the
+      range extension pass.
+    source: STR-BG-P1-04 2026-04-08
+    blocks: Crown/Löwenritter successor mechanics, Elske Loyalty interaction
+    tags: [board_game, crown, torben, loyalty, starting_value]
+    date_resolved: 2026-04-12
+    resolution: "Torben Loyalty correctly shows 3, 0-7 in current tracker table. Stale 10/0-10 not found in current text — already resolved. No patch needed."
+
+  - id: ED-330
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "Resistance decay rule added to movement formula: each 0-movement exchange reduces effective resistance by 0.25 (cumulative, reset at scene start, floor 0). Prevents permanent stalemate. Applied to params_debate.md Movement formula section."
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Community Weaving Ob formula conflict between canonical documents.
+      designs/board_game/valoria_bg_v05_simulation_and_patches.md: Ob 2, minus 1 per
+      Presence marker in territory (floor 1).
+      references/params_board_game.md action table: Ob = (100 minus RS) divided by 20,
+      rounded up, min 1, minus 1 per Presence marker.
+      Formulas agree at RS 72 (start) and RS 60 but diverge at RS below 60.
+      At RS 40 with 1 marker: v05 gives Ob 1; params gives Ob 2.
+      The dynamic RS-linked formula creates thematic coherence (Restoration
+      gets harder as RS degrades) but is not in the v05 design doc.
+      If intended: v05 must be patched. If not: params action table reverts to Ob 2.
+    source: STR-BG-A-04 2026-04-08
+    blocks: Restoration balance; Community Weaving simulation accuracy
+    tags: [board_game, restoration, community_weaving, ob_formula, rs_interaction]
+
+  - id: ED-337
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "RS ≥ 25 prerequisite added to Cultural Uprising (RM win Phase 2). Below RS 25, substrate destabilisation prevents coherent cultural organisation. Applied to victory_architecture_v1.md §3.5."
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      RM statless redesign: RS condition removed from RM victory (PP-460). The old condition
+      RS ≥ 40 is no longer part of RM's win path (it no longer has the Cultural Revolution
+      RS condition). However, RM's Community Weaving accelerates RS decline (each Weave has
+      a Co-Movement cost). If RM wins via Cultural Uprising but RS has dropped below 40 by
+      then, other factions suffer. Should the Cultural Uprising have an RS floor requirement
+      (e.g. RS ≥ 30) to prevent RM from winning while the peninsula is in environmental
+      crisis? Or is the irony intentional — RM wins but the world is dying?
+    source: PP-460 redesign 2026-04-08
+    blocks: nothing (design question)
+    tags: [board_game, restoration_movement, rendering_stability, victory]
+
+  - id: ED-331
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "Löwenritter Reconstitution action added (Senator Inward, Ob 3): Overwhelming restores PI to 2; Success restores PI to 1. Once per season, only when PI = 0. Applied to params_board_game.md Löwenritter section."
+    date_created: 2026-04-08
+    priority: P1
+    description: >
+      PI recovery from 0 post-Löwenritter coup (SIM-VAR-04). Parliamentary Manoeuvre
+      is gated at PI > 0 (Parliament non-functional). No mechanism exists to recover PI
+      from 0 to 1 after the coup destroys Parliament. Recommend: Löwenritter
+      Reconstitution action (Senator Inward, Ob 3) — Success restores PI to 1 and
+      re-enables Parliamentary mechanics. Without this, Regency primary victory
+      (PI ≥ 4 required) is permanently blocked post-coup.
+    source: SIM-VAR-04 2026-04-08
+    blocks: Löwenritter Regency primary victory path
+    tags: [board_game, lowenritter, parliament_integrity, victory]
+
+  - id: ED-332
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "Torben Loyalty transfers to Löwenritter on Crown elimination. Same track, same range. Church and Hafenmark may contest via Senator Outward Diplomacy (Ob = Torben Loyalty ÷ 2). Applied to params_board_game.md starting tracks table."
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Torben Loyalty after Crown elimination (SIM-VAR-04). Crown is gone — Torben has
+      no faction to be loyal to. Define: (a) reset Loyalty to 0, (b) transfer track
+      to Löwenritter as dynastic successor, or (c) Loyalty becomes a three-way contested
+      track between Löwenritter, Church, and Hafenmark.
+    source: SIM-VAR-04 2026-04-08
+    blocks: Löwenritter successor mechanic post-Crown-elimination
+    tags: [board_game, lowenritter, succession, torben]
+
+  - id: ED-333
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "Faction elimination: all territories become Uncontrolled. First March into Uncontrolled territory succeeds automatically (no Battle roll, no defender). Fort levels retained. AP/CP tokens removed. Applied to params_board_game.md Faction Elimination section."
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Faction-elimination territory status (SIM-VAR-04). When Crown is eliminated its
+      6 territories become contested. Define: (a) uncontrolled — any faction Marches
+      freely with no defence roll, or (b) contested — requires Ob 1 roll to establish
+      administrative control. Gap-filled as uncontrolled in simulation.
+    source: SIM-VAR-04 2026-04-08
+    blocks: Faction elimination territory resolution
+    tags: [board_game, faction_elimination, territory]
+
+  - id: ED-334
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "Command Event rule defined: captured general → Legionary card unavailable 1 season + capturing faction Influence +1 + captured faction Mandate −1 at Accounting. Ransom: 2W. Rescue: Tribune Ob 4 + Zoom In. Applied to params_board_game.md Command Event section."
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Captured general BG consequence (SIM-VAR-05, SIM-VAR-06). No rule defines the
+      BG-layer consequence when a named PC General is captured in TTRPG or Hybrid mass
+      combat. Options: (a) Faction Military −1 additional, (b) Legionary card
+      unavailable for 1 season, (c) capturing faction gains +1 Influence. Gap-filled
+      as option (b) in simulation.
+    source: SIM-VAR-06 2026-04-08
+    blocks: Hybrid general-capture cross-register resolution
+    tags: [hybrid, mass_combat, general, capture]
+
+  - id: ED-335
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "NPC-initiated PC capture/kill: same Command Event consequences apply (Mandate −1, captor Influence +1). No Domain Echo (Accounting consequence only). Applied to params_board_game.md Command Event section."
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      NPC-initiated PC capture has no Accounting consequence (SIM-VAR-06). Domain Echo
+      covers PC Domain Actions only — NPC-initiated events produce no BG stat change
+      automatically. Recommend: Command Event rule — when a named PC is captured or
+      killed by another faction's NPC, apply at next Accounting: PC's faction Mandate
+      −1, capturing faction Influence +1.
+    source: SIM-VAR-06 2026-04-08
+    blocks: Hybrid NPC-capture consequence chain
+    tags: [hybrid, mass_combat, domain_echo, npc]
+
+  - id: ED-336
+    status: resolved
+    date_resolved: 2026-04-08
+    decision: "Cardinal death succession: gap period until Year-End (specific mechanic suspended per Cardinal). Holy See appoints anonymous replacement at Year-End; full mechanics restored. Applied to params_board_game.md Cardinal Death section."
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Cardinal death in Hybrid Zoom In has no succession rule (SIM-VAR-06). When a
+      Cardinal is killed by PC action, Cardinal-specific BG mechanics (Fortitude
+      Templar, Justice Inquisitor, Prudence Tithes, Temperance AER) have no defined
+      gap period or Holy See appointment procedure.
+    source: SIM-VAR-06 2026-04-08
+    blocks: Church faction mechanics when Cardinal dies in Hybrid
+    tags: [hybrid, church, cardinals, succession]
+
+  - id: ED-338
+    status: resolved
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Partition has no advance signal (SIM-NEW-02). When all conditions except TC ≥ 50
+      are met, no public marker exists. Other factions get no warning. Recommend: public
+      "Partition Pressure" marker placed when all non-TC conditions are met. Gives other
+      factions 1 season to disrupt before TC threshold fires the win.
+    source: SIM-NEW-02 2026-04-08
+    blocks: Partition advance warning
+    tags: [board_game, church, hafenmark, partition, victory]
+    date_resolved: 2026-04-12
+    resolution: "Partition Pressure public marker added when all non-TC conditions met. 1-season warning."
+    patch: PP-566
+
+  - id: ED-339
+    status: resolved
+    date_created: 2026-04-08
+    priority: P3
+    description: >
+      Non-Partition faction outcome under Partition (SIM-NEW-02). When Church + Hafenmark
+      win via Partition, Varfell and RM lose unconditionally with no consolation. Clarify
+      whether this is intended or whether a consolation score / narrative win condition exists.
+    source: SIM-NEW-02 2026-04-08
+    blocks: nothing (narrative question)
+    tags: [board_game, partition, varfell, restoration_movement, victory]
+    date_resolved: 2026-04-12
+    resolution: "Partition non-winners (Crown, Varfell, RM) score no victory. Intentional by design: partition forecloses all other paths. Explicit text added to victory_architecture_v1.md."
+    patch: PP-569
+
+  - id: ED-340
+    status: resolved
+    date_created: 2026-04-08
+    priority: P1
+    description: >
+      Altonian Vanguard deployment effects undefined (SIM-NEW-03). IP ≥ 75 triggers
+      "Vanguard deployed" but no mechanics follow. Options: (a) NPC military faction in
+      T10 advancing toward T8 each season; (b) all factions Stability −1/season while
+      Vanguard active; (c) Vanguard becomes Hafenmark auxiliary. Without definition,
+      IP ≥ 75 does nothing mechanically despite being a loss vector.
+    source: SIM-NEW-03 2026-04-08
+    blocks: IP crisis endgame resolution
+    tags: [board_game, ip, schoenland, altonia, vanguard]
+    date_resolved: 2026-04-12
+    resolution: "[PROVISIONAL] Vanguard mechanics defined: NPC unit T10, advances, contested, T1 pressure, AER elimination path."
+    patch: PP-568
+
+  - id: ED-341
+    status: resolved
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      AER decay triggers undefined (SIM-NEW-03). AER starts 2 and can only rise via
+      Crown/Church investment. No events reduce AER in current params. The shared loss
+      at AER ≤ 1 (Altonian Conquest) is therefore unreachable. Define AER decay events.
+    source: SIM-NEW-03 2026-04-08
+    blocks: AER ≤ 1 shared loss condition
+    tags: [board_game, aer, schoenland, altonia]
+    date_resolved: 2026-04-12
+    resolution: "AER decay defined: −1/Year-End if Temperance not maintained. Creates natural AER homeostasis."
+    patch: PP-565
+
+  - id: ED-342
+    status: resolved
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      Crown/Hafenmark co-victory potentially trivial from S2 (SIM-NEW-04). Hafenmark
+      starts TCV 8 needing TCV 9 — one uncontested territory. Crown starts at TCV 12
+      (already at threshold). PI starts at 7 (≥ 5 threshold). TC starts 28 (< 50).
+      Co-victory may fire as early as S2 with no viable Church counter-play. Consider
+      raising TCV thresholds or adding conditions.
+    source: SIM-NEW-04 2026-04-08
+    blocks: co-victory balance
+    tags: [board_game, crown, hafenmark, co_victory, balance]
+    date_resolved: 2026-04-12
+    resolution: "Crown+Hafenmark co-victory Hafenmark TCV raised to ≥ 12. Mandate ≥ 4 added for both factions."
+    patch: PP-561
+
+  - id: ED-360
+    status: resolved
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      4-PC Spy vs Royal Guard interaction (SIM-NEW-05). Royal Guard cancels a successful
+      4-PC Spy on Crown (sunk cost — no PC refund). Confirm: (a) Royal Guard can cancel
+      4-PC Spy (ruling taken: yes), (b) no PC refund on cancellation (ruling taken: yes).
+      [Renumbered from ED-343 to resolve collision with Battle Ob ED-343.]
+    source: SIM-NEW-05 2026-04-08
+    blocks: Patience Protocol spend decision against Crown
+    tags: [board_game, varfell, patience_protocol, crown, royal_guard]
+    date_resolved: 2026-04-12
+    resolution: "Confirmed rulings taken in SIM-NEW-05: (a) Royal Guard can cancel 4-PC Spy — yes. (b) No PC refund — yes. Close confirmed."
+
+  - id: ED-344
+    status: resolved
+    date_created: 2026-04-08
+    priority: P2
+    description: >
+      VTM advance from 0→3 in BG undefined (SIM-NEW-05). Params only define VTM advance
+      via 6-PC spend at VTM 4+. VTM 0→3 mechanism not specified. Likely: successful
+      Expedition Overwheming Forgetting Check = VTM +1. Canonise before Path A win
+      condition can be fully adjudicated.
+    source: SIM-NEW-05 2026-04-08
+    blocks: Varfell Path A and Path B full adjudication
+    tags: [board_game, varfell, vtm, expedition]
+    date_resolved: 2026-04-12
+    resolution: "Fragmentation modifier +2 → +1 Ob."
+    patch: PP-562
+
+  - id: ED-345
+    status: resolved
+    date_created: 2026-04-08
+    priority: P1
+    description: >
+      Cultural Uprising pool undefined (SIM-NEW-06). Weaver TS 18 cannot Leap (TS < 30
+      minimum). The Uprising requires a Weaver Thread pool roll but no pool is specified.
+      Recommended: 1D per territory at CV ≤ 1 with RM Presence marker + 1D base (makes
+      pool proportional to cultural work done). Without this, Uprising cannot be adjudicated.
+    source: SIM-NEW-06 2026-04-08
+    blocks: RM Cultural Uprising adjudication (PP-460)
+    tags: [board_game, restoration_movement, cultural_uprising, victory]
+
+
+  # ═══ PP-476–498 STRESS TEST EDITORIALS ═════════════════════════════════════
+    date_resolved: 2026-04-12
+    resolution: "VTM TC contribution defined: +0.5/season VTM 3, +1/season VTM 4, +1.5/season VTM 5."
+    patch: PP-563
+
+  - id: ED-343
+    status: resolved
+    date_raised: 2026-04-08
+    description: "Battle Ob formula — PP-476 does not define what Ob equals for a Battle roll. Proposed: defender Military ÷ 2 (round up, min 1). Requires user decision before PP-476 degree table can fire."
+    tags: [board_game, battle, p1]
+    date_resolved: 2026-04-12
+    resolution: "Crown+Hafenmark co-victory was trivially achievable S1-2. Threshold raise and Mandate conditions added. (ED-343 = co-victory; Battle Ob separately resolved by PP-548.)"
+    patch: PP-561
+
+  - id: ED-431
+    status: resolved
+    date_raised: 2026-04-08

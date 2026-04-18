@@ -1,0 +1,826 @@
+  description: "Territory table reconciled from physical map + canonical source. Hafenmark = T2 (Gransol capital)/T4 (Spartfell)/T8 (Eidursjo). Varfell = T9/T10/T11/T12 (4 territories at start). Crown = T1/T3/T5/T6/T7/T13. Hafenvalor = Crown port T6 (not Hafenmark capital). Church has no starting territorial control (cathedral presence in T3 only). Guilds/Niflhel: commercial/network presence only, no territorial control. Adjacency table derived from physical map. Resolves ED-107."
+  finding_id: "ED-107 / Physical map + canonical source"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.4"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-195
+  renumber_date: 2026-04-04
+
+- id: PP-362
+  date: 2026-04-02
+  severity: P1
+  description: "Territory cascade corrections from PP-195 reassignment: Crown Deed 2 T1+T2→T1+T6; Hafenmark Path C Deed 3 T6→T2; TC80 duchy capital TC bonus corrected (Gransol T2 +3, Hafenvalor T6 +1); Ministry AP-tokens T2 removed (Crown-only); Varfell expansion constraint text corrected (T10 is Varfell starting territory); Elske contact via T4 (now Hafenmark) — facilitation/obstruction mechanic added."
+  finding_id: "PP-195 cascade"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.4"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-196
+  renumber_date: 2026-04-04
+
+- id: PP-363
+  date: 2026-04-02
+  severity: P1
+  description: "Final territory table from annotated physical map. Key correction over PP-195: Halvardshelm T11 = Hafenmark (white dot on map), not Varfell. Hafenmark now has 4 territories (T2/T4/T8/T11). Varfell has 3 (T9/T10/T12). Southernmost radiating zones documented (red arcs = Zone 1/2/3). Two Altonian mountain passes documented (purple routes: northeast near Spartfell T4, northwest near Sigurdshelm T10). Adjacency table finalized from map. Hafenvalor confirmed as Crown port sub-location of T1 area."
+  finding_id: "Annotated physical map (Screenshot_20260402-224317_2)"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.5"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-197
+  renumber_date: 2026-04-04
+
+- id: PP-364
+  date: 2026-04-02
+  severity: P1
+  description: "Final territory corrections from starred map: Vargstad = Varfell duchy capital (green star, SW, T12 renamed from Oastad). Halvardshelm T11 = Varfell (green circle — PP-197 was wrong to assign to Hafenmark). Hafenmark = T2/T4/T8 (3 territories). Varfell = T9/T10/T11/T12 (4 territories). Road network generated from circle positions, terrain, pre-industrial geography. Adjacency table finalized. TC80 seizure values corrected for final territory assignments."
+  finding_id: "Annotated map with stars"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.7.5"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-198
+  renumber_date: 2026-04-04
+
+- id: PP-365
+  date: 2026-04-02
+  severity: P1
+  description: "Definitive 15-territory map. Varfell 4 (T1-T4), Hafenmark 4 (T5-T8), Crown 5 (T9-T13), Church 1 (T14 Himmelenger), Southernmost 1 (T15 Askeheim). T16 Schoenland maritime island NPC. Road network, adjacency, Southernmost zones, TC80 table, VC territory references, Ministry/Guilds/Niflhel starting positions all updated. ED-108: T10 Nordhelm/T11 Mittelmark names provisional."
+  finding_id: "Map 3 annotations + user faction count"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.8.0"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-199
+  renumber_date: 2026-04-04
+
+- id: PP-366
+  date: 2026-04-02
+  scope: mass_combat_commander_bonus
+  description: >
+  Confirm commander bonus formula: Military÷3 round down, min 0, max +2D. Resolves ED-033.
+  files_changed:
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
+  status: applied
+  renumbered_from: PP-190
+  renumber_date: 2026-04-04
+
+- id: PP-367
+  date: 2026-04-02
+  scope: altonian_invasion_units
+  description: >
+  Provisional Altonian unit stats derived from Military ~5. Heavy Infantry, Cavalry, Crossbow, Artillery. Deployment at IP≥75. ED-036 provisional.
+  files_changed:
+  - references/params_mass_combat.md
+  status: applied
+  renumbered_from: PP-193
+  renumber_date: 2026-04-04
+
+- id: PP-368
+  date: 2026-04-02
+  scope: mass_combat_dmg_mod
+  description: >
+  Confirm unit Dmg Mod table. Values consistent with personal combat weapon types. Resolves ED-062.
+  files_changed:
+  - references/params_mass_combat.md
+  - designs/mass_combat/mass_battle_v3.md
+  status: applied
+  renumbered_from: PP-194
+  renumber_date: 2026-04-04
+
+- id: PP-369
+  date: 2026-04-02
+  scope: bg_battle_partial_outcome
+  description: >
+  Confirm Partial battle outcome: margin ≤1 either direction = Partial; Attacker Stability −1. Resolves ED-063.
+  files_changed:
+  - designs/mass_combat/mass_battle_v3.md
+  status: applied
+  renumbered_from: PP-195
+  renumber_date: 2026-04-04
+
+- id: PP-370
+  date: 2026-04-02
+  scope: mass_combat_projectile_dr
+  description: >
+  Confirm projectile DR table. LP/HP vs None=0 correct (net hits sufficient). LBl vs Light=2 intentional. Resolves ED-061 and ED-064.
+  files_changed:
+  - references/params_mass_combat.md
+  status: applied
+  renumbered_from: PP-196
+  renumber_date: 2026-04-04
+
+- id: PP-371
+  date: 2026-04-02
+  scope: mass_combat_projectile_balance
+  description: >
+  LBl vs LP dominance analysis. LBl better vs Light only. LP equal/better at Medium/Heavy. Intentional weapon role distinction. Resolves ED-065.
+  files_changed:
+  - references/params_mass_combat.md
+  status: applied
+  renumbered_from: PP-197
+  renumber_date: 2026-04-04
+
+- id: PP-372
+  date: 2026-04-02
+  scope: mass_combat_artillery_morale
+  description: >
+  Artillery morale cascade capped by existing −3/phase rule. Multiple simultaneous HBl destructions still capped. Resolves ED-066.
+  files_changed:
+  - designs/mass_combat/mass_battle_v3.md
+  status: applied
+  renumbered_from: PP-198
+  renumber_date: 2026-04-04
+
+- id: PP-373
+  date: 2026-04-02
+  scope: simultaneous_catastrophe
+  description: >
+  Simultaneous catastrophe resolution order: RS=0 first (Shared Loss), then IP≥80. Independent effects. RS=0 is terminal — IP moot if Shared Loss fires. Resolves ED-077.
+  files_changed:
+  - references/params_factions.md
+  status: applied
+  renumbered_from: PP-199
+  renumber_date: 2026-04-04
+
+- id: PP-374
+  date: 2026-04-02
+  scope: bg_thread_coherence
+  description: >
+  BG Thread ops always skipped (Phase 4/6). No Coherence cost in BG is correct by design — Thread operates below BG abstraction. Resolves ED-080.
+  files_changed:
+  - references/params_mass_combat.md
+  status: applied
+  renumbered_from: PP-200
+  renumber_date: 2026-04-04
+
+- id: PP-375
+  date: 2026-04-02
+  scope: reformed_settlement_ob
+  description: >
+  Reformed Settlement standing effect: +1 Ob on Diplomacy targeting Hafenmark while TC≥40 and Church Resisted. Derived from bg_v05 simulation. Resolves ED-081.
+  files_changed:
+  - references/params_factions.md
+  status: applied
+  renumbered_from: PP-201
+  renumber_date: 2026-04-04
+
+- id: PP-376
+  date: 2026-04-02
+  scope: bg_planning_phase_time
+  description: >
+  Planning phase time: ~8 min/player with reference cards, ~12-15 without. Pre-assign Seasonal Priority on faction cards. No mechanical change. Resolves ED-083.
+  files_changed:
+  - references/params_mass_combat.md
+  status: applied
+  renumbered_from: PP-202
+  renumber_date: 2026-04-04
+
+- id: PP-377
+  date: 2026-04-02
+  severity: P2
+  description: "Geographic realism review of road/trade network against terrain. Corrections: (1) Removed T9 (Arcansheld) ↔ T4 (Vargstad) adjacency — no realistic route across mountain terrain; path must go via T3 Halvardshelm. (2) Renamed 'King's Road' to coastal route T12→T14→T13 (correct — follows settled east coast). Old inland route T12→T11→T9 renamed 'Military Road' (Löwenritter patrol route). (3) Clarified Schoenland T7 connection = IP invasion staging only, not trade. (4) Added geographic trade notes documenting east coast trade axis and Varfell trade isolation (mechanically intentional). (5) Renamed 'Fortress Road' to 'Fortress Extension' (T9→T13 interior route, not T9→T4 which is removed)."
+  finding_id: "Geographic realism review"
+  source: audit
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.8.1"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-200
+  renumber_date: 2026-04-04
+
+- id: PP-378
+  date: 2026-04-02
+  scope: debate_scale_transitions
+  description: >
+  Confirm resolved debate and scale transition mechanics.
+  ED-012: Dual win-conditions confirmed (exchange majority + audience capture).
+  ED-043: Church Tribunal — accused corroboration intentionally prohibited.
+  ED-057a: Hybrid Debate confirmed resolved in debate §6.14.
+  ED-058: Debate end = exchange limit; stalemate = proposer loses.
+  ED-055b: GM Zoom In/Out reference card stub added to stage11.
+  ED-073/075/076: Non-battle Zoom In, PC embedding, co-movement propagation
+  confirmed via stage11 Eight Handoff Rules and §11.7.
+  Gap items ED-009/014/022/049/051/055a/056/057b/072 documented with GAP notes.
+  files_changed:
+  - references/params_contest.md
+  - compilation/v0.14/stage11_scale_transitions.md
+  - canon/editorial_ledger.yaml
+  - canon/patch_register.yaml
+  status: applied
+  resolves: ED-012, ED-043, ED-055b, ED-057a, ED-058, ED-073, ED-075, ED-076
+  gaps_documented: ED-009, ED-014, ED-022, ED-049, ED-051, ED-055a, ED-056, ED-057b, ED-072
+  renumbered_from: PP-203
+  renumber_date: 2026-04-04
+
+- id: PP-379
+  date: 2026-04-02
+  severity: P2
+  description: "Map v2 provisionally approved. Territory positions finalised: Himmelenger (T14) equidistant from Nordhelm/Lowenskyst/Valorsplatz/Gransol. Mittelmark (T11) between Valorsplatz and Stillhelm. Schoenland = merchant NPC only, no military adjacency, sea-trade connections only (T8/T12). Rivers added: R. Valoris (lake→Valorsplatz), NW tributary, NE stream, R. Vargard (SW peninsula). Connections added: T9↔T12 (Arcansheld-Valorsplatz), T11↔T12/T13 (Mittelmark corridor). Roads deferred to next session. Names provisional (ED-108 open for T10/T11)."
+  finding_id: "User provisional approval"
+  source: editorial
+  affects: [references/params_board_game.md, designs/board_game/valoria_map_v2.svg]
+  applied_to_version: "v0.8.2"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-201
+  renumber_date: 2026-04-04
+
+- id: PP-380
+  date: 2026-04-02
+  severity: P1
+  description: "BAL-BG-02 balance analysis. Stale territory references fixed: Crown Deed 2 (T1/T6→T12/T9); Hafenmark Path C (T6→T5 Gransol); Varfell Path B (T12→T4); Starting Control block updated to PP-199 assignments. P1 design findings flagged as ED-109 through ED-112. P2 finding ED-113. All require user decision before mechanics patch."
+  finding_id: "BAL-BG-02"
+  source: simulation
+  affects: [references/params_board_game.md, canon/editorial_ledger.yaml]
+  applied_to_version: "v0.8.3"
+  status: applied
+  applied_commit: pending
+  renumbered_from: PP-202
+  renumber_date: 2026-04-04
+
+- id: PP-219
+  date: 2026-04-02
+  severity: P1
+  description: "Southernmost access redesign. T13 Stillhelm = normal territory (reverts PP-203 Fort 1 and march-trigger; both were wrong). T15 Askeheim = Southernmost proper — no faction control possible; Champion TS >= 30 required; Expedition Procedure defined (stage in T13, declare Expedition, Forgetting Check on entry); Meeting Edeyja defined. Varfell Path B/C correctly reference T13 (normal territory control) not T15. TC 80 seizure cannot target T15. Warden Cooperation advances via successful Expedition seasons, not territorial control."
+  finding_id: "User clarification — Stillhelm is normal; Southernmost access gate is T15 only"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.8.5"
+  status: applied
+  applied_commit: pending
+
+- id: PP-220
+  date: 2026-04-02
+  severity: P2
+  description: "Champion TS table updated: Almud Almqvist TS 28 (near-Stirring, qualifies via Discovery Event only — politically costly); Lenneth Almqvist (Queen, Crown) can access Southernmost via arc development — starting TS unknown, ED-119 opened for full design. Crown now has two conditional Champion pathways. Three factions have Southernmost access paths: Varfell (fastest, VTM), Crown (conditional, arc-dependent), Restoration (support role only)."
+  finding_id: "User clarification — Lenneth is Crown Queen"
+  source: editorial
+  affects: [references/params_board_game.md]
+  applied_to_version: "v0.8.5"
+  status: applied
+  applied_commit: pending
+
+  # ── SIM-X-22: Combat + Mass Battle + Thread + Temporal Axes (2026-04-03) ───
+
+- id: PP-232
+  date: "2026-04-03"
+  severity: P1
+  description: "Batch correction from docx review. Core: Ob cap raised to 20, Overwhelming floor 3, Health formula revised to (End+6)×(wounds+1), Stamina floor 2, armour wield constraint added, Certainty flagged ED-128, Composure flagged ED-127. Combat: weapon system rebuilt (Short/Long × Light/Heavy × Blade/Blunt matrix, base TN 7 with modifiers), STR confirmed in damage formula, damage formula revised to armour-dependent modifier table, initiative order corrected (lower initiative declares first; higher declares last), tie result corrected (no damage; initiative stays), wound penalty corrected to −1D only (no Ob penalty), Mass Mismatch Long weapon exemption removed. Debate: Argue pool corrected to (Cognition × 2) + History, initiative stat corrected to Attunement, Step 1 name flagged ED-132, Diverge flagged ED-133. Threadwork: Leap pool adds Spirit, Leap Failure corrected to −1D Thread Pool Score for scene, POP TN corrected to 8, sequential failure rule corrected to ejection+−1D, Weaving Structural Ob corrected to 8, Diagnosis flagged ED-134, FR term flagged ED-135. Mass combat: Strength→Size, Combat Power→Power, Cohesion→Discipline, Command Rating/Coherence Rating→Command throughout."
+  source: docx_review
+  affects:
+  - references/params_core.md
+  - references/params_combat.md
+  - references/params_contest.md
+  - references/params_threadwork.md
+  - references/params_mass_combat.md
+  status: applied
+  applied_commit: "2026-04-03-pp232-docx-review-batch"
+  editorial_flags_raised: [ED-127, ED-128, ED-129, ED-130, ED-131, ED-132, ED-133, ED-134, ED-135]
+
+- id: PP-233
+  date: "2026-04-03"
+  severity: P1
+  description: "Mass battle unit combat formula established. Pool = min(Size,Command)+Command. Command caps both Size contribution to pool and Discipline contribution to Health (min(Discipline,Command)+DR = Health per Size H). Total Health = Size×H using full Size. Damage per success = 1+Power. Size after = floor(remaining Health / H). Damage simultaneous — destroyed unit still delivers outgoing damage. Size loss only reduces pool when Size>Command."
+  source: design
+  affects:
+  - references/params_mass_combat.md
+  status: applied
+  applied_commit: "2026-04-03-pp233-mass-combat-unit-formula"
+
+  PP-234
+  date: "2026-04-04"
+  severity: P1
+  description: "Social Contest System v2. Full redesign of debate system. (1) Genre restructure: 3 genres (Past/Present/Future) → 2 genres (Memory/Projection). 'Present' retired as genre — it is the Husserlian operation site, not a temporal position. (2) Attribute renames: Presence→Charisma, Memory→Recall. 'Presence' reserved for Husserlian technical use. (3) Composure = Charisma + 6 (resolves ED-127, parallels Health = Endurance + 6). (4) Faction boost: single-axis selection from 4 options (Memory/Projection/Revealing/Obscuring). Church=Obscuring, Crown=Revealing, Varfell=Projection, Hafenmark=Memory, Restoration=Revealing. (5) Fractional multipliers removed; replaced with integer bonus dice (+1D primary genre, +1D audience boost). (6) Adjudicator-type pool rotation: Cognition (expert judge), Charisma (crowd), Attunement (no adjudicator). (7) Strain minimum 0 (matches combat). (8) Let It Ride explicit for contests. (9) Fail Forward for private ties. (10) Interaction types: CLASH/REINFORCE/CROSS + TIE. All prior SIM-D baselines invalidated."
+  source: designs/contest/social_contest_system_v2.md
+  resolves: [ED-127]
+  creates: [ED-136, ED-137, ED-138, SIM-DEBT-03, SIM-DEBT-04]
+  invalidates: [SIM-D-01, SIM-D-02, SIM-D-03, SIM-D-04, SIM-D-05]
+
+- id: PP-235
+  date: 2026-04-04
+  source: designs/cogload_moderate_target.md
+  scope: ALL
+  description: "Cognitive load optimization package. SC-2 (Read once per contest), SC-3 (argument styles), SC-4 (auto-corroborate), SC-5 (resistance token), TM-1 (late Thread declaration), TM-2 (single op per mass battle turn), TM-3 (Command suspension during Thread), MC-1 (battle plan templates), MC-3 (5-phase consolidation option). Plus reference architecture: weapon cards (PC-1), unit cards (MC-4/MC-5), faction mats (BG-1/BG-2), strain card (SC-1), ×3 RS card (TM-4). Threadwork restorations: TW-2/TW-3/TW-5 kept at full complexity (experienced player system). TW-1/TW-4/TW-6 pre-computation aids retained."
+  files_changed:
+  - references/params_contest.md
+  - references/params_mass_combat.md
+  status: applied
+  tags: [cognitive_load, all_modes, optimization]
+
+- id: PP-236
+  date: 2026-04-04
+  severity: P2
+  description: "Crown covert actions: Influence pool +1 Ob (no Intel stat). Provisional."
+  source: SIM-H-01 gap resolution
+  affects: [references/params_factions.md]
+  status: applied
+  provisional: true
+  editorial: ED-147
+
+- id: PP-237
+  date: 2026-04-04
+  severity: P2
+  description: "Public Instability Hybrid mode definition: range 0-10, start 5, thresholds at 8 and 10. Provisional."
+  source: SIM-H-01 gap resolution
+  affects: [references/params_factions.md]
+  status: applied
+  provisional: true
+  editorial: ED-148
+
+- id: PP-238
+  date: 2026-04-04
+  severity: P2
+  description: "Lowenritter reactive Military NPC guidance: prioritise Consolidation if border faction Military exceeds own."
+  source: SIM-H-01 gap resolution
+  affects: [references/params_factions.md]
+  status: applied
+  provisional: false
+
+- id: PP-239
+  date: 2026-04-04
+  severity: P1
+  description: "RS has no natural decay. All RS changes are event-driven. Corrects SIM-H-01 accounting error (RS 54, not 53)."
+  source: SIM-H-01 audit
+  affects: [references/params_threadwork.md, tests/sim_h01_hybrid_season6.md]
+  status: applied
+  provisional: false
+
+- id: PP-240
+  date: 2026-04-04
+  severity: P2
+  description: "Forgetting Check stacking: deepest Ob per scene; independent across scenes. Collective Forgetting undefined (GAP-H-01)."
+  source: SIM-H-02
+  affects: [references/params_threadwork.md]
+  status: applied
+  provisional: true
+
+- id: PP-241
+  date: 2026-04-04
+  severity: P2
+  description: "Crown-Lowenritter covert delegation: Lowenritter Intel pool; Crown +1 Ob penalty does not apply to delegated actions. Provisional."
+  source: SIM-H-03
+  affects: [references/params_factions.md]
+  status: applied
+  provisional: true
+  editorial: ED-149
+
+- id: PP-242
+  date: 2026-04-04
+  severity: P1
+  description: "AMPLIFY combined pool cap: highest individual pool x2. Prevents degenerate multi-orator stacking. Provisional."
+  source: SIM-H-04
+  affects: [references/params_contest.md]
+  status: applied
+  provisional: true
+  editorial: ED-150
+
+- id: PP-243
+  date: 2026-04-04
+  severity: P2
+  description: "Momentum auto-successes add to roll, not replace. 1-result on die can cancel Momentum auto-success."
+  source: SIM-H-06
+  affects: [references/params_core.md]
+  status: applied
+  provisional: false
+
+- id: PP-244
+  date: 2026-04-04
+  severity: P1
+  description: "Scene to Mass transition modifier table (Hybrid). PC combat outcome sets Domain Action Ob modifier. Provisional (addresses AUD-P1-15)."
+  source: SIM-H-07
+  affects: [references/params_factions.md]
+  status: applied
+  provisional: true
+  editorial: ED-151
+
+- id: PP-245
+  date: 2026-04-04
+  severity: P2
+  description: "CROSS exchange: both genre evaluations resolve simultaneously. Provisional."
+  source: Audit-02
+  affects: [references/params_contest.md]
+  status: applied
+  provisional: true
+
+- id: PP-246
+  date: 2026-04-04
+  severity: P2
+  description: "Extract Niflhel (covert -1 Ob) and Lowenritter (Martial Honour) ethical framework modifiers to params_factions."
+  source: Audit-03
+  affects: [references/params_factions.md]
+  status: applied
+  provisional: false
+
+- id: PP-247
+  date: 2026-04-04
+  source: SIM-C-01 AUD-F01
+  system: core_engine
+  description: "Combat Pool formula corrected in params_core.md: (Agility x2)+History+3 -> Agility+(History points+3). Matches stage1 ss2.3 and ss3.4."
+  status: applied
+  files_changed: [references/params_core.md]
+
+- id: PP-248
+  date: 2026-04-04
+  source: SIM-C-01 AUD-F02 AUD-F03
+  system: core_engine
+  description: "Stamina formula corrected in params_core.md: End+History+1 -> End+1 per stage1 ss3.9. Health row clarified: base score End+6, wound-interval mechanics to Notes."
+  status: applied
+  files_changed: [references/params_core.md]
+
+- id: PP-249
+  date: 2026-04-04
+  source: SIM-C-01 AUD-F06 PP-232-propagation
+  system: core_engine
+  description: "Ob cap propagated to stage1 ss1.3: updated from 10 to 20 per PP-232. Ob stacking cap and Ob-20 exception updated throughout ss1.3-1.4."
+  status: applied
+  files_changed: [compilation/v0.14/stage1_core_engine.md]
+
+- id: PP-250
+  date: 2026-04-04
+  severity: P1
+  description: "Zoom In mid-phase deferral fix: triggers during Phase 5 defer to After Phase 6 Step 1, not end-of-Phase-5. Eliminates ghost-unit state (ED-057)."
+  finding_id: "F-HYB-01 / ED-158"
+  source: simulation/SIM-STRESS-02
+  status: applied
+  files_changed:
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
+
+- id: PP-251
+  date: 2026-04-04
+  severity: P2
+  description: "PC incapacitation during Zoom In: Stage 1 general consequences fire immediately on Zoom Out, before mass battle resumes."
+  finding_id: "F-HYB-02 / ED-159"
+  source: simulation/SIM-STRESS-02
+  status: applied
+  files_changed:
+  - compilation/v0.14/stage11_scale_transitions.md
+
+- id: PP-252
+  date: 2026-04-04
+  severity: P2
+  description: "Multiple simultaneous Zoom Ins at same phase-lock point: resolve in Attunement order. Ties: Agility, then GM."
+  finding_id: "F-HYB-03 / ED-160"
+  source: simulation/SIM-STRESS-02
+  status: applied
+  files_changed:
+  - compilation/v0.14/stage11_scale_transitions.md
+
+- id: PP-253
+  date: 2026-04-04
+  severity: P2
+  description: "Rendering Stability timing: RS changes from Thread operations apply immediately in both phases. PP-089 next-season deferral governs faction stat Domain Echoes only."
+  finding_id: "F-HYB-04 / ED-161"
+  source: simulation/SIM-STRESS-02
+  status: applied
+  files_changed:
+  - compilation/v0.14/stage11_scale_transitions.md
+
+- id: PP-254
+  date: 2026-04-04
+  severity: P2
+  description: "Theocracy Counter seizure classification: territory seizure TC gains are a distinct category (not Domain Actions). All TC sources subject to ±5/season combined cap."
+  finding_id: "F-CLK-02 / ED-162"
+  source: simulation/SIM-STRESS-02
+  status: applied
+  files_changed:
+  - compilation/v0.14/stage11_scale_transitions.md
+  - references/params_factions.md
+
+- id: PP-255
+  date: 2026-04-04
+  severity: P2
+  description: "Public Instability track — full BG design. Accrual +1/season Mandate<3. Recovery −1/season zero hostile Stability DAs. PI≥8: revolt check (Stability≤3 factions Ob 2; fail→Mandate−1). PI=10: GM uprising event."
+  finding_id: "F-CLK-06 / ED-163"
+  source: simulation/SIM-STRESS-02
+  status: applied
+  files_changed:
+  - compilation/v0.14/stage6_factions.md
+  - references/params_factions.md
+
+- id: PP-256
+  date: 2026-04-04
+  severity: P2
+  description: "Feigned Retreat Discipline check Ob: pursuing-side Discipline check is Ob 1. Pursuing is natural impulse; Ob 1 reflects difficulty of halting momentum."
+  finding_id: "F-S3-16 / ED-169"
+  source: simulation/SIM-STRESS-03
+  status: applied
+  files_changed:
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
+
+- id: PP-257
+  date: 2026-04-04
+  severity: P2
+  description: "Corroboration Knot relaxed: any declared coalition member may corroborate. Knot-sharing = Ob 1; non-Knot coalition = Ob 2. Asymmetric proceedings: all disadvantaged corroborators Ob 2."
+  finding_id: "ED-014"
+  source: batch_resolution
+  status: applied
+  files_changed:
+  - designs/contest/social_contest_system_v2.md
+  - references/params_contest.md
+
+- id: PP-258
+  date: 2026-04-04
+  severity: P2
+  description: "Thread combat vs Mode 3 entities: pool split applies to Thread pool same as Combat Pool. Defence allocation reduces opponent effective margin."
+  finding_id: "ED-030"
+  source: batch_resolution
+  status: applied
+  files_changed:
+  - references/params_combat.md
+
+- id: PP-259
+  date: 2026-04-04
+  severity: P2
+  description: "Zoom In cannot delay accounting consequences. Seasonal Accounting fires on schedule regardless of active Zoom In suspension. TC and victory checks are not deferrable."
+  finding_id: "ED-056"
+  source: batch_resolution
+  status: applied
+  files_changed:
+  - compilation/v0.14/stage11_scale_transitions.md
+
+- id: PP-260
+  date: 2026-04-04
+  severity: P2
+  description: "Vaynard VTM 5: may pick between two Co-Movement card draws. Influences interpretation only (which of two outcomes manifests), not co-movement itself. P-14 compliant."
+  finding_id: "ED-083"
+  source: batch_resolution
+  status: applied
+  files_changed:
+  - references/params_combat.md
+
+- id: PP-261
+  date: 2026-04-04
+  severity: P2
+  description: "BG Co-Movement P-14 compliance via GM narration from card category. No additional mechanical protocol. Cards are random draws; only framing is arbitrated."
+  finding_id: "ED-086"
+  source: batch_resolution
+  status: applied
+  files_changed:
+  - references/params_combat.md
+
+- id: PP-262
+  date: 2026-04-04
+  severity: P1
+  description: "Crown victory balance: deed set requires ≥2 post-S1 achievable deeds. If 3 of 5 pre-met at start, replace one with: Hold Valorsplatz + Mandate ≥ 5 at Season 6 end."
+  finding_id: "ED-109"
+  source: batch_resolution
+  status: applied
+  files_changed:
+  - compilation/v0.14/stage6_factions.md
+  - references/params_factions.md
+
+- id: PP-263
+  date: 2026-04-04
+  severity: P1
+  description: "Church secondary TC source: Piety Domain Action (Mandate pool TN 7 Ob 2, once/season). Success: TC +1. Bypasses Hafenmark suppression. Counts toward ±5 combined cap."
+  finding_id: "ED-110 / ED-112"
+  source: batch_resolution
+  status: applied
+  files_changed:
+  - compilation/v0.14/stage6_factions.md
+  - references/params_factions.md
+
+- id: PP-264
+  date: 2026-04-04
+  severity: P1
+  description: "Varfell T13 seizure: T13 starting Fortification 1. Seizure requires Military DA vs Ob 1 (Fortification). Not automatic in S1."
+  finding_id: "ED-111"
+  source: batch_resolution
+  status: applied
+  files_changed:
+  - compilation/v0.14/stage6_factions.md
+  - references/params_factions.md
+
+- id: PP-266
+  date: 2026-04-04
+  severity: P2
+  description: "T13 Fortification 1 also prevents Varfell dominant-opening dominance (ED-113). T13 note added to Varfell faction section."
+  finding_id: "ED-113"
+  source: batch_resolution
+  status: applied
+  files_changed:
+  - compilation/v0.14/stage6_factions.md
+
+- id: PP-267
+  date: 2026-04-04
+  severity: P2
+  description: "Hybrid Strategic Phase Thread effects: no paradox windows at strategic scale. Co-Movement cards produce narrative RS changes only. Paradox windows require personal-scale Leap."
+  finding_id: "ED-125"
+  source: batch_resolution
+  status: applied
+  files_changed:
+  - compilation/v0.14/stage11_scale_transitions.md
+
+- id: PP-268
+  date: 2026-04-04
+  severity: P2
+  description: "Zone terminology: Close zone → Melee range; Far zone → Ranged distance. Applied throughout personal combat doc."
+  finding_id: "ED-129"
+  source: batch_resolution
+  status: applied
+  files_changed:
+  - designs/combat/combat_design_v1.md
+  - references/params_mass_combat.md
+
+- id: PP-269
+  date: 2026-04-04
+  severity: P2
+  description: "Stage 1/2 incapacitation defined in personal combat: Stage 1 = incapacitated (stabilisable, Medicine Ob 2); Stage 2 = dying (Medicine Ob 3 or death at scene end)."
+  finding_id: "ED-130"
+  source: batch_resolution
+  status: applied
+  files_changed:
+  - designs/combat/combat_design_v1.md
+
+- id: PP-270
+  date: 2026-04-04
+  severity: P2
+  description: "Community Weaving canonical spec: PP-195 version. Mandate + History, TN 7, Ob 3. Success: RS +1. All other Community Weaving versions superseded."
+  finding_id: "ED-139"
+  source: batch_resolution
+  status: applied
+  files_changed:
+  - compilation/v0.14/stage6_factions.md
+  - references/params_factions.md
+
+- id: PP-271
+  date: 2026-04-04
+  severity: P2
+  description: "BG Overwhelming threshold: Ob+1 surplus with minimum 3 successes (ED-031 canonical). TTRPG floor-3 is TTRPG only. BG and TTRPG use same Ob+1 formula."
+  finding_id: "ED-142"
+  source: batch_resolution
+  status: applied
+  files_changed:
+  - references/params_combat.md
+
+- id: PP-272
+  date: 2026-04-04
+  severity: P2
+  description: "'Division' stricken from §7 Church Tribunal as vestigial (no mechanic defined). Term removed."
+  finding_id: "ED-166"
+  source: batch_resolution
+  status: applied
+  files_changed:
+  - designs/contest/social_contest_system_v2.md
+  - references/params_contest.md
+
+- id: PP-273
+  date: 2026-04-04
+  severity: P1
+  description: "Mass battle minimum unit combat pool: 1 die minimum after all penalties. Formation Break (Discipline 0) removes attacking capability. Command=0: units fight at 1 die minimum."
+  finding_id: "F-S4-21 / F-S4-22 / ED-176"
+  source: simulation/SIM-STRESS-04
+  status: applied
+  files_changed:
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
+
+- id: PP-274
+  date: 2026-04-04
+  severity: P2
+  description: "Multi-engagement pool split: target facing multiple attackers declares one Offence/Defence split. All attackers roll against same Defence allocation independently."
+  finding_id: "F-S4-16 / ED-175"
+  source: simulation/SIM-STRESS-04
+  status: applied
+  files_changed:
+  - designs/combat/combat_design_v1.md
+
+- id: PP-275
+  date: 2026-04-04
+  severity: P2
+  description: "Stamina maximum = base value. Take a Breath recovery capped at base Stamina formula result. Stamina cannot exceed base value through recovery."
+  finding_id: "F-S4-08 / ED-173"
+  source: simulation/SIM-STRESS-04
+  status: applied
+  files_changed:
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
+
+- id: PP-276
+  date: 2026-04-04
+  severity: P2
+  description: "Initiative transfer mixed outcome: when both combatants succeed at different priorities in same exchange, initiative stays with current holder. No decisive momentum shift."
+  finding_id: "F-S4-05 / ED-171"
+  source: simulation/SIM-STRESS-04
+  status: applied
+  files_changed:
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
+
+- id: PP-277
+  date: 2026-04-04
+  severity: P2
+  description: "Feint -2D Defence clarification: reduces Defence allocation ceiling (max Defence dice = pool − 2), not total pool. Consistent with Fibonacci bonus as allocation modifier."
+  finding_id: "F-S4-06 / ED-172"
+  source: simulation/SIM-STRESS-04
+  status: applied
+  files_changed:
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
+
+- id: PP-278
+  date: 2026-04-04
+  severity: P2
+  description: "Read step renamed Appraise throughout social contest system (ED-132). Appraise = active assessment of audience/opponent position."
+  finding_id: "ED-132"
+  source: batch_resolution_final
+  status: applied
+  files_changed:
+  - designs/contest/social_contest_system_v2.md
+  - references/params_contest.md
+
+- id: PP-279
+  date: 2026-04-04
+  severity: P2
+  description: "FR (Forced Resolution) collective label struck (ED-135). Operations are: Weaving, Pulling, Locking, Dissolution, Mending. Self-descriptive."
+  finding_id: "ED-135"
+  source: batch_resolution_final
+  status: applied
+  files_changed:
+  - designs/contest/social_contest_system_v2.md
+  - references/params_contest.md
+
+- id: PP-281
+  date: 2026-04-04
+  severity: P2
+  description: "PI cascade brake (ED-174): revolt-pass → Stability +1. PI increase rate cap: +2/season max from all sources combined."
+  finding_id: "ED-174"
+  source: batch_resolution_final
+  status: applied
+  files_changed:
+  - compilation/v0.14/stage6_factions.md
+  - references/params_factions.md
+
+- id: PP-282
+  date: 2026-04-04
+  severity: P1
+  description: "Altonian invasion provisional unit stats (ED-036 unblocked): Vanguard (S4,P4,D4,M5,LightCut+HP,Medium) and Heavy Infantry (S5,P5,D5,M5,HeavyCut,Heavy). Wave: 3V+2H, NPC general Command 5. NOTED: placeholder."
+  finding_id: "ED-036"
+  source: batch_resolution_final
+  status: applied
+  files_changed:
+  - compilation/v0.14/stage6_factions.md
+  - references/params_mass_combat.md
+
+- id: PP-283
+  date: 2026-04-04
+  severity: P2
+  description: "Faction tactic cards §B.4 confirmed canonical defaults (ED-019). Content revisable without patch; mechanical effects require patch."
+  finding_id: "ED-019"
+  source: batch_resolution_final
+  status: applied
+  files_changed:
+  - designs/mass_combat/mass_battle_v3.md
+
+- id: PP-284
+  date: 2026-04-04
+  severity: P2
+  description: "Stage 1/2 incapacitation clarifications: (1) Wound recovery: stabilised return after 1-scene rest; wounds clear at session end. (2) Stage 2 trigger: any attack dealing ≥1 net hit to downed Stage 1 character triggers Stage 2; downed characters have Defence 0."
+  finding_id: "F-S5-11 / F-S5-12 / ED-177 / ED-178"
+  source: simulation/SIM-STRESS-05
+  status: applied
+  files_changed:
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
+
+- id: PP-285
+  date: 2026-04-04
+  severity: P2
+  description: "Rescue: rescuer receives no Defence allocation when interposing. Armour DR applies only. Rescue is a reactive physical interposition, not a parry."
+  finding_id: "F-S6-09 / ED-180"
+  source: simulation/SIM-STRESS-06
+  status: applied
+  files_changed:
+  - designs/combat/combat_design_v1.md
+  - references/params_combat.md
+
+- id: PP-286
+  date: 2026-04-04
+  severity: P2
+  description: "Rescue payoff — Momentum on declaration (not hit-taken); rescued actor exempt from Fibonacci penalty and targeting this round. ED-198."
+  finding_id: "SIM-X-26R-F05"
+  source: editorial
+  editorial_id: ED-198
+  affects: [designs/combat/combat_design_v1.md, references/params_combat.md]
+  applied_to_version: "v1.6+"
+  status: applied
+  applied_commit: "pending"
+
+  # PP-257 REVERTED — see error audit 2026-04-04
+
+- id: PP-382
+  date: 2026-04-04
+  source: user-ruling
+  priority: P1
+  system: combat
+  description: "Wound max formula corrected: floor(Endurance/2)+1. End=1 → 1 wound max (was 2 in prior table). End 2-7 unchanged. Net successes floor clarified as 0 (pool total, not per die)."

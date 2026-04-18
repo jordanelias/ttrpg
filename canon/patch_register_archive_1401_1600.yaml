@@ -1,0 +1,705 @@
+    STALE BODY: Stamina = Endurance + Relevant History + 1 (modified by armour) — minimum 2
+    CORRECT (params_core.md, PP-248): Stamina = Endurance + 1 — minimum 2
+    PP-248 applied this correction but params_combat.md body was never updated.
+    The History component in the stale formula has no design basis in current params.
+    Armour modifier still applies: final Stamina = (End + 1) + armour modifier (negative),
+    minimum 2. Armour cannot reduce Stamina to 1 or below (wield constraint unchanged).
+  finding_id: audit-A
+  affects:
+    - references/params_combat.md
+  status: applied
+
+- id: PP-612
+  type: correction
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Combat Pool formula reconciled. params_combat.md body stated doubled formula
+    (Agility × 2) + History + 3; PP-247 correction and params_core.md both state
+    non-doubled: Agility + History (points + 3), minimum 5.
+    CANONICAL (PP-247, params_core.md): Combat Pool = Agility + weapon History (points + 3),
+    minimum 5.
+    The minimum 5 is meaningful only for the non-doubled formula (Agi 1 + 0 hist + 3 = 4
+    < 5); under the doubled formula the minimum would always be met, making it redundant.
+    The minimum 5 confirms PP-247's non-doubled formula is the intended correction.
+
+    DESIGN INTENT NOTE (added to resolve ED-NEW-11 partial):
+    Combat and fieldwork/contest use structurally different pool constructions deliberately:
+    - Combat Pool: Attribute (non-doubled) + History. Combat rewards raw physical capacity
+      with modest History amplification.
+    - Contest/Fieldwork Pool: (Primary Attribute × 2) + History. Social and investigative
+      work rewards intellectual/social depth more heavily relative to raw attribute.
+    - Thread operations: Attribute (non-doubled) + History + TPS. Perceptual depth (TPS)
+      is the amplifier for Thread work, not doubled attribute.
+    This is intentional asymmetry, not an error. params_contest.md note ("equivalent to
+    combat pool Agi×2+H+3") was written against the stale body and is incorrect —
+    contest and combat pools are NOT equivalent in construction.
+  finding_id: audit-B ED-NEW-11
+  affects:
+    - references/params_combat.md
+    - references/params_contest.md
+  status: applied
+
+- id: PP-613
+  type: correction
+  date: 2026-04-14
+  severity: P1
+  description: >
+    params_mass_combat.md: PP-192/PP-225 mass battle RS ×3 multiplier table struck.
+    PP-601 (this session) struck the ×3 multiplier for both RS costs and gains in mass
+    battle, replacing it with: individual Thread op RS costs at full TTRPG value (×1),
+    Dissonant Counter ≥ 3 at battle end = RS −1 (cap −1/battle, PP-600).
+    The table in params_mass_combat.md ("Op | Normal RS | Mass Battle RS (×3)") with
+    entries showing Dissolution failure as −24 RS is now incorrect and struck.
+    Replace with: Thread operation RS costs in mass battle = full TTRPG value (×1).
+    RS consequence from mass battle comes from Substrate Saturation Counter (renamed
+    from Dissonant Counter per PP-606): Counter ≥ 3 at battle end → RS −1 at Accounting.
+    Cap: −1 per battle regardless of Counter level. Battle-context Thread Debt expires
+    at battle season end (PP-600).
+    PP-201 warning note (campaign impact of Dissolution) retains correct framing but the
+    expected RS values must be updated: E[RS per Dissolution attempt] uses TTRPG-scale
+    costs (Success −5, Failure −8 per new gap-scale system), not ×3 values. The warning
+    remains valid — Dissolution in mass battle is still campaign-altering — but the
+    specific numbers (−18.4 expected, −24 failure) are now stale.
+    PP-204 RS<24 threshold warning: Dissolution Failure in mass battle at full TTRPG
+    value = Structural Gap (n=3, immediate breach cost −3 + Structural Gap opens draining
+    −3/season for 7 seasons). Single Dissolution failure no longer produces immediate
+    −24 RS. Rupture risk from single Dissolution in mass battle is now eliminated unless
+    RS is already very low. PP-204 warning retained but threshold recalculated: at RS < 8
+    (Structural breach cost −3 would push below 0 if RS < 3; gap drain is seasonal).
+    Immediate Rupture from mass battle Dissolution is now only possible at RS ≤ 3.
+    Update PP-204 accordingly.
+  finding_id: audit-C PP-601 PP-600
+  affects:
+    - references/params_mass_combat.md
+  status: applied
+
+- id: PP-614
+  type: correction
+  date: 2026-04-14
+  severity: P2
+  description: >
+    Social contest Step 1 action consolidated. Three names and two pools reconciled.
+    HISTORY: Read (original, Attunement only, Ob 1) → Judge (PP-254, Attunement + Recall,
+    Ob = opponent Cha÷2 round up) → Appraise (PP-278, pool not restated).
+    CANONICAL (PP-254 + PP-278 combined):
+    Name: Appraise
+    Pool: Attunement + Recall | TN 7 | Ob = opponent Charisma ÷ 2 (round up), min 1
+    Rationale: assessing an opponent's mode, stance, and vulnerability requires both
+    reading people (Attunement) and memory of prior exchanges and known positions (Recall).
+    Ob = opponent Cha÷2 makes skilled social actors harder to read — correct design.
+    Flat Ob 1 was from the original Read action before PP-254 updated the mechanic.
+
+    OLD §Pools entry "Read pool = Attunement only (no History)" is struck.
+    All references to the action in params_contest.md should use Appraise.
+    The §PP-278 note "Read → Appraise" remains as patch history only.
+
+    RESULT TABLE for Appraise:
+    | Net | Information |
+    | Failure | Misleading signal: wrong boost identified |
+    | Partial (1) | Boosted axis type (genre or orientation) but not which |
+    | Success (≥2) | Full boost identified |
+    | Overwhelming (≥3) | Boost + one specific detail (Belief, threshold, emotional state) |
+    (Unchanged from existing table — only name, pool, and Ob corrected.)
+  finding_id: audit-D
+  affects:
+    - references/params_contest.md
+  status: applied
+
+- id: PP-615
+  type: correction
+  date: 2026-04-14
+  severity: P1
+  description: >
+    PP-612 REVERSED. PP-612 concluded Combat Pool uses a non-doubled formula
+    (Agi + hist + 3) based on params_core.md and a PP-247 patch note. This was wrong.
+
+    CANONICAL formula confirmed by user:
+    Combat Pool = (Agility × 2) + History (points + 3) — minimum 5.
+
+    The doubled formula (Agi × 2) is consistent across all three active roll systems:
+    - Combat:   (Agility × 2) + weapon History (pts + 3), min 5
+    - Contest:  (Primary Attribute × 2) + History (pts + 3)
+    - Fieldwork: (Primary Attribute × 2) + History (pts + 3)
+
+    The stale entries are params_core.md ("Agility + weapon proficiency History (points + 3)")
+    and the PP-247 patch note ("Agi + hist_pts + 3"). Both incorrectly show non-doubled.
+    params_combat.md body was correct throughout. PP-247 was a mistaken correction.
+
+    params_core.md Combat Pool row corrected to:
+    "Combat Pool | (Agility × 2) + weapon proficiency History (points + 3) | min 5"
+
+    ED-NEW-11 (pool formula contradiction) closed: all three systems use (Attr × 2) + 3.
+    The minimum 5 is a safety floor — at Agi 1 (minimum) × 2 + 0 hist + 3 = 5, so
+    the minimum is always met and effectively redundant, but kept as explicit floor.
+  finding_id: PP-612 ED-NEW-11
+  affects:
+    - references/params_core.md
+    - references/params_combat.md
+  status: applied
+
+- id: PP-616
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Thread operation pools standardised. Attunement removed from all Thread pools.
+    Spirit is the attribute for all Thread operations — it is the metaphysical capacity
+    to engage with Thread reality while remaining grounded. Attunement (Social group)
+    belongs in social/perceptual calibration contexts, not Thread work.
+
+    CANONICAL THREAD POOLS (all use (Spirit × 2) + History + TPS base):
+
+    | Operation         | Pool                             | TN |
+    |-------------------|----------------------------------|----|
+    | Leap              | (Spirit × 2) + History + TPS     | 7  |
+    | Weaving           | (Spirit × 2) + History + TPS     | 7  |
+    | Pulling           | (Spirit × 2) + History + TPS     | 7  |
+    | Past-Oriented Pulling | (Spirit × 2) + History + TPS÷2 (round down) | 8 |
+    | Mending           | (Spirit × 2) + History + TPS     | 7  |
+    | Community Weaving | (Spirit × 2) + History + TPS     | 7  |
+    | Locking           | (Spirit × 2) + History           | 8  |
+    | Dissolution       | (Spirit × 2) + History           | 8  |
+
+    CHANGES FROM PRIOR PARAMS:
+    - Mending was: Attunement + Focus + TPS. Now: (Spirit × 2) + History + TPS.
+    - Leap was: Spirit + Attunement + History + TPS. Now: (Spirit × 2) + History + TPS.
+    - Community Weaving was: Attunement + History + TPS. Now: (Spirit × 2) + History + TPS.
+    - Focus removed from all pool dice. Focus = Contact Rounds only (duration, not pool).
+    - All remaining references to Attunement in Thread operation pools are struck.
+
+    BINDING OPS (Lock/Dissolution) — no TPS, design note added:
+    Locking and Dissolution act against the substrate's natural tendency (forcing fixity or
+    forcing absence). Perceptual depth (TPS) does not assist these operations — the
+    practitioner is not reading the substrate but overriding it. Spirit and domain
+    knowledge (History) are the sole resources. This is intentional and load-bearing
+    to the Binding Ops design (PP-252).
+
+    POP — half TPS, design note added:
+    Past-Oriented Pulling operates across temporal distance. Perceptual depth (TPS) applies
+    to present Thread configurations; past configurations are only partially accessible
+    to current perception. Half TPS at TN 8 represents working with partial perceptual
+    access at greater temporal depth. The further back the recency band, the harder the Ob.
+
+    ATTUNEMENT REMAINS CANONICAL FOR:
+    - Combat initiative (higher Attunement acts last — reads the exchange)
+    - Social contest Appraise pool (Attunement + Recall)
+    - No-Adjudicator contest arguing (Attunement × 2) + History
+    - Fieldwork: social reads, witness interviews, Thread-aware exploration
+    Attunement is the social/perceptual calibration stat. It is not a Thread work stat.
+
+    FOCUS REMAINS CANONICAL FOR:
+    - Contact Rounds = Focus score (duration of Thread contact window)
+    Focus no longer contributes dice to any Thread operation pool.
+
+    REALISTIC POOL CALIBRATION NOTE:
+    Effective practitioner ceiling given realistic stat assumptions (3 = average,
+    each step = ~1 SD, Spirit 5 = exceptional, TS 75 = near-Edeyja after centuries):
+    - Capable PC: Spirit 4, TS 50→TPS 5, Hist 3: pool = (4×2)+3+5 = 16D
+    - Exceptional PC: Spirit 5, TS 60→TPS 6, Hist 3: pool = (5×2)+3+6 = 19D
+    - Edeyja (NPC): Spirit 6, TS 75→TPS 7, Hist 3: pool = (6×2)+3+7 = 22D
+    Ob 10 (Foundational): Edeyja P(≥10) ≈ 6%. Correct difficulty.
+  finding_id: null
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+
+- id: PP-617
+  type: patch
+  date: 2026-04-14
+  severity: P2
+  description: >
+    History system formalised. Replaces informal "history points + 3" construction.
+
+    CANONICAL HISTORY RULES:
+    - Each character has Histories — areas of life experience and expertise.
+    - Each History has a level (1–3 points). Cap: 3 points per specific History.
+    - Primary relevant History: contributes full points as dice (+1D per point, max +3D).
+    - Only one History may be designated Primary per roll (must be narratively defensible).
+    - Secondary History: not permitted. One History only per roll.
+    - The +3D constant in all pool formulas is the floor contribution independent of
+      History — a baseline competence every character brings, before History.
+
+    POOL FORMULA (all systems — unified):
+    Pool = (Primary Attribute × 2) + 3 + (Primary History level, 0–3D)
+    Minimum pool: 5D (at Attribute 1, no relevant History: (1×2)+3=5).
+    Maximum from History: +3D (History level 3).
+    Maximum pool (non-Thread): (7×2)+3+3 = 20D — theoretical, not realistic.
+    Realistic max (Attribute 5, History 3): (5×2)+3+3 = 16D.
+
+    Thread pool formula:
+    Pool = (Spirit × 2) + 3 + (Primary History level) + TPS
+    (TPS replaces the "perceptual amplifier" function that doubling would otherwise provide)
+
+    Recall stat governs History point cap: a specific History cannot hold more points
+    than the character's Recall score. History 3 requires Recall ≥ 3.
+  finding_id: null
+  affects:
+    - references/params_core.md
+    - references/params_threadwork.md
+  status: applied
+
+- id: PP-618
+  type: correction
+  date: 2026-04-14
+  severity: P1
+  description: >
+    PP-616 correction: Binding Ops (Lock, Dissolution) include TPS.
+
+    PP-616 stated Binding Ops use (Spirit × 2) + History with NO TPS. This was wrong.
+
+    RATIONALE (reversed): Perceptual depth (TPS) is directly relevant to Locking and
+    Dissolution. The deeper a practitioner perceives a Thread configuration, the better
+    they understand its internal structure — its joints, tolerances, and the points at
+    which it can be fixed in place (Lock) or unmade (Dissolution). A TS 30 practitioner
+    attempting Dissolution on something they can barely perceive has far less information
+    about where and how to apply the operation than a TS 70 practitioner who sees the
+    full architecture. Knowing a configuration's limits is how you break it.
+
+    The TN 8 for Binding Ops is what makes them genuinely difficult — not a reduced pool.
+
+    CORRECTED CANONICAL THREAD POOLS:
+
+    | Operation             | Pool                                 | TN |
+    |-----------------------|--------------------------------------|----|
+    | Leap                  | (Spirit × 2) + History + TPS         | 7  |
+    | Weaving               | (Spirit × 2) + History + TPS         | 7  |
+    | Pulling               | (Spirit × 2) + History + TPS         | 7  |
+    | Past-Oriented Pulling | (Spirit × 2) + History + TPS÷2      | 8  |
+    | Mending               | (Spirit × 2) + History + TPS         | 7  |
+    | Community Weaving     | (Spirit × 2) + History + TPS         | 7  |
+    | Locking               | (Spirit × 2) + History + TPS         | 8  |
+    | Dissolution           | (Spirit × 2) + History + TPS         | 8  |
+
+    All Thread operations now use the same pool construction.
+    Differentiation comes from: TN (7 vs 8), Ob (scale-dependent), TS minimum gates,
+    Coherence costs, and Gap consequences (Dissolution only).
+    POP retains TPS÷2 and TN 8 — temporal distance limits perceptual access to past
+    configurations; this is the remaining pool asymmetry.
+
+    COMBAT INITIATIVE CLARIFICATION (PP-239 confirmed):
+    Attunement primary: higher Attunement acts last in Exchange 1 (more information).
+    Agility tiebreaker: if Attunement equal, higher Agility acts last.
+    Both stats involved — Attunement is the primary initiative stat; Agility resolves ties.
+    This was not changed by PP-616; clarification only.
+  finding_id: PP-616
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+- id: PP-619
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Thread operation TN system finalised. Replaces all prior TN assignments.
+
+    SINGLE POOL: (Spirit × 2) + History + TPS — all operations, no exceptions.
+
+    TN MODIFIERS (additive):
+    - Base TN: 7
+    - Binding Op (Lock or Dissolution): +1 TN
+    - Past-Oriented Pulling: +1 TN
+    - Both modifiers apply: +2 TN
+
+    CANONICAL TN TABLE:
+    | Operation             | TN |
+    |-----------------------|----|
+    | Leap                  | 7  |
+    | Weaving               | 7  |
+    | Pulling               | 7  |
+    | Mending               | 7  |
+    | Community Weaving     | 7  |
+    | Locking               | 8  |
+    | Dissolution           | 8  |
+    | Past-Oriented Pulling | 8  |
+    | Past-Oriented Locking | 9  |
+    | Past-Oriented Dissolution | 9 |
+
+    Past-Oriented Binding Ops (TN 9) represent attempting to Lock or Dissolve a
+    Thread configuration as it existed at a prior time — targeting the past state of
+    something rather than its present state. Near-impossible in practice.
+
+    STRUCK: TPS÷2 for POP (PP-616 and PP-618 entries on this). Full TPS always.
+    STRUCK: all previous TN distinctions based on pool composition (no TPS for BO, etc.).
+    The pool is identical for all operations. Difficulty is entirely in TN and Ob.
+  finding_id: PP-616 PP-618
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+- id: PP-620
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Thread operation Ob table recalibrated against new pool formula.
+    Prior Obs were designed for old pool construction (Spirit + History, non-doubled).
+    New pool (Spirit × 2) + History + TPS produces higher expected nets; Obs revised upward.
+
+    CANONICAL OB TABLE:
+
+    Standard operations (TN 7): Weaving, Pulling, Mending, Community Weaving, Leap.
+    Binding Ops (TN 8): Locking, Dissolution.
+    POP (TN 8): Past-Oriented Pulling.
+    POP Binding (TN 9): Past-Oriented Locking/Dissolution.
+
+    | Scale       | n | TS min | Standard Op Ob | Mending Ob | Binding Op Ob |
+    |-------------|---|--------|----------------|------------|---------------|
+    | Object      | 0 | 30+    | 1              | n/a        | 1             |
+    | Personal    | — | 30+    | 2              | n/a        | 2             |
+    | Relational  | 1 | 50+    | 3              | 2          | 3             |
+    | Territorial | 2 | 50+    | 5              | 4          | 5             |
+    | Structural  | 3 | 70+    | 7              | 6          | 7             |
+    | Foundational| 5 | 90+    | 10             | 10         | 10            |
+
+    FORMULA DERIVATION:
+    Standard op Ob = 2n + 1 (standard operations impose on substrate; +1 above Mending).
+    Mending Ob = 2n (per PP-604; Mending facilitates substrate's self-repair tendency).
+    Binding Op Ob = same as standard op Ob; difficulty from TN+1, not Ob+1.
+    Foundational converges at Ob 10 (the gap between "imposing" and "facilitating" collapses
+    when the substrate's own conditions are what you're engaging).
+
+    MENDING AGE MODIFIER (PP-608): +0 fresh / +1 established (2-4 seasons) / +2 entrenched (5+).
+
+    PERSONAL SCALE: no Gap equivalent (Personal-scale failure collapses to Relational Gap).
+    No Mending Ob for Personal scale; operation Ob 2.
+
+    OLD MINIMUM OB 4 FOR BINDING OPS: struck. Object Binding Op = Ob 1 at TN8 is correct —
+    TS 30 practitioners can perceive Object configurations well enough to Lock or Dissolve
+    them; the TN8 provides the difficulty, not an artificial floor.
+
+    VERIFICATION (normal approximation, E per die: TN7=0.3, TN8=0.2):
+    Beginner (10D): Object TN7 Ob1 → P≈82%. Object Lock TN8 Ob1 → P≈73%.
+    Capable (14D): Relational TN7 Ob3 → P≈68%.
+    Expert (17D): Territorial TN7 Ob5 → P≈52%. Relational Lock TN8 Ob3 → P≈55%.
+    Master (20D): Structural TN7 Ob7 → P≈37%. Territorial Lock TN8 Ob5 → P≈35%.
+    Edeyja (22D): Foundational TN7 Ob10 → P≈14%. Structural Lock TN8 Ob7 → P≈16%.
+
+    Curve confirmed: Object/Personal = general practitioner access. Relational = capable work.
+    Territorial = expert territory. Structural = legendary. Foundational = Edeyja's limit.
+  finding_id: null
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+- id: PP-621
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Thread operation scale physical calibration corrected. "Territorial" ≠ BG territory card.
+    Scales are phenomenological (emergent Thread configuration structure), not political.
+
+    PHYSICAL SCALE CALIBRATION (canonical):
+    | Scale       | Physical scope                                          |
+    |-------------|---------------------------------------------------------|
+    | Object      | One discrete thing                                      |
+    | Personal    | One person's Thread configuration                       |
+    | Relational  | Connections between specific entities; formation-level  |
+    | Territorial | A coherent local area: valley, town, battlefield        |
+    | Structural  | An entire regional domain = one BG territory card       |
+    | Foundational| Thread substrate conditions; the Calamity wound network |
+
+    CONSEQUENCE: BG territories (T1-T17) are Structural scale, not Territorial.
+    T15 Askeheim as a whole is Structural. The Calamity wound is Foundational.
+
+    MASS BATTLE THREADWORK SCALE:
+    - Formation-level operations (Discipline, command coherence): Relational. Ob 3. TS 50+.
+    - Battlefield-wide operations (the battle area as a place): Territorial. Ob 5. TS 50+.
+    - Campaign-level strategic operations (a whole province): Structural. Ob 7. TS 70+.
+    Substrate Saturation Counter fires from multiple Relational operations in one Territorial
+    space — correct framing confirmed.
+
+    EDEYJA AT T15:
+    - T15 is Structural scale. Structural Mending Ob 6, TN 7, 22D: P(≥6) ≈ 52%.
+    - Foundational wounds undermine Structural Mending — repair cannot hold while
+      Foundational conditions are disrupted from below.
+    - Edeyja must isolate individual Foundational gaps, Mend at Ob 10 (~14% per attempt),
+      then Structural Mending can hold in cleared areas.
+    - Lower-scale gaps (Territorial, Relational) self-close once Structural stability
+      is restored — she does not Mend them individually.
+    - WC 3 (RS +2/season) = cascade of natural healing in Foundationally-cleared areas.
+    - Conflict in Proximity 1-3 territories disrupts isolation work, resetting sections.
+
+    SCALE HIERARCHY RULE: Mending at scale X cannot hold while a deeper disruption
+    at scale X+1 or greater persists in the same area. Must work from the deepest
+    disruption upward.
+
+    REVISED OB TABLE (Obs unchanged from PP-620; scale calibration is what changed):
+    | Scale       | n | Standard Op Ob (TN7) | Mending Ob (TN7) | Binding Ob (TN8) |
+    |-------------|---|----------------------|------------------|------------------|
+    | Object      | 0 | 1                    | n/a              | 1                |
+    | Personal    | — | 2                    | n/a              | 2                |
+    | Relational  | 1 | 3                    | 2                | 3                |
+    | Territorial | 2 | 5                    | 4                | 5                |
+    | Structural  | 3 | 7                    | 6                | 7                |
+    | Foundational| 5 | 10                   | 10               | 10               |
+
+    Edeyja (22D TN7): Territorial Ob5 P≈70%; Structural Ob7 P≈45%; Foundational Ob10 P≈14%.
+    Curve confirmed against physical scale interpretation.
+  finding_id: PP-620
+  affects:
+    - references/params_threadwork.md
+    - designs/setting/calamity_radiation.md
+  status: applied
+
+- id: PP-622
+  type: patch
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Thread operation Ob system redesigned. Three independent axes replace the single
+    scale-based Ob. Total Ob = Depth Ob + Breadth Ob + Distance Ob + TN modifiers.
+
+    DEPTH OB — Fibonacci (how primordial is the Thread being engaged?):
+    | Depth       | Ob | TS minimum | Description                                      |
+    |-------------|----|-----------|-------------------------------------------------|
+    | Object      | 1  | 30+       | Discrete thing-configurations                   |
+    | Personal    | 1  | 30+       | One person's individual Thread configuration    |
+    | Relational  | 2  | 50+       | Thread connections between specific entities    |
+    | Field       | 3  | 50+       | Coherent local area: battlefield, town, community |
+    | Structural  | 5  | 70+       | Domain conditions (= one BG territory at scale) |
+    | Foundational| 8  | 90+       | Thread substrate conditions; closest to Ein Sof |
+
+    Object and Personal both Ob 1: same Thread depth, different configuration type.
+    Fibonacci: 1, 1, 2, 3, 5, 8. The escalation between levels grows — the jump
+    from Structural to Foundational (3 Ob) exceeds any prior gap. Correct.
+
+    "Field" replaces "Territorial" as name for the intermediate level. A field of
+    shared Thread coherence — the emergent configuration of a coherent local area.
+    Not a BG territory card (those are Structural scale).
+
+    MENDING DEPTH OB: Depth Ob − 1 (working with substrate's self-repair tendency).
+    | Mending Depth | Ob |
+    |---------------|-----|
+    | Relational    | 1   |
+    | Field         | 2   |
+    | Structural    | 4   |
+    | Foundational  | 7   |
+    Object-scale gaps self-close; no Mending needed.
+
+    BREADTH OB — How much at that depth level?
+    | Breadth     | Example                           | Ob |
+    |-------------|-----------------------------------|----|
+    | Single      | One entity, one connection        | 0  |
+    | Small group | 2–10 entities                     | 1  |
+    | Formation   | 10–1000; a town                   | 2  |
+    | Battlefield | 1000–10000; a battle area         | 3  |
+    | Regional    | Entire BG territory               | 4  |
+
+    DISTANCE OB — How far from the practitioner's body?
+    | Distance    | Range          | Ob | TS required |
+    |-------------|----------------|----|-------------|
+    | Contact     | 0–1m           | 0  | 30+         |
+    | Close       | 1–10m          | 0  | 30+         |
+    | Near        | 10–100m        | 1  | 50+         |
+    | Distant     | 100m–1km       | 2  | 70+         |
+    | Far         | 1km+           | 3  | 90+         |
+
+    TN MODIFIERS (unchanged from PP-619):
+    Base TN 7. Binding Op: +1 TN. POP: +1 TN. POP Binding: +2 TN.
+
+    VERIFICATION:
+    Beginner (10D TN7 E=3.0): Object beside (Ob1) P≈82% ✓; Relational beside (Ob2) P≈50% ✓
+    Capable (14D TN7 E=4.2): Relational beside (Ob2) P≈68% ✓
+    Expert (17D TN7 E=5.1): Formation 100m (Ob5: 2+2+1) P≈52% ✓
+    Master (20D TN7 E=6.0): Battlefield (Ob6: 2+3+1) P≈40% ✓
+    Edeyja (22D TN7 E=6.6): Single Foundational gap beside (Ob8) P≈33% ✓
+    Edeyja (22D TN7 E=6.6): Entire Calamity network (Ob15: 8+4+3) P<1% ✓
+
+    The Calamity network is impossible to repair at once without any special rule —
+    Breadth+Distance penalties make it so. Edeyja's work must be one isolated gap at
+    a time, at close range, at Ob 7 (Mending) or Ob 8 (other Foundational ops).
+
+    STRIKES: All prior single-axis Ob tables for Thread operations (PP-620, PP-621).
+    The old scale-based Obs (2n+1) are superseded.
+    Gap self-closure timers and Mending age modifiers (PP-604, PP-608) unchanged.
+    Mending Ob in PP-604 replaced by: Depth Ob (Fibonacci) − 1 + age modifier + Breadth + Distance.
+
+    [EDITORIAL: ED-441 — "Field" as canonical name for depth level 3. User flagged as
+    provisional ("whatever it's called"). Confirm or propose alternative before compilation.]
+  finding_id: PP-620 PP-621
+  affects:
+    - references/params_threadwork.md
+  status: applied
+
+- id: PP-623
+  type: correction
+  date: 2026-04-14
+  severity: P1
+  description: >
+    Probability calculation corrected throughout. Prior simulation used E[net]=0.3
+    per die at TN7, which is wrong. Correct values:
+
+    E[NET PER DIE BY TN:
+    TN 7: faces 1→-1, 2-6→0, 7-9→+1, 10→+2. E = -0.1+0+0.3+0.2 = 0.4
+    TN 8: faces 1→-1, 2-7→0, 8-9→+1, 10→+2. E = -0.1+0+0.2+0.2 = 0.3
+    TN 9: faces 1→-1, 2-8→0, 9→+1, 10→+2. E = -0.1+0+0.1+0.2 = 0.2
+    Each TN step costs exactly 0.1 E[net] per die.
+
+    Variance per die (TN7): E[X²]=0.8, Var=0.64, SD=0.8.
+    For N dice: E=0.4N, SD=√(0.64N)=0.8√N.
+
+    FIBONACCI DEPTH Ob CORRECTED (shift one step up in sequence):
+    | Depth       | Ob | Mending Ob |
+    |-------------|-----|------------|
+    | Object      | 1   | n/a        |
+    | Personal    | 2   | n/a        |
+    | Relational  | 3   | 2          |
+    | Field       | 5   | 4          |
+    | Structural  | 8   | 7          |
+    | Foundational| 13  | 12         |
+
+    Sequence: 1, 2, 3, 5, 8, 13. Fibonacci from F(1) through F(7).
+    Mending: Depth Ob − 1 (working with substrate's self-repair tendency).
+
+    TOTAL OB = Depth Ob + Breadth Ob + Distance Ob + TN modifiers (unchanged from PP-622).
+
+    VERIFICATION (E=0.4/die TN7, normal approx with continuity correction):
+    Beginner 10D (E=4.0, SD=2.53):
+      Object single contact Ob1: P≈92% ✓ any practitioner
+      Relational single contact Ob3: P≈72% ✓ struggle
+    Capable 14D (E=5.6, SD=2.99):
+      Relational single contact Ob3: P≈85% ✓ reliable
+      Field formation 100m (Ob5+2+1=8): P≈40% ✓ expert territory
+    Expert 17D (E=6.8, SD=3.30):
+      Field single contact Ob5: P≈76% ✓
+      Formation 100m Ob(3+2+1=6): P≈65% ✓
+    Master 20D (E=8.0, SD=3.58):
+      Structural single contact Ob8: P≈56% ✓ hard
+    Edeyja 22D (E=8.8, SD=3.75):
+      Foundational Mending single contact Ob12: P≈22% ✓ hard sustained work
+      Foundational standard single contact Ob13: P≈16% ✓
+      Foundational network Ob(13+4+3=20): P<1% ✓ impossible alone
+
+    TN8 (Binding Ops): E=0.3N. For 22D: E=6.6, SD=3.66.
+      Edeyja Relational Lock single contact (Ob3): P≈83% ✓ expert Binding accessible
+      Edeyja Structural Lock single contact (Ob8): P≈47% ✓ hard
+    TN9 (POP Binding): E=0.2N. 22D: E=4.4.
+      Near-impossible except at shallow depth and close range.
+  finding_id: PP-622 probability_error
+  affects:
+    - references/params_threadwork.md
+    - references/params_core.md
+  status: applied
+- id: PP-593
+  date: 2026-04-13
+  scope: fieldwork
+  description: >
+    Disposition advance Ob recalibrated: floor((6-disposition)/2)+1.
+    Original max(1, 3-d) produced median 3 sessions Neutral→Bonded (too fast).
+    New formula: median 5 sessions, p75=8. Obs: 4→3→3→2.
+  affects: [designs/fieldwork/fieldwork_design_v1.md]
+  finding_id: SIM-FW-03
+  status: applied
+- id: PP-594
+  date: 2026-04-13
+  scope: hybrid
+  description: >
+    Scale transitions design document v1 created. Consolidates stage11
+    compilation (deprecated), params_scale_transitions, and PP-089/103/107-112
+    /232/261/340-343 into canonical design-layer document. 11 sections covering
+    three-mode architecture, scale table, handoff rules, zoom protocol,
+    domain echo, mode transitions, scope rules, thread timing, contested
+    figure system.
+  affects: [designs/hybrid/scale_transitions_design_v1.md, references/canonical_sources.yaml]
+  status: applied
+
+- id: PP-624
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    ED-439 fully resolved. Three items:
+
+    ITEM 1 — Binding Ops TPS exclusion design note:
+    ED-439 item 1 was written against PP-616 which briefly excluded TPS from Binding Ops.
+    PP-618 reversed this on the same day. Item 1 is void — Binding Ops include TPS (PP-618).
+    No design note about exclusion needed; the rationale for inclusion is in PP-618.
+
+    ITEM 2 — Attunement doubling in fieldwork vs Thread ops:
+    Correct framing post-PP-619: Attunement ×2 applies to non-Thread fieldwork actions
+    where it is primary (Interview, Read, Negotiate, Thread-aware exploration). Thread-Read
+    uses (Spirit × 2) + History + TPS — not Attunement — because Thread-Read is a Leap,
+    and all Leaps are Spirit-primary per PP-619. The line is clean: Attunement = social/
+    perceptual calibration; Spirit = Thread contact. TPS is the perceptual depth amplifier
+    for Thread work. Design note added to fieldwork §4.5 and threadwork §2.3.
+
+    ITEM 3 — Leap pool retains Attunement:
+    Confirmed by Jordan: Leap pool = (Spirit × 2) + History + TPS. No Attunement.
+    PP-619 "no exceptions" stands. ED-439 item 3 is resolved by authorial decision.
+
+    WOUND DISRUPTION CHECK (unlisted in ED-439; identified in conferral):
+    threadwork_redesign_v25 §2.3 specified wound disruption during contact as:
+    "Attunement score in d10s, TN 7, Ob 1." Corrected to Spirit score in d10s, TN 7, Ob 1.
+    Rationale: maintaining Thread-state suspension (the Leap's rendering suspension)
+    against physical disruption is Spirit's function — "metaphysical capacity to engage
+    with Thread reality while remaining grounded" (PP-610). Attunement is social/perceptual
+    calibration with no role in maintaining metaphysical states.
+  finding_id: ED-439
+  affects:
+    - designs/ttrpg/threadwork_redesign_v25.md
+    - designs/fieldwork/fieldwork_design_v1.md
+  status: applied
+
+- id: PP-625
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    threadwork_redesign_v25.md propagation pass — all pool formulas corrected to canonical
+    post-PP-619 state. This document was last committed 2026-04-02 and had not received
+    the PP-616 through PP-619 pool unification. Changes applied:
+
+    LEAP (§2.3): Spirit + Attunement + History + TPS → (Spirit × 2) + History + TPS
+    WEAVING (§2.3): Spirit + History + TPS → (Spirit × 2) + History + TPS
+    PULLING (§2.4): Spirit + History + TPS → (Spirit × 2) + History + TPS
+    POP (§2.4): Spirit + History + TPS÷2 → (Spirit × 2) + History + TPS
+      (TPS÷2 struck per PP-619; full TPS always)
+    LOCK (§3.x): Spirit + History [no TPS] → (Spirit × 2) + History + TPS
+      TN 7 → TN 8 (Binding Op per PP-619)
+      Minimum Ob 4 struck (PP-623)
+      Pre-PP-622 Ob table struck; pointer to params_threadwork §Three-Axis Ob System
+    DISSOLUTION (§3.x): Same corrections as Lock
+    MENDING (§4.x): Attunement + Focus + TPS → (Spirit × 2) + History + TPS
+      (PP-616: Attunement and Focus struck from all Thread pools; Focus = Contact Rounds only)
+      Design note updated to reflect Spirit-primary for all Thread contact
+    WOUND DISRUPTION CHECK (§2.3): Attunement score → Spirit score (PP-624)
+
+    Header notice added to document pointing to params_threadwork.md as canonical
+    source for all Ob values (pre-PP-622 single-axis Ob tables in design doc are stale).
+  finding_id: PP-616 PP-618 PP-619 PP-624
+  affects:
+    - designs/ttrpg/threadwork_redesign_v25.md
+  status: applied
+
+- id: PP-626
+  type: patch
+  date: 2026-04-13
+  severity: P1
+  description: >
+    fieldwork_design_v1.md §4.5 Thread-Read pool corrected.
+    Prior: Attunement × 2 + History bonus, TN 7, Ob per Depth. Add TPS as bonus dice.
+    Correct: (Spirit × 2) + History + TPS, TN 7, Ob per Depth.
+    Thread-Read is defined as a perceptive Leap. All Leaps use (Spirit × 2) + History + TPS
+    per PP-619. Attunement struck from all Thread contact pools.
+    §4.2 investigation action table row for Thread-Read also updated: primary = Spirit.
+  finding_id: PP-619 PP-624
+  affects:
+    - designs/fieldwork/fieldwork_design_v1.md
+  status: applied
+
+- id: PP-627
+  type: correction
+  date: 2026-04-13
+  severity: P3
+  description: >
+    Health formula presentation harmonised (ED-438).
+    No mechanical change — documentation clarity only.
+
+    params_core.md Health row updated to:
+    "Wound threshold = Endurance + 6. On each Wound taken: threshold resets (Health refills).
+    Total capacity = (End + 6) × (wound count + 1). See params_combat.md for cumulative formula."
+

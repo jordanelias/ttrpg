@@ -1,0 +1,782 @@
+  description: >
+    Prominence check timing (ED-367 resolved). Prominence for Graduated Seizure is assessed
+    at seizure declaration, not at resolution. If Church Mandate falls below the controlling
+    faction's Mandate between declaration and resolution (e.g. via an interrupt action),
+    the seizure roll still proceeds — the declaration locked the prominence check. Rationale:
+    consistency with standard Domain Action resolution (declared conditions govern); prevents
+    exploit where factions artificially inflate their own Mandate mid-resolution to strip
+    prominence. Corrects SIM-GS-01 finding J4.
+  finding_id: [J4-SIM-GS-01, ED-367]
+  source: SIM-GS-01 editorial resolution 2026-04-09
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-510
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Casus Belli mechanic definition (GAP-CB resolved). Casus Belli (CB) is a one-season
+    political token. When CB is granted: the receiving faction places a CB marker on their
+    faction mat (colour-coded to the offending faction). Effects (all fire at next Accounting
+    after CB is granted):
+    (1) Receiving faction may play one free Senator Outward (Diplomacy) action targeting the
+        offending faction this season without spending a card slot. This represents formal
+        diplomatic protest.
+    (2) If the receiving faction plays a Legionary action against the offending faction this
+        season, Ob is reduced by 1 (min 1). Military action is politically legitimised.
+    (3) All other factions observe the CB grant (public record). Any faction may invoke
+        the CB as justification for joining a coalition this season (coalition Ob −1 for
+        this season only if the CB-holding faction is primary).
+    CB marker is removed at the following Accounting regardless of whether effects were used.
+    Only one CB may be held against any single faction at a time; a new CB from the same
+    source replaces the existing one (timer resets, effects refresh).
+    [PROVISIONAL: CB stacking across multiple sources (e.g. CB from Church AND CB from Crown
+    simultaneously) flagged — confirm whether multiple CB markers can be held.]
+  finding_id: [L2-SIM-GS-01, GAP-CB]
+  source: SIM-GS-01 editorial resolution 2026-04-09
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: applied
+
+- id: PP-511
+  date: 2026-04-09
+  severity: P2
+  description: >
+    Mandatory Assert suspension post-TC 75 (ED-369 resolved). Mandatory Assert (PP-480,
+    active at TC 50–74) is suspended when TC ≥ 75 (freeze state). Church is no longer
+    required to play Assert once TC freezes — the mandatory Assert was a TC-generation
+    mechanism, and TC generation has ceased. In the seizure phase, Church's action
+    economy is fully available for seizure and supporting actions. Assert remains
+    available as an optional action post-TC 75 (it produces no TC change but can
+    still serve as a Stability-risk action if Church chooses). Corrects SIM-GS-01
+    finding L6.
+  finding_id: [L6-SIM-GS-01, ED-369]
+  source: SIM-GS-01 editorial resolution 2026-04-09
+  affects: [references/params_board_game.md]
+  status: applied
+
+
+  - id: PP-512
+    date: 2026-04-09
+    description: "Crown Treaty Ob formula — Ob = ceil(target Mandate / 2) min 1 (was Ob = target Mandate). Aligns with all other diplomatic formulas. Mandate <= 1 target invalid."
+    status: applied
+    affects: [victory_architecture_v1.md, params_board_game.md]
+    finding: SIM-DIPL-01 A-01-F1/D-17 (P1)
+
+  - id: PP-513
+    date: 2026-04-09
+    description: "Crown Treaty consent mechanism — consent timing (next Phase 1), NPC AI rule (M>=3 AND Sta<=3), refusal CB, 4-season period, consent incentive (Sta+1 on OW/S)."
+    status: applied
+    affects: [victory_architecture_v1.md]
+    finding: SIM-DIPL-01 A-01-F2/D-07 (P1)
+
+  - id: PP-514
+    date: 2026-04-09
+    description: "Crown Treaty target-break clause — partner Domain Action targeting Crown territory dissolves Treaty; Crown gets permanent CB; partner Sta −1."
+    status: applied
+    affects: [victory_architecture_v1.md]
+    finding: SIM-DIPL-01 A-01-F3 (P2)
+
+  - id: PP-515
+    date: 2026-04-09
+    description: "Open Pledge system — publicly declared seasonal commitments. Honour +1 Standing. Breach Sta −1 + CB to all witnesses. Simultaneous resolution: Phase 1 card declaration is factual test. Forced breach exemption. Closed Pledge variant."
+    status: applied
+    affects: [params_board_game.md]
+    finding: SIM-DIPL-01 A-05-F1/D-08 (P1); Scenario 2 simultaneous resolution gap
+
+  - id: PP-516
+    date: 2026-04-09
+    description: "Coalition Pairs table replacement — Guilds and Niflhel removed (PP-188 struck them as player factions). Replaced with: Diplomatic Alignment (Church+HF, Inf>=5), Military Compact (Varfell+LW, Mil>=5 + Named Enemy), Trade Compact (Crown+HF, TCV-based), Thread Stewardship (Varfell+RM, VTM>=3+Presence>=2). Named Enemy: declared at activation, public, Phase 1 changeable."
+    status: applied
+    affects: [params_factions.md]
+    finding: SIM-DIPL-01 D-12 (P1), D-13 (P2); Scenario 6 Named Enemy gap
+
+  - id: PP-517
+    date: 2026-04-09
+    description: "Diplomatic Token military conflict definition — Legionary card targeting other faction's held territory (intent; March to uncontested excluded). Token suspended while holder has Mandate 0."
+    status: applied
+    affects: [params_board_game.md]
+    finding: SIM-DIPL-01 A-02-F1 (P2)
+
+  - id: PP-518
+    date: 2026-04-09
+    description: "Valid suppression action definition for coalition bonus (PP-296) — primary Mandate-reduction effect only; secondary/conditional/cascade excluded."
+    status: applied
+    affects: [params_board_game.md]
+    finding: SIM-DIPL-01 A-03-F2 (P2)
+
+  - id: PP-519
+    date: 2026-04-09
+    description: "Casus Belli stacking cap (max 1 per target, second replaces) and consumption rule (one Military roll, consumed on roll, declared Phase 4 start)."
+    status: applied
+    affects: [params_board_game.md]
+    finding: SIM-DIPL-01 A-04-F1/F2 (P2)
+
+  - id: PP-520
+    date: 2026-04-09
+    description: "Thread Liaison 'Allied' scope restriction — Liaison designation requires Active Crown Treaty partner only; Parliamentary voter and Resentment conditions excluded."
+    status: applied
+    affects: [params_board_game.md]
+    finding: SIM-DIPL-01 D-11 (P2)
+
+  - id: PP-521
+    date: 2026-04-09
+    description: "Diplomatic Token removed on Crown Treaty formation with token-holding faction (Treaty supersedes Token). Slot freed for new placement."
+    status: applied
+    affects: [params_board_game.md]
+    finding: SIM-DIPL-01 D-10 (P3)
+
+  - id: PP-522
+    date: 2026-04-09
+    description: "Missed Coalition Penalty threshold — 'at or above' the coalition floor (not 'above')."
+    status: applied
+    affects: [params_board_game.md]
+    finding: SIM-DIPL-01 D-03 (P3)
+
+  - id: PP-523
+    date: 2026-04-09
+    description: "Treaty betrayal cascade timing — Sta/Mandate at end Phase 4; CB at Accounting Step 1; CB usable next season."
+    status: applied
+    affects: [params_board_game.md]
+    finding: SIM-DIPL-01 D-14 (P2)
+
+  - id: PP-524
+    date: 2026-04-09
+    description: "Solo/co-victory simultaneous declaration — declaring faction chooses path at Accounting Step 12 start; 2-Accounting req applies to declared path."
+    status: applied
+    affects: [params_board_game.md]
+    finding: SIM-DIPL-01 D-15 (P2)
+
+  - id: PP-525
+    date: 2026-04-09
+    description: "Crown-break trigger definition — Crown breaks Treaty by: (a) Legionary targeting partner's held territory, or (b) explicit Phase 1 dissolution declaration. Other actions not Crown-breaks."
+    status: applied
+    affects: [params_board_game.md]
+    finding: SIM-DIPL-02 Scenario 9 (P2)
+
+  - id: PP-526
+    date: 2026-04-09
+    description: "Diplomatic Alignment 'shared Parliamentary motion' definition — once/season during Parliamentary Session, Church and Hafenmark count as same-side voters regardless of declared votes. Not a free card play; no action spend required."
+    status: applied
+    affects: [params_factions.md, params_board_game.md]
+    finding: SIM-DIPL-02 Scenario 10 (P1)
+
+  - id: PP-527
+    date: 2026-04-09
+    description: "Closed Pledge witnesses at revelation — witnesses = factions at Accounting where revelation occurs (not original private pledge-making). Consequences to all present at revelation."
+    status: applied
+    affects: [params_board_game.md]
+    finding: SIM-DIPL-02 Scenario 13 (P2)
+
+  - id: PP-528
+    date: 2026-04-09
+    description: "Crown Treaty lapse timing — lapse at Phase 1 of season after period ends (N+5 for Treaty formed season N). Accounting of N+4 sees Treaty active. Extension declared at Phase 1 of N+5."
+    status: applied
+    affects: [victory_architecture_v1.md]
+    finding: SIM-DIPL-02 Scenario 15 (P2)
+
+- id: PP-505
+  date: 2026-04-09
+  severity: P2
+  description: >
+    ED-354 resolved. Thread-destroyed unit Phase 5 participation: simultaneous-damage
+    rule governs. A unit reduced to 0 by Phase 4 Thread effects retains Phase 3-end Size
+    during Phase 5 — damage not applied until Phase 6 Step 1. Unit participates in Phase 5
+    Engagement normally. Old design doc exception ("does not participate in Phase 5")
+    struck — it contradicted the load-bearing simultaneous-damage mechanic.
+    Simulation: E[return fire] = ~1.15 Size loss at pool=6D. [PROVISIONAL]
+  finding_id: SIM-MB-01 D-1-F1
+  source: mass_battle stress test 2026-04-09
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  status: applied
+
+- id: PP-506
+  date: 2026-04-09
+  severity: P2
+  description: >
+    ED-355 resolved. Bilateral general personal combat: mass battle does not freeze.
+    Both armies fight uncommanded — PP-273 1D minimum, Line, no tactics — until each
+    general re-establishes Command (Ob 2 check Phase 1 following turn). Sequencing:
+    simultaneous initiative per standard personal combat. Simulation: 3-turn duel
+    leaves ~80% of Size=5 armies intact. Low-Command generals disadvantaged on
+    re-establishment (Cmd=2: 20% success vs Cmd=5: 55%). [PROVISIONAL]
+  finding_id: SIM-MB-01 D-7-F1
+  source: mass_battle stress test 2026-04-09
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  status: applied
+
+- id: PP-507
+  date: 2026-04-09
+  severity: P2
+  description: >
+    ED-357 resolved. Mutual destruction (PP-240) Stability check Ob 1 REPLACES §A.13
+    battle-lost Ob 1 check. A draw has no loser — battle-lost consequence does not fire.
+    Each faction takes exactly one Ob 1 Stability check at Accounting.
+    Simulation: Stability=3 faction passes ~66%, Stability=4 ~73%. [PROVISIONAL]
+  finding_id: SIM-MB-01 D-12-F1
+  source: mass_battle stress test 2026-04-09
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  status: applied
+
+- id: PP-508
+  date: 2026-04-09
+  severity: P1
+  description: >
+    ED-358 resolved. §A.8 splitting note struck and replaced with correct doctrine.
+    Splitting is structurally advantageous in nearly all Command pairings (+9% to +45%
+    win-rate advantage). §A.8 claim ("splitting 3+3 against undivided 5 is disadvantageous")
+    was wrong — it assumed defender could maintain full pool vs each sub-unit simultaneously,
+    which is impossible under current rules (defender pool splits). Hard counters to splitting:
+    (1) Narrow Pass terrain (1 engagement per side — primary counter), (2) Feigned Retreat
+    to disengage and re-concentrate. Matching the split is not an effective counter.
+    Simulation: split dominates in all tested configurations except near-ceiling matchups. [PROVISIONAL]
+  finding_id: SIM-MB-02 Scenario 8, SIM-MB-03 D2
+  source: mass_battle stress test 2026-04-09
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_mass_combat.md]
+  status: applied
+
+
+- id: PP-540
+  type: balance
+  date: 2026-04-10
+  severity: P1
+  description: >
+    Crown Peninsula Sovereignty — TCV 16→14; rival suppression 3-of-3 → 2-of-3.
+    Solo victory timeline reduced from 18–22 seasons to 12–16 seasons.
+    Crown TCV threshold reduced from ≥ 16 to ≥ 14.
+    Rival suppression condition changed from 'every other playable faction' to
+    'at least 2 of the 3 other playable factions' at Mandate ≤ 2 / eliminated / Treaty.
+    Balance rationale: Crown was 4–6 seasons slower than all other solo paths.
+  finding_id: SIM-VIC-01 F-VIC-02 (ED-383)
+  source: balance_analysis_2026_04_10
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-541
+  type: balance
+  date: 2026-04-10
+  severity: P2
+  description: >
+    Hafenmark Parliamentary Sovereignty — TCV 12→13.
+    Solo victory timeline increased from 10–14 seasons to 12–16 seasons.
+    Balance rationale: Hafenmark was 2–4 seasons faster than all other solo paths.
+  finding_id: SIM-VIC-01 F-VIC-06
+  source: balance_analysis_2026_04_10
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-542
+  type: balance
+  date: 2026-04-10
+  severity: P2
+  description: >
+    Varfell Path C Thread Supremacy — VTM = 5 → VTM ≥ 4.
+    Solo victory timeline reduced from 14–18 seasons to 12–16 seasons.
+    VTM 5 cap (uniqueness condition) replaced with VTM ≥ 4 (mastery condition).
+    Balance rationale: Path C was 2 seasons above target ceiling.
+  finding_id: SIM-COMPREHENSIVE-01
+  source: balance_analysis_2026_04_10
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-543
+  type: balance
+  date: 2026-04-10
+  severity: P1
+  description: >
+    RM Cultural Revolution Phase 1 — territory threshold ≥ 5 (PP-478) → ≥ 4 (PP-543 supersedes).
+    Also resolves F-VIC-RM-01 conflict: §3.5 had ≥ 8, PP-478 had ≥ 5. PP-543 = ≥ 4 is now canonical.
+    Solo victory timeline reduced from 14–20 seasons to 14–18 seasons.
+    Balance rationale: RM upper bound (20 seasons) exceeded hardest-mode acceptable range.
+  finding_id: F-VIC-RM-01 (SIM-VIC-03); SIM-COMPREHENSIVE-01
+  source: balance_analysis_2026_04_10
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-544
+  type: balance
+  date: 2026-04-10
+  severity: P1
+  description: >
+    Crown+Hafenmark co-victory — PI threshold ≥ 5 → ≥ 7.
+    Co-victory timeline increased from 7–10 seasons to 10–14 seasons.
+    PI ≥ 7 aligns with Revolution threshold (provisional CLK-01) — co-victory fires
+    at the same pressure point as Löwenritter Coup eligibility. Thematically coherent.
+    Balance rationale: 7–10 season co-victory was faster than any solo path, undermining
+    the asymmetry between solo and co-victory effort.
+  finding_id: F-VIC-03 (SIM-VIC-01); SIM-VIC-02 ED-343
+  source: balance_analysis_2026_04_10
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-545
+  type: balance
+  date: 2026-04-10
+  severity: P1
+  description: >
+    Varfell+RM co-victory — VTM ≥ 4→3; territory threshold ≥ 4→3.
+    Co-victory timeline reduced from 20+ (infeasible) to 12–16 seasons.
+    Balance rationale: Varfell+RM was analytically unachievable in race conditions.
+    All other co-victories are viable; Varfell+RM should be hardest co-victory, not impossible.
+  finding_id: F-CO-02 (SIM-VIC-02)
+  source: balance_analysis_2026_04_10
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-546
+  type: balance
+  date: 2026-04-10
+  severity: P2
+  description: >
+    Hafenmark+RM co-victory — territory threshold ≥ 4 → ≥ 3 (CV ≤ 2).
+    Co-victory timeline reduced from ~16–20 seasons to ~8–10 seasons.
+    Balance rationale: prior threshold made this co-victory slower than most solo paths,
+    removing the incentive structure. RM Founding prerequisite adds ~4 seasons of pre-game
+    investment, justifying the shorter post-Founding timeline.
+  finding_id: SIM-COMPREHENSIVE-01
+  source: balance_analysis_2026_04_10
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-547
+  type: formula-correction
+  date: 2026-04-11
+  severity: P1
+  description: >
+    Standardise all Mandate-derived Obstacle formulas to floor(Mandate / 2) + 1.
+    Previous formulas were either raw Mandate (Ob = Mandate or min(Mandate, 4))
+    or ceiling(Mandate / 2). All six instances corrected in params_board_game.md:
+    (1) Theocracy Counter Suppress Ob (L337),
+    (2) Excommunication Ob Cap PP-180 header (L468),
+    (3) Mandate Suppression general rule PP-296 (L471),
+    (4) Church Piety Spread PP-428 (L1206),
+    (5) Hafenmark Diplomat Card ED-320 (L1282),
+    (6) Varfell Counter-Narrative PP-441 (L1378).
+    Cap of 4 removed from PP-180/PP-296 — formula is self-scaling.
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-548
+  type: formula-correction
+  date: 2026-04-11
+  severity: P1
+  description: >
+    All stat÷2 Ob and capacity formulas standardised to floor(stat/2)+1.
+    Applied across params_board_game.md: Govern Ob (L113), Trade Ob (L114,
+    ÷3 eliminated), Diplomacy vs NPC Ob (L115), Crown Treaty Ob (L117),
+    Spy Ob (L120), Parliamentary Manoeuvre Ob (L121), Battle Ob (L385),
+    Corrupt Ministry Ob (L721, min-2 override removed), Active Inquisition Ob
+    (L1221), Royal Charter Ob (L1298), Max active Charters capacity (L1299).
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-549
+  type: formula-correction
+  date: 2026-04-11
+  severity: P1
+  description: >
+    PP-547 extension — floor(stat/2)+1 applied to files missed in original commit.
+    params_factions.md: general diplomatic Ob rule (L35), TC Suppress Ob (L47),
+    TC60 Seizure Ob (L82), Excommunication vs leader Ob (L120), Suppression
+    roll Ob (L129), Hafenmark Diplomacy summary Ob (L486), Max Charters
+    capacity (L507). victory_architecture_v1.md: TC Suppress Ob (L329).
+    social_contest_system_v2.md: Private negotiation Ob (L306).
+    mass_battle_v3.md: Muster unit Power (L515-516).
+  affects:
+    - references/params_factions.md
+    - designs/board_game/victory_architecture_v1.md
+    - designs/contest/social_contest_system_v2.md
+    - designs/mass_combat/mass_battle_v3.md
+  status: applied
+
+- id: PP-550
+  type: formula-correction
+  date: 2026-04-11
+  severity: P2
+  description: >
+    BG Commander bonus: floor(Military/3) max +2D (PP-190) rejected.
+    Replaced with floor(Military/2)+1 throughout. Eliminates all ÷3 formulas
+    from the system. Updated in mass_battle_v3.md, params_mass_combat.md.
+    Self-scaling (max +4D at Military 7); explicit cap removed.
+  affects:
+    - designs/mass_combat/mass_battle_v3.md
+    - references/params_mass_combat.md
+  status: applied
+
+- id: PP-551
+  type: design
+  date: 2026-04-11
+  severity: P2
+  description: >
+    Certainty track redesigned. Old track (epistemological confidence,
+    0-10 countdown, PP-289) struck. New track: cosmological worldview journey
+    from Solmund orthodoxy (5) to Thread acceptance (0). Scale 0-5 oscillating.
+    Everyone holds it; Church can push it back via absolution and community
+    reinforcement. Both poles are stable states. Mechanical effects at
+    Certainty 5, 2-1, and 0. Independent of Coherence and Thread Sensitivity.
+    Not tracked in Board Game mode.
+  affects: [references/params_core.md]
+  status: applied
+
+- id: PP-552
+  type: naming
+  date: 2026-04-11
+  severity: P2
+  description: >
+    CV (territory Conviction) renamed to PT (Piety Track) across all files.
+    "Conviction Yield" becomes "Piety Yield." Resolves naming conflict with
+    social contest "Conviction Track" (unchanged). 34 instances in
+    params_board_game, 2 in params_factions, 49 in victory_architecture,
+    relevant entries in clock_registry. The social contest Conviction Track
+    is unaffected.
+  affects:
+    - references/params_board_game.md
+    - references/params_factions.md
+    - designs/board_game/victory_architecture_v1.md
+    - designs/systems/clock_registry.md
+  status: applied
+
+- id: PP-553
+  type: range-correction
+  date: 2026-04-11
+  severity: P2
+  description: >
+    Range standardisation across all files. PI range corrected 0-10 → 0-20
+    (effects table goes to 20+; auto-resolves at Crown elimination). TC range
+    standardised to 0-75 (freeze ceiling) everywhere. TS hard cap declared at
+    100 (removes undefined +). RS start values documented per mode: TTRPG=60,
+    BG=72. Prosperity scale declared 1-7 (territory values already 1-6, valid).
+    RDT 0-6 → 0-5 [PROVISIONAL: step-6 state consolidated into step-5].
+    Faction stats floor corrected to 1-7 in clock_registry (was 0-7 for all).
+    Missing clock_registry entries added: Intel stat, Certainty, Reputation,
+    Standing, Guild Favour, Church AP, Intel Counter.
+  affects:
+    - references/params_board_game.md
+    - references/params_factions.md
+    - references/params_threadwork.md
+    - references/params_core.md
+    - designs/systems/clock_registry.md
+  status: applied
+
+- id: PP-554
+  type: formula-correction
+  date: 2026-04-11
+  severity: P2
+  description: >
+    Ministry Mandate collapse triggers updated for floor-1 rule.
+    "Ministry Mandate = 0" triggers replaced with "Ministry Mandate ≤ 1"
+    at params_board_game L734 (Crown Policy unavailable) and L825
+    (Guilds trade protections lapse). The Submission Mandate-0 mechanic
+    (PP-475, L1503) is preserved — submitted faction's Mandate-0 vassal
+    state is a deliberate exception to the floor-1 rule [PROVISIONAL: ED-378].
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-555
+  date: 2026-04-12
+  severity: P2
+  description: "Solberg recall trigger mechanic. Fires when Schoenland central Intel check (Ob 2) at Year-End succeeds with 2+ of: Supply Chain Exposure (Arc 37 terminal event), Parish Revolt (Arc 36 terminal event), PI >= 8 (PP-255 revolt threshold). Check is independent of Solberg's reports (STABILITY-SEEKING AI produces downplayed reports; Schoenland uses trade intelligence). One-season delay if check fails. Corrects ED-411 proposed IP >= 15 threshold (out of range) to PI >= 8."
+  finding_id: "ED-411"
+  source: editorial
+  affects: [gm_ref/arcs_36_40_interdependent.md, references/params_factions.md]
+  status: applied
+  applied_commit: pending
+
+- id: PP-556
+  date: 2026-04-12
+  severity: P2
+  description: "Arc-specific Hybrid Zoom In trigger extension. Supplements existing PC-presence trigger (PP-103) with arc-documented board-state conditions that call Zoom In scenes. Format: 'Hybrid Trigger: [condition] -> Zoom In [scene type]. BG consequence resolves at Accounting.' Phase-Lock (Side A), Freeze, Transfer, Zoom Out procedures unchanged. Concurrent ordering: Mandate order descending (PP-269). TC threshold crossing not delayed by arc-triggered Zoom In (PP-268/PP-293). First example: Haelgrund Defection trigger (Arc 41 — npc_roster §4 BG Event Card condition)."
+  finding_id: "arc-specific-zoom-in-gap"
+  source: design
+  affects: [designs/gm_ref_cp14/zoom_in_out_reference_card.md]
+  status: applied
+  applied_commit: pending
+
+- id: PP-555
+  type: formula-correction
+  date: 2026-04-11
+  severity: P1
+  description: >
+    Audit findings from post-PP-548-554 review.
+    (1) BG Commander bonus: PP-550 incorrectly applied floor(Military/2)+1.
+    Pool bonuses are not Ob derivations; floor+1 rule does not apply.
+    Corrected to floor(Military/2) — Military 0 now correctly gives 0 bonus dice.
+    Updated in mass_battle_v3.md and params_mass_combat.md.
+    (2) RDT table orphan: row-6 remained after range corrected to 0-5.
+    Row-6 effect (All diplomatic actions targeting Hafenmark +1 Ob) merged into
+    row-5 as capstone. Row-6 removed. RDT stale header at L539 updated to 0-5.
+    (3) Stale 'Conviction value' text in Church Seizure Ob description replaced
+    with 'Piety value' in params_board_game and victory_architecture_v1.md.
+    (4) params_threadwork PP-283 Certainty references updated to PP-551.
+    Stale flag at L552 resolved.
+  affects:
+    - designs/mass_combat/mass_battle_v3.md
+    - references/params_mass_combat.md
+    - references/params_board_game.md
+    - designs/board_game/victory_architecture_v1.md
+    - references/params_threadwork.md
+  status: applied
+
+- id: PP-556
+  type: editorial
+  date: 2026-04-11
+  severity: P2
+  description: >
+    ED-370 resolved: Hybrid Diplomacy→Treaty bridge.
+    Personal Diplomacy success (any degree) in TTRPG/Hybrid scene targeting
+    a faction queues -1 Ob Domain Echo on BG Treaty roll at next Accounting.
+    Cap: -1 Ob regardless of success count. One Echo per Treaty target per arc.
+    Rule added to victory_architecture_v1.md §Treaty period.
+  finding_id: ED-370
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-557
+  type: editorial
+  date: 2026-04-11
+  severity: P2
+  description: >
+    ED-371 resolved: Coalition suppression auto-trigger (PP-296) confirmed
+    as designed. No Senator card required. Cost is the Domain Action itself.
+    Coalition emergence is intentional. No mechanical change.
+  finding_id: ED-371
+  affects: []
+  status: applied
+
+- id: PP-558
+  type: editorial
+  date: 2026-04-11
+  severity: P2
+  description: >
+    ED-372 resolved: Thread Liaison dissolution is prospective only.
+    Thread operations already credited before dissolution remain valid.
+    Future operations after dissolution provide no Liaison benefit.
+    Explicit prospective clause added to params_board_game §Thread Liaison.
+  finding_id: ED-372
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-559
+  type: editorial
+  date: 2026-04-11
+  severity: P3
+  description: >
+    ED-373 resolved: Diplomatic Token suspended while token-holding faction
+    is in submitted (vassal) state (Mandate 0 from submission). Resumes on
+    recovery. Updated from 'Mandate 0' to 'submitted/vassal state' to align
+    with floor-1 rule — Mandate 0 only occurs in submission context.
+  finding_id: ED-373
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-560
+  type: mechanical-clarification
+  date: 2026-04-12
+  severity: P1
+  description: >
+    ED-313 resolved: PI ≤ 2 TC +2 effect does not apply when TC is frozen at 75.
+    TC freeze state takes precedence over the institutional-collapse TC bonus.
+    PI ≤ 2 still removes Hafenmark Parliamentary Manoeuvre and enables Crown decree governance.
+  finding_id: ED-313
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-561
+  type: balance
+  date: 2026-04-12
+  severity: P1
+  description: >
+    ED-342/ED-343 resolved: Crown+Hafenmark co-victory was achievable by Season 1-2 with
+    zero active play (Hafenmark needed only +1 TCV from starting 8). Fix: raise Hafenmark
+    TCV threshold from 9 → 12 (requires 4 territory gains). Add: both factions must have
+    Mandate ≥ 4 simultaneously (requires active political maintenance). Updated in both
+    victory_architecture_v1.md §4 and params_board_game co-victory summary table.
+  finding_id: ED-342, ED-343
+  affects:
+    - designs/board_game/victory_architecture_v1.md
+    - references/params_board_game.md
+  status: applied
+
+- id: PP-562
+  type: balance
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-344 resolved: Royal Decree Fragmentation modifier reduced from +2 Ob to +1 Ob.
+    The +2 Ob perversely punished Crown hardest when Decree was most needed (3+ rivals
+    at Stability ≤ 2 = late-game crisis = maximum suppression urgency). +1 Ob preserves
+    the crisis-difficulty flavour without near-prohibitive cost.
+  finding_id: ED-344
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-563
+  type: definition
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-345 resolved: VTM TC contribution defined. Once VTM is publicly visible (VTM 3+),
+    generates Church institutional pressure: VTM 3 = +0.5 TC/season, VTM 4 = +1 TC/season,
+    VTM 5 = +1.5 TC/season (fractional tracking; applied at Accounting). Matches "low"/"high"
+    cost labels already present in VTM Discretion text (PP-438). VTM Discretion (1 PC) still
+    suppresses for 1 season.
+  finding_id: ED-345
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-564
+  type: redesign
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-346 resolved: Ministry Priority 3 redesigned. Old: contested roll (Ministry 3D vs
+    Church Mandate Ob, ~11% success rate) to delay Church Seizure. New: automatic procedural
+    objection — no roll required. Church Seizure in that territory delayed 1 season. AP-token
+    consumed. Rationale: Ministry's institutional role is procedural/administrative, not military.
+    A near-impossible roll made Priority 3 mechanically dead (11% success).
+  finding_id: ED-346
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-565
+  type: redesign
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-328 + ED-341 resolved: AER advancement and decay redesigned.
+    Advancement: Cardinal of Temperance Phase 1 declaration now requires a roll
+    (Mandate vs Ob = floor(current AER / 2) + 1). Success: AER +1. Failure: no change.
+    At AER 2-3: Ob 2 (~54% at Mandate 5). At AER 4-5: Ob 3 (~29% at Mandate 5).
+    Decay: AER -1 at Year-End Accounting if Temperance maintenance was not successfully
+    maintained that year. Creates natural AER homeostasis without trivialising early AER.
+    Was: passive no-roll AER loss reduction; achievable AER 3 by Season 3 automatically.
+  finding_id: ED-328, ED-341
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-566
+  type: design
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-338 resolved: Partition Pressure public marker added. When all Partition conditions
+    EXCEPT TC ≥ 50 are simultaneously met at Accounting, a public Partition Pressure marker
+    is placed. This gives other factions 1 season to disrupt conditions before the TC threshold
+    check can fire the victory. Marker removed if any condition breaks. Addresses no-advance-
+    signal finding from SIM-NEW-02: other factions had no warning.
+  finding_id: ED-338
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-567
+  type: formula-correction
+  date: 2026-04-12
+  severity: P1
+  description: >
+    ED-351 resolved: Three conflicting Discipline degradation definitions reconciled.
+    PP-320/ED-140 Power-asymmetry condition (condition 2: attacking Power > defending Power
+    OR Thread/artillery) is struck as superseded. PP-251 is canonical: condition 2 =
+    this unit's Size loss exceeds opposing unit's Size loss by ≥ 1. Mass_battle_v3 §A.4
+    and params_mass_combat PP-251 now agree. PP-320 section updated to reflect supersession.
+  finding_id: ED-351
+  affects: [references/params_mass_combat.md]
+  status: applied
+
+- id: PP-568
+  type: design
+  date: 2026-04-12
+  severity: P1
+  description: >
+    ED-340 provisional: Altonian Vanguard deployment mechanics defined. IP ≥ 75 places NPC
+    Vanguard (Military 5, Size 3) at T10 (Spartfell). Advances one territory/2 unchallenged
+    seasons along invasion route (T10→T3→T2→T1). Contest triggers automatic Battle vs Ob 3.
+    While at T1: all factions -1 Stability/season. Eliminated by AER management (AER ≥ 4
+    raises IP threshold; AER = 5 halts Vanguard). [PROVISIONAL — authorial review required
+    for Vanguard identity, route, and elimination narrative.]
+  finding_id: ED-340
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-569
+  type: clarification
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-339 resolved: Partition non-winners explicitly score no victory (by design).
+    ED-347 resolved: No cap on multi-Cardinal assassination per season; cascading mechanic
+    suspensions are the natural limiter. Explicit text added to params_board_game.
+    ED-348 resolved: Löwenritter assumes full T14 Ehrenfeld on Coup trigger; T14 does NOT
+    go Uncontrolled. Garrison presence formalises control. Explicit rule added.
+  finding_id: ED-339, ED-347, ED-348
+  affects: [references/params_board_game.md, designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-570
+  type: design
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-316 provisional: Weight-of-numbers rule. When a unit's Size > 2× the opposing
+    general's Command (formation too large to be directed against), opposing unit passes
+    Morale check Ob 1 at Phase 6 Step 2. Failure: -1 Morale. Captures demoralisation
+    from sheer mass regardless of direct damage. [PROVISIONAL — confirm trigger and scale.]
+  finding_id: ED-316
+  affects: [designs/mass_combat/mass_battle_v3.md, references/params_board_game.md]
+  status: applied
+
+- id: PP-571
+  type: balance
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-388 provisional: Hafenmark Parliamentary Sovereignty gate added: Hafenmark Stability
+    ≥ 3. Prevents Parliamentary victory while faction is structurally destabilised.
+    Added to victory_architecture_v1.md §3.3 conditions table.
+  finding_id: ED-388
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-572
+  type: balance
+  date: 2026-04-12
+  severity: P2
+  description: >
+    ED-391 provisional: Crown+Hafenmark co-victory now requires neither faction has played
+    Legionary targeting the other in the preceding 4 seasons. Reinforces the cooperative
+    design intent of the co-victory path — it must represent genuine political alignment,
+    not tactical opportunism. Added to co-victory table in victory_architecture_v1.md.
+  finding_id: ED-391
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-573
+  type: worldbuilding
+  date: 2026-04-12
+  severity: P1
+  description: >
+    ED-364 provisional: Almud Almqvist characterization updated. Conviction text revised to
+    "Order is not made — it is maintained. Everything depends on not flinching." NPC profile
+    note added: shrewd, guarded, politically capable king; caution informed by suspected
+    father assassination and structural impossibility of managing 6+ simultaneous pressure
+    vectors. Baralta comparison: scope difference, not competence difference.
+    [PROVISIONAL — for Jordan review]
+  finding_id: ED-364
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-574
+  type: cleanup
+  date: 2026-04-12
+  severity: P3
+  description: >
+    ED-358 struck as false debt. All 13 NPCs in the roster have documented presence
+    in canonical params files. The editorial conflated "simulation-provisional" with
+    "undocumented." Cardinals: full BG mechanics in params_board_game + params_factions.
+    Torben/Elske: loyalty tracks. Maret Uln: succession block PP-486. Edeyja: Warden
+    mechanics. Almud/Baralta/Vaynard: full faction leader profiles. Lenneth: explicitly
+    arc-dependent (documented). Erikssen/Inquisitor/Riskbreaker: faction roles defined.
+    ED-358b added: Lenneth TS P3 tracking only.
+  finding_id: ED-358
+  affects: [canon/editorial_ledger.yaml]
+  status: applied
+
+- id: PP-575

@@ -1,0 +1,636 @@
+  source: simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
+  status: applied
+
+- id: PP-451
+  date: 2026-04-08
+  severity: P1
+  description: "Design doc §6.1 Step 4 resistance formula aligned to params_debate PP-278: resistance = ceil(average Stability / 4). Design doc previously used ceil(Stability)−1 which produced radically higher values. Resolves SIM-SC-01 D-12."
+  finding_id: SIM-SC-01-D-12
+  source: simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md]
+  status: applied
+
+- id: PP-452
+  date: 2026-04-08
+  severity: P1
+  description: "Interaction type names aligned between design doc and params_debate. COMPETITION→AMPLIFY, DIVERGENCE→CROSS, DIVERGE state→Deadlock State. Design doc §6.4 updated with AMPLIFY combined pool cap (PP-242/250) and CROSS simultaneous resolution (PP-245). Resolves SIM-SC-01 D-11."
+  finding_id: SIM-SC-01-D-11
+  source: simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
+  status: applied
+
+- id: PP-453
+  date: 2026-04-08
+  severity: P1
+  description: "Genre weight adjacency model introduced. Base weights: primary ×1.0, adjacent (one step on Past→Present→Future arc) ×0.75, opposed ×0.5. Audience ethical mode boost reduced from +0.5 to +0.25 (boosted weight cap ×1.25, down from ×1.5). Adjacent genre (×0.75) now produces CT movement at margin 3+ against R=1, eliminating dominant-strategy collapse. Resolves SIM-SC-01 D-14/A-01."
+  finding_id: SIM-SC-01-D-14
+  source: simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
+  status: applied
+
+- id: PP-454
+  date: 2026-04-08
+  severity: P2
+  description: "Regroup no longer advances CT toward non-forfeiting side. Exchange is forfeited with no CT consequence (neutral recovery). Eliminates recovery cost asymmetry vs combat Take a Breath. Resolves SIM-SC-01 L-01 and D-04 (Regroup-on-Spent exploit neutralised — CT cost that made it rational is removed)."
+  finding_id: SIM-SC-01-L-01
+  source: simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
+  status: applied
+
+- id: PP-455
+  date: 2026-04-08
+  severity: P2
+  description: "Concentration restore on Regroup: max(Focus score, 2). Minimum restore of 2 regardless of Focus. Regroup no longer counts as exchange loss for Concentration depletion — no depletion during Regroup at all. Resolves Focus-1 Regroup trap (SIM-SC-01 D-05)."
+  finding_id: SIM-SC-01-D-05
+  source: simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
+  status: applied
+
+- id: PP-456
+  date: 2026-04-08
+  severity: P2
+  description: "CROSS exchanges produce no winner/loser designation. Additional −1 Concentration on exchange loss does not apply to CROSS. Fumble in CROSS: effective_margin = 0, no additional Concentration depletion beyond standard −1 per exchange. Resolves SIM-SC-01 D-08."
+  finding_id: SIM-SC-01-D-08
+  source: simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
+  status: applied
+
+- id: PP-457
+  date: 2026-04-08
+  severity: P2
+  description: "Debate Fatigue set at moment Rattled threshold is reached, not at debate conclusion. Trigger is Rattled, regardless of subsequent outcome (win, lose, concede, Unmask). Removes perverse incentive that punished winning-while-Rattled more than conceding. Resolves SIM-SC-01 D-13."
+  finding_id: SIM-SC-01-D-13
+  source: simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
+  status: applied
+
+- id: PP-458
+  date: 2026-04-08
+  severity: P2
+  description: "Refute action added (Step 2c). Declared after opponent claims Memory bonus, before dice rolled. Roll Recall Ob 2 TN 7. Failure: bonus stands. Success: bonus denied. Overwhelming: bonus denied + opponent −1D on Argue. Max one Refute per exchange per orator. Resolves SIM-SC-01 D-15 (Memory bonus unverifiable)."
+  finding_id: SIM-SC-01-D-15
+  source: simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
+  status: applied
+
+- id: PP-459
+  date: 2026-04-08
+  severity: P2
+  description: "Design doc §6.4 Step 2b aligned with params_debate ED-014: Knot no longer required for corroboration. Any ally who witnessed the relevant events may corroborate. Knot holders give full Knot bonus (not capped at +1D). GAP-DS-12 resolved. Resolves SIM-SC-01 D-16."
+  finding_id: SIM-SC-01-D-16
+  source: simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md]
+  status: applied
+
+- id: PP-460
+  date: 2026-04-08
+  severity: P2
+  description: "Composure formula corrected to Charisma + 6 (range 7–13), aligned with params_core PP-234/ED-127. Design doc §6.2 Poise references struck. Focus confirmed as standard Mental attribute per params_core. NPC Composure: same formula. Resolves SIM-SC-01 D-03."
+  finding_id: SIM-SC-01-D-03
+  source: simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
+  status: applied
+
+- id: PP-461
+  date: 2026-04-08
+  severity: P1
+  description: "§3.8 genre-win Thread consequences classified as social co-movement events, not Thread operations. P-01 mandatory three-dimensional auto-effects do not apply. Mandatory mechanical effects: RS +1 for Evidence and Consequence wins; Disposition change for Character wins. Remainder GM-narrated. Resolves SIM-SC-01 J-04."
+  finding_id: SIM-SC-01-J-04
+  source: simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
+  status: applied
+
+- id: PP-462
+  date: 2026-04-08
+  severity: P3
+  description: "Doubt Marker scale-dependency confirmed as intended design. Design note added: Doubt Marker is proportional — denies all movement at low margins, reduces but does not cancel at high margins. Obscuring is the losing-side tool, not a universal denial. Resolves SIM-SC-01 D-02 (no mechanical change)."
+  finding_id: SIM-SC-01-D-02
+  source: simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
+  status: applied
+
+- id: PP-463
+  date: 2026-04-08
+  severity: P3
+  description: "Concentration floor = 0 made explicit in params_debate. Multiple depletion triggers in same exchange cannot reduce below 0; Spent fires once. Already implicit in design doc; now stated explicitly. Resolves SIM-SC-01 D-06."
+  finding_id: SIM-SC-01-D-06
+  source: simulation resolution 2026-04-08
+  affects: [references/params_contest.md]
+  status: applied
+
+- id: PP-465
+  date: 2026-04-08
+  severity: P1
+  description: "Refute action Ob reduced from 2 to 1. Ob 2 produced ~18% success at Recall 1 (near-impossible). Ob 1 produces ~66% at Recall 1, ~87% at Recall 2 — accessible to any character while preserving skill gradient at Overwhelming. Multi-opponent clarification added: already-denied Memory bonus may not be Refuted again. Resolves AUD-SC-F-07/D-G19."
+  finding_id: AUD-SC-D-G19
+  source: audit/simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md, references/params_contest.md]
+  status: applied
+
+- id: PP-466
+  date: 2026-04-08
+  severity: P2
+  description: "BG Parliamentary Vote §6.13 Step 2 explicitly scoped to PP-453 adjacency genre weight model. Previously referenced generic genre_weight without specifying which weight values apply. Now confirmed: primary ×1.0, adjacent ×0.75, opposed ×0.5, audience ethical mode +0.25. Resolves AUD-SC-C-01/D-G01/D-G20."
+  finding_id: AUD-SC-C-01
+  source: audit/simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md]
+  status: applied
+
+- id: PP-467
+  date: 2026-04-08
+  severity: P2
+  description: "Deadlock State clarified: Doubt Marker applies normally during Deadlock (GW=1.0, effective_margin = margin, Doubt Marker reduces by 2 as normal). Regroup is legal during Deadlock; forfeiting does not trigger margin-≥2 exit condition. Resolves AUD-SC-SD-02/SD-03."
+  finding_id: AUD-SC-SD-03
+  source: audit/simulation resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md]
+  status: applied
+
+- id: PP-468
+  date: 2026-04-08
+  severity: P2
+  description: "[EDITORIAL: Concentration attribute] in §5.1 (deprecated Part 5) marked resolved — Focus confirmed by PP-460, Poise deprecated. Resolves AUD-SC-D-G04."
+  finding_id: AUD-SC-D-G04
+  source: audit resolution 2026-04-08
+  affects: [designs/debate/debate_system_redesign_v1.md]
+  status: applied
+
+- id: PP-470
+  date: 2026-04-08
+  severity: P2
+  description: "Total TCV corrected from 30 to 29. Recount from params_board_game.md canonical TCV table: T1(5)+T2(1)+T3(2)+T4(1)+T5(1)+T6(1)+T7(1)+T8(4)+T9(3)+T10(2)+T11(1)+T12(3)+T13(1)+T14(2)+T15(0)+T17(1) = 29. Total Domination requires TCV ≥ 28, leaving 1 TCV uncaptured (any single TCV-1 territory). Stated total of 30 is incorrect."
+  finding_id: STR-BG-D-03
+  source: BG stress test 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-471
+  date: 2026-04-08
+  severity: P2
+  description: "Restoration Movement may not purchase Legionary cards from Senate Market. Restoration has Military 0; Muster is invalid at Military 0 (PP-039). Legionary cards would be unplayable in hand and create confusion. Restriction added to Restoration faction restrictions."
+  finding_id: STR-BG-D-07
+  source: BG stress test 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-473
+  date: 2026-04-08
+  severity: P2
+  description: "Explicit note added to TC generation table: Conviction Yield = 0 in all Church-controlled territories. Church Prominence requires Church Mandate > controlling faction Mandate. When Church is the controlling faction, Church Mandate = Church Mandate = not Prominent. This is a structural constraint on TC income — Church's Conviction Yield only fires in rival-controlled territories where rivals have Mandate below Church's. As Church seizes territories post-TC 75, those territories exit the Conviction Yield pool."
+  finding_id: STR-BG-D-10
+  source: BG stress test 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-474
+  date: 2026-04-08
+  severity: P2
+  description: "Clarification added: AER >= 3 (bypasses Hafenmark structural suppression, PP-203) and Parliamentary Challenge (PP-431-COR) are independent effects. AER >= 3 bypasses the passive structural suppression. Parliamentary Challenge is a card action that fires on card play regardless of AER. In seasons where AER >= 3 is active, structural suppression is already negated, so Challenge's 'replaces structural' clause has no practical effect — Challenge still fires and produces its degree-table TC result independently."
+  finding_id: STR-BG-D-11
+  source: BG stress test 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-475
+  date: 2026-04-08
+  severity: P2
+  description: "Submission + Mandate 0 interaction ruled: Submission supersedes Collapse. If a Submitting faction's halved Mandate reaches 0: the faction does not enter Faction Collapse (which requires Stability 0 at Accounting end, not Mandate 0 — I-04 correction). Faction remains as vassal with Mandate 0. Mandate 0 effects (Crown Policy unavailable if Crown Mandate 0, Ministry interaction) still apply to that faction's actions."
+  finding_id: STR-BG-D-15
+  source: BG stress test 2026-04-08
+  affects: [references/params_board_game.md, designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-460
+  date: 2026-04-08
+  severity: P1
+  description: >
+    Restoration Movement redesigned as statless faction (ED-337 resolution). RM loses all
+    faction stats (M/I/W/Mil/Sta). It operates purely through Presence markers and Community
+    Weaving. Victory condition redesigned: Phase 1 — CV ≤ 1 in ≥ 8 of 15 playable territories;
+    Phase 2 — Cultural Uprising of T9 Himmelenger (Weaver Thread pool vs Ob = TC÷10). Win:
+    T9 under RM administration + Phase 1 held × 2 consecutive Accounting steps. RM card hand
+    reduced: 2× Praetor, 1× Pontifex, 1× Recess. Community Organising pool: 1D base + 1D per
+    adjacent Presence marker. No Stability cost on Organising failure. PP-403 explicitly
+    excludes RM. ED-327 resolved. ED-337 created.
+  finding_id: ED-327, ED-337
+  source: design decision 2026-04-08
+  affects:
+    - designs/board_game/victory_architecture_v1.md
+    - references/params_board_game.md
+    - references/params_factions.md
+    - canon/editorial_ledger.yaml
+  status: applied
+
+- id: PP-461
+  date: 2026-04-08
+  severity: P1
+  description: "ED-330 resolved — Resistance decay added to debate movement formula: each 0-movement exchange reduces effective resistance by 0.25 (floor 0, reset per scene). Prevents forced-CLASH permanent stalemate. Applied to params_debate.md."
+  finding_id: ED-330
+  source: editorial resolution 2026-04-08
+  affects: [references/params_contest.md]
+  status: applied
+
+- id: PP-462
+  date: 2026-04-08
+  severity: P1
+  description: "ED-331 resolved — Löwenritter Reconstitution action (Senator Inward, Ob 3): Overwhelming restores PI to 2; Success restores PI to 1. Once/season when PI = 0. Unblocks Regency primary victory path post-coup. Applied to params_board_game.md."
+  finding_id: ED-331
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-463
+  date: 2026-04-08
+  severity: P2
+  description: "ED-332 resolved — Torben Loyalty transfers to Löwenritter on Crown elimination (same track, same range). Church and Hafenmark may contest via Senator Outward Diplomacy (Ob = Torben ÷ 2). Applied to params_board_game.md starting tracks table."
+  finding_id: ED-332
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-465
+  date: 2026-04-08
+  severity: P2
+  description: "ED-334 + ED-335 resolved — Command Event rule: captured/killed PC General triggers Legionary card unavailable 1 season + captor Influence +1 + victim Mandate −1 at Accounting. Ransom 2W. Rescue Tribune Ob 4 + Zoom In. Applies to both PC Domain Actions and NPC-initiated events. Applied to params_board_game.md."
+  finding_id: ED-334, ED-335
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-466
+  date: 2026-04-08
+  severity: P2
+  description: "ED-336 resolved — Cardinal death succession: mechanic suspended until Year-End, Holy See appoints anonymous replacement at Year-End with full mechanics restored. Applied to params_board_game.md Cardinal Death section."
+  finding_id: ED-336
+  source: editorial resolution 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-467
+  date: 2026-04-08
+  severity: P2
+  description: "ED-337 resolved — RS ≥ 25 prerequisite added to RM Cultural Uprising (Phase 2). Below RS 25, substrate destabilisation prevents coherent cultural organisation. Applied to victory_architecture_v1.md §3.5."
+  finding_id: ED-337
+  source: editorial resolution 2026-04-08
+  affects: [designs/board_game/victory_architecture_v1.md]
+  status: applied
+
+- id: PP-468
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-NEW-01: Conviction Yield calibrated. F-CY-01 (P1 late-game accelerator S16+), F-CY-02 (P2 Temperance Focus AER 3 bypass), F-CY-03 (AER asymmetry), F-CY-04 (Yield nullified at TC 75). No rule changes needed."
+  source: simulation 2026-04-08
+  affects: [tests/sim_new_01_conviction_yield.md, tests/coverage_matrix.md]
+  status: applied
+
+- id: PP-469
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-NEW-02: Partition Victory stress-tested. F-PT-01 (TC binding constraint), F-PT-02 (effective game end at Crown M≤3), F-PT-03 (no advance signal, P2). ED-338 (Partition Pressure marker P2), ED-339 (consolation P3) raised."
+  source: simulation 2026-04-08
+  affects: [tests/sim_new_02_partition.md, tests/coverage_matrix.md]
+  status: applied
+
+- id: PP-470
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-NEW-03: IP crisis + AER threshold. F-IP-01 (Vanguard undefined, P1), F-IP-02 (IP 75 unreachable ~55 seasons, P1), F-IP-03/04 (AER 5 dominant; AER decay undefined). ED-340 (Vanguard P1), ED-341 (AER decay P2) raised."
+  source: simulation 2026-04-08
+  affects: [tests/sim_new_03_ip_crisis.md, tests/coverage_matrix.md]
+  status: applied
+
+- id: PP-471
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-NEW-04: Resistance decay + Crown/Hafenmark co-victory. F-RD-01 (decay breaks stalemate in ~7 exchanges, P1), F-RD-02 (TIE interaction clean). F-CV-01 (co-victory achievable S2, P1), F-CV-02 (TCV thresholds underdone). ED-342 (co-victory balance P2) raised."
+  source: simulation 2026-04-08
+  affects: [tests/sim_new_04_resistance_decay.md, tests/coverage_matrix.md]
+  status: applied
+
+- id: PP-472
+  date: 2026-04-08
+  severity: P2
+  description: "SIM-NEW-05: Patience Protocol full arc. F-PP-01 (saturation S3), F-PP-02 (4-PC chain vs Investigate path), F-PP-03 (Royal Guard sinks 4-PC Spy), F-PP-04 (VTM 0→3 undefined). ED-343 (Royal Guard P2), ED-344 (VTM advance P2) raised."
+  source: simulation 2026-04-08
+  affects: [tests/sim_new_05_patience_protocol.md, tests/coverage_matrix.md]
+  status: applied
+
+- id: PP-473
+  date: 2026-04-08
+  severity: P1
+  description: "SIM-NEW-06: Cultural Uprising first run. F-CU-01 (Uprising pool undefined, P1 — Weaver TS 18 cannot Leap), F-CU-02/03/04/05 (Partial = progress; Church recapture Ob 9; RS pacing). ED-345 (Uprising pool P1) raised."
+  source: simulation 2026-04-08
+  affects: [tests/sim_new_06_cultural_uprising.md, tests/coverage_matrix.md]
+  status: applied
+
+- id: PP-478
+  date: 2026-04-08
+  severity: P1
+  description: >
+    RM Founding Mechanic (canonical design decision). Restoration Movement (RM) is NOT a
+    playable faction in BG-only mode. In Hybrid mode, RM does not exist at game start;
+    it may emerge mid-campaign through a Founding event. Founding requires: Popular Will
+    (PW) track >= 3 AND >= 3 territories CV <= 1 AND RS <= 60, plus a Founding Agent
+    (PC or named NPC) succeeding a roll vs Ob = TC / 10 round up. Founded RM receives
+    starting stats (Mandate 1-2, Influence 2-3, Wealth 1, Military 0, Stability 3-4)
+    based on Founding degree. RM co-victories (Varfell+RM, Hafenmark+RM) available in
+    Hybrid mode post-Founding only; struck from BG-only mode. PW track: 0-5, public,
+    advances via CV pressure and PC community actions, regresses via Church Heresy
+    Investigations and TC >= 60. Applied to: params_board_game.md, victory_architecture_v1.md,
+    params_factions.md. BG doc "5 players only" restriction struck.
+  finding_id: design_decision_rm_founding
+  source: design decision 2026-04-08 (Jordan)
+  affects:
+    - references/params_board_game.md
+    - designs/board_game/victory_architecture_v1.md
+    - references/params_factions.md
+    - designs/board_game/valoria_bg_v05_simulation_and_patches.md
+  status: applied
+
+
+- id: PP-478
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Battle Outcome — drawn-battle rule takes precedence when attacker and defender nets are equal. When nets equal, drawn-battle fires (both Discipline −1) and the independent margin calculation does not execute for either side. Drawn-battle is the overriding resolution for equal-net outcomes. Resolves STR-PP476-A-02.
+  finding_id: STR-PP476-A-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-479
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Battle Outcome — Discipline floor = 0. A unit cannot have Discipline below 0. Discipline −4 outcome against a unit at Discipline ≤ 2 destroys the unit immediately (Discipline would go negative). Fort garrisons use Fort level as their Discipline analog: Discipline damage reduces Fort level by the equivalent steps (−2 = Fort −1; −4 = Fort −2; destruction = Fort −2 and garrison removed). Resolves STR-PP476-D-02.
+  finding_id: STR-PP476-D-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-480
+  date: 2026-04-08
+  severity: P2
+  description: >
+    TC 50–74 Mandatory Assert: Assert is mandatory for Church at TC 50–74 (must play one Assert per season, using a standard card slot). If no valid card slot is available, Assert does not fire but mandatory is noted. Suppress remains available for any faction (optional). Resolves STR-PI-TC-D-01.
+  finding_id: STR-PI-TC-D-01
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-481
+  date: 2026-04-08
+  severity: P1
+  description: >
+    Löwenritter PI recovery: PI +1 at Year-End when Löwenritter Mandate ≥ 3 AND TC < 50. Cap: PI 4 (Löwenritter cannot fully reconstitute Parliament — PI 4 is achievable for their PI ≥ 4 victory condition). This creates a recovery path from PI 2 (post-Reconstitution) to victory threshold over 2 years. Resolves STR-PI-TC-A-03.
+  finding_id: STR-PI-TC-A-03
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-482
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Torben Loyalty dissolution on Crown elimination: if Torben Loyalty ≤ 2 when Crown is eliminated, the track dissolves. No transfer to Löwenritter, no contest fires. Record as historical note. At Torben ≤ 2 the succession claim is too weak to generate meaningful politics. At Torben ≥ 3: standard transfer and contest rules (PP-463) apply. Resolves STR-TORBEN-D-01.
+  finding_id: STR-TORBEN-D-01
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-483
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Torben Year-End modifiers post-Crown-elimination: substitute Löwenritter stats for Crown stats in all Torben Year-End modifier conditions. 'Crown PI ≥ 5' → 'Löwenritter PI ≥ 5'. 'Crown upheld Mandate 2+ consecutive seasons' → 'Löwenritter upheld Mandate 2+ consecutive seasons'. Applies from first Year-End after Crown elimination. Resolves STR-TORBEN-D-02.
+  finding_id: STR-TORBEN-D-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-484
+  date: 2026-04-08
+  severity: P1
+  description: >
+    Church capital Conviction Yield exception: Church's own capital territory (T9 Himmelenger) generates Conviction Yield at base rate regardless of Prominence formula. CV 5 = +1 TC; CV 4 = +0.5 TC. This exception applies only to T9 while Church controls it. Rationale: Prominence is a cross-faction comparison; a self-comparison is structurally undefined. T9 is where Church institutional momentum is strongest — yielding 0 from home territory was an unintended consequence of PP-473. Resolves STR-TC-A-02.
+  finding_id: STR-TC-A-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-485
+  date: 2026-04-08
+  severity: P1
+  description: >
+    Reconstitution failure — Church Mandate cap and counter-action. Church Mandate +1 on Löwenritter Reconstitution failure is capped at ceiling 7 (standard stat ceiling). Additionally: Church may play one Senator Outward (Diplomacy, Ob 2 TN 7) per season targeting Löwenritter parliamentary space. Success: Löwenritter may not play Reconstitution this season (Church procedurally blocks the parliamentary convening). Failure: no effect. This action uses Church's Senator card slot. Resolves STR-RECON-D-03.
+  finding_id: STR-RECON-D-03
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-486
+  date: 2026-04-08
+  severity: P1
+  description: >
+    Weight-of-Numbers — primary faction determination: the primary suppressing faction (whose pool the coalition bonus applies to) is the faction with the highest Mandate among all factions playing suppression actions against the same target this phase. Tiebreak priority: Crown > Hafenmark > Varfell > Löwenritter > Restoration Movement. Determination is automatic — no declaration required. Resolves STR-WON-D-01.
+  finding_id: STR-WON-D-01
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-487
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Weight-of-Numbers — valid suppression action definition: a valid suppression action is any Domain Action that directly targets another faction's Mandate stat or their unique clock/track (TC for Church, PI for Hafenmark, VTM for Varfell). This mirrors the Institutional Mandate trigger scope (ED-324). Generic Domain Actions not targeting Mandate or unique tracks do not qualify. Resolves STR-WON-D-02.
+  finding_id: STR-WON-D-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-488
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Ministry AP-tokens on faction elimination: Ministry AP-tokens persist through any faction's elimination. They are Ministry (NPC) assets, not assets of the controlling faction. Territories that go Uncontrolled after faction elimination retain their Ministry AP-tokens. The Ministry NPC AI continues to operate per its priority tree regardless of which faction holds former Crown territories. Corrects STR-ELIM-D-02.
+  finding_id: STR-ELIM-D-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-489
+  date: 2026-04-08
+  severity: P1
+  description: >
+    Captured General — multiple capture stacking: each captured/killed named general adds 1 season to the Legionary card unavailability timer additively. Timer displayed on faction mat. If a general is killed while Legionary is already unavailable, timer extends by 1. No cap stated — sustained military pressure yields proportionate disruption. Resolves STR-GEN-D-01.
+  finding_id: STR-GEN-D-01
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-490
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Captured General — Mandate −1 timing: Mandate −1 fires at Accounting regardless of whether ransom has been offered or accepted. Ransom restores the general next season; the political cost of losing command is immediate and not mitigated by ransom payment. Confirms rule text intent. Resolves STR-GEN-D-02.
+  finding_id: STR-GEN-D-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-491
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Cardinal Succession — schism trigger with dead Cardinal: when a Cardinal is dead (in the gap period before Year-End replacement), that Cardinal is removed from the schism trigger pool. If the schism trigger fires (Church Stability = 2 + Senator action vs Church this season), the acting Cardinal is the next in rotation order: Fortitude → Justice → Prudence → Temperance → Fortitude (skipping any dead Cardinals). If all four Cardinals are dead simultaneously, schism cannot trigger (no Cardinals to challenge). Resolves STR-CARD-D-02.
+  finding_id: STR-CARD-D-02
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+
+- id: PP-492
+  date: 2026-04-08
+  severity: P1
+  description: >
+    Conviction Yield — Church velocity compensation: at TC 30–49, Institutional Momentum produces TC +2/season (increased from +1) to compensate for the structural Conviction Yield exclusion of Church-controlled territories (PP-473 + PP-484). At TC 50+, Institutional Momentum reverts to +1/season (standard). Rationale: Church starts with only T9 (its capital, excluded from Conviction Yield pool by PP-473 logic). Early-game TC generation is critically hampered without T9 yield; the +2 momentum at 30–49 provides a credible approach to the 50-threshold where Conviction Yield in other territories can take over. Resolves STR-TC-D-01 (partially — campaign length still a gap).
+  finding_id: STR-TC-D-01
+  source: stress test 2026-04-08 PP-476-498 coverage
+  affects: ['references/params_board_game.md']
+  status: applied
+
+- id: PP-479
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Church + Hafenmark Partition co-victory condition "no active military conflict" defined.
+    Means: no Legionary card played by either faction targeting a territory held by the other
+    in the current season OR the immediately prior season. Physical tracking: a Conflict Marker
+    (flip token) placed on the relevant faction mat when military conflict occurs; removed at
+    the second Accounting after placement. Resolves SIM-DEBT-BG-03 D-03-04.
+  finding_id: STR-BG-D-03-04
+  source: BG remaining SIM-DEBT simulation 2026-04-08
+  affects: [designs/board_game/victory_architecture_v1.md, references/params_board_game.md]
+  status: applied
+
+- id: PP-480
+  date: 2026-04-08
+  severity: P2
+  description: >
+    Ministry NPC Domain action conflict rule added. When Ministry NPC would play a Domain
+    action in a territory already acted on by a player faction in the same Phase 4 resolution,
+    Ministry redirects to the next-priority territory per its AI tree. Ministry does not stack
+    Domain actions with player factions in the same territory same phase. If all viable
+    territories are already acted-on: Ministry takes Priority 5 default action in any uncontested
+    AP-token territory regardless of prior player action there. Resolves SIM-DEBT-BG-05 F-Ministry-01.
+  finding_id: STR-BG-Ministry-01
+  source: BG remaining SIM-DEBT simulation 2026-04-08
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-493
+  date: 2026-04-09
+  severity: infrastructure
+  description: >
+    Retroactive register entry. Territory renumbering: all T-numbers remapped to
+    geography_design.md canonical (17 territories). Old names (Arcansheld, Vargstad,
+    Eidursjo, Nordhelm, Mittelmark) replaced with canonical names. TCV total = 30.
+    Starting TCV: Crown 12, Hafenmark 8, Varfell 6, Church 3. Previously applied to
+    victory_architecture_v1.md without register entry.
+  finding_id: null
+  source: retroactive register formalisation 2026-04-09
+  affects: [designs/board_game/victory_architecture_v1.md, references/params_board_game.md]
+  status: applied
+
+- id: PP-494
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Retroactive register entry. Church Graduated Seizure: Pool = Influence + floor(TC/15),
+    Ob = 7 − CV. Available at any TC value (not post-75 gate). Replaces TC 75 hard seizure
+    gate. Church TCV victory threshold reduced to ≥ 8. OW CV+1 is a consequence, not
+    cap-governed. Previously applied to victory_architecture_v1.md and params_board_game.md
+    without register entry.
+  finding_id: null
+  source: retroactive register formalisation 2026-04-09
+  affects: [designs/board_game/victory_architecture_v1.md, references/params_board_game.md]
+  status: applied
+
+- id: PP-506
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Fort Level / Battle trigger for Graduated Seizure (ED-355, ED-368 resolved).
+    Fort Level does NOT modify Seizure Ob. Seizure is a political act — Church
+    institutional authority overriding local governance. Fort Level is relevant only
+    to Battle resolution, not to seizure Ob.
+    Battle trigger rule: if the target territory has a garrison (Fort ≥ 1 AND at least
+    one military unit present belonging to the controlling faction), Church must first
+    win a Battle before Seizure can be attempted that season. Battle uses standard rules
+    (attacker Military vs Ob = defender Military ÷ 2, round up, min 1; Fort Level adds
+    bonus dice to defender per standard Battle rules). If Church wins the Battle: Seizure
+    roll proceeds immediately in the same resolution. If Church loses the Battle: Seizure
+    does not fire; Casus Belli still granted. An ungarrisoned fortified territory (Fort ≥ 1,
+    no units) can be Seized directly — no Battle required.
+    Retroactively formalises victory_architecture_v1.md §3.2 PP-500 reference.
+    [PROVISIONAL: ED-355 flagged for simulation confirmation.]
+  finding_id: [D5-J3-SIM-GS-01]
+  source: SIM-GS-01 editorial resolution 2026-04-09
+  affects: [references/params_board_game.md, references/params_factions.md]
+  status: applied
+
+- id: PP-507
+  date: 2026-04-09
+  severity: P1
+  description: >
+    Graduated Seizure availability gate (ED-365 resolved). Church Graduated Seizure
+    (PP-494) is available at ANY TC value from TC ≥ 15 (i.e. as soon as floor(TC/15) ≥ 1).
+    There is no post-TC 75 gate on Graduated Seizure itself. TC 75 is the phase transition
+    where TC freezes and seizure becomes Church's primary strategic mode — but seizure was
+    always available. The params_board_game §TC 75 Territorial Seizure header was a
+    structural artifact grouping seizure rules, not a gate condition. Struck from
+    params_board_game: the implication that seizure requires TC ≥ 75. Corrects SIM-GS-01
+    finding D5.
+    Early Seizure (TC < 50) political consequence: Casus Belli granted plus all factions
+    observe the attempt (no concealment possible pre-TC 50; Church's territorial ambition
+    becomes a political event). Post-TC 50: Casus Belli still granted but observation
+    is limited to factions with Intel ≥ 3 in the target territory.
+    [PROVISIONAL: observation rule flagged for simulation confirmation.]
+  finding_id: [D5-SIM-GS-01, ED-365]
+  source: SIM-GS-01 editorial resolution 2026-04-09
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-508
+  date: 2026-04-09
+  severity: P1
+  description: >
+    OW CV cap conflict resolution (ED-366 resolved). PP-494 governs: Graduated Seizure
+    Overwhelming result grants CV +1 in target territory as a consequence, NOT cap-governed.
+    The ±1 CV seasonal cap applies to player-initiated CV Domain Actions only. Seizure is
+    a distinct category (analogous to PP-254 TC seizure classification). Struck from
+    params_board_game §TC 75 Territorial Seizure Results: the phrase 'counts against ±1 CV
+    seasonal cap.' Replaces with: 'CV +1 on Overwhelming is a consequence effect — not
+    subject to the ±1 CV seasonal cap. State-change effects and conquest consequences are
+    exempt from action caps.' Corrects SIM-GS-01 finding D7.
+  finding_id: [D7-SIM-GS-01, ED-366]
+  source: SIM-GS-01 editorial resolution 2026-04-09
+  affects: [references/params_board_game.md]
+  status: applied
+
+- id: PP-509
+  date: 2026-04-09
+  severity: P2
