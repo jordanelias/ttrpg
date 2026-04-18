@@ -4,8 +4,8 @@ ci_editorial_checker.py
 Runs in CI. Checks that commits to editorial-governed paths contain
 [EDITORIAL] or [PROVISIONAL] markers for substantive content.
 
-Editorial paths: designs/npcs/, designs/worldbuilding/, designs/setting/,
-                 gm_ref/, canon/03_ (timeline)
+Editorial paths: designs/npcs/, designs/world/,
+                 designs/arcs/gm_ref/, canon/03_ (timeline)
 
 Short stubs (< 200 chars) are exempt.
 Mechanical-only content (tables, formulas) is NOT exempt — the rule is path-based.
@@ -15,8 +15,8 @@ import subprocess, sys, os, re
 EDITORIAL_PATHS = (
     'designs/npcs/',
     'designs/worldbuilding/',
-    'designs/setting/',
-    'gm_ref/',
+    'designs/world/',
+    'designs/arcs/gm_ref/',
     'canon/03_',
 )
 MARKERS = ('[EDITORIAL:', '[PROVISIONAL:', '[EDITORIAL GATE]')

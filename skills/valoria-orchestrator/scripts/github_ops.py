@@ -520,19 +520,19 @@ def safe_session_close(
         raise RuntimeError(
             "[COMMIT BLOCKED] session_log_current.md contains prose headers (## ...).\n"
             "Protocol: resumption block only — pure YAML, no summaries, no task lists.\n"
-            "Move narrative content to the session_log_archive.md entry instead."
+            "Move narrative content to the archives/session/session_log_archive_part_7.md entry instead."
         )
 
     fresh = read_files_graphql(
-        ["session_log_current.md", "session_log_archive.md"],
+        ["session_log_current.md", "archives/session/session_log_archive_part_7.md"],
         repo='ttrpg', skip_health_check=True
     )
     live_current = fresh.get("session_log_current.md", "") or ""
-    live_archive  = fresh.get("session_log_archive.md",  "") or ""
+    live_archive  = fresh.get("archives/session/session_log_archive_part_7.md",  "") or ""
 
     archive_tokens = len(live_archive) // 4
     if archive_tokens > ARCHIVE_WARN_THRESHOLD:
-        print(f"[ARCHIVE WARNING] session_log_archive.md: {archive_tokens:,} tokens. Year-split soon.")
+        print(f"[ARCHIVE WARNING] archives/session/session_log_archive_part_7.md: {archive_tokens:,} tokens. Year-split soon.")
 
     live_id      = _extract_session_id(live_current)
     new_id       = _extract_session_id(new_session_log)
@@ -546,7 +546,7 @@ def safe_session_close(
 
     additions = [
         ("session_log_current.md", new_session_log),
-        ("session_log_archive.md", live_archive + "\n---\n\n" + live_current),
+        ("archives/session/session_log_archive_part_7.md", live_archive + "\n---\n\n" + live_current),
     ]
     if extra_additions:
         additions.extend(extra_additions)

@@ -25,7 +25,7 @@ Fetch the following from GitHub before running any calculation:
 
 ```python
 required = [
-    'references/params_core.md',   # canonical die rule, TN values, Ob definitions
+    'params/core.md',   # canonical die rule, TN values, Ob definitions
     'references/glossary.md',      # term definitions
 ]
 files = g.read_files_graphql(required)
@@ -35,7 +35,7 @@ for path, content in files.items():
         raise RuntimeError(f"GitHub fetch failed: {path} — cannot proceed")
 ```
 
-**The die rule and TN values are read from `references/params_core.md`.** The module source below encodes the current standard rule; if `params_core.md` differs, the module source is stale and must be updated before proceeding.
+**The die rule and TN values are read from `params/core.md`.** The module source below encodes the current standard rule; if `params_core.md` differs, the module source is stale and must be updated before proceeding.
 
 ## Term Reference
 
@@ -45,7 +45,7 @@ Use `references/glossary.md` (fetched above) for all term definitions and permit
 
 ## Canonical Die Rule
 
-Read from `references/params_core.md`. Current standard:
+Read from `params/core.md`. Current standard:
 
 ```
 d10 face → net successes
@@ -167,11 +167,11 @@ Round probabilities to 3 decimal places in tables; 1 decimal in prose.
 
 | Params file | Used by |
 |-------------|---------|
-| `references/params_core.md` | All skills (dice engine baseline) |
-| `references/params_combat.md` | simulator Mode G1, combat-simulator |
-| `references/params_mass_combat.md` | simulator Mode G1 |
-| `references/params_debate.md` | simulator Mode G2 |
-| `references/params_threadwork.md` | simulator Mode G3 |
-| `references/params_factions.md` | simulator Mode G4, mechanic-audit |
-| `references/params_board_game.md` | simulator Mode G5 |
-| `references/params_scale_transitions.md` | simulator Mode G (cross-mode), mechanic-audit Mode G |
+| `params/core.md` | All skills (dice engine baseline) |
+| `params/combat.md` | simulator Mode G1, combat-simulator |
+| `params/mass_combat.md` | simulator Mode G1 |
+| `params/contest.md` | simulator Mode G2 |
+| `params/threadwork.md` | simulator Mode G3 |
+| `params/factions.md` | simulator Mode G4, mechanic-audit |
+| `params/board_game.md` | simulator Mode G5 |
+| `params/scale_transitions.md` | simulator Mode G (cross-mode), mechanic-audit Mode G |

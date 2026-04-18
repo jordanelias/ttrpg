@@ -32,8 +32,8 @@ Fetch the following from GitHub before writing any simulation code or reading an
 ```python
 required = [
     'references/canonical_sources.yaml',  # confirm current design doc
-    'references/params_combat.md',        # ALL mechanical values — source of truth
-    'references/params_core.md',          # dice engine baseline
+    'params/combat.md',        # ALL mechanical values — source of truth
+    'params/core.md',          # dice engine baseline
 ]
 files = g.read_files_graphql(required)
 token = g.assert_fetched(*required)  # raises if any path not fetched
@@ -60,7 +60,7 @@ for path, content in files.items():
 
 ## Step 3 — Build Valid Build List
 
-A build = (weapon_profile, armour_type). Use weapon Str minimums and armour Str minimums from fetched `references/params_combat.md`. A build is valid if:
+A build = (weapon_profile, armour_type). Use weapon Str minimums and armour Str minimums from fetched `params/combat.md`. A build is valid if:
 1. Str ≥ weapon Str minimum, OR Str = minimum − 1 (penalty applies per params)
 2. Str ≥ armour Str minimum, OR Str = minimum − 1 (penalty applies per params)
 3. NOT 2+ below either minimum (cannot wield / cannot wear)
@@ -93,7 +93,7 @@ python3 /path/to/scripts/combat_sim.py \
 
 ## Step 5 — Manoeuvre Coverage
 
-Robust testing must verify manoeuvre mechanics are consistent with simulation assumptions. Check each manoeuvre class using values from fetched `references/params_combat.md`:
+Robust testing must verify manoeuvre mechanics are consistent with simulation assumptions. Check each manoeuvre class using values from fetched `params/combat.md`:
 
 ### Defensive
 - **Defend!** — Full pool defence. Verify: pool shift works, Overwhelming holds-at-bay fires
@@ -134,7 +134,7 @@ Apply findings framework from `references/findings_template.md`:
 
 ## Step 7 — Output
 
-Write to `/home/claude/sim_results_runN.md`. Commit to `tests/sim_results_runN.md` via `g.atomic_commit()`.
+Write to `/home/claude/sim_results_runN.md`. Commit to `tests/sim/sim_results_runN.md` via `g.atomic_commit()`.
 Update `session_log_current.md`.
 
 ---
@@ -158,9 +158,9 @@ Exit 0 required on all three. On non-zero exit: fix the reported issue before co
 ## Version Check Protocol (Mandatory)
 
 Before running any mode that uses mechanical values:
-1. Read the relevant `references/params_*.md` file(s) from GitHub.
+1. Read the relevant `params/*.md` file(s) from GitHub.
 2. Check the `<!-- version: -->` tag at the top of each params file.
-3. Compare against the current ruleset version (stated in `compilation/README.md`).
+3. Compare against the current ruleset version (stated in `deprecated/compilation/README.md`).
 4. If params version ≠ current ruleset version: **halt**, flag as `[STALE PARAMS: <file> is vX.XX, current ruleset is vY.YY — update params before proceeding]`, and do not proceed until the user confirms or params are updated.
 
 ---
@@ -169,8 +169,8 @@ Before running any mode that uses mechanical values:
 
 | File | Purpose |
 |---|---|
-| `references/params_combat.md` | Canonical mechanical values — only source |
-| `references/params_core.md` | Dice engine baseline |
+| `params/combat.md` | Canonical mechanical values — only source |
+| `params/core.md` | Dice engine baseline |
 | `references/sim_protocol.md` | State machine, manoeuvre contest protocol |
 | `references/findings_template.md` | Output structure |
 | `scripts/combat_sim.py` | Runnable simulation script |

@@ -185,15 +185,15 @@ After `atomic_commit()` returns SHA: re-fetch both output files. Confirm:
 ## Priority Order for Atomization
 
 Work through in this order (highest mechanical value / most cross-referenced first):
-1. `designs/ttrpg/threadwork_v30.md` (856 lines — highest complexity)
-2. `designs/combat/combat_v30.md`
-3. `designs/board_game/board_game_v30.md`
-4. `designs/fieldwork/fieldwork_v30.md`
-5. `designs/mass_combat/mass_battle_v30.md`
-6. `designs/contest/social_contest_v30.md`
-7. `designs/hybrid/scale_transitions_v30.md`
-8. `designs/systems/npc_behavior_v30.md`
-9. `designs/systems/clock_registry_v30.md`
+1. `designs/threadwork/threadwork_v30.md` (856 lines — highest complexity)
+2. `designs/scene/combat_v30.md`
+3. `designs/provincial/strategic_layer_v30.md`
+4. `designs/scene/fieldwork_v30.md`
+5. `designs/provincial/mass_battle_v30.md`
+6. `designs/scene/social_contest_v30.md`
+7. `designs/architecture/scale_transitions_v30.md`
+8. `designs/npcs/npc_behavior_v30.md`
+9. `designs/provincial/clock_registry_v30.md`
 10. All others from `references/design_registry.yaml`
 
 ## Collision Prevention

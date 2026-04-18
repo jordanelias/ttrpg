@@ -29,7 +29,7 @@ if canonical is None:
     raise RuntimeError("canonical_sources.yaml missing — cannot resolve which docs are current")
 
 # Step 2: fetch required docs based on arc scope (see Read Protocol below)
-# Step 3: check gm_ref/ directory to avoid arc duplication
+# Step 3: check designs/arcs/gm_ref/ directory to avoid arc duplication
 ```
 
 **Do not read compilation stage files from memory.** Even if you have seen them this session, verify via `canonical_sources.yaml` which version is current before using any values.
@@ -54,18 +54,18 @@ Fetch in this order. Check `canonical_sources.yaml` to confirm current paths bef
 **Always required:**
 - `references/canonical_sources.yaml` (done in input validation)
 - `references/glossary.md` — term definitions; fetch before using any game-specific term
-- `references/params_factions.md` — faction stats, Domain Actions, seasonal accounting
-- `references/params_core.md` — dice engine baseline
+- `params/factions.md` — faction stats, Domain Actions, seasonal accounting
+- `params/core.md` — dice engine baseline
 
 **Fetch if arcs involve Thread mechanics:**
-- `references/params_threadwork.md`
+- `params/threadwork.md`
 - `canon/00_philosophical_foundations.md` §1–2 only (inseparability, scale principle) — fetch the file, read only those sections
 
 **Fetch if arcs involve social/debate:**
-- `references/params_debate.md`
+- `params/contest.md`
 
 **Fetch if arcs involve mass battle:**
-- `references/params_mass_combat.md`
+- `params/mass_combat.md`
 
 **Fetch if arcs involve specific Non-Player Characters:**
 - The canonical NPC doc (check `canonical_sources.yaml` for current path)
@@ -74,7 +74,7 @@ Fetch in this order. Check `canonical_sources.yaml` to confirm current paths bef
 - The canonical territories doc (check `canonical_sources.yaml` for current path)
 
 **Check for prior arcs (fetch directory listing, avoid duplication):**
-- `gm_ref/` — list contents via GitHub API before generating; do not reproduce an arc already documented there
+- `designs/arcs/gm_ref/` — list contents via GitHub API before generating; do not reproduce an arc already documented there
 
 ---
 
@@ -133,5 +133,5 @@ Exit 0 required on all three. On non-zero exit: fix the reported issue before co
 
 **Post-commit verification:** after `atomic_commit()` returns a SHA, re-fetch all files modified in that commit and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
 
-- Commit to `gm_ref/` on GitHub after every batch via `g.atomic_commit()`. File naming: `arcs_NN_MM_[topic].md`.
+- Commit to `designs/arcs/gm_ref/` on GitHub after every batch via `g.atomic_commit()`. File naming: `arcs_NN_MM_[topic].md`.
 - Log any canon corrections found during generation as `[GAP-ARC-NN]` in the output document.

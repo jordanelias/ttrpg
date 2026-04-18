@@ -1,13 +1,13 @@
 # params_board_game_split.yaml
-# Maps all headings from references/params_board_game.md to domain files.
-# The original file at references/params_board_game.md becomes the index.
+# Maps all headings from params/board_game.md to domain files.
+# The original file at params/board_game.md becomes the index.
 # All headings must be accounted for — orphans are errors.
 
-index_file: references/params_board_game.md
+index_file: params/board_game.md
 
 domain_files:
 
-  - target: references/params_bg_core.md
+  - target: params/bg/core.md
     description: "Core rules: factions, dice, degrees, starting values, ceilings"
     headings:
       - "FACTION ASSIGNMENT (canonical, v04 B1)"
@@ -24,7 +24,7 @@ domain_files:
       - "Faction Conviction Texts (PP-181, ED-080/081 resolved 2026-04-03)"
       - "Batch Card Hand (v04 B3 confirmed — Card-Hand system PP-177)"
 
-  - target: references/params_bg_phases.md
+  - target: params/bg/phases.md
     description: "Phase structure, resolution priority, accounting"
     headings:
       - "Phase 4 Resolution Priority Order (v04 B4 — CORRECTED from stage_bg_proposal_v02 order)"
@@ -32,7 +32,7 @@ domain_files:
       - "Year-End Accounting (every 4th season = Winter, v04 B11)"
       - "Accounting Phase Reference (PP-180 + v04 B4)"
 
-  - target: references/params_bg_military.md
+  - target: params/bg/military.md
     description: "Military: muster, battle, fortify, co-movement, drawn battle"
     headings:
       - "Unit Muster Ob Table (from v04 B8 + compilation B6)"
@@ -47,7 +47,7 @@ domain_files:
       - "Casus Belli — Stacking Cap and Consumption (PP-519)"
       - "Conflict Marker — Church + Hafenmark Partition (PP-479)"
 
-  - target: references/params_bg_clocks.md
+  - target: params/bg/clocks.md
     description: "Clock environmental effects, cascade depth"
     headings:
       - "Clock Environmental Effects (v04 B2)"
@@ -56,7 +56,7 @@ domain_files:
       - "Invasion Pressure (IP) Effects"
       - "Cascade Depth Cap (v04 B4)"
 
-  - target: references/params_bg_victory.md
+  - target: params/bg/victory.md
     description: "Victory conditions, TCV, co-victory, shared loss, PI"
     headings:
       - "Victory Conditions — Pointer"
@@ -71,7 +71,7 @@ domain_files:
       - "Hollow Victory Mechanics — DISSOLVED (PP-427)"
       - "Solo/Co-Victory Declaration Priority (PP-524)"
 
-  - target: references/params_bg_tc_seizure.md
+  - target: params/bg/tc_seizure.md
     description: "TC generation, TC 75 seizure, theocracy counter"
     headings:
       - "TC Generation — Seasonal (canonical: military_layer_v30 §3, tc_political_redesign_v30 §§1–3)"
@@ -87,7 +87,7 @@ domain_files:
       - "TC Threshold Check — Zoom In Interaction (ED-056 resolved 2026-04-03)"
       - "Church TC Gain — Redesign Required (ED-110 resolved 2026-04-03)"
 
-  - target: references/params_bg_parliament.md
+  - target: params/bg/parliament.md
     description: "Parliament, PI scale, mandate, ministry, crown policy"
     headings:
       - "Parliament Integrity (PI) Scale"
@@ -103,7 +103,7 @@ domain_files:
       - "Treaty Betrayal Cascade Timing (PP-523)"
       - "Diplomatic Alignment — Parliamentary Motion Definition (PP-526)"
 
-  - target: references/params_bg_npcs_special.md
+  - target: params/bg/npcs_special.md
     description: "Torben, Elske, Riskbreakers, Warden tracks, special characters"
     headings:
       - "Torben Loyalty Track (v04 B2 + B5 — PP-188 correction)"
@@ -117,7 +117,7 @@ domain_files:
       - "Intel Advancement Counter (PP-180 revised)"
       - "Command Event — Captured or Killed General (ED-334 + ED-335 resolved)"
 
-  - target: references/params_bg_tracks.md
+  - target: params/bg/tracks.md
     description: "AER, RDT, TD, VTM, trade network, thread mechanics"
     headings:
       - "Trade Network Investment — Hafenmark Wealth Sink (PP-178)"
@@ -133,7 +133,7 @@ domain_files:
       - "Theological Dissatisfaction (TD) — Range 0–5"
       - "VTM 5 — Once-Per-Game Tracking (PP-477)"
 
-  - target: references/params_bg_institutions.md
+  - target: params/bg/institutions.md
     description: "Church structure, Löwenritter, Ministry, cardinal succession"
     headings:
       - "Church of Solmund — Canonical Structure (PP-194, from original source documents)"
@@ -150,7 +150,7 @@ domain_files:
       - "Parliament Deposition Mechanic (PP-194 — from canonical source)"
       - "Parish / Cathedral System — Church (ED-319 RESOLVED)"
 
-  - target: references/params_bg_ministry.md
+  - target: params/bg/ministry.md
     description: "Ministry NPC faction: stats, tokens, AI, PI track"
     headings:
       - "Ministry — NPC Faction (PP-193)"
@@ -165,7 +165,7 @@ domain_files:
       - "Guilds CP-Token Starting Positions (PP-203)"
       - "Niflhel Network Starting Depth (PP-203)"
 
-  - target: references/params_bg_geography.md
+  - target: params/bg/geography.md
     description: "Territory table, adjacency, roads, proximity, southernmost"
     headings:
       - "Ducal Geography — RESOLVED (ED-107)"
@@ -180,7 +180,7 @@ domain_files:
       - "Altonian Mountain Passes"
       - "Proximity Ratings (supersedes Southernmost Zones — PP-199)"
       - "Southernmost Access System (PP-219)"
-      - "Authority: designs/ttrpg/edeyja_npc.md; Philosophical Foundations P-13"
+      - "Authority: designs/npcs/edeyja_npc.md; Philosophical Foundations P-13"
       - "Expedition Procedure (T6 → T15)"
       - "Champion TS Values (BG)"
       - "What \"No Faction Control\" Means in BG"
@@ -189,7 +189,7 @@ domain_files:
       - "Victory Condition Territory References — SUPERSEDED"
       - "Varfell Path B — Southernmost Dominion (ED-311 RESOLVED — Option A)"
 
-  - target: references/params_bg_faction_actions.md
+  - target: params/bg/faction_actions.md
     description: "Faction unique actions (PP-428–442)"
     headings:
       - "Faction Unique Actions — Board Game (PP-428–442, 2026-04-07)"
@@ -209,7 +209,7 @@ domain_files:
       - "Varfell — Counter-Narrative (PP-441 + PP-441-COR)"
       - "Counter-Intelligence Postures (PP-442)"
 
-  - target: references/params_bg_npc_priority_trees.md
+  - target: params/bg/npc_priority_trees.md
     description: "NPC faction priority trees and NPC patches"
     headings:
       - "NPC Faction Priority Trees (from npc_behavior_system_v1.md §8)"
@@ -228,7 +228,7 @@ domain_files:
       - "PP-NPC-03 — Church Framework Drift Revision (SIM-NPC-01 F-02)"
       - "PP-NPC-04 — Varfell Collection Cooldown (SIM-NPC-01 F-06)"
 
-  - target: references/params_bg_ed_resolutions.md
+  - target: params/bg/ed_resolutions.md
     description: "ED resolution patches and balance findings"
     headings:
       - "Balance Findings — Status Update"
@@ -256,7 +256,7 @@ domain_files:
       - "ED-142 Resolution (PP-322) — BG Overwhelming Threshold [FLAGGED]"
       - "BG Overwhelming — Final Ruling (PP-262)"
 
-  - target: references/params_bg_stress_patches.md
+  - target: params/bg/stress_patches.md
     description: "BG stress test patches and late-session additions"
     headings:
       - "BG Stress Test Patches (2026-04-08)"

@@ -135,8 +135,8 @@ Systematic search across nine categories:
 
 Simulate fieldwork operations across investigation, exploration, and socializing tracks.
 
-**Params source:** `references/params_fieldwork.md`
-**Design source:** `designs/fieldwork/fieldwork_v30.md`
+**Params source:** `params/fieldwork.md`
+**Design source:** `designs/scene/fieldwork_v30.md`
 
 **Test categories:**
 1. Evidence Track progression rates (Depth 1–5, by action type)

@@ -6,7 +6,7 @@
 # Rule: most recent PATCHED design doc or params file wins.
 # ALL compilation/v0.14 stage documents are OUTDATED as of 2026-04-04.
 # Do not use any stage document as a mechanical reference.
-# Canonical authority: design docs (designs/) and params files (references/params_*.md).
+# Canonical authority: design docs (designs/) and params files (params/*.md).
 
 
 # FETCH STRATEGY:
@@ -21,94 +21,94 @@ systems:
 
   core_engine:
     status: active
-    canonical: references/params_core.md
+    canonical: params/core.md
     canonical_sha__references__params_core_md: "b29c807ce204a9f9d487926371b084b17be2e565"
-    params: references/params_core.md
+    params: params/core.md
     design_doc: null
 
   characters:
     status: active
-    canonical: references/params_core.md
+    canonical: params/core.md
     canonical_sha__references__params_core_md: "b29c807ce204a9f9d487926371b084b17be2e565"
-    params: references/params_core.md
+    params: params/core.md
     design_doc: null
 
   combat:
     status: active
-    canonical: designs/combat/combat_v30.md
+    canonical: designs/scene/combat_v30.md
     canonical_sha__designs__combat__combat_v30_md: "ee5ae9a52b5f59169a416ccb8444f54f3d872065"
-    params: references/params_combat.md
-    design_doc: designs/combat/combat_v30.md
+    params: params/combat.md
+    design_doc: designs/scene/combat_v30.md
 
   threadwork:
     status: active
-    canonical: designs/ttrpg/threadwork_v30.md
+    canonical: designs/threadwork/threadwork_v30.md
     canonical_sha__designs__ttrpg__threadwork_v30_md: "9a9320325c78d857225171d8514d2d901f050ea8"
-    params: references/params_threadwork.md
-    design_doc: designs/ttrpg/threadwork_v30.md
+    params: params/threadwork.md
+    design_doc: designs/threadwork/threadwork_v30.md
 
   southernmost:
     status: design_debt
-    canonical: compilation/v0.14/stage4_southernmost_deprecated.md
+    canonical: deprecated/compilation/v0.14/stage4_southernmost_deprecated.md
     canonical_sha__compilation__v0_14__stage4_southernmost_deprecated_md: "c38d8cc1b4862052832807dcd72487e6c37b1607"
     params: null
     design_doc: null
 
   clocks:
     status: active
-    canonical: designs/systems/clock_registry_v30.md
+    canonical: designs/provincial/clock_registry_v30.md
     canonical_sha__designs__systems__clock_registry_v30_md: "615dfac8dda524c27eb3f0793803024e3de02e61"
     params: null
-    design_doc: designs/systems/clock_registry_v30.md
+    design_doc: designs/provincial/clock_registry_v30.md
 
   factions:
     status: active
-    canonical_ttrpg: compilation/v0.14/stage6_factions_deprecated.md
+    canonical_ttrpg: deprecated/compilation/v0.14/stage6_factions_deprecated.md
     canonical_sha__compilation__v0_14__stage6_factions_deprecated_md: "4eb711be538f8f2b6eab4e2fcffd8b85e5c01120"
-    canonical_bg: designs/board_game/board_game_v30.md
+    canonical_bg: designs/provincial/strategic_layer_v30.md
     canonical_sha__designs__board_game__board_game_v30_md: "f6ff31a7ff0bfdd69875e5dc9a498eeea10a5247"
-    canonical_hybrid: designs/board_game/board_game_v30.md
+    canonical_hybrid: designs/provincial/strategic_layer_v30.md
     canonical_sha__designs__board_game__board_game_v30_md: "f6ff31a7ff0bfdd69875e5dc9a498eeea10a5247"
-    params: references/params_factions.md
+    params: params/factions.md
 
   victory:
     status: active
-    canonical: designs/board_game/victory_v30.md
+    canonical: designs/provincial/victory_v30.md
     canonical_sha__designs__board_game__victory_v30_md: "7dcf3c8d545b2f39842ac0a125ef901cdb29cc53"
     params: null
-    design_doc: designs/board_game/victory_v30.md
+    design_doc: designs/provincial/victory_v30.md
 
   territories:
     status: active
-    canonical: designs/setting/geography_v30.md
+    canonical: designs/world/geography_v30.md
     canonical_sha__designs__setting__geography_v30_md: "625ccad8feb36cfa49821060b83b551f8716099e"
     params: null
-    design_doc: designs/setting/geography_v30.md
+    design_doc: designs/world/geography_v30.md
 
   mass_combat:
     status: active
-    canonical: designs/mass_combat/mass_battle_v30.md
+    canonical: designs/provincial/mass_battle_v30.md
     canonical_sha__designs__mass_combat__mass_battle_v30_md: "794af1bd1b4a1e47904e2ad309443e67dc2e86e0"
-    params: references/params_mass_combat.md
-    design_doc: designs/mass_combat/mass_battle_v30.md
+    params: params/mass_combat.md
+    design_doc: designs/provincial/mass_battle_v30.md
 
   social_debate:
     status: active
-    canonical: designs/contest/social_contest_v30.md
+    canonical: designs/scene/social_contest_v30.md
     canonical_sha__designs__contest__social_contest_v30_md: "pending"
-    params: references/params_contest.md
-    design_doc: designs/contest/social_contest_v30.md
+    params: params/contest.md
+    design_doc: designs/scene/social_contest_v30.md
 
   board_game:
     status: active
-    canonical: designs/board_game/board_game_v30.md
+    canonical: designs/provincial/strategic_layer_v30.md
     canonical_sha__designs__board_game__board_game_v30_md: "f6ff31a7ff0bfdd69875e5dc9a498eeea10a5247"
-    params: references/params_board_game.md
-    design_doc: designs/board_game/board_game_v30.md
+    params: params/board_game.md
+    design_doc: designs/provincial/strategic_layer_v30.md
 
   scale_transitions:
     status: active
-    canonical: designs/hybrid/scale_transitions_v30.md
+    canonical: designs/architecture/scale_transitions_v30.md
     canonical_sha__designs__hybrid__scale_transitions_v30_md: "88296c23715efbfed4151f1ce48b5c99b1780790"
     canonical_sha__compilation__v0_14__stage11_scale_transitions_deprecated_md: "277e7ffb787cf6af153462b4cee3bcea09ae4ec6"
     params: null
@@ -116,42 +116,42 @@ systems:
 
   campaign_modes:
     status: design_debt
-    canonical: compilation/v0.14/stage12_campaign_modes_deprecated.md
+    canonical: deprecated/compilation/v0.14/stage12_campaign_modes_deprecated.md
     canonical_sha__compilation__v0_14__stage12_campaign_modes_deprecated_md: "029603bb27b7f5835277f42115e5ff3c19985d66"
     params: null
     design_doc: null
 
   npc_behavior:
     status: active
-    canonical: designs/systems/npc_behavior_v30.md
+    canonical: designs/npcs/npc_behavior_v30.md
     canonical_sha__designs__systems__npc_behavior_v30_md: "pending"
     params: null
-    design_doc: designs/systems/npc_behavior_v30.md
+    design_doc: designs/npcs/npc_behavior_v30.md
 
   fieldwork:
     status: active
-    canonical: designs/fieldwork/fieldwork_v30.md
+    canonical: designs/scene/fieldwork_v30.md
     canonical_sha__designs__fieldwork__fieldwork_v30_md: "d17cfcd35280bfb43a3dfc0dc6abbdac58382b64"
     params: null
-    design_doc: designs/fieldwork/fieldwork_v30.md
+    design_doc: designs/scene/fieldwork_v30.md
 
   params_factions_ttrpg:
     status: active
-    canonical: references/params_factions_ttrpg.md
+    canonical: params/factions_personal.md
     canonical_sha__references__params_factions_ttrpg_md: "61c583b31e716aa8ce43d8148777aed6d155db8b"
-    params: references/params_factions_ttrpg.md
+    params: params/factions_personal.md
 
   params_southernmost:
     status: active
-    canonical: references/params_southernmost.md
+    canonical: params/southernmost.md
     canonical_sha__references__params_southernmost_md: "21188eec29fe1b2cd2a40d2b4b325fb43baccfb8"
-    params: references/params_southernmost.md
+    params: params/southernmost.md
 
   params_campaign_modes:
     status: active
-    canonical: references/params_campaign_modes.md
+    canonical: params/campaign_modes.md
     canonical_sha__references__params_campaign_modes_md: "b0b16ae957b2281827aed8478fcd0c0f9ebf1ee1"
-    params: references/params_campaign_modes.md
+    params: params/campaign_modes.md
 
 # GLOBAL NOTE (2026-04-04):
 # All compilation/v0.14 stage documents are outdated and superseded.
@@ -162,10 +162,10 @@ systems:
 
   calamity_radiation:
     status: active
-    canonical: designs/setting/calamity_radiation_v30.md
+    canonical: designs/world/calamity_radiation_v30.md
     canonical_sha__designs__setting__calamity_radiation_v30_md: "3a86fbf65e61d9e96caa2efd70ccb5ae8946f1ea"
     params: null
-    design_doc: designs/setting/calamity_radiation_v30.md
+    design_doc: designs/world/calamity_radiation_v30.md
 
   emergent_arcs:
     status: active
@@ -176,45 +176,45 @@ systems:
 
   faction_layer:
     status: active
-    canonical: designs/board_game/faction_layer_v30.md
+    canonical: designs/provincial/faction_layer_v30.md
     canonical_sha__designs__board_game__faction_layer_v30_md: "pending"
-    params: references/params_factions.md
-    design_doc: designs/board_game/faction_layer_v30.md
-    infill_doc: designs/board_game/faction_layer_v30_infill.md
+    params: params/factions.md
+    design_doc: designs/provincial/faction_layer_v30.md
+    infill_doc: designs/provincial/faction_layer_v30_infill.md
 
   military_layer:
     status: active
-    canonical: designs/systems/military_layer_v30.md
+    canonical: designs/provincial/military_layer_v30.md
     canonical_sha__designs__systems__military_layer_v30_md: "pending"
-    params: references/params_board_game.md
-    design_doc: designs/systems/military_layer_v30.md
+    params: params/board_game.md
+    design_doc: designs/provincial/military_layer_v30.md
 
   tc_political:
     status: active
-    canonical: designs/systems/tc_political_redesign_v30.md
+    canonical: designs/provincial/tc_political_v30.md
     canonical_sha__designs__systems__tc_political_redesign_v30_md: "pending"
-    params: references/params_board_game.md
-    design_doc: designs/systems/tc_political_redesign_v30.md
+    params: params/board_game.md
+    design_doc: designs/provincial/tc_political_v30.md
 
   player_agency:
     status: active
-    canonical: designs/systems/player_agency_v30.md
+    canonical: designs/architecture/player_agency_v30.md
     params: null
-    design_doc: designs/systems/player_agency_v30.md
+    design_doc: designs/architecture/player_agency_v30.md
     notes: "Accepted 2026-04-17 (editorial batch acceptance)."
 
   companion_specification:
-    canonical: designs/systems/companion_specification_v30.md
+    canonical: designs/npcs/companion_specification_v30.md
     params: null
     status: active
-    design_doc: designs/systems/companion_specification_v30.md
+    design_doc: designs/npcs/companion_specification_v30.md
     notes: "NPC travel companion system — formation, departure, actions, world bridge. Accepted 2026-04-17 (editorial batch acceptance). Resolves ED-555, ED-557, ED-559, ED-571."
 
   settlement_layer:
-    canonical: designs/systems/settlement_layer_v30.md
+    canonical: designs/territory/settlement_layer_v30.md
     params: null
     status: active
-    design_doc: designs/systems/settlement_layer_v30.md
+    design_doc: designs/territory/settlement_layer_v30.md
     notes: "36 settlements across 17 provinces — dual-authority governance, faction emergence/collapse, extended timeline. Accepted 2026-04-17 (editorial batch acceptance)."
 
   ui_ux_reference:
@@ -227,61 +227,61 @@ systems:
 
   investigation_systems:
     status: active
-    canonical: designs/systems/investigation_systems_proposal_2026-04-15.md
+    canonical: designs/scene/investigation_systems_v30.md
     params: null
-    design_doc: designs/systems/investigation_systems_proposal_2026-04-15.md
+    design_doc: designs/scene/investigation_systems_v30.md
     notes: "NPE · Investigation Interface · Dialogue Lattice. Accepted 2026-04-17 (editorial batch acceptance)."
 
   conviction_track:
     status: active
-    canonical: designs/conviction_track/conviction_track_v30.md
+    canonical: designs/scene/conviction_track_v30.md
     params: null
-    design_doc: designs/conviction_track/conviction_track_v30.md
+    design_doc: designs/scene/conviction_track_v30.md
     notes: "Conviction track + Church victory redesign (PP-406 through PP-418). Accepted 2026-04-17 (editorial batch acceptance)."
 
   character_histories:
     status: active
-    canonical: designs/characters/character_histories_v30.md
+    canonical: designs/world/character_histories_v30.md
     params: null
-    design_doc: designs/characters/character_histories_v30.md
-    infill_doc: designs/characters/character_histories_v30_infill.md
+    design_doc: designs/world/character_histories_v30.md
+    infill_doc: designs/world/character_histories_v30_infill.md
     notes: "Lifepath system. Resolves ED-374. Accepted 2026-04-17 (editorial batch acceptance). Open editorial items ED-375, ED-377, ED-380 carry forward on canonical doc."
 
   peninsular_strain:
     status: active
-    canonical: designs/board_game/peninsular_strain_v1.md
+    canonical: designs/provincial/peninsular_strain_v30.md
     params: null
-    design_doc: designs/board_game/peninsular_strain_v1.md
+    design_doc: designs/provincial/peninsular_strain_v30.md
     notes: "Victory condition restructure — integrated into victory_v30.md. Accepted 2026-04-17 (editorial batch acceptance). Open item ED-626 (Accord/Order relationship) carries forward."
 
   arc_expansion:
     status: active
-    canonical: designs/systems/arc_expansion_v1_2026-04-16.md
+    canonical: designs/arcs/arc_expansion_v30.md
     params: null
-    design_doc: designs/systems/arc_expansion_v1_2026-04-16.md
+    design_doc: designs/arcs/arc_expansion_v30.md
     notes: "Arc density expansion — 19 arc design additions (ED-591 through ED-609). Accepted 2026-04-17 (editorial batch acceptance). Provisional items promoted to canonical; individual open arc items carry forward."
 
   bridge_part1_revisions:
     status: active
-    canonical: designs/audit/bridge_part1_revisions_2026-04-16.md
+    canonical: designs/audit/bridge_part1_revisions.md
     params: null
-    design_doc: designs/audit/bridge_part1_revisions_2026-04-16.md
+    design_doc: designs/audit/bridge_part1_revisions.md
     notes: "Player Agency canonization + Renown + Mechanical Scene Slate revision block. Accepted 2026-04-17 (editorial batch acceptance)."
 
 
   faction_politics_expanded:
     status: active
-    canonical: designs/systems/faction_politics_expanded_v1.md
+    canonical: designs/provincial/faction_politics_v30.md
     params: null
-    design_doc: designs/systems/faction_politics_expanded_v1.md
+    design_doc: designs/provincial/faction_politics_v30.md
     notes: "Rank-ladder expansion (Standing 0-7), sub-office ladders, caste integration, TC × rank, Baralta × rank, Ministry expansion, Generational Shift fix. PP-660, 2026-04-17. Supersedes original faction_politics_patch_register_2026-04-16.md draft. Raises ED-634 through ED-658."
 
 
   throughline_resolutions:
     status: active
-    canonical: designs/systems/throughline_resolutions_v1.md
+    canonical: designs/arcs/throughline_resolutions_v30.md
     params: null
-    design_doc: designs/systems/throughline_resolutions_v1.md
+    design_doc: designs/arcs/throughline_resolutions_v30.md
     notes: "10 throughline integration fixes for PP-660 faction politics expansion. PP-661, 2026-04-17. Applied fixes: character creation caste viability, Std 0 carve-out, Warden × TC scale, Generational × Coup × IP × Baralta interaction, NPC roster capacity, Hall Tier settlement integration, SIM-POL discoverability, register-split future marker. ED-659."
 
 
@@ -307,7 +307,7 @@ systems:
 # Duplicate top-level companion_specification entry removed; canonical entry under `systems:` block.
 
 
-- file: tests/throughline_analysis_2026-04-17.md
+- file: tests/audit/throughline_analysis.md
   type: simulation_synthesis
   date: 2026-04-17
   description: "Cross-batch throughline analysis (ST-01 through ST-60). Robustness/elegance/smoothness audit. Propagation record for all P0/P1 items from batches 1-8."
@@ -332,30 +332,30 @@ systems:
 
   thread_horizontal_integration:
     status: active
-    canonical: designs/systems/thread_horizontal_integration_spec.md
+    canonical: designs/threadwork/thread_horizontal_integration_spec.md
     notes: "Thread integration spec. ED-673-681. 2026-04-17."
   campaign_architecture:
-    canonical: designs/systems/campaign_architecture_v1.md
+    canonical: designs/architecture/campaign_architecture_v30.md
     status: active
     note: "2026-04-17: Church 4-axis infrastructure, CI=100 mass seizure, RM identity correction, Thread revelation curve, phased IP, Altonia repulsion, MS reform, Coherence asymmetry, Mending community, Portrait Retirement, Lineage Acts, Warden faction paths."
 
   historical_precedents:
     status: active
-    canonical: references/historical_precedents_analysis.md
+    canonical: references/historical/precedents_analysis.md
     params: null
     design_doc: null
     notes: "Historical precedent analysis informing Church, RM, invasion, cultural revival mechanics. PP-675."
 
   historical_precedents_warfare:
     status: active
-    canonical: references/historical_precedents_warfare.md
+    canonical: references/historical/precedents_warfare.md
     params: null
     design_doc: null
     notes: "Historical precedent analysis for warfare, mustering, territory seizure. PP-676."
 
   derived_stats:
     status: active
-    canonical: designs/systems/derived_stats_v1.md
+    canonical: designs/scene/derived_stats_v30.md
     params: null
-    design_doc: designs/systems/derived_stats_v1.md
+    design_doc: designs/scene/derived_stats_v30.md
     notes: "Derived stat system — Treasury, Legitimacy, Reputation, Cohesion, Levies Available. PP-679/680."

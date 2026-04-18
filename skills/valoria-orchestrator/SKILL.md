@@ -169,11 +169,11 @@ Archive size warning fires at 100,000 tokens — signals need for year-split.
 session token: [16-char hex from g.assert_fetched()]
 canonical_sources.yaml: ✓ fetched ([N] lines)
 [canonical design doc path]: ✓ fetched ([N] lines)
-references/params_[system].md: ✓ fetched ([N] lines) / ✗ missing
+params/[system].md: ✓ fetched ([N] lines) / ✗ missing
 ```
 If any required file is missing from this log, or session token is absent, stop — the analysis is invalid. Jordan: verify the token is present and line counts are plausible before accepting any output.
 
-**Version check:** confirm `<!-- version: -->` tag in each fetched params file matches current ruleset version in `compilation/README.md`. If mismatch: flag `[STALE PARAMS: <file> is vX.XX, current is vY.YY]` and stop.
+**Version check:** confirm `<!-- version: -->` tag in each fetched params file matches current ruleset version in `deprecated/compilation/README.md`. If mismatch: flag `[STALE PARAMS: <file> is vX.XX, current is vY.YY]` and stop.
 
 **Additional reads:** Any task referencing a specific design doc, params file, or register must fetch that file from GitHub before use. Do not read from memory, local copies, or project files.
 
@@ -366,7 +366,7 @@ oid2 = h.safe_commit(godot_additions, [], '[godot] implement PP-NNN: mechanic ch
 
 Read from ttrpg params files to implement. Never invent mechanical values:
 ```python
-params = g.read_files_graphql(['references/params_combat.md'], repo='ttrpg')
+params = g.read_files_graphql(['params/combat.md'], repo='ttrpg')
 # Use params content to derive constants for GDScript
 ```
 

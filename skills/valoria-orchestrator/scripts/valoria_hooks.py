@@ -20,9 +20,9 @@ _task_gates_passed   = set()
 
 EDITORIAL_PATHS = (
     'designs/npcs/',
-    'designs/worldbuilding/',
-    'designs/setting/',
-    'gm_ref/',
+    'designs/world/',
+    'designs/world/',
+    'designs/arcs/gm_ref/',
     'canon/03_',
 )
 EDITORIAL_MARKERS = ('[EDITORIAL:', '[PROVISIONAL:', '[EDITORIAL GATE]')
@@ -285,7 +285,7 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
 
     # Co-file: sim output → coverage_matrix
     sim_writes = [p for p in paths_in_commit
-                  if p.startswith('tests/sim_') or p.startswith('tests/aud_')]
+                  if p.startswith('tests/sim/') or p.startswith('tests/audit/')]
     if sim_writes and 'tests/coverage_matrix.md' not in paths_in_commit:
         errors.append(
             f"CO-FILE: simulation output added but tests/coverage_matrix.md not updated.\n"

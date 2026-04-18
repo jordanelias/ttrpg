@@ -27,13 +27,13 @@ policies:
     max_tokens: 2000
     on_exceed: "block_commit"
     on_close: "archive_to"
-    archive_target: "session_log_archive.md"
+    archive_target: "archives/session/session_log_archive.md"
 
-  - match: "session_log_archive.md"
+  - match: "archives/session/session_log_archive.md"
     max_tokens: 50000
     on_exceed: "chunk_by_quarter"
-    chunk_pattern: "session_log_archive_{year}_q{quarter}.md"
-    index_file: "session_log_archive_index.md"
+    chunk_pattern: "archives/session/session_log_archive_{year}_q{quarter}.md"
+    index_file: "archives/session/session_log_archive_index.md"
 
   # ────────────────────────────────────────────────────────────
   # REGISTERS — patches
@@ -90,31 +90,31 @@ policies:
   # ────────────────────────────────────────────────────────────
   # PARAMS FILES — atomized by domain
   # ────────────────────────────────────────────────────────────
-  - match: "references/params_board_game.md"
+  - match: "params/board_game.md"
     max_tokens: 5000
     split_strategy: custom_map
     split_map: "references/splits/params_board_game_split.yaml"
     index_replaces_canonical: true
 
-  - match: "references/params_threadwork.md"
+  - match: "params/threadwork.md"
     max_tokens: 5000
     split_strategy: canonical_vs_superseded
     superseded_marker: "SUPERSEDED SECTIONS"
-    superseded_target: "references/params_threadwork_superseded.md"
+    superseded_target: "params/threadwork_superseded.md"
     superseded_max_tokens: 15000
 
-  - match: "references/params_factions.md"
+  - match: "params/factions.md"
     max_tokens: 5000
     split_strategy: by_level_2_heading
     split_cap_per_file: 5000
-    target_pattern: "references/params_factions_{slug}.md"
+    target_pattern: "params/factions/{slug}.md"
     index_replaces_canonical: true
 
-  - match: "references/params_mass_combat.md"
+  - match: "params/mass_combat.md"
     max_tokens: 8000
     on_exceed: "flag_for_next_session"
 
-  - match: "references/params_*.md"
+  - match: "params/*.md"
     max_tokens: 10000
     on_exceed: "flag_for_split"
     require_rule_above_threshold: true

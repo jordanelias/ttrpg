@@ -77,7 +77,7 @@ if register_writes and 'references/propagation_map.md' not in changed:
     )
 
 # ── Rule 3: sim output → coverage_matrix.md ──────────────────────────────────
-sim_outputs = [f for f in changed if f.startswith('tests/sim_') or f.startswith('tests/aud_')]
+sim_outputs = [f for f in changed if f.startswith('tests/sim/') or f.startswith('tests/audit/')]
 if sim_outputs and 'tests/coverage_matrix.md' not in changed:
     violations.append(
         f"SIMULATION OUTPUT added but coverage_matrix.md not updated.\n"
@@ -90,8 +90,8 @@ for doc in design_docs:
     # Extract system name from path: designs/{category}/{system}_v30.md
     basename = os.path.basename(doc).replace('_v30.md', '')
     params_candidates = [
-        f'references/params_{basename}.md',
-        f'references/params_{basename.replace("_design","")}.md',
+        f'params/{basename}.md',
+        f'params/{basename.replace("_design","")}.md',
     ]
     if not any(p in changed for p in params_candidates):
         # Hard check: SPECIFIC params file required, not just any params file

@@ -95,7 +95,7 @@ def parse_patches(content, from_id=None):
             continue
 
         # Files — YAML list item
-        file_item_m = re.match(r'-\s*(references/params_\S+\.md)', line_s)
+        file_item_m = re.match(r'-\s*(params/\S+\.md)', line_s)
         if file_item_m:
             current["files"].append(file_item_m.group(1))
             continue
@@ -118,7 +118,7 @@ def parse_patches(content, from_id=None):
     # Filter to params-affecting patches only
     params_patches = []
     for p in patches:
-        params_files = [f for f in p["files"] if f.startswith("references/params_")]
+        params_files = [f for f in p["files"] if f.startswith("params/")]
         if params_files:
             p["params_files"] = params_files
             params_patches.append(p)
