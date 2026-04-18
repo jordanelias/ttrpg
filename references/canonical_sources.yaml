@@ -138,19 +138,19 @@ systems:
   params_factions_ttrpg:
     status: active
     canonical: params/factions_personal.md
-    canonical_sha__references__params_factions_ttrpg_md: "61c583b31e716aa8ce43d8148777aed6d155db8b"
+    canonical_sha__params__factions_personal_md: "61c583b31e716aa8ce43d8148777aed6d155db8b"
     params: params/factions_personal.md
 
   params_southernmost:
     status: active
     canonical: params/southernmost.md
-    canonical_sha__references__params_southernmost_md: "21188eec29fe1b2cd2a40d2b4b325fb43baccfb8"
+    canonical_sha__params__southernmost_md: "21188eec29fe1b2cd2a40d2b4b325fb43baccfb8"
     params: params/southernmost.md
 
   params_campaign_modes:
     status: active
     canonical: params/campaign_modes.md
-    canonical_sha__references__params_campaign_modes_md: "b0b16ae957b2281827aed8478fcd0c0f9ebf1ee1"
+    canonical_sha__params__campaign_modes_md: "b0b16ae957b2281827aed8478fcd0c0f9ebf1ee1"
     params: params/campaign_modes.md
 
 # GLOBAL NOTE (2026-04-04):
@@ -163,7 +163,7 @@ systems:
   calamity_radiation:
     status: active
     canonical: designs/world/calamity_radiation_v30.md
-    canonical_sha__designs__setting__calamity_radiation_v30_md: "3a86fbf65e61d9e96caa2efd70ccb5ae8946f1ea"
+    canonical_sha__designs__world__calamity_radiation_v30_md: "43ebe89361243910a2f2bfc9d3aecd506f98bcde"
     params: null
     design_doc: designs/world/calamity_radiation_v30.md
 
@@ -185,14 +185,14 @@ systems:
   military_layer:
     status: active
     canonical: designs/provincial/military_layer_v30.md
-    canonical_sha__designs__systems__military_layer_v30_md: "pending"
+    canonical_sha__designs__provincial__military_layer_v30_md: "7f345a56121f03ac2d59af72564d8030fae40c58"
     params: params/board_game.md
     design_doc: designs/provincial/military_layer_v30.md
 
   tc_political:
     status: active
     canonical: designs/provincial/tc_political_v30.md
-    canonical_sha__designs__systems__tc_political_redesign_v30_md: "pending"
+    canonical_sha__designs__provincial__tc_political_v30_md: "65733224cdb1395dacb091c820371d45017eef9e"
     params: params/board_game.md
     design_doc: designs/provincial/tc_political_v30.md
 
