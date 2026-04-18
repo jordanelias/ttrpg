@@ -357,15 +357,41 @@ See compilation/v0.14/stage11_scale_transitions_deprecated.md §11.8.
 
 ## 10. THREAD IN COMBAT
 
-See designs/ttrpg/threadwork_redesign_v25.md for full Thread operation rules.
+Combat is thread-configurations in violent restructuring (Foundations A1). A wound is a thread disruption at the actualized dimension. Death is a configuration ceasing to cohere. The body's damage impedes substrate-level work (+1 Ob per Wound to all Thread operations — threadwork_v30 §2.3). These are not metaphors; per A1, everything is constituted from threads.
 
-**Key interface points:**
-- Leap round: practitioner commits all pool to Defence during Leap. ~60% hit probability from any opponent who can attack. Real tactical cost.
-- W-24 (Coherent Strike): viable only with range protection during Leap.
-- W-33 (Rally the Broken): effective only for CP ≥ 3 units.
-- Coherence −1 per Thread operation in mass battle. See ST-TW-03.
+**Full Thread operation rules:** designs/ttrpg/threadwork_v30.md.
 
-**Board Game:** Thread operations abstracted to Co-Movement cards and faction Thread orders. See bg_v05_simulation_and_patches.md §7 and threadwork_redesign_v25.md §7.1.
+### 10.1 Practitioner Interface
+
+- **Leap round:** Practitioner commits all pool to Defence during Leap. ~60% hit probability from any opponent who can attack. Real tactical cost.
+- **Coherent Strike (W-24):** Viable only with range protection during Leap.
+- **Rally the Broken (W-33):** Effective only for CP ≥ 3 units.
+- **Wound penalties:** +1 Ob per Wound to all Thread operations (threadwork_v30 §2.3).
+- **Mass battle:** Coherence −1 per Thread operation. See mass_battle_v30 §A.10.
+
+### 10.2 Thread Perception in Combat
+
+Practitioners and TS-sensitive observers perceive combat events through the Thread. Per threadwork_v30 §2.3 visibility table (extended by ED-677):
+
+| Observer TS | Combat Wound | Death |
+|---|---|---|
+| 0–9 | Normal perception | Normal grief |
+| 10–29 | Vague unease at violence | Sense of loss beyond normal grief |
+| 30–49 | Perceives thread disruption at wound site | Perceives configuration ceasing to cohere |
+| 50+ | Identifies structural depth of wound | Perceives full thread-state dissolution |
+
+This perception provides investigative information (fieldwork_v30 §2.4) and feeds Confrontation Development (Foundations A10).
+
+### 10.3 Cross-System Fire from Combat
+
+| Combat Event | Consequence | System |
+|---|---|---|
+| Killing named NPC | Knot rupture + Conviction Scar on witnesses | §13.3 Death Cascade; npc_behavior_v30 §3.4 |
+| Practitioner Dissolution in combat | RS cost + Scar on all witnesses with engaged Conviction | threadwork_v30 §5.2; npc_behavior_v30 §3.4 |
+| Practitioner Dissolution witnessed by companion | Companion Thread violation departure if Faith/Order/Equity Conviction | companion_specification_v30 §6.1 |
+| Thread operation witnessed by adjudicator in formal proceeding | Certainty-indexed adjudicator response | social_contest_v30 §9.4b |
+
+**Board Game:** Thread operations abstracted to Co-Movement cards and faction Thread orders. See threadwork_v30 §7.1.
 
 ---
 

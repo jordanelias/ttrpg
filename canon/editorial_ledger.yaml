@@ -32,7 +32,7 @@
   - id: ED-677
     date: 2026-04-17
     description: "Thread perception extension. threadwork_v30."
-    status: open
+    status: resolved
     severity: P2
     affects: [designs/ttrpg/threadwork_v30.md]
 
@@ -60,6 +60,6 @@
   - id: ED-681
     date: 2026-04-17
     description: "Rendering Crisis narrative structure. threadwork_v30."
-    status: open
+    status: resolved
     severity: P3
     affects: [designs/ttrpg/threadwork_v30.md]

@@ -179,6 +179,20 @@ Physical effects (a wound closing, an object moving) are visible to all.
 
 **Wound penalties:** +1 Ob per Wound applies to all Thread operation rolls — Leap, Weaving, Pulling, Mending, FR. The body's damage impedes the suspension.
 
+### Rendered-Level Thread Event Visibility (ED-677)
+
+Extension of the above table to rendered-level events — not practitioner operations but the thread events that combat, death, and substrate instability constitute:
+
+| Observer TS | Combat Wound | Death | Mass Casualty | Gap Manifestation | Rendering Crisis |
+|---|---|---|---|---|---|
+| 0–9 | Normal perception | Normal grief | Normal horror | Nothing | Vague wrongness |
+| 10–29 | Vague unease | Loss beyond grief | Deep wrongness; nightmares | Unease near site | Overwhelming wrongness |
+| 30–49 | Thread disruption at wound | Configuration ceasing to cohere | Mass disruption; direction identifiable | Absence; Gap partly readable | Full crisis visible |
+| 50–69 | Wound depth (surface vs structural) | Full thread-state dissolution | Scope/casualties through substrate | Full Gap: original config reconstructible | Crisis cause identifiable |
+| 70+ | Complete structural perception | Dying configuration's complete state | Every individual disruption perceivable | Full forensic + temporal trace | Can intervene (Anchoring assistance) |
+
+No mechanical changes. Provides narrative and investigative information. Supplements fieldwork_v30 §4.5 Thread-Read evidence quality.
+
 ## 2.4 Operations During Contact
 
 
@@ -631,6 +645,21 @@ Pool: highest Close Knot's Bonds score + number of successful Anchoring Scenes, 
 
 
 > **GM guidance — TS 30-31 Rendering Crisis risk (PP-206):** [PROVISIONAL] Before a practitioner with Thread Sensitivity 30 or 31 begins the Rendering Crisis arc (PP-194), the GM must inform the player: Success or Overwhelming results permanently reduce Thread Sensitivity by 1. At TS 30, this reduction yields TS 29 — below the Leap minimum. The practitioner survives the crisis but loses Thread ops permanently. This is intended. Surface this before the arc begins so the player makes an informed choice: attempt resolution (risk losing Thread access) or accept NPC status directly.
+
+
+### Rendering Crisis — Narrative Structure (ED-681)
+
+For videogame implementation, the mechanical checklist above unfolds as four designed beats:
+
+**Beat 1 — Withdrawal:** The practitioner cannot sustain normal rendering. Colors desaturate. Sounds echo. NPCs' words arrive with delay. The practitioner perceives the thread-substrate without the rendering filter. No rolls — pure narrative. Companion Commentary fires if companion present (bridge_part1_revisions B.3.3).
+
+**Beat 2 — Knot Anchoring:** A Close Knot NPC arrives. The practitioner perceives them simultaneously as rendered person and thread-configuration. Mechanical: Spirit check TN 7 Ob 1. Success: Coherence +1. Failure: NPC receives Knot Strain +1.
+
+**Beat 3 — Place Anchoring:** The practitioner visits a location with personal significance (from character_histories_v30 lifepath — hometown, formation site, or vocation location). The place's familiar configuration provides rendering reference. Mechanical: Spirit check TN 7 Ob 2. Success: Coherence +1. Failure: involuntary Thread-Read fires (co-movement applies).
+
+**Beat 4 — The Choice:** The practitioner confronts epistemic seduction (A11): do I want to return to rendering? A moment of full substrate perception — the world as it is, not as rendering presents it. This IS the resolution roll. Pool: Spirit + Focus, TN 7, Ob 2. Overwhelming: +2 Coherence, −1 TS. Success: +1 Coherence. Partial: no change. Failure: no recovery; Coherence floor at current value for 1 additional season.
+
+The crisis is not punishment. It is the practitioner's existential season — the cost of having gone too deep, the return to rendered life.
 
 > **TS 90+ Coherence 0 — Reality Strain RS cost (PP-197):** [PROVISIONAL — canon: Amendment 01 §Resonant] A practitioner who reaches Coherence 0 with Thread Sensitivity 90+ is undergoing Structural-scale self-maintenance threadwork at every moment (per Amendment 01: they substitute layer 3 for failed layer 2). This continuous Structural-scale threadwork strains the substrate exactly as the Einhir site-network did, localized to their presence. **RS cost:** −1 RS per scene in which the practitioner is actively maintaining their existence (any scene in which they are conscious and present). This cost fires at scene end, not at Accounting — it is immediate and continuous. The practitioner need not perform any deliberate Thread operations for this cost to apply; their existence is the operation. This cost is separate from and stacks with all other RS degradation sources. For TS 30–69 practitioners at Coherence 0: no reality strain RS cost (insufficient Thread Sensitivity for layer 3 self-maintenance at the required depth — they are in ontological freefall, not self-maintenance). For TS 70–89: −1 RS per session (not per scene — Structural-scale self-maintenance is possible but less continuous than Resonant). Apply during Rendering Crisis arc and after, if the practitioner remains at Coherence 0.
 
