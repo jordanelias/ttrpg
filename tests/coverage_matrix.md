@@ -131,7 +131,6 @@ Faction Politics rank-ladder expansion (PP-660). Propagated to:
 
 Remaining open sub-EDs: ED-640/642/643/644/645/648/649/650/651/652/655/656/657/658, SIM-POL-R01/02/05. All P2 except ED-643 (Solmund propagation P1) and SIM-POL-R01/02/05 (P1 sim-debt).
 
-
 ## New Findings — sim_npc_player_batch3_2026-04-17
 
 ### Staleness Audit
@@ -309,3 +308,33 @@ Resume trigger: (a) user-initiated simulation review, or (b) patch to faction_po
 | CROSS-MEND-01 | Seasonal fatigue is the correct throttle — transparent to player, resets cleanly, no permanent impairment |
 | CROSS-MEND-02 | ARC-S32 and ARC-S34 were built on Mending-as-Coherence-drain; both require text revision |
 | CROSS-MEND-03 | Community Mending capacity is ~10x RS budget assumption; scenario narratives valid but net figures stale |
+
+
+## New Findings — sim_alternate_branches2_2026-04-17
+
+### P1 Findings
+
+| ID | Source | Description | Status |
+|----|--------|-------------|--------|
+| S-01 | Branch S | Ministry census records contain 150 seasons of undeclared Thread-sensitivity data | Open — ED-671 |
+
+### Confirmed Working
+
+| System | Source | Status |
+|--------|--------|--------|
+| Olafsson extra-territorial heresy designation as legal shadow outside Hafenmark | K-01 | ✓ |
+| Baralta Arc B + Niflhel creates permanent constitutional precedent for criminal network | N-01 | ✓ |
+| Unmanaged Arc C begins from absence of support not excess of exposure | Q-01 | ✓ Practitioner relationship structurally required |
+| Almud Arc A reform prevents Counter advance via Ehrenwall moral ledger shift | T-01 | ✓ Reform path structurally prevents Coup |
+| Haelgrund refusing synthesis → neutrality dataset more consequential than partisan dataset | S-01 | ✓ |
+| Linder full RS report → Himlensendt sermon → offhand comment becomes public political theology | P-01 | ✓ |
+| Stenskald conservative endorsement → Incapacity Assessment cascade at S28 | O-01 | ✓ |
+
+### Cross-Branch Findings
+
+| Finding | Description |
+|---------|-------------|
+| CROSS-B2-01 | Institutional neutrality is always political — no institutional act is without political consequence |
+| CROSS-B2-02 | Most consequential actions are the smallest ones — addenda, single report decisions, synthesis refusals |
+| CROSS-B2-03 | Reform path requires choosing uncertainty before being forced to — only path that permanently prevents the Coup |
+

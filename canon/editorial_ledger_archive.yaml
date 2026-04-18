@@ -4172,3 +4172,109 @@ editorial_decisions:
     status: resolved
     severity: P0
     affects: [designs/systems/derived_stats_v1.md, designs/mass_combat/mass_battle_v30.md, designs/board_game/military_layer_v30.md, designs/board_game/tc_political_redesign_v30.md, designs/board_game/peninsular_strain_v1.md, designs/board_game/victory_v30.md, designs/systems/settlement_layer_v30.md]
+
+  - id: ED-623
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "IP advancement too slow."
+    status: open
+    severity: P2
+
+  - id: ED-624
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Elske Loyalty track and Diplomatic Exchange procedure not documented."
+    status: open
+    severity: P2
+
+  - id: ED-625
+    date: 2026-04-16
+    archived: 2026-04-17
+    description: "Church Excommunication procedure not documented."
+    status: open
+    severity: P2
+
+  - id: ED-626
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Accord/Order relationship in peninsular_strain_v1."
+    status: open
+    severity: P2
+
+  - id: ED-627
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Thread-settlement interaction gaps."
+    status: open
+    severity: P2
+
+  - id: ED-628
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Vaynard Season 0 Jarl Assembly as pre-campaign scene."
+    status: open
+    severity: P2
+
+  - id: ED-630
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Coup Counter as moral ledger: dual-track advancement proposal."
+    status: open
+    severity: P2
+
+  - id: ED-631
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Heresy Proceedings resolution time unspecified."
+    status: open
+    severity: P2
+
+  - id: ED-660
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Certainty 6 scale issue for Almstedt."
+    status: open
+    severity: P2
+
+  - id: ED-661
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Ministry Protocol 3 seniority conflict."
+    status: open
+    severity: P2
+
+  - id: ED-662
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Elske residency post-Coup legal implications."
+    status: open
+    severity: P2
+
+  - id: ED-664
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Advisor-principal confidentiality boundary undefined."
+    status: open
+    severity: P2
+
+  - id: ED-665
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Grand Contest as succession trial not in canonical docs."
+    status: open
+    severity: P2
+
+  - id: ED-668
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "RS decline rate calibration question."
+    status: open
+    severity: P2
+
+  - id: ED-669
+    date: 2026-04-17
+    archived: 2026-04-17
+    description: "Irreversible institutional precedent persistence across campaigns."
+    status: open
+    severity: P2
+

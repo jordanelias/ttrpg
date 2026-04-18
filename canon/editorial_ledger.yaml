@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 684
+# next_id: 674
 
   - id: ED-682
     date: 2026-04-18
@@ -87,3 +87,31 @@
     severity: P1
     resolution: "Mechanic canonicalized in derived_stats_v1 Treasury section. Income = Competence x 25 gold/season, capped at Wealth x 50/season."
     affects: [designs/systems/derived_stats_v1.md]
+
+  - id: ED-670
+    date: 2026-04-17
+    description: "Extra-territorial heresy designation: no rule on how it interacts with Hafenmark Sovereign Authority Doctrine outside Hafenmark."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-671
+    date: 2026-04-17
+    description: "Thread-perception census: Ministry census contains 150 seasons of undeclared TS data ('perceptual anomalies'). No mechanic governs interpretation or access. Requires ruling."
+    status: open
+    severity: P1
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-672
+    date: 2026-04-17
+    description: "Arc A timing window: Almud Arc A requires Certainty <=1 AND Counter <=1 simultaneously. Standard play may not synchronize without active player management. Clarification needed."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-673
+    date: 2026-04-17
+    description: "Hochjarl Incapacity Assessment: oral law provision referenced in Varfell succession but not formally defined. Requires triggers, process, duration, outcomes."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
