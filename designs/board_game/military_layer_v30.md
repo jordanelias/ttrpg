@@ -119,6 +119,23 @@ Per params_board_game §Unit Muster Ob Table:
 
 **Wealth** gates professional unit quality — you need money to equip and pay soldiers. Wealth expenditure (Ob 2 for HI, Ob 4 for Artillery) is a separate roll from the Muster roll. Both must succeed for the unit to be raised at that quality. On Muster Success but Wealth Failure: unit raised as Light Infantry instead (the cheaper available type).
 
+### §1.5b Settlement-Type Muster Bonuses (NEW — historical_precedents_warfare §3.2)
+
+The settlement where Muster occurs modifies the output:
+
+| Settlement Type | Muster Modifier |
+|----------------|----------------|
+| Fortress | +1 initial Size for Heavy Infantry and Cavalry (military infrastructure). |
+| City / Port | May Muster **Militia** (new type: Power 2, Discipline 3, Service 4 seasons, Levy cost. Armed citizenry — better than Levy, no Wealth gate). |
+| Town | Standard (Levy and above per prerequisites). |
+| Mine | May Muster **Sappers** (new type: Power 1, Discipline 2, unlimited service at −0.5 Wealth/season. +2D on Siege actions — historical mining specialists). |
+| Cathedral | Knights Templar only (existing rule, Church faction). |
+| Outpost | Cannot Muster (insufficient population). |
+
+**Design rationale:** Different settlements historically produced different types of soldiers. Castle towns equipped heavy troops. Trading cities armed militia. Mining communities provided siege specialists. This makes geographic control of settlement types militarily meaningful.
+
+[EDITORIAL: ED-680 — Settlement Muster bonuses. Source: historical_precedents_warfare.md §3.2.]
+
 ### §1.6 Experience
 
 A unit gains one Experience step after surviving a battle in which its faction won or drew, and it was not destroyed (Size > 0 at resolution):
@@ -407,6 +424,50 @@ A Siege is an extended encirclement operation targeting a fortified territory. I
 **RS cost:** Siege (per season) −1 RS (per threadwork_v30.md §5.2 — canonical; this entry formally incorporates that cost into playable faction mechanics).
 
 **Calibration note (from ST-44):** Fort 3 at Military 4 is Ob 5. P(Success) ≈ 2% per season. Fort 3 is effectively impregnable to Military 4 through Siege. Fort 3 requires Military 5+ for reliable progress (~25% Success per season at 5D Ob 5). The correct counter to an impregnable Fort 3 is political (reduce defender Mandate until garrison is withdrawn voluntarily) or Sabotage (Tribune Intel OW in the territory, −1 Ob to subsequent Siege).
+
+### §1.9b Siege Civilian Consequences (NEW — historical_precedents_warfare §2.3)
+
+Each season of active siege, the besieged settlement's Prosperity −1 (starvation, economic collapse, refugee flight). If Prosperity reaches 0 during siege: the civilian population demands surrender — defending faction must make Mandate check (Ob 2) to continue the siege. Failure: garrison surrenders (territory transfers at Accord 1). Success: siege continues but settlement Order −1 (garrison suppresses civilian unrest).
+
+**Design rationale:** Historically, garrisons surrendered not from military defeat but from civilian pressure. Starving populations forced commanders to negotiate. This creates a time limit on siege defense independent of Fort Level.
+
+### §1.9c Siege Parley (NEW — historical_precedents_warfare §2.3)
+
+During any season of active siege, either side may declare **Parley** — a Social Contest between attacker and defender commanders.
+
+**Pool:** Charisma + Cognition (both sides). Modifiers: attacker +1D per Fort Level already reduced; defender +1D if supply run succeeded this season.
+
+**Ob:** 2 (both sides — standard contested).
+
+| Outcome | Effect |
+|---------|--------|
+| Attacker wins | Defender surrenders on terms. Territory transfers at Accord 2 (negotiated, not conquered). Fort Level unchanged. Defender units may withdraw to adjacent friendly territory. |
+| Defender wins | Siege continues. Attacker Stability −1 (rejected terms, publicly). |
+| Tie | Both sides agree to temporary truce (1 season cease-fire, no siege progression, Prosperity stops declining). |
+
+**Design rationale:** Most medieval sieges ended through negotiation, not storm. The Accord 2 outcome makes Parley mechanically attractive vs assault (which yields Accord 1). This creates a genuine choice: assault for speed (Accord 1, expensive to govern) or parley for governance quality (Accord 2, requires social capability).
+
+[EDITORIAL: ED-678 — Siege Parley and civilian consequences. Source: historical_precedents_warfare.md §2.]
+
+---
+
+### §1.10 Show of Force (NEW — historical_precedents_warfare §4.3)
+
+A faction may move units to a territory border without declaring Battle — military demonstration, not military action.
+
+**Prerequisites:** Faction's total unit Size in territories adjacent to target exceeds defender's garrison Size in the target by ≥ 3.
+
+**Action:** Show of Force is declared as a Domain Action (uses Legionary card). No battle occurs.
+
+**Effect:** Defender must make Mandate check (Ob = attacker Military − defender Military, min 1, max 3).
+- Failure: Defender cedes territory voluntarily. Accord set to 2 (negotiated transfer). No RS cost, no IP increase, no Peninsular Strain.
+- Success: Defender holds. Attacker may then declare Battle normally next season (Show of Force does not consume the Battle declaration).
+
+**Restrictions:** Show of Force cannot target a settlement with Fort Level ≥ 2 (fortified positions are immune to intimidation). Show of Force near the Altonian border (T3 Lowenskyst, T10 Spartfell) contributes IP +1 (military posturing signals instability to Altonia).
+
+**Design rationale:** Most historical territorial transfers happened through threat of battle, not battle itself. Gun-boat diplomacy. This makes military capability strategically valuable beyond actual combat — a faction with Military 6 can compel concessions without fighting, avoiding RS and Strain costs.
+
+[EDITORIAL: ED-679 — Show of Force. Source: historical_precedents_warfare.md §4.3.]
 
 ---
 

@@ -493,6 +493,10 @@ Pursuit: Fast units only. Routing unit loses Size equal to pursuer net
 Offence successes (no Defence) each turn. Recall: Command Ob 2.
 Over-pursuing exposes flanks. *[confirmed]*
 
+**Morale Cascade (NEW — historical_precedents_warfare §1.3c):** When a unit routs (Morale reaches 0), all friendly units in the same engagement make an immediate Discipline check (Ob 1). Failure: Morale −1. Multiple simultaneous routs compound — each triggers a separate cascade check. This models the historical reality where battles were lost when one section of the line broke and panic spread (Cannae, Hastings). The check is Ob 1 — Discipline 4 units pass ~87% — so cascades primarily threaten low-Discipline formations (Levy, militia), which is historically correct.
+
+[EDITORIAL: ED-677 — Morale Cascade. Source: historical_precedents_warfare.md §1.3c.]
+
 ---
 
 ### A.13 REINFORCEMENT (between battles) *[editorial items]*
@@ -503,6 +507,37 @@ Maximum: cannot exceed original Size at army creation.
 Destroyed units (Size 0) cannot be restored — must raise new unit at full
 Resource cost. Thread effects on units (over-actualisation, Locks) persist
 across battle boundaries unless cleared. *[EDGE-08]*
+
+### A.14b CAMPAIGN SUPPLY (NEW — historical_precedents_warfare §1.3a)
+
+Units stationed in hostile territory (territory NOT controlled by the unit's faction) cost Wealth at Accounting:
+
+| Unit Type | Hostile Territory Cost |
+|-----------|----------------------|
+| Levy | 0 (forage locally — but see Service Duration below) |
+| Light Infantry | −0.5/season (round: −1 every other season) |
+| Heavy Infantry / Cavalry | −1/season |
+| Ranged | −0.5/season |
+| Artillery | −1.5/season |
+
+Units in friendly territory cost nothing (population supports them). Units in territories with Prosperity 0 cannot be supplied — they lose Size −1/season from attrition regardless of ownership.
+
+**Altonian exception:** Altonian Vanguard forces do NOT pay Campaign Supply in territories they occupy (they control supply through invasion corridor). Valorian factions operating offensively in occupied zones DO pay.
+
+**Design rationale:** Historical armies could not exist indefinitely in hostile territory. This creates economic pressure to conquer quickly or consolidate supply. The mechanic already exists for siege (Wealth −1/season per §1.9) — this extends it to general hostile occupation.
+
+[EDITORIAL: ED-676 — Campaign Supply. Source: historical_precedents_warfare.md §1.3a.]
+
+### A.14c SERVICE DURATION (NEW — historical_precedents_warfare §1.3b)
+
+| Unit Type | Service Duration | Overstay Consequence |
+|-----------|-----------------|---------------------|
+| Levy | 4 seasons | Discipline −1/season after expiry. At Discipline 0: unit disbands. |
+| Light Infantry+ | Unlimited | Requires Campaign Supply payment (see A.14b). On faction Wealth 0: all professional units Discipline −1/season. |
+
+Levy service can be extended by paying Wealth −1/season (converting conscripts to paid service). This represents the historical transition from feudal levy to paid army.
+
+**BG simplification:** Levy units auto-disband after 4 seasons unless the faction pays Wealth −1 to extend.
 
 **Battle outcome → faction consequences:** *[FACTION-P2-02 — proposed, EDITORIAL]*
 **Battle outcome → peninsular consequences (PP-647, peninsular_strain_v1.md §3):**

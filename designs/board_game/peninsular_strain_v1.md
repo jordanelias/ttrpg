@@ -459,11 +459,22 @@ Occupation (faction_layer_v30.md §2) and Accord (this document §2) address dif
 |-----------------|-------------------|--------|
 | Military occupation (3-season conversion) | 1 (Resistant) | §2.4 this document |
 | Military Overwhelming (immediate transfer) | 1 (Resistant) | §2.4 this document |
+| Show of Force (military demonstration) | 2 (Compliant) | military_layer_v30 §1.10 |
+| Siege Parley (negotiated surrender) | 2 (Compliant) | military_layer_v30 §1.9c |
 | Treaty cession (negotiated) | 2 (Compliant) | §2.3 this document |
-| Church Seizure (Success) | max(floor(PT/2)+1, 2) | §5.2 this document |
-| Church Seizure (Overwhelming) | floor(PT/2)+2, max 3 | §5.2 this document |
+| Pastoral Assumption (Church vacuum fill) | 2 (Compliant) | settlement_layer_v30 §1.7 |
+| Church Seizure, PT < 3 (imposed against cultural grain) | 1 (Resistant) | §5.2, revised |
+| Church Seizure, PT ≥ 3 (Success) | max(floor(PT/2)+1, 2) | §5.2 this document |
+| Church Seizure, PT ≥ 3 (Overwhelming) | floor(PT/2)+2, max 3 | §5.2 this document |
 | Dynastic Proclamation (Success/OW) | 2 (Compliant) | §5.3 this document |
-| Cultural Reformation (Success/OW) | 2 (Compliant) | §5.4 this document |
+| Cultural Reformation (Success/OW) | 3 (Aligned) | §5.4, revised — population underwent genuine cultural transformation |
+| RM Community Organizing (post-Founding) | 3 (Aligned) | victory_v30 §8 — population self-organized into RM governance |
+
+**Historical grounding (historical_precedents_warfare §5.3):** Accord varies by acquisition method because the *type* of legitimacy determines population acceptance. Military conquest imposes through force (Weber: no legitimacy basis → Resistant). Show of Force / Parley / Treaty involve negotiation (rational acceptance → Compliant). Cultural Reformation and RM represent genuine population transformation (identity shift → Aligned). Church Seizure depends on whether the population was already religiously aligned (PT ≥ 3) or not (PT < 3).
+
+**Note:** Cultural Reformation upgraded from Accord 2 to Accord 3. Rationale: Cultural Reformation takes the longest of any acquisition method (requires sustained cultural investment across multiple seasons). The population didn't just accept new governance — it internalized a new cultural identity. This is the slowest path but produces the best governance outcome, which is the correct incentive structure.
+
+[EDITORIAL: ED-681 — Accord by acquisition method revision. Source: historical_precedents_warfare.md §5.3.]
 
 **Recapture:** The displaced faction may attempt military_advance at -1 Ob (home territory advantage per faction_layer §2.2). If successful, territory returns to their control. Accord resets to 2 (population welcomes return of familiar governance), not the original pre-occupation value.
 

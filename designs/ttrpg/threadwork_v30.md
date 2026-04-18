@@ -739,6 +739,37 @@ The crisis is not punishment. It is the practitioner's existential season.
 
 Rendering Stability advances at Accounting (Cascade Phase). Both TTRPG-sourced changes (from Personal Phase Thread operations) and board-game-sourced changes (from Strategic Phase orders) are applied at the same Accounting. No double-counting; seasonal cap on Rendering Stability change is ±10 per season.
 
+## 5.6 Thread Revelation Curve (campaign_architecture_v1 §4)
+
+As MS drops, Thread becomes progressively visible to non-practitioners. This is the game's master narrative driver — every NPC arc, faction identity, and political alliance is downstream of the revelation curve.
+
+**Starting state (MS ~72):** Threadwork is folklore. Common people consider it old stories. The Church frames Thread phenomena through Solmundic theology. Crown considers it irrelevant. Hafenmark ignores it. Varfell KNOWS (Vaynard's private collection, VTM track). Wardens live it but are marginal.
+
+**The Forgetting (critical context):** The Forgetting radiates from the Southernmost. It is possible to READ about threadwork from surviving books and documents, but it is NOT possible to truly EXPERIENCE or understand threadwork through rational/linguistic means. Thread Sensitivity is experiential, not intellectual. This means RM's cultural revival can reconstruct governance structures but cannot access the metaphysical foundation. People who believe threadwork was real are treated like flat-earth contrarians — correct, but considered insane.
+
+| MS Band | Non-Practitioner Perception | Political Impact |
+|---------|----------------------------|-----------------|
+| 100–80 (Stable) | Nothing. Folklore. | None. Thread is politically irrelevant. |
+| 79–60 (Strained) | Subtle anomalies near T15/T6/T13. Animals behaving strangely. Crop patterns. "The Southernmost is always strange." | Mild unease in border territories. Church explains as "God's testing ground." No political action. |
+| 59–40 (Fragile) | Observable phenomena in Proximity ≤ 2 territories. Gaps visible as physical distortions. People disappear near Gap sites. | Growing fear. Church scrambles to maintain theological framework. Crown must address public safety. Varfell's Thread knowledge becomes politically valuable. RM denial becomes harder to sustain. |
+| 39–20 (Fractured) | Peninsula-wide phenomena. Brief moments where reality looks "thin." Memories feel uncertain. Familiar places seem unfamiliar. Threadcut beings encountered by ordinary people. | **Crisis of understanding.** "The stories were true." Every faction must respond. Church: theological challenge. Crown: governance inadequacy. RM: ideological foundation shakes. Varfell + Wardens gain enormous political relevance. |
+| 19–1 (Critical) | Thread undeniable. Non-practitioners perceive substrate directly in extreme cases. World visibly frays. | **Existential reorientation.** The faction integrating Thread reality into governance fastest gains decisive advantage. |
+
+**Revelation Triggers (accelerate public awareness regardless of MS):** A renowned character performs threadwork publicly. A Threadcut being appears in a populated settlement. Edeyja's Mending produces visible results. Mass battle involving Thread operations. Each trigger produces a mandatory Revelation Event scene — player and relevant NPCs react to Thread becoming more public. NPC Conviction and Certainty determine reaction.
+
+**Faction responses:** Church → theological crisis (Himlensendt's arc). Crown → governance inadequacy (no framework for metaphysical crisis). Hafenmark → legitimacy challenge. Varfell → vindication and opportunity. RM → identity crisis (Embrace/Denial/Schism, see campaign_architecture_v1 §2.4). Wardens → political relevance.
+
+**Hidden Thread-site bonus (historical_precedents_analysis §4.3):** RM governance cells at settlements containing Thread-active sites (former Threadweaving locations, Proximity ≤ 2) receive +0.5 Accord/season, unlabeled in UI. The player observes RM governance working better in certain locations without knowing why. At Thread revelation (MS enters Fragile band or Revelation Trigger fires), the bonus becomes visible and the player understands: the governance model was partly metaphysical.
+
+Branch on RM choice:
+- **Embrace:** Bonus revealed, doubles to +1 Accord/season. RM consciously engages Thread properties.
+- **Denial:** Bonus continues but stays hidden. Governance works but RM refuses to acknowledge why.
+- **Schism:** Embrace faction gets doubled bonus in their settlements. Denial faction loses bonus entirely.
+
+**Thread-active settlement mapping:** A settlement is Thread-active if: (a) it is in a territory with Proximity ≤ 2 to T15 Askeheim, OR (b) it contains a POI tagged as a former Threadweaving site in geography_v30. Current Thread-active settlements: S-010 Stillhelm, S-011 Stillhelm Watch, S-031 Oastad, S-032 Oastad Shrine, S-033 Askeheim Ruins, S-034 Askeheim Gate, S-028 Grauwald (Einhir heritage site), S-029 Grauwald Lodge.
+
+[EDITORIAL: ED-682 — Thread Revelation Curve propagated. Source: campaign_architecture_v1 §4, historical_precedents_analysis §4.3.]
+
 ---
 
 # PART SIX: THREADCUT BEINGS

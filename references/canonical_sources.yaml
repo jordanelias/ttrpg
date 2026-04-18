@@ -345,3 +345,10 @@ systems:
     params: null
     design_doc: null
     notes: "Historical precedent analysis informing Church, RM, invasion, cultural revival mechanics. PP-675."
+
+  historical_precedents_warfare:
+    status: active
+    canonical: references/historical_precedents_warfare.md
+    params: null
+    design_doc: null
+    notes: "Historical precedent analysis for warfare, mustering, territory seizure. PP-676."
