@@ -92,8 +92,9 @@ Three battles per season = −3 MS. Predictable. Cumulative. No spikes. Player c
 | Threadwork Type | Coherence Cost | Rationale |
 |----------------|---------------|-----------|
 | Mending (standard) | 0 | Aligned with substrate coherence. Healing, not violation. |
-| Mending (OW or extended) | 1 | Even aligned work under extreme strain leaves a mark. |
-| Mending (seasonal fatigue) | +1 cumulative Ob per Mending in same season | Fatigue, not corruption. Resets each season. |
+| Mending (OW or extended) | 0 | Corrected — overwork manifests as pool depletion and Ob fatigue, not Coherence cost. See §3.2 note. |
+| Threadwork (all ops, including Mending) — in-scene | Pool −Fibonacci per consecutive op (0/−1/−2/−4/−7/−12D). Resets each scene. | Physical overwork within a contact window. |
+| Threadwork (all ops, including Mending) — cross-scene | +2 Ob per prior threadwork scene this season. Resets each season. | Cumulative seasonal exhaustion from repeated substrate exposure. |
 | Sight (passive) | 0 | Observation doesn't alter flow. |
 | Sight (active/forced) | 1 | Forcing sight into torn areas is against the flow. |
 | Lock | 1 per test | Freezing flow is against substrate nature. |
@@ -101,7 +102,7 @@ Three battles per season = −3 MS. Predictable. Cumulative. No spikes. Player c
 | Extraction | 1–2 (by scale) | Removing from substrate carries cost. |
 | Binding | 2 per test | Imposing permanent constraint. |
 
-Mending at 0 cost means practitioners can Mend sustainably without self-destruction. The seasonal fatigue Ob (+1 cumulative, resets each season) prevents infinite Mending within a single season without invoking Coherence damage.
+Mending at 0 Coherence cost means practitioners can Mend sustainably without self-destruction. Overwork is expressed through two-tier threadwork fatigue (in-scene Fibonacci pool penalty; cross-scene +2 Ob per prior threadwork scene) rather than Coherence drain. The OW Mending row (previously cost 1 Coherence) is corrected to 0 — the overwork cost is already captured by the fatigue mechanics.
 
 ## §3.3 Mending Community
 

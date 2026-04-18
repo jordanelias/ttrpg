@@ -380,7 +380,13 @@ Ob ceiling: 8 (regardless of stacked modifiers).
 
 **Mending Coherence Asymmetry (campaign_architecture_v1 §3.2):** Mending costs 0 Coherence per operation. Rationale: Mending works with the substrate's self-repair tendency, not against it. The practitioner is not imposing their rendering on reality — they are supporting reality's own coherence. This is philosophically distinct from all other Thread operations, which impose the practitioner's will on the substrate.
 
-**Seasonal fatigue limit:** Each consecutive Mending in the same season adds +1 Ob cumulative (fatigue). A practitioner who Mends 4 times in a season rolls at +3 Ob on the fourth attempt. Resets each season. This preserves the physical limit (the work is tiring, not corrosive) without making Mending specialists invulnerable to the Coherence system.
+**Threadwork fatigue (two-tier — applies to all threadwork including Mending):**
+
+*In-scene pool penalty:* Each consecutive threadwork operation in the same scene reduces the pool by a Fibonacci amount. Op 1 = full pool, op 2 = −1D, op 3 = −2D, op 4 = −4D, op 5 = −7D, op 6 = −12D. Pool restores fully at the start of each new scene. This models acute overwork within a contact window.
+
+*Cross-scene Ob fatigue:* Each scene in a season in which threadwork is used adds +2 Ob to all threadwork in subsequent scenes that season. Resets each season. This models cumulative seasonal exhaustion from repeated substrate exposure.
+
+Mending is subject to both mechanics. It does not cost Coherence. The two mechanics together replace the old Mending-specific "+1 Ob cumulative per Mending in same season" rule (struck).
 
 Threadcut being interference: +Ob = being's Thread Sensitivity ÷ 20 (round up), max +4.
 
@@ -396,7 +402,7 @@ Loss per operation cap: −1 max per single operation regardless of combined sou
 | Structural scale op | −2 |
 | FR Lock or Dissolution (any scale) | −1 additional |
 | Past-Oriented Pulling | −1 additional. **Cap applies** (unlike Binding Ops per PP-196). Total POP cost = −1 max regardless of scale. (PP-631, TW-05) Cross-ref: fieldwork_v30 §4.5; POP during fieldwork investigation follows same cap. ED-NEW-15 RESOLVED. |
-| Mending | 0 (asymmetry — campaign_architecture_v1 §3.2; seasonal fatigue +1 Ob cumulative instead) |
+| Mending | 0 (asymmetry — campaign_architecture_v1 §3.2; threadwork fatigue applies instead — see above) |
 | Dissolution residue use | −1 additional (not subject to cap) |
 | History Resonance risk die shows 1 | −1 |
 | Degree table Failure (Relational+ scale) | apply as written |
