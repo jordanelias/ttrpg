@@ -260,7 +260,8 @@ def check_register_health(fetched_with_keys: dict) -> None:
 # ── Core reads ────────────────────────────────────────────────────────────────
 
 def read_files_graphql(paths: list, repo: str = None,
-                       skip_health_check: bool = False) -> dict:
+                       skip_health_check: bool = False,
+                       force_full: bool = False) -> dict:
     """
     Batch-read files from a repo via GraphQL.
 
@@ -274,6 +275,10 @@ def read_files_graphql(paths: list, repo: str = None,
 
     if not paths:
         return {}
+
+    # Auto-skeleton routing for design docs (unless force_full)
+    if not force_full and REPOS[repo].get('enforce_health'):
+        paths = _route_to_skeletons(paths, repo)
 
     aliases = {f"f{i}": p for i, p in enumerate(paths)}
     fields = "\n".join(
@@ -602,6 +607,7 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
 
     import github_ops as _g_mod
     token = _h_mod.assert_bootstrap()
+    _h_mod.context_gate()
     return _g_mod, _h_mod, files, token
 
 
@@ -664,6 +670,69 @@ def fetch_system(system: str, canonical_sources_content: str,
         raise RuntimeError(f"No fetchable paths for '{system}' at depth '{depth}'")
 
     return read_files_graphql(paths, repo=repo, skip_health_check=True)
+
+
+# ── Skeleton routing ─────────────────────────────────────────────────────────
+
+_skeleton_route_cache: dict = {}  # path -> skeleton_path or None
+
+def _route_to_skeletons(paths: list, repo: str) -> list:
+    """
+    For any design doc path that has a committed _skeleton.md,
+    substitute the skeleton path unless force_full=True.
+    Caches mapping in session state.
+    """
+    routed = []
+    for p in paths:
+        if not p.startswith('designs/') or p.endswith('_skeleton.md') or p.endswith('_infill.md'):
+            routed.append(p)
+            continue
+        cache_key = _repo_key(p, repo)
+        if cache_key in _skeleton_route_cache:
+            skel = _skeleton_route_cache[cache_key]
+            routed.append(skel if skel else p)
+        else:
+            # Check if skeleton exists (one API call — cached after first check)
+            skel_path = p[:-3] + '_skeleton.md' if p.endswith('.md') else p + '_skeleton.md'
+            if file_exists(skel_path, repo):
+                _skeleton_route_cache[cache_key] = skel_path
+                routed.append(skel_path)
+                print(f"[SKELETON ROUTE] {p} → {skel_path}")
+            else:
+                _skeleton_route_cache[cache_key] = None
+                routed.append(p)
+    return routed
+
+
+# ── fetch_for_task: single-call task setup ───────────────────────────────────
+
+def fetch_for_task(task_type: str, system: str = None) -> dict:
+    """
+    Single call to load everything a task needs, routed optimally.
+    - Loads task-required files from TASK_REQUIRED_FILES
+    - If system provided, loads skeleton + params (via fetch_system)
+    - Uses skeleton routing by default
+    - Returns {path: content} ready for work
+    """
+    import valoria_hooks as h
+    h.task_gate(task_type)
+
+    paths = h.TASK_REQUIRED_FILES.get(task_type, []).copy()
+    files = read_files_graphql(paths, skip_health_check=True)
+
+    if system:
+        cs = files.get('references/canonical_sources.yaml', '')
+        if not cs:
+            cs_fetch = read_files_graphql(
+                ['references/canonical_sources.yaml'], skip_health_check=True
+            )
+            cs = cs_fetch.get('references/canonical_sources.yaml', '')
+            files.update(cs_fetch)
+        system_files = fetch_system(system, cs, depth='skeleton')
+        files.update(system_files)
+
+    return files
+
 
 # ── CLI smoke test ────────────────────────────────────────────────────────────
 

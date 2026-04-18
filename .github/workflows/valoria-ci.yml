@@ -35,6 +35,10 @@ jobs:
           python -m py_compile tools/broken_dependency_checker.py
           python -m py_compile tools/patch_propagation_checker.py
           python -m py_compile tools/freshness_gate.py
+          python -m py_compile tools/compliance_check.py
+          python -m py_compile tools/atomizer.py
+          python -m py_compile tools/skeleton_gen.py
+          python -m py_compile tools/index_gen.py
           echo "All tools: syntax OK"
 
   # ── EXTERNAL ENFORCEMENT: runs outside Claude, cannot be bypassed ──────────
@@ -147,6 +151,23 @@ jobs:
             references/propagation_map.md
           retention-days: 30
 
+  compliance-check:
+    name: Compliance Check
+    runs-on: ubuntu-latest
+    needs: [register-sizes, hooks-verifier]
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PyYAML
+        run: pip install pyyaml
+      - name: Run compliance check
+        run: python3 tools/compliance_check.py --check-only --repo-state .
+
   skills-lint:
     name: Skills Lint
     runs-on: ubuntu-latest
@@ -185,7 +206,7 @@ jobs:
           hooks="skills/valoria-orchestrator/scripts/valoria_hooks.py"
           fail=0
           for fn in assert_bootstrap task_gate task_gate_with_system editorial_gate \
-                    pre_commit_gate commit_message_gate propose_mechanic_gate \
+                    pre_commit_gate pre_commit_gate_mutating commit_message_gate propose_mechanic_gate \
                     context_gate memory_contamination_guard safe_commit; do
             grep -q "def $fn" "$hooks" \
               || { echo "FAIL: $hooks missing: def $fn"; fail=1; }

@@ -1,0 +1,189 @@
+version: 1
+established: 2026-04-18
+philosophy: |
+  Rules are deterministic. The atomizer must be able to apply them without
+  semantic understanding. If a file requires human judgment to split, it
+  needs a custom split_map file, not a new rule type.
+
+defaults:
+  compliance_check_on_bootstrap: true
+  compliance_check_on_commit: true
+  compliance_check_on_close: true
+  auto_fix_on_violation: true
+  force_skeleton_routing_for_design_docs: true
+  skeleton_threshold_tokens: 5000
+  archive_chunk_max_tokens: 10000
+  unknown_file_warn_tokens: 10000
+  max_auto_fix_iterations: 3
+
+# ── Policies are evaluated top to bottom; first match wins ──
+
+policies:
+
+  # ────────────────────────────────────────────────────────────
+  # SESSION FILES
+  # ────────────────────────────────────────────────────────────
+  - match: "session_log_current.md"
+    max_tokens: 2000
+    on_exceed: "block_commit"
+    on_close: "archive_to"
+    archive_target: "session_log_archive.md"
+
+  - match: "session_log_archive.md"
+    max_tokens: 50000
+    on_exceed: "chunk_by_quarter"
+    chunk_pattern: "session_log_archive_{year}_q{quarter}.md"
+    index_file: "session_log_archive_index.md"
+
+  # ────────────────────────────────────────────────────────────
+  # REGISTERS — patches
+  # ────────────────────────────────────────────────────────────
+  - match: "canon/patch_register_active.yaml"
+    max_tokens: 10000
+    auto_archive_status: [applied, struck, superseded]
+    archive_target_pattern: "canon/patch_register_archive_{range}.yaml"
+    archive_chunk_max: 10000
+    archive_chunk_by: pp_range
+    index_file: "canon/patch_register_index.md"
+    index_max_tokens: 3000
+    regenerate_index_on: [any_change]
+
+  - match: "canon/patch_register_archive*.yaml"
+    max_tokens: 10000
+    on_exceed: "error"
+    read_restriction: "index_first"
+
+  - match: "canon/patch_register_index.md"
+    max_tokens: 3000
+    split_active_only: true
+    regenerate_from: "canon/patch_register_active.yaml"
+
+  # ────────────────────────────────────────────────────────────
+  # REGISTERS — editorial ledger
+  # ────────────────────────────────────────────────────────────
+  - match: "canon/editorial_ledger.yaml"
+    max_tokens: 2000
+    auto_archive_status: [resolved, struck, superseded]
+    archive_target_pattern: "canon/editorial_ledger_archive_{range}.yaml"
+    archive_chunk_max: 10000
+    archive_chunk_by: ed_range
+    index_file: "canon/editorial_ledger_index.md"
+    summary_file: "canon/editorial_ledger_summary.yaml"
+    summary_max_tokens: 1000
+    regenerate_summary_on: [any_change]
+
+  - match: "canon/editorial_ledger_archive*.yaml"
+    max_tokens: 10000
+    on_exceed: "error"
+    read_restriction: "index_first"
+
+  # ────────────────────────────────────────────────────────────
+  # REGISTERS — coverage matrix
+  # ────────────────────────────────────────────────────────────
+  - match: "tests/coverage_matrix.md"
+    max_tokens: 5000
+    archive_threshold: 4500
+    auto_archive_status: [resolved, struck]
+    archive_target_pattern: "tests/coverage_matrix_archive_{range}.md"
+    archive_chunk_max: 10000
+
+  # ────────────────────────────────────────────────────────────
+  # PARAMS FILES — atomized by domain
+  # ────────────────────────────────────────────────────────────
+  - match: "references/params_board_game.md"
+    max_tokens: 5000
+    split_strategy: custom_map
+    split_map: "references/splits/params_board_game_split.yaml"
+    index_replaces_canonical: true
+
+  - match: "references/params_threadwork.md"
+    max_tokens: 5000
+    split_strategy: canonical_vs_superseded
+    superseded_marker: "SUPERSEDED SECTIONS"
+    superseded_target: "references/params_threadwork_superseded.md"
+    superseded_max_tokens: 15000
+
+  - match: "references/params_factions.md"
+    max_tokens: 5000
+    split_strategy: by_level_2_heading
+    split_cap_per_file: 5000
+    target_pattern: "references/params_factions_{slug}.md"
+    index_replaces_canonical: true
+
+  - match: "references/params_mass_combat.md"
+    max_tokens: 8000
+    on_exceed: "flag_for_next_session"
+
+  - match: "references/params_*.md"
+    max_tokens: 10000
+    on_exceed: "flag_for_split"
+    require_rule_above_threshold: true
+
+  # ────────────────────────────────────────────────────────────
+  # ARC REGISTER
+  # ────────────────────────────────────────────────────────────
+  - match: "references/arc_register.md"
+    max_tokens: 5000
+    split_strategy: by_vector_category
+    split_cap_per_file: 10000
+    target_pattern: "references/arcs/arc_register_{category}.md"
+    index_replaces_canonical: true
+    categories:
+      - name: clocks
+        matches: ["I — Clock Vectors"]
+      - name: threads
+        matches: ["II — Thread Vectors"]
+      - name: factions
+        matches: ["III — Faction Vectors"]
+      - name: territory
+        matches: ["IV — Territory Vectors"]
+      - name: events
+        matches: ["V — BG Conviction Events", "VI — Convergence Markers"]
+
+  # ────────────────────────────────────────────────────────────
+  # PROPAGATION MAP
+  # ────────────────────────────────────────────────────────────
+  - match: "references/propagation_map.md"
+    max_tokens: 5000
+    split_strategy: tables_vs_log
+    log_split_marker: "BROKEN DEPENDENCIES"
+    log_target: "references/propagation_log.md"
+    log_max_tokens: 10000
+    log_chunk_pattern: "references/propagation_log_{year}_q{quarter}.md"
+    regenerate_log_index_on: [any_change]
+
+  # ────────────────────────────────────────────────────────────
+  # DESIGN DOCS — skeleton required above threshold
+  # ────────────────────────────────────────────────────────────
+  - match: "designs/**/*.md"
+    exclude_suffix: ["_skeleton.md", "_infill.md"]
+    require_skeleton_above: 5000
+    skeleton_pattern: "{basename}_skeleton.md"
+    infill_pattern: "{basename}_infill.md"
+    on_read: "skeleton_first"
+    skeleton_must_update_on: [any_canonical_change]
+
+  # ────────────────────────────────────────────────────────────
+  # REFERENCE INDEXES — must stay compact
+  # ────────────────────────────────────────────────────────────
+  - match: "references/file_index.md"
+    max_tokens: 8000
+    summary_file: "references/file_index_summary.md"
+    summary_max_tokens: 1000
+
+  - match: "references/design_registry.yaml"
+    max_tokens: 8000
+
+  - match: "references/canonical_sources.yaml"
+    max_tokens: 5000
+
+  # ────────────────────────────────────────────────────────────
+  # CATCH-ALL — flag any unrecognized file above safe size
+  # ────────────────────────────────────────────────────────────
+  - match: "**/*.md"
+    max_tokens: 15000
+    on_exceed: "flag_unknown_pattern"
+
+  - match: "**/*.yaml"
+    max_tokens: 10000
+    on_exceed: "flag_unknown_pattern"

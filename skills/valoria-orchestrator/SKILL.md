@@ -10,6 +10,25 @@ description: >
   Also trigger whenever another Valoria skill needs routing or sequencing.
 ---
 
+## COMPLIANCE IS AUTOMATIC
+
+You do NOT manually run atomization, skeleton generation, register splitting,
+or archive chunking. These are enforced by `compliance_check.py` via hooks.
+
+If bootstrap reports `[COMPLIANCE]` activity, it is handling rule violations.
+Wait for it to complete. Then proceed with Jordan's task.
+
+If bootstrap raises `[COMPLIANCE VIOLATION]` with manual items, those require
+specific content decisions. Report to Jordan — do not guess.
+
+**Never run these tasks manually:**
+- "Atomize X" → compliance auto-splits at threshold
+- "Split this register" → auto-archive on commit
+- "Generate skeleton for Y" → auto-generated when design doc committed
+- "Regenerate the index" → auto-regenerated on any register change
+
+---
+
 ## PROJECT CONTEXT — VIDEOGAME ONLY
 
 **As of 2026-04-17, Valoria is a videogame project.** TTRPG, board game, and hybrid modes are abandoned. All design work targets the Godot 4.3 implementation in `jordanelias/valoria-game`.

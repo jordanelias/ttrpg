@@ -1,0 +1,274 @@
+# params_board_game_split.yaml
+# Maps all headings from references/params_board_game.md to domain files.
+# The original file at references/params_board_game.md becomes the index.
+# All headings must be accounted for — orphans are errors.
+
+index_file: references/params_board_game.md
+
+domain_files:
+
+  - target: references/params_bg_core.md
+    description: "Core rules: factions, dice, degrees, starting values, ceilings"
+    headings:
+      - "FACTION ASSIGNMENT (canonical, v04 B1)"
+      - "Playable Factions"
+      - "NPC-Only Factions (never playable)"
+      - "Dice System (v05 correction)"
+      - "Degree Table (PP-179 + PP-249 — matches TTRPG)"
+      - "Starting Values (v04 B2, PP-188 correction)"
+      - "Faction Starting Stats (v04 B5)"
+      - "Faction Elimination — Territory Status (ED-333 resolved)"
+      - "Stat Ceilings and Floors"
+      - "Standard Action Ob Reference (P-21, v04 B3)"
+      - "Ethical Framework Modifiers (v04 B4)"
+      - "Faction Conviction Texts (PP-181, ED-080/081 resolved 2026-04-03)"
+      - "Batch Card Hand (v04 B3 confirmed — Card-Hand system PP-177)"
+
+  - target: references/params_bg_phases.md
+    description: "Phase structure, resolution priority, accounting"
+    headings:
+      - "Phase 4 Resolution Priority Order (v04 B4 — CORRECTED from stage_bg_proposal_v02 order)"
+      - "Phase 5 Seasonal Accounting (v04 B4 — CORRECTED)"
+      - "Year-End Accounting (every 4th season = Winter, v04 B11)"
+      - "Accounting Phase Reference (PP-180 + v04 B4)"
+
+  - target: references/params_bg_military.md
+    description: "Military: muster, battle, fortify, co-movement, drawn battle"
+    headings:
+      - "Unit Muster Ob Table (from v04 B8 + compilation B6)"
+      - "BG Co-Movement Resolution Protocol (PP-182, ED-086 resolved 2026-04-03 — P-14 compliant)"
+      - "Drawn Battle Rule (PP-180)"
+      - "Ranged Faction Military Modifier (ED-087 resolved 2026-04-03)"
+      - "Co-Movement Card Effects — BG Reference (PP-187)"
+      - "Casus Belli (PP-510)"
+      - "Battle Ob Formula (PP-499, ED-343 resolved)"
+      - "Battle Resolution — Formal Outcome Table (PP-476)"
+      - "Fortify — Pool Stat (ED-338 provisional)"
+      - "Casus Belli — Stacking Cap and Consumption (PP-519)"
+      - "Conflict Marker — Church + Hafenmark Partition (PP-479)"
+
+  - target: references/params_bg_clocks.md
+    description: "Clock environmental effects, cascade depth"
+    headings:
+      - "Clock Environmental Effects (v04 B2)"
+      - "Rendering Stability (RS) Effects"
+      - "Theocracy Clock (TC) Effects"
+      - "Invasion Pressure (IP) Effects"
+      - "Cascade Depth Cap (v04 B4)"
+
+  - target: references/params_bg_victory.md
+    description: "Victory conditions, TCV, co-victory, shared loss, PI"
+    headings:
+      - "Victory Conditions — Pointer"
+      - "Summary (see victory_v30.md §3 for full conditions)"
+      - "Territory Consolidation Values (TCV)"
+      - "Co-Victory Pairings"
+      - "Shared Loss Conditions"
+      - "Hollow Victory — DISSOLVED"
+      - "Public Instability (PI) Thresholds (PP-501, ED-361 resolved)"
+      - "Crown Victory Condition — Redesign (ED-109 resolved 2026-04-03)"
+      - "Total Domination Victory Path (ED-318 RESOLVED)"
+      - "Hollow Victory Mechanics — DISSOLVED (PP-427)"
+      - "Solo/Co-Victory Declaration Priority (PP-524)"
+
+  - target: references/params_bg_tc_seizure.md
+    description: "TC generation, TC 75 seizure, theocracy counter"
+    headings:
+      - "TC Generation — Seasonal (canonical: military_layer_v30 §3, tc_political_redesign_v30 §§1–3)"
+      - "Faction Political Pool (tc_political_redesign_v30 §3.4)"
+      - "TC 75 Territorial Seizure (PP-421 — per victory_v30.md §7)"
+      - "Seizure Ob"
+      - "Seizure Results"
+      - "Seizure Constraints"
+      - "Church Graduated Seizure (PP-494, PP-506–PP-511)"
+      - "Theocracy Counter Starting Value — Canonical"
+      - "TC 75 Seizure — Territorial Seizure (PP-421)"
+      - "TC 75 Seizure — Territory Values — SUPERSEDED"
+      - "TC Threshold Check — Zoom In Interaction (ED-056 resolved 2026-04-03)"
+      - "Church TC Gain — Redesign Required (ED-110 resolved 2026-04-03)"
+
+  - target: references/params_bg_parliament.md
+    description: "Parliament, PI scale, mandate, ministry, crown policy"
+    headings:
+      - "Parliament Integrity (PI) Scale"
+      - "Crown Policy Instrument (PP-180, v04 confirmed)"
+      - "Mandate Recovery (PP-174 — provisional, no v04 basis but not contradicted)"
+      - "Mandate Suppression — General Cap and Coalition Bonus (PP-296)"
+      - "Institutional Mandate Uphold/Appease (PP-189 — v05 names this \"Appease\" not \"Compromise\")"
+      - "PP-189 Final Corrections (v05 authoritative)"
+      - "Ministry Domain Action Conflict (PP-480)"
+      - "Open Pledge System (PP-515)"
+      - "Missed Coalition Penalty — Threshold Clarification (PP-522)"
+      - "Crown-Break Trigger Definition (PP-525)"
+      - "Treaty Betrayal Cascade Timing (PP-523)"
+      - "Diplomatic Alignment — Parliamentary Motion Definition (PP-526)"
+
+  - target: references/params_bg_npcs_special.md
+    description: "Torben, Elske, Riskbreakers, Warden tracks, special characters"
+    headings:
+      - "Torben Loyalty Track (v04 B2 + B5 — PP-188 correction)"
+      - "Elske Off-Board Card (v04 B2)"
+      - "Patience Protocol (Varfell, v04 B5)"
+      - "Riskbreakers (NPC, v04 B13 — reconciled with amendment2)"
+      - "Warden Recognition Track (PP-425 — Varfell Path B)"
+      - "Warden Emergence (v04 B2/B13)"
+      - "Warden Cooperation Track (WC)"
+      - "Warden's Accord (WA)"
+      - "Intel Advancement Counter (PP-180 revised)"
+      - "Command Event — Captured or Killed General (ED-334 + ED-335 resolved)"
+
+  - target: references/params_bg_tracks.md
+    description: "AER, RDT, TD, VTM, trade network, thread mechanics"
+    headings:
+      - "Trade Network Investment — Hafenmark Wealth Sink (PP-178)"
+      - "AER (Altonian Ecclesiastical Relationship) (PP-181, v04 confirmed)"
+      - "RDT (Reformed Doctrine Track) (PP-181, v04 B5 confirmed)"
+      - "TD (Theological Dissatisfaction) (PP-181, v04 B5 confirmed)"
+      - "VTM (Vaynard Thread Mastery) (PP-181, v04 B5 confirmed)"
+      - "Church Excommunication Ob Cap (PP-180)"
+      - "Partial Mend — Thread Wound Risk (PP-184)"
+      - "Church Attention Pool — Per-Territory Rules (PP-185)"
+      - "Hafenmark — RDT/TD Tracks (ED-321 RESOLVED)"
+      - "Reformed Doctrine Track (RDT) — Range 0–5"
+      - "Theological Dissatisfaction (TD) — Range 0–5"
+      - "VTM 5 — Once-Per-Game Tracking (PP-477)"
+
+  - target: references/params_bg_institutions.md
+    description: "Church structure, Löwenritter, Ministry, cardinal succession"
+    headings:
+      - "Church of Solmund — Canonical Structure (PP-194, from original source documents)"
+      - "Four Cardinals (appointed by Holy See)"
+      - "Cardinal Death — Succession (ED-336 resolved)"
+      - "Church Levies"
+      - "Excommunication — Canonical Procedure"
+      - "Löwenritter — Canonical Structure (PP-194)"
+      - "Structure"
+      - "Löwenritter — Reconstitution (ED-331 resolved)"
+      - "Ministry — Canonical Identity (PP-194)"
+      - "Ministry of Guilds — Specific BG Role"
+      - "Parliament Nomination Mechanic (PP-194)"
+      - "Parliament Deposition Mechanic (PP-194 — from canonical source)"
+      - "Parish / Cathedral System — Church (ED-319 RESOLVED)"
+
+  - target: references/params_bg_ministry.md
+    description: "Ministry NPC faction: stats, tokens, AI, PI track"
+    headings:
+      - "Ministry — NPC Faction (PP-193)"
+      - "Ethical Framework: Procedural Consequentialism"
+      - "Ministry Stats"
+      - "Ministry Tokens"
+      - "Parliament Connection — Direct Mechanics"
+      - "Ministry NPC AI Priority Tree (runs at Phase 4, Priority 4 — Domain Actions tier)"
+      - "Ministry Compromise and Corruption"
+      - "Ministry and PI Track — Summary"
+      - "Ministry AP-Token Starting Positions (PP-203)"
+      - "Guilds CP-Token Starting Positions (PP-203)"
+      - "Niflhel Network Starting Depth (PP-203)"
+
+  - target: references/params_bg_geography.md
+    description: "Territory table, adjacency, roads, proximity, southernmost"
+    headings:
+      - "Ducal Geography — RESOLVED (ED-107)"
+      - "Territory Table — Canonical (geography_v30.md)"
+      - "Spiritual Weight (SW) — Territory Attribute (tc_political_redesign_v30 §1)"
+      - "Starting Control — Canonical (geography_v30.md)"
+      - "Adjacency — Canonical (geography_v30.md)"
+      - "Road Network — Canonical (geography_v30.md)"
+      - "Primary Roads"
+      - "Secondary Roads"
+      - "Geographic Trade Notes"
+      - "Altonian Mountain Passes"
+      - "Proximity Ratings (supersedes Southernmost Zones — PP-199)"
+      - "Southernmost Access System (PP-219)"
+      - "Authority: designs/ttrpg/edeyja_npc.md; Philosophical Foundations P-13"
+      - "Expedition Procedure (T6 → T15)"
+      - "Champion TS Values (BG)"
+      - "What \"No Faction Control\" Means in BG"
+      - "Faction Capital Territories — see Territory Table Reconciled (PP-195)"
+      - "Varfell Territorial Expansion Constraint (PP-191)"
+      - "Victory Condition Territory References — SUPERSEDED"
+      - "Varfell Path B — Southernmost Dominion (ED-311 RESOLVED — Option A)"
+
+  - target: references/params_bg_faction_actions.md
+    description: "Faction unique actions (PP-428–442)"
+    headings:
+      - "Faction Unique Actions — Board Game (PP-428–442, 2026-04-07)"
+      - "Church — Piety Spread (PP-428)"
+      - "Church — Active Inquisition (PP-429)"
+      - "Church — Cardinal Focus (PP-430)"
+      - "Hafenmark — Parliamentary Challenge (PP-431 + PP-431-COR)"
+      - "Hafenmark — Parliamentary Session (PP-432)"
+      - "Hafenmark — Diplomat Card (ED-320 RESOLVED)"
+      - "Crown — Royal Charter (PP-433)"
+      - "Crown — Royal Decree Enhancement (PP-435)"
+      - "Crown — Thread Liaison (PP-436)"
+      - "Crown — Diplomatic Outreach to Schoenland (PP-437)"
+      - "Varfell — VTM Discretion (PP-438)"
+      - "Varfell — Revelation Tokens / Path A (PP-439)"
+      - "Varfell — Ethical Framework (PP-440)"
+      - "Varfell — Counter-Narrative (PP-441 + PP-441-COR)"
+      - "Counter-Intelligence Postures (PP-442)"
+
+  - target: references/params_bg_npc_priority_trees.md
+    description: "NPC faction priority trees and NPC patches"
+    headings:
+      - "NPC Faction Priority Trees (from npc_behavior_system_v1.md §8)"
+      - "Priority Tree Template (7 levels)"
+      - "Church Priority Tree"
+      - "Crown Priority Tree"
+      - "Hafenmark Priority Tree"
+      - "Varfell Priority Tree"
+      - "Guilds Priority Tree"
+      - "Löwenritter Priority Tree"
+      - "Niflhel Priority Tree"
+      - "Restoration Movement Priority Tree (Post-Founding)"
+      - "Edeyja/Wardens Priority Tree (Post-Emergence)"
+      - "PP-NPC-01 — Crown Royal Decree Gate (SIM-NPC-01 F-01)"
+      - "PP-NPC-02 — Crown TC Awareness + Coup Counter Refinement (SIM-NPC-01 F-02/F-03)"
+      - "PP-NPC-03 — Church Framework Drift Revision (SIM-NPC-01 F-02)"
+      - "PP-NPC-04 — Varfell Collection Cooldown (SIM-NPC-01 F-06)"
+
+  - target: references/params_bg_ed_resolutions.md
+    description: "ED resolution patches and balance findings"
+    headings:
+      - "Balance Findings — Status Update"
+      - "Concurrent Zoom In — Ordering (ED-072 resolved 2026-04-03)"
+      - "ED-019 Resolution (PP-261) [FLAGGED FOR DESIGNER REVIEW]"
+      - "ED-056 Resolution (PP-268)"
+      - "ED-072 Resolution (PP-269)"
+      - "ED-080 Resolution (PP-270)"
+      - "ED-081 Resolution (PP-271)"
+      - "ED-083 Resolution (PP-272)"
+      - "ED-085 Resolution (PP-273)"
+      - "ED-086 Resolution (PP-274)"
+      - "ED-108 Resolution (PP-277) [FLAGGED FOR DESIGNER REVIEW]"
+      - "ED-109 through ED-113 Resolution (PP-278) [FLAGGED FOR DESIGNER REVIEW]"
+      - "BG Overwhelming Threshold — Final (PP-281 / PP-299)"
+      - "ED-056 Resolution (PP-293) — Zoom In TC Win-Delay Exploit"
+      - "ED-072 Resolution (PP-294) — Concurrent Zoom In Ordering"
+      - "ED-080 Resolution (PP-295) — Baralta Conviction Text [FLAGGED]"
+      - "ED-081 Resolution (PP-296) — Vaynard Conviction Text [FLAGGED]"
+      - "ED-083 Resolution (PP-297) — VTM 5 P-14 Compliance"
+      - "ED-085 Resolution (PP-298) — Reformed Settlement Church Responses [FLAGGED]"
+      - "ED-086 Resolution (PP-299) — BG Co-Movement Resolution Protocol"
+      - "ED-108 Resolution (PP-302) — Crown Territory Names [FLAGGED]"
+      - "ED-109–113 Resolution (PP-303) — BG Balance Adjustments [FLAGGED]"
+      - "ED-142 Resolution (PP-322) — BG Overwhelming Threshold [FLAGGED]"
+      - "BG Overwhelming — Final Ruling (PP-262)"
+
+  - target: references/params_bg_stress_patches.md
+    description: "BG stress test patches and late-session additions"
+    headings:
+      - "BG Stress Test Patches (2026-04-08)"
+      - "Total TCV Correction (PP-470)"
+      - "Restoration Senate Market Restriction (PP-471)"
+      - "Piety Yield Dead Zone — Explicit Note (PP-473)"
+      - "AER >= 3 and Parliamentary Challenge — Independence Clarification (PP-474)"
+      - "Submission + Mandate 0 Ruling (PP-475)"
+      - "Restoration Movement — Founding Mechanic (PP-478)"
+      - "RM Status by Mode"
+      - "Popular Will (PW) Track"
+      - "Founding Trigger (all three at any Accounting, Hybrid mode only)"
+      - "Founding Procedure"
+      - "Community Organising (Restoration, post-Founding)"
+      - "BG-Only Mode Notes"

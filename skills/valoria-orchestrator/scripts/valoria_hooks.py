@@ -56,13 +56,55 @@ def assert_bootstrap() -> str:
         token = g.get_session_token()
         _bootstrap_confirmed = True
         print(f"[HOOK ✓] bootstrap — token: {token}")
-        return token
     except RuntimeError:
         raise RuntimeError(
             "[HOOK VIOLATION] No session token — bootstrap incomplete.\n"
             "read_files_graphql() must be called before any work begins.\n"
             "Re-run the bootstrap block."
         )
+
+    # Compliance check — blocks work if violations exist
+    try:
+        sys.path.insert(0, '/home/claude')
+        import compliance_check as cc
+        violations = cc.check_all()
+        if violations:
+            auto_fixable = [v for v in violations if v.auto_fixable]
+
+            if auto_fixable:
+                print(f"[COMPLIANCE] {len(auto_fixable)} auto-fixable violations. Applying...")
+                additions, msg = cc.auto_fix(auto_fixable, session_commit=False)
+                auth = g._authorize_next_commit()
+                g.atomic_commit(
+                    additions=additions, deletions=[],
+                    message=msg, repo='ttrpg', _auth=auth,
+                )
+                print(f"[COMPLIANCE ✓] Auto-fixes committed.")
+
+            # Re-check after auto-fix
+            remaining = cc.check_all()
+            manual = [v for v in remaining if v.severity == 'error']
+            if manual:
+                raise RuntimeError(
+                    "[COMPLIANCE VIOLATION] Manual intervention required after auto-fix pass:\n"
+                    + cc.report(manual)
+                    + "\nFix these before any other work. No bypass exists."
+                )
+            if remaining:
+                warns = [v for v in remaining if v.severity == 'warn']
+                if warns:
+                    print(f"[COMPLIANCE ⚠] {len(warns)} warning(s) — non-blocking")
+        else:
+            print(f"[COMPLIANCE ✓] All files compliant.")
+    except ImportError:
+        print("[COMPLIANCE] compliance_check.py not found — skipping (pre-Phase 0)")
+    except RuntimeError as e:
+        if 'Cannot load references/atomization_rules.yaml' in str(e):
+            print("[COMPLIANCE] atomization_rules.yaml not deployed — skipping (pre-Phase 0)")
+        else:
+            raise
+
+    return token
 
 
 # ── Hook 2: Task gate ─────────────────────────────────────────────────────────
@@ -260,6 +302,43 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
     print(f"[HOOK ✓] pre_commit_gate ({len(additions)} additions, {len(deletions)} deletions)")
 
 
+def pre_commit_gate_mutating(additions: list, deletions: list = None) -> list:
+    """
+    Like pre_commit_gate but returns augmented additions list.
+    Runs compliance validation and auto-applies fixes to the commit.
+    """
+    # Run standard pre_commit_gate first (editorial, size, co-file checks)
+    pre_commit_gate(additions, deletions)
+
+    # Then run compliance validation on proposed commit
+    try:
+        sys.path.insert(0, '/home/claude')
+        import compliance_check as cc
+        viols = cc.validate_commit(additions, deletions or [])
+
+        auto_viols = [v for v in viols if v.auto_fixable]
+        manual_viols = [v for v in viols if not v.auto_fixable]
+
+        if manual_viols:
+            raise RuntimeError(
+                "[COMPLIANCE VIOLATION] Commit would violate rules:\n"
+                + cc.report(manual_viols)
+            )
+
+        if auto_viols:
+            additions = cc.apply_auto_fixes_to_additions(additions, auto_viols)
+            print(f"[COMPLIANCE ✓] Auto-applied {len(auto_viols)} fixes to commit")
+    except ImportError:
+        pass  # compliance_check not deployed yet
+    except RuntimeError as e:
+        if 'Cannot load references/atomization_rules.yaml' in str(e):
+            pass  # rules not deployed yet
+        else:
+            raise
+
+    return additions
+
+
 # ── Hook 6: Propose mechanic ──────────────────────────────────────────────────
 
 def propose_mechanic_gate(system: str) -> None:
@@ -426,8 +505,8 @@ def safe_commit(additions: list, deletions: list, message: str,
     commit_message_gate(message)
 
     if repo_config.get('enforce_editorial', False):
-        # Full gates for design repo
-        pre_commit_gate(additions, deletions or [])
+        # Full gates for design repo — mutating variant adds compliance co-files
+        additions = pre_commit_gate_mutating(additions, deletions or [])
     else:
         # Godot code: only size sanity check (no editorial/co-file gates)
         errors = []
