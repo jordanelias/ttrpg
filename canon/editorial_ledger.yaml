@@ -243,21 +243,26 @@ entries:
     description: "Cohesion -15 = derived of Stability -1, not independent."
     status: open
     severity: P2
-    - id: ED-706
-      date: 2026-04-19
-      description: "Vaynard Thread Mastery (VTM) struck entirely — no canonical advancement mechanic existed. Varfell victory paths A/B/C + Cultural Reformation pool formula need rewrite."
-      status: open
-      severity: P2
+  - id: ED-706
+    date: 2026-04-19
+    description: "VTM struck entirely — no canonical advancement mechanic existed. Varfell victory paths A/B/C + Cultural Reformation pool formula need rewrite."
+    status: open
+    severity: P2
 
-    - id: ED-707
-      date: 2026-04-19
-      description: "Cultural Reformation (Varfell Colonist action, PP-650) struck — incompatible with Vaynard's military conqueror identity. Varfell expansion is purely military. Faction action list + Varfell ladder + NPC priority trees need rewrite."
-      status: open
-      severity: P2
+  - id: ED-707
+    date: 2026-04-19
+    description: "Cultural Reformation (PP-650) struck — incompatible with Vaynard's military-conqueror identity. Varfell expansion military-only. Faction action list + Varfell ladder + NPC priority trees need rewrite."
+    status: open
+    severity: P2
   - id: ED-708
     date: 2026-04-19
-    description: "VTM-STRIKE cascade — Varfell Path C (Thread Supremacy) dissolved as faction-scale victory condition. Thread mastery is character-scale only. Remaining Varfell paths: A (Intelligence Hegemony) and B (Southernmost Dominion). Win probability rebalance required (PP-663 affects Varfell A/B target viability; Varfell C removed from table)."
+    description: "VTM-STRIKE cascade — Varfell Path C dissolved. Thread mastery is character-scale only. Remaining Varfell paths: A (Intelligence Hegemony), B (Southernmost Dominion). Win probability rebalance required."
     status: open
     severity: P2
     source: PP-663
-
+  - id: ED-709
+    date: 2026-04-19
+    description: "VTM-STRIKE residual cleanup (PP-664) — three files tombstone-bannered in PP-663 but body mechanics unedited. PP-664 patches faction_actions.md (VTM Discretion × 2, Cultural Reformation section), npc_priority_trees.md (Varfell P5 rows × 2), strategic_layer_v30.md (Cascade Test 3, Scenario B via [HISTORICAL EXAMPLE] banners; Scenario A descriptors re-framed; private-tracks list)."
+    status: open
+    severity: P2
+    source: PP-664

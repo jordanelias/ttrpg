@@ -316,7 +316,7 @@ See I-05 above. PATCH P-16 resolves this.
 - Casus Belli: well-defined acquisition and effect. Load ≈ 3/10.
 
 **Systems at moderate load (manageable with reference cards):**
-- Faction-specific private tracks (Player Character, RDT, Thread Depth, AER): four concurrent private tracks across factions. Per-player this is one or two tracks. Load ≈ 3/10. (PP-663: VTM struck.) per player.
+- Faction-specific private tracks (Player Character, RDT, Thread Depth, AER): four concurrent private tracks across factions. (PP-664: VTM removed from track list per PP-663.) Per-player this is one or two tracks. Load ≈ 3/10. (PP-663: VTM struck.) per player.
 
 
 **Systems at elevated load (require careful design attention):**
@@ -391,6 +391,8 @@ But at RDT 6:
 
 ## Cascade Test 3: Varfell Vaynard-scale Thread Operation + Co-Movement + Rendering Stability Trigger (PP-663 re-framed)
 
+> **[HISTORICAL EXAMPLE — PP-664]** The scenario below was constructed when VTM was a live faction track. VTM has been struck from canon (PP-663). The example is preserved to illustrate cascade depth analysis, not as a normative description of current mechanics. For current Thread operations, see `threadwork_v30` — all Thread mastery is character-scale.
+
 **Setup:** Rendering Stability 38 (below 40; Thread operations Ob −1 globally active; but Ob1 floor applies). Varfell Vaynard personal Thread ops available (was VTM 5 — PP-663: faction track struck; test preserved as character-scale scene illustration). Varfell plays Pontifex (Senate Market, Thread operation) in T12. Declares Actualized dimension outcome before drawing (VTM 5 ability): chooses Rendering Stability +1 (stabilize).
 
 **Thread Operation Procedure:**
@@ -446,7 +448,7 @@ Territories Church can seize: any non-Church controlled territory.
 # PART SIX: EMERGENT SCENARIOS (Branching Dice Rolls)
 
 ## SCENARIO A: The Klapp Awakening — Church-Varfell-Wardens Triangle
-*(Season 9, 4-player game. Church Influence 38, Rendering Stability 48, Varfell VTM 3)*
+*(Season 9, 4-player game. Church Influence 38, Rendering Stability 48, Vaynard in T9 — character-scale practitioner presence; PP-664: VTM state descriptor struck with VTM track)*
 
 
 **Klapp Event draws from Named Character Events deck. Card drawn.**
@@ -454,7 +456,7 @@ Territories Church can seize: any non-Church controlled territory.
 Church player now holds Klapp Active State: +1D all Investigate, Heresy Investigations cost 0 Wealth.
 
 **Following Season (Season 10): Klapp Trajectory Choice fires.**
-Varfell VTM 3 is in T9 (adjacent to T3). Trajectory Choice condition met.
+Vaynard (Varfell practitioner) is in T9 (adjacent to T3). Trajectory Choice condition met.
 
 **BRANCH A: Church chooses Trajectory A (Suppress)**
 - Church Influence +1 (Church Influence 39). Klapp card removed.
@@ -470,15 +472,17 @@ Varfell VTM 3 is in T9 (adjacent to T3). Trajectory Choice condition met.
       - **Prosecute:** Church Stability −1. AER −1. Church Influence −2. Klapp removed.
       - **Protect:** Himmensendt Renown −1. Klapp Active 1 more season.
 
-*Assume Varfell VTM 4 in this branch.*
+*Assume Vaynard has advanced character-scale Thread capability in this branch (PP-664: VTM 4 descriptor struck).*
 - Warden Cooperation +1 (now 2). Church Influence −2 (Church Influence 36). Church Stability −1.
 - Church gains limited Thread access: one Senate Market Pontifex/season.
-- Varfell: Tribune Outward in T3 (Spy): Influence 4 + VTM 4 (Casus Belli Ob −1 not applicable here) vs Ob 2. Roll 4d10: 10, 8, 2, 5 → 2+1 = 3 net. Overwhelming. Varfell learns of Trajectory C. Klapp's Awakening Milestone fires: **Restoration + Varfell may now collaborate on [NAME-PENDING: ED-048] Ritual research at Warden Cooperation 2 instead of 3.**
+- Varfell: Tribune Outward in T3 (Spy): Influence 4 (PP-664: VTM dice bonus struck with VTM track) vs Ob 2. Roll 4d10: 10, 8, 2, 5 → 2 net. Success (original OW result was VTM-boosted; re-scored without VTM). Varfell learns of Trajectory C. Klapp's Awakening Milestone fires: **Restoration + Varfell may now collaborate on [NAME-PENDING: ED-048] Ritual research at Warden Cooperation 2 instead of 3.**
 
 
 ---
 
 ## SCENARIO B: Varfell Patience Protocol Climax — Season 14 (PP-663: VTM 4+ gating struck)
+
+> **[HISTORICAL EXAMPLE — PP-664]** Scenario preserved for cascade depth reference. VTM-scaled mechanics struck from canon. Patience Protocol PC spend for VTM advancement no longer exists (PC spend options reduced to Spy — see `params/bg/npcs_special §Patience Protocol`).
 *(Single-player scenario, Varfell player)*
 
 **State:** Player Character 6 (maximum, VTM 4+). Varfell has not played their Tribune in 6 consecutive seasons except once for Senate Market restraint. Mandate 3, Military 4, VTM 4.

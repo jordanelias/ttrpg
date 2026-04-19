@@ -251,3 +251,22 @@ patches:
     - designs/provincial/peninsular_strain_v30.md
   status: applied
   applied_commit: pending
+- id: PP-664
+  date: 2026-04-19
+  severity: P2
+  description: "VTM-STRIKE residual cleanup — completes PP-663. Patches three files
+    where PP-663 added tombstone banners but left bodies unedited: faction_actions.md
+    (VTM Discretion × 2, Cultural Reformation PP-650 section), npc_priority_trees.md
+    (Varfell P5 rows × 2), strategic_layer_v30.md (Cascade Test 3 + Scenario B wrapped
+    in [HISTORICAL EXAMPLE] banners; Scenario A descriptors re-framed; private tracks
+    list corrected). Editorial ledger normalized (ED-706/707 indentation fix). ED-709 raised."
+  finding_id: USER-DIRECTED
+  source: user
+  affects:
+    - params/bg/faction_actions.md
+    - params/bg/npc_priority_trees.md
+    - designs/provincial/strategic_layer_v30.md
+    - canon/editorial_ledger.yaml
+    - references/canonical_sources.yaml
+  status: applied
+  applied_commit: pending

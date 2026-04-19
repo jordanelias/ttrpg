@@ -80,3 +80,19 @@ If broken dependencies are found:
 **Consequences requiring further editorial work:**
 - Varfell win probability rebalance (ED-708) — removal of Path C and change of A/B gates may affect win rates
 - Varfell non-military acquisition toolkit: no replacement for Cultural Reformation. Varfell expansion now military-only. Consider whether this leaves Varfell underpowered vs non-military-expanding rivals (Crown Treaty, Church Seizure, Hafenmark Dynastic Proclamation).
+
+## 2026-04-19 — PP-664 VTM-STRIKE residual cleanup
+
+**Commit:** (this commit)
+**Scope:** completes PP-663 propagation. Three files had tombstone banners added in PP-663 commits but their body mechanics were never edited.
+
+- params/bg/faction_actions.md — VTM Discretion (PP-438) tombstoned in both duplicate sites; Cultural Reformation (PP-650) section tombstoned; Tribune Intel actions "VTM-building" reference corrected in both sites.
+- params/bg/npc_priority_trees.md — Varfell priority tree P5 rows (both duplicates) replaced: "VTM/WR advancement ... VTM ≥ 2" → "WR advancement ... no Varfell unit in T15".
+- designs/provincial/strategic_layer_v30.md — Cascade Test 3 body + Scenario B body wrapped in [HISTORICAL EXAMPLE — PP-664] banners; Scenario A "Varfell VTM 3/4" state descriptors re-framed to character-scale Vaynard presence; Cognitive Load private-tracks list corrected.
+
+**Registers:**
+- canon/editorial_ledger.yaml: ED-706/707 indentation normalized (dedent 2 spaces); ED-708 description compacted; ED-709 added.
+- canon/patch_register_active.yaml: PP-664 entry added.
+- references/canonical_sources.yaml: struck VTM and CR entries updated with committed SHAs (613ebf9, dc13a75) + pending-PP-664 marker.
+
+**Consequences:** none new. Closes PP-663 propagation.

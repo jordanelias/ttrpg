@@ -155,14 +155,11 @@ Roll: Influence vs Ob = current AER level, min 1. Virtue Ethics: −1 Ob.
 
 ---
 
-### Varfell — VTM Discretion (PP-438)
-**Type:** Accounting action. **At VTM 3+.**
-Spend 1 Patience Counter at Accounting to suppress VTM CI contribution for that season.
-**VTM CI contribution (PP-563):** Once VTM is publicly visible (VTM 3+), it generates Church institutional pressure: VTM 3 = +0.5 CI/season; VTM 4 = +1 CI/season; VTM 5 = +1.5 CI/season (applied at Accounting, rounded to nearest 0.5, tracking half-CI fractionally). Matches "low"/"high" labels in Discretion cost text.
-**Cooldown:** Once per 2 consecutive seasons (Discretion Cooldown marker, cleared at Year-End).
-Does not suppress other CI sources.
+### Varfell — VTM Discretion — STRUCK (PP-664, 2026-04-19)
 
-**Cost:** 0 PC at VTM 3 (cooldown-only gate; CI contribution is low). 1 PC at VTM 4+ (CI contribution is high; cost is proportional). (ED-323 resolved 2026-04-08.)
+VTM Discretion dissolved with VTM track (PP-663). Varfell no longer has a Thread-scaled CI suppression action at faction scale. Opposing Thread operations are handled at character scale per `threadwork_v30 §2.6` (PP-632 Opposing Operations) — any faction with a practitioner can contest an opponent's Thread operation; this is no longer Varfell-specific.
+
+**Replacement for VTM CI contribution:** struck. With VTM track dissolved, there is no "publicly visible VTM tier" to generate Church pressure. Church pressure on Varfell now accrues through standard means: Heresy Investigation (`faction_actions §Church`), Niflhel-derived Church Attention Pool (`params/bg/tracks §Church AP`), and territorial Piety Track drift.
 
 ---
 
@@ -176,7 +173,7 @@ Target faction knows they've been revealed (public token).
 
 ### Varfell — Ethical Framework (PP-440)
 **Consequentialism −1 Ob applies to:**
-- Tribune Intel actions (Investigate, Spy, VTM-building, Counter-Narrative)
+- Tribune Intel actions (Investigate, Spy, Counter-Narrative) [PP-664: VTM-building struck with VTM track]
 
 **+1 Ob penalty applies to:**
 - Public ideological campaigns
@@ -371,14 +368,11 @@ Roll: Influence vs Ob = current AER level, min 1. Virtue Ethics: −1 Ob.
 ---
 
 
-### Varfell — VTM Discretion (PP-438)
-**Type:** Accounting action. **At VTM 3+.**
-Spend 1 Patience Counter at Accounting to suppress VTM CI contribution for that season.
-**VTM CI contribution (PP-563):** Once VTM is publicly visible (VTM 3+), it generates Church institutional pressure: VTM 3 = +0.5 CI/season; VTM 4 = +1 CI/season; VTM 5 = +1.5 CI/season (applied at Accounting, rounded to nearest 0.5, tracking half-CI fractionally). Matches "low"/"high" labels in Discretion cost text.
-**Cooldown:** Once per 2 consecutive seasons (Discretion Cooldown marker, cleared at Year-End).
-Does not suppress other CI sources.
+### Varfell — VTM Discretion — STRUCK (PP-664, 2026-04-19)
 
-**Cost:** 0 PC at VTM 3 (cooldown-only gate; CI contribution is low). 1 PC at VTM 4+ (CI contribution is high; cost is proportional). (ED-323 resolved 2026-04-08.)
+VTM Discretion dissolved with VTM track (PP-663). Varfell no longer has a Thread-scaled CI suppression action at faction scale. Opposing Thread operations are handled at character scale per `threadwork_v30 §2.6` (PP-632 Opposing Operations) — any faction with a practitioner can contest an opponent's Thread operation; this is no longer Varfell-specific.
+
+**Replacement for VTM CI contribution:** struck. With VTM track dissolved, there is no "publicly visible VTM tier" to generate Church pressure. Church pressure on Varfell now accrues through standard means: Heresy Investigation (`faction_actions §Church`), Niflhel-derived Church Attention Pool (`params/bg/tracks §Church AP`), and territorial Piety Track drift.
 
 ---
 
@@ -394,7 +388,7 @@ Target faction knows they've been revealed (public token).
 
 ### Varfell — Ethical Framework (PP-440)
 **Consequentialism −1 Ob applies to:**
-- Tribune Intel actions (Investigate, Spy, VTM-building, Counter-Narrative)
+- Tribune Intel actions (Investigate, Spy, Counter-Narrative) [PP-664: VTM-building struck with VTM track]
 
 **+1 Ob penalty applies to:**
 - Public ideological campaigns
@@ -457,22 +451,11 @@ Existing Sanctuary card: extended to also block Varfell 4-PC Spy action once per
 
 ---
 
-## Cultural Reformation (Varfell only) — PP-650, peninsular_strain_v30.md §5.4
+## Cultural Reformation (Varfell only) — STRUCK (PP-664, 2026-04-19; supersedes PP-650, peninsular_strain_v30.md §5.4)
 
-**Card:** Colonist. Once per season.
-**Pool:** Influence + floor(VTM / 2).
-**Ob:** PT + 1 (target territory). PT 0 → Ob 1. PT 3 → Ob 4. PT 5 → Ob 6.
-**Prerequisites:** VTM ≥ 2. Target PT ≤ 3. Target adjacent to Varfell territory OR has Varfell intelligence presence.
+Cultural Reformation dissolved per CR-STRIKE-2026-04-19 (supersession_register). Incompatible with Vaynard's identity as military conqueror. Varfell non-military territorial acquisition is no longer available at faction scale.
 
-| Degree | Effect |
-|--------|--------|
-| Overwhelming | Territory transfers. Accord 2. PT −1 in target. CI −1. |
-| Success | Territory transfers. Accord 2. PT −1. |
-| Partial | No transfer. PT −1 (cultural seed). Varfell gains intelligence presence. |
-| Failure | Varfell Stability −1. CI +1. Church Attention Pool +1. |
-
-**Anti-Altonian:** Territories gained via Reformation: Altonian intel ops +1 Ob.
-**Defensive:** Target may invoke Institutional Mandate (PP-189). Church Counter-Reformation: if Church Prominent in target AND plays Senator same Phase 4, +1 Ob to Reformation.
+**Replacement:** none at faction scale. Varfell expansion is military-only (`faction_actions §Varfell Military`). Character-scale Thread operations remain available per `threadwork_v30` but do not transfer territory.
 
 ---
 
