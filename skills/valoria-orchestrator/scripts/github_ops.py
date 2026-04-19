@@ -415,6 +415,19 @@ def read_files_graphql(paths: list, repo: str = None,
         _session_fetches[key] = content
         output[path] = content
 
+        # Record read depth. If force_full OR path is not a design doc
+        # (designs/.../*.md but not _skeleton.md), it's a full read.
+        # Design docs that got routed to their _skeleton.md variant are
+        # tracked by read_skeleton() when that fires separately.
+        if content is not None:
+            is_design_doc = (
+                path.startswith('designs/')
+                and path.endswith('.md')
+                and not path.endswith('_skeleton.md')
+            )
+            if force_full or not is_design_doc:
+                _full_reads.add(key)
+
     _refresh_token()
     _save_cache()
 
@@ -816,6 +829,10 @@ def _route_to_skeletons(paths: list, repo: str) -> list:
             if file_exists(skel_path, repo):
                 _skeleton_route_cache[cache_key] = skel_path
                 routed.append(skel_path)
+                # Record that the ORIGINAL design doc path was skeleton-routed.
+                # This lets read_depth(original_path) return 'skeleton' even
+                # though the fetch cache holds content under the skeleton path.
+                _skeleton_reads[cache_key] = True
                 print(f"[SKELETON ROUTE] {p} → {skel_path}")
             else:
                 _skeleton_route_cache[cache_key] = None
@@ -883,13 +900,27 @@ def read_skeleton(path: str, repo: str = None) -> list:
     repo = repo or _active_repo
     key = _repo_key(path, repo)
     
-    # Use cached content if available
+    # Use cached content if available. If the path was skeleton-routed on a
+    # prior fetch, the content lives under the routed _skeleton.md key — not
+    # under the original path's key.
     content = _session_fetches.get(key)
     if content is None:
-        fetched = read_files_graphql([path], repo=repo, skip_health_check=True)
-        content = fetched.get(path)
+        # Check if this path has been skeleton-routed this session
+        routed_cached = _skeleton_route_cache.get(key)
+        if routed_cached:
+            content = _session_fetches.get(_repo_key(routed_cached, repo))
         if content is None:
-            raise RuntimeError(f"[SKELETON] File not found: {path} in {repo}")
+            fetched = read_files_graphql([path], repo=repo, skip_health_check=True)
+            # Fetched output may be under routed path; check both
+            content = fetched.get(path)
+            if content is None:
+                # Try routed path
+                for k, v in fetched.items():
+                    if v is not None:
+                        content = v
+                        break
+            if content is None:
+                raise RuntimeError(f"[SKELETON] File not found: {path} in {repo}")
     
     lines = content.splitlines()
     headings = []
@@ -929,6 +960,15 @@ def read_sections(path: str, heading_indices: list, repo: str = None) -> str:
     
     content = _session_fetches.get(key)
     if content is None:
+        # Check skeleton-route cache — content may live under routed path
+        routed = _skeleton_route_cache.get(key)
+        if routed:
+            content = _session_fetches.get(_repo_key(routed, repo))
+            if content is not None:
+                # Update key so section tracking below records against original path
+                # (intentional: sim_gate uses the original path for depth lookups)
+                pass
+    if content is None:
         raise RuntimeError(f"[SECTIONS] File not fetched: {path}. Call read_skeleton() first.")
     
     lines = content.splitlines()
@@ -966,12 +1006,95 @@ def read_sections(path: str, heading_indices: list, repo: str = None) -> str:
     
     extracted = "\n\n".join(result_parts)
     print(f"[SECTIONS] {path}: extracted {len(heading_indices)} sections, ~{len(extracted)//4} tokens (full file: ~{len(content)//4} tokens)")
+
+    # Track section reads. If all headings have been read via sections,
+    # promote to full read.
+    if key not in _section_reads:
+        _section_reads[key] = set()
+    # Only count indices that actually existed in the file
+    valid_indices = {idx for idx in heading_indices if idx in sections}
+    _section_reads[key].update(valid_indices)
+    if len(_section_reads[key]) >= len(headings):
+        _full_reads.add(key)
+
     return extracted
 
 # Skeleton tracking state
 _skeleton_reads: dict = {}
 
+# Read-depth tracking state
+_section_reads: dict = {}  # repo_key -> set of heading indices read via read_sections()
+_full_reads: set = set()   # repo_keys that have been fully read
+
 def was_skeletonized(path: str, repo: str = None) -> bool:
     """Check if a path went through read_skeleton() this session."""
     repo = repo or _active_repo
     return _skeleton_reads.get(_repo_key(path, repo), False)
+
+
+def read_depth(path: str, repo: str = None) -> str:
+    """
+    Return read depth for a path this session:
+      'full'     — full content fetched (non-design doc or force_full=True or all sections read)
+      'sections' — partial read via read_sections() (subset of headings)
+      'skeleton' — only the skeleton was fetched (design doc auto-route)
+      'none'     — not fetched this session
+    """
+    repo = repo or _active_repo
+    key = _repo_key(path, repo)
+
+    if key in _full_reads:
+        return 'full'
+    if key in _section_reads and _section_reads[key]:
+        return 'sections'
+    if key in _skeleton_reads and _skeleton_reads[key]:
+        return 'skeleton'
+    if key in _session_fetches and _session_fetches[key] is not None:
+        # Content present, no tracking — assume full for non-design docs.
+        # Design docs always route through skeleton or sections tracking.
+        _full_reads.add(key)
+        return 'full'
+    return 'none'
+
+
+def read_depth_report(paths: list, repo: str = None) -> dict:
+    """Return {path: depth} for a list of paths. Uses read_depth()."""
+    repo = repo or _active_repo
+    return {p: read_depth(p, repo) for p in paths}
+
+
+def sections_read(path: str, repo: str = None) -> set:
+    """Return set of heading indices read via read_sections() for path."""
+    repo = repo or _active_repo
+    key = _repo_key(path, repo)
+    return set(_section_reads.get(key, set()))
+
+
+def verify_reads_for_task(required_paths: list, repo: str = None,
+                          require_depth: str = 'full') -> list:
+    """
+    Cross-reference required_paths against what was read this session.
+
+    require_depth:
+      'full'     — require full read (default for sim)
+      'sections' — sections or full count
+      'any'      — any depth including skeleton counts
+
+    Returns list of (path, depth) for paths that fail the requirement.
+    Empty list = all requirements met.
+    """
+    if require_depth not in ('full', 'sections', 'any'):
+        raise ValueError(f"require_depth must be 'full', 'sections', or 'any'; got '{require_depth}'")
+    failures = []
+    for path in required_paths:
+        depth = read_depth(path, repo)
+        if require_depth == 'full':
+            if depth != 'full':
+                failures.append((path, depth))
+        elif require_depth == 'sections':
+            if depth not in ('full', 'sections'):
+                failures.append((path, depth))
+        else:  # 'any'
+            if depth == 'none':
+                failures.append((path, depth))
+    return failures

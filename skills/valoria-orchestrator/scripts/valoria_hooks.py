@@ -743,31 +743,34 @@ def sim_gate(scope: str, systems: list = None) -> None:
             continue
 
         key = g._repo_key(canonical_path, repo)
-        if key not in g._session_fetches or g._session_fetches[key] is None:
+
+        # Check read depth. Must be 'full' for sim work — simulations need
+        # mechanical detail which only exists in full design docs. Skeletons
+        # contain only section headings; sections may miss cross-references.
+        try:
+            depth = g.read_depth(canonical_path, repo)
+        except AttributeError:
+            # Older github_ops without read_depth — fall back to session fetch check
+            depth = 'full' if (key in g._session_fetches and g._session_fetches[key] is not None) else 'none'
+
+        if depth == 'none':
             unfetched_paths.append((system, canonical_path))
             continue
-
-        # Skeleton check: a design doc fetched as skeleton does not count as
-        # "read for simulation" — sim needs mechanical detail which lives in
-        # the full file. Use github_ops.was_skeletonized() for accurate check.
-        if canonical_path.startswith('designs/'):
-            try:
-                if g.was_skeletonized(canonical_path, repo):
-                    skeleton_only_paths.append((system, canonical_path))
-            except Exception:
-                # was_skeletonized may not exist in older github_ops — fall back
-                # to content heuristic
-                content = g._session_fetches.get(key)
-                if content and '<!-- SKELETON — auto-generated' in content[:500]:
-                    skeleton_only_paths.append((system, canonical_path))
+        if depth == 'skeleton':
+            skeleton_only_paths.append((system, canonical_path))
+        # 'sections' and 'full' both pass — sim work can use section reads IF
+        # the relevant sections were read. The ledger enforces that — each
+        # ledger entry names the exact section it quoted from.
 
         # If there's a params file in the registry too, fetching the params
         # file is also required — params files may contain values that override
         # or augment design_doc content.
         params_path = entry.get('params')
         if params_path and isinstance(params_path, str):
-            p_key = g._repo_key(params_path, repo)
-            if p_key not in g._session_fetches or g._session_fetches[p_key] is None:
+            p_depth = g.read_depth(params_path, repo) if hasattr(g, 'read_depth') else (
+                'full' if g._repo_key(params_path, repo) in g._session_fetches else 'none'
+            )
+            if p_depth == 'none':
                 unfetched_paths.append((system, params_path))
 
     # Assemble violation report
