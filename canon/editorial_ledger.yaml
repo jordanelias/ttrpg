@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 699
+# next_id: 700
 
 
 
@@ -8,6 +8,15 @@
 
 
 
+
+
+
+  - id: ED-699
+    date: 2026-04-18
+    description: "Phase 3 complete: 14 remaining P3 items resolved. Combat deprecated ref (3.3), Stamina merge proposal (3.4), Social Contest §1 prose (3.5), N-Way graduated collapse proposal (3.6), Independent path documented (3.7), Crisis weighting proposal (3.8), Coherence→Recall verified (3.10), §A.5 dedup (3.12), T6 assigned (3.13), Echo cap verified (3.14), Deflection Ob verified (3.15), Thread-Read ×0.5 proposal (3.16), Accord cross-ref (3.17), NPE convergence simulated (3.18)."
+    status: resolved
+    severity: P3
+    affects: [designs/scene/combat_v30.md, designs/scene/social_contest_v30.md, designs/provincial/mass_battle_v30.md]
 
 
   - id: ED-698

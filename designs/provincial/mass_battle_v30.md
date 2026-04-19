@@ -222,7 +222,6 @@ execution rolls. A 2-wound general has tactic success probability halved.
 
 **Coherence does not affect Command (PP-249):** Coherence is a Thread perceptual track; Command is tactical effectiveness. Dissonance impairs Thread operations only. No Coherence penalty applies to Command tactic rolls.
 
-**Coherence does not affect Command (PP-249):** Coherence is a Thread perceptual track; Command is tactical effectiveness. Dissonance impairs Thread operations only. No Coherence penalty applies to Command tactic rolls.
 
 **Mass battle pauses during personal combat.** If general enters personal
 combat, mass battle holds at current state. Resume at Phase 1 of next mass
