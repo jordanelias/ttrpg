@@ -17,6 +17,8 @@ import github_ops as g
 
 _bootstrap_confirmed = False
 _task_gates_passed   = set()
+_checkpoint_written_this_session = False
+_soft_warn_issued = False
 
 EDITORIAL_PATHS = (
     'designs/npcs/',
@@ -30,8 +32,10 @@ EDITORIAL_MARKERS = ('[EDITORIAL:', '[PROVISIONAL:', '[EDITORIAL GATE]')
 VALID_SCOPES    = {'editorial','patch','simulation','compilation','infrastructure','skill','cleanup','godot','phase','fix','bugfix'}
 COMMIT_FORMAT   = re.compile(r'^\[(editorial|patch|simulation|compilation|infrastructure|skill|cleanup|godot|phase|fix|bugfix)\] .{10,}')
 
-CONTEXT_WARN    = 140_000
-CONTEXT_HARD    = 180_000
+CONTEXT_SOFT              = 120_000   # 60% — plan handoff
+CONTEXT_CHECKPOINT_HARD   = 150_000   # 75% — commit checkpoint now
+CONTEXT_HARD              = 180_000   # 90% — hard close (existing)
+CONTEXT_WARN              = CONTEXT_SOFT  # alias for backward compat
 
 TASK_REQUIRED_FILES = {
     "simulation":      ["references/canonical_sources.yaml", "canon/02_canon_constraints.md"],
@@ -397,27 +401,6 @@ _SYSTEM_OVERHEAD_TOKENS = 50_000
 # conversation turns (30 avg * 1000 = 30k), tool output tokens (~3k buffer), safety margin (~3k).
 # Conservative by design — real usage is higher. When in doubt, close earlier.
 
-def context_gate() -> None:
-    """
-    Estimate context usage. Hard stop at 90% (180k), warn at 70% (140k) of 200k window.
-    Counts fetched file content + fixed overhead. Lower-bound — real usage is higher.
-    Call at session start and every ~10 tool calls.
-    """
-    fetch_tokens = sum(len(c) for c in g._session_fetches.values() if c) // 4
-    total        = fetch_tokens + _SYSTEM_OVERHEAD_TOKENS
-
-    if total >= CONTEXT_HARD:
-        raise RuntimeError(
-            f"[HOOK VIOLATION] Context hard stop: ~{total:,} estimated tokens\n"
-            f"  (fetches: {fetch_tokens:,} + overhead: {_SYSTEM_OVERHEAD_TOKENS:,})\n"
-            f"Run Session Close Protocol immediately."
-        )
-    elif total >= CONTEXT_WARN:
-        print(f"[HOOK ⚠] Context ~{total:,} tokens (warn threshold). "
-              f"Complete current stage then close.")
-    else:
-        print(f"[HOOK ✓] context_gate: ~{total:,} estimated tokens "
-              f"(fetches {fetch_tokens:,} + overhead {_SYSTEM_OVERHEAD_TOKENS:,})")
 
 
 # ── Hook 8: Memory contamination guard ───────────────────────────────────────
@@ -1002,3 +985,345 @@ def sim_fabrication_check(additions: list) -> None:
         raise RuntimeError("\n".join(lines))
 
     print(f"[HOOK ✓] sim_fabrication_check ({len(sim_files)} sim files, all constants cited)")
+
+
+# ── Checkpoint artifact schema ────────────────────────────────────────────────
+
+CHECKPOINT_PATH = 'canon/session_checkpoint.md'
+
+# A checkpoint is a machine-readable yaml frontmatter + human-readable body.
+# The format:
+#
+#   ---
+#   schema_version: 1
+#   session_token: <16-char hex>
+#   created_at: <ISO8601 UTC>
+#   status: active | closed | stale
+#   task_scope: <string describing the session's task>
+#   context_tokens_at_checkpoint: <int>
+#   files_verified: [<path>, ...]
+#   sim_ledger_path: /home/claude/sim_verification_ledger.json  # if sim work
+#   commits_this_session: [<oid>, ...]
+#   completed: [<work item>, ...]
+#   pending: [<work item, ordered>]
+#   decisions_made: [<decision>, ...]
+#   open_questions: [<question>, ...]
+#   next_bootstrap_actions: [<action>, ...]
+#   ---
+#   # Session Checkpoint — <date>
+#
+#   <human-readable narrative: what was done, what's next, why stopped>
+
+def write_checkpoint(task_scope: str,
+                     files_verified: list = None,
+                     completed: list = None,
+                     pending: list = None,
+                     decisions: list = None,
+                     open_questions: list = None,
+                     next_actions: list = None,
+                     commits: list = None,
+                     narrative: str = "",
+                     sim_ledger: bool = False) -> str:
+    """
+    Write a session checkpoint to GitHub at CHECKPOINT_PATH.
+
+    Required on context_gate() hitting CONTEXT_CHECKPOINT_HARD (75%).
+    Recommended at CONTEXT_SOFT (60%) to avoid rushed checkpoints at 75%.
+
+    Returns the commit OID.
+
+    Must be called AFTER bootstrap. task_scope is the single-line description
+    of what this session is doing (e.g. "sim_gate + flush protocol build").
+
+    This function commits DIRECTLY via atomic_commit (not safe_commit) because:
+    - safe_commit requires task_gate, which may not have been called yet
+    - checkpoints are metadata about the session, not task output
+    - checkpoint commits use a dedicated '[infrastructure]' scope
+    """
+    global _checkpoint_written_this_session
+
+    if not _bootstrap_confirmed:
+        raise RuntimeError(
+            "[HOOK VIOLATION] write_checkpoint() before assert_bootstrap()."
+        )
+
+    from datetime import datetime, timezone
+    import json as _json
+
+    token = g.get_session_token()
+    fetch_tokens = sum(len(c) for c in g._session_fetches.values() if c) // 4
+    total_tokens = fetch_tokens + _SYSTEM_OVERHEAD_TOKENS
+
+    frontmatter = {
+        'schema_version': 1,
+        'session_token': token,
+        'created_at': datetime.now(timezone.utc).isoformat(),
+        'status': 'active',
+        'task_scope': task_scope,
+        'context_tokens_at_checkpoint': total_tokens,
+        'files_verified': files_verified or [],
+        'sim_ledger_present': sim_ledger,
+        'commits_this_session': commits or [],
+        'completed': completed or [],
+        'pending': pending or [],
+        'decisions_made': decisions or [],
+        'open_questions': open_questions or [],
+        'next_bootstrap_actions': next_actions or [],
+    }
+
+    # Build markdown
+    import yaml
+    yaml_block = yaml.safe_dump(frontmatter, default_flow_style=False,
+                                sort_keys=False, allow_unicode=True)
+    body_parts = [
+        '---', yaml_block.strip(), '---', '',
+        f'# Session Checkpoint — {datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")}',
+        '',
+        f'**Task scope:** {task_scope}',
+        f'**Session token:** `{token}`',
+        f'**Context at checkpoint:** ~{total_tokens:,} tokens',
+        '',
+    ]
+
+    if narrative:
+        body_parts.extend([
+            '## Narrative',
+            '',
+            narrative.strip(),
+            '',
+        ])
+
+    if completed:
+        body_parts.extend([
+            '## Completed this session',
+            '',
+            *[f'- {item}' for item in completed],
+            '',
+        ])
+
+    if pending:
+        body_parts.extend([
+            '## Pending (in order)',
+            '',
+            *[f'{i+1}. {item}' for i, item in enumerate(pending)],
+            '',
+        ])
+
+    if decisions:
+        body_parts.extend([
+            '## Decisions made',
+            '',
+            *[f'- {item}' for item in decisions],
+            '',
+        ])
+
+    if open_questions:
+        body_parts.extend([
+            '## Open questions',
+            '',
+            *[f'- {item}' for item in open_questions],
+            '',
+        ])
+
+    if next_actions:
+        body_parts.extend([
+            '## Next bootstrap actions',
+            '',
+            '*(When a new session bootstraps, these are the first steps to take.)*',
+            '',
+            *[f'{i+1}. {item}' for i, item in enumerate(next_actions)],
+            '',
+        ])
+
+    content = '\n'.join(body_parts) + '\n'
+
+    # Commit directly — checkpoint is infrastructure metadata
+    auth = g._authorize_next_commit()
+    oid = g.atomic_commit(
+        additions=[(CHECKPOINT_PATH, content)],
+        deletions=[],
+        message=f'[infrastructure] checkpoint — {task_scope[:60]}',
+        repo='ttrpg',
+        _auth=auth,
+    )
+    print(f"[HOOK ✓] checkpoint written → {oid} ({total_tokens:,} tokens at checkpoint)")
+    return oid
+
+
+def close_checkpoint() -> str:
+    """
+    Mark the active checkpoint as closed. Called at session close after
+    the final session_log_current.md commit.
+
+    Returns the commit OID of the close, or None if no active checkpoint.
+    """
+    files = g.read_files_graphql([CHECKPOINT_PATH])
+    current = files.get(CHECKPOINT_PATH)
+    if not current:
+        return None  # nothing to close
+
+    import yaml
+    # Parse frontmatter
+    if not current.startswith('---'):
+        return None
+    parts = current.split('---', 2)
+    if len(parts) < 3:
+        return None
+    try:
+        fm = yaml.safe_load(parts[1]) or {}
+    except Exception:
+        return None
+
+    if fm.get('status') == 'closed':
+        return None  # already closed
+
+    fm['status'] = 'closed'
+    from datetime import datetime, timezone
+    fm['closed_at'] = datetime.now(timezone.utc).isoformat()
+
+    new_yaml = yaml.safe_dump(fm, default_flow_style=False, sort_keys=False,
+                              allow_unicode=True)
+    new_content = '---\n' + new_yaml.strip() + '\n---' + parts[2]
+
+    auth = g._authorize_next_commit()
+    oid = g.atomic_commit(
+        additions=[(CHECKPOINT_PATH, new_content)],
+        deletions=[],
+        message='[infrastructure] checkpoint closed — session complete',
+        repo='ttrpg',
+        _auth=auth,
+    )
+    print(f"[HOOK ✓] checkpoint closed → {oid}")
+    return oid
+
+
+def read_active_checkpoint() -> dict:
+    """
+    If canon/session_checkpoint.md exists and has status=active, return its
+    parsed frontmatter as a dict. Otherwise return None.
+
+    Called at bootstrap to allow sessions to resume from the last checkpoint
+    instead of starting cold.
+    """
+    try:
+        files = g.read_files_graphql([CHECKPOINT_PATH])
+        content = files.get(CHECKPOINT_PATH)
+    except Exception:
+        return None
+    if not content or not content.startswith('---'):
+        return None
+    parts = content.split('---', 2)
+    if len(parts) < 3:
+        return None
+    import yaml
+    try:
+        fm = yaml.safe_load(parts[1]) or {}
+    except Exception:
+        return None
+    if fm.get('status') != 'active':
+        return None
+    return fm
+
+
+# ── New context_gate with three tiers ─────────────────────────────────────────
+
+def context_gate() -> None:
+    """
+    Estimate context usage against three tiers:
+      60% (CONTEXT_SOFT)            — warn: plan handoff; write a draft checkpoint soon
+      75% (CONTEXT_CHECKPOINT_HARD) — require: checkpoint must be written this session
+      90% (CONTEXT_HARD)            — hard stop: session close protocol only
+
+    At 75%, raises RuntimeError unless write_checkpoint() has been called.
+    At 90%, raises RuntimeError regardless.
+
+    Call at session start and every ~10 tool calls.
+    """
+    global _soft_warn_issued
+
+    fetch_tokens = sum(len(c) for c in g._session_fetches.values() if c) // 4
+    total = fetch_tokens + _SYSTEM_OVERHEAD_TOKENS
+
+    if total >= CONTEXT_HARD:
+        raise RuntimeError(
+            f"[HOOK VIOLATION] Context hard stop: ~{total:,} estimated tokens\n"
+            f"  (fetches: {fetch_tokens:,} + overhead: {_SYSTEM_OVERHEAD_TOKENS:,})\n"
+            f"Run Session Close Protocol immediately. Do not begin new work.\n"
+            f"Close: commit final state, update session_log_current.md, close_checkpoint()."
+        )
+
+    if total >= CONTEXT_CHECKPOINT_HARD:
+        if not _checkpoint_written_this_session:
+            raise RuntimeError(
+                f"[HOOK VIOLATION] Context at ~{total:,} tokens (75% threshold).\n"
+                f"A checkpoint MUST be written before any further work.\n\n"
+                f"Call h.write_checkpoint(task_scope='...', completed=[...], pending=[...])\n"
+                f"The checkpoint commits to canon/session_checkpoint.md and allows a new\n"
+                f"session to resume this work instead of starting cold.\n\n"
+                f"After writing the checkpoint, this gate will let you continue — but\n"
+                f"the right move is to close the session now and start fresh."
+            )
+        else:
+            print(f"[HOOK ⚠] Context ~{total:,} tokens (75%). Checkpoint written — "
+                  f"continuing is OK but handoff is imminent.")
+        return
+
+    if total >= CONTEXT_SOFT:
+        if not _soft_warn_issued:
+            print(f"[HOOK ⚠] Context ~{total:,} tokens (60% threshold).\n"
+                  f"  Plan for handoff. Consider calling h.write_checkpoint() at the\n"
+                  f"  next clean stopping point. At 75% a checkpoint is mandatory.")
+            _soft_warn_issued = True
+        else:
+            print(f"[HOOK ⚠] Context ~{total:,} tokens (soft threshold still exceeded)")
+        return
+
+    print(f"[HOOK ✓] context_gate: ~{total:,} estimated tokens "
+          f"(fetches {fetch_tokens:,} + overhead {_SYSTEM_OVERHEAD_TOKENS:,})")
+
+
+# ── Bootstrap helper: resume prompt ───────────────────────────────────────────
+
+def prompt_resume_from_checkpoint() -> None:
+    """
+    Called at bootstrap. If an active checkpoint exists, print its summary
+    and return it so the orchestrator can decide whether to resume.
+
+    Does NOT auto-resume — user must confirm. That's the session-start protocol:
+      Message 1 = bootstrap, print checkpoint status, stop.
+      Message 2 = user confirms resume, or sends new task.
+    """
+    cp = read_active_checkpoint()
+    if not cp:
+        return None
+
+    print("\n" + "=" * 50)
+    print("ACTIVE CHECKPOINT FOUND")
+    print("=" * 50)
+    print(f"Task scope:       {cp.get('task_scope', '?')}")
+    print(f"Session token:    {cp.get('session_token', '?')}")
+    print(f"Created:          {cp.get('created_at', '?')}")
+    print(f"Files verified:   {len(cp.get('files_verified', []))}")
+    print(f"Commits:          {len(cp.get('commits_this_session', []))}")
+    print(f"Pending items:    {len(cp.get('pending', []))}")
+
+    pending = cp.get('pending', [])
+    if pending:
+        print("\nPending work (in order):")
+        for i, item in enumerate(pending[:5], 1):
+            print(f"  {i}. {item}")
+        if len(pending) > 5:
+            print(f"  ... and {len(pending) - 5} more")
+
+    next_actions = cp.get('next_bootstrap_actions', [])
+    if next_actions:
+        print("\nNext bootstrap actions:")
+        for i, a in enumerate(next_actions[:3], 1):
+            print(f"  {i}. {a}")
+
+    print("=" * 50)
+    print("To resume: confirm with Jordan, then fetch needed files and continue.")
+    print("To start fresh: close_checkpoint() before beginning new work.")
+    print("=" * 50 + "\n")
+
+    return cp

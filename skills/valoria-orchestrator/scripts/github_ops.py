@@ -269,6 +269,8 @@ def _authorize_next_commit() -> str:
 
     Caller verification via inspect.stack():
     - valoria_hooks.safe_commit()
+    - valoria_hooks.assert_bootstrap() (compliance auto-fix)
+    - valoria_hooks.write_checkpoint() / close_checkpoint() (session checkpoints)
     - github_ops.safe_session_close()
     - github_ops.append_to_register()
     - Direct bash_tool calls (<stdin>, /tmp, <string>) for infrastructure work
@@ -278,6 +280,7 @@ def _authorize_next_commit() -> str:
     approved = (
         (caller_fn == 'safe_commit' and 'valoria_hooks' in caller_file) or
         (caller_fn == 'assert_bootstrap' and 'valoria_hooks' in caller_file) or
+        (caller_fn in ('write_checkpoint', 'close_checkpoint') and 'valoria_hooks' in caller_file) or
         (caller_fn in ('safe_session_close', 'append_to_register') and 'github_ops' in caller_file) or
         ('<stdin>' in caller_file or caller_file.startswith('/tmp') or caller_file == '<string>')
     )
