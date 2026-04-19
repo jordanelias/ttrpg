@@ -259,3 +259,27 @@ Rationale: the configuration has already changed state — the new object is a d
 mechanical entity. OA penalizes repeated intervention on the SAME configuration,
 not downstream consequences of that intervention.
 
+## Mending Community Quality Tiers (Edeyja / Distributed Practice)
+
+Mending is not exclusively individual. The Edeyja (Warden collective) practices distributed Mending — multiple practitioners working the same substrate region across seasons. Community Mending quality is determined by the practitioners' collective Spirit stat, which governs attunement to the substrate.
+
+| Tier | Spirit Threshold | Mending Quality | Effect |
+|------|-----------------|-----------------|--------|
+| Novice | Spirit < 3 | Uncertain | Mending Ob +1. Failed Mending produces no RS penalty (practitioner's touch is too light to damage). |
+| Competent | Spirit 3–4 | Reliable | Standard Mending Ob. Failed Mending RS −2 as normal. |
+| Adept | Spirit 5–6 | Precise | Mending Ob −1 (minimum 1). Success produces RS +2 (instead of +1). |
+| Master | Spirit 7+ | Resonant | Mending Ob −1 (minimum 1). Success produces RS +2. Overwhelming closes Gap AND reduces Ob of adjacent Gaps by 1 (substrate healing propagates). |
+
+**Collective Mending (2+ practitioners on same Gap):**
+- Each additional practitioner adds +1D to the primary's Mending pool (cap: +3D from assistants).
+- Assistants must be Competent tier or above. Novice assistants do not contribute dice.
+- All participants use the primary practitioner's Coherence track for the operation (Mending costs 0 Coherence per asymmetry — this is free for all participants).
+- Seasonal fatigue Ob (+1 per consecutive Mending/season) applies independently per practitioner. An assistant fatigued from their own Mending still contributes +1D but the primary's fatigue is what governs the roll Ob.
+
+**Edeyja Mending Sanctuary (settlement-level):**
+When Wardens declare a Mending Sanctuary at a settlement (requires WC ≥ 2 and Outpost settlement near the Southernmost), the settlement gains:
+- RS +1/season passive (Edeyja distributed Mending operating continuously)
+- All Mending operations within the territory: Ob −1 (stacks with tier bonus, minimum 1)
+- Thread practitioners visiting the Sanctuary may train Mending at +1 advancement rate
+
+This is the mechanical expression of WC 3 → RS +2/season (see Warden Cooperation track above). The +2 comes from the Sanctuary's +1 passive plus Edeyja's personal Mending contributions averaging +1/season.
