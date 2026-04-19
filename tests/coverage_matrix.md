@@ -263,3 +263,16 @@ Critical gaps blocking valid simulation:
 
 Previous 11 NPC PC campaign results (a6f468ee) are NOT valid for balance testing.
 Engine rebuild required before iterative NPC simulations.
+
+## TC/CI/TCV Cross-Document Conflicts — 2026-04-18
+
+7 conflicts identified. Engine rebuild blocked pending editorial resolution.
+Full register: tests/audit/tc_tcv_conflict_register_2026-04-18.md
+
+1. TC freeze at 75 vs TC runs to 100 (5 docs disagree)
+2. TC vs CI naming (campaign_architecture uses CI)
+3. Seizure availability threshold (TC 15 vs TC 40 vs any)
+4. Seizure Ob formula (7−PT vs 2+Fort+max(0,3−PT))
+5. TCV values for T8/T9 (T9=5 vs T9=3)
+6. TC 100 event mechanics (Unification vs Mass Seizure)
+7. Church victory condition (existing vs TC 100 only)
