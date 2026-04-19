@@ -1,7 +1,6 @@
 # Valoria Editorial Ledger — Active
-# next_id: 704
+# next_id: 706
 # Rebuilt 2026-04-19. Lost IDs: ED-670-672, ED-698-703.
-# ED-620,624,628,643 resolved (victory_v30) — in archive.
 
 entries:
 
@@ -19,7 +18,7 @@ entries:
 
   - id: ED-587
     date: 2026-04-16
-    description: "Stability Crisis Zoom In trigger absent. Proposed: Stability drops <= 2 OR drops >= 2 in one Accounting."
+    description: "Stability Crisis Zoom In trigger absent. Proposed: Stability drops <= 2 OR drops >= 2 i..."
     status: open
     severity: P2
 
@@ -103,115 +102,99 @@ entries:
 
   - id: ED-632
     date: 2026-04-17
-    description: "Shadow Renown: referenced in faction_politics_expanded (REN-03) but no implementation — no track, no unlock condition..."
+    description: "Shadow Renown: referenced in faction_politics_expanded (REN-03) but no implementation —..."
     status: open
     severity: P1
-    affects: [designs/systems/faction_politics_expanded_v1.md, designs/systems/player_agency_v30.md]
 
   - id: ED-633
     date: 2026-04-17
-    description: "Deniability Debt (Riskbreaker): referenced in faction_politics_expanded §2.2 as 'stage13 mechanic, retained' but not ..."
+    description: "Deniability Debt (Riskbreaker): referenced in faction_politics_expanded §2.2 as 'stage1..."
     status: open
     severity: P1
-    affects: [designs/systems/faction_politics_expanded_v1.md]
 
   - id: ED-640
     date: 2026-04-17
-    description: "Hafenmark Militia sub-rank ladder (equivalent to Löwenritter Knight, internal to Hafenmark Martial-branch Parliamenta..."
+    description: "Hafenmark Militia sub-rank ladder (equivalent to Löwenritter Knight, internal to Hafenm..."
     status: open
     severity: P2
-    affects: [designs/systems/faction_politics_expanded_v1.md]
 
   - id: ED-642
     date: 2026-04-17
-    description: "Guild Grand Guildmaster rank (Std 6) — confirm whether this rank exists or is omitted per collective-leadership design."
+    description: "Guild Grand Guildmaster rank (Std 6) — confirm whether this rank exists or is omitted p..."
     status: open
     severity: P2
-    affects: [designs/systems/faction_politics_expanded_v1.md]
 
   - id: ED-644
     date: 2026-04-17
-    description: "CV≡PT terminology: same per-territory stat. Full rename (conviction_track_v30 → piety_track_v30, CV → PT throughout) ..."
+    description: "CV≡PT terminology: same per-territory stat. Full rename (conviction_track_v30 → piety_t..."
     status: open
     severity: P2
-    affects: [designs/conviction_track/conviction_track_v30.md]
 
   - id: ED-645
     date: 2026-04-17
     description: "T15 Southernmost / Askeheim reconciliation (naming conflict in cross-references)."
     status: open
     severity: P2
-    affects: [designs/setting/geography_v30.md]
 
   - id: ED-648
     date: 2026-04-17
-    description: "Crown Ministry of Universities (Hochschule) — proposed new Ministry alongside existing six. Confirm inclusion. Season..."
+    description: "Crown Ministry of Universities (Hochschule) — proposed new Ministry alongside existing ..."
     status: open
     severity: P2
-    affects: [designs/systems/faction_politics_expanded_v1.md]
 
   - id: ED-649
     date: 2026-04-17
     description: "College of Prelates: 2 additional Prelates need naming (Standing 5, not Cardinal-rank)."
     status: open
     severity: P2
-    affects: [designs/systems/npc_behavior_v30.md]
 
   - id: ED-650
     date: 2026-04-17
-    description: "Succession rivals need naming and Stance Triangles: Crown Cadet Claimant, Varfell Vaynard-protégé, Hafenmark alternat..."
+    description: "Succession rivals need naming and Stance Triangles: Crown Cadet Claimant, Varfell Vayna..."
     status: open
     severity: P2
-    affects: [designs/systems/npc_behavior_v30.md]
 
   - id: ED-651
     date: 2026-04-17
     description: "Markamt Minister — explicit name and Stance Triangle needed."
     status: open
     severity: P2
-    affects: [designs/systems/npc_behavior_v30.md]
 
   - id: ED-652
     date: 2026-04-17
-    description: "Rank dismissal mechanics: cost of re-entry at Std 1→0; Dishonored flag persistence; handling across mode transitions."
+    description: "Rank dismissal mechanics: cost of re-entry at Std 1→0; Dishonored flag persistence; han..."
     status: open
     severity: P2
-    affects: [designs/systems/faction_politics_expanded_v1.md]
 
   - id: ED-655
     date: 2026-04-17
-    description: "Ministry/Committee Position mechanic: uniform mechanic across Crown/Hafenmark/Church/Varfell or faction-specific vari..."
+    description: "Ministry/Committee Position mechanic: uniform mechanic across Crown/Hafenmark/Church/Va..."
     status: open
     severity: P2
-    affects: [designs/systems/faction_politics_expanded_v1.md]
 
   - id: ED-656
     date: 2026-04-17
-    description: "Cross-rank advancement interaction: player holds Löwenritter sub-office rank AND Crown primary rank. Confirm Duty con..."
+    description: "Cross-rank advancement interaction: player holds Löwenritter sub-office rank AND Crown ..."
     status: open
     severity: P2
-    affects: [designs/systems/faction_politics_expanded_v1.md]
 
   - id: ED-657
     date: 2026-04-17
     description: "Rank restoration after dismissal: what paths exist, and at what cost?"
     status: open
     severity: P2
-    affects: [designs/systems/faction_politics_expanded_v1.md]
 
   - id: ED-658
     date: 2026-04-17
-    description: "Warden Ladder integration with VTM Path B: Warden rank does not grant automatic Path B progression but Warden-Chief d..."
+    description: "Warden Ladder integration with VTM Path B: Warden rank does not grant automatic Path B ..."
     status: open
     severity: P2
-    affects: [designs/board_game/varfell_path_b_v30.md, designs/systems/faction_politics_expanded_v1.md]
 
   - id: ED-660
     date: 2026-04-17
-    description: "Certainty scale: faction_politics_expanded lists Almstedt at Certainty 6, exceeding the 0-5 scale. Requires formal de..."
+    description: "Certainty scale: faction_politics_expanded lists Almstedt at Certainty 6, exceeding the..."
     status: open
     severity: P2
-    affects: [designs/systems/faction_politics_expanded_v1.md, designs/systems/npc_behavior_v30.md]
 
   - id: ED-661
     date: 2026-04-17
@@ -246,5 +229,17 @@ entries:
   - id: ED-669
     date: 2026-04-17
     description: "Irreversible institutional precedent persistence across campaigns."
+    status: open
+    severity: P2
+
+  - id: ED-704
+    date: 2026-04-19
+    description: "Seizure does not apply to Uncontrolled territories."
+    status: open
+    severity: P2
+
+  - id: ED-705
+    date: 2026-04-19
+    description: "Cohesion -15 = derived of Stability -1, not independent."
     status: open
     severity: P2
