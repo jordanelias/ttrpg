@@ -36,14 +36,14 @@ systems:
   combat:
     status: active
     canonical: designs/scene/combat_v30.md
-    canonical_sha__designs__scene__combat_v30_md: "STALE-ED694-propagation"
+    canonical_sha__designs__scene__combat_v30_md: "5467c12ceaf0042914d43b52aec98360fd069c35"
     params: params/combat.md
     design_doc: designs/scene/combat_v30.md
 
   threadwork:
     status: active
     canonical: designs/threadwork/threadwork_v30.md
-    canonical_sha__designs__threadwork__threadwork_v30_md: "STALE-ED694-propagation"
+    canonical_sha__designs__threadwork__threadwork_v30_md: "4a445a1af643736420421bc24fa92f0ec0ef97f3"
     params: params/threadwork.md
     design_doc: designs/threadwork/threadwork_v30.md
 
@@ -57,7 +57,7 @@ systems:
   clocks:
     status: active
     canonical: designs/provincial/clock_registry_v30.md
-    canonical_sha__designs__provincial__clock_registry_v30_md: "8e997e8e0a5a54f5c8b561a0cfbefabb8fc90683"
+    canonical_sha__designs__provincial__clock_registry_v30_md: "453ae0253a60088457da9e4cdbcea9ba7845ada6"
     params: null
     design_doc: designs/provincial/clock_registry_v30.md
 
@@ -74,7 +74,7 @@ systems:
   victory:
     status: active
     canonical: designs/provincial/victory_v30.md
-    canonical_sha__designs__provincial__victory_v30_md: "42c7429d436cb72e8b9ae227db7ccd1c61839cfb"
+    canonical_sha__designs__provincial__victory_v30_md: "e524161a5d432eedacc4ecdbf5bc1c5dc9d68e3f"
     params: null
     design_doc: designs/provincial/victory_v30.md
 
@@ -88,14 +88,14 @@ systems:
   mass_combat:
     status: active
     canonical: designs/provincial/mass_battle_v30.md
-    canonical_sha__designs__provincial__mass_battle_v30_md: "STALE-ED694-propagation"
+    canonical_sha__designs__provincial__mass_battle_v30_md: "e5187a2a6e8ddce2b73bbd7dbd31241e4b54a543"
     params: params/mass_combat.md
     design_doc: designs/provincial/mass_battle_v30.md
 
   social_debate:
     status: active
     canonical: designs/scene/social_contest_v30.md
-    canonical_sha__designs__scene__social_contest_v30_md: "STALE-ED694-propagation"
+    canonical_sha__designs__scene__social_contest_v30_md: "75e6cd3dea9eb84d6c7007fc209d9b217c6f8c51"
     params: params/contest.md
     design_doc: designs/scene/social_contest_v30.md
 
@@ -109,7 +109,7 @@ systems:
   scale_transitions:
     status: active
     canonical: designs/architecture/scale_transitions_v30.md
-    canonical_sha__designs__architecture__scale_transitions_v30_md: "b3bd53481d9577e9d7e097b6608fc6fd3cf8b075"
+    canonical_sha__designs__architecture__scale_transitions_v30_md: "9d11ef1393e779fc62eaba3d94943b5b40318d3d"
     canonical_sha__deprecated__compilation__v0_14__stage11_scale_transitions_deprecated_md: "277e7ffb787cf6af153462b4cee3bcea09ae4ec6"
     params: null
     design_doc: null
@@ -124,14 +124,14 @@ systems:
   npc_behavior:
     status: active
     canonical: designs/npcs/npc_behavior_v30.md
-    canonical_sha__designs__npcs__npc_behavior_v30_md: "ee5aebbd336a38ed048e98cd53a8fd471fe43efd"
+    canonical_sha__designs__npcs__npc_behavior_v30_md: "4349e94bb7b1f19e7358bc4cc721851eafeba9f1"
     params: null
     design_doc: designs/npcs/npc_behavior_v30.md
 
   fieldwork:
     status: active
     canonical: designs/scene/fieldwork_v30.md
-    canonical_sha__designs__scene__fieldwork_v30_md: "c7b04bb836c23d4d3650d2096deeac4d88362671"
+    canonical_sha__designs__scene__fieldwork_v30_md: "7aee788071210bba6adc5f362d0dc19ad92a41dc"
     params: null
     design_doc: designs/scene/fieldwork_v30.md
 
@@ -163,7 +163,7 @@ systems:
   calamity_radiation:
     status: active
     canonical: designs/world/calamity_radiation_v30.md
-    canonical_sha__designs__world__calamity_radiation_v30_md: "43ebe89361243910a2f2bfc9d3aecd506f98bcde"
+    canonical_sha__designs__world__calamity_radiation_v30_md: "e4d5efd5b87ae22a96b5736e126ec86615b63aae"
     params: null
     design_doc: designs/world/calamity_radiation_v30.md
 
@@ -177,7 +177,7 @@ systems:
   faction_layer:
     status: active
     canonical: designs/provincial/faction_layer_v30.md
-    canonical_sha__designs__provincial__faction_layer_v30_md: "132a32f7a80cd21b99f586b7b40a203cd57d1deb"
+    canonical_sha__designs__provincial__faction_layer_v30_md: "e0eb92a384a28d460328ce4078ad254343925fe9"
     params: params/factions.md
     design_doc: designs/provincial/faction_layer_v30.md
     infill_doc: designs/provincial/faction_layer_v30_infill.md
@@ -239,7 +239,7 @@ systems:
   conviction_track:
     status: active
     canonical: designs/scene/conviction_track_v30.md
-    canonical_sha__designs__scene__conviction_track_v30_md: "952d5605a46f4af19e760a91081f20cd56f5c0d2"
+    canonical_sha__designs__scene__conviction_track_v30_md: "f23654c44cbc88cd9464c34616a8de83c03ba682"
     params: null
     design_doc: designs/scene/conviction_track_v30.md
     notes: "Conviction track + Church victory redesign (PP-406 through PP-418). Accepted 2026-04-17 (editorial batch acceptance)."
@@ -256,7 +256,7 @@ systems:
   peninsular_strain:
     status: active
     canonical: designs/provincial/peninsular_strain_v30.md
-    canonical_sha__designs__provincial__peninsular_strain_v30_md: "d9e7c659aea63b3ca9b2f4438bf5151c0190f519"
+    canonical_sha__designs__provincial__peninsular_strain_v30_md: "dcf43c9c06d6b52ace787b70fad6f22ff85e2816"
     params: null
     design_doc: designs/provincial/peninsular_strain_v30.md
     notes: "Victory condition restructure — integrated into victory_v30.md. Accepted 2026-04-17 (editorial batch acceptance). Open item ED-626 (Accord/Order relationship) carries forward."
@@ -374,7 +374,7 @@ systems:
   derived_stats:
     status: active
     canonical: designs/scene/derived_stats_v30.md
-    canonical_sha__designs__scene__derived_stats_v30_md: "STALE-pending-commit"
+    canonical_sha__designs__scene__derived_stats_v30_md: "af3d4c643cea042a98766c0454264537f495950d"
     params: null
     design_doc: designs/scene/derived_stats_v30.md
     notes: "Derived stat system v2 — Vitality, Stamina, Composure, Concentration, Thread Fatigue, TroopCount + faction derived values. PP-679/680, ED-694."
