@@ -102,6 +102,115 @@ def _repo_key(path: str, repo: str) -> str:
     """Namespace fetch keys by repo to avoid collisions."""
     return f"{repo}:{path}"
 
+# ── Cache lifecycle management ────────────────────────────────────────────────
+
+# Session-permanent keys: needed for co-file compliance, context_gate, bootstrap.
+# These survive eviction calls unless explicitly targeted.
+SESSION_PERMANENT_PATTERNS = (
+    'session_log_current.md',
+    'editorial_ledger_summary.yaml',
+    'file_index_summary.md',
+    'canonical_sources.yaml',
+    'patch_register_active.yaml',
+    'editorial_ledger.yaml',
+    'propagation_map.md',
+    'coverage_matrix.md',
+)
+
+def cache_evict(*paths: str, repo: str = None) -> int:
+    """Remove specific paths from session cache. Returns count evicted.
+    
+    Use after a task completes and its fetched docs are no longer needed.
+    Example: g.cache_evict('designs/scene/combat_v30.md', 'designs/threadwork/threadwork_v30.md')
+    """
+    repo = repo or _active_repo
+    evicted = 0
+    for path in paths:
+        key = _repo_key(path, repo)
+        if key in _session_fetches:
+            del _session_fetches[key]
+            evicted += 1
+    if evicted:
+        _save_cache()
+    return evicted
+
+
+def cache_evict_pattern(*prefixes: str, repo: str = None, protect_permanent: bool = True) -> int:
+    """Evict all cached entries whose path starts with any given prefix.
+    
+    By default protects session-permanent files. Set protect_permanent=False
+    to evict everything matching (use with caution).
+    
+    Example: g.cache_evict_pattern('designs/', 'tests/')  # evict all design/test docs
+    """
+    repo = repo or _active_repo
+    to_evict = []
+    for key in list(_session_fetches.keys()):
+        # Key format: "repo:path"
+        if ':' in key:
+            key_repo, key_path = key.split(':', 1)
+        else:
+            key_path = key
+            key_repo = _active_repo
+        
+        if repo and key_repo != repo:
+            continue
+        
+        if any(key_path.startswith(p) for p in prefixes):
+            if protect_permanent and any(perm in key_path for perm in SESSION_PERMANENT_PATTERNS):
+                continue
+            to_evict.append(key)
+    
+    for key in to_evict:
+        del _session_fetches[key]
+    
+    if to_evict:
+        _save_cache()
+    return len(to_evict)
+
+
+def cache_evict_committed(additions: list, deletions: list = None, repo: str = None) -> int:
+    """Evict all entries that were just committed (additions + deletions).
+    
+    Called automatically by atomic_commit after successful commit.
+    Committed content is on GitHub — no reason to keep it in session cache.
+    Session-permanent files are re-fetched on next access if needed.
+    """
+    repo = repo or _active_repo
+    evicted = 0
+    for path, _ in (additions or []):
+        key = _repo_key(path, repo)
+        if key in _session_fetches:
+            # Keep session-permanent files — they're needed for co-file checks
+            if any(perm in path for perm in SESSION_PERMANENT_PATTERNS):
+                # Update the cached value to the committed content instead of evicting
+                _session_fetches[key] = _  # already the latest
+                continue
+            del _session_fetches[key]
+            evicted += 1
+    for path in (deletions or []):
+        key = _repo_key(path, repo)
+        if key in _session_fetches:
+            del _session_fetches[key]
+            evicted += 1
+    if evicted:
+        _save_cache()
+    return evicted
+
+
+def cache_stats() -> dict:
+    """Return cache statistics for diagnostics."""
+    total_chars = sum(len(v) for v in _session_fetches.values() if v)
+    permanent = sum(1 for k in _session_fetches 
+                    if any(p in k for p in SESSION_PERMANENT_PATTERNS))
+    return {
+        'entries': len(_session_fetches),
+        'permanent': permanent,
+        'transient': len(_session_fetches) - permanent,
+        'total_chars': total_chars,
+        'est_tokens': total_chars // 4,
+    }
+
 
 def use_repo(repo: str) -> None:
     """Switch the default active repo. Use 'ttrpg' or 'valoria-game'."""
@@ -447,8 +556,14 @@ def atomic_commit(
 
         oid = result["data"]["createCommitOnBranch"]["commit"]["oid"]
 
-        for path, _ in additions:
-            _session_fetches.pop(_repo_key(path, repo), None)
+        # Evict committed content — it's on GitHub now.
+        # Session-permanent files get their cached value updated instead of evicted.
+        for path, content in additions:
+            key = _repo_key(path, repo)
+            if any(perm in path for perm in SESSION_PERMANENT_PATTERNS):
+                _session_fetches[key] = content  # update to committed version
+            else:
+                _session_fetches.pop(key, None)
         for path in (deletions or []):
             _session_fetches.pop(_repo_key(path, repo), None)
         if _session_fetches:
