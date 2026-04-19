@@ -71,11 +71,11 @@ Estimated effort: 1 session. No design decisions required.
 
 ## 0.6 — Triage P0 blockers ED-668–672
 **Why:** 5 P0 blockers (Thread horizontal integration items from stress register) are listed in the editorial ledger summary but not addressed in any workplan phase. P0 outranks P1 by definition.
-**Action:** Read `tests/thread_stress/threadwork_audit_register.md`. For each ED-668–672: determine resolved (archive), still open (add to Phase 1 at P0 severity), or reclassify (change severity with rationale). These may correspond to successor items from ED-629 (Thread stress test).
-**Cross-ref:** `canon/editorial_ledger_summary.yaml` `p0_blocker_ids`, `tests/thread_stress/threadwork_audit_register.md`
+**Action:** Read `tests/stress/thread/threadwork_audit_register.md`. For each ED-668–672: determine resolved (archive), still open (add to Phase 1 at P0 severity), or reclassify (change severity with rationale). These may correspond to successor items from ED-629 (Thread stress test).
+**Cross-ref:** `canon/editorial_ledger_summary.yaml` `p0_blocker_ids`, `tests/stress/thread/threadwork_audit_register.md`
 
 ## 0.7 — Params file staleness audit
-**Why:** The simulation framework (Phase 4) reads mechanical values from `references/params_*.md` files. If params are stale (don't match their source design doc), the simulation produces incorrect results. This must be resolved before Phase 4, not after.
+**Why:** The simulation framework (Phase 4) reads mechanical values from `params/*.md` files. If params are stale (don't match their source design doc), the simulation produces incorrect results. This must be resolved before Phase 4, not after.
 **Action:** For each params file (`params_core`, `params_combat`, `params_mass_combat`, `params_contest`/`params_debate`, `params_threadwork`, `params_factions`, `params_board_game`, `params_scale_transitions`): compare against its canonical source design doc per `references/canonical_sources.yaml`. Mark stale entries. Refresh values. Clear `KNOWN STALE SYNC GAPS` in file_index.
 **Cross-ref:** `references/propagation_map.md` §PARAMS-SKILL DEPENDENCY MAP
 
@@ -92,20 +92,20 @@ Estimated effort: 2–3 sessions. Requires design decisions.
 **Canon check:** P-12 (relational contagion through Knots) — Knot formation must respect the constitutive nature of Knot connections. A Knot is not a contract; it is a structural relational binding. The formation procedure must reflect this ontological weight. P-15 (three-layer being-persistence) — Knot formation engages the second layer (unconscious self-rendering), not just surface Disposition.
 **Design task:** Define a Knot formation procedure for videogame mode. Proposed approach: at Disposition +5 with a TS ≥ 30 character, a Knot formation scene fires (Spirit check TN 7, Ob 2). Success: Knot established. Failure: Disposition maintained but Knot attempt costs 1 season cooldown. For non-sensitive characters (TS < 30): Knot formation is impossible — Knots require Thread contact. The relationship remains at Disposition +5 with all non-Knot benefits (+1D social, no decay) but without relational contagion or Solidarity targeting.
 **Affected docs:** `npc_behavior_v30.md` (§6.3 Solidarity — add Knot formation subsection), `fieldwork_v30.md` (§5.6 Knot Integration — add formation procedure), `companion_specification_v30.md` (§2.1 eligibility — Knot path already references this but no procedure exists).
-**Propagation:** `references/params_core.md` (Bonds/Knot rules), `references/propagation_map.md`, `canon/editorial_ledger.yaml` (new ED or resolve ED-391).
+**Propagation:** `params/core.md` (Bonds/Knot rules), `references/propagation_map.md`, `canon/editorial_ledger.yaml` (new ED or resolve ED-391).
 
 ## 1.2 — Accord Propagation to Settlement Order [AUD-SET-02]
 **Why:** Settlement layer (§1.3) changed Accord derivation: Province Accord = floor(mean settlement Order). But every existing doc that references "Accord −1 in territory" still uses direct Accord modification. These rules now need to specify WHICH settlement's Order is affected. Without this propagation, the settlement layer's Accord derivation is canonical but not exercised — downstream systems still bypass it.
 **Canon check:** P-03 (rendering = consciousness-performed) — settlement Order is the rendered-level experience of governance; province Accord is the abstracted measure. The propagation must preserve this distinction: events that the player experiences at a settlement affect that settlement's Order; events that occur at the province level (Domain Actions, military control changes) affect all settlements proportionally or target the Seat settlement by default.
 **Design task:** Audit every Accord change rule across all docs. For each, determine: does this affect one settlement (which one — Seat, specific combat location, NPC's home settlement?), all settlements in a province (distribute evenly), or the province directly (bypass settlement Order — reserved for Domain Actions that target the province abstraction layer)?
 **Affected docs (non-exhaustive):**
-- `peninsular_strain_v1.md` §2.3–2.4 (Accord gaining/losing rules) — each rule needs settlement targeting
+- `peninsular_strain_v30.md` §2.3–2.4 (Accord gaining/losing rules) — each rule needs settlement targeting
 - `victory_v30.md` §0.2 (Accord system) — cross-reference to peninsular_strain for Accord rules
 - `mass_battle_v30.md` §A.14 (battle consequences → Accord) — target the Seat settlement of the province where battle occurred
 - `scale_transitions_v30.md` §5.5 (Accord Domain Echo) — already specifies "in one territory" but needs settlement targeting
 - `npc_behavior_v30.md` (priority tree Govern actions) — Govern targets a settlement, not a province
 - `combat_v30.md` §13.2b (Settlement Combat Consequences) — already settlement-level, confirm alignment
-- `designs/board_game/board_game_v30.md` §9 (Hybrid Accounting) — Accord changes at Accounting
+- `designs/provincial/strategic_layer_v30.md` §9 (Hybrid Accounting) — Accord changes at Accounting
 **Scope estimate:** 15–25 individual rule references to update. Large propagation footprint. Each modified doc requires propagation_map update and canonical_sources SHA update.
 **Propagation:** Every modified doc → `references/propagation_map.md`, `references/canonical_sources.yaml` SHAs.
 
@@ -114,14 +114,14 @@ Estimated effort: 2–3 sessions. Requires design decisions.
 **Design task:** Build a per-faction economic model. For each of Crown, Church, Hafenmark, Varfell: calculate seasonal Treasury income (Σ(settlement Prosperity) × 10 per settlement + Haushalt Competence bonus if Crown + Trade action results), seasonal drains (unit upkeep at −25/professional/season, Campaign Supply at −100/season if in hostile territory, construction at −200/action, Muster costs), and time-to-zero at starting values with no income actions. Adjust multipliers if any faction collapses within 3 seasons or never faces economic pressure within 20 seasons.
 **Dependencies:** 1.2 (Accord propagation affects which settlements contribute Prosperity income — Accord 0 settlements contribute nothing, Accord 1 settlements contribute nothing, only Accord ≥ 2 contributes).
 **Simulation:** `tests/sim_derived_stats_calibration.md` (new). Register in `tests/coverage_matrix.md`.
-**Propagation:** `designs/systems/derived_stats_v1.md` (multiplier updates if adjusted), `references/params_board_game.md` (faction economic parameters).
+**Propagation:** `designs/scene/derived_stats_v30.md` (multiplier updates if adjusted), `params/board_game.md` (faction economic parameters).
 
 ## 1.4 — Faction Politics Simulation [AUD-FP-01]
-**Why:** 947 lines of faction_politics_expanded_v1 committed without simulation coverage. 5 SIM-POL items deferred (SIM-POL-R01 through R05 in coverage_matrix). The rank ladders, branch specialization, Ministry Competence/Corruption tracks, and caste viability matrix have no simulation coverage.
+**Why:** 947 lines of faction_politics_v30 committed without simulation coverage. 5 SIM-POL items deferred (SIM-POL-R01 through R05 in coverage_matrix). The rank ladders, branch specialization, Ministry Competence/Corruption tracks, and caste viability matrix have no simulation coverage.
 **Design task:** Run SIM-POL-R01 through R05. Key questions: (a) Can a player reach Standing 7 within 30 seasons (120 seasons = 30 years) through normal Duty completion? At what rate? (b) Do Ministry Competence decay rates (unfunded → −1/season) produce meaningful economic pressure on the Crown? (c) Does the caste viability matrix correctly gate faction access — can a Southern Einhir character reach Standing 5+ in the Church (should be Closed)? (d) Do branch specializations (Martial/Administrative/Intelligence for Crown) produce meaningfully different play experiences — different Duty types, different NPC relationships, different Standing advancement paths? (e) Are the 5 rank ladders balanced in advancement rate — does one faction reach Standing 7 significantly faster than others?
 **Dependencies:** 1.3 (derived stats affect Duty success conditions via Treasury/Legitimacy thresholds, which affect Standing advancement rate).
 **Simulation:** `tests/sim_faction_politics.md` (new). Update `tests/coverage_matrix.md` SIM-POL items from DEFERRED to results.
-**Propagation:** `designs/systems/faction_politics_expanded_v1.md` (if adjustments needed), `references/params_board_game.md` (Standing thresholds).
+**Propagation:** `designs/provincial/faction_politics_v30.md` (if adjustments needed), `params/board_game.md` (Standing thresholds).
 
 ## 1.5 — Resolve Coverage Matrix P1 EDs [ED-588, ED-589, ED-612]
 **Why:** Active P1 EDs in coverage matrix not captured by the system audit because they're victory/faction design gaps, not system quality issues. But they affect simulation accuracy — the simulation framework cannot model RM or Guild victory paths without these resolved.
@@ -129,7 +129,7 @@ Estimated effort: 2–3 sessions. Requires design decisions.
 - **ED-589: RM Presence marker mechanics undefined.** RM uses "Presence markers" for Community Weaving and Cultural Reclamation but the placement, accumulation, and removal rules are not specified. Define: how does RM place Presence? What does each marker cost? How many can exist per territory? How are they removed by Church/Crown suppression?
 - **ED-612: Guilds have no solo victory condition.** Guilds are an NPC faction with no player-accessible victory path. Is this intentional (Guilds are a tool, not a protagonist)? Or should Guilds have a victory condition for a hypothetical Guild-aligned player path?
 **Design task:** Resolve each. Small-scope design decisions with victory_v30 and faction implications.
-**Propagation:** `designs/board_game/victory_v30.md`, `tests/coverage_matrix.md`, `canon/editorial_ledger.yaml`.
+**Propagation:** `designs/provincial/victory_v30.md`, `tests/coverage_matrix.md`, `canon/editorial_ledger.yaml`.
 
 ---
 
@@ -141,7 +141,7 @@ Estimated effort: 3–5 sessions. Mix of simulation, design, and propagation.
 **Why:** SIM-DEBT-03/04 outstanding since PP-234 genre restructure. The two-genre system (Memory/Projection) with integer bonus dice (+1D genre, +1D audience, max +2D) has never been simulated. The prior three-genre simulation baselines are invalidated. Additionally, CROSS interaction's floor(successes ÷ 2) formula may make it non-viable against Resistance 2+ audiences — a 6-success CROSS exchange produces effective margin 3, which only moves the track 1 point against Resistance 2.
 **Tasks:** (a) Simulate 100+ contest exchanges under the PP-234 system across all three adjudicator types (Cognition pools for Expert Judge, Charisma pools for Crowd, Attunement pools for No Adjudicator). Vary pool sizes from 5D to 13D. (b) Specifically test CROSS viability: how often does a CROSS exchange produce track movement at Resistance 1, 2, 3? If success rate at Resistance 2 is <10%, CROSS needs rebalancing (e.g., floor(successes × 2/3) instead of floor(÷2), or effective margin = successes − 1 instead of floor(÷2)). (c) Test Chain Contest deadlock stall-break (ED-582) against high-Focus orators (Focus 5+, Resistance 2 both sides): does the Resistance drop to 1 produce meaningful track movement, or does it always resolve as forced Compromise?
 **Simulation:** `tests/sim_contest_pp234.md` (new). Resolve SIM-DEBT-03/04 in coverage_matrix.
-**Propagation:** If CROSS is rebalanced → `designs/contest/social_contest_v30.md` §4 CROSS section, `references/params_contest.md`.
+**Propagation:** If CROSS is rebalanced → `designs/scene/social_contest_v30.md` §4 CROSS section, `params/contest.md`.
 
 ## 2.2 — Co-Movement Card Calibration [ED-577-01/02/03/04] ⚠ HARD DEPENDENCY FOR PHASE 4
 **Why:** 15-card table added this session (ED-577) but effects are entirely unsimulated. Four open flags. The simulation framework uses Co-Movement cards in every Thread operation — uncalibrated cards produce unreliable RS trajectories, which invalidates the entire Phase 4 simulation.
@@ -151,7 +151,7 @@ Estimated effort: 3–5 sessions. Mix of simulation, design, and propagation.
 (c) **RS swing variance [ED-577-03].** Simulate: model 30 seasons × 3 Thread operations/season (average across all factions and practitioners) = 90 card draws per campaign. Calculate mean cumulative RS impact and standard deviation. If std dev > 15 RS points, the deck is too volatile — individual campaigns would have wildly different RS trajectories purely from card draw luck. Fix: adjust individual card RS values to mean-center the deck (sum of all RS effects across 18 cards ≈ 0, with variance from Actualized/Unactualized split).
 (d) **CM-06 +1D scope [ED-577-04].** CM-06 "Resonance Bloom" grants "+1D to next Thread operation" to "all Practitioners in territory." In a territory with 3+ practitioners, this is extremely powerful — it compounds with existing pool bonuses. Propose: +1D applies to the next operation per practitioner (not all operations), expires unused at season end.
 **Simulation:** `tests/sim_comovement_calibration.md` (new).
-**Propagation:** `designs/ttrpg/threadwork_v30.md` §4.3 (card revisions if needed), §4.1 (Core Principle — write foundational text explaining why Co-Movement produces random effects), §4.2 (Why Random — write design rationale).
+**Propagation:** `designs/threadwork/threadwork_v30.md` §4.3 (card revisions if needed), §4.1 (Core Principle — write foundational text explaining why Co-Movement produces random effects), §4.2 (Why Random — write design rationale).
 
 ## 2.3 — NPC Stat Gaps [AUD-NPC-02]
 **Why:** 7 NPCs missing TS and/or Certainty values: Ehrenwall (ED-392/393), Torben (ED-394/395/396), Maret Uln (ED-397/398). These values are needed for: NPC priority tree evaluation (TS gates Thread actions), Conviction Scar matrix (Certainty scaling), and arc transition triggers (TS threshold crossing).
@@ -159,7 +159,7 @@ Estimated effort: 3–5 sessions. Mix of simulation, design, and propagation.
 - **Ehrenwall:** TS 0 (military career, no practitioner exposure), Certainty 4 (Faithful — conventional piety, not deep theology). Consistent with her Order/Autonomy Conviction and martial background.
 - **Torben:** TS 0 (court-raised, no practitioner exposure), Certainty 4 (Faithful — conventional education). But note: Conviction window (ED-618) means Certainty is mutable through play if a faction invests in Torben before Season 8. If Varfell invests, Certainty may drop; if Church invests, Certainty may rise.
 - **Maret Uln:** TS 35 (from sustained Varfell Thread exposure under Vaynard's program — she was part of the intelligence apparatus that handled Thread-adjacent information), Certainty 2 (Skeptic — secular intellectual like Vaynard but more community-oriented). TS 35 means she crosses the Active threshold and can perform Thread-Read, which affects her arc behavior if Vaynard is eliminated and she takes over.
-**Propagation:** `designs/systems/npc_behavior_v30.md` (NPC profiles §2.5, §2.8, §2.10), `designs/systems/arc_expansion_v1.md` (arc profiles reference these values), resolve ED-392–398 in editorial ledger.
+**Propagation:** `designs/npcs/npc_behavior_v30.md` (NPC profiles §2.5, §2.8, §2.10), `designs/arcs/arc_expansion_v30.md` (arc profiles reference these values), resolve ED-392–398 in editorial ledger.
 
 ## 2.4 — NPC Priority Tree Cross-Faction Simulation [AUD-NPC-03]
 **Why:** 9 faction priority trees (§8.2–§8.10) have never been tested against each other. Each tree has 6–8 priority levels with conditional behaviors. A single incorrect priority ordering (e.g., Church §8.2 prioritizing TC expansion over territorial defense during Stability ≤ 2) produces faction behavior that breaks verisimilitude — the Church would expand aggressively while its institutions are crumbling.
@@ -182,23 +182,23 @@ Estimated effort: 3–5 sessions. Mix of simulation, design, and propagation.
 ## 2.7 — Mass Battle Editorial Items [AUD-MB-02]
 **Why:** Part C of mass_battle_v30 has 7 editorial items pending approval: Command-EDIT-01 (Military stat → unit Power/Discipline ceiling), Command-EDIT-02 (battle outcome → faction stat consequences), Command-EDIT-03 (Muster → unit stats: Size=2, Power = floor(Military/2)+1), BG-EDIT-01 (commander bonus formula: floor(Military/2)), BG-EDIT-02 (faction-specific tactic cards), CLOCK-EDIT-01 (IP 75+ Altonian invasion unit stats), CLOCK-EDIT-02 (Church military victory → TC change).
 **Action:** Review each proposed resolution. Accept or modify. These are confirmations of proposals already stated in the doc — acceptance commits them as canonical, rejection requires alternative resolution.
-**Propagation:** `designs/mass_combat/mass_battle_v30.md` Part C (strike editorial flags, mark as resolved), `references/params_mass_combat.md` (update extracted values).
+**Propagation:** `designs/provincial/mass_battle_v30.md` Part C (strike editorial flags, mark as resolved), `params/mass_combat.md` (update extracted values).
 
 ## 2.8 — Combat Ranged TN Integration [AUD-COM-04, ED-129]
 **Why:** Melee weapons use a clean 3-axis binary TN matrix (Reach × Weight × Type → 8 profiles, TN 5–8). Ranged weapons (Bow TN 7, Crossbow TN 6, Sling TN 8) exist as a separate table outside this matrix. This means the combat system has two parallel weapon frameworks — one combinatorial, one lookup. For Godot implementation, the engine needs either one unified framework or an explicit architectural justification for two.
 **Design task:** Either integrate ranged weapons into the 3-axis matrix (propose: add a 4th binary axis "Delivery: Melee/Ranged" that shifts TN and removes STR minimum for Ranged) or formalize ranged as a distinct weapon category with explicit justification (ranged weapons don't share the Reach/Weight characteristics that define melee — a bow is neither Short nor Long in the melee sense).
-**Propagation:** `designs/combat/combat_v30.md` §5, `references/params_combat.md` (weapon tables).
+**Propagation:** `designs/scene/combat_v30.md` §5, `params/combat.md` (weapon tables).
 
 ## 2.9 — Threadwork Foundation Text [AUD-TW-01]
 **Why:** §4.1 (Core Principle) and §4.2 (Why the Actual Effect Is Random) are empty stubs. The Co-Movement card table exists (ED-577, this session) but the explanatory text for why random effects occur when a practitioner operates on Thread is missing. For a system this philosophically grounded (the entire metaphysics is about rendering, consciousness, and the inseparability of observer and substrate), empty philosophical sections are conspicuous.
 **Design task:** Write §4.1 and §4.2 prose. These are philosophical/design rationale sections, not mechanical specs. ~200 words each. §4.1 should explain that Co-Movement is constitutive — Thread operations affect the substrate, and the substrate's response is not deterministic because the substrate is not a mechanism (it is constitutive ground, per Foundations A1). §4.2 should explain why the game uses random card draws rather than deterministic outcomes — the randomness models the practitioner's inability to predict how the substrate will respond to intentional intervention.
-**Propagation:** `designs/ttrpg/threadwork_v30.md` §4.1, §4.2.
+**Propagation:** `designs/threadwork/threadwork_v30.md` §4.1, §4.2.
 
 ## 2.10 — UI/UX Integration: Derived Stats + Settlement Map [AUD-UI-01, AUD-UI-02]
 **Why:** UI spec (v4.1) predates derived_stats_v1 and settlement_layer_v30. The faction overview display proposed in derived_stats §3.3 (stat bars for capability + resource numbers with income/drain breakdown) hasn't been incorporated into the UI spec. The 36-settlement map view (province zoom shows settlement nodes with type icons and stat indicators) isn't specified anywhere in the UI doc.
 **Design task:** (a) Add Part 11 subsection for derived stats display: render the §3.3 proposed layout as a UI spec with Godot-facing implementation notes. Stat bars show 1–7 capability. Resource numbers show derived values with seasonal net (green = positive, red = negative). Income/drain breakdown on hover. (b) Add Part 3 subsection for settlement map: province-level zoom replaces the flat territory view with a settlement node graph. Each node shows: settlement type icon, current stats (P/D/O as 3 small bars), governor name, Church infrastructure indicators (4 small icons for the 4 axes). Settlement selection opens the settlement detail panel.
 **Dependencies:** 1.3 (derived stat multipliers must be finalized before UI displays them — the numbers shown to the player must be correct).
-**Propagation:** `designs/ui/valoria_ui_ux_v4_1.md` (new subsections in Part 3 and Part 11), cross-reference from `derived_stats_v1.md` §3.3 and `settlement_layer_v30.md` §4.1.
+**Propagation:** `designs/ui/valoria_ui_ux_v4_1.md` (new subsections in Part 3 and Part 11), cross-reference from `derived_stats_v30.md` §3.3 and `settlement_layer_v30.md` §4.1.
 
 ## 2.11 — Generational Transition Throughline
 **Why:** When a PC dies/retires and a new character enters via Conviction Legacy (T8), the transition's effect on tracked state is only partially specified. Evidence Tracks persist (fieldwork §4.1). Disposition resets (new character). Standing resets to 0. Knots break. Coherence resets to 10. But these aren't all stated in one place, and some transitions aren't stated at all (what happens to the PC's Resources? Their Exposure per territory? Their Combat Reputation? Their active Obligations? Their companion relationships?).
@@ -209,11 +209,11 @@ Estimated effort: 3–5 sessions. Mix of simulation, design, and propagation.
 - **Break:** All Knots (relational threads sever — Knotted NPCs receive Knot rupture strain)
 - **Transfer:** Companions depart (departure scene for each — the companion was bonded to the person, not the player). Active Obligations transfer to the new character's faction (the institution remembers the commitment even if the individual doesn't).
 - **Open question:** Resources — does personal wealth persist (inheritance) or reset (new character starts fresh)? Propose: Resources = floor(predecessor's Resources / 2) + new character's starting Resources (partial inheritance).
-**Propagation:** `designs/systems/player_agency_v30.md` (§10 Conviction Legacy or new §11), `designs/systems/clock_registry_v30.md` (add generational transition column per track).
+**Propagation:** `designs/architecture/player_agency_v30.md` (§10 Conviction Legacy or new §11), `designs/provincial/clock_registry_v30.md` (add generational transition column per track).
 
 ## 2.12 — params_threadwork Ob Alignment [AUD-TW-02]
 **Why:** Threadwork design doc (threadwork_v30) references "canonical: params_threadwork.md §Three-Axis Ob System" for all Thread operation Ob values, but the in-document Ob tables are struck (crossed out) without clear cross-reference to the params file. If the two sources specify different Ob values, a developer reading the design doc sees struck (wrong) values with no inline replacement — they must know to look in the params file.
-**Action:** Fetch `references/params_threadwork.md`. Compare three-axis Ob values against the struck tables in threadwork_v30. Confirm alignment or flag discrepancies. If aligned: add inline cross-reference note under each struck table ("Current Ob values: see params_threadwork.md §Three-Axis Ob System"). If misaligned: determine which is authoritative (canonical_sources.yaml says), update the other.
+**Action:** Fetch `params/threadwork.md`. Compare three-axis Ob values against the struck tables in threadwork_v30. Confirm alignment or flag discrepancies. If aligned: add inline cross-reference note under each struck table ("Current Ob values: see params_threadwork.md §Three-Axis Ob System"). If misaligned: determine which is authoritative (canonical_sources.yaml says), update the other.
 **Propagation:** If discrepancies found → update one source to match the other. Update `references/canonical_sources.yaml` SHA.
 
 ---
@@ -233,7 +233,7 @@ Estimated effort: 2–3 sessions. No blockers. Can be done in any order.
 Rename Strength→Size, CP→Power, Cohesion→Discipline, Morale→Morale in combat §9 unit stat block to match mass_battle PP-232 renames. Simple find-replace within one section.
 
 ## 3.3 — Combat §9 Deprecated Doc Reference [AUD-COM-03]
-Replace PP-089/090 reference to `compilation/v0.14/stage11_scale_transitions_deprecated.md` with reference to `designs/hybrid/scale_transitions_v30.md`. The relevant content (Hybrid Phase Order and Mode-Switch) should be in scale_transitions_v30 — if it's not, migrate it.
+Replace PP-089/090 reference to `deprecated/compilation/v0.14/stage11_scale_transitions_deprecated.md` with reference to `designs/architecture/scale_transitions_v30.md`. The relevant content (Hybrid Phase Order and Mode-Switch) should be in scale_transitions_v30 — if it's not, migrate it.
 
 ## 3.4 — Stamina Merge Proposal [AUD-COM-05]
 **Proposal:** Evaluate merging Stamina into Combat Pool depletion. Currently combat tracks three resources: pool dice (allocated per round), wound progress (accumulated damage within current wound interval), and Stamina (depletes 1/round, 0 = Out of Breath = −2D). Stamina could be folded into pool depletion: each round, pool depletes by 1 (fatigue). Take a Breath restores Endurance dice. Armor penalty applies as starting pool reduction rather than Stamina modifier. This eliminates one tracking axis without losing the tactical decision.
@@ -265,7 +265,7 @@ conviction_track_v30 uses "CV" throughout. Newer docs (tc_political_redesign, vi
 **Action:** Map common practitioner builds (Spirit 5+, Focus 4+, typical Recall 2–4) against Coherence thresholds. Verify that critical skills (combat, fieldwork investigation, governance) remain accessible at Coherence 4–3. If a typical practitioner loses combat skills at Coherence 4, the penalty may be too harsh — consider: Recall reduction applies only to Thread-related skill checks, not all skills.
 
 ## 3.11 — Clock Registry: Settlement Derived Tracks [AUD-CK-01] ⚠ SIM-RELEVANT
-Settlement stats (Prosperity/Defense/Order) have derived values defined in derived_stats_v1 §4 (Local Economy, Garrison Strength, Public Order) but these aren't listed in the clock registry. The registry is the single source of truth for all tracked values — the simulation framework will read it to initialize state.
+Settlement stats (Prosperity/Defense/Order) have derived values defined in derived_stats_v30 §4 (Local Economy, Garrison Strength, Public Order) but these aren't listed in the clock registry. The registry is the single source of truth for all tracked values — the simulation framework will read it to initialize state.
 **Action:** Add Local Economy, Garrison Strength, Public Order to clock_registry_v30 Settlement Tracks section.
 
 ## 3.12 — Mass Battle §A.5 Deduplication [AUD-MB-01]
@@ -288,7 +288,7 @@ Throughline tags jump from T5 (Martial Law at Settlement Level) to T7 (Local Act
 **Proposal:** Thread-Read Evidence Track progress at ×0.5 (round down) for investigation questions that don't directly concern Thread phenomena. Thread-Read remains full-progress for Thread-specific questions (Gap investigation, practitioner identification, Dissolution forensics). This preserves Thread-Read's unique value for Thread topics while preventing it from dominating general investigation.
 
 ## 3.17 — Victory Accord Rule Consolidation [AUD-VIC-01]
-Accord rules are split across victory_v30 §0.2 and peninsular_strain_v1 §2. A developer implementing Accord must read both documents. Either add explicit cross-references ("Full Accord rules: see peninsular_strain_v1 §2") to victory_v30 §0.2, or move all Accord rules to one canonical location and have the other reference it.
+Accord rules are split across victory_v30 §0.2 and peninsular_strain_v30 §2. A developer implementing Accord must read both documents. Either add explicit cross-references ("Full Accord rules: see peninsular_strain_v30 §2") to victory_v30 §0.2, or move all Accord rules to one canonical location and have the other reference it.
 
 ## 3.18 — NPE Volatility Convergence [AUD-INV-01]
 **Concern:** The NPC Population Engine (investigation_systems) has an off-screen social pressure mechanic: at season end, NPCs with shared worldview and adjacent Stance positions make a Volatility check, and on pass, both shift toward each other's Stance by 1. Over 30+ seasons, this convergence may flatten NPC diversity — all NPCs in a high-Piety territory converge to Church-aligned positions, eliminating the heterodox NPCs that make investigation interesting.
@@ -440,7 +440,7 @@ SEASON LOOP:
 | Altonian | — | — | — | — | — | — | Dormant (IP 5) |
 | Wardens | — | — | — | — | — | — | Dormant (WC 0) |
 
-**Derived values:** Calculated per derived_stats_v1 §2 (Treasury = Wealth × 100, Legitimacy = Mandate × 20, etc.).
+**Derived values:** Calculated per derived_stats_v30 §2 (Treasury = Wealth × 100, Legitimacy = Mandate × 20, etc.).
 
 **Card hands:** 4 shared + 2 faction-specific per faction (mass_battle §B.4). Cards refresh each season.
 
@@ -758,7 +758,7 @@ tests/
     calibration_report.md — THE GATE DOCUMENT
 ```
 
-**Canonical source loading:** The simulator reads mechanical values from `references/params_*.md` files (refreshed in Phase 0.7). `init_validator.py` compares every loaded value against the canonical design doc and flags discrepancies before running. Design doc values are authoritative if discrepancy found.
+**Canonical source loading:** The simulator reads mechanical values from `params/*.md` files (refreshed in Phase 0.7). `init_validator.py` compares every loaded value against the canonical design doc and flags discrepancies before running. Design doc values are authoritative if discrepancy found.
 
 ---
 

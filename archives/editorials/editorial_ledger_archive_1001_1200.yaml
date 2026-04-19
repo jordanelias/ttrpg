@@ -761,3 +761,82 @@
     status: open
     severity: P2
 
+# Archived 2026-04-18 (compliance trim)
+  - id: ED-682
+    date: 2026-04-18
+    description: "Derived stats integration — §8 personal-scale applications added: Bonds→Disposition cap propagated to fieldwork §5.1, Army Morale composite added to mass_battle cross-ref, Renown→governance penalty bridge added to player_agency §5.4, Garrison Strength combat feedback added to combat §13.2b. §8.5 documents what NOT to add."
+    status: resolved
+    severity: P2
+    affects: [designs/systems/derived_stats_v1.md, designs/fieldwork/fieldwork_v30.md, designs/combat/combat_v30.md, designs/systems/player_agency_v30.md, designs/mass_combat/mass_battle_v30.md]
+
+  - id: ED-683
+    date: 2026-04-18
+    description: "Disposition +5 unreachable under PP-632 floor(Bonds/2)+1 cap. Knot formation mechanically impossible at attribute max 7."
+    status: resolved
+    severity: P1
+    resolution: "PP-684 applied prior session: ceiling = Bonds. Bonds 5 reaches +5 at creation. All docs updated. Confirmed closed on audit."
+    affects: [references/params_core.md, designs/fieldwork/fieldwork_v30.md, designs/systems/derived_stats_v1.md]
+
+  - id: ED-666
+    date: 2026-04-18
+    description: "Path B speed-run: Vaynard wins S9 while all other factions 15+ seasons from conditions."
+    status: resolved
+    severity: P1
+    resolution: "Season ≥ 12 (Year 3) gate added to Path B conditions. victory_v30 §3.4."
+    affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-667
+    date: 2026-04-18
+    description: "Coup Counter fires S17 before Regency Establishment structurally achievable."
+    status: resolved
+    severity: P1
+    resolution: "Season ≥ 20 (Year 5) gate added to Regency Establishment. victory_v30 §3.6."
+    affects: [designs/board_game/victory_v30.md]
+
+  - id: ED-576
+    date: 2026-04-18
+    description: "Post-combat fieldwork when player fled undefined."
+    status: resolved
+    severity: P1
+    resolution: "Fled/Retreated transition added to combat_v30 §11.5. No post-combat scene; site becomes standard POI; evidence degrades +1 Ob/season. Exposure still applies."
+    affects: [designs/combat/combat_v30.md]
+
+  - id: ED-577
+    date: 2026-04-18
+    description: "Co-Movement Cards 1-15 not in canonical docs."
+    status: resolved
+    severity: P1
+    resolution: "Full 15-card table added to threadwork_v30 §4.3. All TT references converted to RS (inverted). Deck composition note added."
+    affects: [designs/ttrpg/threadwork_v30.md]
+
+  - id: ED-578
+    date: 2026-04-18
+    description: "TTRPG mass battle melee damage formula implicit."
+    status: resolved
+    severity: P1
+    resolution: "combat_v30 §9 PP-086 now cross-references mass_battle_v30 Phase 5 as canonical formula. PP-086 retained for personal-scale abstraction only."
+    affects: [designs/combat/combat_v30.md]
+
+  - id: ED-581
+    date: 2026-04-18
+    description: "Social initiative deterministic vs combat rolled."
+    status: resolved
+    severity: P1
+    resolution: "social_contest_v30 §5 changed to rolled initiative (Attunement vs Attunement, TN 7, Ob 1). Aligns with combat initiative. ED-138 resolved."
+    affects: [designs/contest/social_contest_v30.md]
+
+  - id: ED-582
+    date: 2026-04-18
+    description: "Chain Contest Resistance-2 stall not documented."
+    status: resolved
+    severity: P1
+    resolution: "Deadlock rule added to social_contest_v30 §6.3. Two consecutive zero-movement exchanges: Resistance drops by 1. Third consecutive zero-movement: contest ends as Compromise."
+    affects: [designs/contest/social_contest_v30.md]
+
+  - id: ED-663
+    date: 2026-04-18
+    description: "Haushalt Competence 3 +2 Wealth/season has no cap."
+    status: resolved
+    severity: P1
+    resolution: "Mechanic canonicalized in derived_stats_v1 Treasury section. Income = Competence x 25 gold/season, capped at Wealth x 50/season."
+    affects: [designs/systems/derived_stats_v1.md]
