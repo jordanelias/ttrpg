@@ -25,3 +25,10 @@ sources:
 # ── PP-665 Name Resolution (2026-04-19) ──────────────────────────────────
 # Maret Vossen renamed to Yrsa Vossen (RM leader). Maret Uln (Varfell) unchanged.
 # Forename collision resolved. See canon/patch_register_active.yaml PP-665.
+
+# ── PP-666 New Systems (2026-04-19) ──────────────────────────────────────
+# Three new mechanical systems added as PROVISIONAL specs. See ED-710, ED-711, ED-712.
+# - Settlement adjacency: designs/territory/settlement_adjacency_v30.md
+# - Fractional province ownership: designs/provincial/fractional_province_ownership_v30.md
+# - Faction succession split: designs/provincial/faction_succession_split_v30.md
+# Status: PROVISIONAL — pending smoke-test before CANONICAL.

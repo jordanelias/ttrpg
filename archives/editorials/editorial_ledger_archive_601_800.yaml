@@ -610,3 +610,37 @@
     decision: null
     tags: [board_game, hafenmark, balance]
 
+  # ── VTM-STRIKE / CR-STRIKE archive (2026-04-19) ───────────────────────
+  # Moved from active ledger to free headroom. Audit trail preserved in:
+  # - canon/supersession_register.yaml (VTM-STRIKE-2026-04-19, CR-STRIKE-2026-04-19)
+  # - canon/patch_register_active.yaml (PP-663, PP-664)
+  # - references/propagation_map.md (PP-663 and PP-664 blocks)
+  # Status: open (cascade consequences of strike not yet fully resolved mechanically)
+
+  - id: ED-706
+    status: open
+    date_raised: 2026-04-19
+    description: "VTM struck entirely — no canonical advancement mechanic existed. Varfell victory paths A/B/C + Cultural Reformation pool formula need rewrite."
+    source: PP-663
+    tags: [board_game, varfell, struck]
+
+  - id: ED-707
+    status: open
+    date_raised: 2026-04-19
+    description: "Cultural Reformation (PP-650) struck — incompatible with Vaynard's military-conqueror identity. Varfell expansion military-only. Faction action list + Varfell ladder + NPC priority trees need rewrite."
+    source: PP-663
+    tags: [board_game, varfell, struck]
+
+  - id: ED-708
+    status: open
+    date_raised: 2026-04-19
+    description: "VTM-STRIKE cascade — Varfell Path C dissolved. Thread mastery is character-scale only. Remaining Varfell paths: A (Intelligence Hegemony), B (Southernmost Dominion). Win probability rebalance required."
+    source: PP-663
+    tags: [board_game, varfell, victory]
+
+  - id: ED-709
+    status: open
+    date_raised: 2026-04-19
+    description: "VTM-STRIKE residual cleanup (PP-664) — three files tombstone-bannered in PP-663 but body mechanics unedited. PP-664 patches faction_actions.md, npc_priority_trees.md, strategic_layer_v30.md."
+    source: PP-664
+    tags: [board_game, varfell, struck]

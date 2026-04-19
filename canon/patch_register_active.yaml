@@ -313,3 +313,23 @@ patches:
     - tests/coverage_matrix_archive.md
   status: applied
   applied_commit: pending
+- id: PP-666
+  date: 2026-04-19
+  severity: P2
+  description: "Three new mechanical systems added per user direction 2026-04-19:
+    settlement adjacency graph (inter-settlement edges for invasion routing; replaces
+    abstract 'internal road network'), fractional province ownership (province PV
+    fractionalizes by settlement Prosperity when Seat and non-Seat have different
+    controllers; 75%-share Consolidation threshold), generalized faction succession
+    contest (leader loss triggers contest across all factions; narrow margins split
+    faction; Baralta Crown Claim subsumed as Crown-specific special case). RM Settlement
+    Emergence pathway formalized alongside existing Stage 2→5 emergence. ED-710, ED-711,
+    ED-712 raised. Specs at PROVISIONAL status — pending smoke-test balance."
+  finding_id: USER-DIRECTED
+  source: user
+  affects:
+    - designs/territory/settlement_adjacency_v30.md
+    - designs/provincial/fractional_province_ownership_v30.md
+    - designs/provincial/faction_succession_split_v30.md
+  status: applied
+  applied_commit: pending

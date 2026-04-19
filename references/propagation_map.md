@@ -119,3 +119,30 @@ If broken dependencies are found:
 - references/canonical_sources.yaml: PP-665 cross-reference note appended.
 
 **Consequences:** none — cosmetic rename with no mechanical impact. All NPC stance triangles, priority trees, arc profiles, and mechanical references preserved.
+
+## 2026-04-19 — PP-666 Three new mechanical systems (settlement adjacency, fractional ownership, succession split)
+
+**Commit:** (this commit)
+**Scope:** per user direction, add three new mechanical systems as PROVISIONAL design specs + pointer ED entries in editorial ledger.
+
+**New specs:**
+- designs/territory/settlement_adjacency_v30.md — inter-settlement adjacency graph, edge types (road/river/mountain/coastal), army movement at settlement scale, mass battle at settlement scale, siege sequencing.
+- designs/provincial/fractional_province_ownership_v30.md — CK-style province fractionalization when Seat and non-Seat have different controllers; PV share by settlement Prosperity; Greater/Lesser naming; Consolidation at 75%; Fragmentation Check each Accounting; Secession.
+- designs/provincial/faction_succession_split_v30.md — universal Succession Contest framework; contenders by claim type; narrow-winner faction split; asset split (provinces, Mandate 60/40, Wealth 70/30, units by Loyalty); RM Settlement Emergence pathway formalized.
+
+**Registers:**
+- canon/editorial_ledger.yaml: ED-710, ED-711, ED-712 added as pointer entries. ED-706-709 archived to free headroom.
+- archives/editorials/editorial_ledger_archive_601_800.yaml: ED-706-709 appended with VTM/CR strike audit trail note.
+- canon/patch_register_active.yaml: PP-666 entry.
+- references/canonical_sources.yaml: PP-666 cross-reference note.
+
+**Supersedes (partially):**
+- baralta_crown_claim_v30 Succession Contest (§2) — now special case of generalized Succession Contest in faction_succession_split_v30.
+- settlement_layer_v30 §5.1 'internal road network' reference — formalized as adjacency graph in settlement_adjacency_v30.
+- settlement_layer_v30 §5.1 'When the Seat is captured, provincial control transfers' — superseded by fractional ownership (Seat-only transfer now produces fractional state if non-Seat also contested).
+
+**Consequences requiring further work:**
+- settlement_adjacency_map.yaml needs authoring (derivable from geography_v30 + settlement_layer §2.1).
+- PV-recompute logic needed across victory_v30 win probability table (current figures assume whole-province control).
+- NPC behavior priority trees (npc_behavior_v30 §7) need succession-contest decision branches.
+- Smoke-test required for all three systems before moving from PROVISIONAL to CANONICAL.
