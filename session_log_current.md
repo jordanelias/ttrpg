@@ -1,8 +1,8 @@
-session_id: 2026-04-19-engine-v3-rebuild-plus-canon-strikes
+session_id: 2026-04-19-provisional-mechanics-arc-test
 session_close: 2026-04-19
 phase: 0
 status: complete
-last_stage: engine_v3.6 committed + workplan for v4 rebuild + VTM and Cultural Reformation struck from canon
+last_stage: PP-666 provisional mechanics arc test — 4 scenarios × 3 seeds, committed 6ea1f3e
 next_action:
   skill: engine_v4 rebuild — Phase 0 canon audit
   description: >
@@ -18,33 +18,47 @@ next_action:
     RM activation trigger, Thread ops in mass battle, subnational faction emergence.
     Phase 0 confirms whether these gaps are real or exist in canon sections
     not yet read. After audit, Phase 1 (substrate — territory graph + settlement
-    sublayer + Calamity radiation state) starts. Do not touch engine_v3 until
-    audit complete.
-  blockers: []
+    sublayer + Calamity radiation state) starts.
+    NOTE: Arc test surfaced 8 additional gaps in PP-666 mechanics — see
+    tests/sim_framework/arc_test_results.md. Two design issues flagged:
+    (1) Secession oscillation loop in fractional_province_ownership_v30 — needs cooldown.
+    (2) Splinter viability at Mandate 1 unclear in faction_succession_split_v30.
+    These should be resolved before PP-666 mechanics are canonized.
+  blockers:
+    - settlement_adjacency_map.yaml not authored — blocks adjacency mechanic canonization
+    - fractional_province_ownership_v30 Secession cooldown gap — produces oscillation loop
 commits:
-  - 422fa07: Mass Seizure exponential declaration curve P=((CI-60)/40)^3.3 + supersession_check hook
-  - 2e70d77: Engine v3.1 — 6 bug fixes + Warden emergence
-  - 3f07396: Engine v3.2 — territory inheritance + LocalMilitia revolt + 0-territory elimination
-  - f7aa0ed: Engine v3.3 — VTM struck from engine + RS seasonal decay
-  - bc57b6c: Engine v3.4 — Church infrastructure buildup + heresy investigation + Hafenmark wealth
-  - d225feb: Engine v3.5 — earlier Mass Seizure curve P=((CI-40)/60)^2.5 + elimination cascade
-  - 297f892: Engine v3.6 — Cultural Reformation struck from engine + Varfell pure military
-  - 13b8f30: Workplan for engine_v4 full rebuild from canonical game systems
-  - 613ebf9: VTM + Cultural Reformation struck from canon — ED-706, ED-707
+  - 6ea1f3e: PP-666 arc test — 4 scenarios, 8 gap flags, secession loop + splinter viability issues
 session_highlights:
-  - Engine v3 went through 6 iterations. Final state at 297f892 has correct dice, CI, RS, territory inheritance, LocalMilitia revolt, exponential seizure curve. Still structurally wrong for rebuild (no geography, no settlements, no mass battles).
-  - Supersession register infrastructure now live. canon/supersession_register.yaml + supersession_check hook in valoria_hooks.py fires during pre_commit_gate as non-blocking warning when commits touch flagged files. Verified live during commits 422fa07 and 613ebf9.
-  - VTM struck — no canonical advancement mechanic existed, was placeholder. Varfell victory paths A/B/C + Cultural Reformation pool formula need rewrite (ED-706).
-  - Cultural Reformation struck — Jordan clarified Vaynard is Reinhardt von Lohengramm parallel. Military conqueror, not ideological converter. Varfell expansion is purely military. Tribune intel remains, Thread operations remain as personal-scale actions. (ED-707)
-  - Extensive faction identity canon review: Almud = best player at table playing defense on all fronts (weaponizes Einhir question, redirects threats into each other, wins late by absorbing wreckage). Baralta = iron personality + parliamentary prowess + mining wealth → best troops, food vulnerability. Vaynard = revolutionary southern Einhir, closest to Thread, hemmed in by fortresses. Himlensendt = true believer whose pastoral service drifts into theocracy. Caste system = binary (Einhir-heritage vs not), structurally load-bearing for NPC ecosystem.
-  - Engine v3 is architecturally wrong. Has been building NPC-vs-NPC stat-comparison loop without player, scenes, zoom-in, actual mass battles, Thread operations, terrain, adjacency, settlement-level Church infrastructure, or geographic constraints. Correct dice/CI/RS mechanics but wrong faction model.
-  - Workplan for engine_v4 full rebuild from game systems up, not from faction win-rate targets down. 6 phases, ~8 sessions.
+  - Ran targeted simulation of three PROVISIONAL PP-666 mechanics: settlement_adjacency_v30,
+    fractional_province_ownership_v30, faction_succession_split_v30.
+  - Settlement adjacency fires correctly. Path-constrained invasion → partial capture →
+    fractionalization works as designed.
+  - Succession split produces meaningful seed-to-seed variance (clear vs narrow outcomes
+    drive divergent arcs). RM backing interaction (+1 Influence on partial success) is
+    well-designed.
+  - Fractional province oscillation bug: no Secession cooldown in spec. Settlement
+    seceeds → consolidates → seceeds in consecutive seasons indefinitely. Needs 2-season
+    post-Consolidation cooldown added to fractional_province_ownership_v30.
+  - Splinter faction at Mandate 1 is non-functional: collapses in ~4 seasons. Spec
+    unclear whether splinter is "chaos token" or "durable rival".
+  - Dominant emergent arc across all scenarios: RM ascent from Varfell political fracture.
+    Vaynard dies → succession split → Eastern Varfell at Mandate 1 fails fragmentation
+    checks → Grauwald/Oastad secede to RM → RM reaches Stage 3 by mid-game.
+    This arc is mechanically grounded and design-intent-aligned but may be too fast
+    (Stage 3 by S02 in degraded-Order scenarios).
+  - Full seed-determinism in Arc 3 (no succession event) — dice pools too static,
+    no real variance without high-variance events. Engine_v4 needs dynamic Influence.
+  - Crown and Church are passive across all arcs. Expected for this simulation scope;
+    confirms engine_v4 needs Crown suppression AI and Church Mass Seizure to be active actors.
 open_items:
   - ED-706 VTM strike — Varfell victory paths A/B/C need rewrite (P2)
   - ED-707 Cultural Reformation strike — faction_actions, Varfell ladder, NPC priority trees need rewrite (P2)
-  - Six canon gaps flagged in workplan blocking parts of v4 rebuild (mine income rate, food vulnerability, Einhir suppression action, RM activation trigger, Thread ops in mass battle, subnational faction emergence)
+  - Six canon gaps from workplan (mine income rate, food vulnerability, Einhir suppression action,
+    RM activation trigger, Thread ops in mass battle, subnational faction emergence)
+  - Eight new gap flags from arc test — see tests/sim_framework/arc_test_results.md
   - coverage_matrix at 4537/5000 tokens — warning threshold
-  - editorial_ledger at 1652/2000 tokens — warning threshold (after ED-706 and ED-707 added)
+  - editorial_ledger at 1652/2000 tokens — warning threshold
   - ED-671 Thread-perception census (P1)
   - ED-666 Path B speed-run calibration (P1) — note: Path B itself pending rewrite after VTM strike
   - ED-667 Coup Counter readiness gap (P1)
@@ -52,3 +66,6 @@ open_items:
   - ED-633 Deniability Debt (P1)
   - ED-629 Heresy Proceedings auth loop (P1)
   - ED-663 Wealth cap (P1)
+  - PP-666 fractional_province_ownership_v30 — Secession cooldown gap (new, from arc test)
+  - PP-666 faction_succession_split_v30 — splinter viability at Mandate 1 unclear (new, from arc test)
+  - PP-666 settlement_adjacency_map.yaml — not authored, blocks canonization (new, from arc test)
