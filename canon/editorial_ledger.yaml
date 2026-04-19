@@ -1,8 +1,17 @@
 # Valoria Editorial Ledger — Active
-# next_id: 693
+# next_id: 694
 
 
 
+
+
+
+  - id: ED-693
+    date: 2026-04-18
+    description: "AUD-NPC-03: Priority tree cross-faction simulation. 10-season 4-faction AI test. No broken priority evaluation. Church repetition (Assert) is intentional — correct single-minded institutional behavior. Cross-faction reactivity confirmed."
+    status: resolved
+    severity: P2
+    affects: [designs/npcs/npc_behavior_v30.md, tests/sim/sim_priority_trees.md]
 
 
   - id: ED-692

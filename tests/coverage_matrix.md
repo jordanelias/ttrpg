@@ -33,6 +33,7 @@
 | ED-588 | PT ≤ 3 (revised from PT ≤ 1). Resolved in victory_v30 §3.5 (2026-04-16). |
 | ED-589 | Presence marker mechanics defined: Community Organizing Domain Action, cap 5/territory, Church/Crown suppression rules. victory_v30 §3.5 updated. |
 | ED-612 | Guilds intentionally have no solo victory condition. Guilds are an NPC faction/tool, not a protagonist faction. Confirmed in throughline analysis. |
+| AUD-NPC-03 | Priority tree cross-faction sim — 10 seasons, trees produce faction-appropriate behavior, repetition intentional |
 | SIM-DEBT-03/04 | Social contest PP-234 re-simulation — CROSS viable at R1, intentionally weak at R2, stall-break working |
 | ED-577-01/02/03/04 | Co-Movement calibration — all 4 resolved, RS ±4.3 PASS |
 | SIM-POL-R01-R05 | Faction politics simulation — all 5 items PASS (Standing reachability, Ministry decay, caste gating, branch differentiation, cross-faction balance) |
