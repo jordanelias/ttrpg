@@ -11,7 +11,7 @@ Usage in every bash_tool block:
     oid = h.safe_commit(additions, deletions, message)
 """
 
-import os, sys, re
+import os, sys, re, json
 sys.path.insert(0, '/home/claude')
 import github_ops as g
 
@@ -304,6 +304,12 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
             f"  Sim outputs: {sim_writes}"
         )
 
+    # Sim fabrication check — catches uncited mechanical constants in sim files
+    try:
+        sim_fabrication_check(additions)
+    except RuntimeError as e:
+        errors.append(str(e))
+
     if errors:
         raise RuntimeError(
             "[HOOK VIOLATION] pre_commit_gate FAILED:\n\n"
@@ -547,3 +553,452 @@ def safe_commit(additions: list, deletions: list, message: str,
     )
     print(f"[HOOK ✓] safe_commit → {repo} — {oid}")
     return oid
+
+
+# ── NEW Hook 10: Simulation verification ledger ───────────────────────────────
+#
+# THE PROBLEM THIS SOLVES:
+# Simulations have failed because Claude writes mechanical code without having
+# actually read the canonical sources. The code is then built on fabricated or
+# remembered values, producing results that look valid but are mechanically wrong.
+#
+# THE FIX:
+# Before any simulation code is written or committed, a verification ledger must
+# exist that maps every canonical source read → every mechanical value extracted
+# → every sim variable using that value. The ledger is an artifact, not a mental
+# record. If you cannot produce the ledger, you have not read enough to simulate.
+
+import json
+
+# Systems that simulation code typically touches. For a "full stack" sim, all of
+# these must have canonical sources read. For a targeted sim, only the relevant
+# subset. The gate accepts a scope parameter to distinguish.
+SIM_CANONICAL_PRESETS = {
+    "full_stack": [
+        "core_engine", "combat", "threadwork", "clocks", "factions",
+        "victory", "territories", "mass_combat", "social_debate",
+        "scale_transitions", "faction_layer", "military_layer",
+        "tc_political", "peninsular_strain", "settlement_layer",
+        "campaign_architecture", "derived_stats",
+    ],
+    "strategic": [
+        "core_engine", "factions", "victory", "territories", "clocks",
+        "faction_layer", "tc_political", "peninsular_strain",
+        "campaign_architecture",
+    ],
+    "combat": ["core_engine", "combat", "derived_stats"],
+    "mass_combat": ["core_engine", "mass_combat", "derived_stats"],
+    "thread": ["core_engine", "threadwork"],
+    "social": ["core_engine", "social_debate", "conviction_track"],
+    # Custom scope: caller provides systems list directly
+}
+
+
+def sim_gate(scope: str, systems: list = None) -> None:
+    """
+    Gate before any simulation code is written.
+
+    1. Resolves the canonical sources registry.
+    2. Determines required systems (from preset or explicit list).
+    3. Confirms every canonical design doc for those systems has been read
+       at full depth (not just skeleton).
+    4. Requires a verification ledger at /home/claude/sim_verification_ledger.json
+       mapping each mechanical value in the sim to its canonical source.
+
+    Failure raises RuntimeError with the exact gap identified.
+
+    Usage:
+        h.sim_gate("strategic")  # uses preset
+        h.sim_gate("custom", systems=["core_engine", "combat", "victory"])
+
+    The ledger format (JSON):
+        {
+          "sim_file": "valoria_sim_v3.py",
+          "scope": "strategic",
+          "entries": [
+            {
+              "sim_variable": "CROWN_STARTING_MANDATE",
+              "value": 5,
+              "canonical_source": "params/factions/stats_1_7_scale.md",
+              "section": "Starting Stats",
+              "quoted_text": "Crown | 5 | 5 | 5 | 4 ..."
+            },
+            ...
+          ]
+        }
+
+    Every mechanical constant in the sim must have a ledger entry. No exceptions.
+    """
+    if not _bootstrap_confirmed:
+        raise RuntimeError(
+            "[HOOK VIOLATION] sim_gate() before assert_bootstrap()."
+        )
+
+    # Require task_gate('simulation') has run
+    if 'simulation' not in _task_gates_passed:
+        raise RuntimeError(
+            "[HOOK VIOLATION] sim_gate() requires task_gate('simulation') first.\n"
+            "Call h.task_gate('simulation') before h.sim_gate()."
+        )
+
+    # Resolve systems
+    if scope in SIM_CANONICAL_PRESETS:
+        if systems is not None:
+            raise RuntimeError(
+                f"[HOOK VIOLATION] sim_gate('{scope}') uses a preset — do not pass systems.\n"
+                f"To override, use scope='custom' with explicit systems=[...]."
+            )
+        systems = SIM_CANONICAL_PRESETS[scope]
+    elif scope == "custom":
+        if not systems:
+            raise RuntimeError(
+                "[HOOK VIOLATION] sim_gate('custom') requires systems=[...]."
+            )
+    else:
+        raise RuntimeError(
+            f"[HOOK VIOLATION] Unknown sim scope '{scope}'.\n"
+            f"Valid presets: {sorted(SIM_CANONICAL_PRESETS.keys())}\n"
+            f"Or use scope='custom' with systems=[...]."
+        )
+
+    # Load canonical_sources.yaml from session fetches
+    cs_key = g._repo_key('references/canonical_sources.yaml', 'ttrpg')
+    cs_content = g._session_fetches.get(cs_key)
+    if not cs_content:
+        raise RuntimeError(
+            "[HOOK VIOLATION] sim_gate(): canonical_sources.yaml not fetched.\n"
+            "Call read_files_graphql(['references/canonical_sources.yaml']) first."
+        )
+
+    # canonical_sources.yaml has known malformed sections (mixed top-level list
+    # items and mappings). Parse robustly by filtering out the specific list-
+    # item blocks that clash with the surrounding mapping structure, while
+    # keeping all sibling mapping entries.
+    import yaml
+    cs = None
+    try:
+        cs = yaml.safe_load(cs_content)
+    except Exception:
+        # Remove lines that are top-level list items ('- key:' at column 0)
+        # and their indented child lines, but preserve siblings that are
+        # mapping keys at column 0 or 2 (common outer/nested indentation).
+        lines = cs_content.split('\n')
+        filtered = []
+        skipping = False
+        for line in lines:
+            # Start skipping at a '- ' list marker at column 0
+            if line.startswith('- '):
+                skipping = True
+                continue
+            if skipping:
+                # Stop skipping when we hit a line that starts with non-space
+                # OR a line that starts with exactly 2 spaces followed by a
+                # letter (sibling mapping entry at the outer level — not a
+                # child of the list item).
+                if line and not line[0].isspace():
+                    skipping = False
+                    filtered.append(line)
+                elif (line.startswith('  ') and len(line) > 2
+                      and not line[2].isspace()
+                      and line[2].isalpha()):
+                    skipping = False
+                    filtered.append(line)
+                # Otherwise still skipping this list-item's children
+                continue
+            filtered.append(line)
+
+        cleaned = '\n'.join(filtered)
+        try:
+            cs = yaml.safe_load(cleaned)
+        except Exception as e:
+            raise RuntimeError(
+                f"[HOOK VIOLATION] sim_gate(): cannot parse canonical_sources.yaml\n"
+                f"even after removing malformed list blocks: {e}\n"
+                f"Fix the YAML file before proceeding."
+            )
+
+    # Systems may be in the top-level `systems:` key or as bare top-level keys
+    # (the file mixes both styles). Merge them.
+    cs_systems = {}
+    if cs:
+        cs_systems.update(cs.get('systems', {}) or {})
+        # Also absorb top-level mapping keys that have 'canonical' or 'design_doc'
+        # fields — these are system-like entries not under systems:
+        for k, v in cs.items():
+            if k == 'systems':
+                continue
+            if isinstance(v, dict) and (
+                'canonical' in v or 'design_doc' in v
+            ) and k not in cs_systems:
+                cs_systems[k] = v
+
+    # For each required system, resolve canonical path and verify fetched at depth
+    missing_systems = []
+    unfetched_paths = []
+    skeleton_only_paths = []
+    repo = g.active_repo()
+
+    for system in systems:
+        entry = cs_systems.get(system)
+        # Also check top-level (some systems are defined outside systems:)
+        if not entry and cs:
+            entry = cs.get(system)
+        if not entry:
+            missing_systems.append(system)
+            continue
+
+        # Resolve canonical path — prefer design_doc over canonical for simulation
+        # because design_doc is the mechanical source; params files are derived.
+        canonical_path = (
+            entry.get('design_doc') or
+            entry.get('canonical') or
+            entry.get('canonical_bg') or
+            entry.get('canonical_ttrpg')
+        )
+        if not canonical_path or not isinstance(canonical_path, str):
+            missing_systems.append(f"{system} (no canonical path in registry)")
+            continue
+
+        key = g._repo_key(canonical_path, repo)
+        if key not in g._session_fetches or g._session_fetches[key] is None:
+            unfetched_paths.append((system, canonical_path))
+            continue
+
+        # Skeleton check: a design doc fetched as skeleton does not count as
+        # "read for simulation" — sim needs mechanical detail which lives in
+        # the full file. Use github_ops.was_skeletonized() for accurate check.
+        if canonical_path.startswith('designs/'):
+            try:
+                if g.was_skeletonized(canonical_path, repo):
+                    skeleton_only_paths.append((system, canonical_path))
+            except Exception:
+                # was_skeletonized may not exist in older github_ops — fall back
+                # to content heuristic
+                content = g._session_fetches.get(key)
+                if content and '<!-- SKELETON — auto-generated' in content[:500]:
+                    skeleton_only_paths.append((system, canonical_path))
+
+        # If there's a params file in the registry too, fetching the params
+        # file is also required — params files may contain values that override
+        # or augment design_doc content.
+        params_path = entry.get('params')
+        if params_path and isinstance(params_path, str):
+            p_key = g._repo_key(params_path, repo)
+            if p_key not in g._session_fetches or g._session_fetches[p_key] is None:
+                unfetched_paths.append((system, params_path))
+
+    # Assemble violation report
+    errors = []
+    if missing_systems:
+        errors.append(
+            "Systems not found in canonical_sources.yaml:\n"
+            + "\n".join(f"    {s}" for s in missing_systems)
+        )
+    if unfetched_paths:
+        errors.append(
+            "Canonical sources not fetched:\n"
+            + "\n".join(f"    {sys}: {path}" for sys, path in unfetched_paths)
+            + "\n  Fetch with: read_files_graphql([<paths>])"
+        )
+    if skeleton_only_paths:
+        errors.append(
+            "Sources fetched as SKELETON only (not infilled) — simulations need mechanical detail:\n"
+            + "\n".join(f"    {sys}: {path}" for sys, path in skeleton_only_paths)
+            + "\n  Fetch full content with: read_files_graphql([<paths>])\n"
+            + "  Or use read_sections() for specific ranges."
+        )
+
+    if errors:
+        raise RuntimeError(
+            f"[HOOK VIOLATION] sim_gate('{scope}') — canonical reads incomplete:\n\n"
+            + "\n\n".join(f"  [{i+1}] {e}" for i, e in enumerate(errors))
+            + "\n\nA simulation cannot be written on incomplete sources.\n"
+            + "Fetch the missing content before proceeding. No exceptions.\n"
+        )
+
+    # Verification ledger check — the artifact must exist
+    ledger_path = '/home/claude/sim_verification_ledger.json'
+    if not os.path.exists(ledger_path):
+        raise RuntimeError(
+            f"[HOOK VIOLATION] sim_gate('{scope}') — verification ledger missing.\n"
+            f"Required file: {ledger_path}\n\n"
+            f"The ledger must map every mechanical constant in the sim to its\n"
+            f"canonical source. Example entry:\n"
+            f'  {{"sim_variable": "CROWN_STARTING_MANDATE",\n'
+            f'    "value": 5,\n'
+            f'    "canonical_source": "params/factions/stats_1_7_scale.md",\n'
+            f'    "section": "Starting Stats",\n'
+            f'    "quoted_text": "Crown | 5 | 5 | 5 | 4 ..." }}\n\n'
+            f"Build the ledger before writing any sim code. No exceptions."
+        )
+
+    try:
+        with open(ledger_path) as f:
+            ledger = json.load(f)
+    except Exception as e:
+        raise RuntimeError(
+            f"[HOOK VIOLATION] sim_gate(): cannot parse {ledger_path}: {e}\n"
+            f"Ledger must be valid JSON."
+        )
+
+    entries = ledger.get('entries', [])
+    if not entries:
+        raise RuntimeError(
+            f"[HOOK VIOLATION] sim_gate(): verification ledger has no entries.\n"
+            f"Add one entry per mechanical constant in the sim before proceeding."
+        )
+
+    # Each entry must have the four required fields
+    required_fields = ('sim_variable', 'value', 'canonical_source', 'quoted_text')
+    incomplete = []
+    for i, e in enumerate(entries):
+        missing = [f for f in required_fields if f not in e or e[f] in (None, '')]
+        if missing:
+            incomplete.append(f"entry {i}: missing {missing}")
+    if incomplete:
+        raise RuntimeError(
+            "[HOOK VIOLATION] sim_gate(): ledger entries incomplete:\n"
+            + "\n".join(f"  {x}" for x in incomplete)
+            + "\nEvery entry requires: sim_variable, value, canonical_source, quoted_text."
+        )
+
+    # Each referenced canonical_source must be in session fetches
+    referenced_sources = {e['canonical_source'] for e in entries}
+    unfetched_refs = [
+        s for s in referenced_sources
+        if g._repo_key(s, repo) not in g._session_fetches
+        or g._session_fetches[g._repo_key(s, repo)] is None
+    ]
+    if unfetched_refs:
+        raise RuntimeError(
+            "[HOOK VIOLATION] sim_gate(): ledger references unfetched sources:\n"
+            + "\n".join(f"  {s}" for s in unfetched_refs)
+            + "\nFetch these before proceeding."
+        )
+
+    print(f"[HOOK ✓] sim_gate('{scope}') — {len(systems)} systems verified, "
+          f"{len(entries)} ledger entries, {len(referenced_sources)} sources cited")
+
+
+# ── Extension to pre_commit_gate: anti-fabrication check for sim commits ──────
+#
+# THE PROBLEM THIS SOLVES:
+# Even with sim_gate, Claude could write sim code with uncited mechanical values
+# and commit it. This catches uncited constants at commit time.
+#
+# THE FIX:
+# Any committed .py file under tests/sim/ or containing "sim" in the name must
+# have every numeric literal either (a) covered by a ledger entry, or (b)
+# annotated with a `# [canonical: path §section]` comment on the same line or
+# the line above.
+
+_MECHANICAL_NUMERIC_PATTERN = re.compile(r'(?<![a-zA-Z_])(\d+)(?![a-zA-Z_])')
+_CANONICAL_COMMENT_PATTERN = re.compile(r'#\s*\[canonical:\s*[^\]]+\]')
+
+# Values exempt from citation requirement — these are structural, not mechanical.
+_EXEMPT_NUMBERS = {'0', '1', '2', '10', '100'}  # indices, loop bounds, percentages
+# Note: this is permissive. A "2" could be Ob 2 (mechanical) or list[2] (structural).
+# The gate uses heuristics, not hard rules — it prints warnings and lets the
+# committer decide. False negatives are acceptable; false positives are not.
+
+
+def _is_sim_file(path: str) -> bool:
+    """A file is a sim file if it's under tests/sim/ or its name contains 'sim'."""
+    if not path.endswith('.py'):
+        return False
+    if path.startswith('tests/sim/'):
+        return True
+    basename = path.rsplit('/', 1)[-1].lower()
+    if 'sim' in basename or 'simulation' in basename:
+        return True
+    return False
+
+
+def _extract_uncited_constants(content: str) -> list:
+    """
+    Scan Python content for numeric literals on lines without canonical citations.
+    Returns list of (line_number, line_text, number) for uncited values.
+    Heuristic — skips exempt values (0, 1, 2, 10, 100) and comment-only lines.
+    """
+    uncited = []
+    lines = content.split('\n')
+    for i, line in enumerate(lines, 1):
+        stripped = line.strip()
+        if not stripped or stripped.startswith('#'):
+            continue
+        # Does this line or the line before have a canonical comment?
+        prev = lines[i - 2] if i >= 2 else ''
+        if _CANONICAL_COMMENT_PATTERN.search(line) or _CANONICAL_COMMENT_PATTERN.search(prev):
+            continue
+        # Strip string literals to avoid flagging numbers in strings
+        # Rough heuristic — doesn't handle escape sequences perfectly
+        code_only = re.sub(r"'[^']*'", "''", line)
+        code_only = re.sub(r'"[^"]*"', '""', code_only)
+        # Strip inline comments
+        if '#' in code_only:
+            code_only = code_only.split('#', 1)[0]
+        numbers = _MECHANICAL_NUMERIC_PATTERN.findall(code_only)
+        for n in numbers:
+            if n in _EXEMPT_NUMBERS:
+                continue
+            # Skip if part of a standard Python idiom (range, len, slice)
+            # Heuristic: if the number is inside range(), len(), [:N], etc.,
+            # it's probably structural.
+            if re.search(rf'(range|len|enumerate|slice)\s*\([^)]*\b{n}\b', code_only):
+                continue
+            uncited.append((i, line.rstrip(), n))
+    return uncited
+
+
+def sim_fabrication_check(additions: list) -> None:
+    """
+    Post-sim-gate check: scans committed sim files for uncited mechanical constants.
+    Called automatically within pre_commit_gate for .py files matching sim patterns.
+    Raises RuntimeError if uncited constants found and a ledger does not cover them.
+    """
+    sim_files = [(p, c) for p, c in additions if _is_sim_file(p)]
+    if not sim_files:
+        return
+
+    # Load ledger if present — values there are "cited"
+    ledger_values = set()
+    ledger_path = '/home/claude/sim_verification_ledger.json'
+    if os.path.exists(ledger_path):
+        try:
+            with open(ledger_path) as f:
+                ledger = json.load(f)
+            for e in ledger.get('entries', []):
+                v = e.get('value')
+                if v is not None:
+                    ledger_values.add(str(v))
+        except Exception:
+            pass
+
+    problems = []
+    for path, content in sim_files:
+        uncited = _extract_uncited_constants(content)
+        # Filter: if the number matches a ledger value, accept it
+        # (this is loose — same number different meaning would pass. But the
+        #  primary failure mode is wholly fabricated values, which this catches.)
+        genuine = [(ln, txt, n) for ln, txt, n in uncited if n not in ledger_values]
+        if genuine:
+            problems.append((path, genuine))
+
+    if problems:
+        lines = ["[HOOK VIOLATION] sim_fabrication_check — uncited mechanical constants:\n"]
+        for path, items in problems:
+            lines.append(f"  {path}:")
+            for ln, txt, n in items[:10]:  # cap at 10 per file to avoid spam
+                lines.append(f"    line {ln}: value {n} — {txt[:80]}")
+            if len(items) > 10:
+                lines.append(f"    ... and {len(items) - 10} more")
+            lines.append("")
+        lines.append("Every mechanical constant requires either:")
+        lines.append("  (a) a ledger entry in /home/claude/sim_verification_ledger.json, OR")
+        lines.append("  (b) a `# [canonical: path §section]` comment on same or prior line.")
+        lines.append("")
+        lines.append("Fabricated constants are the primary simulation failure mode.")
+        lines.append("This gate is intentionally noisy — it catches the failure early.")
+        raise RuntimeError("\n".join(lines))
+
+    print(f"[HOOK ✓] sim_fabrication_check ({len(sim_files)} sim files, all constants cited)")
