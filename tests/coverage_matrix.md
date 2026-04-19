@@ -247,3 +247,19 @@ covered by system validation ED-702. Settlement derived stats covered by Phase 6
 | GAP-SIM-01 | RM govern actions use generic territory fallback — should route through Community Organizing | OPEN P3 |
 | NOTE-SIM-01 | Vaynard RS=0, Edeyja RS=1 — validates canonical arc descriptions mechanically | CONFIRMED |
 | NOTE-SIM-02 | Maret Uln best RS outcome (33) — diplomat+moderate TS most substrate-preserving | CONFIRMED |
+
+## Engine Audit — 2026-04-18
+
+50 mechanical gaps identified in engine_v2.py vs canonical params.
+Full audit: tests/audit/engine_audit_2026-04-18.md
+
+Critical gaps blocking valid simulation:
+- G-DICE-01/02/03/04: d10 face 1/10 bonuses absent; degree table wrong at Ob>2
+- G-STAT-01 to 06: Church Mandate/Wealth and Varfell all-stats undertuned
+- G-TRACK-01: IP starts at 5 vs canonical 20
+- G-VIC-01 to 08: Victory checks use territory count not TCV; conditions incomplete
+- G-AI-04: Varfell AI complete stub
+- G-TC-03: TC not frozen at 75
+
+Previous 11 NPC PC campaign results (a6f468ee) are NOT valid for balance testing.
+Engine rebuild required before iterative NPC simulations.

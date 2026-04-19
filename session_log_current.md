@@ -1,21 +1,9 @@
-# Session Log — 2026-04-18 (NPC PC campaign sims)
-last_stage: Full campaign simulations complete — 11 NPC PC + player character runs
+# Session Log — 2026-04-18 (engine audit)
+last_stage: Engine audit complete — 50 gaps vs canonical, rebuild required before NPC sims
 next_action:
-  skill: confirm with Jordan
+  skill: engine rebuild (dice to state to TCV to victory to TC to RS to AI)
   description: >
-    11 full-length campaigns (120 seasons each) completed. All NPC PCs + player character.
-    Key findings: Vaynard/Edeyja RS collapse validates canonical arcs. Maret Uln best RS.
-    Calibration gaps: TC convergence at 49 (CAL-SIM-01), 0/11 victories (CAL-SIM-02).
-    RM govern fallback gap logged (GAP-SIM-01).
+    Previous NPC PC sims invalid. Engine has 50 confirmed gaps vs canonical params.
+    Must rebuild engine before iterative NPC simulations. Audit committed.
   blockers: []
-commits:
-  - pending: "[simulation] 11 NPC PC full campaigns — all complete, findings logged"
-resolutions_this_session:
-  - "11 full campaign simulations (120 seasons each) — all 10 named NPCs + player character"
-  - "CAL-SIM-01/02 calibration items logged in coverage matrix"
-  - "GAP-SIM-01 RM govern gap logged"
-open_items:
-  - CAL-SIM-01: TC convergence at 49 — P2 calibration
-  - CAL-SIM-02: 0/11 victories — P2 calibration
-  - GAP-SIM-01: RM govern routing — P3
 P1-BLOCKER count: 0
