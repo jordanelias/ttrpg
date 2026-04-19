@@ -1,7 +1,16 @@
 # Valoria Editorial Ledger — Active
-# next_id: 692
+# next_id: 693
 
 
+
+
+
+  - id: ED-692
+    date: 2026-04-18
+    description: "AUD-SC-02/03 + SIM-DEBT-03/04: Social contest PP-234 re-simulation. CROSS viability confirmed at R1, intentionally weak at R2. Stall-break (ED-582) working. No rebalancing needed."
+    status: resolved
+    severity: P2
+    affects: [designs/scene/social_contest_v30.md, tests/sim/sim_contest_pp234.md]
 
 
   - id: ED-689
