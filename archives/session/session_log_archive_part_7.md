@@ -99,3 +99,14 @@ open_items:
   - PV values for T2,T4,T5,T6,T7,T10,T11,T13,T17 TBD
   - TC->CI, TCV->PV propagation across 8+ files
 P1-BLOCKER count: 0
+
+---
+
+session_id: peninsular_strain_restructure_propagation
+session_close: 2026-04-19
+phase: COMPLETE
+status: CLOSED
+last_stage: done
+next_action:
+  skill: confirm with Jordan
+blockers: []
