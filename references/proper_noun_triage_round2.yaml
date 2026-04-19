@@ -1,0 +1,1924 @@
+# Proper Noun Triage Decisions Log — Round 2
+# Applied via deterministic auto-triage + manual disambiguation
+# Input: 466 candidates from round 1 (after 29 decisions were made)
+
+version: 2
+total_decisions: 466
+source: auto_triage_final
+
+breakdown:
+  alias_auto_surname: {count: 6, description: "surname matched existing canonical last-word (unique)"}
+  alias_auto_firstname: {count: 3, description: "given-name matched existing canonical first-word (unique)"}
+  alias_auto_multiword: {count: 16, description: "multi-word token contains existing canonical"}
+  alias_auto_adjective: {count: 3, description: "adjective or plural form of existing canonical"}
+  promote_manual: {count: 5, description: "manually promoted to registry after investigation"}
+  reject_section_header: {count: 41, description: "starts with \"The\" — likely section header fragment"}
+  reject_mechanical_compound: {count: 125, description: "compound starting with mechanical-prefix word"}
+  reject_false_positive: {count: 11, description: "common English word or known false positive"}
+  reject_game_mechanic: {count: 222, description: "game mechanic / action name / stat"}
+  reject_external_reference: {count: 30, description: "real-world reference (not Valoria proper noun)"}
+  reject_conditional: {count: 4, description: "conditional construction (\"If X ...\") — grammatical accident"}
+
+decisions:
+  vossen:
+    token: "Vossen"
+    bucket: alias_auto_surname
+    alias_of: "maret_vossen"
+    rule: "last_word_unique"
+  ehrenwall:
+    token: "Ehrenwall"
+    bucket: alias_auto_surname
+    alias_of: "grandmaster_ehrenwall"
+    rule: "last_word_unique"
+  himlensendt:
+    token: "Himlensendt"
+    bucket: alias_auto_surname
+    alias_of: "confessor_arne_himlensendt"
+    rule: "last_word_unique"
+  jarnstal:
+    token: "Jarnstal"
+    bucket: alias_auto_surname
+    alias_of: "cardinal_osten_jarnstal"
+    rule: "last_word_unique"
+  olafsson:
+    token: "Olafsson"
+    bucket: alias_auto_surname
+    alias_of: "cardinal_arnlod_olafsson"
+    rule: "last_word_unique"
+  movement:
+    token: "Movement"
+    bucket: alias_auto_surname
+    alias_of: "restoration_movement"
+    rule: "last_word_unique"
+  confessor:
+    token: "Confessor"
+    bucket: alias_auto_firstname
+    alias_of: "confessor_arne_himlensendt"
+    rule: "first_word_unique"
+  duke:
+    token: "Duke"
+    bucket: alias_auto_firstname
+    alias_of: "duke_magnus_vaynard"
+    rule: "first_word_unique"
+  torben:
+    token: "Torben"
+    bucket: alias_auto_firstname
+    alias_of: "prince_torben_almqvist"
+    rule: "manual_alias_firstname"
+  forgetting_check:
+    token: "Forgetting Check"
+    bucket: alias_auto_multiword
+    alias_of: "forgetting"
+    rule: "multiword_contains_canonical"
+  southern_einhir:
+    token: "Southern Einhir"
+    bucket: alias_auto_multiword
+    alias_of: "einhir"
+    rule: "multiword_contains_canonical"
+  southern_einhir_descendant:
+    token: "Southern Einhir Descendant"
+    bucket: alias_auto_multiword
+    alias_of: "einhir"
+    rule: "multiword_contains_canonical"
+  southernmost_awareness:
+    token: "Southernmost Awareness"
+    bucket: alias_auto_multiword
+    alias_of: "southernmost"
+    rule: "multiword_contains_canonical"
+  average_valorian:
+    token: "Average Valorian"
+    bucket: alias_auto_multiword
+    alias_of: "valoria"
+    rule: "multiword_contains_canonical"
+  einhir_lore:
+    token: "Einhir Lore"
+    bucket: alias_auto_multiword
+    alias_of: "einhir"
+    rule: "multiword_contains_canonical"
+  riskbreaker_exposure:
+    token: "Riskbreaker Exposure"
+    bucket: alias_auto_multiword
+    alias_of: "riskbreaker"
+    rule: "multiword_contains_canonical"
+  himmelenger_child:
+    token: "Himmelenger Child"
+    bucket: alias_auto_multiword
+    alias_of: "himmelenger"
+    rule: "multiword_contains_canonical"
+  maritime_forgetting:
+    token: "Maritime Forgetting"
+    bucket: alias_auto_multiword
+    alias_of: "forgetting"
+    rule: "multiword_contains_canonical"
+  maritime_forgetting_zone:
+    token: "Maritime Forgetting Zone"
+    bucket: alias_auto_multiword
+    alias_of: "forgetting"
+    rule: "multiword_contains_canonical"
+  riskbreaker_identity:
+    token: "Riskbreaker Identity"
+    bucket: alias_auto_multiword
+    alias_of: "riskbreaker"
+    rule: "multiword_contains_canonical"
+  schoenland_factor:
+    token: "Schoenland Factor"
+    bucket: alias_auto_multiword
+    alias_of: "schoenland"
+    rule: "multiword_contains_canonical"
+  stable_valoria:
+    token: "Stable Valoria"
+    bucket: alias_auto_multiword
+    alias_of: "valoria"
+    rule: "multiword_contains_canonical"
+  unstable_valoria:
+    token: "Unstable Valoria"
+    bucket: alias_auto_multiword
+    alias_of: "valoria"
+    rule: "multiword_contains_canonical"
+  lions:
+    token: "Lions"
+    bucket: alias_auto_multiword
+    alias_of: "lowenritter"
+    rule: "manual_alias_lions_to_lowenritter"
+  warden:
+    token: "Warden"
+    bucket: alias_auto_multiword
+    alias_of: "wardens"
+    rule: "singular_of_wardens"
+  riskbreakers:
+    token: "Riskbreakers"
+    bucket: alias_auto_adjective
+    alias_of: "riskbreaker"
+    rule: "adjective_or_plural"
+  valorian:
+    token: "Valorian"
+    bucket: alias_auto_adjective
+    alias_of: "valoria"
+    rule: "adjective_or_plural"
+  valnese:
+    token: "Valnese"
+    bucket: alias_auto_adjective
+    alias_of: "valoria"
+    rule: "adjective_or_plural"
+  the_church:
+    token: "The Church"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_prudence_cardinal:
+    token: "The Prudence Cardinal"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_southernmost:
+    token: "The Southernmost"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_guilds:
+    token: "The Guilds"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_hybrid_zoom:
+    token: "The Hybrid Zoom"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_crown:
+    token: "The Crown"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_first_leap:
+    token: "The First Leap"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_forgetting:
+    token: "The Forgetting"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_thread:
+    token: "The Thread"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_agent_who:
+    token: "The Agent Who"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_byzantine:
+    token: "The Byzantine"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_calamity:
+    token: "The Calamity"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_competent_custodian:
+    token: "The Competent Custodian"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_compromised_enforcer:
+    token: "The Compromised Enforcer"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_disputed_inheritance:
+    token: "The Disputed Inheritance"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_divided_inheritance:
+    token: "The Divided Inheritance"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_efficient_erosion:
+    token: "The Efficient Erosion"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_einhir:
+    token: "The Einhir"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_empire:
+    token: "The Empire"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_inquisitor:
+    token: "The Inquisitor"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_institutional_revivalist:
+    token: "The Institutional Revivalist"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_invisible_supply:
+    token: "The Invisible Supply"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_last_maintenance:
+    token: "The Last Maintenance"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_ledger_that:
+    token: "The Ledger That"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_lowenritter:
+    token: "The Löwenritter"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_medici:
+    token: "The Medici"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_operative_who:
+    token: "The Operative Who"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_protestant_monarch:
+    token: "The Protestant Monarch"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_proving_ground:
+    token: "The Proving Ground"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_restoration:
+    token: "The Restoration"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_right_answer:
+    token: "The Right Answer"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_scholar:
+    token: "The Scholar"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_soldier_who:
+    token: "The Soldier Who"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_structural_keystone:
+    token: "The Structural Keystone"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_system:
+    token: "The System"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_trust_economy:
+    token: "The Trust Economy"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_unconscious_peacemaker:
+    token: "The Unconscious Peacemaker"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_virke:
+    token: "The Virke"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  the_visible_revolution:
+    token: "The Visible Revolution"
+    bucket: reject_section_header
+    rule: "the_prefix"
+  not_mechanics:
+    token: "Not Mechanics"
+    bucket: reject_section_header
+    rule: "parenthetical_qualifier_fragment"
+  on_partial:
+    token: "On Partial"
+    bucket: reject_section_header
+    rule: "fragment"
+  church_mandate:
+    token: "Church Mandate"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  church_wealth:
+    token: "Church Wealth"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  new:
+    token: "New"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  faction_play:
+    token: "Faction Play"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  guild:
+    token: "Guild"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  guilds_wealth:
+    token: "Guilds Wealth"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  starting:
+    token: "Starting"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  starting_certainty:
+    token: "Starting Certainty"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  domain_echo:
+    token: "Domain Echo"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  prudence_cardinal:
+    token: "Prudence Cardinal"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  starting_skills:
+    token: "Starting Skills"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  thread_tension:
+    token: "Thread Tension"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  leap:
+    token: "Leap"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  ritual:
+    token: "Ritual"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  wealth:
+    token: "Wealth"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  board_game:
+    token: "Board Game"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  church_stability:
+    token: "Church Stability"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  domain_actions:
+    token: "Domain Actions"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  practitioner:
+    token: "Practitioner"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  border:
+    token: "Border"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  faction:
+    token: "Faction"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  prudence:
+    token: "Prudence"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  core:
+    token: "Core"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  crown_mandate:
+    token: "Crown Mandate"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  domain_echoes:
+    token: "Domain Echoes"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  existing:
+    token: "Existing"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  guilds_stability:
+    token: "Guilds Stability"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  named:
+    token: "Named"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  parliamentary:
+    token: "Parliamentary"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  prudence_crisis:
+    token: "Prudence Crisis"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  thread_sensitive:
+    token: "Thread Sensitive"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  cardinals:
+    token: "Cardinals"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  character_histories:
+    token: "Character Histories"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  church_military:
+    token: "Church Military"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  guilds_mandate:
+    token: "Guilds Mandate"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  mass_battle:
+    token: "Mass Battle"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  social:
+    token: "Social"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  territories:
+    token: "Territories"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  tithe:
+    token: "Tithe"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  calamity_familiarity:
+    token: "Calamity Familiarity"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  community_voice:
+    token: "Community Voice"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  community_weaving:
+    token: "Community Weaving"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  deep_south:
+    token: "Deep South"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  domain_action:
+    token: "Domain Action"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  governance:
+    token: "Governance"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  guild_favour:
+    token: "Guild Favour"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  guild_schism:
+    token: "Guild Schism"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  leap_scar:
+    token: "Leap Scar"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  levy:
+    token: "Levy"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  ministry_collapse:
+    token: "Ministry Collapse"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  narrative:
+    token: "Narrative"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  route:
+    token: "Route"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  territory:
+    token: "Territory"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  thread_perception:
+    token: "Thread Perception"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  adjacent:
+    token: "Adjacent"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  adjacent_spark_list:
+    token: "Adjacent Spark List"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  altonian_cultural_imperialism:
+    token: "Altonian Cultural Imperialism"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  altonian_invasion_routes:
+    token: "Altonian Invasion Routes"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  altonian_prince:
+    token: "Altonian Prince"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  border_settlement_child:
+    token: "Border Settlement Child"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  calamity_bleed_gradient:
+    token: "Calamity Bleed Gradient"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  cardinal_events:
+    token: "Cardinal Events"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  cardinal_justice:
+    token: "Cardinal Justice"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  cardinal_mechanics:
+    token: "Cardinal Mechanics"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  character:
+    token: "Character"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  character_analyses:
+    token: "Character Analyses"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  character_creation_summary:
+    token: "Character Creation Summary"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  church_heresy_investigation:
+    token: "Church Heresy Investigation"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  church_inquisitor:
+    token: "Church Inquisitor"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  church_taxation:
+    token: "Church Taxation"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  church_territory:
+    token: "Church Territory"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  church_vocations:
+    token: "Church Vocations"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  cognatic_senior_succession:
+    token: "Cognatic Senior Succession"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  conviction_yield:
+    token: "Conviction Yield"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  covert:
+    token: "Covert"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  crown_domain_actions:
+    token: "Crown Domain Actions"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  crown_emergency_powers:
+    token: "Crown Emergency Powers"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  crown_influence:
+    token: "Crown Influence"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  crown_minister:
+    token: "Crown Minister"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  crown_vocations:
+    token: "Crown Vocations"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  debate_system:
+    token: "Debate System"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  deep:
+    token: "Deep"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  existing_items_addressed:
+    token: "Existing Items Addressed"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  faction_axis_positions:
+    token: "Faction Axis Positions"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  final_trimmed:
+    token: "Final Trimmed"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  governance_event_cards:
+    token: "Governance Event Cards"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  guild_arbitration:
+    token: "Guild Arbitration"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  guild_event_cards:
+    token: "Guild Event Cards"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  guild_vocations:
+    token: "Guild Vocations"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  guilds_representative:
+    token: "Guilds Representative"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  hafenmark_vocations:
+    token: "Hafenmark Vocations"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  highland:
+    token: "Highland"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  justice:
+    token: "Justice"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  leap_clarity:
+    token: "Leap Clarity"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  levy_system:
+    token: "Levy System"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  lifepath_system:
+    token: "Lifepath System"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  lowenritter_covert:
+    token: "Löwenritter Covert"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  lowenritter_event_cards:
+    token: "Löwenritter Event Cards"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  lowenritter_military:
+    token: "Löwenritter Military"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  lowenritter_officer:
+    token: "Löwenritter Officer"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  lowenritter_vocations:
+    token: "Löwenritter Vocations"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  ministry_bureaucrat:
+    token: "Ministry Bureaucrat"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  name:
+    token: "Name"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  name_pending:
+    token: "Name Pending"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  new_items:
+    token: "New Items"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  new_mechanic:
+    token: "New Mechanic"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  niflhel_vocations:
+    token: "Niflhel Vocations"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  open_editorial_items:
+    token: "Open Editorial Items"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  open_items:
+    token: "Open Items"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  practitioner_vocations:
+    token: "Practitioner Vocations"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  practitioners:
+    token: "Practitioners"
+    bucket: reject_mechanical_compound
+    rule: "single_word_mechanical"
+  restoration_movement_geography:
+    token: "Restoration Movement Geography"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  restoration_movement_leader:
+    token: "Restoration Movement Leader"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  restoration_movement_vocations:
+    token: "Restoration Movement Vocations"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  setting_reference:
+    token: "Setting Reference"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  starting_control_summary:
+    token: "Starting Control Summary"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  succession_fallback:
+    token: "Succession Fallback"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  territory_design:
+    token: "Territory Design"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  territory_map:
+    token: "Territory Map"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  three_duchies:
+    token: "Three Duchies"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  three_indigenous_nations:
+    token: "Three Indigenous Nations"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  tutoring_demand:
+    token: "Tutoring Demand"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  tutoring_demands:
+    token: "Tutoring Demands"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  varfell_practitioner:
+    token: "Varfell Practitioner"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  varfell_vocations:
+    token: "Varfell Vocations"
+    bucket: reject_mechanical_compound
+    rule: "mechanical_prefix"
+  interface:
+    token: "Interface"
+    bucket: reject_false_positive
+    rule: "hardcoded_false_positive"
+  accounting:
+    token: "Accounting"
+    bucket: reject_false_positive
+    rule: "hardcoded_false_positive"
+  reference:
+    token: "Reference"
+    bucket: reject_false_positive
+    rule: "hardcoded_false_positive"
+  remaining:
+    token: "Remaining"
+    bucket: reject_false_positive
+    rule: "hardcoded_false_positive"
+  cross:
+    token: "Cross"
+    bucket: reject_false_positive
+    rule: "common_english_word"
+  specific:
+    token: "Specific"
+    bucket: reject_false_positive
+    rule: "common_english_word"
+  taught:
+    token: "Taught"
+    bucket: reject_false_positive
+    rule: "common_english_word"
+  absent:
+    token: "Absent"
+    bucket: reject_false_positive
+    rule: "common_english_word"
+  dual:
+    token: "Dual"
+    bucket: reject_false_positive
+    rule: "common_english_word"
+  grief:
+    token: "Grief"
+    bucket: reject_false_positive
+    rule: "common_english_word"
+  lead:
+    token: "Lead"
+    bucket: reject_false_positive
+    rule: "common_english_word"
+  parish:
+    token: "Parish"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  inquisitor:
+    token: "Inquisitor"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  named_character_events:
+    token: "Named Character Events"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  born:
+    token: "Born"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  end:
+    token: "End"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  heresy_investigation:
+    token: "Heresy Investigation"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  third_skill:
+    token: "Third Skill"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  all_modes:
+    token: "All Modes"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  defence:
+    token: "Defence"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  diagnosis:
+    token: "Diagnosis"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  formation:
+    token: "Formation"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  history:
+    token: "History"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  named_character_event:
+    token: "Named Character Event"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  parliament:
+    token: "Parliament"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  prosperity:
+    token: "Prosperity"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  trade:
+    token: "Trade"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  already:
+    token: "Already"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  holy_see:
+    token: "Holy See"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  intel:
+    token: "Intel"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  lore:
+    token: "Lore"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  non:
+    token: "Non"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  origin:
+    token: "Origin"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  appraise:
+    token: "Appraise"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  argue:
+    token: "Argue"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  deniability_debt:
+    token: "Deniability Debt"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  game_master:
+    token: "Game Master"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  infill:
+    token: "Infill"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  table:
+    token: "Table"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  abstracted:
+    token: "Abstracted"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  approach_training:
+    token: "Approach Training"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  awareness:
+    token: "Awareness"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  discipline:
+    token: "Discipline"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  evidence:
+    token: "Evidence"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  immune:
+    token: "Immune"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  inherited_resonance:
+    token: "Inherited Resonance"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  lord_steward:
+    token: "Lord Steward"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  repair:
+    token: "Repair"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  skeleton:
+    token: "Skeleton"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  structure:
+    token: "Structure"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  templar:
+    token: "Templar"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  weaving:
+    token: "Weaving"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  became:
+    token: "Became"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  black_market_contacts:
+    token: "Black Market Contacts"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  confirm:
+    token: "Confirm"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  constitutional_crisis:
+    token: "Constitutional Crisis"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  coup_counter:
+    token: "Coup Counter"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  factions:
+    token: "Factions"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  foundations:
+    token: "Foundations"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  grants:
+    token: "Grants"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  haggler:
+    token: "Haggler"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  institutional:
+    token: "Institutional"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  knots:
+    token: "Knots"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  motion:
+    token: "Motion"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  naval:
+    token: "Naval"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  nerve:
+    token: "Nerve"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  no_confidence:
+    token: "No Confidence"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  parliamentary_vote:
+    token: "Parliamentary Vote"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  players:
+    token: "Players"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  practitioner_mentorship:
+    token: "Practitioner Mentorship"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  read:
+    token: "Read"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  resonant_style:
+    token: "Resonant Style"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  riposte:
+    token: "Riposte"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  roster:
+    token: "Roster"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  smooth_liar:
+    token: "Smooth Liar"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  table_mutiny:
+    token: "Table Mutiny"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  trained:
+    token: "Trained"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  two:
+    token: "Two"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  war:
+    token: "War"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  whether:
+    token: "Whether"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  worldbuilding:
+    token: "Worldbuilding"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  add:
+    token: "Add"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  anomaly:
+    token: "Anomaly"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  artefact_authentication:
+    token: "Artefact Authentication"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  authority:
+    token: "Authority"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  axis:
+    token: "Axis"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  breadbasket:
+    token: "Breadbasket"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  catalyst:
+    token: "Catalyst"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  catastrophe:
+    token: "Catastrophe"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  cathedral:
+    token: "Cathedral"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  contact:
+    token: "Contact"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  crowd:
+    token: "Crowd"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  crown_heartland_child:
+    token: "Crown Heartland Child"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  dead_drop:
+    token: "Dead Drop"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  discovery:
+    token: "Discovery"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  doctrinal_fluency:
+    token: "Doctrinal Fluency"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  duchy:
+    token: "Duchy"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  eagle_eyes:
+    token: "Eagle Eyes"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  elske_loyalty:
+    token: "Elske Loyalty"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  enemy:
+    token: "Enemy"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  extraordinary_repair_weaving:
+    token: "Extraordinary Repair Weaving"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  fort:
+    token: "Fort"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  gate:
+    token: "Gate"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  genuine:
+    token: "Genuine"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  guild_masters:
+    token: "Guild Masters"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  heresy_investigations:
+    token: "Heresy Investigations"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  intelligence:
+    token: "Intelligence"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  key:
+    token: "Key"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  klapp_awakening:
+    token: "Klapp Awakening"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  know:
+    token: "Know"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  knowledge:
+    token: "Knowledge"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  lifepath:
+    token: "Lifepath"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  literacy:
+    token: "Literacy"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  lost_someone:
+    token: "Lost Someone"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  martial_law:
+    token: "Martial Law"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  morale:
+    token: "Morale"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  obscuring:
+    token: "Obscuring"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  one:
+    token: "One"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  order:
+    token: "Order"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  paper_trail:
+    token: "Paper Trail"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  parish_revolt:
+    token: "Parish Revolt"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  physical:
+    token: "Physical"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  player_character:
+    token: "Player Character"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  policy:
+    token: "Policy"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  post:
+    token: "Post"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  professional:
+    token: "Professional"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  return:
+    token: "Return"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  revolution:
+    token: "Revolution"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  road_survival:
+    token: "Road Survival"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  room:
+    token: "Room"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  sea:
+    token: "Sea"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  see:
+    token: "See"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  self:
+    token: "Self"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  strike:
+    token: "Strike"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  sub:
+    token: "Sub"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  additions:
+    token: "Additions"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  adjacency_notes:
+    token: "Adjacency Notes"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  artisans:
+    token: "Artisans"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  beliefs:
+    token: "Beliefs"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  betrayed:
+    token: "Betrayed"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  campaign_hook:
+    token: "Campaign Hook"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  cards:
+    token: "Cards"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  caste_axis:
+    token: "Caste Axis"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  caste_system_impact:
+    token: "Caste System Impact"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  changes:
+    token: "Changes"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  chief:
+    token: "Chief"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  close_knot:
+    token: "Close Knot"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  co:
+    token: "Co"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  command:
+    token: "Command"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  compact:
+    token: "Compact"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  conditional:
+    token: "Conditional"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  consequences:
+    token: "Consequences"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  cultural_memory:
+    token: "Cultural Memory"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  cut:
+    token: "Cut"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  description:
+    token: "Description"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  diagnoses:
+    token: "Diagnoses"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  displaced:
+    token: "Displaced"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  ducal_household_education:
+    token: "Ducal Household Education"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  economy:
+    token: "Economy"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  empire:
+    token: "Empire"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  environmental:
+    token: "Environmental"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  equip:
+    token: "Equip"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  excommunication_reversal_paths:
+    token: "Excommunication Reversal Paths"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  exposing:
+    token: "Exposing"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  factional_vocations:
+    token: "Factional Vocations"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  fjord_child:
+    token: "Fjord Child"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  flag:
+    token: "Flag"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  flaw:
+    token: "Flaw"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  founding_mechanic:
+    token: "Founding Mechanic"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  fourth_cardinal:
+    token: "Fourth Cardinal"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  fracture:
+    token: "Fracture"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  fractured:
+    token: "Fractured"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  free_masters:
+    token: "Free Masters"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  geography:
+    token: "Geography"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  highland_born:
+    token: "Highland Born"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  histories:
+    token: "Histories"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  imperial_court:
+    token: "Imperial Court"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  in_hybrid:
+    token: "In Hybrid"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  institutional_pressure:
+    token: "Institutional Pressure"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  institutionally:
+    token: "Institutionally"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  intuitive_threadwork:
+    token: "Intuitive Threadwork"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  island:
+    token: "Island"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  journeymen_years:
+    token: "Journeymen Years"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  knot_memory:
+    token: "Knot Memory"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  landlocked:
+    token: "Landlocked"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  law:
+    token: "Law"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  legend:
+    token: "Legend"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  locked_zones:
+    token: "Locked Zones"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  low:
+    token: "Low"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  manages:
+    token: "Manages"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  map_alignment:
+    token: "Map Alignment"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  maritime:
+    token: "Maritime"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  mechanics:
+    token: "Mechanics"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  minor:
+    token: "Minor"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  mode_coverage_summary:
+    token: "Mode Coverage Summary"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  mode_interface_matrix:
+    token: "Mode Interface Matrix"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  needs:
+    token: "Needs"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  outgrew_his_chain:
+    token: "Outgrew His Chain"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  people:
+    token: "People"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  philosophical_grounding:
+    token: "Philosophical Grounding"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  popular_will:
+    token: "Popular Will"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  pre:
+    token: "Pre"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  reach:
+    token: "Reach"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  recruited:
+    token: "Recruited"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  recruiter:
+    token: "Recruiter"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  rendering_memory:
+    token: "Rendering Memory"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  resolves:
+    token: "Resolves"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  road:
+    token: "Road"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  ruler_diamond_positions:
+    token: "Ruler Diamond Positions"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  setting:
+    token: "Setting"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  simple_rule:
+    token: "Simple Rule"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  single:
+    token: "Single"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  skill_level_design:
+    token: "Skill Level Design"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  specified:
+    token: "Specified"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  stable:
+    token: "Stable"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  summary_table:
+    token: "Summary Table"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  syndicate_broker:
+    token: "Syndicate Broker"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  templars:
+    token: "Templars"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  terrain_regions:
+    token: "Terrain Regions"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  thematic:
+    token: "Thematic"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  theocracy_counter:
+    token: "Theocracy Counter"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  this_session:
+    token: "This Session"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  three:
+    token: "Three"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  type:
+    token: "Type"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  universities:
+    token: "Universities"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  without:
+    token: "Without"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  witnessed_something_impossible:
+    token: "Witnessed Something Impossible"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  your_institution:
+    token: "Your Institution"
+    bucket: reject_game_mechanic
+    rule: "game_mechanic"
+  match:
+    token: "Match"
+    bucket: reject_game_mechanic
+    rule: "generic_mechanic"
+  invasion:
+    token: "Invasion"
+    bucket: reject_game_mechanic
+    rule: "generic_mechanic"
+  loyalty:
+    token: "Loyalty"
+    bucket: reject_game_mechanic
+    rule: "generic_stat"
+  scenario:
+    token: "Scenario"
+    bucket: reject_game_mechanic
+    rule: "generic_mechanic"
+  one_ministry:
+    token: "One Ministry"
+    bucket: reject_game_mechanic
+    rule: "event_or_phrase_fragment"
+  rawlsian:
+    token: "Rawlsian"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  suger:
+    token: "Suger"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  japan:
+    token: "Japan"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  byzantine:
+    token: "Byzantine"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  florence:
+    token: "Florence"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  moscow:
+    token: "Moscow"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  aetius:
+    token: "Aetius"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  anabasis:
+    token: "Anabasis"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  bellarmine:
+    token: "Bellarmine"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  christine_granville:
+    token: "Christine Granville"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  demetrios_palaiologos:
+    token: "Demetrios Palaiologos"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  denis:
+    token: "Denis"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  galileo:
+    token: "Galileo"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  god:
+    token: "God"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  godot:
+    token: "Godot"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  gothic:
+    token: "Gothic"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  greeks:
+    token: "Greeks"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  lohengramm:
+    token: "Lohengramm"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  lupicco:
+    token: "Lupicco"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  macedonian:
+    token: "Macedonian"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  medici:
+    token: "Medici"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  mira_sondhal:
+    token: "Mira Sondhal"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  morea:
+    token: "Morea"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  norwegian:
+    token: "Norwegian"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  ottomans:
+    token: "Ottomans"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  richard_sorge:
+    token: "Richard Sorge"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  rome:
+    token: "Rome"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  rosa_luxemburg:
+    token: "Rosa Luxemburg"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  saint:
+    token: "Saint"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  swiss:
+    token: "Swiss"
+    bucket: reject_external_reference
+    rule: "external_world_reference"
+  if_vaynard:
+    token: "If Vaynard"
+    bucket: reject_conditional
+    rule: "conditional_start"
+  if_ehrenwall:
+    token: "If Ehrenwall"
+    bucket: reject_conditional
+    rule: "conditional_start"
+  if_strand:
+    token: "If Strand"
+    bucket: reject_conditional
+    rule: "conditional_start"
+  if_lenneth:
+    token: "If Lenneth"
+    bucket: reject_conditional
+    rule: "conditional_start"
+  almaic_kyriakos:
+    token: "Almaic Kyriakos"
+    bucket: promote_manual
+    types: ["concept"]
+    canonical: "Almaic Kyriakos"
+    entry_note: "Church structural term — see worldbuilding_v30 §3.6"
+  valorsmark:
+    token: "Valorsmark"
+    bucket: promote_manual
+    types: ["realm"]
+    canonical: "Valorsmark"
+    entry_note: "Historical/lore name for Valoria — older usage visible in worldbuilding tables (e.g., \"Valoria | Valorsmark\"). Retains meaning as lore-layer reference."
+  ashmarket:
+    token: "Ashmarket"
+    bucket: promote_manual
+    types: ["region"]
+    canonical: "Ashmarket"
+    entry_note: "Inland slum built over Einhir foundations — named district/settlement, character_histories_v30 §1F modifier"
+  wardens:
+    token: "Wardens"
+    bucket: promote_manual
+    types: ["subfaction"]
+    canonical: "Wardens"
+    entry_note: "Southernmost-focused subfaction led by Edeyja (Warden-Chief). Mechanically neutral; cannot be weaponised for faction goals (npc_roster_v30)."
+  almqvist:
+    token: "Almqvist"
+    bucket: promote_manual
+    types: ["people"]
+    canonical: "Almqvist"
+    entry_note: "Royal family/dynasty of the Crown. Named members: King Almud, Queen Lenneth, Prince Torben, Princess Elske."
