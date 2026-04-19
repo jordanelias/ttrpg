@@ -26,24 +26,11 @@
 | ED | Description |
 |----|-------------|
 
-## Resolved This Session
+## Resolved This Session (summary)
 
-| ED | Resolution |
-|----|------------|
-| ED-588 | PT ≤ 3 (revised from PT ≤ 1). Resolved in victory_v30 §3.5 (2026-04-16). |
-| ED-589 | Presence marker mechanics defined: Community Organizing Domain Action, cap 5/territory, Church/Crown suppression rules. victory_v30 §3.5 updated. |
-| ED-612 | Guilds intentionally have no solo victory condition. Guilds are an NPC faction/tool, not a protagonist faction. Confirmed in throughline analysis. |
-| AUD-SET-01/03 | Settlement economy — income differentiated, Order→Accord proportional, siege attrition calibrated |
-| AUD-VIC-02 | RM victory — simplified 5/5 wins, but omits Church counter-pressure. Full calibration Phase 4. |
-| AUD-NPC-03 | Priority tree cross-faction sim — 10 seasons, trees produce faction-appropriate behavior, repetition intentional |
-| SIM-DEBT-03/04 | Social contest PP-234 re-simulation — CROSS viable at R1, intentionally weak at R2, stall-break working |
-| ED-577-01/02/03/04 | Co-Movement calibration — all 4 resolved, RS ±4.3 PASS |
-| SIM-POL-R01-R05 | Faction politics simulation — all 5 items PASS (Standing reachability, Ministry decay, caste gating, branch differentiation, cross-faction balance) |
-| ED-684 | Derived stats calibration — multipliers confirmed provisional (sim_derived_stats_calibration) |
-| ED-590 | Church victory revised + validated: CI ≥ 65 + Accord ≥ 3 in ≥ 3 non-capitals |
-| ED-572 | Assert → Pontifex-exclusive |
-| ED-545/551/555/557/559/571/583 | See sim_batch_3 |
-| ED-539/585 | See sim_batch_3/4 |
+15 items resolved. See sim_batch archives for details.
+Key: ED-588/589 (RM), ED-612 (Guilds), AUD-SET/VIC/NPC, SIM-DEBT-03/04,
+ED-577-01-04, SIM-POL-R01-R05, ED-684, ED-590, ED-572, ED-545+.
 
 ## Throughline Analysis + Propagation — 2026-04-17
 
@@ -347,3 +334,15 @@ Findings:
 - Propagation: victory_v30 §7 CI ceiling 75→100, CI→CI in §3.2
 - GAP: PV not defined in any canonical source
 - NPC fix: Varfell priority tree needs March-to-T15 at P2/P3 when VTM ≥ 2
+
+## CI/PV/Seizure Conflict Resolution — 2026-04-19
+
+All 7 conflicts from tc_tcv_conflict_register resolved per editorial_decisions_ci_pv.
+
+| Conflict | Resolution |
+|----------|-----------|
+| CI ceiling | 100, no freeze |
+| Seizure threshold | CI >= 60, one-shot |
+| Seizure Ob | 10 - PT - infra (floor 1) |
+| PV values | T8/T12=4, T3/T14=3, total 35 |
+| Victory | Peninsular Sovereignty only |
