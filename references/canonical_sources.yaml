@@ -378,3 +378,10 @@ systems:
     params: null
     design_doc: designs/scene/derived_stats_v30.md
     notes: "Derived stat system v2 — Vitality, Stamina, Composure, Concentration, Thread Fatigue, TroopCount + faction derived values. PP-679/680, ED-694."
+
+  throughline_registry:
+    status: active
+    canonical: references/throughline_registry.md
+    params: null
+    design_doc: references/throughline_registry.md
+    notes: "Complete throughline index — 6 narrative, 14 system. PP-682."
