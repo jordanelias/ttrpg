@@ -74,7 +74,7 @@ systems:
   victory:
     status: active
     canonical: designs/provincial/victory_v30.md
-    canonical_sha__designs__provincial__victory_v30_md: "e524161a5d432eedacc4ecdbf5bc1c5dc9d68e3f"
+    canonical_sha__designs__provincial__victory_v30_md: "0da727211d126b4ef58a0551f5110cb2ee8008a0"
     params: null
     design_doc: designs/provincial/victory_v30.md
 

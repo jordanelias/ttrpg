@@ -398,6 +398,31 @@ Only available if Regency Establishment not achieved after 8 Löwenritter season
 | RS | > 35 |
 | TC | < 60 |
 
+
+#### §3.6a Post-Coup Succession Rule (ED-674)
+
+When Coup Counter reaches 4 and Löwenritter activates:
+
+**Immediate effects (Season of Coup):**
+
+1. **Crown leadership vacated.** Almud is removed (imprisoned, exiled, or killed — determined by Ehrenwall's Conviction state at coup trigger). Crown faction does not dissolve but enters Interregnum: no Leadership actions, no treaty ratification, no Royal Decrees. Crown officers retain their Standing but cannot advance.
+2. **Löwenritter chain of command governs.** Ehrenwall (Grand Master) is acting head of government. Knight-Commanders govern Crown-held territories at Accord −1 (military occupation). Kreutz's prior role (Royal Guard Captain) is vacated — his replacement is the senior Knight-Commander by Standing.
+3. **Crown Ministries freeze.** All Ministry actions are suspended for 1 season (administrative disruption). After the freeze, Ministries resume under Löwenritter authority — Ministry NPCs serve whoever governs (per Haelgrund's Belief 1). Ministry Stability −1 from the disruption.
+4. **Coup Counter resets to 0.** The counter tracks pre-coup instability; post-coup, the counter is irrelevant. It does not re-accumulate unless a second coup scenario emerges (requires Ehrenwall's removal + a successor Grand Master, which is outside standard campaign scope).
+
+**Succession candidates (tracked from coup season onward):**
+
+| Candidate | Path | Confirmation condition |
+|---|---|---|
+| Torben Almqvist | Dynastic heir | Torben Loyalty ≥ 6 + Parliamentary Succession Endorsement (faction_layer §5.4) |
+| Elske (Schoenland) | Diplomatic marriage | Diplomatic Exchange success (per Elske Loyalty Track above) + Parliamentary Succession Endorsement |
+| Player character | Deed-Claim | Standing ≥ 6 in Crown + 3 Legitimizing Authority tokens (per LIN-01) + inner-circle 3-of-5 supermajority |
+| No candidate | Military Consolidation | 8 Löwenritter seasons elapse without confirmation → Alternate victory path activates |
+
+**Succession confirmation:** When any candidate meets their condition, Löwenritter fires a Succession Scene (mandatory Zoom In). Ehrenwall formally transfers governance. The confirmed successor becomes Crown Leader. Löwenritter reverts to NPC faction status. All Crown officers' Standing is preserved. Accord in military-occupied territories recovers +1 per season under the new leader (maximum Accord 2 without faction-specific non-military action).
+
+**Faction stat inheritance:** The new Crown leader inherits current Crown Mandate, Stability, and Wealth. Löwenritter Military score transfers as a one-time +1D bonus to the new leader's first Military Domain Action (the institutional military apparatus carries over, then dissolves into Crown structure). IP and TC are unchanged — these are peninsular, not faction-specific.
+
 ---
 
 ## 4. Co-Victory Pairings

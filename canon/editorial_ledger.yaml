@@ -94,10 +94,11 @@
   - id: ED-674
     date: 2026-04-18
     description: "PP-298: Post-coup succession rule. victory_v30 §3.6 defines Loewenritter activation but not chain of command after coup. Who inherits? Counter reset?"
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/provincial/victory_v30.md, designs/provincial/faction_layer_v30.md]
     source_pp: PP-298
+    resolution: "§3.6a Post-Coup Succession Rule added to victory_v30. Crown interregnum, Löwenritter chain of command, Ministry freeze, counter reset, 4 succession paths, stat inheritance. ED-674."
 
   - id: ED-675
     date: 2026-04-18
