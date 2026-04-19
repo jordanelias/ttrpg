@@ -1,50 +1,27 @@
-# Editorial Ledger — Session Summary
-# Full active ledger: canon/editorial_ledger.yaml
-# Full archive: archives/editorials/editorial_ledger_archive_*.yaml
-# Full index: canon/editorial_ledger_index.md
-# Last updated: 2026-04-18 (Phase 0 housekeeping — summary rebuild, ED-663 resolved, ED-673 dedup→ED-679)
+# Editorial Ledger Summary
 
-next_id: 680
-p0_blocker_count: 0
-p0_blocker_ids: []
-p1_blocker_count: 0
-p1_blocker_ids: ['ED-671', 'ED-674', 'ED-675', 'ED-679']
-p2_count: 6
-p2_ids: ['ED-670', 'ED-672', 'ED-673', 'ED-676', 'ED-677', 'ED-678']
-provisional_count: 0
-provisional_ids: []
-open_count: 10
-open_ids: ['ED-670', 'ED-671', 'ED-672', 'ED-673', 'ED-674', 'ED-675', 'ED-676', 'ED-677', 'ED-678', 'ED-679']
-resolved_this_session: ['ED-663']
-flagged_count: 0
-flagged_ids: []
+<!-- auto-generated — 2026-04-19T16:31:11Z -->
 
-# Cross-register blocker tracking:
-external_blockers:
-  sim_debt:
-    location: tests/coverage_matrix.md
-    items: ['SIM-POL-R01', 'SIM-POL-R02', 'SIM-POL-R03', 'SIM-POL-R04', 'SIM-POL-R05']
-    count: 5
-    note: "Faction politics rank-ladder simulation deferred per Jordan instruction."
-  unsimulated_canonical:
-    note: "settlement_layer_v30 (497 lines), faction_politics_v30 (947 lines), throughline_resolutions_v30 (412 lines) committed without simulation coverage."
-  archived_open:
-    items: ['ED-632', 'ED-633', 'ED-668', 'ED-669']
-    note: "Archived with status:open. ED-632 Shadow Renown, ED-633 Deniability Debt still undefined. ED-668 RS decline rate, ED-669 irreversible precedent — P2 calibration items deferred to Phase 2/4."
+p1_blocker_count: 2
+open_count: 40
+total_active: 40
+next_id: 706
 
-total_blocker_view: >
-  0 P0 + 4 P1 editorial blockers in active ledger.
-  5 SIM-DEBT items deferred (coverage_matrix).
-  4 archived-open items tracked but not blocking.
-  ~1,800 lines unsimulated canonical content.
+p1_blockers:
+  - ED-632: Shadow Renown: referenced in faction_politics_expanded (REN-
+  - ED-633: Deniability Debt (Riskbreaker): referenced in faction_politi
 
-note: >
-  2026-04-18 Phase 0 housekeeping:
-  - Summary rebuilt from scratch (prior auto-generated summary was zeroed out by index_gen.py).
-  - ED-663 resolved: wealth cap canonicalized in derived_stats_v1 (Competence×25, cap Wealth×50/season).
-  - Duplicate ED-673 renumbered to ED-679 (Niflhel intelligence output mechanic, P1).
-  - P0 triage complete: ED-668-672 were never P0. Old summary misclassified them. No P0 blockers exist.
-  - Session log open_items cleaned: removed resolved/archived EDs (666,667,629), added current open items.
-  - Broken dependency checker: 0 broken deps (clean).
-  - File index propagation-pending: no pending items (clean post-restructure).
+p2_open:
+  - ED-542: Battle consequences propagation gap — mass_battle_v30.md mis
+  - ED-586: Arc behavioral state vs Priority 6 contradiction at Mandate 
+  - ED-587: Stability Crisis Zoom In trigger absent. Proposed: Stability
+  - ED-615: Schoenland Treaty terms undefined. What does Schoenland rece
+  - ED-616: No Parliamentary mechanic blocks Tribune Domain Actions. Int
+  - ED-617: Grand Contest Recall (+2D): once per cited source per contes
+  - ED-618: Torben Conviction emergence window: formally Seasons 1-8.
+  - ED-621: BG Parliamentary Vote: lobby offset can pre-determine outcom
+  - ED-622: Varfell cannot file Parliamentary motions (no Senator card).
+  - ED-623: IP advancement too slow.
 
+recent_resolutions:
+  - none
