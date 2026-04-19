@@ -748,6 +748,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 |---|---|---|
 | 1 | Stability ≤ 2 | Consul Inward in Varfell capital. |
 | 2 | TK advancement opportunity: Expedition possible (T6 accessible) OR Private Collection usable (Intel vs Ob 2) OR practitioner contact available | Private Collection deployment. OR: Tribune Investigate if target has Thread-relevant intel. |
+| 2b | VTM ≥ 2 AND no Varfell unit in T15 AND Varfell Military ≥ 3 | March unit to T15 (Southernmost). Required for Warden Emergence trigger (edeyja §5.2). Without T15 presence, Path B cannot advance. |
 | 3 | Intel action available with measurable one-season outcome: Tribune Investigate vs rival faction | Tribune Investigate against faction with highest hidden stats. |
 | 4 | Maximise information advantage. Acquire resources. Senator Outward (diplomatic positioning). | Standard |
 | 4b | VTM ≥ 2 AND adjacent territory PT ≤ 2 AND Varfell Influence + floor(VTM/2) ≥ PT + 1 (viable Ob) | Cultural Reformation (Colonist card) targeting adjacent territory with lowest PT. NPC uses Reformation over military expansion when viable. (peninsular_strain_v1.md §5.4) |
