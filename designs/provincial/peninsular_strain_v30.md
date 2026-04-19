@@ -65,25 +65,29 @@ Accord represents the population's acceptance of the current controller's govern
 
 ### §2.1 Starting Accord
 
-| Territory | Controller | Accord | Rationale |
-|-----------|-----------|--------|-----------|
-| T1 Valorsplatz | Crown★ | 3 | Royal capital |
-| T2 Kronmark | Crown | 2 | Heartland |
-| T3 Lowenskyst | Crown | 2 | Border fortress |
-| T5 Feldmark | Crown | 2 | Breadbasket |
-| T6 Stillhelm | Crown | 2 | Southern farmland |
-| T14 Ehrenfeld | Crown | 2 | Military hinge |
-| T8 Gransol | Hafenmark★ | 3 | Hafenmark capital |
-| T7 Rendstad | Hafenmark | 2 | Timber valley |
-| T10 Spartfell | Hafenmark | 2 | Border castle |
-| T17 Halvarshelm | Hafenmark | 2 | Northern mines |
-| T9 Himmelenger | Church★ | 3 | Cathedral city |
-| T12 Sigurdshelm | Varfell★ | 3 | Varfell seat |
-| T13 Oastad | Varfell | 2 | Southern fjords |
-| T11 Halvardshelm | Varfell | 2 | Central fjords |
-| T4 Grauwald | Varfell | 2 | Highland territory |
-| T15 Askeheim | Uncontrolled | — | No Accord (no settled population centre) |
-| T16 Schoenland | Schoenland | — | Not in territorial play |
+**Derivation (authoritative, per settlement_layer_v30 §1.3 REVISED):** Province Accord = floor(mean Order across all settlements in the province). Values below are derived from settlement_layer §2.1 starting Order values and are the authoritative starting state. Accord is dynamic thereafter — it recomputes whenever any settlement's Order changes. Prior direct-assignment rules (§2.3–2.4) now operate by modifying settlement Order values, which cascade upward. T15 Askeheim and T16 Schoenland retain explicit overrides (see footnotes).
+
+| Territory | Controller | Accord | Source Settlement Orders | Rationale |
+|-----------|-----------|--------|--------------------------|-----------|
+| T1 Valorsplatz | Crown★ | 3 | Palace 4, Riverside 3, Cathedral 4 → floor(3.67) | Royal capital |
+| T2 Kronmark | Crown | 3 | Kronmark 3, Watchtower 3 → floor(3.0) | Heartland |
+| T3 Lowenskyst | Crown | 3 | Fortress 4, Garrison Town 3 → floor(3.5) | Border fortress |
+| T5 Feldmark | Crown | 2 | Feldmark 3, Storehouse 2 → floor(2.5) | Breadbasket |
+| T6 Stillhelm | Crown | 2 | Stillhelm 2, Watch 2 → floor(2.0) | Southern farmland |
+| T14 Ehrenfeld | Crown | 3 | Citadel 4, Market 3, Barracks 4 → floor(3.67) | Military hinge |
+| T8 Gransol | Hafenmark★ | 3 | Parliament 4, Harbor 3, Market 3 → floor(3.33) | Hafenmark capital |
+| T7 Rendstad | Hafenmark | 2 | Rendstad 2 → floor(2.0) | Timber valley |
+| T10 Spartfell | Hafenmark | 2 | Fortress 3, Village 2 → floor(2.5) | Border castle |
+| T17 Halvarshelm | Hafenmark | 2 | Mines 2, Town 3 → floor(2.5) | Northern mines |
+| T9 Himmelenger | Church★ | 4 | Cathedral 5, City 4, Seminary 5 → floor(4.67) | Cathedral city — highest institutional alignment |
+| T12 Sigurdshelm | Varfell★ | 2 | Keep 3, Cove 2 → floor(2.5) | Varfell seat |
+| T13 Oastad | Varfell | 1 | Oastad 2, Shrine 1 → floor(1.5) | Southern fjords — RM-influenced Shrine drags Order |
+| T11 Halvardshelm | Varfell | 2 | Halvardshelm 2 → floor(2.0) | Central fjords |
+| T4 Grauwald | Varfell | 2 | Grauwald 2, Lodge 2 → floor(2.0) | Highland territory |
+| T15 Askeheim | Uncontrolled | 0 | (override) | No Accord (Uncontrolled — Ruins 1, Gate 0 would derive 0; explicit override ensures Uncontrolled status holds regardless of future Order changes) |
+| T16 Schoenland | Schoenland | 0 | (override) | Not in territorial play (derived Order values exist but territory does not participate in peninsular Accord/TCV economy) |
+
+**Cross-reference:** This table's values match `systems/data/ValoriaDataLibrary.gd` territory seed Accord values exactly (verified 17/17). Any future canonical change to settlement_layer §2.1 starting Orders must propagate to this table and to ValoriaDataLibrary in the same commit.
 
 ### §2.2 Starting Piety Track (PT) Values — NEW
 

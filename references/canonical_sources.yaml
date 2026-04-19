@@ -256,7 +256,7 @@ systems:
   peninsular_strain:
     status: active
     canonical: designs/provincial/peninsular_strain_v30.md
-    canonical_sha__designs__provincial__peninsular_strain_v30_md: "dcf43c9c06d6b52ace787b70fad6f22ff85e2816"
+    canonical_sha__designs__provincial__peninsular_strain_v30_md: "62e373c659538674fb10ff856c1dbcbb834e7772"
     params: null
     design_doc: designs/provincial/peninsular_strain_v30.md
     notes: "Victory condition restructure — integrated into victory_v30.md. Accepted 2026-04-17 (editorial batch acceptance). Open item ED-626 (Accord/Order relationship) carries forward."
