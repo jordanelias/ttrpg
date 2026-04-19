@@ -739,19 +739,19 @@ Clock changes still batch to Accounting.
 
 ---
 
-## PART C: OPEN EDITORIAL ITEMS
+## PART C: EDITORIAL ITEMS — RESOLVED (Phase 2.7, 2026-04-18)
 
-All items below require user approval before compilation.
+All items below approved and confirmed canonical (ED-689).
 
-| ID | Item | Proposed resolution |
-|---|---|---|
-| Command-EDIT-01 | Military stat → unit Power/Discipline ceiling (§A.4) | Table above — confirm |
-| Command-EDIT-02 | Battle outcome → faction stat consequences (§A.13) | −1 Military/unit destroyed; Stability checks as above |
-| Command-EDIT-03 | Muster → unit stats (§A.13) | Size=2, Power = floor(Military/2)+1 |
-| BG-EDIT-01 | Commander bonus formula (§B.3) | floor(Military/2) (PP-555) |
-| BG-EDIT-02 | Faction-specific tactic cards (§B.4) | 8 faction cards above |
-| CLOCK-EDIT-01 | Institutional Pressure 75+ Altonian invasion unit stats | See simulation report |
-| CLOCK-EDIT-02 | Church military victory → Theocracy Counter change | No Theocracy Counter change from military victory alone (confirm) |
+| ID | Item | Resolution | Status |
+|---|---|---|---|
+| Command-EDIT-01 | Military stat → unit Power/Discipline ceiling (§A.4) | CONFIRMED: table in §A.4 is canonical | ✓ |
+| Command-EDIT-02 | Battle outcome → faction stat consequences (§A.13) | CONFIRMED: −1 Military/unit destroyed; Stability checks per §A.13 | ✓ |
+| Command-EDIT-03 | Muster → unit stats (§A.13) | CONFIRMED: Size=2, Power = floor(Military/2)+1 | ✓ |
+| BG-EDIT-01 | Commander bonus formula (§B.3) | CONFIRMED: floor(Military/2) per PP-555 | ✓ |
+| BG-EDIT-02 | Faction-specific tactic cards (§B.4) | CONFIRMED: 8 faction cards as specified | ✓ |
+| CLOCK-EDIT-01 | IP 75+ Altonian invasion unit stats | DEFERRED: requires Phase 4 simulation for calibration | ⏳ |
+| CLOCK-EDIT-02 | Church military victory → TC change | CONFIRMED: No TC change from military victory alone. TC changes from institutional actions only. | ✓ |
 ---
 
 #

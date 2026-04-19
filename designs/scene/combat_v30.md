@@ -147,9 +147,9 @@ Penalty if 1 below minimum: −1D Combat Pool. Cannot wield if 2+ below minimum.
 | Long Heavy Blunt | 8 | War hammer, pollaxe |
 | Unarmed | 8 | Fists, grappling, improvised |
 
-[EDITORIAL: ED-129 — Ranged weapon TN integration into this matrix pending.]
+[ED-129 RESOLVED: Ranged weapons are a distinct weapon category, not integrated into the 3-axis melee matrix. Rationale: ranged weapons do not share the Reach (Short/Long) or Weight (Light/Heavy) characteristics that define melee combat profiles. A bow is neither Short nor Long in the melee sense; a crossbow has no meaningful Reach axis. The 3-axis matrix applies to melee only. Ranged weapons use the dedicated table below. For Godot implementation: melee and ranged are separate weapon-type enums with independent TN lookups.]
 
-### Ranged Weapons (retained from prior system, pending ED-129)
+### Ranged Weapons (distinct category — ED-129 resolved)
 
 | Weapon | TN | Notes |
 |--------|-----|-------|

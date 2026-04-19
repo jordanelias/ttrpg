@@ -1,6 +1,29 @@
 # Valoria Editorial Ledger — Active
-# next_id: 689
+# next_id: 692
 
+
+
+
+  - id: ED-689
+    date: 2026-04-18
+    description: "AUD-MB-02: Mass battle Part C editorial items. 6 of 7 confirmed canonical (Command-EDIT-01/02/03, BG-EDIT-01/02, CLOCK-EDIT-02). CLOCK-EDIT-01 deferred to Phase 4 sim."
+    status: resolved
+    severity: P2
+    affects: [designs/provincial/mass_battle_v30.md, params/mass_combat.md]
+
+  - id: ED-690
+    date: 2026-04-18
+    description: "AUD-COM-04/ED-129: Ranged weapon TN integration. Ranged formalized as distinct category — not integrated into 3-axis melee matrix. Architectural justification: ranged weapons lack Reach/Weight axes."
+    status: resolved
+    severity: P2
+    affects: [designs/scene/combat_v30.md, params/combat.md]
+
+  - id: ED-691
+    date: 2026-04-18
+    description: "AUD-TW-02: params_threadwork Ob alignment verified. Cross-references already exist at all struck tables. Canonical values in params_threadwork match PP-622/623 three-axis system. No discrepancies."
+    status: resolved
+    severity: P2
+    affects: [params/threadwork.md, designs/threadwork/threadwork_v30.md]
 
 
   - id: ED-688

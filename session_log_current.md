@@ -2,7 +2,7 @@ session_id: phase0_housekeeping_2026-04-18
 session_close: pending
 phase: Phase 0 — Housekeeping
 status: IN PROGRESS
-last_stage: 2.9 complete
+last_stage: 2.7/2.8/2.12 complete
 next_action:
   skill: Phase 2 continued — P2 items — Derived stats calibration
   description: >
@@ -13,6 +13,9 @@ commits:
   - pending_07: "Phase 0.7: Params staleness — PP-208/297/349/351 propagated, 3 SHAs updated"
   - pending: "Phase 1.1: Knot formation — fieldwork §5.6a, npc_behavior §6.3 GAP resolved, params/core updated — ED-680"
 resolutions_this_session:
+  - "2.7: Mass battle Part C — 6/7 editorial items confirmed canonical. CLOCK-EDIT-01 deferred to Phase 4. ED-689."
+  - "2.8: Ranged TN — formalized as distinct category, ED-129 resolved. ED-690."
+  - "2.12: params_threadwork Ob alignment verified — already aligned, no changes needed. ED-691."
   - "2.9: Threadwork §4.1/4.2 prose written. A1/A2/A4/A5 grounded. ED-688."
   - "2.3: NPC stat gaps. Ehrenwall TS=0/Cert=4, Torben TS=0/Cert=4, Maret Uln TS=35/Cert=2. ED-392-398 resolved. ED-687."
   - "2.2: Co-Movement calibration. ED-577-01/02/03/04 all resolved. RS ±4.3 PASS. Phase 4 hard dep cleared. ED-686. Ledger archived (7 resolved entries)."
