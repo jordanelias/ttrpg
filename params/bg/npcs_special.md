@@ -54,7 +54,7 @@ Range 0–4. Varfell-only private track. Advances through successful Expeditions
 ## Warden Emergence (v04 B2/B13)
 Condition: any faction's Southernmost Expedition passes Forgetting Check (Phase 5 Step 9).
 On Emergence: Warden Token placed at position 0. Warden Cooperation Track activates.
-Edeyja/Wardens NPC AI activates (B13: contain entity; investigate Niflhel; work alongside; emergency Mend).
+Edeyja/Wardens NPC AI activates (B13: contain entity; investigate Thread exploitation sites; work alongside; emergency Mend).
 
 
 
@@ -88,7 +88,7 @@ See victory_v30.md §8 for WA movement rules and full RM stat block.
 Intel Advancement Counter (0–3) on faction mat.
 Each season with ≥1 successful Intel or Quiet Network order: Counter +1.
 At Counter 4: Intel stat +1 (max 7); Counter resets to 0.
-Note: Intel stat advancement is valid for NPC factions (Niflhel). Varfell victory paths use Intelligence stat and territorial control. (VTM struck PP-663.)
+Note: Intel stat advancement is valid for NPC factions (intelligence brokers, settlement-level). Varfell victory paths use Intelligence stat and territorial control. (VTM struck PP-663.)
 
 
 ## Command Event — Captured or Killed General (ED-334 + ED-335 resolved)

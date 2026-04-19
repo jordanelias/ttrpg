@@ -122,7 +122,7 @@
 
 ---
 
-## 10. Dalla Virke — Syndicate Broker (Niflhel)
+## 10. Dalla Virke — Independent Intelligence Broker (formerly Niflhel — DISSOLVED)
 
 
 
@@ -175,7 +175,7 @@
 | 7 | Annika Feldhaus | Guilds | Thread-touched supply chain | PROFIT-MAXIMISING | Wealthy but politically marginalised |
 | 8 | Peder Almstedt | Ministry | Preserves system over justice | CONSERVATIVE (blocks reform) | PI recovers faster but reform +1 Ob |
 | 9 | Gerik Strand | Crown Court (Lord Steward) | Conditional position, unconditional world | OVERPERFORMER (can't delegate) | Crown admin +1D but brittle; flattery −1 Ob |
-| 10 | Dalla Virke | Virke syndicate (Niflhel) | Thread-touched supply chain she built | NETWORK PROTECTOR | Shields partners; withholds intel from own family |
+| 10 | Dalla Virke | Independent broker (settlement-tied) | Thread-touched supply chain she built | NETWORK PROTECTOR | Shields partners; withholds intel from own family |
 | 11 | Doux Alexios Laskaris | Altonia | Genuine attachment to assigned asset | PROTECTIVE (shields Elske) | IP +1/season slower; flips if Elske threatened |
 | 12 | Rikard Solberg | Schoenland | Wants to go home | STABILITY-SEEKING | Schoenland policy ~1 season behind optimal |
 | 13 | Aldric Tormann | Church (Prudence) | Tithe maximiser alienates parishes | OPTIMISER | Church Wealth +1/season but Mandate erodes in squeezed territories |
@@ -325,8 +325,8 @@ Per worldbuilding_integration_v3 §axis system, each NPC sits on 2–3 of the 9 
 | Mode | Presence | Interface |
 |------|----------|-----------|
 | TTRPG | **Full** | Syndicate broker. PCs interact with her for black market access, contraband, intelligence. Her trust network creates asymmetric access — PCs who've built a trading relationship get protection; newcomers get exploited. Thread-touched goods investigation arc: Diagnosis on her merchandise reveals the Thread connection. |
-| Hybrid | **Full → Event** | Virke's trust network determines which factions get favourable Niflhel trade terms in BG. PC actions in Zoom In (building or burning the trust relationship) produce Domain Echoes that modify Niflhel trade Obs for specific factions. Thread-touched revelation: Domain Echo cascades to Feldhaus (Guilds) via shared supply chain. |
-| BG | **Modifier** | Niflhel trade actions use Virke's network. Factions inside the trust network (determined by prior Hybrid interactions, or GM-set in BG-only): trade Ob −1. Factions outside: no modifier. *Card: Supply Chain Exposure* (shared with Feldhaus — see #7). If Virke is recalled by her family (trust network collapse), all Niflhel trade actions +1 Ob for remainder of campaign (replacement has no local relationships). |
+| Hybrid | **Full → Event** | Virke's trust network determines which factions get favourable intelligence broker trade terms in BG. PC actions in Zoom In (building or burning the trust relationship) produce Domain Echoes that modify Niflhel trade Obs for specific factions. Thread-touched revelation: Domain Echo cascades to Feldhaus (Guilds) via shared supply chain. |
+| BG | **Modifier** | Intelligence broker trade actions use Virke's network. Factions inside the trust network (determined by prior Hybrid interactions, or GM-set in BG-only): trade Ob −1. Factions outside: no modifier. *Card: Supply Chain Exposure* (shared with Feldhaus — see #7). If Virke is recalled by her family (trust network collapse), all Niflhel trade actions +1 Ob for remainder of campaign (replacement has no local relationships). |
 
 
 ---
