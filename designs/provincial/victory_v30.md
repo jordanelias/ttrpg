@@ -325,6 +325,28 @@ RM holds T9 through cultural presence, not military garrison. Control is maintai
 - RM has ≥ 3 Presence markers in T9
 - PT in T9 ≤ 3 *(ED-588 resolved 2026-04-16: revised from PT ≤ 1. T9 starts PT 5 under Church management; ≤ 1 was unreachable post-Uprising without 4+ seasons of RM governance. PT ≤ 3 is achievable immediately after Uprising OW: PT 5 − 2 = PT 3. RM must then prevent Church Govern actions from rebuilding PT above 3.)*
 
+
+#### Presence Marker Mechanics (ED-589 resolution)
+
+**Community Organizing (RM Domain Action — Relational-scale Thread operation):**
+Pool = Mandate + Influence. TN 7. Ob 2 (base), +1 if territory has Church Governor, +1 if territory has Crown military garrison (≥ 1 professional unit).
+
+| Degree | Effect |
+|---|---|
+| Overwhelming (3+ net) | +2 Presence markers in target territory. PT −1 (community rejects institutional piety). |
+| Success (2 net) | +1 Presence marker in target territory. |
+| Partial (1 net) | +1 Presence marker. RM Exposure +1 in territory. |
+| Failure (0 net) | No marker. RM Exposure +2. Church Attention Pool +1 in territory. |
+
+**Presence marker cap:** 5 per territory.
+**Passive spread:** Per §7.1 Framework Drift — +1 adjacent territory/season when RM Stability ≥ 3.
+
+**Suppression — Church (Preach variant):** Pool = Influence. TN 7. Ob = Presence markers in territory. Success: −1 marker, PT +1. Overwhelming: −2 markers, PT +1. Failure: no effect, RM Exposure −1 (attention diverted).
+
+**Suppression — Crown (Enforce variant):** Pool = Military. TN 7. Ob 2. Success: −1 marker, Order −1 in target settlement. Failure: no marker removed, Order −1 (crackdown visible).
+
+**Cell Resilience:** +1 Ob to all suppression when RM has Presence in ≥ 3 settlements in province (per settlement_layer_v30).
+
 If either condition fails at Accounting, T9 reverts to the prior controller (or becomes Uncontrolled if the prior controller has been eliminated). RM cannot March, garrison, or build Fort in any territory. (PP-578)
 
 

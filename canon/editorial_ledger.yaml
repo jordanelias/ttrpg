@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 681
+# next_id: 683
 
   - id: ED-680
     date: 2026-04-18
@@ -9,6 +9,22 @@
     resolution: "Knot formation procedure added to fieldwork_v30 §5.6a. Prerequisites: Disposition +5 + TS ≥ 30 (either party) + Knot capacity. Spirit pool vs TN 7 Ob 2. Solidarity GAP in npc_behavior §6.3 replaced with cross-reference. params/core updated with formation rule summary."
     affects: [designs/scene/fieldwork_v30.md, designs/npcs/npc_behavior_v30.md, params/core.md]
     canon_compliance: "A12 (Knots bind threads — Thread contact required), P-12 (relational contagion — formation structurally significant), P-15 (second-layer engagement — Spirit check), A10 (confrontation development)"
+
+  - id: ED-681
+    date: 2026-04-18
+    description: "ED-589 resolution: RM Presence marker mechanics. Community Organizing Domain Action defined (Pool=Mandate+Influence, TN 7, Ob 2+modifiers). Placement, cap (5/territory), Church/Crown suppression rules specified."
+    status: resolved
+    severity: P1
+    resolution: "Presence marker specification added to victory_v30 §3.5 (RM Territory Control). Community Organizing: Mandate+Influence pool, TN 7, Ob 2 base. Suppression: Church via Preach (Ob=markers), Crown via Enforce (Ob 2, Order −1). Coverage matrix updated."
+    affects: [designs/provincial/victory_v30.md, tests/coverage_matrix.md]
+    canon_compliance: "A12 (community-scale Thread binding), P-03 (rendered-level expression), P-08 (epistemological barrier — suppression requires detection)"
+
+  - id: ED-682
+    date: 2026-04-18
+    description: "Coverage matrix cleanup: ED-588 (RM PT ≤ 1) was already resolved in victory_v30 (PT ≤ 3, 2026-04-16). ED-612 (Guilds victory) confirmed resolved per throughline analysis (Guilds intentionally NPC-only). Both moved from Active P1 to Resolved."
+    status: resolved
+    severity: P3
+    affects: [tests/coverage_matrix.md]
 
   - id: ED-663
     date: 2026-04-18

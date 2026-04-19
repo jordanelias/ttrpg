@@ -25,14 +25,14 @@
 
 | ED | Description |
 |----|-------------|
-| ED-588 | RM Phase 2 T9 PT ≤ 1 unreachable |
-| ED-589 | RM Presence marker mechanics undefined |
-| ED-612 | Guilds have no solo victory condition |
 
 ## Resolved This Session
 
 | ED | Resolution |
-|----|-----------|
+|----|------------|
+| ED-588 | PT ≤ 3 (revised from PT ≤ 1). Resolved in victory_v30 §3.5 (2026-04-16). |
+| ED-589 | Presence marker mechanics defined: Community Organizing Domain Action, cap 5/territory, Church/Crown suppression rules. victory_v30 §3.5 updated. |
+| ED-612 | Guilds intentionally have no solo victory condition. Guilds are an NPC faction/tool, not a protagonist faction. Confirmed in throughline analysis. |
 | ED-590 | Church victory revised + validated: TC ≥ 65 + Accord ≥ 3 in ≥ 3 non-capitals |
 | ED-572 | Assert → Pontifex-exclusive |
 | ED-545/551/555/557/559/571/583 | See sim_batch_3 |
