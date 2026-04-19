@@ -311,3 +311,11 @@ Full audit: tests/audit/scene_mechanics_audit_2026-04-18.md
 1 stale ×3 multiplier reference in mass combat PP-204
 
 All four systems mechanically complete (63/67 items verified).
+
+## ED-295/ED-297 Resolved — 2026-04-18
+
+ED-295 (CLASH stall) and ED-297 (AMPLIFY dominance): both confirmed working via
+historical precedent analysis. Coalition dominance and institutional stalemate are
+intended design, validated by Bolshevik/ANC/Solidarity/Congress/CCP/Zapatista patterns.
+
+Composure formula propagated: Cha+6 → Cha×3 in params/contest.md (ED-694).

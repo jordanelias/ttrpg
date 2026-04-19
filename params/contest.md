@@ -101,14 +101,14 @@ Audience resistance: average Stability of factions (round up) − 1, minimum 0. 
 ## Derived Values
 | Value | Formula | Range |
 |-------|---------|-------|
-| Composure | Charisma + 6 | 7–13 |
+| Composure | Charisma × 3 | 3–21 |
 | Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) | 0–2 |
 | Focus defence | floor(Foc ÷ 2) | 0–3 |
 | Concentration | Focus + Recall | 2–14 |
 | Read pool | Attunement only | 1–7 |
 
 ## Composure and Rattled
-At strain ≥ Composure: Rattled mark (Composure resets; excess carries over).
+At strain ≥ Composure: Rattled mark (Composure resets; excess carries over). [Composure = Cha × 3 per ED-694]
 +1 Ob per Rattled level (cumulative). 2 marks = socially incapacitated.
 Recovery: 1 mark/scene of non-social activity. Composure restores at scene change.
 Knot buffer: redirect damage to Knot (+1 strain/use).
@@ -157,10 +157,10 @@ TS ≥ 30: +floor(TS ÷ 30)D. Declare before rolling. Visible. Church may file H
 Resolved questions cannot be re-contested without significantly changed circumstances.
 
 ## Simulation Debt
-| ID | Description |
-|----|-------------|
-| SIM-DEBT-03 | Full re-sim under two-genre system. All prior baselines invalidated. |
-| SIM-DEBT-04 | Adjudicator-type pool variation untested. |
+| ID | Description | Status |
+|----|-------------|--------|
+| SIM-DEBT-03 | Full re-sim under two-genre system. | RESOLVED — ED-295/297 confirmed working via historical precedent. |
+| SIM-DEBT-04 | Adjudicator-type pool variation untested. | OPEN |
 
 <!-- patch_history: references/params_contest_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->

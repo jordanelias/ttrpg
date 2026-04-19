@@ -57,3 +57,19 @@
     status: resolved
     severity: P1
     affects: [designs/npcs/npc_behavior_v30.md]
+
+  - id: ED-295
+    date: 2026-04-18
+    description: "CLASH movement stalls at median — floor formula produces 0 movement when margin barely exceeds resistance."
+    status: resolved
+    severity: P1
+    resolution: "Confirmed working by historical precedent analysis (references/historical/precedents_analysis.md). Solo advocacy against institutional resistance is historically correct — stalemate is the expected outcome. Resolution path is coalition (AMPLIFY) or Resonant Style bypass, not Ob reduction."
+    affects: [designs/scene/social_contest_v30.md, params/contest.md]
+
+  - id: ED-297
+    date: 2026-04-18
+    description: "AMPLIFY produces ~5 movement/exchange vs CLASH ~0 at median — coalitions mechanically dominant over solo advocacy."
+    status: resolved
+    severity: P1
+    resolution: "Confirmed working by historical precedent analysis. Every successful historical movement (Bolsheviks, ANC, Solidarity, Congress, CCP, Zapatistas) succeeded through coalition. Coalition dominance over individual advocacy is the universal historical pattern. AMPLIFY strength is intended design."
+    affects: [designs/scene/social_contest_v30.md, params/contest.md]
