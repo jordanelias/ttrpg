@@ -297,3 +297,17 @@ Rebuilt from scratch against canonical params. 50 audit gaps addressed.
 Smoke test: 5 seeds × 120 seasons. 0 victories — AI expansion rate too low.
 CI generation working (reaches 100 in 3/5). RS correct. Dice correct.
 Next: tune faction AI military expansion, then NPC campaigns.
+
+## Scene Mechanics Audit — 2026-04-18
+
+Full audit: tests/audit/scene_mechanics_audit_2026-04-18.md
+
+3 cross-document conflicts (params files stale vs params/core.md):
+  A. Stamina: combat says End+1, core says End×5 (ED-694 wins)
+  B. Composure: contest says Cha+6, core says Cha×3 (ED-694 wins)
+  C. Disposition ceiling: fieldwork says floor(Bonds/2)+1, core says =Bonds (PP-684 wins)
+
+2 open EDs in Contest: ED-295 (CLASH stall), ED-297 (AMPLIFY dominance)
+1 stale ×3 multiplier reference in mass combat PP-204
+
+All four systems mechanically complete (63/67 items verified).
