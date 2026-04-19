@@ -403,7 +403,7 @@ Check against IP: existing IP +1 from Torben Loyalty ≤ 3. Battle IP +2 is addi
 
 Old: Seizure gated by CI ≥ 75 (removed).
 Old: Graduated Seizure from CI ≥ 40 (struck by PP-494 replacement).
-**Current (victory_v30 §3.2):** Mass Seizure is a one-shot event. CI ≥ 60 makes it available. Declaration probability scales (CI − 58)/42 per season, 100% at CI 100. Ob = 10 − PT − infrastructure modifiers (floor 1).
+**Current (victory_v30 §3.2):** Mass Seizure is a one-shot event. CI ≥ 60 makes it available. Declaration probability per season: P = ((CI−60)/40)^3.3 — 1% at CI 70, 10% at CI 80, 39% at CI 90, 100% at CI 100. Exponential shape models Church institutional restraint (civil-war-grade action). Ob = 10 − PT − infrastructure modifiers (floor 1).
 **RESOLVED (ED-NEW-CI-11):** Seizure Ob formula confirmed as 10 − PT − infrastructure (floor 1).
 
 ### §7.7 Accord Degradation in Sim

@@ -272,6 +272,65 @@ def commit_message_gate(message: str) -> None:
 
 # ── Hook 5: Pre-commit gate ───────────────────────────────────────────────────
 
+# ── Hook: Supersession check ──────────────────────────────────────────────────
+
+def supersession_check(additions: list) -> None:
+    """
+    Non-blocking WARNING. Checks canon/supersession_register.yaml for any entries
+    whose 'files_to_recheck' list overlaps with the current commit's paths.
+    Emits a visible warning per match so that a propagating commit re-asserts
+    whatever the superseded authority used to claim.
+
+    Does NOT block — commits legitimately re-touch these files. The warning is
+    a prompt to verify the commit does not regress the supersession.
+
+    The register itself lives at canon/supersession_register.yaml. If not fetched
+    this session, silently skip (can't check what we don't have).
+    """
+    register_path = 'canon/supersession_register.yaml'
+    repo_key = g._repo_key(register_path, g.active_repo())
+    if repo_key not in g._session_fetches or g._session_fetches[repo_key] is None:
+        return  # register not fetched — skip
+
+    content = g._session_fetches[repo_key]
+    if not content:
+        return
+
+    try:
+        import yaml
+        data = yaml.safe_load(content) or {}
+    except Exception:
+        return  # malformed register — don't fail the commit
+
+    entries = data.get('entries', []) if isinstance(data, dict) else []
+    if not entries:
+        return
+
+    commit_paths = {p for p, _ in additions}
+    matches = []
+    for e in entries:
+        if not isinstance(e, dict):
+            continue
+        recheck = e.get('files_to_recheck', []) or []
+        if isinstance(recheck, list):
+            overlap = commit_paths & set(recheck)
+            if overlap:
+                matches.append({
+                    'id': e.get('superseded_id', '?'),
+                    'scope': str(e.get('scope', ''))[:80],
+                    'replacement': str(e.get('replacement', ''))[:120],
+                    'touched': sorted(overlap),
+                })
+
+    if matches:
+        print(f"\n[HOOK ⚠ SUPERSESSION] {len(matches)} match(es) in canon/supersession_register.yaml:")
+        for m in matches:
+            print(f"  - {m['id']}: {m['scope']}")
+            print(f"    Current canonical: {m['replacement']}")
+            print(f"    Touched in this commit: {', '.join(m['touched'])}")
+        print("  Verify commit does not regress the superseded authority. (non-blocking)\n")
+
+
 def pre_commit_gate(additions: list, deletions: list = None) -> None:
     """
     Hard gate before every commit. Checks:
@@ -373,6 +432,10 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
         sim_fabrication_check(additions)
     except RuntimeError as e:
         errors.append(str(e))
+
+    # Supersession check — warn (non-blocking) if commit touches files flagged
+    # as propagation risks in canon/supersession_register.yaml
+    supersession_check(additions)
 
     if errors:
         raise RuntimeError(

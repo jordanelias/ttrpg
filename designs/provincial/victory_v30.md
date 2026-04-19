@@ -204,18 +204,21 @@ PV ≥ 22 AND every other playable faction eliminated (Stability 0). No treaties
 
 **Church Seizure (one-time event):** The Church may declare a Mass Seizure when CI ≥ 60. This is a one-shot bid — the Church gets exactly one attempt. CI determines the Seizure pool; the higher the CI, the stronger the bid.
 
-**Declaration is not automatic.** Mass Seizure is functionally a declaration of civil war against the Crown and secular factions. Even when mechanically available (CI ≥ 60), the Church institutional apparatus resists pulling the trigger. Probability of declaration per season scales with CI:
+**Declaration is not automatic.** Mass Seizure is functionally a declaration of civil war against the Crown and secular factions. Even when mechanically available (CI ≥ 60), the Church institutional apparatus resists pulling the trigger. Probability of declaration per season scales exponentially with CI — restraint dominates early, breaks down near ceiling:
 
 | CI | P(declare this season) |
 |----|------------------------|
 | < 60 | 0% (unavailable) |
-| 60 | 5% |
-| 70 | 29% |
-| 80 | 52% |
-| 90 | 76% |
+| 60 | 0% (threshold) |
+| 70 | 1% |
+| 75 | 4% |
+| 80 | 10% |
+| 85 | 21% |
+| 90 | 39% |
+| 95 | 64% |
 | 100 | 100% (forced) |
 
-**Formula:** P(declare) = max(0, min(1.0, (CI − 58) / 42)). Applied at Accounting. On success, Mass Seizure fires immediately. On failure, Church passes the season — another roll next Accounting. Player Church may override (declare voluntarily at any CI ≥ 60) or defer (suppress declaration even at CI 100 for 1 season only, then forced).
+**Formula:** P(declare) = ((CI − 60) / 40)^3.3, clamped to [0, 1]. Applied at Accounting. On success, Mass Seizure fires immediately. On failure, Church passes the season — another roll next Accounting. Player Church may override (declare voluntarily at any CI ≥ 60) or defer (suppress declaration even at CI 100 for 1 season only, then forced).
 
 **Church Seizure Pool:** Influence + floor(CI / 15)
 **Church Seizure Ob:** 10 − PT − infrastructure modifiers (floor 1). PT = target territory Piety value (0 = Restoration pole, 5 = Piety pole). Infrastructure modifiers per settlement (see below).
@@ -643,7 +646,7 @@ Multiple victory conditions require RS thresholds. A faction that ignores RS ris
 
 Starting CI: 28. CI caps at 100. Church may declare Mass Seizure at CI ≥ 60 (one-shot — see §3.2).
 
-**Mass Seizure (see §3.2):** One-time event. Declaration gated: CI ≥ 60 available, probability (CI − 58)/42 per season, 100% at CI 100. Every territory with a Church building becomes a simultaneous Seizure target on declaration. Ob = 10 − PT − infrastructure (floor 1). No second attempt.
+**Mass Seizure (see §3.2):** One-time event. Declaration gated: CI ≥ 60 available, P(declare) = ((CI−60)/40)^3.3 per season — 1% at CI 70, 10% at CI 80, 39% at CI 90, 100% at CI 100. Institutional restraint models civil-war gravity. Every territory with a Church building becomes a simultaneous Seizure target on declaration. Ob = 10 − PT − infrastructure (floor 1). No second attempt.
 
 **Seasonal CI at Accounting:**
 1. Institutional Momentum: CI +1 (passive).

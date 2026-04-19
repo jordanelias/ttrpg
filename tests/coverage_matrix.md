@@ -356,3 +356,15 @@ P(declare) = max(0, min(1.0, (CI-58)/42)): 5% at CI 60, 29% at 70, 52% at 80, 76
 Civil-war-grade action; Church institutional restraint modeled by the probability curve.
 Files: victory_v30 §3.2/§7, ci_political_v30 §7.6, params/bg/ci_seizure.md.
 Supersession register created at canon/supersession_register.yaml.
+
+
+## Mass Seizure Declaration Curve v2 (exponential) — 2026-04-19
+
+Curve revised from linear to exponential to reflect Church institutional restraint
+dominating early CI range and only breaking down near ceiling.
+
+Formula: P(declare) = ((CI-60)/40)^3.3, clamped [0,1].
+CI 70: 1%, CI 80: 10%, CI 90: 39%, CI 100: 100% (forced).
+
+Also: valoria_hooks.py supersession_check() added — non-blocking warning when a
+commit touches files flagged in canon/supersession_register.yaml.

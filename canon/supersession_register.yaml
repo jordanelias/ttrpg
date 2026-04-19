@@ -20,8 +20,9 @@ entries:
     superseded_date: 2026-04-19
     replacement: >
       Threshold remains CI >= 60, but Mass Seizure declaration is probabilistic per season:
-      P(declare) = max(0, min(1.0, (CI-58)/42)). 5% at CI 60, 100% at CI 100.
-      The probability curve models Church institutional restraint (civil-war-grade action).
+      P(declare) = ((CI-60)/40)^3.3, clamped [0,1].
+      Exponential curve: 1% at CI 70, 10% at CI 80, 39% at CI 90, 100% at CI 100.
+      Models Church institutional restraint dominating until near ceiling.
     files_to_recheck:
       - designs/provincial/victory_v30.md
       - designs/provincial/ci_political_v30.md
