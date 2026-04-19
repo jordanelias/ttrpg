@@ -1,11 +1,11 @@
 # Editorial Ledger Summary
 
-<!-- auto-generated — 2026-04-19T16:31:11Z -->
+<!-- auto-generated — 2026-04-19T17:15:00Z -->
 
 p1_blocker_count: 2
-open_count: 40
-total_active: 40
-next_id: 706
+open_count: 42
+total_active: 42
+next_id: 708
 
 p1_blockers:
   - ED-632: Shadow Renown: referenced in faction_politics_expanded (REN-

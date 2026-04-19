@@ -3,6 +3,15 @@
 
 <!-- v30 baseline — renamed from designs/board_game/victory_architecture_v1.md on 2026-04-13 -->
 # VALORIA BG — Victory Architecture
+
+<!-- [SUPERSEDED 2026-04-19] VAYNARD THREAD MASTERY (VTM) STRUCK -->
+<!-- Per Jordan decision 2026-04-19 (session): VTM was a placeholder mechanic with no canonical advancement rule. -->
+<!-- Cultural Reformation (Varfell's primary territorial action) was also STRUCK — incompatible with Vaynard's identity. -->
+<!-- Vaynard is a military conqueror (Reinhardt von Lohengramm parallel). Thread/RM is political constituency + genuine -->
+<!-- ethical cause, NOT a combat/territorial force multiplier. Varfell expands through military conquest, period. -->
+<!-- All VTM references and Cultural Reformation references below this line are SUPERSEDED. Pending: editorial rewrite -->
+<!-- of Varfell victory paths, faction actions list, and NPC priority trees. See commits: 297f892 (engine), 13b8f30 (workplan). -->
+
 ## ED-306 Resolution (v3 — geography_design.md territory numbering, CI 100 canonical, PT cap clarified)
 ## PP-540–546 (2026-04-10): Balance patches — solo + co-victory timeline normalisation
 ## Date: 2026-04-06 | Status: DESIGN — pending Varfell Path B user decision (ED-311)

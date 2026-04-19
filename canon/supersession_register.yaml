@@ -34,3 +34,34 @@ entries:
     superseded_date: 2026-04-19
     replacement: "CI >= 60 makes Mass Seizure available; declaration still probabilistic (see 250715f entry)."
     files_to_recheck: [tests/audit/editorial_decisions_ci_pv_2026-04-18.md]
+  - superseded_id: "VTM-STRIKE-2026-04-19"
+    date: 2026-04-19
+    scope: "Vaynard Thread Mastery (VTM) track — 0-5 range, used in Cultural Reformation pool and Varfell victory paths A/B/C"
+    superseded_by: "Jordan session decision 2026-04-19"
+    replacement: >
+      VTM STRUCK entirely. No canonical advancement mechanic existed — was placeholder.
+      Varfell victory paths requiring VTM need editorial rewrite. Cultural Reformation also STRUCK (see CR-STRIKE entry).
+    files_to_recheck:
+      - designs/provincial/victory_v30.md
+      - designs/provincial/varfell_path_b_v30.md
+      - params/bg/core.md
+      - params/bg/npc_priority_trees.md
+    commits: [f7aa0ed, 297f892, 13b8f30]
+
+  - superseded_id: "CR-STRIKE-2026-04-19"
+    date: 2026-04-19
+    scope: "Cultural Reformation (Varfell Colonist card action) — PP-650, territory transfer via Influence + floor(VTM/2) vs PT+1"
+    superseded_by: "Jordan session decision 2026-04-19"
+    replacement: >
+      Cultural Reformation STRUCK. Incompatible with Vaynard's identity as military conqueror (Reinhardt von Lohengramm parallel).
+      Vaynard does not convert populations ideologically. Varfell expansion is purely military conquest.
+      Tribune intel remains (reveals enemy stats for target selection). Thread operations remain as personal-scale actions
+      available to Varfell first due to southern TS baseline + RM proximity — NOT as BG-layer territorial/combat bonuses.
+    files_to_recheck:
+      - params/bg/faction_actions.md
+      - params/bg/npc_priority_trees.md
+      - designs/provincial/faction_politics_v30.md
+      - designs/npcs/npc_behavior_v30.md
+      - designs/provincial/victory_v30.md
+    commits: [297f892, 13b8f30]
+

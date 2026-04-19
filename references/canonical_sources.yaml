@@ -1,2 +1,23 @@
 # Canonical Sources
-# placeholder — pending population
+# Tracks which docs are authoritative for which systems.
+# Entries here supersede any other documentation they conflict with.
+
+sources:
+  # ── Struck canon (2026-04-19) ──────────────────────────────────────────
+  # The following mechanics are NO LONGER CANONICAL. See canon/supersession_register.yaml.
+  # Any doc referencing these mechanics has [SUPERSEDED 2026-04-19] marker at top of file.
+  struck:
+    - id: "VTM"
+      name: "Vaynard Thread Mastery"
+      reason: "Placeholder mechanic with no canonical advancement rule. Referenced in victory paths + Cultural Reformation pool but never defined. Struck per Jordan 2026-04-19."
+      eds: [ED-706]
+      replacement: "Pending editorial rewrite of Varfell victory paths."
+      commits: [f7aa0ed, 297f892, 13b8f30]
+    - id: "PP-650"
+      name: "Cultural Reformation"
+      reason: "Varfell Colonist card territorial conversion action. Incompatible with Vaynard's military-conqueror identity (Reinhardt von Lohengramm parallel). Vaynard does not convert populations ideologically. Varfell expansion is purely military. Struck per Jordan 2026-04-19."
+      eds: [ED-707]
+      replacement: "Varfell expands via military conquest only. Tribune intel remains (reveals enemy stats for target selection). Thread operations remain as personal-scale actions available to Varfell first due to southern TS baseline + RM proximity, NOT as BG-layer bonuses."
+      commits: [297f892, 13b8f30]
+
+# placeholder — additional sources pending population

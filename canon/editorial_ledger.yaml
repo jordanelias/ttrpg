@@ -243,3 +243,15 @@ entries:
     description: "Cohesion -15 = derived of Stability -1, not independent."
     status: open
     severity: P2
+    - id: ED-706
+      date: 2026-04-19
+      description: "Vaynard Thread Mastery (VTM) struck entirely — no canonical advancement mechanic existed. Varfell victory paths A/B/C + Cultural Reformation pool formula need rewrite."
+      status: open
+      severity: P2
+
+    - id: ED-707
+      date: 2026-04-19
+      description: "Cultural Reformation (Varfell Colonist action, PP-650) struck — incompatible with Vaynard's military conqueror identity. Varfell expansion is purely military. Faction action list + Varfell ladder + NPC priority trees need rewrite."
+      status: open
+      severity: P2
+

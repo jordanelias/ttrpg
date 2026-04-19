@@ -3,6 +3,15 @@
 
 <!-- v30 baseline — renamed from designs/board_game/varfell_path_b_redesign_ed311.md on 2026-04-13 -->
 # Varfell Path B — Southernmost Dominion (Redesign Proposal)
+
+<!-- [SUPERSEDED 2026-04-19] VAYNARD THREAD MASTERY (VTM) STRUCK -->
+<!-- Per Jordan decision 2026-04-19 (session): VTM was a placeholder mechanic with no canonical advancement rule. -->
+<!-- Cultural Reformation (Varfell's primary territorial action) was also STRUCK — incompatible with Vaynard's identity. -->
+<!-- Vaynard is a military conqueror (Reinhardt von Lohengramm parallel). Thread/RM is political constituency + genuine -->
+<!-- ethical cause, NOT a combat/territorial force multiplier. Varfell expands through military conquest, period. -->
+<!-- All VTM references and Cultural Reformation references below this line are SUPERSEDED. Pending: editorial rewrite -->
+<!-- of Varfell victory paths, faction actions list, and NPC priority trees. See commits: 297f892 (engine), 13b8f30 (workplan). -->
+
 ## ED-311 | Status: AWAITING USER REVIEW
 ## Date: 2026-04-06
 ## Context: Full-spectrum review FLAG 18 — 7-condition path reduced for cognitive load

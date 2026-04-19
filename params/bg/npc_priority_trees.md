@@ -1,3 +1,13 @@
+
+
+<!-- [SUPERSEDED 2026-04-19] CULTURAL REFORMATION STRUCK + VTM STRUCK -->
+<!-- Per Jordan decision 2026-04-19 (session): Cultural Reformation was incompatible with Vaynard's identity. -->
+<!-- Vaynard is a military conqueror. He does not convert populations ideologically. Varfell expansion is purely military. -->
+<!-- VTM (Vaynard Thread Mastery) was also STRUCK — placeholder mechanic with no canonical advancement. -->
+<!-- Tribune intel (reveals enemy stats for target selection) remains. Thread operations remain as personal-scale actions -->
+<!-- available to Varfell first due to southern TS baseline + RM proximity, NOT as BG-layer combat/territorial bonuses. -->
+<!-- See commits: 297f892 (engine), 13b8f30 (workplan), 13b8f30 (canon audit workplan). -->
+
 ## NPC Faction Priority Trees (from npc_behavior_system_v1.md §8)
 <!-- Source: designs/systems/npc_behavior_system_v1.md. Canonical. -->
 <!-- Ministry Priority Tree (existing, PP-564) retained above. Trees below cover all other NPC factions. -->
