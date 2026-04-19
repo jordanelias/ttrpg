@@ -1,50 +1,63 @@
-session_id: 2026-04-19-batch4-arc-test
+session_id: 2026-04-19-sim-batches-ignition-architecture
 session_close: 2026-04-19
 phase: 0
 status: complete
-last_stage: arc test batch 4 — PI/RDT/TD/Accord/Coup — committed d195dbc
+last_stage: Pass 1 cleanup complete — supersession banners + coverage index. Conflict architecture proposal committed.
 next_action:
-  skill: engine_v4 rebuild — Phase 0 canon audit
+  skill: Pass 2 Session A — structural foundation specs
   description: >
-    Start Phase 0. Workplan at tests/sim_framework/workplan_rebuild_2026-04-19.md.
-    Phase 0 canon audit, produce tests/sim_framework/canon_audit.md.
-    Batch 4 added 6 new gap flags. Notable: T9 PT=5 at game start changes B3-1
-    findings (CI hits cap from S1). Coup triggers PI collapse to 0 permanently.
+    Write three-scale resolution model (settlement→province→peninsula) into phases.md or
+    settlement_layer_v30. Write bishop appointment action into faction_actions.md + propagate
+    to settlement_layer §3.2, ci_seizure.md, npc_behavior §8.2 Church tree. Write PP-666
+    spec patches (secession candidate restriction, RM Order=0 threshold). Flag splinter
+    Influence split for Jordan design decision.
   blockers:
-    - T9 PT=5 at game start (canonical) — B3-1 seizure timing results need revision
-    - Coup Counter advancement sources not in any read doc
+    - Jordan design decision: splinter Influence split (60/40 or unsplit)
+    - Jordan design decision: CI cap vs Piety Yield at T9 (reduce SW or raise cap)
+    - Jordan design decision: T2 garrison in Crown priority tree (explicit or accept exposure)
+    - Jordan design decision: Almud's father assassination — strike backstory or make live
 commits:
-  - d195dbc: arc test batch 4 — PI track, RDT/TD, Accord revolt, Löwenritter Coup
+  - 6ea1f3e: B1 arc test — PP-666 provisional mechanics, 4 scenarios
+  - acfe32d: B2 arc test — 5 design variants, 3 sim bugs fixed
+  - 8088bc3: B3 arc test — CI/seizure, RS decay, Fort, IP/Vanguard, suppression race
+  - d195dbc: B4 arc test — PI track, RDT/TD, Accord revolt, Löwenritter Coup
+  - c5be6fc: early-game ignition analysis (historical precedents, Tensions Deck v1)
+  - db953eb: session audit — 7 issues, 20 gaps consolidated
+  - 2494e7a: conflict architecture proposal — unified design (3-scale model, bishop appointment,
+              graduated autonomy, Niflhel dissolved, Tensions Deck rescoped)
+  - ab0365d: Tensions Deck pair validation — 15/15 pass (revised to 6 external bilateral cards)
+  - de8769d: Pass 1 cleanup — supersession banners on B1/B3/ignition + sim coverage index
 session_highlights:
-  - B4-1 (PP-431-COR fix): Corrected model produces S12-S18 variance vs S12-S14 structural-only.
-    Challenge is a situational tool (play near CI thresholds), not a blanket every-season strategy.
-    T9 PT=5 at game start discovered — B3-1 used wrong PT values; Piety Yield hits cap from S1.
-  - B4-2 (PI track): PI is structurally net-positive under Hafenmark pressure. PI never reaches
-    NonFunctional (≤2) without the Coup. PI drifts to 15+ over 30 seasons. Upper-band effects
-    (Crown Policy M≥4) trivially met by Crown M=5. PI track needs either higher-frequency loss
-    sources or more meaningful ceiling effects.
-  - B4-3 (RDT/TD): CI60 fires at S8 in every seed (T9 PT=5 canonical). TD4 (Ob+2 at HF territories)
-    not reached until S20 — after first Seizure attempt. TD5 (T8 permanently unseizable) fires S24.
-    RDT/TD is a viable long-game defensive path for Hafenmark, but the first 12 seasons are exposed.
-    Seizure Failure consequences (Stab-1 + Casus Belli) not tracked — gap for engine_v4.
-  - B4-4 (Accord revolt): Strain hits Collapse (10) by S4-5 under 2 battles/season. Cascade driven
-    by garrison coverage, not battle intensity. Recovery path absent under sustained conflict.
-    Treaty mechanic (-1 Strain from diplomatic resolution) not modeled — key missing piece.
-  - B4-5 (Löwenritter Coup): PI collapses to 0 immediately post-coup and stays there permanently.
-    PI=0 gives Church CI+2/season but this is largely redundant past CI80. Real consequence is
-    permanent loss of Parliament as Hafenmark tool. Paradox: Coup accelerates Church victory —
-    Crown must prevent the Coup to avoid enabling Church. Post-coup board (Löwenritter at T14 Fort3
-    Mil6, PI=0, CI accelerating) is the richest player decision space in the design.
-    Coup Counter advancement sources and Coup effect on Crown Mandate are unspecified gaps.
+  - 4 sim batches tested 18 mechanical systems across 20+ scenarios. 20 gap flags surfaced.
+    3 spec patches ready. 4 design decisions flagged for Jordan.
+  - Core finding: the game already starts on fire — 5 provinces have non-aligned settlements
+    at game start. Settlement governance friction IS the ignition system. No new mechanic needed
+    for early-game conflict; only recognition that fragmentation checks fire from S1.
+  - Three-scale model: Peninsula (victory) → Province (contest) → Settlement (engine). Control
+    flows up, pressure flows down. Settlement resolves first each season.
+  - Church expansion: bishop appointment action (Ob 1 where Church building ≥ tier 2) gives
+    Church a settlement-level territorial path independent of CI timer. Mass Seizure becomes
+    formalization of settlement-level reality, not the primary expansion mechanic. Geneva trap:
+    factions accept Church infrastructure for Stability bonus → Church claims governance later.
+  - Graduated Löwenritter autonomy (4-stage) replaces binary coup. Autonomous stage (de facto
+    independent, de jure loyal) is the richest game state.
+  - Niflhel struck as faction. Functions distributed to settlement phenomena: black markets
+    (Order ≤ 1), intelligence brokers (settlement NPCs), Thread exploitation sites (locations).
+  - Tensions Deck: 6 external bilateral cards, draw 2 at game start. Each card is a fuse
+    (S0 seed → S8+ fire). Factions: each appears in exactly 3 cards. 15/15 pairs validated
+    against belligerent-target-opportunity criteria. Internal tensions (Löwenritter autonomy,
+    Guild instability, RM emergence) are emergent downstream of external pressures, not forced.
+  - Royal assassination: fuse model (S8+ fire, succeed-on-fire). 3 targets produce 3 different
+    mid-games: Lenneth dead → Almud revenge; Torben dead → Elske retrieval/Altonian provocation;
+    Almud dead → Lenneth inverts Crown identity (pro-Thread, pro-Einhir).
+  - Pass 1 cleanup complete: supersession banners on 3 docs, sim coverage index created with
+    reading order + supersession map + consolidated gap list + campaign arc timeline.
 open_items:
-  - B3-1 results need revision — T9 PT=5 canonical, not PT=1 as assumed; CI hits cap S1
-  - ED-706, ED-707 (P2 rewrites)
-  - PP-666 spec fixes (3 from Batch 2)
-  - B3-5 suppression race already rerun as B4-1 (PP-431-COR corrected)
-  - GAP: T9 PT=5 at start — Piety Yield hits cap from S1; Assert irrelevant immediately
-  - GAP: Coup Counter advancement sources not in read docs
-  - GAP: Coup effect on Crown Mandate not canonical
-  - GAP: Seizure Failure consequences (Stab-1 + Casus Belli) not modeled in any sim
-  - GAP: Treaty mechanic interaction with Strain not modeled
-  - GAP: PI track upper-bound effects need design review
-  - All prior open items carried forward
+  - Pass 2 Session A: three-scale model spec, bishop appointment, PP-666 patches
+  - Pass 2 Session B: graduated Löwenritter autonomy, Niflhel dissolution
+  - Pass 2 Session C: Tensions Deck spec, Royal assassination fuse detail
+  - 4 Jordan design decisions pending (splinter Influence, CI cap, T2 garrison, father backstory)
+  - 7 unspecified systems (AER, Warden behavior, campaign battle scale, Coup advancement,
+    Coup→Mandate, Seizure failure chain, treaty→Strain)
+  - 6 data gaps (adjacency map, fractional stake disposition, contender pools, RM disposition,
+    consolidation Influence, PI upper-bound)
