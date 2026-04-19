@@ -530,10 +530,10 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 #### Almud Almqvist — Arc Map
 
 **Arc A: The Reformer**
-- Branch condition: Almud's Certainty reaches 1 or 0 AND Löwenritter Coup Counter ≤ 1.
-- Risk: TC acceleration (Church responds to Crown heresy). Löwenritter Coup Counter advances if reforms perceived as weakness.
+- Branch condition: Almud's Certainty reaches 1 or 0 AND Löwenritter Autonomy = Loyal.
+- Risk: TC acceleration (Church responds to Crown heresy). Löwenritter Autonomy may advance toward Restless if reforms perceived as weakness.
 
-> **Timing window clarification (ED-672):** Arc A requires Certainty ≤ 1 AND Coup Counter ≤ 1 simultaneously. In standard play, Almud's Certainty declines through player-initiated Evidence/Consequence Resonant Style engagements (typically 1 Certainty per 2–3 seasons of sustained effort). Coup Counter advances from Crown instability triggers (officer loss, Crown Stability ≤ 2, Ehrenwall's assessment). The window is intentionally narrow — Arc A (reform) is the hardest arc to achieve because it requires the player to destabilize Almud's worldview while simultaneously keeping the Crown stable enough that the Löwenritter do not intervene. If the window closes (Counter reaches 2 while Certainty is still ≥ 2), Arc A becomes permanently inaccessible and Almud defaults to Arc B or C. This is working as designed — reform from within is supposed to be the most demanding path.
+> **Timing window clarification (ED-672):** Arc A requires Certainty ≤ 1 AND Löwenritter Autonomy = Loyal simultaneously. In standard play, Almud's Certainty declines through player-initiated Evidence/Consequence Resonant Style engagements (typically 1 Certainty per 2–3 seasons of sustained effort). Coup Counter advances from Crown instability triggers (officer loss, Crown Stability ≤ 2, Ehrenwall's assessment). The window is intentionally narrow — Arc A (reform) is the hardest arc to achieve because it requires the player to destabilize Almud's worldview while simultaneously keeping the Crown stable enough that the Löwenritter do not intervene. If the window closes (Counter reaches 2 while Certainty is still ≥ 2), Arc A becomes permanently inaccessible and Almud defaults to Arc B or C. This is working as designed — reform from within is supposed to be the most demanding path.
 
 
 **Arc B: The Fortress**
@@ -542,7 +542,7 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 - Resonant Style shift: Authority only. He can only be moved by someone he personally respects and whose competence he has witnessed — Ehrenwall, possibly PCs with Military or Mandate achievements.
 
 **Arc C: The Overthrown**
-- Branch condition: Löwenritter Coup Counter reaches 3. Coup fires.
+- Branch condition: Löwenritter Autonomy reaches Split (Stage 4). Löwenritter separates.
 - Conviction shift: Order → Autonomy (survival). Almud becomes an exile.
 - Risk: Torben's Loyalty track transfers to Löwenritter. Crown faction under Löwenritter control.
 
@@ -707,7 +707,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | Priority | Condition | Action |
 |---|---|---|
 | 1 | Stability ≤ 2 | Consul Inward in capital territory. Royal Decree targeting own Stability if available. |
-| 2 | 2+ territories changed control this season OR Löwenritter Coup Counter = 2 OR PI ≥ 8 | Military response: Legionary in threatened territory. If no Legionary: Royal Decree targeting Military. |
+| 2 | 2+ territories changed control this season OR Löwenritter Autonomy = Restless OR PI ≥ 8 | Military response: Legionary in threatened territory. If no Legionary: Royal Decree targeting Military. |
 | 3 | Royal Decree available AND framework-aligned target exists (public, visible, virtuous) | Royal Decree: +1 to weakest-stat ally or −1 to strongest-stat rival. |
 | 4 | Maintain treaties. Defend held territory. Govern in lowest-Accord territory (prioritise Accord 1 before capital). If T2 Kronmark is ungarrisoned AND any Varfell unit is active in T4: deploy minimum garrison to T2 (1 unit, Legionary Inward). Crown's breadbasket must not be left exposed when Varfell has forward-deployed forces. | Consul Inward (Accord governance) or Senator Outward (diplomacy/Treaty). |
 | 5 | Torben Loyalty ≤ 3: Senator Outward targeting Torben. | Secondary |
@@ -758,14 +758,14 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | Priority | Condition | Action |
 |---|---|---|
 | 1 | Stability ≤ 2 | Military Consolidation (internal). |
-| 2 | Coup Counter = 2 (one more increment fires coup): evaluate whether the triggering condition is imminent. If imminent: prepare (pre-position Legionary in T14 Ehrenfeld). If not: Military Consolidation. | Coup readiness assessment |
+| 2 | Autonomy = Autonomous (one stage from Split): evaluate whether the triggering condition is imminent. If imminent: prepare (pre-position Legionary in T14 Ehrenfeld). If not: Military Consolidation. | Coup readiness assessment |
 | 3 | Military action protecting Valorian sovereignty available (border defense, Altonian resistance): Legionary deployment to border territory. −1 Ob (Martial Honour alignment). | Sovereignty defense |
 | 4 | If bordering faction Military exceeds Löwenritter Military: Military Consolidation (PP-238 guidance). | Standard reactive maintenance |
 | 5 | Crown Mandate < 3 or Torben Loyalty < 3: Riskbreaker activation against faction most threatening Crown. | Crown-protective covert action |
 | 6 | If attacked: Full Military response. Löwenritter does not negotiate under military threat. | Reactive — maximum force |
 | 7 | Pass. Maintain garrison. | Default |
 
-**Post-Coup (Coup Counter 3):** Priority tree restructures. All priorities below Survival become: impose Martial Law → consolidate Crown territories → Reconstitution (when PI = 0).
+**Post-Split (Autonomy Stage 4):** Priority tree restructures. All priorities below Survival become: impose Martial Law → consolidate Crown territories → Reconstitution (when PI = 0).
 
 ### §8.8 Niflhel NPC Priority Tree
 **STRUCK** — Niflhel dissolved. See conflict_architecture_proposal.
@@ -1013,7 +1013,7 @@ An NPC who has been recruited defects if:
 
 ### §7.1 Crown Priority Tree
 1. **IF** Stability ≤ 2 → Govern (Inward, restore Stability)
-2. **IF** Coup Counter ≥ 3 → Royal Guard (counter coup preparation)
+2. **IF** Autonomy = Autonomous/Split → Royal Guard (counter-Split preparation)
 3. **IF** PI ≥ 10 → Parliamentary Manoeuvre (reduce PI)
 4. **IF** Torben Loyalty ≤ 2 → Senator (Inward, dynasty management)
 5. **IF** TC ≥ 50 AND Church Mandate ≥ 4 → Suppress (target Church TC)
@@ -1051,7 +1051,7 @@ An NPC who has been recruited defects if:
 7. **IF** WR < 3 AND Path B selected → Expedition (Warden contact, advance WR) (PP-663: WC reference retained as shared-clock; Varfell Path B gate is WR)
 8. **DEFAULT** → Tribune (Inward, Military — build strength)
 
-### §7.5 Löwenritter Priority Tree (NPC faction — activates on Crown elimination or Coup)
+### §7.5 Löwenritter Priority Tree (NPC faction — activates on Crown elimination or Split)
 1. **IF** Stability ≤ 1 → Military action (restore garrison control)
 2. **IF** PI = 0 → Reconstitution (restore Parliament)
 3. **IF** Torben Loyalty ≤ 2 → Dynasty management (secure succession)
