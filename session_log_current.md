@@ -1,16 +1,21 @@
-# Session Log — 2026-04-18 (engine v3 iteration 2)
-last_stage: Engine v3 AI tuning — throttled military, Crown dominance identified
+# Session Log — 2026-04-18 (engine v3 card economy)
+last_stage: Engine v3 with card-hand economy. RS drain still dominant — need political expansion + RS recovery.
 next_action:
-  skill: simulation — AI balance iteration
+  skill: simulation — military→political AI rebalance + RS recovery
   description: >
-    Engine v3 core mechanics canonical (dice, CI, RS, seizure CI≥75 one-time, victory=peninsula).
-    AI balance issues found: Crown Royal Decree overpowered (+1 stat/season free),
-    other factions lose territory via Accord decay and don't reclaim.
-    Next: constrain Royal Decree to card-slot cost, add Uncontrolled territory
-    reclaim logic, balance faction expansion rates for equal win probability.
+    Card-hand economy implemented (6 cards/faction, 1-season cooldown).
+    Royal Decree now costs Prefect card (every other season max).
+    RS→0 shared loss in all 5 seeds at S68-96. Two fixes needed:
+    1. Faction expansion should be primarily political (Crown Treaty,
+       Dynastic Proclamation, Cultural Reformation, CI Seizure), with
+       military as last resort per canonical priority trees.
+    2. RS recovery mechanics (WC≥2 halves decay, WC=3 gives +2/season)
+       must be implemented.
+    Also: update editorial_decisions doc — seizure threshold is CI≥75 not CI≥60.
   blockers: []
 commits:
-  - 250715f8: "[fix] seizure threshold CI≥75"
-  - fcb1ea76: "[simulation] engine v3 initial"
-  - pending: "[simulation] engine v3 AI tuning v2"
+  - 250715f8: seizure CI≥75
+  - fcb1ea76: engine v3 initial
+  - 1e4f8b3f: throttled military
+  - pending: card-hand economy
 P1-BLOCKER count: 0

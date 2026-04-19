@@ -131,6 +131,10 @@ class Faction:
     active: bool = True
     submitted: bool = False
     seizure_used: bool = False  # [canonical: editorial_decisions §6 — one-time]
+    # Card-hand economy [canonical: params/bg/core.md §Batch Card Hand]
+    hand: List[str] = field(default_factory=list)      # available cards
+    cooldown: List[str] = field(default_factory=list)   # cards on 1-season cooldown
+    expertise: str = ''  # Domain Expertise card type (+1D)
 
     def clamp(self):
         # [canonical: params/bg/core.md §Stat Ceilings and Floors]
@@ -170,8 +174,17 @@ def init_state(seed: int = 42) -> GameState:
     # T9 starts with Cathedral
     gs.territories['T9'].church_building = 3  # [canonical: Cathedral City]
     # Factions
+    # [canonical: params/bg/core.md §Batch Card Hand + §Domain Expertise]
+    STARTING_HANDS = {
+        'Crown':     (['Legionary','Legionary','Consul','Senator','Prefect','Recess'], 'Legionary'),
+        'Church':    (['Senator','Senator','Pontifex','Consul','Legionary','Recess'], 'Senator'),
+        'Hafenmark': (['Consul','Consul','Senator','Legionary','Diplomat','Recess'], 'Consul'),
+        'Varfell':   (['Tribune','Tribune','Legionary','Consul','Colonist','Recess'], 'Tribune'),
+    }
     for fname, stats in FACTION_STATS.items():
-        gs.factions[fname] = Faction(fname, **stats, territories=list(FACTION_TERRITORIES[fname]))
+        hand, expertise = STARTING_HANDS[fname]
+        gs.factions[fname] = Faction(fname, **stats, territories=list(FACTION_TERRITORIES[fname]),
+                                     hand=list(hand), expertise=expertise)
     return gs
 
 # ═══════════════════════════════════════════════════════════════
@@ -281,42 +294,74 @@ def check_victory(gs: GameState):
         gs.log.append(f"S{gs.season}: SHARED LOSS — Rupture (RS=0)")
 
 # ═══════════════════════════════════════════════════════════════
-# FACTION AI — 7-PRIORITY TREES
-# [canonical: params/bg/npc_priority_trees.md]
+# CARD ECONOMY
+# [canonical: params/bg/core.md §Batch Card Hand, params/bg/phases.md Step 3]
+# Each card: play → cooldown 1 season → return to hand
+# ═══════════════════════════════════════════════════════════════
+
+def play_card(faction: Faction, card_type: str) -> bool:
+    """Attempt to play a card. Returns True if card was available."""
+    if card_type in faction.hand:
+        faction.hand.remove(card_type)
+        faction.cooldown.append(card_type)
+        return True
+    return False
+
+def has_card(faction: Faction, card_type: str) -> bool:
+    return card_type in faction.hand
+
+def advance_cooldowns(gs: GameState):
+    """Phase 5 Step 3: all cooldown items return to hand."""
+    # [canonical: params/bg/phases.md Step 3 — Cooldown Track -1; at 0: return]
+    # Simplified: 1-season cooldown, so all cooldown cards return each season
+    for f in gs.factions.values():
+        if f.active:
+            f.hand.extend(f.cooldown)
+            f.cooldown.clear()
+
 # ═══════════════════════════════════════════════════════════════
 
 def faction_ai_church(gs: GameState):
     f = gs.factions['Church']
     if not f.active: return
 
-    # P1: Survival
-    if f.stability <= 2:
-        # Consul Inward highest-PT territory
+    # P1: Survival — Consul card
+    # [canonical: params/bg/npc_priority_trees.md Church P1]
+    if f.stability <= 2 and has_card(f, 'Consul'):
         best = max((t for t in gs.territories.values() if t.controller == 'Church'), key=lambda t: t.pt, default=None)
         if best:
+            play_card(f, 'Consul')
             net, deg = check(f.influence, max(1, best.pt // 2 + 1))
             if deg in ('Success', 'Overwhelming'):
                 f.stability = min(7, f.stability + 1)
-        return
+            return
 
-    # P2: Heresy response — simplified: if any territory lost PT this season, investigate
-    # (tracked implicitly; skip for now)
+    # P4: Expand Piety — Consul card
+    if has_card(f, 'Consul'):
+        targets = [t for t in gs.territories.values() if t.controller == 'Church' and t.pt < 5]
+        if targets:
+            play_card(f, 'Consul')
+            target = min(targets, key=lambda t: t.pt)
+            net, deg = check(f.influence, max(1, target.pt // 2 + 1))
+            if deg == 'Overwhelming':
+                target.pt = min(5, target.pt + 1)
+            elif deg == 'Success':
+                target.accord = min(3, target.accord + 1)
 
-    # P3: CI advancement — handled in generate_ci (Assert)
+    # Senator: diplomacy (abstract)
+    if has_card(f, 'Senator'):
+        play_card(f, 'Senator')
 
-    # P4: Expand Piety — Consul Inward lowest-PT territory with Church presence
-    targets = [t for t in gs.territories.values() if t.controller == 'Church' and t.pt < 5]
-    if targets:
-        target = min(targets, key=lambda t: t.pt)
-        net, deg = check(f.influence, max(1, target.pt // 2 + 1))
-        if deg == 'Overwhelming':
-            target.pt = min(5, target.pt + 1)
-        elif deg == 'Success':
-            target.accord = min(3, target.accord + 1)
+    # Legionary: reclaim uncontrolled or defend
+    if has_card(f, 'Legionary') and f.military >= 2:
+        lost = [t for t in gs.territories.values() if t.controller == 'Uncontrolled' and t.id != 'T15']
+        if lost:
+            play_card(f, 'Legionary')
+            attempt_conquest(gs, f, lost[0])
 
-    # Church seizure attempt (one-time, CI ≥ 60)
-    # [canonical: Jordan correction 2026-04-18 — CI ≥ 75, one-time seizure]
-    if gs.ci >= 75 and not gs.church_seizure_fired:  # [canonical: Jordan correction — CI ≥ 75, one-time]
+    # Church seizure (one-time, CI ≥ 75)
+    # [canonical: Jordan correction — CI ≥ 75, one-time seizure]
+    if gs.ci >= 75 and not gs.church_seizure_fired:
         attempt_church_seizure(gs)
 
 def attempt_church_seizure(gs: GameState):
@@ -424,82 +469,94 @@ def faction_ai_crown(gs: GameState):
     f = gs.factions['Crown']
     if not f.active: return
 
-    # P1: Survival
+    # P1: Survival — Consul card
     # [canonical: params/bg/npc_priority_trees.md Crown P1]
-    if f.stability <= 2:
+    if f.stability <= 2 and has_card(f, 'Consul'):
+        play_card(f, 'Consul')
         net, deg = check(f.influence, 2)
         if deg in ('Success', 'Overwhelming'):
             f.stability = min(7, f.stability + 1)
         return
 
-    # P2: Military response — reclaim lost territories first
+    # P2: Military response — Legionary card, reclaim lost territories
     # [canonical: params/bg/npc_priority_trees.md Crown P2]
     lost = [tid for tid in FACTION_TERRITORIES['Crown'] if gs.territories[tid].controller != 'Crown']
-    if lost and f.military >= 2:
-        target = gs.territories[lost[0]]
-        attempt_conquest(gs, f, target)
+    if lost and has_card(f, 'Legionary') and f.military >= 2:
+        play_card(f, 'Legionary')
+        attempt_conquest(gs, f, gs.territories[lost[0]])
         return
 
-    # P3: Royal Decree — boost weakest stat
-    # [canonical: params/bg/npc_priority_trees.md Crown P3]
-    if f.mandate >= 4:
+    # P3: Royal Decree — Prefect card (Special/Unique Priority 6)
+    # [canonical: params/bg/core.md §Standard Action Ob — Royal Decree is Crown-specific]
+    if f.mandate >= 4 and has_card(f, 'Prefect'):
+        play_card(f, 'Prefect')
         weakest = min(['mandate','influence','wealth','military','stability'], key=lambda a: getattr(f, a))
         setattr(f, weakest, min(7, getattr(f, weakest) + 1))
 
-    # P4: Govern + expand
-    # Govern home territories with low accord
-    home = [gs.territories[tid] for tid in f.territories if gs.territories[tid].accord < 3]
-    if home:
-        t = min(home, key=lambda t: t.accord)
-        net, deg = check(f.influence, max(1, t.accord))
-        if deg in ('Success', 'Overwhelming'):
-            t.accord = min(3, t.accord + 1)
+    # P4: Govern — Consul card
+    if has_card(f, 'Consul'):
+        home = [gs.territories[tid] for tid in f.territories if gs.territories[tid].accord < 3]
+        if home:
+            play_card(f, 'Consul')
+            t = min(home, key=lambda t: t.accord)
+            net, deg = check(f.influence, max(1, t.accord))
+            if deg in ('Success', 'Overwhelming'):
+                t.accord = min(3, t.accord + 1)
 
-    # Military expansion — Crown expands when stable and has clear advantage
-    # Not every season — only when Military > weakest rival's Military + 1
-    if f.stability >= 4 and f.military >= 4 and gs.season % 3 == 0:
+    # Senator: diplomacy
+    if has_card(f, 'Senator'):
+        play_card(f, 'Senator')
+
+    # Legionary: expansion when stable (if still available)
+    if has_card(f, 'Legionary') and f.stability >= 4 and f.military >= 4:
         target = pick_conquest_target(gs, f)
         if target:
             ctrl = gs.factions.get(target.controller)
             if not ctrl or not ctrl.active or f.military > ctrl.military:
+                play_card(f, 'Legionary')
                 attempt_conquest(gs, f, target)
 
 def faction_ai_hafenmark(gs: GameState):
     f = gs.factions['Hafenmark']
     if not f.active: return
 
-    # P1: Survival
-    if f.stability <= 2:
+    # P1: Survival — Consul card
+    if f.stability <= 2 and has_card(f, 'Consul'):
+        play_card(f, 'Consul')
         net, deg = check(f.influence, 2)
         if deg in ('Success', 'Overwhelming'):
             f.stability = min(7, f.stability + 1)
         return
 
-    # P2: Respond to Church seizure — Parliamentary objection
+    # P2: Respond to Church seizure — Senator card
     # [canonical: params/bg/npc_priority_trees.md Hafenmark P2]
-    if gs.church_seizure_fired:
+    if gs.church_seizure_fired and has_card(f, 'Senator'):
         if f.mandate >= 4:
+            play_card(f, 'Senator')
             net, deg = check(f.mandate, max(1, gs.factions['Church'].mandate // 2 + 1))
             if deg in ('Success', 'Overwhelming'):
                 gs.ci = max(0, gs.ci - 2)
 
-    # P4: Govern home
-    home = [gs.territories[tid] for tid in f.territories if gs.territories[tid].accord < 3]
-    if home:
-        t = min(home, key=lambda t: t.accord)
-        net, deg = check(f.influence, max(1, t.accord))
-        if deg in ('Success', 'Overwhelming'):
-            t.accord = min(3, t.accord + 1)
+    # P4: Govern — Consul card
+    if has_card(f, 'Consul'):
+        home = [gs.territories[tid] for tid in f.territories if gs.territories[tid].accord < 3]
+        if home:
+            play_card(f, 'Consul')
+            t = min(home, key=lambda t: t.accord)
+            net, deg = check(f.influence, max(1, t.accord))
+            if deg in ('Success', 'Overwhelming'):
+                t.accord = min(3, t.accord + 1)
 
-    # P5: Diplomatic expansion — Dynastic Proclamation
-    # [canonical: params/bg/faction_actions.md — Hafenmark Diplomat card]
-    if f.mandate >= 4:
+    # P5: Dynastic Proclamation — Diplomat card
+    # [canonical: params/bg/faction_actions.md — Hafenmark Diplomat]
+    if f.mandate >= 4 and has_card(f, 'Diplomat'):
         targets = [t for t in gs.territories.values()
                    if t.controller not in ('Hafenmark', 'Uncontrolled', 'Church') and t.id != 'T15']
         if targets:
             target = max(targets, key=lambda t: t.pv)
             ctrl = gs.factions.get(target.controller)
             if ctrl and f.mandate > ctrl.mandate:
+                play_card(f, 'Diplomat')
                 dip_ob = max(1, ctrl.stability // 2 + 1)
                 net, deg = check(f.mandate, dip_ob)
                 if deg in ('Success', 'Overwhelming'):
@@ -509,51 +566,74 @@ def faction_ai_hafenmark(gs: GameState):
                     target.accord = 2
                     gs.log.append(f"S{gs.season}: Hafenmark claims {target.name} via Dynastic Proclamation")
 
-    # Military expansion when diplomatically blocked — less frequent than Crown
-    if f.stability >= 4 and f.military >= 2 and gs.season % 4 == 0:
+    # Legionary: military expansion
+    if has_card(f, 'Legionary') and f.stability >= 3 and f.military >= 2:
         target = pick_conquest_target(gs, f)
         if target:
             ctrl = gs.factions.get(target.controller)
             if not ctrl or not ctrl.active or f.military >= ctrl.military:
+                play_card(f, 'Legionary')
                 attempt_conquest(gs, f, target)
 
 def faction_ai_varfell(gs: GameState):
     f = gs.factions['Varfell']
     if not f.active: return
 
-    # P1: Survival
-    if f.stability <= 2:
+    # P1: Survival — Consul card
+    if f.stability <= 2 and has_card(f, 'Consul'):
+        play_card(f, 'Consul')
         net, deg = check(f.influence, 2)
         if deg in ('Success', 'Overwhelming'):
             f.stability = min(7, f.stability + 1)
         return
 
-    # P2: Intel — Tribune investigate (Varfell's core advantage)
+    # P2/P3: Intel — Tribune card (+1D Domain Expertise)
     # [canonical: params/bg/npc_priority_trees.md Varfell P2/P3]
-    # Abstract: intel success boosts next military action
     intel_bonus = 0
-    rivals = [r for r in gs.factions.values() if r.active and r.name != 'Varfell']
-    if rivals:
-        target_rival = max(rivals, key=lambda r: r.wealth)
-        net, deg = check(f.influence, 2)
+    if has_card(f, 'Tribune'):
+        play_card(f, 'Tribune')
+        pool = f.influence + 1  # [canonical: Domain Expertise +1D for Tribune]
+        net, deg = check(pool, 2)
         if deg in ('Success', 'Overwhelming'):
-            intel_bonus = 1  # +1D on next military action
+            intel_bonus = 1
 
-    # P4: Govern home
-    home = [gs.territories[tid] for tid in f.territories if gs.territories[tid].accord < 3]
-    if home:
-        t = min(home, key=lambda t: t.accord)
-        net, deg = check(f.influence, max(1, t.accord))
+    # Second Tribune if available
+    if has_card(f, 'Tribune'):
+        play_card(f, 'Tribune')
+        pool = f.influence + 1
+        net, deg = check(pool, 2)
         if deg in ('Success', 'Overwhelming'):
-            t.accord = min(3, t.accord + 1)
+            intel_bonus += 1
 
-    # Military expansion — Varfell uses intel advantage, less frequent
-    # [canonical: params/bg/npc_priority_trees.md Varfell P6 — no military first-strike]
-    if f.stability >= 4 and f.military >= 3 and gs.season % 4 == 1:
+    # P4: Govern — Consul card
+    if has_card(f, 'Consul'):
+        home = [gs.territories[tid] for tid in f.territories if gs.territories[tid].accord < 3]
+        if home:
+            play_card(f, 'Consul')
+            t = min(home, key=lambda t: t.accord)
+            net, deg = check(f.influence, max(1, t.accord))
+            if deg in ('Success', 'Overwhelming'):
+                t.accord = min(3, t.accord + 1)
+
+    # Colonist: Cultural Reformation (PT reduction in target territory)
+    # [canonical: params/bg/core.md §Standard Action Ob — Cultural Reformation]
+    if has_card(f, 'Colonist'):
+        targets = [t for t in gs.territories.values() if t.controller == 'Varfell' and t.pt > 1]
+        if targets:
+            play_card(f, 'Colonist')
+            target = max(targets, key=lambda t: t.pt)
+            reform_ob = max(1, target.pt + 1)
+            net, deg = check(f.influence + intel_bonus, reform_ob)
+            if deg in ('Success', 'Overwhelming'):
+                target.pt = max(0, target.pt - 1)
+
+    # Legionary: military expansion with intel advantage
+    if has_card(f, 'Legionary') and f.stability >= 3 and f.military >= 3:
         target = pick_conquest_target(gs, f)
         if target:
             ctrl = gs.factions.get(target.controller)
             if not ctrl or not ctrl.active or f.military + intel_bonus > ctrl.military:
+                play_card(f, 'Legionary')
                 saved_mil = f.military
                 f.military += intel_bonus
                 attempt_conquest(gs, f, target)
@@ -581,6 +661,10 @@ def run_season(gs: GameState):
 
     # Phase 5: Accounting
     # Step 1: Apply pending changes (implicit in action resolution above)
+
+    # Step 3: Advance Cooldown Track
+    # [canonical: params/bg/phases.md Step 3]
+    advance_cooldowns(gs)
 
     # Step 2: Stability checks — any faction with ≥2 attr loss
     # [canonical: params/bg/phases.md Step 2]
