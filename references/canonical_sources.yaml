@@ -385,3 +385,8 @@ systems:
     params: null
     design_doc: references/throughline_registry.md
     notes: "Complete throughline index — 6 narrative, 14 system. PP-682."
+
+  throughlines_map:
+    status: active
+    canonical: references/throughlines_complete.md
+    notes: "Complete throughlines map. 25 constitutive chains across 8 categories. 2026-04-18."

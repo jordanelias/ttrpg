@@ -51,3 +51,6 @@
 ## STALE SYNC GAPS
 
 None identified post-restructure. All paths updated in ecosystem files.
+
+## Throughlines — 2026-04-18
+throughlines_map: references/throughlines_complete.md  # 25 constitutive chains, 8 categories
