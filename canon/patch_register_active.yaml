@@ -372,3 +372,20 @@ patches:
     - designs/provincial/victory_v30.md
   status: applied
   applied_commit: pending
+- id: PP-670
+  date: 2026-04-19
+  severity: P3
+  description: "Label accuracy audit across 71 suffix-labeled files. Primary target
+    (npc_roster_caste_annotations_deprecated.md) confirmed correctly labeled;
+    content verified merged into npc_roster_v30 §14. One true mislabel found:
+    threadwork_v25_historical.md had no internal HISTORICAL banner despite
+    filename — banner added pointing to canonical threadwork_v30. Three
+    sim_ttrpg_batch_legacy_* files have filename-only labels (low priority, deferred).
+    Full findings: designs/audit/label_audit_2026-04-19.md. ED-716 raised."
+  finding_id: USER-DIRECTED
+  source: user
+  affects:
+    - designs/threadwork/threadwork_v25_historical.md
+    - designs/audit/label_audit_2026-04-19.md
+  status: applied
+  applied_commit: pending

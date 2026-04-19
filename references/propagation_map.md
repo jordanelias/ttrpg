@@ -196,3 +196,22 @@ All new statuses reference PP-667 and the resolution document `designs/audit/gap
 - references/canonical_sources.yaml: co-file touch.
 
 **Consequences:** none new. Completes PP-667 propagation. No new editorial ledger entries needed (resolutions already logged under ED-713/714/715 in PP-667).
+
+## 2026-04-19 — PP-670 Label accuracy audit
+
+**Commit:** (this commit)
+**Scope:** audit of all files with deprecation-suffix names (`_deprecated`, `_legacy`, `_historical`, `_superseded`). 71 files reviewed.
+
+**Findings:**
+- `designs/npcs/npc_roster_caste_annotations_deprecated.md`: correctly labeled. Merge into `npc_roster_v30.md §14` verified.
+- `designs/threadwork/threadwork_v25_historical.md`: mislabel — filename said historical but no internal banner. **Fixed** — banner added pointing to canonical `threadwork_v30.md`.
+- `tests/sim/sim_ttrpg_batch_legacy_02/03/04.md`: filename-only labels, no internal banners. Deferred as low-priority test-layer work.
+- All 57 files in `deprecated/` directory correctly placed per `deprecated/README.md` policy.
+- `params/threadwork_superseded.md`: correctly labeled internally, location intentional.
+
+**Registers:**
+- canon/patch_register_active.yaml: PP-670 entry.
+- canon/editorial_ledger.yaml: ED-716 resolution entry.
+- references/canonical_sources.yaml: co-file touch.
+
+**Deferred:** sim_ttrpg_batch_legacy banner pass — not a blocker. Low reader-hazard; names are self-describing.

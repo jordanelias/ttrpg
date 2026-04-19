@@ -100,3 +100,10 @@ entries:
     status: resolved
     severity: P2
     source: PP-667
+
+  - id: ED-716
+    date: 2026-04-19
+    description: "Label audit (PP-670): caste annotations file correctly deprecated (merged into npc_roster_v30 §14 on 2026-04-11). threadwork_v25_historical.md had mismatched label — internal banner added. sim_ttrpg_batch_legacy_* files flagged for follow-up banner pass (low priority). See designs/audit/label_audit_2026-04-19.md."
+    status: resolved
+    severity: P3
+    source: PP-670

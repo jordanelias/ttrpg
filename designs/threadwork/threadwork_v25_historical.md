@@ -1,3 +1,8 @@
+<!-- HISTORICAL — pre-atomization snapshot (2026-04-13) -->
+<!-- Canonical is designs/threadwork/threadwork_v30.md -->
+<!-- This file preserves prose/appendix content atomized out of canonical on 2026-04-13 -->
+<!-- [EDITORIAL: PP-670 — historical-label correction 2026-04-19] -->
+
 # THREADWORK MECHANICS — v2.6
 ## Date: 2026-03-27 (revised 2026-04-02)
 ## Authority: Philosophical Foundations (immutable) → this document (design proposal, requires editorial approval)
