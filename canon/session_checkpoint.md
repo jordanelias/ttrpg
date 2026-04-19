@@ -2,7 +2,7 @@
 schema_version: 1
 session_token: 6f58cef463f332ab
 created_at: '2026-04-19T03:13:50.845574+00:00'
-status: active
+status: closed
 task_scope: checkpoint hook final test
 context_tokens_at_checkpoint: 56022
 files_verified:
@@ -19,6 +19,7 @@ decisions_made: []
 open_questions: []
 next_bootstrap_actions:
 - Test in a long session
+closed_at: '2026-04-19T03:13:52.328970+00:00'
 ---
 
 # Session Checkpoint — 2026-04-19 03:13 UTC
