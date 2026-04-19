@@ -1,16 +1,9 @@
 # Valoria Proper Noun Registry
-# Auto-seeded by tools/extract_proper_nouns.py
+# Updated via triage tool (first round: 26 decisions applied, 3 deferred to glossary work)
 # Canonical source of truth for character, territory, faction,
-# settlement, and landmark names.
-#
-# Schema per entry:
-#   canonical: <canonical spelling>
-#   type: character|territory|faction|settlement|landmark|people
-#   aliases: [list of known alternative spellings/references]
-#   source: <primary source file>
-#   occurrences: <count of files this name appears in>
+# subfaction, organization, realm, region, people, concept, structure names.
 
-version: 1
+version: 2
 
 characters:
   aldric_tormann:
@@ -24,7 +17,7 @@ characters:
   annika_feldhaus:
     canonical: "Annika Feldhaus"
     role: "Guilds Representative"
-    aliases: []
+    aliases: ["Feldhaus"]
     source: "designs/npcs/npc_roster_v30.md"
     additional_sources:
       - "designs/npcs/npc_character_analyses_v30.md"
@@ -58,7 +51,7 @@ characters:
     canonical: "Dalla Virke"
     role: "Syndicate Broker"
     location: "Niflhel"
-    aliases: []
+    aliases: ["Virke"]
     source: "designs/npcs/npc_roster_v30.md"
     additional_sources:
       - "designs/npcs/npc_character_analyses_v30.md"
@@ -68,7 +61,7 @@ characters:
     canonical: "Doux Alexios Laskaris"
     role: "Altonian Prince"
     location: "married to Elske"
-    aliases: []
+    aliases: ["Laskaris"]
     source: "designs/npcs/npc_roster_v30.md"
     additional_sources:
       - "designs/npcs/npc_character_analyses_v30.md"
@@ -76,13 +69,13 @@ characters:
     files_count: 4
   duchess_inge_baralta:
     canonical: "Duchess Inge Baralta"
-    aliases: []
+    aliases: ["Baralta"]
     source: "designs/npcs/npc_character_analyses_v30.md"
     occurrences_count: 2
     files_count: 2
   duke_magnus_vaynard:
     canonical: "Duke Magnus Vaynard"
-    aliases: []
+    aliases: ["Vaynard"]
     source: "designs/npcs/npc_character_analyses_v30.md"
     occurrences_count: 2
     files_count: 2
@@ -116,7 +109,7 @@ characters:
     canonical: "Halvar Brandt"
     role: "Löwenritter Officer"
     location: "Lions' Table"
-    aliases: []
+    aliases: ["Brandt"]
     source: "designs/npcs/npc_roster_v30.md"
     additional_sources:
       - "designs/npcs/npc_character_analyses_v30.md"
@@ -124,7 +117,7 @@ characters:
     files_count: 4
   king_almud_almqvist:
     canonical: "King Almud Almqvist"
-    aliases: []
+    aliases: ["Almud"]
     source: "designs/npcs/npc_character_analyses_v30.md"
     occurrences_count: 2
     files_count: 2
@@ -149,7 +142,7 @@ characters:
   peder_almstedt:
     canonical: "Peder Almstedt"
     role: "Ministry Bureaucrat"
-    aliases: []
+    aliases: ["Almstedt"]
     source: "designs/npcs/npc_roster_v30.md"
     additional_sources:
       - "designs/npcs/npc_character_analyses_v30.md"
@@ -163,20 +156,20 @@ characters:
     files_count: 2
   princess_elske_almqvist:
     canonical: "Princess Elske Almqvist"
-    aliases: []
+    aliases: ["Elske"]
     source: "designs/npcs/npc_character_analyses_v30.md"
     occurrences_count: 3
     files_count: 3
   queen_lenneth_almqvist:
     canonical: "Queen Lenneth Almqvist"
-    aliases: []
+    aliases: ["Lenneth"]
     source: "designs/npcs/npc_character_analyses_v30.md"
     occurrences_count: 2
     files_count: 2
   rikard_solberg:
     canonical: "Rikard Solberg"
     role: "Schoenland Factor"
-    aliases: []
+    aliases: ["Solberg"]
     source: "designs/npcs/npc_roster_v30.md"
     additional_sources:
       - "designs/npcs/npc_character_analyses_v30.md"
@@ -186,17 +179,24 @@ characters:
     canonical: "Sigrid Torsvald"
     role: "TS Riskbreaker"
     location: "Löwenritter Covert"
-    aliases: []
+    aliases: ["Torsvald"]
     source: "designs/npcs/npc_roster_v30.md"
     additional_sources:
       - "designs/npcs/npc_character_analyses_v30.md"
     occurrences_count: 8
     files_count: 4
+  solmund:
+    canonical: "Solmund"
+    also_types: ["concept"]
+    aliases: []
+    source: "triage"
+    added_via_triage: true
+    comment: "Solmund is threadcut being, Church of Solmund named after him"
   sæmund_haelgrund:
     canonical: "Sæmund Haelgrund"
     role: "Church Inquisitor"
     location: "Cardinal Justice"
-    aliases: []
+    aliases: ["Haelgrund"]
     source: "designs/npcs/npc_roster_v30.md"
     additional_sources:
       - "designs/npcs/npc_character_analyses_v30.md"
@@ -290,7 +290,7 @@ territories:
     files_count: 3
   schoenland:
     canonical: "Schoenland"
-    also_types: ['faction']
+    also_types: ["faction"]
     territory_id: T16
     aliases: []
     source: "designs/world/geography_v30.md"
@@ -358,3 +358,82 @@ factions:
     source: "designs/world/geography_v30.md"
     occurrences_count: 79
     files_count: 10
+
+subfactions:
+  lowenritter:
+    canonical: "Löwenritter"
+    parent_faction: "crown"
+    aliases: []
+    source: "triage"
+    added_via_triage: true
+    entry_note: "military of Crown"
+  niflhel:
+    canonical: "Niflhel"
+    also_types: ["organization", "concept"]
+    aliases: []
+    source: "triage"
+    added_via_triage: true
+    entry_note: "Niflhel is umbrella word used for illegal/underground/criminal organizations"
+
+organizations:
+  restoration_movement:
+    canonical: "Restoration Movement"
+    aliases: ["Restoration"]
+    source: "triage"
+    added_via_triage: true
+    entry_note: "begin game as a political movement. Can evolve into subfaction or full faction over play — reclassify if/when it graduates"
+
+realms:
+  altonia:
+    canonical: "Altonia"
+    aliases: []
+    source: "triage"
+    added_via_triage: true
+    entry_note: "empire"
+  valoria:
+    canonical: "Valoria"
+    aliases: []
+    source: "triage"
+    added_via_triage: true
+    entry_note: "name of peninsula and kingdom"
+
+regions:
+  southernmost:
+    canonical: "Southernmost"
+    aliases: []
+    source: "triage"
+    added_via_triage: true
+    entry_note: "name for region where calamity occurred"
+
+peoples:
+  altonian:
+    canonical: "Altonian"
+    also_types: ["concept"]
+    aliases: []
+    source: "triage"
+    added_via_triage: true
+    entry_note: "Altonia is name of empire, Altonian is descriptor for it"
+  einhir:
+    canonical: "Einhir"
+    also_types: ["concept"]
+    aliases: []
+    source: "triage"
+    added_via_triage: true
+    entry_note: "Einhir are a people, were a formal nation civilization, adjective used for things that belong to Einhir"
+  riskbreaker:
+    canonical: "Riskbreaker"
+    also_types: ["subfaction"]
+    parent_faction: "lowenritter"
+    aliases: []
+    source: "triage"
+    added_via_triage: true
+    entry_note: "a Riskbreaker is someone who belongs to the Riskbreakers"
+
+concepts:
+  forgetting:
+    canonical: "Forgetting"
+    aliases: []
+    source: "triage"
+    added_via_triage: true
+    entry_note: "concept-level term; the mechanical process is implemented as a game system — glossary work (part 2) will track the mechanic separately"
+    comment: "the phenomenon whereby a person is unable to render their experiences in the southernmost, which lends to them forgetting ie unable to reconcile being there"
