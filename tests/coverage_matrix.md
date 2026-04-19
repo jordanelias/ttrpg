@@ -276,3 +276,8 @@ Full register: tests/audit/tc_tcv_conflict_register_2026-04-18.md
 5. TCV values for T8/T9 (T9=5 vs T9=3)
 6. TC 100 event mechanics (Unification vs Mass Seizure)
 7. Church victory condition (existing vs TC 100 only)
+
+## Editorial Decisions — CI/PV/Seizure/Victory — 2026-04-18
+
+7 conflicts resolved. See tests/audit/editorial_decisions_ci_pv_2026-04-18.md
+TC→CI, TCV→PV, no freeze, seizure CI≥60 one-time, victory=peninsula control.
