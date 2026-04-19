@@ -103,3 +103,62 @@ Regression: TD −1 if Church Excommunicates Hafenmark AND RDT does not advance 
 
 ## VTM 5 — Once-Per-Game Tracking (PP-477)
 Varfell faction mat: flip token 'VTM 5 Power Used'. Set to Used on ability activation. Not reset between sessions.
+
+---
+
+## Accord (Per-Territory, 0–3) — PP-645, peninsular_strain_v30.md §2
+
+Population acceptance of current controller. Modifies effective Prosperity and TCV.
+
+| Accord | Name | Effective Prosperity | Other Effects |
+|--------|------|---------------------|---------------|
+| 3 | Aligned | Base (full) | Defender +1D in Battle. |
+| 2 | Compliant | Base (full) | Normal operations. |
+| 1 | Resistant | 0 | Govern Ob +1. Garrison required (≥ 1 unit) or Accord → 0 at Accounting. |
+| 0 | Revolt | N/A | Territory becomes Uncontrolled. Garrison fights Popular Uprising (Military vs Ob 2). |
+
+**TCV counts only at Accord ≥ 2.** Military conquest → Accord 1. Non-military acquisition → Accord 2+.
+
+**Starting Accord:** Faction capitals = 3. Home territories = 2. T15 Askeheim: no Accord. T16 Schoenland: not in play.
+
+---
+
+## Peninsular Strain (Global, 0–10) — PP-646, peninsular_strain_v30.md §4
+
+Tracks cumulative civil war damage to peninsular unity. Starts at 0.
+
+**Advance:** +1 per season with inter-faction battle. +2 per faction elimination. +1 per Revolt.
+**Decay:** −1 per peaceful season (no battles, no revolts). −1 per diplomatic resolution (max 1/season).
+
+| Strain | Name | Effect |
+|--------|------|--------|
+| 0–2 | Peace | None. |
+| 3–4 | Tension | All factions: Mandate check at Accounting (pool vs Ob 1). Failure: Mandate −1. |
+| 5–6 | Fracture | All factions: Accord −1 in one territory (lowest first). |
+| 7–8 | Crisis | All factions: Accord −1 in ALL non-capital territories. Mandate check Ob 2. |
+| 9–10 | Collapse | Non-capital Accord cap 2. Mandate check Ob 3. RS −1/season additional. |
+
+---
+
+## Starting Piety Track (PT) — PP-652 (provisional), peninsular_strain_v30.md §2.2
+
+| T# | Territory | Starting PT | Rationale |
+|----|-----------|-------------|-----------|
+| T1 | Valorsplatz | 3 | Capital, moderate piety |
+| T2 | Kronmark | 3 | Heartland, orthodox |
+| T3 | Lowenskyst | 3 | Border fortress, practical |
+| T4 | Grauwald | 2 | Highland, old Einhir traditions |
+| T5 | Feldmark | 3 | Agricultural, conventional |
+| T6 | Stillhelm | 1 | Calamity proximity erodes faith |
+| T7 | Rendstad | 3 | Conventional |
+| T8 | Gransol | 3 | Baralta devout but parliamentary moderation |
+| T9 | Himmelenger | 5 | Cathedral city (canonical) |
+| T10 | Spartfell | 3 | Practical |
+| T11 | Halvardshelm | 2 | Old Einhir ways |
+| T12 | Sigurdshelm | 2 | Varfell seat, Restoration-sympathetic |
+| T13 | Oastad | 1 | Calamity proximity, Restoration stronghold |
+| T14 | Ehrenfeld | 3 | Institutional piety |
+| T15 | Askeheim | 0 | Hard-fixed (canonical) |
+| T17 | Halvarshelm | 3 | Conventional |
+
+[PROVISIONAL — pending user review]

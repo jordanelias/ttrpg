@@ -184,7 +184,19 @@ Per mass_battle_v30 §B.3, §PP-104:
 
 **Unit damage:** distribute net successes × Martial Damage Modifier across defender's units (attacker chooses which units take damage, reducing their Health/Size). Formation Break at Size 0.
 
-**Fort bonus dice to defender:** applies to the defender's pool, not as Ob. A Fort 3 territory gives the defender +3 dice on top of their Martial sum + commander bonus. This represents fortifications giving defenders a material advantage in the engagement, not making attackers less accurate.
+**Fort bonus dice to defender:** applies to the defender's pool, not as Ob.
+
+### §2.2b Peninsular Consequences of Battle (PP-647, peninsular_strain_v30.md §3)
+
+| Consequence | Trigger | Value |
+|---|---|---|
+| Substrate Fracture | Any battle on Valorian soil | RS −1 (Campaign/War: RS −2) |
+| Vulnerability Signal | Inter-faction battle this season | IP +2 at Accounting |
+| Peninsular Strain | Inter-faction battle this season | Strain +1 at Accounting |
+| Accord degradation | Territory conquered via battle | Accord → 1 (Resistant) |
+| Accord erosion | Battle in territory you control (defender) | Accord −1 |
+
+Covert operations and ungarrisoned Church Seizure: no RS/IP/Strain cost. Popular Uprisings and Altonian Vanguard: RS −1 only (not inter-faction). A Fort 3 territory gives the defender +3 dice on top of their Martial sum + commander bonus. This represents fortifications giving defenders a material advantage in the engagement, not making attackers less accurate.
 
 ### §2.3 BG → TTRPG Handoff
 

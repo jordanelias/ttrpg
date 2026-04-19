@@ -85,6 +85,32 @@ SW is a fixed attribute per territory representing ecclesiastical importance. Pr
 
 
 
+
+
+## Starting Accord (peninsular_strain_v30.md §2.1)
+
+| T# | Territory | Controller | Accord |
+|----|-----------|-----------|--------|
+| T1 | Valorsplatz | Crown★ | 3 |
+| T2 | Kronmark | Crown | 2 |
+| T3 | Lowenskyst | Crown | 2 |
+| T4 | Grauwald | Varfell | 2 |
+| T5 | Feldmark | Crown | 2 |
+| T6 | Stillhelm | Crown | 2 |
+| T7 | Rendstad | Hafenmark | 2 |
+| T8 | Gransol | Hafenmark★ | 3 |
+| T9 | Himmelenger | Church★ | 3 |
+| T10 | Spartfell | Hafenmark | 2 |
+| T11 | Halvardshelm | Varfell | 2 |
+| T12 | Sigurdshelm | Varfell★ | 3 |
+| T13 | Oastad | Varfell | 2 |
+| T14 | Ehrenfeld | Crown | 2 |
+| T15 | Askeheim | Uncontrolled | — |
+| T16 | Schoenland | Schoenland | — |
+| T17 | Halvarshelm | Hafenmark | 2 |
+
+Capitals = 3 (Aligned). Home territories = 2 (Compliant). Accord ≥ 2 required for TCV contribution.
+
 ## Starting Control — Canonical (geography_v30.md)
 | Faction | Territories | Count | Starting TCV |
 |---------|------------|-------|-------------|

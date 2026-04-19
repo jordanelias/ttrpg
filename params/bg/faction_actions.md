@@ -426,3 +426,49 @@ On any Varfell Tribune Investigate success, Hafenmark may declare Procedural Obj
 Existing Sanctuary card: extended to also block Varfell 4-PC Spy action once per season (in addition to existing Sanctuary effects).
 
 ---
+
+---
+
+## Dynastic Proclamation (Hafenmark only) — PP-649, peninsular_strain_v30.md §5.3
+
+**Card:** Diplomat (Hafenmark faction card). Once per season.
+**Pool:** Influence.
+**Ob:** floor(target faction Stability / 2) + 1. +1 Ob if target territory PT ≤ 1. −1 Ob if Diplomatic Token on target faction.
+**Prerequisites:** Hafenmark Mandate ≥ 4. Hafenmark Mandate > target controller Mandate. Target adjacent to Hafenmark territory.
+
+| Degree | Effect |
+|--------|--------|
+| Overwhelming | Territory transfers. Accord 2. Target Mandate −1. Hafenmark Mandate +1. +1 Standing. No CB. |
+| Success | Territory transfers. Accord 2. Target Mandate −1. |
+| Partial | No transfer. Hafenmark gains CB vs target. Target territory Accord −1. |
+| Failure | Hafenmark Stability −1. |
+
+**Defensive:** Target may invoke Institutional Mandate (PP-189) if Mandate ≥ 4 to cancel.
+
+---
+
+## Cultural Reformation (Varfell only) — PP-650, peninsular_strain_v30.md §5.4
+
+**Card:** Colonist. Once per season.
+**Pool:** Influence + floor(VTM / 2).
+**Ob:** PT + 1 (target territory). PT 0 → Ob 1. PT 3 → Ob 4. PT 5 → Ob 6.
+**Prerequisites:** VTM ≥ 2. Target PT ≤ 3. Target adjacent to Varfell territory OR has Varfell intelligence presence.
+
+| Degree | Effect |
+|--------|--------|
+| Overwhelming | Territory transfers. Accord 2. PT −1 in target. TC −1. |
+| Success | Territory transfers. Accord 2. PT −1. |
+| Partial | No transfer. PT −1 (cultural seed). Varfell gains intelligence presence. |
+| Failure | Varfell Stability −1. TC +1. Church Attention Pool +1. |
+
+**Anti-Altonian:** Territories gained via Reformation: Altonian intel ops +1 Ob.
+**Defensive:** Target may invoke Institutional Mandate (PP-189). Church Counter-Reformation: if Church Prominent in target AND plays Senator same Phase 4, +1 Ob to Reformation.
+
+---
+
+## Martial Governance (Löwenritter only) — PP-653, peninsular_strain_v30.md §2.6
+
+**Card:** Legionary (Govern variant).
+**Pool:** Military (not Influence).
+**Ob:** floor(Prosperity / 2) + 2 (harder than standard Govern).
+**Effect:** Accord +1 on Success (cap 2 via Martial Governance — Accord 3 requires standard Govern with Influence).
