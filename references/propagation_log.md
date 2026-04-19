@@ -282,7 +282,7 @@ Propagation targets:
 - references/params_combat.md — ED-098 (cover Phase 1), ED-130 (Stage 1/2 struck)
 - references/params_threadwork.md — ED-030 (Mode 3 Thread combat), ED-034 (Ceiral Ritual RS), ED-086 (co-movement simultaneous), ED-121 (paradox window scene), ED-124 (Diagnosis struck mass battle), ED-134 (Diagnosis struck)
 - references/params_mass_combat.md — ED-019 (tactic cards), ED-036 (Altonian stats confirmed), ED-094 (HP reload abstracted)
-- references/params_factions.md — ED-005 (Maret Vossen, Aldric Hann), ED-006 (Riskbreakers identity)
+- references/params_factions.md — ED-005 (Yrsa Vossen, Aldric Hann), ED-006 (Riskbreakers identity)
 - references/params_board_game.md — ED-056 (TC/Zoom In), ED-072 (concurrent Zoom In), ED-080/081 (Conviction texts), ED-083 (VTM5 P-14), ED-085 (Ignore penalised), ED-086 (co-movement), ED-087 (ranged modifier), ED-109 (Crown victory), ED-110 (Church TC)
 **Status:** Complete for params layer. Design docs (designs/) not updated — skeleton debt flagged separately.
 

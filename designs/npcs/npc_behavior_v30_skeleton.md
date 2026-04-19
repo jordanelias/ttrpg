@@ -28,7 +28,7 @@
 | 13 | 92 | 3 | §2.3 Duchess Inge Baralta (Hafenmark) |
 | 14 | 112 | 3 | §2.4 Duke Magnus Vaynard (Varfell) |
 | 15 | 133 | 3 | §2.5 Grandmaster Lisbeth Ehrenwall (Löwenritter) |
-| 16 | 154 | 3 | §2.6 Maret Vossen (Restoration Movement) |
+| 16 | 154 | 3 | §2.6 Yrsa Vossen (Restoration Movement) |
 | 17 | 173 | 3 | §2.7 Aldric Hann (Restoration Movement — Secondary) |
 | 18 | 193 | 3 | §2.8 Prince Torben Almqvist (Crown — Heir) |
 | 19 | 211 | 3 | §2.9 Edeyja (Southernmost Warden-Chief) |
@@ -138,7 +138,7 @@
 | 13 | 475 | §2.3 Duchess Inge Baralta (Hafenmark) |
 | 14 | 435 | §2.4 Duke Magnus Vaynard (Varfell) |
 | 15 | 429 | §2.5 Grandmaster Lisbeth Ehrenwall (Löwenritter) |
-| 16 | 413 | §2.6 Maret Vossen (Restoration Movement) |
+| 16 | 413 | §2.6 Yrsa Vossen (Restoration Movement) |
 | 17 | 335 | §2.7 Aldric Hann (Restoration Movement — Secondary) |
 | 18 | 583 | §2.8 Prince Torben Almqvist (Crown — Heir) |
 | 19 | 435 | §2.9 Edeyja (Southernmost Warden-Chief) |

@@ -19,7 +19,7 @@
 | 4 | 12 | 2 | Design Principle |
 | 5 | 18 | 2 | 1. Edeyja — Warden-Chief (Southernmost) |
 | 6 | 28 | 2 | 2. Maret Uln — Varfell Practitioner / Succession Fallback |
-| 7 | 42 | 2 | 3. Maret Vossen — Restoration Movement Leader |
+| 7 | 42 | 2 | 3. Yrsa Vossen — Restoration Movement Leader |
 | 8 | 56 | 2 | 4. Sæmund Haelgrund — Church Inquisitor (Cardinal Justice) |
 | 9 | 69 | 2 | 5. Sigrid Torsvald — TS Riskbreaker (Löwenritter Covert) |
 | 10 | 81 | 2 | 6. Halvar Brandt — Löwenritter Officer (Lions' Table) |
@@ -36,7 +36,7 @@
 | 21 | 213 | 3 | Legend |
 | 22 | 222 | 3 | 1. Edeyja (Wardens) |
 | 23 | 234 | 3 | 2. Maret Uln (Varfell) |
-| 24 | 245 | 3 | 3. Maret Vossen (Restoration Movement) |
+| 24 | 245 | 3 | 3. Yrsa Vossen (Restoration Movement) |
 | 25 | 256 | 3 | 4. Sæmund Haelgrund (Church — Inquisitor) |
 | 26 | 267 | 3 | 5. Sigrid Torsvald (Löwenritter — Riskbreaker) |
 | 27 | 278 | 3 | 6. Halvar Brandt (Löwenritter) |
@@ -65,7 +65,7 @@
 | 4 | 6 | Design Principle |
 | 5 | 34 | 1. Edeyja — Warden-Chief (Southernmost) |
 | 6 | 371 | 2. Maret Uln — Varfell Practitioner / Succession Fallback |
-| 7 | 312 | 3. Maret Vossen — Restoration Movement Leader |
+| 7 | 312 | 3. Yrsa Vossen — Restoration Movement Leader |
 | 8 | 163 | 4. Sæmund Haelgrund — Church Inquisitor (Cardinal Justice) |
 | 9 | 268 | 5. Sigrid Torsvald — TS Riskbreaker (Löwenritter Covert) |
 | 10 | 245 | 6. Halvar Brandt — Löwenritter Officer (Lions' Table) |
@@ -82,7 +82,7 @@
 | 21 | 94 | Legend |
 | 22 | 311 | 1. Edeyja (Wardens) |
 | 23 | 251 | 2. Maret Uln (Varfell) |
-| 24 | 231 | 3. Maret Vossen (Restoration Movement) |
+| 24 | 231 | 3. Yrsa Vossen (Restoration Movement) |
 | 25 | 399 | 4. Sæmund Haelgrund (Church — Inquisitor) |
 | 26 | 266 | 5. Sigrid Torsvald (Löwenritter — Riskbreaker) |
 | 27 | 316 | 6. Halvar Brandt (Löwenritter) |

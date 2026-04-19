@@ -362,6 +362,6 @@ At PI ≥ 8: revolt-pass → Stability +1. PI increase rate cap: +2/season max f
 
 ## ED-005 Resolution (PP-286) — Restoration Movement Leader [FLAGGED]
 
-Primary NPC contact: **Maret Vossen** (confirmed existing). Secondary: **Aldric Hann**.
+Primary NPC contact: **Yrsa Vossen** (confirmed existing). Secondary: **Aldric Hann**.
 Full stat blocks deferred to campaign development. Names canonical from existing params.
 [FLAGGED: stat blocks required before NPC roster compilation.]

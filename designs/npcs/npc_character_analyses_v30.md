@@ -31,7 +31,7 @@ Edeyja is the only NPC in the roster who is not compromised, and this is itself 
 
 ---
 
-## 3. Maret Vossen — The Visible Revolution
+## 3. Yrsa Vossen — The Visible Revolution
 
 
 

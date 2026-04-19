@@ -68,7 +68,7 @@ PT reduction by RM is sociological: Church institutional authority displaced by 
 
 ## §2.3 RM's Crisis — When Folklore Becomes Real
 
-When Thread phenomena become publicly visible (see Part 4), RM discovers the governance nodes they've been building ARE Threadweaving sites. Three possible NPC arc paths for Maret Vossen:
+When Thread phenomena become publicly visible (see Part 4), RM discovers the governance nodes they've been building ARE Threadweaving sites. Three possible NPC arc paths for Yrsa Vossen:
 - **Embrace:** RM integrates Thread reality. The governance model was always metaphysical. RM becomes potential Warden ally.
 - **Denial:** RM insists the model works politically, not metaphysically. Coherent but disadvantaged.
 - **Schism:** Movement splits. Thread-aware branch allies with Wardens/Varfell. Rationalist branch maintains pure political program.

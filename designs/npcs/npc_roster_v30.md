@@ -39,7 +39,7 @@
 
 ---
 
-## 3. Maret Vossen — Restoration Movement Leader
+## 3. Yrsa Vossen — Restoration Movement Leader
 
 **Existing references:** params_factions §ED-005 (PP-286). Primary RM NPC contact.
 
@@ -168,7 +168,7 @@
 |---|------|---------|------------|---------|-----------------|
 | 1 | Edeyja | Wardens | None (exempt) | None | Moral anchor |
 | 2 | Maret Uln | Varfell | Dual loyalty (RM sympathy) | CONFLICTED (hesitates vs RM) | Varfell intel 1 season late on RM |
-| 3 | Maret Vossen | RM | Visibility = target | IDEALIST (spreads thin) | Presence markers vulnerable |
+| 3 | Yrsa Vossen | RM | Visibility = target | IDEALIST (spreads thin) | Presence markers vulnerable |
 | 4 | Sæmund Haelgrund | Church | Evidence he can't report | PROCEDURALIST (slow) | Investigations +1 season but Overwhelming |
 | 5 | Sigrid Torsvald | Löwenritter (covert) | TS 35 in anti-Thread org | RISK-AVERSE on Thread | ~30% abort rate in Thread zones |
 | 6 | Halvar Brandt | Löwenritter | Border war trauma → threat fixation | EXTERNAL THREAT FIXATED | Redirects military to borders, neglects internal |
@@ -190,7 +190,7 @@ Per worldbuilding_integration_v3 §axis system, each NPC sits on 2–3 of the 9 
 |-----|--------|--------|--------|
 | Edeyja | 9 (world is more) | — | — |
 | Maret Uln | 7 (transparency) | 9 (world is more) | 4 (change) |
-| Maret Vossen | 3 (equity) | 4 (change) | 9 (world is more) |
+| Yrsa Vossen | 3 (equity) | 4 (change) | 9 (world is more) |
 | Haelgrund | 5 (order) | 9 (world is what it appears → crumbling) | 2 (institutional faith) |
 | Torsvald | 5 (order) | 9 (world is more → awakening) | 8 (resistance) |
 | Brandt | 5 (order) | 6 (ducal/Crown command) | 8 (resistance) |
@@ -242,7 +242,7 @@ Per worldbuilding_integration_v3 §axis system, each NPC sits on 2–3 of the 9 
 
 ---
 
-### 3. Maret Vossen (Restoration Movement)
+### 3. Yrsa Vossen (Restoration Movement)
 
 | Mode | Presence | Interface |
 |------|----------|-----------|
@@ -371,7 +371,7 @@ Per worldbuilding_integration_v3 §axis system, each NPC sits on 2–3 of the 9 
 |-----|-------|--------|-----|-------------|
 | Edeyja | Full | Full→Modifier | Abstracted (WC/WR) | 2.5 |
 | Maret Uln | Full | Full→Event | Event Card | 3 |
-| Maret Vossen | Full | Full | Absent (PP-478) | 2 |
+| Yrsa Vossen | Full | Full | Absent (PP-478) | 2 |
 | Haelgrund | Full | Full→Modifier | Event Card ×2 | 3 |
 | Torsvald | Full | Modifier | Abstracted (Debt) | 2.5 |
 | Brandt | Full | Event | Event Card | 3 |

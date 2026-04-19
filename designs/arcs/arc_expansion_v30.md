@@ -444,7 +444,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 
 ---
 
-#### Maret Vossen — Full Arc Expansion
+#### Yrsa Vossen — Full Arc Expansion
 
 **Beliefs (complete):**
 1. "Power is not taken — it is grown. We grow it in every household where we are trusted."

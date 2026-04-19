@@ -668,7 +668,7 @@ Starting CI: 28. CI caps at 100. Church may declare Mass Seizure at CI ≥ 60 (o
 WA-based spontaneous emergence struck (PP-478). RM emergence in Hybrid mode is exclusively via the Founding Mechanic.
 
 **Prerequisites (all required):**
-- Player PC Disposition ≥ +3 with Maret Vossen
+- Player PC Disposition ≥ +3 with Yrsa Vossen
 - ≥ 2 territories have PT ≤ 2
 - RS ≥ 40
 - Player has completed ≥ 1 Community Organizing (political organizing — building consensus-governance cells, mutual-aid networks, community contacts)

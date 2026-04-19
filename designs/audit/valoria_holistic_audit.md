@@ -197,7 +197,7 @@ Varfell's 3 victory paths (Thread Mastery, Southernmost Dominion, Partition) giv
 
 ## 4.5 Restoration Movement Actor Problem
 
-RM has victory conditions (Cultural Revolution: Piety ≤ 1 in 8+ territories, MS ≥ 40) but **no mechanical actor in BG mode**. No card hand. No Priority Tree in board_game_v30. Maret Vossen has an AI priority stack in npc_behavior_v30, but she is not a faction leader — RM is a latent faction that emerges through territory-level Piety drift.
+RM has victory conditions (Cultural Revolution: Piety ≤ 1 in 8+ territories, MS ≥ 40) but **no mechanical actor in BG mode**. No card hand. No Priority Tree in board_game_v30. Yrsa Vossen has an AI priority stack in npc_behavior_v30, but she is not a faction leader — RM is a latent faction that emerges through territory-level Piety drift.
 
 **In the videogame, the player IS the RM actor.** This works if the player chooses an RM-aligned character. But NPC-RM needs at minimum: Community Weaving as a Domain Action (Ob 3, per threadwork), Piety drift from Presence, and a trigger for RM Emergence (formal faction status with Mandate, Influence, etc.).
 

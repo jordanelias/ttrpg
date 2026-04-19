@@ -1,3 +1,4 @@
+<!-- [EDITORIAL: PP-665 — Maret Vossen → Yrsa Vossen rename (2026-04-19). No mechanical changes; cosmetic rename to resolve forename collision with Maret Uln.] -->
 # VALORIA — NPC ETHICAL STANCE AND RESONANCE BEHAVIOR SYSTEM v1
 ## Status: SUPERSEDED — canonical doc is designs/systems/npc_behavior_v30.md (editorial batch acceptance 2026-04-17). Retained as historical reference.
 ## Date: 2026-04-13
@@ -155,7 +156,7 @@ Each NPC has a primary Resonant Style and a secondary (activates after primary e
 
 ---
 
-### §2.6 Maret Vossen (Restoration Movement)
+### §2.6 Yrsa Vossen (Restoration Movement)
 
 | Attribute | Value | Notes |
 |---|---|---|
@@ -189,7 +190,7 @@ Each NPC has a primary Resonant Style and a secondary (activates after primary e
 | Certainty | 3 (Questioning) | Less committed than Vossen to Thread cosmology; more committed to practical liberation. |
 
 **Beliefs:**
-1. "The movement needs infrastructure, not speeches — I will build what Maret inspires."
+1. "The movement needs infrastructure, not speeches — I will build what Yrsa inspires."
 2. "Every cell that is compromised is a community that suffers — I will protect our people."
 
 **Leadership Deviation Ob:** 2.

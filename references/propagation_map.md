@@ -96,3 +96,26 @@ If broken dependencies are found:
 - references/canonical_sources.yaml: struck VTM and CR entries updated with committed SHAs (613ebf9, dc13a75) + pending-PP-664 marker.
 
 **Consequences:** none new. Closes PP-663 propagation.
+
+## 2026-04-19 — PP-665 Maret Vossen → Yrsa Vossen forename rename
+
+**Commit:** (this commit)
+**Scope:** resolves forename collision between Maret Uln (Varfell) and Maret Vossen (RM). Vossen renamed to Yrsa Vossen; Uln retains forename.
+
+**Renames:**
+- 43 instances of "Maret Vossen" → "Yrsa Vossen" across 25 canonical active files.
+- 2 standalone "Maret" → "Yrsa" in Aldric Hann's belief quote (npc_behavior_v30 and npc_behavior_system_v1) — context is RM leader reference.
+- Registry key `maret_vossen` → `yrsa_vossen` in references/proper_noun_registry.yaml.
+- proper_noun_triage_decisions.yaml `maret` token: action `flag` → `split_resolved`, comment updated to note PP-665 resolution.
+
+**Intentionally NOT renamed:**
+- Archives (`archives/session/`, `archives/editorials/`, `archives/patches/`).
+- Deprecated files (`deprecated/`, `*_deprecated.md`).
+- Historical simulation outputs (`tests/sim/`, `tests/stress/`, `tests/audit/`, `tests/emergent_arc_skeleton_test_*`).
+- Standalone "Maret" references in active files where context is Maret Uln (Varfell succession) — no rename required.
+
+**Registers:**
+- canon/patch_register_active.yaml: PP-665 entry added.
+- references/canonical_sources.yaml: PP-665 cross-reference note appended.
+
+**Consequences:** none — cosmetic rename with no mechanical impact. All NPC stance triangles, priority trees, arc profiles, and mechanical references preserved.

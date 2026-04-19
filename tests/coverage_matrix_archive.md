@@ -697,7 +697,7 @@ Editorial branches: 1 (ED-423/ED-404 Grand Debate + Quaestio — simulation stop
 | Einhir canon | COMPLETE | Foundational stabilization sites; Calamity mechanism |
 | Probability corrected | COMPLETE | TN7=0.4/die; Fibonacci calibrated |
 | Dissonance | COMPLETE | Spirit check mechanic; no separate tracker |
-| SIM-FW-03 | Fieldwork: Disposition economy 10-session arc | A+D | 10+ sessions | Disposition, Sincerity Gate, Cover | RM | Maret Vossen | Social relationship calibration | Complete | 1 P2 (fixed PP-593) |
+| SIM-FW-03 | Fieldwork: Disposition economy 10-session arc | A+D | 10+ sessions | Disposition, Sincerity Gate, Cover | RM | Yrsa Vossen | Social relationship calibration | Complete | 1 P2 (fixed PP-593) |
 | SIM-FW-06 | Fieldwork: Cover derived value calibration | A | Multi-action | Cover, Exposure | None | None | Detection risk calibration | Complete | 0 |
 
 ## Fieldwork System — Simulation Debt Register (2026-04-13)

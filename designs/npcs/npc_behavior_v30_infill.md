@@ -25,7 +25,7 @@ Each NPC has a primary Resonant Style and a secondary (activates after primary e
 2. "The Church overreaches because no one stands on law against them — I will."
 ### §2.4 Duke Magnus Vaynard (Varfell)
 ### §2.5 Grandmaster Lisbeth Ehrenwall (Löwenritter)
-### §2.6 Maret Vossen (Restoration Movement)
+### §2.6 Yrsa Vossen (Restoration Movement)
 1. "The people of Valoria deserve to know their own history — I will recover what the Church buried."
 2. "Power without accountability is tyranny — I will hold every faction to this standard, including our own."
 ### §2.7 Aldric Hann (Restoration Movement — Secondary)

@@ -21,3 +21,7 @@ sources:
       commits: [297f892, 13b8f30, 613ebf9, dc13a75, "pending-PP-664"]
 
 # placeholder — additional sources pending population
+
+# ── PP-665 Name Resolution (2026-04-19) ──────────────────────────────────
+# Maret Vossen renamed to Yrsa Vossen (RM leader). Maret Uln (Varfell) unchanged.
+# Forename collision resolved. See canon/patch_register_active.yaml PP-665.

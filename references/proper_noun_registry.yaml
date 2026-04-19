@@ -130,8 +130,8 @@ characters:
       - "designs/npcs/npc_character_analyses_v30.md"
     occurrences_count: 11
     files_count: 5
-  maret_vossen:
-    canonical: "Maret Vossen"
+  yrsa_vossen:
+    canonical: "Yrsa Vossen"
     role: "Restoration Movement Leader"
     aliases: ["Vossen"]
     source: "designs/npcs/npc_roster_v30.md"

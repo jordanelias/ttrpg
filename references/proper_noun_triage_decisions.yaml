@@ -102,9 +102,9 @@ decisions:
     alias_of: "king_almud_almqvist"
   maret:
     token: "Maret"
-    action: flag
-    flagged_for_review: true
-    comment: "two different characters (Maret Uln, Maret Vossen), needs context for resolving"
+    action: split_resolved
+    flagged_for_review: false
+    comment: "Resolved 2026-04-19 (PP-665): Maret Vossen renamed to Yrsa Vossen; Maret Uln retains forename. Two distinct characters with no shared forename."
   riskbreaker:
     token: "Riskbreaker"
     action: promote

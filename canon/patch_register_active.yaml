@@ -270,3 +270,46 @@ patches:
     - references/canonical_sources.yaml
   status: applied
   applied_commit: pending
+- id: PP-665
+  date: 2026-04-19
+  severity: P2
+  description: "Maret Vossen → Yrsa Vossen forename rename — resolves forename collision
+    between Maret Uln (Varfell succession, npc_behavior §2.10) and Maret Vossen (RM
+    leader, npc_behavior §2.6). Uln retains forename; Vossen becomes Yrsa Vossen.
+    43 instances of 'Maret Vossen' replaced across 25 files. 2 standalone 'Maret'
+    instances in Aldric Hann's belief quote (RM context) rewritten to 'Yrsa'.
+    Remaining standalone 'Maret' instances refer to Maret Uln and are unchanged.
+    proper_noun_registry key renamed maret_vossen → yrsa_vossen. proper_noun_triage_decisions
+    maret token marked split_resolved. Archives, deprecated files, historical sim
+    outputs (tests/sim/, tests/stress/, tests/coverage_matrix_archive.md) left
+    untouched as historical records."
+  finding_id: USER-DIRECTED
+  source: user
+  affects:
+    - designs/npcs/npc_roster_v30.md
+    - designs/npcs/npc_roster_v30_infill.md
+    - designs/npcs/npc_roster_v30_skeleton.md
+    - designs/npcs/npc_behavior_v30.md
+    - designs/npcs/npc_behavior_v30_infill.md
+    - designs/npcs/npc_behavior_v30_skeleton.md
+    - designs/npcs/npc_behavior_system_v1.md
+    - designs/npcs/npc_behavior_system_v1_skeleton.md
+    - designs/npcs/npc_character_analyses_v30.md
+    - designs/npcs/npc_character_analyses_v30_infill.md
+    - designs/arcs/arc_expansion_v30.md
+    - designs/arcs/arc_expansion_v30_skeleton.md
+    - designs/arcs/gm_ref/arcs_36_40.md
+    - designs/arcs/gm_ref/arcs_41_45.md
+    - designs/architecture/campaign_architecture_v30.md
+    - designs/architecture/complete_systems_reference.md
+    - designs/provincial/victory_v30.md
+    - designs/audit/valoria_holistic_audit.md
+    - designs/audit/integration_audit_v1_2026-04-15.md
+    - references/propagation_log.md
+    - references/proper_noun_registry.yaml
+    - references/proper_noun_triage_decisions.yaml
+    - references/valoria_complete_systems_r2.md
+    - params/factions/stats_1_7_scale.md
+    - tests/coverage_matrix_archive.md
+  status: applied
+  applied_commit: pending

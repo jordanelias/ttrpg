@@ -93,7 +93,7 @@ Sincerely devout. Not cynical — wrong.
 
 **Royal Guard:** +2 Ob assassination attempts on Court members.
 
-## 1.9 Maret Vossen (Restoration Movement)
+## 1.9 Yrsa Vossen (Restoration Movement)
 
 **Convictions:** Equity/Continuity. **Pressure Point:** Loyalty/Consequence. **TS:** 0. **Certainty:** 2. **Authority Challenge Ob:** 2.
 

@@ -43,7 +43,7 @@
 | 28 | 345 | 4 | Lisbeth Ehrenwall — Full Arc Profiles |
 | 29 | 401 | 4 | Torsvald (Riskbreaker) — Full Arc Profiles |
 | 30 | 443 | 3 | RESTORATION MOVEMENT — Expanded Arc Set |
-| 31 | 447 | 4 | Maret Vossen — Full Arc Expansion |
+| 31 | 447 | 4 | Yrsa Vossen — Full Arc Expansion |
 | 32 | 475 | 4 | Aldric Hann — Full Arc Expansion |
 | 33 | 494 | 3 | SOUTHERNMOST WARDENS — Expanded Arc Set |
 | 34 | 498 | 4 | Edeyja — Arc B Expansion (fuller specification) |
@@ -106,7 +106,7 @@
 | 28 | 1,341 | Lisbeth Ehrenwall — Full Arc Profiles |
 | 29 | 1,475 | Torsvald (Riskbreaker) — Full Arc Profiles |
 | 30 | 2,015 | RESTORATION MOVEMENT — Expanded Arc Set |
-| 31 | 1,244 | Maret Vossen — Full Arc Expansion |
+| 31 | 1,244 | Yrsa Vossen — Full Arc Expansion |
 | 32 | 758 | Aldric Hann — Full Arc Expansion |
 | 33 | 1,441 | SOUTHERNMOST WARDENS — Expanded Arc Set |
 | 34 | 507 | Edeyja — Arc B Expansion (fuller specification) |

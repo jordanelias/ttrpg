@@ -153,7 +153,7 @@ Every named NPC holds three interconnected attributes.
 
 ---
 
-### §2.6 Maret Vossen (Restoration Movement)
+### §2.6 Yrsa Vossen (Restoration Movement)
 
 | Attribute | Value | Notes |
 |---|---|---|
@@ -185,7 +185,7 @@ Every named NPC holds three interconnected attributes.
 | Certainty | 3 (Questioning) | Less committed than Vossen to Thread cosmology; more committed to practical liberation. |
 
 **Beliefs:**
-1. "The movement needs infrastructure, not speeches — I will build what Maret inspires."
+1. "The movement needs infrastructure, not speeches — I will build what Yrsa inspires."
 2. "Every cell that is compromised is a community that suffers — I will protect our people."
 
 **Leadership Deviation Ob:** 2.
@@ -1156,7 +1156,7 @@ Canonical values for NPC Behavior System integration:
 | Haelgrund | 12 (hidden) | 4 | Hidden TS. Certainty 4 — procedural certainty masking buried knowledge. |
 | Torsvald | 20+ | 2 | Active Riskbreaker. Low certainty — operational awareness of Thread reality. |
 | Edeyja | 50+ | 1 | Warden. Certainty 1 — Thread reality is her primary frame. |
-| Maret Vossen | 0 | 3 | Non-practitioner RM leader. Certainty 3 — political conviction with pragmatic flexibility. |
+| Yrsa Vossen | 0 | 3 | Non-practitioner RM leader. Certainty 3 — political conviction with pragmatic flexibility. |
 
 ---
 
