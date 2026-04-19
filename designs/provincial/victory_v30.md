@@ -24,7 +24,7 @@ Two simultaneous contests: who governs the peninsula AND whether it survives. Ch
 
 ## 0. Universal Victory Condition — Peninsular Sovereignty
 
-**All factions share this victory condition.** Faction-specific conditions in §3 below are retained as alternate (easier) paths.
+**All factions share this victory condition.** Faction-specific entries in §3 below describe each faction's asymmetric approach to achieving this goal — their toolkit, not an alternate endpoint.
 
 All conditions simultaneous at Accounting, held for 2 consecutive Accountings:
 
@@ -38,9 +38,11 @@ All conditions simultaneous at Accounting, held for 2 consecutive Accountings:
 
 **Full rules:** See designs/board_game/peninsular_strain_v1.md §6.
 
-### 0.1 Peninsular Partition (Co-Victory, multiplayer)
+### 0.1 Peninsular Partition (Co-Victory — Alliance-Stalemate Negotiation)
 
-All conditions simultaneous at Accounting, held for 2 consecutive Accountings:
+When exactly two factions remain AND those factions have a formal alliance or treaty on record (Formal Crown Treaty, Partition Agreement, or any Diplomatic Card that established mutual non-aggression) AND the stalemate conditions below are met — the game surfaces a negotiation prompt.
+
+**Stalemate conditions** (all simultaneous at Accounting, held 2 consecutive Accountings):
 
 | Condition | Threshold |
 |-----------|-----------|
@@ -51,9 +53,15 @@ All conditions simultaneous at Accounting, held for 2 consecutive Accountings:
 | Peninsular Strain | ≤ 6 |
 | Institutional standing | Both factions Mandate ≥ 3 |
 
-**Incompatible pairings:** Crown + Church, Crown + Löwenritter, Church + Varfell, Church + RM.
+**The prompt:** "[NPC Faction] honors the alliance. The peninsula rests between you. End here, as partners, or pursue everything alone?"
 
-Existing co-victory pairings in §4 below are retained as alternate co-victories with their existing thresholds.
+**Accept:** Campaign concludes. Portrait fires. The partition is the ending — two factions who fought together chose not to fight each other. The game recognizes this as an honorable conclusion.
+
+**Reject:** NPC faction Disposition drops significantly (likely Hostile). Alliance dissolved. Player must fight former ally for remaining territories. This path can produce the game's most emotionally complex ending: victory by betrayal.
+
+**No formal alliance or treaty between the last two factions:** No prompt fires. They fight to completion.
+
+**Incompatible pairings:** Crown + Church, Crown + Löwenritter, Church + Varfell, Church + RM.
 
 ### 0.2 Accord System
 
@@ -157,7 +165,9 @@ Key rules:
 
 ## 3. Faction Strategies — Asymmetric Approaches to Peninsular Sovereignty
 
-**These are NOT victory conditions.** They describe each faction's unique toolkit for territorial acquisition. The ONLY faction victory is Peninsular Sovereignty (§0): control all 15 territories, Accord ≥ 2, Strain ≤ 6, held 2 consecutive Accountings. Every faction pursues the same goal through different means.
+**These are NOT victory conditions.** They describe each faction's asymmetric approach to territorial acquisition — the toolkit, not the endpoint. The ONLY victory is Peninsular Sovereignty (§0): control all 15 territories, Accord ≥ 2, Strain ≤ 6, held 2 consecutive Accountings. Every faction pursues the same goal through different means. The conditions listed under each faction below describe strategic thresholds that indicate when a faction's approach is working — NOT alternate endpoints.
+
+**Emergent player-founded factions:** The settlement layer's Faction Emergence pathway (Local Actor → Regional Power → National Actor) means a player can build their own faction from nothing. Founded Organization at Mandate 3, controlling 2+ territories with Accord ≥ 2, declares itself a formal faction. That faction then pursues peninsular sovereignty like any other.
 
 
 ### 3.1 Crown — Peninsula Sovereignty
@@ -185,8 +195,8 @@ Key rules:
 
 **Token interaction (PP-509):** Hafenmark Diplomatic Token on Treaty partner removed at Treaty formation.
 
-#### Alternate — Dominion
-TCV ≥ 22 AND every other playable faction eliminated (Stability 0). No treaties.
+#### Strategic Milestone — Dominion
+TCV ≥ 22 AND every other playable faction eliminated (Stability 0). No treaties. This is not a separate victory — it indicates the Crown has achieved total military dominance and need only maintain Accord ≥ 2 across all territories to satisfy Peninsular Sovereignty (§0).
 
 ---
 
@@ -221,13 +231,13 @@ Early Seizure (TC < 50) is possible but carries political consequences: Casus Be
 
 **Fort interaction (PP-500, ED-355 resolved):** Fort Level does not modify Seizure Ob. Seizure is a political act — Church institutional authority overriding local governance. If the territory has a garrison (Fort ≥ 1 AND military units present), Church must win a Battle (attacker Military vs Battle Ob, modified by Fort per standard Battle rules) before Seizure can be attempted. An ungarrisoned fortified territory (Fort ≥ 1, no units) can be Seized without Battle.
 
-**Victory conditions (all simultaneous at Accounting):**
+**Strategic milestones (indicators that the Church approach is working — NOT alternate endpoints):**
 
-| Condition | Threshold |
-|-----------|-----------|
-| TCV held | ≥ 8 |
-| PT in all held territories | ≥ 3 |
-| Accord in non-capital territories | ≥ 3 in at least 3 non-capital Church territories (not T9) |
+| Milestone | Threshold | Significance |
+|-----------|-----------|--------------|
+| TCV held | ≥ 8 | Church has established territorial base through Seizure |
+| PT in all held territories | ≥ 3 | Church governance has cultivated piety |
+| Accord in non-capital territories | ≥ 3 in at least 3 non-capital Church territories (not T9) | Church governs well, not merely occupies |
 
 *(ED-585/590 resolved 2026-04-16: Accord ≥ 3 condition added. TCV + PT alone was insufficient — Church met TCV ≤ Season 4 in simulation, making it no constraint on TC timing. Accord ≥ 3 requires Govern OW or Seizure OW in 3 non-capital territories, creating a sustained governance burden that competes with Assert and Seizure for Church's Consul card each season.)*
 
@@ -237,8 +247,42 @@ Church Mandate ≥ 4 required to initiate any seizure. Overwhelming seizure: PT 
 
 
 **Prominence Self-Control Rule (PP-534):** The Church is automatically Prominent in all territories it controls, regardless of Mandate comparison. The Mandate comparison mechanic (Church Mandate > controlling faction's Mandate → Church is Prominent in that territory) applies only to territories controlled by rival factions. This prevents the absurdity of the Church failing its own Prominence check in territories it already governs.
-#### Alternate — Altonian Theocracy Path
-Altonian Ecclesiastical Accord (AEA) track 0–5. Victory: AEA = 5 + TC ≥ 60 + Church controls T9 (Himmelenger). Requires less territory but more diplomatic conditions.
+
+#### CI=100 — Mass Seizure Declaration
+
+When CI reaches 100, the Church pivots from incremental territorial pressure to an all-or-nothing push toward theocracy. Every territory with a Church building (Chapel or higher) in at least one settlement becomes a simultaneous Seizure target.
+
+**Settlement Church Infrastructure (4-axis model — see settlement_layer_v30.md §Church Infrastructure):**
+
+Settlements track Church presence on four independent axes:
+- **Religious Building** (mutually exclusive): None / Chapel (+0.5 PT) / Church (+1 PT) / Cathedral (+2 PT, +0.5 PT adjacent)
+- **Templar Station** (binary): +1 TC/season, interrupt rival Domain Actions (+1 Ob, costs 1 TC)
+- **Inquisitor Base** (binary): Surveillance Zone, suppresses RM organizing (+1 Ob)
+- **Church Governor** (binary): de facto Church territory, bypasses civilian governance
+
+**Per-settlement Seizure Ob modifiers (stacking):**
+
+| Axis | Modifier |
+|------|----------|
+| Chapel | −0 |
+| Church | −1 |
+| Cathedral | −2 |
+| Templar Station | −1 |
+| Inquisitor Base | −1 |
+| Church Governor | −2 |
+
+Maximum per settlement: −6. Territory Seizure Ob aggregates modifiers across all settlements.
+
+**CI=100 Mechanics:**
+
+1. **Mass Seizure Declaration fires as a Zoom In event.** The Archbishop formally declares. Every faction receives an Emergency Session — 1 season to respond before seizures resolve.
+2. **Seizure targets all territories with Church building (Chapel+).** Individual Seizure Ob = 7 − PT − (sum of infrastructure modifiers).
+3. **Succeeded seizures still require Accord ≥ 2.** Mass-seized territories start at Accord 1 (military-equivalent) or Accord 2 (if PT ≥ 3). The Church must govern what it seized.
+4. **Failed seizures generate 2 Church Attention events** the following season.
+5. **The game does not end at CI=100.** It enters the Theocratic Bid phase — a high-stakes sequence where the Church consolidates while every other faction responds. If the Church achieves all 15 territories with Accord ≥ 2, it wins via Peninsular Sovereignty (§0). If it overextends, governance crisis.
+
+#### Strategic Milestone — Altonian Theocracy Path
+Altonian Ecclesiastical Accord (AEA) track 0–5. Milestone: AEA = 5 + TC ≥ 60 + Church controls T9 (Himmelenger). Indicates diplomatic route to Church dominance is viable — still requires full peninsular sovereignty to win.
 
 #### Partition — Church + Hafenmark (ED-304)
 **Trigger (all simultaneous at Accounting):**
@@ -475,28 +519,72 @@ Co-victories are distinct from operational coalitions (PP-404/405). A faction ma
 
 **No shared loss. No fade to black.** Every crisis becomes a new chapter. The campaign continues.
 
-| Condition | Trigger | Transition |
-|-----------|---------|------------|
-| Post-Calamity Era | RS = 0 at Accounting | Substrate tears. Faction acquisition suspended 3 seasons. Mending Domain Echo doubled. Dissolution/Lock +2 Ob. Recovery: MS restored to 20 within 10 seasons. |
-| Occupation Era | IP ≥ 100 AND AER ≤ 1 | Altonian Governorate activates (Mandate 3, Military 5, Stability 4). All faction Domain Actions in occupied territories +2 Ob. Underground Network and Resistance Work activate. Recovery: IP reduced below 60 through sustained resistance. |
+### 5.1 RS=0 → Post-Calamity Era
 
-**Occupation Era — Expanded (historical_precedents_analysis §2, campaign_architecture_v1 Part 5):**
+The substrate tears. The world changes. Campaign continues.
 
-**Critical design note:** During Occupation, the game world continues ticking. RS continues to decline. Thread phenomena continue to intensify. The Southernmost calamity clock does not pause. Faction internal politics continue. The Occupation is a new constraint layered on top of existing systems, not a replacement for them. A player dealing with Occupation must simultaneously manage: Altonian resistance, internal faction politics, RS/Thread crisis, and their personal character arc. This is historically accurate — occupied nations face the full weight of their pre-existing problems plus the occupation itself.
+- Faction acquisition suspended for 3 seasons (the world cannot be governed while it is coming apart)
+- Mending Domain Echo doubled (MS +2/Success, +4/OW)
+- Dissolution/Lock +2 Ob (destabilizing an already unstable substrate is harder)
+- Mending Ob unchanged (recovery must be achievable)
+- Founded Organizations gain +1 Domain Action for Community Organizing/Mending only
+- Recovery: MS restored to 20 within 10 seasons
+- True terminal: Second Calamity fires only after 10 seasons sustained at MS ≤ 5 — requires a decade of complete failure
 
-**IP Visibility Milestones (NEW — historical_precedents_analysis §2.3):**
-- **IP 60:** All factions receive Intelligence Report: "Altonian forces massing at border." Mandatory notification in Scene Slate (Priority 2). Factions currently in inter-faction conflict make Mandate check (Ob 2) to divert resources to border defense. Failure: faction is too consumed by internal politics to respond (no defensive Domain Actions targeting Altonia permitted this season).
-- **IP 80:** Second Intelligence Report: "Altonian advance forces in Schoenland corridor." Mandatory Priority 1 scene: faction leaders convene emergency session. Player may attempt coalition-building via Social Contest.
-- **IP 90:** Final warning: "Invasion imminent." All factions aware. Any faction still engaged in inter-faction Battle takes Cohesion −20 (population perceives leadership failure, derived_stats_v1).
+**On the 3-season suspension:** The faction player's acquisition is suspended but the game is not idle. During suspension: defend existing territories' Accord from Post-Calamity degradation, contribute to Mending to end the era faster, position politically against rivals whose territories are also degrading. Scene Slate surfaces this clearly.
 
-**Altonian Alignment (NEW — historical_precedents_analysis §2.4):** NPC faction AI behavior — when an NPC faction reaches Mandate ≤ 2 (desperate), there is a chance it secretly contacts the Altonian Vanguard Commander, offering strategic intelligence in exchange for favorable treatment during Occupation. This is NOT a player action — it is a world event the player discovers through investigation. Effect: IP +5 immediate. Aligning faction gets −2 Ob on Domain Actions during Occupation Era (collaborator status). **Discoverable:** Niflhel intelligence or Riskbreaker investigation (Evidence Track threshold 4). Discovery produces a Revelation Event scene — the player learns that a faction they may have trusted has betrayed the peninsula. If exposed publicly: aligning faction's Accord drops to 0 in all territories, Peninsular Strain +3, all other factions gain Casus Belli. Historical precedent: Byzantine Kantakouzenos inviting Ottomans (1354), French collaboration during WWII. This generates emergent narrative — the betrayal is a story the player discovers and responds to as a character, not a button they press.
+**"A Life in Valoria" significance:** The Post-Calamity Era is where personal-scale play is most consequential. Faction machinery is broken. Relationships, Thread competence, community organization, and the player's Founded Organization are the only functional currencies. A player who has been building Knots and Mending for 20 seasons is now the most powerful actor — not from a power boost, but because the institutions that dwarfed them have collapsed.
+
+### 5.2 IP=100 → Phased Occupation Era
+
+IP=100 does NOT trigger immediate Governorate imposition. It triggers a phased military invasion escalating as IP remains elevated. Three phases correspond to three geographic corridors into the peninsula.
+
+**Phase 1 — First Mountain Pass (IP reaches 100):**
+Altonian forces cross the first mountain pass. One border territory (lowest Accord, highest Military Ob for defender — T3 Lowenskyst or T10 Spartfell) comes under Active Invasion — contested, not occupied. Faction Domain Actions in contested territory +1 Ob. Personal-scale Ambush and Supply Interdiction events available. IP decay: Vanguard Commander Social Contest (Success: IP −3); passive decay if no battle for 3 seasons (IP −1/season).
+
+If IP drops below 85 during Phase 1: invasion stalls, forward garrison withdrawn. Campaign continues without Occupation.
+
+**Phase 2 — Additionally Through Schoenland (IP sustained at 85+ for 3 seasons after Phase 1):**
+Second invasion corridor through Schoenland. Two additional territories under Active Invasion simultaneously (T1 Valorsplatz sea connection or T17 Halvarshelm). Altonian Governorate NPC faction formally established: Mandate 2, Military 4, Stability 3. Underground Network mechanics available to all non-Altonian factions. Resistance Work personal-scale actions activate. Two-front problem requiring coordinated faction response.
+
+If IP drops below 75 during Phase 2: second corridor abandoned, Phase 1 conditions apply.
+
+**Phase 3 — Additionally Through the Northwest Pass (IP sustained at 80+ for 3 more seasons):**
+Third corridor from northwest (T4 Grauwald / T7 Rendstad). Governorate holds contiguous territory chain. Mandate rises to 3, Military 5, Stability 4. All faction Domain Actions in occupied territories +2 Ob. Governorate begins replacing local governance at Seat settlements — the existential crisis.
+
+Recovery from Phase 3: IP reduced below 60 through sustained resistance. This is the game's hardest non-terminal challenge. Designed to be winnable but to feel like a war.
+
+**IP Visibility Milestones:**
+- **IP 60:** Intelligence Report — "Altonian forces massing at border." Scene Slate Priority 2. Factions in inter-faction conflict: Mandate check (Ob 2) to divert resources.
+- **IP 80:** "Altonian advance forces in Schoenland corridor." Priority 1 scene: emergency session. Coalition-building via Social Contest available.
+- **IP 90:** "Invasion imminent." All factions aware. Factions still in inter-faction Battle: Cohesion −20.
 
 [EDITORIAL: ED-684 — IP milestones and Altonian Alignment. Source: historical_precedents_analysis.md §2.]
 
-**RM Presence → Underground Network (NEW — historical_precedents_analysis §2.3):** When Occupation Era begins, RM Presence markers in occupied territories convert 1:1 to Underground Network points. RM's political organizing infrastructure — consensus-governance cells, mutual-aid networks, community contacts — functions as resistance infrastructure. Historical precedent: French Resistance built on pre-war communist and socialist party cell structures; Polish Solidarity's workplace networks became underground resistance during martial law. This gives RM a meaningful advantage in resistance scenarios without making Occupation trivially easy (RM caps at ~5-6 Presence per territory; Occupation likely lasts 10+ seasons).
+**Altonian Alignment:** NPC faction AI — when NPC faction reaches Mandate ≤ 2, chance it secretly contacts Altonian Vanguard Commander. Not a player action — a world event discovered through investigation. Effect: IP +5 immediate, aligning faction −2 Ob on Domain Actions during Occupation (collaborator). Discoverable via Niflhel intelligence or Riskbreaker investigation (Evidence Track threshold 4). If exposed publicly: aligning faction Accord drops to 0 all territories, Strain +3, all factions gain Casus Belli.
+
+**Altonian Repulsion:** It is possible to REPEL the invasion entirely.
+
+- **Military repulsion:** Defending faction(s) win Mass Battle vs Altonian forces with Overwhelming result → Altonian forces retreat one phase. Two consecutive Overwhelming defeats → full withdrawal. IP resets to 60, cannot rise above 80 for 10 seasons (Altonia rebuilding).
+- **Diplomatic repulsion:** Schoenland diplomatic channel (Elske Loyalty ≥ 6, Social Contest vs Vanguard Commander Ob 4, IP < 80). Success: IP → 40. Overwhelming: IP → 20 + Non-Aggression Pact for 20 seasons.
+- **Resistance repulsion (during Occupation):** Underground Network Mandate ≥ 3 AND Governorate Accord = 0 in all occupied territories AND Mass Battle vs Governorate Success+ → full withdrawal. IP → 30.
+- **Permanently defeated:** If repelled by military Overwhelming ×2, or diplomatic Non-Aggression, or resistance uprising — Altonia is no longer a threat. IP freezes, cannot rise. Invasion storyline resolved.
+
+**RM Presence → Underground Network:** When Occupation begins, RM Presence markers in occupied territories convert 1:1 to Underground Network points. RM's political organizing infrastructure functions as resistance infrastructure.
 
 [EDITORIAL: ED-685 — RM Underground Network conversion. Source: historical_precedents_analysis.md §2.]
-| Anarchy Era | All playable factions at Stability 0 simultaneously | Parliament dissolved. Direct governance via personal Charisma. Founded Organizations claim ungoverned territories. New faction formation available (Mandate 3 + 2 territories + Founding Declaration). Recovery: two formal factions establish Parliament quorum. |
+
+**Critical design note:** During Occupation, the game world continues ticking. RS declines. Thread phenomena intensify. The Southernmost calamity clock does not pause. Faction internal politics continue. The Occupation is a new constraint layered on existing systems, not a replacement.
+
+### 5.3 All Factions Dissolved → Anarchy Era
+
+No faction has standing Mandate. Parliament has no quorum. The Ministry continues.
+
+- Any character with Standing 2+ retains personal network but loses institutional support
+- Territory governance becomes direct: Charisma pool, not faction card
+- Founded Organizations can claim Presence in ungoverned territories without Domain Action cost
+- New faction formation: Founded Organization at Mandate 3 + 2 territories + Accord ≥ 2 for 2 seasons → Founding Declaration scene → formal faction
+- Recovery: two or more formal factions establish Parliament quorum
 
 **The only true campaign terminal:** Second Calamity. Fires after 10 seasons sustained at MS ≤ 5 during Post-Calamity Era. Requires a decade of complete failure to reach.
 
@@ -542,7 +630,7 @@ Multiple victory conditions require RS thresholds. A faction that ignores RS ris
 
 Starting TC: 28. Phase transition at TC 75 (TC freezes, Church shifts to seizure mode).
 
-**CI=100 Mass Seizure Declaration (campaign_architecture_v1 §1.3, settlement_layer_v30 §1.5):** When CI reaches 100, every territory where at least one settlement has a Church building (Chapel or higher) becomes a simultaneous Seizure target. Individual Seizure Ob calculated per-territory based on PT and infrastructure modifiers. The Mass Seizure is a mandatory Zoom In event — the Archbishop declares, other factions get 1 season of Emergency Session to respond, then each territory resolves independently. CI=100 does NOT mean the Church wins — it means the Church makes its bid for theocracy. See campaign_architecture_v1.md §1.3 for full specification.
+**CI=100 Mass Seizure Declaration (see §3.2 for full specification):** When CI reaches 100, every territory where at least one settlement has a Church building (Chapel or higher) becomes a simultaneous Seizure target. Individual Seizure Ob calculated per-territory based on PT and Church infrastructure modifiers (4-axis model: Religious Building, Templar Station, Inquisitor Base, Church Governor — see settlement_layer_v30.md §Church Infrastructure). The Mass Seizure is a mandatory Zoom In event. CI=100 does NOT mean the Church wins — it means the Church makes its bid for theocracy. The Church still needs Peninsular Sovereignty (§0) to win.
 
 **Seasonal TC at Accounting:**
 1. Institutional Momentum: TC +1 (passive).

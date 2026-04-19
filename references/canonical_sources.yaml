@@ -259,7 +259,7 @@ systems:
     canonical_sha__designs__provincial__peninsular_strain_v30_md: "62e373c659538674fb10ff856c1dbcbb834e7772"
     params: null
     design_doc: designs/provincial/peninsular_strain_v30.md
-    notes: "Victory condition restructure — integrated into victory_v30.md. Accepted 2026-04-17 (editorial batch acceptance). Open item ED-626 (Accord/Order relationship) carries forward."
+    notes: "Victory condition restructure — integrated into victory_v30.md. Accepted 2026-04-17 (editorial batch acceptance). 2026-04-19: propagated acquisition strategy reframe, phased IP escalation, alliance-stalemate co-victory, CI=100 mass seizure, world-state transition reform, Altonian repulsion. Open item ED-626 (Accord/Order relationship) carries forward."
 
   arc_expansion:
     status: active
