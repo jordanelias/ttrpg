@@ -840,3 +840,82 @@
     severity: P1
     resolution: "Mechanic canonicalized in derived_stats_v1 Treasury section. Income = Competence x 25 gold/season, capped at Wealth x 50/season."
     affects: [designs/systems/derived_stats_v1.md]
+
+
+# Archived 2026-04-18 — Phase 0-1 session
+
+# Editorial Ledger Archive — Phase 0-1 Session (2026-04-18)
+
+  - id: ED-680
+    date: 2026-04-18
+    description: "AUD-NPC-01: Knot formation during play. Solidarity Resonant Style required active Knot but no in-play formation procedure existed. Blocks Solidarity targeting post-character-creation."
+    status: resolved
+    severity: P1
+    resolution: "Knot formation procedure added to fieldwork_v30 §5.6a. Prerequisites: Disposition +5 + TS ≥ 30 (either party) + Knot capacity. Spirit pool vs TN 7 Ob 2. Solidarity GAP in npc_behavior §6.3 replaced with cross-reference. params/core updated with formation rule summary."
+    affects: [designs/scene/fieldwork_v30.md, designs/npcs/npc_behavior_v30.md, params/core.md]
+    canon_compliance: "A12 (Knots bind threads — Thread contact required), P-12 (relational contagion — formation structurally significant), P-15 (second-layer engagement — Spirit check), A10 (confrontation development)"
+
+
+  - id: ED-681
+    date: 2026-04-18
+    description: "ED-589 resolution: RM Presence marker mechanics. Community Organizing Domain Action defined (Pool=Mandate+Influence, TN 7, Ob 2+modifiers). Placement, cap (5/territory), Church/Crown suppression rules specified."
+    status: resolved
+    severity: P1
+    resolution: "Presence marker specification added to victory_v30 §3.5 (RM Territory Control). Community Organizing: Mandate+Influence pool, TN 7, Ob 2 base. Suppression: Church via Preach (Ob=markers), Crown via Enforce (Ob 2, Order −1). Coverage matrix updated."
+    affects: [designs/provincial/victory_v30.md, tests/coverage_matrix.md]
+    canon_compliance: "A12 (community-scale Thread binding), P-03 (rendered-level expression), P-08 (epistemological barrier — suppression requires detection)"
+
+
+  - id: ED-682
+    date: 2026-04-18
+    description: "Coverage matrix cleanup: ED-588 (RM PT ≤ 1) was already resolved in victory_v30 (PT ≤ 3, 2026-04-16). ED-612 (Guilds victory) confirmed resolved per throughline analysis (Guilds intentionally NPC-only). Both moved from Active P1 to Resolved."
+    status: resolved
+    severity: P3
+    affects: [tests/coverage_matrix.md]
+
+
+  - id: ED-683
+    date: 2026-04-18
+    description: "AUD-SET-02: Accord propagation to settlement Order. 35 Accord change rules audited across 6 docs. Settlement Targeting Specification §2.5 added to peninsular_strain. 15 province-level sets (Category A: all settlements reset). 15 incremental changes (Category B: specific settlement per rule). Cross-references added to mass_battle, scale_transitions, faction_layer."
+    status: resolved
+    severity: P1
+    resolution: "§2.5 Settlement Targeting Specification added to peninsular_strain_v30. Category A (province-level set) and Category B (targeted ±N) rules defined with settlement targeting rationale. mass_battle Part E Accord entries updated with settlement targeting. scale_transitions and faction_layer cross-references added."
+    affects: [designs/provincial/peninsular_strain_v30.md, designs/provincial/mass_battle_v30.md, designs/architecture/scale_transitions_v30.md, designs/provincial/faction_layer_v30.md]
+    canon_compliance: "P-03 (rendering = consciousness-performed: settlement Order is rendered-level experience, province Accord is abstracted measure)"
+
+
+  - id: ED-684
+    date: 2026-04-18
+    description: "AUD-DS-01: Derived stats numerical calibration. Per-faction economic model confirms provisional multipliers are viable."
+    status: resolved
+    severity: P1
+    resolution: "Multipliers confirmed: Treasury x100, Legitimacy x20, Reputation x15, Cohesion x10, Prosperity x10. No faction collapses within 3 seasons. Fine-tuning deferred to Phase 4.4."
+    affects: [designs/scene/derived_stats_v30.md, tests/sim/sim_derived_stats_calibration.md]
+
+
+  - id: ED-685
+    date: 2026-04-18
+    description: "AUD-FP-01: Faction politics simulation. 5 SIM-POL items (R01-R05) run. All PASS. Standing 7 reachable in median 15 seasons. Ministry decay creates economic pressure. Caste gating works. Branches differentiated. Cross-faction balanced."
+    status: resolved
+    severity: P1
+    resolution: "1000-trial Monte Carlo + analytical models. All 5 SIM-POL items pass. No adjustments needed to faction_politics_v30. Coverage matrix updated."
+    affects: [designs/provincial/faction_politics_v30.md, tests/coverage_matrix.md, tests/sim/sim_faction_politics.md]
+
+
+  - id: ED-663
+    date: 2026-04-18
+    description: "Haushalt Competence 3 +2 Wealth/season has no cap — unbounded Wealth generation."
+    status: resolved
+    severity: P1
+    resolution: "Mechanic canonicalized in derived_stats_v1 Treasury section. Income = Competence x 25 gold/season, capped at Wealth x 50/season. See archive ED-663 (resolved) in editorial_ledger_archive_1001_1200.yaml."
+    affects: [designs/scene/derived_stats_v30.md]
+
+
+  - id: ED-686
+    date: 2026-04-18
+    description: "ED-577-01/02/03/04: Co-Movement card calibration."
+    status: resolved
+    severity: P2
+    resolution: "All 4 items resolved. CM-13 TS=15, CM-06 per-practitioner, global deck, RS variance ±4.3. Phase 4 hard dep cleared."
+    affects: [designs/threadwork/threadwork_v30.md]
+

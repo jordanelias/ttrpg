@@ -691,18 +691,18 @@ All Thread Tension references from the original deck are converted to Rendering 
 | CM-03 | Echo Cascade | Rendering Stability −1. One resolved Thread operation re-manifests a minor version of its effect. | No effect. |
 | CM-04 | Coherence Bleed | Rendering Stability −1. Lowest-Coherence Thread entity in territory: Coherence −1. | No RS change. Coherence loss still applies. |
 | CM-05 | Anchor Settling | Rendering Stability +1. One Thread Witness Node in territory stabilises (cannot be disrupted this season). | Rendering Stability +1. No Node effect. |
-| CM-06 | Resonance Bloom | Rendering Stability −2. All Practitioners in territory: +1D to next Thread operation. | Rendering Stability −1. No bonus. |
+| CM-06 | Resonance Bloom | Rendering Stability −2. Each Practitioner in territory: +1D to their next Thread operation this season (one use per practitioner, expires unused at season end). (ED-577-04 resolved) | Rendering Stability −1. No bonus. |
 | CM-07 | Scar Memory | No RS change. One Dissolution residue site in territory becomes visible to non-Sensitives for 1 scene. | No effect. |
 | CM-08 | Temporal Fold | Rendering Stability −1. One past-oriented Pulling operation in territory may target one additional season into the past (free depth extension). | No RS change. No depth extension. |
 | CM-09 | Rendering Surge | Rendering Stability −3. All Thread entities in territory: forced Coherence check Ob 1. | Rendering Stability −2. No Coherence check. |
 | CM-10 | Ground Harmony | Rendering Stability +2. Mending operations in territory: −1 Ob this season. | Rendering Stability +1. No Ob change. |
 | CM-11 | Witness Flare | No RS change. All Thread Witness Nodes in territory activate: Church Attention Pool +1. | Church Attention Pool +1. No Node activation. |
 | CM-12 | Ground Stability | Rendering Stability +1. Territory Thread Debt cleared (all accumulated +Ob tokens removed). | Rendering Stability +1. Debt not cleared. |
-| CM-13 | Epistemic Breach | Rendering Stability −1. One non-Sensitive NPC in territory gains temporary Thread perception for 1 scene. Church Attention Pool +1. | Church Attention Pool +1. No perception grant. |
+| CM-13 | Epistemic Breach | Rendering Stability −1. One non-Sensitive NPC in territory gains temporary TS = 15 for 1 scene (passive perception only — anomalous awareness per visibility table, cannot Thread-Read or Leap). Certainty pressure point. Church Attention Pool +1. (ED-577-01 resolved) | Church Attention Pool +1. No perception grant. |
 | CM-14 | Substrate Assertion | Rendering Stability −3. One Locked Thread entity in territory: Lock strength +1. | Rendering Stability −1. No Lock change. |
 | CM-15 | Dissolution Wake | Rendering Stability −2. One territory gains a Dissolution residue site if none exists. If one exists: residue intensity +1. | Rendering Stability −1. Residue intensity +1 if site exists; otherwise no effect. |
 
-**Deck composition:** 18 cards total (CM-01 through CM-18). Cards 16–18 are Mending-specific additions (see §7.1). Shuffle all 18 into a single deck. Draw 1 per Thread operation (2 if Thread Witness Node present in territory).
+**Deck composition:** 18 cards total (CM-01 through CM-18). Cards 16–18 are Mending-specific additions (see §7.1). Shuffle all 18 into a single deck. Draw 1 per Thread operation (2 if Thread Witness Node present in territory). Reshuffle when all 18 cards drawn (global deck, not per-territory). Deck cycles every ~3-4 seasons at typical operation rates. (ED-577-02 resolved)
 
 
 ## 4.4 History Resonance and Flashback Anchoring
