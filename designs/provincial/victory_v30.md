@@ -3,11 +3,11 @@
 
 <!-- v30 baseline — renamed from designs/board_game/victory_architecture_v1.md on 2026-04-13 -->
 # VALORIA BG — Victory Architecture
-## ED-306 Resolution (v3 — geography_design.md territory numbering, TC 75 canonical, PT cap clarified)
+## ED-306 Resolution (v3 — geography_design.md territory numbering, CI 100 canonical, PT cap clarified)
 ## PP-540–546 (2026-04-10): Balance patches — solo + co-victory timeline normalisation
 ## Date: 2026-04-06 | Status: DESIGN — pending Varfell Path B user decision (ED-311)
 ## Supersedes: v2 (same path), params_board_game.md §Victory Conditions, all Deed-based victory systems
-## Dependencies: ED-302 (PT confirmed), ED-303 (TC freeze at 75), ED-304 (Partition Victory), ED-305 (WA=0), ED-307 (Baralta cadet branch), BALANCE-001 (equal win probability), BALANCE-004 (Askeheim purpose)
+## Dependencies: ED-302 (PT confirmed), ED-303 (CI cap at 100), ED-304 (Partition Victory), ED-305 (WA=0), ED-307 (Baralta cadet branch), BALANCE-001 (equal win probability), BALANCE-004 (Askeheim purpose)
 ## Territory numbering: geography_design.md canonical (all T-numbers match geography_design.md)
 ## See also: designs/board_game/peninsular_strain_v1.md (Accord, Peninsular Strain, universal victory condition, faction acquisition toolkits)
 
@@ -16,7 +16,7 @@
 ## Core Frame
 
 
-Two simultaneous contests: who governs the peninsula AND whether it survives. Church and Hafenmark are structurally blind to the Rendering Stability (RS) crisis. Church compensates with Graduated Seizure — available early but strongest at high TC. Crown and Varfell can address RS via Thread path but at cost of political resources.
+Two simultaneous contests: who governs the peninsula AND whether it survives. Church and Hafenmark are structurally blind to the Rendering Stability (RS) crisis. Church compensates with Graduated Seizure — available early but strongest at high CI. Crown and Varfell can address RS via Thread path but at cost of political resources.
 
 **Equal win probability** for Crown, Varfell, Hafenmark, Church. Restoration Movement (RM) is hardest mode (Hybrid only). (BALANCE-001, revised PP-494)
 
@@ -47,7 +47,7 @@ When exactly two factions remain AND those factions have a formal alliance or tr
 | Condition | Threshold |
 |-----------|-----------|
 | Collective territory control | Both factions collectively control all 15 playable territories (directly or via hegemony) |
-| Individual minimum | Each faction TCV ≥ 10 |
+| Individual minimum | Each faction PV ≥ 10 |
 | Accord | ≥ 2 in all territories controlled by each faction |
 | Non-aggression | No Battle between the two factions in preceding 4 seasons |
 | Peninsular Strain | ≤ 6 |
@@ -70,7 +70,7 @@ Per-territory attribute (0–3). Modifies effective Prosperity. See peninsular_s
 - Accord 2 (Compliant): full Prosperity, normal.
 - Accord 1 (Resistant): no Prosperity contribution, Govern Ob +1, garrison required.
 - Accord 0 (Revolt): territory becomes Uncontrolled.
-- **TCV counts only at Accord ≥ 2.**
+- **PV counts only at Accord ≥ 2.**
 - Military conquest → Accord 1. Faction-specific non-military acquisition → Accord 2+.
 
 ### 0.3 Peninsular Strain Counter
@@ -118,14 +118,14 @@ Full specifications: peninsular_strain_v1.md §5.
 | T16 | Bergstadt | 3 | Standard |
 | T17 | Drakensholm | 3 | Standard |
 
-**Design note:** PT 5 at T9 means the Church starts with its theological heartland at full doctrinal saturation — TC generation from T9 is guaranteed from Season 1. PT 1 at T6/T13 represents frontier territories where the Church must invest to gain traction. PT 2 at Varfell territories reflects cultural resistance to institutional theology. These values are calibrated against the TC generation formula (params_board_game) where PT ≥ 3 contributes positively to TC.
+**Design note:** PT 5 at T9 means the Church starts with its theological heartland at full doctrinal saturation — CI generation from T9 is guaranteed from Season 1. PT 1 at T6/T13 represents frontier territories where the Church must invest to gain traction. PT 2 at Varfell territories reflects cultural resistance to institutional theology. These values are calibrated against the CI generation formula (params_board_game) where PT ≥ 3 contributes positively to CI.
 
 
-## 1. Territory Consolidation Values (TCV)
+## 1. Territory Consolidation Values (PV)
 
 All territory numbers match geography_design.md canonical table.
 
-| T# | Territory | TCV | Controller |
+| T# | Territory | PV | Controller |
 |----|-----------|-----|------------|
 | T1 | Valorsplatz | 5 | Crown★ |
 | T9 | Himmelenger | 5 | Church★ |
@@ -146,7 +146,7 @@ All territory numbers match geography_design.md canonical table.
 | T16 | Schoenland | — | Not in territorial play |
 | | **Total** | **31** | |
 
-**Starting TCV by faction:** Crown 12, Hafenmark 6, Varfell 6, Church 5.
+**Starting PV by faction:** Crown 12, Hafenmark 6, Varfell 6, Church 5.
 
 ---
 
@@ -176,7 +176,7 @@ Key rules:
 
 | Condition | Threshold |
 |-----------|-----------|
-| TCV held | ≥ 14 | *(PP-540: was 16)* |
+| PV held | ≥ 14 | *(PP-540: was 16)* |
 | Rival suppression | At least 2 of the 3 other playable factions: Mandate ≤ 2 OR eliminated OR formal Crown Treaty in effect | *(PP-540: was all 3)* |
 | IP | < 60 |
 | PI | ≥ 3 |
@@ -196,25 +196,27 @@ Key rules:
 **Token interaction (PP-509):** Hafenmark Diplomatic Token on Treaty partner removed at Treaty formation.
 
 #### Strategic Milestone — Dominion
-TCV ≥ 22 AND every other playable faction eliminated (Stability 0). No treaties. This is not a separate victory — it indicates the Crown has achieved total military dominance and need only maintain Accord ≥ 2 across all territories to satisfy Peninsular Sovereignty (§0).
+PV ≥ 22 AND every other playable faction eliminated (Stability 0). No treaties. This is not a separate victory — it indicates the Crown has achieved total military dominance and need only maintain Accord ≥ 2 across all territories to satisfy Peninsular Sovereignty (§0).
 
 ---
 
 ### 3.2 Church of Solmund — Solmundan Orthodoxy
 
-**Graduated Seizure (PP-494):** Church may attempt Territorial Seizure at any TC value. TC determines the size of Church's Seizure pool — the higher the TC, the more institutional authority Church projects.
+**Graduated Seizure (PP-494):** Church may attempt Territorial Seizure at any CI value. CI determines the size of Church's Seizure pool — the higher the CI, the more institutional authority Church projects.
 
-**Church Seizure Pool:** Influence + floor(TC / 15)
+**Church Seizure Pool:** Influence + floor(CI / 15)
 **Church Seizure Ob:** 7 − PT (where PT is the target territory's Piety value, 0 = Restoration pole, 5 = Piety pole)
 **Seizure Accord:** Success → max(floor(PT/2)+1, 2). Overwhelming → floor(PT/2)+2, max 3. Partial → 1. See peninsular_strain_v1.md §5.2.
 
-| TC | Pool Bonus | Total Pool (Inf 6) |
+| CI | Pool Bonus | Total Pool (Inf 6) |
 |----|-----------|-------------------|
 | 15 | +1 | 7 |
 | 30 | +2 | 8 |
 | 45 | +3 | 9 |
 | 60 | +4 | 10 |
 | 75 | +5 | 11 |
+| 90 | +6 | 12 |
+| 100 | +6 | 12 |
 
 | PT | Seizure Ob | Notes |
 |----|-----------|-------|
@@ -225,9 +227,9 @@ TCV ≥ 22 AND every other playable faction eliminated (Stability 0). No treatie
 | 1 | 6 | Restoration-leaning — Church is an invader |
 | 0 (Restoration) | 7 | Hostile population — Seizure is an act of war |
 
-TC freezes at 75. At TC 75 (pool 11D) vs PT 5 (Ob 2): Seizure is essentially guaranteed. Against PT 0 (Ob 7): Church succeeds ~40% — formidable but not certain.
+CI caps at 100. At CI 100 (pool 12D) vs PT 5 (Ob 2): Seizure is essentially guaranteed. Against PT 0 (Ob 7): Church succeeds ~50% — formidable but not certain. Milestones at CI 40/55/65/80/100 per tc_political_v30 §7.1.
 
-Early Seizure (TC < 50) is possible but carries political consequences: Casus Belli from the controlling faction, and every other faction sees Church territorial ambition. The lower the TC, the more it looks like institutional aggression rather than a natural extension of authority. The civil war scenario is a real cost.
+Early Seizure (CI < 50) is possible but carries political consequences: Casus Belli from the controlling faction, and every other faction sees Church territorial ambition. The lower the CI, the more it looks like institutional aggression rather than a natural extension of authority. The civil war scenario is a real cost.
 
 **Fort interaction (PP-500, ED-355 resolved):** Fort Level does not modify Seizure Ob. Seizure is a political act — Church institutional authority overriding local governance. If the territory has a garrison (Fort ≥ 1 AND military units present), Church must win a Battle (attacker Military vs Battle Ob, modified by Fort per standard Battle rules) before Seizure can be attempted. An ungarrisoned fortified territory (Fort ≥ 1, no units) can be Seized without Battle.
 
@@ -235,11 +237,11 @@ Early Seizure (TC < 50) is possible but carries political consequences: Casus Be
 
 | Milestone | Threshold | Significance |
 |-----------|-----------|--------------|
-| TCV held | ≥ 8 | Church has established territorial base through Seizure |
+| PV held | ≥ 8 | Church has established territorial base through Seizure |
 | PT in all held territories | ≥ 3 | Church governance has cultivated piety |
 | Accord in non-capital territories | ≥ 3 in at least 3 non-capital Church territories (not T9) | Church governs well, not merely occupies |
 
-*(ED-585/590 resolved 2026-04-16: Accord ≥ 3 condition added. TCV + PT alone was insufficient — Church met TCV ≤ Season 4 in simulation, making it no constraint on TC timing. Accord ≥ 3 requires Govern OW or Seizure OW in 3 non-capital territories, creating a sustained governance burden that competes with Assert and Seizure for Church's Consul card each season.)*
+*(ED-585/590 resolved 2026-04-16: Accord ≥ 3 condition added. PV + PT alone was insufficient — Church met PV ≤ Season 4 in simulation, making it no constraint on CI timing. Accord ≥ 3 requires Govern OW or Seizure OW in 3 non-capital territories, creating a sustained governance burden that competes with Assert and Seizure for Church's Consul card each season.)*
 
 **Prominence prerequisite:** Church may only seize a territory where Church is Prominent — defined as Church Mandate exceeding the controlling faction's Mandate in that territory. Church Mandate is the Church faction's global Mandate stat. Controlling faction Mandate is their global Mandate stat. Prominence is assessed at seizure declaration.
 
@@ -256,7 +258,7 @@ When CI reaches 100, the Church pivots from incremental territorial pressure to 
 
 Settlements track Church presence on four independent axes:
 - **Religious Building** (mutually exclusive): None / Chapel (+0.5 PT) / Church (+1 PT) / Cathedral (+2 PT, +0.5 PT adjacent)
-- **Templar Station** (binary): +1 TC/season, interrupt rival Domain Actions (+1 Ob, costs 1 TC)
+- **Templar Station** (binary): +1 CI/season, interrupt rival Domain Actions (+1 Ob, costs 1 CI)
 - **Inquisitor Base** (binary): Surveillance Zone, suppresses RM organizing (+1 Ob)
 - **Church Governor** (binary): de facto Church territory, bypasses civilian governance
 
@@ -282,17 +284,17 @@ Maximum per settlement: −4 (cap per settlement_layer_v30.md §1.5). Territory 
 5. **The game does not end at CI=100.** It enters the Theocratic Bid phase — a high-stakes sequence where the Church consolidates while every other faction responds. If the Church achieves all 15 territories with Accord ≥ 2, it wins via Peninsular Sovereignty (§0). If it overextends, governance crisis.
 
 #### Strategic Milestone — Altonian Theocracy Path
-Altonian Ecclesiastical Accord (AEA) track 0–5. Milestone: AEA = 5 + TC ≥ 60 + Church controls T9 (Himmelenger). Indicates diplomatic route to Church dominance is viable — still requires full peninsular sovereignty to win.
+Altonian Ecclesiastical Accord (AEA) track 0–5. Milestone: AEA = 5 + CI ≥ 60 + Church controls T9 (Himmelenger). Indicates diplomatic route to Church dominance is viable — still requires full peninsular sovereignty to win.
 
 #### Partition — Church + Hafenmark (ED-304)
 **Trigger (all simultaneous at Accounting):**
 - Crown Mandate ≤ 1
-- TC ≥ 50
+- CI ≥ 50
 - Church controls ≥ 2 territories
 - Hafenmark controls ≥ 3 territories
 - No active military conflict between Church and Hafenmark
 
-**Partition Pressure marker (ED-338, PP-566):** At Accounting, if all conditions EXCEPT TC ≥ 50 are simultaneously met, place a public Partition Pressure marker. Other factions have 1 season to disrupt conditions before TC threshold check fires. Remove marker if any condition breaks before TC ≥ 50.
+**Partition Pressure marker (ED-338, PP-566):** At Accounting, if all conditions EXCEPT CI ≥ 50 are simultaneously met, place a public Partition Pressure marker. Other factions have 1 season to disrupt conditions before CI threshold check fires. Remove marker if any condition breaks before CI ≥ 50.
 
 
 
@@ -306,7 +308,7 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Milestone: AEA = 5 + TC ≥ 60
 
 | Condition | Threshold |
 |-----------|-----------|
-| TCV held | ≥ 13 | *(PP-541: was 12)* |
+| PV held | ≥ 13 | *(PP-541: was 12)* |
 | Hafenmark Mandate | ≥ 4 |
 | Hafenmark Stability | ≥ 3 | *(PP-571, ED-388: prevents Parliamentary Sovereignty while faction is destabilised)* |
 | PI | ≥ 5 |
@@ -316,7 +318,7 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Milestone: AEA = 5 + TC ≥ 60
 
 | Condition | Threshold |
 |-----------|-----------|
-| TCV held | ≥ 12 |
+| PV held | ≥ 12 |
 | Crown Mandate | ≤ 1 |
 | Control T1 (Valorsplatz) | held |
 | Hafenmark Mandate | ≥ 5 |
@@ -330,7 +332,7 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Milestone: AEA = 5 + TC ≥ 60
 
 | Condition | Threshold |
 |-----------|-----------|
-| TCV held | ≥ 10 |
+| PV held | ≥ 10 |
 | VTM | ≥ 3 |
 | At least 2 rival factions' stats fully revealed | fixed count |
 | Varfell controls ≥ 1 territory outside starting 4 | — |
@@ -340,7 +342,7 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Milestone: AEA = 5 + TC ≥ 60
 
 | Condition | Threshold |
 |-----------|-----------|
-| TCV held | ≥ 8 |
+| PV held | ≥ 8 |
 | Control T4 (Grauwald) AND T13 (Oastad) | both held |
 | VTM | ≥ 3 |
 | Warden Recognition (WR) | ≥ 2 |
@@ -354,7 +356,7 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Milestone: AEA = 5 + TC ≥ 60
 
 | Condition | Threshold |
 |-----------|-----------|
-| TCV held | ≥ 10 |
+| PV held | ≥ 10 |
 | VTM | ≥ 4 | *(PP-542: was = 5)* |
 | RS | ≥ 50 |
 
@@ -369,22 +371,22 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Milestone: AEA = 5 + TC ≥ 60
 PT ≤ 1 in ≥ 4 of the 15 playable territories (T1–T14, T17) *(PP-543: was ≥ 8; PP-478 had ≥ 5 — PP-543 supersedes both)*. Checked at each Accounting. Once met and held, Phase 2 becomes available. If the majority drops below 8, Phase 2 is locked again until it recovers.
 
 #### Phase 2 — Cultural Uprising of T9 Himmelenger
-Available only while Phase 1 condition is met. Declared once per game at any Accounting where Phase 1 holds. RM plays their Pontifex card and rolls: **Weaver Thread pool vs Ob = TC ÷ 10 (round up, min 1, max 5).**
+Available only while Phase 1 condition is met. Declared once per game at any Accounting where Phase 1 holds. RM plays their Pontifex card and rolls: **Weaver Thread pool vs Ob = CI ÷ 10 (round up, min 1, max 5).**
 
 Prerequisites: RS ≥ 25 (substrate must be stable enough for a coherent popular movement — below 25, physical destabilisation overwhelms cultural organisation). If RS < 25, Cultural Uprising is unavailable regardless of Phase 1 status.
 
 Modifiers:
 - T9 PT ≤ 1: Ob −1 (Cathedral already culturally shifted)
 - WC ≥ 2: +1D (Wardens support the Uprising)
-- TC ≥ 50 at declaration: Ob +1 (Church institutional authority is strong enough to resist)
+- CI ≥ 50 at declaration: Ob +1 (Church institutional authority is strong enough to resist)
 - Church Mandate ≥ 5: Ob +1 (Church actively suppresses)
 
 | Degree | Effect |
 |--------|--------|
-| Overwhelming | T9 transfers to RM administration. Church Mandate −2. TC −3 (institutional rupture). T9 PT −2 (population has decisively shifted — makes PT ≤ 3 holding condition immediately achievable from a PT 5 starting position). |
+| Overwhelming | T9 transfers to RM administration. Church Mandate −2. CI −3 (institutional rupture). T9 PT −2 (population has decisively shifted — makes PT ≤ 3 holding condition immediately achievable from a PT 5 starting position). |
 | Success | T9 transfers to RM administration. Church Mandate −1. |
 | Partial | T9 does not transfer. PT in T9 −1 (popular sentiment shifted). Uprising attempt used up for this arc. |
-| Failure | Uprising crushed. TC +2 (Church authority strengthened by resistance). T9 PT +1. Uprising attempt used up for this arc. |
+| Failure | Uprising crushed. CI +2 (Church authority strengthened by resistance). T9 PT +1. Uprising attempt used up for this arc. |
 
 #### RM Territory Control — Cultural Displacement
 **Presence markers vs Phase 1 (important distinction):** Presence markers are the *holding mechanic* for post-Uprising T9 (≥ 3 required in T9). They are NOT the Phase 1 mechanic. Phase 1 (PT ≤ 1 in ≥ 4 territories) tracks Piety Track values, not Presence marker counts. Community Organizing places Presence markers; it does not directly reduce PT. PT reduction comes from: Cultural Reformation OW (Varfell, −1 PT), successful Uprising OW (T9, −2 PT), Calamity Drift (RS ≤ 50 in low-PT territories), and natural secular drift (−1 PT per 5 seasons without Church cultivation). RM players should prioritise PT reduction for Phase 1 and Presence markers for post-Uprising T9 holding — these are parallel but distinct goals.
@@ -433,8 +435,8 @@ If either condition fails at Accounting, T9 reverts to the prior controller (or 
 
 | Condition | Threshold |
 |-----------|-----------|
-| TCV held | ≥ 10 |
-| TC | < 50 |
+| PV held | ≥ 10 |
+| CI | < 50 |
 | IP | < 60 |
 | RS | > 40 |
 | PI | ≥ 4 |
@@ -463,10 +465,10 @@ Only available if Regency Establishment not achieved after 8 Löwenritter season
 
 | Condition | Threshold |
 |-----------|-----------|
-| TCV held | ≥ 16 |
+| PV held | ≥ 16 |
 | Löwenritter Military | ≥ 5 |
 | RS | > 35 |
-| TC | < 60 |
+| CI | < 60 |
 
 
 #### §3.6a Post-Coup Succession Rule (ED-674)
@@ -491,7 +493,7 @@ When Coup Counter reaches 4 and Löwenritter activates:
 
 **Succession confirmation:** When any candidate meets their condition, Löwenritter fires a Succession Scene (mandatory Zoom In). Ehrenwall formally transfers governance. The confirmed successor becomes Crown Leader. Löwenritter reverts to NPC faction status. All Crown officers' Standing is preserved. Accord in military-occupied territories recovers +1 per season under the new leader (maximum Accord 2 without faction-specific non-military action).
 
-**Faction stat inheritance:** The new Crown leader inherits current Crown Mandate, Stability, and Wealth. Löwenritter Military score transfers as a one-time +1D bonus to the new leader's first Military Domain Action (the institutional military apparatus carries over, then dissolves into Crown structure). IP and TC are unchanged — these are peninsular, not faction-specific.
+**Faction stat inheritance:** The new Crown leader inherits current Crown Mandate, Stability, and Wealth. Löwenritter Military score transfers as a one-time +1D bonus to the new leader's first Military Domain Action (the institutional military apparatus carries over, then dissolves into Crown structure). IP and CI are unchanged — these are peninsular, not faction-specific.
 
 ---
 
@@ -500,14 +502,14 @@ When Coup Counter reaches 4 and Löwenritter activates:
 
 | Pair | Conditions (all simultaneous at Accounting) |
 |------|---------------------------------------------|
-| **Crown + Hafenmark** | Crown TCV ≥ 12 AND Hafenmark TCV ≥ 12 AND PI ≥ 7 AND TC < 50 AND Crown Mandate ≥ 4 AND Hafenmark Mandate ≥ 4 AND neither faction has played Legionary targeting the other in preceding 4 seasons | *(PP-561 + PP-572, ED-391: 4-season no-active-conflict reinforces cooperative design)* |
-| **Crown + Varfell** | Crown TCV ≥ 12 AND Varfell TCV ≥ 8 AND VTM ≥ 3 AND RS ≥ 50 |
+| **Crown + Hafenmark** | Crown PV ≥ 12 AND Hafenmark PV ≥ 12 AND PI ≥ 7 AND CI < 50 AND Crown Mandate ≥ 4 AND Hafenmark Mandate ≥ 4 AND neither faction has played Legionary targeting the other in preceding 4 seasons | *(PP-561 + PP-572, ED-391: 4-season no-active-conflict reinforces cooperative design)* |
+| **Crown + Varfell** | Crown PV ≥ 12 AND Varfell PV ≥ 8 AND VTM ≥ 3 AND RS ≥ 50 |
 | **Varfell + RM** | VTM ≥ 3 AND WR ≥ 2 AND ≥ 3 territories PT ≤ 1 AND RS ≥ 40 AND Varfell controls T13 | *(PP-545: VTM was ≥ 4; territories was ≥ 4)* |
-| **Hafenmark + RM** | Hafenmark TCV ≥ 10 AND ≥ 3 territories PT ≤ 2 AND PI ≥ 4 AND RS ≥ 40 | *(PP-546: territories was ≥ 4)* |
-| **Löwenritter + Hafenmark** | Löwenritter TCV ≥ 8 AND Hafenmark TCV ≥ 8 AND PI ≥ 4 |
-| **Church + Hafenmark (Partition)** | See §3.2. Crown Mandate ≤ 1, TC ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no active military conflict. Requires Phase 1 Declaration (see below). |
+| **Hafenmark + RM** | Hafenmark PV ≥ 10 AND ≥ 3 territories PT ≤ 2 AND PI ≥ 4 AND RS ≥ 40 | *(PP-546: territories was ≥ 4)* |
+| **Löwenritter + Hafenmark** | Löwenritter PV ≥ 8 AND Hafenmark PV ≥ 8 AND PI ≥ 4 |
+| **Church + Hafenmark (Partition)** | See §3.2. Crown Mandate ≤ 1, CI ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no active military conflict. Requires Phase 1 Declaration (see below). |
 
-**Partition Phase 1 Declaration (ED-629):** Church+Hafenmark Partition cannot fire silently at Accounting. At Phase 1 of the season in which all Partition conditions are simultaneously met, either the Church player (or NPC Church AI) OR the Hafenmark player (or NPC Hafenmark AI) must publicly declare: "We assert Peninsular Partition this season." This declaration is visible to all players at Phase 1. Other factions then have the full Phase 4 Domain Action window to disrupt any single Partition condition: restore Crown Mandate from ≤ 1 to ≥ 2 (Crown Govern OW), initiate Battle between Church and Hafenmark (breaking non-aggression), reduce Church or Hafenmark territory count below the required minimum, or suppress TC below 50 (Hafenmark OW Suppress + Varfell VTM Discretion). If all conditions survive Phase 4 and hold at Accounting: Partition fires. **NPC AI Partition Declaration:** NPC Hafenmark and NPC Church both declare when all 5 conditions are met at Phase 1 evaluation. NPC AI never suppresses a Partition declaration.
+**Partition Phase 1 Declaration (ED-629):** Church+Hafenmark Partition cannot fire silently at Accounting. At Phase 1 of the season in which all Partition conditions are simultaneously met, either the Church player (or NPC Church AI) OR the Hafenmark player (or NPC Hafenmark AI) must publicly declare: "We assert Peninsular Partition this season." This declaration is visible to all players at Phase 1. Other factions then have the full Phase 4 Domain Action window to disrupt any single Partition condition: restore Crown Mandate from ≤ 1 to ≥ 2 (Crown Govern OW), initiate Battle between Church and Hafenmark (breaking non-aggression), reduce Church or Hafenmark territory count below the required minimum, or suppress CI below 50 (Hafenmark OW Suppress + Varfell VTM Discretion). If all conditions survive Phase 4 and hold at Accounting: Partition fires. **NPC AI Partition Declaration:** NPC Hafenmark and NPC Church both declare when all 5 conditions are met at Phase 1 evaluation. NPC AI never suppresses a Partition declaration.
 
 **Incompatible:** Crown + Church, Crown + Löwenritter, Church + Varfell, Church + RM.
 
@@ -626,20 +628,20 @@ Multiple victory conditions require RS thresholds. A faction that ignores RS ris
 
 ---
 
-## 7. TC Generation and Church Seizure
+## 7. CI Generation and Church Seizure
 
-Starting TC: 28. Phase transition at TC 75 (TC freezes, Church shifts to seizure mode).
+Starting CI: 28. Phase transition at CI 100 (CI cap, Church shifts to seizure mode).
 
 **CI=100 Mass Seizure Declaration (see §3.2 for full specification):** When CI reaches 100, every territory where at least one settlement has a Church building (Chapel or higher) becomes a simultaneous Seizure target. Individual Seizure Ob calculated per-territory based on PT and Church infrastructure modifiers (4-axis model: Religious Building, Templar Station, Inquisitor Base, Church Governor — see settlement_layer_v30.md §Church Infrastructure). The Mass Seizure is a mandatory Zoom In event. CI=100 does NOT mean the Church wins — it means the Church makes its bid for theocracy. The Church still needs Peninsular Sovereignty (§0) to win.
 
-**Seasonal TC at Accounting:**
-1. Institutional Momentum: TC +1 (passive).
+**Seasonal CI at Accounting:**
+1. Institutional Momentum: CI +1 (passive).
 2. Piety Yield: per territory where Church is Prominent (Church Mandate > controlling faction Mandate), add by PT. PT 5 = +1, PT 4 = +0.5, others = 0. Total = floor(sum).
-3. Assert (optional Church action): Influence vs Ob 2. Success: TC +1. Failure: Cohesion −15 (derived_stats_v1).
+3. Assert (optional Church action): Influence vs Ob 2. Success: CI +1. Failure: Cohesion −15 (derived_stats_v1).
 4. Suppress (optional opponent action): Mandate vs Ob = floor(Church Mandate / 2) + 1. Success: negate Step 1 passive. Failure: Cohesion −15 (derived_stats_v1).
-5. Hafenmark Structural Suppression: while Baralta Mandate ≥ 4, TC −1/season.
+5. Hafenmark Structural Suppression: while Baralta Mandate ≥ 4, CI −1/season.
 
-**Church Seizure (Graduated, PP-494):** Pool = Influence + floor(TC/15). Ob = 7 − PT. Prominence required. Church Mandate ≥ 4. Overwhelming seizure: PT +1 (consequence, not cap-governed). See §3.2 for full table.
+**Church Seizure (Graduated, PP-494):** Pool = Influence + floor(CI/15). Ob = 7 − PT. Prominence required. Church Mandate ≥ 4. Overwhelming seizure: PT +1 (consequence, not cap-governed). See §3.2 for full table.
 
 ---
 
@@ -700,10 +702,10 @@ P-32 ("Hybrid victory = BG victory PLUS personal arc resolution") is retained. A
 
 ## 10. Win Probability Assessment
 
-| Faction | Start TCV | Target TCV | Gap | Key Difficulty | Est. Timeline |
+| Faction | Start PV | Target PV | Gap | Key Difficulty | Est. Timeline |
 |---------|-----------|------------|-----|----------------|---------------|
 | Crown | 12 | 14 | +2 | Suppress 2 of 3 rivals (×2 political) | 12–16 seasons | *(PP-540)* |
-| Church | 5 | 8 | +3 | Graduated Seizure from TC 30+; PT management | 14–18 seasons |
+| Church | 5 | 8 | +3 | Graduated Seizure from CI 30+; PT management | 14–18 seasons |
 | Hafenmark | 6 | 12 | +6 | Dynastic Proclamation + Mil 3 handicap + Crown Mandate suppression | 12–16 seasons | *(PP-541)* |
 | Varfell A | 6 | 10 | +4 | Geographic isolation + VTM 3 + intel reveals | 12–14 seasons |
 | Varfell B | 6 | 8 | +2 | VTM 3 + Warden Recognition + T13 control | 12–16 seasons |
@@ -726,10 +728,10 @@ P-32 ("Hybrid victory = BG victory PLUS personal arc resolution") is retained. A
 
 | PP | Scope | Description |
 |----|-------|-------------|
-| PP-408 | TCV | Territory Consolidation Values — remapped to PP-199 numbering |
-| PP-409 | Victory | Crown Peninsula Sovereignty — TCV ≥ 16 (gap restored to +6 after remapping) |
-| PP-410 | Victory | Crown Dominion alternate — TCV ≥ 22 |
-| PP-411 | Victory | Hafenmark Parliamentary Sovereignty — TCV ≥ 12 |
+| PP-408 | PV | Territory Consolidation Values — remapped to PP-199 numbering |
+| PP-409 | Victory | Crown Peninsula Sovereignty — PV ≥ 16 (gap restored to +6 after remapping) |
+| PP-410 | Victory | Crown Dominion alternate — PV ≥ 22 |
+| PP-411 | Victory | Hafenmark Parliamentary Sovereignty — PV ≥ 12 |
 | PP-412 | Victory | Hafenmark Dynastic Assertion — T1 Valorsplatz (corrected from old T-number) |
 | PP-413 | Victory | Church Altonian Theocracy — T9 Himmelenger (corrected from old T-number) |
 | PP-414 | Victory | Varfell Path B provisional (ED-311 pending) |
@@ -738,14 +740,14 @@ P-32 ("Hybrid victory = BG victory PLUS personal arc resolution") is retained. A
 | PP-417 | Church | Prominence mechanic defined (Church Mandate > controlling faction Mandate per territory) |
 | PP-418 | Löwenritter | Military Consolidation — 8-season timer requires counter on Löwenritter mat |
 | PP-419 | Hybrid | PT state transfer rules (replaces §9.1 directives-to-author format) |
-| PP-420 | Hybrid | Victory condition check — replaces TC Win-Delay Rule |
-| PP-421 | TC | TC 75 canonical freeze + seizure threshold. TC 80 in params_board_game struck. |
+| PP-420 | Hybrid | Victory condition check — replaces CI Win-Delay Rule |
+| PP-421 | CI | CI 100 canonical cap + seizure threshold. CI 80 in params_board_game struck. |
 | PP-422 | Co-Victory | WA/WC references replaced with WR in Varfell+RM co-victory |
 | PP-423 | Crown | Formal Crown Treaty mechanic |
 | PP-424 | System | Deed system dissolved — all factions |
 | PP-425 | WR | Warden Recognition track defined (0–4) |
-| PP-493 | Territory | All T-numbers remapped to geography_design.md canonical. Old names (Arcansheld, Vargstad, Eidursjo, Nordhelm, Mittelmark) replaced. TCV total = 30. Starting TCV: Crown 12, Hafenmark 8, Varfell 6, Church 3. |
-| PP-494 | Church | Graduated Seizure: Pool = Influence + floor(TC/15), Ob = 7 − PT. Replaces TC 75 hard gate. Church TCV threshold reduced to ≥ 8. BALANCE-001 revised to include Church in equal win probability. |
+| PP-493 | Territory | All T-numbers remapped to geography_design.md canonical. Old names (Arcansheld, Vargstad, Eidursjo, Nordhelm, Mittelmark) replaced. PV total = 30. Starting PV: Crown 12, Hafenmark 8, Varfell 6, Church 3. |
+| PP-494 | Church | Graduated Seizure: Pool = Influence + floor(CI/15), Ob = 7 − PT. Replaces CI 100 hard gate. Church PV threshold reduced to ≥ 8. BALANCE-001 revised to include Church in equal win probability. |
 
 
 ---
@@ -756,7 +758,7 @@ Available to all playable factions as alternate victory path.
 
 | Condition | Threshold |
 |-----------|-----------|
-| TCV held | ≥ 28 |
+| PV held | ≥ 28 |
 | All rival factions | Stability 0 (eliminated) OR Submitted |
 
 Both conditions must hold simultaneously for 2 consecutive Accounting steps.
@@ -769,7 +771,7 @@ Both conditions must hold simultaneously for 2 consecutive Accounting steps.
 
 Simulation confirms that spoiler strategies are functional. Key findings:
 - Church spoiling Crown: viable 5–8 season delay via Mandate maintenance + Inquisitor deployment. Crown counter: Royal Decree chain.
-- Varfell spoiling Church: TC suppression via Counter-Narrative is minor (−0.135 TC/use expected); primary effect is AP pressure. Hybrid mode allows invisible spoiling via personal-scale Zoom In actions.
+- Varfell spoiling Church: CI suppression via Counter-Narrative is minor (−0.135 CI/use expected); primary effect is AP pressure. Hybrid mode allows invisible spoiling via personal-scale Zoom In actions.
 - Institutional Mandate trigger scope: [EDITORIAL: ED-324 — confirm trigger fires on Mandate-targeting actions only.]
 
 ## PP-478 Override — §3.5 Restoration Movement
@@ -782,7 +784,7 @@ Simulation confirms that spoiler strategies are functional. Key findings:
 ### RM Solo Victory (Hybrid mode, post-Founding)
 Phase 1: ≥ 4 territories PT ≤ 1, held 2 consecutive Accounting steps. *(PP-543: was ≥ 5)*
 Phase 2: Cultural Uprising of T9 Himmelenger. RS ≥ 25 required (PP-467).
-Roll: Weaver Thread pool vs Ob = TC ÷ 10. Win: T9 under RM administration + Phase 1 held × 2 Accounting steps.
+Roll: Weaver Thread pool vs Ob = CI ÷ 10. Win: T9 under RM administration + Phase 1 held × 2 Accounting steps.
 
 ### §4 Co-Victory Override (PP-478)
 Varfell+RM and Hafenmark+RM co-victories: **Hybrid mode only, post-Founding.** BG-only: struck.
