@@ -199,6 +199,58 @@ scales self-close naturally. Conflict in Proximity 1–3 territories resets isol
 
 ---
 
+<!-- PP-653 -->
+## Opposing Operations — Contested Intentionality (PP-653; design: threadwork_v30 2.6)
+**Scope:** Two practitioners in contact targeting same configuration with opposing intentionalities.
+**Opposing pairs:** Weave/Pull, Lock/Dissolution, Lock/Pull, Weave/Dissolution.
+**Not opposing:** Weave/Lock, Pull/Dissolution (compound). Any op/Mending (different target: substrate absence). Different-Depth ops on same entity (different configurations).
+
+### Opposing Engagement Modifier
+Added to each practitioner's total Ob: +floor(opponent TPS / 2), minimum +1.
+| Opponent TPS | +Ob |
+|---|---|
+| 3 | +1 |
+| 4-5 | +2 |
+| 6-7 | +3 |
+| 8-9 | +4 |
+| 10 | +5 |
+
+### Resolution
+| A | B | Outcome | RS | A Cost | B Cost |
+|---|---|---|---|---|---|
+| >=Ob | >=Ob | Shifting Object | worst RS +1 | Coh 3.2; +1 Ob, 2 Comp | same |
+| >=Ob | Partial | A resolves (O to S; S stays) | A RS +1 | Coh 3.2; 1 Comp | Coh 3.2; +1 Ob, 2 Comp; no degree-table |
+| >=Ob | Fail | A at degree | A RS | normal | standard Failure |
+| Partial | Partial | d6: 1-2 SO (-1 Depth); 3-6 none | -1 | Coh 3.2; +1 Ob, 2 Comp | same |
+| Partial | Fail | A Partial | A Partial RS | normal | standard Failure |
+| Fail | Fail | nothing | -1 | Coh 3.2; 1 Comp | same |
+
+Overwhelmed: knot strain, not degree-table Failure. Foundations 12.2.
+
+### FR vs FR Both-Fail (by Depth)
+Object -1 (d6:1); Personal -2 (1-2); Relational -3 (1-3); Field -4 (1-4); Structural -5 (1-5). Both +2 Ob, 4 Comp.
+
+### Knot Strain
+Standard loser: +1 Ob, 2 Comp. Winner: 1 Comp. FR loser: +2 Ob, 4 Comp (+1 Wound if Dissolution winner vs Partial). Tie: both +1 Ob, 2 Comp. Both fail: 1 Comp each. Scene-scoped.
+
+### Co-Movement
+Coherence per-practitioner. Epistemic + actual: ONCE compound.
+
+### Sustained Opposition
++1 Ob if target changed. SO on SO: advance deterioration tier.
+
+### N-Way (3+)
+Lattice collapse. All fail. Gap at Depth. RS -(2 x n). All +2 Ob, 4 Comp.
+
+### Mending Immunity
+Cannot be opposed. Indirect +1 Ob from co-movement; P-17; threshold effects. Ceiling 8.
+
+### Mass Battle
+Highest net wins at degree; loser Partial. Tie: SO. RS x3. Temporal not x3.
+
+### BG / Hybrid
+BG: both succeed = SO + Card. Hybrid: Personal roll stands; BG at Cascade; modifier uses NPC TPS or Int/2.
+
 ## Over-Actualisation State Transition (PP-208 — canonical)
 
 OA modifier does NOT carry through brittleness collapse to Shifting Object.

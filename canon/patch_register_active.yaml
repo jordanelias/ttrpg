@@ -214,3 +214,11 @@ patches:
   - references/params_board_game.md
   status: provisional
 
+- id: PP-653
+  date: 2026-04-18
+  severity: P1
+  description: "Opposing Operations params propagation from design doc 2.6. Adds opposing engagement modifier, resolution table, knot strain, FR vs FR, N-way, Mending immunity, cross-mode."
+  source: "designs/threadwork/threadwork_v30.md"
+  affects:
+  - params/threadwork.md
+  status: applied

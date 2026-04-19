@@ -50,3 +50,8 @@ The script:
 If broken dependencies are found:
 - Do NOT close the commit until resolved
 - Either fix the reference (update the path) or add `[BROKEN-DEP: path — reason]` to the commit message with an explanation
+
+## PP-653 Opposing Operations Propagation (2026-04-18)
+| Source | Target | Type |
+|---|---|---|
+| designs/threadwork/threadwork_v30.md 2.6 | params/threadwork.md | design to params propagation |
