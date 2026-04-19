@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 701
+# next_id: 702
 
 
 
@@ -10,6 +10,15 @@
 
 
 
+
+
+
+  - id: ED-701
+    date: 2026-04-18
+    description: "Phase 4.2-4.3: Subsystem infill + feature coverage. 7 modules (combat, fieldwork, contest, threadwork, mass_battle, governance, NPC arcs). 263 features fired across 50 runs (202% of 130 target). All key checklist items pass."
+    status: resolved
+    severity: P1
+    affects: [tests/sim_framework/]
 
 
   - id: ED-700
