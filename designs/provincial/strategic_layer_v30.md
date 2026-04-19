@@ -230,9 +230,9 @@ All rolls use **d10**. Results per die:
 
 ---
 
-## G-03 — VTM "Thread-active territory" Undefined
+## G-03 — STRUCK (PP-663, 2026-04-19)
 
-**Location:** B5 Varfell, Gaining VTM.
+VTM track dissolved. "Thread-active territory" definition was tied to VTM gate mechanics (VTM 2+ qualifying a territory for Thread Operation Ob reduction). With VTM struck, territory Thread-activity is character-scale only — a territory is Thread-active if a practitioner is embedded there, per threadwork_v30 §2.3 (Thread Operation Visibility).
 
 ---
 
@@ -254,19 +254,15 @@ All rolls use **d10**. Results per die:
 **Location:** B7 Warden Cooperation Track, Forgetting Check.
 **Gap:** "**In board game mode, the Forgetting Check pool is:**
 - Restoration faction: Influence + 1D per Presence marker in T13.
-- Ob 1 (floor). Thread-qualified presence (Restoration Weaver active in T13 this season, or VTM 2+) does not reduce Ob below the floor; instead, the qualified party may reroll one die once.
+- Ob 1 (floor). Thread-qualified presence (Restoration Weaver active in T13 this season) does not reduce Ob below the floor; instead, the qualified party may reroll one die once. (PP-663: VTM 2+ reroll trigger struck.)
 In hybrid mode: use the Player Character's Spirit + Thread Sensitivity (Thread Sensitivity ÷ 10, rounded down) as the pool, as specified in TTRPG compiled stages." Spirit is a TTRPG attribute with no defined board game equivalent. What does a faction roll for this check?
-**Correction (PATCH P-26):** "In board game mode, the Forgetting Check pool is: Influence + 1D per Presence marker in T13 (Restoration) OR VTM level (Varfell) OR Wealth ÷ 2 rounded up (other factions, representing the resources they brought to sustain cognitive continuity). Ob 1 (floor applies). Thread-qualified presence (Restoration Weaver this season, VTM 2+) grants −1 Ob, already at floor. A practitioner Player Character present reduces the applicable Ob by 1 in hybrid mode using their actual Thread Sensitivity."
+**Correction (PATCH P-26, PP-663 revised):** "In board game mode, the Forgetting Check pool is: Influence + 1D per Presence marker in T13 (Restoration) OR Intelligence stat (Varfell) OR Wealth ÷ 2 rounded up (other factions, representing the resources they brought to sustain cognitive continuity). Ob 1 (floor applies). Thread-qualified presence (Restoration Weaver this season) grants −1 Ob, already at floor. A practitioner Player Character present reduces the applicable Ob by 1 in hybrid mode using their actual Thread Sensitivity." (PP-663: VTM-level dice and VTM 2+ Ob reduction struck; Varfell contribution now Intelligence stat.)
 
 ---
 
-## G-07 — VTM Bootstrapping Success Rate on d10
+## G-07 — STRUCK (PP-663, 2026-04-19)
 
-**Location:** B5 Varfell, VTM Bootstrapping.
-**Gap:** Bootstrapping: "Roll Influence vs. **Ob 1**. 
-- Success or Overwhelming: VTM +1 immediately.
-- Failure: Bootstrapping fails. No retry this campaign. Varfell must gain VTM through standard methods only." On d10 with Influence 4 at Ob 2: P(≥2 net successes) ≈ 56%. A once-per-campaign action fails 44% of the time. This is too harsh for a foundational faction mechanic.
-**Correction (PATCH P-27):** Reduce Bootstrapping to Ob 1. P(≥1 net success from pool of 4) ≈ 85% — a confident but not guaranteed start. **Add:** "Partial on Bootstrapping: the attempt partially takes hold. Varfell gains a 'Latent VTM' marker. On any subsequent successful Tribune Inward in T9 within 2 seasons, this converts to VTM +1. Failure: attempt fails; Bootstrapping cannot be retried." This preserves Season 1 stakes without making the faction's entire arc hinge on a coin-flip.
+VTM Bootstrapping action removed with VTM track. PATCH P-27 correction is moot — the action it corrected no longer exists.
 
 ---
 
@@ -320,7 +316,7 @@ See I-05 above. PATCH P-16 resolves this.
 - Casus Belli: well-defined acquisition and effect. Load ≈ 3/10.
 
 **Systems at moderate load (manageable with reference cards):**
-- Faction-specific private tracks (VTM, Player Character, RDT, Thread Depth, AER): five concurrent private tracks across factions. Per-player this is one or two tracks. Load ≈ 4/10 per player.
+- Faction-specific private tracks (Player Character, RDT, Thread Depth, AER): four concurrent private tracks across factions. Per-player this is one or two tracks. Load ≈ 3/10. (PP-663: VTM struck.) per player.
 
 
 **Systems at elevated load (require careful design attention):**
@@ -393,20 +389,20 @@ But at RDT 6:
 
 ---
 
-## Cascade Test 3: Varfell VTM 5 + Co-Movement + Rendering Stability Trigger
+## Cascade Test 3: Varfell Vaynard-scale Thread Operation + Co-Movement + Rendering Stability Trigger (PP-663 re-framed)
 
-**Setup:** Rendering Stability 38 (below 40; Thread operations Ob −1 globally active; but Ob1 floor applies). Varfell VTM 5. Varfell plays Pontifex (Senate Market, Thread operation) in T12. Declares Actualized dimension outcome before drawing (VTM 5 ability): chooses Rendering Stability +1 (stabilize).
+**Setup:** Rendering Stability 38 (below 40; Thread operations Ob −1 globally active; but Ob1 floor applies). Varfell Vaynard personal Thread ops available (was VTM 5 — PP-663: faction track struck; test preserved as character-scale scene illustration). Varfell plays Pontifex (Senate Market, Thread operation) in T12. Declares Actualized dimension outcome before drawing (VTM 5 ability): chooses Rendering Stability +1 (stabilize).
 
 **Thread Operation Procedure:**
 1. Declare: Pontifex, T12, Weaving (stabilization).
 2. Against temporal flow check: Rendering Stability is below 30? No (Rendering Stability 38). Prior Thread Debt in T12? Assume yes — 1 token present. → Thread Debt incurred. +1 Ob to NEXT operation here (per PATCH P-24 correction).
 3. Ob modifiers: base Ob 2, Thread Witness Node in T12? Assume yes (+1 additional Co-Movement draw later). Rendering Stability environment (49–30): Thread operations −1 Ob. Ob 2 − 1 = Ob 1 (floor). Thread Debt existing: this doesn't increase THIS operation's Ob (per PATCH P-24 — the debt affects the NEXT operation, not this one). Ob 1.
-4. Roll: VTM 5 ability — Varfell doesn't roll VTM as a stat directly. Thread operations use Influence. Influence 4 + VTM modifier? VTM 5 benefits: "choose the Actualized dimension outcome of one Co-Movement card draw." The roll itself uses Influence vs Ob.
+4. Roll: Thread operation — Vaynard-scale (character, not faction). Thread operations use the practitioner's personal TS/Coherence per threadwork_v30. Scene-layer resolution: Vaynard chooses the Actualized dimension outcome of one Co-Movement card draw." The roll itself uses Influence vs Ob.
    Roll 4d10: 9, 7, 2, 10 → 9(1), 7(1), 10(2) = 4 net. Ob 1, surplus 3 = **Overwhelming.**
 
-5. Apply result: Weaving Overwhelming in T12 — the stabilization works. Additional effect at Overwhelming: Rendering Stability +1 (from the declared VTM 5 Actualized dimension choice).
+5. Apply result: Weaving Overwhelming in T12 — the stabilization works. Additional effect at Overwhelming: Rendering Stability +1 (from the declared Actualized dimension choice).
 6. Co-Movement draw: Thread Witness Node → draw 2 cards. Cards drawn: CM-12 (Ground Stability) and CM-19 (Substrate Assertion).
-   - VTM 5 ability: Actualized dimension already declared as Rendering Stability +1. CM-12 Actualized = Rendering Stability +1. CM-19 Actualized = Rendering Stability −3.
+   - Vaynard practitioner declaration: Actualized dimension already declared as Rendering Stability +1. CM-12 Actualized = Rendering Stability +1. CM-19 Actualized = Rendering Stability −3.
    - Per VTM 5: "choose the Actualized dimension outcome of one Co-Movement card draw." Only ONE card's Rendering Stability can be chosen. The other applies normally.
    - Varfell chooses CM-12 as the card for VTM 5 intervention: Rendering Stability +1 applies. CM-19's Rendering Stability −3 applies normally.
    - Net Rendering Stability from this operation: +1 (Overwhelming) + +1 (CM-12 chosen) − 3 (CM-19) = Rendering Stability −1 net. Rendering Stability 38 → 37.
@@ -482,7 +478,7 @@ Varfell VTM 3 is in T9 (adjacent to T3). Trajectory Choice condition met.
 
 ---
 
-## SCENARIO B: Varfell Patience Protocol Climax — Season 14, VTM 4+
+## SCENARIO B: Varfell Patience Protocol Climax — Season 14 (PP-663: VTM 4+ gating struck)
 *(Single-player scenario, Varfell player)*
 
 **State:** Player Character 6 (maximum, VTM 4+). Varfell has not played their Tribune in 6 consecutive seasons except once for Senate Market restraint. Mandate 3, Military 4, VTM 4.

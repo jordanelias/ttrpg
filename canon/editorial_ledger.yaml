@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 706
+# next_id: 709
 # Rebuilt 2026-04-19. Lost IDs: ED-670-672, ED-698-703.
 
 entries:
@@ -254,4 +254,10 @@ entries:
       description: "Cultural Reformation (Varfell Colonist action, PP-650) struck — incompatible with Vaynard's military conqueror identity. Varfell expansion is purely military. Faction action list + Varfell ladder + NPC priority trees need rewrite."
       status: open
       severity: P2
+  - id: ED-708
+    date: 2026-04-19
+    description: "VTM-STRIKE cascade — Varfell Path C (Thread Supremacy) dissolved as faction-scale victory condition. Thread mastery is character-scale only. Remaining Varfell paths: A (Intelligence Hegemony) and B (Southernmost Dominion). Win probability rebalance required (PP-663 affects Varfell A/B target viability; Varfell C removed from table)."
+    status: open
+    severity: P2
+    source: PP-663
 

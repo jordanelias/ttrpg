@@ -26,10 +26,10 @@ Contact: Crown or Löwenritter Senator Outward in T4 (Ob 2 at IP < 60; Ob 3 at I
 Return: Elske Loyalty ≥ 6 + IP < 60 + Crown/Löwenritter unit in T4: Military vs Ob 2. IP +5 on success.
 
 
-## Patience Protocol (Varfell, v04 B5)
-Patience Counters (PC): 0–4 at VTM 0–3; 0–6 at VTM 4+. Private to Varfell player.
+## Patience Protocol (Varfell, v04 B5 — PP-663 revised)
+Patience Counters (PC): 0–4. Private to Varfell player.
 Gaining: +1 PC per season Tribune available but played differently; +1 PC per season pass on Senate purchase when Wealth ≥ 3. Max +2/season.
-[Full spend table in v04 B5 — key: 4 PC = Spy anywhere on board; 6 PC at VTM 4+ = VTM +1]
+Spending: 4 PC = Spy anywhere on board (canonical). VTM-advancement spend option struck with VTM track (PP-663).
 
 
 ## Riskbreakers (NPC, v04 B13 — reconciled with amendment2)
@@ -88,7 +88,7 @@ See victory_v30.md §8 for WA movement rules and full RM stat block.
 Intel Advancement Counter (0–3) on faction mat.
 Each season with ≥1 successful Intel or Quiet Network order: Counter +1.
 At Counter 4: Intel stat +1 (max 7); Counter resets to 0.
-Note: Intel stat advancement is valid for NPC factions (Niflhel). Varfell victory paths do NOT require Intel stat advancement — they use VTM and territorial control.
+Note: Intel stat advancement is valid for NPC factions (Niflhel). Varfell victory paths use Intelligence stat and territorial control. (VTM struck PP-663.)
 
 
 ## Command Event — Captured or Killed General (ED-334 + ED-335 resolved)

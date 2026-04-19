@@ -55,3 +55,28 @@ If broken dependencies are found:
 | Source | Target | Type |
 |---|---|---|
 | designs/threadwork/threadwork_v30.md 2.6 | params/threadwork.md | design to params propagation |
+
+
+## 2026-04-19 — PP-663 VTM-STRIKE / CR-STRIKE mechanical cleanup
+
+**Commit:** (this commit)
+**Scope:** completing propagation of VTM-STRIKE-2026-04-19 and CR-STRIKE-2026-04-19 canonical supersessions by cleaning residual mechanical references in:
+- designs/provincial/clock_registry_v30.md (VTM row removed from Faction-Specific Tracks table)
+- params/bg/tracks.md (VTM and VTM 5 track definitions tombstoned)
+- params/bg/core.md (Cultural Reformation action row tombstoned)
+- params/bg/npcs_special.md (Patience Protocol flattened to flat PC 0–4; Intel note corrected)
+- designs/provincial/victory_v30.md (Varfell Path A → Intelligence gate; Path B → WR ≥ 3; Path C dissolved; 2 co-victory pairings re-gated; win probability table cleaned; non-military acquisition table CR row tombstoned; RM cultural displacement PT sources cleaned)
+- designs/provincial/strategic_layer_v30.md (G-03 and G-07 sections tombstoned; G-06/P-26 Forgetting Check corrected to Intelligence stat; Cascade Test 3 re-framed character-scale; Scenario B header cleaned; private tracks list adjusted)
+- designs/provincial/faction_politics_v30.md (Edeyja Inner Circle gate, Council of Warden context, ED-658 note)
+- designs/npcs/npc_behavior_v30.md (§8.5 rows 2b/4b/5; §7.4 rows 2/4/7; §7.9 Institutional Mandate unique-clock changed VTM→WR)
+- designs/provincial/varfell_path_b_v30.md (all three Options cleaned; Path B canonical = Option A + raised WR)
+- designs/provincial/peninsular_strain_v30.md (§5.4 Cultural Reformation section tombstoned; 5 other CR mentions across §2, §7 cleaned)
+
+**Registers:**
+- canon/patch_register_active.yaml: PP-663 entry added
+- canon/editorial_ledger.yaml: ED-708 entry (Path C dissolution + rebalance flag)
+- references/canonical_sources.yaml: PP-663 commit reference appended to VTM and CR struck entries
+
+**Consequences requiring further editorial work:**
+- Varfell win probability rebalance (ED-708) — removal of Path C and change of A/B gates may affect win rates
+- Varfell non-military acquisition toolkit: no replacement for Cultural Reformation. Varfell expansion now military-only. Consider whether this leaves Varfell underpowered vs non-military-expanding rivals (Crown Treaty, Church Seizure, Hafenmark Dynastic Proclamation).

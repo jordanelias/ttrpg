@@ -22,9 +22,8 @@ Hafenmark private track 0–5. (PP-555)
 Hafenmark private track 0–5.
 
 
-## VTM (Vaynard Thread Mastery) (PP-181, v04 B5 confirmed)
-Private 0–2; public 3+.
-[Full table in PP-181 section — confirmed by v04 B5]
+## VTM — STRUCK (PP-663, 2026-04-19)
+Vaynard Thread Mastery track removed as faction-level stat. Thread capability is now character-scale only (Vaynard's personal TS/Coherence per threadwork_v30). Faction-level gates re-specced: see PP-663.
 
 
 ## Church Excommunication Ob Cap (PP-180)
@@ -101,8 +100,8 @@ Regression: TD −1 if Church Excommunicates Hafenmark AND RDT does not advance 
 ---
 
 
-## VTM 5 — Once-Per-Game Tracking (PP-477)
-Varfell faction mat: flip token 'VTM 5 Power Used'. Set to Used on ability activation. Not reset between sessions.
+## VTM 5 — STRUCK (PP-663, 2026-04-19)
+Once-per-game tracking removed with VTM track. Thread-scaled abilities at faction scale dissolved.
 
 ---
 

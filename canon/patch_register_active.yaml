@@ -1,6 +1,6 @@
 # Patch Register — Active
 # Applied/approved/consumed patches archived to canon/patch_register_archive_*.yaml
-# Next PP number: 663
+# Next PP number: 664
 
 patches:
 
@@ -222,3 +222,32 @@ patches:
   affects:
   - params/threadwork.md
   status: applied
+- id: PP-663
+  date: 2026-04-19
+  severity: P1
+  description: VTM-STRIKE — Vaynard Thread Mastery removed as faction-level stat/track.
+    Thread capability is character-scale only per threadwork_v30 (Vaynard's personal
+    TS/Coherence). Strike propagated to clock_registry, tracks.md, core.md (Cultural
+    Reformation), npcs_special.md (Patience Protocol flat PC 0-4, Intel note corrected),
+    victory_v30 (Path A Intelligence ≥ 4, Path B WR ≥ 3 raised, Path C dissolved, two
+    co-victory pairings re-gated), strategic_layer (G-07 Bootstrapping struck, G-03
+    Forgetting Check re-specced to Intelligence, Cascade Test 3 re-framed character-scale),
+    faction_politics (Edeyja Inner Circle gate, Council of Warden context, ED-658 note),
+    npc_behavior (Varfell priority trees §7.4 and §8.5, Institutional Mandate unique
+    clock changed to WR), varfell_path_b (Option A/B/C tables), peninsular_strain §5.4
+    (Cultural Reformation pool and prerequisites).
+  finding_id: USER-DIRECTED
+  source: user
+  affects:
+    - designs/provincial/clock_registry_v30.md
+    - params/bg/tracks.md
+    - params/bg/core.md
+    - params/bg/npcs_special.md
+    - designs/provincial/victory_v30.md
+    - designs/provincial/strategic_layer_v30.md
+    - designs/provincial/faction_politics_v30.md
+    - designs/npcs/npc_behavior_v30.md
+    - designs/provincial/varfell_path_b_v30.md
+    - designs/provincial/peninsular_strain_v30.md
+  status: applied
+  applied_commit: pending

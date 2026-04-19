@@ -97,7 +97,7 @@ Each Battle on Valorian soil: RS −1 (Campaign/War scale: RS −2). Each season
 | Crown | Formal Crown Treaty | Senator | 2 (diplomatic transfer) |
 | Church | Mass Seizure (one-shot) | Special/Unique | max(floor(PT/2)+1, 2) |
 | Hafenmark | Dynastic Proclamation | Diplomat | 2 |
-| Varfell | Cultural Reformation | Colonist | 2 |
+| Varfell | ~~Cultural Reformation~~ STRUCK CR-STRIKE-2026-04-19. Varfell expansion = military-only. | — | — |
 | Löwenritter | Martial Governance | Legionary (Govern variant) | +1 per success (cap 2) |
 
 Full specifications: peninsular_strain_v1.md §5.
@@ -351,37 +351,32 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Milestone: AEA = 5 + CI ≥ 60
 
 ### 3.4 Varfell — Vaynard's Three Paths
 
-#### Path A — Intelligence Hegemony
+#### Path A — Intelligence Hegemony (PP-663 revised — VTM row struck)
 
 | Condition | Threshold |
 |-----------|-----------|
 | PV held | ≥ 10 |
-| VTM | ≥ 3 |
+| Intelligence stat | ≥ 4 |
 | At least 2 rival factions' stats fully revealed | fixed count |
 | Varfell controls ≥ 1 territory outside starting 4 | — |
 
 #### Path B — Southernmost Dominion
-[ED-311 RESOLVED — Option A (4 conditions + WR track), 2026-04-07]
+[ED-311 RESOLVED — Option A, 2026-04-07; PP-663 revised — VTM row struck, WR raised to ≥ 3]
 
 | Condition | Threshold |
 |-----------|-----------|
 | PV held | ≥ 8 |
 | Control T4 (Grauwald) AND T13 (Oastad) | both held |
-| VTM | ≥ 3 |
-| Warden Recognition (WR) | ≥ 2 |
+| Warden Recognition (WR) | ≥ 3 |
 | Season | ≥ 12 (Year 3) |
 
 **WR track (0–4):** See params_board_game.md §Varfell Path B for full WR track rules.
 **Blocked if:** WR has ever returned to 0 after first advancing past 1.
 **Season gate (ED-666):** Path B represents demonstrated stewardship over time, not just accumulated territorial control. Season 12 is the earliest at which WR ≥ 2 through legitimate expedition work is plausible. Prevents S9 speed-run wins before other factions have reached meaningful development.
 
-#### Path C — Thread Supremacy
+#### Path C — STRUCK (PP-663, 2026-04-19)
 
-| Condition | Threshold |
-|-----------|-----------|
-| PV held | ≥ 10 |
-| VTM | ≥ 4 | *(PP-542: was = 5)* |
-| RS | ≥ 50 |
+Thread Supremacy as a faction-scale victory condition is dissolved. Thread mastery is personal-scale (Vaynard as character per threadwork_v30), not a faction progress track. Varfell retains two canonical victory paths: A (Intelligence Hegemony) and B (Southernmost Dominion).
 
 ---
 
@@ -412,7 +407,7 @@ Modifiers:
 | Failure | Uprising crushed. CI +2 (Church authority strengthened by resistance). T9 PT +1. Uprising attempt used up for this arc. |
 
 #### RM Territory Control — Cultural Displacement
-**Presence markers vs Phase 1 (important distinction):** Presence markers are the *holding mechanic* for post-Uprising T9 (≥ 3 required in T9). They are NOT the Phase 1 mechanic. Phase 1 (PT ≤ 1 in ≥ 4 territories) tracks Piety Track values, not Presence marker counts. Community Organizing places Presence markers; it does not directly reduce PT. PT reduction comes from: Cultural Reformation OW (Varfell, −1 PT), successful Uprising OW (T9, −2 PT), Calamity Drift (RS ≤ 50 in low-PT territories), and natural secular drift (−1 PT per 5 seasons without Church cultivation). RM players should prioritise PT reduction for Phase 1 and Presence markers for post-Uprising T9 holding — these are parallel but distinct goals.
+**Presence markers vs Phase 1 (important distinction):** Presence markers are the *holding mechanic* for post-Uprising T9 (≥ 3 required in T9). They are NOT the Phase 1 mechanic. Phase 1 (PT ≤ 1 in ≥ 4 territories) tracks Piety Track values, not Presence marker counts. Community Organizing places Presence markers; it does not directly reduce PT. PT reduction comes from: successful Uprising OW (T9, −2 PT), Calamity Drift (RS ≤ 50 in low-PT territories), and natural secular drift (−1 PT per 5 seasons without Church cultivation). (CR-STRIKE-2026-04-19: Cultural Reformation −1 PT removed.) RM players should prioritise PT reduction for Phase 1 and Presence markers for post-Uprising T9 holding — these are parallel but distinct goals.
 
 **Overwhelming Uprising bonus:** An Overwhelming Cultural Uprising result automatically places +2 Presence markers in T9 (population mobilisation from the Uprising itself). These markers are placed before the holding condition is checked, ensuring OW Uprising immediately provides the foundation for holding T9.
 
@@ -526,13 +521,13 @@ When Coup Counter reaches 4 and Löwenritter activates:
 | Pair | Conditions (all simultaneous at Accounting) |
 |------|---------------------------------------------|
 | **Crown + Hafenmark** | Crown PV ≥ 12 AND Hafenmark PV ≥ 12 AND PI ≥ 7 AND CI < 50 AND Crown Mandate ≥ 4 AND Hafenmark Mandate ≥ 4 AND neither faction has played Legionary targeting the other in preceding 4 seasons | *(PP-561 + PP-572, ED-391: 4-season no-active-conflict reinforces cooperative design)* |
-| **Crown + Varfell** | Crown PV ≥ 12 AND Varfell PV ≥ 8 AND VTM ≥ 3 AND RS ≥ 50 |
-| **Varfell + RM** | VTM ≥ 3 AND WR ≥ 2 AND ≥ 3 territories PT ≤ 1 AND RS ≥ 40 AND Varfell controls T13 | *(PP-545: VTM was ≥ 4; territories was ≥ 4)* |
+| **Crown + Varfell** | Crown PV ≥ 12 AND Varfell PV ≥ 8 AND WR ≥ 2 AND RS ≥ 50 | *(PP-663: VTM ≥ 3 replaced by WR ≥ 2)* |
+| **Varfell + RM** | WR ≥ 2 AND ≥ 3 territories PT ≤ 1 AND RS ≥ 40 AND Varfell controls T13 | *(PP-545: VTM was ≥ 4; territories was ≥ 4; PP-663: VTM ≥ 3 term struck)* |
 | **Hafenmark + RM** | Hafenmark PV ≥ 10 AND ≥ 3 territories PT ≤ 2 AND PI ≥ 4 AND RS ≥ 40 | *(PP-546: territories was ≥ 4)* |
 | **Löwenritter + Hafenmark** | Löwenritter PV ≥ 8 AND Hafenmark PV ≥ 8 AND PI ≥ 4 |
 | **Church + Hafenmark (Partition)** | See §3.2. Crown Mandate ≤ 1, CI ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no active military conflict. Requires Phase 1 Declaration (see below). |
 
-**Partition Phase 1 Declaration (ED-629):** Church+Hafenmark Partition cannot fire silently at Accounting. At Phase 1 of the season in which all Partition conditions are simultaneously met, either the Church player (or NPC Church AI) OR the Hafenmark player (or NPC Hafenmark AI) must publicly declare: "We assert Peninsular Partition this season." This declaration is visible to all players at Phase 1. Other factions then have the full Phase 4 Domain Action window to disrupt any single Partition condition: restore Crown Mandate from ≤ 1 to ≥ 2 (Crown Govern OW), initiate Battle between Church and Hafenmark (breaking non-aggression), reduce Church or Hafenmark territory count below the required minimum, or suppress CI below 50 (Hafenmark OW Suppress + Varfell VTM Discretion). If all conditions survive Phase 4 and hold at Accounting: Partition fires. **NPC AI Partition Declaration:** NPC Hafenmark and NPC Church both declare when all 5 conditions are met at Phase 1 evaluation. NPC AI never suppresses a Partition declaration.
+**Partition Phase 1 Declaration (ED-629):** Church+Hafenmark Partition cannot fire silently at Accounting. At Phase 1 of the season in which all Partition conditions are simultaneously met, either the Church player (or NPC Church AI) OR the Hafenmark player (or NPC Hafenmark AI) must publicly declare: "We assert Peninsular Partition this season." This declaration is visible to all players at Phase 1. Other factions then have the full Phase 4 Domain Action window to disrupt any single Partition condition: restore Crown Mandate from ≤ 1 to ≥ 2 (Crown Govern OW), initiate Battle between Church and Hafenmark (breaking non-aggression), reduce Church or Hafenmark territory count below the required minimum, or suppress CI below 50 (Hafenmark OW Suppress; Varfell VTM Discretion struck PP-663). If all conditions survive Phase 4 and hold at Accounting: Partition fires. **NPC AI Partition Declaration:** NPC Hafenmark and NPC Church both declare when all 5 conditions are met at Phase 1 evaluation. NPC AI never suppresses a Partition declaration.
 
 **Incompatible:** Crown + Church, Crown + Löwenritter, Church + Varfell, Church + RM.
 
@@ -730,9 +725,8 @@ P-32 ("Hybrid victory = BG victory PLUS personal arc resolution") is retained. A
 | Crown | 12 | 14 | +2 | Suppress 2 of 3 rivals (×2 political) | 12–16 seasons | *(PP-540)* |
 | Church | 5 | 8 | +3 | Mass Seizure (one-shot) at CI ≥ 60; PT management | 14–18 seasons |
 | Hafenmark | 6 | 12 | +6 | Dynastic Proclamation + Mil 3 handicap + Crown Mandate suppression | 12–16 seasons | *(PP-541)* |
-| Varfell A | 6 | 10 | +4 | Geographic isolation + VTM 3 + intel reveals | 12–14 seasons |
-| Varfell B | 6 | 8 | +2 | VTM 3 + Warden Recognition + T13 control | 12–16 seasons |
-| Varfell C | 6 | 10 | +4 | VTM 5 (~S14+) + RS maintenance | 14–18 seasons |
+| Varfell A | 6 | 10 | +4 | Geographic isolation + Intelligence 4 + intel reveals | 12–14 seasons | *(PP-663)* |
+| Varfell B | 6 | 8 | +2 | Warden Recognition 3 + T13 control | 12–16 seasons | *(PP-663)* |
 | RM | — | — | — | 4 territories PT ≤ 1 (Phase 1) + Phase 2 roll | 14–18 seasons | *(PP-543)* |
 | **Universal** | any | 31 (all) | varies | All 15 territories, Accord ≥ 2, Strain ≤ 6 | 20–30 seasons | Prestige win |
 

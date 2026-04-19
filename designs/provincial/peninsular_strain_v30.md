@@ -121,7 +121,7 @@ Accord represents the population's acceptance of the current controller's govern
 | Church Seizure, Success | Accord set to max(floor(PT/2) + 1, 2) | Guarantees ≥ 2. Political act backed by institutional authority. |
 | Church Seizure, Overwhelming | Accord set to floor(PT/2) + 2, max 3 | Strong institutional mandate. |
 | Dynastic Proclamation (Hafenmark), Success or Overwhelming | Accord set to 2 | Diplomatic transfer with dynastic legitimacy. |
-| Cultural Reformation (Varfell), Success or Overwhelming | Accord set to 2 | Cultural alignment with population. |
+| ~~Cultural Reformation (Varfell)~~ | STRUCK CR-STRIKE-2026-04-19 | Action dissolved. |
 | Crown Treaty — diplomatic transfer | Accord set to 2 | Legitimacy inherited from prior ruler. |
 | Territory transfer via Co-Victory partition | Accord set to 2 | Negotiated handover. |
 
@@ -206,7 +206,7 @@ Accord is the game's victory condition foundation. It should be experienceable, 
 
 Province Accord = floor(mean(settlement Order)) per settlement_layer_v30 §1.3. Existing Accord change rules operate as follows:
 
-**Category A — Province-Level Set (Accord set to N):** Macro-political events that reset the entire province's relationship with its population. Implementation: set ALL settlement Order values in the province to N. Applies to: military conquest (§2.4), Church Seizure (§3.4), Dynastic Proclamation (§3.5), Cultural Reformation (§3.6), Crown Treaty, Co-Victory partition, diplomatic transfers (faction_layer §2.1), Occupation transfers (faction_layer §5).
+**Category A — Province-Level Set (Accord set to N):** Macro-political events that reset the entire province's relationship with its population. Implementation: set ALL settlement Order values in the province to N. Applies to: military conquest (§2.4), Church Seizure (§3.4), Dynastic Proclamation (§3.5), Crown Treaty, Co-Victory partition, diplomatic transfers (faction_layer §2.1), Occupation transfers (faction_layer §5). (CR-STRIKE-2026-04-19: Cultural Reformation removed from list.)
 
 **Category B — Targeted ±N (Accord ±N → Order ±N in specific settlement):**
 
@@ -365,31 +365,11 @@ Baralta's divine-right claim. "Faith is not mediated — it is lived. Anyone who
 
 **Why Diplomat card, not Senator:** Hafenmark has 1× Senator and 1× Diplomat. Diplomat is Hafenmark's unique card. Proclamation is Hafenmark's unique acquisition tool. Using Diplomat preserves Senator for Diplomacy and Parliamentary Manoeuvre. The Diplomat card's existing function (place Diplomatic Tokens) creates a natural two-phase strategy: first deploy Diplomatic Tokens (build leverage), then Proclaim (use leverage for territorial acquisition).
 
-### §5.4 Varfell — Cultural Reformation — NEW
+### §5.4 Varfell — Cultural Reformation — STRUCK CR-STRIKE-2026-04-19
 
-Vaynard's revolutionary program: shatter the caste system, expel Altonian influence, remove Church from political life.
+Cultural Reformation dissolved. Incompatible with Vaynard's identity as military conqueror (Reinhardt von Lohengramm parallel). Vaynard does not convert populations ideologically; Varfell expansion is purely military. Tribune intel operations remain (reveals enemy stats for target selection). Thread operations remain character-scale only (threadwork_v30), not BG-layer bonuses.
 
-**Card type:** Colonist. Once per season.
-**Pool:** Influence + floor(VTM / 2).
-**Ob:** PT + 1 (target territory). Low-PT territories are easier (population already leans Restoration). High-PT territories resist cultural reformation. PT 0 → Ob 1. PT 3 → Ob 4. PT 5 → Ob 6.
-**Prerequisites:** VTM ≥ 2. Target territory PT ≤ 3 (population must have some openness to Restoration ideas). Target territory adjacent to Varfell-controlled territory OR territory where Varfell has intelligence presence (Tribune operation successfully completed there within 2 seasons).
-
-| Degree | Effect |
-|--------|--------|
-| Overwhelming | Territory control transfers. Accord set to 2. PT −1 in target territory. CI −1 (Church institutional grip weakens). |
-| Success | Territory control transfers. Accord set to 2. PT −1 in target territory. |
-| Partial | Territory does not transfer. PT −1 in target territory (cultural seed planted). Varfell gains intelligence presence in territory if not already present. |
-| Failure | Varfell Cohesion −20 (derived_stats_v1). CI +1 (Church reaction). Church Attention Pool +1. |
-
-**Why Ob = PT + 1:** This makes Varfell's expansion tool inversely correlated with Church's. As PT drops (through Calamity Drift, RM activity, or Varfell's own Partial results planting seeds), Varfell's Reformation becomes easier. As PT rises (through Church cultivation), it becomes harder. Varfell can directly influence PT through Tribune intelligence operations, Counter-Narrative (existing action targeting Church-Prominent territories), and by succeeding at Reformation (each success lowers PT further). This creates a feedback loop: success → lower PT → easier future success — but only in the low-PT band.
-
-**Why Colonist card:** Varfell has 1× Colonist in starting hand. Colonist is thematically coherent — Cultural Reformation IS cultural colonisation. Using Colonist preserves Tribune for intelligence operations (Investigate, Spy) and avoids forcing Varfell to choose between intelligence and expansion on the same card type.
-
-**Defensive interaction:** Target faction may invoke Institutional Mandate (PP-189) if Mandate ≥ 4. Church may invoke Counter-Reformation (new): if Church is Prominent in the target territory AND plays a Senator card targeting that territory in the same Phase 4, Church adds +1 Ob to Reformation. Costs Church one card play.
-
-**Open Pledge interaction (PP-515):** Reformation may be declared as Open Pledge ("I will culturally reform [territory] this season"). Honour: +1 Standing. Breach: standard PP-515 consequences.
-
-**Anti-Altonian effect:** Territories gained via Cultural Reformation: Altonian intelligence operations (espionage, proxy actions) face +1 Ob. The population has been culturally inoculated against foreign influence. (Does not apply to territories gained by military conquest.)
+See canon/supersession_register.yaml entry CR-STRIKE-2026-04-19. PP-650 superseded.
 
 ---
 
@@ -501,12 +481,12 @@ Occupation (faction_layer_v30.md §2) and Accord (this document §2) address dif
 | Church Seizure, PT ≥ 3 (Success) | max(floor(PT/2)+1, 2) | §5.2 this document |
 | Church Seizure, PT ≥ 3 (Overwhelming) | floor(PT/2)+2, max 3 | §5.2 this document |
 | Dynastic Proclamation (Success/OW) | 2 (Compliant) | §5.3 this document |
-| Cultural Reformation (Success/OW) | 3 (Aligned) | §5.4, revised — population underwent genuine cultural transformation |
+| ~~Cultural Reformation~~ | STRUCK CR-STRIKE-2026-04-19 | Action dissolved. |
 | RM Community Organizing (post-Founding) | 3 (Aligned) | victory_v30 §8 — population self-organized into RM governance |
 
-**Historical grounding (historical_precedents_warfare §5.3):** Accord varies by acquisition method because the *type* of legitimacy determines population acceptance. Military conquest imposes through force (Weber: no legitimacy basis → Resistant). Show of Force / Parley / Treaty involve negotiation (rational acceptance → Compliant). Cultural Reformation and RM represent genuine population transformation (identity shift → Aligned). Church Seizure depends on whether the population was already religiously aligned (PT ≥ 3) or not (PT < 3).
+**Historical grounding (historical_precedents_warfare §5.3):** Accord varies by acquisition method because the *type* of legitimacy determines population acceptance. Military conquest imposes through force (Weber: no legitimacy basis → Resistant). Show of Force / Parley / Treaty involve negotiation (rational acceptance → Compliant). RM represents genuine population transformation (identity shift → Aligned). Church Seizure depends on whether the population was already religiously aligned (PT ≥ 3) or not (PT < 3). (CR-STRIKE-2026-04-19: Cultural Reformation removed from list.)
 
-**Note:** Cultural Reformation upgraded from Accord 2 to Accord 3. Rationale: Cultural Reformation takes the longest of any acquisition method (requires sustained cultural investment across multiple seasons). The population didn't just accept new governance — it internalized a new cultural identity. This is the slowest path but produces the best governance outcome, which is the correct incentive structure.
+**Note:** ~~Cultural Reformation Accord tier~~ STRUCK CR-STRIKE-2026-04-19.
 
 [EDITORIAL: ED-692 — Accord by acquisition method revision. Source: historical_precedents_warfare.md §5.3.]
 
@@ -554,7 +534,7 @@ Accord on Seizure follows this document §5.2 regardless of CI milestone. Seizur
 | params_board_game.md §Starting Values | Add: Accord per territory (§2.1), Starting PT (§2.2), Peninsular Strain (start 0, range 0–10). | P1 |
 | params_board_game.md §Clock Environmental Effects | Add: Peninsular Strain threshold table (§4.3). | P1 |
 | params_board_game.md §Accounting | Add steps 4c/4d/4e per §7. | P1 |
-| params_board_game.md §Faction Actions | Add: Dynastic Proclamation (§5.3), Cultural Reformation (§5.4). | P1 |
+| params_board_game.md §Faction Actions | Add: Dynastic Proclamation (§5.3). Cultural Reformation (§5.4) STRUCK CR-STRIKE-2026-04-19. | P1 |
 | params_board_game.md §Starting TCV | Update Crown 12, Hafenmark 6, Church 5, Varfell 6. | P1 |
 | geography_v30.md | No change needed (TCV is in victory_v30.md, not geography). | — |
 | npc_behavior_v30.md | Update NPC priority trees for Accord-aware governance. | P2 |
@@ -573,7 +553,7 @@ Accord on Seizure follows this document §5.2 regardless of CI milestone. Seizur
 | PP-NEW-05 | System | Peninsular Strain counter (0–10). Advances from inter-faction battles, faction eliminations, revolts. |
 | PP-NEW-06 | System | Battle consequences: RS −1 per battle on Valorian soil. IP +2 per season with inter-faction battle. |
 | PP-NEW-07 | Hafenmark | Dynastic Proclamation domain action (Diplomat card). Replaces Parliamentary Sovereignty as primary path. |
-| PP-NEW-08 | Varfell | Cultural Reformation domain action (Colonist card). |
+| ~~PP-NEW-08~~ | Varfell | ~~Cultural Reformation domain action~~ STRUCK CR-STRIKE-2026-04-19. |
 | PP-NEW-09 | Church | Seizure Accord formula revised: Success → max(floor(PT/2)+1, 2). Guaranteed ≥ 2. |
 | PP-NEW-10 | PT | Starting PT values per territory proposed (§2.2). |
 | PP-NEW-11 | Löwenritter | Accord adaptation: Martial Governance (Military pool Govern, Ob +1, cap Accord 2). Strain exemption for first 2 seasons post-coup. |

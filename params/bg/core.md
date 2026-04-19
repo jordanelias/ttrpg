@@ -195,7 +195,7 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 | Community Organising (Restoration) | 2 | Pool: 1D base + 1D per adjacent territory with RM Presence marker. Failure: no Stability cost (RM has no Stability). Try again next season. (PP-460) |
 | Community Weaving (Restoration) | (100−RS)÷20 round up min 1 | −1 per Presence marker in territory |
 | Dynastic Proclamation (Hafenmark) | floor(target Stability / 2) + 1 | Diplomat card. Hafenmark M ≥ 4, M > target controller M. +1 Ob if PT ≤ 1. −1 Ob if Diplomatic Token on target. See peninsular_strain_v1.md §5.3. |
-| Cultural Reformation (Varfell) | PT + 1 (target territory) | Colonist card. VTM ≥ 2. Target PT ≤ 3. Pool: Influence + floor(VTM/2). See peninsular_strain_v1.md §5.4. |
+| Cultural Reformation (Varfell) | STRUCK CR-STRIKE-2026-04-19 | Action removed. Varfell expansion is military-only. See canon/supersession_register.yaml. |
 | Martial Governance (Löwenritter) | floor(Prosperity / 2) + 2 | Löwenritter only. Military pool. Accord +1 (cap 2). |
 | Fortify | Fort level + 1 | — |
 

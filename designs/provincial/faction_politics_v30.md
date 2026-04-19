@@ -218,7 +218,7 @@ The oral law provision referenced in Varfell succession — when a Hochjarl or V
 | Senior Jarl of the Western Highlands | **Björn Holdar** (new — ED-637; renamed from initial "Björn Torben" to avoid collision with heir Torben Almqvist) | Precedent | Evidence | 4 | Controls resource-rich western fjords. Needs player cooperation for continued settlement development. Caste-neutral. |
 | Skald-Chief | **Ingrid Stenskald** (new — ED-638; renamed from initial "Ingrid Ehrenwall" to avoid collision with canonical Löwenritter Grand Master Ehrenwall) | Continuity | Evidence | 5 | "Stenskald" = stone-skald; keeper of Varfell's oral law; validates claims. Hard requirement: any Deed-Claim succession in Varfell needs the Skald-Chief's endorsement (or the Skald-Chief's death, which creates a secondary succession crisis). |
 | Vaynard's Huscarl Captain | **Maret Uln** (canonical — npc_roster_v30 #2) | Community | Evidence | 3 | She is already canonical as Varfell Practitioner / Succession Fallback. Promoting her to Huscarl Captain rather than a separate role resolves two issues: (a) it makes her mechanically proximate to Vaynard without requiring player investment; (b) her Southern Einhir solidarity (npc_roster §14) now has direct access to Vaynard's ear. |
-| Warden Liaison | **Edeyja** (canonical — npc_roster_v30 #1; appears in Inner Circle only on VTM Path B) | Warden | Evidence | 4 | Technically Warden-Chief (Southernmost), not Varfell. Becomes Inner Circle member if Vaynard has committed to Path B (Thread work). Her Conviction "Warden" is Varfell-specific — a Conviction tier above the standard 5 (see ED-641 below). |
+| Warden Liaison | **Edeyja** (canonical — npc_roster_v30 #1; appears in Inner Circle only on Path B, WR ≥ 3) (PP-663: VTM reference replaced) | Warden | Evidence | 4 | Technically Warden-Chief (Southernmost), not Varfell. Becomes Inner Circle member if Vaynard has committed to Path B (Thread work). Her Conviction "Warden" is Varfell-specific — a Conviction tier above the standard 5 (see ED-641 below). |
 
 ---
 
@@ -775,7 +775,7 @@ The Jarl Assembly (per §1.3 of this register, plus factions_ttrpg_v30 §8.5) ha
 | **Council of the March** | Eastern military frontier; Altonian invasion preparation | Thorvald Hann (canonical-proposed, §1.3c) |
 | **Council of the Highlands** | Western resource territories; timber, metals, trade routes | Björn Holdar (proposed, resolved from initial "Björn Torben") |
 | **Council of the Skald** | Cultural memory; Einhir oral tradition; lawspeaking | Ingrid Stenskald (proposed, Skald-Chief; resolved from initial "Ingrid Ehrenwall") |
-| **Council of the Warden** | Thread-related matters (VTM Path B/C context); Warden liaison | Maret Uln (proposed dual role) OR Edeyja when serving |
+| **Council of the Warden** | Thread-related matters (Path B context); Warden liaison (PP-663: Path C struck; VTM term dropped) | Maret Uln (proposed dual role) OR Edeyja when serving |
 | **Council of Voices** | Diplomacy; Crown and Hafenmark relations; Schoenland border | Vaynard's Huscarl Captain (role function) |
 
 Unlike Crown Ministries or Hafenmark Committees, the Councils are not permanently funded entities — they convene on need, often at the Jarl Assembly's annual meeting, and delegate to individual Jarls for implementation. There is no Seasonal Cost; instead, each Council has a **Readiness Track** (0–3) that declines without session and increases when the Council acts.
@@ -920,7 +920,7 @@ Deviations from parity must be explicitly justified in the rank's specification.
 | ED-655 | Ministry Position and Committee Position — same mechanic across Crown/Hafenmark/Church/Varfell? Or faction-specific variants? Recommend uniform mechanic with faction-specific titles | P2 |
 | ED-656 | Cross-rank advancement interaction: player holds Löwenritter sub-office rank AND Crown primary rank. Confirm Duty conflicts between the two parallel chains are handled via faction AI evaluation (NPC-03 delegation) | P2 |
 | ED-657 | Rank restoration after dismissal: what paths exist, and what is the cost? | P2 |
-| ED-658 | Warden Ladder integration with VTM Path B victory mechanics (varfell_path_b_v30) — Warden rank does not grant automatic Path B progression, but Warden-Chief designation must interact with Path B Deed sequence | P2 |
+| ED-658 | Warden Ladder integration with Path B victory mechanics (varfell_path_b_v30, PP-663 revised) — Warden rank does not grant automatic Path B progression, but Warden-Chief designation must interact with Path B Deed sequence | P2 |
 | SIM-POL-R01 | Simulation: 7-rank progression pacing — validate that a player starting at Std 0 can reasonably reach Std 5 by S14 and Std 7 by S20 under normal play | P1 SIM-DEBT |
 | SIM-POL-R02 | Simulation: caste modifier impact — confirm that Southern Einhir rank-advancement gates do not create unwinnable game states | P1 SIM-DEBT |
 | SIM-POL-R03 | Simulation: Baralta Crown Claim × rank interaction — confirm the Hafenmark-to-Crown Recognition Ceremony does not create exploit paths for free Crown Std 5 | P2 SIM-DEBT |

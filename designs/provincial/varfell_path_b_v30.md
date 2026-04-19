@@ -20,11 +20,11 @@
 
 ## Problem
 
-Path B currently has 7 simultaneous conditions:
+Path B currently has 6 simultaneous conditions (PP-663: condition 4 VTM ≥ 3 struck):
 1. TCV ≥ 8
 2. Control T4 (Vargstad)
 3. Garrison or Tribune in T15 (Askeheim)
-4. VTM ≥ 3
+4. ~~VTM ≥ 3~~ [STRUCK PP-663]
 5. Warden Cooperation (WC) ≥ 1
 6. Warden's Accord (WA) ≥ +1
 7. T4 CV ≤ 1
@@ -43,8 +43,7 @@ T4 CV ≤ 1 adds a cultural gate that must be actively maintained against natura
 |-----------|-----------|-----------------|
 | TCV held | ≥ 8 | Minimal territorial control from the fjords |
 | Control T4 (Vargstad) AND T13 (Stillhelm) | both held | Southern gateway to the Southernmost secured |
-| VTM | ≥ 3 | Thread awareness sufficient for Warden engagement |
-| Warden Recognition | ≥ 2 | Wardens acknowledge Vaynard's stewardship |
+| Warden Recognition | ≥ 3 | Wardens acknowledge Vaynard's stewardship (raised from ≥ 2 by PP-663 to compensate for VTM row removal) |
 
 **Warden Recognition (WR)** replaces both WC and WA. WR is a single track 0–4:
 - WR 0: Wardens unaware or indifferent.
@@ -66,9 +65,9 @@ If you prefer to keep WA and WC as separate visible tracks:
 |-----------|-----------|
 | TCV held | ≥ 8 |
 | Control T4 AND T13 | both held |
-| VTM | ≥ 3 |
 | Warden Cooperation (WC) | ≥ 1 |
 | Warden's Accord (WA) | ≥ +1 |
+*(PP-663: VTM ≥ 3 row struck from Option B.)*
 
 
 ---

@@ -748,11 +748,11 @@ All NPC faction priority trees follow a standardised 7-level structure:
 |---|---|---|
 | 1 | Stability ≤ 2 | Consul Inward in Varfell capital. |
 | 2 | TK advancement opportunity: Expedition possible (T6 accessible) OR Private Collection usable (Intel vs Ob 2) OR practitioner contact available | Private Collection deployment. OR: Tribune Investigate if target has Thread-relevant intel. |
-| 2b | VTM ≥ 2 AND no Varfell unit in T15 AND Varfell Military ≥ 3 | March unit to T15 (Southernmost). Required for Warden Emergence trigger (edeyja §5.2). Without T15 presence, Path B cannot advance. |
+| 2b | Varfell practitioner present (Vaynard or Maret Uln) AND no Varfell unit in T15 AND Varfell Military ≥ 3 | March unit to T15 (Southernmost). Required for Warden Emergence trigger (edeyja §5.2). Without T15 presence, Path B cannot advance. (PP-663: VTM gate replaced with embedded practitioner check.) |
 | 3 | Intel action available with measurable one-season outcome: Tribune Investigate vs rival faction | Tribune Investigate against faction with highest hidden stats. |
 | 4 | Maximise information advantage. Acquire resources. Senator Outward (diplomatic positioning). | Standard |
-| 4b | VTM ≥ 2 AND adjacent territory PT ≤ 2 AND Varfell Influence + floor(VTM/2) ≥ PT + 1 (viable Ob) | Cultural Reformation (Colonist card) targeting adjacent territory with lowest PT. NPC uses Reformation over military expansion when viable. (peninsular_strain_v1.md §5.4) |
-| 5 | VTM advancement if conditions met. Warden Recognition pursuit if Path B available. | Secondary |
+| 4b | STRUCK CR-STRIKE-2026-04-19 | Cultural Reformation action dissolved. Varfell expansion is military-only. (Row removed from Varfell priority tree.) |
+| 5 | Warden Recognition pursuit if Path B available. | Secondary | *(PP-663: VTM advancement removed.)* |
 | 6 | If attacked: Intel-based response (reveal attacker's hidden stat, expose their action). No military first-strike. | Reactive |
 | 7 | Pass. Patience Protocol (bank +2D for future roll). | Default |
 
@@ -1102,12 +1102,12 @@ An NPC who has been recruited defects if:
 
 ### §7.4 Varfell Priority Tree
 1. **IF** Stability ≤ 2 → Tribune (Inward, restore Stability)
-2. **IF** VTM ≥ 3 AND Discretion available AND TC contribution this season ≥ 1 → VTM Discretion (suppress TC)
+2. **IF** Varfell practitioner present AND TC contribution this season ≥ 1 → Opposing Thread Operation (suppress TC, character-scale per threadwork_v30 §2.6; PP-663: VTM Discretion struck)
 3. **IF** Military ≥ 4 AND adjacent target with controller Mandate ≤ 2 → March (expand)
-4. **IF** VTM < target (Path A: 5, Path B: 4, Path C: 3) → Expedition (advance VTM)
+4. **IF** WR < target (Path B: 3) OR Intelligence < target (Path A: 4) → Expedition OR Tribune Inward (advance WR / Intelligence) (PP-663: VTM advancement struck; Path C dissolved)
 5. **IF** TCV < threshold (Path A: 14, Path B: 12, Path C: 10) → March or Claim
 6. **IF** Mandate < 3 → Tribune (Outward, Influence)
-7. **IF** Warden Cooperation track WC < 2 AND Path B selected → Expedition (Warden contact)
+7. **IF** WR < 3 AND Path B selected → Expedition (Warden contact, advance WR) (PP-663: WC reference retained as shared-clock; Varfell Path B gate is WR)
 8. **DEFAULT** → Tribune (Inward, Military — build strength)
 
 ### §7.5 Löwenritter Priority Tree (NPC faction — activates on Crown elimination or Coup)
@@ -1135,7 +1135,7 @@ An NPC who has been recruited defects if:
 4. **DEFAULT** → Hold position (garrison T10)
 
 ### §7.9 Priority Tree Override Conditions
-- **Institutional Mandate trigger:** When any DA targets a faction's Mandate stat or unique clock (TC/Church, PI/Hafenmark, VTM/Varfell), the targeted faction MUST respond next season with a defensive DA targeting the attacker (skipping normal priority tree). One override per season maximum.
+- **Institutional Mandate trigger:** When any DA targets a faction's Mandate stat or unique clock (TC/Church, PI/Hafenmark, WR/Varfell), the targeted faction MUST respond next season with a defensive DA targeting the attacker (skipping normal priority tree). One override per season maximum. (PP-663: Varfell unique clock changed from VTM to WR.)
 
 
 ### §7.10 NPC Stat Values (Thread Sensitivity and Certainty)
