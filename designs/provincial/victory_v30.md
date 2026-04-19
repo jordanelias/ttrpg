@@ -271,7 +271,7 @@ Settlements track Church presence on four independent axes:
 | Inquisitor Base | −1 |
 | Church Governor | −2 |
 
-Maximum per settlement: −6. Territory Seizure Ob aggregates modifiers across all settlements.
+Maximum per settlement: −4 (cap per settlement_layer_v30.md §1.5). Territory Seizure Ob aggregates modifiers across all settlements in the territory.
 
 **CI=100 Mechanics:**
 
