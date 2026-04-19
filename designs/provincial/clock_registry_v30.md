@@ -14,7 +14,7 @@
 | Clock | Range | Start | Direction | Source |
 |-------|-------|-------|-----------|--------|
 | Rendering Stability (RS) | 0–100 | 72 | ↓ (decay) | params_threadwork.md §RS |
-| Theocracy Counter (TC) | 0–100 | 28 | ↑ | victory_architecture_v1.md §7 |
+| Church Influence (CI) | 0–100 | 28 | ↑ | victory_architecture_v1.md §7 |
 | Invasion Pressure (IP) | 0–100 | 5 | ↑ | params_board_game.md §IP |
 | Parliament Integrity (PI) | 0–20 | 7 | ↑ (cumulative pressure) | params_board_game.md §PI. Auto-resolves at PI ≥ 20. |
 

@@ -40,7 +40,7 @@
 | ED-577-01/02/03/04 | Co-Movement calibration — all 4 resolved, RS ±4.3 PASS |
 | SIM-POL-R01-R05 | Faction politics simulation — all 5 items PASS (Standing reachability, Ministry decay, caste gating, branch differentiation, cross-faction balance) |
 | ED-684 | Derived stats calibration — multipliers confirmed provisional (sim_derived_stats_calibration) |
-| ED-590 | Church victory revised + validated: TC ≥ 65 + Accord ≥ 3 in ≥ 3 non-capitals |
+| ED-590 | Church victory revised + validated: CI ≥ 65 + Accord ≥ 3 in ≥ 3 non-capitals |
 | ED-572 | Assert → Pontifex-exclusive |
 | ED-545/551/555/557/559/571/583 | See sim_batch_3 |
 | ED-539/585 | See sim_batch_3/4 |
@@ -50,13 +50,13 @@
 Top-down audit across all 8 batches (ST-01 through ST-60).
 
 ### Robustness: ✓ working
-Victory race convergence, TC/RS pyrrhic collision, Obligation cascade, Torben investment race, Calamity reversal gate, co-victory hold, Elske subversive strategy, Niflhel intelligence market
+Victory race convergence, CI/RS pyrrhic collision, Obligation cascade, Torben investment race, Calamity reversal gate, co-victory hold, Elske subversive strategy, Niflhel intelligence market
 
 ### Robustness: ✗ gaps addressed
 IP rate too mild → revised (+3/battle, +2/season TC60+); No Parliamentary block on Excommunication → Parliamentary Stay added; Guilds solo victory resolved (ED-612)
 
 ### Elegance: ✓ working
-TC Reform, Church Accord governance condition, Feigned Retreat dual utility, Excommunication fait accompli, Shield Wall/Wedge counter, Depth 5 non-investigative
+CI Reform, Church Accord governance condition, Feigned Retreat dual utility, Excommunication fait accompli, Shield Wall/Wedge counter, Depth 5 non-investigative
 
 ### Elegance: ✗ gaps addressed
 Grand Contest Recall → once-per-source rule; Accord/Order invisible → clarified; IP published wrong → corrected; BG lobby pre-determination → capped at 4-6
@@ -117,7 +117,7 @@ All open editorial items approved by Jordan. Propagated this batch:
 | ED-620 RM Founding Mechanic | victory_v30 §8 | Propagated |
 | ED-624 Elske Loyalty Track | victory_v30 §3.6 | Propagated |
 | ED-625 Excommunication Tribunal | social_contest §7.1 | Propagated |
-| ED-616 Intelligence Embargo | tc_political_redesign §8 | Propagated |
+| ED-616 Intelligence Embargo | ci_political_redesign §8 | Propagated |
 | ED-591-609 Arc Expansion v1 | npc_behavior §5.2 reference note | Approved + noted |
 | ED-634 Faction Politics expansion | faction_politics_expanded_v1 | Approved, propagation pending |
 
@@ -186,7 +186,7 @@ Remaining open sub-EDs: ED-640/642/643/644/645/648/649/650/651/652/655/656/657/6
 | Grand Contest Spent rate | PASS | 100% at Foc 3. Regroup required. |
 | Thread multi-op matrix | PASS | Spirit/Focus both gate meaningfully |
 
-**Patch:** TroopCount formula `TC/(Size×block)` → `TC/max_TC`, capped 1.0.
+**Patch:** TroopCount formula `CI/(Size×block)` → `CI/max_TC`, capped 1.0.
 
 ### Combat Formula Correction (stress_derived_stats_v2_corrected)
 
@@ -242,7 +242,7 @@ covered by system validation ED-702. Settlement derived stats covered by Phase 6
 
 | ID | Description | Status |
 |----|-------------|--------|
-| CAL-SIM-01 | TC convergence at 49 across all 11 NPC PC campaigns — faction AI TC rate undertuned | OPEN P2 |
+| CAL-SIM-01 | CI convergence at 49 across all 11 NPC PC campaigns — faction AI CI rate undertuned | OPEN P2 |
 | CAL-SIM-02 | 0/11 victories at S120 — victory thresholds or faction AI strategic direction insufficient | OPEN P2 |
 | GAP-SIM-01 | RM govern actions use generic territory fallback — should route through Community Organizing | OPEN P3 |
 | NOTE-SIM-01 | Vaynard RS=0, Edeyja RS=1 — validates canonical arc descriptions mechanically | CONFIRMED |
@@ -259,28 +259,28 @@ Critical gaps blocking valid simulation:
 - G-TRACK-01: IP starts at 5 vs canonical 20
 - G-VIC-01 to 08: Victory checks use territory count not TCV; conditions incomplete
 - G-AI-04: Varfell AI complete stub
-- G-TC-03: TC not frozen at 75
+- G-CI-03: CI not frozen at 75
 
 Previous 11 NPC PC campaign results (a6f468ee) are NOT valid for balance testing.
 Engine rebuild required before iterative NPC simulations.
 
-## TC/CI/TCV Cross-Document Conflicts — 2026-04-18
+## CI/CI/TCV Cross-Document Conflicts — 2026-04-18
 
 7 conflicts identified. Engine rebuild blocked pending editorial resolution.
 Full register: tests/audit/tc_tcv_conflict_register_2026-04-18.md
 
-1. TC freeze at 75 vs TC runs to 100 (5 docs disagree)
-2. TC vs CI naming (campaign_architecture uses CI)
-3. Seizure availability threshold (TC 15 vs TC 40 vs any)
+1. CI freeze at 75 vs CI runs to 100 (5 docs disagree)
+2. CI vs CI naming (campaign_architecture uses CI)
+3. Seizure availability threshold (CI 15 vs CI 40 vs any)
 4. Seizure Ob formula (7−PT vs 2+Fort+max(0,3−PT))
 5. TCV values for T8/T9 (T9=5 vs T9=3)
-6. TC 100 event mechanics (Unification vs Mass Seizure)
-7. Church victory condition (existing vs TC 100 only)
+6. CI 100 event mechanics (Unification vs Mass Seizure)
+7. Church victory condition (existing vs CI 100 only)
 
 ## Editorial Decisions — CI/PV/Seizure/Victory — 2026-04-18
 
 7 conflicts resolved. See tests/audit/editorial_decisions_ci_pv_2026-04-18.md
-TC→CI, TCV→PV, no freeze, seizure CI≥60 one-time, victory=peninsula control.
+CI→CI, TCV→PV, no freeze, seizure CI≥60 one-time, victory=peninsula control.
 
 ## Reapplication — 2026-04-18
 
@@ -329,21 +329,21 @@ Composure formula propagated: Cha+6 → Cha×3 in params/contest.md (ED-694).
 Still blocking:
 - WC never advances (no Warden emergence mechanic) → RS recovery never fires
 - Uncontrolled territories accumulate — no faction reclaims them
-- TC→CI/TCV→PV propagation in victory_v30 (full-session task)
+- CI→CI/TCV→PV propagation in victory_v30 (full-session task)
 
 
-## Warden Emergence + Uncontrolled Reclaim + TC Propagation — 2026-04-19
+## Warden Emergence + Uncontrolled Reclaim + CI Propagation — 2026-04-19
 
 Source: tests/sim/sim_warden_tc_reclaim.md
 
 3 scenarios:
 - Scenario A: Warden Emergence via Forgetting Check — works, Ob 1 near-trivial. NPC priority tree missing March-to-T15 trigger.
 - Scenario B: Uncontrolled territory reclaim — free march works. ED-NEW-008: Seizure undefined for Uncontrolled.
-- Scenario C: TC formula consistency — TC ceiling conflict (victory_v30 says 75, tc_political says 100). CI=TC rename not propagated.
+- Scenario C: CI formula consistency — CI ceiling conflict (victory_v30 says 75, ci_political says 100). CI=CI rename not propagated.
 
 Findings:
 - ED-NEW-008: Seizure vs Uncontrolled territory gap
 - ED-NEW-009: Cohesion −15 = derived consequence of Stability −1 (confirm)
-- Propagation: victory_v30 §7 TC ceiling 75→100, CI→TC in §3.2
+- Propagation: victory_v30 §7 CI ceiling 75→100, CI→CI in §3.2
 - GAP: PV not defined in any canonical source
 - NPC fix: Varfell priority tree needs March-to-T15 at P2/P3 when VTM ≥ 2

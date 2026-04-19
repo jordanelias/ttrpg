@@ -50,11 +50,11 @@ Advances: Reformed Settlement event = +1 (max once per arc). Requires: Hafenmark
 | RDT | Effect |
 |-----|--------|
 | 0 | Reformed Settlement blocked: Church may Appease at no cost |
-| 1 | Parliamentary Manoeuvre targeting TC: −1 Ob |
+| 1 | Parliamentary Manoeuvre targeting CI: −1 Ob |
 | 2 | Formal Reformed Settlement. TD track activates. |
 | 3 | Church Mandate −1 (institutional strain) + Diplomatic actions vs Church: −1 Ob |
-| 4 | TC suppression extends: −1 TC/season while Hafenmark Mandate ≥ 3 (was ≥ 4). Reformed territory PT actions +1 Ob for Church. |
-| 5 | Excommunication against Hafenmark costs +2 Mandate. Baralta: −2 Ob on TC Suppress actions. All diplomatic actions targeting Hafenmark from any faction: +1 Ob. |
+| 4 | CI suppression extends: −1 CI/season while Hafenmark Mandate ≥ 3 (was ≥ 4). Reformed territory PT actions +1 Ob for Church. |
+| 5 | Excommunication against Hafenmark costs +2 Mandate. Baralta: −2 Ob on CI Suppress actions. All diplomatic actions targeting Hafenmark from any faction: +1 Ob. |
 
 ### Theological Dissatisfaction (TD) — Range 0–5
 Activates at RDT 2. Advances: +1 per arc when RDT ≥ 2 AND Church plays Assert. Church may freeze TD by playing Accommodate Reformed Settlement.
@@ -67,7 +67,7 @@ Regression: TD −1 if Church Excommunicates Hafenmark AND RDT does not advance 
 | 2 | Cardinal of Fortitude schism risk when Church Stability < 3 |
 | 3 | Any season Church loses PI: Hafenmark gains PI +1 |
 | 4 | Church Seizure in Hafenmark territories: Ob +2 |
-| 5 | Church cannot seize T8 Gransol (Hafenmark capital) regardless of TC or PT. Permanent. |
+| 5 | Church cannot seize T8 Gransol (Hafenmark capital) regardless of CI or PT. Permanent. |
 
 ---
 
@@ -78,11 +78,11 @@ Advances: Reformed Settlement event = +1 (max once per arc). Requires: Hafenmark
 | RDT | Effect |
 |-----|--------|
 | 0 | Reformed Settlement blocked: Church may Appease at no cost |
-| 1 | Parliamentary Manoeuvre targeting TC: −1 Ob |
+| 1 | Parliamentary Manoeuvre targeting CI: −1 Ob |
 | 2 | Formal Reformed Settlement. TD track activates. |
 | 3 | Church Mandate −1 (institutional strain) + Diplomatic actions vs Church: −1 Ob |
-| 4 | TC suppression extends: −1 TC/season while Hafenmark Mandate ≥ 3 (was ≥ 4). Reformed territory PT actions +1 Ob for Church. |
-| 5 | Excommunication against Hafenmark costs +2 Mandate. Baralta: −2 Ob on TC Suppress actions. All diplomatic actions targeting Hafenmark from any faction: +1 Ob. |
+| 4 | CI suppression extends: −1 CI/season while Hafenmark Mandate ≥ 3 (was ≥ 4). Reformed territory PT actions +1 Ob for Church. |
+| 5 | Excommunication against Hafenmark costs +2 Mandate. Baralta: −2 Ob on CI Suppress actions. All diplomatic actions targeting Hafenmark from any faction: +1 Ob. |
 
 
 ### Theological Dissatisfaction (TD) — Range 0–5
@@ -96,7 +96,7 @@ Regression: TD −1 if Church Excommunicates Hafenmark AND RDT does not advance 
 | 2 | Cardinal of Fortitude schism risk when Church Stability < 3 |
 | 3 | Any season Church loses PI: Hafenmark gains PI +1 |
 | 4 | Church Seizure in Hafenmark territories: Ob +2 |
-| 5 | Church cannot seize T8 Gransol (Hafenmark capital) regardless of TC or PT. Permanent. |
+| 5 | Church cannot seize T8 Gransol (Hafenmark capital) regardless of CI or PT. Permanent. |
 
 ---
 

@@ -18,7 +18,7 @@ Execute in strict order:
 1. Apply all pending attribute changes from resolved orders.
 2. Faction Stability checks: any faction with ≥2 attribute loss this season: Stability pool vs Ob = loss magnitude.
 3. Advance Cooldown Track (all items −1 slot; at 0: return to hand).
-4. Clock advances: RS baseline drift (−1 at Year-End/Winter only). TC per formula. IP per Altonian pressure table. PI changes.
+4. Clock advances: RS baseline drift (−1 at Year-End/Winter only). CI per formula. IP per Altonian pressure table. PI changes.
 4b. **Church Prominence update (ED-326):** Church player marks Prominent territories on faction mat — any territory where Church global Mandate exceeds that territory's controlling faction's global Mandate. Updated every Accounting. Used for: Counter-Narrative target eligibility, Seizure Ob formula, Piety Spread.
 4c. **Accord checks:** (i) Each territory at Accord 1 without garrison (no military unit from controlling faction): Accord → 0. (ii) Each territory at Accord 0: Revolt — garrison fights Popular Uprising (Military vs Ob 2) or retreats; territory becomes Uncontrolled; Peninsular Strain +1. (iii) Passive normalisation: each territory with garrison AND no hostile action for 2 consecutive seasons: Accord +1 (cap 2).
 4d. **Peninsular Strain update:** (i) If no inter-faction battles AND no Revolts this season: Strain −1 (min 0). (ii) If diplomatic resolution occurred (Treaty formed, Pledge honoured): Strain −1 (max one from this source/season). (iii) Apply Strain threshold effects.
@@ -38,7 +38,7 @@ Execute in strict order:
 
 
 ## Year-End Accounting (every 4th season = Winter, v04 B11)
-1. Apply Year-End TC and RS fractions.
+1. Apply Year-End CI and RS fractions.
 2. RS baseline drift −1 (annual world degradation).
 3. Löwenritter (if active): raise one free unit; Prosperity −1.
 4. Torben Loyalty Year-End modifiers: Crown PI ≥ 5 →+1; Crown upheld Mandate 2+ consecutive seasons →+1; Löwenritter PI ≥ 3 without Emergency Powers →+1.
@@ -46,7 +46,7 @@ Execute in strict order:
 6. Hollow Victory totals announced publicly.
 7. Once-Per-Year effects trigger.
 8. Age track (optional Long Campaign only).
-9. Check TC Year-End fractions for threshold crossings.
+9. Check CI Year-End fractions for threshold crossings.
 10. Season resets to Spring. Campaign year advances.
 
 

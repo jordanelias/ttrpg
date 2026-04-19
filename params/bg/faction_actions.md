@@ -6,7 +6,7 @@
 **Type:** Consul Inward (Church only). **Prerequisite:** AP ≥ 1.
 Roll: Mandate vs Ob = floor(controlling faction Mandate / 2) + 1 + Fort Level.
 Doctrine-aligned territory: −1 Ob.
-**Post-TC 75:** Range-limited to adjacent territories only.
+**Post-CI 75:** Range-limited to adjacent territories only.
 
 | Degree | Effect |
 |--------|--------|
@@ -52,12 +52,12 @@ Designate one Cardinal as Focused:
 **Type:** Senator Inward (Hafenmark only). **Once per season.**
 Roll: Mandate vs Ob 2 (−1 Ob if PI ≥ 5 → Ob 1 minimum).
 
-**PP-431-COR:** In any season Hafenmark plays Parliamentary Challenge, structural TC suppression (Baralta's Mandate ≥ 4 automatic −1/season) does NOT fire. Challenge replaces structural — the replacement triggers on card play regardless of roll outcome.
+**PP-431-COR:** In any season Hafenmark plays Parliamentary Challenge, structural CI suppression (Baralta's Mandate ≥ 4 automatic −1/season) does NOT fire. Challenge replaces structural — the replacement triggers on card play regardless of roll outcome.
 
 | Degree | Effect |
 |--------|--------|
-| Overwhelming | TC −2 + Church must Uphold or Appease |
-| Success | TC −1 |
+| Overwhelming | CI −2 + Church must Uphold or Appease |
+| Success | CI −1 |
 | Partial | Stability −1 |
 | Failure | Stability −1 + Church Mandate +1 |
 
@@ -72,7 +72,7 @@ Blocking factions generate Resentment tokens per PP-405.
 |---------|--------|
 | Majority Support | PI +1 + Hafenmark Mandate +1 |
 | Majority Oppose | Hafenmark Stability −1 |
-| Tie | TC +1 (institutional paralysis) |
+| Tie | CI +1 (institutional paralysis) |
 
 **Diplomatic Token interaction (PP-320-ED):** Each active Diplomatic Token on a faction mat counts that faction as Support regardless of declared vote.
 
@@ -147,12 +147,12 @@ Roll: Influence vs Ob = current AER level, min 1. Virtue Ethics: −1 Ob.
 
 ### Varfell — VTM Discretion (PP-438)
 **Type:** Accounting action. **At VTM 3+.**
-Spend 1 Patience Counter at Accounting to suppress VTM TC contribution for that season.
-**VTM TC contribution (PP-563):** Once VTM is publicly visible (VTM 3+), it generates Church institutional pressure: VTM 3 = +0.5 TC/season; VTM 4 = +1 TC/season; VTM 5 = +1.5 TC/season (applied at Accounting, rounded to nearest 0.5, tracking half-TC fractionally). Matches "low"/"high" labels in Discretion cost text.
+Spend 1 Patience Counter at Accounting to suppress VTM CI contribution for that season.
+**VTM CI contribution (PP-563):** Once VTM is publicly visible (VTM 3+), it generates Church institutional pressure: VTM 3 = +0.5 CI/season; VTM 4 = +1 CI/season; VTM 5 = +1.5 CI/season (applied at Accounting, rounded to nearest 0.5, tracking half-CI fractionally). Matches "low"/"high" labels in Discretion cost text.
 **Cooldown:** Once per 2 consecutive seasons (Discretion Cooldown marker, cleared at Year-End).
-Does not suppress other TC sources.
+Does not suppress other CI sources.
 
-**Cost:** 0 PC at VTM 3 (cooldown-only gate; TC contribution is low). 1 PC at VTM 4+ (TC contribution is high; cost is proportional). (ED-323 resolved 2026-04-08.)
+**Cost:** 0 PC at VTM 3 (cooldown-only gate; CI contribution is low). 1 PC at VTM 4+ (CI contribution is high; cost is proportional). (ED-323 resolved 2026-04-08.)
 
 ---
 
@@ -183,12 +183,12 @@ Roll: Intel vs Ob = floor(Church Mandate / 2) + 1. Consequentialism: −1 Ob.
 
 | Degree | Effect |
 |--------|--------|
-| Overwhelming | TC −0.5 + AP +2 in territory |
+| Overwhelming | CI −0.5 + AP +2 in territory |
 | Success | AP +2 in territory |
 | Partial | AP +1 |
 | Failure | Intel network exposed: Church notified of Varfell presence, AP +1 tagged as Varfell (+2 Ob to Counter-Narrative in this territory next season) |
 
-**TC tracking:** Fractional TC values accumulate. Track running decimal on TC track. Round to integer for threshold checks only.
+**CI tracking:** Fractional CI values accumulate. Track running decimal on CI track. Round to integer for threshold checks only.
 **AP note (ED-325):** AP is tracked per-territory (PP-185). Counter-Narrative AP in a territory contributes to that territory's AP pool, not a global pool. Inquisitor deploys in the territory where threshold is crossed.
 
 ---
@@ -212,7 +212,7 @@ Existing Sanctuary card: extended to also block Varfell 4-PC Spy action once per
 **Type:** Consul Inward (Church only). **Prerequisite:** AP ≥ 1.
 Roll: Mandate vs Ob = floor(controlling faction Mandate / 2) + 1 + Fort Level.
 Doctrine-aligned territory: −1 Ob.
-**Post-TC 75:** Range-limited to adjacent territories only.
+**Post-CI 75:** Range-limited to adjacent territories only.
 
 | Degree | Effect |
 |--------|--------|
@@ -261,12 +261,12 @@ Designate one Cardinal as Focused:
 **Type:** Senator Inward (Hafenmark only). **Once per season.**
 Roll: Mandate vs Ob 2 (−1 Ob if PI ≥ 5 → Ob 1 minimum).
 
-**PP-431-COR:** In any season Hafenmark plays Parliamentary Challenge, structural TC suppression (Baralta's Mandate ≥ 4 automatic −1/season) does NOT fire. Challenge replaces structural — the replacement triggers on card play regardless of roll outcome.
+**PP-431-COR:** In any season Hafenmark plays Parliamentary Challenge, structural CI suppression (Baralta's Mandate ≥ 4 automatic −1/season) does NOT fire. Challenge replaces structural — the replacement triggers on card play regardless of roll outcome.
 
 | Degree | Effect |
 |--------|--------|
-| Overwhelming | TC −2 + Church must Uphold or Appease |
-| Success | TC −1 |
+| Overwhelming | CI −2 + Church must Uphold or Appease |
+| Success | CI −1 |
 | Partial | Stability −1 |
 | Failure | Stability −1 + Church Mandate +1 |
 
@@ -282,7 +282,7 @@ Blocking factions generate Resentment tokens per PP-405.
 |---------|--------|
 | Majority Support | PI +1 + Hafenmark Mandate +1 |
 | Majority Oppose | Hafenmark Stability −1 |
-| Tie | TC +1 (institutional paralysis) |
+| Tie | CI +1 (institutional paralysis) |
 
 **Diplomatic Token interaction (PP-320-ED):** Each active Diplomatic Token on a faction mat counts that faction as Support regardless of declared vote.
 
@@ -363,12 +363,12 @@ Roll: Influence vs Ob = current AER level, min 1. Virtue Ethics: −1 Ob.
 
 ### Varfell — VTM Discretion (PP-438)
 **Type:** Accounting action. **At VTM 3+.**
-Spend 1 Patience Counter at Accounting to suppress VTM TC contribution for that season.
-**VTM TC contribution (PP-563):** Once VTM is publicly visible (VTM 3+), it generates Church institutional pressure: VTM 3 = +0.5 TC/season; VTM 4 = +1 TC/season; VTM 5 = +1.5 TC/season (applied at Accounting, rounded to nearest 0.5, tracking half-TC fractionally). Matches "low"/"high" labels in Discretion cost text.
+Spend 1 Patience Counter at Accounting to suppress VTM CI contribution for that season.
+**VTM CI contribution (PP-563):** Once VTM is publicly visible (VTM 3+), it generates Church institutional pressure: VTM 3 = +0.5 CI/season; VTM 4 = +1 CI/season; VTM 5 = +1.5 CI/season (applied at Accounting, rounded to nearest 0.5, tracking half-CI fractionally). Matches "low"/"high" labels in Discretion cost text.
 **Cooldown:** Once per 2 consecutive seasons (Discretion Cooldown marker, cleared at Year-End).
-Does not suppress other TC sources.
+Does not suppress other CI sources.
 
-**Cost:** 0 PC at VTM 3 (cooldown-only gate; TC contribution is low). 1 PC at VTM 4+ (TC contribution is high; cost is proportional). (ED-323 resolved 2026-04-08.)
+**Cost:** 0 PC at VTM 3 (cooldown-only gate; CI contribution is low). 1 PC at VTM 4+ (CI contribution is high; cost is proportional). (ED-323 resolved 2026-04-08.)
 
 ---
 
@@ -402,12 +402,12 @@ Roll: Intel vs Ob = floor(Church Mandate / 2) + 1. Consequentialism: −1 Ob.
 
 | Degree | Effect |
 |--------|--------|
-| Overwhelming | TC −0.5 + AP +2 in territory |
+| Overwhelming | CI −0.5 + AP +2 in territory |
 | Success | AP +2 in territory |
 | Partial | AP +1 |
 | Failure | Intel network exposed: Church notified of Varfell presence, AP +1 tagged as Varfell (+2 Ob to Counter-Narrative in this territory next season) |
 
-**TC tracking:** Fractional TC values accumulate. Track running decimal on TC track. Round to integer for threshold checks only.
+**CI tracking:** Fractional CI values accumulate. Track running decimal on CI track. Round to integer for threshold checks only.
 **AP note (ED-325):** AP is tracked per-territory (PP-185). Counter-Narrative AP in a territory contributes to that territory's AP pool, not a global pool. Inquisitor deploys in the territory where threshold is crossed.
 
 ---
@@ -456,10 +456,10 @@ Existing Sanctuary card: extended to also block Varfell 4-PC Spy action once per
 
 | Degree | Effect |
 |--------|--------|
-| Overwhelming | Territory transfers. Accord 2. PT −1 in target. TC −1. |
+| Overwhelming | Territory transfers. Accord 2. PT −1 in target. CI −1. |
 | Success | Territory transfers. Accord 2. PT −1. |
 | Partial | No transfer. PT −1 (cultural seed). Varfell gains intelligence presence. |
-| Failure | Varfell Stability −1. TC +1. Church Attention Pool +1. |
+| Failure | Varfell Stability −1. CI +1. Church Attention Pool +1. |
 
 **Anti-Altonian:** Territories gained via Reformation: Altonian intel ops +1 Ob.
 **Defensive:** Target may invoke Institutional Mandate (PP-189). Church Counter-Reformation: if Church Prominent in target AND plays Senator same Phase 4, +1 Ob to Reformation.

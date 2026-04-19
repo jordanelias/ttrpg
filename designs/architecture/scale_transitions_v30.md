@@ -219,7 +219,7 @@ Thread events produce Domain Echo to faction stats when they meet Thread Signifi
 | Public Thread op, Church territory | Church Mandate | −1 |
 | Public Thread op, Varfell territory (VTM ≥ 3) | Varfell Mandate | +1 |
 
-**Timing:** Queued to Accounting. **Cap:** 1 Thread Domain Echo per scene per faction (PP-329). **Model:** Extends Epistemic TC Trigger (PP-182) to all factions. TC trigger fires independently. Thread Domain Echo and Accord Domain Echo (§5.5) may both fire from same scene on different stats.
+**Timing:** Queued to Accounting. **Cap:** 1 Thread Domain Echo per scene per faction (PP-329). **Model:** Extends Epistemic CI Trigger (PP-182) to all factions. CI trigger fires independently. Thread Domain Echo and Accord Domain Echo (§5.5) may both fire from same scene on different stats.
 
 ---
 
@@ -271,10 +271,10 @@ PCs grant +1D to their faction's Domain Action in the territory they are physica
 ## §10 Thread Timing in Hybrid (PP-125, PP-260)
 
 Hybrid Strategic Phase temporal auto-effects from Thread operations:
-| Thread Operation | TC Effect |
+| Thread Operation | CI Effect |
 |-----------------|-----------|
-| Dissolution | TC +1 |
-| Past-Oriented Pulling (POP) | TC −1 |
+| Dissolution | CI +1 |
+| Past-Oriented Pulling (POP) | CI −1 |
 | Lock / Weave / Mend | None |
 
 Paradox window = 1 season on POP. Full TTRPG RS values propagate directly to BG RS track. BG Co-Movement ceiling applies only to BG-initiated Thread abstraction (not TTRPG scene Thread ops). (ED-034 resolved)

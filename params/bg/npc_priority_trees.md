@@ -16,14 +16,14 @@
 ### Church Priority Tree
 | P | Condition | Action |
 |---|---|---|
-| 1 | Stability ≤ 2 | Consul Inward highest-PT territory. Suspend TC Assert if Stability = 1. |
+| 1 | Stability ≤ 2 | Consul Inward highest-PT territory. Suspend CI Assert if Stability = 1. |
 | 2 | Open Thread op in Church territory OR practitioner public OR Piety −2 | Heresy Investigation. If target = faction leader: Excommunication. |
-| 3 | TC < 75 AND Mandate ≥ 4 | Assert (TC +1). Piety DA if Assert used. |
+| 3 | CI < 75 AND Mandate ≥ 4 | Assert (CI +1). Piety DA if Assert used. |
 | 4 | Default | Expand Piety. Consul Inward lowest-PT territory with Church presence. |
 | 5 | AER maintenance | Temperance declaration if Cardinal active + Church controls T9. |
 | 6 | Attacked | Templar deployment if Fortitude active + Stability ≥ 2. |
 | 7 | Default | Pass. |
-Post-TC 75: P3 → Territorial Seizure (highest-value targets first).
+Post-CI 75: P3 → Territorial Seizure (highest-value targets first).
 
 ### Crown Priority Tree
 | P | Condition | Action |
@@ -41,7 +41,7 @@ Post-TC 75: P3 → Territorial Seizure (highest-value targets first).
 |---|---|---|
 | 1 | Stability ≤ 2 | Consul Inward capital. |
 | 2 | Church seizes territory OR constitutional bypass | Sovereign Authority Doctrine or Parliamentary objection. |
-| 3 | Suppress available (Church M ≥ 4, Baralta M ≥ 4) | Suppress TC. |
+| 3 | Suppress available (Church M ≥ 4, Baralta M ≥ 4) | Suppress CI. |
 | 4 | Default | Maintain order. Consul Inward. Diplomatic Senator to Crown/Guilds. |
 | 5 | Trade Compact conditions met | Pursue Compact activation. |
 | 6 | Attacked | Parliamentary Manoeuvre. Legionary defensive only. |
@@ -130,14 +130,14 @@ Post-Coup: all priorities → Martial Law → consolidate → Reconstitution (PI
 ### Church Priority Tree
 | P | Condition | Action |
 |---|---|---|
-| 1 | Stability ≤ 2 | Consul Inward highest-PT territory. Suspend TC Assert if Stability = 1. |
+| 1 | Stability ≤ 2 | Consul Inward highest-PT territory. Suspend CI Assert if Stability = 1. |
 | 2 | Open Thread op in Church territory OR practitioner public OR Piety −2 | Heresy Investigation. If target = faction leader: Excommunication. |
-| 3 | TC < 75 AND Mandate ≥ 4 | Assert (TC +1). Piety DA if Assert used. |
+| 3 | CI < 75 AND Mandate ≥ 4 | Assert (CI +1). Piety DA if Assert used. |
 | 4 | Default | Expand Piety. Consul Inward lowest-PT territory with Church presence. |
 | 5 | AER maintenance | Temperance declaration if Cardinal active + Church controls T9. |
 | 6 | Attacked | Templar deployment if Fortitude active + Stability ≥ 2. |
 | 7 | Default | Pass. |
-Post-TC 75: P3 → Territorial Seizure (highest-value targets first).
+Post-CI 75: P3 → Territorial Seizure (highest-value targets first).
 
 
 ### Crown Priority Tree
@@ -157,7 +157,7 @@ Post-TC 75: P3 → Territorial Seizure (highest-value targets first).
 |---|---|---|
 | 1 | Stability ≤ 2 | Consul Inward capital. |
 | 2 | Church seizes territory OR constitutional bypass | Sovereign Authority Doctrine or Parliamentary objection. |
-| 3 | Suppress available (Church M ≥ 4, Baralta M ≥ 4) | Suppress TC. |
+| 3 | Suppress available (Church M ≥ 4, Baralta M ≥ 4) | Suppress CI. |
 | 4 | Default | Maintain order. Consul Inward. Diplomatic Senator to Crown/Guilds. |
 | 5 | Trade Compact conditions met | Pursue Compact activation. |
 | 6 | Attacked | Parliamentary Manoeuvre. Legionary defensive only. |
@@ -242,16 +242,16 @@ Crown Priority Tree P3 (Royal Decree): do NOT attempt if Crown Mandate ≤ 2. At
 Royal Decree failure cost (Mandate −1) applies only at Mandate ≥ 3. At Mandate ≤ 2: failure produces no Mandate loss (institution too weak for additional reputational damage).
 
 
-## PP-NPC-02 — Crown TC Awareness + Coup Counter Refinement (SIM-NPC-01 F-02/F-03)
-Crown Priority Tree P2: insert trigger "If TC ≥ 35: Crown takes TC-reducing action (Senator Outward to Hafenmark for coordinated Suppress, OR direct DA targeting Church Mandate). This fires BEFORE the standard P2 triggers (territory loss, coup, PI)."
-Coup Counter increment: TC ≥ 40 trigger requires BOTH conditions: (a) TC ≥ 40, AND (b) Church actively Asserted this season. Passive TC advance alone does not trigger counter. Crown must have failed to prevent active Church expansion, not merely failed to counter institutional drift.
+## PP-NPC-02 — Crown CI Awareness + Coup Counter Refinement (SIM-NPC-01 F-02/F-03)
+Crown Priority Tree P2: insert trigger "If CI ≥ 35: Crown takes CI-reducing action (Senator Outward to Hafenmark for coordinated Suppress, OR direct DA targeting Church Mandate). This fires BEFORE the standard P2 triggers (territory loss, coup, PI)."
+Coup Counter increment: CI ≥ 40 trigger requires BOTH conditions: (a) CI ≥ 40, AND (b) Church actively Asserted this season. Passive CI advance alone does not trigger counter. Crown must have failed to prevent active Church expansion, not merely failed to counter institutional drift.
 
 
 ## PP-NPC-03 — Church Framework Drift Revision (SIM-NPC-01 F-02)
 Church Framework Drift (Influence +1) conditions revised:
 - (a) No faction targeted Church with any hostile DA this season, AND
 - (b) Church Stability ≥ 4, AND
-- (c) TC advanced this season (Influence drift IS the TC advance — same institutional process).
+- (c) CI advanced this season (Influence drift IS the CI advance — same institutional process).
 - Frequency: per year (at Year-End Accounting), not per 2 seasons.
 Replaces prior unconditional 2-season drift.
 

@@ -42,7 +42,7 @@ Stability is a faction's capacity to maintain institutional coherence under shoc
 
 **PP-403 REPEALED.** Failed Domain Actions no longer cost Stability. See §0 for one named exception (Suppress failure).
 
-**PP-403 exception retained:** Suppress action (TC Accounting formula, params_board_game §TC Generation Step 4) Failure → Stability −1. This is a specific named political commitment failure, not a general action failure.
+**PP-403 exception retained:** Suppress action (CI Accounting formula, params_board_game §CI Generation Step 4) Failure → Stability −1. This is a specific named political commitment failure, not a general action failure.
 
 ### §1.2 Stability Triggers (Five Canonical)
 
@@ -278,7 +278,7 @@ Political Vacuum (PP-500) applies when a faction is eliminated. During Vacuum (1
 
 Church Graduated Seizure (victory_v30.md §3.2) is a legal/spiritual transfer mechanism distinct from military occupation. If Church declares Seizure on a territory currently under Occupation by another faction:
 
-- Seizure roll proceeds normally (Influence + floor(TC/15) vs Ob = 7 − PT)
+- Seizure roll proceeds normally (Influence + floor(CI/15) vs Ob = 7 − PT)
 - Success or Overwhelming: Seizure succeeds; Occupation marker removed; Church gains control
 - Failure: Occupation marker remains; Church loses Mandate −1 (failed intervention exposed their overreach)
 - The occupying faction may contest via military_advance in the following season (Casus Belli against Church for the marker removal)
@@ -380,7 +380,7 @@ When negotiations stall (both parties declare irreconcilable demands), either fa
 
 ### §5.1 Definition and Relationship to Existing Actions
 
-Parliament is the collective institutional forum of all active factions. It is distinct from Hafenmark's **Parliamentary Manoeuvre** (existing Standard Action, params_board_game §Standard Action Ob Reference), which is Hafenmark's individual-faction social action for TC suppression and direct influence plays. Parliamentary Manoeuvre remains unchanged.
+Parliament is the collective institutional forum of all active factions. It is distinct from Hafenmark's **Parliamentary Manoeuvre** (existing Standard Action, params_board_game §Standard Action Ob Reference), which is Hafenmark's individual-faction social action for CI suppression and direct influence plays. Parliamentary Manoeuvre remains unchanged.
 
 Parliament adds a collective vote layer: motions that require multiple factions to agree before taking effect.
 
@@ -434,15 +434,15 @@ The targeted faction may Rebuttal any Censure or Outlawry vote:
 | Success | Stability cost negated; Mandate cost halved |
 | Overwhelming | Both costs negated; proposer Mandate −1 (reputational damage) + target Stability +1 |
 
-### §5.6 TC Parliament Interaction
+### §5.6 CI Parliament Interaction
 
-Parliamentary actions do NOT directly affect TC.
+Parliamentary actions do NOT directly affect CI.
 
 ### §5.6b Peninsular Strain Parliament Interaction
 
 Parliamentary Censure, Embargo, Blockade, and Outlawry reduce target Stability. If Stability drops to ≤ 2, Accord −1 in all territories controlled by that faction (peninsular_strain_v1.md §2.4). Combined Embargo+Blockade (−1 Stability/season ongoing) will erode Accord progressively. Parliament is a legitimacy weapon: sustained institutional pressure degrades governance without triggering battle consequences (no RS cost, no IP cost, no Strain).
 
-Parliamentary vote to lift an Embargo/Blockade: Strain −1 (diplomatic resolution per peninsular_strain_v1.md §4.2). TC changes only through the named TC Accounting formula (Passive, Piety Yield, Assert, Suppress, Hafenmark Structural Suppression). Parliament can indirectly weaken Church (Censure, Embargo) reducing their effective Mandate for Suppress resistance rolls. It cannot directly suppress TC.
+Parliamentary vote to lift an Embargo/Blockade: Strain −1 (diplomatic resolution per peninsular_strain_v1.md §4.2). CI changes only through the named CI Accounting formula (Passive, Piety Yield, Assert, Suppress, Hafenmark Structural Suppression). Parliament can indirectly weaken Church (Censure, Embargo) reducing their effective Mandate for Suppress resistance rolls. It cannot directly suppress CI.
 
 ### §5.7 Wealth Zero Consequence
 
@@ -527,8 +527,8 @@ PHASE 5 — SEASONAL ACCOUNTING (10 steps) [ED-678: collapsed from 13, PP-472]
   Step 2:  Accounting Stability check (≥2 attribute loss → Stability pool roll vs Ob)
            Includes Trigger 1–5 and Parliament consequences. Collapse check (§1.5) fires here.
   Step 3:  Cooldown track advance
-  Step 4:  Clock advances (RS, TC formula, IP, PI)
-           TC formula: Passive +1 → Piety Yield → Assert → Suppress [failure→Stab−1] → Baralta
+  Step 4:  Clock advances (RS, CI formula, IP, PI)
+           CI formula: Passive +1 → Piety Yield → Assert → Suppress [failure→Stab−1] → Baralta
            Church Prominence update
   Step 5:  Church Attention Pool resolution
            Thread Debt drain; Thread Resonance markers cleared
@@ -559,7 +559,7 @@ PHASE 5 — SEASONAL ACCOUNTING (10 steps) [ED-678: collapsed from 13, PP-472]
 - Treaty Phase 2 (Concession declaration) = player negotiation at table; no roll
 - Grand Debate: unavailable in BG mode
 - Officer fate: ED-334/335 only; d10 table not used
-- Starting values per mode: see params_board_game (TC=28, PI=7, RS=72)
+- Starting values per mode: see params_board_game (CI=28, PI=7, RS=72)
 
 ### §8.2 TTRPG Mode
 
@@ -568,7 +568,7 @@ PHASE 5 — SEASONAL ACCOUNTING (10 steps) [ED-678: collapsed from 13, PP-472]
 - Personal scenes central; Domain Actions produce consequences via Domain Echo (§3.4 scale_transitions_v30.md)
 - Grand Debate available for stalled treaty negotiations
 - d10 officer fate table active
-- Starting values: TC=0, PI=0, RS=60
+- Starting values: CI=0, PI=0, RS=60
 
 ### §8.3 Hybrid Mode
 
@@ -580,16 +580,16 @@ PHASE 5 — SEASONAL ACCOUNTING (10 steps) [ED-678: collapsed from 13, PP-472]
 
 ---
 
-## §9 — TC FORMULA (FULL, for sim integration)
+## §9 — CI FORMULA (FULL, for sim integration)
 
-Complete TC Accounting sequence (Phase 5 Step 4), superseding partial references elsewhere:
+Complete CI Accounting sequence (Phase 5 Step 4), superseding partial references elsewhere:
 
-1. **Institutional Momentum:** TC +1 (always, cannot be negated below this baseline by player actions; only events can)
+1. **Institutional Momentum:** CI +1 (always, cannot be negated below this baseline by player actions; only events can)
 2. **Piety Yield:** For each territory where Church Mandate > controlling faction's Mandate (Church Prominent): PT 5 = +1, PT 4 = +0.5 (fractional; accumulated, floored at Year-End). Territories: T9(PT start 5), T6(PT 2), others per params.
-3. **Assert** (optional Church action, Phase 4 Priority 6): Influence vs Ob 2. Success: TC +1. Failure: Church Stability −1.
-4. **Suppress** (optional opponent action, Phase 4 Priority 4): Mandate vs Ob = floor(Church Mandate/2)+1. Success: negate Step 1 passive this season. Cannot reduce TC below value at season start. **Failure: Stability −1 to suppressing faction.**
-5. **Hafenmark Structural Suppression (Baralta):** While Inge Baralta NPC Mandate ≥ 4: TC −1/season automatically. This is Baralta's institutional expertise; requires no action slot. Fires regardless of other suppression.
-6. **TC seasonal cap (PP-504):** ±3/season from player-initiated Domain Actions. ±5/season from all sources combined.
+3. **Assert** (optional Church action, Phase 4 Priority 6): Influence vs Ob 2. Success: CI +1. Failure: Church Stability −1.
+4. **Suppress** (optional opponent action, Phase 4 Priority 4): Mandate vs Ob = floor(Church Mandate/2)+1. Success: negate Step 1 passive this season. Cannot reduce CI below value at season start. **Failure: Stability −1 to suppressing faction.**
+5. **Hafenmark Structural Suppression (Baralta):** While Inge Baralta NPC Mandate ≥ 4: CI −1/season automatically. This is Baralta's institutional expertise; requires no action slot. Fires regardless of other suppression.
+6. **CI seasonal cap (PP-504):** ±3/season from player-initiated Domain Actions. ±5/season from all sources combined.
 
 ---
 

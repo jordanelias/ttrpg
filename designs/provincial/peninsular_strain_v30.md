@@ -2,7 +2,7 @@
 ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance). Integrated into victory_v30.md.
 ## Date: 2026-04-14
 ## Supersedes: victory_v30.md §1 TCV table (partial — TCV revaluation), victory_v30.md §3 (faction-specific victory conditions replaced by universal condition), victory_v30.md §4 (co-victory restructured), victory_v30.md §5 (shared loss retained with modifications)
-## Dependencies: geography_v30.md (territory numbering), params_board_game.md (card-hand PP-177, faction stats, Prosperity per territory, Diplomatic Token PP-517/521, Standing PP-515, Institutional Mandate PP-189), victory_v30.md §2 (PT track retained), victory_v30.md §6 (Askeheim/RS retained), victory_v30.md §7 (TC generation retained), victory_v30.md §9 (Hybrid integration retained)
+## Dependencies: geography_v30.md (territory numbering), params_board_game.md (card-hand PP-177, faction stats, Prosperity per territory, Diplomatic Token PP-517/521, Standing PP-515, Institutional Mandate PP-189), victory_v30.md §2 (PT track retained), victory_v30.md §6 (Askeheim/RS retained), victory_v30.md §7 (CI generation retained), victory_v30.md §9 (Hybrid integration retained)
 ## Propagation required: victory_v30.md, params_board_game.md, geography_v30.md (TCV only)
 
 ---
@@ -17,7 +17,7 @@ The peninsula is 35 years post-secession. The population has living memory of th
 
 ## §1 Territory Consolidation Values (TCV) — Revised
 
-Himmelenger revalued to 5 (Cathedral City, 5 adjacencies, site of Cultural Uprising, focal point of TC/PT mechanics). Gransol revalued to 3 (Hafenmark's power is parliamentary/institutional, not territorial primacy).
+Himmelenger revalued to 5 (Cathedral City, 5 adjacencies, site of Cultural Uprising, focal point of CI/PT mechanics). Gransol revalued to 3 (Hafenmark's power is parliamentary/institutional, not territorial primacy).
 
 | T# | Territory | TCV | Controller |
 |----|-----------|-----|------------|
@@ -258,7 +258,7 @@ Each season in which a Battle between playable factions is resolved: **IP +3** (
 
 Altonia monitors the peninsula for weakness. Civil war signals vulnerability. This fires once per season regardless of how many battles occur (one season of warfare = one intelligence signal). Battles against NPC factions (Altonian Vanguard, Popular Uprising, Löwenritter coup) do NOT trigger IP advancement — Altonia does not gain intelligence from its own operations, and internal unrest is a different signal from inter-faction civil war.
 
-**TC-based IP advancement (ED-623):** When TC ≥ 60, Altonia reads Church dominance as peninsula vulnerability. Add **IP +2 per season** while TC ≥ 60 (in addition to civil war IP). This fires automatically at Accounting alongside other IP sources. Revised from +1 (prior rate produced insufficient pressure in moderate-TC campaigns).
+**CI-based IP advancement (ED-623):** When CI ≥ 60, Altonia reads Church dominance as peninsula vulnerability. Add **IP +2 per season** while CI ≥ 60 (in addition to civil war IP). This fires automatically at Accounting alongside other IP sources. Revised from +1 (prior rate produced insufficient pressure in moderate-CI campaigns).
 
 **IP advancement from civil war is independent of Peninsular Strain (§4).** The two tracks do not feed each other.
 
@@ -297,7 +297,7 @@ Global track, range 0–10. Starts at 0. Public (visible counter on board).
 
 ### §4.4 Strain and IP — No Cross-Feeding
 
-Strain and IP are independent tracks. Strain effects at Fracture/Crisis/Collapse do NOT add IP. IP advances from its own triggers (Altonian pressure table, TC > 60, civil war battles per §3.2). Both may advance from the same battle event but through separate rules.
+Strain and IP are independent tracks. Strain effects at Fracture/Crisis/Collapse do NOT add IP. IP advances from its own triggers (Altonian pressure table, CI > 60, civil war battles per §3.2). Both may advance from the same battle event but through separate rules.
 
 ---
 
@@ -324,7 +324,7 @@ Crown Treaty subordinates rival factions diplomatically. Treaty-bound factions c
 See victory_v30.md §3.2 for full Seizure mechanics (PP-494).
 
 **Card type:** Special/Unique Power (Priority 6).
-**Pool:** Influence + floor(TC / 15).
+**Pool:** Influence + floor(CI / 15).
 **Ob:** 7 − PT.
 **Prerequisites:** Church Mandate ≥ 4. Prominence (Church Mandate > controlling faction Mandate).
 
@@ -376,10 +376,10 @@ Vaynard's revolutionary program: shatter the caste system, expel Altonian influe
 
 | Degree | Effect |
 |--------|--------|
-| Overwhelming | Territory control transfers. Accord set to 2. PT −1 in target territory. TC −1 (Church institutional grip weakens). |
+| Overwhelming | Territory control transfers. Accord set to 2. PT −1 in target territory. CI −1 (Church institutional grip weakens). |
 | Success | Territory control transfers. Accord set to 2. PT −1 in target territory. |
 | Partial | Territory does not transfer. PT −1 in target territory (cultural seed planted). Varfell gains intelligence presence in territory if not already present. |
-| Failure | Varfell Cohesion −20 (derived_stats_v1). TC +1 (Church reaction). Church Attention Pool +1. |
+| Failure | Varfell Cohesion −20 (derived_stats_v1). CI +1 (Church reaction). Church Attention Pool +1. |
 
 **Why Ob = PT + 1:** This makes Varfell's expansion tool inversely correlated with Church's. As PT drops (through Calamity Drift, RM activity, or Varfell's own Partial results planting seeds), Varfell's Reformation becomes easier. As PT rises (through Church cultivation), it becomes harder. Varfell can directly influence PT through Tribune intelligence operations, Counter-Narrative (existing action targeting Church-Prominent territories), and by succeeding at Reformation (each success lowers PT further). This creates a feedback loop: success → lower PT → easier future success — but only in the low-PT band.
 
@@ -516,16 +516,16 @@ Occupation (faction_layer_v30.md §2) and Accord (this document §2) address dif
 
 ---
 
-## §7c TC 0-100 Integration (tc_political_redesign_v30.md)
+## §7c CI 0-100 Integration (tc_political_redesign_v30.md)
 
-This document's Church Seizure pool formula (Influence + floor(TC/15)) is compatible with TC running to 100 (no freeze at 75). At TC 100: pool bonus = floor(100/15) = 6 (vs 5 at old TC 75 ceiling). The Seizure Ob formula (7 - PT) is unchanged.
+This document's Church Seizure pool formula (Influence + floor(CI/15)) is compatible with CI running to 100 (no freeze at 75). At CI 100: pool bonus = floor(100/15) = 6 (vs 5 at old CI 75 ceiling). The Seizure Ob formula (7 - PT) is unchanged.
 
-TC milestone effects (tc_political_redesign_v30.md §2.1) interact with Seizure availability:
-- TC >= 40: Church Seizure available (replaces old TC >= 75 gate)
-- TC 80: Seizure Ob -1 globally (stacks with 7 - PT formula)
-- TC 100: Theocracy Unification Attempt (Seizure on any territory, not just Prominent)
+CI milestone effects (tc_political_redesign_v30.md §2.1) interact with Seizure availability:
+- CI >= 40: Church Seizure available (replaces old CI >= 75 gate)
+- CI 80: Seizure Ob -1 globally (stacks with 7 - PT formula)
+- CI 100: Theocracy Unification Attempt (Seizure on any territory, not just Prominent)
 
-Accord on Seizure follows this document §5.2 regardless of TC milestone. Seizure is always a political act; Accord reflects institutional legitimacy, not TC level.
+Accord on Seizure follows this document §5.2 regardless of CI milestone. Seizure is always a political act; Accord reflects institutional legitimacy, not CI level.
 
 ---
 

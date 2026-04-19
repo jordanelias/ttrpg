@@ -5,7 +5,7 @@
 | 8–10 | Full Parliament. Crown Policy requires Mandate ≥ 4. |
 | 5–7 | Standard. Parliamentary Manoeuvre available. |
 | 3–4 | Degraded. Parliamentary Manoeuvre +1 Ob. Crown Decree Ob reduced to 1. |
-| ≤ 2 | Non-functional. Hafenmark loses Parliamentary Manoeuvre. Crown governs by decree. TC +2 (does not apply when TC is frozen at 75 — PP-560). |
+| ≤ 2 | Non-functional. Hafenmark loses Parliamentary Manoeuvre. Crown governs by decree. CI +2 (does not apply when CI is frozen at 75 — PP-560). |
 
 PI degrades: Crown Emergency Powers (−1), Church territorial seizure (−1), Löwenritter coup (−3).
 **Löwenritter T14 on Coup (PP-569, ED-348):** On Coup trigger, Löwenritter assumes immediate full control of T14 Ehrenfeld. T14 does NOT go Uncontrolled — the garrison presence formalises. Crown retains no claim.
@@ -43,16 +43,16 @@ Coalition bonus applies to the primary suppressing faction's pool. Secondary fac
 Each faction has a printed Institutional Mandate. When event challenges it:
 - **Uphold** (before roll): Roll proceeds normally. No cost.
 - **Appease** (before roll): Triggering action cancelled entirely — no roll made. Mandate −1.
-**Trigger scope (ED-324 resolved 2026-04-08):** Fires when a Domain Action directly targets the faction's Mandate stat OR their unique clock/track — TC for Church, PI for Hafenmark, VTM for Varfell. Stability, Influence, Wealth, Military do not trigger. Deterministic — no GM discretion.
+**Trigger scope (ED-324 resolved 2026-04-08):** Fires when a Domain Action directly targets the faction's Mandate stat OR their unique clock/track — CI for Church, PI for Hafenmark, VTM for Varfell. Stability, Influence, Wealth, Military do not trigger. Deterministic — no GM discretion.
 NPC rule: NPC factions Appease if Mandate ≥ 4 AND Stability ≤ 3.
 Note: Prior params used "Compromise" — v05 PP-189 establishes "Appease" as the canonical term.
 
 
 ## PP-189 Final Corrections (v05 authoritative)
 Corrections applied over PP-188:
-- TC starting value: 28 (PP-188 had set it to 22 — wrong; P-32 in v05 explicitly raises it from 22 to 28)
-- Church primary victory threshold: TC ≥ 65 (P-32 reduced from 70)
-- TC 75 seizure: Church Mandate vs Ob = Fort + 1 (PP-192/PP-421); PP-183 had wrong formula
+- CI starting value: 28 (PP-188 had set it to 22 — wrong; P-32 in v05 explicitly raises it from 22 to 28)
+- Church primary victory threshold: CI ≥ 65 (P-32 reduced from 70)
+- CI 75 seizure: Church Mandate vs Ob = Fort + 1 (PP-192/PP-421); PP-183 had wrong formula
 - Majority-1s override: STRUCK in v05 (DESIGN DECISION 2026-04-02)
 - Institutional Mandate: Uphold/Appease (PP-189); prior params used "Compromise"
 - canonical source: v05 is authoritative (v04 is the structural base; v05 is most recent)

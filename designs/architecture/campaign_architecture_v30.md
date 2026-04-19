@@ -22,7 +22,7 @@ Church presence in a settlement is four independent attributes, not a linear pro
 | Cathedral | +2/season, +0.5 to adjacent | −2 | Irreplaceable. Destroyed only by Mass Battle. |
 
 **Axis 2 — Templar Station (yes/no):**
-+1 TC/season in territory. Can interrupt rival Domain Actions (+1 Ob, costs 1 TC). Seizure Ob −1.
++1 CI/season in territory. Can interrupt rival Domain Actions (+1 Ob, costs 1 CI). Seizure Ob −1.
 
 **Axis 3 — Inquisitor Base (yes/no):**
 Surveillance Zone: practitioners Concealment test each season. RM organizing +1 Ob. 1 Church Attention/season if RM present. Seizure Ob −1.
@@ -242,7 +242,7 @@ This document is the canonical source for all systems above. The following exist
 |-----------------|---------|--------|
 | settlement_layer_v30 §1.4 | Church axes | Add cross-ref to this doc Part 1 |
 | victory_v30 §5 | World-State Transitions | Add phased IP detail from Part 5 |
-| victory_v30 §7 | TC/CI | Add CI=100 Mass Seizure from Part 1 §1.3 |
+| victory_v30 §7 | CI/CI | Add CI=100 Mass Seizure from Part 1 §1.3 |
 | threadwork_v30 §5.2 | MS sources | Strike ×3, reference Part 3 §3.1 |
 | params_threadwork §Coherence | Cost table | Replace with Part 3 §3.2 |
 | rs_budget §2.2 | Mass battle drain | Update from ×3 to flat −1 |

@@ -3,7 +3,7 @@
 ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
 ## Scope: Sub-territory settlement nodes, dual-authority governance, subnational factions, invasion granularity, player progression from settlement to national, faction emergence/collapse, extended timeline, succession
 ## Precedent: KOEI ROTK (officer-city assignment, development, provincial control), Crusader Kings III (barony-county-duchy-kingdom hierarchy, vassal governance, realm fragmentation)
-## Affects: S03 Geography, S04 Clocks, S06 Faction Layer, S07 Victory, S08 TC, S09 Military, S10 NPC Behavior, S14 Fieldwork, S15 Mass Combat, S17 Scale Transitions, Player Agency, Companion Specification
+## Affects: S03 Geography, S04 Clocks, S06 Faction Layer, S07 Victory, S08 CI, S09 Military, S10 NPC Behavior, S14 Fieldwork, S15 Mass Combat, S17 Scale Transitions, Player Agency, Companion Specification
 ## Canon compliance: P-01 (settlement-level Thread phenomena), P-03 (settlement as rendered environment), P-15 (settlement identity as cultural-layer persistence)
 
 ---
@@ -108,7 +108,7 @@ Church presence in a settlement is NOT a linear tier progression. It is four ind
 
 **Axis 1 — Religious Building (mutually exclusive, one per settlement):** None / Chapel (+0.5 PT/season) / Church (+1 PT/season) / Cathedral (+2 PT/season, +0.5 PT to adjacent territories).
 
-**Axis 2 — Templar Station (binary):** +1 TC/season in territory. Church can interrupt rival Domain Actions (+1 Ob, costs 1 TC).
+**Axis 2 — Templar Station (binary):** +1 CI/season in territory. Church can interrupt rival Domain Actions (+1 Ob, costs 1 CI).
 
 **Axis 3 — Inquisitor Base (binary):** Surveillance Zone: Thread practitioners make Concealment test each season. RM governance-building actions +1 Ob. RM cultural presence generates 1 Church Attention/season.
 
@@ -443,7 +443,7 @@ The existing clocks assume a 13–15 year game. With settlements adding governan
 | Clock | Current Rate | Recalibrated Rate | Rationale |
 |-------|-------------|-------------------|-----------|
 | MS decay | −1/year baseline | −1/year baseline (unchanged) | MS is an existential pressure. 72 → 0 in 72 years without intervention. 30-year game = MS ~42 at game end (Fragile band). This is correct — long games should reach deep Calamity effects. |
-| TC (Church Influence) | Passive +1/season | Passive +1/season if Church Mandate ≥ 3 (existing conditional). 28 start. | 30-year game = 120 seasons. TC caps at 75 (phase transition), so the real question is: when does 75 fire? At +1/season: ~47 seasons (~12 years). This is correct — Church pressure should peak in mid-game. |
+| CI (Church Influence) | Passive +1/season | Passive +1/season if Church Mandate ≥ 3 (existing conditional). 28 start. | 30-year game = 120 seasons. CI caps at 75 (phase transition), so the real question is: when does 75 fire? At +1/season: ~47 seasons (~12 years). This is correct — Church pressure should peak in mid-game. |
 | IP (Invasion Pressure) | +1/season baseline | +1/2 seasons baseline (halved) | Current rate: 20 start, 100 in 80 seasons (20 years). This is too fast for a 30-year game — invasion would fire before the player completes the settlement→national progression. Halved rate: 100 in 160 seasons (40 years). 30-year game: IP ~80 (Altonian preparation, not yet invasion). Invasion fires only if events accelerate IP. |
 | Political Stability | 0 start, +1 per violence event | Unchanged | Cumulative. Self-regulating via victory gate (≤ 6). |
 
@@ -490,7 +490,7 @@ A 30-year game spans a generation. The first leaders (Almud, Baralta, Vaynard, H
 - Personal-scale mechanics (combat, contests, Thread operations, fieldwork actions) operate at individual level. Settlements provide the location where these actions occur but do not modify their mechanics.
 - The dice engine, pool construction, Ob system, and degree table are unchanged.
 - NPC Stance Triangles, Resonant Styles, Conviction Scars — unchanged.
-- Clock pressures (MS, TC, IP) — unchanged in function, only IP rate adjusted.
+- Clock pressures (MS, CI, IP) — unchanged in function, only IP rate adjusted.
 - Calamity radiation — operates at province level per node distance. Settlements within a province share the same radiation band.
 
 ---

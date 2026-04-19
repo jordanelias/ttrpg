@@ -174,8 +174,8 @@
 - `designs/provincial/strategic_layer_v30.md`
 - `designs/provincial/strategic_layer_v30_infill.md`
 - `designs/provincial/strategic_layer_v30_skeleton.md`
-- `designs/provincial/tc_political_v30.md`
-- `designs/provincial/tc_political_v30_skeleton.md`
+- `designs/provincial/ci_political_v30.md`
+- `designs/provincial/ci_political_v30_skeleton.md`
 - `designs/provincial/valoria_map_v2.svg`
 - `designs/provincial/varfell_path_b_v30.md`
 - `designs/provincial/varfell_path_b_v30_infill.md`
@@ -266,7 +266,7 @@
 - `params/bg/parliament.md`
 - `params/bg/phases.md`
 - `params/bg/stress_patches.md`
-- `params/bg/tc_seizure.md`
+- `params/bg/ci_seizure.md`
 - `params/bg/tracks.md`
 - `params/bg/victory.md`
 - `params/board_game.md`

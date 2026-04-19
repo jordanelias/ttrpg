@@ -78,7 +78,7 @@ All rolls use **d10**. Results per die:
 
 > **P-29: Rendering Stability gain:** Revolution Rendering Stability gain from Thread operations: +1 Rendering Stability per successful Weave against Church-held territory (max +2/season from this source). Requires Thread Sensitivity ≥ 20 practitioner.
 
-> **P-23:** **Theocracy Counter Seizure threshold:** Church Theocracy Counter 80+ triggers seizure at next Accounting. Territory roll: Church Military vs Defender Military, Ob 2. Each success: one contested territory flips. Hard cap: maximum 2 territory transfers per seizure event per faction (prevents single-season consolidation).
+> **P-23:** **Church Influence Seizure threshold:** Church Church Influence 80+ triggers seizure at next Accounting. Territory roll: Church Military vs Defender Military, Ob 2. Each success: one contested territory flips. Hard cap: maximum 2 territory transfers per seizure event per faction (prevents single-season consolidation).
 
 
 > **P-18:** **Unit cap at Military:** Number of units deployed cannot exceed current Military stat. Excess units over Military are immediately removed — they cannot be held as reinforcements beyond the cap.
@@ -299,7 +299,7 @@ In hybrid mode: use the Player Character's Spirit + Thread Sensitivity (Thread S
 | Torben complied (sent to Altonia) | −3/season while
 
 **Location:** B4 Accounting Step 4, B2 Clock Environmental Effects.
-**Gap:** The Institutional Pressure section in B2 shows threshold EFFECTS but not the ongoing Institutional Pressure ADVANCEMENT formula. "Institutional Pressure per Altonian pressure table" is referenced in B4 but no table appears in the document. From scattered references: Theocracy Counter > 60 → Institutional Pressure +1/season. No base Institutional Pressure advancement is stated.
+**Gap:** The Institutional Pressure section in B2 shows threshold EFFECTS but not the ongoing Institutional Pressure ADVANCEMENT formula. "Institutional Pressure per Altonian pressure table" is referenced in B4 but no table appears in the document. From scattered references: Church Influence > 60 → Institutional Pressure +1/season. No base Institutional Pressure advancement is stated.
 **Correction (PATCH P-28):** See below.
 
 ---
@@ -334,9 +334,9 @@ See I-05 above. PATCH P-16 resolves this.
 
 # PART FIVE: MECHANICAL CASCADE CRUNCH
 
-## Cascade Test 1: Church Overwhelming Decree Chain (Season 7, Theocracy Counter 36)
+## Cascade Test 1: Church Overwhelming Decree Chain (Season 7, Church Influence 36)
 
-**Setup:** Theocracy Counter 36 (above 30; Church in territory −1 Ob bracket active). Church plays Senator Inward T3 (Decree). Mandate 5, doctrine-aligned −1 Ob, Church-held territory −1 Ob (Theocracy Counter 30–49 bracket). Base Ob 2 − 1 − 1 = Ob 1 (floor applies — already at 1; no further reduction).
+**Setup:** Church Influence 36 (above 30; Church in territory −1 Ob bracket active). Church plays Senator Inward T3 (Decree). Mandate 5, doctrine-aligned −1 Ob, Church-held territory −1 Ob (Church Influence 30–49 bracket). Base Ob 2 − 1 − 1 = Ob 1 (floor applies — already at 1; no further reduction).
 
 **Roll (d10):** 5d10: 10, 8, 3, 7, 1 → 10(×2), 8(×1), 7(×1), 1(-1) = 4 − 1 = 3 net successes. Ob 1, surplus 2 = **Overwhelming.**
 
@@ -348,13 +348,13 @@ See I-05 above. PATCH P-16 resolves this.
 **Total immediate effects from this card play:** 3 (Overwhelming Decree binding + free HI + Standing consequence). Within the Cascade Depth Cap of 3. ✓ No queue to Accounting needed.
 
 **But**: The HI itself, when resolved at Accounting Step 5, could trigger:
-- If successful (Attention Pool ≥ 3): Theocracy Counter +0.5; AER +1; Restoration potentially loses Presence marker.
+- If successful (Attention Pool ≥ 3): Church Influence +0.5; AER +1; Restoration potentially loses Presence marker.
 - If target is Restoration faction, Restoration may Appease their Mandate (Investigation closes, Mandate −1).
 - If Restoration Compromises: their Stability −1 (Appease cost: 1 Standing + 1 Stability).
 
 **Season end cascade from T3 Decree + HI:**
-- Theocracy Counter +1 (T3 control) at Accounting.
-- +0.5 Theocracy Counter if HI confirmed at Step 5.
+- Church Influence +1 (T3 control) at Accounting.
+- +0.5 Church Influence if HI confirmed at Step 5.
 - AER +1 if HI confirmed (AER 2 → 3, which triggers: "Institutional Pressure vanguard threshold: 76→80").
 
 **Verdict:** This chain is manageable. Three immediate effects, then deferred accounting effects. The Cascade Depth Cap is doing its job. The queued HI resolution creates appropriate drama but doesn't chain into uncontrolled spirals.
@@ -369,15 +369,15 @@ Church Non-Player Character must respond at Accounting Step 5: Resist, Accommoda
 
 
 Effects from Reformed Settlement — Resist:
-1. Theocracy Counter +3. Current Theocracy Counter 52 + 1 (Assert) + 3 (Resist) = 56.
+1. Church Influence +3. Current Church Influence 52 + 1 (Assert) + 3 (Resist) = 56.
 2. RDT +1 → RDT 6.
 3. Hafenmark +1 Standing vs Church.
 4. Hafenmark +1 Deed Token.
 
-**Theocracy Counter 56 triggers:**
-5. Assert/Suppress mandatory this season — already fired (Priority 1). But Theocracy Counter 56 is still in the 50–69 bracket (mandatory Assert each season going forward). No new threshold crossed this season unless Theocracy Counter hits 60.
+**Church Influence 56 triggers:**
+5. Assert/Suppress mandatory this season — already fired (Priority 1). But Church Influence 56 is still in the 50–69 bracket (mandatory Assert each season going forward). No new threshold crossed this season unless Church Influence hits 60.
 
-Actually wait: Theocracy Counter 52 + Assert (+1) + Resist (+3) = 56. Theocracy Counter 60 threshold NOT crossed this season. No new environmental effects. ✓
+Actually wait: Church Influence 52 + Assert (+1) + Resist (+3) = 56. Church Influence 60 threshold NOT crossed this season. No new environmental effects. ✓
 
 But at RDT 6:
 6. "All Diplomatic actions targeting Hafenmark: +1 Ob." This is now permanent for the remainder of the game.
@@ -387,9 +387,9 @@ But at RDT 6:
 
 > **Clarification (PP-035):** "Hollow Victory applies only to Deed-counting factions (Hafenmark, Guilds, and any faction whose victory condition uses a Deed or similar countable token). Restoration's presence-based victory condition (Rendering Stability ≥ 50) and Löwenritter/Crown's mandate-based conditions are not Deed systems. Hollow Victory does not apply to these factions."
 
-**Verdict:** The Reformed Settlement chain fires 6-7 effects in one resolution window. The Cascade Depth Cap of 3 immediate effects prevents some of these from applying instantly — specifically: the Theocracy Counter gain, RDT gain, and Deed confirmation must queue to Accounting rather than applying mid-Phase. This is correct behavior per the cap rule. The cap prevents a single card play from immediately triggering a victory declaration within Phase 4.
+**Verdict:** The Reformed Settlement chain fires 6-7 effects in one resolution window. The Cascade Depth Cap of 3 immediate effects prevents some of these from applying instantly — specifically: the Church Influence gain, RDT gain, and Deed confirmation must queue to Accounting rather than applying mid-Phase. This is correct behavior per the cap rule. The cap prevents a single card play from immediately triggering a victory declaration within Phase 4.
 
-**Gap identified:** The Cascade Depth Cap says "more than 3 immediate mechanical effects in one resolution step." Are clock changes (Theocracy Counter +3 from Resist) "immediate mechanical effects"? If yes, the Reformed Settlement Resist triggers ONLY 3 immediate effects (Theocracy Counter +3, RDT +1, Standing +1) with the Deed Token queuing to Accounting. If the Deed Token queues, Hafenmark cannot win this season unless accounting resolves and confirms. This is correct. **The Cascade Depth Cap is a genuine pacing tool.** Confirm that clock changes count against the 3-effect cap. Add this to PATCH P-29.
+**Gap identified:** The Cascade Depth Cap says "more than 3 immediate mechanical effects in one resolution step." Are clock changes (Church Influence +3 from Resist) "immediate mechanical effects"? If yes, the Reformed Settlement Resist triggers ONLY 3 immediate effects (Church Influence +3, RDT +1, Standing +1) with the Deed Token queuing to Accounting. If the Deed Token queues, Hafenmark cannot win this season unless accounting resolves and confirms. This is correct. **The Cascade Depth Cap is a genuine pacing tool.** Confirm that clock changes count against the 3-effect cap. Add this to PATCH P-29.
 
 ---
 
@@ -419,17 +419,17 @@ But at RDT 6:
 
 ---
 
-## Cascade Test 4: Church Theocracy Counter 80 Territorial Seizure
+## Cascade Test 4: Church Church Influence 80 Territorial Seizure
 
 
 
-Per-territory roll for Church at Theocracy Counter 80: Church Mandate vs Ob 3 (contested territory) or Ob 2 (allied/neutral).
+Per-territory roll for Church at Church Influence 80: Church Mandate vs Ob 3 (contested territory) or Ob 2 (allied/neutral).
 Territories Church can seize: any non-Church controlled territory.
 
 5 territories to roll on (T1, T2, T6, T9, T14 — example distribution):
 - T1 (Crown capital): Church Mandate 5 vs Ob 3. Roll 5d10: 8, 7, 3, 2, 9 → 3 net. Ob 3 = Success. T1 contested (Crown and Church now both present — BATTLE required).
 - T2 (Crown): Roll 5d10: 5, 4, 6, 2, 8 → 1 net. Ob 3 = Failure. No seizure of T2.
-- T6 (Hafenmark): Roll 5d10: 9, 7, 7, 1, 4 → 3−1 = 2 net. Ob 3 = Partial. "Territory status contested but not seized" — what does Partial mean for Theocracy Counter 80 seizure? **Gap identified below.**
+- T6 (Hafenmark): Roll 5d10: 9, 7, 7, 1, 4 → 3−1 = 2 net. Ob 3 = Partial. "Territory status contested but not seized" — what does Partial mean for Church Influence 80 seizure? **Gap identified below.**
 - T9 (Varfell): Roll 5d10: 3, 1, 5, 6, 7 → 1−1 = 0 net. Failure.
 - T14 (Restoration): Roll 5d10: 8, 8, 9, 7, 2 → 4 net. Overwhelming. Immediate seizure + no Standing cost for Church.
 
@@ -438,19 +438,19 @@ Territories Church can seize: any non-Church controlled territory.
 - Fires a Zoom-In trigger in hybrid mode (Battle in Player Character home territory).
 - Triggers Crown Institutional Mandate event (Church in Crown territory without consent).
 - Public Instability −1 (Church Territorial Seizure).
-- Theocracy Counter +2 (Seizure successful per Theocracy Counter formula).
-- AER: if AER ≥ 3, AER adjusts Theocracy Counter formula.
+- Church Influence +2 (Seizure successful per Church Influence formula).
+- AER: if AER ≥ 3, AER adjusts Church Influence formula.
 
 > **P-25: wound conversion:** Wound conversion on Zoom In: 1 personal Wound = Coherence Rating −1 for that character (minimum Coherence Rating 1). Wounds do not convert to unit Strength loss.
 
-**Total effects from one Theocracy Counter 80 seizure roll on T1:** 5+ cascading effects. Only 3 can be immediate per the Cascade Depth Cap — the rest queue. **The Theocracy Counter 80 event is the largest cascade event in the game. This warrants a dedicated resolution checklist card.**
+**Total effects from one Church Influence 80 seizure roll on T1:** 5+ cascading effects. Only 3 can be immediate per the Cascade Depth Cap — the rest queue. **The Church Influence 80 event is the largest cascade event in the game. This warrants a dedicated resolution checklist card.**
 
 ---
 
 # PART SIX: EMERGENT SCENARIOS (Branching Dice Rolls)
 
 ## SCENARIO A: The Klapp Awakening — Church-Varfell-Wardens Triangle
-*(Season 9, 4-player game. Theocracy Counter 38, Rendering Stability 48, Varfell VTM 3)*
+*(Season 9, 4-player game. Church Influence 38, Rendering Stability 48, Varfell VTM 3)*
 
 
 **Klapp Event draws from Named Character Events deck. Card drawn.**
@@ -461,21 +461,21 @@ Church player now holds Klapp Active State: +1D all Investigate, Heresy Investig
 Varfell VTM 3 is in T9 (adjacent to T3). Trajectory Choice condition met.
 
 **BRANCH A: Church chooses Trajectory A (Suppress)**
-- Theocracy Counter +1 (Theocracy Counter 39). Klapp card removed.
+- Church Influence +1 (Church Influence 39). Klapp card removed.
 - Church player: "We knew. We always know. Klapp's archive will remain sealed."
 - Downstream: Varfell player correctly deduces Church suppressed something. Tribune Investigate in T3 (Ob 2, d10 roll): 4d10: 9, 7, 3, 1 → 2-1 = 1 net. Ob 2. Partial: "above or below threshold" for one stat. Varfell learns Church Mandate is "Good" (4-5). No further information. The suppression is opaque.
 
 **BRANCH B: Church chooses Trajectory B (Investigate Further)**
-- Theocracy Counter −1 (Theocracy Counter 37). Klapp Active continues.
+- Church Influence −1 (Church Influence 37). Klapp Active continues.
 - Next season (11): **Klapp Discovery Event Roll.** Church: Mandate 5 vs Ob 2.
   - Roll A (5d10): 8, 8, 7, 3, 9 → 4 net. Success. Klapp suspects. Church player notes privately.
     - Church player: Klapp has developed awareness. Trajectory B continues.
     - Himmensendt must Prosecute or Protect Klapp.
-      - **Prosecute:** Church Stability −1. AER −1. Theocracy Counter −2. Klapp removed.
+      - **Prosecute:** Church Stability −1. AER −1. Church Influence −2. Klapp removed.
       - **Protect:** Himmensendt Renown −1. Klapp Active 1 more season.
 
 *Assume Varfell VTM 4 in this branch.*
-- Warden Cooperation +1 (now 2). Theocracy Counter −2 (Theocracy Counter 36). Church Stability −1.
+- Warden Cooperation +1 (now 2). Church Influence −2 (Church Influence 36). Church Stability −1.
 - Church gains limited Thread access: one Senate Market Pontifex/season.
 - Varfell: Tribune Outward in T3 (Spy): Influence 4 + VTM 4 (Casus Belli Ob −1 not applicable here) vs Ob 2. Roll 4d10: 10, 8, 2, 5 → 2+1 = 3 net. Overwhelming. Varfell learns of Trajectory C. Klapp's Awakening Milestone fires: **Restoration + Varfell may now collaborate on [NAME-PENDING: ED-048] Ritual research at Warden Cooperation 2 instead of 3.**
 
@@ -551,7 +551,7 @@ Vanguard (defender, Balanced vs Offensive): Discipline 5 +fort? T4 has Fort 2: +
 
 **Resolution (per PATCH P-16, compare net successes):** Löwenritter 6 net vs Vanguard 2 net. Löwenritter wins by 4 (overwhelming margin). Vanguard unit destroyed; Institutional Pressure does not advance to Season 2 invasion. Institutional Pressure −5 (military rebuff). Institutional Pressure: 76 → 71. Below threshold again. AER consequence: Vanguard repelled → AER −1 (optional, reflect Altonian embarrassment).
 
-**EMERGENT CONCLUSION:** A seemingly inevitable invasion is repelled by a military that sacrificed political legitimacy to get there. The Löwenritter won the battle. But Public Instability = 4, AER = 1 (after Reformed Settlement), and Theocracy Counter = 55. The Church is consolidating. Hafenmark won the Reformed Settlement Deed but may have brought the invasion closer by degrading AER. **This is the exact political-military tension the game is designed to produce.** The system works.
+**EMERGENT CONCLUSION:** A seemingly inevitable invasion is repelled by a military that sacrificed political legitimacy to get there. The Löwenritter won the battle. But Public Instability = 4, AER = 1 (after Reformed Settlement), and Church Influence = 55. The Church is consolidating. Hafenmark won the Reformed Settlement Deed but may have brought the invasion closer by degrading AER. **This is the exact political-military tension the game is designed to produce.** The system works.
 
 ---
 
@@ -565,7 +565,7 @@ Vanguard (defender, Balanced vs Offensive): Discipline 5 +fort? T4 has Fort 2: +
 
 
 ## A Feast for Odin / Feast Games
-**Comparison:** Complex action selection with cascading production chains. Valoria's Phase 5 Accounting is the most Feast-like element — many simultaneous calculations. The risk is that accounting feels like bookkeeping rather than drama. **Recommendation:** Any accounting step that changes the board state in a visible, narratively interesting way (a clock crossing a threshold, a faction collapsing) should be **announced dramatically** before the numbers are updated. The drama of "Theocracy Counter crosses 50 — Assert/Suppress now mandatory every season" should be a table moment, not a quiet bookkeeping entry.
+**Comparison:** Complex action selection with cascading production chains. Valoria's Phase 5 Accounting is the most Feast-like element — many simultaneous calculations. The risk is that accounting feels like bookkeeping rather than drama. **Recommendation:** Any accounting step that changes the board state in a visible, narratively interesting way (a clock crossing a threshold, a faction collapsing) should be **announced dramatically** before the numbers are updated. The drama of "Church Influence crosses 50 — Assert/Suppress now mandatory every season" should be a table moment, not a quiet bookkeeping entry.
 
 ## Here I Stand / Virgin Queen
 - HIS has explicit rules for when the game ends in a shared loss (Ottoman conquest). Valoria's Rendering Stability Rupture = shared loss is correct but the Rendering Stability decline rate (−1/year baseline) is slow. In a 20-season game, Rendering Stability loses ~5 points from baseline alone. Thread operations accelerate this. The shared loss threat needs to feel more immediate in the mid-game.
@@ -578,19 +578,19 @@ Vanguard (defender, Balanced vs Offensive): Discipline 5 +fort? T4 has Fort 2: +
 
 ## Church Holy State Victory — Pace Analysis
 
-**Starting Theocracy Counter 22. Target Theocracy Counter 70. Gap: 48 points.**
+**Starting Church Influence 22. Target Church Influence 70. Gap: 48 points.**
 
 **Typical gain rate:**
 - T3 control (guaranteed start): +1/season
-- Assert (Theocracy Counter > 50, mandatory): +1/season from Season ~14+
+- Assert (Church Influence > 50, mandatory): +1/season from Season ~14+
 - Minor sources (Heresy confirmations, Templar deployments): +0.5–1.5/season
 
 
-**With Hafenmark Baralta suppression (Mandate ≥ 4 passive: −1/season):** Net gain ~1/season before Theocracy Counter 50, ~2/season after. Estimated victory: Season 35–45.
+**With Hafenmark Baralta suppression (Mandate ≥ 4 passive: −1/season):** Net gain ~1/season before Church Influence 50, ~2/season after. Estimated victory: Season 35–45.
 
 
 
-Alternatively, add an additional Theocracy Counter gain source: "Church wins any contested Institutional Mandate dispute (another faction Compromises their Mandate in response to a Church action): Theocracy Counter +0.5." This rewards active Church engagement in political disputes.
+Alternatively, add an additional Church Influence gain source: "Church wins any contested Institutional Mandate dispute (another faction Compromises their Mandate in response to a Church action): Church Influence +0.5." This rewards active Church engagement in political disputes.
 
 ---
 
@@ -717,7 +717,7 @@ The Cascade phase resolves all batched consequences in fixed order. Game Master-
 
 1. Domain Echoes from Personal phase scenes
 2. Thread operation clock changes (RS, TT)
-3. Clock threshold events (TC, IP, RS band transitions)
+3. Clock threshold events (CI, IP, RS band transitions)
 4. Board order consequences (Non-Player Character actions, coalition penalties, etc.)
 5. Accounting: attribute changes, seasonal caps applied, victory checks
 

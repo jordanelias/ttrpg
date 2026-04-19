@@ -5,7 +5,7 @@
 <!-- Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) -->
 <!-- Date: 2026-04-14 -->
 
-# VALORIA — TC Political Legitimacy Redesign, Stat Economy & Card System
+# VALORIA — CI Political Legitimacy Redesign, Stat Economy & Card System
 ## v1.0
 
 ---
@@ -14,26 +14,26 @@
 
 | Item | Prior state | This document |
 |---|---|---|
-| TC ceiling | 75 (freeze + seizure) | 100 (no freeze; Unification attempt at 100) |
-| TC territory values | Contributed to 75-threshold seizure | Repurposed as Spiritual Weight (SW) — see §1 |
-| TC political role | Clock only; no gameplay intersection except Church seizure | Defines Church's political pool bonus in all institutional contexts |
-| TC passive | PP-402 unconditional +1 | Conditional passive per military_layer_v30 §3.2 |
+| CI ceiling | 75 (freeze + seizure) | 100 (no freeze; Unification attempt at 100) |
+| CI territory values | Contributed to 75-threshold seizure | Repurposed as Spiritual Weight (SW) — see §1 |
+| CI political role | Clock only; no gameplay intersection except Church seizure | Defines Church's political pool bonus in all institutional contexts |
+| CI passive | PP-402 unconditional +1 | Conditional passive per military_layer_v30 §3.2 |
 | Card renewal | Not modelled in sim | Cooldown Track implemented |
 | Govern effect | Mandate +1 on success (sim) | Mandate recovery (OW in capital per PP-174) + Accord maintenance |
 | Battle → RS/IP | Not modelled in sim | Battle → RS −1, IP +2 per season with inter-faction battle |
 | AI postures | Greedy / single-turn evaluation | Threat-aware, stat-priority ordering |
 
 Conflicts resolved:
-- ED-110 (Church TC Gain redesign): directly addressed via competitive formula in military_layer_v30 §3
-- TC 75 freeze (PP-421): superseded; TC runs to 100
+- ED-110 (Church CI Gain redesign): directly addressed via competitive formula in military_layer_v30 §3
+- CI 75 freeze (PP-421): superseded; CI runs to 100
 
 ---
 
 ## §1 — SPIRITUAL WEIGHT: TERRITORY VALUES REPURPOSED
 
-The TC-contribution values that previously fed the 75 → seizure threshold are repurposed as **Spiritual Weight (SW)** per territory. SW is a fixed attribute on the territory card representing its ecclesiastical importance — cathedral density, historical presence of Church, popular piety tradition.
+The CI-contribution values that previously fed the 75 → seizure threshold are repurposed as **Spiritual Weight (SW)** per territory. SW is a fixed attribute on the territory card representing its ecclesiastical importance — cathedral density, historical presence of Church, popular piety tradition.
 
-SW is NOT the same as Piety Track (PT). PT is dynamic (changes through action). SW is fixed (set at game start). SW gates how much TC and political legitimacy can flow through a territory.
+SW is NOT the same as Piety Track (PT). PT is dynamic (changes through action). SW is fixed (set at game start). SW gates how much CI and political legitimacy can flow through a territory.
 
 | T# | Territory | TCV | Spiritual Weight |
 |---|---|---|---|
@@ -45,7 +45,7 @@ SW is NOT the same as Piety Track (PT). PT is dynamic (changes through action). 
 | T6 | Stillhelm | 1 | 1 |
 | T7 | Rendstad | 1 | 2 |
 | T8 | Gransol | 4 | 3 (trading city; strong Church commercial presence) |
-| T9 | Himmelenger | 3 | 5 (cathedral city; Church's primary anchor) |
+| T9 | Himmelenger | 5 | 5 (cathedral city; Church's primary anchor) |
 | T10 | Spartfell | 1 | 2 |
 | T11 | Halvardshelm | 1 | 1 |
 | T12 | Sigurdshelm | 3 | 2 |
@@ -58,7 +58,7 @@ SW is NOT the same as Piety Track (PT). PT is dynamic (changes through action). 
 
 **SW use cases:**
 
-1. **Piety Yield weighting:** TC from Piety Yield = Σ(PT tier × SW factor) per prominent territory, where SW factor = SW/5.
+1. **Piety Yield weighting:** CI from Piety Yield = Σ(PT tier × SW factor) per prominent territory, where SW factor = SW/5.
    - T9 (SW 5, PT 5): yield = 1.0 × (5/5) = 1.0
    - T8 (SW 3, PT 3): yield = 0.25 × (3/5) = 0.15 (negligible)
    - T14 (SW 3, PT 3 default): yield = 0.25 × (3/5) = 0.15
@@ -69,13 +69,13 @@ SW is NOT the same as Piety Track (PT). PT is dynamic (changes through action). 
 
 ---
 
-## §2 — TC: 0-100, NO FREEZE
+## §2 — CI: 0-100, NO FREEZE
 
-### §2.1 TC Runs to 100
+### §2.1 CI Runs to 100
 
-TC no longer freezes at 75. The 75 threshold is replaced by a new milestone system:
+CI no longer freezes at 75. The 75 threshold is replaced by a new milestone system:
 
-| TC | Milestone | Effect |
+| CI | Milestone | Effect |
 |---|---|---|
 | 28 | Starting value | — |
 | 40 | Church Assertive | Church gains +1D on all Assert and Seizure rolls |
@@ -84,39 +84,39 @@ TC no longer freezes at 75. The 75 threshold is replaced by a new milestone syst
 | 80 | Church Ascendant | Seizure Ob reduced by 1 globally. All territory PT drifts +1 toward piety pole at Year-End (unless Warden Cooperation ≥ 2) |
 | 100 | Theocracy Unification Attempt | See §2.2 |
 
-The prior TC 75 Seizure protocol (Ob = 2 + Fort Level + max(0, 3 − PT)) remains active from TC 40 onward. It is no longer gated by TC 75. It is gated by Church Mandate ≥ 4 and Church Prominent in target territory (existing ED-326 condition).
+The prior CI 75 Seizure protocol (Ob = 2 + Fort Level + max(0, 3 − PT)) remains active from CI 40 onward. It is no longer gated by CI 75. It is gated by Church Mandate ≥ 4 and Church Prominent in target territory (existing ED-326 condition).
 
-### §2.2 TC 100 — Theocracy Unification Attempt
+### §2.2 CI 100 — Theocracy Unification Attempt
 
-When TC reaches 100:
-- TC does not continue to advance
+When CI reaches 100:
+- CI does not continue to advance
 - Church publicly declares Papal Sovereignty over the peninsula
 - **Unification campaign begins:** each Accounting, Church may declare Unification Seizure on any territory (not just prominent territories), Ob = 2 + Fort Level
 - Secular factions each get one free Parliamentary motion (no card slot) to oppose Church per season while Unification is active
-- Unification ends (and TC drops to 75) if: Church loses 3 territories to secular counterattack in a single Year-End, OR Church Mandate drops to 3 or below (authority collapses), OR Crown Treaty forms against Church (Church as the suppressed faction)
+- Unification ends (and CI drops to 75) if: Church loses 3 territories to secular counterattack in a single Year-End, OR Church Mandate drops to 3 or below (authority collapses), OR Crown Treaty forms against Church (Church as the suppressed faction)
 - If Church successfully controls ≥ 10 territories while Unification is active for 2 consecutive Year-Ends: Church wins (Theocracy Unification victory)
 
 ### §2.3 Starting Value
 
-TC starts at 28 per P-32. Unchanged.
+CI starts at 28 per P-32. Unchanged.
 
 ### §2.4 Seasonal Cap
 
-±5 TC per season from all sources combined (PP-504). ±3 from player Domain Actions specifically. Unchanged.
+±5 CI per season from all sources combined (PP-504). ±3 from player Domain Actions specifically. Unchanged.
 
 ---
 
-## §3 — TC AS POLITICAL LEGITIMACY
+## §3 — CI AS POLITICAL LEGITIMACY
 
 ### §3.1 Design Basis: Historical Precedent
 
-In the Italian peninsula of the 15th and 16th centuries, the Pope's political weight in civil matters was not constant — it fluctuated with the Church's demonstrated authority. When Julius II (1503–1513) was at the height of his temporal power, secular rulers needed his blessing for major acts. When the Avignon papacy (1309–1377) was seen as a tool of the French crown, papal legitimacy was widely questioned. The Church's political reach in secular governance was earned, sustained, and lost through the same mechanisms that raised and lowered the TC: piety, wealth, military presence, successful sermons, and above all, demonstrable institutional competence where the secular state was failing.
+In the Italian peninsula of the 15th and 16th centuries, the Pope's political weight in civil matters was not constant — it fluctuated with the Church's demonstrated authority. When Julius II (1503–1513) was at the height of his temporal power, secular rulers needed his blessing for major acts. When the Avignon papacy (1309–1377) was seen as a tool of the French crown, papal legitimacy was widely questioned. The Church's political reach in secular governance was earned, sustained, and lost through the same mechanisms that raised and lowered the CI: piety, wealth, military presence, successful sermons, and above all, demonstrable institutional competence where the secular state was failing.
 
-This maps directly to TC as a modifier: high TC = Church's institutional claims are credible and hard to dismiss in public forums. Low TC = Church is one voice among many.
+This maps directly to CI as a modifier: high CI = Church's institutional claims are credible and hard to dismiss in public forums. Low CI = Church is one voice among many.
 
-### §3.2 TC Bonus Dice (Church in Political Forums)
+### §3.2 CI Bonus Dice (Church in Political Forums)
 
-When Church acts in any of the following contexts, it adds floor(TC/20) bonus dice to its roll:
+When Church acts in any of the following contexts, it adds floor(CI/20) bonus dice to its roll:
 
 | Context | Roll affected |
 |---|---|
@@ -127,21 +127,21 @@ When Church acts in any of the following contexts, it adds floor(TC/20) bonus di
 | Diplomacy vs PLAYABLE faction (Senator Outward) | Influence pool |
 
 **Examples:**
-- TC 28 (start): floor(28/20) = +1D
-- TC 40: +2D
-- TC 60: +3D
-- TC 80: +4D
-- TC 100: +5D
+- CI 28 (start): floor(28/20) = +1D
+- CI 40: +2D
+- CI 60: +3D
+- CI 80: +4D
+- CI 100: +5D
 
-This is a large bonus at high TC. It is by design. A Church operating at TC 80 is historically comparable to the papacy of Julius II or Innocent III — a genuinely dominant institutional force that secular rulers cannot dismiss without cost.
+This is a large bonus at high CI. It is by design. A Church operating at CI 80 is historically comparable to the papacy of Julius II or Innocent III — a genuinely dominant institutional force that secular rulers cannot dismiss without cost.
 
-### §3.3 TC Obstacle Modifier (Opposing Church)
+### §3.3 CI Obstacle Modifier (Opposing Church)
 
 Conversely, when secular factions target Church with Parliamentary motions (Censure, Embargo, Blockade, Outlawry targeting Church as subject):
 
-Ob of the vote threshold calculation is unchanged, but each secular faction voting against Church reduces their effective Mandate contribution by floor(TC/30):
+Ob of the vote threshold calculation is unchanged, but each secular faction voting against Church reduces their effective Mandate contribution by floor(CI/30):
 
-| TC | Reduction to voting Mandate |
+| CI | Reduction to voting Mandate |
 |---|---|
 | 0–29 | 0 |
 | 30–59 | −1 |
@@ -150,18 +150,18 @@ Ob of the vote threshold calculation is unchanged, but each secular faction voti
 
 This represents the political cost of being seen to oppose the Church publicly when the Church has high institutional legitimacy. Secular rulers whose populations attend church, who depend on Church welfare networks, and who need Church endorsement for legitimacy can't simply vote to Embargo the Church without consequence.
 
-**Design note (ED-110 resolution):** This gives Church more ways to exert political power than Baralta can suppress. Baralta (TC −1/season) operates on the TC total. Church's parliamentary immunity grows with TC, meaning Hafenmark's structural suppression is a long game — it slows Church's rise but doesn't neutralise its political leverage once TC is already high.
+**Design note (ED-110 resolution):** This gives Church more ways to exert political power than Baralta can suppress. Baralta (CI −1/season) operates on the CI total. Church's parliamentary immunity grows with CI, meaning Hafenmark's structural suppression is a long game — it slows Church's rise but doesn't neutralise its political leverage once CI is already high.
 
 ### §3.4 Faction Political Pool (Parliamentary and Negotiation)
 
 For all factions including Church, the working political pool in Parliamentary motions is:
 
-**Political pool = Mandate + floor(TC/20) [Church only] + any modifiers**
+**Political pool = Mandate + floor(CI/20) [Church only] + any modifiers**
 
 For non-Church factions, the political pool in Parliament is:
-**Political pool = Mandate − floor(TC/30) [if voting against Church in a motion targeting Church]**
+**Political pool = Mandate − floor(CI/30) [if voting against Church in a motion targeting Church]**
 
-This creates an asymmetry that mirrors historical reality: the Church's opponents pay a legitimacy cost proportional to TC; the Church gains a legitimacy bonus proportional to TC.
+This creates an asymmetry that mirrors historical reality: the Church's opponents pay a legitimacy cost proportional to CI; the Church gains a legitimacy bonus proportional to CI.
 
 ---
 
@@ -305,7 +305,7 @@ When a card is played, it is placed on the Cooldown Track with a slot count equa
 
 **Crown's 2× Legionary advantage:** Crown can conduct military action two seasons in a row before both Legionary cards are on cooldown. This reflects Crown's larger standing army and military bureaucracy.
 
-**Church's 2× Senator advantage:** Church can conduct social/diplomatic/TC actions two seasons in a row. Assert, Suppress, Diplomacy, Parliamentary actions — Church has more political bandwidth than any other faction.
+**Church's 2× Senator advantage:** Church can conduct social/diplomatic/CI actions two seasons in a row. Assert, Suppress, Diplomacy, Parliamentary actions — Church has more political bandwidth than any other faction.
 
 ---
 
@@ -324,7 +324,7 @@ Muster new unit in the threatened territory. If can't Muster this season (no Leg
 **Priority 3 — CONSOLIDATE (Stability ≤ 2 OR Wealth ≤ 1 OR Mandate ≤ 2):**
 Govern + Trade. No military expansion. Mandate recovery is the target; Wealth maintenance prevents unit degradation.
 
-**Priority 4 — COUNTER-THREAT (TC ≥ 55 AND faction is HF or Crown):**
+**Priority 4 — COUNTER-THREAT (CI ≥ 55 AND faction is HF or Crown):**
 Hafenmark: Suppress is mandatory Priority-4 action every season when available. Crown: pursue Crown Treaty if Mandate ≥ 4 and TCV ≥ 10.
 
 **Priority 5 — EXPAND (all Priority 1-4 conditions clear):**
@@ -342,16 +342,16 @@ Govern in capital (Mandate recovery), Trade (Wealth building).
 - PI awareness: if PI ≥ 10, Crown should prioritise Parliamentary actions over military.
 
 **Hafenmark:**
-- Suppress = highest non-existential priority at TC ≥ 40. Church's Mandate rising means HF's structural suppression (Baralta) is insufficient alone — active Suppress is critical.
+- Suppress = highest non-existential priority at CI ≥ 40. Church's Mandate rising means HF's structural suppression (Baralta) is insufficient alone — active Suppress is critical.
 - Consul cards: Trade when Wealth < 4, Govern when Mandate < 4 or Accord at risk.
 - Military: defensive only. T8 and T10 must remain garrisoned. T7 is expendable.
 - Parliamentary Manoeuvre: use whenever PI ≥ 5 to rebuild PI (HF victory needs PI ≥ 5 which is the starting value — they need to prevent PI from falling).
 
 **Church:**
-- Assert when TC < 60 and Legionary cards unavailable (Senator cards used for Assert).
-- Church Seizure when TC ≥ 40 and prominent territories have PT ≥ 3.
+- Assert when CI < 60 and Legionary cards unavailable (Senator cards used for Assert).
+- Church Seizure when CI ≥ 40 and prominent territories have PT ≥ 3.
 - Govern in T9 to maintain Accord 3 (Aligned) — highest PT territory is most valuable.
-- Military (Templar): position Templar units in PT ≥ 3 territories for TC bonus.
+- Military (Templar): position Templar units in PT ≥ 3 territories for CI bonus.
 
 **Varfell:**
 - Intel ops against Crown (highest Mandate rival) — information is Varfell's tool.
@@ -362,24 +362,24 @@ Govern in capital (Mandate recovery), Trade (Wealth building).
 
 ## §7 — AUDIT OF ALL CHANGES AGAINST EXISTING MECHANICS
 
-### §7.1 TC Cap vs New Milestones
+### §7.1 CI Cap vs New Milestones
 
 Old cap: ±5/season (PP-504). Still applies.
 New ceiling: 100 (replacing 75 freeze). No conflict — seasonal cap prevents runaway.
-New milestones at 40/55/65/80/100 add effects but don't change TC formula.
+New milestones at 40/55/65/80/100 add effects but don't change CI formula.
 
-**Check:** Prior victory_v30 §3.2 Church victory requires TC ≥ 65. With TC running to 100, this threshold remains as a Church win condition sub-requirement; the TC Unification at 100 is an additional/alternate path.
-**Flag (ED-NEW-TC-10):** Confirm whether Church victory condition at TC 65 + TCV ≥ 8 remains as-is or is replaced by TC 100 Unification only.
+**Check:** Prior victory_v30 §3.2 Church victory requires CI ≥ 65. With CI running to 100, this threshold remains as a Church win condition sub-requirement; the CI Unification at 100 is an additional/alternate path.
+**Flag (ED-NEW-CI-10):** Confirm whether Church victory condition at CI 65 + TCV ≥ 8 remains as-is or is replaced by CI 100 Unification only.
 
 ### §7.2 Political Pool vs Mandate Pool
 
 Existing: Parliament votes by Mandate (§5.3 faction_layer_v30).
-New: Church gets floor(TC/20) bonus dice; opposing factions get −floor(TC/30) voting Mandate.
+New: Church gets floor(CI/20) bonus dice; opposing factions get −floor(CI/30) voting Mandate.
 **No conflict:** These are additive modifiers to the Mandate pool, not replacements.
 
-**Check:** At TC 100, Church bonus = +5D; opposing Mandate reduction = −3/faction.
+**Check:** At CI 100, Church bonus = +5D; opposing Mandate reduction = −3/faction.
 Crown (Mandate 5) voting against Church: effective votes = 5−3 = 2. Church (Mandate 5 + 5 bonus = 10D, against Ob 2) has overwhelming Parliament dominance.
-This is by design — TC 100 represents a Church that has politically dominated the peninsula. Secular factions should have acted to prevent this.
+This is by design — CI 100 represents a Church that has politically dominated the peninsula. Secular factions should have acted to prevent this.
 
 ### §7.3 Territory SW vs TCV
 
@@ -399,12 +399,12 @@ New: Battle → RS −1 per season with battle; IP +2.
 Check against existing: RS baseline decay is −1/year-end (annual). Battle RS damage is separate and immediate. No conflict — both apply.
 Check against IP: existing IP +1 from Torben Loyalty ≤ 3. Battle IP +2 is additional. No conflict.
 
-### §7.6 Seizure Changes (TC milestone vs old TC 75 gate)
+### §7.6 Seizure Changes (CI milestone vs old CI 75 gate)
 
-Old: Seizure gated by TC ≥ 75 (now removed as a gate).
-New: Seizure available from TC ≥ 40 (milestone). Existing Seizure Ob formula unchanged.
-**Check victory_v30 §7 (TC 75 Seizure protocol):** The prior seizure at TC 75 used "Ob = 2 + Fort Level + max(0, 3 − PT)". With TC running past 75, this Ob formula still applies at TC 40+. The TC 80 milestone reduces Seizure Ob by 1 globally (stacks with formula).
-**Flag (ED-NEW-TC-11):** Confirm Seizure Ob formula: is it still 2+Fort+max(0,3−PT) or does it use the updated Ob = 7−PT formula from the Church victory redesign?
+Old: Seizure gated by CI ≥ 75 (now removed as a gate).
+New: Seizure available from CI ≥ 40 (milestone). Existing Seizure Ob formula unchanged.
+**Check victory_v30 §7 (CI 75 Seizure protocol):** The prior seizure at CI 75 used "Ob = 2 + Fort Level + max(0, 3 − PT)". With CI running past 75, this Ob formula still applies at CI 40+. The CI 80 milestone reduces Seizure Ob by 1 globally (stacks with formula).
+**Flag (ED-NEW-CI-11):** Confirm Seizure Ob formula: is it still 2+Fort+max(0,3−PT) or does it use the updated Ob = 7−PT formula from the Church victory redesign?
 
 ### §7.7 Accord Degradation in Sim
 
@@ -416,5 +416,5 @@ Accord recovery: Govern action (Success → +1, max 3).
 ### §7.8 BG Mode vs TTRPG Mode Applicability
 
 All §1-6 mechanics apply to BG and Hybrid modes.
-TTRPG mode: TC political legitimacy bonus (§3) applies when Church acts in social contests or domain scenes. Floor(TC/20) bonus dice on relevant Influence/Mandate rolls.
+TTRPG mode: CI political legitimacy bonus (§3) applies when Church acts in social contests or domain scenes. Floor(CI/20) bonus dice on relevant Influence/Mandate rolls.
 No conflict with scale_transitions_v30 §3 (Domain Echo handles TTRPG → faction layer translation).

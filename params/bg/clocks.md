@@ -22,14 +22,14 @@ Southernmost Surge (one-time, RS ≤ 10): all territories within Proximity 2 of 
 
 
 
-### Theocracy Clock (TC) Effects
-| TC Range | Effect |
+### Church Influence (CI) Effects
+| CI Range | Effect |
 |----------|--------|
 | Below 30 | No modifier |
 | 30–49 | Church orders: −1 Ob in Church-held territory |
 | 50–69 | Church orders: −1 Ob everywhere. Non-Church Diplomacy targeting Church: +1 Ob. Mandatory Assert/Suppress each season |
 | 70–74 | As above. Territorial Seizure protocol pending — Church prioritises seizure actions. |
-| 75+ | TC frozen. Territorial Seizure protocol active. AER no longer modifies TC gains (TC frozen). |
+| 75+ | CI frozen. Territorial Seizure protocol active. AER no longer modifies CI gains (CI frozen). |
 
 ### Invasion Pressure (IP) Effects
 | IP Range | Effect |
@@ -76,14 +76,14 @@ Southernmost Surge (one-time, RS ≤ 10): all territories within Proximity 2 of 
 
 
 
-### Theocracy Clock (TC) Effects
-| TC Range | Effect |
+### Church Influence (CI) Effects
+| CI Range | Effect |
 |----------|--------|
 | Below 30 | No modifier |
 | 30–49 | Church orders: −1 Ob in Church-held territory |
 | 50–69 | Church orders: −1 Ob everywhere. Non-Church Diplomacy targeting Church: +1 Ob. Mandatory Assert/Suppress each season |
 | 70–74 | As above. Territorial Seizure protocol pending — Church prioritises seizure actions. |
-| 75+ | TC frozen. Territorial Seizure protocol active. AER no longer modifies TC gains (TC frozen). |
+| 75+ | CI frozen. Territorial Seizure protocol active. AER no longer modifies CI gains (CI frozen). |
 
 
 ### Invasion Pressure (IP) Effects
@@ -110,4 +110,4 @@ All battles on Valorian soil: RS −1 (RS −2 for Campaign/War scale). Each sea
 
 ## Cascade Depth Cap (v04 B4)
 Maximum 3 immediate mechanical effects per card play resolution step. Additional effects queue to next Accounting.
-State-based modifiers (RS/TC/IP/PI environmental effects) do NOT count against this cap.
+State-based modifiers (RS/CI/IP/PI environmental effects) do NOT count against this cap.
