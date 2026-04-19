@@ -11,18 +11,18 @@
 
 ## 1. Conviction Track — Per-Territory Stat
 
-**Name:** Conviction (CV)
+**Name:** Conviction (PT)
 **Range:** 0–5 per territory.
 **Poles:** 0 = Einhir Restoration pole. 5 = Solmund Orthodoxy pole.
 
 
-[EDITORIAL: ED-302 — Confirm track name "Conviction" (CV). Alternative candidates: "Devotion", "Orthodoxy", "Glaube".]
+[EDITORIAL: ED-302 — Confirm track name "Conviction" (PT). Alternative candidates: "Devotion", "Orthodoxy", "Glaube".]
 
-[EDITORIAL: ED-644 — CV ≡ PT terminology equivalence (2026-04-17). Conviction (CV) here is the same per-territory stat as Piety (PT) in tc_political_redesign_v30 §1. Newer design docs prefer "PT" terminology; this file retains "CV" for skeleton stability. Full rename (CV → PT, file rename conviction_track_v30.md → piety_track_v30.md) deferred to future cleanup pass. Mechanical equivalence: use PT rules in tc_political_redesign when conflict arises.]
+[EDITORIAL: ED-644 — PT ≡ PT terminology equivalence (2026-04-17). Conviction (PT) here is the same per-territory stat as Piety (PT) in tc_political_redesign_v30 §1. Newer design docs prefer "PT" terminology; this file retains "PT" for skeleton stability. Full rename (PT → PT, file rename conviction_track_v30.md → piety_track_v30.md) deferred to future cleanup pass. Mechanical equivalence: use PT rules in tc_political_redesign when conflict arises.]
 
 ### 1.1 Starting Values (PP-406)
 
-| T# | Territory | Controller | CV | Notes |
+| T# | Territory | Controller | PT | Notes |
 |----|-----------|-----------|-----|-------|
 | T1 | Valorsplatz | Crown | 4 | Capital — Crown-Church symbiosis |
 | T2 | Kronmark | Crown | 4 | Heartland |
@@ -44,64 +44,64 @@
 
 **T15 rule (PP-407):** T15 Conviction is permanently 0. No action, event, faction ability, or seasonal drift may increase it. The Calamity annihilated orthodox Piety at the Einhir epicentre. This is metaphysically irreversible — the rendering itself is compromised there (P-07).
 
-**T9 soft cap:** Himmelenger starts at CV 5 but is not locked. Sustained pressure (Hafenmark suppression, Varfell cultural actions, RS decline) can reduce it. It does not auto-recover to 5.
+**T9 soft cap:** Himmelenger starts at PT 5 but is not locked. Sustained pressure (Hafenmark suppression, Varfell cultural actions, RS decline) can reduce it. It does not auto-recover to 5.
 
 ### 1.2 Movement Rules (PP-408)
 
-**Seasonal cap:** ±1 CV per territory per season. No combination of actions can move a territory's CV by more than 1 in a single season.
+**Seasonal cap:** ±1 PT per territory per season. No combination of actions can move a territory's PT by more than 1 in a single season.
 
 
-**Exception — Calamity Drift (RS decline):** When Rendering Stability (RS) drops below a threshold, territories adjacent to T15 experience CV erosion. See §1.3.
+**Exception — Calamity Drift (RS decline):** When Rendering Stability (RS) drops below a threshold, territories adjacent to T15 experience PT erosion. See §1.3.
 
 #### Movement Actions
 
 | Action | Faction(s) | Direction | Condition | Ob | Effect |
 |--------|-----------|-----------|-----------|-----|--------|
-| Preach | Church | CV +1 | Church controls or is prominent in territory | Influence vs Ob 2 | Success: CV +1 in target territory |
-| Suppress Heresy | Church | CV +1 | Territory CV ≤ 2 | Influence vs Ob 3 | Success: CV +1. Failure: CV −1 (backlash) |
-| Cultural Reclamation | Varfell | CV −1 | Varfell controls territory OR territory has Einhir cultural presence | Influence vs Ob 2 | Success: CV −1 in target territory |
-| Community Weaving | RM (latent or active) | CV −1 | Territory CV ≤ 3 | See §5.3 | Success: CV −1 (plus RS effects per existing mechanic) |
-| Secular Governance | Hafenmark | CV −1 | Hafenmark controls territory | Mandate vs Ob 2 | Success: CV −1. Cannot reduce below 2 via this action. |
-| Consecrate | Church | CV +1 | Church controls territory AND CV ≥ 3 | Influence vs Ob 3 | Success: CV +1. Additionally: territory becomes Consecrated (see §1.4) |
-| Missionary Work | Church | CV +1 | Territory not controlled by Church, CV ≤ 3 | Influence vs Ob = controlling faction's Mandate | Success: CV +1 in that territory |
+| Preach | Church | PT +1 | Church controls or is prominent in territory | Influence vs Ob 2 | Success: PT +1 in target territory |
+| Suppress Heresy | Church | PT +1 | Territory PT ≤ 2 | Influence vs Ob 3 | Success: PT +1. Failure: PT −1 (backlash) |
+| Cultural Reclamation | Varfell | PT −1 | Varfell controls territory OR territory has Einhir cultural presence | Influence vs Ob 2 | Success: PT −1 in target territory |
+| Community Weaving | RM (latent or active) | PT −1 | Territory PT ≤ 3 | See §5.3 | Success: PT −1 (plus RS effects per existing mechanic) |
+| Secular Governance | Hafenmark | PT −1 | Hafenmark controls territory | Mandate vs Ob 2 | Success: PT −1. Cannot reduce below 2 via this action. |
+| Consecrate | Church | PT +1 | Church controls territory AND PT ≥ 3 | Influence vs Ob 3 | Success: PT +1. Additionally: territory becomes Consecrated (see §1.4) |
+| Missionary Work | Church | PT +1 | Territory not controlled by Church, PT ≤ 3 | Influence vs Ob = controlling faction's Mandate | Success: PT +1 in that territory |
 
 
 **Church prominence:** Church Mandate > controlling faction's Mandate in that territory. Required for Preach. Not required for Missionary Work (which targets territories where Church lacks prominence — hence the higher Ob).
 
-### 1.3 Calamity Drift — RS-Linked CV Erosion (PP-409)
+### 1.3 Calamity Drift — RS-Linked PT Erosion (PP-409)
 
 
 | RS Threshold | Effect |
 |-------------|--------|
-| RS ≤ 50 | Territories adjacent to T15 (T6, T13): CV −1 at Accounting if CV > 0 |
-| RS ≤ 35 | All territories within 2 steps of T15: CV −1 at Accounting if CV > 0. Adjacency per map. |
-| RS ≤ 20 | All territories: CV −1 at Accounting if CV > 0. Orthodoxy collapses under rendering strain. |
+| RS ≤ 50 | Territories adjacent to T15 (T6, T13): PT −1 at Accounting if PT > 0 |
+| RS ≤ 35 | All territories within 2 steps of T15: PT −1 at Accounting if PT > 0. Adjacency per map. |
+| RS ≤ 20 | All territories: PT −1 at Accounting if PT > 0. Orthodoxy collapses under rendering strain. |
 
-Calamity Drift applies after all faction actions resolve but before TC calculation. Calamity Drift ignores the ±1/season cap (it stacks with faction-driven movement). Calamity Drift cannot reduce T15 below 0 (already there) or increase any CV.
+Calamity Drift applies after all faction actions resolve but before TC calculation. Calamity Drift ignores the ±1/season cap (it stacks with faction-driven movement). Calamity Drift cannot reduce T15 below 0 (already there) or increase any PT.
 
-### 1.3b Thread Operation CV Drift (ED-676)
+### 1.3b Thread Operation PT Drift (ED-676)
 
-Visible Thread operations in a territory shift CV:
+Visible Thread operations in a territory shift PT:
 
-| Thread Event | CV Change | Condition |
+| Thread Event | PT Change | Condition |
 |---|---|---|
-| Public Dissolution | CV −1 | Witnesses present. Thread reality undeniable. |
+| Public Dissolution | PT −1 | Witnesses present. Thread reality undeniable. |
 | Public Mending | No change | Ambiguous: Church claims miracle; practitioners claim mastery. |
-| Public Weaving (non-harmful) | CV −0.5 (rounded at Accounting) | Mild exposure. Accumulates slowly. |
-| Visible Rendering Crisis | CV +1 | Thread danger reinforces Church framework. |
-| Monstrous Incursion (spontaneous, from radiation) | CV −1 | Substrate instability visible beyond Church explanation. |
+| Public Weaving (non-harmful) | PT −0.5 (rounded at Accounting) | Mild exposure. Accumulates slowly. |
+| Visible Rendering Crisis | PT +1 | Thread danger reinforces Church framework. |
+| Monstrous Incursion (spontaneous, from radiation) | PT −1 | Substrate instability visible beyond Church explanation. |
 
 **Scope:** "Public" = witnessed by non-practitioner NPCs. Concealed operations (threadwork_v30 §2.3) do not trigger.
 
-**Interaction with Calamity Drift (§1.3):** Stacks. Both fire at Accounting. Cap: CV ±2 per territory per season from Thread sources (Calamity Drift + Thread Operation Drift combined).
+**Interaction with Calamity Drift (§1.3):** Stacks. Both fire at Accounting. Cap: PT ±2 per territory per season from Thread sources (Calamity Drift + Thread Operation Drift combined).
 
 ### 1.4 Consecrated Status (PP-410)
 
-A territory that reaches CV 5 via a Consecrate action gains **Consecrated** status.
+A territory that reaches PT 5 via a Consecrate action gains **Consecrated** status.
 
 Effects:
 - Church seizure Ob in this territory: −1 (population welcomes Church governance).
-- Consecrated status is lost if Church loses control AND CV drops below 4.
+- Consecrated status is lost if Church loses control AND PT drops below 4.
 
 ---
 
@@ -117,17 +117,17 @@ Effects:
 
 ### Ob Formula
 
-**Ob = Base + Fort Modifier + CV Modifier**
+**Ob = Base + Fort Modifier + PT Modifier**
 
 | Component | Value |
 |-----------|-------|
 | **Base** | 2 |
 | **Fort Modifier** | +1 per Fortification level in territory (0–3 range) |
-| **CV Modifier** | +(3 − CV), minimum 0. At CV 5: +0. At CV 4: +0. At CV 3: +0. At CV 2: +1. At CV 1: +2. At CV 0: +3. |
+| **PT Modifier** | +(3 − PT), minimum 0. At PT 5: +0. At PT 4: +0. At PT 3: +0. At PT 2: +1. At PT 1: +2. At PT 0: +3. |
 
-Simplified: **Ob = 2 + Fort Level + max(0, 3 − CV)**
+Simplified: **Ob = 2 + Fort Level + max(0, 3 − PT)**
 
-| CV | CV Modifier | Interpretation |
+| PT | PT Modifier | Interpretation |
 |----|------------|----------------|
 | 5 | +0 | Population fully orthodox — welcomes Church rule |
 | 4 | +0 | Strong faith — minimal resistance |
@@ -152,13 +152,13 @@ Simplified: **Ob = 2 + Fort Level + max(0, 3 − CV)**
 
 | Degree | Outcome |
 |--------|---------|
-| Overwhelming | Church seizes administrative control. Controlling faction's Mandate −1 in territory. CV +1 (if below 5). PI −1. |
+| Overwhelming | Church seizes administrative control. Controlling faction's Mandate −1 in territory. PT +1 (if below 5). PI −1. |
 | Success | Church seizes administrative control. PI −1. |
 | Partial | No seizure. Church Mandate +1, controlling faction Mandate −1 in that territory. |
 | Failure | No seizure. Church Mandate −1 (overreach). TC −2 (visible failure undermines institutional momentum). |
 
 
-**Loss of seized territory:** If CV drops below 2 in a Church-controlled territory, a Stability check (Ob 2) is required at Accounting. Failure: Church loses administrative control; territory reverts to prior controller (or becomes Uncontrolled if prior controller has Mandate 0).
+**Loss of seized territory:** If PT drops below 2 in a Church-controlled territory, a Stability check (Ob 2) is required at Accounting. Failure: Church loses administrative control; territory reverts to prior controller (or becomes Uncontrolled if prior controller has Mandate 0).
 
 ---
 
@@ -174,9 +174,9 @@ At Accounting, TC adjusts as follows (in order):
 
 **Step 1 — Institutional Momentum (passive):** TC +1. (Unchanged from PP-402. Church institutional presence generates baseline pressure regardless of territory holdings.)
 
-**Step 2 — Conviction Yield:** For each territory where Church is prominent (Church Mandate > controlling faction's Mandate), add TC bonus based on that territory's CV:
+**Step 2 — Conviction Yield:** For each territory where Church is prominent (Church Mandate > controlling faction's Mandate), add TC bonus based on that territory's PT:
 
-| CV | TC Yield |
+| PT | TC Yield |
 |----|----------|
 | 5 | +1 |
 | 4 | +0.5 (track half-steps; round down total across all territories) |
@@ -187,7 +187,7 @@ At Accounting, TC adjusts as follows (in order):
 
 **Total Conviction Yield = floor(Σ yield across all prominent territories)**
 
-Maximum theoretical Conviction Yield per season: if Church is prominent in all 15 eligible territories (implausible), and all are CV 5: +15. Realistic early game: prominent in T9 (CV 5) + maybe T1, T2 (CV 4): +1 + 0.5 + 0.5 = floor(2) = +2.
+Maximum theoretical Conviction Yield per season: if Church is prominent in all 15 eligible territories (implausible), and all are PT 5: +15. Realistic early game: prominent in T9 (PT 5) + maybe T1, T2 (PT 4): +1 + 0.5 + 0.5 = floor(2) = +2.
 
 **Step 3 — Assert (optional Church action):** Church may spend a Standard Action to Assert. Roll: Influence vs Ob 2. Success: TC +1 (in addition to Steps 1–2). Failure: no additional TC; Stability −1 (PP-403 applies).
 
@@ -201,9 +201,9 @@ The old Piety Domain Action (Mandate pool, TN 7, Ob 2, TC +1) is replaced by the
 
 ### TC Pacing Analysis
 
-Early game (S1–S5): Church prominent in ~1–2 territories (T9 at CV 5). TC gain ≈ +1 (passive) +1 (CV yield from T9) −1 (Hafenmark suppress if Baralta active) = +1/season. TC at S5 ≈ 33.
+Early game (S1–S5): Church prominent in ~1–2 territories (T9 at PT 5). TC gain ≈ +1 (passive) +1 (PT yield from T9) −1 (Hafenmark suppress if Baralta active) = +1/season. TC at S5 ≈ 33.
 
-Mid game (S6–S12): Church expands prominence via Mandate growth, Preaching raises CV. Prominent in 3–5 territories, some at CV 4–5. TC gain ≈ +1 +2 −1 = +2/season. TC at S12 ≈ 47.
+Mid game (S6–S12): Church expands prominence via Mandate growth, Preaching raises PT. Prominent in 3–5 territories, some at PT 4–5. TC gain ≈ +1 +2 −1 = +2/season. TC at S12 ≈ 47.
 
 Late game (S13–S20): Church at peak prominence, 5–8 territories, active Preaching. TC gain ≈ +1 +3 = +4/season (Hafenmark suppression may have ended). TC 75 reached ~S20.
 
@@ -244,7 +244,7 @@ This gives a 20-season timeline to TC 75 under active Church play with moderate 
 
 
 
-**Erosion:** If CV drops below 2 in a Church-held territory, Stability check required (see §2). Loss of territory reduces TCV sum — Church can lose its victory position.
+**Erosion:** If PT drops below 2 in a Church-held territory, Stability check required (see §2). Loss of territory reduces TCV sum — Church can lose its victory position.
 
 ### 4.2 Alternate Victory — Altonian Theocracy Path (PP-414)
 
@@ -305,21 +305,21 @@ This gives a 20-season timeline to TC 75 under active Church play with moderate 
 | Varfell protects a practitioner from Church persecution (narrative trigger) | WA +1 |
 | Varfell uses Thread operations in Varfell territory AND VTM is public (≥ 3) | WA +1 (once only — first reveal) |
 | Varfell seizes territory from another faction using military force | WA −1 |
-| Varfell raises CV in own territory (via any means) | WA −1 |
+| Varfell raises PT in own territory (via any means) | WA −1 |
 | Varfell allies with Church (formal alliance declared) | WA −2 (immediate) |
 | Varfell suppresses Community Weaving in own territory | WA −1 |
 | RS drops below 50 while Varfell controls T13 | WA −1 (Einhir sites destabilise; movement blames Varfell inaction) |
 
-**Seasonal cap:** ±1 WA per season (same discipline as CV).
+**Seasonal cap:** ±1 WA per season (same discipline as PT).
 
-**WA does not track separately from CV.** WA is Vaynard's political relationship with the movement; CV is the population's faith level. They interact but are independent stats.
+**WA does not track separately from PT.** WA is Vaynard's political relationship with the movement; PT is the population's faith level. They interact but are independent stats.
 
 ### 5.2 Emergence Trigger
 
 RM **emerges as an active NPC faction** when ALL of the following are true at Accounting:
 
 1. WA ≤ −2 (Varfell has alienated the movement)
-2. At least 3 territories have CV ≤ 1
+2. At least 3 territories have PT ≤ 1
 3. RS ≤ 50 (rendering instability feeds cultural desperation)
 
 
@@ -330,7 +330,7 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 
 | Stat | Value | Derivation |
 |------|-------|------------|
-| Mandate | Count of territories with CV ≤ 1 (min 2, max 5) | Popular mandate from low-conviction populations |
+| Mandate | Count of territories with PT ≤ 1 (min 2, max 5) | Popular mandate from low-conviction populations |
 | Influence | 4 | Grassroots network |
 | Wealth | 1 | No institutional backing |
 | Military | 0 | Non-violent movement |
@@ -338,23 +338,23 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 
 **Ethical Framework:** Rawlsian Social Contract (unchanged from stage6 design). −1 Ob for actions benefiting common population; +1 Ob for actions concentrating power.
 
-**NPC AI priority:** Reduce CV in adjacent territories. Protect RS. Oppose Church and any faction with Mandate ≥ 5.
+**NPC AI priority:** Reduce PT in adjacent territories. Protect RS. Oppose Church and any faction with Mandate ≥ 5.
 
 **Actions (once per season, NPC-controlled):**
 
 | Action | Roll | Effect |
 |--------|------|--------|
-| Community Weaving | Influence vs Ob = Thread Tension ÷ 20 (round up, min 1). Requires practitioner TS 30+ affiliated. | Overwhelming: RS +2, CV −1 in target territory. Success: RS +1, CV −1. Partial: no effect. Failure: Stability −1, RS −1. Co-Movement card drawn. |
-| Grassroots Organising | Influence vs Ob 2 | Success: RM Mandate +1 in one territory with CV ≤ 2. Caps at Mandate 5. |
-| Resist Seizure | Influence vs Church Influence | When Church attempts seizure in territory with CV ≤ 2: RM adds +1 Ob to Church seizure roll. Passive — does not consume RM's action. |
+| Community Weaving | Influence vs Ob = Thread Tension ÷ 20 (round up, min 1). Requires practitioner TS 30+ affiliated. | Overwhelming: RS +2, PT −1 in target territory. Success: RS +1, PT −1. Partial: no effect. Failure: Stability −1, RS −1. Co-Movement card drawn. |
+| Grassroots Organising | Influence vs Ob 2 | Success: RM Mandate +1 in one territory with PT ≤ 2. Caps at Mandate 5. |
+| Resist Seizure | Influence vs Church Influence | When Church attempts seizure in territory with PT ≤ 2: RM adds +1 Ob to Church seizure roll. Passive — does not consume RM's action. |
 
-**Territory presence:** Active RM has presence in every territory with CV ≤ 1. RM does not control territory — it exerts influence within it. RM presence adds +1 Ob to any Church action in that territory.
+**Territory presence:** Active RM has presence in every territory with PT ≤ 1. RM does not control territory — it exerts influence within it. RM presence adds +1 Ob to any Church action in that territory.
 
 ### 5.4 Suppression and Resolution
 
 **Suppression:** RM can be suppressed back to latency if:
 - WA returns to ≥ 0 (Varfell reconciles), OR
-- All territories rise to CV ≥ 2 (movement loses popular base), OR
+- All territories rise to PT ≥ 2 (movement loses popular base), OR
 - RM Stability reaches 0 (movement collapses internally).
 
 
@@ -371,7 +371,7 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 |------|-----------|------|
 | **Deed 1 — Extend the Reach** | Control T13 (Oastad) + garrison or Tribune present in T15 (Southernmost) simultaneously for 2 consecutive seasons. | VTM ≥ 2 (must have Thread awareness to engage the Southernmost meaningfully). |
 | **Deed 2 — Walk the Wound** | Complete a Southernmost Expedition (existing mechanic) with Vaynard's personal participation. Pass the Forgetting Check. | VTM ≥ 3. Warden Cooperation ≥ 1. |
-| **Deed 3 — Keeper's Mandate** | Hold T13 at CV ≤ 1 AND WA ≥ +1 for 2 consecutive seasons. | VTM ≥ 3. The movement must trust Vaynard — this cannot be achieved if RM has emerged as hostile. |
+| **Deed 3 — Keeper's Mandate** | Hold T13 at PT ≤ 1 AND WA ≥ +1 for 2 consecutive seasons. | VTM ≥ 3. The movement must trust Vaynard — this cannot be achieved if RM has emerged as hostile. |
 
 
 
@@ -403,7 +403,7 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 |-----------|-------------------|
 | VTM ≥ 4 | Varfell |
 | WA ≥ +2 | Varfell (cultivation choices) |
-| ≥ 4 territories at CV ≤ 1 | Both (Varfell Cultural Reclamation + latent RM Community Weaving) |
+| ≥ 4 territories at PT ≤ 1 | Both (Varfell Cultural Reclamation + latent RM Community Weaving) |
 | RS ≥ 40 | Both (Community Weaving sustains RS; Varfell Thread operations must not collapse it) |
 | Warden Cooperation ≥ 2 | Varfell |
 | Vaynard controls T13 (Oastad) | Varfell |
@@ -424,7 +424,7 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 
 | ED | Description | Priority |
 |----|-------------|----------|
-| ED-302 | Confirm track name "Conviction" (CV) | P2 |
+| ED-302 | Confirm track name "Conviction" (PT) | P2 |
 | ED-303 | Does TC freeze at 75 or continue advancing? Design recommends freeze. | P1 |
 | ED-304 | Hollow Victory scoring — co-win or draw? Design recommends conditional victory for both. | P2 |
 | ED-305 | Varfell-RM Relationship Track (Warden's Accord) starting value — 0 is proposed. Confirm. | P2 |
@@ -437,10 +437,10 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 |-----|-------------|
 | [GAP: TC pacing — no simulation] | TC 75 timeline estimate (~S20) is analytical only. Needs simulation with faction AI to validate. Flag as SIM-DEBT. |
 | [GAP: AEA pacing — no simulation] | Altonian Theocracy clock has 5 advancement conditions. Needs simulation to confirm it is achievable but not trivial. |
-| [GAP: RM emergence frequency] | The triple condition (WA ≤ −2, 3 territories CV ≤ 1, RS ≤ 50) may be too restrictive or too permissive. Needs stress test. |
-| [GAP: Community Weaving dual effect] | Community Weaving now affects both RS and CV. Need to verify this does not create a positive feedback loop (low CV → more Weaving → lower CV → more RM power). |
-| [GAP: Consecrated status interaction with seizure] | Consecrated territories get −1 Ob on seizure but also require CV ≥ 5 via Consecrate action. This may make high-CV territories too easy to seize. Needs edge case check. |
-| [GAP: Hafenmark Secular Governance floor] | Secular Governance cannot reduce CV below 2. Is this the right floor? If Hafenmark wants to support RM, they may need to push lower. |
+| [GAP: RM emergence frequency] | The triple condition (WA ≤ −2, 3 territories PT ≤ 1, RS ≤ 50) may be too restrictive or too permissive. Needs stress test. |
+| [GAP: Community Weaving dual effect] | Community Weaving now affects both RS and PT. Need to verify this does not create a positive feedback loop (low PT → more Weaving → lower PT → more RM power). |
+| [GAP: Consecrated status interaction with seizure] | Consecrated territories get −1 Ob on seizure but also require PT ≥ 5 via Consecrate action. This may make high-PT territories too easy to seize. Needs edge case check. |
+| [GAP: Hafenmark Secular Governance floor] | Secular Governance cannot reduce PT below 2. Is this the right floor? If Hafenmark wants to support RM, they may need to push lower. |
 | [GAP: Fort Level data] | Seizure Ob formula uses Fort Level (0–3). Confirm which territories have which Fort Levels — not in handoff. |
 
 ---
@@ -449,12 +449,12 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 
 | PP | Scope | Description |
 |----|-------|-------------|
-| PP-406 | Track | Conviction (CV) starting values — 15 eligible territories, 0–5 range |
-| PP-407 | Track | T15 hard fix rule — CV permanently 0, no exceptions |
-| PP-408 | Track | CV movement rules — faction actions, frequency, seasonal cap ±1 |
-| PP-409 | Track | Calamity Drift — RS-linked CV erosion at RS ≤ 50/35/20 |
-| PP-410 | Track | Consecrated status — CV 5 via Consecrate action, floor of 4 while Church controls |
-| PP-411 | Seizure | Church Seizure Ob = 2 + Fort Level + max(0, 3 − CV). Prominence required. |
+| PP-406 | Track | Conviction (PT) starting values — 15 eligible territories, 0–5 range |
+| PP-407 | Track | T15 hard fix rule — PT permanently 0, no exceptions |
+| PP-408 | Track | PT movement rules — faction actions, frequency, seasonal cap ±1 |
+| PP-409 | Track | Calamity Drift — RS-linked PT erosion at RS ≤ 50/35/20 |
+| PP-410 | Track | Consecrated status — PT 5 via Consecrate action, floor of 4 while Church controls |
+| PP-411 | Seizure | Church Seizure Ob = 2 + Fort Level + max(0, 3 − PT). Prominence required. |
 | PP-412 | TC | TC generation redesign — passive +1, Conviction Yield, Assert, Suppress, Hafenmark structural |
 | PP-413 | Victory | Church Primary Victory — TC 75 phase transition, TCV ≥ 18 for 2 seasons |
 | PP-414 | Victory | Altonian Theocracy Path — AEA clock 0–5, victory at AEA 5 + TC ≥ 60 + hold T9 |
@@ -467,20 +467,20 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 
 ## 11. Conviction Track Presentation Layer (NEW — World→Player Bridge)
 
-### §11.1 CV Change Environmental Events
+### §11.1 PT Change Environmental Events
 
-When Conviction (CV) changes in a territory, the change should be experienceable by any player present. CV is not just a number — it is the cultural identity of a community shifting.
+When Conviction (PT) changes in a territory, the change should be experienceable by any player present. PT is not just a number — it is the cultural identity of a community shifting.
 
-| CV Transition | Environmental Description |
+| PT Transition | Environmental Description |
 |--------------|--------------------------|
-| CV +1 (any → higher) | Church influence deepens. **Settlement type modulation:** Cathedral settlements amplify this effect (total Church presence). Market/Port settlements mute it (commerce dampens extremes). Outpost settlements show minimal change. New description: the morning bells ring longer. A priest who used to preach from memory now reads directly from the Solmund Codex. A shrine appears at the crossroads that wasn't there last season. The tavern-keeper has hung a blessing plaque by the door. |
-| CV −1 (any → lower) | Einhir heritage resurfaces. **Settlement type modulation:** Outpost/Town settlements show this most strongly (frontier culture is closer to Einhir roots). Cathedral settlements resist (institutional inertia). New description: someone has left wildflowers at the old Einhir stone circle outside town. Children are singing a song in a language the Church doesn't teach. An elder tells a story about what the land was before Solmund, and no one shushes them. |
-| CV reaches 5 (Consecrated) | Total Church dominance. The territory feels different. Church officials are present in every public space. The old Einhir names for landmarks have been replaced with Solmundic names on the official signposts. Non-Church social gatherings require permission. |
-| CV reaches 0 | Einhir restoration complete. Church architecture is repurposed or abandoned. Thread-sensitive characters perceive a subtle difference in the substrate — the rendering is thinner here, closer to what it was before the orthodoxy. |
+| PT +1 (any → higher) | Church influence deepens. **Settlement type modulation:** Cathedral settlements amplify this effect (total Church presence). Market/Port settlements mute it (commerce dampens extremes). Outpost settlements show minimal change. New description: the morning bells ring longer. A priest who used to preach from memory now reads directly from the Solmund Codex. A shrine appears at the crossroads that wasn't there last season. The tavern-keeper has hung a blessing plaque by the door. |
+| PT −1 (any → lower) | Einhir heritage resurfaces. **Settlement type modulation:** Outpost/Town settlements show this most strongly (frontier culture is closer to Einhir roots). Cathedral settlements resist (institutional inertia). New description: someone has left wildflowers at the old Einhir stone circle outside town. Children are singing a song in a language the Church doesn't teach. An elder tells a story about what the land was before Solmund, and no one shushes them. |
+| PT reaches 5 (Consecrated) | Total Church dominance. The territory feels different. Church officials are present in every public space. The old Einhir names for landmarks have been replaced with Solmundic names on the official signposts. Non-Church social gatherings require permission. |
+| PT reaches 0 | Einhir restoration complete. Church architecture is repurposed or abandoned. Thread-sensitive characters perceive a subtle difference in the substrate — the rendering is thinner here, closer to what it was before the orthodoxy. |
 
-**TTRPG/Hybrid:** GM narrates the transition. The description does not specify the CV number — the player perceives the change through lived texture, not statistics.
+**TTRPG/Hybrid:** GM narrates the transition. The description does not specify the PT number — the player perceives the change through lived texture, not statistics.
 
-**Videogame:** Environmental art shifts per CV level: shrine placement, banner type, ambient NPC dialogue, architectural details, lighting warmth.
+**Videogame:** Environmental art shifts per PT level: shrine placement, banner type, ambient NPC dialogue, architectural details, lighting warmth.
 
 ### §11.2 Church Attention Pool — Player-Facing Indicators
 

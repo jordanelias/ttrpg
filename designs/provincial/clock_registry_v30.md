@@ -120,3 +120,13 @@ Reputation and Standing (oscillating, BG):
 | Settlement Order | 0–5 | Per settlement registry | settlement_layer_v30 §1.3, §2.1 |
 | Local Actor Disposition | −3 to +5 | +1 toward governor, 0 others | settlement_layer_v30 §4.5 |
 | Guild Favor (per settlement) | 1–7 | 3 (Guild-managed) / 1 (other) | player_agency_v30 §9 (T2) |
+
+
+### Settlement Derived Values (derived_stats_v30 §4, AUD-CK-01 resolved)
+
+| Track | Range | Derivation | Source | Direction |
+|-------|-------|-----------|--------|-----------|
+| Local Economy | 0–250 | Prosperity × 50 | settlement_layer_v30 §1.3 | Higher = more gold income |
+| Garrison Strength | 0–250 | Defense × 20 + Fort Level × 30 | settlement_layer_v30 §1.3 | Higher = harder to attack |
+| Public Order | 0–100 | Order × 20 | settlement_layer_v30 §1.3 | 0 = riot events fire |
+

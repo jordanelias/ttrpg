@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 698
+# next_id: 699
 
 
 
@@ -9,93 +9,13 @@
 
 
 
-  - id: ED-697
+
+  - id: ED-698
     date: 2026-04-18
-    description: "AUD-UI-01/02: UI/UX integration supplement. Derived stats display spec (Part 11.x) with Godot notes. Settlement map spec (Part 3.x) with node display, interaction, and implementation."
+    description: "AUD-COM-01: Combat §4 priority contradiction resolved (Option B: resolution order within simultaneous declarations). AUD-COM-02: §9 stat names propagated (11 replacements). AUD-CT-01: CV→PT rename (111 replacements). AUD-CK-01: Settlement derived tracks added to clock_registry."
     status: resolved
-    severity: P2
-    affects: [designs/ui/valoria_ui_ux_supplement_derived_settlement.md, designs/ui/valoria_ui_ux_v4_1.md]
-
-
-  - id: ED-696
-    date: 2026-04-18
-    description: "Phase 2.11: Generational transition specification. Every tracked value enumerated with transition behavior (preserve/transform/reset/break/transfer). Resources inheritance resolved: floor(predecessor/2) + new starting."
-    status: resolved
-    severity: P2
-    affects: [designs/architecture/player_agency_v30.md]
-
-
-  - id: ED-694
-    date: 2026-04-18
-    description: "AUD-SET-01/03: Settlement economy simulation. Income differentiated. Order→Accord derivation proportional. Siege attrition 4 seasons to kill Size 4 unit (appropriate). All 3 checks PASS."
-    status: resolved
-    severity: P2
-    affects: [designs/territory/settlement_layer_v30.md]
-
-  - id: ED-695
-    date: 2026-04-18
-    description: "AUD-VIC-02: RM victory probability. Simplified sim: 5/5 wins mean S22. CAVEAT: omits Church counter-pressure. Full calibration deferred to Phase 4. Mechanics functional."
-    status: resolved
-    severity: P2
-    affects: [designs/provincial/victory_v30.md]
-
-
-  - id: ED-693
-    date: 2026-04-18
-    description: "AUD-NPC-03: Priority tree cross-faction simulation. 10-season 4-faction AI test. No broken priority evaluation. Church repetition (Assert) is intentional — correct single-minded institutional behavior. Cross-faction reactivity confirmed."
-    status: resolved
-    severity: P2
-    affects: [designs/npcs/npc_behavior_v30.md, tests/sim/sim_priority_trees.md]
-
-
-  - id: ED-692
-    date: 2026-04-18
-    description: "AUD-SC-02/03 + SIM-DEBT-03/04: Social contest PP-234 re-simulation. CROSS viability confirmed at R1, intentionally weak at R2. Stall-break (ED-582) working. No rebalancing needed."
-    status: resolved
-    severity: P2
-    affects: [designs/scene/social_contest_v30.md, tests/sim/sim_contest_pp234.md]
-
-
-  - id: ED-689
-    date: 2026-04-18
-    description: "AUD-MB-02: Mass battle Part C editorial items. 6 of 7 confirmed canonical (Command-EDIT-01/02/03, BG-EDIT-01/02, CLOCK-EDIT-02). CLOCK-EDIT-01 deferred to Phase 4 sim."
-    status: resolved
-    severity: P2
-    affects: [designs/provincial/mass_battle_v30.md, params/mass_combat.md]
-
-  - id: ED-690
-    date: 2026-04-18
-    description: "AUD-COM-04/ED-129: Ranged weapon TN integration. Ranged formalized as distinct category — not integrated into 3-axis melee matrix. Architectural justification: ranged weapons lack Reach/Weight axes."
-    status: resolved
-    severity: P2
-    affects: [designs/scene/combat_v30.md, params/combat.md]
-
-  - id: ED-691
-    date: 2026-04-18
-    description: "AUD-TW-02: params_threadwork Ob alignment verified. Cross-references already exist at all struck tables. Canonical values in params_threadwork match PP-622/623 three-axis system. No discrepancies."
-    status: resolved
-    severity: P2
-    affects: [params/threadwork.md, designs/threadwork/threadwork_v30.md]
-
-
-  - id: ED-688
-    date: 2026-04-18
-    description: "AUD-TW-01: Threadwork §4.1 Core Principle and §4.2 Why Random — empty stubs filled with philosophical/design rationale prose (~200 words each)."
-    status: resolved
-    severity: P2
-    resolution: "§4.1: Co-Movement is constitutive — substrate responds as a whole to intervention, practitioner controls where they touch, not how the ground moves. §4.2: Card draws model bounded unpredictability of substrate response — finite deck, known effects, unpredictable ordering."
-    affects: [designs/threadwork/threadwork_v30.md]
-    canon_compliance: "A1 (dual role), A2 (inseparability), A4 (intelligibility), A5 (Ein Sof)"
-
-
-  - id: ED-687
-    date: 2026-04-18
-    description: "AUD-NPC-02: 7 NPC stat gaps resolved. Ehrenwall TS=0/Cert=4, Torben TS=0/Cert=4, Maret Uln TS=35/Cert=2. Resolves ED-392 through ED-398."
-    status: resolved
-    severity: P2
-    resolution: "All 6 editorial gaps in npc_behavior_v30 §2.5/§2.8/§2.10 replaced with confirmed values. Maret Uln TS=35 enables Thread-Read, affects arc behavior post-Vaynard."
-    affects: [designs/npcs/npc_behavior_v30.md]
-
+    severity: P3
+    affects: [designs/scene/combat_v30.md, designs/scene/conviction_track_v30.md, designs/provincial/clock_registry_v30.md]
 
   - id: ED-670
     date: 2026-04-17
@@ -173,5 +93,6 @@
     affects: [designs/npcs/npc_behavior_v30.md]
     source_pp: PP-019
     note: "Renumbered from duplicate ED-673."
+
 
 

@@ -75,17 +75,18 @@ Round duration: 6–10 seconds narrative.
 
 ## 4. ACTIONS
 
-**Combat action priority order (PP-247):** Lower number = resolves first within a round.
+**Combat action resolution order (PP-247, AUD-COM-01 resolved):** All actions are declared simultaneously and blindly (§2 Step 3). Resolution order determines which effects apply first when multiple actions target the same character in the same round. Lower number = resolves first. This adds tactical depth: a Rescue (reactive, resolves on trigger) can intervene before a Strike (Priority 1) kills the target.
 
-****THIS DOESN'T MAKE SENSE RE PRIORITY. IT'S ALL SIMULTANEOUS****
-| Priority | Action |
-|----------|--------|
+| Resolution Order | Action |
+|-----------------|--------|
 | 1 | Strike |
 | 2 | Feint |
 | 3 | Disarm, Tie Up, Retrieve |
 | 4 | Establish Distance, Escape |
 | 5 | Leap (Thread — full-round) |
-| — | Full Guard, Take a Breath, Dodge, Rescue (reactive; trigger-timed) |
+| Reactive | Full Guard, Take a Breath, Dodge, Rescue (trigger-timed, resolve when trigger fires) |
+
+**Godot implementation:** Process all declared actions in resolution order. Check for reactive triggers at each step. If a target is incapacitated before their action resolves, their action is lost (they were too slow).
 
 
 | Action | Description |
@@ -325,9 +326,9 @@ Rescued actor exemptions expire at round end.
 *This section provides the interface between personal and unit scales.*
 
 ### Unit Stat Block (1–7 unless noted)
-- **Strength:** Headcount/health pool. At 0: destroyed.
-- **Combat Power (CP):** Dice pool ceiling.
-- **Cohesion:** Organisational integrity.
+- **Size:** Headcount/health pool. At 0: destroyed.
+- **Power (Power):** Dice pool ceiling.
+- **Discipline:** Organisational integrity.
 - **Morale:** Rout threshold.
 - **Speed:** Slow / Standard / Fast.
 - **Weapon Type:** Inherits personal combat TN table (above).
@@ -406,19 +407,19 @@ This perception provides investigative information (fieldwork_v30 §2.4) and fee
 ## 11. FACTION UNIT ROSTERS (from MT-01, 2026-03-30)
 
 Default unit stats (board game / mass combat):
-- Standard unit: Martial 2, Cohesion 3
-- Elite unit: Martial 3–4, Cohesion 4–5
+- Standard unit: Martial 2, Discipline 3
+- Elite unit: Martial 3–4, Discipline 4–5
 
 | Faction | Military | Starting Units | Notes |
 |---------|---------|---------------|-------|
 | Crown | 4 | 4 | Mixed infantry + cavalry. Standard formation. |
-| Church | 4 | 4 | 2 Templar (elite: Cohesion 5, Martial 4) + 2 garrison (Cohesion 3, Martial 2). Templars deploy free at Theocracy Counter ≥ 40 in Himmelstift. |
-| Hafenmark | 3 | 3 | 1 ducal guard (elite: Cohesion 4, Martial 3) + 2 militia. |
-| Varfell | 4 | 4 | Highland infantry. Cohesion 4. Home territory bonus: +1D in Eisengrund. |
-| Guilds | 2 | 2 | Hired mercenaries. Cohesion 3, Martial 2. High Wealth allows rapid replacement. |
+| Church | 4 | 4 | 2 Templar (elite: Discipline 5, Martial 4) + 2 garrison (Discipline 3, Martial 2). Templars deploy free at Theocracy Counter ≥ 40 in Himmelstift. |
+| Hafenmark | 3 | 3 | 1 ducal guard (elite: Discipline 4, Martial 3) + 2 militia. |
+| Varfell | 4 | 4 | Highland infantry. Discipline 4. Home territory bonus: +1D in Eisengrund. |
+| Guilds | 2 | 2 | Hired mercenaries. Discipline 3, Martial 2. High Wealth allows rapid replacement. |
 | Niflhel | 0 | 0 | No standing units. Cannot hold territory by force. |
 | Revolution | 0 | 0 | No standing units. Community defence possible via Community Weaving. |
-| Löwenritter | 5 (→6 post-coup) | 5 (→6) | All units elite: Cohesion 5, Martial 4. +1 unit from Crown transfer post-coup. |
+| Löwenritter | 5 (→6 post-coup) | 5 (→6) | All units elite: Discipline 5, Martial 4. +1 unit from Crown transfer post-coup. |
 
 
 **Mustering:** Muster order raises 1 new unit per success (up to Military cap) at standard stats.
@@ -517,7 +518,7 @@ Combat in a settlement produces settlement-level consequences on top of province
 
 These effects are immediate and stack with existing Domain Echo and reputation effects from §13.1 and §13.2.
 
-**Garrison Strength feedback (derived_stats_v1 §8.4):** When the player personally defends a settlement, combat outcome modifies Garrison Strength: victory +10, Overwhelming victory +20 + Public Order +5, defeat −10, settlement falls → Garrison Strength 0 + Defense stat check Ob 2. This cascade (personal combat → settlement derived value → faction income) is the most direct personal→faction feedback loop.
+**Garrison Size feedback (derived_stats_v1 §8.4):** When the player personally defends a settlement, combat outcome modifies Garrison Size: victory +10, Overwhelming victory +20 + Public Order +5, defeat −10, settlement falls → Garrison Size 0 + Defense stat check Ob 2. This cascade (personal combat → settlement derived value → faction income) is the most direct personal→faction feedback loop.
 
 ### §13.3 Death Cascade
 
