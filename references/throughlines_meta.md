@@ -1,6 +1,7 @@
 <!-- SKELETON — mechanical spec only -->
 <!-- Infill: references/throughlines_meta_infill.md -->
 <!-- [EDITORIAL: PP-672 — throughlines hierarchical framework, canonical vetting guide, 2026-04-19] -->
+<!-- [EDITORIAL: Session B — T-10 struck (Niflhel dissolved), М-4 count 5→4] -->
 <!-- [EDITORIAL: PP-674 — added tier N (Necessity Test), framework enforcement via vetting_gate, 2026-04-19] -->
 
 # Valoria Throughlines Framework — Canonical Vetting Guide
@@ -92,7 +93,7 @@ Structural patterns from the 25 throughlines. Each subordinated to Μ modes.
 - **−** violates — resolve or redesign
 - **○** does not apply to proposal scope
 
-**T→М tag table** (for Τ-level checks): see infill §3.1. Summary: all 25 T's covered; primary-assignment distribution — М-1: 4 · М-2: 2 · М-3: 3 · М-4: 5 · М-5: 6 · М-6: 5.
+**T→М tag table** (for Τ-level checks): see infill §3.1. Summary: all 25 T's covered; primary-assignment distribution — М-1: 4 · М-2: 2 · М-3: 3 · М-4: 4 · М-5: 6 · М-6: 5.
 
 ---
 

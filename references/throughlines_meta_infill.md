@@ -80,7 +80,7 @@ Four is the minimum coherent set.
 | T-07 | Peninsular Strain | М-1 | — | Clock — continuous pressure from accumulated war. |
 | T-08 | Church Rendering Reinforcement | М-4 | — | Institutional — Church's substrate-posture is rendering-reinforcement. |
 | T-09 | Varfell Thread Progressive | М-4 | — | Institutional — Varfell's posture is thread-progressive. |
-| T-10 | Niflhel Accelerationist | М-4 | — | Institutional — Niflhel's posture structurally diverges from RS preservation. |
+| T-10 | **STRUCK** (Niflhel dissolved) | — | — | Niflhel dissolved as faction. Thread exploitation distributed to settlement-level phenomena. |
 | T-11 | Crown Pragmatic | М-4 | — | Institutional — Crown's posture is instrumentalist. |
 | T-12 | Practitioner Arc | М-6 | М-1 | Primary forced-choice (Coherence cost forces engagement decisions). Secondary pressure (Coherence depletes). |
 | T-13 | Certainty Journey | М-6 | М-3 | Primary forced-choice (irreversible descent opens capabilities, closes relationships). Secondary substrate-grounded. |
@@ -97,13 +97,13 @@ Four is the minimum coherent set.
 | T-24 | Convergence as Crisis | М-5 | — | Scale-connecting — multiple throughlines intersecting at various scales produce emergent crisis. |
 | T-25 | Generational Arc | М-5 | — | Scale-connecting — 30-year clock transforms personal standings into institutional reality. |
 
-Coverage: 25 of 25. Primary distribution: М-1: 4 · М-2: 2 · М-3: 3 · М-4: 5 · М-5: 6 · М-6: 5.
+Coverage: 24 of 25 (T-10 struck — Niflhel dissolved). Primary distribution: М-1: 4 · М-2: 2 · М-3: 3 · М-4: 4 · М-5: 6 · М-6: 5.
 
 ### §3.2 М-dependencies explained
 
 **М-2 presupposes М-1.** Geography is how continuous pressure distributes spatially. Without pressure (М-1), there is no uneven distribution to be geographic. Radiation Gradient (T-18) only makes sense if RS is decaying (a specific instance of М-1's pressure-is-continuous).
 
-**М-4 presupposes М-3.** Faction substrate-postures are postures *on* the substrate. Without substrate grounding (М-3), there is nothing for factions to take postures toward. The Church's rendering-reinforcement, Varfell's thread-progression, Niflhel's accelerationism, Crown's instrumentalism — each is a stance on how to relate to Thread. No Thread, no stance.
+**М-4 presupposes М-3.** Faction substrate-postures are postures *on* the substrate. Without substrate grounding (М-3), there is nothing for factions to take postures toward. The Church's rendering-reinforcement, Varfell's thread-progression, Crown's instrumentalism — each is a stance on how to relate to Thread. No Thread, no stance.
 
 **М-5 presupposes М-3.** Cross-scale consequence propagates because all scales share the substrate. A personal Thread operation produces peninsula-scale co-movement because both are operations on the same medium. Without shared substrate, scales would need separate mechanics and the framework would be approving multiple incommensurable game-systems under one name.
 

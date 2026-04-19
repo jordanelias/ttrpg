@@ -74,11 +74,8 @@ How each faction's identity produces mechanical consequences across systems.
 **What it means:** Varfell is the faction whose institutional interest aligns with substrate maintenance. The three Vaynard paths (Intelligence, Southernmost, Thread Supremacy) represent different strategies for this alignment. Path B (Southernmost Dominion) makes WC Varfell's primary objective — the faction whose political interest IS the survival contest.
 **Arc register vectors:** ARC-S01, ARC-S13, ARC-S16, ARC-S27, ARC-T21
 
-### T-10: Niflhel as Accelerationist
-**Chain:** Harvest (Dissolution Residue collection) → RS acceleration → substrate instability → more Gaps → more threadcut beings → more Harvest material → Niflhel capability growth
-**Systems:** npc_behavior (§8.8 Niflhel priority tree with Harvest gate), wc_survival_spine, rs_budget, arc_expansion (Quiet One arc)
-**What it means:** Niflhel is the only faction whose strategic interest structurally diverges from RS preservation. Their Harvest requires Dissolution — the operation that damages the substrate most. The RS-monitoring subroutine in §8.8 gates Harvest intensity, but the structural incentive remains: Niflhel benefits from substrate damage up to the point of Rupture.
-**Arc register:** The Quiet One (arc_expansion_v1) — Thread extraction operative
+### T-10: STRUCK — Niflhel Dissolved
+**STRUCK** (conflict_architecture_proposal). Niflhel dissolved as faction. Thread Harvest replaced by settlement-level Thread exploitation sites. Quiet One becomes independent settlement-tied NPC.
 
 ### T-11: Crown as Pragmatic Instrumentalist
 **Chain:** Royal Decree + Thread Liaison + institutional succession → Thread-as-tool when advantageous, Thread-as-threat when dangerous → reactive rather than principled Thread engagement
@@ -158,8 +155,8 @@ Chains that produce emergent strategic dynamics.
 **What it means:** This is the game's central strategic architecture. A player who optimizes for sovereignty ignores WC and RS, risking Rupture. A player who optimizes for survival sacrifices political position. The tension is unresolvable — the player must manage both contests simultaneously with insufficient resources for either. WC 3 is the only endgame survival path, and it requires cross-faction cooperation that the sovereignty contest discourages.
 
 ### T-21: Thread Political Warfare
-**Chain:** Shared RS track → any faction's Thread aggression damages all factions → mutual deterrence → Lock-and-cede (deny territory by making it ungovernable) → Thread brinksmanship (bait enemy into RS-costly operations) → Niflhel as accelerationist (Harvest = RS damage as resource)
-**Systems:** npc_behavior (§8.5 Varfell brinksmanship, §8.8 Niflhel Lock-and-cede/Harvest gate, §8.10 Warden RS override), rs_budget, wc_survival_spine
+**Chain:** Shared RS track → any faction's Thread aggression damages all factions → mutual deterrence → Lock-and-cede (deny territory by making it ungovernable) → Thread brinksmanship (bait enemy into RS-costly operations) → Thread exploitation sites (settlement-level RS damage as tragedy-of-the-commons)
+**Systems:** npc_behavior (§8.5 Varfell brinksmanship, §8.10 Warden RS override), rs_budget, wc_survival_spine
 **What it means:** The shared RS track creates a geopolitical doctrine. Aggressive Thread warfare is a credible threat against all factions including the attacker. The strategic behaviors (Lock-and-cede, brinksmanship, Harvest) are not exploits — they are coherent doctrines that the shared RS track generates. For videogame implementation, these must be NPC AI behaviors, not emergent player discoveries alone.
 **Arc register:** ARC-S33 (Lattice of Enemies)
 
@@ -218,7 +215,6 @@ Where throughlines intersect, the game's deepest strategic dynamics emerge.
 | T-07 Peninsular Strain | Not covered | peninsular_strain §4 | Fully implemented |
 | T-08 Church Rendering | ARC-S03, S06, S08, S09, etc. | npc_behavior (Church tree), conviction_track | Fully implemented |
 | T-09 Varfell Progressive | ARC-S01, S13, S27 | victory §6 (WR/WC), faction_politics (Warden ladder) | Fully implemented |
-| T-10 Niflhel Accelerationist | Quiet One (arc_expansion) | npc_behavior §8.8 (Harvest gate) | Implemented (ED-679) |
 | T-11 Crown Instrumentalist | ARC-S14, S17, S28, S45 | params_board_game (Thread Liaison) | Implemented |
 | T-12 Practitioner Arc | ARC-S04, S34 | threadwork §3 (Coherence), npc_behavior §4.3 | Implemented (ED-672, ED-681) |
 | T-13 Certainty Journey | Implicit in Thread vectors | params_core (Certainty Track), character_histories (ED-678) | Fully implemented |

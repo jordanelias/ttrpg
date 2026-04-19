@@ -87,7 +87,7 @@ Chapel → Church → Cathedral + Templar + Inquisitor + Governor → PT → TC 
 
 **Docs:** settlement_layer_v30 §1.5–1.7, campaign_architecture_v1 §1, victory_v30 §7, tc_political_redesign_v30 §2–3
 
-## T10 — Economic Pressure as Strategic Constraint
+## — Economic Pressure as Strategic Constraint
 Derived stats connect every military and governance decision to economic consequences. Campaign Supply drains Treasury. Siege drains Treasury. Muster costs Treasury. Upkeep costs Treasury. Income from settlement Prosperity through Wealth stat to Treasury. The player feels economic pressure as visible resource drain and responds strategically.
 
 **Docs:** derived_stats_v1 §3.1 (Treasury), mass_battle_v30 §A.14b, military_layer_v30 §1.9
@@ -119,16 +119,16 @@ Character action → settlement consequence → territory consequence → penins
 | System | Throughlines |
 |--------|-------------|
 | Thread/Coherence/RS | N1, N5, T1, T13, T14 |
-| Faction stats/Domain Actions | N2, T2, T10 |
+| Faction stats/Domain Actions | N2, T2 |
 | Settlement governance | N2, N6, T1, T7, T13 |
-| Mass battle | T5, T6, T10, T12 |
+| Mass battle | T5, T6, T12 |
 | Social contest | N3, N6, T4 |
 | Conviction/Portrait | N4, T8 |
 | Fieldwork/Investigation | N5, T3 |
 | Church infrastructure | N6, T9 |
 | RM mechanics | N5, T11 |
-| Altonian invasion | T6, T10, T12 |
-| Derived stats | T2, T10, T12, T13 |
+| Altonian invasion | T6, T12 |
+| Derived stats | T2, T12, T13 |
 | Card system | T2 |
 | Caste system | N3 |
 | NPC behavior | N6, T4, T7, T14 |
