@@ -1,7 +1,7 @@
 # Valoria — Conflict Architecture Proposal
 
 **Date:** 2026-04-19  
-**Status:** PROPOSAL — synthesizes 4 sim batches + ignition analysis + Jordan feedback  
+**Status:** CANON — approved by Jordan. Session B propagated Niflhel dissolution + graduated Löwenritter autonomy. Session A propagated 3-scale model + bishop appointment + PP-666 patches.  
 **Supersedes:** `early_game_ignition_analysis.md` (timing model revised, Niflhel dissolved, Tensions Deck rescoped)
 
 ---

@@ -14,7 +14,7 @@
 
 Current BG succession mechanics route Crown elimination exclusively to Löwenritter:
 - Crown eliminated → Torben Loyalty transfers to Löwenritter (PP-494)
-- Coup Counter 4 → coup fires (PP-194)
+- Löwenritter Autonomy 4 → coup fires (PP-194)
 - Royal Deposition (PI ≥ 5 + Church Mandate ≥ 5 + Crown Mandate ≤ 1 + 2 Standing tokens) → Crown to Löwenritter or emergency Parliament
 
 
@@ -34,7 +34,7 @@ When the trigger fires, a Succession Contest opens at the next Accounting. All m
 
 | Candidate | Claim Basis | Pool | Condition |
 |-----------|------------|------|-----------|
-| Löwenritter | Military authority + institutional loyalty | Military 5 + Stability | Coup Counter ≥ 3 (has been building toward this) |
+| Löwenritter | Military authority + institutional loyalty | Military 5 + Stability | Löwenritter Autonomy ≥ 3 (has been building toward this) |
 | Hafenmark | Deed-claim + parliamentary authority | Mandate + Influence | Baralta alive + Hafenmark Mandate ≥ 4 |
 | Church | Consecration authority (refuse all candidates, claim regency) | Mandate + Influence | TC ≥ 40 (theocratic threshold — Church only claims if already dominant) |
 
@@ -149,15 +149,15 @@ Hafenmark ranks below Std 7 do NOT auto-transfer. Crown ranks under Baralta are 
 
 ---
 
-## 7. Generational Shift × Coup Counter × IP × Crown Claim Interaction (PP-661)
+## 7. Generational Shift × Löwenritter Autonomy × IP × Crown Claim Interaction (PP-661)
 
 PP-660 revised Torben's maturation from "10 years game-time" to a 4-trigger Generational Shift. Three existing clocks interact with this in ways requiring explicit spec:
 
-### 7.1 Generational Shift × Coup Counter
+### 7.1 Generational Shift × Löwenritter Autonomy
 
 When Generational Shift fires (any trigger), evaluate Torben's Disposition to the player and his Loyalty vector:
 
-| Shift Trigger | Torben Disposition to player | Torben Loyalty vector | Coup Counter effect |
+| Shift Trigger | Torben Disposition to player | Torben Loyalty vector | Löwenritter Autonomy effect |
 |---------------|-----------------------------|-----------------------|---------------------|
 | Campaign Seasons ≥ 24 (natural) | Any | ≥ 4 (Crown-aligned) | No effect |
 | Campaign Seasons ≥ 24 | Any | ≤ 3 (Altonian) | +1 (standard per factions_ttrpg §8.9) |
@@ -190,15 +190,15 @@ If IP ≥ 75 (Vanguard active) AND Torben Disposition to player ≤ 0 at Generat
 - At subsequent Generational Shift: Torben matures under Baralta's regency. Disposition to Baralta is a new variable (default 0, modified by ward-relationship scenes). At Disposition ≤ −2, Torben becomes rival claimant post-Shift — delayed Scenario A.
 
 **Scenario C — Generational Shift AND Baralta Crown Claim fire concurrently:**
-- Contested Crown Succession Contest. Hafenmark, Torben, and Löwenritter (if Coup Counter ≥ 2) all stake claim.
+- Contested Crown Succession Contest. Hafenmark, Torben, and Löwenritter (if Löwenritter Autonomy ≥ 2) all stake claim.
 - Torben's pool = Mandate + Bloodline Legitimacy bonus (+2D, Bloodline claim tier per LIN-01).
-- If Torben wins: Crown stays Bloodline claim; Hafenmark's attempt fails; Baralta reverts to pre-contest status with Stability −1 (overreach per §2 failure clause); Löwenritter Coup Counter +1.
+- If Torben wins: Crown stays Bloodline claim; Hafenmark's attempt fails; Baralta reverts to pre-contest status with Stability −1 (overreach per §2 failure clause); Löwenritter Löwenritter Autonomy +1.
 
 ### 7.4 Sequencing Rules
 
 When multiple clocks fire same Accounting:
 1. **Succession takes precedence** — Almud death or Generational Shift Declaration Scene fires first, pauses other clock resolutions within 1 season.
-2. **Coup Counter resolves next** — if Counter reaches 3, Coup fires after Succession declared but before IP effects apply.
+2. **Löwenritter Autonomy resolves next** — if Counter reaches 3, Coup fires after Succession declared but before IP effects apply.
 3. **IP effects apply last** — peninsula's post-succession state is what Altonia reacts to.
 
 [EDITORIAL: ED-659 — Three-clock interaction table applied PP-661.]

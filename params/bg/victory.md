@@ -71,7 +71,7 @@ PI measures popular dissatisfaction with monarchical governance. Higher PI benef
 | 0–4 | Stable. No mechanical effect. |
 | 5–9 | Tensions. Crown Domain Actions +1 Ob in territories with PI markers. Hafenmark Parliamentary Manoeuvre −1 Ob. |
 | 10–14 | Unrest. Crown Stability check Ob +1 at Accounting. Popular demonstrations — flavour. |
-| 15–19 | Revolt. Crown loses 1 territory per season (lowest PV, becomes Uncontrolled after 1-season Political Vacuum per PP-500). Löwenritter coup check if Coup Counter ≥ 2. |
+| 15–19 | Revolt. Crown loses 1 territory per season (lowest PV, becomes Uncontrolled after 1-season Political Vacuum per PP-500). Löwenritter coup check if Löwenritter Autonomy ≥ 2. |
 | 20+ | Collapse. Crown elimination at next Accounting unless PI reduced below 20 before then. |
 
 PI advances per existing IP/PI interaction rules. PI markers placed in territories where relevant events fire.
@@ -151,7 +151,7 @@ PI measures popular dissatisfaction with monarchical governance. Higher PI benef
 | 0–4 | Stable. No mechanical effect. |
 | 5–9 | Tensions. Crown Domain Actions +1 Ob in territories with PI markers. Hafenmark Parliamentary Manoeuvre −1 Ob. |
 | 10–14 | Unrest. Crown Stability check Ob +1 at Accounting. Popular demonstrations — flavour. |
-| 15–19 | Revolt. Crown loses 1 territory per season (lowest PV, becomes Uncontrolled after 1-season Political Vacuum per PP-500). Löwenritter coup check if Coup Counter ≥ 2. |
+| 15–19 | Revolt. Crown loses 1 territory per season (lowest PV, becomes Uncontrolled after 1-season Political Vacuum per PP-500). Löwenritter coup check if Löwenritter Autonomy ≥ 2. |
 | 20+ | Collapse. Crown elimination at next Accounting unless PI reduced below 20 before then. |
 
 PI advances per existing IP/PI interaction rules. PI markers placed in territories where relevant events fire.
