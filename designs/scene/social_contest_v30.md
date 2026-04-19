@@ -46,7 +46,9 @@ The adjudicator type determines the primary attribute for the Argue pool (§4, S
 | "Should we do X? What will follow? What should become?" | Projection |
 
 
-**Step 3 — Set genre and orientation dice:**
+**Step 3 — Set style bonus dice:**
+
+(The player chose one style at Step 2 — a single choice among Precedent, Suppression, Vision, or Insinuation. This step calculates which bonus dice that choice earns.)
 
 Base: orators arguing in the primary genre receive +1D. Orators arguing in the non-primary genre receive +0D.
 
