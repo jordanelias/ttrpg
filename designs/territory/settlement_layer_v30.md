@@ -252,6 +252,8 @@ The faction controlling a province assigns governors to its settlements. Assignm
 
 **NPC Governor:** NPC governors use the faction AI priority tree with settlement-level adaptation. NPC governors always prioritize Order ≥ 2 (institutional stability), then Prosperity development, then Defense only if threatened.
 
+**Bishop-Governor (PP-TBD):** A special governor type installed via Church Ecclesiastical Appointment action. Bishop-governors follow Church NPC Priority Tree (npc_behavior_v30 §8.2) rather than the controlling faction's tree. Settlement governance transfers to Church on appointment. Province fractionalizes if bishop-governor settlement's controller now differs from Seat holder.
+
 ## §3.3 Subnational Faction Governance
 
 Certain settlement types naturally align with subnational factions. The provincial authority may grant management rights to a subnational faction, or the subnational faction may already hold traditional rights.

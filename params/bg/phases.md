@@ -1,3 +1,26 @@
+## Three-Scale Resolution Model (PP-TBD)
+
+Each season resolves in three layers, bottom-up:
+
+1. **Settlement layer** (resolves first). Infrastructure actions: Church building construction,
+   Guild trade operations, Crown ministerial placement, RM community organizing, governor
+   appointments (including bishop appointments per PP-TBD). Settlement Order and Prosperity
+   update. Black markets emerge (Order ≤ 1, no governor) or resolve (Order ≥ 3). Governor
+   authority checks fire.
+
+2. **Province layer** (resolves second). Fragmentation checks using updated settlement data.
+   Accord recalculates from settlement Order floor-average. Province PV recalculates from
+   settlement Prosperity weighted by controller alignment. Military movement along settlement
+   adjacency graph. Mass battles resolve at settlement nodes. Territorial transfer.
+
+3. **Peninsula layer** (resolves third). RS/CI/IP/PI/Strain clocks update from province-level
+   events. Altonian pressure evaluated. Victory condition check against updated PV totals.
+   Warden emergence. Season advances.
+
+Control flows upward: settlement infrastructure → province Accord/PV → peninsula victory.
+Pressure flows downward: peninsula events → province consequences → settlement disruption.
+
+
 ## Phase 4 Resolution Priority Order (v04 B4 — CORRECTED from stage_bg_proposal_v02 order)
 | Priority | Order Type | Notes |
 |----------|-----------|-------|

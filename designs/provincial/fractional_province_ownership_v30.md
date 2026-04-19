@@ -100,6 +100,8 @@ Outcomes:
 
 Secession creates a persistent fracture — the settlement is neither "the Seat-holder's" nor "the invader's" but effectively a client or independent holding. This is the RM-settlement-emergence pathway already in `settlement_layer §6.2 Stage 2`.
 
+**Secession candidate restriction (PP-TBD):** Secession candidates are limited to settlements controlled by a national faction (Crown, Hafenmark, Varfell, Church, Löwenritter, Guilds, Schoenland). Settlements already held by a subnational faction (RM, Wardens) or marked Uncontrolled are NOT valid Secession candidates. If all non-Seat alien settlements are subnational, the Failure outcome produces no Secession — treat as Partial instead (Order drop).
+
 ---
 
 ## §3 Worked Example

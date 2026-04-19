@@ -58,6 +58,29 @@ Designate one Cardinal as Focused:
 
 ---
 
+
+### Church — Ecclesiastical Appointment (PP-TBD)
+**Type:** Consul Outward (Church only).
+**Prerequisite:** Target settlement has Church building ≥ tier 2 (Church or Cathedral).
+Target settlement has no governor OR existing governor Disposition toward Church ≥ +2.
+**Roll:** Influence vs Ob 1.
+
+| Degree | Effect |
+|--------|--------|
+| Overwhelming | Church bishop-governor installed. Settlement governance transfers to Church. Accord +1 in settlement (population accepts — bishop was already the de facto authority). PT +1 in territory. |
+| Success | Church bishop-governor installed. Settlement governance transfers to Church. Accord unchanged. |
+| Partial | Appointment contested. Governor remains. Church Stability −1 (institutional embarrassment). PT unchanged. |
+| Failure | Appointment rejected. Controlling faction gains awareness of Church governance ambition. No Casus Belli generated (appointment is non-military). |
+
+**Notes:**
+- Does NOT generate Casus Belli (non-military institutional action).
+- Province fractionalizes if settlement controller now differs from Seat holder.
+- Fragmentation checks fire at next Accounting for affected province.
+- This action is the pre-Seizure accumulation path. Mass Seizure at CI 60+ remains
+  the formal political formalization of settlement-level Church governance.
+
+---
+
 ### Hafenmark — Parliamentary Challenge (PP-431 + PP-431-COR)
 **Type:** Senator Inward (Hafenmark only). **Once per season.**
 Roll: Mandate vs Ob 2 (−1 Ob if PI ≥ 5 → Ob 1 minimum).
@@ -260,6 +283,29 @@ Designate one Cardinal as Focused:
 | Temperance | AER +1 this season |
 
 **Schism interaction:** Schisming Cardinal ignores Focus. Focus has no effect if the designated Cardinal is in schism this season.
+
+---
+
+
+### Church — Ecclesiastical Appointment (PP-TBD)
+**Type:** Consul Outward (Church only).
+**Prerequisite:** Target settlement has Church building ≥ tier 2 (Church or Cathedral).
+Target settlement has no governor OR existing governor Disposition toward Church ≥ +2.
+**Roll:** Influence vs Ob 1.
+
+| Degree | Effect |
+|--------|--------|
+| Overwhelming | Church bishop-governor installed. Settlement governance transfers to Church. Accord +1 in settlement (population accepts — bishop was already the de facto authority). PT +1 in territory. |
+| Success | Church bishop-governor installed. Settlement governance transfers to Church. Accord unchanged. |
+| Partial | Appointment contested. Governor remains. Church Stability −1 (institutional embarrassment). PT unchanged. |
+| Failure | Appointment rejected. Controlling faction gains awareness of Church governance ambition. No Casus Belli generated (appointment is non-military). |
+
+**Notes:**
+- Does NOT generate Casus Belli (non-military institutional action).
+- Province fractionalizes if settlement controller now differs from Seat holder.
+- Fragmentation checks fire at next Accounting for affected province.
+- This action is the pre-Seizure accumulation path. Mass Seizure at CI 60+ remains
+  the formal political formalization of settlement-level Church governance.
 
 ---
 

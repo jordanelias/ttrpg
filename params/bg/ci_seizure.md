@@ -25,6 +25,8 @@ CI creates asymmetric legitimacy: Church gains political bonus proportional to C
 ## Church Mass Seizure (one-shot — per victory_v30.md §3.2, §7)
 **CI ≥ 60 makes Mass Seizure available. One-time event. Declaration probability per season: P = ((CI−60)/40)^3.3 — 1% at CI 70, 10% at CI 80, 39% at CI 90, 100% at CI 100. Exponential shape models institutional restraint. CI runs to 100 (no freeze).**
 
+**Pre-Seizure accumulation path (PP-TBD):** Bishop Appointment (faction_actions.md, Church — Ecclesiastical Appointment) is the settlement-level precursor to Mass Seizure. Church accumulates governance of individual settlements via bishop-governor installation before CI 60+ triggers the formal peninsula-wide political formalization. Mass Seizure converts accumulated settlement-level Church governance into recognized territorial control.
+
 ### Seizure Ob
 Ob = 10 − PT − infrastructure modifiers (floor 1). See victory_v30 §3.2 for infrastructure table.
 Prominence required: Church Mandate > controlling faction's Mandate in target territory.
@@ -70,6 +72,8 @@ Attacker rolls: Military pool vs Ob. Degree table per standard BG degree table (
 
 
 
+
+**Pre-Seizure accumulation path (PP-TBD):** Bishop Appointment (faction_actions.md, Church — Ecclesiastical Appointment) is the settlement-level precursor to Mass Seizure. Church accumulates governance of individual settlements via bishop-governor installation before CI 60+ triggers the formal peninsula-wide political formalization. Mass Seizure converts accumulated settlement-level Church governance into recognized territorial control.
 
 ### Seizure Ob
 Ob = 10 − PT − infrastructure modifiers (floor 1). See victory_v30 §3.2 for infrastructure table.

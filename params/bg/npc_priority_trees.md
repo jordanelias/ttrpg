@@ -41,7 +41,7 @@ Post-CI 75: P3 → Territorial Seizure (highest-value targets first).
 | 1 | Stability ≤ 2 | Consul Inward capital. Royal Decree own Stability if available. |
 | 2 | 2+ territories changed OR Coup Counter = 2 OR PI ≥ 8 | Military response. Legionary in threatened territory. |
 | 3 | Royal Decree available + framework-aligned target | Decree: +1 weakest-stat ally or −1 strongest-stat rival. |
-| 4 | Default | Maintain treaties. Defend territory. Govern. Consul/Senator. |
+| 4 | Default | Maintain treaties. Defend territory. Govern. Consul/Senator. If T2 Kronmark is ungarrisoned AND any Varfell unit is active in T4: deploy minimum garrison to T2 (1 unit, Legionary Inward). Crown's breadbasket must not be left exposed when Varfell has forward-deployed forces. |
 | 5 | Torben Loyalty ≤ 3 | Senator Outward targeting Torben. |
 | 6 | Attacked | Military proportional. Crown covert (Influence +1 Ob). |
 | 7 | Default | Pass. Thread Liaison if allied faction identified. |
@@ -156,7 +156,7 @@ Post-CI 75: P3 → Territorial Seizure (highest-value targets first).
 | 1 | Stability ≤ 2 | Consul Inward capital. Royal Decree own Stability if available. |
 | 2 | 2+ territories changed OR Coup Counter = 2 OR PI ≥ 8 | Military response. Legionary in threatened territory. |
 | 3 | Royal Decree available + framework-aligned target | Decree: +1 weakest-stat ally or −1 strongest-stat rival. |
-| 4 | Default | Maintain treaties. Defend territory. Govern. Consul/Senator. |
+| 4 | Default | Maintain treaties. Defend territory. Govern. Consul/Senator. If T2 Kronmark is ungarrisoned AND any Varfell unit is active in T4: deploy minimum garrison to T2 (1 unit, Legionary Inward). Crown's breadbasket must not be left exposed when Varfell has forward-deployed forces. |
 | 5 | Torben Loyalty ≤ 3 | Senator Outward targeting Torben. |
 | 6 | Attacked | Military proportional. Crown covert (Influence +1 Ob). |
 | 7 | Default | Pass. Thread Liaison if allied faction identified. |

@@ -710,7 +710,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | 1 | Stability ≤ 2 | Consul Inward in highest-PT territory. If Stability = 1: also suspend TC Assert this season. |
 | 2 | Open Thread operation in Church territory OR practitioner identified publicly OR Piety loss ≥ 2 this season | Heresy Investigation (Cardinal of Justice). If target is faction leader: Excommunication. |
 | 3 | TC < 75 AND Mandate ≥ 4 | Assert (TC +1). Piety Domain Action if Assert already used. |
-| 4 | Expand Piety AND maintain Accord. Consul Inward in lowest-Accord Church territory if Accord ≤ 1; otherwise lowest-PT territory where Church has presence. | Standard |
+| 4 | Expand Piety AND maintain Accord. Consul Inward in lowest-Accord Church territory if Accord ≤ 1; otherwise lowest-PT territory where Church has presence. If Church building ≥ tier 2 in ungoverned settlement: Ecclesiastical Appointment. | Standard |
 | 5 | AER maintenance (if Cardinal of Temperance active and Church controls T9). Temperance declaration. | Secondary |
 | 6 | If attacked (Mandate targeted, territory seized): Templar deployment to contested territory (if Cardinal of Fortitude active and Stability ≥ 2). | Reactive |
 | 7 | Pass. | Default |
@@ -724,7 +724,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | 1 | Stability ≤ 2 | Consul Inward in capital territory. Royal Decree targeting own Stability if available. |
 | 2 | 2+ territories changed control this season OR Löwenritter Coup Counter = 2 OR PI ≥ 8 | Military response: Legionary in threatened territory. If no Legionary: Royal Decree targeting Military. |
 | 3 | Royal Decree available AND framework-aligned target exists (public, visible, virtuous) | Royal Decree: +1 to weakest-stat ally or −1 to strongest-stat rival. |
-| 4 | Maintain treaties. Defend held territory. Govern in lowest-Accord territory (prioritise Accord 1 before capital). | Consul Inward (Accord governance) or Senator Outward (diplomacy/Treaty). |
+| 4 | Maintain treaties. Defend held territory. Govern in lowest-Accord territory (prioritise Accord 1 before capital). If T2 Kronmark is ungarrisoned AND any Varfell unit is active in T4: deploy minimum garrison to T2 (1 unit, Legionary Inward). Crown's breadbasket must not be left exposed when Varfell has forward-deployed forces. | Consul Inward (Accord governance) or Senator Outward (diplomacy/Treaty). |
 | 5 | Torben Loyalty ≤ 3: Senator Outward targeting Torben. | Secondary |
 | 6 | If attacked: Military response proportional to threat. Crown covert action (Influence pool +1 Ob) if threat is covert. | Reactive |
 | 7 | Pass. Thread Liaison declaration if allied faction identified. | Default |

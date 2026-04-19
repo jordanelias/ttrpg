@@ -74,7 +74,7 @@ When a faction splits, the asset division:
 | Provinces | Geographic split. Winner takes faction's historical capital province + adjacent provinces. Splinter takes remaining provinces. Concretely: winner holds the capital Seat; each contested non-capital province goes to the nearer contender (proximity measured through settlement adjacency graph). |
 | Settlements | Follow province unless a settlement's governor has Disposition ≥ +3 toward a specific contender — that settlement follows the contender regardless of province assignment. |
 | Mandate | Winner: 60% (round down). Splinter: 40% (round down). Remainder burns (political legitimacy lost in succession crisis). |
-| Influence | Each contender keeps pre-contest Influence. No split. |
+| Influence | Winner: 60% (round down). Splinter: 40% (round down). Remainder lost (institutional capacity fragmented in succession crisis). Follows same split ratio as Mandate. |
 | Wealth | Winner takes 70% (round down). Splinter takes 30% (round down). |
 | Military units | Each unit rolls Loyalty check: Loyalty = (Commander Disposition toward contender) + (unit Discipline). Higher-Loyalty contender wins unit. Ties: unit disbands. |
 | Stability | Winner: current − 1. Splinter: 2 (new entity always starts fragile). |
@@ -138,7 +138,7 @@ User asked whether RM can emerge from populist movement → subfaction → settl
 - **Stage 4 Faction:** RM controls 4+ settlements across 2+ provinces OR holds 1+ provincial Seat via Cultural Uprising (`victory §3.5 Phase 2`). Full faction sheet at this point.
 - **Stage 5 Hegemon:** RM controls 2+ provinces. Universal Victory applies.
 
-**New clarification (this ED):** RM's emergence can now formally fire per-settlement rather than requiring the province-scale Cultural Uprising. If a settlement's Order drops to 0 AND PT ≤ 1 AND local Disposition toward Yrsa Vossen is ≥ +3, RM may declare **Settlement Emergence** — taking governance of that settlement without firing Phase 2 Uprising. This gives RM a gradual emergence path instead of an all-or-nothing Phase 2 gate.
+**New clarification (this ED):** RM's emergence can now formally fire per-settlement rather than requiring the province-scale Cultural Uprising. If a settlement's Order = 0 (not merely ≤ 1) AND PT ≤ 1 AND local Disposition toward Yrsa Vossen is ≥ +3, RM may declare **Settlement Emergence** — taking governance of that settlement without firing Phase 2 Uprising. This gives RM a gradual emergence path instead of an all-or-nothing Phase 2 gate. Order = 0 is a hard threshold — Order 1 settlements are degraded but still governed; Order 0 represents complete governance collapse, which is the prerequisite for RM's alternative governance to fill the vacuum.
 
 **Threshold:** Settlement Emergence may fire at most once per province per 4 seasons. Prevents RM explosive emergence across whole peninsula.
 
