@@ -1,3 +1,12 @@
+<!-- [PARTIALLY SUPERSEDED 2026-04-19] -->
+<!-- B3-1: T9 starts at PT=5 (canonical core.md), not PT=1 as assumed. Piety Yield hits -->
+<!-- the +5/season cap from S1. Assert is irrelevant immediately, not after PT buildup. -->
+<!-- Seizure timing (S10-15) is directionally correct but setup narrative is wrong. -->
+<!-- B3-5: PP-431-COR not modeled — Challenge replaces structural suppression, not -->
+<!-- supplements. Corrected in B4-1 (d195dbc). B3-5 results invalidated. -->
+<!-- Findings still valid: RS decay timeline, Fort constraint analysis, IP/Vanguard -->
+<!-- deployment timing, campaign arc shape (three-act structure). -->
+
 # Valoria — Arc Test Batch 3 Results
 
 **Date:** 2026-04-19  

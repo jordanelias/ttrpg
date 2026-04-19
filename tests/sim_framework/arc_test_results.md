@@ -1,3 +1,11 @@
+<!-- [PARTIALLY SUPERSEDED 2026-04-19] -->
+<!-- Batch 2 (acfe32d) fixed 3 sim bugs: RM Inf inflation on RM→RM secession, same-season -->
+<!-- Consolidation race, session state loss. Secession cooldown recommendation WRONG — root -->
+<!-- cause is RM→RM secession noise, not churn. Fix: restrict Secession candidates to national -->
+<!-- factions (B2 finding). Province PV values approximated — canonical values in victory.md. -->
+<!-- Findings still valid: settlement adjacency path-constraint, fractional PV derivation, -->
+<!-- succession contest variance, RM ascent arc shape. -->
+
 # Valoria — Provisional Mechanics Arc Test Results
 
 **Date:** 2026-04-19  

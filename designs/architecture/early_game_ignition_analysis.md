@@ -1,3 +1,11 @@
+<!-- [SUPERSEDED 2026-04-19] -->
+<!-- This analysis is superseded by designs/architecture/conflict_architecture_proposal.md -->
+<!-- Key changes: Niflhel dissolved into settlement phenomena (not a faction). Tensions Deck -->
+<!-- rescoped to 6 external bilateral cards, draw 2 (was 8 mixed cards). Assassination timing -->
+<!-- changed to S8+ fuse model (was game-start). Internal tension cards removed (emergent instead). -->
+<!-- Settlement governance friction identified as the actual ignition system. -->
+<!-- Historical precedent research (§2) remains valid reference material. -->
+
 # Valoria — Early-Game Ignition: Historical Precedents and Design Recommendations
 
 **Date:** 2026-04-19  
