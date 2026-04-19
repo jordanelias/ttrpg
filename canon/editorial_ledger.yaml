@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 685
+# next_id: 686
 
   - id: ED-680
     date: 2026-04-18
@@ -42,6 +42,14 @@
     severity: P1
     resolution: "Multipliers confirmed: Treasury x100, Legitimacy x20, Reputation x15, Cohesion x10, Prosperity x10. No faction collapses within 3 seasons. Fine-tuning deferred to Phase 4.4."
     affects: [designs/scene/derived_stats_v30.md, tests/sim/sim_derived_stats_calibration.md]
+
+  - id: ED-685
+    date: 2026-04-18
+    description: "AUD-FP-01: Faction politics simulation. 5 SIM-POL items (R01-R05) run. All PASS. Standing 7 reachable in median 15 seasons. Ministry decay creates economic pressure. Caste gating works. Branches differentiated. Cross-faction balanced."
+    status: resolved
+    severity: P1
+    resolution: "1000-trial Monte Carlo + analytical models. All 5 SIM-POL items pass. No adjustments needed to faction_politics_v30. Coverage matrix updated."
+    affects: [designs/provincial/faction_politics_v30.md, tests/coverage_matrix.md, tests/sim/sim_faction_politics.md]
 
   - id: ED-663
     date: 2026-04-18
