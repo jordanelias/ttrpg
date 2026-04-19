@@ -54,7 +54,7 @@ Post-CI 75: P3 → Territorial Seizure (highest-value targets first).
 | 2 | TK opportunity: Expedition OR Collection OR practitioner contact | Collection deployment or Tribune Investigate (Thread intel). |
 | 3 | Intel action with measurable outcome | Tribune Investigate vs highest-hidden-stat rival. |
 | 4 | Default | Maximise info advantage. Senator Outward. |
-| 5 | VTM/WR advancement conditions met | Pursue VTM or Warden Recognition. |
+| 5 | VTM/WR advancement conditions met | Pursue VTM or Warden Recognition. If VTM ≥ 2 AND no unit in T15: March to T15 (Legionary Outward) as immediate priority. |
 | 6 | Attacked | Intel response: reveal attacker's hidden stat. No military first-strike. |
 | 7 | Default | Pass. Patience Protocol (+2D future). |
 
@@ -171,7 +171,7 @@ Post-CI 75: P3 → Territorial Seizure (highest-value targets first).
 | 2 | TK opportunity: Expedition OR Collection OR practitioner contact | Collection deployment or Tribune Investigate (Thread intel). |
 | 3 | Intel action with measurable outcome | Tribune Investigate vs highest-hidden-stat rival. |
 | 4 | Default | Maximise info advantage. Senator Outward. |
-| 5 | VTM/WR advancement conditions met | Pursue VTM or Warden Recognition. |
+| 5 | VTM/WR advancement conditions met | Pursue VTM or Warden Recognition. If VTM ≥ 2 AND no unit in T15: March to T15 (Legionary Outward) as immediate priority. |
 | 6 | Attacked | Intel response: reveal attacker's hidden stat. No military first-strike. |
 | 7 | Default | Pass. Patience Protocol (+2D future). |
 
