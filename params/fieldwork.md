@@ -32,7 +32,7 @@ Pool maximum: 24D (Attribute 7, History 7: (7×2) + (7+3) = 24)
 | 0 | Surface | None | Auto |
 | 1 | Settled | Cog ≥ 2 or local History | 1 |
 | 2 | Hidden | Cog ≥ 3 or Att ≥ 3 | 2 |
-| 3 | Buried | TS ≥ 10 (explore/invest) or Disposition ≥ floor(Bonds/2)+1 − 1 (social) | 3 |
+| 3 | Buried | TS ≥ 10 (explore/invest) or Disposition ≥ Bonds − 1 (social, PP-684) | 3 |
 | 4 | Liminal | TS ≥ 30 | 5 |
 | 5 | Unintelligible | TS ≥ 50; Coherence check Ob 2 | 8 |
 
@@ -117,14 +117,16 @@ Evidence: +2 (Success), +3 (Overwhelming).
 Mending arc: severity reduction yields +1/+2/+2/+3 across four reductions.
 
 ## Disposition Track (PP-632)
-Range: −4 to floor(Bonds/2)+1. Asymmetric per-NPC per-PC.
+Range: −4 to Bonds (PP-684 revised from floor(Bonds/2)+1). Asymmetric per-NPC per-PC.
 
 | Bonds | Max Disposition |
 |-------|----------------|
 | 1 | +1 |
-| 2–3 | +2 |
-| 4–5 | +3 |
-| 6–7 | +4 |
+| 2 | +2 |
+| 3 | +3 |
+| 4 | +4 |
+| 5 | +5 |
+| 6–7 | +5 (capped by Disposition max) |
 
 **Ob rule: effective Ob = max(1, base Ob − Disposition).** Direct subtraction; no stepped table.
 Negative Disposition adds difficulty. Positive Disposition reduces it. Floor 1 always applies.

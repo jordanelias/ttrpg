@@ -12,7 +12,7 @@
 
 ## Pool Formula
 Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)
-Stamina = Endurance + 1 (modified by armour) — minimum 2 (PP-611 corrects PP-232 body; History component struck; matches params_core PP-248)
+Stamina = Endurance × 5 (ED-694 canonical; PP-611 superseded). Variable action costs (standard 5, heavy 8, defensive 3). Armor adds to drain per action.
 Health = (Endurance + 6) × (max Wounds + 1) — total pool, never resets. Wound threshold every (Endurance + 6) points of damage; Wound counter +1 at each threshold. Incapacitated at 0 HP. (PP-232, ED-438)
 
 **Armour wield constraint (PP-232):** A character cannot wear armour whose Stamina modifier would reduce their Stamina to 1 or below.
@@ -177,8 +177,8 @@ Cover DR stacks additively with armour DR.
 ## Actions Summary
 Strike / Establish Distance / Feint / Take a Breath / Full Guard / Disarm / Retrieve Weapon / Reload (Heavy Piercing only) / Dodge (ranged attacks only — forfeit all offensive action; full pool as passive Defence vs one incoming ranged attack; armour DR applies) (PP-215) / Out of Breath (forced at Stamina 0)
 
-## Stamina Minimum (PP-165, revised PP-232)
-Stamina minimum: **2**. Cannot wear armour that would reduce Stamina to 1 or below.
+## Stamina (ED-694)
+Stamina = Endurance × 5. Range 5–35. Cannot wear armour that would reduce effective Stamina below action cost minimum.
 
 <!-- patch_history: references/params_combat_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
