@@ -1,20 +1,21 @@
-# Session Log — 2026-04-18 (sim debt closure)
-last_stage: Simulation debt fully resolved — SIM-B2-01/02/03 PASS, unsimulated canonical closed
+# Session Log — 2026-04-18 (NPC PC campaign sims)
+last_stage: Full campaign simulations complete — 11 NPC PC + player character runs
 next_action:
   skill: confirm with Jordan
   description: >
-    All simulation debt resolved. SIM-B2-01 (Vaynard 3-path): no conflicts found.
-    SIM-B2-02 (Ehrenwall timing): arc B window confirmed viable pre-S9.
-    SIM-B2-03 (Justice governance): canonical framing validated.
-    Unsimulated canonical content (settlement/faction_politics/throughline_resolutions)
-    assessed as structural specs, not execution sims — closed.
+    11 full-length campaigns (120 seasons each) completed. All NPC PCs + player character.
+    Key findings: Vaynard/Edeyja RS collapse validates canonical arcs. Maret Uln best RS.
+    Calibration gaps: TC convergence at 49 (CAL-SIM-01), 0/11 victories (CAL-SIM-02).
+    RM govern fallback gap logged (GAP-SIM-01).
   blockers: []
 commits:
-  - pending: "[simulation] SIM-B2 all items resolved + coverage matrix update"
+  - pending: "[simulation] 11 NPC PC full campaigns — all complete, findings logged"
 resolutions_this_session:
-  - "SIM-B2-01: Vaynard 3-path conflict — PASS (0/200 conflicts)"
-  - "SIM-B2-02: Ehrenwall timing — PASS (Arc B viable pre-S9, coup 100% without intervention)"
-  - "SIM-B2-03: Justice governance — PASS (canonical framing supported)"
-  - "Unsimulated canonical content closure — settlement/faction_politics/throughline_resolutions assessed as structural specs"
-open_items: []
+  - "11 full campaign simulations (120 seasons each) — all 10 named NPCs + player character"
+  - "CAL-SIM-01/02 calibration items logged in coverage matrix"
+  - "GAP-SIM-01 RM govern gap logged"
+open_items:
+  - CAL-SIM-01: TC convergence at 49 — P2 calibration
+  - CAL-SIM-02: 0/11 victories — P2 calibration
+  - GAP-SIM-01: RM govern routing — P3
 P1-BLOCKER count: 0

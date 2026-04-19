@@ -237,3 +237,13 @@ definitions, clock interaction tables), not probabilistic mechanics requiring ex
 faction_politics rank-ladder already covered by SIM-POL-R01–R05 (resolved). Three-clock interaction
 covered by system validation ED-702. Settlement derived stats covered by Phase 6 Godot audit.
 **Sim debt: FULLY RESOLVED as of 2026-04-18.**
+
+## Campaign NPC Sim Findings — 2026-04-18
+
+| ID | Description | Status |
+|----|-------------|--------|
+| CAL-SIM-01 | TC convergence at 49 across all 11 NPC PC campaigns — faction AI TC rate undertuned | OPEN P2 |
+| CAL-SIM-02 | 0/11 victories at S120 — victory thresholds or faction AI strategic direction insufficient | OPEN P2 |
+| GAP-SIM-01 | RM govern actions use generic territory fallback — should route through Community Organizing | OPEN P3 |
+| NOTE-SIM-01 | Vaynard RS=0, Edeyja RS=1 — validates canonical arc descriptions mechanically | CONFIRMED |
+| NOTE-SIM-02 | Maret Uln best RS outcome (33) — diplomat+moderate TS most substrate-preserving | CONFIRMED |
