@@ -170,6 +170,36 @@ The original register leaves four inner-circle NPCs unnamed. This proposal names
 | **6** | **Senior Jarl** (Markherr) | Seniority by service: the player has been a Jarl for at least 4 year-arcs OR led Varfell forces in at least 2 successful campaigns. Plus: unanimous Jarl Assembly confirmation (all other senior Jarls at Disposition ≥ 0). | Chairs one of the five standing Jarl Assembly councils (see §7.4); speaks with acting authority on specialty matters (Martial, Resource, Cultural, Warden, Foreign); may convene regional mustering of multiple Jarls | Must chair at least one Assembly council; must manage regional Military ≥ 3; must attend all Assembly sessions | Senior Jarl's Seat — permanent place at the Jarl Assembly high table; Vaynard's confidence | Senior Jarl's broad-torc; province standard at Assembly | Vaynard only; plus (for cultural matters) the Skald-Chief | Loss of council chairmanship (Assembly vote); or military failure of a campaign the Senior Jarl commanded |
 | **7** | **High Thane / Jarl-Regent** (Hochjarl) | Jarl Assembly elects the player as Vaynard's Regent (during Vaynard's absence or incapacity) OR as designated successor (Vaynard names the player at a public Assembly). Requires: majority support of the senior Jarls (3 of 5 at Disposition ≥ +1); personal performance in either a completed Varfell Deed (path B or C — see victory_v30 §3 and varfell_path_b_v30) or a Grand Contest victory (per the original register SUC-01 Varfell mechanic). | May convene Jarl Assembly in Vaynard's absence; succession-eligible (Varfell elective succession per SUC-01); speaks for Varfell in inter-faction negotiations; direct access to Vaynard's Private Collection (Ob +0 rather than +2) | Must hold Senior Jarl majority; maintain Military ≥ 4 in Varfell provinces; active pursuit of Varfell strategic priority (currently Path A, B, or C per Vaynard's campaign posture) | Jarl-Regent's Hall at Sigurdshelm (Vaynard's seat); access to Vaynard's private quarters; household of 20+ | Jarl-Regent's regalia — Vaynard's secondary torc (ceremonial); personal seal of state | Vaynard only | Loss of Jarl majority (Senior Jarls withdrawing support — SUC-03); or public military failure at campaign scale |
 
+
+#### §1.3a Hochjarl Incapacity Assessment (ED-673)
+
+The oral law provision referenced in Varfell succession — when a Hochjarl or Vaynard himself is deemed incapable of leadership — requires formal definition.
+
+**Triggers (any one sufficient):**
+
+| Trigger | Initiator | Evidence required |
+|---|---|---|
+| Physical incapacity | Any Senior Jarl | Witnessed injury or illness lasting ≥ 2 seasons; confirmed by at least 1 other Senior Jarl |
+| Mental incapacity | Any Senior Jarl | 2 consecutive Assembly sessions where the assessed leader's orders are incoherent or contradicted within the same session; witnessed by majority of Assembly |
+| Prolonged absence | Jarl Assembly automatic | Leader absent from Assembly for 3 consecutive sessions without designating a Regent |
+| Conviction collapse | Player or NPC action | Leader's Certainty reaches 0 AND Conviction Scar count ≥ 3 (the leader's framework has disintegrated) |
+
+**Process:**
+
+1. **Invocation:** Any Senior Jarl declares Assessment at the Jarl Assembly. Costs the invoker Disposition −1 with the assessed leader (challenging leadership is personal).
+2. **Deliberation:** All Senior Jarls vote. Majority (3 of 5) required to confirm incapacity. The assessed leader may speak in their own defense (Social Contest, Ob 2; Success: one Senior Jarl switches vote to oppose Assessment).
+3. **Duration:** If Assessment passes, the assessed leader is removed from active leadership for a minimum of 2 seasons (recovery period). A Regent is appointed per Standing 7 succession rules.
+4. **Outcomes:**
+
+| After recovery period | Result |
+|---|---|
+| Leader recovers (injury heals, Certainty ≥ 1) | Reinstated automatically. Regent steps down. |
+| Leader does not recover after 4 seasons | Permanent removal. Succession fires per SUC-01 Varfell elective process. |
+| Leader dies during assessment | Immediate succession per SUC-01. |
+
+**Vaynard-specific:** If Vaynard is assessed as incapacitated, the Hochjarl (if one exists) automatically becomes Regent. If no Hochjarl exists, the Senior Jarl with highest Military contribution becomes acting Regent until formal election.
+
+
 ### §1.3b Varfell Specialty Branches (Unlocks at Standing 3)
 
 | Branch | Assembly Council | Sub-office opens | Primary mentor line |

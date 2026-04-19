@@ -195,6 +195,21 @@ A practitioner Knotted to an NPC may Thread-Read that NPC's Thread configuration
 | Breach | 5 | The rendering's edge. Unintelligible ground proximate. | Existential content: rendering strain (§3.4). The character confronts what rendering cannot process. **Threadcut emergence sites:** if a Breach is the confirmed entry point of a known threadcut being (Mode 3), Thread-Read of the site reveals the being's entry configuration — the tear's topology is a forensic record of the being's first moment of active self-maintenance. Evidence yield: +3 regardless of roll degree (Thread-verified tag). The being may detect this investigation (§2.8 counter-investigation applies). |
 
 
+#### §3.3a Einhir Site World Map Detectability (ED-676, PP-042)
+
+Einhir sites (Remnants, Anomalies, Breaches) render on the world map according to the following TS-gated visibility rules:
+
+| Site type | TS 0–9 | TS 10–29 | TS 30–49 | TS 50+ |
+|---|---|---|---|---|
+| Remnant (Depth 3) | Invisible. Terrain shows as normal landscape. | Marked as "unusual terrain" — no Thread label. Player sees a question mark icon. | Visible as "Einhir Remnant" with approximate boundary. Examine available. | Full visibility. Thread scar topology visible. Thread-Read available from map. |
+| Anomaly (Depth 4) | Invisible. | Invisible. Vague unease in territory description (text-only flavor). | Marked as "disturbance" — general area only, no precise location. Must Examine to locate precisely. | Visible as "Active Anomaly" with precise location and Mode classification (1 or 2). |
+| Breach (Depth 5) | Invisible. | Invisible. | Invisible. Territory description mentions rendering strain. | Marked as "Breach Zone" — visible but entering triggers Coherence check (per Depth 5 rules). |
+
+**After Diagnosis:** Once a character with sufficient TS has performed a successful Diagnosis operation (threadwork_v30 §2) on a site, the site becomes permanently visible on the world map at its full detail level for all characters. The practitioner's Diagnosis renders the site intelligible — the information propagates through the party's shared knowledge base.
+
+**Engine implementation:** Site visibility is per-character, calculated from character TS at map render time. Diagnosed sites flag as  and render at max detail for all characters. Sites generate procedurally from territory RS history (low RS = more Remnants/Anomalies; RS ≤ 30 may spawn Breaches).
+
+
 **Conditional POI availability:** Not all POIs are discoverable at all times. POIs may be gated by: RS band (a Remnant becomes visible only when RS drops below 60), season (a Snapped Zone oscillates into accessibility in Winter only), faction control (a Secret accessible only while the controlling faction holds the territory), or prior discovery (discovering POI A reveals the existence of POI B). The GM records conditional gates at setup. In Godot, conditional gates are authored per-POI.
 
 ### §3.2 Discovery Procedure

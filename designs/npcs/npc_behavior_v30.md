@@ -299,6 +299,21 @@ Cardinals are institutional officers, not independent actors. They activate as i
 
 ---
 
+
+#### §2.13a Extra-Territorial Heresy Jurisdiction (ED-670)
+
+Church heresy designation operates differently inside vs outside Church-controlled territories:
+
+| Territory controller | Church heresy authority | Mechanical effect |
+|---|---|---|
+| Church (T9 + Church-controlled) | Full — Inquisitors may investigate, try, and sentence | Standard heresy proceedings (OFC-03). No jurisdictional obstacle. |
+| Crown (T1 + Crown-controlled) | Permitted with Crown cooperation | Requires Archbishop's Representative (Father Gustav Linder) to formally request Crown permission. Crown grants automatically unless Almud is in Arc A (Reformer) — then Crown blocks (Almud Ob 2 Conviction check; failure = permits, success = blocks). |
+| Hafenmark (T8 + Hafenmark-controlled) | Blocked by Sovereign Authority Doctrine | Hafenmark's Categorical Imperative framework treats Church heresy proceedings as extra-constitutional. Baralta will not permit Church trials on Hafenmark soil. Church may: (a) request extradition (Diplomacy Ob 3; Hafenmark grants only if the accused has Standing 0 in Hafenmark — no citizen is surrendered), or (b) declare the accused heretic in absentia (no mechanical effect in Hafenmark; the accused suffers −2 Standing in any Church territory they enter). |
+| Varfell (T12 + Varfell-controlled) | Tolerated but resented | Vaynard permits Church investigations to avoid TC pressure, but Inquisitors operate at +1 Ob in Varfell (local resistance, cultural friction). Jarl Council may overrule Church sentences if the accused has Varfell Standing ≥ 3. |
+| Uncontrolled / Contested | No authority | Church has no jurisdictional basis. Inquisitors may operate covertly (Intel action, not heresy proceeding). |
+
+**Engine note:** Heresy designation is tracked per-NPC as a boolean flag. The flag gates Church Standing (heretic cannot hold Standing ≥ 1) and triggers Church Attention Pool +1 in any territory the heretic enters.
+
 ### §2.14 Registrar Lennart Haelgrund (Ministry — Throughline T4)
 
 | Attribute | Value | Notes |
@@ -504,6 +519,9 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 **Arc A: The Reformer**
 - Branch condition: Almud's Certainty reaches 1 or 0 AND Löwenritter Coup Counter ≤ 1.
 - Risk: TC acceleration (Church responds to Crown heresy). Löwenritter Coup Counter advances if reforms perceived as weakness.
+
+> **Timing window clarification (ED-672):** Arc A requires Certainty ≤ 1 AND Coup Counter ≤ 1 simultaneously. In standard play, Almud's Certainty declines through player-initiated Evidence/Consequence Resonant Style engagements (typically 1 Certainty per 2–3 seasons of sustained effort). Coup Counter advances from Crown instability triggers (officer loss, Crown Stability ≤ 2, Ehrenwall's assessment). The window is intentionally narrow — Arc A (reform) is the hardest arc to achieve because it requires the player to destabilize Almud's worldview while simultaneously keeping the Crown stable enough that the Löwenritter do not intervene. If the window closes (Counter reaches 2 while Certainty is still ≥ 2), Arc A becomes permanently inaccessible and Almud defaults to Arc B or C. This is working as designed — reform from within is supposed to be the most demanding path.
+
 
 **Arc B: The Fortress**
 - Branch condition: Crown Stability ≤ 2 at any point AND Almud's Certainty ≥ 3 (he has not been confronted).

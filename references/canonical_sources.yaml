@@ -74,7 +74,7 @@ systems:
   victory:
     status: active
     canonical: designs/provincial/victory_v30.md
-    canonical_sha__designs__provincial__victory_v30_md: "0da727211d126b4ef58a0551f5110cb2ee8008a0"
+    canonical_sha__designs__provincial__victory_v30_md: "97b6ba80d5ea8624579572ce4473885e10cdd855"
     params: null
     design_doc: designs/provincial/victory_v30.md
 
@@ -124,14 +124,14 @@ systems:
   npc_behavior:
     status: active
     canonical: designs/npcs/npc_behavior_v30.md
-    canonical_sha__designs__npcs__npc_behavior_v30_md: "726b1f6c1619c675e27a099c0f7ea39d27f6f847"
+    canonical_sha__designs__npcs__npc_behavior_v30_md: "ccfd4d9670c835d95133526e58bf8aa56f4a025c"
     params: null
     design_doc: designs/npcs/npc_behavior_v30.md
 
   fieldwork:
     status: active
     canonical: designs/scene/fieldwork_v30.md
-    canonical_sha__designs__scene__fieldwork_v30_md: "7aee788071210bba6adc5f362d0dc19ad92a41dc"
+    canonical_sha__designs__scene__fieldwork_v30_md: "57a72bc132675062a53819bf6252abc78af892e5"
     params: null
     design_doc: designs/scene/fieldwork_v30.md
 
@@ -177,7 +177,7 @@ systems:
   faction_layer:
     status: active
     canonical: designs/provincial/faction_layer_v30.md
-    canonical_sha__designs__provincial__faction_layer_v30_md: "e7be6dbb3e80e4880d2fd3a94c11217288f5d813"
+    canonical_sha__designs__provincial__faction_layer_v30_md: "447a611306d697de1b7a4b6c4f70642ee26cd19e"
     params: params/factions.md
     design_doc: designs/provincial/faction_layer_v30.md
     infill_doc: designs/provincial/faction_layer_v30_infill.md
@@ -281,7 +281,7 @@ systems:
   faction_politics_expanded:
     status: active
     canonical: designs/provincial/faction_politics_v30.md
-    canonical_sha__designs__provincial__faction_politics_v30_md: "e7297b2445de33328c59b9e32765eb838b887869"
+    canonical_sha__designs__provincial__faction_politics_v30_md: "c98e89bd7c24b1d3964a0fef0337f9376b3a20d2"
     params: null
     design_doc: designs/provincial/faction_politics_v30.md
     notes: "Rank-ladder expansion (Standing 0-7), sub-office ladders, caste integration, TC × rank, Baralta × rank, Ministry expansion, Generational Shift fix. PP-660, 2026-04-17. Supersedes original faction_politics_patch_register_2026-04-16.md draft. Raises ED-634 through ED-658."

@@ -520,44 +520,30 @@ PHASE 4 — ACTION RESOLUTION
   Priority 6: Special/Unique (Royal Decree, Excommunication, Church Seizure)
   Priority 7: Project advancement
 
-PHASE 5 — SEASONAL ACCOUNTING (13 steps)
-  Step 1:   Apply all pending attribute changes from resolved orders
-  Step 1.5: [NEW] Parliamentary votes resolve → Trigger 3 effects applied
-             Treaty ratification rolls (Phase 3) → Trigger 2 effects applied
-  Step 2:   Accounting Stability check (≥2 attribute loss → Stability pool roll vs Ob)
-             [Now includes Trigger 1–5 and Parliament consequences in the check]
-  Step 3:   Cooldown track advance
-  Step 4:   Clock advances (RS, TC formula, IP, PI)
-             TC formula: Passive +1 → Piety Yield → Assert → Suppress [failure→Stab−1] → Baralta
-  Step 4b:  Church Prominence update
-  Step 5:   Church Attention Pool resolution
-  Step 6:   Thread Debt drain
-  Step 7:   Thread Resonance markers cleared
-  Step 8:   Threshold events / Event Cards
-  Step 8b:  Milestone Bonus check
-  Step 9:   Warden Emergence check
-  Step 9b:  Vaynard-Edeyja same-season rule
-  Step 10:  Warden Cooperation check
-  Step 10b: Torben/Elske Loyalty events
-  Step 11:  [DISSOLVED — Hollow Victory. Retained for numbering continuity]
-  Step 4c: [PENINSULAR STRAIN] Accord checks:
-             → Accord 1 without garrison: Accord → 0
-             → Accord 0: Revolt (Military vs Ob 2 or retreat; Uncontrolled; Strain +1)
-             → Passive normalisation: garrison + no hostile action 2 seasons: Accord +1 (cap 2)
-  Step 4d: [PENINSULAR STRAIN] Peninsular Strain update:
-             → No inter-faction battles AND no Revolts: Strain −1 (min 0)
-             → Diplomatic resolution (Treaty, Pledge honoured): Strain −1 (max 1/season)
-             → Apply Strain threshold effects
-  Step 4e: [PENINSULAR STRAIN] Battle consequence accounting:
-             → IP +2 if inter-faction battle this season
-             → RS adjustments from battles already applied during Phase 4
-  [Steps 5–11 unchanged]
-  Step 11.5:[FACTION LAYER] Occupation duration check:
-             → Any territory in Occupation for 3rd consecutive season: control transfer fires
-             → Trigger 1 (formal transfer) applies; Accord set to 1 (3-season occupation)
-             → Institutional Consolidation check: any faction with no Trigger 1–5 this season: Stability +1
-  Step 12:  Victory condition check (2 consecutive Accounting)
-  Step 13:  Season marker advances → Winter: Year-End Accounting
+PHASE 5 — SEASONAL ACCOUNTING (10 steps) [ED-678: collapsed from 13, PP-472]
+  Step 1:  Apply all pending attribute changes from resolved orders
+           Parliamentary votes resolve → Trigger 3 effects applied
+           Treaty ratification rolls (Phase 3) → Trigger 2 effects applied
+  Step 2:  Accounting Stability check (≥2 attribute loss → Stability pool roll vs Ob)
+           Includes Trigger 1–5 and Parliament consequences. Collapse check (§1.5) fires here.
+  Step 3:  Cooldown track advance
+  Step 4:  Clock advances (RS, TC formula, IP, PI)
+           TC formula: Passive +1 → Piety Yield → Assert → Suppress [failure→Stab−1] → Baralta
+           Church Prominence update
+  Step 5:  Church Attention Pool resolution
+           Thread Debt drain; Thread Resonance markers cleared
+  Step 6:  Peninsular Strain accounting:
+           → Accord checks (garrison, Revolt, passive normalisation)
+           → Strain update (battle/Revolt decay, diplomatic resolution)
+           → Battle consequence accounting (IP, RS)
+  Step 7:  Threshold events / Event Cards; Milestone Bonus check
+           Warden Emergence check; Vaynard-Edeyja same-season rule
+  Step 8:  Warden Cooperation check; Torben/Elske Loyalty events
+  Step 9:  Occupation duration check:
+           → 3rd consecutive season Occupation → control transfer; Trigger 1 applies; Accord 1
+           → Institutional Consolidation: no Trigger 1–5 this season → Stability +1
+  Step 10: Victory condition check (2 consecutive Accounting)
+           Season marker advances → Winter: Year-End Accounting
 ```
 
 ---

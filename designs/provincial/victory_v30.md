@@ -87,6 +87,32 @@ Full specifications: peninsular_strain_v1.md §5.
 
 ---
 
+
+### 0.4 Starting Piety Track Values by Territory (ED-677, PP-652)
+
+| T# | Territory | Starting PT | Rationale |
+|----|-----------|-------------|-----------|
+| T1 | Valorsplatz | 3 | Capital — moderate Church presence, Crown-dominated |
+| T2 | Falkenberg | 3 | Standard |
+| T3 | Steinfeld | 3 | Standard |
+| T4 | Mittelmark | 2 | Varfell-adjacent; lower Church integration |
+| T5 | Weissburg | 3 | Standard |
+| T6 | Sonnental | 1 | Remote southern; minimal Church infrastructure |
+| T7 | Grauheim | 3 | Standard |
+| T8 | Gransol | 3 | Hafenmark capital; Church present but constitutionally constrained |
+| T9 | Himmelenger | 5 | Church capital; maximum theological saturation |
+| T10 | Nordmark | 3 | Standard |
+| T11 | Eisengrund | 2 | Varfell-adjacent; traditional religion blends with doctrine |
+| T12 | Sigurdshelm | 2 | Varfell capital; oral tradition dominant, Church institutional presence weaker |
+| T13 | Southernmost | 1 | Warden territory; Thread-adjacent; Church has minimal reach |
+| T14 | Hafenfeld | 3 | Standard |
+| T15 | Kronheim | 3 | Standard |
+| T16 | Bergstadt | 3 | Standard |
+| T17 | Drakensholm | 3 | Standard |
+
+**Design note:** PT 5 at T9 means the Church starts with its theological heartland at full doctrinal saturation — TC generation from T9 is guaranteed from Season 1. PT 1 at T6/T13 represents frontier territories where the Church must invest to gain traction. PT 2 at Varfell territories reflects cultural resistance to institutional theology. These values are calibrated against the TC generation formula (params_board_game) where PT ≥ 3 contributes positively to TC.
+
+
 ## 1. Territory Consolidation Values (TCV)
 
 All territory numbers match geography_design.md canonical table.
