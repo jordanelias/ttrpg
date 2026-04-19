@@ -139,8 +139,8 @@ Every named NPC holds three interconnected attributes.
 | Ethical Framework | Martial Honour (Löwenritter) | Aligned: −1 Ob on orders protecting Valorian sovereignty. Contradictory: +2 Ob advancing personal/factional gain at Valoria's expense. |
 | Primary Resonant Style | Consequence | Show her that her actions are producing the instability she exists to prevent. The Coup Counter mechanism IS her consequence vulnerability: she is keeping count of the Crown's failures. Turn the count on her own decisions. |
 | Secondary Resonant Style | Solidarity | Ehrenwall is a soldier. She has comrades. If a Knot-connected PC or NPC makes a personal appeal grounded in shared service, shared sacrifice, or military bonds, it reaches her where strategic argument cannot. |
-| Thread Sensitivity | [EDITORIAL: ED-392 — Ehrenwall TS not specified. Estimate: 0–5. Military background with no practitioner exposure. Confirm.] |
-| Certainty | [EDITORIAL: ED-393 — Ehrenwall Certainty not specified. Estimate: 4 (Faithful) — conventional piety, not deep theology. Confirm.] |
+| Thread Sensitivity | 0 (military career, no practitioner exposure — ED-392 resolved) |
+| Certainty | 4 (Faithful — conventional piety, martial background. Consistent with Order/Autonomy Conviction — ED-393 resolved) |
 
 **Beliefs:**
 1. "Valoria endures, whatever the cost — I will ensure it."
@@ -200,8 +200,8 @@ Every named NPC holds three interconnected attributes.
 | Ethical Framework | Inherits from whichever faction holds his Loyalty (Crown at start). Framework shifts on Loyalty transfer. |
 | Primary Resonant Style | Solidarity | He is young, isolated, and has been treated as a political asset rather than a person. Anyone who treats him as a person — who builds a genuine relationship — gains enormous leverage. |
 | Secondary Resonant Style | Authority | He respects power and competence. If Solidarity fails (the relationship is insufficient), demonstrate that you are the strongest actor in the room. He follows strength when he cannot follow friendship. |
-| Thread Sensitivity | [EDITORIAL: ED-395 — Torben TS not specified. Probable 0. Raised in court without practitioner exposure. Confirm.] |
-| Certainty | [EDITORIAL: ED-396 — Torben Certainty not specified. Probable 4 (Faithful) — conventional education. Could be lower if Almud's private sympathy influenced his upbringing. Confirm.] |
+| Thread Sensitivity | 0 (court-raised, no practitioner exposure — ED-395 resolved. Note: Conviction window ED-618 means mutable through play S1-8) |
+| Certainty | 4 (Faithful — conventional education. Mutable through faction investment per Conviction window ED-618 — ED-396 resolved) |
 
 **Beliefs:**
 
@@ -240,8 +240,8 @@ Activates only if Vaynard is eliminated (Loyalty 0 + Mandate 0, per PP-486).
 | Ethical Framework | Shifts from Consequentialist Pragmatism to a hybrid: −1 Ob on actions benefiting common population (Rawlsian inheritance), −1 Ob on actions with measurable outcomes (Consequentialist retention). +1 Ob on actions that target Restoration Movement. |
 | Primary Resonant Style | Evidence | Same vulnerability structure as Vaynard but directed differently: show her evidence that collaboration with RM is producing worse outcomes than Vaynard's independent path would have. |
 | Secondary Resonant Style | Solidarity | She has relationships in both Varfell and RM networks. Relational appeals carry weight. |
-| Thread Sensitivity | [EDITORIAL: ED-397 — Maret Uln TS not specified. Confirm.] |
-| Certainty | [EDITORIAL: ED-398 — Maret Uln Certainty not specified. Confirm.] |
+| Thread Sensitivity | 35 (sustained Varfell Thread exposure under Vaynard's intelligence program. Crosses Active threshold — can perform Thread-Read. Affects arc behavior if Vaynard eliminated — ED-397 resolved) |
+| Certainty | 2 (Skeptic — secular intellectual like Vaynard but more community-oriented. Does not deny Thread reality but approaches it pragmatically — ED-398 resolved) |
 
 **Beliefs:**
 1. "Vaynard's path led to destruction — knowledge must serve the community, not the collector."

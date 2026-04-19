@@ -2,7 +2,7 @@ session_id: phase0_housekeeping_2026-04-18
 session_close: pending
 phase: Phase 0 — Housekeeping
 status: IN PROGRESS
-last_stage: 2.2 complete
+last_stage: 2.3 complete
 next_action:
   skill: Phase 2 continued — P2 items — Derived stats calibration
   description: >
@@ -13,6 +13,7 @@ commits:
   - pending_07: "Phase 0.7: Params staleness — PP-208/297/349/351 propagated, 3 SHAs updated"
   - pending: "Phase 1.1: Knot formation — fieldwork §5.6a, npc_behavior §6.3 GAP resolved, params/core updated — ED-680"
 resolutions_this_session:
+  - "2.3: NPC stat gaps. Ehrenwall TS=0/Cert=4, Torben TS=0/Cert=4, Maret Uln TS=35/Cert=2. ED-392-398 resolved. ED-687."
   - "2.2: Co-Movement calibration. ED-577-01/02/03/04 all resolved. RS ±4.3 PASS. Phase 4 hard dep cleared. ED-686. Ledger archived (7 resolved entries)."
   - "1.4: AUD-FP-01 faction politics simulation. SIM-POL-R01-R05 all PASS. Standing 7 reachable median S15. Ministry decay meaningful. Caste gating correct. Branches differentiated. Balance within ±2 seasons. ED-685 resolved. PHASE 1 COMPLETE."
   - "1.3: AUD-DS-01 derived stats calibration. Multipliers confirmed provisional. ED-684 resolved."

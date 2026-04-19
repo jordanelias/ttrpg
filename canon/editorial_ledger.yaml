@@ -1,5 +1,15 @@
 # Valoria Editorial Ledger — Active
-# next_id: 687
+# next_id: 688
+
+
+  - id: ED-687
+    date: 2026-04-18
+    description: "AUD-NPC-02: 7 NPC stat gaps resolved. Ehrenwall TS=0/Cert=4, Torben TS=0/Cert=4, Maret Uln TS=35/Cert=2. Resolves ED-392 through ED-398."
+    status: resolved
+    severity: P2
+    resolution: "All 6 editorial gaps in npc_behavior_v30 §2.5/§2.8/§2.10 replaced with confirmed values. Maret Uln TS=35 enables Thread-Read, affects arc behavior post-Vaynard."
+    affects: [designs/npcs/npc_behavior_v30.md]
+
 
   - id: ED-670
     date: 2026-04-17
