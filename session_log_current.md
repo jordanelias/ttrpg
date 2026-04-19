@@ -2,9 +2,9 @@ session_id: phase0_housekeeping_2026-04-18
 session_close: pending
 phase: Phase 0 — Housekeeping
 status: IN PROGRESS
-last_stage: 2.11 complete
+last_stage: Phase 2 COMPLETE
 next_action:
-  skill: Phase 2 continued — P2 items — Derived stats calibration
+  skill: Phase 3 — sim-relevant items (3.1, 3.2, 3.9, 3.11) — P2 items — Derived stats calibration
   description: >
     Phase 1.1, 1.2, 1.5 complete. Next: 1.3 (derived stats calibration — depends on 1.2, now unblocked).
 blockers: []
@@ -13,6 +13,7 @@ commits:
   - pending_07: "Phase 0.7: Params staleness — PP-208/297/349/351 propagated, 3 SHAs updated"
   - pending: "Phase 1.1: Knot formation — fieldwork §5.6a, npc_behavior §6.3 GAP resolved, params/core updated — ED-680"
 resolutions_this_session:
+  - "2.10: UI/UX integration supplement. Derived stats display + settlement map specs. ED-697. PHASE 2 COMPLETE."
   - "2.11: Generational transition spec. All tracked values enumerated (preserve/transform/reset/break/transfer). Resources inheritance defined. ED-696."
   - "2.5: Settlement economy — all 3 checks PASS. ED-694."
   - "2.6: RM victory — 5/5 simplified, Church counter-pressure omitted. Phase 4 calibration. ED-695."

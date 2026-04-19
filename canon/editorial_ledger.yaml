@@ -1,11 +1,20 @@
 # Valoria Editorial Ledger — Active
-# next_id: 697
+# next_id: 698
 
 
 
 
 
 
+
+
+
+  - id: ED-697
+    date: 2026-04-18
+    description: "AUD-UI-01/02: UI/UX integration supplement. Derived stats display spec (Part 11.x) with Godot notes. Settlement map spec (Part 3.x) with node display, interaction, and implementation."
+    status: resolved
+    severity: P2
+    affects: [designs/ui/valoria_ui_ux_supplement_derived_settlement.md, designs/ui/valoria_ui_ux_v4_1.md]
 
 
   - id: ED-696
