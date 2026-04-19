@@ -1,75 +1,250 @@
 # Valoria Editorial Ledger — Active
 # next_id: 704
+# Rebuilt 2026-04-19. Lost IDs: ED-670-672, ED-698-703.
+# ED-620,624,628,643 resolved (victory_v30) — in archive.
 
+entries:
 
+  - id: ED-542
+    date: 2026-04-14
+    description: "Battle consequences propagation gap — mass_battle_v30.md missing section."
+    status: open
+    severity: P2
 
+  - id: ED-586
+    date: 2026-04-16
+    description: "Arc behavioral state vs Priority 6 contradiction at Mandate < 3. Constrained sub-arc proposed."
+    status: open
+    severity: P2
 
+  - id: ED-587
+    date: 2026-04-16
+    description: "Stability Crisis Zoom In trigger absent. Proposed: Stability drops <= 2 OR drops >= 2 in one Accounting."
+    status: open
+    severity: P2
 
+  - id: ED-615
+    date: 2026-04-16
+    description: "Schoenland Treaty terms undefined. What does Schoenland receive from Crown Treaty?"
+    status: open
+    severity: P2
 
+  - id: ED-616
+    date: 2026-04-16
+    description: "No Parliamentary mechanic blocks Tribune Domain Actions. Intelligence Embargo motion proposed."
+    status: open
+    severity: P2
 
+  - id: ED-617
+    date: 2026-04-16
+    description: "Grand Contest Recall (+2D): once per cited source per contest, not per exchange."
+    status: open
+    severity: P2
 
+  - id: ED-618
+    date: 2026-04-16
+    description: "Torben Conviction emergence window: formally Seasons 1-8."
+    status: open
+    severity: P2
 
+  - id: ED-619
+    date: 2026-04-16
+    description: "GM advisory: 3-active-Obligation cap for tractability."
+    status: open
+    severity: P3
 
+  - id: ED-621
+    date: 2026-04-16
+    description: "BG Parliamentary Vote: lobby offset can pre-determine outcome. Starting track restriction proposed."
+    status: open
+    severity: P2
 
+  - id: ED-622
+    date: 2026-04-16
+    description: "Varfell cannot file Parliamentary motions (no Senator card). Explicit note needed."
+    status: open
+    severity: P2
 
+  - id: ED-623
+    date: 2026-04-16
+    description: "IP advancement too slow."
+    status: open
+    severity: P2
 
+  - id: ED-625
+    date: 2026-04-16
+    description: "Church Excommunication procedure not documented."
+    status: open
+    severity: P2
 
+  - id: ED-626
+    date: 2026-04-17
+    description: "Accord/Order relationship in peninsular_strain_v1."
+    status: open
+    severity: P2
 
-  - id: 
+  - id: ED-627
+    date: 2026-04-17
+    description: "Thread-settlement interaction gaps."
+    status: open
+    severity: P2
+
+  - id: ED-630
+    date: 2026-04-17
+    description: "Coup Counter as moral ledger: dual-track advancement proposal."
+    status: open
+    severity: P2
+
+  - id: ED-631
+    date: 2026-04-17
+    description: "Heresy Proceedings resolution time unspecified."
+    status: open
+    severity: P2
+
+  - id: ED-632
+    date: 2026-04-17
+    description: "Shadow Renown: referenced in faction_politics_expanded (REN-03) but no implementation — no track, no unlock condition..."
+    status: open
+    severity: P1
+    affects: [designs/systems/faction_politics_expanded_v1.md, designs/systems/player_agency_v30.md]
+
   - id: ED-633
     date: 2026-04-17
-    description: "Siege Action §1.9 propagated to military_layer_v30."
-    status: resolved
+    description: "Deniability Debt (Riskbreaker): referenced in faction_politics_expanded §2.2 as 'stage13 mechanic, retained' but not ..."
+    status: open
+    severity: P1
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-640
+    date: 2026-04-17
+    description: "Hafenmark Militia sub-rank ladder (equivalent to Löwenritter Knight, internal to Hafenmark Martial-branch Parliamenta..."
+    status: open
     severity: P2
-    affects: [designs/provincial/military_layer_v30.md]
+    affects: [designs/systems/faction_politics_expanded_v1.md]
 
-  - id: ED-641
+  - id: ED-642
     date: 2026-04-17
-    description: "Community + Warden Convictions added to npc_behavior §1.2."
-    status: resolved
+    description: "Guild Grand Guildmaster rank (Std 6) — confirm whether this rank exists or is omitted per collective-leadership design."
+    status: open
     severity: P2
-    affects: [designs/npcs/npc_behavior_v30.md]
+    affects: [designs/systems/faction_politics_expanded_v1.md]
 
-  - id: ED-635
+  - id: ED-644
     date: 2026-04-17
-    description: "Hafenmark Legal Advisor Torvi Heljason added to npc_behavior §2.16."
-    status: resolved
-    severity: P1
-    affects: [designs/npcs/npc_behavior_v30.md]
+    description: "CV≡PT terminology: same per-territory stat. Full rename (conviction_track_v30 → piety_track_v30, CV → PT throughout) ..."
+    status: open
+    severity: P2
+    affects: [designs/conviction_track/conviction_track_v30.md]
 
-  - id: ED-636
+  - id: ED-645
     date: 2026-04-17
-    description: "Hafenmark Military Commander Olaf Geirson added to npc_behavior §2.16."
-    status: resolved
-    severity: P1
-    affects: [designs/npcs/npc_behavior_v30.md]
+    description: "T15 Southernmost / Askeheim reconciliation (naming conflict in cross-references)."
+    status: open
+    severity: P2
+    affects: [designs/setting/geography_v30.md]
 
-  - id: ED-637
+  - id: ED-648
     date: 2026-04-17
-    description: "Varfell Jarl Björn Holdar added to npc_behavior §2.17."
-    status: resolved
-    severity: P1
-    affects: [designs/npcs/npc_behavior_v30.md]
+    description: "Crown Ministry of Universities (Hochschule) — proposed new Ministry alongside existing six. Confirm inclusion. Season..."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
 
-  - id: ED-638
+  - id: ED-649
     date: 2026-04-17
-    description: "Varfell Skald-Chief Ingrid Stenskald added to npc_behavior §2.17."
-    status: resolved
-    severity: P1
-    affects: [designs/npcs/npc_behavior_v30.md]
+    description: "College of Prelates: 2 additional Prelates need naming (Standing 5, not Cardinal-rank)."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
 
-  - id: ED-295
-    date: 2026-04-18
-    description: "CLASH movement stalls at median — floor formula produces 0 movement when margin barely exceeds resistance."
-    status: resolved
-    severity: P1
-    resolution: "Confirmed working by historical precedent analysis (references/historical/precedents_analysis.md). Solo advocacy against institutional resistance is historically correct — stalemate is the expected outcome. Resolution path is coalition (AMPLIFY) or Resonant Style bypass, not Ob reduction."
-    affects: [designs/scene/social_contest_v30.md, params/contest.md]
+  - id: ED-650
+    date: 2026-04-17
+    description: "Succession rivals need naming and Stance Triangles: Crown Cadet Claimant, Varfell Vaynard-protégé, Hafenmark alternat..."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
 
-  - id: ED-297
-    date: 2026-04-18
-    description: "AMPLIFY produces ~5 movement/exchange vs CLASH ~0 at median — coalitions mechanically dominant over solo advocacy."
-    status: resolved
-    severity: P1
-    resolution: "Confirmed working by historical precedent analysis. Every successful historical movement (Bolsheviks, ANC, Solidarity, Congress, CCP, Zapatistas) succeeded through coalition. Coalition dominance over individual advocacy is the universal historical pattern. AMPLIFY strength is intended design."
-    affects: [designs/scene/social_contest_v30.md, params/contest.md]
+  - id: ED-651
+    date: 2026-04-17
+    description: "Markamt Minister — explicit name and Stance Triangle needed."
+    status: open
+    severity: P2
+    affects: [designs/systems/npc_behavior_v30.md]
+
+  - id: ED-652
+    date: 2026-04-17
+    description: "Rank dismissal mechanics: cost of re-entry at Std 1→0; Dishonored flag persistence; handling across mode transitions."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-655
+    date: 2026-04-17
+    description: "Ministry/Committee Position mechanic: uniform mechanic across Crown/Hafenmark/Church/Varfell or faction-specific vari..."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-656
+    date: 2026-04-17
+    description: "Cross-rank advancement interaction: player holds Löwenritter sub-office rank AND Crown primary rank. Confirm Duty con..."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-657
+    date: 2026-04-17
+    description: "Rank restoration after dismissal: what paths exist, and at what cost?"
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-658
+    date: 2026-04-17
+    description: "Warden Ladder integration with VTM Path B: Warden rank does not grant automatic Path B progression but Warden-Chief d..."
+    status: open
+    severity: P2
+    affects: [designs/board_game/varfell_path_b_v30.md, designs/systems/faction_politics_expanded_v1.md]
+
+  - id: ED-660
+    date: 2026-04-17
+    description: "Certainty scale: faction_politics_expanded lists Almstedt at Certainty 6, exceeding the 0-5 scale. Requires formal de..."
+    status: open
+    severity: P2
+    affects: [designs/systems/faction_politics_expanded_v1.md, designs/systems/npc_behavior_v30.md]
+
+  - id: ED-661
+    date: 2026-04-17
+    description: "Ministry Protocol 3 seniority conflict."
+    status: open
+    severity: P2
+
+  - id: ED-662
+    date: 2026-04-17
+    description: "Elske residency post-Coup legal implications."
+    status: open
+    severity: P2
+
+  - id: ED-664
+    date: 2026-04-17
+    description: "Advisor-principal confidentiality boundary undefined."
+    status: open
+    severity: P2
+
+  - id: ED-665
+    date: 2026-04-17
+    description: "Grand Contest as succession trial not in canonical docs."
+    status: open
+    severity: P2
+
+  - id: ED-668
+    date: 2026-04-17
+    description: "RS decline rate calibration question."
+    status: open
+    severity: P2
+
+  - id: ED-669
+    date: 2026-04-17
+    description: "Irreversible institutional precedent persistence across campaigns."
+    status: open
+    severity: P2
