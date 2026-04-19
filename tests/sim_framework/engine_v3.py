@@ -218,9 +218,10 @@ def generate_ci(gs: GameState) -> int:
         if t.templar and t.controller == 'Church':
             delta += 1
 
-    # Step 5: Assert (optional) — Church AI decides; simplified as: attempt if CI < 100
+    # Step 5: Assert (optional) — only when stability safe
     # [canonical: params/bg/tc_seizure.md §3.6 — Influence vs Ob 2]
-    if gs.ci < 100:
+    # [canonical: params/bg/npc_priority_trees.md Church P1 — suspend Assert if Stability=1]
+    if gs.ci < 100 and church.stability >= 3:
         net, deg = check(church.influence, 2)
         if deg in ('Success', 'Overwhelming'):
             delta += 1
@@ -367,50 +368,101 @@ def attempt_church_seizure(gs: GameState):
     gs.strain = min(10, gs.strain + 2)
     gs.log.append(f"S{gs.season}: Church seizure attempt → Strain+2 ({gs.strain})")
 
+def attempt_conquest(gs: GameState, attacker: Faction, target: Territory):
+    """Universal territory conquest mechanic. Returns True if successful."""
+    defender = gs.factions.get(target.controller)
+    if not defender or not defender.active:
+        # Uncontrolled — free claim
+        target.controller = attacker.name
+        attacker.territories.append(target.id)
+        target.accord = 1
+        return True
+    # [canonical: params/bg/tc_seizure.md — Battle Ob = floor(defender Military / 2) + 1]
+    battle_ob = max(1, defender.military // 2 + 1)
+    net, deg = check(attacker.military, battle_ob)
+    if deg in ('Success', 'Overwhelming'):
+        defender.territories.remove(target.id)
+        target.controller = attacker.name
+        attacker.territories.append(target.id)
+        target.accord = 1
+        # [canonical: peninsular_strain_v30 §3 — battle consequences]
+        gs.rs = max(0, gs.rs - 1)
+        gs.strain = min(10, gs.strain + 1)
+        gs.ip = min(100, gs.ip + 2)
+        gs.log.append(f"S{gs.season}: {attacker.name} conquers {target.name} from {defender.name} ({deg})")
+        if deg == 'Overwhelming':
+            defender.stability = max(0, defender.stability - 1)
+        return True
+    else:
+        # Battle still happened — RS/strain cost
+        gs.rs = max(0, gs.rs - 1)
+        gs.strain = min(10, gs.strain + 1)
+        gs.ip = min(100, gs.ip + 2)
+        if deg == 'Failure':
+            attacker.stability = max(0, attacker.stability - 1)
+        return False
+
+def pick_conquest_target(gs: GameState, attacker: Faction) -> Territory:
+    """Pick highest-PV non-owned territory where attacker has military advantage."""
+    targets = [t for t in gs.territories.values()
+               if t.controller != attacker.name and t.controller != 'Uncontrolled' and t.id != 'T15']
+    if not targets:
+        # Try uncontrolled
+        targets = [t for t in gs.territories.values() if t.controller == 'Uncontrolled' and t.id != 'T15']
+    if not targets:
+        return None
+    # Prefer targets where we have military advantage
+    def score(t):
+        ctrl = gs.factions.get(t.controller)
+        if not ctrl or not ctrl.active:
+            return t.pv + 10  # easy target
+        advantage = attacker.military - ctrl.military
+        return t.pv + advantage
+    return max(targets, key=score)
+
 def faction_ai_crown(gs: GameState):
     f = gs.factions['Crown']
     if not f.active: return
 
     # P1: Survival
+    # [canonical: params/bg/npc_priority_trees.md Crown P1]
     if f.stability <= 2:
-        net, deg = check(f.influence, max(1, 2))
+        net, deg = check(f.influence, 2)
         if deg in ('Success', 'Overwhelming'):
             f.stability = min(7, f.stability + 1)
         return
 
-    # P2: Military response if territories lost
+    # P2: Military response — reclaim lost territories first
+    # [canonical: params/bg/npc_priority_trees.md Crown P2]
     lost = [tid for tid in FACTION_TERRITORIES['Crown'] if gs.territories[tid].controller != 'Crown']
-    if len(lost) >= 2 or gs.coup_counter >= 2 or gs.pi >= 8:
-        # Legionary action — attempt to reclaim one territory
-        if lost and f.military >= 2:
-            target = gs.territories[lost[0]]
-            defender = gs.factions.get(target.controller)
-            if defender and defender.active:
-                battle_ob = max(1, defender.military // 2 + 1)
-                net, deg = check(f.military, battle_ob)
-                if deg in ('Success', 'Overwhelming'):
-                    defender.territories.remove(target.id)
-                    target.controller = 'Crown'
-                    f.territories.append(target.id)
-                    target.accord = 1
-                    gs.rs = max(0, gs.rs - 1)
-                    gs.strain = min(10, gs.strain + 1)
-                    gs.ip = min(100, gs.ip + 2)
+    if lost and f.military >= 2:
+        target = gs.territories[lost[0]]
+        attempt_conquest(gs, f, target)
         return
 
     # P3: Royal Decree — boost weakest stat
+    # [canonical: params/bg/npc_priority_trees.md Crown P3]
     if f.mandate >= 4:
         weakest = min(['mandate','influence','wealth','military','stability'], key=lambda a: getattr(f, a))
         setattr(f, weakest, min(7, getattr(f, weakest) + 1))
 
-    # P4: Default — Govern
+    # P4: Govern + expand
+    # Govern home territories with low accord
     home = [gs.territories[tid] for tid in f.territories if gs.territories[tid].accord < 3]
     if home:
         t = min(home, key=lambda t: t.accord)
-        gov_ob = max(1, t.accord)
-        net, deg = check(f.influence, gov_ob)
+        net, deg = check(f.influence, max(1, t.accord))
         if deg in ('Success', 'Overwhelming'):
             t.accord = min(3, t.accord + 1)
+
+    # Military expansion — Crown expands when stable and has clear advantage
+    # Not every season — only when Military > weakest rival's Military + 1
+    if f.stability >= 4 and f.military >= 4 and gs.season % 3 == 0:
+        target = pick_conquest_target(gs, f)
+        if target:
+            ctrl = gs.factions.get(target.controller)
+            if not ctrl or not ctrl.active or f.military > ctrl.military:
+                attempt_conquest(gs, f, target)
 
 def faction_ai_hafenmark(gs: GameState):
     f = gs.factions['Hafenmark']
@@ -423,17 +475,15 @@ def faction_ai_hafenmark(gs: GameState):
             f.stability = min(7, f.stability + 1)
         return
 
-    # P2: Respond to Church seizure
+    # P2: Respond to Church seizure — Parliamentary objection
+    # [canonical: params/bg/npc_priority_trees.md Hafenmark P2]
     if gs.church_seizure_fired:
-        # Parliamentary objection
         if f.mandate >= 4:
             net, deg = check(f.mandate, max(1, gs.factions['Church'].mandate // 2 + 1))
             if deg in ('Success', 'Overwhelming'):
                 gs.ci = max(0, gs.ci - 2)
 
-    # P3: Suppress CI (handled in generate_ci)
-
-    # P4: Govern + trade
+    # P4: Govern home
     home = [gs.territories[tid] for tid in f.territories if gs.territories[tid].accord < 3]
     if home:
         t = min(home, key=lambda t: t.accord)
@@ -441,21 +491,31 @@ def faction_ai_hafenmark(gs: GameState):
         if deg in ('Success', 'Overwhelming'):
             t.accord = min(3, t.accord + 1)
 
-    # P5: Diplomatic expansion — attempt to gain territory via Dynastic Proclamation
+    # P5: Diplomatic expansion — Dynastic Proclamation
+    # [canonical: params/bg/faction_actions.md — Hafenmark Diplomat card]
     if f.mandate >= 4:
-        adjacent_non_haf = [t for t in gs.territories.values()
-                           if t.controller not in ('Hafenmark', 'Uncontrolled', 'Church')]
-        if adjacent_non_haf and random.random() < 0.15:
-            target = random.choice(adjacent_non_haf)
+        targets = [t for t in gs.territories.values()
+                   if t.controller not in ('Hafenmark', 'Uncontrolled', 'Church') and t.id != 'T15']
+        if targets:
+            target = max(targets, key=lambda t: t.pv)
             ctrl = gs.factions.get(target.controller)
-            if ctrl:
+            if ctrl and f.mandate > ctrl.mandate:
                 dip_ob = max(1, ctrl.stability // 2 + 1)
                 net, deg = check(f.mandate, dip_ob)
-                if deg == 'Overwhelming':
+                if deg in ('Success', 'Overwhelming'):
                     ctrl.territories.remove(target.id)
                     target.controller = 'Hafenmark'
                     f.territories.append(target.id)
                     target.accord = 2
+                    gs.log.append(f"S{gs.season}: Hafenmark claims {target.name} via Dynastic Proclamation")
+
+    # Military expansion when diplomatically blocked — less frequent than Crown
+    if f.stability >= 4 and f.military >= 2 and gs.season % 4 == 0:
+        target = pick_conquest_target(gs, f)
+        if target:
+            ctrl = gs.factions.get(target.controller)
+            if not ctrl or not ctrl.active or f.military >= ctrl.military:
+                attempt_conquest(gs, f, target)
 
 def faction_ai_varfell(gs: GameState):
     f = gs.factions['Varfell']
@@ -468,41 +528,36 @@ def faction_ai_varfell(gs: GameState):
             f.stability = min(7, f.stability + 1)
         return
 
-    # P2: Intel — Tribune investigate
-    # Reveal hidden stat of richest rival
+    # P2: Intel — Tribune investigate (Varfell's core advantage)
+    # [canonical: params/bg/npc_priority_trees.md Varfell P2/P3]
+    # Abstract: intel success boosts next military action
+    intel_bonus = 0
     rivals = [r for r in gs.factions.values() if r.active and r.name != 'Varfell']
     if rivals:
         target_rival = max(rivals, key=lambda r: r.wealth)
         net, deg = check(f.influence, 2)
         if deg in ('Success', 'Overwhelming'):
-            pass  # Intel gathered (abstract — no hidden stat tracking yet)
+            intel_bonus = 1  # +1D on next military action
 
-    # P3: Military expansion into adjacent territories
-    if f.military >= 3 and random.random() < 0.1:
-        targets = [t for t in gs.territories.values()
-                  if t.controller not in ('Varfell', 'Uncontrolled')]
-        if targets:
-            target = random.choice(targets)
-            ctrl = gs.factions.get(target.controller)
-            if ctrl:
-                battle_ob = max(1, ctrl.military // 2 + 1)
-                net, deg = check(f.military, battle_ob)
-                if deg in ('Success', 'Overwhelming'):
-                    ctrl.territories.remove(target.id)
-                    target.controller = 'Varfell'
-                    f.territories.append(target.id)
-                    target.accord = 1
-                    gs.rs = max(0, gs.rs - 1)
-                    gs.strain = min(10, gs.strain + 1)
-                    gs.ip = min(100, gs.ip + 2)
-
-    # P4: Govern
+    # P4: Govern home
     home = [gs.territories[tid] for tid in f.territories if gs.territories[tid].accord < 3]
     if home:
         t = min(home, key=lambda t: t.accord)
         net, deg = check(f.influence, max(1, t.accord))
         if deg in ('Success', 'Overwhelming'):
             t.accord = min(3, t.accord + 1)
+
+    # Military expansion — Varfell uses intel advantage, less frequent
+    # [canonical: params/bg/npc_priority_trees.md Varfell P6 — no military first-strike]
+    if f.stability >= 4 and f.military >= 3 and gs.season % 4 == 1:
+        target = pick_conquest_target(gs, f)
+        if target:
+            ctrl = gs.factions.get(target.controller)
+            if not ctrl or not ctrl.active or f.military + intel_bonus > ctrl.military:
+                saved_mil = f.military
+                f.military += intel_bonus
+                attempt_conquest(gs, f, target)
+                f.military = saved_mil
 
 # ═══════════════════════════════════════════════════════════════
 # SEASON LOOP
