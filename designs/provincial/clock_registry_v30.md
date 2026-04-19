@@ -27,7 +27,7 @@ Progress tracks (0-base; 0 = not yet developed):
 | Altonian Ecclesiastical Accord (AER) | Church/Hafenmark | 0–5 | 0 | victory_architecture_v1.md §AEA |
 | Torben Loyalty | Crown → Löwenritter | 0–7 | 3 | params_board_game.md §Torben (PP-498) |
 | Elske Loyalty | Crown | 0–7 | 4 | params_board_game.md §Elske |
-| Coup Counter | Löwenritter (GM private) | 0–4 | 0 | params_board_game.md §Coup Counter |
+| Löwenritter Autonomy | Crown-Löwenritter (public) | Loyal/Restless/Autonomous/Split | Loyal | conflict_architecture_proposal §Graduated Autonomy |
 | Popular Will (PW) | Shared (Hybrid only) | 0–5 | 0 | params_board_game.md §RM Founding |
 | Warden Cooperation (WC) | Shared | 0–3 | 0 | victory_architecture_v1.md §6 |
 | Warden Recognition (WR) | Varfell | 0–4 | 0 | victory_architecture_v1.md §6 |

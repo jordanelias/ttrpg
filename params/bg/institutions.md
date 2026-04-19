@@ -107,13 +107,13 @@ Per canonical source: Löwenritter serves the Monarch through military and civic
   - Royal Investigators: counter-espionage and investigation. BG: once per season, Löwenritter may cancel one successful Intel action targeting Crown (Royal Investigators intercept).
 
 **Riskbreaker correction (PP-194):** Riskbreakers are Löwenritter's covert sub-unit. In BG:
-- Pre-coup: Riskbreakers fire under Löwenritter NPC AI Priority Tree (not independent).
-- Post-coup: Riskbreakers become a Löwenritter player resource — once per season, may execute one Priority Tree action at no card cost.
+- Pre-Split (Loyal/Restless/Autonomous): Riskbreakers fire under Löwenritter NPC AI Priority Tree (not independent).
+- Post-Split: Riskbreakers become a Löwenritter player resource — once per season, may execute one Priority Tree action at no card cost.
 - Riskbreaker "independence" in prior design documents (acting against Crown) remains mechanically valid — Riskbreakers serve Valoria, not Almud personally, consistent with canonical source.
 
 
 ### Löwenritter — Reconstitution (ED-331 resolved)
-**Type:** Senator Inward (Löwenritter only, post-coup). Available only when PI = 0.
+**Type:** Senator Inward (Löwenritter only, post-Split). Available only when PI = 0.
 Roll: Mandate vs Ob 3. Once per season.
 
 | Degree | Effect |
@@ -135,14 +135,14 @@ Roll: Mandate vs Ob 3. Once per season.
   - Royal Investigators: counter-espionage and investigation. BG: once per season, Löwenritter may cancel one successful Intel action targeting Crown (Royal Investigators intercept).
 
 **Riskbreaker correction (PP-194):** Riskbreakers are Löwenritter's covert sub-unit. In BG:
-- Pre-coup: Riskbreakers fire under Löwenritter NPC AI Priority Tree (not independent).
-- Post-coup: Riskbreakers become a Löwenritter player resource — once per season, may execute one Priority Tree action at no card cost.
+- Pre-Split (Loyal/Restless/Autonomous): Riskbreakers fire under Löwenritter NPC AI Priority Tree (not independent).
+- Post-Split: Riskbreakers become a Löwenritter player resource — once per season, may execute one Priority Tree action at no card cost.
 - Riskbreaker "independence" in prior design documents (acting against Crown) remains mechanically valid — Riskbreakers serve Valoria, not Almud personally, consistent with canonical source.
 
 
 
 ### Löwenritter — Reconstitution (ED-331 resolved)
-**Type:** Senator Inward (Löwenritter only, post-coup). Available only when PI = 0.
+**Type:** Senator Inward (Löwenritter only, post-Split). Available only when PI = 0.
 Roll: Mandate vs Ob 3. Once per season.
 
 | Degree | Effect |
@@ -180,7 +180,7 @@ Crown must confirm: if Crown Mandate ≥ 3, confirmation is automatic. If Crown 
 Per canonical source: "Court Parliament has constitutional right to depose Monarch if deemed unfit for duties by the Holy See AND Imperial Court."
 **BG mechanic — Royal Deposition:**
 Fires if ALL of: PI ≥ 5 (Parliament functional), Church Mandate ≥ 5 (Holy See has standing), Crown Mandate ≤ 1 (Monarch deemed unfit), AND at least 2 other player factions have active Standing tokens against Crown.
-Effect: Crown player must pass the Crown to Löwenritter (succession triggers) OR call an emergency Parliamentary Session (Senator Inward, Ob 3) to restore legitimacy. If neither: Crown faction is eliminated; Löwenritter Coup Counter immediately set to 4 (coup fires next season).
+Effect: Crown player must pass the Crown to Löwenritter (Split stage triggers) OR call an emergency Parliamentary Session (Senator Inward, Ob 3) to restore legitimacy. If neither: Crown faction is eliminated; Löwenritter Coup Counter immediately set to 4 (coup fires next season).
 
 
 ### Ministry of Guilds — Specific BG Role
@@ -203,7 +203,7 @@ Crown must confirm: if Crown Mandate ≥ 3, confirmation is automatic. If Crown 
 Per canonical source: "Court Parliament has constitutional right to depose Monarch if deemed unfit for duties by the Holy See AND Imperial Court."
 **BG mechanic — Royal Deposition:**
 Fires if ALL of: PI ≥ 5 (Parliament functional), Church Mandate ≥ 5 (Holy See has standing), Crown Mandate ≤ 1 (Monarch deemed unfit), AND at least 2 other player factions have active Standing tokens against Crown.
-Effect: Crown player must pass the Crown to Löwenritter (succession triggers) OR call an emergency Parliamentary Session (Senator Inward, Ob 3) to restore legitimacy. If neither: Crown faction is eliminated; Löwenritter Coup Counter immediately set to 4 (coup fires next season).
+Effect: Crown player must pass the Crown to Löwenritter (Split stage triggers) OR call an emergency Parliamentary Session (Senator Inward, Ob 3) to restore legitimacy. If neither: Crown faction is eliminated; Löwenritter Coup Counter immediately set to 4 (coup fires next season).
 
 
 ## Parish / Cathedral System — Church (ED-319 RESOLVED)

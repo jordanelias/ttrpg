@@ -18,10 +18,10 @@
 | Hafenmark | 2–5 players |
 | Varfell | 2–5 players |
 | Restoration Movement | 5 players only (optional) — statless faction; operates through PT and Presence only |
-| Löwenritter | Conditional: post-coup only |
+| Löwenritter | Conditional: Split stage only |
 
 ### NPC-Only Factions (never playable)
-Löwenritter (pre-coup), Riskbreakers, Inquisitors, Guilds, Schoenland, Altonia, Edeyja/Wardens.
+Löwenritter (pre-Split), Riskbreakers, Inquisitors, Guilds, Schoenland, Altonia, Edeyja/Wardens.
 Niflhel: STRUCK (conflict_architecture_proposal). Functions distributed to settlement-level phenomena (black markets, intelligence brokers, Thread exploitation sites).
 Ministry: NPC faction (source document not yet identified — [GAP: Ministry NPC design doc not found in any read document. User confirmed it exists. Design blocked until source located.])
 
@@ -36,11 +36,11 @@ Note: Guilds do NOT have player victory conditions. All Guilds victory condition
 | Hafenmark | 2–5 players |
 | Varfell | 2–5 players |
 | Restoration Movement | 5 players only (optional) — statless faction; operates through PT and Presence only |
-| Löwenritter | Conditional: post-coup only |
+| Löwenritter | Conditional: Split stage only |
 
 
 ### NPC-Only Factions (never playable)
-Löwenritter (pre-coup), Riskbreakers, Inquisitors, Guilds, Schoenland, Altonia, Edeyja/Wardens.
+Löwenritter (pre-Split), Riskbreakers, Inquisitors, Guilds, Schoenland, Altonia, Edeyja/Wardens.
 Niflhel: STRUCK (conflict_architecture_proposal). Functions distributed to settlement-level phenomena (black markets, intelligence brokers, Thread exploitation sites).
 Ministry: NPC faction (source document not yet identified — [GAP: Ministry NPC design doc not found in any read document. User confirmed it exists. Design blocked until source located.])
 
@@ -84,7 +84,18 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | AER | 2 | 0–5 | Near IP clock. |
 | Torben Loyalty | **7** | 0–7 | Active from game start. No IP trigger. On Crown elimination: Torben Loyalty track transfers to Löwenritter (they inherit the succession claim). Löwenritter wins or loses Torben via Influence actions the same way Crown did. Church and Hafenmark may contest via Senator Outward Diplomacy (Ob = current Torben Loyalty ÷ 2). (PP-599: start 7, range 0–7. PP-498 start 3 superseded.) |
 | Elske Loyalty | 4 | 0–7 | Off-board card near T4. |
-| Löwenritter Coup Counter | 0 | 0–4 | Public. Threshold 4 = coup eligible. |
+| Löwenritter Autonomy | Loyal | Loyal→Restless→Autonomous→Split | Graduated autonomy (conflict_architecture_proposal). Replaces binary Coup Counter. See below. |
+
+#### Löwenritter Graduated Autonomy (replaces Coup Counter)
+
+| Stage | Trigger | T14 Status | Crown Effect |
+|-------|---------|------------|--------------|
+| **Loyal** | Start | S014 Barracks answers to Crown via Ehrenwall. Garrison deployable. | Normal. Crown controls T14 fully. |
+| **Restless** | Crown Stability ≤ 3, OR no military action 4+ seasons, OR Crown loses a province | S014 follows Löwenritter orders for defensive actions. Crown +1 Ob offensive deployment. | Fragmentation checks at T14 Ob +1. |
+| **Autonomous** | Crown Stability ≤ 2, OR Ehrenwall Disposition toward Almud < 0, OR 4+ seasons Restless without resolution | S014 does not respond to Crown. T14 garrison under Ehrenwall exclusively. Crown retains sovereignty claim. | Crown Military reduced by T14 garrison. Cannot access Fort 3. PI −1. |
+| **Split** | Crown attacks Löwenritter, OR Crown eliminated, OR 4+ seasons Autonomous without resolution | T14 becomes Löwenritter territory. Löwenritter = separate faction (M3/I2/W3/Mil6/Stab5). PI −3. | Crown loses T14, PV drops by 3. Löwenritter negotiates independently. |
+
+**Reversal:** Stages 1–3 reversible. Crown can return to Loyal by: raising Stability above 3, conducting military action validating Löwenritter identity, or improving Ehrenwall Disposition through diplomatic engagement. Stage 4 (Split) is irreversible without reconquest.
 | Warden Cooperation (WC) | 0 | 0–3 | Peninsula-wide. WR ≥ 2 required to advance. (PP-605) |
 | Warden Recognition (WR) | 0 | 0–3 | Varfell-only private track. Gates WC. (PP-605) |
 | Peninsular Strain | 0 | 0–10 | Public. Advances from inter-faction battles (+1/season), faction eliminations (+2), revolts (+1). Decays −1/peaceful season. See peninsular_strain_v1.md §4. |
@@ -150,7 +161,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Hafenmark | 4 | 4 | 5 | 3 | 4 |
 | Varfell | **4** | 4 | **4** | 4 | 4 |
 | Restoration Movement | — | — | — | — | — | No faction stats. Operates via Presence markers and Community Weaving only. (PP-460) |
-| Löwenritter (post-coup) | 3 | 2 | 3 | 6 | 5 |
+| Löwenritter (Split) | 3 | 2 | 3 | 6 | 5 |
 | Guilds (NPC) | 3 | 4 | 6 | 2 | 5 |
 
 CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 territories (T4/T11/T12/T13). Handicap is defensive: mountain range + Thread Wounds hem in expansion. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. CI = 28 (P-32). CI Mass Seizure threshold = 60, cap = 100 (per victory_v30.md §7).
@@ -163,7 +174,7 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 - Uncontrolled territories: any faction may March in freely (no Battle roll for entry, no defender).
 - Fort level is retained on the territory card (physical fortifications don't vanish).
 - Ministry AP-tokens and Guilds CP-tokens in eliminated faction territories are removed immediately.
-- Löwenritter Coup Counter: if Crown is eliminated, Löwenritter Coup Counter sets to 4 (coup fires next season per existing rule — PP-194).
+- Löwenritter Autonomy: if Crown is eliminated, Löwenritter immediately advances to Split (Stage 4). T14 becomes Löwenritter territory.
 - CI, IP, RS effects tied to eliminated faction's territory holdings: cease immediately (e.g. T9 CI +1/season bonus stops if Church is eliminated and loses T9 control).
 
 
