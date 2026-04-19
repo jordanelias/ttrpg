@@ -398,7 +398,7 @@ RM holds T9 through cultural presence, not military garrison. Control is maintai
 
 #### Presence Marker Mechanics (ED-589 resolution)
 
-**Community Organizing (RM Domain Action — Relational-scale Thread operation):**
+**Community Organizing (RM Domain Action — political organizing, NOT Thread work):**
 Pool = Mandate + Influence. TN 7. Ob 2 (base), +1 if territory has Church Governor, +1 if territory has Crown military garrison (≥ 1 professional unit).
 
 | Degree | Effect |
@@ -651,7 +651,7 @@ WA-based spontaneous emergence struck (PP-478). RM emergence in Hybrid mode is e
 - Player PC Disposition ≥ +3 with Maret Vossen
 - ≥ 2 territories have PT ≤ 2
 - RS ≥ 40
-- Player has completed ≥ 1 Community Organizing (Relational-scale Thread operation protecting or supporting a non-practitioner community)
+- Player has completed ≥ 1 Community Organizing (political organizing — building consensus-governance cells, mutual-aid networks, community contacts)
 
 **Founding Scene (mandatory Priority 0 Zoom In when prerequisites met):**
 1. Player proposes: a named territory (first cell location), a Commitment, a Belief declaration.
