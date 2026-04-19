@@ -175,6 +175,33 @@ This check fires AFTER Trigger 1–5 consequences are applied. It can fire in th
 
 ---
 
+### §1.5 Faction Collapse Exit Procedure (ED-675)
+
+When a faction's Stability reaches 0 at Accounting end, the faction collapses. This section consolidates and supersedes P-15, P-24, and §9.10 (strategic_layer_v30) as the single canonical collapse procedure.
+
+**Step 1 — Attribute snapshot.** Mandate drops to 0 immediately (political legitimacy is gone). All other attributes (Military, Wealth, Influence) freeze at their current values. The Mandate drop occurs before the freeze.
+
+**Step 2 — Territory transition.** All territories controlled by the collapsed faction become Uncontrolled. Accord in those territories drops to 0 (Revolt state). Units in those territories become Masterless — they hold position but take no orders. Any faction may Claim Masterless units via Domain Action (Military Ob 2; Success: units transfer to claiming faction at current strength; Failure: units disband).
+
+**Step 3 — Officer and NPC fate.** Named officer NPCs of the collapsed faction enter Independent status. They retain their Conviction, Beliefs, and Disposition values. They may be recruited by other factions via Social Contest (Ob = Leadership Deviation Ob + 2). Unrecruited officers remain in their home settlement as unaffiliated NPCs and may initiate independent actions per npc_behavior_v30 §4.2.
+
+**Step 4 — Player character transition.** A player character affiliated with the collapsed faction loses all faction dice bonuses (Standing-derived). Standing is preserved as a historical record but grants no mechanical benefit. The player continues as an unaffiliated character. Options:
+
+| Path | Requirement | Mechanical effect |
+|---|---|---|
+| Join another faction | That faction's Standing 0 initiation gate | Begin at Standing 0 in new faction; old Standing irrelevant |
+| Reconstitute collapsed faction | Influence Domain Action, Ob 4, repeated 3 seasons consecutively | Faction re-emerges at Stability 1, Mandate 1, other attributes at 50% of frozen values (round down). Player becomes faction leader. Requires at least 1 territory held or recaptured. |
+| Remain unaffiliated | None | No faction actions available; personal-scale play only; may act as independent agent or mercenary |
+
+**Step 5 — Parliamentary removal.** The collapsed faction loses its Parliamentary seat. Any active Motions proposed by the collapsed faction lapse. Treaties with the collapsed faction remain in force only if the faction reconstitutes within 4 seasons; otherwise they dissolve automatically.
+
+**Step 6 — Victory path closure.** The collapsed faction's victory conditions are no longer evaluable. If the faction reconstitutes, victory conditions reactivate but all progress counters (TCV, PI, etc.) reset to 0 — reconstitution is a fresh start for victory purposes.
+
+**Collapse immunity:** A faction at Stability 1 that would be reduced to 0 by an Accounting Stability Check (§1.4) may invoke a one-time Survival Exception: Stability remains at 1, but Mandate −1 (minimum 0) and one territory of the attacking faction's choice becomes Contested (Accord → 1). This exception can fire once per faction per campaign.
+
+**Engine note:** Collapse is evaluated at Accounting Step 2 (after trigger consequences, after §1.4 cascade check). The engine checks Stability = 0 after all modifiers resolve. If multiple factions collapse simultaneously, process in descending Mandate order (highest Mandate collapses last — they had the most political capital to burn).
+
+
 ## §2 — TERRITORIAL OCCUPATION
 
 ### §2.1 Definition

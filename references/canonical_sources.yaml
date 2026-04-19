@@ -177,7 +177,7 @@ systems:
   faction_layer:
     status: active
     canonical: designs/provincial/faction_layer_v30.md
-    canonical_sha__designs__provincial__faction_layer_v30_md: "e0eb92a384a28d460328ce4078ad254343925fe9"
+    canonical_sha__designs__provincial__faction_layer_v30_md: "e7be6dbb3e80e4880d2fd3a94c11217288f5d813"
     params: params/factions.md
     design_doc: designs/provincial/faction_layer_v30.md
     infill_doc: designs/provincial/faction_layer_v30_infill.md

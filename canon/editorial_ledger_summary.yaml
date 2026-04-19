@@ -7,7 +7,7 @@
 next_id: 680
 p0_blocker_count: 0
 p0_blocker_ids: []
-p1_blocker_count: 2
+p1_blocker_count: 1
 p1_blocker_ids: ['ED-671', 'ED-674', 'ED-675', 'ED-679']
 p2_count: 6
 p2_ids: ['ED-670', 'ED-672', 'ED-673', 'ED-676', 'ED-677', 'ED-678']

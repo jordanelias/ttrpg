@@ -103,10 +103,11 @@
   - id: ED-675
     date: 2026-04-18
     description: "PP-320: Faction collapse exit procedure. board_game_v30 I-04 flags contradiction. faction_layer_v30 §1.3 has recovery but not collapse→exit transition."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/provincial/faction_layer_v30.md, designs/provincial/strategic_layer_v30.md]
     source_pp: PP-320
+    resolution: "§1.5 Faction Collapse Exit Procedure added to faction_layer. 6-step procedure (attribute snapshot, territory transition, officer fate, PC transition, parliamentary removal, victory closure). Consolidates P-15/P-24/§9.10. Survival exception. ED-675."
 
   - id: ED-676
     date: 2026-04-18
