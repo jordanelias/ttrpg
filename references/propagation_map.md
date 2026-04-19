@@ -241,3 +241,35 @@ All new statuses reference PP-667 and the resolution document `designs/audit/gap
 - references/canonical_sources.yaml: cross-reference note.
 
 **No mechanical changes.** Pure synthesis / meta-analysis document.
+
+## 2026-04-19 — PP-672 Throughlines hierarchical framework (canonical vetting guide)
+
+**Commit:** (this commit)
+**Scope:** adopt five-tier hierarchical framework as canonical vetting authority for all Valoria work. Supersedes PP-671 meta-throughlines document.
+
+**Structure:**
+- Ω (1) — Intent: belonging criterion with four clauses (cross-scale consequence, personal transformation, autonomous world, non-dominance); Thread-substrate ontology committed.
+- Μ (4) — Modes: Pressure, Autonomous Composition, Substrate Ontology, Cross-Scale Consequence.
+- М (6) — Meta-throughlines: Pressure is continuous, Geography holds pressure, Substrate grounds all, Institutions stake substrate-postures, Scales connect, Choice is forced.
+- Τ (25) — existing throughlines, now tagged with primary/secondary М.
+- Q — quality tier (robust, smooth, elegant) applied after belonging established.
+- Μ̄ — Godot translation requirements.
+
+**Protocol:**
+- Scope classification (Class A new system → E cleanup), each with vetting depth.
+- Failure lexicon (11 named failure modes).
+- Authority: Jordan owns Ω/Μ; Claude applies full protocol; Ω failures flagged, never unilaterally rejected.
+
+**Files:**
+- references/throughlines_meta.md: full rewrite as skeleton (9k chars; loaded during routine vetting).
+- references/throughlines_meta_infill.md: new; rationale, worked examples, full per-T tag table, Godot translation rationale, failure lexicon with examples (28k chars; loaded only when deeper context needed).
+- canon/editorial_ledger.yaml: ED-718 adoption entry.
+- canon/patch_register_active.yaml: PP-672 entry (supersedes PP-671).
+- references/canonical_sources.yaml: framework named as vetting authority.
+
+**Audit integration:** addresses 21 findings against PP-671 including Ω-substrate gap, personal-layer omission, Μ-triad agent-composition omission, М-tier misclassifications, missing vetting protocol, undefined audience, no connection to robust/smooth/elegant. Full change list in skeleton adoption notes.
+
+**Consequences:**
+- All future Class A proposals run through framework before approval.
+- Existing canon grandfathered; retroactive audit deferred.
+- Existing ED-717 gaps (Hafenmark/Löwenritter/RM substrate-postures) persist as open items against М-4.

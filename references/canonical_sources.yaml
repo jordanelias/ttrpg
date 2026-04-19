@@ -50,3 +50,9 @@ sources:
 # 5 meta-throughlines extracted from throughlines_complete.md.
 # Evaluative criteria for design proposals. See references/throughlines_meta.md.
 # ED-717 flags Hafenmark/Löwenritter/RM institutional-attractor throughline gap.
+
+# ── PP-672 Throughlines Framework (2026-04-19) ───────────────────────────
+# references/throughlines_meta.md (skeleton) + references/throughlines_meta_infill.md (infill)
+# are the canonical vetting authority for all Valoria work.
+# Five tiers: Ω (intent) / Μ (modes) / М (meta-throughlines) / Τ (throughlines) / Q (quality).
+# Supersedes PP-671 meta-throughlines doc. See ED-718.

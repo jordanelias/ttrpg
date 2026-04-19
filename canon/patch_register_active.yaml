@@ -408,3 +408,23 @@ patches:
     - references/throughlines_meta.md
   status: applied
   applied_commit: pending
+- id: PP-672
+  date: 2026-04-19
+  severity: P2
+  description: "Throughlines hierarchical framework — canonical vetting guide. Five-tier
+    hierarchy (Ω Intent / Μ Modes / М Meta-throughlines / Τ Throughlines / Q Quality)
+    with scope-classification protocol (Classes A-E), rating rubric (+/✓/−/○), failure
+    lexicon (11 terms), Godot translation table, authority rules (Jordan owns vision
+    tiers, Claude applies protocol), and retroactive scope (new work only; existing
+    grandfathered). Skeleton/infill split for efficient loading. Supersedes PP-671
+    as vetting framework. Addresses 21 audit findings against PP-671 meta-throughlines
+    doc. ED-718 adoption entry."
+  finding_id: USER-DIRECTED
+  source: user
+  affects:
+    - references/throughlines_meta.md
+    - references/throughlines_meta_infill.md
+    - references/canonical_sources.yaml
+  status: applied
+  applied_commit: pending
+  supersedes: PP-671

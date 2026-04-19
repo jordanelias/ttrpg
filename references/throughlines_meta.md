@@ -1,160 +1,216 @@
-<!-- [EDITORIAL: PP-671 — meta-throughline synthesis 2026-04-19, user-directed] -->
+<!-- SKELETON — mechanical spec only -->
+<!-- Infill: references/throughlines_meta_infill.md -->
+<!-- [EDITORIAL: PP-672 — throughlines hierarchical framework, canonical vetting guide, 2026-04-19] -->
 
-# VALORIA — META-THROUGHLINES
+# Valoria Throughlines Framework — Canonical Vetting Guide
 
-## Date: 2026-04-19
-## Source: `references/throughlines_complete.md` (25 throughlines, 8 categories)
-## Definition: A meta-throughline is a pattern that operates ACROSS multiple throughlines — a constitutive principle that the throughlines themselves instantiate.
-## Purpose: Identify the deepest structural commitments of the game so design work can evaluate new mechanics against them.
+**Purpose.** Evaluate every proposal for vision-alignment (belonging) and execution quality. Hierarchical: higher tiers more constitutive; a higher-tier failure cannot be rescued by lower-tier success.
 
----
+**Adoption.** PP-672. Applies to work after adoption. Existing canon grandfathered.
 
-## Summary
+**Authority.** Jordan owns Ω, Μ. Co-owned М, Τ. Claude applies Q and the full protocol. Claude flags Ω concerns to Jordan; never unilaterally rejects for Ω failure.
 
-Five meta-throughlines emerge from reviewing the 25 throughlines. Each is grounded in specific throughlines where the pattern is mechanically visible. Together, they constitute the game's design DNA — the commitments that distinguish Valoria from generic faction strategy or generic Thread-fantasy RPG.
-
-| # | Meta-Throughline | Instantiating Throughlines | Design consequence |
-|-|-|-|-|
-| M-1 | Decay-as-default | T-04, T-05, T-06, T-07, T-12, T-16, T-18, T-19 | World state degrades without player action; player intervention slows decay at best |
-| M-2 | Substrate as universal medium | T-01, T-02, T-03, T-08, T-13, T-18, T-21, T-22 | Every system measures rendering/thread state; "everything is thread" is mechanical, not flavor |
-| M-3 | Institutional identity = mechanical attractor | T-05, T-08, T-09, T-10, T-11 | No faction is mechanically interchangeable; each maps to a distinct substrate-relationship |
-| M-4 | Scale-preserving chains | T-01, T-03, T-15, T-16, T-18, T-19, T-23, T-24, T-25 | Same throughlines operate at personal/settlement/province/peninsular scales |
-| M-5 | Forced-choice architecture | T-12, T-13, T-14, T-17, T-20, T-22 | Every significant throughline produces irreducible tradeoffs; no universal solution exists |
+**Load order.** For routine vetting, load this skeleton. Load infill (`throughlines_meta_infill.md`) only when a decision requires deeper justification — examples, rationale, worked cases, per-T tag table, full Μ̄ translation rationale.
 
 ---
 
-## M-1: Decay-as-default
+## §1 Ω — INTENT (1)
 
-**Pattern:** The game's baseline state is entropic. Throughlines describing time-based pressure — clock decay (T-04 RS, T-05 TC, T-06 IP, T-07 Strain), individual-scale cycles (T-12 Coherence depletion), relational cascades (T-16 Knot Strain), geographic worsening (T-18 Radiation, T-19 Southernmost Spiral) — all advance regardless of player action. Player intervention slows decay at best; no player action can reverse the baseline direction.
+**Ω:** *A proposal belongs in Valoria if it contributes to the central experience: a player making decisions inside a world whose ontology is the Thread substrate, where (a) strategic-layer actions produce cross-scale consequences the player can trace but cannot fully anticipate, (b) personal-layer moments of confrontation permanently transform the player's character through engagement with the substrate, (c) autonomous agents (NPCs, factions, clocks) continue generating consequential events regardless of player action, (d) no strategy or choice produces dominance — every action pays what it buys.*
 
-**Grounding in canon:**
-- T-04: "RS baseline decay (−1/year) + Gap persistence (−4/season) + Lock drift" — structural, not player-triggered
-- T-05: "TC passive advance (+1/season conditional)" — Church expands by default
-- T-07: "War destroys the capacity to govern ... positive feedback loop"
-- T-18: "The Calamity is not a past event — it is a geographic condition that worsens as RS declines"
+**Ω-level questions:**
+1. What cross-scale consequence? (Ω-a)
+2. What personal-scale transformation? (Ω-b)
+3. What autonomous events? (Ω-c)
+4. What is the irreducible tradeoff? (Ω-d)
 
-**Design consequence:** The videogame must NOT provide a "rest" state where the player can stabilize. Every turn must present active decay that the player is choosing which dimension of to address. The player's agency is in prioritization of which decay to intervene against, not in whether decay occurs.
-
-**Exceptions (where something advances through player action):** T-15 (Player Progression) and T-14 (Conviction Architecture) both move via player action — but both also have decay vectors (Renown decay, Scar accumulation). Even progress-throughlines carry decay.
+**Ω failure = flag to Jordan. Do not autonomously reject.**
 
 ---
 
-## M-2: Substrate as universal medium
+## §2 Μ — MODES (4)
 
-**Pattern:** Every Valoria mechanic is mechanically, not metaphorically, a Thread interaction. Statistics across all scales (Health, Order, Prosperity, Mandate, Stability, Coherence, RS, TC, CV, Strain) measure configurations of the substrate at their respective scales. Perception (T-02), operations (T-03), politics (T-08), radiation (T-18), and collective action (T-22) all reduce to substrate state changes.
+Four causal mechanisms by which Ω is produced. A proposal primarily serves 1–2; must not undermine others.
 
-**Grounding in canon:**
-- T-01: "Health, Composure, Order, Prosperity, Mandate, Stability — all measure thread-configuration state at different scales ... This is not metaphor; it is the game's ontological commitment"
-- T-02: "The player does not see 'the world' — they see what their character's rendering can present"
-- T-03: "Every intervention on the substrate produces unintended consequences"
-- T-08: "The Church's institutional function is rendering-reinforcement"
+- **Μ-α PRESSURE AS ENGAGEMENT DRIVER.** Continuous pressure forces engagement over idling.
+- **Μ-β AUTONOMOUS AGENT COMPOSITION.** Independent agents interact to produce events no agent predicts.
+- **Μ-γ SUBSTRATE ONTOLOGY.** Every element is Thread-substrate configuration. Canon A1, A2.
+- **Μ-δ CROSS-SCALE CONSEQUENCE.** Actions at any scale produce effects at other scales via shared substrate.
 
-**Design consequence:** When adding a new mechanic, ask: what thread-configuration state does this measure? A mechanic that cannot be expressed as substrate interaction is either (a) restateable in substrate terms, or (b) a violation of the game's core commitment. Physical UI in Godot should visualize thread-configuration wherever possible (TS gates on perception, rendering failures on low-RS maps, co-movement auras on Thread operations).
-
-**Relationship to M-1:** Substrate state degrades over time (M-1 acts on M-2). The decay-as-default meta-throughline operates on the substrate-as-universal-medium meta-throughline. Decay is the substrate's temporal direction.
-
----
-
-## M-3: Institutional identity = mechanical attractor
-
-**Pattern:** Each major faction's political identity maps to a distinct, non-interchangeable mechanical relationship with the substrate. This is NOT faction-as-flavor with shared mechanics. Church (T-08), Varfell (T-09), Niflhel (T-10), Crown (T-11) each define their own causal chains with different systems, different victory pathways, and different relationships to Thread.
-
-**Grounding in canon:**
-- T-08 Church: "every mechanism it controls ... works to prevent the population from perceiving the substrate" → rendering-reinforcement
-- T-09 Varfell: "the faction whose institutional interest aligns with substrate maintenance" → thread-progressive
-- T-10 Niflhel: "the only faction whose strategic interest structurally diverges from RS preservation" → accelerationist
-- T-11 Crown: "Thread-as-tool when advantageous, Thread-as-threat when dangerous" → pragmatist
-
-**Design consequence:** A new faction would need its own substrate-relationship axis, not a reskinned existing one. The peninsula is full of factions because each one represents a distinct answer to "what is our institutional relationship to rendering?" Hafenmark (not in the listed four) would need explicit characterization along this axis — T-11 partially covers Crown via Thread Liaison, but Hafenmark's relationship to substrate remains categorically underspecified across the 25 throughlines (see §Meta-Observations below).
-
-**Relationship to M-2:** The faction attractors carve up M-2's substrate-as-universal-medium into distinct political-mechanical territories. M-2 is the shared field; M-3 is how institutions stake territory on that field.
+**Μ-level questions:**
+1. Pressure contributed/alleviated? (Μ-α)
+2. Autonomous events enabled/required? (Μ-β)
+3. Substrate state measured/changed? (Μ-γ)
+4. Cross-scale consequences? (Μ-δ)
 
 ---
 
-## M-4: Scale-preserving chains
+## §3 М — META-THROUGHLINES (6)
 
-**Pattern:** Throughlines fire identically at multiple scales. Personal Thread operations (T-03, T-12) produce the same co-movement pattern as mass Thread operations (T-03 at mass_battle scale). NPC arc emergence (T-23) mirrors faction emergence (T-15). Convergence (T-24) operates across all scales — a single-season crisis is just a scale-contracted version of the generational arc (T-25). The game's scale-transition architecture is mathematically the same system at different resolutions.
+Structural patterns from the 25 throughlines. Each subordinated to Μ modes.
 
-**Grounding in canon:**
-- T-03: "Co-movement fires in all modes" — personal, relational, mass, structural scales
-- T-15 Player Progression: "Standing 0 ... settlement governance ... provincial authority ... faction emergence" — 5-stage scale ladder uses same action types at each stage
-- T-18 Radiation Gradient: "per-territory effects (Ob modifiers ... settlement Order effects)" — same matrix applied at territory and settlement
-- T-23 NPC arc and T-25 Generational arc: same state-machine pattern at 1-NPC and 20-NPC-cohort scales
+| М | Pattern | Parent Μ |
+|---|---|---|
+| М-1 | Pressure is continuous | Μ-α |
+| М-2 | Geography holds pressure | Μ-α, Μ-δ |
+| М-3 | Substrate grounds all | Μ-γ |
+| М-4 | Institutions stake substrate-postures | Μ-γ |
+| М-5 | Scales connect through substrate | Μ-δ |
+| М-6 | Choice is forced | Μ-α |
 
-**Design consequence:** Implementation economy. Code written for personal-scale Thread operations (combat scene) should extend to mass-scale (strategic battle) with a scale-parameter change, not a rewrite. The scale-transition UX (zoom in/zoom out) is mechanically a parameter change, not a mode switch. This meta-throughline is the argument against per-scale code duplication.
+**Dependencies:** М-2→М-1 · М-4→М-3 · М-5→М-3 · М-6→М-1.
 
-**Non-preservation cases:** T-13 Certainty and T-14 Conviction are individual-only — they do not scale up to faction level. A faction does not have Certainty. (Though a faction's dominant NPC's Certainty influences faction behavior via priority trees.) This bounds M-4 — some throughlines are scale-bound to the personal layer.
+**Rating rubric:**
+- **+** extends — new instantiation of the pattern
+- **✓** satisfies — consistent with the pattern
+- **−** violates — resolve or redesign
+- **○** does not apply to proposal scope
 
----
-
-## M-5: Forced-choice architecture
-
-**Pattern:** Every significant throughline produces irreducible tradeoffs. The practitioner (T-12) trades Coherence for Thread power. The Certainty journey (T-13) opens capabilities and closes relationships. The Conviction Scar system (T-14) makes moral transformation costly. The companion Thread-departure (T-17) trades Thread freedom for relational bonds. The Two Contests (T-20) split resources between sovereignty and survival. The Belief Lattice (T-22) requires NPCs to break institutional commitments to cooperate.
-
-**Grounding in canon:**
-- T-12: "−1 TS permanent → recovery → ... The price of pulling back from the substrate"
-- T-13: "The journey from C5 (orthodox) to C0 (Thread-accepted) cannot be reversed ... Each step opens capabilities and closes relationships"
-- T-17: "The system forces the player to choose: Thread power or relational bonds"
-- T-20: "The tension is unresolvable — the player must manage both contests simultaneously with insufficient resources for either"
-- T-22: "The practitioners who must save the world can only cooperate after their institutional commitments have been broken by the crisis itself"
-
-**Design consequence:** Valoria does not resolve its tensions. The game's shape is adversarial against optimization — there is no strategy that dominates all others because every strategy pays for what it buys. In Godot implementation, UX must surface the tradeoff at every choice point. Tooltips that show only the positive effect violate M-5. Every capability should display its cost.
-
-**Relationship to M-1 and M-2:** Forced choices exist because resources are scarce (M-1 ensures scarcity via decay) in a substrate where all interventions produce side-effects (M-2 ensures interventions are lossy via Inseparability). M-5 is the player-facing expression of the combination of M-1 and M-2.
+**T→М tag table** (for Τ-level checks): see infill §3.1. Summary: all 25 T's covered; primary-assignment distribution — М-1: 4 · М-2: 2 · М-3: 3 · М-4: 5 · М-5: 6 · М-6: 5.
 
 ---
 
-## Meta-Observations (not meta-throughlines, but structural findings)
+## §4 Τ — THROUGHLINES (25)
 
-### Hafenmark underspecification
+Source: `references/throughlines_complete.md`.
 
-The 25 throughlines include explicit characterizations for Church (T-08), Varfell (T-09), Niflhel (T-10), and Crown (T-11). **Hafenmark is not characterized** — it appears only as a throughline-affected party (e.g., T-05 "Hafenmark Parliamentary Challenge" as TC suppression tool) without its own institutional-attractor throughline. This is an M-3 gap: Hafenmark's institutional relationship to rendering is not defined.
-
-**Implications:** Hafenmark's mechanical identity currently derives from Baralta's personal arc, Parliament mechanics, and Trade Network, but these are either NPC-scoped or cross-faction generic. No throughline defines Hafenmark's substrate-posture. Recommended: add T-26 (or renumbered) "Hafenmark as Institutional Compromise" — characterizing Hafenmark's rendering-relationship through its constitutional Parliament (substrate-agnostic political authority). This gap is flagged for future throughline-map revision.
-
-### Löwenritter underspecification (same issue)
-
-Löwenritter (T-nothing) appears as a mechanical actor in Coup Counter, Riskbreaker rank, military operations — but has no institutional throughline. Their relationship to Thread (Riskbreaker tolerance, military pragmatism) is a candidate for T-27.
-
-### RM underspecification (same issue)
-
-RM appears in multiple throughlines as affected party (T-05 suppression target, T-07 governance agent) but has no own institutional-attractor throughline. Given PP-666 formalized RM's settlement-emergence pathway and Jordan's clear design investment in RM as a co-primary faction, RM is a throughline gap. Recommended: T-28 "RM as Cultural Restoration" — rendering-relationship through pre-Calamity Einhir substrate recovery.
-
-### Two contests distinguishes Valoria from peers
-
-M-5 + T-20 together describe Valoria's deepest design commitment: the survival contest (RS/WC) and the sovereignty contest (territorial/faction) compete for the same resources. This is not a common strategy-game pattern. Most games present a single victory axis. Valoria presents two mandatorily-simultaneous axes where optimizing one endangers the other. M-5 enforces this at every scale from Coherence to national strategy.
-
-### Throughline-to-throughline interaction is sparse
-
-The Throughline Interaction Matrix (`throughlines_complete.md` §Interaction Matrix) defines 35 cross-throughline interactions among 7 throughlines (T-04, T-05, T-06, T-08, T-09, T-12, T-20). The other 18 throughlines have unmodeled interactions. If M-4 (scale preservation) and M-5 (forced choice) are real, then interaction density should be higher — a full matrix would reveal additional convergence markers beyond the 7+ collisions currently logged in `arc_register`.
+**Τ-level question:** Which T's does this touch? For each: extend, preserve, or break? If break, is there deliberate supersession? Log breaks to `canon/supersession_register.yaml`.
 
 ---
 
-## Meta-throughline satisfaction check for recent design work
+## §5 Q — QUALITY
 
-| Patch | M-1 Decay | M-2 Substrate | M-3 Identity | M-4 Scale | M-5 Choice |
-|-|-|-|-|-|-|
-| PP-663 VTM strike | N/A | Negative (struck mechanic was substrate-interaction) | Neutral — doesn't re-characterize Varfell | N/A | N/A |
-| PP-664 residual cleanup | N/A | N/A | N/A | N/A | N/A |
-| PP-665 Yrsa rename | N/A | N/A | N/A | N/A | N/A |
-| PP-666 settlement adjacency | N/A | Extends substrate-as-medium (edge types including Thread-Witnessed) | N/A | ✓ STRONG (same battle mechanic fires at settlement scale) | ✓ (bypass vs assault vs siege is forced choice) |
-| PP-666 fractional ownership | ✓ STRONG (provinces decay in political unity, not just PV) | N/A | N/A | ✓ (settlement ↔ province ownership scales) | ✓ (consolidate-now vs accept-fragment forced choice) |
-| PP-666 succession split | ✓ (succession is a decay/transition event) | N/A | ✓ STRONG (splits faction's institutional identity; M-3 specifies this was under-modeled) | ✓ (individual Standing → faction identity per T-15 scale) | ✓ STRONG (narrow winner → split is irreducible tradeoff) |
-| PP-667 gap sweep | N/A | N/A | N/A | N/A | N/A |
-| PP-668 propagation | N/A | N/A | N/A | N/A | N/A |
+Applied after belonging established. Q failure = iterate, not reject.
 
-**Finding:** PP-666's three new systems each strongly satisfy multiple meta-throughlines. Specifically the faction succession split (ED-712) directly addresses the M-3 institutional-identity underspecification raised in this meta-analysis — it makes faction identity **forkable**, which is a deeper commitment to M-3 than having a single fixed attractor per faction.
+**Q-robust:** positive feedback loop.
+- Three viable player approaches to any situation the mechanic governs.
+- Visible, traceable world-state change from player action.
+- Mechanic fires in scenarios without player action.
+- **Dramatic legibility:** designer familiar with Valoria but unfamiliar with proposal can read game-state and answer in one sentence each — *whose position is at risk, what each named actor wants, what happens if no one acts next season*.
+
+**Q-smooth:** composes without special-casing.
+- Methodology matches governing subsystem.
+- Scale-transition behavior specified.
+- Temporal behavior specified: pause/queue/advance during scene vs season tick.
+
+**Q-elegant:** depth from rule simplicity.
+- Core rule restatable after one reading.
+- Second-order consequence predictable without additional rule-reading.
+- External dependencies enumerated; "except when X" flagged and justified.
+
+**Q-level questions** (check when applying):
+- Robust: 3 approaches + visible change + player-independent scenario + its stakes.
+- Smooth: methodology + matching neighbor + scales + transitions + temporal behavior.
+- Elegant: restated rule + predictable 2nd-order consequence + dependencies.
 
 ---
 
-## Usage
+## §6 Μ̄ — MECHANICS (Godot)
 
-This document exists to provide evaluative criteria for future design work. When proposing a new mechanic, verify:
+**Μ̄-level question:** Implementable in Godot as described? What engine features required?
 
-1. Does it satisfy or extend M-1 (does it contribute to decay, or does it provide unearned stability)?
-2. Does it satisfy M-2 (is it expressible as thread-configuration state)?
-3. Does it respect M-3 (does it reinforce a faction's attractor or blur identities)?
-4. Does it honor M-4 (is it scale-transferable, or scale-bound with justification)?
-5. Does it enforce M-5 (does it present an irreducible tradeoff, or provide dominant-strategy optimization)?
+Implementation implications of higher-tier commitments: see infill §6 for full translation table (shader/clock/UI/state-machine mappings per Ω clause and Μ mode).
 
-A mechanic that fails multiple meta-throughlines is likely off-vision, not just off-balance.
+Headline rules:
+- Strategic clock is real-time; single save per campaign; NPCs and factions autonomous.
+- Substrate state parameterizes rendering (shaders, environmental UI).
+- Every stat has a thread-state visualization.
+- Tooltips show costs alongside gains.
+
+---
+
+## §7 FAILURE LEXICON
+
+| Term | Fails |
+|---|---|
+| Rest state | Ω-c, Μ-α |
+| Dominant strategy | Ω-d, М-6 |
+| Flavor-only | Ω, Μ-γ, М-3 |
+| Scale break | Μ-δ, М-5 |
+| Reskinned attractor | М-4 |
+| Event without stakes | Q-robust |
+| Special-cased | Q-smooth, Q-elegant |
+| Cost-hidden | М-6 |
+| Strategic-only | Ω-b |
+| Personal-only | Ω-a |
+| Authored emergence | Μ-β |
+
+Full definitions with concrete examples: infill §7.
+
+---
+
+## §8 VETTING PROTOCOL
+
+### §8.1 Scope classification
+
+| Class | Definition | Vetting |
+|---|---|---|
+| A. New system | New subsystem/resource/action category/state machine | Full: Ω → Μ → М → Τ → Q |
+| B. System extension | New mechanic within existing system | Μ → М → Τ → Q (Ω inherited) |
+| C. Parameter change | Threshold/rate/cap on existing mechanic | Τ only |
+| D. Content addition | New NPC/territory/arc/narrative beat | Τ only |
+| E. Cleanup | Bug/typo/rename/reorg/register | Triage: touches mechanics? → escalate to D. No mechanics? → execute. |
+
+### §8.2 Failure behavior
+
+- Ω fail → flag Jordan; do not proceed.
+- Μ fail → redesign required.
+- М fail (single) → redesign OR documented tradeoff.
+- М fail (multiple) → redesign required.
+- Τ break → supersession log if intended; otherwise fix.
+- Q fail → iterate.
+
+### §8.3 Conflict resolution
+
+Higher tiers override lower.
+
+### §8.4 Test battery
+
+Protocol must correctly classify:
+- Pass: PP-666 settlement adjacency, hypothetical Hafenmark food stat, companion Thread-witness dialogue.
+- Fail: 10-season peace treaty (Ω-d), merchant caravan minigame (Μ-γ), Standing-7 permanent boost (Μ-α/М-6), reskinned Hafenmark (М-4).
+
+Full walkthroughs: infill §5.
+
+---
+
+## §9 REGISTER INTEGRATION
+
+No new registers. Uses existing:
+- `canon/patch_register_active.yaml`: Class A/B entries include `vetting` field with Ω/Μ/М/Q results.
+- `canon/editorial_ledger.yaml`: flagged concerns use Failure Lexicon terms.
+- `canon/supersession_register.yaml`: Τ-breaks with supersession.
+- `references/canonical_sources.yaml`: notes framework as vetting authority.
+- `references/throughlines_complete.md`: М-tag annotations per infill §3.1.
+
+---
+
+## §10 AUTHORITY
+
+| Tier | Owner | Claude |
+|---|---|---|
+| Ω | Jordan | Flag failures; no reject |
+| Μ | Jordan | Apply ratings; propose refinements |
+| М | Jordan approves; Claude refines | Apply ratings; propose reclassifications |
+| Τ | Co-owned | Propose new T's w/ Jordan approval |
+| Q | Claude | Apply autonomously |
+| Μ̄ | Dev team | Document implementation |
+
+---
+
+## §11 SCOPE
+
+Effective PP-672. New work vetted. Existing canon grandfathered. When existing touched: touched aspects vetted; untouched remain. Retroactive audit separate future project.
+
+---
+
+## §12 LIMITS
+
+- Not a simulation validator (rates need engine_v4 smoke-test).
+- Not a fiction/flavor guide (worldbuilding, names remain Jordan's).
+- Not a replacement for editorial ledger (ED tracks questions; framework vets answers).
+- Not a hard filter. Jordan is final authority on disagreements.
+
+---
+
+*Infill: per-tier rationale, М-derivation walkthrough, per-T tag table, worked examples (5), failure-lexicon definitions with examples, Godot translation rationale, PP-671 historical note. Load only when routine skeleton insufficient.*

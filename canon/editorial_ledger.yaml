@@ -114,3 +114,10 @@ entries:
     status: open
     severity: P2
     source: PP-671
+
+  - id: ED-718
+    date: 2026-04-19
+    description: "Throughlines hierarchical framework (PP-672) — canonical vetting guide adopted. Five tiers: Ω (intent, 1), Μ (modes, 4), М (meta-throughlines, 6), Τ (throughlines, 25), Q (quality, 3). Supersedes PP-671 meta-throughlines doc as vetting authority. Skeleton: references/throughlines_meta.md (9k). Infill: references/throughlines_meta_infill.md (28k). Adoption scope: new work; existing canon grandfathered."
+    status: resolved
+    severity: P2
+    source: PP-672
