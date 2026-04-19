@@ -109,6 +109,8 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 
 **Bonds (Bon):** Governs relational depth in two simultaneous directions: (1) Disposition ceiling = Bonds (PP-684: revised from floor(Bonds/2)+1); (2) Knot pool = (Bonds×2)+3, max Knot count = floor(Bonds/2)+1. Bonds 5 = Disposition +5 (Knot candidate, achievable at creation). Bonds 7 = 3 Close Knots at full capacity. (PP-632, PP-684)
 
+**Knot Formation (AUD-NPC-01):** Disposition +5 + TS ≥ 30 (either party) + Knot capacity available → Spirit pool (Spirit×2) vs TN 7, Ob 2. Overwhelming: Close Knot + co-movement draw. Success: Distant Knot. Partial: no Knot, 2-season cooldown. Failure: Disposition −1, 4-season cooldown. Non-sensitive (TS < 30 both): Knot impossible. See fieldwork_v30 §5.6a.
+
 **Recall (Rec):** Knowledge, experience, retention. Sets the per-History point cap — a History can never hold more points than the character's Recall score.
 **Focus (Foc):** Concentration, discipline, precision under pressure. Governs Thread contact duration: Contact Rounds = Focus score (range 1–7).
 

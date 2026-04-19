@@ -571,7 +571,7 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 | Evidence | Memory + Revealing (Precedent). Must cite specific, named, verifiable claim. | +1D to Argue roll. On win: Conviction Track +1 additional (bypasses 1 point of resistance). |
 | Consequence | Projection + Revealing (Vision). Must project specific outcome NPC's framework fails to prevent. | +1D to Argue roll. On win: NPC takes +2 strain (hits thinnest defense). |
 | Authority | Invoke specific authority figure or text the NPC's framework recognises as binding. Authority must genuinely contradict NPC's position. | +1D to Argue roll. Doubt Marker placed on NPC regardless of exchange outcome. |
-| Solidarity | Requires active Knot (Close or Distant) with NPC. Must invoke the relationship itself. [GAP: NPC Knot formation during play not mechanically specified — see ED-391. Currently accessible only via lifepath pre-assignment or GM-granted Knot from sustained narrative relationship.] | +1D to Argue roll. On win: no strain dealt, but NPC's next Belief revision check uses Ob −1. |
+| Solidarity | Requires active Knot (Close or Distant) with NPC. Must invoke the relationship itself. Knot formation during play: see fieldwork_v30 §5.6a. Prerequisites: Disposition +5 + either PC or NPC TS ≥ 30 + Knot capacity available. | +1D to Argue roll. On win: no strain dealt, but NPC's next Belief revision check uses Ob −1. |
 
 ### §6.4 Wrong-Style Penalty (Church Martyrdom Extension)
 

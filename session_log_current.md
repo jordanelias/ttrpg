@@ -2,16 +2,18 @@ session_id: phase0_housekeeping_2026-04-18
 session_close: pending
 phase: Phase 0 — Housekeeping
 status: IN PROGRESS
-last_stage: 0.7 complete
+last_stage: 1.1 complete
 next_action:
-  skill: Phase 1 — P1 blockers
+  skill: Phase 1.2 or 1.5
   description: >
-    Phase 0 complete. All registers clean, params refreshed. Ready for Phase 1.
+    Phase 1.1 (Knot formation) complete. Next: 1.2 (Accord propagation) or 1.5 (coverage matrix P1s).
 blockers: []
 commits:
   - 7b877cc1: "Phase 0.1-0.6: Summary rebuild, ED-663 resolved, ED-673→ED-679 dedup, P0 triage, session log sync"
-  - pending: "Phase 0.7: Params staleness — PP-208/297/349/351 propagated, 3 SHAs updated"
+  - pending_07: "Phase 0.7: Params staleness — PP-208/297/349/351 propagated, 3 SHAs updated"
+  - pending: "Phase 1.1: Knot formation — fieldwork §5.6a, npc_behavior §6.3 GAP resolved, params/core updated — ED-680"
 resolutions_this_session:
+  - "1.1: AUD-NPC-01 Knot formation resolved. §5.6a added to fieldwork (formation procedure). §6.3 Solidarity GAP replaced in npc_behavior. params/core updated. ED-680 resolved."
   - "0.7: Params staleness audit — 3 stale params (threadwork/mass_combat/contest) updated with PP-208/297/349/351. 2 move-only (fieldwork/scale_transitions) clean. canonical_sources SHAs refreshed."
   - "0.1: Summary rebuilt from scratch — index_gen.py had zeroed it. Correct counts: 4 P1, 6 P2, 10 open, next_id 680."
   - "0.2: ED-663 resolved (wealth cap already canonicalized in derived_stats_v1). Duplicate ED-673 renumbered to ED-679."

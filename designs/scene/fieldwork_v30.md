@@ -438,6 +438,28 @@ Knot-linked characters gain:
 - Shared Composure buffer (per social_contest_system_v2.md §4 Step 6)
 - Relational contagion risk (P-12): Thread-shift propagates through Knots
 
+
+### §5.6a Knot Formation Procedure (AUD-NPC-01 resolution)
+
+**Prerequisites (all required):**
+1. Disposition +5 with the target NPC
+2. Either PC or NPC has TS ≥ 30 (Thread contact — per A12, Knots bind threads; substrate must be accessible)
+3. PC's current Knot count < floor(Bonds/2)
+4. No existing Knot with this NPC
+
+When prerequisites are met, a Knot Formation scene appears on the Scene Slate at Priority 2. The scene fires once per eligible NPC per season. If declined, it reappears next season while prerequisites hold.
+
+**Resolution:** Spirit pool (Spirit × 2) vs TN 7, Ob 2.
+
+| Degree | Result |
+|---|---|
+| Overwhelming (3+ net) | Close Knot forms. Co-movement card drawn (A1/C1: Thread binding is never dimensionally isolated). |
+| Success (2 net) | Distant Knot forms. Upgradeable to Close via 3 additional social scenes at Disposition +5 (no roll — time and presence). |
+| Partial (1 net) | No Knot. Disposition maintained. NPC aware of the attempt. Cooldown: 2 seasons. |
+| Failure (0 net) | No Knot. Disposition −1 (structural asymmetry of intention — A12). Cooldown: 4 seasons. |
+
+**Canon compliance:** A12 (Knots bind threads — Thread contact required), P-12 (relational contagion — formation must be structurally significant), P-15 (second-layer engagement — Spirit check models opening one's rendering to mutual influence), A10 (confrontation development — genuine encounter, not transaction).
+
 ### §5.7 Contest Escalation and Negotiate Boundary
 
 

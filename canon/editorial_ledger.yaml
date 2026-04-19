@@ -1,5 +1,14 @@
 # Valoria Editorial Ledger — Active
-# next_id: 680
+# next_id: 681
+
+  - id: ED-680
+    date: 2026-04-18
+    description: "AUD-NPC-01: Knot formation during play. Solidarity Resonant Style required active Knot but no in-play formation procedure existed. Blocks Solidarity targeting post-character-creation."
+    status: resolved
+    severity: P1
+    resolution: "Knot formation procedure added to fieldwork_v30 §5.6a. Prerequisites: Disposition +5 + TS ≥ 30 (either party) + Knot capacity. Spirit pool vs TN 7 Ob 2. Solidarity GAP in npc_behavior §6.3 replaced with cross-reference. params/core updated with formation rule summary."
+    affects: [designs/scene/fieldwork_v30.md, designs/npcs/npc_behavior_v30.md, params/core.md]
+    canon_compliance: "A12 (Knots bind threads — Thread contact required), P-12 (relational contagion — formation structurally significant), P-15 (second-layer engagement — Spirit check), A10 (confrontation development)"
 
   - id: ED-663
     date: 2026-04-18
