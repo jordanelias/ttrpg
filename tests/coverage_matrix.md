@@ -187,3 +187,23 @@ Remaining open sub-EDs: ED-640/642/643/644/645/648/649/650/651/652/655/656/657/6
 | Thread multi-op matrix | PASS | Spirit/Focus both gate meaningfully |
 
 **Patch:** TroopCount formula `TC/(Size×block)` → `TC/max_TC`, capped 1.0.
+
+### Combat Formula Correction (stress_derived_stats_v2_corrected)
+
+Prior stress tests used stale multiplicative formula (net_hits × weapon_dmg).
+Canonical formula (PP-232): Damage = net_hits + STR + weapon_modifier[weapon][target_armor].
+
+| Test | Result | Notes |
+|------|--------|-------|
+| Heavy vs Light (blade vs blade) | Heavy 85% | Light blade bounces off heavy armor (mod +0). STR 5 vs 3 = +2/hit. Correct. |
+| Heavy vs Light (light uses blunt) | Light 56% | Blunt ignores armor (+5 all tiers). Weapon counter-pick works. |
+| Str 7 vs Str 1 | Str7 89% | +6 damage/hit. STR is highly significant. |
+| Tank(E7/A2) vs Cannon(E1/A6) | Tank 83% | Vitality 78 vs 14. Durability beats pool advantage. |
+| Assassin(A6/S2) vs Balanced(A4/S4) | Balanced 62% | Low Str hurts even with pool advantage vs unarmored. |
+
+**RETRACTED: "Agility dominance" finding from v1 tests was a simulation bug, not a design issue.**
+The canonical additive formula with STR already creates proper attribute balance:
+- Agility → pool (accuracy, defense)
+- Strength → damage per hit
+- Endurance → survivability (Vitality, Stamina)
+- Weapon choice → armor counter-play (blunt beats heavy, blade beats light)
