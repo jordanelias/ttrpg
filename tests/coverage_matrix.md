@@ -34,35 +34,7 @@ ED-577-01-04, SIM-POL-R01-R05, ED-684, ED-590, ED-572, ED-545+.
 
 ## Throughline Analysis + Propagation — 2026-04-17
 
-Top-down audit across all 8 batches (ST-01 through ST-60).
-
-### Robustness: ✓ working
-Victory race convergence, CI/RS pyrrhic collision, Obligation cascade, Torben investment race, Calamity reversal gate, co-victory hold, Elske subversive strategy, Niflhel intelligence market
-
-### Robustness: ✗ gaps addressed
-IP rate too mild → revised (+3/battle, +2/season TC60+); No Parliamentary block on Excommunication → Parliamentary Stay added; Guilds solo victory resolved (ED-612)
-
-### Elegance: ✓ working
-CI Reform, Church Accord governance condition, Feigned Retreat dual utility, Excommunication fait accompli, Shield Wall/Wedge counter, Depth 5 non-investigative
-
-### Elegance: ✗ gaps addressed
-Grand Contest Recall → once-per-source rule; Accord/Order invisible → clarified; IP published wrong → corrected; BG lobby pre-determination → capped at 4-6
-
-### Smoothness: ✓ working
-Zoom In/Out (cleanest system), 5-step Cascade, collective co-movement fires once, three-faction bilateral sequential, mass battle tactic cards
-
-### Smoothness: ✗ gaps addressed
-Accord/Order co-fire sequence → Order 0 first, Accord 0 second; Partition silent win → Phase 1 declaration required; Siege mechanic absent → §1.9 added; Parliamentary Stay → §10.1 added
-
-### Propagated
-social_contest: Grand Contest Recall fix, BG lobby cap, Obligation 3-cap advisory, Parliamentary Stay §10.1
-victory_v30: Rupture Scene + Last Declaration, RM Presence vs Phase 1 distinction, Partition Phase 1 declaration
-peninsular_strain: IP rate +3/battle +2/season-TC60, Accord/Order distinction §2.4b, co-fire sequence
-mass_battle: §E Battle Consequences (canonical consolidation from 4 source docs)
-military_layer: §1.9 Siege Action mechanic
-scale_transitions: Stability Crisis Zoom In trigger
-npc_behavior: Constrained sub-arc state, Torben Conviction window S1-8
-
+8 categories validated. See tests/sim_batch archives for detail.
 
 ## New Findings — sim_npc_player_batch2_2026-04-16
 
@@ -368,3 +340,12 @@ CI 70: 1%, CI 80: 10%, CI 90: 39%, CI 100: 100% (forced).
 
 Also: valoria_hooks.py supersession_check() added — non-blocking warning when a
 commit touches files flagged in canon/supersession_register.yaml.
+
+## Engine v3.1 — 6 bug fixes + Warden emergence — 2026-04-19
+
+1. Seizure: exponential P=((CI-60)/40)^3.3 (replaces deterministic CI>=75)
+2. Mass Seizure: ALL prominent territories (was single-target)
+3. Warden emergence: VTM, T15 march, WR/WC, RS stabilization
+4. 0-territory = immediate elimination
+5. AI expansion thresholds lowered
+20-seed: 75% Varfell, 10% Crown, 10% SHARED_LOSS. Avg S56.

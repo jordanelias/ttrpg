@@ -159,6 +159,8 @@ class GameState:
     aer: int = 2    # Altonian Ecclesiastical Relationship
     wc: int = 0     # Warden Cooperation
     wr: int = 0     # Warden Recognition
+    vtm: int = 0    # Vaynard Thread Mastery [canonical: params/bg/core.md]
+    warden_emerged: bool = False  # Edeyja/Wardens active
     factions: Dict[str, Faction] = field(default_factory=dict)
     territories: Dict[str, Territory] = field(default_factory=dict)
     log: List[str] = field(default_factory=list)
@@ -381,16 +383,23 @@ def faction_ai_church(gs: GameState):
             play_card(f, 'Legionary')
             attempt_conquest(gs, f, lost[0])
 
-    # Church seizure (one-time, CI ≥ 75)
-    # [canonical: Jordan correction — CI ≥ 75, one-time seizure]
-    if gs.ci >= 75 and not gs.church_seizure_fired:
-        attempt_church_seizure(gs)
+    # Church Mass Seizure declaration (probabilistic)
+    # [canonical: victory_v30 §3.2 — P(declare) = ((CI-60)/40)^3.3, CI ≥ 60]
+    # Exponential curve: 1% at CI 70, 10% at CI 80, 39% at CI 90, 100% at CI 100
+    if gs.ci >= 60 and not gs.church_seizure_fired:
+        p_declare = min(1.0, max(0.0, ((gs.ci - 60) / 40.0) ** 3.3))
+        if random.random() < p_declare:
+            attempt_mass_seizure(gs)
 
-def attempt_church_seizure(gs: GameState):
-    """One-time Church seizure attempt. [canonical: editorial_decisions §4,6]"""
+def attempt_mass_seizure(gs: GameState):
+    """One-time Mass Seizure — ALL prominent territories targeted simultaneously.
+    [canonical: victory_v30 §3.2 — Mass Seizure, one-shot, Ob = 10 - PT - infrastructure (floor 1)]"""
     gs.church_seizure_fired = True
     church = gs.factions['Church']
-    # Target: highest-PV non-Church territory where Church is prominent
+    pool = church.influence + gs.ci // 15  # [canonical: victory_v30 §3.2]
+
+    # Target: all non-Church territories where Church is prominent
+    # [canonical: victory_v30 §3.2 — every territory with Church building]
     targets = []
     for tid, t in gs.territories.items():
         if t.controller == 'Church' or t.controller == 'Uncontrolled':
@@ -398,42 +407,44 @@ def attempt_church_seizure(gs: GameState):
         ctrl = gs.factions.get(t.controller)
         if ctrl and church.mandate > ctrl.mandate:
             targets.append(t)
+
     if not targets:
-        gs.log.append(f"S{gs.season}: Church seizure — no prominent targets available")
+        gs.log.append(f"S{gs.season}: Church Mass Seizure declared — no prominent targets!")
         return
 
-    target = max(targets, key=lambda t: t.pv)
-    # [canonical: editorial_decisions §4 — Ob = 10 - PT - infrastructure]
-    ob = max(1, 10 - target.pt + target.church_infra_modifier)
-    pool = church.influence + gs.ci // 15  # [canonical: victory_v30 §3.2 — Pool = Influence + floor(CI/15)]
-    net, deg = check(pool, ob)
+    seized = 0
+    failed = 0
+    for target in targets:
+        # [canonical: victory_v30 §3.2 — Ob = 10 - PT + church_infra_modifier (modifier is negative)]
+        ob = max(1, 10 - target.pt + target.church_infra_modifier)
+        net, deg = check(pool, ob)
 
-    if deg == 'Overwhelming':
-        old_ctrl = target.controller
-        gs.factions[old_ctrl].territories.remove(target.id)
-        target.controller = 'Church'
-        church.territories.append(target.id)
-        target.accord = max(2, target.pt // 2 + 1)
-        target.pt = min(5, target.pt + 1)
-        gs.log.append(f"S{gs.season}: Church SEIZES {target.name} from {old_ctrl} (OW). Accord={target.accord}")
-    elif deg == 'Success':
-        old_ctrl = target.controller
-        gs.factions[old_ctrl].territories.remove(target.id)
-        target.controller = 'Church'
-        church.territories.append(target.id)
-        target.accord = max(2, target.pt // 2 + 1)
-        gs.log.append(f"S{gs.season}: Church SEIZES {target.name} from {old_ctrl}. Accord={target.accord}")
-    elif deg == 'Partial':
-        target.accord = 1
-        gs.log.append(f"S{gs.season}: Church seizure of {target.name} — PARTIAL. Accord→1")
-    else:
-        church.stability -= 1
+        if deg in ('Overwhelming', 'Success'):
+            old_ctrl = target.controller
+            if target.id in gs.factions[old_ctrl].territories:
+                gs.factions[old_ctrl].territories.remove(target.id)
+            target.controller = 'Church'
+            church.territories.append(target.id)
+            if deg == 'Overwhelming':
+                target.accord = max(2, target.pt // 2 + 1)
+                target.pt = min(5, target.pt + 1)
+            else:
+                target.accord = max(2, target.pt // 2 + 1)
+            seized += 1
+            gs.log.append(f"S{gs.season}: Church SEIZES {target.name} from {old_ctrl} ({deg})")
+        elif deg == 'Partial':
+            target.accord = 1
+            failed += 1
+        else:
+            failed += 1
+
+    # Political cost: Mass Seizure is civil war
+    # [canonical: victory_v30 §3.2 — Strain +2, failed seizures generate Church Attention]
+    gs.strain = min(10, gs.strain + 3)
+    if failed > 0:
+        church.stability = max(0, church.stability - (failed // 2))
         church.clamp()
-        gs.log.append(f"S{gs.season}: Church seizure of {target.name} — FAILURE. Stability-1")
-
-    # Political cost: Casus Belli
-    gs.strain = min(10, gs.strain + 2)
-    gs.log.append(f"S{gs.season}: Church seizure attempt → Strain+2 ({gs.strain})")
+    gs.log.append(f"S{gs.season}: Church MASS SEIZURE — {seized} seized, {failed} failed. Strain={gs.strain}")
 
 def attempt_conquest(gs: GameState, attacker: Faction, target: Territory):
     """Universal territory conquest mechanic. Returns True if successful."""
@@ -556,7 +567,7 @@ def faction_ai_crown(gs: GameState):
             play_card(f, 'Senator')
 
     # Legionary: expansion when stable (if still available)
-    if has_card(f, 'Legionary') and f.stability >= 4 and f.military >= 4:
+    if has_card(f, 'Legionary') and f.stability >= 2 and f.military >= 2:
         target = pick_conquest_target(gs, f)
         if target:
             ctrl = gs.factions.get(target.controller)
@@ -650,6 +661,10 @@ def faction_ai_varfell(gs: GameState):
         net, deg = check(pool, 2)
         if deg in ('Success', 'Overwhelming'):
             intel_bonus = 1
+            # [canonical: params/bg/core.md — VTM advances via intel/Thread contact]
+            if random.random() < 0.3:  # ~30% chance per successful intel op
+                gs.vtm = min(5, gs.vtm + 1)
+                gs.log.append(f"S{gs.season}: Varfell VTM advances to {gs.vtm}")
 
     # Second Tribune if available
     if has_card(f, 'Tribune'):
@@ -658,6 +673,15 @@ def faction_ai_varfell(gs: GameState):
         net, deg = check(pool, 2)
         if deg in ('Success', 'Overwhelming'):
             intel_bonus += 1
+
+    # P5: March to T15 when VTM ≥ 2 AND no unit in T15
+    # [canonical: npc_behavior §8.5 P2b / params/bg/npc_priority_trees.md Varfell P5]
+    if gs.vtm >= 2 and gs.territories['T15'].controller != 'Varfell' and has_card(f, 'Legionary') and f.military >= 3:
+        play_card(f, 'Legionary')
+        gs.territories['T15'].controller = 'Varfell'
+        f.territories.append('T15')
+        gs.territories['T15'].accord = 1
+        gs.log.append(f"S{gs.season}: Varfell marches to T15 (Askeheim) — Warden contact imminent")
 
     # P4: Govern — Consul card
     # [canonical: params/bg/core.md — Govern Ob = floor(Prosperity/2)+1]
@@ -705,7 +729,7 @@ def faction_ai_varfell(gs: GameState):
                 gs.ci = min(100, gs.ci + 1)
 
     # Legionary: military expansion with intel advantage
-    if has_card(f, 'Legionary') and f.stability >= 3 and f.military >= 3:
+    if has_card(f, 'Legionary') and f.stability >= 2 and f.military >= 2:
         target = pick_conquest_target(gs, f)
         if target:
             ctrl = gs.factions.get(target.controller)
@@ -730,6 +754,20 @@ def run_season(gs: GameState):
         [f for f in gs.factions.values() if f.active and not f.submitted],
         key=lambda f: -f.stability
     )
+
+    # Pre-phase: opportunistic reclaim of Uncontrolled territories (free march, no card cost)
+    # [canonical: attempt_conquest — Uncontrolled = free claim]
+    for f in factions_by_stab:
+        unclaimed = [t for t in gs.territories.values()
+                     if t.controller == 'Uncontrolled' and t.id != 'T15']
+        if unclaimed:
+            # Claim up to 2 per season (administrative limit)
+            for target in unclaimed[:2]:
+                target.controller = f.name
+                f.territories.append(target.id)
+                target.accord = 1
+                gs.log.append(f"S{gs.season}: {f.name} claims Uncontrolled {target.name}")
+
     for f in factions_by_stab:
         if f.name == 'Church':   faction_ai_church(gs)
         elif f.name == 'Crown':  faction_ai_crown(gs)
@@ -798,11 +836,42 @@ def run_season(gs: GameState):
                 if deg == 'Failure':
                     f.mandate = max(0, f.mandate - 1)
 
+    # Warden emergence + WR/WC advancement
+    # [canonical: params/bg/core.md — WR gates WC; WR advances via Varfell T15 presence]
+    # [canonical: npc_behavior §8.5 P2b — T15 presence prerequisite for Warden emergence]
+    varfell = gs.factions.get('Varfell')
+    if varfell and varfell.active and 'T15' in varfell.territories:
+        # WR advances: Varfell in T15 with VTM ≥ 2 → WR +1/year at Year-End
+        if is_year_end and gs.vtm >= 2 and gs.wr < 3:
+            gs.wr = min(3, gs.wr + 1)
+            gs.log.append(f"S{gs.season}: Warden Recognition advances to {gs.wr}")
+
+    # WC advances when WR ≥ 2 (per-year at Year-End)
+    # [canonical: params/bg/core.md — WC: WR ≥ 2 required to advance]
+    if is_year_end and gs.wr >= 2 and gs.wc < 3:
+        gs.wc = min(3, gs.wc + 1)
+        gs.log.append(f"S{gs.season}: Warden Cooperation advances to {gs.wc}")
+
+    # Warden emergence at WC ≥ 1
+    if gs.wc >= 1 and not gs.warden_emerged:
+        gs.warden_emerged = True
+        gs.log.append(f"S{gs.season}: WARDEN EMERGENCE — Edeyja and Wardens active")
+
+    # Warden active: RS stabilization
+    # [canonical: params/bg/npc_priority_trees.md Edeyja P3 — RS ≤ 40: RS +1/Warden, max +2/season]
+    if gs.warden_emerged and gs.rs <= 40:
+        warden_rs = min(2, 1 + (1 if gs.wc >= 2 else 0))
+        gs.rs = min(100, gs.rs + warden_rs)
+
     # Step 12: Victory check
     check_victory(gs)
 
     # Faction elimination check
     for f in gs.factions.values():
+        if f.active:
+            # [canonical: Jordan — a faction with no territories is no faction at all]
+            if len(f.territories) == 0:
+                f.stability = 0
         if f.active and f.stability <= 0:
             f.active = False
             # Release territories
@@ -826,7 +895,7 @@ def run_campaign(seed: int = 42, max_seasons: int = 120) -> GameState:
 # ═══════════════════════════════════════════════════════════════
 
 if __name__ == '__main__':
-    print("Engine v3 — smoke test (5 seeds × 120 seasons)")
+    print("Engine v3.1 — smoke test (5 seeds × 120 seasons)")
     results = []
     for seed in range(5):
         gs = run_campaign(seed=seed*100+42, max_seasons=120)
