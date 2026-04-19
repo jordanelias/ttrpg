@@ -70,6 +70,46 @@ _session_token:    str  = None
 _health_checked:   bool = False
 _commit_auth:      str  = None
 
+# Optimistic concurrency state
+_fetch_head:       dict = {}   # repo_key -> HEAD OID at fetch time
+
+
+class CollisionError(RuntimeError):
+    """
+    Raised when a commit is blocked because a file was modified by another
+    session since this session's fetch. The caller must re-fetch the affected
+    paths, reconcile, and retry.
+    """
+    def __init__(self, colliding_paths, fetch_head, current_head, message=None):
+        self.colliding_paths = colliding_paths
+        self.fetch_head = fetch_head
+        self.current_head = current_head
+        default_msg = (
+            f"[COLLISION] Commit blocked — repository HEAD moved since session fetch.\n"
+            f"  Paths in commit: {colliding_paths}\n"
+            f"  Your fetch HEAD: {fetch_head[:12] if fetch_head else 'unknown'}\n"
+            f"  Current HEAD:    {current_head[:12] if current_head else 'unknown'}\n\n"
+            f"  Another session committed between your fetch and this commit.\n"
+            f"  To resolve:\n"
+            f"    1. Re-fetch affected paths with read_files_graphql(<paths>).\n"
+            f"    2. Examine the fresh content — has your target file been modified?\n"
+            f"    3. If yes, reconcile your changes against the fresh content.\n"
+            f"    4. Retry the commit.\n\n"
+            f"  For session-coordinating files (session_log_current.md, registers)\n"
+            f"  where the other session's changes are orthogonal to yours,\n"
+            f"  merge rather than overwrite."
+        )
+        super().__init__(message or default_msg)
+
+
+def get_fetch_head(path: str, repo: str = None) -> str:
+    """
+    Return the HEAD OID recorded at fetch time for path, or None if not fetched.
+    Used by tooling to check collision state without touching _fetch_head directly.
+    """
+    repo = repo or _active_repo
+    return _fetch_head.get(_repo_key(path, repo))
+
 # ── Disk cache (persists across bash_tool subprocesses) ──────────────────────
 _CACHE_PATH = '/home/claude/.valoria_cache.json'
 
@@ -428,6 +468,17 @@ def read_files_graphql(paths: list, repo: str = None,
             if force_full or not is_design_doc:
                 _full_reads.add(key)
 
+    # Record HEAD OID at fetch time for optimistic concurrency protection.
+    # One HEAD fetch per batch. All files in the batch share this fetch_head.
+    try:
+        current_head = get_head_oid(repo)
+        for path in paths:
+            key = _repo_key(path, repo)
+            if output.get(path) is not None:
+                _fetch_head[key] = current_head
+    except Exception:
+        pass  # non-fatal — if we can't get HEAD, skip collision tracking
+
     _refresh_token()
     _save_cache()
 
@@ -500,12 +551,24 @@ def atomic_commit(
     repo:      str  = None,
     expected_oid: str = None,
     _auth:     str  = None,
+    collision_check: bool = True,
 ) -> str:
     """
     Atomic commit to ttrpg or valoria-game.
 
     REQUIRES authorization token from _authorize_next_commit().
     Use h.safe_commit(additions, deletions, message, repo='valoria-game') instead.
+
+    Optimistic concurrency (collision_check=True, default):
+      If expected_oid is not explicitly passed, this function uses the HEAD OID
+      recorded at fetch time (from _fetch_head). If the repo HEAD has moved
+      since any fetched file in this commit was read, raises CollisionError
+      WITHOUT retrying. Caller must re-fetch, reconcile, retry.
+
+    Escape hatch (collision_check=False):
+      Use current HEAD, never fail on concurrency. Only safe for genuinely
+      append-only patterns where the fresh fetch occurred immediately before
+      this call (e.g. append_to_register's internal use).
     """
     global _commit_auth, _session_token
     repo = repo or _active_repo
@@ -527,8 +590,39 @@ def atomic_commit(
                     f"[COMMIT BLOCKED] {path}: {tokens:,} tokens exceeds {threshold:,} limit."
                 )
 
-    if expected_oid is None:
+    # Determine expected_oid for optimistic concurrency.
+    committed_paths = [p for p, _ in additions] + list(deletions or [])
+    committed_keys = [_repo_key(p, repo) for p in committed_paths]
+
+    if expected_oid is not None:
+        # Caller explicitly set it — honor their choice, no lookup needed.
+        pass
+    elif not collision_check:
+        # Legacy/escape-hatch: use current HEAD, never fail on concurrency.
         expected_oid = get_head_oid(repo)
+    else:
+        # Optimistic concurrency: use the fetch-time HEAD of the paths being
+        # committed. If none of the paths were fetched this session, we have
+        # no anchor — fall back to current HEAD (effectively no protection,
+        # but nothing to protect against). If paths have differing fetch
+        # HEADs, require the most recent one (most restrictive).
+        session_heads = set()
+        for key in committed_keys:
+            h = _fetch_head.get(key)
+            if h:
+                session_heads.add(h)
+        if not session_heads:
+            # No fetch heads recorded — this is a first-touch commit. Use
+            # current HEAD; GitHub will still reject if someone else is also
+            # first-touching, but this is the honest fallback.
+            expected_oid = get_head_oid(repo)
+        elif len(session_heads) == 1:
+            expected_oid = session_heads.pop()
+        else:
+            # Multiple fetch heads among committed files — use the one that
+            # is still current if any, else take any (will likely collision).
+            current = get_head_oid(repo)
+            expected_oid = current if current in session_heads else next(iter(session_heads))
 
     file_additions = [
         {"path": p, "contents": base64.b64encode(c.encode("utf-8")).decode("ascii")}
@@ -558,45 +652,61 @@ def atomic_commit(
         }
     }
 
-    try:
-        result = _graphql(mutation, variables)
-        if "errors" in result:
-            errs = result["errors"]
-            if any("expectedHeadOid" in str(e) for e in errs):
+    result = _graphql(mutation, variables)
+    if "errors" in result:
+        errs = result["errors"]
+        # If the failure was expectedHeadOid mismatch, raise CollisionError.
+        if any("expectedHeadOid" in str(e) or "stale" in str(e).lower() for e in errs):
+            if collision_check:
+                current_head = get_head_oid(repo)
+                raise CollisionError(
+                    colliding_paths=committed_paths,
+                    fetch_head=expected_oid,
+                    current_head=current_head,
+                )
+            else:
+                # collision_check disabled — retry with fresh HEAD (legacy)
                 variables["input"]["expectedHeadOid"] = get_head_oid(repo)
                 result = _graphql(mutation, variables)
                 if "errors" in result:
-                    raise RuntimeError(f"Commit failed after OID retry: {result['errors']}")
-            else:
-                raise RuntimeError(f"Commit failed: {errs}")
-
-        oid = result["data"]["createCommitOnBranch"]["commit"]["oid"]
-
-        # Evict committed content — it's on GitHub now.
-        # Session-permanent files get their cached value updated instead of evicted.
-        for path, content in additions:
-            key = _repo_key(path, repo)
-            if any(perm in path for perm in SESSION_PERMANENT_PATTERNS):
-                _session_fetches[key] = content  # update to committed version
-            else:
-                _session_fetches.pop(key, None)
-        for path in (deletions or []):
-            _session_fetches.pop(_repo_key(path, repo), None)
-        if _session_fetches:
-            _refresh_token()
+                    raise RuntimeError(f"Commit failed after HEAD refresh: {result['errors']}")
         else:
-            _session_token = None
-        _save_cache()
+            raise RuntimeError(f"Commit failed: {errs}")
 
-        return oid
+    oid = result["data"]["createCommitOnBranch"]["commit"]["oid"]
 
-    except Exception as e:
-        raise RuntimeError(f"Commit error [{repo}]: {e}")
+    # Evict committed content — it's on GitHub now.
+    # Session-permanent files get their cached value updated instead of evicted.
+    for path, content in additions:
+        key = _repo_key(path, repo)
+        if any(perm in path for perm in SESSION_PERMANENT_PATTERNS):
+            _session_fetches[key] = content  # update to committed version
+            # Record the new HEAD as this file's fetch_head — it's authoritative now
+            _fetch_head[key] = oid
+        else:
+            _session_fetches.pop(key, None)
+            _fetch_head.pop(key, None)
+    for path in (deletions or []):
+        _session_fetches.pop(_repo_key(path, repo), None)
+        _fetch_head.pop(_repo_key(path, repo), None)
+    if _session_fetches:
+        _refresh_token()
+    else:
+        _session_token = None
+    _save_cache()
+
+    return oid
 
 
 def append_to_register(path: str, new_entries: str,
                        commit_message: str, repo: str = None) -> str:
-    """Safe register append with size check. ttrpg only."""
+    """Safe register append with size check. ttrpg only.
+
+    Uses optimistic concurrency via atomic_commit's default behavior — the fresh
+    fetch at the top of this function establishes a new fetch_head, and if
+    anything else commits between our fetch and our commit, we get CollisionError.
+    Caller should catch CollisionError and retry (re-fetch, re-append, re-commit).
+    """
     repo = repo or 'ttrpg'
     fresh = read_files_graphql([path], repo=repo, skip_health_check=True)
     current = fresh.get(path) or ""
