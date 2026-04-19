@@ -139,7 +139,7 @@
     status: resolved
     severity: P1
     affects: [designs/npcs/npc_behavior_v30.md]
-    resolution: "§2.14a Ministry Census Thread-Perception Data added. PAR data structure, 3-tier access, TS-gated interpretation, procedural engine generation, Haelgrund Arc C exception. ED-671."
+    resolution: "§8.8a Niflhel Intelligence Output Mechanic added. 4-tier product system (Rumour/Dossier/Leverage), sale mechanic, exposure counter, engine implementation. ED-679."
     source_pp: PP-019
     note: "Renumbered from duplicate ED-673."
 

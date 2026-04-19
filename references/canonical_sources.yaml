@@ -124,7 +124,7 @@ systems:
   npc_behavior:
     status: active
     canonical: designs/npcs/npc_behavior_v30.md
-    canonical_sha__designs__npcs__npc_behavior_v30_md: "126012576b30c04b4e2d3f3556e3129195888207"
+    canonical_sha__designs__npcs__npc_behavior_v30_md: "726b1f6c1619c675e27a099c0f7ea39d27f6f847"
     params: null
     design_doc: designs/npcs/npc_behavior_v30.md
 

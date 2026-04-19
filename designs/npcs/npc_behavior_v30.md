@@ -749,6 +749,40 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | 8 | If exposed (operative captured, evidence published): all four arms redirect to exposure containment. Assassination mode against witness if Intel vs Intel +2 is feasible. | Reactive — existential threat |
 | 9 | Pass. No deployment. | Default |
 
+
+#### §8.8a Niflhel Intelligence Output Mechanic (ED-679)
+
+Niflhel's Quiet Intelligence mode (Priority 1, 3, 4) generates actionable intelligence products. This section defines what those products are, how they are delivered, and what mechanical effects they produce.
+
+**Intelligence gathering resolution:** Each season a Niflhel arm deploys in Quiet Intelligence mode, the engine rolls: Intel pool (Niflhel's effective Intelligence stat, typically 3–5) vs Ob determined by target faction's counter-intelligence posture.
+
+| Target posture | Ob |
+|---|---|
+| No active Intel actions this season | 1 |
+| Intel action deployed defensively (counter-intel) | 2 |
+| Intel action + Riskbreaker or Inquisitor active | 3 |
+
+**Intelligence products (by degree):**
+
+| Degree | Product | Mechanical effect | Shelf life |
+|---|---|---|---|
+| Failure | No product. Operative at risk of exposure (10% chance per failure — tracked by engine). | None | — |
+| Partial | **Rumour:** Reveals one attribute value of target faction (Mandate, Military, Wealth, or Stability — Niflhel chooses). | Information only — no mechanical advantage. Available to any faction Niflhel sells to. | 2 seasons |
+| Success | **Dossier:** Reveals all four attribute values + one pending Domain Action (next season's highest-priority action from the target's priority tree). | Buying faction gains +1D on one Domain Action targeting the dossier subject this season (foreknowledge advantage). | 1 season |
+| Overwhelming | **Leverage:** As Dossier, plus one exploitable vulnerability (lowest attribute, or officer NPC with Disposition ≤ 0, or treaty obligation about to lapse). | Buying faction gains +1D as above. Additionally, Niflhel may offer a Sabotage operation at −1 Ob against the identified vulnerability. | 1 season |
+
+**Delivery mechanic — Sale or Use:**
+
+Niflhel does not use intelligence products directly (no Mandate to leverage politically). Instead, products are sold to other factions or to the player:
+
+- **NPC faction purchase:** Niflhel approaches the faction most likely to act against the target (determined by priority tree conflict analysis). Price: 1 Wealth per product tier (Rumour = 1, Dossier = 2, Leverage = 3). If the buyer cannot pay, Niflhel may accept a favour token (one future Domain Action performed on Niflhel's behalf, redeemable within 4 seasons).
+- **Player purchase:** Niflhel contacts the player via Outreach (§8.11) if the player has Niflhel Standing ≥ 1 or has conducted any prior transaction with Niflhel. Same pricing. Player may negotiate via Social Contest (Ob 2; Success: 50% price; Overwhelming: free + Niflhel Disposition +1).
+- **Unsold products:** If no buyer is found within 1 season, the product expires. Niflhel does not stockpile — information decays.
+
+**Exposure accumulation:** Each Failure result increments an internal Exposure Counter (per target faction). At Exposure Counter = 3, the target faction discovers Niflhel's intelligence operation and may act on it (Priority 8 activates for Niflhel). Counter resets to 0 if Niflhel suspends operations against that target for 2 consecutive seasons.
+
+**Engine implementation:** Intelligence gathering is resolved during Phase 3 (Domain Actions). Products are generated and queued. Sales are resolved during Phase 4 (Social). Unsold products expire at Accounting.
+
 ### §8.9 Restoration Movement NPC Priority Tree (Post-Founding Only)
 
 | Priority | Condition | Action |
