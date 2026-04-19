@@ -16,7 +16,7 @@ One attribute per derived value. No multi-attribute combinations. History and eq
 
 Stats change rarely (structural capability). Derived values change frequently (current state). The two-layer split exists because stats serve the resolution engine (small integers for dice pools) while derived values serve the state engine (large integers for resource tracking). These are different jobs requiring different scales.
 
-**Output scaling** (TroopCount only): `output = floor(integer_result × derived_value / (stat × multiplier))`. Applied only to active capacity outputs (TroopCount → damage dealt). Not applied to survival resources (Vitality, Composure) — a depleted survival pool makes you easier to kill, not weaker at killing.
+**Output scaling** (TroopCount only): `output = floor(integer_result × derived_value / max_derived_value)`, capped at ratio 1.0. Applied only to active capacity outputs (TroopCount → damage dealt). Not applied to survival resources (Vitality, Composure) — a depleted survival pool makes you easier to kill, not weaker at killing.
 
 ---
 
@@ -59,6 +59,8 @@ Resolution: stats remain 1–7 (correct pool range for d10 probability curves). 
 
 Wound Interval checks use raw post-DR damage, not Vitality-scaled damage. Equipment Vitality bonuses affect total capacity before incapacitation; they do not change wound accrual rate. Armor DR still reduces incoming damage before both Vitality deduction and Wound Interval accumulation.
 
+**Vitality cap:** `max_Vitality = Endurance × 10 + equipment_bonus`. Healing and recovery cannot exceed max_Vitality. If equipment is destroyed mid-combat, max drops but current Vitality is retained until next healing attempt (same pattern as faction Treasury when Wealth drops).
+
 **Eliminates:** Max Wounds as a stored stat. Health formula `(End+6)×(floor(End/2)+1)`.
 
 | Endurance | Current Health | Vitality (×10) | Wounds before incap (current → new) |
@@ -100,6 +102,8 @@ End 4: Stamina 20. Standard attacks at 5/round: 4 rounds before Out of Breath. H
 **Eliminates:** Current formula `End + History + 1 − armour_mod`. History moves to recovery. Armour moves from base reduction to drain modifier (Battle Brothers precedent: armor adds to per-action fatigue cost, doesn't reduce max fatigue).
 
 **Precedent:** Battle Brothers fatigue system. Variable action costs create pre-combat decisions (loadout) and in-combat decisions (burst vs sustain). Viable in videogame because UI handles math.
+
+**UI note:** Equipment screen should display "Estimated combat rounds: N" based on loadout weight and Endurance. No hard Endurance gate for armor — the Stamina math IS the gate.
 
 ---
 
@@ -197,7 +201,7 @@ Spirit 6 / Focus 2: high threshold (30), sustained contact, but only 1 operation
 
 **Size** (1–7) becomes a computed integer: `Size = floor(TroopCount / block_size)`. All combat formulas reference Size unchanged: `Pool = min(Size, Command) + Command`.
 
-**Output scaling:** `effective_damage = floor(successes × (1 + Power) × TroopCount / (Size × block_size))`. A unit at 4,600 TroopCount (Size 4, Campaign) deals ~15% more damage than one at 4,000 (also Size 4). Continuous output without touching resolution.
+**Output scaling:** `effective_damage = floor(successes × (1 + Power) × TroopCount / max_TroopCount)`, where `max_TroopCount = Size_at_muster × block_size`. Ratio is always ≤ 1.0 (capped — reinforcement above muster grants pool dice via Size increase, not output bonus). Damage degrades smoothly as troops are lost. No discontinuities at Size boundaries. A unit at 4,600 / 5,000 deals 92% damage; at 3,000 / 5,000 deals 60% damage. The pool die loss at Size thresholds provides the cliff drama; output scaling provides the continuous degradation between cliffs.
 
 **Health layer (engine-only):** `Total Health = Size_at_muster × H`, where `H = min(Discipline, Command) + DR`. Unchanged. TroopCount = `floor(current_Health × block_size / H)`.
 

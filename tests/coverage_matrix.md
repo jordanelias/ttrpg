@@ -33,7 +33,6 @@
 | ED-588 | PT ≤ 3 (revised from PT ≤ 1). Resolved in victory_v30 §3.5 (2026-04-16). |
 | ED-589 | Presence marker mechanics defined: Community Organizing Domain Action, cap 5/territory, Church/Crown suppression rules. victory_v30 §3.5 updated. |
 | ED-612 | Guilds intentionally have no solo victory condition. Guilds are an NPC faction/tool, not a protagonist faction. Confirmed in throughline analysis. |
-| PHASE-4-FRAMEWORK | Simulation framework operational — state.py + engine.py, 50-run baseline validates architecture, 25/130 features, infill needed |
 | AUD-SET-01/03 | Settlement economy — income differentiated, Order→Accord proportional, siege attrition calibrated |
 | AUD-VIC-02 | RM victory — simplified 5/5 wins, but omits Church counter-pressure. Full calibration Phase 4. |
 | AUD-NPC-03 | Priority tree cross-faction sim — 10 seasons, trees produce faction-appropriate behavior, repetition intentional |
@@ -175,27 +174,16 @@ Remaining open sub-EDs: ED-640/642/643/644/645/648/649/650/651/652/655/656/657/6
 ---
 
 
-## Derived Stats v2 Stress Tests (stress_derived_stats_v2.py)
+### Derived Stats v2 Patch Validation
 
-| Test | System | Result | Notes |
-|------|--------|--------|-------|
-| End 1 survivability | Vitality | PASS | Vit=10, 1 wound. Glass cannon — intended. |
-| End 7 + plate | Vitality | PASS | Vit=78, 6 wounds. Equipment adds 1 wound tier. |
-| Equipment stacking | Vitality | PASS | +20 equip → 6 wounds. Within bounds. |
-| Poison drain | Vitality | PASS | 10 rounds to die. Decision window exists. |
-| Heavy loadout exhaustion | Stamina | PASS | End 3 heavy: 1 attack. Punishing, correct. |
-| Light defensive sustain | Stamina | PASS | End 5 light: 8 rounds. Long fight. |
-| Take a Breath recovery | Stamina | PASS | 70% restore. Degraded continuation. |
-| Cha 1 fragility | Composure | PASS | Composure 3. Instant Rattle. Intended. |
-| Focus defense absorption | Composure | PASS | Focus 7 negates low-margin strain. |
-| Focus 3 Grand Contest | Concentration | PASS | Spent at exchange 3. Regroup required. |
-| Regroup timing | Concentration | PASS | Saves Focus 4 in Grand Contest. Tactical. |
-| Spirit 2/Focus 6 | Thread Fatigue | PASS | Endurance bottleneck (1 Pull). |
-| Spirit 6/Focus 2 | Thread Fatigue | PASS | Skill bottleneck (1 op). |
-| Thread artifact | Thread Fatigue | PASS | +1 operation. Meaningful, not dominant. |
-| TroopCount output scaling | TroopCount | PASS | Sub-Size granularity works (Δ3 dmg). |
-| Cross-system independence | Combat→Thread | PASS | Stamina and Thread Fatigue independent. |
-| Equal fighters (5k) | Full Combat | PASS | 48/50%, 9.9 rounds, 3.2 wounds avg. |
-| Heavy vs Light (5k) | Full Combat | PASS | 48/50%. Pool advantage > durability. Pre-existing. |
-| Equal orators (3k) | Social Contest | PASS | 41/40/20%. 55% Rattled. Calibrated. |
-| Cha 6 vs Foc 6 | Social Contest | PASS | Cha wins 74%. Pool-primary dominates. |
+| Test | Result | Notes |
+|------|--------|-------|
+| TroopCount monotonicity | PASS | Damage never increases as troops decrease (4k values) |
+| Reinforcement cap | PASS | Over-muster ratio capped at 1.0 |
+| Vitality healing cap | PASS | Cannot exceed max_Vitality |
+| Equal combat with breath | PASS | 48/49%, 10.7r avg |
+| Mass battle equal armies | PASS | 52/48%, 4.2r avg |
+| Grand Contest Spent rate | PASS | 100% at Foc 3. Regroup required. |
+| Thread multi-op matrix | PASS | Spirit/Focus both gate meaningfully |
+
+**Patch:** TroopCount formula `TC/(Size×block)` → `TC/max_TC`, capped 1.0.
