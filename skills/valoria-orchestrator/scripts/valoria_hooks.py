@@ -47,6 +47,7 @@ TASK_REQUIRED_FILES = {
     "patch":           ["canon/patch_register_active.yaml"],
     "compilation":     ["references/canonical_sources.yaml", "canon/patch_register_active.yaml"],
     "propose_mechanic":["references/canonical_sources.yaml", "canon/editorial_ledger_summary.yaml"],
+    "design_proposal": ["references/canonical_sources.yaml", "canon/editorial_ledger_summary.yaml", "references/throughlines_meta.md"],
     "design":          ["references/canonical_sources.yaml"],
     "infrastructure":  [],
 }
@@ -257,6 +258,98 @@ def editorial_gate(path: str, content: str) -> None:
     print(f"[HOOK ✓] editorial_gate — {path}")
 
 
+# ── Hook 3b: Framework vetting gate (PP-674) ──────────────────────────────────
+#
+# Enforces the canonical vetting framework from references/throughlines_meta.md.
+# Triggers when a commit modifies canon/patch_register_active.yaml adding a
+# Class A or Class B patch entry. Requires the entry to carry a `vetting:` block
+# with N, Ω, Μ, М, Q records. Class C/D/E entries are exempt. Pre-PP-674 entries
+# are grandfathered.
+
+VETTING_REQUIRED_KEYS = ('class', 'necessity', 'omega', 'mu', 'm_ratings', 'q')
+VETTING_CLASS_VALUES = ('A', 'B', 'C', 'D', 'E')
+VETTING_ENFORCED_FROM_PP = 674
+
+
+def vetting_gate(additions: list) -> None:
+    """
+    Validates framework-required vetting records on patch_register additions.
+
+    Fires only if additions modify canon/patch_register_active.yaml. Locates
+    PP entries with id >= PP-674; for each Class A/B entry, verifies a
+    `vetting:` block is present with required keys. Class C/D/E entries only
+    need the `class` field.
+
+    This enforces the canonical vetting framework (references/throughlines_meta.md)
+    at commit time. CI runs the same check externally.
+    """
+    import re as _re
+    pr_additions = [(p, c) for p, c in additions if p == 'canon/patch_register_active.yaml']
+    if not pr_additions:
+        return  # Not touching the patch register, nothing to enforce
+
+    path, content = pr_additions[0]
+
+    # Parse PP entries — simple YAML-ish extraction (the full yaml module might
+    # not be available in every environment; use the same regex style other
+    # hooks use).
+    entries = _re.findall(
+        r'-\s+id:\s+PP-(\d+)\s*\n(.*?)(?=\n-\s+id:\s+PP-\d+|\Z)',
+        content, _re.DOTALL
+    )
+    errors = []
+    for pp_num_str, body in entries:
+        pp_num = int(pp_num_str)
+        if pp_num < VETTING_ENFORCED_FROM_PP:
+            continue  # grandfathered
+        # Does this entry have a vetting block?
+        vetting_match = _re.search(r'\n\s+vetting:\s*\n(.*?)(?=\n\s+\w+:|\Z)',
+                                   body, _re.DOTALL)
+        if not vetting_match:
+            # Missing — is this a Class A/B? We do not know for certain without
+            # a class marker. Default: require vetting block for all entries
+            # >= PP-674 unless the body explicitly carries "class: C|D|E" or
+            # "pre-framework: true".
+            if _re.search(r'class:\s*[CDE]\b', body) or 'pre-framework: true' in body:
+                continue
+            errors.append(
+                f"PP-{pp_num_str}: no `vetting:` block. Required for "
+                f"Class A/B patches (PP-{VETTING_ENFORCED_FROM_PP}+). "
+                f"Add class + vetting per references/throughlines_meta.md §8, "
+                f"or mark `class: E` / `pre-framework: true` if grandfathered."
+            )
+            continue
+        vetting_block = vetting_match.group(1)
+        # Parse class
+        class_match = _re.search(r'class:\s*([A-E])\b', vetting_block)
+        if not class_match:
+            errors.append(
+                f"PP-{pp_num_str}: vetting.class missing or invalid. "
+                f"Must be one of {VETTING_CLASS_VALUES}."
+            )
+            continue
+        cls = class_match.group(1)
+        if cls in ('C', 'D', 'E'):
+            # Light validation — only need class
+            continue
+        # Class A/B — require full set
+        for key in VETTING_REQUIRED_KEYS:
+            if _re.search(rf'\b{key}:', vetting_block) is None:
+                errors.append(
+                    f"PP-{pp_num_str} (Class {cls}): vetting.{key} missing. "
+                    f"Required keys for Class A/B: {VETTING_REQUIRED_KEYS}."
+                )
+
+    if errors:
+        raise RuntimeError(
+            "[HOOK VIOLATION] vetting_gate FAILED:\n\n"
+            + "\n\n".join(f"  [{i+1}] {e}" for i, e in enumerate(errors))
+            + "\n\nFramework: references/throughlines_meta.md\n"
+            + "Required for Class A/B patches (PP-674+). Fix before committing."
+        )
+    print(f"[HOOK ✓] vetting_gate — {len(entries)} PP entries scanned")
+
+
 # ── Hook 4: Commit message ────────────────────────────────────────────────────
 
 def commit_message_gate(message: str) -> None:
@@ -430,6 +523,12 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
     # Sim fabrication check — catches uncited mechanical constants in sim files
     try:
         sim_fabrication_check(additions)
+    except RuntimeError as e:
+        errors.append(str(e))
+
+    # Framework vetting gate (PP-674) — enforce throughlines_meta.md protocol
+    try:
+        vetting_gate(additions)
     except RuntimeError as e:
         errors.append(str(e))
 

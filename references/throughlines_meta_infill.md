@@ -2,6 +2,7 @@
 <!-- Companion to: references/throughlines_meta.md (SKELETON) -->
 <!-- Do not use for vetting reference; use skeleton only -->
 <!-- [EDITORIAL: PP-672 — throughlines hierarchical framework infill, 2026-04-19] -->
+<!-- [EDITORIAL: PP-674 — tier N (Necessity) added, framework enforcement details, 2026-04-19] -->
 
 # Throughlines Framework — Infill
 
@@ -275,6 +276,14 @@ These are requirements for the implementation to honor the framework, not sugges
 
 ## §7 Failure Lexicon — definitions with examples
 
+**Fantasy imposition.** A mechanic drawn from game-design convention (RPG, fantasy strategy, roguelike) rather than from Renaissance-era political-leadership dynamics. Example: "legendary weapons with unique properties," "class-based character abilities," "dungeon crawl encounters," "artifact collection quests." These originate from genre tropes, not the subject matter. Violates N.
+
+**Duplicate coverage.** A proposed mechanic models a dynamic that is already mechanized elsewhere. Example: adding a "siege morale" stat when settlement Order already models the social fabric under siege. The proposal adds surface area without adding coverage. Violates N — extend existing, don't duplicate.
+
+**Edge case mechanic.** A proposed mechanic models a dynamic that was real in the Renaissance but rare. Example: a dedicated "poisoning heir" mechanic — poisoning happened (Cesare Borgia, Catherine de Medici rumors) but was not a load-bearing dynamic distinct from Social Contest / Intrigue. Violates N — abstract into existing rather than dedicate mechanical surface.
+
+**Abstractable.** A proposed mechanic models a dynamic that is real and load-bearing but already adequately covered by existing abstract mechanics. Example: a "portrait commissioning" stat. Patronage politics was central (Medici art patronage shaped Florentine faction dynamics), but its political function — expressing Wealth, building Prestige, signaling Faction loyalty — is covered by existing Wealth + Social Contest + Stature. Dedicated stat would add surface without insight. Violates N.
+
 **Rest state.** A mechanic or state that allows the player to stop making decisions and accumulate advantage passively. Example: a "consolidation season" where all decay pauses while the player builds infrastructure. Violates Ω-c (autonomy — world stops pressing) and Μ-α (pressure — no pressure to engage).
 
 **Dominant strategy.** A choice that pays more than alternatives in all situations. Example: a Thread operation that gives a strategic benefit with no Coherence cost. Violates Ω-d and М-6. Note: a choice that dominates in *some* situations is not a dominant strategy; dominance requires context-independence.
@@ -321,3 +330,138 @@ Editorial ledger entries ED-717 (Hafenmark/Löwenritter/RM institutional-attract
 - **When to restructure М further.** If new systems (like PP-666 three-system patch) reveal a consistent pattern not captured by existing М, the framework should expand. Current: 6 patterns. Open: is there a 7th М for "Temporal recursion" (T-03 co-movement across time, T-25 generational arc, T-13 irreversibility) or are those adequately covered by М-5?
 - **Hafenmark/Löwenritter/RM substrate-postures.** ED-717 flagged that these factions lack explicit М-4 characterization. Until they get T-throughlines of their own, М-4 vetting of faction proposals involving them defaults to "undefined baseline."
 - **Retroactive canon audit.** Existing canon is grandfathered. When is the right time for a systematic pass applying this framework retroactively? Probably after engine_v4 smoke-test produces concrete data about which mechanics are load-bearing.
+
+---
+
+## §10 N — NECESSITY TIER (PP-674)
+
+### §10.1 Why N sits above Ω
+
+Ω asks: does this belong in Valoria as game experience? N asks: does this belong in Valoria as a simulation of Renaissance-era political leadership? Both must pass, but they're different questions.
+
+A mechanic can satisfy Ω and still fail N. Example: a cleanly-designed relic hunt system. It might produce cross-scale consequence (Ω-a), personal transformation (Ω-b), autonomous events (Ω-c), irreducible tradeoff (Ω-d). It might even ground in substrate (Μ-γ). But relic hunting is not a load-bearing dynamic of Renaissance political leadership. It's a fantasy-game convention. Complexity for its own sake.
+
+The user's design constraint — *"we don't want complexity for the sake of it — we just have a complex game because there were many ways in which the leader of a political faction during Renaissance era could succeed fail or die"* — is a constitutive rule about what mechanics earn their place. N codifies it.
+
+N sits as tier-0 (above Ω) because subject-grounding is prior to experiential fit. A proposal that fails N does not proceed to belonging vetting because there is nothing to be experiential-about. You cannot ask "is this a Valoria experience?" if the thing isn't Valoria material to begin with.
+
+### §10.2 What counts as subject grounding
+
+Valoria's subject matter is the political leadership class of the Renaissance Italian peninsula and its analogues — faction heads, condottieri, churchmen, merchant princes, landholding nobility, mercenary captains. The dynamics that were load-bearing for these people:
+
+- **Succession** (named winners, partition on narrow claims, dynastic marriage leverage, illegitimate heirs, regency crises)
+- **Excommunication politics** (papal interdict, consecration refusal, heresy accusations as political weapon)
+- **Condottiere loyalty** (switching sides mid-campaign, bankruptcy-triggered betrayal, contract renegotiation under duress)
+- **City-state coalitions** (Leagues, mutual defense pacts, betrayal of allies, diplomatic isolation)
+- **Food and grain politics** (famine-triggered revolts, trade-route leverage, granary control)
+- **Parliamentary / senatorial factional blocs** (voting coalitions, bribery, exile via vote)
+- **Assassination and exposure** (successful removal, failed plots exposed, protection through faction loyalty)
+- **Financial ruin** (bank collapse, bankruptcy, usury-triggered excommunication — Medici/Pazzi dynamics)
+- **Territorial loss/gain** (siege, bypass, occupation, treaty concession)
+- **Thread/heresy politics** (in Valoria's counterfactual) — how substrate-doctrine functions mechanically as Renaissance-era religious-political contest would
+
+These are the *actually happened repeatedly, consequentially, to real people* category. Mechanics that model them earn their complexity.
+
+### §10.3 What fails N
+
+- **Fantasy imposition.** Legendary weapons, artifact hunts, named magic items, class-based abilities, adventurer-party composition, random encounter tables, dungeon crawls, loot systems. These are RPG/strategy-game conventions from genres with different source material. Rejected.
+
+- **Duplicate coverage.** A "merchant caravan" mechanic when the Trade Network already models economic exchange. A "siege morale" mechanic when settlement Order already models the same dynamic. Rejected — extend existing, don't duplicate.
+
+- **Edge case mechanic.** A dedicated "cardinal-bribing" mechanic. Bribery existed; it was not a load-bearing dynamic separate from Parliamentary Manoeuvre or Social Contest. Rejected — abstract into existing.
+
+- **Abstractable.** A dedicated "portrait commissioning" stat. Patronage of art mattered; its political function is covered by existing Wealth + Prestige + Domain Actions. Rejected — existing abstractions suffice.
+
+### §10.4 What passes N
+
+- **PP-666 succession split** — Medici/Pazzi fracture, Habsburg partitions, Visconti breakup. Load-bearing. Pass.
+- **Hypothetical Hafenmark Food Vulnerability** — Italian city-states repeatedly collapsed on grain supply (Ferrara 1481, Florence during sieges, Genoa 1528). Pass.
+- **Hypothetical condottiere contract renegotiation** — Francesco Sforza turned sides repeatedly; Hawkwood switched employers; mercenary captain bankruptcy triggered cascades. Load-bearing. Pass.
+- **Hypothetical papal interdict mechanic** — repeatedly decisive (Venice 1508, Florence 1376). Pass.
+
+### §10.5 Authority on N
+
+Jordan is subject-matter authority. Claude cannot autonomously judge whether a dynamic was load-bearing in the Renaissance — that requires specific historical knowledge Jordan has and Claude does not. Claude's role: flag when a proposal appears to fail N, articulate the failure in Failure Lexicon terms, present to Jordan for decision.
+
+Claude can surface pattern-level concerns (e.g., "this looks like fantasy imposition because the proposal references X which I don't recall from the subject matter"). Claude cannot issue the binding verdict.
+
+### §10.6 N interaction with Ω
+
+Because N is tier-0, Ω vetting does not fire until N passes. However, the two tiers are independent in the sense that Ω failures still need to be raised even if N passes — a subject-grounded mechanic can still fail Ω (e.g., a historically-real "permanent peace treaty" mechanic would pass N but fail Ω-d).
+
+In practice, the vetting workflow is:
+1. N check — does this earn its existence?
+2. If N pass → Ω check — does this produce the Valoria experience?
+3. If both pass → Μ / М / Τ → Q.
+
+### §10.7 Rewritten worked examples (N-updated)
+
+**Merchant caravan minigame** (previously failed at Μ-γ). Now fails at N: **fantasy imposition**. The caravan minigame is a game-design convention, not a Renaissance-political-leadership dynamic. Note: if the proposal were instead "Trade Network crisis mechanic" — grounded in the Medici bank failure, the Venice-Ottoman trade route politics, the Genoese financial collapse — it would pass N and proceed to Ω vetting (where it would likely also pass, being substrate-grounded economic pressure).
+
+**"Legendary weapon" system** (hypothetical). Fails N: **fantasy imposition**. Named magical weapons are a fantasy-RPG convention. The Renaissance-real analogue would be named military formations (the Swiss Guard, the Compagnia Bianca) or specific condottiere bands — those could pass N if proposed.
+
+**PP-666 succession split** (previously passed Ω/Μ/М/Q). Now also passes N: **succession fracture is load-bearing**. The Medici inheritance dispute of 1434, Visconti partition of 1402, Habsburg partitions 1521, Pazzi conspiracy 1478 — succession on narrow claims was the single most common cause of faction-layer crisis in the era. Dedicated mechanic is earned.
+
+---
+
+## §11 Framework enforcement (PP-674)
+
+### §11.1 Why enforcement matters
+
+A framework that is advisory is not a framework. The previous state (PP-672) committed the framework document but had no enforcement — Claude could skip vetting on any commit, and would. PP-674 adds hard enforcement at the commit layer.
+
+### §11.2 Enforcement mechanism
+
+`valoria_hooks.vetting_gate(additions)` fires during `pre_commit_gate` when additions include `canon/patch_register_active.yaml`. It parses the patch register, finds PP entries with `id >= PP-674`, and for each verifies:
+
+- The entry has a `vetting:` block.
+- The block has `class:` with value A/B/C/D/E.
+- If class is A or B, the block has all six required keys: `class`, `necessity`, `omega`, `mu`, `m_ratings`, `q`.
+
+Failures raise RuntimeError, blocking the commit. CI runs the same check externally after push, so the gate cannot be bypassed by editing hooks in-container.
+
+Grandfathering: entries with `pre-framework: true` are exempt. This applies to PP-001..PP-673.
+
+### §11.3 Required `vetting:` block structure
+
+```yaml
+- id: PP-XXX
+  date: YYYY-MM-DD
+  # ... normal fields ...
+  vetting:
+    class: A                         # A|B|C|D|E
+    necessity: pass                  # N result; pass | fail | flagged
+    omega: pass                      # Ω result; pass | fail | flagged
+    mu: [Μ-α, Μ-δ]                  # modes primarily served
+    m_ratings:
+      M-1: "+"                       # per §3 rubric: + | ✓ | − | ○
+      M-2: "○"
+      M-3: "✓"
+      M-4: "○"
+      M-5: "+"
+      M-6: "+"
+    q: pass                          # pass | iterate | skip
+```
+
+Class C/D/E can use minimal form: `vetting: { class: C }`.
+
+### §11.4 Task type: `design_proposal`
+
+New task type in `TASK_REQUIRED_FILES`. Requires loading `references/throughlines_meta.md` before any design_proposal work begins. Use this task gate when proposing a new mechanic — ensures framework skeleton is in context.
+
+### §11.5 Auditable audit trail
+
+Every Class A/B patch from PP-674 onward has a permanent vetting record in the patch register. This produces:
+
+- A reviewable history of why each system was approved.
+- Data for pattern-detection — are certain М's consistently violated? Are N failures flagged but merged anyway?
+- A self-validating protocol — PP-674 itself carries a vetting block (the first).
+
+### §11.6 What enforcement does NOT do
+
+- Does not vet Class C/D/E proposals substantively. Minimal class marker suffices.
+- Does not re-vet existing (pre-PP-674) mechanics. Grandfathered.
+- Does not enforce framework text — if the framework document changes, existing vetting records become inconsistent but are not retroactively invalidated.
+- Does not catch misclassification — a Class A proposal misclassified as Class C will skip vetting. The classification itself requires human judgment.
+
+The enforcement catches *procedural* framework violations (missing vetting blocks). *Substantive* framework violations (wrong M ratings, false N pass) require Jordan's review — hence the authority chain.

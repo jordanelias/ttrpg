@@ -314,3 +314,35 @@ Meaning #1 retains "skeleton" (correct usage). Meanings #2 and #3 migrate to "in
 - canon/editorial_ledger.yaml: ED-719 entry.
 - canon/patch_register_active.yaml: PP-673 entry.
 - references/canonical_sources.yaml: cleanup note.
+
+## 2026-04-19 — PP-674 Framework enforcement + Necessity tier (N)
+
+**Commit:** (this commit)
+**Scope:** make the vetting framework a mandatory validation tool; add tier N (Necessity) above Ω.
+
+**Framework changes (references/throughlines_meta.md, references/throughlines_meta_infill.md):**
+- New tier N (Necessity Test) above Ω. Tests whether a proposal models a load-bearing Renaissance-era political-leadership dynamic.
+- N-level questions (5) added to skeleton §0.
+- 4 new Failure Lexicon terms: fantasy imposition, duplicate coverage, edge case mechanic, abstractable.
+- Vetting protocol (§8.1) updated: Class A/B begin with N-check.
+- §8.5 added: enforcement specification — required vetting: block schema for Class A/B patches.
+- Authority table: N owned by Jordan (subject-matter authority).
+- Infill §10 added: tier N rationale, worked examples, what counts as subject grounding.
+- Infill §11 added: enforcement mechanism, vetting: block schema, self-validation of PP-674.
+
+**Ecosystem enforcement (skills/valoria-orchestrator/scripts/valoria_hooks.py):**
+- New function: vetting_gate(additions) — validates Class A/B patch register entries from PP-674 forward have vetting: blocks with required keys (class, necessity, omega, mu, m_ratings, q).
+- vetting_gate wired into pre_commit_gate — fires on every commit that touches canon/patch_register_active.yaml.
+- New task type: design_proposal — requires references/throughlines_meta.md in context before proposing mechanics.
+- Grandfathering: entries with pre-framework: true exempt. PP-001..PP-673 implicit-grandfathered (no new entries before PP-674 need retroactive markers; only new entries are checked).
+
+**Registers:**
+- canon/patch_register_active.yaml: PP-674 entry (self-validating — includes own vetting: block, class A, infrastructure note).
+- canon/editorial_ledger.yaml: ED-720.
+- references/canonical_sources.yaml: enforcement note.
+
+**Consequences:**
+- All future Class A/B gameplay proposals will carry permanent vetting records in the patch register.
+- Pattern-detection across vetting records becomes possible (are certain М's consistently violated? are N failures flagged but merged anyway?).
+- Framework is no longer advisory — it is procedurally enforced.
+- Substantive framework compliance (correct M ratings, accurate N judgments) still requires Jordan's review; the gate catches only procedural violations.

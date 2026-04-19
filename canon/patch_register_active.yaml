@@ -458,3 +458,43 @@ patches:
     - 75 auto-generated *_skeleton.md → *_index.md
   status: applied
   applied_commit: pending
+- id: PP-674
+  date: 2026-04-19
+  severity: P1
+  description: "Framework enforcement + tier N (Necessity Test). Adds vetting_gate
+    to valoria_hooks.py, new task type design_proposal, new tier N (subject-grounding
+    check) above Ω in references/throughlines_meta.md. Tier N codifies the user's
+    design constraint: Valoria's complexity is earned only when modeling
+    load-bearing Renaissance-era political-leadership dynamics; complexity for
+    its own sake is rejected. Four new Failure Lexicon terms: fantasy imposition,
+    duplicate coverage, edge case mechanic, abstractable. Authority: Jordan owns
+    N (subject-matter authority); Claude flags N failures. Enforcement: Class A/B
+    patch register entries from PP-674 forward require a vetting: block with
+    class/necessity/omega/mu/m_ratings/q keys, validated by vetting_gate() at
+    commit and by CI. PP-001..PP-673 grandfathered via pre-framework: true.
+    Self-validating: this PP-674 entry includes its own vetting block. ED-720
+    for adoption."
+  finding_id: USER-DIRECTED
+  source: user
+  affects:
+    - references/throughlines_meta.md
+    - references/throughlines_meta_infill.md
+    - skills/valoria-orchestrator/scripts/valoria_hooks.py
+    - canon/patch_register_active.yaml
+    - canon/editorial_ledger.yaml
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: A
+    necessity: pass  # infrastructure: models no Renaissance dynamic, but earns existence as vetting apparatus; N scrutiny applies to game mechanics not meta-framework
+    omega: pass  # framework itself is not a game mechanic; vetting the framework against Ω is a category error, but it supports all future Ω vetting
+    mu: []  # Meta-framework, not gameplay; doesn't serve Μ modes directly
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+    q: pass  # infrastructure quality check: hooks pass syntax; framework text is consistent with §10 ownership rules
+    note: "Self-exempting — meta-framework infrastructure, not gameplay mechanic. Subsequent Class A/B gameplay proposals will carry full vetting records."

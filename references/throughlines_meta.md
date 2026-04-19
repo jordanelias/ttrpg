@@ -1,16 +1,42 @@
 <!-- SKELETON — mechanical spec only -->
 <!-- Infill: references/throughlines_meta_infill.md -->
 <!-- [EDITORIAL: PP-672 — throughlines hierarchical framework, canonical vetting guide, 2026-04-19] -->
+<!-- [EDITORIAL: PP-674 — added tier N (Necessity Test), framework enforcement via vetting_gate, 2026-04-19] -->
 
 # Valoria Throughlines Framework — Canonical Vetting Guide
 
 **Purpose.** Evaluate every proposal for vision-alignment (belonging) and execution quality. Hierarchical: higher tiers more constitutive; a higher-tier failure cannot be rescued by lower-tier success.
 
-**Adoption.** PP-672. Applies to work after adoption. Existing canon grandfathered.
+**Adoption.** PP-672 (framework). PP-674 (tier N + enforcement). Applies to work after adoption. Existing canon grandfathered.
 
-**Authority.** Jordan owns Ω, Μ. Co-owned М, Τ. Claude applies Q and the full protocol. Claude flags Ω concerns to Jordan; never unilaterally rejects for Ω failure.
+**Authority.** Jordan owns N, Ω, Μ. Co-owned М, Τ. Claude applies Q and the full protocol. Claude flags N/Ω concerns to Jordan; never unilaterally rejects for N or Ω failure.
+
+**Enforcement (PP-674).** `valoria_hooks.vetting_gate` blocks commits to `canon/patch_register_active.yaml` that add Class A/B PP entries from PP-674 onward without a `vetting:` block. CI runs the same check externally.
 
 **Load order.** For routine vetting, load this skeleton. Load infill (`throughlines_meta_infill.md`) only when a decision requires deeper justification — examples, rationale, worked cases, per-T tag table, full Μ̄ translation rationale.
+
+---
+
+## §0 N — NECESSITY (1)
+
+**N:** *A proposal earns its existence in Valoria if it models a real, load-bearing dynamic of Renaissance-era political leadership — the ways leaders of political factions could succeed, fail, or die. Complexity is permitted only when grounded in the subject matter; complexity for its own sake is rejected, even when otherwise well-designed.*
+
+**N-level questions** (all Class A/B must answer):
+1. What Renaissance-era political dynamic does this model? (Name it.)
+2. Is that dynamic already covered by existing mechanics?
+3. Does the proposal produce meaningfully different player situations than existing mechanics?
+4. Was the dynamic load-bearing in the historical subject, or edge-case?
+5. What is lost by modeling this abstractly through existing mechanics?
+
+**N failure modes** (see §7 Failure Lexicon):
+- Fantasy imposition — from game-design convention, not subject grounding.
+- Duplicate coverage — existing mechanic already models this dynamic.
+- Edge case mechanic — dynamic was rare historically; doesn't earn dedicated mechanic.
+- Abstractable — existing abstract mechanics cover it adequately.
+
+**N failure = flag to Jordan. Do not autonomously reject.**
+
+N is tier-0: checked before Ω. A proposal that fails N does not proceed to belonging vetting — complexity without subject grounding is rejected regardless of experiential fit.
 
 ---
 
@@ -123,6 +149,10 @@ Headline rules:
 
 | Term | Fails |
 |---|---|
+| Fantasy imposition | N |
+| Duplicate coverage | N |
+| Edge case mechanic | N |
+| Abstractable | N |
 | Rest state | Ω-c, Μ-α |
 | Dominant strategy | Ω-d, М-6 |
 | Flavor-only | Ω, Μ-γ, М-3 |
@@ -145,14 +175,15 @@ Full definitions with concrete examples: infill §7.
 
 | Class | Definition | Vetting |
 |---|---|---|
-| A. New system | New subsystem/resource/action category/state machine | Full: Ω → Μ → М → Τ → Q |
-| B. System extension | New mechanic within existing system | Μ → М → Τ → Q (Ω inherited) |
+| A. New system | New subsystem/resource/action category/state machine | Full: **N** → Ω → Μ → М → Τ → Q |
+| B. System extension | New mechanic within existing system | **N** → Μ → М → Τ → Q (Ω inherited) |
 | C. Parameter change | Threshold/rate/cap on existing mechanic | Τ only |
 | D. Content addition | New NPC/territory/arc/narrative beat | Τ only |
 | E. Cleanup | Bug/typo/rename/reorg/register | Triage: touches mechanics? → escalate to D. No mechanics? → execute. |
 
 ### §8.2 Failure behavior
 
+- **N fail → flag Jordan; do not proceed.** Complexity without subject grounding is rejected.
 - Ω fail → flag Jordan; do not proceed.
 - Μ fail → redesign required.
 - М fail (single) → redesign OR documented tradeoff.
@@ -162,15 +193,40 @@ Full definitions with concrete examples: infill §7.
 
 ### §8.3 Conflict resolution
 
-Higher tiers override lower.
+Higher tiers override lower. N precedes Ω — a proposal that passes Ω but fails N is rejected before Ω even applies.
 
 ### §8.4 Test battery
 
 Protocol must correctly classify:
-- Pass: PP-666 settlement adjacency, hypothetical Hafenmark food stat, companion Thread-witness dialogue.
-- Fail: 10-season peace treaty (Ω-d), merchant caravan minigame (Μ-γ), Standing-7 permanent boost (Μ-α/М-6), reskinned Hafenmark (М-4).
+- Pass: PP-666 settlement adjacency (passes N — succession fracture is Renaissance-load-bearing; Medici, Habsburg, Visconti), hypothetical Hafenmark food vulnerability (passes N — Italian city-states repeatedly collapsed on grain supply), companion Thread-witness dialogue (passes N — confidant/witness politics is real dynamic).
+- Fail: 10-season peace treaty (fails Ω-d), merchant caravan minigame (fails N — fantasy imposition), Standing-7 permanent boost (fails Μ-α/М-6), reskinned Hafenmark (fails М-4), hypothetical "legendary weapon" system (fails N — fantasy imposition from game-design convention).
 
 Full walkthroughs: infill §5.
+
+### §8.5 Enforcement (PP-674)
+
+Class A/B patch register entries must include a `vetting:` block:
+
+```yaml
+vetting:
+  class: A | B | C | D | E
+  necessity: pass | fail | flagged   # N result
+  omega: pass | fail | flagged       # Ω result
+  mu: [primary-Μ-served, ...]        # list of Μ modes served
+  m_ratings:                         # М pattern ratings per §3 rubric
+    M-1: "+" | "✓" | "−" | "○"
+    M-2: ...
+    M-3: ...
+    M-4: ...
+    M-5: ...
+    M-6: ...
+  q: pass | iterate | skip           # Q-tier result
+```
+
+Class C/D/E entries may use minimal `vetting: { class: C }` (or D/E).
+Pre-PP-674 entries may use `pre-framework: true` for grandfathering.
+
+`valoria_hooks.vetting_gate` blocks commits missing the block. CI runs same check.
 
 ---
 
@@ -189,6 +245,7 @@ No new registers. Uses existing:
 
 | Tier | Owner | Claude |
 |---|---|---|
+| N | Jordan | Flag failures; no reject |
 | Ω | Jordan | Flag failures; no reject |
 | Μ | Jordan | Apply ratings; propose refinements |
 | М | Jordan approves; Claude refines | Apply ratings; propose reclassifications |

@@ -128,3 +128,10 @@ entries:
     status: resolved
     severity: P2
     source: PP-673
+
+  - id: ED-720
+    date: 2026-04-19
+    description: "Framework enforcement + tier N (PP-674). valoria_hooks.vetting_gate() enforces vetting: block on Class A/B patch register entries from PP-674 forward. New task type design_proposal requires loading throughlines_meta.md. Tier N added above Ω: subject-grounding check against Renaissance-era political-leadership dynamics. Four new Failure Lexicon terms (fantasy imposition, duplicate coverage, edge case mechanic, abstractable). N authority: Jordan. Pre-PP-674 entries grandfathered via pre-framework: true marker."
+    status: resolved
+    severity: P1
+    source: PP-674

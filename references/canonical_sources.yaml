@@ -62,3 +62,10 @@ sources:
 # style (banner: SKELETON — mechanical spec only). Auto-generated heading
 # navigation companions renamed to *_index.md; tool renamed to doc_index_gen.py.
 # See ED-719 and PP-673.
+
+# ── PP-674 Framework enforcement + tier N (2026-04-19) ───────────────────
+# valoria_hooks.vetting_gate enforces vetting: blocks on Class A/B patch entries.
+# Tier N (Necessity) added: subject-grounding check against Renaissance-era
+# political-leadership dynamics. 4 new Failure Lexicon terms (fantasy imposition,
+# duplicate coverage, edge case mechanic, abstractable).
+# See ED-720 and references/throughlines_meta.md §0, §8.5, §10-11.
