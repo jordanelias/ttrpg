@@ -496,3 +496,37 @@ When a player character retires or dies, the player designates one active Convic
 - Relationship "I will [NPC]" → "I will honor [predecessor]'s bond with [NPC]" (if alive) or "I will carry [predecessor]'s grief" (if dead)
 
 Legacy Conviction occupies 1 of 3 Conviction slots. Can be revised normally. Renown inherited: floor(predecessor ÷ 2). Dispositions: predecessor's allies (+3) start at +1; enemies (−2) start at −1; others at 0. Knotted NPCs: Knot does not transfer but +1D on first Connect (Knot scar). Settlement governance transfers to designated protégé automatically.
+
+---
+
+## §11 — LINEAGE ACTS
+
+When a character retires (via Portrait Retirement, §2.3) or dies, the player may start a new character in the same world. Lineage Acts determine what carries over. Three types:
+
+### 11.1 Mentorship
+
+**What carries over:** Skills at 60% of predecessor's values, Founded Organization membership, 1 Close Knot (Disposition −2 from predecessor's value).
+
+**How established:** Scene: Designate a mentee. Must be an existing NPC with Disposition ≥ +3. The mentee becomes the new player character.
+
+### 11.2 Succession
+
+**What carries over:** Social standing, titles, faction affiliation, estates. Settlement governance transfers automatically.
+
+**How established:** Automatic if the character has declared an heir through dialogue or scene during the campaign. If no heir was declared, succession follows canonical NPC rules (faction-specific).
+
+### 11.3 Thread Legacy
+
+**What carries over:** Warden Recognition (WR) at half (rounded down), Thread knowledge (operations known), Knot Legacy embedded in substrate.
+
+**How established:** Scene: Embed knowledge into a Knot. Requires WR ≥ 2. The embedded Knot is discoverable by a future practitioner — this is what the Wardens do. The successor character can find the Knot Legacy through fieldwork investigation (Evidence Track threshold 3 at the embedding site).
+
+### 11.4 No Lineage Act
+
+If no Lineage Act was established before death or retirement: the player starts a new character with no mechanical inheritance. The predecessor's Portrait is recorded. The world continues. Death without preparation is a clean break, not a punishment.
+
+### 11.5 Lineage and §10 Conviction Legacy Interaction
+
+Lineage Acts and Conviction Legacy (§10) are independent systems that fire simultaneously. A retiring character designates both a Legacy Conviction (§10) AND a Lineage Act (§11). The new character inherits both: the transformed Conviction occupies one slot, and the Lineage Act determines what mechanical state carries over.
+
+[EDITORIAL: ED-687 — Lineage Acts. Source: victory revision proposal v2 §1.7.1, analysis §1.5.]
