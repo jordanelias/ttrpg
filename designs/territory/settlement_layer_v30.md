@@ -352,6 +352,36 @@ Each settlement generates 1–2 Local Actors — lightweight non-faction NPCs re
 
 # PART 5: MILITARY GRANULARITY
 
+
+
+### §4.7 Black Markets (Niflhel Dissolution — conflict_architecture_proposal)
+
+Any settlement with Order ≤ 1 or no governor develops a black market. Systemic consequence of governance failure.
+
+**Emergence:** Automatic when settlement Order ≤ 1 OR settlement has no governor.
+**Disappearance:** Automatic when settlement Order ≥ 3.
+**Effects:**
+- Settlement Wealth +0.5 (illicit trade is still trade).
+- Settlement Accord −0.5 (population distrusts lawless governance).
+
+### §4.8 Intelligence Brokers (Niflhel Dissolution — conflict_architecture_proposal)
+
+Individual NPCs in specific settlements who sell information. Not coordinated — each operates independently for personal profit.
+
+**Discovery:** Discoverable through Tribune or Riskbreaker actions.
+**Capabilities:** Sell faction intelligence; fabricate intel when peace reduces demand (Ems Dispatch pattern); can be killed, bought out, or turned.
+**Placement:** One broker per settlement with Prosperity ≥ 3 and no governor or governor Stability ≤ 2. Named NPCs with Dispositions.
+
+### §4.9 Thread Exploitation Sites (Niflhel Dissolution — conflict_architecture_proposal)
+
+Settlements at Thread Proximity ≤ 2 where Thread residue accumulates naturally. Location-based phenomenon.
+
+**Emergence:** Any settlement with Thread Proximity ≤ 2.
+**Harvesting:** Any faction/actor who discovers the site can harvest. RS −0.5 per harvest per season. Wealth +1 for harvesting faction.
+**Discovery:** Requires fieldwork (Investigation action). Thread Proximity not public until RS visibility thresholds (threadwork_v30 §5.6).
+
+---
+
 ## §5.1 Invasion and Defense
 
 Invading a province now requires capturing (or bypassing) its settlements. The Seat is the strategic objective — capturing the Seat grants provincial control. Other settlements may be captured, bypassed, or besieged independently.
