@@ -487,25 +487,51 @@ def faction_ai_crown(gs: GameState):
         return
 
     # P3: Royal Decree — Prefect card (Special/Unique Priority 6)
-    # [canonical: params/bg/core.md §Standard Action Ob — Royal Decree is Crown-specific]
+    # [canonical: params/bg/faction_actions.md Crown Royal Decree Enhancement PP-435 — Ob 2, once/season]
     if f.mandate >= 4 and has_card(f, 'Prefect'):
         play_card(f, 'Prefect')
-        weakest = min(['mandate','influence','wealth','military','stability'], key=lambda a: getattr(f, a))
-        setattr(f, weakest, min(7, getattr(f, weakest) + 1))
+        net, deg = check(f.mandate, 2)  # [canonical: Mandate pool vs Ob 2]
+        if deg in ('Success', 'Overwhelming'):
+            weakest = min(['mandate','influence','wealth','military','stability'], key=lambda a: getattr(f, a))
+            setattr(f, weakest, min(7, getattr(f, weakest) + 1))
+            if deg == 'Overwhelming':
+                # [canonical: PP-435 Enhancement — OW: ±2 to one faction or ±1 to two]
+                setattr(f, weakest, min(7, getattr(f, weakest) + 1))
 
     # P4: Govern — Consul card
+    # [canonical: params/bg/core.md — Govern Ob = floor(Prosperity/2)+1, -1 own capital]
     if has_card(f, 'Consul'):
         home = [gs.territories[tid] for tid in f.territories if gs.territories[tid].accord < 3]
         if home:
             play_card(f, 'Consul')
             t = min(home, key=lambda t: t.accord)
-            net, deg = check(f.influence, max(1, t.accord))
+            gov_ob = max(1, t.pv // 2 + 1)  # using PV as Prosperity proxy
+            if t.id == 'T1': gov_ob = max(1, gov_ob - 1)  # [canonical: -1 own capital]
+            net, deg = check(f.influence, gov_ob)
             if deg in ('Success', 'Overwhelming'):
                 t.accord = min(3, t.accord + 1)
 
-    # Senator: diplomacy
+    # Senator: Crown Treaty — diplomatic submission of weaker faction
+    # [canonical: params/bg/core.md — Formal Crown Treaty Ob = floor(target Mandate/2)+1]
     if has_card(f, 'Senator'):
-        play_card(f, 'Senator')
+        rivals = [r for r in gs.factions.values() if r.active and not r.submitted
+                  and r.name != 'Crown' and r.mandate < f.mandate]
+        if rivals:
+            target_r = min(rivals, key=lambda r: r.mandate)
+            play_card(f, 'Senator')
+            treaty_ob = max(1, target_r.mandate // 2 + 1)
+            net, deg = check(f.mandate, treaty_ob)
+            if deg in ('Success', 'Overwhelming'):
+                # Crown Treaty: target submits (territories transfer conceptually)
+                for tid in list(target_r.territories):
+                    gs.territories[tid].controller = 'Crown'
+                    f.territories.append(tid)
+                    gs.territories[tid].accord = 2
+                target_r.territories.clear()
+                target_r.submitted = True
+                gs.log.append(f"S{gs.season}: {target_r.name} submits to Crown via Treaty")
+        else:
+            play_card(f, 'Senator')
 
     # Legionary: expansion when stable (if still available)
     if has_card(f, 'Legionary') and f.stability >= 4 and f.military >= 4:
@@ -538,17 +564,20 @@ def faction_ai_hafenmark(gs: GameState):
                 gs.ci = max(0, gs.ci - 2)
 
     # P4: Govern — Consul card
+    # [canonical: params/bg/core.md — Govern Ob = floor(Prosperity/2)+1]
     if has_card(f, 'Consul'):
         home = [gs.territories[tid] for tid in f.territories if gs.territories[tid].accord < 3]
         if home:
             play_card(f, 'Consul')
             t = min(home, key=lambda t: t.accord)
-            net, deg = check(f.influence, max(1, t.accord))
+            gov_ob = max(1, t.pv // 2 + 1)
+            if t.id == 'T8': gov_ob = max(1, gov_ob - 1)  # [canonical: -1 own capital]
+            net, deg = check(f.influence, gov_ob)
             if deg in ('Success', 'Overwhelming'):
                 t.accord = min(3, t.accord + 1)
 
     # P5: Dynastic Proclamation — Diplomat card
-    # [canonical: params/bg/faction_actions.md — Hafenmark Diplomat]
+    # [canonical: params/bg/faction_actions.md PP-649 — Pool: Influence, Ob: floor(target Stability/2)+1]
     if f.mandate >= 4 and has_card(f, 'Diplomat'):
         targets = [t for t in gs.territories.values()
                    if t.controller not in ('Hafenmark', 'Uncontrolled', 'Church') and t.id != 'T15']
@@ -558,12 +587,15 @@ def faction_ai_hafenmark(gs: GameState):
             if ctrl and f.mandate > ctrl.mandate:
                 play_card(f, 'Diplomat')
                 dip_ob = max(1, ctrl.stability // 2 + 1)
-                net, deg = check(f.mandate, dip_ob)
+                # [canonical: PP-649 — Pool: Influence. +1 Ob if PT ≤ 1]
+                if target.pt <= 1: dip_ob += 1
+                net, deg = check(f.influence, dip_ob)
                 if deg in ('Success', 'Overwhelming'):
                     ctrl.territories.remove(target.id)
                     target.controller = 'Hafenmark'
                     f.territories.append(target.id)
                     target.accord = 2
+                    ctrl.mandate = max(0, ctrl.mandate - 1)  # [canonical: PP-649 Success]
                     gs.log.append(f"S{gs.season}: Hafenmark claims {target.name} via Dynastic Proclamation")
 
     # Legionary: military expansion
@@ -606,26 +638,49 @@ def faction_ai_varfell(gs: GameState):
             intel_bonus += 1
 
     # P4: Govern — Consul card
+    # [canonical: params/bg/core.md — Govern Ob = floor(Prosperity/2)+1]
     if has_card(f, 'Consul'):
         home = [gs.territories[tid] for tid in f.territories if gs.territories[tid].accord < 3]
         if home:
             play_card(f, 'Consul')
             t = min(home, key=lambda t: t.accord)
-            net, deg = check(f.influence, max(1, t.accord))
+            gov_ob = max(1, t.pv // 2 + 1)
+            if t.id == 'T12': gov_ob = max(1, gov_ob - 1)  # [canonical: -1 own capital]
+            net, deg = check(f.influence, gov_ob)
             if deg in ('Success', 'Overwhelming'):
                 t.accord = min(3, t.accord + 1)
 
-    # Colonist: Cultural Reformation (PT reduction in target territory)
-    # [canonical: params/bg/core.md §Standard Action Ob — Cultural Reformation]
+    # Colonist: Cultural Reformation — transfers territory on Success/OW
+    # [canonical: params/bg/faction_actions.md PP-650 — Pool: Influence+floor(VTM/2), Ob: PT+1]
+    # [canonical: Prerequisites: VTM ≥ 2, target PT ≤ 3, adjacent to Varfell territory]
     if has_card(f, 'Colonist'):
-        targets = [t for t in gs.territories.values() if t.controller == 'Varfell' and t.pt > 1]
+        # Target: non-Varfell territory with PT ≤ 3
+        targets = [t for t in gs.territories.values()
+                   if t.controller not in ('Varfell', 'Uncontrolled') and t.pt <= 3 and t.id != 'T15']
         if targets:
             play_card(f, 'Colonist')
-            target = max(targets, key=lambda t: t.pt)
+            target = min(targets, key=lambda t: t.pt)  # easiest first (lowest PT)
             reform_ob = max(1, target.pt + 1)
-            net, deg = check(f.influence + intel_bonus, reform_ob)
+            pool = f.influence + intel_bonus  # VTM not tracked yet; using intel_bonus as proxy
+            net, deg = check(pool, reform_ob)
             if deg in ('Success', 'Overwhelming'):
+                # [canonical: PP-650 — territory transfers, Accord 2, PT -1, TC -1]
+                ctrl = gs.factions.get(target.controller)
+                if ctrl and target.id in ctrl.territories:
+                    ctrl.territories.remove(target.id)
+                target.controller = 'Varfell'
+                f.territories.append(target.id)
+                target.accord = 2
                 target.pt = max(0, target.pt - 1)
+                gs.ci = max(0, gs.ci - 1)
+                gs.log.append(f"S{gs.season}: Varfell claims {target.name} via Cultural Reformation ({deg})")
+            elif deg == 'Partial':
+                # [canonical: PP-650 Partial — no transfer, PT -1, intel presence]
+                target.pt = max(0, target.pt - 1)
+            else:
+                # [canonical: PP-650 Failure — Stability -1, TC +1]
+                f.stability = max(0, f.stability - 1)
+                gs.ci = min(100, gs.ci + 1)
 
     # Legionary: military expansion with intel advantage
     if has_card(f, 'Legionary') and f.stability >= 3 and f.military >= 3:

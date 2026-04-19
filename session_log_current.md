@@ -1,21 +1,16 @@
-# Session Log — 2026-04-18 (engine v3 card economy)
-last_stage: Engine v3 with card-hand economy. RS drain still dominant — need political expansion + RS recovery.
+# Session Log — 2026-04-18 (engine v3 canonical audit)
+last_stage: Engine v3 canonical action audit — 6 Ob fixes, Crown Treaty added, Cultural Reformation transfers territory
 next_action:
-  skill: simulation — military→political AI rebalance + RS recovery
+  skill: simulation — RS recovery + victory check bug + continued NPC campaigns
   description: >
-    Card-hand economy implemented (6 cards/faction, 1-season cooldown).
-    Royal Decree now costs Prefect card (every other season max).
-    RS→0 shared loss in all 5 seeds at S68-96. Two fixes needed:
-    1. Faction expansion should be primarily political (Crown Treaty,
-       Dynastic Proclamation, Cultural Reformation, CI Seizure), with
-       military as last resort per canonical priority trees.
-    2. RS recovery mechanics (WC≥2 halves decay, WC=3 gives +2/season)
-       must be implemented.
-    Also: update editorial_decisions doc — seizure threshold is CI≥75 not CI≥60.
+    Canonical audit found 6 action Ob/mechanic errors. Fixed:
+    - Royal Decree: Mandate pool vs Ob 2 (was Influence, no roll)
+    - Govern Ob: floor(PV/2)+1 (was Accord-based)
+    - Dynastic Proclamation: Influence pool, +1 Ob if PT≤1, Mandate-1 on success
+    - Cultural Reformation: territory transfers on Success/OW (was PT-only)
+    - Crown Treaty: added (diplomatic submission via Senator)
+    Still missing: Piety Spread (Church PT building), RS recovery (WC mechanics).
+    Potential bug: Church victory at S11 seed 2 — victory fires with active 0-territory factions.
+    RS→0 shared loss in 4/5 seeds. Need RS recovery mechanics.
   blockers: []
-commits:
-  - 250715f8: seizure CI≥75
-  - fcb1ea76: engine v3 initial
-  - 1e4f8b3f: throttled military
-  - pending: card-hand economy
 P1-BLOCKER count: 0
