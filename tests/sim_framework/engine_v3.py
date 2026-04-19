@@ -204,7 +204,7 @@ def generate_ci(gs: GameState) -> int:
     # [canonical: params/bg/tc_seizure.md §3.2]
     prominent_count = 0
     for tid, t in gs.territories.items():
-        if t.controller != 'Church' and t.controller != 'Uncontrolled':
+        if t.controller != 'Church' and t.controller not in ('Uncontrolled', 'LocalMilitia'):
             ctrl_faction = gs.factions.get(t.controller)
             if ctrl_faction and church.mandate > ctrl_faction.mandate:
                 prominent_count += 1
@@ -378,7 +378,7 @@ def faction_ai_church(gs: GameState):
 
     # Legionary: reclaim uncontrolled or defend
     if has_card(f, 'Legionary') and f.military >= 2:
-        lost = [t for t in gs.territories.values() if t.controller == 'Uncontrolled' and t.id != 'T15']
+        lost = [t for t in gs.territories.values() if t.controller in ('Uncontrolled', 'LocalMilitia') and t.id != 'T15']
         if lost:
             play_card(f, 'Legionary')
             attempt_conquest(gs, f, lost[0])
@@ -402,7 +402,7 @@ def attempt_mass_seizure(gs: GameState):
     # [canonical: victory_v30 §3.2 — every territory with Church building]
     targets = []
     for tid, t in gs.territories.items():
-        if t.controller == 'Church' or t.controller == 'Uncontrolled':
+        if t.controller == 'Church' or t.controller in ('Uncontrolled', 'LocalMilitia'):
             continue
         ctrl = gs.factions.get(t.controller)
         if ctrl and church.mandate > ctrl.mandate:
@@ -450,16 +450,18 @@ def attempt_conquest(gs: GameState, attacker: Faction, target: Territory):
     """Universal territory conquest mechanic. Returns True if successful."""
     defender = gs.factions.get(target.controller)
     if not defender or not defender.active:
-        # Uncontrolled — free claim
+        # Uncontrolled / local militia — free claim
         target.controller = attacker.name
-        attacker.territories.append(target.id)
+        if target.id not in attacker.territories:
+            attacker.territories.append(target.id)
         target.accord = 1
         return True
     # [canonical: params/bg/tc_seizure.md — Battle Ob = floor(defender Military / 2) + 1]
     battle_ob = max(1, defender.military // 2 + 1)
     net, deg = check(attacker.military, battle_ob)
     if deg in ('Success', 'Overwhelming'):
-        defender.territories.remove(target.id)
+        if target.id in defender.territories:
+            defender.territories.remove(target.id)
         target.controller = attacker.name
         attacker.territories.append(target.id)
         target.accord = 1
@@ -470,6 +472,13 @@ def attempt_conquest(gs: GameState, attacker: Faction, target: Territory):
         gs.log.append(f"S{gs.season}: {attacker.name} conquers {target.name} from {defender.name} ({deg})")
         if deg == 'Overwhelming':
             defender.stability = max(0, defender.stability - 1)
+        # [canonical: Jordan — territory inheritance on elimination]
+        # If defender has no territories left, attacker absorbs all (faction collapses)
+        if len(defender.territories) == 0 and defender.active:
+            defender.active = False
+            defender.stability = 0
+            gs.strain = min(10, gs.strain + 2)
+            gs.log.append(f"S{gs.season}: {defender.name} ELIMINATED by {attacker.name} — territories absorbed")
         return True
     else:
         # Battle still happened — RS/strain cost
@@ -483,10 +492,10 @@ def attempt_conquest(gs: GameState, attacker: Faction, target: Territory):
 def pick_conquest_target(gs: GameState, attacker: Faction) -> Territory:
     """Pick highest-PV non-owned territory where attacker has military advantage."""
     targets = [t for t in gs.territories.values()
-               if t.controller != attacker.name and t.controller != 'Uncontrolled' and t.id != 'T15']
+               if t.controller != attacker.name and t.controller not in ('Uncontrolled', 'LocalMilitia') and t.id != 'T15']
     if not targets:
         # Try uncontrolled
-        targets = [t for t in gs.territories.values() if t.controller == 'Uncontrolled' and t.id != 'T15']
+        targets = [t for t in gs.territories.values() if t.controller in ('Uncontrolled', 'LocalMilitia') and t.id != 'T15']
     if not targets:
         return None
     # Prefer targets where we have military advantage
@@ -755,20 +764,21 @@ def run_season(gs: GameState):
         key=lambda f: -f.stability
     )
 
-    # Pre-phase: opportunistic reclaim of Uncontrolled territories (free march, no card cost)
-    # [canonical: attempt_conquest — Uncontrolled = free claim]
     for f in factions_by_stab:
-        unclaimed = [t for t in gs.territories.values()
-                     if t.controller == 'Uncontrolled' and t.id != 'T15']
-        if unclaimed:
-            # Claim up to 2 per season (administrative limit)
-            for target in unclaimed[:2]:
+        # P0: Reclaim LocalMilitia territories — free conquest, top priority
+        # [canonical: Jordan — provinces should never sit unclaimed]
+        if has_card(f, 'Legionary'):
+            militia_targets = [t for t in gs.territories.values()
+                              if t.controller == 'LocalMilitia' and t.id != 'T15']
+            if militia_targets:
+                play_card(f, 'Legionary')
+                target = max(militia_targets, key=lambda t: t.pv)
                 target.controller = f.name
-                f.territories.append(target.id)
+                if target.id not in f.territories:
+                    f.territories.append(target.id)
                 target.accord = 1
-                gs.log.append(f"S{gs.season}: {f.name} claims Uncontrolled {target.name}")
+                gs.log.append(f"S{gs.season}: {f.name} reclaims {target.name} from local militia")
 
-    for f in factions_by_stab:
         if f.name == 'Church':   faction_ai_church(gs)
         elif f.name == 'Crown':  faction_ai_crown(gs)
         elif f.name == 'Hafenmark': faction_ai_hafenmark(gs)
@@ -811,13 +821,16 @@ def run_season(gs: GameState):
     for tid, t in gs.territories.items():
         if t.accord == 1 and not t.garrison:
             t.accord = 0  # [canonical: Accord 1 without garrison → 0]
-        if t.accord == 0 and t.controller != 'Uncontrolled':
-            # Revolt — territory becomes Uncontrolled
+        if t.accord == 0 and t.controller not in ('Uncontrolled', 'LocalMilitia'):
+            # Revolt — territory forms local militia governance
+            # [canonical: Jordan — settlements form ad-hoc faction rather than sit vacant]
             old_ctrl = t.controller
             if old_ctrl in gs.factions and tid in gs.factions[old_ctrl].territories:
                 gs.factions[old_ctrl].territories.remove(tid)
-            t.controller = 'Uncontrolled'
+            t.controller = 'LocalMilitia'
+            t.accord = 1  # local governance provides minimum stability
             gs.strain = min(10, gs.strain + 1)
+            gs.log.append(f"S{gs.season}: {t.name} revolts — local militia forms")
 
     # Step 4d: Strain update
     # [canonical: params/bg/phases.md Step 4d]
@@ -874,13 +887,25 @@ def run_season(gs: GameState):
                 f.stability = 0
         if f.active and f.stability <= 0:
             f.active = False
-            # Release territories
+            # Remaining territories go to the strongest active neighbor, not Uncontrolled
+            # [canonical: Jordan — provinces should never sit unclaimed]
+            absorber = max(
+                [r for r in gs.factions.values() if r.active and not r.submitted and r.name != f.name],
+                key=lambda r: len(r.territories),
+                default=None
+            )
             for tid in list(f.territories):
-                gs.territories[tid].controller = 'Uncontrolled'
-                gs.territories[tid].accord = 0
+                if absorber:
+                    gs.territories[tid].controller = absorber.name
+                    absorber.territories.append(tid)
+                    gs.territories[tid].accord = 1  # imposed rule, not accepted
+                else:
+                    # No absorber — genuine collapse, local militia forms
+                    gs.territories[tid].controller = 'LocalMilitia'
+                    gs.territories[tid].accord = 1
             f.territories.clear()
             gs.strain = min(10, gs.strain + 2)
-            gs.log.append(f"S{gs.season}: {f.name} ELIMINATED (Stability 0)")
+            gs.log.append(f"S{gs.season}: {f.name} ELIMINATED (Stability 0) — territories to {absorber.name if absorber else 'LocalMilitia'}")
 
 def run_campaign(seed: int = 42, max_seasons: int = 120) -> GameState:
     gs = init_state(seed)
