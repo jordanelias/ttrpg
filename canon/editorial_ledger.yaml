@@ -107,3 +107,10 @@ entries:
     status: resolved
     severity: P3
     source: PP-670
+
+  - id: ED-717
+    date: 2026-04-19
+    description: "Meta-throughline synthesis (PP-671): 5 meta-throughlines extracted from 25 throughlines — Decay-as-default, Substrate-as-universal-medium, Institutional-identity-as-mechanical-attractor, Scale-preserving chains, Forced-choice architecture. Three gaps flagged: Hafenmark, Löwenritter, RM all lack own institutional-attractor throughlines (M-3 under-specification). See references/throughlines_meta.md."
+    status: open
+    severity: P2
+    source: PP-671

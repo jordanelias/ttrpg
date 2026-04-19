@@ -45,3 +45,8 @@ sources:
 # ── PP-670 Label Audit (2026-04-19) ──────────────────────────────────────
 # See designs/audit/label_audit_2026-04-19.md + ED-716.
 # One correction: threadwork_v25_historical.md banner added.
+
+# ── PP-671 Meta-throughlines (2026-04-19) ────────────────────────────────
+# 5 meta-throughlines extracted from throughlines_complete.md.
+# Evaluative criteria for design proposals. See references/throughlines_meta.md.
+# ED-717 flags Hafenmark/Löwenritter/RM institutional-attractor throughline gap.

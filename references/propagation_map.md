@@ -215,3 +215,29 @@ All new statuses reference PP-667 and the resolution document `designs/audit/gap
 - references/canonical_sources.yaml: co-file touch.
 
 **Deferred:** sim_ttrpg_batch_legacy banner pass — not a blocker. Low reader-hazard; names are self-describing.
+
+## 2026-04-19 — PP-671 Meta-throughline synthesis
+
+**Commit:** (this commit)
+**Scope:** synthesize 5 meta-throughlines from the 25 game throughlines; provide evaluative criteria for design proposals.
+
+**New file:** references/throughlines_meta.md (15k chars)
+
+**Meta-throughlines identified:**
+- M-1 Decay-as-default — entropic baseline, instantiated by 8 throughlines
+- M-2 Substrate-as-universal-medium — rendering/thread ontology across all systems, instantiated by 8 throughlines
+- M-3 Institutional identity = mechanical attractor — each faction's distinct substrate-relationship, instantiated by 5 throughlines
+- M-4 Scale-preserving chains — same throughlines fire at multiple scales, instantiated by 9 throughlines
+- M-5 Forced-choice architecture — irreducible tradeoffs at every significant choice point, instantiated by 6 throughlines
+
+**Findings:**
+- Hafenmark, Löwenritter, and RM all lack their own institutional-attractor throughlines (M-3 gap). ED-717 logs this.
+- PP-666's three new systems (settlement adjacency, fractional ownership, succession split) each strongly satisfy multiple meta-throughlines — validates PP-666 as vision-aligned design.
+- Throughline-interaction matrix is sparse (7 throughlines covered of 25); recommended for future expansion.
+
+**Registers:**
+- canon/patch_register_active.yaml: PP-671 entry.
+- canon/editorial_ledger.yaml: ED-717 entry (M-3 faction under-spec).
+- references/canonical_sources.yaml: cross-reference note.
+
+**No mechanical changes.** Pure synthesis / meta-analysis document.

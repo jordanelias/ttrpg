@@ -389,3 +389,22 @@ patches:
     - designs/audit/label_audit_2026-04-19.md
   status: applied
   applied_commit: pending
+- id: PP-671
+  date: 2026-04-19
+  severity: P2
+  description: "Meta-throughline synthesis from throughlines_complete.md (25 throughlines,
+    8 categories). Identified 5 meta-throughlines operating ACROSS the throughlines:
+    M-1 Decay-as-default (entropic baseline; 8 throughlines); M-2 Substrate-as-universal-medium
+    (rendering/thread ontology across all systems; 8 throughlines); M-3 Institutional
+    identity = mechanical attractor (each faction's distinct substrate-relationship;
+    5 throughlines — gap: Hafenmark/Löwenritter/RM uncharacterized); M-4 Scale-preserving
+    chains (same throughlines at personal/settlement/province/peninsular scales; 9
+    throughlines); M-5 Forced-choice architecture (irreducible tradeoffs; 6 throughlines).
+    Doc: references/throughlines_meta.md. Provides evaluative criteria for future
+    design proposals. ED-717 raised (M-3 under-spec for Hafenmark/Löwenritter/RM)."
+  finding_id: USER-DIRECTED
+  source: user
+  affects:
+    - references/throughlines_meta.md
+  status: applied
+  applied_commit: pending
