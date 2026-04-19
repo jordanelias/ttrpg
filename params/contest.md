@@ -1,5 +1,5 @@
 <!-- version: v2.1-PP235 | sources: designs/contest/social_contest_v30.md | last_updated: 2026-04-04 -->
-<!-- PATCHES APPLIED (canonical): PP-123, PP-171, PP-232, PP-234–237, PP-242, PP-245, PP-253–259, PP-272, PP-278–279, PP-378, PP-390–395, PP-401, PP-449–450, PP-452–458, PP-460–463, PP-465, PP-529, PP-612, PP-614 -->
+<!-- PATCHES APPLIED (canonical): PP-123, PP-171, PP-232, PP-234–237, PP-242, PP-245, PP-253–259, PP-272, PP-278–279, PP-378, PP-390–395, PP-349, PP-351, PP-401, PP-449–450, PP-452–458, PP-460–463, PP-465, PP-529, PP-612, PP-614 -->
 <!-- PP-234: Full system redesign. Genre restructure (3→2), attribute renames (Presence→Charisma, Memory→Recall), -->
 <!--         Composure = Charisma + 6, faction boost revision (4 single-axis options), integer bonus dice, -->
 <!--         adjudicator-type pool rotation, Let It Ride explicit, Fail Forward for ties. -->
@@ -295,3 +295,19 @@ Wrong RS vs Church institutional NPC (Himlensendt, Olafsson, Klapp, Cardinals) i
 
 ### Stacking
 Max positional bonus: +5D (genre +1, audience +1, RS targeting +1, Recall +2). Each prerequisite independently costly. Practical pools 12–18D; 25D+ extreme.
+
+## Temporal Axis Conflict (PP-351 — canonical)
+
+If a practitioner initiates a Thread operation on a temporal axis that opposes
+the contest's primary temporal orientation, the Thread operation's co-movement
+effects apply to the contest's Conviction Track (±1 shift per co-movement
+card drawn during the contest scene).
+
+## Church Self-Investigation Exception (PP-349 — canonical)
+
+The Church does not file Heresy Investigation against its own ordained members
+who are supporting Church institutional interests (TC advancement, PT increase,
+infrastructure expansion). Self-investigation only triggers when an ordained
+member acts against Church interests (supporting RM, lowering PT, aiding
+Varfell Thread programs).
+

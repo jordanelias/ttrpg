@@ -1,5 +1,5 @@
 <!-- version: v0.14+design-ST7-R4-PP235 | sources: designs/mass_combat/mass_battle_v30.md (v4.4, PP-106) | last_updated: 2026-04-03 -->
-<!-- PATCHES APPLIED (canonical): PP-86, PP-91, PP-104, PP-106, PP-111, PP-171, PP-173, PP-175, PP-188–194, PP-196–197, PP-200–202, PP-204, PP-222–225, PP-227, PP-229, PP-231–233, PP-235, PP-240–241, PP-245, PP-249–251, PP-256, PP-268, PP-273, PP-282–283, PP-300–301, PP-305–306, PP-333–334, PP-336, PP-338, PP-366–368, PP-370–371, PP-374, PP-376, PP-388, PP-398, PP-500, PP-502–508, PP-530, PP-550, PP-555, PP-567, PP-600–601, PP-610, PP-613 -->
+<!-- PATCHES APPLIED (canonical): PP-86, PP-91, PP-104, PP-106, PP-111, PP-171, PP-173, PP-175, PP-188–194, PP-196–197, PP-200–202, PP-204, PP-222–225, PP-227, PP-229, PP-231–233, PP-235, PP-240–241, PP-245, PP-249–251, PP-256, PP-268, PP-273, PP-282–283, PP-300–301, PP-305–306, PP-333–334, PP-336, PP-338, PP-366–368, PP-370–371, PP-374, PP-376, PP-388, PP-398, PP-500, PP-502–508, PP-297, PP-530, PP-550, PP-555, PP-567, PP-600–601, PP-610, PP-613 -->
 <!-- PP-232: Unit stats renamed (Strength→Size, Combat Power→Power, Cohesion→Discipline, Coherence Rating/Command Rating→Command); -->
 <!--         Power derived from Size; damage formula references updated. -->
 <!-- PP-233: Unit combat formula established. Pool = min(Size,Command)+Command. -->
@@ -518,6 +518,16 @@ Low-Command generals take significantly longer to re-establish — intended asym
 PP-240 Ob 1 Stability check (mutual destruction = draw) REPLACES §A.13 battle-lost
 Ob 1 check. A draw produces no loser — battle-lost consequence does not fire.
 Each faction takes exactly one Ob 1 check at Accounting.
+
+
+## Stalemate Break (PP-297 — canonical)
+
+If 3 consecutive Battle Turns produce 0 total damage across all engagements
+(no Size loss on either side), both armies suffer:
+- All units: Discipline Ob 1 check
+- Failure: Morale −1
+- If any unit Morale reaches 0: standard Rout rules apply
+Rationale: prolonged indecisive combat erodes unit cohesion.
 
 ## Splitting Doctrine (PP-508) [PROVISIONAL]
 Splitting is structurally advantageous in most configurations. Simulation matrix (Att Cmd 2-5 vs Def Cmd 2-5):

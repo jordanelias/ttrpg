@@ -1,4 +1,4 @@
-<!-- PATCHES APPLIED (session 2026-04-14): PP-600-623 — full Thread system redesign. PP-631 (2026-04-13): POP cap note, Community Organizing pool. PP-632 (2026-04-13): Knot mechanics (pool, tiers, formation, breaking).
+<!-- PATCHES APPLIED (session 2026-04-14): PP-208, PP-600-623 — full Thread system redesign. PP-631 (2026-04-13): POP cap note, Community Organizing pool. PP-632 (2026-04-13): Knot mechanics (pool, tiers, formation, breaking).
      Key changes: pool unified to (Spirit×2)+History+TPS; TN-based difficulty; three-axis Ob;
      Gap self-closure by scale; RS cap struck; WR/WC redesigned; Dissonance→Spirit check.
      All prior pool formulas, Ob tables, and RS cap entries below are superseded by PP-600-623.
@@ -198,3 +198,12 @@ Mend at Ob 12 (P≈22% per attempt), then Structural conditions stabilize, then 
 scales self-close naturally. Conflict in Proximity 1–3 territories resets isolation work.
 
 ---
+
+## Over-Actualisation State Transition (PP-208 — canonical)
+
+OA modifier does NOT carry through brittleness collapse to Shifting Object.
+A Shifting Object created by OA-induced collapse starts at base Ob (no OA penalty).
+Rationale: the configuration has already changed state — the new object is a different
+mechanical entity. OA penalizes repeated intervention on the SAME configuration,
+not downstream consequences of that intervention.
+

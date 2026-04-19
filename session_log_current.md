@@ -2,15 +2,17 @@ session_id: phase0_housekeeping_2026-04-18
 session_close: pending
 phase: Phase 0 — Housekeeping
 status: IN PROGRESS
-last_stage: 0.1-0.6 complete
+last_stage: 0.7 complete
 next_action:
-  skill: 0.7 params staleness audit
+  skill: Phase 1 — P1 blockers
   description: >
-    Phase 0.1-0.6 register cleanup complete. 0.7 (params staleness) is next.
+    Phase 0 complete. All registers clean, params refreshed. Ready for Phase 1.
 blockers: []
 commits:
-  - pending: "Phase 0.1-0.6: Summary rebuild, ED-663 resolved, ED-673→ED-679 dedup, session log cleanup, P0 triage (no P0s), broken dep check (clean)"
+  - 7b877cc1: "Phase 0.1-0.6: Summary rebuild, ED-663 resolved, ED-673→ED-679 dedup, P0 triage, session log sync"
+  - pending: "Phase 0.7: Params staleness — PP-208/297/349/351 propagated, 3 SHAs updated"
 resolutions_this_session:
+  - "0.7: Params staleness audit — 3 stale params (threadwork/mass_combat/contest) updated with PP-208/297/349/351. 2 move-only (fieldwork/scale_transitions) clean. canonical_sources SHAs refreshed."
   - "0.1: Summary rebuilt from scratch — index_gen.py had zeroed it. Correct counts: 4 P1, 6 P2, 10 open, next_id 680."
   - "0.2: ED-663 resolved (wealth cap already canonicalized in derived_stats_v1). Duplicate ED-673 renumbered to ED-679."
   - "0.3: File index propagation-pending count: 0 (clean post-restructure). No update needed."

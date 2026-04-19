@@ -43,7 +43,7 @@ systems:
   threadwork:
     status: active
     canonical: designs/threadwork/threadwork_v30.md
-    canonical_sha__designs__threadwork__threadwork_v30_md: "b01fe4b2e4417bf167290b916b5ad52faf0f08a0"
+    canonical_sha__designs__threadwork__threadwork_v30_md: "9611d357cb1186212d26b4f431e5191c13f0d60e"
     params: params/threadwork.md
     design_doc: designs/threadwork/threadwork_v30.md
 
@@ -88,14 +88,14 @@ systems:
   mass_combat:
     status: active
     canonical: designs/provincial/mass_battle_v30.md
-    canonical_sha__designs__provincial__mass_battle_v30_md: "4b2d163af212c5b3f2e68a8ab30d3f6bb354242b"
+    canonical_sha__designs__provincial__mass_battle_v30_md: "7c1828ba4a84a26174b2094ceb3df5240bb54132"
     params: params/mass_combat.md
     design_doc: designs/provincial/mass_battle_v30.md
 
   social_debate:
     status: active
     canonical: designs/scene/social_contest_v30.md
-    canonical_sha__designs__scene__social_contest_v30_md: "6fc234822423d4a856082d1d597e0c3a217c97a3"
+    canonical_sha__designs__scene__social_contest_v30_md: "bd3a2af6b09c19e39addbc80453b7ea59409a6b4"
     params: params/contest.md
     design_doc: designs/scene/social_contest_v30.md
 
