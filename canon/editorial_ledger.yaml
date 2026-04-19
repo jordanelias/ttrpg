@@ -70,11 +70,12 @@
     affects: [designs/npcs/npc_behavior_v30.md]
 
   - id: ED-671
-    date: 2026-04-17
+    date: 2026-04-18
     description: "Thread-perception census: Ministry census contains 150 seasons of undeclared TS data ('perceptual anomalies'). No mechanic governs interpretation or access. Requires ruling."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/npcs/npc_behavior_v30.md]
+    resolution: "§2.14a Ministry Census Thread-Perception Data added. PAR data structure, 3-tier access, TS-gated interpretation, procedural engine generation, Haelgrund Arc C exception. ED-671."
 
   - id: ED-672
     date: 2026-04-17
@@ -133,9 +134,10 @@
   - id: ED-679
     date: 2026-04-18
     description: "PP-019: Niflhel intelligence output mechanic. npc_behavior_v30 §8.8 has priority tree but no mechanic for how gathered intelligence becomes actionable. Needs 1-page spec."
-    status: open
+    status: resolved
     severity: P1
     affects: [designs/npcs/npc_behavior_v30.md]
+    resolution: "§2.14a Ministry Census Thread-Perception Data added. PAR data structure, 3-tier access, TS-gated interpretation, procedural engine generation, Haelgrund Arc C exception. ED-671."
     source_pp: PP-019
     note: "Renumbered from duplicate ED-673."
 

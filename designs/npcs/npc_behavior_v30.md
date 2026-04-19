@@ -323,6 +323,35 @@ Cardinals are institutional officers, not independent actors. They activate as i
 **Arc B: The Whistleblower.** Branch: player shows Haelgrund Evidence (Resonant Style) that Ministry records have been altered by a faction. Total Victory contest. Haelgrund goes public with the corruption, destabilizing the corrupting faction (Mandate −2) but exposing the Ministry to political retaliation (Ministry Stability −2).
 **Arc C: The Archivist.** Branch: player investigates the deep archives (Depth 3+ in Ministry settlements). Haelgrund confronts the Thread artifact nature of the archives. His TS advances to 20+. He becomes a covert Thread-aware bureaucrat — the most dangerous kind of ally, because he controls the peninsula's institutional memory and now understands that memory is metaphysically constituted.
 
+**§2.14a Ministry Census: Thread-Perception Data (ED-671)**
+
+The Ministry census — conducted every 2 seasons across all Ministry-administered settlements — records population, economic output, infrastructure condition, and a mandatory field labeled "Perceptual Anomaly Reports" (PAR). PAR entries are complaints, observations, and incident reports from residents describing unexplained phenomena: déjà vu clusters, temporal disorientation, objects in wrong locations, memory discrepancies between neighbors. The Ministry has collected PAR data for 150+ seasons. It is filed under "Public Health — Cognitive" and has never been cross-referenced with Thread activity.
+
+**Data structure:** Each settlement's PAR file contains a per-season anomaly density score (0–10 scale, derived from incident count normalized by population). Anomaly density correlates with local Rendering Stability (inverse) and cumulative Thread operation volume, but the Ministry does not know this.
+
+**Access rules:**
+
+| Access level | Requirement | What is returned |
+|---|---|---|
+| Summary statistics | Ministry Standing ≥ 1 or Bureaucracy Domain Action (Ob 1) | Settlement-level anomaly density scores, current and 10-season trend |
+| Raw incident reports | Ministry Standing ≥ 3 or Research Domain Action in Ministry settlement (Ob 2) | Individual PAR entries with dates, locations, reporter identities |
+| Deep archive cross-reference | Ministry Standing ≥ 5 OR Haelgrund Arc C active OR Depth 3+ in Ministry settlement | Full PAR dataset with temporal overlay — pattern becomes visible (see Interpretation below) |
+
+**Interpretation mechanic:**
+
+A character with TS ≥ 30 (Stirring or above) who accesses the deep archive cross-reference recognizes PAR data as Thread Sensitivity readings encoded in lay language. This recognition is automatic — no roll required. The character gains:
+
+- **Census Thread Map:** Identifies which settlements have sustained high Thread activity over the campaign timeline. Each settlement with anomaly density ≥ 6 for 3+ consecutive seasons is flagged as a Thread Activity Zone. This information is equivalent to knowing the settlement's Rendering Stability band (Stable/Contested/Fractured) without visiting it.
+- **Practitioner inference:** Settlements with anomaly density spikes correlating with specific seasons can be cross-referenced with known NPC movements to identify likely practitioners. Ob 3 Intellect check per settlement queried. Success: one NPC with TS ≥ 30 in that settlement during the spike season is identified as a probable practitioner. This does not confirm — it narrows the search.
+
+A character with TS 10–29 who accesses the deep archive gets an uneasy sense that the data means something more than cognitive health reports, but cannot decode it. They gain +1D on their next Thread-related Intellect check (one-time bonus, consumed on use).
+
+A character with TS 0–9 sees only public health data. No Thread-relevant information is perceived.
+
+**Engine implementation:** Census data is generated procedurally from settlement Rendering Stability history. No manual authoring. The PAR anomaly density for settlement S in season T = max(0, 10 − RS_band_midpoint) + random(−1, +1), clamped 0–10. RS band midpoints: Stable=90, Contested=65, Fractured=40, Shattered=15.
+
+**Haelgrund integration:** If Haelgrund reaches Arc C (TS → 20+), he does not yet meet the TS ≥ 30 threshold for automatic recognition. However, his institutional knowledge grants an exception: Haelgrund at TS 20+ can perform the cross-reference with an Intellect Ob 2 check (his bureaucratic expertise compensates for incomplete Thread perception). On success, he provides the Census Thread Map to the player without the player needing to access it themselves. On failure, he senses the pattern but cannot articulate it — retry available next season.
+
 ---
 
 ## §3 NPC BELIEFS: FORMATION, REVISION, AND SCARS
