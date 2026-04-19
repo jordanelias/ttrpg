@@ -1,7 +1,7 @@
 # Session A — Spec Patches (Ready for Propagation)
 
 **Date:** 2026-04-19  
-**Status:** APPROVED PATCHES — propagate into target files next session  
+**Status:** ALL PATCHES PROPAGATED  
 **Commit scope:** 6 patches + 1 new action + 1 backstory strike
 
 ---
@@ -178,4 +178,4 @@ AFTER:  | 4 | Default | Maintain treaties. Defend territory. Govern. Consul/Sena
 | 4 (RM threshold) | `faction_succession_split_v30 §4` | **DONE** — e89d196 |
 | 5 (Splinter Influence) | `faction_succession_split_v30 §2.4` | **DONE** — e89d196 |
 | 6 (T2 garrison) | `npc_priority_trees.md`, `npc_behavior_v30 §8.3` | **DONE** — e89d196 |
-| 7 (Backstory strike) | `character_histories_v30`, `npc_character_analyses_v30`, `worldbuilding_v30` | **Needs full read first** — flag for next session |
+| 7 (Backstory strike) | `npc_character_analyses_v30_infill`, `narrative_scenario_chains`, `arcs_10_18` | **DONE** — 7da338a. character_histories_v30 and worldbuilding_v30 had no assassination refs. |
