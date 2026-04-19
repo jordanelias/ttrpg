@@ -131,7 +131,7 @@ systems:
   fieldwork:
     status: active
     canonical: designs/scene/fieldwork_v30.md
-    canonical_sha__designs__scene__fieldwork_v30_md: "57a72bc132675062a53819bf6252abc78af892e5"
+    canonical_sha__designs__scene__fieldwork_v30_md: "f5a8291bff7826b5ff306a4f0f33b852cab71edc"
     params: null
     design_doc: designs/scene/fieldwork_v30.md
 

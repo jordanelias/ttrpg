@@ -459,7 +459,7 @@ Knot-linked characters gain:
 **Prerequisites (all required):**
 1. Disposition +5 with the target NPC
 2. Either PC or NPC has TS ≥ 30 (Thread contact — per A12, Knots bind threads; substrate must be accessible)
-3. PC's current Knot count < floor(Bonds/2)
+3. PC's current Knot count < floor(Bonds/2)+1 (per params_core §Bonds max Knot count)
 4. No existing Knot with this NPC
 
 When prerequisites are met, a Knot Formation scene appears on the Scene Slate at Priority 2. The scene fires once per eligible NPC per season. If declined, it reappears next season while prerequisites hold.
