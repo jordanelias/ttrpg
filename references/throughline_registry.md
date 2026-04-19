@@ -97,6 +97,12 @@ Political movement → consensus cells → suppression survival (cell resilience
 
 **Docs:** campaign_architecture_v1 §2, victory_v30 §3.5/§8, settlement_layer_v30 §3.3/§4.3, threadwork_v30 §5.6
 
+
+## T15a — Hafenmark as Unmediated Sovereigntist
+Hafenmark shares Church theology but rejects ecclesial monopoly on divine access and governance authority. Baralta's divine-right claim ("faith is not mediated — it is lived") drives anti-Church apparatus (Suppress CI, Dynastic Proclamation, Sovereign Authority Doctrine). Thread revelation threatens the foundation: TS 0 means Baralta cannot access what she claims governance by right of faith.
+
+**Key docs:** peninsular_strain_v30 §5.3 (Dynastic Proclamation), npc_behavior_v30 §2.3 (Baralta profile), victory_v30 §3.3 (Dynastic Assertion), params/bg/institutions (Sovereign Authority Doctrine)
+
 ## T12 — Morale and Legitimacy Cascade
 Battle → Morale Cascade (rout spreads) → Cohesion drain → Accord erosion → governance difficulty → further Cohesion drain. Military defeat cascades from battlefield through institutional confidence to population-level governance acceptance. Derived stats make each step visible.
 
@@ -132,7 +138,7 @@ Character action → settlement consequence → territory consequence → penins
 | Card system | T2 |
 | Caste system | N3 |
 | NPC behavior | N6, T4, T7, T14 |
-| Accord/Peninsular Strain | N2, T5, T12, T13 |
+| Accord/Peninsular Strain | N2, T5, T12, T13, T15a |
 | Warden mechanics | N1, T14 |
 
 **Result:** Every system connects to ≥ 2 throughlines. No orphan mechanics. The derived stat system connects to 4 throughlines — structurally load-bearing, validating the architectural decision.
