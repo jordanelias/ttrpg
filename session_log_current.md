@@ -1,24 +1,45 @@
-# Session Log — 2026-04-18 (continued)
-last_stage: Phase 6 — Combat §4 CombatLogic.gd to valoria-game
+# session_log_current.md
+last_stage: All 5 anti-fabrication layers deployed — infrastructure complete
 next_action:
-  skill: Phase 6 ongoing — valoria-game GODOT-IMPACT sync
+  skill: simulation
   description: >
-    Accord propagation COMPLETE (aa73b868). Combat §4 COMPLETE (de2c895d).
-    Next pending GODOT-IMPACT items: Knot formation, RM Presence markers,
-    Co-Movement card mechanics, Phase 3 fixes, Simulation framework, Phase 5 schemas.
+    Anti-fabrication infrastructure is fully deployed across 4 hook layers +
+    1 workflow protocol:
+
+    1. [d84d1e95] sim_gate + sim_fabrication_check hooks
+       Verification ledger required before sim code; uncited constants
+       blocked at commit.
+
+    2. [8d09412b] checkpoint protocol — 3-tier context gate
+       60% warn, 75% hard-require write_checkpoint(), 90% session close.
+
+    3. [30973e71] read-depth logging
+       read_depth/read_depth_report/sections_read/verify_reads_for_task.
+       Auto-routed skeletons tracked. sim_gate uses read_depth().
+       Fixed read_skeleton/read_sections lookup for routed paths.
+
+    4. [f714903e] valoria-simulator Mode G — Incremental Build Protocol
+       Workflow-level structural fix. Multi-module sims must now decompose
+       into per-session modules with canonical verification at each step.
+       Explicitly documents the sim_v2 failure pattern as anti-pattern.
+
+    Full-stack simulation work can now proceed via Mode G. Next sim build
+    must start with a module manifest, one module per session, with
+    sim_gate('custom', systems=[...]) on each module build and full
+    force_full=True fetches for all canonical design docs.
+
+    sim_v2 (valoria_sim_v2.py) remains discarded — mechanically invalid.
   blockers: []
 commits:
-  - 44cb4a1e: "[editorial] 2.14a Ministry Census — ED-671"
-  - 6e1d27ac: "[editorial] 3.6a Post-Coup Succession — ED-674"
-  - 436bbde5: "[editorial] 1.5 Faction Collapse Exit — ED-675"
-  - 8ee5688c: "[editorial] 8.8a Niflhel Intel Output — ED-679"
-  - 4d69e699: "[editorial] P2 batch: ED-670/672/673/676/677/678"
-  - b53fab72: "[fix] ED-672 ledger text"
-  - aa73b868: "[sync] Accord propagation — valoria-game (4 files, ACCORD_MAX fix)"
-  - de2c895d: "[sync] CombatLogic.gd — PP-247 priority order, round orchestration"
+  - d84d1e95: "[infrastructure] sim_gate + sim_fabrication_check"
+  - 8d09412b: "[infrastructure] checkpoint protocol — 3-tier context gate"
+  - 30973e71: "[infrastructure] read-depth logging + read_skeleton fix"
+  - f714903e: "[skill] valoria-simulator Mode G — Incremental Build Protocol"
 resolutions_this_session:
-  - "10/10 editorial items resolved (4 P1 + 6 P2). 4/4 system validations PASS."
-  - "Phase 6: Accord propagation. TerritoryData +accord, 17 territories §2.1 values, SettingState tracker, Constants ACCORD_MAX 5→3 + 6 tier constants."
-  - "Phase 6: CombatLogic.gd — combat round orchestration. CombatantState, DeclaredAction (PP-247 priority), resolve_round (Strike/Feint/Disarm/Escape/Leap priority sort), damage formula (PP-232), wound computation (ED-694), Desperate Strike/Parry/Full Guard/Disengage, consequence emission."
-open_items: []
-P1-BLOCKER count: 0
+  - "Mode G added to valoria-simulator — incremental build protocol for multi-module sims"
+  - "Anti-patterns from sim_v2 explicitly documented in the skill"
+  - "Full-stack sim can now be attempted correctly via Mode G"
+open_items:
+  - "canonical_sources.yaml has malformed '- file:' block (pre-existing, low priority)"
+  - "When user is ready, next sim build should start with module manifest per Mode G"
+p1_blocker_count: 0
