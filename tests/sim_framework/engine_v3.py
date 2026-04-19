@@ -192,7 +192,7 @@ def init_state(seed: int = 42) -> GameState:
         'Crown':     (['Legionary','Legionary','Consul','Senator','Prefect','Recess'], 'Legionary'),
         'Church':    (['Senator','Senator','Pontifex','Consul','Legionary','Recess'], 'Senator'),
         'Hafenmark': (['Consul','Consul','Senator','Legionary','Diplomat','Recess'], 'Consul'),
-        'Varfell':   (['Tribune','Tribune','Legionary','Consul','Colonist','Recess'], 'Tribune'),
+        'Varfell':   (['Tribune','Tribune','Legionary','Legionary','Consul','Recess'], 'Tribune'),
     }
     for fname, stats in FACTION_STATS.items():
         hand, expertise = STARTING_HANDS[fname]
@@ -799,49 +799,36 @@ def faction_ai_varfell(gs: GameState):
             if deg in ('Success', 'Overwhelming'):
                 t.accord = min(3, t.accord + 1)
 
-    # Colonist: Cultural Reformation — transfers territory on Success/OW
-    # [canonical: params/bg/faction_actions.md PP-650 — Pool: Influence, Ob: PT+1]
-    # [canonical: Prerequisites: target PT ≤ 3, adjacent to Varfell territory. VTM struck.]
+    # Varfell expansion is purely military — Vaynard is a conqueror
+    # [canonical: Jordan — Vaynard is Reinhardt. Militaristic, opportunistic. Thread is a force multiplier.]
+    # Colonist card repurposed: strategic positioning / supply lines (+1 Military next conquest)
     if has_card(f, 'Colonist'):
-        # Target: non-Varfell territory with PT ≤ 3
-        targets = [t for t in gs.territories.values()
-                   if t.controller not in ('Varfell', 'Uncontrolled') and t.pt <= 3 and t.id != 'T15']
-        if targets:
-            play_card(f, 'Colonist')
-            target = min(targets, key=lambda t: t.pt)  # easiest first (lowest PT)
-            reform_ob = max(1, target.pt + 1)
-            pool = f.influence + intel_bonus  # intel_bonus from Tribune operations
-            net, deg = check(pool, reform_ob)
-            if deg in ('Success', 'Overwhelming'):
-                # [canonical: PP-650 — territory transfers, Accord 2, PT -1, TC -1]
-                ctrl = gs.factions.get(target.controller)
-                if ctrl and target.id in ctrl.territories:
-                    ctrl.territories.remove(target.id)
-                target.controller = 'Varfell'
-                f.territories.append(target.id)
-                target.accord = 2
-                target.pt = max(0, target.pt - 1)
-                gs.ci = max(0, gs.ci - 1)
-                gs.log.append(f"S{gs.season}: Varfell claims {target.name} via Cultural Reformation ({deg})")
-            elif deg == 'Partial':
-                # [canonical: PP-650 Partial — no transfer, PT -1, intel presence]
-                target.pt = max(0, target.pt - 1)
-            else:
-                # [canonical: PP-650 Failure — Stability -1, TC +1]
-                f.stability = max(0, f.stability - 1)
-                gs.ci = min(100, gs.ci + 1)
+        play_card(f, 'Colonist')
+        # Colonist = forward staging — temporary military boost for next engagement
+        # (absorbed into the Legionary action below via intel_bonus)
+        intel_bonus += 1
 
-    # Legionary: military expansion with intel advantage
-    if has_card(f, 'Legionary') and f.stability >= 2 and f.military >= 2:
+    # Legionary: military expansion — Vaynard is relentlessly aggressive
+    # [canonical: Jordan — extremely militaristic and opportunistic]
+    # Intel advantage: knows enemy stats, picks weakest target, +1D per successful Tribune
+    if has_card(f, 'Legionary') and f.military >= 2:
         target = pick_conquest_target(gs, f)
         if target:
-            ctrl = gs.factions.get(target.controller)
-            if not ctrl or not ctrl.active or f.military + intel_bonus > ctrl.military:
-                play_card(f, 'Legionary')
-                saved_mil = f.military
-                f.military += intel_bonus
-                attempt_conquest(gs, f, target)
-                f.military = saved_mil
+            play_card(f, 'Legionary')
+            saved_mil = f.military
+            f.military += intel_bonus  # Tribune intel + Colonist staging bonus
+            attempt_conquest(gs, f, target)
+            f.military = saved_mil
+
+    # Second Legionary if available — Vaynard presses advantage
+    if has_card(f, 'Legionary') and f.military >= 2:
+        target = pick_conquest_target(gs, f)
+        if target:
+            play_card(f, 'Legionary')
+            saved_mil = f.military
+            f.military += intel_bonus
+            attempt_conquest(gs, f, target)
+            f.military = saved_mil
 
 # ═══════════════════════════════════════════════════════════════
 # SEASON LOOP
