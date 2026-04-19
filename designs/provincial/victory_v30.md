@@ -16,7 +16,7 @@
 ## Core Frame
 
 
-Two simultaneous contests: who governs the peninsula AND whether it survives. Church and Hafenmark are structurally blind to the Rendering Stability (RS) crisis. Church compensates with Graduated Seizure — available early but strongest at high CI. Crown and Varfell can address RS via Thread path but at cost of political resources.
+Two simultaneous contests: who governs the peninsula AND whether it survives. Church and Hafenmark are structurally blind to the Rendering Stability (RS) crisis. Church compensates with Mass Seizure — a one-shot bid available at CI ≥ 60, strongest at CI 100. Crown and Varfell can address RS via Thread path but at cost of political resources.
 
 **Equal win probability** for Crown, Varfell, Hafenmark, Church. Restoration Movement (RM) is hardest mode (Hybrid only). (BALANCE-001, revised PP-494)
 
@@ -86,7 +86,7 @@ Each Battle on Valorian soil: RS −1 (Campaign/War scale: RS −2). Each season
 | Faction | Non-Military Acquisition | Card Type | Accord on Success |
 |---------|------------------------|-----------|-------------------|
 | Crown | Formal Crown Treaty | Senator | 2 (diplomatic transfer) |
-| Church | Graduated Seizure | Special/Unique | max(floor(PT/2)+1, 2) |
+| Church | Mass Seizure (one-shot) | Special/Unique | max(floor(PT/2)+1, 2) |
 | Hafenmark | Dynastic Proclamation | Diplomat | 2 |
 | Varfell | Cultural Reformation | Colonist | 2 |
 | Löwenritter | Martial Governance | Legionary (Govern variant) | +1 per success (cap 2) |
@@ -121,7 +121,7 @@ Full specifications: peninsular_strain_v1.md §5.
 **Design note:** PT 5 at T9 means the Church starts with its theological heartland at full doctrinal saturation — CI generation from T9 is guaranteed from Season 1. PT 1 at T6/T13 represents frontier territories where the Church must invest to gain traction. PT 2 at Varfell territories reflects cultural resistance to institutional theology. These values are calibrated against the CI generation formula (params_board_game) where PT ≥ 3 contributes positively to CI.
 
 
-## 1. Territory Consolidation Values (PV)
+## 1. Provincial Value (PV)
 
 All territory numbers match geography_design.md canonical table.
 
@@ -129,10 +129,10 @@ All territory numbers match geography_design.md canonical table.
 |----|-----------|-----|------------|
 | T1 | Valorsplatz | 5 | Crown★ |
 | T9 | Himmelenger | 5 | Church★ |
-| T8 | Gransol | 3 | Hafenmark★ |
-| T12 | Sigurdshelm | 3 | Varfell★ |
-| T3 | Lowenskyst | 2 | Crown |
-| T14 | Ehrenfeld | 2 | Crown |
+| T8 | Gransol | 4 | Hafenmark★ |
+| T12 | Sigurdshelm | 4 | Varfell★ |
+| T3 | Lowenskyst | 3 | Crown |
+| T14 | Ehrenfeld | 3 | Crown |
 | T10 | Spartfell | 1 | Hafenmark |
 | T7 | Rendstad | 1 | Hafenmark |
 | T17 | Halvarshelm | 1 | Hafenmark |
@@ -144,9 +144,9 @@ All territory numbers match geography_design.md canonical table.
 | T4 | Grauwald | 1 | Varfell |
 | T15 | Askeheim | 0 | Uncontrolled |
 | T16 | Schoenland | — | Not in territorial play |
-| | **Total** | **31** | |
+| | **Total** | **35** | |
 
-**Starting PV by faction:** Crown 12, Hafenmark 6, Varfell 6, Church 5.
+**Starting PV by faction:** Crown 14, Hafenmark 7, Varfell 7, Church 5.
 
 ---
 
@@ -202,36 +202,33 @@ PV ≥ 22 AND every other playable faction eliminated (Stability 0). No treaties
 
 ### 3.2 Church of Solmund — Solmundan Orthodoxy
 
-**Graduated Seizure (PP-494):** Church may attempt Territorial Seizure at any CI value. CI determines the size of Church's Seizure pool — the higher the CI, the more institutional authority Church projects.
+**Church Seizure (one-time event):** The Church may declare a Mass Seizure when CI ≥ 60. This is a one-shot bid — the Church gets exactly one attempt. CI determines the Seizure pool; the higher the CI, the stronger the bid.
 
 **Church Seizure Pool:** Influence + floor(CI / 15)
-**Church Seizure Ob:** 7 − PT (where PT is the target territory's Piety value, 0 = Restoration pole, 5 = Piety pole)
+**Church Seizure Ob:** 10 − PT − infrastructure modifiers (floor 1). PT = target territory Piety value (0 = Restoration pole, 5 = Piety pole). Infrastructure modifiers per settlement (see below).
 **Seizure Accord:** Success → max(floor(PT/2)+1, 2). Overwhelming → floor(PT/2)+2, max 3. Partial → 1. See peninsular_strain_v1.md §5.2.
 
 | CI | Pool Bonus | Total Pool (Inf 6) |
 |----|-----------|-------------------|
-| 15 | +1 | 7 |
-| 30 | +2 | 8 |
-| 45 | +3 | 9 |
 | 60 | +4 | 10 |
 | 75 | +5 | 11 |
 | 90 | +6 | 12 |
 | 100 | +6 | 12 |
 
-| PT | Seizure Ob | Notes |
+| PT | Base Ob (no infra) | Notes |
 |----|-----------|-------|
-| 5 (Piety) | 2 | Pious territory — Church authority unquestioned |
-| 4 | 3 | |
-| 3 | 4 | |
-| 2 | 5 | Contested ground |
-| 1 | 6 | Restoration-leaning — Church is an invader |
-| 0 (Restoration) | 7 | Hostile population — Seizure is an act of war |
+| 5 (Piety) | 5 | Pious territory — Church has deep roots |
+| 4 | 6 | |
+| 3 | 7 | |
+| 2 | 8 | Contested ground |
+| 1 | 9 | Restoration-leaning — Church is an invader |
+| 0 (Restoration) | 10 | Hostile population — Seizure is an act of war |
 
-CI caps at 100. At CI 100 (pool 12D) vs PT 5 (Ob 2): Seizure is essentially guaranteed. Against PT 0 (Ob 7): Church succeeds ~50% — formidable but not certain. Milestones at CI 40/55/65/80/100 per tc_political_v30 §7.1.
+CI caps at 100. At CI 100 (pool 12D) vs PT 5 with Cathedral+Templar+Governor (Ob 5−5=1→floor 1): guaranteed. Against PT 0 with no infrastructure (Ob 10): Church needs extraordinary rolls. The one-shot nature means timing is everything — declare too early and waste the bid, wait too long and opponents prepare.
 
-Early Seizure (CI < 50) is possible but carries political consequences: Casus Belli from the controlling faction, and every other faction sees Church territorial ambition. The lower the CI, the more it looks like institutional aggression rather than a natural extension of authority. The civil war scenario is a real cost.
+**This is a one-time event.** If the Church declares Mass Seizure and fails to achieve Peninsular Sovereignty within the resulting Theocratic Bid phase, the Church does not get a second attempt. The institutional authority spent in the declaration cannot be reconstituted. CI continues to accumulate but no further Mass Seizure is possible.
 
-**Fort interaction (PP-500, ED-355 resolved):** Fort Level does not modify Seizure Ob. Seizure is a political act — Church institutional authority overriding local governance. If the territory has a garrison (Fort ≥ 1 AND military units present), Church must win a Battle (attacker Military vs Battle Ob, modified by Fort per standard Battle rules) before Seizure can be attempted. An ungarrisoned fortified territory (Fort ≥ 1, no units) can be Seized without Battle.
+**Fort interaction (PP-500, ED-355 resolved):** Fort Level does not modify Seizure Ob directly — it is already captured in the infrastructure modifier system. If the territory has a garrison (Fort ≥ 1 AND military units present), Church must win a Battle (attacker Military vs Battle Ob, modified by Fort per standard Battle rules) before Seizure can be attempted. An ungarrisoned fortified territory (Fort ≥ 1, no units) can be Seized without Battle.
 
 **Strategic milestones (indicators that the Church approach is working — NOT alternate endpoints):**
 
@@ -252,7 +249,7 @@ Church Mandate ≥ 4 required to initiate any seizure. Overwhelming seizure: PT 
 
 #### CI=100 — Mass Seizure Declaration
 
-When CI reaches 100, the Church pivots from incremental territorial pressure to an all-or-nothing push toward theocracy. Every territory with a Church building (Chapel or higher) in at least one settlement becomes a simultaneous Seizure target.
+When CI reaches 100, the Church's one-shot Mass Seizure (see above) fires at maximum strength. Every territory with a Church building (Chapel or higher) in at least one settlement becomes a simultaneous Seizure target. If the Church has not yet declared Seizure (CI ≥ 60 threshold), CI=100 is the optimal moment. If the Church already declared and spent its one-shot at CI 60–99, CI=100 has no additional Seizure effect.
 
 **Settlement Church Infrastructure (4-axis model — see settlement_layer_v30.md §Church Infrastructure):**
 
@@ -262,7 +259,7 @@ Settlements track Church presence on four independent axes:
 - **Inquisitor Base** (binary): Surveillance Zone, suppresses RM organizing (+1 Ob)
 - **Church Governor** (binary): de facto Church territory, bypasses civilian governance
 
-**Per-settlement Seizure Ob modifiers (stacking):**
+**Per-settlement Seizure Ob modifiers (stacking, subtracted from base 10 − PT):**
 
 | Axis | Modifier |
 |------|----------|
@@ -273,15 +270,16 @@ Settlements track Church presence on four independent axes:
 | Inquisitor Base | −1 |
 | Church Governor | −2 |
 
-Maximum per settlement: −4 (cap per settlement_layer_v30.md §1.5). Territory Seizure Ob aggregates modifiers across all settlements in the territory.
+Maximum per settlement: −4 (cap per settlement_layer_v30.md §1.5). Territory Seizure Ob aggregates modifiers across all settlements in the territory. Ob floor: 1.
 
-**CI=100 Mechanics:**
+**Mass Seizure Mechanics:**
 
 1. **Mass Seizure Declaration fires as a Zoom In event.** The Archbishop formally declares. Every faction receives an Emergency Session — 1 season to respond before seizures resolve.
-2. **Seizure targets all territories with Church building (Chapel+).** Individual Seizure Ob = 7 − PT − (sum of infrastructure modifiers).
+2. **Seizure targets all territories with Church building (Chapel+).** Individual Seizure Ob = 10 − PT − (sum of infrastructure modifiers), floor 1.
 3. **Succeeded seizures still require Accord ≥ 2.** Mass-seized territories start at Accord 1 (military-equivalent) or Accord 2 (if PT ≥ 3). The Church must govern what it seized.
 4. **Failed seizures generate 2 Church Attention events** the following season.
-5. **The game does not end at CI=100.** It enters the Theocratic Bid phase — a high-stakes sequence where the Church consolidates while every other faction responds. If the Church achieves all 15 territories with Accord ≥ 2, it wins via Peninsular Sovereignty (§0). If it overextends, governance crisis.
+5. **The game does not end at Mass Seizure.** It enters the Theocratic Bid phase — a high-stakes sequence where the Church consolidates while every other faction responds. If the Church achieves all 15 territories with Accord ≥ 2, it wins via Peninsular Sovereignty (§0). If it overextends, governance crisis.
+6. **No second attempt.** The Mass Seizure is the Church's one shot. If the bid fails, the Church must pursue Peninsular Sovereignty through conventional territorial acquisition (Govern, military, diplomacy) like any other faction.
 
 #### Strategic Milestone — Altonian Theocracy Path
 Altonian Ecclesiastical Accord (AEA) track 0–5. Milestone: AEA = 5 + CI ≥ 60 + Church controls T9 (Himmelenger). Indicates diplomatic route to Church dominance is viable — still requires full peninsular sovereignty to win.
@@ -630,9 +628,9 @@ Multiple victory conditions require RS thresholds. A faction that ignores RS ris
 
 ## 7. CI Generation and Church Seizure
 
-Starting CI: 28. Phase transition at CI 100 (CI cap, Church shifts to seizure mode).
+Starting CI: 28. CI caps at 100. Church may declare Mass Seizure at CI ≥ 60 (one-shot — see §3.2).
 
-**CI=100 Mass Seizure Declaration (see §3.2 for full specification):** When CI reaches 100, every territory where at least one settlement has a Church building (Chapel or higher) becomes a simultaneous Seizure target. Individual Seizure Ob calculated per-territory based on PT and Church infrastructure modifiers (4-axis model: Religious Building, Templar Station, Inquisitor Base, Church Governor — see settlement_layer_v30.md §Church Infrastructure). The Mass Seizure is a mandatory Zoom In event. CI=100 does NOT mean the Church wins — it means the Church makes its bid for theocracy. The Church still needs Peninsular Sovereignty (§0) to win.
+**Mass Seizure (see §3.2):** One-time event. When declared (CI ≥ 60), every territory with a Church building becomes a simultaneous Seizure target. Ob = 10 − PT − infrastructure (floor 1). CI=100 is the optimal declaration point but not required. No second attempt.
 
 **Seasonal CI at Accounting:**
 1. Institutional Momentum: CI +1 (passive).
@@ -641,7 +639,7 @@ Starting CI: 28. Phase transition at CI 100 (CI cap, Church shifts to seizure mo
 4. Suppress (optional opponent action): Mandate vs Ob = floor(Church Mandate / 2) + 1. Success: negate Step 1 passive. Failure: Cohesion −15 (derived_stats_v1).
 5. Hafenmark Structural Suppression: while Baralta Mandate ≥ 4, CI −1/season.
 
-**Church Seizure (Graduated, PP-494):** Pool = Influence + floor(CI/15). Ob = 7 − PT. Prominence required. Church Mandate ≥ 4. Overwhelming seizure: PT +1 (consequence, not cap-governed). See §3.2 for full table.
+**Church Seizure (one-shot, replaces PP-494):** Pool = Influence + floor(CI/15). Ob = 10 − PT − infrastructure (floor 1). CI ≥ 60 required. One attempt only. Prominence required. Church Mandate ≥ 4. Overwhelming seizure: PT +1 (consequence, not cap-governed). See §3.2 for full specification.
 
 ---
 
@@ -705,7 +703,7 @@ P-32 ("Hybrid victory = BG victory PLUS personal arc resolution") is retained. A
 | Faction | Start PV | Target PV | Gap | Key Difficulty | Est. Timeline |
 |---------|-----------|------------|-----|----------------|---------------|
 | Crown | 12 | 14 | +2 | Suppress 2 of 3 rivals (×2 political) | 12–16 seasons | *(PP-540)* |
-| Church | 5 | 8 | +3 | Graduated Seizure from CI 30+; PT management | 14–18 seasons |
+| Church | 5 | 8 | +3 | Mass Seizure (one-shot) at CI ≥ 60; PT management | 14–18 seasons |
 | Hafenmark | 6 | 12 | +6 | Dynastic Proclamation + Mil 3 handicap + Crown Mandate suppression | 12–16 seasons | *(PP-541)* |
 | Varfell A | 6 | 10 | +4 | Geographic isolation + VTM 3 + intel reveals | 12–14 seasons |
 | Varfell B | 6 | 8 | +2 | VTM 3 + Warden Recognition + T13 control | 12–16 seasons |
@@ -747,7 +745,7 @@ P-32 ("Hybrid victory = BG victory PLUS personal arc resolution") is retained. A
 | PP-424 | System | Deed system dissolved — all factions |
 | PP-425 | WR | Warden Recognition track defined (0–4) |
 | PP-493 | Territory | All T-numbers remapped to geography_design.md canonical. Old names (Arcansheld, Vargstad, Eidursjo, Nordhelm, Mittelmark) replaced. PV total = 30. Starting PV: Crown 12, Hafenmark 8, Varfell 6, Church 3. |
-| PP-494 | Church | Graduated Seizure: Pool = Influence + floor(CI/15), Ob = 7 − PT. Replaces CI 100 hard gate. Church PV threshold reduced to ≥ 8. BALANCE-001 revised to include Church in equal win probability. |
+| PP-494 | Church | Mass Seizure (one-shot): Pool = Influence + floor(CI/15), Ob = 10 − PT − infrastructure (floor 1). CI ≥ 60 required. Replaces Graduated Seizure. Church PV threshold reduced to ≥ 8. BALANCE-001 revised to include Church in equal win probability. |
 
 
 ---

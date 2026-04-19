@@ -22,11 +22,11 @@ Legacy CI sources (AER momentum, Attention Pool threshold, Emergency Powers, Fre
 CI creates asymmetric legitimacy: Church gains political bonus proportional to CI; opponents pay a legitimacy cost proportional to CI when directly opposing Church.
 
 
-## CI 75 Territorial Seizure (PP-421 — per victory_v30.md §7)
-**Note: CI no longer freezes at 75 (see tc_political_redesign_v30 §2). CI 75 marks the milestone where seizure becomes Church's primary mode, but seizure is available from CI ≥ 15 (PP-507). CI continues to 100.**
+## Church Mass Seizure (one-shot — per victory_v30.md §3.2, §7)
+**CI ≥ 60 required. One-time event. CI runs to 100 (no freeze). CI 100 is optimal declaration point.**
 
 ### Seizure Ob
-Ob = 2 + Fort Level + max(0, 3 − PT).
+Ob = 10 − PT − infrastructure modifiers (floor 1). See victory_v30 §3.2 for infrastructure table.
 Prominence required: Church Mandate > controlling faction's Mandate in target territory.
 Church Mandate ≥ 4 required to attempt seizure.
 
@@ -36,18 +36,18 @@ Per victory_v30.md §7. Overwhelming seizure: PT +1 in target territory. This is
 ### Seizure Constraints
 One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland).
 
-### Church Graduated Seizure (PP-494, PP-506–PP-511)
-**Available:** Any CI value from CI ≥ 15 (PP-507). Not gated on CI 75. CI 75 freeze marks the phase transition where seizure becomes Church's primary mode, but seizure was always available.
-**Pool:** Influence + floor(CI / 15). At CI 28: 7D. At CI 75: 11D (frozen cap). (PP-494)
-**Ob:** 7 − PT (target territory Piety value). PT 5 = Ob 2. PT 0 = Ob 7. (PP-494)
+### Church Mass Seizure (one-shot, replaces PP-494)
+**Available:** CI ≥ 60. One attempt only. (Replaces Graduated Seizure PP-494.)
+**Pool:** Influence + floor(CI / 15). At CI 60: 10D. At CI 100: 12D.
+**Ob:** 10 − PT − infrastructure modifiers (floor 1). PT 5 with full infra = Ob 1. PT 0 no infra = Ob 10.
 
 | PT | Seizure Ob |
 |----|-----------|
 | 5 (Piety) | 2 |
-| 4 | 3 |
-| 3 | 4 |
-| 2 | 5 |
-| 1 | 6 |
+| 4 | 6 (before infra) |
+| 3 | 7 (before infra) |
+| 2 | 8 (before infra) |
+| 1 | 9 (before infra) |
 | 0 (Restoration) | 7 |
 
 **Prerequisites:** Church Mandate ≥ 4. Prominence (Church Mandate > controlling faction Mandate). Prominence assessed at seizure declaration. (PP-509)
@@ -59,7 +59,7 @@ One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland)
 **Early Seizure political visibility:**
 - CI < 50: all factions observe the seizure attempt. No concealment.
 - CI ≥ 50: only factions with Intel ≥ 3 in the target territory observe. (PP-507) [PROVISIONAL]
-**Mandatory Assert post-CI 75:** Suspended. Assert optional only once CI freezes. (PP-511)
+**Mandatory Assert post-CI 75:** Suspended. Assert optional only once CI caps. (PP-511)
 **[ED-355 RESOLVED — PP-506. ED-365 RESOLVED — PP-507. ED-366 RESOLVED — PP-508. ED-367 RESOLVED — PP-509. ED-368 RESOLVED — PP-506. ED-369 RESOLVED — PP-511.]**
 
 ### Battle Ob Formula (PP-499, ED-343 resolved)
@@ -72,7 +72,7 @@ Attacker rolls: Military pool vs Ob. Degree table per standard BG degree table (
 
 
 ### Seizure Ob
-Ob = 2 + Fort Level + max(0, 3 − PT).
+Ob = 10 − PT − infrastructure modifiers (floor 1). See victory_v30 §3.2 for infrastructure table.
 Prominence required: Church Mandate > controlling faction's Mandate in target territory.
 Church Mandate ≥ 4 required to attempt seizure.
 
@@ -85,18 +85,18 @@ Per victory_v30.md §7. Overwhelming seizure: PT +1 in target territory. This is
 One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland).
 
 
-### Church Graduated Seizure (PP-494, PP-506–PP-511)
-**Available:** Any CI value from CI ≥ 15 (PP-507). Not gated on CI 75. CI 75 freeze marks the phase transition where seizure becomes Church's primary mode, but seizure was always available.
-**Pool:** Influence + floor(CI / 15). At CI 28: 7D. At CI 75: 11D (frozen cap). (PP-494)
-**Ob:** 7 − PT (target territory Piety value). PT 5 = Ob 2. PT 0 = Ob 7. (PP-494)
+### Church Mass Seizure (one-shot, replaces PP-494)
+**Available:** CI ≥ 60. One attempt only. (Replaces Graduated Seizure PP-494.)
+**Pool:** Influence + floor(CI / 15). At CI 60: 10D. At CI 100: 12D.
+**Ob:** 10 − PT − infrastructure modifiers (floor 1). PT 5 with full infra = Ob 1. PT 0 no infra = Ob 10.
 
 | PT | Seizure Ob |
 |----|-----------|
 | 5 (Piety) | 2 |
-| 4 | 3 |
-| 3 | 4 |
-| 2 | 5 |
-| 1 | 6 |
+| 4 | 6 (before infra) |
+| 3 | 7 (before infra) |
+| 2 | 8 (before infra) |
+| 1 | 9 (before infra) |
 | 0 (Restoration) | 7 |
 
 **Prerequisites:** Church Mandate ≥ 4. Prominence (Church Mandate > controlling faction Mandate). Prominence assessed at seizure declaration. (PP-509)
@@ -108,7 +108,7 @@ One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland)
 **Early Seizure political visibility:**
 - CI < 50: all factions observe the seizure attempt. No concealment.
 - CI ≥ 50: only factions with Intel ≥ 3 in the target territory observe. (PP-507) [PROVISIONAL]
-**Mandatory Assert post-CI 75:** Suspended. Assert optional only once CI freezes. (PP-511)
+**Mandatory Assert post-CI 75:** Suspended. Assert optional only once CI caps. (PP-511)
 **[ED-355 RESOLVED — PP-506. ED-365 RESOLVED — PP-507. ED-366 RESOLVED — PP-508. ED-367 RESOLVED — PP-509. ED-368 RESOLVED — PP-506. ED-369 RESOLVED — PP-511.]**
 
 
@@ -121,7 +121,7 @@ Cap: 2 territory transfers per seizure event (v04/v05 P-23). Previously set to 4
 
 
 ## CI 75 Seizure — Territory Values — SUPERSEDED
-**See TCV table in §Victory Conditions above.** Per-territory seizure Ob = 2 + Fort Level + max(0, 3 − PT). Fort levels per geography_v30.md territory table.
+**See TCV table in §Victory Conditions above.** Per-territory seizure Ob = 10 − PT − infrastructure modifiers (floor 1). See victory_v30 §3.2 for infrastructure table. Fort levels per geography_v30.md territory table.
 [TERRITORY-DEBT: RESOLVED 2026-04-08 — PP-493. All T# references verified against geography_v30.md.]
 
 ## CI Threshold Check — Zoom In Interaction (ED-056 resolved 2026-04-03)

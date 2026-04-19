@@ -66,7 +66,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Track | Start | Range | Notes |
 |-------|-------|-------|-------|
 | Rendering Stability (RS) | 72 | 0–100 | Rupture = shared loss |
-| Church Influence (CI) | **28** | 0–75 (freeze ceiling) | CI 75 = Territorial Seizure phase transition (CI freezes). P-32 sets starting value at 28. |
+| Church Influence (CI) | **28** | 0–100 (no freeze) | CI 60 = Mass Seizure available (one-shot). CI 100 = cap. P-32 sets starting value at 28. |
 | Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard |
 | Parliament Integrity (PI) | **7** | 0–20 | Cumulative pressure meter. Auto-resolves at PI ≥ 20 (Crown elimination). |
 | AER | 2 | 0–5 | Near IP clock. |
@@ -142,7 +142,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Guilds (NPC) | 3 | 4 | 6 | 2 | 5 |
 | Niflhel (NPC) | — | 5 | 4 | — | 4 |
 
-CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 territories (T4/T11/T12/T13). Handicap is defensive: mountain range + Thread Wounds hem in expansion. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. CI = 28 (P-32). CI phase transition = 75 (per victory_v30.md §7).
+CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 territories (T4/T11/T12/T13). Handicap is defensive: mountain range + Thread Wounds hem in expansion. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. CI = 28 (P-32). CI Mass Seizure threshold = 60, cap = 100 (per victory_v30.md §7).
 
 
 
