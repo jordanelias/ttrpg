@@ -2,7 +2,7 @@ session_id: phase0_housekeeping_2026-04-18
 session_close: pending
 phase: Phase 0 — Housekeeping
 status: IN PROGRESS
-last_stage: 2.4 complete
+last_stage: 2.5/2.6 complete
 next_action:
   skill: Phase 2 continued — P2 items — Derived stats calibration
   description: >
@@ -13,6 +13,8 @@ commits:
   - pending_07: "Phase 0.7: Params staleness — PP-208/297/349/351 propagated, 3 SHAs updated"
   - pending: "Phase 1.1: Knot formation — fieldwork §5.6a, npc_behavior §6.3 GAP resolved, params/core updated — ED-680"
 resolutions_this_session:
+  - "2.5: Settlement economy — all 3 checks PASS. ED-694."
+  - "2.6: RM victory — 5/5 simplified, Church counter-pressure omitted. Phase 4 calibration. ED-695."
   - "2.4: Priority tree cross-faction sim. 10 seasons 4 factions. Trees produce correct behavior. Church Assert repetition intentional. ED-693."
   - "2.1: Social contest PP-234 sim. CROSS viable R1, weak R2 (intentional). Stall-break working. SIM-DEBT-03/04 cleared. ED-692."
   - "2.7: Mass battle Part C — 6/7 editorial items confirmed canonical. CLOCK-EDIT-01 deferred to Phase 4. ED-689."

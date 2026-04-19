@@ -1,9 +1,25 @@
 # Valoria Editorial Ledger — Active
-# next_id: 694
+# next_id: 696
 
 
 
 
+
+
+
+  - id: ED-694
+    date: 2026-04-18
+    description: "AUD-SET-01/03: Settlement economy simulation. Income differentiated. Order→Accord derivation proportional. Siege attrition 4 seasons to kill Size 4 unit (appropriate). All 3 checks PASS."
+    status: resolved
+    severity: P2
+    affects: [designs/territory/settlement_layer_v30.md]
+
+  - id: ED-695
+    date: 2026-04-18
+    description: "AUD-VIC-02: RM victory probability. Simplified sim: 5/5 wins mean S22. CAVEAT: omits Church counter-pressure. Full calibration deferred to Phase 4. Mechanics functional."
+    status: resolved
+    severity: P2
+    affects: [designs/provincial/victory_v30.md]
 
 
   - id: ED-693
