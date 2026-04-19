@@ -1,37 +1,23 @@
-# session_log_current.md
-last_stage: Checkpoint / flush protocol deployed
+# Session Log — 2026-04-18 (continued)
+last_stage: Phase 6 — Accord propagation to valoria-game
 next_action:
-  skill: infrastructure
+  skill: Phase 6 ongoing — valoria-game GODOT-IMPACT sync
   description: >
-    Two infrastructure enforcement layers deployed this session.
-    
-    Prior (session 1): sim_gate() + sim_fabrication_check() — require canonical
-    sources fetched at full depth AND a verification ledger at
-    /home/claude/sim_verification_ledger.json before any sim code. Uncited
-    mechanical constants blocked at commit.
-    
-    This session: 3-tier context gate (60/75/90 %) + write_checkpoint() /
-    close_checkpoint() / read_active_checkpoint() / prompt_resume_from_checkpoint().
-    At 60%: soft warning to plan handoff. At 75%: HARD block — must call
-    write_checkpoint() before continuing. At 90%: existing hard stop (session
-    close only). Checkpoints persist to canon/session_checkpoint.md and allow
-    a new session to resume from the last state instead of starting cold.
-    
-    github_ops.py _authorize_next_commit() extended to allow write_checkpoint()
-    and close_checkpoint() as approved callers.
+    Accord propagation COMPLETE (aa73b868). ACCORD_MAX bug fixed (5→3).
+    Next pending GODOT-IMPACT items: Knot formation, RM Presence markers,
+    Co-Movement card mechanics, Combat §4 CombatLogic, Phase 3 fixes,
+    Simulation framework, Phase 5 schemas.
   blockers: []
 commits:
-  - d84d1e95: "[infrastructure] sim_gate + sim_fabrication_check"
-  - 8d09412b: "[infrastructure] checkpoint protocol — 3-tier context gate"
+  - 44cb4a1e: "[editorial] 2.14a Ministry Census — ED-671"
+  - 6e1d27ac: "[editorial] 3.6a Post-Coup Succession — ED-674"
+  - 436bbde5: "[editorial] 1.5 Faction Collapse Exit — ED-675"
+  - 8ee5688c: "[editorial] 8.8a Niflhel Intel Output — ED-679"
+  - 4d69e699: "[editorial] P2 batch: ED-670/672/673/676/677/678"
+  - b53fab72: "[fix] ED-672 ledger text"
+  - aa73b868: "[sync] Accord propagation — valoria-game (4 files, ACCORD_MAX fix)"
 resolutions_this_session:
-  - "sim_v2 audit complete — documented all mechanical errors"
-  - "sim_gate() hook built, tested, committed"
-  - "sim_fabrication_check() hook built, wired into pre_commit_gate, committed"
-  - "write_checkpoint + close_checkpoint + read_active_checkpoint committed"
-  - "3-tier context gate (60/75/90) committed"
-  - "github_ops auth extended for checkpoint callers"
-open_items:
-  - "canonical_sources.yaml has malformed '- file:' block (pre-existing, not this session)"
-  - "Pending infrastructure: read-depth logging, incremental sim workflow skill"
-  - "sim_v2 (valoria_sim_v2.py) discarded — mechanically invalid. Next sim build must use sim_gate protocol from first line of code."
-p1_blocker_count: 0
+  - "10/10 editorial items resolved (4 P1 + 6 P2). 4/4 system validations PASS."
+  - "Phase 6: Accord propagation to valoria-game. TerritoryData +accord field, 17 territories with §2.1 starting values, SettingState tracker registration, Constants ACCORD_MAX fixed 5→3 + 6 tier constants. Bug: ACCORD_MAX was 5 (incorrect). valoria-game commits aa73b868, 9d8caf70."
+open_items: []
+P1-BLOCKER count: 0
