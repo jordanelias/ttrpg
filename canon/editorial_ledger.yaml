@@ -1,10 +1,19 @@
 # Valoria Editorial Ledger — Active
-# next_id: 696
+# next_id: 697
 
 
 
 
 
+
+
+
+  - id: ED-696
+    date: 2026-04-18
+    description: "Phase 2.11: Generational transition specification. Every tracked value enumerated with transition behavior (preserve/transform/reset/break/transfer). Resources inheritance resolved: floor(predecessor/2) + new starting."
+    status: resolved
+    severity: P2
+    affects: [designs/architecture/player_agency_v30.md]
 
 
   - id: ED-694
