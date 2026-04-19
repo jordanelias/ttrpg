@@ -207,3 +207,16 @@ The canonical additive formula with STR already creates proper attribute balance
 - Strength → damage per hit
 - Endurance → survivability (Vitality, Stamina)
 - Weapon choice → armor counter-play (blunt beats heavy, blade beats light)
+
+### System Validation Suite (sim_system_validation.py + system_validation_report.md)
+
+| Test | Result | Notes |
+|------|--------|-------|
+| Generational Transition | PASS | All 5 categories (preserve/transform/reset/break/transfer) validated against ED-696 |
+| Derived Stats Calibration | CONFIRMED | Provisional to confirmed. Multipliers validated. Economic pressure dynamics correct. |
+| Scale Transitions E2E | PASS | All 6 directions (Personal/Settlement/Territory/Peninsula bidirectional) |
+| Personal-Scale Combat | PASS | 15D/Ob3: 78% success (41 OW, 37 S, 18 P, 4 F) |
+| Personal-Scale Contest | PASS | 12D vs 10D opposed: 60% PC win rate |
+| Fieldwork Depth Gates | PASS | TS thresholds (0/10/30/50) gate correctly |
+| Threadwork Resolution | PASS | 14D/Ob3: Coherence/RS costs fire |
+| Degree Table (OW gate) | PASS | net >= 2*Ob AND net >= 3 |
