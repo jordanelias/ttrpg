@@ -448,10 +448,11 @@ def faction_ai_church(gs: GameState):
             target.inquisitor = True
             gs.log.append(f"S{gs.season}: Church deploys Inquisitor in {target.name}")
 
-    # Church Mass Seizure declaration (probabilistic)
-    # [canonical: victory_v30 §3.2 — P(declare) = ((CI-60)/40)^3.3, CI ≥ 60]
-    if gs.ci >= 60 and not gs.church_seizure_fired:
-        p_declare = min(1.0, max(0.0, ((gs.ci - 60) / 40.0) ** 3.3))
+    # Church Mass Seizure declaration (probabilistic, fires earlier)
+    # [canonical: victory_v30 §3.2 — shifted curve for earlier declaration]
+    # P = ((CI-40)/60)^2.5: CI 50→2%, CI 60→8%, CI 70→19%, CI 80→35%, CI 90→57%, CI 100→100%
+    if gs.ci >= 40 and not gs.church_seizure_fired:
+        p_declare = min(1.0, max(0.0, ((gs.ci - 40) / 60.0) ** 2.5))
         if random.random() < p_declare:
             attempt_mass_seizure(gs)
 
@@ -526,6 +527,9 @@ def attempt_conquest(gs: GameState, attacker: Faction, target: Territory):
         return True
     # [canonical: params/bg/tc_seizure.md — Battle Ob = floor(defender Military / 2) + 1]
     battle_ob = max(1, defender.military // 2 + 1)
+    # [canonical: Jordan — Hafenmark discipline + equipment defensive advantage]
+    if defender.name == 'Hafenmark':
+        battle_ob += 1  # fortified positions + better equipment
     atk_pool = attacker.military
     # [canonical: Jordan — Hafenmark smithing/equipment advantage]
     if attacker.name == 'Hafenmark':
@@ -627,16 +631,23 @@ def faction_ai_crown(gs: GameState):
 
     # Senator: Crown Treaty — diplomatic submission of weaker faction
     # [canonical: params/bg/core.md — Formal Crown Treaty Ob = floor(target Mandate/2)+1]
+    # Crown aggressively pursues treaties when it has military/territorial advantage
     if has_card(f, 'Senator'):
-        rivals = [r for r in gs.factions.values() if r.active and not r.submitted
-                  and r.name != 'Crown' and r.mandate < f.mandate]
+        rivals = sorted(
+            [r for r in gs.factions.values() if r.active and not r.submitted
+             and r.name != 'Crown' and (r.mandate < f.mandate or len(r.territories) < len(f.territories) // 2)],
+            key=lambda r: len(r.territories)  # target weakest first
+        )
         if rivals:
-            target_r = min(rivals, key=lambda r: r.mandate)
+            target_r = rivals[0]
             play_card(f, 'Senator')
             treaty_ob = max(1, target_r.mandate // 2 + 1)
-            net, deg = check(f.mandate, treaty_ob)
+            # +1D if Crown has 2× territories
+            pool = f.mandate
+            if len(f.territories) >= 2 * max(1, len(target_r.territories)):
+                pool += 1
+            net, deg = check(pool, treaty_ob)
             if deg in ('Success', 'Overwhelming'):
-                # Crown Treaty: target submits (territories transfer conceptually)
                 for tid in list(target_r.territories):
                     gs.territories[tid].controller = 'Crown'
                     f.territories.append(tid)
@@ -708,6 +719,7 @@ def faction_ai_hafenmark(gs: GameState):
             if ctrl and f.mandate > ctrl.mandate:
                 play_card(f, 'Diplomat')
                 dip_ob = max(1, ctrl.stability // 2 + 1)
+                # [canonical: Jordan — Hafenmark wealth backs diplomatic claims]
                 # [canonical: PP-649 — Pool: Influence. +1 Ob if PT ≤ 1]
                 if target.pt <= 1: dip_ob += 1
                 net, deg = check(f.influence, dip_ob)
@@ -719,14 +731,20 @@ def faction_ai_hafenmark(gs: GameState):
                     ctrl.mandate = max(0, ctrl.mandate - 1)  # [canonical: PP-649 Success]
                     gs.log.append(f"S{gs.season}: Hafenmark claims {target.name} via Dynastic Proclamation")
 
-    # Legionary: military expansion
+    # Legionary: military expansion — Hafenmark uses wealth-backed professional army
+    # [canonical: Jordan — better troops/equipment from mines, discipline from Baralta]
     if has_card(f, 'Legionary') and f.stability >= 3 and f.military >= 2:
         target = pick_conquest_target(gs, f)
         if target:
             ctrl = gs.factions.get(target.controller)
-            if not ctrl or not ctrl.active or f.military >= ctrl.military:
+            effective_mil = f.military + f.wealth // 3  # wealth funds better equipment
+            if not ctrl or not ctrl.active or effective_mil >= ctrl.military:
                 play_card(f, 'Legionary')
+                # Temporarily boost military for the conquest roll
+                saved_mil = f.military
+                f.military = effective_mil
                 attempt_conquest(gs, f, target)
+                f.military = saved_mil
 
 def faction_ai_varfell(gs: GameState):
     f = gs.factions['Varfell']
@@ -919,6 +937,34 @@ def run_season(gs: GameState):
     battles_this_season = any('SEIZES' in e or 'Battle' in e for e in gs.log if f'S{gs.season}' in e)
     if not battles_this_season and gs.strain > 0:
         gs.strain -= 1
+
+    # Territory pressure — factions losing ground destabilize
+    # [canonical: Jordan — increase elimination cascade speed]
+    for f in gs.factions.values():
+        if f.active and not f.submitted:
+            home_count = len([tid for tid in FACTION_TERRITORIES.get(f.name, [])
+                             if gs.territories[tid].controller == f.name])
+            starting = len(FACTION_TERRITORIES.get(f.name, []))
+            if starting > 0:
+                lost_ratio = 1.0 - (home_count / starting)
+                # Lost >50% of home territories: -1 Stability/season
+                if lost_ratio > 0.5:
+                    f.stability = max(0, f.stability - 1)
+                    f.clamp()
+            # Forced submission: ≤ 2 territories vs dominant faction with ≥ 10
+            if len(f.territories) <= 2:
+                dominant = max(
+                    [r for r in gs.factions.values() if r.active and not r.submitted and r.name != f.name],
+                    key=lambda r: len(r.territories), default=None
+                )
+                if dominant and len(dominant.territories) >= 10:
+                    f.submitted = True
+                    for tid in list(f.territories):
+                        gs.territories[tid].controller = dominant.name
+                        dominant.territories.append(tid)
+                        gs.territories[tid].accord = 1
+                    f.territories.clear()
+                    gs.log.append(f"S{gs.season}: {f.name} SUBMITS to {dominant.name} ({dominant.name} holds {len(dominant.territories)} territories)")
 
     # Strain threshold effects
     # [canonical: params/bg/core.md §Peninsular Strain Threshold Effects]
