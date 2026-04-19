@@ -81,7 +81,11 @@ def assert_bootstrap() -> str:
                 # Evict all transient fetches from compliance auto-fix.
                 # Compliance reads full design docs for skeleton generation —
                 # those docs are not needed after skeletons are committed.
-                evicted = g.cache_evict_pattern('designs/', 'tests/', 'params/', 'archives/')
+                evicted = g.cache_evict_pattern(
+                    'designs/', 'tests/', 'params/', 'archives/',
+                    'deprecated/', 'skills/', 'canon/', 'references/',
+                    'docs/', 'tools/',
+                )
                 if evicted:
                     print(f"[COMPLIANCE] Evicted {evicted} transient cache entries")
                 print(f"[COMPLIANCE ✓] Auto-fixes committed.")
