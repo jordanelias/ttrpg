@@ -270,22 +270,7 @@ Activates only if Vaynard is eliminated (Loyalty 0 + Mandate 0, per PP-486).
 ---
 
 ### §2.12 Niflhel (Four-Arm Structure — No Single Leader)
-
-| Attribute | Value | Notes |
-|---|---|---|
-| Primary Conviction | Autonomy | Survival and profit. No moral framework. Pure instrumentality. |
-| Secondary Conviction | [None — Niflhel does not have a fallback ideology. If Autonomy fails, the arms fracture and each pursues individual survival.] |
-| Ethical Framework | Amoral Consequentialism (Niflhel) | Covert: −1 Ob (always). Public: +2 Ob. |
-| Primary Resonant Style | Consequence | Operationally focused. Show them that their actions are producing blowback that threatens their survival infrastructure. Thread Tension accumulation from Quiet deployments is the canonical example: they do not know they are degrading Rendering Stability. |
-| Secondary Resonant Style | Evidence | If Consequence fails, present evidence of their own exposure — compromised operatives, trail leading to their supply chains, Warden detection of their Southernmost activity. Existential operational threat. |
-| Thread Sensitivity | Arm-dependent. Quiet operatives may include practitioners. |
-| Certainty | Variable. Operatives across all Certainty levels. |
-
-**Beliefs:**
-1. [Institutional] "We survive by being invisible. Exposure is death."
-2. [Institutional] "Every service has a price. Every faction is a client."
-
----
+**STRUCK** — Niflhel dissolved (conflict_architecture_proposal). Four-arm structure eliminated. Functions distributed to settlement-level phenomena.
 
 ### §2.13 Cardinal Officers (Church — Sub-NPCs)
 
@@ -405,7 +390,7 @@ A character with TS 0–9 sees only public health data. No Thread-relevant infor
 
 Beliefs are revealed to players through:
 - Contest Appraise step (Overwhelming: one Belief revealed per §4 social_contest_system_v2.md)
-- Niflhel Intelligence mode (Success: one NPC's active Belief per stage6 §8.7)
+- Intelligence broker mode [was Niflhel — struck] (Success: one NPC's active Belief per stage6 §8.7)
 - Observation (GM grants Belief revelation when the NPC acts on a Belief in a way the PC witnesses)
 
 ### §3.2 Belief Revision
@@ -675,7 +660,7 @@ Maximum bonus dice from Resonant Style targeting: +1D. This stacks with genre bo
 | Consequentialist Pragmatism | Varfell | TK +0.5 per season of active investigation. Caps at TK 3 without PC interaction. | Per season |
 | Rawlsian Social Contract | Restoration | RM Presence markers spread to 1 adjacent territory per season when RM Stability ≥ 3 | Per season (conditional) |
 | Moral Relativism | Guilds | Guild Favour +1 in highest-Favour territory per Year-End | Per year |
-| Amoral Consequentialism | Niflhel | After 3 consecutive Quiet deployments in same territory: Intel Ob +1 (overexposure) | Self-limiting |
+| Amoral Consequentialism | [Niflhel — STRUCK] | Ethical framework dissolved with faction. Intelligence broker NPCs operate without faction-level ethical framework. |
 | Martial Honour | Löwenritter | If Military < 5: all non-survival actions redirect to Military Consolidation | Continuous |
 
 ### §7.2 Drift and NPC Arc Interaction
@@ -783,52 +768,8 @@ All NPC faction priority trees follow a standardised 7-level structure:
 **Post-Coup (Coup Counter 3):** Priority tree restructures. All priorities below Survival become: impose Martial Law → consolidate Crown territories → Reconstitution (when PI = 0).
 
 ### §8.8 Niflhel NPC Priority Tree
+**STRUCK** — Niflhel dissolved. See conflict_architecture_proposal.
 
-| Priority | Condition | Action |
-|---|---|---|
-| 1 | Stability ≤ 2 | No public action available. Quiet Intelligence mode against strongest rival (learn threat vector). |
-| 2 | Exposure threat: any faction has evidence trail pointing to Niflhel operations | Quiet Sabotage mode targeting the faction holding evidence (Stability −1 to disrupt their capacity to act on evidence). |
-| 3 | Covert action available (−1 Ob): Quiet Intelligence mode against richest faction (learn hidden Wealth or Intel stat). | Intelligence harvesting |
-| 4 | Acquire resources. Sell services. Remain invisible. Quiet Intelligence mode against least-known faction. | Standard |
-| 5 | **Thread Harvest gate (ED-679):** RS ≤ 30 → Harvest (Dissolution Residue via Quiet arm) max 1/season. RS ≤ 20 → Harvest suspended. | RS-gated Harvest |
-| 6 | **Lock-and-cede (ED-679):** Territory about to be conquered → practitioner (Coherence ≥ 5) Locks critical configs before ceding. Conqueror inherits RS drain + ungovernable province. | Strategic denial |
-| 7 | Southernmost supply chain: RS ≤ 40 → reduce Southernmost ops to 1/year. | Supply chain management |
-| 8 | If exposed (operative captured, evidence published): all four arms redirect to exposure containment. Assassination mode against witness if Intel vs Intel +2 is feasible. | Reactive — existential threat |
-| 9 | Pass. No deployment. | Default |
-
-
-#### §8.8a Niflhel Intelligence Output Mechanic (ED-679)
-
-Niflhel's Quiet Intelligence mode (Priority 1, 3, 4) generates actionable intelligence products. This section defines what those products are, how they are delivered, and what mechanical effects they produce.
-
-**Intelligence gathering resolution:** Each season a Niflhel arm deploys in Quiet Intelligence mode, the engine rolls: Intel pool (Niflhel's effective Intelligence stat, typically 3–5) vs Ob determined by target faction's counter-intelligence posture.
-
-| Target posture | Ob |
-|---|---|
-| No active Intel actions this season | 1 |
-| Intel action deployed defensively (counter-intel) | 2 |
-| Intel action + Riskbreaker or Inquisitor active | 3 |
-
-**Intelligence products (by degree):**
-
-| Degree | Product | Mechanical effect | Shelf life |
-|---|---|---|---|
-| Failure | No product. Operative at risk of exposure (10% chance per failure — tracked by engine). | None | — |
-| Partial | **Rumour:** Reveals one attribute value of target faction (Mandate, Military, Wealth, or Stability — Niflhel chooses). | Information only — no mechanical advantage. Available to any faction Niflhel sells to. | 2 seasons |
-| Success | **Dossier:** Reveals all four attribute values + one pending Domain Action (next season's highest-priority action from the target's priority tree). | Buying faction gains +1D on one Domain Action targeting the dossier subject this season (foreknowledge advantage). | 1 season |
-| Overwhelming | **Leverage:** As Dossier, plus one exploitable vulnerability (lowest attribute, or officer NPC with Disposition ≤ 0, or treaty obligation about to lapse). | Buying faction gains +1D as above. Additionally, Niflhel may offer a Sabotage operation at −1 Ob against the identified vulnerability. | 1 season |
-
-**Delivery mechanic — Sale or Use:**
-
-Niflhel does not use intelligence products directly (no Mandate to leverage politically). Instead, products are sold to other factions or to the player:
-
-- **NPC faction purchase:** Niflhel approaches the faction most likely to act against the target (determined by priority tree conflict analysis). Price: 1 Wealth per product tier (Rumour = 1, Dossier = 2, Leverage = 3). If the buyer cannot pay, Niflhel may accept a favour token (one future Domain Action performed on Niflhel's behalf, redeemable within 4 seasons).
-- **Player purchase:** Niflhel contacts the player via Outreach (§8.11) if the player has Niflhel Standing ≥ 1 or has conducted any prior transaction with Niflhel. Same pricing. Player may negotiate via Social Contest (Ob 2; Success: 50% price; Overwhelming: free + Niflhel Disposition +1).
-- **Unsold products:** If no buyer is found within 1 season, the product expires. Niflhel does not stockpile — information decays.
-
-**Exposure accumulation:** Each Failure result increments an internal Exposure Counter (per target faction). At Exposure Counter = 3, the target faction discovers Niflhel's intelligence operation and may act on it (Priority 8 activates for Niflhel). Counter resets to 0 if Niflhel suspends operations against that target for 2 consecutive seasons.
-
-**Engine implementation:** Intelligence gathering is resolved during Phase 3 (Domain Actions). Products are generated and queued. Sales are resolved during Phase 4 (Social). Unsold products expire at Accounting.
 
 ### §8.9 Restoration Movement NPC Priority Tree (Post-Founding Only)
 
@@ -847,7 +788,7 @@ Niflhel does not use intelligence products directly (no Mandate to leverage poli
 | Priority | Condition | Action |
 |---|---|---|
 | 1 | Gap or Shifting Object detected in any territory | Emergency Mend at Gap site. Wardens deploy to location. |
-| 2 | Niflhel supply chain disturbance detected (Thread Tension source traced to Southernmost harvesting) | Investigate source. Wardens intercept Niflhel operatives in Southernmost territory. |
+| 2 | Thread exploitation site disturbance detected (Thread Tension source traced to Southernmost harvesting) | Investigate source. Wardens intercept Niflhel operatives in Southernmost territory. |
 | 3 | RS ≤ 40 | Peninsula-wide Weaving. RS +1 per Warden deployment (max +2/season). |
 | 4 | Work alongside any faction performing Thread restoration (Community Organizing, Mending, RS-positive actions) | Cooperation: +1D to allied Thread operations in Southernmost-adjacent territories (Warden Cooperation Track ≥ 1). |
 | 5 | Assess any new practitioner who enters Southernmost territory | Assessment interview. TS ≤ 20: dismissed. TS 21–39: acknowledged. TS 40+: useful. |
