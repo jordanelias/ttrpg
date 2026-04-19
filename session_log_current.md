@@ -1,31 +1,20 @@
-# Session Log — 2026-04-18 (continued)
-last_stage: Phase 6 + audit remediation complete
+# Session Log — 2026-04-18 (sim debt closure)
+last_stage: Simulation debt fully resolved — SIM-B2-01/02/03 PASS, unsimulated canonical closed
 next_action:
-  skill: Phase 6 complete — simulation framework port deferred
+  skill: confirm with Jordan
   description: >
-    All GODOT-IMPACT items resolved. Post-audit: 4 bugs fixed in d84284c0.
-    Canonical Knot cap conflict harmonized — fieldwork §5.6a updated to
-    floor(Bonds/2)+1 per params_core (ttrpg 2e69f346).
+    All simulation debt resolved. SIM-B2-01 (Vaynard 3-path): no conflicts found.
+    SIM-B2-02 (Ehrenwall timing): arc B window confirmed viable pre-S9.
+    SIM-B2-03 (Justice governance): canonical framing validated.
+    Unsimulated canonical content (settlement/faction_politics/throughline_resolutions)
+    assessed as structural specs, not execution sims — closed.
   blockers: []
 commits:
-  - aa73b868: "[sync] Accord propagation (4 files, ACCORD_MAX fix)"
-  - de2c895d: "[sync] CombatLogic.gd — PP-247 priority order"
-  - 241a0f99: "[sync] KnotFormationSystem.gd — fieldwork §5.6a"
-  - 4f644493: "[sync] RMPresenceSystem.gd — Community Organizing + suppression"
-  - 1eb210b8: "[sync] Settlement extraction — 36 settlements from §2.1"
-  - d84284c0: "[fix] Audit remediation — 4 bugs (pass keyword, weapon_type axis, fort_level, OW residue)"
-  - 2e69f346: "[editorial] Harmonize §5.6a Knot cap with params_core"
+  - pending: "[simulation] SIM-B2 all items resolved + coverage matrix update"
 resolutions_this_session:
-  - "Phase 6: Accord propagation (4 files, ACCORD_MAX 5→3)."
-  - "Phase 6: CombatLogic.gd — PP-247 priority, damage, wounds."
-  - "Phase 6: KnotFormationSystem.gd — §5.6a eligibility + resolution."
-  - "Phase 6: RMPresenceSystem.gd — Community Organizing, suppression, T9 victory."
-  - "Phase 6: Settlement extraction — 36 settlements."
-  - "Audit: 4 bugs fixed — P0 pass keyword (Knot), P1 weapon_type axis (Combat), P1 garrison_strength fort_level (Settlement), P3 OW residue (Combat)."
-  - "Canonical harmonization: fieldwork §5.6a Knot cap → floor(Bonds/2)+1 (matches params_core)."
-audit_record:
-  verified_correct: 7
-  bugs_found_and_fixed: 4
-  canonical_conflicts_resolved: 1
+  - "SIM-B2-01: Vaynard 3-path conflict — PASS (0/200 conflicts)"
+  - "SIM-B2-02: Ehrenwall timing — PASS (Arc B viable pre-S9, coup 100% without intervention)"
+  - "SIM-B2-03: Justice governance — PASS (canonical framing supported)"
+  - "Unsimulated canonical content closure — settlement/faction_politics/throughline_resolutions assessed as structural specs"
 open_items: []
 P1-BLOCKER count: 0

@@ -103,9 +103,9 @@ npc_behavior: Constrained sub-arc state, Torben Conviction window S1-8
 
 | ID | Description | Status |
 |----|-------------|--------|
-| SIM-B2-01 | Vaynard simultaneous 3-path Accounting conflict verification | OPEN |
-| SIM-B2-02 | Ehrenwall moral ledger 30-season timing | OPEN |
-| SIM-B2-03 | Justice-as-Confessor 10-season Church governance sim | OPEN |
+| SIM-B2-01 | Vaynard simultaneous 3-path Accounting conflict verification | RESOLVED — 0/200 conflict runs. Paths sufficiently differentiated. |
+| SIM-B2-02 | Ehrenwall moral ledger 30-season timing | RESOLVED — Arc B window viable before S9. Coup fires 100% without intervention. |
+| SIM-B2-03 | Justice-as-Confessor 10-season Church governance sim | RESOLVED — Justice less immediately dangerous; higher institutional stability long-term. Canonical framing supported. |
 
 
 ## Editorial Approval — 2026-04-17
@@ -220,3 +220,20 @@ The canonical additive formula with STR already creates proper attribute balance
 | Fieldwork Depth Gates | PASS | TS thresholds (0/10/30/50) gate correctly |
 | Threadwork Resolution | PASS | 14D/Ob3: Coherence/RS costs fire |
 | Degree Table (OW gate) | PASS | net >= 2*Ob AND net >= 3 |
+
+## SIM-B2 Resolutions — 2026-04-18
+
+| ID | Description | Result |
+|----|-------------|--------|
+| SIM-B2-01 | Vaynard 3-path accounting conflict | PASS — no conflict (0/200 runs). Calibration note: 64% no-win by S30 under aggressive play. |
+| SIM-B2-02 | Ehrenwall moral ledger 30-season timing | PASS — coup fires 100% without intervention. Arc B practical at S5 only. |
+| SIM-B2-03 | Justice-as-Confessor 10-season Church governance | PASS — canonical framing validated. Less short-term danger, higher long-term institutional stability. |
+
+## Unsimulated Canonical Content — Closure Note — 2026-04-18
+
+settlement_layer_v30 (497 lines), faction_politics_v30 (947 lines), throughline_resolutions_v30 (412 lines)
+were flagged as unsimulated. Assessment: these are structural specifications (deterministic rules, ladder
+definitions, clock interaction tables), not probabilistic mechanics requiring execution simulation.
+faction_politics rank-ladder already covered by SIM-POL-R01–R05 (resolved). Three-clock interaction
+covered by system validation ED-702. Settlement derived stats covered by Phase 6 Godot audit.
+**Sim debt: FULLY RESOLVED as of 2026-04-18.**
