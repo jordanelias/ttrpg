@@ -1,41 +1,24 @@
-# session_log_current.md
-last_stage: Read-depth logging deployed — third infrastructure layer complete
+# Session Log — 2026-04-18 (continued)
+last_stage: Phase 6 — Combat §4 CombatLogic.gd to valoria-game
 next_action:
-  skill: infrastructure
+  skill: Phase 6 ongoing — valoria-game GODOT-IMPACT sync
   description: >
-    Three of five planned anti-fabrication infrastructure layers now deployed:
-
-    1. [d84d1e95] sim_gate + sim_fabrication_check — verification ledger
-       required before sim code, uncited constants blocked at commit.
-
-    2. [8d09412b] checkpoint protocol — 3-tier context gate (60/75/90 %),
-       write_checkpoint/close_checkpoint/read_active_checkpoint hooks.
-
-    3. [30973e71] read-depth logging — read_depth/read_depth_report/
-       sections_read/verify_reads_for_task hooks. Auto-routed skeleton paths
-       now tracked in _skeleton_reads. read_skeleton/read_sections fixed to
-       handle skeleton-routed paths. sim_gate now uses read_depth() for
-       robust depth-aware blocking.
-
-    Remaining (future sessions):
-    - Incremental sim workflow skill (not a hook — structural/protocol change)
-
-    Nothing else outstanding at the infrastructure layer.
+    Accord propagation COMPLETE (aa73b868). Combat §4 COMPLETE (de2c895d).
+    Next pending GODOT-IMPACT items: Knot formation, RM Presence markers,
+    Co-Movement card mechanics, Phase 3 fixes, Simulation framework, Phase 5 schemas.
   blockers: []
 commits:
-  - d84d1e95: "[infrastructure] sim_gate + sim_fabrication_check"
-  - 8d09412b: "[infrastructure] checkpoint protocol — 3-tier context gate"
-  - 30973e71: "[infrastructure] read-depth logging + read_skeleton fix"
+  - 44cb4a1e: "[editorial] 2.14a Ministry Census — ED-671"
+  - 6e1d27ac: "[editorial] 3.6a Post-Coup Succession — ED-674"
+  - 436bbde5: "[editorial] 1.5 Faction Collapse Exit — ED-675"
+  - 8ee5688c: "[editorial] 8.8a Niflhel Intel Output — ED-679"
+  - 4d69e699: "[editorial] P2 batch: ED-670/672/673/676/677/678"
+  - b53fab72: "[fix] ED-672 ledger text"
+  - aa73b868: "[sync] Accord propagation — valoria-game (4 files, ACCORD_MAX fix)"
+  - de2c895d: "[sync] CombatLogic.gd — PP-247 priority order, round orchestration"
 resolutions_this_session:
-  - "read_depth/read_depth_report/sections_read/verify_reads_for_task added to github_ops"
-  - "Auto-skeleton routing now records to _skeleton_reads for read_depth lookups"
-  - "read_files_graphql records full reads for non-design / force_full paths"
-  - "read_sections records section index reads, promotes to full when all headings read"
-  - "sim_gate rewritten to use read_depth() instead of fragile string-match"
-  - "Fixed read_skeleton/read_sections lookup for skeleton-routed paths"
-  - "All 7 read-depth tests + 7 regression tests pass"
-open_items:
-  - "canonical_sources.yaml has malformed '- file:' block (pre-existing, not this session)"
-  - "Incremental sim workflow skill — future session"
-  - "sim_v2 (valoria_sim_v2.py) discarded — mechanically invalid. Next sim build must use sim_gate protocol from first line of code."
-p1_blocker_count: 0
+  - "10/10 editorial items resolved (4 P1 + 6 P2). 4/4 system validations PASS."
+  - "Phase 6: Accord propagation. TerritoryData +accord, 17 territories §2.1 values, SettingState tracker, Constants ACCORD_MAX 5→3 + 6 tier constants."
+  - "Phase 6: CombatLogic.gd — combat round orchestration. CombatantState, DeclaredAction (PP-247 priority), resolve_round (Strike/Feint/Disarm/Escape/Leap priority sort), damage formula (PP-232), wound computation (ED-694), Desperate Strike/Parry/Full Guard/Disengage, consequence emission."
+open_items: []
+P1-BLOCKER count: 0
