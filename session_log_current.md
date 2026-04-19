@@ -1,20 +1,31 @@
-# Session Log — 2026-04-18 (continued)
-last_stage: System validation complete — all editorial + system validation PASS
+# session_log_current.md
+last_stage: sim_gate + sim_fabrication_check hooks deployed
 next_action:
-  skill: Phase 5 — Godot implementation prep
+  skill: infrastructure
   description: >
-    All P1/P2 editorial items resolved (10/10). System validations complete (4/4).
-    Derived stats confirmed (provisional to confirmed). Campaign sim ready at design layer.
+    New hooks live in valoria_hooks.py (d84d1e95). sim_gate() requires canonical
+    sources fetched at full depth AND a verification ledger at
+    /home/claude/sim_verification_ledger.json before any sim work.
+    sim_fabrication_check() catches uncited mechanical constants at commit time.
+    
+    BACKGROUND (this session): Full audit of valoria_sim_v2.py against canonical
+    sources revealed 24 correct / 15 partial / 8 wrong / 5 fabricated / 19
+    missing mechanical assumptions. Root cause: sim was written from skeletons
+    (section titles only) instead of fully read canonical design docs. Victory
+    conditions were wholly fabricated. See /mnt/user-data/outputs/sim_v2_audit.md
+    (not committed — audit artifact only).
+    
+    The sim itself (valoria_sim_v2.py) is discarded — mechanically invalid.
+    Next sim build must use sim_gate() protocol from first line of code.
   blockers: []
 commits:
-  - 44cb4a1e: "[editorial] 2.14a Ministry Census — ED-671"
-  - 6e1d27ac: "[editorial] 3.6a Post-Coup Succession — ED-674"
-  - 436bbde5: "[editorial] 1.5 Faction Collapse Exit — ED-675"
-  - 8ee5688c: "[editorial] 8.8a Niflhel Intel Output — ED-679"
-  - 4d69e699: "[editorial] P2 batch: ED-670/672/673/676/677/678"
-  - b53fab72: "[fix] ED-672 ledger text"
-  - pending: "[simulation] System validation"
+  - d84d1e95: "[infrastructure] sim_gate + sim_fabrication_check"
 resolutions_this_session:
-  - "10/10 editorial items resolved (4 P1 + 6 P2). 4/4 system validations PASS."
-open_items: []
-P1-BLOCKER count: 0
+  - "Audit of sim_v2 completed — documented all mechanical errors"
+  - "sim_gate() hook built and tested (9 test cases pass)"
+  - "sim_fabrication_check() hook built and wired into pre_commit_gate"
+  - "YAML fallback parser for malformed canonical_sources.yaml"
+open_items:
+  - "canonical_sources.yaml has malformed '- file:' block appended (pre-existing)"
+  - "Pending infrastructure: context flush at 60%, read-depth logging, incremental sim skill"
+p1_blocker_count: 0
