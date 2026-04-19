@@ -170,7 +170,10 @@ Choose mode before rolling. One deployment per season.
 **Assassination mode:** Intel vs target's Intel +2 → Overwhelming: Non-Player Character eliminated, no evidence; Success: eliminated, evidence trail; Partial: wounded, evidence trail; Failure: operative captured, full exposure, Niflhel Stability −2.
 Long-term cost: each Quiet deployment this season: Thread Tension +0.5 (cumulative).
 
-### Restoration Movement — Community Weaving
+### Restoration Movement — Community Weaving [SUPERSEDED by PP-616]
+
+> **SUPERSEDED:** This spec is superseded by `params/threadwork.md` PP-616 (Community Organizing — Canonical Pool). PP-616 unifies all Thread operations under a single pool formula: `(Spirit × 2) + History + TPS`, supersedes the Influence-pool framing, replaces Thread Tension effect with direct RS effect, and removes the Domain Action framing ("Not a Domain Action — a Thread operation"). Co-Movement card draw per P-01 remains canonical. Retained below for patch-history reference only — do not implement.
+
 Roll: Influence vs Ob = Thread Tension ÷ 20 (round up).
 Requires: at least one practitioner with Thread Sensitivity (TS) 30+ affiliated with the Restoration Movement.
 | Degree | Result |
@@ -237,7 +240,9 @@ Trigger: Mandate ≥ 4 AND Domain Action directly challenges faction core instit
 | Appease | Before roll | Action cancelled | Mandate −1 |
 NPC: Appease if Mandate ≥ 4 AND Stability ≤ 3.
 
-## Community Weaving — Procedure (PP-195) [PROVISIONAL]
+## Community Weaving — Procedure (PP-195) [SUPERSEDED by PP-616]
+
+> **SUPERSEDED:** This procedure is superseded by `params/threadwork.md` PP-616 (Community Organizing — Canonical Pool). PP-616 changes: (1) pool formula from `Mandate + History` to `(Spirit × 2) + History + TPS` unifying all Thread operations; (2) removes Domain Action framing — Community Organizing is a Thread operation, not a DA ("One per contact window round. Not a Domain Action."); (3) removes the Failure → Mandate −1 consequence. Mandate ≥ 1 prerequisite retained (Mending Mandate). The [PROVISIONAL] tag is removed — PP-616 is final. Retained below for patch-history reference only — do not implement.
 
 Revolution Domain Action. Pool: Mandate (as dice) + History, TN 7, Ob 3. Prerequisite: Mandate ≥ 1.
 | Degree | RS Effect | Other |
