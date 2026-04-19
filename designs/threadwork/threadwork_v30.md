@@ -41,7 +41,15 @@ Thread perception is settlement-modulated: +1 Ob in Cathedral settlements (rende
 
 > **Mass battle Rendering Stability cost note (ST-TW-03):** **Finding from sim_x_03_massbattle_thread.md**
 **[DESIGN NOTE]**
-**[STRUCK — campaign_architecture_v1 §3.1]** The ×3 RS multiplier is replaced by flat −1 per battle. A practitioner performing Thread operations in mass battle pays the standard per-operation Coherence cost (−1/op at Relational+, 0 for Mending per asymmetry) but RS drain from battle is a flat −1 regardless of operation count. This makes Thread in battle a meaningful choice rather than strategically suicidal.
+**[STRUCK — campaign_architecture_v1 §3.1]** The ×3 RS multiplier is replaced by a flat additive model:
+
+- **Standard Mass Battle:** −1 MS per battle, regardless of scale or outcome.
+- **Cataclysmic Mass Battle** (player-tagged at scene setup, extraordinary circumstances): −2 MS.
+- **Mass Battle in destabilized substrate** (MS ≤ 10): −1 MS base, plus Stability Check (Ob 3) — failure adds −1 MS (maximum −2/battle in destabilized conditions).
+
+The flat model makes warfare cost predictable and cumulative. Three battles per season = −3 MS. No spikes. The player can see degradation coming and choose to stop fighting. The Stability Check at MS ≤ 10 preserves the sense that warfare near the tipping point is especially dangerous — chance-based, not multiplicative.
+
+A practitioner performing Thread operations in mass battle pays the standard per-operation Coherence cost (−1/op at Relational+, 0 for Mending per asymmetry) but RS drain from battle is the flat −1 regardless of operation count. This makes Thread in battle a meaningful choice rather than strategically suicidal.
 
 ### TTRPG ONLY
 - Part 3: Coherence (10→0) — personal practitioner track; no BG equivalent
@@ -426,10 +434,14 @@ Game Master determines domain type when Lock is applied.
 
 | Degree | Outcome |
 |---|---|
-| Overwhelming | Substrate restored. Gap closes cleanly. Rendering Stability +2 (strain released). Coherence −1 (base cost; inclusive of §3.2). Mended area +1 Ob to future Gap formation in this zone for 1 season. |
-| Success | Substrate restored. Gap closes. Rendering Stability +1. Coherence −1 (base cost; inclusive of §3.2). |
-| Partial | Gap reduced one severity category. Rendering Stability unchanged. Coherence −1 (cap). Second Mending required. |
-| Failure | Mending fails. Gap unchanged. Coherence −1 (cap). Rendering Stability −2. |
+| Overwhelming | Substrate restored. Gap closes cleanly. Rendering Stability +2 (strain released). Coherence: 0 (Mending is aligned work — no rendering damage). Mended area +1 Ob to future Gap formation in this zone for 1 season. |
+| Success | Substrate restored. Gap closes. Rendering Stability +1. Coherence: 0. |
+| Partial | Gap reduced one severity category. Rendering Stability unchanged. Coherence: 0. Second Mending required. |
+| Failure | Mending fails. Gap unchanged. Coherence: 0. Rendering Stability −2. |
+
+**Mending Coherence Asymmetry:** Mending never costs Coherence. A practitioner who Mends is restoring the substrate's intelligible face — working with the rendering, not against it. This is the philosophical distinction between Mending and all other Thread operations: Pull, Weave, Lock, and Dissolution all suspend the practitioner's own rendering (layer 2) to act on another thread's rendering. Mending does not suspend — it supports. The practitioner's rendering is continuous throughout. This is why the Edeyja can Mend indefinitely without personal degradation, and why Mending is the only Thread operation that is unconditionally good for the world.
+
+**Seasonal Mending Fatigue:** Each consecutive Mending in the same season (not scene — season) adds +1 Ob cumulative. A practitioner who Mends 4 times in one season rolls the fourth at +3 Ob. Resets each season. The work is tiring, not corrosive — a surgeon can operate all day without moral injury, but their hands get tired.
 
 **Mending co-movement profile:**
 
