@@ -1,5 +1,5 @@
 <!-- version: v1.0 | source: designs/fieldwork/fieldwork_v30.md | last_updated: 2026-04-13 -->
-<!-- PATCHES APPLIED: PP-575 (initial), PP-576 (audit), PP-577 (transitions), PP-578 (threadwork), PP-579 (ontological), PP-580 (extended), PP-581 (P1 resolution), PP-582 (fidelity) -->
+<!-- PATCHES APPLIED: PP-575 (initial), PP-576 (audit), PP-577 (transitions), PP-578 (threadwork), PP-579 (ontological), PP-580 (extended), PP-581 (P1 resolution), PP-582 (fidelity), PP-632 (Disposition redesign + Knot system) -->
 
 # params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing)
 
@@ -32,7 +32,7 @@ Pool maximum: 24D (Attribute 7, History 7: (7×2) + (7+3) = 24)
 | 0 | Surface | None | Auto |
 | 1 | Settled | Cog ≥ 2 or local History | 1 |
 | 2 | Hidden | Cog ≥ 3 or Att ≥ 3 | 2 |
-| 3 | Buried | TS ≥ 10 (explore/invest) or Disposition +3 (social) | 3 |
+| 3 | Buried | TS ≥ 10 (explore/invest) or Disposition ≥ floor(Bonds/2)+1 − 1 (social) | 3 |
 | 4 | Liminal | TS ≥ 30 | 5 |
 | 5 | Unintelligible | TS ≥ 50; Coherence check Ob 2 | 8 |
 
@@ -116,26 +116,59 @@ Evidence: +2 (Success), +3 (Overwhelming).
 
 Mending arc: severity reduction yields +1/+2/+2/+3 across four reductions.
 
-## Disposition Track
-Range: −3 to +5. Asymmetric per-NPC per-PC.
-| Value | Label | Ob Modifier | Info Gate |
-|-------|-------|-------------|-----------|
-| −3 | Hostile | +3 | Refuses interaction |
-| −2 | Suspicious | +2 | Minimal |
-| −1 | Wary | +1 | Surface |
-| 0 | Neutral | +0 | Surface |
-| +1 | Interested | +0 | Settled |
-| +2 | Friendly | −1 | Hidden |
-| +3 | Trusting | −1 | Buried |
-| +4 | Devoted | −2 | Liminal |
-| +5 | Bonded | −2 | Knot candidate |
+## Disposition Track (PP-632)
+Range: −4 to floor(Bonds/2)+1. Asymmetric per-NPC per-PC.
 
-Starting: same faction +1, allied 0, neutral 0/−1, rival −1/−2, hostile −2/−3, Reputation 3+ → +1.
+| Bonds | Max Disposition |
+|-------|----------------|
+| 1 | +1 |
+| 2–3 | +2 |
+| 4–5 | +3 |
+| 6–7 | +4 |
+
+**Ob rule: effective Ob = max(1, base Ob − Disposition).** Direct subtraction; no stepped table.
+Negative Disposition adds difficulty. Positive Disposition reduces it. Floor 1 always applies.
+Impress is exempt (it produces starting Disposition; Disposition is not yet established).
+
+| Value | Label | Info Gate |
+|-------|-------|-----------|
+| −4 | Hostile | Refuses interaction. Violence possible. |
+| −3 | Suspicious | Minimal cooperation. |
+| −2 | Wary | Guarded. Surface only. |
+| −1 | Cool | Cautious. Surface only. |
+| 0 | Neutral | Standard. Surface. |
+| +1 | Interested | Settled information. |
+| +2 | Friendly | Hidden information. |
+| +3 | Trusting | Buried information. |
+| +4 | Devoted | Liminal information. Knot threshold at Bonds 6–7. |
+
+**Starting Disposition — lifepath derivation (PP-632):**
+For each relevant lifepath element, assign ±0.5 based on alignment/conflict with NPC faction, culture, and role. Sum, take floor, clamp to [−4, floor(Bonds/2)+1].
+- Same birthplace/cultural region: +0.5
+- Same occupation/guild/trade: +0.5
+- Same faction (loose): +0.5 / (full member): +1
+- Rival faction: −0.5 / (actively opposed): −1
+- Opposing lineage or family conflict: −0.5
+- Shared formative history (war, disaster, institution): +0.5
+
 Shift by degree: Failure −1, Partial +0, Success +1, Overwhelming +2.
-Decay: ≥ +3 decays −1/season without contact. ≤ +2 stable.
-Recovery from ≤ −2: requires narrative event before social actions.
+Decay: > +2 decays −1/season without contact. ≤ +2 stable indefinitely.
+Recovery from ≤ −3: requires significant narrative event before social actions.
 Post-Contest: winner Disposition +1 with adjudicator, loser −1.
 NPC learns investigation revealed their secrets: −2 (exception: +1 if NPC wanted truth).
+
+
+## Knot System (PP-632 — see params/threadwork.md for full mechanics)
+Knots are being-with (Mitsein), not Thread operations. Any character. TS not required.
+
+Pool = (Bonds × 2) + 3. Max count = floor(Bonds/2)+1.
+Tiers: Close (5pts) / Medium (2pts) / Loose (1pt).
+Formation: max Disposition + Connect roll (Ob = tier, Disposition subtracted, floor 1).
+Effects: +1D social with partner; no Disposition decay; shared Composure buffer;
+  relational contagion (P-12) for practitioners; Knot-mediated Thread-Read (TS 30+, +1 strain/use).
+Rupture: Disposition →−4; Composure damage = tier cost.
+Loss: Disposition track removed; Coherence −1; Composure damage = tier cost.
+Full mechanics: params/threadwork.md §Knot Mechanics.
 
 ## Sincerity Gate
 Trigger: GM-called when Belief contradicts genuine engagement.
@@ -143,7 +176,7 @@ Pool: Spirit. TN: 7. Ob: 1.
 Failure: Disposition unchanged or −1. Success: normal result.
 
 ## Gift/Bribe
-No roll. Starting Disposition +1. Once per NPC per season. Fails at Disposition ≤ −2.
+No roll. Starting Disposition +1. Once per NPC per season. Fails at Disposition ≤ −3 (Suspicious/Hostile NPCs reject gifts from strangers).
 
 ## Knot-Mediated Remote Thread-Read (§2.6)
 Pool: standard Thread-Read. TN: 7. Ob: Personal (2).
