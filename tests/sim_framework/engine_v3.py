@@ -172,8 +172,20 @@ def init_state(seed: int = 42) -> GameState:
     # Territories
     for tid, (name, pv, sw, pr, ctrl, accord, pt) in TERRITORIES.items():
         gs.territories[tid] = Territory(tid, name, pv, sw, pr, ctrl, accord, pt)
-    # T9 starts with Cathedral
-    gs.territories['T9'].church_building = 3  # [canonical: Cathedral City]
+    # Church infrastructure starting state
+    # [canonical: Jordan — most settlements have a chapel at minimum]
+    for tid, t in gs.territories.items():
+        if tid == 'T9':
+            t.church_building = 3  # [canonical: Cathedral City]
+            t.templar = True       # Cathedral garrison
+        elif tid in ('T1', 'T3', 'T8', 'T14'):
+            t.church_building = 2  # Church building in major territories
+        elif tid in ('T4', 'T11', 'T12', 'T13', 'T15'):
+            t.church_building = 0  # Varfell/remote territories — no Church presence
+        elif tid in ('T6',):
+            t.church_building = 0  # Remote southern — minimal Church reach
+        else:
+            t.church_building = 1  # Chapel in standard territories
     # Factions
     # [canonical: params/bg/core.md §Batch Card Hand + §Domain Expertise]
     STARTING_HANDS = {
@@ -359,32 +371,85 @@ def faction_ai_church(gs: GameState):
                 f.stability = min(7, f.stability + 1)
             return
 
-    # P4: Expand Piety — Consul card
-    if has_card(f, 'Consul'):
-        targets = [t for t in gs.territories.values() if t.controller == 'Church' and t.pt < 5]
-        if targets:
-            play_card(f, 'Consul')
-            target = min(targets, key=lambda t: t.pt)
-            net, deg = check(f.influence, max(1, target.pt // 2 + 1))
+    # P2: Heresy Investigation — target Thread-active faction leaders
+    # [canonical: Jordan — Vaynard faces heresy charges for Thread work]
+    # [canonical: params/bg/npc_priority_trees.md Church P2]
+    if has_card(f, 'Pontifex'):
+        # Target Varfell first (Thread-active), then any faction with low PT in their capital
+        varfell = gs.factions.get('Varfell')
+        if varfell and varfell.active and not varfell.submitted:
+            play_card(f, 'Pontifex')
+            # Heresy Investigation: Church Influence vs target Stability
+            net, deg = check(f.influence, max(1, varfell.stability // 2 + 1))
             if deg == 'Overwhelming':
-                target.pt = min(5, target.pt + 1)
+                varfell.mandate = max(0, varfell.mandate - 1)
+                varfell.stability = max(0, varfell.stability - 1)
+                gs.log.append(f"S{gs.season}: Church HERESY charges against Varfell (OW) — Mandate-1, Stability-1")
             elif deg == 'Success':
-                target.accord = min(3, target.accord + 1)
+                varfell.mandate = max(0, varfell.mandate - 1)
+                gs.log.append(f"S{gs.season}: Church heresy investigation of Varfell — Mandate-1")
 
-    # Senator: diplomacy (abstract)
+    # P3: Church infrastructure investment — upgrade buildings, deploy Templars/Inquisitors
+    # [canonical: Jordan — Church regularly invests in chapel→church→cathedral, Templars, Inquisitors]
+    if has_card(f, 'Consul'):
+        play_card(f, 'Consul')
+        # Upgrade priority: highest-PT non-maxed territory (bias toward existing Church presence)
+        upgrade_targets = sorted(
+            [t for t in gs.territories.values()
+             if t.church_building < 3 and t.controller != 'Varfell'
+             and not (t.controller == 'Hafenmark' and gs.factions.get('Hafenmark') and gs.factions['Hafenmark'].mandate >= 4)  # Baralta blocks Church building
+             and t.id != 'T15'],
+            key=lambda t: (-t.pt, -t.church_building)  # favor high PT, then upgrade existing
+        )
+        if upgrade_targets:
+            target = upgrade_targets[0]
+            # Upgrade building: Influence vs Ob = current_level + 1
+            net, deg = check(f.influence, target.church_building + 1)
+            if deg in ('Success', 'Overwhelming'):
+                target.church_building = min(3, target.church_building + 1)
+                bnames = {1: 'Chapel', 2: 'Church', 3: 'Cathedral'}
+                gs.log.append(f"S{gs.season}: Church builds {bnames[target.church_building]} in {target.name}")
+                # PT boost from building
+                if target.church_building >= 2 and target.pt < 5:
+                    target.pt = min(5, target.pt + 1)
+
+    # P3b: Deploy Templar — military presence biased toward Cathedrals > Churches
+    # [canonical: Jordan — increasing Templar presence biased toward cathedrals]
+    if has_card(f, 'Legionary') and f.military >= 2:
+        templar_targets = sorted(
+            [t for t in gs.territories.values()
+             if not t.templar and t.church_building >= 2 and t.id != 'T15'],
+            key=lambda t: -t.church_building  # Cathedral first
+        )
+        if templar_targets:
+            play_card(f, 'Legionary')
+            target = templar_targets[0]
+            target.templar = True
+            gs.log.append(f"S{gs.season}: Church deploys Templar Station in {target.name}")
+        else:
+            # No Templar targets — use for military defense/reclaim
+            lost = [t for t in gs.territories.values() if t.controller in ('Uncontrolled', 'LocalMilitia') and t.id != 'T15']
+            if lost:
+                play_card(f, 'Legionary')
+                attempt_conquest(gs, f, lost[0])
+
+    # P3c: Deploy Inquisitor — suppresses RM, raises Seizure Ob for rivals
+    # [canonical: Jordan — Inquisitors suppress RM and target faction leadership]
     if has_card(f, 'Senator'):
         play_card(f, 'Senator')
-
-    # Legionary: reclaim uncontrolled or defend
-    if has_card(f, 'Legionary') and f.military >= 2:
-        lost = [t for t in gs.territories.values() if t.controller in ('Uncontrolled', 'LocalMilitia') and t.id != 'T15']
-        if lost:
-            play_card(f, 'Legionary')
-            attempt_conquest(gs, f, lost[0])
+        inq_targets = sorted(
+            [t for t in gs.territories.values()
+             if not t.inquisitor and t.church_building >= 1 and t.id != 'T15'
+             and t.controller != 'Varfell'],  # can't operate in hostile territory
+            key=lambda t: (-t.church_building, t.pt)
+        )
+        if inq_targets:
+            target = inq_targets[0]
+            target.inquisitor = True
+            gs.log.append(f"S{gs.season}: Church deploys Inquisitor in {target.name}")
 
     # Church Mass Seizure declaration (probabilistic)
     # [canonical: victory_v30 §3.2 — P(declare) = ((CI-60)/40)^3.3, CI ≥ 60]
-    # Exponential curve: 1% at CI 70, 10% at CI 80, 39% at CI 90, 100% at CI 100
     if gs.ci >= 60 and not gs.church_seizure_fired:
         p_declare = min(1.0, max(0.0, ((gs.ci - 60) / 40.0) ** 3.3))
         if random.random() < p_declare:
@@ -416,6 +481,10 @@ def attempt_mass_seizure(gs: GameState):
     for target in targets:
         # [canonical: victory_v30 §3.2 — Ob = 10 - PT + church_infra_modifier (modifier is negative)]
         ob = max(1, 10 - target.pt + target.church_infra_modifier)
+        # [canonical: Jordan — Baralta suppresses Church in Hafenmark territory]
+        haf = gs.factions.get('Hafenmark')
+        if haf and haf.active and target.controller == 'Hafenmark' and haf.mandate >= 4:
+            ob += 3  # constitutional resistance to Church seizure
         net, deg = check(pool, ob)
 
         if deg in ('Overwhelming', 'Success'):
@@ -457,7 +526,11 @@ def attempt_conquest(gs: GameState, attacker: Faction, target: Territory):
         return True
     # [canonical: params/bg/tc_seizure.md — Battle Ob = floor(defender Military / 2) + 1]
     battle_ob = max(1, defender.military // 2 + 1)
-    net, deg = check(attacker.military, battle_ob)
+    atk_pool = attacker.military
+    # [canonical: Jordan — Hafenmark smithing/equipment advantage]
+    if attacker.name == 'Hafenmark':
+        atk_pool += 1  # equipment bonus from mines
+    net, deg = check(atk_pool, battle_ob)
     if deg in ('Success', 'Overwhelming'):
         if target.id in defender.territories:
             defender.territories.remove(target.id)
@@ -586,6 +659,13 @@ def faction_ai_crown(gs: GameState):
 def faction_ai_hafenmark(gs: GameState):
     f = gs.factions['Hafenmark']
     if not f.active: return
+
+    # Hafenmark Wealth advantage — mine income
+    # [canonical: Jordan — fantastic material wealth from mines]
+    # +1 Wealth per 2 territories held (mine network), capped at 7
+    mine_bonus = min(2, len(f.territories) // 3)
+    if mine_bonus > 0 and f.wealth < 7:
+        f.wealth = min(7, f.wealth + mine_bonus)
 
     # P1: Survival — Consul card
     if f.stability <= 2 and has_card(f, 'Consul'):
