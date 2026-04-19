@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 700
+# next_id: 701
 
 
 
@@ -9,6 +9,15 @@
 
 
 
+
+
+
+  - id: ED-700
+    date: 2026-04-18
+    description: "Phase 4.0-4.1: Simulation framework architecture + state initialization. state.py (game state data structures, 34 settlements, 14 NPCs, 4+4 factions). engine.py (season loop, 10 policies, faction AI, accounting). 50-run baseline validates architecture. 25/130 features — infill needed."
+    status: resolved
+    severity: P1
+    affects: [tests/sim_framework/state.py, tests/sim_framework/engine.py]
 
 
   - id: ED-699

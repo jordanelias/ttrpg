@@ -33,6 +33,7 @@
 | ED-588 | PT ≤ 3 (revised from PT ≤ 1). Resolved in victory_v30 §3.5 (2026-04-16). |
 | ED-589 | Presence marker mechanics defined: Community Organizing Domain Action, cap 5/territory, Church/Crown suppression rules. victory_v30 §3.5 updated. |
 | ED-612 | Guilds intentionally have no solo victory condition. Guilds are an NPC faction/tool, not a protagonist faction. Confirmed in throughline analysis. |
+| PHASE-4-FRAMEWORK | Simulation framework operational — state.py + engine.py, 50-run baseline validates architecture, 25/130 features, infill needed |
 | AUD-SET-01/03 | Settlement economy — income differentiated, Order→Accord proportional, siege attrition calibrated |
 | AUD-VIC-02 | RM victory — simplified 5/5 wins, but omits Church counter-pressure. Full calibration Phase 4. |
 | AUD-NPC-03 | Priority tree cross-faction sim — 10 seasons, trees produce faction-appropriate behavior, repetition intentional |
