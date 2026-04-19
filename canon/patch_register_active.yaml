@@ -333,3 +333,22 @@ patches:
     - designs/provincial/faction_succession_split_v30.md
   status: applied
   applied_commit: pending
+- id: PP-667
+  date: 2026-04-19
+  severity: P2
+  description: "Gap sweep — 3 real gaps from canon_audit §4 resolved (mine income
+    rate canonicalized; Hafenmark food vulnerability and Crown Einhir suppression
+    confirmed as non-mechanics), 26 OPEN ITEMS across 6 design docs resolved or
+    classified (9 settlement_layer, 9 military_layer, 7 peninsular_strain, 9
+    faction_layer, ED-311 closed, threadwork PROVISIONALs deferred as scene-layer
+    scope). Editorial ledger pressure managed by archiving ED-540..ED-659 batch
+    (31 entries) to free ~1400 tokens. Full resolution document: designs/audit/gap_resolution_2026-04-19.md.
+    Propagation to source-doc OPEN ITEMS tables deferred."
+  finding_id: USER-DIRECTED
+  source: user
+  affects:
+    - designs/audit/gap_resolution_2026-04-19.md
+    - canon/editorial_ledger.yaml
+    - archives/editorials/editorial_ledger_archive_601_800.yaml
+  status: applied
+  applied_commit: pending

@@ -4,191 +4,6 @@
 
 entries:
 
-  - id: ED-542
-    date: 2026-04-14
-    description: "Battle consequences propagation gap — mass_battle_v30.md missing section."
-    status: open
-    severity: P2
-
-  - id: ED-586
-    date: 2026-04-16
-    description: "Arc behavioral state vs Priority 6 contradiction at Mandate < 3. Constrained sub-arc proposed."
-    status: open
-    severity: P2
-
-  - id: ED-587
-    date: 2026-04-16
-    description: "Stability Crisis Zoom In trigger absent. Proposed: Stability drops <= 2 OR drops >= 2 i..."
-    status: open
-    severity: P2
-
-  - id: ED-615
-    date: 2026-04-16
-    description: "Schoenland Treaty terms undefined. What does Schoenland receive from Crown Treaty?"
-    status: open
-    severity: P2
-
-  - id: ED-616
-    date: 2026-04-16
-    description: "No Parliamentary mechanic blocks Tribune Domain Actions. Intelligence Embargo motion proposed."
-    status: open
-    severity: P2
-
-  - id: ED-617
-    date: 2026-04-16
-    description: "Grand Contest Recall (+2D): once per cited source per contest, not per exchange."
-    status: open
-    severity: P2
-
-  - id: ED-618
-    date: 2026-04-16
-    description: "Torben Conviction emergence window: formally Seasons 1-8."
-    status: open
-    severity: P2
-
-  - id: ED-619
-    date: 2026-04-16
-    description: "GM advisory: 3-active-Obligation cap for tractability."
-    status: open
-    severity: P3
-
-  - id: ED-621
-    date: 2026-04-16
-    description: "BG Parliamentary Vote: lobby offset can pre-determine outcome. Starting track restriction proposed."
-    status: open
-    severity: P2
-
-  - id: ED-622
-    date: 2026-04-16
-    description: "Varfell cannot file Parliamentary motions (no Senator card). Explicit note needed."
-    status: open
-    severity: P2
-
-  - id: ED-623
-    date: 2026-04-16
-    description: "IP advancement too slow."
-    status: open
-    severity: P2
-
-  - id: ED-625
-    date: 2026-04-16
-    description: "Church Excommunication procedure not documented."
-    status: open
-    severity: P2
-
-  - id: ED-626
-    date: 2026-04-17
-    description: "Accord/Order relationship in peninsular_strain_v1."
-    status: open
-    severity: P2
-
-  - id: ED-627
-    date: 2026-04-17
-    description: "Thread-settlement interaction gaps."
-    status: open
-    severity: P2
-
-  - id: ED-630
-    date: 2026-04-17
-    description: "Coup Counter as moral ledger: dual-track advancement proposal."
-    status: open
-    severity: P2
-
-  - id: ED-631
-    date: 2026-04-17
-    description: "Heresy Proceedings resolution time unspecified."
-    status: open
-    severity: P2
-
-  - id: ED-632
-    date: 2026-04-17
-    description: "Shadow Renown: referenced in faction_politics_expanded (REN-03) but no implementation —..."
-    status: open
-    severity: P1
-
-  - id: ED-633
-    date: 2026-04-17
-    description: "Deniability Debt (Riskbreaker): referenced in faction_politics_expanded §2.2 as 'stage1..."
-    status: open
-    severity: P1
-
-  - id: ED-640
-    date: 2026-04-17
-    description: "Hafenmark Militia sub-rank ladder (equivalent to Löwenritter Knight, internal to Hafenm..."
-    status: open
-    severity: P2
-
-  - id: ED-642
-    date: 2026-04-17
-    description: "Guild Grand Guildmaster rank (Std 6) — confirm whether this rank exists or is omitted p..."
-    status: open
-    severity: P2
-
-  - id: ED-644
-    date: 2026-04-17
-    description: "CV≡PT terminology: same per-territory stat. Full rename (conviction_track_v30 → piety_t..."
-    status: open
-    severity: P2
-
-  - id: ED-645
-    date: 2026-04-17
-    description: "T15 Southernmost / Askeheim reconciliation (naming conflict in cross-references)."
-    status: open
-    severity: P2
-
-  - id: ED-648
-    date: 2026-04-17
-    description: "Crown Ministry of Universities (Hochschule) — proposed new Ministry alongside existing ..."
-    status: open
-    severity: P2
-
-  - id: ED-649
-    date: 2026-04-17
-    description: "College of Prelates: 2 additional Prelates need naming (Standing 5, not Cardinal-rank)."
-    status: open
-    severity: P2
-
-  - id: ED-650
-    date: 2026-04-17
-    description: "Succession rivals need naming and Stance Triangles: Crown Cadet Claimant, Varfell Vayna..."
-    status: open
-    severity: P2
-
-  - id: ED-651
-    date: 2026-04-17
-    description: "Markamt Minister — explicit name and Stance Triangle needed."
-    status: open
-    severity: P2
-
-  - id: ED-652
-    date: 2026-04-17
-    description: "Rank dismissal mechanics: cost of re-entry at Std 1→0; Dishonored flag persistence; han..."
-    status: open
-    severity: P2
-
-  - id: ED-655
-    date: 2026-04-17
-    description: "Ministry/Committee Position mechanic: uniform mechanic across Crown/Hafenmark/Church/Va..."
-    status: open
-    severity: P2
-
-  - id: ED-656
-    date: 2026-04-17
-    description: "Cross-rank advancement interaction: player holds Löwenritter sub-office rank AND Crown ..."
-    status: open
-    severity: P2
-
-  - id: ED-657
-    date: 2026-04-17
-    description: "Rank restoration after dismissal: what paths exist, and at what cost?"
-    status: open
-    severity: P2
-
-  - id: ED-658
-    date: 2026-04-17
-    description: "Warden Ladder integration with VTM Path B: Warden rank does not grant automatic Path B ..."
-    status: open
-    severity: P2
 
   - id: ED-660
     date: 2026-04-17
@@ -264,3 +79,24 @@ entries:
     status: open
     severity: P2
     source: PP-666
+
+  - id: ED-713
+    date: 2026-04-19
+    description: "Mine income rate resolved: Mine-type settlement yields floor(Prosperity/2) Wealth/year to controlling faction. Guild management +1, Trade Network token +1. Cap 4 Wealth/Mine/year. See designs/audit/gap_resolution_2026-04-19.md §1.1 (PP-667)."
+    status: resolved
+    severity: P2
+    source: PP-667
+
+  - id: ED-714
+    date: 2026-04-19
+    description: "Hafenmark food vulnerability and Crown Einhir suppression DA — resolved as non-mechanics. Both exist only as worldbuilding texture. Existing mechanics (Trade Network, Heresy Investigation, Church AP, Parliamentary Motion) cover the design space. See designs/audit/gap_resolution_2026-04-19.md §1.2, §1.3 (PP-667)."
+    status: resolved
+    severity: P2
+    source: PP-667
+
+  - id: ED-715
+    date: 2026-04-19
+    description: "OPEN ITEMS sweep across settlement_layer, military_layer, peninsular_strain, faction_layer, victory_v30, threadwork_v30 — 26 items resolved, 5 superseded by PP-663/PP-666, 7 deferred to engine_v4 smoke-test, 10+ threadwork PROVISIONALs deferred as scene-layer scope. Propagation to source-doc OPEN ITEMS tables deferred to follow-up infrastructure commit. See designs/audit/gap_resolution_2026-04-19.md §2 (PP-667)."
+    status: resolved
+    severity: P2
+    source: PP-667

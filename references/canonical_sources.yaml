@@ -32,3 +32,8 @@ sources:
 # - Fractional province ownership: designs/provincial/fractional_province_ownership_v30.md
 # - Faction succession split: designs/provincial/faction_succession_split_v30.md
 # Status: PROVISIONAL — pending smoke-test before CANONICAL.
+
+# ── PP-667 Gap Sweep (2026-04-19) ────────────────────────────────────────
+# 3 real audit gaps resolved + 26 OPEN ITEMS across 6 design docs swept.
+# See designs/audit/gap_resolution_2026-04-19.md + ED-713, ED-714, ED-715.
+# Editorial ledger archival batch: ED-542..ED-658 moved to archive_601_800.

@@ -644,3 +644,194 @@
     description: "VTM-STRIKE residual cleanup (PP-664) — three files tombstone-bannered in PP-663 but body mechanics unedited. PP-664 patches faction_actions.md, npc_priority_trees.md, strategic_layer_v30.md."
     source: PP-664
     tags: [board_game, varfell, struck]
+
+  # ── 2026-04-19 archival batch ─────────────────────────────────────────
+  # Open entries ED-540..659 moved from active ledger to free headroom for
+  # ongoing gap-sweep work. All entries retain status: open. Audit trail
+  # preserved; re-promote to active ledger if/when resolution work begins.
+
+  - id: ED-542
+    date_raised: 2026-04-14
+    status: open
+    description: "Battle consequences propagation gap — mass_battle_v30.md missing section."
+    severity: P2
+
+  - id: ED-586
+    date_raised: 2026-04-16
+    status: open
+    description: "Arc behavioral state vs Priority 6 contradiction at Mandate < 3. Constrained sub-arc proposed."
+    severity: P2
+
+  - id: ED-587
+    date_raised: 2026-04-16
+    status: open
+    description: "Stability Crisis Zoom In trigger absent. Proposed: Stability drops <= 2 OR drops >= 2 i..."
+    severity: P2
+
+  - id: ED-615
+    date_raised: 2026-04-16
+    status: open
+    description: "Schoenland Treaty terms undefined. What does Schoenland receive from Crown Treaty?"
+    severity: P2
+
+  - id: ED-616
+    date_raised: 2026-04-16
+    status: open
+    description: "No Parliamentary mechanic blocks Tribune Domain Actions. Intelligence Embargo motion proposed."
+    severity: P2
+
+  - id: ED-617
+    date_raised: 2026-04-16
+    status: open
+    description: "Grand Contest Recall (+2D): once per cited source per contest, not per exchange."
+    severity: P2
+
+  - id: ED-618
+    date_raised: 2026-04-16
+    status: open
+    description: "Torben Conviction emergence window: formally Seasons 1-8."
+    severity: P2
+
+  - id: ED-619
+    date_raised: 2026-04-16
+    status: open
+    description: "GM advisory: 3-active-Obligation cap for tractability."
+    severity: P3
+
+  - id: ED-621
+    date_raised: 2026-04-16
+    status: open
+    description: "BG Parliamentary Vote: lobby offset can pre-determine outcome. Starting track restriction proposed."
+    severity: P2
+
+  - id: ED-622
+    date_raised: 2026-04-16
+    status: open
+    description: "Varfell cannot file Parliamentary motions (no Senator card). Explicit note needed."
+    severity: P2
+
+  - id: ED-623
+    date_raised: 2026-04-16
+    status: open
+    description: "IP advancement too slow."
+    severity: P2
+
+  - id: ED-625
+    date_raised: 2026-04-16
+    status: open
+    description: "Church Excommunication procedure not documented."
+    severity: P2
+
+  - id: ED-626
+    date_raised: 2026-04-17
+    status: open
+    description: "Accord/Order relationship in peninsular_strain_v1."
+    severity: P2
+
+  - id: ED-627
+    date_raised: 2026-04-17
+    status: open
+    description: "Thread-settlement interaction gaps."
+    severity: P2
+
+  - id: ED-630
+    date_raised: 2026-04-17
+    status: open
+    description: "Coup Counter as moral ledger: dual-track advancement proposal."
+    severity: P2
+
+  - id: ED-631
+    date_raised: 2026-04-17
+    status: open
+    description: "Heresy Proceedings resolution time unspecified."
+    severity: P2
+
+  - id: ED-632
+    date_raised: 2026-04-17
+    status: open
+    description: "Shadow Renown: referenced in faction_politics_expanded (REN-03) but no implementation —..."
+    severity: P1
+
+  - id: ED-633
+    date_raised: 2026-04-17
+    status: open
+    description: "Deniability Debt (Riskbreaker): referenced in faction_politics_expanded §2.2 as 'stage1..."
+    severity: P1
+
+  - id: ED-640
+    date_raised: 2026-04-17
+    status: open
+    description: "Hafenmark Militia sub-rank ladder (equivalent to Löwenritter Knight, internal to Hafenm..."
+    severity: P2
+
+  - id: ED-642
+    date_raised: 2026-04-17
+    status: open
+    description: "Guild Grand Guildmaster rank (Std 6) — confirm whether this rank exists or is omitted p..."
+    severity: P2
+
+  - id: ED-644
+    date_raised: 2026-04-17
+    status: open
+    description: "CV≡PT terminology: same per-territory stat. Full rename (conviction_track_v30 → piety_t..."
+    severity: P2
+
+  - id: ED-645
+    date_raised: 2026-04-17
+    status: open
+    description: "T15 Southernmost / Askeheim reconciliation (naming conflict in cross-references)."
+    severity: P2
+
+  - id: ED-648
+    date_raised: 2026-04-17
+    status: open
+    description: "Crown Ministry of Universities (Hochschule) — proposed new Ministry alongside existing ..."
+    severity: P2
+
+  - id: ED-649
+    date_raised: 2026-04-17
+    status: open
+    description: "College of Prelates: 2 additional Prelates need naming (Standing 5, not Cardinal-rank)."
+    severity: P2
+
+  - id: ED-650
+    date_raised: 2026-04-17
+    status: open
+    description: "Succession rivals need naming and Stance Triangles: Crown Cadet Claimant, Varfell Vayna..."
+    severity: P2
+
+  - id: ED-651
+    date_raised: 2026-04-17
+    status: open
+    description: "Markamt Minister — explicit name and Stance Triangle needed."
+    severity: P2
+
+  - id: ED-652
+    date_raised: 2026-04-17
+    status: open
+    description: "Rank dismissal mechanics: cost of re-entry at Std 1→0; Dishonored flag persistence; han..."
+    severity: P2
+
+  - id: ED-655
+    date_raised: 2026-04-17
+    status: open
+    description: "Ministry/Committee Position mechanic: uniform mechanic across Crown/Hafenmark/Church/Va..."
+    severity: P2
+
+  - id: ED-656
+    date_raised: 2026-04-17
+    status: open
+    description: "Cross-rank advancement interaction: player holds Löwenritter sub-office rank AND Crown ..."
+    severity: P2
+
+  - id: ED-657
+    date_raised: 2026-04-17
+    status: open
+    description: "Rank restoration after dismissal: what paths exist, and at what cost?"
+    severity: P2
+
+  - id: ED-658
+    date_raised: 2026-04-17
+    status: open
+    description: "Warden Ladder integration with VTM Path B: Warden rank does not grant automatic Path B ..."
+    severity: P2

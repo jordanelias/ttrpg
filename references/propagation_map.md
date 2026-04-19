@@ -146,3 +146,33 @@ If broken dependencies are found:
 - PV-recompute logic needed across victory_v30 win probability table (current figures assume whole-province control).
 - NPC behavior priority trees (npc_behavior_v30 §7) need succession-contest decision branches.
 - Smoke-test required for all three systems before moving from PROVISIONAL to CANONICAL.
+
+## 2026-04-19 — PP-667 Gap sweep + editorial ledger archival batch
+
+**Commit:** (this commit)
+**Scope:**
+- Resolve 3 real audit gaps from canon_audit §4.
+- Sweep OPEN ITEMS across 6 surveyed design docs — 26 resolutions logged.
+- Archive ED-540..ED-659 batch (31 entries) to archives/editorials/editorial_ledger_archive_601_800.yaml.
+
+**Gap resolutions (canon_audit §4):**
+- Mine income rate: Mine-type settlement yields floor(Prosperity/2) Wealth/year; Guild +1; Trade Network +1; cap 4.
+- Hafenmark food vulnerability: confirmed as worldbuilding-only; existing mechanics (Trade Network, Occupation Effects) cover the design space.
+- Crown Einhir suppression: confirmed as ambient worldbuilding; existing Heresy Investigation / Church AP / Parliament Motion suffice.
+
+**OPEN ITEMS sweep:**
+- settlement_layer §9: 9 items (2 deferred to smoke-test, 4 resolved, 1 superseded by PP-666, 2 out-of-scope/confirmed).
+- military_layer §5: 9 items (3 deferred, 6 resolved).
+- peninsular_strain §8: 7 items (1 superseded by PP-663, 6 confirmed/resolved).
+- faction_layer §10: 9 items (7 resolved, 2 deferred).
+- victory_v30 §11: ED-311 closed (resolved in-file by PP-663).
+- threadwork_v30: 10+ PROVISIONALs deferred as scene-layer / out-of-scope for videogame rebuild.
+
+**Registers:**
+- canon/editorial_ledger.yaml: archived ED-542..ED-658 batch (31 entries). Added ED-713, ED-714, ED-715 as resolution pointers.
+- archives/editorials/editorial_ledger_archive_601_800.yaml: appended archival batch with note.
+- canon/patch_register_active.yaml: PP-667 entry.
+- references/canonical_sources.yaml: co-file note.
+
+**Remaining work:**
+- Propagation to source-doc OPEN ITEMS tables (setting settlement_layer §9 ED-SETT-01 to RESOLVED etc.) deferred. This is a mechanical update across 6 files; best handled as an infrastructure commit after engine_v4 smoke-test confirms the resolutions stand.
