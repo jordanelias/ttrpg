@@ -272,21 +272,43 @@ def generate_ci(gs: GameState) -> int:
 # ═══════════════════════════════════════════════════════════════
 
 def check_victory(gs: GameState):
+    # [canonical: victory_v30 §0 — Universal Victory: all 15 playable territories controlled,
+    #  Accord ≥ 2, all rivals eliminated or submitted. Held 2 consecutive Accountings.]
+    # [canonical: editorial_decisions §7 — victory = control peninsula]
+    playable = [tid for tid in gs.territories if tid not in ('T15',)]  # T15 Askeheim, T16 not in play
+
     for fname, f in gs.factions.items():
         if not f.active or f.submitted:
             continue
-        # Check if this faction controls or dominates all others
-        all_controlled = True
+
+        # Check 1: all rival factions eliminated or submitted
+        rivals_clear = True
         for rival_name, rival in gs.factions.items():
             if rival_name == fname:
                 continue
             if rival.active and not rival.submitted:
-                all_controlled = False
+                rivals_clear = False
                 break
-        if all_controlled:
-            gs.winner = fname
-            gs.log.append(f"S{gs.season}: VICTORY — {fname} controls peninsula")
-            return
+        if not rivals_clear:
+            continue
+
+        # Check 2: all playable territories controlled by winner (directly or via submitted factions)
+        controlled = set(f.territories)
+        for sub_name, sub in gs.factions.items():
+            if sub.submitted and sub_name != fname:
+                controlled.update(sub.territories)
+        uncontrolled = [tid for tid in playable if tid not in controlled]
+        if uncontrolled:
+            continue
+
+        # Check 3: Accord ≥ 2 in all directly controlled territories
+        low_accord = [tid for tid in f.territories if gs.territories[tid].accord < 2]
+        if low_accord:
+            continue
+
+        gs.winner = fname
+        gs.log.append(f"S{gs.season}: VICTORY — {fname} controls peninsula ({len(f.territories)} territories)")
+        return
 
     # [canonical: params/bg/core.md — RS 0 = Rupture, shared loss]
     if gs.rs <= 0:
@@ -733,7 +755,18 @@ def run_season(gs: GameState):
     # [canonical: params/core.md §RS Baseline Decay — -1 per in-game year at Year-End]
     is_year_end = (gs.season % 4 == 0)
     if is_year_end:
-        gs.rs = max(0, gs.rs - 1)
+        # [canonical: params/bg/core.md §Warden Cooperation Effects]
+        # WC ≥ 2: RS decay rate halved (baseline -1 becomes -0.5, rounded down)
+        # WC = 3: RS +2/season at Accounting
+        if gs.wc >= 2:
+            pass  # halved: -0.5 rounds to 0 at Year-End
+        else:
+            gs.rs = max(0, gs.rs - 1)
+
+    # WC = 3: RS +2/season (every season, not just Year-End)
+    # [canonical: params/bg/core.md — WC 3: RS +2/season at Accounting]
+    if gs.wc >= 3:
+        gs.rs = min(100, gs.rs + 2)
 
     # Step 4c: Accord checks
     # [canonical: params/bg/phases.md Step 4c]

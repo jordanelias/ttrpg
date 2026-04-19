@@ -319,3 +319,14 @@ historical precedent analysis. Coalition dominance and institutional stalemate a
 intended design, validated by Bolshevik/ANC/Solidarity/Congress/CCP/Zapatista patterns.
 
 Composure formula propagated: Cha+6 → Cha×3 in params/contest.md (ED-694).
+
+## Engine v3 Fixes — 2026-04-19
+
+- Victory check: now requires territory control (all 15 playable) + Accord ≥ 2 + all rivals eliminated/submitted
+- RS recovery: WC ≥ 2 halves baseline decay, WC = 3 adds RS +2/season
+- False Church S11 victory (seed 2) eliminated
+
+Still blocking:
+- WC never advances (no Warden emergence mechanic) → RS recovery never fires
+- Uncontrolled territories accumulate — no faction reclaims them
+- TC→CI/TCV→PV propagation in victory_v30 (full-session task)
