@@ -36,14 +36,14 @@ systems:
   combat:
     status: active
     canonical: designs/scene/combat_v30.md
-    canonical_sha__designs__scene__combat_v30_md: "23a4e9d4fb2a5327c34d028b33e2acaedd39cf67"
+    canonical_sha__designs__scene__combat_v30_md: "STALE-ED694-propagation"
     params: params/combat.md
     design_doc: designs/scene/combat_v30.md
 
   threadwork:
     status: active
     canonical: designs/threadwork/threadwork_v30.md
-    canonical_sha__designs__threadwork__threadwork_v30_md: "9611d357cb1186212d26b4f431e5191c13f0d60e"
+    canonical_sha__designs__threadwork__threadwork_v30_md: "STALE-ED694-propagation"
     params: params/threadwork.md
     design_doc: designs/threadwork/threadwork_v30.md
 
@@ -88,14 +88,14 @@ systems:
   mass_combat:
     status: active
     canonical: designs/provincial/mass_battle_v30.md
-    canonical_sha__designs__provincial__mass_battle_v30_md: "7c1828ba4a84a26174b2094ceb3df5240bb54132"
+    canonical_sha__designs__provincial__mass_battle_v30_md: "STALE-ED694-propagation"
     params: params/mass_combat.md
     design_doc: designs/provincial/mass_battle_v30.md
 
   social_debate:
     status: active
     canonical: designs/scene/social_contest_v30.md
-    canonical_sha__designs__scene__social_contest_v30_md: "bd3a2af6b09c19e39addbc80453b7ea59409a6b4"
+    canonical_sha__designs__scene__social_contest_v30_md: "STALE-ED694-propagation"
     params: params/contest.md
     design_doc: designs/scene/social_contest_v30.md
 

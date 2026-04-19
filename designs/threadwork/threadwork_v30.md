@@ -136,7 +136,19 @@ Pre-calculate the Leap pool on the character sheet as a named entry separate fro
 
 
 
-### Contact Duration
+### Contact Duration (ED-694: Thread Fatigue replaces Contact Rounds)
+
+**Thread Fatigue** counts up from 0 toward threshold = Spirit × 5 (range 5–35). At threshold: contact breaks involuntarily, cannot re-establish until rested.
+
+**Per-operation fatigue costs:** Leap (entry, one-time) 3. Passive sensing 2/round. Mending 4/round. Pulling 5/round. Locking 7/round. Dissolution 10/round.
+
+**Focus role:** Focus no longer sets contact duration. Focus sets max operations per contact session (Focus − 1). A Spirit 6/Focus 2 practitioner has high endurance but only 1 operation per session. A Spirit 2/Focus 6 practitioner exhausts quickly but can perform up to 5 operations if endurance allows.
+
+**Equipment:** Thread-conductive artifact −1 fatigue/round. Einhir proximity +3/round. Stimulant herbs: threshold +5 temporarily.
+
+**Recovery:** Full rest resets to 0. Meditation reduces by Spirit score.
+
+### Contact Duration (legacy reference)
 
 
 > **Focus Halving (P-11):** When an environmental effect halves contact duration, round down. Focus 1 after halving = zero operations (experience only). Focus 3 halved = 1 = zero operations. Focus 5 halved = 2 = one operation. Environmental Focus reduction affects contact duration only, not pool calculation — the attribute itself is unchanged.
@@ -148,7 +160,7 @@ Pre-calculate the Leap pool on the character sheet as a named entry separate fro
 
 **Operations per Focus:**
 
-| Focus | Contact Rounds | Operation Rounds | Operations Available |
+| Focus | Contact Rounds (legacy) | Operation Rounds (legacy) | Max Operations (ED-694: this column is the active rule; duration governed by Thread Fatigue) |
 |---|---|---|---|
 | 1 | 1 | 0 | None. Contact is too brief. Configuration orients and rendering reasserts. The practitioner experiences the suspension but cannot act within it. |
 | 2 | 2 | 1 | One operation. |

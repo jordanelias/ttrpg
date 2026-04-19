@@ -131,22 +131,21 @@ Exchange 1 initiative: higher Attunement acts last (highest information). Subseq
 
 ## Wounds / Incapacitation (PP-232)
 
-Health = (Endurance + 6) × (max Wounds + 1). Total pool — never resets.
-Wound threshold = every (Endurance + 6) points of accumulated damage.
-Taking a Wound: the Wound counter increments by 1; the pool continues depleting without reset.
-Example: Endurance 4 → max Wounds 3, total Health 40. Wounds at 30 HP, 20 HP, 10 HP; incapacitated at 0 HP.
-Allows critical hits to deal multiple wounds simultaneously.
+Vitality = Endurance × 10. Total damage capacity. Equipment adds flat Vitality (+4 leather, +6 chain, +8 plate). Max Vitality = End × 10 + equipment bonus. Healing cannot exceed max.
+Wound Interval = Endurance + 6. Wounds accrue at floor(cumulative_damage / Wound_Interval). Computed on the fly — no Max Wounds stat.
+Example: Endurance 4 → Vitality 40, Wound Interval 10. Wounds at 10, 20, 30 cumulative damage; incapacitated at Vitality 0.
+Allows critical hits to deal multiple wounds simultaneously. (ED-694: replaces Health formula, eliminates Max Wounds.)
 
 Per Wound: **−1D Combat Pool only** (no Ob penalty). (PP-232)
 
-**Max wounds formula: floor(Endurance ÷ 2) + 1** (PP-263)
+**Wounds computed on the fly:** wounds_taken = floor(total_damage / Wound_Interval). No Max Wounds stat. (ED-694, replaces PP-263 Max Wounds formula.)
 
-| Endurance | Max Wounds before incapacitation |
-|-----------|----------------------------------|
-| 1 | 1 |
-| 2–3 | 2 |
-| 4–5 | 3 |
-| 6–7 | 4 |
+| Endurance | Vitality | Wound Interval | Wounds before incap |
+|-----------|----------|----------------|---------------------|
+| 1 | 10 | 7 | 1 |
+| 2–3 | 20–30 | 8–9 | 2–3 |
+| 4–5 | 40–50 | 10–11 | 4 |
+| 6–7 | 60–70 | 12–13 | 5 |
 
 [ED-130 resolved 2026-04-03] Stage 1 (down) and Stage 2 (dying) incapacitation states STRUCK. No staged incapacitation states in current design. Health track runs to 0 = incapacitated.
 

@@ -72,13 +72,25 @@ sub-unit types for Ranged (archer/crossbow/slinger)]
 | Campaign | ~1,000 soldiers | Territorial |
 | War | ~5,000 soldiers | Structural |
 
-Scale is narrative only — no mechanical change except Thread Thread Sensitivity minimums.
+Scale sets **block_size** for TroopCount derivation (ED-694):
+
+| Scale | block_size |
+|-------|-----------|
+| Skirmish | 10 |
+| Company | 100 |
+| Battle | 500 |
+| Campaign | 1,000 |
+| War | 5,000 |
+
+**TroopCount = Size × block_size** (set at muster). Size becomes a computed integer: `Size = floor(TroopCount / block_size)`. All combat formulas reference Size unchanged. Output scaling: `effective_damage = floor(successes × (1 + Power) × TroopCount / max_TroopCount)`, capped at ratio 1.0. Player sees: "Heavy Infantry — 4,428 / 5,000 (Size 4)".
+
+Thread Sensitivity minimums per scale still apply.
 
 ---
 
 ### A.4 UNIT STAT BLOCK (all 1–7)
 
-**Size** — health pool (headcount). At 0: destroyed.
+**Size** — computed from TroopCount: `Size = floor(TroopCount / block_size)`. At Size 0 (TroopCount < block_size): destroyed. TroopCount is the granular health pool; Size is the integer used by combat formulas. (ED-694)
 
 **Power** — dice pool ceiling.
 

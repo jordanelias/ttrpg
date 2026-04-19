@@ -248,11 +248,11 @@ DR is subtracted from damage after net hits + weapon modifier.
 
 ## 7. WOUNDS AND STAMINA
 
-### Wounds (ED-548 correction, 2026-04-16)
+### Wounds (ED-548, ED-694 — Vitality replaces Health)
 
-**Wound Interval = Endurance + 6** (range 7–13). Damage accumulates against the current wound's interval. At Wound Interval damage: take one Wound, damage counter resets to zero, continue accumulating toward the next Wound. (PP-210, structural correction applied)
+**Vitality = Endurance × 10** (range 10–70). Total damage capacity. Equipment adds flat Vitality. Incapacitated at 0. (ED-694, replaces Health formula.)
 
-**Max Wounds = floor(Endurance ÷ 2) + 1** (PP-263)
+**Wound Interval = Endurance + 6** (range 7–13). Wounds accrue at floor(cumulative_damage / Wound_Interval). Computed on the fly — Max Wounds eliminated. (ED-694, replaces PP-263.)
 
 | Endurance | Wound Interval | Max Wounds | Total Damage Capacity = WI × (MW + 1) |
 |-----------|----------------|------------|---------------------------------------|
@@ -268,9 +268,9 @@ Each Wound: −1D Combat Pool only (cumulative). No Ob penalty from wounds. (PP-
 **Design note:** the prior formulation ("Health = Endurance + 6, resets to full on Wound") produced a cliff effect — Wounds always appeared at the same perceived threshold, and the Combat Pool penalty stacked at a uniform rate regardless of the character's actual resilience. The corrected formulation scales total capacity with both Endurance (via Wound Interval) and Max Wounds (via the multiplier), producing a smooth curve. A high-Endurance character absorbs more total damage AND accrues Wounds more slowly. The −1D per Wound penalty now reflects a genuine resource depletion, not a ticking clock to inevitable incapacitation.
 
 ### Stamina
-Stamina = Endurance + Relevant History + 1 − armour modifier. **Minimum 2. Maximum = base value (PP-275).** (PP-232) Take a Breath restores Endurance score, capped at base Stamina value. Cannot wear armour whose Stamina modifier would reduce Stamina to 1 or below. (PP-232)
-Depletes by 1 per round of active combat.
-At 0: Out of Breath. −2D to all combat rolls. Recovery: Take a Breath action.
+**Stamina = Endurance × 5** (range 5–35). Variable action costs: standard attack 5, heavy attack 8, defensive stance 3, dodge 4, movement 2/zone. Armor adds to drain: heavy +2, medium +1, light +0. (ED-694, replaces composite formula.)
+Take a Breath restores (Endurance + relevant History) × 2, capped at max.
+At 0: Out of Breath. −2D to all combat rolls.
 
 **Hybrid:** Wound Ob penalties carry into TTRPG mass battle Command checks (PP-232) (see stage11 PP-089 and mass_battle_v3 §A.5). Do NOT reduce BG commander bonus.
 

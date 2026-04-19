@@ -177,21 +177,21 @@ Both orators push in the same direction within the same temporal horizon.
 - Consumed on use.
 
 **Step 5 — Forfeit actions:**
-- **Regroup:** Forfeit exchange. No argument, no strain. Conviction Track moves +1 toward non-forfeiting side. Concentration restores by Focus score.
+- **Regroup:** Forfeit exchange. No argument, no strain. Conviction Track moves +1 toward non-forfeiting side. Concentration restores to max (Focus × 3).
 - **Concede a Point:** Forfeit exchange. Take 1 strain. Conviction Track moves +1 toward non-forfeiting side. Gain +1D on next exchange.
 
 **Step 6 — Strain and Concentration:**
 
-**Composure = Charisma + 6.** Range 7–13. Social damage buffer before Rattled. [RESOLVES ED-127. Parallel to Health = Endurance + 6. One attribute + constant per derived track. Charisma governs social resilience the way Endurance governs physical resilience.]
+**Composure = Charisma × 3.** Range 3–21. Social damage buffer before Rattled. [ED-127 resolved, ED-694 updated. Single attribute × multiplier. Strain, Charisma modifier, and Focus defence all scaled ×3 to match. Equipment (attire, regalia) adds flat Composure.]
 
 - Strain accumulates toward Composure threshold.
 - All subsequent contest rolls: +1 Ob per Rattled level (cumulative).
 - Rattled recovery: 1 mark clears per full scene of non-social activity or rest.
 - Composure recovery: full restore at scene change (new location, new interlocutors).
 
-**Concentration = Focus + Recall.** Range 2–14. Depletes by 1 per exchange, −1 additional on exchange loss.
+**Concentration = Focus × 3.** Range 3–21. Depletes by 3 per exchange, −3 additional on exchange loss. (ED-694: Recall removed — Recall's role is the +2D citation bonus in Argue, not sustained focus.)
 - At Concentration 0: **Spent** — next exchange: −2D to all rolls; opponent gets +1D. Then resets to maximum.
-  **Spent timing:** Concentration is checked after Step 4 (CLASH/REINFORCE resolution). If Concentration reaches 0 at Step 4, Spent is entered immediately — but the penalty applies to the *next* exchange, not the current one (the triggering exchange has already rolled in Step 3). Spent resets to setup total after the penalty exchange resolves.
+  **Spent timing:** Concentration is checked after Step 4 (CLASH/REINFORCE resolution). If Concentration reaches 0 at Step 4, Spent is entered immediately — but the penalty applies to the *next* exchange, not the current one (the triggering exchange has already rolled in Step 3). Spent resets to Focus × 3 after the penalty exchange resolves.
 - If both Rattled and Spent active: penalties cumulative. Pool minimum 1D per core engine.
 
 **Step 7 — GM records exchange on hidden ledger.**
@@ -294,10 +294,10 @@ When a contest ends in Compromise (Conviction Track 4–6), the tension is defer
 
 | Value | Formula | Range | Parallel |
 |---|---|---|---|
-| Composure | Charisma + 6 | 7–13 | Health = Endurance + 6 |
-| Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) | 0–2 | — |
-| Focus defence | floor(Foc ÷ 2) | 0–3 | Armour Rating (damage reduction) |
-| Concentration | Focus + Recall | 2–14 | Maximum = Focus + Recall (restoration cannot exceed this) | Stamina = Endurance + History + 1 |
+| Composure | Charisma × 3 | 3–21 | Vitality = Endurance × 10 (ED-694) |
+| Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) × 3 | 0–6 | — |
+| Focus defence | floor(Foc ÷ 2) × 3 | 0–9 | Armour Rating (damage reduction), scaled ×3 |
+| Concentration | Focus × 3 | 3–21 | Maximum = Focus × 3 (Regroup restores to max). Recall removed — no conceptual link to sustained focus. (ED-694) |
 | Appraise pool | Attunement only | 1–7 | — |
 | Argue pool | (Primary Attribute × 2) + History bonus | Variable | Combat Pool = (Agility × 2) + History + 3 |
 

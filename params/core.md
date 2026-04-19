@@ -118,11 +118,11 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 
 | Score | Formula | Range | Notes |
 |-------|---------|-------|-------|
-| Health | (Endurance + 6) × (max Wounds + 1) | 14–44 | Total pool; never resets. Wounds accumulate every (End + 6) damage; −1D per Wound. Incapacitated at 0 HP. See params_combat.md. (PP-232, ED-438) |
-| Stamina | Endurance + 1 | min 2 | Combat resource. Floor 2. Cannot wear armour that would reduce Stamina to 1 or below. (PP-248/PP-611 confirmed) |
-| Composure | Charisma + 6 | 7–13 | Social damage buffer before Rattled. Parallels Health = Endurance + 6. (PP-234, ED-127 resolved) |
+| Vitality | Endurance × 10 | 10–70 | Total damage capacity. Wounds accrue at each Wound Interval (End + 6) of cumulative damage; −1D per Wound. Incapacitated at 0. Equipment adds flat Vitality. Replaces Health formula. (ED-694) |
+| Stamina | Endurance × 5 | 5–35 | Combat action economy. Variable action costs (standard 5, heavy 8, defensive 3). Armor adds to drain per action. Take a Breath restores (End + History) × 2. (ED-694) |
+| Composure | Charisma × 3 | 3–21 | Social damage buffer before Rattled. Strain scaled ×3. Equipment (attire, regalia) adds flat Composure. (ED-694, replaces Cha+6) |
 | Combat Pool | (Agility × 2) + weapon History (points + 3) | min 5 | Split Offence/Defence each round. PP-615: doubled formula confirmed canonical; PP-247 note was stale. |
-| Contact Rounds | Focus | 1–7 | Max rounds maintaining Thread contact (practitioners only) |
+| Thread Fatigue | Spirit × 5 (threshold) | 5–35 | Thread action economy. Counts up from 0. Contact breaks at threshold. Variable operation costs (Pulling 5, Locking 7, Dissolution 10). Focus sets max operations per session (Focus − 1). (ED-694, replaces Contact Rounds = Focus) |
 | Certainty | 5 (starting, varies by background) | 0–5 | Cosmological worldview: Solmund orthodoxy (5) → Thread acceptance (0). See PP-551 section below. |
 | Coherence | 10 (starting); countdown to 0 | 0–10 | Personal rendering legibility |
 | Resolve | Spirit | 1–7 | Maximum total Inspiration value |
