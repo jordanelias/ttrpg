@@ -172,10 +172,10 @@ AFTER:  | 4 | Default | Maintain treaties. Defend territory. Govern. Consul/Sena
 
 | Patch | Target files | Status |
 |-------|-------------|--------|
-| 1 (Three-scale) | `phases.md` | Ready — insert new section |
-| 2 (Bishop appointment) | `faction_actions.md`, `settlement_layer_v30 §3.2`, `ci_seizure.md`, `npc_behavior_v30 §8.2` | Ready — new entry + 3 cross-refs |
-| 3 (Secession restriction) | `fractional_province_ownership_v30 §2.6` | Ready — add paragraph |
-| 4 (RM threshold) | `faction_succession_split_v30 §4` | Ready — word change |
-| 5 (Splinter Influence) | `faction_succession_split_v30 §2.4` | Ready — table row change |
-| 6 (T2 garrison) | `npc_priority_trees.md`, `npc_behavior_v30 §8.3` | Ready — add condition to P4 |
+| 1 (Three-scale) | `phases.md` | **DONE** — e89d196 |
+| 2 (Bishop appointment) | `faction_actions.md`, `settlement_layer_v30 §3.2`, `ci_seizure.md`, `npc_behavior_v30 §8.2` | **DONE** — e89d196 |
+| 3 (Secession restriction) | `fractional_province_ownership_v30 §2.6` | **DONE** — e89d196 |
+| 4 (RM threshold) | `faction_succession_split_v30 §4` | **DONE** — e89d196 |
+| 5 (Splinter Influence) | `faction_succession_split_v30 §2.4` | **DONE** — e89d196 |
+| 6 (T2 garrison) | `npc_priority_trees.md`, `npc_behavior_v30 §8.3` | **DONE** — e89d196 |
 | 7 (Backstory strike) | `character_histories_v30`, `npc_character_analyses_v30`, `worldbuilding_v30` | **Needs full read first** — flag for next session |
