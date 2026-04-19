@@ -152,6 +152,89 @@ Simulate fieldwork operations across investigation, exploration, and socializing
 
 **State tracked:** Evidence Track, Exposure (per territory/character), Disposition (per NPC), Cover level, Church Attention Pool, Finding count/reliability.
 
+### Mode G — Incremental Build Protocol (MANDATORY for multi-module simulations)
+
+**When to use this mode:** Any simulation that requires building new code spanning more than one mechanical system. Examples: full-stack campaign sim, multi-phase combat simulator, integrated threadwork+combat interaction test. Single-module sims (dice engine test, isolated probability distribution) do NOT require this protocol.
+
+**Why this mode exists:** The `sim_v2` failure (2026-04-18) happened because a full-stack simulation was built in a single session, with canonical sources read at skeleton-depth only, and mechanical constants invented to fill gaps in unread sections. Every mechanical assumption in that sim was suspect — the audit found 24 correct / 15 partial / 8 wrong / 5 fabricated / 19 missing assumptions. This mode structurally prevents that failure by decomposing the build across sessions, one module at a time, with canonical verification gated at every step.
+
+---
+
+#### Protocol
+
+**Step 1 — Module decomposition (first session).**
+
+Before writing any code, produce a module manifest at `/home/claude/sim_module_manifest.md`. Each module is a self-contained mechanical layer that can be built, verified, and tested in one session.
+
+Canonical modules for a full-stack Valoria sim (as one example):
+
+| Module | Depends On | Canonical Sources | Est. Session Budget |
+|---|---|---|---|
+| 1. Dice engine | — | `params/core.md` | 1 session |
+| 2. Territory map | — | `designs/world/geography_v30.md`, `params/bg/geography.md` | 1 session |
+| 3. Faction layer | dice, territory | `designs/provincial/faction_layer_v30.md`, `params/factions/stats_1_7_scale.md` | 1 session |
+| 4. Clock system | faction | `designs/provincial/clock_registry_v30.md`, `params/bg/clocks.md`, `params/bg/tracks.md` | 1 session |
+| 5. TC system | clocks, faction | `designs/provincial/tc_political_v30.md`, `params/bg/tc_seizure.md` | 1 session |
+| 6. Peninsular Strain + Accord | faction, territory | `designs/provincial/peninsular_strain_v30.md` | 1 session |
+| 7. Faction acquisition toolkits | all above | `peninsular_strain_v30 §5`, faction-specific designs | 1–2 sessions |
+| 8. Universal victory condition | all above | `peninsular_strain_v30 §6` | 1 session |
+| 9. NPC AI priority trees | faction, clocks | `params/bg/npc_priority_trees.md`, `designs/npcs/npc_behavior_v30.md` | 1–2 sessions |
+| 10. Phase resolution loop | all above | `params/bg/phases.md` | 1 session |
+| 11. Zoom-in personal resolution | combat, thread, social | respective design docs | 2–3 sessions |
+| 12. Integration + batch runner | all above | — | 1 session |
+
+The manifest must list: module number, name, dependencies, canonical source paths (fetched via `canonical_sources.yaml`, not guessed), and estimated session budget. Commit the manifest to `tests/sim/<sim-name>/module_manifest.md`.
+
+**Step 2 — Per-module session protocol.**
+
+Each module gets its own session. The session protocol:
+
+1. Bootstrap normally.
+2. `h.task_gate('simulation')`.
+3. Read the module manifest from GitHub.
+4. Identify the current module (next unchecked in manifest).
+5. Fetch every canonical source listed for this module at FULL depth: `g.read_files_graphql(paths, force_full=True)`. Verify with `g.read_depth_report(paths)` — every path must read `full`.
+6. Build the verification ledger at `/home/claude/sim_verification_ledger.json`. Every mechanical constant used in this module must have a ledger entry (sim_variable, value, canonical_source, section, quoted_text). Quoted_text must actually appear in the fetched content — verify with in-memory string search before adding the entry.
+7. `h.sim_gate('custom', systems=[list of systems this module touches])`. Must pass.
+8. Write the module code. Every mechanical constant carries an inline `# [canonical: path §section]` comment OR corresponds to a ledger entry. `sim_fabrication_check()` will verify this at commit.
+9. Run module in isolation against known inputs. Outputs logged.
+10. `h.safe_commit()` with the module file and an updated `tests/sim/<sim-name>/module_manifest.md` that marks the module `status: verified`.
+11. Update `session_log_current.md` with: module completed, ledger entries added, next module to build.
+
+**If a session cannot complete a module:** write a checkpoint (`h.write_checkpoint()`) with exactly which canonical sources are read/verified and where the partial code is. Next session resumes from checkpoint.
+
+**Step 3 — Inter-module integration.**
+
+Once all modules in the manifest are marked `status: verified`, a dedicated integration session wires them together. This session does not add new mechanics — only imports and integrates existing module files. If integration reveals that a module was built incorrectly (API mismatch, unverified assumption), flag the module for rebuild; do NOT patch it inline without returning to the canonical sources.
+
+**Step 4 — Batch testing.**
+
+After integration, run the sim against a batch of seeds (10+, ideally 50+). Analyze outcomes for: victory distribution, clock ranges, faction elimination rates, any results that contradict canonical design intent. Findings go into the standard Mode D edge-case format.
+
+---
+
+#### Rules that override other Modes
+
+These are non-negotiable for incremental build sims:
+
+- **No multi-module code in a single session.** If the module takes more than one session, checkpoint and resume. Never finish a module by compressing or skipping reads.
+- **No mechanical constant without a ledger entry OR inline citation.** `sim_fabrication_check()` enforces this at commit. Do not try to work around it by using variables named after the value.
+- **No assumption that a previously-built module is correct.** Each session re-verifies the imports it uses by re-fetching the canonical source for the specific values being read from upstream modules.
+- **No cross-module "fixing" in integration.** If integration reveals a module is wrong, the module is flagged for rebuild in its own session. Do not patch.
+- **All sims that use Mode G commit to `tests/sim/<sim-name>/` as a directory.** Module files, manifest, ledger snapshot, and batch outputs all live there.
+
+---
+
+#### Anti-patterns (what sim_v2 did — do not repeat)
+
+| Anti-pattern | Why it failed | What to do instead |
+|---|---|---|
+| Build a "v1" sim across a single session covering all systems | Canonical sources get read at skeleton depth because there's no time to infill everything | Module decomposition, one system per session |
+| Fetch skeletons for design docs, build mechanics from section titles | Section titles imply structure but not mechanical values; code gets built on inference | Always `force_full=True` for design docs used in a module's canonical source list |
+| Invent victory conditions, elimination rules, and clock thresholds because they "sound right" | Violates canonical system in non-obvious ways; produces superficially valid outputs | Every mechanic traced to a verified ledger entry; if the ledger can't cite it, the mechanic isn't built yet |
+| Run 50-seed batches on a sim that failed validation | Compounds the fabrication: bad results look statistically rigorous and get trusted | No batch runs before all modules pass `status: verified` in the manifest |
+| Assume "the structure is right, I'll fix values later" | Never happens; the sim gets committed and used as reference | The structure IS the values — fix at commit time or don't commit |
+
 ### Mode E — Coverage Matrix
 Track which mechanics have been tested in which modes.
 
