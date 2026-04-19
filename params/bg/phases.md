@@ -1,3 +1,12 @@
+## Game Setup (Session C — conflict_architecture_proposal CANON)
+
+Before Season 1:
+
+1. **Place starting settlements.** 5 provinces begin with non-aligned settlements (T1, T8, T14, T4, T13). Settlement controller misalignments produce fragmentation checks from S1.
+2. **Draw Tensions Deck card.** Draw 1 card from 6. Determines which friction point burns hottest and which S8+ event fires. See params/bg/tensions_deck.md.
+3. **Determine assassination target (if Royal Crisis drawn).** Sub-roll for target (Lenneth/Torben/Almud). See params/bg/royal_assassination.md.
+4. **Set Löwenritter Autonomy to Loyal.** T14 Ehrenfeld starts with S014 Barracks under Crown via Ehrenwall.
+
 ## Three-Scale Resolution Model (PP-TBD)
 
 Each season resolves in three layers, bottom-up:
