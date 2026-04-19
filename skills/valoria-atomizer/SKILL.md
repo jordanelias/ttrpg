@@ -2,12 +2,12 @@
 name: valoria-atomizer
 description: >
   Split a v30 Valoria design document into two files:
-  (1) a skeleton — mechanical specification only (tables, formulas, procedures, edge case rulings, cross-references);
+  (1) a index — mechanical specification only (tables, formulas, procedures, edge case rulings, cross-references);
   (2) a content infill — all prose, rationale, examples, design history, and explanatory text.
   Updates references/design_registry.yaml atomized field on completion.
-  Trigger on: "atomize", "skeleton", "infill", "split design doc", "extract skeleton",
+  Trigger on: "atomize", "index", "infill", "split design doc", "extract index",
   "extract prose", "separate mechanics from prose", or when a design doc fails the
-  Skeleton Ruleset Principle (doc > 400 lines with explanatory content).
+  Index Ruleset Principle (doc > 400 lines with explanatory content).
 ---
 
 **Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
@@ -18,14 +18,14 @@ description: >
 
 ## Purpose
 
-Apply the Skeleton Ruleset Principle to every v30 design doc. After atomization:
-- `{name}_v30.md` becomes the skeleton (mechanical spec only — the source of truth for mechanical values)
-- `{name}_v30_infill.md` is created (all extracted non-skeleton content)
+Apply the Index Ruleset Principle to every v30 design doc. After atomization:
+- `{name}_v30.md` becomes the index (mechanical spec only — the source of truth for mechanical values)
+- `{name}_v30_infill.md` is created (all extracted non-index content)
 - `references/design_registry.yaml` is updated: `atomized: in_progress` (one file done) → `atomized: complete` (both done)
 
-## What Goes in Skeleton vs Infill
+## What Goes in Index vs Infill
 
-### Skeleton — KEEP in `_v30.md`
+### Index — KEEP in `_v30.md`
 - All tables (stat tables, formula tables, procedure tables, degree tables)
 - All explicit formulas and mathematical expressions
 - Numbered/bulleted procedure steps (the mechanical sequence itself)
@@ -41,10 +41,10 @@ Apply the Skeleton Ruleset Principle to every v30 design doc. After atomization:
 - Worked examples (narrative walkthroughs)
 - Flavor text, in-world framing
 - Philosophical justification
-- All content flagged `[SKELETON-DEBT: ...]`
+- All content flagged `[INDEX-DEBT: ...]`
 
 ### Rule of thumb
-> If it answers "what/how" → skeleton. If it answers "why" → infill.
+> If it answers "what/how" → index. If it answers "why" → infill.
 
 ## Input Validation (MANDATORY)
 
@@ -75,7 +75,7 @@ target_files = g.read_files_graphql([canonical_v30_path])
 ### Step 1 — Section Inventory
 Parse the fetched design doc into sections (by `##` headers).
 For each section, classify:
-- `skeleton-only` — all content is tables, formulas, or one-sentence rulings
+- `index-only` — all content is tables, formulas, or one-sentence rulings
 - `infill-only` — all content is prose, rationale, or examples
 - `mixed` — contains both
 
@@ -83,16 +83,16 @@ Output a classification table (do not skip this step):
 ```
 | Section | Lines | Classification | Notes |
 |---------|-------|----------------|-------|
-| § N — Title | N–N | skeleton-only | — |
+| § N — Title | N–N | index-only | — |
 | § N — Title | N–N | mixed | lines M–M are rationale |
 ```
 
-### Step 2 — Extract Skeleton
-Build `{name}_v30_skeleton.md` (or update `{name}_v30.md` in-place if replacing the canonical):
+### Step 2 — Extract Index
+Build `{name}_v30_index.md` (or update `{name}_v30.md` in-place if replacing the canonical):
 
 Header block:
 ```markdown
-<!-- SKELETON — mechanical spec only — generated {date} from {predecessor} -->
+<!-- INDEX — mechanical spec only — generated {date} from {predecessor} -->
 <!-- Infill: {name}_v30_infill.md -->
 <!-- DO NOT add prose to this file. Edit {name}_v30_infill.md for rationale/examples. -->
 ```
@@ -112,58 +112,58 @@ Build `{name}_v30_infill.md`:
 Header block:
 ```markdown
 <!-- INFILL — prose, rationale, examples extracted from {canonical_v30_path} -->
-<!-- Skeleton: {name}_v30.md (or {name}_v30_skeleton.md) -->
-<!-- This file does not contain mechanical values. Reference the skeleton for all values. -->
+<!-- Index: {name}_v30.md (or {name}_v30_index.md) -->
+<!-- This file does not contain mechanical values. Reference the index for all values. -->
 ```
 
 Content rules:
 - Each extracted section prefixed with its original section header
-- Add `[→ skeleton §N.N]` backlink after each header
+- Add `[→ index §N.N]` backlink after each header
 - Preserve all prose verbatim
-- If the skeleton has an edge case that was truncated, include the full text here
+- If the index has an edge case that was truncated, include the full text here
 
 ### Step 4 — Update Registry
 Fetch `references/design_registry.yaml` immediately before write (collision guard).
 Update the target entry:
 ```yaml
-  skeleton: designs/{system}/{name}_v30_skeleton.md  # or _v30.md if replacing in-place
+  index: designs/{system}/{name}_v30_index.md  # or _v30.md if replacing in-place
   infill: designs/{system}/{name}_v30_infill.md
   atomized: complete
 ```
 
 ### Step 5 — Atomic Commit
 Files in commit:
-1. Skeleton file (`{name}_v30_skeleton.md` or updated `{name}_v30.md`)
+1. Index file (`{name}_v30_index.md` or updated `{name}_v30.md`)
 2. Infill file (`{name}_v30_infill.md`) — NEW
 3. `references/design_registry.yaml` — updated
 4. Run freshness_gate if canonical changed: `python3 tools/freshness_gate.py --update`
 
-Commit message: `[infrastructure] atomize {system}: skeleton + infill extracted — {date}`
+Commit message: `[infrastructure] atomize {system}: index + infill extracted — {date}`
 
 ## In-Place vs Side-by-Side Atomization
 
 Two strategies — choose based on doc size and disruption:
 
 **In-place** (preferred for docs ≤ 300 lines after extraction):
-- `{name}_v30.md` becomes the skeleton (replace content)
+- `{name}_v30.md` becomes the index (replace content)
 - `{name}_v30_infill.md` is the new infill file
 - canonical_sources.yaml does not change (path unchanged)
 
 **Side-by-side** (for large docs where in-place would lose too much context):
 - `{name}_v30.md` remains full doc (untouched)
-- `{name}_v30_skeleton.md` is the extracted skeleton
+- `{name}_v30_index.md` is the extracted index
 - `{name}_v30_infill.md` is the extracted infill
-- `design_registry.yaml`: set `skeleton: {name}_v30_skeleton.md`
-- canonical_sources.yaml: if canonical is changing to skeleton path, update it
+- `design_registry.yaml`: set `index: {name}_v30_index.md`
+- canonical_sources.yaml: if canonical is changing to index path, update it
 
 **Decision rule:** If removing infill content reduces doc by > 40%, use side-by-side.
 
-## SKELETON-DEBT Handling
+## INDEX-DEBT Handling
 
-While atomizing, if a section is flagged `[SKELETON-DEBT: ...]` anywhere in the doc:
-1. Record in the infill file header: `## SKELETON-DEBT ITEMS RESOLVED`
+While atomizing, if a section is flagged `[INDEX-DEBT: ...]` anywhere in the doc:
+1. Record in the infill file header: `## INDEX-DEBT ITEMS RESOLVED`
 2. Extract all flagged content to infill
-3. Remove flag from skeleton
+3. Remove flag from index
 
 ## Pre-Commit Checks
 
@@ -178,7 +178,7 @@ Exit 0 required. On non-zero: fix before committing.
 ## Post-Commit Verification
 
 After `atomic_commit()` returns SHA: re-fetch both output files. Confirm:
-- Skeleton file contains NO prose paragraphs > 1 sentence
+- Index file contains NO prose paragraphs > 1 sentence
 - Infill file contains NO mechanical formula tables
 - `design_registry.yaml` shows `atomized: complete`
 

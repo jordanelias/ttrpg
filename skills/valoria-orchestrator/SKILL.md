@@ -12,7 +12,7 @@ description: >
 
 ## COMPLIANCE IS AUTOMATIC
 
-You do NOT manually run atomization, skeleton generation, register splitting,
+You do NOT manually run atomization, index generation, register splitting,
 or archive chunking. These are enforced by `compliance_check.py` via hooks.
 
 If bootstrap reports `[COMPLIANCE]` activity, it is handling rule violations.
@@ -24,7 +24,7 @@ specific content decisions. Report to Jordan — do not guess.
 **Never run these tasks manually:**
 - "Atomize X" → compliance auto-splits at threshold
 - "Split this register" → auto-archive on commit
-- "Generate skeleton for Y" → auto-generated when design doc committed
+- "Generate index for Y" → auto-generated when design doc committed
 - "Regenerate the index" → auto-regenerated on any register change
 
 ---
@@ -291,7 +291,7 @@ next_id = int(nid_match.group(1))
 files = g.read_files_graphql(['references/design_registry.yaml'])
 ```
 
-**Before renaming or creating skeleton/infill files:** read the registry, update `canonical_v30`, `skeleton`, `infill`, `atomized` fields atomically.
+**Before renaming or creating index/infill files:** read the registry, update `canonical_v30`, `index`, `infill`, `atomized` fields atomically.
 
 **After any rename, atomization, or deprecation:** include `references/design_registry.yaml` in the same atomic commit.
 
@@ -302,7 +302,7 @@ All active canonical design docs use the `_v30.md` suffix. Pre-v30 filenames are
 | File type | Pattern |
 |-----------|---------|
 | Canonical design doc | `designs/{system}/{name}_v30.md` |
-| Skeleton (mechanical spec only) | `designs/{system}/{name}_v30_skeleton.md` |
+| Index (mechanical spec only) | `designs/{system}/{name}_v30_index.md` |
 | Content infill (prose, rationale) | `designs/{system}/{name}_v30_infill.md` |
 | Mode-split variant | DEPRECATED — videogame is the sole target. Existing mode-split files are historical. |
 
@@ -376,15 +376,15 @@ params = g.read_files_graphql(['params/combat.md'], repo='ttrpg')
 
 ## Fetch Depth Routing (Token Efficiency)
 
-**Default: skeleton-first.** Always load the canonical v30 skeleton file, NOT the infill, unless prose rationale is specifically needed.
+**Default: index-first.** Always load the canonical v30 index file, NOT the infill, unless prose rationale is specifically needed.
 
 | Task | Depth | Function |
 |---|---|---|
-| Mechanic proposal | `skeleton` | `g.fetch_system('combat', cs_content)` |
+| Mechanic proposal | `index` | `g.fetch_system('combat', cs_content)` |
 | Simulation | `params_only` | `g.fetch_system('combat', cs_content, depth='params_only')` |
 | Deep editorial review | `full` | `g.fetch_system('combat', cs_content, depth='full')` |
 | Canon check | Use `canon/00_philosophical_foundations_rules.md` (1,943t) NOT full prose (17,554t) |
-| Audit | `skeleton` + params separately if values needed |
+| Audit | `index` + params separately if values needed |
 
 **Infill files exist for rationale/prose.** They are NOT needed for: simulation, audit, mechanic proposal, patch work, compilation. Only load infill when Jordan asks for philosophical justification or narrative context.
 

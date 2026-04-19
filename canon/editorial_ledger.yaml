@@ -121,3 +121,10 @@ entries:
     status: resolved
     severity: P2
     source: PP-672
+
+  - id: ED-719
+    date: 2026-04-19
+    description: "Terminology cleanup (PP-673) — three-way 'skeleton' collision resolved. Auto-generated *_skeleton.md files (heading/line/token navigation companions) renamed to *_index.md; tools/skeleton_gen.py renamed to tools/doc_index_gen.py; github_ops functions (read_skeleton→read_index, was_skeletonized→was_indexed, _route_to_skeletons→_route_to_indexes) and caches (_skeleton_reads→_index_reads, _skeleton_route_cache→_index_route_cache) renamed; depth='skeleton' depth='index'. The term 'skeleton' is now reserved for ruleset-in-mechanical-spec-style canonical documents (banner: '<!-- SKELETON — mechanical spec only -->'). 75 files renamed, 8 code/skill files updated."
+    status: resolved
+    severity: P2
+    source: PP-673

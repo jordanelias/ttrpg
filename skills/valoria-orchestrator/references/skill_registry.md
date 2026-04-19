@@ -76,11 +76,11 @@
 ### valoria-atomizer (PLANNED — not yet built)
 - Path: (not yet created — will be `skills/valoria-atomizer/SKILL.md`)
 - Model: Sonnet 4.6
-- Triggers: atomize, skeleton, infill, split design doc, extract skeleton, extract prose
-- Purpose: Read a v30 design doc, split into skeleton (tables/formulas/procedures/edge cases)
+- Triggers: atomize, index, infill, split design doc, extract index, extract prose
+- Purpose: Read a v30 design doc, split into index (tables/formulas/procedures/edge cases)
   and infill (prose, rationale, examples, history). Update design_registry.yaml.
 - Input: v30 design doc path from design_registry.yaml
-- Output: `{name}_v30_skeleton.md` + `{name}_v30_infill.md` + updated registry entry
+- Output: `{name}_v30_index.md` + `{name}_v30_infill.md` + updated registry entry
 - Pre-requisite: design doc must exist at canonical_v30 path in design_registry.yaml
 
 

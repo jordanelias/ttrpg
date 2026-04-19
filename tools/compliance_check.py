@@ -6,7 +6,7 @@ Two modes:
   1. check_all() — full repo scan (bootstrap, session close)
   2. validate_commit() — pre-commit check of proposed additions
 
-Dependencies: github_ops (for repo I/O), atomizer, skeleton_gen, index_gen, PyYAML.
+Dependencies: github_ops (for repo I/O), atomizer, doc_index_gen, index_gen, PyYAML.
 """
 
 import sys, os, re, fnmatch
@@ -17,12 +17,12 @@ from dataclasses import dataclass, field
 
 # Lazy imports to avoid circular deps at module load
 _atomizer = None
-_skeleton_gen = None
+_doc_index_gen = None
 _index_gen = None
 _github_ops = None
 
 def _lazy_import():
-    global _atomizer, _skeleton_gen, _index_gen, _github_ops
+    global _atomizer, _doc_index_gen, _index_gen, _github_ops
     if _atomizer is None:
         # Tools may be in /home/claude or tools/ — handle both
         for tools_dir in ['/home/claude', '/home/claude/tools', '.']:
@@ -31,11 +31,11 @@ def _lazy_import():
                     sys.path.insert(0, tools_dir)
                 break
         import atomizer as _a
-        import skeleton_gen as _s
+        import doc_index_gen as _s
         import index_gen as _i
         import github_ops as _g
         _atomizer = _a
-        _skeleton_gen = _s
+        _doc_index_gen = _s
         _index_gen = _i
         _github_ops = _g
 
@@ -46,12 +46,12 @@ def _lazy_import():
 class Violation:
     path: str
     rule: dict
-    kind: str           # 'size_exceeded' | 'missing_skeleton' | 'stale_skeleton' |
+    kind: str           # 'size_exceeded' | 'missing_index' | 'stale_index' |
                         # 'missing_index' | 'archive_needed' | 'unknown_pattern'
     current_tokens: int
     threshold: int
     auto_fixable: bool
-    fix_action: str     # 'atomizer.atomize' | 'skeleton_gen.generate_skeleton' | etc.
+    fix_action: str     # 'atomizer.atomize' | 'doc_index_gen.generate_index' | etc.
     fix_args: dict = field(default_factory=dict)
     severity: str = 'error'  # 'error' | 'warn' | 'info'
 
@@ -134,27 +134,27 @@ def _check_size(path: str, content: str, rule: dict) -> Violation | None:
     )
 
 
-def _check_skeleton(path: str, content: str, rule: dict,
+def _check_index(path: str, content: str, rule: dict,
                     repo_files: dict) -> Violation | None:
-    """Check if skeleton exists and is fresh for design docs."""
+    """Check if index exists and is fresh for design docs."""
     _lazy_import()
-    require_above = rule.get('require_skeleton_above')
+    require_above = rule.get('require_index_above')
     if require_above is None:
         return None
     current_tokens = len(content) // 4
     if current_tokens <= require_above:
         return None
 
-    skel_path = _skeleton_gen.skeleton_path_for(path)
-    skel_content = repo_files.get(skel_path)
+    idx_path = _doc_index_gen.index_path_for(path)
+    idx_content = repo_files.get(idx_path)
 
-    if skel_content is None:
+    if idx_content is None:
         return Violation(
-            path=path, rule=rule, kind='missing_skeleton',
+            path=path, rule=rule, kind='missing_index',
             current_tokens=current_tokens, threshold=require_above,
             auto_fixable=True,
-            fix_action='skeleton_gen.generate_skeleton',
-            fix_args={'canonical_path': path, 'skeleton_path': skel_path},
+            fix_action='doc_index_gen.generate_index',
+            fix_args={'canonical_path': path, 'index_path': idx_path},
         )
 
     # Check staleness (would need SHA comparison — simplified: always regen if content differs)
@@ -228,7 +228,7 @@ def check_all(repo: str = 'ttrpg') -> list[Violation]:
 
     # Pass 2: fetch files that need content checks (batched)
     paths_to_fetch = [p for p, r in files_to_check
-                      if r.get('max_tokens') or r.get('require_skeleton_above')
+                      if r.get('max_tokens') or r.get('require_index_above')
                       or r.get('auto_archive_status')]
 
     # Batch fetch (GraphQL has a practical limit, so chunk)
@@ -249,7 +249,7 @@ def check_all(repo: str = 'ttrpg') -> list[Violation]:
         if v:
             violations.append(v)
 
-        v = _check_skeleton(path, content, rule, repo_files)
+        v = _check_index(path, content, rule, repo_files)
         if v:
             violations.append(v)
 
@@ -265,7 +265,7 @@ def validate_commit(additions: list, deletions: list,
     """
     Validate a proposed commit against rules. Checks:
       - No addition exceeds its file's max_tokens
-      - Skeleton co-files present when required
+      - Index co-files present when required
       - Index files regenerated when triggers match
     """
     _lazy_import()
@@ -283,17 +283,17 @@ def validate_commit(additions: list, deletions: list,
         if v:
             violations.append(v)
 
-        # Skeleton co-file check for design docs
-        require_above = rule.get('require_skeleton_above')
+        # Index co-file check for design docs
+        require_above = rule.get('require_index_above')
         if require_above and len(content) // 4 > require_above:
-            skel_path = _skeleton_gen.skeleton_path_for(path)
-            if skel_path not in addition_paths:
+            idx_path = _doc_index_gen.index_path_for(path)
+            if idx_path not in addition_paths:
                 violations.append(Violation(
-                    path=path, rule=rule, kind='missing_skeleton',
+                    path=path, rule=rule, kind='missing_index',
                     current_tokens=len(content) // 4, threshold=require_above,
                     auto_fixable=True,
-                    fix_action='skeleton_gen.generate_skeleton',
-                    fix_args={'canonical_path': path, 'skeleton_path': skel_path,
+                    fix_action='doc_index_gen.generate_index',
+                    fix_args={'canonical_path': path, 'index_path': idx_path,
                               'content': content},
                 ))
 
@@ -317,7 +317,7 @@ def auto_fix(violations: list[Violation],
         if not v.auto_fixable:
             continue
 
-        if v.fix_action == 'skeleton_gen.generate_skeleton':
+        if v.fix_action == 'doc_index_gen.generate_index':
             canonical_content = v.fix_args.get('content', '')
             if not canonical_content:
                 # Need to fetch
@@ -326,11 +326,11 @@ def auto_fix(violations: list[Violation],
                 )
                 canonical_content = fetched.get(v.path, '')
             if canonical_content:
-                skel_path = v.fix_args.get('skeleton_path',
-                                           _skeleton_gen.skeleton_path_for(v.path))
-                skel_content = _skeleton_gen.generate_skeleton(v.path, canonical_content)
-                additions.append((skel_path, skel_content))
-                fixed.append(f"skeleton: {skel_path}")
+                idx_path = v.fix_args.get('index_path',
+                                           _doc_index_gen.index_path_for(v.path))
+                idx_content = _doc_index_gen.generate_index(v.path, canonical_content)
+                additions.append((idx_path, idx_content))
+                fixed.append(f"index: {idx_path}")
 
         elif v.fix_action == 'atomizer.atomize':
             fetched = _github_ops.read_files_graphql(
@@ -419,7 +419,7 @@ def apply_auto_fixes_to_additions(additions: list,
     for v in violations:
         if not v.auto_fixable:
             continue
-        if v.fix_action == 'skeleton_gen.generate_skeleton':
+        if v.fix_action == 'doc_index_gen.generate_index':
             # Find the content in additions
             content = None
             for p, c in additions:
@@ -427,29 +427,29 @@ def apply_auto_fixes_to_additions(additions: list,
                     content = c
                     break
             if content:
-                skel_path = v.fix_args.get('skeleton_path',
-                                           _skeleton_gen.skeleton_path_for(v.path))
-                skel_content = _skeleton_gen.generate_skeleton(v.path, content)
-                extra.append((skel_path, skel_content))
+                idx_path = v.fix_args.get('index_path',
+                                           _doc_index_gen.index_path_for(v.path))
+                idx_content = _doc_index_gen.generate_index(v.path, content)
+                extra.append((idx_path, idx_content))
 
     return additions + extra
 
 
-def find_skeleton_for(path: str, repo: str = 'ttrpg') -> str | None:
+def find_index_for(path: str, repo: str = 'ttrpg') -> str | None:
     """
-    For design doc paths, check if a committed skeleton exists.
-    Returns skeleton path if found, None otherwise.
+    For design doc paths, check if a committed index exists.
+    Returns index path if found, None otherwise.
     """
     _lazy_import()
     if not path.startswith('designs/'):
         return None
-    # Skip skeleton/infill files themselves
-    if path.endswith('_skeleton.md') or path.endswith('_infill.md'):
+    # Skip index/infill files themselves
+    if path.endswith('_index.md') or path.endswith('_infill.md'):
         return None
 
-    skel_path = _skeleton_gen.skeleton_path_for(path)
-    if _github_ops.file_exists(skel_path, repo):
-        return skel_path
+    idx_path = _doc_index_gen.index_path_for(path)
+    if _github_ops.file_exists(idx_path, repo):
+        return idx_path
     return None
 
 

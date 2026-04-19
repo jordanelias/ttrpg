@@ -56,3 +56,9 @@ sources:
 # are the canonical vetting authority for all Valoria work.
 # Five tiers: Ω (intent) / Μ (modes) / М (meta-throughlines) / Τ (throughlines) / Q (quality).
 # Supersedes PP-671 meta-throughlines doc. See ED-718.
+
+# ── PP-673 Terminology cleanup (2026-04-19) ──────────────────────────────
+# "skeleton" now strictly refers to canonical rulesets in mechanical-spec-only
+# style (banner: SKELETON — mechanical spec only). Auto-generated heading
+# navigation companions renamed to *_index.md; tool renamed to doc_index_gen.py.
+# See ED-719 and PP-673.

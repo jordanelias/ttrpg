@@ -124,8 +124,8 @@ def assert_bootstrap(scope: str = None) -> str:
                     message=msg, repo='ttrpg', _auth=auth,
                 )
                 # Evict all transient fetches from compliance auto-fix.
-                # Compliance reads full design docs for skeleton generation —
-                # those docs are not needed after skeletons are committed.
+                # Compliance reads full design docs for index generation —
+                # those docs are not needed after indexes are committed.
                 evicted = g.cache_evict_pattern(
                     'designs/', 'tests/', 'params/', 'archives/',
                     'deprecated/', 'skills/', 'canon/', 'references/',
@@ -243,8 +243,8 @@ def editorial_gate(path: str, content: str) -> None:
         return
     if len(content) < 200:
         return  # stub — exempt
-    if path.endswith('_skeleton.md'):
-        print(f"[HOOK ✓] editorial_gate — {path} (skeleton exempt)")
+    if path.endswith('_index.md'):
+        print(f"[HOOK ✓] editorial_gate — {path} (index exempt)")
         return
     if not any(m in content for m in EDITORIAL_MARKERS):
         raise RuntimeError(
@@ -554,11 +554,11 @@ def audit_gate(task_description: str, paths: list) -> None:
     Enforce heading-gated reads for audit/review tasks.
     
     On audit-keyword tasks: every design doc in `paths` MUST go through
-    g.read_skeleton() before g.read_files_graphql() or any full read.
-    Raises RuntimeError if a full read is attempted without prior skeleton.
+    g.read_index() before g.read_files_graphql() or any full read.
+    Raises RuntimeError if a full read is attempted without prior index.
     
     Call this BEFORE reading any design files for audit tasks.
-    After this gate passes, use g.read_skeleton(path) then g.read_sections(path, [...]).
+    After this gate passes, use g.read_index(path) then g.read_sections(path, [...]).
     """
     task_lower = task_description.lower()
     is_audit = any(kw in task_lower for kw in _AUDIT_KEYWORDS)
@@ -570,33 +570,33 @@ def audit_gate(task_description: str, paths: list) -> None:
     if not design_paths:
         return  # no design docs = no gate needed
     
-    # Check that none of these paths were already full-read without skeleton
+    # Check that none of these paths were already full-read without index
     repo = g.active_repo()
-    already_fetched_without_skeleton = [
+    already_fetched_without_index = [
         p for p in design_paths
         if g._repo_key(p, repo) in g._session_fetches
-        and not g.was_skeletonized(p, repo)
+        and not g.was_indexed(p, repo)
     ]
     
-    if already_fetched_without_skeleton:
-        print(f"[HOOK ⚠] audit_gate: {len(already_fetched_without_skeleton)} files were full-read "
-              f"without skeleton. For future reads, use g.read_skeleton() first.")
+    if already_fetched_without_index:
+        print(f"[HOOK ⚠] audit_gate: {len(already_fetched_without_index)} files were full-read "
+              f"without index. For future reads, use g.read_index() first.")
     
-    print(f"[HOOK ✓] audit_gate — {len(design_paths)} design docs require skeleton-first reads")
-    print(f"  Protocol: g.read_skeleton(path) → evaluate headings → g.read_sections(path, [relevant_indices])")
+    print(f"[HOOK ✓] audit_gate — {len(design_paths)} design docs require index-first reads")
+    print(f"  Protocol: g.read_index(path) → evaluate headings → g.read_sections(path, [relevant_indices])")
 
 
-def assert_skeleton_before_full_read(path: str) -> None:
+def assert_index_before_full_read(path: str) -> None:
     """
     Call before any full file read in audit context.
-    Raises if the path is a design doc that wasn't skeletonized first.
+    Raises if the path is a design doc that wasn't indexed first.
     """
     if not path.startswith('designs/'):
         return
-    if not g.was_skeletonized(path):
+    if not g.was_indexed(path):
         raise RuntimeError(
-            f"[HOOK VIOLATION] Full read of '{path}' without prior skeleton.\n"
-            f"Audit protocol: call g.read_skeleton('{path}') first, then\n"
+            f"[HOOK VIOLATION] Full read of '{path}' without prior index.\n"
+            f"Audit protocol: call g.read_index('{path}') first, then\n"
             f"g.read_sections('{path}', [relevant_heading_indices])."
         )
 
@@ -707,7 +707,7 @@ def sim_gate(scope: str, systems: list = None) -> None:
     1. Resolves the canonical sources registry.
     2. Determines required systems (from preset or explicit list).
     3. Confirms every canonical design doc for those systems has been read
-       at full depth (not just skeleton).
+       at full depth (not just index).
     4. Requires a verification ledger at /home/claude/sim_verification_ledger.json
        mapping each mechanical value in the sim to its canonical source.
 
@@ -841,7 +841,7 @@ def sim_gate(scope: str, systems: list = None) -> None:
     # For each required system, resolve canonical path and verify fetched at depth
     missing_systems = []
     unfetched_paths = []
-    skeleton_only_paths = []
+    index_only_paths = []
     repo = g.active_repo()
 
     for system in systems:
@@ -868,7 +868,7 @@ def sim_gate(scope: str, systems: list = None) -> None:
         key = g._repo_key(canonical_path, repo)
 
         # Check read depth. Must be 'full' for sim work — simulations need
-        # mechanical detail which only exists in full design docs. Skeletons
+        # mechanical detail which only exists in full design docs. Indexes
         # contain only section headings; sections may miss cross-references.
         try:
             depth = g.read_depth(canonical_path, repo)
@@ -879,8 +879,8 @@ def sim_gate(scope: str, systems: list = None) -> None:
         if depth == 'none':
             unfetched_paths.append((system, canonical_path))
             continue
-        if depth == 'skeleton':
-            skeleton_only_paths.append((system, canonical_path))
+        if depth == 'index':
+            index_only_paths.append((system, canonical_path))
         # 'sections' and 'full' both pass — sim work can use section reads IF
         # the relevant sections were read. The ledger enforces that — each
         # ledger entry names the exact section it quoted from.
@@ -909,10 +909,10 @@ def sim_gate(scope: str, systems: list = None) -> None:
             + "\n".join(f"    {sys}: {path}" for sys, path in unfetched_paths)
             + "\n  Fetch with: read_files_graphql([<paths>])"
         )
-    if skeleton_only_paths:
+    if index_only_paths:
         errors.append(
-            "Sources fetched as SKELETON only (not infilled) — simulations need mechanical detail:\n"
-            + "\n".join(f"    {sys}: {path}" for sys, path in skeleton_only_paths)
+            "Sources fetched as INDEX only (not infilled) — simulations need mechanical detail:\n"
+            + "\n".join(f"    {sys}: {path}" for sys, path in index_only_paths)
             + "\n  Fetch full content with: read_files_graphql([<paths>])\n"
             + "  Or use read_sections() for specific ranges."
         )

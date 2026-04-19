@@ -156,7 +156,7 @@ Simulate fieldwork operations across investigation, exploration, and socializing
 
 **When to use this mode:** Any simulation that requires building new code spanning more than one mechanical system. Examples: full-stack campaign sim, multi-phase combat simulator, integrated threadwork+combat interaction test. Single-module sims (dice engine test, isolated probability distribution) do NOT require this protocol.
 
-**Why this mode exists:** The `sim_v2` failure (2026-04-18) happened because a full-stack simulation was built in a single session, with canonical sources read at skeleton-depth only, and mechanical constants invented to fill gaps in unread sections. Every mechanical assumption in that sim was suspect — the audit found 24 correct / 15 partial / 8 wrong / 5 fabricated / 19 missing assumptions. This mode structurally prevents that failure by decomposing the build across sessions, one module at a time, with canonical verification gated at every step.
+**Why this mode exists:** The `sim_v2` failure (2026-04-18) happened because a full-stack simulation was built in a single session, with canonical sources read at index-depth only, and mechanical constants invented to fill gaps in unread sections. Every mechanical assumption in that sim was suspect — the audit found 24 correct / 15 partial / 8 wrong / 5 fabricated / 19 missing assumptions. This mode structurally prevents that failure by decomposing the build across sessions, one module at a time, with canonical verification gated at every step.
 
 ---
 
@@ -229,8 +229,8 @@ These are non-negotiable for incremental build sims:
 
 | Anti-pattern | Why it failed | What to do instead |
 |---|---|---|
-| Build a "v1" sim across a single session covering all systems | Canonical sources get read at skeleton depth because there's no time to infill everything | Module decomposition, one system per session |
-| Fetch skeletons for design docs, build mechanics from section titles | Section titles imply structure but not mechanical values; code gets built on inference | Always `force_full=True` for design docs used in a module's canonical source list |
+| Build a "v1" sim across a single session covering all systems | Canonical sources get read at index depth because there's no time to infill everything | Module decomposition, one system per session |
+| Fetch indexes for design docs, build mechanics from section titles | Section titles imply structure but not mechanical values; code gets built on inference | Always `force_full=True` for design docs used in a module's canonical source list |
 | Invent victory conditions, elimination rules, and clock thresholds because they "sound right" | Violates canonical system in non-obvious ways; produces superficially valid outputs | Every mechanic traced to a verified ledger entry; if the ledger can't cite it, the mechanic isn't built yet |
 | Run 50-seed batches on a sim that failed validation | Compounds the fabrication: bad results look statistically rigorous and get trusted | No batch runs before all modules pass `status: verified` in the manifest |
 | Assume "the structure is right, I'll fix values later" | Never happens; the sim gets committed and used as reference | The structure IS the values — fix at commit time or don't commit |

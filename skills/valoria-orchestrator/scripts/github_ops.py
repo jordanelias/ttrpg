@@ -431,9 +431,9 @@ def read_files_graphql(paths: list, repo: str = None,
     if not paths:
         return {}
 
-    # Auto-skeleton routing for design docs (unless force_full)
+    # Auto-index routing for design docs (unless force_full)
     if not force_full and REPOS[repo].get('enforce_health'):
-        paths = _route_to_skeletons(paths, repo)
+        paths = _route_to_indexes(paths, repo)
 
     aliases = {f"f{i}": p for i, p in enumerate(paths)}
     fields = "\n".join(
@@ -458,14 +458,14 @@ def read_files_graphql(paths: list, repo: str = None,
         output[path] = content
 
         # Record read depth. If force_full OR path is not a design doc
-        # (designs/.../*.md but not _skeleton.md), it's a full read.
-        # Design docs that got routed to their _skeleton.md variant are
-        # tracked by read_skeleton() when that fires separately.
+        # (designs/.../*.md but not _index.md), it's a full read.
+        # Design docs that got routed to their _index.md variant are
+        # tracked by read_index() when that fires separately.
         if content is not None:
             is_design_doc = (
                 path.startswith('designs/')
                 and path.endswith('.md')
-                and not path.endswith('_skeleton.md')
+                and not path.endswith('_index.md')
             )
             if force_full or not is_design_doc:
                 _full_reads.add(key)
@@ -1081,15 +1081,15 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
 
 
 
-# ── Smart fetch (skeleton-first) ────────────────────────────────────────────
+# ── Smart fetch (index-first) ────────────────────────────────────────────
 
 def fetch_system(system: str, canonical_sources_content: str,
-                 depth: str = 'skeleton', repo: str = None) -> dict:
+                 depth: str = 'index', repo: str = None) -> dict:
     """
     Fetch system files using depth-aware routing.
 
     depth:
-      'skeleton'    — canonical doc only (default, sufficient for most work)
+      'index'    — canonical doc only (default, sufficient for most work)
       'full'        — canonical doc + infill (for deep editorial or prose review)
       'params_only' — params file only (for simulation, value checks)
       'all'         — canonical + infill + params
@@ -1124,7 +1124,7 @@ def fetch_system(system: str, canonical_sources_content: str,
     params = entry.get('params')
 
     paths = []
-    if depth in ('skeleton', 'full', 'all'):
+    if depth in ('index', 'full', 'all'):
         if canonical:
             paths.append(canonical)
     if depth in ('full', 'all'):
@@ -1141,38 +1141,38 @@ def fetch_system(system: str, canonical_sources_content: str,
     return read_files_graphql(paths, repo=repo, skip_health_check=True)
 
 
-# ── Skeleton routing ─────────────────────────────────────────────────────────
+# ── Index routing ─────────────────────────────────────────────────────────
 
-_skeleton_route_cache: dict = {}  # path -> skeleton_path or None
+_index_route_cache: dict = {}  # path -> index_path or None
 
-def _route_to_skeletons(paths: list, repo: str) -> list:
+def _route_to_indexes(paths: list, repo: str) -> list:
     """
-    For any design doc path that has a committed _skeleton.md,
-    substitute the skeleton path unless force_full=True.
+    For any design doc path that has a committed _index.md,
+    substitute the index path unless force_full=True.
     Caches mapping in session state.
     """
     routed = []
     for p in paths:
-        if not p.startswith('designs/') or p.endswith('_skeleton.md') or p.endswith('_infill.md'):
+        if not p.startswith('designs/') or p.endswith('_index.md') or p.endswith('_infill.md'):
             routed.append(p)
             continue
         cache_key = _repo_key(p, repo)
-        if cache_key in _skeleton_route_cache:
-            skel = _skeleton_route_cache[cache_key]
+        if cache_key in _index_route_cache:
+            skel = _index_route_cache[cache_key]
             routed.append(skel if skel else p)
         else:
-            # Check if skeleton exists (one API call — cached after first check)
-            skel_path = p[:-3] + '_skeleton.md' if p.endswith('.md') else p + '_skeleton.md'
-            if file_exists(skel_path, repo):
-                _skeleton_route_cache[cache_key] = skel_path
-                routed.append(skel_path)
-                # Record that the ORIGINAL design doc path was skeleton-routed.
-                # This lets read_depth(original_path) return 'skeleton' even
-                # though the fetch cache holds content under the skeleton path.
-                _skeleton_reads[cache_key] = True
-                print(f"[SKELETON ROUTE] {p} → {skel_path}")
+            # Check if index exists (one API call — cached after first check)
+            idx_path = p[:-3] + '_index.md' if p.endswith('.md') else p + '_index.md'
+            if file_exists(idx_path, repo):
+                _index_route_cache[cache_key] = idx_path
+                routed.append(idx_path)
+                # Record that the ORIGINAL design doc path was index-routed.
+                # This lets read_depth(original_path) return 'index' even
+                # though the fetch cache holds content under the index path.
+                _index_reads[cache_key] = True
+                print(f"[INDEX ROUTE] {p} → {idx_path}")
             else:
-                _skeleton_route_cache[cache_key] = None
+                _index_route_cache[cache_key] = None
                 routed.append(p)
     return routed
 
@@ -1183,8 +1183,8 @@ def fetch_for_task(task_type: str, system: str = None) -> dict:
     """
     Single call to load everything a task needs, routed optimally.
     - Loads task-required files from TASK_REQUIRED_FILES
-    - If system provided, loads skeleton + params (via fetch_system)
-    - Uses skeleton routing by default
+    - If system provided, loads index + params (via fetch_system)
+    - Uses index routing by default
     - Returns {path: content} ready for work
     """
     import valoria_hooks as h
@@ -1201,7 +1201,7 @@ def fetch_for_task(task_type: str, system: str = None) -> dict:
             )
             cs = cs_fetch.get('references/canonical_sources.yaml', '')
             files.update(cs_fetch)
-        system_files = fetch_system(system, cs, depth='skeleton')
+        system_files = fetch_system(system, cs, depth='index')
         files.update(system_files)
 
     return files
@@ -1220,11 +1220,11 @@ if __name__ == "__main__":
     print("Smoke test passed.")
 
 
-# ── Heading-gated reads (skeleton-first audit pattern) ─────────────────────
+# ── Heading-gated reads (index-first audit pattern) ─────────────────────
 
 import re as _re_mod
 
-def read_skeleton(path: str, repo: str = None) -> list:
+def read_index(path: str, repo: str = None) -> list:
     """
     Fetch a file and return its heading structure without body content.
     
@@ -1232,18 +1232,18 @@ def read_skeleton(path: str, repo: str = None) -> list:
       [{'line': int, 'level': int, 'text': str, 'idx': int}, ...]
     
     Also caches the full content internally (avoids double-fetch on infill).
-    Prints skeleton to stdout for Claude's context.
+    Prints index to stdout for Claude's context.
     """
     repo = repo or _active_repo
     key = _repo_key(path, repo)
     
-    # Use cached content if available. If the path was skeleton-routed on a
-    # prior fetch, the content lives under the routed _skeleton.md key — not
+    # Use cached content if available. If the path was index-routed on a
+    # prior fetch, the content lives under the routed _index.md key — not
     # under the original path's key.
     content = _session_fetches.get(key)
     if content is None:
-        # Check if this path has been skeleton-routed this session
-        routed_cached = _skeleton_route_cache.get(key)
+        # Check if this path has been index-routed this session
+        routed_cached = _index_route_cache.get(key)
         if routed_cached:
             content = _session_fetches.get(_repo_key(routed_cached, repo))
         if content is None:
@@ -1257,7 +1257,7 @@ def read_skeleton(path: str, repo: str = None) -> list:
                         content = v
                         break
             if content is None:
-                raise RuntimeError(f"[SKELETON] File not found: {path} in {repo}")
+                raise RuntimeError(f"[INDEX] File not found: {path} in {repo}")
     
     lines = content.splitlines()
     headings = []
@@ -1271,13 +1271,13 @@ def read_skeleton(path: str, repo: str = None) -> list:
                 'idx': len(headings),
             })
     
-    # Track that this path has been skeletonized
-    _skeleton_reads[_repo_key(path, repo)] = True
+    # Track that this path has been indexed
+    _index_reads[_repo_key(path, repo)] = True
     
-    # Print compact skeleton
+    # Print compact index
     total_lines = len(lines)
     total_tokens = total_lines * 10 // 4  # rough estimate
-    print(f"\n[SKELETON] {path} — {total_lines} lines, ~{len(content)//4} tokens, {len(headings)} headings")
+    print(f"\n[INDEX] {path} — {total_lines} lines, ~{len(content)//4} tokens, {len(headings)} headings")
     for h in headings:
         indent = "  " * (h['level'] - 1)
         print(f"  {h['idx']:>3}  L{h['line']:<5} {indent}{h['text']}")
@@ -1289,7 +1289,7 @@ def read_sections(path: str, heading_indices: list, repo: str = None) -> str:
     """
     Return content under specified headings only.
     
-    heading_indices: list of idx values from read_skeleton() output.
+    heading_indices: list of idx values from read_index() output.
     Returns concatenated section content (heading + body until next same-or-higher heading).
     """
     repo = repo or _active_repo
@@ -1297,8 +1297,8 @@ def read_sections(path: str, heading_indices: list, repo: str = None) -> str:
     
     content = _session_fetches.get(key)
     if content is None:
-        # Check skeleton-route cache — content may live under routed path
-        routed = _skeleton_route_cache.get(key)
+        # Check index-route cache — content may live under routed path
+        routed = _index_route_cache.get(key)
         if routed:
             content = _session_fetches.get(_repo_key(routed, repo))
             if content is not None:
@@ -1306,7 +1306,7 @@ def read_sections(path: str, heading_indices: list, repo: str = None) -> str:
                 # (intentional: sim_gate uses the original path for depth lookups)
                 pass
     if content is None:
-        raise RuntimeError(f"[SECTIONS] File not fetched: {path}. Call read_skeleton() first.")
+        raise RuntimeError(f"[SECTIONS] File not fetched: {path}. Call read_index() first.")
     
     lines = content.splitlines()
     
@@ -1356,17 +1356,17 @@ def read_sections(path: str, heading_indices: list, repo: str = None) -> str:
 
     return extracted
 
-# Skeleton tracking state
-_skeleton_reads: dict = {}
+# Index tracking state
+_index_reads: dict = {}
 
 # Read-depth tracking state
 _section_reads: dict = {}  # repo_key -> set of heading indices read via read_sections()
 _full_reads: set = set()   # repo_keys that have been fully read
 
-def was_skeletonized(path: str, repo: str = None) -> bool:
-    """Check if a path went through read_skeleton() this session."""
+def was_indexed(path: str, repo: str = None) -> bool:
+    """Check if a path went through read_index() this session."""
     repo = repo or _active_repo
-    return _skeleton_reads.get(_repo_key(path, repo), False)
+    return _index_reads.get(_repo_key(path, repo), False)
 
 
 def read_depth(path: str, repo: str = None) -> str:
@@ -1374,7 +1374,7 @@ def read_depth(path: str, repo: str = None) -> str:
     Return read depth for a path this session:
       'full'     — full content fetched (non-design doc or force_full=True or all sections read)
       'sections' — partial read via read_sections() (subset of headings)
-      'skeleton' — only the skeleton was fetched (design doc auto-route)
+      'index' — only the index was fetched (design doc auto-route)
       'none'     — not fetched this session
     """
     repo = repo or _active_repo
@@ -1384,11 +1384,11 @@ def read_depth(path: str, repo: str = None) -> str:
         return 'full'
     if key in _section_reads and _section_reads[key]:
         return 'sections'
-    if key in _skeleton_reads and _skeleton_reads[key]:
-        return 'skeleton'
+    if key in _index_reads and _index_reads[key]:
+        return 'index'
     if key in _session_fetches and _session_fetches[key] is not None:
         # Content present, no tracking — assume full for non-design docs.
-        # Design docs always route through skeleton or sections tracking.
+        # Design docs always route through index or sections tracking.
         _full_reads.add(key)
         return 'full'
     return 'none'
@@ -1415,7 +1415,7 @@ def verify_reads_for_task(required_paths: list, repo: str = None,
     require_depth:
       'full'     — require full read (default for sim)
       'sections' — sections or full count
-      'any'      — any depth including skeleton counts
+      'any'      — any depth including index counts
 
     Returns list of (path, depth) for paths that fail the requirement.
     Empty list = all requirements met.
