@@ -12,7 +12,6 @@ Seasonal cap: ±2 per stat per season (TTRPG); ±varies (BG — see accounting).
 | Hafenmark | 4 | 4 | 4 | 5 | 5 | 3 | — | 4 |
 | Varfell | 4 | 4 | 4 | 4 | 4 | 4 | — | 4 |
 | Guilds | 3 | 3 | 4 | 6 | 6 | 2 | — | 5 |
-| Niflhel | — | — | 5 | 4 | 4 | — | — | 4 |
 | Restoration Movement | — | — | — | — | — | — | — | — | No faction stats (PP-460). Operates via Presence markers and Community Weaving. Victory via Cultural Uprising of T9 Himmelenger. |
 | Löwenritter | — | 3 | 2/3 | — | — | 5/6 | 3 | 5/4 |
 
@@ -81,7 +80,7 @@ Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Restoration Movem
 | Church | Excommunication | Mandate vs target Mandate (leader) / Ob 2 (non-leader) | Strips Circles bonus; target faction Mandate −1. Reversal: Grand Debate (5 exchanges) or new Confessor. |
 | Church | Theocracy Counter 60 Territorial Seizure | Mandate vs floor(owner's Mandate / 2) + 1 | Per-territory roll. Success: administrative control. Failure: Mandate −1. |
 | Restoration Movement | Community Weaving | Presence markers −1 Ob (base Ob 2) | Mending Mandate prerequisite: Mandate ≥ 1 |
-| [Others] | See stage6_factions.md §8.4–8.9 | — | Hafenmark, Varfell, Guilds, Niflhel, Löwenritter unique actions not extracted |
+| [Others] | See stage6_factions.md §8.4–8.9 | — | Hafenmark, Varfell, Guilds, Löwenritter unique actions not extracted |
 
 ## Nine Political Axes (qualitative — not tracked numerically)
 
@@ -164,11 +163,8 @@ Roll: Wealth vs target faction's Wealth.
 Cannot target factions in territories where Guild Favour < 5.
 
 ### Niflhel — The Quiet Network
-Choose mode before rolling. One deployment per season.
-**Intelligence mode:** Intel vs target's Intel → Success: learn one hidden faction attribute or one Non-Player Character's active Belief; Overwhelming: learn two.
-**Sabotage mode:** Intel vs target's Stability → Success: Stability −1; Failure: operative exposed (Niflhel Intel −1 for 1 season; target gains Grievance Marker).
-**Assassination mode:** Intel vs target's Intel +2 → Overwhelming: Non-Player Character eliminated, no evidence; Success: eliminated, evidence trail; Partial: wounded, evidence trail; Failure: operative captured, full exposure, Niflhel Stability −2.
-Long-term cost: each Quiet deployment this season: Thread Tension +0.5 (cumulative).
+**STRUCK** — Niflhel dissolved (conflict_architecture_proposal). Intelligence/sabotage/assassination functions distributed to settlement-level intelligence brokers.
+
 
 ### Restoration Movement — Community Weaving [SUPERSEDED by PP-616]
 
@@ -288,7 +284,7 @@ Individual profiles and stat blocks deferred to campaign development.
 <!-- PP-238 applied 2026-04-04: Lowenritter reactive Military NPC guidance -->
 <!-- PP-241 applied 2026-04-04: Crown-Lowenritter covert delegation rule (PROVISIONAL) -->
 <!-- PP-244 applied 2026-04-04: Scene→Mass transition modifier table (PROVISIONAL) -->
-<!-- PP-246 applied 2026-04-04: Niflhel + Lowenritter ethical framework modifiers extracted -->
+<!-- PP-246 applied 2026-04-04: Lowenritter ethical framework modifiers extracted (Niflhel struck) -->
 
 ## Crown Covert Actions (PP-236) [PROVISIONAL — ED-147]
 
@@ -321,11 +317,10 @@ When a personal combat scene precedes or overlaps a Strategic Phase mass action:
 - PC Failure: mass action at +2 Ob (PC captured/incapacitated; morale cost)
 Mid-combat zoom: pause combat. Resolve Strategic Phase. Apply mass outcome as context. Resume personal combat next session.
 
-## Ethical Framework Modifiers — Niflhel and Lowenritter (PP-246)
+## Ethical Framework Modifiers — Löwenritter (PP-246)
 
 | Faction | Framework | Aligned (−1 Ob) | Contradict (+1 Ob) |
 |---------|-----------|----------------|-------------------|
-| Niflhel | Transactional Survival | Covert actions (always −1 Ob; covert is their native mode) | Open/public actions |
 | Löwenritter | Martial Honour | Military actions + Crown-loyal actions | Political manipulation; acting against Crown interest |
 
 ## PP-242 — Seasonal cap timing

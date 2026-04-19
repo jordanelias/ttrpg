@@ -92,15 +92,7 @@ Post-CI 75: P3 → Territorial Seizure (highest-value targets first).
 Post-Coup: all priorities → Martial Law → consolidate → Reconstitution (PI = 0).
 
 ### Niflhel Priority Tree
-| P | Condition | Action |
-|---|---|---|
-| 1 | Stability ≤ 2 | Quiet Intelligence vs strongest rival. |
-| 2 | Exposure threat: evidence trail to Niflhel | Quiet Sabotage vs evidence-holder (Stability −1). |
-| 3 | Covert action available | Quiet Intelligence vs richest faction. |
-| 4 | Default | Invisible. Quiet Intelligence vs least-known faction. |
-| 5 | TT ≥ 40 + Southernmost ops this year | Reduce Southernmost operations to 1/year. |
-| 6 | Exposed | All arms redirect to containment. Assassination if feasible. |
-| 7 | Default | Pass. TT accumulation pauses. |
+**STRUCK** — Niflhel dissolved (conflict_architecture_proposal). Functions distributed to settlement-level phenomena.
 
 ### Restoration Movement Priority Tree (Post-Founding)
 | P | Condition | Action |
@@ -117,7 +109,7 @@ Post-Coup: all priorities → Martial Law → consolidate → Reconstitution (PI
 | P | Condition | Action |
 |---|---|---|
 | 1 | Gap or Shifting Object detected | Emergency Mend at Gap site. |
-| 2 | Niflhel supply chain disturbance detected | Investigate. Intercept operatives. |
+| 2 | Thread exploitation site disturbance detected | Investigate. Intercept operatives. |
 | 3 | RS ≤ 40 | Peninsula-wide Weaving. RS +1/Warden (max +2/season). |
 | 4 | Faction performing Thread restoration | Cooperation: +1D allied Thread ops (WC ≥ 1). |
 | 5 | New practitioner enters Southernmost | Assessment. TS ≤ 20: dismissed. TS 40+: useful. |
@@ -212,15 +204,7 @@ Post-Coup: all priorities → Martial Law → consolidate → Reconstitution (PI
 
 
 ### Niflhel Priority Tree
-| P | Condition | Action |
-|---|---|---|
-| 1 | Stability ≤ 2 | Quiet Intelligence vs strongest rival. |
-| 2 | Exposure threat: evidence trail to Niflhel | Quiet Sabotage vs evidence-holder (Stability −1). |
-| 3 | Covert action available | Quiet Intelligence vs richest faction. |
-| 4 | Default | Invisible. Quiet Intelligence vs least-known faction. |
-| 5 | TT ≥ 40 + Southernmost ops this year | Reduce Southernmost operations to 1/year. |
-| 6 | Exposed | All arms redirect to containment. Assassination if feasible. |
-| 7 | Default | Pass. TT accumulation pauses. |
+**STRUCK** — Niflhel dissolved (conflict_architecture_proposal). Functions distributed to settlement-level phenomena.
 
 
 ### Restoration Movement Priority Tree (Post-Founding)
@@ -239,7 +223,7 @@ Post-Coup: all priorities → Martial Law → consolidate → Reconstitution (PI
 | P | Condition | Action |
 |---|---|---|
 | 1 | Gap or Shifting Object detected | Emergency Mend at Gap site. |
-| 2 | Niflhel supply chain disturbance detected | Investigate. Intercept operatives. |
+| 2 | Thread exploitation site disturbance detected | Investigate. Intercept operatives. |
 | 3 | RS ≤ 40 | Peninsula-wide Weaving. RS +1/Warden (max +2/season). |
 | 4 | Faction performing Thread restoration | Cooperation: +1D allied Thread ops (WC ≥ 1). |
 | 5 | New practitioner enters Southernmost | Assessment. TS ≤ 20: dismissed. TS 40+: useful. |

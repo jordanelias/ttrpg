@@ -21,10 +21,11 @@
 | Löwenritter | Conditional: post-coup only |
 
 ### NPC-Only Factions (never playable)
-Löwenritter (pre-coup), Riskbreakers, Inquisitors, Guilds, Schoenland, Niflhel, Altonia, Edeyja/Wardens.
+Löwenritter (pre-coup), Riskbreakers, Inquisitors, Guilds, Schoenland, Altonia, Edeyja/Wardens.
+Niflhel: STRUCK (conflict_architecture_proposal). Functions distributed to settlement-level phenomena (black markets, intelligence brokers, Thread exploitation sites).
 Ministry: NPC faction (source document not yet identified — [GAP: Ministry NPC design doc not found in any read document. User confirmed it exists. Design blocked until source located.])
 
-Note: Guilds and Niflhel do NOT have player victory conditions. All Guilds/Niflhel victory condition text from prior params versions is struck.
+Note: Guilds do NOT have player victory conditions. All Guilds victory condition text from prior params versions was struck (PP-191).
 
 
 ### Playable Factions
@@ -39,10 +40,11 @@ Note: Guilds and Niflhel do NOT have player victory conditions. All Guilds/Niflh
 
 
 ### NPC-Only Factions (never playable)
-Löwenritter (pre-coup), Riskbreakers, Inquisitors, Guilds, Schoenland, Niflhel, Altonia, Edeyja/Wardens.
+Löwenritter (pre-coup), Riskbreakers, Inquisitors, Guilds, Schoenland, Altonia, Edeyja/Wardens.
+Niflhel: STRUCK (conflict_architecture_proposal). Functions distributed to settlement-level phenomena (black markets, intelligence brokers, Thread exploitation sites).
 Ministry: NPC faction (source document not yet identified — [GAP: Ministry NPC design doc not found in any read document. User confirmed it exists. Design blocked until source located.])
 
-Note: Guilds and Niflhel do NOT have player victory conditions. All Guilds/Niflhel victory condition text from prior params versions is struck.
+Note: Guilds do NOT have player victory conditions. All Guilds victory condition text from prior params versions was struck (PP-191).
 
 
 ## Dice System (v05 correction)
@@ -150,7 +152,6 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Restoration Movement | — | — | — | — | — | No faction stats. Operates via Presence markers and Community Weaving only. (PP-460) |
 | Löwenritter (post-coup) | 3 | 2 | 3 | 6 | 5 |
 | Guilds (NPC) | 3 | 4 | 6 | 2 | 5 |
-| Niflhel (NPC) | — | 5 | 4 | — | 4 |
 
 CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 territories (T4/T11/T12/T13). Handicap is defensive: mountain range + Thread Wounds hem in expansion. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. CI = 28 (P-32). CI Mass Seizure threshold = 60, cap = 100 (per victory_v30.md §7).
 
