@@ -39,7 +39,7 @@ SW is NOT the same as Piety Track (PT). PT is dynamic (changes through action). 
 |---|---|---|---|
 | T1 | Valorsplatz | 5 | 2 (seat of secular power; Church is present but contested) |
 | T2 | Kronmark | 1 | 2 |
-| T3 | Lowenskyst | 2 | 2 |
+| T3 | Lowenskyst | 3 | 2 |
 | T4 | Grauwald | 1 | 1 |
 | T5 | Feldmark | 1 | 2 |
 | T6 | Stillhelm | 1 | 1 |
@@ -48,9 +48,9 @@ SW is NOT the same as Piety Track (PT). PT is dynamic (changes through action). 
 | T9 | Himmelenger | 5 | 5 (cathedral city; Church's primary anchor) |
 | T10 | Spartfell | 1 | 2 |
 | T11 | Halvardshelm | 1 | 1 |
-| T12 | Sigurdshelm | 3 | 2 |
+| T12 | Sigurdshelm | 4 | 2 |
 | T13 | Oastad | 1 | 1 |
-| T14 | Ehrenfeld | 2 | 3 (military stronghold with significant Church benediction tradition) |
+| T14 | Ehrenfeld | 3 | 3 (military stronghold with significant Church benediction tradition) |
 | T15 | Askeheim | 0 | 0 (Calamity ground; Church presence impossible) |
 | T16 | Schoenland | — | 1 |
 | T17 | Halvarshelm | 1 | 2 |

@@ -21,17 +21,17 @@ The Deed-based victory system has been dissolved for ALL factions including Löw
 **Peninsular Partition (Co-Victory, multiplayer):** Both factions collectively control all 15 territories. Each PV ≥ 10. Accord ≥ 2 everywhere. No inter-faction battle preceding 4 seasons. Strain ≤ 6. Both Mandate ≥ 3. See peninsular_strain_v1.md §6.3.
 
 ### Territory Consolidation Values (PV)
-Per victory_v30.md §1. Total PV = 30 (T16 Schoenland not in territorial play, T15 Askeheim PV = 0).
+Per victory_v30.md §1. Total PV = 33 (T16 Schoenland not in territorial play, T15 Askeheim PV = 0).
 
 | T# | Territory | PV | Starting Controller |
 |----|-----------|-----|---------------------|
 | T1 | Valorsplatz | 5 | Crown |
 | T8 | Gransol | 4 | Hafenmark |
 | T9 | Himmelenger | 5 | Church of Solmund |
-| T12 | Sigurdshelm | 3 | Varfell |
-| T3 | Lowenskyst | 2 | Crown |
-| T10 | Spartfell | 2 | Hafenmark |
-| T14 | Ehrenfeld | 2 | Crown |
+| T12 | Sigurdshelm | 4 | Varfell |
+| T3 | Lowenskyst | 3 | Crown |
+| T10 | Spartfell | 1 | Hafenmark |
+| T14 | Ehrenfeld | 3 | Crown |
 | T2 | Kronmark | 1 | Crown |
 | T4 | Grauwald | 1 | Varfell |
 | T5 | Feldmark | 1 | Crown |
@@ -41,7 +41,7 @@ Per victory_v30.md §1. Total PV = 30 (T16 Schoenland not in territorial play, T
 | T13 | Oastad | 1 | Varfell |
 | T17 | Halvarshelm | 1 | Hafenmark |
 
-Starting PV: Crown 12, Hafenmark 8, Varfell 6, Church of Solmund 3.
+Starting PV: Crown 14, Hafenmark 7, Varfell 7, Church 5.
 
 ### Co-Victory Pairings
 Per victory_v30.md §4. All require 2 consecutive Accounting steps except Church+Hafenmark Partition (immediate on mutual agreement).
@@ -97,17 +97,17 @@ PI advances per existing IP/PI interaction rules. PI markers placed in territori
 
 
 ### Territory Consolidation Values (PV)
-Per victory_v30.md §1. Total PV = 30 (T16 Schoenland not in territorial play, T15 Askeheim PV = 0).
+Per victory_v30.md §1. Total PV = 33 (T16 Schoenland not in territorial play, T15 Askeheim PV = 0).
 
 | T# | Territory | PV | Starting Controller |
 |----|-----------|-----|---------------------|
 | T1 | Valorsplatz | 5 | Crown |
 | T8 | Gransol | 4 | Hafenmark |
 | T9 | Himmelenger | 5 | Church of Solmund |
-| T12 | Sigurdshelm | 3 | Varfell |
-| T3 | Lowenskyst | 2 | Crown |
-| T10 | Spartfell | 2 | Hafenmark |
-| T14 | Ehrenfeld | 2 | Crown |
+| T12 | Sigurdshelm | 4 | Varfell |
+| T3 | Lowenskyst | 3 | Crown |
+| T10 | Spartfell | 1 | Hafenmark |
+| T14 | Ehrenfeld | 3 | Crown |
 | T2 | Kronmark | 1 | Crown |
 | T4 | Grauwald | 1 | Varfell |
 | T5 | Feldmark | 1 | Crown |
@@ -117,7 +117,7 @@ Per victory_v30.md §1. Total PV = 30 (T16 Schoenland not in territorial play, T
 | T13 | Oastad | 1 | Varfell |
 | T17 | Halvarshelm | 1 | Hafenmark |
 
-Starting PV: Crown 12, Hafenmark 8, Varfell 6, Church of Solmund 3.
+Starting PV: Crown 14, Hafenmark 7, Varfell 7, Church 5.
 
 
 ### Co-Victory Pairings

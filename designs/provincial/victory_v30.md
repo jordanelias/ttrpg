@@ -144,7 +144,7 @@ All territory numbers match geography_design.md canonical table.
 | T4 | Grauwald | 1 | Varfell |
 | T15 | Askeheim | 0 | Uncontrolled |
 | T16 | Schoenland | — | Not in territorial play |
-| | **Total** | **35** | |
+| | **Total** | **33** | |
 
 **Starting PV by faction:** Crown 14, Hafenmark 7, Varfell 7, Church 5.
 
