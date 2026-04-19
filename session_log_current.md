@@ -1,10 +1,16 @@
 # Session Log — 2026-04-18 (continued)
-last_stage: Phase 6 — 4 GODOT-IMPACT items propagated to valoria-game
+last_stage: Phase 6 — GODOT-IMPACT triage complete, 4 items propagated
 next_action:
-  skill: Phase 6 ongoing — valoria-game GODOT-IMPACT sync
+  skill: Phase 6 ongoing — simulation framework port (dedicated session)
   description: >
-    Accord DONE (aa73b868). Combat §4 DONE (de2c895d). Knot §5.6a DONE (241a0f99).
-    RM Presence DONE (4f644493). Next: Co-Movement card mechanics, Phase 3 fixes.
+    GODOT-IMPACT triage complete. 8/9 items resolved or classified:
+    - DONE: Accord (aa73b868), Combat §4 (de2c895d), Knot §5.6a (241a0f99),
+      RM Presence (4f644493), Derived stats (prior), Church stats (prior),
+      Phase 5 schemas (23 data types present).
+    - PARTIAL: Co-Movement (mechanics done, card content Phase 7-8).
+    - N/A: Phase 3 fixes (design-doc text only).
+    - DEFERRED: Simulation framework (state.py/engine.py port, dedicated session).
+    Bug fixed: ACCORD_MAX was 5, corrected to 3.
   blockers: []
 commits:
   - 44cb4a1e: "[editorial] 2.14a Ministry Census — ED-671"
@@ -19,9 +25,10 @@ commits:
   - 4f644493: "[sync] RMPresenceSystem.gd — Community Organizing + suppression"
 resolutions_this_session:
   - "10/10 editorial items resolved (4 P1 + 6 P2). 4/4 system validations PASS."
-  - "Phase 6: Accord propagation (4 files, ACCORD_MAX 5→3 bug fix)."
-  - "Phase 6: CombatLogic.gd — round orchestration, PP-247 priority."
-  - "Phase 6: KnotFormationSystem.gd — §5.6a eligibility + resolution."
-  - "Phase 6: RMPresenceSystem.gd — Community Organizing Ob formula (PP-491), Presence marker placement, Church suppression, T9 victory condition check."
+  - "Phase 6 Accord: TerritoryData +accord, 17 territories §2.1, SettingState tracker, Constants ACCORD_MAX 5→3 + 6 tier constants."
+  - "Phase 6 Combat §4: CombatLogic.gd — CombatantState, DeclaredAction (PP-247 priority), resolve_round, damage (PP-232), wounds (ED-694), Desperate Strike/Parry/Full Guard/Disengage."
+  - "Phase 6 Knot §5.6a: KnotFormationSystem.gd — 5 prereqs, Spirit×2 TN7 Ob2, Close/Distant Knot, cooldown."
+  - "Phase 6 RM Presence: RMPresenceSystem.gd — Community Organizing Ob formula (PP-491), marker placement, Church suppression, T9 victory check."
+  - "Phase 6 triage: Co-Movement PARTIAL (mechanics done), Phase 3 N/A (text only), Phase 5 schemas DONE (23 types), Simulation framework DEFERRED."
 open_items: []
 P1-BLOCKER count: 0
