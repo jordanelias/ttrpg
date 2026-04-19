@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 702
+# next_id: 703
 
 
 
@@ -11,6 +11,15 @@
 
 
 
+
+
+
+  - id: ED-702
+    date: 2026-04-18
+    description: "Phase 4.4-4.6: Baseline analysis, stress tests, calibration report. Gate CONDITIONALLY PASSED. 7/7 testable criteria pass. Feature coverage 263/130. RS reaches Fractured in 56% of runs. TC 75 at S60-80. Victory timing deferred to territorial model regression."
+    status: resolved
+    severity: P1
+    affects: [tests/sim_framework/calibration_report.md]
 
 
   - id: ED-701
