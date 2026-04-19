@@ -346,3 +346,13 @@ All 7 conflicts from tc_tcv_conflict_register resolved per editorial_decisions_c
 | Seizure Ob | 10 - PT - infra (floor 1) |
 | PV values | T8/T12=4, T3/T14=3, total 35 |
 | Victory | Peninsular Sovereignty only |
+
+
+## Mass Seizure Declaration Curve — 2026-04-19
+
+Issue: prior commit 250715f raised seizure threshold 60->75. Superseded by this commit.
+Resolution: threshold stays CI >= 60; declaration is probabilistic per season.
+P(declare) = max(0, min(1.0, (CI-58)/42)): 5% at CI 60, 29% at 70, 52% at 80, 76% at 90, 100% at 100.
+Civil-war-grade action; Church institutional restraint modeled by the probability curve.
+Files: victory_v30 §3.2/§7, ci_political_v30 §7.6, params/bg/ci_seizure.md.
+Supersession register created at canon/supersession_register.yaml.

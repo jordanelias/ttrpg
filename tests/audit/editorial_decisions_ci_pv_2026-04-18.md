@@ -10,6 +10,9 @@ Theocracy Counter is now Church Influence (CI).
 ## Decision 3: Seizure available from CI ≥ 60
 Church may attempt territorial seizure when CI ≥ 60.
 
+**UPDATE 2026-04-19:** Declaration is probabilistic, not automatic. Mass Seizure is a civil-war-grade action; Church institutional restraint models via P(declare) = max(0, min(1.0, (CI−58)/42)) per season. 5% at CI 60 → 100% at CI 100. See victory_v30 §3.2.
+**SUPERSESSION NOTE:** Commit 250715f (engine v3 fix) raised threshold to CI ≥ 75. That correction is itself superseded — threshold stays at 60, with probabilistic declaration curve handling the institutional-restraint intent.
+
 ## Decision 4: Seizure Ob = 10 − PT − infrastructure modifiers
 Base Ob = 10 − PT. Infrastructure: Chapel −1, Church −2, Cathedral −3, Inquisitor −1, Templar −1.
 Ob floor: 1.

@@ -204,6 +204,19 @@ PV ≥ 22 AND every other playable faction eliminated (Stability 0). No treaties
 
 **Church Seizure (one-time event):** The Church may declare a Mass Seizure when CI ≥ 60. This is a one-shot bid — the Church gets exactly one attempt. CI determines the Seizure pool; the higher the CI, the stronger the bid.
 
+**Declaration is not automatic.** Mass Seizure is functionally a declaration of civil war against the Crown and secular factions. Even when mechanically available (CI ≥ 60), the Church institutional apparatus resists pulling the trigger. Probability of declaration per season scales with CI:
+
+| CI | P(declare this season) |
+|----|------------------------|
+| < 60 | 0% (unavailable) |
+| 60 | 5% |
+| 70 | 29% |
+| 80 | 52% |
+| 90 | 76% |
+| 100 | 100% (forced) |
+
+**Formula:** P(declare) = max(0, min(1.0, (CI − 58) / 42)). Applied at Accounting. On success, Mass Seizure fires immediately. On failure, Church passes the season — another roll next Accounting. Player Church may override (declare voluntarily at any CI ≥ 60) or defer (suppress declaration even at CI 100 for 1 season only, then forced).
+
 **Church Seizure Pool:** Influence + floor(CI / 15)
 **Church Seizure Ob:** 10 − PT − infrastructure modifiers (floor 1). PT = target territory Piety value (0 = Restoration pole, 5 = Piety pole). Infrastructure modifiers per settlement (see below).
 **Seizure Accord:** Success → max(floor(PT/2)+1, 2). Overwhelming → floor(PT/2)+2, max 3. Partial → 1. See peninsular_strain_v1.md §5.2.
@@ -630,7 +643,7 @@ Multiple victory conditions require RS thresholds. A faction that ignores RS ris
 
 Starting CI: 28. CI caps at 100. Church may declare Mass Seizure at CI ≥ 60 (one-shot — see §3.2).
 
-**Mass Seizure (see §3.2):** One-time event. When declared (CI ≥ 60), every territory with a Church building becomes a simultaneous Seizure target. Ob = 10 − PT − infrastructure (floor 1). CI=100 is the optimal declaration point but not required. No second attempt.
+**Mass Seizure (see §3.2):** One-time event. Declaration gated: CI ≥ 60 available, probability (CI − 58)/42 per season, 100% at CI 100. Every territory with a Church building becomes a simultaneous Seizure target on declaration. Ob = 10 − PT − infrastructure (floor 1). No second attempt.
 
 **Seasonal CI at Accounting:**
 1. Institutional Momentum: CI +1 (passive).

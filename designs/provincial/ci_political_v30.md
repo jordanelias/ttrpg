@@ -399,12 +399,12 @@ New: Battle → RS −1 per season with battle; IP +2.
 Check against existing: RS baseline decay is −1/year-end (annual). Battle RS damage is separate and immediate. No conflict — both apply.
 Check against IP: existing IP +1 from Torben Loyalty ≤ 3. Battle IP +2 is additional. No conflict.
 
-### §7.6 Seizure Changes (CI milestone vs old CI 75 gate)
+### §7.6 Seizure Changes (Mass Seizure replaces gated Seizure)
 
-Old: Seizure gated by CI ≥ 75 (now removed as a gate).
-New: Seizure available from CI ≥ 40 (milestone). Existing Seizure Ob formula unchanged.
-**RESOLVED (victory_v30 §3.2):** Seizure Ob = 10 − PT − infrastructure modifiers (floor 1). One-shot Mass Seizure at CI ≥ 60. Old formulas (2+Fort+max(0,3−PT) and 7−PT) both superseded.
-**RESOLVED (ED-NEW-CI-11):** Seizure Ob formula confirmed as 10 − PT − infrastructure (floor 1). See victory_v30 §3.2.
+Old: Seizure gated by CI ≥ 75 (removed).
+Old: Graduated Seizure from CI ≥ 40 (struck by PP-494 replacement).
+**Current (victory_v30 §3.2):** Mass Seizure is a one-shot event. CI ≥ 60 makes it available. Declaration probability scales (CI − 58)/42 per season, 100% at CI 100. Ob = 10 − PT − infrastructure modifiers (floor 1).
+**RESOLVED (ED-NEW-CI-11):** Seizure Ob formula confirmed as 10 − PT − infrastructure (floor 1).
 
 ### §7.7 Accord Degradation in Sim
 

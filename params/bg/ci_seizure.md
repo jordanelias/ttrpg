@@ -23,7 +23,7 @@ CI creates asymmetric legitimacy: Church gains political bonus proportional to C
 
 
 ## Church Mass Seizure (one-shot — per victory_v30.md §3.2, §7)
-**CI ≥ 60 required. One-time event. CI runs to 100 (no freeze). CI 100 is optimal declaration point.**
+**CI ≥ 60 makes Mass Seizure available. One-time event. Declaration probability (CI−58)/42 per season — 5% at CI 60, 100% at CI 100. CI runs to 100 (no freeze).**
 
 ### Seizure Ob
 Ob = 10 − PT − infrastructure modifiers (floor 1). See victory_v30 §3.2 for infrastructure table.
@@ -37,7 +37,7 @@ Per victory_v30.md §7. Overwhelming seizure: PT +1 in target territory. This is
 One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland).
 
 ### Church Mass Seizure (one-shot, replaces PP-494)
-**Available:** CI ≥ 60. One attempt only. (Replaces Graduated Seizure PP-494.)
+**Available:** CI ≥ 60. Declaration probability per season: P = max(0, min(1.0, (CI-58)/42)). One attempt only. (Replaces Graduated Seizure PP-494.)
 **Pool:** Influence + floor(CI / 15). At CI 60: 10D. At CI 100: 12D.
 **Ob:** 10 − PT − infrastructure modifiers (floor 1). PT 5 with full infra = Ob 1. PT 0 no infra = Ob 10.
 
@@ -86,7 +86,7 @@ One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland)
 
 
 ### Church Mass Seizure (one-shot, replaces PP-494)
-**Available:** CI ≥ 60. One attempt only. (Replaces Graduated Seizure PP-494.)
+**Available:** CI ≥ 60. Declaration probability per season: P = max(0, min(1.0, (CI-58)/42)). One attempt only. (Replaces Graduated Seizure PP-494.)
 **Pool:** Influence + floor(CI / 15). At CI 60: 10D. At CI 100: 12D.
 **Ob:** 10 − PT − infrastructure modifiers (floor 1). PT 5 with full infra = Ob 1. PT 0 no infra = Ob 10.
 

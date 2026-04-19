@@ -1,0 +1,35 @@
+# Supersession Register
+# Tracks editorial decisions, PPs, EDs, and commits that have been overridden by later work.
+# 
+# PURPOSE: Prevent propagation of stale authority. Before treating any editorial decision,
+# PP, ED resolution, or audit finding as authoritative, check this register for supersession.
+#
+# FORMAT:
+#   - superseded_id: <commit-sha | ED-NNN | PP-NNN | file_path>
+#     scope: <what the superseded item claimed>
+#     superseded_by: <commit-sha | ED-NNN | PP-NNN>
+#     superseded_date: YYYY-MM-DD
+#     replacement: <brief description of current canonical>
+#     files_to_recheck: [paths that may have propagated the stale version]
+
+entries:
+
+  - superseded_id: 250715f
+    scope: "Engine v3 seizure threshold raised CI >= 60 -> CI >= 75"
+    superseded_by: "(this commit)"
+    superseded_date: 2026-04-19
+    replacement: >
+      Threshold remains CI >= 60, but Mass Seizure declaration is probabilistic per season:
+      P(declare) = max(0, min(1.0, (CI-58)/42)). 5% at CI 60, 100% at CI 100.
+      The probability curve models Church institutional restraint (civil-war-grade action).
+    files_to_recheck:
+      - designs/provincial/victory_v30.md
+      - designs/provincial/ci_political_v30.md
+      - params/bg/ci_seizure.md
+
+  - superseded_id: tests/audit/editorial_decisions_ci_pv_2026-04-18.md Decision 3
+    scope: "Seizure available from CI >= 60 (automatic availability)"
+    superseded_by: "(this commit)"
+    superseded_date: 2026-04-19
+    replacement: "CI >= 60 makes Mass Seizure available; declaration still probabilistic (see 250715f entry)."
+    files_to_recheck: [tests/audit/editorial_decisions_ci_pv_2026-04-18.md]
