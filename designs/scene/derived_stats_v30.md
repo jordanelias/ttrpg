@@ -1,46 +1,229 @@
 # VALORIA — Derived Stat System Specification
-## Date: 2026-04-17
-## Status: PROPOSAL — architectural addition to videogame layer
-## Scope: Derived values from 1–7 faction stats, separating capacity (dice pools) from state (granular resources)
-## Principle: Stats are what your faction CAN do. Derived values are what your faction HAS right now.
+## Date: 2026-04-18
+## Status: PROPOSAL — supersedes prior derived_stats_v30.md
+## Scope: Unified derived value system across personal, unit, settlement, and faction scales
+## Principle: Stats are what your faction/character CAN do. Derived values are what they HAVE right now.
 
 ---
 
-## §1 — The Problem
+## §1 — Core Architecture
 
-The 1–7 faction stat system was designed for a board game where stats ARE dice pools. This is elegant — one number serves two functions. But for a videogame, it creates three problems:
+Every 1–7 stat remains the dice pool for its resolution system. No change to the dice engine. Each stat additionally produces a **derived value** — a granular resource the player tracks and the engine consumes.
 
-1. **Granularity.** ±1 on a 1–7 scale is a 14–100% change in capability. You can't express "a modest drain" because the smallest drain is enormous.
-2. **Feedback.** The player sees "Wealth 4 → 3" and has to mentally calculate what that means. There's no visceral feedback.
-3. **Conflation.** "How wealthy is my faction" (capacity) and "how much money do I have" (state) are forced into one number. A faction can be structurally wealthy (good trade infrastructure) but temporarily broke (just fought an expensive war), or vice versa.
+**Derivation formula:** `derived_value = attribute × multiplier`
 
-## §2 — The Solution: Stats + Derived Values
+One attribute per derived value. No multi-attribute combinations. History and equipment modify drain/recovery rates, never the base pool size. The multiplier is an integer constant, calibrated to the interaction frequency of the system.
 
-Every faction stat (1–7) remains the dice pool for Domain Actions. No mechanical change to the resolution engine. Each stat additionally produces a **derived value** — a granular resource the player tracks and the engine consumes.
+Stats change rarely (structural capability). Derived values change frequently (current state). The two-layer split exists because stats serve the resolution engine (small integers for dice pools) while derived values serve the state engine (large integers for resource tracking). These are different jobs requiring different scales.
 
-**Core principle:** Stats change rarely and represent structural capability. Derived values change frequently and represent current state. Stat damage (−1 Wealth) means your economy is structurally damaged. Derived value drain (−50 Treasury) means you're spending resources.
+**Output scaling** (TroopCount only): `output = floor(integer_result × derived_value / (stat × multiplier))`. Applied only to active capacity outputs (TroopCount → damage dealt). Not applied to survival resources (Vitality, Composure) — a depleted survival pool makes you easier to kill, not weaker at killing.
 
-**Stat → Derived value mapping:**
+---
 
-| Stat | Dice Pool For | Derived Value | Derivation | What It Represents |
-|------|--------------|---------------|------------|-------------------|
-| **Mandate** | Govern, Crown Treaty, Peninsular Strain checks | **Legitimacy** | Mandate × 20, starting = stat × 20 | Popular/institutional trust capital. Spent by unpopular decisions, crisis responses, emergency authority invocations. Replenished by successful governance. |
-| **Wealth** | Trade, Muster Wealth checks | **Treasury** | Wealth × 100, starting = stat × 100 | Accumulated economic resources. Spent by military upkeep, Campaign Supply, muster costs, construction. Replenished by Trade actions and territorial Prosperity income. |
-| **Military** | Muster, BG Battle pool | **Levies Available** | Military × 2 (max units fieldable simultaneously) | Force projection capacity. Not a spendable resource — a ceiling. Raising units doesn't reduce it; it constrains how many you can have active. |
-| **Influence** | Diplomacy, Intel, Treaty, Seizure | **Reputation** | Influence × 15, starting = stat × 15 | Political capital across factions. Spent by diplomatic actions, spy operations, political maneuvers. Replenished by successful diplomacy and intel wins. |
-| **Stability** | Stability checks only (not a pool for actions) | **Cohesion** | Stability × 10, starting = stat × 10 | Internal faction unity. Drained by defeats, failed governance, internal conflict. Replenished by peaceful seasons and successful Govern. |
+## §2 — The Problem
 
-## §3 — How Derived Values Work
+The 1–7 stat system was designed for a board game where stats ARE dice pools. For a videogame, it creates three problems:
 
-### 3.1 Income and Drain
+1. **Granularity.** ±1 on a 1–7 scale is a 14–100% change in capability. You can't express "a modest drain."
+2. **Feedback.** The player sees "Wealth 4 → 3" and must mentally calculate implications. No visceral feedback.
+3. **Conflation.** "How capable is my faction" (capacity) and "what resources do I have" (state) are one number.
 
-Each derived value has **seasonal income** (automatic at Accounting) and **drains** (from actions, events, and ongoing costs).
+Resolution: stats remain 1–7 (correct pool range for d10 probability curves). Derived values provide granularity, feedback, and state tracking. Small numbers for decisions, big numbers for consequences.
+
+---
+
+## §3 — Multiplier Tiers
+
+| Tier | Multiplier | Systems | Rationale |
+|------|-----------|---------|-----------|
+| High | ×10 | Vitality | Combat has most interactions per scene (5–8+ rounds). Fine granularity for gradual degradation, wound thresholds, equipment differentiation. |
+| Medium | ×5 | Stamina, Thread Fatigue | Action economy resources deplete per-round/per-operation. Variable action costs (3–10 per action) without inflating numbers. |
+| Low | ×3 | Composure, Concentration | Social contests are 1–5 exchanges. Lower multiplier gives equipment modifiers proportionally more impact. |
+| Faction | ×10–100 | Treasury, Legitimacy, Reputation, Cohesion | Seasonal interaction frequency (1–5 events/season). Each calibrated independently. |
+
+---
+
+## §4 — Personal Scale: Combat Resources
+
+### 4.1 Vitality (survival resource)
+
+| Property | Value |
+|----------|-------|
+| Formula | Endurance × 10 |
+| Range | 10–70 |
+| Direction | Drains down from max |
+| Depleted at | 0 (incapacitated) |
+| Equipment | Armor adds flat Vitality (+4 leather, +6 chain, +8 plate). Consumables restore on rest (+4 rations, +8 healer's kit). Poisons drain per round. |
+
+**Wound Interval = Endurance + 6** (unchanged). Wounds accrue at each interval of cumulative damage: `wounds_taken = floor(total_damage / Wound_Interval)`. Each wound = −1D Combat Pool (unchanged).
+
+Wound Interval checks use raw post-DR damage, not Vitality-scaled damage. Equipment Vitality bonuses affect total capacity before incapacitation; they do not change wound accrual rate. Armor DR still reduces incoming damage before both Vitality deduction and Wound Interval accumulation.
+
+**Eliminates:** Max Wounds as a stored stat. Health formula `(End+6)×(floor(End/2)+1)`.
+
+| Endurance | Current Health | Vitality (×10) | Wounds before incap (current → new) |
+|-----------|---------------|----------------|--------------------------------------|
+| 1 | 14 | 10 | 2 → 1 |
+| 2 | 24 | 20 | 3 → 2 |
+| 3 | 27 | 30 | 3 → 3 |
+| 4 | 40 | 40 | 4 → 4 |
+| 5 | 44 | 50 | 4 → 4 |
+| 6 | 60 | 60 | 5 → 5 |
+| 7 | 65 | 70 | 5 → 5 |
+
+Low-End characters become slightly more fragile (correct — minimal attribute investment should not be padded). Mid-to-high matches exactly or gains slightly.
+
+### 4.2 Stamina (action economy resource)
+
+| Property | Value |
+|----------|-------|
+| Formula | Endurance × 5 |
+| Range | 5–35 |
+| Direction | Drains down from max |
+| Depleted at | 0 (Out of Breath: −2D all combat rolls) |
+| Recovery | Take a Breath: restores (Endurance + relevant combat History) × 2, capped at max |
+| Equipment | Heavy armor: +2 drain per action. Medium: +1. Light/none: +0. |
+
+**Variable action costs:**
+
+| Action | Stamina Cost |
+|--------|-------------|
+| Standard attack | 5 |
+| Heavy/special attack | 8 |
+| Defensive stance | 3 |
+| Dodge/disengage | 4 |
+| Special maneuver (Feint, Disarm, etc.) | 6–10 |
+| Movement (per zone) | 2 |
+
+End 4: Stamina 20. Standard attacks at 5/round: 4 rounds before Out of Breath. Heavy armor (+2): effective 7/round, ~3 rounds. Take a Breath with History 3: restores (4+3)×2 = 14.
+
+**Eliminates:** Current formula `End + History + 1 − armour_mod`. History moves to recovery. Armour moves from base reduction to drain modifier (Battle Brothers precedent: armor adds to per-action fatigue cost, doesn't reduce max fatigue).
+
+**Precedent:** Battle Brothers fatigue system. Variable action costs create pre-combat decisions (loadout) and in-combat decisions (burst vs sustain). Viable in videogame because UI handles math.
+
+---
+
+## §5 — Personal Scale: Social Contest Resources
+
+### 5.1 Composure (survival resource)
+
+| Property | Value |
+|----------|-------|
+| Formula | Charisma × 3 |
+| Range | 3–21 |
+| Direction | Strain accumulates toward threshold; Rattled when strain ≥ Composure |
+| Depleted at | Rattled: +1 Ob per Rattled level to all contest rolls (cumulative) |
+| Recovery | Full restore at scene change (unchanged) |
+| Equipment | Court attire +2, Crown regalia +4, formal robes +3. Emotional state: +3 in own court, −3 confronting personal enemy. |
+
+Strain per exchange: rescaled ×3.
+Charisma modifier (attacker): `max(0, floor((Cha−3)/2)) × 3`. Range 0–6.
+Focus defense (defender): `floor(Foc/2) × 3`. Range 0–9.
+
+**Eliminates:** Current formula `Cha + 6`. Removes the +6 constant. Low-Cha characters become appropriately fragile in social contests.
+
+### 5.2 Concentration (action economy resource)
+
+| Property | Value |
+|----------|-------|
+| Formula | Focus × 3 |
+| Range | 3–21 |
+| Direction | Drains down from max |
+| Depleted at | 0 (Spent: −2D next exchange, opponent +1D; then resets to max) |
+| Depletion rate | −3 per exchange; −3 additional on exchange loss |
+| Recovery | Regroup forfeit action: restores to max (Focus × 3) |
+
+**Eliminates:** Current formula `Focus + Recall`. Recall removed — has no conceptual connection to sustained mental focus. Recall already provides +2D citation bonus in the Argue step (correct role for knowledge/memory). Concentration is sustained focus under pressure, governed by Focus alone.
+
+---
+
+## §6 — Personal Scale: Thread Resources
+
+### 6.1 Thread Fatigue (action economy resource)
+
+| Property | Value |
+|----------|-------|
+| Formula | Spirit × 5 (threshold) |
+| Range | Threshold 5–35 |
+| Direction | **Counts up from 0** toward threshold |
+| Threshold reached | Thread exhaustion: contact breaks involuntarily, cannot re-establish until rested |
+| Recovery | Full rest: resets to 0. Meditation: reduces by Spirit score. |
+| Equipment | Thread-conductive artifact: −1 fatigue/round. Einhir proximity: +3/round. Stimulant herbs: threshold +5 temporarily. |
+
+**Per-operation fatigue costs:**
+
+| Operation | Fatigue/Round |
+|-----------|--------------|
+| Leap (entry cost, one-time) | 3 |
+| Passive sensing | 2 |
+| Mending | 4 |
+| Pulling | 5 |
+| Locking | 7 |
+| Dissolution | 10 |
+
+**Focus role change:** Focus no longer sets contact duration. Contact Rounds eliminated. Focus sets maximum operations per contact session, preserving current `Focus − 1` cap:
+
+| Focus | Max Operations per Session |
+|-------|---------------------------|
+| 1 | 0 (experience only) |
+| 2 | 1 |
+| 3 | 2 |
+| 4 | 3 |
+| 5+ | 4+ |
+
+Spirit 6 / Focus 2: high threshold (30), sustained contact, but only 1 operation — endurance without skill. Spirit 2 / Focus 6: low threshold (10), exhausts quickly, but 5 operations if endurance allowed — skill without staying power.
+
+**Coherence** (survival resource): unchanged. 10→0 countdown. Not a derived value — a permanent degradation track.
+
+---
+
+## §7 — Unit Scale: TroopCount
+
+| Property | Value |
+|----------|-------|
+| Formula | Size × block_size (set at muster) |
+| Direction | Drains down |
+| Depleted at | TroopCount < block_size (Size = 0, unit destroyed) |
+
+**block_size by battle scale** (canonicalizes A.3 narrative table):
+
+| Scale | block_size |
+|-------|-----------|
+| Skirmish | 10 |
+| Company | 100 |
+| Battle | 500 |
+| Campaign | 1,000 |
+| War | 5,000 |
+
+**Size** (1–7) becomes a computed integer: `Size = floor(TroopCount / block_size)`. All combat formulas reference Size unchanged: `Pool = min(Size, Command) + Command`.
+
+**Output scaling:** `effective_damage = floor(successes × (1 + Power) × TroopCount / (Size × block_size))`. A unit at 4,600 TroopCount (Size 4, Campaign) deals ~15% more damage than one at 4,000 (also Size 4). Continuous output without touching resolution.
+
+**Health layer (engine-only):** `Total Health = Size_at_muster × H`, where `H = min(Discipline, Command) + DR`. Unchanged. TroopCount = `floor(current_Health × block_size / H)`.
+
+Player sees: **"Heavy Infantry — 4,428 / 5,000 (Size 4)"**
+
+---
+
+## §8 — Faction Scale
+
+| Stat | Derived Value | Derivation | What It Represents |
+|------|--------------|------------|-------------------|
+| Mandate | **Legitimacy** | Mandate × 20, starting = stat × 20 | Popular/institutional trust capital |
+| Wealth | **Treasury** | Wealth × 100, starting = stat × 100 | Accumulated economic resources |
+| Military | **Levies Available** | Military × 2 (ceiling) | Force projection capacity — not spendable, constrains active unit count |
+| Influence | **Reputation** | Influence × 15, starting = stat × 15 | Political capital across factions |
+| Stability | **Cohesion** | Stability × 10, starting = stat × 10 | Internal faction unity |
+
+### 8.1 Income and Drain
+
+Each derived value has **seasonal income** (automatic at Accounting) and **drains** (from actions, events, ongoing costs).
 
 **Treasury (from Wealth):**
 - Seasonal income: Σ(Prosperity of controlled settlements) × 10 gold/season
 - Trade Success: +Wealth × 25 gold (one-time)
 - Trade Overwhelming: +Wealth × 50 gold
-- Haushalt Competence bonus: +Competence × 25 gold/season (Competence 0–3). Cap: Haushalt Competence income cannot exceed Wealth × 50 per season. At Wealth 4/Competence 3: +75/season, capped at 200. (ED-663 resolution: mechanic canonicalized here with cap to prevent unbounded generation. Competence income supplements but cannot dominate territorial Prosperity income.)
+- Haushalt Competence bonus: +Competence × 25 gold/season (Competence 0–3). Cap: Haushalt Competence income cannot exceed Wealth × 50 per season. (ED-663 resolution)
 - Campaign Supply (units in hostile territory): −100 gold/season
 - Siege (attacker): −100 gold/season per active siege
 - Muster (Levy): −50 gold
@@ -50,237 +233,120 @@ Each derived value has **seasonal income** (automatic at Accounting) and **drain
 - Unit upkeep (professional units, per season): −25 gold per unit
 - Construction (Fortify, infrastructure): −200 gold per action
 
-**When Treasury reaches 0:** Faction cannot Muster, cannot Fortify, cannot perform any action with a gold cost. Professional units begin Discipline degradation (−1/season). At the NEXT Accounting where Treasury is still 0: **Wealth −1** (the economy is structurally damaged — not just broke, but broken). This is the only path from derived value depletion to stat damage.
+**When Treasury reaches 0:** Faction cannot Muster, Fortify, or perform gold-cost actions. Professional units begin Discipline degradation (−1/season). At NEXT Accounting where Treasury is still 0: **Wealth −1** (structural economic damage). Only routine path from derived value depletion to stat damage.
 
-**When Wealth stat drops:** Treasury maximum drops (new max = Wealth × 100). Treasury does NOT automatically drop — you keep what you have, but your income capacity is reduced. Recovery requires Trade actions to rebuild Wealth stat (existing mechanic, unchanged).
+**When Wealth stat drops:** Treasury maximum drops (new max = Wealth × 100). Current Treasury retained. Recovery requires Trade actions.
 
 **Legitimacy (from Mandate):**
-- Seasonal income: +5 per territory at Accord ≥ 2 (governed population supports the regime)
+- Seasonal income: +5 per territory at Accord ≥ 2
 - Successful Govern action: +Mandate × 5
-- Consensus Delay override (RM): −20 (community perceives authority violation)
+- Consensus Delay override (RM): −20
 - Emergency authority invocation: −30
-- Unpopular Domain Action (action that drops Accord in any territory): −15
-- Battle in own territory: −10 (population perceives failure to protect)
-- Peninsular Strain Mandate check failure: Legitimacy −25 AND Mandate −1 (existing mechanic — stat damage triggers from crisis)
+- Unpopular Domain Action (drops Accord): −15
+- Battle in own territory: −10
+- Peninsular Strain Mandate check failure: Legitimacy −25 AND Mandate −1
 
-**When Legitimacy reaches 0:** Mandate check at Accounting (Ob 2). Failure: Mandate −1. The regime is losing structural authority, not just popular support. Accord −1 in all territories (population loses faith in governance).
+**When Legitimacy reaches 0:** Mandate check at Accounting (Ob 2). Failure: Mandate −1. Accord −1 in all territories.
 
 **Reputation (from Influence):**
 - Seasonal income: +5 per diplomatic relationship at Disposition ≥ +2
-- Successful Intel/Spy action: +Influence × 5
+- Successful Intel/Spy: +Influence × 5
 - Successful Diplomacy: +Influence × 10
 - Failed diplomatic initiative: −15
-- Exposed Niflhel operation / Altonian Alignment discovery: −50
-- Church Attention triggered against faction: −10
+- Exposed Niflhel/Altonian operation: −50
+- Church Attention triggered: −10
 - Casus Belli declared against faction: −20
 
-**When Reputation reaches 0:** Diplomatic actions take +1 Ob (nobody trusts you). Intel operations take +1 Ob (your agents are known and watched). At next Accounting with Reputation still 0: Influence −1.
+**When Reputation reaches 0:** Diplomatic and Intel actions +1 Ob. At next Accounting still at 0: Influence −1.
 
 **Cohesion (from Stability):**
-- Seasonal income: +10 per peaceful season (no battle, no crisis event)
-- Successful Govern action: +5
+- Seasonal income: +10 per peaceful season
+- Successful Govern: +5
 - Battle loss: −15
 - Accord drops to 0 in any territory: −20
 - Faction leader death/succession: −30
 - Coup (Löwenritter): −50
-- Internal faction schism (RM Schism, Church Cardinal defection): −40
+- Internal faction schism: −40
 
-**When Cohesion reaches 0:** Stability check at Accounting (Ob 1). Failure: Stability −1. Further Cohesion drain at Stability ≤ 2 triggers faction collapse checks per existing rules.
+**When Cohesion reaches 0:** Stability check at Accounting (Ob 1). Failure: Stability −1. Cohesion drain at Stability ≤ 2 triggers faction collapse checks.
 
-**Levies Available (from Military):**
-This works differently — it's a ceiling, not a spendable pool. Military × 2 = maximum units that can be active simultaneously. If Military drops (from battle losses), the ceiling drops — if you're over the new ceiling, you must disband units until you're at or below the limit (representing loss of command infrastructure, not individual soldiers).
+**Levies Available (from Military):** Ceiling, not spendable. Military × 2 = max active units. If Military drops, ceiling drops — disband excess units.
 
-### 3.2 Stat Damage Only From Structural Failure
+### 8.2 Stat Damage Only From Structural Failure
 
-The key design rule: **no game event directly modifies a 1–7 stat except through derived value depletion or explicit major events.**
+**No game event directly modifies a 1–7 stat except through derived value depletion or explicit major events.**
 
-Current design has ~85 places where stats change by ±1 or ±2 from specific game events. Most of these should be converted to derived value changes:
+Events that SHOULD still directly modify stats (major structural shifts): faction collapse triggers, coup, CI=100 Mass Seizure, Altonian Occupation, Parliamentary Outlawry, Generational Shift, Peninsular Strain ≥7, Trade/Govern Overwhelming, decisive battle loss (margin ≥2), unit destruction.
 
-| Current Rule | Conversion |
-|-------------|-----------|
-| "Battle loss: Military −1" | Treasury −200 (war costs) + Cohesion −15 (morale damage). Military −1 only if battle was Campaign-scale defeat. |
-| "Campaign Supply: Wealth −1/season" | Treasury −100/season. Wealth −1 only when Treasury reaches 0. |
-| "Stability −1 from failed Govern" | Cohesion −15. Stability −1 only when Cohesion reaches 0. |
-| "Mandate −1 from Peninsular Strain" | Legitimacy −25. Mandate −1 only at Strain ≥ 7 (major crisis). |
-| "Accord −1 in territory" | Stays as-is — Accord is already a per-territory value, not a faction stat. No conversion needed. |
+The dividing line: "bad quarter" (derived drain) vs "fundamentally weakened" (stat damage).
 
-**Events that SHOULD still directly modify stats (major structural shifts):**
-- Faction collapse trigger (Stability directly to 0)
-- Coup (Mandate directly modified)
-- CI=100 Mass Seizure Declaration (stat resets for seized territories)
-- Altonian Occupation beginning (stat overrides for occupied territories)
-- Parliamentary Outlawry (Mandate −2, direct political destruction)
-- Generational Shift (stat resets per succession rules)
+---
 
-These are rare, dramatic, campaign-altering events. The player should feel them as structural shocks, not routine fluctuations.
+## §9 — Settlement Scale (PENDING)
 
-### 3.3 What the Player Sees
-
-The faction overview screen shows:
-
-```
-CROWN OF VALORSMARK
-━━━━━━━━━━━━━━━━━━━
-
-Mandate ████████░░ 5      Legitimacy: 87/100
-Wealth  ██████░░░░ 4      Treasury:  340/400 gold
-Military ████████░░ 5     Levies: 7/10 fielded
-Influence █████████░ 5    Reputation: 62/75
-Stability ████████░░ 4    Cohesion: 35/40
-
-Treasury this season: +65 income, −125 costs = −60 net
-  Income: Valorsplatz (40) + Kronmark (15) + Feldmark (10)
-  Costs:  Army in Lowenskyst (−100) + Unit upkeep (−25)
-```
-
-The player sees at a glance: my economy is bleeding (negative net treasury), my stability is fine, my reputation is moderate. They know they need to either pull troops back from Lowenskyst or Trade to boost income. The stat bars tell them structural capability; the derived numbers tell them current state.
-
-### 3.4 Why This Is Better Than a Resource-Only Economy
-
-The 1–7 stats remain the resolution engine. When the player attempts a Trade action, they still roll Wealth dice (4d10) against Ob. The Treasury is the *consequence* of Trade success, not the *input*. This preserves the elegant stat-as-pool design while giving the player granular feedback on their economic state.
-
-If we went pure resource economy (5572 gold, no Wealth stat), the player would need to understand what gold amount maps to what probability of trade success, what military capacity their treasury buys, etc. The two-layer system (stats for capability, derived values for state) gives the player two different kinds of information through two intuitive displays.
-
-## §4 — Settlement-Level Derived Values
-
-The same principle applies at settlement scale. Settlement stats (Prosperity, Defense, Order) are 0–5 on the current design. These also benefit from derived values:
+Architecture supports settlement-level derived values:
 
 | Settlement Stat | Derived Value | Derivation |
-|----------------|---------------|-----------|
-| Prosperity | **Local Economy** | Prosperity × 50. Drained by siege, military action, famine events. Contributes to faction Treasury income. |
-| Defense | **Garrison Strength** | Defense × 20 + Fort Level × 30. This is what the player sees when evaluating "how defended is this settlement." |
-| Order | **Public Order** | Order × 20. Drained by oppressive actions, siege, faction transition. Below 0: riot events generate. |
+|----------------|---------------|-----------:|
+| Prosperity | **Local Economy** | Prosperity × 50 |
+| Defense | **Garrison Strength** | Defense × 20 + Fort Level × 30 |
+| Order | **Public Order** | Order × 20 |
 
-Settlement derived values work the same way: granular drain/recovery, stat damage only from structural failure (Prosperity −1 only when Local Economy hits 0 and stays there).
+Multipliers and interaction design pending settlement_v30 development. Not canonicalized.
 
-**This connects settlement to faction:** a settlement's Local Economy contributes to the controlling faction's Treasury income. A settlement under siege has Local Economy draining, which reduces faction income, which drains faction Treasury, which eventually (if sustained) causes Wealth stat damage. The cascade is: siege → settlement economic damage → faction income loss → treasury depletion → structural economic damage. Each step is visible to the player. Each step is a decision point (lift the siege? trade harder? accept the loss?).
+---
 
-## §5 — Integration with Existing Mechanics
+## §10 — Cross-Scale Bridges
 
-### 5.1 What Changes
+### 10.1 Disposition Cap by Bonds Attribute
 
-- All "Stat ±1" events in current design documents are reviewed and converted to derived value changes EXCEPT explicit major structural events (listed in §3.2).
-- Domain Action results (Trade Success = +gold, Govern Success = +legitimacy) replace stat modifications in most cases.
-- The seasonal Accounting step adds derived value income/drain calculation before stat checks.
-- UI displays both stat bars and derived value numbers.
+Disposition ceiling = Bonds (PP-684). Bonds is structural capability (how deep relationships CAN go). Disposition is current state (how deep this relationship IS). Pattern identical to Wealth→Treasury.
 
-### 5.2 What Does NOT Change
+Companion formation (Disposition ≥ +3) requires Bonds ≥ 5. Knot candidacy (Disposition +5) requires Bonds ≥ 5 (achievable at creation).
 
-- The 1–7 stat scale.
-- The d10 dice pool resolution engine.
-- Ob tables for all Domain Actions.
-- The card system (card hand, cooldown, action mapping).
-- TC, PT, Accord, RS, IP — these are already distinct tracked values, not faction stats.
-- Personal character stats (Charisma, Cognition, etc.) — these operate at a different scale and don't need derived values.
-- Thread mechanics (Coherence, Thread Sensitivity) — already granular (10→0 and percentage scales).
+Cross-reference: fieldwork_v30 §5.1, params_core §Bonds (PP-632/PP-684), companion_specification §2.1.
 
-### 5.3 Videogame Implementation
-
-The engine maintains both layers:
-- **Stat layer:** 1–7 values, used for dice pool resolution. Rarely modified. Displayed as capability bars.
-- **Derived layer:** Granular values (0–max), used for economic simulation, upkeep, event consequences. Frequently modified. Displayed as resource numbers with income/drain breakdown.
-- **Cascade rule:** Derived value reaching 0 AND remaining at 0 through next Accounting triggers stat −1. This is the ONLY routine path from derived to stat damage.
-
-The player never sees dice pool calculations directly. They see: "Trade action — 72% success chance" (derived from Wealth stat pool vs Ob). "Treasury +340 gold on success" (derived from Wealth × 25 × modifiers). The engine translates between the two layers transparently.
-
-## §6 — Calibration Notes
-
-All derived value numbers in this document are PROVISIONAL. They need simulation to confirm:
-- Income rates produce sustainable economies for each faction at starting stats
-- Drain rates create meaningful pressure without immediate collapse
-- Stat damage triggers are rare enough to feel consequential (once every 5–10 seasons, not every season)
-- Starting derived values give factions 3–5 seasons of runway before economic pressure forces Trade actions
-
-The specific multipliers (×100 for Treasury, ×20 for Legitimacy, etc.) are tuning knobs that can be adjusted without changing the architecture.
-
-
-
-## §8 — Personal-Scale Derived Value Applications
-
-The derived value principle (separate structural capability from current state) already exists in personal-scale systems (Health, Composure, Coherence). This section formalizes three additional applications identified by cross-system audit.
-
-### 8.1 Disposition Cap by Bonds Attribute
-
-Disposition (−3 to +5 per NPC per PC) has a maximum value capped by the player's Bonds attribute: **Disposition ceiling = Bonds** (PP-684, revised from PP-632). A character with Bonds 3 can reach Disposition +3 (Trusting, companion eligible). Bonds 5 reaches +5 (Bonded, Knot candidate — achievable at creation). Bonds 7 reaches +5 with room for the maximum 3 Close Knots at full capacity.
-
-This makes Bonds the structural capability (how deep relationships CAN go) and Disposition the current state (how deep this specific relationship IS). The pattern is identical to Wealth→Treasury: Bonds determines the ceiling; social fieldwork fills toward it.
-
-**Design consequence:** Companion formation (Disposition ≥ +3) requires Bonds ≥ 5. A character who prioritizes Bonds at creation (Bonds 5, one of the max-5 slots) can form companions immediately. A character who neglects Bonds (Bonds 1, ceiling +1) cannot even reach Friendly (+2) — their relationships are structurally shallow.
-
-**Resolved (PP-684):** The original PP-632 cap formula floor(Bonds/2)+1 made Disposition +5 unreachable (attribute max 7 → ceiling 4), which made Knot formation mechanically impossible. PP-684 simplifies the cap to **ceiling = Bonds**. Disposition ceiling now equals the Bonds attribute directly. Bonds 5 (achievable at creation) reaches Disposition +5 and unlocks Knot candidacy. Bonds 3 reaches +3 (companion eligibility). This is cleaner than the floor formula, preserves the gating intent (Bonds investment determines relationship depth), and makes every Disposition tier reachable through attribute progression.
-
-**Cross-reference:** fieldwork_v30 §5.1 (Disposition Track), params_core §Bonds (PP-632), companion_specification §2.1 (eligibility).
-
-### 8.2 Army Morale (Mass Combat Derived Value)
-
-Unit-level Morale (1–7) already exists as a per-unit stat. Army Morale is a derived composite that gives the player a single legible indicator of "will my army hold."
+### 10.2 Army Morale (Mass Combat Derived Composite)
 
 **Army Morale = floor(average unit Morale) + Command modifier + Cohesion modifier**
 
 | Component | Source | Range |
 |-----------|--------|-------|
-| Average unit Morale | mean of all active units' Morale, floored | 1–7 |
-| Command modifier | +1 if general's Command ≥ 4; −1 if Command ≤ 2 | −1 to +1 |
-| Cohesion modifier | +1 if faction Cohesion ≥ 75% of max; −1 if Cohesion ≤ 25% of max | −1 to +1 |
+| Average unit Morale | mean of active units' Morale, floored | 1–7 |
+| Command modifier | +1 if Command ≥ 4; −1 if Command ≤ 2 | −1 to +1 |
+| Cohesion modifier | +1 if faction Cohesion ≥ 75% of max; −1 if ≤ 25% | −1 to +1 |
 
-**Army Morale thresholds:**
-- 6+: Resolute. Units hold under pressure. Rout contagion does not spread.
-- 4–5: Steady. Normal operation.
-- 2–3: Shaken. All units −1D on Morale checks. General must make Command check (Ob 2) each Cascade Phase to prevent involuntary Withdrawal.
-- 1: Wavering. All units −2D on Morale checks. Withdrawal begins next phase unless General rallies (Command check Ob 3).
-- 0: Routed. Army-level rout. All units retreat. Battle lost.
+Thresholds: 6+ Resolute, 4–5 Steady, 2–3 Shaken (−1D Morale checks, Command check Ob 2 each Cascade), 1 Wavering (−2D, Withdrawal unless rally Ob 3), 0 Routed (army-level rout, battle lost).
 
-Army Morale changes when: units are destroyed (average drops), general is killed (Command modifier lost), faction Cohesion drops from off-field events (Cohesion modifier shifts), battle proceeds through Cascade Phases (individual unit Morale degrades per existing rules).
+### 10.3 Renown ↔ Derived Value Bridge
 
-The player sees Army Morale as a single number on the battle interface. Individual unit Morale is still tracked but displayed as a per-unit detail, not the primary indicator.
-
-### 8.3 Renown ↔ Derived Value Bridge
-
-Renown (0–10) measures cross-faction personal significance. It should interact with faction derived values when the player holds governance responsibility.
-
-**Governance Responsibility Modifier:** When the player holds a governance position (Standing ≥ 3, per player_agency §5.1), faction derived value drains from governance failures apply a Renown-proportional penalty:
+When player holds governance position (Standing ≥ 3), faction derived value drains from governance failures apply Renown penalties:
 
 | Event | Derived Value Drain | Renown Consequence |
-|-------|--------------------|--------------------|
-| Accord drops in governed territory | Cohesion −20 (existing) | If player is Governor: Renown −1 |
-| Treasury reaches 0 while player is faction officer | Wealth −1 at Accounting (existing) | If player is Counselor+: Renown −1 |
-| Battle loss in territory player governs | Cohesion −15 (existing) | If player is Governor: Renown −1 |
-| Faction Stability reaches 0 | Faction collapses (existing) | If player is faction member: Renown −2 |
+|-------|--------------------|-------------------|
+| Accord drops in governed territory | Cohesion −20 | Governor: Renown −1 |
+| Treasury reaches 0 while faction officer | Wealth −1 at Accounting | Counselor+: Renown −1 |
+| Battle loss in governed territory | Cohesion −15 | Governor: Renown −1 |
+| Faction Stability reaches 0 | Faction collapses | Member: Renown −2 |
 
-Renown penalties from governance failures cap at −2 per season. Renown does not decay below 0.
+Renown governance penalties cap at −2 per season. Does not decay below 0.
 
-**The feedback loop:** Player gains Renown through competent governance (§5.4 sources). Player takes governance responsibility (Standing ≥ 3). Governance failures drain Renown. This creates stakes for governance positions — leadership is earned through the Renown track and risked through the derived value bridge.
-
-### 8.4 Settlement Combat Defense Feedback
-
-When a player personally defends a settlement in combat and wins, the settlement's Garrison Strength recovers:
+### 10.4 Settlement Combat Defense Feedback
 
 | Combat Outcome | Garrison Strength Effect |
 |----------------|------------------------|
-| Player wins defense combat (repels attacker) | Garrison Strength +10 (immediate) |
-| Player wins defense combat with Overwhelming | Garrison Strength +20 + Public Order +5 (the population saw competent defense) |
-| Player loses defense combat | Garrison Strength −10 (the garrison is weakened) |
+| Player wins defense (repels attacker) | Garrison Strength +10 |
+| Player wins with Overwhelming | Garrison Strength +20 + Public Order +5 |
+| Player loses defense | Garrison Strength −10 |
 | Settlement falls during player defense | Garrison Strength → 0, Defense stat check Ob 2 at next Accounting |
 
-This cascade (personal combat outcome → settlement derived value → faction derived value income) is the most complete personal→faction feedback loop in the game. The player who fights to defend a settlement sees the mechanical consequence in the settlement's Garrison number, which feeds into faction Military capacity via the Levies Available ceiling.
+Personal combat outcome → settlement derived value → faction derived value income: the most complete personal→faction feedback loop.
 
-### 8.5 Derived Values the System Does NOT Need
+---
 
-Personal-scale systems that already have functional derived scores and should not receive additional layers:
+## §11 — Stat Modification Conversion Registry (PP-680)
 
-- **Combat Pool** (Agi×2 + History + 3): Already derived. Adding "Combat Readiness" would duplicate Stamina.
-- **Composure** (Cha+6): Already the social damage buffer. Adding "Social Capital" would duplicate it.
-- **Coherence** (10→0): Already granular with named thresholds. No additional layer needed.
-- **Cover** (Cog + History): Already the fieldwork exposure buffer.
-- **Thread Sensitivity** (percentage growth): Already granular.
-
-The principle: add derived values only where the current stat-as-pool conflation causes granularity, feedback, or visibility problems. Personal-scale systems already solved this.
-
-[EDITORIAL: ED-694 — Derived stat system. Architectural addition to videogame layer. Does not modify existing board game / hybrid mechanics — adds a presentation and simulation layer for Godot implementation.]
-
-## §7 — Stat Modification Conversion Registry (PP-680)
-
-Audit of all 51 stat ±1/±2 references across design docs. Each classified as CONVERT (routine → derived value drain) or KEEP (structural → direct stat modification).
+Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → derived drain) or KEEP (structural → direct stat modification).
 
 ### Converted to Derived Value (routine fluctuations):
 
@@ -309,7 +375,7 @@ Audit of all 51 stat ±1/±2 references across design docs. Each classified as C
 
 | Event | Stat Change | Rationale |
 |-------|-----------|-----------|
-| Battle loss (margin ≥2): Military −1 | KEEP | Losing a battle decisively IS structural military damage |
+| Battle loss (margin ≥2): Military −1 | KEEP | Decisive loss IS structural military damage |
 | Unit destroyed: Military −1 | KEEP | Permanent force loss |
 | Campaign defeat: Mandate −1 | KEEP | Major political event |
 | Crown Treaty: target Mandate −1 | KEEP | Diplomatic victory — structural |
@@ -324,6 +390,55 @@ Audit of all 51 stat ±1/±2 references across design docs. Each classified as C
 | Coup, Occupation, Generational Shift | KEEP | Campaign-altering events |
 | Peninsular Strain ≥7: Mandate check | KEEP | Existential crisis level |
 
-### Design Principle
+---
 
-The dividing line: **would a real-world state experience this as "we had a bad quarter" (derived drain) or "our government has been fundamentally weakened" (stat damage)?** A failed siege is a bad quarter. A campaign-scale military defeat is structural. A failed trade mission is a bad quarter. An Overwhelming trade success that opens new markets is structural. The derived value layer absorbs the routine. The stat layer records the permanent.
+## §12 — What Changes from Current Systems
+
+| Current System | Change | Rationale |
+|---------------|--------|-----------|
+| Health = (End+6) × (floor(End/2)+1) | → Vitality = End × 10 | Simpler, eliminates Max Wounds, opens equipment space |
+| Max Wounds = floor(End/2)+1 | → Eliminated | Wounds computed on the fly: floor(damage / Wound_Interval) |
+| Stamina = End + History + 1 − armour | → Stamina = End × 5; History → recovery; armour → drain modifier | Single-attribute base, variable action costs, BB precedent |
+| Composure = Cha + 6 | → Composure = Cha × 3 | Removes +6 constant, opens social equipment space |
+| Concentration = Focus + Recall | → Concentration = Focus × 3 | Removes Recall (wrong attribute), single-attribute derivation |
+| Contact Rounds = Focus | → Thread Fatigue threshold = Spirit × 5; Focus → max ops per session | Separates duration (Spirit) from skill (Focus), variable costs |
+| Size (1–7 stored stat) | → TroopCount = Size × block_size; Size computed | Sub-Size visibility, output scaling, reinforcement decisions |
+| A.3 scale table (narrative only) | → block_size canonicalized | Required for TroopCount derivation |
+
+## §13 — What Does NOT Change
+
+- Dice engine: d10, TN 6/7/8, integer pools, integer Ob, degree table
+- Combat Pool: (Agi × 2) + History + 3, split offense/defense
+- Wound Interval: End + 6
+- Wound penalty: −1D per wound (cumulative)
+- DR / armor damage reduction tables
+- All faction stat → dice pool relationships
+- All mass combat formulas (Pool, H, damage per success)
+- Coherence (10→0 countdown), Certainty (0–5), Momentum (0–4)
+- Social contest: Argue pools, genre/orientation, Conviction Track, interaction types
+- Thread operations: Leap procedure, operation types, co-movement, Ob values
+- Disposition Track, Renown Track, Standing
+- TC, PT, Accord, RS, IP — already distinct tracked values
+
+---
+
+## §14 — Complete Derived Value Map
+
+| Scale | Stat | Derived Value | Multiplier | Direction |
+|-------|------|--------------|-----------|-----------|
+| Personal | Endurance | **Vitality** | ×10 | Drains down |
+| Personal | Endurance | **Stamina** | ×5 | Drains down |
+| Personal | Charisma | **Composure** | ×3 | Drains down |
+| Personal | Focus | **Concentration** | ×3 | Drains down |
+| Personal | Spirit | **Thread Fatigue** | ×5 (threshold) | Counts up |
+| Unit | Size | **TroopCount** | ×block_size | Drains down |
+| Faction | Mandate | **Legitimacy** | ×20 | Drains down |
+| Faction | Wealth | **Treasury** | ×100 | Drains down |
+| Faction | Military | **Levies Available** | ×2 | Ceiling |
+| Faction | Influence | **Reputation** | ×15 | Drains down |
+| Faction | Stability | **Cohesion** | ×10 | Drains down |
+| Settlement | Prosperity | **Local Economy** | ×50 | PENDING |
+| Settlement | Defense | **Garrison Strength** | ×20+Fort | PENDING |
+| Settlement | Order | **Public Order** | ×20 | PENDING |
+
+[EDITORIAL: ED-694 — Derived stat system v2. Architectural redesign for videogame layer. Supersedes prior PROPOSAL. Extends personal-scale derived values (Vitality, Stamina, Composure, Concentration, Thread Fatigue), adds unit-scale TroopCount with output scaling, preserves all faction-scale values and PP-680 registry. Does not modify existing dice engine or resolution mechanics.]
