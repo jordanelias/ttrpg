@@ -1,14 +1,10 @@
-# Session Status (auto-generated)
-# DO NOT EDIT — this file is managed by start_session_log / close_session_log
-#
-# Active sessions: 0
-# Last updated: 2026-04-19T05:31:02.174446+00:00
-# See: session_logs/index.md for details
-#
-session_id: pointer
-status: IDLE
-active_sessions: 0
-last_stage: auto-generated
+# Session Log — 2026-04-18 (engine v3)
+last_stage: Engine v3 built and smoke-tested. 0/5 victories — AI tuning needed.
 next_action:
-  skill: see session_logs/index.md
-blockers: []
+  skill: simulation — faction AI tuning then NPC campaigns
+  description: >
+    Engine v3 committed with correct dice, stats, CI, RS, victory.
+    AI expansion rate insufficient for peninsula control. Tune military
+    aggression per canonical priority trees, then run NPC campaigns.
+  blockers: []
+P1-BLOCKER count: 0

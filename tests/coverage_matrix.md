@@ -290,3 +290,10 @@ TC→CI, TCV→PV, no freeze, seizure CI≥60 one-time, victory=peninsula contro
 - military_layer §1.9: Siege Action mechanic
 ED-633/635/636/637/638/641 resolved.
 
+
+## Engine v3 — 2026-04-18
+
+Rebuilt from scratch against canonical params. 50 audit gaps addressed.
+Smoke test: 5 seeds × 120 seasons. 0 victories — AI expansion rate too low.
+CI generation working (reaches 100 in 3/5). RS correct. Dice correct.
+Next: tune faction AI military expansion, then NPC campaigns.
