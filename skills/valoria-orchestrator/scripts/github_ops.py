@@ -50,6 +50,7 @@ REPOS = {
 # ── Token thresholds (ttrpg only) ─────────────────────────────────────────────
 TOKEN_THRESHOLDS = {
     "session_log_current.md":                  2_000,
+    "session_logs/index.md":                   2_000,
     "canon/editorial_ledger.yaml":             2_000,
     "canon/editorial_ledger_summary.yaml":     1_000,
     "references/file_index_summary.md":        1_000,
@@ -148,6 +149,7 @@ def _repo_key(path: str, repo: str) -> str:
 # These survive eviction calls unless explicitly targeted.
 SESSION_PERMANENT_PATTERNS = (
     'session_log_current.md',
+    'session_logs/index.md',
     'editorial_ledger_summary.yaml',
     'file_index_summary.md',
     'canonical_sources.yaml',
@@ -798,9 +800,233 @@ def safe_session_close(
                          repo='ttrpg', _auth=auth)
 
 
+# ── Per-session session logs ─────────────────────────────────────────────────
+
+# Valid scope tags for session logs
+SESSION_SCOPES = {
+    'infrastructure', 'godot', 'editorial', 'design',
+    'simulation', 'audit', 'general',
+}
+
+_active_session_scope: str = None
+_active_session_log_path: str = None
 
 
-# ── quick_bootstrap: one-call preamble for all subsequent bash blocks ─────────
+def start_session_log(scope: str, token: str) -> str:
+    """
+    Create a per-session log file and update the session index.
+
+    Creates: session_logs/<scope>_<token>.md
+    Updates: session_logs/index.md (auto-generated active session list)
+    Updates: session_log_current.md (auto-generated pointer to active sessions)
+
+    Returns the path of the created session log file.
+    """
+    global _active_session_scope, _active_session_log_path
+
+    if scope not in SESSION_SCOPES:
+        raise RuntimeError(
+            f"[SESSION] Unknown scope '{scope}'.\n"
+            f"Valid: {sorted(SESSION_SCOPES)}"
+        )
+
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc).isoformat()
+
+    log_path = f"session_logs/{scope}_{token}.md"
+    log_content = (
+        f"session_id: {scope}_{token}\n"
+        f"scope: {scope}\n"
+        f"token: {token}\n"
+        f"started_at: {now}\n"
+        f"status: ACTIVE\n"
+    )
+
+    # Read current index (may not exist yet)
+    try:
+        idx_files = read_files_graphql(
+            ['session_logs/index.md'], repo='ttrpg', skip_health_check=True
+        )
+        index_content = idx_files.get('session_logs/index.md') or ''
+    except Exception:
+        index_content = ''
+
+    # Append this session to index
+    new_entry = f"- scope: {scope} | token: {token} | started: {now} | log: {log_path}\n"
+    if not index_content.strip():
+        index_content = "# Active Sessions\n\n" + new_entry
+    else:
+        index_content = index_content.rstrip() + "\n" + new_entry
+
+    # Generate session_log_current.md as auto-pointer
+    pointer_content = _generate_pointer(index_content)
+
+    additions = [
+        (log_path, log_content),
+        ('session_logs/index.md', index_content),
+        ('session_log_current.md', pointer_content),
+    ]
+
+    auth = _authorize_next_commit()
+    oid = atomic_commit(
+        additions=additions, deletions=[],
+        message=f'[infrastructure] Session start — scope: {scope}, token: {token}',
+        repo='ttrpg', _auth=auth,
+    )
+
+    _active_session_scope = scope
+    _active_session_log_path = log_path
+    print(f"[SESSION ✓] Started: {log_path} → {oid}")
+    return log_path
+
+
+def close_session_log(
+    scope: str,
+    token: str,
+    final_log_content: str,
+    extra_additions: list = None,
+) -> str:
+    """
+    Archive a per-session log and remove it from the active index.
+
+    Archives to: archives/session/session_log_<scope>_<date>_<token>.md
+    Removes from: session_logs/index.md
+    Updates: session_log_current.md (pointer)
+    Deletes: session_logs/<scope>_<token>.md
+
+    Returns commit OID.
+    """
+    global _active_session_scope, _active_session_log_path
+
+    from datetime import datetime, timezone
+    date_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+
+    log_path = f"session_logs/{scope}_{token}.md"
+    archive_path = f"archives/session/session_log_{scope}_{date_str}_{token}.md"
+
+    # Validate final log content
+    REQUIRED_FIELDS = ['session_id', 'session_close', 'status', 'last_stage', 'next_action', 'blockers']
+    missing = [f for f in REQUIRED_FIELDS if f not in final_log_content]
+    if missing:
+        raise RuntimeError(
+            f"[SESSION] Close log missing fields: {missing}\n"
+            f"Required: {REQUIRED_FIELDS}"
+        )
+
+    # Read current index
+    fresh = read_files_graphql(
+        ['session_logs/index.md'], repo='ttrpg', skip_health_check=True
+    )
+    index_content = fresh.get('session_logs/index.md') or ''
+
+    # Remove this session's entry from index
+    lines = index_content.split('\n')
+    new_lines = [l for l in lines if token not in l]
+    new_index = '\n'.join(new_lines)
+
+    # Generate updated pointer
+    pointer_content = _generate_pointer(new_index)
+
+    additions = [
+        (archive_path, final_log_content),
+        ('session_logs/index.md', new_index),
+        ('session_log_current.md', pointer_content),
+    ]
+    if extra_additions:
+        additions.extend(extra_additions)
+
+    deletions = [log_path]
+
+    auth = _authorize_next_commit()
+    oid = atomic_commit(
+        additions=additions, deletions=deletions,
+        message=f'[infrastructure] Session close — scope: {scope}, token: {token}',
+        repo='ttrpg', _auth=auth,
+    )
+
+    _active_session_scope = None
+    _active_session_log_path = None
+    print(f"[SESSION ✓] Closed: {log_path} → archived {archive_path} → {oid}")
+    return oid
+
+
+def read_active_sessions() -> list:
+    """
+    Parse session_logs/index.md and return list of active session dicts.
+    Each dict: {scope, token, started, log}.
+    """
+    try:
+        files = read_files_graphql(
+            ['session_logs/index.md'], repo='ttrpg', skip_health_check=True
+        )
+        content = files.get('session_logs/index.md') or ''
+    except Exception:
+        return []
+
+    sessions = []
+    for line in content.split('\n'):
+        if not line.startswith('- scope:'):
+            continue
+        parts = {}
+        for segment in line[2:].split(' | '):
+            segment = segment.strip()
+            if ':' in segment:
+                k, v = segment.split(':', 1)
+                parts[k.strip()] = v.strip()
+        if parts.get('scope') and parts.get('token'):
+            sessions.append(parts)
+    return sessions
+
+
+def update_session_log(scope: str, token: str, content: str) -> str:
+    """
+    Write updated content to the active per-session log.
+    Only the owning session should call this.
+    """
+    log_path = f"session_logs/{scope}_{token}.md"
+    tokens = len(content) // 4
+    if tokens > 2000:
+        raise RuntimeError(
+            f"[SESSION] Per-session log too large: {tokens:,} tokens (limit 2,000).\n"
+            f"Trim to resumption block only."
+        )
+    auth = _authorize_next_commit()
+    oid = atomic_commit(
+        additions=[(log_path, content)], deletions=[],
+        message=f'[infrastructure] Session log update — {scope}_{token}',
+        repo='ttrpg', _auth=auth,
+    )
+    print(f"[SESSION ✓] Updated: {log_path} → {oid}")
+    return oid
+
+
+def _generate_pointer(index_content: str) -> str:
+    """
+    Generate session_log_current.md as an auto-generated pointer
+    to the active sessions index.
+    """
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc).isoformat()
+
+    # Count active sessions from index
+    session_count = sum(1 for l in index_content.split('\n') if l.startswith('- scope:'))
+
+    return (
+        f"# Session Status (auto-generated)\n"
+        f"# DO NOT EDIT — this file is managed by start_session_log / close_session_log\n"
+        f"#\n"
+        f"# Active sessions: {session_count}\n"
+        f"# Last updated: {now}\n"
+        f"# See: session_logs/index.md for details\n"
+        f"#\n"
+        f"session_id: pointer\n"
+        f"status: {'ACTIVE' if session_count > 0 else 'IDLE'}\n"
+        f"active_sessions: {session_count}\n"
+        f"last_stage: auto-generated\n"
+        f"next_action:\n"
+        f"  skill: see session_logs/index.md\n"
+        f"blockers: []\n"
+    )
 
 def quick_bootstrap(extra_paths: list = None) -> tuple:
     """
@@ -827,6 +1053,7 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
 
     session_paths = [
         'session_log_current.md',
+        'session_logs/index.md',
         'canon/editorial_ledger_summary.yaml',
         'references/file_index_summary.md',
         'references/canonical_sources.yaml',

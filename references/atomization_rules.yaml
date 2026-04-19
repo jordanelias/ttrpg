@@ -26,8 +26,24 @@ policies:
   - match: "session_log_current.md"
     max_tokens: 2000
     on_exceed: "block_commit"
+    write_policy: "auto_generated_only"
+    note: "Auto-generated pointer to session_logs/index.md. Direct writes blocked."
+
+  - match: "session_logs/index.md"
+    max_tokens: 2000
+    on_exceed: "block_commit"
+    write_policy: "managed_only"
+    managed_by: ["start_session_log", "close_session_log"]
+    note: "Auto-generated active session list. Only written by session lifecycle functions."
+
+  - match: "session_logs/*.md"
+    exclude_match: ["session_logs/index.md"]
+    max_tokens: 2000
+    on_exceed: "block_commit"
+    write_policy: "single_writer"
+    note: "Per-session log files. Single writer per file (owning session only)."
     on_close: "archive_to"
-    archive_target: "archives/session/session_log_archive.md"
+    archive_target_pattern: "archives/session/session_log_{scope}_{date}_{token}.md"
 
   - match: "archives/session/session_log_archive.md"
     max_tokens: 50000

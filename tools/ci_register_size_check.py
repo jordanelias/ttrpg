@@ -10,6 +10,7 @@ import os, sys
 THRESHOLDS = {
     # ── Active registers (strict limits — must chunk before exceeding) ──────
     "session_log_current.md":                  2_000,
+    "session_logs/index.md":                   2_000,
     "canon/editorial_ledger.yaml":             2_000,
     "canon/editorial_ledger_summary.yaml":     1_000,
     "references/file_index_summary.md":        1_000,

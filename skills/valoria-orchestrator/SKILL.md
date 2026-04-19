@@ -92,6 +92,7 @@ import valoria_hooks as h
 # Step 2: batch-read session-critical files (triggers register health check automatically)
 files = g.read_files_graphql([
     'session_log_current.md',
+    'session_logs/index.md',
     'canon/editorial_ledger_summary.yaml',
     'references/file_index_summary.md',
     'references/canonical_sources.yaml',
@@ -107,6 +108,7 @@ h.assert_bootstrap()
 h.context_gate()
 token = g.assert_fetched(
     'session_log_current.md',
+    'session_logs/index.md',
     'canon/editorial_ledger_summary.yaml',
     'references/canonical_sources.yaml',
 )
@@ -459,22 +461,25 @@ Each type pre-fetches its required files — see `TASK_REQUIRED_FILES` in `valor
 ## Session Close Protocol
 **Re-fetch after writes:** after any `atomic_commit()` call, re-fetch all modified files before referencing them again in the same session. The in-context version and the committed version may differ.
 
-**All commits go to GitHub via `h.safe_commit()` or `g.safe_session_close()`. Direct `g.atomic_commit()` raises RuntimeError without authorization from safe_commit().**
+**All commits go to GitHub via `h.safe_commit()`, `g.close_session_log()`, or `g.safe_session_close()` (legacy). Direct `g.atomic_commit()` raises RuntimeError without authorization from safe_commit().**
 
-**Session log archive:** `session_log_archive.md` grows every session. `safe_session_close()` warns at 100,000 tokens — year-split at that point (e.g. `session_log_archive_2026_q1.md`).
+**Per-session logs:** Each session writes to `session_logs/<scope>_<token>.md`. The file `session_log_current.md` is auto-generated — direct writes are blocked by `pre_commit_gate`.
 
-Write YAML resumption block to `session_log_current.md`:
+Close a session with `g.close_session_log(scope, token, final_content)`:
 ```yaml
+session_id: <scope>_<token>
 session_close: YYYY-MM-DD HH:mm
+scope: <scope>
+status: CLOSED
 last_stage: [stage name]
 next_action:
   skill: name
   input_file: filename
   parameters: {}
-open_gaps_added: []
-editorial_decisions_pending: []
 blockers: []
 ```
+
+This archives the log to `archives/session/`, removes the session from the index, and updates the auto-generated pointer.
 
 ## Token Rules
 - Never re-read a document already fetched this session. Consume fetched content.

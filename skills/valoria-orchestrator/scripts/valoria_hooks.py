@@ -19,6 +19,8 @@ _bootstrap_confirmed = False
 _task_gates_passed   = set()
 _checkpoint_written_this_session = False
 _soft_warn_issued = False
+_session_scope = None
+_session_log_path = None
 
 EDITORIAL_PATHS = (
     'designs/npcs/',
@@ -52,9 +54,15 @@ TASK_REQUIRED_FILES = {
 
 # ── Hook 1: Bootstrap ─────────────────────────────────────────────────────────
 
-def assert_bootstrap() -> str:
-    """Confirm github_ops fetched from GitHub this session. Raises if not."""
-    global _bootstrap_confirmed
+def assert_bootstrap(scope: str = None) -> str:
+    """
+    Confirm github_ops fetched from GitHub this session. Raises if not.
+
+    scope: optional session scope tag (e.g. 'infrastructure', 'godot').
+           When provided, sets _session_scope for per-session log routing.
+           Valid scopes are defined in github_ops.SESSION_SCOPES.
+    """
+    global _bootstrap_confirmed, _session_scope, _session_log_path
     try:
         token = g.get_session_token()
         _bootstrap_confirmed = True
@@ -65,6 +73,39 @@ def assert_bootstrap() -> str:
             "read_files_graphql() must be called before any work begins.\n"
             "Re-run the bootstrap block."
         )
+
+    # Set session scope if provided
+    if scope:
+        if hasattr(g, 'SESSION_SCOPES') and scope not in g.SESSION_SCOPES:
+            raise RuntimeError(
+                f"[HOOK VIOLATION] Unknown session scope '{scope}'.\n"
+                f"Valid: {sorted(g.SESSION_SCOPES)}"
+            )
+        _session_scope = scope
+        _session_log_path = f"session_logs/{scope}_{token}.md"
+        print(f"[HOOK ✓] session scope: {scope} → {_session_log_path}")
+
+    # Print active sessions summary
+    if hasattr(g, 'read_active_sessions'):
+        try:
+            active = g.read_active_sessions()
+            if active:
+                print(f"\n[SESSION] {len(active)} active session(s):")
+                for s in active:
+                    marker = " ← THIS SESSION" if s.get('token') == token else ""
+                    print(f"  {s.get('scope','?')} | {s.get('token','?')[:12]} | {s.get('started','?')}{marker}")
+                # Warn on scope overlap
+                if scope:
+                    overlapping = [s for s in active
+                                   if s.get('scope') == scope and s.get('token') != token]
+                    if overlapping:
+                        print(f"\n  ⚠ WARNING: scope '{scope}' is already active in another session!")
+                        print(f"  Concurrent same-scope sessions risk collisions.")
+                        print(f"  Consider using a different scope or closing the other session first.")
+            else:
+                print("[SESSION] No other active sessions.")
+        except Exception:
+            pass  # index may not exist yet (pre-migration)
 
     # Compliance check — blocks work if violations exist
     try:
@@ -260,6 +301,25 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
 
     errors = []
     paths_in_commit = {p for p, _ in additions} | set(deletions)
+
+    # Block direct writes to session_log_current.md (now auto-generated)
+    if 'session_log_current.md' in paths_in_commit:
+        # Allow writes from trusted internal callers (start_session_log, close_session_log, safe_session_close)
+        import inspect
+        caller = inspect.stack()[1].function
+        trusted_callers = {'start_session_log', 'close_session_log', 'safe_session_close',
+                           '_generate_pointer', 'pre_commit_gate_mutating'}
+        # Walk up the stack to find if any trusted caller is in the chain
+        caller_chain = {f.function for f in inspect.stack()[:8]}
+        if not caller_chain & trusted_callers:
+            errors.append(
+                f"LEGACY BLOCK: session_log_current.md is now auto-generated.\n"
+                f"  Use per-session logs instead:\n"
+                f"    g.start_session_log(scope, token)  — creates session_logs/<scope>_<token>.md\n"
+                f"    g.update_session_log(scope, token, content)  — updates your session log\n"
+                f"    g.close_session_log(scope, token, content)  — archives and closes\n"
+                f"  Direct writes to session_log_current.md are blocked."
+            )
 
     # Editorial check per path
     for path, content in additions:
