@@ -322,9 +322,9 @@ Existing rule retained. While Inge Baralta NPC Mandate ≥ 4: TC −1 per season
 
 Per PP-504 (unchanged): ±5 TC per season from all sources combined. ±3 from player-initiated Domain Actions specifically.
 
-### §3.10 Freeze at 75
+### §3.10 CI Cap and Seizure
 
-Per existing rules. At TC 75: TC freezes. Church shifts to Graduated Territorial Seizure campaign. No change to existing TC 75 threshold or post-75 mechanics.
+CI caps at 100 (no freeze). Church Mass Seizure available at CI ≥ 60 (one-shot). See victory_v30 §3.2/§7.
 
 ### §3.11 Full TC Accounting Sequence
 
@@ -345,7 +345,7 @@ Execute in order at Phase 5 Step 4:
 
 ### §4.1 Accord as Population Commitment
 
-Accord (per-territory, 0–3) already governs Prosperity and TCV per params_board_game. It also directly affects military engagement:
+Accord (per-territory, 0–3) already governs Prosperity and PV per params_board_game. It also directly affects military engagement:
 
 | Accord | Battle effect | Muster effect |
 |---|---|---|

@@ -34,11 +34,11 @@ Church official governs settlement. De facto Church territory. Removal: Mass Bat
 
 Axes stack independently. Maximum per-settlement Seizure Ob modifier: −6 (Cathedral + Templar + Inquisitor + Governor). Territory modifier = sum across all settlements.
 
-Base Seizure Ob = 7 − PT. With territory infrastructure modifier applied.
+Base Seizure Ob = 10 − PT − infrastructure modifiers (floor 1). See victory_v30 §3.2.
 
 ## §1.3 CI=100 — Mass Seizure Declaration
 
-When CI reaches 100: every territory with at least one settlement containing a Church building (Chapel+) is targeted for simultaneous Seizure. Individual Ob per territory = 7 − PT − (sum of infrastructure modifiers across settlements in that territory).
+When CI reaches 100: every territory with at least one settlement containing a Church building (Chapel+) is targeted for simultaneous Seizure. Individual Ob per territory = 10 − PT − (sum of infrastructure modifiers), floor 1.
 
 The Mass Seizure Declaration is a mandatory Zoom In scene. Archbishop declares. All factions get 1 Emergency Session season to respond. Then each territory resolves independently.
 

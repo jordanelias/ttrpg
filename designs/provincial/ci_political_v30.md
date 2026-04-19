@@ -14,8 +14,8 @@
 
 | Item | Prior state | This document |
 |---|---|---|
-| CI ceiling | 75 (freeze + seizure) | 100 (no freeze; Unification attempt at 100) |
-| CI territory values | Contributed to 75-threshold seizure | Repurposed as Spiritual Weight (SW) — see §1 |
+| CI ceiling | 75 (freeze + seizure) | 100 (no freeze; Mass Seizure one-shot at CI >= 60) |
+| CI territory values | Contributed to 75-threshold seizure | Repurposed as Spiritual Weight (SW) — see §1. TCV renamed PV. |
 | CI political role | Clock only; no gameplay intersection except Church seizure | Defines Church's political pool bonus in all institutional contexts |
 | CI passive | PP-402 unconditional +1 | Conditional passive per military_layer_v30 §3.2 |
 | Card renewal | Not modelled in sim | Cooldown Track implemented |
@@ -35,7 +35,7 @@ The CI-contribution values that previously fed the 75 → seizure threshold are 
 
 SW is NOT the same as Piety Track (PT). PT is dynamic (changes through action). SW is fixed (set at game start). SW gates how much CI and political legitimacy can flow through a territory.
 
-| T# | Territory | TCV | Spiritual Weight |
+| T# | Territory | PV | Spiritual Weight |
 |---|---|---|---|
 | T1 | Valorsplatz | 5 | 2 (seat of secular power; Church is present but contested) |
 | T2 | Kronmark | 1 | 2 |
@@ -73,7 +73,7 @@ SW is NOT the same as Piety Track (PT). PT is dynamic (changes through action). 
 
 ### §2.1 CI Runs to 100
 
-CI no longer freezes at 75. The 75 threshold is replaced by a new milestone system:
+CI runs to 100 (no freeze). Milestone system:
 
 | CI | Milestone | Effect |
 |---|---|---|
@@ -84,16 +84,16 @@ CI no longer freezes at 75. The 75 threshold is replaced by a new milestone syst
 | 80 | Church Ascendant | Seizure Ob reduced by 1 globally. All territory PT drifts +1 toward piety pole at Year-End (unless Warden Cooperation ≥ 2) |
 | 100 | Theocracy Unification Attempt | See §2.2 |
 
-The prior CI 75 Seizure protocol (Ob = 2 + Fort Level + max(0, 3 − PT)) remains active from CI 40 onward. It is no longer gated by CI 75. It is gated by Church Mandate ≥ 4 and Church Prominent in target territory (existing ED-326 condition).
+Mass Seizure (one-shot): Ob = 10 − PT − infrastructure (floor 1). Available from CI >= 60. Gated by Church Mandate >= 4 and Church Prominent in target territory (ED-326). See victory_v30 §3.2.
 
 ### §2.2 CI 100 — Theocracy Unification Attempt
 
 When CI reaches 100:
 - CI does not continue to advance
 - Church publicly declares Papal Sovereignty over the peninsula
-- **Unification campaign begins:** each Accounting, Church may declare Unification Seizure on any territory (not just prominent territories), Ob = 2 + Fort Level
+- **Mass Seizure (one-shot):** Church declares simultaneous seizure on all territories with Church buildings. Ob = 10 − PT − infrastructure (floor 1). This is a one-time event.
 - Secular factions each get one free Parliamentary motion (no card slot) to oppose Church per season while Unification is active
-- Unification ends (and CI drops to 75) if: Church loses 3 territories to secular counterattack in a single Year-End, OR Church Mandate drops to 3 or below (authority collapses), OR Crown Treaty forms against Church (Church as the suppressed faction)
+- Mass Seizure bid fails if: Church loses 3 territories to counterattack in a single Year-End, OR Church Mandate drops to 3 or below. No second attempt.
 - If Church successfully controls ≥ 10 territories while Unification is active for 2 consecutive Year-Ends: Church wins (Theocracy Unification victory)
 
 ### §2.3 Starting Value
@@ -325,7 +325,7 @@ Muster new unit in the threatened territory. If can't Muster this season (no Leg
 Govern + Trade. No military expansion. Mandate recovery is the target; Wealth maintenance prevents unit degradation.
 
 **Priority 4 — COUNTER-THREAT (CI ≥ 55 AND faction is HF or Crown):**
-Hafenmark: Suppress is mandatory Priority-4 action every season when available. Crown: pursue Crown Treaty if Mandate ≥ 4 and TCV ≥ 10.
+Hafenmark: Suppress is mandatory Priority-4 action every season when available. Crown: pursue Crown Treaty if Mandate ≥ 4 and PV ≥ 10.
 
 **Priority 5 — EXPAND (all Priority 1-4 conditions clear):**
 Military expansion if border units available. Seizure (Church). Intel operation (Varfell).
@@ -337,7 +337,7 @@ Govern in capital (Mandate recovery), Trade (Wealth building).
 
 **Crown:**
 - Must maintain Mandate ≥ 4 to be a viable Crown Treaty user. Govern (capital) is always Priority if Mandate < 4.
-- Crown Treaty targets: PLAYABLE factions only, Mandate ≥ 2. Prefer faction with lowest TCV (easiest to suppress).
+- Crown Treaty targets: PLAYABLE factions only, Mandate ≥ 2. Prefer faction with lowest PV (easiest to suppress).
 - Military: defend T1, T14, T2, T3 (core territories). Only expand when those four are garrisoned.
 - PI awareness: if PI ≥ 10, Crown should prioritise Parliamentary actions over military.
 
@@ -365,11 +365,11 @@ Govern in capital (Mandate recovery), Trade (Wealth building).
 ### §7.1 CI Cap vs New Milestones
 
 Old cap: ±5/season (PP-504). Still applies.
-New ceiling: 100 (replacing 75 freeze). No conflict — seasonal cap prevents runaway.
+Ceiling: 100 (no freeze). Seasonal cap ±5 prevents runaway.
 New milestones at 40/55/65/80/100 add effects but don't change CI formula.
 
 **Check:** Prior victory_v30 §3.2 Church victory requires CI ≥ 65. With CI running to 100, this threshold remains as a Church win condition sub-requirement; the CI Unification at 100 is an additional/alternate path.
-**Flag (ED-NEW-CI-10):** Confirm whether Church victory condition at CI 65 + TCV ≥ 8 remains as-is or is replaced by CI 100 Unification only.
+**RESOLVED (ED-NEW-CI-10):** Victory = Peninsular Sovereignty for all factions. CI is a tool, not a win condition. No faction-specific victory thresholds.
 
 ### §7.2 Political Pool vs Mandate Pool
 
@@ -381,10 +381,10 @@ New: Church gets floor(CI/20) bonus dice; opposing factions get −floor(CI/30) 
 Crown (Mandate 5) voting against Church: effective votes = 5−3 = 2. Church (Mandate 5 + 5 bonus = 10D, against Ob 2) has overwhelming Parliament dominance.
 This is by design — CI 100 represents a Church that has politically dominated the peninsula. Secular factions should have acted to prevent this.
 
-### §7.3 Territory SW vs TCV
+### §7.3 Territory SW vs PV
 
-TCV is unchanged (existing victory condition calculation). SW is a new attribute. No conflict.
-TCV used for: victory threshold checks, occupation TCV zeroing.
+TCV renamed PV (Provincial Value). SW is a separate attribute. No conflict.
+PV used for: victory threshold checks, occupation PV zeroing.
 SW used for: Church political pool, Piety Yield weighting, PT momentum.
 
 ### §7.4 Govern Full Effect vs PP-174
@@ -403,8 +403,8 @@ Check against IP: existing IP +1 from Torben Loyalty ≤ 3. Battle IP +2 is addi
 
 Old: Seizure gated by CI ≥ 75 (now removed as a gate).
 New: Seizure available from CI ≥ 40 (milestone). Existing Seizure Ob formula unchanged.
-**Check victory_v30 §7 (CI 75 Seizure protocol):** The prior seizure at CI 75 used "Ob = 2 + Fort Level + max(0, 3 − PT)". With CI running past 75, this Ob formula still applies at CI 40+. The CI 80 milestone reduces Seizure Ob by 1 globally (stacks with formula).
-**Flag (ED-NEW-CI-11):** Confirm Seizure Ob formula: is it still 2+Fort+max(0,3−PT) or does it use the updated Ob = 7−PT formula from the Church victory redesign?
+**RESOLVED (victory_v30 §3.2):** Seizure Ob = 10 − PT − infrastructure modifiers (floor 1). One-shot Mass Seizure at CI ≥ 60. Old formulas (2+Fort+max(0,3−PT) and 7−PT) both superseded.
+**RESOLVED (ED-NEW-CI-11):** Seizure Ob formula confirmed as 10 − PT − infrastructure (floor 1). See victory_v30 §3.2.
 
 ### §7.7 Accord Degradation in Sim
 
