@@ -673,10 +673,15 @@ The crisis is not punishment. It is the practitioner's existential season.
 
 ## 4.1 Core Principle
 
+Co-Movement is constitutive, not incidental. When a practitioner operates on Thread, they intervene in the substrate from which all being is rendered (A1). The substrate is not a mechanism with predictable outputs — it is constitutive ground, the condition of possibility for things to appear as they do. An operation that alters one configuration necessarily disturbs adjacent configurations because configurations are not discrete objects stored in separate locations; they are aspects of a continuous substrate that extends through all three dimensions simultaneously (A2).
 
+The practitioner intends a specific outcome — to weave a configuration toward a particular actualisation, or to pull a temporal thread toward a prior state. But the substrate responds as a whole. The epistemic, temporal, and actualised dimensions co-move because they are not independent axes of a coordinate system; they are distinguishable aspects of a single constitutive ground. Co-Movement is what happens when the ground responds to being touched. The practitioner controls where they touch. They do not control how the ground moves.
 
 ## 4.2 Why the Actual Effect Is Random
 
+The game models Co-Movement through random card draws rather than deterministic tables because the practitioner cannot predict how the substrate will respond to intentional intervention. This is not a limitation of the practitioner's skill or knowledge — it is a metaphysical fact about the substrate itself (A1, A4). The unintelligible ground (Ein Sof) from which threads are continuously spooled exceeds all categories and attributes (A5). A practitioner who could predict Co-Movement with certainty would possess complete knowledge of how the constitutive ground relates to every rendered configuration in the affected region. This knowledge is, by definition, impossible for a rendering-bound consciousness.
+
+The card deck represents the bounded unpredictability of substrate response. The deck is finite (18 cards) and known (the practitioner understands what kinds of effects are possible), but the specific card drawn on any given operation is not foreseeable. Over a full deck cycle, all effects will occur — the substrate's response is exhaustive, not arbitrary. But the ordering is beyond the practitioner's control. Card counting across peninsula-wide operations is possible but requires tracking information the practitioner does not naturally possess, modeling the strategic value of Thread-monitoring intelligence networks.
 
 ## 4.3 Auto-Effect Tables
 

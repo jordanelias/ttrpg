@@ -1,5 +1,16 @@
 # Valoria Editorial Ledger — Active
-# next_id: 688
+# next_id: 689
+
+
+
+  - id: ED-688
+    date: 2026-04-18
+    description: "AUD-TW-01: Threadwork §4.1 Core Principle and §4.2 Why Random — empty stubs filled with philosophical/design rationale prose (~200 words each)."
+    status: resolved
+    severity: P2
+    resolution: "§4.1: Co-Movement is constitutive — substrate responds as a whole to intervention, practitioner controls where they touch, not how the ground moves. §4.2: Card draws model bounded unpredictability of substrate response — finite deck, known effects, unpredictable ordering."
+    affects: [designs/threadwork/threadwork_v30.md]
+    canon_compliance: "A1 (dual role), A2 (inseparability), A4 (intelligibility), A5 (Ein Sof)"
 
 
   - id: ED-687
