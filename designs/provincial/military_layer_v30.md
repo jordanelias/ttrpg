@@ -383,16 +383,18 @@ The military layer bridges BG units to mass battle. Mass battle §A.10 has exten
 
 ## §5 — OPEN EDITORIAL ITEMS
 
+<!-- Updated 2026-04-19 PP-668 — PP-667 resolutions propagated. See designs/audit/gap_resolution_2026-04-19.md §2.2 -->
+
 | ID | Description | Status |
 |---|---|---|
 | FACTION-P2-01 | Military → Power/Disc ceiling confirmed | RESOLVED |
 | FACTION-P2-03 | Muster → Size=2, Power=floor(Mil/2)+1 confirmed | RESOLVED |
-| ED-NEW-MIL-01 | Population modifier to initial Size (Prosperity tiers) — confirm thresholds | PROVISIONAL |
-| ED-NEW-MIL-02 | Accord 1 → Martial −1 in battle — confirm applies to defence only or also offence | PROVISIONAL |
-| ED-NEW-MIL-03 | Experience stack (2 steps, Power +1 each) — confirm ceiling is faction Military ceiling | PROVISIONAL |
-| ED-NEW-MIL-04 | Wealth Zero → HI/Cavalry Discipline −1/season (not Military −1) — confirm replaces prior rule | PROVISIONAL |
-| ED-NEW-TC-01 | Conditional passive thresholds (0-1/2-4/5+) — simulate before confirming | PROVISIONAL |
-| ED-NEW-TC-02 | Charity Advantage formula (Wealth differential ≥ 2) — confirm threshold | PROVISIONAL |
-| ED-NEW-TC-03 | PT 3 as fractional Piety Yield (+0.25) — confirm or raise to +0.5 | PROVISIONAL |
-| BALANCE-NEW-TC-01 | TC reform may make TC too slow/fast depending on Church play style — simulation required | Simulation pending |
-| CLOCK-EDIT-02 | Church military victory → no TC change from military victory alone (confirm) | PROVISIONAL |
+| ED-NEW-MIL-01 | Population modifier to initial Size (Prosperity tiers). | **RESOLVED (PP-667)** — Prosperity 1-2: Size +0 · 3-4: Size +1 · 5: Size +2. |
+| ED-NEW-MIL-02 | Accord 1 → Martial −1: offence or defence? | **RESOLVED (PP-667)** — BOTH. |
+| ED-NEW-MIL-03 | Experience stack ceiling. | **RESOLVED (PP-667)** — ceiling is faction Military stat (1–7). |
+| ED-NEW-MIL-04 | Wealth Zero → HI/Cavalry Discipline −1/season. | **RESOLVED (PP-667)** — confirmed; supersedes "Military −1" prior rule. |
+| ED-NEW-TC-01 | Conditional passive thresholds (0-1/2-4/5+). | **DEFERRED (PP-667)** to engine_v4 smoke-test. |
+| ED-NEW-TC-02 | Charity Advantage Wealth differential ≥ 2. | **RESOLVED (PP-667)** — threshold = 2. |
+| ED-NEW-TC-03 | PT 3 Piety Yield. | **RESOLVED (PP-667)** — raised to +0.5 (was +0.25). Integer-stable granularity. |
+| BALANCE-NEW-TC-01 | TC reform pace. | **DEFERRED (PP-667)** to engine_v4 smoke-test. |
+| CLOCK-EDIT-02 | Church military victory → no TC change. | **RESOLVED (PP-667)** — confirmed. TC changes only via Piety Yield / Assert / Suppress / Charity Advantage. |

@@ -511,15 +511,17 @@ Accord on Seizure follows this document §5.2 regardless of CI milestone. Seizur
 
 ## §8 Open Items
 
-| # | Item | Status |
-|---|------|--------|
-| 1 | Starting PT values (§2.2): proposed, requires user review before canonical. | PROVISIONAL |
-| 2 | Hafenmark Parliamentary Sovereignty → struck, replaced by Dynastic Assertion as primary. Confirm. | AWAITING USER |
-| 3 | Church Counter-Reformation defensive action (§5.4): new mechanic, needs formal PP. | NEEDS SPEC |
-| 4 | Varfell Colonist card availability: confirm Varfell starting hand includes 1× Colonist. | CONFIRMED (params_board_game.md) |
-| 5 | Accord physical component: dial on territory card vs separate marker. Production decision. | DEFERRED |
-| 6 | NPC AI priority trees (npc_behavior_v30.md): need Accord-aware updates. NPC factions must factor Accord into Govern decisions. | PROPAGATION NEEDED |
-| 7 | Hybrid mode: Accord changes from Zoom In personal scenes queue as Domain Echoes (±1 Accord max per Zoom In), consistent with PT transfer rules (victory_v30.md §9.1). | NEEDS SPEC |
+<!-- Updated 2026-04-19 PP-668 — PP-667 resolutions propagated. See designs/audit/gap_resolution_2026-04-19.md §2.3 -->
+
+| # | Item | Status (PP-667) |
+|---|------|------------------|
+| 1 | Starting PT values (§2.2): requires user review. | **CONFIRMED** — approved per Jordan 2026-04-18 (PP-652 applied). |
+| 2 | Hafenmark Parliamentary Sovereignty struck, Dynastic Assertion primary. | **CONFIRMED** — peninsular_strain §6.2 STRUCK; victory_v30 §3.3 Dynastic Assertion primary. |
+| 3 | Church Counter-Reformation defensive action (§5.4). | **SUPERSEDED** by CR-STRIKE (PP-663). Cultural Reformation struck; Counter-Reformation no longer needed. |
+| 4 | Varfell Colonist card availability. | **CONFIRMED** (params_board_game.md). Retained post-CR-STRIKE for Tribune Outward / territorial intel use. |
+| 5 | Accord physical component. | **N/A** — videogame-only project scope. BG physical excluded. |
+| 6 | NPC AI priority trees Accord-aware updates. | **RESOLVED** — npc_behavior_v30 §8 priority trees factor Accord via Govern decision. |
+| 7 | Hybrid mode Zoom-In Accord Domain Echo. | **CONFIRMED** — per scale_transitions_v30 Domain Echo rules. |
 
 ---
 

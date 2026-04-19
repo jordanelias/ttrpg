@@ -352,3 +352,23 @@ patches:
     - archives/editorials/editorial_ledger_archive_601_800.yaml
   status: applied
   applied_commit: pending
+- id: PP-668
+  date: 2026-04-19
+  severity: P2
+  description: "Propagate PP-667 gap-sweep resolutions into source-doc OPEN ITEMS
+    tables. Updates settlement_layer_v30 §9 (9 items), military_layer_v30 §5 (9
+    items), peninsular_strain_v30 §8 (7 items), faction_layer_v30 §10 (9 items),
+    victory_v30 §11 (ED-311 closed). All items marked with final status (RESOLVED
+    / DEFERRED / SUPERSEDED / CONFIRMED / N/A) referencing PP-667 and the resolution
+    document designs/audit/gap_resolution_2026-04-19.md. Follow-up to PP-667 which
+    flagged this propagation as deferred."
+  finding_id: USER-DIRECTED
+  source: user
+  affects:
+    - designs/territory/settlement_layer_v30.md
+    - designs/provincial/military_layer_v30.md
+    - designs/provincial/peninsular_strain_v30.md
+    - designs/provincial/faction_layer_v30.md
+    - designs/provincial/victory_v30.md
+  status: applied
+  applied_commit: pending

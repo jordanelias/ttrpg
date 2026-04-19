@@ -737,7 +737,7 @@ P-32 ("Hybrid victory = BG victory PLUS personal arc resolution") is retained. A
 
 | ED | Description | Status |
 |----|-------------|--------|
-| ED-311 | Varfell Path B redesign — see varfell_path_b_redesign_ed311.md | AWAITING USER DECISION |
+| ED-311 | Varfell Path B redesign. | **CLOSED (PP-667)** — resolved in-file by PP-663 (VTM row struck; WR raised to ≥3). Supersedes varfell_path_b_redesign_ed311.md. |
 
 ---
 

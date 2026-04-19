@@ -37,3 +37,7 @@ sources:
 # 3 real audit gaps resolved + 26 OPEN ITEMS across 6 design docs swept.
 # See designs/audit/gap_resolution_2026-04-19.md + ED-713, ED-714, ED-715.
 # Editorial ledger archival batch: ED-542..ED-658 moved to archive_601_800.
+
+# ── PP-668 OPEN ITEMS propagation (2026-04-19) ───────────────────────────
+# Completes PP-667 propagation. Source-doc OPEN ITEMS tables now show final
+# status for all 34 previously-open items.

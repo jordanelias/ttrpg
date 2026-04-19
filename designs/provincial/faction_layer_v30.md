@@ -595,14 +595,16 @@ Complete CI Accounting sequence (Phase 5 Step 4), superseding partial references
 
 ## §10 — OPEN ITEMS AND EDITORIAL FLAGS
 
-| ID | Description | Status |
+<!-- Updated 2026-04-19 PP-668 — PP-667 resolutions propagated. See designs/audit/gap_resolution_2026-04-19.md §2.4 -->
+
+| ID | Description | Status (PP-667) |
 |---|---|---|
-| ED-NEW-001 | Casus Belli: confirm CB consumes on use vs expires after 1 season | PROVISIONAL |
-| ED-NEW-002 | Occupation Partial (contested foothold): confirm −1 Ob for follow-up attack | PROVISIONAL |
-| ED-NEW-003 | Church Seizure on Occupied territory: confirm Seizure overrides occupation marker | PROVISIONAL |
-| ED-NEW-004 | Parliament Combined Embargo+Blockade: confirm Stability −1/season ongoing (not one-time) | PROVISIONAL |
-| ED-NEW-005 | Wealth Zero Military drain: confirm −1 Military per season (not per Accounting) | PROVISIONAL |
-| ED-NEW-006 | Institutional Consolidation recovery: confirm +1 Stability only if ALL triggers 1–5 unfired vs ANY unfired | FLAGGED |
-| ED-NEW-007 | Ransom refusal = Subterfuge: confirm this doesn't double-count with existing ED-334 NPC-kill rule | FLAGGED |
-| BALANCE-NEW-001 | Stability recovery (+1 clean season) may make long campaigns too stable. Simulation required. | Simulation pending |
-| BALANCE-NEW-002 | Blockade + Embargo combined could eliminate Guilds/Hafenmark within 4 seasons from Wealth 0. Confirm intended. | Simulation pending |
+| ED-NEW-001 | Casus Belli: consumes on use vs expires after 1 season. | **RESOLVED** — consumes on use. Auto-expires after 3 seasons if unused. |
+| ED-NEW-002 | Occupation Partial −1 Ob follow-up attack. | **RESOLVED** — confirmed; −1 Ob next season. |
+| ED-NEW-003 | Church Seizure overrides occupation. | **RESOLVED** — confirmed. Occupying faction loses presence but gains Casus Belli against Church. |
+| ED-NEW-004 | Parliament Embargo+Blockade: ongoing Stability penalty? | **RESOLVED** — Stability −1/season ongoing while both active. Ends when either ends. |
+| ED-NEW-005 | Wealth Zero Military drain per season. | **RESOLVED** — confirmed; −1 Military per season. |
+| ED-NEW-006 | Institutional Consolidation recovery: ALL vs ANY unfired. | **RESOLVED** — ALL unfired required. High bar; partial history disqualifies. |
+| ED-NEW-007 | Ransom refusal vs ED-334 double-count. | **RESOLVED** — no double-count. Ransom refusal is independent Stability trigger; ED-334 is separate Mandate penalty. They stack because they measure different failures. |
+| BALANCE-NEW-001 | Stability recovery pace. | **DEFERRED** to engine_v4 smoke-test. |
+| BALANCE-NEW-002 | Blockade + Embargo Guilds/Hafenmark collapse rate. | **DEFERRED** to engine_v4 smoke-test. |

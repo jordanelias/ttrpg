@@ -514,17 +514,19 @@ Each settlement has 2–4 POIs across Depth levels, authored per settlement type
 
 # PART 9: OPEN ITEMS
 
-| ID | Description | Priority |
-|----|-------------|----------|
-| ED-SETT-01 | Settlement starting Prosperity/Defense/Order values need simulation. Current values are estimated from province context, not calibrated. | P1 |
-| ED-SETT-02 | Settlement governance action pool/Ob calibration. Does a 4-Cognition governor reliably develop Prosperity? Simulation needed. | P1 |
-| ED-SETT-03 | Province Accord derivation from settlement Order average: does this produce Accord values consistent with existing peninsular_strain Accord tables? Edge cases: province with 1 settlement (Accord = that settlement's Order, capped at 3) vs province with 3 settlements (average may produce non-integer floors). | P1 |
-| ED-SETT-04 | Siege duration calibration. At Order −1/season, a Fortress with Order 4 takes 4 seasons to fall by siege alone. Is this too long? Too short? | P2 |
-| ED-SETT-05 | Subnational faction management rights: does Church management of cathedrals in non-Church provinces create a sovereignty conflict? The province faction controls the province; the Church controls the cathedral. What happens when they disagree about territorial policy? | P2 |
-| ED-SETT-06 | NPC governor AI: do NPC governors follow the faction priority tree or a settlement-specific priority tree? Proposed: settlement-specific (Pacify → Develop → Fortify → Administer) with faction tree override at faction Stability ≤ 2. | P2 |
-| ED-SETT-07 | Generational Shift clock: does the −1/−2/−3 attribute penalty apply to player characters? If yes, it creates a natural incentive for cross-generational play. If no, the player is mechanically immortal while NPCs age around them. Proposed: yes, it applies to PCs. | P2 |
-| ED-SETT-08 | Settlement adjacency within provinces: are all settlements in a province adjacent to each other, or do some have internal road connections that matter for invasion sequence? Current proposal: all adjacent (province is small enough for local travel). | P3 |
-| ED-SETT-09 | Board game physical representation: 36 settlement tokens on the map creates cognitive load. Options: (a) settlements represented on province cards, not the map; (b) settlement tokens placed only when contested; (c) settlements abstracted in BG mode (only surface in Hybrid/TTRPG). | P2 |
+<!-- Updated 2026-04-19 PP-668 — PP-667 resolutions propagated. See designs/audit/gap_resolution_2026-04-19.md §2.1 -->
+
+| ID | Description | Status (PP-667) |
+|----|-------------|-----------------|
+| ED-SETT-01 | Settlement starting Prosperity/Defense/Order values need simulation. | **DEFERRED** to engine_v4 smoke-test. Values stand PROVISIONAL. |
+| ED-SETT-02 | Settlement governance action pool/Ob calibration. | **DEFERRED** — proposed pool = governor's primary stat; Ob 2 standard / 3 recovery / 4 crisis. Calibration pending smoke-test. |
+| ED-SETT-03 | Province Accord derivation edge cases. | **RESOLVED** — single-settlement: Accord = that settlement's Order. Multi-settlement: floor-average; ties broken by Seat getting +1 weight. |
+| ED-SETT-04 | Siege duration 4 seasons for Order 4 Fortress. | **RESOLVED** — 4 seasons intended. Siege is slow politico-economic collapse; Assault is the fast path. |
+| ED-SETT-05 | Subnational management sovereignty conflict. | **CONFIRMED** — resolved by existing §3.3 Contested management (social contest). |
+| ED-SETT-06 | NPC governor priority tree. | **RESOLVED** — settlement-specific (Pacify → Develop → Fortify → Administer); faction-tree override at Stability ≤ 2. |
+| ED-SETT-07 | Generational Shift applies to PCs. | **RESOLVED** — yes. Encourages cross-generational play. |
+| ED-SETT-08 | Settlement intra-province adjacency. | **SUPERSEDED** by PP-666 `settlement_adjacency_v30` — adjacency is now graph-defined. |
+| ED-SETT-09 | Board game physical representation. | **N/A** — videogame-only per project scope. BG physical excluded. |
 
 ---
 

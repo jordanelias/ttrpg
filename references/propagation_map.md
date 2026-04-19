@@ -176,3 +176,23 @@ If broken dependencies are found:
 
 **Remaining work:**
 - Propagation to source-doc OPEN ITEMS tables (setting settlement_layer §9 ED-SETT-01 to RESOLVED etc.) deferred. This is a mechanical update across 6 files; best handled as an infrastructure commit after engine_v4 smoke-test confirms the resolutions stand.
+
+## 2026-04-19 — PP-668 OPEN ITEMS propagation (completes PP-667)
+
+**Commit:** (this commit)
+**Scope:** propagate PP-667 gap-sweep resolutions into the source-doc OPEN ITEMS tables. Closes the deferred propagation work flagged in PP-667.
+
+**Files:**
+- designs/territory/settlement_layer_v30.md §9 — 9 items with final status (4 RESOLVED, 1 CONFIRMED, 1 SUPERSEDED by PP-666, 2 DEFERRED, 1 N/A).
+- designs/provincial/military_layer_v30.md §5 — 9 items (6 RESOLVED, 3 DEFERRED).
+- designs/provincial/peninsular_strain_v30.md §8 — 7 items (4 CONFIRMED, 1 RESOLVED, 1 SUPERSEDED by PP-663, 1 N/A).
+- designs/provincial/faction_layer_v30.md §10 — 9 items (7 RESOLVED, 2 DEFERRED).
+- designs/provincial/victory_v30.md §11 — ED-311 CLOSED.
+
+All new statuses reference PP-667 and the resolution document `designs/audit/gap_resolution_2026-04-19.md`.
+
+**Registers:**
+- canon/patch_register_active.yaml: PP-668 entry.
+- references/canonical_sources.yaml: co-file touch.
+
+**Consequences:** none new. Completes PP-667 propagation. No new editorial ledger entries needed (resolutions already logged under ED-713/714/715 in PP-667).
