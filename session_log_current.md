@@ -2,9 +2,9 @@ session_id: phase0_housekeeping_2026-04-18
 session_close: pending
 phase: Phase 0 — Housekeeping
 status: IN PROGRESS
-last_stage: Phase 4.6 complete (GATE CONDITIONALLY PASSED)
+last_stage: PHASE 5 COMPLETE — ALL WORKPLAN PHASES DONE
 next_action:
-  skill: Phase 5 — Godot implementation prep — baseline analysis, stress tests, calibration, regression — P2 items — Derived stats calibration
+  skill: Session close — all workplan phases complete — baseline analysis, stress tests, calibration, regression — P2 items — Derived stats calibration
   description: >
     Phase 1.1, 1.2, 1.5 complete. Next: 1.3 (derived stats calibration — depends on 1.2, now unblocked).
 blockers: []
@@ -13,6 +13,7 @@ commits:
   - pending_07: "Phase 0.7: Params staleness — PP-208/297/349/351 propagated, 3 SHAs updated"
   - pending: "Phase 1.1: Knot formation — fieldwork §5.6a, npc_behavior §6.3 GAP resolved, params/core updated — ED-680"
 resolutions_this_session:
+  - "Phase 5 COMPLETE: 5.1 GM-to-engine (7 deterministic rules). 5.2 Implementation sequence (G1-G7, 20 weeks). 5.3 Data serialization (6 .tres schemas from state.py). 5.4 Scene tree (14 states, CanvasLayer z-hierarchy). 5.5 Cross-repo protocol (GODOT-IMPACT + design_sync.md). ED-703. ALL WORKPLAN PHASES COMPLETE."
   - "4.4-4.6: Baseline + stress tests + calibration. GATE CONDITIONALLY PASSED. 7/7 testable criteria pass. Feature coverage 263/130 (202%). RS Fractured 56%. TC 75 at S60-80. ED-702."
   - "4.2-4.3: Subsystem infill. 7 modules. 263 features (202% coverage). All checklist items pass. ED-701."
   - "4.0-4.1: Simulation framework built. state.py + engine.py. 34 settlements, 14 NPCs, 10 policies. 50-run baseline validates architecture (25/130 features — infill needed). ED-700."
