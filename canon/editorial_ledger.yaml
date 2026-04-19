@@ -84,7 +84,7 @@
     status: resolved
     severity: P2
     affects: [designs/npcs/npc_behavior_v30.md]
-    resolution: "§2.13a Extra-Territorial Heresy Jurisdiction. 5-territory-type jurisdiction table. Hafenmark blocks via Sovereign Authority. ED-670."
+    resolution: "Timing window clarification added after Arc A in npc_behavior. Narrow window intentional — reform path is hardest. Window closure permanent. ED-672."
 
   - id: ED-673
     date: 2026-04-17
