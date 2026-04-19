@@ -197,6 +197,36 @@ Accord is the game's victory condition foundation. It should be experienceable, 
 
 **Accord change visibility:** When Accord changes in a territory where the player is present, the GM or game narrates the transition: "Over the past weeks, you've noticed the market closing earlier. The baker who used to greet you by name now serves you in silence." This is not a stat notification — it is world texture.
 
+
+### §2.5 Settlement Targeting Specification (AUD-SET-02 resolution)
+
+Province Accord = floor(mean(settlement Order)) per settlement_layer_v30 §1.3. Existing Accord change rules operate as follows:
+
+**Category A — Province-Level Set (Accord set to N):** Macro-political events that reset the entire province's relationship with its population. Implementation: set ALL settlement Order values in the province to N. Applies to: military conquest (§2.4), Church Seizure (§3.4), Dynastic Proclamation (§3.5), Cultural Reformation (§3.6), Crown Treaty, Co-Victory partition, diplomatic transfers (faction_layer §2.1), Occupation transfers (faction_layer §5).
+
+**Category B — Targeted ±N (Accord ±N → Order ±N in specific settlement):**
+
+| Rule | Target Settlement | Rationale |
+|------|------------------|-----------|
+| Govern Success/OW (§2.3) | Seat settlement of province | Governance operates from seat of power |
+| Passive normalisation (§2.3) | All settlements in province equally | Stability affects entire province |
+| Strain Fracture (§2.6 roll 5-6) | Lowest-Order settlement in province | Instability breaks at weakest point |
+| Strain Crisis (§2.6 roll 7-8) | All non-capital settlements −1 Order | Capital settlements insulated by institutional presence |
+| Strain Collapse (§2.6 roll 9-10) | All settlements Order capped at 2 | Province-wide crisis ceiling |
+| Dynastic Proc Partial (§3.5) | Seat settlement | Political rejection radiates from seat |
+| Institutional consolidation (faction_layer §4) | Lowest-Order settlement | Investment flows to weakest link |
+| Parliamentary action (faction_layer §9) | All settlements −1 Order | Economic sanctions affect entire province |
+| Battle in territory (mass_battle Part E) | Settlement nearest battle site; if no identifiable settlement, Seat | Military action damages local governance |
+| PC public governance (scale_transitions §5.5) | Settlement where scene occurred | Personal-scale actions are location-specific |
+| PC destabilisation (scale_transitions §5.5) | Settlement where scene occurred | Personal-scale actions are location-specific |
+| PC territorial violence (scale_transitions §5.5) | Settlement where violence occurred | Violence damages local Order |
+| Löwenritter Martial Governance (§2.8) | Seat settlement | Military governance operates from seat |
+
+**Province Accord recalculation:** After any settlement Order change, Province Accord recalculates at next Accounting: floor(mean(all settlement Order values in province)).
+
+**Cap:** ±1 Order per settlement per season from personal-scale actions (per §2.4.2). Province-level Domain Actions (Category A and B Govern/Strain) are not subject to this cap.
+
+
 ---
 
 ## §3 Battle Consequences — NEW

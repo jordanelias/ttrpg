@@ -193,6 +193,8 @@ Personal scenes in Hybrid mode may produce Accord changes via Domain Echo. Cap: 
 
 | Personal Scene Outcome | Accord Domain Echo |
 |----------------------|-------------------|
+
+**Settlement targeting (AUD-SET-02):** Accord changes from personal scenes target the settlement where the scene occurred, not the province directly. Province Accord recalculates at Accounting: floor(mean(settlement Order)). Full targeting rules: peninsular_strain_v30 §2.5.
 | PC publicly governs/administers a territory (sermon, public address, dispute resolution) — Overwhelming/Success | Accord +1 in that territory (queued to next Accounting) |
 | PC action destabilises territory governance (assassination, public betrayal, inciting unrest) — Success | Accord −1 in that territory (queued to next Accounting) |
 | PC negotiates territorial transfer between factions (personal diplomacy success) | Transferred territory Accord set to 2 (queued to next Accounting) |

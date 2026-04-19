@@ -148,6 +148,8 @@ Three-condition gate. ALL three must be met simultaneously.
 | Mutual peace treaty | Both parties Stability ≥ 2 | +1 |
 | Recapture own occupied territory | Military_advance Success | +1 |
 | Rebuttal roll Overwhelming (Parliament) | See §5.5 | +1 |
+
+**Settlement targeting (AUD-SET-02):** Accord ±N rules in this document target specific settlements per peninsular_strain_v30 §2.5. Province-level "Accord set to N" (transfers, cession) resets all settlement Order values. Incremental changes (±1) target the settlement specified in §2.5 Category B table.
 | Institutional consolidation | No Trigger 1–5 fired against this faction this season at Accounting | +1 (also: Accord +1 in one territory at controller choice, cap 2 — stable governance builds trust) |
 | Church Absolution (Church unique action) | Target Stability ≤ 2; costs Church Mandate −1 | +1 to target; Church Influence +1 |
 | Löwenritter public endorsement | Löwenritter Stability ≥ 3, Military ≥ 4 | +1 to target; Löwenritter Mandate +1 |

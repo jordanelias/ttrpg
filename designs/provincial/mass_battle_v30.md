@@ -823,8 +823,8 @@ Every Battle resolved on Valorian soil carries systemic costs beyond the immedia
 | Consequence | Trigger | Value |
 |------------|---------|-------|
 | Substrate Fracture | Any inter-faction Battle | RS −1 (Campaign/War scale: RS −2) |
-| Accord erosion — conquered territory | Attacker conquers via Battle | Accord set to 1 |
-| Accord erosion — defender's territory | Battle occurs in a territory the defender controls | Accord −1 |
+| Accord erosion — conquered territory | Attacker conquers via Battle | Accord set to 1 (Category A: all settlements reset to Order 1) |
+| Accord erosion — defender's territory | Battle occurs in a territory the defender controls | Order −1 in settlement nearest battle site (Category B per §2.5) |
 
 ### §E.2 Accounting Consequences (per season in which ≥ 1 inter-faction Battle occurred)
 
