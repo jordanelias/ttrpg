@@ -330,3 +330,20 @@ Still blocking:
 - WC never advances (no Warden emergence mechanic) → RS recovery never fires
 - Uncontrolled territories accumulate — no faction reclaims them
 - TC→CI/TCV→PV propagation in victory_v30 (full-session task)
+
+
+## Warden Emergence + Uncontrolled Reclaim + TC Propagation — 2026-04-19
+
+Source: tests/sim/sim_warden_tc_reclaim.md
+
+3 scenarios:
+- Scenario A: Warden Emergence via Forgetting Check — works, Ob 1 near-trivial. NPC priority tree missing March-to-T15 trigger.
+- Scenario B: Uncontrolled territory reclaim — free march works. ED-NEW-008: Seizure undefined for Uncontrolled.
+- Scenario C: TC formula consistency — TC ceiling conflict (victory_v30 says 75, tc_political says 100). CI=TC rename not propagated.
+
+Findings:
+- ED-NEW-008: Seizure vs Uncontrolled territory gap
+- ED-NEW-009: Cohesion −15 = derived consequence of Stability −1 (confirm)
+- Propagation: victory_v30 §7 TC ceiling 75→100, CI→TC in §3.2
+- GAP: PV not defined in any canonical source
+- NPC fix: Varfell priority tree needs March-to-T15 at P2/P3 when VTM ≥ 2
