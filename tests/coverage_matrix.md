@@ -281,3 +281,12 @@ Full register: tests/audit/tc_tcv_conflict_register_2026-04-18.md
 
 7 conflicts resolved. See tests/audit/editorial_decisions_ci_pv_2026-04-18.md
 TC→CI, TCV→PV, no freeze, seizure CI≥60 one-time, victory=peninsula control.
+
+## Reapplication — 2026-04-18
+
+15/20 session changes already present in restructured main. 3 remaining gaps patched:
+- npc_behavior §1.2: Community + Warden Convictions
+- npc_behavior §2.15-2.17: Crown inner circle (Voss/Reichard/Thale/Linder/Kreutz), Hafenmark (Heljason/Geirson), Varfell (Holdar/Stenskald)
+- military_layer §1.9: Siege Action mechanic
+ED-633/635/636/637/638/641 resolved.
+

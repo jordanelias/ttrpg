@@ -32,6 +32,8 @@ Every named NPC holds three interconnected attributes.
 | Precedent | Value is inherited from what has been established | Legal continuity, constitutional procedure, institutional memory | Ad hoc decisions, revolutionary action |
 | Autonomy | Value is chosen by the actor | Self-determination, operational freedom, survival | Universal moral claims, institutional demands |
 | Continuity | Value is sustained through practice | The work itself, applied necessity, endurance | Politics, ideology, anything that does not directly serve the ongoing task |
+| Community | Value is constituted through collective being | The group, the living tradition, the practice as shared act | Individual claims of authority or exception; hierarchy that displaces communal determination |
+| Warden | Value is the maintenance of the boundary between rendering and collapse | The work of holding — Thread practice, Mending, substrate care | Political agendas that interfere with the maintenance work; ideology that claims priority over immediate necessity |
 
 
 ### §1.3 Resonant Style Taxonomy
@@ -368,6 +370,32 @@ A character with TS 0–9 sees only public health data. No Thread-relevant infor
 **Haelgrund integration:** If Haelgrund reaches Arc C (TS → 20+), he does not yet meet the TS ≥ 30 threshold for automatic recognition. However, his institutional knowledge grants an exception: Haelgrund at TS 20+ can perform the cross-reference with an Intellect Ob 2 check (his bureaucratic expertise compensates for incomplete Thread perception). On success, he provides the Census Thread Map to the player without the player needing to access it themselves. On failure, he senses the pattern but cannot articulate it — retry available next season.
 
 ---
+
+
+### §2.15 Crown Inner Circle (ED-634, approved 2026-04-17)
+
+| Role | Name | Conviction | RS | Certainty | Notes |
+|------|------|------------|-----|-----------|-------|
+| Royal Marshal | Wilhelm Voss | Order | Authority | 4 | Distrusts Löwenritter. Disposition vs Southern Einhir: −1. |
+| Lord Treasurer | Annalie Reichard | Precedent | Evidence | 5 | Distant Feldhaus cousin. Disposition toward Baralta: +1. |
+| Spymaster | Kolbrun Thale | Autonomy | Consequence | 3 | Rumored Southern Einhir. Only inner-circle Niflhel contact. |
+| Archbishop's Representative | Father Gustav Linder | Faith | Authority | 5 | Himlensendt's agent. Disposition vs Thread practitioners: −2. |
+| Royal Guard Captain / LR Liaison | Theodor Kreutz | Order | Authority | 4 | Pre-designated allegiance to Almud personally. Coup Counter linked to his removal. |
+
+### §2.16 Hafenmark Inner Council (ED-635, ED-636, approved 2026-04-17)
+
+| Role | Name | Conviction | RS | Certainty |
+|------|------|------------|-----|-----------|
+| Legal Advisor | Torvi Heljason | Precedent | Evidence | 5 |
+| Military Commander | Olaf Geirson | Order | Consequence | 4 |
+
+### §2.17 Varfell Jarl Council (ED-637, ED-638, approved 2026-04-17)
+
+| Role | Name | Conviction | RS | Certainty |
+|------|------|------------|-----|-----------|
+| Senior Jarl of the Western Highlands | Björn Holdar | Continuity | Consequence | 3 |
+| Skald-Chief | Ingrid Stenskald | Community | Solidarity | 3 |
+
 
 ## §3 NPC BELIEFS: FORMATION, REVISION, AND SCARS
 

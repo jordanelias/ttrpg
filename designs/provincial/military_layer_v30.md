@@ -157,6 +157,24 @@ Templar units have TC implications — see §2.5.
 
 ---
 
+### §1.9 Siege Action (NEW — ED-633, approved 2026-04-17)
+
+Extended encirclement targeting a fortified territory. Replaces Battle against garrisoned Fort ≥ 2.
+
+**Card:** Legionary Inward. Requires 1 Legionary card + ≥ 1 unit adjacent to target.  
+**Pool:** Attacker Military stat, TN 7. **Ob:** 2 + Fort Level.
+
+| Degree | Fort effect | Cost |
+|--------|-------------|------|
+| Overwhelming | Fort −2 | RS −1, Wealth −1 |
+| Success | Fort −1 | RS −1, Wealth −1 |
+| Partial | No change | RS −1, Wealth −1 |
+| Failure | No change | Stability −1, Wealth −1 |
+
+**Cap:** 5 seasons. Then: Assault (at current Fort) or Withdraw. **RS:** −1/season (threadwork §5.2).  
+**Garrison supply:** Consul Outward Ob 2 from adjacent territory. Fail: Garrison Discipline −1/season.  
+**Calibration:** Fort 3, Military 4 = Ob 5 ≈ 2%/season. Requires Military 5+ (~25%) or political bypass.
+
 ## §2 — BG BATTLE RESOLUTION (CANONICAL)
 
 ### §2.1 Pool Formula
@@ -184,19 +202,7 @@ Per mass_battle_v30 §B.3, §PP-104:
 
 **Unit damage:** distribute net successes × Martial Damage Modifier across defender's units (attacker chooses which units take damage, reducing their Health/Size). Formation Break at Size 0.
 
-**Fort bonus dice to defender:** applies to the defender's pool, not as Ob.
-
-### §2.2b Peninsular Consequences of Battle (PP-647, peninsular_strain_v30.md §3)
-
-| Consequence | Trigger | Value |
-|---|---|---|
-| Substrate Fracture | Any battle on Valorian soil | RS −1 (Campaign/War: RS −2) |
-| Vulnerability Signal | Inter-faction battle this season | IP +2 at Accounting |
-| Peninsular Strain | Inter-faction battle this season | Strain +1 at Accounting |
-| Accord degradation | Territory conquered via battle | Accord → 1 (Resistant) |
-| Accord erosion | Battle in territory you control (defender) | Accord −1 |
-
-Covert operations and ungarrisoned Church Seizure: no RS/IP/Strain cost. Popular Uprisings and Altonian Vanguard: RS −1 only (not inter-faction). A Fort 3 territory gives the defender +3 dice on top of their Martial sum + commander bonus. This represents fortifications giving defenders a material advantage in the engagement, not making attackers less accurate.
+**Fort bonus dice to defender:** applies to the defender's pool, not as Ob. A Fort 3 territory gives the defender +3 dice on top of their Martial sum + commander bonus. This represents fortifications giving defenders a material advantage in the engagement, not making attackers less accurate.
 
 ### §2.3 BG → TTRPG Handoff
 

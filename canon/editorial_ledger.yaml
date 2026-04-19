@@ -15,139 +15,45 @@
 
 
 
-  - id: ED-703
-    date: 2026-04-18
-    description: "Phase 5: Godot Implementation Prep. 5.1 GM-to-engine conversion (7 rules). 5.2 Implementation sequence (7 phases, 20 weeks). 5.3 Data serialization (6 .tres schemas). 5.4 Scene tree (14 states, signal-based transitions). 5.5 Cross-repo protocol (GODOT-IMPACT tags, design_sync.md)."
-    status: resolved
-    severity: P1
-    affects: [designs/godot/]
-
-
-  - id: ED-702
-    date: 2026-04-18
-    description: "Phase 4.4-4.6: Baseline analysis, stress tests, calibration report. Gate CONDITIONALLY PASSED. 7/7 testable criteria pass. Feature coverage 263/130. RS reaches Fractured in 56% of runs. TC 75 at S60-80. Victory timing deferred to territorial model regression."
-    status: resolved
-    severity: P1
-    affects: [tests/sim_framework/calibration_report.md]
-
-
-  - id: ED-701
-    date: 2026-04-18
-    description: "Phase 4.2-4.3: Subsystem infill + feature coverage. 7 modules (combat, fieldwork, contest, threadwork, mass_battle, governance, NPC arcs). 263 features fired across 50 runs (202% of 130 target). All key checklist items pass."
-    status: resolved
-    severity: P1
-    affects: [tests/sim_framework/]
-
-
-  - id: ED-700
-    date: 2026-04-18
-    description: "Phase 4.0-4.1: Simulation framework architecture + state initialization. state.py (game state data structures, 34 settlements, 14 NPCs, 4+4 factions). engine.py (season loop, 10 policies, faction AI, accounting). 50-run baseline validates architecture. 25/130 features — infill needed."
-    status: resolved
-    severity: P1
-    affects: [tests/sim_framework/state.py, tests/sim_framework/engine.py]
-
-
-  - id: ED-699
-    date: 2026-04-18
-    description: "Phase 3 complete: 14 remaining P3 items resolved. Combat deprecated ref (3.3), Stamina merge proposal (3.4), Social Contest §1 prose (3.5), N-Way graduated collapse proposal (3.6), Independent path documented (3.7), Crisis weighting proposal (3.8), Coherence→Recall verified (3.10), §A.5 dedup (3.12), T6 assigned (3.13), Echo cap verified (3.14), Deflection Ob verified (3.15), Thread-Read ×0.5 proposal (3.16), Accord cross-ref (3.17), NPE convergence simulated (3.18)."
-    status: resolved
-    severity: P3
-    affects: [designs/scene/combat_v30.md, designs/scene/social_contest_v30.md, designs/provincial/mass_battle_v30.md]
-
-
-  - id: ED-698
-    date: 2026-04-18
-    description: "AUD-COM-01: Combat §4 priority contradiction resolved (Option B: resolution order within simultaneous declarations). AUD-COM-02: §9 stat names propagated (11 replacements). AUD-CT-01: CV→PT rename (111 replacements). AUD-CK-01: Settlement derived tracks added to clock_registry."
-    status: resolved
-    severity: P3
-    affects: [designs/scene/combat_v30.md, designs/scene/conviction_track_v30.md, designs/provincial/clock_registry_v30.md]
-
-  - id: ED-670
+  - id: 
+  - id: ED-633
     date: 2026-04-17
-    description: "Extra-territorial heresy designation: no rule on how it interacts with Hafenmark Sovereign Authority Doctrine outside Hafenmark."
+    description: "Siege Action §1.9 propagated to military_layer_v30."
     status: resolved
     severity: P2
-    affects: [designs/npcs/npc_behavior_v30.md]
-    resolution: "§2.13a Extra-Territorial Heresy Jurisdiction. 5-territory-type jurisdiction table. Hafenmark blocks via Sovereign Authority. ED-670."
+    affects: [designs/provincial/military_layer_v30.md]
 
-  - id: ED-671
-    date: 2026-04-18
-    description: "Thread-perception census: Ministry census contains 150 seasons of undeclared TS data ('perceptual anomalies'). No mechanic governs interpretation or access. Requires ruling."
-    status: resolved
-    severity: P1
-    affects: [designs/npcs/npc_behavior_v30.md]
-    resolution: "§2.14a Ministry Census Thread-Perception Data added. PAR data structure, 3-tier access, TS-gated interpretation, procedural engine generation, Haelgrund Arc C exception. ED-671."
-
-  - id: ED-672
+  - id: ED-641
     date: 2026-04-17
-    description: "Arc A timing window: Almud Arc A requires Certainty <=1 AND Counter <=1 simultaneously. Standard play may not synchronize without active player management. Clarification needed."
+    description: "Community + Warden Convictions added to npc_behavior §1.2."
     status: resolved
     severity: P2
     affects: [designs/npcs/npc_behavior_v30.md]
-    resolution: "Timing window clarification added after Arc A in npc_behavior. Narrow window intentional — reform path is hardest. Window closure permanent. ED-672."
 
-  - id: ED-673
+  - id: ED-635
     date: 2026-04-17
-    description: "Hochjarl Incapacity Assessment: oral law provision referenced in Varfell succession but not formally defined. Requires triggers, process, duration, outcomes."
-    status: resolved
-    resolution: "§1.3a Hochjarl Incapacity Assessment added to faction_politics. 4 triggers, Assembly vote process, 2-season minimum recovery, permanent removal after 4. ED-673."
-    severity: P2
-    affects: [designs/provincial/faction_politics_v30.md]
-
-  - id: ED-674
-    date: 2026-04-18
-    description: "PP-298: Post-coup succession rule. victory_v30 §3.6 defines Loewenritter activation but not chain of command after coup. Who inherits? Counter reset?"
-    status: resolved
-    severity: P1
-    affects: [designs/provincial/victory_v30.md, designs/provincial/faction_layer_v30.md]
-    source_pp: PP-298
-    resolution: "§3.6a Post-Coup Succession Rule added to victory_v30. Crown interregnum, Löwenritter chain of command, Ministry freeze, counter reset, 4 succession paths, stat inheritance. ED-674."
-
-  - id: ED-675
-    date: 2026-04-18
-    description: "PP-320: Faction collapse exit procedure. board_game_v30 I-04 flags contradiction. faction_layer_v30 §1.3 has recovery but not collapse→exit transition."
-    status: resolved
-    severity: P1
-    affects: [designs/provincial/faction_layer_v30.md, designs/provincial/strategic_layer_v30.md]
-    source_pp: PP-320
-    resolution: "§1.5 Faction Collapse Exit Procedure added to faction_layer. 6-step procedure (attribute snapshot, territory transition, officer fate, PC transition, parliamentary removal, victory closure). Consolidates P-15/P-24/§9.10. Survival exception. ED-675."
-
-  - id: ED-676
-    date: 2026-04-18
-    description: "PP-042: Einhir site detectability on world map. How do sites render? Always visible? TS-gated? After Diagnosis?"
-    status: resolved
-    resolution: "§3.3a Einhir Site World Map Detectability added to fieldwork. TS-gated visibility per site type. Diagnosis makes sites permanently visible. ED-676."
-    severity: P2
-    affects: [designs/scene/fieldwork_v30.md, designs/threadwork/threadwork_v30.md]
-    source_pp: PP-042
-
-  - id: ED-677
-    date: 2026-04-18
-    description: "PP-652: Starting PT values per territory. Proposed: T9=5, T6=1, T13=1, T4/T11/T12=2, rest=3. Accept or adjust."
-    status: resolved
-    resolution: "§0.4 Starting PT Values table added to victory_v30. T9=5, T6/T13=1, T4/T11/T12=2, rest=3. Accepted as proposed. ED-677."
-    severity: P2
-    affects: [designs/provincial/victory_v30.md, designs/provincial/peninsular_strain_v30.md]
-    source_pp: PP-652
-
-  - id: ED-678
-    date: 2026-04-18
-    description: "PP-472: Accounting steps collapse 13→10. faction_layer_v30 §7 still shows 13 steps. Accept simplification or retain?"
-    status: resolved
-    resolution: "Accounting collapsed 13→10 steps in faction_layer §8.1. Merged sub-steps, removed dissolved Step 11, consolidated Peninsular Strain. ED-678."
-    severity: P2
-    affects: [designs/provincial/faction_layer_v30.md]
-    source_pp: PP-472
-
-  - id: ED-679
-    date: 2026-04-18
-    description: "PP-019: Niflhel intelligence output mechanic. npc_behavior_v30 §8.8 has priority tree but no mechanic for how gathered intelligence becomes actionable. Needs 1-page spec."
+    description: "Hafenmark Legal Advisor Torvi Heljason added to npc_behavior §2.16."
     status: resolved
     severity: P1
     affects: [designs/npcs/npc_behavior_v30.md]
-    resolution: "§8.8a Niflhel Intelligence Output Mechanic added. 4-tier product system (Rumour/Dossier/Leverage), sale mechanic, exposure counter, engine implementation. ED-679."
-    source_pp: PP-019
-    note: "Renumbered from duplicate ED-673."
 
+  - id: ED-636
+    date: 2026-04-17
+    description: "Hafenmark Military Commander Olaf Geirson added to npc_behavior §2.16."
+    status: resolved
+    severity: P1
+    affects: [designs/npcs/npc_behavior_v30.md]
 
+  - id: ED-637
+    date: 2026-04-17
+    description: "Varfell Jarl Björn Holdar added to npc_behavior §2.17."
+    status: resolved
+    severity: P1
+    affects: [designs/npcs/npc_behavior_v30.md]
 
+  - id: ED-638
+    date: 2026-04-17
+    description: "Varfell Skald-Chief Ingrid Stenskald added to npc_behavior §2.17."
+    status: resolved
+    severity: P1
+    affects: [designs/npcs/npc_behavior_v30.md]
