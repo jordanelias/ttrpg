@@ -1,28 +1,31 @@
-session_id: restructure_ci_fixes_2026-04-18
-session_close: 2026-04-18
-phase: COMPLETE
-status: CLOSED
-last_stage: done
+session_id: phase0_housekeeping_2026-04-18
+session_close: pending
+phase: Phase 0 — Housekeeping
+status: IN PROGRESS
+last_stage: 0.1-0.6 complete
 next_action:
-  skill: confirm with Jordan
+  skill: 0.7 params staleness audit
   description: >
-    All restructure CI issues resolved. 8/8 CI jobs pass.
+    Phase 0.1-0.6 register cleanup complete. 0.7 (params staleness) is next.
 blockers: []
 commits:
-  - 102507f8: "Fix bootstrap auth + freshness_gate commit compat + editorial_gate skeleton exemption + 11 missing skeletons"
-  - 1abd7506: "Fix ci_editorial_checker: remove stale worldbuilding path, add skeleton exemption"
+  - pending: "Phase 0.1-0.6: Summary rebuild, ED-663 resolved, ED-673→ED-679 dedup, session log cleanup, P0 triage (no P0s), broken dep check (clean)"
 resolutions_this_session:
-  - "github_ops: assert_bootstrap added to _authorize_next_commit approved callers — fixes bootstrap compliance auto-fix auth violation"
-  - "freshness_gate.py: commit now uses atomic_commit (hook-compatible) with put_file fallback for CI — prevents session state corruption"
-  - "valoria_hooks: editorial_gate now exempts _skeleton.md files"
-  - "ci_editorial_checker: stale designs/worldbuilding/ path removed, skeleton exemption added"
-  - "11 missing skeletons generated for gm_ref arc docs (8) and audit docs (3)"
-  - "CI: 8/8 jobs pass (was 6/8)"
+  - "0.1: Summary rebuilt from scratch — index_gen.py had zeroed it. Correct counts: 4 P1, 6 P2, 10 open, next_id 680."
+  - "0.2: ED-663 resolved (wealth cap already canonicalized in derived_stats_v1). Duplicate ED-673 renumbered to ED-679."
+  - "0.3: File index propagation-pending count: 0 (clean post-restructure). No update needed."
+  - "0.4: Broken dependency checker: 0 broken deps. Clean."
+  - "0.5: Session log open_items cleaned. Removed ED-666/667/629 (resolved+archived), ED-632/633 (archived-open, tracked in summary). Added ED-670-679."
+  - "0.6: P0 triage: ED-668-672 were never P0. Old summary misclassified. ED-668/669 are archived P2 calibration items. ED-670/671/672 are active at correct severity (P2/P1/P2). No P0 blockers exist."
 open_items:
   - ED-671 Thread-perception census (P1)
-  - ED-666 Path B speed-run calibration (P1)
-  - ED-667 Coup Counter readiness gap (P1)
-  - ED-632 Shadow Renown mechanic (P1)
-  - ED-633 Deniability Debt (P1)
-  - ED-629 Heresy Proceedings auth loop (P1)
-  - ED-663 Wealth cap (P1)
+  - ED-674 Post-coup succession rule (P1)
+  - ED-675 Faction collapse exit procedure (P1)
+  - ED-679 Niflhel intelligence output mechanic (P1)
+  - ED-670 Extra-territorial heresy (P2)
+  - ED-672 Arc A timing window (P2)
+  - ED-673 Hochjarl Incapacity Assessment (P2)
+  - ED-676 Einhir site detectability (P2)
+  - ED-677 Starting PT values (P2)
+  - ED-678 Accounting steps collapse (P2)
+

@@ -1,48 +1,41 @@
 # Valoria Editorial Ledger — Active
-# next_id: 674
+# next_id: 680
+
   - id: ED-663
     date: 2026-04-18
     description: "Haushalt Competence 3 +2 Wealth/season has no cap — unbounded Wealth generation."
-    status: open
+    status: resolved
     severity: P1
-    resolution: "[GAP: Source doc not located. Mechanic cited in REICH-SIM-01. Requires source before cap can be applied.]"
-    affects: [unknown]
+    resolution: "Mechanic canonicalized in derived_stats_v1 Treasury section. Income = Competence x 25 gold/season, capped at Wealth x 50/season. See archive ED-663 (resolved) in editorial_ledger_archive_1001_1200.yaml."
+    affects: [designs/scene/derived_stats_v30.md]
 
   - id: ED-670
     date: 2026-04-17
     description: "Extra-territorial heresy designation: no rule on how it interacts with Hafenmark Sovereign Authority Doctrine outside Hafenmark."
     status: open
     severity: P2
-    affects: [designs/systems/npc_behavior_v30.md]
+    affects: [designs/npcs/npc_behavior_v30.md]
 
   - id: ED-671
     date: 2026-04-17
     description: "Thread-perception census: Ministry census contains 150 seasons of undeclared TS data ('perceptual anomalies'). No mechanic governs interpretation or access. Requires ruling."
     status: open
     severity: P1
-    affects: [designs/systems/npc_behavior_v30.md]
+    affects: [designs/npcs/npc_behavior_v30.md]
 
   - id: ED-672
     date: 2026-04-17
     description: "Arc A timing window: Almud Arc A requires Certainty <=1 AND Counter <=1 simultaneously. Standard play may not synchronize without active player management. Clarification needed."
     status: open
     severity: P2
-    affects: [designs/systems/npc_behavior_v30.md]
+    affects: [designs/npcs/npc_behavior_v30.md]
 
   - id: ED-673
     date: 2026-04-17
     description: "Hochjarl Incapacity Assessment: oral law provision referenced in Varfell succession but not formally defined. Requires triggers, process, duration, outcomes."
     status: open
     severity: P2
-    affects: [designs/systems/faction_politics_expanded_v1.md]
-
-  - id: ED-673
-    date: 2026-04-18
-    description: "PP-019: Niflhel intelligence output mechanic. npc_behavior_v30 §8.8 has priority tree but no mechanic for how gathered intelligence becomes actionable. Needs 1-page spec."
-    status: open
-    severity: P1
-    affects: [designs/npcs/npc_behavior_v30.md]
-    source_pp: PP-019
+    affects: [designs/provincial/faction_politics_v30.md]
 
   - id: ED-674
     date: 2026-04-18
@@ -83,3 +76,13 @@
     severity: P2
     affects: [designs/provincial/faction_layer_v30.md]
     source_pp: PP-472
+
+  - id: ED-679
+    date: 2026-04-18
+    description: "PP-019: Niflhel intelligence output mechanic. npc_behavior_v30 §8.8 has priority tree but no mechanic for how gathered intelligence becomes actionable. Needs 1-page spec."
+    status: open
+    severity: P1
+    affects: [designs/npcs/npc_behavior_v30.md]
+    source_pp: PP-019
+    note: "Renumbered from duplicate ED-673."
+
