@@ -103,6 +103,18 @@ Hafenmark shares Church theology but rejects ecclesial monopoly on divine access
 
 **Key docs:** peninsular_strain_v30 §5.3 (Dynastic Proclamation), npc_behavior_v30 §2.3 (Baralta profile), victory_v30 §3.3 (Dynastic Assertion), params/bg/institutions (Sovereign Authority Doctrine)
 
+
+## T15b — Löwenritter as Substrate-Agnostic Protector
+Governance authority from institutional duty and military capability. Substrate irrelevant to national defense. Thread revelation: the existential threat is substrate decay, military tools cannot address it. Praetorian identity crisis.
+
+**Key docs:** params/bg/core (graduated autonomy), npc_behavior_v30 §2.5 (Ehrenwall), victory_v30 §3.6 (Military Regency)
+
+
+## T15c — RM as Substrate-Heritage Reclaimer
+Unknowing inheritance — Einhir cultural practices were substrate-connected but RM rebuilds them as political tradition. Hidden Thread-site bonus (governance works better where Thread is proximate). Thread revelation: vindication AND identity crisis. Only faction with unconscious substrate-posture.
+
+**Key docs:** victory_v30 §3.5 (Cultural Revolution), threadwork_v30 §5.6 (hidden bonus), npc_behavior_v30 §2.6 (Vossen)
+
 ## T12 — Morale and Legitimacy Cascade
 Battle → Morale Cascade (rout spreads) → Cohesion drain → Accord erosion → governance difficulty → further Cohesion drain. Military defeat cascades from battlefield through institutional confidence to population-level governance acceptance. Derived stats make each step visible.
 
@@ -127,12 +139,12 @@ Character action → settlement consequence → territory consequence → penins
 | Thread/Coherence/RS | N1, N5, T1, T13, T14 |
 | Faction stats/Domain Actions | N2, T2 |
 | Settlement governance | N2, N6, T1, T7, T13 |
-| Mass battle | T5, T6, T12 |
+| Mass battle | T5, T6, T12, T15b |
 | Social contest | N3, N6, T4 |
 | Conviction/Portrait | N4, T8 |
 | Fieldwork/Investigation | N5, T3 |
 | Church infrastructure | N6, T9 |
-| RM mechanics | N5, T11 |
+| RM mechanics | N5, T11, T15c |
 | Altonian invasion | T6, T12 |
 | Derived stats | T2, T12, T13 |
 | Card system | T2 |

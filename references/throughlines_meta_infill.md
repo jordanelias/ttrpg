@@ -83,6 +83,8 @@ Four is the minimum coherent set.
 | T-10 | **STRUCK** (Niflhel dissolved) | — | — | Niflhel dissolved as faction. Thread exploitation distributed to settlement-level phenomena. |
 | T-11 | Crown Pragmatic | М-4 | — | Institutional — Crown's posture is instrumentalist. |
 | T-15a | Hafenmark Unmediated Sovereigntist | М-4 | М-6 | Primary institutional (divine-right governance rejects ecclesial monopoly). Secondary forced-choice (Thread revelation threatens TS-0 Baralta). |
+| T-15b | Löwenritter Substrate-Agnostic Protector | М-4 | М-6 | Primary institutional (military duty, substrate irrelevant). Secondary forced-choice (revelation means military tools fight wrong war). |
+| T-15c | RM Substrate-Heritage Reclaimer | М-4 | М-6 | Primary institutional (unknowing substrate inheritance via Einhir practice). Secondary forced-choice (Embrace/Denial/Schism at revelation). |
 | T-12 | Practitioner Arc | М-6 | М-1 | Primary forced-choice (Coherence cost forces engagement decisions). Secondary pressure (Coherence depletes). |
 | T-13 | Certainty Journey | М-6 | М-3 | Primary forced-choice (irreversible descent opens capabilities, closes relationships). Secondary substrate-grounded. |
 | T-14 | Conviction Architecture | М-6 | — | Forced-choice — Scar accumulation forces arc transitions. |
@@ -98,7 +100,7 @@ Four is the minimum coherent set.
 | T-24 | Convergence as Crisis | М-5 | — | Scale-connecting — multiple throughlines intersecting at various scales produce emergent crisis. |
 | T-25 | Generational Arc | М-5 | — | Scale-connecting — 30-year clock transforms personal standings into institutional reality. |
 
-Coverage: 24 of 25 + T-15a (T-10 struck; T-15a added). Primary distribution: М-1: 4 · М-2: 2 · М-3: 3 · М-4: 5 · М-5: 6 · М-6: 5.
+Coverage: 24 of 25 + T-15a/b/c (T-10 struck; T-15a/b/c added). Primary distribution: М-1: 4 · М-2: 2 · М-3: 3 · М-4: 7 · М-5: 6 · М-6: 5.
 
 ### §3.2 М-dependencies explained
 
