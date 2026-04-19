@@ -314,8 +314,8 @@ def faction_ai_church(gs: GameState):
             target.accord = min(3, target.accord + 1)
 
     # Church seizure attempt (one-time, CI ≥ 60)
-    # [canonical: editorial_decisions §3,6]
-    if gs.ci >= 60 and not gs.church_seizure_fired:
+    # [canonical: Jordan correction 2026-04-18 — CI ≥ 75, one-time seizure]
+    if gs.ci >= 75 and not gs.church_seizure_fired:  # [canonical: Jordan correction — CI ≥ 75, one-time]
         attempt_church_seizure(gs)
 
 def attempt_church_seizure(gs: GameState):
