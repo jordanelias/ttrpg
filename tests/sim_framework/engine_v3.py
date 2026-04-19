@@ -159,7 +159,6 @@ class GameState:
     aer: int = 2    # Altonian Ecclesiastical Relationship
     wc: int = 0     # Warden Cooperation
     wr: int = 0     # Warden Recognition
-    vtm: int = 0    # Vaynard Thread Mastery [canonical: params/bg/core.md]
     warden_emerged: bool = False  # Edeyja/Wardens active
     factions: Dict[str, Faction] = field(default_factory=dict)
     territories: Dict[str, Territory] = field(default_factory=dict)
@@ -670,10 +669,7 @@ def faction_ai_varfell(gs: GameState):
         net, deg = check(pool, 2)
         if deg in ('Success', 'Overwhelming'):
             intel_bonus = 1
-            # [canonical: params/bg/core.md — VTM advances via intel/Thread contact]
-            if random.random() < 0.3:  # ~30% chance per successful intel op
-                gs.vtm = min(5, gs.vtm + 1)
-                gs.log.append(f"S{gs.season}: Varfell VTM advances to {gs.vtm}")
+
 
     # Second Tribune if available
     if has_card(f, 'Tribune'):
@@ -683,9 +679,9 @@ def faction_ai_varfell(gs: GameState):
         if deg in ('Success', 'Overwhelming'):
             intel_bonus += 1
 
-    # P5: March to T15 when VTM ≥ 2 AND no unit in T15
-    # [canonical: npc_behavior §8.5 P2b / params/bg/npc_priority_trees.md Varfell P5]
-    if gs.vtm >= 2 and gs.territories['T15'].controller != 'Varfell' and has_card(f, 'Legionary') and f.military >= 3:
+    # P5: March to T15 — Varfell's Thread investigation path
+    # [canonical: npc_behavior §8.5 P2b — VTM struck; march gates on faction stability + military]
+    if gs.territories['T15'].controller != 'Varfell' and has_card(f, 'Legionary') and f.military >= 3 and f.stability >= 3:
         play_card(f, 'Legionary')
         gs.territories['T15'].controller = 'Varfell'
         f.territories.append('T15')
@@ -706,8 +702,8 @@ def faction_ai_varfell(gs: GameState):
                 t.accord = min(3, t.accord + 1)
 
     # Colonist: Cultural Reformation — transfers territory on Success/OW
-    # [canonical: params/bg/faction_actions.md PP-650 — Pool: Influence+floor(VTM/2), Ob: PT+1]
-    # [canonical: Prerequisites: VTM ≥ 2, target PT ≤ 3, adjacent to Varfell territory]
+    # [canonical: params/bg/faction_actions.md PP-650 — Pool: Influence, Ob: PT+1]
+    # [canonical: Prerequisites: target PT ≤ 3, adjacent to Varfell territory. VTM struck.]
     if has_card(f, 'Colonist'):
         # Target: non-Varfell territory with PT ≤ 3
         targets = [t for t in gs.territories.values()
@@ -716,7 +712,7 @@ def faction_ai_varfell(gs: GameState):
             play_card(f, 'Colonist')
             target = min(targets, key=lambda t: t.pt)  # easiest first (lowest PT)
             reform_ob = max(1, target.pt + 1)
-            pool = f.influence + intel_bonus  # VTM not tracked yet; using intel_bonus as proxy
+            pool = f.influence + intel_bonus  # intel_bonus from Tribune operations
             net, deg = check(pool, reform_ob)
             if deg in ('Success', 'Overwhelming'):
                 # [canonical: PP-650 — territory transfers, Accord 2, PT -1, TC -1]
@@ -799,22 +795,27 @@ def run_season(gs: GameState):
     ci_delta = generate_ci(gs)
     gs.ci = max(0, min(100, gs.ci + ci_delta))
 
-    # RS baseline: -1/year at Year-End only
-    # [canonical: params/core.md §RS Baseline Decay — -1 per in-game year at Year-End]
+    # RS baseline: -1/season (EVERY season, not just Year-End)
+    # [canonical: params/bg/clocks.md — "seasonal baseline -1"]
     is_year_end = (gs.season % 4 == 0)
-    if is_year_end:
-        # [canonical: params/bg/core.md §Warden Cooperation Effects]
-        # WC ≥ 2: RS decay rate halved (baseline -1 becomes -0.5, rounded down)
-        # WC = 3: RS +2/season at Accounting
-        if gs.wc >= 2:
-            pass  # halved: -0.5 rounds to 0 at Year-End
-        else:
-            gs.rs = max(0, gs.rs - 1)
+    rs_delta = -1  # baseline decay per season
 
-    # WC = 3: RS +2/season (every season, not just Year-End)
-    # [canonical: params/bg/core.md — WC 3: RS +2/season at Accounting]
+    # [canonical: params/bg/core.md §Warden Cooperation Effects]
+    # WC ≥ 2: RS decay rate halved (baseline -1 becomes -0.5, rounded down)
+    if gs.wc >= 2:
+        rs_delta = 0  # halved: floor(-0.5) = 0 baseline
+
+    # WC = 3: RS +2/season at Accounting
+    # [canonical: params/bg/core.md — WC 3: RS +2/season]
+    # Net effect at WC 3: 0 baseline + 2 = +2/season (stabilization, not immunity)
     if gs.wc >= 3:
-        gs.rs = min(100, gs.rs + 2)
+        rs_delta += 2
+
+    # [canonical: params/bg/clocks.md — Strain 9-10 Collapse: RS -1/season additional]
+    if gs.strain >= 9:
+        rs_delta -= 1
+
+    gs.rs = max(0, min(100, gs.rs + rs_delta))
 
     # Step 4c: Accord checks
     # [canonical: params/bg/phases.md Step 4c]
@@ -854,8 +855,8 @@ def run_season(gs: GameState):
     # [canonical: npc_behavior §8.5 P2b — T15 presence prerequisite for Warden emergence]
     varfell = gs.factions.get('Varfell')
     if varfell and varfell.active and 'T15' in varfell.territories:
-        # WR advances: Varfell in T15 with VTM ≥ 2 → WR +1/year at Year-End
-        if is_year_end and gs.vtm >= 2 and gs.wr < 3:
+        # WR advances: Varfell present in T15 → WR +1/year at Year-End
+        if is_year_end and gs.wr < 3:
             gs.wr = min(3, gs.wr + 1)
             gs.log.append(f"S{gs.season}: Warden Recognition advances to {gs.wr}")
 

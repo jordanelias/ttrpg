@@ -348,5 +348,4 @@ commit touches files flagged in canon/supersession_register.yaml.
 3. Warden emergence: VTM, T15 march, WR/WC, RS stabilization
 4. 0-territory = immediate elimination
 5. AI expansion thresholds lowered
-20-seed v3.2: 80% Varfell, 5% Crown, 15% stalemate. Avg S55.
-Territory inheritance + LocalMilitia revolt + 0-terr instant elimination.
+20-seed: 75% Varfell, 10% Crown, 10% SHARED_LOSS. Avg S56.
