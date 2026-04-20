@@ -357,3 +357,7 @@ tests/sim/campaign_simulation_readiness_2026-04-19.md — reports that all 17 fu
 ## Session 1 — valoria_full_campaign_sim.py — 2026-04-19
 
 tests/sim/valoria_full_campaign_sim.py — foundation: core engine (dice, degree), faction 6-stat model, clocks (RS/CI/IP/PI/Strain/Autonomy), seasonal loop with Accounting. 10-season peaceful smoke test PASS. 103-entry ledger, all constants cited. Session 2: DA layer. Session 3: NPCs + tests.
+
+## Session 2 — sim update — 2026-04-19
+
+Session 2 Middle Layer: territory model (17 territories T1-T17 with Proximity/PV/SW/PT/Accord/adjacency), Domain Action framework (Royal Decree, Excommunication, SAD, Private Collection, Economic Leverage, Assert, Suppress, Govern, Trade), Piety Yield formula, Church political pool bonus, faction AI stub, 40-season smoke test across 3 seeds PASS. 130-entry ledger.
