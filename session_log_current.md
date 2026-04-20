@@ -1,23 +1,25 @@
-session_id: 2026-04-19-sim-session-1
+session_id: 2026-04-19-sim-all-sessions
 session_close: 2026-04-19
 phase: 0
-status: active
-last_stage: Sim Session 1 foundation committed (129f2f2b); checkpoint acc07c85 written at 75% context
+status: complete
+last_stage: Full campaign simulation harness complete (Sessions 1+2+3); 8-seed deterministic corpus PASS
 next_action:
-  skill: Resume from canon/session_checkpoint.md — execute Session 2 Middle Layer
+  skill: Tier A conquest loop (mass combat + territory seizure + Peninsular Sovereignty reachable)
   description: >
-    See canon/session_checkpoint.md for full Session 2 scope. Summary: add
-    territory model (T1-T15), Domain Action framework with 6+ canonical DAs,
-    Piety Yield/CI political pool, Peninsular Strain propagation, simplified
-    mass combat and contest, faction AI stub, then 40-season smoke test with
-    real DAs. All Session 1 ledger entries at /home/claude/sim_verification_ledger.json.
+    The sim runs end-to-end but no faction can conquer another's territory
+    yet, so Peninsular Sovereignty is unreachable in simulation. Tier A
+    adds mass_battle_v30 resolution, Church CI=60+ TC Seizure DA, Crown
+    military occupation, territory control changes with Accord damage.
+    After Tier A: factions can win via Peninsular Sovereignty and we can
+    measure win-rate distributions across seeds. See
+    tests/sim/campaign_simulation_readiness_2026-04-19.md §5 for full
+    Tier A/B/C scope.
   blockers: []
 blockers: []
 commits:
-  - 129f2f2b: Session 1 foundation — core engine + clocks + factions + seasonal loop (10-season smoke PASS)
-  - acc07c85: Checkpoint — Session 1 done, Session 2 pending
+  - 129f2f2b: Sim Session 1 — foundation (core engine, clocks, factions, seasonal loop)
+  - 99b469cf: Sim Session 2 — territory model + DA framework + Piety Yield + faction AI
+  - 6264e685: Sim Session 3 — victory + Tensions Deck + Royal Assassination + Threadwork + 8-seed corpus
 P1-BLOCKER count: 0
 design_complete: true
-sim_harness_session_1_complete: true
-sim_harness_session_2_complete: false
-sim_harness_session_3_complete: false
+sim_harness_complete: true
