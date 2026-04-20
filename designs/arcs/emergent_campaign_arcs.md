@@ -1,6 +1,7 @@
 <!-- DERIVED FROM: Checkpoint 14 (compilation/valoria_ruleset_checkpoint_14.md, 2026-03-26) -->
 <!-- SESSION: 2026-03-30 / 2026-03-31 — see session_log_archive.md -->
 <!-- STATUS: Pre-release reference tool. Not valid against any post-CP14 ruleset. -->
+<!-- POST-SESSION-B/C NOTE (2026-04-19): Arc 1 (Coup Counter) and Arc 3 (Niflhel) reference dissolved systems. Coup Counter was replaced by Löwenritter graduated autonomy (4-stage Loyal/Restless/Autonomous/Split) — see designs/architecture/conflict_architecture_proposal.md. Niflhel dissolved — Shadow Network phenomena now render at settlement layer (designs/territory/settlement_layer_v30.md §4.7-4.9); Dalla Virke became independent intelligence broker (designs/npcs/npcs_special.md). The arcs below remain as pre-dissolution illustrations of emergent structure only. -->
 
 # Valoria — Emergent Campaign Arcs
 *Derived purely from mechanical systems. No editorial content decided. All narrative framing is illustrative, not canonical.*
