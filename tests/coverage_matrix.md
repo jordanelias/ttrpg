@@ -349,3 +349,7 @@ commit touches files flagged in canon/supersession_register.yaml.
 4. 0-territory = immediate elimination
 5. AI expansion thresholds lowered
 20-seed: 75% Varfell, 10% Crown, 10% SHARED_LOSS. Avg S56.
+
+## Full Campaign Simulation Readiness — 2026-04-19
+
+tests/sim/campaign_simulation_readiness_2026-04-19.md — reports that all 17 full_stack systems have canonical sources (populated in references/canonical_sources.yaml systems: block, commit 393e76e3). Zero P1 editorial blockers. Automated Python harness is unwritten; narrative sim corpus (sim_x_01-36+, sim_var_01-06, arc sims) covers all cross-system interactions. Not a sim output in the mechanical sense — a readiness assessment documenting design completeness.
