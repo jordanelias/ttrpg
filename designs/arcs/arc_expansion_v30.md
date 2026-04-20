@@ -8,6 +8,21 @@
 ##   Cross-NPC conditioners specify when one NPC's arc triggers a transition in another.
 ##   Environmental conditioners bind arcs to world-track thresholds.
 
+<!-- POST-SESSION-B/C CANONICAL OVERRIDE (2026-04-19):
+This doc was approved 2026-04-17, one day before Niflhel dissolution (Session B, 2026-04-18) and Löwenritter graduated autonomy replacing the Coup Counter (Session B, 2026-04-18).
+
+DEAD (non-canonical, do not implement):
+  • §"NIFLHEL — Named Arm Operatives" and its sub-sections (Quartermaster, The Quiet One) — STRUCK below. Niflhel dissolved; Shadow Network phenomena now render at settlement layer (designs/territory/settlement_layer_v30.md §4.7-4.9). Dalla Virke → independent intelligence broker (designs/npcs/npcs_special.md).
+  • §"Löwenritter-Niflhel Proximity" cross-NPC conditioner table — STRUCK below.
+  • Any "Niflhel infiltration / Niflhel Arm N / Niflhel operation" mention in other NPC arcs (Torsvald, RM Vossen/Hann, Vaynard): reframe as "settlement-layer intelligence broker operation" at the table; mechanical hooks remain valid with that re-skin.
+  • Editorial ledger items spawned from this doc that named Niflhel arcs (e.g., ED-600) are dead-on-arrival.
+
+SUPERSEDED (arc structure remains valid as illustration; translate mechanics):
+  • Coup Counter (binary 0–3 trigger) → Löwenritter graduated autonomy (Loyal → Restless → Autonomous → Split, 4 stages). See designs/architecture/conflict_architecture_proposal.md and params/clocks/clock_registry_v30.md.
+  • Rough mapping for reader translation only: Coup Counter 0–1 ≈ Loyal/Restless; CC 2 ≈ Restless/Autonomous; CC 3 (fires) ≈ Autonomous/Split with formal demand delivered.
+  • Affected sections (not exhaustive): Almud Arc A/B/C branch conditions; Ehrenwall Arc A/B/C (entire track); cross-NPC conditioners referencing CC; Obligation-triggered conditioners with CC deltas.
+-->
+
 ---
 
 ## PART I: METHODOLOGY REFERENCE
@@ -548,62 +563,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 
 ### NIFLHEL — Named Arm Operatives
 
-Niflhel's four-arm structure has no named NPCs beyond the collective. Providing one named operative per arm — the NPC the player encounters when Niflhel interactions become personal.
-
----
-
-#### The Quartermaster (Arm 1 — Finance and Supply)
-
-| Attribute | Value |
-|-----------|-------|
-| Name | Geirr Soln (never uses this name professionally; known as "the Quartermaster") |
-| Primary Conviction | Autonomy | "I am not affiliated. I provide services. That is the entire relationship." |
-| Secondary Conviction | Continuity | He keeps running because systems keep running. The Niflhel supply chain is his life's technical work. He cares about its elegance. |
-| Thread Sensitivity | 0 | No interest or exposure. |
-| Certainty | 4 | Pragmatic conventional piety — enough to operate without suspicion in Church territories. |
-| Resonant Style | Consequence | Show him that his supply chain is producing operational failures that he hasn't accounted for. His professional pride is attached to the supply chain's effectiveness, not to any outcome it produces. |
-| Leadership Deviation | N/A — individual operative, reports to Arm 1 directorate |
-
-**Arc A: The Service Provider**
-- Contact trigger: Player's Fieldwork investigation reaches Evidence Track 5 on Niflhel's supply chain (ST-06 fieldwork sim finding). At Evidence 5: player identifies the Quartermaster as the contact point. Approach requires Niflhel contact protocol: Investigation-triggered (Tribune Spy OW → Niflhel makes contact next season per prior session's proposed rule).
-- Behavior: The Quartermaster will provide exactly what he is asked for at market rates. He will not volunteer information. He will not participate in anything that compromises his operational infrastructure. He is a professional.
-
-**Arc B: The Professional Confronted**
-- Branch condition: Player provides the Quartermaster with Verified Evidence that his supply chain is delivering Thread-extraction equipment to the Southernmost (the Altonian-labeled goods finding from ST-06). The Consequence RS trigger fires: his supply chain is producing a consequence he did not account for — accelerated RS decline potentially destroying the infrastructure his supply chain relies on.
-- Transformation: The Quartermaster does not abandon Niflhel. But he becomes willing to negotiate what he will and will not supply. He will not supply Thread-extraction equipment for any client. This creates a fracture within Arm 1 — the directorate did not authorise this decision.
-- New access: The Quartermaster will trade operational information (what Niflhel is doing in specific territories) in exchange for the player providing him with RS data (he is now tracking RS as a professional risk indicator). This creates an intelligence relationship — not loyalty, not alliance, but mutual usefulness.
-
-**Arc C: The Defector**
-- Branch condition: Arm 1 directorate overrides the Quartermaster's supply restriction AND continues delivering Thread-extraction equipment. He has made a professional judgment; his directorate has overruled it. He has two choices: comply or leave.
-- Transformation: He leaves. Quietly. Takes nothing that isn't his. He does not report Niflhel's operations to any faction — that would be a betrayal of professional standards he genuinely holds. But he is no longer a Niflhel operative.
-- Player access: A Quartermaster who has left Niflhel is recruitable (§9.5 standard recruitment, Ob 1 — he has no current faction Disposition). His value: complete operational knowledge of Niflhel Arm 1's supply network, delivery schedules, and client list. This is campaign-defining intelligence that can expose every Niflhel operation currently running.
-
----
-
-#### The Quiet One (Arm 2 — Operations/Thread Extraction)
-
-| Attribute | Value |
-|-----------|-------|
-| Name | Unknown. Operatives in Arm 2 use no names. Known only by their operational signature. |
-| Primary Conviction | Autonomy | Mission, completion, extraction. No ideology. No sentiment. |
-| Secondary Conviction | [None — Arm 2 operatives have no fallback. They are the Niflhel arm designed to have no conscience. When Autonomy fails: they fracture into independent survival.] |
-| Thread Sensitivity | 35 (active practitioner — this is why Arm 2 can operate Thread-extraction) |
-| Certainty | 1 | Full Thread awareness. Operational clarity — Thread is a resource, not a reality. The most dangerous practitioner Conviction possible. |
-| Resonant Style | Evidence | Show them that the Thread they are extracting is responding — that the substrate is registering their operations as damage, not as neutral extraction. Thread evidence (from Edeyja or a Structural Finding) is the only argumentation vector. |
-
-**Arc A: The Extractor (Default)**
-- Behavior: Arm 2 runs Thread operations in T15 adjacency, harvesting configurations for Altonian clients. Each operation: RS −1 (Lock or Dissolution of Thread configurations without Mending follow-up). The Quiet One has TS 35 and does not know what Dissolution costs — they were trained to extract, not to understand what they extract from.
-- Arc A passive threat: Every 3 seasons of continuous Arm 2 operation: RS −3 additional from extraction (over and above normal Lock drift). This is the systematic RS attack the supply chain enables.
-
-**Arc B: The Witness**
-- Branch condition: The Quiet One performs an extraction operation that produces a Monstrous Incursion (Dissolution Failure at RS ≤ 40 — they are now operating in damaged substrate). They witness what their extraction produces. First direct encounter with the consequences of their work.
-- Transformation: Not moral awakening — operational recalibration. The Incursion is a risk they have not accounted for. Certainty 1 (Thread as resource) is strained when the resource fights back. Evidence RS fires: Thread evidence showing what the extracted configurations were doing (protecting the substrate from deeper damage) is now registerable.
-- New behavior: The Quiet One requests intelligence on what they are extracting before each operation. This is not conscience — it is professional risk management. But it means they will refuse operations in territories where the extraction evidence suggests catastrophic failure risk. They now have limits.
-
-**Arc C: The Consequence**
-- Branch condition: Arm 2 produces a catastrophic extraction failure (RS ≤ 30, Dissolution Failure, Gap opens, Monstrous Incursion at Campaign scale). The Quiet One survives. Everyone near them does not.
-- Transformation: The operational framework fails. They cannot recalibrate from a mass casualty event caused by their extraction. Autonomy without consequence-framework collapses into — nothing. Certainty 1 becomes Certainty 0 in a single scene. Full Thread awareness with no framework: the most dangerous epistemic state in the game.
-- If player reaches them in the immediate aftermath (Mandatory Zoom In: "PC who has Thread Sensitivity ≥ 30 and is within 2 territories perceives the catastrophic Gap formation"): intervention is possible. Offering the Quiet One a framework — any framework, even contested — is better than the void. They are at the edge of a First Leap they did not choose.
+**STRUCK** — Niflhel dissolved (conflict_architecture_proposal.md, Session B 2026-04-18). The Quartermaster (Arm 1) and The Quiet One (Arm 2) NPC arcs proposed here are dead-on-arrival. Intelligence/sabotage/Thread-extraction functions distributed to settlement-level intelligence brokers (designs/territory/settlement_layer_v30.md §4.7-4.9). Dalla Virke became the canonical independent broker (designs/npcs/npcs_special.md). ED-600 (Niflhel named operatives) closed as dead.
 
 ---
 
@@ -695,11 +655,7 @@ These fire when one NPC's arc produces a direct consequence in another NPC's arc
 
 #### Löwenritter-Niflhel Proximity
 
-| NPC A arc event | NPC B triggered |
-|----------------|----------------|
-| Torsvald (Riskbreaker) discovers Niflhel Southernmost operation | Quartermaster (Arm 1): Priority 1 update — "Riskbreakers have identified our supply chain." Niflhel Arm 1 goes to operational silence for 2 seasons (no supply runs, operatives in safe houses). RS threat temporarily arrested. |
-| Niflhel Arm 2 produces catastrophic extraction failure (Arc C) | Torsvald: mandatory Discovery Event (the catastrophic Gap formation is perceptible at TS 20+). Forces Arc B trigger regardless of TS check result — the scale of the event accelerates his TS development. |
-| Ehrenwall (post-coup, Arc C) establishes Löwenritter control over T14 | Quartermaster: T14 was Niflhel's primary logistics hub. Löwenritter garrison in T14 forces Arm 1 to relocate. Next 2 seasons: supply chain disrupted, RS threat reduced 50%. Quartermaster reaches out to player (if player has Contact established) to negotiate neutral territory — he needs a new hub. |
+**STRUCK** — Both halves dissolved. Niflhel no longer exists as a faction; Coup Counter replaced by Löwenritter graduated autonomy. Cross-NPC triggers in this table are dead. Torsvald (Riskbreaker) arcs retain their mechanical structure; encounter "Niflhel Southernmost operation" triggers should be reframed as settlement-layer broker operations (designs/territory/settlement_layer_v30.md §4.7-4.9).
 
 ---
 
