@@ -164,3 +164,9 @@ entries:
     status: resolved
     severity: P1
     source: 2026-04-19
+
+  - id: ED-721
+    date: 2026-04-19
+    description: "CI cap vs Piety Yield T9 — Jordan decision. See ci_political_v30 §7.1."
+    status: open
+    severity: P2

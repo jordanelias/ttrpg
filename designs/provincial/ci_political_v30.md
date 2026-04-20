@@ -368,6 +368,8 @@ Old cap: ±5/season (PP-504). Still applies.
 Ceiling: 100 (no freeze). Seasonal cap ±5 prevents runaway.
 New milestones at 40/55/65/80/100 add effects but don't change CI formula.
 
+[EDITORIAL: ED-721 — CI cap vs Piety Yield at T9 (Himmelenger) — Jordan decision pending. Question: does T9's Piety Yield contribution (1.0 CI/season at SW 5, PT 5) count against the ±5/season CI cap, or does T9 as Church's primary cathedral anchor bypass the cap? Default behavior until Jordan decides: Option A — T9 counts against cap (uniform; cap holds). Option B — T9 bypasses (Church anchor keystone; rewards Church for T9 control). Option C — T9 contributes at half against cap (soft cap). Current canonical interpretation: Option A (uniform mechanic, cap applies), applied as the safe default until Jordan chooses otherwise. See editorial_ledger.yaml ED-721.]
+
 **Check:** Prior victory_v30 §3.2 Church victory requires CI ≥ 65. With CI running to 100, this threshold remains as a Church win condition sub-requirement; the CI Unification at 100 is an additional/alternate path.
 **RESOLVED (ED-NEW-CI-10):** Victory = Peninsular Sovereignty for all factions. CI is a tool, not a win condition. No faction-specific victory thresholds.
 
