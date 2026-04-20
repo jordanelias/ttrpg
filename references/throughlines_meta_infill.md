@@ -324,14 +324,14 @@ The previous meta-throughlines document (`throughlines_meta.md` committed as PP-
 
 PP-672 supersedes PP-671 as the vetting framework. The original PP-671 patterns are retained (reclassified as М-1 through М-6 with adjustments) but are no longer the whole story — they are now one tier of a five-tier hierarchy with operational protocol.
 
-Editorial ledger entries ED-717 (Hafenmark/Löwenritter/RM institutional-attractor gaps) persist as open items flagged against М-4.
+Editorial ledger entry ED-717 (Hafenmark/Löwenritter/RM institutional-attractor gaps) was resolved at the framework level by T-15a/b/c additions. Propagation into faction design docs proceeds one faction at a time: Hafenmark §8.4 (factions_personal_v30) — DONE 2026-04-19; Löwenritter §8.9 — PENDING; RM §8.8 — PENDING.
 
 ---
 
 ## §9 Open questions (for future revision)
 
 - **When to restructure М further.** If new systems (like PP-666 three-system patch) reveal a consistent pattern not captured by existing М, the framework should expand. Current: 6 patterns. Open: is there a 7th М for "Temporal recursion" (T-03 co-movement across time, T-25 generational arc, T-13 irreversibility) or are those adequately covered by М-5?
-- **Hafenmark/Löwenritter/RM substrate-postures.** ED-717 flagged that these factions lack explicit М-4 characterization. Until they get T-throughlines of their own, М-4 vetting of faction proposals involving them defaults to "undefined baseline."
+- **Hafenmark/Löwenritter/RM substrate-postures.** ED-717 flagged a framework-level gap. Resolved at the framework: T-15a/b/c added (see §3.1). Propagation into faction design docs (factions_personal_v30 §8.4/§8.8/§8.9) is incremental — Hafenmark arm done 2026-04-19; Löwenritter and RM arms pending. Until all three faction sections carry the T-throughline pointer, М-4 vetting of cross-faction proposals remains cautious: check the pending faction's anticipated substrate-posture against T-15b (Löwenritter substrate-agnostic protector) or T-15c (RM substrate-heritage reclaimer) as defined in §3.1 involving them defaults to "undefined baseline."
 - **Retroactive canon audit.** Existing canon is grandfathered. When is the right time for a systematic pass applying this framework retroactively? Probably after engine_v4 smoke-test produces concrete data about which mechanics are load-bearing.
 
 ---
