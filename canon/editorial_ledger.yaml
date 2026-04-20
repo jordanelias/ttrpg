@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 723
+# next_id: 726
 # Rebuilt 2026-04-19. Lost IDs: ED-670-672, ED-698-703.
 
 entries:
@@ -151,4 +151,28 @@ entries:
     status: resolved
     severity: P2
     source: jordan_review_during_ED-721
-    resolution: "Editorial decision (Jordan permission, 2026-04-20, option B from in-session proposal): SW unifies into a runtime aggregate of settlement-level Church religious infrastructure. SW(t) = min(5, Σ over settlements s in t of building_tier(s.religious_building)) where None=0, Chapel=1, Church=2, Cathedral=3. Cap 5, floor 0. Geography SW table now seeds the starting state — at game start, each territory is populated with religious buildings whose tier sum equals the listed SW value. Runtime updates: +1 to +3 on Ecclesiastical Appointment / building upgrade; −1 to −3 on siege / Mass Battle sack / desacralization. All three SW use cases (Piety Yield, Church political pool, PT momentum) now operate on dynamic SW — losing Himmelenger Cathedral collapses T9 Piety Yield from 1.0 to 0.4 (floored to 0). Propagated to ci_political_v30 §1, params/bg/geography.md, settlement_layer_v30 §1.5. engine_v3.py code unchanged — current code reads territory.sw, which is now expected to be runtime-mutable rather than fixed; Game state model will need to surface SW updates from settlement state changes (flagged for engine update in next sim session)."
+    resolution: "Editorial decision (Jordan permission, 2026-04-20, option B from in-session proposal): SW unifies into a runtime aggregate of settlement-level Church religious infrastructure. SW(t) = min(5, Σ over settlements s in t of building_tier(s.religious_building)) where None=0, Chapel=1, Church=2, Cathedral=3. Cap 5, floor 0. Geography SW table now seeds the starting state — at game start, each territory is populated with religious buildings whose tier sum equals the listed SW value. Runtime updates: +1 to +3 on Ecclesiastical Appointment / building upgrade; −1 to −3 on siege / Mass Battle sack / desacralization. All three SW use cases (Piety Yield, Church political pool, PT momentum) now operate on dynamic SW — losing Himmelenger Cathedral collapses T9 Piety Yield from 1.0 to 0.4 (floored to 0). Propagated to ci_political_v30 §1, params/bg/geography.md, settlement_layer_v30 §1.5+§1.6a (per-settlement seed table). engine_v3.py: added sack_religious_building / build_religious_building helpers; B5 stress-tested (arc_test_b5_2026-04-20.md). B5 confirmed predicted penalties: −1.15 CI/season per Cathedral lost; non-Prominent territories accumulate 'stored value' that activates on future Prominence; recovery via E.A. is fully reversible."
+
+  - id: ED-723
+    date: 2026-04-20
+    description: "AER (Altonian Ecclesiastical Relationship) generation mechanic flagged as unspecified in tests/sim_framework/session_audit_2026-04-19.md gap #9. Investigation revealed mechanic was already specified in params/bg/tracks.md PP-181/PP-565 + params/bg/institutions.md (Cardinal of Temperance row): Mandate vs Ob = ⌊AER/2⌋+1 maintains; Year-End decay −1 if not maintained. Gap was a sim implementation gap, not a design gap. The B3 simulator did not load tracks.md and therefore did not implement the mechanic."
+    status: resolved
+    severity: P2
+    source: tests/sim_framework/session_audit_2026-04-19.md
+    resolution: "Editorial confirmation (Jordan permission, 2026-04-20): AER mechanic per tracks.md is canonical. engine_v3 wiring added: GameState.aer_temperance_active_this_year flag; Church Priority 5 (Cardinal of Temperance Phase 1 declaration, requires Church controls T9, Mandate vs Ob = ⌊AER/2⌋+1, Success: AER +1 cap 5); Year-End decay −1 if no Temperance success that year; check_victory adds Altonian Conquest condition (IP ≥ 100 AND AER ≤ 1). B5-6 verified: 8-season run shows AER 2 → 4 with Temperance firing at S4 + S6. session_audit_2026-04-19.md gap #9 closed."
+
+  - id: ED-724
+    date: 2026-04-20
+    description: "Engine v4 per-settlement architecture proposal — engine v3 models territory aggregates; ED-722 dynamic SW + settlement_layer_v30 Part 1 (per-settlement governance, religious building axis, Bishop-Governor, Wing slots, black markets, intelligence brokers, Thread exploitation sites) presuppose a per-settlement model. Engine v3 simulations of these mechanics are necessarily approximate."
+    status: resolved
+    severity: P2
+    source: ED-722_followup
+    resolution: "Editorial approval (Jordan permission, 2026-04-20): proposal documented in designs/architecture/engine_v4_per_settlement_proposal.md. Five-phase migration plan: v4.0 foundational (Settlement dataclass, Territory.sw as property), v4.1 per-settlement seizure, v4.2 per-settlement Capture sequence, v4.3 Bishop appointment, v4.4 settlement-derived phenomena (black markets / intel brokers / Thread sites). v4.0 is high-priority (unblocks B6 Cathedral construction stress test). v4.1–v4.4 can be deferred until specific stress tests require them. Engine v3 + ED-722 mutator helpers are sufficient for non-architectural sim work."
+
+  - id: ED-725
+    date: 2026-04-20
+    description: "B5 stress test batch — exercises ED-722 dynamic SW, ED-723 AER mechanic, and confirms ED-721 PT_TIER table under destructive-event scenarios."
+    status: resolved
+    severity: P2
+    source: ED-721/722/723_followup
+    resolution: "B5-1 baseline 3.70 CI/season; B5-2 sack T9 Cathedral → −1.15/season penalty (matches ED-722 prediction); B5-3 compound Cathedral+Templar loss → −2.15/season; B5-4 desacralization of non-Prominent territory has zero immediate effect (stored value); B5-5 recovery via E.A. fully reversible; B5-6 AER mechanic verified working; B5-7 time-to-Unification baseline S15 vs sacked-S5 S16 (modest campaign-scale impact due to other CI sources buffering). Findings document: tests/sim_framework/arc_test_b5_2026-04-20.md. Open: B6 Cathedral-construction acceleration test (requires engine_v4.0); Mass Seizure declaration probability vs cleanly-completing campaigns audit (9/10 runs early-end via shared-loss)."

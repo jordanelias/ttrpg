@@ -161,7 +161,8 @@ class GameState:
     coup_counter: int = 0  # Löwenritter
     torben_loyalty: int = 7  # [canonical: params/bg/core.md — start 7]
     elske_loyalty: int = 4   # [canonical: params/bg/core.md — start 4]
-    aer: int = 2    # Altonian Ecclesiastical Relationship
+    aer: int = 2    # Altonian Ecclesiastical Relationship [canonical: params/bg/tracks.md PP-181 + PP-565]
+    aer_temperance_active_this_year: bool = False  # tracks Cardinal of Temperance maintenance for Year-End decay
     wc: int = 0     # Warden Cooperation
     wr: int = 0     # Warden Recognition
     warden_emerged: bool = False  # Edeyja/Wardens active
@@ -204,6 +205,42 @@ def init_state(seed: int = 42) -> GameState:
         gs.factions[fname] = Faction(fname, **stats, territories=list(FACTION_TERRITORIES[fname]),
                                      hand=list(hand), expertise=expertise)
     return gs
+
+# ═══════════════════════════════════════════════════════════════
+# DYNAMIC SW MUTATIONS (ED-722)
+# [canonical: ci_political_v30 §1, settlement_layer_v30 §1.5/§1.6a]
+# Engine v3 models SW per territory (aggregate); v4 will model per settlement.
+# These helpers mutate SW directly and log the cause.
+# ═══════════════════════════════════════════════════════════════
+
+def sack_religious_building(gs: GameState, territory_id: str, tier_lost: int = 3, reason: str = 'sack'):
+    """Reduce SW(t) by tier_lost (typically 3 for Cathedral, 2 Church, 1 Chapel).
+    Cap floor at 0. Also clears church_building if SW reaches 0.
+    Templar Presence does NOT auto-clear — caller must clear separately if intended."""
+    t = gs.territories.get(territory_id)
+    if not t:
+        return
+    old = t.sw
+    t.sw = max(0, t.sw - tier_lost)
+    # Reduce church_building (territory-aggregate proxy) symmetrically
+    if t.church_building > 0:
+        if tier_lost >= 3 or t.sw == 0:
+            t.church_building = max(0, t.church_building - 1)
+    if old != t.sw:
+        gs.log.append(f"S{gs.season}: {reason} @ {t.name} — SW {old}→{t.sw}, church_building→{t.church_building}")
+
+def build_religious_building(gs: GameState, territory_id: str, tier_added: int = 1, reason: str = 'Ecclesiastical Appointment'):
+    """Increase SW(t) by tier_added (Chapel +1, Church +2, Cathedral +3, or upgrade +1).
+    Cap at 5."""
+    t = gs.territories.get(territory_id)
+    if not t:
+        return
+    old = t.sw
+    t.sw = min(5, t.sw + tier_added)
+    if t.church_building < 3:
+        t.church_building = min(3, t.church_building + 1)
+    if old != t.sw:
+        gs.log.append(f"S{gs.season}: {reason} @ {t.name} — SW {old}→{t.sw}, church_building→{t.church_building}")
 
 # ═══════════════════════════════════════════════════════════════
 # CI GENERATION (per season)
@@ -335,6 +372,11 @@ def check_victory(gs: GameState):
         gs.winner = 'SHARED_LOSS'
         gs.log.append(f"S{gs.season}: SHARED LOSS — Rupture (RS=0)")
 
+    # [canonical: params/bg/victory.md — Altonian Conquest: IP ≥ 100 + AER ≤ 1]
+    if gs.ip >= 100 and gs.aer <= 1 and not gs.winner:
+        gs.winner = 'ALTONIAN_CONQUEST'
+        gs.log.append(f"S{gs.season}: SHARED LOSS — Altonian Conquest (IP {gs.ip}, AER {gs.aer})")
+
 # ═══════════════════════════════════════════════════════════════
 # CARD ECONOMY
 # [canonical: params/bg/core.md §Batch Card Hand, params/bg/phases.md Step 3]
@@ -454,6 +496,19 @@ def faction_ai_church(gs: GameState):
             target = inq_targets[0]
             target.inquisitor = True
             gs.log.append(f"S{gs.season}: Church deploys Inquisitor in {target.name}")
+
+    # P5: Cardinal of Temperance — AER maintenance declaration (Phase 1)
+    # [canonical: params/bg/tracks.md PP-181/PP-565 + params/bg/institutions.md (Temperance row)]
+    # Requires Church controls T9 (Himmelenger university city). Mandate vs Ob = floor(AER/2)+1.
+    # Success: AER +1 (cap 5). Year-End decay: −1 if no Temperance success this year.
+    t9 = gs.territories.get('T9')
+    if t9 and t9.controller == 'Church' and gs.aer < 5:
+        ob = gs.aer // 2 + 1
+        net, deg = check(f.mandate, ob)
+        if deg in ('Success', 'Overwhelming'):
+            gs.aer = min(5, gs.aer + 1)
+            gs.aer_temperance_active_this_year = True
+            gs.log.append(f"S{gs.season}: Church Temperance declaration (Ob {ob}) — AER {gs.aer-1}→{gs.aer}")
 
     # Church Mass Seizure declaration (probabilistic, fires earlier)
     # [canonical: victory_v30 §3.2 — shifted curve for earlier declaration]
@@ -996,6 +1051,16 @@ def run_season(gs: GameState):
     if gs.warden_emerged and gs.rs <= 40:
         warden_rs = min(2, 1 + (1 if gs.wc >= 2 else 0))
         gs.rs = min(100, gs.rs + warden_rs)
+
+    # AER decay at Year-End: -1 if no Cardinal of Temperance success this year
+    # [canonical: params/bg/tracks.md PP-565 — Year-End decay if no Temperance maintenance]
+    if is_year_end:
+        if not gs.aer_temperance_active_this_year:
+            old_aer = gs.aer
+            gs.aer = max(0, gs.aer - 1)
+            if gs.aer != old_aer:
+                gs.log.append(f"S{gs.season}: AER decay (no Temperance maintenance) — AER {old_aer}→{gs.aer}")
+        gs.aer_temperance_active_this_year = False  # reset for next year
 
     # Step 12: Victory check
     check_victory(gs)

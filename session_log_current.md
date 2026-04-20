@@ -26,7 +26,23 @@ session_highlights:
   - Patch 7 backstory strike VERIFIED already complete per 7da338a; session_log open_item was stale. No residual Almud-father-assassination refs remain in character_histories_v30, worldbuilding_v30, or npc_character_analyses_v30 (only explicit STRUCK banners).
   - ED-667 open_item also stale: archived in editorial_ledger_archive_1001_1200.yaml:788 and closed by graduated autonomy in Session B.
 open_items:
-  - B5 stress test: ED-722 dynamic SW under settlement loss/sack scenarios (e.g., Varfell conquers + sacks Himmelenger Cathedral; predicted SW(T9) 5→2, T9 yield 1→0).
-  - engine_v4: per-settlement model (vs engine_v3 per-territory aggregate). Aligns with campaign_architecture_v1 §1.1.
-  - AER generation mechanic — still unspecified (B3 gap #9, independent of Piety Yield re-run).
+  - B6 Cathedral-construction acceleration test (requires engine_v4.0 foundational migration).
+  - Mass Seizure declaration probability vs cleanly-completing campaigns audit (9/10 B5-7 runs early-end via shared-loss conditions before reaching CI 100; either Seizure curve too shallow or shared-loss mechanics dominating).
+  - engine_v4 phased implementation per ED-724 (v4.0 high priority; v4.1–v4.4 deferred until specific stress tests require).
 P1-BLOCKER count: 0
+session_highlights_2026_04_20_late:
+  - ED-721 RESOLVED (Jordan editorial permission): CI cap vs Piety Yield formula ambiguity. PT_TIER non-linear lookup (PT 5 → 1.0; PT 4 → 0.5; PT 3 → 0.25; PT 2 → 0.10; PT ≤ 1 → 0). T9 yields 1 CI/season floored — Assert remains relevant. Propagated to ci_political_v30 §1, params/bg/ci_seizure.md, params/bg/geography.md, engine_v3.py PT_TIER dict.
+  - ED-722 RESOLVED (Jordan editorial permission, option B): Spiritual Weight unified with settlement Religious Building axis. SW(t) = min(5, Σ building_tier per settlement) where None=0/Chapel=1/Church=2/Cathedral=3. Geography SW table seeds starting state; runtime mutates via construction/destruction. Propagated to ci_political_v30 §1, params/bg/geography.md, settlement_layer_v30 §1.5+§1.6a (per-settlement seed table totaling 32 across all territories).
+  - ED-723 RESOLVED (Jordan editorial permission): AER mechanic gap #9 was a sim implementation gap, not design gap. Spec already in tracks.md PP-181/PP-565 + institutions.md (Cardinal of Temperance row). engine_v3 wired: P5 Temperance declaration (Mandate vs Ob ⌊AER/2⌋+1 in T9), Year-End decay if not maintained, Altonian Conquest loss condition (IP ≥ 100 + AER ≤ 1).
+  - ED-724 RESOLVED (Jordan editorial permission): engine_v4 per-settlement architecture proposal documented at designs/architecture/engine_v4_per_settlement_proposal.md. Five-phase migration plan; v4.0 foundational is high-priority, v4.1–v4.4 deferred.
+  - ED-725 RESOLVED: B5 stress test batch executed on engine_v3 with ED-722 mutator helpers. Findings: −1.15 CI/season per Cathedral lost (matches predicted yield collapse 1→0); compound Cathedral+Templar loss = −2.15/season; non-Prominent territory desacralization has zero immediate effect (stored value); recovery via Ecclesiastical Appointment fully reversible; AER mechanic verified working. Document: tests/sim_framework/arc_test_b5_2026-04-20.md.
+commits_2026_04_20_late:
+  - 6dab223: ED-721 PT_TIER table — formula ambiguity resolved
+  - 13fed6f: ci_political_v30 index regen
+  - c7399a5: ED-722 SW unification — dynamic infrastructure aggregate
+  - 603222e: ci_political + settlement_layer indexes regen
+  - 6947834: audit invalidation banners (B3/B4 results, sim_coverage_index)
+  - 00e471e: ED-721/722 re-run (arc_test_rerun_2026-04-20.md)
+  - a1709d7: settlement_layer index regen + open_items update
+  - (this commit): ED-723 AER wiring + ED-724 engine_v4 proposal + ED-725 B5 batch + arc_test_b5_2026-04-20.md
+P1-BLOCKER count (post 2026-04-20 late session): 0
