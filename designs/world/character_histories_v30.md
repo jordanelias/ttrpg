@@ -144,7 +144,7 @@
 
 
 
-Starting skill: ★ **Tideward Rats** (unique) — +1D on all Investigation rolls in Valorsplatz. You know the sewers, warehouses, smuggling routes. Additionally: +1D to detect Niflhel activity specifically (they use the same routes you do).
+Starting skill: ★ **Tideward Rats** (unique) — +1D on all Investigation rolls in Valorsplatz. You know the sewers, warehouses, smuggling routes. Additionally: +1D to detect settlement-layer smuggling and broker activity (they use the same routes you do).
 
 **Modifier: Ashmarket (inland slum on Einhir foundations)** — Built over the ruins of a pre-occupation Einhir quarter. The foundations occasionally produce objects that should not exist — not through Thread activity (node distance 3, no Calamity effects at RS 60) but through simple archaeology: things buried 245+ years ago occasionally become unburied.
 
@@ -343,12 +343,7 @@ Starting Certainty: 4 or 5 (GM determines). Starting skill: ★ **Institutional 
 
 ### Niflhel Vocations
 
-| Vocation | Starting Skills (★) | Third Skill (spark) | Knot |
-|---|---|---|---|
-| **3-NI1: Dockworker (Niflhel arm)** | ★ Hidden Cargo (unique: −1 Ob smuggling) · ★ Scrapper § (unarmed TN 7) | Shadow Work § | A fellow dockworker who doesn't know the full extent of what you move — or who knows and pretends not to. Each Thread Tension +0.5 from Niflhel's Southernmost harvesting flows through your hands without your knowledge. |
-| **3-NI2: Quiet Operative** | ★ Silent Kill (unique: +3 flat damage vs unaware target) · ★ Vanish (unique: Agility TN 7 Ob 2 to leave zone untracked) | Dead Drop § | A former target you did not kill — someone whose life you hold like a debt that can never be repaid. Their existence is evidence of your disobedience. |
-| **3-NI3: Reckoner** | ★ Pressure Point (unique: +2D when financial vulnerability identified) · ★ Intimidation § | Urban Navigation § (+1D escape/evasion in urban) | A debtor who became a source — someone whose vulnerability you exploited and who now provides information because the alternative is worse. The relationship is coercion wearing the mask of mutual benefit. |
-| **3-NI4: Fence** | ★ Appraisal (unique: +2D assess value/authenticity any object) · ★ Black Market Contacts § | Haggler's Nerve § | A regular buyer whose discretion you trust. Transactional but durable. If they are arrested, they know enough to destroy you. This fact keeps you both honest. |
+**STRUCK** — Niflhel dissolved (conflict_architecture_proposal.md, Session B 2026-04-18). The four Niflhel vocations (3-NI1 Dockworker/Niflhel arm; 3-NI2 Quiet Operative; 3-NI3 Reckoner; 3-NI4 Fence) are struck. Characters with smuggling, shadow-work, or fence backstories should select **3-CF6 Independent Criminal** (common vocations) with Knots tied to settlement-layer intelligence brokers (designs/territory/settlement_layer_v30.md §4.7-4.9). Thread-extraction-operator backstories are no longer a PC-buildable vocation — the canonical settings for Thread exploitation are now environmental site phenomena (settlement_layer_v30 §4.9) rather than faction staff roles.
 
 ### Restoration Movement Vocations
 
@@ -362,7 +357,7 @@ Starting Certainty: 4 or 5 (GM determines). Starting skill: ★ **Institutional 
 
 | Vocation | Starting Skills (★) | Third Skill (spark) | Knot |
 |---|---|---|---|
-| **3-LO1: Löwenritter Knight** | ★ Elite Discipline (unique: unit Discipline floor 2) · ★ Riposte § | Formation Discipline § | A brother/sister knight whose loyalty to the Order matches yours. If the Coup Counter reaches 3, you face each other's choices. |
+| **3-LO1: Löwenritter Knight** | ★ Elite Discipline (unique: unit Discipline floor 2) · ★ Riposte § | Formation Discipline § | A brother/sister knight whose loyalty to the Order matches yours. If the Löwenritter reach Autonomous or Split on the graduated autonomy track, you face each other's choices. |
 | **3-LO2: Border Ranger** | ★ Eagle Eyes (unique: Cognition roll to reveal one element of opposing Phase 1) · ★ Know the Enemy § | Cold Iron § | A patrol partner — someone who shares the mountain watch. More time in silence together than most people spend with family in conversation. |
 | **3-LO3: Riskbreaker** | ★ Deniable Action (unique: Spirit roll to deflect evidence trail) · ★ Smooth Liar § | Silent Kill § | A handler within the Order — the only person alive who knows what you have done. This Knot is itself a secret. |
 | **3-LO4: Patrol Officer (Threadcut Encounter Veteran)** | ★ Anomaly Recognition (unique: +1D Cognition to assess threadcut being threat/movement/constraints) · ★ Classified Knowledge (unique: once/arc invoke classified info for +2D; risks Order exposure) | Know the Enemy § | Your commanding officer who ordered you to file the false report ("anomalous wildlife"). Protecting you or containing you — you're not sure which. |
@@ -373,10 +368,10 @@ Starting Certainty: 4 or 5 (GM determines). Starting skill: ★ **Institutional 
 |---|---|---|---|
 | **3-CF1: Mercenary** | ★ Weapon Versatility (unique: switch weapon type between exchanges at no cost) · ★ Riposte § | Eagle Eyes § | A former employer whose cause you served and whose money you took without moral commitment. They may call the debt of loyalty you never offered. |
 | **3-CF2: Wandering Healer** | ★ Field Medicine (unique: −1 Ob stabilise) · ★ Folk Healer § | Road Survival § | A patient whose life you saved with a folk remedy the Church classifies as heretical. They recovered. They reported you. The investigation was dropped — but the Church file exists. |
-| **3-CF3: Traveling Merchant** | ★ Wide Network (unique: +1D in up to 3 previously-operated territories) · ★ Haggler's Nerve § | Road Survival § | A trading partner you suspect of moving goods for Niflhel. You've never asked. Your trade route depends on their connections. Your conscience depends on not knowing. |
+| **3-CF3: Traveling Merchant** | ★ Wide Network (unique: +1D in up to 3 previously-operated territories) · ★ Haggler's Nerve § | Road Survival § | A trading partner you suspect of moving goods for settlement-layer intelligence brokers (the successor phenomena to Niflhel's supply chain). You've never asked. Your trade route depends on their connections. Your conscience depends on not knowing. |
 | **3-CF4: Scribe** | ★ Textual Memory (unique: recall previously-handled documents) · ★ Paper Trail § | Forgery Detection (unique: +2D authenticate documents) | An author whose work you copied — someone whose ideas you know better than your own because you transcribed every word. They don't know you exist. |
 | **3-CF5: Diplomat / Envoy** | ★ Diplomatic Protocol (unique: ethical framework Ob penalties reduced by 1 when formally representing a faction) · ★ Read the Room § | Treaty Language (unique: +1D Recall on prior agreements/diplomatic precedent) | Your counterpart — the diplomat from the other side. Professional opponents, personal respect. If war breaks, this relationship becomes impossible to maintain and devastating to lose. |
-| **3-CF6: Independent Criminal** | ★ Opportunist (unique: once/scene after any other character's roll revealed, +2D on next roll exploiting outcome) · ★ Slippery § (Escape −1 Ob; +1D pursuit evasion in urban) | Fence Contacts § (+1D underground trade with non-Niflhel networks) | A mark who became a friend — or a friend who became a mark. The relationship is built on a deception you've either confessed (survived) or maintained (dread). |
+| **3-CF6: Independent Criminal** | ★ Opportunist (unique: once/scene after any other character's roll revealed, +2D on next roll exploiting outcome) · ★ Slippery § (Escape −1 Ob; +1D pursuit evasion in urban) | Fence Contacts § (+1D underground trade with settlement-layer broker networks) | A mark who became a friend — or a friend who became a mark. The relationship is built on a deception you've either confessed (survived) or maintained (dread). |
 
 ---
 
@@ -427,7 +422,7 @@ You saw a Thread phenomenon. Your rendering cracked.
 
 **4D-i. Crown** — Certainty: none. ★ **Crown Mandate** (unique): +1D first DA/season on Crown's behalf.
 **4D-ii. Church** — Certainty: +1. ★ **Ecclesial Trust** (unique): +1D first DA/season on Church's behalf.
-**4D-iii. Niflhel** — Certainty: none. ★ **Shadow Allegiance** (unique): +1D first covert DA/season.
+**4D-iii. [STRUCK — Niflhel dissolved per conflict_architecture_proposal.md]** Formerly a recruitment option. Settlement-layer intelligence brokers do not recruit at character-creation granularity; PCs with broker ties should use 4B (Betrayed by Your Institution) or 4C (Lost Someone) framings. Numbering preserved to avoid breaking cross-references.
 **4D-iv. Restoration** — Certainty: −1. ★ **Movement Trust** (unique): +1D first Restoration-aligned DA/season.
 **4D-v. Practitioner** — Certainty: −1. ★ **Marked for Practice** (unique): +1D on First Leap attempt. Stacks with Approach Training.
 

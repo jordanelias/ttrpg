@@ -50,7 +50,7 @@
 
 **Klapp Awakening:** Already in stage13. On Thread Sensitivity (TS) growth success: protects Thread-significant texts. Church Intel detects pattern → internal Heresy Investigation. If investigated before player intervention: Church Stability −1, TC +1. If players extract Klapp: −1D on Church scholarly Influence rolls.
 
-**Olafsson-Niflhel Exposure:** Already in stage13 (Baralta evidence mechanic). No new mechanics.
+**Olafsson-Broker Exposure (formerly Olafsson-Niflhel):** Already in stage13 (Baralta evidence mechanic). No new mechanics. Trigger reframed post-Session-B: Olafsson's exposure via settlement-layer intelligence broker connection (previously Niflhel connection). Mechanical effect unchanged.
 
 ## 3.3 Cardinal Events (Board Game — Named Character Event Cards)
 
@@ -60,7 +60,7 @@
 - Counter-play: Church player may spend 1 Influence + 1 Stability to recall Jarnstal and reset the counter. Can only be done once per game.
 
 **Card: Olafsson Exposure**
-- Effect: Olafsson-Niflhel connection revealed. Church Stability −2, TC −3. Olafsson removed (Inquisitor operations suspended for 2 seasons). Church Heresy Investigation actions +1 Ob until replacement Cardinal appointed.
+- Effect: Olafsson's connection to settlement-layer intelligence brokers revealed (post-Niflhel-dissolution reframing). Church Stability −2, TC −3. Olafsson removed (Inquisitor operations suspended for 2 seasons). Church Heresy Investigation actions +1 Ob until replacement Cardinal appointed.
 - Counter-play: Church may pre-emptively remove Olafsson (spend 1 Stability at Accounting) to prevent the exposure — but loses Inquisitor effectiveness permanently.
 
 **Card: Klapp Awakening**
@@ -110,7 +110,7 @@ Deniability Debt: already in stage13. No changes.
 
 ## 4.3 Löwenritter Event Cards (Board Game — Named Character Events)
 
-**Card: Ehrenwall Coup**
+**Card: Ehrenwall Split** *(formerly Card: Ehrenwall Coup — renamed post-Session-B to reflect Löwenritter graduated autonomy replacing the binary Coup Counter; fires when Autonomy track reaches Split stage, not on a single count-threshold trigger. See designs/architecture/conflict_architecture_proposal.md and params/clocks/clock_registry_v30.md.)*
 
 **Card: Riskbreaker Exposure**
 - Trigger: Deniability Debt reaches 3 (tracked per stage13).
@@ -265,7 +265,7 @@ All new cards from this document, plus existing events confirmed for the deck:
 | Card | Faction | Trigger | Source |
 |------|---------|---------|--------|
 | Klapp Awakening | Church | Thread op within 1 territory of Himmelenger, TC ≥ 30, no Heresy Investigation this season | BG v05 Scenario A |
-| Ehrenwall Coup | Löwenritter | Coup Counter reaches 3 | stage6 §8.9 |
+| Ehrenwall Split (was Ehrenwall Coup) | Löwenritter | Löwenritter Autonomy track reaches Split (graduated autonomy, replaces Coup Counter 3-trigger) | conflict_architecture_proposal.md, clock_registry_v30.md |
 | Riskbreaker Exposure | Crown | Deniability Debt reaches 3/5 | stage13 §13.6 |
 
 ## New (proposed in this document)
@@ -273,7 +273,7 @@ All new cards from this document, plus existing events confirmed for the deck:
 | Card | Faction | Trigger | Effect Summary |
 |------|---------|---------|---------------|
 | Jarnstal Independence | Church | Jarnstal Counter reaches 3 | Church Military splits. Church Stability −2, TC +2. |
-| Olafsson Exposure | Church | Overwhelming Intel action vs Church in Niflhel-present territory | Church Stability −2, TC −3. Inquisitor operations suspended 2 seasons. |
+| Olafsson Exposure | Church | Overwhelming Intel action vs Church in a settlement with intelligence-broker presence (reframed post-Niflhel-dissolution; settlement_layer_v30 §4.8) | Church Stability −2, TC −3. Inquisitor operations suspended 2 seasons. |
 | Prudence Crisis | Church | Church Wealth ≤ 2 | Church Mandate −1 in low-Prosperity territories. Restoration +1 Influence there. |
 | Lions' Table Mutiny | Löwenritter | Military ≤ 2 AND Ehrenwall removed | Löwenritter fragments. Military halved. |
 | Guild Schism | Guilds | Stability ≤ 2 | Wealth −1, Influence −1 for 1 season. One territory Guild Favour → 0. |
