@@ -546,6 +546,13 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 - Conviction shift: Order → Autonomy (survival). Almud becomes an exile.
 - Risk: Torben's Loyalty track transfers to Löwenritter. Crown faction under Löwenritter control.
 
+**Arc D: Assassination Target (Royal Crisis fuse, target roll 5–6)**
+- Branch condition: Royal Crisis Tension Card drawn AND assassination target sub-roll = 5–6 AND fuse reaches S8+ without player intervention. See `params/bg/royal_assassination.md`.
+- Consequence: Lenneth takes the throne. Crown's factional identity inverts — Lenneth is pro-Einhir, pro-Thread-research, anti-caste-suppression. Crown becomes ally of Varfell and RM on the Einhir question; becomes a heresy target for Church.
+- Löwenritter decision point: protect a "heretic queen" (remain Loyal) or advance Autonomy track (Restless → Autonomous → Split).
+- Supersedes Arcs A/B/C on fire (Almud exits the game). Arc C-style transfer of Torben's Loyalty may still occur if Löwenritter advance to Split.
+- Player interdiction: investigate during S1–S7 (costs card slots); success averts the fire but reveals faction-level tensions and allegiances.
+
 ---
 
 #### Arne Himlensendt — Arc Map
@@ -604,6 +611,48 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 - Risk: Her presence strains RS in the territories she passes through (per threadwork_v25 §Coherence/TS 70+ RS drain). She is a walking Calamity echo.
 
 **Warden Faction Paths (campaign_architecture_v1 §6):** Five paths to Warden political relevance: (A) Recruited by Varfell (WR 3+, institutional integration); (B) Recruited by RM post-revelation (Embrace arc, philosophical alliance); (C) Recruited by player (WR ≥ 3 + Founded Organization); (D) Recruited by Lenneth (Crown integration via Elske Loyalty Track); (E) Independent faction at MS ≤ 20 (crisis-driven, Mending Sanctuary declaration). See campaign_architecture_v1.md §6.2 for full specification. If activated, Warden governance uses consensus model with collective Spirit-derived governance stat.
+
+---
+
+#### Prince Torben Almqvist — Arc Map *(see §2.8 for stats/Convictions/Beliefs)*
+
+Torben's Arcs A–C emerge through the Conviction window (Seasons 1–8, ED-618) — whichever faction sets his Primary Conviction determines arc shape. Arc D is exogenous (fires from the Royal Crisis fuse regardless of Conviction state).
+
+**Arc A: The Bought Prince** *(Conviction locked by Crown/Hafenmark/Church — institutional alignment)*
+- Behavior: Torben takes the throne on schedule. Loyalty transfers predictably. Crown priority tree continues under his leadership with locked Conviction-aligned behavior.
+
+**Arc B: The Contested Heir** *(Conviction locked by Varfell/RM/Restoration — disruptive alignment)*
+- Behavior: Succession produces factional realignment. Crown's institutional character shifts to align with his investing faction. Triggers Stability check at accession.
+
+**Arc C: The Uncommitted** *(No faction reaches Disposition +2 before Season 8 — Conviction defaults to Order)*
+- Behavior: Torben becomes an Order-aligned extension of Crown institutional tendency. No narrative arc movement — he is absorbed by the institution.
+
+**Arc D: Assassination Target (Royal Crisis fuse, target roll 3–4)**
+- Branch condition: Royal Crisis Tension Card drawn AND assassination target sub-roll = 3–4 AND fuse reaches S8+ without player intervention. See `params/bg/royal_assassination.md`.
+- Consequence: Elske retrieval required — she is the only remaining heir. Crown must deploy military to T4 (Varfell territory) to establish an extraction route. Direct provocation against Varfell AND Altonian diplomatic crisis (IP spike). Succession question and Altonian question merge into a compound event touching three factions.
+- Supersedes Arcs A/B/C on fire (Torben exits the game).
+- Player interdiction: investigate during S1–S7 (costs card slots); success averts the fire.
+
+---
+
+#### Princess Lenneth Almqvist — Arc Map
+
+*Lenneth is a secondary Crown NPC. Full profile (TS 8, Certainty 3) referenced in §13 practitioner summary (line 1089) and lenneth_threadwork_design. Behavior profile may be added to §2 in future work.*
+
+**Primary Conviction:** Reason (archive-driven; institutional certainty disrupted by what she has read). Secondary: Equity (pro-Einhir, sympathetic to cultural suppression effects).
+
+**Arc A: The Reformist Queen (via Arc D below, conditional on Almud assassination)**
+- Activation: Only if Almud dies (assassination target roll 5–6 succeeds OR other Almud-kill path). Lenneth takes the throne.
+- Behavior: Crown's factional identity inverts. Pro-Einhir, pro-Thread-research, anti-caste-suppression. Crown allies with Varfell and RM on the Einhir question. Becomes a heresy target for Church. Löwenritter decide: protect heretic queen (Loyal) or advance Autonomy (Restless → Autonomous → Split).
+
+**Arc B: The Archive Keeper (Default, Almud survives)**
+- Behavior: Lenneth remains in the Crown apparatus, deepening her archive work. Thread research leakage via her channels continues to feed Varfell (TK advancement path) and RM practitioners. Disposition-building by players toward Lenneth produces Thread intelligence and potential Warden contact (Warden Faction Path D — "Recruited by Lenneth" via Elske Loyalty Track).
+
+**Arc D: Assassination Target (Royal Crisis fuse, target roll 1–2)**
+- Branch condition: Royal Crisis Tension Card drawn AND assassination target sub-roll = 1–2 AND fuse reaches S8+ without player intervention. See `params/bg/royal_assassination.md`.
+- Consequence: Almud revenge arc. Crown's king diverts resources to finding the killer; Crown governance suffers as Almud's attention narrows. Investigation arc opens — every faction is a suspect. Crown's defensive posture breaks from inside. Without Lenneth's moderating influence, Crown's Einhir policy hardens. RM PW advances. Southern Accord erodes.
+- Supersedes Arc A/B on fire (Lenneth exits the game).
+- Player interdiction: investigate during S1–S7 (costs card slots); success averts the fire.
 
 ---
 
