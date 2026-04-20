@@ -339,7 +339,7 @@ The Riskbreaker ladder tops at Standing 6 (not 7) because there is no rank above
 
 ## §2.2b Shadow Renown and Deniability Debt — Mechanical Specs
 
-[PROVISIONAL: ED-632 / ED-633 proposed resolution — pending Jordan sign-off. Preserves existing Riskbreaker Exposure card thresholds (Debt 3/5) from worldbuilding_v30 §4.3. Specs parallel Renown (player_agency_v30 §5.4) for the covert track.]
+[CANON 2026-04-19 — ED-632 / ED-633 resolved. Jordan-approved. Preserves existing Riskbreaker Exposure card thresholds (Debt 3/5) from worldbuilding_v30 §4.3. Specs parallel Renown (player_agency_v30 §5.4) for the covert track.]
 
 ### §2.2b.i Shadow Renown (0–10)
 
