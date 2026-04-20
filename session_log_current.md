@@ -1,41 +1,30 @@
-session_id: 2026-04-19-session-bc-completion
-session_close: 2026-04-19
+session_id: 2026-04-20-refresh-state
+session_close: 2026-04-20
 phase: 0
 status: complete
-last_stage: Session B + C propagation — Niflhel dissolution, Löwenritter graduated autonomy, Tensions Deck, Royal assassination
+last_stage: Session B/C residual cleanup — ED-717 formal closure, factions_personal_v30 Niflhel strike, npc_behavior_v30 incidentals, assassination target Arc Maps (Almud/Torben/Lenneth)
 next_action:
-  skill: Session B/C residual cleanup, then ED-717
+  skill: Index regeneration, then CI cap vs Piety Yield at T9 editorial gate
   description: >
-    Residual propagation: arc files with incidental Niflhel/Coup refs,
-    assassination target NPC arc profiles in npc_behavior_v30, Patch 7
-    backstory strike. Then ED-717 (Hafenmark/Löwenritter/RM substrate-posture
-    throughlines, one at a time starting with Hafenmark).
+    All substantive Session B/C residuals resolved. Remaining: mechanical
+    index regeneration (`tools/doc_index_gen.py`) for files modified across
+    Sessions B/C and today's refresh-state branch. Then surface
+    CI cap vs Piety Yield at T9 to Jordan (editorial-gated design decision).
   blockers:
     - Jordan design decision still pending: CI cap vs Piety Yield at T9
 commits:
-  - f8dafe0: Niflhel dissolution — params strike (core, stats_1_7_scale, npc_priority_trees)
-  - 1fdc160: Niflhel dissolution — T-10 struck, М-4 count 5→4 (throughlines)
-  - 747adcd: Niflhel dissolution — npc_behavior_v30 §2.12/§8.8/§8.8a struck
-  - c0be619: Löwenritter graduated autonomy — Coup Counter replaced (core, institutions, clock_registry)
-  - f6b6ae6: Löwenritter graduated autonomy — npc_behavior_v30 §8.7/§7.5 updated
-  - d78d7b9: Niflhel dissolution — settlement_layer_v30 §4.7-4.9 (black markets, brokers, exploitation sites)
-  - 6e952c3: conflict_architecture_proposal PROPOSAL→CANON, Coup→Autonomy in victory + baralta_crown_claim
-  - 3cfa81f: Dalla Virke→independent broker, npcs_special Niflhel→settlement refs
-  - d29d8b6: Tensions Deck 6-card spec + Royal assassination fuse spec (new params files)
-  - 238cf45: Game Setup section in phases.md (Tensions Deck draw, starting settlements)
+  - cce9147: ED-717 formal closure — status open → resolved in active ledger (resolution note cites T-15a/b/c additions)
+  - 040ac2d: factions_personal_v30 Niflhel dissolution — §8.7 struck, Starting Values row removed, Partial sheets line updated, Royal Decree example, Axis 7, Baralta Leadership Deviation, TK channel, Revolution deviation comparison
+  - 6272909: npc_behavior_v30 incidentals — Ehrenwall RS / ED-672 Almud window / Kreutz updated to Löwenritter Autonomy; Hann evidence / Kolbrun Thale / Baralta Arc B / Wardens Priority 2 updated to intelligence brokers; §8.11.3 Niflhel row relabeled Intelligence Brokers
+  - f63c0b4: Royal assassination target propagation — Almud Arc D (roll 5–6), Torben Arc Map + Arc D (roll 3–4), Lenneth Arc Map + Arc D (roll 1–2). Cross-ref params/bg/royal_assassination.md
 session_highlights:
-  - Session B complete (10 commits across 2 context windows). Niflhel fully dissolved in primary canonical files — faction stats, priority trees, T-10 throughline, NPC sections all struck. Replacement settlement phenomena (black markets, intelligence brokers, Thread exploitation sites) canonized in settlement_layer_v30 §4.7-4.9.
-  - Löwenritter graduated autonomy (4-stage Loyal/Restless/Autonomous/Split) replaces binary Coup Counter across all primary params, institutional docs, clock registry, and NPC behavior trees.
-  - conflict_architecture_proposal.md elevated from PROPOSAL to CANON per Jordan directive.
-  - Session C complete. Tensions Deck 6-card spec (params/bg/tensions_deck.md) and Royal assassination fuse (params/bg/royal_assassination.md) extracted as standalone canonical params. Game Setup section added to phases.md.
-  - М-4 throughline count corrected 5→4 (T-10 struck). Remaining М-4 throughlines: T-08 (Church rendering reinforcement), T-09 (Varfell thread progressive), T-11 (Crown pragmatic instrumentalist), T-21 (Thread political warfare).
+  - ED-717 formally closed in editorial_ledger.yaml (was status: open despite cb50098 mechanical closure in Session B). Resolution block cites all three throughline commits (5537bc9 + cb50098).
+  - factions_personal_v30 Niflhel fully struck — §8.7 replaced with STRUCK banner + redirect to settlement_layer_v30 §4.7–4.9 (Black Markets, Intelligence Brokers, Thread Exploitation Sites); all incidental refs updated.
+  - npc_behavior_v30 incidentals swept — Coup Counter refs in Ehrenwall/ED-672/Kreutz now reference Löwenritter Autonomy track; Niflhel refs in Hann/Kolbrun/Baralta Arc B/Wardens now reference intelligence brokers or independent settlement actors; §8.11.3 Outreach table row relabeled.
+  - Royal assassination fuse (params/bg/royal_assassination.md) propagated into npc_behavior_v30 §5.2 Arc Maps. Almud gains Arc D (roll 5–6 → Lenneth accession). New Arc Maps added for Torben (Arc A Bought / B Contested / C Uncommitted / D Roll 3–4 Elske retrieval) and Lenneth (Arc A Reformist Queen / B Archive Keeper / D Roll 1–2 revenge arc).
+  - Patch 7 backstory strike VERIFIED already complete per 7da338a; session_log open_item was stale. No residual Almud-father-assassination refs remain in character_histories_v30, worldbuilding_v30, or npc_character_analyses_v30 (only explicit STRUCK banners).
+  - ED-667 open_item also stale: archived in editorial_ledger_archive_1001_1200.yaml:788 and closed by graduated autonomy in Session B.
 open_items:
-  - Residual Niflhel/Coup refs in arc files (arcs_31_35, arc_expansion, emergent_campaign_arcs, factions_personal_v30) — incidental, not mechanical definitions
-  - npc_behavior_v30 — 8 incidental Niflhel refs remaining in table entries; ~4 natural-language coup refs
-  - Assassination target propagation to NPC arc profiles (Almud Arc A/B/C, Lenneth, Torben)
-  - Patch 7 backstory strike (Session A) — needs full reads of character_histories_v30, npc_character_analyses_v30, worldbuilding_v30
-  - ED-667 (Coup Counter readiness gap) — resolved by graduated autonomy; needs formal closure
-  - Index regeneration for all modified files
-  - ED-717 (Hafenmark/Löwenritter/RM substrate-posture gaps) — ready to start after cleanup
-  - CI cap vs Piety Yield at T9 — Jordan design decision pending
+  - Index regeneration (`tools/doc_index_gen.py`) for files modified in Sessions B/C and today: factions_personal_v30, npc_behavior_v30, editorial_ledger, plus Session B/C files.
+  - CI cap vs Piety Yield at T9 — Jordan design decision pending.
 P1-BLOCKER count: 2
