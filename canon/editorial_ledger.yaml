@@ -150,3 +150,17 @@ entries:
     status: resolved
     severity: P2
     source: Session B graduated autonomy (2026-04-18)
+
+  - id: ED-632
+    date: 2026-04-19
+    description: "Shadow Renown — PROVISIONAL spec in faction_politics_v30 §2.2b.i."
+    status: resolved
+    severity: P1
+    source: 2026-04-19
+
+  - id: ED-633
+    date: 2026-04-19
+    description: "Deniability Debt — PROVISIONAL spec in faction_politics_v30 §2.2b.ii."
+    status: resolved
+    severity: P1
+    source: 2026-04-19

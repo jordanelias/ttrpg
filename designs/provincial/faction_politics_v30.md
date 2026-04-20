@@ -333,7 +333,83 @@ The original register specifies Office Specifications (OFC-01 through OFC-04) fo
 
 The Riskbreaker ladder tops at Standing 6 (not 7) because there is no rank above "Commander" — the Commander reports directly to the Grand Master. Promotion above would put the Riskbreaker on the Löwenritter Grand Master track, which is structurally possible but ends the covert career.
 
-**Deniability Debt** (stage13 mechanic, retained) accumulates at all levels and is the Riskbreaker-specific demotion risk.
+**Deniability Debt** (stage13 mechanic, retained) accumulates at all levels and is the Riskbreaker-specific demotion risk. See §2.2b below for full mechanical spec.
+
+---
+
+## §2.2b Shadow Renown and Deniability Debt — Mechanical Specs
+
+[PROVISIONAL: ED-632 / ED-633 proposed resolution — pending Jordan sign-off. Preserves existing Riskbreaker Exposure card thresholds (Debt 3/5) from worldbuilding_v30 §4.3. Specs parallel Renown (player_agency_v30 §5.4) for the covert track.]
+
+### §2.2b.i Shadow Renown (0–10)
+
+**Definition.** Shadow Renown measures the player's cross-faction personal significance accrued through covert actions. It is the Riskbreaker- and intelligence-community mirror of public Renown: every gain represents reputation earned inside informal networks that cannot be publicly cited. Shadow Renown and public Renown are separate tracks.
+
+**Sources:**
+
+| Source | Shadow Renown Gained | Condition |
+|--------|----------------------|-----------|
+| Covert mission (Operative+) succeeds | +1 | No Exposure event; target Disposition verifies completion |
+| Covert assassination / sabotage success | +1 | Per §2.2 Riskbreaker mission ranks; cap once/target/season |
+| Intelligence delivered to faction or patron | +1 | Verified actionable (changes an Ob or reveals a hidden NPC stat) |
+| NPC recruited as Shadow Asset | +1 | Ongoing Knot with Disposition ≥ +2; target knows only the cover identity |
+| Black-market trade closed at Overwhelming | +1 | Only counts for illicit goods or information; legitimate trade routes go through public Renown |
+| Riskbreaker promotion event | +1 | Automatic; each Rb-Std advancement per §2.2 ladder |
+
+**Cap:** +2 Shadow Renown per season maximum. Shadow Renown does not decay naturally.
+
+**Effects:**
+
+| Shadow Renown | Effect |
+|---------------|--------|
+| 3+ | Covert NPCs (spymasters, fences, informants, Riskbreaker peers) at neutral Disposition start at +1. |
+| 5+ | +1D on Interrogate, Extort, and Black-Market-Contact actions. |
+| 7+ | Independent covert Domain Action: pool = floor(Shadow Renown ÷ 2), resolved outside any faction's Mandate/Intel pool (Riskbreaker Commander authority). |
+| 9+ | May initiate an Exposure Event against a target (trades Shadow Renown for Deniability Debt per §2.2b.ii; see exchange table). |
+
+**Display and tracking.** Shadow Renown is a private subfield on the companion app (per ED-POL-04 resolution). It cannot be cited in public social contests (Grand Debate, Parliament, Ceremonial Scene) — citing converts the spend to public Renown at a 2:1 loss, and inflicts +1 Deniability Debt for each citation. Shadow Renown above the cap (10) spills into Deniability Debt at 1:1.
+
+**Conversion — successful Exposure.** If a Shadow Renown action becomes public (Exposure Event resolves against the player), each +1 Shadow Renown earned from the now-public action converts to **−1 public Renown** (Infamy penalty) and +1 Deniability Debt. This is the risk profile that makes covert operation mechanically distinct from overt reputation-building.
+
+### §2.2b.ii Deniability Debt (0–7, cap 7)
+
+**Definition.** Deniability Debt is the Riskbreaker-specific tracked risk that the Order's covert operations leave traces. It accumulates from operational friction (evidence trails, partial successes, witness exposure) and discharges through cooling-off periods or dedicated counter-intelligence work.
+
+**Accrual:**
+
+| Trigger | Debt Gained |
+|---------|-------------|
+| Partial result on any Riskbreaker covert mission | +1 |
+| Failure on any Riskbreaker covert mission | +2 |
+| Evidence trail generated (Intel roll vs Ob 3 after the operation — failure creates evidence) | +1 |
+| Witnessed by unintended non-asset NPC (GM discretion; typical trigger: ambient Standing 3+ NPC passing through operation zone) | +1 |
+| Operation uses Löwenritter resources (Military stat, named knight, Lions' Helm asset) and is traced | +2 |
+| Each Shadow Renown point that spills past cap 10 | +1 |
+
+**Reduction:**
+
+| Trigger | Debt Reduced |
+|---------|--------------|
+| One full season passes with no Riskbreaker operations of any kind | −1 (cooling off; does not apply if Debt ≥ 5) |
+| Counter-intelligence operation succeeds (Intel vs Ob 3, once per season, Riskbreaker Squad-Leader or higher) | −1 |
+| Riskbreaker Commander spends 1 Shadow Renown to purge records | −1 (once per campaign arc) |
+| Parliamentary inquiry concluded in Riskbreaker favor (Grand Debate win at Debt 5 threshold) | Reset to 2 |
+
+**Thresholds and effects:**
+
+| Debt | Effect |
+|------|--------|
+| 0–1 | No effect. |
+| 2 | +1 Ob on all Riskbreaker covert actions (operational caution tax). |
+| 3 | **Riskbreaker Exposure card triggers** (per worldbuilding_v30 §4.3 Card: Riskbreaker Exposure). Crown Domain Actions against non-Crown factions +1 Ob. |
+| 4 | Cooling-off reduction disabled (Debt sticks above 4). |
+| 5 | **Parliamentary inquiry opens** — Grand Debate (Crown Influence + Mandate at stake per worldbuilding_v30 §4.3). |
+| 6 | Riskbreaker operations require Commander personal approval. +2 Ob on Rb-Std 1–3 independent operations. |
+| 7 (cap) | Riskbreaker Commander demotion mandatory at next Seasonal Accounting. All Rb-Std ranks demoted by 1. New Commander selected per §2.2 ladder succession rules. |
+
+**Display and tracking.** Deniability Debt is a faction-level attribute on Löwenritter's companion-app card (per ED-POL-04). The Riskbreaker Commander and the sitting king (Almud or successor) can read it; other factions must probe via Intel actions (Ob 3) to sense the threshold band.
+
+**Cross-references.** See §2.2 Riskbreaker Ladder for rank structure; worldbuilding_v30 §4.3 for the Riskbreaker Exposure card; player_agency_v30 §5.4 for the parallel public Renown spec.
 
 ---
 
