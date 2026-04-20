@@ -169,8 +169,24 @@ Edeyja is the only NPC in the roster who is not compromised, and this is itself 
 
 ## 2. Queen Lenneth Almqvist — The Institutional Revivalist
 
+**Base profile.** Lenneth Almqvist is the Queen Consort. Primary Conviction: Equity. She believes caste suppression is wrong and the Crown should be the instrument of reform. Her programme: Einhir revival through Crown authority. Archivist by training — she has network access to pre-Suppression texts and institutional records. She does not hold a faction stat sheet; her influence routes through Almud (Crown Mandate modulation) and, in extreme cases, through direct ascension.
 
+**Arc A: The Reformist Queen Consort (Default)**
+- Role: policy influence through Almud. Crown reform advances only insofar as Almud's Certainty declines and he permits her programme to enter Crown action.
+- Foils: Baralta (Succession Triangle), Vaynard (Einhir Triangle) — see npc_foils_v30.md.
 
+**Arc B: The Widow Regent (Royal Assassination Fuse — Almud target, sub-roll 5–6)**
+- Branch condition: Royal Crisis Tension Card fires with Almud as sub-rolled target (params/bg/royal_assassination.md). Almud dies S8–S12. Lenneth assumes the throne.
+- Conviction: Equity becomes primary Crown doctrine. Ethical Framework shifts (Virtue Ethics → Equity doctrine). Crown factional identity inverts — pro-Einhir, pro-Thread-research, anti-caste-suppression becomes explicit Crown policy.
+- Consequences: Church opens Heresy Investigation against Crown (Crown Mandate −2 to −3). Crown aligns with Varfell and RM on the Einhir question. Löwenritter decision forced: protect the heretic queen (stay Loyal/Restless) or advance toward Autonomous/Split. Torben's Loyalty track transfers to Lenneth. Most transformative fuse outcome — changes what Crown IS.
+
+**Arc C: The Assassination Victim (Royal Assassination Fuse — Lenneth target, sub-roll 1–2)**
+- Branch condition: Royal Crisis Tension Card fires with Lenneth as sub-rolled target. Lenneth dies S8–S12.
+- Arc terminates on fire. Consequences activate Almud's Arc D (The Avenger — see designs/npcs/npc_behavior_v30.md §5.2 Almud Arc Map). Without Lenneth's moderating influence Crown's Einhir policy hardens, RM PW advances, Southern Accord erodes.
+
+*Arcs B/C are mutually exclusive — a sub-roll at game start (or when Royal Crisis card is drawn) determines which (if any) of Lenneth/Torben/Almud is targeted. See params/bg/royal_assassination.md.*
+
+---
 
 
 
@@ -181,6 +197,7 @@ Edeyja is the only NPC in the roster who is not compromised, and this is itself 
 
 ## 3. Prince Torben Almqvist — The Disputed Inheritance
 
+**Royal Assassination Fuse — target possibility (sub-roll 3–4, params/bg/royal_assassination.md):** If Torben is the sub-rolled target, the fuse fires S8–S12 and he dies. His Conviction window arc (ED-618) terminates; consequences activate Almud's Arc E (The Bereaved Father) — Crown must deploy military to T4 to retrieve Elske from Altonia. Compound Varfell provocation + Altonian diplomatic crisis. See designs/npcs/npc_behavior_v30.md §2.8 and §5.2 Almud Arc Map for mechanical hooks.
 
 Altonia's Tutoring Demand (IP 30) is an attack on the deed-presumption itself: if Torben is educated in Altonian values, the next Almqvist monarch would be culturally Altonian — the deed-monarchy's legitimation logic would be hollow, a northern Einhir throne occupied by an Altonian-trained prince.
 
@@ -188,6 +205,10 @@ Altonia's Tutoring Demand (IP 30) is an attack on the deed-presumption itself: i
 
 ## 4. Princess Elske Almqvist — The Divided Inheritance
 
+**Base profile.** Elske is in Altonia (tutoring arrangement — see §3 Torben on the Altonian Tutoring Demand). She is not directly playable as a Crown heir in the default campaign because Torben holds the succession position. She becomes operationally relevant in two scenarios:
+
+1. **Royal Assassination Fuse — Torben target (sub-roll 3–4, params/bg/royal_assassination.md):** Torben dies. Elske becomes the only remaining Almqvist heir. Crown deploys military to T4 (Varfell territory) to establish an extraction route. Extraction succeeds, fails, or becomes a multi-season arc depending on Varfell disposition and Altonian response. If Elske is retrieved: she becomes the new heir, culturally Altonian-leaning, and the campaign's succession arc takes on an acculturation dimension (her Conviction emerges through Crown-side faction investment in a post-retrieval window, analogous to Torben's ED-618 window but with Altonian cultural priors).
+2. **Altonian leverage without fire:** Absent the fuse, Elske's status is a standing Altonian chip — Altonia can raise Tutoring-Demand IP threats or threaten to send Elske back at politically inconvenient moments.
 
 ---
 

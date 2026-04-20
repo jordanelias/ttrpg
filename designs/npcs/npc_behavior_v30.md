@@ -208,6 +208,8 @@ Every named NPC holds three interconnected attributes.
 **Beliefs:**
 
 
+**Royal Assassination Fuse — target possibility (sub-roll 3–4, params/bg/royal_assassination.md):** If Torben is the sub-rolled target on the Royal Crisis Tension Card, the fuse fires S8–S12 and Torben dies. His Conviction window arc (ED-618) terminates on fire. Consequences activate Almud's Arc E (The Bereaved Father — Elske retrieval scenario; see §5.2 Almud Arc Map). Crown must retrieve Elske from Altonia through military deployment to T4; Varfell provocation plus Altonian diplomatic crisis (IP spike). If Torben is not the sub-rolled target, his standard arc proceeds.
+
 ---
 
 ### §2.9 Edeyja (Southernmost Warden-Chief)
@@ -545,6 +547,23 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 - Branch condition: Löwenritter Autonomy reaches Split (Stage 4). Löwenritter separates.
 - Conviction shift: Order → Autonomy (survival). Almud becomes an exile.
 - Risk: Torben's Loyalty track transfers to Löwenritter. Crown faction under Löwenritter control.
+
+**Arc D: The Avenger (Royal Assassination Fuse — Lenneth target, sub-roll 1–2)**
+- Branch condition: Royal Crisis Tension Card fires with Lenneth as sub-rolled target (params/bg/royal_assassination.md). Lenneth dies S8–S12.
+- Conviction: Order remains primary, but Ethical Framework modifier shifts — virtuous public action subordinated to investigation. Covert/expedient actions no longer contradictory while pursuing the killer.
+- Behavior: Crown governance suffers (Mandate −1 to −2 over subsequent seasons) as Almud's attention narrows. Investigation arc opens — every faction becomes a suspect. Defensive posture breaks from inside.
+- Consequences: Without Lenneth's moderating influence, Crown's Einhir policy hardens; RM PW advances (popular reaction to royal grief); Southern Accord erodes.
+
+**Arc E: The Bereaved Father (Royal Assassination Fuse — Torben target, sub-roll 3–4)**
+- Branch condition: Royal Crisis Tension Card fires with Torben as sub-rolled target. Torben dies S8–S12.
+- Behavior: Crown must retrieve Elske from Altonia — she is the only remaining heir. Military deployment to T4 (Varfell territory) to establish extraction route.
+- Consequences: Direct provocation against Varfell AND Altonian diplomatic crisis (IP spike). Succession question, Altonian question, and Varfell question collapse into one compound event.
+
+**Arc F: Eliminated (Royal Assassination Fuse — Almud target, sub-roll 5–6)**
+- Branch condition: Royal Crisis Tension Card fires with Almud as sub-rolled target. Almud dies S8–S12.
+- Almud's arc terminates on fire. Lenneth assumes the throne — see her Widow Regent arc (designs/npcs/npc_character_analyses_v30.md §2). Torben's Loyalty track transfers to Lenneth. Crown factional identity inverts (pro-Einhir, pro-Thread-research, anti-caste-suppression becomes explicit policy). Church opens Heresy Investigation against Crown. Löwenritter decision forced: protect the heretic queen (Loyal/Restless) or advance toward Autonomous/Split.
+
+*Arcs D/E/F are mutually exclusive — one sub-roll at game start (or when Royal Crisis card is drawn) determines which (if any) fires. See params/bg/royal_assassination.md for fuse timeline (S0 seed → S8+ fire, succeed-on-fire).*
 
 ---
 
