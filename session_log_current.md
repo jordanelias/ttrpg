@@ -26,8 +26,7 @@ session_highlights:
   - Patch 7 backstory strike VERIFIED already complete per 7da338a; session_log open_item was stale. No residual Almud-father-assassination refs remain in character_histories_v30, worldbuilding_v30, or npc_character_analyses_v30 (only explicit STRUCK banners).
   - ED-667 open_item also stale: archived in editorial_ledger_archive_1001_1200.yaml:788 and closed by graduated autonomy in Session B.
 open_items:
-  - B3/B4 re-run on corrected engine_v3 (PT_tier table from ED-721 + dynamic SW from ED-722). Prior saturated-cap results invalidated.
-  - engine_v3 update: surface dynamic SW from settlement state (currently reads territory.sw as fixed; ED-722 makes it runtime-mutable from religious-building-tier aggregation).
-  - Audit pass on test docs that referenced the +5/season Piety Yield finding (sim_batch_3_2026-04-16.md, sim_stress_batch_2_2026-04-16.md, arc_test_batch3_results.md, arc_test_batch4_results.md, sim_coverage_index.md) — flag invalidated.
-  - Setup convention doc: per-settlement religious-building seed assignments to match starting SW table (T1 → 1 Church in S-003; T9 → 1 Cathedral in S-023 + 1 Church in S-025; etc.).
+  - B5 stress test: ED-722 dynamic SW under settlement loss/sack scenarios (e.g., Varfell conquers + sacks Himmelenger Cathedral; predicted SW(T9) 5→2, T9 yield 1→0).
+  - engine_v4: per-settlement model (vs engine_v3 per-territory aggregate). Aligns with campaign_architecture_v1 §1.1.
+  - AER generation mechanic — still unspecified (B3 gap #9, independent of Piety Yield re-run).
 P1-BLOCKER count: 0
