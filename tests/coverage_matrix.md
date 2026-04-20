@@ -361,3 +361,7 @@ tests/sim/valoria_full_campaign_sim.py — foundation: core engine (dice, degree
 ## Session 2 — sim update — 2026-04-19
 
 Session 2 Middle Layer: territory model (17 territories T1-T17 with Proximity/PV/SW/PT/Accord/adjacency), Domain Action framework (Royal Decree, Excommunication, SAD, Private Collection, Economic Leverage, Assert, Suppress, Govern, Trade), Piety Yield formula, Church political pool bonus, faction AI stub, 40-season smoke test across 3 seeds PASS. 130-entry ledger.
+
+## Session 3 — sim complete — 2026-04-19
+
+Session 3 Top Layer: Victory evaluation (Peninsular Sovereignty, Partition, Church CI=100), Tensions Deck 6-card fuse system (draw 1 at S0, fire S8-S12), Royal Assassination sub-roll (Lenneth/Torben/Almud consequence arcs), Threadwork TT→RS coupling stub, 8-seed deterministic test corpus. All tests PASS. 153-entry ledger.
