@@ -72,3 +72,84 @@ sources:
 # duplicate coverage, edge case mechanic, abstractable).
 # See ED-720 and references/throughlines_meta.md §0, §8.5, §10-11.
 # Session C: Tensions Deck (params/bg/tensions_deck.md) and Royal Assassination (params/bg/royal_assassination.md) specs extracted from conflict_architecture_proposal.
+
+
+# ── Full-Stack System → Canonical Source Map (2026-04-19) ────────────────
+# Populated for sim_gate(full_stack) readiness. Each system maps to its
+# authoritative design_doc and (where applicable) its params file. The sim
+# verification ledger must cite these paths. See valoria_hooks.SIM_CANONICAL_PRESETS.
+
+systems:
+  core_engine:
+    design_doc: designs/architecture/complete_systems_reference.md
+    params: params/core.md
+    bg_params: params/bg/core.md
+  combat:
+    design_doc: params/combat.md
+    params: params/combat.md
+  threadwork:
+    design_doc: designs/threadwork/threadwork_v30.md
+    params: params/threadwork.md
+  clocks:
+    design_doc: params/bg/clocks.md
+    params: params/bg/clocks.md
+  factions:
+    design_doc: designs/provincial/factions_personal_v30.md
+    params: params/factions.md
+    stats: params/factions/stats_1_7_scale.md
+  victory:
+    design_doc: designs/provincial/victory_v30.md
+    params: params/bg/victory.md
+  territories:
+    design_doc: designs/territory/settlement_layer_v30.md
+    adjacency: designs/territory/settlement_adjacency_v30.md
+    fractional: designs/provincial/fractional_province_ownership_v30.md
+  mass_combat:
+    design_doc: designs/provincial/mass_battle_v30.md
+    params: params/mass_combat.md
+  social_debate:
+    design_doc: params/contest.md
+    params: params/contest.md
+  scale_transitions:
+    design_doc: designs/architecture/scale_transitions_v30.md
+    params: params/scale_transitions.md
+  faction_layer:
+    design_doc: designs/provincial/faction_layer_v30.md
+  military_layer:
+    design_doc: designs/provincial/military_layer_v30.md
+  tc_political:
+    design_doc: designs/provincial/ci_political_v30.md
+    note: "Renamed from tc_political_redesign_v30 — same doc, CI is Theocracy Counter's politically-active form."
+  peninsular_strain:
+    design_doc: designs/provincial/peninsular_strain_v30.md
+  settlement_layer:
+    design_doc: designs/territory/settlement_layer_v30.md
+  campaign_architecture:
+    design_doc: designs/architecture/campaign_architecture_v30.md
+  derived_stats:
+    design_doc: params/factions/stats_1_7_scale.md
+    note: "Derived faction stats (1-7 scale). Primary source for Mandate/Influence/Wealth/Military/Intel/Stability starting values and progression rules."
+
+# ── Supporting param specs (referenced by multiple systems) ──────────────
+  conviction_track:
+    design_doc: designs/npcs/npc_behavior_v30.md
+    params: params/factions/npc_stance_triangles.md
+  faction_succession_split:
+    design_doc: designs/provincial/faction_succession_split_v30.md
+  royal_assassination_fuse:
+    design_doc: params/bg/royal_assassination.md
+    source: conflict_architecture_proposal.md
+  tensions_deck:
+    design_doc: params/bg/tensions_deck.md
+    source: conflict_architecture_proposal.md
+  conflict_architecture:
+    design_doc: designs/architecture/conflict_architecture_proposal.md
+    note: "CANON 2026-04-18. Niflhel dissolution + Löwenritter graduated autonomy + Tensions Deck + Royal assassination fuse."
+  throughlines_framework:
+    design_doc: references/throughlines_meta.md
+    infill: references/throughlines_meta_infill.md
+    note: "Canonical vetting authority for all proposals (PP-672, PP-674)."
+
+# All 17 full_stack systems mapped. sim_gate('full_stack') will pass after a
+# verification ledger is built at /home/claude/sim_verification_ledger.json
+# citing these paths. See valoria_hooks.sim_gate() for requirements.
