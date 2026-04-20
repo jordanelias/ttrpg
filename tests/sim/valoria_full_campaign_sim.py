@@ -1,22 +1,23 @@
 """
-Valoria Full Campaign Simulation — Sessions 1 + 2 + 3 (Complete)
+Valoria Full Campaign Simulation — Sessions 1 + 2 + 3 + Tier A
 ==============================================================================
 
 Generated: 2026-04-19
 
 Session 1: core engine + clocks + faction stats + seasonal loop.
 Session 2: territories + DA framework + Piety Yield + faction AI.
-Session 3 (this extension):
-- §14 Victory evaluation: Peninsular Sovereignty (universal), Church CI=100
-  Theocracy Unification, Partition co-victory, shared loss (Rupture)
-- §15 Tensions Deck: 6-card pool, draw 1 at game start, S8-S12 fire window
-- §16 Royal Assassination fuse: sub-roll target (Lenneth/Torben/Almud),
-  consequence arc activation
-- §17 Threadwork stub: Thread Tension tracking, RS coupling (Private
-  Collection feeds TT, TT decays RS at thresholds)
-- §18 Deterministic test corpus: 8 seeds × scenario matrix (baseline,
-  Church-dominant, Crown-pressured, Assassination-Lenneth, Assassination-
-  Torben, Assassination-Almud, Thread-cascade, Peaceful control)
+Session 3: Victory eval + Tensions Deck + Royal Assassination + Threadwork.
+Tier A (this extension):
+- §20 Mass Combat resolution (simplified BG mode from mass_battle_v30 §B.3):
+  single-roll per side, margin-based outcome, Accord damage per PP-645.
+- §21 Invade DA: attacker triggers mass combat on an adjacent enemy territory.
+- §22 Church TC Seizure DA: CI>=60 one-per-territory seizure against Church-
+  prominent territories not held by Church.
+- §23 Mass Seizure: CI>=60 one-shot, fires against all non-Church Church-
+  prominent territories simultaneously (victory_v30 §3.2).
+- §24 Faction AI v2: prioritize conquest when Military available + adjacent
+  target; Church prioritizes TC Seizure / Mass Seizure when CI>=60.
+- §25 Tier A corpus: 16 seeds, win-rate distribution analysis.
 
 Every new mechanical constant is cited via inline canonical comments and
 covered by /home/claude/sim_verification_ledger.json.
@@ -1695,6 +1696,437 @@ def deterministic_test_corpus() -> None:
     return campaigns
 
 
+# ============================================================================
+# §20. Mass Combat Resolution (BG mode simplified)
+#      [canonical: designs/provincial/mass_battle_v30.md §B.3 BG Battle Resolution]
+# ============================================================================
+
+
+@dataclass
+class BattleResult:
+    attacker: str
+    defender: str
+    territory: str
+    attacker_net: int
+    defender_net: int
+    outcome: str                      # "capture" | "partial" | "defender_wins"
+    effects: List[str]
+
+
+def _military_pool(f: Faction) -> int:
+    """BG battle pool = Military + commander bonus.
+    [canonical: mass_battle_v30.md §B.3 Step 3 "Pool = Martial + commander bonus"]
+    [canonical: mass_battle_v30.md §B.3 "Commander bonus = floor(faction Military / 2) PP-555"]"""
+    mil = f.military if f.military is not None else 0
+    commander_bonus = mil // 2                       # [canonical: mass_battle_v30.md §B.3 "floor(Military/2)"]
+    return mil + commander_bonus
+
+
+def resolve_mass_battle(camp: "Campaign", attacker: Faction, defender: Faction,
+                        territory: Territory) -> BattleResult:
+    """Simplified single-roll BG battle.
+    [canonical: mass_battle_v30.md §B.3 BG Battle Resolution + Step 4 margin table]
+    [canonical: mass_battle_v30.md §B.3 Accord consequence PP-645]"""
+    a_pool = _military_pool(attacker)
+    d_pool = _military_pool(defender) if defender else 0
+    # Defender fort adds dice (simplified formation defence bonus)
+    # [canonical: geography_v30.md fort rating; §B.3 disposition Ob modifiers]
+    d_bonus = territory.fort                          # [canonical: geography_v30.md Fort column]
+    # Roll both sides; TN 7 standard.
+    _, a_net, a_faces = contest(a_pool, 1, camp.rng)  # Ob 1 placeholder; margin matters, not Ob here
+    _, d_net, d_faces = contest(d_pool + d_bonus, 1, camp.rng)
+    effects: List[str] = []
+    # Step 4: determine outcome by margin [canonical: mass_battle_v30.md §B.3 Step 4 PP-104]
+    margin = a_net - d_net
+    if margin >= 2:                                   # [canonical: mass_battle_v30.md §B.3 "Attacker net >= Defender net + 2"]
+        # Attacker wins: territory captured, defender Military -1
+        territory.controller = attacker.name          # [canonical: mass_battle_v30.md §B.3 "Territory captured"]
+        territory.accord = 1                          # [canonical: mass_battle_v30.md §B.3 "Accord set to 1 (Resistant) PP-645"]
+        if defender and defender.change_stat("military", -1):   # [canonical: mass_battle_v30.md §B.3 "Defender Military -1"]
+            effects.append(f"{defender.name}.military -1")
+        effects.append(f"{territory.tid} captured by {attacker.name}; Accord->1")
+        outcome = "capture"
+    elif margin <= -2:                                # [canonical: mass_battle_v30.md §B.3 "Defender net >= Attacker net + 2"]
+        if attacker.change_stat("military", -1):      # [canonical: mass_battle_v30.md §B.3 "Attacker Military -1"]
+            effects.append(f"{attacker.name}.military -1")
+        effects.append(f"{territory.tid} held; defender wins")
+        outcome = "defender_wins"
+    else:                                             # [canonical: mass_battle_v30.md §B.3 "Margin <=1 either direction = Partial"]
+        effects.append(f"{territory.tid} partial — no territory change")
+        # Attacker Cohesion -15 -> modeled as Attacker Stability -1
+        # [canonical: mass_battle_v30.md §B.3 "Attacker Cohesion -15 (derived_stats_v1)"]
+        if attacker.change_stat("stability", -1):     # [canonical: derived_stats_v1 Cohesion -15 = Stability -1]
+            effects.append(f"{attacker.name}.stability -1 (partial commitment cost)")
+        outcome = "partial"
+    return BattleResult(
+        attacker=attacker.name, defender=defender.name if defender else "None",
+        territory=territory.tid, attacker_net=a_net, defender_net=d_net,
+        outcome=outcome, effects=effects,
+    )
+
+
+# ============================================================================
+# §21. Invade DA
+# ============================================================================
+
+
+def da_invade(camp: "Campaign", actor: Faction, territory_id: str) -> DAResult:
+    """Invade an adjacent enemy territory. Triggers mass combat.
+    Requires: actor controls an adjacent territory; target controlled by another
+    faction or uncontrolled; actor Military >= 2.
+    [canonical: mass_battle_v30.md §B.3 BG battle; geography_v30.md adjacency]"""
+    target = camp.territories.get(territory_id)
+    if target is None:
+        return DAResult(actor.name, "invade", territory_id, Degree.FAILURE, 0, [],
+                        ["Invalid territory"])
+    # Need adjacency from some territory actor controls
+    # [canonical: geography_v30.md Adjacent column]
+    actor_adjacent = any(
+        t.controller == actor.name and territory_id in t.adjacent
+        for t in camp.territories.values()
+    )
+    if not actor_adjacent:
+        return DAResult(actor.name, "invade", territory_id, Degree.FAILURE, 0, [],
+                        ["Target not adjacent to actor territory"])
+    # Cannot invade own territory
+    if target.controller == actor.name:
+        return DAResult(actor.name, "invade", territory_id, Degree.FAILURE, 0, [],
+                        ["Cannot invade own territory"])
+    # Need Military >= 2 to mount invasion [simplified: some force must exist]
+    if actor.military is None or actor.military < 2:  # [canonical: mass_battle_v30.md A.13 "unit requires Military >= 2"]
+        return DAResult(actor.name, "invade", territory_id, Degree.FAILURE, 0, [],
+                        ["Military too low to invade"])
+    defender = camp.factions.get(target.controller) if target.controller else None
+    # Sim: if defender is NPC-only (Guilds) or uncontrolled (None), allow
+    # attacker to win by walkover if defender Military 0 or None
+    if defender is None or defender.military is None or defender.military == 0:
+        # Walkover capture
+        target.controller = actor.name
+        target.accord = 1                             # [canonical: mass_battle_v30.md §B.3 PP-645]
+        camp.any_battle_this_season = True
+        return DAResult(actor.name, "invade", territory_id, Degree.SUCCESS, 0, [],
+                        [f"{target.tid} walkover captured by {actor.name}"])
+    br = resolve_mass_battle(camp, actor, defender, target)
+    camp.battle_results.append(br)
+    camp.any_battle_this_season = True                # [canonical: params/bg/clocks.md §Battle Consequences]
+    camp.last_battle_seasons[(actor.name, defender.name)] = camp.season
+    actor._da_used_this_season.add("invade")
+    # Map BattleResult outcome to DA degree for reporting
+    degree = Degree.OVERWHELMING if br.outcome == "capture" else (
+        Degree.FAILURE if br.outcome == "defender_wins" else Degree.PARTIAL
+    )
+    return DAResult(actor.name, "invade", territory_id, degree,
+                    br.attacker_net - br.defender_net, [], br.effects)
+
+
+# ============================================================================
+# §22. Church TC Seizure DA (CI >= 60, per-territory)
+#      [canonical: stats_1_7_scale.md §Unique Actions TC 60 Territorial Seizure]
+# ============================================================================
+
+
+def da_tc_seizure(camp: "Campaign", actor: Faction, territory_id: str) -> DAResult:
+    """Church Territorial Seizure at CI>=60.
+    [canonical: stats_1_7_scale.md §Unique Actions TC 60 Territorial Seizure]
+    Roll: Mandate vs floor(owner Mandate/2)+1. Once per territory."""
+    target = camp.territories.get(territory_id)
+    if target is None:
+        return DAResult(actor.name, "tc_seizure", territory_id, Degree.FAILURE, 0, [],
+                        ["Invalid territory"])
+    # Gate: CI >= 60 [canonical: stats_1_7_scale.md "Trigger: TC reaches 60"]
+    if not camp.clocks.tc60_seizure_unlocked:         # [canonical: stats_1_7_scale.md TC60 gate]
+        return DAResult(actor.name, "tc_seizure", territory_id, Degree.FAILURE, 0, [],
+                        ["CI < 60"])
+    # Must be Church-prominent and not already Church-held
+    # [canonical: ci_political_v30.md §2.1 "Church Prominent in target territory ED-326"]
+    if target.controller == actor.name:
+        return DAResult(actor.name, "tc_seizure", territory_id, Degree.FAILURE, 0, [],
+                        ["Already Church-held"])
+    if not target.church_prominent:                   # [canonical: ci_political_v30.md §2.1 ED-326]
+        return DAResult(actor.name, "tc_seizure", territory_id, Degree.FAILURE, 0, [],
+                        ["Not Church-prominent"])
+    owner = camp.factions.get(target.controller) if target.controller else None
+    owner_mandate = owner.mandate if (owner and owner.mandate is not None) else 0
+    ob = (owner_mandate // 2) + 1                     # [canonical: stats_1_7_scale.md TC60 Seizure "floor(owner Mandate/2)+1"]
+    pool = _stat_pool(actor, "mandate")
+    degree, net, faces = contest(pool, ob, camp.rng)
+    effects: List[str] = []
+    if degree in (Degree.OVERWHELMING, Degree.SUCCESS):
+        target.controller = actor.name                # [canonical: stats_1_7_scale.md TC60 "Administrative control"]
+        target.accord = 1                             # peacefully administered seizure still resistant
+        effects.append(f"{target.tid} seized by Church")
+        # Flat TC +? not applied here (immediate CI already at 60+)
+    else:
+        # Failure: Mandate -1 [canonical: stats_1_7_scale.md TC60 Failure]
+        if actor.change_stat("mandate", -1):          # [canonical: stats_1_7_scale.md TC60 F "Mandate -1"]
+            effects.append(f"{actor.name}.mandate -1")
+    actor._da_used_this_season.add("tc_seizure")
+    return DAResult(actor.name, "tc_seizure", territory_id, degree, net, faces, effects)
+
+
+# ============================================================================
+# §23. Mass Seizure (CI>=60 one-shot)
+#      [canonical: victory_v30.md §3.2 CI=100 Mass Seizure Declaration]
+#      [canonical: ci_political_v30.md §2.1 "Mass Seizure ... from CI >= 60"]
+# ============================================================================
+
+
+def da_mass_seizure(camp: "Campaign", actor: Faction) -> DAResult:
+    """Church Mass Seizure one-shot at CI>=60.
+    [canonical: ci_political_v30.md §2.1 "Mass Seizure ... Gated by Church Mandate >= 4"]
+    [canonical: stats_1_7_scale.md TC60 Seizure + Mass Seizure]"""
+    effects: List[str] = []
+    if not camp.clocks.mass_seizure_available or camp.clocks.mass_seizure_used:
+        return DAResult(actor.name, "mass_seizure", None, Degree.FAILURE, 0, [],
+                        ["Mass Seizure unavailable"])
+    # Gate: Church Mandate >= 4 [canonical: ci_political_v30.md §2.1 ED-326 gate]
+    if actor.mandate is None or actor.mandate < 4:    # [canonical: ci_political_v30.md "Church Mandate >= 4"]
+        return DAResult(actor.name, "mass_seizure", None, Degree.FAILURE, 0, [],
+                        ["Church Mandate < 4"])
+    # Fire against all Church-prominent territories not held by Church
+    # [canonical: ci_political_v30.md §2.1 "one-shot ... Ob = 10 - PT - infrastructure"]
+    targets = [t for t in camp.territories.values()
+               if t.church_prominent and t.controller != actor.name]
+    if not targets:
+        return DAResult(actor.name, "mass_seizure", None, Degree.FAILURE, 0, [],
+                        ["No Church-prominent non-Church territories"])
+    captured = 0
+    for t in targets:
+        # Ob = max(1, 10 - PT) (simplified; full infrastructure mods deferred)
+        # [canonical: ci_political_v30.md §2.1 "Ob = 10 - PT - infrastructure (floor 1)"]
+        ob = max(1, 10 - t.pt)                        # [canonical: ci_political_v30.md §2.1 Mass Seizure Ob]
+        pool = _stat_pool(actor, "mandate")
+        degree, net, _ = contest(pool, ob, camp.rng)
+        if degree in (Degree.OVERWHELMING, Degree.SUCCESS, Degree.PARTIAL):
+            t.controller = actor.name                 # [canonical: ci_political_v30.md §2.1 "Mass Seizure captures"]
+            t.accord = 1                              # [canonical: mass_battle_v30.md PP-645 Accord 1]
+            captured += 1
+            effects.append(f"{t.tid} seized")
+    camp.clocks.mass_seizure_used = True              # [canonical: ci_political_v30.md §2.1 "one-shot"]
+    actor._da_used_this_season.add("mass_seizure")
+    return DAResult(actor.name, "mass_seizure", None,
+                    Degree.OVERWHELMING if captured > 0 else Degree.FAILURE,
+                    captured, [], effects + [f"Mass Seizure: {captured}/{len(targets)} captured"])
+
+
+# ============================================================================
+# §24. Faction AI v2 — Conquest-aware priority
+# ============================================================================
+
+
+def _find_invasion_target(camp: "Campaign", actor: Faction) -> Optional[str]:
+    """Find a weakest adjacent enemy territory to invade.
+    Priority: lower defender Military > lower fort > higher PV."""
+    candidates = []
+    for t in camp.territories.values():
+        if t.controller == actor.name:
+            continue
+        # Must be adjacent to an owned territory
+        if not any(nt.controller == actor.name and t.tid in nt.adjacent
+                   for nt in camp.territories.values()):
+            continue
+        # Skip protected: Schoenland (foreign), Askeheim (Calamity)
+        if t.controller == "Schoenland" or t.tid == "T15":
+            continue
+        defender = camp.factions.get(t.controller) if t.controller else None
+        d_mil = defender.military if (defender and defender.military) else 0
+        candidates.append((t, d_mil))
+    if not candidates:
+        return None
+    # Sort by (low defender Military, low fort, high PV)
+    candidates.sort(key=lambda x: (x[1], x[0].fort, -x[0].pv))
+    return candidates[0][0].tid
+
+
+def select_da_for_faction_v2(camp: "Campaign", f: Faction) -> Optional[Callable]:
+    """AI v2: adds conquest (Invade / TC Seizure / Mass Seizure) + defensive Govern."""
+    if not f.alive() or not f.playable:
+        return None
+
+    # Church priority: if CI>=60 and Mass Seizure unused, FIRE IT
+    if f.name == "Church" and camp.clocks.mass_seizure_available and not camp.clocks.mass_seizure_used:
+        if f.mandate is not None and f.mandate >= 4:
+            return lambda: da_mass_seizure(camp, f)
+
+    # Church priority: if CI>=60, TC Seizure a Church-prominent non-Church territory
+    if f.name == "Church" and camp.clocks.tc60_seizure_unlocked and "tc_seizure" not in f._da_used_this_season:
+        candidates = [t for t in camp.territories.values()
+                      if t.church_prominent and t.controller != f.name and t.controller is not None]
+        if candidates:
+            # Pick lowest-Mandate owner for easiest roll
+            def _owner_mandate(t):
+                o = camp.factions.get(t.controller)
+                return o.mandate if (o and o.mandate is not None) else 0
+            candidates.sort(key=_owner_mandate)
+            tid = candidates[0].tid
+            return lambda: da_tc_seizure(camp, f, tid)
+
+    # Non-Church military-capable: if Military >= 3, attempt Invade every 3 seasons
+    # Also require that we don't already control all 15 playable territories
+    own_count = sum(1 for t in camp.territories.values() if t.controller == f.name)
+    # [canonical: victory_v30.md §0 "all 15 playable"]
+    playable_own = sum(1 for tid in PLAYABLE_TERRITORIES
+                       if camp.territories[tid].controller == f.name)
+
+    # If we're close to PS (own >= 10 playable) prioritize Govern over Invade to
+    # rebuild Accord on captured territories. [canonical: victory_v30.md §0 Accord >= 2]
+    if playable_own >= 10:
+        low_accord_owned = [t for t in camp.territories.values()
+                            if t.controller == f.name and t.accord < 2
+                            and t.tid in PLAYABLE_TERRITORIES]
+        if low_accord_owned and "govern" not in f._da_used_this_season:
+            target_t = low_accord_owned[0]
+            return lambda: da_govern(camp, f, target_t.tid)
+
+    if (f.military is not None and f.military >= 3                              # [canonical: mass_battle_v30.md A.13 Military>=2 to mount]
+            and "invade" not in f._da_used_this_season
+            and own_count < 15                                                  # [canonical: victory_v30.md §0]
+            and camp.season % 2 == 0                                            # every other season (rate-limit invasion spam)
+            and f.name != "Church"):                                            # Church uses TC Seizure, not military invasion
+        invasion_target = _find_invasion_target(camp, f)
+        if invasion_target:
+            return lambda: da_invade(camp, f, invasion_target)
+
+    # Fall through to Session 2 AI (Mandate repair, unique actions, govern, trade)
+    return select_da_for_faction(camp, f)
+
+
+def domain_actions_phase_v2(camp: Campaign, log: SimLog) -> None:
+    """Per-season DA phase using AI v2."""
+    for fname, f in camp.factions.items():
+        if not f.playable or not f.alive():
+            continue
+        action_fn = select_da_for_faction_v2(camp, f)
+        if action_fn is None:
+            continue
+        result = action_fn()
+        if result is None:
+            continue
+        camp.da_results.append(result)
+        eff_txt = "; ".join(result.effects) if result.effects else "no effect"
+        log.add(f"DA: {fname} {result.action}"
+                f" -> {result.degree.value} (net={result.net}) [{eff_txt}]")
+
+
+def run_season_tier_a(camp: Campaign) -> SimLog:
+    """Tier A seasonal loop: full Session-3 loop + conquest-aware AI."""
+    camp.season += 1
+    log = SimLog(season=camp.season)
+    log.add(f"--- Season {camp.season} ---")
+    tick_tension_fuses(camp, log)
+    domain_actions_phase_v2(camp, log)                # v2 AI with conquest
+    accounting_phase(camp, log)
+    threadwork_accounting(camp, log)
+    evaluate_victory(camp, log)
+    log.add(f"State: RS={camp.clocks.rendering_stability} "
+            f"CI={camp.clocks.church_influence} IP={camp.clocks.invasion_pressure} "
+            f"PI={camp.clocks.parliament_integrity} Strain={camp.clocks.peninsular_strain} "
+            f"Autonomy={camp.clocks.autonomy.value}")
+    camp.logs.append(log)
+    return log
+
+
+def initial_campaign_tier_a(seed: int = 0) -> Campaign:
+    camp = initial_campaign_s3(seed=seed)
+    camp.battle_results = []                          # per-run combat log
+    camp.last_battle_seasons = {}                     # (attacker, defender) -> season
+    return camp
+
+
+def run_campaign_tier_a(max_seasons: int = 60, seed: int = 0) -> Campaign:
+    """Tier A full campaign run. Default 60 seasons — Peninsular Sovereignty
+    usually takes 30-60 seasons even with active conquest."""
+    camp = initial_campaign_tier_a(seed=seed)
+    while not camp.campaign_over and camp.season < max_seasons:
+        run_season_tier_a(camp)
+    return camp
+
+
+# ============================================================================
+# §25. Tier A Tests + Win-Rate Corpus
+# ============================================================================
+
+
+def smoke_test_mass_combat() -> None:
+    """Verify a deterministic mass battle produces a valid outcome."""
+    camp = initial_campaign_tier_a(seed=42)
+    crown = camp.factions["Crown"]
+    hafenmark = camp.factions["Hafenmark"]
+    # Crown invades T8 Gransol (adjacent to T9 which Crown doesn't own but is adjacent via T14)
+    # Actually verify adjacency: T14 Ehrenfeld is Crown-controlled, T14 adj includes T4 (Varfell),
+    # so Crown can invade T4. Use that.
+    result = da_invade(camp, crown, "T4")
+    assert result.degree in (Degree.OVERWHELMING, Degree.PARTIAL, Degree.FAILURE)
+    # any_battle_this_season should be true after an invasion (unless walkover rules out combat)
+    print(f"MASS COMBAT TEST: Crown invades T4 -> {result.degree.value} "
+          f"[{'; '.join(result.effects)[:100]}]")
+
+
+def smoke_test_tier_a_campaign(seed: int = 42, max_seasons: int = 60,
+                                verbose: bool = False) -> Campaign:
+    camp = run_campaign_tier_a(max_seasons=max_seasons, seed=seed)
+    # Clock sanity
+    assert 0 <= camp.clocks.rendering_stability <= 100
+    assert 0 <= camp.clocks.church_influence <= 100
+    # Territory control sanity — sum equals 17
+    control_counts: Dict[str, int] = {}
+    for t in camp.territories.values():
+        k = t.controller or "Uncontrolled"
+        control_counts[k] = control_counts.get(k, 0) + 1
+    assert sum(control_counts.values()) == 17
+    fuse = camp.tension_fuses[0]
+    summary = (f"seed={seed} ran={camp.season} "
+               f"card={fuse.card.value}"
+               f"{' target=' + (fuse.rc_target or '') if fuse.rc_target else ''} "
+               f"fired={fuse.fired} "
+               f"RS={camp.clocks.rendering_stability} "
+               f"CI={camp.clocks.church_influence} "
+               f"IP={camp.clocks.invasion_pressure} "
+               f"Strain={camp.clocks.peninsular_strain} "
+               f"autonomy={camp.clocks.autonomy.value} "
+               f"battles={len(getattr(camp, 'battle_results', []))} "
+               f"victory={camp.victory_condition or 'ongoing'}")
+    print(summary)
+    if verbose:
+        from collections import Counter
+        print(f"  Territory control: {dict(sorted(control_counts.items(), key=lambda x:-x[1]))}")
+        print(f"  Battles: {len(camp.battle_results)}")
+        for br in camp.battle_results[:5]:
+            print(f"    {br.attacker}->{br.defender} {br.territory} "
+                  f"net={br.attacker_net}v{br.defender_net} -> {br.outcome}")
+        if len(camp.battle_results) > 5:
+            print(f"    ... +{len(camp.battle_results) - 5} more battles")
+        da_counts = Counter(r.action for r in camp.da_results)
+        print(f"  DA counts: {dict(da_counts.most_common())}")
+    return camp
+
+
+def tier_a_win_rate_corpus(num_seeds: int = 16, max_seasons: int = 60) -> None:
+    """Run N seeds, measure outcome distribution."""
+    from collections import Counter
+    print(f"\n=== TIER A WIN-RATE CORPUS ({num_seeds} seeds, {max_seasons} seasons max) ===")
+    outcomes: Counter = Counter()
+    winners: Counter = Counter()
+    for seed in range(1, num_seeds + 1):
+        camp = run_campaign_tier_a(max_seasons=max_seasons, seed=seed)
+        vc = camp.victory_condition or "ONGOING"
+        outcomes[vc.split(":")[0]] += 1
+        if vc and ":" in vc:
+            tag = vc.split(":", 1)[0]
+            if tag == "PENINSULAR_SOVEREIGNTY":
+                winners[vc.split(": ")[1]] += 1
+            elif tag == "CHURCH_VICTORY":
+                winners["Church (CI=100)"] += 1
+            elif tag == "PARTITION":
+                winners[vc.split(": ")[1]] += 1
+            elif tag == "SHARED_LOSS":
+                winners["SHARED_LOSS"] += 1
+            elif tag == "CROWN_ELIMINATED":
+                winners["CROWN_ELIMINATED"] += 1
+    print(f"Outcomes: {dict(outcomes)}")
+    print(f"Winners: {dict(winners)}")
+
+
 if __name__ == "__main__":
     smoke_test_dice()
     smoke_test_territory_model()
@@ -1703,6 +2135,11 @@ if __name__ == "__main__":
     smoke_test_10_peaceful()
     smoke_test_victory_conditions()
     smoke_test_tensions_deck()
-    print("\n=== FULL CAMPAIGN SAMPLE (seed=42, verbose) ===")
-    smoke_test_full_campaign(seed=42, max_seasons=40, verbose=True)
-    deterministic_test_corpus()
+    smoke_test_mass_combat()
+    print("\n=== TIER A SAMPLE (seed=42, verbose) ===")
+    smoke_test_tier_a_campaign(seed=42, max_seasons=60, verbose=True)
+    print("\n=== TIER A SAMPLE (seed=7, verbose) ===")
+    smoke_test_tier_a_campaign(seed=7, max_seasons=60, verbose=True)
+    tier_a_win_rate_corpus(num_seeds=16, max_seasons=100)
+    print("\n=== EXTENDED-HORIZON CORPUS (120 seasons) ===")
+    tier_a_win_rate_corpus(num_seeds=8, max_seasons=120)

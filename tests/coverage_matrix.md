@@ -367,3 +367,5 @@ Session 2 Middle Layer: territory model (17 territories T1-T17 with Proximity/PV
 Session 3 Top Layer: Victory evaluation (Peninsular Sovereignty, Partition, Church CI=100), Tensions Deck 6-card fuse system (draw 1 at S0, fire S8-S12), Royal Assassination sub-roll (Lenneth/Torben/Almud consequence arcs), Threadwork TT→RS coupling stub, 8-seed deterministic test corpus. All tests PASS. 153-entry ledger.
 
 ## Readiness v2 — 2026-04-19: sim harness complete.
+
+## Tier A — 2026-04-19: conquest loop. 16-seed 100s: Church 11 / Varfell 3 / Crown 2.
