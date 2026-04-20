@@ -6,6 +6,7 @@
 <!-- Flag any value used in simulation: [UNVERIFIED: <value> — pending stress test] -->
 <!-- Mode: TTRPG -->
 <!-- Authority: designs/ working layer — pending compilation -->
+<!-- Post-Session-B (2026-04-19): Niflhel dissolved per conflict_architecture_proposal (CANON). §8.7 struck. Functions redistributed to settlement_layer_v30 §4.7–4.9 (Black Markets, Intelligence Brokers, Thread Exploitation Sites). Partial sheets line, Starting Values row, and incidental refs updated. -->
 
 # PART EIGHT: FACTIONS
 
@@ -25,7 +26,7 @@
 | Intel | Intelligence network and covert operations |
 | Stability | Internal cohesion and crisis resistance |
 
-**Partial sheets:** Niflhel (no Mandate, no Military), Revolution (Influence, Stability, Intel only), Lowenritter (no Mandate, no Wealth — Military, Intel, Influence, Stability only).
+**Partial sheets:** Revolution (Influence, Stability, Intel only), Lowenritter (no Mandate, no Wealth — Military, Intel, Influence, Stability only). *(Niflhel partial sheet struck — see §8.7.)*
 
 
 ### Starting Values
@@ -37,7 +38,6 @@
 | Hafenmark | 4 | 4 | 5 | 3 | — | 4 |
 | Varfell | 4 | 4 | 4 | 4 | — | 4 |
 | Guilds | 3 | 4 | 6 | 2 | — | 5 |
-| Niflhel | — | 5 | 4 | — | — | 4 |
 | Revolution | — | 3 | — | — | — | 3 |
 | Lowenritter | — | 3 | — | 5 | 3 | 5 |
 
@@ -87,7 +87,7 @@ Range: 0–10. Starting value: 5 (BG). Not a separate track in TTRPG mode (effec
 | 4. Cultural identity | Einhir recovery | Colonial settlement | Revolution vs Crown/Church |
 | 5. Economic control | Guild autonomy | State/Church taxation | Guilds vs Crown/Church |
 | 6. Military authority | Ducal/Crown command | Templar independence | Hafenmark/Crown vs Church |
-| 7. Information | Transparency | Secrecy | Revolution vs Niflhel/Varfell |
+| 7. Information | Transparency | Secrecy | Revolution vs Church/Varfell |
 | 8. External threat | Accommodation of Altonia | Resistance | Crown (split) vs all |
 | 9. Ontological | The world is what it appears | The world is more | Church vs practitioners |
 
@@ -117,7 +117,7 @@ Range: 0–10. Starting value: 5 (BG). Not a separate track in TTRPG mode (effec
 | **Roll** | Mandate vs Ob 2 |
 | **Success** | One faction attribute change (any faction, ±1) takes effect immediately rather than at seasonal accounting |
 | **Failure** | Mandate −1 (overreach) |
-| **Constraint** | Cannot target Intel — decrees are public acts. Cannot target a stat absent from the target faction's sheet (e.g. Niflhel has no Mandate; Löwenritter has no Wealth). (PP-243) |
+| **Constraint** | Cannot target Intel — decrees are public acts. Cannot target a stat absent from the target faction's sheet (e.g. Löwenritter has no Wealth; Revolution has no Mandate/Military/Wealth). (PP-243) |
 | **Limit** | 1/season; consecutive seasons: +1 Ob per consecutive use (decree fatigue) |
 
 **Altonian invasion units — provisional (PP-282, ED-036 resolved):**
@@ -199,7 +199,7 @@ Invasion wave: 3 Vanguard + 2 Heavy Infantry. NPC general Command 5.
 
 
 
-**Leadership Deviation:** Baralta acts against tendency (extralegal action, breaking with Parliament, allying with Niflhel): Stability check **Ob 1**. Low cost — Baralta IS the institution. Her personal authority is so thoroughly embedded that deviation costs are minimal. This is her structural advantage.
+**Leadership Deviation:** Baralta acts against tendency (extralegal action, breaking with Parliament, covert alignment with intelligence brokers or black markets): Stability check **Ob 1**. Low cost — Baralta IS the institution. Her personal authority is so thoroughly embedded that deviation costs are minimal. This is her structural advantage.
 
 **Unique Action — Sovereign Authority Doctrine**
 
@@ -259,7 +259,7 @@ Invasion wave: 3 Vanguard + 2 Heavy Infantry. NPC general Command 5.
 | 4 | Urgency. Willing to offer collection access (including originary locks) for Thread education and Southernmost partnership. Theocracy Counter +2. |
 | 5 | Dangerous knowledge — understands what Solmund was structurally. Seeks capability, not further knowledge. Theocracy Counter +3. |
 
-TK advances through: practitioner relationship (sustained season, cap ×2); originary lock examination with practitioner context (cap ×1); Church archive access via Niflhel channels (+1/archive); players sharing Thread-level knowledge directly (+1–2 by depth); Discovery Event triggering Thread Sensitivity 30 (+2 immediately).
+TK advances through: practitioner relationship (sustained season, cap ×2); originary lock examination with practitioner context (cap ×1); Church archive access via intelligence broker or bribed archivist (+1/archive); players sharing Thread-level knowledge directly (+1–2 by depth); Discovery Event triggering Thread Sensitivity 30 (+2 immediately).
 
 ---
 
@@ -291,41 +291,18 @@ The Guilds apply economic pressure to any faction present in a territory where G
 
 ---
 
-## 8.7 Faction 6: Niflhel (Shadow Network)
+## 8.7 Faction 6: Niflhel — **STRUCK** (dissolved per conflict_architecture_proposal, CANON 2026-04-19)
 
-**Ethical Framework: Amoral Consequentialism**
+**STRUCK** — Niflhel dissolved. Faction stat block, ethical framework, four-arm structure (Dockworkers / Reckoners / Burned / Quiet), Quiet Network action, intelligence/sabotage/assassination modes all eliminated.
 
+Functions redistributed to settlement-level phenomena in `settlement_layer_v30.md`:
+- **§4.7 Black Markets** — systemic consequence of governance failure (Order ≤ 1 or no governor). Replaces Niflhel's economic/smuggling arm.
+- **§4.8 Intelligence Brokers** — independent per-settlement NPCs selling (and fabricating) intelligence for personal profit. Replaces Niflhel's intelligence arm; discoverable, buyable, turnable, killable.
+- **§4.9 Thread Exploitation Sites** — location-based Thread residue at Proximity ≤ 2; anyone may harvest. Replaces Niflhel's Quiet arm Thread Harvest.
 
-- Covert Domain Actions (intelligence, sabotage, assassination, smuggling): **−1 Ob**
-- Public Domain Actions (anything requiring Niflhel to act openly or claim credit): **+2 Ob**
+Assassination as a mechanic persists as NPC-level action, not a faction action. Royal assassination fuse: `params/bg/royal_assassination.md`.
 
-
-**Partial sheet:** No Mandate. No Military. (Influence, Wealth, Intel, Stability only.)
-
-
-**Leadership Deviation:** Four-arm decentralised structure (Dockworkers, Reckoners, Burned, Quiet). No single leader can deviate without the other arms' consent. Redirecting any arm requires Intel vs Ob 3 within Niflhel. Failure: the arm acts independently against the redirecting leader's interests.
-
-**Unique Action — The Quiet Network**
-
-
-**Intelligence mode:**
-- Roll: Intel vs target's Intel
-- Success: learn one hidden faction attribute or one Non-Player Character's active Belief
-- Overwhelming: learn two
-
-**Sabotage mode:**
-- Roll: Intel vs target's Stability
-- Success: target Stability −1
-- Failure: operative exposed — Niflhel Intel −1 for 1 season; target gains Grievance Marker
-
-**Assassination mode:**
-- Roll: Intel vs target's Intel +2
-- Overwhelming: named Non-Player Character eliminated; no evidence trail
-- Success: named Non-Player Character eliminated; evidence trail exists
-- Partial: target wounded, not killed; evidence trail
-- Failure: operative captured; full exposure; Niflhel Stability −2
-
-**Long-term cost:** Each Quiet deployment in a season: Thread Tension +0.5 (cumulative). Niflhel's Southernmost harvesting supply chain disturbs the Thread-configurational environment. They do not know this.
+Former Niflhel operatives (Quartermaster, The Quiet One, Dalla Virke, etc.) are now independent settlement-anchored actors; see `npc_behavior_v30` and `npcs_special`.
 
 
 
@@ -344,7 +321,7 @@ The Guilds apply economic pressure to any faction present in a territory where G
 
 **Institutional Tendency:** Spread pamphlets. Undermine elite Mandate. Protect practitioners. Recover Einhir cultural knowledge. Defaults to information warfare and cultural advocacy.
 
-**Leadership Deviation:** No formal leader — a movement. Directing it requires Influence vs Ob 2 within the movement (easier than Niflhel due to ideological coherence). Directing the Revolution toward violence, authoritarianism, or elite alliance triggers Stability check **Ob 3** (the movement fractures if it betrays its own principles).
+**Leadership Deviation:** No formal leader — a movement. Directing it requires Influence vs Ob 2 within the movement (ideological coherence aids direction). Directing the Revolution toward violence, authoritarianism, or elite alliance triggers Stability check **Ob 3** (the movement fractures if it betrays its own principles).
 
 **Unique Action — Community Weaving**
 
