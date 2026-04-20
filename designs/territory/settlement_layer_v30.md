@@ -132,6 +132,37 @@ Church buildings provide a Stability bonus to the settlement they occupy, reflec
 
 This bonus applies regardless of whether the Church controls the settlement. A Crown governor who permits a Chapel in their settlement benefits from the social cohesion the parish provides — but also accepts the PT generation that comes with it.
 
+### §1.6a Starting Religious-Building Seeds (ED-722 — SW seed convention)
+
+To realize the starting SW values from `params/bg/geography.md` under the dynamic-SW rule (ED-722), each territory's settlements are seeded with religious buildings whose tier sum equals the listed SW. Building tiers: None=0, Chapel=1, Church=2, Cathedral=3. Cap 5 per territory.
+
+| T# | SW seed | Settlement → Religious Building (tier) | Σ |
+|----|---------|---------------------------------------|---|
+| T1 | 2 | S-003 Valorsplatz Cathedral → Church (2) *(old Solmundic, not as grand as Himmelenger)* | 2 |
+| T2 | 2 | S-004 Kronmark → Chapel (1); S-005 Watchtower → Chapel (1) | 2 |
+| T3 | 2 | S-006 Lowenskyst Fortress → Chapel (1); S-007 Garrison Town → Chapel (1) | 2 |
+| T4 | 1 | S-028 Grauwald → Chapel (1) | 1 |
+| T5 | 2 | S-008 Feldmark → Church (2) | 2 |
+| T6 | 1 | S-010 Stillhelm → Chapel (1) | 1 |
+| T7 | 2 | S-018 Rendstad → Church (2) | 2 |
+| T8 | 3 | S-015 Gransol Parliament → Church (2); S-017 Market Quarter → Chapel (1) | 3 |
+| T9 | 5 | S-023 Himmelenger Cathedral → Cathedral (3); S-025 Himmelenger Seminary → Church (2) | 5 |
+| T10 | 2 | S-019 Spartfell Fortress → Chapel (1); S-020 Spartfell Village → Chapel (1) | 2 |
+| T11 | 1 | S-030 Halvardshelm → Chapel (1) | 1 |
+| T12 | 2 | S-026 Sigurdshelm Keep → Church (2) | 2 |
+| T13 | 1 | S-031 Oastad → Chapel (1) | 1 |
+| T14 | 3 | S-012 Ehrenfeld Citadel → Church (2); S-013 Ehrenfeld Market → Chapel (1) | 3 |
+| T15 | 0 | (Calamity ground — no Church presence possible) | 0 |
+| T16 | 1 | S-035 Schoenland City → Chapel (1) | 1 |
+| T17 | 2 | S-022 Halvarshelm Town → Church (2) | 2 |
+| **Total** | **32** | — | **32** ✓ |
+
+**Notes:**
+- The S-003 Valorsplatz Cathedral *settlement type* is Cathedral, but its *religious building* is Church (tier 2). Settlement type and religious building axis are independent (§1.5). The S-003 settlement type gives Wing slots and naming significance; the religious building tier gives SW contribution. The Confessor's seat is at Himmelenger (S-023), not Valorsplatz.
+- S-025 Himmelenger Seminary is settlement type Cathedral but religious building Church (tier 2) — it's a teaching church, not the spiritual center. Together S-023 (Cathedral, 3) + S-025 (Church, 2) sum to 5 = SW(T9).
+- Settlements not listed (e.g., S-001 Valorsplatz Palace, S-009 Feldmark Storehouse) have religious_building = None at game start.
+- These are starting seeds. Runtime SW updates per ED-722 mechanic: Ecclesiastical Appointment / building upgrade increases tier; siege / sack / desacralization decreases it.
+
 **Design intent:** Historically, theocracies grew not through hostility but through helpfulness. Populations and even secular leaders wanted Church infrastructure because it solved real governance problems. The theocratic endpoint was a consequence of rational, self-interested decisions at each step.
 
 ### §1.7 Pastoral Assumption (NEW — historical_precedents_analysis §1.4)

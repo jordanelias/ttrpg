@@ -61,9 +61,9 @@ TERRITORIES = {
     'T9':  ('Himmelenger',    5,  5,  4, 'Church',     3, 5),  # [canonical: Cathedral City PV=5, PT=5]
     'T10': ('Spartfell',      1,  2,  3, 'Hafenmark',  2, 3),
     'T11': ('Halvardshelm',   1,  1,  2, 'Varfell',    2, 2),  # [canonical: PT=2]
-    'T12': ('Sigurdshelm',    4,  1,  2, 'Varfell',    3, 2),  # [canonical: Duchy capital PV=4, PT=2]
+    'T12': ('Sigurdshelm',    4,  2,  2, 'Varfell',    3, 2),  # [canonical: Duchy capital PV=4, PT=2; SW=2 per params/bg/geography.md ED-722 seed]
     'T13': ('Oastad',         1,  1,  2, 'Varfell',    2, 1),  # [canonical: PT=1]
-    'T14': ('Ehrenfeld',      3,  2,  3, 'Crown',      2, 3),  # [canonical: Fortress/strategic PV=3]
+    'T14': ('Ehrenfeld',      3,  3,  3, 'Crown',      2, 3),  # [canonical: Fortress/strategic PV=3; SW=3 per params/bg/geography.md ED-722 seed (Church benediction tradition)]
     'T15': ('Askeheim',       0,  0,  0, 'Uncontrolled', 0, 0), # [canonical: hard-fixed]
     'T17': ('Halvarshelm',    1,  2,  4, 'Hafenmark',  2, 3),
 }
@@ -97,7 +97,12 @@ class Territory:
     id: str
     name: str
     pv: int
-    sw: int
+    sw: int                     # Spiritual Weight; ED-722 (2026-04-20): now dynamic.
+                                # SW = min(5, Σ building_tier per settlement) where None=0/Chapel=1/Church=2/Cathedral=3.
+                                # Initialized from params/bg/geography.md SW seed table.
+                                # Engine v3 does not model per-settlement infra: sw is a territory-level aggregate
+                                # that should be updated when church_building changes (no destroy events in B3/B4).
+                                # See settlement_layer_v30 §1.6a for per-settlement seed assignments.
     pr: int
     controller: str
     accord: int
@@ -105,7 +110,7 @@ class Territory:
     fort: int = 0
     garrison: bool = False
     # Church infrastructure per settlement_layer/campaign_architecture
-    church_building: int = 0   # 0=none, 1=chapel, 2=church, 3=cathedral
+    church_building: int = 0   # 0=none, 1=chapel, 2=church, 3=cathedral (single highest-tier; legacy field)
     templar: bool = False
     inquisitor: bool = False
     church_governor: bool = False
