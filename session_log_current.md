@@ -1,23 +1,26 @@
-session_id: 2026-04-19-resolve-all
+session_id: 2026-04-19-approve-all-and-simready
 session_close: 2026-04-19
 phase: 0
 status: complete
-last_stage: All deliverable items resolved — ED-717 fully closed, ED-632/633 PROVISIONAL specs, ED-721 CI cap decision formalized (default Option A)
+last_stage: Approvals landed (ED-632/633/721 canonized); canonical_sources.yaml systems: block populated; full campaign simulation readiness report published
 next_action:
-  skill: Jordan approvals + remaining P2 ledger items
+  skill: Write automated full-campaign Python simulation harness
   description: >
-    Three items await Jordan sign-off: (1) approve or amend the PROVISIONAL
-    Shadow Renown spec (faction_politics_v30 §2.2b.i); (2) approve or amend
-    the PROVISIONAL Deniability Debt spec (faction_politics_v30 §2.2b.ii);
-    (3) decide ED-721 — CI cap vs Piety Yield at T9 — Option A (default,
-    applied), B (T9 bypasses cap), or C (half-contribution). Remaining
-    open P2 items in editorial_ledger.yaml (~40 entries) can be worked
-    per priority at Jordan's direction.
+    Design (§5 of tests/sim/campaign_simulation_readiness_2026-04-19.md)
+    is complete with 17/17 full_stack systems canonically mapped and zero
+    P1 blockers. Remaining work is engineering: (1) valoria_full_campaign_sim.py
+    orchestrator covering the seasonal loop, all 17 systems, and scale
+    transitions; (2) /home/claude/sim_verification_ledger.json mapping
+    every mechanical constant to canonical source (per sim_gate); (3) test
+    corpus of deterministic seeds for variant scenarios (RM-led, Church-
+    dominant, Löwenritter split, Varfell conquest, Thread revelation).
+    Estimated scope: 2-4 focused sessions. Not blocked by any design gap.
   blockers: []
 blockers: []
 commits:
-  - 38ab83a0: ED-717 Löwenritter + RM arms — Substrate-Posture subsections (T-15b §8.9, T-15c §8.8); ED-717 fully closed
-  - 4271b084: ED-632 Shadow Renown + ED-633 Deniability Debt — PROVISIONAL mechanical specs in faction_politics_v30 §2.2b
-  - 8d911ef5: ED-721 — CI cap vs Piety Yield at T9 formalized (Jordan decision pending; default Option A applied)
-  - 39d7f85e: Regenerate indexes for 3 docs
+  - 13c646fb: Canonize ED-632/633 (Shadow Renown + Deniability Debt) + ED-721 Option A (CI cap uniform at T9)
+  - 393e76e3: Populate canonical_sources.yaml systems block (17 full_stack + 6 supporting)
+  - ffc00895: Full campaign simulation readiness report published (tests/sim/campaign_simulation_readiness_2026-04-19.md)
 P1-BLOCKER count: 0
+design_complete: true
+sim_harness_complete: false
