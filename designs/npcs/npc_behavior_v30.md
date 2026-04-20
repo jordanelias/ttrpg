@@ -139,7 +139,7 @@ Every named NPC holds three interconnected attributes.
 | Primary Conviction | Order | "Valoria endures, whatever the cost." Order in service of the nation's survival — not order for its own sake. |
 | Secondary Conviction | Autonomy | If Order fails (the Crown she serves proves unworthy, the system is irretrievably broken), Ehrenwall falls back on martial self-determination. The Löwenritter act because someone must. |
 | Ethical Framework | Martial Honour (Löwenritter) | Aligned: −1 Ob on orders protecting Valorian sovereignty. Contradictory: +2 Ob advancing personal/factional gain at Valoria's expense. |
-| Primary Resonant Style | Consequence | Show her that her actions are producing the instability she exists to prevent. The Coup Counter mechanism IS her consequence vulnerability: she is keeping count of the Crown's failures. Turn the count on her own decisions. |
+| Primary Resonant Style | Consequence | Show her that her actions are producing the instability she exists to prevent. The Löwenritter Autonomy track IS her consequence vulnerability: she is keeping count of the Crown's failures through Autonomy advancement (Loyal → Restless → Autonomous → Split). Turn that count on her own decisions. |
 | Secondary Resonant Style | Solidarity | Ehrenwall is a soldier. She has comrades. If a Knot-connected PC or NPC makes a personal appeal grounded in shared service, shared sacrifice, or military bonds, it reaches her where strategic argument cannot. |
 | Thread Sensitivity | 0 (military career, no practitioner exposure — ED-392 resolved) |
 | Certainty | 4 (Faithful — conventional piety, martial background. Consistent with Order/Autonomy Conviction — ED-393 resolved) |
@@ -180,7 +180,7 @@ Every named NPC holds three interconnected attributes.
 | Secondary Conviction | Autonomy | Less idealistic than Vossen. If Equity fails, Hann defaults to survival — his own and the movement's operational capacity. |
 | Ethical Framework | Rawlsian Social Contract (Restoration) | As Vossen. |
 | Primary Resonant Style | Consequence | Hann is a doer. Show him that his operations are producing bad outcomes. Logistics-focused minds respond to demonstrated operational failure. |
-| Secondary Resonant Style | Evidence | If Consequence fails, present evidence of structural problems in his network — compromised cells, Niflhel infiltration, Church surveillance he has missed. His operational pride is the access point. |
+| Secondary Resonant Style | Evidence | If Consequence fails, present evidence of structural problems in his network — compromised cells, intelligence broker infiltration, Church surveillance he has missed. His operational pride is the access point. |
 | Thread Sensitivity | 0 | Non-practitioner. Lower Charisma than Vossen, higher Circles in logistics and street-level networks. |
 | Certainty | 3 (Questioning) | Less committed than Vossen to Thread cosmology; more committed to practical liberation. |
 
@@ -363,9 +363,9 @@ A character with TS 0–9 sees only public health data. No Thread-relevant infor
 |------|------|------------|-----|-----------|-------|
 | Royal Marshal | Wilhelm Voss | Order | Authority | 4 | Distrusts Löwenritter. Disposition vs Southern Einhir: −1. |
 | Lord Treasurer | Annalie Reichard | Precedent | Evidence | 5 | Distant Feldhaus cousin. Disposition toward Baralta: +1. |
-| Spymaster | Kolbrun Thale | Autonomy | Consequence | 3 | Rumored Southern Einhir. Only inner-circle Niflhel contact. |
+| Spymaster | Kolbrun Thale | Autonomy | Consequence | 3 | Rumored Southern Einhir. Only inner-circle contact with settlement-level intelligence brokers. |
 | Archbishop's Representative | Father Gustav Linder | Faith | Authority | 5 | Himlensendt's agent. Disposition vs Thread practitioners: −2. |
-| Royal Guard Captain / LR Liaison | Theodor Kreutz | Order | Authority | 4 | Pre-designated allegiance to Almud personally. Coup Counter linked to his removal. |
+| Royal Guard Captain / LR Liaison | Theodor Kreutz | Order | Authority | 4 | Pre-designated allegiance to Almud personally. Löwenritter Autonomy advancement linked to his removal. |
 
 ### §2.16 Hafenmark Inner Council (ED-635, ED-636, approved 2026-04-17)
 
@@ -520,7 +520,7 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 
 ### §5.2 Named NPC Arc Profiles
 
-*Arc expansion v1 (ED-591-609, approved 2026-04-17): Full A/B/C arc sets for all named NPCs and sub-faction NPCs are specified in `designs/systems/arc_expansion_v1_2026-04-16.md`. That document is the canonical source for: Cardinal Officers (Stark/Voss/Vorn/Kald), Ehrenwall, Torsvald/Riskbreakers, Vossen/Hann, Orm (Second Warden), Niflhel operatives (Quartermaster/The Quiet One), Almud Arc C (3-trajectory), Vaynard Arc A/B full, environmental arc conditioners, cross-NPC conditioners, obligation conditioners, and 11 Zoom In triggers. The profiles below are the abbreviated canonical summaries; consult arc_expansion_v1 for full arc map detail.*
+*Arc expansion v1 (ED-591-609, approved 2026-04-17): Full A/B/C arc sets for all named NPCs and sub-faction NPCs are specified in `designs/systems/arc_expansion_v1_2026-04-16.md`. That document is the canonical source for: Cardinal Officers (Stark/Voss/Vorn/Kald), Ehrenwall, Torsvald/Riskbreakers, Vossen/Hann, Orm (Second Warden), former Niflhel operatives — Quartermaster/The Quiet One, now independent settlement-anchored actors per Niflhel dissolution (see arc_expansion post-Session-B banner), Almud Arc C (3-trajectory), Vaynard Arc A/B full, environmental arc conditioners, cross-NPC conditioners, obligation conditioners, and 11 Zoom In triggers. The profiles below are the abbreviated canonical summaries; consult arc_expansion_v1 for full arc map detail.*
 
 ### §5.2 Named NPC Arc Profiles
 
@@ -533,7 +533,7 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 - Branch condition: Almud's Certainty reaches 1 or 0 AND Löwenritter Autonomy = Loyal.
 - Risk: TC acceleration (Church responds to Crown heresy). Löwenritter Autonomy may advance toward Restless if reforms perceived as weakness.
 
-> **Timing window clarification (ED-672):** Arc A requires Certainty ≤ 1 AND Löwenritter Autonomy = Loyal simultaneously. In standard play, Almud's Certainty declines through player-initiated Evidence/Consequence Resonant Style engagements (typically 1 Certainty per 2–3 seasons of sustained effort). Coup Counter advances from Crown instability triggers (officer loss, Crown Stability ≤ 2, Ehrenwall's assessment). The window is intentionally narrow — Arc A (reform) is the hardest arc to achieve because it requires the player to destabilize Almud's worldview while simultaneously keeping the Crown stable enough that the Löwenritter do not intervene. If the window closes (Counter reaches 2 while Certainty is still ≥ 2), Arc A becomes permanently inaccessible and Almud defaults to Arc B or C. This is working as designed — reform from within is supposed to be the most demanding path.
+> **Timing window clarification (ED-672, updated post-Session-B — Coup Counter → Löwenritter Autonomy):** Arc A requires Certainty ≤ 1 AND Löwenritter Autonomy = Loyal simultaneously. In standard play, Almud's Certainty declines through player-initiated Evidence/Consequence Resonant Style engagements (typically 1 Certainty per 2–3 seasons of sustained effort). Löwenritter Autonomy advances from Crown instability triggers (officer loss, Crown Stability ≤ 2, Ehrenwall's assessment) through the graduated Loyal → Restless → Autonomous → Split stages. The window is intentionally narrow — Arc A (reform) is the hardest arc to achieve because it requires the player to destabilize Almud's worldview while simultaneously keeping the Crown stable enough that the Löwenritter do not advance past Loyal. If the window closes (Autonomy advances to Restless or beyond while Certainty is still ≥ 2), Arc A becomes permanently inaccessible and Almud defaults to Arc B or C. This is working as designed — reform from within is supposed to be the most demanding path.
 
 
 **Arc B: The Fortress**
@@ -569,7 +569,7 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 
 **Arc B: The Pragmatist**
 - Branch condition: Church seizes Hafenmark territory via TC AND Baralta's Sovereign Authority Doctrine fails (Failure result).
-- Behavior: Baralta becomes willing to take extralegal action. Alliance with Crown, Restoration, or even Niflhel becomes possible. Leadership Deviation Ob still 1 (she IS the institution — the institution follows her, not the other way around).
+- Behavior: Baralta becomes willing to take extralegal action. Alliance with Crown, Restoration, or covert alignment with intelligence brokers / black markets becomes possible. Leadership Deviation Ob still 1 (she IS the institution — the institution follows her, not the other way around).
 
 **Arc C: Excommunication**
 - Branch condition: Church Excommunication succeeds against Baralta. TC +4 immediate. Hafenmark Mandate crisis.
@@ -758,7 +758,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | Priority | Condition | Action |
 |---|---|---|
 | 1 | Stability ≤ 2 | Military Consolidation (internal). |
-| 2 | Autonomy = Autonomous (one stage from Split): evaluate whether the triggering condition is imminent. If imminent: prepare (pre-position Legionary in T14 Ehrenfeld). If not: Military Consolidation. | Coup readiness assessment |
+| 2 | Autonomy = Autonomous (one stage from Split): evaluate whether the triggering condition is imminent. If imminent: prepare (pre-position Legionary in T14 Ehrenfeld). If not: Military Consolidation. | Split readiness assessment |
 | 3 | Military action protecting Valorian sovereignty available (border defense, Altonian resistance): Legionary deployment to border territory. −1 Ob (Martial Honour alignment). | Sovereignty defense |
 | 4 | If bordering faction Military exceeds Löwenritter Military: Military Consolidation (PP-238 guidance). | Standard reactive maintenance |
 | 5 | Crown Mandate < 3 or Torben Loyalty < 3: Riskbreaker activation against faction most threatening Crown. | Crown-protective covert action |
@@ -788,7 +788,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | Priority | Condition | Action |
 |---|---|---|
 | 1 | Gap or Shifting Object detected in any territory | Emergency Mend at Gap site. Wardens deploy to location. |
-| 2 | Thread exploitation site disturbance detected (Thread Tension source traced to Southernmost harvesting) | Investigate source. Wardens intercept Niflhel operatives in Southernmost territory. |
+| 2 | Thread exploitation site disturbance detected (Thread Tension source traced to Southernmost harvesting) | Investigate source. Wardens intercept independent harvesters and intelligence brokers active in Southernmost territory. |
 | 3 | RS ≤ 40 | Peninsula-wide Weaving. RS +1 per Warden deployment (max +2/season). |
 | 4 | Work alongside any faction performing Thread restoration (Community Organizing, Mending, RS-positive actions) | Cooperation: +1D to allied Thread operations in Southernmost-adjacent territories (Warden Cooperation Track ≥ 1). |
 | 5 | Assess any new practitioner who enters Southernmost territory | Assessment interview. TS ≤ 20: dismissed. TS 21–39: acknowledged. TS 40+: useful. |
@@ -828,7 +828,7 @@ An NPC generates a Demand entry when ALL of the following hold:
 | Löwenritter | Ehrenwall | Request for military cooperation, sovereignty defense, border patrol | Military conscription, loyalty challenge, operational demand |
 | RM | Vossen, Hann | Request for community support, resource sharing, practitioner protection | Solidarity demand, community obligation |
 | Guilds | Council | Trade proposal, arbitration request, economic cooperation | Trade embargo threat, debt collection, guild law enforcement |
-| Niflhel | (arms) | Covert offer, intelligence exchange, service proposal | Threat, blackmail, exposure warning |
+| Intelligence Brokers *(settlement NPCs, post-Niflhel dissolution)* | per settlement | Covert offer, intelligence exchange, service proposal | Threat, blackmail, exposure warning |
 | Wardens | Edeyja | Thread assistance request, Southernmost expedition, Mending cooperation | Assessment demand, territorial boundary enforcement |
 
 #### §8.11.4 Outreach Scene Structure
