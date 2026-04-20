@@ -353,3 +353,7 @@ commit touches files flagged in canon/supersession_register.yaml.
 ## Full Campaign Simulation Readiness — 2026-04-19
 
 tests/sim/campaign_simulation_readiness_2026-04-19.md — reports that all 17 full_stack systems have canonical sources (populated in references/canonical_sources.yaml systems: block, commit 393e76e3). Zero P1 editorial blockers. Automated Python harness is unwritten; narrative sim corpus (sim_x_01-36+, sim_var_01-06, arc sims) covers all cross-system interactions. Not a sim output in the mechanical sense — a readiness assessment documenting design completeness.
+
+## Session 1 — valoria_full_campaign_sim.py — 2026-04-19
+
+tests/sim/valoria_full_campaign_sim.py — foundation: core engine (dice, degree), faction 6-stat model, clocks (RS/CI/IP/PI/Strain/Autonomy), seasonal loop with Accounting. 10-season peaceful smoke test PASS. 103-entry ledger, all constants cited. Session 2: DA layer. Session 3: NPCs + tests.
