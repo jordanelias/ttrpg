@@ -1,26 +1,23 @@
-session_id: 2026-04-19-approve-all-and-simready
+session_id: 2026-04-19-sim-session-1
 session_close: 2026-04-19
 phase: 0
-status: complete
-last_stage: Approvals landed (ED-632/633/721 canonized); canonical_sources.yaml systems: block populated; full campaign simulation readiness report published
+status: active
+last_stage: Sim Session 1 foundation committed (129f2f2b); checkpoint acc07c85 written at 75% context
 next_action:
-  skill: Write automated full-campaign Python simulation harness
+  skill: Resume from canon/session_checkpoint.md — execute Session 2 Middle Layer
   description: >
-    Design (§5 of tests/sim/campaign_simulation_readiness_2026-04-19.md)
-    is complete with 17/17 full_stack systems canonically mapped and zero
-    P1 blockers. Remaining work is engineering: (1) valoria_full_campaign_sim.py
-    orchestrator covering the seasonal loop, all 17 systems, and scale
-    transitions; (2) /home/claude/sim_verification_ledger.json mapping
-    every mechanical constant to canonical source (per sim_gate); (3) test
-    corpus of deterministic seeds for variant scenarios (RM-led, Church-
-    dominant, Löwenritter split, Varfell conquest, Thread revelation).
-    Estimated scope: 2-4 focused sessions. Not blocked by any design gap.
+    See canon/session_checkpoint.md for full Session 2 scope. Summary: add
+    territory model (T1-T15), Domain Action framework with 6+ canonical DAs,
+    Piety Yield/CI political pool, Peninsular Strain propagation, simplified
+    mass combat and contest, faction AI stub, then 40-season smoke test with
+    real DAs. All Session 1 ledger entries at /home/claude/sim_verification_ledger.json.
   blockers: []
 blockers: []
 commits:
-  - 13c646fb: Canonize ED-632/633 (Shadow Renown + Deniability Debt) + ED-721 Option A (CI cap uniform at T9)
-  - 393e76e3: Populate canonical_sources.yaml systems block (17 full_stack + 6 supporting)
-  - ffc00895: Full campaign simulation readiness report published (tests/sim/campaign_simulation_readiness_2026-04-19.md)
+  - 129f2f2b: Session 1 foundation — core engine + clocks + factions + seasonal loop (10-season smoke PASS)
+  - acc07c85: Checkpoint — Session 1 done, Session 2 pending
 P1-BLOCKER count: 0
 design_complete: true
-sim_harness_complete: false
+sim_harness_session_1_complete: true
+sim_harness_session_2_complete: false
+sim_harness_session_3_complete: false
