@@ -135,3 +135,17 @@ entries:
     status: resolved
     severity: P1
     source: PP-674
+
+  - id: ED-600
+    date: 2026-04-19
+    description: "Niflhel named operatives (Quartermaster, Quiet One) — dead. Session B Niflhel dissolution. STRUCK in arc_expansion_v30.md (bdf8a6a2)."
+    status: resolved
+    severity: P2
+    source: Session B dissolution (2026-04-18)
+
+  - id: ED-667
+    date: 2026-04-19
+    description: "Coup Counter readiness gap — binary trigger lacked intermediate posture. Resolved by Löwenritter graduated autonomy (4-stage Loyal/Restless/Autonomous/Split). See conflict_architecture_proposal.md, clock_registry_v30.md. Propagated Session B (c0be619, f6b6ae6) + 2026-04-19 session (148d0184..8ff353d3)."
+    status: resolved
+    severity: P2
+    source: Session B graduated autonomy (2026-04-18)
