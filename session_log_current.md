@@ -26,10 +26,17 @@ session_highlights:
   - Patch 7 backstory strike VERIFIED already complete per 7da338a; session_log open_item was stale. No residual Almud-father-assassination refs remain in character_histories_v30, worldbuilding_v30, or npc_character_analyses_v30 (only explicit STRUCK banners).
   - ED-667 open_item also stale: archived in editorial_ledger_archive_1001_1200.yaml:788 and closed by graduated autonomy in Session B.
 open_items:
-  - B6 Cathedral-construction acceleration test (requires engine_v4.0 foundational migration).
-  - Mass Seizure declaration probability vs cleanly-completing campaigns audit (9/10 B5-7 runs early-end via shared-loss conditions before reaching CI 100; either Seizure curve too shallow or shared-loss mechanics dominating).
-  - engine_v4 phased implementation per ED-724 (v4.0 high priority; v4.1–v4.4 deferred until specific stress tests require).
+  - Broader balance pass — Crown-conquest-vs-Church-CI timing (ED-726 flagged but deferred). Three candidate levers: Crown conquest dampening / Church CI acceleration / Altonian Conquest threshold loosening.
+  - engine_v4.1–v4.4 (per-settlement Mass Seizure, Capture sequence, Bishop appointment, black markets / intel brokers / Thread sites) — deferred until specific stress tests require.
 P1-BLOCKER count: 0
+session_highlights_2026_04_20_final:
+  - ED-726 RESOLVED (no canonical change, audit): Mass Seizure declaration curve is mechanically sound; Crown conquest timeline (S6–S20) dominates Church accumulate-speed before CI reaches declaration reliability (80+). Mass Seizure declared in only 4/20 runs. Deferred balance levers documented.
+  - ED-727 RESOLVED: engine_v4.0 foundational migration implemented at tests/sim_framework/engine_v4.py. 34 settlements populated from §1.6a seed table. Territory.sw is now a derived property. v3/v4 S1 parity verified. All 16 territory SWs match seed table.
+  - ED-728 RESOLVED: B6 Cathedral-construction acceleration test executed on engine_v4.0. Key finding: Church infrastructure investment has a **two-step payoff** — build (step 1) → destabilize controller's Mandate (step 2) → Prominence activates yield. Construction in non-Prominent territories is stored value, not immediate yield. SW cap at 5 verified. Rebuild fully restorative.
+commits_2026_04_20_final:
+  - e7e1681: ED-723/724/725 (AER wiring + engine_v4 proposal + B5 batch)
+  - e722dcc: engine_v4_per_settlement_proposal index
+  - (this commit): ED-726 audit + ED-727 engine_v4.0 + ED-728 B6 batch
 session_highlights_2026_04_20_late:
   - ED-721 RESOLVED (Jordan editorial permission): CI cap vs Piety Yield formula ambiguity. PT_TIER non-linear lookup (PT 5 → 1.0; PT 4 → 0.5; PT 3 → 0.25; PT 2 → 0.10; PT ≤ 1 → 0). T9 yields 1 CI/season floored — Assert remains relevant. Propagated to ci_political_v30 §1, params/bg/ci_seizure.md, params/bg/geography.md, engine_v3.py PT_TIER dict.
   - ED-722 RESOLVED (Jordan editorial permission, option B): Spiritual Weight unified with settlement Religious Building axis. SW(t) = min(5, Σ building_tier per settlement) where None=0/Chapel=1/Church=2/Cathedral=3. Geography SW table seeds starting state; runtime mutates via construction/destruction. Propagated to ci_political_v30 §1, params/bg/geography.md, settlement_layer_v30 §1.5+§1.6a (per-settlement seed table totaling 32 across all territories).

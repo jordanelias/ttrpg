@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 726
+# next_id: 729
 # Rebuilt 2026-04-19. Lost IDs: ED-670-672, ED-698-703.
 
 entries:
@@ -175,4 +175,28 @@ entries:
     status: resolved
     severity: P2
     source: ED-721/722/723_followup
-    resolution: "B5-1 baseline 3.70 CI/season; B5-2 sack T9 Cathedral → −1.15/season penalty (matches ED-722 prediction); B5-3 compound Cathedral+Templar loss → −2.15/season; B5-4 desacralization of non-Prominent territory has zero immediate effect (stored value); B5-5 recovery via E.A. fully reversible; B5-6 AER mechanic verified working; B5-7 time-to-Unification baseline S15 vs sacked-S5 S16 (modest campaign-scale impact due to other CI sources buffering). Findings document: tests/sim_framework/arc_test_b5_2026-04-20.md. Open: B6 Cathedral-construction acceleration test (requires engine_v4.0); Mass Seizure declaration probability vs cleanly-completing campaigns audit (9/10 runs early-end via shared-loss)."
+    resolution: "B5-1 baseline 3.70 CI/season; B5-2 sack T9 Cathedral → −1.15/season penalty (matches ED-722 prediction); B5-3 compound Cathedral+Templar loss → −2.15/season; B5-4 desacralization of non-Prominent territory has zero immediate effect (stored value); B5-5 recovery via E.A. fully reversible; B5-6 AER mechanic verified working; B5-7 time-to-Unification baseline S15 vs sacked-S5 S16 (modest campaign-scale impact due to other CI sources buffering). Findings document: tests/sim_framework/arc_test_b5_2026-04-20.md. Followed by ED-726/727/728 resolving remaining open items."
+
+  - id: ED-726
+    date: 2026-04-20
+    description: "Mass Seizure declaration audit — investigate why 9/10 B5-7 runs end before CI 100."
+    status: resolved
+    severity: P3
+    source: ED-725_open_item
+    resolution: "20-seed audit finds: Crown victory 11/20, Altonian Conquest 5/20, SHARED_LOSS 2/20, Hafenmark 1/20, timeout 1/20. Mass Seizure declared in only 4/20 runs. Mean end season S16.6, median CI at end = 31. **Finding: not a sim bug. Crown conquest timeline (S6–S20 resolutions) dominates Church accumulate-speed.** Mass Seizure declaration curve P=((CI−40)/60)^2.5 is mechanically sound — yields reliable declaration at CI 80+ (35%+ per season). The problem is CI rarely reaches 80 before Crown wins via peninsula control. Three balance levers noted (Crown conquest dampening / Church CI acceleration / Altonian Conquest threshold loosening) but DEFERRED to broader balance pass. Audit doc: tests/sim_framework/mass_seizure_declaration_audit_2026-04-20.md. No canonical change."
+
+  - id: ED-727
+    date: 2026-04-20
+    description: "engine_v4.0 foundational migration — implement per-settlement data model per ED-724 §4.1 v4.0 scope."
+    status: resolved
+    severity: P2
+    source: ED-724
+    resolution: "Implementation at tests/sim_framework/engine_v4.py. Settlement dataclass (id, name, territory_id, settlement_type, controller, religious_building, prosperity, defense, order). 34 settlements populated from settlement_layer_v30 §1.6a seed table. Territory.sw refactored as derived property: min(5, Σ religious_building_tier over t.settlement_ids). Helpers: sack_settlement_building(sid) / build_settlement_building(sid, target) operate at settlement scale; legacy territory-level sack_religious_building / build_religious_building now wrap settlement-scale ops. Backward-compat maintained — v3/v4 S1 CI delta identical (parity verified). All 16 territory SWs match geography seed table exactly. v4.1–v4.4 (per-settlement seizure, Capture sequence, Bishop appointment, settlement-derived phenomena) remain deferred per ED-724."
+
+  - id: ED-728
+    date: 2026-04-20
+    description: "B6 Cathedral-construction acceleration test — validate ED-722 dynamic SW at per-settlement scale via engine_v4.0."
+    status: resolved
+    severity: P2
+    source: ED-724/ED-725_open_item
+    resolution: "B6-1 baseline 3.70/season (v4 parity with v3 B5-1). B6-2 S-003 Cathedral upgrade in Crown-controlled T1 = +0.16/season (within noise — Church not Prominent, stored value only). B6-3 aggressive 3-territory Chapel expansion = +0.05/season (same: stored value). B6-4 SW cap at 5 verified (Σ=8 → 5). B6-5 rebuild after sack: fully restorative, no hysteresis. **Strategic finding: Church infrastructure investment has a two-step payoff — build (step 1) → destabilize controller's Mandate (step 2) → Prominence activates yield.** Confirms B5-4 finding that dynamic SW matters only in Prominent territories; amplifies it with construction-side evidence. Findings doc: tests/sim_framework/arc_test_b6_2026-04-20.md."
