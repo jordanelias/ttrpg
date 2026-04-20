@@ -29,11 +29,32 @@ Conflicts resolved:
 
 ---
 
-## §1 — SPIRITUAL WEIGHT: TERRITORY VALUES REPURPOSED
+## §1 — SPIRITUAL WEIGHT: DYNAMIC CHURCH INFRASTRUCTURE AGGREGATE
 
-The CI-contribution values that previously fed the 75 → seizure threshold are repurposed as **Spiritual Weight (SW)** per territory. SW is a fixed attribute on the territory card representing its ecclesiastical importance — cathedral density, historical presence of Church, popular piety tradition.
+**ED-722 (resolved 2026-04-20, Jordan editorial permission):** SW is no longer a fixed territory attribute. It is a runtime aggregate of Church religious infrastructure across the territory's settlements:
 
-SW is NOT the same as Piety Track (PT). PT is dynamic (changes through action). SW is fixed (set at game start). SW gates how much CI and political legitimacy can flow through a territory.
+```
+SW(t) = min(5, Σ over settlements s in t of building_tier(s.religious_building))
+```
+
+where `building_tier`: None = 0, Chapel = 1, Church = 2, Cathedral = 3 (per settlement_layer_v30 §1.5 Axis 1).
+
+Cap: 5 per territory (preserves the prior SW 0–5 range).
+Floor: 0.
+
+**Why dynamic:** The settlement layer (PP-666, settlement_layer_v30) made Church infrastructure a buildable, destroyable, capturable asset. A static SW double-counts what infrastructure already represents. Under ED-722, SW unifies into one mechanic: physical Church presence in territory settlements drives Piety Yield, political pool, and PT momentum proportionally to current — not historical — infrastructure.
+
+**Setup seed:** At game start, each territory T# is seeded with Church religious buildings such that the aggregate equals the SW value listed in the geography table below. Specific settlement-level assignment is per setup convention (e.g., T9 Himmelenger seeds a Cathedral in S-023 + a Church in S-025 to reach SW 5; T1 Valorsplatz seeds a Church in S-003 to reach SW 2). The per-settlement assignment is recorded in setup; the territory aggregate is what mechanics consume.
+
+**Runtime updates:**
+- **+1 to +3:** When Church installs a religious building via Ecclesiastical Appointment (Chapel +1, Church +2, Cathedral +3) in a settlement that previously had None.
+- **+1 (upgrade):** Chapel → Church or Church → Cathedral upgrades (Δ = +1 each step).
+- **−1 to −3:** When a Church religious building is destroyed (siege, Mass Battle sack of Church-held settlement, or successful RM/Crown desacralization Domain Action).
+- **Cap at 5** even if Σ exceeds it (excess infra adds qualitative benefits via settlement-layer effects but does not raise the territory-level SW).
+
+**Starting SW table (geography seed):**
+
+SW is NOT the same as Piety Track (PT). PT is dynamic (changes through Sermon / Pamphleteer / Community Weaving etc.). SW is now also dynamic but moves through *infrastructure* changes (build / destroy), not population sentiment.
 
 | T# | Territory | PV | Spiritual Weight |
 |---|---|---|---|
@@ -71,11 +92,12 @@ SW is NOT the same as Piety Track (PT). PT is dynamic (changes through action). 
    | 1 | — | 0 |
    | 0 | Restoration | 0 |
 
-   **Worked examples (canonical):**
-   - T9 (SW 5, PT 5): yield = 1.0 × (5/5) = 1.0 → floored to **1**
-   - T8 (SW 3, PT 3): yield = 0.25 × (3/5) = 0.15 → floored to **0**
-   - T14 (SW 3, PT 3 default): yield = 0.25 × (3/5) = 0.15 → floored to **0**
+   **Worked examples (canonical, using starting SW from the geography seed table):**
+   - T9 (SW 5 = 1 Cathedral + 1 Church, PT 5): yield = 1.0 × (5/5) = 1.0 → floored to **1**
+   - T8 (SW 3 = 1 Cathedral, PT 3): yield = 0.25 × (3/5) = 0.15 → floored to **0**
+   - T14 (SW 3 = 1 Cathedral, PT 3 default): yield = 0.25 × (3/5) = 0.15 → floored to **0**
    - T9 at PT 4 (after one Sermon loss): yield = 0.5 × 1.0 = 0.5 → floored to **0**
+   - T9 after Himmelenger Cathedral sacked (SW drops 5 → 2, PT 5): yield = 1.0 × (2/5) = 0.4 → floored to **0**. *Loss of cathedral collapses Church passive yield; rebuild via Ecclesiastical Appointment to restore.*
 
    Game-start total Piety Yield: ~**1 CI/season** from T9 only. Assert (+1), Conditional Passive (+1), Charity Advantage (+0–2), Templar Presence (+0–1) remain mechanically relevant — the +5 seasonal cap (PP-504) is not saturated by Piety Yield alone.
 

@@ -27,9 +27,11 @@ All faction starting positions reflect canonical geography. Old v04 map assignme
 
 ★ = faction capital.
 
-### Spiritual Weight (SW) — Territory Attribute (tc_political_redesign_v30 §1)
+### Spiritual Weight (SW) — Dynamic Church Infrastructure Aggregate (ci_political_v30 §1, ED-722 resolved 2026-04-20)
 
-SW is a fixed attribute per territory representing ecclesiastical importance. Pre-printed on territory cards. SW gates TC generation (Piety Yield weighting), Church political pool, and PT momentum.
+SW is no longer a fixed attribute. It is a runtime aggregate: SW(t) = min(5, Σ over settlements s in t of building_tier(s.religious_building)) where None=0, Chapel=1, Church=2, Cathedral=3 (settlement_layer_v30 §1.5 Axis 1). Cap 5, floor 0. Increments via Ecclesiastical Appointment / building upgrade; decrements via siege, Mass Battle sack of Church-held settlement, or successful desacralization.
+
+The table below is the **starting SW seed** for game setup — each territory begins with religious buildings whose tier sum equals the listed value.
 
 | T# | Territory | SW | Rationale |
 |----|-----------|-----|-----------|
@@ -56,9 +58,11 @@ SW is a fixed attribute per territory representing ecclesiastical importance. Pr
 
 
 
-### Spiritual Weight (SW) — Territory Attribute (tc_political_redesign_v30 §1)
+### Spiritual Weight (SW) — Dynamic Church Infrastructure Aggregate (ci_political_v30 §1, ED-722 resolved 2026-04-20)
 
-SW is a fixed attribute per territory representing ecclesiastical importance. Pre-printed on territory cards. SW gates TC generation (Piety Yield weighting), Church political pool, and PT momentum.
+SW is no longer a fixed attribute. It is a runtime aggregate: SW(t) = min(5, Σ over settlements s in t of building_tier(s.religious_building)) where None=0, Chapel=1, Church=2, Cathedral=3 (settlement_layer_v30 §1.5 Axis 1). Cap 5, floor 0. Increments via Ecclesiastical Appointment / building upgrade; decrements via siege, Mass Battle sack of Church-held settlement, or successful desacralization.
+
+The table below is the **starting SW seed** for game setup — each territory begins with religious buildings whose tier sum equals the listed value.
 
 | T# | Territory | SW | Rationale |
 |----|-----------|-----|-----------|

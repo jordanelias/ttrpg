@@ -108,6 +108,8 @@ Church presence in a settlement is NOT a linear tier progression. It is four ind
 
 **Axis 1 — Religious Building (mutually exclusive, one per settlement):** None / Chapel (+0.5 PT/season) / Church (+1 PT/season) / Cathedral (+2 PT/season, +0.5 PT to adjacent territories).
 
+**Building tier (ED-722 — Spiritual Weight aggregation):** None=0, Chapel=1, Church=2, Cathedral=3. Territory-level Spiritual Weight is the capped sum: `SW(t) = min(5, Σ over settlements s in t of building_tier(s.religious_building))`. SW feeds Piety Yield, Church political pool, and PT momentum (ci_political_v30 §1). Construction (Ecclesiastical Appointment) and destruction (siege, Mass Battle sack, desacralization) update SW dynamically. Starting seeds: params/bg/geography.md SW table.
+
 **Axis 2 — Templar Station (binary):** +1 CI/season in territory. Church can interrupt rival Domain Actions (+1 Ob, costs 1 CI).
 
 **Axis 3 — Inquisitor Base (binary):** Surveillance Zone: Thread practitioners make Concealment test each season. RM governance-building actions +1 Ob. RM cultural presence generates 1 Church Attention/season.

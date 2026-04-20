@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 722
+# next_id: 723
 # Rebuilt 2026-04-19. Lost IDs: ED-670-672, ED-698-703.
 
 entries:
@@ -144,3 +144,11 @@ entries:
     severity: P1
     source: tests/sim_framework/session_audit_2026-04-19.md
     resolution: "Editorial decision (Jordan permission, 2026-04-20): formalize PT_tier as non-linear lookup, matching the spec's worked examples. Canonical table now in ci_political_v30 §1: PT 5 → 1.0; PT 4 → 0.5; PT 3 → 0.25; PT 2 → 0.10; PT 1 → 0; PT 0 → 0. Game-start Piety Yield = 1 CI/season from T9; cap not saturated. Assert preserved as relevant Domain Action. Propagated to params/bg/ci_seizure.md, params/bg/geography.md, and engine_v3.py (PT_TIER dict). B3/B4 simulator outputs based on the literal-PT formula are now invalidated — flagged for re-run in next simulation session. arc_test_batch3.py + arc_test_batch4.py code unchanged (test scripts) — re-run will use corrected engine_v3."
+
+  - id: ED-722
+    date: 2026-04-20
+    description: "Spiritual Weight redundancy — settlement_layer_v30 §1.5 Religious Building Axis (Chapel/Church/Cathedral) duplicated SW's role as 'where Church matters structurally.' SW was a static parallel mechanic to dynamic settlement-level Church infrastructure introduced by PP-666. Identified by Jordan during ED-721 review."
+    status: resolved
+    severity: P2
+    source: jordan_review_during_ED-721
+    resolution: "Editorial decision (Jordan permission, 2026-04-20, option B from in-session proposal): SW unifies into a runtime aggregate of settlement-level Church religious infrastructure. SW(t) = min(5, Σ over settlements s in t of building_tier(s.religious_building)) where None=0, Chapel=1, Church=2, Cathedral=3. Cap 5, floor 0. Geography SW table now seeds the starting state — at game start, each territory is populated with religious buildings whose tier sum equals the listed SW value. Runtime updates: +1 to +3 on Ecclesiastical Appointment / building upgrade; −1 to −3 on siege / Mass Battle sack / desacralization. All three SW use cases (Piety Yield, Church political pool, PT momentum) now operate on dynamic SW — losing Himmelenger Cathedral collapses T9 Piety Yield from 1.0 to 0.4 (floored to 0). Propagated to ci_political_v30 §1, params/bg/geography.md, settlement_layer_v30 §1.5. engine_v3.py code unchanged — current code reads territory.sw, which is now expected to be runtime-mutable rather than fixed; Game state model will need to surface SW updates from settlement state changes (flagged for engine update in next sim session)."
