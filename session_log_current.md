@@ -4,14 +4,15 @@ phase: 0
 status: complete
 last_stage: Session B/C residual cleanup — ED-717 formal closure, factions_personal_v30 Niflhel strike, npc_behavior_v30 incidentals, assassination target Arc Maps (Almud/Torben/Lenneth)
 next_action:
-  skill: Index regeneration, then CI cap vs Piety Yield at T9 editorial gate
+  skill: Re-run B3/B4 simulations on corrected engine_v3
   description: >
-    All substantive Session B/C residuals resolved. Remaining: mechanical
-    index regeneration (`tools/doc_index_gen.py`) for files modified across
-    Sessions B/C and today's refresh-state branch. Then surface
-    CI cap vs Piety Yield at T9 to Jordan (editorial-gated design decision).
-  blockers:
-    - Jordan design decision still pending: CI cap vs Piety Yield at T9
+    All substantive Session B/C residuals resolved. CI cap vs Piety Yield blocker
+    resolved per ED-721 (Jordan editorial permission, 2026-04-20): formula
+    ambiguity in 'PT_tier × SW/5'. Canonical PT_tier table formalized
+    (PT 5 → 1.0; PT 4 → 0.5; PT 3 → 0.25; PT 2 → 0.10; PT ≤ 1 → 0).
+    engine_v3.py corrected. Next: re-run B3/B4 batches; previous results
+    (saturating cap from S1) are invalidated by formula correction.
+  blockers: []
 commits:
   - cce9147: ED-717 formal closure — status open → resolved in active ledger (resolution note cites T-15a/b/c additions)
   - 040ac2d: factions_personal_v30 Niflhel dissolution — §8.7 struck, Starting Values row removed, Partial sheets line updated, Royal Decree example, Axis 7, Baralta Leadership Deviation, TK channel, Revolution deviation comparison
@@ -25,6 +26,6 @@ session_highlights:
   - Patch 7 backstory strike VERIFIED already complete per 7da338a; session_log open_item was stale. No residual Almud-father-assassination refs remain in character_histories_v30, worldbuilding_v30, or npc_character_analyses_v30 (only explicit STRUCK banners).
   - ED-667 open_item also stale: archived in editorial_ledger_archive_1001_1200.yaml:788 and closed by graduated autonomy in Session B.
 open_items:
-  - Index regeneration (`tools/doc_index_gen.py`) for files modified in Sessions B/C and today: factions_personal_v30, npc_behavior_v30, editorial_ledger, plus Session B/C files.
-  - CI cap vs Piety Yield at T9 — Jordan design decision pending.
-P1-BLOCKER count: 2
+  - B3/B4 re-run on corrected engine_v3 (PT_tier table). Prior saturated-cap results invalidated by ED-721 formula correction.
+  - Audit pass on test docs that referenced the +5/season Piety Yield finding (sim_batch_3_2026-04-16.md, sim_stress_batch_2_2026-04-16.md, arc_test_batch3_results.md, arc_test_batch4_results.md, sim_coverage_index.md) — flag invalidated.
+P1-BLOCKER count: 0

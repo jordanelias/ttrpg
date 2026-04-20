@@ -52,7 +52,7 @@ SW is a fixed attribute per territory representing ecclesiastical importance. Pr
 | T17 | Halvarshelm | 2 | Northern mines |
 | **Total** | | **32** | |
 
-**SW use cases:** (1) Piety Yield: TC += Σ(PT tier × SW/5) per prominent territory. (2) Church political pool: += Σ(SW of prominent territories)/5. (3) PT momentum: +1D to PT change actions in SW ≥ 3 territories.
+**SW use cases:** (1) Piety Yield: TC += Σ(PT_tier × SW/5) per Prominent territory, floored. PT_tier is non-linear (PT 5 → 1.0; PT 4 → 0.5; PT 3 → 0.25; PT 2 → 0.10; PT 1 → 0; PT 0 → 0) — see ci_political_v30 §1 canonical table (ED-721). (2) Church political pool: += Σ(SW of prominent territories)/5. (3) PT momentum: +1D to PT change actions in SW ≥ 3 territories.
 
 
 
@@ -81,7 +81,7 @@ SW is a fixed attribute per territory representing ecclesiastical importance. Pr
 | T17 | Halvarshelm | 2 | Northern mines |
 | **Total** | | **32** | |
 
-**SW use cases:** (1) Piety Yield: TC += Σ(PT tier × SW/5) per prominent territory. (2) Church political pool: += Σ(SW of prominent territories)/5. (3) PT momentum: +1D to PT change actions in SW ≥ 3 territories.
+**SW use cases:** (1) Piety Yield: TC += Σ(PT_tier × SW/5) per Prominent territory, floored. PT_tier is non-linear (PT 5 → 1.0; PT 4 → 0.5; PT 3 → 0.25; PT 2 → 0.10; PT 1 → 0; PT 0 → 0) — see ci_political_v30 §1 canonical table (ED-721). (2) Church political pool: += Σ(SW of prominent territories)/5. (3) PT momentum: +1D to PT change actions in SW ≥ 3 territories.
 
 
 

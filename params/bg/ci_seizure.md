@@ -3,7 +3,7 @@
 
 Seasonal CI at Accounting (execute in order, per military_layer_v30 §3):
 1. **Conditional Passive (§3.2):** CI +1 only if Church Mandate > controlling faction Mandate in ≥ 2 territories.
-2. **Piety Yield (§3.3):** CI += Σ(PT tier × SW/5) per prominent territory, floored. SW = Spiritual Weight per territory (tc_political_redesign_v30 §1).
+2. **Piety Yield (§3.3):** CI += Σ(PT_tier × SW/5) per Prominent territory, floored. SW = Spiritual Weight per territory (tc_political_redesign_v30 §1). PT_tier is a non-linear factor (NOT literal PT): PT 5 → 1.0; PT 4 → 0.5; PT 3 → 0.25; PT 2 → 0.10; PT 1 → 0; PT 0 → 0. Canonical table: ci_political_v30 §1 (ED-721 resolved 2026-04-20). T9 yield at game start (SW 5, PT 5) = 1.0 × 1.0 = 1 CI/season floored. The +5 seasonal cap is not saturated by Piety Yield alone — Assert remains relevant.
 3. **Charity Advantage (§3.4):** Church Wealth spent on charity → CI +1 per 2 Wealth, cap 2/season.
 4. **Templar Presence (§3.5):** +1 CI per territory with Church military unit AND Church Prominence.
 5. **Assert (§3.6):** Optional Church action. Influence vs Ob 2. Success: CI +1. Failure: Stability −1.

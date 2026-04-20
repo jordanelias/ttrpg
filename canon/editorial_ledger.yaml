@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active
-# next_id: 709
+# next_id: 722
 # Rebuilt 2026-04-19. Lost IDs: ED-670-672, ED-698-703.
 
 entries:
@@ -136,3 +136,11 @@ entries:
     status: resolved
     severity: P1
     source: PP-674
+
+  - id: ED-721
+    date: 2026-04-20
+    description: "CI cap vs Piety Yield at T9 — formula ambiguity in 'PT tier × SW/5'. Spec example (ci_political_v30 §1, lines 62–64) treated PT as a non-linear tier factor (T9 PT 5 → 1.0; T8 PT 3 → 0.25), yielding ~1 CI/season at game start — Assert remains relevant. B3/B4 simulators (engine_v3 line 232, arc_test_batch4 line 109) interpreted PT_tier as the literal PT value, computing 5×5/5 = 5/season — saturating the +5 cap from S1 and rendering Assert mechanically irrelevant. Audit (tests/sim_framework/session_audit_2026-04-19.md gap #6) flagged for Jordan design decision."
+    status: resolved
+    severity: P1
+    source: tests/sim_framework/session_audit_2026-04-19.md
+    resolution: "Editorial decision (Jordan permission, 2026-04-20): formalize PT_tier as non-linear lookup, matching the spec's worked examples. Canonical table now in ci_political_v30 §1: PT 5 → 1.0; PT 4 → 0.5; PT 3 → 0.25; PT 2 → 0.10; PT 1 → 0; PT 0 → 0. Game-start Piety Yield = 1 CI/season from T9; cap not saturated. Assert preserved as relevant Domain Action. Propagated to params/bg/ci_seizure.md, params/bg/geography.md, and engine_v3.py (PT_TIER dict). B3/B4 simulator outputs based on the literal-PT formula are now invalidated — flagged for re-run in next simulation session. arc_test_batch3.py + arc_test_batch4.py code unchanged (test scripts) — re-run will use corrected engine_v3."

@@ -58,10 +58,28 @@ SW is NOT the same as Piety Track (PT). PT is dynamic (changes through action). 
 
 **SW use cases:**
 
-1. **Piety Yield weighting:** CI from Piety Yield = Σ(PT tier × SW factor) per prominent territory, where SW factor = SW/5.
-   - T9 (SW 5, PT 5): yield = 1.0 × (5/5) = 1.0
-   - T8 (SW 3, PT 3): yield = 0.25 × (3/5) = 0.15 (negligible)
-   - T14 (SW 3, PT 3 default): yield = 0.25 × (3/5) = 0.15
+1. **Piety Yield weighting:** CI from Piety Yield = Σ(PT_tier × SW_factor) per Prominent territory, floored. SW_factor = SW/5. PT_tier is non-linear per the table below — NOT the literal PT value.
+
+   **PT tier table (canonical, ED-721 resolved 2026-04-20):**
+
+   | PT | Pole | PT_tier |
+   |----|------|---------|
+   | 5 | Piety | 1.0 |
+   | 4 | — | 0.5 |
+   | 3 | — | 0.25 |
+   | 2 | — | 0.10 |
+   | 1 | — | 0 |
+   | 0 | Restoration | 0 |
+
+   **Worked examples (canonical):**
+   - T9 (SW 5, PT 5): yield = 1.0 × (5/5) = 1.0 → floored to **1**
+   - T8 (SW 3, PT 3): yield = 0.25 × (3/5) = 0.15 → floored to **0**
+   - T14 (SW 3, PT 3 default): yield = 0.25 × (3/5) = 0.15 → floored to **0**
+   - T9 at PT 4 (after one Sermon loss): yield = 0.5 × 1.0 = 0.5 → floored to **0**
+
+   Game-start total Piety Yield: ~**1 CI/season** from T9 only. Assert (+1), Conditional Passive (+1), Charity Advantage (+0–2), Templar Presence (+0–1) remain mechanically relevant — the +5 seasonal cap (PP-504) is not saturated by Piety Yield alone.
+
+   **Why non-linear:** Piety Yield models structural Church advantage in Piety-pole cathedral cities, not linear accumulation. PT 5 is qualitatively different from PT 3 — at PT 5, the population's institutional alignment with Church is unconditional; at PT 3, alignment is contested and yields nothing passive. Geometric collapse below PT 3 reflects that Church's CI generation requires either a Piety stronghold (T9) or active investment (Assert / Charity / Templar). It cannot drift to the cap from broad mid-PT presence.
 
 2. **Church political pool (§3):** Church's parliamentary/negotiation pool includes Σ(SW of Prominent territories) / 5 bonus dice.
 

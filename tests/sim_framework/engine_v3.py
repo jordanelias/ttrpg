@@ -222,14 +222,16 @@ def generate_ci(gs: GameState) -> int:
     if prominent_count >= 2:
         delta += 1
 
-    # Step 2: Piety Yield — TC += Σ(PT tier × SW/5) per prominent territory, floored
-    # [canonical: params/bg/tc_seizure.md §3.3]
+    # Step 2: Piety Yield — TC += Σ(PT_tier × SW/5) per prominent territory, floored
+    # [canonical: ci_political_v30 §1, ED-721 resolved 2026-04-20]
+    # PT_tier is non-linear (NOT literal PT): see canonical table.
+    PT_TIER = {5: 1.0, 4: 0.5, 3: 0.25, 2: 0.10, 1: 0.0, 0: 0.0}
     piety_yield = 0.0
     for tid, t in gs.territories.items():
         ctrl_faction = gs.factions.get(t.controller)
         is_prominent = (t.controller == 'Church') or (ctrl_faction and church.mandate > ctrl_faction.mandate)
-        if is_prominent and t.pt >= 4:
-            piety_yield += t.pt * t.sw / 5.0
+        if is_prominent:
+            piety_yield += PT_TIER.get(t.pt, 0.0) * (t.sw / 5.0)
     delta += math.floor(piety_yield)
 
     # Step 3: Charity Advantage — Church Wealth spent → CI +1 per 2 Wealth, cap 2/season

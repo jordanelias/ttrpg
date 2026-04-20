@@ -70,8 +70,8 @@ The simplified model has P(hit per die) = 0.4. The full model has E(net per die)
 ### Open — design review required:
 | # | Gap | Source |
 |---|-----|--------|
-| 6 | CI seasonal cap vs Piety Yield (T9 SW5 PT5 = +5/season, cap saturated from S1) | B3, revised B4 |
-| 7 | Assert irrelevant once Piety Yield saturates cap | B3, revised B4 |
+| 6 | ~~CI seasonal cap vs Piety Yield (T9 SW5 PT5 = +5/season, cap saturated from S1)~~ — **RESOLVED ED-721 (2026-04-20)**: formula ambiguity. PT_tier is non-linear (PT 5 → 1.0; PT 4 → 0.5; PT 3 → 0.25; PT 2 → 0.10; PT ≤ 1 → 0). T9 yields 1 CI/season floored. Cap not saturated. B3/B4 results based on literal-PT formula are invalidated — flagged for re-run on corrected engine_v3. | B3, revised B4 |
+| 7 | ~~Assert irrelevant once Piety Yield saturates cap~~ — **RESOLVED ED-721**: Assert remains mechanically relevant under canonical PT_tier table. | B3, revised B4 |
 | 8 | T2 Kronmark garrison not in Crown priority tree (Route A too easy) | B3 |
 | 9 | AER generation mechanic not found in any read doc | B3 |
 | 10 | Warden emergence mechanics post-RS40 unspecified | B3 |
