@@ -5,6 +5,8 @@
 **Systems:** PP-431-COR fix, PI track, RDT/TD cascade, Accord revolt, Löwenritter Coup  
 **Canonical sources:** `params/bg/parliament.md`, `params/bg/tracks.md`, `params/bg/core.md`, `params/bg/phases.md`, `params/bg/ci_seizure.md`
 
+> **[INVALIDATED — ED-721 + ED-722, 2026-04-20]** All Piety-Yield-dependent findings in this batch (Sections B4-1, B4-3, B4-4) are based on the literal-PT interpretation of the formula (`PT × SW / 5`), which the simulator implemented but which conflicts with the canonical worked example. ED-721 formalized PT_tier as non-linear (PT 5 → 1.0; PT 4 → 0.5; …), reducing T9 yield from +5/season to +1/season floored. ED-722 made SW dynamic (loss of Cathedral collapses SW). Re-run required on corrected engine_v3. Findings on PI track dynamics (B4-2) and Coup-PI interaction (B4-3) that do not depend on Piety Yield magnitude remain provisionally valid. Coup-Church alliance interaction (B4-3 paragraph 2) needs full re-evaluation since Church doesn't reach CI 100 via Piety Yield alone under corrected formula.
+
 ---
 
 ## B4-1: PP-431-COR Fix — Challenge Replaces Structural Suppression

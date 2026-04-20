@@ -26,7 +26,7 @@
 | B1 | RM Inf = 55 | ❌ Sim bug | B2: RM Inf inflated on RM→RM no-ops |
 | B1 | PV totals deterministic across seeds | ❌ Sim bug masked variance | B2: corrected dice produce variance |
 | B3 | T9 PT buildup from low values | ❌ Wrong starting PT | B4: T9 PT=5 canonical (core.md) |
-| B3 | Assert drives CI growth | ❌ Wrong — Piety Yield dominates | B4: Assert irrelevant at T9 PT=5 |
+| B3 | Assert drives CI growth | ❌ Wrong — Piety Yield dominates | B4: Assert irrelevant at T9 PT=5 — but **B4 finding itself INVALIDATED by ED-721**: PT_tier non-linear; T9 yield = 1 CI/season floored, not 5. Assert IS relevant. Re-run pending. |
 | B3 | PP-431-COR not modeled | ❌ Wrong suppression model | B4-1: corrected (Challenge replaces structural) |
 | Ignition | Niflhel Provocation mechanic | ❌ Niflhel dissolved | Conflict architecture: settlement phenomena |
 | Ignition | Tensions Deck 8 cards, draw 2, game-start fire | ❌ Wrong timing + scope | Conflict architecture: 6 external cards, draw 2, S8+ fuse |
@@ -43,9 +43,9 @@
 
 ### Design decisions required from Jordan (4):
 4. Splinter Influence split — 60/40 same as Mandate, or unsplit? (B2)
-5. CI seasonal cap vs Piety Yield at T9 — reduce SW from 5, or raise cap from ±5? (B3/B4)
+5. ~~CI seasonal cap vs Piety Yield at T9 — reduce SW from 5, or raise cap from ±5?~~ — **RESOLVED ED-721 (2026-04-20)**: formula ambiguity. PT_tier formalized as non-linear lookup (PT 5 → 1.0; …); T9 yields 1 CI/season floored. Cap not saturated. **Also ED-722**: SW unified as dynamic infrastructure aggregate.
 6. T2 Kronmark garrison — explicit Crown priority tree entry, or accept T2 as exposed? (B3)
-7. Almud's father assassination — strike as backstory, make live via Royal Crisis card? (ignition)
+7. ~~Almud's father assassination — strike as backstory, make live via Royal Crisis card?~~ — **RESOLVED**: struck per Patch 7 (commit 7da338a); royal_assassination.md fuse spec + npc_behavior_v30 §5.2 Arc D maps for Almud/Torben/Lenneth (commit f63c0b4).
 
 ### Systems not yet specified (7):
 8. AER generation mechanic — not in any read doc (B3)

@@ -1,11 +1,14 @@
-<!-- [PARTIALLY SUPERSEDED 2026-04-19] -->
-<!-- B3-1: T9 starts at PT=5 (canonical core.md), not PT=1 as assumed. Piety Yield hits -->
-<!-- the +5/season cap from S1. Assert is irrelevant immediately, not after PT buildup. -->
-<!-- Seizure timing (S10-15) is directionally correct but setup narrative is wrong. -->
+<!-- [PARTIALLY SUPERSEDED 2026-04-19; FURTHER INVALIDATED 2026-04-20 — ED-721 + ED-722] -->
+<!-- B3-1 (and the +5/season cap-saturation premise): based on literal-PT formula. -->
+<!-- ED-721 formalized PT_tier as non-linear: PT 5 → 1.0; PT 4 → 0.5; PT 3 → 0.25. -->
+<!-- T9 yield = 1 CI/season floored, NOT +5. Cap is not saturated by Piety Yield alone. -->
+<!-- Assert REMAINS RELEVANT from S1. B3-1 seizure timing requires full re-run. -->
+<!-- ED-722 made SW dynamic: loss of Cathedral collapses SW; Church must defend infra. -->
 <!-- B3-5: PP-431-COR not modeled — Challenge replaces structural suppression, not -->
 <!-- supplements. Corrected in B4-1 (d195dbc). B3-5 results invalidated. -->
 <!-- Findings still valid: RS decay timeline, Fort constraint analysis, IP/Vanguard -->
-<!-- deployment timing, campaign arc shape (three-act structure). -->
+<!-- deployment timing, campaign arc shape (three-act structure). All Piety/CI -->
+<!-- timing claims invalidated pending re-run on corrected engine_v3. -->
 
 # Valoria — Arc Test Batch 3 Results
 
