@@ -110,11 +110,10 @@ entries:
 
   - id: ED-717
     date: 2026-04-19
-    description: "Meta-throughline synthesis (PP-671): 3 substrate-posture gaps (Hafenmark/Löwenritter/RM lacking М-4 characterization). Framework-level resolution: T-15a/b/c added to throughlines_meta_infill.md §3.1 (Hafenmark Unmediated Sovereigntist; Löwenritter Substrate-Agnostic Protector; RM Substrate-Heritage Reclaimer). Design-doc propagation incremental: Hafenmark §8.4 in factions_personal_v30 — DONE 2026-04-19. Löwenritter §8.9 and RM §8.8 — pending future sessions."
-    status: open
+    description: "Meta-throughline synthesis (PP-671): 3 substrate-posture gaps (Hafenmark/Löwenritter/RM lacking М-4 characterization). Framework resolution: T-15a/b/c in throughlines_meta_infill.md §3.1. Design-doc propagation complete 2026-04-19: Hafenmark §8.4, Löwenritter §8.9, RM §8.8 (factions_personal_v30)."
+    status: resolved
     severity: P2
     source: PP-671
-    progress: "1 of 3 faction arms propagated (Hafenmark done)"
 
 
   - id: ED-718
