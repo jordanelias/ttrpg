@@ -246,6 +246,119 @@ ontological pathology of the entity. The 'wrongness' practitioners feel
 in monstrous presence is a symptom of the rendering's encounter with its
 own limits, projected outward as a quality of the encountered being.
 
+***4.3 Confrontation as Constitutive Finitude***
+
+Encounter with excess being produces a phenomenological signature
+structurally indistinguishable from clinical trauma: emotional residue
+without referential content (dread that has no object; urgency with no
+specifiable cause), fragmentary perception that does not compose into
+narrative recall, somatic echo retaining traces the mind cannot retrieve,
+and the felt sense of having been overwhelmed. This signature is consistent
+across confrontations with monstrous incursions (§4.1, §5.1), Locked Zones,
+dissolution residue fields, high-magnitude threadwork operations at the
+practitioner's own scale threshold, and the excess-of-Real content of
+Solmund's speech.
+
+The signature's resemblance to trauma is not incidental. The subject was,
+in an ordinary sense, overwhelmed: capacity was exceeded, integration
+failed, the ordinary storage-and-recall of experience did not complete. The
+emotional residue is real. The somatic trace is real. The fragments are
+real.
+
+The rendering is a finite process. Its finitude is not a limitation upon a
+potentially-unlimited capacity but a constitutive feature of what the
+rendering is. The rendering is the consciousness-performed apprehension of
+a contracted region of Being (§2.1); it is by specification a bounded
+operation on bounded material. When the subject encounters what exceeds
+this boundary---what is itself uncontracted, what arrives through a breach
+as surfeit (§4.1)---the rendering does not malfunction. It operates exactly
+within specification. The specification does not include what has arrived.
+
+A cup pouring the ocean: the cup has not failed. The cup holds what cups
+hold. The water that does not fit does not fail to enter because the cup
+was defective. The water does not fit because the cup is the cup. What is
+not cup-shaped and cup-sized does not become contained by
+failing-differently; it does not become contained at all.
+
+What remains after confrontation---the residue, the fragments, the somatic
+echo---is exactly what the rendering was able to constitute from the
+encounter, plus the trace of exactly what it was not. Emotional residue
+persists in the primitive system, which registers valence and intensity
+with lower epistemological demands than the rendering proper. Fragmentary
+perception persists where portions of the encounter fell within rendering
+scope and the rest did not. The fragments are not wreckage of a whole that
+should have formed; they are the portions that were ever going to form as
+experience. The remainder was not lost. It was not constituted.
+
+The pivot follows. The ordinary trauma model presumes that a subject's
+capacity was exceeded by a particular stressor---that the experience's
+magnitude surpassed a capacity which, under other conditions, would have
+been adequate, and that damage occurred in the moment of exceedance.
+Healing, on this model, returns capacity toward its pre-damage baseline.
+The framework departs from this model in a specific way: confrontation with
+excess being exceeds a capacity that was, in principle, never adequate to
+this. The rendering is not a more-or-less instance of an otherwise
+unlimited receptivity. It is bounded in kind, not merely in degree. Excess
+being is not a quantitatively-intense stressor overwhelming rendering; it
+is a category to which the rendering has no interface at all. There is
+nothing to heal because nothing broke. The residue and fragments are what
+the encounter was going to leave in any finite being, not the wreckage of a
+completed experience. The trauma-signature is real. The damage model of
+that signature is incorrect.
+
+Per §14, thread sensitivity develops through repeated felt confrontation,
+held rather than fled. The pivot clarifies why this development is
+structurally safe: what would otherwise read as cumulative damage is, in
+fact, cumulative perceptual expansion. Each confrontation in which the
+rendering encounters its constitutive horizon without breaking
+internalizes, at the level of the subject, that the rendered world is a
+contracted region rather than the totality. The subject's commitment to the
+rendering-as-given loosens. Perceptual availability to thread-level
+structure increases. The development cannot be accelerated by bypassing
+confrontation; it requires felt encounter with what genuinely exceeds
+rendering. The developmental arc from TS 0 to TS 100+ is an arc of
+progressively deepened perceptual expansion through genuine confrontations
+held---categorically distinct, at every point, from damage.
+
+This section does not claim that nothing can damage a practitioner. It
+claims that confrontation does not. The locus of practitioner risk is
+elsewhere: in the Leap (suspension of self-rendering to perform Thread
+operations), in accumulated dissolution residue that shifts the
+practitioner's own configuration toward the unintelligible pole (§16), in
+Temporal Disjunction produced by high-magnitude thread operations, in
+proximity to and knotting-compromise with third-mode beings (§5.3).
+Perception of excess being does not damage. Operation against substrate
+tendency does. These are different acts in different layers, with different
+metaphysical structures. The framework permits no equivalence between them,
+and the framework's mechanical expressions (Coherence track, knot
+formation, Mending Coherence asymmetry) rest on maintaining the
+distinction.
+
+The Church's moral condemnation of threadwork collapses two categorically
+distinct acts: confrontation (the perceptual opening that produces TS) and
+operation (threadwork performed upon configurations). The condemnation
+treats both as heretical, as if looking and doing were the same species of
+act. This is the central error inside a theologically-coherent institution.
+The Church is not confused about doctrine; it is confused at the layer
+beneath doctrine, at the level of what perception itself is. The
+reasonable-but-wrong inferential chain flows from this: the Catastrophe was
+caused by threadwork; therefore all thread-related activity---including the
+passive confrontations that produce TS in the first place---is implicated
+in the Catastrophe's moral lineage. The chain is logically valid given the
+premise that confrontation and operation are the same kind of thing. The
+framework denies that premise. The practical consequence within the
+rendered world is the Perceptual Prophylaxis (§9): the essentialist
+theology forecloses the developmental preconditions for TS by preventing
+the preceding confrontations from being psychologically held. The moral
+terror around any thread-related experience arrives before any operation is
+contemplated; confrontation is re-read as demonic incursion, as spiritual
+failure, as the very thing that destroyed civilization. The prophylaxis
+operates by preventing the safe developmental arc from ever beginning.
+
+[EDITORIAL: PR-1 ED-729 --- resolved 2026-04-20; Finitude Pivot
+integrated as §4.3 per atomization workplan Batch 1 Option A. Source:
+session_master_2026_04_20.md Part I.]
+
 **5. The Three Modes of Emergence**
 
 ***5.1 Ordinary Monstrous Incursion***
