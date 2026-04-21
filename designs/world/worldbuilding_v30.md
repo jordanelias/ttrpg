@@ -88,6 +88,16 @@ Single decision point at IP 50: Almaic Kyriakos envoy. Church chooses cooperate 
 
 [EDITORIAL: ED-NEW-07 — Almaic Kyriakos IP interaction. Needs IP ladder review.]
 
+## 3.7 Practitioner Witness Tradition (suppressed)
+
+A parallel literary tradition exists alongside the canonical miracle-witness scripture: accounts by thread-sensitive people who encountered Solmund and perceived his operations at a scale the non-practitioner witness could not access. These accounts describe Solmund's acts accurately — which, within the Church's interpretive commitment to the miracle framework, reads as heresy. The Church's interpretive community was built by non-practitioners; by the time it encountered practitioner accounts, it had already committed to the miracle framework, and practitioner accounts were categorised as heretical from their first circulation.
+
+The tradition survives in fragments: Seam Texts (passages of orthodox scripture in which the underlying practitioner testimony breaks through the theological overlay, readable only at TS 30+; see `designs/world/solmund_cultural_guide_consolidated.md` §12); a small number of suppressed manuscripts held privately by Einhir-sympathetic lineages; and oral practitioner transmission within Warden orders. The tradition is the most theologically dangerous material in the setting because accuracy, within the Church's framework, is worse than denial — accurate description reveals the mechanism, and the mechanism reveals that the Church's cosmology is a rendering applied to something the rendering cannot contain.
+
+**Mechanical implications.** Seam Texts function as discoverable POIs (Remnant type) in Church territories, gated by TS via the visibility tables in `designs/threadwork/threadwork_v30.md` §2.3. Same text, two readings: TS 0–29 reads devotional language; TS 30+ reads the suppressed witness account. Discovery develops character arcs (Conviction pressure, SA increments, Certainty track). Placement in new territories can also occur via Miracle Investigation (§22.1 consolidated guide) once RWCE events fire.
+
+[EDITORIAL: PR-14 Finding 7 — resolved 2026-04-20 (ED-735). Section added as canonical worldbuilding placement for the practitioner witness tradition.]
+
 ---
 
 # 4. LÖWENRITTER INTERNAL STRUCTURE

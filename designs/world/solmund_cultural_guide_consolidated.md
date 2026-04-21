@@ -85,7 +85,7 @@ Time, pattern, the still point. The Church's *intellectual* tradition — not de
 
 Neoplatonic cascade from the One through intellect, soul, matter. Each level participates in what exceeds it.
 
-**Application (Issue B-1 — proposed, not derived from existing canon):** The Four Cardinals as emanative orders — a possible Church self-understanding. Doctrine closest to the founding act (intelligibility). Military as actuality. Wealth as temporal depth. Missions as the boundary. This is proposed setting content requiring editorial decision.
+**Application (Issue B-1 — CANONICAL per PR-12 ED-733 resolved 2026-04-20):** The Four Cardinals as emanative orders is canonical Church self-understanding. Doctrine closest to the founding act (intelligibility). Military as actuality. Wealth as temporal depth. Missions as the boundary. This framing drives Church faction AI: sincere in its theological self-understanding, structurally incorrect at the framework layer (see `canon/02_foundations_amendment_leap_mechanism.md` Amendment 5 on the Church's conflation). [EDITORIAL: PR-12 B-1 — resolved 2026-04-20; accepted as canonical Church self-understanding.]
 
 **Pattern:** Abstract to concrete, principle to manifestation. Sentences long and subordinated. Prose enacts hierarchy.
 
@@ -141,7 +141,7 @@ Letter permutation as meditative technique. Language simultaneously tool and obs
 
 Divine contraction (*tsimtsum*), shattering of vessels (*shevirat ha-kelim*), human repair (*tikkun*).
 
-**Application (Issue S-1 — requires framing as interpretation, not mechanism):** The shevirat ha-kelim parallel to the Einhir Catastrophe is illustrative, but the mechanisms differ in a P-07-load-bearing way. Luria implicitly attributes agency to the divine light (the light shatters vessels). Canon: the mechanism is "entirely on the rendered side" (§6.1) — the ground does not respond. The Lurianic mapping is valid as **Restoration Movement theology** — how the RM frames the Catastrophe — but not as a mechanical description of what happened. The distinction matters: the RM's Lurianic framing IS their theology, and it drives their tikkun/repair programme. But the philosophical foundations do not endorse it as correct.
+**Application (Issue S-1 — CANONICAL per PR-13 ED-734 resolved 2026-04-20):** The shevirat ha-kelim parallel to the Einhir Catastrophe is canonical **Restoration Movement theology** — how the RM frames the Catastrophe and grounds its tikkun/repair programme. The Lurianic framing is theologically load-bearing for the RM faction; it is not mechanically load-bearing for the setting. P-07 constraint holds: the mechanism of the Catastrophe is entirely on the rendered side (`canon/00_philosophical_foundations.md` §6.1; `canon/02_foundations_amendment_leap_mechanism.md` Amendment 4); the ground does not respond. Luria implicitly attributes agency to the divine light (the light shatters vessels), which the framework does not endorse. The RM's Lurianic reading therefore stands as in-world theology — sincere, structurally distinctive, theologically generative — without being adopted as the framework's description of what actually happened. [EDITORIAL: PR-13 S-1 — resolved 2026-04-20; accepted as RM theology, not mechanical description.]
 
 **Pattern:** Vocabulary of vessels, shattering, scattering, gathering, repair. Prose has temporal urgency — something must be done.
 
@@ -269,7 +269,7 @@ Farmers, merchants, labourers, children. People in the Crown heartland and north
 
 ### 11.2 Tradition Two: The Practitioner Witness
 
-**Flagged (Finding 7):** The two-witness-tradition framework is extrapolation grounded in canon principles, not established canon. The logic (Church suppresses thread knowledge; practitioner accounts are thread knowledge; therefore the Church would suppress practitioner accounts) is sound. But the specific literary tradition is being proposed, not described. Requires editorial acceptance.
+**Canonical extension (Finding 7 — PR-14 ED-735 resolved 2026-04-20):** The two-witness-tradition framework is accepted as canon extension. The Church's suppression of thread knowledge, combined with the fact that practitioner accounts of Solmund's acts are thread knowledge, entails a suppressed practitioner literary tradition paralleling the non-practitioner miracle tradition. The two traditions produce categorically different texts from the same historical events, and the suppression is itself mechanically relevant (POI placement, scripture discoverability, TS-gated reading). See `designs/world/worldbuilding_v30.md` §3.7 for canonical worldbuilding placement. [EDITORIAL: PR-14 Finding 7 — resolved 2026-04-20.]
 
 Rare. Thread-sensitive people who encountered Solmund outside the devastated terrain. They perceived operations at a scale that should not exist. Not bigger human threadwork — categorically different. They immediately understood what they were seeing was not human.
 
