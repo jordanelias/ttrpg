@@ -4,14 +4,14 @@
 <!-- v30 baseline — renamed from designs/setting/calamity_radiation.md on 2026-04-13 -->
 # VALORIA — Calamity Radiation Framework
 ## Status: CANONICAL — approved 2026-04-06
-## Scope: Geographic graduation of Rendering Stability (RS) threshold effects by node distance from Askeheim (T15)
+## Scope: Geographic graduation of Mending Stability (MS) threshold effects by node distance from Askeheim (T15)
 ## Cross-references: designs/ttrpg/threadwork_redesign_v25.md §5.3, §6; designs/setting/geography_design.md §Calamity Bleed Gradient
 
 ---
 
 ## Design Principle
 
-The RS threshold system (threadwork_v25 §5.3) defines **what** effects occur at each RS band. This document defines **where** those effects manifest, based on node distance from Askeheim (T15) — the epicenter of the Einhir Catastrophe.
+The MS threshold system (threadwork_v25 §5.3) defines **what** effects occur at each MS band. This document defines **where** those effects manifest, based on node distance from Askeheim (T15) — the epicenter of the Einhir Catastrophe.
 
 
 ---
@@ -46,16 +46,16 @@ The radiation creeps inward from the periphery. Frontier outposts fall first. Th
 
 ## Radiation Matrix
 
-Each cell describes the instability state for that combination of RS band and node distance. Effects are cumulative downward (lower RS bands include all effects from higher bands).
+Each cell describes the instability state for that combination of MS band and node distance. Effects are cumulative downward (lower MS bands include all effects from higher bands).
 
-### RS 100–80 (Stable)
+### MS 100–80 (Stable)
 
 | Distance | State | Effects |
 |---|---|---|
 | 0 (Askeheim) | Wound persists (contained) | Gaps and tears from the Calamity remain open. Wardens maintain active Mending operations. Forgetting active (see §Forgetting below). Micro-Gap emergent beings present intermittently (non-combat, Thread Sensitivity (TS) 20–40). No effects radiate beyond Askeheim at this band. |
 | 1–5 | Normal | No Calamity effects. |
 
-### RS 79–60 (Strained)
+### MS 79–60 (Strained)
 
 | Distance | State | Effects |
 |---|---|---|
@@ -63,7 +63,7 @@ Each cell describes the instability state for that combination of RS band and no
 | 1 | Folklore | Strange happenings. Non-practitioners uneasy near old Einhir sites. Oral traditions of the Calamity survive. Church Influence +1 Ob (cultural resistance). No mechanical instability. |
 | 2–5 | Normal | No Calamity effects. |
 
-### RS 59–40 (Fragile)
+### MS 59–40 (Fragile)
 
 | Distance | State | Effects |
 |---|---|---|
@@ -72,7 +72,7 @@ Each cell describes the instability state for that combination of RS band and no
 | 2 | Folklore begins | Strange happenings. Inconsistent memories near Einhir ruin sites. No mechanical effects. |
 | 3–5 | Normal | No Calamity effects. |
 
-### RS 39–20 (Fractured)
+### MS 39–20 (Fractured)
 
 | Distance | State | Effects |
 |---|---|---|
@@ -82,7 +82,7 @@ Each cell describes the instability state for that combination of RS band and no
 | 3 | Folklore | Strange happenings begin. Oral reports of unsettling events. No mechanical effects. |
 | 4–5 | Normal | No Calamity effects. |
 
-### RS 19–1 (Critical)
+### MS 19–1 (Critical)
 
 | Distance | State | Effects |
 |---|---|---|
@@ -93,14 +93,14 @@ Each cell describes the instability state for that combination of RS band and no
 | 4 | Folklore | Strange happenings. Oral reports. No mechanical effects. |
 | 5 | Normal | No Calamity effects. |
 
-### RS 0 (The Rupture)
+### MS 0 (The Rupture)
 
 
 ---
 
-## Southernmost Surge (Threshold Event: RS ≤ 10)
+## Southernmost Surge (Threshold Event: MS ≤ 10)
 
-When RS drops to 10 or below, a Southernmost Surge fires at the next Accounting. This is a one-time event per campaign (does not repeat if RS rises above 10 and drops again).
+When MS drops to 10 or below, a Southernmost Surge fires at the next Accounting. This is a one-time event per campaign (does not repeat if MS rises above 10 and drops again).
 
 
 
@@ -113,7 +113,7 @@ When RS drops to 10 or below, a Southernmost Surge fires at the next Accounting.
 |---|---|---|---|---|
 | Micro-Gap emergent | Micro-Gap (closes within scene) | 20–40 | Hours to days. Intermittent presence — flickers in and out of intelligibility. | Non-combat. Barely perceivable (TS 30+ required). Appears as flicker, unease, or momentary wrongness. |
 | Standard Gap emergent | Standard Gap (persists without Mending) | 50–70 | Seasons. Sustained self-rendering. Can interact with the rendered world. | Combat-capable. Observer-dependent rendering per threadwork_v25 §6.2. Health pool = Spirit × 2. |
-| Catastrophic Gap emergent | Catastrophic Gap (3+ seasons, Ob 7+ to Mend) | 80+ | Years to indefinite. Structural-scale self-maintenance. | Campaign-level entity. Solmund-class. Capable of external Thread operations. RS cost per scene (PP-197 applies at TS 90+). |
+| Catastrophic Gap emergent | Catastrophic Gap (3+ seasons, Ob 7+ to Mend) | 80+ | Years to indefinite. Structural-scale self-maintenance. | Campaign-level entity. Solmund-class. Capable of external Thread operations. MS cost per scene (PP-197 applies at TS 90+). |
 
 
 **Behaviour:** Threadcut beings are not hostile by default. They have no relationship to organic life's concerns. They exist. Their existence draws on the same substrate practitioners use, which is why their presence adds +Ob to Mending operations (threadwork_v25 §9.7, P-17). They may be indifferent, curious, or territorial — Game Master determines based on the being's configurational character.
@@ -122,11 +122,11 @@ When RS drops to 10 or below, a Southernmost Surge fires at the next Accounting.
 
 ## Board Game Mode Implementation
 
-Each territory card includes a **Proximity Rating** (0–5, printed, based on node distance from Askeheim). At Accounting, the Game Master (or facilitator in competitive BG) performs one lookup per territory: current RS band × Proximity Rating → instability state from the radiation matrix.
+Each territory card includes a **Proximity Rating** (0–5, printed, based on node distance from Askeheim). At Accounting, the Game Master (or facilitator in competitive BG) performs one lookup per territory: current MS band × Proximity Rating → instability state from the radiation matrix.
 
 **Simplified BG Lookup Table:**
 
-| RS Band | Proximity 0 | Proximity 1 | Proximity 2 | Proximity 3 | Proximity 4–5 |
+| MS Band | Proximity 0 | Proximity 1 | Proximity 2 | Proximity 3 | Proximity 4–5 |
 |---|---|---|---|---|---|
 | 100–80 | No radiation (Askeheim-only: wound persists, Forgetting active) | — | — | — | — |
 | 79–60 | +1 Ob non-Thread; Forgetting active | Folklore (no mech) | — | — | — |
@@ -145,8 +145,8 @@ This is a single-page reference card. One lookup per territory per season.
 ### Supersedes
 
 ### Cross-references requiring propagation
-- `designs/ttrpg/threadwork_redesign_v25.md` §5.3: RS threshold table notes geographic graduation per calamity_radiation.md (ED-302 callout present). [DONE]
-- `references/params_board_game.md`: RS Effects section rewritten to use Simplified BG Lookup Table; Southernmost Zones replaced with Proximity Rating system. [DONE — 2026-04-06]
+- `designs/ttrpg/threadwork_redesign_v25.md` §5.3: MS threshold table notes geographic graduation per calamity_radiation.md (ED-302 callout present). [DONE]
+- `references/params_board_game.md`: MS Effects section rewritten to use Simplified BG Lookup Table; Southernmost Zones replaced with Proximity Rating system. [DONE — 2026-04-06]
 - `designs/fieldwork/fieldwork_v30.md` §8.1: Survey action (BG Consul Inward variant) uses Proximity Rating to set Ob. Formula: Ob = (5 − Proximity Rating) + 1, min 1. Askeheim (PR 0) → Ob 6; Lowenskyst (PR 5) → Ob 1. Calamity zone Exposure thresholds apply to fieldwork actions in proximity territories per §6 Exposure Track. [DONE — 2026-04-17]
 
 ## Forgetting — Permanent Askeheim Condition (B-03 resolved)
@@ -154,7 +154,7 @@ This is a single-page reference card. One lookup per territory per season.
 
 
 
-**Interaction with RS decline:** As RS drops, the Forgetting does not worsen (it is already total within Askeheim). What worsens is the radiation of OTHER effects (Gaps, beings, Ob modifiers) outward from Askeheim. The Forgetting remains contained at T15 regardless of RS.
+**Interaction with MS decline:** As MS drops, the Forgetting does not worsen (it is already total within Askeheim). What worsens is the radiation of OTHER effects (Gaps, beings, Ob modifiers) outward from Askeheim. The Forgetting remains contained at T15 regardless of MS.
 
 ### Hybrid Mode Note (B-09)
 Calamity Radiation Ob modifiers apply to both Personal Phase Thread operations (TTRPG rules) and Strategic Phase Thread orders (BG rules) in Hybrid mode. Coherence cost from PC-declared leadership (PP-198) stacks independently with Radiation Ob modifiers. This double cost is philosophically correct — operating near the wound is harder AND degrades the practitioner.
@@ -163,7 +163,7 @@ Calamity Radiation Ob modifiers apply to both Personal Phase Thread operations (
 **Radiation × Domain Echo Exception (PP-532):** Radiation-caused Thread failures do NOT generate Domain Echoes. Domain Echoes require deliberate PC Thread operations performed with faction-intent (i.e., the PC declared leadership at Phase 1 of the Cascade Phase per PP-198). Environmental radiation failure is not intentional — it is substrate interference — and therefore queues no echo. This prevents radiation zones from generating spurious Domain Echoes that would distort the faction-layer signal.
 ### Open editorial items
 - ED-302: Calamity Radiation Framework — this document. RESOLVED.
-- B-01: Askeheim effects at RS 100–80 — RESOLVED. Effects contained to Askeheim only at Stable band; no radiation. Band split into 100–80 (Stable) and 79–60 (Strained).
-- B-03: Forgetting RS-dependence — RESOLVED. Forgetting is permanent at Askeheim, conditioned on unhealed Gaps/tears, not on RS. Cessation requires full territorial Mending.
-- [EDITORIAL: ED-303 — RS track naming: "Rendering Stability" vs alternative. User flagged that "rendering" is a process of consciousness, not reality. Current name measures world substrate stability. Options: keep current (defensible — measures stability of the rendered output), rename to "Substrate Integrity" or "Configurational Stability." Deferred to user decision.]
+- B-01: Askeheim effects at MS 100–80 — RESOLVED. Effects contained to Askeheim only at Stable band; no radiation. Band split into 100–80 (Stable) and 79–60 (Strained).
+- B-03: Forgetting MS-dependence — RESOLVED. Forgetting is permanent at Askeheim, conditioned on unhealed Gaps/tears, not on MS. Cessation requires full territorial Mending.
+- [EDITORIAL: ED-303 — MS track naming: "Mending Stability" vs alternative. User flagged that "rendering" is a process of consciousness, not reality. Current name measures world substrate stability. Options: keep current (defensible — measures stability of the rendered output), rename to "Substrate Integrity" or "Configurational Stability." Deferred to user decision.]
 

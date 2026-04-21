@@ -1,12 +1,12 @@
 ## Clock Environmental Effects (v04 B2)
 
-### Rendering Stability (RS) Effects
+### Mending Stability (MS) Effects
 **Canonical source: `designs/setting/calamity_radiation_v30.md`** (Simplified BG Lookup Table).
 
-RS effects are geographically graduated by Proximity Rating (node distance from Askeheim T15), not applied globally.
-Each territory card includes a Proximity Rating (0–5). At Accounting, one lookup per territory: current RS band × Proximity Rating.
+MS effects are geographically graduated by Proximity Rating (node distance from Askeheim T15), not applied globally.
+Each territory card includes a Proximity Rating (0–5). At Accounting, one lookup per territory: current MS band × Proximity Rating.
 
-| RS Band | Proximity 0 | Proximity 1 | Proximity 2 | Proximity 3 | Proximity 4–5 |
+| MS Band | Proximity 0 | Proximity 1 | Proximity 2 | Proximity 3 | Proximity 4–5 |
 |---|---|---|---|---|---|
 | 100–80 | Wound contained; Forgetting active; no radiation | — | — | — | — |
 | 79–60 | +1 Ob non-Thread; Forgetting active | Folklore (no mech) | — | — | — |
@@ -14,10 +14,10 @@ Each territory card includes a Proximity Rating (0–5). At Accounting, one look
 | 39–20 | Gaps auto; beings present | +1 Ob all; Gaps (1d10: 1–2) | +1 Ob Thread; Shifting Objects (1d10: 1) | Folklore (no mech) | — |
 | 19–1 | +2 Ob Mending; beings; Gaps (1d3) | +1 Ob all; Gaps (1d10: 1–4) | +1 Ob Thread; Gaps (1d10: 1–2) | Shifting Objects (1d10: 1) | Folklore (no mech) |
 
-Additional global RS effects at Critical (19–1): all Thread operations +1 Ob worldwide; seasonal Stability checks for all factions at Ob 1 (failure: Mandate −1).
-RS 0 = Rupture (campaign ends, all factions lose).
+Additional global MS effects at Critical (19–1): all Thread operations +1 Ob worldwide; seasonal Stability checks for all factions at Ob 1 (failure: Mandate −1).
+MS 0 = Rupture (campaign ends, all factions lose).
 
-Southernmost Surge (one-time, RS ≤ 10): all territories within Proximity 2 of Askeheim experience effects one band worse for one season. See calamity_radiation_v30.md.
+Southernmost Surge (one-time, MS ≤ 10): all territories within Proximity 2 of Askeheim experience effects one band worse for one season. See calamity_radiation_v30.md.
 
 
 
@@ -40,7 +40,7 @@ Southernmost Surge (one-time, RS ≤ 10): all territories within Proximity 2 of 
 | 75+ | Altonian Vanguard deployed. AER ≥ 4: threshold rises to 80. AER 5: IP held at 50 |
 
 **Battle Consequences (peninsular_strain_v1.md §3):**
-All battles on Valorian soil: RS −1 (RS −2 for Campaign/War scale). Each season with inter-faction battle: IP +2. Each season with inter-faction battle: Peninsular Strain +1. Faction elimination: Strain +2. Territory Revolt (Accord 0): Strain +1. Covert actions and ungarrisoned Church Seizure: no RS/IP/Strain cost.
+All battles on Valorian soil: MS −1 (MS −2 for Campaign/War scale). Each season with inter-faction battle: IP +2. Each season with inter-faction battle: Peninsular Strain +1. Faction elimination: Strain +2. Territory Revolt (Accord 0): Strain +1. Covert actions and ungarrisoned Church Seizure: no MS/IP/Strain cost.
 
 
 **[PROVISIONAL ED-340] Altonian Vanguard Mechanics (PP-568 — flag for authorial review):**
@@ -53,13 +53,13 @@ All battles on Valorian soil: RS −1 (RS −2 for Campaign/War scale). Each sea
 - [EDITORIAL: authorial review required — Vanguard faction identity, advance route, and elimination conditions]
 
 
-### Rendering Stability (RS) Effects
+### Mending Stability (MS) Effects
 **Canonical source: `designs/setting/calamity_radiation_v30.md`** (Simplified BG Lookup Table).
 
-RS effects are geographically graduated by Proximity Rating (node distance from Askeheim T15), not applied globally.
-Each territory card includes a Proximity Rating (0–5). At Accounting, one lookup per territory: current RS band × Proximity Rating.
+MS effects are geographically graduated by Proximity Rating (node distance from Askeheim T15), not applied globally.
+Each territory card includes a Proximity Rating (0–5). At Accounting, one lookup per territory: current MS band × Proximity Rating.
 
-| RS Band | Proximity 0 | Proximity 1 | Proximity 2 | Proximity 3 | Proximity 4–5 |
+| MS Band | Proximity 0 | Proximity 1 | Proximity 2 | Proximity 3 | Proximity 4–5 |
 |---|---|---|---|---|---|
 | 100–80 | Wound contained; Forgetting active; no radiation | — | — | — | — |
 | 79–60 | +1 Ob non-Thread; Forgetting active | Folklore (no mech) | — | — | — |
@@ -67,10 +67,10 @@ Each territory card includes a Proximity Rating (0–5). At Accounting, one look
 | 39–20 | Gaps auto; beings present | +1 Ob all; Gaps (1d10: 1–2) | +1 Ob Thread; Shifting Objects (1d10: 1) | Folklore (no mech) | — |
 | 19–1 | +2 Ob Mending; beings; Gaps (1d3) | +1 Ob all; Gaps (1d10: 1–4) | +1 Ob Thread; Gaps (1d10: 1–2) | Shifting Objects (1d10: 1) | Folklore (no mech) |
 
-Additional global RS effects at Critical (19–1): all Thread operations +1 Ob worldwide; seasonal Stability checks for all factions at Ob 1 (failure: Mandate −1).
-RS 0 = Rupture (campaign ends, all factions lose).
+Additional global MS effects at Critical (19–1): all Thread operations +1 Ob worldwide; seasonal Stability checks for all factions at Ob 1 (failure: Mandate −1).
+MS 0 = Rupture (campaign ends, all factions lose).
 
-Southernmost Surge (one-time, RS ≤ 10): all territories within Proximity 2 of Askeheim experience effects one band worse for one season. See calamity_radiation_v30.md.
+Southernmost Surge (one-time, MS ≤ 10): all territories within Proximity 2 of Askeheim experience effects one band worse for one season. See calamity_radiation_v30.md.
 
 
 
@@ -95,7 +95,7 @@ Southernmost Surge (one-time, RS ≤ 10): all territories within Proximity 2 of 
 | 75+ | Altonian Vanguard deployed. AER ≥ 4: threshold rises to 80. AER 5: IP held at 50 |
 
 **Battle Consequences (peninsular_strain_v1.md §3):**
-All battles on Valorian soil: RS −1 (RS −2 for Campaign/War scale). Each season with inter-faction battle: IP +2. Each season with inter-faction battle: Peninsular Strain +1. Faction elimination: Strain +2. Territory Revolt (Accord 0): Strain +1. Covert actions and ungarrisoned Church Seizure: no RS/IP/Strain cost.
+All battles on Valorian soil: MS −1 (MS −2 for Campaign/War scale). Each season with inter-faction battle: IP +2. Each season with inter-faction battle: Peninsular Strain +1. Faction elimination: Strain +2. Territory Revolt (Accord 0): Strain +1. Covert actions and ungarrisoned Church Seizure: no MS/IP/Strain cost.
 
 
 **[PROVISIONAL ED-340] Altonian Vanguard Mechanics (PP-568 — flag for authorial review):**
@@ -110,4 +110,4 @@ All battles on Valorian soil: RS −1 (RS −2 for Campaign/War scale). Each sea
 
 ## Cascade Depth Cap (v04 B4)
 Maximum 3 immediate mechanical effects per card play resolution step. Additional effects queue to next Accounting.
-State-based modifiers (RS/CI/IP/PI environmental effects) do NOT count against this cap.
+State-based modifiers (MS/CI/IP/PI environmental effects) do NOT count against this cap.

@@ -30,18 +30,18 @@ Thread perception is settlement-modulated: +1 Ob in Cathedral settlements (rende
 
 ### ALL MODES (TTRPG, Board Game, Hybrid)
 - Part 1: Philosophical Framing — foundational for all modes
-- Part 5: Rendering Stability (World Track) — world-level track applies in all modes
-  - §5.4: Rendering Stability in Board Game (BG only)
-  - §5.5: Rendering Stability in Hybrid (Hybrid only)
+- Part 5: Mending Stability (World Track) — world-level track applies in all modes
+  - §5.4: Mending Stability in Board Game (BG only)
+  - §5.5: Mending Stability in Hybrid (Hybrid only)
 - Part 8: Interdependency Map — implementation sequence for all modes
 - Part 9: Stress Test Patches (S-01/P-11 through S-??/P-30) — all mode patches compiled here
 
-> **Scale-based Rendering Stability (P-25):** Rendering Stability consequences on Partial and Failure results scale with operation scale. The below-the-waterline portion of a Structural thread is enormously larger than an Object thread's; when the interaction fails, the unintelligible portion's response is proportionally more severe. **Override degree table Rendering Stability values with the following:** | Scale | Partial Rendering Stability Cost | Failure Rendering Stability Cost | |---|---|---| | Object | 
+> **Scale-based Mending Stability (P-25):** Mending Stability consequences on Partial and Failure results scale with operation scale. The below-the-waterline portion of a Structural thread is enormously larger than an Object thread's; when the interaction fails, the unintelligible portion's response is proportionally more severe. **Override degree table Mending Stability values with the following:** | Scale | Partial Mending Stability Cost | Failure Mending Stability Cost | |---|---|---| | Object | 
 
 
-> **Mass battle Rendering Stability cost note (ST-TW-03):** **Finding from sim_x_03_massbattle_thread.md**
+> **Mass battle Mending Stability cost note (ST-TW-03):** **Finding from sim_x_03_massbattle_thread.md**
 **[DESIGN NOTE]**
-**[STRUCK — campaign_architecture_v1 §3.1]** The ×3 RS multiplier is replaced by a flat additive model:
+**[STRUCK — campaign_architecture_v1 §3.1]** The ×3 MS multiplier is replaced by a flat additive model:
 
 - **Standard Mass Battle:** −1 MS per battle, regardless of scale or outcome.
 - **Cataclysmic Mass Battle** (player-tagged at scene setup, extraordinary circumstances): −2 MS.
@@ -49,16 +49,16 @@ Thread perception is settlement-modulated: +1 Ob in Cathedral settlements (rende
 
 The flat model makes warfare cost predictable and cumulative. Three battles per season = −3 MS. No spikes. The player can see degradation coming and choose to stop fighting. The Stability Check at MS ≤ 10 preserves the sense that warfare near the tipping point is especially dangerous — chance-based, not multiplicative.
 
-A practitioner performing Thread operations in mass battle pays the standard per-operation Coherence cost (−1/op at Relational+, 0 for Mending per asymmetry) but RS drain from battle is the flat −1 regardless of operation count. This makes Thread in battle a meaningful choice rather than strategically suicidal.
+A practitioner performing Thread operations in mass battle pays the standard per-operation Coherence cost (−1/op at Relational+, 0 for Mending per asymmetry) but MS drain from battle is the flat −1 regardless of operation count. This makes Thread in battle a meaningful choice rather than strategically suicidal.
 
 ### TTRPG ONLY
 - Part 3: Coherence (10→0) — personal practitioner track; no BG equivalent
 - Part 6: Threadcut Beings — TTRPG encounter mechanics
 
 
-> **Paradox window resolution (PP-193):** [PROVISIONAL] The P-22 paradox window resolves as follows. **Auto-resolution:** At window end (1d3 scenes), physical facts update; thread snaps to displaced state. Observers Thread Sensitivity 30+ perceive sudden realignment. **Early closure:** A practitioner may Mend the paradox window site (treat as Micro-Gap, Ob 3). Success: window closes immediately. Partial: duration halved. Failure: window persists full duration; RS −2. **Exploitation during window:** Another practitioner may target the paradoxed thread at +2 Ob (two simultaneous configurations resist). On Failure: window collapses immediately and operation's Failure consequences also apply. **After window:** Temporal Disjunction persists (memories intact; physical facts now match displaced state). No further mechanics unless new operation targets displaced thread.
+> **Paradox window resolution (PP-193):** [PROVISIONAL] The P-22 paradox window resolves as follows. **Auto-resolution:** At window end (1d3 scenes), physical facts update; thread snaps to displaced state. Observers Thread Sensitivity 30+ perceive sudden realignment. **Early closure:** A practitioner may Mend the paradox window site (treat as Micro-Gap, Ob 3). Success: window closes immediately. Partial: duration halved. Failure: window persists full duration; MS −2. **Exploitation during window:** Another practitioner may target the paradoxed thread at +2 Ob (two simultaneous configurations resist). On Failure: window collapses immediately and operation's Failure consequences also apply. **After window:** Temporal Disjunction persists (memories intact; physical facts now match displaced state). No further mechanics unless new operation targets displaced thread.
 
-> **Sequential POPs on paradoxed thread (PP-203):** [PROVISIONAL] If a practitioner attempts a Past-Oriented Pull targeting a thread that is currently in a paradox window (P-22 delayed manifestation active on that thread), the attempt **automatically fails**. The thread exists in two simultaneous states; intentionality cannot lock onto a thread with indeterminate configuration. The Leap still fires (Coherence cost applies, Focus window consumed), but the operation resolves as Failure without a roll (no RS cost from the operation itself — the substrate did not engage). The paradox window is unaffected. This ruling applies only to the paradoxed thread itself; other threads in the same scene are unaffected.
+> **Sequential POPs on paradoxed thread (PP-203):** [PROVISIONAL] If a practitioner attempts a Past-Oriented Pull targeting a thread that is currently in a paradox window (P-22 delayed manifestation active on that thread), the attempt **automatically fails**. The thread exists in two simultaneous states; intentionality cannot lock onto a thread with indeterminate configuration. The Leap still fires (Coherence cost applies, Focus window consumed), but the operation resolves as Failure without a roll (no MS cost from the operation itself — the substrate did not engage). The paradox window is unaffected. This ruling applies only to the paradoxed thread itself; other threads in the same scene are unaffected.
 
 
 
@@ -77,11 +77,11 @@ Replaces: "same as Lock" for Pe
 
 
 ### BOARD GAME ONLY
-- §5.4: Rendering Stability in Board Game
-- §7.1: Board Game — New Order: Mend, Co-Movement Card Deck (18 cards), Lock Chronic Drift, Rendering Stability Track
+- §5.4: Mending Stability in Board Game
+- §7.1: Board Game — New Order: Mend, Co-Movement Card Deck (18 cards), Lock Chronic Drift, Mending Stability Track
 
 ### HYBRID ONLY
-- §5.5: Rendering Stability in Hybrid
+- §5.5: Mending Stability in Hybrid
 - §7.2: Hybrid Mode
 - §7.3: Updated Mode Branching
 
@@ -221,7 +221,7 @@ No mechanical changes. Provides narrative and investigative information. Supplem
 
 ### Weaving — Things Cohere
 
-> **Design note (ST-TW-01):** W-24 (Coherent Strike) at Object scale: Rendering Stability unchanged, Coherence −0 on Success. If Leap round is protected (opponent at wrong range), operation is free in Thread terms. Design question: is this intended? See ED-046.
+> **Design note (ST-TW-01):** W-24 (Coherent Strike) at Object scale: Mending Stability unchanged, Coherence −0 on Success. If Leap round is protected (opponent at wrong range), operation is free in Thread terms. Design question: is this intended? See ED-046.
 
 
 
@@ -240,10 +240,10 @@ No mechanical changes. Provides narrative and investigative information. Supplem
 
 | Degree | Outcome |
 |---|---|
-| Overwhelming | Full effect. Rendering Stability +1 (Relational scale or above only). Practitioner gains 1 Thread Sensitivity. The effect exceeds the stated intention — the wound closes without scarring; the agreement develops genuine trust beyond its terms. |
-| Success | Full effect. Rendering Stability unchanged. |
-| Partial | Partial effect (Game Master sets scope). Rendering Stability −1. Coherence −1. |
-| Failure | Interaction collapses. Rendering Stability −2. Coherence −1. At Rendering Stability ≤ 40: Shifting Object forms. At Rendering Stability ≤ 20: Gap opens. |
+| Overwhelming | Full effect. Mending Stability +1 (Relational scale or above only). Practitioner gains 1 Thread Sensitivity. The effect exceeds the stated intention — the wound closes without scarring; the agreement develops genuine trust beyond its terms. |
+| Success | Full effect. Mending Stability unchanged. |
+| Partial | Partial effect (Game Master sets scope). Mending Stability −1. Coherence −1. |
+| Failure | Interaction collapses. Mending Stability −2. Coherence −1. At Mending Stability ≤ 40: Shifting Object forms. At Mending Stability ≤ 20: Gap opens. |
 
 **Over-Actualisation Hazard (Relational+ scale):**
 
@@ -253,7 +253,7 @@ No mechanical changes. Provides narrative and investigative information. Supplem
 | Object / Personal | None. |
 | Relational | Subsequent Thread operations targeting this same configuration: +1 Ob. Clears after one season or when the configuration is Pulled. |
 | Territorial | As Relational, plus: Diagnosis on this configuration +1 Ob. |
-| Structural | As Territorial, plus: +1 Rendering Stability degradation per season it persists (the rigid configuration obstructs substrate traffic). |
+| Structural | As Territorial, plus: +1 Mending Stability degradation per season it persists (the rigid configuration obstructs substrate traffic). |
 
 On Overwhelming at Relational+: over-actualisation effects halved in duration.
 
@@ -265,7 +265,7 @@ On Overwhelming at Relational+: over-actualisation effects halved in duration.
 
 
 
-**Overweaving:** Each operation after the first in the same contact window: +1 Ob (cumulative). A collapsed overweave: Rendering Stability −3 and local Shifting Object risk.
+**Overweaving:** Each operation after the first in the same contact window: +1 Ob (cumulative). A collapsed overweave: Mending Stability −3 and local Shifting Object risk.
 
 ### Pulling — Things Open
 
@@ -300,10 +300,10 @@ Apply to §2.4 Pulling — Past-Oriented Pulling duration table.
 
 | Degree | Outcome |
 |---|---|
-| Overwhelming | Full effect. Extended duration. Rendering Stability unchanged. |
-| Success | Full effect. Standard duration. Rendering Stability unchanged. |
-| Partial | Partial effect or reduced duration. Rendering Stability −1. Coherence −1. |
-| Failure | Snap-back. 1 Wound (armour does not apply). Rendering Stability −2. Coherence −1. |
+| Overwhelming | Full effect. Extended duration. Mending Stability unchanged. |
+| Success | Full effect. Standard duration. Mending Stability unchanged. |
+| Partial | Partial effect or reduced duration. Mending Stability −1. Coherence −1. |
+| Failure | Snap-back. 1 Wound (armour does not apply). Mending Stability −2. Coherence −1. |
 
 ### Past-Oriented Pulling
 
@@ -322,13 +322,13 @@ Apply to §2.4 Pulling — Past-Oriented Pulling duration table.
 | 6–10 seasons | 6 |
 | 10+ seasons / generational | 7 |
 
-*All existing mechanics (Ob by recency, degree table, Thread Tension/Rendering Stability consequences, Fraying Bane) retained with Rendering Stability replacing Thread Tension throughout. Rendering Stability costs inverted: where Thread Tension was +3 minimum, Rendering Stability is −3 minimum.*
+*All existing mechanics (Ob by recency, degree table, Thread Tension/Mending Stability consequences, Fraying Bane) retained with Mending Stability replacing Thread Tension throughout. Mending Stability costs inverted: where Thread Tension was +3 minimum, Mending Stability is −3 minimum.*
 
 **Additional Ob modifier — active Knot Crisis:** If the target event has caused an active Knot Crisis in any character (the death is still being grieved, the loss is still raw), add +1 Ob. The ongoing relational weight of the grief makes the temporal thread more firmly actualised — living sorrow has woven itself into the thread's current configuration and resists displacement.
 
 ### Locking — Unable to Become
 
-> **Rendering Stability drain cap (R-58):** Regardless of concurrent active Locks: Rendering Stability drain from Locks cannot exceed −1/round in combat
+> **Mending Stability drain cap (R-58):** Regardless of concurrent active Locks: Mending Stability drain from Locks cannot exceed −1/round in combat
 Apply to §3.2 Coherence Reduction / Loc
 
 
@@ -347,31 +347,31 @@ Apply to §3.2 Coherence Reduction / Loc
 | Territorial | ~~7~~ |
 | Structural / Foundational | ~~8+~~ |
 
-**Thread Sensitivity 70+ Tier Reduction:** −1 to all FR Rendering Stability costs (minimum 1).
+**Thread Sensitivity 70+ Tier Reduction:** −1 to all FR Mending Stability costs (minimum 1).
 
 | Degree | Outcome |
 |---|---|
-| Overwhelming | Target permanently locked. Rendering Stability −1. Practitioner gains 1 Thread Sensitivity. |
-| Success | Target locked. Rendering Stability −1. |
-| Partial | Partial lock (Game Master sets scope). Rendering Stability −2. Coherence −1 (cap). |
-| Failure | Collapse onto practitioner. Take 2 Wounds (no armour). Rendering Stability −3. Coherence −1 (cap). Adjacent configurations become partially rigid: +1 Ob to all Thread operations targeting configurations adjacent to the failure site, remainder of season. |
+| Overwhelming | Target permanently locked. Mending Stability −1. Practitioner gains 1 Thread Sensitivity. |
+| Success | Target locked. Mending Stability −1. |
+| Partial | Partial lock (Game Master sets scope). Mending Stability −2. Coherence −1 (cap). |
+| Failure | Collapse onto practitioner. Take 2 Wounds (no armour). Mending Stability −3. Coherence −1 (cap). Adjacent configurations become partially rigid: +1 Ob to all Thread operations targeting configurations adjacent to the failure site, remainder of season. |
 
 **Chronic consequences:**
 
 | Duration | Effect |
 |---|---|
 | 1 season | No additional effect. |
-| 2–3 seasons | Rendering Stability −1/season (substrate strain from blocked configurational traffic). +1 Ob to operations targeting Lock or adjacent configurations. |
-| 4+ seasons | Rendering Stability −2/season. Operations targeting any configuration in the same zone: +1 Ob (the frozen thread occludes Diagnosis, degrading intentionality for subsequent operations). |
-| Permanent (never reversed) | Substrate adapts. Rendering Stability drift ceases. Permanent +1 Ob to adjacent operations. This is how Locked Zones form. |
+| 2–3 seasons | Mending Stability −1/season (substrate strain from blocked configurational traffic). +1 Ob to operations targeting Lock or adjacent configurations. |
+| 4+ seasons | Mending Stability −2/season. Operations targeting any configuration in the same zone: +1 Ob (the frozen thread occludes Diagnosis, degrading intentionality for subsequent operations). |
+| Permanent (never reversed) | Substrate adapts. Mending Stability drift ceases. Permanent +1 Ob to adjacent operations. This is how Locked Zones form. |
 
-> **Variable Rendering Stability drift (R-63):** Replaces uniform −1 Rendering Stability/season for locked institutions:
-- Slow-change domain (seasonal/yearly evolution): −1 Rendering Stability/season
+> **Variable Mending Stability drift (R-63):** Replaces uniform −1 Mending Stability/season for locked institutions:
+- Slow-change domain (seasonal/yearly evolution): −1 Mending Stability/season
 Game Master determines domain type when Lock is applied.
 
-**Reversing a Lock:** Pulling at Ob = (original practitioner's Thread Sensitivity ÷ 10, round up) − 2, minimum Ob 1. Successful release: Rendering Stability +1 per season the Lock persisted (max +5), as the substrate decompresses.
+**Reversing a Lock:** Pulling at Ob = (original practitioner's Thread Sensitivity ÷ 10, round up) − 2, minimum Ob 1. Successful release: Mending Stability +1 per season the Lock persisted (max +5), as the substrate decompresses.
 
-**Dissolution of a Lock:** Tears the locked configuration rather than unwinding it. No Rendering Stability release bonus (unlike Pulling — the configuration was torn, not cleanly unwound). Dissolution of a Permanent Lock (4+ seasons, substrate adapted) automatically fails — the configuration no longer exists as a discrete target; it has become part of the substrate's structure. Permanent Locks can only be addressed via the Einhir framework. A novice Lock (Thread Sensitivity 30) is trivially reversible (Ob 1); an expert Lock (Thread Sensitivity 100) requires a specialist (Ob 8). Long-standing Lock release: Rendering Stability +1 per season the Lock persisted (max +5). If 4+ seasons: Shifting Object risk from sudden configurational release.
+**Dissolution of a Lock:** Tears the locked configuration rather than unwinding it. No Mending Stability release bonus (unlike Pulling — the configuration was torn, not cleanly unwound). Dissolution of a Permanent Lock (4+ seasons, substrate adapted) automatically fails — the configuration no longer exists as a discrete target; it has become part of the substrate's structure. Permanent Locks can only be addressed via the Einhir framework. A novice Lock (Thread Sensitivity 30) is trivially reversible (Ob 1); an expert Lock (Thread Sensitivity 100) requires a specialist (Ob 8). Long-standing Lock release: Mending Stability +1 per season the Lock persisted (max +5). If 4+ seasons: Shifting Object risk from sudden configurational release.
 
 ### Dissolution — Unable to Be
 
@@ -386,10 +386,10 @@ Game Master determines domain type when Lock is applied.
 
 | Degree | Outcome |
 |---|---|
-| Overwhelming | Target dissolves cleanly. Rendering Stability −3. Micro-Gap forms and closes within the scene. |
-| Success | Target dissolves. Rendering Stability −5. Gap forms, lasts one scene, closes. |
-| Partial | Target becomes a Shifting Object. Rendering Stability −6. Gap does not close without Mending. Coherence −1 (cap). |
-| Failure | Full Gap tears open. Rendering Stability −8. Monstrous Incursion immediately. Practitioner Incapacitated. Coherence −1 (cap). |
+| Overwhelming | Target dissolves cleanly. Mending Stability −3. Micro-Gap forms and closes within the scene. |
+| Success | Target dissolves. Mending Stability −5. Gap forms, lasts one scene, closes. |
+| Partial | Target becomes a Shifting Object. Mending Stability −6. Gap does not close without Mending. Coherence −1 (cap). |
+| Failure | Full Gap tears open. Mending Stability −8. Monstrous Incursion immediately. Practitioner Incapacitated. Coherence −1 (cap). |
 
 **Lock vs. Dissolution summary:**
 
@@ -397,7 +397,7 @@ Game Master determines domain type when Lock is applied.
 |---|---|---|
 | What it does | Freezes the intelligible face | Tears the intelligible face away |
 | Temporal character | Chronic (damage accumulates) | Acute (damage immediate) |
-| Rendering Stability consequence | Lower immediate (−2 to −4), chronic drift (−1 to −2/season) | Higher immediate (−3 to −8), no drift |
+| Mending Stability consequence | Lower immediate (−2 to −4), chronic drift (−1 to −2/season) | Higher immediate (−3 to −8), no drift |
 | Gap risk | None on success; stiffening on failure | Always |
 | Core violation | Unable to become | Unable to be |
 
@@ -435,10 +435,10 @@ Game Master determines domain type when Lock is applied.
 
 | Degree | Outcome |
 |---|---|
-| Overwhelming | Substrate restored. Gap closes cleanly. Rendering Stability +2 (strain released). Coherence: 0 (Mending is aligned work — no rendering damage). Mended area +1 Ob to future Gap formation in this zone for 1 season. |
-| Success | Substrate restored. Gap closes. Rendering Stability +1. Coherence: 0. |
-| Partial | Gap reduced one severity category. Rendering Stability unchanged. Coherence: 0. Second Mending required. |
-| Failure | Mending fails. Gap unchanged. Coherence: 0. Rendering Stability −2. |
+| Overwhelming | Substrate restored. Gap closes cleanly. Mending Stability +2 (strain released). Coherence: 0 (Mending is aligned work — no rendering damage). Mended area +1 Ob to future Gap formation in this zone for 1 season. |
+| Success | Substrate restored. Gap closes. Mending Stability +1. Coherence: 0. |
+| Partial | Gap reduced one severity category. Mending Stability unchanged. Coherence: 0. Second Mending required. |
+| Failure | Mending fails. Gap unchanged. Coherence: 0. Mending Stability −2. |
 
 **Mending Coherence Asymmetry:** Mending never costs Coherence. A practitioner who Mends is restoring the substrate's intelligible face — working with the rendering, not against it. This is the philosophical distinction between Mending and all other Thread operations: Pull, Weave, Lock, and Dissolution all suspend the practitioner's own rendering (layer 2) to act on another thread's rendering. Mending does not suspend — it supports. The practitioner's rendering is continuous throughout. This is why the Edeyja can Mend indefinitely without personal degradation, and why Mending is the only Thread operation that is unconditionally good for the world.
 
@@ -511,13 +511,13 @@ The opponent's configuration drives the thread in the opposite direction during 
 
 Both roll their operation pools against modified Obs.
 
-| A's Result | B's Result | Thread Outcome | Rendering Stability | A's Consequences | B's Consequences |
+| A's Result | B's Result | Thread Outcome | Mending Stability | A's Consequences | B's Consequences |
 |---|---|---|---|---|---|
-| Meets Ob | Meets Ob | **Shifting Object** at target's scale | Worst single degree-table Rendering Stability cost + 1 | Coherence per §3.2. Knot strain: +1 Ob next Thread op this scene, 2 Composure. | Same. |
-| Meets Ob | Partial | **A's operation resolves.** Overwhelming degrades to Success; Success unchanged. | A's degree-table Rendering Stability cost + 1 | Coherence per §3.2. 1 Composure. | Coherence per §3.2. Knot strain: +1 Ob, 2 Composure. No degree-table consequences. |
-| Meets Ob | Failure | **A's operation resolves at achieved degree.** No contest. | A's degree-table Rendering Stability cost | Normal. | Standard Failure per degree table. |
+| Meets Ob | Meets Ob | **Shifting Object** at target's scale | Worst single degree-table Mending Stability cost + 1 | Coherence per §3.2. Knot strain: +1 Ob next Thread op this scene, 2 Composure. | Same. |
+| Meets Ob | Partial | **A's operation resolves.** Overwhelming degrades to Success; Success unchanged. | A's degree-table Mending Stability cost + 1 | Coherence per §3.2. 1 Composure. | Coherence per §3.2. Knot strain: +1 Ob, 2 Composure. No degree-table consequences. |
+| Meets Ob | Failure | **A's operation resolves at achieved degree.** No contest. | A's degree-table Mending Stability cost | Normal. | Standard Failure per degree table. |
 | Partial | Partial | **Weak oscillation.** d6: 1–2 = Shifting Object one scale below. 3–6 = none. | −1 | Coherence per §3.2. Knot strain: +1 Ob, 2 Composure. | Same. |
-| Partial | Failure | **A's Partial resolves.** | A's Partial Rendering Stability cost | Normal Partial. | Standard Failure. |
+| Partial | Failure | **A's Partial resolves.** | A's Partial Mending Stability cost | Normal Partial. | Standard Failure. |
 | Failure | Failure | **Nothing resolves.** | −1 | Coherence per §3.2. 1 Composure. | Same. |
 
 
@@ -538,7 +538,7 @@ Coherence fires per-practitioner per §3.2 (each suspended their own layer 2). E
 
 ### FR vs FR Both-Fail Scaling
 
-| Scale | Rendering Stability Cost | Shifting Object Risk (d6) |
+| Scale | Mending Stability Cost | Shifting Object Risk (d6) |
 |---|---|---|
 | Object | −1 | 1 = 17% |
 | Personal | −2 | 1–2 = 33% |
@@ -554,7 +554,7 @@ Pre-declared operations in subsequent rounds: +1 Ob sequential failure penalty i
 
 ### N-Way Opposing Operations (3+ Practitioners)
 
-Three or more practitioners with at least two genuinely opposing intentionalities on the same configuration: automatic lattice collapse. All operations fail. Gap forms at target's scale. Rendering Stability −(2 × number of opposing practitioners). All: Coherence per §3.2; knot strain +2 Ob, 4 Composure.
+Three or more practitioners with at least two genuinely opposing intentionalities on the same configuration: automatic lattice collapse. All operations fail. Gap forms at target's scale. Mending Stability −(2 × number of opposing practitioners). All: Coherence per §3.2; knot strain +2 Ob, 4 Composure.
 
 ### Combat Timing
 
@@ -688,7 +688,7 @@ For videogame implementation, the mechanical checklist above unfolds as four des
 
 The crisis is not punishment. It is the practitioner's existential season.
 
-> **TS 90+ Coherence 0 — Reality Strain RS cost (PP-197):** [PROVISIONAL — canon: Amendment 01 §Resonant] A practitioner who reaches Coherence 0 with Thread Sensitivity 90+ is undergoing Structural-scale self-maintenance threadwork at every moment (per Amendment 01: they substitute layer 3 for failed layer 2). This continuous Structural-scale threadwork strains the substrate exactly as the Einhir site-network did, localized to their presence. **RS cost:** −1 RS per scene in which the practitioner is actively maintaining their existence (any scene in which they are conscious and present). This cost fires at scene end, not at Accounting — it is immediate and continuous. The practitioner need not perform any deliberate Thread operations for this cost to apply; their existence is the operation. This cost is separate from and stacks with all other RS degradation sources. For TS 30–69 practitioners at Coherence 0: no reality strain RS cost (insufficient Thread Sensitivity for layer 3 self-maintenance at the required depth — they are in ontological freefall, not self-maintenance). For TS 70–89: −1 RS per session (not per scene — Structural-scale self-maintenance is possible but less continuous than Resonant). Apply during Rendering Crisis arc and after, if the practitioner remains at Coherence 0.
+> **TS 90+ Coherence 0 — Reality Strain MS cost (PP-197):** [PROVISIONAL — canon: Amendment 01 §Resonant] A practitioner who reaches Coherence 0 with Thread Sensitivity 90+ is undergoing Structural-scale self-maintenance threadwork at every moment (per Amendment 01: they substitute layer 3 for failed layer 2). This continuous Structural-scale threadwork strains the substrate exactly as the Einhir site-network did, localized to their presence. **MS cost:** −1 MS per scene in which the practitioner is actively maintaining their existence (any scene in which they are conscious and present). This cost fires at scene end, not at Accounting — it is immediate and continuous. The practitioner need not perform any deliberate Thread operations for this cost to apply; their existence is the operation. This cost is separate from and stacks with all other MS degradation sources. For TS 30–69 practitioners at Coherence 0: no reality strain MS cost (insufficient Thread Sensitivity for layer 3 self-maintenance at the required depth — they are in ontological freefall, not self-maintenance). For TS 70–89: −1 MS per session (not per scene — Structural-scale self-maintenance is possible but less continuous than Resonant). Apply during Rendering Crisis arc and after, if the practitioner remains at Coherence 0.
 
 
 
@@ -712,25 +712,25 @@ The card deck represents the bounded unpredictability of substrate response. The
 
 ### Co-Movement Cards 1–15 (ED-577 — canonical card list)
 
-All Thread Tension references from the original deck are converted to Rendering Stability (inverted polarity: original +TT becomes −RS, original −TT becomes +RS).
+All Thread Tension references from the original deck are converted to Mending Stability (inverted polarity: original +TT becomes −MS, original −TT becomes +MS).
 
 | Card | Name | Actualized Effect | Unactualized Effect |
 |------|------|-------------------|---------------------|
-| CM-01 | Temporal Drift | Rendering Stability −1. One clock in the territory advances 1 tick. | No RS change. Clock advance still applies. |
-| CM-02 | Substrate Ripple | Rendering Stability −2. All Thread operations in territory +1 Ob next season. | Rendering Stability −1. No Ob change. |
-| CM-03 | Echo Cascade | Rendering Stability −1. One resolved Thread operation re-manifests a minor version of its effect. | No effect. |
-| CM-04 | Coherence Bleed | Rendering Stability −1. Lowest-Coherence Thread entity in territory: Coherence −1. | No RS change. Coherence loss still applies. |
-| CM-05 | Anchor Settling | Rendering Stability +1. One Thread Witness Node in territory stabilises (cannot be disrupted this season). | Rendering Stability +1. No Node effect. |
-| CM-06 | Resonance Bloom | Rendering Stability −2. Each Practitioner in territory: +1D to their next Thread operation this season (one use per practitioner, expires unused at season end). (ED-577-04 resolved) | Rendering Stability −1. No bonus. |
-| CM-07 | Scar Memory | No RS change. One Dissolution residue site in territory becomes visible to non-Sensitives for 1 scene. | No effect. |
-| CM-08 | Temporal Fold | Rendering Stability −1. One past-oriented Pulling operation in territory may target one additional season into the past (free depth extension). | No RS change. No depth extension. |
-| CM-09 | Rendering Surge | Rendering Stability −3. All Thread entities in territory: forced Coherence check Ob 1. | Rendering Stability −2. No Coherence check. |
-| CM-10 | Ground Harmony | Rendering Stability +2. Mending operations in territory: −1 Ob this season. | Rendering Stability +1. No Ob change. |
-| CM-11 | Witness Flare | No RS change. All Thread Witness Nodes in territory activate: Church Attention Pool +1. | Church Attention Pool +1. No Node activation. |
-| CM-12 | Ground Stability | Rendering Stability +1. Territory Thread Debt cleared (all accumulated +Ob tokens removed). | Rendering Stability +1. Debt not cleared. |
-| CM-13 | Epistemic Breach | Rendering Stability −1. One non-Sensitive NPC in territory gains temporary TS = 15 for 1 scene (passive perception only — anomalous awareness per visibility table, cannot Thread-Read or Leap). Certainty pressure point. Church Attention Pool +1. (ED-577-01 resolved) | Church Attention Pool +1. No perception grant. |
-| CM-14 | Substrate Assertion | Rendering Stability −3. One Locked Thread entity in territory: Lock strength +1. | Rendering Stability −1. No Lock change. |
-| CM-15 | Dissolution Wake | Rendering Stability −2. One territory gains a Dissolution residue site if none exists. If one exists: residue intensity +1. | Rendering Stability −1. Residue intensity +1 if site exists; otherwise no effect. |
+| CM-01 | Temporal Drift | Mending Stability −1. One clock in the territory advances 1 tick. | No MS change. Clock advance still applies. |
+| CM-02 | Substrate Ripple | Mending Stability −2. All Thread operations in territory +1 Ob next season. | Mending Stability −1. No Ob change. |
+| CM-03 | Echo Cascade | Mending Stability −1. One resolved Thread operation re-manifests a minor version of its effect. | No effect. |
+| CM-04 | Coherence Bleed | Mending Stability −1. Lowest-Coherence Thread entity in territory: Coherence −1. | No MS change. Coherence loss still applies. |
+| CM-05 | Anchor Settling | Mending Stability +1. One Thread Witness Node in territory stabilises (cannot be disrupted this season). | Mending Stability +1. No Node effect. |
+| CM-06 | Resonance Bloom | Mending Stability −2. Each Practitioner in territory: +1D to their next Thread operation this season (one use per practitioner, expires unused at season end). (ED-577-04 resolved) | Mending Stability −1. No bonus. |
+| CM-07 | Scar Memory | No MS change. One Dissolution residue site in territory becomes visible to non-Sensitives for 1 scene. | No effect. |
+| CM-08 | Temporal Fold | Mending Stability −1. One past-oriented Pulling operation in territory may target one additional season into the past (free depth extension). | No MS change. No depth extension. |
+| CM-09 | Rendering Surge | Mending Stability −3. All Thread entities in territory: forced Coherence check Ob 1. | Mending Stability −2. No Coherence check. |
+| CM-10 | Ground Harmony | Mending Stability +2. Mending operations in territory: −1 Ob this season. | Mending Stability +1. No Ob change. |
+| CM-11 | Witness Flare | No MS change. All Thread Witness Nodes in territory activate: Church Attention Pool +1. | Church Attention Pool +1. No Node activation. |
+| CM-12 | Ground Stability | Mending Stability +1. Territory Thread Debt cleared (all accumulated +Ob tokens removed). | Mending Stability +1. Debt not cleared. |
+| CM-13 | Epistemic Breach | Mending Stability −1. One non-Sensitive NPC in territory gains temporary TS = 15 for 1 scene (passive perception only — anomalous awareness per visibility table, cannot Thread-Read or Leap). Certainty pressure point. Church Attention Pool +1. (ED-577-01 resolved) | Church Attention Pool +1. No perception grant. |
+| CM-14 | Substrate Assertion | Mending Stability −3. One Locked Thread entity in territory: Lock strength +1. | Mending Stability −1. No Lock change. |
+| CM-15 | Dissolution Wake | Mending Stability −2. One territory gains a Dissolution residue site if none exists. If one exists: residue intensity +1. | Mending Stability −1. Residue intensity +1 if site exists; otherwise no effect. |
 
 **Deck composition:** 18 cards total (CM-01 through CM-18). Cards 16–18 are Mending-specific additions (see §7.1). Shuffle all 18 into a single deck. Draw 1 per Thread operation (2 if Thread Witness Node present in territory). Reshuffle when all 18 cards drawn (global deck, not per-territory). Deck cycles every ~3-4 seasons at typical operation rates. (ED-577-02 resolved)
 
@@ -743,14 +743,14 @@ All Thread Tension references from the original deck are converted to Rendering 
 
 # PART FIVE: RENDERING STABILITY (WORLD TRACK)
 
-## 5.1 What Rendering Stability Measures
+## 5.1 What Mending Stability Measures
 
 
 **Range:** 100 (fully stable) → 0 (the Rupture).
 
-## 5.2 Rendering Stability Degradation Sources
+## 5.2 Mending Stability Degradation Sources
 
-| Source | Rendering Stability Change |
+| Source | Mending Stability Change |
 |---|---|
 | Thread operation (Weaving, Pulling — partial or failure) | −1 to −2 per degree table |
 | Thread operation (Weaving — overwhelming at Relational+) | +1 (restoration) |
@@ -769,31 +769,31 @@ All Thread Tension references from the original deck are converted to Rendering 
 | Board game Weave order (failure) | −1 |
 | Winter annual drift | −1 |
 
-## 5.3 Rendering Stability Thresholds
+## 5.3 Mending Stability Thresholds
 
-> **Rendering Stability threshold cumulation (P-14):** Rendering Stability threshold effects are cumulative. Each lower band includes all effects from higher bands: - **Fractured (39–20)** includes all Fragile effects (spontaneous Shifting Objects, +1 Ob in affected territories) PLUS Fractured-specific effects (spontaneous Gaps, Monstrous Incursion risk, rendering failures for non-practitioners). - **Critical (19–1)** includes all Fragile + Fractured effects PLUS Crit
+> **Mending Stability threshold cumulation (P-14):** Mending Stability threshold effects are cumulative. Each lower band includes all effects from higher bands: - **Fractured (39–20)** includes all Fragile effects (spontaneous Shifting Objects, +1 Ob in affected territories) PLUS Fractured-specific effects (spontaneous Gaps, Monstrous Incursion risk, rendering failures for non-practitioners). - **Critical (19–1)** includes all Fragile + Fractured effects PLUS Crit
 
 
 
-| Rendering Stability | State | World Effects |
+| Mending Stability | State | World Effects |
 |---|---|---|
 | 100–80 | Stable | No unusual phenomena. Substrate sound. |
 | 79–60 | Strained | Occasional wrongness in territories with Thread history. Non-practitioners with Thread Sensitivity 10+ may sense unease near old operation sites. |
 | 59–40 | Fragile | Shifting Objects form spontaneously in high-traffic Thread territories. One random Shifting Object per season at Accounting. Thread operations +1 Ob in affected territories. |
 | 39–20 | Fractured | Gaps may open spontaneously (1d10 per season at Accounting; on 1–2: Gap in territory with lowest Prosperity). Monstrous Incursion risk in all territories with existing Gaps. Non-practitioners experience rendering failures — inconsistent memories, déjà vu, objects in wrong places. |
-| 19–1 | Critical | As Fractured, plus: spontaneous Gaps on 1–4 (doubled risk). All Thread operations +1 Ob worldwide (the substrate resists manipulation). Seasonal Stability checks for all factions at Ob 1 (institutional rendering begins failing) — failure produces Mandate −1 for that faction (minimum 0). At Mandate 0, failure instead produces Faction Fracture: one sub-faction splinters off as a new minor faction (Game Master determines composition and goals). Mandate cannot go below 0. Discovery Events become common — Thread Sensitivity growth checks for any non-practitioner who witnesses a rendering failure. NPCs with coup or succession trigger conditions (flagged in design files) treat Rendering Stability ≤ 10 as +1 to their trigger check pool (institutional rendering failure accelerates political instability). |
+| 19–1 | Critical | As Fractured, plus: spontaneous Gaps on 1–4 (doubled risk). All Thread operations +1 Ob worldwide (the substrate resists manipulation). Seasonal Stability checks for all factions at Ob 1 (institutional rendering begins failing) — failure produces Mandate −1 for that faction (minimum 0). At Mandate 0, failure instead produces Faction Fracture: one sub-faction splinters off as a new minor faction (Game Master determines composition and goals). Mandate cannot go below 0. Discovery Events become common — Thread Sensitivity growth checks for any non-practitioner who witnesses a rendering failure. NPCs with coup or succession trigger conditions (flagged in design files) treat Mending Stability ≤ 10 as +1 to their trigger check pool (institutional rendering failure accelerates political instability). |
 | 0 | The Rupture | Rendered reality fails. Campaign ends in catastrophe. No faction wins. The Ein Sof's fullness overwhelms the rendered world's capacity. What emerges is not destruction but excess — too much being for consciousness to render. The world does not end. It becomes unintelligible. |
 
-**Design note — Rendering Stability Critical as endgame:** Once Rendering Stability enters the Critical band (19–1), the campaign is in a 2–4 season endgame without dramatic intervention. At Rendering Stability 1, the endgame trap is complete: almost every Thread operation carries Rupture risk on Failure, but not operating also reaches Rupture within 1–3 seasons from Lock drift and winter. The only structural exit requires: remove all active Locks (eliminates drift), Mend all active Gaps (eliminates per-season Rendering Stability loss), then operate exclusively at Object/Personal scale until Rendering Stability recovers via successful Mending. Each Mending attempt at Rendering Stability 1 risks Rupture on Failure (~17–34% success at best). This is the Einhir Catastrophe replicated mechanically — they reached this point, and there was no escape. The game does not provide a clean rescue from Rendering Stability 1. It provides a narrow, difficult path that requires practitioner cooperation across faction lines and accepts that Rupture is a legitimate campaign ending. The convergence of Lock drift, Gap persistence, spontaneous Gap formation, and seasonal operation failures produces net Rendering Stability losses of 8–15 per season even with active Mending. The seasonal cap (±10) prevents single-Accounting Rupture but cannot arrest multi-season terminal decline. Rendering Stability Critical is the point of no return: the table must coordinate across faction lines to stabilise the world, or accept that the campaign ends in the Rupture. This is designed. The Einhir reached the same point.
+**Design note — Mending Stability Critical as endgame:** Once Mending Stability enters the Critical band (19–1), the campaign is in a 2–4 season endgame without dramatic intervention. At Mending Stability 1, the endgame trap is complete: almost every Thread operation carries Rupture risk on Failure, but not operating also reaches Rupture within 1–3 seasons from Lock drift and winter. The only structural exit requires: remove all active Locks (eliminates drift), Mend all active Gaps (eliminates per-season Mending Stability loss), then operate exclusively at Object/Personal scale until Mending Stability recovers via successful Mending. Each Mending attempt at Mending Stability 1 risks Rupture on Failure (~17–34% success at best). This is the Einhir Catastrophe replicated mechanically — they reached this point, and there was no escape. The game does not provide a clean rescue from Mending Stability 1. It provides a narrow, difficult path that requires practitioner cooperation across faction lines and accepts that Rupture is a legitimate campaign ending. The convergence of Lock drift, Gap persistence, spontaneous Gap formation, and seasonal operation failures produces net Mending Stability losses of 8–15 per season even with active Mending. The seasonal cap (±10) prevents single-Accounting Rupture but cannot arrest multi-season terminal decline. Mending Stability Critical is the point of no return: the table must coordinate across faction lines to stabilise the world, or accept that the campaign ends in the Rupture. This is designed. The Einhir reached the same point.
 
-## 5.4 Rendering Stability in Board Game
+## 5.4 Mending Stability in Board Game
 
 
-**Rendering Stability is hidden from players by default.** The Investigate Thread order (Intelligence vs Ob 3) reveals the current Rendering Stability value. Overwhelming: also reveals which territories have Gaps. Players know the world is degrading (they see the threshold effects) but do not know the exact number without investigation.
+**Mending Stability is hidden from players by default.** The Investigate Thread order (Intelligence vs Ob 3) reveals the current Mending Stability value. Overwhelming: also reveals which territories have Gaps. Players know the world is degrading (they see the threshold effects) but do not know the exact number without investigation.
 
-## 5.5 Rendering Stability in Hybrid
+## 5.5 Mending Stability in Hybrid
 
-Rendering Stability advances at Accounting (Cascade Phase). Both TTRPG-sourced changes (from Personal Phase Thread operations) and board-game-sourced changes (from Strategic Phase orders) are applied at the same Accounting. No double-counting; seasonal cap on Rendering Stability change is ±10 per season.
+Mending Stability advances at Accounting (Cascade Phase). Both TTRPG-sourced changes (from Personal Phase Thread operations) and board-game-sourced changes (from Strategic Phase orders) are applied at the same Accounting. No double-counting; seasonal cap on Mending Stability change is ±10 per season.
 
 ## 5.6 Thread Revelation Curve (campaign_architecture_v1 §4)
 
@@ -884,7 +884,7 @@ Available to any faction with an affiliated Thread Sensitivity 50+ character, or
 
 | Order | Roll | Effect |
 |---|---|---|
-| **Mend** | Intelligence (or faction-specific) vs Ob by Gap category (see below) | Success: Gap closed. Rendering Stability +1. Failure: Rendering Stability −1. Draw Co-Movement Card. |
+| **Mend** | Intelligence (or faction-specific) vs Ob by Gap category (see below) | Success: Gap closed. Mending Stability +1. Failure: Mending Stability −1. Draw Co-Movement Card. |
 
 **Board game Mend Ob** (lower than TTRPG — faction-level effort abstracts collective resources):
 
@@ -897,17 +897,17 @@ Available to any faction with an affiliated Thread Sensitivity 50+ character, or
 
 ### Revised Co-Movement Card Deck (18 cards)
 
-Cards 1–15: retained (all Thread Tension references become Rendering Stability, inverted).
+Cards 1–15: retained (all Thread Tension references become Mending Stability, inverted).
 Cards 16–18 added:
 
 16. **Substrate Settling** — Mended territory: all Thread operations −1 Ob next season.
-17. **Scar Trace** — Mended territory retains visible Thread scar. Church Theocracy Counter +1. No Rendering Stability change.
+17. **Scar Trace** — Mended territory retains visible Thread scar. Church Theocracy Counter +1. No Mending Stability change.
 18. **Residue Condensation** — dissolution residue forms at Mending site. Niflhel may harvest.
 
 ### Lock Chronic Drift
 
 
-### Rendering Stability Track
+### Mending Stability Track
 
 Replaces Thread Tension track on board. Runs 100→0. Hidden by default (Investigate Thread reveals). Shared loss at 0.
 
@@ -917,7 +917,7 @@ Replaces Thread Tension track on board. Runs 100→0. Hidden by default (Investi
 
 
 > **Hybrid Coherence declaration rule (PP-198):** [PROVISIONAL — canon: Amendment 01 §2, §3] Coherence cost in Hybrid Strategic Phase is paid by the Player Character who **declares leadership at Phase 1 of the Cascade Phase** (committing to have performed the Leap for that order). This declaration is binary and mechanical — it is not a narrative judgment. The declaring PC's layer 2 was suspended for that order; therefore their Coherence decrements. If no PC declares leadership at Phase 1: no Coherence cost applies to any PC for that order (the order was executed by Non-Player Character practitioners). Multiple PCs cannot co-declare leadership for a single order; only the declared PC pays. Replace all instances of "narratively leads" in Hybrid Coherence rules with "declared leadership at Phase 1 of Cascade Phase."
-- **Rendering Stability changes:** Both Personal and Strategic Phase changes applied at Accounting. Seasonal cap: ±10 net (the cap applies to the net Rendering Stability change after all sources — positive and negative — are resolved at Accounting).
+- **Mending Stability changes:** Both Personal and Strategic Phase changes applied at Accounting. Seasonal cap: ±10 net (the cap applies to the net Mending Stability change after all sources — positive and negative — are resolved at Accounting).
 
 > **Hybrid co-declaration tie-break (PP-205):** [PROVISIONAL] If two or more Player Characters simultaneously declare leadership for the same Strategic Phase Thread order at Phase 1 of the Cascade Phase, the declaration resolves as follows: (1) The PC with the highest Thread Sensitivity declares. (2) If Thread Sensitivity is tied: the PC who declared first at the table (in real-world turn order, not game priority order) declares. (3) The non-declaring PC's declaration is void; they pay no Coherence cost for that order. This ruling applies only to simultaneous declarations. If PCs choose to negotiate among themselves before Phase 1 closes, that negotiation determines the declarer with no tie-break needed.
 
@@ -930,8 +930,8 @@ Replaces Thread Tension track on board. Runs 100→0. Hidden by default (Investi
 | Gap closure | Mending (Att + Focus + Thread Pool Score) | Mend order | TTRPG Mending or Mend order |
 | Co-movement | Version C (temporal + epistemic auto, actual d6) | Co-Movement Cards (18) | Personal: Version C. Strategic: Cards. |
 | Practitioner degradation | Coherence 10→0 | Not tracked | Coherence during Personal Phase |
-| World stability | Rendering Stability 100→0 at seasonal accounting | Rendering Stability 100→0 at Accounting | Rendering Stability at Cascade Phase Accounting |
-| Lock chronic | Game Master tracks; Rendering Stability drift at accounting | Territory card: Rendering Stability −1/season | TTRPG → territory card at Cascade |
+| World stability | Mending Stability 100→0 at seasonal accounting | Mending Stability 100→0 at Accounting | Mending Stability at Cascade Phase Accounting |
+| Lock chronic | Game Master tracks; Mending Stability drift at accounting | Territory card: Mending Stability −1/season | TTRPG → territory card at Cascade |
 
 ---
 
@@ -944,7 +944,7 @@ Replaces Thread Tension track on board. Runs 100→0. Hidden by default (Investi
 | Intelligibility (§4.5, 10→0) | Coherence (10→0) | All character sheets, all Thread operation tables |
 | ThS / CD (§5.9, 20→0) | Coherence (10→0) | Campaign tracking eliminated as separate system |
 | Taint (§5.10, 0→10) | Coherence (low-end effects) | No separate track. Dissolution residue = accelerated Coherence loss. |
-| Thread Tension (Thread Tension, 0→100) | Rendering Stability (Rendering Stability, 100→0) | Board game track, all threshold tables, all operation consequence tables |
+| Thread Tension (Thread Tension, 0→100) | Mending Stability (Mending Stability, 100→0) | Board game track, all threshold tables, all operation consequence tables |
 | Gap closure via FR Dissolution | Mending (new operation) | §5.13, board game orders, Southernmost expedition |
 | "Solmund" (all references) | "Solmund" | All files (logged for Haiku batch) |
 | AG calendar | AS calendar | All files (logged for Haiku batch) |
@@ -966,13 +966,13 @@ Replaces Thread Tension track on board. Runs 100→0. Hidden by default (Investi
 | Step | Task | Model |
 |---|---|---|
 | 1 | Simulate Coherence 10→0 degradation rates across archetype campaigns | Sonnet |
-| 2 | Simulate FR Lock chronic Rendering Stability drift across 10-season campaigns | Sonnet |
+| 2 | Simulate FR Lock chronic Mending Stability drift across 10-season campaigns | Sonnet |
 | 3 | Simulate Mending pool (Att + Focus + Thread Pool Score) probability curves | Sonnet |
 | 4 | Simulate over-actualisation impact on practitioner gameplay | Sonnet |
 | 5 | Stress test Diagnosis-before-Leap sequence (timing in combat) | Sonnet |
 | 6 | Stress test threadcut de-actualisation | Sonnet |
 | 7 | Compile into Thread Operations chapter (new Stage 3) | Sonnet |
-| 8 | Update board game Thread orders, Co-Movement deck, Rendering Stability track | Haiku |
+| 8 | Update board game Thread orders, Co-Movement deck, Mending Stability track | Haiku |
 | 9 | Update hybrid mode branching catalogue | Haiku |
 | 10 | Solmund rename + AG→AS + Church rename (all files) | Haiku |
 | 11 | Canon guard pass on complete redesign | Sonnet |

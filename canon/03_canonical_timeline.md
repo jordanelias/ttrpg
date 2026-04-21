@@ -126,7 +126,7 @@ The post-war settlement establishes: the Valorian Crown (deed-monarchy, Church-c
 ### Clock Starting Values
 | Clock | Value | Rationale |
 |-------|-------|-----------|
-| TT | 28 (Stirring) | ~250 years of accumulated disruption since the Catastrophe, partially stabilised by residual Einhir site integrity. |
+| MS | 72 (Strained) | ~250 years of accumulated disruption since the Catastrophe, partially stabilised by residual Einhir site integrity + Warden Mending. [EDITORIAL: PR-3 ED-731 — TT→MS inversion resolved 2026-04-20; 100-TT gives MS on current scale.] |
 | TC | 22 | Church incubated during 200 years of Altonian containment, consolidated post-independence. 45 years of post-independence accumulation. |
 | IP | 20 (Dormant) | Trade relations active. Elske's marriage provides veneer of stability. |
 
@@ -176,7 +176,7 @@ Not a faction — a spoiler actor. Profits from tension, including caste tension
 | Earlier: TC 0 or TC 15 | **TC 22.** Church predates secession, consolidated post-war. |
 | Timeline chat: one child | **Two children** (Elske + Torben). Session 5 editorial. |
 | Timeline chat: "Altonian prince" | **Altonian Duke (Doux).** Session 5 editorial. |
-| Earlier: TT 28 "reflecting 102 years" | **TT 28 reflecting ~250 years since Catastrophe.** |
+| Earlier: TT 28 "reflecting 102 years" | **MS 72 (Strained) reflecting ~250 years since Catastrophe (TT→MS inversion 2026-04-20).** |
 | Earlier: "Prince Edvar" | **Prince Torben.** Session 5 supersedes. |
 | Earlier: Solmund active for generation+ | **~5 years.** Threadcut being's rendering is actively sustained. |
 | Earlier: Church forms over "centuries" vaguely | **~200 years.** Church present during Altonian colonial period via containment grant. |

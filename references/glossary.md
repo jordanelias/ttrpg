@@ -58,7 +58,7 @@ These are campaign-level trackers shared across all factions. All are event-driv
 
 | Full Term | Abbr | Range | Mode | Start | Loss Threshold | Description |
 |-----------|------|-------|------|-------|----------------|-------------|
-| Rendering Stability | RS | 100→0 | ALL | 60 (TTRPG) / 72 (BG) | 0 = The Rupture (campaign ends) | World coherence. Shared track. Degrades from Thread operations and seasonal effects. |
+| Mending Stability | MS | 100→0 | ALL | 60 (TTRPG) / 72 (BG) | 0 = The Rupture (campaign ends) | World coherence. Shared track. Degrades from Thread operations and seasonal effects. |
 | Theocracy Counter | TC* | 0–100 | ALL | 0 (TTRPG) / 28 (BG) | 65 = Church Holy State (BG) | Church political dominance accumulation. Church-specific clock. Triggers territorial seizure at 60. |
 | Institutional Pressure | IP | 0–100 | ALL | 20 | 75/80 = Altonian Vanguard (BG) | Pressure from the Altonian Empire. Invasion threat tracker. |
 | Public Instability | PI | 0–10 | BG | 5 | 0 = Parliament dissolved + Löwenritter coup | Parliamentary health tracker. Board Game mode only. |
@@ -138,8 +138,8 @@ All factions tracked on 1–7 scale (0 = collapse / inoperability for most stats
 | Gap | — | A rupture in the rendered substrate. Severity scales: Micro-Gap, Standard Gap, Entrenched Gap, Catastrophic Gap. |
 | Shifting Object | — | Pre-Gap substrate instability. Less severe than a Gap; addressable by Mending. |
 | Locked Zone | — | Territory or object subjected to Forced Resolution Lock. |
-| Monstrous Incursion | — | Entity manifestation triggered by low Rendering Stability or severe Dissolution failure. |
-| The Rupture | — | Campaign-ending event when Rendering Stability reaches 0. |
+| Monstrous Incursion | — | Entity manifestation triggered by low Mending Stability or severe Dissolution failure. |
+| The Rupture | — | Campaign-ending event when Mending Stability reaches 0. |
 | Knot | — | A significant relationship bond (Close / Regular / Distant). Mechanically tracked with strain. |
 | Belief | — | Player-authored character conviction. Mechanical driver for Momentum and Character Points. |
 | Inspiration | — | Named focus that grants bonus dice when engaged in relevant scenes. |
