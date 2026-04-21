@@ -150,6 +150,15 @@ systems:
     infill: references/throughlines_meta_infill.md
     note: "Canonical vetting authority for all proposals (PP-672, PP-674)."
 
+# ── Foundations amendments (canonical philosophy) ──────────────────────
+  leap_mechanism:
+    design_doc: canon/02_foundations_amendment_leap_mechanism.md
+    note: "Canonical for Leap suspension dynamics, knot formation, and operation-type taxonomy (restorative/manipulative/destructive). Supplements canon/01 Amendments 1-4. ED-730."
+  self_rendering:
+    design_doc: canon/01_foundations_amendment_self_rendering.md
+    note: "Canonical for three-layer being-persistence, Leap definition, Coherence definition, Coherence 0 TS-gated outcomes."
+
+# ────────────────────────────────────────────────────────────────────────
 # All 17 full_stack systems mapped. sim_gate('full_stack') will pass after a
 # verification ledger is built at /home/claude/sim_verification_ledger.json
 # citing these paths. See valoria_hooks.sim_gate() for requirements.

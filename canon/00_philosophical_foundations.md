@@ -416,6 +416,8 @@ benign: they exist wrongly, not in a moral sense, but in the structural
 sense that their mode of being contradicts the mode in which everything
 else exists.
 
+> See `canon/02_foundations_amendment_leap_mechanism.md` for the operation-type taxonomy governing how deliberate threadwork (the voluntary, transient, practitioner-side version of what threadcut beings perform continuously) affects practitioner Coherence. [EDITORIAL: PR-2 cross-ref — resolved 2026-04-20.]
+
 **Part Three: The Calamity**
 
 **6. The Mechanism of the Tear**

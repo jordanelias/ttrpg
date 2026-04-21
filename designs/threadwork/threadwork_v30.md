@@ -105,7 +105,7 @@ Replaces: "same as Lock" for Pe
 
 ## 2.3 The Leap — Suspending Rendering
 
-
+> **Foundational reference (canon/02).** The Leap's suspension target (layer 2 reflexive facing), the mechanics of involuntary knot formation, and the operation-type taxonomy (restorative / manipulative / destructive) governing knot-propagation weight are specified in `canon/02_foundations_amendment_leap_mechanism.md` Amendments 1–3. This section's mechanical parameters (eligibility, Contact Duration, retention roll) implement those foundations.
 
 ### Eligibility (verify before rolling)
 
@@ -405,6 +405,7 @@ Game Master determines domain type when Lock is applied.
 
 ### Mending — Repairing the Substrate
 
+> **Foundational reference (canon/02).** Mending's zero Coherence cost is a structural consequence of its alignment with substrate tendency (restorative operation type); it is not a mechanical exception. See `canon/02_foundations_amendment_leap_mechanism.md` Amendment 3. Warden Coherence erosion is environmental (proximity to Gaps, dissolution residue, third-mode presences) and is not a function of Mending operations themselves.
 
 > **Correction (R-56):** Healing operations (W-08 and variants) use accelerated Overweave: each healing operation in the same contact window adds +2 Ob (not +1). Sequence: 1st heal Ob 1, 2nd Ob 3, 3rd Ob 5, 4th Ob 7.
 
