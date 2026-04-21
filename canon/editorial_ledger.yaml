@@ -109,7 +109,7 @@ entries:
 
   - id: ED-726
     date: 2026-04-20
-    description: "D-5 resolved: site-network three-layer model (foundational/responsive/not-scheduled). Integration target canon/02_foundations_amendment_leap_mechanism.md (pending Batch 2)."
+    description: "D-5 resolved: Einhir site-network three-layer operational model (foundational pre-Catastrophe scheduled + responsive Warden-era reactive + ambient/not-scheduled). Integration target is designs/world/ (worldbuilding), NOT canon/02_foundations_amendment_leap_mechanism.md (prior mis-mapping corrected). Specific home TBD — candidates: new designs/world/einhir_site_network.md or expansion of designs/world/calamity_radiation_v30.md. Pending separate workplan."
     status: resolved
     severity: P1
     source: "session_master_2026_04_20.md + handoff"
