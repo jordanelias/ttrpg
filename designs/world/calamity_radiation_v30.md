@@ -6,6 +6,7 @@
 ## Status: CANONICAL — approved 2026-04-06
 ## Scope: Geographic graduation of Mending Stability (MS) threshold effects by node distance from Askeheim (T15)
 ## Cross-references: designs/ttrpg/threadwork_redesign_v25.md §5.3, §6; designs/setting/geography_design.md §Calamity Bleed Gradient
+## Trajectory over time: `designs/world/ms_trajectory_v1.md` (MS values at key historical dates; D-1 adopted, MS terminology canonical).
 
 ---
 

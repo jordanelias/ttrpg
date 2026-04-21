@@ -18,7 +18,7 @@ The Einhir civilisation establishes the Southernmost site-network — a coordina
 **The Deterioration (~generation before collapse)**
 The Southernmost's thread-configuration begins exhibiting near-unintelligible behaviour. The Einhir recognise this as systemic degradation and plan a foundational-scale response: a coordinated working across the full site-network involving every significant practitioner on the peninsula.
 
-**The Einhir Catastrophe (~5 years before 0 AG)**
+**The Einhir Catastrophe (~12 years before 0 AG)** [EDITORIAL: D-1 — dating propagated 2026-04-20; ED-722.]
 The mass working fails catastrophically. At the moment of maximum actualization pressure, the configuration inverts — converting the entire Weaving output toward maximum potential rather than actualization. Every thread the network had built releases simultaneously. Gaps of unprecedented scale open across the peninsula. Through these Gaps, Solmund emerges — a fully configured being from the unintelligible ground, organised and self-aware. The Einhir civilisation collapses. The Locked Zones form. The Forgetting begins.
 
 The mechanism is entirely rendered-side: the Einhir over-drew the threads, and the structural limits of the substrate were exceeded. The Ein Sof's surfeit of positive being flooded through the breach. What came through is from the ground, but the tear itself is explained by the rendered world's actions on its own substrate.
@@ -178,7 +178,7 @@ Not a faction — a spoiler actor. Profits from tension, including caste tension
 | Timeline chat: "Altonian prince" | **Altonian Duke (Doux).** Session 5 editorial. |
 | Earlier: TT 28 "reflecting 102 years" | **MS 72 (Strained) reflecting ~250 years since Catastrophe (TT→MS inversion 2026-04-20).** |
 | Earlier: "Prince Edvar" | **Prince Torben.** Session 5 supersedes. |
-| Earlier: Solmund active for generation+ | **~5 years.** Threadcut being's rendering is actively sustained. |
+| Earlier: Solmund active for generation+ | **~7 years perceivable ministry (12 years total emergence per D-1).** Threadcut being's rendering is actively sustained. |
 | Earlier: Church forms over "centuries" vaguely | **~200 years.** Church present during Altonian colonial period via containment grant. |
 | Earlier: Almud TS 28 | **Almud TS 0.** 2026-04-11. Northern Einhir, fully Church-culturally integrated. |
 | Earlier: Almud as secret Einhir sympathiser | **Governance pragmatist with ethical doubt.** 2026-04-11. |
