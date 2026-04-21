@@ -198,13 +198,17 @@ Proposal only — route to debate system design doc for integration.
 
 # 7. HISTORICAL CONTEXT (Setting Reference)
 
-## 7.1 Three Indigenous Nations → Three Duchies
+## 7.1 Three Altonian Provinces → Three Duchies
 
-| Province (Altonian) | Duchy (Valorian) |
-|--------------------|------------------|
+The Einhir civilisation's internal organisation is unknowable from post-Calamity sources (see `canon/03_canonical_timeline.md` L16, D-2 resolved 2026-04-20). The three provinces below are Altonian colonial administrative overlays, not indigenous nations; their boundaries do not correspond to any recoverable pre-Calamity political geography. Post-colonial Valorian duchies inherited province boundaries but renamed.
+
+| Province (Altonian colonial) | Duchy (current Valorian) |
+|-----------------------------|--------------------------|
 | Valoria | Valorsmark |
 | Baiamont | Hafenmark |
 | Lupicco | Varfell |
+
+[EDITORIAL: D-2 — resolved 2026-04-20; heading and framing corrected to reflect Altonian-overlay status, not indigenous.]
 
 ## 7.2 Altonian Cultural Imperialism
 

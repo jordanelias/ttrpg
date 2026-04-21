@@ -291,6 +291,8 @@ The most mechanically actionable concept in this document. A Seam Text is a pass
 
 Orthodox reading: Solmund miraculously restored the well. Practitioner reading: Structural-scale weaving re-actualising the water-bearing configuration. The elder's incomplete sentence is the seam — the moment where perception exceeded vocabulary.
 
+**POI framing note:** When deployed as in-game POI content, this example carries a metadata tag [P-07_FRAME: witness-voice-simile] indicating the "as if the ground remembered" language is a confused witness's reach for vocabulary, not a canonical claim about substrate agency. The POI system must preserve this frame to prevent the witness-voice from being mistaken for a doctrinal claim about the ground possessing memory. [EDITORIAL: PR-15 — resolved 2026-04-20; Option A metadata frame adopted.]
+
 **Mechanical function:** Discoverable POI (Remnant type) in Church territories. Same text, two readings, gated by TS via the existing visibility tables (threadwork_v30 §2.3). Scripture objects discovered early in the game gain new meaning as the player's TS develops. The text does not change. The player's capacity to read it changes.
 
 ---
