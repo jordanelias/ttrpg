@@ -21,6 +21,8 @@ These derive from the Philosophical Foundations and constrain everything.
 **What it means:** The player does not see "the world" — they see what their character's rendering can present. Certainty determines which utterances are available. TS determines what thread events are visible. The radiation matrix produces different perceptual experiences at different RS bands. The game's information architecture IS the rendering.
 **Implementation status:** Fully implemented in investigation_systems (Filter 1, Certainty/TS gates), fieldwork (Intelligibility Gradient), threadwork (visibility table + ED-677 rendered-level extension), calamity_radiation (environmental rendering by band). Player_agency Scene Slate now factors thread-state (ED-674).
 
+**Extension (2026-04-20 ED-729, ED-730).** T-02 grounds the setting's epistemology; its canonical grounding is now specified in `canon/00_philosophical_foundations.md` §4.3 (Confrontation as Constitutive Finitude) and `canon/02_foundations_amendment_leap_mechanism.md` Amendment 1 (reflexive vs outward layer-2 facings). The rendering's finitude is constitutive, not a capacity limitation. Consequence: confrontation with excess being does not damage; only operation against substrate tendency does. Same structural principle recurs at multiple output surfaces (visual per-character filtering, textual Seam Text TS-gating, narrative chronicler divergence, historical tradition split, mechanical auto-effect axes) — the consistency of recurrence is itself the world's ontology becoming legible to the player.
+
 ### T-03: Inseparability
 **Chain:** Foundations A2 / P-01 → every Thread operation fires co-movement across all three dimensions → temporal auto-effect + epistemic auto-effect + actualized auto-effect
 **Systems:** threadwork (core), fieldwork (Thread-Read fires co-movement), mass_battle (co-movement at mass scale), social_contest (temporal axis conflict penalty)
@@ -67,6 +69,8 @@ How each faction's identity produces mechanical consequences across systems.
 **Chain:** Faith Conviction → Certainty 5 selection → TC generation → CV maintenance → Heresy Investigation → AP accumulation → Thread suppression → population TS suppression → practitioner scarcity → reduced Thread capability → Church institutional dominance
 **Systems:** conviction_track, npc_behavior (Church priority tree), params_core (Certainty Track), fieldwork (Exposure → AP), faction_politics_expanded (Church rank ladder requires Certainty), threadwork (Church Heresy Investigation via TC trigger PP-182)
 **What it means:** The Church's institutional function is rendering-reinforcement. Every mechanism it controls — CV maintenance, Heresy Investigation, Excommunication, Certainty-indexed rank advancement — works to prevent the population from perceiving the substrate. This is not malice; it is the institutional expression of Faith Conviction. The Church genuinely believes rendering is sufficient.
+
+**Extension (2026-04-20 ED-730, ED-733, ED-735).** The Church's rendering-reinforcement is driven by a specific category-identification error named in `canon/02_foundations_amendment_leap_mechanism.md` Amendment 5: the Church collapses confrontation (perception) with operation (substrate engagement), and within operation collapses restorative / manipulative / destructive types into a single suspect category. The error is sincere and theologically coherent — the Church's Ficinian Cardinal emanation self-understanding (ED-733, canonical) is a genuine theological structure — but structurally incorrect at the framework layer. This conflation is the *generative engine* of the design: it produces the Perceptual Prophylaxis, the moral terror, the Heresy Investigation machinery, and the recursive rediscovery dynamic (T-26). Player mechanical consequences are distributed across Certainty pressure in Church territory, Miracle Investigation aporia (§22.1 consolidated guide), triple-interpretation faction conflict, Rendering Strain, and the suppressed Practitioner Witness Tradition (`designs/world/worldbuilding_v30.md` §3.7).
 
 ### T-09: Varfell as Thread Progressive
 **Chain:** VTM advancement → WR advancement → WC advancement → RS recovery → Thread capability improvement → more VTM advancement
@@ -199,6 +203,47 @@ Chains that produce emergent story.
 **Chain:** 30-year game span → Generational Shift clock (+1 per 5 years) → original leaders age (−1/−2/−3 to highest attribute) → succession fires → player's generation becomes the leadership class → player-founded factions become primary actors → the peninsula's political landscape is the player's creation
 **Systems:** settlement_layer (§7 Extended Timeline, §7.2 Succession), npc_behavior (arc profiles for succession NPCs), faction_politics_expanded (Torben's Readiness Track, Baralta succession), player_agency (Stature progression)
 **What it means:** The game's longest throughline. The first leaders (Almud, Baralta, Vaynard, Himlensendt) are not permanent — they will weaken, retire, or die. The player who rises from Standing 0 to Standing 7 over 30 years IS the succession. The game's endpoint is not "who won" but "what world did the player build?"
+
+
+### T-26: Recursion as Setting Structure (TL-3)
+**Chain:** Solmund threadwork → Church misidentification as miracle → Church founded on misidentification → Mending/RWCE in game-present → threadwork misidentified again → new generation of scripture and Heresy Investigation on the same category error
+**Systems:** faction AI (Church priority tree), conviction_track (Certainty revision under contradictory evidence), POI system (Seam Text discovery), RWCE response mechanic (per ED-735 integration workplan), arc register (Miracle Investigation arcs)
+**What it means:** The Church is structurally reliving its founding error without recognising it, because the Perceptual Prophylaxis reproduces the perceptual conditions under which the original misidentification occurred. The recursion is not a narrative accident; it is the expected consequence of the category error in §T-08 Extension under a non-practitioner majority population. The recursion stops only when the prophylaxis cracks — which is a long-run player-influenceable variable, not a scripted beat.
+**Implementation status:** Implicit in RWCE cascade design (PR-14 bundle, pending integration). Needs explicit capture in Church priority tree and Miracle Investigation branching.
+**Arc register vectors:** ARC-S32, ARC-S34, arcs touching Southernmost contact events.
+**Source:** session_master_2026_04_20.md Part IV TL-3; ED-735.
+
+### T-27: Effects Real, Explanation Wrong (TL-4)
+**Chain:** Real observable effect in the rendered world → only institutionally-load-bearing explanation available to the observing faction → faction acts on the wrong explanation → effect continues producing real consequences under the wrong frame → incompatible factional explanations produce triple-interpretation conflict
+**Systems:** faction AI (all factions; each has its own wrong frame), conviction_track (Certainty under contradictory evidence), fieldwork (Thread-Read), investigation_systems (Filter chain), chronicler divergence
+**What it means:** The dominant epistemic signature of the setting. Himmelenger's substrate cleanliness (d4 distance + Solmund's northern passage, not Church grace). Scripture (real acts through rendered shell). Baralta's successes (political skill, not divine favour). MS 72 (Wardens + baseline continuity, not doctrinal validation). Every real effect has a wrong, institutionally-load-bearing explanation available. Player information asymmetry (T-30) turns this into gameplay: the player sees the real mechanism while the characters see the available explanation.
+**Implementation status:** Implicit in the triple-interpretation faction design. Seam Text gating operationalises the epistemic split (TS 0–29 reads explanation, TS 30+ reads effect). Needs Conviction Scar targeting tied to specific effect/explanation mismatches.
+**Arc register vectors:** Distributed across faction-interpretation arcs; matrix placement deferred.
+**Source:** session_master_2026_04_20.md Part IV TL-4.
+
+### T-28: Confrontation / Leap / Operation Triad (TL-5)
+**Chain:** Confrontation (perceptual exposure to excess being) → Thread Sensitivity development → Leap (suspension of layer-2 reflexive self-rendering) → Operation (restorative / manipulative / destructive, differential Coherence cost per type) → knot-profile accumulation on character sheet → bidirectional substrate-events through knots
+**Systems:** threadwork (§2.3 Leap, §31 Mending Coherence Asymmetry), character sheet (knot-profile tag), coherence system, MS system (vulnerability triggers from knotted-territory MS drops)
+**What it means:** The most mechanically load-bearing philosophical framework in the design. The Church conflates all three layers into a single suspect category; the framework keeps them categorically distinct. Confrontation is safe perception (no substrate cost). The Leap is a suspension mechanism (no inherent cost, just the suspension). Operation type determines substrate cost (restorative zero; manipulative proportional; destructive catastrophic). `canon/02_foundations_amendment_leap_mechanism.md` is canonical; `designs/threadwork/threadwork_v30.md` §2.3 and §31 implement it.
+**Implementation status:** Foundations committed 2026-04-20 (canon/02). Knot-profile character sheet mechanic specified in canon/02 Amendment 6; Godot implementation pending.
+**Arc register vectors:** Distributed across all practitioner arcs.
+**Source:** session_master_2026_04_20.md Part IV TL-5; ED-730.
+
+### T-29: Baralta as Accidental Prophylaxis Cracker (TL-8)
+**Chain:** Baralta's direct-communion theology (ED-732) → contingency introduced into otherwise-essentialist cognitive frame (deeds > essence) → weakened Perceptual Prophylaxis in populations under her influence → higher per-capita confrontation retention → slow TS development rate lift in Hafenmark over generations → eventual breach of the Church's prophylactic closure in Hafenmark territories
+**Systems:** prophylaxis as territorial/factional variable (pending mechanical capture), conviction_track (Certainty frame), faction AI (Hafenmark priority tree), Thread Revelation Curve (MS-independent population-level visibility)
+**What it means:** Baralta is closer to metaphysical truth than the Church for the wrong reasons. Her framework is historically progressive despite being a wrong mechanism because it opens the perceptual door the Church closes. Her populations, over generations, produce more TS development than Church orthodox populations — not because she teaches practitioners but because her theology loosens the cognitive foreclosure that prevents confrontation from being held. This is a multi-generational throughline; its full effects land after the game's ~30-year span, but gradient effects are present at game start.
+**Implementation status:** Theological profile canonical (NPC §6, ED-732). Prophylaxis-as-variable mechanical capture pending — needs design for territorial prophylaxis rating feeding TS development rates and Seam Text visibility.
+**Arc register vectors:** ARC-S01, ARC-S13, Hafenmark arc cluster (registry update pending).
+**Source:** session_master_2026_04_20.md Part IV TL-8; ED-732.
+
+### T-30: Information Asymmetry as Core Mechanic (TL-7)
+**Chain:** Player POV (full-framework access) → Character POV (framework-blind, perception-bounded) → gap between what the player sees and what the character can know → player decisions inform character choices that the character would not make with character-only information → incompatible faction interpretations compound the gap (triple-interpretation spiral)
+**Systems:** investigation_systems (Filter chain gates character knowledge), chronicler system (what's recorded vs what happened), Miracle Investigation aporia, Conviction Scenes, the TS visibility tables, the Certainty track
+**What it means:** The gap between player and character knowledge IS the gameplay. Church sees miracle; player sees Mending. Baralta reads divine favour; player sees political skill. Witness scripture = rendered shell; player sees excess-of-Real substrate. The triple-interpretation faction conflict is the most elaborate expression: three factions, three framework-incompatible frames, and the player navigating all three without any faction having the framework's view. Structural epistemology derives from Foundations P-03 (rendering is consciousness-performed) and §9 Perceptual Prophylaxis.
+**Implementation status:** Fully implemented in investigation_systems Filter chain and TS visibility tables. Chronicler divergence specified in design but not yet in code. Conviction Scene UX needs to preserve asymmetry without leaking player-POV information into character dialogue.
+**Arc register vectors:** Distributed across all arcs with factional evidence divergence.
+**Source:** session_master_2026_04_20.md Part IV TL-7.
 
 ---
 
